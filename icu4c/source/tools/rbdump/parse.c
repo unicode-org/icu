@@ -19,7 +19,7 @@
 #include "cmemory.h"
 #include "cstring.h"
 #include "filestrm.h"
-#include "ustring.h"
+#include "unicode/ustring.h"
 #include "uprint.h"
 
 /* Protos */
@@ -56,7 +56,7 @@ read_ustring(FileStream *rb,
   T_FileStream_read(rb, &len, sizeof(len));
 
   /* Allocate space for the string */
-  s = (UChar*) icu_malloc(sizeof(UChar) * (len + 1));
+  s = (UChar*) uprv_malloc(sizeof(UChar) * (len + 1));
   if(s == 0) {
     *status = U_MEMORY_ALLOCATION_ERROR;
     return 0;
@@ -104,13 +104,13 @@ read_strlist(FileStream *rb,
     printf("    ");
     uprint(s, stdout, status);
     fputc('\n', stdout);
-    icu_free(s);
+    uprv_free(s);
   }
 
  finish:
 
   /* clean up */
-  icu_free(name);
+  uprv_free(name);
 }
 
 /* Read a 2-d string list */
@@ -156,7 +156,7 @@ read_strlist2d(FileStream *rb,
       if(j != itemcount - 1)
 	fputc(',', stdout);
 
-      icu_free(s);
+      uprv_free(s);
     }
 
     puts("");
@@ -165,7 +165,7 @@ read_strlist2d(FileStream *rb,
  finish:
 
   /* clean up */
-  icu_free(name);
+  uprv_free(name);
 }
 
 /* Read a tagged list */
@@ -205,14 +205,14 @@ read_taglist(FileStream *rb,
     uprint(value, stdout, status);
     fputc('\n', stdout);
     
-    icu_free(tag);
-    icu_free(value);
+    uprv_free(tag);
+    uprv_free(value);
   }
 
  finish:
 
   /* clean up */
-  icu_free(name);
+  uprv_free(name);
 }
 
 /* Parse a compiled rb file */
@@ -289,5 +289,5 @@ parse(FileStream *f,
  finish:
   
   /* clean up */
-  icu_free(localename);
+  uprv_free(localename);
 }

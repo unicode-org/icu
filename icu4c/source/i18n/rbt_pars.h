@@ -8,7 +8,7 @@
 #ifndef RBT_PARS_H
 #define RBT_PARS_H
 
-#include "rbt.h"
+#include "unicode/rbt.h"
 
 class TransliterationRuleData;
 

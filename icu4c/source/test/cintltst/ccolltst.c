@@ -20,9 +20,9 @@
 */
 #include "cintltst.h"
 #include "ccolltst.h"
-#include "ucol.h"
+#include "unicode/ucol.h"
 #include <string.h>
-#include "ustring.h"
+#include "unicode/ustring.h"
 #include <stdio.h>
 
 void addCollAPITest(TestNode**);

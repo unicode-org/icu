@@ -40,13 +40,13 @@
 
 #include "colcache.h"
 
-#include "coll.h"
+#include "unicode/coll.h"
 
-#include "tblcoll.h"
-#include "sortkey.h"
-#include "resbund.h"
+#include "unicode/tblcoll.h"
+#include "unicode/sortkey.h"
+#include "unicode/resbund.h"
 #include "mutex.h"
-#include "normlzr.h"
+#include "unicode/normlzr.h"
 
 //-----------------------------------------------------------------------------
 

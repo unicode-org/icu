@@ -18,7 +18,7 @@
 #ifndef PARSE_H
 #define PARSE_H 1
 
-#include "utypes.h"
+#include "unicode/utypes.h"
 #include "filestrm.h"
 
 void parse(FileStream *f, UErrorCode *status);

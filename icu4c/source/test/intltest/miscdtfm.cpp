@@ -11,16 +11,16 @@
  
 #include "miscdtfm.h"
 
-#include "format.h"
-#include "decimfmt.h"
-#include "datefmt.h"
-#include "smpdtfmt.h"
-#include "dtfmtsym.h"
-#include "locid.h"
-#include "msgfmt.h"
-#include "numfmt.h"
-#include "choicfmt.h"
-#include "gregocal.h"
+#include "unicode/format.h"
+#include "unicode/decimfmt.h"
+#include "unicode/datefmt.h"
+#include "unicode/smpdtfmt.h"
+#include "unicode/dtfmtsym.h"
+#include "unicode/locid.h"
+#include "unicode/msgfmt.h"
+#include "unicode/numfmt.h"
+#include "unicode/choicfmt.h"
+#include "unicode/gregocal.h"
 
 // *****************************************************************************
 // class DateFormatMiscTests
@@ -53,7 +53,7 @@ DateFormatMiscTests::failure(UErrorCode status, const char* msg)
 }
 
 /*
- * @test @(#)$RCSfile: miscdtfm.cpp,v $ $Revision: 1.5 $ $Date: 1999/12/08 23:29:02 $
+ * @test @(#)$RCSfile: miscdtfm.cpp,v $ $Revision: 1.6 $ $Date: 1999/12/28 23:56:59 $
  *
  * @bug 4097450
  */
@@ -145,7 +145,7 @@ DateFormatMiscTests::test4097450()
 }
 
 /*
- * @test @(#)$RCSfile: miscdtfm.cpp,v $ $Revision: 1.5 $ $Date: 1999/12/08 23:29:02 $
+ * @test @(#)$RCSfile: miscdtfm.cpp,v $ $Revision: 1.6 $ $Date: 1999/12/28 23:56:59 $
  *
  * @bug 4099975
  */

@@ -19,11 +19,11 @@
 ********************************************************************************
 */
  
-#include "msgfmt.h"
-#include "decimfmt.h"
-#include "datefmt.h"
-#include "smpdtfmt.h"
-#include "choicfmt.h"
+#include "unicode/msgfmt.h"
+#include "unicode/decimfmt.h"
+#include "unicode/datefmt.h"
+#include "unicode/smpdtfmt.h"
+#include "unicode/choicfmt.h"
 #include "mutex.h"
  
 // *****************************************************************************

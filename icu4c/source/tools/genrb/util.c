@@ -34,10 +34,10 @@ void
 get_dirname(char *dirname,
 	    const char *filename)
 {
-  const char *lastSlash = icu_strrchr(filename, DIR_SEP) + 1;
+  const char *lastSlash = uprv_strrchr(filename, DIR_SEP) + 1;
 
   if(lastSlash>filename) {
-    icu_strncpy(dirname, filename, (lastSlash - filename));
+    uprv_strncpy(dirname, filename, (lastSlash - filename));
     *(dirname + (lastSlash - filename)) = '\0';
   } else {
     *dirname = '\0';
@@ -50,17 +50,17 @@ get_basename(char *basename,
 	     const char *filename)
 {
   /* strip off any leading directory portions */
-  const char *lastSlash = icu_strrchr(filename, DIR_SEP) + 1;
+  const char *lastSlash = uprv_strrchr(filename, DIR_SEP) + 1;
   char *lastDot;
 
   if(lastSlash>filename) {
-    icu_strcpy(basename, lastSlash);
+    uprv_strcpy(basename, lastSlash);
   } else {
-    icu_strcpy(basename, filename);
+    uprv_strcpy(basename, filename);
   }
 
   /* strip off any suffix */
-  lastDot = icu_strrchr(basename, '.');
+  lastDot = uprv_strrchr(basename, '.');
 
   if(lastDot != NULL) {
     *lastDot = '\0';

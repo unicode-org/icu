@@ -12,17 +12,17 @@
 */
 
 
-#include "utypes.h"
+#include "unicode/utypes.h"
 
 #include "intltest.h"
 #include "tfsmalls.h"
 
-#include "msgfmt.h"
-#include "choicfmt.h"
+#include "unicode/msgfmt.h"
+#include "unicode/choicfmt.h"
 
-#include "parsepos.h"
-#include "fieldpos.h"
-#include "fmtable.h"
+#include "unicode/parsepos.h"
+#include "unicode/fieldpos.h"
+#include "unicode/fmtable.h"
 
 
 static bool_t chkstatus( UErrorCode &status, char* msg = NULL )
@@ -80,7 +80,7 @@ void test_ParsePosition( void )
 
 }
 
-#include "decimfmt.h"
+#include "unicode/decimfmt.h"
 
 void test_FieldPosition_example( void )
 {

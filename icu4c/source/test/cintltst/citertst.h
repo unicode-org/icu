@@ -27,8 +27,8 @@
 #define _CITERCOLLTST
 
 #include "cintltst.h"
-#include "utypes.h"
-#include "ucol.h"
+#include "unicode/utypes.h"
+#include "unicode/ucol.h"
 struct ExpansionRecord
     {
         UChar character;

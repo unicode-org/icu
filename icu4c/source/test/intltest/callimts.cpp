@@ -12,10 +12,10 @@
 */
 
 #include "callimts.h"
-#include "calendar.h"
-#include "gregocal.h"
-#include "datefmt.h"
-#include "smpdtfmt.h"
+#include "unicode/calendar.h"
+#include "unicode/gregocal.h"
+#include "unicode/datefmt.h"
+#include "unicode/smpdtfmt.h"
 #include <float.h>
 #include <math.h>
 
@@ -72,19 +72,19 @@ CalendarLimitTest::test(UDate millis, Calendar* cal, DateFormat* fmt)
 double
 CalendarLimitTest::nextDouble(double a)
 {
-    return icu_nextDouble(a, TRUE);
+    return uprv_nextDouble(a, TRUE);
 }
 
 double
 CalendarLimitTest::previousDouble(double a)
 {
-    return icu_nextDouble(a, FALSE);
+    return uprv_nextDouble(a, FALSE);
 }
 
 bool_t
 CalendarLimitTest::withinErr(double a, double b, double err)
 {
-    return ( icu_fabs(a - b) < icu_fabs(a * err) ); 
+    return ( uprv_fabs(a - b) < uprv_fabs(a * err) ); 
 }
 
 void
@@ -231,11 +231,11 @@ CalendarLimitTest::floorDivide(double numerator, double denominator)
 {
     // We do this computation in order to handle
     // a numerator of Long.MIN_VALUE correctly
-    return icu_floor(numerator / denominator);
+    return uprv_floor(numerator / denominator);
     /*
     return (numerator >= 0) ?
-        icu_trunc(numerator / denominator) :
-        icu_trunc((numerator + 1) / denominator) - 1;
+        uprv_trunc(numerator / denominator) :
+        uprv_trunc((numerator + 1) / denominator) - 1;
 */
 }
 
@@ -271,10 +271,10 @@ int32_t
 CalendarLimitTest::floorDivide(double numerator, int32_t denominator, int32_t remainder[]) 
 {
     if (numerator >= 0) {
-        remainder[0] = (int32_t)icu_fmod(numerator, denominator);
-        return (int32_t)icu_trunc(numerator / denominator);
+        remainder[0] = (int32_t)uprv_fmod(numerator, denominator);
+        return (int32_t)uprv_trunc(numerator / denominator);
     }
-    int32_t quotient = (int32_t)(icu_trunc((numerator + 1) / denominator) - 1);
+    int32_t quotient = (int32_t)(uprv_trunc((numerator + 1) / denominator) - 1);
     remainder[0] = (int32_t)(numerator - (quotient * denominator));
     return quotient;
 }
@@ -298,7 +298,7 @@ const int32_t CalendarLimitTest::kLeapMonthLength[]
 bool_t
 CalendarLimitTest::timeToFields(UDate theTime, int32_t* fields)
 {
-    if(icu_isInfinite(theTime))
+    if(uprv_isInfinite(theTime))
         return FALSE;
 
     int32_t rawYear;
@@ -330,7 +330,7 @@ CalendarLimitTest::timeToFields(UDate theTime, int32_t* fields)
             (rawYear%100 != 0 || rawYear%400 == 0);
         
         // Gregorian day zero is a Monday
-        dayOfWeek = (int32_t)icu_fmod(gregorianEpochDay + 1, 7);
+        dayOfWeek = (int32_t)uprv_fmod(gregorianEpochDay + 1, 7);
     }
     else {
         // The Julian epoch day (not the same as Julian Day)
@@ -353,7 +353,7 @@ CalendarLimitTest::timeToFields(UDate theTime, int32_t* fields)
         isLeap = ((rawYear & 0x3) == 0); // equiv. to (rawYear%4 == 0)
         
         // Julian calendar day zero is a Saturday
-        dayOfWeek = (int32_t)icu_fmod(julianEpochDay-1, 7);
+        dayOfWeek = (int32_t)uprv_fmod(julianEpochDay-1, 7);
     }
     
     // Common Julian/Gregorian calculation

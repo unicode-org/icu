@@ -24,9 +24,9 @@
 */
 
 #include "cpputils.h"
-#include "choicfmt.h"
-#include "numfmt.h"
-#include "locid.h"
+#include "unicode/choicfmt.h"
+#include "unicode/numfmt.h"
+#include "unicode/locid.h"
 #include "mutex.h" 
 
 // *****************************************************************************
@@ -107,8 +107,8 @@ ChoiceFormat::operator=(const   ChoiceFormat& that)
         fChoiceLimits = new double[fCount];
         fChoiceFormats = new UnicodeString[fCount];
 
-        icu_arrayCopy(that.fChoiceLimits, fChoiceLimits, fCount);
-        icu_arrayCopy(that.fChoiceFormats, fChoiceFormats, fCount);
+        uprv_arrayCopy(that.fChoiceLimits, fChoiceLimits, fCount);
+        uprv_arrayCopy(that.fChoiceFormats, fChoiceFormats, fCount);
     }
     return *this;
 }
@@ -238,7 +238,7 @@ ChoiceFormat::applyPattern(const UnicodeString& newPattern,
     int32_t count = 0;
     int32_t part = 0;
     double startValue = 0;
-    double oldStartValue = icu_getNaN();
+    double oldStartValue = uprv_getNaN();
     bool_t inQuote = FALSE;
     for(int i = 0; i < newPattern.length(); ++i) {
         UChar ch = newPattern[i];
@@ -265,10 +265,10 @@ ChoiceFormat::applyPattern(const UnicodeString& newPattern,
             UChar posInf = 0x221E;
             UChar negInf [] = {0x002D /*'-'*/, posInf };
             if (tempBuffer == UnicodeString(&posInf, 1, 1)) {
-                startValue = icu_getInfinity();
+                startValue = uprv_getInfinity();
             } 
             else if (tempBuffer == UnicodeString(negInf, 2, 2)) {
-                startValue = - icu_getInfinity();
+                startValue = - uprv_getInfinity();
             } 
             else {
                 //segments[0].trim();
@@ -277,12 +277,12 @@ ChoiceFormat::applyPattern(const UnicodeString& newPattern,
                     return;
             }
 
-            if (ch == 0x003C /*'<'*/ && ! icu_isInfinite(startValue)) {
+            if (ch == 0x003C /*'<'*/ && ! uprv_isInfinite(startValue)) {
                 startValue = nextDouble(startValue);
             }
             // {sfb} There is a bug in MSVC 5.0 sp3 -- 0.0 <= NaN ==> TRUE
             //if (startValue <= oldStartValue) {
-            if (startValue <= oldStartValue && ! icu_isNaN(oldStartValue)) {
+            if (startValue <= oldStartValue && ! uprv_isNaN(oldStartValue)) {
                 status = U_ILLEGAL_ARGUMENT_ERROR;
                 return;
             }
@@ -314,8 +314,8 @@ ChoiceFormat::applyPattern(const UnicodeString& newPattern,
     fChoiceLimits    = new double[fCount];
     fChoiceFormats    = new UnicodeString[fCount];
     
-    icu_arrayCopy(newChoiceLimits, fChoiceLimits, fCount);
-    icu_arrayCopy(newChoiceFormats, fChoiceFormats, fCount);
+    uprv_arrayCopy(newChoiceLimits, fChoiceLimits, fCount);
+    uprv_arrayCopy(newChoiceFormats, fChoiceFormats, fCount);
 }
  
 // -------------------------------------
@@ -333,21 +333,21 @@ ChoiceFormat::toPattern(UnicodeString& result) const
         // approximate that by choosing the closest one to an integer.
         // could do better, but it's not worth it.
         double less = previousDouble(fChoiceLimits[i]);
-        double tryLessOrEqual = icu_fabs(icu_IEEEremainder(fChoiceLimits[i], 1.0));
-        double tryLess = icu_fabs(icu_IEEEremainder(less, 1.0));
+        double tryLessOrEqual = uprv_fabs(uprv_IEEEremainder(fChoiceLimits[i], 1.0));
+        double tryLess = uprv_fabs(uprv_IEEEremainder(less, 1.0));
 
         UErrorCode status = U_ZERO_ERROR;
         UnicodeString buf;
         // {sfb} hack to get this to work on MSVC - NaN doesn't behave as it should
         if (tryLessOrEqual < tryLess && 
-            ! (icu_isNaN(tryLessOrEqual) || icu_isNaN(tryLess))) {
+            ! (uprv_isNaN(tryLessOrEqual) || uprv_isNaN(tryLess))) {
             result += dtos(fChoiceLimits[i], buf, status);
             result += 0x0023 /*'#'*/;
         } 
         else {
-            if (icu_isPositiveInfinity(fChoiceLimits[i])) {
+            if (uprv_isPositiveInfinity(fChoiceLimits[i])) {
                 result += 0x221E;
-            } else if (icu_isNegativeInfinity(fChoiceLimits[i])) {
+            } else if (uprv_isNegativeInfinity(fChoiceLimits[i])) {
                 result += 0x002D /*'-'*/;
                 result += 0x221E;
             } else {
@@ -420,8 +420,8 @@ ChoiceFormat::setChoices(  const double* limits,
     fChoiceLimits = new double[fCount];
     fChoiceFormats = new UnicodeString[fCount];
 
-    icu_arrayCopy(limits, fChoiceLimits, fCount);
-    icu_arrayCopy(formats, fChoiceFormats, fCount);
+    uprv_arrayCopy(limits, fChoiceLimits, fCount);
+    uprv_arrayCopy(formats, fChoiceFormats, fCount);
 }
  
 // -------------------------------------
@@ -528,7 +528,7 @@ ChoiceFormat::parse(const UnicodeString& text,
     // find the best number (defined as the one with the longest parse)
     int32_t start = status.getIndex();
     int32_t furthest = start;
-    double bestNumber = icu_getNaN();
+    double bestNumber = uprv_getNaN();
     double tempNumber = 0.0;
     for (int i = 0; i < fCount; ++i) {
         UnicodeString tempString = fChoiceFormats[i];
@@ -575,7 +575,7 @@ ChoiceFormat::clone() const
 double 
 ChoiceFormat::nextDouble( double d, bool_t positive )
 {
-    return icu_nextDouble( d, positive );
+    return uprv_nextDouble( d, positive );
 }
 
 //eof

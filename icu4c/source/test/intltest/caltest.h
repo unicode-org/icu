@@ -14,9 +14,9 @@
 #ifndef __CalendarTest__
 #define __CalendarTest__
  
-#include "utypes.h"
+#include "unicode/utypes.h"
 #include "caltztst.h"
-#include "calendar.h"
+#include "unicode/calendar.h"
 
 class CalendarTest: public CalendarTimeZoneTest {
 public:

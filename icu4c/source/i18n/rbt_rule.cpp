@@ -8,10 +8,10 @@
 **********************************************************************
 */
 #include "rbt_rule.h"
-#include "rep.h"
+#include "unicode/rep.h"
 #include "rbt_data.h"
-#include "unifilt.h"
-#include "uniset.h"
+#include "unicode/unifilt.h"
+#include "unicode/uniset.h"
 
 /**
  * Construct a new rule with the given key, output text, and other

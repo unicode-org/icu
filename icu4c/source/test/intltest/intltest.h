@@ -23,11 +23,11 @@
 #ifndef _INTLTEST
 #define _INTLTEST
 
-#include "utypes.h"
-#include "unistr.h"
-#include "coll.h"
-#include "sortkey.h"
-#include "fmtable.h" // liu
+#include "unicode/utypes.h"
+#include "unicode/unistr.h"
+#include "unicode/coll.h"
+#include "unicode/sortkey.h"
+#include "unicode/fmtable.h" // liu
 
 #include <iostream.h>
 

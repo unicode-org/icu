@@ -12,14 +12,14 @@
 ********************************************************************
 */
 
-#include "utypes.h"
+#include "unicode/utypes.h"
 #include "dtfmapts.h"
 
-#include "datefmt.h"
-#include "smpdtfmt.h"
-#include "decimfmt.h"
-#include "choicfmt.h"
-#include "msgfmt.h"
+#include "unicode/datefmt.h"
+#include "unicode/smpdtfmt.h"
+#include "unicode/decimfmt.h"
+#include "unicode/choicfmt.h"
+#include "unicode/msgfmt.h"
 
 
 // This is an API test, not a unit test.  It doesn't test very many cases, and doesn't

@@ -12,7 +12,7 @@
 */
 
 #include "ucdtest.h"
-#include "unicode.h"
+#include "unicode/unicode.h"
 #include <stdio.h>
 #include <string.h>
 #include <assert.h>

@@ -13,9 +13,9 @@
 
 #include <stdio.h>
 
-#include "datefmt.h"
-#include "smpdtfmt.h"
-#include "gregocal.h"
+#include "unicode/datefmt.h"
+#include "unicode/smpdtfmt.h"
+#include "unicode/gregocal.h"
 
 
 // *****************************************************************************

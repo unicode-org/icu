@@ -19,7 +19,7 @@
 #ifndef SPCLMAP_H
 #define SPCLMAP_H
 
-#include "utypes.h" // UChar
+#include "unicode/utypes.h" // UChar
 #include "txtbdat.h"
 
 /**

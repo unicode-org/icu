@@ -8,8 +8,8 @@
 **********************************************************************
 */
 
-#include "uniset.h"
-#include "parsepos.h"
+#include "unicode/uniset.h"
+#include "unicode/parsepos.h"
 
 // N.B.: This mapping is different in ICU and Java
 const UnicodeString UnicodeSet::CATEGORY_NAMES(
@@ -712,7 +712,7 @@ void UnicodeSet::addPair(UnicodeString& pairs, UChar c, UChar d) {
         UChar f = pairs.charAt(i+1);
         if (e <= (d+1) && c <= (f+1)) {
             // Merge with this range
-            f = (UChar) icu_max(d, f);
+            f = (UChar) uprv_max(d, f);
 
             // Check to see if we need to merge with the
             // subsequent range also.  This happens if we have
@@ -723,7 +723,7 @@ void UnicodeSet::addPair(UnicodeString& pairs, UChar c, UChar d) {
                 f = pairs.charAt(i+3);
                 pairs.remove(i+2, 2);
             }
-            pairs.setCharAt(i, (UChar) icu_min(c, e));
+            pairs.setCharAt(i, (UChar) uprv_min(c, e));
             pairs.setCharAt(i+1, f);
             return;
         } else if ((b+1) < c && (d+1) < e) {

@@ -21,12 +21,12 @@
 
 /* C FUNCTIONALITY AND REGRESSION TEST FOR BREAKITERATOR */
 
-#include "uloc.h"
-#include "ubrk.h"
-#include "uchar.h"
-#include "utypes.h"
-#include "utypes.h"
-#include "ustring.h"
+#include "unicode/uloc.h"
+#include "unicode/ubrk.h"
+#include "unicode/uchar.h"
+#include "unicode/utypes.h"
+#include "unicode/utypes.h"
+#include "unicode/ustring.h"
 #include "cintltst.h"
 #include "cregrtst.h"
 #include<stdio.h>

@@ -14,12 +14,12 @@
 *   created by: Markus W. Scherer
 */
 
-#include "utypes.h"
-#include "ustring.h"
+#include "unicode/utypes.h"
+#include "unicode/ustring.h"
 #include "cmemory.h"
 #include "cstring.h"
 #include "filestrm.h"
-#include "udata.h"
+#include "unicode/udata.h"
 #include "unewdata.h"
 
 struct UNewDataMemory {
@@ -47,7 +47,7 @@ udata_create(const char *type, const char *name,
     }
 
     /* allocate the data structure */
-    pData=(UNewDataMemory *)icu_malloc(sizeof(UNewDataMemory));
+    pData=(UNewDataMemory *)uprv_malloc(sizeof(UNewDataMemory));
     if(pData==NULL) {
         *pErrorCode=U_MEMORY_ALLOCATION_ERROR;
         return NULL;
@@ -56,18 +56,18 @@ udata_create(const char *type, const char *name,
     /* open the output file */
     path=u_getDataDirectory();
     if(path!=NULL) {
-        icu_strcpy(filename, path);
+        uprv_strcpy(filename, path);
     } else {
         filename[0]=0;
     }
-    icu_strcat(filename, name);
+    uprv_strcat(filename, name);
     if(type!=NULL && *type!=0) {
-        icu_strcat(filename, ".");
-        icu_strcat(filename, type);
+        uprv_strcat(filename, ".");
+        uprv_strcat(filename, type);
     }
     pData->file=T_FileStream_open(filename, "wb");
     if(pData->file==NULL) {
-        icu_free(pData);
+        uprv_free(pData);
         *pErrorCode=U_FILE_ACCESS_ERROR;
         return NULL;
     }
@@ -75,7 +75,7 @@ udata_create(const char *type, const char *name,
     /* write the header information */
     headerSize=pInfo->size+4;
     if(comment!=NULL && *comment!=0) {
-        commentLength=icu_strlen(comment)+1;
+        commentLength=uprv_strlen(comment)+1;
         headerSize+=commentLength;
     } else {
         commentLength=0;
@@ -99,7 +99,7 @@ udata_create(const char *type, const char *name,
     headerSize&=0xf;
     if(headerSize!=0) {
         headerSize=16-headerSize;
-        icu_memset(bytes, 0, headerSize);
+        uprv_memset(bytes, 0, headerSize);
         T_FileStream_write(pData->file, bytes, headerSize);
     }
 
@@ -125,7 +125,7 @@ udata_finish(UNewDataMemory *pData, UErrorCode *pErrorCode) {
             }
             T_FileStream_close(pData->file);
         }
-        icu_free(pData);
+        uprv_free(pData);
     }
 
     return fileLength;
@@ -184,7 +184,7 @@ U_CAPI void U_EXPORT2
 udata_writeString(UNewDataMemory *pData, const char *s, UTextOffset length) {
     if(pData!=NULL && pData->file!=NULL) {
         if(length==-1) {
-            length=icu_strlen(s);
+            length=uprv_strlen(s);
         }
         if(length>0) {
             T_FileStream_write(pData->file, s, length);

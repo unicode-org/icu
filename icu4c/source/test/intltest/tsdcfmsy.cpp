@@ -11,10 +11,10 @@
 ********************************************************************
 */
 
-#include "utypes.h"
+#include "unicode/utypes.h"
 #include "tsdcfmsy.h"
 
-#include "dcfmtsym.h"
+#include "unicode/dcfmtsym.h"
 
 
 void IntlTestDecimalFormatSymbols::runIndexedTest( int32_t index, bool_t exec, char* &name, char* par )

@@ -11,13 +11,13 @@
  
 #include "msfmrgts.h"
 
-#include "format.h"
-#include "decimfmt.h"
-#include "locid.h"
-#include "msgfmt.h"
-#include "numfmt.h"
-#include "choicfmt.h"
-#include "gregocal.h"
+#include "unicode/format.h"
+#include "unicode/decimfmt.h"
+#include "unicode/locid.h"
+#include "unicode/msgfmt.h"
+#include "unicode/numfmt.h"
+#include "unicode/choicfmt.h"
+#include "unicode/gregocal.h"
 
 // *****************************************************************************
 // class MessageFormatRegressionTest
@@ -296,7 +296,7 @@ void MessageFormatRegressionTest::Test4052223()
     pos.setIndex(0); 
     pos.setErrorIndex(-1);
     f->parse("go postal", obj, pos);
-    if (pos.getErrorIndex() == -1 && ! icu_isNaN(obj.getDouble()))
+    if (pos.getErrorIndex() == -1 && ! uprv_isNaN(obj.getDouble()))
         errln(UnicodeString("Parse with \"go postal\" failed, at ") + pos.getErrorIndex());
     
     delete fmt;
@@ -572,7 +572,7 @@ void MessageFormatRegressionTest::Test4106661()
     UnicodeString str;
 
     // Will this work for -inf?
-    logln("Format with -INF : " + fmt->format(Formattable(-icu_getInfinity()), str, bogus, status));
+    logln("Format with -INF : " + fmt->format(Formattable(-uprv_getInfinity()), str, bogus, status));
     failure(status, "fmt->format");
     str.remove();
     logln("Format with -1.0 : " + fmt->format(Formattable(-1.0), str, bogus, status));
@@ -599,10 +599,10 @@ void MessageFormatRegressionTest::Test4106661()
     logln("Format with 2.1 : " + fmt->format(Formattable(2.1), str, bogus, status));
     failure(status, "fmt->format");
     str.remove();
-    logln("Format with NaN : " + fmt->format(Formattable(icu_getNaN()), str, bogus, status));
+    logln("Format with NaN : " + fmt->format(Formattable(uprv_getNaN()), str, bogus, status));
     failure(status, "fmt->format");
     str.remove();
-    logln("Format with +INF : " + fmt->format(Formattable(icu_getInfinity()), str, bogus, status));
+    logln("Format with +INF : " + fmt->format(Formattable(uprv_getInfinity()), str, bogus, status));
     failure(status, "fmt->format");
 
     delete fmt;
@@ -631,7 +631,7 @@ void MessageFormatRegressionTest::Test4094906()
     UnicodeString str;
 
     // Will this work for -inf?
-    logln("Format with -INF : " + fmt->format(Formattable(-icu_getInfinity()), str, bogus, status));
+    logln("Format with -INF : " + fmt->format(Formattable(-uprv_getInfinity()), str, bogus, status));
     failure(status, "fmt->format");
     str.remove();
     logln("Format with -1.0 : " + fmt->format(Formattable(-1.0), str, bogus, status));
@@ -658,10 +658,10 @@ void MessageFormatRegressionTest::Test4094906()
     logln("Format with 2.1 : " + fmt->format(Formattable(2.1), str, bogus, status));
     failure(status, "fmt->format");
     str.remove();
-    logln("Format with NaN : " + fmt->format(Formattable(icu_getNaN()), str, bogus, status));
+    logln("Format with NaN : " + fmt->format(Formattable(uprv_getNaN()), str, bogus, status));
     failure(status, "fmt->format");
     str.remove();
-    logln("Format with +INF : " + fmt->format(Formattable(icu_getInfinity()), str, bogus, status));
+    logln("Format with +INF : " + fmt->format(Formattable(uprv_getInfinity()), str, bogus, status));
     failure(status, "fmt->format");
 
     delete fmt;

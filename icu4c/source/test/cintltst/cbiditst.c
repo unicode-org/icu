@@ -18,9 +18,9 @@
 */
 
 #include "cintltst.h"
-#include "utypes.h"
-#include "uchar.h"
-#include "ubidi.h"
+#include "unicode/utypes.h"
+#include "unicode/uchar.h"
+#include "unicode/ubidi.h"
 #include "cbiditst.h"
 
 /* prototypes ---------------------------------------------------------------*/
@@ -237,7 +237,11 @@ testReordering(UBiDi *pBiDi, int testNumber) {
     ubidi_invertMap(visualMap1, logicalMap2, length);
 
     /* get them from the levels array, too */
+<<<<<<< cbiditst.c
+    uprv_memcpy(levels, ubidi_getLevels(pBiDi, &errorCode), length);
+=======
     memcpy(levels, ubidi_getLevels(pBiDi, &errorCode), length);
+>>>>>>> 1.7
     if(U_FAILURE(errorCode)) {
         log_err("ubidi_getLevels(tests[%d]): error %s\n", testNumber, myErrorName(errorCode));
         return;

@@ -11,10 +11,10 @@
 *****************************************************************************************
 */
 
-#include "utypes.h"
+#include "unicode/utypes.h"
 #include "tsnmfmt.h"
 
-#include "decimfmt.h"
+#include "unicode/decimfmt.h"
 
 #include <math.h>
 #include <float.h>
@@ -133,9 +133,9 @@ IntlTestNumberFormat::testFormat(char *par)
         tryIt(T_INT32(251887531));
         tryIt(-2.3e-168);
 
-        tryIt(icu_getNaN());
-        tryIt(icu_getInfinity());
-        tryIt(-icu_getInfinity());
+        tryIt(uprv_getNaN());
+        tryIt(uprv_getInfinity());
+        tryIt(-uprv_getInfinity());
 
         tryIt(5e-20 / 9);
         tryIt(5e20 / 9);
@@ -179,17 +179,17 @@ IntlTestNumberFormat::testFormat(char *par)
         tryIt(0.0);
         tryIt(it);
         tryIt(T_INT32(0));
-        tryIt(T_INT32(icu_floor(it)));
+        tryIt(T_INT32(uprv_floor(it)));
 
         // try again
         it = randDouble() * 10;
         tryIt(it);
-        tryIt(T_INT32(icu_floor(it)));
+        tryIt(T_INT32(uprv_floor(it)));
 
         // try again with very larget numbers
         it = randDouble() * 10000000000.0;
         tryIt(it);
-        tryIt(T_INT32(icu_floor(it)));
+        tryIt(T_INT32(uprv_floor(it)));
     }
 
     delete fFormat;

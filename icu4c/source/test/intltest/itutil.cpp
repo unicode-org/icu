@@ -15,7 +15,7 @@
  * IntlTestUtilities is the medium level test class for everything in the directory "utility".
  */
 
-#include "utypes.h"
+#include "unicode/utypes.h"
 #include "itutil.h"
 #include "strtest.h"
 #include "loctest.h"

@@ -15,7 +15,7 @@
 #define _INTLTESTDECIMALFORMATSYMBOLS
 
 
-#include "utypes.h"
+#include "unicode/utypes.h"
 #include "intltest.h"
 
 /**

@@ -19,15 +19,15 @@
 #define _TSTNORM
 
 #ifndef _UTYPES
-#include "utypes.h"
+#include "unicode/utypes.h"
 #endif
 
 #ifndef _COLL
-#include "coll.h"
+#include "unicode/coll.h"
 #endif
 
 #ifndef _NORMLZR
-#include "normlzr.h"
+#include "unicode/normlzr.h"
 #endif
 
 #ifndef _INTLTEST

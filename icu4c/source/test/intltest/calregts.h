@@ -12,8 +12,8 @@
 #ifndef _CALENDARREGRESSIONTEST_
 #define _CALENDARREGRESSIONTEST_
  
-#include "utypes.h"
-#include "calendar.h"
+#include "unicode/utypes.h"
+#include "unicode/calendar.h"
 
 #include "intltest.h"
 

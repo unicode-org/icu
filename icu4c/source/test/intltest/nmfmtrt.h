@@ -13,10 +13,10 @@
 #ifndef _NUMBERFORMATROUNDTRIPTEST_
 #define _NUMBERFORMATROUNDTRIPTEST_
  
-#include "utypes.h"
+#include "unicode/utypes.h"
 #include "intltest.h"
 
-#include "fmtable.h"
+#include "unicode/fmtable.h"
 
 class NumberFormat;
 

@@ -17,7 +17,7 @@
 #ifndef __GENPROPS_H__
 #define __GENPROPS_H__
 
-#include "utypes.h"
+#include "unicode/utypes.h"
 
 /* file definitions */
 #define DATA_NAME "uprops"

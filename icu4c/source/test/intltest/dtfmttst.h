@@ -14,9 +14,9 @@
 #ifndef _DATEFORMATTEST_
 #define _DATEFORMATTEST_
  
-#include "utypes.h"
+#include "unicode/utypes.h"
 #include "caltztst.h"
-#include "datefmt.h"
+#include "unicode/datefmt.h"
 
 /** 
  * Performs many different tests for DataeFormat and SimpleDateFormat

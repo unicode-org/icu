@@ -17,7 +17,7 @@
 
 #include <stdio.h>
 
-#include "utypes.h"
+#include "unicode/utypes.h"
 #include "cmemory.h"
 #include "cstring.h"
 #include "filestrm.h"
@@ -51,21 +51,21 @@ main(int argc,
     arg = argv[optind];
     
     /* version info */
-    if(icu_strcmp(arg, "-v") == 0 || icu_strcmp(arg, "--version") == 0) {
+    if(uprv_strcmp(arg, "-v") == 0 || uprv_strcmp(arg, "--version") == 0) {
       printVersion = 1;
     }
     /* usage info */
-    else if(icu_strcmp(arg, "-h") == 0 || icu_strcmp(arg, "--help") == 0) {
+    else if(uprv_strcmp(arg, "-h") == 0 || uprv_strcmp(arg, "--help") == 0) {
       printUsage = 1;
     }
     /* POSIX.1 says all arguments after -- are not options */
-    else if(icu_strcmp(arg, "--") == 0) {
+    else if(uprv_strcmp(arg, "--") == 0) {
       /* skip the -- */
       ++optind;
       break;
     }
     /* unrecognized option */
-    else if(icu_strncmp(arg, "-", icu_strlen("-")) == 0) {
+    else if(uprv_strncmp(arg, "-", uprv_strlen("-")) == 0) {
       printf("rbdump: invalid option -- %s\n", arg+1);
       printUsage = 1;
     }

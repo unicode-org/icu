@@ -24,9 +24,9 @@
 #include "cintltst.h"
 #include <stdio.h>
 #include <string.h>
-#include "uchar.h"
-#include "ustring.h"
-#include "ucnv.h"
+#include "unicode/uchar.h"
+#include "unicode/ustring.h"
+#include "unicode/ucnv.h"
 
 static char* _testDirectory=NULL;
 int main ( int argc, char **argv )

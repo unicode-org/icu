@@ -20,7 +20,7 @@
 
 #include <stdio.h>
 
-#include "utypes.h"
+#include "unicode/utypes.h"
 
 /* Print a ustring to the specified FILE* in the default codepage */
 U_CAPI void uprint(const UChar *s, FILE *f, UErrorCode *status);

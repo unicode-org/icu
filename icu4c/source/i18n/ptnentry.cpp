@@ -22,9 +22,9 @@
 
 #include "ptnentry.h"
 
-#include "unicode.h"
-#include "coll.h"
-#include "normlzr.h"
+#include "unicode/unicode.h"
+#include "unicode/coll.h"
+#include "unicode/normlzr.h"
 
 
 // static member initialization

@@ -9,7 +9,7 @@
 */
 #include "unirange.h"
 #include "uvector.h"
-#include "unistr.h"
+#include "unicode/unistr.h"
 
 UnicodeRange::UnicodeRange(UChar theStart, int32_t theLength) {
     start = theStart;

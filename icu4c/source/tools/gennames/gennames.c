@@ -24,11 +24,11 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include "utypes.h"
+#include "unicode/utypes.h"
 #include "cmemory.h"
 #include "cstring.h"
 #include "filestrm.h"
-#include "udata.h"
+#include "unicode/udata.h"
 #include "unewdata.h"
 
 #define STRING_STORE_SIZE 1000000
@@ -252,7 +252,7 @@ parseDB(FileStream *in, bool_t store10Names) {
     int i;
 
     while(T_FileStream_readLine(in, line, sizeof(line))!=NULL) {
-        length=icu_strlen(line);
+        length=uprv_strlen(line);
 
         /* get the character code */
         limit=getField(line, 0, length);
@@ -260,7 +260,7 @@ parseDB(FileStream *in, bool_t store10Names) {
             fprintf(stderr, "gennames: too few fields at code 0x%lx\n", code);
             exit(U_PARSE_ERROR);
         }
-        code=icu_strtoul(line, NULL, 16);
+        code=uprv_strtoul(line, NULL, 16);
 
         /* get the character name */
         name1Start=limit+1;
@@ -841,7 +841,7 @@ findToken(uint8_t *s, int16_t length) {
 
     for(i=0; i<(int16_t)tokenCount; ++i) {
         token=tokens[i];
-        if(token!=-1 && length==words[token].length && 0==icu_memcmp(s, words[token].s, length)) {
+        if(token!=-1 && length==words[token].length && 0==uprv_memcmp(s, words[token].s, length)) {
             return i;
         }
     }
@@ -854,7 +854,7 @@ findWord(char *s, int16_t length) {
     uint32_t i;
 
     for(i=0; i<wordCount; ++i) {
-        if(length==words[i].length && 0==icu_memcmp(s, words[i].s, length)) {
+        if(length==words[i].length && 0==uprv_memcmp(s, words[i].s, length)) {
             return words+i;
         }
     }
@@ -873,7 +873,7 @@ addWord(char *s, int16_t length) {
     }
 
     stringStart=allocWord(length);
-    icu_memcpy(stringStart, s, length);
+    uprv_memcpy(stringStart, s, length);
 
     word=words+wordCount;
 
@@ -916,11 +916,11 @@ addLine(uint32_t code, char *name1, int16_t name1Length, char *name2, int16_t na
 
     stringStart=allocLine(length);
     if(name1Length>0) {
-        icu_memcpy(stringStart, name1, name1Length);
+        uprv_memcpy(stringStart, name1, name1Length);
     }
     if(name2Length>0) {
         stringStart[name1Length]=NAME_SEPARATOR_CHAR;
-        icu_memcpy(stringStart+name1Length+1, name2, name2Length);
+        uprv_memcpy(stringStart+name1Length+1, name2, name2Length);
     }
 
     line=lines+lineCount;
@@ -950,8 +950,8 @@ addGroup(uint32_t groupMSB, uint8_t *strings, int16_t length) {
     /* store the line lengths first, then the strings */
     lineLengthsTop=(lineLengthsTop+1)/2;
     stringStart=allocLine(lineLengthsTop+length);
-    icu_memcpy(stringStart, lineLengths, lineLengthsTop);
-    icu_memcpy(stringStart+lineLengthsTop, strings, length);
+    uprv_memcpy(stringStart, lineLengths, lineLengthsTop);
+    uprv_memcpy(stringStart+lineLengthsTop, strings, length);
 
     line=lines+lineCount;
 
@@ -967,7 +967,7 @@ addToken(uint8_t *s, int16_t length) {
     uint8_t *stringStart;
 
     stringStart=allocLine(length+1);
-    icu_memcpy(stringStart, s, length);
+    uprv_memcpy(stringStart, s, length);
     stringStart[length]=0;
 
     return stringStart-stringStore;

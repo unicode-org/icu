@@ -17,7 +17,7 @@
 
 #include "list.h"
 #include "cmemory.h"
-#include "ustring.h"
+#include "unicode/ustring.h"
 
 /* Protos */
 static void strlist_grow(struct SList *list, UErrorCode *status);
@@ -34,7 +34,7 @@ strlist_open(UErrorCode *status)
   
   if(U_FAILURE(*status)) return 0;
   
-  list = (struct SList*) icu_malloc(sizeof(struct SList));
+  list = (struct SList*) uprv_malloc(sizeof(struct SList));
   if(list == 0) {
     *status = U_MEMORY_ALLOCATION_ERROR;
     return 0;
@@ -66,12 +66,12 @@ strlist_close(struct SList *list,
   
   /* deallocate each string */
   for(i = 0; i < list->u.fStringList.fCount; ++i) {
-    icu_free(list->u.fStringList.fData[i]);
+    uprv_free(list->u.fStringList.fData[i]);
   }
-  icu_free(list->u.fStringList.fData);
+  uprv_free(list->u.fStringList.fData);
   
   list->fType = eEmpty;
-  icu_free(list);
+  uprv_free(list);
 }
 
 void
@@ -94,7 +94,7 @@ strlist_add(struct SList *list,
     strlist_grow(list, status);
 
   list->u.fStringList.fData[index] = (UChar*) 
-    icu_malloc(sizeof(UChar) * (u_strlen(s) + 1));
+    uprv_malloc(sizeof(UChar) * (u_strlen(s) + 1));
   if(list->u.fStringList.fData[index] == 0) {
     *status = U_MEMORY_ALLOCATION_ERROR;
     return;
@@ -122,7 +122,7 @@ strlist_grow(struct SList *list,
   newCapacity = list->u.fStringList.fCapacity << 1; 
   
   /* allocate space for the array of strings */
-  newData = (UChar**) icu_malloc(sizeof(UChar*) * newCapacity);
+  newData = (UChar**) uprv_malloc(sizeof(UChar*) * newCapacity);
   if(newData == 0) {
     *status = U_MEMORY_ALLOCATION_ERROR;
     return;
@@ -131,18 +131,18 @@ strlist_grow(struct SList *list,
   /* allocate and copy each string */
   for(i = 0; i < list->u.fStringList.fCount; ++i) {
     newData[i] = (UChar*) 
-      icu_malloc(sizeof(UChar) * (u_strlen(list->u.fStringList.fData[i]) + 1));
+      uprv_malloc(sizeof(UChar) * (u_strlen(list->u.fStringList.fData[i]) + 1));
     if(newData[i] == 0) {
       *status = U_MEMORY_ALLOCATION_ERROR;
       for(j = 0; j < i; ++j) 
-	icu_free(newData[j]);
-      icu_free(newData);
+	uprv_free(newData[j]);
+      uprv_free(newData);
       return;
     }
     u_strcpy(newData[i], list->u.fStringList.fData[i]);
   }
   
-  icu_free(list->u.fStringList.fData);
+  uprv_free(list->u.fStringList.fData);
   list->u.fStringList.fData = newData;
   list->u.fStringList.fCapacity = newCapacity;
 }
@@ -156,7 +156,7 @@ strlist2d_open(UErrorCode *status)
   
   if(U_FAILURE(*status)) return 0;
 
-  list = (struct SList*) icu_malloc(sizeof(struct SList));
+  list = (struct SList*) uprv_malloc(sizeof(struct SList));
   if(list == 0) {
     *status = U_MEMORY_ALLOCATION_ERROR;
     return 0;
@@ -198,14 +198,14 @@ strlist2d_close(struct SList *list,
 
   /* deallocate each string */
   for(i = 0; i < list->u.fStringList2d.fCount; ++i) {
-    icu_free(list->u.fStringList2d.fData[i]);
+    uprv_free(list->u.fStringList2d.fData[i]);
   }
-  icu_free(list->u.fStringList2d.fData);
+  uprv_free(list->u.fStringList2d.fData);
 
-  icu_free(list->u.fStringList2d.fRows);
+  uprv_free(list->u.fStringList2d.fRows);
 
   list->fType = eEmpty;
-  icu_free(list);
+  uprv_free(list);
 }
 
 void
@@ -245,7 +245,7 @@ void strlist2d_add(struct SList *list,
     strlist2d_grow(list, status);
 
   list->u.fStringList2d.fData[index] = (UChar*) 
-    icu_malloc(sizeof(UChar) * (u_strlen(s) + 1));
+    uprv_malloc(sizeof(UChar) * (u_strlen(s) + 1));
   if(list->u.fStringList2d.fData[index] == 0) {
     *status = U_MEMORY_ALLOCATION_ERROR;
     return;
@@ -273,7 +273,7 @@ strlist2d_grow(struct SList *list,
   newCapacity = list->u.fStringList2d.fCapacity << 1; 
   
   /* allocate space for the array of strings */
-  newData = (UChar**) icu_malloc(sizeof(UChar*) * newCapacity);
+  newData = (UChar**) uprv_malloc(sizeof(UChar*) * newCapacity);
   if(newData == 0) {
     *status = U_MEMORY_ALLOCATION_ERROR;
     return;
@@ -282,18 +282,18 @@ strlist2d_grow(struct SList *list,
   /* allocate and copy each string */
   for(i = 0; i < list->u.fStringList2d.fCount; ++i) {
     newData[i] = (UChar*) 
-      icu_malloc(sizeof(UChar) * (u_strlen(list->u.fStringList2d.fData[i]) + 1));
+      uprv_malloc(sizeof(UChar) * (u_strlen(list->u.fStringList2d.fData[i]) + 1));
     if(newData[i] == 0) {
       *status = U_MEMORY_ALLOCATION_ERROR;
       for(j = 0; j < i; ++j) 
-	icu_free(newData[j]);
-      icu_free(newData);
+	uprv_free(newData[j]);
+      uprv_free(newData);
       return;
     }
     u_strcpy(newData[i], list->u.fStringList2d.fData[i]);
   }
   
-  icu_free(list->u.fStringList2d.fData);
+  uprv_free(list->u.fStringList2d.fData);
   list->u.fStringList2d.fData = newData;
   list->u.fStringList2d.fCapacity = newCapacity;
 }
@@ -316,7 +316,7 @@ strlist2d_growRows(struct SList *list,
   newCapacity = list->u.fStringList2d.fRowCapacity << 1;
   
   /* allocate space for the array of ints */
-  newRows = (int32_t*) icu_malloc(sizeof(int32_t) * newCapacity);
+  newRows = (int32_t*) uprv_malloc(sizeof(int32_t) * newCapacity);
   if(newRows == 0) {
     *status = U_MEMORY_ALLOCATION_ERROR;
   }
@@ -326,7 +326,7 @@ strlist2d_growRows(struct SList *list,
     newRows[i] = list->u.fStringList2d.fRows[i];
   
   /* clean up */
-  icu_free(list->u.fStringList2d.fRows);
+  uprv_free(list->u.fStringList2d.fRows);
   list->u.fStringList2d.fRows = newRows;
   list->u.fStringList2d.fRowCapacity = newCapacity;
 }
@@ -340,7 +340,7 @@ taglist_open(UErrorCode *status)
   
   if(U_FAILURE(*status)) return 0;
   
-  list = (struct SList*) icu_malloc(sizeof(struct SList));
+  list = (struct SList*) uprv_malloc(sizeof(struct SList));
   if(list == 0) {
     *status = U_MEMORY_ALLOCATION_ERROR;
     return 0;
@@ -368,10 +368,10 @@ taglist_close(struct SList *list,
     return;
   }
   
-  icu_free(list->u.fTaggedList.fData);
+  uprv_free(list->u.fTaggedList.fData);
   
   list->fType = eEmpty;
-  icu_free(list);
+  uprv_free(list);
 }
 
 
@@ -394,7 +394,7 @@ taglist_grow(struct SList *list,
   
   /* allocate space for the array of string pairs */
   newData = (struct SStringPair*) 
-    icu_malloc(sizeof(struct SStringPair) * newCapacity);
+    uprv_malloc(sizeof(struct SStringPair) * newCapacity);
   if(newData == 0) {
     *status = U_MEMORY_ALLOCATION_ERROR;
     return;
@@ -405,7 +405,7 @@ taglist_grow(struct SList *list,
     newData[i] = list->u.fTaggedList.fData[i];
   }
   
-  icu_free(list->u.fTaggedList.fData);
+  uprv_free(list->u.fTaggedList.fData);
   list->u.fTaggedList.fData = newData;
   list->u.fTaggedList.fCapacity = newCapacity;
 }
@@ -426,16 +426,16 @@ taglist_add(struct SList *list,
     return;
   }
 
-  pair.fKey = (UChar*) icu_malloc(sizeof(UChar) * (u_strlen(tag) + 1));
+  pair.fKey = (UChar*) uprv_malloc(sizeof(UChar) * (u_strlen(tag) + 1));
   if(pair.fKey == 0) {
     *status = U_MEMORY_ALLOCATION_ERROR;
     return;
   }
 
-  pair.fValue = (UChar*) icu_malloc(sizeof(UChar) * (u_strlen(data) + 1));
+  pair.fValue = (UChar*) uprv_malloc(sizeof(UChar) * (u_strlen(data) + 1));
   if(pair.fValue == 0) {
     *status = U_MEMORY_ALLOCATION_ERROR;
-    icu_free(pair.fKey);
+    uprv_free(pair.fKey);
     return;
   }
 

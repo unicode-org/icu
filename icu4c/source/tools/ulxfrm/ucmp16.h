@@ -25,7 +25,7 @@
 #define UCMP16_H
 
 
-#include "utypes.h"
+#include "unicode/utypes.h"
 
 
 
@@ -72,7 +72,7 @@
  * @see                CompactIntArray
  * @see                CompactCharArray
  * @see                CompactStringArray
- * @version            $Revision: 1.4 $ 8/25/98
+ * @version            $Revision: 1.5 $ 8/25/98
  * @author             Helena Shih
  */
 

@@ -39,15 +39,15 @@
 #define _G7COLL
 
 #ifndef _UTYPES
-#include "utypes.h"
+#include "unicode/utypes.h"
 #endif
 
 #ifndef _COLL
-#include "coll.h"
+#include "unicode/coll.h"
 #endif
 
 #ifndef _TBLCOLL
-#include "tblcoll.h"
+#include "unicode/tblcoll.h"
 #endif
 
 #ifndef _INTLTEST

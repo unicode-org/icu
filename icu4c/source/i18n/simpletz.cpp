@@ -21,8 +21,8 @@
 ********************************************************************************
 */
 
-#include "simpletz.h"
-#include "gregocal.h"
+#include "unicode/simpletz.h"
+#include "unicode/gregocal.h"
 #include "tzdat.h"
 
 char SimpleTimeZone::fgClassID = 0; // Value is irrelevant

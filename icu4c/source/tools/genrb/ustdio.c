@@ -18,8 +18,8 @@
 
 #include "ustdio.h"
 #include "ufile.h"
-#include "ucnv.h"
-#include "ustring.h"
+#include "unicode/ucnv.h"
+#include "unicode/ustring.h"
 #include "cmemory.h"
 
 static const UChar DELIMITERS [] = { 0x000A, 0x0000 };
@@ -132,7 +132,7 @@ u_fgets(UFILE *f,
     }
 
     /* copy the characters into the target*/
-    icu_memcpy(s, f->fUCPos, count * sizeof(UChar));
+    uprv_memcpy(s, f->fUCPos, count * sizeof(UChar));
 
     /* add the terminator */
     s[count] = 0x0000;
@@ -264,7 +264,7 @@ u_file_read(UChar *chars,
 
   /* if the buffer contains the amount requested, just copy */
   if(dataSize > count) {
-    icu_memcpy(chars, f->fUCPos, count * sizeof(UChar));
+    uprv_memcpy(chars, f->fUCPos, count * sizeof(UChar));
 
     /* update the current buffer position */
     f->fUCPos += count;
@@ -285,7 +285,7 @@ u_file_read(UChar *chars,
     dataSize = f->fUCLimit - f->fUCPos;
 
     /* copy the current data in the buffer */
-    icu_memcpy(chars + read, f->fUCPos, dataSize * sizeof(UChar));
+    uprv_memcpy(chars + read, f->fUCPos, dataSize * sizeof(UChar));
     
     /* update number of items read */
     read += dataSize;

@@ -9,7 +9,7 @@
 */
 #include "rbt_set.h"
 #include "rbt_rule.h"
-#include "unistr.h"
+#include "unicode/unistr.h"
 
 /* Note: There was an old implementation that indexed by first letter of
  * key.  Problem with this is that key may not have a meaningful first

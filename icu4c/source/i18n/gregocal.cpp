@@ -37,7 +37,7 @@
 */
 
 #ifndef _GREGOCAL
-#include "gregocal.h"
+#include "unicode/gregocal.h"
 #endif
 
 // *****************************************************************************
@@ -412,7 +412,7 @@ GregorianCalendar::timeToFields(UDate theTime, bool_t quick, UErrorCode& status)
             (rawYear%100 != 0 || rawYear%400 == 0);
         
         // Gregorian day zero is a Monday
-        dayOfWeek = (int32_t)icu_fmod(gregorianEpochDay + 1, 7);
+        dayOfWeek = (int32_t)uprv_fmod(gregorianEpochDay + 1, 7);
     }
     else {
         // The Julian epoch day (not the same as Julian Day)
@@ -433,7 +433,7 @@ GregorianCalendar::timeToFields(UDate theTime, bool_t quick, UErrorCode& status)
         isLeap = ((rawYear & 0x3) == 0); // equiv. to (rawYear%4 == 0)
         
         // Julian calendar day zero is a Saturday
-        dayOfWeek = (int32_t)icu_fmod(julianEpochDay-1, 7);
+        dayOfWeek = (int32_t)uprv_fmod(julianEpochDay-1, 7);
     }
     
     // Common Julian/Gregorian calculation
@@ -646,7 +646,7 @@ GregorianCalendar::computeFields(UErrorCode& status)
     int32_t date         = internalGet(DATE);
     uint8_t dayOfWeek     = (uint8_t) internalGet(DAY_OF_WEEK);
 
-    double days = icu_floor(localMillis / kOneDay);
+    double days = uprv_floor(localMillis / kOneDay);
     int32_t millisInDay = (int32_t) (localMillis - (days * kOneDay));
     if (millisInDay < 0) 
         millisInDay += U_MILLIS_PER_DAY;
@@ -778,7 +778,7 @@ GregorianCalendar::getEpochDay(UErrorCode& status)
     double wallSec = internalGetTime()/1000 + (internalGet(ZONE_OFFSET) + internalGet(DST_OFFSET))/1000;
     
     // {sfb} force conversion to double
-    return icu_trunc(wallSec / (kOneDay/1000.0));
+    return uprv_trunc(wallSec / (kOneDay/1000.0));
     //return floorDivide(wallSec, kOneDay/1000.0);
 }
 
@@ -1149,7 +1149,7 @@ double
 GregorianCalendar::millisToJulianDay(UDate millis)
 {
     return (double)kEpochStartAsJulianDay + floorDivide(millis, kOneDay);
-    //return kEpochStartAsJulianDay + icu_trunc(millis / kOneDay);
+    //return kEpochStartAsJulianDay + uprv_trunc(millis / kOneDay);
 }
 
 // -------------------------------------
@@ -1165,7 +1165,7 @@ GregorianCalendar::julianDayToMillis(double julian)
 double
 GregorianCalendar::floorDivide(double numerator, double denominator) 
 {
-    return icu_floor(numerator / denominator);
+    return uprv_floor(numerator / denominator);
 }
 
 // -------------------------------------
@@ -1200,10 +1200,10 @@ int32_t
 GregorianCalendar::floorDivide(double numerator, int32_t denominator, int32_t remainder[]) 
 {
     if (numerator >= 0) {
-        remainder[0] = (int32_t)icu_fmod(numerator, denominator);
-        return (int32_t)icu_trunc(numerator / denominator);
+        remainder[0] = (int32_t)uprv_fmod(numerator, denominator);
+        return (int32_t)uprv_trunc(numerator / denominator);
     }
-    int32_t quotient = (int32_t)(icu_trunc((numerator + 1) / denominator) - 1);
+    int32_t quotient = (int32_t)(uprv_trunc((numerator + 1) / denominator) - 1);
     remainder[0] = (int32_t)(numerator - ((double)quotient * denominator));
     return quotient;
 }
@@ -1216,7 +1216,7 @@ GregorianCalendar::EStampValues
 GregorianCalendar::aggregateStamp(EStampValues stamp_a, EStampValues stamp_b) 
 {
     return ((EStampValues)((stamp_a != kUnset && stamp_b != kUnset) 
-        ? icu_max((int32_t)stamp_a, (int32_t)stamp_b)
+        ? uprv_max((int32_t)stamp_a, (int32_t)stamp_b)
         : kUnset));
 }
 
@@ -1625,7 +1625,7 @@ GregorianCalendar::roll(EDateFields field, int32_t amount, UErrorCode& status)
             // contains the Gregorian cutover.  We handle this special case
             // here.  [j81 - aliu]
             double monthLen = cMonthLen * kOneDay;
-            double msIntoMonth = icu_fmod(internalGetTime() - cMonthStart +
+            double msIntoMonth = uprv_fmod(internalGetTime() - cMonthStart +
                                           amount * kOneDay, monthLen);
             if (msIntoMonth < 0) {
                 msIntoMonth += monthLen;
@@ -1644,7 +1644,7 @@ GregorianCalendar::roll(EDateFields field, int32_t amount, UErrorCode& status)
             double delta = amount * kOneDay; // Scale up from days to millis
             double min2 = internalGetTime() - (internalGet(DAY_OF_YEAR) - 1) * kOneDay;
             int32_t yearLen = yearLength();
-            internalSetTime( icu_fmod((internalGetTime() + delta - min2), (yearLen * kOneDay)));
+            internalSetTime( uprv_fmod((internalGetTime() + delta - min2), (yearLen * kOneDay)));
             if (internalGetTime() < 0) 
                 internalSetTime( internalGetTime() + yearLen * kOneDay);
 
@@ -1663,7 +1663,7 @@ GregorianCalendar::roll(EDateFields field, int32_t amount, UErrorCode& status)
             if (leadDays < 0) 
                 leadDays += 7;
             double min2 = internalGetTime() - leadDays * kOneDay;
-            internalSetTime(icu_fmod((internalGetTime() + delta - min2), kOneWeek));
+            internalSetTime(uprv_fmod((internalGetTime() + delta - min2), kOneWeek));
             if (internalGetTime() < 0) 
                 internalSetTime(internalGetTime() + kOneWeek);
             setTimeInMillis(internalGetTime() + min2, status);
@@ -1685,7 +1685,7 @@ GregorianCalendar::roll(EDateFields field, int32_t amount, UErrorCode& status)
             double min2 = internalGetTime() - preWeeks * kOneWeek;
             double gap2 = kOneWeek * (preWeeks + postWeeks + 1); // Must add 1!
             // Roll within this range
-            internalSetTime(icu_fmod((internalGetTime() + delta - min2), gap2));
+            internalSetTime(uprv_fmod((internalGetTime() + delta - min2), gap2));
             if (internalGetTime() < 0) 
                 internalSetTime(internalGetTime() + gap2);
             setTimeInMillis(internalGetTime() + min2, status);

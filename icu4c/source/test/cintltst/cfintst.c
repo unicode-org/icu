@@ -24,13 +24,13 @@
  * collation rules as its sorting sequence.
  */
 
-#include "utypes.h"
-#include "ucol.h"
-#include "uloc.h"
+#include "unicode/utypes.h"
+#include "unicode/ucol.h"
+#include "unicode/uloc.h"
 #include "cintltst.h"
 #include "ccolltst.h"
 #include "cfintst.h"
-#include "ustring.h"
+#include "unicode/ustring.h"
 #include "string.h"
 
 static UCollator *myCollation;

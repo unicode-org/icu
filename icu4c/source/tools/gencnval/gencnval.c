@@ -20,7 +20,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <ctype.h>
-#include "utypes.h"
+#include "unicode/utypes.h"
 #include "cmemory.h"
 #include "cstring.h"
 #include "filestrm.h"
@@ -124,8 +124,8 @@ main(int argc, char *argv[]) {
 
     path=u_getDataDirectory();
     if(path!=NULL) {
-        icu_strcpy(line, path);
-        icu_strcat(line, "convrtrs.txt");
+        uprv_strcpy(line, path);
+        uprv_strcat(line, "convrtrs.txt");
         path=line;
     } else {
         path="convrtrs.txt";
@@ -230,7 +230,7 @@ parseLine(const char *line) {
     /* store the converter name */
     length=limit-start;
     converter=allocString(length+1);
-    icu_memcpy(converter, line+start, length);
+    uprv_memcpy(converter, line+start, length);
     converter[length]=0;
 
     /* add the converter to the converter table */
@@ -264,7 +264,7 @@ parseLine(const char *line) {
         /* store the alias name */
         length=limit-start;
         alias=allocString(length+1);
-        icu_memcpy(alias, line+start, length);
+        uprv_memcpy(alias, line+start, length);
         alias[length]=0;
 
         /* add the alias/converter pair to the alias table */
@@ -317,5 +317,5 @@ allocString(uint32_t length) {
 
 static int
 compareAliases(const void *alias1, const void *alias2) {
-    return icu_stricmp(((Alias *)alias1)->alias, ((Alias *)alias2)->alias);
+    return uprv_stricmp(((Alias *)alias1)->alias, ((Alias *)alias2)->alias);
 }

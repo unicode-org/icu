@@ -13,7 +13,7 @@
 ********************************************************************************
 */
 #ifndef _FMTABLE
-#include "fmtable.h"
+#include "unicode/fmtable.h"
 #endif
 
 #ifndef _CMEMORY
@@ -296,7 +296,7 @@ Formattable::adoptArray(Formattable* array, int32_t count)
 //----------------------------------------------------
 #ifdef _DEBUG
 
-#include "datefmt.h"
+#include "unicode/datefmt.h"
 #include "unistrm.h"
 
 class FormattableStreamer

@@ -18,7 +18,7 @@
 #ifndef RBLIST_H
 #define RBLIST_H 1
 
-#include "utypes.h"
+#include "unicode/utypes.h"
 #include "list.h"
 
 /* A resource bundle data item */

@@ -4,10 +4,10 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
-#include "locid.h"
-#include "unistr.h"
-#include "convert.h"
-#include "ucnv_err.h"
+#include "unicode/locid.h"
+#include "unicode/unistr.h"
+#include "unicode/convert.h"
+#include "unicode/ucnv_err.h"
 #include <iostream.h>
 #include "cppcnvt.h"
 

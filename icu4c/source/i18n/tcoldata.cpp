@@ -25,7 +25,7 @@
 #include "tcoldata.h"
 #include "tables.h"
 #include "mutex.h"
-#include "tblcoll.h"
+#include "unicode/tblcoll.h"
 
 //===============================================================================
 

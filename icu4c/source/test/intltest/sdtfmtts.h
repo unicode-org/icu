@@ -15,7 +15,7 @@
 #define _INTLTESTSIMPLEDATEFORMATAPI
 
 
-#include "utypes.h"
+#include "unicode/utypes.h"
 #include "intltest.h"
 
 /**

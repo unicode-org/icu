@@ -55,15 +55,15 @@
 #include "ucmp32.h"
 #include "tcoldata.h"
 
-#include "tblcoll.h"
+#include "unicode/tblcoll.h"
 
-#include "coleitr.h"
-#include "locid.h"
-#include "unicode.h"
+#include "unicode/coleitr.h"
+#include "unicode/locid.h"
+#include "unicode/unicode.h"
 #include "tables.h"
-#include "normlzr.h"
+#include "unicode/normlzr.h"
 #include "mergecol.h"
-#include "resbund.h"
+#include "unicode/resbund.h"
 #include "filestrm.h"
 
 #ifdef _DEBUG
@@ -74,7 +74,7 @@
 
 #include <string.h>
 
-#include <ustring.h>
+#include "unicode\ustring.h"
 
 
 class RuleBasedCollatorStreamer
@@ -1191,8 +1191,8 @@ RuleBasedCollator::compare( const UnicodeString& source,
     UnicodeString target_togo;
     UTextOffset begin=0;
 
-    source.extract(begin, icu_min(length,source.length()), source_togo);
-    target.extract(begin, icu_min(length,target.length()), target_togo);
+    source.extract(begin, uprv_min(length,source.length()), source_togo);
+    target.extract(begin, uprv_min(length,target.length()), target_togo);
     return (RuleBasedCollator::compare(source_togo, target_togo));
 }
 

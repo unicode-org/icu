@@ -18,13 +18,13 @@
 *     Madhu Katragadda            Ported for C API
 *********************************************************************************
 */
-#include "utypes.h"
-#include "utypes.h"
+#include "unicode/utypes.h"
+#include "unicode/utypes.h"
 #include "cloctst.h"
-#include "uloc.h"
+#include "unicode/uloc.h"
 #include <stdio.h>
 #include <string.h>
-#include "ustring.h"
+#include "unicode/ustring.h"
 #include "cintltst.h"
 
 void PrintDataTable();

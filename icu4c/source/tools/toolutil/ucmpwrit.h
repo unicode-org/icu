@@ -13,7 +13,7 @@
 #ifndef _UCMPWRIT
 #define _UCMPWRIT
 
-#include "utypes.h"
+#include "unicode/utypes.h"
 #include "unewdata.h"
 
 #include "ucmp8.h"

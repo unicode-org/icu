@@ -12,12 +12,12 @@
 #ifndef _NUMBERFORMATREGRESSIONTEST_
 #define _NUMBERFORMATREGRESSIONTEST_
  
-#include "utypes.h"
-#include "numfmt.h"
+#include "unicode/utypes.h"
+#include "unicode/numfmt.h"
 
 #include "intltest.h"
 
-#include "numfmt.h"
+#include "unicode/numfmt.h"
 
 class DecimalFormat;
 

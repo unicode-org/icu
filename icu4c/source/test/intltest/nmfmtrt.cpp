@@ -11,9 +11,9 @@
 
 #include "nmfmtrt.h"
 
-#include "dcfmtsym.h"
-#include "decimfmt.h"
-#include "locid.h"
+#include "unicode/dcfmtsym.h"
+#include "unicode/decimfmt.h"
+#include "unicode/locid.h"
 
 #include <float.h>
 #include <stdio.h>    // for sprintf
@@ -115,9 +115,9 @@ NumberFormatRoundTripTest::test(NumberFormat *fmt)
 {
     if (TRUE)
     {
-        test(fmt, icu_getNaN());
-        test(fmt, icu_getInfinity());
-        test(fmt, -icu_getInfinity());
+        test(fmt, uprv_getNaN());
+        test(fmt, uprv_getInfinity());
+        test(fmt, -uprv_getInfinity());
 
         test(fmt, (int32_t)500);
         test(fmt, (int32_t)0);
@@ -131,7 +131,7 @@ NumberFormatRoundTripTest::test(NumberFormat *fmt)
         for(int i = 0; i < 10; ++i) {
             test(fmt, randomDouble(1));
             test(fmt, randomDouble(10000));
-            test(fmt, icu_floor((randomDouble(10000))));
+            test(fmt, uprv_floor((randomDouble(10000))));
             test(fmt, randomDouble(1e50));
             test(fmt, randomDouble(1e-50));
             test(fmt, randomDouble(1e100));
@@ -266,7 +266,7 @@ NumberFormatRoundTripTest::proportionalError(const Formattable& a, const Formatt
     if(aa != 0 && bb != 0) 
         error /= aa;
     
-    return icu_fabs(error);
+    return uprv_fabs(error);
 }
 
 UnicodeString& 

@@ -8,11 +8,11 @@
 **********************************************************************
 */
 #include "transtst.h"
-#include "utypes.h"
-#include "translit.h"
-#include "rbt.h"
-#include "unifilt.h"
-#include "cpdtrans.h"
+#include "unicode/utypes.h"
+#include "unicode/translit.h"
+#include "unicode/rbt.h"
+#include "unicode/unifilt.h"
+#include "unicode/cpdtrans.h"
 
 #define CASE(id,test) case id:                          \
                           name = #test;                 \

@@ -20,12 +20,12 @@
 */
 /* C API TEST FOR MESSAGE FORMAT */
 
-#include "uloc.h"
-#include "utypes.h"
-#include "umsg.h"
-#include "udat.h"
-#include "umsg.h"
-#include "ustring.h"
+#include "unicode/uloc.h"
+#include "unicode/utypes.h"
+#include "unicode/umsg.h"
+#include "unicode/udat.h"
+#include "unicode/umsg.h"
+#include "unicode/ustring.h"
 #include "cintltst.h"
 #include "cmsgtst.h"
 #include<stdio.h>

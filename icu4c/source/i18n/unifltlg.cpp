@@ -7,8 +7,8 @@
 *   11/17/99    aliu        Creation.
 **********************************************************************
 */
-#include "unifltlg.h"
-#include "unifilt.h"
+#include "unicode/unifltlg.h"
+#include "unicode/unifilt.h"
 
 class UnicodeNotFilter : public UnicodeFilter {
     UnicodeFilter* filt;

@@ -17,7 +17,7 @@
 
 #include <stdio.h>
 
-#include "utypes.h"
+#include "unicode/utypes.h"
 #include "cmemory.h"
 #include "cstring.h"
 #include "filestrm.h"
@@ -32,8 +32,8 @@ U_CDECL_BEGIN
 U_CDECL_END
 #include "toolutil.h"
 
-#include "ucol.h"
-#include "uloc.h"
+#include "unicode/ucol.h"
+#include "unicode/uloc.h"
 
 /* Protos */
 static void usage(void);
@@ -75,17 +75,17 @@ main(int argc,
     arg = argv[optind];
     
     /* version info */
-    if(icu_strcmp(arg, "-v") == 0 || icu_strcmp(arg, "--version") == 0) {
+    if(uprv_strcmp(arg, "-v") == 0 || uprv_strcmp(arg, "--version") == 0) {
       printVersion = 1;
     }
     /* usage info */
-    else if(icu_strcmp(arg, "-h") == 0 || icu_strcmp(arg, "--help") == 0) {
+    else if(uprv_strcmp(arg, "-h") == 0 || uprv_strcmp(arg, "--help") == 0) {
       printUsage = 1;
     }
 
-    else if(icu_strncmp(arg, "-e", 2) == 0) {
+    else if(uprv_strncmp(arg, "-e", 2) == 0) {
         useConversionLibrary = 1;
-        if(icu_strlen(arg) > icu_strlen("-e")) {
+        if(uprv_strlen(arg) > uprv_strlen("-e")) {
             encoding = arg+2;
         } else {
             encoding = 0;
@@ -94,13 +94,13 @@ main(int argc,
     }
 
     /* POSIX.1 says all arguments after -- are not options */
-    else if(icu_strcmp(arg, "--") == 0) {
+    else if(uprv_strcmp(arg, "--") == 0) {
       /* skip the -- */
       ++optind;
       break;
     }
     /* unrecognized option */
-    else if(icu_strncmp(arg, "-", icu_strlen("-")) == 0) {
+    else if(uprv_strncmp(arg, "-", uprv_strlen("-")) == 0) {
       printf("genrb: invalid option -- %s\n", arg+1);
       printUsage = 1;
     }
@@ -210,7 +210,7 @@ processFile(const char *filename, const char *cp,
   T_FileStream_close(in);
   T_FileStream_close(rb_out);
 
-  icu_free(rbname);
+  uprv_free(rbname);
 }
 
 /* Generate the target .res file name from the input file name */
@@ -228,34 +228,34 @@ make_res_filename(const char *filename,
   basename = dirname = resName = 0;
 
   /* determine basename, and compiled file names */
-  basename = (char*) icu_malloc(sizeof(char) * (icu_strlen(filename) + 1));
+  basename = (char*) uprv_malloc(sizeof(char) * (uprv_strlen(filename) + 1));
   if(basename == 0) {
     *status = U_MEMORY_ALLOCATION_ERROR;
     goto finish;
   }
   get_basename(basename, filename);
   
-  dirname = (char*) icu_malloc(sizeof(char) * (icu_strlen(filename) + 1));
+  dirname = (char*) uprv_malloc(sizeof(char) * (uprv_strlen(filename) + 1));
   if(dirname == 0) {
     *status = U_MEMORY_ALLOCATION_ERROR;
     goto finish;
   }
   get_dirname(dirname, filename);
 
-  resName = (char*) icu_malloc(sizeof(char) * (icu_strlen(dirname)
-					       + icu_strlen(basename) 
-					       + icu_strlen(RES_SUFFIX) + 1));
+  resName = (char*) uprv_malloc(sizeof(char) * (uprv_strlen(dirname)
+					       + uprv_strlen(basename) 
+					       + uprv_strlen(RES_SUFFIX) + 1));
   if(resName == 0) {
     *status = U_MEMORY_ALLOCATION_ERROR;
     goto finish;
   }
-  icu_strcpy(resName, dirname);
-  icu_strcat(resName, basename);
-  icu_strcat(resName, RES_SUFFIX);
+  uprv_strcpy(resName, dirname);
+  uprv_strcat(resName, basename);
+  uprv_strcat(resName, RES_SUFFIX);
 
  finish:
-  icu_free(basename);
-  icu_free(dirname);
+  uprv_free(basename);
+  uprv_free(dirname);
 
   return resName;
 }
@@ -275,34 +275,34 @@ make_col_filename(const char *filename,
   basename = dirname = colName = 0;
 
   /* determine basename, and compiled file names */
-  basename = (char*) icu_malloc(sizeof(char) * (icu_strlen(filename) + 1));
+  basename = (char*) uprv_malloc(sizeof(char) * (uprv_strlen(filename) + 1));
   if(basename == 0) {
     *status = U_MEMORY_ALLOCATION_ERROR;
     goto finish;
   }
   get_basename(basename, filename);
   
-  dirname = (char*) icu_malloc(sizeof(char) * (icu_strlen(filename) + 1));
+  dirname = (char*) uprv_malloc(sizeof(char) * (uprv_strlen(filename) + 1));
   if(dirname == 0) {
     *status = U_MEMORY_ALLOCATION_ERROR;
     goto finish;
   }
   get_dirname(dirname, filename);
 
-  colName = (char*) icu_malloc(sizeof(char) * (icu_strlen(dirname)
-					       + icu_strlen(basename) 
-					       + icu_strlen(COL_SUFFIX) + 1));
+  colName = (char*) uprv_malloc(sizeof(char) * (uprv_strlen(dirname)
+					       + uprv_strlen(basename) 
+					       + uprv_strlen(COL_SUFFIX) + 1));
   if(colName == 0) {
     *status = U_MEMORY_ALLOCATION_ERROR;
     goto finish;
   }
-  icu_strcpy(colName, dirname);
-  icu_strcat(colName, basename);
-  icu_strcat(colName, COL_SUFFIX);
+  uprv_strcpy(colName, dirname);
+  uprv_strcat(colName, basename);
+  uprv_strcat(colName, COL_SUFFIX);
 
  finish:
-  icu_free(basename);
-  icu_free(dirname);
+  uprv_free(basename);
+  uprv_free(dirname);
 
   return colName;
 }
@@ -312,7 +312,7 @@ static void make_col(const char *filename, UErrorCode *status)
     char *basename;
     UCollator *coll;
 
-    basename = (char*) icu_malloc(sizeof(char) * (icu_strlen(filename) + 1));
+    basename = (char*) uprv_malloc(sizeof(char) * (uprv_strlen(filename) + 1));
     if(basename == 0) {
         *status = U_MEMORY_ALLOCATION_ERROR;
         return;

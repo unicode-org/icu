@@ -15,7 +15,7 @@
  * IntlTestConvert is the medium level test class for everything in the directory "utility".
  */
 
-#include "utypes.h"
+#include "unicode/utypes.h"
 #include "itconv.h"
 #include "cppcnvt.h"
 

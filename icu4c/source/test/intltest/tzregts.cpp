@@ -13,8 +13,8 @@
 
 #include "calregts.h"
 
-#include "simpletz.h"
-#include "smpdtfmt.h"
+#include "unicode/simpletz.h"
+#include "unicode/smpdtfmt.h"
 
 #include <limits.h>
 

@@ -7,9 +7,9 @@
 **********************************************************************
 */
 
-#include "utypes.h"
+#include "unicode/utypes.h"
 #include "usettest.h"
-#include "uniset.h"
+#include "unicode/uniset.h"
 
 #define CASE(id,test) case id:                          \
                           name = #test;                 \

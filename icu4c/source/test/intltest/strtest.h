@@ -25,7 +25,7 @@
 #ifndef __STRTEST_H__
 #define __STRTEST_H__
 
-#include "utypes.h"
+#include "unicode/utypes.h"
 #include "intltest.h"
 
 class StringTest : public IntlTest {

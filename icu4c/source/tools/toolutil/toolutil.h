@@ -19,7 +19,7 @@
 #ifndef __TOOLUTIL_H__
 #define __TOOLUTIL_H__
 
-#include "utypes.h"
+#include "unicode/utypes.h"
 
 /*
  * For Windows, a path/filename may be the short (8.3) version

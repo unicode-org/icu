@@ -26,11 +26,11 @@
 #ifndef MERGECOL_H
 #define MERGECOL_H
 
-#include "unistr.h"
+#include "unicode/unistr.h"
 #include "ptnentry.h"
 #include "tables.h"
-#include "coll.h"
-#include "normlzr.h"
+#include "unicode/coll.h"
+#include "unicode/normlzr.h"
 
 
 /**

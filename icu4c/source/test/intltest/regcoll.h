@@ -20,15 +20,15 @@
 #define _REGCOLL
 
 #ifndef _UTYPES
-#include "utypes.h"
+#include "unicode/utypes.h"
 #endif
 
 #ifndef _COLL
-#include "coll.h"
+#include "unicode/coll.h"
 #endif
 
 #ifndef _COLEITR
-#include "coleitr.h"
+#include "unicode/coleitr.h"
 #endif
 
 #ifndef _INTLTEST
@@ -36,7 +36,7 @@
 #endif
 
 #ifndef _UNISTR
-#include "unistr.h"
+#include "unicode/unistr.h"
 #endif
 
 class CollationRegressionTest: public IntlTest

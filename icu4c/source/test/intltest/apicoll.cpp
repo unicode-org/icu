@@ -36,19 +36,19 @@
 #include <iostream.h>
 
 #ifndef COLL_H
-#include "coll.h"
+#include "unicode/coll.h"
 #endif
 
 #ifndef TBLCOLL_H
-#include "tblcoll.h"
+#include "unicode/tblcoll.h"
 #endif
 
 #ifndef COLEITR_H
-#include "coleitr.h"
+#include "unicode/coleitr.h"
 #endif
 
 #ifndef SORTKEY_H
-#include "sortkey.h"
+#include "unicode/sortkey.h"
 #endif
 
 #ifndef _APICOLL

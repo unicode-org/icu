@@ -11,11 +11,11 @@
 ********************************************************************
 */
 
-#include "utypes.h"
+#include "unicode/utypes.h"
 #include "tsdate.h"
 
-#include "datefmt.h"
-#include "smpdtfmt.h"
+#include "unicode/datefmt.h"
+#include "unicode/smpdtfmt.h"
 
 #include <math.h>
 
@@ -126,7 +126,7 @@ void IntlTestDateFormat::testFormat(char *par)
     tryDate(now + 6.0*30*ONEDAY);
 
     UDate limit = now * 10; // Arbitrary limit
-    for (int32_t i=0; i<2; ++i) tryDate(icu_floor(randDouble() * limit));
+    for (int32_t i=0; i<2; ++i) tryDate(uprv_floor(randDouble() * limit));
 
     delete fFormat;
 }
@@ -216,14 +216,14 @@ double IntlTestDateFormat::randDouble()
             char* poke = (char*)&d;
             poke[i] = (rand() & 0xFF);
         }
-    } while (icu_isNaN(d) || icu_isInfinite(d));
+    } while (uprv_isNaN(d) || uprv_isInfinite(d));
 
     if (d < 0.0) d = -d;
     if (d > 0.0)
     {
-        double e = icu_floor(icu_log10(d));
-        if (e < -2.0) d *= icu_pow10(-e-2);
-        else if (e > -1.0) d /= icu_pow10(e+1);
+        double e = uprv_floor(uprv_log10(d));
+        if (e < -2.0) d *= uprv_pow10(-e-2);
+        else if (e > -1.0) d /= uprv_pow10(e+1);
     }
     return d;
 }

@@ -7,9 +7,9 @@
 *   11/17/99    aliu        Creation.
 **********************************************************************
 */
-#include "unitohex.h"
-#include "rep.h"
-#include "unifilt.h"
+#include "unicode/unitohex.h"
+#include "unicode/rep.h"
+#include "unicode/unifilt.h"
 
 /**
  * ID for this transliterator.

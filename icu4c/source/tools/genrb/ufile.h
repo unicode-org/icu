@@ -21,8 +21,8 @@
 #ifndef UFILE_H
 #define UFILE_H 1
 
-#include "utypes.h"
-#include "ucnv.h"
+#include "unicode/utypes.h"
+#include "unicode/ucnv.h"
 #include "filestrm.h"
 
 /* The buffer size for fromUnicode calls */

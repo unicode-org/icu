@@ -14,7 +14,7 @@
 #ifndef __TimeZoneBoundaryTest__
 #define __TimeZoneBoundaryTest__
  
-#include "utypes.h"
+#include "unicode/utypes.h"
 #include "caltztst.h"
 class TimeZone;
 class SimpleTimeZone;
