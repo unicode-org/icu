@@ -303,7 +303,7 @@ public:
      *  fields themselves.
      * <p>
      *  For the best performance on split() operations,
-     *  RegexMatcher::split</code> is perferrable to this function
+     *  <code>RegexMatcher::split</code> is perferable to this function
      * 
      * @param input   The string to be split into fields.  The field delimiters
      *                match the pattern (in the "this" object)
