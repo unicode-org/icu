@@ -326,3 +326,10 @@ releaseDefaultConverter(UConverter *converter)
     ucnv_close(converter);
   }
 }
+
+U_CAPI int32_t U_EXPORT2
+u_unescapeChars(const char *s,
+                UChar *dest, int32_t destSize) {
+  /* ### TBD */
+  return 0;
+}
