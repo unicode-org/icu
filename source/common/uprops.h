@@ -364,4 +364,13 @@ uprops_swap(const UDataSwapper *ds,
             const void *inData, int32_t length, void *outData,
             UErrorCode *pErrorCode);
 
+/**
+ * Swap the ICU Unicode character names file. See uchar.c.
+ * @internal
+ */
+U_CAPI int32_t U_EXPORT2
+uchar_swapNames(const UDataSwapper *ds,
+                const void *inData, int32_t length, void *outData,
+                UErrorCode *pErrorCode);
+
 #endif
