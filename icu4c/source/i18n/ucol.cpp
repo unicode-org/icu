@@ -5208,11 +5208,12 @@ ucol_nextSortKeyPart(UCollator *coll,
     // type of the iterator.
     UBool doingIdenticalFromStart = FALSE;
     // Normalizing iterator
+    UAlignedMemory stackNormIter[UNORM_ITER_SIZE/sizeof(UAlignedMemory)];
     UNormIterator *normIter = NULL;
     // If the normalization is turned on for the collator and we are below identical level
     // we will use a FCD normalizing iterator
     if(ucol_getAttribute(coll, UCOL_NORMALIZATION_MODE, status) == UCOL_ON && level < UCOL_PSK_IDENTICAL) {
-      normIter = unorm_openIter(status);
+      normIter = unorm_openIter(stackNormIter, sizeof(stackNormIter), status);
       s.iterator = unorm_setIter(normIter, iter, UNORM_FCD, status);
       s.flags &= ~UCOL_ITER_NORM;
       if(U_FAILURE(*status)) {
@@ -5221,7 +5222,7 @@ ucol_nextSortKeyPart(UCollator *coll,
     } else if(level == UCOL_PSK_IDENTICAL) {
       // for identical level, we need a NFD iterator. We need to instantiate it here, since we 
       // will be updating the state - and this cannot be done on an ordinary iterator.
-      normIter = unorm_openIter(status);
+      normIter = unorm_openIter(stackNormIter, sizeof(stackNormIter), status);
       s.iterator = unorm_setIter(normIter, iter, UNORM_NFD, status);
       s.flags &= ~UCOL_ITER_NORM;
       if(U_FAILURE(*status)) {
@@ -5757,7 +5758,7 @@ ucol_nextSortKeyPart(UCollator *coll,
           // we arrived from the level below and
           // normalization was not turned on.
           // therefore, we need to make a fresh NFD iterator
-          normIter = unorm_openIter(status);
+          normIter = unorm_openIter(stackNormIter, sizeof(stackNormIter), status);
           s.iterator = unorm_setIter(normIter, iter, UNORM_NFD, status);
         } else if(!doingIdenticalFromStart) { 
           // there is an iterator, but we did some other levels.
@@ -6782,6 +6783,9 @@ UCollationResult    ucol_checkIdent(collIterate *sColl, collIterate *tColl, UBoo
 
   // When we arrive here, we can have normal strings or UCharIterators. Currently they are both
   // of same type, but that doesn't really mean that it will stay that way. 
+
+    UAlignedMemory stackNormIter1[UNORM_ITER_SIZE/sizeof(UAlignedMemory)];
+    UAlignedMemory stackNormIter2[UNORM_ITER_SIZE/sizeof(UAlignedMemory)];
     //UChar sStackBuf[256], tStackBuf[256];
     //int32_t sBufSize = 256, tBufSize = 256;
     int32_t            comparison;
@@ -6793,8 +6797,8 @@ UCollationResult    ucol_checkIdent(collIterate *sColl, collIterate *tColl, UBoo
 
     if (sColl->flags & UCOL_USE_ITERATOR) {
       UNormIterator *sNIt = NULL, *tNIt = NULL;
-      sNIt = unorm_openIter(status);
-      tNIt = unorm_openIter(status);
+      sNIt = unorm_openIter(stackNormIter1, sizeof(stackNormIter1), status);
+      tNIt = unorm_openIter(stackNormIter2, sizeof(stackNormIter2), status);
       sColl->iterator->move(sColl->iterator, 0, UITER_START);
       tColl->iterator->move(tColl->iterator, 0, UITER_START);
       UCharIterator *sIt = unorm_setIter(sNIt, sColl->iterator, UNORM_NFD, status);
@@ -7912,6 +7916,8 @@ ucol_strcollIter( const UCollator    *coll,
 
   // Preparing the context objects for iterating over strings
   collIterate sColl, tColl;
+  UAlignedMemory stackNormIter1[UNORM_ITER_SIZE/sizeof(UAlignedMemory)];
+  UAlignedMemory stackNormIter2[UNORM_ITER_SIZE/sizeof(UAlignedMemory)];
   UNormIterator *sNormIter = NULL, *tNormIter = NULL;
 
   IInit_collIterate(coll, NULL, -1, &sColl);
@@ -7922,11 +7928,11 @@ ucol_strcollIter( const UCollator    *coll,
   tColl.iterator = tIter;
 
   if(ucol_getAttribute(coll, UCOL_NORMALIZATION_MODE, status) == UCOL_ON) {
-    sNormIter = unorm_openIter(status);
+    sNormIter = unorm_openIter(stackNormIter1, sizeof(stackNormIter1), status);
     sColl.iterator = unorm_setIter(sNormIter, sIter, UNORM_FCD, status);
     sColl.flags &= ~UCOL_ITER_NORM;
 
-    tNormIter = unorm_openIter(status);
+    tNormIter = unorm_openIter(stackNormIter2, sizeof(stackNormIter2), status);
     tColl.iterator = unorm_setIter(tNormIter, tIter, UNORM_FCD, status);
     tColl.flags &= ~UCOL_ITER_NORM;
   }
