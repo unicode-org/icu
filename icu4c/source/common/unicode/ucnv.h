@@ -1061,6 +1061,141 @@ ucnv_getNextUChar(UConverter * converter,
                   UErrorCode * err);
 
 /**
+ * Convert from one external charset to another using two existing UConverters.
+ * Internally, two conversions - ucnv_toUnicode() and ucnv_fromUnicode() -
+ * are used, "pivoting" through 16-bit Unicode.
+ *
+ * There is a similar function, ucnv_convert(),
+ * which has the following limitations:
+ * - it takes charset names, not converter objects, so that
+ *   - two converters are opened for each call
+ *   - only single-string conversion is possible, not streaming operation
+ * - it does not provide enough information to find out,
+ *   in case of failure, whether the toUnicode or
+ *   the fromUnicode conversion failed
+ *
+ * By contrast, ucnv_convertEx()
+ * - takes UConverter parameters instead of charset names
+ * - fully exposes the pivot buffer for complete error handling
+ *
+ * ucnv_convertEx() also provides further convenience:
+ * - an option to reset the converters at the beginning
+ *   (if reset==TRUE, see parameters;
+ *    also sets *pivotTarget=*pivotSource=pivotStart)
+ * - allow NUL-terminated input
+ *   (only a single NUL byte, will not work for charsets with multi-byte NULs)
+ *   (if sourceLimit==NULL, see parameters)
+ * - terminate with a NUL on output
+ *   (only a single NUL byte, not useful for charsets with multi-byte NULs),
+ *   or set U_STRING_NOT_TERMINATED_WARNING if the output exactly fills
+ *   the target buffer
+ * - the pivot buffer can be provided internally;
+ *   in this case, the caller will not be able to get details about where an
+ *   error occurred
+ *   (if pivotStart==NULL, see below)
+ *
+ * The function returns when one of the following is true:
+ * - the entire source text has been converted successfully to the target buffer
+ * - a target buffer overflow occurred (U_BUFFER_OVERFLOW_ERROR)
+ * - a conversion error occurred
+ *   (other U_FAILURE(), see description of pErrorCode)
+ *
+ * Limitation compared to the direct use of
+ * ucnv_fromUnicode() and ucnv_toUnicode():
+ * ucnv_convertEx() does not provide offset information.
+ *
+ * Limitation compared to ucnv_fromUChars() and ucnv_toUChars():
+ * ucnv_convertEx() does not support preflighting directly.
+ *
+ * Sample code for converting a single string from
+ * one external charset to UTF-8, ignoring the location of errors:
+ *
+ * \code
+ * int32_t
+ * myToUTF8(UConverter *cnv,
+ *          const char *s, int32_t length,
+ *          char *u8, int32_t capacity,
+ *          UErrorCode *pErrorCode) {
+ *     UConverter *utf8Cnv;
+ *     char *target;
+ *
+ *     if(U_FAILURE(*pErrorCode)) {
+ *         return 0;
+ *     }
+ *
+ *     utf8Cnv=myGetCachedUTF8Converter(pErrorCode);
+ *     if(U_FAILURE(*pErrorCode)) {
+ *         return 0;
+ *     }
+ *
+ *     target=u8;
+ *     ucnv_convertEx(cnv, utf8Cnv,
+ *                    &target, u8+capacity,
+ *                    &s, length>=0 ? s+length : NULL,
+ *                    NULL, NULL, NULL, NULL,
+ *                    TRUE, TRUE,
+ *                    pErrorCode);
+ * 
+ *     myReleaseCachedUTF8Converter(utf8Cnv);
+ *
+ *     // return the output string length, but without preflighting
+ *     return (int32_t)(target-u8);
+ * }
+ * \endcode
+ *
+ * @param targetCnv     Output converter, used to convert from the UTF-16 pivot
+ *                      to the target using ucnv_fromUnicode().
+ * @param sourceCnv     Input converter, used to convert from the source to
+ *                      the UTF-16 pivot using ucnv_toUnicode().
+ * @param target        I/O parameter, same as for ucnv_fromUChars().
+ *                      Input: *target points to the beginning of the target buffer.
+ *                      Output: *target points to the first unit after the last char written.
+ * @param targetLimit   Pointer to the first unit after the target buffer.
+ * @param source        I/O parameter, same as for ucnv_toUChars().
+ *                      Input: *source points to the beginning of the source buffer.
+ *                      Output: *source points to the first unit after the last char read.
+ * @param sourceLimit   Pointer to the first unit after the source buffer.
+ * @param pivotStart    Pointer to the UTF-16 pivot buffer. If pivotStart==NULL,
+ *                      then an internal buffer is used and the other pivot
+ *                      arguments are ignored and can be NULL as well.
+ * @param pivotSource   I/O parameter, same as source in ucnv_fromUChars() for
+ *                      conversion from the pivot buffer to the target buffer.
+ * @param pivotTarget   I/O parameter, same as target in ucnv_toUChars() for
+ *                      conversion from the source buffer to the pivot buffer.
+ *                      It must be pivotStart<=*pivotSource<=*pivotTarget<=pivotLimit
+ *                      and pivotStart<pivotLimit (unless pivotStart==NULL).
+ * @param pivotLimit    Pointer to the first unit after the pivot buffer.
+ * @param reset         If TRUE, then ucnv_resetToUnicode(sourceCnv) and
+ *                      ucnv_resetFromUnicode(targetCnv) are called, and the
+ *                      pivot pointers are reset (*pivotTarget=*pivotSource=pivotStart).
+ * @param flush         If true, indicates the end of the input.
+ *                      Passed directly to ucnv_toUnicode(), and carried over to
+ *                      ucnv_fromUnicode() when the source is empty as well.
+ * @param pErrorCode    ICU error code in/out parameter.
+ *                      Must fulfill U_SUCCESS before the function call.
+ *                      U_BUFFER_OVERFLOW_ERROR always refers to the target buffer
+ *                      because overflows into the pivot buffer are handled internally.
+ *                      Other conversion errors are from the source-to-pivot
+ *                      conversion if *pivotSource==pivotStart, otherwise from
+ *                      the pivot-to-target conversion.
+ *
+ * @see ucnv_convert
+ * @see ucnv_fromUnicode
+ * @see ucnv_toUnicode
+ * @see ucnv_fromUChars
+ * @see ucnv_toUChars
+ * @draft ICU 2.6
+ */
+U_CAPI void U_EXPORT2
+ucnv_convertEx(UConverter *targetCnv, UConverter *sourceCnv,
+               char **target, const char *targetLimit,
+               const char **source, const char *sourceLimit,
+               UChar *pivotStart, UChar **pivotSource,
+               UChar **pivotTarget, const UChar *pivotLimit,
+               UBool reset, UBool flush,
+               UErrorCode *pErrorCode);
+
+/**
  * Will convert a sequence of bytes from one codepage to another.
  * This is <STRONG>NOT AN EFFICIENT</STRONG> way to transcode.
  * use \Ref{ucnv_toUnicode} and \Ref{ucnv_fromUnicode} for efficiency.
@@ -1075,6 +1210,8 @@ ucnv_getNextUChar(UConverter * converter,
  * @param err error status. 
  * <code>U_BUFFER_OVERFLOW_ERROR</code> will be set if the target is full and there is still input left in the source.
  * @return  will be filled in with the number of bytes needed in target
+ *
+ * @see ucnv_convertEx
  * @see ucnv_fromUnicode
  * @see ucnv_toUnicode
  * @see ucnv_fromUChars

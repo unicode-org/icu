@@ -82,7 +82,7 @@ static void UCNV_DEBUG_CNV(UConverter *c, int line)
 
 
 /* size of intermediate and preflighting buffers in ucnv_convert() */
-#define CHUNK_SIZE 5*1024
+#define CHUNK_SIZE 1024
 
 typedef struct UAmbiguousConverter {
     const char *name;
@@ -808,7 +808,12 @@ ucnv_fromUnicode (UConverter * _this,
         if (U_FAILURE (*err))
             return;
     }
-    
+
+    if(!flush && *source == sourceLimit) {
+        /* the overflow buffer is emptied and there is no new input: we are done */
+        return;
+    }
+
     args.converter = _this;
     args.flush = flush;
     args.offsets = offsets;
@@ -901,6 +906,11 @@ ucnv_toUnicode (UConverter * _this,
         *target += myTargetIndex;
         if (U_FAILURE (*err))
             return;
+    }
+
+    if(!flush && *source == sourceLimit) {
+        /* the overflow buffer is emptied and there is no new input: we are done */
+        return;
     }
 
     args.converter = _this;
@@ -1116,6 +1126,120 @@ ucnv_getNextUChar(UConverter * converter,
     return ch;
 }
 
+U_CAPI void U_EXPORT2
+ucnv_convertEx(UConverter *targetCnv, UConverter *sourceCnv,
+               char **target, const char *targetLimit,
+               const char **source, const char *sourceLimit,
+               UChar *pivotStart, UChar **pivotSource,
+               UChar **pivotTarget, const UChar *pivotLimit,
+               UBool reset, UBool flush,
+               UErrorCode *pErrorCode) {
+    UChar pivotBuffer[CHUNK_SIZE];
+    UChar *myPivotSource, *myPivotTarget;
+
+    /* error checking */
+    if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
+        return;
+    }
+
+    if( targetCnv==NULL || sourceCnv==NULL ||
+        source==NULL || *source==NULL ||
+        target==NULL || *target==NULL || targetLimit==NULL
+    ) {
+        *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
+        return;
+    }
+
+    if(pivotStart==NULL) {
+        /* use the stack pivot buffer */
+        pivotStart=myPivotSource=myPivotTarget=pivotBuffer;
+        pivotSource=&myPivotSource;
+        pivotTarget=&myPivotTarget;
+        pivotLimit=pivotBuffer+CHUNK_SIZE;
+    } else if(  pivotStart>=pivotLimit ||
+                pivotSource==NULL || *pivotSource==NULL ||
+                pivotTarget==NULL || *pivotTarget==NULL ||
+                pivotLimit==NULL
+    ) {
+        *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
+        return;
+    }
+
+    if(sourceLimit==NULL) {
+        /* get limit of single-byte-NUL-terminated source string */
+        sourceLimit=uprv_strchr(*source, 0);
+    }
+
+    if(reset) {
+        ucnv_resetToUnicode(sourceCnv);
+        ucnv_resetFromUnicode(targetCnv);
+        *pivotTarget=*pivotSource=pivotStart;
+    }
+
+    /* conversion loop */
+    for(;;) {
+        if(reset) {
+            /*
+             * if we did a reset in this function, we know that there is nothing
+             * to convert to the target yet, so we save a function call
+             */
+            reset=FALSE;
+        } else {
+            /*
+             * convert to the target first in case the pivot is filled at entry
+             * or the targetCnv has some output bytes in its state
+             */
+            ucnv_fromUnicode(targetCnv,
+                             target, targetLimit,
+                             pivotSource, *pivotTarget,
+                             NULL,
+                             (UBool)(flush && *source==sourceLimit),
+                             pErrorCode);
+            if(U_FAILURE(*pErrorCode)) {
+                break;
+            }
+
+            /* ucnv_fromUnicode() must have consumed the pivot contents since it returned with U_SUCCESS() */
+            *pivotSource=*pivotTarget=pivotStart;
+        }
+
+        /* convert from the source to the pivot */
+        ucnv_toUnicode(sourceCnv,
+                       pivotTarget, pivotLimit,
+                       source, sourceLimit,
+                       NULL,
+                       flush,
+                       pErrorCode);
+        if(*pErrorCode==U_BUFFER_OVERFLOW_ERROR) {
+            /* pivot overflow: continue with the conversion loop */
+            *pErrorCode=U_ZERO_ERROR;
+        } else if(U_FAILURE(*pErrorCode) || *pivotTarget==pivotStart) {
+            /* conversion error, or there was nothing left to convert */
+            break;
+        }
+        /* else ucnv_toUnicode() wrote into the pivot buffer: continue */
+    }
+
+    /*
+     * The conversion loop is exited when one of the following is true:
+     * - the entire source text has been converted successfully to the target buffer
+     * - a target buffer overflow occurred
+     * - a conversion error occurred
+     */
+
+    /* terminate the target buffer if possible */
+    if(flush && U_SUCCESS(*pErrorCode)) {
+        if(*target!=targetLimit) {
+            **target=0;
+            if(*pErrorCode==U_STRING_NOT_TERMINATED_WARNING) {
+                *pErrorCode=U_ZERO_ERROR;
+            }
+        } else {
+            *pErrorCode=U_STRING_NOT_TERMINATED_WARNING;
+        }
+    }
+}
+
 U_CAPI int32_t U_EXPORT2
 ucnv_convert(const char *toConverterName, const char *fromConverterName,
              char *target, int32_t targetSize,
@@ -1166,40 +1290,14 @@ ucnv_convert(const char *toConverterName, const char *fromConverterName,
 
     if(targetSize>0) {
         /* perform real conversion */
-
-        /*
-         * loops until the input buffer is completely consumed
-         * or an error is encountered;
-         * first we convert from inConverter codepage to Unicode
-         * then from Unicode to outConverter codepage
-         */
         targetLimit=target+targetSize;
-        do {
-            pivot=pivotBuffer;
-            ucnv_toUnicode(inConverter,
-                           &pivot, pivotBuffer+CHUNK_SIZE,
-                           &source, sourceLimit,
-                           NULL,
-                           TRUE,
-                           pErrorCode);
-
-            /* U_BUFFER_OVERFLOW_ERROR only means that the pivot buffer is full */
-            if(U_SUCCESS(*pErrorCode) || *pErrorCode==U_BUFFER_OVERFLOW_ERROR) {
-                *pErrorCode=U_ZERO_ERROR;
-                pivot2=pivotBuffer;
-                ucnv_fromUnicode(outConverter,
-                                 &myTarget, targetLimit,
-                                 (const UChar **)&pivot2, pivot,
-                                 NULL,
-                                 (UBool)(source==sourceLimit),
-                                 pErrorCode);
-                /*
-                 * If this overflows the real target, then we must stop
-                 * converting and preflight with the loop below.
-                 */
-            }
-        } while(U_SUCCESS(*pErrorCode) && source!=sourceLimit);
-
+        ucnv_convertEx(outConverter, inConverter,
+                       &myTarget, targetLimit,
+                       &source, sourceLimit,
+                       pivotBuffer, &pivot, &pivot2, pivotBuffer+CHUNK_SIZE,
+                       FALSE,
+                       TRUE,
+                       pErrorCode);
         targetCapacity=myTarget-target;
     }
 
@@ -1214,53 +1312,32 @@ ucnv_convert(const char *toConverterName, const char *fromConverterName,
 
         targetLimit=targetBuffer+CHUNK_SIZE;
         do {
-            /* since the pivot buffer may still contain some characters, start with emptying it */
             *pErrorCode=U_ZERO_ERROR;
-            while(pivot2!=pivot && U_SUCCESS(*pErrorCode)) {
-                myTarget=targetBuffer;
-                ucnv_fromUnicode(outConverter,
-                                 &myTarget, targetLimit,
-                                 (const UChar **)&pivot2, pivot,
-                                 NULL,
-                                 (UBool)(source==sourceLimit),
-                                 pErrorCode);
-                targetCapacity+=(myTarget-targetBuffer);
-                if(*pErrorCode==U_BUFFER_OVERFLOW_ERROR) {
-                    *pErrorCode=U_ZERO_ERROR;
-                }
-            }
-
-            if(U_FAILURE(*pErrorCode)) {
-                /* an error occurred: done */
-                break;
-            }
-
-            if(source==sourceLimit) {
-                /*
-                 * source is consumed:
-                 * done, and set the buffer overflow error as
-                 * the result for the entire function
-                 */
-                *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
-                break;
-            }
-
-            /* now convert from the source into the pivot buffer again */
-            pivot=pivot2=pivotBuffer;
-            ucnv_toUnicode(inConverter,
-                           &pivot, pivotBuffer+CHUNK_SIZE,
+            myTarget=targetBuffer;
+            ucnv_convertEx(outConverter, inConverter,
+                           &myTarget, targetLimit,
                            &source, sourceLimit,
-                           NULL,
+                           pivotBuffer, &pivot, &pivot2, pivotBuffer+CHUNK_SIZE,
+                           FALSE,
                            TRUE,
                            pErrorCode);
+            targetCapacity+=(myTarget-targetBuffer);
+        } while(*pErrorCode==U_BUFFER_OVERFLOW_ERROR);
+
+        if(U_SUCCESS(*pErrorCode)) {
+            /*
+             * done with preflighting, set the buffer overflow error as
+             * the result for the entire function
+             */
+            *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
         }
-        while(U_SUCCESS(*pErrorCode) || *pErrorCode==U_BUFFER_OVERFLOW_ERROR);
     }
 
     ucnv_close (inConverter);
     ucnv_close (outConverter);
 
-    return u_terminateChars(target, targetSize, targetCapacity, pErrorCode);
+    /* no need to call u_terminateChars() because ucnv_convertEx() took care of that */
+    return targetCapacity;
 }
 
 U_CAPI UConverterType  U_EXPORT2
