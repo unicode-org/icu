@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/demo/impl/AppletFrame.java,v $ 
- * $Date: 2001/11/28 22:24:29 $ 
- * $Revision: 1.2 $
+ * $Date: 2001/12/03 17:49:03 $ 
+ * $Revision: 1.3 $
  *
  *****************************************************************************************
  */
@@ -37,9 +37,9 @@ import java.io.IOException;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: AppletFrame.java,v $ $Revision: 1.2 $ $Date: 2001/11/28 22:24:29 $
+ * @version $RCSfile: AppletFrame.java,v $ $Revision: 1.3 $ $Date: 2001/12/03 17:49:03 $
  */
-public class AppletFrame extends Frame /*implements AppletStub, AppletContext*/ {
+public class AppletFrame extends Frame implements AppletStub, AppletContext {
 
     Applet applet;
 
@@ -72,7 +72,7 @@ public class AppletFrame extends Frame /*implements AppletStub, AppletContext*/ 
     public AppletFrame(String name, Applet applet, int width, int height) {
         super(name);
         this.applet = applet;
-        //applet.setStub(this);
+        applet.setStub(this);
 
         setSize(width, height);
         add("Center", applet);
@@ -90,13 +90,12 @@ public class AppletFrame extends Frame /*implements AppletStub, AppletContext*/ 
     }
 
     // AppletStub API
-    public void appletResize(int width,
-                             int height) {
+    public void appletResize(int width, int height) {
         setSize(width, height);
     }
 
     public AppletContext getAppletContext() {
-        return null;
+        return this;
     }
 
     public URL getCodeBase() {
