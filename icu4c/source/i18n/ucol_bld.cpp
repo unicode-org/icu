@@ -378,7 +378,8 @@ U_CFUNC uint32_t ucol_getCEGenerator(ucolCEGenerator *g, uint32_t* lows, uint32_
           low = UCOL_COMMON_TOP2<<24;
           high = 0xFFFFFFFF;
         } else {
-          low = 0x02000000;
+          //low = 0x02000000; // This needs to be checked - what if low is
+          // not good...
           high = 0x40000000;
         }
         break;
