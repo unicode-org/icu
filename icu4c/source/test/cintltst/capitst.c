@@ -1359,7 +1359,7 @@ void TestSortKeyBufferOverrun(void) {
     ucol_setAttribute(coll, UCOL_ALTERNATE_HANDLING, UCOL_NON_IGNORABLE, &status);
     doOverrunTest(coll, uString, strLen);
 
-
   }
+  ucol_close(coll);
 }
 
