@@ -212,8 +212,8 @@ ubidi_openSized(UTextOffset maxLength, UTextOffset maxRunCount, UErrorCode *pErr
  * which we know we don't need any more;
  * is this the best way to do this??
  */
-extern UBool
-getMemory(void **pMemory, UTextOffset *pSize, UBool mayAllocate, UTextOffset sizeNeeded) {
+U_CFUNC UBool
+ubidi_getMemory(void **pMemory, UTextOffset *pSize, UBool mayAllocate, UTextOffset sizeNeeded) {
     /* check for existing memory */
     if(*pMemory==NULL) {
         /* we need to allocate memory */
