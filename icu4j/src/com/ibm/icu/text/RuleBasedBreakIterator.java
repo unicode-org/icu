@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/RuleBasedBreakIterator.java,v $
- * $Date: 2001/11/05 23:27:47 $
- * $Revision: 1.13 $
+ * $Date: 2001/11/05 23:38:59 $
+ * $Revision: 1.14 $
  *
  *****************************************************************************************
  */
@@ -237,11 +237,11 @@ import java.io.*;
  *     </tr>
  *
  * <p>For a more complete explanation, see <a
- * href="http://www-106.ibm.com/developerworks/unicode/library/boundaries/boundaries.html">http://www-106.ibm.com/developerworks/unicode/library/boundaries/boundaries.html</a>.
+ * href="http://www.ibm.com/developerworks/unicode/library/boundaries/boundaries.html">http://www.ibm.com/developerworks/unicode/library/boundaries/boundaries.html</a>.
  * &nbsp; For examples, see the resource data (which is annotated).</p>
  *
  * @author Richard Gillam
- * $RCSfile: RuleBasedBreakIterator.java,v $ $Revision: 1.13 $ $Date: 2001/11/05 23:27:47 $
+ * $RCSfile: RuleBasedBreakIterator.java,v $ $Revision: 1.14 $ $Date: 2001/11/05 23:38:59 $
  */
 public class RuleBasedBreakIterator extends BreakIterator {
 
