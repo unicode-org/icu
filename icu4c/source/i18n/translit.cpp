@@ -37,6 +37,7 @@
 #include "unicode/uscript.h"
 #include "esctrn.h"
 #include "unesctrn.h"
+#include "util.h"
 
 
 // keep in sync with CompoundTransliterator
@@ -915,7 +916,7 @@ UnicodeString& Transliterator::toRules(UnicodeString& rulesSource,
         UnicodeString id = getID();
         for (int32_t i=0; i<id.length();) {
             UChar32 c = id.char32At(i);
-            if (!UnicodeSet::_escapeUnprintable(rulesSource, c)) {
+            if (!Utility::escapeUnprintable(rulesSource, c)) {
                 rulesSource.append(c);
             }
             i += UTF_CHAR_LENGTH(c);

@@ -18,6 +18,7 @@
 #include "umutex.h"
 #include "ucln_in.h"
 #include "upropset.h"
+#include "util.h"
 
 // HIGH_VALUE > all valid values. 110000 for codepoints
 #define UNICODESET_HIGH 0x0110000
@@ -387,7 +388,7 @@ void UnicodeSet::_appendToPat(UnicodeString& buf, UChar32 c, UBool useHexEscape)
     if (useHexEscape) {
         // Use hex escape notation (\uxxxx or \Uxxxxxxxx) for anything
         // unprintable
-        if (_escapeUnprintable(buf, c)) {
+        if (Utility::escapeUnprintable(buf, c)) {
             return;
         }
     }
@@ -413,49 +414,6 @@ void UnicodeSet::_appendToPat(UnicodeString& buf, UChar32 c, UBool useHexEscape)
     buf.append((UChar) c);
 }
 
-static const UChar HEX[16] = {48,49,50,51,52,53,54,55,  // 0-7
-                              56,57,65,66,67,68,69,70}; // 8-9 A-F
-
-/**
- * Return true if the character is NOT printable ASCII.
- *
- * This method should really be in UnicodeString (or similar).  For
- * now, we implement it here and share it with friend classes.
- */
-UBool UnicodeSet::_isUnprintable(UChar32 c) {
-    return !(c == 0x0A || (c >= 0x20 && c <= 0x7E));
-}
-
-/**
- * Escape unprintable characters using \uxxxx notation for U+0000 to
- * U+FFFF and \Uxxxxxxxx for U+10000 and above.  If the character is
- * printable ASCII, then do nothing and return FALSE.  Otherwise,
- * append the escaped notation and return TRUE.
- *
- * This method should really be in UnicodeString.  For now, we
- * implement it here and share it with friend classes.
- */
-UBool UnicodeSet::_escapeUnprintable(UnicodeString& result, UChar32 c) {
-    if (_isUnprintable(c)) {
-        result.append(BACKSLASH);
-        if (c & ~0xFFFF) {
-            result.append(UPPER_U);
-            result.append(HEX[0xF&(c>>28)]);
-            result.append(HEX[0xF&(c>>24)]);
-            result.append(HEX[0xF&(c>>20)]);
-            result.append(HEX[0xF&(c>>16)]);
-        } else {
-            result.append(LOWER_U);
-        }
-        result.append(HEX[0xF&(c>>12)]);
-        result.append(HEX[0xF&(c>>8)]);
-        result.append(HEX[0xF&(c>>4)]);
-        result.append(HEX[0xF&c]);
-        return TRUE;
-    }
-    return FALSE;
-}
-
 /**
  * Returns a string representation of this set.  If the result of
  * calling this function is passed to a UnicodeSet constructor, it
@@ -479,7 +437,7 @@ UnicodeString& UnicodeSet::_toPattern(UnicodeString& result,
         int32_t backslashCount = 0;
         for (i=0; i<pat.length(); ++i) {
             UChar c = pat.charAt(i);
-            if (escapeUnprintable && _isUnprintable(c)) {
+            if (escapeUnprintable && Utility::isUnprintable(c)) {
                 // If the unprintable character is preceded by an odd
                 // number of backslashes, then it has been escaped.
                 // Before unescaping it, we delete the final
@@ -487,7 +445,7 @@ UnicodeString& UnicodeSet::_toPattern(UnicodeString& result,
                 if ((backslashCount % 2) == 1) {
                     result.truncate(result.length() - 1);
                 }
-                _escapeUnprintable(result, c);
+                Utility::escapeUnprintable(result, c);
                 backslashCount = 0;
             } else {
                 result.append(c);
