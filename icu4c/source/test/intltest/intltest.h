@@ -121,7 +121,7 @@ protected:
                                 Collator::EComparisonResult expectedResult );
 
     static UnicodeString &prettify(const UnicodeString &source, UnicodeString &target);
-	static UnicodeString prettify(const UnicodeString &source);
+    static UnicodeString prettify(const UnicodeString &source);
     static UnicodeString &prettify(const CollationKey &source, UnicodeString &target);
     static UnicodeString &appendHex(uint32_t number, int8_t digits, UnicodeString &target);
     static UnicodeString &appendCompareResult(Collator::EComparisonResult result, UnicodeString &target);

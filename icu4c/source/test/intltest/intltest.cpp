@@ -990,7 +990,7 @@ main(int argc, char* argv[])
     if (major.getErrors() == 0) {
         fprintf(stdout, "OK: All tests passed without error.\n");
     }else{
-	fprintf(stdout, "Errors in total: %ld.\n", major.getErrors());
+        fprintf(stdout, "Errors in total: %ld.\n", major.getErrors());
     }
 
     fprintf(stdout, "--------------------------------------\n");

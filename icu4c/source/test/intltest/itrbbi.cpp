@@ -39,6 +39,6 @@ void IntlTestRBBI::runIndexedTest( int32_t index, UBool exec, char* &name, char*
             }
             break;
         default: name=""; break;
-	}
+    }
 }
 
