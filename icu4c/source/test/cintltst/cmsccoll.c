@@ -748,7 +748,7 @@ void testCollator(UCollator* col, const UChar* p,const UChar* q, uint32_t streng
 }
 
 static char* localesToTest[] = {
-  "ar", "bg", "ca", "cs", /*"da",*/
+"ar", "bg", "ca", "cs", "da",
 "el", "en_BE", "en_US_POSIX", 
 "es", "et", "fi", "fr", "hi", 
 "hr", "hu", "is", "iw", "ja", 
