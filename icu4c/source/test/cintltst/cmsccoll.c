@@ -4185,6 +4185,11 @@ static void TestTibetanConformance(void)
     genericLocaleStarterWithResult("", test, 2, UCOL_EQUAL);
 }
 
+static void PinyinProblem(void) {
+    char *test[] = { "\\u4E56\\u4E56\\u7761", "\\u4E56\\u5B69\\u5B50" };
+    genericLocaleStarter("zh__PINYIN", test, sizeof(test)/sizeof(test[0]));
+}
+
 #define TEST(x) addTest(root, &x, "tscoll/cmsccoll/" # x)
 
 void addMiscCollTest(TestNode** root)
@@ -4241,6 +4246,7 @@ void addMiscCollTest(TestNode** root)
     TEST(NullRule);
     TEST(TestNumericCollation);
     TEST(TestTibetanConformance);
+    TEST(PinyinProblem);
 }
 
 #endif /* #if !UCONFIG_NO_COLLATION */
