@@ -21,114 +21,19 @@
 
 #if !UCONFIG_NO_FORMATTING
 
-#include "uprintf.h"
-#include "uprntf_p.h"
 #include "unicode/ustdio.h"
-#include "ufile.h"
 #include "unicode/ustring.h"
-#include "locbund.h"
 #include "unicode/unum.h"
 #include "unicode/udat.h"
 
+#include "uprintf.h"
+#include "uprntf_p.h"
+#include "ufile.h"
+#include "locbund.h"
+
 #include "cmemory.h"
 
-
-/* --- Prototypes ---------------------------- */
-
-int32_t
-u_printf_simple_percent_handler(UFILE                 *stream,
-                const u_printf_spec_info     *info,
-                const ufmt_args            *args);
-
-int32_t
-u_printf_string_handler(UFILE                 *stream,
-            const u_printf_spec_info     *info,
-            const ufmt_args            *args);
-
-int32_t
-u_printf_date_handler(UFILE             *stream,
-              const u_printf_spec_info     *info,
-              const ufmt_args         *args);
-
-int32_t
-u_printf_scientific_handler(UFILE             *stream,
-                const u_printf_spec_info     *info,
-                const ufmt_args            *args);
-
-int32_t
-u_printf_scidbl_handler(UFILE                 *stream,
-            const u_printf_spec_info     *info,
-            const ufmt_args            *args);
-
-int32_t
-u_printf_uchar_handler(UFILE                 *stream,
-               const u_printf_spec_info     *info,
-               const ufmt_args            *args);
-
-int32_t
-u_printf_currency_handler(UFILE             *stream,
-              const u_printf_spec_info     *info,
-              const ufmt_args            *args);
-
-int32_t
-u_printf_ustring_handler(UFILE                 *stream,
-             const u_printf_spec_info     *info,
-             const ufmt_args         *args);
-
-int32_t
-u_printf_percent_handler(UFILE                 *stream,
-             const u_printf_spec_info     *info,
-             const ufmt_args            *args);
-
-int32_t
-u_printf_time_handler(UFILE             *stream,
-              const u_printf_spec_info     *info,
-              const ufmt_args         *args);
-
-int32_t
-u_printf_spellout_handler(UFILE             *stream,
-              const u_printf_spec_info     *info,
-              const ufmt_args            *args);
-
-int32_t
-u_printf_hex_handler(UFILE             *stream,
-             const u_printf_spec_info     *info,
-             const ufmt_args            *args);
-
-int32_t
-u_printf_char_handler(UFILE                 *stream,
-              const u_printf_spec_info         *info,
-              const ufmt_args              *args);
-
-int32_t
-u_printf_integer_handler(UFILE                 *stream,
-             const u_printf_spec_info     *info,
-             const ufmt_args            *args);
-
-int32_t
-u_printf_uinteger_handler(UFILE                 *stream,
-             const u_printf_spec_info     *info,
-             const ufmt_args            *args);
-
-int32_t
-u_printf_double_handler(UFILE                 *stream,
-            const u_printf_spec_info     *info,
-            const ufmt_args            *args);
-
-int32_t
-u_printf_count_handler(UFILE                 *stream,
-            const u_printf_spec_info     *info,
-            const ufmt_args            *args);
-
-int32_t
-u_printf_octal_handler(UFILE                 *stream,
-            const u_printf_spec_info     *info,
-            const ufmt_args            *args);
-
-int32_t
-u_printf_pointer_handler(UFILE                 *stream,
-            const u_printf_spec_info     *info,
-            const ufmt_args            *args);
+#define UP_PERCENT 0x0025
 
 /* ANSI style formatting */
 /* Use US-ASCII characters only for formatting */
@@ -179,53 +84,10 @@ u_printf_pointer_handler(UFILE                 *stream,
 
 #define UFMT_EMPTY {ufmt_empty, NULL}
 
-struct u_printf_info {
+typedef struct u_printf_info {
     ufmt_type_info info;
     u_printf_handler handler;
-};
-typedef struct u_printf_info u_printf_info;
-
-/* Use US-ASCII characters only for formatting. Most codepages have
- characters 20-7F from Unicode. Using any other codepage specific
- characters will make it very difficult to format the string on
- non-Unicode machines */
-static const u_printf_info g_u_printf_infos[108] = {
-/* 0x20 */
-    UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,
-    UFMT_EMPTY,         UFMT_SIMPLE_PERCENT,UFMT_EMPTY,         UFMT_EMPTY,
-    UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,
-    UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,
-
-/* 0x30 */
-    UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,
-    UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,
-    UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,
-    UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,
-
-/* 0x40 */
-    UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,
-    UFMT_DATE,          UFMT_SCIENTIFIC,    UFMT_EMPTY,         UFMT_SCIDBL,
-    UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,         UFMT_UCHAR,
-    UFMT_EMPTY,         UFMT_CURRENCY,      UFMT_EMPTY,         UFMT_EMPTY,
-
-/* 0x50 */
-    UFMT_PERCENT,       UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,
-    UFMT_TIME,          UFMT_USTRING,       UFMT_SPELLOUT,      UFMT_EMPTY,
-    UFMT_HEX,           UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,
-    UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,
-
-/* 0x60 */
-    UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,         UFMT_CHAR,
-    UFMT_INT,           UFMT_SCIENTIFIC,    UFMT_DOUBLE,        UFMT_SCIDBL,
-    UFMT_EMPTY,         UFMT_INT,           UFMT_EMPTY,         UFMT_EMPTY,
-    UFMT_EMPTY,         UFMT_EMPTY,         UFMT_COUNT,         UFMT_OCTAL,
-
-/* 0x70 */
-    UFMT_POINTER,       UFMT_EMPTY,         UFMT_EMPTY,         UFMT_STRING,
-    UFMT_EMPTY,         UFMT_UINT,          UFMT_EMPTY,         UFMT_EMPTY,
-    UFMT_HEX,           UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,
-    UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,
-};
+} u_printf_info;
 
 #define UPRINTF_NUM_FMT_HANDLERS sizeof(g_u_printf_infos)
 
@@ -238,69 +100,6 @@ static const u_printf_info g_u_printf_infos[108] = {
 
 static const UChar gNullStr[] = {0x28, 0x6E, 0x75, 0x6C, 0x6C, 0x29, 0}; /* "(null)" */
 static const UChar gSpaceStr[] = {0x20, 0}; /* " " */
-
-int32_t
-u_fprintf(    UFILE        *f,
-          const char    *patternSpecification,
-          ... )
-{
-    va_list ap;
-    int32_t count;
-
-    va_start(ap, patternSpecification);
-    count = u_vfprintf(f, patternSpecification, ap);
-    va_end(ap);
-
-    return count;
-}
-
-int32_t
-u_fprintf_u(    UFILE        *f,
-            const UChar    *patternSpecification,
-            ... )
-{
-    va_list ap;
-    int32_t count;
-
-    va_start(ap, patternSpecification);
-    count = u_vfprintf_u(f, patternSpecification, ap);
-    va_end(ap);
-
-    return count;
-}
-
-U_CAPI int32_t  U_EXPORT2 /* U_CAPI ... U_EXPORT2 added by Peter Kirk 17 Nov 2001 */
-u_vfprintf(    UFILE        *f,
-           const char    *patternSpecification,
-           va_list        ap)
-{
-    int32_t count;
-    UChar *pattern;
-    UChar buffer[UFMT_DEFAULT_BUFFER_SIZE];
-    int32_t size = (int32_t)strlen(patternSpecification) + 1;
-
-    /* convert from the default codepage to Unicode */
-    if (size >= MAX_UCHAR_BUFFER_SIZE(buffer)) {
-        pattern = (UChar *)uprv_malloc(size * sizeof(UChar));
-        if(pattern == 0) {
-            return 0;
-        }
-    }
-    else {
-        pattern = buffer;
-    }
-    u_charsToUChars(patternSpecification, pattern, size);
-
-    /* do the work */
-    count = u_vfprintf_u(f, pattern, ap);
-
-    /* clean up */
-    if (pattern != buffer) {
-        uprv_free(pattern);
-    }
-
-    return count;
-}
 
 static int32_t
 u_printf_pad_and_justify(UFILE              *stream,
@@ -367,8 +166,7 @@ u_printf_set_sign(UNumberFormat        *format,
 }
 
 /* handle a '%' */
-
-int32_t
+static int32_t
 u_printf_simple_percent_handler(UFILE                 *stream,
                                 const u_printf_spec_info     *info,
                                 const ufmt_args            *args)
@@ -381,7 +179,7 @@ u_printf_simple_percent_handler(UFILE                 *stream,
 
 /* handle 's' */
 
-int32_t
+static int32_t
 u_printf_string_handler(UFILE                 *stream,
                         const u_printf_spec_info     *info,
                         const ufmt_args            *args)
@@ -434,156 +232,40 @@ u_printf_string_handler(UFILE                 *stream,
     return written;
 }
 
-/* HSYS */
-int32_t
-u_printf_integer_handler(UFILE                 *stream,
-                         const u_printf_spec_info     *info,
-                         const ufmt_args            *args)
+static int32_t
+u_printf_char_handler(UFILE                 *stream,
+                      const u_printf_spec_info         *info,
+                      const ufmt_args              *args)
 {
-    long            num         = (long) (args[0].intValue);
-    UNumberFormat        *format;
-    UChar            result        [UFPRINTF_BUFFER_SIZE];
-    int32_t        minDigits     = -1;
-    UErrorCode        status        = U_ZERO_ERROR;
+    UChar s[UTF_MAX_CHAR_LENGTH+1];
+    int32_t len = 1, written;
+    unsigned char arg = (unsigned char)(args[0].intValue);
 
-    /* mask off any necessary bits */
-    if(info->fIsShort)
-        num &= UINT16_MAX;
-    else if(! info->fIsLong || ! info->fIsLongLong)
-        num &= UINT32_MAX;
+    /* convert from default codepage to Unicode */
+    ufmt_defaultCPToUnicode((const char *)&arg, 2, s, sizeof(s)/sizeof(UChar));
 
-    /* get the formatter */
-    format = u_locbund_getNumberFormat(stream->fBundle);
-
-    /* handle error */
-    if(format == 0)
-        return 0;
-
-    /* set the appropriate flags on the formatter */
-
-    /* set the minimum integer digits */
-    if(info->fPrecision != -1) {
-        /* clone the stream's bundle if it isn't owned */
-        if(! stream->fOwnBundle) {
-            stream->fBundle     = u_locbund_clone(stream->fBundle);
-            stream->fOwnBundle = TRUE;
-            format           = u_locbund_getNumberFormat(stream->fBundle);
-        }
-
-        /* set the minimum # of digits */
-        minDigits = unum_getAttribute(format, UNUM_MIN_INTEGER_DIGITS);
-        unum_setAttribute(format, UNUM_MIN_INTEGER_DIGITS, info->fPrecision);
+    /* Remember that this may be a surrogate pair */
+    if (arg != 0) {
+        len = u_strlen(s);
     }
 
-    /* set whether to show the sign */
-    if(info->fShowSign) {
-        /* clone the stream's bundle if it isn't owned */
-        if(! stream->fOwnBundle) {
-            stream->fBundle     = u_locbund_clone(stream->fBundle);
-            stream->fOwnBundle = TRUE;
-            format           = u_locbund_getNumberFormat(stream->fBundle);
-        }
+    /* width = minimum # of characters to write */
+    /* precision = maximum # of characters to write */
 
-        u_printf_set_sign(format, info, &status);
+    /* precision takes precedence over width */
+    /* determine if the string should be truncated */
+    if(info->fPrecision != -1 && len > info->fPrecision) {
+        written = u_file_write(s, info->fPrecision, stream);
+    }
+    else {
+        /* determine if the string should be padded */
+        written = u_printf_pad_and_justify(stream, info, s, len);
     }
 
-    /* format the number */
-    unum_format(format, num, result, UFPRINTF_BUFFER_SIZE, 0, &status);
-
-    /* restore the number format */
-    if(minDigits != -1)
-        unum_setAttribute(format, UNUM_MIN_INTEGER_DIGITS, minDigits);
-
-    return u_printf_pad_and_justify(stream, info, result, u_strlen(result));
+    return written;
 }
 
-int32_t
-u_printf_hex_handler(UFILE             *stream,
-                     const u_printf_spec_info     *info,
-                     const ufmt_args            *args)
-{
-    long            num         = (long) (args[0].intValue);
-    UChar           result[UFPRINTF_BUFFER_SIZE];
-    int32_t         len        = UFPRINTF_BUFFER_SIZE;
-
-
-    /* mask off any necessary bits */
-    if(info->fIsShort)
-        num &= UINT16_MAX;
-    else if(! info->fIsLong || ! info->fIsLongLong)
-        num &= UINT32_MAX;
-
-    /* format the number, preserving the minimum # of digits */
-    ufmt_ltou(result, &len, num, 16,
-        (UBool)(info->fSpec == 0x0078),
-        (info->fPrecision == -1 && info->fZero) ? info->fWidth : info->fPrecision);
-
-    /* convert to alt form, if desired */
-    if(num != 0 && info->fAlt && len < UFPRINTF_BUFFER_SIZE - 2) {
-        /* shift the formatted string right by 2 chars */
-        memmove(result + 2, result, len * sizeof(UChar));
-        result[0] = 0x0030;
-        result[1] = info->fSpec;
-        len += 2;
-    }
-
-    return u_printf_pad_and_justify(stream, info, result, len);
-}
-
-int32_t
-u_printf_octal_handler(UFILE                 *stream,
-                       const u_printf_spec_info     *info,
-                       const ufmt_args            *args)
-{
-    long            num         = (long) (args[0].intValue);
-    UChar           result[UFPRINTF_BUFFER_SIZE];
-    int32_t         len        = UFPRINTF_BUFFER_SIZE;
-
-
-    /* mask off any necessary bits */
-    if(info->fIsShort)
-        num &= UINT16_MAX;
-    else if(! info->fIsLong || ! info->fIsLongLong)
-        num &= UINT32_MAX;
-
-    /* format the number, preserving the minimum # of digits */
-    ufmt_ltou(result, &len, num, 8,
-        FALSE, /* doesn't matter for octal */
-        info->fPrecision == -1 && info->fZero ? info->fWidth : info->fPrecision);
-
-    /* convert to alt form, if desired */
-    if(info->fAlt && result[0] != 0x0030 && len < UFPRINTF_BUFFER_SIZE - 1) {
-        /* shift the formatted string right by 1 char */
-        memmove(result + 1, result, len * sizeof(UChar));
-        result[0] = 0x0030;
-        len += 1;
-    }
-
-    return u_printf_pad_and_justify(stream, info, result, len);
-}
-
-
-int32_t
-u_printf_uinteger_handler(UFILE                 *stream,
-                          const u_printf_spec_info     *info,
-                          const ufmt_args            *args)
-{
-    u_printf_spec_info uint_info;
-    ufmt_args uint_args;
-
-    memcpy(&uint_info, info, sizeof(u_printf_spec_info));
-    memcpy(&uint_args, args, sizeof(ufmt_args));
-
-    uint_info.fPrecision = 0;
-    uint_info.fAlt  = FALSE;
-
-    /* Get around int32_t limitations */
-    uint_args.doubleValue = ((double) ((uint32_t) (uint_args.intValue)));
-
-    return u_printf_double_handler(stream, &uint_info, &uint_args);
-}
-
-int32_t
+static int32_t
 u_printf_double_handler(UFILE                 *stream,
                         const u_printf_spec_info     *info,
                         const ufmt_args            *args)
@@ -652,42 +334,155 @@ u_printf_double_handler(UFILE                 *stream,
     return u_printf_pad_and_justify(stream, info, result, u_strlen(result));
 }
 
-
-int32_t
-u_printf_char_handler(UFILE                 *stream,
-                      const u_printf_spec_info         *info,
-                      const ufmt_args              *args)
+/* HSYS */
+static int32_t
+u_printf_integer_handler(UFILE                 *stream,
+                         const u_printf_spec_info     *info,
+                         const ufmt_args            *args)
 {
-    UChar s[UTF_MAX_CHAR_LENGTH+1];
-    int32_t len = 1, written;
-    unsigned char arg = (unsigned char)(args[0].intValue);
+    long            num         = (long) (args[0].intValue);
+    UNumberFormat        *format;
+    UChar            result        [UFPRINTF_BUFFER_SIZE];
+    int32_t        minDigits     = -1;
+    UErrorCode        status        = U_ZERO_ERROR;
 
-    /* convert from default codepage to Unicode */
-    ufmt_defaultCPToUnicode((const char *)&arg, 2, s, sizeof(s)/sizeof(UChar));
+    /* mask off any necessary bits */
+    if(info->fIsShort)
+        num &= UINT16_MAX;
+    else if(! info->fIsLong || ! info->fIsLongLong)
+        num &= UINT32_MAX;
 
-    /* Remember that this may be a surrogate pair */
-    if (arg != 0) {
-        len = u_strlen(s);
+    /* get the formatter */
+    format = u_locbund_getNumberFormat(stream->fBundle);
+
+    /* handle error */
+    if(format == 0)
+        return 0;
+
+    /* set the appropriate flags on the formatter */
+
+    /* set the minimum integer digits */
+    if(info->fPrecision != -1) {
+        /* clone the stream's bundle if it isn't owned */
+        if(! stream->fOwnBundle) {
+            stream->fBundle     = u_locbund_clone(stream->fBundle);
+            stream->fOwnBundle = TRUE;
+            format           = u_locbund_getNumberFormat(stream->fBundle);
+        }
+
+        /* set the minimum # of digits */
+        minDigits = unum_getAttribute(format, UNUM_MIN_INTEGER_DIGITS);
+        unum_setAttribute(format, UNUM_MIN_INTEGER_DIGITS, info->fPrecision);
     }
 
-    /* width = minimum # of characters to write */
-    /* precision = maximum # of characters to write */
+    /* set whether to show the sign */
+    if(info->fShowSign) {
+        /* clone the stream's bundle if it isn't owned */
+        if(! stream->fOwnBundle) {
+            stream->fBundle     = u_locbund_clone(stream->fBundle);
+            stream->fOwnBundle = TRUE;
+            format           = u_locbund_getNumberFormat(stream->fBundle);
+        }
 
-    /* precision takes precedence over width */
-    /* determine if the string should be truncated */
-    if(info->fPrecision != -1 && len > info->fPrecision) {
-        written = u_file_write(s, info->fPrecision, stream);
-    }
-    else {
-        /* determine if the string should be padded */
-        written = u_printf_pad_and_justify(stream, info, s, len);
+        u_printf_set_sign(format, info, &status);
     }
 
-    return written;
+    /* format the number */
+    unum_format(format, num, result, UFPRINTF_BUFFER_SIZE, 0, &status);
+
+    /* restore the number format */
+    if(minDigits != -1)
+        unum_setAttribute(format, UNUM_MIN_INTEGER_DIGITS, minDigits);
+
+    return u_printf_pad_and_justify(stream, info, result, u_strlen(result));
 }
 
+static int32_t
+u_printf_hex_handler(UFILE             *stream,
+                     const u_printf_spec_info     *info,
+                     const ufmt_args            *args)
+{
+    long            num         = (long) (args[0].intValue);
+    UChar           result[UFPRINTF_BUFFER_SIZE];
+    int32_t         len        = UFPRINTF_BUFFER_SIZE;
 
-int32_t
+
+    /* mask off any necessary bits */
+    if(info->fIsShort)
+        num &= UINT16_MAX;
+    else if(! info->fIsLong || ! info->fIsLongLong)
+        num &= UINT32_MAX;
+
+    /* format the number, preserving the minimum # of digits */
+    ufmt_ltou(result, &len, num, 16,
+        (UBool)(info->fSpec == 0x0078),
+        (info->fPrecision == -1 && info->fZero) ? info->fWidth : info->fPrecision);
+
+    /* convert to alt form, if desired */
+    if(num != 0 && info->fAlt && len < UFPRINTF_BUFFER_SIZE - 2) {
+        /* shift the formatted string right by 2 chars */
+        memmove(result + 2, result, len * sizeof(UChar));
+        result[0] = 0x0030;
+        result[1] = info->fSpec;
+        len += 2;
+    }
+
+    return u_printf_pad_and_justify(stream, info, result, len);
+}
+
+static int32_t
+u_printf_octal_handler(UFILE                 *stream,
+                       const u_printf_spec_info     *info,
+                       const ufmt_args            *args)
+{
+    long            num         = (long) (args[0].intValue);
+    UChar           result[UFPRINTF_BUFFER_SIZE];
+    int32_t         len        = UFPRINTF_BUFFER_SIZE;
+
+
+    /* mask off any necessary bits */
+    if(info->fIsShort)
+        num &= UINT16_MAX;
+    else if(! info->fIsLong || ! info->fIsLongLong)
+        num &= UINT32_MAX;
+
+    /* format the number, preserving the minimum # of digits */
+    ufmt_ltou(result, &len, num, 8,
+        FALSE, /* doesn't matter for octal */
+        info->fPrecision == -1 && info->fZero ? info->fWidth : info->fPrecision);
+
+    /* convert to alt form, if desired */
+    if(info->fAlt && result[0] != 0x0030 && len < UFPRINTF_BUFFER_SIZE - 1) {
+        /* shift the formatted string right by 1 char */
+        memmove(result + 1, result, len * sizeof(UChar));
+        result[0] = 0x0030;
+        len += 1;
+    }
+
+    return u_printf_pad_and_justify(stream, info, result, len);
+}
+
+static int32_t
+u_printf_uinteger_handler(UFILE                 *stream,
+                          const u_printf_spec_info     *info,
+                          const ufmt_args            *args)
+{
+    u_printf_spec_info uint_info;
+    ufmt_args uint_args;
+
+    memcpy(&uint_info, info, sizeof(u_printf_spec_info));
+    memcpy(&uint_args, args, sizeof(ufmt_args));
+
+    uint_info.fPrecision = 0;
+    uint_info.fAlt  = FALSE;
+
+    /* Get around int32_t limitations */
+    uint_args.doubleValue = ((double) ((uint32_t) (uint_args.intValue)));
+
+    return u_printf_double_handler(stream, &uint_info, &uint_args);
+}
+
+static int32_t
 u_printf_pointer_handler(UFILE                 *stream,
                          const u_printf_spec_info     *info,
                          const ufmt_args            *args)
@@ -703,8 +498,7 @@ u_printf_pointer_handler(UFILE                 *stream,
     return u_printf_pad_and_justify(stream, info, result, len);
 }
 
-
-int32_t
+static int32_t
 u_printf_scientific_handler(UFILE             *stream,
                             const u_printf_spec_info     *info,
                             const ufmt_args            *args)
@@ -811,7 +605,7 @@ u_printf_scientific_handler(UFILE             *stream,
     return u_printf_pad_and_justify(stream, info, result, u_strlen(result));
 }
 
-int32_t
+static int32_t
 u_printf_date_handler(UFILE             *stream,
                       const u_printf_spec_info     *info,
                       const ufmt_args         *args)
@@ -835,7 +629,7 @@ u_printf_date_handler(UFILE             *stream,
     return u_printf_pad_and_justify(stream, info, result, u_strlen(result));
 }
 
-int32_t
+static int32_t
 u_printf_time_handler(UFILE             *stream,
                       const u_printf_spec_info     *info,
                       const ufmt_args         *args)
@@ -859,8 +653,7 @@ u_printf_time_handler(UFILE             *stream,
     return u_printf_pad_and_justify(stream, info, result, u_strlen(result));
 }
 
-
-int32_t
+static int32_t
 u_printf_percent_handler(UFILE                 *stream,
                          const u_printf_spec_info     *info,
                          const ufmt_args            *args)
@@ -930,8 +723,7 @@ u_printf_percent_handler(UFILE                 *stream,
     return u_printf_pad_and_justify(stream, info, result, u_strlen(result));
 }
 
-
-int32_t
+static int32_t
 u_printf_currency_handler(UFILE             *stream,
                           const u_printf_spec_info     *info,
                           const ufmt_args            *args)
@@ -1001,7 +793,7 @@ u_printf_currency_handler(UFILE             *stream,
     return u_printf_pad_and_justify(stream, info, result, u_strlen(result));
 }
 
-int32_t
+static int32_t
 u_printf_ustring_handler(UFILE                 *stream,
                          const u_printf_spec_info     *info,
                          const ufmt_args         *args)
@@ -1031,9 +823,7 @@ u_printf_ustring_handler(UFILE                 *stream,
     return written;
 }
 
-
-
-int32_t
+static int32_t
 u_printf_uchar_handler(UFILE                 *stream,
                        const u_printf_spec_info     *info,
                        const ufmt_args            *args)
@@ -1059,7 +849,7 @@ u_printf_uchar_handler(UFILE                 *stream,
     return written;
 }
 
-int32_t
+static int32_t
 u_printf_scidbl_handler(UFILE                 *stream,
                         const u_printf_spec_info     *info,
                         const ufmt_args            *args)
@@ -1094,8 +884,7 @@ u_printf_scidbl_handler(UFILE                 *stream,
     }
 }
 
-
-int32_t
+static int32_t
 u_printf_count_handler(UFILE                 *stream,
                        const u_printf_spec_info     *info,
                        const ufmt_args            *args)
@@ -1109,8 +898,7 @@ u_printf_count_handler(UFILE                 *stream,
     return 0;
 }
 
-
-int32_t
+static int32_t
 u_printf_spellout_handler(UFILE             *stream,
                           const u_printf_spec_info     *info,
                           const ufmt_args            *args)
@@ -1180,7 +968,110 @@ u_printf_spellout_handler(UFILE             *stream,
     return u_printf_pad_and_justify(stream, info, result, u_strlen(result));
 }
 
-#define UP_PERCENT 0x0025
+U_CAPI int32_t U_EXPORT2 
+u_fprintf(    UFILE        *f,
+          const char    *patternSpecification,
+          ... )
+{
+    va_list ap;
+    int32_t count;
+
+    va_start(ap, patternSpecification);
+    count = u_vfprintf(f, patternSpecification, ap);
+    va_end(ap);
+
+    return count;
+}
+
+U_CAPI int32_t U_EXPORT2 
+u_fprintf_u(    UFILE        *f,
+            const UChar    *patternSpecification,
+            ... )
+{
+    va_list ap;
+    int32_t count;
+
+    va_start(ap, patternSpecification);
+    count = u_vfprintf_u(f, patternSpecification, ap);
+    va_end(ap);
+
+    return count;
+}
+
+U_CAPI int32_t  U_EXPORT2 /* U_CAPI ... U_EXPORT2 added by Peter Kirk 17 Nov 2001 */
+u_vfprintf(    UFILE        *f,
+           const char    *patternSpecification,
+           va_list        ap)
+{
+    int32_t count;
+    UChar *pattern;
+    UChar buffer[UFMT_DEFAULT_BUFFER_SIZE];
+    int32_t size = (int32_t)strlen(patternSpecification) + 1;
+
+    /* convert from the default codepage to Unicode */
+    if (size >= MAX_UCHAR_BUFFER_SIZE(buffer)) {
+        pattern = (UChar *)uprv_malloc(size * sizeof(UChar));
+        if(pattern == 0) {
+            return 0;
+        }
+    }
+    else {
+        pattern = buffer;
+    }
+    u_charsToUChars(patternSpecification, pattern, size);
+
+    /* do the work */
+    count = u_vfprintf_u(f, pattern, ap);
+
+    /* clean up */
+    if (pattern != buffer) {
+        uprv_free(pattern);
+    }
+
+    return count;
+}
+
+/* Use US-ASCII characters only for formatting. Most codepages have
+ characters 20-7F from Unicode. Using any other codepage specific
+ characters will make it very difficult to format the string on
+ non-Unicode machines */
+static const u_printf_info g_u_printf_infos[108] = {
+/* 0x20 */
+    UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,
+    UFMT_EMPTY,         UFMT_SIMPLE_PERCENT,UFMT_EMPTY,         UFMT_EMPTY,
+    UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,
+    UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,
+
+/* 0x30 */
+    UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,
+    UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,
+    UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,
+    UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,
+
+/* 0x40 */
+    UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,
+    UFMT_DATE,          UFMT_SCIENTIFIC,    UFMT_EMPTY,         UFMT_SCIDBL,
+    UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,         UFMT_UCHAR,
+    UFMT_EMPTY,         UFMT_CURRENCY,      UFMT_EMPTY,         UFMT_EMPTY,
+
+/* 0x50 */
+    UFMT_PERCENT,       UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,
+    UFMT_TIME,          UFMT_USTRING,       UFMT_SPELLOUT,      UFMT_EMPTY,
+    UFMT_HEX,           UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,
+    UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,
+
+/* 0x60 */
+    UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,         UFMT_CHAR,
+    UFMT_INT,           UFMT_SCIENTIFIC,    UFMT_DOUBLE,        UFMT_SCIDBL,
+    UFMT_EMPTY,         UFMT_INT,           UFMT_EMPTY,         UFMT_EMPTY,
+    UFMT_EMPTY,         UFMT_EMPTY,         UFMT_COUNT,         UFMT_OCTAL,
+
+/* 0x70 */
+    UFMT_POINTER,       UFMT_EMPTY,         UFMT_EMPTY,         UFMT_STRING,
+    UFMT_EMPTY,         UFMT_UINT,          UFMT_EMPTY,         UFMT_EMPTY,
+    UFMT_HEX,           UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,
+    UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,
+};
 
 U_CAPI int32_t  U_EXPORT2 /* U_CAPI ... U_EXPORT2 added by Peter Kirk 17 Nov 2001 */
 u_vfprintf_u(    UFILE        *f,
