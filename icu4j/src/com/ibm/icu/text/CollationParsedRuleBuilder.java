@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/CollationParsedRuleBuilder.java,v $ 
-* $Date: 2002/07/30 02:38:12 $ 
-* $Revision: 1.3 $
+* $Date: 2002/08/01 21:09:17 $ 
+* $Revision: 1.4 $
 *
 *******************************************************************************
 */
@@ -25,6 +25,7 @@ import com.ibm.icu.impl.IntTrieBuilder;
 import com.ibm.icu.impl.TrieIterator;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.lang.UCharacter;
+import com.ibm.icu.lang.UCharacterCategory;
 import com.ibm.icu.impl.NormalizerImpl;
 import com.ibm.icu.util.RangeValueIterator;
 
@@ -3463,14 +3464,18 @@ class CollationParsedRuleBuilder
                                              CollationElementIterator colEl, 
                                              int start, int limit, int type) 
     {
-        if (type > 0) { 
+        if (type != UCharacterCategory.UNASSIGNED 
+            && type != UCharacterCategory.PRIVATE_USE) { 
             // if the range is assigned - we might ommit more categories later
             Elements el = new Elements();
+            char dec[] = new char[256];
             for (int u32 = start; u32 < limit; u32 ++) {
-            	String comp = UCharacter.toString(u32);
-                String decomp = Normalizer.decompose(comp, false);
-                if (decomp.length() > 1 || (decomp.length() == 1 
-                                          && decomp.charAt(0) != (char)u32)) {
+                int noOfDec = NormalizerImpl.getDecomposition(u32, false,
+                                                              dec, 0, 256);
+                if (noOfDec > 0) {
+                    // if we're positive, that means there is no decomposition
+                    String comp = UCharacter.toString(u32);
+                    String decomp = new String(dec, 0, noOfDec);
                     if (!collator.equals(comp, decomp)) {
                         el.m_cPoints_ = decomp;
                         el.m_prefix_ = 0;
