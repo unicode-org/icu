@@ -182,6 +182,7 @@ static void TestAliasConflict(void) {
     UResourceBundle *he = NULL;
     UResourceBundle *iw = NULL;
     const UChar *result = NULL;
+    int32_t resultLen;
 
     he = ures_open(NULL, "he", &status);
     iw = ures_open(NULL, "iw", &status);
@@ -189,7 +190,7 @@ static void TestAliasConflict(void) {
         log_err("Failed to get resource with %s", myErrorName(status));
     }
     ures_close(iw);
-    result = ures_get(he, "ShortLanguage", &status);
+    result = ures_getStringByKey(he, "ShortLanguage", &resultLen, &status);
     if(U_FAILURE(status) || result == NULL) { 
         log_err("Failed to get resource with %s", myErrorName(status));
     }
@@ -409,9 +410,6 @@ static void TestAPI() {
     ures_close(teFillin);
     ures_close(teFillin2);
     ures_close(teRes);
-
-
-
 }
 
 static void TestErrorConditions(){
@@ -428,6 +426,7 @@ static void TestErrorConditions(){
     UResourceBundle *teFillin=NULL;
     UResourceBundle *teFillin2=NULL;
     uint8_t *binResult = NULL;
+    int32_t resultLen;
 
     directory= u_getDataDirectory();
     uprv_strcpy(testdatapath, directory);
@@ -491,7 +490,7 @@ static void TestErrorConditions(){
     }
     /*Test ures_get() with UResourceBundle = NULL*/
     status=U_ZERO_ERROR;
-    if(ures_get(NULL, "string_only_in_te", &status) != NULL && status != U_ILLEGAL_ARGUMENT_ERROR){
+    if(ures_getStringByKey(NULL, "string_only_in_te", &resultLen, &status) != NULL && status != U_ILLEGAL_ARGUMENT_ERROR){
         log_err("ERROR: ures_get is supposed to fail when UResourceBundle = NULL. Expected: errorCode = U_ILLEGAL_ARGUMENT_ERROR, Got: errorCode=%s\n",
                                            myErrorName(status));
     } 
@@ -1226,6 +1225,7 @@ static void TestFallback()
     UErrorCode status = U_ZERO_ERROR;
     UResourceBundle *fr_FR = NULL;
     const UChar *junk; /* ignored */
+    int32_t resultLen;
 
     log_verbose("Opening fr_FR..");
     fr_FR = ures_open(NULL, "fr_FR", &status);
@@ -1239,15 +1239,15 @@ static void TestFallback()
 
 
     /* clear it out..  just do some calls to get the gears turning */
-    junk = ures_get(fr_FR, "LocaleID", &status);
+    junk = ures_getStringByKey(fr_FR, "LocaleID", &resultLen, &status);
     status = U_ZERO_ERROR;
-    junk = ures_get(fr_FR, "LocaleString", &status);
+    junk = ures_getStringByKey(fr_FR, "LocaleString", &resultLen, &status);
     status = U_ZERO_ERROR;
-    junk = ures_get(fr_FR, "LocaleID", &status);
+    junk = ures_getStringByKey(fr_FR, "LocaleID", &resultLen, &status);
     status = U_ZERO_ERROR;
 
     /* OK first one. This should be a Default value. */
-    junk = ures_get(fr_FR, "%%EURO", &status);
+    junk = ures_getStringByKey(fr_FR, "%%EURO", &resultLen, &status);
     if(status != U_USING_DEFAULT_ERROR)
     {
         log_err("Expected U_USING_DEFAULT_ERROR when trying to get %%EURO from fr_FR, got %s\n", 
@@ -1257,7 +1257,7 @@ static void TestFallback()
     status = U_ZERO_ERROR;
 
     /* and this is a Fallback, to fr */
-    junk = ures_get(fr_FR, "ShortLanguage", &status);
+    junk = ures_getStringByKey(fr_FR, "ShortLanguage", &resultLen, &status);
     if(status != U_USING_FALLBACK_ERROR)
     {
         log_err("Expected U_USING_FALLBACK_ERROR when trying to get ShortLanguage from fr_FR, got %d\n", 
@@ -1272,7 +1272,7 @@ static void TestFallback()
     {
         UErrorCode err =U_ZERO_ERROR;
         UResourceBundle* myResB = ures_open(NULL,"no_NO_NY",&err);
-        const UChar*  myLocID = ures_get(myResB,"LocaleID",&err);
+        const UChar*  myLocID = ures_getStringByKey(myResB, "LocaleID", &resultLen, &err);
         UResourceBundle* tResB = ures_getByKey(myResB, "DayNames", NULL, &err);
         if(err!= U_ZERO_ERROR){
             log_err("Expected U_USING_FALLBACK_ERROR when trying to test no_NO_NY aliased with nn_NO_NY  %s\n",u_errorName(err));
