@@ -187,15 +187,13 @@ ucurr_getName(const UChar* currency,
     //|    //...
     //|  }
     //|}
-    // There may be 2, 3, or 4 entries.  If entry 3 or 4 is absent
-    // it is assumed to be identical to entry 0 or 1.
 
     if (ec == NULL || U_FAILURE(*ec)) {
         return 0;
     }
 
     int32_t choice = (int32_t) nameStyle;
-    if (choice < 0 || choice > 3) {
+    if (choice < 0 || choice > 1) {
         *ec = U_ILLEGAL_ARGUMENT_ERROR;
         return 0;
     }
@@ -231,10 +229,6 @@ ucurr_getName(const UChar* currency,
         UResourceBundle* rb = ures_open(NULL, loc, &ec2);
         UResourceBundle* curr = ures_getByKey(rb, CURRENCIES, NULL, &ec2);
         UResourceBundle* names = ures_getByKey(curr, buf, NULL, &ec2);
-        int32_t n = ures_getSize(names); // should be 2, 3, or 4
-        if (choice >= n) {
-            choice &= 1; // fold 2..3 down to 0..1
-        }
         s = ures_getStringByIndex(names, choice, len, &ec2);
         ures_close(names);
         ures_close(curr);
