@@ -38,7 +38,7 @@ LD_SONAME =
 SO = dll
 ## Non-shared intermediate object suffix
 STATIC_O = ao
-#LIBICU = $(ICUPREFIX)
+LIBICU = cyg$(ICUPREFIX)
 
 ifeq ($(ENABLE_SHARED),YES)
 SO_TARGET_VERSION_SUFFIX = $(SO_TARGET_VERSION_MAJOR)
@@ -73,13 +73,16 @@ I18N_STUBNAME = in
 	@$(SHELL) -ec '$(GEN_DEPS.cc) $< >> $@; [ -s $@ ] || rm -f $@'
 
 ## Versioned target for a shared library.
-FINAL_SO_TARGET=  $(basename $(SO_TARGET))$(SO_TARGET_VERSION).$(SO)
-MIDDLE_SO_TARGET= $(basename $(SO_TARGET))$(SO_TARGET_VERSION_MAJOR).$(SO)
+## Since symbolic links don't work the same way on Windows,
+## we only use the version major number.
+#FINAL_SO_TARGET=$(basename $(SO_TARGET))$(SO_TARGET_VERSION).$(SO)
+FINAL_SO_TARGET=$(basename $(SO_TARGET))$(SO_TARGET_VERSION_MAJOR).$(SO)
+MIDDLE_SO_TARGET=$(SO_TARGET)
 
 ## Versioned libraries rules
-%$(SO_TARGET_VERSION_MAJOR).$(SO): %$(SO_TARGET_VERSION).$(SO)
-	$(RM) $@ && cp $< $@
-%.$(SO): %$(SO_TARGET_VERSION).$(SO)
+#%$(SO_TARGET_VERSION_MAJOR).$(SO): %$(SO_TARGET_VERSION).$(SO)
+#	$(RM) $@ && cp ${<F} $@
+%.$(SO): %$(SO_TARGET_VERSION_MAJOR).$(SO)
 	$(RM) $@ && ln -s ${<F} $@
 
 ##  Bind internal references
