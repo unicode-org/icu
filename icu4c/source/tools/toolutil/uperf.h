@@ -82,6 +82,13 @@ public:
         utimer_getTime(&stop);
         return utimer_getDeltaSeconds(&start,&stop); // ms
     }
+	/**
+	 * Subclasses must implement this method to return any
+	 * errors that may have occured during performing an
+	 * operation
+	 */
+	virtual UErrorCode getStatus()=0;
+
 };
 
 

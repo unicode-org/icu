@@ -686,10 +686,6 @@ ucbuf_readline(UCHARBUF* buf,int32_t* len,UErrorCode* err){
         */
         for(;;){
             c = *temp++;
-            /* Watch for CR, LF, EOF; these finish off a line.*/
-            if (c == 0xd) {
-                continue;
-            }
             if(buf->remaining==0){
                 *err = (UErrorCode) U_EOF;
             }
@@ -702,7 +698,7 @@ ucbuf_readline(UCHARBUF* buf,int32_t* len,UErrorCode* err){
                     return NULL;
                 }
             }
-            if (u_charType(c) == U_LINE_SEPARATOR) {  /* Unipad inserts 2028 line separators! */
+            if (temp>=buf->bufLimit|| c == 0x0a  || c==0x2028 || c==0x0085){  /* Unipad inserts 2028 line separators! */
                 *len = temp - buf->currentPos;
                 savePos = buf->currentPos;
                 buf->currentPos = temp;
@@ -715,15 +711,12 @@ ucbuf_readline(UCHARBUF* buf,int32_t* len,UErrorCode* err){
         */
         for(;;){
             c = *temp++;
-            /* Watch for CR, LF, EOF; these finish off a line.*/
-            if (c == 0xd) {
-                continue;
-            }
+            
             if(buf->currentPos==buf->bufLimit){
                 *err = (UErrorCode) U_EOF;
                 return NULL;
             }
-            if (temp>=buf->bufLimit || u_charType(c) == U_LINE_SEPARATOR) {  /* Unipad inserts 2028 line separators! */
+            if (temp>=buf->bufLimit|| c == 0x0a  || c==0x2028 || c==0x0085) {  /* Unipad inserts 2028 line separators! */
                 *len = temp - buf->currentPos;
                 savePos = buf->currentPos;
                 buf->currentPos = temp;
