@@ -83,9 +83,14 @@ enum {
      URX_CTR_INIT      = 25,   // Counter Inits for {Interval} loops.
      URX_CTR_INIT_NG   = 26,   //   3 kinds, normal, non-greedy, and possesive.
      URX_CTR_INIT_P    = 27,   //   These are 4 word opcodes.  See description.
+                               //    First Operand:  Data loc of counter variable
+                               //    2nd   Operand:  Pat loc of the URX_CTR_LOOPx 
+                               //                    at the end of the loop.
+                               //    3rd   Operand:  Minimum count.
+                               //    4th   Operand:  Max count, -1 for unbounded.
      URX_CTR_LOOP      = 28,   // Loop Ops for {interval} loops.
      URX_CTR_LOOP_NG   = 29,   //   Also in three flavors.
-     URX_CTR_LOOP_P    = 30,
+     URX_CTR_LOOP_P    = 30,   //   Operand is loc of corresponding CTR_INIT.
 
      URX_RELOC_OPRND   = 31,   // Operand value in multi-operand ops that refers
                                //   back into compiled pattern code, and thus must

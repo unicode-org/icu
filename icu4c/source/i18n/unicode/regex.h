@@ -310,16 +310,30 @@ private:
     UnicodeString   fPattern;      // The original pattern string.
     uint32_t        fFlags;        // The flags used when compiling the pattern.
                                    //
-    UVector32       *fCompiledPat; // The compiled pattern.
+    UVector32       *fCompiledPat; // The compiled pattern p-code.
     UnicodeString   fLiteralText;  // Any literal string data from the pattern,
                                    //   after un-escaping, for use during the match.
+
     UVector         *fSets;        // Any UnicodeSets referenced from the pattern.
+
     UBool           fBadState;     // True if some prior error has left this
                                    //  RegexPattern in an unusable state.
+
+    int32_t         fMinMatchLen;  // Minimum Match Length.  All matches will have length
+                                   //   >= this value.  For some patterns, this calculated
+                                   //   value may be less than the true shortest
+                                   //   possible match.
+
+    int32_t         fMaxMatchLen;  // Maximum Match Length.  All matches will have length
+                                   //   <= this value.  For some patterns, this calculated
+                                   //   value may be greater than the true longest
+                                   //   possible match.  For patterns with unbounded
+                                   //   match length, value = -1.
 
     RegexMatcher    *fMatcher;     // A cached matcher for this pattern, used for
                                    //  split(), to avoid having to
                                    //  make new ones on each call.
+                                   //  TODO:  fix thread safety problems.
 
     int32_t         fFrameSize;    // Size of a state stack frame in the
                                    //   execution engine.
@@ -328,13 +342,13 @@ private:
                                    //   does not go on the state stack, but has just
                                    //   a single copy per matcher.
 
-    UVector32       *fGroupMap;     // Map from capture group number to position of
+    UVector32       *fGroupMap;    // Map from capture group number to position of
                                    //   the group's variables in the matcher stack frame.
 
     int32_t         fMaxCaptureDigits;
 
-    UnicodeSet    **fStaticSets;  // Ptr to static (shared) sets for predefined
-                                    //   regex character classes, e.g. Word.
+    UnicodeSet     **fStaticSets;  // Ptr to static (shared) sets for predefined
+                                   //   regex character classes, e.g. Word.
 
     /**
      * The address of this static class variable serves as this class's ID
