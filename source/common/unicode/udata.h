@@ -104,7 +104,7 @@ typedef struct UDataMemory UDataMemory;
  * @return TRUE if the current data memory is acceptable
  * @stable
  */
-typedef UBool
+typedef UBool U_CALLCONV
 UDataMemoryIsAcceptable(void *context,
                         const char *type, const char *name,
                         const UDataInfo *pInfo);
