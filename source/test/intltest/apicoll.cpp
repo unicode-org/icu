@@ -479,10 +479,15 @@ CollationAPITest::TestCollationKey(/* char* par */)
     uint8_t* byteArray2 = 0;
     
     byteArray2 = sortk2.toByteArray(cnt2);
+    /* 
+    this is a bad test since it is dependent on the version of uca data,
+    which changes
+    will remove it.
     const char sortk2_compat[] = { 
-        /*this is a 1.8 sortkey */
+        // this is a 1.8 sortkey
         0x17, 0x19, 0x1B, 0x1D, 0x17, 0x01, 0x08, 0x01, 0x08, 0x00
     };
+    */
 
     const uint8_t* byteArray3 = 0;
     byteArray3 = sortk1.getByteArray(cnt3);
@@ -493,8 +498,10 @@ CollationAPITest::TestCollationKey(/* char* par */)
     CollationKey sortk4(byteArray1, cnt1), sortk5(byteArray2, cnt2);
     CollationKey sortk6(byteArray3, cnt3), sortk7(byteArray4, cnt4);
 
+    /*
     doAssert(memcmp(byteArray2, sortk2_compat, strlen(sortk2_compat)) == 0, 
              "Binary format for 'abcda' sortkey different!");
+    */
     doAssert(sortk1.compareTo(sortk4) == Collator::EQUAL, "CollationKey::toByteArray(sortk1) Failed.");
     doAssert(sortk2.compareTo(sortk5) == Collator::EQUAL, "CollationKey::toByteArray(sortk2) Failed.");
     doAssert(sortk4.compareTo(sortk5) == Collator::GREATER, "sortk4 >>> sortk5 Failed");
