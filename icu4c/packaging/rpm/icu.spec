@@ -8,8 +8,6 @@
 
 # This file can be freely redistributed under the same license as ICU.
 
-%define _unpackaged_files_terminate_build 0
-
 Name: icu
 Version: 3.0
 Release: 1
@@ -21,8 +19,8 @@ Group: System Environment/Libraries
 Source: icu-%{version}.tgz
 BuildRoot: /var/tmp/%{name}-%{version}
 %description
-ICU is a C++ and C library that provides robust and full-featured Unicode
-and locale support. The library provides calendar support, conversions
+ICU is a set of C and C++ libraries that provides robust and full-featured
+Unicode and locale support. The library provides calendar support, conversions
 for many character sets, language sensitive collation, date
 and time formatting, support for many locales, message catalogs
 and resources, message formatting, normalization, number and currency
@@ -40,8 +38,8 @@ not contain any of the data files needed at runtime and present in the
 Summary: International Components for Unicode (libraries)
 Group: Development/Libraries
 %description -n libicu30
-ICU is a C++ and C library that provides robust and full-featured Unicode
-support. This package contains the runtime libraries for ICU. It does
+ICU is a set of C and C++ libraries that provides robust and full-featured
+Unicode support. This package contains the runtime libraries for ICU. It does
 not contain any of the data files needed at runtime and present in the
 `icu' and `icu-locales` packages.
 
@@ -50,17 +48,18 @@ Summary: International Components for Unicode (development files)
 Group: Development/Libraries
 Requires: libicu30 = %{version}
 %description -n libicu-devel
-ICU is a C++ and C library that provides robust and full-featured Unicode
-support. This package contains the development files for ICU.
+ICU is a set of C and C++ libraries that provides robust and full-featured
+Unicode support. This package contains the development files for ICU.
 
 %package locales
 Summary: Locale data for ICU
 Group: System Environment/Libraries
 Requires: libicu30 >= %{version}
 %description locales
-The locale data are used by ICU to provide localization (l10n) and
-internationalization (i18n) support to ICU applications. This package
-also contains break data for various languages, and transliteration data.
+The locale data are used by ICU to provide localization (l10n), 
+internationalization (i18n) and timezone support to ICU applications.
+This package also contains break data for various languages,
+and transliteration data.
 
 %post
 # Adjust the current ICU link in /usr/lib/icu
@@ -133,6 +132,7 @@ make install DESTDIR=$RPM_BUILD_ROOT
 /usr/share/icu/%{version}/license.html
 /usr/share/icu/%{version}/*.cnv
 /usr/share/icu/%{version}/*.icu
+/usr/share/icu/%{version}/*.spp
 
 /usr/bin/derb
 /usr/bin/genbrk
@@ -169,12 +169,13 @@ make install DESTDIR=$RPM_BUILD_ROOT
 /usr/man/man8/gennorm.8.*
 /usr/man/man8/genprops.8.*
 /usr/man/man8/genuca.8.*
-/usr/man/man8/genidna.8.*
+/usr/man/man8/gensprep.8.*
 
 %files -n icu-locales
 /usr/share/icu/%{version}/*.brk
 /usr/share/icu/%{version}/*.res
-/usr/share/icu/%{version}/coll/*.res
+#TODO Fix the location of these files.
+#/usr/share/icu/%{version}/coll/*.res
 
 %files -n libicu30
 %doc license.html
