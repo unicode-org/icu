@@ -289,7 +289,14 @@ ucnv_safeClone(const UConverter* cnv, void *stackBuffer, int32_t *pBufferSize, U
     }
 
     /* increment refcount of shared data if needed */
-    ucnv_incrementRefCount(cnv->sharedData);
+    /*
+    Checking whether it's an algorithic converter is okay
+    in multithreaded applications because the value never changes.
+    Don't check referenceCounter for any other value.
+    */
+    if (cnv->sharedData->referenceCounter != ~0) {
+        ucnv_incrementRefCount(cnv->sharedData);
+    }
 
     if(localConverter==NULL || U_FAILURE(*status)) {
         return NULL;
@@ -390,7 +397,14 @@ ucnv_close (UConverter * converter)
     }
 #endif
 
-    ucnv_unloadSharedDataIfReady(converter->sharedData);
+    /*
+    Checking whether it's an algorithic converter is okay
+    in multithreaded applications because the value never changes.
+    Don't check referenceCounter for any other value.
+    */
+    if (converter->sharedData->referenceCounter != ~0) {
+        ucnv_unloadSharedDataIfReady(converter->sharedData);
+    }
 
     if(!converter->isCopyLocal){
         UCNV_DEBUG_LOG("close:free", "", converter);
