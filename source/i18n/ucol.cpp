@@ -3416,7 +3416,11 @@ ucol_calcSortKey(const    UCollator    *coll,
     }
 
     if(resultLength == 0 || primaries == NULL) {
-        return ucol_getSortKeySize(coll, &s, sortKeySize, strength, len);
+      int32_t keyLen = ucol_getSortKeySize(coll, &s, sortKeySize, strength, len);
+      if(normSource != normBuffer) {
+          uprv_free(normSource);
+      }
+      return keyLen;
     }
     uint8_t *primarySafeEnd = primaries + resultLength - 2;
 
@@ -3924,7 +3928,7 @@ ucol_calcSortKeySimpleTertiary(const    UCollator    *coll,
         int32_t t = ucol_getSortKeySize(coll, &s, sortKeySize, coll->strength, len);
         if(normSource != normBuffer) {
             uprv_free(normSource);
-    }
+        }
         return t;
     }
 
