@@ -6,9 +6,13 @@
 // ***************************************************************************
 
 ga{
-   Version { "2.0" }
+    Version { "2.0" }
 
-   DayAbbreviations { 
+    AmPmMarkers { 
+        "a.m.",
+        "p.m.",
+    }
+    DayAbbreviations { 
         "Domh",
         "Luan",
         "Máirt",
@@ -46,7 +50,7 @@ ga{
         "Márta",
         "Aibreán",
         "Bealtaine",
-        "Meith",
+        "Meitheamh",
         "Iúil",
         "Lúnasa",
         "Meán Fómhair",
@@ -71,6 +75,10 @@ ga{
 //    LocaleScript{ 
 //        "Latn",  // ISO 15924 Name 
 //    }
+    Eras { 
+        "RC",
+        "AD",
+    }
     ExemplarCharacters { "[a-z \u00e1 \u00e9 \u00ed \u00f3 \u00fa]" }
 
     // Currency display names

@@ -7,10 +7,14 @@
 
 en_IE {
     Version { "2.0" }
-    DateTimeElements:intvector { 
-        2,
-        1,
+    AmPmMarkers { 
+        "a.m.",
+        "p.m.",
     }
+//    DateTimeElements:intvector { 
+//        2,
+//        1,
+//    }
     DateTimePatterns { 
         "HH:mm:ss z",
         "HH:mm:ss z",
