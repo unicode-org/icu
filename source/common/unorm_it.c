@@ -202,6 +202,7 @@ readNext(UNormIterator *uni, UCharIterator *iter) {
         /* move array contents to make room */
         moveContentsTowardStart(api, uni->chars, uni->states, delta);
         api->index=limit=api->limit;
+        uni->hasPrevious=TRUE;
     }
 
     /* normalize starting from the limit position */
@@ -221,6 +222,7 @@ readNext(UNormIterator *uni, UCharIterator *iter) {
             /* empty and re-use the arrays */
             uni->states[0]=uni->states[limit];
             api->start=api->index=api->limit=limit=0;
+            uni->hasPrevious=TRUE;
         } else {
             capacity+=room+100;
             if(!reallocArrays(uni, capacity, FALSE)) {
@@ -271,6 +273,7 @@ readPrevious(UNormIterator *uni, UCharIterator *iter) {
         /* move array contents to make room */
         moveContentsTowardEnd(api, uni->chars, uni->states, delta);
         api->index=start=api->start;
+        uni->hasNext=TRUE;
     }
 
     /* normalize ending at the start position */
@@ -290,6 +293,7 @@ readPrevious(UNormIterator *uni, UCharIterator *iter) {
             /* empty and re-use the arrays */
             uni->states[capacity]=uni->states[start];
             api->start=api->index=api->limit=start=capacity;
+            uni->hasNext=TRUE;
         } else {
             capacity+=room+100;
             if(!reallocArrays(uni, capacity, TRUE)) {
