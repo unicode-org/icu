@@ -538,10 +538,6 @@ SOURCE=.\hpmufn.c
 # End Source File
 # Begin Source File
 
-SOURCE=.\mstrmtst.c
-# End Source File
-# Begin Source File
-
 SOURCE=.\putiltst.c
 # End Source File
 # Begin Source File

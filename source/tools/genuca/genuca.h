@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2000-2001, International Business Machines
+*   Copyright (C) 2000-2004, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -33,7 +33,6 @@
 #include "unicode/uchar.h"
 #include "ucol_imp.h"
 #include "uhash.h"
-#include "umemstrm.h"
 #include "unewdata.h"
 
 
