@@ -1624,11 +1624,20 @@ UnicodeStringStreamer::streamIn(UnicodeString *s,
 
 // console IO
 
-#if U_IOSTREAM_SOURCE
+#if U_IOSTREAM_SOURCE >= 198506
 
-ostream&
-operator<<(ostream& stream,
-           const UnicodeString& s)
+#if U_IOSTREAM_SOURCE >= 199711
+
+U_COMMON_API std::ostream &
+operator<<(std::ostream& stream, const UnicodeString& s)
+
+#else
+
+U_COMMON_API ostream &
+operator<<(ostream& stream, const UnicodeString& s)
+
+#endif
+
 {
   if(s.length() > 0) {
     char buffer[200];
