@@ -232,10 +232,25 @@ public:
      *                could be <TT>U_MISSING_RESOURCE_ERROR</T> if the key is not found
      *                could be a non-failing error 
      *                e.g.: <TT>U_USING_FALLBACK_ERROR</TT>,<TT>U_USING_DEFAULT_ERROR </TT>
-     * @return a pointer to a chuck of unsigned bytes which live in a memory mapped/DLL file.
+     * @return a pointer to a chunk of unsigned bytes which live in a memory mapped/DLL file.
      * @stable
      */
     const uint8_t *getBinary(int32_t& len, UErrorCode& status) const;
+
+
+    /**
+     * returns an integer vector from a resource. 
+     *
+     * @param resourceBundle: a string resource
+     * @param len:    fills in the length of resulting integer vector
+     * @param status: fills in the outgoing error code
+     *                could be <TT>U_MISSING_RESOURCE_ERROR</T> if the key is not found
+     *                could be a non-failing error 
+     *                e.g.: <TT>U_USING_FALLBACK_ERROR</TT>,<TT>U_USING_DEFAULT_ERROR </TT>
+     * @return a pointer to a vector of integers that lives in a memory mapped/DLL file.
+     * @stable
+     */
+    const int32_t *getIntVector(int32_t& len, UErrorCode& status) const;
 
     /**
      * Checks whether the resource has another element to iterate over.

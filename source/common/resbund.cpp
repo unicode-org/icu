@@ -290,6 +290,10 @@ const uint8_t *ResourceBundle::getBinary(int32_t& len, UErrorCode& status) const
     return ures_getBinary(resource, &len, &status);
 }
 
+const int32_t *ResourceBundle::getIntVector(int32_t& len, UErrorCode& status) const {
+    return ures_getIntVector(resource, &len, &status);
+}
+
 const char *ResourceBundle::getName(void) {
     return ures_getName(resource);
 }
