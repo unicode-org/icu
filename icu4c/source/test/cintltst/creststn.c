@@ -20,6 +20,7 @@
 #include "cintltst.h"
 #include "unicode/utypes.h"
 #include "unicode/ustring.h"
+#include "unicode/ucnv.h"
 #include "string.h"
 #include "cstring.h"
 #include "cmemory.h"
@@ -157,6 +158,7 @@ static int32_t bundles_count = sizeof(param) / sizeof(param[0]);
 
 
 static void printUChars(UChar*);
+static void TestDecodedBundle();
 
 /***************************************************************************************/
 
@@ -176,6 +178,7 @@ void addNEWResourceBundleTest(TestNode** root)
     addTest(root, &TestBinaryCollationData, "tsutil/creststn/TestBinaryCollationData");
     addTest(root, &TestAPI,             "tsutil/creststn/TestAPI");
     addTest(root, &TestErrorConditions, "tsutil/creststn/TestErrorConditions");
+    addTest(root, &TestDecodedBundle,   "tsutil/creststn/TestDecodedBundle");
 }
 
 
@@ -232,6 +235,41 @@ static void TestAliasConflict(void) {
         log_err("Wrong locale name for %s, expected %s, got %s\n", norwayNames[i], norwayLocales[i], realName);
       }
       ures_close(norway);
+    }
+}
+
+static void TestDecodedBundle(){
+   
+    UErrorCode error = U_ZERO_ERROR;
+   
+    UResourceBundle* resB; 
+    int32_t len =0;
+    const UChar* srcFromRes;
+    UChar src[] = {
+              0x30a7,0x30a8,0x30c9,0x1A,0x30f3,0x30c0,0x30b0,0x30b3,0x30c5,
+              0x30d5,0x30d9,0x30ca,0x30eb,0x305a,0x304a,0x3049,0x3048,0x3046,
+              0x3044,0x3053,0x3054,0x3064,0x3074,0x3084,0x3093,0x3062,0x3060,
+              0x3080,0x3090,0x30a2,0x30b2,0x30b6,0x30b7,0x30b8,0x30d8,0x30d7,
+              0x30d3,0x30d1,0x0000
+    };
+    
+    /* pre-flight */
+    int32_t num =0;
+    char testdatapath[256];
+    const char *directory= u_getDataDirectory();
+    strcpy(testdatapath, directory);
+    strcat(testdatapath, "testdata");
+      
+    resB = ures_open(testdatapath, "ja_data", &error);
+    srcFromRes=ures_getStringByKey(resB,"str",&len,&error);
+    if(u_strncmp(srcFromRes,src,len)!=0){
+        log_err("Genrb produced res files after decoding failed\n");
+    }
+    while(num<len  ){
+        if(src[num]!=srcFromRes[num]){
+            log_verbose(" Expected:  0x%04X Got: 0x%04X \n", src[num],srcFromRes[num]);
+        }
+        num++;
     }
 }
 
