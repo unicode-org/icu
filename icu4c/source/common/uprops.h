@@ -35,6 +35,24 @@ enum {
     UPROPS_INDEX_COUNT=16
 };
 
+/* definitions for the main properties words */
+enum {
+    /* general category shift==0                            0 (5 bits) */
+    UPROPS_EXCEPTION_SHIFT=5,                           /*  5 (1 bit)  */
+    UPROPS_BIDI_SHIFT,                                  /*  6 (5 bits) */
+    UPROPS_MIRROR_SHIFT=UPROPS_BIDI_SHIFT+5,            /* 11 (1 bit)  */
+    UPROPS_NUMERIC_TYPE_SHIFT,                          /* 12 (3 bits) ### TODO 2 or 3 bits? Han number type=4? */
+    UPROPS_RESERVED_SHIFT=UPROPS_NUMERIC_TYPE_SHIFT+3,  /* 15 (5 bits) */
+    UPROPS_VALUE_SHIFT=20,                              /* 20 */
+
+    UPROPS_EXCEPTION_BIT=1UL<<UPROPS_EXCEPTION_SHIFT,
+    UPROPS_VALUE_BITS=32-UPROPS_VALUE_SHIFT,
+
+    UPROPS_MIN_VALUE=-(1L<<(UPROPS_VALUE_BITS-1)),
+    UPROPS_MAX_VALUE=(1L<<(UPROPS_VALUE_BITS-1))-1,
+    UPROPS_MAX_EXCEPTIONS_COUNT=1L<<UPROPS_VALUE_BITS
+};
+
 /* number of properties vector words */
 #define UPROPS_VECTOR_WORDS     2
 
@@ -42,12 +60,18 @@ enum {
  * Properties in vector word 0
  * Bits
  * 31..24   DerivedAge version major/minor one nibble each
+ * 23..18   reserved
+ * 17..15   East Asian Width
+ * 14.. 7   UBlockCode
  *  6.. 0   UScriptCode
  */
 
 /* derived age: one nibble each for major and minor version numbers */
 #define UPROPS_AGE_MASK         0xff000000
 #define UPROPS_AGE_SHIFT        24
+
+#define UPROPS_EA_WIDTH_MASK    0x00038000
+#define UPROPS_EA_WIDTH_SHIFT   15
 
 #define UPROPS_BLOCK_MASK       0x00007f80
 #define UPROPS_BLOCK_SHIFT      7
@@ -102,5 +126,21 @@ enum {
  */
 U_CFUNC uint32_t
 u_getUnicodeProperties(UChar32 c, int32_t column);
+
+/* ### TODO move to uchar.h, @draft ICU 2.x */
+/**
+ * East Asian Widths constants.
+ * Keep in sync with names list in genprops/props2.c.
+ */
+enum UEAWidthCode {
+    U_EA_NEUTRAL,
+    U_EA_AMBIGUOUS,
+    U_EA_HALF_WIDTH,
+    U_EA_FULL_WIDTH,
+    U_EA_NARROW,
+    U_EA_WIDE,
+    U_EA_TOP
+};
+typedef enum UEAWidthCode UEAWidthCode;
 
 #endif
