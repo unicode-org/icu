@@ -491,8 +491,8 @@ static const char *udata_pathiter_next(UDataPathIterator *iter, int32_t *outPath
                 {
 #ifdef UDATA_DEBUG
                     fprintf(stderr, "skipping non-directory .dat file %s\n", iter->pathBuffer);
-                    continue;
 #endif
+                    continue;
                 }
                      
                 iter->pathBuffer[pathLen++] = U_FILE_SEP_CHAR;
