@@ -983,7 +983,7 @@ main(int argc, char* argv[])
     fprintf(stdout, "-----------------------------------------------\n");
 
     // initial check for the default converter
-/*    UErrorCode errorCode = U_ZERO_ERROR;
+    UErrorCode errorCode = U_ZERO_ERROR;
     UConverter *cnv = ucnv_open(0, &errorCode);
     if(cnv != 0) {
         // ok
@@ -1020,8 +1020,9 @@ main(int argc, char* argv[])
                 "*** Check the ICU_DATA environment variable and \n"
                 "*** check that the data files are present.\n");
         return 1;
-    }*/
+    }
 
+    /* TODO: Add option to call u_cleanup and rerun tests. */
     if (all) {
         major.runTest();
         if (leaks) {
@@ -1050,23 +1051,24 @@ main(int argc, char* argv[])
         }
     }
 
-    /* Call it twice to make sure that the defaults were reset */
-    u_cleanup();
-    u_cleanup();
-
-    /* delete these just to see how delete reacts to u_cleanup().
-       This is done in the wrong order on purpose.
-       Normally this should happen first */
     CalendarTimeZoneTest::cleanup();
     delete _testDirectory;
     _testDirectory = 0;
 
     fprintf(stdout, "\n--------------------------------------\n");
     if (major.getErrors() == 0) {
+        /* Call it twice to make sure that the defaults were reset. */
+        /* Call it before the OK message to verify proper cleanup. */
+        u_cleanup();
+        u_cleanup();
+
         fprintf(stdout, "OK: All tests passed without error.\n");
     }else{
         fprintf(stdout, "Errors in total: %ld.\n", (long)major.getErrors());
         major.printErrors();
+
+        /* Call afterwards to display errors. */
+        u_cleanup();
     }
 
     fprintf(stdout, "--------------------------------------\n");
