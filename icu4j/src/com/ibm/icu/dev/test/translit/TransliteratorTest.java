@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/translit/TransliteratorTest.java,v $
- * $Date: 2003/04/23 00:20:16 $
- * $Revision: 1.122 $
+ * $Date: 2003/04/24 23:05:02 $
+ * $Revision: 1.123 $
  *
  *****************************************************************************************
  */
@@ -2836,6 +2836,19 @@ public class TransliteratorTest extends TestFmwk {
         expect("([:^ASCII:]) \u2192 \u2206Name($1);",
                "<=\u2190; >=\u2192; <>=\u2194; &=\u2206",
                "<=\\N{LEFTWARDS ARROW}; >=\\N{RIGHTWARDS ARROW}; <>=\\N{LEFT RIGHT ARROW}; &=\\N{INCREMENT}");
+    }
+
+    public void TestPositionAPI() {
+        Transliterator.Position a = new Transliterator.Position(3,5,7,11);
+        Transliterator.Position b = new Transliterator.Position(a);
+        Transliterator.Position c = new Transliterator.Position();
+        c.set(a);
+        // Call the toString() API:
+        if (a.equals(b) && a.equals(c)) {
+            logln("Ok: " + a + " == " + b + " == " + c);
+        } else {
+            errln("FAIL: " + a + " != " + b + " != " + c);
+        }
     }
     
     //======================================================================
