@@ -259,6 +259,10 @@ parseDerivedNormalizationProperties(const char *filename, UErrorCode *pErrorCode
     }
 
     u_parseDelimitedFile(filename, ';', fields, 2, derivedNormalizationPropertiesLineFn, NULL, pErrorCode);
+    if(U_FAILURE(*pErrorCode)) {
+        fprintf(stderr, "gennorm error: u_parseDelimitedFile(\"%s\") failed - %s\n", filename, u_errorName(*pErrorCode));
+        exit(*pErrorCode);
+    }
 }
 
 /* parser for UnicodeData.txt ----------------------------------------------- */
@@ -328,6 +332,8 @@ unicodeDataLineFn(void *context,
         /* parse the decomposition string */
         length=u_parseCodePoints(s, decomp, sizeof(decomp)/4, pErrorCode);
         if(U_FAILURE(*pErrorCode)) {
+            fprintf(stderr, "gennorm error parsing UnicodeData.txt decomposition of U+%04lx - %s\n",
+                    (long)code, u_errorName(*pErrorCode));
             exit(*pErrorCode);
         }
 
@@ -379,6 +385,10 @@ parseDB(const char *filename, UErrorCode *pErrorCode) {
     }
 
     u_parseDelimitedFile(filename, ';', fields, 15, unicodeDataLineFn, NULL, pErrorCode);
+    if(U_FAILURE(*pErrorCode)) {
+        fprintf(stderr, "gennorm error: u_parseDelimitedFile(\"%s\") failed - %s\n", filename, u_errorName(*pErrorCode));
+        exit(*pErrorCode);
+    }
 }
 
 /*
