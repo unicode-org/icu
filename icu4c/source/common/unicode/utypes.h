@@ -436,6 +436,9 @@ enum UErrorCode {
     U_UNQUOTED_SPECIAL,
     U_UNTERMINATED_QUOTE,
     U_RULE_MASK_ERROR,
+    U_MISPLACED_COMPOUND_FILTER,
+    U_MULTIPLE_COMPOUND_FILTERS,
+    U_INVALID_RBT_SYNTAX,
     U_PARSE_ERROR_LIMIT,                /**< end of Transliterator specific parse Errors */
 
     /* 
