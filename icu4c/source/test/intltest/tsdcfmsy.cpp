@@ -166,7 +166,7 @@ void IntlTestDecimalFormatSymbols::testSymbols(char *par)
     Verify(3456.5, (UnicodeString)"0,000.##", sym, (UnicodeString)"3|456S5");
     
 }
-void IntlTestDecimalFormatSymbols::Verify(double value, UnicodeString& pattern, DecimalFormatSymbols sym, UnicodeString& expected){
+void IntlTestDecimalFormatSymbols::Verify(double value, const UnicodeString& pattern, DecimalFormatSymbols sym, const UnicodeString& expected){
     UErrorCode status = U_ZERO_ERROR;
     DecimalFormat *df = new DecimalFormat(pattern, sym, status);
     if(U_FAILURE(status)){
