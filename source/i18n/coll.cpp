@@ -59,7 +59,7 @@ static ICULocaleService* gService = NULL;
  * Release all static memory held by collator.
  */
 U_CDECL_BEGIN
-static UBool collator_cleanup(void) {
+static UBool U_CALLCONV collator_cleanup(void) {
     if (gService) {
         delete gService;
         gService = NULL;
