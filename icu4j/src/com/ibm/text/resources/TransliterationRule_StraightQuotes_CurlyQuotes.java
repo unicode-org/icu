@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/resources/Attic/TransliterationRule_StraightQuotes_CurlyQuotes.java,v $ 
- * $Date: 2000/04/21 21:17:08 $ 
- * $Revision: 1.3 $
+ * $Date: 2000/04/22 00:04:25 $ 
+ * $Revision: 1.4 $
  *
  *****************************************************************************************
  */
@@ -25,7 +25,7 @@ public class TransliterationRule_StraightQuotes_CurlyQuotes extends ListResource
                 "$white=[[:Zs:][:Zl:][:Zp:]];"
                 + "$black=[^$white];"
                 + "$open=[:Ps:];"
-                + "$dquote=\";"
+                + "$dquote='\"';"
 
                 + "$lAng=\u3008;"
                 + "$ldAng=\u300A;"
@@ -75,8 +75,8 @@ public class TransliterationRule_StraightQuotes_CurlyQuotes extends ListResource
                 // prevent double spaces
                 + "\\ {\\ >;"
 
-                // join hyphens into dash
-                + "-->$mdash;"
+                // join hyphens into dash ### BIDIRECTIONAL ###
+                + "'--'<>$mdash;"
 
                 //#######################################
                 // Conversions back to input
@@ -87,9 +87,6 @@ public class TransliterationRule_StraightQuotes_CurlyQuotes extends ListResource
                 + "''<$rquote;"
                 + "$dquote<$ldquote;"
                 + "$dquote<$rdquote;"
-
-                //hyphens
-                + "--<$mdash;"
             }
         };
     }

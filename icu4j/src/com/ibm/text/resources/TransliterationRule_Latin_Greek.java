@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/resources/Attic/TransliterationRule_Latin_Greek.java,v $ 
- * $Date: 2000/04/21 21:17:08 $ 
- * $Revision: 1.3 $
+ * $Date: 2000/04/22 00:04:25 $ 
+ * $Revision: 1.4 $
  *
  *****************************************************************************************
  */
@@ -56,7 +56,7 @@ public class TransliterationRule_Latin_Greek extends ListResourceBundle {
                 // and for conditionals.
                 // ==============================================
 
-                + "$quote=\";"
+                + "$quote='\"';"
                 
                 // Latin Letters
                 
@@ -217,14 +217,14 @@ public class TransliterationRule_Latin_Greek extends ListResourceBundle {
                 
                 + "''s < $pp{$sigma}$letter;"
                 + "s <          $sigma}$letter;"
-                + "~s <         $sigma;"
+                + "'~'s <         $sigma;"
 
-                + "~s <         $sigma2}$letter;"
+                + "'~'s <         $sigma2}$letter;"
                 + "''s < $pp{$sigma2;"
                 + "s <          $sigma2;"
 
-                + "~s }$letter>$sigma2;"
-                + "~s             > $sigma;"
+                + "'~'s }$letter>$sigma2;"
+                + "'~'s             > $sigma;"
                 + "''s }$letter>$sigma;"
                 + "''s            > $sigma2;"
                 + "s }$letter>$sigma;"
@@ -232,8 +232,8 @@ public class TransliterationRule_Latin_Greek extends ListResourceBundle {
                 
                 // because there are no uppercase forms, had to move these up too.
                 
-                + "i$quote`>$iota_diaeresis2;"
-                + "y$quote`>$ypsilon_diaeresis2;"
+                + "i$quote'`'>$iota_diaeresis2;"
+                + "y$quote'`'>$ypsilon_diaeresis2;"
                 
                 + "$u00ef_acute<>$iota_diaeresis2;"
                 + "$u00fc_acute<>$vowel{$ypsilon_diaeresis2;"
@@ -246,13 +246,13 @@ public class TransliterationRule_Latin_Greek extends ListResourceBundle {
  
                 // Typing variants, in case the keyboard doesn't have accents
                 
-                + "A`>$ALPHA2;"
-                + "E`>$EPSILON2;"
-                + "EE`>$ETA2;"
+                + "'A`'>$ALPHA2;"
+                + "'E`'>$EPSILON2;"
+                + "'EE`'>$ETA2;"
                 + "EE>$ETA;" 
-                + "I`>$IOTA2;"
-                + "O`>$OMICRON2;"
-                + "OO`>$OMEGA2;"
+                + "'I`'>$IOTA2;"
+                + "'O`'>$OMICRON2;"
+                + "'OO`'>$OMEGA2;"
                 + "OO>$OMEGA;"
                 + "I$quote>$IOTA_DIAERESIS;"
                 + "Y$quote>$YPSILON_DIAERESIS;"
@@ -316,13 +316,13 @@ public class TransliterationRule_Latin_Greek extends ListResourceBundle {
 
                 // typing variants, in case the keyboard doesn't have accents
                 
-                + "a`>$alpha2;"
-                + "e`>$epsilon2;"
-                + "ee`>$eta2;"
+                + "'a`'>$alpha2;"
+                + "'e`'>$epsilon2;"
+                + "'ee`'>$eta2;"
                 + "ee>$eta;" 
-                + "i`>$iota2;"
-                + "o`>$omicron2;"
-                + "oo`>$omega2;"
+                + "'i`'>$iota2;"
+                + "'o`'>$omicron2;"
+                + "'oo`'>$omega2;"
                 + "oo>$omega;"
                 + "i$quote>$iota_diaeresis;"
                 + "y$quote>$ypsilon_diaeresis;"
