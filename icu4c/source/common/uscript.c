@@ -16,6 +16,7 @@
 #include "unicode/uscript.h"
 #include "unicode/ures.h"
 #include "unicode/uchar.h"
+#include "unicode/putil.h"
 #include "uprops.h"
 #include "cmemory.h"
 #include "cstring.h"

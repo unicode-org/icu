@@ -26,6 +26,7 @@
 #include "unicode/ustring.h"
 #include "unicode/unum.h"
 #include "unicode/udat.h"
+#include "unicode/putil.h"
 
 #include "uprintf.h"
 #include "ufile.h"

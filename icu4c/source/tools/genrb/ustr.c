@@ -19,6 +19,7 @@
 #include "cmemory.h"
 #include "cstring.h"
 #include "unicode/ustring.h"
+#include "unicode/putil.h"
 
 /* Protos */
 static void ustr_resize(struct UString *s, int32_t len, UErrorCode *status);

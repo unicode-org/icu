@@ -20,6 +20,7 @@ The main root for C API tests
 #define _CINTLTST
 
 #include "unicode/utypes.h"
+#include "unicode/putil.h"
 #include "unicode/ctest.h"
 
 #ifndef U_USE_DEPRECATED_API
