@@ -3,7 +3,7 @@
 ## Copyright (c) 1999-2000, International Business Machines Corporation and
 ## others. All Rights Reserved.
 ##
-## $Id: mh-solaris,v 1.28 2002/05/01 23:48:08 grhoten-oss Exp $
+## $Id: mh-solaris,v 1.29 2002/05/13 23:50:13 grhoten-oss Exp $
 
 ## Flags for position independent code
 SHAREDLIBCFLAGS = -KPIC
@@ -14,19 +14,18 @@ SHAREDLIBCPPFLAGS = -DPIC
 GEN_DEPS.c=  $(CC) -xM $(DEFS) $(CPPFLAGS)
 GEN_DEPS.cc= $(CXX) -xM $(DEFS) $(CPPFLAGS)
 
-## Commands to compile
-COMPILE.c=  $(CC) -mt $(CPPFLAGS) $(CFLAGS) $(DEFS) -c
-COMPILE.cc= $(CXX) -mt $(CPPFLAGS) $(CXXFLAGS) $(DEFS) -c
+# -mt means 'compiles and links a multithreaded program'
+CFLAGS += -mt
+CXXFLAGS += -mt
 
 ## Commands to link
-#LINK.c=		$(CC) -mt $(DEFS) $(CPPFLAGS) $(CFLAGS) $(LDFLAGS)
 ## For Sun Workshop, use CC to link to bring in C++ runtime
-LINK.c=		$(CXX) -mt $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS)
-LINK.cc=	$(CXX) -mt $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS)
+LINK.c=		$(CXX) $(CXXFLAGS) $(LDFLAGS)
+LINK.cc=	$(CXX) $(CXXFLAGS) $(LDFLAGS)
 
 ## Commands to make a shared library
-SHLIB.c=	$(CC) $(CPPFLAGS) $(CFLAGS) $(LDFLAGS) -G
-SHLIB.cc=	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS) -G
+SHLIB.c=	$(CC) $(CFLAGS) $(LDFLAGS) -G
+SHLIB.cc=	$(CXX) $(CXXFLAGS) $(LDFLAGS) -G
 
 ## Compiler switch to embed a runtime search path
 LD_RPATH=	-R

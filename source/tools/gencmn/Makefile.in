@@ -29,8 +29,7 @@ CLEANFILES = *~ mkmap.tmp $(DEPS) $(RES_FILES) $(TEST_FILES) $(DECMN_DEP) $(ALL_
 TARGET = gencmn
 DECMN = decmn
 
-CPPFLAGS += $(BIR_CPPFLAGS)
-DEFS += -I$(top_builddir)/common -I$(top_srcdir)/common -I$(srcdir)/../toolutil
+CPPFLAGS += -I$(top_builddir)/common -I$(top_srcdir)/common -I$(srcdir)/../toolutil $(BIR_CPPFLAGS)
 LIBS = $(LIBICUTOOLUTIL) $(LIBICUUC) $(DEFAULT_LIBS) $(LIB_M)
 
 OBJECTS = gencmn.o

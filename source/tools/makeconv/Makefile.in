@@ -31,7 +31,7 @@ CLEANFILES = *~ $(GENERATED_MAN_FILES) $(DEPS) $(CNV_FILES) $(TEST_CNV_FILES)
 ## Target information
 TARGET = makeconv
 
-DEFS += -I$(top_builddir)/common -I$(top_srcdir)/common -I$(srcdir)/../toolutil
+CPPFLAGS += -I$(top_builddir)/common -I$(top_srcdir)/common -I$(srcdir)/../toolutil
 LIBS = $(LIBICUTOOLUTIL) $(LIBICUUC) $(DEFAULT_LIBS) $(LIB_M)
 
 OBJECTS = makeconv.o ucnvstat.o genmbcs.o

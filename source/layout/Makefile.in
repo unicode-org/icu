@@ -36,8 +36,7 @@ DYNAMICCPPFLAGS = $(SHAREDLIBCPPFLAGS)
 DYNAMICCFLAGS = $(SHAREDLIBCFLAGS)
 DYNAMICCXXFLAGS = $(SHAREDLIBCXXFLAGS)
 
-CPPFLAGS += $(LIBCPPFLAGS)
-DEFS += -I$(srcdir) -I$(top_builddir)/common -I$(srcdir)/unicode -I$(srcdir)/.. -I$(top_builddir)/common -I$(top_srcdir)/common
+CPPFLAGS += -I$(srcdir) -I$(top_builddir)/common -I$(srcdir)/unicode -I$(srcdir)/.. -I$(top_builddir)/common -I$(top_srcdir)/common $(LIBCPPFLAGS)
 LIBS = $(DEFAULT_LIBS)
 
 

@@ -25,7 +25,7 @@ CLEANFILES = *~ $(DEPS) $(RES_FILES) $(TEST_FILES)
 ## Target information
 TARGET = gentest
 
-DEFS += -I$(top_builddir)/common -I$(top_srcdir)/common -I$(srcdir)/../toolutil
+CPPFLAGS += -I$(top_builddir)/common -I$(top_srcdir)/common -I$(srcdir)/../toolutil
 LIBS = $(LIBICUTOOLUTIL) $(LIBICUUC) $(DEFAULT_LIBS) $(LIB_M)
 
 OBJECTS = gentest.o
