@@ -151,6 +151,10 @@ SOURCE=.\errmsg.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\genrb.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\parse.h
 # End Source File
 # Begin Source File
