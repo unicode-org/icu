@@ -209,7 +209,7 @@ main(int argc, char *argv[]) {
     count=*p++;
     /* printf("files[%ld]\n", (long)count); */
     for(i=0; i<count; ++i) {
-        printf("%s\n", base+*p);
+        printf("%s%c%s\n", options[2].value, U_FILE_SEP_CHAR, base+*p);
         p+=2;
     }
     /* puts("endfiles"); */
