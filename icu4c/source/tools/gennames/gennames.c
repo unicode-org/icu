@@ -142,6 +142,10 @@
 #define VERSION_STRING "unam"
 #define NAME_SEPARATOR_CHAR ';'
 
+static const UVersionInfo
+unicode_3_0={ 3, 0, 0, 0 },
+unicode_3_1={ 3, 1, 0, 0 };
+
 /* UDataInfo cf. udata.h */
 static UDataInfo dataInfo={
     sizeof(UDataInfo),
@@ -875,6 +879,7 @@ generateAlgorithmicData(UNewDataMemory *pData) {
     static char prefix[] = "CJK UNIFIED IDEOGRAPH-";
 #   define PREFIX_LENGTH 23
 #   define PREFIX_LENGTH_4 24
+    uint32_t countAlgRanges;
 
     static AlgorithmicRange cjkExtA={
         0x3400, 0x4db5,
@@ -884,6 +889,11 @@ generateAlgorithmicData(UNewDataMemory *pData) {
     static AlgorithmicRange cjk={
         0x4e00, 0x9fa5,
         0, 4,
+        sizeof(AlgorithmicRange)+PREFIX_LENGTH_4
+    };
+    static AlgorithmicRange cjkExtB={
+        0x20000, 0x2a6d6,
+        0, 5,
         sizeof(AlgorithmicRange)+PREFIX_LENGTH_4
     };
 
@@ -919,8 +929,19 @@ generateAlgorithmicData(UNewDataMemory *pData) {
     size=0;
 
     /* number of ranges of algorithmic names */
+    if(uprv_memcmp(dataInfo.dataVersion, unicode_3_1, sizeof(UVersionInfo))>=0) {
+        /* Unicode 3.1 and up has 4 ranges including CJK Extension B */
+        countAlgRanges=4;
+    } else if(uprv_memcmp(dataInfo.dataVersion, unicode_3_0, sizeof(UVersionInfo))>=0) {
+        /* Unicode 3.0 has 3 ranges including CJK Extension A */
+        countAlgRanges=3;
+    } else {
+        /* Unicode 2.0 has 2 ranges including Hangul and CJK Unihan */
+        countAlgRanges=2;
+    }
+
     if(pData!=NULL) {
-        udata_write32(pData, 3);
+        udata_write32(pData, countAlgRanges);
     } else {
         size+=4;
     }
@@ -936,14 +957,16 @@ generateAlgorithmicData(UNewDataMemory *pData) {
      */
 
     /* range 0: cjk extension a */
-    if(pData!=NULL) {
-        udata_writeBlock(pData, &cjkExtA, sizeof(AlgorithmicRange));
-        udata_writeString(pData, prefix, PREFIX_LENGTH);
-        if(PREFIX_LENGTH<PREFIX_LENGTH_4) {
-            udata_writePadding(pData, PREFIX_LENGTH_4-PREFIX_LENGTH);
+    if(countAlgRanges>=3) {
+        if(pData!=NULL) {
+            udata_writeBlock(pData, &cjkExtA, sizeof(AlgorithmicRange));
+            udata_writeString(pData, prefix, PREFIX_LENGTH);
+            if(PREFIX_LENGTH<PREFIX_LENGTH_4) {
+                udata_writePadding(pData, PREFIX_LENGTH_4-PREFIX_LENGTH);
+            }
+        } else {
+            size+=sizeof(AlgorithmicRange)+PREFIX_LENGTH_4;
         }
-    } else {
-        size+=sizeof(AlgorithmicRange)+PREFIX_LENGTH_4;
     }
 
     /* range 1: cjk */
@@ -964,6 +987,19 @@ generateAlgorithmicData(UNewDataMemory *pData) {
         udata_writeString(pData, jamo, sizeof(jamo));
     } else {
         size+=sizeof(AlgorithmicRange)+6+sizeof(jamo);
+    }
+
+    /* range 3: cjk extension b */
+    if(countAlgRanges>=4) {
+        if(pData!=NULL) {
+            udata_writeBlock(pData, &cjkExtB, sizeof(AlgorithmicRange));
+            udata_writeString(pData, prefix, PREFIX_LENGTH);
+            if(PREFIX_LENGTH<PREFIX_LENGTH_4) {
+                udata_writePadding(pData, PREFIX_LENGTH_4-PREFIX_LENGTH);
+            }
+        } else {
+            size+=sizeof(AlgorithmicRange)+PREFIX_LENGTH_4;
+        }
     }
 
     return size;
