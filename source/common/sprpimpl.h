@@ -27,6 +27,7 @@
 #include "unicode/udata.h"
 #include "utrie.h"
 #include "udataswp.h"
+#include "ubidi_props.h"
 
 #define _SPREP_DATA_TYPE "spp"
 
@@ -87,6 +88,7 @@ struct UStringPrepProfile{
     UTrie sprepTrie;
     const uint16_t* mappingData;
     UDataMemory* sprepData;
+    UBiDiProps *bdp; // used only if checkBiDi is set
     UBool isDataLoaded;
     int32_t refCount;
     UBool doNFKC;
