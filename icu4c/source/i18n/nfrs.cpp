@@ -135,7 +135,7 @@ NFRuleSet::NFRuleSet(UnicodeString* descriptions, int32_t index, UErrorCode& sta
     if (description.length() == 0) {
         // throw new IllegalArgumentException("Empty rule set description");
         status = U_PARSE_ERROR;
-	return;
+    return;
     }
 
     // if the description begins with a rule set name (the rule set

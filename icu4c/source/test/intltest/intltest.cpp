@@ -977,16 +977,16 @@ main(int argc, char* argv[])
 #endif
 
     /* Initialize ICU */
-	IntlTest::setICU_DATA();   // Must set data directory before u_init() is called.
+    IntlTest::setICU_DATA();   // Must set data directory before u_init() is called.
     u_init(&errorCode);
     if (U_FAILURE(errorCode)) {
         fprintf(stderr,
                 "#### %s: u_init() failed, error is \"%s\".\n"
-				"#### Most commonly indicates that the ICU data is not accesible.\n"
+                "#### Most commonly indicates that the ICU data is not accesible.\n"
                 "#### Check setting of ICU_DATA, or check that ICU data library is available\n"
-				"#### ICU_DATA is currently set to \"%s\"\n", argv[0], u_errorName(errorCode), u_getDataDirectory());
-		u_cleanup();
-	    return 1;
+                "#### ICU_DATA is currently set to \"%s\"\n", argv[0], u_errorName(errorCode), u_getDataDirectory());
+        u_cleanup();
+        return 1;
     }
 
 
@@ -1209,7 +1209,7 @@ const char* IntlTest::loadTestData(UErrorCode& err){
         /* u_getDataDirectory shoul return \source\data ... set the
          * directory to ..\source\data\..\test\testdata\out\testdata
          */
-		strcpy(tdpath, directory);
+        strcpy(tdpath, directory);
         strcat(tdpath, tdrelativepath);
         strcat(tdpath,"testdata");
 
@@ -1303,14 +1303,14 @@ const char *  IntlTest::pathToDataDirectory()
         }
         else {
             /* __FILE__ on MSVC7 does not contain the directory */
-			FILE *file = fopen(".."U_FILE_SEP_STRING".."U_FILE_SEP_STRING "data" U_FILE_SEP_STRING "Makefile.in", "r");
-			if (file) {
-				fclose(file);
-	            fgDataDir = ".."U_FILE_SEP_STRING".."U_FILE_SEP_STRING "data" U_FILE_SEP_STRING;
-			}
-			else {
-	            fgDataDir = ".."U_FILE_SEP_STRING".."U_FILE_SEP_STRING".."U_FILE_SEP_STRING "data" U_FILE_SEP_STRING;
-			}
+            FILE *file = fopen(".."U_FILE_SEP_STRING".."U_FILE_SEP_STRING "data" U_FILE_SEP_STRING "Makefile.in", "r");
+            if (file) {
+                fclose(file);
+                fgDataDir = ".."U_FILE_SEP_STRING".."U_FILE_SEP_STRING "data" U_FILE_SEP_STRING;
+            }
+            else {
+                fgDataDir = ".."U_FILE_SEP_STRING".."U_FILE_SEP_STRING".."U_FILE_SEP_STRING "data" U_FILE_SEP_STRING;
+            }
         }
     }
 #endif

@@ -83,7 +83,7 @@
  * an alias mapped to this converter is ambiguous. See UCNV_CONVERTER_INDEX_MASK
  * and UCNV_AMBIGUOUS_ALIAS_MAP_BIT for more information. This section is
  * the predigested form of the 5th section so that an alias lookup can be fast.
- * 
+ *
  * 5) This section contains a 2D array with indexes to the 6th section. This
  * section is the full form of all alias mappings. The column index is the
  * index into the converter list (column header). The row index is the index
@@ -139,18 +139,18 @@
  *           -------------------------------------------.
  *     T    /##########################################/|
  *     a   /     #            #                       /#
- *     g  /  #      ##     ##     ### # ### ### ### #/  
- *     s / #             #####  ####        ##  ## #/#  
- *      / ### # # ##  #  #   #          ### # #   #/##  
+ *     g  /  #      ##     ##     ### # ### ### ### #/
+ *     s / #             #####  ####        ##  ## #/#
+ *      / ### # # ##  #  #   #          ### # #   #/##
  *      ------------------------------------------/# #
  *    A |### # # ##  #  #   #          ### # #   #|# #
  *    l |# # #    #     #               ## #     #|# #
  *    i |# # #    #     #                #       #|#
  *    a |#                                       #|#
  *    s |                                        #|#
- *    e 
- *    s 
- *      
+ *    e
+ *    s
+ *
  */
 
 /**
@@ -403,12 +403,12 @@ ucnv_io_stripEBCDICForCompare(char *dst, const char *name) {
  * is case-insensitive.  It also ignores the characters '-', '_', and
  * ' ' (dash, underscore, and space).  Thus the strings "UTF-8",
  * "utf_8", and "Utf 8" are exactly equivalent.
- * 
+ *
  * This is a symmetrical (commutative) operation; order of arguments
  * is insignificant.  This is an important property for sorting the
  * list (when the list is preprocessed into binary form) and for
  * performing binary searches on it at run time.
- * 
+ *
  * @param name1 a converter name or alias, zero-terminated
  * @param name2 a converter name or alias, zero-terminated
  * @return 0 if the names match, or a negative value if the name1
@@ -435,7 +435,7 @@ ucnv_compareNames(const char *name1, const char *name2) {
         if ((c1|c2)==0) {
             return 0;
         }
-        
+
         /* Case-insensitive comparison */
         rc = (int)(unsigned char)uprv_tolower(c1) -
              (int)(unsigned char)uprv_tolower(c2);
@@ -454,21 +454,21 @@ ucnv_compareNames(const char *name1, const char *name2) {
 static U_INLINE uint32_t
 findConverter(const char *alias, UErrorCode *pErrorCode) {
     uint32_t mid, start, limit;
-	uint32_t lastMid;
+    uint32_t lastMid;
     int result;
 
     /* do a binary search for the alias */
     start = 0;
     limit = gUntaggedConvArraySize;
     mid = limit;
-	lastMid = UINT32_MAX;
+    lastMid = UINT32_MAX;
 
     for (;;) {
         mid = (uint32_t)((start + limit) / 2);
-		if (lastMid == mid) {	/* Have we moved? */
-			break;	/* We haven't moved, and it wasn't found. */
-		}
-		lastMid = mid;
+        if (lastMid == mid) {   /* Have we moved? */
+            break;  /* We haven't moved, and it wasn't found. */
+        }
+        lastMid = mid;
         result = ucnv_compareNames(alias, GET_STRING(gAliasList[mid]));
 
         if (result < 0) {
@@ -494,7 +494,7 @@ findConverter(const char *alias, UErrorCode *pErrorCode) {
  * Is this alias in this list?
  * alias and listOffset should be non-NULL.
  */
-static U_INLINE UBool 
+static U_INLINE UBool
 isAliasInList(const char *alias, uint32_t listOffset) {
     if (listOffset) {
         uint32_t currAlias;
@@ -1027,7 +1027,7 @@ ucnv_io_getDefaultConverterName() {
             || length>=sizeof(gDefaultConverterNameBuffer))
         {
             /* Panic time, let's use a fallback. */
-#if (U_CHARSET_FAMILY == U_ASCII_FAMILY) 
+#if (U_CHARSET_FAMILY == U_ASCII_FAMILY)
             name = "US-ASCII";
             /* there is no 'algorithmic' converter for EBCDIC */
 #elif defined(OS390)

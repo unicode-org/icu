@@ -345,8 +345,8 @@ void CompoundTransliteratorTest::TestTransliterate(){
         errln("CompoundTransliterator construction failed");
     }else {
 #if 0
-	// handleTransliterate is a protected method that was erroneously made
-	// public.  It is not public API that needs to be tested.
+    // handleTransliterate is a protected method that was erroneously made
+    // public.  It is not public API that needs to be tested.
         UnicodeString s("abcabc");
         expect(*ct1, s, s);
         UTransPosition index = { 0, 0, 0, 0 };

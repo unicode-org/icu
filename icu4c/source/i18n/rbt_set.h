@@ -149,7 +149,7 @@ public:
      * (getTarget=false) or emitted (getTarget=true) by this set.
      */
     UnicodeSet& getSourceTargetSet(UnicodeSet& result,
-				   UBool getTarget) const;
+                   UBool getTarget) const;
 
 private:
 

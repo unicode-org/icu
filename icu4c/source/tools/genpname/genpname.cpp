@@ -806,7 +806,7 @@ void Builder::fixupMiscellaneousOffsets() {
     header.nameToEnum_offset = nameToEnum_offset;
     header.enumToValue_offset = enumToValue_offset;
     // header meta-info used by Java:
-	U_ASSERT(total_size > 0 && total_size < 0x7FFF);
+    U_ASSERT(total_size > 0 && total_size < 0x7FFF);
     header.total_size = (int16_t) total_size;
     header.valueMap_offset = valueMap_offset;
     header.valueMap_count = (int16_t) valueMap_count;
@@ -815,9 +815,9 @@ void Builder::fixupMiscellaneousOffsets() {
     header.stringPool_offset = stringPool_offset;
     header.stringPool_count = (int16_t) stringPool_count - 1; // don't include "" entry
 
-	U_ASSERT(valueMap_count <= 0x7FFF);
-	U_ASSERT(nameGroupPool_count <= 0x7FFF);
-	U_ASSERT(stringPool_count <= 0x7FFF);
+    U_ASSERT(valueMap_count <= 0x7FFF);
+    U_ASSERT(nameGroupPool_count <= 0x7FFF);
+    U_ASSERT(stringPool_count <= 0x7FFF);
 
     // 3:
     Offset* p = enumToValue->getOffsetArray();

@@ -51,7 +51,7 @@ TestMessageFormat::runIndexedTest(int32_t index, UBool exec,
         TESTCASE(15,testAdopt);
         TESTCASE(16,testCopyConstructor2);
         TESTCASE(17,TestUnlimitedArgsAndSubformats);
-	TESTCASE(18,TestRBNF);
+    TESTCASE(18,TestRBNF);
         default: name = ""; break;
     }
 }

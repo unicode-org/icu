@@ -24,7 +24,7 @@
 int32_t gMyNumberFormatTestClassID;
 UClassID MyNumberFormatTest::getDynamicClassID()  const
 {
-	return (UClassID)&gMyNumberFormatTestClassID;
+    return (UClassID)&gMyNumberFormatTestClassID;
 }
 
 
@@ -1957,9 +1957,9 @@ NumberFormatRegressionTest::Test4162198(void)
     //if(n.getDouble() != dbl) {
     //    errln("Round trip failure");
     //}
-	if (n.getInt64() != dbl) {
-		errln("Round trip failure");
-	}
+    if (n.getInt64() != dbl) {
+        errln("Round trip failure");
+    }
 
     delete f;
 }

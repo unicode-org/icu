@@ -315,18 +315,18 @@ public:
   }
 
   virtual UObject* handleDefault(const ICUServiceKey& key, UnicodeString* /*actualID*/, UErrorCode& status) const {
-	LocaleKey& lkey = (LocaleKey&)key;
-	//int32_t kind = lkey.kind();
+    LocaleKey& lkey = (LocaleKey&)key;
+    //int32_t kind = lkey.kind();
 
-	Locale loc;
-	lkey.canonicalLocale(loc);
+    Locale loc;
+    lkey.canonicalLocale(loc);
 
 #ifdef U_DEBUG_CALSVC
         Locale loc2;
         lkey.currentLocale(loc2);
     fprintf(stderr, "CalSvc:handleDefault for currentLoc %s, canloc %s\n", (const char*)loc.getName(),  (const char*)loc2.getName());
 #endif
-	Calendar *nc =  new GregorianCalendar(loc, status);
+    Calendar *nc =  new GregorianCalendar(loc, status);
 
 #ifdef U_DEBUG_CALSVC
         UErrorCode status2 = U_ZERO_ERROR;
@@ -2895,7 +2895,7 @@ void Calendar::prepareGetActual(UCalendarDateFields field, UBool isMinimum, UErr
         }
         break;
     default:
-	;
+    ;
     }
 
     // Do this last to give it the newest time stamp

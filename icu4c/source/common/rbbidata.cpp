@@ -360,45 +360,45 @@ ubrk_swap(const UDataSwapper *ds, const void *inData, int32_t length, void *outD
     tableStartOffset = ds->readUInt32(rbbiDH->fFTable);
     tableLength      = ds->readUInt32(rbbiDH->fFTableLen);
 
-	if (tableLength > 0) {
-		ds->swapArray32(ds, inBytes+tableStartOffset, topSize, 
-							outBytes+tableStartOffset, status);
-		ds->swapArray16(ds, inBytes+tableStartOffset+topSize, tableLength-topSize,
-							outBytes+tableStartOffset+topSize, status);
-	}
+    if (tableLength > 0) {
+        ds->swapArray32(ds, inBytes+tableStartOffset, topSize, 
+                            outBytes+tableStartOffset, status);
+        ds->swapArray16(ds, inBytes+tableStartOffset+topSize, tableLength-topSize,
+                            outBytes+tableStartOffset+topSize, status);
+    }
     
     // Reverse state table.  Same layout as forward table, above.
     tableStartOffset = ds->readUInt32(rbbiDH->fRTable);
     tableLength      = ds->readUInt32(rbbiDH->fRTableLen);
 
-	if (tableLength > 0) {
-		ds->swapArray32(ds, inBytes+tableStartOffset, topSize, 
-							outBytes+tableStartOffset, status);
-		ds->swapArray16(ds, inBytes+tableStartOffset+topSize, tableLength-topSize,
-							outBytes+tableStartOffset+topSize, status);
-	}
+    if (tableLength > 0) {
+        ds->swapArray32(ds, inBytes+tableStartOffset, topSize, 
+                            outBytes+tableStartOffset, status);
+        ds->swapArray16(ds, inBytes+tableStartOffset+topSize, tableLength-topSize,
+                            outBytes+tableStartOffset+topSize, status);
+    }
 
     // Safe Forward state table.  Same layout as forward table, above.
     tableStartOffset = ds->readUInt32(rbbiDH->fSFTable);
     tableLength      = ds->readUInt32(rbbiDH->fSFTableLen);
 
-	if (tableLength > 0) {
-		ds->swapArray32(ds, inBytes+tableStartOffset, topSize, 
-							outBytes+tableStartOffset, status);
-		ds->swapArray16(ds, inBytes+tableStartOffset+topSize, tableLength-topSize,
-							outBytes+tableStartOffset+topSize, status);
-	}
+    if (tableLength > 0) {
+        ds->swapArray32(ds, inBytes+tableStartOffset, topSize, 
+                            outBytes+tableStartOffset, status);
+        ds->swapArray16(ds, inBytes+tableStartOffset+topSize, tableLength-topSize,
+                            outBytes+tableStartOffset+topSize, status);
+    }
 
     // Safe Reverse state table.  Same layout as forward table, above.
     tableStartOffset = ds->readUInt32(rbbiDH->fSRTable);
     tableLength      = ds->readUInt32(rbbiDH->fSRTableLen);
 
-	if (tableLength > 0) {
-		ds->swapArray32(ds, inBytes+tableStartOffset, topSize, 
-							outBytes+tableStartOffset, status);
-		ds->swapArray16(ds, inBytes+tableStartOffset+topSize, tableLength-topSize,
-							outBytes+tableStartOffset+topSize, status);
-	}
+    if (tableLength > 0) {
+        ds->swapArray32(ds, inBytes+tableStartOffset, topSize, 
+                            outBytes+tableStartOffset, status);
+        ds->swapArray16(ds, inBytes+tableStartOffset+topSize, tableLength-topSize,
+                            outBytes+tableStartOffset+topSize, status);
+    }
 
     // Trie table for character categories
     utrie_swap(ds, inBytes+ds->readUInt32(rbbiDH->fTrie), ds->readUInt32(rbbiDH->fTrieLen),

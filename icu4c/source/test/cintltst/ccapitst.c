@@ -1883,7 +1883,7 @@ static void TestCCSID() {
         errorCode=U_ZERO_ERROR;
         cnv=ucnv_openCCSID(ccsid, UCNV_IBM, &errorCode);
         if(U_FAILURE(errorCode)) {
-    	log_data_err("error: ucnv_openCCSID(%ld) failed (%s)\n", ccsid, u_errorName(errorCode));
+        log_data_err("error: ucnv_openCCSID(%ld) failed (%s)\n", ccsid, u_errorName(errorCode));
             continue;
         }
 

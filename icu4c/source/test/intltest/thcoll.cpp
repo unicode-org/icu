@@ -387,13 +387,13 @@ void CollationThaiTest::TestInvalidThai(void) {
   for (i=0; i < LINES; i++)
   {
     logln("%i", i);
-	  for (j=i+1; j < LINES; j++) {
-		  if (ucol_strcoll (thaiColl, toSort[i], -1, toSort[j], -1) == UCOL_GREATER)
-		  {
-			  // inconsistency ordering found!
+      for (j=i+1; j < LINES; j++) {
+          if (ucol_strcoll (thaiColl, toSort[i], -1, toSort[j], -1) == UCOL_GREATER)
+          {
+              // inconsistency ordering found!
             errln("Inconsistent ordering between strings %i and %i", i, j);
-		  }
-	  }
+          }
+      }
       iteratorText.setTo(toSort[i]);
       c->setText(iteratorText, coll_status);
       backAndForth(*c);

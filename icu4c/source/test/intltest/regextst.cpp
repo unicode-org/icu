@@ -29,7 +29,7 @@
 //  Test class boilerplate
 //
 //---------------------------------------------------------------------------
-RegexTest::RegexTest() 
+RegexTest::RegexTest()
 {
 };
 
@@ -46,29 +46,29 @@ void RegexTest::runIndexedTest( int32_t index, UBool exec, const char* &name, ch
     switch (index) {
 
         case 0: name = "Basic";
-            if (exec) Basic(); 
+            if (exec) Basic();
             break;
         case 1: name = "API_Match";
-            if (exec) API_Match(); 
+            if (exec) API_Match();
             break;
         case 2: name = "API_Replace";
-            if (exec) API_Replace(); 
+            if (exec) API_Replace();
             break;
         case 3: name = "API_Pattern";
-            if (exec) API_Pattern(); 
+            if (exec) API_Pattern();
             break;
         case 4: name = "Extended";
-            if (exec) Extended(); 
+            if (exec) Extended();
             break;
         case 5: name = "Errors";
-            if (exec) Errors(); 
+            if (exec) Errors();
             break;
         case 6: name = "PerlTests";
             if (exec) PerlTests();
             break;
 
 
-        default: name = ""; 
+        default: name = "";
             break; //needed to end loop
     }
 }
@@ -106,7 +106,7 @@ if (status!=errcode) {errln("RegexTest failure at line %d.  Expected status=%s, 
 //
 //          The expected results are UBool - TRUE or FALSE.
 //          The input text is unescaped.  The pattern is not.
-//            
+//
 //
 //---------------------------------------------------------------------------
 
@@ -138,7 +138,7 @@ UBool RegexTest::doRegexLMTest(const char *pat, const char *text, UBool looking,
             line, u_errorName(status));
         return FALSE;
     }
-  
+
     UBool actualmatch;
     actualmatch = REMatcher->lookingAt(status);
     if (U_FAILURE(status)) {
@@ -171,7 +171,7 @@ UBool RegexTest::doRegexLMTest(const char *pat, const char *text, UBool looking,
     delete REMatcher;
     return retVal;
 }
-    
+
 
 
 
@@ -185,8 +185,8 @@ UBool RegexTest::doRegexLMTest(const char *pat, const char *text, UBool looking,
 //          The input text is marked with the expected match positions
 //              <0>text  <1> more text </1>   </0>
 //          The <n> </n> tags are removed before trying the match.
-//          The tags mark the start and end of the match and of any capture groups. 
-//            
+//          The tags mark the start and end of the match and of any capture groups.
+//
 //
 //---------------------------------------------------------------------------
 
@@ -205,8 +205,8 @@ static void set(UVector &vec, int val, UnicodeString index) {
     while (vec.size()<idx+1) {vec.addElement(-1, status);}
     vec.setElementAt(val, idx);
 }
-        
-void RegexTest::regex_find(const UnicodeString &pattern, 
+
+void RegexTest::regex_find(const UnicodeString &pattern,
                            const UnicodeString &flags,
                            const UnicodeString &inputString,
                            int line) {
@@ -230,16 +230,16 @@ void RegexTest::regex_find(const UnicodeString &pattern,
     //  Compile the caller's pattern
     //
     uint32_t bflags = 0;
-    if (flags.indexOf((UChar)0x69) >= 0)  { // 'i' flag 
+    if (flags.indexOf((UChar)0x69) >= 0)  { // 'i' flag
         bflags |= UREGEX_CASE_INSENSITIVE;
     }
-    if (flags.indexOf((UChar)0x78) >= 0)  { // 'x' flag 
+    if (flags.indexOf((UChar)0x78) >= 0)  { // 'x' flag
         bflags |= UREGEX_COMMENTS;
     }
-    if (flags.indexOf((UChar)0x73) >= 0)  { // 's' flag 
+    if (flags.indexOf((UChar)0x73) >= 0)  { // 's' flag
         bflags |= UREGEX_DOTALL;
     }
-    if (flags.indexOf((UChar)0x6d) >= 0)  { // 'm' flag 
+    if (flags.indexOf((UChar)0x6d) >= 0)  { // 'm' flag
         bflags |= UREGEX_MULTILINE;
     }
 
@@ -281,7 +281,7 @@ void RegexTest::regex_find(const UnicodeString &pattern,
     //
     parsePat = RegexPattern::compile("<(/?)([0-9]+)>", 0, pe, status);
     REGEX_CHECK_STATUS_L(line);
-    
+
     unEscapedInput = inputString.unescape();
     parseMatcher = parsePat->matcher(unEscapedInput, status);
     REGEX_CHECK_STATUS_L(line);
@@ -334,9 +334,9 @@ void RegexTest::regex_find(const UnicodeString &pattern,
             errln("Error at line %d:  No match expected, but one found.\n", line);
             failed = TRUE;
         }
-        goto cleanupAndReturn;   
+        goto cleanupAndReturn;
     }
-    
+
     for (i=0; i<=matcher->groupCount(); i++) {
         int32_t  expectedStart = (i >= groupStarts.size()? -1 : groupStarts.elementAti(i));
         if (matcher->start(i, status) != expectedStart) {
@@ -355,11 +355,11 @@ void RegexTest::regex_find(const UnicodeString &pattern,
         }
     }
     if ( matcher->groupCount()+1 < groupStarts.size()) {
-        errln("Error at line %d: Expected %d capture groups, found %d.", 
+        errln("Error at line %d: Expected %d capture groups, found %d.",
             line, groupStarts.size()-1, matcher->groupCount());
         failed = TRUE;
         }
-        
+
 cleanupAndReturn:
     if (failed) {
         errln("\"%s\"  %s  \"%s\"", (const char *)CharString(pattern, 0),
@@ -372,7 +372,7 @@ cleanupAndReturn:
     delete matcher;
     delete callerPattern;
 }
- 
+
 
 
 
@@ -550,23 +550,23 @@ void RegexTest::Basic() {
     //  Escape sequences that become single literal chars, handled internally
     //   by ICU's Unescape.
     //
-    
+
     // REGEX_TESTLM("\101\142", "Ab", TRUE, TRUE);      // Octal     TODO: not implemented yet.
     REGEX_TESTLM("\\a", "\\u0007", TRUE, TRUE);        // BEL
-    REGEX_TESTLM("\\cL", "\\u000c", TRUE, TRUE);       // Control-L 
-    REGEX_TESTLM("\\e", "\\u001b", TRUE, TRUE);        // Escape 
+    REGEX_TESTLM("\\cL", "\\u000c", TRUE, TRUE);       // Control-L
+    REGEX_TESTLM("\\e", "\\u001b", TRUE, TRUE);        // Escape
     REGEX_TESTLM("\\f", "\\u000c", TRUE, TRUE);        // Form Feed
     REGEX_TESTLM("\\n", "\\u000a", TRUE, TRUE);        // new line
     REGEX_TESTLM("\\r", "\\u000d", TRUE, TRUE);        //  CR
     REGEX_TESTLM("\\t", "\\u0009", TRUE, TRUE);        // Tab
-    REGEX_TESTLM("\\u1234", "\\u1234", TRUE, TRUE);       
-    REGEX_TESTLM("\\U00001234", "\\u1234", TRUE, TRUE);       
+    REGEX_TESTLM("\\u1234", "\\u1234", TRUE, TRUE);
+    REGEX_TESTLM("\\U00001234", "\\u1234", TRUE, TRUE);
 
     REGEX_TESTLM(".*\\Ax", "xyz", TRUE, FALSE);  //  \A matches only at the beginning of input
     REGEX_TESTLM(".*\\Ax", " xyz", FALSE, FALSE);  //  \A matches only at the beginning of input
 
     // Escape of special chars in patterns
-    REGEX_TESTLM("\\\\\\|\\(\\)\\[\\{\\~\\$\\*\\+\\?\\.", "\\\\|()[{~$*+?.", TRUE, TRUE);       
+    REGEX_TESTLM("\\\\\\|\\(\\)\\[\\{\\~\\$\\*\\+\\?\\.", "\\\\|()[{~$*+?.", TRUE, TRUE);
 
 
 };
@@ -574,7 +574,7 @@ void RegexTest::Basic() {
 
 //---------------------------------------------------------------------------
 //
-//      API_Match   Test that the API for class RegexMatcher 
+//      API_Match   Test that the API for class RegexMatcher
 //                  is present and nominally working, but excluding functions
 //                  implementing replace operations.
 //
@@ -601,18 +601,18 @@ void RegexTest::API_Match() {
         RegexPattern        *pat2;
         pat2 = RegexPattern::compile(re, flags, pe, status);
         REGEX_CHECK_STATUS;
-        
+
         UnicodeString inStr1 = "abcdef this is a test";
         UnicodeString instr2 = "not abc";
         UnicodeString empty  = "";
-        
-        
+
+
         //
         // Matcher creation and reset.
         //
         RegexMatcher *m1 = pat2->matcher(inStr1, status);
         REGEX_CHECK_STATUS;
-        REGEX_ASSERT(m1->lookingAt(status) == TRUE); 
+        REGEX_ASSERT(m1->lookingAt(status) == TRUE);
         REGEX_ASSERT(m1->input() == inStr1);
         m1->reset(instr2);
         REGEX_ASSERT(m1->lookingAt(status) == FALSE);
@@ -626,7 +626,7 @@ void RegexTest::API_Match() {
         REGEX_ASSERT(&m1->pattern() == pat2);
 
         //
-        //  reset(pos, status) 
+        //  reset(pos, status)
         //
         m1->reset(inStr1);
         m1->reset(4, status);
@@ -708,14 +708,14 @@ void RegexTest::API_Match() {
         REGEX_CHECK_STATUS;
         REGEX_ASSERT(m1->lookingAt(len+1, status) == FALSE);
         REGEX_ASSERT(status == U_INDEX_OUTOFBOUNDS_ERROR);
-        
+
         delete m1;
         delete pat2;
     }
 
 
     //
-    // Capture Group. 
+    // Capture Group.
     //     RegexMatcher::start();
     //     RegexMatcher::end();
     //     RegexMatcher::groupCount();
@@ -729,10 +729,10 @@ void RegexTest::API_Match() {
         RegexPattern *pat = RegexPattern::compile(re, flags, pe, status);
         REGEX_CHECK_STATUS;
         UnicodeString data = "0123456789";
-        
+
         RegexMatcher *matcher = pat->matcher(data, status);
         REGEX_CHECK_STATUS;
-        REGEX_ASSERT(matcher->lookingAt(status) == TRUE); 
+        REGEX_ASSERT(matcher->lookingAt(status) == TRUE);
         int  matchStarts[] = {0,  2, 4, 8};
         int  matchEnds[]   = {10, 8, 6, 10};
         int i;
@@ -789,7 +789,7 @@ void RegexTest::API_Match() {
         REGEX_CHECK_STATUS;
         UnicodeString data = ".abc..abc...abc..";
         //                    012345678901234567
-        
+
         RegexMatcher *matcher = pat->matcher(data, status);
         REGEX_CHECK_STATUS;
         REGEX_ASSERT(matcher->find());
@@ -843,17 +843,17 @@ void RegexTest::API_Match() {
         REGEX_CHECK_STATUS;
         UnicodeString data = ".abcabc.abc..";
         //                    012345678901234567
-        
+
         RegexMatcher *matcher = pat->matcher(data, status);
         REGEX_CHECK_STATUS;
         REGEX_ASSERT(matcher->find());
         REGEX_ASSERT(matcher->start(status) == 0);
-        REGEX_ASSERT(matcher->start(1, status) == -1);    
+        REGEX_ASSERT(matcher->start(1, status) == -1);
         REGEX_ASSERT(matcher->start(2, status) == 1);
 
         REGEX_ASSERT(matcher->find());
         REGEX_ASSERT(matcher->start(status) == 4);
-        REGEX_ASSERT(matcher->start(1, status) == 4);    
+        REGEX_ASSERT(matcher->start(1, status) == 4);
         REGEX_ASSERT(matcher->start(2, status) == -1);
         REGEX_CHECK_STATUS;
 
@@ -901,7 +901,7 @@ void RegexTest::API_Match() {
         //        match of zero length at the end of the input string.
         int                 i;
         UErrorCode          status=U_ZERO_ERROR;
-        RegexMatcher        m(".?", 0, status);     
+        RegexMatcher        m(".?", 0, status);
         REGEX_CHECK_STATUS;
         UnicodeString s("    ");
         m.reset(s);
@@ -933,7 +933,7 @@ void RegexTest::API_Match() {
         RegexPattern  *p = RegexPattern::compile(".", 0, status);
         RegexMatcher  *m = p->matcher(status);
         REGEX_CHECK_STATUS;
-            
+
         REGEX_ASSERT(m->find() == FALSE);
         REGEX_ASSERT(m->input() == "");
         delete m;
@@ -969,7 +969,7 @@ void RegexTest::API_Match() {
 
 //---------------------------------------------------------------------------
 //
-//      API_Replace        API test for class RegexMatcher, testing the 
+//      API_Replace        API test for class RegexMatcher, testing the
 //                         Replace family of functions.
 //
 //---------------------------------------------------------------------------
@@ -980,14 +980,14 @@ void RegexTest::API_Replace() {
     int32_t             flags=0;
     UParseError         pe;
     UErrorCode          status=U_ZERO_ERROR;
-    
+
     UnicodeString       re("abc");
     RegexPattern *pat = RegexPattern::compile(re, flags, pe, status);
     REGEX_CHECK_STATUS;
     UnicodeString data = ".abc..abc...abc..";
     //                    012345678901234567
     RegexMatcher *matcher = pat->matcher(data, status);
-    
+
     //
     //  Plain vanilla matches.
     //
@@ -995,11 +995,11 @@ void RegexTest::API_Replace() {
     dest = matcher->replaceFirst("yz", status);
     REGEX_CHECK_STATUS;
     REGEX_ASSERT(dest == ".yz..abc...abc..");
-    
+
     dest = matcher->replaceAll("yz", status);
     REGEX_CHECK_STATUS;
     REGEX_ASSERT(dest == ".yz..yz...yz..");
-    
+
     //
     //  Plain vanilla non-matches.
     //
@@ -1008,11 +1008,11 @@ void RegexTest::API_Replace() {
     dest = matcher->replaceFirst("yz", status);
     REGEX_CHECK_STATUS;
     REGEX_ASSERT(dest == ".abx..abx...abx..");
-    
+
     dest = matcher->replaceAll("yz", status);
     REGEX_CHECK_STATUS;
     REGEX_ASSERT(dest == ".abx..abx...abx..");
-    
+
     //
     // Empty source string
     //
@@ -1021,11 +1021,11 @@ void RegexTest::API_Replace() {
     dest = matcher->replaceFirst("yz", status);
     REGEX_CHECK_STATUS;
     REGEX_ASSERT(dest == "");
-    
+
     dest = matcher->replaceAll("yz", status);
     REGEX_CHECK_STATUS;
     REGEX_ASSERT(dest == "");
-    
+
     //
     // Empty substitution string
     //
@@ -1033,24 +1033,24 @@ void RegexTest::API_Replace() {
     dest = matcher->replaceFirst("", status);
     REGEX_CHECK_STATUS;
     REGEX_ASSERT(dest == "...abc...abc..");
-    
+
     dest = matcher->replaceAll("", status);
     REGEX_CHECK_STATUS;
     REGEX_ASSERT(dest == "........");
-    
+
     //
     // match whole string
     //
     UnicodeString d4 = "abc";
-    matcher->reset(d4);   
+    matcher->reset(d4);
     dest = matcher->replaceFirst("xyz", status);
     REGEX_CHECK_STATUS;
     REGEX_ASSERT(dest == "xyz");
-    
+
     dest = matcher->replaceAll("xyz", status);
     REGEX_CHECK_STATUS;
     REGEX_ASSERT(dest == "xyz");
-    
+
     //
     // Capture Group, simple case
     //
@@ -1077,10 +1077,10 @@ void RegexTest::API_Replace() {
     dest = matcher2->replaceFirst(replacement, status);
     REGEX_CHECK_STATUS;
     REGEX_ASSERT(dest == "Supplemental Digit 1 bc.defg");
-    
+
     REGEX_ASSERT_FAIL(matcher2->replaceFirst("bad capture group number $5...",status), U_INDEX_OUTOFBOUNDS_ERROR);
-    
-    
+
+
     //
     // Replacement String with \u hex escapes
     //
@@ -1090,7 +1090,7 @@ void RegexTest::API_Replace() {
         matcher->reset(src);
         UnicodeString  result = matcher->replaceAll(substitute, status);
         REGEX_CHECK_STATUS;
-        REGEX_ASSERT(result == "--C-- 1 --C-- 2 --C-- 3"); 
+        REGEX_ASSERT(result == "--C-- 1 --C-- 2 --C-- 3");
     }
     {
         UnicodeString  src = "abc !";
@@ -1101,10 +1101,10 @@ void RegexTest::API_Replace() {
         UnicodeString expected = UnicodeString("--");
         expected.append((UChar32)0x10000);
         expected.append("-- !");
-        REGEX_ASSERT(result == expected); 
+        REGEX_ASSERT(result == expected);
     }
     // TODO:  need more through testing of capture substitutions.
-    
+
     // Bug 4057
     //
     {
@@ -1448,7 +1448,7 @@ RegexTest::getPath(char buffer[2048], const char *filename) {
     const char *testDataDirectory = IntlTest::getSourceTestData(status);
     if (U_FAILURE(status)) {
         errln("ERROR: loadTestData() failed - %s", u_errorName(status));
-	    return NULL;
+        return NULL;
     }
 
     strcpy(buffer, testDataDirectory);
@@ -1482,7 +1482,7 @@ void RegexTest::Extended() {
     UnicodeString testString(FALSE, testData, len);
 
     RegexMatcher    quotedStuffMat("\\s*([\\'\\\"/])(.*?)\\1", 0, status);
-    RegexMatcher    commentMat    ("\\s*(#.*)?$", 0, status); 
+    RegexMatcher    commentMat    ("\\s*(#.*)?$", 0, status);
     RegexMatcher    flagsMat      ("\\s*([ixsmdtGv2-9]*)([:letter:]*)", 0, status);
 
     RegexMatcher    lineMat("(.*?)\\r?\\n", testString, 0, status);
@@ -1601,7 +1601,7 @@ void RegexTest::Errors() {
     //  TODO:  add tests for unbounded length look-behinds.
     REGEX_ERR("abc(?<@xyz).*", 1, 7, U_REGEX_RULE_SYNTAX);       // illegal construct
 
-    // Attempt to use non-default flags 
+    // Attempt to use non-default flags
     {
         UParseError   pe;
         UErrorCode    status = U_ZERO_ERROR;
@@ -1628,7 +1628,7 @@ void RegexTest::Errors() {
     REGEX_ERR("abc{222222222222222222222}",1,14, U_REGEX_NUMBER_TOO_BIG);
     REGEX_ERR("abc{5,50000000000}", 1, 17, U_REGEX_NUMBER_TOO_BIG);        // Overflows int during scan
     REGEX_ERR("abc{5,687865858}", 1, 16, U_REGEX_NUMBER_TOO_BIG);          // Overflows regex binary format
-    REGEX_ERR("abc{687865858,687865859}", 1, 24, U_REGEX_NUMBER_TOO_BIG);   
+    REGEX_ERR("abc{687865858,687865859}", 1, 24, U_REGEX_NUMBER_TOO_BIG);
 
 
     // UnicodeSet containing a string
@@ -1648,12 +1648,12 @@ UChar *RegexTest::ReadAndConvertFile(const char *fileName, int &ulen, UErrorCode
     char        *fileBuf = NULL;
     UConverter* conv     = NULL;
     FILE        *f       = NULL;
- 
+
     ulen = 0;
     if (U_FAILURE(status)) {
         return retPtr;
     }
-    
+
     //
     //  Open the file.
     //
@@ -1668,7 +1668,7 @@ UChar *RegexTest::ReadAndConvertFile(const char *fileName, int &ulen, UErrorCode
     //
     int   fileSize;
     int   amt_read;
-    
+
     fseek( f, 0, SEEK_END);
     fileSize = ftell(f);
     fileBuf = new char[fileSize];
@@ -1678,14 +1678,14 @@ UChar *RegexTest::ReadAndConvertFile(const char *fileName, int &ulen, UErrorCode
         errln("Error reading test data file.");
         goto cleanUpAndReturn;
     }
-    
+
     //
     // Look for a Unicode Signature (BOM) on the data just read
     //
     int32_t        signatureLength;
     const char *   fileBufC;
     const char*    encoding;
-    
+
     fileBufC = fileBuf;
     encoding = ucnv_detectUnicodeSignature(
         fileBuf, fileSize, &signatureLength, &status);
@@ -1693,7 +1693,7 @@ UChar *RegexTest::ReadAndConvertFile(const char *fileName, int &ulen, UErrorCode
         fileBufC  += signatureLength;
         fileSize  -= signatureLength;
     }
-    
+
     //
     // Open a converter to take the rule file to UTF-16
     //
@@ -1701,7 +1701,7 @@ UChar *RegexTest::ReadAndConvertFile(const char *fileName, int &ulen, UErrorCode
     if (U_FAILURE(status)) {
         goto cleanUpAndReturn;
     }
-    
+
     //
     // Convert the rules to UChar.
     //  Preflight first to determine required buffer size.
@@ -1715,7 +1715,7 @@ UChar *RegexTest::ReadAndConvertFile(const char *fileName, int &ulen, UErrorCode
     if (status == U_BUFFER_OVERFLOW_ERROR) {
         // Buffer Overflow is expected from the preflight operation.
         status = U_ZERO_ERROR;
-        
+
         retPtr = new UChar[ulen+1];
         ucnv_toUChars(conv,
             retPtr,       //  dest,
@@ -1757,11 +1757,11 @@ cleanUpAndReturn:
 //        # Column 2 contains the string to be matched.
 //        #
 //        # Column 3 contains the expected result:
-//        # 	y	expect a match
-//        # 	n	expect no match
-//        # 	c	expect an error
-//        #	B	test exposes a known bug in Perl, should be skipped
-//        #	b	test exposes a known bug in Perl, should be skipped if noamp
+//        #     y   expect a match
+//        #     n   expect no match
+//        #     c   expect an error
+//        # B   test exposes a known bug in Perl, should be skipped
+//        # b   test exposes a known bug in Perl, should be skipped if noamp
 //        #
 //        # Columns 4 and 5 are used only if column 3 contains C<y> or C<c>.
 //        #
@@ -1846,7 +1846,7 @@ void RegexTest::PerlTests() {
     //  regexp for $-[0], $+[2], etc.
     RegexPattern *groupsPat = RegexPattern::compile("\\$([+\\-])\\[(\\d+)\\]", 0, pe, status);
     RegexMatcher *groupsMat = groupsPat->matcher(status);
-    
+
     //  regexp for $0, $1, $2, etc.
     RegexPattern *cgPat = RegexPattern::compile("\\$(\\d+)", 0, pe, status);
     RegexMatcher *cgMat = cgPat->matcher(status);
@@ -1944,7 +1944,7 @@ void RegexTest::PerlTests() {
 
         //
         // replace the Perl variables that appear in some of the
-        //   match data strings.  
+        //   match data strings.
         //
         UnicodeString matchString = fields[1];
         matchString.findAndReplace(nulnulSrc, nulnul);
@@ -1954,7 +1954,7 @@ void RegexTest::PerlTests() {
         //  Don't do full unescape, as this unescapes more than Perl does, which
         //  causes other spurious failures in the tests.
         matchString.findAndReplace("\\n", "\n");
-        
+
 
 
         //
@@ -1967,7 +1967,7 @@ void RegexTest::PerlTests() {
             expected = TRUE;
         }
         if (expected != found) {
-            errln("line %d: Expected %smatch, got %smatch", 
+            errln("line %d: Expected %smatch, got %smatch",
                 lineNum, expected?"":"no ", found?"":"no " );
             continue;
         }
@@ -1975,7 +1975,7 @@ void RegexTest::PerlTests() {
         //
         // Interpret the Perl expression from the fourth field of the data file,
         // building up an ICU string from the results of the ICU match.
-        //   The Perl expression will contain references to the results of 
+        //   The Perl expression will contain references to the results of
         //     a regex match, including the matched string, capture group strings,
         //     group starting and ending indicies, etc.
         //
@@ -2052,7 +2052,7 @@ void RegexTest::PerlTests() {
                 case 'n':   c = '\n'; break;
                 // add any other escape sequences that show up in the test expected results.
                 }
-                resultString.append(c); 
+                resultString.append(c);
                 perlExpr.remove(0, 1);
             }
 
@@ -2069,7 +2069,7 @@ void RegexTest::PerlTests() {
                 break;
             }
         }
-        
+
         //
         // Expected Results Compare
         //
@@ -2094,19 +2094,19 @@ void RegexTest::PerlTests() {
     //
     delete cgMat;
     delete cgPat;
-    
+
     delete groupsMat;
     delete groupsPat;
-    
+
     delete flagMat;
     delete flagPat;
 
     delete lineMat;
     delete linePat;
-    
+
     delete fieldPat;
     delete [] testData;
-    
+
 
     logln("%d tests skipped because of unimplemented regexp features.", skippedUnimplementedCount);
 

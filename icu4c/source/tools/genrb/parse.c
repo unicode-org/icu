@@ -499,7 +499,7 @@ parseUCARules(char *tag, uint32_t startline, UErrorCode *status)
         }
     }
 
-	/* terminate the string */
+    /* terminate the string */
     if(target < targetLimit){
         *target = 0x0000;
     }

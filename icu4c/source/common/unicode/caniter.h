@@ -93,7 +93,7 @@ public:
 
     /**
      * Get the next canonically equivalent string.
-	 * <br><b>Warning: The strings are not guaranteed to be in any particular order.</b>
+     * <br><b>Warning: The strings are not guaranteed to be in any particular order.</b>
      * @return the next string that is canonically equivalent. A bogus string is returned when
      * the iteration is done.
      * @stable ICU 2.4

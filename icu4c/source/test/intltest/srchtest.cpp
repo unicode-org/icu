@@ -2235,7 +2235,7 @@ void StringSearchTest::TestSubclass()
     int i;
     StringCharacterIterator chariter(text);
 
-	search.setText(text, status);
+    search.setText(text, status);
     if (search.getText() != search2.getText()) {
         errln("Error setting text");
     }

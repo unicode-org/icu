@@ -517,7 +517,7 @@ isAcceptable3(void *context,
 static void TestUDataOpenChoiceDemo1() {
     UDataMemory *result;
     UErrorCode status=U_ZERO_ERROR;
-	
+    
     const char* name[]={
         "cnvalias",
         "unames",

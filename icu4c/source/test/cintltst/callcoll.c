@@ -1133,13 +1133,13 @@ TestJitterbug1098(){
         u_uastrcpy(rule, rules[i]);
         c1 = ucol_openRules(rule, u_strlen(rule), UCOL_OFF, UCOL_DEFAULT_STRENGTH, &parseError, &status);
         if(U_FAILURE(status)){
-			log_err("Could not parse the rules syntax. Error: %s ", u_errorName(status));
+            log_err("Could not parse the rules syntax. Error: %s ", u_errorName(status));
 
-			if (status == U_PARSE_ERROR) {
-				u_UCharsToChars(parseError.preContext,preContext,20);
-				u_UCharsToChars(parseError.postContext,postContext,20);
-				log_verbose("\n\tPre-Context: %s \n\tPost-Context:%s \n",preContext,postContext);
-			}
+            if (status == U_PARSE_ERROR) {
+                u_UCharsToChars(parseError.preContext,preContext,20);
+                u_UCharsToChars(parseError.postContext,postContext,20);
+                log_verbose("\n\tPre-Context: %s \n\tPost-Context:%s \n",preContext,postContext);
+            }
 
             return;
         }
