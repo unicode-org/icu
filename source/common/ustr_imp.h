@@ -19,6 +19,9 @@
 #include "unicode/ucnv.h"
 #include "unicode/uiter.h"
 
+/** Simple declaration for u_strToTitle() to avoid including unicode/ubrk.h. */
+typedef void *UBreakIterator;
+
 /**
  * Are the Unicode properties loaded?
  * This must be used before internal functions are called that do
@@ -52,13 +55,17 @@ u_growBufferFromStatic(void *context,
                        int32_t length);
 
 /*
- * Internal string casing functions implementing ustring.c and UnicodeString
- * case mapping functions.
+ * Internal string casing functions implementing
+ * ustring.h/ustrcase.c and UnicodeString case mapping functions.
+ *
+ * Lowercases [srcStart..srcLimit[ but takes
+ * context [0..srcLength[ into account.
  * @internal
  */
 U_CFUNC int32_t
 u_internalStrToLower(UChar *dest, int32_t destCapacity,
                      const UChar *src, int32_t srcLength,
+                     int32_t srcStart, int32_t srcLimit,
                      const char *locale,
                      UErrorCode *pErrorCode);
 
@@ -68,6 +75,16 @@ u_internalStrToLower(UChar *dest, int32_t destCapacity,
 U_CFUNC int32_t
 u_internalStrToUpper(UChar *dest, int32_t destCapacity,
                      const UChar *src, int32_t srcLength,
+                     const char *locale,
+                     UErrorCode *pErrorCode);
+
+/**
+ * @internal
+ */
+U_CFUNC int32_t
+u_internalStrToTitle(UChar *dest, int32_t destCapacity,
+                     const UChar *src, int32_t srcLength,
+                     UBreakIterator *titleIter,
                      const char *locale,
                      UErrorCode *pErrorCode);
 
