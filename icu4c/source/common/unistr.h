@@ -1162,7 +1162,7 @@ public:
    * @param newLength the length of the replacement range in <TT>newText</TT>
    * @return a reference to this
    */
-  inline UnicodeString& findAndReplace(UTextOffset start,
+  UnicodeString& findAndReplace(UTextOffset start,
                 int32_t length,
                 const UnicodeString& oldText,
                 UTextOffset oldStart,
@@ -1929,29 +1929,6 @@ UnicodeString::findAndReplace(UTextOffset start,
                   const UnicodeString& newText)
 { return findAndReplace(start, length, oldText, 0, oldText.fLength, 
             newText, 0, newText.fLength); }
-
-inline UnicodeString& 
-UnicodeString::findAndReplace(UTextOffset start,
-                  int32_t length,
-                  const UnicodeString& oldText,
-                  UTextOffset oldStart,
-                  int32_t oldLength,
-                  const UnicodeString& newText,
-                  UTextOffset newStart,
-                  int32_t newLength)
-{
-  UTextOffset pos;
-
-  for(UTextOffset i = start; i < start + length; ++i) {
-    pos = indexOf(oldText, oldStart, oldLength, i, length - i + start);
-    if(pos != -1) {
-      replace(pos, oldLength, newText, newStart, newLength);
-      i += newLength;
-    }
-  }
- 
-  return *this;
-}
 
 // ============================
 // extract

@@ -510,6 +510,44 @@ UnicodeString::doLastIndexOf(UChar c,
   return -1;
 }
 
+UnicodeString& 
+UnicodeString::findAndReplace(UTextOffset start,
+                  int32_t length,
+                  const UnicodeString& oldText,
+                  UTextOffset oldStart,
+                  int32_t oldLength,
+                  const UnicodeString& newText,
+                  UTextOffset newStart,
+                  int32_t newLength)
+{
+  if(isBogus() || oldText.isBogus() || newText.isBogus()) {
+    return *this;
+  }
+
+  pinIndices(start, length);
+  oldText.pinIndices(oldStart, oldLength);
+  newText.pinIndices(newStart, newLength);
+
+  if(oldLength == 0 || newLength == 0) {
+    return *this;
+  }
+
+  while(length >= oldLength) {
+    UTextOffset pos = indexOf(oldText, oldStart, oldLength, start, length);
+    if(pos < 0) {
+      // no more oldText's here: done
+      break;
+    } else {
+      // we found oldText, replace it by newText and go beyond it
+      replace(pos, oldLength, newText, newStart, newLength);
+      length -= pos + oldLength - start;
+      start = pos + newLength;
+    }
+  }
+
+  return *this;
+}
+
 
 //========================================
 // Write implementation
@@ -704,16 +742,17 @@ UnicodeString::doReplace( UTextOffset start,
               UTextOffset srcStart,
               int32_t srcLength)
 {
-  // pin the indices to legal values
-  src.pinIndices(srcStart, srcLength);
+  if(!src.isBogus()) {
+    // pin the indices to legal values
+    src.pinIndices(srcStart, srcLength);
 
-  // get the characters from src
-  const UChar *chars = src.getArrayStart();
-
-  // and replace the range in ourselves with them
-  doReplace(start, length, chars, srcStart, srcLength);
-
-  return *this;
+    // get the characters from src
+    // and replace the range in ourselves with them
+    return doReplace(start, length, src.getArrayStart(), srcStart, srcLength);
+  } else {
+    // remove the range
+    return doReplace(start, length, 0, 0, 0);
+  }
 }
 
 UnicodeString&
@@ -726,6 +765,10 @@ UnicodeString::doReplace(UTextOffset start,
   // if we're bogus, do nothing
   if(fBogus)
     return *this;
+
+  if(srcChars == 0) {
+    srcStart = srcLength = 0;
+  }
 
   bool_t deleteWhenDone = FALSE;
   UChar *bufferToDelete = 0;
@@ -779,9 +822,11 @@ UnicodeString::doReplace(UTextOffset start,
   // now do the replace
 
   // first copy the portion that isn't changing, leaving a hole
-  us_arrayCopy(getArrayStart(), start + length,
-          getArrayStart(), start + srcLength,
-          fLength - (start + length));
+  if(length != srcLength) {
+    us_arrayCopy(getArrayStart(), start + length,
+            getArrayStart(), start + srcLength,
+            fLength - (start + length));
+  }
 
   // now fill in the hole with the new string
   us_arrayCopy(srcChars, srcStart, getArrayStart(), start, srcLength);
