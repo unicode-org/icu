@@ -17,18 +17,14 @@
 #include "LEFontInstance.h"
 #include "OpenTypeTables.h"
 #include "Lookups.h"
+#include "GlyphLookupTables.h"
 #include "GlyphDefinitionTables.h"
 #include "GlyphPositionAdjustments.h"
 
 U_NAMESPACE_BEGIN
 
-struct GlyphPositioningTableHeader
+struct GlyphPositioningTableHeader : public GlyphLookupTableHeader
 {
-    fixed32 version;
-    Offset  scriptListOffset;
-    Offset  featureListOffset;
-    Offset  lookupListOffset;
-
     void    process(LEGlyphID *glyphs, GlyphPositionAdjustment *glyphPositionAdjustments,
                 const LETag **glyphTags, le_int32 glyphCount,
                 le_bool rightToLeft, LETag scriptTag, LETag languageTag,
