@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/lang/UCharacterTest.java,v $
-* $Date: 2003/06/09 23:31:10 $
-* $Revision: 1.59 $
+* $Date: 2003/07/17 21:13:24 $
+* $Revision: 1.60 $
 *
 *******************************************************************************
 */
@@ -29,6 +29,7 @@ import com.ibm.icu.impl.UCharacterName;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.impl.USerializedSet;
 import com.ibm.icu.impl.NormalizerImpl;
+import com.ibm.icu.impl.UCharacterProperty;
 import java.io.BufferedReader;
 import java.util.Arrays;
 
@@ -181,6 +182,25 @@ public final class UCharacterTest extends TestFmwk
             logln("Ok    \\u" + hex(spaces[i]) + " and \\u" +
                   hex(nonspaces[i]) + " and \\u" + hex(whitespaces[i]) +
                   " and \\u" + hex(nonwhitespaces[i]));
+        }
+        
+        int rulewhitespace[] = {0x9, 0xd, 0x20, 0x85, 0xa0, 0x1680, 0x180e,
+                                0x2000, 0x200a, 0x200e, 0x200f, 0x2028, 0x2029, 
+                                0x202f, 0x205f, 0x3000};
+        int nonrulewhitespace[] = {0x8, 0xe, 0x21, 0x86, 0xa1, 0x1681, 0x180f,
+                                   0x1FFF, 0x200b, 0x2010, 0x2030, 0x2030, 
+                                   0x2060, 0x3001};
+        for (int i = 0; i < rulewhitespace.length; i ++) {
+            if (!UCharacterProperty.isRuleWhiteSpace(rulewhitespace[i])) {
+                errln("\\u" + Utility.hex(rulewhitespace[i], 4) 
+                      + " expected to be a rule white space");
+            }
+        }
+        for (int i = 0; i < nonrulewhitespace.length; i ++) {
+            if (UCharacterProperty.isRuleWhiteSpace(nonrulewhitespace[i])) {
+                errln("\\u" + Utility.hex(nonrulewhitespace[i], 4) 
+                      + " expected to be a non rule white space");
+            }
         }
     }
 
