@@ -229,13 +229,13 @@ private:
      * Copy constructor.
      *
      */
-    StringPrep(const StringPrep&);
+    StringPrep(const StringPrep&){};
 
     /**
      * Assignment operator.
      *
      */
-    StringPrep& operator=(const StringPrep&);
+    StringPrep& operator=(const StringPrep&){};
 
     /**
      * Return true if another object is semantically equal to this one.
