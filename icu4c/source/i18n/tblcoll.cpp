@@ -890,26 +890,26 @@ RuleBasedCollator::getRules() const
             data->ruleTable = temp.getRules();
             data->isRuleTableLoaded = TRUE;
 #ifdef _DEBUG
-            // the following is useful for specific debugging purposes
-             UnicodeString name;
-             cerr << "Table collation rules loaded dynamically for "
-                 << data->desiredLocale.getName(name)
-                 << " at "
-                 << data->realLocaleName
-                 << ", " << dec << data->ruleTable.size() << " characters"
-                 << endl;
+//              // the following is useful for specific debugging purposes
+//               UnicodeString name;
+//               cerr << "Table collation rules loaded dynamically for "
+//                   << data->desiredLocale.getName(name)
+//                   << " at "
+//                   << data->realLocaleName
+//                   << ", " << dec << data->ruleTable.size() << " characters"
+//                   << endl;
 #endif
         }
         else
         {
 #ifdef _DEBUG
-            UnicodeString name;
-            cerr << "Unable to load table collation rules dynamically for "
-                << data->desiredLocale.getName(name)
-                << " at "
-                << data->realLocaleName
-                << endl;
-            cerr << "Status " << errorName(status) << ", mPattern " << temp.mPattern << endl;
+//              UnicodeString name;
+//              cerr << "Unable to load table collation rules dynamically for "
+//                  << data->desiredLocale.getName(name)
+//                  << " at "
+//                  << data->realLocaleName
+//                  << endl;
+//              cerr << "Status " << errorName(status) << ", mPattern " << temp.mPattern << endl;
 #endif
 	    /* SRL have to add this because we now have the situation where
 	       DEFAULT is loaded from a binary file w/ no rules. */
