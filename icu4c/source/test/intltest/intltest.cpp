@@ -1160,7 +1160,6 @@ const char* IntlTest::loadTestData(UErrorCode& err){
     UResourceBundle* test =NULL;
     char* tdpath=NULL;
     const char* directory = ".";
-    char p[1024];
     const char* tdrelativepath = U_FILE_SEP_STRING"out"U_FILE_SEP_STRING;
     if( _testDataPath == NULL){
 
@@ -1176,6 +1175,7 @@ const char* IntlTest::loadTestData(UErrorCode& err){
      *             Change to    "wherever\icu\source\data"
      */
     {
+        char p[1024];
         char *pBackSlash;
         int i;
 
