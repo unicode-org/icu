@@ -1,0 +1,1773 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 1997-2004, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+
+en {
+    Version { "3.0" }
+    calendar{
+        gregorian{
+            DateTimePatterns{
+                "h:mm:ss a z",
+                "h:mm:ss a z",
+                "h:mm:ss a",
+                "h:mm a",
+                "EEEE, MMMM d, yyyy",
+                "MMMM d, yyyy",
+                "MMM d, yyyy",
+                "M/d/yy", // Changing this will break binary compatibility.
+                "{1} {0}",
+            }
+            dayNames{
+                format{
+                    abbreviated{
+                        "Sun",
+                        "Mon",
+                        "Tue",
+                        "Wed",
+                        "Thu",
+                        "Fri",
+                        "Sat",
+                    }
+                    wide{
+                        "Sunday",
+                        "Monday",
+                        "Tuesday",
+                        "Wednesday",
+                        "Thursday",
+                        "Friday",
+                        "Saturday",
+                    }
+                }
+            }
+            eras{
+                "BC",
+                "AD",
+            }
+            monthNames{
+                format{
+                    abbreviated{
+                        "Jan",
+                        "Feb",
+                        "Mar",
+                        "Apr",
+                        "May",
+                        "Jun",
+                        "Jul",
+                        "Aug",
+                        "Sep",
+                        "Oct",
+                        "Nov",
+                        "Dec",
+                    }
+                    wide{
+                        "January",
+                        "February",
+                        "March",
+                        "April",
+                        "May",
+                        "June",
+                        "July",
+                        "August",
+                        "September",
+                        "October",
+                        "November",
+                        "December",
+                    }
+                }
+            }
+        }
+    }
+    Countries {
+        AD { "Andorra" }
+        AE { "United Arab Emirates" }
+        AF { "Afghanistan" }
+        AG { "Antigua and Barbuda" }
+        AI { "Anguilla" }
+        AL { "Albania" }
+        AM { "Armenia" }
+        AN { "Netherlands Antilles" }
+        AO { "Angola" }
+        AQ { "Antarctica" }
+        AR { "Argentina" }
+        AS { "American Samoa" }
+        AT { "Austria" }
+        AU { "Australia" }
+        AW { "Aruba" }
+        AZ { "Azerbaijan" }
+
+        BA { "Bosnia and Herzegovina" }
+        BB { "Barbados" }
+        BD { "Bangladesh" }
+        BE { "Belgium" }
+        BF { "Burkina Faso" }
+        BG { "Bulgaria" }
+        BH { "Bahrain" }
+        BI { "Burundi" }
+        BJ { "Benin" }
+        BM { "Bermuda" }
+        BN { "Brunei" }
+        BO { "Bolivia" }
+        BR { "Brazil" }
+        BS { "Bahamas" }
+        BT { "Bhutan" }
+        BV { "Bouvet Island" }
+        BW { "Botswana" }
+        BY { "Belarus" }
+        BZ { "Belize" }
+
+        CA { "Canada" }
+        CC { "Cocos (Keeling) Islands"}
+        CD { "Democratic Republic of the Congo" }
+        CF { "Central African Republic" }
+        CG { "Congo" }
+        CH { "Switzerland" }
+        CI { "C\u00F4te d\u2019Ivoire" }
+        CK { "Cook Islands" }
+        CL { "Chile" }
+        CM { "Cameroon" }
+        CN { "China" }
+        CO { "Colombia" }
+        CR { "Costa Rica" }
+        //CS { "Serbia and Montenegro" } // TODO: if we allow this, then SP must go away
+        CU { "Cuba" }
+        CV { "Cape Verde" }
+        CX { "Christmas Island" }
+        CY { "Cyprus" }
+        CZ { "Czech Republic" }
+
+        DE { "Germany" }
+        DJ { "Djibouti" }
+        DK { "Denmark" }
+        DM { "Dominica" }
+        DO { "Dominican Republic" }
+        DZ { "Algeria" }
+
+        EC { "Ecuador" }
+        EE { "Estonia" }
+        EG { "Egypt" }
+        EH { "Western Sahara" }
+        ER { "Eritrea" }
+        ES { "Spain" }
+        ET { "Ethiopia" }
+
+        FI { "Finland" }
+        FJ { "Fiji" }
+        FK { "Falkland Islands" }
+        FM { "Micronesia" }
+        FO { "Faroe Islands" }
+        FR { "France" }
+
+        GA { "Gabon" }
+        GB { "United Kingdom" }
+        GD { "Grenada" }
+        GE { "Georgia" }
+        GF { "French Guiana" }
+        GH { "Ghana" }
+        GI { "Gibraltar" }
+        GL { "Greenland" }
+        GM { "Gambia" }
+        GN { "Guinea" }
+        GP { "Guadeloupe" }
+        GQ { "Equatorial Guinea" }
+        GR { "Greece" }
+        GS { "South Georgia and the South Sandwich Islands" }
+        GT { "Guatemala" }
+        GU { "Guam" }
+        GW { "Guinea-Bissau" }
+        GY { "Guyana" }
+
+        HK { "Hong Kong S.A.R., China" }
+        HM { "Heard Island and McDonald Islands" }
+        HN { "Honduras" }
+        HR { "Croatia" }
+        HT { "Haiti" }
+        HU { "Hungary" }
+
+        ID { "Indonesia" }
+        IE { "Ireland" }
+        IL { "Israel" }
+        IN { "India" }
+        IO { "British Indian Ocean Territory" }
+        IQ { "Iraq" }
+        IR { "Iran" }
+        IS { "Iceland" }
+        IT { "Italy" }
+
+        JM { "Jamaica" }
+        JO { "Jordan" }
+        JP { "Japan" }
+
+        KE { "Kenya" }
+        KG { "Kyrgyzstan" }
+        KH { "Cambodia" }
+        KI { "Kiribati" }
+        KM { "Comoros" }
+        KN { "Saint Kitts and Nevis" }
+        KP { "North Korea" }
+        KR { "South Korea" }
+        KW { "Kuwait" }
+        KY { "Cayman Islands" }
+        KZ { "Kazakhstan" }
+
+        LA { "Laos" }
+        LB { "Lebanon" }
+        LC { "Saint Lucia" }
+        LI { "Liechtenstein" }
+        LK { "Sri Lanka" }
+        LR { "Liberia" }
+        LS { "Lesotho" }
+        LT { "Lithuania" }
+        LU { "Luxembourg" }
+        LV { "Latvia" }
+        LY { "Libya" }
+
+        MA { "Morocco" }
+        MC { "Monaco" }
+        MD { "Moldova" }
+        MG { "Madagascar" }
+        MH { "Marshall Islands"}
+        MK { "Macedonia" }
+        ML { "Mali" }
+        MM { "Myanmar" }
+        MN { "Mongolia" }
+        MO { "Macao S.A.R., China" }
+        MP { "Northern Mariana Islands" }
+        MQ { "Martinique" }
+        MR { "Mauritania" }
+        MS { "Montserrat" }
+        MT { "Malta" }
+        MU { "Mauritius" }
+        MV { "Maldives" }
+        MW { "Malawi" }
+        MX { "Mexico" }
+        MY { "Malaysia" }
+        MZ { "Mozambique" }
+
+        NA { "Namibia" }
+        NC { "New Caledonia" }
+        NE { "Niger" }
+        NF { "Norfolk Island" }
+        NG { "Nigeria" }
+        NI { "Nicaragua" }
+        NL { "Netherlands" }
+        NO { "Norway" }
+        NP { "Nepal" }
+        NR { "Nauru" }
+        NU { "Niue" }
+        NZ { "New Zealand" }
+
+        OM { "Oman" }
+
+        PA { "Panama" }
+        PE { "Peru" }
+        PF { "French Polynesia" }
+        PG { "Papua New Guinea" }
+        PH { "Philippines" }
+        PK { "Pakistan" }
+        PL { "Poland" }
+        PM { "Saint Pierre and Miquelon" }
+        PN { "Pitcairn" }
+        PR { "Puerto Rico" }
+        PS { "Palestinian Territory" }
+        PT { "Portugal" }
+        PW { "Palau" }
+        PY { "Paraguay" }
+
+        QA { "Qatar" }
+
+        RE { "R\u00E9union" }
+        RO { "Romania" }
+        RU { "Russia" }
+        RW { "Rwanda" }
+
+        SA { "Saudi Arabia" }
+        SB { "Solomon Islands" }
+        SC { "Seychelles" }
+        SD { "Sudan" }
+        SE { "Sweden" }
+        SG { "Singapore" }
+        SH { "Saint Helena" }
+        SI { "Slovenia" }
+        SJ { "Svalbard and Jan Mayen" }
+        SK { "Slovakia" }
+        SL { "Sierra Leone" }
+        SM { "San Marino" }
+        SN { "Senegal" }
+        SO { "Somalia" }
+        SP { "Serbia" }
+        SR { "Suriname" }
+        ST { "Sao Tome and Principe" }
+        SV { "El Salvador" }
+        SY { "Syria" }
+        SZ { "Swaziland" }
+
+        TC { "Turks and Caicos Islands" }
+        TD { "Chad" }
+        TF { "French Southern Territories" }
+        TG { "Togo" }
+        TH { "Thailand" }
+        TJ { "Tajikistan" }
+        TK { "Tokelau" }
+        TL { "Timor-Leste" }    // This was called East Timor
+        TM { "Turkmenistan" }
+        TN { "Tunisia" }
+        TO { "Tonga" }
+        TR { "Turkey" }
+        TT { "Trinidad and Tobago" }
+        TV { "Tuvalu" }
+        TW { "Taiwan" }
+        TZ { "Tanzania" }
+
+        UA { "Ukraine" }
+        UG { "Uganda" }
+        UM { "United States Minor Outlying Islands" }
+        US { "United States" }
+        UY { "Uruguay" }
+        UZ { "Uzbekistan" }
+
+        VA { "Vatican" }
+        VC { "Saint Vincent and the Grenadines" }
+        VE { "Venezuela" }
+        VG { "British Virgin Islands" }
+        VI { "U.S. Virgin Islands" }
+        VN { "Vietnam" }
+        VU { "Vanuatu" }
+
+        WF { "Wallis and Futuna" }
+        WS { "Samoa" }
+
+        YE { "Yemen" }
+        YT { "Mayotte" }
+        YU { "Yugoslavia" }
+
+        ZA { "South Africa" }
+        ZM { "Zambia" }
+        ZW { "Zimbabwe" }
+    }
+    // Last update: May 2003
+    Currencies {
+        ADD { "ADD", "Andorran Diner"       } // 1873-06/30/2002
+        ADP { "ADP", "Andorran Peseta"      } // 1936-
+        AED { "AED", "United Arab Emirates Dirham" } // 12/2/1971-
+        AFA { "AFA", "Afghani (1927-2002)"  } // 1927-
+        AFN { "Af",  "Afghani"              }
+        AIF { "AIF", "Affars and Issas Franc" } // 07/05/1967-06/27/1977
+        ALK { "ALK", "Albanian Lek (1946-1961)" } // 1946-1961
+        ALL { "lek", "Albanian Lek"         } // 1961-
+        ALV { "ALV", "Albanian Lek Valute"  } // 1992-1993
+        ALX { "ALX", "Albanian Dollar Foreign Exchange Certificates" } // 1953-1965
+        AMD { "dram","Armenian Dram"        } // 11/22/1993-
+        ANG { "NA f.","Netherlands Antillan Guilder" } // 05/10/1940-
+        AOA { "AOA", "Angolan Kwanza"       } // 09/1926-12/31/1958
+        AOK { "AOK", "Angolan Kwanza (1977-1990)" } // 01/08/1977-09/25/1990
+        AON { "AON", "Angolan New Kwanza (1990-2000)" } // 09/25/1990-07/01/1995
+        AOR { "AOR", "Angolan Kwanza Reajustado (1995-1999)" } // 07/01/1995-12/13/1999
+        AOS { "AOS", "Angolan Escudo"       } // 12/31/1958-11/11/1976
+        ARA { "ARA", "Argentine Austral"    } // 06/14/1985-01/01/1992
+        ARM { "ARM", "Argentine Peso Moneda Nacional" } // 1899-01/01/1970
+        ARP { "ARP", "Argentine Peso (1983-1985)" } // 06/01/1983-06/14/1985
+        ARS { "Arg$","Argentine Peso"       } // 01/01/1992-
+        ATS { "ATS", "Austrian Schilling"   } // 12/04/1947-02/28/2002
+        AUD { "$A",  "Australian Dollar"    } // 02/14/1966-
+        AUP { "AUP", "Australian Pound"     } // 1902-02/14/1966
+        AWG { "AWG", "Aruban Guilder"       } // 01/01/1986-
+        AZM { "AZM", "Azerbaijanian Manat"  } // 1992-
+        BAD { "BAD", "Bosnia-Herzegovina Dinar" } // 07/01/1992-08/15/1994
+        BAM { "KM",  "Bosnia-Herzegovina Convertible Mark" } // 01/01/1995-
+        BAN { "BAN", "Bosnia-Herzegovina New Dinar" } // 08/15/1994-01/01/1995
+        BBD { "BDS$","Barbados Dollar"      } // 11/29/1966-
+        BDT { "Tk",  "Bangladesh Taka"      } // 01/01/1972-
+        BEC { "BEC", "Belgian Franc (convertible)" }
+        BEF { "BF",  "Belgian Franc"        } // 1831-2002
+        BEL { "BEL", "Belgian Franc (financial)" }
+        BGL { "lev", "Bulgarian Hard Lev"   } // 01/01/1962-01/01/1999
+        BGM { "BGM", "Bulgarian Socialist Lev" } // 05/1952-01/01/1962
+        BGN { "BGN", "Bulgarian New Lev"    } // 01/01/1999-
+        BGO { "BGO", "Bulgarian Lev (1879-1952)" } // 07/08/1879-05/1952
+        BGX { "BGX", "Bulgarian Lev Foreign Exchange Certificates" } // 1965-1986
+        BHD { "BD",  "Bahraini Dinar"       } // 10/1965-
+        BIF { "Fbu", "Burundi Franc"        } // 05/19/1964-
+        BMD { "Ber$","Bermudan Dollar"      } // 02/06/1970-
+        BMP { "BMP", "Bermudan Pound"       } // 1914-02/06/1970
+        BND { "BND", "Brunei Dollar"        } // 06/12/1967-
+        BOB { "Bs",  "Boliviano"            } // 1986-
+        BOL { "BOL", "Boliviano (1863-1962)" } // 06/23/1863-12/31/1962
+        BOP { "BOP", "Bolivian Peso"        } // 01/01/1963-1986
+        BOV { "BOV", "Bolivian Mvdol"       }
+        BRB { "BRB", "Brazilian Cruzeiro Novo (1967-1986)" } // 02/13/1967-02/28/1986
+        BRC { "BRC", "Brazilian Cruzado"    } // 02/28/1986-01/15/1989
+        BRE { "BRE", "Brazilian Cruzeiro (1990-1993)" } // 03/16/1990-08/01/1993
+        BRL { "R$",  "Brazilian Real"       } // 07/01/1994-
+        BRN { "BRN", "Brazilian Cruzado Novo" } // 01/15/1989-03/16/1990
+        BRR { "BRR", "Brazilian Cruzeiro"   } // 08/01/1993-07/01/1994
+        BRZ { "BRZ", "Brazilian Cruzeiro (1942-1967)" } // 1942-1967
+        BSD { "BSD", "Bahamian Dollar"      } // 5/25/1966-
+        BSP { "BSP", "Bahamian Pound"       } // 1869-5/25/1966
+        BTN { "Nu",  "Bhutan Ngultrum"      } // 1974-
+        BTR { "BTR", "Bhutan Rupee"         } // 1928-1974
+        BUK { "BUK", "Burmese Kyat"         } // 01/04/1948-06/18/1989
+        BUR { "BUR", "Burmese Rupee"        } // 04/01/1937-07/01/1952
+        BWP { "BWP", "Botswanan Pula"       } // 1976-
+        BYB { "BYB", "Belarussian New Ruble (1994-1999)" } // 08/1994-01/01/2000
+        BYL { "BYL", "Belarussian Ruble (1992-1994)" } // 09/25/1992-08/1994
+        BYR { "Rbl", "Belarussian Ruble"    } // 01/01/2000-
+        BZD { "BZ$", "Belize Dollar"        } // 1973-
+        BZH { "BZH", "British Honduras Dollar" } // 1855-1972
+        CAD { "Can$","Canadian Dollar"      } // 1858-
+        CDF { "CDF", "Congolese Franc Congolais"      } // 07/1998-
+        CDG { "CDG", "Congolese Republic Franc" } // 06/30/1960-07/22/1967
+        CDL { "CDL", "Congolese Zaire"      } // 07/23/1967-10/27/1971
+        CFF { "CFF", "Central African Republic CFA Franc" } // 04/01/1973-1992
+        CHF { "SwF", "Swiss Franc"          } // 03/17/1799-
+        CKD { "CKD", "Cook Islands Dollar"  } // 1987-
+        CLC { "CLC", "Chilean Condor"       } // 1817-12/31/1959
+        CLE { "CLE", "Chilean Escudo"       } // 1/1/1960-1975
+        CLF { "CLF", "Chilean Unidades de Fomento" } // 1975-
+        CLP { "Ch$", "Chilean Peso"         } // 1975-
+        CMF { "CMF", "Cameroon CFA Franc"   } // 01/01/1960-1992
+        CNP { "CNP", "Chinese Jen Min Piao Yuan" } // 1948-04/30/1953
+        CNX { "CNX", "Chinese US Dollar Foreign Exchange Certificates" } // 1979-1998
+        CNY { "Y", "Chinese Yuan Renminbi" } // 03/01/1953-
+        COB { "COB", "Colombian Paper Peso" }
+        COF { "COF", "Congo CFA Franc"      } // 04/01/1973-1992
+        COP { "Col$","Colombian Peso"       } // 6/9/1871-
+        CRC { "C",   "Costa Rican Colon"    } // 10/26/1896-
+        CSC { "CSC", "Czechoslovak Koruna"  } // 05/1945-06/01/1953
+        CSK { "CSK", "Czechoslovak Hard Koruna" } // 06/01/1953-12/31/1992
+        CUP { "CUP", "Cuban Peso"           } // 1881-
+        CUX { "CUX", "Cuban Foreign Exchange Certificates" } // 1985-
+        CVE { "CVEsc","Cape Verde Escudo"   } // 05/22/1911-
+        CWG { "CWG", "Curacao Guilder"      } // 1848-1960
+        CYP { "\u00A3C","Cyprus Pound"      } // 9/5/1917-
+        CZK { "CZK", "Czech Republic Koruna" } // 01/01/1993-
+        DDM { "DDM", "East German Ostmark"  } // 07/20/1948-10/02/1990
+        DEM { "DEM", "Deutsche Mark"        } // 6/20/1948-2002
+        DES { "DES", "German Sperrmark"     } // 03/31/1951-12/29/1958
+        DJF { "DF",  "Djibouti Franc"       } // 06/27/1977-
+        DKK { "DKr", "Danish Krone"         } // 5/27/1873-
+        DOP { "RD$", "Dominican Peso"       } // 10/1947-
+        DZD { "DA",  "Algerian Dinar"       } // 04/01/1964-
+        DZF { "DZF", "Algerian New Franc"   } // 01/01/1960-04/01/1964
+        DZG { "DZG", "Algerian Franc Germinal" } // 08/04/1851-12/31/1959
+        ECS { "ECS", "Ecuador Sucre"        } // 4/1/1884-2000
+        ECV { "ECV", "Ecuador Unidad de Valor Constante (UVC)" } // 1980-
+        EEK { "EEK", "Estonian Kroon"       } // 06/21/1992-
+        EGP { "EGP", "Egyptian Pound"       } // 11/14/1885-
+        ERN { "ERN", "Eritrean Nakfa"       } // 1997-
+        ESP { "\u20A7","Spanish Peseta"     } // 01/01/1859-02/28/2002
+        ETB { "Br",  "Ethiopian Birr"       } // 09/15/1976-
+        ETD { "ETD", "Ethiopian Dollar"     } // 07/23/1945-09/15/1976
+        EUR { "\u20AC","Euro"               } // 01/01/1999-
+        FIM { "FIM", "Finnish Markka"       } // 1/1/1963-2002
+        FIN { "FIN", "Finnish Markka (1860-1962)" } // 4/4/1860-12/31/1962
+        FJD { "F$",  "Fiji Dollar"          } // 01/13/1969-
+        FJP { "FJP", "Fiji Pound"           } // 1917-01/13/1969
+        FKP { "FKP", "Falkland Islands Pound" } // 1901-
+        FOK { "FOK", "Faeroe Islands Kronur" } // 1940-
+        FRF { "FRF", "French Franc"         } // 01/01/1960-2002
+        FRG { "FRG", "French Franc Germinal/Franc Poincare" } // 04/07/1803-12/31/1959
+        GAF { "GAF", "Gabon CFA Franc"      } // 04/01/1973-1992
+        GBP { "\u00A3","British Pound Sterling" } // 07/27/1694-
+        GEK { "GEK", "Georgian Kupon Larit" } // 04/05/1993-09/23/1995
+        GEL { "lari","Georgian Lari"        } // 09/23/1995-
+        GHC { "GHC", "Ghana Cedi"           } // 03/09/1979-
+        GHO { "GHO", "Ghana Old Cedi"       } // 07/19/1965-02/17/1967
+        GHP { "GHP", "Ghana Pound"          } // 07/14/1958-
+        GHR { "GHR", "Ghana Revalued Cedi"  } // 02/17/1967-03/09/1979
+        GIP { "GIP", "Gibraltar Pound"      } // 1713-
+        GLK { "GLK", "Greenland Krone"      } // 1874-07/01/1967
+        GMD { "GMD", "Gambia Dalasi"        } // 07/01/1971-
+        GMP { "GMP", "Gambia Pound"         } // 05/13/1964-07/01/1971
+        GNF { "GF",  "Guinea Franc"         } // 01/06/1986-
+        GNI { "GNI", "Guinea Franc (1960-1972)" } // 03/01/1960-10/02/1972
+        GNS { "GNS", "Guinea Syli"          } // 10/02/1972-01/06/1986
+        GPF { "GPF", "Guadeloupe Franc"     } // 07/11/1851-12/31/1959
+        GQE { "GQE", "Equatorial Guinea Ekwele Guineana" } // 07/07/1975-01/01/1985
+        GQF { "GQF", "Equatorial Guinea Franco" } // 01/01/1985-1992
+        GQP { "GQP", "Equatorial Guinea Peseta Guineana" } // 10/12/1968-07/07/1975
+        GRD { "GRD", "Greek Drachma"        } // 05/01/1954-2002
+        GRN { "GRN", "Greek New Drachma"    } // 11/11/1944-05/01/1954
+        GTQ { "Q",   "Guatemala Quetzal"    } // 05/27/1925-
+        GUF { "GUF", "French Guyana Franc Guiana" } // 07/11/1851-12/31/1959
+        GWE { "GWE", "Portuguese Guinea Escudo" } // 1879-09/10/1974
+        GWM { "GWM", "Portuguese Guinea Mil Reis" } // 1879-09/10/1974
+        GWP { "GWP", "Guinea-Bissau Peso"   } // 9/10/1974-12/31/1996
+        GYD { "G$",  "Guyana Dollar"        } // 05/26/1966-
+        HKD { "HK$", "Hong Kong Dollar"     } // 2/2/1895-
+        HNL { "L",   "Hoduras Lempira"      } // 04/03/1926-
+        HRD { "HRD", "Croatian Dinar"       }
+        HRK { "HRK", "Croatian Kuna"        } // 05/30/1994-
+        HTG { "HTG", "Haitian Gourde"       } // 08/26/1872-
+        HUF { "Ft",  "Hungarian Forint"     } // 07/23/1946-
+        IBP { "IBP", "Northern Irish Pound" } // 07/27/1694-
+        IDG { "IDG", "Indonesian Nica Guilder" } // 09/1945-05/13/1950
+        IDJ { "IDJ", "Indonesian Java Rupiah" } // 10/17/1945-03/13/1950
+        IDN { "IDN", "Indonesian New Rupiah" } // 11/02/1949-12/13/1965
+        IDR { "Rp",  "Indonesian Rupiah"    } // 12/13/1965-
+        IEP { "IR\u00A3","Irish Pound"      } // 1922-2001
+        ILL { "ILL", "Israeli Sheqel"       } // 02/22/1980-09/04/1985
+        ILP { "ILP", "Israeli Pound"        } // 08/16/1948-02/22/1980
+        ILS { "ILS", "Israeli New Sheqel"   } // 09/04/1985-
+        IMP { "IMP", "Isle of Man Pound Sterling" } // 1865-
+        INR { "=0#Rs.|1#Re.|1<Rs.", "Indian Rupee" } // 08/17/1835-
+        IQD { "ID",  "Iraqi Dinar"          } // 04/19/1931-
+        IRR { "RI",  "Iranian Rial"         } // 05/13/1932-
+        ISK { "ISK", "Icelandic Krona"      } // 12/1/1918-
+        ITL { "\u20A4","Italian Lira"       } // 11/10/1859-
+        JEP { "JEP", "Jersey Pound Sterling" } // 1840-
+        JMD { "J$",  "Jamaican Dollar"      } // 09/08/1969-
+        JMP { "JMP", "Jamaican Pound"       } // 1900-09/08/1969
+        JOD { "JD",  "Jordanian Dinar"      } // 07/01/1950-
+        JPY { "\u00A5","Japanese Yen"       } // 06/1871
+        KES { "K Sh","Kenyan Shilling"      } // 09/14/1966-
+        KGS { "som", "Kyrgystan Som"        } // 05/10/1993-
+        KHO { "KHO", "Cambodian Old Riel"   } // 01/01/1955-1975
+        KHR { "CR",  "Cambodian Riel"       } // 03/20/1980-
+        KID { "KID", "Kiribati Dollar"      } // 07/12/1979-
+        KMF { "CF",  "Comoro Franc"         } // 07/06/1975-
+        KPP { "KPP", "North Korean People\u2019s Won" } // 1947-02/1959
+        KPW { "KPW", "North Korean Won"     } // 02/1959-
+        KRH { "KRH", "South Korean Hwan"    } // 02/15/1953-06/10/1962
+        KRO { "KRO", "South Korean Old Won" } // 1947-02/15/1953
+        KRW { "KRW", "South Korean Won"     } // 06/10/1962-
+        KWD { "KD",  "Kuwaiti Dinar"        } // 04/01/1961-
+        KYD { "KYD", "Cayman Islands Dollar" } // 1971-
+        KZR { "KZR", "Kazakhstan Ruble"     } // 08/1993-11/05/1993
+        KZT { "T",   "Kazakhstan Tenge"     } // 11/05/1993-
+        LAK { "LAK", "Laotian Kip"          } // 05/05/1955-
+        LBP { "LL",  "Lebanese Pound"       } // 01/01/1948-
+        LIF { "LIF", "Liechtenstein Franc"  } // 03/17/1799-
+        LKR { "SL Re","Sri Lanka Rupee"     } // 05/22/1978-
+        LNR { "LNR", "Ceylon Rupee"         } // 12/16/1949-05/22/1978
+        LRD { "LRD", "Liberian Dollar"      } // 01/01/1944-
+        LSL { "M",   "Lesotho Loti"         } // 01/22/1980-
+        LTL { "LTL", "Lithuanian Lita"      } // 06/25/1993-
+        LTT { "LTT", "Lithuanian Talonas"   } // 10/1/1992-06/25/1993
+        LUF { "LUF", "Luxembourg Franc"     } // 12/20/1848-
+        LVL { "LVL", "Latvian Lats"         } // 06/28/1993-
+        LVR { "LVR", "Latvian Ruble"        } // 05/07/1992-10/17/1993
+        LYB { "LYB", "Libyan British Military Authority Lira" } // 1941-12/24/1951
+        LYD { "LD",  "Libyan Dinar"         } // 09/01/1971-
+        LYP { "LYP", "Libyan Pound"         } // 12/24/1951-09/01/1971
+        MAD { "MAD", "Moroccan Dirham"      } // 10/17/1959-
+        MAF { "MAF", "Moroccan Franc"       } // 1881-10/17/1959
+        MCF { "MCF", "Monaco Franc Nouveau" } // 01/01/1960-
+        MCG { "MCG", "Monaco Franc Germinal" } // 03/07/1837-12/31/1959
+        MDC { "MDC", "Moldovan Leu Cupon"   } // 06/1992-11/29/1993
+        MDL { "MDL", "Moldovan Leu"         } // 11/29/1993-
+        MDR { "MDR", "Moldovan Ruble Cupon" } // 05/23/1991-06/1992
+        MGA { "MGA", "Madagascar Ariary"    } // 11/01/1983-
+        MGF { "MGF", "Madagascar Franc"     } // 07/01/1963-
+        MHD { "MHD", "Marshall Islands Dollar" } // 1979-
+        MKD { "MDen","Macedonian Denar"     } // 05/20/1993-
+        MKN { "MKN", "Macedonian Denar (1992-1993)" } // 04/26/1992-05/20/1993
+        MLF { "MLF", "Mali Franc"           } // 07/02/1962-1984
+        MMK { "MMK", "Myanmar Kyat"         } // 06/18/1989-
+        MMX { "MMX", "Myanmar Dollar Foreign Exchange Certificates" }
+        MNT { "Tug", "Mongolian Tugrik"     } // 03/13/1921-
+        MOP { "MOP", "Macao Pataca"         } // 1895-
+        MQF { "MQF", "Martinique Franc"     } // 07/11/1851-1959
+        MRO { "UM",  "Mauritania Ouguiya"   } // 06/29/1973-
+        MTL { "Lm",  "Maltese Lira"         }
+        MTP { "MTP", "Maltese Pound"        } // 08/13/1914-
+        MUR { "MUR", "Mauritius Rupee"      } // 1848-03/12/1968
+        MVP { "MVP", "Maldive Islands Rupee" } // 1960-07/01/1981
+        MVR { "MVR", "Maldive Islands Rufiyaa" } // 07/01/1981-
+        MWK { "MK",  "Malawi Kwacha"        } // 02/15/1971-
+        MWP { "MWP", "Malawi Pound"         } // 07/06/1964-02/15/1971
+        MXN { "MEX$","Mexican Peso"         } // 01/01/1993-
+        MXP { "MXP", "Mexican Silver Peso (1861-1992)" } // 1822-12/31/1992
+        MXV { "MXV", "Mexican Unidad de Inversion (UDI)" } // 1975-
+        MYR { "RM",  "Malaysian Ringgit"    } // 9/16/1963-
+        MZE { "MZE", "Mozambique Escudo"    } // 09/01/1922-06/16/1980
+        MZM { "Mt",  "Mozambique Metical"   } // 06/16/1980-
+        NAD { "N$",  "Namibia Dollar"       } // 1993-
+        NCF { "NCF", "New Caledonia Franc Germinal" } // 12/26/1945-1992
+        NGN { "NGN", "Nigerian Naira"       } // 01/01/1973-
+        NGP { "NGP", "Nigerian Pound"       } // 07/01/1959-01/01/1973
+        NHF { "NHF", "New Hebrides CFP Franc" } // 08/31/1941-12/31/1959
+        NIC { "NIC", "Nicaraguan Cordoba"   } // 02/15/1988-04/30/1991
+        NIG { "NIG", "Nicaraguan Gold Cordoba" } // 04/03/1926-02/15/1988
+        NIO { "NIO", "Nicaraguan Cordoba Oro" } // 04/30/1991-
+        NLG { "NLG", "Netherlands Guilder"  } // 1795-
+        NOK { "NKr", "Norwegian Krone"      } // 1905-
+        NPR { "Nrs", "Nepalese Rupee"       } // 1945-
+        NZD { "$NZ", "New Zealand Dollar"   } // 07/10/1967-
+        NZP { "NZP", "New Zealand Pound"    } // 1907-07/10/1967
+        OMR { "RO",  "Oman Rial"            } // 11/11/1972-
+        OMS { "OMS", "Oman Rial Saidi"      } // 07/25/1970-11/11/1972
+        PAB { "PAB", "Panamanian Balboa"    } // 1904-
+        PDK { "PDK", "Transdniestria Ruble Kupon" } // 12/01/1994-12/31/2000
+        PDN { "PDN", "Transdniestria New Ruble" } // 01/01/2001-
+        PDR { "PDR", "Transdniestria Ruble" } // 01/24/1994-12/01/1994
+        PEI { "PEI", "Peruvian Inti"        } // 02/01/1985-07/01/1991
+        PEN { "PEN", "Peruvian Sol Nuevo"   } // 07/01/1991-
+        PES { "PES", "Peruvian Sol"         } // 02/14/1863-02/01/1985
+        PGK { "PGK", "Papua New Guinea Kina" } // 09/16/1975-
+        PHP { "PHP", "Philippine Peso"      } // 03/02/1903-
+        PKR { "Pra", "Pakistan Rupee"       } // 04/01/1948-
+        PLN { "Zl",  "Polish Zloty"         } // 01/01/1995-
+        PLX { "PLX", "Polish US Dollar Foreign Exchange Certificates" } // 1960-
+        PLZ { "PLZ", "Polish Zloty (1950-1995)" } // 10/28/1950-12/31/1994
+        PSP { "PSP", "Palestine Pound"      } // 11/01/1927-07/01/1950
+        PTC { "PTC", "Portuguese Conto"     } // 06/09/1931-2002
+        PTE { "PTE", "Portuguese Escudo"    } // 05/22/1911-2002
+        PYG { "PYG", "Paraguay Guarani"     } // 11/1943-
+        QAR { "QR",  "Qatari Rial"          } // 05/19/1973-
+        REF { "REF", "Reunion Franc"        } // 07/11/1851-12/31/1959
+        ROL { "leu", "Romanian Leu"         } // 01/28/1952-
+        RON { "RON", "Romanian New Leu"     } // 08/15/1947-01/28/1952
+        RUB { "RUB", "Russian Ruble"        } // 01/01/1999-
+        RUR { "RUR", "Russian Ruble (1991-1998)" } // 12/25/1991-12/31/1998
+        RWF { "RWF", "Rwandan Franc"        } // 05/19/1964-
+        SAR { "SRl", "Saudi Riyal"          } // 10/22/1952-
+        SAS { "SAS", "Saudi Sovereign Riyal" } // 01/01/1936-10/22/1952
+        SBD { "SI$", "Solomon Islands Dollar" } // 10/24/1977-
+        SCR { "SR",  "Seychelles Rupee"     } // 1900-
+        SDD { "SDD", "Sudanese Dinar"       } // 1992-
+        SDP { "SDP", "Sudanese Pound"       } // 04/08/1957-06/1998
+        SEK { "SKr", "Swedish Krona"        } // 5/27/1873-
+        SGD { "S$",  "Singapore Dollar"     } // 8/9/1965-
+        SHP { "SHP", "Saint Helena Pound"   } // 1917-
+        SIB { "SIB", "Slovenia Tolar Bons"  } // 10/08/1991-10/07/1992
+        SIT { "SIT", "Slovenia Tolar"       } // 10/07/1992-
+        SKK { "Sk",  "Slovak Koruna"        } // 01/31/1992-
+        SLL { "SLL", "Sierra Leone Leone"   } // 08/04/1964-
+        SML { "SML", "San Marino Lira"      } // 12/23/1865-
+        SOS { "So. Sh.","Somali Shilling"   } // 07/01/1960-05/24/1991
+        SQS { "SQS", "Somaliland Shilling"  } // 05/24/1991-
+        SRG { "Sf",  "Suriname Guilder"     } // 12/25/1975-
+        SSP { "SSP", "Scotland Pound"       } // 1707-
+        STD { "Db",  "Sao Tome and Principe Dobra" }
+        STE { "STE", "Sao Tome and Principe Escudo" } // 05/22/1911-07/05/1975
+        SUN { "SUN", "Soviet New Ruble"     } // 12/16/1947-12/31/1960
+        SUR { "SUR", "Soviet Rouble"        } // 01/01/1961-12/25/1991
+        SVC { "SVC", "El Salvador Colon"    } // 11/11/1919-
+        SYP { "LS",  "Syrian Pound"         } // 01/01/1948-
+        SZL { "E",   "Swaziland Lilangeni"  } // 09/06/1974-
+        TCC { "TCC", "Turks and Caicos Crown" } // 1971-
+        TDF { "TDF", "Chad CFA Franc"       } // 04/01/1973-1992
+        THB { "THB", "Thai Baht"            } // 04/15/1928-
+        TJR { "TJR", "Tajikistan Ruble"     } // 05/1995-12/31/2000
+        TJS { "TJS", "Tajikistan Somoni"    } // 01/01/2001-
+        TMM { "TMM", "Turkmenistan Manat"   } // 11/01/1993-
+        TND { "TND", "Tunisian Dinar"       } // 11/01/1958-
+        TOP { "T$",  "Tonga Pa\u02bbanga"   } // 02/14/1966-
+        TOS { "TOS", "Tonga Pound Sterling" } // 1921-02/14/1966
+        TPE { "TPE", "Timor Escudo"         } // 01/02/1959-12/07/1975
+        TPP { "TPP", "Timor Pataca"         } // 1895-12/31/1958
+        TRL { "TL",  "Turkish Lira"         } // 11/01/1922-
+        TTD { "TT$", "Trinidad and Tobago Dollar" } // 08/31/1962-
+        TTO { "TTO", "Trinidad and Tobago Old Dollar" } // 01/01/1899-08/01/1951
+        TVD { "TVD", "Tuvalu Dollar"        } // 1979-
+        TWD { "NT$", "Taiwan New Dollar"    } // 6/15/1949-
+        TZS { "T Sh","Tanzanian Shilling"   } // 06/14/1966-
+        UAH { "UAH", "Ukrainian Hryvnia"    } // 09/02/1996-
+        UAK { "UAK", "Ukrainian Karbovanetz" } // 11/13/1992-10/17/1993
+        UGS { "UGS", "Ugandan Shilling (1966-1987)" } // 08/15/1966-05/15/1987
+        UGX { "U Sh","Ugandan Shilling"     } // 05/15/1987-
+        USD { "US$", "US Dollar"            } // 04/04/1792-
+        USN { "USN", "US Dollar (Next day)" }
+        USS { "USS", "US Dollar (Same day)" }
+        UYF { "UYF", "Uruguay Peso Fuerte"  } // 06/23/1862-07/01/1975
+        UYP { "UYP", "Uruguay Peso (1975-1993)" } // 07/01/1975-03/01/1993
+        UYU { "Ur$", "Uruguay Peso Uruguayo" } // 03/01/1993-
+        UZC { "UZC", "Uzbekistan Coupon Som" } // 1993-07/1994
+        UZS { "UZS", "Uzbekistan Sum"       } // 07/1994-
+        VAL { "VAL", "Vatican City Lira"    } // 1929-2002
+        VDD { "VDD", "North Vietnam Piastre Dong Viet" } // 1953-02/28/1958
+        VDN { "VDN", "North Vietnam New Dong" } // 02/28/1958-05/03/1978
+        VDP { "VDP", "North Vietnam Viet Minh Piastre Dong Viet" } // 11/3/1946-1953
+        VEB { "Be",  "Venezuelan Bolivar"    } // 05/11/1871-
+        VGD { "VGD", "British Virgin Islands Dollar" } // 1973-
+        VND { "VND", "Vietnamese Dong"  } // 09/14/1985-
+        VNN { "VNN", "Vietnamese New Dong" } // 05/03/1978-09/14/1985
+        VNR { "VNR", "Vietnamese Republic Dong" } // 12/29/1954-9/22/1975
+        VNS { "VNS", "Vietnamese National Dong" } // 09/22/1975-05/03/1978
+        VUV { "VT",  "Vanuatu Vatu"         } // 01/01/1981-
+        WSP { "WSP", "Western Samoa Pound"  } // 12/17/1920-07/10/1962
+        WST { "WST", "Western Samoa Tala"   } // 07/10/1967-
+        XAD { "XAD", "Asian Dinar Unit of Account" }
+        XAF { "XAF", "CFA Franc BEAC"       } // 1974-
+        XAM { "XAM", "Asian Monetary Unit"  } // 12/1974-
+        XAU { "XAU", "Gold"                 }
+        XBA { "XBA", "European Composite Unit" }
+        XBB { "XBB", "European Monetary Unit" } // 12/1970-04/1972
+        XBC { "XBC", "European Unit of Account (XBC)" } // 04/1972-12/31/1978
+        XBD { "XBD", "European Unit of Account (XBD)" } // 1961-12/31/1978
+        XCD { "EC$", "East Caribbean Dollar" } // 10/06/1965-
+        XCF { "XCF", "CFA Nouveau Franc"    } // 01/01/1960-
+        XDR { "XDR", "Special Drawing Rights" } // 1970-
+        XEF { "XEF", "CFA Franc BCEAEC"     } // 12/04/1958-04/01/1973
+        XEU { "XEU", "European Currency Unit" } // 1975-1998
+        XFO { "XFO", "French Gold Franc"    }
+        XFU { "XFU", "French UIC-Franc"     }
+        XID { "XID", "Islamic Dinar"        }
+        XMF { "XMF", "French Metropolitan Nouveau Franc" } // 1960-
+        XNF { "XNF", "French Antilles CFA Franc" } // 01/01/1960-1975
+        XOF { "XOF", "CFA Franc BCEAO"      } // 12/04/1958-
+        XPF { "CFPF","CFP Franc"            } // 12/26/1945-
+        //XPS { "XPS", "Pound Sterling"       } // 07/27/1694-
+        //XSS { "XSS", "Shilling Sterling"    } // 07/27/1694-
+        XTR { "XTR", "COMECON Transferable Ruble" } // 1960-1992
+        YDD { "YDD", "Yemeni Dinar"         } // 4/1/1965-05/22/1990
+        YEI { "YEI", "Yemeni Imadi Riyal"   } // 1904-02/1964
+        YER { "YRl", "Yemeni Rial"          } // 02/1964-
+        YUD { "YUD", "Yugoslavian Hard Dinar"  } // 01/01/1966-1990
+        YUF { "YUF", "Yugoslavian Federation Dinar" } // 12/04/1943-12/31/1965
+        YUG { "YUG", "Yugoslavian 1994 Dinar" } // 01/1994-02/1994
+        YUM { "YUM", "Yugoslavian Noviy Dinar" } // 02/1994-
+        YUN { "YUN", "Yugoslavian Convertible Dinar" } // 1990-07/1992
+        YUO { "YUO", "Yugoslavian October Dinar" } // 10/1993-12/1993
+        YUR { "YUR", "Yugoslavian Reformed Dinar" } // 07/1992-10/1993
+        ZAL { "ZAL", "South African Rand (financial)" }
+        ZAP { "ZAP", "South African Pound"  } // 1920-02/14/1961
+        ZAR { "R",   "South African Rand"   } // 02/14/1961-
+        ZMK { "ZMK", "Zambian Kwacha"       } // 01/16/1968-
+        ZMP { "ZMP", "Zambian Pound"        } // 08/07/1964-01/16/1968
+        ZRN { "ZRN", "Zairean New Zaire"    } // 11/01/1993-07/1998
+        ZRZ { "ZRZ", "Zairean Zaire"        } // 10/27/1971-11/01/1993
+        ZWD { "Z$",  "Zimbabwe Dollar"      } // 04/18/1980-
+    }
+    Languages {
+        root{ "Root"}    // The only exception to ISO-639
+
+        aa  { "Afar" }
+        ab  { "Abkhazian" }
+        ace { "Achinese" }
+        ach { "Acoli" }
+        ada { "Adangme" }
+        ady { "Adyghe" }
+        ae  { "Avestan" }
+        af  { "Afrikaans" }
+        afa { "Afro-Asiatic (Other)" }
+        afh { "Afrihili" }
+        ak  { "Akan" }
+        akk { "Akkadian" }
+        ale { "Aleut" }
+        alg { "Algonquian Languages" }
+        am  { "Amharic" }
+        an  { "Aragonese" }
+        ang { "English, Old (ca.450-1100)" }
+        apa { "Apache Languages"}
+        ar  { "Arabic" }
+        arc { "Aramaic" }
+        arn { "Araucanian" }
+        arp { "Arapaho" }
+        art { "Artificial (Other)" }
+        arw { "Arawak" }
+        as  { "Assamese" }
+        ast { "Asturian" }
+        ath { "Athapascan Languages" }
+        aus { "Australian Languages" }
+        av  { "Avaric" }
+        awa { "Awadhi" }
+        ay  { "Aymara" }
+        az  { "Azerbaijani" }
+        ba  { "Bashkir" }
+        bad { "Banda" }
+        bai { "Bamileke Languages" }
+        bal { "Baluchi" }
+        bam { "Bambara" }
+        ban { "Balinese" }
+        bas { "Basa" }
+        bat { "Baltic (Other)" }
+        be  { "Belarusian" }
+        bej { "Beja" }
+        bem { "Bemba" }
+        ber { "Berber" }
+        bg  { "Bulgarian" }
+        bh  { "Bihari" }
+        bho { "Bhojpuri" }
+        bi  { "Bislama" }
+        bik { "Bikol" }
+        bin { "Bini" }
+        bla { "Siksika" }   // Blackfoot
+        bm  { "Bambara" }
+        bn  { "Bengali" }
+        bnt { "Bantu" }
+        bo  { "Tibetan" }
+        br  { "Breton" }
+        bra { "Braj" }
+        bs  { "Bosnian"}
+        btk { "Batak" }
+        bua { "Buriat" }
+        bug { "Buginese" }
+        byn { "Blin" }
+        ca  { "Catalan" }
+        cad { "Caddo" }
+        cai { "Central American Indian (Other)" }
+        car { "Carib" }
+        cau { "Caucasian (Other)" }
+        ce  { "Chechen" }
+        ceb { "Cebuano" }
+        cel { "Celtic (Other)" }
+        ch  { "Chamorro" }
+        chb { "Chibcha" }
+        chg { "Chagatai" }
+        chk { "Chuukese" }
+        chm { "Mari" }
+        chn { "Chinook Jargon" }
+        cho { "Choctaw" }
+        chp { "Chipewyan" }
+        chr { "Cherokee" }
+        chy { "Cheyenne" }
+        cmc { "Chamic Languages" }
+        co  { "Corsican" }
+        cop { "Coptic" }
+        cpe { "Creoles and Pidgins, English-based (Other)" }
+        cpf { "Creoles and Pidgins, French-based (Other)" }
+        cpp { "Creoles and pidgins, Portuguese-based (Other)" }
+        cr  { "Cree" }
+        crh { "Crimean Turkish; Crimean Tatar" }
+        crp { "Creoles and Pidgins (Other)" }
+        cs  { "Czech" }
+        csb { "Kashubian" }
+        cu  { "Church Slavic" }
+        cus { "Cushitic (Other)" }
+        cv  { "Chuvash" }
+        cy  { "Welsh" }
+        da  { "Danish" }
+        dak { "Dakota" }
+        dar { "Dargwa" }
+        day { "Dayak" }
+        de  { "German" }
+        del { "Delaware" }
+        den { "Slave" }
+        dgr { "Dogrib" }
+        din { "Dinka" }
+        //div { "Divehi" } // Use dv instead
+        doi { "Dogri" }
+        dra { "Dravidian (Other)" }
+        dsb { "Lower Sorbian" }
+        dua { "Duala" }
+        dum { "Dutch, Middle (ca. 1050-1350)" }
+        dv  { "Divehi" }
+        dyu { "Dyula" }
+        dz  { "Dzongkha" }
+        ee  { "Ewe" }
+        efi { "Efik" }
+        egy { "Egyptian (Ancient)" }
+        eka { "Ekajuk" }
+        el  { "Greek" } //  Modern (1453-)
+        elx { "Elamite" }
+        en  { "English" }
+        enm { "English, Middle (1100-1500)" }
+        eo  { "Esperanto" }
+        es  { "Spanish" }
+        et  { "Estonian" }
+        eu  { "Basque" }
+        ewo { "Ewondo" }
+        fa  { "Persian" }
+        fan { "Fang" }
+        fat { "Fanti" }
+        ff  { "Fulah" }
+        fi  { "Finnish" }
+        fiu { "Finno - Ugrian (Other)" }
+        fj  { "Fijian" }
+        fo  { "Faroese" }
+        fon { "Fon" }
+        fr  { "French" }
+        frm { "French, Middle (ca.1400-1600)" }
+        fro { "French, Old (842-ca.1400)" }
+        fur { "Friulian" }
+        fy  { "Frisian" }
+        ga  { "Irish" }
+        gaa { "Ga" }
+        gay { "Gayo" }
+        gba { "Gbaya" }
+        gd  { "Scottish Gaelic" }
+        gem { "Germanic (Other)" }
+        gez { "Geez" }
+        gil { "Gilbertese" }
+        gl  { "Gallegan" }
+        gmh { "German, Middle High (ca.1050-1500)" }
+        gn  { "Guarani" }
+        goh { "German, Old High (ca.750-1050)" }
+        gon { "Gondi" }
+        gor { "Gorontalo" }
+        got { "Gothic" }
+        grb { "Gerbo" }
+        grc { "Greek, Ancient (to 1453)" }
+        gu  { "Gujarati" }
+        gv  { "Manx" }
+        gwi { "Gwich\u02bbin" }
+        ha  { "Hausa" }
+        hai { "Haida" }
+        haw { "Hawaiian" }
+        he  { "Hebrew" }
+        hi  { "Hindi" }
+        hil { "Hiligaynon" }
+        him { "Himachali" }
+        hit { "Hittite" }
+        hmn { "Hmong" }
+        ho  { "Hiri Motu" }
+        hr  { "Croatian" }
+        hsb { "Upper Sorbian" }
+        ht  { "Haitian" }
+        hu  { "Hungarian" }
+        hup { "Hupa" }
+        hy  { "Armenian" }
+        hz  { "Herero" }
+        ia  { "Interlingua" }
+        iba { "Iban" }
+        id  { "Indonesian" }
+        ie  { "Interlingue" }
+        ig  { "Igbo" }
+        ii  { "Sichuan Yi" }
+        ijo { "Ijo" }
+        ik  { "Inupiaq" }
+        ilo { "Iloko" }
+        //in  { "Indonesian" }  // Use id instead
+        inc { "Indic (Other)" }
+        ine { "Indo-European (Other)" }
+        inh { "Ingush" }
+        io  { "Ido" }
+        ira { "Iranian" }
+        iro { "Iroquoian languages" }
+        is  { "Icelandic" }
+        it  { "Italian" }
+        iu  { "Inuktitut" }
+        //iw  { "Hebrew" }  // Use he instead
+        ja  { "Japanese" }
+        jbo { "Lojban" }
+        //ji  { "Yiddish" } // Use yi instead
+        jpr { "Judeo-Persian" }
+        jrb { "Judeo-Arabic" }
+        jv  { "Javanese" }
+        //jw  { "Javanese" } // Use jv instead
+        ka  { "Georgian" }
+        kaa { "Kara-Kalpak" }
+        kab { "Kabyle" }
+        kac { "Kachin" }
+        kam { "Kamba" }
+        kar { "Karen" }
+        kaw { "Kawi" }
+        kbd { "Kabardian" }
+        kg  { "Kongo" }
+        kha { "Khasi" }
+        khi { "Khoisan (Other)" }
+        kho { "Khotanese" }
+        ki  { "Kikuyu" }
+        kj  { "Kuanyama" }
+        kk  { "Kazakh" }
+        kl  { "Kalaallisut" }
+        km  { "Khmer" }
+        kmb { "Kimbundu" }
+        kn  { "Kannada" }
+        ko  { "Korean" }
+        kok { "Konkani" }
+        kos { "Kosraean" }
+        kpe { "Kpelle" }
+        kr  { "Kanuri" }
+        krc { "Karachay-Balkar" }
+        kro { "Kru" }
+        kru { "Kurukh" }
+        ks  { "Kashmiri" }
+        ku  { "Kurdish" }
+        kum { "Kumyk" }
+        kut { "Kutenai" }
+        kv  { "Komi" }
+        kw  { "Cornish" }
+        ky  { "Kirghiz" }
+        la  { "Latin" }
+        lad { "Ladino" }
+        lah { "Lahnda" }
+        lam { "Lamba" }
+        lb  { "Luxembourgish" }
+        lez { "Lezghian" }
+        lg  { "Ganda" }
+        li  { "Limburgish" }
+        ln  { "Lingala" }
+        lo  { "Lao" }
+        lol { "Mongo" }
+        loz { "Lozi" }
+        lt  { "Lithuanian" }
+        lu  { "Luba-Katanga" }
+        lua { "Luba-Lulua" }
+        lui { "Luiseno" }
+        lun { "Lunda" }
+        luo { "Luo" }
+        lus { "Lushai" }
+        lv  { "Latvian" }
+        mad { "Madurese" }
+        mag { "Magahi" }
+        mai { "Maithili" }
+        mak { "Makasar" }
+        man { "Mandingo" }
+        map { "Austronesian" }
+        mas { "Masai" }
+        mdf { "Moksha" }
+        mdr { "Mandar" }
+        men { "Mende" }
+        mg  { "Malagasy" }
+        mga { "Irish, Middle (900-1200)" }
+        mh  { "Marshallese"}
+        mi  { "Maori" }
+        mic { "Micmac" }
+        min { "Minangkabau" }
+        mis { "Miscellaneous Languages" }
+        mk  { "Macedonian" }
+        mkh { "Mon-Khmer (Other)" }
+        ml  { "Malayalam" }
+        mn  { "Mongolian" }
+        mnc { "Manchu" }
+        mni { "Manipuri" }
+        mno { "Manobo Languages" }
+        mo  { "Moldavian" }
+        moh { "Mohawk" }
+        mos { "Mossi" }
+        mr  { "Marathi" }
+        ms  { "Malay" }
+        mt  { "Maltese" }
+        mul { "Multiple Languages" }
+        mun { "Munda Languages" }
+        mus { "Creek" }
+        mwr { "Marwari" }
+        my  { "Burmese" }
+        myn { "Mayan" }
+        myv { "Erzya" }
+        na  { "Nauru" }
+        nah { "Nahuatl" }
+        nai { "North American Indian (Other)" }
+        nap { "Neapolitan" }
+        nb  { "Norwegian Bokm\u00e5l" }
+        nd  { "Ndebele, North" }
+        nds { "Low German; Low Saxon" }
+        ne  { "Nepali" }
+        new { "Newari" }
+        ng  { "Ndonga" }
+        nia { "Nias" }
+        nic { "Niger - Kordofanian (Other)" }
+        niu { "Niuean" }
+        nl  { "Dutch" }
+        nn  { "Norwegian Nynorsk" }
+        no  { "Norwegian" }
+        nog { "Nogai" }
+        non { "Norse, Old" }
+        nr  { "Ndebele, South" }
+        nso { "Sotho, Northern" }
+        nub { "Nubian Languages" }
+        nv  { "Navajo"}
+        ny  { "Nyanja; Chichewa; Chewa" }
+        nym { "Nyamwezi" }
+        nyn { "Nyankole" }
+        nyo { "Nyoro" }
+        nzi { "Nzima" }
+        oc  { "Occitan (post 1500); Proven\u00E7al"}
+        oj  { "Ojibwa" }
+        om  { "Oromo" }
+        or  { "Oriya" }
+        os  { "Ossetic" }
+        osa { "Osage" }
+        ota { "Turkish, Ottoman (1500-1928)" }
+        oto { "Otomian Languages" }
+        pa  { "Punjabi" }
+        paa { "Papuan (Other)" }
+        pag { "Pangasinan" }
+        pal { "Pahlavi" }
+        pam { "Pampanga" }
+        pap { "Papiamento" }
+        pau { "Palauan" }
+        peo { "Persian Old (ca.600-400 B.C.)" }
+        phi { "Philippine (Other)" }
+        phn { "Phoenician" }
+        pi  { "Pali" }
+        pl  { "Polish" }
+        pon { "Pohnpeian" }
+        pra { "Prakrit Languages" }
+        pro { "Proven\u00E7al, Old (to 1500)" }
+        ps  { "Pashto (Pushto)" }
+        pt  { "Portuguese" }
+        qu  { "Quechua" }
+        // The range qaa-qtz is reserved for local use.
+        raj { "Rajasthani" }
+        rap { "Rapanui" }
+        rar { "Rarotongan" }
+        rm  { "Rhaeto-Romance" }
+        rn  { "Rundi" }
+        ro  { "Romanian" }
+        roa { "Romance (Other)" }
+        rom { "Romany" }
+        ru  { "Russian" }
+        rw  { "Kinyarwanda" }
+        sa  { "Sanskrit" }
+        sad { "Sandawe" }
+        sah { "Yakut" }
+        sai { "South American Indian (Other)" }
+        sal { "Salishan languages" }
+        sam { "Samaritan Aramaic" }
+        sas { "Sasak" }
+        sat { "Santali" }
+        sc  { "Sardinian" }
+        sco { "Scots" }
+        sd  { "Sindhi" }
+        se  { "Northern Sami" }
+        sel { "Selkup" }
+        sem { "Semitic (Other)" }
+        sg  { "Sango" }
+        sga { "Irish, Old (to 900)" }
+        sgn { "Sign Languages" }
+        sh  { "Serbo-Croatian" }
+        shn { "Shan" }
+        si  { "Sinhalese" }
+        sid { "Sidamo" }
+        sio { "Siouan Languages" }
+        sit { "Sino-Tibetan (Other)" }
+        sk  { "Slovak" }
+        sl  { "Slovenian" }
+        sla { "Slavic (Other)" }
+        sm  { "Samoan" }
+        sma { "Southern Sami" }
+        smi { "Sami languages (Other)" }
+        smj { "Lule Sami" }
+        smn { "Inari Sami" }
+        sms { "Skolt Sami" }
+        sn  { "Shona" }
+        snk { "Soninke" }
+        so  { "Somali" }
+        sog { "Sogdien" }
+        son { "Songhai" }
+        sq  { "Albanian" }
+        sr  { "Serbian" }
+        srr { "Serer" }
+        ss  { "Swati" }
+        ssa { "Nilo-Saharam (Other)" }
+        st  { "Sotho, Southern" }
+        su  { "Sundanese" }
+        suk { "Sukuma" }
+        sus { "Susu" }
+        sux { "Sumerian"}
+        sv  { "Swedish" }
+        sw  { "Swahili" }
+        syr { "Syriac" }
+        ta  { "Tamil" }
+        tai { "Tai (Other)" }
+        te  { "Telugu" }
+        tem { "Timne" }
+        ter { "Tereno" }
+        tet { "Tetum" }
+        tg  { "Tajik" }
+        th  { "Thai" }
+        ti  { "Tigrinya" }
+        tig { "Tigre" }
+        tiv { "Tiv" }
+        tk  { "Turkmen" }
+        tkl { "Tokelau" }
+        tl  { "Tagalog" }
+        tli { "Tlingit" }
+        tmh { "Tamashek" }
+        tn  { "Tswana" }
+        to  { "Tonga (Tonga Islands)" }
+        tog { "Tonga (Nyasa)" }
+        tpi { "Tok Pisin" }
+        tr  { "Turkish" }
+        ts  { "Tsonga" }
+        tsi { "Tsimshian" }
+        tt  { "Tatar" }
+        tum { "Tumbuka" }
+        tup { "Tupi languages" }
+        tut { "Altaic (Other)" }
+        tvl { "Tuvalu" }
+        tw  { "Twi" }
+        ty  { "Tahitian" }
+        tyv { "Tuvinian" }
+        udm { "Udmurt" }
+        ug  { "Uighur" }
+        uga { "Ugaritic" }
+        uk  { "Ukrainian" }
+        umb { "Umbundu" }
+        und { "Undetermined" }
+        ur  { "Urdu" }
+        uz  { "Uzbek" }
+        vai { "Vai" }
+        ve  { "Venda" }
+        vi  { "Vietnamese" }
+        vo  { "Volap\u00FCk" }   // Yes the iso-639 standard uses the umlaut in the English name
+        vot { "Votic" }
+        wa  { "Walloon" }
+        wak { "Wakashan Languages" }
+        wal { "Walamo" }
+        war { "Waray" }
+        was { "Washo" }
+        wen { "Sorbian Languages" }
+        wo  { "Wolof" }
+        xal { "Kalmyk" }
+        xh  { "Xhosa" }
+        yao { "Yao" }
+        yap { "Yapese" }
+        yi  { "Yiddish" }
+        yo  { "Yoruba" }
+        ypk { "Yupik Languages" }
+        za  { "Zhuang" }
+        zap { "Zapotec" }
+        zen { "Zenaga" }
+        zh  { "Chinese" }
+        znd { "Zande" }
+        zu  { "Zulu" }
+        zun { "Zuni" }
+    }
+    ExemplarCharacters{ "[a-z]" }
+    LocaleScript:array{ "Latn" }
+    NumberPatterns { 
+        "#,##0.###;-#,##0.###",
+        "\u00A4#,##0.00;-\u00A4#,##0.00",
+        "#,##0%",
+        "#E0",
+    }
+    // TODO: This list may be incomplete. Finish it once a formal list appears.
+    // http://www.unicode.org/iso15924/
+    Scripts {
+        Arab { "Arabic" }
+        Armn { "Armenian" }
+        Beng { "Bengali" }
+        Bopo { "Bopomofo" }
+        Brai { "Braille" }
+        Buhd { "Buhid" }
+        Cans { "Unified Canadian Aboriginal Symbols" }
+        Cher { "Cherokee" }
+        Cprt { "Cypriot" }
+        Cyrl { "Cyrillic" }
+        Deva { "Devanagari" }
+        Dsrt { "Deseret" }
+        Ethi { "Ethiopic" }
+        Geor { "Georgian" }
+        Goth { "Gothic" }
+        Grek { "Greek" }
+        Gujr { "Gujarati" }
+        Guru { "Gurmukhi" }
+        Hang { "Hangul" }
+        Hano { "Hanunoo" }
+        Hani { "Han" }
+        Hans { "Simplified Han" }
+        Hant { "Traditional Han" }
+        Hebr { "Hebrew" }
+        Hira { "Hiragana" }
+        Hrkt { "Katakana or Hiragana" }
+        Ital { "Old Italic" }
+        Kana { "Katakana" }
+        Khmr { "Khmer" }
+        Knda { "Kannada" }
+        Laoo { "Lao" }
+        Latn { "Latin" }
+        Limb { "Limbu" }
+        Linb { "Linear B" }
+        Mlym { "Malayalam" }
+        Mong { "Mongolian" }
+        Mymr { "Myanmar" }
+        Ogam { "Ogham" }
+        Orya { "Oriya" }
+        Osma { "Osmanya" }
+        Qaac { "Coptic" } // Coptic is not a formal part of ISO-15924 yet
+        Qaai { "Inherited" } // PUA
+        Runr { "Runic" }
+        Shaw { "Shavian" }
+        Sinh { "Sinhala" }
+        Syrc { "Syriac" }
+        Tagb { "Tagbanwa" }
+        Tale { "Tai Le" }
+        Taml { "Tamil" }
+        Telu { "Telugu" }
+        Tglg { "Tagalog" }
+        Thaa { "Thaana" }
+        //Thai { "Thai" } // Just happens to be a duplicate
+        Tibt { "Tibetan" }
+        Ugar { "Ugaritic" }
+        Yiii { "Yi" }
+        Zyyy { "Common" } // This may need to become "undetermined script"
+    }
+
+    //------------------------------------------------------------
+    // Rule Based Number Format Support
+    //------------------------------------------------------------
+
+     // * Spellout rules for U.S. English.  This rule set has two variants:
+     // * %simplified is a set of rules showing the simple method of spelling
+     // * out numbers in English: 289 is formatted as "two hundred eighty-nine".
+     // * %default uses a more complicated algorithm to format
+     // * numbers in a more natural way: 289 is formatted as "two hundred AND
+     // * eighty-nine" and commas are inserted between the thousands groups for
+     // * values above 100,000.
+
+     SpelloutRules {
+        // This rule set shows the normal simple formatting rules for English
+        "%simplified:\n"
+               // negative number rule.  This rule is used to format negative
+               // numbers.  The result of formatting the number's absolute
+               // value is placed where the >> is.
+            "-x: minus >>;\n"
+               // faction rule.  This rule is used for formatting numbers
+               // with fractional parts.  The result of formatting the
+               // number's integral part is substituted for the <<, and
+               // the result of formatting the number's fractional part
+               // (one digit at a time, e.g., 0.123 is "zero point one two
+               // three") replaces the >>.
+            "x.x: << point >>;\n"
+               // the rules for the values from 0 to 19 are simply the
+               // words for those numbers
+            "zero; one; two; three; four; five; six; seven; eight; nine;\n"
+            "ten; eleven; twelve; thirteen; fourteen; fifteen; sixteen;\n"
+                "seventeen; eighteen; nineteen;\n"
+               // beginning at 20, we use the >> to mark the position where
+               // the result of formatting the number's ones digit.  Thus,
+               // we only need a new rule at every multiple of 10.  Text in
+               // backets is omitted if the value being formatted is an
+               // even multiple of 10.
+            "20: twenty[->>];\n"
+            "30: thirty[->>];\n"
+            "40: forty[->>];\n"
+            "50: fifty[->>];\n"
+            "60: sixty[->>];\n"
+            "70: seventy[->>];\n"
+            "80: eighty[->>];\n"
+            "90: ninety[->>];\n"
+               // beginning at 100, we can use << to mark the position where
+               // the result of formatting the multiple of 100 is to be
+               // inserted.  Notice also that the meaning of >> has shifted:
+               // here, it refers to both the ones place and the tens place.
+               // The meanings of the << and >> tokens depend on the base value
+               // of the rule.  A rule's divisor is (usually) the highest
+               // power of 10 that is less than or equal to the rule's base
+               // value.  The value being formatted is divided by the rule's
+               // divisor, and the integral quotient is used to get the text
+               // for <<, while the remainder is used to produce the text
+               // for >>.  Again, text in brackets is omitted if the value
+               // being formatted is an even multiple of the rule's divisor
+               // (in this case, an even multiple of 100)
+            "100: << hundred[ >>];\n"
+               // The rules for the higher numbers work the same way as the
+               // rule for 100: Again, the << and >> tokens depend on the
+               // rule's divisor, which for all these rules is also the rule's
+               // base value.  To group by thousand, we simply don't have any
+               // rules between 1,000 and 1,000,000.
+            "1000: << thousand[ >>];\n"
+            "1,000,000: << million[ >>];\n"
+            "1,000,000,000: << billion[ >>];\n"
+            "1,000,000,000,000: << trillion[ >>];\n"
+               // overflow rule.  This rule specifies that values of a
+               // quadrillion or more are shown in numerals rather than words.
+               // The == token means to format (with new rules) the value
+               // being formatted by this rule and place the result where
+               // the == is.  The #,##0 inside the == signs is a
+               // DecimalFormat pattern.  It specifies that the value should
+               // be formatted with a DecimalFormat object, and that it
+               // should be formatted with no decimal places, at least one
+               // digit, and a thousands separator.
+            "1,000,000,000,000,000: =#,##0=;\n"
+
+        // %default is a more elaborate form of %simplified;  It is basically
+        // the same, except that it introduces "and" before the ones digit
+        // when appropriate (basically, between the tens and ones digits) and
+        // separates the thousands groups with commas in values over 100,000.
+        "%default:\n"
+               // negative-number and fraction rules.  These are the same
+               // as those for %simplified, but have to be stated here too
+               // because this is an entry point
+            "-x: minus >>;\n"
+            "x.x: << point >>;\n"
+               // just use %simplified for values below 100
+            "=%simplified=;\n"
+               // for values from 100 to 9,999 use %%and to decide whether or
+               // not to interpose the "and"
+            "100: << hundred[ >%%and>];\n"
+            "1000: << thousand[ >%%and>];\n"
+               // for values of 100,000 and up, use %%commas to interpose the
+               // commas in the right places (and also to interpose the "and")
+            "100,000>>: << thousand[>%%commas>];\n"
+            "1,000,000: << million[>%%commas>];\n"
+            "1,000,000,000: << billion[>%%commas>];\n"
+            "1,000,000,000,000: << trillion[>%%commas>];\n"
+            "1,000,000,000,000,000: =#,##0=;\n"
+        // if the value passed to this rule set is greater than 100, don't
+        // add the "and"; if it's less than 100, add "and" before the last
+        // digits
+        "%%and:\n"
+            "and =%default=;\n"
+            "100: =%default=;\n"
+        // this rule set is used to place the commas
+        "%%commas:\n"
+               // for values below 100, add "and" (the apostrophe at the
+               // beginning is ignored, but causes the space that follows it
+               // to be significant: this is necessary because the rules
+               // calling %%commas don't put a space before it)
+            "' and =%default=;\n"
+               // put a comma after the thousands (or whatever preceded the
+               // hundreds)
+            "100: , =%default=;\n"
+               // put a comma after the millions (or whatever precedes the
+               // thousands)
+            "1000: , <%default< thousand, >%default>;\n"
+               // and so on...
+            "1,000,000: , =%default=;"
+        // %%lenient-parse isn't really a set of number formatting rules;
+        // it's a set of collation rules.  Lenient-parse mode uses a Collator
+        // object to compare fragments of the text being parsed to the text
+        // in the rules, allowing more leeway in the matching text.  This set
+        // of rules tells the formatter to ignore commas when parsing (it
+        // already ignores spaces, which is why we refer to the space; it also
+        // ignores hyphens, making "twenty one" and "twenty-one" parse
+        // identically)
+        "%%lenient-parse:\n"
+        //                "& ' ' , ',' ;\n"
+        "   &\u0000 << ' ' << ',' << '-'; \n"
+    }
+
+
+//         * This rule set adds an English ordinal abbreviation to the end of a
+//         * number.  For example, 2 is formatted as "2nd".  Parsing doesn't work with
+//         * this rule set.  To parse, use DecimalFormat on the numeral.
+    OrdinalRules {
+        // this rule set formats the numeral and calls %%abbrev to
+        // supply the abbreviation
+        "%main:\n"
+            "=#,##0==%%abbrev=;\n"
+        // this rule set supplies the abbreviation
+        "%%abbrev:\n"
+               // the abbreviations.  Everything from 4 to 19 ends in "th"
+            "th; st; nd; rd; th;\n"
+               // at 20, we begin repeating the cycle every 10 (13 is "13th",
+               // but 23 and 33 are "23rd" and "33rd")  We do this by
+               // ignoring all bug the ones digit in selecting the abbreviation
+            "20: >>;\n"
+               // at 100, we repeat the whole cycle by considering only the
+               // tens and ones digits in picking an abbreviation
+            "100: >>;\n"
+    }
+
+//         * This rule set formats a number of seconds in sexagesimal notation
+//         * (i.e., hours, minutes, and seconds).  %with-words formats it with
+//         * words (3,740 is "1 hour, 2 minutes, 20 seconds") and %in-numerals
+//         * formats it entirely in numerals (3,740 is "1:02:20").
+    DurationRules {
+        // main rule set for formatting with words
+        "%with-words:\n"
+               // take care of singular and plural forms of "second"
+            "0 seconds; 1 second; =0= seconds;\n"
+               // use %%min to format values greater than 60 seconds
+            "60/60: <%%min<[, >>];\n"
+               // use %%hr to format values greater than 3,600 seconds
+               // (the ">>>" below causes us to see the number of minutes
+               // when when there are zero minutes)
+            "3600/60: <%%hr<[, >>>];\n"
+        // this rule set takes care of the singular and plural forms
+        // of "minute"
+        "%%min:\n"
+            "0 minutes; 1 minute; =0= minutes;\n"
+        // this rule set takes care of the singular and plural forms
+        // of "hour"
+        "%%hr:\n"
+            "0 hours; 1 hour; =0= hours;\n"
+
+        // main rule set for formatting in numerals
+        "%in-numerals:\n"
+               // values below 60 seconds are shown with "sec."
+            "=0= sec.;\n"
+               // higher values are shown with colons: %%min-sec is used for
+               // values below 3,600 seconds...
+            "60: =%%min-sec=;\n"
+               // ...and %%hr-min-sec is used for values of 3,600 seconds
+               // and above
+            "3600: =%%hr-min-sec=;\n"
+        // this rule causes values of less than 10 minutes to show without
+        // a leading zero
+        "%%min-sec:\n"
+            "0: :=00=;\n"
+            "60/60: <0<>>;\n"
+        // this rule set is used for values of 3,600 or more.  Minutes are always
+        // shown, and always shown with two digits
+        "%%hr-min-sec:\n"
+            "0: :=00=;\n"
+            "60/60: <00<>>;\n"
+            "3600/60: <#,##0<:>>>;\n"
+        // the lenient-parse rules allow several different characters to be used
+        // as delimiters between hours, minutes, and seconds
+        "%%lenient-parse:\n"
+            "& ':' = '.' = ' ' = '-';\n"
+    }
+    Keys{
+         collation { "Collation" }
+         calendar  { "Calendar" }
+         currency  { "Currency" }
+    }
+    Types{
+        // variants for collation (traditional may also be used for traditional chinese)
+        collation{
+            phonebook   { "Phonebook Order" }
+            pinyin      { "Pinyin Order" }
+            traditional { "Traditional" }
+            stroke      { "Stroke Order" }
+            direct      { "Direct Order" }
+        }
+        calendar{
+            //traditional   { "Traditional Calendar" }
+            japanese      { "Japanese Calendar" }
+            buddhist      { "Buddhist Calendar" }
+            islamic       { "Islamic Calendar" }
+            islamic-civil  { "Islamic-Civil Calendar" }
+            hebrew        { "Hebrew Calendar" }
+            chinese       { "Chinese Calendar" }
+            gregorian     { "Gregorian Calendar" }
+        }
+
+
+    }
+
+    // each variant name that occurs in locales should be listed with %% and a display string
+    Variants{
+        //PREEURO { "Pre-Euro" }   // PREEURO variant display name
+        //EURO    { "Euro" }         // EURO variant display name
+        //NY      { "Nynorsk" }      // Norwegian variant display name
+        POSIX   { "Posix" }
+        REVISED {"Revised Orthography" }
+    }
+
+    // Format for the display name of a Transliterator.
+    // This is the English form of this resource.
+    TransliteratorNamePattern { "{0,choice,0#|1#{1}|2#{1} to {2}}" }
+
+    // Transliterator display names
+    // This is the English form of this resource.
+    // This list is currently incomplete, and care should be taken to translate these identifiers.
+    // TODO: Reorganize this data like Country, Currencies and Language tables.
+    "%Translit%Hex"         { "Hex Escape" }
+    "%Translit%UnicodeName" { "Unicode Name" }
+    "%Translit%UnicodeChar" { "Unicode Character" }
+
+    zoneStrings {
+        {
+            "PST",
+            "Pacific Standard Time",
+            "PST",
+            "Pacific Daylight Time",
+            "PDT",
+            "Los Angeles",
+        }
+        {
+            "America/Los_Angeles",
+            "Pacific Standard Time",
+            "PST",
+            "Pacific Daylight Time",
+            "PDT",
+            "Los Angeles",
+        }
+        {
+            "MST",
+            "Mountain Standard Time",
+            "MST",
+            "Mountain Daylight Time",
+            "MDT",
+            "Denver",
+        }
+        {
+            "America/Denver",
+            "Mountain Standard Time",
+            "MST",
+            "Mountain Daylight Time",
+            "MDT",
+            "Denver",
+        }
+        {
+            "PNT",
+            "Mountain Standard Time",
+            "MST",
+            "Mountain Standard Time",
+            "MST",
+            "Phoenix",
+        }
+        {
+            "America/Phoenix",
+            "Mountain Standard Time",
+            "MST",
+            "Mountain Standard Time",
+            "MST",
+            "Phoenix",
+        }
+        {
+            "CST",
+            "Central Standard Time",
+            "CST",
+            "Central Daylight Time",
+            "CDT",
+            "Chicago",
+        }
+        {
+            "America/Chicago",
+            "Central Standard Time",
+            "CST",
+            "Central Daylight Time",
+            "CDT",
+            "Chicago",
+        }
+        {
+            "EST",
+            "Eastern Standard Time",
+            "EST",
+            "Eastern Daylight Time",
+            "EDT",
+            "New York",
+        }
+        {
+            "America/New_York",
+            "Eastern Standard Time",
+            "EST",
+            "Eastern Daylight Time",
+            "EDT",
+            "New York",
+        }
+        {
+            "IET",
+            "Eastern Standard Time",
+            "EST",
+            "Eastern Standard Time",
+            "EST",
+            "Indianapolis",
+        }
+        {
+            "America/Indianapolis",
+            "Eastern Standard Time",
+            "EST",
+            "Eastern Standard Time",
+            "EST",
+            "Indianapolis",
+        }
+        {
+            "HST",
+            "Hawaii Standard Time",
+            "HST",
+            "Hawaii Standard Time",
+            "HST",
+            "Honolulu",
+        }
+        {
+            "Pacific/Honolulu",
+            "Hawaii Standard Time",
+            "HST",
+            "Hawaii Standard Time",
+            "HST",
+            "Honolulu",
+        }
+        {
+            "AST",
+            "Alaska Standard Time",
+            "AST",
+            "Alaska Daylight Time",
+            "ADT",
+            "Anchorage"
+        }
+        {
+            "America/Anchorage",
+            "Alaska Standard Time",
+            "AST",
+            "Alaska Daylight Time",
+            "ADT",
+            "Anchorage",
+        }
+        {
+            "America/Halifax",
+            "Atlantic Standard Time",
+            "AST",
+            "Atlantic Daylight Time",
+            "ADT",
+            "Halifax"
+        }
+        {
+            "CNT",
+            "Newfoundland Standard Time",
+            "CNT",
+            "Newfoundland Daylight Time",
+            "CDT",
+            "St. Johns",
+        }
+        {
+            "America/St_Johns",
+            "Newfoundland Standard Time",
+            "CNT",
+            "Newfoundland Daylight Time",
+            "CDT",
+            "St. Johns",
+        }
+        {
+            "ECT",
+            "Central European Standard Time",
+            "CET",
+            "Central European Daylight Time",
+            "CEST",
+            "Paris",
+        }
+        {
+            "Europe/Paris",
+            "Central European Standard Time",
+            "CET",
+            "Central European Daylight Time",
+            "CEST",
+            "Paris",
+        }
+        {
+            "GMT",
+            "Greenwich Mean Time",
+            "GMT",
+            "Greenwich Mean Time",
+            "GMT",
+            "London",
+        }
+        {
+            "Africa/Casablanca",
+            "Greenwich Mean Time",
+            "GMT",
+            "Greenwich Mean Time",
+            "GMT",
+            "Casablanca",
+        }
+        {
+            "Asia/Jerusalem",
+            "Israel Standard Time",
+            "IST",
+            "Israel Daylight Time",
+            "IDT",
+            "Jerusalem",
+        }
+        {
+            "JST",
+            "Japan Standard Time",
+            "JST",
+            "Japan Standard Time",
+            "JST",
+            "Tokyo",
+        }
+        {
+            "Asia/Tokyo",
+            "Japan Standard Time",
+            "JST",
+            "Japan Standard Time",
+            "JST",
+            "Tokyo",
+        }
+        {
+            "Europe/Bucharest",
+            "Eastern European Standard Time",
+            "EET",
+            "Eastern European Daylight Time",
+            "EEST",
+            "Bucharest",
+        }
+        {
+            "CTT",
+            "China Standard Time",
+            "CTT",
+            "China Standard Time",
+            "CDT",
+            "Shanghai",
+        }
+        {
+            "Asia/Shanghai",
+            "China Standard Time",
+            "CTT",
+            "China Standard Time",
+            "CDT",
+            "Shanghai",
+        }
+    }
+}

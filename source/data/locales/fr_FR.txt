@@ -1,0 +1,18 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 1997-2004, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+
+fr_FR {
+    Version{ "2.0"}
+    calendar{
+        gregorian{
+            DateTimeElements:intvector {
+                2,
+                1,
+            }
+        }
+    }
+}

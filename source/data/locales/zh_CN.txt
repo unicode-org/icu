@@ -1,0 +1,32 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 1997-2004, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+
+zh_CN {
+    Version{ "2.0" }
+    NumberPatterns { 
+        "#,##0.###;-#,##0.###",
+        "\u00A4#,##0.00;-\u00A4#,##0.00",
+        "#,##0%",
+        "#E0",
+    }
+    // use 12-hour time (24-hour time is also known to be used)
+    calendar{
+        gregorian{
+            DateTimePatterns{
+                "ahh'\u65F6'mm'\u5206'ss'\u79D2' z",
+                "ahh'\u65F6'mm'\u5206'ss'\u79D2'",
+                "ahh:mm:ss",
+                "ah:mm",
+                "yyyy'\u5E74'M'\u6708'd'\u65E5'EEEE",
+                "yyyy'\u5E74'M'\u6708'd'\u65E5'",
+                "yyyy-M-d",
+                "yy-M-d",
+                "{1} {0}",
+            }
+        }
+    }
+}

@@ -1,0 +1,5 @@
+# Copyright (c) 2001-2004 International Business Machines 
+# Corporation and others. All Rights Reserved.
+pmacos.h
+pos400.h
+pwin32.h

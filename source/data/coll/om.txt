@@ -1,0 +1,32 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 2001-2004, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+// * Oromo language locale.
+// * Contributed by Daniel Yacob <yacob@geez.org>
+// *
+// * Oromo terms are provided by Mahdi Hamid Muudee of Sagalee Oromoo
+// * Publishing Co. Inc and formatted in Posix format locale by Daniel Yacob of
+// * the Ge'ez Frontier Foundation.  The Oromo language terms used here
+// * are those considered to be canonical in the Oromo language under
+// * contemporary and progressive usage adopted by government bureaus
+// * across the Oromo region.  Regional synonyms naturally exist for many
+// * of the month and day names.
+
+//om {
+//    Version{ "2.0" }
+//    collations {
+//        standard { 
+//            Version { "1.0" }
+//            Sequence { "&Z<ch<<<Ch<<<CH"
+//                "<dh<<<Dh<<<DH"
+//                "<kh<<<Kh<<<KH"
+//                "<ny<<<Ny<<<NY"
+//                "<ph<<<Ph<<<PH"
+//                "<sh<<<Sh<<<SH"
+//            }
+//        }
+//    }
+//}

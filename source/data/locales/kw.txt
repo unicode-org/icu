@@ -1,0 +1,105 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 1997-2004, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+
+kw {
+    Version { "2.0" }
+    Countries {
+        GB { "Rywvaneth Unys" }
+    }
+    ExemplarCharacters { "[a-z]" }
+    LocaleScript:array{ 
+        "Latn",  // ISO 15924 Name 
+    }
+    Languages {
+        kw { "kernewek" }
+    }
+//    NumberElements { 
+//        ".",
+//        ",",
+//        ";",
+//        "%",
+//        "0",
+//        "#",
+//        "-",
+//        "E",
+//        "\u2030",
+//        "\u221e",
+//        "\ufffd",
+//    }
+
+    // /**************** Info Below is needed ****************/
+    // Countries{}
+    // Languages{}
+    // localPatternChars{}
+    //
+    calendar{
+        gregorian{
+            AmPmMarkers{
+                "a.m.",
+                "p.m.",
+            }
+            dayNames{
+                format{
+                    abbreviated{
+                        "Sul",
+                        "Lun",
+                        "Mth",
+                        "Mhr",
+                        "Yow",
+                        "Gwe",
+                        "Sad",
+                    }
+                    wide{
+                        "De Sul",
+                        "De Lun",
+                        "De Merth",
+                        "De Merher",
+                        "De Yow",
+                        "De Gwener",
+                        "De Sadorn",
+                    }
+                }
+            }
+            eras{
+                "RC", // BC
+                "AD"   // AD
+            }
+            monthNames{
+                format{
+                    abbreviated{
+                        "Gen",
+                        "Whe",
+                        "Mer",
+                        "Ebr",
+                        "Me",
+                        "Efn",
+                        "Gor",
+                        "Est",
+                        "Gwn",
+                        "Hed",
+                        "Du",
+                        "Kev",
+                    }
+                    wide{
+                        "Mys Genver",
+                        "Mys Whevrel",
+                        "Mys Merth",
+                        "Mys Ebrel",
+                        "Mys Me",
+                        "Mys Efan",
+                        "Mys Gortheren",
+                        "Mye Est",
+                        "Mys Gwyngala",
+                        "Mys Hedra",
+                        "Mys Du",
+                        "Mys Kevardhu",
+                    }
+                }
+            }
+        }
+    }
+}

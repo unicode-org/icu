@@ -1,0 +1,73 @@
+Unicode 4.0.1 update
+
+*** related Jitterbugs
+
+3170 RFE: Update to Unicode 4.0.1
+3171 Add new Unicode 4.0.1 properties
+3520 use Unicode 4.0.1 updates for break iteration
+
+*** data files & enums & parser code
+
+* file preparation
+- ucdstrip: DerivedNormalizationProps.txt, NormalizationTest.txt, DerivedCoreProperties.txt
+- ucdstrip and ucdmerge: EastAsianWidth.txt, LineBreak.txt
+
+* file fixes
+- fix UnicodeData.txt general categories of Ethiopic digits Nd->No
+  according to PRI #26
+  http://www.unicode.org/review/resolved-pri.html#pri26
+- undone again because no corrigendum in sight;
+  instead modified tests to not check consistency on this for Unicode 4.0.1
+
+* ucdterms.txt
+- update from http://www.unicode.org/copyright.html
+  formatted for plain text
+
+* uchar.h & uprops.h & uprops.c & genprops
+- add UBLOCK_CYRILLIC_SUPPLEMENT because the block is renamed
+- add U_LB_INSEPARABLE due to a spelling fix
+  + put short name comment only on line with new constant
+    for genpname perl script parser
+- new binary properties
+  + STerm
+  + Variation_Selector
+
+* genpname
+- fix genpname perl script so that it doesn't choke on more than 2 names per property value
+- perl script: correctly calculate the maximum number of fields per row
+
+* uscript.h
+- new script code Hrkt=Katakana_Or_Hiragana
+
+* gennorm.c track changes in DerivedNormalizationProps.txt
+- "FNC" -> "FC_NFKC"
+- single field "NFD_NO" -> two fields "NFD_QC; N" etc.
+
+* genprops/props2.c track changes in DerivedNumericValues.txt
+- changed from 3 columns to 2, dropping the numeric type
+  + assume that the type is always numeric for Han characters,
+    and that only those are added in addition to what UnicodeData.txt lists
+
+*** Unicode version numbers
+- makedata.mak
+- uchar.h
+- configure.in
+
+*** tests
+- update test of default bidi classes according to PRI #28
+  /tsutil/cucdtst/TestUnicodeData
+  http://www.unicode.org/review/resolved-pri.html#pri28
+- bidi tests: change exemplar character for ES depending on Unicode version
+- change hardcoded expected property values where they change
+
+*** other code
+
+* name matching
+- read UCD.html
+
+* scripts
+- use new Hrkt=Katakana_Or_Hiragana
+
+* ZWJ & ZWNJ
+- are now part of combining character sequences
+- break iteration used to assume that LB classes did not overlap; now they do for ZWJ & ZWNJ

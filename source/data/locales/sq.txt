@@ -1,0 +1,347 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 1997-2004, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+
+sq {
+    Version{ "2.0" }
+    Countries { 
+        AD { "Andorr\u00eb" }
+        AE { "Emiratet Arabe te Bashkuara" }
+        AF { "Afganistan" }
+        AG { "Antigua e Barbuda" }
+        //AL { "Shqip\u00ebri" }
+        AL { "Shqip\u00EBria" }
+        AM { "Armeni" }
+        AO { "Angol\u00eb" }
+        AR { "Argjentin\u00eb" }
+        AT { "Austri" }
+        AU { "Australi" }
+        AZ { "Azerbajxhan" }
+
+        BA { "Bosnja dhe Hercegovina" }
+        //BB { "Barbados" }
+        //BD { "Bangladesh" }
+        BE { "Belgjik\u00eb" }
+        //BF { "Burkina Faso" }
+        BG { "Bullgari" }
+        BH { "Bahrein" }
+        //BI { "Burundi" }
+        //BJ { "Benin" }
+        BN { "Brunej" }
+        BO { "Bolivi" }
+        //BR { "Brazil" }
+        //BS { "Bahamas" }
+        BT { "Butan" }
+        BW { "Botsvana" }
+        BY { "Bjellorusi" }
+        //BZ { "Belize" }
+
+        CA { "Kanada" }
+        CF { "Republika Qendrore e Afrik\u00ebs" }
+        CG { "Kongo" }
+        CH { "Zvic\u00ebr" }
+        CI { "Bregu i Fildisht\u00eb" }
+        CL { "Kili" }
+        CM { "Kamerun" }
+        CN { "Kin\u00eb" }
+        CO { "Kolumbi" }
+        CR { "Kosta Rika" }
+        //CS { "Serbi\u00eb dhe Mali i Zi" } // TODO: if we allow this, then SP must go away
+        CU { "Kub\u00eb" }
+        CV { "Kap Verde" }
+        CY { "Qipro" }
+        CZ { "Republika e \u00c7ekis\u00eb" }
+
+        DE { "Gjermani" }
+        DJ { "Xhibuti" }
+        DK { "Danimark\u00eb" }
+        DM { "Dominik\u00eb" }
+        DO { "Republika Dominikan\u00eb" }
+        DZ { "Algjeri" }
+
+        EC { "Ekuator" }
+        EE { "Estoni" }
+        EG { "Egjipt" }
+        EH { "Saharaja Per\u00ebndimore" }
+        ER { "Eritre" }
+        ES { "Spanj\u00eb" }
+        ET { "Etiopi" }
+
+        FI { "Finland\u00eb" }
+        FJ { "Fixhi" }
+        FM { "Mikronezi" }
+        FR { "Franc\u00eb" }
+
+        GA { "Gjabon" }
+        //GD { "Grenada" }
+        GE { "Gjeorgji" }
+        GH { "Gan\u00eb" }
+        GM { "Gambi" }
+        GN { "Guine" }
+        GQ { "Guineja Ekuatoriale" }
+        GR { "Greqi" }
+        GT { "Guatemal\u00eb" }
+        GW { "Guine Bisau" }
+        GY { "Guajana" }
+
+        //HN { "Honduras" }
+        HR { "Kroaci" }
+        //HT { "Haiti" }
+        HU { "Hungari" }
+
+        ID { "Indonezi" }
+        IE { "Irland\u00eb" }
+        IL { "Izrael" }
+        IN { "Indi" }
+        IQ { "Irak" }
+        //IR { "Iran" }
+        IS { "Island\u00eb" }
+        IT { "Itali" }
+
+        JM { "Xhamajk\u00eb" }
+        JO { "Jordani" }
+        JP { "Japoni" }
+
+        KE { "Kenia" }
+        KG { "Kirgistan" }
+        KH { "Kamboxhi" }
+        KI { "Qiribati" }
+        KM { "Komore" }
+        KN { "Saint Kitts e Nevis" }
+        KP { "Koreja e Veriut" }
+        KR { "Koreja e Jugut" }
+        KW { "Kuvajt" }
+        KZ { "Kazakistan" }
+
+        //LA { "Laos" }
+        LB { "Liban" }
+        //LC { "Saint Lucia" }
+        LI { "Liht\u00ebnshtajn" }
+        //LK { "Sri Lanka" }
+        LR { "Liberi" }
+        LS { "Lesoto" }
+        LT { "Lituani" }
+        LU { "Luksemburg" }
+        LV { "Letoni" }
+        LY { "Libi" }
+
+        MA { "Maroko" }
+        MC { "Monako" }
+        MD { "Moldavi" }
+        MG { "Madagaskar" }
+        MH { "Ishujt Marshall" }
+        MK { "Maqedoni" }
+        //ML { "Mali" }
+        //MM { "Myanmar" }
+        MN { "Mongoli" }
+        MR { "Mauritani" }
+        MT { "Malt\u00eb" }
+        //MU { "Mauritius" }
+        MV { "Maldivit" }
+        MW { "Malavi" }
+        MX { "Meksik\u00eb" }
+        MY { "Malajzi" }
+        MZ { "Mozambik" }
+
+        NA { "Namibi" }
+        //NE { "Niger" }
+        NG { "Nigeri" }
+        NI { "Nikaragua" }
+        NL { "Vendet e Ul\u00ebta" }
+        NO { "Norvegji" }
+        //NP { "Nepal" }
+        //NR { "Nauru" }
+        NZ { "Zelanda e Re" }
+
+        //OM { "Oman" }
+
+        //PA { "Panama" }
+        //PE { "Peru" }
+        PG { "Papua Guineja e Re" }
+        PH { "Filipine" }
+        //PK { "Pakistan" }
+        PL { "Poloni" }
+        PT { "Portugali" }
+        //PW { "Palau" }
+        PY { "Paraguaj" }
+
+        QA { "Katar" }
+
+        RO { "Rumani" }
+        RU { "Rusi" }
+        RW { "Ruanda" }
+
+        SA { "Arabia Saudite" }
+        SB { "Ishujt Solomon" }
+        SC { "Sishel" }
+        //SD { "Sudan" }
+        SE { "Suedi" }
+        SG { "Singapor" }
+        SI { "Slloveni" }
+        SK { "Sllovaki" }
+        SL { "Siera Leone" }
+        //SM { "San Marino" }
+        //SN { "Senegal" }
+        SO { "Somali" }
+        SP { "Serbi\u00eb" }
+        //SR { "Surinam" }
+        ST { "Sao Tome e Prinsipe" }
+        //SV { "El Salvador" }
+        SY { "Siri" }
+        SZ { "Svaziland\u00eb" }
+
+        TD { "\u00c7ad" }
+        TG { "Togo" }
+        TH { "Tajland\u00eb" }
+        TJ { "Taxhikistan" }
+        //TM { "Turkmenistan" }
+        TN { "Tunisi" }
+        //TO { "Tonga" }
+        TR { "Turqi" }
+        TT { "Trinidad e Tobago" }
+        //TV { "Tuvalu" }
+        TW { "Tajvan" }
+        TZ { "Tanzani" }
+
+        UA { "Ukrain\u00eb" }
+        //UG { "Uganda" }
+        US { "Shtetet e Bashkuara t\u00eb Amerik\u00ebs" }
+        UY { "Uruguaj" }
+        //UZ { "Uzbekistan" }
+
+        VA { "Vatikan" }
+        VC { "Saint Vincent e Grenadinet" }
+        VE { "Venezuel\u00eb" }
+        //VN { "Vietnam" }
+        //VU { "Vanuatu" }
+
+        //WS { "Samoa" }
+
+        YE { "Jemen" }
+
+        ZA { "Afrika e Jugut" }
+        ZM { "Zambi" }
+        ZW { "Zimbabve" }
+    }
+    Currencies {
+        ALL { "Lek", "ALL" }
+    }
+
+    Languages { 
+        sq { "shqipe" }
+    }
+    localPatternChars { "GanjkHmsSEDFwWxhKzAeugXZ" }
+    LocaleScript{ 
+        "Latn",  // ISO 15924 Name 
+    }
+    ExemplarCharacters { "[a-z\u00e7\u00eb{dh}{gj}{ll}{nj}{rr}{sh}{th}{xh}{zh}]" }
+    NumberElements { 
+        ",",
+        ".",
+        ";",
+        "%",
+        "0",
+        "#",
+        "-",
+        "E",
+        "\u2030",
+        "\u221E",
+        "\uFFFD",
+        ",",
+        "+",
+    }
+/*    zoneStrings { 
+       {
+            "Europe/Tirane",
+            "CET", // TODO: Replace with long Albanian name
+            "CET",
+            "CEST", // TODO: Replace with long Albanian name
+            "CEST",
+        }
+    }
+*/
+    calendar{
+        gregorian{
+            DateTimeElements:intvector {
+                2,
+                1, // "Minimal Days in First Week" is unknown. Root value used instead
+            }
+            AmPmMarkers{
+                "PD",
+                "MD",
+            }
+            DateTimePatterns{
+                "h.mm.ss.a z",
+                "h.mm.ss.a z",
+                "h:mm:ss.a",
+                "h.mm.a",
+                "EEEE, dd MMMM yyyy",
+                "dd MMMM yyyy",
+                "yyyy-MM-dd",
+                "yy-MM-dd",
+                "{1} {0}",
+            }
+            dayNames{
+                format{
+                    abbreviated{
+                        "Die",
+                        "H\u00EBn",
+                        "Mar",
+                        "M\u00EBr",
+                        "Enj",
+                        "Pre",
+                        "Sht",
+                    }
+                    wide{
+                        "e diel",
+                        "e h\u00EBn\u00EB",
+                        "e mart\u00EB",
+                        "e m\u00EBrkur\u00EB",
+                        "e enjte",
+                        "e premte",
+                        "e shtun\u00EB",
+                    }
+                }
+            }
+            eras{
+                "p.e.r.",
+                "n.e.r.",
+            }
+            monthNames{
+                format{
+                    abbreviated{
+                        "Jan",
+                        "Shk",
+                        "Mar",
+                        "Pri",
+                        "Maj",
+                        "Qer",
+                        "Kor",
+                        "Gsh",
+                        "Sht",
+                        "Tet",
+                        "N\u00EBn",
+                        "Dhj",
+                    }
+                    wide{
+                        "janar",
+                        "shkurt",
+                        "mars",
+                        "prill",
+                        "maj",
+                        "qershor",
+                        "korrik",
+                        "gusht",
+                        "shtator",
+                        "tetor",
+                        "n\u00EBntor",
+                        "dhjetor",
+                    }
+                }
+            }
+        }
+    }
+}

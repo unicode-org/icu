@@ -1,0 +1,263 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 1997-2004, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+
+af {
+    Version { "4.0" }
+
+
+    Countries {
+        //Fallback{ "en" }
+        // Some of the names are the same as en.
+
+        AE { "Verenigde Arabiese Emirate" }
+        AF { "Afganistan" }
+        AG { "Antigua en Barbuda" }
+        AL { "Albani\u00eb" }
+        AM { "Armeni\u00eb" }
+        AR { "Argentini\u00eb" }
+        AT { "Oostenryk" }
+        AU { "Australi\u00eb" }
+        AZ { "Aserbeidjan" }
+
+        BA { "Bosni\u00eb en Herzegowina" }
+        BD { "Bangladesj" }
+        BE { "Belgi\u00eb" }
+        BF { "Boerkina Fasso" }
+        BG { "Bulgarye" }
+        BH { "Bahrein" }
+        BN { "Broenei" }
+        BO { "Bolivi\u00eb" }
+        BR { "Brasili\u00eb" }
+        BT { "Bhoetan" }
+        BY { "Wit-Rusland" }
+
+        CA { "Kanada" }
+        CF { "Sentraal-Afrikaanse Republiek" }
+        CG { "Kongo" }
+        CH { "Switserland" }
+        CI { "Ivoorkus" }
+        CL { "Chili" }
+        CM { "Kameroen" }
+        CN { "Sjina" }
+        //CS { "Serwi\u00eb en Montenegro" } // TODO: if we allow this, then SP must go away
+        CU { "Kuba" }
+        CV { "Kaap Verde" }
+        CY { "Ciprus" }
+        CZ { "Tjeggiese Republiek" }
+
+        DE { "Duitsland" }
+        DJ { "Djiboeti" }
+        DK { "Denemarke" }
+        DO { "Dominikaanse Republiek" }
+        DZ { "Algeri\u00eb" }
+
+        EE { "Estland" }
+        EG { "Egipte" }
+        EH { "Wes-Sahara" }
+        ES { "Spanje" }
+        ET { "Ethiopi\u00eb" }
+
+        FJ { "Fidji" }
+        FM { "Mikronesi\u00eb" }
+        FR { "Frankryk" }
+
+        GA { "Gaboen" }
+        GB { "Groot-Brittanje" }
+        GE { "Georgi\u00eb" }
+        GM { "Gambi\u00eb" }
+        GN { "Guinee" }
+        GQ { "Ekwatoriaal-Guinee" }
+        GR { "Griekeland" }
+        GW { "Guinee-Bissau" }
+
+        HR { "Kroasi\u00eb" }
+        HT { "Ha\u00efti" }
+        HU { "Hongarye" }
+
+        ID { "Indonesi\u00eb" }
+        IE { "Ierland" }
+        IN { "Indi\u00eb" }
+        IQ { "Irak" }
+        IS { "Ysland" }
+        IT { "Itali\u00eb" }
+
+        JM { "Jamaika" }
+        JO { "Jordani\u00eb" }
+
+        KE { "Kenia" }
+        KG { "Kirgisi\u00eb" }
+        KH { "Kambodja" }
+        KM { "Comore" }
+        KN { "Saint Kitts en Nevis" }
+        KP { "Noord-Korea" }
+        KR { "Suid-Korea" }
+        KW { "Koeweit" }
+        KZ { "Kasakstan" }
+
+        LB { "Libanon" }
+        LR { "Liberi\u00eb" }
+        LT { "Litaue" }
+        LU { "Luxemburg" }
+        LV { "Letland" }
+        LY { "Libi\u00eb" }
+
+        MA { "Marokko" }
+        MG { "Madagaskar" }
+        MH { "Marshall-eilande"}
+        MK { "Macedoni\u00eb" }
+        MN { "Mongoli\u00eb" }
+        MR { "Mouritani\u00eb" }
+        MV { "Maldive" }
+        MX { "Meksiko" }
+        MY { "Maleisi\u00eb" }
+        MZ { "Mosambiek" }
+
+        NA { "Namibi\u00eb" }
+        NE { "Nigeri\u00eb" }
+        NL { "Nederland" }
+        NO { "Noorwe\u00eb" }
+        NR { "Naoeroe" }
+        NZ { "Nieu-Seeland" }
+
+        PG { "Papoea Nieu-Guinee" }
+        PH { "Filippyne" }
+        PL { "Pole" }
+
+        QA { "Katar" }
+
+        RO { "Roemeni\u00eb" }
+        RU { "Rusland" }
+
+        SA { "Saoedi-Arabi\u00eb" }
+        SB { "Solomon Eilande" }
+        SC { "Seychelle" }
+        SD { "Soedan" }
+        SE { "Swede" }
+        SG { "Singapoer" }
+        SI { "Sloweni\u00eb" }
+        SK { "Slowakye" }
+        SO { "Somali\u00eb" }
+        SP { "Serwi\u00eb" }
+        ST { "Sao Tome en Principe" }
+        SV { "Salvador" }
+        SY { "Siri\u00eb" }
+
+        TD { "Tsjaad" }
+        TJ { "Tadjikistan" }
+        TM { "Turkmeni\u00eb" }
+        TN { "Tunisi\u00eb" }
+        TR { "Turkye" }
+        TT { "Trinidad en Tobago" }
+        TZ { "Tanzani\u00eb" }
+
+        UA { "Oekraine" }
+        US { "Verenigde State van Amerika" }
+        UZ { "Oesbekistan" }
+
+        VA { "Vatikaan" }
+        VC { "Saint Vincent en die Grenadine" }
+        VN { "Vi\u00ebtnam" }
+
+        YE { "Jemen" }
+
+        ZA { "Suid-Afrika" }
+        ZM { "Zambi\u00eb" }
+    }
+    Currencies {
+        ZAR { "R", "Rand" }
+    }
+    Languages {
+        //af { "Afrikaanse" } // adjective form
+        af { "Afrikaans" }
+    }
+    ExemplarCharacters { "[a-z\u00e1\u00e9\u00e8\u00e2\u00ea\u00ee\u00f4\u00fb\u00eb\u00ef\u00f6\u0149]" }
+    LocaleScript{ 
+        "Latn",  // ISO 15924 Name 
+    }
+    
+    calendar{
+        gregorian{
+            eras {
+                "v.C.",
+                "n.C."
+            }
+            dayNames{
+                format{        
+                    abbreviated { 
+                        "So",
+                        "Ma",
+                        "Di",
+                        "Wo",
+                        "Do",
+                        "Vr",
+                        "Sa",
+                    }
+                    wide { 
+                        "Sondag",
+                        "Maandag",
+                        "Dinsdag",
+                        "Woensdag",
+                        "Donderdag",
+                        "Vrydag",
+                        "Saterdag",
+                    }
+                }
+            }
+            monthNames{
+                format{
+                    abbreviated { 
+                        "Jan",
+                        "Feb",
+                        "Mar",
+                        "Apr",
+                        "Mei",
+                        "Jun",
+                        "Jul",
+                        "Aug",
+                        "Sep",
+                        "Okt",
+                        "Nov",
+                        "Des",
+                    }
+                    wide { 
+                        "Januarie",
+                        "Februarie",
+                        "Maart",
+                        "April",
+                        "Mei",
+                        "Junie",
+                        "Julie",
+                        "Augustus",
+                        "September",
+                        "Oktober",
+                        "November",
+                        "Desember",
+                    }
+                }
+            }
+        }
+    }
+    NumberElements { 
+        ",",
+        "\u00A0",
+        ";",
+        "%",
+        "0",
+        "#",
+        "-",
+        "E",
+        "\u2030",
+        "\u221E",
+        "\uFFFD",
+        ",",
+        "+",
+    }
+
+    // /**************** Info Below is needed ****************/
+    // localPatternChars{}
+
+}

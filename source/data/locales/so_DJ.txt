@@ -1,0 +1,47 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 2001-2004, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+// * Somali language locale for Djibouti.
+// * Contributed by :
+// *    Daniel Yacob <yacob@geez.org>, Ge'ez Frontier Foundation
+// *    Mohamed Diriye Abdullahi <diriyeam@magellan.umontreal.ca>
+// *    Department of Linguistics and Translation, Universite de Montreal, Montreal
+
+so_DJ {
+    Version{ "2.0" }
+
+
+    // Measurement { "Metric" }
+//    NumberElements {
+//        ".",
+//        ",",
+//        ";",
+//        "%",
+//        "0",
+//        "#",
+//        "-",
+//        "E",
+//        "\u2030",
+//        "\u221E",
+//        "\uFFFD",
+//    }
+    NumberPatterns {
+        "#,##0.###;-#,##0.###",
+        "\u00A4#,##0.00;-\u00A4#,##0.00",
+        "#,##0%",
+        "#E0",
+    }
+    // PaperSize {
+    //    Height { "297" }
+    //    Width { "210" }
+    //    Units { "mm" }
+    // }
+
+    // Currency display names
+    Currencies {
+        DJF { "$", "DJF" }
+    }
+}

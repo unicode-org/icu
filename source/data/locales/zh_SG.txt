@@ -1,0 +1,70 @@
+﻿// -*- Coding: utf-8; -*-
+// ***************************************************************************
+// *
+// *   Copyright (C) 1997-2004, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+// Singapore locale: Data By Syn Wee Quek
+
+
+zh_SG {
+    Version { "2.0" }
+//    AmPmMarkers { 
+//        "\u4E0A\u5348", // am
+//        "\u4E0B\u5348" // pm
+//    }
+    calendar{
+        gregorian{
+            DateTimePatterns {
+                // most commonly used formal time format 
+                "a hh:mm:ss",
+                "a hh:mm:ss",
+                "a hh:mm",
+                "a hh:mm",
+                // most commonly used date format
+                "dd MMMM yyyy",
+                "dd MMM yyyy",
+                "dd-MMM-yy",
+                "dd/MM/yy",
+                "{1} {0}"
+            }
+        }
+    }
+
+    // Duplicates from zh locale have been removed.
+    Countries {
+        AU { "\u6FB3\u6D32" }
+        CZ { "\u6377\u514B" }
+        ID { "\u5370\u5C3C" }
+        KR { "\u5357\u97E9" }
+        MK { "\u9A6C\u5176\u987F" }
+        NZ { "\u7EBD\u897F\u5170" }
+        SA { "\u6C99\u5730\u963F\u62C9\u4F2F" }
+    }
+    // Duplicates from zh locale have been removed.
+    Languages {
+        root { "\u6839 \u6e90" }
+
+        ko { "\u97e9\u6587" }           // Korean
+        sh { "\u585e\u5c14\u7ef4\u4e9a\u514b\u7f57\u5730\u4e9a\u6587" }   // SerboCroatian
+    }
+    NumberPatterns { 
+        "#,##0.###;-#,##0.###",
+        "\u00A4#,##0.00;-\u00A4#,##0.00",
+        "#,##0%",
+        "#E0",
+    }
+/*
+    zoneStrings { 
+        {
+            "SST",
+            "Singapore Standard Time",
+            "SST",
+            "Singapore Standard Time",
+            "SST",
+//            "Singapore"
+        }
+    }
+*/
+}

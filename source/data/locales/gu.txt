@@ -1,0 +1,110 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 2001-2004, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+
+gu {
+    Version{ "2.0" }
+    Countries {
+        CN { "\u0a9a\u0ac0\u0aa8" }
+        DE { "\u0a9c\u0aae\u0abf\u0aa8\u0ac0" }
+        EG { "\u0aae\u0abf\u0ab8\u0ab0" }
+        GE { "\u0a9c\u0acd\u0aaf\u0acb\u0ab0\u0acd\u0a9c\u0ac0\u0aaf\u0abe" }
+        IN { "\u0aad\u0abe\u0ab0\u0aa4" }
+        NP { "\u0aa8\u0ac7\u0aaa\u0abe\u0ab3" }
+        PK { "\u0a95\u0ab0\u0abe\u0a82\u0a9a\u0ac0" }
+        TM { "\u0aa4\u0ac1\u0ab0\u0acd\u0a95\u0acd\u0aae\u0aa8\u0abf\u0ab8\u0acd\u0aa4\u0abe\u0aa8" }
+        TR { "\u0aa4\u0ac1\u0ab0\u0acd\u0a95\u0ab8\u0acd\u0aa4\u0abe\u0aa8" }
+        US { "\u0ab8\u0a82\u0aaf\u0ac1\u0a95\u0aa4 \u0ab0\u0abe\u0a9c\u0acd\u0aaf \u0a85\u0aae\u0ac7\u0ab0\u0abf\u0a95\u0abe" }
+    }
+    // Currency display names
+    Currencies {
+        INR { "\u0AB0\u0AC1", "INR" }
+    }
+    ExemplarCharacters { "[[:Gujr:]\u200c\u200d]" }
+    LocaleScript:array { "Gujr" }
+    Languages {
+        gu { "\u0A97\u0AC1\u0A9C\u0AB0\u0ABE\u0AA4\u0AC0" }
+    }
+
+
+    NumberElements{
+        ".",
+        ",",
+        ";",
+        "%",
+        "\u0AE6",
+        "#",
+        "-",
+        "E",
+        "\u2030",
+        "\u221E",
+        "\uFFFD",
+        ".",
+        "+",
+    }
+    calendar{
+        gregorian{
+            AmPmMarkers{
+                "\u0AAA\u0AC2\u0AB0\u0ACD\u0AB5\u00A0\u0AAE\u0AA7\u0ACD\u0AAF\u0ABE\u0AB9\u0ACD\u0AA8",
+                "\u0A89\u0AA4\u0ACD\u0AA4\u0AB0\u00A0\u0AAE\u0AA7\u0ACD\u0AAF\u0ABE\u0AB9\u0ACD\u0AA8"
+            }
+            dayNames{
+                format{
+                    abbreviated{
+                        "\u0AB0\u0AB5\u0ABF",
+                        "\u0AB8\u0ACB\u0AAE",
+                        "\u0AAE\u0A82\u0A97\u0AB3",
+                        "\u0AAC\u0AC1\u0AA7",
+                        "\u0A97\u0AC1\u0AB0\u0AC1",
+                        "\u0AB6\u0AC1\u0A95\u0ACD\u0AB0",
+                        "\u0AB6\u0AA8\u0ABF"
+                    }
+                    wide{
+                        "\u0AB0\u0AB5\u0ABF\u0AB5\u0ABE\u0AB0",
+                        "\u0AB8\u0ACB\u0AAE\u0AB5\u0ABE\u0AB0",
+                        "\u0AAE\u0A82\u0A97\u0AB3\u0AB5\u0ABE\u0AB0",
+                        "\u0AAC\u0AC1\u0AA7\u0AB5\u0ABE\u0AB0",
+                        "\u0A97\u0AC1\u0AB0\u0AC1\u0AB5\u0ABE\u0AB0",
+                        "\u0AB6\u0AC1\u0A95\u0ACD\u0AB0\u0AB5\u0ABE\u0AB0",
+                        "\u0AB6\u0AA8\u0ABF\u0AB5\u0ABE\u0AB0"
+                    }
+                }
+            }
+            monthNames{
+                format{
+                    abbreviated{
+                        "\u0A9C\u0ABE\u0AA8\u0ACD\u0AAF\u0AC1",
+                        "\u0AAB\u0AC7\u0AAC\u0ACD\u0AB0\u0AC1",
+                        "\u0AAE\u0ABE\u0AB0\u0ACD\u0A9A",
+                        "\u0A8F\u0AAA\u0ACD\u0AB0\u0ABF\u0AB2",
+                        "\u0AAE\u0AC7",
+                        "\u0A9C\u0AC2\u0AA8",
+                        "\u0A9C\u0AC1\u0AB2\u0ABE\u0A88",
+                        "\u0A91\u0A97\u0AB8\u0ACD\u0A9F",
+                        "\u0AB8\u0AAA\u0ACD\u0A9F\u0AC7",
+                        "\u0A91\u0A95\u0ACD\u0A9F\u0ACB",
+                        "\u0AA8\u0AB5\u0AC7",
+                        "\u0AA1\u0ABF\u0AB8\u0AC7"
+                    }
+                    wide{
+                        "\u0A9C\u0ABE\u0AA8\u0ACD\u0AAF\u0AC1\u0A86\u0AB0\u0AC0",
+                        "\u0AAB\u0AC7\u0AAC\u0ACD\u0AB0\u0AC1\u0A86\u0AB0\u0AC0",
+                        "\u0AAE\u0ABE\u0AB0\u0ACD\u0A9A",
+                        "\u0A8F\u0AAA\u0ACD\u0AB0\u0ABF\u0AB2",
+                        "\u0AAE\u0AC7",
+                        "\u0A9C\u0AC2\u0AA8",
+                        "\u0A9C\u0AC1\u0AB2\u0ABE\u0A88",
+                        "\u0A91\u0A97\u0AB8\u0ACD\u0A9F",
+                        "\u0AB8\u0AAA\u0ACD\u0A9F\u0AC7\u0AAE\u0ACD\u0AAC\u0AB0",
+                        "\u0A91\u0A95\u0ACD\u0A9F\u0ACD\u0AAC\u0AB0",
+                        "\u0AA8\u0AB5\u0AC7\u0AAE\u0ACD\u0AAC\u0AB0",
+                        "\u0AA1\u0ABF\u0AB8\u0AC7\u0AAE\u0ACD\u0AAC\u0AB0"
+                    }
+                }
+            }
+        }
+    }
+}

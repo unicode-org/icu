@@ -1,0 +1,41 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 1997-2004, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+
+// Created by Roozbeh Pournader <roozbeh@sharif.edu>
+
+fa_IR {
+    Version { "3.0" }
+    calendar{
+        gregorian{
+            DateTimeElements:intvector {
+                7,      // Saturday
+                1,
+            }
+        }
+    }
+    NumberPatterns {
+        "#,##0.###;\u2212#,##0.###",
+        "#,##0 \u00a4;\u2212#,##0 \u00a4",
+        "%#,##0",
+        "#E0",
+    }
+    NumberElements { 
+        "\u066B",
+        "\u066C",
+        ";",
+        "\u066A",
+        "\u06F0",
+        "#",
+        "-",
+        "\u00D7\u06F1\u06F0^",
+        "\u2030",
+        "\u221E",
+        "\uFFFD",
+        "\u066B",
+        "+",
+    }
+}

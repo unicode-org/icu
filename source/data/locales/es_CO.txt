@@ -1,0 +1,45 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 1997-2004, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+
+es_CO {
+    Version { "2.0" }
+    NumberElements { 
+        ",",
+        ".",
+        ";",
+        "%",
+        "0",
+        "#",
+        "-",
+        "E",
+        "\u2030",
+        "\u221E",
+        "\uFFFD",
+        ",",
+        "+",
+    }
+    // Currency display names
+    Currencies {
+        COP { "$", "Peso de Colombia" }
+        USD { "US$", "D\u00F3lar Americano" }
+    }
+    calendar{
+        gregorian{
+            DateTimePatterns{
+                "HH:mm:ss z",
+                "H:mm:ss z",
+                "H:mm:ss",
+                "H:mm",
+                "EEEE d' de 'MMMM' de 'yyyy",
+                "d' de 'MMMM' de 'yyyy",
+                "d/MM/yyyy",
+                "d/MM/yy",
+                "{1} {0}",
+            }
+        }
+    }
+}

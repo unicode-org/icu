@@ -1,0 +1,23 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 1997-2004, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+
+fo {
+    Version { "2.0" }
+    collations {
+        standard { 
+            Version { "2.0" }
+            Sequence { 
+                "&D<<\u0111<<<\u0110<<\u00f0<<<\u00d0 "
+                "&t<<<\u00fe/h"
+                "&T<<<\u00de/H"
+                "&Y<<u\u0308<<<U\u0308<<u\u030b<<<U\u030b"
+                "&[before 1]\u0292<\u00e6<<<\u00c6<<\u00e4<<<\u00c4<<e\u0328<<<E\u0328<\u00f8<<<\u00d8<<\u00f6<<<\u00d6<<\u0151<<<\u0150<<\u0153<<<\u0152<\u00e5<<<\u00c5"
+                "<<<aa<<<Aa<<<AA"	// Danish, Faroese only            
+            }
+        }
+    }
+}

@@ -1,0 +1,589 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 1997-2004, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+
+cs {
+    Version{ "3.0" }
+    Countries {
+        Fallback{"en"}
+        //AD { "Andorra" }
+        AE { "Spojen\u00E9 arabsk\u00E9 emir\u00E1ty" }
+        AF { "Afgh\u00E1nist\u00E1n" }
+        AG { "Antigua a Barbuda" }
+        AI { "Anguila" }
+        AL { "Alb\u00E1nie" }
+        AM { "Arm\u00E9nie" }
+        AN { "Nizozemsk\u00E9 Antily" }
+        //AO { "Angola" }
+        AQ { "Antarktida" }
+        //AR { "Argentina" }
+        AS { "Americk\u00E1 Samoa" }
+        AT { "Rakousko" }
+        AU { "Austr\u00E1lie" }
+        //AW { "Aruba" }
+        AZ { "\u00C1zerb\u00E1jd\u017E\u00E1n" }
+        BA { "Bosna a Hercegovina" }
+        //BB { "Barbados" }
+        BD { "Banglad\u00E9\u0161" }
+        BE { "Belgie" }
+        //BF { "Burkina Faso" }
+        BG { "Bulharsko" }
+        BH { "Bahrajn" }
+        //BI { "Burundi" }
+        //BJ { "Benin" }
+        BM { "Bermudy" }
+        BN { "Brunej Darussalam" }
+        BO { "Bol\u00EDvie" }
+        BR { "Braz\u00EDlie" }
+        BS { "Bahamy" }
+        BT { "Bh\u00FAt\u00E1n" }
+        BV { "Ostrov Bouvet" }
+        //BW { "Botswana" }
+        BY { "B\u011Blorusko" }
+        //BZ { "Belize" }
+        CA { "Kanada" }
+        CC { "Kokosov\u00E9 ostrovy" }
+        CD { "Kongo, demokratick\u00E1 republika" }
+        CF { "St\u0159edoafrick\u00E1 republika" }
+        CG { "Kongo" }
+        CH { "\u0160v\u00FDcarsko" }
+        CI { "Pob\u0159e\u017E\u00ED slonoviny" }
+        CK { "Cookovy ostrovy" }
+        //CL { "Chile" }
+        CM { "Kamerun" }
+        CN { "\u010C\u00EDna" }
+        CO { "Kolumbie" }
+        CR { "Kostarika" }
+        CU { "Kuba" }
+        CV { "Kapverdy" }
+        CX { "V\u00E1no\u010Dn\u00ED ostrovy" }
+        CY { "Kypr" }
+        CZ { "\u010Cesk\u00E1 republika" }
+        DE { "N\u011Bmecko" }
+        DJ { "D\u017Eibuti" }
+        DK { "D\u00E1nsko" }
+        DM { "Dominika" }
+        DO { "Dominik\u00E1nsk\u00E1 republika" }
+        DZ { "Al\u017E\u00EDrsko" }
+        EC { "Ekv\u00E1dor" }
+        EE { "Estonsko" }
+        //EG { "Egypt" }
+        EH { "Z\u00E1padn\u00ED Sahara" }
+        //ER { "Eritrea" }
+        ES { "\u0160pan\u011Blsko" }
+        ET { "Etiopie" }
+        FI { "Finsko" }
+        FJ { "Fid\u017Ei" }
+        FK { "Falklandsk\u00E9 ostrovy" }
+        FM { "Mikron\u00E9sie, federativn\u00ED st\u00E1t" }
+        FO { "Faersk\u00E9 ostrovy" }
+        FR { "Francie" }
+        //GA { "Gabon" }
+        GB { "Velk\u00E1 Brit\u00E1nie" }
+        //GD { "Grenada" }
+        GE { "Gruzie" }
+        GF { "Francouzsk\u00E1 Guyana" }
+        //GH { "Ghana" }
+        //GI { "Gibraltar" }
+        GL { "Gr\u00F3nsko" }
+        GM { "Gambie" }
+        //GN { "Guinea" }
+        //GP { "Guadeloupe" }
+        GQ { "Rovn\u00EDkov\u00E1 Guinea" }
+        GR { "\u0158ecko" }
+        GS { "Ji\u017En\u00ED Georgie a Ji\u017En\u00ED Sandwichovy ostrovy" }
+        //GT { "Guatemala" }
+        //GU { "Guam" }
+        //GW { "Guinea-Bissau" }
+        //GY { "Guyana" }
+        HK { "Hongkong, zvl\u00E1\u0161tn\u00ED administrativn\u00ED oblast \u010C\u00EDny" }
+        HM { "Ostrovy Heard a McDonald" }
+        //HN { "Honduras" }
+        HR { "Chorvatsko" }
+        //HT { "Haiti" }
+        HU { "Ma\u010Farsko" }
+        ID { "Indon\u00E9sie" }
+        IE { "Irsko" }
+        IL { "Izrael" }
+        IN { "Indie" }
+        IO { "Britsk\u00E9 \u00FAzem\u00ED v Indick\u00E9m oce\u00E1nu" }
+        IQ { "Ir\u00E1k" }
+        IR { "\u00CDr\u00E1n" }
+        IS { "Island" }
+        IT { "It\u00E1lie" }
+        JM { "Jamajka" }
+        JO { "Jord\u00E1nsko" }
+        JP { "Japonsko" }
+        KE { "Ke\u0148a" }
+        KG { "Kyrgyzst\u00E1n" }
+        KH { "Kambod\u017Ea" }
+        //KI { "Kiribati" }
+        KM { "Komory" }
+        KN { "Svat\u00FD Kitts a Nevis" }
+        KP { "Severn\u00ED Korea" } // alternate name { "Korea, lidov\u011B demokratick\u00E1 republika" }
+        KR { "Ji\u017En\u00ED Korea" } // alternate name { "Korea, republika" }
+        KW { "Kuvajt" }
+        KY { "Kajmansk\u00E9 ostrovy" }
+        KZ { "Kazachst\u00E1n" }
+        LA { "Lidov\u011B demokratick\u00E1 republika Laos" }
+        LB { "Libanon" }
+        LC { "Svat\u00E1 Lucie" }
+        LI { "Lichten\u0161tejnsko" }
+        LK { "Sr\u00ED Lanka" }
+        LR { "Lib\u00E9rie" }
+        //LS { "Lesotho" }
+        LT { "Litva" }
+        LU { "Lucembursko" }
+        LV { "Loty\u0161sko" }
+        LY { "Libye" }    // alternate name { "Libye" }
+        MA { "Maroko" }
+        MC { "Monako" }
+        MD { "Moldavsko, republika" }
+        MG { "Madagaskar" }
+        MH { "Marshallovy ostrovy" }
+        //MK { "Makedonie, republika" }
+        //ML { "Mali" }
+        MM { "Myanmar (Burma)" }
+        MN { "Mongolsko" }
+        //MO { "\u010C\u00EDna, zvl\u00E1\u0161tn\u00ED administrativn\u00ED oblast \u010C\u00EDny" }
+        MP { "Severn\u00ED Mariany" }
+        MQ { "Martinik" }
+        MR { "Maurit\u00E1nie" }
+        //MS { "Montserrat" }
+        //MT { "Malta" }
+        MU { "Mauricius" }
+        MV { "Maladivy" }
+        //MW { "Malawi" }
+        MX { "Mexiko" }
+        MY { "Malajsie" }
+        MZ { "Mosambik" }
+        NA { "Namibie" }
+        NC { "Nov\u00E1 Kaledonie" }
+        //NE { "Niger" }
+        NF { "Norfolk" }
+        NG { "Nig\u00E9rie" }
+        NI { "Nikaragua" }
+        NL { "Nizozemsko" }
+        NO { "Norsko" }
+        NP { "Nep\u00E1l" }
+        //NR { "Nauru" }
+        //NU { "Niue" }
+        NZ { "Nov\u00FD Z\u00E9land" }
+        OM { "Om\u00E1n" }
+        //PA { "Panama" }
+        //PE { "Peru" }
+        PF { "Francouzsk\u00E1 Polyn\u00E9sie" }
+        PG { "Papua-Nov\u00E1 Guinea" }
+        PH { "Filip\u00EDny" }
+        PK { "P\u00E1kist\u00E1n" }
+        PL { "Polsko" }
+        PM { "Svat\u00FD Pierre a Miquelon" }
+        //PN { "Pitcairn" }
+        PR { "Portoriko" }
+        //PS { "Palestinsk\u00E9 \u00FAzem\u00ED" }
+        PT { "Portugalsko" }
+        //PW { "Palau" }
+        //PY { "Paraguay" }
+        QA { "Katar" }
+        //RE { "R\u00E9union" }
+        RO { "Rumunsko" }
+        RU { "Rusko" }
+        //RW { "Rwanda" }
+        SA { "Sa\u00FAdsk\u00E1 Ar\u00E1bie" }
+        SB { "\u0160alamounovy ostrovy" }
+        SC { "Seychely" }
+        SD { "S\u00FAd\u00E1n" }
+        SE { "\u0160v\u00E9dsko" }
+        SG { "Singapur" }
+        SH { "Svat\u00E1 Helena" }
+        SI { "Slovinsko" }
+        SJ { "Svalbard a Jan Mayen" }
+        SK { "Slovensko" }
+        //SL { "Sierra Leone" }
+        //SM { "San Marino" }
+        //SN { "Senegal" }
+        SO { "Som\u00E1lsko" }
+        SR { "Surinam" }
+        ST { "Svat\u00FD Tom\u00E1\u0161" }
+        //SV { "El Salvador" }
+        SY { "S\u00FDrie" }    // alternate name { "S\u00FDrie" }
+        SZ { "Svazijsko" }
+        TC { "Ostrovy Caicos a Turks" }
+        TD { "\u010Cad" }
+        TF { "Francouzsk\u00E1 ji\u017En\u00ED teritoria" }
+        //TG { "Togo" }
+        TH { "Thajsko" }
+        TJ { "T\u00E1d\u017Eikist\u00E1n" }
+        //TK { "Tokelau" }
+        TL { "V\u00FDchodn\u00ED Timor" }
+        TM { "Turkmenist\u00E1n" }
+        TN { "Tunisko" }
+        //TO { "Tonga" }
+        TR { "Turecko" }
+        TT { "Trinidad a Tobago" }
+        //TV { "Tuvalu" }
+        TW { "Tchaj-wan" }
+        TZ { "Tanzanie" }
+        UA { "Ukrajina" }
+        //UG { "Uganda" }
+        UM { "Men\u0161\u00ED odlehl\u00E9 ostrovy USA" }
+        US { "Spojen\u00E9 st\u00E1ty" }
+        //UY { "Uruguay" }
+        UZ { "Uzbekist\u00E1n" }
+        VA { "Svat\u00FD stolec" }
+        VC { "Svat\u00FD Vincent a Grenadiny" }
+        //VE { "Venezuela" }
+        VG { "Britsk\u00E9 Panensk\u00E9 ostrovy" }
+        VI { "Americk\u00E9 Panensk\u00E9 ostrovy" }
+        //VN { "Vietnam" }
+        //VU { "Vanuatu" }
+        WF { "Wallis a Futuna" }
+        //WS { "Samoa" }
+        YE { "Jemen" }
+        //YT { "Mayotte" }
+        YU { "Jugosl\u00E1vie" }
+        ZA { "Ji\u017En\u00ED Afrika" }
+        ZM { "Zambie" }
+        //ZW { "Zimbabwe" }
+    }
+    Languages {
+        aa { "Afar\u0161tina" }
+        ab { "Abch\u00E1z\u0161tina" }
+        af { "Afrik\u00E1n\u0161tina" }
+        am { "Amhar\u0161tina" }
+        ar { "Arab\u0161tina" }
+        as { "Assam\u00E9\u0161tina" }
+        ay { "Aym\u00E1r\u0161tina" }
+        az { "Azerbajd\u017E\u00E1n\u0161tina" }
+
+        ba { "Baskir\u0161tina" }
+        be { "B\u011Bloru\u0161tina" }
+        bg { "Bulhar\u0161tina" }
+        bh { "Bihar\u0161tina" }
+        bi { "Bisl\u00E1m\u0161tina" }
+        bn { "Beng\u00E1l\u0161tina" }
+        bo { "Tibet\u0161tina" }
+        br { "Breta\u0148\u0161tina" }
+
+        ca { "Katal\u00E1n\u0161tina" }
+        co { "Korsi\u010Dtina" }
+        cs { "\u010Ce\u0161tina" }
+        cy { "Vel\u0161tina" }
+
+        da { "D\u00E1n\u0161tina" }
+        de { "N\u011Bm\u010Dina" }
+        dz { "Bh\u00FAt\u00E1n\u0161tina" }
+
+        el { "\u0158e\u010Dtina" }
+        en { "Angli\u010Dtina" }
+        eo { "Esperanto" }
+        es { "\u0160pan\u011Bl\u0161tina" }
+        et { "Eston\u0161tina" }
+        eu { "Baski\u010Dtina" } 
+
+        fa { "Per\u0161tina" }
+        fi { "Fin\u0161tina" }
+        fj { "Fid\u017Ei" }
+        fo { "Faer\u0161tina" }
+        fr { "Francouz\u0161tina" }
+        fy { "Fr\u00ED\u0161tina" }
+
+        ga { "Ir\u0161tina" }
+        gd { "Skotsk\u00E1 gal\u0161tina" }
+        gl { "Hali\u010D\u0161tina" }
+        gn { "Guaran\u0161tina" }
+        gu { "Gujarat\u0161tina" }
+
+        ha { "Hausa" }
+        he { "Hebrej\u0161tina" }
+        hi { "Hind\u0161tina" }
+        hr { "Chorvat\u0161tina" }
+        hu { "Ma\u010Far\u0161tina" }
+        hy { "Arm\u00E9n\u0161tina" }
+
+        
+        ia { "Interlingua" }
+        ie { "Interlingue" }
+        id { "Indon\u00E9\u0161tina" }
+        ik { "Inupiak\u0161tina" }
+        //in { "Indon\u00E9\u0161tina" }
+        is { "Island\u0161tina" }
+        it { "Ital\u0161tina" }
+        iu { "Inuktitut\u0161tina" }
+        // iw { "Hebrej\u0161tina" }
+
+        ja { "Japon\u0161tina" }
+        //ji { "Jidi\u0161" }
+        jv { "Jav\u00E1n\u0161tina" }
+
+
+        ka { "Gruz\u00EDn\u0161tina" }
+        kk { "Kazach\u0161tina" }
+        kl { "Gr\u00F3n\u0161tina" }
+        km { "Kambod\u017E\u0161tina" }
+        kn { "Kannad\u0161tina" }      
+        ko { "Korej\u0161tina" }
+        ks { "Ka\u0161m\u00EDr\u0161tina" }
+        ku { "Kurd\u0161tina" }
+        ky { "Kirgiz\u0161tina" }
+
+        la { "Latina" }
+        ln { "Lingal\u0161tina" }
+        lo { "Lao\u0161tina" }
+        lt { "Litev\u0161tina" }
+        lv { "Loty\u0161tina" }
+
+        mg { "Malga\u0161tina" }
+        mi { "Maor\u0161tina" }
+        mk { "Makedon\u0161tina" }
+        ml { "Malabar\u0161tina" }
+        mn { "Mongol\u0161tina" }
+        mo { "Moldav\u0161tina" }
+        mr { "Marathi" }
+        ms { "Malaj\u0161tina" }
+        mt { "Malt\u0161tina" }
+        my { "Barm\u0161tina" }
+
+        na { "Nauru" }
+        nl { "Holand\u0161tina" }
+        ne { "Nep\u00E1l\u0161tina" }
+        no { "Nor\u0161tina" }
+
+        oc { "Occitan" }
+        om { "Oromo (Afan)" }
+        or { "Oriya" }
+
+        pa { "Pa\u0148d\u017E\u00E1b\u0161tina" }
+        pl { "Pol\u0161tina" }        
+        ps { "Pashto (Pushto)" }
+        pt { "Portugal\u0161tina" }
+
+        qu { "Ke\u010Du\u00E1n\u0161tina" }
+
+        rm { "R\u00E9torom\u00E1n\u0161tina" }
+        rn { "Kirundi" }
+        ro { "Rumun\u0161tina" }
+        ru { "Ru\u0161tina" }
+        rw { "Kinyarwand\u0161tina" }
+
+        sa { "Sanskrt" }
+        sd { "Sindhi" }
+        sg { "Sangho" }
+        sh { "Srbochorvat\u0161tina" }
+        si { "Sinh\u00E1l\u0161tina" }
+        sk { "Sloven\u0161tina" }
+        sl { "Slovin\u0161tina" }
+        sm { "Samoy\u0161tina" }
+        sn { "Shona" }
+        so { "Som\u00E1l\u0161tina" }
+        sq { "Alb\u00E1n\u0161tina" }
+        sr { "Srb\u0161tina" }
+        ss { "Siswat\u0161tina" }
+        st { "Sesotho" }
+        su { "Sundan\u0161tina" }
+        sv { "\u0160v\u00E9d\u0161tina" }
+        sw { "Svahil\u0161tina" }
+
+        ta { "Tamil\u0161tina" }
+        te { "Telug\u0161tina" }
+        tg { "T\u00E1d\u017Ei\u010Dtina" }
+        th { "Thaj\u0161tina" }
+        ti { "Tigrinij\u0161tina" }
+        tk { "Turkmen\u0161tina" }
+        tl { "Tagalog" }
+        tn { "Setswan\u0161tina" }
+        to { "Tonga" }
+        tr { "Ture\u010Dtina" }
+        ts { "Tsonga" }
+        tt { "Tatar\u0161tina" }
+        tw { "Twi" }
+
+        ug { "Uighur\u0161tina" }
+        uk { "Ukrajin\u0161tina" }
+        ur { "Urd\u0161tina" }
+        uz { "Uzbe\u010Dtina" }
+
+        vi { "Vietnam\u0161tina" }
+        vo { "Volapuk" }
+
+        wo { "Wolof" }
+
+        xh { "Xhosa" }
+
+        yi { "Jidi\u0161" }
+        yo { "Yoruba" }
+
+        za { "Zhuang" }
+        zu { "Zulu" }
+        zh { "\u010C\u00EDn\u0161tina" }
+       
+    }
+    NumberElements { 
+        ",",
+        "\u00A0",
+        ";",
+        "%",
+        "0",
+        "#",
+        "-",
+        "E",
+        "\u2030",
+        "\u221E",
+        "\uFFFD",
+        ",",
+        "+",
+    }
+    localPatternChars { "GuMtkHmsSEDFwWahKzUeygAZ" }
+
+    LocaleScript{ 
+        "Latn",  // ISO 15924 Name 
+    }
+    ExemplarCharacters { "[a-z \u00fd \u00e1 \u00e9 \u00ed \u00f3 \u00fa \u011b \u016f \u010d \u010f \u0148 \u0159 \u0161 \u0165 \u017e]" }
+
+    // Currency display names
+    Currencies {
+        CZK { "K\u010D", "CZK" }
+    }
+    calendar{
+        gregorian{
+            AmPmMarkers{
+                "dop.",
+                "odp.",
+            }
+            DateTimeElements:intvector {
+                2,
+                1, // "Minimal Days in First Week" is unknown. Root value used instead
+            }
+            DateTimePatterns{
+                "H:mm:ss z",
+                "H:mm:ss z",
+                "H:mm:ss",
+                "H:mm",
+                "EEEE, d. MMMM yyyy",
+                "d. MMMM yyyy",
+                "d.M.yyyy",
+                "d.M.yy",
+                "{1} {0}",
+            }
+            dayNames{
+                format{
+                    abbreviated{
+                        "ne",
+                        "po",
+                        "\u00FAt",
+                        "st",
+                        "\u010dt",
+                        "p\u00E1",
+                        "so",
+                    }
+                    wide{
+                        "ned\u011Ble",
+                        "pond\u011Bl\u00ED",
+                        "\u00FAter\u00FD",
+                        "st\u0159eda",
+                        "\u010dtvrtek",
+                        "p\u00E1tek",
+                        "sobota",
+                    }
+                }
+            }
+            eras{
+                "p\u0159.Kr.",
+                "po Kr.",
+            }
+            monthNames{
+                format{
+                    abbreviated{
+                        "1.",
+                        "2.",
+                        "3.",
+                        "4.",
+                        "5.",
+                        "6.",
+                        "7.",
+                        "8.",
+                        "9.",
+                        "10.",
+                        "11.",
+                        "12.",
+                    }
+                    narrow {
+                        "l",
+                        "\u00fa",
+                        "b",
+                        "d",
+                        "k",
+                        "\u010d",
+                        "\u010d",
+                        "s",
+                        "z",
+                        "\u0159",
+                        "l",
+                        "p"
+		    }
+                    wide{
+                        "ledna",
+                        "\u00fanora",
+                        "b\u0159ezna",
+                        "dubna",
+                        "kv\u011btna",
+                        "\u010dervna",
+                        "\u010dervence",
+                        "srpna",
+                        "z\u00e1\u0159\u00ed",
+                        "\u0159\u00edjna",
+                        "listopadu",
+                        "prosince",
+                    }
+                }
+                stand-alone{
+                    abbreviated{
+                        "1.",
+                        "2.",
+                        "3.",
+                        "4.",
+                        "5.",
+                        "6.",
+                        "7.",
+                        "8.",
+                        "9.",
+                        "10.",
+                        "11.",
+                        "12.",
+                    }
+                    narrow {
+                        "l",
+                        "\u00fa",
+                        "b",
+                        "d",
+                        "k",
+                        "\u010d",
+                        "\u010d",
+                        "s",
+                        "z",
+                        "\u0159",
+                        "l",
+                        "p"
+		    }
+                    wide {
+                        "Leden",
+                        "\u00danor",
+                        "B\u0159ezen",
+                        "Duben",
+                        "Kv\u011bten",
+                        "\u010cerven",
+                        "\u010cervenec",
+                        "Srpen",
+                        "Z\u00e1\u0159\u00ed",
+                        "\u0158\u00edjen",
+                        "Listopad",
+                        "Prosinec"
+                    }
+                }
+            }
+        }
+    }
+}

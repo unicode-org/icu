@@ -1,0 +1,390 @@
+﻿// ***************************************************************************
+// *
+// *   Copyright (C) 1997-2004, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+
+et {
+    Version{ "3.0" }
+    Countries {
+        Fallback{ "en"}
+        //AD { "Andorra" }
+        AE { "Araabia \u00DChendemiraadid" }
+        AF { "Afganistan" }
+        AG { "Antigua ja Barbuda" }
+        //AI { "Anguilla" }
+        AL { "Albaania" }
+        AM { "Armeenia" }
+        AN { "Hollandi Antillid" }
+        //AO { "Angola" }
+        AQ { "Antarktika" }
+        //AR { "Argentina" }
+        AS { "Ameerika Samoa" }
+        //AT { "Austria" }
+        AU { "Austraalia" }
+        //AW { "Aruba" }
+        AZ { "Aserbaid\u012Aaan" }
+        BA { "Bosnia ja Hertsegoviina" }
+        //BB { "Barbados" }
+        //BD { "Bangladesh" }
+        BE { "Belgia" }
+        //BF { "Burkina Faso" }
+        BG { "Bulgaaria" }
+        BH { "Bahrein" }
+        //BI { "Burundi" }
+        //BJ { "Benin" }
+        //BM { "Bermuda" }
+        //BN { "Brunei" }
+        BO { "Boliivia" }
+        BR { "Brasiilia" }
+        BS { "Bahama saared" }
+        //BT { "Bhutan" }
+        BV { "Bouvet\u2019 saar" }
+        //BW { "Botswana" }
+        BY { "Valgevene" }
+        //BZ { "Belize" }
+        CA { "Kanada" }
+        CC { "Kookossaared" }
+        CD { "Kongo DV" }
+        CF { "Kesk-Aafrika Vabariik" }
+        CG { "Kongo" }
+        CH { "\u0128veits" }
+        CI { "Cote d\u2019Ivoire" }
+        CK { "Cooki saared" }
+        CL { "Tiiili" }
+        CM { "Kamerun" }
+        CN { "Hiina" }
+        //CO { "Colombia" }
+        //CR { "Costa Rica" }
+        CU { "Kuuba" }
+        CV { "Cabo Verde" }
+        CX { "J\u00F5ulusaar" }
+        CY { "K\u00FCpros" }
+        CZ { "Tiehhi Vabariik" }
+        DE { "Saksamaa" }
+        //DJ { "Djibouti" }
+        DK { "Taani" }
+        //DM { "Dominica" }
+        DO { "Dominikaani Vabariik" }
+        DZ { "Al\u012Aeeria" }
+        //EC { "Ecuador" }
+        EE { "Eesti" }
+        EG { "Egiptus" }
+        EH { "L\u00E4\u00E4ne-Sahara" }
+        //ER { "Eritrea" }
+        ES { "Hispaania" }
+        ET { "Etioopia" }
+        FI { "Soome" }
+        FJ { "Fid\u012Ai" }
+        FK { "Falklandi saared" }
+        FM { "Mikroneesia Liiduriigid" }
+        FO { "F\u00E4\u00E4ri saared" }
+        FR { "Prantsusmaa" }
+        //GA { "Gabon" }
+        GB { "\u00DChendkuningriik" }
+        //GD { "Grenada" }
+        GE { "Gruusia" }
+        GF { "Prantsuse Guajaana" }
+        //GH { "Ghana" }
+        //GI { "Gibraltar" }
+        GL { "Gr\u00F6\u00F6nimaa" }
+        //GM { "Gambia" }
+        //GN { "Guinea" }
+        //GP { "Guadeloupe" }
+        GQ { "Ekvatoriaal-Guinea" }
+        GR { "Kreeka" }
+        GS { "L\u00F5una-Georgia ja L\u00F5una-Sandwichi saared" }
+        //GT { "Guatemala" }
+        //GU { "Guam" }
+        //GW { "Guinea-Bissau" }
+        //GY { "Guyana" }
+        HK { "Hongkongi erihalduspiirkond" }
+        HM { "Heard ja McDonald" }
+        //HN { "Honduras" }
+        HR { "Horvaatia" }
+        //HT { "Haiti" }
+        HU { "Ungari" }
+        ID { "Indoneesia" }
+        IE { "Iirimaa" }
+        IL { "Iisrael" }
+        //IN { "India" }
+        IO { "Briti India ookeani ala" }
+        IQ { "Iraak" }
+        IR { "Iraan" }
+        IS { "Island" }
+        IT { "Itaalia" }
+        //JM { "Jamaica" }
+        JO { "Jordaania" }
+        JP { "Jaapan" }
+        //KE { "Kenya" }
+        KG { "K\u00F5rg\u00F5zstan" }
+        KH { "Kambod\u012Aa" }
+        //KI { "Kiribati" }
+        KM { "Komoorid" }
+        KN { "Saint Kitts ja Nevis" }
+        KP { "P\u00F5hja-Korea" }    // alternate name { "Korea RDV" }
+        KR { "L\u00F5una-Korea" }    // alternate name { "Korea Vabariik" }
+        KW { "Kuveit" }
+        KY { "Kaimani saared" }
+        KZ { "Kasahstan" }
+        LA { "Laose DRV" }
+        LB { "Liibanon" }
+        //LC { "Saint Lucia" }
+        //LI { "Liechtenstein" }
+        //LK { "Sri Lanka" }
+        LR { "Libeeria" }
+        //LS { "Lesotho" }
+        LT { "Leedu" }
+        LU { "Luksemburg" }
+        LV { "L\u00E4ti" }
+        LY { "Liib\u00FCa" }
+        MA { "Maroko" }
+        //MC { "Monaco" }
+        //MD { "Moldova" }
+        MG { "Madagaskar" }
+        MH { "Marshalli Saared" }
+        MK { "Makedoonia Vabariik" }
+        //ML { "Mali" }
+        //MM { "Myanmar" }
+        MN { "Mongoolia" }
+        MO { "Aomeni Hiina erihalduspiirkond" }
+        MP { "P\u00F5hja-Mariaanid" }
+        //MQ { "Martinique" }
+        MR { "Mauritaania" }
+        //MS { "Montserrat" }
+        //MT { "Malta" }
+        //MU { "Mauritius" }
+        MV { "Maldiivid" }
+        //MW { "Malawi" }
+        MX { "Mehhiko" }
+        MY { "Malaisia" }
+        MZ { "Mosambiik" }
+        NA { "Namiibia" }
+        NC { "Uus-Kaledoonia" }
+        //NE { "Niger" }
+        NF { "Norfolk" }
+        NG { "Nigeeria" }
+        //NI { "Nicaragua" }
+        NL { "Holland" }
+        NO { "Norra" }
+        //NP { "Nepal" }
+        //NR { "Nauru" }
+        //NU { "Niue" }
+        NZ { "Uus-Meremaa" }
+        OM { "Omaan" }
+        //PA { "Panama" }
+        PE { "Peruu" }
+        PF { "Prantsuse Pol\u00FCneesia" }
+        PG { "Paapua Uus-Guinea" }
+        PH { "Filipiinid" }
+        //PK { "Pakistan" }
+        PL { "Poola" }
+        PM { "Saint-Pierre ja Miquelon" }
+        //PN { "Pitcairn" }
+        //PR { "Puerto Rico" }
+        PS { "Palestiina Omavalitsus" }
+        //PT { "Portugal" }
+        PW { "Belau" }
+        //PY { "Paraguay" }
+        QA { "Katar" }
+        //RE { "R\u00E9union" }
+        RO { "Rumeenia" }
+        RU { "Venemaa" }
+        //RW { "Rwanda" }
+        SA { "Saudi Araabia" }
+        SB { "Saalomoni Saared" }
+        SC { "Seiiellid" }
+        SD { "Sudaan" }
+        SE { "Rootsi" }
+        SG { "Singapur" }
+        //SH { "Saint Helena" }
+        SI { "Sloveenia" }
+        SJ { "Svalbard ja Jan Mayen" }
+        SK { "Slovakkia" }
+        //SL { "Sierra Leone" }
+        //SM { "San Marino" }
+        //SN { "Senegal" }
+        SO { "Somaalia" }
+        //SR { "Suriname" }
+        ST { "Sao Tom\u00E9 ja Principe" }
+        //SV { "El Salvador" }
+        SY { "S\u00FC\u00FCria" }
+        SZ { "Svaasimaa" }
+        TC { "Turks ja Caicos" }
+        TD { "Tiaad" }
+        TF { "Prantsuse L\u00F5unaalad" }
+        //TG { "Togo" }
+        TH { "Tai" }
+        TJ { "Tad\u012Aikistan" }
+        //TK { "Tokelau" }
+        TL { "Ida-Timor" }
+        TM { "T\u00FCrkmenistan" }
+        TN { "Tuneesia" }
+        //TO { "Tonga" }
+        TR { "T\u00FCrgi" }
+        TT { "Trinidad ja Tobago" }
+        //TV { "Tuvalu" }
+        //TW { "Taiwan" }
+        TZ { "Tansaania" }
+        UA { "Ukraina" }
+        //UG { "Uganda" }
+        UM { "\u00DChendriikide hajasaared" }
+        US { "Ameerika \u00DChendriigid" }
+        //UY { "Uruguay" }
+        UZ { "Usbekistan" }
+        VA { "P\u00FCha Tool (Vatikan)" }
+        VC { "Saint Vincent ja Grenadiinid" }
+        //VE { "Venezuela" }
+        VG { "Briti Neitsisaared" }
+        VI { "USA Neitsisaared" }
+        //VN { "Vietnam" }
+        //VU { "Vanuatu" }
+        WF { "Wallis ja Futuna" }
+        //WS { "Samoa" }
+        YE { "Jeemen" }
+        //YT { "Mayotte" }
+        YU { "Jugoslaavia" }
+        ZA { "L\u00F5una-Aafrika Vabariik" }
+        ZM { "Sambia" }
+        //ZW { "Zimbabwe" }
+    }
+    Languages { 
+        ar { "Araabia" }
+        bg { "Bulgaaria" }
+        cs { "Tiehhi" }
+        da { "Taani" }
+        de { "Saksa" }
+        el { "Kreeka" }
+        en { "Inglise" }
+        es { "Hispaania" }
+        et { "Eesti" }
+        fi { "Soome" }
+        fr { "Prantsuse" }
+        he { "Heebrea" }
+        hr { "Horvaadi" }
+        hu { "Ungari" }
+        it { "Itaalia" }
+        ja { "Jaapani" }
+        ko { "Korea" }
+        lt { "Leedu" }
+        lv { "L\u00E4ti" }
+        nl { "Hollandi" }
+        no { "Norra" }
+        pl { "Poola" }
+        pt { "Portugali" }
+        ro { "Rumeenia" }
+        ru { "Vene" }
+        sk { "Slovaki" }
+        sl { "Sloveeni" }
+        sv { "Rootsi" }
+        tr { "T\u00FCrgi" }
+        zh { "Hiina" }
+        //zh_cn { "Hiina (lihtsustatud)" }
+        //zh_tw { "Hiina (traditsiooniline)" }
+    }
+
+    NumberElements { 
+        ",",
+        "\u00A0",
+        ";",
+        "%",
+        "0",
+        "#",
+        "-",
+        "E",
+        "\u2030",
+        "\u221E",
+        "\uFFFD",
+        ",",
+        "+",
+    }
+    localPatternChars { "GanjkHmsSEDFwWxhKzAeugXZ" }
+
+    LocaleScript{ 
+        "Latn",  // ISO 15924 Name 
+    }
+    ExemplarCharacters { "[a-z \u00f5 \u00e4 \u00f6 \u00fc \u0161 \u017e]" }
+
+    // Currency display names
+    Currencies {
+        EEK { "kr", "EEK" }
+    }
+    calendar{
+        gregorian{
+            DateTimeElements:intvector {
+                2,
+                1, // "Minimal Days in First Week" is unknown. Root value used instead
+            }
+            DateTimePatterns{
+                "H:mm:ss z",
+                "H:mm:ss z",
+                "H:mm:ss",
+                "H:mm",
+                "EEEE, d, MMMM yyyy",
+                "d MMMM yyyy",
+                "dd.MM.yyyy",
+                "dd.MM.yy",
+                "{1} {0}",
+            }
+            dayNames{
+                format{
+                    abbreviated{
+                        "P",
+                        "E",
+                        "T",
+                        "K",
+                        "N",
+                        "R",
+                        "L",
+                    }
+                    wide{
+                        "p\u00FChap\u00E4ev",
+                        "esmasp\u00E4ev",
+                        "teisip\u00E4ev",
+                        "kolmap\u00E4ev",
+                        "neljap\u00E4ev",
+                        "reede",
+                        "laup\u00E4ev",
+                    }
+                }
+            }
+            eras{
+                "e.m.a.",
+                "m.a.j.",
+            }
+            monthNames{
+                format{
+                    abbreviated{
+                        "jaan",
+                        "veebr",
+                        "m\u00E4rts",
+                        "apr",
+                        "mai",
+                        "juuni",
+                        "juuli",
+                        "aug",
+                        "sept",
+                        "okt",
+                        "nov",
+                        "dets",
+                    }
+                    wide{
+                        "jaanuar",
+                        "veebruar",
+                        "m\u00E4rts",
+                        "aprill",
+                        "mai",
+                        "juuni",
+                        "juuli",
+                        "august",
+                        "september",
+                        "oktoober",
+                        "november",
+                        "detsember",
+                    }
+                }
+            }
+        }
+    }
+}

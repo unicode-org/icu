@@ -1,0 +1,114 @@
+## Makefile.in for ICU - tools/ctestfw
+## Copyright (c) 1999-2004, International Business Machines Corporation and
+## others. All Rights Reserved.
+## Stephen F. Booth
+
+## Source directory information
+srcdir = @srcdir@
+top_srcdir = @top_srcdir@
+
+top_builddir = ../..
+
+include $(top_builddir)/icudefs.mk
+
+## Build directory information
+subdir = tools/ctestfw
+
+## Extra files to remove for 'make clean'
+CLEANFILES = *~ $(DEPS) $(IMPORT_LIB) $(MIDDLE_IMPORT_LIB) $(FINAL_IMPORT_LIB)
+
+## Target information
+
+ifneq ($(ENABLE_STATIC),)
+TARGET = $(LIBSICU)$(CTESTFW_STUBNAME)$(ICULIBSUFFIX).$(A)
+endif
+
+CPPFLAGS += -I$(top_builddir)/common -I$(top_srcdir)/common -I$(top_srcdir)/i18n -I$(srcdir)
+DEFS += -DT_CTEST_IMPLEMENTATION
+
+
+ifneq ($(ENABLE_SHARED),)
+SO_TARGET = $(LIBICU)$(CTESTFW_STUBNAME)$(ICULIBSUFFIX).$(SO)
+ALL_SO_TARGETS = $(SO_TARGET) $(MIDDLE_SO_TARGET) $(FINAL_SO_TARGET)
+endif
+
+ALL_TARGETS = $(TARGET) $(ALL_SO_TARGETS)
+
+DYNAMICCPPFLAGS = $(SHAREDLIBCPPFLAGS)
+DYNAMICCFLAGS = $(SHAREDLIBCFLAGS)
+DYNAMICCXXFLAGS = $(SHAREDLIBCXXFLAGS)
+
+LDFLAGS += $(LDFLAGSCTESTFW)
+LIBS = $(LIBICUUC) $(DEFAULT_LIBS)
+
+OBJECTS = ctest.o tstdtmod.o testdata.o datamap.o
+
+STATIC_OBJECTS = $(OBJECTS:.o=.$(STATIC_O))
+
+DEPS = $(OBJECTS:.o=.d)
+
+## List of phony targets
+.PHONY : all all-local install install-local clean clean-local	\
+distclean distclean-local dist dist-local check check-local
+
+## Clear suffix list
+.SUFFIXES :
+
+## List of standard targets
+all: all-local
+install: install-local
+clean: clean-local
+distclean : distclean-local
+dist: dist-local
+check: all check-local
+
+all-local: $(ALL_TARGETS)
+
+install-local: install-library
+
+install-library: all-local
+#echo This doesn't need to be installed normally
+#	$(MKINSTALLDIRS) $(DESTDIR)$(libdir)
+#ifneq ($(ENABLE_STATIC),)
+#	$(INSTALL-L) $(TARGET) $(DESTDIR)$(libdir)/$(TARGET)
+#endif
+#ifneq ($(ENABLE_SHARED),)
+#	$(INSTALL-L) $(FINAL_SO_TARGET) $(DESTDIR)$(libdir)/$(FINAL_SO_TARGET)
+#ifneq ($(FINAL_SO_TARGET),$(SO_TARGET))
+#	cd $(DESTDIR)$(libdir) && $(RM) $(MIDDLE_SO_TARGET) && ln -s $(FINAL_SO_TARGET) $(MIDDLE_SO_TARGET)
+#	cd $(DESTDIR)$(libdir) && $(RM) $(SO_TARGET) && ln -s $(FINAL_SO_TARGET) $(SO_TARGET)
+#endif
+#endif
+
+dist-local:
+
+clean-local:
+	test -z "$(CLEANFILES)" || $(RMV) $(CLEANFILES)
+	$(RMV) $(OBJECTS) $(STATIC_OBJECTS) $(ALL_TARGETS)
+
+distclean-local: clean-local
+	$(RMV) Makefile
+
+check-local: all-local
+
+Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
+	cd $(top_builddir) \
+	 && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
+
+ifneq ($(ENABLE_STATIC),)
+$(TARGET): $(TARGET)($(STATIC_OBJECTS))
+	$(RANLIB) $@
+endif
+
+ifneq ($(ENABLE_SHARED),)
+$(FINAL_SO_TARGET): $(OBJECTS)
+	$(SHLIB.cc) $(LD_SONAME) $(OUTOPT)$@ $^ $(LIBS)
+endif
+
+ifeq (,$(MAKECMDGOALS))
+-include $(DEPS)
+else
+ifneq ($(patsubst %clean,,$(MAKECMDGOALS)),)
+-include $(DEPS)
+endif
+endif

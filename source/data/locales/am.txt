@@ -1,0 +1,363 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 2001-2004, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+// * Amharic language.
+// * Contributed by Daniel Yacob <yacob@geez.org>, Ge'ez Frontier Foundation
+
+am {
+    Version{ "2.0" }
+    calendar{
+            gregorian{
+            DateTimeElements:intvector { 
+                7,
+                1,
+            }
+
+            dayNames{
+                format{
+                        
+                    abbreviated {
+                        "\u12A5\u1211\u12F5",
+                        "\u1230\u129E",
+                        "\u121B\u12AD\u1230",
+                        "\u1228\u1261\u12D5",
+                        "\u1210\u1219\u1235",
+                        "\u12D3\u122D\u1265",
+                        "\u1245\u12F3\u121C",
+                    }
+                    wide {
+                        "\u12A5\u1211\u12F5",
+                        "\u1230\u129E",
+                        "\u121B\u12AD\u1230\u129E",
+                        "\u1228\u1261\u12D5",
+                        "\u1210\u1219\u1235",
+                        "\u12D3\u122D\u1265",
+                        "\u1245\u12F3\u121C",
+                    }
+                }
+            }
+            eras {
+                "\u12D3/\u12D3",
+                "\u12D3/\u121D"
+            }
+            monthNames{
+                format{
+                    abbreviated {
+                        "\u1303\u1295\u12E9",
+                        "\u134C\u1265\u1229",
+                        "\u121B\u122D\u127D",
+                        "\u12A4\u1355\u1228",
+                        "\u121C\u12ED",
+                        "\u1301\u1295",
+                        "\u1301\u120B\u12ED",
+                        "\u12A6\u1308\u1235",
+                        "\u1234\u1355\u1274",
+                        "\u12A6\u12AD\u1270",
+                        "\u1296\u126C\u121D",
+                        "\u12F2\u1234\u121D",
+                    }
+                    wide {
+                        "\u1303\u1295\u12E9\u12C8\u122A",
+                        "\u134C\u1265\u1229\u12C8\u122A",
+                        "\u121B\u122D\u127D",
+                        "\u12A4\u1355\u1228\u120D",
+                        "\u121C\u12ED",
+                        "\u1301\u1295",
+                        "\u1301\u120B\u12ED",
+                        "\u12A6\u1308\u1235\u1275",
+                        "\u1234\u1355\u1274\u121D\u1260\u122D",
+                        "\u12A6\u12AD\u1270\u12CD\u1260\u122D",
+                        "\u1296\u126C\u121D\u1260\u122D",
+                        "\u12F2\u1234\u121D\u1260\u122D",
+                    }
+                }
+            }
+        }
+    }         
+    LocaleScript {
+        "Ethi",
+    }
+    ExemplarCharacters{"[:Ethi:]"}
+
+    Languages { 
+        aa { "\u12A0\u134B\u122D\u129B" }
+        ab { "\u12A0\u1265\u1210\u12DA\u129B" }
+        af { "\u12A0\u134D\u122A\u1243\u1295\u1235\u129B" }
+        am { "\u12A0\u121B\u122D\u129B" }
+        ar { "\u12D0\u122D\u1262\u129B" }
+        as { "\u12A0\u1233\u121C\u12DB\u12CA" }
+        ay { "\u12A0\u12EB\u121B\u122D\u129B" }
+        az { "\u12A0\u12DC\u122D\u1263\u12ED\u1303\u1295\u129B" }
+        ba { "\u1263\u1235\u12AA\u122D\u129B" }
+        be { "\u1264\u120B\u122B\u123B\u129B" }
+        bg { "\u1261\u120D\u130B\u122A\u129B" }
+        bh { "\u1262\u1203\u122A" }
+        bi { "\u1262\u1235\u120B\u121D\u129B" }
+        bn { "\u1260\u1295\u130B\u120A\u129B" }
+        bo { "\u1275\u1260\u1275\u1295\u129B" }
+        br { "\u1265\u122C\u1276\u1295\u129B" }
+        ca { "\u12AB\u1273\u120B\u1295\u129B" }
+        co { "\u12AE\u122D\u1232\u12AB\u129B" }
+        cs { "\u127C\u12AD\u129B" }
+        cy { "\u12C8\u120D\u123D" }
+        da { "\u12F4\u1292\u123D" }
+        de { "\u1300\u122D\u1218\u1295" }
+        dz { "\u12F5\u12DE\u1295\u130D\u12BB\u129B" }
+        el { "\u130D\u122A\u12AD\u129B" }
+        en { "\u12A5\u1295\u130D\u120A\u12DD\u129B" }
+        eo { "\u12A4\u1235\u1350\u122B\u1295\u1276" }
+        es { "\u1235\u1353\u1292\u123D" }
+        et { "\u12A4\u1235\u1276\u1292\u12A0\u1295" }
+        eu { "\u1263\u1235\u12AD\u129B" }
+        fa { "\u1350\u122D\u1232\u12EB\u129B" }
+        fi { "\u134A\u1292\u123D" }
+        fj { "\u134A\u1302\u129B" }
+        fo { "\u134B\u122E\u129B" }
+        fr { "\u1348\u1228\u1295\u1233\u12ED\u129B" }
+        fy { "\u134D\u122A\u1235\u129B" }
+        ga { "\u12A0\u12ED\u122A\u123D" }
+        gd { "\u12A5\u1235\u12AE\u1275\u1235 \u130C\u120D\u12AD\u129B" }
+        gl { "\u130B\u1208\u130B\u129B" }
+        gn { "\u1313\u122B\u1292\u129B" }
+        gu { "\u1309\u1303\u122D\u1272\u129B" }
+        ha { "\u1203\u12CD\u1233\u129B" }
+        he { "\u12D5\u1265\u122B\u1235\u1325" }
+        hi { "\u1210\u1295\u12F5\u129B" }
+        hr { "\u12AD\u122E\u123D\u12EB\u1295\u129B" }
+        hu { "\u1200\u1295\u130B\u122A\u129B" }
+        hy { "\u12A0\u122D\u1218\u1293\u12CA" }
+        ia { "\u12A2\u1295\u1274\u122D\u120A\u1295\u1313" }
+        id { "\u12A5\u1295\u12F6\u1292\u1232\u129B" }
+        ie { "\u12A5\u1295\u1270\u122D\u120A\u1295\u130D\u12C8" }
+        ik { "\u12A5\u1291\u1352\u12EB\u1245\u129B" }
+        is { "\u12A0\u12ED\u1235\u120B\u1295\u12F5\u129B" }
+        it { "\u1323\u120A\u12EB\u1295\u129B" }
+        iu { "\u12A5\u1291\u12AD\u1272\u1271\u1275\u129B" }
+        ja { "\u1303\u1353\u1295\u129B" }
+        jv { "\u1303\u126B\u1295\u129B" }
+        ka { "\u130A\u12EE\u122D\u130A\u12EB\u1295" }
+        kk { "\u12AB\u12DB\u12AD\u129B" }
+        kl { "\u12AB\u120B\u120A\u1231\u1275\u129B" }
+        km { "\u12AD\u1218\u122D\u129B" }
+        kn { "\u12AB\u1293\u12F3\u129B" }
+        ko { "\u12AE\u122A\u12EB\u129B" }
+        ks { "\u12AB\u123D\u121A\u122D\u129B" }
+        ku { "\u12A9\u122D\u12F5\u123D\u129B" }
+        ky { "\u12AA\u122D\u130A\u12DD\u129B" }
+        la { "\u120B\u1272\u1295\u129B" }
+        ln { "\u120A\u1295\u130B\u120B\u129B" }
+        lo { "\u120B\u12CD\u1235\u129B" }
+        lt { "\u120A\u1271\u12A0\u1292\u12EB\u1295" }
+        lv { "\u120B\u1275\u126A\u12EB\u1295" }
+        mg { "\u121B\u120B\u130B\u1235\u129B" }
+        mi { "\u121B\u12EE\u122A\u129B" }
+        mk { "\u121B\u12A8\u12F6\u1292\u129B" }
+        ml { "\u121B\u120B\u12EB\u120B\u121D\u129B" }
+        mn { "\u121E\u1295\u130E\u120B\u12CA\u129B" }
+        mo { "\u121E\u120D\u12F3\u126B\u12CA\u1293" }
+        mr { "\u121B\u122B\u12DA\u129B" }
+        ms { "\u121B\u120B\u12ED\u129B" }
+        mt { "\u121B\u120D\u1272\u1235\u129B" }
+        my { "\u1261\u122D\u121B\u129B" }
+        na { "\u1293\u12A1\u1229" }
+        ne { "\u1294\u1353\u120A\u129B" }
+        nl { "\u12F0\u127D" }
+        no { "\u1296\u122D\u12CC\u1302\u12EB\u1295" }
+        oc { "\u12A6\u12AA\u1273\u1295\u129B" }
+        om { "\u12A6\u122E\u121D\u129B" }
+        or { "\u12A6\u122A\u12EB\u129B" }
+        pa { "\u1353\u1295\u1303\u1262\u129B" }
+        pl { "\u1356\u120A\u123D" }
+        ps { "\u1351\u123D\u1276\u129B" }
+        pt { "\u1356\u122D\u1271\u130B\u120A\u129B" }
+        qu { "\u12B5\u127F\u129B" }
+        rm { "\u122E\u121B\u1295\u1235"}
+        rn { "\u1229\u1295\u12F2\u129B" }
+        ro { "\u122E\u121B\u1292\u12EB\u1295" }
+        ru { "\u122B\u123D\u129B" }
+        rw { "\u12AA\u1295\u12EB\u122D\u12CB\u1295\u12F5\u129B" }
+        sa { "\u1233\u1295\u1235\u12AD\u122A\u1275\u129B" }
+        sd { "\u1232\u1295\u12F5\u1202\u129B" }
+        sg { "\u1233\u1295\u130E\u129B" }
+        // sh { "\u0073\u0068"} // this is an error.. we need translation for this
+        si { "\u1235\u1295\u1203\u120D\u129B" }
+        sk { "\u1235\u120E\u126B\u12AD\u129B" }
+        sl { "\u1235\u120E\u126A\u129B" }
+        sm { "\u1233\u121E\u12A0\u129B" }
+        sn { "\u123E\u1293\u129B" }
+        so { "\u1231\u121B\u120D\u129B" }
+        sq { "\u120D\u1264\u1292\u129B" }
+        sr { "\u1230\u122D\u1262\u129B" }
+        ss { "\u1235\u12CB\u1272\u129B" }
+        st { "\u1236\u12DE\u129B" }
+        su { "\u1231\u12F3\u1295\u129B" }
+        sv { "\u1235\u12CA\u12F5\u1295\u129B" }
+        sw { "\u1235\u12CB\u1202\u120A\u129B" }
+        ta { "\u1273\u121A\u120D\u129B" }
+        te { "\u1270\u1209\u1309\u129B" }
+        tg { "\u1273\u1302\u12AA\u129B" }
+        th { "\u1273\u12ED\u129B" }
+        ti { "\u1275\u130D\u122D\u129B" }
+        tk { "\u1271\u122D\u12AD\u1218\u1295\u129B" }
+        tl { "\u1273\u130B\u120E\u1308\u129B" }
+        tn { "\u133D\u12CB\u1293\u12CA\u129B" }
+        to { "\u1276\u1295\u130B" }
+        tr { "\u1271\u122D\u12AD\u129B" }
+        ts { "\u133E\u1295\u130B\u129B" }
+        tt { "\u1273\u1273\u122D\u129B" }
+        tw { "\u1275\u12CA\u129B" }
+        ug { "\u12A1\u12CA\u130D\u1201\u122D\u129B" }
+        uk { "\u12E9\u12AD\u1228\u1292\u129B" }
+        ur { "\u12A1\u122D\u12F1\u129B" }
+        uz { "\u12A1\u12DD\u1260\u12AD\u129B" }
+        vi { "\u126A\u1275\u1293\u121D\u129B" }
+        vo { "\u126E\u120B\u1351\u12AD\u129B" }
+        wo { "\u12CE\u120E\u134D\u129B" }
+        xh { "\u12DE\u1233\u129B" }
+        yi { "\u12ED\u12F2\u123B\u12CA\u129B" }
+        yo { "\u12EE\u1229\u1263\u12CA\u129B" }
+        za { "\u12E1\u12CB\u1295\u130D\u129B" }
+        zh { "\u127B\u12ED\u1295\u129B" }
+        zu { "\u12D9\u1209\u129B" }
+        byn { "\u1265\u120A\u1295" }
+        gez { "\u130D\u12D5\u12DD\u129B" }
+        tig { "\u1275\u130D\u1228" }
+        sid { "\u1232\u12F3\u121D\u129B" }
+    }
+    Countries { 
+        AD { "\u12A0\u1295\u12F6\u122B" }
+        AE { "\u12E8\u1270\u1263\u1260\u1229\u1275 \u12A0\u1228\u1265 \u12A4\u121D\u122C\u1275\u1235" }
+        AL { "\u12A0\u120D\u1263\u1292\u12EB" }
+        AM { "\u12A0\u122D\u121C\u1292\u12EB" }
+        AN { "\u1294\u12D8\u122D\u120B\u1295\u12F5\u1235 \u12A0\u1295\u1272\u120D\u1235" }
+        AR { "\u12A0\u122D\u1300\u1295\u1272\u1293" }
+        AT { "\u12A6\u1235\u1275\u122A\u12EB" }
+        AU { "\u12A0\u12CD\u1235\u1275\u122C\u120A\u12EB" }
+        AZ { "\u12A0\u12D8\u122D\u1263\u1303\u1295" }
+        BA { "\u1266\u1235\u1292\u12EB \u12A5\u1293 \u1204\u122D\u12DE\u130E\u126A\u1292\u12EB" }
+        BB { "\u1263\u122D\u1264\u12F6\u1235" }
+        BE { "\u1264\u120D\u1304\u121D" }
+        BG { "\u1261\u120D\u130C\u122A\u12EB" }
+        BH { "\u1263\u1205\u122C\u1295" }
+        BM { "\u1264\u122D\u1219\u12F3" }
+        BO { "\u1266\u120A\u126A\u12EB" }
+        BR { "\u1265\u122B\u12DA\u120D" }
+        BT { "\u1261\u1205\u1273\u1295" }
+        BY { "\u1264\u120B\u1229\u1235" }
+        BZ { "\u1264\u120A\u12D8" }
+        CD { "\u12AE\u1295\u130E" }
+        CF { "\u12E8\u1218\u12AB\u12A8\u1208\u129B\u12CD \u12A0\u134D\u122A\u12AB \u122A\u1350\u1265\u120A\u12AD" }
+        CH { "\u1235\u12CA\u12D8\u122D\u120B\u1295\u12F5" }
+        CL { "\u127A\u120A" }
+        CM { "\u12AB\u121C\u1229\u1295" }
+        CN { "\u127B\u12ED\u1293" }
+        CO { "\u12AE\u120E\u121D\u1262\u12EB" }
+        CV { "\u12AC\u1355 \u126C\u122D\u12F4" }
+        CY { "\u1233\u12ED\u1355\u1228\u1235" }
+        CZ { "\u127C\u12AD \u122A\u1351\u1265\u120A\u12AD" }
+        DE { "\u1300\u122D\u1218\u1295" }
+        DK { "\u12F4\u1295\u121B\u122D\u12AD" }
+        DM { "\u12F6\u121A\u1292\u12AB" }
+        DO { "\u12F6\u121A\u1292\u12AD \u122A\u1351\u1265\u120A\u12AD" }
+        DZ { "\u12A0\u120D\u1304\u122A\u12EB" }
+        EC { "\u12A2\u12B3\u12F6\u122D" }
+        EE { "\u12A4\u1235\u1276\u1292\u12EB" }
+        EG { "\u130D\u1265\u133D" }
+        EH { "\u121D\u12D5\u122B\u1263\u12CA \u1233\u1205\u122B" }
+        ER { "\u12A4\u122D\u1275\u122B" }
+        ES { "\u1235\u1354\u1295" }
+        ET { "\u12A2\u1275\u12EE\u1335\u12EB" }
+        FI { "\u134A\u1295\u120B\u1295\u12F5" }
+        FJ { "\u134A\u1302" }
+        FM { "\u121A\u12AD\u122E\u1294\u12E2\u12EB" }
+        GB { "\u12A5\u1295\u130D\u120A\u12DD" }
+        GE { "\u1306\u122D\u1302\u12EB" }
+        GF { "\u12E8\u1348\u1228\u1295\u1233\u12ED \u1309\u12CA\u12A0\u1293" }
+        GM { "\u130B\u121D\u1262\u12EB" }
+        GN { "\u130A\u1292" }
+        GQ { "\u12A2\u12B3\u1276\u122A\u12EB\u120D \u130A\u1292" }
+        GR { "\u130D\u122A\u12AD" }
+        GW { "\u1262\u1233\u12CE"}
+        GY { "\u1309\u12EB\u1293" }
+        HK { "\u1206\u1295\u130D \u12AE\u1295\u130D" }
+        HR { "\u12AD\u122E\u12A4\u123D\u12EB" }
+        HT { "\u1200\u12ED\u1272" }
+        HU { "\u1200\u1295\u130B\u122A" }
+        ID { "\u12A2\u1295\u12F6\u1294\u12E2\u12EB" }
+        IE { "\u12A0\u12E8\u122D\u120B\u1295\u12F5" }
+        IL { "\u12A5\u1235\u122B\u12A4\u120D" }
+        IN { "\u1205\u1295\u12F5" }
+        IQ { "\u12A2\u122B\u1245" }
+        IS { "\u12A0\u12ED\u1235\u120B\u1295\u12F5" }
+        IT { "\u1323\u120A\u12EB\u1295" }
+        JM { "\u1303\u121B\u12ED\u12AB" }
+        JO { "\u1306\u122D\u12F3\u1295" }
+        JP { "\u1303\u1353\u1295" }
+        KH { "\u12AB\u121D\u1266\u12F2\u12EB" }
+        KM { "\u12AE\u121E\u122E\u1235" }
+        KP { "\u12F0\u1261\u1265 \u12AE\u122A\u12EB" }
+        KR { "\u1230\u121C\u1295 \u12AE\u122A\u12EB" }
+        KW { "\u12AD\u12CC\u1275" }
+        LB { "\u120A\u1263\u1296\u1235" }
+        LT { "\u120A\u1271\u12CC\u1292\u12EB" }
+        LV { "\u120B\u1275\u126A\u12EB" }
+        LY { "\u120A\u1262\u12EB" }
+        MA { "\u121E\u122E\u12AE" }
+        MD { "\u121E\u120D\u12F6\u126B" }
+        MK { "\u121B\u12A8\u12F6\u1292\u12EB" }
+        MN { "\u121E\u1295\u130E\u120A\u12EB" }
+        MO { "\u121B\u12AB\u12CE" }
+        MR { "\u121E\u122A\u1274\u1292\u12EB" }
+        MT { "\u121B\u120D\u1273" }
+        MU { "\u121B\u1229\u1238\u1235" }
+        MX { "\u121C\u12AD\u1232\u12AE" }
+        MY { "\u121B\u120C\u12E2\u12EB" }
+        NA { "\u1293\u121A\u1262\u12EB" }
+        NC { "\u1292\u12CD \u12AB\u120C\u12F6\u1292\u12EB" }
+        NG { "\u1293\u12ED\u1304\u122A\u12EB" }
+        NL { "\u1294\u12D8\u122D\u120B\u1295\u12F5" }
+        NO { "\u1296\u122D\u12CC" }
+        NP { "\u1294\u1353\u120D" }
+        NZ { "\u1292\u12CD \u12DA\u120B\u1295\u12F5" }
+        PE { "\u1354\u1229" }
+        PF { "\u12E8\u1348\u1228\u1295\u1233\u12ED \u1356\u120A\u1294\u12E2\u12EB" }
+        PG { "\u1353\u1351\u12CB \u1292\u12CD \u130A\u1292" }
+        PL { "\u1356\u120B\u1295\u12F5" }
+        PR { "\u1356\u122D\u1273 \u122A\u12AE" }
+        RO { "\u122E\u121C\u1292\u12EB" }
+        RU { "\u122B\u123A\u12EB" }
+        SA { "\u1233\u12CD\u12F5\u12A0\u1228\u1262\u12EB" }
+        SD { "\u1231\u12F3\u1295" }
+        SE { "\u1235\u12CA\u12F5\u1295" }
+        SG { "\u1232\u1295\u130B\u1356\u122D" }
+        SI { "\u1235\u120E\u126C\u1292\u12EB" }
+        SK { "\u1235\u120E\u126B\u12AA\u12EB" }
+        SN { "\u1234\u1294\u130B\u120D" }
+        SO { "\u1231\u121B\u120C" }
+        SP { "\u1230\u122D\u1262\u12EB" }
+        SY { "\u1232\u122A\u12EB" }
+        TD { "\u127B\u12F5" }
+        TF { "\u12E8\u1348\u1228\u1295\u1233\u12ED \u12F0\u1261\u1263\u12CA \u130D\u12DB\u1276\u127D" }
+        TH { "\u1273\u12ED\u120B\u1295\u12F5" }
+        TJ { "\u1273\u1303\u12AA\u1235\u1273\u1295" }
+        TL { "\u121D\u1235\u122B\u1245 \u1272\u121E\u122D" }
+        TN { "\u1271\u1292\u12DA\u12EB" }
+        TR { "\u1271\u122D\u12AD" }
+        TT { "\u1275\u122A\u1292\u12F3\u12F5 \u12A5\u1293 \u1276\u1263\u130E" }
+        TZ { "\u1273\u1295\u12DB\u1292\u12EB" }
+        UG { "\u12E9\u130B\u1295\u12F3" }
+        US { "\u12A0\u121C\u122A\u12AB" }
+        UZ { "\u12E9\u12DD\u1260\u12AA\u1235\u1273\u1295" }
+        VE { "\u126C\u1295\u12D9\u12CC\u120B" }
+        VG { "\u12E8\u12A5\u1295\u130D\u120A\u12DD \u12F5\u1295\u130D\u120D \u12F0\u1234\u1276\u127D" }
+        VI { "\u12E8\u12A0\u121C\u122A\u12AB \u1268\u122D\u1302\u1295 \u12F0\u1234\u1276\u127D" }
+        YE { "\u12E8\u1218\u1295" }
+        YU { "\u12E9\u130E\u12DD\u120B\u126A\u12EB" }
+        ZA { "\u12F0\u1261\u1265 \u12A0\u134D\u122A\u12AB" }
+        ZM { "\u12DB\u121D\u1262\u12EB" }
+
+    }
+}

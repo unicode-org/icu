@@ -1,0 +1,155 @@
+icu (2.6.1-1) experimental; urgency=low
+
+  * New upstream version.
+  * Ivo Timmermans:
+      * debian/rules Don't create arch-all packages in the binary-arch
+        target.  Closes: #184403
+
+ -- Ivo Timmermans <ivo@debian.org>  Thu,  6 Nov 2003 09:03:44 +0100
+
+icu (2.6-1) experimental; urgency=low
+
+  * New upstream version. Closes: #162975
+  * debian/control: New maintainers
+  * Daniel Glassey:
+      * debian/rules Change the optimisations to -O3 and -O to get it to build
+      * debian/rules get the latest config.{sub,guess} from /usr/share/misc
+        so add build-dep on autotools-dev
+      * debian/postinst gencnval is now in {prefix}/bin
+  * Ivo Timmermans:
+      * debian/control Tightened debhelper build dependency
+      * debian/control Update Standards-Version
+
+ -- Daniel Glassey <wdg@debian.org>  Wed,  3 Sep 2003 12:39:35 +0200
+
+icu (2.1-1.2) unstable; urgency=low
+
+  * NMU.
+  * Updated source/config.{sub,guess}.  Closes: #182697
+
+ -- Ivo Timmermans <ivo@debian.org>  Fri,  7 Mar 2003 20:58:23 +0100
+
+icu (2.1-1.1) unstable; urgency=low
+
+  * NMU.
+  * debian/control: Go through G++ ABI transition. Closes: #180124
+  * source/common/unicode/docmain.h: Fix \mainpage and \section tags,
+    so doxygen doesn't get confused any more. Closes: #178344
+  * debian/copyright: Added upstream URL. Closes: #165780
+  * 
+
+ -- Ivo Timmermans <ivo@debian.org>  Fri, 14 Feb 2003 15:21:56 +0100
+
+icu (2.1-1) unstable; urgency=low
+
+  * ICU 2.1 release.
+  * Changed the icu package description. Closes: 142886
+  * Use -O1 for CXXFLAGS for OS/390. Closes: 143021
+
+ -- Yves Arrouye <yves@debian.org>  Mon, 15 Apr 2002 14:03:12 -0700
+
+icu (2.0.2-1) unstable; urgency=low
+
+  * Minor release of ICU with fixes for threading and strTo/FromWCS
+
+ -- Yves Arrouye <yves@debian.org>  Tue,  2 Apr 2002 09:06:00 -0800
+
+icu (2.0-2.1pre20020318-1) unstable; urgency=low
+
+  * Use the library number in the development package too.
+  * ICU changed to version 2.1.
+
+ -- Yves Arrouye <yves@debian.org>  Tue, 19 Mar 2002 18:38:37 -0800
+
+icu (2.0-2.1pre20020303-1) unstable; urgency=low
+
+  * Fixed a crash in uconv when no argument is passed to -f or -t.
+  * Other upstream changes.
+  * Fresh upload with an up to date orig tar file so that future
+    diffs won't be 6 megabytes long!
+
+ -- Yves Arrouye <yves@debian.org>  Sun,  3 Mar 2002 15:31:13 -0800
+
+icu (2.0-2.1pre-1) unstable; urgency=low
+
+  * Prerelease of 2.1 with a working upgraded uconv(1).
+
+ -- Yves Arrouye <yves@debian.org>  Fri,  1 Mar 2002 21:51:47 -0800
+
+icu (2.0-3) unstable; urgency=low
+
+  * Renamed doc-base to icu-doc.doc-base. Closes: 127487
+
+ -- Yves Arrouye <yves@debian.org>  Fri, 18 Jan 2002 22:33:53 -0800
+
+icu (2.0-2) unstable; urgency=low
+
+  * Fixed a bug in uprv_uca_cloneTempTable().  Closes: 128484
+  * Update Debian bugs status.  Closes: 104642
+  * Use the official 2.0 tarball as the original tar.
+  * Added manual pages for every tool.
+
+ -- Yves Arrouye <yves@debian.org>  Wed, 16 Jan 2002 20:45:42 -0800
+
+icu (2.0-1) unstable; urgency=low
+
+  * Update to ICU version 2.0.
+
+ -- Yves Arrouye <yves@debian.org>  Sat, 10 Nov 2001 21:58:19 -0800
+
+icu (1.8.1-2) unstable; urgency=low
+
+  * Updated copyright file. Closes: 112488
+  * Updated icu-locales description. Closes: 75499
+
+ -- Yves Arrouye <yves@debian.org>  Sat, 10 Nov 2001 21:24:58 -0800
+
+icu (1.8.1-1.1) unstable; urgency=low
+
+  * NMU to resolve build failures on ia64 and (hopefully) hppa.
+  * config.{sub|guess} update
+  * source/tools/ctestfw/ctest.c: Add static declaration to global
+    variables local to that module to avoid @gprel relocation errors.
+    Closes: 104642
+
+ -- Yves Arrouye <yves@debian.org>  Sat, 10 Nov 2001 21:24:44 -0800
+
+icu (1.8.1-1) unstable; urgency=low
+
+  * Update to ICU version 1.8.1.
+
+ -- root <yves@debian.org>  Mon, 21 May 2001 15:27:36 -0700
+
+icu (1.7-1) unstable; urgency=low
+
+  * Update to ICU version 1.7.
+
+ -- Yves Arrouye <yves@debian.org>  Tue, 21 Nov 2000 22:54:52 -0800
+
+icu (1.6.0.1-20001113-2) unstable; urgency=low
+
+  * New snapshot with better ISO-2022.
+
+ -- Yves Arrouye <yves@debian.org>  Mon, 13 Nov 2000 21:05:00 -0800
+
+icu (1.6.0.1-20001027-1) unstable; urgency=low
+
+  * Move architecture-dependent files into /usr/lib, instead of
+    /usr/share.
+  * Move convrtrs.txt into /etc/icu, make it a conffile, and generate
+    /usr/lib/icu/1.6.0.1/cnvalias.dat from it at postinst time.
+  * Manage a /usr/lib/icu/current symbolic link across installations
+    of the libicuXX packages. The symlink will always point to the
+    highest numbered version of ICU.
+
+ -- Yves Arrouye <yves@debian.org>  Fri, 27 Oct 2000 15:40:12 -0700
+
+icu (1.6.0.1-20001017-1) unstable; urgency=low
+
+  * Initial Release.
+
+ -- Yves Arrouye <yves@debian.org>  Tue, 24 Oct 2000 16:14:12 -0700
+
+Local variables:
+mode: debian-changelog
+End:

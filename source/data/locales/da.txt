@@ -1,0 +1,1504 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 1997-2004, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+
+da {
+    Version {"3.0"}
+    Countries {
+        Fallback{ "en"}
+        //AD { "Andorra" }
+        AE { "Forenede Arabiske Emirater" }
+        //AF { "Afghanistan" }
+        AG { "Antigua og Barbuda" }
+        //AI { "Anguilla" }
+        AL { "Albanien" }
+        AM { "Armenien" }
+        AN { "Hollandske Antiller" }
+        //AO { "Angola" }
+        AQ { "Antarktis" }
+        //AR { "Argentina" }
+        AS { "Amerikansk Samoa" }
+        AT { "\u00D8strig" }
+        AU { "Australien" }
+        //AW { "Aruba" }
+        AZ { "Aserbajdsjan" }
+        BA { "Bosnien-Hercegovina" }
+        //BB { "Barbados" }
+        //BD { "Bangladesh" }
+        BE { "Belgien" }
+        //BF { "Burkina Faso" }
+        BG { "Bulgarien" }
+        //BH { "Bahrain" }
+        //BI { "Burundi" }
+        //BJ { "Benin" }
+        //BM { "Bermuda" }
+        BN { "Brunei Darussalam" }
+        //BO { "Bolivia" }
+        BR { "Brasilien" }
+        //BS { "Bahamas" }
+        //BT { "Bhutan" }
+        BV { "Bouvet\u00f8" }
+        //BW { "Botswana" }
+        BY { "Hviderusland" }
+        //BZ { "Belize" }
+        //CA { "Canada" }
+        CC { "Cocos-\u00f8erne (Keeling\u00f8erne)" }
+        CD { "Den Demokratiske Republik Congo" }
+        CF { "Centralafrikanske Republik" }
+        //CG { "Congo" }
+        CH { "Schweiz" }
+        CI { "Elfenbenskysten" }
+        CK { "Cook-\u00f8erne" }
+        //CL { "Chile" }
+        CM { "Cameroun" }
+        CN { "Kina" }
+        //CO { "Colombia" }
+        //CR { "Costa Rica" }
+        //CU { "Cuba" }
+        CV { "Kap Verde" }
+        CX { "Jule\u00F8en" }
+        CY { "Cypern" }
+        CZ { "Tjekkiet" }
+        DE { "Tyskland" }
+        //DJ { "Djibouti" }
+        DK { "Danmark" }
+        //DM { "Dominica" }
+        DO { "Den Dominikanske Republik" }
+        DZ { "Algeriet" }
+        //EC { "Ecuador" }
+        EE { "Estland" }
+        EG { "Egypten" }
+        EH { "Vestsahara" }
+        //ER { "Eritrea" }
+        ES { "Spanien" }
+        ET { "Etiopien" }
+        //FI { "Finland" }
+        FJ { "Fiji-\u00f8erne" }
+        FK { "Falklands\u00F8erne" }
+        FM { "Mikronesiens Forenede Stater" }
+        FO { "F\u00E6r\u00F8erne" }
+        FR { "Frankrig" }
+        //GA { "Gabon" }
+        GB { "Storbritannien" }
+        //GD { "Grenada" }
+        GE { "Georgien" }
+        GF { "Fransk Guyana" }
+        //GH { "Ghana" }
+        //GI { "Gibraltar" }
+        GL { "Gr\u00F8nland" }
+        //GM { "Gambia" }
+        //GN { "Guinea" }
+        //GP { "Guadeloupe" }
+        GQ { "\u00C6kvatorialguinea" }
+        GR { "Gr\u00E6kenland" }
+        GS { "South Georgia og De Sydlige Sandwich\u00F8er" }
+        //GT { "Guatemala" }
+        //GU { "Guam" }
+        //GW { "Guinea-Bissau" }
+        //GY { "Guyana" }
+        HK { "SAR Hongkong" }
+        HM { "Heard- og McDonald-\u00f8erne" }
+        //HN { "Honduras" }
+        HR { "Kroatien" }
+        //HT { "Haiti" }
+        HU { "Ungarn" }
+        ID { "Indonesien" }
+        IE { "Irland" }
+        //IL { "Israel" }
+        IN { "Indien" }
+        IO { "Det Britiske Territorium i Det Indiske Ocean" }
+        IQ { "Irak" }
+        //IR { "Den Islamiske Republik Iran" }
+        IS { "Island" }
+        IT { "Italien" }
+        //JM { "Jamaica" }
+        //JO { "Jordan" }
+        //JP { "Japan" }
+        //KE { "Kenya" }
+        KG { "Kirgisistan" }
+        KH { "Cambodja" }
+        //KI { "Kiribati" }
+        KM { "Comorerne" }
+        KN { "Saint Kitts og Nevis" }
+        KP { "Nordkorea" }    // alternate name { "Den Demokratiske Folkerepublik Korea" }
+        KR { "Sydkorea" }    // alternate name { "Republikken Korea" }
+        //KW { "Kuwait" }
+        KY { "Cayman\u00F8erne" }
+        KZ { "Kasakhstan" }
+        //LA { "Laos" }
+        LB { "Libanon" }
+        //LC { "Saint Lucia" }
+        //LI { "Liechtenstein" }
+        //LK { "Sri Lanka" }
+        //LR { "Liberia" }
+        //LS { "Lesotho" }
+        LT { "Litauen" }
+        //LU { "Luxembourg" }
+        LV { "Letland" }
+        LY { "Libyen" }
+        MA { "Marokko" }
+        //MC { "Monaco" }
+        MD { "Republikken Moldova" }
+        MG { "Madagaskar" }
+        MH { "Marshall\u00F8erne" }
+        MK { "Republikken Makedonien" }
+        //ML { "Mali" }
+        //MM { "Myanmar" }
+        MN { "Mongoliet" }
+        MO { "SAR Macao" }
+        MP { "Nordmarianerne" }
+        //MQ { "Martinique" }
+        MR { "Mauretanien" }
+        //MS { "Montserrat" }
+        //MT { "Malta" }
+        //MU { "Mauritius" }
+        MV { "Maldiverne" }
+        //MW { "Malawi" }
+        //MX { "Mexico" }
+        //MY { "Malaysia" }
+        //MZ { "Mozambique" }
+        //NA { "Namibia" }
+        NC { "Ny Caledonien" }
+        //NE { "Niger" }
+        //NF { "Norfolk Island" }
+        //NG { "Nigeria" }
+        //NI { "Nicaragua" }
+        NL { "Holland" }
+        NO { "Norge" }
+        //NP { "Nepal" }
+        //NR { "Nauru" }
+        //NU { "Niue" }
+        //NZ { "New Zealand" }
+        //OM { "Oman" }
+        //PA { "Panama" }
+        //PE { "Peru" }
+        PF { "Fransk Polynesien" }
+        PG { "Papua Ny Guinea" }
+        PH { "Filippinerne" }
+        //PK { "Pakistan" }
+        PL { "Polen" }
+        PM { "Saint Pierre og Miquelon" }
+        //PN { "Pitcairn" }
+        //PR { "Puerto Rico" }
+        PS { "De pal\u00E6stinensiske omr\u00E5der" }
+        //PT { "Portugal" }
+        //PW { "Palau" }
+        //PY { "Paraguay" }
+        //QA { "Qatar" }
+        RE { "Reunion" }
+        RO { "Rum\u00E6nien" }
+        RU { "Rusland" }
+        //RW { "Rwanda" }
+        SA { "Saudi-Arabien" }
+        SB { "Salomon\u00F8erne" }
+        SC { "Seychellerne" }
+        //SD { "Sudan" }
+        SE { "Sverige" }
+        //SG { "Singapore" }
+        SH { "St. Helena" }
+        SI { "Slovenien" }
+        SJ { "Svalbard og Jan Mayen" }
+        SK { "Slovakiet" }
+        //SL { "Sierra Leone" }
+        //SM { "San Marino" }
+        //SN { "Senegal" }
+        //SO { "Somalia" }
+        SP { "Serbien" }
+        SR { "Surinam" }
+        ST { "S\u00e3o Tom\u00e9 og Pr\u00edncipe" }
+        //SV { "El Salvador" }
+        SY { "Syrien" }
+        //SZ { "Swaziland" }
+        TC { "Turks- og Caicos\u00f8erne" }
+        TD { "Tchad" }
+        TF { "Franske Besiddelser i Det Sydlige Indiske Ocean" }
+        //TG { "Togo" }
+        //TH { "Thailand" }
+        TJ { "Tadsjikistan" }
+        //TK { "Tokelau" }
+        //TL { "Timor-Leste" }    // This was called East Timor
+        //TM { "Turkmenistan" }
+        TN { "Tunesien" }
+        //TO { "Tonga" }
+        TR { "Tyrkiet" }
+        TT { "Trinidad og Tobago" }
+        //TV { "Tuvalu" }
+        //TW { "Taiwan" }
+        //TZ { "Tanzania" }
+        //UA { "Ukraine" }
+        //UG { "Uganda" }
+        UM { "De Mindre Amerikanske Overs\u00f8iske \u00d8er" }
+        US { "USA" }
+        //UY { "Uruguay" }
+        UZ { "Usbekistan" }
+        VA { "Vatikanstaten" }
+        VC { "St. Vincent og Grenadinerne" }
+        //VE { "Venezuela" }
+        VG { "De britiske jomfru\u00F8er" }
+        VI { "De amerikanske jomfru\u00F8er" }
+        //VN { "Vietnam" }
+        //VU { "Vanuatu" }
+        WF { "Wallis og Futuna\u00f8erne" }
+        //WS { "Samoa" }
+        //YE { "Yemen" }
+        //YT { "Mayotte" }
+        YU { "Jugoslavien" }
+        ZA { "Sydafrika" }
+        //ZM { "Zambia" }
+        //ZW { "Zimbabwe" }
+    }
+    // Currency display names
+    Currencies {
+        ADD { "ADD", "Andorransk diner"       } // 1873-06/30/2002
+        ADP { "ADP", "Andorransk peseta"      } // 1936-
+        AED { "AED", "Dirham fra de Forenede Arabiske Emirater" } // 12/2/1971-
+        AIF { "AIF", "Affars og Issas franc" } // 07/05/1967-06/27/1977
+        ALK { "ALK", "Albansk lek (1946-1961)" } // 1946-1961
+        ALL { "lek", "Albansk lek"         } // 1961-
+        ALV { "ALV", "Albansk lek"  } // 1992-1993
+        AMD { "dram","Armensk dram"        } // 11/22/1993-
+        ANG { "NA f.","Gylden fra De Nederlandske Antiller" } // 05/10/1940-
+        AOA { "AOA", "Angolansk kwanza"        } // 09/1926-12/31/1958
+        AOK { "AOK", "Angolansk kwanza (1977-1990)" } // 01/08/1977-09/25/1990
+        AON { "AON", "Ny angolansk kwanza (1990-2000)" } // 09/25/1990-07/01/1995
+        AOR { "AOR", "Angolansk kwanza reajustado (1995-1999)" } // 07/01/1995-12/13/1999
+        AOS { "AOS", "Angolansk escudo"        } // 12/31/1958-11/11/1976
+        ARA { "ARA", "Argentinsk austral"    } // 06/14/1985-01/01/1992
+        ARM { "ARM", "Argentinsk peso moneda nacional" } // 1899-01/01/1970
+        ARP { "ARP", "Argentinsk peso (1983-1985)" } // 06/01/1983-06/14/1985
+        ARS { "Arg$","Argentinsk peso"       } // 01/01/1992-
+        ATS { "ATS", "\u00D8strigsk schilling"   } // 12/04/1947-02/28/2002
+        AUD { "$A",  "Australsk dollar"    } // 02/14/1966-
+        AUP { "AUP", "Australsk pund"     } // 1902-02/14/1966
+        AWG { "AWG", "Arubansk gylden"       } // 01/01/1986-
+        AZM { "AZM", "Aserbajdsjansk manat"  } // 1992-
+        BAD { "BAD", "Bosnien-Hercegovinsk dinar" } // 07/01/1992-08/15/1994
+        BAM { "KM",  "Bosnien-Hercegovinsk konvertibel mark" } // 01/01/1995-
+        BAN { "BAN", "Ny bosnien-hercegovinsk dinar" } // 08/15/1994-01/01/1995
+        BBD { "BDS$","Barbadisk dollar"      } // 11/29/1966-
+        BDT { "Tk",  "Bangladeshisk taka"      } // 01/01/1972-
+        BEC { "BEC", "Belgisk franc (konvertibel)" }
+        BEF { "BF",  "Belgisk franc"        } // 1831-2002
+        BEL { "BEL", "Belgisk franc (financial)" }
+        BGL { "lev", "Bulgarsk hard lev"   } // 01/01/1962-01/01/1999
+        BGM { "BGM", "Bulgarsk socialist lev" } // 05/1952-01/01/1962
+        BGN { "BGN", "Ny Bulgarsk lev"    } // 01/01/1999-
+        BGO { "BGO", "Bulgarsk lev (1879-1952)" } // 07/08/1879-05/1952
+        BHD { "BD",  "Bahrainsk dinar"       } // 10/1965-
+        BIF { "Fbu", "Burundisk franc"        } // 05/19/1964-
+        BMD { "Ber$","Bermudansk dollar"       } // 02/06/1970-
+        BMP { "BMP", "Bermudansk pund"        } // 1914-02/06/1970
+        BND { "BND", "Bruneisk dollar"        } // 06/12/1967-
+        BOP { "BOP", "Boliviansk peso"        } // 01/01/1963-1986
+        BOV { "BOV", "Boliviansk mvdol"       }
+        BRB { "BRB", "Brasiliansk cruzeiro novo (1967-1986)" } // 02/13/1967-02/28/1986
+        BRC { "BRC", "Brasiliansk cruzado"       } // 02/28/1986-01/15/1989
+        BRE { "BRE", "Brasiliansk cruzeiro (1990-1993)" } // 03/16/1990-08/01/1993
+        BRL { "R$",  "Brasiliansk real"          } // 07/01/1994-
+        BRN { "BRN", "Brasiliansk cruzado novo"  } // 01/15/1989-03/16/1990
+        BRR { "BRR", "Brasiliansk cruzeiro"      } // 08/01/1993-07/01/1994
+        BRZ { "BRZ", "Brasiliansk cruzeiro (1942-1967)" } // 1942-1967
+        BSD { "BSD", "Bahamansk dollar"       } // 5/25/1966-
+        BSP { "BSP", "Bahamansk pund"        } // 1869-5/25/1966
+        BTN { "Nu",  "Bhutansk ngultrum"      } // 1974-
+        BTR { "BTR", "Bhutansk rupee"         } // 1928-1974
+        BUK { "BUK", "Burmesisk kyat"         } // 01/04/1948-06/18/1989
+        BUR { "BUR", "Burmesisk rupee"        } // 04/01/1937-07/01/1952
+        BWP { "BWP", "Botswansk pula"        } // 1976-
+        BYB { "BYB", "Ny hviderussisk rubel (1994-1999)" } // 08/1994-01/01/2000
+        BYL { "BYL", "Hviderussisk rubel (1992-1994)" } // 09/25/1992-08/1994
+        BYR { "Rbl", "Hviderussisk rubel"        } // 01/01/2000-
+        BZD { "BZ$", "Belizisk dollar"        } // 1973-
+        BZH { "BZH", "Britisk Honduras dollar" } // 1855-1972
+        CAD { "Can$","Canadisk dollar"      } // 1858-
+        CDF { "CDF", "Congolesisk franc congolais"      } // 07/1998-
+        CDG { "CDG", "Congolesisk franc" } // 06/30/1960-07/22/1967
+        CDL { "CDL", "Congolesisk Zaire"      } // 07/23/1967-10/27/1971
+        CFF { "CFF", "CFA-franc fra den Centralafrikanske republik" } // 04/01/1973-1992
+        CHF { "SwF", "Schweizisk franc"          } // 03/17/1799-
+        CKD { "CKD", "Dollar fra Cook\u00F8erne"  } // 1987-
+        CLC { "CLC", "Chilensk condor"       } // 1817-12/31/1959
+        CLE { "CLE", "Chilensk escudo"       } // 1/1/1960-1975
+        CLF { "CLF", "Chilensk unidades de fomento" } // 1975-
+        CLP { "Ch$", "Chilensk peso"         } // 1975-
+        CMF { "CMF", "Camerounsk CFA-franc"   } // 01/01/1960-1992
+        CNP { "CNP", "Kinesisk jen min piao yuan" } // 1948-04/30/1953
+        CNY { "Y",   "Kinesisk yuan renminbi" } // 03/01/1953-
+        COB { "COB", "Colombiansk papirpeso" }
+        COF { "COF", "Congolesisk CFA-franc"      } // 04/01/1973-1992
+        COP { "Col$","Colombiansk peso"       } // 6/9/1871-
+        CRC { "C",   "Costaricansk colon"    } // 10/26/1896-
+        CSC { "CSC", "Tjekkoslovakisk koruna"  } // 05/1945-06/01/1953
+        CSK { "CSK", "Tjekkoslovakisk hard koruna" } // 06/01/1953-12/31/1992
+        CUP { "CUP", "Cubansk peso"           } // 1881-
+        CVE { "CVEsc","Kapverdisk escudo"    } // 05/22/1911-
+        CWG { "CWG", "Curacaosk gylden"      } // 1848-1960
+        CYP { "\u00A3C","Cypriotisk pund"         } // 9/5/1917-
+        CZK { "CZK", "Tjekkisk koruna" } // 01/01/1993-
+        DDM { "DDM", "\u00D8sttysk mark"  } // 07/20/1948-10/02/1990
+        DEM { "DEM", "Tysk mark"        } // 6/20/1948-2002
+        DES { "DES", "Tysk sperrmark"     } // 03/31/1951-12/29/1958
+        DJF { "DF",  "Djiboutisk franc"       } // 06/27/1977-
+        DKK { "kr",	 "Dansk krone"         } // 5/27/1873-
+        DOP { "RD$", "Dominikansk peso"       } // 10/1947-
+        DZD { "DA",  "Algerisk dinar"       } // 04/01/1964-
+        DZF { "DZF", "Ny algerisk franc"   } // 01/01/1960-04/01/1964
+        DZG { "DZG", "Algerisk franc germinal" } // 08/04/1851-12/31/1959
+        ECS { "ECS", "Ecuadoriansk sucre"        } // 4/1/1884-2000
+        EEK { "EEK", "Estisk kroon"        } // 06/21/1992-
+        EGP { "EGP", "Egyptisk pund"       } // 11/14/1885-
+        ERN { "ERN", "Eritreisk nakfa"        } // 1997-
+        ESP { "ESP","Spansk peseta"       } // 01/01/1859-02/28/2002
+        ETB { "Br",  "Etiopisk birr"       } // 09/15/1976-
+        ETD { "ETD", "Etiopisk dollar"     } // 07/23/1945-09/15/1976
+        EUR { "\u20AC","Euro"                 } // 01/01/1999-
+        FIM { "FIM", "Finsk mark"       } // 1/1/1963-2002
+        FIN { "FIN", "Finsk mark (1860-1962)" } // 4/4/1860-12/31/1962
+        FJD { "F$",  "Fijiansk dollar"          } // 01/13/1969-
+        FJP { "FJP", "Fijiansk pund"           } // 1917-01/13/1969
+        FKP { "FKP", "Pund fra Falklands\u00F8erne" } // 1901-
+        FOK { "FOK", "F\u00E6r\u00F8sk krone" } // 1940-
+        FRF { "FRF", "Fransk franc"         } // 01/01/1960-2002
+        GAF { "GAF", "Gabonesisk CFA-franc"      } // 04/01/1973-1992
+        GBP { "\u00A3","Britisk pund" } // 07/27/1694-
+        GEK { "GEK", "Georgisk kupon larit" } // 04/05/1993-09/23/1995
+        GEL { "lari","Georgisk lari"        } // 09/23/1995-
+        GHC { "GHC", "Ghanesisk cedi"           } // 03/09/1979-
+        GHO { "GHO", "Gammel ghanesisk cedi"       } // 07/19/1965-02/17/1967
+        GHP { "GHP", "Ghanesisk pund"          } // 07/14/1958-
+        GHR { "GHR", "Ghanesisk revalueret cedi"  } // 02/17/1967-03/09/1979
+        GIP { "GIP", "Gibraltarisk pund"      } // 1713-
+        GLK { "GLK", "Gr\u00F8nlandsk krone"      } // 1874-07/01/1967
+        GMD { "GMD", "Gambisk dalasi"        } // 07/01/1971-
+        GMP { "GMP", "Gambisk pund"         } // 05/13/1964-07/01/1971
+        GNF { "GF",  "Guineansk franc"         } // 01/06/1986-
+        GNI { "GNI", "Guineansk franc (1960-1972)" } // 03/01/1960-10/02/1972
+        GNS { "GNS", "Guineansk syli"          } // 10/02/1972-01/06/1986
+        GPF { "GPF", "Guadeloupsk franc"     } // 07/11/1851-12/31/1959
+        GQE { "GQE", "\u00C6kvatorialguineask ekwele guineana" } // 07/07/1975-01/01/1985
+        GQF { "GQF", "\u00C6kvatorialguineask franco" } // 01/01/1985-1992
+        GQP { "GQP", "\u00C6kvatorialguineask peseta guineana" } // 10/12/1968-07/07/1975
+        GRD { "GRD", "Gr\u00E6sk drachma"        } // 05/01/1954-2002
+        GRN { "GRN", "Ny gr\u00E6sk drachma"    } // 11/11/1944-05/01/1954
+        GTQ { "Q",   "Guatemalansk quetzal"    } // 05/27/1925-
+        GUF { "GUF", "Fransk-guyansk franc guiana" } // 07/11/1851-12/31/1959
+        GWE { "GWE", "Portugisisk guinea escudo" } // 1879-09/10/1974
+        GWM { "GWM", "Portugisisk guinea mil reis" } // 1879-09/10/1974
+        GWP { "GWP", "Guineansk peso"   } // 9/10/1974-12/31/1996
+        GYD { "G$",  "Guyansk dollar"        } // 05/26/1966-
+        HNL { "L",   "Honduransk lempira"      } // 04/03/1926-
+        HRD { "HRD", "Kroatisk dinar"       }
+        HRK { "HRK", "Kroatisk kuna"        } // 05/30/1994-
+        HTG { "HTG", "Haitisk gourde"         } // 08/26/1872-
+        HUF { "Ft",  "Ungarsk forint"     } // 07/23/1946-
+        IBP { "IBP", "Nordirsk pund" } // 07/27/1694-
+        IDG { "IDG", "Indonesisk nica guilder" } // 09/1945-05/13/1950
+        IDJ { "IDJ", "Indonesisk java rupiah" } // 10/17/1945-03/13/1950
+        IDN { "IDN", "Ny indonesisk rupiah" } // 11/02/1949-12/13/1965
+        IDR { "Rp",  "Indonesisk pupiah"     } // 12/13/1965-
+        IEP { "IR\u00A3","Irsk pund"      } // 1922-2001
+        ILL { "ILL", "Israelsk shekel"       } // 02/22/1980-09/04/1985
+        ILP { "ILP", "Israelsk pund"        } // 08/16/1948-02/22/1980
+        ILS { "ILS","Ny israelsk shekel"   } // 09/04/1985-
+        INR { "=0#Rs.|1#Re.|1<Rs.", "Indisk rupee" } // 08/17/1835-
+        IQD { "ID",  "Irakisk dinar"          } // 04/19/1931-
+        IRR { "RI",  "Iransk rial"         } // 05/13/1932-
+        ISK { "ISK", "Islandsk krona"        } // 12/1/1918-
+        ITL { "\u20A4", "Italiensk lira"         } // 11/10/1859-
+        JEP { "JEP", "Pund fra Jersey" } // 1840-
+        JMD { "J$",  "Jamaicansk dollar"      } // 09/08/1969-
+        JMP { "JMP", "Jamaicansk pund"       } // 1900-09/08/1969
+        JOD { "JD",  "Jordansk dinar"      } // 07/01/1950-
+        JPY { "\u00A5","Japansk yen"         } // 06/1871
+        KES { "K Sh","Kenyansk shilling"      } // 09/14/1966-
+        KGS { "som", "Kirgisisk som"        } // 05/10/1993-
+        KHO { "KHO", "Gammel cambodjansk riel"    } // 01/01/1955-1975
+        KHR { "CR",  "Cambodjansk riel"        } // 03/20/1980-
+        //KID { "KID", "Kiribati dollar"      } // 07/12/1979-
+        KMF { "CF",  "Comorisk franc"         } // 07/06/1975-
+        //KPP { "KPP", "North Korean People\u2019s Won" } // 1947-02/1959
+        KPW { "KPW", "Nordkoreansk won"     } // 02/1959-
+        KRH { "KRH", "Sydkoreansk hwan"    } // 02/15/1953-06/10/1962
+        KRO { "KRO", "Gammel sydkoreansk won" } // 1947-02/15/1953
+        KRW { "KRW","Sydkoreansk won"     } // 06/10/1962-
+        KWD { "KD",  "Kuwaitisk dinar"        } // 04/01/1961-
+        KYD { "KYD", "Dollar fra Cayman\u00F8erne" } // 1971-
+        KZR { "KZR", "Kasakhisk rubel"     } // 08/1993-11/05/1993
+        KZT { "T",   "Kasakhisk tenge"     } // 11/05/1993-
+        LAK { "LAK","Laotisk kip"          } // 05/05/1955-
+        LBP { "LL",  "Libanesisk pund"       } // 01/01/1948-
+        LIF { "LIF", "Liechtensteinsk franc"  } // 03/17/1799-
+        LKR { "SL Re","Srilankansk rupee"      } // 05/22/1978-
+        LNR { "LNR", "Ceylonesisk rupee"         } // 12/16/1949-05/22/1978
+        LRD { "LRD", "Liberisk dollar"      } // 01/01/1944-
+        LSL { "M",   "Lesothisk loti"         } // 01/22/1980-
+        LTL { "LTL", "Litauisk lita"      } // 06/25/1993-
+        LTT { "LTT", "Litauisk talonas"   } // 10/1/1992-06/25/1993
+        LUF { "LUF", "Luxembourgsk franc"     } // 12/20/1848-
+        LVL { "LVL", "Lettisk lats"         } // 06/28/1993-
+        LVR { "LVR", "Lettisk rubel"        } // 05/07/1992-10/17/1993
+        LYD { "LD",  "Libysk dinar"         } // 09/01/1971-
+        LYP { "LYP", "Libysk pund"         } // 12/24/1951-09/01/1971
+        MAD { "MAD", "Marokkansk dirham"      } // 10/17/1959-
+        MAF { "MAF", "Marokkansk franc"       } // 1881-10/17/1959
+        MCF { "MCF", "Ny monegaskisk franc" } // 01/01/1960-
+        MCG { "MCG", "Monegaskisk franc germinal" } // 03/07/1837-12/31/1959
+        MDC { "MDC", "Moldovisk leu cupon"   } // 06/1992-11/29/1993
+        MDL { "MDL", "Moldovisk leu"         } // 11/29/1993-
+        MDR { "MDR", "Moldovisk ruble cupon" } // 05/23/1991-06/1992
+        MGA { "MGA", "Madagaskisk ariary"    } // 11/01/1983-
+        MGF { "MGF", "Madagaskisk franc"     } // 07/01/1963-
+        MHD { "MHD", "Dollar fra Marshall\u00F8erne" } // 1979-
+        MKD { "MDen","Makedonsk denar"     } // 05/20/1993-
+        MKN { "MKN", "Makedonsk denar (1992-1993)" } // 04/26/1992-05/20/1993
+        MLF { "MLF", "Malisk franc"           } // 07/02/1962-1984
+        MMK { "MMK", "Myanmarsk kyat"         } // 06/18/1989-
+        MNT { "Tug", "Mongolsk tugrik"      } // 03/13/1921-
+        MOP { "MOP", "Macaosk pataca"         } // 1895-
+        MQF { "MQF", "Martiniquisk franc"     } // 07/11/1851-1959
+        MRO { "UM",  "Mauritansk ouguiya"   } // 06/29/1973-
+        MTL { "Lm",  "Maltesisk lira"         }
+        MTP { "MTP", "Maltesisk pund"        } // 08/13/1914-
+        MUR { "MUR", "Mauritisk rupee"      } // 1848-03/12/1968
+        MVP { "MVP", "Maldivisk rupee" } // 1960-07/01/1981
+        MVR { "MVR", "Maldivisk rufiyaa" } // 07/01/1981-
+        MWK { "MK",  "Malawisk kwacha"        } // 02/15/1971-
+        MWP { "MWP", "Malawisk pund"         } // 07/06/1964-02/15/1971
+        MXN { "MEX$","Mexicansk peso"         } // 01/01/1993-
+        MXP { "MXP", "Mexicansk silver peso (1861-1992)" } // 1822-12/31/1992
+        MYR { "RM",  "Malaysisk ringgit"    } // 9/16/1963-
+        MZE { "MZE", "Mozambiquisk escudo"    } // 09/01/1922-06/16/1980
+        MZM { "Mt",  "Mozambiquisk metical"   } // 06/16/1980-
+        NAD { "N$",  "Namibisk dollar"       } // 1993-
+        NCF { "NCF", "Nykaledonsk franc germinal" } // 12/26/1945-1992
+        NGN { "NGN", "Nigeriansk naira"       } // 01/01/1973-
+        NGP { "NGP", "Nigeriansk pund"       } // 07/01/1959-01/01/1973
+        NHF { "NHF", "CFP-franc fra Ny-Hebriderne" } // 08/31/1941-12/31/1959
+        NIC { "NIC", "Nicaraguansk cordoba"   } // 02/15/1988-04/30/1991
+        NIG { "NIG", "Nicaraguansk gold cordoba" } // 04/03/1926-02/15/1988
+        NIO { "NIO", "Nicaraguansk cordoba oro" } // 04/30/1991-
+        NLG { "NLG", "Hollandsk guilder"  } // 1795-
+        NOK { "NKr", "Norsk krone"      } // 1905-
+        NPR { "Nrs", "Nepalesisk rupee"       } // 1945-
+        NZD { "$NZ", "New Zealandsk dollar"   } // 07/10/1967-
+        NZP { "NZP", "New Zealandsk pund"    } // 1907-07/10/1967
+        OMR { "RO",  "Omansk rial"            } // 11/11/1972-
+        OMS { "OMS", "Omansk rial saidi"      } // 07/25/1970-11/11/1972
+        PAB { "PAB", "Panamansk balboa"    } // 1904-
+        PDK { "PDK", "Transdniestrisk rubelkupon" } // 12/01/1994-12/31/2000
+        PDN { "PDN", "Ny transdniestrisk rubel" } // 01/01/2001-
+        PDR { "PDR", "Transdniestrisk rubel" } // 01/24/1994-12/01/1994
+        PEI { "PEI", "Peruviansk inti"        } // 02/01/1985-07/01/1991
+        PEN { "PEN", "Peruviansk sol nuevo"   } // 07/01/1991-
+        PES { "PES", "Peruviansk sol"         } // 02/14/1863-02/01/1985
+        PGK { "PGK", "Papuansk kina" } // 09/16/1975-
+        PHP { "PHP", "Filippinsk peso"      } // 03/02/1903-
+        PKR { "Pra", "Pakistansk rupee"       } // 04/01/1948-
+        PLN { "Zl",  "Polsk zloty"         } // 01/01/1995-
+        PLZ { "PLZ", "Polsk zloty (1950-1995)" } // 10/28/1950-12/31/1994
+        PSP { "PSP", "Pal\u00E6stinensisk pund"      } // 11/01/1927-07/01/1950
+        PTC { "PTC", "Portugisisk conto"     } // 06/09/1931-2002
+        PTE { "PTE", "Portugisisk escudo"     } // 05/22/1911-2002
+        PYG { "PYG", "Paraguaysk guarani"     } // 11/1943-
+        QAR { "QR",  "Qatarsk rial"          } // 05/19/1973-
+        ROL { "leu", "Rum\u00E6nsk leu"         } // 01/28/1952-
+        RON { "RON", "Ny rum\u00E6nsk leu"     } // 08/15/1947-01/28/1952
+        RUB { "RUB", "Russisk rubel"        } // 01/01/1999-
+        RUR { "RUR", "Russisk rubel (1991-1998)" } // 12/25/1991-12/31/1998
+        RWF { "RWF", "Rwandisk franc"         } // 05/19/1964-
+        SAR { "SRl", "Saudisk riyal"          } // 10/22/1952-
+        SAS { "SAS", "Saudisk sovereign riyal" } // 01/01/1936-10/22/1952
+        SBD { "SI$", "Salomonsk dollar" } // 10/24/1977-
+        SCR { "SR",  "Seychellisk rupee"     } // 1900-
+        SDD { "SDD", "Sudansk dinar"       } // 1992-
+        SDP { "SDP", "Sudansk pund"       } // 04/08/1957-06/1998
+        SEK { "SKr", "Svensk krona"        } // 5/27/1873-
+        SGD { "S$",  "Singaporeansk dollar"     } // 8/9/1965-
+        SHP { "SHP", "Pund fra Saint Helena"   } // 1917-
+        SIB { "SIB", "Slovensk tolar bons"  } // 10/08/1991-10/07/1992
+        SIT { "SIT", "Slovensk tolar"       } // 10/07/1992-
+        SKK { "Sk",  "Slovakisk koruna"        } // 01/31/1992-
+        SLL { "SLL", "Sierraleonsk leone"   } // 08/04/1964-
+        SML { "SML", "Lira fra San Marino"      } // 12/23/1865-
+        SOS { "So. Sh.","Somalisk shilling"      } // 07/01/1960-05/24/1991
+        SQS { "SQS", "Somalilands shilling"  } // 05/24/1991-
+        SRG { "Sf",  "Surinamsk guilder"     } // 12/25/1975-
+        SSP { "SSP", "Skotsk pund"       } // 1707-
+        STD { "Db",  "Dobra fra Sao Tome og Principe" }
+        STE { "STE", "Escudo fra Sao Tome og Principe" } // 05/22/1911-07/05/1975
+        SUN { "SUN", "Ny sovjetisk rubel"     } // 12/16/1947-12/31/1960
+        SUR { "SUR", "Sovjetisk rubel"        } // 01/01/1961-12/25/1991
+        SVC { "SVC", "Salvadoransk colon"    } // 11/11/1919-
+        SYP { "LS",  "Syrisk pund"         } // 01/01/1948-
+        SZL { "E",   "Swazilandsk lilangeni"  } // 09/06/1974-
+        TDF { "TDF", "Tchadisk CFA-franc"       } // 04/01/1973-1992
+        THB { "THB", "Thailandsk baht"            } // 04/15/1928-
+        TJR { "TJR", "Tadsjikisk rubel"     } // 05/1995-12/31/2000
+        TJS { "TJS", "Tadsjikisk somoni"    } // 01/01/2001-
+        TMM { "TMM", "Turkmensk manat"   } // 11/01/1993-
+        TND { "TND", "Tunesisk dinar"       } // 11/01/1958-
+        TOP { "T$",  "Tongask pa\u02BBanga"   } // 02/14/1966-
+        TOS { "TOS", "Tongask pund" } // 1921-02/14/1966
+        TPE { "TPE", "Escudo fra Timor"         } // 01/02/1959-12/07/1975
+        TPP { "TPP", "Pataca fra Timor"         } // 1895-12/31/1958
+        TRL { "TL",  "Tyrkisk lira"         } // 11/01/1922-
+        TTD { "TT$", "Dollar fra Trinidad og Tobago" } // 08/31/1962-
+        TTO { "TTO", "Gammel dollar fra Trinidad og Tobago" } // 01/01/1899-08/01/1951
+        TVD { "TVD", "Tuvaluansk dollar"        } // 1979-
+        TWD { "NT$", "Ny taiwansk dollar"    } // 6/15/1949-
+        TZS { "T Sh","Tanzanisk shilling"   } // 06/14/1966-
+        UAH { "UAH", "Ukrainsk grynia"    } // 09/02/1996-
+        UAK { "UAK", "Ukrainsk karbovanetz" } // 11/13/1992-10/17/1993
+        UGS { "UGS", "Ugandisk shilling (1966-1987)" } // 08/15/1966-05/15/1987
+        UGX { "U Sh","Ugandisk shilling"      } // 05/15/1987-
+        USD { "US$", "Amerikanske dollar"            } // 04/04/1792-
+        USN { "USN", "Amerikansk dollar (n\u00E6ste dag)" }
+        USS { "USS", "Amerikansk dollar (samme dag)" }
+        UYF { "UYF", "Uruguaysk peso fuerte"  } // 06/23/1862-07/01/1975
+        UYP { "UYP", "Uruguaysk peso (1975-1993)" } // 07/01/1975-03/01/1993
+        UYU { "Ur$", "Uruguaysk peso uruguayo" } // 03/01/1993-
+        UZC { "UZC", "Usbekisk coupon som" } // 1993-07/1994
+        UZS { "UZS", "Usbekisk sum"       } // 07/1994-
+        VAL { "VAL", "Vatikansk lira"    } // 1929-2002
+        VDD { "VDD", "Nordvietnamesisk piastre dong viet" } // 1953-02/28/1958
+        VDN { "VDN", "Ny nordvietnamesisk dong" } // 02/28/1958-05/03/1978
+        VDP { "VDP", "Nordvietnamesisk viet minh piastre dong viet" } // 11/3/1946-1953
+        VEB { "Be",  "Venezuelansk bolivar"    } // 05/11/1871-
+        VGD { "VGD", "Dollar fra De Britiske Jomfru\u00F8er" } // 1973-
+        VND { "VND", "Vietnamesisk dong"  } // 09/14/1985-
+        VNN { "VNN", "Ny vietnamesisk dong" } // 05/03/1978-09/14/1985
+        VNR { "VNR", "Vietnamesisk republikansk dong" } // 12/29/1954-9/22/1975
+        VNS { "VNS", "Vietnamesisk national dong" } // 09/22/1975-05/03/1978
+        VUV { "VT",  "Vanuaisk vatu"         } // 01/01/1981-
+        WSP { "WSP", "Samoansk pund"  } // 12/17/1920-07/10/1962
+        WST { "WST", "Samoansk tala"   } // 07/10/1967-
+        XAF { "XAF", "Beninsk CFA-franc"       } // 1974-
+        XAU { "XAU", "Guld"                 }
+        XCD { "EC$", "\u00D8st-karaibisk dollar" } // 10/06/1965-
+        XFO { "XFO", "Fransk guldfranc"    }
+        XFU { "XFU", "Fransk UIC-franc"     }
+        XID { "XID", "Islamisk dinar"        }
+        XPF { "CFPF","CFP-franc"            } // 12/26/1945-
+        //XPS { "XPS", "Pund sterling"       } // 07/27/1694-
+        YDD { "YDD", "Yemenitisk dinar"         } // 4/1/1965-05/22/1990
+        YEI { "YEI", "Yemenitisk imadi riyal"   } // 1904-02/1964
+        YER { "YRl", "Yemenitisk rial"          } // 02/1964-
+        YUD { "YUD", "Jugoslavisk hard dinar"  } // 01/01/1966-1990
+        YUF { "YUF", "Jugoslavisk federation dinar" } // 12/04/1943-12/31/1965
+        YUG { "YUG", "Jugoslavisk 1994 dinar" } // 01/1994-02/1994
+        YUM { "YUM", "Jugoslavisk noviy dinar" } // 02/1994-
+        YUN { "YUN", "Jugoslavisk convertible dinar" } // 1990-07/1992
+        YUO { "YUO", "Jugoslavisk october dinar" } // 10/1993-12/1993
+        YUR { "YUR", "Jugoslavisk reformed dinar" } // 07/1992-10/1993
+        ZAL { "ZAL", "Sydafrikansk rand (financial)"     }
+        ZAP { "ZAP", "Sydafrikansk pund"  } // 1920-02/14/1961
+        ZAR { "R",   "Sydafrikansk rand"   } // 02/14/1961-
+        ZMK { "ZMK", "Zambisk kwacha"       } // 01/16/1968-
+        ZMP { "ZMP", "Zambisk pund"        } // 08/07/1964-01/16/1968
+        ZRN { "ZRN", "Ny zairisk zaire"    } // 11/01/1993-07/1998
+        ZRZ { "ZRZ", "Zairisk naire"        } // 10/27/1971-11/01/1993
+        ZWD { "Z$",  "Zimbabwisk dollar"      } // 04/18/1980-
+    }
+    Languages {
+        aa  { "Afar" }
+        ab  { "Abkhasisk" }
+        ace { "Achinesisk" }
+        ach { "Acoli" }
+        ada { "Adangme" }
+        ady { "Adyghe" }
+        ae  { "Avestan" }
+        af  { "Afrikaans" }
+        afa { "Afro-asiatisk (\u00f8vrige)" }
+        afh { "Afrihili" }
+        ak  { "Akan" }
+        akk { "Akkadisk" }
+        ale { "Aleutiske sprog" }
+        alg { "Algonkiske sprog" }
+        am  { "Amharisk" }
+        an  { "Aragonesisk" }
+        ang { "Angelsaksisk (ca.450-1100)" }
+        apa { "Apache sprog"}
+        ar  { "Arabisk" }
+        arc { "Aram\u00e6isk" }
+        arn { "Araukansk" }
+        arp { "Arapaho" }
+        art { "Kunstsprog (\u00f8vrige)" }
+        arw { "Arawak" }
+        as  { "Assamesisk" }
+        ast { "Asturisk" }
+        //ath { "Athapascan Languages" }
+        aus { "Australske sprog" }
+        av  { "Avarisk" }
+        awa { "Awadhi" }
+        ay  { "Aymara" }
+        az  { "Aserbajdsjan" }
+        ba  { "Bashkir" }
+        bad { "Banda" }
+        //bai { "Bamileke Languages" }
+        bal { "Baluchi" }
+        bam { "Bambara" }
+        ban { "Balinesisk" }
+        bas { "Basa" }
+        bat { "Baltiske sprog (\u00f8vrige)" }
+        be  { "Hviderussisk" }
+        bej { "Beja" }
+        bem { "Bemba" }
+        ber { "Berberiske sprog" }
+        bg  { "Bulgarsk" }
+        bh  { "Bihari" }
+        bho { "Bhojpuri" }
+        bi  { "Bislama" }
+        bik { "Bikol" }
+        bin { "Bini" }
+        bla { "Siksika" }   // Blackfoot
+        bm  { "Bambara" }
+        bn  { "Bengalsk" }
+        bnt { "Bantu" }
+        bo  { "Tibetansk" }
+        br  { "Bretonsk" }
+        bra { "Braj" }
+        bs  { "Bosnisk"}
+        btk { "Batak" }
+        bua { "Buriat" }
+        bug { "Buginesisk" }
+        byn { "Blin" }
+        ca  { "Katalansk" }
+        cad { "Caddo" }
+        cai { "Mellemamerikanske indianske sprog (\u00f8vrige)" }
+        car { "Caribisk" }
+        cau { "Kaukasiske sprog (\u00f8vrige)" }
+        ce  { "Tjetjensk" }
+        ceb { "Cebuano" }
+        cel { "Keltiske sprog (\u00f8vrige)" }
+        ch  { "Chamorro" }
+        chb { "Chibcha" }
+        chg { "Chagatai" }
+        chk { "Chuukese" }
+        chm { "Mari" }
+        chn { "Chinook" }
+        cho { "Choctaw" }
+        chp { "Chipewyan" }
+        chr { "Cherokee" }
+        chy { "Cheyenne" }
+        cmc { "Chamic sprog" }
+        co  { "Korsikansk" }
+        cop { "Koptisk" }
+        cpe { "Kreolsk og pidgin, baseret p\u00e5 engelsk (\u00f8vrige)" }
+        cpf { "Kreolsk og pidgin, baseret p\u00e5 fransk (\u00f8vrige)" }
+        cpp { "Kreolsk og pidgin, baseret p\u00e5 portugisisk (\u00f8vrige)" }
+        cr  { "Cree" }
+        crh { "Krim-tyrkisk; Krim-tatarisk" }
+        crp { "Kreolsk og pidgin (\u00f8vrige)" }
+        cs  { "Tjekkisk" }
+        csb { "Kashubian" }
+        cu  { "Kirkeslavisk" }
+        cus { "Kusjitiske sprog (\u00f8vrige)" }
+        cv  { "Chuvash" }
+        cy  { "Walisisk" }
+        //da { "dansk" } // Old value
+        da  { "Dansk" }
+        dak { "Dakota" }
+        dar { "Dargwa" }
+        day { "Dayak" }
+        de  { "Tysk" }
+        del { "Delaware" }
+        den { "Slave (Athapascan)" }
+        dgr { "Dogrib" }
+        din { "Dinka" }
+        doi { "Dogri" }
+        dra { "Dravidiske sprog (\u00f8vrige)" }
+        dsb { "Nedre sorbisk" }
+        dua { "Duala" }
+        dum { "Hollandsk (ca. 1050-1350)" }
+        dv  { "Divehi" }
+        dyu { "Dyula" }
+        dz  { "Dzongkha" }
+        ee  { "Ewe" }
+        efi { "Efik" }
+        egy { "Egyptisk (oldtid)" }
+        eka { "Ekajuk" }
+        el  { "Gr\u00E6sk" }
+        elx { "Elamitisk" }
+        en  { "Engelsk" }
+        enm { "Engelsk, Middel- (1100-1500)" }
+        eo  { "Esperanto" }
+        es  { "Spansk" }
+        et  { "Estisk" }
+        eu  { "Baskisk" }
+        ewo { "Ewondo" }
+        fa  { "Persisk" }
+        fan { "Fang" }
+        fat { "Fanti" }
+        ff  { "Fulah" }
+        fi  { "Finsk" }
+        fiu { "Finsk-ugriske sprog (\u00f8vrige)" }
+        fj  { "Fijian" }
+        fo  { "F\u00e6r\u00f8sk" }
+        fon { "Fon" }
+        fr  { "Fransk" }
+        frm { "Fransk, Middel- (ca.1400-1600)" }
+        fro { "Fransk, Old- (842-ca.1400)" }
+        fur { "Friulian" }
+        fy  { "Frisisk" }
+        ga  { "Irsk" }
+        gaa { "Ga" }
+        gay { "Gayo" }
+        gba { "Gbaya" }
+        gd  { "G\u00e6lisk (skotsk)" }
+        gem { "Germanske sprog (\u00f8vrige)" }
+        gez { "Geez" }
+        gil { "Gilbertesisk" }
+        gl  { "Galicisk" }
+        gmh { "Tysk, Middelh\u00f8j- (ca.1050-1500)" }
+        gn  { "Guarani" }
+        goh { "Tysk, Oldh\u00f8j- (ca.750-1050)" }
+        gon { "Gondi" }
+        gor { "Gorontalo" }
+        got { "Gotisk" }
+        grb { "Grebo" }
+        grc { "Gr\u00e6sk, Old- (til 1453)" }
+        gu  { "Gujaratisk" }
+        gv  { "Manx" }
+        gwi { "Gwich\u02bbin" }
+        ha  { "Hausa" }
+        hai { "Haida" }
+        haw { "Hawaiiansk" }
+        he  { "Hebraisk" }
+        hi  { "Hindi" }
+        hil { "Hiligaynon" }
+        him { "Himachali" }
+        hit { "Hittitisk" }
+        hmn { "Hmong" }
+        ho  { "Hiri Motu" }
+        hr  { "Kroatisk" }
+        hsb { "\u00d8vre sorbisk" }
+        ht  { "Haitisk" }
+        hu  { "Ungarsk" }
+        hup { "Hupa" }
+        hy  { "Armensk" }
+        hz  { "Herero" }
+        ia  { "Interlingua" }
+        iba { "Iban" }
+        id  { "Indonesisk" }
+        ie  { "Interlingue" }
+        ig  { "Igbo" }
+        ii  { "Sichuan Yi" }
+        ijo { "Ijo" }
+        ik  { "Inupiaq" }
+        ilo { "Iloko" }
+        inc { "Indiske sprog (\u00f8vrige)" }
+        ine { "Indoeurop\u00e6iske sprog (\u00f8vrige)" }
+        inh { "Ingush" }
+        io  { "Ido" }
+        ira { "Iranske sprog (\u00f8vrige)" }
+        iro { "Irokesiske sprog" }
+        is  { "Islandsk" }
+        it  { "Italiensk" }
+        iu  { "Inuktitut" }
+        ja  { "Japansk" }
+        jbo { "Lojban" }
+        jpr { "J\u00f8disk-persisk" }
+        jrb { "J\u00f8disk-arabisk" }
+        jv  { "Javanesisk" }
+        ka  { "Georgisk" }
+        kaa { "Karakalpakisk" }
+        kab { "Kabyle" }
+        kac { "Kachin" }
+        kam { "Kamba" }
+        kar { "Karen" }
+        kaw { "Kawi" }
+        kbd { "Kabardian" }
+        kg  { "Kongo" }
+        kha { "Khasi" }
+        khi { "Khoisan (\u00f8vrige)" }
+        kho { "Khotanesisk" }
+        ki  { "Kikuyu" }
+        kj  { "Kuanyama" }
+        kk  { "Kasakhisk" }
+         kl  { "Kalaallisut" }
+        km  { "Khmer" }
+        kmb { "Kimbundu" }
+        kn  { "Kannaresisk" }
+        ko  { "Koreansk" }
+         kok { "Konkani" }
+        kos { "Kosraean" }
+        kpe { "Kpelle" }
+        kr  { "Kanuri" }
+        krc { "Karachay-Balkar" }
+        kro { "Kru" }
+        kru { "Kurukh" }
+        ks  { "Kashmiri" }
+        ku  { "Kurdisk" }
+        kw  { "Cornisk" }
+        ky  { "Kirgisisk" }
+        la  { "Latin" }
+        lad { "Ladino" }
+        lah { "Lahnda" }
+        lam { "Lamba" }
+        lb  { "Luxembourgsk" }
+        lez { "Lezghian" }
+        lg  { "Ganda" }
+        li  { "Limburgsk" }
+        ln  { "Lingala" }
+        lo  { "Lao" }
+        lol { "Mongo" }
+        loz { "Lozi" }
+        lt  { "Litauisk" }
+        lu  { "Luba-Katanga" }
+        lua { "Luba-Lulua" }
+        lui { "Luiseno" }
+        lun { "Lunda" }
+        luo { "Luo" }
+        lus { "Lushai" }
+        lv  { "Lettisk" }
+        mad { "Madurese" }
+        mag { "Magahi" }
+        mai { "Maithili" }
+        mak { "Makasar" }
+        man { "Mandingo" }
+        map { "Malajo-polynesiske sprog (\u00f8vrige)" }
+        mas { "Masai" }
+        mdf { "Moksha" }
+        mdr { "Mandar" }
+        men { "Mende" }
+        mg  { "Malagasy" }
+        mga { "Irsk, Middel- (900-1200)" }
+        mh  { "Marshallese"}
+        mi  { "Maori" }
+        mic { "Micmac" }
+        min { "Minangkabau" }
+        mis { "Diverse sprog" }
+        mk  { "Makedonsk" }
+        mkh { "Mon-khmer (\u00f8vrige)" }
+        ml  { "Malayalam" }
+        mn  { "Mongolsk" }
+        mnc { "Manchu" }
+        mni { "Manipuri" }
+        //mno { "Manobo Languages" }
+        mo  { "Moldovisk" }
+        moh { "Mohawk" }
+        mos { "Mossi" }
+        mr  { "Marathisk" }
+        ms  { "Malay" }
+        mt  { "Maltesisk" }
+        mul { "Flere sprog" }
+        mun { "Munda (\u00f8vrige)" }
+        mus { "Creek" }
+        mwr { "Marwari" }
+        my  { "Burmesisk" }
+        myn { "Maya sprog" }
+        myv { "Erzya" }
+        na  { "Nauru" }
+        nah { "Nahuatl" }
+        nai { "Nordamerikanske indianske sprog (\u00f8vrige)" }
+        nap { "Neapolitansk" }
+        nb  { "Norsk Bokm\u00e5l" }
+        nd  { "Ndebele, Nord" }
+        nds { "Nedertysk; nedersachsisk" }
+        ne  { "Nepalesisk" }
+        new { "Newari" }
+        ng  { "Ndonga" }
+        nia { "Nias" }
+        nic { "Niger-Congo sprog (\u00f8vrige)" }
+        niu { "Niuean" }
+        nl  { "Hollandsk" }
+        nn  { "Nynorsk" }
+        no  { "Norsk" }
+        nog { "Nogai" }
+        non { "Islandsk, Old-" }
+        nr  { "Ndebele, Syd" }
+        nso { "Sotho, Nord" }
+        nub { "Nubiske sprog" }
+        nv  { "Navajo"}
+        ny  { "Nyanja; Chichewa; Chewa" }
+        nym { "Nyamwezi" }
+        nyn { "Nyankole" }
+        nyo { "Nyoro sprog" }
+        nzi { "Nzima" }
+        oc  { "Occitansk (efter 1500); Provencalsk"}
+        oj  { "Ojibwa" }
+        om  { "Oromo" }
+        or  { "Oriya" }
+        os  { "Ossetisk" }
+        osa { "Osage" }
+        ota { "Osmannisk (1500-1928)" }
+        oto { "Otomi sprog" }
+        pa  { "Punjabi" }
+        paa { "Papua-australske sprog (\u00f8vrige)" }
+        pag { "Pangasinan" }
+        pal { "Pahlavi" }
+        pam { "Pampanga" }
+        pap { "Papiamento" }
+        pau { "Palauansk" }
+        peo { "Persisk, Old- (ca. 600-400 f. Kr.)" }
+        phi { "Filippinske sprog (\u00f8vrige)" }
+        phn { "F\u00f8nikisk" }
+        pi  { "Pali" }
+        pl  { "Polsk" }
+        pon { "Ponape" }
+        //pra { "Prakrit Languages" }
+        pro { "Provencalsk (f\u00f8r 1500)" }
+        ps  { "Pashto (Pushto)" }
+        pt  { "Portugisisk" }
+        qu  { "Quechua" }
+        raj { "Rajasthani" }
+        rap { "Rapanui" }
+        rar { "Rarotongan" }
+        rm  { "R\u00e6toromansk" }
+        rn  { "Rundi" }
+        ro  { "Rum\u00E6nsk" }
+        roa { "Romanske sprog (\u00f8vrige)" }
+        rom { "Romani" }
+        ru  { "Russisk" }
+        rw  { "Kinyarwanda" }
+        sa  { "Sanskrit" }
+        sad { "Sandawe" }
+        sah { "Yakut" }
+        sai { "Sydamerikanske indianske sprog (\u00f8vrige)" }
+        //sal { "Salishan languages" }
+        sam { "Samaritansk" }
+        sas { "Sasak" }
+        sat { "Santali" }
+        sc  { "Sardinsk" }
+        sco { "Skotsk" }
+        sd  { "Sindhi" }
+        se  { "Nordsamisk" }
+        sel { "Selkupisk" }
+        sem { "Semitiske sprog (\u00f8vrige)" }
+        sg  { "Sango" }
+        sga { "Irsk, Old- (indtil 900)" }
+        sgn { "Tegnsprog" }
+        sh  { "Serbokroatisk" }
+        shn { "Shan" }
+        si  { "Singalesisk" }
+        sid { "Sidamo" }
+        //sio { "Siouan Languages" }
+        sit { "Sino-tibetanske sprog (\u00f8vrige)" }
+        sk  { "Slovakisk" }
+        sl  { "Slovensk" }
+         sla { "Slaviske sprog (\u00f8vrige)" }
+        sm  { "Samoansk" }
+        sma { "Sydsamisk" }
+        smi { "Samiske sprog (\u00f8vrige)" }
+        smj { "Lule Sami" }
+        smn { "Inari Sami" }
+        sms { "Skolt Sami" }
+        sn  { "Shona" }
+        snk { "Soninke" }
+        so  { "Somalisk" }
+        sog { "Sogdiansk" }
+        son { "Songhai" }
+        sq  { "Albansk" }
+        sr  { "Serbisk" }
+        srr { "Serer" }
+        ss  { "Swati" }
+        ssa { "Afrikanske sprog syd for Sahara (\u00f8vrige)" }
+        st  { "Sotho, Southern" }
+        su  { "Sundanesisk" }
+        suk { "Sukuma" }
+        sus { "Susu" }
+        sux { "Sumerisk"}
+        sv  { "Svensk" }
+        sw  { "Swahili" }
+        syr { "Syrisk" }
+        ta  { "Tamilsk" }
+        tai { "Tai (\u00f8vrige)" }
+        te  { "Telugu" }
+        tem { "Temne" }
+        ter { "Tereno" }
+        tet { "Tetum" }
+        tg  { "Tajik" }
+        th  { "Thailandsk" }
+        ti  { "Tigrinya" }
+        tig { "Tigre" }
+        tiv { "Tivi" }
+        tk  { "Turkmensk" }
+        tkl { "Tokelau" }
+        tl  { "Tagalog" }
+        tli { "Tlingit" }
+        tmh { "Tamashek" }
+        tn  { "Tswana" }
+        to  { "Tonga (Tonga\u00f8erne)" }
+        tog { "Tonga (Nyasa)" }
+        tpi { "Tok Pisin" }
+        tr  { "Tyrkisk" }
+        ts  { "Tsonga" }
+        tsi { "Tsimshisk" }
+        tt  { "Tatarisk" }
+        tum { "Tumbuka" }
+        //tup { "Tupi languages" }
+        tut { "Tyrkisk-tatariske sprog (\u00f8vrige)" }
+        tvl { "Tuvalu" }
+        tw  { "Twi" }
+        ty  { "Tahitiansk" }
+        tyv { "Tuvinian" }
+        udm { "Udmurt" }
+        ug  { "Uigurisk" }
+        uga { "Ugaristisk" }
+        uk  { "Ukrainsk" }
+        umb { "Umbundu" }
+        und { "Sproget kan ikke bestemmes" }
+        ur  { "Urdu" }
+        uz  { "Usbekisk" }
+        vai { "Vai" }
+        ve  { "Venda" }
+        vi  { "Vietnamesisk" }
+        vo  { "Volap\u00fck" }   // Yes the iso-639 standard uses the umlaut in the English name
+        vot { "Votisk" }
+        wa  { "Vallonsk" }
+        //wak { "Wakashan Languages" }
+        wal { "Walamo" }
+        war { "Waray" }
+        was { "Washo" }
+        wen { "Vendiske sprog" }
+        wo  { "Wolof" }
+        xal { "Kalmyk" }
+        xh  { "Xhosa" }
+        yao { "Yao" }
+        yap { "Yap" }
+        yi  { "Jiddisch" }
+        yo  { "Yoruba" }
+        //ypk { "Yupik Languages" }
+        za  { "Zhuang" }
+        zap { "Zapotec" }
+        zen { "Zenaga" }
+        zh  { "Kinesisk" }
+        //zh_cn { "Kinesisk (Forkortet)" }
+        //zh_tw { "Kinesisk (Uforkortet)" }
+        znd { "Zande" }
+        zu  { "Zulu" }
+        zun { "Zuni" }
+    }
+    localPatternChars { "GuMtkHmsSEDFwWahKzUeygAZ" }
+    NumberElements { 
+        ",",
+        ".",
+        ";",
+        "%",
+        "0",
+        "#",
+        "-",
+        "E",
+        "\u2030",
+        "\u221E",
+        "\uFFFD",
+        ",",
+        "+",
+    }
+    Scripts {
+       	Arab { "Arabisk" }
+        Armn { "Armensk" }
+        Cprt { "Cypriotisk" }
+        Cyrl { "Kyrillisk" }
+        Deva { "Devanagarisk" }
+        Ethi { "Etiopisk" }
+        Geor { "Georgisk" }
+        Goth { "Gotisk" }
+        Grek { "Gr\u00E6sk" }
+        Hans { "Forenklet Han" }
+        Hant { "Traditionelt Han" }
+        Hebr { "Hebraisk" }
+        Ital { "Olditalisk" }
+        Latn { "Latinsk" }
+        Mong { "Mongolsk" }
+        Qaac { "Koptisk" } // Coptic is not a formal part of ISO-15924 yet
+        Runr { "Runer" }
+        Sinh { "Singalesisk" }
+        Syrc { "Syrisk" }
+        Taml { "Tamilsk" }
+        Tibt { "Tibetansk" }
+        Ugar { "Ugaritisk" }
+        //Yiii { "Jiddisch" } // This is wrong. This is Yi, not Yiddish.
+        Zyyy { "Ukendt" } // This may need to become "undetermined script"
+    }
+    ExemplarCharacters { "[a-z \u00e6 \u00e5 \u00f8 \u00e1 \u00e9 \u00ed \u00f3 \u00fa \u00fd]" }
+    LocaleScript{  
+        "Latn",  // ISO 15924 Name 
+    }
+    SpelloutRules {
+        "-x: minus >>;\n"
+        "nol; en; to; tre; fire; fem; seks; syv; otte; ni;\n"
+        "ti; elleve; tolv; tretten; fjorten; femten; seksten; sytten; atten; nitten;\n"
+        "20: [>>og]tvye;\n"
+        "30: [>>og]tredive;\n"
+        "40: [>>og]fyrre;\n"
+        "50: [>>og]femti;\n"
+        "60: [>>og]seksti;\n"
+        "70: [>>og]syvti;\n"
+        "80: [>>og]otteti;\n"
+        "90: [>>og]niti;\n"
+        "100: et hundrede[>>];\n"
+        "200: << hundrede[>>];\n"
+        "1000: et tusinde[ >>];\n"
+        "2000: << tusinde[ >>];\n"
+        "1,000,000: en million[ >>];\n"
+        "2,000,000: << million[ >>];\n"
+        "1,000,000,000: en milliarde[ >>];\n"
+        "2,000,000,000: << milliarde[ >>];\n"
+        "1,000,000,000,000: en billione[ >>];\n"
+        "2,000,000,000,000: << billione[ >>];\n"
+        "1,000,000,000,000,000: =#,##0=;"
+    }
+    Keys{
+         collation { "Sortering" }
+         calendar  { "Kalender" }
+         currency  { "Valuta" }
+    }
+    Types{
+        // variants for collation (traditional may also be used for traditional chinese)
+        collation{
+            phonebook   { "Sorteringsr\u00E6kkef\u00F8lge i telefonb\u00F8ger" } 
+            pinyin      { "Pinyin-baseret sorteringsr\u00E6kkef\u00F8lge"    }
+            traditional { "Traditionel sorteringsr\u00E6kkef\u00F8lge"     } 
+            stroke      { "Stroke-baseret sorteringsr\u00E6kkef\u00F8lge"    }
+            direct      { "Direkte sorteringsr\u00E6kkef\u00F8lge"    } 
+        }
+        calendar{
+            japanese      { "Japansk kalender"  } 
+            buddhist      { "Buddhistisk kalender"  } 
+            islamic       { "Islamisk kalender"   }
+            islamic-civil { "Verdslig islamisk kalender" }
+            hebrew        { "J\u00F8disk kalender"    } 
+            chinese       { "Kinesisk kalender"   } 
+            gregorian     { "Gregoriansk kalender" } 
+        }
+    }
+
+    calendar{
+        gregorian{
+            DateTimeElements:intvector {
+                2,
+                4,
+            }
+            DateTimePatterns{
+                "HH:mm:ss z",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "EEEE dd MMMM yyyy",
+                "d. MMM yyyy",
+                "dd-MM-yyyy",
+                "dd-MM-yy",
+                "{1} {0}",
+            }
+            dayNames{
+                format{
+                    abbreviated{
+                        "s\u00F8n",
+                        "man",
+                        "tir",
+                        "ons",
+                        "tor",
+                        "fre",
+                        "l\u00F8r",
+                    }
+                    narrow{
+		                "S",
+		                "M",
+		                "T",
+		                "O",
+		                "T",
+		                "F",
+		                "L",
+                    }
+                    wide{
+                        "s\u00F8ndag",
+                        "mandag",
+                        "tirsdag",
+                        "onsdag",
+                        "torsdag",
+                        "fredag",
+                        "l\u00F8rdag",
+                    }
+                }
+            }
+            eras{
+                "f.Kr.",
+                "e.Kr.",
+            }
+            monthNames{
+                format{
+                    abbreviated{
+                        "jan",
+                        "feb",
+                        "mar",
+                        "apr",
+                        "maj",
+                        "jun",
+                        "jul",
+                        "aug",
+                        "sep",
+                        "okt",
+                        "nov",
+                        "dec",
+                    }
+                    narrow{
+		                "J",
+		                "F",
+		                "M",
+		                "A",
+		                "M",
+		                "J",
+		                "J",
+		                "A",
+		                "S",
+		                "O",
+		                "N",
+ 		                "D",
+                    }
+                    wide{
+                        "januar",
+                        "februar",
+                        "marts",
+                        "april",
+                        "maj",
+                        "juni",
+                        "juli",
+                        "august",
+                        "september",
+                        "oktober",
+                        "november",
+                        "december",
+                    }
+                }
+            }
+        }
+    }
+    zoneStrings {
+         {
+            "PST",
+            "Pacific-normaltid",
+            "PST",
+            "Pacific-sommertid",
+            "PDT",
+            "Los Angeles",
+        }
+        {
+            "America/Los_Angeles",
+            "Pacific-normaltid",
+            "PST",
+            "Pacific-sommertid",
+            "PDT",
+            "Los Angeles",
+        }
+        {
+            "MST",
+            "Mountain-normaltid",
+            "MST",
+            "Mountain-sommertid",
+            "MDT",
+            "Denver",
+        }
+        {
+            "America/Denver",
+            "Mountain-normaltid",
+            "MST",
+            "Mountain-sommertid",
+            "MDT",
+            "Denver",
+        }
+        {
+            "PNT",
+            "Mountain-normaltid",
+            "MST",
+            "Mountain-normaltid",
+            "MST",
+            "Phoenix",
+        }
+        {
+            "America/Phoenix",
+            "Mountain-normaltid",
+            "MST",
+            "Mountain-normaltid",
+            "MST",
+            "Phoenix",
+        }
+        {
+            "CST",
+            "Central-normaltid",
+            "CST",
+            "Central-sommertid",
+            "CDT",
+            "Chicago",
+        }
+        {
+            "America/Chicago",
+            "Central-normaltid",
+            "CST",
+            "Central-sommertid",
+            "CDT",
+            "Chicago",
+        }
+        {
+            "EST",
+            "Eastern-normaltid",
+            "EST",
+            "Eastern-sommertid",
+            "EDT",
+            "New York",
+        }
+        {
+            "America/New_York",
+            "Eastern-normaltid",
+            "EST",
+            "Eastern-sommertid",
+            "EDT",
+            "New York",
+        }
+        {
+            "IET",
+            "Eastern-normaltid",
+            "EST",
+            "Eastern-normaltid",
+            "EST",
+            "Indianapolis",
+        }
+        {
+            "America/Indianapolis",
+            "Eastern-normaltid",
+            "EST",
+            "Eastern-normaltid",
+            "EST",
+            "Indianapolis",
+        }
+        {
+            "HST",
+            "Hawaii-normaltid",
+            "HST",
+            "Hawaii--normaltid",
+            "HST",
+            "Honolulu",
+        }
+        {
+            "Pacific/Honolulu",
+            "Hawaii-normaltid",
+            "HST",
+            "Hawaii-normaltid",
+            "HST",
+            "Honolulu",
+        }
+        {
+            "AST",
+            "Alaska-normaltid",
+            "AST",
+            "Alaska-sommertid",
+            "ADT",
+            "Anchorage"
+        }
+        {
+            "America/Anchorage",
+            "Alaska-normaltid",
+            "AST",
+            "Alaska-sommertid",
+            "ADT",
+            "Anchorage",
+        }
+        {
+            "America/Halifax",
+            "Atlantic-normaltid",
+            "AST",
+            "Atlantic-sommertid",
+            "ADT",
+            "Halifax"
+        }
+        {
+            "CNT",
+            "Newfoundland-normaltid",
+            "CNT",
+            "Newfoundland-sommertid",
+            "CDT",
+            "St. Johns",
+        }
+        {
+            "America/St_Johns",
+            "Newfoundland-normaltid",
+            "CNT",
+            "Newfoundland-sommertid",
+            "CDT",
+            "St. Johns",
+        }
+        {
+            "ECT",
+            "Mellemeurop\u00e6isk normaltid",
+            "CET",
+            "Mellemeurop\u00e6isk sommertid",
+            "CEST",
+            "Paris",
+        }
+        {
+            "Europe/Paris",
+            "Mellemeurop\u00e6isk normaltid",
+            "CET",
+            "Mellemeurop\u00e6isk sommertid",
+            "CEST",
+            "Paris",
+        }
+        {
+            "GMT",
+            "Verdenstid",
+            "GMT",
+            "Verdenstid",
+            "GMT",
+            "London",
+        }
+        {
+            "Africa/Casablanca",
+            "Verdenstid",
+            "GMT",
+            "Verdenstid",
+            "GMT",
+            "Casablanca",
+        }
+        {
+            "Asia/Jerusalem",
+            "Israelsk normaltid",
+            "IST",
+            "Israelsk sommertid",
+            "IDT",
+            "Jerusalem",
+        }
+        {
+            "JST",
+            "Japansk normaltid",
+            "JST",
+            "Japansk normaltid",
+            "JST",
+            "Tokyo",
+        }
+        {
+            "Asia/Tokyo",
+            "Japansk normaltid",
+            "JST",
+            "Japansk normaltid",
+            "JST",
+            "Tokyo",
+        }
+        {
+            "Europe/Bucharest",
+            "\u00d8steurop\u00e6isk normaltid",
+            "EET",
+            "\u00d8steurop\u00e6isk sommertid",
+            "EEST",
+            "Bukarest",
+        }
+        {
+            "CTT",
+            "Kinesisk normaltid",
+            "CTT",
+            "Kinesisk normaltid",
+            "CDT",
+            "Shanghai",
+        }
+        {
+            "Asia/Shanghai",
+            "Kinesisk normaltid",
+            "CTT",
+            "Kinesisk normaltid",
+            "CDT",
+            "Shanghai",
+        }
+    }
+}

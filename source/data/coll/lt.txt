@@ -1,0 +1,30 @@
+﻿// ***************************************************************************
+// *
+// *   Copyright (C) 1997-2004, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+
+lt {
+    Version{ "2.0" }
+    collations {
+      standard { 
+        Version { "2.0" }
+        Sequence { 
+            "&\u0328 << \u0307" // put dot-above after ogonek
+            "&[before 1]D<č<<<Č"
+            "&[before 1]J<y<<<Y"
+            "&[before 1]T<š<<<Š"
+            "&[before 1]Ʒ<ž<<<Ž"
+            // sources differ on the following, and the strengths thereof
+            // so keep in file but leave commented out
+            // "&C<<ch<<<Ch<<<CH"
+            // "&H<ch<<<Ch<<<CH"
+            // "&[before 1]B<ą<<<Ą"
+            // "&[before 1]F<ę<<<Ę<ė<<<Ė"
+            // "&[before 1]I<į<<<Į"
+            // "&[before 1]V<ų<<<Ų<ū<<<Ū"
+        }
+      }
+    }
+}

@@ -1,0 +1,55 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 1997-2004, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+
+fr_BE {
+    Version{ "2.0" }
+    NumberElements {
+        ",",
+        ".",
+        ";",
+        "%",
+        "0",
+        "#",
+        "-",
+        "E",
+        "\u2030",
+        "\u221E",
+        "\uFFFD",
+        ",",
+        "+",
+    }
+
+    NumberPatterns {
+        "#,##0.###;-#,##0.###",
+        "#,##0.00 \u00a4;-#,##0.00 \u00a4",
+        "#,##0%",
+        "#E0",
+    }
+    
+    // Reuse Swiss French spellout rules.  Also for French in Zaire, 
+    // but we've no locale for it yet.
+    SpelloutRules:alias { "/ICUDATA/fr_CH" }
+    calendar{
+        gregorian{
+            DateTimeElements:intvector {
+                2,
+                1,
+            }
+            DateTimePatterns{
+                "H' h 'mm' min 'ss' s 'z",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "EEEE d MMMM yyyy",
+                "d MMMM yyyy",
+                "dd-MMM-yy",
+                "d/MM/yy",
+                "{1} {0}",
+            }
+        }
+    }
+}

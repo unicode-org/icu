@@ -1,0 +1,191 @@
+## -*-makefile-*-
+## 390-specific setup 
+## Copyright (c) 1999-2004, International Business Machines Corporation and
+## others. All Rights Reserved.
+
+###################################################################
+#                    IMPORTANT NOTE                               #
+###################################################################
+# Before you try to run the Makefile, make sure you have the      #
+# environment variables set.                                      #
+#                                                                 #
+# If you are going to do the OS390BATCH build, make sure you have #
+# the OS390BATCH environment variable set.                        #
+#                                                                 #
+#   export OS390BATCH=1                                           #
+#                                                                 #
+# To build a version of ICU which uses IEEE Floating point        #
+#                                                                 #
+#   export IEEE390=1                                              #
+#                                                                 #
+# To build a version of ICU which uses a two common libraries     #
+# where the smaller one is loaded first.                          #
+#                                                                 #
+#   export OS390_STUBDATA=1                                       #
+#                                                                 #
+# To build a version of ICU which exploits the C/C++ compiler     #
+# and runtime Extra Performance Linkage (XPLINK), specify         #
+#                                                                 #
+#   export OS390_XPLINK=1                                         #
+#                                                                 #
+###################################################################
+
+ifeq (${IEEE390},)
+IEEE390=1
+endif
+
+ifeq (${IEEE390}, 1)
+ICU_IEEE          = -Wc,"float(ieee)" -DIEEE_754=1
+else
+ICU_IEEE          = -DIEEE_754=0
+endif
+
+# TODO: Consider using  -Wc,roc,ros for making the data and strings readonly
+#       -Wc,"ros" seems to work, but not the "roc"
+CFLAGS          += -Wc,"langlvl(extended),spill(2000)" -Wc,"ros" $(ICU_BUILD_OPTIONS) $(ICU_IEEE) -Wc,dll,expo
+CXXFLAGS        += -Wc,"langlvl(extended),spill(2000)" -Wc,"ros" $(ICU_BUILD_OPTIONS) $(ICU_IEEE) -Wc,dll,expo
+DEFS            += -D_OPEN_THREADS -D_XOPEN_SOURCE_EXTENDED -D_MSE_PROTOS -D_SHR_TZNAME -D_SHR_TIMEZONE -DU_LIBICUDATA_NAME=\"$(ICUDATA_NAME)\"
+ARFLAGS         = -cr
+
+# TODO: Fix this configuration so that icu-config will work!
+#       This means we shouldn't be using so many of these special case defines.
+ifeq (${OS390_XPLINK}, 1)
+# Note:  The following options require the PTF for PQ69418 on z/OS 1.2
+#        and later.
+# These lines must be the last options specified.
+ICU_XPLINK_C      = -Wc,"xplink(backchain,storeargs)" -Wc,"GOFF,NOCSECT,RENT,SSCOMM" -Wc,"inline(auto,noreport,500,2500)"
+ICU_XPLINK_CPP    = -Wc,"xplink(backchain,storeargs)" -Wc,"GOFF,NOCSECT,NOTEMPINC" -Wc,"inline(auto,noreport,300,2500)"
+ICU_XPLINK_L      = -Wl,dll,xplink -Wl,EDIT=NO
+endif
+
+## OS390BATCH
+ifeq (${OS390BATCH},1)
+DEFS            += -DOS390BATCH
+endif
+
+# Uncomment this line or do "gmake OS390_STUBDATA=1" to enable dual common library support
+#OS390_STUBDATA=1
+
+
+## Commands to generate dependency files
+GEN_DEPS.c=	makedep                        
+GEN_DEPS.cc=	makedep
+
+## Commands to compile
+# _CXX_STEPS="-1" is a prelink step when compiling C and C++, and
+# it's only needed for long function names
+COMPILE.c       = $(COMPILE_LINK_ENVVAR) $(CXX) $(DEFS) $(CPPFLAGS) $(CFLAGS) $(ICU_XPLINK_C) -c
+COMPILE.cc      = _CXX_CXXSUFFIX="cpp" $(COMPILE_LINK_ENVVAR) $(CXX) $(DEFS) $(CPPFLAGS) $(CXXFLAGS) $(ICU_XPLINK_CPP) -c
+
+# Commands to link
+LINK.c=		$(COMPILE_LINK_ENVVAR) $(CC) $(CFLAGS) -Wl,dll $(LDFLAGS) $(ICU_XPLINK_L)
+LINK.cc=	$(COMPILE_LINK_ENVVAR) $(CXX) $(CXXFLAGS) -Wl,dll $(LDFLAGS) $(ICU_XPLINK_L)
+
+## Commands for shared library (dll)
+SHLIB.c=	$(LINK.c)
+SHLIB.cc=	$(LINK.cc)
+
+## Compiler switch to embed a runtime search path
+LD_RPATH=	-I
+
+## Environment variable to set a runtime search path
+LDLIBRARYPATH_ENVVAR = LIBPATH
+
+## An import library (a.k.a. sidedeck) is needed for z/OS and MSVC
+IMPORT_LIB_EXT = .x
+
+## Versioned target for a shared library.
+FINAL_SO_TARGET=  $(basename $(SO_TARGET))$(SO_TARGET_VERSION).$(SO)
+MIDDLE_SO_TARGET= $(basename $(SO_TARGET))$(SO_TARGET_VERSION_MAJOR).$(SO)
+
+## Versioned import library names.
+IMPORT_LIB = $(basename $(notdir $(SO_TARGET)))$(IMPORT_LIB_EXT)
+MIDDLE_IMPORT_LIB = $(basename $(notdir $(MIDDLE_SO_TARGET)))$(IMPORT_LIB_EXT)
+FINAL_IMPORT_LIB = $(basename $(notdir $(FINAL_SO_TARGET)))$(IMPORT_LIB_EXT)
+
+## Shared object suffix (switch to dll for shared library build)
+SO = dll
+## Non-shared intermediate object suffix
+STATIC_O = o
+
+ifeq ($(OS390_STUBDATA),1)
+## Suffix of the subset data library for dual common library support
+STUB_SUFFIX=_stub
+DEFS      += -DOS390_STUBDATA
+endif
+
+ifeq ($(OS390BATCH),1)
+ifeq ($(OS390_STUBDATA),1)
+BATCH_STUB_TARGET=	"//'${LOADMOD}(IXMI${SO_TARGET_VERSION_MAJOR}D1)'"
+BATCH_LIBICUDT=		"//'${LOADEXP}(IXMI${SO_TARGET_VERSION_MAJOR}D1)'"
+else
+BATCH_STUB_TARGET=	"//'${LOADMOD}(IXMI${SO_TARGET_VERSION_MAJOR}DA)'"
+BATCH_LIBICUDT=		"//'${LOADEXP}(IXMI${SO_TARGET_VERSION_MAJOR}DA)'"
+endif
+
+BATCH_COMMON_TARGET="//'${LOADMOD}(IXMI${SO_TARGET_VERSION_MAJOR}UC)'"
+BATCH_I18N_TARGET="//'${LOADMOD}(IXMI${SO_TARGET_VERSION_MAJOR}IN)'"
+BATCH_IO_TARGET="//'${LOADMOD}(IXMI${SO_TARGET_VERSION_MAJOR}IO)'"
+BATCH_LAYOUT_TARGET="//'${LOADMOD}(IXMI${SO_TARGET_VERSION_MAJOR}LE)'"
+BATCH_LAYOUTEX_TARGET="//'${LOADMOD}(IXMI${SO_TARGET_VERSION_MAJOR}LX)'"
+
+BATCH_LIBICUUC=		"//'${LOADEXP}(IXMI${SO_TARGET_VERSION_MAJOR}UC)'"
+BATCH_LIBICUI18N=	"//'${LOADEXP}(IXMI${SO_TARGET_VERSION_MAJOR}IN)'"
+BATCH_LIBICUIO=		"//'${LOADEXP}(IXMI${SO_TARGET_VERSION_MAJOR}IO)'"
+BATCH_LIBICULE=		"//'${LOADEXP}(IXMI${SO_TARGET_VERSION_MAJOR}LE)'"
+BATCH_LIBICULX=		"//'${LOADEXP}(IXMI${SO_TARGET_VERSION_MAJOR}LX)'"
+endif
+
+## Link commands to link to ICU libs
+LIBICUDT=	$(top_builddir)/stubdata/$(LIBICU)data$(ICULIBSUFFIX)$(STUB_SUFFIX)$(SO_TARGET_VERSION).x
+LIBICUUC=	$(top_builddir)/common/$(LIBICU)uc$(ICULIBSUFFIX)$(SO_TARGET_VERSION).x
+LIBICUI18N=	$(top_builddir)/i18n/$(LIBICU)i18n$(ICULIBSUFFIX)$(SO_TARGET_VERSION).x
+LIBICULE=	$(top_builddir)/layout/$(LIBICU)le$(ICULIBSUFFIX)$(SO_TARGET_VERSION).x
+LIBICULX=	$(top_builddir)/layoutex/$(LIBICU)lx$(ICULIBSUFFIX)$(SO_TARGET_VERSION).x
+LIBICUIO=	$(top_builddir)/io/$(LIBICU)io$(ICULIBSUFFIX)$(SO_TARGET_VERSION).x
+LIBCTESTFW=	$(top_builddir)/tools/ctestfw/$(LIBICU)test$(ICULIBSUFFIX)$(SO_TARGET_VERSION).x
+LIBICUTOOLUTIL=	$(top_builddir)/tools/toolutil/$(LIBICU)tu$(ICULIBSUFFIX)$(SO_TARGET_VERSION).x
+
+## Special 390 rules
+
+## Build archive from object
+%.a : $(OBJECTS)
+	$(AR) $(ARFLAGS) $@ $(OBJECTS)
+
+## Compilation rules
+%.$(STATIC_O): $(srcdir)/%.c
+	$(COMPILE.c) $(STATICCPPFLAGS) $(STATICCFLAGS) -o $@ $<
+%.o: $(srcdir)/%.c
+	$(COMPILE.c) $(DYNAMICCPPFLAGS) $(DYNAMICCFLAGS) -o $@ $<
+
+%.$(STATIC_O): $(srcdir)/%.cpp
+	$(COMPILE.cc) $(STATICCPPFLAGS) $(STATICCXXFLAGS) -o $@ $<
+%.o: $(srcdir)/%.cpp
+	$(COMPILE.cc) $(DYNAMICCPPFLAGS) $(DYNAMICCXXFLAGS) -o $@ $<
+
+## Dependency rules
+%.d : %.u
+	@$(SHELL) -ec 'cat $<  \
+		| sed '\''s/\($*\)\.o[ :]*/\1.o $@ : /g'\'' > $@; \
+		[ -s $@ ] || rm -f $@ ; rm -f $<'
+
+%.u : $(srcdir)/%.c
+	@echo "generating dependency information for $<"
+	@$(SHELL) -ec 'touch            $*.u  > /dev/null 2>&1'
+	@$(SHELL) -ec '$(GEN_DEPS.c) -f $*.u $< > /dev/null 2>&1'
+
+%.u : $(srcdir)/%.cpp
+	@echo "generating dependency information for $<"
+	@$(SHELL) -ec 'touch              $*.u  > /dev/null 2>&1'
+	@$(SHELL) -ec '$(GEN_DEPS.cc)  -f $*.u $< > /dev/null 2>&1'
+
+## Versioned libraries rules
+%$(SO_TARGET_VERSION_MAJOR).$(SO): %$(SO_TARGET_VERSION).$(SO)
+	$(RM) $@ && ln -s ${*F}$(SO_TARGET_VERSION).$(SO) $@
+%.$(SO): %$(SO_TARGET_VERSION).$(SO)
+	$(RM) $@ && ln -s ${*F}$(SO_TARGET_VERSION).$(SO) $@
+
+## Install libraries as executable
+INSTALL-L=$(INSTALL_PROGRAM)
+
+## End 390-specific setup

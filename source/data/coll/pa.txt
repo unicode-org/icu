@@ -1,0 +1,18 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 2001-2004, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+
+pa {
+    Version{ "1.0"}
+    collations {
+      standard {
+        Version { "1.0" }
+        Sequence { 
+            "[normalization on]"
+        }
+      }
+    }
+}
