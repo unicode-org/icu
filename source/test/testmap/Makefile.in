@@ -1,5 +1,5 @@
 ## Makefile.in for ICU - test/testmap
-## Copyright (c) 1999, International Business Machines Corporation and
+## Copyright (c) 2003, International Business Machines Corporation and
 ## others. All Rights Reserved.
 
 ## Source directory information
@@ -10,9 +10,6 @@ top_builddir = ../..
 
 include $(top_builddir)/icudefs.mk
 
-## Platform-specific setup
-include @platform_make_fragment@
-
 ## Build directory information
 subdir = test/testmap
 
@@ -20,11 +17,14 @@ subdir = test/testmap
 CLEANFILES = *~ $(DEPS)
 
 ## Target information
-TARGET = testmap
+TARGET = testmap$(EXEEXT)
 
-DEFS = @DEFS@
+#DEFS = @DEFS@
+CPPFLAGS += -I$(top_builddir)/common -I$(top_srcdir)/common -I$(top_srcdir)/i18n 
+#CFLAGS += @CFLAGS@
+#CXXFLAGS = @CXXFLAGS@
 
-CPPFLAGS = @CPPFLAGS@ -I$(top_srcdir)/common 
+LIBS = $(LIBICUI18N) $(LIBICUUC) $(DEFAULT_LIBS) $(LIB_M)
 
 # Data packaging options are set at configure time with --with-data-packaging.
 CPPFLAGS += @DATA_PACKAGING_CPPFLAGS@
@@ -32,12 +32,6 @@ CPPFLAGS += @DATA_PACKAGING_CPPFLAGS@
 #ifeq ($(PKGDATA_MODE),dll)
 #CPPFLAGS += -DUDATA_MAP_DLL
 #LIBICUDATA= -L$(top_srcdir)/../data -licudata
-
-CFLAGS = @CFLAGS@
-CXXFLAGS = @CXXFLAGS@
-ENABLE_RPATH = @ENABLE_RPATH@
-LDFLAGS = @LDFLAGS@
-LIBS = $(LIBICUUC) @LIBS@ @LIB_M@ $(LIBICUDATA)
 
 OBJECTS = testmap.o
 
@@ -51,7 +45,7 @@ distclean distclean-local dist dist-local check check-local
 .SUFFIXES :
 
 ## List of standard targets
-all: all-local
+Xall: all-local
 install: install-local
 clean: clean-local
 distclean : distclean-local
@@ -79,11 +73,14 @@ Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
 	 && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
 
 $(TARGET) : $(OBJECTS)
-	$(LINK.c) -o $@ $^ $(LIBS)
+	$(LINK.cc) $(OUTOPT)$@ $^ $(LIBS)
 
+ifeq (,$(MAKECMDGOALS))
+-include $(DEPS)
+else
 ifneq ($(patsubst %clean,,$(MAKECMDGOALS)),)
 ifneq ($(patsubst %install,,$(MAKECMDGOALS)),)
 -include $(DEPS)
 endif
 endif
-
+endif
