@@ -3,7 +3,7 @@
 ## Copyright (c) 1999-2000, International Business Machines Corporation and
 ## others. All Rights Reserved.
 ##
-## $Id: mh-aix,v 1.16 2000/10/16 18:05:34 yves Exp $
+## $Id: mh-aix,v 1.17 2000/11/04 02:16:11 srl Exp $
 
 ## Commands to generate dependency files
 GEN_DEPS.c=	$(CC) -E -M $(DEFS) $(CPPFLAGS)
@@ -94,5 +94,10 @@ LIBUSTDIO=      -L$(top_builddir)/extra/ustdio -lustdio
 %.u : $(srcdir)/%.cpp
 	@echo "Generating dependency information for $<"
 	@$(SHELL) -ec '$(GEN_DEPS.cc) $< > /dev/null 2>&1'
+
+## BIR  - bind with internal references [so app data and icu data doesn't collide]
+BIR_LDFLAGS= -E$(NAME).map -bnoexpall
+BIR_CPPFLAGS= -DU_HAVE_BIND_INTERNAL_REFERENCES
+BIR_DEPS= $(NAME).map
 
 ## End Aix-specific setup

@@ -66,6 +66,8 @@ main(int argc, char* argv[]) {
     /* read command line options */
     argc=u_parseArgs(argc, argv, sizeof(options)/sizeof(options[0]), options);
 
+#ifndef U_HAVE_BIND_INTERNAL_REFERENCES
+
     if( (options[4].doesOccur) && uprv_strcmp(options[4].value, "icudata")) /* be consistent with gencmn! */
     {
       uprv_strcpy(symPrefix, options[4].value);
@@ -75,6 +77,9 @@ main(int argc, char* argv[]) {
     {
       symPrefix[0] = 0;
     }
+#else
+    symPrefix[0] = 0;
+#endif
 
     /* error handling, printing usage message */
     if(argc<0) {

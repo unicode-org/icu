@@ -3,7 +3,7 @@
 ## Copyright (c) 1999-2000, International Business Machines Corporation and
 ## others. All Rights Reserved.
 ##
-## $Id: mh-solaris,v 1.20 2000/10/17 16:52:58 yves Exp $
+## $Id: mh-solaris,v 1.21 2000/11/04 02:16:11 srl Exp $
 
 ## Flags for position independent code
 SHAREDLIBCFLAGS = -KPIC
@@ -94,4 +94,8 @@ LIBUSTDIO=      -L$(top_builddir)/extra/ustdio -lustdio
 %.$(SO): %.$(SO).$(SO_TARGET_VERSION_MAJOR)
 	$(RM) $@ && ln -s $*.$(SO).$(SO_TARGET_VERSION) $@
 
+# 
+BIR_LDFLAGS=  -Wl,-M,$(NAME).map -Wl,-B,symbolic -Wl,-B,eliminate
+BIR_CPPFLAGS= -DU_HAVE_BIND_INTERNAL_REFERENCES
+BIR_DEPS=   $(NAME).map
 ## End Solaris-specific setup
