@@ -196,7 +196,6 @@ $(BUILDDIR)/$(ICUDT)unorm.icu: $(UNICODEDATADIR)/UnicodeData.txt $(UNICODEDATADI
 
 # ucadata.icu
 $(BUILDDIR)/$(ICUDT)ucadata.icu: $(UNICODEDATADIR)/FractionalUCA.txt $(TOOLDIR)/genuca/genuca$(EXEEXT) $(BUILDDIR)/$(ICUDT)unorm.icu
-	ls -l $(BUILDDIR)/$(ICUDT)unorm.icu
 	$(INVOKE) $(TOOLDIR)/genuca/genuca -s $(UNICODEDATADIR) -d $(BUILDDIR) -i $(BUILDDIR) 
 
 # unames.icu
