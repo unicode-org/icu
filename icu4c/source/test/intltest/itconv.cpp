@@ -24,9 +24,18 @@ void IntlTestConvert::runIndexedTest( int32_t index, bool_t exec, char* &name, c
     if (exec) logln("TestSuite Convert: ");
     switch (index) {
         case 0:
-            name = "ConvertTest"; 
+            name = "TestConvert"; 
             if (exec) {
-                logln("ConvertTest---"); logln("");
+                logln("TestConvert---"); logln("");
+                ConvertTest test;
+                callTest( test, par );
+            }
+            break;
+
+        case 1:
+            name = "TestAmbiguous";
+            if (exec) {
+                logln("TestAmbiguous---"); logln("");
                 ConvertTest test;
                 callTest( test, par );
             }
