@@ -250,7 +250,7 @@ pt {
         1,
     }
     DateTimePatterns { 
-        "HH'H'mm'm' z",
+        "HH'H'mm'm'ss's' z",
         "HH:mm:ss z",
         "HH:mm:ss",
         "HH:mm",
