@@ -1322,6 +1322,35 @@ void CollationAPITest::TestAttribute()
     delete coll;
 }
 
+void CollationAPITest::TestVariableTopSetting() {
+  UErrorCode status = U_ZERO_ERROR;
+
+  UChar vt[256] = { 0 };
+
+  Collator *coll = Collator::createInstance(status);
+
+  uint32_t oldVarTop = coll->getVariableTop(status);
+
+  vt[0] = 0x0041;
+
+  uint32_t newVarTop = coll->setVariableTop(vt, 1, status);
+
+  if((newVarTop & 0xFFFF0000) != (coll->getVariableTop(status) & 0xFFFF0000)) {
+    errln("Didn't set vartop properly\n");
+  }
+
+  coll->setVariableTop(oldVarTop, status);
+
+  uint32_t newerVarTop = coll->setVariableTop(UnicodeString(vt, 1), status);
+
+  if((newVarTop & 0xFFFF0000) != (newerVarTop & 0xFFFF0000)) {
+    errln("Didn't set vartop properly from UnicodeString!\n");
+  }
+
+  delete coll;
+
+}
+
 void CollationAPITest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* /*par */)
 {
     if (exec) logln("TestSuite CollationAPITest: ");
@@ -1341,6 +1370,7 @@ void CollationAPITest::runIndexedTest( int32_t index, UBool exec, const char* &n
         case 12: name = "TestMaxExpansion";   if (exec)   TestMaxExpansion(); break;
         case 13: name = "TestDisplayName";   if (exec)   TestDisplayName(); break;
         case 14: name = "TestAttribute";   if (exec)   TestAttribute(); break;
+        case 15: name = "TestVariableTopSetting"; if (exec) TestVariableTopSetting(); break;
         default: name = ""; break;
     }
 }
