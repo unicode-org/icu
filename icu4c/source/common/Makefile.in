@@ -69,16 +69,16 @@ LIBS = $(LIBICUDT) @LIBS@
 # Data packaging options are set at configure time with --with-data-packaging.
 CPPFLAGS += @DATA_PACKAGING_CPPFLAGS@
 
-OBJECTS = normlzr.o unorm.o bidi.o ubidi.o \
-ubidiwrt.o ubidiln.o chariter.o cwchar.o schriter.o uchriter.o \
-digitlst.o filestrm.o ushape.o umemstrm.o locid.o locmap.o uloc.o \
-mutex.o umutex.o putil.o udata.o uresbund.o uresdata.o resbund.o \
-uchar.o ucmp8.o ucmp16.o ucmp32.o ucmpe32.o uvector.o uhash.o uhash_us.o \
-unames.o unicode.o unistr.o ustring.o cstring.o utf_impl.o \
-scsu.o ucnv.o ucnv_bld.o ucnv_cb.o ucnv_cnv.o ucnv_err.o ucnv_io.o convert.o \
-ucnvlat1.o ucnvmbcs.o ucnv_utf.o ucnv2022.o ucnvhz.o ucnv_lmb.o ucnvscsu.o \
-uscript.o ucnvisci.o ucln_cmn.o ustrfmt.o ucmndata.o udatamem.o umapfile.o \
-ustrtrns.o
+OBJECTS = putil.o locmap.o mutex.o umutex.o \
+udata.o ucmndata.o udatamem.o umapfile.o filestrm.o \
+uresbund.o uresdata.o resbund.o cwchar.o uloc.o locid.o uhash.o uhash_us.o \
+ucnv.o ucnv_bld.o ucnv_cb.o ucnv_cnv.o ucnv_err.o ucnv_io.o ucnvlat1.o \
+ucnv_utf.o ucnvmbcs.o ucnv2022.o ucnvhz.o ucnv_lmb.o ucnvscsu.o ucnvisci.o \
+unistr.o utf_impl.o ustring.o cstring.o ustrfmt.o ustrtrns.o \
+normlzr.o unorm.o chariter.o schriter.o uchriter.o \
+uchar.o bidi.o ubidi.o ubidiwrt.o ubidiln.o ushape.o unames.o ucln_cmn.o \
+uscript.o umemstrm.o ucmp8.o ucmpe32.o uvector.o digitlst.o \
+unicode.o scsu.o convert.o
 
 STATIC_OBJECTS = $(OBJECTS:.o=.$(STATIC_O))
 
