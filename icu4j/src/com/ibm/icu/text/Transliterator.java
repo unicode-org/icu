@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/Transliterator.java,v $
- * $Date: 2002/07/26 21:12:36 $
- * $Revision: 1.82 $
+ * $Date: 2002/07/30 22:12:43 $
+ * $Revision: 1.83 $
  *
  *****************************************************************************************
  */
@@ -251,7 +251,7 @@ import java.util.Vector;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: Transliterator.java,v $ $Revision: 1.82 $ $Date: 2002/07/26 21:12:36 $
+ * @version $RCSfile: Transliterator.java,v $ $Revision: 1.83 $ $Date: 2002/07/30 22:12:43 $
  */
 public abstract class Transliterator {
     /**
@@ -627,43 +627,80 @@ public abstract class Transliterator {
 
     /**
      * Abstract method that concrete subclasses define to implement
-     * keyboard transliteration.  This method should transliterate all
-     * characters between <code>pos.start</code> and
-     * <code>pos.contextLimit</code> that can be unambiguously
-     * transliterated, regardless of future insertions of text at
-     * <code>pos.contextLimit</code>.  <code>pos.start</code> should
-     * be advanced past committed characters (those that will not
-     * change in future calls to this method).
-     * <code>pos.contextLimit</code> should be updated to reflect text
-     * replacements that shorten or lengthen the text between
-     * <code>pos.start</code> and <code>pos.contextLimit</code>.  Upon
-     * return, neither <code>pos.start</code> nor
-     * <code>pos.contextLimit</code> should be less than the initial value
-     * of <code>pos.start</code>.  <code>pos.contextStart</code>
-     * should <em>not</em> be changed.
+     * their transliteration algorithm.  This method handles both
+     * incremental and non-incremental transliteration.  Let
+     * <code>originalStart</code> refer to the value of
+     * <code>pos.start</code> upon entry.
+     * 
+     * <ul>
+     *  <li>If <code>incremental</code> is false, then this method
+     *  should transliterate all characters between
+     *  <code>pos.start</code> and <code>pos.limit</code>. Upon return
+     *  <code>pos.start</code> must == <code> pos.limit</code>.</li>
      *
+     *  <li>If <code>incremental</code> is true, then this method
+     *  should transliterate all characters between
+     *  <code>pos.start</code> and <code>pos.limit</code> that can be
+     *  unambiguously transliterated, regardless of future insertions
+     *  of text at <code>pos.limit</code>.  Upon return,
+     *  <code>pos.start</code> should be in the range
+     *  [<code>originalStart</code>, <code>pos.limit</code>).
+     *  <code>pos.start</code> should be positioned such that
+     *  characters [<code>originalStart</code>, <code>
+     *  pos.start</code>) will not be changed in the future by this
+     *  transliterator and characters [<code>pos.start</code>,
+     *  <code>pos.limit</code>) are unchanged.</li>
+     * </ul>
+     * 
+     * <p>Implementations of this method should also obey the
+     * following invariants:</p>
+     *
+     * <ul>
+     *  <li> <code>pos.limit</code> and <code>pos.contextLimit</code>
+     *  should be updated to reflect changes in length of the text
+     *  between <code>pos.start</code> and <code>pos.limit</code>. The
+     *  difference <code> pos.contextLimit - pos.limit</code> should
+     *  not change.</li>
+     *
+     *  <li><code>pos.contextStart</code> should not change.</li>
+     *
+     *  <li>Upon return, neither <code>pos.start</code> nor
+     *  <code>pos.limit</code> should be less than
+     *  <code>originalStart</code>.</li>
+     *
+     *  <li>Text before <code>originalStart</code> and text after
+     *  <code>pos.limit</code> should not change.</li>
+     *
+     *  <li>Text before <code>pos.contextStart</code> and text after
+     *  <code> pos.contextLimit</code> should be ignored.</li>
+     * </ul>
+     *    
      * <p>Subclasses may safely assume that all characters in
-     * [pos.start, pos.limit) are unfiltered.  In other words, the
-     * filter has already been applied by the time this method is
-     * called.  See filteredTransliterate().
-     *
+     * [<code>pos.start</code>, <code>pos.limit</code>) are filtered.
+     * In other words, the filter has already been applied by the time
+     * this method is called.  See
+     * <code>filteredTransliterate()</code>.
+     *    
      * <p>This method is <b>not</b> for public consumption.  Calling
-     * this method directly will transliterate [pos.start,
-     * pos.limit) without applying the filter.  End user code that
-     * wants to call this method should be calling transliterate().
-     * Subclass code that wants to call this method should probably be
-     * calling filteredTransliterate().
-     *
-     * <p>If incremental is true, then upon return pos.start may be
-     * less than pos.limit, if some characters are unprocessed.  If
-     * incremental is false, then pos.start should be equal to pos.limit.
-     *
+     * this method directly will transliterate
+     * [<code>pos.start</code>, <code>pos.limit</code>) without
+     * applying the filter. End user code should call <code>
+     * transliterate()</code> instead of this method. Subclass code
+     * should call <code>filteredTransliterate()</code> instead of
+     * this method.<p>
+     * 
      * @param text the buffer holding transliterated and
      * untransliterated text
-     * @param pos the start and limit of the text, the position
-     * of the cursor, and the start and limit of transliteration.
-     * @param incremental if true, assume more text may be coming after
-     * pos.contextLimit.  Otherwise, assume the text is complete.
+     * 
+     * @param pos the indices indicating the start, limit, context
+     * start, and context limit of the text.
+     * 
+     * @param incremental if true, assume more text may be inserted at
+     * <code>pos.limit</code> and act accordingly.  Otherwise,
+     * transliterate all text between <code>pos.start</code> and
+     * <code>pos.limit</code> and move <code>pos.start</code> up to
+     * <code>pos.limit</code>.
+     * 
      * @see #transliterate
      */
     protected abstract void handleTransliterate(Replaceable text,
