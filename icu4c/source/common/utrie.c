@@ -32,8 +32,11 @@
 /* Building a trie ----------------------------------------------------------*/
 
 U_CAPI UNewTrie * U_EXPORT2
-utrie_open(UNewTrie *fillIn, uint32_t *aliasData, int32_t maxDataLength, UBool latin1Linear) {
+utrie_open(UNewTrie *fillIn,
+           uint32_t *aliasData, int32_t maxDataLength,
+           uint32_t initialValue, UBool latin1Linear) {
     UNewTrie *trie;
+    int32_t i, j;
 
     if( maxDataLength<UTRIE_DATA_BLOCK_LENGTH ||
         (latin1Linear && maxDataLength<1024)
@@ -64,25 +67,26 @@ utrie_open(UNewTrie *fillIn, uint32_t *aliasData, int32_t maxDataLength, UBool l
         trie->isDataAllocated=TRUE;
     }
 
-    /* preallocate and reset the first data block (block index 0, all values 0) */
-    uprv_memset(trie->data, 0, 4*UTRIE_DATA_BLOCK_LENGTH);
-    trie->dataLength=UTRIE_DATA_BLOCK_LENGTH;
+    /* preallocate and reset the first data block (block index 0) */
+    j=UTRIE_DATA_BLOCK_LENGTH;
 
-    /* preallocate and reset Latin-1 (U+0000..U+00ff) after that if requested */
     if(latin1Linear) {
-        int32_t i, j;
-
-        uprv_memset(trie->data, 0, 4096); /* made sure above that maxDataLength>=1024 */
+        /* preallocate and reset the first block (number 0) and Latin-1 (U+0000..U+00ff) after that */
+        /* made sure above that maxDataLength>=1024 */
 
         /* set indexes to point to consecutive data blocks */
         i=0;
-        j=UTRIE_DATA_BLOCK_LENGTH;
         do {
             /* do this at least for trie->index[0] even if that block is only partly used for Latin-1 */
             trie->index[i++]=j;
             j+=UTRIE_DATA_BLOCK_LENGTH;
         } while(i<(256>>UTRIE_SHIFT));
-        trie->dataLength=j;
+    }
+
+    /* reset the initially allocated blocks to the initial value */
+    trie->dataLength=j;
+    while(j>0) {
+        trie->data[--j]=initialValue;
     }
 
     trie->indexLength=UTRIE_MAX_INDEX_LENGTH;
@@ -114,7 +118,7 @@ utrie_clone(UNewTrie *fillIn, const UNewTrie *other, uint32_t *aliasData, int32_
         isDataAllocated=TRUE;
     }
 
-    trie=utrie_open(fillIn, aliasData, aliasDataCapacity, other->isLatin1Linear);
+    trie=utrie_open(fillIn, aliasData, aliasDataCapacity, other->data[0], other->isLatin1Linear);
     if(trie==NULL) {
         uprv_free(aliasData);
     } else {
@@ -176,12 +180,8 @@ utrie_getDataBlock(UNewTrie *trie, UChar32 c) {
     trie->dataLength=newTop;
     trie->index[c]=newBlock;
 
-    if(indexValue==0) {
-        uprv_memset(trie->data+newBlock, 0, 4*UTRIE_DATA_BLOCK_LENGTH);
-    } else /* indexValue<0 */ {
-        /* copy-on-write for a block from a setRange() */
-        uprv_memcpy(trie->data+newBlock, trie->data-indexValue, 4*UTRIE_DATA_BLOCK_LENGTH);
-    }
+    /* copy-on-write for a block from a setRange() */
+    uprv_memcpy(trie->data+newBlock, trie->data-indexValue, 4*UTRIE_DATA_BLOCK_LENGTH);
     return newBlock;
 }
 
@@ -230,7 +230,8 @@ utrie_get32(UNewTrie *trie, UChar32 c, UBool *pInBlockZero) {
  * @internal
  */
 static void
-utrie_fillBlock(uint32_t *block, UChar32 start, UChar32 limit, uint32_t value, UBool overwrite) {
+utrie_fillBlock(uint32_t *block, UChar32 start, UChar32 limit,
+                uint32_t value, uint32_t initialValue, UBool overwrite) {
     uint32_t *pLimit;
 
     pLimit=block+limit;
@@ -241,7 +242,7 @@ utrie_fillBlock(uint32_t *block, UChar32 start, UChar32 limit, uint32_t value, U
         }
     } else {
         while(block<pLimit) {
-            if(*block==0) {
+            if(*block==initialValue) {
                 *block=value;
             }
             ++block;
@@ -256,6 +257,7 @@ utrie_setRange32(UNewTrie *trie, UChar32 start, UChar32 limit, uint32_t value, U
      * mark index values for repeat-data blocks by setting bit 31 of the index values
      * fill around existing values if any, if(overwrite)
      */
+    uint32_t initialValue;
     int32_t block, rest, repeatBlock;
 
     /* valid, uncompacted trie and valid indexes? */
@@ -268,6 +270,7 @@ utrie_setRange32(UNewTrie *trie, UChar32 start, UChar32 limit, uint32_t value, U
         return TRUE; /* nothing to do */
     }
 
+    initialValue=trie->data[0];
     if(start&UTRIE_MASK) {
         UChar32 nextStart;
 
@@ -279,10 +282,12 @@ utrie_setRange32(UNewTrie *trie, UChar32 start, UChar32 limit, uint32_t value, U
 
         nextStart=(start+UTRIE_DATA_BLOCK_LENGTH)&~UTRIE_MASK;
         if(nextStart<=limit) {
-            utrie_fillBlock(trie->data+block, start&UTRIE_MASK, UTRIE_DATA_BLOCK_LENGTH, value, overwrite);
+            utrie_fillBlock(trie->data+block, start&UTRIE_MASK, UTRIE_DATA_BLOCK_LENGTH,
+                            value, initialValue, overwrite);
             start=nextStart;
         } else {
-            utrie_fillBlock(trie->data+block, start&UTRIE_MASK, limit&UTRIE_MASK, value, overwrite);
+            utrie_fillBlock(trie->data+block, start&UTRIE_MASK, limit&UTRIE_MASK,
+                            value, initialValue, overwrite);
             return TRUE;
         }
     }
@@ -294,7 +299,7 @@ utrie_setRange32(UNewTrie *trie, UChar32 start, UChar32 limit, uint32_t value, U
     limit&=~UTRIE_MASK;
 
     /* iterate over all-value blocks */
-    if(value==0) {
+    if(value==initialValue) {
         repeatBlock=0;
     } else {
         repeatBlock=-1;
@@ -304,7 +309,7 @@ utrie_setRange32(UNewTrie *trie, UChar32 start, UChar32 limit, uint32_t value, U
         block=trie->index[start>>UTRIE_SHIFT];
         if(block>0) {
             /* already allocated, fill in value */
-            utrie_fillBlock(trie->data+block, 0, UTRIE_DATA_BLOCK_LENGTH, value, overwrite);
+            utrie_fillBlock(trie->data+block, 0, UTRIE_DATA_BLOCK_LENGTH, value, initialValue, overwrite);
         } else if(trie->data[-block]!=value && (block==0 || overwrite)) {
             /* set the repeatBlock instead of the current block 0 or range block */
             if(repeatBlock>=0) {
@@ -318,7 +323,7 @@ utrie_setRange32(UNewTrie *trie, UChar32 start, UChar32 limit, uint32_t value, U
 
                 /* set the negative block number to indicate that it is a repeat block */
                 trie->index[start>>UTRIE_SHIFT]=-repeatBlock;
-                utrie_fillBlock(trie->data+repeatBlock, 0, UTRIE_DATA_BLOCK_LENGTH, value, TRUE);
+                utrie_fillBlock(trie->data+repeatBlock, 0, UTRIE_DATA_BLOCK_LENGTH, value, initialValue, TRUE);
             }
         }
 
@@ -332,7 +337,7 @@ utrie_setRange32(UNewTrie *trie, UChar32 start, UChar32 limit, uint32_t value, U
             return FALSE;
         }
 
-        utrie_fillBlock(trie->data+block, 0, rest, value, overwrite);
+        utrie_fillBlock(trie->data+block, 0, rest, value, initialValue, overwrite);
     }
 
     return TRUE;
@@ -476,7 +481,7 @@ utrie_fold(UNewTrie *trie, UNewTrieGetFoldedValue *getFoldedValue, UErrorCode *p
  * Compact a folded build-time trie.
  *
  * The compaction
- * - removes all-zero blocks
+ * - removes all-initial-value blocks
  * - maps all blocks that are completely filled with the same values to only of them
  * - overlaps adjacent blocks as much as possible
  *
@@ -513,11 +518,12 @@ utrie_compact(UNewTrie *trie, UErrorCode *pErrorCode) {
 
     /* compaction */
 
-    /* never move the all-zero block */
+    /* never move the all-initial-value block 0 */
     trie->map[0]=0;
 
-    /* prime the whole blocks lookup table with the all-zero block */
-    wholeBlockValues[0]=wholeBlockIndexes[0]=0;
+    /* prime the whole blocks lookup table with the all-initial-value block 0 */
+    wholeBlockValues[0]=trie->data[0];
+    wholeBlockIndexes[0]=0;
     countWholeBlocks=1;
 
     /* if Latin-1 is preallocated and linear, then do not compact Latin-1 data */
@@ -842,6 +848,7 @@ utrie_unserialize(UTrie *trie, const uint8_t *data, int32_t length, UErrorCode *
             return -1;
         }
         trie->data32=(const uint32_t *)p16;
+        trie->initialValue=trie->data32[0];
         return sizeof(UTrieHeader)+2*trie->indexLength+4*trie->dataLength;
     } else {
         if(length<2*trie->dataLength) {
@@ -851,6 +858,7 @@ utrie_unserialize(UTrie *trie, const uint8_t *data, int32_t length, UErrorCode *
 
         /* the "data16" data is used via the index pointer */
         trie->data32=NULL;
+        trie->initialValue=trie->index[trie->indexLength];
         return sizeof(UTrieHeader)+2*trie->indexLength+2*trie->dataLength;
     }
 }
@@ -873,7 +881,7 @@ utrie_enum(UTrie *trie,
     const uint32_t *data32;
     const uint16_t *index;
 
-    uint32_t value, prevValue, noValue;
+    uint32_t value, prevValue, initialValue;
     UChar32 c, prev;
     int32_t l, i, j, block, prevBlock, offset;
 
@@ -888,13 +896,13 @@ utrie_enum(UTrie *trie,
     index=trie->index;
     data32=trie->data32;
 
-    /* get the non-value that corresponds to a trie data entry of 0 */
-    noValue=enumValue(context, 0);
+    /* get the enumeration value that corresponds to an initial-value trie data entry */
+    initialValue=enumValue(context, trie->initialValue);
 
     /* set variables for previous range */
     prevBlock=0;
     prev=0;
-    prevValue=noValue;
+    prevValue=initialValue;
 
     /* enumerate BMP - the main loop enumerates data blocks */
     for(i=0, c=0; c<=0xffff; ++i) {
@@ -911,20 +919,20 @@ utrie_enum(UTrie *trie,
             /* the block is the same as the previous one, and filled with value */
             c+=UTRIE_DATA_BLOCK_LENGTH;
         } else if(block==0) {
-            /* this is the all-zero block */
-            if(prevValue!=noValue) {
+            /* this is the all-initial-value block */
+            if(prevValue!=initialValue) {
                 if(prev<c) {
                     enumRange(context, prev, c, prevValue);
                 }
                 prevBlock=0;
                 prev=c;
-                prevValue=noValue;
+                prevValue=initialValue;
             }
             c+=UTRIE_DATA_BLOCK_LENGTH;
         } else {
             prevBlock=block;
             for(j=0; j<UTRIE_DATA_BLOCK_LENGTH; ++j) {
-                value= data32!=NULL ? enumValue(context, data32[block+j]) : enumValue(context, index[block+j]);
+                value=enumValue(context, data32!=NULL ? data32[block+j] : index[block+j]);
                 if(value!=prevValue) {
                     if(prev<c) {
                         enumRange(context, prev, c, prevValue);
@@ -966,13 +974,13 @@ utrie_enum(UTrie *trie,
         offset=trie->getFoldingOffset(value);
         if(offset<=0) {
             /* no data for this lead surrogate */
-            if(prevValue!=noValue) {
+            if(prevValue!=initialValue) {
                 if(prev<c) {
                     enumRange(context, prev, c, prevValue);
                 }
                 prevBlock=0;
                 prev=c;
-                prevValue=noValue;
+                prevValue=initialValue;
             }
 
             /* nothing else to do for the supplementary code points for this lead surrogate */
@@ -988,20 +996,20 @@ utrie_enum(UTrie *trie,
                     /* the block is the same as the previous one, and filled with value */
                     c+=UTRIE_DATA_BLOCK_LENGTH;
                 } else if(block==0) {
-                    /* this is the all-zero block */
-                    if(prevValue!=noValue) {
+                    /* this is the all-initial-value block */
+                    if(prevValue!=initialValue) {
                         if(prev<c) {
                             enumRange(context, prev, c, prevValue);
                         }
                         prevBlock=0;
                         prev=c;
-                        prevValue=noValue;
+                        prevValue=initialValue;
                     }
                     c+=UTRIE_DATA_BLOCK_LENGTH;
                 } else {
                     prevBlock=block;
                     for(j=0; j<UTRIE_DATA_BLOCK_LENGTH; ++j) {
-                        value= data32!=NULL ? enumValue(context, data32[block+j]) : enumValue(context, index[block+j]);
+                        value=enumValue(context, data32!=NULL ? data32[block+j] : index[block+j]);
                         if(value!=prevValue) {
                             if(prev<c) {
                                 enumRange(context, prev, c, prevValue);

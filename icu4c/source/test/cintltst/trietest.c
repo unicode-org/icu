@@ -193,7 +193,7 @@ testTrieIteration(const char *testName,
                 if(offset>0) {
                     value=UTRIE_GET16_FROM_OFFSET_TRAIL(trie, offset, c2);
                 } else {
-                    value=0;
+                    value=trie->initialValue;
                 }
             } else {
                 value=UTRIE_GET32_FROM_LEAD(trie, c);
@@ -201,7 +201,7 @@ testTrieIteration(const char *testName,
                 if(offset>0) {
                     value=UTRIE_GET32_FROM_OFFSET_TRAIL(trie, offset, c2);
                 } else {
-                    value=0;
+                    value=trie->initialValue;
                 }
             }
             if(value!=values[i]) {
@@ -266,7 +266,7 @@ testTrieRanges(const char *testName,
     UBool overwrite, ok;
 
     log_verbose("\ntesting Trie '%s'\n", testName);
-    newTrie=utrie_open(NULL, NULL, 2000, latin1Linear);
+    newTrie=utrie_open(NULL, NULL, 2000, checkRanges[0].value, latin1Linear);
 
     /* set values from setRanges[] */
     ok=TRUE;
@@ -543,14 +543,38 @@ checkRanges2[]={
     0x110000, 0
 };
 
+/* use a non-zero initial value */
+static const SetRange
+setRanges3[]={
+    0x31,   0xa4,   1,  FALSE,
+    0x3400, 0x6789, 2,  FALSE,
+    0x30000,0x34567,9,  TRUE,
+    0x45678,0x56789,3,  TRUE
+};
+
+static const CheckRange
+checkRanges3[]={
+    0,      9,      /* dummy start range, also carries the initial value */
+    0x31,   9,
+    0xa4,   1,
+    0x3400, 9,
+    0x6789, 2,
+    0x45678,9,
+    0x56789,3,
+    0x110000,9
+};
+
 static void
 TrieTest() {
     testTrieRanges4("set1",
         setRanges1, ARRAY_LENGTH(setRanges1),
         checkRanges1, ARRAY_LENGTH(checkRanges1));
-    testTrieRanges4("set2",
+    testTrieRanges4("set2-overlap",
         setRanges2, ARRAY_LENGTH(setRanges2),
         checkRanges2, ARRAY_LENGTH(checkRanges2));
+    testTrieRanges4("set3-initial-9",
+        setRanges3, ARRAY_LENGTH(setRanges3),
+        checkRanges3, ARRAY_LENGTH(checkRanges3));
 }
 
 #if 1
