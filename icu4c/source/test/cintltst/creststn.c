@@ -185,7 +185,8 @@ void addNEWResourceBundleTest(TestNode** root)
     addTest(root, &TestResourceLevelAliasing, "tsutil/creststn/TestResourceLevelAliasing");
     addTest(root, &TestDirectAccess,          "tsutil/creststn/TestDirectAccess"); 
     addTest(root, &TestGetKeywordValues,      "tsutil/creststn/TestGetKeywordValues"); 
-    addTest(root, &TestGetFunctionalEquivalent, "tsutil/creststn/TestGetFunctionalEquivalent");
+    addTest(root, &TestGetFunctionalEquivalent,"tsutil/creststn/TestGetFunctionalEquivalent");
+    addTest(root, &TestJB3763,                "tsutil/creststn/TestJB3763");
 
 }
 
@@ -2290,9 +2291,9 @@ static void TestDirectAccess(void) {
 
     ures_close(t2);
     t2 = ures_open(NULL, "he", &status);
-    t = ures_getByKeyWithFallback(t2, "calendar", t, &status);
-    t2 = ures_getByKeyWithFallback(t, "islamic-civil", t2, &status);
-    t = ures_getByKeyWithFallback(t2, "DateTimePatterns", t, &status);
+    t2 = ures_getByKeyWithFallback(t2, "calendar", t2, &status);
+    t2 = ures_getByKeyWithFallback(t2, "islamic-civil", t2, &status);
+    t2 = ures_getByKeyWithFallback(t2, "DateTimePatterns", t2, &status);
     if(U_SUCCESS(status)) {
         log_err("This resource does not exist. How did it get here?\n");
     }
@@ -2301,9 +2302,9 @@ static void TestDirectAccess(void) {
     ures_close(t2);
     t2 = ures_open(NULL, "he", &status);
     /* George's fix */
-    t = ures_getByKeyWithFallback(t2, "calendar", t, &status);
-    t2 = ures_getByKeyWithFallback(t, "islamic-civil", t2, &status);
-    t = ures_getByKeyWithFallback(t2, "eras", t, &status);
+    t2 = ures_getByKeyWithFallback(t2, "calendar", t2, &status);
+    t2 = ures_getByKeyWithFallback(t2, "islamic-civil", t2, &status);
+    t2 = ures_getByKeyWithFallback(t2, "eras", t2, &status);
     if(U_FAILURE(status)) {
         log_err("Didn't get Eras. I know they are there!\n");
     }
@@ -2311,16 +2312,35 @@ static void TestDirectAccess(void) {
 
     ures_close(t2);
     t2 = ures_open(NULL, "root", &status);
-    t = ures_getByKeyWithFallback(t2, "calendar", t, &status);
-    t2 = ures_getByKeyWithFallback(t, "islamic-civil", t2, &status);
-    t = ures_getByKeyWithFallback(t2, "DateTimePatterns", t, &status);
+    t2 = ures_getByKeyWithFallback(t2, "calendar", t2, &status);
+    t2 = ures_getByKeyWithFallback(t2, "islamic-civil", t2, &status);
+    t2 = ures_getByKeyWithFallback(t2, "DateTimePatterns", t2, &status);
     if(U_SUCCESS(status)) {
         log_err("This resource does not exist. How did it get here?\n");
     }
     status = U_ZERO_ERROR;
 
-    ures_close(t);
     ures_close(t2);
+    ures_close(t);
+}
+
+static void TestJB3763(void) {
+    /* Nasty bug prevented using parent as fill-in, since it would
+     * stomp the path information.
+     */
+    UResourceBundle *t = NULL;
+    UErrorCode status = U_ZERO_ERROR;
+    t = ures_open(NULL, "sr_Latn", &status);
+    t = ures_getByKeyWithFallback(t, "calendar", t, &status);
+    t = ures_getByKeyWithFallback(t, "gregorian", t, &status);
+    t = ures_getByKeyWithFallback(t, "AmPmMarkers", t, &status);
+    if(U_FAILURE(status)) {
+        log_err("This resource should be available?\n");
+    }
+    status = U_ZERO_ERROR;
+
+    ures_close(t);
+
 }
 
 static void TestGetKeywordValues(void) {
