@@ -75,7 +75,8 @@ CalendarRegressionTest::runIndexedTest( int32_t index, UBool exec, const char* &
         CASE(37,TestJ438);
         CASE(38,TestLeapFieldDifference);
         CASE(39,TestMalaysianInstance);
-        CASE(40,test4092362);
+        CASE(40,test4059654);
+        CASE(41,test4092362);
     default: name = ""; break;
     }
 }
@@ -376,7 +377,7 @@ void CalendarRegressionTest::test4059654() {
     gc->set(Calendar::MILLISECOND, 0);
 
     UDate cd = gc->getTime(status);
-    GregorianCalendar *exp = new GregorianCalendar(97, 3, 1, 0, 0, 0, status);
+    GregorianCalendar *exp = new GregorianCalendar(1997, 3, 1, 0, 0, 0, status);
     if (cd != exp->getTime(status))
         errln(UnicodeString("Fail: Calendar::set broken. Got ") + cd + " Want " + exp->getTime(status));
 
