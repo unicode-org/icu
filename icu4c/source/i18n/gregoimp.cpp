@@ -16,13 +16,6 @@ int32_t Math::floorDivide(int32_t numerator, int32_t denominator) {
         numerator / denominator : ((numerator + 1) / denominator) - 1;
 }
 
-double Math::floorDivide(double numerator, double denominator,
-                         double& remainder) {
-    double quotient = uprv_floor(numerator / denominator);
-    remainder = numerator - (quotient * denominator);
-    return quotient;
-}
-
 int32_t Math::floorDivide(double numerator, int32_t denominator,
                           int32_t& remainder) {
     double quotient;
