@@ -4,7 +4,7 @@ dnl Copyright (c) 1999-2000, International Business Machines Corporation and
 dnl others. All Rights Reserved.
 dnl Stephen F. Booth, heavily modified by Yves and others
 
-dnl $Id: configure.in,v 1.146 2002/01/08 22:10:21 yves-oss Exp $
+dnl $Id: configure.in,v 1.147 2002/01/23 16:42:10 yves-oss Exp $
 
 dnl Process this file with autoconf to produce a configure script
 AC_INIT(common/unicode/utypes.h)
@@ -403,26 +403,6 @@ U_ENDIAN_CHAR="b"
 fi
 AC_SUBST(U_IS_BIG_ENDIAN)
 
-dnl Do various wchar_t related checks
-AC_CHECK_HEADER(wchar.h)
-if test "$ac_cv_header_wchar_h" = no
-then
-    U_HAVE_WCHAR_H=0
-    U_HAVE_WCSCPY=0
-else
-    AC_DEFINE(HAVE_WCHAR_H)
-    U_HAVE_WCHAR_H=1
-    dnl Some broken systems have wchar.h but not some of its functions...
-    AC_SEARCH_LIBS(wcscpy, wcs)
-    if test "$ac_cv_search_wcscpy" != no; then
-      U_HAVE_WCSCPY=1
-    else
-      U_HAVE_WCSCPY=0
-    fi
-fi
-AC_SUBST(U_HAVE_WCHAR_H)
-AC_SUBST(U_HAVE_WCSCPY)
-
 dnl Do various POSIX related checks
 U_HAVE_NL_LANGINFO_CODESET=0
 U_NL_LANGINFO_CODESET=-1
@@ -638,6 +618,26 @@ else
 HAVE_UINT64_T=1
 fi
 AC_SUBST(HAVE_UINT64_T)
+
+dnl Do various wchar_t related checks
+AC_CHECK_HEADER(wchar.h)
+if test "$ac_cv_header_wchar_h" = no
+then
+    U_HAVE_WCHAR_H=0
+    U_HAVE_WCSCPY=0
+else
+    AC_DEFINE(HAVE_WCHAR_H)
+    U_HAVE_WCHAR_H=1
+    dnl Some broken systems have wchar.h but not some of its functions...
+    AC_SEARCH_LIBS(wcscpy, wcs)
+    if test "$ac_cv_search_wcscpy" != no; then
+      U_HAVE_WCSCPY=1
+    else
+      U_HAVE_WCSCPY=0
+    fi
+fi
+AC_SUBST(U_HAVE_WCHAR_H)
+AC_SUBST(U_HAVE_WCSCPY)
 
 dnl Echo
 ECHO_N=$ac_n
