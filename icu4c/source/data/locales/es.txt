@@ -390,7 +390,7 @@ es {
         EGP { "EGP", "Libra Egipcia" }
         ESP { "Pts", "Peseta Espa\u00F1ola" }
         ETB { "ETB", "Birr de Etiop\u00EDa" }
-        EUR { "EUR", "Moneda de los estados miembros de EMU" }
+        EUR { "\u20AC", "Moneda de los estados miembros de EMU" }
         FIM { "FIM", "Marco Finland\u00E9s" }
         FJD { "FJD", "D\u00F3lar de Fiji" }
         FKP { "FKP", "Libra de Falkland" }
@@ -420,13 +420,13 @@ es {
         ITL { "ITL", "Lira Italiana" }
         JMD { "JMD", "D\u00F3lar de Jamaica" }
         JOD { "JOD", "Dinar de Jordania" }
-        JPY { "JPY", "Yen Japon\u00E9s" }
+        JPY { "\uFFE5", "Yen Japon\u00E9s" }
         KES { "KES", "Chel\u00EDn de Kenya" }
         KHR { "KHR", "Riel de Camboya" }
         KIS { "KIS", "Som de Kirghizstan" }
         KMF { "KMF", "Franco de Comoros" }
         KPW { "KPW", "Won de Corea del Norte" }
-        KRW { "KRW", "Won de Corea del Sur" }
+        KRW { "\u20A9", "Won de Corea del Sur" }
         KWD { "KWD", "Dinar de Kuwait" }
         KYD { "KYD", "D\u00F3lar de las Caim\u00E1n" }
         KZT { "KZT", "Tenge de Kazakhst\u00E1n" }
@@ -453,7 +453,7 @@ es {
         MXP { "MXP", "Peso Mexicano (viejo)" }
         MYR { "MYR", "Ringgit de Malaysia" }
         MZM { "MZM", "Metical de Mozambique" }
-        NGN { "NGN", "Naira de Nigeria" }
+        NGN { "\u20A6", "Naira de Nigeria" }
         NIO { "C$", "Cordoba de Nicaragua" }
         NLG { "NLG", "Guilder de Holanda" }
         NOK { "NOK", "C\u00F3rona Noruega" }
