@@ -60,6 +60,7 @@ icu4c/source/data/xml/main/en_NZ.xml svneol=native#text/xml
 icu4c/source/data/xml/main/en_PH.xml svneol=native#text/xml
 icu4c/source/data/xml/main/en_SG.xml svneol=native#text/xml
 icu4c/source/data/xml/main/en_US.xml svneol=native#text/xml
+icu4c/source/data/xml/main/en_US_POSIX.xml svneol=native#text/xml
 icu4c/source/data/xml/main/en_VI.xml svneol=native#text/xml
 icu4c/source/data/xml/main/en_ZA.xml svneol=native#text/xml
 icu4c/source/data/xml/main/en_ZW.xml svneol=native#text/xml
