@@ -3,7 +3,7 @@
 ## Copyright (c) 1999-2000, International Business Machines Corporation and
 ## others. All Rights Reserved.
 ##
-## $Id: mh-irix,v 1.16 2000/10/16 18:05:34 yves Exp $
+## $Id: mh-irix,v 1.17 2000/11/29 16:25:25 srl Exp $
 
 ## Flags for position independent code
 SHAREDLIBCFLAGS = -shared
@@ -34,8 +34,8 @@ SHLIB.c=        $(CC) -shared $(DEFS) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS)
 SHLIB.cc=       $(CXX) -shared $(DEFS) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS)
 
 ## Compiler switch to embed a runtime search path
-LD_RPATH=	-I
-LD_RPATH_PRE=
+LD_RPATH=
+LD_RPATH_PRE=  -Wl,-rpath,
 
 ## Environment variable to set a runtime search path
 LDLIBRARYPATH_ENVVAR = LD_LIBRARY_PATH
