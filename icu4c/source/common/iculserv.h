@@ -283,9 +283,11 @@ protected:
         return (UClassID)&fgClassID;
     }
 
+#ifdef SERVICE_DEBUG
  public:
     virtual UnicodeString& debug(UnicodeString& result) const;
     virtual UnicodeString& debugClass(UnicodeString& result) const;
+#endif
 
  private:
     static const char fgClassID;
@@ -307,15 +309,9 @@ class U_COMMON_API SimpleLocaleKeyFactory : public LocaleKeyFactory {
 
  public:
     SimpleLocaleKeyFactory(UObject* objToAdopt, 
-                           const Locale& locale, 
+                           const UnicodeString& locale, 
                            int32_t kind, 
                            int32_t coverage);
-
-    SimpleLocaleKeyFactory(UObject* objToAdopt, 
-                           const Locale& locale, 
-                           int32_t kind, 
-                           int32_t coverage, 
-                           const UnicodeString& name);
 
     /**
      * Override of superclass method.  Returns the service object if kind/locale match.  Service is not used.
@@ -340,9 +336,11 @@ class U_COMMON_API SimpleLocaleKeyFactory : public LocaleKeyFactory {
         return (UClassID)&fgClassID;
     }
 
+#ifdef SERVICE_DEBUG
  public:
     virtual UnicodeString& debug(UnicodeString& result) const;
     virtual UnicodeString& debugClass(UnicodeString& result) const;
+#endif
 
  private:
     static const char fgClassID;
@@ -400,9 +398,11 @@ protected:
         return (UClassID)&fgClassID;
     }
 
+#ifdef SERVICE_DEBUG
  public:
     virtual UnicodeString& debug(UnicodeString& result) const;
     virtual UnicodeString& debugClass(UnicodeString& result) const;
+#endif
 
  private:
     static const char fgClassID;
@@ -492,6 +492,29 @@ class U_COMMON_API ICULocaleService : public ICUService
    * a SimpleLocaleKeyFactory, and registers the factory.
    */
   virtual URegistryKey registerInstance(UObject* objToAdopt, const Locale& locale, int32_t kind, int32_t coverage, UErrorCode& status);
+
+#if 0
+  // Since both UnicodeString and Locale have constructors that take const char*, adding a public
+  // method that takes UnicodeString causes ambiguity at call sites that use const char*.
+  // We really need a flag that is understood by all compilers that will suppress the warning about
+  // hidden overrides.
+
+  /**
+   * (Stop compiler from complaining about hidden overrides.)
+   */
+  URegistryKey registerInstance(UObject* objToAdopt, const UnicodeString& locale, UErrorCode& status);
+
+  /**
+   * (Stop compiler from complaining about hidden overrides.)
+   */
+  URegistryKey registerInstance(UObject* objToAdopt, const UnicodeString& locale, UBool visible, UErrorCode& status);
+
+  /**
+   * Since the factory ultimately needs a UnicodeString, and we needed to add other overrides that take a
+   * UnicodeString as well, we'll vector all the overrides through this call.
+   */
+  virtual URegistryKey registerInstance(UObject* objToAdopt, const UnicodeString& locale, int32_t kind, int32_t coverage, UErrorCode& status);
+#endif
 
   /**
    * Convenience method for callers using locales.  This returns the standard

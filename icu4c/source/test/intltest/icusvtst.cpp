@@ -30,7 +30,7 @@ class ICUNSubclass : public ICUNotifier {
         // return l instanceof MyListener;
     }
 
-    void notifyListener(const EventListener& l) const {
+    void notifyListener(EventListener& l) const {
     }
 };
 
@@ -42,7 +42,7 @@ class LKFSubclass : public LocaleKeyFactory {
     }
 
     protected:
-    const Hashtable* getSupportedIDs(void) const {
+    const Hashtable* getSupportedIDs(UErrorCode& status) const {
         //    return Collections.EMPTY_SET;
         return NULL;
     }
@@ -103,9 +103,9 @@ class TestIntegerService : public ICUService {
         return LocaleKey::createWithCanonicalFallback(id, NULL, status); // no fallback locale
     }
 
-    virtual ICUServiceFactory* createSimpleFactory(UObject* obj, const UnicodeString& id, UBool visible) 
+    virtual ICUServiceFactory* createSimpleFactory(UObject* obj, const UnicodeString& id, UBool visible, UErrorCode& status) 
     {
-        if (obj && obj->getDynamicClassID() == Integer::getStaticClassID()) {
+        if (U_SUCCESS(status) && obj && obj->getDynamicClassID() == Integer::getStaticClassID()) {
             return new SimpleFactory((Integer*)obj, id, visible);
         }
         return NULL;
@@ -1150,7 +1150,7 @@ void ICUServiceTest::testLocale() {
             logln("locales: ");
             {
                 const char* p;
-                while (p = locales->next(status)) {
+                while (p = locales->next(NULL, status)) {
                     logln(p);
                 }
             }
