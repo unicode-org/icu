@@ -697,8 +697,7 @@ umsg_setLocale(UMessageFormat *fmt, const char* locale)
 U_CAPI const char* 
 umsg_getLocale(UMessageFormat *fmt)
 {
-    Locale loc = ((MessageFormat*)fmt)->getLocale();
-    return loc.getName();
+    return ((MessageFormat*)fmt)->getLocale().getName();
 }
 
 U_CAPI void 
