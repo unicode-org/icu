@@ -1081,12 +1081,18 @@ doOpenChoice(const char *path, const char *type, const char *name,
     const DataHeader   *pHeader;
     const char         *inBasename;
     UErrorCode          errorCode=U_ZERO_ERROR;
-    UBool               isICUData;
-    
     const char         *treeChar;
-   
-    isICUData= (UBool)(path==NULL ? TRUE : (!uprv_strncmp(path,U_ICUDATA_NAME U_TREE_SEPARATOR_STRING, uprv_strlen(U_ICUDATA_NAME U_TREE_SEPARATOR_STRING))));
 
+    UBool               isICUData = FALSE;
+
+    if(path == NULL ||
+       !strcmp(path, U_ICUDATA_ALIAS) ||
+       !uprv_strncmp(path, U_ICUDATA_NAME U_TREE_SEPARATOR_STRING,
+                     uprv_strlen(U_ICUDATA_NAME U_TREE_SEPARATOR_STRING)) ||
+       !uprv_strncmp(path, U_ICUDATA_ALIAS U_TREE_SEPARATOR_STRING,
+                     uprv_strlen(U_ICUDATA_ALIAS U_TREE_SEPARATOR_STRING))) {
+      isICUData = TRUE;
+    }
 
 #if (U_FILE_SEP_CHAR != U_FILE_ALT_SEP_CHAR)
     /* remap from alternate path char to the main one */
@@ -1134,10 +1140,18 @@ doOpenChoice(const char *path, const char *type, const char *name,
       } else {
         treeChar = uprv_strchr(path, U_TREE_SEPARATOR);
         if(treeChar) { 
-          TinyString_append(&treeName, treeChar+1); /* following '/' */
-          TinyString_appendn(&pkgName, path, treeChar-path);
-        }  else {
-          TinyString_append(&pkgName, path);
+          TinyString_append(&treeName, treeChar+1); /* following '-' */
+          if(!isICUData) {
+            TinyString_appendn(&pkgName, path, treeChar-path);
+          } else {
+            TinyString_append(&pkgName, U_ICUDATA_NAME);
+          }
+        } else {
+          if(!isICUData) {
+            TinyString_append(&pkgName, path);
+          } else {
+            TinyString_append(&pkgName, U_ICUDATA_NAME);
+          }
         }
       }
     }
