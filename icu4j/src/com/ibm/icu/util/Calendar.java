@@ -641,7 +641,7 @@ import com.ibm.text.SimpleDateFormat;
  * @see          GregorianCalendar
  * @see          TimeZone
  * @see          DateFormat
- * @version      $Revision: 1.17 $ $Date: 2000/11/28 16:40:59 $
+ * @version      $Revision: 1.18 $ $Date: 2000/11/28 22:16:31 $
  * @author Mark Davis, David Goldsmith, Chen-Lieh Huang, Alan Liu, Laura Werner
  * @since JDK1.1
  */
@@ -2629,7 +2629,7 @@ public abstract class Calendar implements Serializable, Cloneable {
         if (fields[field] > max) {
             set(field, max);
         } else if (fields[field] < min) {
-            set(fields[field], min);
+            set(field, min);
         }
     }
 
