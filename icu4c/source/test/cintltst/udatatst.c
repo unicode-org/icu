@@ -62,10 +62,10 @@ void TestUDataOpen(){
     const char* type="dat";
 
     char* path=(char*)malloc(sizeof(char) * (strlen(u_getDataDirectory()) + strlen(U_ICUDATA_NAME) +1 ) );
-    char* testPath=(char*)malloc(sizeof(char) * (strlen(u_getDataDirectory()) + strlen("testdat1") +1 ) );
+    char* testPath=(char*)malloc(sizeof(char) * (strlen(u_getDataDirectory()) + strlen("testdata") +1 ) );
 
     strcat(strcpy(path, u_getDataDirectory()), U_ICUDATA_NAME);
-    strcat(strcpy(testPath, u_getDataDirectory()), "testdat1");
+    strcat(strcpy(testPath, u_getDataDirectory()), "testdata");
 
 
     log_verbose("Testing udata_open()\n");
@@ -202,9 +202,9 @@ void TestUDataOpenChoiceDemo1() {
     };
     const char* type="dat";
 
-    char* testPath=(char*)malloc(sizeof(char) * (strlen(u_getDataDirectory()) + strlen("testdat1") +1 ) );
+    char* testPath=(char*)malloc(sizeof(char) * (strlen(u_getDataDirectory()) + strlen("testdata") +1 ) );
 
-    strcat(strcpy(testPath, u_getDataDirectory()), "testdat1");
+    strcat(strcpy(testPath, u_getDataDirectory()), "testdata");
 
     result=udata_openChoice(NULL, type, name[0], isAcceptable1, NULL, &status);
     if(U_FAILURE(status)){
@@ -276,8 +276,8 @@ void TestUDataOpenChoiceDemo2() {
     const char* type="dat";
 
     const char* base[]={  /* these are the common base names to use for the test */
-        "testdat1",   /* corresponds to something like 'base.dat', 'base.dll', 'libbase.so', etc.. */
-        "testdat2"  /* libbase_test.so, libbase_test.a, etc... */
+        "testdata",   /* corresponds to something like 'base.dat', 'base.dll', 'libbase.so', etc.. */
+        "testdata"  /* libbase_test.so, libbase_test.a, etc... */
     };
 
     char* path=(char*)malloc(sizeof(char) * (strlen(u_getDataDirectory()) + strlen(base[0]) + 1) );
@@ -350,10 +350,10 @@ void TestUDataGetInfo() {
     const char* type="dat";
 
     char* path=(char*)malloc(sizeof(char) * (strlen(u_getDataDirectory()) + strlen(U_ICUDATA_NAME) +1 ) );
-    char* testPath=(char*)malloc(sizeof(char) * (strlen(u_getDataDirectory()) + strlen("testdat1") +1 ) );
+    char* testPath=(char*)malloc(sizeof(char) * (strlen(u_getDataDirectory()) + strlen("testdata") +1 ) );
 
     strcat(strcpy(path, u_getDataDirectory()), U_ICUDATA_NAME);
-    strcat(strcpy(testPath, u_getDataDirectory()), "testdat1");
+    strcat(strcpy(testPath, u_getDataDirectory()), "testdata");
 
 
     log_verbose("Testing udata_getInfo() for cnvalias.dat\n");
@@ -418,9 +418,9 @@ void TestUDataGetMemory() {
 
     const char* name2="test";
 
-   char* testPath=(char*)malloc(sizeof(char) * (strlen(u_getDataDirectory()) + strlen("testdat1") +1 ) );
+   char* testPath=(char*)malloc(sizeof(char) * (strlen(u_getDataDirectory()) + strlen("testdata") +1 ) );
 
-   strcat(strcpy(testPath, u_getDataDirectory()), "testdat1");
+   strcat(strcpy(testPath, u_getDataDirectory()), "testdata");
 
     log_verbose("Testing udata_getMemory for \"cnvalias.dat()\"\n");
     result=udata_openChoice(NULL, type, name, isAcceptable1, NULL, &status);
@@ -473,10 +473,10 @@ void TestErrorConditions(){
     const char* type="dat";
 
     char* path=(char*)malloc(sizeof(char) * (strlen(u_getDataDirectory()) + strlen(U_ICUDATA_NAME) +1 ) );
-    char* testPath=(char*)malloc(sizeof(char) * (strlen(u_getDataDirectory()) + strlen("testdat1") +1 ) );
+    char* testPath=(char*)malloc(sizeof(char) * (strlen(u_getDataDirectory()) + strlen("testdata") +1 ) );
 
     strcat(strcpy(path, u_getDataDirectory()), U_ICUDATA_NAME);
-    strcat(strcpy(testPath, u_getDataDirectory()), "testdat1");
+    strcat(strcpy(testPath, u_getDataDirectory()), "testdata");
 
     status = U_ILLEGAL_ARGUMENT_ERROR;
     /*Try udata_open with status != U_ZERO_ERROR*/
@@ -583,9 +583,9 @@ void TestAppData()
 
   UErrorCode status = U_ZERO_ERROR;
 
-  char* testPath=(char*)malloc(sizeof(char) * (strlen(u_getDataDirectory()) + strlen("testdat2") +1 ) );
+  char* testPath=(char*)malloc(sizeof(char) * (strlen(u_getDataDirectory()) + strlen("testdata") +1 ) );
 
-  strcat(strcpy(testPath, u_getDataDirectory()), "testdat2");
+  strcat(strcpy(testPath, u_getDataDirectory()), "testdata");
 
   icu = ures_open(NULL, "root", &status);
   if(U_FAILURE(status))
