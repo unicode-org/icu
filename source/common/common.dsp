@@ -219,6 +219,10 @@ SOURCE=.\normlzr.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\propname.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\putil.c
 # ADD CPP /Ze
 # End Source File
@@ -1034,6 +1038,10 @@ InputPath=.\unicode\parsepos.h
 
 !ENDIF 
 
+# End Source File
+# Begin Source File
+
+SOURCE=.\pnamedat.h
 # End Source File
 # Begin Source File
 
