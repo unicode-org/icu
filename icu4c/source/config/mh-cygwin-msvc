@@ -55,8 +55,8 @@ LINK.c=		LINK.EXE /subsystem:console $(LDFLAGS)
 LINK.cc=	LINK.EXE /subsystem:console $(LDFLAGS)
 
 ## Commands to make a shared library
-SHLIB.c=	LINK.EXE /DLL $(LDFLAGS)
-SHLIB.cc=	LINK.EXE /DLL $(LDFLAGS)
+SHLIB.c=	LINK.EXE /subsystem:console /DLL $(LDFLAGS)
+SHLIB.cc=	LINK.EXE /subsystem:console /DLL $(LDFLAGS)
 
 ## Compiler switch to embed a runtime search path
 LD_RPATH=	
@@ -93,9 +93,19 @@ LIBICUUC=	$(LIBDIR)/$(LIBICU)$(COMMON_STUBNAME)$(ICULIBSUFFIX).lib $(LIBICUDT)
 LIBICUI18N=	$(LIBDIR)/$(LIBICU)$(I18N_STUBNAME)$(ICULIBSUFFIX).lib
 LIBICULE=	$(LIBDIR)/$(LIBICU)$(LAYOUT_STUBNAME)$(ICULIBSUFFIX).lib
 LIBICULX=	$(LIBDIR)/$(LIBICU)$(LAYOUTEX_STUBNAME)$(ICULIBSUFFIX).lib
+LIBICUIO=	$(LIBDIR)/$(LIBICU)$(IO_STUBNAME)$(ICULIBSUFFIX).lib
 LIBCTESTFW=	$(top_builddir)/tools/ctestfw/$(LIBICU)$(CTESTFW_STUBNAME)$(ICULIBSUFFIX).lib
 LIBICUTOOLUTIL=	$(LIBDIR)/$(LIBICU)$(TOOLUTIL_STUBNAME)$(ICULIBSUFFIX).lib
-LIBICUIO=	$(LIBDIR)/$(LIBICU)$(IO_STUBNAME)$(ICULIBSUFFIX).lib
+
+## These are the library specific LDFLAGS
+LDFLAGSICUDT=	# Unused for now.
+LDFLAGSICUUC=	/base:"0x4a800000"# in-uc = 1MB
+LDFLAGSICUI18N=	/base:"0x4a900000"# io-in = 2MB
+LDFLAGSICUIO=	/base:"0x4ab00000"# le-io = 1MB
+LDFLAGSICULE=	/base:"0x4ac00000"# lx-le = 512KB
+LDFLAGSICULX=	/base:"0x4ac80000"
+LDFLAGSCTESTFW=	# Unused for now.
+LDFLAGSICUTOOLUTIL=	/base:"0x4ac00000"# Same as layout. Layout and tools probably won't mix.
 
 ## If we can't use the shared libraries, use the static libraries
 ifneq ($(ENABLE_SHARED),YES)

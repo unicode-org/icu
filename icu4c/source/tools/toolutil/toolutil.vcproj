@@ -44,6 +44,7 @@
 				SuppressStartupBanner="TRUE"
 				AdditionalLibraryDirectories="..\..\..\lib"
 				ProgramDatabaseFile=".\..\..\..\lib/icutu30.pdb"
+				BaseAddress="0x4ac00000"
 				ImportLibrary="..\..\..\lib/icutu.lib"/>
 			<Tool
 				Name="VCMIDLTool"
@@ -108,6 +109,7 @@
 				AdditionalLibraryDirectories="..\..\..\lib"
 				GenerateDebugInformation="TRUE"
 				ProgramDatabaseFile=".\..\..\..\lib/icutu30d.pdb"
+				BaseAddress="0x4ac00000"
 				ImportLibrary="..\..\..\lib/icutud.lib"/>
 			<Tool
 				Name="VCMIDLTool"
