@@ -4,7 +4,7 @@ dnl Copyright (c) 1999-2003, International Business Machines Corporation and
 dnl others. All Rights Reserved.
 dnl Stephen F. Booth, heavily modified by Yves and others
 
-dnl $Id: configure.in,v 1.203 2003/12/14 18:06:32 grhoten-oss Exp $
+dnl $Id: configure.in,v 1.204 2004/02/20 20:16:27 srl Exp $
 
 dnl Process this file with autoconf to produce a configure script
 AC_INIT(common/unicode/utypes.h)
@@ -702,26 +702,21 @@ AC_ARG_WITH(data-packaging,
 		auto) datapackaging=$withval ;;
 		common) datapackaging=archive ;;
 		dll) datapackaging=library ;;
-		*) AC_MSG_ERROR(bad value ${withval} for --with-iostream) ;;
+		static) datapackaging=static ;;
+		*) AC_MSG_ERROR(bad value ${withval} for --with-data-packaging) ;;
 		esac], 
         [datapackaging=])
 
+dnl Note:  'thesysconfdir' is an evaluated version, for Man pages, so also for thedatadir, thelibdir, etc.. 
 thesysconfdir=`eval echo $sysconfdir`
 AC_SUBST(thesysconfdir)
 thedatadir=`eval echo $datadir`
 AC_SUBST(thedatadir)
 thelibdir=`test "x$exec_prefix" = xNONE && exec_prefix="$prefix"; eval echo $libdir`
 AC_SUBST(thelibdir)
-case $datapackaging in
-    common)
-	pkgicudatadir=$datadir
-	thepkgicudatadir=$thedatadir
-	;;
-    *)
-	pkgicudatadir=$libdir
-	thepkgicudatadir=$thelibdir
-	;;
-esac
+dnl Always put raw data files in share/icu/{version}, etc.   Never use lib/icu/{version} for data files.. Actual shared libraries will go in {libdir}. 
+pkgicudatadir=$datadir
+thepkgicudatadir=$thedatadir
 AC_SUBST(pkgicudatadir)
 AC_SUBST(thepkgicudatadir)
 
