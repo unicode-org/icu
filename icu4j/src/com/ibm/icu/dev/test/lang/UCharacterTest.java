@@ -642,7 +642,8 @@ public final class UCharacterTest extends TestFmwk
                 if (UCharacter.getDirection(ch) != dir)
                 {
                     errln("FAIL \\u" + hex(ch) +
-                        " expected wrong direction " + dir);
+                        " expected direction " + dir + " but got " + 
+			  UCharacter.getDirection(ch));
                     break;
                 }
                 
@@ -650,7 +651,8 @@ public final class UCharacterTest extends TestFmwk
                 if (UCharacter.getDirectionality(ch) != bdir)
                 {
                     errln("FAIL \\u" + hex(ch) +
-                        " expected wrong directionality " + bdir);
+                        " expected directionality " + bdir + " but got " +
+			  UCharacter.getDirectionality(ch));
                     break;
                 }                
 
