@@ -2363,6 +2363,13 @@ structLocale{
         REVISED{""}
     }
     Version{""}
+    boundaries{
+        grapheme{"char"}
+        line{"line"}
+        sentence{"sentence"}
+        title{"title"}
+        word{"word"}
+    }
     calendar{
         buddhist{
             DateTimePatterns{
