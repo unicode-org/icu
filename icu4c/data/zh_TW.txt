@@ -1330,7 +1330,7 @@ zh_TW {
     LocaleString { "zh_TW" }
     NumberPatterns { 
             "#,##0.###;-#,##0.###",
-            "\u81FA\u5E63\u00A4#,##0.00\u5143;-\u81FA\u5E63\u00A4#,##0.00\u5143",
+            "\u00A4#,##0.00;-\u00A4#,##0.00",
             "#,##0%",
     }
     ShortCountry { "TWN" }
