@@ -36,7 +36,7 @@ de.txt de_AT.txt de_AT_EURO.txt de_CH.txt\
 de_DE.txt de_DE_EURO.txt de_LU.txt de_LU_EURO.txt\
 el.txt el_GR.txt el_GR_EURO.txt\
 en.txt en_AS.txt en_AU.txt en_BE.txt en_BE_EURO.txt en_BW.txt en_CA.txt en_GB.txt en_GB_EURO.txt\
-en_HK.txt en_IE.txt en_IE_EURO.txt en_IN.txt en_MH.txt en_MP.txt en_NZ.txt en_PH.txt en_SG.txt\
+en_GU.txt en_HK.txt en_IE.txt en_IE_EURO.txt en_IN.txt en_MH.txt en_MP.txt en_NZ.txt en_PH.txt en_SG.txt\
 en_UM.txt en_US.txt en_US_POSIX.txt en_VI.txt en_ZA.txt en_ZW.txt\
 eo.txt\
 es.txt es_AR.txt es_BO.txt es_CL.txt es_CO.txt\
@@ -85,7 +85,7 @@ sk.txt sk_SK.txt\
 sl.txt sl_SI.txt\
 sq.txt sq_AL.txt\
 sr.txt sr_YU.txt\
-sv.txt sv_FI.txt sv_SE.txt\
+sv.txt sv_FI.txt sv_FI_AL.txt sv_SE.txt\
 sw.txt sw_KE.txt sw_TZ.txt\
 ta.txt ta_IN.txt\
 te.txt te_IN.txt\
