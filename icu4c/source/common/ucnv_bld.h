@@ -27,6 +27,7 @@
 #include "unicode/utypes.h"
 #include "unicode/ucnv.h"
 #include "unicode/ucnv_err.h"
+#include "ucnvmbcs.h"
 
 /* ### move the following typedef and array into implementation files! */
 typedef struct
@@ -83,7 +84,7 @@ typedef struct UConverterStaticData {
  * Defines the UConverterSharedData struct,
  * the immutable, shared part of UConverter.
  */
-typedef struct UConverterSharedData {
+struct UConverterSharedData {
     uint32_t structSize;            /* Size of this structure */
     uint32_t referenceCounter;      /* used to count number of clients, 0xffffffff for static SharedData */
 
@@ -96,7 +97,7 @@ typedef struct UConverterSharedData {
 
     /*initial values of some members of the mutable part of object */
     uint32_t toUnicodeStatus;
-} UConverterSharedData;
+};
 
 
 /* Defines a UConverter, the lightweight mutable part the user sees */
