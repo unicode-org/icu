@@ -83,9 +83,6 @@ const Collator::EComparisonResult CollationTurkishTest::results[] = {
 void CollationTurkishTest::doTest( UnicodeString source, UnicodeString target, Collator::EComparisonResult result)
 {
     Collator::EComparisonResult compareResult = myCollation->compare(source, target);
-    SimpleFwdCharIterator src(source);
-    SimpleFwdCharIterator trg(target);
-    Collator::EComparisonResult incResult = myCollation->compare(src, trg);
     CollationKey sortKey1, sortKey2;
     UErrorCode key1status = U_ZERO_ERROR, key2status = U_ZERO_ERROR; //nos
     myCollation->getCollationKey(source, /*nos*/ sortKey1, key1status );
@@ -95,7 +92,7 @@ void CollationTurkishTest::doTest( UnicodeString source, UnicodeString target, C
         return;
     }
     Collator::EComparisonResult keyResult = sortKey1.compareTo(sortKey2);
-    reportCResult( source, target, sortKey1, sortKey2, compareResult, keyResult, incResult, result );
+    reportCResult( source, target, sortKey1, sortKey2, compareResult, keyResult, compareResult, result );
 }
 
 void CollationTurkishTest::TestTertiary(/* char* par */)
