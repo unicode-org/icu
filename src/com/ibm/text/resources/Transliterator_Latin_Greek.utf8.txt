@@ -1,0 +1,375 @@
+#--------------------------------------------------------------------
+# Copyright (c) 1999-2001, International Business Machines
+# Corporation and others.  All Rights Reserved.
+#--------------------------------------------------------------------
+# Date: Tue Jan 23 12:18:45 2001
+#--------------------------------------------------------------------
+
+# Latin-Greek
+
+# ==============================================
+# Modern Greek Transliteration Rules
+#
+# This transliterates modern Greek characters, but using rules
+# that are traditional for Ancient Greek, and
+# thus more resemble Greek words that have become part
+# of English. It differs from the official Greek
+# transliteration, which is more phonetic (since
+# most modern Greek vowels, for example, have
+# degenerated simply to sound like "ee").
+#
+# There are only a few tricky parts.
+# 1. eta and omega don't map directly to Latin vowels,
+#    so we use a macron on e and o, and some
+#    other combinations if they are accented.
+# 2. The accented, diaeresis i and y are substituted too.
+# 3. Some letters use digraphs, like "ph". While typical,
+#    they need some special handling.
+# 4. A gamma before a gamma or a few other letters is
+#    transliterated as an "n", as in "Anglo"
+# 5. An ypsilon after a vowel is a "u", as in
+#    "Mouseio". Otherwise it is a "y" as in "Physikon"
+# 6. The construction of the rules is made simpler by making sure
+#    that most rules for lowercase letters exactly correspond to the
+#    rules for uppercase letters, *except* for the case of the letters
+#    in the rule itself. That way, after modifying the uppercase rules,
+#    you can just copy, paste, and "set to lowercase" to get
+#    the rules for lowercase letters!
+# ==============================================
+
+# ==============================================
+# Variables, used to make the rules more comprehensible
+# and for conditionals.
+# ==============================================
+
+### $quote='\"';
+
+# Latin Letters
+
+### $E_MACRON=Ē;
+### $e_macron=ē;
+### $O_MACRON=Ō;
+### $o_macron=ō;
+### $Y_UMLAUT=Ÿ;
+### $y_umlaut=ÿ;
+
+#! // with real accents.
+#! + "$E_MACRON_ACUTE=Ḗ;"
+#! + "$e_macron_acute=ḗ;"
+#! + "$O_MACRON_ACUTE=Ṓ;"
+#! + "$o_macron_acute=ṓ;"
+#! + "$y_umlaut_acute=ÿ́;"
+#! + "$u00ef_acute=ḯ;"
+#! + "$u00fc_acute=ǘ;"
+#! //
+
+# single letter equivalents
+
+### $E_MACRON_ACUTE=Ê;
+### $e_macron_acute=ê;
+### $O_MACRON_ACUTE=Ô;
+### $o_macron_acute=ô;
+### $y_umlaut_acute=ŷ;
+### $u00ef_acute=î;
+### $u00fc_acute=û;
+
+# Greek Letters
+
+### $ALPHA=Α;
+### $BETA=Β;
+### $GAMMA=Γ;
+### $DELTA=Δ;
+### $EPSILON=Ε;
+### $ZETA=Ζ;
+### $ETA=Η;
+### $THETA=Θ;
+### $IOTA=Ι;
+### $KAPPA=Κ;
+### $LAMBDA=Λ;
+### $MU=Μ;
+### $NU=Ν;
+### $XI=Ξ;
+### $OMICRON=Ο;
+### $PI=Π;
+### $RHO=Ρ;
+### $SIGMA=Σ;
+### $TAU=Τ;
+### $YPSILON=Υ;
+### $PHI=Φ;
+### $CHI=Χ;
+### $PSI=Ψ;
+### $OMEGA=Ω;
+
+### $ALPHA2=Ά;
+### $EPSILON2=Έ;
+### $ETA2=Ή;
+### $IOTA2=Ί;
+### $OMICRON2=Ό;
+### $YPSILON2=Ύ;
+### $OMEGA2=Ώ;
+### $IOTA_DIAERESIS=Ϊ;
+### $YPSILON_DIAERESIS=Ϋ;
+
+### $alpha=α;
+### $beta=β;
+### $gamma=γ;
+### $delta=δ;
+### $epsilon=ε;
+### $zeta=ζ;
+### $eta=η;
+### $theta=θ;
+### $iota=ι;
+### $kappa=κ;
+### $lambda=λ;
+### $mu=μ;
+### $nu=ν;
+### $xi=ξ;
+### $omicron=ο;
+### $pi=π;
+### $rho=ρ;
+### $sigma=σ;
+### $tau=τ;
+### $ypsilon=υ;
+### $phi=φ;
+### $chi=χ;
+### $psi=ψ;
+### $omega=ω;
+
+#forms
+
+### $alpha2=ά;
+### $epsilon2=έ;
+### $eta2=ή;
+### $iota2=ί;
+### $omicron2=ό;
+### $ypsilon2=ύ;
+### $omega2=ώ;
+### $iota_diaeresis=ϊ;
+### $ypsilon_diaeresis=ϋ;
+### $iota_diaeresis2=ΐ;
+### $ypsilon_diaeresis2=ΰ;
+### $sigma2=ς;
+
+# Variables for conditional mappings
+
+# Use lowercase for all variable names, to allow cut/paste below.
+
+$letter=[~[:Lu:][:Ll:]];
+$lower=[[:Ll:]];
+$softener=[eiyEIY];
+$vowel=[aeiouAEIOU \
+ ΑΕΗΙΟΥΩ \
+ ΆΈΉΊΌΎΏ \
+ ΪΫ \
+ αεηιουω \
+ άέήίόύώ \
+ ϊϋ \
+ ΐΰ \
+ ];
+$n_gamma=[GKXCgkxc];
+$gamma_n=[ΓΚΧΞγκχξ];
+$pp=[Pp];
+
+# ==============================================
+# Rules
+# ==============================================
+# The following are special titlecases, and should
+# not be copied when duplicating the lowercase
+# ==============================================
+
+Th <> Θ}$lower;
+Ph <> Φ}$lower;
+Ch <> Χ}$lower;
+#masked: + "Ps<Φ}$lower;"
+
+# Because there is no uppercase forms for final sigma,
+# we had to move all the sigma rules up here.
+
+# Remember to insert ' to preserve round trip, for double letters
+# don't need to do this for the digraphs with h,
+# since it is not created when mapping back from greek
+
+# use special form for s
+
+''S <> $pp{Σ; # handle PS
+S <> Σ;
+
+# The following are a bit tricky. 's' takes two forms in greek
+# final or non final.
+# We use ~s to represent the abnormal form: final before letter
+# or non-final before non-letter.
+# We use 's to separate p and s (otherwise ps is one letter)
+# so, we break out the following forms:
+
+''s < $pp{σ}$letter;
+s <          σ}$letter;
+'~'s <         σ;
+
+'~'s <         ς}$letter;
+''s < $pp{ς;
+s <          ς;
+
+'~'s }$letter>ς;
+'~'s             > σ;
+''s }$letter>σ;
+''s            > ς;
+s }$letter>σ;
+s              > ς;
+
+# because there are no uppercase forms, had to move these up too.
+
+i'\"''`'>ΐ;
+y'\"''`'>ΰ;
+
+î<>ΐ;
+û<>$vowel{ΰ;
+ŷ<>ΰ;
+
+# ==============================================
+# Uppercase Forms.
+# To make lowercase forms, just copy and lowercase below
+# ==============================================
+
+# Typing variants, in case the keyboard doesn't have accents
+
+'A`'>Ά;
+'E`'>Έ;
+'EE`'>Ή;
+EE>Η;
+'I`'>Ί;
+'O`'>Ό;
+'OO`'>Ώ;
+OO>Ω;
+I'\"'>Ϊ;
+Y'\"'>Ϋ;
+
+# Basic Letters
+
+A<>Α;
+Á<>Ά;
+B<>Β;
+N }$n_gamma<>Γ}$gamma_n;
+G<>Γ;
+D<>Δ;
+''E <> [Ee]{Ε; # handle EE
+E<>Ε;
+É<>Έ;
+Z<>Ζ;
+Ê<>Ή;
+Ē<>Η;
+TH<>Θ;
+I<>Ι;
+Í<>Ί;
+Ï<>Ϊ;
+K<>Κ;
+L<>Λ;
+M<>Μ;
+N'' <> Ν}$gamma_n;
+N<>Ν;
+X<>Ξ;
+''O <> [Oo]{ Ο; # handle OO
+O<>Ο;
+Ó<>Ό;
+PH<>Φ; # needs ordering before P
+PS<>Ψ; # needs ordering before P
+P<>Π;
+R<>Ρ;
+T<>Τ;
+U <> $vowel{Υ;
+Ú <> $vowel{Ύ;
+Ü <> $vowel{Ϋ;
+Y<>Υ;
+Ý<>Ύ;
+Ÿ<>Ϋ;
+CH<>Χ;
+Ô<>Ώ;
+Ō<>Ω;
+
+# Extra English Letters. Mapped for completeness
+
+C}$softener>|S;
+C>|K;
+F>|PH;
+H>|CH;
+J>|I;
+Q>|K;
+V>|U;
+W>|U;
+
+# ==============================================
+# Lowercase Forms. Just copy above and lowercase
+# ==============================================
+
+# typing variants, in case the keyboard doesn't have accents
+
+'a`'>ά;
+'e`'>έ;
+'ee`'>ή;
+ee>η;
+'i`'>ί;
+'o`'>ό;
+'oo`'>ώ;
+oo>ω;
+i'\"'>ϊ;
+y'\"'>ϋ;
+
+# basic letters
+
+a<>α;
+á<>ά;
+b<>β;
+n }$n_gamma<>γ}$gamma_n;
+g<>γ;
+d<>δ;
+''e <> [Ee]{ε; # handle EE
+e<>ε;
+é<>έ;
+z<>ζ;
+ê<>ή;
+ē<>η;
+th<>θ;
+i<>ι;
+í<>ί;
+ï<>ϊ;
+k<>κ;
+l<>λ;
+m<>μ;
+n'' <> ν}$gamma_n;
+n<>ν;
+x<>ξ;
+''o <> [Oo]{ ο; # handle OO
+o<>ο;
+ó<>ό;
+ph<>φ; # needs ordering before p
+ps<>ψ; # needs ordering before p
+p<>π;
+r<>ρ;
+t<>τ;
+u <> $vowel{υ;
+ú <> $vowel{ύ;
+ü <> $vowel{ϋ;
+y<>υ;
+ý<>ύ;
+ÿ<>ϋ;
+ch<>χ;
+ô<>ώ;
+ō<>ω;
+
+# extra english letters. mapped for completeness
+
+c}$softener>|s;
+c>|k;
+f>|ph;
+h>|ch;
+j>|i;
+q>|k;
+v>|u;
+w>|u;
+
+# ====================================
+# Normal final rule: remove '
+# ====================================
+
+#+ "''>;"
+
+# eof
