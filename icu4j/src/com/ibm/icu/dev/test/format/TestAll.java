@@ -23,6 +23,7 @@ public class TestAll extends TestGroup {
                   "TestAll$RBNF",
                   "TestAll$NumberFormat",
                   "TestAll$DateFormat",
+                  "TestAll$MessageFormat",
                   "com.ibm.icu.dev.test.format.BigNumberFormatTest"
               },
               "Formatting Tests");
@@ -69,6 +70,15 @@ public class TestAll extends TestGroup {
                 "IntlTestDateFormatSymbols",
                 "IntlTestSimpleDateFormatAPI",
                 "DateFormatRegressionTestJ",
+            });
+        }
+    }
+
+    public static class MessageFormat extends TestGroup {
+        public MessageFormat() {
+            super(new String[] {
+                "TestMessageFormat",
+                "MessageRegression",
             });
         }
     }
