@@ -11,6 +11,7 @@
 #include "strrepl.h"
 #include "rbt_data.h"
 #include "util.h"
+#include "unicode/uniset.h"
 
 U_NAMESPACE_BEGIN
 
@@ -255,6 +256,22 @@ UnicodeString& StringReplacer::toReplacerPattern(UnicodeString& rule,
                               TRUE, escapeUnprintable, quoteBuf);
 
     return rule;
+}
+
+/**
+ * Implement UnicodeReplacer
+ */
+void StringReplacer::addReplacementSetTo(UnicodeSet& toUnionTo) const {
+    UChar32 ch;
+    for (int32_t i=0; i<output.length(); i+=UTF_CHAR_LENGTH(ch)) {
+	ch = output.char32At(i);
+	UnicodeReplacer* r = data->lookupReplacer(ch);
+	if (r == NULL) {
+	    toUnionTo.add(ch);
+	} else {
+	    r->addReplacementSetTo(toUnionTo);
+	}
+    }
 }
 
 /**

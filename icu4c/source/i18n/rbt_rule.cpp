@@ -494,6 +494,32 @@ void TransliterationRule::setData(const TransliterationRuleData* d) {
     // Don't have to do segments since they are in the context or key
 }
 
+/**
+ * Union the set of all characters that may be modified by this rule
+ * into the given set.
+ */
+void TransliterationRule::addSourceSetTo(UnicodeSet& toUnionTo) const {
+    int32_t limit = anteContextLength + keyLength;
+    for (int32_t i=anteContextLength; i<limit; ) {
+	UChar32 ch = pattern.char32At(i);
+	i += UTF_CHAR_LENGTH(ch);
+	const UnicodeMatcher* matcher = data->lookupMatcher(ch);
+	if (matcher == NULL) {
+	    toUnionTo.add(ch);
+	} else {
+	    matcher->addMatchSetTo(toUnionTo);
+	}
+    }
+}
+
+/**
+ * Union the set of all characters that may be emitted by this rule
+ * into the given set.
+ */
+void TransliterationRule::addTargetSetTo(UnicodeSet& toUnionTo) const {
+    output->toReplacer()->addReplacementSetTo(toUnionTo);
+}
+
 U_NAMESPACE_END
 
 //eof

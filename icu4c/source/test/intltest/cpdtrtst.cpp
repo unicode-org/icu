@@ -331,6 +331,9 @@ void CompoundTransliteratorTest::TestTransliterate(){
     if(U_FAILURE(status)){
         errln("CompoundTransliterator construction failed");
     }else {
+#if 0
+	// handleTransliterate is a protected method that was erroneously made
+	// public.  It is not public API that needs to be tested.
         UnicodeString s("abcabc");
         expect(*ct1, s, s);
         UTransPosition index = { 0, 0, 0, 0 };
@@ -343,7 +346,7 @@ void CompoundTransliteratorTest::TestTransliterate(){
         UnicodeString rsource3(s);
         ct1->handleTransliterate(rsource3, index, TRUE); 
         expectAux(ct1->getID() + ":String, index(1,2,3), incremental=TRUE", rsource3 + "->" + rsource3, rsource3==expectedResult, expectedResult);
-
+#endif
     }
     delete ct1;
     UnicodeString Data[]={
@@ -391,7 +394,7 @@ void CompoundTransliteratorTest::expect(const CompoundTransliterator& t,
     t.transliterate(rsource);
     expectAux(t.getID() + ":Replaceable", source + "->" + rsource, rsource==expectedResult, expectedResult);
 
-    // Test handleTransliterate (incremental) transliteration -- 
+    // Test transliterate (incremental) transliteration -- 
     rsource.remove();
     rsource.append(source);
     UTransPosition index;
@@ -399,7 +402,8 @@ void CompoundTransliteratorTest::expect(const CompoundTransliterator& t,
     index.contextLimit = source.length();
     index.start = 0;
     index.limit = source.length();
-    t.handleTransliterate(rsource, index, TRUE);
+    UErrorCode ec = U_ZERO_ERROR;
+    t.transliterate(rsource, index, ec);
     t.finishTransliteration(rsource,index);
     expectAux(t.getID() + ":handleTransliterate ", source + "->" + rsource, rsource==expectedResult, expectedResult);
 

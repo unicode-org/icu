@@ -82,6 +82,11 @@ class FunctionReplacer : public UnicodeFunctor, public UnicodeReplacer {
                                              UBool escapeUnprintable) const;
 
     /**
+     * Implement UnicodeReplacer
+     */
+    virtual void addReplacementSetTo(UnicodeSet& toUnionTo) const;
+
+    /**
      * UnicodeFunctor API
      */
     virtual void setData(const TransliterationRuleData*);

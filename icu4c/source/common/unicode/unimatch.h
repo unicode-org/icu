@@ -14,6 +14,7 @@ U_NAMESPACE_BEGIN
 
 class Replaceable;
 class UnicodeString;
+class UnicodeSet;
 
 /**
  * Constants returned by <code>UnicodeMatcher::matches()</code>
@@ -128,6 +129,13 @@ public:
      * indexing.
      */
     virtual UBool matchesIndexValue(uint8_t v) const = 0;
+
+    /**
+     * Union the set of all characters that may be matched by this object
+     * into the given set.
+     * @param toUnionTo the set into which to union the source characters
+     */
+    virtual void addMatchSetTo(UnicodeSet& toUnionTo) const = 0;
 };
 
 U_NAMESPACE_END

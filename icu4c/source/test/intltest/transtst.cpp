@@ -159,6 +159,7 @@ TransliteratorTest::runIndexedTest(int32_t index, UBool exec,
         TESTCASE(69,TestMulticharStringSet);
         TESTCASE(70,TestUserFunction);
         TESTCASE(71,TestAnyX);
+        TESTCASE(72,TestSourceTargetSet);
 
         default: name = ""; break;
     }
@@ -3568,6 +3569,53 @@ void TransliteratorTest::TestAnyX(void) {
            CharsToUnicodeString("greek:abkABK hiragana:abuku cyrillic:abc"));
 
     delete anyLatin;
+}
+
+/**
+ * Test the source and target set API.  These are only implemented
+ * for RBT and CompoundTransliterator at this time.
+ */
+void TransliteratorTest::TestSourceTargetSet() {
+    UErrorCode ec = U_ZERO_ERROR;
+
+    // Rules
+    const char* r =
+	"a > b; "
+	"r [x{lu}] > q;";
+
+    // Expected source
+    UnicodeSet expSrc("[arx{lu}]", ec);
+
+    // Expected target
+    UnicodeSet expTrg("[bq]", ec);
+
+    UParseError pe;
+    Transliterator* t = Transliterator::createFromRules("test", r, UTRANS_FORWARD, pe, ec);
+
+    if (U_FAILURE(ec)) {
+	delete t;
+	errln("FAIL: Couldn't set up test");
+	return;
+    }
+
+    UnicodeSet src; t->getSourceSet(src);
+    UnicodeSet trg; t->getTargetSet(trg);
+
+    if (src == expSrc && trg == expTrg) {
+	UnicodeString a, b;
+	logln((UnicodeString)"Ok: " +
+	      r + " => source = " + src.toPattern(a, TRUE) +
+	      ", target = " + trg.toPattern(b, TRUE));
+    } else {
+	UnicodeString a, b, c, d;
+	errln((UnicodeString)"FAIL: " +
+	      r + " => source = " + src.toPattern(a, TRUE) +
+	      ", expected " + expSrc.toPattern(b, TRUE) +
+	      "; target = " + trg.toPattern(c, TRUE) +
+	      ", expected " + expTrg.toPattern(d, TRUE));
+    }
+
+    delete t;
 }
 
 //======================================================================

@@ -10,6 +10,7 @@
 #include "rbt_set.h"
 #include "rbt_rule.h"
 #include "unicode/unistr.h"
+#include "unicode/uniset.h"
 #include "cmemory.h"
 
 U_CDECL_BEGIN
@@ -402,6 +403,26 @@ UnicodeString& TransliterationRuleSet::toRules(UnicodeString& ruleSource,
         r->toRule(ruleSource, escapeUnprintable);
     }
     return ruleSource;
+}
+
+/**
+ * Return the set of all characters that may be modified
+ * (getTarget=false) or emitted (getTarget=true) by this set.
+ */
+UnicodeSet& TransliterationRuleSet::getSourceTargetSet(UnicodeSet& result,
+						       UBool getTarget) const {
+    result.clear();
+    int32_t count = ruleVector->size();
+    for (int32_t i=0; i<count; ++i) {
+	TransliterationRule* r =
+	    (TransliterationRule*) ruleVector->elementAt(i);
+	if (getTarget) {
+	    r->addTargetSetTo(result);
+	} else {
+	    r->addSourceSetTo(result);
+	}
+    }
+    return result;
 }
 
 U_NAMESPACE_END

@@ -382,6 +382,7 @@ public:
      */
     Transliterator* clone(void) const;
 
+ protected:
     /**
      * Implements {@link Transliterator#handleTransliterate}.
      * @deprecated To be removed after 2002-sep-30.
@@ -389,6 +390,7 @@ public:
     virtual void handleTransliterate(Replaceable& text, UTransPosition& offsets,
                                      UBool isIncremental) const;
 
+ public:
     /**
      * Return a representation of this transliterator as source rules.
      * These rules will produce an equivalent transliterator if used
@@ -403,6 +405,18 @@ public:
      */
     virtual UnicodeString& toRules(UnicodeString& result,
                                    UBool escapeUnprintable) const;
+
+ protected:
+    /**
+     * Implement Transliterator framework
+     */
+    virtual void handleGetSourceSet(UnicodeSet& result) const;
+
+ public:
+    /**
+     * Override Transliterator framework
+     */
+    virtual UnicodeSet& getTargetSet(UnicodeSet& result) const;
 
     /**
      * Return the class ID for this class.  This is useful only for

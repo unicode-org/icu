@@ -20,6 +20,7 @@ class TransliterationRule;
 class TransliterationRuleData;
 class UnicodeFilter;
 class UnicodeString;
+class UnicodeSet;
 
 /**
  * A set of rules for a <code>RuleBasedTransliterator</code>.
@@ -132,6 +133,13 @@ public:
      */
     virtual UnicodeString& toRules(UnicodeString& result,
                                    UBool escapeUnprintable) const;
+
+    /**
+     * Return the set of all characters that may be modified
+     * (getTarget=false) or emitted (getTarget=true) by this set.
+     */
+    UnicodeSet& getSourceTargetSet(UnicodeSet& result,
+				   UBool getTarget) const;
 };
 
 U_NAMESPACE_END

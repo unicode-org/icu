@@ -115,6 +115,15 @@ UBool Quantifier::matchesIndexValue(uint8_t v) const {
 }
 
 /**
+ * Implement UnicodeMatcher
+ */
+void Quantifier::addMatchSetTo(UnicodeSet& toUnionTo) const {
+    if (maxCount > 0) {
+	matcher->toMatcher()->addMatchSetTo(toUnionTo);
+    }
+}
+
+/**
  * Implement UnicodeFunctor
  */
 void Quantifier::setData(const TransliterationRuleData* d) {

@@ -97,6 +97,11 @@ class StringMatcher : public UnicodeFunctor, public UnicodeMatcher, public Unico
     virtual UBool matchesIndexValue(uint8_t v) const;
 
     /**
+     * Implement UnicodeMatcher
+     */
+    virtual void addMatchSetTo(UnicodeSet& toUnionTo) const;
+
+    /**
      * Implement UnicodeFunctor
      */
     virtual void setData(const TransliterationRuleData*);
@@ -144,6 +149,13 @@ class StringMatcher : public UnicodeFunctor, public UnicodeMatcher, public Unico
      * set of matches with this segment.
      */
     void resetMatch();
+
+    /**
+     * Union the set of all characters that may output by this object
+     * into the given set.
+     * @param toUnionTo the set into which to union the output characters
+     */
+    virtual void addReplacementSetTo(UnicodeSet& toUnionTo) const;
 
  private:
 
