@@ -49,43 +49,16 @@
 #include "cstring.h"
 #include "cmemory.h"
 #include "unicode/strenum.h"
+#include "uassert.h"
 
-// static initialization
-
-
-static const UChar         GMT_ID[] = {0x47, 0x4D, 0x54, 0x00}; /* "GMT" */
-static const int32_t       GMT_ID_LENGTH = 3;
-static const UChar         CUSTOM_ID[] = 
-{
-    0x43, 0x75, 0x73, 0x74, 0x6F, 0x6D, 0x00 /* "Custom" */
-};
-
-// See header file for documentation of the following
-static const TZHeader *    DATA = NULL;
-static const uint32_t*     INDEX_BY_ID = 0;
-static const OffsetIndex*  INDEX_BY_OFFSET = 0;
-static const CountryIndex* INDEX_BY_COUNTRY = 0;
-static UDataMemory*        UDATA_POINTER = 0;
-static UMTX                LOCK;
-static UBool               DATA_LOADED = FALSE;
-static void                loadZoneData(void);
-
-U_NAMESPACE_BEGIN
-static TimeZone*           DEFAULT_ZONE = NULL;
-static TimeZone*           _GMT = NULL; // cf. TimeZone::GMT
-static UnicodeString*      ZONE_IDS = 0;
-const char                 TimeZone::fgClassID = 0; // Value is irrelevant
-
-static const TZEquivalencyGroup* lookupEquivalencyGroup(const UnicodeString& id);
-U_NAMESPACE_END
 /**
  * udata callback to verify the zone data.
  */
 U_CDECL_BEGIN
 static UBool U_CALLCONV
 isTimeZoneDataAcceptable(void * /*context*/,
-                           const char * /*type*/, const char * /*name*/,
-                           const UDataInfo *pInfo) {
+                         const char * /*type*/, const char * /*name*/,
+                         const UDataInfo *pInfo) {
     return
         pInfo->size >= sizeof(UDataInfo) &&
         pInfo->isBigEndian == U_IS_BIG_ENDIAN &&
@@ -98,84 +71,86 @@ isTimeZoneDataAcceptable(void * /*context*/,
 }
 U_CDECL_END
 
+// Static data and constants
+
+static const UChar         GMT_ID[] = {0x47, 0x4D, 0x54, 0x00}; /* "GMT" */
+static const int32_t       GMT_ID_LENGTH = 3;
+static const UChar         CUSTOM_ID[] = 
+{
+    0x43, 0x75, 0x73, 0x74, 0x6F, 0x6D, 0x00 /* "Custom" */
+};
+
+// See header file for documentation of the following
+static const TZHeader *    DATA = NULL;          // alias into UDATA_MEMORY
+static const uint32_t*     INDEX_BY_ID = 0;      // alias into UDATA_MEMORY
+static const OffsetIndex*  INDEX_BY_OFFSET = 0;  // alias into UDATA_MEMORY
+static const CountryIndex* INDEX_BY_COUNTRY = 0; // alias into UDATA_MEMORY
+
+static UDataMemory*        UDATA_MEMORY = 0;
+static UMTX                LOCK;
+static TimeZone*           DEFAULT_ZONE = NULL;
+static TimeZone*           _GMT = NULL; // cf. TimeZone::GMT
+static UnicodeString*      ZONE_IDS = 0;
+const char                 TimeZone::fgClassID = 0; // Value is irrelevant
+
 UBool timeZone_cleanup()
 {
-    U_NAMESPACE_USE
-
+    // Aliases into UDATA_MEMORY; do NOT delete
     DATA = NULL;
     INDEX_BY_ID = NULL;
     INDEX_BY_OFFSET = NULL;
     INDEX_BY_COUNTRY = NULL;
-    if (ZONE_IDS) {
-        delete []ZONE_IDS;
-        ZONE_IDS = NULL;
+
+    delete []ZONE_IDS;
+    ZONE_IDS = NULL;
+
+    delete DEFAULT_ZONE;
+    DEFAULT_ZONE = NULL;
+
+    delete _GMT;
+    _GMT = NULL;
+
+    if (UDATA_MEMORY) {
+        udata_close(UDATA_MEMORY);
+        UDATA_MEMORY = NULL;
     }
-    if (UDATA_POINTER) {
-        udata_close(UDATA_POINTER);
-        UDATA_POINTER = NULL;
-    }
+
     if (LOCK) {
         umtx_destroy(&LOCK);
         LOCK = NULL;
     }
-    if (_GMT) {
-        delete _GMT;
-        _GMT = NULL;
-    }
-    if (DEFAULT_ZONE) {
-        delete DEFAULT_ZONE;
-        DEFAULT_ZONE = NULL;
-    }
-    DATA_LOADED = FALSE;
+
     return TRUE;
 }
 
+U_NAMESPACE_BEGIN
+
 /**
- * Attempt to load the system zone data from icudata.dll (or its
- * equivalent).  After this call returns DATA_LOADED will be true.
- * DATA itself will be non-null if the load succeeded; otherwise it
- * will be null.  This call does nothing if the load has already
- * happened or or if it happens in another thread concurrently before
- * we can get there.
+ * Load the system time zone data from icudata.dll (or its
+ * equivalent).  If this call succeeds, it will return TRUE and
+ * UDATA_MEMORY will be non-null, and DATA and INDEX_BY_* will be set
+ * to point into it.  If this call fails, either because the data
+ * could not be opened, or because the ID array could not be
+ * allocated, then it will return FALSE.
  *
- * After this call, we are guaranteed that DATA_LOADED is true.  We
- * are _not_ guaranteed that DATA will be nonzero.  If it is nonzero,
- * we are guaranteed that all associated data structures are
- * initialized.
+ * Must be called OUTSIDE mutex.
  */
-static void loadZoneData() {
-    U_NAMESPACE_USE
-
-    if (DATA_LOADED) {
-        return;
-    }
-
-    // Cleanup handles both _GMT and the UDataMemory-based statics
-    ucln_i18n_registerCleanup();
-
-    // Initialize _GMT independently; it should be valid even if we
-    // can't load the time zone UDataMemory.
-    TimeZone* gmt = new SimpleTimeZone(0, UnicodeString(GMT_ID, GMT_ID_LENGTH));
-    umtx_lock(&LOCK);
-    if (_GMT == NULL) {
-        _GMT = gmt;
-        gmt = NULL;
-    }
-    umtx_unlock(&LOCK);
-    delete gmt;
+static UBool loadZoneData() {
 
     // Open a data memory object, to be closed either later in this
     // function or in timeZone_cleanup().  Purify (etc.) may
     // mistakenly report this as a leak.
     UErrorCode status = U_ZERO_ERROR;
-    UDataMemory* data = udata_openChoice(0, TZ_DATA_TYPE, TZ_DATA_NAME,
+    UDataMemory* udata = udata_openChoice(0, TZ_DATA_TYPE, TZ_DATA_NAME,
         (UDataMemoryIsAcceptable*)isTimeZoneDataAcceptable, 0, &status);
     if (U_FAILURE(status)) {
-        return;
+        U_ASSERT(udata==0);
+        return FALSE;
     }
 
-    TZHeader* tzh = (TZHeader*)udata_getMemory(data);
-    // Result guaranteed to be nonzero if 'data' is nonzero
+    U_ASSERT(udata!=0);
+    TZHeader* tzh = (TZHeader*)udata_getMemory(udata);
+    U_ASSERT(tzh!=0);
 
     const uint32_t* index_by_id =
         (const uint32_t*)((int8_t*)tzh + tzh->nameIndexDelta);
@@ -188,6 +163,10 @@ static void loadZoneData() {
     // of this array conforms to the ordering of the
     // index by name table.
     UnicodeString* zone_ids = new UnicodeString[tzh->count];
+    if (zone_ids == 0) {
+        udata_close(udata);
+        return FALSE;
+    }
     // Find start of name table, and walk through it
     // linearly.  If you're wondering why we don't use
     // the INDEX_BY_ID, it's because that indexes the
@@ -206,34 +185,62 @@ static void loadZoneData() {
     // Keep mutexed operations as short as possible by doing all
     // computations first, then doing pointer copies within the mutex.
     umtx_lock(&LOCK);
-    if (!DATA_LOADED) {
+    if (UDATA_MEMORY == 0) {
+        UDATA_MEMORY = udata;
         DATA = tzh;
         INDEX_BY_ID = index_by_id;
         INDEX_BY_OFFSET = index_by_offset;
         INDEX_BY_COUNTRY = index_by_country;
-        UDATA_POINTER = data;
         ZONE_IDS = zone_ids;
 
-        data = NULL;
-        DATA_LOADED = TRUE;
+        udata = NULL;
+        zone_ids = NULL;
     }
     umtx_unlock(&LOCK);
 
     // If another thread initialized the statics first, then delete
     // our unused data.
-    if (data != NULL) {
-        udata_close(data);
+    if (udata != NULL) {
+        udata_close(udata);
         delete[] zone_ids;
     }
+
+    // Cleanup handles both _GMT and the UDataMemory-based statics
+    ucln_i18n_registerCleanup();
+
+    return TRUE;
+}
+
+/**
+ * Inline function that returns TRUE if we have zone data, loading it
+ * if necessary.  The only time this function will return false is if
+ * loadZoneData() fails, and UDATA_MEMORY and associated pointers are
+ * NULL (rare).
+ *
+ * The difference between this function and loadZoneData() is that
+ * this is an inline function that expands to code which avoids making
+ * a function call in the case where the data is already loaded (the
+ * common case).
+ *
+ * Must be called OUTSIDE mutex.
+ */
+static inline UBool haveZoneData() {
+    umtx_lock(&LOCK);
+    UBool f = (UDATA_MEMORY != 0);
+    umtx_unlock(&LOCK);
+    return f || loadZoneData();
 }
 
 // -------------------------------------
-U_NAMESPACE_BEGIN
+
 const TimeZone*
 TimeZone::getGMT(void)
 {
-    if (!DATA_LOADED) {
-        loadZoneData();
+    Mutex lock(&LOCK);
+    // Initialize _GMT independently of other static data; it should
+    // be valid even if we can't load the time zone UDataMemory.
+    if (_GMT == 0) {
+        _GMT = new SimpleTimeZone(0, UnicodeString(GMT_ID, GMT_ID_LENGTH));
     }
     return _GMT;
 }
@@ -296,10 +303,8 @@ TimeZone::createTimeZone(const UnicodeString& ID)
      * user wants, but at least is a functioning TimeZone object.
      */
     TimeZone* result = 0;
-    if (!DATA_LOADED) {
-        loadZoneData();
-    }
-    if (DATA != 0) {
+
+    if (haveZoneData()) {
         result = createSystemTimeZone(ID);
     }
     if (result == 0) {
@@ -309,26 +314,6 @@ TimeZone::createTimeZone(const UnicodeString& ID)
         result = getGMT()->clone();
     }
     return result;
-}
-
-/**
- * Lookup the given name in our system zone table.  If found,
- * instantiate a new zone of that name and return it.  If not
- * found, return 0.
- */
-TimeZone*
-TimeZone::createSystemTimeZone(const UnicodeString& name) {
-    if (0 == DATA) {
-        return 0;
-    }
-    
-    const TZEquivalencyGroup *eg = lookupEquivalencyGroup(name);
-    if (eg != 0) {
-        return eg->isDST ?
-            new SimpleTimeZone(eg->u.d.zone, name) :
-            new SimpleTimeZone(eg->u.s.zone, name);                
-    }
-    return 0;
 }
 
 /**
@@ -359,23 +344,39 @@ lookupEquivalencyGroup(const UnicodeString& id) {
     return 0;
 }
 
+/**
+ * Lookup the given name in our system zone table.  If found,
+ * instantiate a new zone of that name and return it.  If not
+ * found, return 0.
+ *
+ * The caller must ensure that haveZoneData() returns TRUE before
+ * calling.
+ */
+TimeZone*
+TimeZone::createSystemTimeZone(const UnicodeString& name) {
+    U_ASSERT(UDATA_MEMORY != 0);
+    const TZEquivalencyGroup *eg = lookupEquivalencyGroup(name);
+    if (eg != NULL) {
+        return eg->isDST ?
+            new SimpleTimeZone(eg->u.d.zone, name) :
+            new SimpleTimeZone(eg->u.s.zone, name);                
+    }
+    return NULL;
+}
+
 // -------------------------------------
 
+/**
+ * Initialize DEFAULT_ZONE from the system default time zone.  The
+ * caller should confirm that DEFAULT_ZONE is NULL before calling.
+ * Upon return, DEFAULT_ZONE will not be NULL, unless operator new()
+ * returns NULL.
+ *
+ * Must be called OUTSIDE mutex.
+ */
 void
 TimeZone::initDefault()
 { 
-    if (!DATA_LOADED) {
-        loadZoneData();
-    }
-
-    // This function is called by createDefault() to initialize
-    // DEFAULT_ZONE from the system default time zone.  If
-    // DEFAULT_ZONE is already filled in, we obviously don't have to
-    // do anything.
-    if (DEFAULT_ZONE != NULL) {
-        return;
-    }
-
     // We access system timezone data through TPlatformUtilities,
     // including tzset(), timezone, and tzname[].
     int32_t rawOffset = 0;
@@ -402,37 +403,41 @@ TimeZone::initDefault()
         rawOffset = uprv_timezone() * -U_MILLIS_PER_SECOND;
     }
 
-    TimeZone* default_zone = createSystemTimeZone(hostID);
+    TimeZone* default_zone = NULL;
 
-    // If we couldn't get the time zone ID from the host, use
-    // the default host timezone offset.  Further refinements
-    // to this include querying the host to determine if DST
-    // is in use or not and possibly using the host locale to
-    // select from multiple zones at a the same offset.  We
-    // don't do any of this now, but we could easily add this.
-    if (default_zone == 0 && DATA != 0) {
-        // Use the designated default in the time zone list that has the
-        // appropriate GMT offset, if there is one.
-        
-        const OffsetIndex* index = INDEX_BY_OFFSET;
-        
-        for (;;) {
-            if (index->gmtOffset > rawOffset) {
-                // Went past our desired offset; no match found
-                break;
+    if (haveZoneData()) {
+        default_zone = createSystemTimeZone(hostID);
+
+        // If we couldn't get the time zone ID from the host, use
+        // the default host timezone offset.  Further refinements
+        // to this include querying the host to determine if DST
+        // is in use or not and possibly using the host locale to
+        // select from multiple zones at a the same offset.  We
+        // don't do any of this now, but we could easily add this.
+        if (default_zone == NULL) {
+            // Use the designated default in the time zone list that has the
+            // appropriate GMT offset, if there is one.
+
+            const OffsetIndex* index = INDEX_BY_OFFSET;
+
+            for (;;) {
+                if (index->gmtOffset > rawOffset) {
+                    // Went past our desired offset; no match found
+                    break;
+                }
+                if (index->gmtOffset == rawOffset) {
+                    // Found our desired offset
+                    default_zone = createSystemTimeZone(ZONE_IDS[index->defaultZone]);
+                    break;
+                }
+                // Compute the position of the next entry.  If the delta value
+                // in this entry is zero, then there is no next entry.
+                uint16_t delta = index->nextEntryDelta;
+                if (delta == 0) {
+                    break;
+                }
+                index = (const OffsetIndex*)((int8_t*)index + delta);
             }
-            if (index->gmtOffset == rawOffset) {
-                // Found our desired offset
-                DEFAULT_ZONE = createTimeZone(ZONE_IDS[index->defaultZone]);
-                break;
-            }
-            // Compute the position of the next entry.  If the delta value
-            // in this entry is zero, then there is no next entry.
-            uint16_t delta = index->nextEntryDelta;
-            if (delta == 0) {
-                break;
-            }
-            index = (const OffsetIndex*)((int8_t*)index + delta);
         }
     }
 
@@ -459,7 +464,13 @@ TimeZone::initDefault()
 TimeZone*
 TimeZone::createDefault()
 {
-    initDefault(); // After this call DEFAULT_ZONE is not NULL
+    umtx_lock(&LOCK);
+    UBool f = (DEFAULT_ZONE != 0);
+    umtx_unlock(&LOCK);
+    if (!f) {
+        initDefault();
+    }
+
     Mutex lock(&LOCK); // In case adoptDefault is called
     return DEFAULT_ZONE->clone();
 }
@@ -501,30 +512,27 @@ class TZEnumeration : public StringEnumeration {
     int32_t* map;
     int32_t  len;
     int32_t  pos;
-    void* _bufp;
-    int32_t _buflen;
+    void*    _bufp;
+    int32_t  _buflen;
 
 public:
     TZEnumeration() {
         map = NULL;
-		_bufp = NULL;
+        _bufp = NULL;
         len = pos = _buflen = 0;
-        if (!DATA_LOADED) {
-            loadZoneData();
-        }
-        if (DATA != NULL) {
+        if (haveZoneData()) {
             len = DATA->count;
         }
     }
 
     TZEnumeration(int32_t rawOffset) {
         map = NULL;
-		_bufp = NULL;
+                _bufp = NULL;
         len = pos = _buflen = 0;
-        if (!DATA_LOADED) {
-            loadZoneData();
+
+        if (!haveZoneData()) {
+            return;
         }
-        if (DATA == NULL) return;
 
         /* The offset index table is a table of variable-sized objects.
          * Each entry has an offset to the next entry; the last entry has
@@ -574,12 +582,12 @@ public:
 
     TZEnumeration(const char* country) {
         map = NULL;
-		_bufp = NULL;
+                _bufp = NULL;
         len = pos = _buflen = 0;
-        if (!DATA_LOADED) {
-            loadZoneData();
+
+        if (!haveZoneData()) {
+            return;
         }
-        if (DATA == NULL) return;
 
         /* The country index table is a table of variable-sized objects.
          * Each entry has an offset to the next entry; the last entry has
@@ -630,7 +638,7 @@ public:
 
     virtual ~TZEnumeration() {
         uprv_free(map);
-		uprv_free(_bufp);
+                uprv_free(_bufp);
     }
 
     int32_t count(UErrorCode& status) const {
@@ -679,10 +687,10 @@ public:
     }
 
 public:
-	virtual UClassID getDynamicClassID(void) const { return getStaticClassID(); }
-	static UClassID getStaticClassID(void) { return (UClassID)&fgClassID; }
+        virtual UClassID getDynamicClassID(void) const { return getStaticClassID(); }
+        static UClassID getStaticClassID(void) { return (UClassID)&fgClassID; }
 private:
-	static const char fgClassID;
+        static const char fgClassID;
 
 private:
     /**
@@ -730,10 +738,7 @@ TimeZone::createAvailableIDs(int32_t rawOffset, int32_t& numIDs)
     // The caller will delete the array when done, but not the pointers
     // in the array.
     
-    if (!DATA_LOADED) {
-        loadZoneData();
-    }
-    if (0 == DATA) {
+    if (!haveZoneData()) {
         numIDs = 0;
         return 0;
     }
@@ -798,10 +803,7 @@ TimeZone::createAvailableIDs(const char* country, int32_t& numIDs) {
     // The caller will delete the array when done, but not the pointers
     // in the array.
     
-    if (!DATA_LOADED) {
-        loadZoneData();
-    }
-    if (0 == DATA) {
+    if (!haveZoneData()) {
         numIDs = 0;
         return 0;
     }
@@ -872,10 +874,7 @@ TimeZone::createAvailableIDs(int32_t& numIDs)
     // that.  However, that would be a breaking API change, and some
     // callers familiar with the original API might try to delete it.
 
-    if (!DATA_LOADED) {
-        loadZoneData();
-    }
-    if (0 == DATA) {
+    if (!haveZoneData()) {
         numIDs = 0;
         return 0;
     }
@@ -902,10 +901,7 @@ TimeZone::createAvailableIDs(int32_t& numIDs)
 
 int32_t
 TimeZone::countEquivalentIDs(const UnicodeString& id) {
-    if (!DATA_LOADED) {
-        loadZoneData();
-    }
-    if (0 == DATA) {
+    if (!haveZoneData()) {
         return 0;
     }
     const TZEquivalencyGroup *eg = lookupEquivalencyGroup(id);
@@ -916,10 +912,7 @@ TimeZone::countEquivalentIDs(const UnicodeString& id) {
 
 const UnicodeString
 TimeZone::getEquivalentID(const UnicodeString& id, int32_t index) {
-    if (!DATA_LOADED) {
-        loadZoneData();
-    }
-    if (0 != DATA) {
+    if (haveZoneData()) {
         const TZEquivalencyGroup *eg = lookupEquivalencyGroup(id);
         if (eg != 0) {
             const uint16_t *p = eg->isDST ? &eg->u.d.count : &eg->u.s.count;
