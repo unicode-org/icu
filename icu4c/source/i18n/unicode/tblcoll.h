@@ -463,7 +463,7 @@ public:
    *    U_CE_NOT_FOUND_ERROR if more than one character was passed and there is no such a contraction<br>
    *    U_PRIMARY_TOO_LONG_ERROR if the primary for the variable top has more than two bytes
    * @return a 32 bit value containing the value of the variable top in upper 16 bits. Lower 16 bits are undefined
-   * @draft ICU 2.0
+   * @stable
    */
   virtual uint32_t setVariableTop(const UChar *varTop, int32_t len, UErrorCode &status);
 
@@ -474,7 +474,7 @@ public:
    *    U_CE_NOT_FOUND_ERROR if more than one character was passed and there is no such a contraction<br>
    *    U_PRIMARY_TOO_LONG_ERROR if the primary for the variable top has more than two bytes
    * @return a 32 bit value containing the value of the variable top in upper 16 bits. Lower 16 bits are undefined
-   * @draft ICU 2.0
+   * @stable
    */
   virtual uint32_t setVariableTop(const UnicodeString varTop, UErrorCode &status);
 
@@ -483,7 +483,7 @@ public:
    * Lower 16 bits are ignored.
    * @param varTop CE value, as returned by setVariableTop or ucol)getVariableTop
    * @param status error code (not changed by function)
-   * @draft ICU 2.0
+   * @stable
    */
   virtual void setVariableTop(const uint32_t varTop, UErrorCode &status);
 
@@ -491,7 +491,7 @@ public:
    * Gets the variable top value of a Collator. 
    * Lower 16 bits are undefined and should be ignored.
    * @param status error code (not changed by function). If error code is set, the return value is undefined.
-   * @draft ICU 2.0
+   * @stable
    */
   virtual uint32_t getVariableTop(UErrorCode &status) const;
 
