@@ -1462,13 +1462,13 @@ void TestIDNA::testCompareReferenceImpl(const UChar* src, int32_t srcLen){
     {
         
         const UChar* labelUChars = label.getBuffer();
-        UChar ascii[MAX_DEST_SIZE];
+        UChar ascii[MAX_DEST_SIZE]={0};
         int32_t asciiCapacity = MAX_DEST_SIZE, asciiLen=0;
-        UChar uni[MAX_DEST_SIZE];
+        UChar uni[MAX_DEST_SIZE]={0};
         int32_t uniCapacity = MAX_DEST_SIZE, uniLen=0;
         UErrorCode expectedStatus = U_ZERO_ERROR;
         UParseError parseError;
-        ascii[0] = uni[0] =0;
+        //ascii[0] = uni[0] =0;
         logln("Comparing idnaref_toASCII with uidna_toASCII for input: " + prettify(label));
         
         asciiLen = idnaref_toASCII(labelUChars, label.length()-1,ascii,asciiCapacity,
