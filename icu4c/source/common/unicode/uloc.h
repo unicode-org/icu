@@ -834,6 +834,31 @@ uloc_getKeywordValue(const char* localeID,
                      char* buffer, int32_t bufferCapacity,
                      UErrorCode* status);
 
+
+/**
+ * Set the value of the specified keyword.
+ * NOTE: Unlike almost every other ICU function which takes a
+ * buffer, this function will NOT truncate the output text. If a
+ * BUFFER_OVERFLOW_ERROR is received, it means that the original
+ * buffer is untouched. This is done to prevent incorrect or possibly
+ * even malformed locales from being generated and used.
+ * 
+ * @param keywordName name of the keyword to be set. Case insensitive.
+ * @param keywordValue value of the keyword to be set. If 0-length or
+ *  NULL, will result in the keyword being removed. No error is given if 
+ *  that keyword does not exist.
+ * @param buffer input buffer containing locale to be modified.
+ * @param bufferCapacity capacity of receiving buffer
+ * @param status containing error code - buffer not big enough.
+ * @return the length needed for the buffer
+ * @see uloc_getKeywordValue
+ * @draft ICU 3.2
+ */
+U_DRAFT int32_t U_EXPORT2
+uloc_setKeywordValue(const char* keywordName,
+                     const char* keywordValue,
+                     char* buffer, int32_t bufferCapacity,
+                     UErrorCode* status);
 /*eof*/
 
 
