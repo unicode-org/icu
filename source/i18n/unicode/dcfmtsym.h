@@ -177,66 +177,90 @@ public:
 
     /**
      * character used for zero. Different for Arabic, etc.
+     * This function returns only the first code unit of the symbol string,
+     * unlike getSymbol().
      * @deprecated remove after 2000-dec-31
      */
     UChar getZeroDigit(void) const;
     /**
      * character used for zero. Different for Arabic, etc.
+     * This function can set only a one-code unit symbol,
+     * unlike setSymbol().
      * @deprecated remove after 2000-dec-31
      */
     void setZeroDigit(UChar zeroDigit);
 
     /**
      * character used for thousands separator. Different for French, etc.
+     * This function returns only the first code unit of the symbol string,
+     * unlike getSymbol().
      * @deprecated remove after 2000-dec-31
      */
     UChar getGroupingSeparator(void) const;
     /**
      * character used for thousands separator. Different for French, etc.
+     * This function can set only a one-code unit symbol,
+     * unlike setSymbol().
      * @deprecated remove after 2000-dec-31
      */
     void setGroupingSeparator(UChar groupingSeparator);
 
     /**
      * character used for decimal sign. Different for French, etc.
+     * This function returns only the first code unit of the symbol string,
+     * unlike getSymbol().
      * @deprecated remove after 2000-dec-31
      */
     UChar getDecimalSeparator(void) const;
     /**
      * character used for decimal sign. Different for French, etc.
+     * This function can set only a one-code unit symbol,
+     * unlike setSymbol().
      * @deprecated remove after 2000-dec-31
      */
     void setDecimalSeparator(UChar decimalSeparator);
 
     /**
      * character used for per mill sign. Different for Arabic, etc.
+     * This function returns only the first code unit of the symbol string,
+     * unlike getSymbol().
      * @deprecated remove after 2000-dec-31
      */
     UChar getPerMill(void) const;
     /**
      * character used for per mill sign. Different for Arabic, etc.
+     * This function can set only a one-code unit symbol,
+     * unlike setSymbol().
      * @deprecated remove after 2000-dec-31
      */
     void setPerMill(UChar permill);
 
     /**
      * character used for percent sign. Different for Arabic, etc.
+     * This function returns only the first code unit of the symbol string,
+     * unlike getSymbol().
      * @deprecated remove after 2000-dec-31
      */
     UChar getPercent(void) const;
     /**
      * character used for percent sign. Different for Arabic, etc.
+     * This function can set only a one-code unit symbol,
+     * unlike setSymbol().
      * @deprecated remove after 2000-dec-31
      */
     void setPercent(UChar percent);
 
     /**
      * character used for a digit in a pattern.
+     * This function returns only the first code unit of the symbol string,
+     * unlike getSymbol().
      * @deprecated remove after 2000-dec-31
      */
     UChar getDigit(void) const;
     /**
      * character used for a digit in a pattern.
+     * This function can set only a one-code unit symbol,
+     * unlike setSymbol().
      * @deprecated remove after 2000-dec-31
      */
     void setDigit(UChar digit);
@@ -244,12 +268,16 @@ public:
     /**
      * character used to separate positive and negative subpatterns
      * in a pattern.
+     * This function returns only the first code unit of the symbol string,
+     * unlike getSymbol().
      * @deprecated remove after 2000-dec-31
      */
     UChar getPatternSeparator(void) const;
     /**
      * character used to separate positive and negative subpatterns
      * in a pattern.
+     * This function can set only a one-code unit symbol,
+     * unlike setSymbol().
      * @deprecated remove after 2000-dec-31
      */
     void setPatternSeparator(UChar patternSeparator);
@@ -282,11 +310,15 @@ public:
 
     /**
      * character used to represent plus sign
+     * This function returns only the first code unit of the symbol string,
+     * unlike getSymbol().
      * @deprecated remove after 2000-dec-31
      */
     UChar getPlusSign(void) const;
     /**
      * character used to represent plus sign
+     * This function can set only a one-code unit symbol,
+     * unlike setSymbol().
      * @deprecated remove after 2000-dec-31
      */
     void setPlusSign(UChar minusSign);
@@ -295,6 +327,8 @@ public:
      * character used to represent minus sign. If no explicit
      * negative format is specified, one is formed by prefixing
      * minusSign to the positive format.
+     * This function returns only the first code unit of the symbol string,
+     * unlike getSymbol().
      * @deprecated remove after 2000-dec-31
      */
     UChar getMinusSign(void) const;
@@ -302,6 +336,8 @@ public:
      * character used to represent minus sign. If no explicit
      * negative format is specified, one is formed by prefixing
      * minusSign to the positive format.
+     * This function can set only a one-code unit symbol,
+     * unlike setSymbol().
      * @deprecated remove after 2000-dec-31
      */
     void setMinusSign(UChar minusSign);
@@ -309,12 +345,16 @@ public:
     /**
      * character used to represent exponential. Almost always left
      * unchanged.
+     * This function returns only the first code unit of the symbol string,
+     * unlike getSymbol().
      * @deprecated remove after 2000-dec-31
      */
     UChar getExponentialSymbol(void) const;
     /**
      * character used to represent exponential. Almost always left
      * unchanged.
+     * This function can set only a one-code unit symbol,
+     * unlike setSymbol().
      * @deprecated remove after 2000-dec-31
      */
     void setExponentialSymbol(UChar exponential);
@@ -343,11 +383,15 @@ public:
 
     /**
      * The monetary decimal separator.
+     * This function returns only the first code unit of the symbol string,
+     * unlike getSymbol().
      * @deprecated remove after 2000-dec-31
      */
     UChar getMonetaryDecimalSeparator(void) const;
     /**
      * The monetary decimal separator.
+     * This function can set only a one-code unit symbol,
+     * unlike setSymbol().
      * @deprecated remove after 2000-dec-31
      */
     void setMonetaryDecimalSeparator(UChar sep);
@@ -357,6 +401,8 @@ public:
      * is not the pad character itself; rather, it is the special pattern
      * character <em>preceding</em> the pad character.  In the pattern
      * "*_#,##0", '*' is the pad escape, and '_' is the pad character.
+     * This function returns only the first code unit of the symbol string,
+     * unlike getSymbol().
      * @return the character 
      * @see #setPadEscape
      * @see DecimalFormat#getFormatWidth
@@ -371,6 +417,8 @@ public:
      * not the pad character itself; rather, it is the special pattern character
      * <em>preceding</em> the pad character.  In the pattern "*_#,##0", '*' is
      * the pad escape, and '_' is the pad character.
+     * This function can set only a one-code unit symbol,
+     * unlike setSymbol().
      * @see #getPadEscape
      * @see DecimalFormat#setFormatWidth
      * @see DecimalFormat#setPadPosition
