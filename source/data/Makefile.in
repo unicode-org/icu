@@ -39,7 +39,7 @@ SUBDIRS = build
 #lib icu data for link
 LIB_ICUDATA_NAME=lib$(ICUDATA_NAME)
 ## Extra files to install [nothing at present]
-SPECIALTESTDATA=test1.cnv test3.cnv test4.cnv
+SPECIALTESTDATA=test1.cnv test3.cnv test4.cnv testudata_nam.typ
 TESTDATAOBJDIR=../test/testdata
 top_builddir_from_tmp = $(patsubst ..%,../..%,$(top_builddir))
 INVOKE = $(LDLIBRARYPATH_ENVVAR)=$(top_builddir_from_tmp)/common:$(top_builddir_from_tmp)/tools/toolutil:$(top_builddir_from_tmp)/stubdata:$$$(LDLIBRARYPATH_ENVVAR)
@@ -141,6 +141,9 @@ testdata: $(SPECIALTESTDATA)
 
 %.cnv: build/%.cnv
 	ln -sf $< .
+
+testudata_nam.typ: build/te_IN.res
+	cp $< $@
 
 ####
 ####

@@ -23,13 +23,24 @@
 #include "filestrm.h"
 #include "cintltst.h"
 
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <stdlib.h>
 #include <stdio.h>
+
+#ifdef WIN32
+#include <io.h>
+#else
+#include <unistd.h>
+#endif
 
 static void TestUDataOpen(void);
 static void TestUDataOpenChoiceDemo1(void);
 static void TestUDataOpenChoiceDemo2(void);
 static void TestUDataGetInfo(void);
 static void TestUDataGetMemory(void);
+static void TestUDataSetAppData(void);
 static void TestErrorConditions(void);
 static void TestAppData(void);
 static void TestICUDataName(void);
@@ -44,6 +55,7 @@ addUDataTest(TestNode** root)
     addTest(root, &TestUDataOpenChoiceDemo2, "udatatst/TestUDataOpenChoiceDemo2"); 
     addTest(root, &TestUDataGetInfo,    "udatatst/TestUDataGetInfo"   );
     addTest(root, &TestUDataGetMemory,  "udatatst/TestUDataGetMemory" );
+    addTest(root, &TestUDataSetAppData, "udatatst/TestUDataSetAppData" );
     addTest(root, &TestErrorConditions, "udatatst/TestErrorConditions");
     addTest(root, &TestAppData, "udatatst/TestAppData" );
     addTest(root, &TestICUDataName, "udatatst/TestICUDataName" );
@@ -62,8 +74,13 @@ static void TestUDataOpen(){
     const char* name = "test";
     const char* type="dat";
 
-    char* path=(char*)malloc(sizeof(char) * (strlen(u_getDataDirectory()) + strlen(U_ICUDATA_NAME) +1 ) );
+    char* path=(char*)malloc(sizeof(char) * (strlen(u_getDataDirectory())
+                                           + strlen(U_ICUDATA_NAME)
+                                           + strlen("/build")+1 ) );
     char* testPath=(char*)malloc(sizeof(char) * (strlen(u_getDataDirectory()) + strlen("testdata") +1 ) );
+
+    char        *icuDataFilePath = 0;
+    struct stat stat_buf;
 
     strcat(strcpy(path, u_getDataDirectory()), U_ICUDATA_NAME);
     strcat(strcpy(testPath, u_getDataDirectory()), "testdata");
@@ -78,12 +95,18 @@ static void TestUDataOpen(){
         udata_close(result);
     }
 
-#if 0
+    /* If the ICU system common data file is present in this confiugration,   
+     *   verify that udata_open can explicitly fetch items from it.
+     *   If packaging mode == dll, the file may not exist.  So, if the file is 
+     *   missing, skip this test without error.
+     */
+    icuDataFilePath = (char *)malloc(strlen(path) + 10);
+    strcpy(icuDataFilePath, path);
+    strcat(icuDataFilePath, ".dat");
+    if (stat(icuDataFilePath, &stat_buf) == 0)
     {
         int i;
-        /* These tests assume that the ICU data dll can be opened by name.     */
-        /* This is no longer true.  For common data, only .dat files can be    */
-        /* dynamicallyopened, not libraries                                    */
+        log_verbose("Testing udata_open() on %s\n", icuDataFilePath);
         for(i=0; i<sizeof(memMap)/sizeof(memMap[0]); i++){
             status=U_ZERO_ERROR;
             result=udata_open(path, memMap[i][1], memMap[i][0], &status);
@@ -95,7 +118,90 @@ static void TestUDataOpen(){
             }
         }
     }
-#endif
+    else
+    {
+         log_verbose("Skipping tests of udata_open() on %s.  File not present in this configuration.\n",
+             icuDataFilePath);
+    }
+    free(icuDataFilePath);
+    icuDataFilePath = NULL;
+
+    /* If the ICU individual files used to build the ICU system common data are
+     *   present in this configuration,   
+     *   verify that udata_open can explicitly open them.
+     *   These data files are present in the ICU data/build directory after a build
+     *    completes.  Tests are most commonly run with the data directory pointing
+     *    back into this directory structure, but this is not required.  Soooo, if
+     *    the files are missing, skip this test without error.
+     */
+    icuDataFilePath = (char *)malloc(strlen(path) + 10);
+    strcpy(icuDataFilePath, u_getDataDirectory());
+    strcat(icuDataFilePath, "/build/tz.dat");
+    if (stat(icuDataFilePath, &stat_buf) == 0)
+    {
+        int i;
+        strcpy(icuDataFilePath, u_getDataDirectory());
+        strcat(icuDataFilePath, "/build");
+        log_verbose("Testing udata_open() on %s\n", icuDataFilePath);
+        for(i=0; i<sizeof(memMap)/sizeof(memMap[0]); i++){
+            status=U_ZERO_ERROR;
+            result=udata_open(path, memMap[i][1], memMap[i][0], &status);
+            if(U_FAILURE(status)) {
+                log_err("FAIL: udata_open() failed for path = %s, name=%s, type=%s, \n errorcode=%s\n", path, memMap[i][0], memMap[i][1], myErrorName(status));
+            } else {
+                log_verbose("PASS: udata_open worked for path = %s, name=%s, type=%s\n",  path, memMap[i][0], memMap[i][1]);
+                udata_close(result);
+            }
+        }
+    }
+    else
+    {
+         log_verbose("Skipping tests of udata_open() on %s.  File not present in this configuration.\n",
+             icuDataFilePath);
+    }
+    free(icuDataFilePath);
+    icuDataFilePath = NULL;
+
+    /*
+     * Test fallback file names for open of separate data files.
+     *    With these params to udata_open:
+     *       path = wherever/testudata
+     *       type = typ
+     *       name = nam
+     *     these files will be tried first:
+     *              wherever/testudata_nam.typ
+     *              testudata_nam.typ
+     *  A test data file named testudata_nam.typ exists for the purpose of testing this.
+     */
+    log_verbose("Testing udata_open, with base_name.type style fallback to individual file.\n");
+    icuDataFilePath = (char *)malloc(strlen(u_getDataDirectory()) + 50);
+    strcpy(icuDataFilePath, u_getDataDirectory());
+    strcat(icuDataFilePath, "testudata");
+    status = U_ZERO_ERROR;
+    result = udata_open( icuDataFilePath, "typ", "nam", &status);
+    if (status != U_ZERO_ERROR) {
+        log_err("FAIL: udata_open( \"%s\", \"typ\", \"nam\") returned status %s\n", icuDataFilePath, u_errorName(status));
+    }
+    udata_close(result);
+    free(icuDataFilePath);
+
+    /*
+     * Another fallback test.   Paths ending with a trailing directory separator
+     *    take a slightly different code path, with the "base name" from the path
+     *    being empty in the internal udata_open logic.
+     */
+    log_verbose("Testing udata_open, with path containing a trailing directory separator.\n");
+    icuDataFilePath = (char *)malloc(strlen(u_getDataDirectory()) + 50);
+    strcpy(icuDataFilePath, u_getDataDirectory());
+    status = U_ZERO_ERROR;
+    result = udata_open( icuDataFilePath, "cnv", "test1", &status);
+    if (status != U_ZERO_ERROR) {
+        log_err("FAIL: udata_open( \"%s\", \"cnv\", \"test1\") returned status %s\n", icuDataFilePath, u_errorName(status));
+    }
+    udata_close(result);
+    free(icuDataFilePath);
+
+
 
     log_verbose("Testing udata_open() with a non existing binary file\n");
     result=udata_open(path, "tst", "nonexist", &status);
@@ -118,6 +224,150 @@ static void TestUDataOpen(){
     free(path);
     free(testPath);
 }
+
+
+
+static void TestUDataSetAppData(){
+    UDataMemory      *dataItem;
+
+    UErrorCode        status=U_ZERO_ERROR;
+    int               fileHandle = 0;              /* We are going to read the testdata.dat file */
+    char             *filePath = 0;
+    struct stat       statBuf;
+    size_t            fileSize = 0;
+    char             *fileBuf = 0;
+
+    size_t            i;
+    
+    log_verbose("Testing udata_setAppData()\n");
+    
+    /* Open the testdata.dat file, using normal   */
+    filePath=(char*)malloc(sizeof(char) * (strlen(u_getDataDirectory()) + 100) );
+    strcat(strcpy(filePath, u_getDataDirectory()), "testdata.dat");
+#ifdef WIN32
+    fileHandle = open( filePath, O_RDONLY | O_BINARY );
+#else
+    fileHandle = open( filePath, O_RDONLY);
+#endif
+    if( fileHandle == -1 ) {
+        log_err("FAIL: TestUDataSetAppData() can not open(\"%s\", O_RDONLY)\n", filePath);
+        goto cleanupAndReturn;
+    }
+
+    /* 
+     *Find the size of testdata.dat, and read the whole thing into memory
+     */
+    if (fstat(fileHandle, &statBuf) == 0) {
+        fileSize = statBuf.st_size;
+    }
+    if (fileSize == 0) {
+        log_err("FAIL: TestUDataSetAppData() can not find size of file \"%s\".\n", filePath);
+        goto cleanupAndReturn;
+    }
+
+    fileBuf = (char *)malloc(fileSize);
+    if (fileBuf == 0) {
+        log_err("FAIL: TestUDataSetAppData() can not malloc(%d) for file \"%s\".\n", fileSize, filePath);
+        goto cleanupAndReturn;
+    }
+
+    i = read(fileHandle, fileBuf, fileSize);
+    if (i != fileSize) {
+        log_err("FAIL: TestUDataSetAppData() error reading file \"%s\".\n", filePath);
+        goto cleanupAndReturn;
+    }
+
+    /*
+     * Got testdata.dat into memory, now we try setAppData using the memory image.
+     */
+
+    status=U_ZERO_ERROR;
+    udata_setAppData("appData1", fileBuf, &status); 
+    if (status != U_ZERO_ERROR) {
+        log_err("FAIL: TestUDataSetAppData(): udata_setAppData(\"appData1\", fileBuf, status) "
+                " returned status of %s\n", u_errorName(status));
+        goto cleanupAndReturn;
+    }
+
+    udata_setAppData("appData2", fileBuf, &status); 
+    if (status != U_ZERO_ERROR) {
+        log_err("FAIL: TestUDataSetAppData(): udata_setAppData(\"appData2\", fileBuf, status) "
+                " returned status of %s\n", u_errorName(status));
+        goto cleanupAndReturn;
+    }
+
+    /*  If we try to setAppData with the same name a second time, we should get a 
+     *    a using default warning.
+     */
+    udata_setAppData("appData2", fileBuf, &status); 
+    if (status != U_USING_DEFAULT_WARNING) {
+        log_err("FAIL: TestUDataSetAppData(): udata_setAppData(\"appData2\", fileBuf, status) "
+                " returned status of %s, expected U_USING_DEFAULT_WARNING.\n", u_errorName(status));
+    }
+
+    /*
+     * Verify that we can access data using the names we supplied to setAppData
+     *   testData should hold these items:  root.res te.res te_IN.res testtypes.res testempty.res test.dat
+     */
+    status = U_ZERO_ERROR;
+    dataItem = udata_open("appData1", "res", "te_IN", &status);
+    if (status != U_ZERO_ERROR) {
+        log_err("FAIL: TestUDataSetAppData(): udata_open(\"appData1\", \"res\", \"te_IN\"... "
+                " returned status of %s, expected U_ZERO_ERROR.\n", u_errorName(status));
+    }
+    udata_close(dataItem);
+
+    status = U_ZERO_ERROR;
+    dataItem = udata_open("appData2", "dat", "test", &status);
+    if (status != U_ZERO_ERROR) {
+        log_err("FAIL: TestUDataSetAppData(): udata_open(\"appData2\", \"dat\", \"test\"... "
+                " returned status of %s, expected U_ZERO_ERROR.\n", u_errorName(status));
+    }
+    udata_close(dataItem);
+
+    
+    /*
+     * Try data that should not exist, check for returned error.
+     */
+    status = U_ZERO_ERROR;
+    dataItem = udata_open("appData3", "res", "bum_IN", &status);
+    if (status != U_FILE_ACCESS_ERROR) {
+        log_err("FAIL: TestUDataSetAppData(): udata_open(\"appData3\", \"res\", \"te_IN\"... "
+                " returned status of %s, expected U_FILE_ACCESS_ERROR.\n", u_errorName(status));
+    }
+    udata_close(dataItem);
+
+    status = U_ZERO_ERROR;
+    dataItem = udata_open("appData2", "dat", "no_such_name", &status);
+    if (status != U_FILE_ACCESS_ERROR) {
+        log_err("FAIL: TestUDataSetAppData(): udata_open(\"appData2\", \"dat\", \"no_such_name\"... "
+                " returned status of %s, expected U_FILE_ACCESS_ERROR.\n", u_errorName(status));
+    }
+    udata_close(dataItem);
+
+    /*
+     * Try udata_setAppData on memory conatining bogus data - data that does not
+     *   have the header of an ICU common data format file.
+     */
+    status = U_ZERO_ERROR;
+    udata_setAppData("appData4", "This string is memory that doesn't look like ICU Common Data", &status);
+    if (status != U_INVALID_FORMAT_ERROR) {
+        log_err("FAIL: TestUDataSetAppData(): udata_open(\"appData2\", \"dat\", \"no_such_name\"... "
+                " returned status of %s, expected U_INVALID_FORMAT_ERROR.\n", u_errorName(status));
+    }
+    
+
+cleanupAndReturn:
+    /*  Note:  fileBuf is not deleted because ICU retains a pointer to it
+     *         forever (until ICU is shut down).
+     */
+    if (fileHandle > 0) {
+        close(fileHandle);
+    }
+    free(filePath);
+    return;
+}
+
 
 static UBool
 isAcceptable1(void *context,

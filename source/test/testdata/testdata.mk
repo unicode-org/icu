@@ -15,6 +15,7 @@ ALL : "$(TESTDATAOUT)\testdata.dat"
 
 "$(TESTDATAOUT)\testdata.dat" : TESTDATA_ENC  "$(TESTDATAOUT)\root.res" "$(TESTDATAOUT)\te.res" "$(TESTDATAOUT)\te_IN.res" "$(TESTDATAOUT)\testtypes.res" "$(TESTDATAOUT)\testempty.res" "$(TESTDATAOUT)\ja_data.res" $(TESTDATAOUT)test.dat
 	@echo Building test data
+	copy $(TESTDATAOUT)\te.res $(TESTDATAOUT)\testudata_nam.typ
 	@"$(ICUTOOLS)\pkgdata\$(CFG)\pkgdata" -v -m common -c -p testdata -O "$(PKGOPT)" -d "$(TESTDATAOUT)" -T "$(TESTDATAOUT)" -s "$(TESTDATAOUT)" <<
 root.res
 te.res
@@ -23,6 +24,7 @@ testtypes.res
 testempty.res
 test.dat
 <<
+
 
 # Inference rule for creating resource bundles
 # Some test data resource bundles are known to have warnings and bad data.
