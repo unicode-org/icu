@@ -794,9 +794,9 @@ static void TestInt64Format() {
   UChar result[512];
   UNumberFormat *fmt;
   UErrorCode status = U_ZERO_ERROR;
-  const double doubleInt64Max = (double)INT64_MAX;
-  const double doubleInt64Min = (double)INT64_MIN;
-  const double doubleBig = 10.0 * (double)INT64_MAX;      
+  const double doubleInt64Max = (double)U_INT64_MAX;
+  const double doubleInt64Min = (double)U_INT64_MIN;
+  const double doubleBig = 10.0 * (double)U_INT64_MAX;      
   int32_t val32;
   int64_t val64;
   double  valDouble;
@@ -810,7 +810,7 @@ static void TestInt64Format() {
     log_err("error in unum_openPattern(): %s\n", myErrorName(status));
   } else {
     unum_setAttribute(fmt, UNUM_MAX_FRACTION_DIGITS, 20);
-    unum_formatInt64(fmt, INT64_MAX, result, 512, NULL, &status);
+    unum_formatInt64(fmt, U_INT64_MAX, result, 512, NULL, &status);
     if (U_FAILURE(status)) {
       log_err("error in unum_format(): %s\n", myErrorName(status));
     } else {
@@ -828,7 +828,7 @@ static void TestInt64Format() {
       val64 = unum_parseInt64(fmt, result, u_strlen(result), &parsepos, &status);
       if (U_FAILURE(status)) {
         log_err("parseInt64 returned error: %s\n", myErrorName(status));
-      } else if (val64 != INT64_MAX) {
+      } else if (val64 != U_INT64_MAX) {
         log_err("parseInt64 returned incorrect value, got: %ld\n", val64);
       }
 
@@ -892,7 +892,7 @@ static void TestInt64Format() {
       val64 = unum_parseInt64(fmt, result, u_strlen(result), &parsepos, &status);
       if (status != U_INVALID_FORMAT_ERROR) {
         log_err("parseInt64 didn't report error error: %s\n", myErrorName(status));
-      } else if (val64 != INT64_MAX) {
+      } else if (val64 != U_INT64_MAX) {
         log_err("parseInt64 returned incorrect value, got: %ld\n", val64);
       }
 
