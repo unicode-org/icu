@@ -38,7 +38,7 @@
 
 /* fallback properties for the ASCII range if the data cannot be loaded */
 /* these are printed by genprops in verbose mode */
-static uint32_t staticProps32Table[]={
+static const uint32_t staticProps32Table[]={
     /* 0x00 */ 0x48f,
     /* 0x01 */ 0x48f,
     /* 0x02 */ 0x48f,
@@ -376,7 +376,7 @@ enum {
 
 /* number of bits in an 8-bit integer value */
 #define EXC_GROUP 8
-static uint8_t flagsOffset[256]={
+static const uint8_t flagsOffset[256]={
     0, 1, 1, 2, 1, 2, 2, 3, 1, 2, 2, 3, 2, 3, 3, 4,
     1, 2, 2, 3, 2, 3, 3, 4, 2, 3, 3, 4, 3, 4, 4, 5,
     1, 2, 2, 3, 2, 3, 3, 4, 2, 3, 3, 4, 3, 4, 4, 5,
@@ -752,8 +752,8 @@ u_getCombiningClass(UChar32 c) {
 /* static data tables ------------------------------------------------------- */
 
 struct BlockScriptMap {
-    UChar        fFirstCode;
-    UChar        fLastCode;
+    const UChar        fFirstCode;
+    const UChar        fLastCode;
 };
 typedef struct BlockScriptMap BlockScriptMap;
 
@@ -850,47 +850,47 @@ static const BlockScriptMap fScriptIndex[] = {
   { 0xFFFF, 0xFFFF } /* END */
 };
 
-const UChar cellWidthRanges[] =
-    {
-        0x0000, /* general scripts area*/
-        0x1100, /* combining Hangul choseong*/
-        0x1160, /* combining Hangul jungseong and jongseong*/
-        0x1e00, /* Latin Extended Additional, Greek Extended*/
-        0x2000, /* symbols and punctuation*/
-        0x3000, /* CJK phonetics & symbols, CJK ideographs, Hangul syllables*/
-        0xd800, /* surrogates, private use*/
-        0xf900, /* CJK compatibility ideographs*/
-        0xfb00, /* alphabetic presentation forms, Arabic presentations forms A, combining half marks*/
-        0xfe30, /* CJK compatibility forms, small form variants*/
-        0xfe70, /* Arabic presentation forms B*/
-        0xff00, /* fullwidth ASCII*/
-        0xff60, /* halfwidth, CJK punctuation, Katakana, Hangul Jamo*/
-        0xffe0, /* fullwidth punctuation and currency signs*/
-        0xffe8, /* halfwidth forms, arrows, and shapes*/
-        0xfff0  /* specials*/
-    };
+static const UChar cellWidthRanges[] =
+{
+    0x0000, /* general scripts area*/
+    0x1100, /* combining Hangul choseong*/
+    0x1160, /* combining Hangul jungseong and jongseong*/
+    0x1e00, /* Latin Extended Additional, Greek Extended*/
+    0x2000, /* symbols and punctuation*/
+    0x3000, /* CJK phonetics & symbols, CJK ideographs, Hangul syllables*/
+    0xd800, /* surrogates, private use*/
+    0xf900, /* CJK compatibility ideographs*/
+    0xfb00, /* alphabetic presentation forms, Arabic presentations forms A, combining half marks*/
+    0xfe30, /* CJK compatibility forms, small form variants*/
+    0xfe70, /* Arabic presentation forms B*/
+    0xff00, /* fullwidth ASCII*/
+    0xff60, /* halfwidth, CJK punctuation, Katakana, Hangul Jamo*/
+    0xffe0, /* fullwidth punctuation and currency signs*/
+    0xffe8, /* halfwidth forms, arrows, and shapes*/
+    0xfff0  /* specials*/
+};
 
-const UChar cellWidthValues[] =
-    {
-        U_HALF_WIDTH,    /* general scripts area*/
-        U_FULL_WIDTH,    /* combining Hangul choseong*/
-        U_ZERO_WIDTH,    /* combining Hangul jungseong and jongseong*/
-        U_HALF_WIDTH,    /* Latin extended aAdditional, Greek extended*/
-        U_NEUTRAL_WIDTH, /* symbols and punctuation*/
-        U_FULL_WIDTH,    /* CJK phonetics & symbols, CJK ideographs, Hangul syllables*/
-        U_NEUTRAL_WIDTH, /* surrogates, private use*/
-        U_FULL_WIDTH,    /* CJK compatibility ideographs*/
-        U_HALF_WIDTH,    /* alphabetic presentation forms, Arabic presentations forms A, combining half marks*/
-        U_FULL_WIDTH,    /* CJK compatibility forms, small form variants*/
-        U_HALF_WIDTH,    /* Arabic presentation forms B*/
-        U_FULL_WIDTH,    /* fullwidth ASCII*/
-        U_HALF_WIDTH,    /* halfwidth CJK punctuation, Katakana, Hangul Jamo*/
-        U_FULL_WIDTH,    /* fullwidth punctuation and currency signs*/
-        U_HALF_WIDTH,    /* halfwidth forms, arrows, and shapes*/
-        U_ZERO_WIDTH     /* specials*/
-    };
+static const UChar cellWidthValues[] =
+{
+    U_HALF_WIDTH,    /* general scripts area*/
+    U_FULL_WIDTH,    /* combining Hangul choseong*/
+    U_ZERO_WIDTH,    /* combining Hangul jungseong and jongseong*/
+    U_HALF_WIDTH,    /* Latin extended aAdditional, Greek extended*/
+    U_NEUTRAL_WIDTH, /* symbols and punctuation*/
+    U_FULL_WIDTH,    /* CJK phonetics & symbols, CJK ideographs, Hangul syllables*/
+    U_NEUTRAL_WIDTH, /* surrogates, private use*/
+    U_FULL_WIDTH,    /* CJK compatibility ideographs*/
+    U_HALF_WIDTH,    /* alphabetic presentation forms, Arabic presentations forms A, combining half marks*/
+    U_FULL_WIDTH,    /* CJK compatibility forms, small form variants*/
+    U_HALF_WIDTH,    /* Arabic presentation forms B*/
+    U_FULL_WIDTH,    /* fullwidth ASCII*/
+    U_HALF_WIDTH,    /* halfwidth CJK punctuation, Katakana, Hangul Jamo*/
+    U_FULL_WIDTH,    /* fullwidth punctuation and currency signs*/
+    U_HALF_WIDTH,    /* halfwidth forms, arrows, and shapes*/
+    U_ZERO_WIDTH     /* specials*/
+};
 
-const int16_t numCellWidthValues = 16;
+#define NUM_CELL_WIDTH_VALUES (sizeof(cellWidthValues)/sizeof(cellWidthValues[0]))
 
 /* Get the script associated with the character*/
 UCharBlock
@@ -952,9 +952,11 @@ u_charCellWidth(UChar32 ch)
         default:
             /* for all remaining characters, find out which Unicode range they belong to using
                the table above, and then look up the appropriate return value in that table*/
-            for (i = 0; i < numCellWidthValues; ++i)
-                if (ch < cellWidthRanges[i])
+            for (i = 0; i < (int16_t)NUM_CELL_WIDTH_VALUES; ++i) {
+                if (ch < cellWidthRanges[i]) {
                     break;
+                }
+            }
             --i;
             return cellWidthValues[i];
     }
