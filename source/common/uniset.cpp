@@ -143,6 +143,7 @@ U_NAMESPACE_BEGIN
 
 UOBJECT_DEFINE_RTTI_IMPLEMENTATION(ParsePosition)
 ParsePosition::~ParsePosition() {}
+SymbolTable::~SymbolTable() {}
 
 /**
  * Minimum value that can be stored in a UnicodeSet.
