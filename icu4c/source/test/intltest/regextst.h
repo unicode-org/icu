@@ -8,6 +8,8 @@
 #ifndef REGEXTST_H
 #define REGEXTST_H
 
+#include "unicode/utypes.h"
+#if !UCONFIG_NO_REGULAR_EXPRESSIONS
 
 #include "intltest.h"
 #include "unicode/regex.h"
@@ -35,4 +37,6 @@ public:
     virtual void regex_err(const char *pat, int32_t errline, int32_t errcol,
                             UErrorCode expectedStatus, int line);
 };
+
+#endif   // !UCONFIG_NO_REGULAR_EXPRESSIONS
 #endif

@@ -4,9 +4,9 @@
 //
 //   file:  regeximp.h
 //
-//           ICU Regular Expressions, declarations of internal implementation types
-//           and constants that are common between the pattern compiler and the 
-//           runtime execution engine.
+//           ICU Regular Expressions,
+//               Definitions of constant values used in the compiled form of
+//               a regular expression pattern.
 //
 
 #ifndef _REGEXIMP_H
@@ -19,7 +19,7 @@
 //
 static const uint32_t     URX_UNUSED1       = 1;
 static const uint32_t     URX_END           = 2;
-static const uint32_t     URX_ONECHAR       = 3;
+static const uint32_t     URX_ONECHAR       = 3;    // Value field is the 21 bit unicode char to match
 static const uint32_t     URX_STRING        = 4;    // Value field is index of string start
 static const uint32_t     URX_STRING_LEN    = 5;    // Value field is string length (code units)
 static const uint32_t     URX_STATE_SAVE    = 6;    // Value field is pattern position to push
@@ -55,7 +55,7 @@ static const uint32_t     URX_DOLLAR        = 24;   // Also for \Z
 
                 
 //
-//  Access to Unicode Sets for composite properties
+//  Access to Unicode Sets for Perl-like composite character properties
 //     The sets are accessed by the match engine for things like \w (word boundary)
 //     
 static const uint32_t     URX_ISWORD_SET  = 1;
