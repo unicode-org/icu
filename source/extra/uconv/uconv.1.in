@@ -55,6 +55,7 @@ Unicode, and then from Unicode to the destination encoding).
 It is possible to specify callbacks that are used to handle invalid
 characters in the input, or characters that cannot be transcoded to
 the destination encoding.
+.PP
 .B uconv
 can also run the transcoding through a specified
 .IR transliterator ,
