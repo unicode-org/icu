@@ -483,7 +483,7 @@ en {
         AOK { "AOK", "Angolan Kwanza (1977-1990)" } // 01/08/1977-09/25/1990
         AON { "AON", "Angolan New Kwanza (1990-2000)" } // 09/25/1990-07/01/1995
         AOR { "AOR", "Angolan Kwanza Reajustado (1995-1999)" } // 07/01/1995-12/13/1999
-        AOS { "AOS", "Angolan Escudo  "      } // 12/31/1958-11/11/1976
+        AOS { "AOS", "Angolan Escudo"        } // 12/31/1958-11/11/1976
         ARA { "ARA", "Argentine Austral"    } // 06/14/1985-01/01/1992
         ARM { "ARM", "Argentine Peso Moneda Nacional" } // 1899-01/01/1970
         ARP { "ARP", "Argentine Peso (1983-1985)" } // 06/01/1983-06/14/1985
