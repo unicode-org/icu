@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/TestAll.java,v $ 
- * $Date: 2002/11/25 22:11:47 $ 
- * $Revision: 1.43 $
+ * $Date: 2002/12/18 19:58:25 $ 
+ * $Revision: 1.44 $
  *
  *****************************************************************************************
  */
@@ -216,6 +216,7 @@ public class TestAll extends TestFmwk {
             new com.ibm.icu.dev.test.util.ICUListResourceBundleTest(),
 	    new com.ibm.icu.dev.test.util.CompactArrayTest(),
             new com.ibm.icu.dev.test.util.StringTokenizerTest(),
+            new com.ibm.icu.dev.test.util.CurrencyTest(),
             });
     }
     public void TestMath() throws Exception{
