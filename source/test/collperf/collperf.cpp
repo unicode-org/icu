@@ -944,6 +944,13 @@ int main(int argc, const char** argv) {
         fprintf(stderr, "Collator creation failed.: %d\n", status);
         return -1;
     }
+    if (status==U_USING_DEFAULT_ERROR && opt_terse==FALSE) {
+        fprintf(stderr, "Warning, U_USING_DEFAULT_ERROR for %s\n", opt_locale);
+    }
+    if (status==U_USING_FALLBACK_ERROR && opt_terse==FALSE) {
+        fprintf(stderr, "Warning, U_USING_FALLBACK_ERROR for %s\n", opt_locale);
+    }
+    
     if (opt_norm) {
         ucol_setAttribute(gCol, UCOL_NORMALIZATION_MODE, UCOL_ON, &status);
     }
@@ -1018,7 +1025,7 @@ int main(int argc, const char** argv) {
         exit(-1);
     }
 
-    const int MAXLINES = 10000;
+    const int MAXLINES = 40000;
     gFileLines = new Line[MAXLINES];
     UChar buf[1024];
     int   column = 0;
