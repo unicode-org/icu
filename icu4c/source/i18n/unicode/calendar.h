@@ -883,7 +883,7 @@ protected:
     bool_t      fIsSet[FIELD_COUNT];
 
     // Special values of stamp[]
-    enum EStampValues {
+    enum {
         kUnset                 = 0,
         kInternallySet,
         kMinimumUserStamp
