@@ -51,6 +51,7 @@ TransliteratorTest::runIndexedTest(int32_t index, bool_t exec,
         CASE(11,TestPatternQuoting);
         CASE(12,TestJ277);
         CASE(13,TestJ243);
+        CASE(14,TestJ329);
         default: name = ""; break;
     }
 }
@@ -65,11 +66,15 @@ void TransliteratorTest::TestInstantiation() {
                   i + ") returned empty string");
             continue;
         }
-        Transliterator* t = Transliterator::createInstance(id);
+        ParseError parseError;
+        Transliterator* t = Transliterator::createInstance(id,
+                              Transliterator::FORWARD, &parseError);
         name.truncate(0);
         Transliterator::getDisplayName(id, name);
         if (t == 0) {
-            errln(UnicodeString("FAIL: Couldn't create ") + id);
+            errln(UnicodeString("FAIL: Couldn't create ") + id +
+                  ", parse error " + parseError.code + ", line " +
+                  parseError.line + ", offset " + parseError.offset);
             // When createInstance fails, it deletes the failing
             // entry from the available ID list.  We detect this
             // here by looking for a change in countAvailableIDs.
@@ -575,6 +580,43 @@ void TransliteratorTest::TestJ243(void) {
     status = U_ZERO_ERROR;
     UnicodeToHexTransliterator hex3("&\\#x###0;", status);
     expect(hex3, "012", "&#x30;&#x31;&#x32;");
+}
+
+/**
+ * Parsers need better syntax error messages.
+ */
+void TransliteratorTest::TestJ329(void) {
+    
+    struct { bool_t containsErrors; const char* rule; } DATA[] = {
+        { FALSE, "a > b; c > d" },
+        { TRUE,  "a > b; no operator; c > d" },
+    };
+    int32_t DATA_length = sizeof(DATA) / sizeof(DATA[0]);
+
+    for (int32_t i=0; i<DATA_length; ++i) {
+        UErrorCode status = U_ZERO_ERROR;
+        ParseError parseError;
+        RuleBasedTransliterator rbt("<ID>",
+                                    DATA[i].rule,
+                                    Transliterator::FORWARD,
+                                    0,
+                                    parseError,
+                                    status);
+        bool_t gotError = U_FAILURE(status);
+        UnicodeString desc(DATA[i].rule);
+        desc.append(gotError ? " -> error" : " -> no error");
+        if (gotError) {
+            desc = desc + ", ParseError code=" + parseError.code +
+                " line=" + parseError.line +
+                " offset=" + parseError.offset +
+                " context=" + parseError.context;
+        }
+        if (gotError == DATA[i].containsErrors) {
+            logln(UnicodeString("Ok:   ") + desc);
+        } else {
+            errln(UnicodeString("FAIL: ") + desc);
+        }
+    }
 }
 
 //======================================================================
