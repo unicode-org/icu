@@ -184,6 +184,7 @@ void LocaleTest::runIndexedTest( int32_t index, UBool exec, const char* &name, c
         CASE(22, TestVariantParsing)
         CASE(23, Test4105828)
         CASE(24, TestSetIsBogus)
+        CASE(25, TestParallelAPIValues)
 
         default: name = ""; break; //needed to end loop
     }
@@ -225,7 +226,7 @@ void LocaleTest::TestBasicGetters() {
         if (testLocale.getVariant()[0] != 0)
             errln("  Variant code mismatch: something versus \"\"");
     }
-    
+
     /*tests for the depracted API*/
 #ifdef ICU_LOCID_USE_DEPRECATES
     for (i = 0; i <= MAX_LOCALES; i++) {
@@ -286,6 +287,76 @@ void LocaleTest::TestBasicGetters() {
     // doesn't support anything that isn't an officially recognized language or
     // country code, so we no longer support this feature.
 }
+
+void LocaleTest::TestParallelAPIValues() {
+    logln("Test synchronization between C and C++ API");
+    if (strcmp(Locale::getChinese().getName(), ULOC_CHINESE) != 0) {
+        errln("Differences for ULOC_CHINESE Locale");
+    }
+    if (strcmp(Locale::getEnglish().getName(), ULOC_ENGLISH) != 0) {
+        errln("Differences for ULOC_ENGLISH Locale");
+    }
+    if (strcmp(Locale::getFrench().getName(), ULOC_FRENCH) != 0) {
+        errln("Differences for ULOC_FRENCH Locale");
+    }
+    if (strcmp(Locale::getGerman().getName(), ULOC_GERMAN) != 0) {
+        errln("Differences for ULOC_GERMAN Locale");
+    }
+    if (strcmp(Locale::getItalian().getName(), ULOC_ITALIAN) != 0) {
+        errln("Differences for ULOC_ITALIAN Locale");
+    }
+    if (strcmp(Locale::getJapanese().getName(), ULOC_JAPANESE) != 0) {
+        errln("Differences for ULOC_JAPANESE Locale");
+    }
+    if (strcmp(Locale::getKorean().getName(), ULOC_KOREAN) != 0) {
+        errln("Differences for ULOC_KOREAN Locale");
+    }
+    if (strcmp(Locale::getSimplifiedChinese().getName(), ULOC_SIMPLIFIED_CHINESE) != 0) {
+        errln("Differences for ULOC_SIMPLIFIED_CHINESE Locale");
+    }
+    if (strcmp(Locale::getTraditionalChinese().getName(), ULOC_TRADITIONAL_CHINESE) != 0) {
+        errln("Differences for ULOC_TRADITIONAL_CHINESE Locale");
+    }
+
+
+    if (strcmp(Locale::getCanada().getName(), ULOC_CANADA) != 0) {
+        errln("Differences for ULOC_CANADA Locale");
+    }
+    if (strcmp(Locale::getCanadaFrench().getName(), ULOC_CANADA_FRENCH) != 0) {
+        errln("Differences for ULOC_CANADA_FRENCH Locale");
+    }
+    if (strcmp(Locale::getChina().getName(), ULOC_CHINA) != 0) {
+        errln("Differences for ULOC_CHINA Locale");
+    }
+    if (strcmp(Locale::getPRC().getName(), ULOC_PRC) != 0) {
+        errln("Differences for ULOC_PRC Locale");
+    }
+    if (strcmp(Locale::getFrance().getName(), ULOC_FRANCE) != 0) {
+        errln("Differences for ULOC_FRANCE Locale");
+    }
+    if (strcmp(Locale::getGermany().getName(), ULOC_GERMANY) != 0) {
+        errln("Differences for ULOC_GERMANY Locale");
+    }
+    if (strcmp(Locale::getItaly().getName(), ULOC_ITALY) != 0) {
+        errln("Differences for ULOC_ITALY Locale");
+    }
+    if (strcmp(Locale::getJapan().getName(), ULOC_JAPAN) != 0) {
+        errln("Differences for ULOC_JAPAN Locale");
+    }
+    if (strcmp(Locale::getKorea().getName(), ULOC_KOREA) != 0) {
+        errln("Differences for ULOC_KOREA Locale");
+    }
+    if (strcmp(Locale::getTaiwan().getName(), ULOC_TAIWAN) != 0) {
+        errln("Differences for ULOC_TAIWAN Locale");
+    }
+    if (strcmp(Locale::getUK().getName(), ULOC_UK) != 0) {
+        errln("Differences for ULOC_UK Locale");
+    }
+    if (strcmp(Locale::getUS().getName(), ULOC_US) != 0) {
+        errln("Differences for ULOC_US Locale");
+    }
+}
+
 
 void LocaleTest::TestSimpleResourceInfo() {
   UnicodeString   temp;
@@ -1088,10 +1159,10 @@ LocaleTest::TestAtypicalLocales()
 
     int32_t i;
     UErrorCode status = U_ZERO_ERROR;
-    Locale::setDefault(Locale::US, status);
+    Locale::setDefault(Locale::getUS(), status);
     for (i = 0; i < 9; ++i) {
         UnicodeString name;
-        localesToTest[i].getDisplayName(Locale::US, name);
+        localesToTest[i].getDisplayName(Locale::getUS(), name);
         logln(name);
         if (name != englishDisplayNames[i])
         {
@@ -1112,7 +1183,7 @@ LocaleTest::TestAtypicalLocales()
 
     for (i = 0; i < 9; i++) {
         UnicodeString name;
-        localesToTest[i].getDisplayName(Locale::FRANCE, name);
+        localesToTest[i].getDisplayName(Locale::getFrance(), name);
         logln(name);
         if (name != frenchDisplayNames[i])
             errln("Lookup in French failed: expected \"" + frenchDisplayNames[i]
@@ -1458,14 +1529,14 @@ LocaleTest::TestVariantParsing()
     
     UnicodeString got;
     
-    en_US_custom.getDisplayVariant(Locale::US, got);
+    en_US_custom.getDisplayVariant(Locale::getUS(), got);
     if(got != dispVar) {
         errln("FAIL: getDisplayVariant()");
         errln("Wanted: " + dispVar);
         errln("Got   : " + got);
     }
 
-    en_US_custom.getDisplayName(Locale::US, got);
+    en_US_custom.getDisplayName(Locale::getUS(), got);
     if(got != dispName) {
         errln("FAIL: getDisplayName()");
         errln("Wanted: " + dispName);
@@ -1517,7 +1588,7 @@ LocaleTest::TestVariantParsing()
 void 
 LocaleTest::Test4105828() 
 {
-    Locale LOC [] = { Locale::CHINESE,  Locale("zh", "CN", ""),
+    Locale LOC [] = { Locale::getChinese(),  Locale("zh", "CN", ""),
                      Locale("zh", "TW", ""), Locale("zh", "HK", "") };
     UErrorCode status = U_ZERO_ERROR;
     for (int32_t i = 0; i < 4; ++i) {

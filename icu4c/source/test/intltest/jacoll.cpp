@@ -3,25 +3,11 @@
  * Copyright (c) 1997-2001, International Business Machines Corporation and
  * others. All Rights Reserved. 
  ********************************************************************/
-#ifndef _COLL
 #include "unicode/coll.h"
-#endif
-
-#ifndef _TBLCOLL
 #include "unicode/tblcoll.h"
-#endif
-
-#ifndef _UNISTR
 #include "unicode/unistr.h"
-#endif
-
-#ifndef _SORTKEY
 #include "unicode/sortkey.h"
-#endif
-
-#ifndef _JACOLL
 #include "jacoll.h"
-#endif
 
 #include "sfwdchit.h"
 
@@ -29,13 +15,13 @@ CollationKanaTest::CollationKanaTest()
 : myCollation(0)
 {
     UErrorCode status = U_ZERO_ERROR;
-    myCollation = Collator::createInstance(Locale::JAPAN, status);
+    myCollation = Collator::createInstance(Locale::getJapan(), status);
     if(!myCollation || U_FAILURE(status)) {
-      errln(__FILE__ "failed to create! err " + UnicodeString(u_errorName(status)));
-	/* if it wasn't already: */
-	delete myCollation;
-	myCollation = NULL;
-	return;
+        errln(__FILE__ "failed to create! err " + UnicodeString(u_errorName(status)));
+        /* if it wasn't already: */
+        delete myCollation;
+        myCollation = NULL;
+        return;
     }
 
     myCollation->setDecomposition(Normalizer::DECOMP);

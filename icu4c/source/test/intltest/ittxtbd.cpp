@@ -1038,12 +1038,12 @@ void IntlTestTextBoundary::TestGetDisplayName()
 {
     UnicodeString   result;
     
-    BreakIterator::getDisplayName(Locale::US, result);
-    if (Locale::getDefault() == Locale::US && result != "English (United States)")
+    BreakIterator::getDisplayName(Locale::getUS(), result);
+    if (Locale::getDefault() == Locale::getUS() && result != "English (United States)")
         errln("BreakIterator::getDisplayName() failed: expected \"English (United States)\", got \""
                 + result);
 
-    BreakIterator::getDisplayName(Locale::FRANCE, Locale::US, result);
+    BreakIterator::getDisplayName(Locale::getFrance(), Locale::getUS(), result);
     if (result != "French (France)")
         errln("BreakIterator::getDisplayName() failed: expected \"French (France)\", got \""
                 + result);

@@ -152,11 +152,11 @@ CollationAPITest::TestProperty(/* char* par */)
     UnicodeString name;
 
     logln("Get display name for the US English collation in German : ");
-    logln(Collator::getDisplayName(Locale::US, Locale::GERMAN, name));
+    logln(Collator::getDisplayName(Locale::getUS(), Locale::getGerman(), name));
     doAssert((name == UnicodeString("Englisch (Vereinigte Staaten)")), "getDisplayName failed");
 
     logln("Get display name for the US English collation in English : ");
-    logln(Collator::getDisplayName(Locale::US, Locale::ENGLISH, name)); 
+    logln(Collator::getDisplayName(Locale::getUS(), Locale::getEnglish(), name)); 
     doAssert((name == UnicodeString("English (United States)")), "getDisplayName failed");
 #if 0
     // weiv : this test is bogus if we're running on any machine that has different default locale than English.
@@ -213,7 +213,7 @@ CollationAPITest::TestProperty(/* char* par */)
 
     doAssert(((RuleBasedCollator *)col)->getRules() == ((RuleBasedCollator *)junk)->getRules(), 
                "The default collation should be returned.");
-    Collator *frCol = Collator::createInstance(Locale::FRANCE, success);
+    Collator *frCol = Collator::createInstance(Locale::getFrance(), success);
     if (U_FAILURE(success))
     {
         errln("Creating French collator failed.");
@@ -1247,8 +1247,8 @@ void CollationAPITest::TestDisplayName()
     }
     UnicodeString name;
     UnicodeString result;
-    coll->getDisplayName(Locale::CANADA_FRENCH, result);
-    Locale::CANADA_FRENCH.getDisplayName(name);
+    coll->getDisplayName(Locale::getCanadaFrench(), result);
+    Locale::getCanadaFrench().getDisplayName(name);
     if (result.compare(name)) {
         errln("Failure getting the correct name for locale en_US");
     }

@@ -111,7 +111,7 @@ RbnfRoundTripTest::TestFrenchSpelloutRT()
 {
   UErrorCode status = U_ZERO_ERROR;
   RuleBasedNumberFormat* formatter
-    = new RuleBasedNumberFormat(URBNF_SPELLOUT, Locale::FRANCE, status);
+    = new RuleBasedNumberFormat(URBNF_SPELLOUT, Locale::getFrance(), status);
 
   if (U_FAILURE(status)) {
     errln("failed to construct formatter");
@@ -165,7 +165,7 @@ RbnfRoundTripTest::TestGermanSpelloutRT()
 {
   UErrorCode status = U_ZERO_ERROR;
   RuleBasedNumberFormat* formatter
-    = new RuleBasedNumberFormat(URBNF_SPELLOUT, Locale::GERMANY, status);
+    = new RuleBasedNumberFormat(URBNF_SPELLOUT, Locale::getGermany(), status);
 
   if (U_FAILURE(status)) {
     errln("failed to construct formatter");

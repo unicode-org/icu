@@ -216,7 +216,7 @@ void CollationRegressionTest::Test4058613(/* char* par */)
     Locale oldDefault = Locale::getDefault();
     UErrorCode status = U_ZERO_ERROR;
     
-    Locale::setDefault(Locale::KOREAN, status);
+    Locale::setDefault(Locale::getKorean(), status);
 
     if (U_FAILURE(status))
     {
@@ -358,11 +358,11 @@ void CollationRegressionTest::Test4062418(/* char* par */)
 
     RuleBasedCollator *c = NULL;
     
-    c = (RuleBasedCollator *) Collator::createInstance(Locale::FRANCE, status);
+    c = (RuleBasedCollator *) Collator::createInstance(Locale::getFrance(), status);
 
     if (c == NULL || U_FAILURE(status))
     {
-        errln("Failed to create collator for Locale::FRANCE");
+        errln("Failed to create collator for Locale::getFrance()");
         delete c;
         return;
     }
@@ -437,11 +437,11 @@ void CollationRegressionTest::Test4066696(/* char* par */)
     UErrorCode status = U_ZERO_ERROR;
     RuleBasedCollator *c = NULL;
     
-    c = (RuleBasedCollator *)Collator::createInstance(Locale::FRANCE, status);
+    c = (RuleBasedCollator *)Collator::createInstance(Locale::getFrance(), status);
 
     if (c == NULL || U_FAILURE(status))
     {
-        errln("Failure creating collator for Locale::FRANCE");
+        errln("Failure creating collator for Locale::getFrance()");
         delete c;
         return;
     }
@@ -821,12 +821,12 @@ void CollationRegressionTest::Test4132736(/* char* par */)
 
     Collator *c = NULL;
     
-    c = Collator::createInstance(Locale::FRANCE, status);
+    c = Collator::createInstance(Locale::getFrance(), status);
     c->setStrength(Collator::TERTIARY);
     
     if (c == NULL || U_FAILURE(status))
     {
-        errln("Failed to create a collator for Locale::FRANCE");
+        errln("Failed to create a collator for Locale::getFrance()");
         delete c;
     }
 
