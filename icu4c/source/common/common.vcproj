@@ -1392,9 +1392,6 @@
 			Name="registration"
 			Filter="">
 			<File
-				RelativePath=".\iculdata.h">
-			</File>
-			<File
 				RelativePath=".\iculserv.cpp">
 			</File>
 			<File
@@ -1405,9 +1402,6 @@
 			</File>
 			<File
 				RelativePath=".\icunotif.h">
-			</File>
-			<File
-				RelativePath=".\icurwlck.h">
 			</File>
 			<File
 				RelativePath=".\icuserv.cpp">
