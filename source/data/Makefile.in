@@ -123,7 +123,7 @@ endif
 
 install-convrtrstxt: $(top_srcdir)/../data/convrtrs.txt
 	$(MKINSTALLDIRS) $(DESTDIR)$(pkgsysconfdir)
-	$(INSTALL_DATA) $< $(DESTDIR)$(pkgsysconfdir
+	$(INSTALL_DATA) $< $(DESTDIR)$(pkgsysconfdir)
 
 # specials
 testdata: $(SPECIALTESTDATA)
