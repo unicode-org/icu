@@ -4,10 +4,10 @@ JAVAC=      javac -classpath $(CLASSPATH) -sourcepath $(SRCDIR) -d $(CLASSDIR) $
 
 .SUFFIXES: .java .class 
 
-!ifdef FILES_JAVA
+ifdef FILES_JAVA
 FILES_java=  $(FILES_java:/=\)
 
-!endif
+endif
 FILES_class= $(FILES_java:.java=.class)
 
 CLASSLIST= classes.list
@@ -15,23 +15,23 @@ CLASSLIST= classes.list
 {$(SRCDIR)\$(PKGPATH)}.java{$(CLASSDIR)\$(PKGPATH)}.class:
 	@echo $(?) >> $(CLASSLIST)
 
-!ifdef FILES_dict
+ifdef FILES_dict
 FILES_dict= $(FILES_dict:/=\)
 SRC_FILES_dict= $(FILES_dict:classes=src)
 
-!endif
+endif
 
 classes: delete.classlist $(FILES_class) $(FILES_dics)
 	@if exist $(CLASSLIST) echo Compiling {
 	@if exist $(CLASSLIST) cat $(CLASSLIST)
 	if exist $(CLASSLIST) $(JAVAC) @$(CLASSLIST)
 	rm -f $(CLASSLIST)
-!ifdef FILES_dict
-    cp $(SRC_FILES_dict) $(TARGDIR)
-!endif
-!ifdef SUBDIRS
-	@for %%d in ( $(SUBDIRS) ) do cd %d && nmake -nologo /f makefile.nmk classes && cd ..
-!endif
+ifdef FILES_dict
+	cp $(SRC_FILES_dict) $(TARGDIR)
+endif
+ifdef SUBDIRS
+	@for %%d in ( $(SUBDIRS) ) do cd %d && gmake -f makefile.gmk classes && cd ..
+endif
 
 dict: $(SRC_FILES_dict)
 	echo $(FILES_dict)
