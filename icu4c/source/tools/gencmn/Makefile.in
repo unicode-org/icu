@@ -18,10 +18,11 @@ include @platform_make_fragment@
 subdir = tools/gencmn
 
 ## Extra files to remove for 'make clean'
-CLEANFILES = *~ mkmap.tmp $(DEPS) $(RES_FILES) $(TEST_FILES)
+CLEANFILES = *~ mkmap.tmp $(DEPS) $(RES_FILES) $(TEST_FILES) $(DECMN_DEP)
 
 ## Target information
 TARGET = gencmn
+DECMN = decmn
 
 ENABLE_STATIC = @ENABLE_STATIC@
 
@@ -43,8 +44,10 @@ LDFLAGS = @LDFLAGS@ $(RPATHLDFLAGS)
 LIBS = $(LIBICUTOOLUTIL) $(LIBICUUC) @LIBS@ @LIB_M@
 
 OBJECTS = gencmn.o
+DECMN_OBJ = decmn.o
 
 DEPS = $(OBJECTS:.o=.d)
+DECMN_DEP = $(DECMN_OBJ:.o=.d)
 
 ## List of phony targets
 .PHONY : all all-local install install-local clean clean-local		\
@@ -62,17 +65,18 @@ distclean : distclean-local
 dist: dist-local
 check: all check-local
 
-all-local: $(TARGET) $(RES_FILES) $(TRANSLIT_RES) $(TEST_FILES)
+all-local: $(TARGET) $(RES_FILES) $(TRANSLIT_RES) $(TEST_FILES) $(DECMN)
 
 install-local: all-local
 	$(MKINSTALLDIRS) $(DESTDIR)$(sbindir)
 	$(INSTALL) $(TARGET) $(DESTDIR)$(sbindir)/$(TARGET)
+	$(INSTALL) $(DECMN) $(DESTDIR)$(sbindir)/$(DECMN)
 
 dist-local:
 
 clean-local:
 	test -z "$(CLEANFILES)" || $(RMV) $(CLEANFILES)
-	$(RMV) $(TARGET) $(OBJECTS)
+	$(RMV) $(TARGET) $(OBJECTS) $(DECMN) $(DECMN_OBJ)
 
 distclean-local: clean-local
 	$(RMV) Makefile
@@ -86,10 +90,15 @@ Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
 $(TARGET) : $(OBJECTS)
 	$(LINK) -o $@ $^ $(LIBS) 
 
+$(DECMN) : $(DECMN_OBJ)
+	$(LINK) -o $@ $^ $(LIBS) 
+
 ifeq (,$(MAKECMDGOALS))
 -include $(DEPS)
+-include $(DECMN_DEP)
 else
 ifneq ($(patsubst %clean,,$(MAKECMDGOALS)),)
 -include $(DEPS)
+-include $(DECMN_DEP)
 endif
 endif
