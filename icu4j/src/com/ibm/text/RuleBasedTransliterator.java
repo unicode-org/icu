@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/RuleBasedTransliterator.java,v $ 
- * $Date: 2001/02/16 18:53:55 $ 
- * $Revision: 1.41 $
+ * $Date: 2001/02/20 17:59:40 $ 
+ * $Revision: 1.42 $
  *
  *****************************************************************************************
  */
@@ -279,7 +279,7 @@ import com.ibm.text.resources.ResourceReader;
  * <p>Copyright (c) IBM Corporation 1999-2000. All rights reserved.</p>
  * 
  * @author Alan Liu
- * @version $RCSfile: RuleBasedTransliterator.java,v $ $Revision: 1.41 $ $Date: 2001/02/16 18:53:55 $
+ * @version $RCSfile: RuleBasedTransliterator.java,v $ $Revision: 1.42 $ $Date: 2001/02/20 17:59:40 $
  */
 public class RuleBasedTransliterator extends Transliterator {
 
@@ -1465,8 +1465,11 @@ public class RuleBasedTransliterator extends Transliterator {
 
 /**
  * $Log: RuleBasedTransliterator.java,v $
+ * Revision 1.42  2001/02/20 17:59:40  alan4j
+ * Remove backslash-u from log
+ *
  * Revision 1.41  2001/02/16 18:53:55  alan4j
- * Handle \u escapes
+ * Handle backslash-u escapes
  *
  * Revision 1.40  2001/02/03 00:46:21  alan4j
  * Load RuleBasedTransliterator files from UTF8 files instead of ResourceBundles
