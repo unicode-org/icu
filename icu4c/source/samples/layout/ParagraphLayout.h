@@ -187,7 +187,9 @@ public:
      * in the paragraph. The width of the line is specified each time so that it can
      * be varied to support arbitrary paragraph shapes.
      *
-     * @param width is the width of the line.
+     * @param width is the width of the line. If <code>width</code> is less than or equal
+     *              to zero, a <code>ParagraphLayout::Line</code> object represnting the
+     *              rest of the paragraph will be returned.
      *
      * @return a <code>ParagraphLayout::Line</code> object which represents the line. The caller
      *         is responsible for deleting the object.

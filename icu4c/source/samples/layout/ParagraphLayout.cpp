@@ -451,30 +451,34 @@ const ParagraphLayout::Line *ParagraphLayout::nextLine(float width)
 
     fLineStart = fLineEnd;
 
-    le_int32 glyph    = fCharToGlyphMap[fLineStart];
-    float widthSoFar  = 0;
+    if (width > 0) {
+        le_int32 glyph    = fCharToGlyphMap[fLineStart];
+        float widthSoFar  = 0;
 
-    while (glyph < fGlyphCount && widthSoFar + fGlyphWidths[glyph] <= width) {
-        widthSoFar += fGlyphWidths[glyph++];
-    }
+        while (glyph < fGlyphCount && widthSoFar + fGlyphWidths[glyph] <= width) {
+            widthSoFar += fGlyphWidths[glyph++];
+        }
 
-    // If no glyphs fit on the line, force one to fit.
-    //
-    // (There shouldn't be any zero width glyphs at the
-    // start of a line unless the paragraph consists of
-    // only zero width glyphs, because otherwise the zero
-    // width glyphs will have been included on the end of
-    // the previous line...)
-    if (widthSoFar == 0 && glyph < fGlyphCount) {
-        glyph += 1;
-    }
+        // If no glyphs fit on the line, force one to fit.
+        //
+        // (There shouldn't be any zero width glyphs at the
+        // start of a line unless the paragraph consists of
+        // only zero width glyphs, because otherwise the zero
+        // width glyphs will have been included on the end of
+        // the previous line...)
+        if (widthSoFar == 0 && glyph < fGlyphCount) {
+            glyph += 1;
+        }
 
-    fLineEnd = previousBreak(fGlyphToCharMap[glyph]);
+        fLineEnd = previousBreak(fGlyphToCharMap[glyph]);
 
-    // If there's no real break, break at the
-    // glyph that didn't fit.
-    if (fLineEnd <= fLineStart) {
-        fLineEnd = fGlyphToCharMap[glyph];
+        // If there's no real break, break at the
+        // glyph that didn't fit.
+        if (fLineEnd <= fLineStart) {
+            fLineEnd = fGlyphToCharMap[glyph];
+        }
+    } else {
+        fLineEnd = fCharCount;
     }
 
     return computeVisualRuns();
