@@ -271,8 +271,8 @@ UCATableHeader *uprv_uca_reassembleTable(tempUCATable *t, UCATableHeader *mD, UE
 
     UCATableHeader *myData = (UCATableHeader *)dataStart;
     myData->contractionSize = contractionsSize;
-    myData->version[0] = 0;
-    myData->version[1] = 0;
+    myData->version[0] = t->image->version[0];
+    myData->version[1] = t->image->version[1];
 
     tableOffset += paddedsize(sizeof(UCATableHeader));
 

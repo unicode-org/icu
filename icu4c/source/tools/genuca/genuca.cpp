@@ -575,7 +575,7 @@ write_uca_table(const char *filename,
     myD->caseLevel = UCOL_OFF;         /* do we have an extra case level */
     myD->normalizationMode = UCOL_ON; /* attribute for normalization */
     /* populate the version info struct with version info*/
-    myD->version[0] = UCA_BUILDER_VERSION;
+    myD->version[0] = UCOL_BUILDER_VERSION;
     /*TODO:The fractional rules version should be taken from FractionalUCA.txt*/
     myD->version[1] = UCA_TAILORING_RULES_VERSION;
 
