@@ -37,6 +37,9 @@ the following steps.
    tz.bat.  The output of this step is the intermediate text file
    source/tools/gentz/tz.txt.
 
+   As the second argument, pass in "tz.htm".  This will generate an
+   html documentation file that goes into the icu/docs directory.
+
 4. Run source/tools/makedata on Windows.  On UNIX systems the
    equivalent build steps are performed by 'make' and 'make install'.
 
