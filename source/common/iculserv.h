@@ -68,7 +68,9 @@ class U_COMMON_API LocaleKey : public ICUServiceKey {
     UnicodeString _currentID;
 
   public:
-    static const int32_t KIND_ANY; //  = -1;
+    enum {
+        KIND_ANY = -1
+    };
 
     /**
      * Create a LocaleKey with canonical primary and fallback IDs.
