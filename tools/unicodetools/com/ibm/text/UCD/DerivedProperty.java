@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/DerivedProperty.java,v $
-* $Date: 2002/05/31 01:41:04 $
-* $Revision: 1.14 $
+* $Date: 2002/06/22 01:21:09 $
+* $Revision: 1.15 $
 *
 *******************************************************************************
 */
@@ -21,6 +21,10 @@ public final class DerivedProperty implements UCD_Types {
     UCD ucdData;
     
     // ADD CONSTANT to UCD_TYPES
+    
+    static public UnicodeProperty make(int derivedPropertyID) {
+        return make(derivedPropertyID, Default.ucd);
+    }
     
     static public UnicodeProperty make(int derivedPropertyID, UCD ucd) {
         if (derivedPropertyID < 0 || derivedPropertyID >= DERIVED_PROPERTY_LIMIT) return null;

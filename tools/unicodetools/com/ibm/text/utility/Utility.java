@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/utility/Utility.java,v $
-* $Date: 2002/06/13 21:14:05 $
-* $Revision: 1.18 $
+* $Date: 2002/06/22 01:21:11 $
+* $Revision: 1.19 $
 *
 *******************************************************************************
 */
@@ -825,23 +825,54 @@ public final class Utility {    // COMMON UTILITIES
         return "Showing Stack with fake " + sw.getBuffer().toString();
     }
     
-    public static void showSetNames(String prefix, UnicodeSet set, boolean all, UCD ucd) {
+    public static void showSetNames(String prefix, UnicodeSet set, boolean separateLines, UCD ucd) {
+        PrintWriter temp = new PrintWriter(System.out);
+        showSetNames(temp, prefix, set, separateLines, false, ucd);
+        temp.close();
+    }
+    
+    public static void showSetNames(PrintWriter pw, String prefix, UnicodeSet set, boolean separateLines, boolean IDN, UCD ucd) {
         int count = set.getRangeCount();
         for (int i = 0; i < count; ++i) {
             int start = set.getRangeStart(i);
             int end = set.getRangeEnd(i);
-            if (all) {
+            if (separateLines || (IDN && isSeparateLineIDN(start,end,ucd))) {
                 for (int cp = start; cp <= end; ++cp) {
-                    if (!set.contains(cp)) continue;
-                    System.out.println(prefix + ucd.getCodeAndName(cp));
+                    if (!IDN) pw.println(prefix + ucd.getCodeAndName(cp));
+                    else {
+                        pw.println(prefix + Utility.hex(cp,4) + "; " + ucd.getName(cp));
+                    }
                 }
             } else {
-                System.out.println(prefix + ucd.getCode(start)
-                    + ((start != end) ? (".." + ucd.getCode(end)) : "")
-                    + "\t# " + ucd.getName(start)
-                    + ((start != end) ? (".." + ucd.getName(end)) : "")
-                );
+                if (!IDN) {
+                    pw.println(prefix + ucd.getCode(start)
+                        + ((start != end) ? (".." + ucd.getCode(end)) : "")
+                        + "\t# " + ucd.getName(start) + ((start != end) ? (".." + ucd.getName(end)) : "")
+                    );
+                } else {
+                    
+                    pw.println(prefix + Utility.hex(start,4)
+                        + ((start != end) ? ("-" + Utility.hex(end,4)) : "")
+                        + (ucd.isAssigned(start)
+                           ? "; " + ucd.getName(start) + ((start != end) 
+                                ? ("-" + ucd.getName(end)) 
+                                : "") 
+                           : "")
+                    );
+                }
             }
         }
+    }
+    
+    private static boolean isSeparateLineIDN(int cp, UCD ucd) {
+        if (ucd.hasComputableName(cp)) return false;
+        int cat = ucd.getCategory(cp);
+        if (cat == UCD_Types.Cn) return false;
+        if (ucd.getCategory(cp) == UCD_Types.Cc && !ucd.getBinaryProperty(cp, UCD_Types.White_space)) return false;
+        return true;
+    }
+    
+    private static boolean isSeparateLineIDN(int start, int end, UCD ucd) {
+        return (isSeparateLineIDN(start, ucd) || isSeparateLineIDN(end, ucd));
     }
 }

@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/UCD.java,v $
-* $Date: 2002/06/15 02:47:13 $
-* $Revision: 1.14 $
+* $Date: 2002/06/22 01:21:09 $
+* $Revision: 1.15 $
 *
 *******************************************************************************
 */
@@ -1013,7 +1013,7 @@ to guarantee identifier closure.
             if (fixStrings) {
                 if (result.name == null) {
                     result.name = "<unassigned-" + Utility.hex(codePoint, 4) + ">";
-                    System.out.println("Warning: fixing name for " + result.name);
+                    // System.out.println("Warning: fixing name for " + result.name);
                 }
                 if (result.shortName == null) {
                     result.shortName = Utility.replace(result.name, UCD_Names.NAME_ABBREVIATIONS);

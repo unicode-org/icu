@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/VerifyUCD.java,v $
-* $Date: 2002/06/15 02:47:12 $
-* $Revision: 1.16 $
+* $Date: 2002/06/22 01:21:09 $
+* $Revision: 1.17 $
 *
 *******************************************************************************
 */
@@ -22,11 +22,14 @@ import java.io.*;
 //import java.text.Un;
 import com.ibm.icu.text.CanonicalIterator;
 import com.ibm.icu.text.UnicodeSet;
+import com.ibm.icu.text.UnicodeSetIterator;
+
 import com.ibm.icu.text.UTF16;
 import com.ibm.text.utility.*;
 import java.text.NumberFormat;
 
 public class VerifyUCD implements UCD_Types {
+    static final boolean DEBUG = false;
     
     static void oneTime() {
         Default.setUCD();
@@ -1099,7 +1102,288 @@ can help you narrow these down.
         }
         probe.put(new Integer(cp), Default.ucd.getCodeAndName(cp) + " (" + Default.ucd.getCategoryID(cp) + ")" + option);
     }
+    
+    static void showDifferences(PrintWriter log, UnicodeSet s1, String name1, UnicodeSet s2, String name2, boolean both) {
+        if (!s1.equals(s2)) {
+            log.println();
+            log.println("In " + name1 + ", but NOT " + name2);
+            Utility.showSetNames(log," ", new UnicodeSet(s1).removeAll(s2), false, false, Default.ucd);
+            log.println();
+            log.println("NOT in " + name1 + ", but in " + name2);
+            Utility.showSetNames(log," ", new UnicodeSet(s2).removeAll(s1), false, false, Default.ucd);
+            log.println();
+            if (both) {
+                log.println("In both " + name1 + " AND " + name2);
+                Utility.showSetNames(log," ", new UnicodeSet(s2).retainAll(s1), false, false, Default.ucd);
+                log.println();
+            }
+        }
+    }
+    
 
+    public static void genIDN() throws IOException {
+        PrintWriter out = new PrintWriter(System.out);
+        Default.setUCD();
+        PrintWriter log = Utility.openPrintWriter("IDN-tables.txt");
+        
+        /*UnicodeSet y = UnifiedBinaryProperty.make(CATEGORY + FORMAT).getSet();
+        UnicodeSet x = new UnicodeSet(0xE0001,0xE007F).retainAll(y);
+        
+        System.out.println("y: " + y.toPattern(true));
+        System.out.println("x: " + x.toPattern(true));
+        Utility.showSetNames(out, "* ", x, false, true, Default.ucd);
+        out.flush();
+        */
+        
+        
+        // table1
+        System.out.println("Getting Basics");
+        UnicodeSet unassigned = UnifiedBinaryProperty.make(CATEGORY + UNASSIGNED).getSet();
+        System.out.print(".");
+        UnicodeSet lineSeparators = UnifiedBinaryProperty.make(CATEGORY+LINE_SEPARATOR).getSet();
+        System.out.print(".");
+        UnicodeSet paraSeparators = UnifiedBinaryProperty.make(CATEGORY+PARAGRAPH_SEPARATOR).getSet();
+        System.out.print(".");
+        UnicodeSet spaceSeparators = UnifiedBinaryProperty.make(CATEGORY+SPACE_SEPARATOR).getSet();
+        System.out.print(".");
+        UnicodeSet noncharacters = UnifiedBinaryProperty.make(BINARY_PROPERTIES + Noncharacter_Code_Point).getSet();
+        System.out.print(".");
+        UnicodeSet deprecated = UnifiedBinaryProperty.make(BINARY_PROPERTIES + Deprecated).getSet();
+        System.out.print(".");
+        UnicodeSet format = UnifiedBinaryProperty.make(CATEGORY + FORMAT).getSet();
+        System.out.print(".");
+        UnicodeSet bidi_control = UnifiedBinaryProperty.make(BINARY_PROPERTIES+Bidi_Control).getSet();
+        System.out.print(".");
+        UnicodeSet binary_IDS = UnifiedBinaryProperty.make(BINARY_PROPERTIES+IDS_BinaryOperator).getSet();
+        System.out.print(".");
+        UnicodeSet trinary_IDS = UnifiedBinaryProperty.make(BINARY_PROPERTIES+IDS_TrinaryOperator).getSet();
+        System.out.print(".");
+        UnicodeSet whitespace = UnifiedBinaryProperty.make(BINARY_PROPERTIES+White_space).getSet();
+        whitespace.addAll(spaceSeparators); // bug.
+        System.out.print(".");
+        
+        UnicodeSet defaultIgnorable = UnifiedBinaryProperty.make(DERIVED + DefaultIgnorable).getSet();
+        System.out.print(".");
+        
+        UnicodeSet privateUse = UnifiedBinaryProperty.make(CATEGORY+PRIVATE_USE).getSet();
+        System.out.print(".");
+        UnicodeSet control = UnifiedBinaryProperty.make(CATEGORY+Cc).getSet();
+        System.out.print(".");
+        UnicodeSet surrogate = UnifiedBinaryProperty.make(CATEGORY+SURROGATE).getSet();
+        
+        System.out.println("Building Sets");
+        // small test:
+        
+        if (DEBUG) {
+            showDifferences(log, whitespace, "White_Space", 
+                new UnicodeSet(spaceSeparators).addAll(lineSeparators).addAll(paraSeparators), "Separators", true);
+            
+            showDifferences(log, UnifiedBinaryProperty.make(DERIVED + ID_Start).getSet(), "ID_Start",
+                UnifiedBinaryProperty.make(DERIVED + Mod_ID_Start).getSet(), "XID_Start", false);
+
+            showDifferences(log, UnifiedBinaryProperty.make(DERIVED + ID_Continue_NO_Cf).getSet(), "ID_Continue",
+                UnifiedBinaryProperty.make(DERIVED + Mod_ID_Continue_NO_Cf).getSet(), "XID_Continue", false);
+
+            System.out.println("Done with Test");
+        }
+
+        UnicodeSet A1 = new UnicodeSet(unassigned).removeAll(noncharacters);
+        
+        // special code for B1
+
+/*
+B1, old
+00AD; SOFT HYPHEN
+1806; MONGOLIAN TODO SOFT HYPHEN
+180B; MONGOLIAN FREE VARIATION SELECTOR ONE
+180C; MONGOLIAN FREE VARIATION SELECTOR TWO
+180D; MONGOLIAN FREE VARIATION SELECTOR THREE
+200B; ZERO WIDTH SPACE
+200C; ZERO WIDTH NON-JOINER
+200D; ZERO WIDTH JOINER
+FEFF; ZERO WIDTH NO-BREAK SPACE
+*/
+        
+        UnicodeSet B1 = new UnicodeSet().add(0xAD).add(0x1806).add(0x034F); // START WITH soft hyphen, mongolian soft hyphen, grapheme joiner
+        // THEN ADD default ignorables or format characters that are *variation* or *zero width*
+        UnicodeSet temp = new UnicodeSet(defaultIgnorable).addAll(format).addAll(spaceSeparators)
+            .removeAll(surrogate).removeAll(control); // remove some just to avoid clutter when debugging.
+        UnicodeSetIterator it = new UnicodeSetIterator(temp);
+        while(it.next()) {
+            if (!Default.ucd.isAssigned(it.codepoint)) continue;
+            String name = Default.ucd.getName(it.codepoint);
+            System.out.print(Default.ucd.getCodeAndName(it.codepoint));
+            
+            if (name.indexOf("VARIATION") >= 0 || name.indexOf("ZERO") >= 0 
+                || name.indexOf("WORD JOINER") >= 0) {
+                B1.add(it.codepoint);
+                System.out.print("*");
+            }
+            System.out.println();
+        }
+        
+        UnicodeSet C1 = new UnicodeSet(whitespace).removeAll(control).removeAll(lineSeparators)
+            .removeAll(paraSeparators);
+
+        UnicodeSet C2 = new UnicodeSet(defaultIgnorable).removeAll(unassigned).removeAll(surrogate)
+            .addAll(control).addAll(format).addAll(lineSeparators).addAll(paraSeparators);
+
+        UnicodeSet C3 = new UnicodeSet(privateUse);
+        
+        UnicodeSet C4 = new UnicodeSet(noncharacters);
+        
+        UnicodeSet C5 = new UnicodeSet(surrogate);
+
+        UnicodeSet C6 = new UnicodeSet(0xFFF9, 0xFFFC).add(0xFFFD);
+        
+        UnicodeSet C7 = new UnicodeSet(binary_IDS).addAll(trinary_IDS);
+        
+        UnicodeSet C8 = new UnicodeSet(deprecated).addAll(bidi_control);
+        
+        UnicodeSet C9 = new UnicodeSet(0xE0001,0xE007F).retainAll(format);
+        //Utility.showSetNames(out, "\t&&& ", C9, false, true, Default.ucd);
+        //out.flush();
+        
+        
+        // FIX UP SETS!!
+        B1.removeAll(C6);
+        B1.removeAll(C8);
+        B1.removeAll(C9);
+        
+        C1.removeAll(B1);
+        
+        C2.removeAll(B1);
+        C2.removeAll(C6);
+        C2.removeAll(C8);
+        C2.removeAll(C9);
+        
+        System.out.println("Check that A1, B1, C1..9 are disjoint");
+        
+        UnicodeSet[] test = {A1, B1, C1, C2, C3, C4, C5, C6, C7, C8, C9};
+        String[] testNames = {"A1", "B1", "C1", "C2", "C3", "C4", "C5", "C6", "C7", "C8", "C9"};
+        UnicodeSet union = new UnicodeSet();
+        
+        for (int i = 0; i < test.length; ++i) {
+            union.addAll(test[i]);
+            for (int j = i + 1; j < test.length; ++j) {
+                if (test[i].containsNone(test[j])) continue;
+                log.println(testNames[i] + " and " + testNames[j] + " intersect!");
+                UnicodeSet intersection = new UnicodeSet(test[i]).retainAll(test[j]);
+                Utility.showSetNames(log,"  ", intersection, false, true, Default.ucd);
+                log.println();
+            }
+        }
+        
+        System.out.println("Check that union works");
+        
+        UnicodeSet[] badChars = {unassigned, noncharacters, deprecated, format, 
+            control, surrogate, privateUse, binary_IDS, trinary_IDS, whitespace, defaultIgnorable,
+            lineSeparators, paraSeparators, spaceSeparators};
+        UnicodeSet badCharUnion = new UnicodeSet();
+        for (int i = 0; i < badChars.length; ++i) {
+            badCharUnion.addAll(badChars[i]);
+        }
+        
+        showDifferences(log, union, "(A1+B1+C1-C9)", 
+            badCharUnion, 
+            "(Whitespace+Deprecated+DefaultIgnorable+Separator+Other (cont/format/surr/priv/unass))", false);
+       
+        System.out.println("Generating B2, B3");
+        
+        log.println("Generating B2, B3");
+        Map B2 = new TreeMap();
+        Map B3 = new TreeMap();
+        Integer tempInteger = null;
+        
+        for (int i = 0; i < 0x10FFFF; ++i) {
+            int cat = Default.ucd.getCategory(i);
+            if (!Default.ucd.isAssigned(i)) continue;
+            //if (cat == Cc || cat == Cf || cat == Co || cat == Cn) continue; // we can skip these
+            //if (Default.ucd.hasComputableName(i)) continue;
+            tempInteger = null;
+            
+            String original = UTF16.valueOf(i);
+            String caseFold = Default.ucd.getCase(i, FULL, FOLD);
+            if (!original.equals(caseFold)) {
+                tempInteger = new Integer(i);
+                B2.put(tempInteger, caseFold);
+                B3.put(tempInteger, caseFold);
+            }
+            
+            String b = Default.nfkc.normalize(caseFold);
+            String c = Default.nfkc.normalize(Default.ucd.getCase(b, FULL, FOLD));
+            
+            if (!c.equals(b)) {
+                if (tempInteger != null) {
+                    if (DEBUG) {
+                        log.println("Possible Conflict");
+                        log.println("    " + Default.ucd.getCodeAndName(i));
+                        log.println(" => " + Default.ucd.getCodeAndName(caseFold));
+                        log.println(" => " + Default.ucd.getCodeAndName(c));
+                    }
+                } else {
+                    tempInteger = new Integer(i);
+                    if (DEBUG) {
+                        log.println("    " + Default.ucd.getCodeAndName(i));
+                        log.println(" => " + Default.ucd.getCodeAndName(c));
+                    }
+                }
+                if (DEBUG) log.println();
+                B2.put(tempInteger, c);
+            }
+        }
+        
+        
+        // PRINTOUT
+        
+        printIDN_Table(log, "A.1", "Unassigned code points in Unicode " + Default.ucd.getVersion(), A1);
+        printIDN_Table(log, "B.1", "Commonly mapped to nothing", B1);
+
+        printIDN_Map(log, "B.2", "Mapping for lowercase used with NFKC", B2, B3);
+
+        printIDN_Map(log, "B.3", "Mapping for lowercase used with no normalization", B3, B2);
+
+        printIDN_Table(log, "C.1", "Space characters", C1);
+        printIDN_Table(log, "C.2", "Control characters", C2);
+        printIDN_Table(log, "C.3", "Private use", C3);
+        printIDN_Table(log, "C.4", "Non-character code points", C4);
+        printIDN_Table(log, "C.5", "Surrogate codes", C5);
+        printIDN_Table(log, "C.6", "Inappropriate for plain text", C6);
+        printIDN_Table(log, "C.7", "Inappropriate for canonical representation", C7);
+        printIDN_Table(log, "C.8", "Change display properties (or deprecated)", C8);
+        printIDN_Table(log, "C.9", "Tagging characters", C9);
+        
+        System.out.println("Done");
+        log.close();
+    }
+    
+    public static void printIDN_Map(PrintWriter log, String tableNumber, String description, Map map, Map other) {
+        System.out.println(tableNumber+ " " + description);
+        log.println("");
+        log.println(tableNumber+ " " + description);
+        log.println("");
+        log.println("----- Start Table " + tableNumber + " -----");
+        Iterator it = map.keySet().iterator();
+        while(it.hasNext()) {
+            Integer key = (Integer) it.next();
+            String value = (String) map.get(key);
+            int cp = key.intValue();
+            log.println(Utility.hex(cp, 4) + "; " + Utility.hex(value, 4) + "; "
+                + (!value.equals(other.get(key))? "***" : "")
+                + Default.ucd.getName(cp));
+        }
+        log.println("----- End Table " + tableNumber + " -----");
+    }
+    
+    public static void printIDN_Table(PrintWriter log, String tableNumber, String description, UnicodeSet set) {
+        System.out.println(tableNumber+ " " + description);
+        log.println("");
+        log.println(tableNumber+ " " + description);
+        log.println("");
+        log.println("----- Start Table " + tableNumber + " -----");
+        Utility.showSetNames(log, "", set, false, true, Default.ucd);
+        log.println("----- End Table " + tableNumber + " -----");
+    }
 
     public static BitSet guessIDN() {
         BitSet result = new BitSet();
@@ -1330,9 +1614,11 @@ E0020-E007F; [TAGGING CHARACTERS]
 			    }
 
 			    if (line.length() == 0) continue;
+			    if (line.charAt(0) == '-') continue;
 
                 int count = Utility.split(line,';',parts);
-                if (count != 3) throw new ChainException("Incorrect # of fields in IDN folding", null);
+                if (count != 3) throw new ChainException("Incorrect # of fields in IDN folding, line = {0}",
+                    new String[] {line});
 
                 String key = Utility.fromHex(parts[0]);
                 if (UTF32.length32(key) != 1) throw new ChainException("First IDN field not single character: " + line, null);
@@ -1393,8 +1679,12 @@ E0020-E007F; [TAGGING CHARACTERS]
                     Utility.fixDot();
 			        System.out.println("//" + lineNumber + ": '" + line + "'");
 			    }
-
+                
+                int commentPos = line.indexOf(';');
+                if (commentPos >= 0) line = line.substring(0,commentPos);
+                line = line.trim();
 			    if (line.length() == 0) continue;
+			    if (line.charAt(0) == '-') continue;
 
                 int count = Utility.split(line,'-',parts);
                 if (count > 2) throw new ChainException("Incorrect # of fields in IDN list", null);

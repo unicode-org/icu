@@ -5,17 +5,19 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/DiffPropertyLister.java,v $
-* $Date: 2002/05/29 02:01:00 $
-* $Revision: 1.6 $
+* $Date: 2002/06/22 01:21:09 $
+* $Revision: 1.7 $
 *
 *******************************************************************************
 */
 
 package com.ibm.text.UCD;
+import com.ibm.icu.text.UnicodeSet;
 import java.io.*;
 
 class DiffPropertyLister extends PropertyLister {
     private UCD oldUCD;
+    private UnicodeSet set = new UnicodeSet();
     private static final int NOPROPERTY = -1;
 
     public DiffPropertyLister(String oldUCDName, String newUCDName, PrintWriter output, int property) {
@@ -33,6 +35,10 @@ class DiffPropertyLister extends PropertyLister {
     
     public DiffPropertyLister(String oldUCDName, String newUCDName, PrintWriter output) {
     	this(oldUCDName, newUCDName, output, NOPROPERTY);
+    }
+    
+    public UnicodeSet getSet() {
+        return set;
     }
 
     public String valueName(int cp) {
@@ -64,7 +70,13 @@ class DiffPropertyLister extends PropertyLister {
 
     public byte status(int cp) {
     	if (newProp == null) {
-        	return ucdData.isAllocated(cp) && (oldUCD == null || !oldUCD.isAllocated(cp)) ? INCLUDE : EXCLUDE;
+        	if (ucdData.isAllocated(cp) && (oldUCD == null || !oldUCD.isAllocated(cp))) {
+    	        set.add(cp);
+        	    return INCLUDE;
+        	}
+        	else {
+        	    return EXCLUDE;
+        	}
     	}
     	
     	// just look at property differences among allocated characters
@@ -74,7 +86,10 @@ class DiffPropertyLister extends PropertyLister {
     	
     	String val = newProp.getValue(cp);
     	String oldVal = oldProp.getValue(cp);
-    	if (!oldVal.equals(val)) return INCLUDE;
+    	if (!oldVal.equals(val)) {
+    	    set.add(cp);
+    	    return INCLUDE;
+    	}
     	return EXCLUDE;
 
         /*if (cp == 0xFFFF) {

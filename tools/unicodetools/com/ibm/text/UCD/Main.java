@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/Main.java,v $
-* $Date: 2002/06/15 02:47:14 $
-* $Revision: 1.16 $
+* $Date: 2002/06/22 01:21:09 $
+* $Revision: 1.17 $
 *
 *******************************************************************************
 */
@@ -83,7 +83,8 @@ public final class Main implements UCD_Types {
             else if (arg.equalsIgnoreCase("checkCaseShort")) VerifyUCD.checkCase2(false);
             else if (arg.equalsIgnoreCase("checkCanonicalProperties")) VerifyUCD.checkCanonicalProperties();
             else if (arg.equalsIgnoreCase("CheckCaseFold")) VerifyUCD.CheckCaseFold();
-            else if (arg.equalsIgnoreCase("idn")) VerifyUCD.VerifyIDN();
+            else if (arg.equalsIgnoreCase("genIDN")) VerifyUCD.genIDN();
+            else if (arg.equalsIgnoreCase("VerifyIDN")) VerifyUCD.VerifyIDN();
             else if (arg.equalsIgnoreCase("NFTest")) VerifyUCD.NFTest();
             else if (arg.equalsIgnoreCase("test1")) VerifyUCD.test1();
             else if (arg.equalsIgnoreCase("TrailingZeros")) GenerateData.genTrailingZeros();

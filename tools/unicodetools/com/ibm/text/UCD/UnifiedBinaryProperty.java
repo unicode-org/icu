@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/UnifiedBinaryProperty.java,v $
-* $Date: 2002/03/15 01:57:01 $
-* $Revision: 1.6 $
+* $Date: 2002/06/22 01:21:09 $
+* $Revision: 1.7 $
 *
 *******************************************************************************
 */
@@ -22,6 +22,10 @@ final class UnifiedBinaryProperty extends UnicodeProperty {
     int majorProp;
     int propValue;
     // DerivedProperty dp;
+    
+    public static UnicodeProperty make(int propMask) {
+        return make(propMask, Default.ucd);
+    }
     
     public static UnicodeProperty make(int propMask, UCD ucd) {
         if ((propMask & 0xFF00) == DERIVED) {
