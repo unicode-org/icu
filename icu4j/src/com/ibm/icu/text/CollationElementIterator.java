@@ -1519,7 +1519,7 @@ public final class CollationElementIterator
                     }
                 }
                 m_bufferOffset_ = 0;
-                return next(); // IGNORABLE;
+                return IGNORABLE;
             } else {
                 return collator.m_expansion_[getExpansionOffset(collator, ce)];
             }
@@ -1815,7 +1815,6 @@ public final class CollationElementIterator
     {
         backupInternalState(m_utilSpecialBackUp_);
         int entryce = CE_NOT_FOUND_;
-        boolean wasIgnorable = false;
         while (true) {
             int entryoffset = getContractionOffset(collator, ce);
             int offset = entryoffset;
@@ -1828,21 +1827,7 @@ public final class CollationElementIterator
                     ce = entryce;
                     updateInternalState(m_utilSpecialBackUp_);
                 }
-                else if (wasIgnorable) {
-                    // move back to last non-ignorable position
-                    // this is to synch with the reverse direction
-                    updateInternalState(m_utilSpecialBackUp_);
-                }
                 break;
-            }
-            
-            if (collator.m_contractionCE_[entryoffset] != CE_NOT_FOUND_
-                && !wasIgnorable) {
-                // there are further contractions to be performed, so we store
-                // the so-far completed ce, so that if we fail in the next
-                // round we just return this one.
-                entryce = collator.m_contractionCE_[entryoffset];
-                backupInternalState(m_utilSpecialBackUp_);
             }
 
             // get the discontiguos maximum combining class
@@ -1855,20 +1840,18 @@ public final class CollationElementIterator
                 // contraction characters are ordered, skip all smaller
                 offset ++;
             }
-            
+
             if (ch == collator.m_contractionIndex_[offset]) {
                 // Found the source string char in the contraction table.
                 //  Pick up the corresponding CE from the table.
                 ce = collator.m_contractionCE_[offset];
-                wasIgnorable = false;
             }
             else {
                 // if there is a completely ignorable code point in the middle
                 // of contraction, we need to act as if it's not there
-                int nextCE = collator.m_trie_.getLeadValue(ch);
+                int isZeroCE = collator.m_trie_.getLeadValue(ch);
                 // it's easy for BMP code points
-                if (nextCE == 0) {
-                    wasIgnorable = true;
+                if (isZeroCE == 0) {
                     continue;
                 }
                 else if (UTF16.isLeadSurrogate(ch)) {
@@ -1877,10 +1860,10 @@ public final class CollationElementIterator
                         char trail = (char)nextChar();
                         if (UTF16.isTrailSurrogate(trail)) {
                             // do stuff with trail
-                            if (RuleBasedCollator.getTag(nextCE)
+                            if (RuleBasedCollator.getTag(isZeroCE)
                                 == RuleBasedCollator.CE_SURROGATE_TAG_) {
                                 int finalCE = collator.m_trie_.getTrailValue(
-                                                           nextCE, trail);
+                                                           isZeroCE, trail);
                                 if (finalCE == 0) {
                                     continue;
                                 }
@@ -1901,7 +1884,7 @@ public final class CollationElementIterator
                         // because of us
                         continue;
                     }
-               }    
+               }
 
                 // Source string char was not in contraction table.
                 // Unless it is a discontiguous contraction, we are done
@@ -1941,16 +1924,10 @@ public final class CollationElementIterator
 
             // source was a contraction
             if (!isContractionTag(ce)) {
-                if (wasIgnorable) {
-                    // move back to last non-ignorable position
-                    // this is to synch with the reverse direction
-                    updateInternalState(m_utilSpecialBackUp_);
-                }
                 break;
             }
 
             // ccontinue looping to check for the remaining contraction.
-            /***
             if (collator.m_contractionCE_[entryoffset] != CE_NOT_FOUND_) {
                 // there are further contractions to be performed, so we store
                 // the so-far completed ce, so that if we fail in the next
@@ -1964,7 +1941,6 @@ public final class CollationElementIterator
                     m_utilSpecialBackUp_.m_offset_ --;
                 }
             }
-            ***/
         }
         return ce;
     }
@@ -2021,10 +1997,9 @@ public final class CollationElementIterator
         else {
             // ce are terminated
             m_CEBufferSize_ = 1;
-            offset ++;
             while (collator.m_expansion_[offset] != 0) {
                 m_CEBuffer_[m_CEBufferSize_ ++] =
-                    collator.m_expansion_[offset ++];
+                    collator.m_expansion_[++ offset];
             }
         }
         // in case of one element expansion, we 
@@ -2319,7 +2294,7 @@ public final class CollationElementIterator
             m_FCDStart_ = m_FCDLimit_ - 1;
             // Indicate where to continue in main input string after
             // exhausting the buffer
-            return next();
+            return IGNORABLE;
         }
     }
 
@@ -2475,7 +2450,7 @@ public final class CollationElementIterator
         else {
             m_buffer_.insert(0, (char)prevch);
         }
-        return previous(); // IGNORABLE;
+        return IGNORABLE;
     }
 
     /**
@@ -2917,7 +2892,7 @@ public final class CollationElementIterator
 
             m_FCDStart_ = m_source_.getIndex();
             m_FCDLimit_ = m_FCDStart_ + 1;
-            return previous();
+            return IGNORABLE;
         }
     }
 
