@@ -133,69 +133,9 @@ void   UCNV_FROM_U_CALLBACK_SUBSTITUTE (
         return;
     }
 
-    /* ### TODO:
-     * This should use the new ucnv_cbWrite...() functions instead of doing
-     * "tricks" as before we had a good callback API!
-     */
+    *err = U_ZERO_ERROR;
 
-    /*In case we're dealing with a modal converter a la UCNV_EBCDIC_STATEFUL,
-    we need to make sure that the emitting of the substitution charater in the right mode*/
-    uprv_memcpy(togo, fromArgs->converter->subChar, togoLen = fromArgs->converter->subCharLen);
-    if (ucnv_getType(fromArgs->converter) == UCNV_EBCDIC_STATEFUL)
-    {
-        if ((fromArgs->converter->fromUnicodeStatus)&&(togoLen != 2))
-        {
-            togo[0] = UCNV_SI;
-            togo[1] = fromArgs->converter->subChar[0];
-            togo[2] = UCNV_SO;
-            togoLen = 3;
-        }
-        else if (!(fromArgs->converter->fromUnicodeStatus)&&(togoLen != 1))
-        {
-            togo[0] = UCNV_SO;
-            togo[1] = fromArgs->converter->subChar[0];
-            togo[2] = fromArgs->converter->subChar[1];
-            togo[3] = UCNV_SI;
-            togoLen = 4;
-        }
-    }
-
-    /*if we have enough space on the output buffer we just copy
-    the subchar there and update the pointer */  
-    if ((fromArgs->targetLimit - fromArgs->target) >= togoLen)
-    {
-        uprv_memcpy (fromArgs->target, togo, togoLen);
-        fromArgs->target += togoLen;
-        *err = U_ZERO_ERROR;
-        if (fromArgs->offsets)
-        {
-            int i=0;
-            for (i=0;i<togoLen;i++) fromArgs->offsets[i]=0;
-            fromArgs->offsets += togoLen;
-        }
-    }
-    else
-    {
-        /*if we don't have enough space on the output buffer
-        *we copy as much as we can to it, update that pointer.
-        *copy the rest in the internal buffer, and increase the
-        *length marker
-        */
-        uprv_memcpy (fromArgs->target, togo, (fromArgs->targetLimit - fromArgs->target));
-        if (fromArgs->offsets)
-        {
-            int i=0;
-            for (i=0;i<(fromArgs->targetLimit - fromArgs->target);i++) fromArgs->offsets[i]=0;
-            fromArgs->offsets += (fromArgs->targetLimit - fromArgs->target);
-        }
-        uprv_memcpy (fromArgs->converter->charErrorBuffer + fromArgs->converter->charErrorBufferLength,
-        togo + (fromArgs->targetLimit - fromArgs->target),
-        togoLen - (fromArgs->targetLimit - fromArgs->target));
-        fromArgs->converter->charErrorBufferLength += togoLen - (fromArgs->targetLimit - fromArgs->target);
-        fromArgs->target += (fromArgs->targetLimit - fromArgs->target);
-        *err = U_INDEX_OUTOFBOUNDS_ERROR;
-    }
-    return;
+    ucnv_cbFromUWriteSub(fromArgs, 0, err);
 }
 
 /*uses itou to get a unicode escape sequence of the offensive sequence,
@@ -215,32 +155,23 @@ void   UCNV_FROM_U_CALLBACK_ESCAPE (
 
   UChar valueString[VALUE_STRING_LENGTH];
   int32_t valueStringLength = 0;
-  int32_t i = 0;
-  /*Makes a bitwise copy of the converter passwd in */
-  UConverter myConverter = *(fromArgs->converter);
-  char myTarget[VALUE_STRING_LENGTH];
-  char *myTargetAlias = myTarget;
+  uint32_t i = 0;
+
   const UChar *myValueSource = NULL;
   UErrorCode err2 = U_ZERO_ERROR;
-  uint32_t myFromUnicodeStatus = fromArgs->converter->fromUnicodeStatus;
   UConverterFromUCallback original = NULL;
   void *originalContext;
+
+  UConverterFromUCallback ignoredCallback = NULL;
+  void *ignoredContext;
 
   if (reason > UCNV_IRREGULAR)
   {
     return;
   }
 
-  /* ### TODO:
-   * This should use the new ucnv_cbWrite...() functions instead of doing
-   * "tricks" as before we had a good callback API!
-   */
-
-  ucnv_reset (&myConverter);
-  myConverter.fromUnicodeStatus = myFromUnicodeStatus;
-  
-  ucnv_setFromUCallBack (&myConverter,
-             (UConverterFromUCallback) UCNV_FROM_U_CALLBACK_STOP,
+  ucnv_setFromUCallBack (fromArgs->converter,
+             (UConverterFromUCallback) UCNV_FROM_U_CALLBACK_SUBSTITUTE,
              NULL,  /* To Do for HSYS: context is null? */
              &original,
              &originalContext,
@@ -267,68 +198,21 @@ void   UCNV_FROM_U_CALLBACK_ESCAPE (
 
   myValueSource = valueString;
 
-  /*converts unicode escape sequence */
-  ucnv_fromUnicode (&myConverter,
-            &myTargetAlias,
-            myTargetAlias + VALUE_STRING_LENGTH,
-            &myValueSource,
-            myValueSource + valueStringLength,
-            NULL,
-            TRUE,
-            &err2);
+  /* reset the error */
+  *err = U_ZERO_ERROR;
 
+  ucnv_cbFromUWriteUChars(fromArgs, myValueSource, valueStringLength, 0, err);
+
+  ucnv_setFromUCallBack (fromArgs->converter,
+                         original,
+                         originalContext,
+                         &ignoredCallback,
+                         &ignoredContext,
+                         &err2);
   if (U_FAILURE (err2))
     {
-      UCNV_FROM_U_CALLBACK_SUBSTITUTE (
-                       NULL, /* TO do for HSYS: context */
-                       fromArgs,
-                       codeUnits,
-                       length,
-                       codePoint,
-                       reason,
-                       err);
+      *err = err2;
       return;
-    }
-
-  valueStringLength = myTargetAlias - myTarget;
-  
-  /*if we have enough space on the output buffer we just copy
-   * the subchar there and update the pointer
-   */
-  if ((fromArgs->targetLimit - fromArgs->target) >= valueStringLength)
-    {
-      uprv_memcpy (fromArgs->target, myTarget, valueStringLength);
-      fromArgs->target += valueStringLength;
-      *err = U_ZERO_ERROR;
-
-      if (fromArgs->offsets)
-        {
-          int j=0;
-          for (j=0;j<valueStringLength;j++) fromArgs->offsets[j]=0;
-          fromArgs->offsets += valueStringLength;
-        }
-    }
-  else
-    {
-      /*if we don't have enough space on the output buffer
-       *we copy as much as we can to it, update that pointer.
-       *copy the rest in the internal buffer, and increase the
-       *length marker
-       */
-
-      if (fromArgs->offsets)
-        {
-          int j=0;
-          for (j=0;j<(fromArgs->targetLimit - fromArgs->target);j++) fromArgs->offsets[j]=0;
-          fromArgs->offsets += (fromArgs->targetLimit - fromArgs->target);
-        }
-      uprv_memcpy (fromArgs->target, myTarget, (fromArgs->targetLimit - fromArgs->target));
-      uprv_memcpy (fromArgs->converter->charErrorBuffer + fromArgs->converter->charErrorBufferLength,
-          myTarget + (fromArgs->targetLimit - fromArgs->target),
-          valueStringLength - (fromArgs->targetLimit - fromArgs->target));
-      fromArgs->converter->charErrorBufferLength += valueStringLength - (fromArgs->targetLimit - fromArgs->target);
-      fromArgs->target += (fromArgs->targetLimit - fromArgs->target);
-      *err = U_INDEX_OUTOFBOUNDS_ERROR;
     }
 
   return;
@@ -362,27 +246,9 @@ void   UCNV_TO_U_CALLBACK_SUBSTITUTE (
     {
         return;
     }
-
-    /* ### TODO:
-     * This should use the new ucnv_cbWrite...() functions instead of doing
-     * "tricks" as before we had a good callback API!
-     */
-
-    if ((toArgs->targetLimit - toArgs->target) >= 1)
-    {
-        *((toArgs->target)++) = 0xFFFD;
-        if (toArgs->offsets)
-        {
-            *((toArgs->offsets)++) = 0;
-        }
-        *err = U_ZERO_ERROR;
-    }
-    else
-    {
-        toArgs->converter->UCharErrorBuffer[toArgs->converter->UCharErrorBufferLength] = 0xFFFD;
-        toArgs->converter->UCharErrorBufferLength++;
-        *err = U_INDEX_OUTOFBOUNDS_ERROR;
-    }
+    
+    *err = U_ZERO_ERROR;
+    ucnv_cbToUWriteSub(toArgs,0,err);
 
     return;
 }
