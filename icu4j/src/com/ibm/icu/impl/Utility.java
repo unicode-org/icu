@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/Utility.java,v $
- * $Date: 2003/06/03 22:41:26 $
- * $Revision: 1.40 $
+ * $Date: 2003/06/09 23:15:00 $
+ * $Revision: 1.41 $
  *
  *****************************************************************************************
  */
@@ -37,6 +37,7 @@ public final class Utility {
      * Convenience utility to compare two int[]s
      * Ought to be in System
      */
+    ///CLOVER:OFF
     public final static boolean arrayEquals(int[] source, Object target) {
         if (source == null) return (target == null);
         if (!(target instanceof int[])) return false;
@@ -44,11 +45,13 @@ public final class Utility {
         return (source.length == targ.length
                 && arrayRegionMatches(source, 0, targ, 0, source.length));
     }
+    ///CLOVER:ON
 
     /**
      * Convenience utility to compare two double[]s
      * Ought to be in System
      */
+    ///CLOVER:OFF
     public final static boolean arrayEquals(double[] source, Object target) {
         if (source == null) return (target == null);
         if (!(target instanceof double[])) return false;
@@ -56,6 +59,7 @@ public final class Utility {
         return (source.length == targ.length
                 && arrayRegionMatches(source, 0, targ, 0, source.length));
     }
+    ///CLOVER:ON
 
     /**
      * Convenience utility to compare two Object[]s
@@ -118,6 +122,7 @@ public final class Utility {
      * The start indices and start+len must be valid.
      * Ought to be in System
      */
+    ///CLOVER:OFF
     public final static boolean arrayRegionMatches(int[] source, int sourceStart,
                                             int[] target, int targetStart,
                                             int len)
@@ -130,6 +135,7 @@ public final class Utility {
         }
         return true;
     }
+    ///CLOVER:ON
 
     /**
      * Convenience utility to compare two arrays of doubles.
@@ -137,6 +143,7 @@ public final class Utility {
      * The start indices and start+len must be valid.
      * Ought to be in System
      */
+    ///CLOVER:OFF
     public final static boolean arrayRegionMatches(double[] source, int sourceStart,
                                             double[] target, int targetStart,
                                             int len)
@@ -149,6 +156,7 @@ public final class Utility {
         }
         return true;
     }
+    ///CLOVER:ON
 
     /**
      * Convenience utility. Does null checks on objects, then calls equals.
@@ -185,6 +193,7 @@ public final class Utility {
      * The ESCAPE value is chosen so as not to collide with commonly
      * seen values.
      */
+    ///CLOVER:OFF
     static public final String arrayToRLEString(int[] a) {
         StringBuffer buffer = new StringBuffer();
 
@@ -204,6 +213,7 @@ public final class Utility {
         encodeRun(buffer, runValue, runLength);
         return buffer.toString();
     }
+    ///CLOVER:ON
 
     /**
      * Construct a string representing a short array.  Use run-length encoding.
@@ -218,6 +228,7 @@ public final class Utility {
      * The ESCAPE value is chosen so as not to collide with commonly
      * seen values.
      */
+    ///CLOVER:OFF
     static public final String arrayToRLEString(short[] a) {
         StringBuffer buffer = new StringBuffer();
         // for (int i=0; i<a.length; ++i) buffer.append((char) a[i]);
@@ -237,6 +248,7 @@ public final class Utility {
         encodeRun(buffer, runValue, runLength);
         return buffer.toString();
     }
+    ///CLOVER:ON
 
     /**
      * Construct a string representing a char array.  Use run-length encoding.
@@ -313,6 +325,7 @@ public final class Utility {
      * Encode a run, possibly a degenerate run (of < 4 values).
      * @param length The length of the run; must be > 0 && <= 0xFFFF.
      */
+    ///CLOVER:OFF
     private static final void encodeRun(StringBuffer buffer, int value, int length) {
         if (length < 4) {
             for (int j=0; j<length; ++j) {
@@ -335,11 +348,14 @@ public final class Utility {
             appendInt(buffer, value); // Don't need to escape this value
         }
     }
+    ///CLOVER:ON
+    
+    ///CLOVER:OFF
     private static final void appendInt(StringBuffer buffer, int value) {
         buffer.append((char)(value >>> 16));
         buffer.append((char)(value & 0xFFFF));
     }
-
+    ///CLOVER:ON
 
     /**
      * Encode a run, possibly a degenerate run (of < 4 values).

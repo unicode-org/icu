@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/lang/UCharacterCaseTest.java,v $
-* $Date: 2003/06/03 18:49:30 $ 
-* $Revision: 1.11 $
+* $Date: 2003/06/09 23:15:00 $ 
+* $Revision: 1.12 $
 *
 *******************************************************************************
 */
@@ -116,10 +116,24 @@ public final class UCharacterCaseTest extends TestFmwk
                 errln("FAIL: foldCase(\\u" + hex(FOLDING_SIMPLE_[i]) +
                       ", true) should be \\u" + hex(FOLDING_SIMPLE_[i + 1]));
             }
+            if (UCharacter.foldCase(FOLDING_SIMPLE_[i], 
+                                    UCharacter.FOLD_CASE_DEFAULT) !=
+                                                      FOLDING_SIMPLE_[i + 1]) {
+                errln("FAIL: foldCase(\\u" + hex(FOLDING_SIMPLE_[i]) +
+                      ", UCharacter.FOLD_CASE_DEFAULT) should be \\u" 
+                      + hex(FOLDING_SIMPLE_[i + 1]));
+            }
             if (UCharacter.foldCase(FOLDING_SIMPLE_[i], false) !=
                 FOLDING_SIMPLE_[i + 2]) {
                 errln("FAIL: foldCase(\\u" + hex(FOLDING_SIMPLE_[i]) +
                       ", false) should be \\u" + hex(FOLDING_SIMPLE_[i + 2]));
+            }
+            if (UCharacter.foldCase(FOLDING_SIMPLE_[i], 
+                                    UCharacter.FOLD_CASE_EXCLUDE_SPECIAL_I) !=
+                                    FOLDING_SIMPLE_[i + 2]) {
+                errln("FAIL: foldCase(\\u" + hex(FOLDING_SIMPLE_[i]) +
+                      ", UCharacter.FOLD_CASE_EXCLUDE_SPECIAL_I) should be \\u" 
+                      + hex(FOLDING_SIMPLE_[i + 2]));
             }
         }
 
@@ -130,11 +144,26 @@ public final class UCharacterCaseTest extends TestFmwk
             errln("FAIL: foldCase(" + hex(FOLDING_MIXED_[0]) +
                   ", true) should be " + FOLDING_DEFAULT_[0]);
         }
+        
+        if (!FOLDING_DEFAULT_[0].equals(UCharacter.foldCase(FOLDING_MIXED_[0],
+                                                            UCharacter.FOLD_CASE_DEFAULT))) {
+                    errln("FAIL: foldCase(" + hex(FOLDING_MIXED_[0]) +
+                          ", UCharacter.FOLD_CASE_DEFAULT) should be " 
+                          + FOLDING_DEFAULT_[0]);
+                }
 
         if (!FOLDING_EXCLUDE_SPECIAL_I_[0].equals(
                             UCharacter.foldCase(FOLDING_MIXED_[0], false))) {
             errln("FAIL: foldCase(" + hex(FOLDING_MIXED_[0]) +
                   ", false) should be " + FOLDING_EXCLUDE_SPECIAL_I_[0]);
+        }
+        
+        if (!FOLDING_EXCLUDE_SPECIAL_I_[0].equals(
+                                    UCharacter.foldCase(FOLDING_MIXED_[0], 
+                                    UCharacter.FOLD_CASE_EXCLUDE_SPECIAL_I))) {
+            errln("FAIL: foldCase(" + hex(FOLDING_MIXED_[0]) +
+                  ", UCharacter.FOLD_CASE_EXCLUDE_SPECIAL_I) should be " 
+                  + FOLDING_EXCLUDE_SPECIAL_I_[0]);
         }
 
         if (!FOLDING_DEFAULT_[1].equals(UCharacter.foldCase(FOLDING_MIXED_[1],
@@ -143,12 +172,26 @@ public final class UCharacterCaseTest extends TestFmwk
                  ", true) should be " + hex(FOLDING_DEFAULT_[1]));
         }
 
-
+        if (!FOLDING_DEFAULT_[1].equals(UCharacter.foldCase(FOLDING_MIXED_[1],
+                                                            UCharacter.FOLD_CASE_DEFAULT))) {
+            errln("FAIL: foldCase(" + hex(FOLDING_MIXED_[1]) +
+                         ", UCharacter.FOLD_CASE_DEFAULT) should be " 
+                         + hex(FOLDING_DEFAULT_[1]));
+        }
+        
         // alternate handling for dotted I/dotless i (U+0130, U+0131)
         if (!FOLDING_EXCLUDE_SPECIAL_I_[1].equals(
                         UCharacter.foldCase(FOLDING_MIXED_[1], false))) {
             errln("FAIL: foldCase(" + hex(FOLDING_MIXED_[1]) +
                   ", false) should be " + hex(FOLDING_EXCLUDE_SPECIAL_I_[1]));
+        }
+        
+        if (!FOLDING_EXCLUDE_SPECIAL_I_[1].equals(
+                                UCharacter.foldCase(FOLDING_MIXED_[1], 
+                                UCharacter.FOLD_CASE_EXCLUDE_SPECIAL_I))) {
+            errln("FAIL: foldCase(" + hex(FOLDING_MIXED_[1]) +
+                  ", UCharacter.FOLD_CASE_EXCLUDE_SPECIAL_I) should be "
+                  + hex(FOLDING_EXCLUDE_SPECIAL_I_[1]));
         }
     }
 

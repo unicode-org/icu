@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/RuleBasedCollator.java,v $
-* $Date: 2003/06/03 18:49:35 $
-* $Revision: 1.39 $
+* $Date: 2003/06/09 23:15:00 $
+* $Revision: 1.40 $
 *
 *******************************************************************************
 */
@@ -3539,27 +3539,6 @@ public final class RuleBasedCollator extends Collator
             ch += 0x2000;
         }
         return ch;
-    }
-
-    /**
-     * Checks that the source after offset is ignorable
-     * @param source text string to check
-     * @param offset
-     * @return true if source after offset is ignorable. false otherwise
-     */
-    private final boolean checkIgnorable(String source, int offset)
-
-    {
-        m_srcUtilIter_.setText(source);
-        m_srcUtilColEIter_.setText(m_srcUtilIter_, offset);
-        int ce = m_srcUtilColEIter_.next();
-        while (ce != CollationElementIterator.NULLORDER) {
-            if (ce != CollationElementIterator.IGNORABLE) {
-                return false;
-            }
-            ce = m_srcUtilColEIter_.next();
-        }
-        return true;
     }
 
     /**

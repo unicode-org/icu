@@ -6,8 +6,8 @@
 *
 * $Source: 
 *         /usr/cvs/icu4j/icu4j/src/com/ibm/icu/text/UCharacterPropertyDB.java $ 
-* $Date: 2003/06/03 18:49:33 $ 
-* $Revision: 1.30 $
+* $Date: 2003/06/09 23:15:00 $ 
+* $Revision: 1.31 $
 *
 *******************************************************************************
 */
@@ -263,10 +263,12 @@ public final class UCharacterProperty implements Trie.DataManipulate
     * @param prop the character
     * @return unsigned numberic value
     */
+    ///CLOVER:OFF
     public static int getUnsignedValue(int prop)
     {
         return (prop >> VALUE_SHIFT_) & UNSIGNED_VALUE_MASK_AFTER_SHIFT_;
     }
+    ///CLOVER:ON
     
     /**
     * Determines if the exception value passed in has the kind of information
@@ -290,6 +292,7 @@ public final class UCharacterProperty implements Trie.DataManipulate
     * @param exception data type
     * @return exception data type value at index
     */
+    ///CLOVER:OFF
     public int getExceptionValue(int props, int etype)
     {
         int index = getExceptionIndex(props);
@@ -305,6 +308,7 @@ public final class UCharacterProperty implements Trie.DataManipulate
         }
         return -1;
     }
+    ///CLOVER:ON
     
     /**
     * Gets the exception value at the index, assuming that data type is 

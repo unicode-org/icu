@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/UCharacterNameReader.java,v $ 
-* $Date: 2003/06/03 18:49:33 $ 
-* $Revision: 1.4 $
+* $Date: 2003/06/09 23:15:00 $ 
+* $Revision: 1.5 $
 *
 *******************************************************************************
 */
@@ -112,7 +112,7 @@ final class UCharacterNameReader implements ICUBinary.Authenticate
         }
         data.setAlgorithm(alg);
     }
-      
+    
     /**
     * <p>Checking the file for the correct format.</p>
     * @param dataformatid
@@ -120,12 +120,14 @@ final class UCharacterNameReader implements ICUBinary.Authenticate
     * @return true if the file format version is correct
     * @draft 2.1
     */
+    ///CLOVER:OFF
     protected boolean authenticate(byte dataformatid[],
                                    byte dataformatversion[])
     {
         return Arrays.equals(DATA_FORMAT_ID_, dataformatid) &&
                Arrays.equals(DATA_FORMAT_VERSION_, dataformatversion);
     }
+    ///CLOVER:ON
     
     // private variables -------------------------------------------------
   

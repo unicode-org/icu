@@ -6,8 +6,8 @@
 *
 * $Source:
 *     /usr/cvs/icu4j/icu4j/src/com/ibm/icu/text/UCharacterName.java $
-* $Date: 2003/06/03 18:49:32 $
-* $Revision: 1.5 $
+* $Date: 2003/06/09 23:15:00 $
+* $Revision: 1.6 $
 *
 *******************************************************************************
 */
@@ -459,10 +459,12 @@ public final class UCharacterName
      * @param codepoint
      * @return minimum codepoint in the group which codepoint belongs to
      */
+    ///CLOVER:OFF
     public static int getGroupMinFromCodepoint(int codepoint)
     {
         return codepoint & ~GROUP_MASK_;
     }
+    ///CLOVER:ON
 
     /**
      * Get the Algorithm range length
@@ -555,6 +557,7 @@ public final class UCharacterName
      * Equivalent to uprv_getMaxISOCommentLength.
      * @return the maximum length of any codepoint name
      */
+    ///CLOVER:OFF
     public int getMaxISOCommentLength()
     {
         if (initNameSetsLengths()) {
@@ -564,6 +567,7 @@ public final class UCharacterName
             return 0;
         }
     }
+    ///CLOVER:ON
 
     /**
      * Fills set with characters that are used in Unicode character names.
@@ -580,10 +584,12 @@ public final class UCharacterName
      * Equivalent to uprv_getISOCommentCharacters.
      * @param set USet to receive characters. Existing contents are deleted.
      */
+    ///CLOVER:OFF
     public void getISOCommentCharacters(UnicodeSet set)
     {
         convert(m_ISOCommentSet_, set);
     }
+    ///CLOVER:ON
 
     // package private inner class --------------------------------------
 
@@ -1338,6 +1344,7 @@ public final class UCharacterName
     * @return group string set index in datatable otherwise -1 is returned if
     *         group string set is not found
     */
+    ///CLOVER:OFF
     private int getGroupStringIndex(int ch)
     {
         // gets the msb
@@ -1366,6 +1373,7 @@ public final class UCharacterName
         }
         return -1;
     }
+    ///CLOVER:ON
 
     /**
     * Gets the character extended type
