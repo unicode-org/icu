@@ -1495,6 +1495,7 @@ static void TestJ1968(void) {
     UErrorCode err = U_ZERO_ERROR;
     UConverter *cnv;
     char myConvName[] = "My really really really really really really really really really really really"
+                          " really really really really really really really really really really really"
                           " really really really really really really really really long converter name";
 
     cnv = ucnv_open(myConvName, &err);
@@ -1517,10 +1518,18 @@ static void TestJ1968(void) {
     }
 
     err = U_ZERO_ERROR;
+    myConvName[UCNV_MAX_CONVERTER_NAME_LENGTH-1] = ',';
+    strncpy(myConvName + UCNV_MAX_CONVERTER_NAME_LENGTH, "locale=", 7);
+    cnv = ucnv_open(myConvName, &err);
+    if (cnv || err != U_BUFFER_OVERFLOW_ERROR) {
+        log_err("4) Didn't get U_BUFFER_OVERFLOW_ERROR as expected %s\n", u_errorName(err));
+    }
+
+    err = U_ZERO_ERROR;
     myConvName[UCNV_MAX_CONVERTER_NAME_LENGTH] = 0;
     cnv = ucnv_open(myConvName, &err);
     if (cnv || err != U_FILE_ACCESS_ERROR) {
-        log_err("4) Didn't get U_FILE_ACCESS_ERROR as expected %s\n", u_errorName(err));
+        log_err("5) Didn't get U_FILE_ACCESS_ERROR as expected %s\n", u_errorName(err));
     }
 
     err = U_ZERO_ERROR;
