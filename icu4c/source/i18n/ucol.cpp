@@ -827,7 +827,7 @@ UCollator* ucol_initCollator(const UCATableHeader *image, UCollator *fillIn, UEr
         fcdTrieIndex = unorm_getFCDTrie(status);
     }
 
-    result->errorCode = *status;
+    //result->errorCode = *status;
 
     result->latinOneCEs = NULL;
 
@@ -3719,7 +3719,7 @@ ucol_getSortKey(const    UCollator    *coll,
   /*ucol_calcSortKeySimpleTertiary(...);*/
 
   int32_t keySize = coll->sortKeyGen(coll, source, sourceLength, &result, resultLength, FALSE, &status);
-  ((UCollator *)coll)->errorCode = status; /*semantically const */
+  //((UCollator *)coll)->errorCode = status; /*semantically const */
   return keySize;
 }
 
@@ -5150,7 +5150,7 @@ enum {
  *             of normalizing sequence.
  */
 U_CAPI int32_t U_EXPORT2 
-ucol_nextSortKeyPart(UCollator *coll,
+ucol_nextSortKeyPart(const UCollator *coll,
                      UCharIterator *iter,
                      uint32_t state[2],
                      uint8_t *dest, int32_t count,
