@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/calendar/HebrewTest.java,v $ 
- * $Date: 2002/08/07 03:10:18 $ 
- * $Revision: 1.5 $
+ * $Date: 2003/01/21 18:15:08 $ 
+ * $Revision: 1.6 $
  *
  *****************************************************************************************
  */
@@ -110,6 +110,11 @@ public class HebrewTest extends CalendarTest {
             {   5757, SHEVAT,    2,     MONTH,  12,     5758, TEVET,     2 },
             {   5757, SHEVAT,    2,     MONTH,  13,     5758, SHEVAT,    2 },
             
+            {   5762, AV,        1,     MONTH,   1,     5762, ELUL,      1 },   // JB#2327
+            {   5762, AV,       30,     DATE,    1,     5762, ELUL,      1 },   // JB#2327
+            {   5762, ELUL,      1,     DATE,   -1,     5762, AV,       30 },   // JB#2327
+            {   5762, ELUL,      1,     MONTH,  -1,     5762, AV,        1 },   // JB#2327
+            
             {   5757, KISLEV,    1,     DATE,   30,     5757, TEVET,     2 },   // 29-day month
             {   5758, KISLEV,    1,     DATE,   31,     5758, TEVET,     2 },   // 30-day month
         };
@@ -204,7 +209,21 @@ public class HebrewTest extends CalendarTest {
         new TestCase(2459464.5,  0,  5782,    1,   1,  TUE,   0,  0,  0),
         new TestCase(2467142.5,  0,  5803,    1,   1,  MON,   0,  0,  0),
         new TestCase(2455448.5,  0,  5771,    1,   1,  THU,   0,  0,  0),
-        new TestCase(2487223.5,  0,  5858,    1,   1,  SAT,   0,  0,  0),
+    
+        // Test cases for JB#2327        
+        // http://www.fourmilab.com/documents/calendar/
+        // http://www.calendarhome.com/converter/
+//      2452465.5, 2002, JULY, 10, 5762, AV, 1,
+//      2452494.5, 2002, AUGUST, 8, 5762, AV, 30,
+//      2452495.5, 2002, AUGUST, 9, 5762, ELUL, 1,
+//      2452523.5, 2002, SEPTEMBER, 6, 5762, ELUL, 29,
+//      2452524.5, 2002, SEPTEMBER, 7, 5763, TISHRI, 1,
+        //         Julian Day  Era  Year  Month Day  WkDay Hour Min Sec
+        new TestCase(2452465.5,  0,  5762,    AV+1,  1,  WED,   0,  0,  0),
+        new TestCase(2452494.5,  0,  5762,    AV+1, 30,  THU,   0,  0,  0),
+        new TestCase(2452495.5,  0,  5762,  ELUL+1,  1,  FRI,   0,  0,  0),
+        new TestCase(2452523.5,  0,  5762,  ELUL+1, 29,  FRI,   0,  0,  0),
+        new TestCase(2452524.5,  0,  5763,TISHRI+1,  1,  SAT,   0,  0,  0),
     };
     
     /**
@@ -233,25 +252,26 @@ public class HebrewTest extends CalendarTest {
         // We can't test complete() on some lines below because of ADAR_1 -- if
         // the calendar is set to ADAR_1 on a non-leap year, the result is undefined.
         int[] DATA = {
-            // c     - test complete() or not
-            // m/y   - before and after month/year
+            // m1/y1 - month/year before (month is 1-based) 
             // delta - amount to add to month field
-            //c m1  y1 delta  m2  y2
-            1,  10,  2,  +24,  9,  4, // (year 2, month 10) + 24 months -> (y 4, m 9)
-            1,  10,  2,  +60,  8,  7, // (y 2, m 10) + 60 months -> (y 7, m 8)
-            1,   1,  2,  +12,  1,  3, // (y 2, m 1) + 12 months -> (y 3, m 1)
-            1,   3, 18,  -24,  4, 16, // (y 18, m 3) - 24 months -> (y 16, m 4)
-            1,   1,  6,  -24,  1,  4,
-            1,   4,  3,   +2,  6,  3, // Leap year - no skip 4,5,6,7,8
-            1,   8,  3,   -2,  6,  3, // Leap year - no skip
-            0,   4,  2,   +2,  7,  2, // Skip over leap month 4,5,(6),7,8
-            0,   8,  2,   -2,  5,  2, // Skip over leap month going backward
+            // m2/y2 - month/year after add(MONTH, delta)
+            // m3/y3 - month/year after set(MONTH, m1+delta)
+          //m1  y1 delta  m2  y2  m3  y3
+            10,  2,  +24,  9,  4,  9,  4,
+            10,  2,  +60,  8,  7,  8,  7,
+            1 ,  2,  +12,  1,  3, 13,  2, //*set != add; also see '*' below
+            3 , 18,  -24,  4, 16,  4, 16,
+            1 ,  6,  -24,  1,  4,  1,  4,
+            4 ,  3,   +2,  6,  3,  6,  3, // Leap year - no skip 4,5,6,7,8
+            8 ,  3,   -2,  6,  3,  6,  3, // Leap year - no skip
+            4 ,  2,   +2,  7,  2,  7,  2, // Skip leap month 4,5,(6),7,8
+            8 ,  2,   -2,  5,  2,  7,  2, //*Skip leap month going backward
         };
         for (int i=0; i<DATA.length; ) {
-            boolean testComplete = DATA[i++] != 0;
             int m = DATA[i++], y = DATA[i++];
             int monthDelta = DATA[i++];
             int m2 = DATA[i++], y2 = DATA[i++];
+            int m3 = DATA[i++], y3 = DATA[i++];
             int mact, yact;
 
             cal.clear();
@@ -276,17 +296,15 @@ public class HebrewTest extends CalendarTest {
                 }
             }
             
-            if (testComplete) {
-                cal.clear();
-                cal.set(Calendar.YEAR, y);
-                cal.set(Calendar.MONTH, m + monthDelta - 1);
-                yact = cal.get(Calendar.YEAR); mact = cal.get(Calendar.MONTH) + 1;
-                if (y2 != yact || m2 != mact) {
-                    errln("Fail: " + (m+monthDelta) + "/" + y +
-                          " -> complete() -> " +
-                          mact + "/" + yact + ", expected " +
-                          m2 + "/" + y2);
-                }
+            cal.clear();
+            cal.set(Calendar.YEAR, y);
+            cal.set(Calendar.MONTH, m + monthDelta - 1);
+            yact = cal.get(Calendar.YEAR); mact = cal.get(Calendar.MONTH) + 1;
+            if (y3 != yact || m3 != mact) {
+                errln("Fail: " + (m+monthDelta) + "/" + y +
+                      " -> complete() -> " +
+                      mact + "/" + yact + ", expected " +
+                      m3 + "/" + y3);
             }
         }
     }
@@ -321,45 +339,45 @@ public class HebrewTest extends CalendarTest {
     }
     
     public void TestCoverage() {
-	{
-	    // new HebrewCalendar(TimeZone)
-	    HebrewCalendar cal = new HebrewCalendar(TimeZone.getDefault());
-	}
-
-	{
-	    // new HebrewCalendar(Locale)
-	    HebrewCalendar cal = new HebrewCalendar(Locale.getDefault());
-	}
-
-	{
-	    // new HebrewCalendar(Date)
-	    HebrewCalendar cal = new HebrewCalendar(new Date());
-	}
-
-	{
-	    // data
-	    HebrewCalendar cal = new HebrewCalendar(2800, HebrewCalendar.SHEVAT, 1);
-	    Date time = cal.getTime();
-
-	    String[] calendarLocales = {
-		"iw_IL"
-	    };
-
-	    String[] formatLocales = {
-		"en", "fi", "fr", "hu", "iw", "nl"
-	    };
-	    for (int i = 0; i < calendarLocales.length; ++i) {
-		String calLocName = calendarLocales[i];
-		Locale calLocale = LocaleUtility.getLocaleFromName(calLocName);
-		cal = new HebrewCalendar(calLocale);
-
-		for (int j = 0; j < formatLocales.length; ++j) {
-		    String locName = formatLocales[j];
-		    Locale formatLocale = LocaleUtility.getLocaleFromName(locName);
-		    DateFormat format = DateFormat.getDateTimeInstance(cal, DateFormat.FULL, DateFormat.FULL, formatLocale);
-		    logln(calLocName + "/" + locName + " --> " + format.format(time));
-		}
-	    }
-	}
+    	{
+    	    // new HebrewCalendar(TimeZone)
+    	    HebrewCalendar cal = new HebrewCalendar(TimeZone.getDefault());
+    	}
+    
+    	{
+    	    // new HebrewCalendar(Locale)
+    	    HebrewCalendar cal = new HebrewCalendar(Locale.getDefault());
+    	}
+    
+    	{
+    	    // new HebrewCalendar(Date)
+    	    HebrewCalendar cal = new HebrewCalendar(new Date());
+    	}
+    
+    	{
+    	    // data
+    	    HebrewCalendar cal = new HebrewCalendar(2800, HebrewCalendar.SHEVAT, 1);
+    	    Date time = cal.getTime();
+    
+    	    String[] calendarLocales = {
+    		"iw_IL"
+    	    };
+    
+    	    String[] formatLocales = {
+    		"en", "fi", "fr", "hu", "iw", "nl"
+    	    };
+    	    for (int i = 0; i < calendarLocales.length; ++i) {
+        		String calLocName = calendarLocales[i];
+        		Locale calLocale = LocaleUtility.getLocaleFromName(calLocName);
+        		cal = new HebrewCalendar(calLocale);
+        
+        		for (int j = 0; j < formatLocales.length; ++j) {
+        		    String locName = formatLocales[j];
+        		    Locale formatLocale = LocaleUtility.getLocaleFromName(locName);
+        		    DateFormat format = DateFormat.getDateTimeInstance(cal, DateFormat.FULL, DateFormat.FULL, formatLocale);
+        		    logln(calLocName + "/" + locName + " --> " + format.format(time));
+        		}
+    	    }
+    	}
     }
 };
