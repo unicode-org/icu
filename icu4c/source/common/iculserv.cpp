@@ -262,8 +262,6 @@ LocaleUtility::isFallbackOf(const UnicodeString& root, const UnicodeString& chil
  ******************************************************************
  */
 
-const int32_t LocaleKey::KIND_ANY = -1;
-
 LocaleKey*
 LocaleKey::createWithCanonicalFallback(const UnicodeString* primaryID,
                                        const UnicodeString* canonicalFallbackID,
