@@ -67,52 +67,7 @@ enum UScriptCode {
       U_YI          = 41,   /* Yiii */
       U_SCRIPT_CODE_LIMIT = 43 
   };
-static const char* scriptCodeName[]={
-    "U_INVALID_CODE",
-    "U_COMMON",    
-    "U_INHERITED", 
-    "U_ARABIC",    
-    "U_ARMENIAN",  
-    "U_BENGALI",   
-    "U_BOPOMOFO",  
-    "U_CHEROKEE",  
-    "U_COPTIC",    
-    "U_CYRILLIC",  
-    "U_DESERET",   
-    "U_DEVANAGARI",
-    "U_ETHIOPIC",  
-    "U_GEORGIAN",  
-    "U_GOTHIC",    
-    "U_GREEK",     
-    "U_GUJARATI",  
-    "U_GURMUKHI",  
-    "U_HAN",       
-    "U_HANGUL",   
-    "U_HEBREW",    
-    "U_HIRAGANA",  
-    "U_KANNADA",   
-    "U_KATAKANA",  
-    "U_KHMER",     
-    "U_LAO",       
-    "U_LATIN",     
-    "U_MALAYALAM", 
-    "U_MONGOLIAN", 
-    "U_MYANMAR",   
-    "U_OGHAM",     
-    "U_OLD_ITALIC",
-    "U_ORIYA",     
-    "U_RUNIC",     
-    "U_SINHALA",   
-    "U_SYRIAC",    
-    "U_TAMIL",     
-    "U_TELUGU",    
-    "U_THAANA",    
-    "U_THAI",      
-    "U_TIBETAN",   
-    "U_UCAS",      
-    "U_YI",  
-    "U_SCRIPT_CODE_LIMIT",
-};
+
 
 
 
