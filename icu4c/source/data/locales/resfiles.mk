@@ -105,7 +105,7 @@ sv.txt sv_FI.txt sv_SE.txt\
 sw.txt sw_KE.txt sw_TZ.txt\
 ta.txt ta_IN.txt\
 te.txt te_IN.txt\
-th.txt th_TH.txt\
+th.txt th_TH.txt th_TH_TRADITIONAL.txt\
 ti.txt ti_ET.txt ti_ER.txt\
 tr.txt tr_TR.txt\
 uk.txt uk_UA.txt\
