@@ -90,7 +90,7 @@ static void TestBreakIteratorCAPI()
     /*trying to open an illegal iterator*/
     bogus     = ubrk_open((UBreakIteratorType)5, "en_US", text, u_strlen(text), &status);
     if(U_SUCCESS(status)){
-        log_err("FAIL: Error in ubrk_open() for BOGUS breakiterator. Expected U_MEMORY_ALLOCATION_ERROR");
+        log_err("FAIL: Error in ubrk_open() for BOGUS breakiterator. Expected U_MEMORY_ALLOCATION_ERROR\n");
     }
     if(U_FAILURE(status)){
         if(status != U_MEMORY_ALLOCATION_ERROR){
