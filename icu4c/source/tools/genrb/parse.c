@@ -706,7 +706,6 @@ parse(FileStream *f, const char *cp, const char *inputDir,
                 coll = ucol_openRules(token.fChars, token.fLength, UCOL_DECOMP_CAN, 0, &intStatus);
 
                 if(U_SUCCESS(intStatus) && coll !=NULL) {
-                    ucol_setNormalization(coll, UCOL_NO_NORMALIZATION);
                     binColData = ucol_cloneRuleData(coll, &len, &intStatus);
                     coll->dataInfo.dataVersion[1] = version[0]; /*tailoring rules version*/
                     if(U_SUCCESS(*status) && data != NULL) {
