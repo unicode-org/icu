@@ -65,7 +65,6 @@ static const UChar closeParen[] = { (UChar)0x0029 /* ( */, (UChar)0x0000};
 
 
 static char* _defaultLocale = NULL;
-static char* _dataDirectory = NULL;
 
 static char** _installedLocales = NULL;
 static int32_t _installedLocalesCount = 0;
@@ -1166,28 +1165,11 @@ const char* const* uloc_getISOCountries()
 const char*
 uloc_getDataDirectory()
 {
-  if (_dataDirectory == NULL) 
-    {
-      uloc_setDataDirectory(icu_getDefaultDataDirectory());
-    }
-  return _dataDirectory;
+  return u_getDataDirectory();
 }
 
 void
 uloc_setDataDirectory(const char* newDirectory) 
 {
-  char* newDataDirectory = (char*) icu_malloc(sizeof(char)*(icu_strlen(newDirectory) + 1));
-  icu_strcpy(newDataDirectory, newDirectory);
-  
-  {
-    umtx_lock(NULL);
-    
-    if(_dataDirectory != NULL)
-      icu_free(_dataDirectory);
-    _dataDirectory = newDataDirectory;
-    if(_installedLocales != NULL)
-      icu_free(_installedLocales);
-    _installedLocales = NULL;
-    umtx_unlock(NULL);
-  }
+  u_setDataDirectory(newDirectory);
 }

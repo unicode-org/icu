@@ -135,8 +135,11 @@ U_CAPI char*    U_EXPORT2 icu_tzname(int index);
 /* Get UTC (GMT) time measured in seconds since 0:00 on 1/1/70. */
 U_CAPI int32_t  U_EXPORT2 icu_getUTCtime(void);
 
-/* Return the default data directory for this platform.  See Locale. */
-U_CAPI const char*  U_EXPORT2 icu_getDefaultDataDirectory(void);
+/* Return the data directory for this platform. */
+U_CAPI const char* U_EXPORT2 u_getDataDirectory(void);
+
+/* Set the data directory. */
+U_CAPI void U_EXPORT2 u_setDataDirectory(const char *directory);
 
 /* Return the default codepage for this platform and locale */
 U_CAPI const char*  U_EXPORT2 icu_getDefaultCodepage(void);
@@ -155,8 +158,25 @@ U_CAPI const char*  U_EXPORT2 icu_getDefaultLocaleID(void);
  */
 U_CAPI double           U_EXPORT2 icu_nextDouble(double d, bool_t positive);
 
+/*
+ * Filesystem file and path separator characters.
+ * Example: '/' and ':' on Unix, '\\' and ';' on Windows.
+ */
+#ifdef XP_MAC
+#   define U_FILE_SEP_CHAR ':'
+#   define U_PATH_SEP_CHAR ';'
+#   define U_FILE_SEP_STRING ":"
+#   define U_PATH_SEP_STRING ";"
+#elif defined(WIN32) || defined(OS2)
+#   define U_FILE_SEP_CHAR '\\'
+#   define U_PATH_SEP_CHAR ';'
+#   define U_FILE_SEP_STRING "\\"
+#   define U_PATH_SEP_STRING ";"
+#else
+#   define U_FILE_SEP_CHAR '/'
+#   define U_PATH_SEP_CHAR ':'
+#   define U_FILE_SEP_STRING "/"
+#   define U_PATH_SEP_STRING ":"
 #endif
 
-
-
-
+#endif
