@@ -14,32 +14,6 @@ public class TransliteratorTest extends IntlTest {
         new TransliteratorTest().run(args);
     }
 
-    /**
-     * A CommonPoint legacy round-trip test for the Kana transliterator.
-     */
-//    public void TestKanaRoundTrip() {
-//        Transliterator t = Transliterator.getInstance("Kana");
-//        StringTokenizer tok = new StringTokenizer(KANA_RT_DATA);
-//        while (tok.hasMoreTokens()) {
-//            String str = tok.nextToken();
-//            ReplaceableString tmp = new ReplaceableString(str);
-//            t.transliterate(tmp, Transliterator.FORWARD);
-//
-//            str = tmp.toString();
-//            tmp = new ReplaceableString(str);
-//            t.transliterate(tmp, Transliterator.REVERSE);
-//            t.transliterate(tmp, Transliterator.FORWARD);
-//            if (!tmp.toString().equals(str)) {
-//                tmp = new ReplaceableString(str);
-//                t.transliterate(tmp, Transliterator.REVERSE);
-//                String a = tmp.toString();
-//                t.transliterate(tmp, Transliterator.FORWARD);
-//                errln("FAIL: " + escape(str) + " -> " +
-//                      escape(a) + " -> " + escape(tmp.toString()));
-//            }
-//        }
-//    }
-
     public void TestInstantiation() {
         long ms = System.currentTimeMillis();
         String ID;
@@ -126,26 +100,6 @@ public class TransliteratorTest extends IntlTest {
                                                        "a>ERROR");
         expect(t, "abcdefgABCDEFGU", "&bcd&fg!^**!^*&");
     }
-
-    // Restore this test if/when it's been deciphered.  In general,
-    // tests that depend on a specific transliterator are subject
-    // to the same fragility as tests that depend on resource data.
-
-//    public void TestKana() {
-//        String DATA[] = {
-//            "a", "\u3042",
-//            "A", "\u30A2",
-//            "aA", "\u3042\u30A2",
-//            "aaaa", "\u3042\u3042\u3042\u3042",
-//            "akasata", "\u3042\u304B\u3055\u305F",
-//        };
-//
-//        Transliterator t = Transliterator.getInstance("Latin-Kana");
-//        Transliterator rt = Transliterator.getInstance("Kana-Latin");
-//        for (int i=0; i<DATA.length; i+=2) {
-//            expect(t, DATA[i], DATA[i+1], rt);
-//        }
-//    }
 
     /**
      * Test inline set syntax and set variable syntax.
@@ -297,10 +251,10 @@ public class TransliteratorTest extends IntlTest {
                 log = new StringBuffer(s.toString() + " + "
                                        + DATA[i]
                                        + " -> ");
-                t.keyboardTransliterate(s, index, DATA[i]);
+                t.transliterate(s, index, DATA[i]);
             } else {
                 log = new StringBuffer(s.toString() + " => ");
-                t.finishKeyboardTransliteration(s, index);
+                t.finishTransliteration(s, index);
             }
             String str = s.toString();
             // Show the start index '{' and the cursor '|'
@@ -340,11 +294,7 @@ public class TransliteratorTest extends IntlTest {
      * some strings that should come out unchanged.
      */
     public void TestCompoundKana() {
-        Transliterator kana = Transliterator.getInstance("Latin-Kana");
-        Transliterator rkana = Transliterator.getInstance("Kana-Latin");
-        Transliterator[] trans = { kana, rkana };
-        Transliterator t = new CompoundTransliterator("<ID>", trans);
-
+        Transliterator t = new CompoundTransliterator("Latin-Kana;Kana-Latin");
         expect(t, "aaaaa", "aaaaa");
     }
 
@@ -355,12 +305,12 @@ public class TransliteratorTest extends IntlTest {
         Transliterator a = Transliterator.getInstance("Unicode-Hex");
         Transliterator b = Transliterator.getInstance("Hex-Unicode");
         Transliterator[] trans = { a, b };
-        Transliterator ab = new CompoundTransliterator("ab", trans);
+        Transliterator ab = new CompoundTransliterator(trans);
         String s = "abcde";
         expect(ab, s, s);
 
         trans = new Transliterator[] { b, a };
-        Transliterator ba = new CompoundTransliterator("ba", trans);
+        Transliterator ba = new CompoundTransliterator(trans);
         ReplaceableString str = new ReplaceableString(s);
         a.transliterate(str);
         expect(ba, str.toString(), str.toString());
@@ -439,8 +389,8 @@ public class TransliteratorTest extends IntlTest {
                 log.append(" + ");
             }
             log.append(source.charAt(i)).append(" -> ");
-            t.keyboardTransliterate(rsource, index,
-                                    String.valueOf(source.charAt(i)));
+            t.transliterate(rsource, index,
+                            String.valueOf(source.charAt(i)));
             // Append the string buffer with a vertical bar '|' where
             // the committed index is.
             String s = rsource.toString();
@@ -452,7 +402,7 @@ public class TransliteratorTest extends IntlTest {
         // As a final step in keyboard transliteration, we must call
         // transliterate to finish off any pending partial matches that
         // were waiting for more input.
-        t.finishKeyboardTransliteration(rsource, index);
+        t.finishTransliteration(rsource, index);
         result = rsource.toString();
         log.append(" => ").append(rsource.toString());
 
