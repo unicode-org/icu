@@ -580,7 +580,9 @@ U_CAPI UCollator * ucol_safeClone(
 #define U_COL_SAFECLONE_BUFFERSIZE 256
 
 /* declaration for forward iterating function */
+U_CDECL_BEGIN
 typedef UChar UCharForwardIterator(void *context);
+U_CDECL_END
 
 /**
  * String compare that uses user supplied character iteration.
