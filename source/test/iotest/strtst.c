@@ -518,6 +518,27 @@ static void TestStringCompatibility(void) {
     }
 }
 
+static void TestArgumentSkipping(void) {
+#if 0
+    UChar uBuffer[256];
+    char buffer[256];
+    char compBuffer[256];
+    int32_t uNumScanned;
+    int32_t cNumScanned;
+    char ch1 = 0, ch2 = 0;
+
+    /* Reinitialize the buffer to verify null termination works.*/
+    u_memset(uBuffer, 0x2a, sizeof(uBuffer)/sizeof(*uBuffer));
+    uBuffer[sizeof(uBuffer)/sizeof(*uBuffer)-1] = 0;
+    memset(buffer, 0x2a, sizeof(buffer)/sizeof(*buffer));
+    buffer[sizeof(buffer)/sizeof(*buffer)-1] = 0;
+
+    strcpy(buffer, "123456789");
+    u_uastrcpy(uBuffer, "123456789");
+    uNumScanned = sscanf(buffer, "%*c%c", &ch1, &ch2);
+    uNumScanned = u_sscanf(uBuffer, "%*c%c", &ch1, &ch2);
+#endif
+}
 static void TestSScanSetFormat(const char *format, const UChar *uValue, const char *cValue, UBool expectedToPass) {
     UChar uBuffer[256];
     char buffer[256];
@@ -552,27 +573,6 @@ static void TestSScanSetFormat(const char *format, const UChar *uValue, const ch
     }
 }
 
-static void TestArgumentSkipping(void) {
-#if 0
-    UChar uBuffer[256];
-    char buffer[256];
-    char compBuffer[256];
-    int32_t uNumScanned;
-    int32_t cNumScanned;
-    char ch1 = 0, ch2 = 0;
-
-    /* Reinitialize the buffer to verify null termination works.*/
-    u_memset(uBuffer, 0x2a, sizeof(uBuffer)/sizeof(*uBuffer));
-    uBuffer[sizeof(uBuffer)/sizeof(*uBuffer)-1] = 0;
-    memset(buffer, 0x2a, sizeof(buffer)/sizeof(*buffer));
-    buffer[sizeof(buffer)/sizeof(*buffer)-1] = 0;
-
-    strcpy(buffer, "123456789");
-    u_uastrcpy(uBuffer, "123456789");
-    uNumScanned = sscanf(buffer, "%*c%c", &ch1, &ch2);
-    uNumScanned = u_sscanf(uBuffer, "%*c%c", &ch1, &ch2);
-#endif
-}
 static void TestSScanset(void) {
     static const UChar abcUChars[] = {0x61,0x62,0x63,0x63,0x64,0x65,0x66,0x67,0};
     static const char abcChars[] = "abccdefg";
@@ -615,6 +615,27 @@ static void TestSScanset(void) {
     /* TODO: Need to specify precision with a "*" */
 }
 
+static void TestBadSScanfFormat(const char *format, const UChar *uValue, const char *cValue) {
+    UChar uBuffer[256];
+    int32_t uNumScanned;
+
+    /* Reinitialize the buffer to verify null termination works. */
+    u_memset(uBuffer, 0x2a, sizeof(uBuffer)/sizeof(*uBuffer));
+    uBuffer[sizeof(uBuffer)/sizeof(*uBuffer)-1] = 0;
+
+    uNumScanned = u_sscanf(uValue, format, uBuffer);
+    if (uNumScanned != 0 || uBuffer[0] != 0x2a || uBuffer[1] != 0x2a) {
+        log_err("%s too much stored on a failure\n", format);
+    }
+}
+
+static void TestBadScanfFormat(void) {
+    static const UChar abcUChars[] = {0x61,0x62,0x63,0x63,0x64,0x65,0x66,0x67,0};
+    static const char abcChars[] = "abccdefg";
+
+    TestBadSScanfFormat("%[]  ", abcUChars, abcChars);
+}
+
 U_CFUNC void
 addStringTest(TestNode** root) {
     addTest(root, &TestString, "string/TestString");
@@ -623,6 +644,7 @@ addStringTest(TestNode** root) {
     addTest(root, &TestSScanset, "string/TestSScanset");
     addTest(root, &TestArgumentSkipping, "string/TestArgumentSkipping");
     addTest(root, &TestStringCompatibility, "string/TestStringCompatibility");
+    addTest(root, &TestBadScanfFormat, "string/TestBadScanfFormat");
 }
 
 
