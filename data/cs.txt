@@ -1,0 +1,115 @@
+// ****************************************************************************
+// *                                                                          *
+// * COPYRIGHT:                                                               *
+// * (C) Copyright Taligent, Inc.,  1997                                      *
+// * (C) Copyright International Business Machines Corporation,  1997-99      *
+// * Licensed Material - Program-Property of IBM - All Rights Reserved.       *
+// * US Government Users Restricted Rights - Use, duplication, or disclosure  *
+// * restricted by GSA ADP Schedule Contract with IBM Corp.                   *
+// *                                                                          *
+// ****************************************************************************
+
+cs {
+    AmPmMarkers { 
+            "dop.",
+            "odp.",
+    }
+    CollationElements { "& \u0361 ; \u0308 = \u030D& C < c\u030C , C\u030C& H < "
+        "ch , cH , Ch , CH & R < r\u030C , R\u030C& S < s\u030C , S\u030C& Z < z\u030C ,"
+        " Z\u030C" }
+    Countries { 
+        CZ { "\u010Cesk\u00E1 republika" }
+    }
+    DateTimePatterns { 
+            "H:mm:ss z",
+            "H:mm:ss z",
+            "H:mm:ss",
+            "H:mm",
+            "EEEE, d. MMMM yyyy",
+            "d. MMMM yyyy",
+            "d.M.yyyy",
+            "d.M.yy",
+            "{1} {0}",
+    }
+    DayAbbreviations { 
+            "Ne",
+            "Po",
+            "\u00DAt",
+            "St",
+            "\u010Ct",
+            "P\u00E1",
+            "So",
+    }
+    DayNames { 
+            "Ned\u011Ble",
+            "Pond\u011Bl\u00ED",
+            "\u00DAter\u00FD",
+            "St\u0159eda",
+            "\u010Ctvrtek",
+            "P\u00E1tek",
+            "Sobota",
+    }
+    Eras { 
+            "p\u0159.Kr.",
+            "po Kr.",
+    }
+    Languages { 
+        cs { "\u010De\u0161tina" }
+    }
+    LocaleID { "0405" }
+    LocaleString { "cs" }
+    MonthAbbreviations { 
+            "I",
+            "II",
+            "III",
+            "IV",
+            "V",
+            "VI",
+            "VII",
+            "VIII",
+            "IX",
+            "X",
+            "XI",
+            "XII",
+            "",
+    }
+    MonthNames { 
+            "leden",
+            "\u00FAnor",
+            "b\u0159ezen",
+            "duben",
+            "kv\u011Bten",
+            "\u010Derven",
+            "\u010Dervenec",
+            "srpen",
+            "z\u00E1\u0159\u00ED",
+            "\u0159\u00EDjen",
+            "listopad",
+            "prosinec",
+            "",
+    }
+    NumberElements { 
+            ",",
+            "\u00A0",
+            ";",
+            "%",
+            "0",
+            "#",
+            "-",
+            "E",
+            "\u2030",
+            "\u221E",
+            "\uFFFD",
+    }
+    ShortLanguage { "ces" }
+    localPatternChars { "GuMtkHmsSEDFwWahKz" }
+    zoneStrings { 
+        {
+                "Africa/Casablanca",
+                "GMT",
+                "GMT",
+                "GMT",
+                "GMT",
+        }
+    }
+}

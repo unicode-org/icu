@@ -1,0 +1,111 @@
+// ****************************************************************************
+// *                                                                          *
+// * COPYRIGHT:                                                               *
+// * (C) Copyright Taligent, Inc.,  1997                                      *
+// * (C) Copyright International Business Machines Corporation,  1997-99      *
+// * Licensed Material - Program-Property of IBM - All Rights Reserved.       *
+// * US Government Users Restricted Rights - Use, duplication, or disclosure  *
+// * restricted by GSA ADP Schedule Contract with IBM Corp.                   *
+// *                                                                          *
+// ****************************************************************************
+
+no {
+    CollationElements { "& Z < \u00E6, \u00C6  < a\u0308, A\u0308< \u00F8, \u00D8"
+        " < o\u0308, O\u0308< o\u030B, O\u030B < a\u030A, A\u030A, aa , aA , Aa , AA  & "
+        "V, w, W " }
+    Countries { 
+        NO { "Norge" }
+    }
+    DateTimeElements { 
+            "2",
+            "4",
+    }
+    DateTimePatterns { 
+            "'kl 'HH.mm z",
+            "HH:mm:ss z",
+            "HH:mm:ss",
+            "HH:mm",
+            "d. MMMM yyyy",
+            "d. MMMM yyyy",
+            "dd.MMM.yy",
+            "dd.MM.yy",
+            "{1} {0}",
+    }
+    DayAbbreviations { 
+            "s\u00F8",
+            "ma",
+            "ti",
+            "on",
+            "to",
+            "fr",
+            "l\u00F8",
+    }
+    DayNames { 
+            "s\u00F8ndag",
+            "mandag",
+            "tirsdag",
+            "onsdag",
+            "torsdag",
+            "fredag",
+            "l\u00F8rdag",
+    }
+    Languages { 
+        no { "norsk" }
+    }
+    LocaleID { "0414" }
+    LocaleString { "no" }
+    MonthAbbreviations { 
+            "jan",
+            "feb",
+            "mar",
+            "apr",
+            "mai",
+            "jun",
+            "jul",
+            "aug",
+            "sep",
+            "okt",
+            "nov",
+            "des",
+            "",
+    }
+    MonthNames { 
+            "januar",
+            "februar",
+            "mars",
+            "april",
+            "mai",
+            "juni",
+            "juli",
+            "august",
+            "september",
+            "oktober",
+            "november",
+            "desember",
+            "",
+    }
+    NumberElements { 
+            ",",
+            "\u00A0",
+            ";",
+            "%",
+            "0",
+            "#",
+            "-",
+            "E",
+            "\u2030",
+            "\u221E",
+            "\uFFFD",
+    }
+    ShortLanguage { "nor" }
+    localPatternChars { "GyMdkHmsSEDFwWahKz" }
+    zoneStrings { 
+        {
+                "Africa/Casablanca",
+                "GMT",
+                "GMT",
+                "GMT",
+                "GMT",
+        }
+    }
+}

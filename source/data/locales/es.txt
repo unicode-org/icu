@@ -1,0 +1,132 @@
+// ****************************************************************************
+// *                                                                          *
+// * COPYRIGHT:                                                               *
+// * (C) Copyright Taligent, Inc.,  1997                                      *
+// * (C) Copyright International Business Machines Corporation,  1997-99      *
+// * Licensed Material - Program-Property of IBM - All Rights Reserved.       *
+// * US Government Users Restricted Rights - Use, duplication, or disclosure  *
+// * restricted by GSA ADP Schedule Contract with IBM Corp.                   *
+// *                                                                          *
+// ****************************************************************************
+
+es {
+    CollationElements { "& N < n\u0303, N\u0303 " }
+    Countries { 
+        ES { "Espa\u00F1a" }
+        AR { "Argentina" }
+        BO { "Bolivia" }
+        CL { "Chile" }
+        CO { "Colombia" }
+        CR { "Costa Rica" }
+        DO { "Rep\u00FAblica Dominicana" }
+        EC { "Ecuador" }
+        GT { "Guatemala" }
+        HN { "Honduras" }
+        MX { "M\u00E9xico" }
+        NI { "Nicaragua" }
+        PA { "Panam\u00E1" }
+        PE { "Per\u00FA" }
+        PR { "Puerto Rico" }
+        PY { "Paraguay" }
+        SV { "El SalvadorUY" }
+        UY { "Uruguay" }
+        VE { "Venezuela" }
+    }
+    DateTimeElements { 
+            "2",
+            "1",
+    }
+    DateTimePatterns { 
+            "HH'H'mm'' z",
+            "H:mm:ss z",
+            "H:mm:ss",
+            "H:mm",
+            "EEEE d' de 'MMMM' de 'yyyy",
+            "d' de 'MMMM' de 'yyyy",
+            "dd-MMM-yy",
+            "d/MM/yy",
+            "{1} {0}",
+    }
+    DayAbbreviations { 
+            "dom",
+            "lun",
+            "mar",
+            "mi\u00E9",
+            "jue",
+            "vie",
+            "s\u00E1b",
+    }
+    DayNames { 
+            "domingo",
+            "lunes",
+            "martes",
+            "mi\u00E9rcoles",
+            "jueves",
+            "viernes",
+            "s\u00E1bado",
+    }
+    Languages { 
+        es { "espa\u00F1ol" }
+    }
+    LocaleID { "0c0a" }
+    LocaleString { "es" }
+    MonthAbbreviations { 
+            "ene",
+            "feb",
+            "mar",
+            "abr",
+            "may",
+            "jun",
+            "jul",
+            "ago",
+            "sep",
+            "oct",
+            "nov",
+            "dic",
+            "",
+    }
+    MonthNames { 
+            "enero",
+            "febrero",
+            "marzo",
+            "abril",
+            "mayo",
+            "junio",
+            "julio",
+            "agosto",
+            "septiembre",
+            "octubre",
+            "noviembre",
+            "diciembre",
+            "",
+    }
+    NumberElements { 
+            ",",
+            ".",
+            ";",
+            "%",
+            "0",
+            "#",
+            "-",
+            "E",
+            "\u2030",
+            "\u221E",
+            "\uFFFD",
+    }
+    NumberPatterns { 
+            "#,##0.###;-#,##0.###",
+            "\u00A4#,##0.00;(\u00A4#,##0.00)",
+            "#,##0%",
+    }
+    ShortLanguage { "spa" }
+    localPatternChars { "GuMtkHmsSEDFwWahKz" }
+    zoneStrings { 
+        {
+                "Africa/Casablanca",
+                "GMT",
+                "GMT",
+                "GMT",
+                "GMT",
+        }
+    }
+}

@@ -1,0 +1,148 @@
+// ****************************************************************************
+// *                                                                          *
+// * COPYRIGHT:                                                               *
+// * (C) Copyright Taligent, Inc.,  1997                                      *
+// * (C) Copyright International Business Machines Corporation,  1997-99      *
+// * Licensed Material - Program-Property of IBM - All Rights Reserved.       *
+// * US Government Users Restricted Rights - Use, duplication, or disclosure  *
+// * restricted by GSA ADP Schedule Contract with IBM Corp.                   *
+// *                                                                          *
+// ****************************************************************************
+
+fr {
+    CollationElements { "@" }
+    Countries { 
+        FR { "France" }
+        US { "\u00C9tats-Unis" }
+        DK { "Danemark" }
+        DE { "Allemagne" }
+        AT { "Autriche" }
+        GR { "Gr\u00E8ce" }
+        ES { "Espagne" }
+        FI { "Finlande" }
+        IT { "Italie" }
+        CH { "Suisse" }
+        BE { "Belgique" }
+        CA { "Canada" }
+        JP { "Japon" }
+        NL { "Pays-Bas" }
+        NO { "Norv\u00E8ge" }
+        PT { "Portugal" }
+        SE { "Su\u00E8de" }
+        TR { "Turquie" }
+    }
+    DateTimeElements { 
+            "2",
+            "1",
+    }
+    DateTimePatterns { 
+            "HH' h 'mm z",
+            "HH:mm:ss z",
+            "HH:mm:ss",
+            "HH:mm",
+            "EEEE d MMMM yyyy",
+            "d MMMM yyyy",
+            "d MMM yy",
+            "dd/MM/yy",
+            "{1} {0}",
+    }
+    DayAbbreviations { 
+            "dim.",
+            "lun.",
+            "mar.",
+            "mer.",
+            "jeu.",
+            "ven.",
+            "sam.",
+    }
+    DayNames { 
+            "dimanche",
+            "lundi",
+            "mardi",
+            "mercredi",
+            "jeudi",
+            "vendredi",
+            "samedi",
+    }
+    Eras { 
+            "BC",
+            "ap. J.-C.",
+    }
+    Languages { 
+        fr { "fran\u00E7ais" }
+        en { "anglais" }
+        de { "allemand" }
+        da { "danois" }
+        es { "espagnol" }
+        el { "grec" }
+        fi { "finnois" }
+        it { "italien" }
+        ja { "japonais" }
+        nl { "hollandais" }
+        no { "norv\u00E9gien" }
+        pt { "portugais" }
+        sv { "su\u00E9dois" }
+        tr { "turc" }
+    }
+    LocaleID { "040c" }
+    LocaleString { "fr" }
+    MonthAbbreviations { 
+            "janv.",
+            "f\u00E9vr.",
+            "mars",
+            "avr.",
+            "mai",
+            "juin",
+            "juil.",
+            "ao\u00FBt",
+            "sept.",
+            "oct.",
+            "nov.",
+            "d\u00E9c.",
+            "",
+    }
+    MonthNames { 
+            "janvier",
+            "f\u00E9vrier",
+            "mars",
+            "avril",
+            "mai",
+            "juin",
+            "juillet",
+            "ao\u00FBt",
+            "septembre",
+            "octobre",
+            "novembre",
+            "d\u00E9cembre",
+            "",
+    }
+    NumberElements { 
+            ",",
+            "\u00A0",
+            ";",
+            "%",
+            "0",
+            "#",
+            "-",
+            "E",
+            "\u2030",
+            "\u221E",
+            "\uFFFD",
+    }
+    NumberPatterns { 
+            "#,##0.###;-#,##0.###",
+            "#,##0.00 \u00A4;-#,##0.00 \u00A4",
+            "#,##0%",
+    }
+    ShortLanguage { "fra" }
+    localPatternChars { "GanjkHmsSEDFwWxhKz" }
+    zoneStrings { 
+        {
+                "Africa/Casablanca",
+                "GMT",
+                "GMT",
+                "GMT",
+                "GMT",
+        }
+    }
+}

@@ -1,0 +1,111 @@
+// ****************************************************************************
+// *                                                                          *
+// * COPYRIGHT:                                                               *
+// * (C) Copyright Taligent, Inc.,  1997                                      *
+// * (C) Copyright International Business Machines Corporation,  1997-99      *
+// * Licensed Material - Program-Property of IBM - All Rights Reserved.       *
+// * US Government Users Restricted Rights - Use, duplication, or disclosure  *
+// * restricted by GSA ADP Schedule Contract with IBM Corp.                   *
+// *                                                                          *
+// ****************************************************************************
+
+et {
+    CollationElements { "@& S < s\u030C, S\u030C < z , Z < z\u030C , Z\u030C & V"
+        " ; w , W < o\u0303 , O\u0303< a\u0308 , A\u0308 < o\u0308 , O\u0308 ; w\u0302 ,"
+        " W\u0302< u\u0308 , U\u0308& Y < \u01B6 , \u01B5 " }
+    Countries { 
+        EE { "Eesti" }
+    }
+    DateTimePatterns { 
+            "H:mm:ss z",
+            "H:mm:ss z",
+            "H:mm:ss",
+            "H:mm",
+            "EEEE, d, MMMM yyyy",
+            "EEEE, d, MMMM yyyy",
+            "d-M-yyyy",
+            "d-M-yy",
+            "{1} {0}",
+    }
+    DayAbbreviations { 
+            "P",
+            "E",
+            "T",
+            "K",
+            "N",
+            "R",
+            "L",
+    }
+    DayNames { 
+            "p\u00FChap\u00E4ev",
+            "esmasp\u00E4ev",
+            "teisip\u00E4ev",
+            "kolmap\u00E4ev",
+            "neljap\u00E4ev",
+            "reede",
+            "laup\u00E4ev",
+    }
+    Eras { 
+            "e.m.a.",
+            "m.a.j.",
+    }
+    Languages { 
+        et { "Eesti" }
+    }
+    LocaleID { "0425" }
+    LocaleString { "et" }
+    MonthAbbreviations { 
+            "Jaan",
+            "Veebr",
+            "M\u00E4rts",
+            "Apr",
+            "Mai",
+            "Juuni",
+            "Juuli",
+            "Aug",
+            "Sept",
+            "Okt",
+            "Nov",
+            "Dets",
+            "",
+    }
+    MonthNames { 
+            "Jaanuar",
+            "Veebruar",
+            "M\u00E4rts",
+            "Aprill",
+            "Mai",
+            "Juuni",
+            "Juuli",
+            "August",
+            "September",
+            "Oktoober",
+            "November",
+            "Detsember",
+            "",
+    }
+    NumberElements { 
+            ",",
+            "\u00A0",
+            ";",
+            "%",
+            "0",
+            "#",
+            "-",
+            "E",
+            "\u2030",
+            "\u221E",
+            "\uFFFD",
+    }
+    ShortLanguage { "est" }
+    localPatternChars { "GanjkHmsSEDFwWxhKz" }
+    zoneStrings { 
+        {
+                "Africa/Casablanca",
+                "GMT",
+                "GMT",
+                "GMT",
+                "GMT",
+        }
+    }
+}

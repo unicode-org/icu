@@ -1,0 +1,109 @@
+## Makefile.in for ICU - test/cintltst
+## Stephen F. Booth
+
+## Shell to use
+SHELL = @SHELL@
+
+## Install directory information
+srcdir = @srcdir@
+top_srcdir = @top_srcdir@
+prefix = @prefix@
+exec_prefix = @exec_prefix@
+
+bindir = @bindir@
+sbindir = @sbindir@
+datadir = @datadir@
+libdir = @libdir@
+includedir = @includedir@
+
+pkgdatadir = $(datadir)/@PACKAGE@
+pkglibdir = $(libdir)/@PACKAGE@
+pkgincludedir = $(includedir)/@PACKAGE@
+
+## Install program information
+mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
+
+INSTALL = @INSTALL@
+INSTALL_PROGRAM = @INSTALL_PROGRAM@
+INSTALL_DATA = @INSTALL_DATA@
+
+## Compiler/tools information
+CC = @CC@
+CXX = @CXX@
+PACKAGE = @PACKAGE@
+VERSION = @VERSION@
+
+## Platform-specific setup
+@host_frag@
+
+## Build directory information
+top_builddir = ../..
+subdir = test/cintltst
+
+## Extra files to remove for 'make clean'
+CLEANFILES = *~
+
+## Target information
+TARGET = cintltst
+
+DEFS = @DEFS@
+CPPFLAGS = @CPPFLAGS@ -I$(top_srcdir)/common -I$(top_srcdir)/i18n -I$(top_srcdir)/tools/ctestfw
+CFLAGS = @CFLAGS@
+CXXFLAGS = @CXXFLAGS@
+LDFLAGS = @LDFLAGS@ \
+$(LD_RPATH)$(LD_RPATH_PRE)$(top_builddir)/common@ld_rpath_suf@$(LD_RPATH_PRE)$(top_builddir)/i18n@ld_rpath_suf@$(LD_RPATH_PRE)$(top_builddir)/tools/ctestfw
+LIBS =-L$(top_builddir)/common -licu-uc -L$(top_builddir)/i18n -licu-i18n -L$(top_builddir)/tools/ctestfw -lctestfw @LIBS@ @LIB_M@
+
+OBJECTS = callcoll.o calltest.o capitst.o cbiapts.o cbkittst.o		\
+ccaltst.o ccapitst.o ccolltst.o cconvtst.o ccurrtst.o cdantst.o		\
+cdattst.o cdetst.o cdtdptst.o cdtrgtst.o cestst.o cfintst.o cformtst.o	\
+cfrtst.o cg7coll.o cintltst.o citertst.o cjaptst.o cloctst.o cmsgtst.o	\
+cnmdptst.o cnormtst.o cnumtst.o cregrtst.o crestst.o cturtst.o		\
+cucdtst.o cutiltst.o encoll.o nucnvtst.o susctest.o nccbtst.o
+
+DEPS = $(OBJECTS:.o=.d)
+
+## List of phony targets
+.PHONY : all all-local install install-local clean clean-local	\
+distclean distclean-local dist dist-local check check-local
+
+## Clear suffix list
+.SUFFIXES :
+
+## List of standard targets
+all: all-local
+install: install-local
+clean: clean-local
+distclean : distclean-local
+dist: dist-local
+check: check-local
+
+all-local: $(TARGET)
+
+install-local: all-local
+
+dist-local:
+
+clean-local:
+	test -z "$(CLEANFILES)" || rm -f $(CLEANFILES)
+	rm -f $(OBJECTS) $(TARGET)
+
+distclean-local: clean-local
+	rm -f Makefile $(DEPS)
+
+check-local: $(TARGET)
+	ICU_DATA=$(top_builddir)/../data/ TZ=PST8PDT ./$(TARGET)
+
+Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
+	cd $(top_builddir) \
+	 && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
+
+$(TARGET) : $(OBJECTS)
+	$(LINK.c) -o $@ $^ $(LIBS)
+
+ifneq ($(MAKECMDGOALS),distclean)
+-include $(DEPS)
+endif
+
+
+

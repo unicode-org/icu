@@ -1,0 +1,46 @@
+## HP/UX-specific setup using CC
+
+## Commands to generate dependency files
+GEN_DEPS.c= 	:
+GEN_DEPS.cc= 	:
+
+## Commands to compile
+COMPILE.c=	$(CC) -D_PTHREADS_DRAFT4 +z -Ae $(DEFS) $(CPPFLAGS) $(CFLAGS) -c
+COMPILE.cc=	$(CXX) -D_PTHREADS_DRAFT4 +z +a1 $(DEFS) $(CPPFLAGS) $(CXXFLAGS) -c
+
+## Commands to link
+## We need to use the C++ linker, even when linking C programs, since
+##  our libraries contain C++ code (bug in linker?)
+#LINK.c=		$(CC) -D_PTHREADS_DRAFT4 +z -Ae $(DEFS) $(CPPFLAGS) $(CFLAGS) $(LDFLAGS)
+LINK.c=	$(CXX) -D_PTHREADS_DRAFT4 +z +a1 $(DEFS) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS)
+LINK.cc=	$(CXX) -D_PTHREADS_DRAFT4 +z +a1 $(DEFS) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS)
+
+## Commands to make a shared library
+#SHLIB.c=	$(LD) $(LDFLAGS) -b
+SHLIB.c=	$(CXX) $(DEFS) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS) -b
+SHLIB.cc=	$(CXX) $(DEFS) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS) -b
+
+## Compiler switch to embed a runtime search path
+LD_RPATH=	-Wl,+b,
+LD_RPATH_PRE= 	
+
+## Shared object suffix
+SO=		sl
+
+## Compilation rules
+%.o : $(srcdir)/%.c
+	$(COMPILE.c) -o $@ $<
+
+%.o : $(srcdir)/%.cpp
+	$(COMPILE.cc) -o $@ $<
+
+## Dependency rules
+%.d : $(srcdir)/%.c
+	@echo "Generating dependency information for $<"
+	@$(GEN_DEPS.c) $< > $@
+
+%.d : $(srcdir)/%.cpp
+	@echo "Generating dependency information for $<"
+	@$(GEN_DEPS.cc) $< > $@
+
+## End HP/UX-specific setup

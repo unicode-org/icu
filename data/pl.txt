@@ -1,0 +1,116 @@
+// ****************************************************************************
+// *                                                                          *
+// * COPYRIGHT:                                                               *
+// * (C) Copyright Taligent, Inc.,  1997                                      *
+// * (C) Copyright International Business Machines Corporation,  1997-99      *
+// * Licensed Material - Program-Property of IBM - All Rights Reserved.       *
+// * US Government Users Restricted Rights - Use, duplication, or disclosure  *
+// * restricted by GSA ADP Schedule Contract with IBM Corp.                   *
+// *                                                                          *
+// ****************************************************************************
+
+pl {
+    CollationElements { "& A < a\u0328 , A\u0328 & C < c\u0301 , C\u0301 & D < \u0111"
+        ", \u0110 & E < e\u0328 , E\u0328 & L < \u0142 , \u0141 & N < n\u0301 , N\u0301 "
+        "& O < o\u0301 , O\u0301 & S < s\u0301 , S\u0301 & Z < z\u0301 , Z\u0301 < z\u0307"
+        " , Z\u0307 " }
+    Countries { 
+        PL { "Polska" }
+    }
+    DateTimeElements { 
+            "2",
+            "1",
+    }
+    DateTimePatterns { 
+            "HH:mm:ss z",
+            "HH:mm:ss z",
+            "HH:mm:ss",
+            "HH:mm",
+            "EEEE, d MMMM yyyy",
+            "d MMMM yyyy",
+            "yyyy-MM-dd",
+            "yy-MM-dd",
+            "{1} {0}",
+    }
+    DayAbbreviations { 
+            "N",
+            "Pn",
+            "Wt",
+            "\u015Ar",
+            "Cz",
+            "Pt",
+            "So",
+    }
+    DayNames { 
+            "niedziela",
+            "poniedzia\u0142ek",
+            "wtorek",
+            "\u015Broda",
+            "czwartek",
+            "pi\u0105tek",
+            "sobota",
+    }
+    Eras { 
+            "p.n.e.",
+            "n.e.",
+    }
+    Languages { 
+        pl { "polski" }
+    }
+    LocaleID { "0415" }
+    LocaleString { "pl" }
+    MonthAbbreviations { 
+            "sty",
+            "lut",
+            "mar",
+            "kwi",
+            "maj",
+            "cze",
+            "lip",
+            "sie",
+            "wrz",
+            "pa\u017A",
+            "lis",
+            "gru",
+            "",
+    }
+    MonthNames { 
+            "stycze\u0144",
+            "luty",
+            "marzec",
+            "kwiecie\u0144",
+            "maj",
+            "czerwiec",
+            "lipiec",
+            "sierpie\u0144",
+            "wrzesie\u0144",
+            "pa\u017Adziernik",
+            "listopad",
+            "grudzie\u0144",
+            "",
+    }
+    NumberElements { 
+            ",",
+            "\u00A0",
+            ";",
+            "%",
+            "0",
+            "#",
+            "-",
+            "E",
+            "\u2030",
+            "\u221E",
+            "\uFFFD",
+    }
+    ShortLanguage { "pol" }
+    localPatternChars { "GyMdkHmsSEDFwWahKz" }
+    zoneStrings { 
+        {
+                "Africa/Casablanca",
+                "GMT",
+                "GMT",
+                "GMT",
+                "GMT",
+        }
+    }
+}

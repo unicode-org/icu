@@ -1,0 +1,325 @@
+/*
+********************************************************************
+* COPYRIGHT: 
+* (C) Copyright International Business Machines Corporation, 1998
+* Licensed Material - Program-Property of IBM - All Rights Reserved. 
+* US Government Users Restricted Rights - Use, duplication, or disclosure 
+* restricted by GSA ADP Schedule Contract with IBM Corp. 
+*
+********************************************************************
+*/
+
+#include "nmfmtrt.h"
+
+#include "dcfmtsym.h"
+#include "decimfmt.h"
+#include "locid.h"
+
+#include <float.h>
+#include <stdio.h>    // for sprintf
+ 
+// *****************************************************************************
+// class NumberFormatRoundTripTest
+// *****************************************************************************
+
+bool_t NumberFormatRoundTripTest::verbose                    = FALSE;
+bool_t NumberFormatRoundTripTest::STRING_COMPARE            = TRUE;
+bool_t NumberFormatRoundTripTest::EXACT_NUMERIC_COMPARE        = FALSE;
+bool_t NumberFormatRoundTripTest::DEBUG                        = FALSE;
+double NumberFormatRoundTripTest::MAX_ERROR                    = 1e-14;
+double NumberFormatRoundTripTest::max_numeric_error            = 0.0;
+double NumberFormatRoundTripTest::min_numeric_error            = 1.0;
+
+#define CASE(id,test) case id: name = #test; if (exec) { logln(#test "---"); logln((UnicodeString)""); test(); } break;
+
+void NumberFormatRoundTripTest::runIndexedTest( int32_t index, bool_t exec, char* &name, char* par )
+{
+    // if (exec) logln((UnicodeString)"TestSuite NumberFormatRoundTripTest");
+    switch (index) {
+        CASE(0, start)
+        default: name = ""; break;
+    }
+}
+
+const char* 
+NumberFormatRoundTripTest::errorName(UErrorCode code)
+{
+    switch (code) {
+        case ZERO_ERROR:                return "ZERO_ERROR";
+        case ILLEGAL_ARGUMENT_ERROR:    return "ILLEGAL_ARGUMENT_ERROR";
+        case MISSING_RESOURCE_ERROR:    return "MISSING_RESOURCE_ERROR";
+        case INVALID_FORMAT_ERROR:      return "INVALID_FORMAT_ERROR";
+        case FILE_ACCESS_ERROR:         return "FILE_ACCESS_ERROR";
+        case INTERNAL_PROGRAM_ERROR:    return "INTERNAL_PROGRAM_ERROR";
+        case MESSAGE_PARSE_ERROR:       return "MESSAGE_PARSE_ERROR";
+        case MEMORY_ALLOCATION_ERROR:   return "MEMORY_ALLOCATION_ERROR";
+        case USING_FALLBACK_ERROR:      return "USING_FALLBACK_ERROR";
+        case USING_DEFAULT_ERROR:       return "USING_DEFAULT_ERROR";
+        default:                        return "[BOGUS UErrorCode]";
+    }
+}
+
+bool_t 
+NumberFormatRoundTripTest::failure(UErrorCode status, const char* msg)
+{
+    if(FAILURE(status)) {
+        errln(UnicodeString("FAIL: ") + msg + " failed, error " + errorName(status));
+        return TRUE;
+    }
+
+    return FALSE;
+}
+ 
+void 
+NumberFormatRoundTripTest::start()
+{
+// test(NumberFormat.getInstance(new Locale("sr", "", "")));
+    
+    UErrorCode status = ZERO_ERROR;
+
+    NumberFormat *fmt = NULL;
+
+    logln("Default Locale");
+
+    fmt = NumberFormat::createInstance(status);
+    failure(status, "NumberFormat::createInstance");
+    test(fmt);
+    delete fmt;
+    
+    fmt = NumberFormat::createCurrencyInstance(status);
+    failure(status, "NumberFormat::createCurrencyInstance");
+    test(fmt);
+    delete fmt;
+    
+    fmt = NumberFormat::createPercentInstance(status);
+    failure(status, "NumberFormat::createPercentInstance");
+    test(fmt);
+    delete fmt;
+
+
+    int32_t locCount = 0;
+    const Locale *loc = NumberFormat::getAvailableLocales(locCount);
+    if(quick) {
+        if(locCount > 5)
+            locCount = 5;
+        logln("Quick mode: only testing first 5 Locales");
+    }
+    for(int i = 0; i < locCount; ++i) {
+        UnicodeString name;
+        logln(loc[i].getDisplayName(name));
+
+        fmt = NumberFormat::createInstance(loc[i], status);
+        failure(status, "NumberFormat::createInstance");
+        test(fmt);
+        delete fmt;
+    
+        fmt = NumberFormat::createCurrencyInstance(loc[i], status);
+        failure(status, "NumberFormat::createCurrencyInstance");
+        test(fmt);
+        delete fmt;
+    
+        fmt = NumberFormat::createPercentInstance(loc[i], status);
+        failure(status, "NumberFormat::createPercentInstance");
+        test(fmt);
+        delete fmt;
+    }
+
+    logln(UnicodeString("Numeric error ") + min_numeric_error + " to " + max_numeric_error);
+}
+
+
+void 
+NumberFormatRoundTripTest::test(NumberFormat *fmt)
+{
+    if (TRUE)
+    {
+        test(fmt, icu_getNaN());
+        test(fmt, icu_getInfinity());
+        test(fmt, -icu_getInfinity());
+
+        test(fmt, (int32_t)500);
+        test(fmt, (int32_t)0);
+        test(fmt, (int32_t)-0);
+        test(fmt, 0.0);
+        double negZero = 0.0; negZero /= -1.0;
+        test(fmt, negZero);
+        test(fmt, 9223372036854775808.0);
+        test(fmt, -9223372036854775809.0);
+
+        for(int i = 0; i < 10; ++i) {
+            test(fmt, randomDouble(1));
+            test(fmt, randomDouble(10000));
+            test(fmt, icu_floor((randomDouble(10000))));
+            test(fmt, randomDouble(1e50));
+            test(fmt, randomDouble(1e-50));
+            test(fmt, randomDouble(1e100));
+            // {sfb} When formatting with a percent instance, numbers very close to
+            // DBL_MAX will fail the round trip.  This is because:
+            // 1) Format the double into a string --> INF% (since 100 * double > DBL_MAX)
+            // 2) Parse the string into a double --> INF
+            // 3) Re-format the double --> INF%
+            // 4) The strings are equal, so that works.
+            // 5) Calculate the proportional error --> INF, so the test will fail
+            // I'll get around this by dividing by the multiplier to make sure
+            // the double will stay in range.
+            //if(fmt->getMultipler() == 1)
+            if(fmt->getDynamicClassID() == DecimalFormat::getStaticClassID())
+                test(fmt, randomDouble(1e308) / ((DecimalFormat*)fmt)->getMultiplier());
+
+#ifndef XP_MAC
+            test(fmt, randomDouble(1e-323));
+#else
+// PowerPC doesn't support denormalized doubles, so the low-end range
+// doesn't match NT
+            test(fmt, randomDouble(1e-290));
+#endif
+            test(fmt, randomDouble(1e-100));
+        }
+    }
+}
+
+/**
+ * Return a random value from -range..+range.
+ */
+double 
+NumberFormatRoundTripTest::randomDouble(double range)
+{
+    double a = randFraction();
+    return (2.0 * range * a) - range;
+}
+
+void 
+NumberFormatRoundTripTest::test(NumberFormat *fmt, double value)
+{
+    test(fmt, Formattable(value));
+}
+
+void 
+NumberFormatRoundTripTest::test(NumberFormat *fmt, int32_t value)
+{
+    test(fmt, Formattable(value));
+}
+
+void 
+NumberFormatRoundTripTest::test(NumberFormat *fmt, const Formattable& value)
+{
+    fmt->setMaximumFractionDigits(999);
+    
+    UErrorCode status = ZERO_ERROR;
+    UnicodeString s, s2, temp;
+    if(isDouble(value))
+        s = fmt->format(value.getDouble(), s);
+    else
+        s = fmt->format(value.getLong(), s);
+
+    Formattable n;
+    bool_t show = verbose;
+    if(DEBUG)
+        logln(UnicodeString("  ") + /*value.getString(temp) +*/ " F> " + escape(s));
+
+    fmt->parse(s, n, status);
+    failure(status, "fmt->parse");
+    if(DEBUG) 
+        logln("  " + escape(s) + " P> " /*+ n.getString(temp)*/);
+
+    if(isDouble(n))
+        s2 = fmt->format(n.getDouble(), s2);
+    else
+        s2 = fmt->format(n.getLong(), s2);
+    
+    if(DEBUG) 
+        logln(UnicodeString("  ") + /*n.getString(temp) +*/ " F> " + escape(s2));
+
+    if(STRING_COMPARE) {
+        if (s != s2) {
+            errln(" *** STRING ERROR");
+            show = TRUE;
+        }
+    }
+
+    if(EXACT_NUMERIC_COMPARE) {
+        if(value != n) {
+            errln(" *** NUMERIC ERROR");
+            show = TRUE;
+        }
+    }
+    else {
+        // Compute proportional error
+        double error = proportionalError(value, n);
+
+        if(error > MAX_ERROR) {
+            errln(UnicodeString(" *** NUMERIC ERROR ") + error);
+            show = TRUE;
+        }
+
+        if (error > max_numeric_error) 
+            max_numeric_error = error;
+        if (error < min_numeric_error) 
+            min_numeric_error = error;
+    }
+
+    if(show)
+        logln(/*value.getString(temp) +*/ typeOf(value, temp) + " F> " +
+            escape(s) + " P> " +
+            /*n.getString(temp) +*/ typeOf(n, temp) + " F> " +
+            escape(s2));
+}
+
+double 
+NumberFormatRoundTripTest::proportionalError(const Formattable& a, const Formattable& b)
+{
+    double aa,bb;
+    
+    if(isDouble(a))
+        aa = a.getDouble();
+    else
+        aa = a.getLong();
+
+    if(isDouble(b))
+        bb = b.getDouble();
+    else
+        bb = b.getLong();
+
+    double error = aa - bb;
+    if(aa != 0 && bb != 0) 
+        error /= aa;
+    
+    return icu_fabs(error);
+}
+
+UnicodeString& 
+NumberFormatRoundTripTest::typeOf(const Formattable& n, UnicodeString& result)
+{
+    if(n.getType() == Formattable::kLong) {
+        result = UnicodeString(" Long");
+    }
+    else if(n.getType() == Formattable::kDouble) {
+        result = UnicodeString(" Double");
+    }
+    else if(n.getType() == Formattable::kString) {
+        result = UnicodeString(" UnicodeString");
+        UnicodeString temp;
+    }
+
+    return result;
+}
+
+
+UnicodeString& 
+NumberFormatRoundTripTest::escape(UnicodeString& s)
+{
+    UnicodeString copy(s);
+    s.remove();
+    for(int i = 0; i < copy.size(); ++i) {
+        UChar c = copy[i];
+        if(c < 0x00FF) 
+            s += c;
+        else {
+            s += "+U";
+            char temp[16];
+            sprintf(temp, "%4X", c);        // might not work
+            s += temp;
+        }
+    }
+    return s;
+}

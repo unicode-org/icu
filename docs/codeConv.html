@@ -1,0 +1,34 @@
+<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="GENERATOR" content="Microsoft FrontPage 3.0">
+<title>ICU Code Conventions</title>
+</head>
+
+<body bgcolor="#FFFFFF">
+
+<h1>IBM's International Classes for Unicode Code Conventions</h1>
+
+<ul>
+  <li><font size="+3">No &quot;bare&quot; types</font></li>
+  <li><br>
+    <font size="+2">-- int8_t, int16_t, etc.</font> <br>
+    <font size="+2">-- UChar, UTextOffset</font> </li>
+  <li><font size="+3">Pass-in, Pass-out Idiom</font></li>
+  <li><br>
+    <font size="+2">-- pass in: output parameter to be filled in</font> <br>
+    <font size="+2">-- return: the output parameter to enable chaining</font> <br>
+    <font size="+2">example: uniString.removeBetween(2,3).toUpper();</font> </li>
+  <li><a href="errorCod.html"><font size="+3">Error Handling</font></a></li>
+  <li><font size="+3">Const</font></li>
+  <li><a href="nameConv.html"><font size="+3">Naming Conventions</font></a></li>
+</ul>
+
+<p><a href="../readme.html#API">ReadMe for IBM's International Classes for Unicode, API
+Overview</a> <br>
+&nbsp; <br>
+&nbsp; </p>
+</body>
+</html>

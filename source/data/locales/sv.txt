@@ -1,0 +1,111 @@
+// ****************************************************************************
+// *                                                                          *
+// * COPYRIGHT:                                                               *
+// * (C) Copyright Taligent, Inc.,  1997                                      *
+// * (C) Copyright International Business Machines Corporation,  1997-99      *
+// * Licensed Material - Program-Property of IBM - All Rights Reserved.       *
+// * US Government Users Restricted Rights - Use, duplication, or disclosure  *
+// * restricted by GSA ADP Schedule Contract with IBM Corp.                   *
+// *                                                                          *
+// ****************************************************************************
+
+sv {
+    CollationElements { "& Z < \u00E6 , \u00C6 < a\u030A , A\u030A , aa , aA , A"
+        "a , AA< a\u0308 , A\u0308 < o\u0308 , O\u0308 ; u\u030B , U\u030B < o\u030B , O"
+        "\u030B ; \u00F8 , \u00D8 & V ; w , W& Y, u\u0308 , U\u0308" }
+    Countries { 
+        SE { "Sverige" }
+    }
+    DateTimeElements { 
+            "2",
+            "4",
+    }
+    DateTimePatterns { 
+            "'kl 'H:mm z",
+            "HH:mm:ss z",
+            "HH:mm:ss",
+            "HH:mm",
+            "'den 'd MMMM yyyy",
+            "'den 'd MMMM yyyy",
+            "yyyy-MMM-dd",
+            "yyyy-MM-dd",
+            "{1} {0}",
+    }
+    DayAbbreviations { 
+            "s\u00F6",
+            "m\u00E5",
+            "ti",
+            "on",
+            "to",
+            "fr",
+            "l\u00F6",
+    }
+    DayNames { 
+            "s\u00F6ndag",
+            "m\u00E5ndag",
+            "tisdag",
+            "onsdag",
+            "torsdag",
+            "fredag",
+            "l\u00F6rdag",
+    }
+    Languages { 
+        sv { "svenska" }
+    }
+    LocaleID { "041d" }
+    LocaleString { "sv" }
+    MonthAbbreviations { 
+            "jan",
+            "feb",
+            "mar",
+            "apr",
+            "maj",
+            "jun",
+            "jul",
+            "aug",
+            "sep",
+            "okt",
+            "nov",
+            "dec",
+            "",
+    }
+    MonthNames { 
+            "januari",
+            "februari",
+            "mars",
+            "april",
+            "maj",
+            "juni",
+            "juli",
+            "augusti",
+            "september",
+            "oktober",
+            "november",
+            "december",
+            "",
+    }
+    NumberElements { 
+            ",",
+            "\u00A0",
+            ";",
+            "%",
+            "0",
+            "#",
+            "-",
+            "E",
+            "\u2030",
+            "\u221E",
+            "\uFFFD",
+    }
+    ShortLanguage { "swe" }
+    localPatternChars { "GyMdkHmsSEDFwWahKz" }
+    zoneStrings { 
+        {
+                "Africa/Casablanca",
+                "GMT",
+                "GMT",
+                "GMT",
+                "GMT",
+        }
+    }
+}

@@ -1,0 +1,86 @@
+
+// This is a test locale file for the fake locale 'te'
+
+te
+{
+    string_only_in_te { TE }
+
+    array_only_in_te { TE0, TE1, TE2, TE3 }
+
+    array_2d_only_in_te
+    {
+        { TE00, TE01 }
+        { TE10, TE11 }
+    }
+
+    tagged_array_only_in_te
+    {
+        tag9 { TE9 } 
+        tag11 { TE11 } 
+        tag3 { TE3 } 
+        tag4 { TE4 }
+    }
+
+    string_in_Default_te_te_IN { TE }
+
+    array_in_Default_te_te_IN { TE0, TE1, TE2, TE3, TE4 }
+
+    array_2d_in_Default_te_te_IN
+    {
+        { TE00, TE01, TE02 }
+        { TE10, TE11, TE12 }
+        { TE20, TE21, TE22 }
+        { TE30, TE31, TE32 }
+    }
+
+    tagged_array_in_Default_te_te_IN
+    {
+        tag7 { TE7 } 
+        tag8 { TE8 } 
+        tag14 { TE14 } 
+        tag0 { TE0 } 
+        tag4 { TE4 } 
+        tag10 { TE10 } 
+    }
+
+    string_in_Default_te { TE }
+
+    array_in_Default_te { TE0, TE1, TE2, TE3, TE4 }
+
+    array_2d_in_Default_te
+    {
+        { TE00, TE01, TE02 }
+        { TE10, TE11, TE12 }
+        { TE20, TE21, TE22 }
+        { TE30, TE31, TE32 }
+    }
+
+    tagged_array_in_Default_te
+    {
+        tag2 { TE2 } 
+        tag1 { TE1 } 
+        tag0 { TE0 } 
+        tag3 { TE3 }
+        tag4 { TE4 } 
+        tag5 { TE5 } 
+        tag6 { TE6 }
+    }
+
+    string_in_te_te_IN { TE }
+
+    array_in_te_te_IN { TE0, TE1, TE2 }
+
+    array_2d_in_te_te_IN
+    {
+        { TE00, TE01, TE02 }
+        { TE10, TE11, TE12 }
+        { TE20, TE21, TE22 }
+    }
+
+    tagged_array_in_te_te_IN
+    {
+        tag0 { TE0 } 
+    }
+}
+
+//eof

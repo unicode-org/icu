@@ -1,0 +1,109 @@
+// ****************************************************************************
+// *                                                                          *
+// * COPYRIGHT:                                                               *
+// * (C) Copyright Taligent, Inc.,  1997                                      *
+// * (C) Copyright International Business Machines Corporation,  1997-99      *
+// * Licensed Material - Program-Property of IBM - All Rights Reserved.       *
+// * US Government Users Restricted Rights - Use, duplication, or disclosure  *
+// * restricted by GSA ADP Schedule Contract with IBM Corp.                   *
+// *                                                                          *
+// ****************************************************************************
+
+nl {
+    Countries { 
+        NL { "Nederland" }
+        BE { "Belgi\u00EB" }
+    }
+    DateTimeElements { 
+            "2",
+            "4",
+    }
+    DateTimePatterns { 
+            "H:mm:ss' uur' z",
+            "H:mm:ss z",
+            "H:mm:ss",
+            "H:mm",
+            "EEEE d MMMM yyyy",
+            "d MMMM yyyy",
+            "d-MMM-yy",
+            "d-M-yy",
+            "{1} {0}",
+    }
+    DayAbbreviations { 
+            "zo",
+            "ma",
+            "di",
+            "wo",
+            "do",
+            "vr",
+            "za",
+    }
+    DayNames { 
+            "zondag",
+            "maandag",
+            "dinsdag",
+            "woensdag",
+            "donderdag",
+            "vrijdag",
+            "zaterdag",
+    }
+    Languages { 
+        nl { "Nederlands" }
+    }
+    LocaleID { "0413" }
+    LocaleString { "nl" }
+    MonthAbbreviations { 
+            "jan",
+            "feb",
+            "mrt",
+            "apr",
+            "mei",
+            "jun",
+            "jul",
+            "aug",
+            "sep",
+            "okt",
+            "nov",
+            "dec",
+            "",
+    }
+    MonthNames { 
+            "januari",
+            "februari",
+            "maart",
+            "april",
+            "mei",
+            "juni",
+            "juli",
+            "augustus",
+            "september",
+            "oktober",
+            "november",
+            "december",
+            "",
+    }
+    NumberElements { 
+            ",",
+            ".",
+            ";",
+            "%",
+            "0",
+            "#",
+            "-",
+            "E",
+            "\u2030",
+            "\u221E",
+            "\uFFFD",
+    }
+    ShortLanguage { "nld" }
+    localPatternChars { "GyMdkHmsSEDFwWahKz" }
+    zoneStrings { 
+        {
+                "Africa/Casablanca",
+                "GMT",
+                "GMT",
+                "GMT",
+                "GMT",
+        }
+    }
+}

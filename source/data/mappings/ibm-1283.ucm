@@ -1,0 +1,366 @@
+#
+# IBM-1283 - Apple Cyrillic
+#
+<code_set_name>   "IBM-1283"
+<char_name_mask>  "AXXXX"
+<mb_cur_max>      1
+<mb_cur_min>      1
+<uconv_class>     "SBCS"
+<subchar>         \x1A
+
+CHARMAP
+<U0000>         \x00
+<U0001>         \x01
+<U0002>         \x02
+<U0003>         \x03
+<U0004>         \x04
+<U0005>         \x05
+<U0006>         \x06
+<U0007>         \x07
+<U0008>         \x08
+<U0009>         \x09
+<U000A>         \x0A
+<U000B>         \x0B
+<U000C>         \x0C
+<U000D>         \x0D
+<U000E>         \x0E
+<U000F>         \x0F
+<U0010>         \x10
+<U2318>         \x11
+<U0011>         \x11
+<U2713>         \x12
+<U0012>         \x12
+<U2666>         \x13
+<U0013>         \x13
+<UF8FE>         \x14
+<U0014>         \x14
+<U0015>         \x15
+<U0016>         \x16
+<U0017>         \x17
+<U0018>         \x18
+<U0019>         \x19
+<U001A>         \x1A
+<U001B>         \x1B
+<U001C>         \x1C
+<U001D>         \x1D
+<U001E>         \x1E
+<U001F>         \x1F
+<U0020>         \x20
+<UFF01>         \x21
+<U0021>         \x21
+<UFF02>         \x22
+<U0022>         \x22
+<UFF03>         \x23
+<U0023>         \x23
+<UFF04>         \x24
+<U0024>         \x24
+<UFF05>         \x25
+<U0025>         \x25
+<UFF06>         \x26
+<U0026>         \x26
+<UFF07>         \x27
+<U0027>         \x27
+<UFF08>         \x28
+<U0028>         \x28
+<UFF09>         \x29
+<U0029>         \x29
+<UFF0A>         \x2A
+<U002A>         \x2A
+<UFF0B>         \x2B
+<U002B>         \x2B
+<UFF0C>         \x2C
+<U002C>         \x2C
+<UFF0D>         \x2D
+<U002D>         \x2D
+<UFF0E>         \x2E
+<U002E>         \x2E
+<UFF0F>         \x2F
+<U002F>         \x2F
+<UFF10>         \x30
+<U0030>         \x30
+<UFF11>         \x31
+<U0031>         \x31
+<UFF12>         \x32
+<U0032>         \x32
+<UFF13>         \x33
+<U0033>         \x33
+<UFF14>         \x34
+<U0034>         \x34
+<UFF15>         \x35
+<U0035>         \x35
+<UFF16>         \x36
+<U0036>         \x36
+<UFF17>         \x37
+<U0037>         \x37
+<UFF18>         \x38
+<U0038>         \x38
+<UFF19>         \x39
+<U0039>         \x39
+<UFF1A>         \x3A
+<U003A>         \x3A
+<UFF1B>         \x3B
+<U003B>         \x3B
+<UFF1C>         \x3C
+<U003C>         \x3C
+<UFF1D>         \x3D
+<U003D>         \x3D
+<UFF1E>         \x3E
+<U003E>         \x3E
+<UFF1F>         \x3F
+<U003F>         \x3F
+<UFF20>         \x40
+<U0040>         \x40
+<UFF21>         \x41
+<U0041>         \x41
+<UFF22>         \x42
+<U0042>         \x42
+<UFF23>         \x43
+<U0043>         \x43
+<UFF24>         \x44
+<U0044>         \x44
+<UFF25>         \x45
+<U0045>         \x45
+<UFF26>         \x46
+<U0046>         \x46
+<UFF27>         \x47
+<U0047>         \x47
+<UFF28>         \x48
+<U0048>         \x48
+<UFF29>         \x49
+<U0049>         \x49
+<UFF2A>         \x4A
+<U004A>         \x4A
+<UFF2B>         \x4B
+<U004B>         \x4B
+<UFF2C>         \x4C
+<U004C>         \x4C
+<UFF2D>         \x4D
+<U004D>         \x4D
+<UFF2E>         \x4E
+<U004E>         \x4E
+<UFF2F>         \x4F
+<U004F>         \x4F
+<UFF30>         \x50
+<U0050>         \x50
+<UFF31>         \x51
+<U0051>         \x51
+<UFF32>         \x52
+<U0052>         \x52
+<UFF33>         \x53
+<U0053>         \x53
+<UFF34>         \x54
+<U0054>         \x54
+<UFF35>         \x55
+<U0055>         \x55
+<UFF36>         \x56
+<U0056>         \x56
+<UFF37>         \x57
+<U0057>         \x57
+<UFF38>         \x58
+<U0058>         \x58
+<UFF39>         \x59
+<U0059>         \x59
+<UFF3A>         \x5A
+<U005A>         \x5A
+<UFF3B>         \x5B
+<U005B>         \x5B
+<UFF3C>         \x5C
+<U005C>         \x5C
+<UFF3D>         \x5D
+<U005D>         \x5D
+<UFF3E>         \x5E
+<U005E>         \x5E
+<UFF3F>         \x5F
+<U005F>         \x5F
+<UFF40>         \x60
+<U0060>         \x60
+<UFF41>         \x61
+<U0061>         \x61
+<UFF42>         \x62
+<U0062>         \x62
+<UFF43>         \x63
+<U0063>         \x63
+<UFF44>         \x64
+<U0064>         \x64
+<UFF45>         \x65
+<U0065>         \x65
+<UFF46>         \x66
+<U0066>         \x66
+<UFF47>         \x67
+<U0067>         \x67
+<UFF48>         \x68
+<U0068>         \x68
+<UFF49>         \x69
+<U0069>         \x69
+<UFF4A>         \x6A
+<U006A>         \x6A
+<UFF4B>         \x6B
+<U006B>         \x6B
+<UFF4C>         \x6C
+<U006C>         \x6C
+<UFF4D>         \x6D
+<U006D>         \x6D
+<UFF4E>         \x6E
+<U006E>         \x6E
+<UFF4F>         \x6F
+<U006F>         \x6F
+<UFF50>         \x70
+<U0070>         \x70
+<UFF51>         \x71
+<U0071>         \x71
+<UFF52>         \x72
+<U0072>         \x72
+<UFF53>         \x73
+<U0073>         \x73
+<UFF54>         \x74
+<U0074>         \x74
+<UFF55>         \x75
+<U0075>         \x75
+<UFF56>         \x76
+<U0076>         \x76
+<UFF57>         \x77
+<U0077>         \x77
+<UFF58>         \x78
+<U0078>         \x78
+<UFF59>         \x79
+<U0079>         \x79
+<UFF5A>         \x7A
+<U007A>         \x7A
+<UFF5B>         \x7B
+<U007B>         \x7B
+<UFF5C>         \x7C
+<U007C>         \x7C
+<UFF5D>         \x7D
+<U007D>         \x7D
+<UFF5E>         \x7E
+<U007E>         \x7E
+<U007F>         \x7F
+<U0410>         \x80      # ka020000
+<U0411>         \x81      # kb020000
+<U0412>         \x82      # kv020000
+<U0413>         \x83      # kg020000
+<U0414>         \x84      # kd020000
+<U0415>         \x85      # ke020000
+<U0416>         \x86      # kz220000
+<U0417>         \x87      # kz020000
+<U0418>         \x88      # ki020000
+<U0419>         \x89      # kj120000
+<U041A>         \x8A      # kk020000
+<U041B>         \x8B      # kl020000
+<U041C>         \x8C      # km020000
+<U041D>         \x8D      # kn020000
+<U041E>         \x8E      # ko020000
+<U041F>         \x8F      # kp020000
+<U0420>         \x90      # kr020000
+<U0421>         \x91      # ks020000
+<U0422>         \x92      # kt020000
+<U0423>         \x93      # ku020000
+<U0424>         \x94      # kf020000
+<U0425>         \x95      # kh020000
+<U0426>         \x96      # kc020000
+<U0427>         \x97      # kc220000
+<U0428>         \x98      # ks220000
+<U0429>         \x99      # ks160000
+<U042A>         \x9A      # ku220000
+<U042B>         \x9B      # ky020000
+<U042C>         \x9C      # kx120000
+<U042D>         \x9D      # ke140000
+<U042E>         \x9E      # ku160000
+<U042F>         \x9F      # ka160000
+<U2020>         \xA0      # sm340000  dagger
+<U00B0>         \xA1      # sm190000  degree
+<U00A2>         \xA2      # sc040000  cent
+<U00A3>         \xA3      # sc020000  sterling
+<U00A7>         \xA4      # sm240000  section
+<U2022>         \xA5      # sm570000  bullet1
+<U00B6>         \xA6      # sm250000  paragraph
+<U0406>         \xA7      # ki120000
+<U00AE>         \xA8      # sm530000  registered
+<U00A9>         \xA9      # sm520000  copyright
+<U2122>         \xAA      # sm540000  trademark
+<U0402>         \xAB      # kd620000
+<U0452>         \xAC      # kd610000
+<U2260>         \xAD      # sa540000  notequal
+<U0403>         \xAE      # kg120000
+<U0453>         \xAF      # kg110000
+<U221E>         \xB0      # sa450000  infinity
+<U00B1>         \xB1      # sa020000  plusminus
+<U2264>         \xB2      # sa520000  lessequal
+<U2265>         \xB3      # sa530000  greaterequal
+<U0456>         \xB4      # ki110000
+<U00B5>         \xB5      # sm170000  mu
+<U2202>         \xB6      # sa490000  partialdiff
+<U0408>         \xB7      # kj020000
+<U0404>         \xB8      # ke160000
+<U0454>         \xB9      # ke150000
+<U0407>         \xBA      # ki180000
+<U0457>         \xBB      # ki170000
+<U0409>         \xBC      # kl420000
+<U0459>         \xBD      # kl410000
+<U040A>         \xBE      # kn120000
+<U045A>         \xBF      # kn110000
+<U0458>         \xC0      # kj010000
+<U0405>         \xC1      # kz160000
+<U00AC>         \xC2      # sm660000  logicalnot
+<U221A>         \xC3      # sa800000  radical
+<U0192>         \xC4      # sc070000  florin
+<U2248>         \xC5      # sa700000  approxequal
+<U2206>         \xC6      # sl060000  deltaapl
+<U00AB>         \xC7      # sp170000  guillemotleft
+<U00BB>         \xC8      # sp180000  guillemotright
+<U2026>         \xC9      # sv520000  ellipsis
+<U00A0>         \xCA      # sp300000  reqspace
+<U040B>         \xCB      # kc120000
+<U045B>         \xCC      # kc110000
+<U040C>         \xCD      # kk120000
+<U045C>         \xCE      # kk110000
+<U0455>         \xCF      # kz150000
+<U2013>         \xD0      # ss680000  endash
+<U2014>         \xD1      # sm900000  emdash
+<U201C>         \xD2      # sp210000  quotedblleft
+<U201D>         \xD3      # sp220000  quotedblright
+<U2018>         \xD4      # sp190000  quoteleft
+<U2019>         \xD5      # sp200000  quoteright
+<U00F7>         \xD6      # sa060000  divide
+<U201E>         \xD7      # sp230000  quotedblbase
+<U040E>         \xD8      # ku240000
+<U045E>         \xD9      # ku230000
+<U040F>         \xDA      # kg220000
+<U045F>         \xDB      # kg210000
+<U2116>         \xDC      # sm000000  No
+<U0401>         \xDD      # ke180000
+<U0451>         \xDE      # ke170000
+<U044F>         \xDF      # ka150000
+<U0430>         \xE0      # ka010000
+<U0431>         \xE1      # kb010000
+<U0432>         \xE2      # kv010000
+<U0433>         \xE3      # kg010000
+<U0434>         \xE4      # kd010000
+<U0435>         \xE5      # ke010000
+<U0436>         \xE6      # kz210000
+<U0437>         \xE7      # kz010000
+<U0438>         \xE8      # ki010000
+<U0439>         \xE9      # kj110000
+<U043A>         \xEA      # kk010000
+<U043B>         \xEB      # kl010000
+<U043C>         \xEC      # km010000
+<U043D>         \xED      # kn010000
+<U043E>         \xEE      # ko010000
+<U043F>         \xEF      # kp010000
+<U0440>         \xF0      # kr010000
+<U0441>         \xF1      # ks010000
+<U0442>         \xF2      # kt010000
+<U0443>         \xF3      # ku010000
+<U0444>         \xF4      # kf010000
+<U0445>         \xF5      # kh010000
+<U0446>         \xF6      # kc010000
+<U0447>         \xF7      # kc210000
+<U0448>         \xF8      # ks210000
+<U0449>         \xF9      # ks150000
+<U044A>         \xFA      # ku210000
+<U044B>         \xFB      # ky010000
+<U044C>         \xFC      # kx110000
+<U044D>         \xFD      # ke130000
+<U044E>         \xFE      # ku150000
+<U00A4>         \xFF      # sc010000  currency
+END CHARMAP

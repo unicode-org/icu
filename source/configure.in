@@ -1,0 +1,190 @@
+dnl configure.in for ICU
+dnl Stephen F. Booth
+
+dnl Process this file with autoconf to produce a configure script
+AC_INIT(common/utypes.h)
+AC_CONFIG_HEADER(common/icucfg.h)
+PACKAGE="icu"
+AC_SUBST(PACKAGE)
+VERSION="1.2.2"
+AC_SUBST(VERSION)
+
+dnl Checks for programs
+AC_PROG_CC
+AC_PROG_CXX
+AC_PROG_INSTALL
+AC_CHECK_PROG(AUTOCONF, autoconf, autoconf, true)
+
+dnl Determine the host system and Makefile fragment
+AC_CANONICAL_HOST
+ICU_CHECK_MH_FRAG
+
+dnl Checks for libraries
+dnl On HP/UX, don't link to -lm from a shared lib because it isn't
+dnl  PIC (at least on 10.2)
+case "${host}" in
+	*-*-hpux*) 	AC_CHECK_LIB(m, floor, LIB_M="-lm") ;;
+	*) 		AC_CHECK_LIB(m, floor) 
+			LIB_M="" ;;
+esac
+AC_SUBST(LIB_M)
+
+dnl special pthread handling 
+dnl AIX uses pthreads instead of pthread, and HP/UX uses cma
+AC_CHECK_LIB(pthread, pthread_create)
+if test $ac_cv_lib_pthread_pthread_create = no; then
+AC_CHECK_LIB(pthreads, pthread_create)
+fi
+if test $ac_cv_lib_pthread_pthread_create = no; then
+AC_CHECK_LIB(cma, pthread_create)
+fi
+
+dnl Checks for header files
+AC_CHECK_HEADERS(inttypes.h)
+if test $ac_cv_header_inttypes_h = no; then
+HAVE_INTTYPES_H=0
+else
+HAVE_INTTYPES_H=1
+fi
+AC_SUBST(HAVE_INTTYPES_H)
+
+dnl Checks for typedefs
+AC_CHECK_TYPE(int8_t,signed char)
+AC_CHECK_TYPE(uint8_t,unsigned char)
+AC_CHECK_TYPE(int16_t,signed short)
+AC_CHECK_TYPE(uint16_t,unsigned short)
+AC_CHECK_TYPE(int32_t,signed long)
+AC_CHECK_TYPE(uint32_t,unsigned long)
+AC_CHECK_TYPE(bool_t,signed char)
+
+if test $ac_cv_type_int8_t = no; then
+HAVE_INT8_T=0
+else
+HAVE_INT8_T=1
+fi
+AC_SUBST(HAVE_INT8_T)
+
+if test $ac_cv_type_uint8_t = no; then
+HAVE_UINT8_T=0
+else
+HAVE_UINT8_T=1
+fi
+AC_SUBST(HAVE_UINT8_T)
+
+if test $ac_cv_type_int16_t = no; then
+HAVE_INT16_T=0
+else
+HAVE_INT16_T=1
+fi
+AC_SUBST(HAVE_INT16_T)
+
+if test $ac_cv_type_uint16_t = no; then
+HAVE_UINT16_T=0
+else
+HAVE_UINT16_T=1
+fi
+AC_SUBST(HAVE_UINT16_T)
+
+if test $ac_cv_type_int32_t = no; then
+HAVE_INT32_T=0
+else
+HAVE_INT32_T=1
+fi
+AC_SUBST(HAVE_INT32_T)
+
+if test $ac_cv_type_uint32_t = no; then
+HAVE_UINT32_T=0
+else
+HAVE_UINT32_T=1
+fi
+AC_SUBST(HAVE_UINT32_T)
+
+if test $ac_cv_type_bool_t = no; then
+HAVE_BOOL_T=0
+else
+HAVE_BOOL_T=1
+fi
+AC_SUBST(HAVE_BOOL_T)
+
+dnl Enable/disable extras
+AC_ARG_ENABLE(extras,
+	[  --enable-extras         build ICU extras [default=yes]],
+	[case "${enableval}" in
+		yes) extras=true ;;
+		no)  extras=false ;;
+		*) AC_MSG_ERROR(bad value ${enableval} for --enable-extras) ;;
+		esac], 
+	extras=true)
+ICU_CONDITIONAL(EXTRAS, test "$extras" = true)
+
+dnl Enable/disable tests
+AC_ARG_ENABLE(tests,
+	[  --enable-tests          build ICU tests [default=yes]],
+	[case "${enableval}" in
+		yes) tests=true ;;
+		no)  tests=false ;;
+		*) AC_MSG_ERROR(bad value ${enableval} for --enable-tests) ;;
+		esac], 
+	tests=true)
+ICU_CONDITIONAL(TESTS, test "$tests" = true)
+
+dnl Enable/disable samples
+AC_ARG_ENABLE(samples,
+	[  --enable-samples        build ICU samples [default=yes]],
+	[case "${enableval}" in
+		yes) samples=true ;;
+		no)  samples=false ;;
+		*) AC_MSG_ERROR(bad value ${enableval} for --enable-samples) ;;
+		esac], 
+	samples=true)
+ICU_CONDITIONAL(SAMPLES, test "$samples" = true)
+
+dnl Platform-specific Makefile setup
+case "${host}" in
+	*-*-solaris*) 	platform=SOLARIS ;;
+	*-*-linux*) 	platform=LINUX ;;
+	*-*-aix*) 	platform=AIX ;;
+	*-*-hpux*) 	platform=HPUX ;;
+	*) 		platform=UNKNOWN ;;
+esac
+AC_SUBST(platform)
+host_frag=$icu_cv_host_frag
+AC_SUBST_FILE(host_frag)
+
+dnl Handle -rpath options for shared library paths
+case "${host}" in
+	*-*-solaris*) 	ld_rpath_suf=":" ;;
+	*-*-linux*) 	ld_rpath_suf=" " ;;
+	*-*-aix*) 	ld_rpath_suf="" ;;
+	*-*-hpux*) 	ld_rpath_suf=":" ;;
+	*) 		ld_rpath_suf="" ;;
+esac
+AC_SUBST(ld_rpath_suf)
+
+dnl On HP/UX, main() functions compiled in C don't invoke
+dnl static constructors in C++ libs.  Hack around that here
+dnl by renaming some .c files to .cpp
+case "${host}" in
+	*-*-hpux*) 	
+		for file in tools/gencol/gencol samples/date/date \
+		  samples/cal/cal test/cintltst/cintltst
+		do
+		  if test -f $file.c; then
+		    mv $file.c $file.cpp
+		  fi
+		done
+	;;
+esac
+
+
+dnl output the Makefiles
+AC_OUTPUT([Makefile \
+		common/Makefile common/platform.h i18n/Makefile \
+		extra/Makefile extra/ustdio/Makefile \
+		tools/Makefile tools/ctestfw/Makefile tools/makeconv/Makefile \
+		tools/genrb/Makefile tools/gencol/Makefile \
+		tools/rbdump/Makefile \
+		test/Makefile test/intltest/Makefile test/cintltst/Makefile \
+		test/ieeetest/Makefile \
+		samples/Makefile samples/date/Makefile samples/cal/Makefile \
+		samples/XMLConverter/Makefile])

@@ -1,0 +1,49 @@
+/*
+*******************************************************************************
+*                                                                             *
+* COPYRIGHT:                                                                  *
+*   (C) Copyright International Business Machines Corporation, 1998           *
+*   Licensed Material - Program-Property of IBM - All Rights Reserved.        *
+*   US Government Users Restricted Rights - Use, duplication, or disclosure   *
+*   restricted by GSA ADP Schedule Contract with IBM Corp.                    *
+*                                                                             *
+*******************************************************************************
+*
+* File uscnf_p.h
+*
+* Modification History:
+*
+*   Date        Name        Description
+*   12/02/98    stephen        Creation.
+*   03/13/99    stephen     Modified for new C API.
+*******************************************************************************
+*/
+
+#ifndef _USCNF_P
+#define _USCNF_P
+
+#include "uscanf.h"
+
+/**
+ * Struct encapsulating a single u_scanf format specification.
+ */
+struct u_scanf_spec {
+  u_scanf_spec_info    fInfo;        /* Information on this spec */
+  int32_t        fArgPos;    /* Position of data in arg list */
+  bool_t        fSkipArg;    /* TRUE if arg should be skipped */
+};
+typedef struct u_scanf_spec u_scanf_spec;
+
+/**
+ * Parse a single u_scanf format specifier.
+ * @param fmt A pointer to a '%' character in a u_scanf format specification.
+ * @param spec A pointer to a <TT>u_scanf_spec</TT> to receive the parsed
+ * format specifier.
+ * @return The number of characters contained in this specifier.
+ */
+int32_t
+u_scanf_parse_spec (const UChar     *fmt,
+            u_scanf_spec    *spec);
+
+
+#endif

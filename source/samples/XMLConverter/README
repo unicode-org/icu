@@ -1,0 +1,34 @@
+Friday, Aug 13, 1999              ICU XMLConverter Sample
+-------------------- 
+
+  XMLConverter is an example which demonstrates codepage converersion
+between XML files.  (For more information on XML, see the IBM XML4C
+project which is available at:
+                         http://www.alphaWorks.ibm.com/tech/xml4c
+  The XML4C++ uses ICU internally for conversion.)
+
+
+  XML Files contain their encoding at the top, as in the following
+example:
+
+    <?xml version="1.0" encoding="ascii" ?>
+
+  To use the XMLConverter, try the following example:
+
+   XMLConverter -v -e utf-16be samples/animal.xml samples/animal_utf16.xml
+
+  This will create a file named animal_utf16.xml which is in the utf16
+big-endian codepage.
+
+Currently the following encodings are supported:
+
+ ascii, utf8, utf-16be, utf-16le, ebcdic-cp-us
+
+---
+(c) Copyright 1997-1999 IBM Corporation 
+IBM Center for Java Technology Silicon Valley,
+10275 N De Anza Blvd., Cupertino, CA 95014 
+All rights reserved. 
+Internet email to icu4c@us.ibm.com
+
+

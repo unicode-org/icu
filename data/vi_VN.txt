@@ -1,0 +1,10 @@
+vi_VN {
+    CurrencyElements {
+            "\u20AB",
+            "D ",
+            ",",
+    }
+    LocaleID { "242A" }
+    LocaleString { "vi_VN" }
+    ShortCountry { "VNM" }
+}
