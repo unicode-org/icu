@@ -123,7 +123,7 @@ package390: $(BUILDDIR)/icudata390.lst $(BUILDDIR)/icudata.lst ./icupkg.inc
 ##### Define all the data files. the build rule that depends on them is below.
 
 ## DAT files - Misc. data files.
-DAT_FILES_SHORT=uprops.icu pnames.icu unames.icu unorm.icu cnvalias.icu tz.icu ucadata.icu invuca.icu 
+DAT_FILES_SHORT=uprops.icu pnames.icu unames.icu unorm.icu cnvalias.icu tz.icu ucadata.icu invuca.icu uidna.icu 
 DAT_FILES=$(DAT_FILES_SHORT:%=$(BUILDDIR)/$(ICUDT)%)
 
 ## BRK files
@@ -218,6 +218,10 @@ $(BUILDDIR)/$(ICUDT)cnvalias.icu: $(UCMSRCDIR)/convrtrs.txt $(TOOLDIR)/gencnval/
 $(BUILDDIR)/$(ICUDT)tz.icu: $(MISCSRCDIR)/timezone.txt $(TOOLDIR)/gentz/gentz$(EXEEXT)
 	ICU_DATA=$(BUILDDIR) $(INVOKE) $(TOOLDIR)/gentz/gentz -d $(BUILDDIR) $(MISCSRCDIR)/timezone.txt
 
+# uidna.icu
+$(BUILDDIR)/$(ICUDT)uidna.icu: $(MISCSRCDIR)/rfc3454_A_1.txt $(MISCSRCDIR)/rfc3454_B_1.txt $(MISCSRCDIR)/rfc3454_B_2.txt $(MISCSRCDIR)/rfc3454_C_X.txt $(TOOLDIR)/genidna/genidna$(EXEEXT)
+	ICU_DATA=$(BUILDDIR) $(INVOKE) $(TOOLDIR)/genidna/genidna -d $(BUILDDIR) -s $(SRCDATADIR)
+
 ####################################################    BRK
 # BRK FILES
 
@@ -303,7 +307,7 @@ TEST_UCM_SOURCE= test1.ucm test3.ucm test4.ucm
 TEST_UCM_FILES=$(TEST_UCM_SOURCE:%=$(TESTSRCDATADIR)/data/%)
 TEST_CNV_FILES=$(TEST_UCM_SOURCE:%.ucm=$(TESTBUILDDIR)/$(TESTDT)%.cnv)
 
-TEST_RES = casing.txt root.txt te.txt te_IN.txt testtypes.txt testaliases.txt testempty.txt DataDrivenCollationTest.txt
+TEST_RES = casing.txt root.txt te.txt te_IN.txt testtypes.txt testaliases.txt testempty.txt DataDrivenCollationTest.txt idna_rules.txt 
 TEST_RES_FILES=$(TEST_RES:%.txt=$(TESTBUILDDIR)/$(TESTDT)%.res) $(TESTBUILDDIR)/$(TESTDT)iscii.res
 
 ALL_TEST_FILES = $(TEST_DAT_FILES) $(TEST_BRK_FILES) $(TEST_CNV_FILES) $(TEST_RES_FILES) $(TESTOUTDIR)/$(TESTDT)nam.typ
