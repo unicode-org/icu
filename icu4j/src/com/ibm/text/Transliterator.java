@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/Transliterator.java,v $
- * $Date: 2001/11/19 20:53:06 $
- * $Revision: 1.61 $
+ * $Date: 2001/11/20 00:41:01 $
+ * $Revision: 1.62 $
  *
  *****************************************************************************************
  */
@@ -242,7 +242,7 @@ import com.ibm.util.Utility;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: Transliterator.java,v $ $Revision: 1.61 $ $Date: 2001/11/19 20:53:06 $
+ * @version $RCSfile: Transliterator.java,v $ $Revision: 1.62 $ $Date: 2001/11/20 00:41:01 $
  */
 public abstract class Transliterator {
     /**
@@ -279,6 +279,11 @@ public abstract class Transliterator {
      * details.
      *
      * <p>contextStart <= start <= limit <= contextLimit
+     *
+     * <p>Note: All index values in this structure must be at code point
+     * boundaries.  That is, none of them may occur between two code units
+     * of a surrogate pair.  If any index does split a surrogate pair,
+     * results are unspecified.
      */
     public static class Position {
 
