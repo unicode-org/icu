@@ -4,9 +4,9 @@
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  *
- * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/DictionaryBasedBreakIterator.java,v $ 
- * $Date: 2002/02/16 03:06:07 $ 
- * $Revision: 1.9 $
+ * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/DictionaryBasedBreakIterator.java,v $
+ * $Date: 2002/12/04 01:45:51 $
+ * $Revision: 1.10 $
  *
  *****************************************************************************************
  */
@@ -44,6 +44,8 @@ import java.io.*;
  * dictionary file is in a serialized binary format.  We have a very primitive (and
  * slow) BuildDictionaryFile utility for creating dictionary files, but aren't
  * currently making it public.  Contact us for help.
+ *
+ * @stable
  */
 public class DictionaryBasedBreakIterator extends RuleBasedBreakIterator {
 
@@ -91,6 +93,7 @@ public class DictionaryBasedBreakIterator extends RuleBasedBreakIterator {
      * except for the special meaning of DICTIONARY_VAR.  This parameter is just
      * passed through to RuleBasedBreakIterator's constructor.
      * @param dictionaryFilename The filename of the dictionary file to use
+     * @stable
      */
     public DictionaryBasedBreakIterator(String description,
                                         InputStream dictionaryStream) throws IOException {
@@ -102,11 +105,13 @@ public class DictionaryBasedBreakIterator extends RuleBasedBreakIterator {
      * Returns a Builder that is customized to build a DictionaryBasedBreakIterator.
      * This is the same as RuleBasedBreakIterator.Builder, except for the extra code
      * to handle the DICTIONARY_VAR tag.
+     * @internal
      */
     protected RuleBasedBreakIterator.Builder makeBuilder() {
         return new Builder();
     }
 
+/** @internal */
 public void writeTablesToFile(FileOutputStream file, boolean littleEndian) throws IOException {
 super.writeTablesToFile(file, littleEndian);
 
@@ -125,7 +130,8 @@ switch (categoryFlags.length % 4) {
     default: break;
 }
 }
-    
+
+    /** @stable */
     public void setText(CharacterIterator newText) {
         super.setText(newText);
         cachedBreakPositions = null;
@@ -137,6 +143,7 @@ switch (categoryFlags.length % 4) {
      * Sets the current iteration position to the beginning of the text.
      * (i.e., the CharacterIterator's starting offset).
      * @return The offset of the beginning of the text.
+     * @stable
      */
     public int first() {
         cachedBreakPositions = null;
@@ -149,6 +156,7 @@ switch (categoryFlags.length % 4) {
      * Sets the current iteration position to the end of the text.
      * (i.e., the CharacterIterator's ending offset).
      * @return The text's past-the-end offset.
+     * @stable
      */
     public int last() {
         cachedBreakPositions = null;
@@ -161,6 +169,7 @@ switch (categoryFlags.length % 4) {
      * Advances the iterator one step backwards.
      * @return The position of the last boundary position before the
      * current iteration position
+     * @stable
      */
     public int previous() {
         CharacterIterator text = getText();
@@ -190,6 +199,7 @@ switch (categoryFlags.length % 4) {
      * before the specified position.
      * @param offset The position to begin searching from
      * @return The position of the last boundary before "offset"
+     * @stable
      */
     public int preceding(int offset) {
         CharacterIterator text = getText();
@@ -224,6 +234,7 @@ switch (categoryFlags.length % 4) {
      * the specified position.
      * @param offset The position to begin searching forward from
      * @return The position of the first boundary after "offset"
+     * @stable
      */
     public int following(int offset) {
         CharacterIterator text = getText();
@@ -254,6 +265,7 @@ switch (categoryFlags.length % 4) {
 
     /**
      * This is the implementation function for next().
+     * @internal
      */
     protected int handleNext() {
         CharacterIterator text = getText();
@@ -298,6 +310,7 @@ switch (categoryFlags.length % 4) {
 
     /**
      * Looks up a character category for a character.
+     * @internal
      */
     protected int lookupCategory(char c) {
         // this override of lookupCategory() exists only to keep track of whether we've
@@ -420,7 +433,7 @@ switch (categoryFlags.length % 4) {
                             possibleBreakPositions.peek())) {
                     possibleBreakPositions.pop();
                 }
-                
+
                 // if we've used up all possible break-position combinations, there's
                 // an error or an unknown word in the text.  In this case, we start
                 // over, treating the farthest character we've reached as the beginning
@@ -508,7 +521,8 @@ switch (categoryFlags.length % 4) {
     /**
      * The Builder class for DictionaryBasedBreakIterator inherits almost all of
      * its functionality from the Builder class for RuleBasedBreakIterator, but
-     * extends it with extra logic to handle the DICTIIONARY_VAR token
+     * extends it with extra logic to handle the DICTIONARY_VAR token
+     * @internal
      */
     protected class Builder extends RuleBasedBreakIterator.Builder {
 
@@ -555,7 +569,7 @@ switch (categoryFlags.length % 4) {
             categoryFlags = new boolean[categories.size()];
             for (int i = 0; i < categories.size(); i++) {
                 UnicodeSet cs = (UnicodeSet)categories.elementAt(i);
-                
+
                 cs.retainAll(dictionaryChars);
                 if (!cs.isEmpty()) {
                     categoryFlags[i] = true;
