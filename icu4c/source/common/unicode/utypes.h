@@ -38,7 +38,7 @@
 #include <wchar.h>
 #include <stdlib.h>
 
-#include "unicode\uversion.h"
+#include "unicode/uversion.h"
 /*===========================================================================*/
 /* Include platform-dependent definitions                                    */
 /* which are contained in the platform-specific file platform.h              */
