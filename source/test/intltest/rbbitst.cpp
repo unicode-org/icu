@@ -2985,6 +2985,11 @@ void RBBITest::RunMonkey(BreakIterator *bi, RBBIMonkeyKind &mk, char *name, uint
     }
 
     while (loopCount <= numIterations || numIterations == -1) {
+        if (numIterations == -1 && loopCount % 500 == 0) {
+            // If test is running in an infinite loop, display a periodic tic so
+            //   we can tell that it is making progress.
+            fprintf(stderr, ".");
+        }
         // Save current random number seed, so that we can recreate the random numbers
         //   for this loop iteration in event of an error.
         seed = m_seed;
