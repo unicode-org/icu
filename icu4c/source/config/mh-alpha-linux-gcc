@@ -3,7 +3,7 @@
 ## Copyright (c) 1999-2000, International Business Machines Corporation and
 ## others. All Rights Reserved.
 ##
-## $Id: mh-alpha-linux-gcc,v 1.1 2001/05/25 17:58:03 rviswanadha Exp $
+## $Id: mh-alpha-linux-gcc,v 1.2 2001/08/17 02:33:04 rviswanadha Exp $
 
 ## Commands to generate dependency files
 GEN_DEPS.c=	$(CC) -E -MM $(DEFS) $(CPPFLAGS)
@@ -60,7 +60,8 @@ INSTALL-S = $(INSTALL_PROGRAM)
 INSTALL-L = $(INSTALL_DATA)
 
 ## Link commands to link to ICU libs
-LIBICUUC= 	-L$(top_builddir)/common -l$(ICUPREFIX)uc
+LIBICUDT=       -L$(top_builddir)/data -L$(top_builddir)/stubdata -l$(ICUPREFIX)data
+LIBICUUC= 	-L$(top_builddir)/common -l$(ICUPREFIX)uc $(LIBICUDT)
 LIBICUI18N= 	-L$(top_builddir)/i18n -l$(ICUPREFIX)i18n
 LIBCTESTFW= 	-L$(top_builddir)/tools/ctestfw -lctestfw
 LIBICUTOOLUTIL=-L$(top_builddir)/tools/toolutil -l$(ICUPREFIX)toolutil
