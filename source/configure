@@ -3758,7 +3758,8 @@ case "${host}" in
       tools/rbdump/read tools/genccode/genccode \
       tools/gencmn/gencmn tools/gencmn/decmn tools/gencnval/gencnval \
       tools/gennames/gennames tools/gentest/gentest \
-      tools/pkgdata/pkgdata tools/genprops/genprops
+      tools/pkgdata/pkgdata tools/genqchk/genqchk tools/genfchk/genfchk \
+	  tools/genprops/genprops
     do
       if test -f $file.c; then
         mv $file.c $file.cpp
@@ -3914,6 +3915,8 @@ trap 'rm -rf `echo "README icudefs.mk \
     tools/gennames/Makefile \
     tools/toolutil/Makefile \
     tools/gentest/Makefile \
+	tools/genqchk/Makefile \
+	tools/genfchk/Makefile \
     tools/genprops/Makefile \
     tools/ctestfw/Makefile \
     test/Makefile test/testdata/Makefile \
@@ -4081,6 +4084,8 @@ CONFIG_FILES=\${CONFIG_FILES-"README icudefs.mk \
     tools/gennames/Makefile \
     tools/toolutil/Makefile \
     tools/gentest/Makefile \
+	tools/genqchk/Makefile \
+	tools/genfchk/Makefile \
     tools/genprops/Makefile \
     tools/ctestfw/Makefile \
     test/Makefile test/testdata/Makefile \

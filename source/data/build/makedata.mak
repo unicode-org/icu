@@ -137,10 +137,12 @@ testdata: ucadata.dat $(RB_FILES) {"$(ICUTOOLS)\genrb\$(CFG)"}genrb.exe
 BRK_FILES = "$(ICUDBLD)\sent.brk" "$(ICUDBLD)\char.brk" "$(ICUDBLD)\line.brk" "$(ICUDBLD)\word.brk" "$(ICUDBLD)\line_th.brk" "$(ICUDBLD)\word_th.brk"
 
 #invoke pkgdata
-"$(DLL_OUTPUT)\$(U_ICUDATA_NAME).dll" :  $(CNV_FILES) $(BRK_FILES) uprops.dat unames.dat cnvalias.dat tz.dat ucadata.dat invuca.dat $(ALL_RES) 
+"$(DLL_OUTPUT)\$(U_ICUDATA_NAME).dll" :  $(CNV_FILES) $(BRK_FILES) qchk.dat fchk.dat uprops.dat unames.dat cnvalias.dat tz.dat ucadata.dat invuca.dat $(ALL_RES) 
 	@echo Building icu data
 	@cd "$(ICUDBLD)"
  	"$(ICUTOOLS)\pkgdata\$(CFG)\pkgdata" -e icudata -v -T . -m dll -c -p $(U_ICUDATA_NAME) -O "$(PKGOPT)" -d "$(DLL_OUTPUT)" -s . <<pkgdatain.txt
+qchk.dat
+fchk.dat
 uprops.dat
 unames.dat
 cnvalias.dat
@@ -190,6 +192,8 @@ CLEAN :
 	-@erase "*.cnv"
 	-@erase "*.res"
 	-@erase "$(TRANS)*.res"
+	-@erase "qchk*.*"
+	-@erase "fchk*.*"
 	-@erase "uprops*.*"
 	-@erase "unames*.*"
 	-@erase "cnvalias*.*"
@@ -240,6 +244,18 @@ $(DLL_OUTPUT)\test4.cnv: "$(TESTDATA)\test4.ucm"
 	@cd "$(ICUDATA)"
 	@set ICU_DATA=$(DLL_OUTPUT)
 	@"$(ICUTOOLS)\makeconv\$(CFG)\makeconv" $**
+
+# Targets for qchk.dat
+qchk.dat: "$(ICUDATA)\unidata\QuickCheck.txt" "$(ICUTOOLS)\genqchk\$(CFG)\genqchk.exe"
+	@echo Creating data file for Quick Check Properties
+	@set ICU_DATA=$(ICUDBLD)
+	@"$(ICUTOOLS)\genqchk\$(CFG)\genqchk" -s "$(ICUDATA)\unidata"
+
+# Targets for fchk.dat
+fchk.dat: "$(ICUDATA)\unidata\FCDCheck.txt" "$(ICUTOOLS)\genfchk\$(CFG)\genfchk.exe"
+	@echo Creating data file for FCD Check Properties
+	@set ICU_DATA=$(ICUDBLD)
+	@"$(ICUTOOLS)\genfchk\$(CFG)\genfchk" -s "$(ICUDATA)\unidata"
 
 # Targets for unames.dat
 unames.dat: {"$(ICUDATA)"}\unidata\UnicodeData.txt "$(ICUTOOLS)\gennames\$(CFG)\gennames.exe"

@@ -4,7 +4,7 @@ dnl Copyright (c) 1999-2000, International Business Machines Corporation and
 dnl others. All Rights Reserved.
 dnl Stephen F. Booth, heavily modified by Yves and others
 
-dnl $Id: configure.in,v 1.100 2001/03/16 18:54:35 yves Exp $
+dnl $Id: configure.in,v 1.101 2001/04/04 02:28:04 swquek Exp $
 
 dnl Process this file with autoconf to produce a configure script
 AC_INIT(common/unicode/utypes.h)
@@ -684,7 +684,8 @@ case "${host}" in
 		  tools/rbdump/read tools/genccode/genccode \
 		  tools/gencmn/gencmn tools/gencnval/gencnval \
 		  tools/gennames/gennames tools/gentest/gentest \
-                  tools/pkgdata/pkgdata tools/genprops/genprops
+          tools/pkgdata/pkgdata tools/genqchk/genqchk \
+		  tools/genfchk/genfchk tools/genprops/genprops
 		do
 		  if test -f $file.c; then
 		    mv $file.c $file.cpp
@@ -738,7 +739,8 @@ AC_OUTPUT([README icudefs.mk \
 		tools/genuca/Makefile  \
 		tools/pkgdata/Makefile tools/pkgdata/icupkg.inc \
 		tools/genccode/Makefile tools/gencmn/Makefile tools/gencnval/Makefile tools/gentz/Makefile \
-	        tools/gennames/Makefile tools/toolutil/Makefile tools/gentest/Makefile tools/genprops/Makefile \
+        tools/gennames/Makefile tools/toolutil/Makefile tools/gentest/Makefile \
+		tools/genqchk/Makefile tools/genfchk/Makefile tools/genprops/Makefile \
 		test/Makefile test/testdata/Makefile test/intltest/Makefile test/cintltst/Makefile \
 		test/ieeetest/Makefile \
 		samples/Makefile samples/date/Makefile samples/cal/Makefile \
