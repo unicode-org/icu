@@ -867,8 +867,7 @@ TimeZone::createEnumeration(const char* country) {
 
 // -------------------------------------
 
-// TODO: #ifdef out this code after 8-Nov-2003
-// #ifdef ICU_TIMEZONE_USE_DEPRECATES
+#ifdef U_USE_TIMEZONE_OBSOLETE_2_8
 
 const UnicodeString** 
 TimeZone::createAvailableIDs(int32_t rawOffset, int32_t& numIDs)
@@ -990,9 +989,7 @@ TimeZone::createAvailableIDs(int32_t& numIDs)
     return ids;
 }
 
-// ICU_TIMEZONE_USE_DEPRECATES
-// #endif
-// see above
+#endif
 
 // ---------------------------------------
 
