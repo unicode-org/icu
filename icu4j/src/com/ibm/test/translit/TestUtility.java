@@ -4,6 +4,32 @@ import com.ibm.text.UCharacterCategory;
 
 public final class TestUtility {
 
+	public static String hex(char ch) {
+		String foo = Integer.toString(ch,16).toUpperCase();
+		return "0000".substring(0,4-foo.length()) + foo;
+	}
+    
+	public static String hex(int ch) {
+		String foo = Integer.toString(ch,16).toUpperCase();
+		return "00000000".substring(0,4-foo.length()) + foo;
+	}
+    
+	public static String hex(String s) {
+	  return hex(s,",");
+	}
+	
+	public static String hex(String s, String sep) {
+	  if (s.length() == 0) return "";
+	  String result = hex(s.charAt(0));
+	  for (int i = 1; i < s.length(); ++i) {
+	    result += sep;
+	    result += hex(s.charAt(i));
+	  }
+	  return result;
+	}
+	
+    // COMMENTED OUT ALL THE OLD SCRIPT STUFF
+    /*
     public static byte getScript(char c) {
       return getScript(getBlock(c));
     }
@@ -56,30 +82,6 @@ public final class TestUtility {
         return Character.isLetter(c);
     }
 
-	public static String hex(char ch) {
-		String foo = Integer.toString(ch,16).toUpperCase();
-		return "0000".substring(0,4-foo.length()) + foo;
-	}
-    
-	public static String hex(int ch) {
-		String foo = Integer.toString(ch,16).toUpperCase();
-		return "00000000".substring(0,4-foo.length()) + foo;
-	}
-    
-	public static String hex(String s) {
-	  return hex(s,",");
-	}
-	
-	public static String hex(String s, String sep) {
-	  if (s.length() == 0) return "";
-	  String result = hex(s.charAt(0));
-	  for (int i = 1; i < s.length(); ++i) {
-	    result += sep;
-	    result += hex(s.charAt(i));
-	  }
-	  return result;
-	}
-	
   public static void main(String[] args) {
     System.out.println("Blocks: ");
     byte lastblock = -128;
@@ -404,5 +406,5 @@ public final class TestUtility {
       78, 78, 78, 78, 78, 78, 78, 78, 78, 78, 78, 78, 78, 78, 78, 78,
       78, 78, 79, 79, 79, 79, -27, 81, 81, 81, 81, 81, -28, -29, 87, -30
     };
-
+    */
 }
