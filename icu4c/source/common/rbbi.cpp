@@ -20,7 +20,7 @@ U_NAMESPACE_BEGIN
  * A token used as a character-category value to identify ignore characters
  */
 const int8_t
-RuleBasedBreakIterator::RBBI_IGNORE = -1;
+RuleBasedBreakIterator::UBRK_IGNORE = -1;
 
 /**
  * The state number of the starting state
@@ -456,7 +456,7 @@ int32_t RuleBasedBreakIterator::handleNext(void) {
         
         // if the character isn't an ignore character, look up a state
         // transition in the state table
-        if (category != RBBI_IGNORE) {
+        if (category != UBRK_IGNORE) {
             state = tables->lookupState(state, category);
         }
         
@@ -488,7 +488,7 @@ int32_t RuleBasedBreakIterator::handleNext(void) {
             
         // keep track of the last "real" character we saw.  If this character isn't an
         // ignore character, take note of it and its position in the text
-        if (category != RBBI_IGNORE && state != STOP_STATE) {
+        if (category != UBRK_IGNORE && state != STOP_STATE) {
             lastC = c;
             lastCPos = text->getIndex();
         }
@@ -542,7 +542,7 @@ int32_t RuleBasedBreakIterator::handlePrevious(void) {
         
         // if the current character isn't an ignore character, look up a
         // state transition in the backwards state table
-        if (category != RBBI_IGNORE)
+        if (category != UBRK_IGNORE)
             state = tables->lookupBackwardState(state, category);
             
         // then advance one character backwards
@@ -555,7 +555,7 @@ int32_t RuleBasedBreakIterator::handlePrevious(void) {
     // that takes us into the stop state will always be the character BEFORE
     // the break position.)
     if (c != CharacterIterator::DONE) {
-        if (lastCategory != RBBI_IGNORE)
+        if (lastCategory != UBRK_IGNORE)
             text->setIndex(text->getIndex() + 2);
         else
             text->next();
