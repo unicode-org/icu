@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2002-2003, International Business Machines
+*   Copyright (C) 2002-2004, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -191,6 +191,16 @@ U_CAPI UBool U_EXPORT2
 uset_containsString(const USet* set, const UChar* str, int32_t strLen) {
     UnicodeString s(strLen==-1, str, strLen);
     return ((const UnicodeSet*) set)->contains(s);
+}
+
+U_CAPI UBool U_EXPORT2
+uset_containsAll(const USet* set1, const USet* set2) {
+    return ((const UnicodeSet*) set1)->containsAll(* (const UnicodeSet*) set2);
+}
+
+U_CAPI UBool U_EXPORT2
+uset_equals(const USet* set1, const USet* set2) {
+    return *(const UnicodeSet*)set1 == *(const UnicodeSet*)set2;
 }
 
 U_CAPI int32_t U_EXPORT2

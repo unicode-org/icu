@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2002-2003, International Business Machines
+*   Copyright (C) 2002-2004, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -386,6 +386,20 @@ uset_getItem(const USet* set, int32_t itemIndex,
              UChar32* start, UChar32* end,
              UChar* str, int32_t strCapacity,
              UErrorCode* ec);
+
+/* TODO: propose the following to the list and make them public */
+
+/**
+ * @internal
+ */
+U_CAPI UBool U_EXPORT2
+uset_containsAll(const USet* set1, const USet* set2);
+
+/**
+ * @internal
+ */
+U_CAPI UBool U_EXPORT2
+uset_equals(const USet* set1, const USet* set2);
 
 /*********************************************************************
  * Serialized set API
