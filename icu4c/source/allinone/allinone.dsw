@@ -98,6 +98,9 @@ Package=<4>
     Begin Project Dependency
     Project_Dep_Name icuswap
     End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name iotest
+    End Project Dependency
 }}}
 
 ###############################################################################
@@ -471,6 +474,24 @@ Package=<4>
 
 ###############################################################################
 
+Project: "io"=..\io\io.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name common
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name i18n
+    End Project Dependency
+}}}
+
+###############################################################################
+
 Project: "iotest"=..\test\iotest\iotest.dsp - Package Owner=<4>
 
 Package=<5>
@@ -679,24 +700,6 @@ Package=<4>
     End Project Dependency
     Begin Project Dependency
     Project_Dep_Name pkgdata
-    End Project Dependency
-}}}
-
-###############################################################################
-
-Project: "io"=..\io\io.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-    Begin Project Dependency
-    Project_Dep_Name common
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name i18n
     End Project Dependency
 }}}
 
