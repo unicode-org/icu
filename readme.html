@@ -218,6 +218,19 @@
     "http://oss.software.ibm.com/icu/download/2.2/">ICU 2.2 download
     page</a>.</p>
 
+    <h3>UnicodeString assignments</h3>
+
+    <p>ICU 2.4 changes the behavior of the <code>UnicodeString</code> assignment operator
+    and copy constructor for where the source string is a readonly alias.
+    For such strings, the copy used to also be a readonly alias to the same buffer,
+    but that was seen as too dangerous (see <a href="http://www.jtcsv.com/cgibin/icu-bugs?findid=2296">Jitterbug 2296</a>).
+    The new <code>fastCopyFrom()</code> member function provides the old
+    assignment behavior.
+    It can be used explicitly when it is known to be safe to maintain readonly aliases
+    instead of cloning the buffer.
+    For more information about string aliasing and other <code>UnicodeString</code> storage models
+    see the <a href="http://oss.software.ibm.com/icu/userguide/strings.html">User Guide Strings chapter</a>.</p>
+
     <h3>Unicode-handling macros (utf*.h)</h3>
 
     <p>The macros in <code>source/common/unicode/utf*.h</code> have been
