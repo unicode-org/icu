@@ -22,7 +22,7 @@ class ParsePosition;
 class SymbolTable;
 class UVector;
 class CaseEquivClass;
-
+class RuleCharacterIterator;
     
 /**
  * A mutable set of Unicode characters and multicharacter strings.  Objects of this class
@@ -1113,17 +1113,11 @@ private:
 
     const UnicodeString* getString(int32_t index) const;
 
-private:
-
     //----------------------------------------------------------------
     // RuleBasedTransliterator support
     //----------------------------------------------------------------
 
-    friend class TransliteratorParser;
-    friend class TransliteratorIDParser;
-
-    friend class RBBIRuleScanner;
-    friend class RegexCompile;
+public:
 
     /**
      * Constructs a set from the given pattern.  See the class description
@@ -1142,6 +1136,7 @@ private:
      * varNameToChar is also non-null.
      * @exception <code>U_ILLEGAL_ARGUMENT_ERROR</code> if the pattern
      * contains a syntax error.
+     * @draft ICU 2.8
      */
     UnicodeSet(const UnicodeString& pattern, ParsePosition& pos,
                const SymbolTable& symbols,
@@ -1151,9 +1146,12 @@ private:
      * Constructs a set from the given pattern.  Identical to the
      * 4-parameter ParsePosition contstructor, but does not take a
      * SymbolTable, and does not recognize embedded variables.
+     * @draft ICU 2.8
      */
     UnicodeSet(const UnicodeString& pattern, ParsePosition& pos,
                uint32_t options, UErrorCode& status);
+
+private:
 
     /**
      * Returns <tt>true</tt> if this set contains any character whose low byte
@@ -1198,6 +1196,12 @@ private:
                       const SymbolTable* symbols,
                       UErrorCode& status);
 
+    void applyPattern(RuleCharacterIterator& chars,
+                      const SymbolTable* symbols,
+                      UnicodeString& rebuiltPat,
+                      int32_t options,
+                      UErrorCode& ec);
+
     //----------------------------------------------------------------
     // Implementation: Utility methods
     //----------------------------------------------------------------
@@ -1209,13 +1213,6 @@ private:
     void swapBuffers(void);
 
     UBool allocateStrings();
-
-    void _applyPattern(const UnicodeString& pattern,
-                       ParsePosition& pos,
-                       uint32_t options,
-                       const SymbolTable* symbols,
-                       UnicodeString& rebuiltPat,
-                       UErrorCode& status);
 
     UnicodeString& _toPattern(UnicodeString& result,
                               UBool escapeUnprintable) const;
@@ -1244,6 +1241,9 @@ private:
      */
     static UBool resemblesPropertyPattern(const UnicodeString& pattern,
                                           int32_t pos);
+
+    static UBool resemblesPropertyPattern(RuleCharacterIterator& chars,
+                                          int32_t iterOpts);
 
     /**
      * Parse the given property pattern at the given parse position
@@ -1286,6 +1286,10 @@ private:
     UnicodeSet& applyPropertyPattern(const UnicodeString& pattern,
                                      ParsePosition& ppos,
                                      UErrorCode &ec);
+
+    void applyPropertyPattern(RuleCharacterIterator& chars,
+                              UnicodeString& rebuiltPat,
+                              UErrorCode& ec);
 
     /**
      * A filter that returns TRUE if the given code point should be

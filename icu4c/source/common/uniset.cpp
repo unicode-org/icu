@@ -12,7 +12,8 @@
 #include "unicode/parsepos.h"
 #include "unicode/uchar.h"
 #include "unicode/uscript.h"
-#include "symtable.h"
+#include "symtable.h" // TODO => unicode/symtable.h
+#include "ruleiter.h"
 #include "cmemory.h"
 #include "uhash.h"
 #include "util.h"
@@ -60,6 +61,7 @@ static const UChar POSIX_CLOSE[] = { 58,93,0 };  // ":]"
 static const UChar PERL_OPEN[]   = { 92,112,0 }; // "\\p"
 static const UChar PERL_CLOSE[]  = { 125,0 };    // "}"
 static const UChar NAME_OPEN[]   = { 92,78,0 };  // "\\N"
+static const UChar HYPHEN_RIGHT_BRACE[] = {0x2D,0x5D,0}; /*-]*/
 
 // Special property set IDs
 static const char ANY[]   = "ANY";   // [\u0000-\U0010FFFF]
@@ -1878,474 +1880,417 @@ void UnicodeSet::applyPattern(const UnicodeString& pattern,
     if (U_FAILURE(status)) {
         return;
     }
-
     // Need to build the pattern in a temporary string because
     // _applyPattern calls add() etc., which set pat to empty.
     UnicodeString rebuiltPat;
-    _applyPattern(pattern, pos, options, symbols, rebuiltPat, status);
+    RuleCharacterIterator chars(pattern, symbols, pos);
+    applyPattern(chars, symbols, rebuiltPat, options, status);
+    if (U_FAILURE(status)) return;
+    if (chars.inVariable()) {
+        // syntaxError(chars, "Extra chars in variable value");
+        status = U_MALFORMED_SET;
+        return;
+    }
     pat = rebuiltPat;
 }
 
-void UnicodeSet::_applyPattern(const UnicodeString& pattern,
-                               ParsePosition& pos,
-                               uint32_t options,
-                               const SymbolTable* symbols,
-                               UnicodeString& rebuiltPat,
-                               UErrorCode& status) {
+/**
+ * Parse the pattern from the given RuleCharacterIterator.  The
+ * iterator is advanced over the parsed pattern.
+ * @param chars iterator over the pattern characters.  Upon return
+ * it will be advanced to the first character after the parsed
+ * pattern, or the end of the iteration if all characters are
+ * parsed.
+ * @param symbols symbol table to use to parse and dereference
+ * variables, or null if none.
+ * @param rebuiltPat the pattern that was parsed, rebuilt or
+ * copied from the input pattern, as appropriate.
+ * @param options a bit mask of zero or more of the following:
+ * IGNORE_SPACE, CASE.
+ */
+void UnicodeSet::applyPattern(RuleCharacterIterator& chars,
+                              const SymbolTable* symbols,
+                              UnicodeString& rebuiltPat,
+                              int32_t options,
+                              UErrorCode& ec) {
+    if (U_FAILURE(ec)) return;
 
-    if (U_FAILURE(status)) {
-        return;
+    // Syntax characters: [ ] ^ - & { }
+
+    // Recognized special forms for chars, sets: c-c s-s s&s
+
+    int32_t opts = RuleCharacterIterator::PARSE_VARIABLES |
+                   RuleCharacterIterator::PARSE_ESCAPES;
+    if ((options & USET_IGNORE_SPACE) != 0) {
+        opts |= RuleCharacterIterator::SKIP_WHITESPACE;
     }
 
-    // If the pattern contains any of the following, we save a
-    // rebuilt (variable-substituted) copy of the source pattern:
-    // - a category
-    // - an intersection or subtraction operator
-    // - an anchor (trailing '$', indicating RBT ether)
-    UBool rebuildPattern = FALSE;
-    UnicodeString newPat(SET_OPEN);
-    int32_t nestedPatStart = - 1; // see below for usage
-    UBool nestedPatDone = FALSE; // see below for usage
-    UnicodeString multiCharBuffer;
+    UnicodeString pat, buf;
+    UBool usePat = FALSE;
+    UnicodeSet* scratch = 0;
+    RuleCharacterIterator::Pos backup;
+
+    // mode: 0=before [, 1=between [...], 2=after ]
+    // lastItem: 0=none, 1=char, 2=set
+    int8_t lastItem = 0, mode = 0;
+    UChar32 lastChar = 0;
+    UChar op = 0;
 
     UBool invert = FALSE;
+
     clear();
 
-    const UChar32 NONE = (UChar32) -1;
-    UChar32 lastChar = NONE; // This is either a char (0..10FFFF) or NONE
-    UBool isLastLiteral = FALSE; // TRUE if lastChar was a literal
-    UChar lastOp = 0;
+    while (mode != 2 && !chars.atEnd()) {
+        U_ASSERT((lastItem == 0 && op == 0) ||
+                 (lastItem == 1 && (op == 0 || op == 0x2D /*'-'*/)) ||
+                 (lastItem == 2 && (op == 0 || op == 0x2D /*'-'*/ ||
+                                    op == 0x26 /*'&'*/)));
 
-    /* This loop iterates over the characters in the pattern.  We start at
-     * the position specified by pos.  We exit the loop when either a
-     * matching closing ']' is seen, or we read all characters of the
-     * pattern.  In the latter case an error will be thrown.
-     */
+        UChar32 c = 0;
+        UBool literal = FALSE;
+        UnicodeSet* nested = 0;
 
-    /* Pattern syntax:
-     *  pat := '[' '^'? elem* ']'
-     *  elem := a | a '-' a | set | set op set
-     *  set := pat | (a set variable)
-     *  op := '&' | '-'
-     *  a := (a character, possibly defined by a var)
-     */
+        // -------- Check for property pattern
 
-    // mode 0: No chars parsed yet; next must be '['
-    // mode 1: '[' seen; if next is '^' or ':' then special
-    // mode 15: "[^" seen; if next is '-' then literal
-    // mode 2: '[' '^'? '-'? seen; parse pattern and close with ']'
-    // mode 3: '[:' seen; parse category and close with ':]'
-    // mode 4: ']' seen; parse complete
-    // mode 5: Top-level property pattern seen
-    int8_t mode = 0;
-    int32_t i = pos.getIndex();
-    int32_t limit = pattern.length();
-    UnicodeSet nestedAux;
-    const UnicodeSet* nestedSet; // never owned
-    UnicodeString scratch;
-    /* In the case of an embedded SymbolTable variable, we look it up and
-     * then take characters from the resultant char[] array.  These chars
-     * are subjected to an extra level of lookup in the SymbolTable in case
-     * they are stand-ins for a nested UnicodeSet.  */
-    const UnicodeString* varValueBuffer = NULL;
-    int32_t ivarValueBuffer = 0;
-    int32_t anchor = 0;
-    UChar32 c;
-    while (i<limit) {
-        /* If the next element is a single character, c will be set to it,
-         * and nestedSet will be null.  In this case isLiteral indicates
-         * whether the character should assume special meaning if it has
-         * one.  If the next element is a nested set, either via a variable
-         * reference, or via an embedded "[..]"  or "[:..:]" pattern, then
-         * nestedSet will be set to the pairs list for the nested set, and
-         * c's value should be ignored.
-         */
-        nestedSet = NULL;
-        UBool isLiteral = FALSE;
-        if (varValueBuffer != NULL) {
-            if (ivarValueBuffer < varValueBuffer->length()) {
-                c = varValueBuffer->char32At(ivarValueBuffer);
-                ivarValueBuffer += UTF_CHAR_LENGTH(c);
-                const UnicodeFunctor *m = symbols->lookupMatcher(c); // may be NULL
-                if (m != NULL && m->getDynamicClassID() != UnicodeSet::getStaticClassID()) {
-                    status = U_ILLEGAL_ARGUMENT_ERROR;
-                    return;
-                }
-                nestedSet = (UnicodeSet*) m;
-                nestedPatDone = FALSE;
-            } else {
-                varValueBuffer = NULL;
-                c = pattern.char32At(i);
-                i += UTF_CHAR_LENGTH(c);
-            }
-        } else {
-            c = pattern.char32At(i);
-            i += UTF_CHAR_LENGTH(c);
+        // setMode: 0=none, 1=unicodeset, 2=propertypat, 3=preparsed
+        int8_t setMode = 0;
+        if (resemblesPropertyPattern(chars, opts)) {
+            setMode = 2;
         }
 
-        if ((options & USET_IGNORE_SPACE) && uprv_isRuleWhiteSpace(c)) {
+        // -------- Parse '[' of opening delimiter OR nested set.
+        // If there is a nested set, use `setMode' to define how
+        // the set should be parsed.  If the '[' is part of the
+        // opening delimiter for this pattern, parse special
+        // strings "[", "[^", "[-", and "[^-".  Check for stand-in
+        // characters representing a nested set in the symbol
+        // table.
+
+        else {
+            // Prepare to backup if necessary
+            chars.getPos(backup);
+            c = chars.next(opts, literal, ec);
+            if (U_FAILURE(ec)) return;
+
+            if (c == 0x5B /*'['*/ && !literal) {
+                if (mode == 1) {
+                    chars.setPos(backup); // backup
+                    setMode = 1;
+                } else {
+                    // Handle opening '[' delimiter
+                    mode = 1;
+                    pat.append((UChar) 0x5B /*'['*/);
+                    chars.getPos(backup); // prepare to backup
+                    c = chars.next(opts, literal, ec); 
+                    if (U_FAILURE(ec)) return;
+                    if (c == 0x5E /*'^'*/ && !literal) {
+                        invert = TRUE;
+                        pat.append((UChar) 0x5E /*'^'*/);
+                        chars.getPos(backup); // prepare to backup
+                        c = chars.next(opts, literal, ec);
+                        if (U_FAILURE(ec)) return;
+                    }
+                    // Fall through to handle special leading '-';
+                    // otherwise restart loop for nested [], \p{}, etc.
+                    if (c == 0x2D /*'-'*/) {
+                        literal = TRUE;
+                        // Fall through to handle literal '-' below
+                    } else {
+                        chars.setPos(backup); // backup
+                        continue;
+                    }
+                }
+            } else if (symbols != 0) {
+                const UnicodeFunctor *m = symbols->lookupMatcher(c);
+                if (m != 0) {
+                    if (m->getDynamicClassID() != UnicodeSet::getStaticClassID()) {
+                        ec = U_MALFORMED_SET;
+                        return;
+                    }
+                    // casting away const, but `nested' won't be modified
+                    // (important not to modify stored set)
+                    nested = (UnicodeSet*) m;
+                    setMode = 3;
+                }
+            }
+        }
+
+        // -------- Handle a nested set.  This either is inline in
+        // the pattern or represented by a stand-in that has
+        // previously been parsed and was looked up in the symbol
+        // table.
+
+        if (setMode != 0) {
+            if (lastItem == 1) {
+                if (op != 0) {
+                    // syntaxError(chars, "Char expected after operator");
+                    ec = U_MALFORMED_SET;
+                    return;
+                }
+                add(lastChar, lastChar);
+                _appendToPat(pat, lastChar, FALSE);
+                lastItem = 0;
+                op = 0;
+            }
+
+            if (op == 0x2D /*'-'*/ || op == 0x26 /*'&'*/) {
+                pat.append(op);
+            }
+
+            if (nested == 0) {
+                if (scratch == 0) { // lazy allocation
+                    scratch = new UnicodeSet();
+                    if (scratch == 0) {
+                        ec = U_MEMORY_ALLOCATION_ERROR;
+                        return;
+                    }
+                }
+                nested = scratch;
+            }
+            switch (setMode) {
+            case 1:
+                nested->applyPattern(chars, symbols, pat, options, ec);
+                break;
+            case 2:
+                chars.skipIgnored(opts);
+                nested->applyPropertyPattern(chars, pat, ec);
+                if (U_FAILURE(ec)) return;
+                break;
+            case 3: // `nested' already parsed
+                nested->_toPattern(pat, FALSE);
+                break;
+            }
+
+            usePat = TRUE;
+
+            if (mode == 0) {
+                // Entire pattern is a category; leave parse loop
+                *this = *nested;
+                mode = 2;
+                break;
+            }
+
+            switch (op) {
+            case '-':
+                removeAll(*nested);
+                break;
+            case '&':
+                retainAll(*nested);
+                break;
+            case 0:
+                addAll(*nested);
+                break;
+            }
+
+            op = 0;
+            lastItem = 2;
+
             continue;
         }
 
-        // Keep track of the count of characters after an alleged anchor
-        if (anchor > 0) {
-            ++anchor;
+        if (mode == 0) {
+            // syntaxError(chars, "Missing '['");
+            ec = U_MALFORMED_SET;
+            return;
         }
 
-        // Parse the opening '[' and optional following '^'
-        switch (mode) {
-        case 0:
-            if (resemblesPropertyPattern(pattern, i-1)) {
-                mode = 3;
-                break; // Fall through
-            } else if (c == SET_OPEN) {
-                mode = 1; // Next look for '^' or ':'
-                continue;
-            } else {
-                // throw new IllegalArgumentException("Missing opening '['");
-                status = U_ILLEGAL_ARGUMENT_ERROR;
-                return;
-            }
-        case 1:
-            mode = 2;
+        // -------- Parse special (syntax) characters.  If the
+        // current character is not special, or if it is escaped,
+        // then fall through and handle it below.
+
+        if (!literal) {
             switch (c) {
-            case COMPLEMENT:
-                invert = TRUE;
-                newPat.append(c);
-                mode = 15;
-                continue; // Back to top to fetch next character
-            case HYPHEN:
-                isLiteral = TRUE; // Treat leading '-' as a literal
-                break; // Fall through
-            }
-            break;
-        case 15:
-            mode = 2;
-            if (c == HYPHEN) {
-                isLiteral = TRUE; // [^-...] starts with literal '-'
-            }
-            break;
-            // else fall through and parse this character normally
-        }
-
-        // After opening matter is parsed ("[", "[^", or "[:"), the mode
-        // will be 2 if we want a closing ']', or 3 if we should parse a
-        // category and close with ":]".
-
-        // Only process escapes, variable references, and nested sets
-        // if we are _not_ retrieving characters from the variable
-        // buffer.  Characters in the variable buffer have already
-        // benn through escape and variable reference processing.
-        if (varValueBuffer == NULL) {
-            /**
-             * Handle property set patterns.
-             */
-            if (resemblesPropertyPattern(pattern, i-1)) {
-                ParsePosition pp(i-1);
-                nestedAux.applyPropertyPattern(pattern, pp, status);
-                if (U_FAILURE(status)) {
-                    U_ASSERT(pp.getIndex() == i-1);
-                    //throw new IllegalArgumentException("Invalid property pattern " +
-                    //                                   pattern.substring(i-1));
+            case 0x5D /*']'*/:
+                if (lastItem == 1) {
+                    add(lastChar, lastChar);
+                    _appendToPat(pat, lastChar, FALSE);
+                }
+                // Treat final trailing '-' as a literal
+                if (op == 0x2D /*'-'*/) {
+                    add(op, op);
+                    pat.append(op);
+                } else if (op == 0x26 /*'&'*/) {
+                    // syntaxError(chars, "Trailing '&'");
+                    ec = U_MALFORMED_SET;
                     return;
                 }
-                nestedSet = &nestedAux;
-                nestedPatStart = newPat.length();
-                nestedPatDone = TRUE; // we're going to do it just below
-                
-                switch (lastOp) {
-                case HYPHEN:
-                case INTERSECTION:
-                    newPat.append(lastOp);
-                    break;
-                }
-
-                // If we have a top-level property pattern, then trim
-                // off the opening '[' and use the property pattern
-                // as the entire pattern.
-                if (mode == 3) {
-                    newPat.truncate(0);
-                }
-                UnicodeString str;
-                pattern.extractBetween(i-1, pp.getIndex(), str);
-                newPat.append(str);
-                rebuildPattern = TRUE;
-                
-                i = pp.getIndex(); // advance past property pattern
-                
-                if (mode == 3) {
-                    // Entire pattern is a category; leave parse
-                    // loop.  This is one of 2 ways we leave this
-                    // loop if the pattern is well-formed.
-                    *this = nestedAux;
-                    mode = 5;
-                    break;
-                }
-            }
-            
-            /* Handle escapes.  If a character is escaped, then it assumes its
-             * literal value.  This is true for all characters, both special
-             * characters and characters with no special meaning.  We also
-             * interpret '\\uxxxx' Unicode escapes here (as literals).
-             */
-            else if (c == BACKSLASH) {
-                UChar32 escaped = pattern.unescapeAt(i);
-                if (escaped == (UChar32) -1) {
-                    status = U_ILLEGAL_ARGUMENT_ERROR;
-                    return;
-                }
-                isLiteral = TRUE;
-                c = escaped;
-            }
-
-            /* Parse variable references.  These are treated as literals.  If a
-             * variable refers to a UnicodeSet, its stand in character is
-             * returned in the UChar[] buffer.
-             * Variable names are only parsed if varNameToChar is not null.
-             * Set variables are only looked up if varCharToSet is not null.
-             */
-            else if (symbols != NULL && !isLiteral && c == SymbolTable::SYMBOL_REF) {
-                pos.setIndex(i);
-                UnicodeString name = symbols->parseReference(pattern, pos, limit);
-                if (name.length() != 0) {
-                    varValueBuffer = symbols->lookup(name);
-                    if (varValueBuffer == NULL) {
-                        //throw new IllegalArgumentException("Undefined variable: "
-                        //                                   + name);
-                        status = U_ILLEGAL_ARGUMENT_ERROR;
-                        return;
-                    }
-                    ivarValueBuffer = 0;
-                    i = pos.getIndex(); // Make i point PAST last char of var name
-                } else {
-                    // Got a null; this means we have an isolated $.
-                    // Tentatively assume this is an anchor.
-                    anchor = 1;
-                }
-                continue; // Back to the top to get varValueBuffer[0]
-            }
-
-            /* An opening bracket indicates the first bracket of a nested
-             * subpattern.
-             */
-            else if (!isLiteral && c == SET_OPEN) {
-                // Record position before nested pattern
-                nestedPatStart = newPat.length();
-
-                // Recurse to get the pairs for this nested set.
-                // Backup i to '['.
-                pos.setIndex(--i);
-                switch (lastOp) {
-                case HYPHEN:
-                case INTERSECTION:
-                    newPat.append(lastOp);
-                    break;
-                }
-                nestedAux._applyPattern(pattern, pos, options, symbols, newPat, status);
-                nestedSet = &nestedAux;
-                nestedPatDone =  TRUE;
-                if (U_FAILURE(status)) {
-                    return;
-                }
-                i = pos.getIndex();
-            }
-
-            else if (!isLiteral && c == OPEN_BRACE) {
-                // start of a string. find the rest.
-                int32_t length = 0;
-                int32_t st = i;
-                multiCharBuffer.truncate(0);
-                while (i < pattern.length()) {
-                    UChar32 ch = pattern.char32At(i);
-                    i += UTF_CHAR_LENGTH(ch); 
-                    if (ch == CLOSE_BRACE) {
-                        length = -length; // signal that we saw '}'
-                        break;
-                    } else if (ch == BACKSLASH) {
-                        ch = pattern.unescapeAt(i);
-                        if (ch == (UChar32) -1) {
-                            status = U_ILLEGAL_ARGUMENT_ERROR;
-                            return;
+                pat.append((UChar) 0x5D /*']'*/);
+                mode = 2;
+                continue;
+            case 0x2D /*'-'*/:
+                if (op == 0) {
+                    if (lastItem != 0) {
+                        op = (UChar) c;
+                        continue;
+                    } else {
+                        // Treat final trailing '-' as a literal
+                        add(c, c);
+                        c = chars.next(opts, literal, ec);
+                        if (U_FAILURE(ec)) return;
+                        if (c == 0x5D /*']'*/ && !literal) {
+                            pat.append(HYPHEN_RIGHT_BRACE);
+                            mode = 2;
+                            continue;
                         }
                     }
-                    --length; // sic; see above
-                    multiCharBuffer.append(ch);
                 }
-                if (length < 1) {
-                    status = U_ILLEGAL_ARGUMENT_ERROR;
+                // syntaxError(chars, "'-' not after char or set");
+                ec = U_MALFORMED_SET;
+                return;
+            case 0x26 /*'&'*/:
+                if (lastItem == 2 && op == 0) {
+                    op = (UChar) c;
+                    continue;
+                }
+                // syntaxError(chars, "'&' not after set");
+                ec = U_MALFORMED_SET;
+                return;
+            case 0x5E /*'^'*/:
+                // syntaxError(chars, "'^' not after '['");
+                ec = U_MALFORMED_SET;
+                return;
+            case 0x7B /*'{'*/:
+                if (op != 0) {
+                    // syntaxError(chars, "Missing operand after operator");
+                    ec = U_MALFORMED_SET;
                     return;
+                }
+                if (lastItem == 1) {
+                    add(lastChar, lastChar);
+                    _appendToPat(pat, lastChar, FALSE);
+                }
+                lastItem = 0;
+                buf.truncate(0);
+                {
+                    UBool ok = FALSE;
+                    while (!chars.atEnd()) {
+                        c = chars.next(opts, literal, ec);
+                        if (U_FAILURE(ec)) return;
+                        if (c == 0x7D /*'}'*/ && !literal) {
+                            ok = TRUE;
+                            break;
+                        }
+                        buf.append(c);
+                    }
+                    if (buf.length() < 1 || !ok) {
+                        // syntaxError(chars, "Invalid multicharacter string");
+                        ec = U_MALFORMED_SET;
+                        return;
+                    }
                 }
                 // We have new string. Add it to set and continue;
                 // we don't need to drop through to the further
                 // processing
-                add(multiCharBuffer);
-                pattern.extractBetween(st, i, multiCharBuffer);
-                newPat.append(OPEN_BRACE).append(multiCharBuffer);
-                rebuildPattern = TRUE;
+                add(buf);
+                pat.append((UChar) 0x7B /*'{'*/);
+                _appendToPat(pat, buf, FALSE);
+                pat.append((UChar) 0x7D /*'}'*/);
                 continue;
-            }
-        }
-
-        /* At this point we have either a character c, or a nested set.  If
-         * we have encountered a nested set, either embedded in the pattern,
-         * or as a variable, we have a non-null nestedSet, and c should be
-         * ignored.  Otherwise c is the current character, and isLiteral
-         * indicates whether it is an escaped literal (or variable) or a
-         * normal unescaped character.  Unescaped characters '-', '&', and
-         * ']' have special meanings.
-         */
-        if (nestedSet != NULL) {
-            if (lastChar != NONE) {
-                if (lastOp != 0) {
-                    // throw new IllegalArgumentException("Illegal rhs for " + lastChar + lastOp);
-                    status = U_ILLEGAL_ARGUMENT_ERROR;
+            case SymbolTable::SYMBOL_REF:
+                //         symbols  nosymbols
+                // [a-$]   error    error (ambiguous)
+                // [a$]    anchor   anchor
+                // [a-$x]  var "x"* literal '$'
+                // [a-$.]  error    literal '$'
+                // *We won't get here in the case of var "x"
+                {
+                    chars.getPos(backup);
+                    c = chars.next(opts, literal, ec);
+                    if (U_FAILURE(ec)) return;
+                    UBool anchor = (c == 0x5D /*']'*/ && !literal);
+                    if (symbols == 0 && !anchor) {
+                        c = SymbolTable::SYMBOL_REF;
+                        chars.setPos(backup);
+                        break; // literal '$'
+                    }
+                    if (anchor && op == 0) {
+                        if (lastItem == 1) {
+                            add(lastChar, lastChar);
+                            _appendToPat(pat, lastChar, FALSE);
+                        }
+                        add(U_ETHER);
+                        usePat = TRUE;
+                        pat.append((UChar) SymbolTable::SYMBOL_REF);
+                        pat.append((UChar) 0x5D /*']'*/);
+                        mode = 2;
+                        continue;
+                    }
+                    // syntaxError(chars, "Unquoted '$'");
+                    ec = U_MALFORMED_SET;
                     return;
                 }
-                add(lastChar, lastChar);
-                if (nestedPatDone) {
-                    // If there was a character before the nested set,
-                    // then we need to insert it in newPat before the
-                    // pattern for the nested set.  This position was
-                    // recorded in nestedPatStart.
-                    UnicodeString s;
-                    _appendToPat(s, lastChar, FALSE);
-                    newPat.insert(nestedPatStart, s);
-                } else {
-                    _appendToPat(newPat, lastChar, FALSE);
-                }
-                lastChar = NONE;
-            }
-            switch (lastOp) {
-            case HYPHEN:
-                removeAll(*nestedSet);
-                break;
-            case INTERSECTION:
-                retainAll(*nestedSet);
-                break;
-            case 0:
-                addAll(*nestedSet);
+            default:
                 break;
             }
+        }
 
-            // Get the pattern for the nested set, if we haven't done so
-            // already.
-            if (!nestedPatDone) {
-                if (lastOp != 0) {
-                    newPat.append(lastOp);
-                }
-                nestedSet->_toPattern(newPat, FALSE);
-            }
-            rebuildPattern = TRUE;
+        // -------- Parse literal characters.  This includes both
+        // escaped chars ("\u4E01") and non-syntax characters
+        // ("a").
 
-            lastOp = 0;
-
-        } else if (!isLiteral && c == SET_CLOSE) {
-            // Final closing delimiter.  This is one of 2 ways we
-            // leave this loop if the pattern is well-formed.
-            if (anchor > 2 || anchor == 1) {
-                //throw new IllegalArgumentException("Syntax error near $" + pattern);
-                status = U_ILLEGAL_ARGUMENT_ERROR;
-                return;
-            }
-            if (anchor == 2) {
-                rebuildPattern = TRUE;
-                newPat.append((UChar)SymbolTable::SYMBOL_REF);
-                add(U_ETHER);
-            }
-            mode = 4;
+        switch (lastItem) {
+        case 0:
+            lastItem = 1;
+            lastChar = c;
             break;
-        } else if (lastOp == 0 && !isLiteral && (c == HYPHEN || c == INTERSECTION)) {
-            // assert(c <= 0xFFFF);
-            lastOp = (UChar) c;
-        } else if (lastOp == HYPHEN) {
-            if (lastChar >= c || lastChar == NONE) {
-                // Don't allow redundant (a-a) or empty (b-a) ranges;
-                // these are most likely typos.
-                //throw new IllegalArgumentException("Invalid range " + lastChar +
-                //                                       '-' + c);
-                status = U_ILLEGAL_ARGUMENT_ERROR;
-                return;
-            }
-            add(lastChar, c);
-            _appendToPat(newPat, lastChar, FALSE);
-            newPat.append(HYPHEN);
-            _appendToPat(newPat, c, FALSE);
-            lastOp = 0;
-            lastChar = NONE;
-        } else if (lastOp != 0) {
-            // We have <set>&<char> or <char>&<char>
-            // throw new IllegalArgumentException("Unquoted " + lastOp);
-            status = U_ILLEGAL_ARGUMENT_ERROR;
-            return;
-        } else {
-            if (lastChar != NONE) {
-                // We have <char><char>
+        case 1:
+            if (op == 0x2D /*'-'*/) {
+                if (lastChar >= c) {
+                    // Don't allow redundant (a-a) or empty (b-a) ranges;
+                    // these are most likely typos.
+                    // syntaxError(chars, "Invalid range");
+                    ec = U_MALFORMED_SET;
+                    return;
+                }
+                add(lastChar, c);
+                _appendToPat(pat, lastChar, FALSE);
+                pat.append(op);
+                _appendToPat(pat, c, FALSE);
+                lastItem = 0;
+                op = 0;
+            } else {
                 add(lastChar, lastChar);
-                _appendToPat(newPat, lastChar, FALSE);
+                _appendToPat(pat, lastChar, FALSE);
+                lastChar = c;
+            }
+            break;
+        case 2:
+            if (op != 0) {
+                // syntaxError(chars, "Set expected after operator");
+                ec = U_MALFORMED_SET;
+                return;
             }
             lastChar = c;
-            isLastLiteral = isLiteral;
+            lastItem = 1;
+            break;
         }
     }
 
-    if (mode < 4) {
-        // throw new IllegalArgumentException("Missing ']'");
-        status = U_ILLEGAL_ARGUMENT_ERROR;
+    if (mode != 2) {
+        // syntaxError(chars, "Missing ']'");
+        ec = U_MALFORMED_SET;
         return;
     }
 
-    // Treat a trailing '$' as indicating U_ETHER.  This code is only
-    // executed if symbols == NULL; otherwise other code parses the
-    // anchor.
-    if (lastChar == (UChar)SymbolTable::SYMBOL_REF && !isLastLiteral) {
-        rebuildPattern = TRUE;
-        newPat.append(lastChar);
-        add(U_ETHER);
-    }
-
-    else if (lastChar != NONE) {
-        add(lastChar, lastChar);
-        _appendToPat(newPat, lastChar, FALSE);
-    }
-
-    // Handle unprocessed stuff preceding the closing ']'
-    if (lastOp == HYPHEN) {
-        // Trailing '-' is treated as literal
-        add(lastOp, lastOp);
-        newPat.append(HYPHEN);
-    } else if (lastOp == INTERSECTION) {
-        // throw new IllegalArgumentException("Unquoted trailing " + lastOp);
-        status = U_ILLEGAL_ARGUMENT_ERROR;
-        return;
-    }
-
-    if (mode == 4) {
-        newPat.append(SET_CLOSE);
-    }
+    chars.skipIgnored(opts);
 
     /**
-     * If this pattern should be compiled case-insensitive, then
-     * we need to close over case BEFORE complementing.  This
-     * makes patterns like /[^abc]/i work.
+     * Handle global flags (invert, case insensitivity).  If this
+     * pattern should be compiled case-insensitive, then we need
+     * to close over case BEFORE COMPLEMENTING.  This makes
+     * patterns like /[^abc]/i work.
      */
     if ((options & USET_CASE_INSENSITIVE) != 0) {
         closeOver(USET_CASE);
     }
-
-    /**
-     * If we saw a '^' after the initial '[' of this pattern, then perform
-     * the complement.  (Inversion after '[:' is handled elsewhere.)
-     */
     if (invert) {
         complement();
     }
 
-    pos.setIndex(i);
-
-    // Use the rebuilt pattern (newPat) only if necessary.  Prefer the
+    // Use the rebuilt pattern (pat) only if necessary.  Prefer the
     // generated pattern.
-    if (rebuildPattern) {
-        rebuiltPat.append(newPat);
+    if (usePat) {
+        rebuiltPat.append(pat);
     } else {
         _generatePattern(rebuiltPat, FALSE);
     }
@@ -2971,6 +2916,33 @@ UBool UnicodeSet::resemblesPropertyPattern(const UnicodeString& pattern,
 }
 
 /**
+ * Return true if the given iterator appears to point at a
+ * property pattern.  Regardless of the result, return with the
+ * iterator unchanged.
+ * @param chars iterator over the pattern characters.  Upon return
+ * it will be unchanged.
+ * @param iterOpts RuleCharacterIterator options
+ */
+UBool UnicodeSet::resemblesPropertyPattern(RuleCharacterIterator& chars,
+                                           int32_t iterOpts) {
+    // NOTE: literal will always be FALSE, because we don't parse escapes.
+    UBool result = FALSE, literal;
+    UErrorCode ec = U_ZERO_ERROR;
+    iterOpts &= ~RuleCharacterIterator::PARSE_ESCAPES;
+    RuleCharacterIterator::Pos pos;
+    chars.getPos(pos);
+    UChar32 c = chars.next(iterOpts, literal, ec);
+    if (c == 0x5B /*'['*/ || c == 0x5C /*'\\'*/) {
+        UChar32 d = chars.next(iterOpts & ~RuleCharacterIterator::SKIP_WHITESPACE,
+                               literal, ec);
+        result = (c == 0x5B /*'['*/) ? (d == 0x3A /*':'*/) :
+                 (d == 0x4E /*'N'*/ || d == 0x70 /*'p'*/ || d == 0x50 /*'P'*/);
+    }
+    chars.setPos(pos);
+    return result && U_SUCCESS(ec);
+}
+
+/**
  * Parse the given property pattern at the given parse position.
  */
 UnicodeSet& UnicodeSet::applyPropertyPattern(const UnicodeString& pattern,
@@ -3061,6 +3033,33 @@ UnicodeSet& UnicodeSet::applyPropertyPattern(const UnicodeString& pattern,
     }
 
     return *this;
+}
+
+/**
+ * Parse a property pattern.
+ * @param chars iterator over the pattern characters.  Upon return
+ * it will be advanced to the first character after the parsed
+ * pattern, or the end of the iteration if all characters are
+ * parsed.
+ * @param rebuiltPat the pattern that was parsed, rebuilt or
+ * copied from the input pattern, as appropriate.
+ */
+void UnicodeSet::applyPropertyPattern(RuleCharacterIterator& chars,
+                                      UnicodeString& rebuiltPat,
+                                      UErrorCode& ec) {
+    if (U_FAILURE(ec)) return;
+    UnicodeString pat;
+    chars.lookahead(pat);
+    ParsePosition pos(0);
+    applyPropertyPattern(pat, pos, ec);
+    if (U_FAILURE(ec)) return;
+    if (pos.getIndex() == 0) {
+        // syntaxError(chars, "Invalid property pattern");
+        ec = U_MALFORMED_SET;
+        return;
+    }
+    chars.jumpahead(pos.getIndex());
+    rebuiltPat.append(pat, 0, pos.getIndex());
 }
 
 //----------------------------------------------------------------
