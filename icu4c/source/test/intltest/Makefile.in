@@ -23,9 +23,9 @@ BUILDDIR := $(CURR_SRCCODE_FULL_DIR)/../../
 # Simplify the path for Unix
 BUILDDIR := $(BUILDDIR:test/intltest/../../=)
 # Simplify the path for Windows
-BUILDDIR := $(BUILDDIR:test\\\\intltest/../../=)
+BUILDDIR := $(BUILDDIR:test\\intltest/../../=)
 # Simplify the path for Windows 98
-BUILDDIR := $(BUILDDIR:TEST\\\\INTLTEST/../../=)
+BUILDDIR := $(BUILDDIR:TEST\\INTLTEST/../../=)
 
 CPPFLAGS += -I$(top_builddir)/common -I$(top_srcdir)/common -I$(top_srcdir)/i18n -I$(top_srcdir)/tools/toolutil -I$(top_srcdir)/tools/ctestfw
 DEFS += -D'U_TOPSRCDIR="$(top_srcdir)/"' -D'U_TOPBUILDDIR="$(BUILDDIR)"'
