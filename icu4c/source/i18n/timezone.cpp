@@ -686,6 +686,8 @@ void TimeZone::getOffset(UDate date, UBool local, int32_t& rawOffset,
 // New available IDs API as of ICU 2.4.  Uses StringEnumeration API.
 
 class TZEnumeration : public StringEnumeration {
+private:
+
     // Map into to zones.  Our results are zone[map[i]] for
     // i=0..len-1, where zone[i] is the i-th Olson zone.  If map==NULL
     // then our results are zone[i] for i=0..len-1.  Len will be zero
@@ -693,6 +695,23 @@ class TZEnumeration : public StringEnumeration {
     int32_t* map;
     int32_t  len;
     int32_t  pos;
+
+    UBool getID(int32_t i) {
+        UErrorCode ec = U_ZERO_ERROR;
+        int32_t idLen = 0;
+        const UChar* id = NULL;
+        UResourceBundle *top = ures_openDirect(0, kZONEINFO, &ec);
+        top = ures_getByKey(top, kNAMES, top, &ec); // dereference Zones section
+        id = ures_getStringByIndex(top, i, &idLen, &ec);
+        if(U_FAILURE(ec)) {
+            unistr.truncate(0);
+        }
+        else {
+            unistr.fastCopyFrom(UnicodeString(TRUE, id, idLen));
+        }
+        ures_close(top);
+        return U_SUCCESS(ec);
+    }
 
 public:
     TZEnumeration() : map(NULL), len(0), pos(0) {
@@ -809,25 +828,6 @@ public:
 
     virtual void reset(UErrorCode& /*status*/) {
         pos = 0;
-    }
-
-private:
-
-    UBool getID(int32_t i) {
-        UErrorCode ec = U_ZERO_ERROR;
-        int32_t idLen = 0;
-        const UChar* id = NULL;
-        UResourceBundle *top = ures_openDirect(0, kZONEINFO, &ec);
-        top = ures_getByKey(top, kNAMES, top, &ec); // dereference Zones section
-        id = ures_getStringByIndex(top, i, &idLen, &ec);
-        if(U_FAILURE(ec)) {
-            unistr.truncate(0);
-        }
-        else {
-            unistr.fastCopyFrom(UnicodeString(TRUE, id, idLen));
-        }
-        ures_close(top);
-        return U_SUCCESS(ec);
     }
 
 public:
