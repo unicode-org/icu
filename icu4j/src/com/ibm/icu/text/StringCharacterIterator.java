@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/StringCharacterIterator.java,v $ 
- * $Date: 2002/02/16 03:06:15 $ 
- * $Revision: 1.3 $
+ * $Date: 2002/11/22 00:37:00 $ 
+ * $Revision: 1.4 $
  *
  *****************************************************************************************
  */
@@ -28,6 +28,7 @@ import java.text.CharacterIterator;
  * entire <code>String</code>.
  *
  * @see CharacterIterator
+ * @deprecated since 2.4, use java.text.StringCharacterIterator instead.
  */
 
 public final class StringCharacterIterator implements CharacterIterator
@@ -40,6 +41,7 @@ public final class StringCharacterIterator implements CharacterIterator
 
     /**
      * Constructs an iterator with an initial index of 0.
+     * @deprecated since 2.4, use java.text.StringCharacterIterator instead.
      */
     public StringCharacterIterator(String text)
     {
@@ -50,7 +52,8 @@ public final class StringCharacterIterator implements CharacterIterator
      * Constructs an iterator with the specified initial index.
      *
      * @param  text   The String to be iterated over
-     * @param  pos    Initial iterator position
+     * @param  pos    Initial iterator position     
+     * @deprecated since 2.4, use java.text.StringCharacterIterator instead.
      */
     public StringCharacterIterator(String text, int pos)
     {
@@ -64,7 +67,8 @@ public final class StringCharacterIterator implements CharacterIterator
      * @param  text   The String to be iterated over
      * @param  begin  Index of the first character
      * @param  end    Index of the character following the last character
-     * @param  pos    Initial iterator position
+     * @param  pos    Initial iterator position 
+     * @deprecated since 2.4, use java.text.StringCharacterIterator instead.
      */
     public StringCharacterIterator(String text, int begin, int end, int pos) {
         if (text == null) {
@@ -91,7 +95,8 @@ public final class StringCharacterIterator implements CharacterIterator
      * new StringCharacterIterator objects every time their setText method
      * is called.
      *
-     * @param  text   The String to be iterated over
+     * @param  text   The String to be iterated over 
+     * @deprecated since 2.4, use java.text.StringCharacterIterator instead.
      */
     public void setText(String text) {
         if (text == null) {
@@ -105,7 +110,8 @@ public final class StringCharacterIterator implements CharacterIterator
 
     /**
      * Implements CharacterIterator.first() for String.
-     * @see CharacterIterator#first
+     * @see CharacterIterator#first 
+     * @deprecated since 2.4, use java.text.StringCharacterIterator instead.
      */
     public char first()
     {
@@ -115,7 +121,8 @@ public final class StringCharacterIterator implements CharacterIterator
 
     /**
      * Implements CharacterIterator.last() for String.
-     * @see CharacterIterator#last
+     * @see CharacterIterator#last 
+     * @deprecated since 2.4, use java.text.StringCharacterIterator instead.
      */
     public char last()
     {
@@ -129,7 +136,8 @@ public final class StringCharacterIterator implements CharacterIterator
 
     /**
      * Implements CharacterIterator.setIndex() for String.
-     * @see CharacterIterator#setIndex
+     * @see CharacterIterator#setIndex 
+     * @deprecated since 2.4, use java.text.StringCharacterIterator instead.
      */
     public char setIndex(int p)
     {
@@ -142,7 +150,8 @@ public final class StringCharacterIterator implements CharacterIterator
 
     /**
      * Implements CharacterIterator.current() for String.
-     * @see CharacterIterator#current
+     * @see CharacterIterator#current 
+     * @deprecated since 2.4, use java.text.StringCharacterIterator instead.
      */
     public char current()
     {
@@ -156,7 +165,8 @@ public final class StringCharacterIterator implements CharacterIterator
 
     /**
      * Implements CharacterIterator.next() for String.
-     * @see CharacterIterator#next
+     * @see CharacterIterator#next 
+     * @deprecated since 2.4, use java.text.StringCharacterIterator instead.
      */
     public char next()
     {
@@ -172,7 +182,8 @@ public final class StringCharacterIterator implements CharacterIterator
 
     /**
      * Implements CharacterIterator.previous() for String.
-     * @see CharacterIterator#previous
+     * @see CharacterIterator#previous 
+     * @deprecated since 2.4, use java.text.StringCharacterIterator instead.
      */
     public char previous()
     {
@@ -187,7 +198,8 @@ public final class StringCharacterIterator implements CharacterIterator
 
     /**
      * Implements CharacterIterator.getBeginIndex() for String.
-     * @see CharacterIterator#getBeginIndex
+     * @see CharacterIterator#getBeginIndex 
+     * @deprecated since 2.4, use java.text.StringCharacterIterator instead.
      */
     public int getBeginIndex()
     {
@@ -196,7 +208,8 @@ public final class StringCharacterIterator implements CharacterIterator
 
     /**
      * Implements CharacterIterator.getEndIndex() for String.
-     * @see CharacterIterator#getEndIndex
+     * @see CharacterIterator#getEndIndex 
+     * @deprecated since 2.4, use java.text.StringCharacterIterator instead.
      */
     public int getEndIndex()
     {
@@ -205,7 +218,8 @@ public final class StringCharacterIterator implements CharacterIterator
 
     /**
      * Implements CharacterIterator.getIndex() for String.
-     * @see CharacterIterator#getIndex
+     * @see CharacterIterator#getIndex 
+     * @deprecated since 2.4, use java.text.StringCharacterIterator instead.
      */
     public int getIndex()
     {
@@ -216,7 +230,8 @@ public final class StringCharacterIterator implements CharacterIterator
      * Compares the equality of two StringCharacterIterator objects.
      * @param obj the StringCharacterIterator object to be compared with.
      * @return true if the given obj is the same as this
-     * StringCharacterIterator object; false otherwise.
+     * StringCharacterIterator object; false otherwise. 
+     * @deprecated since 2.4, use java.text.StringCharacterIterator instead.
      */
     public boolean equals(Object obj)
     {
@@ -243,7 +258,8 @@ public final class StringCharacterIterator implements CharacterIterator
 
     /**
      * Computes a hashcode for this iterator.
-     * @return A hash code
+     * @return A hash code 
+     * @deprecated since 2.4, use java.text.StringCharacterIterator instead.
      */
     public int hashCode()
     {
@@ -252,7 +268,8 @@ public final class StringCharacterIterator implements CharacterIterator
 
     /**
      * Creates a copy of this iterator.
-     * @return A copy of this
+     * @return A copy of this 
+     * @deprecated since 2.4, use java.text.StringCharacterIterator instead.
      */
     public Object clone()
     {
