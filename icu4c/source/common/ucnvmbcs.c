@@ -181,9 +181,6 @@ U_CFUNC void
 _MBCSSingleFromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
                                   UErrorCode *pErrorCode);
 
-static const uint32_t
-gb18030Ranges[13][4];
-
 static void
 fromUCallback(UConverter *cnv,
               void *context, UConverterFromUnicodeArgs *pArgs,
@@ -195,6 +192,38 @@ toUCallback(UConverter *cnv,
             void *context, UConverterToUnicodeArgs *pArgs,
             const char *codeUnits, int32_t length,
             UConverterCallbackReason reason, UErrorCode *pErrorCode);
+
+/* GB 18030 data ------------------------------------------------------------ */
+
+/* helper macros for linear values for GB 18030 four-byte sequences */
+#define LINEAR_18030(a, b, c, d) ((((a)*10+(b))*126L+(c))*10L+(d))
+
+#define LINEAR_18030_BASE LINEAR_18030(0x81, 0x30, 0x81, 0x30)
+
+#define LINEAR(x) LINEAR_18030(x>>24, (x>>16)&0xff, (x>>8)&0xff, x&0xff)
+
+/*
+ * Some ranges of GB 18030 where both the Unicode code points and the
+ * GB four-byte sequences are contiguous and are handled algorithmically by
+ * the special callback functions below.
+ * The values are start & end of Unicode & GB codes.
+ */
+static const uint32_t
+gb18030Ranges[13][4]={
+    0x10000, 0x10ffff, LINEAR(0x90308130), LINEAR(0xe3329a35),
+    0x9fa6, 0xdfff, LINEAR(0x82358f34), LINEAR(0x83389837),
+    0x0452, 0x200f, LINEAR(0x8130d239), LINEAR(0x8136a530),
+    0xe865, 0xf92b, LINEAR(0x83389838), LINEAR(0x8431cc32),
+    0x2643, 0x2e80, LINEAR(0x8137a838), LINEAR(0x8138fd37),
+    0xfa2a, 0xfe2f, LINEAR(0x8431e336), LINEAR(0x8432cc35),
+    0x3ce1, 0x4055, LINEAR(0x8231d439), LINEAR(0x8232af33),
+    0x361b, 0x3917, LINEAR(0x8230a634), LINEAR(0x8230f238),
+    0x49b8, 0x4c76, LINEAR(0x8234a132), LINEAR(0x8234e734),
+    0x4160, 0x4336, LINEAR(0x8232c938), LINEAR(0x8232f838),
+    0x478e, 0x4946, LINEAR(0x8233e839), LINEAR(0x82349639),
+    0x44d7, 0x464b, LINEAR(0x8233a430), LINEAR(0x8233c932),
+    0xffe6, 0xffff, LINEAR(0x8432e932), LINEAR(0x8432eb37)
+};
 
 /* MBCS setup functions ----------------------------------------------------- */
 
@@ -628,21 +657,21 @@ callback:
                 sourceIndex=nextSourceIndex+((const uint8_t *)pArgs->source-source);
                 source=(const uint8_t *)pArgs->source;
 
-                /* break on error */
-                if(U_FAILURE(*pErrorCode)) {
-                    offset=0;
-                    state=0;
-                    byteIndex=0;
-                    break;
-                }
-
                 /*
                  * If the callback overflowed the target, then we need to
                  * stop here with an overflow indication.
                  */
-                if(cnv->UCharErrorBufferLength>0) {
+                if(*pErrorCode==U_BUFFER_OVERFLOW_ERROR) {
+                    break;
+                } else if(cnv->UCharErrorBufferLength>0) {
                     /* target is full */
                     *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
+                    break;
+                } else if(U_FAILURE(*pErrorCode)) {
+                    /* break on error */
+                    offset=0;
+                    state=0;
+                    byteIndex=0;
                     break;
                 }
 
@@ -841,18 +870,18 @@ callback:
             sourceIndex=nextSourceIndex+((const uint8_t *)pArgs->source-source);
             source=(const uint8_t *)pArgs->source;
 
-            /* break on error */
-            if(U_FAILURE(*pErrorCode)) {
-                break;
-            }
-
             /*
              * If the callback overflowed the target, then we need to
              * stop here with an overflow indication.
              */
-            if(cnv->UCharErrorBufferLength>0) {
+            if(*pErrorCode==U_BUFFER_OVERFLOW_ERROR) {
+                break;
+            } else if(cnv->UCharErrorBufferLength>0) {
                 /* target is full */
                 *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
+                break;
+            } else if(U_FAILURE(*pErrorCode)) {
+                /* break on error */
                 break;
             }
 
@@ -1566,19 +1595,19 @@ callback:
             source=pArgs->source;
             targetCapacity=(uint8_t *)pArgs->targetLimit-target;
 
-            /* break on error */
-            if(U_FAILURE(*pErrorCode)) {
-                c=0;
-                break;
-            }
-
             /*
              * If the callback overflowed the target, then we need to
              * stop here with an overflow indication.
              */
-            if(cnv->charErrorBufferLength>0) {
+            if(*pErrorCode==U_BUFFER_OVERFLOW_ERROR) {
+                break;
+            } else if(cnv->charErrorBufferLength>0) {
                 /* target is full */
                 *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
+                break;
+            } else if(U_FAILURE(*pErrorCode)) {
+                /* break on error */
+                c=0;
                 break;
             }
 
@@ -1788,19 +1817,19 @@ callback:
             source=pArgs->source;
             targetCapacity=(uint8_t *)pArgs->targetLimit-target;
 
-            /* break on error */
-            if(U_FAILURE(*pErrorCode)) {
-                c=0;
-                break;
-            }
-
             /*
              * If the callback overflowed the target, then we need to
              * stop here with an overflow indication.
              */
-            if(cnv->charErrorBufferLength>0) {
+            if(*pErrorCode==U_BUFFER_OVERFLOW_ERROR) {
+                break;
+            } else if(cnv->charErrorBufferLength>0) {
                 /* target is full */
                 *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
+                break;
+            } else if(U_FAILURE(*pErrorCode)) {
+                /* break on error */
+                c=0;
                 break;
             }
 
@@ -2032,35 +2061,7 @@ const UConverterSharedData _MBCSData={
 
 /* ### IMPORTANT: THIS IS ALPHA-VERSION SUPPORT CODE FOR GB 18030 AND MAY CHANGE WITHOUT NOTICE */
 
-/* helper macros for linear values for GB 18030 four-byte sequences */
-#define LINEAR_18030(a, b, c, d) ((((a)*10+(b))*126L+(c))*10L+(d))
-
-#define LINEAR_18030_BASE LINEAR_18030(0x81, 0x30, 0x81, 0x30)
-
-#define LINEAR(x) LINEAR_18030(x>>24, (x>>16)&0xff, (x>>8)&0xff, x&0xff)
-
-/*
- * Some ranges of GB 18030 where both the Unicode code points and the
- * GB four-byte sequences are contiguous and are handled algorithmically by
- * the special callback functions below.
- * The values are start & end of Unicode & GB codes.
- */
-static const uint32_t
-gb18030Ranges[13][4]={
-    0x10000, 0x10ffff, LINEAR(0x90308130), LINEAR(0xe3329a35),
-    0x9fa6, 0xdfff, LINEAR(0x82358f34), LINEAR(0x83389837),
-    0x0452, 0x200f, LINEAR(0x8130d239), LINEAR(0x8136a530),
-    0xe865, 0xf92b, LINEAR(0x83389838), LINEAR(0x8431cc32),
-    0x2643, 0x2e80, LINEAR(0x8137a838), LINEAR(0x8138fd37),
-    0xfa2a, 0xfe2f, LINEAR(0x8431e336), LINEAR(0x8432cc35),
-    0x3ce1, 0x4055, LINEAR(0x8231d439), LINEAR(0x8232af33),
-    0x361b, 0x3917, LINEAR(0x8230a634), LINEAR(0x8230f238),
-    0x49b8, 0x4c76, LINEAR(0x8234a132), LINEAR(0x8234e734),
-    0x4160, 0x4336, LINEAR(0x8232c938), LINEAR(0x8232f838),
-    0x478e, 0x4946, LINEAR(0x8233e839), LINEAR(0x82349639),
-    0x44d7, 0x464b, LINEAR(0x8233a430), LINEAR(0x8233c932),
-    0xffe6, 0xffff, LINEAR(0x8432e932), LINEAR(0x8432eb37)
-};
+/* definition of LINEAR macros and gb18030Ranges see near the beginning of the file */
 
 /* the callback functions handle GB 18030 specially */
 static void
