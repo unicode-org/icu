@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/BreakIterator.java,v $
- * $Date: 2004/01/12 21:18:43 $
- * $Revision: 1.27 $
+ * $Date: 2004/01/15 22:19:50 $
+ * $Revision: 1.28 $
  *
  *****************************************************************************************
  */
@@ -685,6 +685,11 @@ public abstract class BreakIterator implements Cloneable
      * drawn from <tt>en</tt> (the <i>actual</i> locale), and
      * <tt>en_US</tt> may be the most specific locale that exists (the
      * <i>valid</i> locale).
+     *
+     * <p>Note: This method will be implemented in ICU 3.0; ICU 2.8
+     * contains a partial preview implementation.  The * <i>actual</i>
+     * locale is returned correctly, but the <i>valid</i> locale is
+     * not, in most cases.
      * @param type type of information requested, either {@link
      * com.ibm.icu.util.ULocale#VALID_LOCALE} or {@link
      * com.ibm.icu.util.ULocale#ACTUAL_LOCALE}.
