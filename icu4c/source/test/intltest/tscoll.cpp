@@ -386,7 +386,7 @@ IntlTestCollator::doTestVariant(Collator* col, const UnicodeString &source, cons
     const UChar* trg = target.getBuffer();
     UCollationResult compareResultIter = (UCollationResult)result;
 
-    if(!quick) {
+    if(1) {
       UCharIterator sIter, tIter;
       uiter_setString(&sIter, src, sLen);
       uiter_setString(&tIter, trg, tLen);
@@ -636,6 +636,15 @@ void IntlTestCollator::backAndForth(CollationElementIterator &iter)
 
     while ((o = iter.previous(status)) != CollationElementIterator::NULLORDER)
     {
+        if(index == 0) {
+          if(o == 0) {
+            continue;
+          } else { // this is an error, orders exhausted but there are non-ignorable CEs from
+            // going backwards
+            errln("Backward iteration returned a non ignorable after orders are exhausted");
+            break;
+          }
+        }
         if (o != orders[--index])
         {
             if (o == 0)
