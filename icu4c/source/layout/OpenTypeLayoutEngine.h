@@ -1,8 +1,8 @@
 
 /*
- * %W% %W%
+ * %W% %E%
  *
- * (C) Copyright IBM Corp. 1998, 1999, 2000, 2001 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998, 1999, 2000, 2001, 2002 - All Rights Reserved
  *
  */
 
@@ -118,6 +118,13 @@ protected:
 	 * by a special empty tag.
 	 */
     const LETag **fFeatureTags;
+
+        /**
+         * A list of tags in the order in which the features in
+         * the font should be applied, as opposed to using the
+         * order of the lookups in the font.
+         */
+    const LETag *fFeatureOrder;
 
 	/**
 	 * The address of the GSUB table.

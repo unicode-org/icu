@@ -40,7 +40,7 @@ public:
 protected:
     LookupProcessor(const char *baseAddress,
         Offset scriptListOffset, Offset featureListOffset, Offset lookupListOffset,
-        LETag scriptTag, LETag languageTag);
+        LETag scriptTag, LETag languageTag, const LETag *featureOrder);
 
     LookupProcessor();
 
@@ -51,6 +51,9 @@ protected:
 
     LETag					*lookupSelectArray;
     LETag					requiredFeatureTag;
+
+    le_uint16               *lookupOrderArray;
+    le_uint32               lookupOrderCount;
 };
 
 U_NAMESPACE_END

@@ -6,6 +6,7 @@
  */
 
 #include "LETypes.h"
+#include "OpenTypeUtilities.h"
 #include "LEFontInstance.h"
 #include "OpenTypeTables.h"
 #include "Features.h"
@@ -20,6 +21,8 @@ U_NAMESPACE_BEGIN
 
 LETag LookupProcessor::notSelected    = 0x00000000;
 LETag LookupProcessor::defaultFeature = 0xFFFFFFFF;
+
+LETag emptyTag = 0x00000000;
 
 
 le_uint32 LookupProcessor::applyLookupTable(const LookupTable *lookupTable, GlyphIterator *glyphIterator,
@@ -53,9 +56,8 @@ void LookupProcessor::process(LEGlyphID *glyphs, GlyphPositionAdjustment *glyphP
         return;
     }
 
-    le_uint16 lookupListCount = SWAPW(lookupListTable->lookupCount);
-
-    for (le_uint16 lookup = 0; lookup < lookupListCount; lookup += 1) {
+    for (le_uint16 order = 0; order < lookupOrderCount; order += 1) {
+        le_uint16 lookup = lookupOrderArray[order];
         LETag selectTag = lookupSelectArray[lookup];
 
         if (selectTag != notSelected) {
@@ -109,7 +111,7 @@ LETag LookupProcessor::selectFeature(le_uint16 featureIndex, LETag tagOverride) 
 
 LookupProcessor::LookupProcessor(const char *baseAddress,
         Offset scriptListOffset, Offset featureListOffset, Offset lookupListOffset,
-        LETag scriptTag, LETag languageTag)
+        LETag scriptTag, LETag languageTag, const LETag *featureOrder)
     : lookupListTable(NULL), featureListTable(NULL), lookupSelectArray(NULL),
       requiredFeatureTag(notSelected)
 {
@@ -159,6 +161,54 @@ LookupProcessor::LookupProcessor(const char *baseAddress,
 
         selectFeature(featureIndex);
     }
+
+    int lookup;
+
+    lookupOrderArray = new le_uint16[lookupListCount];
+
+    // FIXME: selectFeature looks at all the lookups for a given feature, and
+    // so does this code. It should be possible to combine the processing:
+    // use a routine that takes a featureTable (or a feature index if we add
+    // a routine to get the feature index from the tag) dumps the lookups into
+    // lookupOrderArray starting at a given index, sets the lookupSelectArray,
+    // and returns the number of lookups added. Then both branches below can
+    // call the routine - the featureOrder branch will sort as it goes, and
+    // the other branch will sort when it's done
+    if (featureOrder != 0) {
+        int tag, order = 0;
+
+	// FIXME: figure out where the default feature goes in all of this...
+	// (a hack that will work for Devamt.ttf is to just put it first)
+        for (tag = 0; featureOrder[tag] != emptyTag; tag += 1) {
+            const FeatureTable *featureTable = featureListTable->getFeatureTable(featureOrder[tag]);
+            le_uint16 lookupCount = featureTable? SWAPW(featureTable->lookupCount) : 0;
+
+            if (featureTable != 0) {
+                le_uint16 lookupCount = SWAPW(featureTable->lookupCount);
+
+                for (lookup = 0; lookup < lookupCount; lookup += 1) {
+                    lookupOrderArray[order + lookup] = SWAPW(featureTable->lookupListIndexArray[lookup]);
+                }
+
+                if (lookupCount > 1) {
+                    OpenTypeUtilities::sort(&lookupOrderArray[order], lookupCount);
+                }
+
+                order += lookupCount;
+            }
+        }
+
+        lookupOrderCount = order;
+    } else {
+	// FIXME - lookup up the features from the featureListTable by feature index,
+	// and add the lookups to the lookupOrderArray in the order they come. Sort the
+	// whole array when finished.
+        for (lookup = 0; lookup < lookupListCount; lookup += 1) {
+            lookupOrderArray[lookup] = lookup;
+        }
+
+        lookupOrderCount = lookupListCount;
+    }
 }
 
 LookupProcessor::LookupProcessor()
@@ -167,6 +217,7 @@ LookupProcessor::LookupProcessor()
 
 LookupProcessor::~LookupProcessor()
 {
+    delete[] lookupOrderArray;
     delete[] lookupSelectArray;
 };
 

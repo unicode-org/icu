@@ -164,4 +164,27 @@ le_int32 OpenTypeUtilities::search(le_uint16 value, const le_uint16 array[], le_
     return index;
 }
 
+//
+// Straight insertion sort from Knuth vol. III, pg. 81
+//
+void OpenTypeUtilities::sort(le_uint16 *array, le_int32 count)
+{
+    for (le_int32 j = 1; j < count; j += 1) {
+        le_int32 i;
+        le_uint16 v = array[j];
+
+        for (i = j - 1; i >= 0; i -= 1) {
+            if (v >= array[i]) {
+                break;
+            }
+
+            array[i + 1] = array[i];
+        }
+
+        array[i + 1] = v;
+    }
+}
+
+ 
+
 U_NAMESPACE_END
