@@ -103,7 +103,7 @@ u_shapeArabic(const UChar *source, int32_t sourceLength,
 
     /* make sure that no reserved options values are used; allow dest==NULL only for preflighting */
     if( source==NULL || sourceLength<-1 ||
-        dest==NULL && destSize!=0 || destSize<0 ||
+        (dest==NULL && destSize!=0) || destSize<0 ||
         options>=U_SHAPE_DIGIT_TYPE_RESERVED ||
         (options&U_SHAPE_LENGTH_MASK)==U_SHAPE_LENGTH_RESERVED ||
         (options&U_SHAPE_LETTERS_MASK)==U_SHAPE_LETTERS_RESERVED ||
@@ -123,8 +123,8 @@ u_shapeArabic(const UChar *source, int32_t sourceLength,
 
     /* check that source and destination do not overlap */
     if( dest!=NULL &&
-        (source<=dest && dest<source+sourceLength ||
-         dest<=source && source<dest+destSize)
+        ((source<=dest && dest<source+sourceLength) ||
+         (dest<=source && source<dest+destSize))
     ) {
         *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
         return 0;
