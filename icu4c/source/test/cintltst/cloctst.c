@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 1997-2001, International Business Machines Corporation and
+ * Copyright (c) 1997-2003, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /********************************************************************************
@@ -1310,7 +1310,7 @@ TestKeyInRootRecursive(UResourceBundle *root, UResourceBundle *currentBundle, co
                     ures_getType(subBundle));
             continue;
         }
-        else if (ures_getType(subBundle) == RES_INT_VECTOR) {
+        else if (ures_getType(subBundle) == URES_INT_VECTOR) {
             int32_t minSize;
             int32_t subBundleSize;
             int32_t idx;
@@ -1350,12 +1350,12 @@ TestKeyInRootRecursive(UResourceBundle *root, UResourceBundle *currentBundle, co
                         locale);
             }
         }
-        else if (ures_getType(subBundle) == RES_ARRAY) {
+        else if (ures_getType(subBundle) == URES_ARRAY) {
             UResourceBundle *subSubBundle = ures_getByIndex(subBundle, 0, NULL, &errorCode);
             UResourceBundle *subSubRootBundle = ures_getByIndex(subRootBundle, 0, NULL, &errorCode);
 
             if (U_SUCCESS(errorCode)
-                && (ures_getType(subSubBundle) == RES_ARRAY || ures_getType(subSubRootBundle) == RES_ARRAY))
+                && (ures_getType(subSubBundle) == URES_ARRAY || ures_getType(subSubRootBundle) == URES_ARRAY))
             {
                 /* TODO: Properly check for 2D arrays and zoneStrings */
                 if (subBundleKey != NULL && strcmp(subBundleKey, "zoneStrings") == 0) {
@@ -1497,7 +1497,7 @@ TestKeyInRootRecursive(UResourceBundle *root, UResourceBundle *currentBundle, co
             ures_close(subSubBundle);
             ures_close(subSubRootBundle);
         }
-        else if (ures_getType(subBundle) == RES_STRING) {
+        else if (ures_getType(subBundle) == URES_STRING) {
             int32_t len = 0;
             const UChar *string = ures_getString(subBundle, &len, &errorCode);
             if (U_FAILURE(errorCode) || string == NULL) {
@@ -1546,11 +1546,11 @@ TestKeyInRootRecursive(UResourceBundle *root, UResourceBundle *currentBundle, co
                 }
             }
         }
-        else if (ures_getType(subBundle) == RES_TABLE) {
+        else if (ures_getType(subBundle) == URES_TABLE) {
             /* Here is one of the recursive parts */
             TestKeyInRootRecursive(subRootBundle, subBundle, locale);
         }
-        else if (ures_getType(subBundle) == RES_BINARY || ures_getType(subBundle) == RES_INT) {
+        else if (ures_getType(subBundle) == URES_BINARY || ures_getType(subBundle) == URES_INT) {
             /* Can't do anything to check it */
             /* We'll assume it's all correct */
             if (strcmp(subBundleKey, "LocaleID") != 0) {

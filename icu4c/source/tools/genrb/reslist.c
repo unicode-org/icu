@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2000, International Business Machines
+*   Copyright (C) 2000-2003, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -99,9 +99,9 @@ static uint32_t array_write(UNewDataMemory *mem, struct SResource *res,
         i = 0;
 
         while (current != NULL) {
-            if (current->fType == RES_INT) {
+            if (current->fType == URES_INT) {
                 resources[i] = (current->fType << 28) | (current->u.fIntValue.fValue & 0xFFFFFFF);
-            } else if (current->fType == RES_BINARY) {
+            } else if (current->fType == URES_BINARY) {
                 uint32_t uo = usedOffset;
 
                 usedOffset    = res_write(mem, current, usedOffset, status);
@@ -207,9 +207,9 @@ static uint32_t table_write(UNewDataMemory *mem, struct SResource *res,
             /* where the key is plus root pointer */
             keys[i] = (uint16_t) (current->fKey + sizeof(uint32_t));
 
-            if (current->fType == RES_INT) {
+            if (current->fType == URES_INT) {
                 resources[i] = (current->fType << 28) | (current->u.fIntValue.fValue & 0xFFFFFFF);
-            } else if (current->fType == RES_BINARY) {
+            } else if (current->fType == URES_BINARY) {
                 uint32_t uo = usedOffset;
 
                 usedOffset    = res_write(mem, current, usedOffset, status);
@@ -250,19 +250,19 @@ uint32_t res_write(UNewDataMemory *mem, struct SResource *res,
 
     if (res != NULL) {
         switch (res->fType) {
-        case RES_STRING:
+        case URES_STRING:
             return string_write    (mem, res, usedOffset, status);
-        case RES_ALIAS:
+        case URES_ALIAS:
             return alias_write    (mem, res, usedOffset, status);
-        case RES_INT_VECTOR:
+        case URES_INT_VECTOR:
             return intvector_write (mem, res, usedOffset, status);
-        case RES_BINARY:
+        case URES_BINARY:
             return bin_write       (mem, res, usedOffset, status);
-        case RES_INT:
+        case URES_INT:
             return int_write       (mem, res, usedOffset, status);
-        case RES_ARRAY:
+        case URES_ARRAY:
             return array_write     (mem, res, usedOffset, status);
-        case RES_TABLE:
+        case URES_TABLE:
             return table_write     (mem, res, usedOffset, status);
 
         default:
@@ -347,7 +347,7 @@ void bundle_write(struct SRBRoot *bundle, const char *outputDir, const char *out
 
     usedOffset = sizeof(uint32_t) + bundle->fKeyPoint + pad ; /*this is how much root and keys are taking up*/
 
-    root = ((usedOffset + bundle->fRoot->u.fTable.fChildrenSize) >> 2) | (RES_TABLE << 28); /* we're gonna put the main table at the end */
+    root = ((usedOffset + bundle->fRoot->u.fTable.fChildrenSize) >> 2) | (URES_TABLE << 28); /* we're gonna put the main table at the end */
 
     udata_write32(mem, root);
 
@@ -375,7 +375,7 @@ struct SResource* table_open(struct SRBRoot *bundle, char *tag, UErrorCode *stat
         return NULL;
     }
 
-    res->fType = RES_TABLE;
+    res->fType = URES_TABLE;
     res->fKey  = bundle_addtag(bundle, tag, status);
 
     if (U_FAILURE(*status)) {
@@ -408,7 +408,7 @@ struct SResource* array_open(struct SRBRoot *bundle, char *tag, UErrorCode *stat
         return NULL;
     }
 
-    res->fType = RES_ARRAY;
+    res->fType = URES_ARRAY;
     res->fKey  = bundle_addtag(bundle, tag, status);
 
     if (U_FAILURE(*status)) {
@@ -441,7 +441,7 @@ struct SResource *string_open(struct SRBRoot *bundle, char *tag, UChar *value, i
         return NULL;
     }
 
-    res->fType = RES_STRING;
+    res->fType = URES_STRING;
     res->fKey  = bundle_addtag(bundle, tag, status);
 
     if (U_FAILURE(*status)) {
@@ -481,7 +481,7 @@ struct SResource *alias_open(struct SRBRoot *bundle, char *tag, UChar *value, in
         return NULL;
     }
 
-    res->fType = RES_ALIAS;
+    res->fType = URES_ALIAS;
     res->fKey  = bundle_addtag(bundle, tag, status);
 
     if (U_FAILURE(*status)) {
@@ -521,7 +521,7 @@ struct SResource* intvector_open(struct SRBRoot *bundle, char *tag, UErrorCode *
         return NULL;
     }
 
-    res->fType = RES_INT_VECTOR;
+    res->fType = URES_INT_VECTOR;
     res->fKey  = bundle_addtag(bundle, tag, status);
 
     if (U_FAILURE(*status)) {
@@ -558,7 +558,7 @@ struct SResource *int_open(struct SRBRoot *bundle, char *tag, int32_t value, UEr
         return NULL;
     }
 
-    res->fType = RES_INT;
+    res->fType = URES_INT;
     res->fKey  = bundle_addtag(bundle, tag, status);
 
     if (U_FAILURE(*status)) {
@@ -587,7 +587,7 @@ struct SResource *bin_open(struct SRBRoot *bundle, const char *tag, uint32_t len
         return NULL;
     }
 
-    res->fType = RES_BINARY;
+    res->fType = URES_BINARY;
     res->fKey  = bundle_addtag(bundle, tag, status);
 
     if (U_FAILURE(*status)) {
@@ -722,25 +722,25 @@ void bin_close(struct SResource *binres, UErrorCode *status) {
 void res_close(struct SResource *res, UErrorCode *status) {
     if (res != NULL) {
         switch(res->fType) {
-        case RES_STRING:
+        case URES_STRING:
             string_close(res, status);
             break;
-        case RES_ALIAS:
+        case URES_ALIAS:
             alias_close(res, status);
             break;
-        case RES_INT_VECTOR:
+        case URES_INT_VECTOR:
             intvector_close(res, status);
             break;
-        case RES_BINARY:
+        case URES_BINARY:
             bin_close(res, status);
             break;
-        case RES_INT:
+        case URES_INT:
             int_close(res, status);
             break;
-        case RES_ARRAY:
+        case URES_ARRAY:
             array_close(res, status);
             break;
-        case RES_TABLE :
+        case URES_TABLE :
             table_close(res, status);
             break;
         default:
@@ -801,9 +801,9 @@ void table_add(struct SResource *table, struct SResource *res, int linenumber, U
 
     table->u.fTable.fChildrenSize += res->fSize + calcPadding(res->fSize);
 
-    if (res->fType == RES_TABLE) {
+    if (res->fType == URES_TABLE) {
         table->u.fTable.fChildrenSize += res->u.fTable.fChildrenSize;
-    } else if (res->fType == RES_ARRAY) {
+    } else if (res->fType == URES_ARRAY) {
         table->u.fTable.fChildrenSize += res->u.fArray.fChildrenSize;
     }
 
@@ -863,9 +863,9 @@ void array_add(struct SResource *array, struct SResource *res, UErrorCode *statu
     array->fSize += sizeof(uint32_t);
     array->u.fArray.fChildrenSize += res->fSize + calcPadding(res->fSize);
 
-    if (res->fType == RES_TABLE) {
+    if (res->fType == URES_TABLE) {
         array->u.fArray.fChildrenSize += res->u.fTable.fChildrenSize;
-    } else if (res->fType == RES_ARRAY) {
+    } else if (res->fType == URES_ARRAY) {
         array->u.fArray.fChildrenSize += res->u.fArray.fChildrenSize;
     }
 }

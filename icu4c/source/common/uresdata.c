@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *                                                                             *
-* Copyright (C) 1999-2002, International Business Machines Corporation        *
+* Copyright (C) 1999-2003, International Business Machines Corporation        *
 *               and others. All Rights Reserved.                              *
 *                                                                             *
 *******************************************************************************
@@ -212,7 +212,7 @@ res_load(ResourceData *pResData,
     pResData->rootRes=*pResData->pRoot;
 
     /* currently, we accept only resources that have a Table as their roots */
-    if(RES_GET_TYPE(pResData->rootRes)!=RES_TABLE) {
+    if(RES_GET_TYPE(pResData->rootRes)!=URES_TABLE) {
         udata_close(pResData->data);
         pResData->data=NULL; 
         return FALSE;
@@ -231,7 +231,7 @@ res_unload(ResourceData *pResData) {
 
 U_CFUNC const UChar *
 res_getString(const ResourceData *pResData, const Resource res, int32_t *pLength) {
-    if(res!=RES_BOGUS && RES_GET_TYPE(res)==RES_STRING) {
+    if(res!=RES_BOGUS && RES_GET_TYPE(res)==URES_STRING) {
         int32_t *p=(int32_t *)RES_GET_POINTER(pResData->pRoot, res);
         if (pLength) {
             *pLength=*p;
@@ -247,7 +247,7 @@ res_getString(const ResourceData *pResData, const Resource res, int32_t *pLength
 
 U_CFUNC const UChar *
 res_getAlias(const ResourceData *pResData, const Resource res, int32_t *pLength) {
-    if(res!=RES_BOGUS && RES_GET_TYPE(res)==RES_ALIAS) {
+    if(res!=RES_BOGUS && RES_GET_TYPE(res)==URES_ALIAS) {
         int32_t *p=(int32_t *)RES_GET_POINTER(pResData->pRoot, res);
         if (pLength) {
             *pLength=*p;
@@ -279,7 +279,7 @@ res_getBinary(const ResourceData *pResData, const Resource res, int32_t *pLength
 
 U_CFUNC const int32_t *
 res_getIntVector(const ResourceData *pResData, const Resource res, int32_t *pLength) {
-    if(res!=RES_BOGUS && RES_GET_TYPE(res)==RES_INT_VECTOR) {
+    if(res!=RES_BOGUS && RES_GET_TYPE(res)==URES_INT_VECTOR) {
         int32_t *p=(int32_t *)RES_GET_POINTER(pResData->pRoot, res);
         *pLength=*p++;
         if (*pLength == 0) {
@@ -295,13 +295,13 @@ res_getIntVector(const ResourceData *pResData, const Resource res, int32_t *pLen
 U_CFUNC int32_t
 res_countArrayItems(const ResourceData *pResData, const Resource res) {
     if(res!=RES_BOGUS) {
-        if(RES_GET_TYPE(res)==RES_STRING) {
+        if(RES_GET_TYPE(res)==URES_STRING) {
             return 1;
-        } else if(RES_GET_TYPE(res)==RES_ARRAY) {
+        } else if(RES_GET_TYPE(res)==URES_ARRAY) {
             Resource *p=RES_GET_POINTER(pResData->pRoot, res);
             int32_t count=*(int32_t *)p;   
             return count;
-        } else if(RES_GET_TYPE(res)==RES_TABLE) {
+        } else if(RES_GET_TYPE(res)==URES_TABLE) {
             return res_getTableSize(pResData, res);
         }
     } 
@@ -332,7 +332,7 @@ res_findResource(const ResourceData *pResData, Resource r, const char** path, co
   int32_t indexR = 0, keyLen = 0;
   UResType type = RES_GET_TYPE(t1);
   
-  while(nextSepP && *pathP && t1 != RES_BOGUS && (type == RES_TABLE || type == RES_ARRAY)) { 
+  while(nextSepP && *pathP && t1 != RES_BOGUS && (type == URES_TABLE || type == URES_ARRAY)) { 
     /* Iteration stops if: the path has been consumed, we found a non-existing
      * resource (t1 == RES_BOGUS) or we found a scalar resource (including alias)
      */
@@ -350,7 +350,7 @@ res_findResource(const ResourceData *pResData, Resource r, const char** path, co
 
     /* if the resource is a table */
     /* try the key based access */
-    if(type == RES_TABLE) {
+    if(type == URES_TABLE) {
       t2 = _res_findTableItemN(pResData->pRoot, t1, pathP, keyLen, key);
       if(t2 == RES_BOGUS) { 
         /* if we fail to get the resource by key, maybe we got an index */
@@ -360,7 +360,7 @@ res_findResource(const ResourceData *pResData, Resource r, const char** path, co
           t2 = res_getTableItemByIndex(pResData, t1, indexR, key);
         }
       }
-    } else if(type == RES_ARRAY) {
+    } else if(type == URES_ARRAY) {
       t2 = _res_getArrayItem(pResData->pRoot, t1, indexR);
       *key = NULL;
     } else { /* can't do much here, except setting t2 to bogus */
@@ -409,4 +409,3 @@ res_getTableSize(const ResourceData *pResData, Resource table) {
     uint16_t *p=(uint16_t *)RES_GET_POINTER(pResData->pRoot, table);
     return *p;
 }
-

@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2002, International Business Machines
+*   Copyright (C) 2002-2003, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -477,25 +477,25 @@ res_write_xml(struct SResource *res,UErrorCode *status) {
 
     if (res != NULL) {
         switch (res->fType) {
-        case RES_STRING:
+        case URES_STRING:
              string_write_xml    (res, status);
              return;
-        case RES_ALIAS:
+        case URES_ALIAS:
              alias_write_xml     (res, status);
              return;
-        case RES_INT_VECTOR:
+        case URES_INT_VECTOR:
              intvector_write_xml (res, status);
              return;
-        case RES_BINARY:
+        case URES_BINARY:
              bin_write_xml       (res, status);
              return;
-        case RES_INT:
+        case URES_INT:
              int_write_xml       (res, status);
              return;
-        case RES_ARRAY:
+        case URES_ARRAY:
              array_write_xml     (res, status);
              return;
-        case RES_TABLE:
+        case URES_TABLE:
              table_write_xml     (res, status);
              return;
 
@@ -563,4 +563,3 @@ bundle_write_xml(struct SRBRoot *bundle, const char *outputDir,const char* outpu
     ucnv_close(conv);
 
 }
-

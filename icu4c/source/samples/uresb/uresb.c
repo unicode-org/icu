@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1999-2000, International Business Machines
+*   Copyright (C) 1999-2003, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -223,7 +223,7 @@ void printOutBundle(UFILE *out, UResourceBundle *resource, int32_t indent, UErro
     const char *key = ures_getKey(resource);
 
     switch(ures_getType(resource)) {
-    case RES_STRING :
+    case URES_STRING :
         {
             int32_t len=0;
             const UChar*thestr = ures_getString(resource, &len, status);
@@ -250,7 +250,7 @@ void printOutBundle(UFILE *out, UResourceBundle *resource, int32_t indent, UErro
             free(string);
         }
         break;
-    case RES_INT :
+    case URES_INT :
         printIndent(out, indent);
         if(key != NULL) {
             u_fprintf(out, "%s", key);
@@ -262,7 +262,7 @@ void printOutBundle(UFILE *out, UResourceBundle *resource, int32_t indent, UErro
         }
         u_fprintf(out, "\n");
         break;
-    case RES_BINARY :
+    case URES_BINARY :
         {
             int32_t len = 0;
             const int8_t *data = (const int8_t *)ures_getBinary(resource, &len, status);
@@ -291,7 +291,7 @@ void printOutBundle(UFILE *out, UResourceBundle *resource, int32_t indent, UErro
             }
         }
         break;
-    case RES_INT_VECTOR :
+    case URES_INT_VECTOR :
       {
           int32_t len = 0;
           const int32_t *data = ures_getIntVector(resource, &len, status);
@@ -318,8 +318,8 @@ void printOutBundle(UFILE *out, UResourceBundle *resource, int32_t indent, UErro
           }
       }
       break;
-    case RES_TABLE :
-    case RES_ARRAY :
+    case URES_TABLE :
+    case URES_ARRAY :
         {
             UResourceBundle *t = NULL;
             ures_resetIterator(resource);
@@ -329,7 +329,7 @@ void printOutBundle(UFILE *out, UResourceBundle *resource, int32_t indent, UErro
             }
             u_fprintf(out, "{");
             if(VERBOSE) {
-                if(ures_getType(resource) == RES_TABLE) {
+                if(ures_getType(resource) == URES_TABLE) {
                     u_fprintf(out, " // TABLE");
                 } else {
                     u_fprintf(out, " // ARRAY");

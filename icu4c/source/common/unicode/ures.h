@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 1997-2002, International Business Machines
+*   Copyright (C) 1997-2003, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *
@@ -57,22 +57,68 @@ typedef struct UResourceBundle UResourceBundle;
 
 /**
  * Numeric constants for types of resource items.
+ * @see ures_getType
  * @stable ICU 2.0
  */
 typedef enum {
-    RES_NONE=-1,
-    RES_STRING=0,
-    RES_BINARY=1,
-    RES_TABLE=2,
-  /* this resource is an alias - contains a string 
-   * that is the name of resource containing data 
-   */
-    RES_ALIAS=3, 
+    /** Resource type constant for "no resource". @draft ICU 2.6 */
+    URES_NONE=-1,
 
-    RES_INT=7,
-    RES_ARRAY=8,
+    /** Resource type constant for 16-bit Unicode strings. @draft ICU 2.6 */
+    URES_STRING=0,
 
-    RES_INT_VECTOR=14,
+    /** Resource type constant for binary data. @draft ICU 2.6 */
+    URES_BINARY=1,
+
+    /** Resource type constant for tables of key-value pairs. @draft ICU 2.6 */
+    URES_TABLE=2,
+
+    /**
+     * Resource type constant for aliases;
+     * internally stores a string which identifies the actual resource
+     * storing the data (can be in a different resource bundle).
+     * Resolved internally before delivering the actual resource through the API.
+     * @draft ICU 2.6
+     */
+    URES_ALIAS=3,
+
+    /**
+     * Resource type constant for a single 28-bit integer, interpreted as
+     * signed or unsigned by the ures_getInt() or ures_getUInt() function.
+     * @see ures_getInt
+     * @see ures_getUInt
+     * @draft ICU 2.6
+     */
+    URES_INT=7,
+
+    /** Resource type constant for arrays of resources. @draft ICU 2.6 */
+    URES_ARRAY=8,
+
+    /**
+     * Resource type constant for vectors of 32-bit integers.
+     * @see ures_getIntVector
+     * @draft ICU 2.6
+     */
+    URES_INT_VECTOR=14,
+
+
+    /** @deprecated ICU 2.6 Use the URES_ constant instead. */
+    RES_NONE=URES_NONE,
+    /** @deprecated ICU 2.6 Use the URES_ constant instead. */
+    RES_STRING=URES_STRING,
+    /** @deprecated ICU 2.6 Use the URES_ constant instead. */
+    RES_BINARY=URES_BINARY,
+    /** @deprecated ICU 2.6 Use the URES_ constant instead. */
+    RES_TABLE=URES_TABLE,
+    /** @deprecated ICU 2.6 Use the URES_ constant instead. */
+    RES_ALIAS=URES_ALIAS,
+    /** @deprecated ICU 2.6 Use the URES_ constant instead. */
+    RES_INT=URES_INT,
+    /** @deprecated ICU 2.6 Use the URES_ constant instead. */
+    RES_ARRAY=URES_ARRAY,
+    /** @deprecated ICU 2.6 Use the URES_ constant instead. */
+    RES_INT_VECTOR=URES_INT_VECTOR,
+    /** @deprecated ICU 2.6 Not used. */
     RES_RESERVED=15
 } UResType;
 
