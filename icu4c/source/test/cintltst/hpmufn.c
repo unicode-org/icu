@@ -18,6 +18,14 @@
 #include <stdlib.h>
 #include <string.h>
 
+/**
+ * This should align the memory properly on any machine.
+ */
+typedef union {
+    long    t1;
+    double  t2;
+    void   *t3;
+} ctest_AlignedMemory;
 
 static void TestHeapFunctions(void);
 static void TestMutexFunctions(void);
@@ -66,8 +74,8 @@ static char *safeGetICUDataDirectory() {
 /*
  *  Test Heap Functions.
  *    Implemented on top of the standard malloc heap.
- *    All blocks increased in size by 8 bytes, and the poiner returned to ICU is
- *       offset up by 8, which should cause a good heap corruption if one of our "blocks"
+ *    All blocks increased in size by 8 to 16 bytes, and the poiner returned to ICU is
+ *       offset up by 8 to 16, which should cause a good heap corruption if one of our "blocks"
  *       ends up being freed directly, without coming through us.
  *    Allocations are counted, to check that ICU actually does call back to us.
  */
@@ -75,9 +83,9 @@ int    gBlockCount = 0;
 const void  *gContext;
 
 static void   *myMemAlloc(const void *context, size_t size) {
-    char *retPtr = (char *)malloc(size+8);
+    char *retPtr = (char *)malloc(size+sizeof(ctest_AlignedMemory));
     if (retPtr != NULL) {
-        retPtr += 8;
+        retPtr += sizeof(ctest_AlignedMemory);
     }
     gBlockCount ++;
     return retPtr;
@@ -86,7 +94,7 @@ static void   *myMemAlloc(const void *context, size_t size) {
 static void  myMemFree(const void *context, void *mem) {
     char *freePtr = (char *)mem;
     if (freePtr != NULL) {
-        freePtr -= 8;
+        freePtr -= sizeof(ctest_AlignedMemory);
     }
     free(freePtr);
 }
@@ -98,11 +106,11 @@ static void  *myMemRealloc(const void *context, void *mem, size_t size) {
     char *retPtr;
 
     if (p!=NULL) {
-        p -= 8;
+        p -= sizeof(ctest_AlignedMemory);
     }
-    retPtr = realloc(p, size+8);
+    retPtr = realloc(p, size+sizeof(ctest_AlignedMemory));
     if (retPtr != NULL) {
-        p += 8;
+        p += sizeof(ctest_AlignedMemory);
     }
     return retPtr;
 }
