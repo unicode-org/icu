@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/ReplaceableString.java,v $ 
- * $Date: 2000/04/25 17:17:37 $ 
- * $Revision: 1.3 $
+ * $Date: 2001/10/03 00:14:22 $ 
+ * $Revision: 1.4 $
  *
  *****************************************************************************************
  */
@@ -24,7 +24,7 @@ package com.ibm.text;
  *
  * @see Replaceable
  * @author Alan Liu
- * @version $RCSfile: ReplaceableString.java,v $ $Revision: 1.3 $ $Date: 2000/04/25 17:17:37 $
+ * @version $RCSfile: ReplaceableString.java,v $ $Revision: 1.4 $ $Date: 2001/10/03 00:14:22 $
  */
 public class ReplaceableString implements Replaceable {
     private StringBuffer buf;
@@ -65,6 +65,13 @@ public class ReplaceableString implements Replaceable {
      */
     public String toString() {
         return buf.toString();
+    }
+
+    /**
+     * Return a substring of the given string.
+     */
+    public String substring(int start, int limit) {
+        return buf.substring(start, limit);
     }
 
     /**

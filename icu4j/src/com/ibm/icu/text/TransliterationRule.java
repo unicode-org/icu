@@ -4,9 +4,9 @@
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  *
- * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/TransliterationRule.java,v $ 
- * $Date: 2001/09/26 18:00:06 $ 
- * $Revision: 1.28 $
+ * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/TransliterationRule.java,v $
+ * $Date: 2001/10/03 00:14:23 $
+ * $Revision: 1.29 $
  *
  *****************************************************************************************
  */
@@ -28,7 +28,7 @@ import com.ibm.util.Utility;
  * may contain variables.  Variables represent a set of Unicode
  * characters, such as the letters <i>a</i> through <i>z</i>.
  * Variables are detected by looking up each character in a supplied
- * variable list to see if it has been so defined. 
+ * variable list to see if it has been so defined.
  *
  * <p>A rule may contain segments in its input string and segment references in
  * its output string.  A segment is a substring of the input pattern, indicated
@@ -44,7 +44,7 @@ import com.ibm.util.Utility;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: TransliterationRule.java,v $ $Revision: 1.28 $ $Date: 2001/09/26 18:00:06 $
+ * @version $RCSfile: TransliterationRule.java,v $ $Revision: 1.29 $ $Date: 2001/10/03 00:14:23 $
  */
 class TransliterationRule {
 
@@ -310,7 +310,7 @@ class TransliterationRule {
          * r1:      aakkkpppp
          * r2:     aaakkkkkpppp
          *            ^
-         * 
+         *
          * The strings must be aligned at the first character of the
          * key.  The length of r1 to the left of the alignment point
          * must be <= the length of r2 to the left; ditto for the
@@ -346,10 +346,10 @@ class TransliterationRule {
         int left2 = r2.anteContextLength;
         int right = pattern.length() - left;
         int right2 = r2.pattern.length() - left2;
-        
+
         // TODO Clean this up -- some logic might be combinable with the
         // next statement.
-        
+
         // Test for anchor masking
         if (left == left2 && right == right2 &&
             keyLength <= r2.keyLength &&
@@ -371,7 +371,7 @@ class TransliterationRule {
             pos - UTF16.getCharCount(UTF16.charAt(str, pos-1)) :
             pos - 1;
     }
-    
+
     static final int posAfter(Replaceable str, int pos) {
         return (pos >= 0 && pos < str.length()) ?
             pos + UTF16.getCharCount(UTF16.charAt(str, pos)) :
@@ -387,10 +387,10 @@ class TransliterationRule {
      * context and key characters match, but the text is not long
      * enough to match all of them.  A full match means all context
      * and key characters match.
-     * 
+     *
      * If a full match is obtained, perform a replacement, update pos,
      * and return U_MATCH.  Otherwise both text and pos are unchanged.
-     * 
+     *
      * @param text the text
      * @param pos the position indices
      * @param incremental if TRUE, test for partial matches that may
@@ -559,13 +559,13 @@ class TransliterationRule {
         if (segments == null) {
             text.replace(pos.start, keyLimit, output);
             lenDelta = output.length() - (keyLimit - pos.start);
-            if (cursorPos >= 0 && cursorPos < keyLength) {
-                // Within the key, the cursor refers to 16-bit code units
+            if (cursorPos >= 0 && cursorPos <= output.length()) {
+                // Within the output string, the cursor refers to 16-bit code units
                 newStart = pos.start + cursorPos;
             } else {
                 newStart = pos.start;
                 int n = cursorPos;
-                // Outside the key, cursorPos counts code points
+                // Outside the output string, cursorPos counts code points
                 while (n > 0) {
                     newStart += UTF16.getCharCount(UTF16.charAt(text, newStart));
                     --n;
@@ -638,7 +638,7 @@ class TransliterationRule {
                 }
             }
         }
-    
+
         oText += lenDelta;
         pos.limit += lenDelta;
         pos.contextLimit += lenDelta;
@@ -665,11 +665,11 @@ class TransliterationRule {
      * cleared out by, at the end, calling this method with a literal
      * character.
      */
-    protected void appendToRule(StringBuffer rule,
-                                int c,
-                                boolean isLiteral,
-                                boolean escapeUnprintable,
-                                StringBuffer quoteBuf) {
+    static void appendToRule(StringBuffer rule,
+                             int c,
+                             boolean isLiteral,
+                             boolean escapeUnprintable,
+                             StringBuffer quoteBuf) {
         // If we are escaping unprintables, then escape them outside
         // quotes.  <backslash>u and <backslash>U are not recognized within quotes.  The same
         // logic applies to literals, but literals are never escaped.
@@ -745,11 +745,11 @@ class TransliterationRule {
         //System.out.println("rule=" + rule.toString() + " qb=" + quoteBuf.toString());
     }
 
-    protected final void appendToRule(StringBuffer rule,
-                                      String text,
-                                      boolean isLiteral,
-                                      boolean escapeUnprintable,
-                                      StringBuffer quoteBuf) {
+    static final void appendToRule(StringBuffer rule,
+                                   String text,
+                                   boolean isLiteral,
+                                   boolean escapeUnprintable,
+                                   StringBuffer quoteBuf) {
         for (int i=0; i<text.length(); ++i) {
             appendToRule(rule, text.charAt(i), isLiteral, escapeUnprintable, quoteBuf);
         }
@@ -764,7 +764,7 @@ class TransliterationRule {
      */
     public String toRule(boolean escapeUnprintable) {
         int i;
-        
+
         StringBuffer rule = new StringBuffer();
 
         // iseg indexes into segments[] directly (not offset from FSPI)
@@ -863,7 +863,7 @@ class TransliterationRule {
                     if (show) {
                         rule.append((char)(48+d));
                     }
-                }            
+                }
                 rule.append(' ');
             }
         }
@@ -905,6 +905,9 @@ class TransliterationRule {
 
 /**
  * $Log: TransliterationRule.java,v $
+ * Revision 1.29  2001/10/03 00:14:23  alan
+ * jitterbug 73: finish quantifier and supplemental char support
+ *
  * Revision 1.28  2001/09/26 18:00:06  alan
  * jitterbug 67: sync parser with icu4c, allow unlimited, nested segments
  *
