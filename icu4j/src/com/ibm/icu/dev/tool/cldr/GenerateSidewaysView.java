@@ -15,7 +15,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -28,15 +27,10 @@ import java.util.TreeSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.xml.parsers.SAXParser;
-import javax.xml.parsers.SAXParserFactory;
-
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
-import org.xml.sax.helpers.AttributesImpl;
-import org.xml.sax.helpers.DefaultHandler;
 import org.xml.sax.helpers.XMLReaderFactory;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.ext.LexicalHandler;
@@ -47,7 +41,6 @@ import com.ibm.icu.dev.tool.UOption;
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.text.Collator;
-import com.ibm.icu.util.Currency;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.UResourceBundle;
 
@@ -109,8 +102,9 @@ import com.ibm.icu.util.UResourceBundle;
                 log.println("Processing " + contents[i]);
                 String baseName = contents[i].substring(0,contents[i].length()-4);
                 GenerateSidewaysView temp = getCLDR(baseName);
-                if (baseName.equals("zh_TW")) baseName = "zh_Hant_TW";
-                //if (baseName.equals("root")) temp.addMissing();
+                // if (baseName.equals("zh_TW")) baseName = "zh_Hant_TW";
+                // if (baseName.equals("root")) temp.addMissing();
+
                 temp.writeTo(options[DESTDIR].value, baseName);
                 sidewaysView.putData(temp.data, baseName);
                 log.flush();          
@@ -311,6 +305,7 @@ import com.ibm.icu.util.UResourceBundle;
     
     public String toString() {
         StringBuffer buffer = new StringBuffer();
+
         buffer.append("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>"+NEWLINE
         + "<!DOCTYPE ldml SYSTEM \"http://www.unicode.org/cldr/dtd/1.2/beta/ldml.dtd\">"+NEWLINE);
         
