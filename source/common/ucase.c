@@ -563,25 +563,6 @@ ucase_addCaseClosure(const UCaseProps *csp, UChar32 c, const USetAdder *sa) {
             closureLength=0;
         }
 
-#if 0
-        /* add all full case mappings */
-        if(HAS_SLOT(excWord, UCASE_EXC_FULL_MAPPINGS)) {
-            pe=pe0;
-            GET_SLOT_VALUE(excWord, UCASE_EXC_FULL_MAPPINGS, pe, fullLength);
-            ++pe;
-            fullLength&=0xffff; /* bits 16 and higher are reserved */
-            while(fullLength!=0) {
-                length=fullLength&0xf;
-                if(length!=0) {
-                    sa->addString(sa->set, (const UChar *)pe, length);
-                    pe+=length;
-                }
-                fullLength>>=4;
-            }
-            closure=(const UChar *)pe; /* behind full case mappings */
-        }
-#endif
-
         /* add the full case folding */
         if(HAS_SLOT(excWord, UCASE_EXC_FULL_MAPPINGS)) {
             pe=pe0;
