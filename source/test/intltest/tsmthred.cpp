@@ -187,7 +187,7 @@ void SimpleThread::start()
 
     pthread_attr_t attr;
 
-#ifdef HPUX
+#ifdef HPUX_CMA
 	rc = pthread_attr_create(&attr);
     rc = pthread_create(&(imp->fThread),attr,&SimpleThreadProc,(void*)this);
     pthread_attr_delete(&attr);
@@ -205,7 +205,7 @@ void SimpleThread::sleep(int32_t millis)
    sigignore(SIGALRM);
 #endif
 
-#ifdef HPUX
+#ifdef HPUX_CMA
    cma_sleep(millis/100);
 #else
    usleep(millis * 1000); 
