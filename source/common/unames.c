@@ -22,6 +22,7 @@
 #include "unicode/utypes.h"
 #include "umutex.h"
 #include "cmemory.h"
+#include "cstring.h"
 #include "unicode/uchar.h"
 #include "unicode/udata.h"
 
@@ -97,6 +98,14 @@ static uint16_t
 getAlgName(AlgorithmicRange *range, uint32_t code, UCharNameChoice nameChoice,
         char *buffer, uint16_t bufferLength);
 
+static uint16_t
+writeFactorSuffix(const uint16_t *factors, uint16_t count,
+                  const char *s, /* suffix elements */
+                  uint32_t code,
+                  uint16_t indexes[8], /* output fields from here */
+                  const char *elementBases[8], const char *elements[8],
+                  char *buffer, uint16_t bufferLength);
+
 static UBool
 enumAlgNames(AlgorithmicRange *range,
              UChar32 start, UChar32 limit,
@@ -130,23 +139,15 @@ u_charName(UChar32 code, UCharNameChoice nameChoice,
     }
 
     /* try algorithmic names first */
-    if(nameChoice==U_UNICODE_CHAR_NAME) {
-        /*
-         * Do not try algorithmic names for Unicode 1.0 because
-         * Unihan names are the same as the modern ones,
-         * extension A was only introduced with Unicode 3.0, and
-         * the Hangul syllable block was moved and changed around Unicode 1.1.5.
-         */
-        p=(uint32_t *)((uint8_t *)uCharNames+uCharNames->algNamesOffset);
-        i=*p;
-        algRange=(AlgorithmicRange *)(p+1);
-        while(i>0) {
-            if(algRange->start<=(uint32_t)code && (uint32_t)code<=algRange->end) {
-                return getAlgName(algRange, (uint32_t)code, nameChoice, buffer, (uint16_t)bufferLength);
-            }
-            algRange=(AlgorithmicRange *)((uint8_t *)algRange+algRange->size);
-            --i;
+    p=(uint32_t *)((uint8_t *)uCharNames+uCharNames->algNamesOffset);
+    i=*p;
+    algRange=(AlgorithmicRange *)(p+1);
+    while(i>0) {
+        if(algRange->start<=(uint32_t)code && (uint32_t)code<=algRange->end) {
+            return getAlgName(algRange, (uint32_t)code, nameChoice, buffer, (uint16_t)bufferLength);
         }
+        algRange=(AlgorithmicRange *)((uint8_t *)algRange+algRange->size);
+        --i;
     }
 
     /* normal character name */
@@ -181,6 +182,10 @@ u_enumCharNames(UChar32 start, UChar32 limit,
                 void *context,
                 UCharNameChoice nameChoice,
                 UErrorCode *pErrorCode) {
+    AlgorithmicRange *algRange;
+    uint32_t *p;
+    uint32_t i;
+
     if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
         return;
     }
@@ -201,48 +206,41 @@ u_enumCharNames(UChar32 start, UChar32 limit,
         return;
     }
 
-    if(nameChoice==U_UNICODE_CHAR_NAME) {
-        /* for modern Unicode character names, interleave the data-driven ones with the algorithmic ones */
-        AlgorithmicRange *algRange;
-        uint32_t *p;
-        uint32_t i;
-
-        /* iterate over all algorithmic ranges; assume that they are in ascending order */
-        p=(uint32_t *)((uint8_t *)uCharNames+uCharNames->algNamesOffset);
-        i=*p;
-        algRange=(AlgorithmicRange *)(p+1);
-        while(i>0) {
-            /* enumerate the character names before the current algorithmic range */
-            /* here: start<limit */
-            if((uint32_t)start<algRange->start) {
-                if((uint32_t)limit<=algRange->start) {
-                    enumNames(uCharNames, start, limit, fn, context, nameChoice);
-                    return;
-                }
-                if(!enumNames(uCharNames, start, (UChar32)algRange->start, fn, context, nameChoice)) {
-                    return;
-                }
-                start=(UChar32)algRange->start;
+    /* interleave the data-driven ones with the algorithmic ones */
+    /* iterate over all algorithmic ranges; assume that they are in ascending order */
+    p=(uint32_t *)((uint8_t *)uCharNames+uCharNames->algNamesOffset);
+    i=*p;
+    algRange=(AlgorithmicRange *)(p+1);
+    while(i>0) {
+        /* enumerate the character names before the current algorithmic range */
+        /* here: start<limit */
+        if((uint32_t)start<algRange->start) {
+            if((uint32_t)limit<=algRange->start) {
+                enumNames(uCharNames, start, limit, fn, context, nameChoice);
+                return;
             }
-            /* enumerate the character names in the current algorithmic range */
-            /* here: algRange->start<=start<limit */
-            if((uint32_t)start<=algRange->end) {
-                if((uint32_t)limit<=(algRange->end+1)) {
-                    enumAlgNames(algRange, start, limit, fn, context, nameChoice);
-                    return;
-                }
-                if(!enumAlgNames(algRange, start, (UChar32)algRange->end+1, fn, context, nameChoice)) {
-                    return;
-                }
-                start=(UChar32)algRange->end+1;
+            if(!enumNames(uCharNames, start, (UChar32)algRange->start, fn, context, nameChoice)) {
+                return;
             }
-            /* continue to the next algorithmic range (here: start<limit) */
-            algRange=(AlgorithmicRange *)((uint8_t *)algRange+algRange->size);
-            --i;
+            start=(UChar32)algRange->start;
         }
+        /* enumerate the character names in the current algorithmic range */
+        /* here: algRange->start<=start<limit */
+        if((uint32_t)start<=algRange->end) {
+            if((uint32_t)limit<=(algRange->end+1)) {
+                enumAlgNames(algRange, start, limit, fn, context, nameChoice);
+                return;
+            }
+            if(!enumAlgNames(algRange, start, (UChar32)algRange->end+1, fn, context, nameChoice)) {
+                return;
+            }
+            start=(UChar32)algRange->end+1;
+        }
+        /* continue to the next algorithmic range (here: start<limit) */
+        algRange=(AlgorithmicRange *)((uint8_t *)algRange+algRange->size);
+        --i;
     }
     /* enumerate the character names after the last algorithmic range */
-    /* for Unicode 1.0 names, use only the data-driven ones */
     enumNames(uCharNames, start, limit, fn, context, nameChoice);
 }
 
@@ -589,10 +587,24 @@ getAlgName(AlgorithmicRange *range, uint32_t code, UCharNameChoice nameChoice,
         char *buffer, uint16_t bufferLength) {
     uint16_t bufferPos=0;
 
+    /*
+     * Do not write algorithmic Unicode 1.0 names because
+     * Unihan names are the same as the modern ones,
+     * extension A was only introduced with Unicode 3.0, and
+     * the Hangul syllable block was moved and changed around Unicode 1.1.5.
+     */
+    if(nameChoice!=U_UNICODE_CHAR_NAME) {
+        /* zero-terminate */
+        if(bufferLength>0) {
+            *buffer=0;
+        }
+        return 0;
+    }
+
     switch(range->type) {
     case 0: {
         /* name = prefix hex-digits */
-        char *s=(char *)(range+1);
+        const char *s=(const char *)(range+1);
         char c;
 
         uint16_t i, count;
@@ -628,72 +640,19 @@ getAlgName(AlgorithmicRange *range, uint32_t code, UCharNameChoice nameChoice,
     }
     case 1: {
         /* name = prefix factorized-elements */
-        uint16_t *factors=(uint16_t *)(range+1);
-        char *s=(char *)(factors+range->variant);
+        uint16_t indexes[8];
+        const uint16_t *factors=(const uint16_t *)(range+1);
+        uint16_t count=range->variant;
+        const char *s=(const char *)(factors+count);
         char c;
-
-        uint16_t indeces[8];
-        uint16_t i, count, factor;
 
         /* copy prefix */
         while((c=*s++)!=0) {
             WRITE_CHAR(buffer, bufferLength, bufferPos, c);
         }
 
-        /* write elements according to the factors */
-        code-=range->start;
-
-        /*
-         * the factorized elements are determined by modulo arithmetic
-         * with the factors of this algorithm
-         *
-         * note that for fewer operations, count is decremented here
-         */
-        count=(uint16_t)(range->variant-1);
-        for(i=count; i>0; --i) {
-            factor=factors[i];
-            indeces[i]=(uint16_t)(code%factor);
-            code/=factor;
-        }
-        /*
-         * we don't need to calculate the last modulus because start<=code<=end
-         * guarantees here that code<=factors[0]
-         */
-        indeces[0]=(uint16_t)code;
-
-        /* write each element */
-        for(;;) {
-            /* skip indeces[i] strings */
-            factor=indeces[i];
-            while(factor>0) {
-                while(*s++!=0) {}
-                --factor;
-            }
-
-            /* write element */
-            while((c=*s++)!=0) {
-                WRITE_CHAR(buffer, bufferLength, bufferPos, c);
-            }
-
-            /* we do not need to perform the rest of this loop for i==count - break here */
-            if(i>=count) {
-                break;
-            }
-
-            /* skip the rest of the strings for this factors[i] */
-            factor=(uint16_t)(factors[i]-indeces[i]-1);
-            while(factor>0) {
-                while(*s++!=0) {}
-                --factor;
-            }
-
-            ++i;
-        }
-
-        /* zero-terminate */
-        if(bufferLength>0) {
-            *buffer=0;
-        }
+        bufferPos+=writeFactorSuffix(factors, count,
+                                     s, code-range->start, indexes, NULL, NULL, buffer, bufferLength);
         break;
     }
     default:
@@ -708,11 +667,213 @@ getAlgName(AlgorithmicRange *range, uint32_t code, UCharNameChoice nameChoice,
     return bufferPos;
 }
 
+static uint16_t
+writeFactorSuffix(const uint16_t *factors, uint16_t count,
+                  const char *s, /* suffix elements */
+                  uint32_t code,
+                  uint16_t indexes[8], /* output fields from here */
+                  const char *elementBases[8], const char *elements[8],
+                  char *buffer, uint16_t bufferLength) {
+    uint16_t i, factor, bufferPos=0;
+    char c;
+
+    /* write elements according to the factors */
+
+    /*
+     * the factorized elements are determined by modulo arithmetic
+     * with the factors of this algorithm
+     *
+     * note that for fewer operations, count is decremented here
+     */
+    --count;
+    for(i=count; i>0; --i) {
+        factor=factors[i];
+        indexes[i]=(uint16_t)(code%factor);
+        code/=factor;
+    }
+    /*
+     * we don't need to calculate the last modulus because start<=code<=end
+     * guarantees here that code<=factors[0]
+     */
+    indexes[0]=(uint16_t)code;
+
+    /* write each element */
+    for(;;) {
+        if(elementBases!=NULL) {
+            *elementBases++=s;
+        }
+
+        /* skip indexes[i] strings */
+        factor=indexes[i];
+        while(factor>0) {
+            while(*s++!=0) {}
+            --factor;
+        }
+        if(elements!=NULL) {
+            *elements++=s;
+        }
+
+        /* write element */
+        while((c=*s++)!=0) {
+            WRITE_CHAR(buffer, bufferLength, bufferPos, c);
+        }
+
+        /* we do not need to perform the rest of this loop for i==count - break here */
+        if(i>=count) {
+            break;
+        }
+
+        /* skip the rest of the strings for this factors[i] */
+        factor=(uint16_t)(factors[i]-indexes[i]-1);
+        while(factor>0) {
+            while(*s++!=0) {}
+            --factor;
+        }
+
+        ++i;
+    }
+
+    /* zero-terminate */
+    if(bufferLength>0) {
+        *buffer=0;
+    }
+
+    return bufferPos;
+}
+
 static UBool
 enumAlgNames(AlgorithmicRange *range,
              UChar32 start, UChar32 limit,
              UEnumCharNamesFn *fn, void *context,
              UCharNameChoice nameChoice) {
-    /* ### */
+    char buffer[200];
+    uint16_t length;
+
+    if(nameChoice!=U_UNICODE_CHAR_NAME) {
+        return TRUE;
+    }
+
+    /* enumerate the rest of the names in this range */
+    switch(range->type) {
+    case 0: {
+        char *s, *end;
+        char c;
+
+        /* get the full name of the start character */
+        length=getAlgName(range, (uint32_t)start, nameChoice, buffer, sizeof(buffer));
+        if(length<=0) {
+            return TRUE;
+        }
+
+        /* call the enumerator function with this first character */
+        if(!fn(context, start, nameChoice, buffer, length)) {
+            return FALSE;
+        }
+
+        /* go to the end of the name; all these names have the same length */
+        end=buffer;
+        while(*end!=0) {
+            ++end;
+        }
+
+        /* enumerate the rest of the names */
+        while(++start<limit) {
+            /* increment the hexadecimal number on a character-basis */
+            s=end;
+            do {
+                c=*--s;
+                if('0'<=c && c<'9' || 'A'<=c && c<'F') {
+                    *s=c+1;
+                    break;
+                } else if(c=='9') {
+                    *s='A';
+                    break;
+                } else if(c=='F') {
+                    *s='0';
+                }
+            } while(1);
+
+            if(!fn(context, start, nameChoice, buffer, length)) {
+                return FALSE;
+            }
+        }
+        break;
+    }
+    case 1: {
+        uint16_t indexes[8];
+        const char *elementBases[8], *elements[8];
+        const uint16_t *factors=(const uint16_t *)(range+1);
+        uint16_t count=range->variant;
+        const char *s=(const char *)(factors+count);
+        char *suffix, *t;
+        uint16_t prefixLength, i, index;
+
+        char c;
+
+        /* name = prefix factorized-elements */
+
+        /* copy prefix */
+        suffix=buffer;
+        prefixLength=0;
+        while((c=*s++)!=0) {
+            *suffix++=c;
+            ++prefixLength;
+        }
+
+        /* append the suffix of the start character */
+        length=prefixLength+writeFactorSuffix(factors, count,
+                                              s, (uint32_t)start-range->start,
+                                              indexes, elementBases, elements,
+                                              suffix, (uint16_t)(sizeof(buffer)-prefixLength));
+
+        /* call the enumerator function with this first character */
+        if(!fn(context, start, nameChoice, buffer, length)) {
+            return FALSE;
+        }
+
+        /* enumerate the rest of the names */
+        while(++start<limit) {
+            /* increment the indexes in lexical order bound by the factors */
+            i=count;
+            do {
+                index=indexes[--i]+1;
+                if(index<factors[i]) {
+                    /* skip one index and its element string */
+                    indexes[i]=index;
+                    s=elements[i];
+                    while(*s++!=0) {}
+                    elements[i]=s;
+                    break;
+                } else {
+                    /* reset this index to 0 and its element string to the first one */
+                    indexes[i]=0;
+                    elements[i]=elementBases[i];
+                }
+            } while(1);
+
+            /* to make matters a little easier, just append all elements to the suffix */
+            t=suffix;
+            length=prefixLength;
+            for(i=0; i<count; ++i) {
+                s=elements[i];
+                while((c=*s++)!=0) {
+                    *t++=c;
+                    ++length;
+                }
+            }
+            /* zero-terminate */
+            *t=0;
+
+            if(!fn(context, start, nameChoice, buffer, length)) {
+                return FALSE;
+            }
+        }
+        break;
+    }
+    default:
+        /* undefined type */
+        break;
+    }
+
     return TRUE;
 }
