@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/util/Attic/Utility.java,v $
- * $Date: 2001/11/07 18:48:23 $
- * $Revision: 1.10 $
+ * $Date: 2001/11/20 00:25:27 $
+ * $Revision: 1.11 $
  *
  *****************************************************************************************
  */
@@ -1045,5 +1045,66 @@ public final class Utility {
         b.delete(0, i);
         for (i=b.length()-1; i>=0 && Character.isWhitespace(b.charAt(i)); --i) {}
         return b.delete(i+1, b.length());
+    }
+
+    // "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    static final char DIGITS[] = {
+        48,49,50,51,52,53,54,55,56,57,
+        65,66,67,68,69,70,71,72,73,74,
+        75,76,77,78,79,80,81,82,83,84,
+        85,86,87,88,89,90
+    };
+
+    /**
+     * Append a number to the given StringBuffer in the radix 10
+     * generating at least one digit.
+     */
+    public static StringBuffer appendNumber(StringBuffer result, int n) {
+        return appendNumber(result, n, 10, 1);
+    }
+
+    /**
+     * Append a number to the given StringBuffer in the given radix.
+     * Standard digits '0'-'9' are used and letters 'A'-'Z' for
+     * radices 11 through 36.
+     * @param result the digits of the number are appended here
+     * @param n the number to be converted to digits; may be negative.
+     * If negative, a '-' is prepended to the digits.
+     * @param radix a radix from 2 to 36 inclusive.
+     * @param minDigits the minimum number of digits, not including
+     * any '-', to produce.  Values less than 2 have no effect.  One
+     * digit is always emitted regardless of this parameter.
+     * @return a reference to result
+     */
+    public static StringBuffer appendNumber(StringBuffer result, int n,
+                                            int radix, int minDigits) {
+        if (radix < 2 || radix > 36) {
+            // Bogus radix
+            throw new IllegalArgumentException("Illegal radix " + radix);
+        }
+        // Handle negatives
+        if (n < 0) {
+            n = -n;
+            result.append('-');
+        }
+        // First determine the number of digits
+        int nn = n;
+        int r = 1;
+        while (nn >= radix) {
+            nn /= radix;
+            r *= radix;
+            --minDigits;
+        }
+        // Now generate the digits
+        while (--minDigits > 0) {
+            result.append(DIGITS[0]);
+        }
+        while (r > 0) {
+            int digit = n / r;
+            result.append(DIGITS[digit]);
+            n -= digit * r;
+            r /= radix;
+        }
+        return result;
     }
 }
