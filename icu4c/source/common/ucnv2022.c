@@ -1,3 +1,4 @@
+#include <stdio.h>
 /*
 **********************************************************************
 *   Copyright (C) 2000-2001, International Business Machines
@@ -74,6 +75,7 @@ typedef enum {
 }Cnv2022Type;
 
 #define UCNV_OPTIONS_VERSION_MASK 0xf
+#define UCNV_2022_MAX_CONVERTERS 10
 
 typedef struct{
     UConverter *currentConverter;
@@ -84,7 +86,7 @@ typedef struct{
     StateEnum toUnicodeSaveState;
     Cnv2022Type currentType;
     int plane;
-    UConverter* myConverterArray[10];
+    UConverter* myConverterArray[UCNV_2022_MAX_CONVERTERS];
     UBool isEscapeAppended;
     UBool isShiftAppended;
     UBool isLocaleSpecified;
@@ -671,24 +673,19 @@ _ISO2022Close(UConverter *converter) {
    UConverter **array = myData->myConverterArray;
 
     if (converter->extraInfo != NULL) {
-        if(!converter->isCopyLocal){
-            /*close the array of converter pointers and free the memory*/
-            while(*array!=NULL){
-                if(*array==myData->currentConverter){
-                   myData->currentConverter=NULL;
-                }
-                ucnv_close(*array++);
+        /*close the array of converter pointers and free the memory*/
+        while(*array!=NULL){
+            if(*array==myData->currentConverter){
+                myData->currentConverter=NULL;
+            }
+            ucnv_close(*array++);
+            
+        }
 
-            }
-            ucnv_close(myData->currentConverter);
+        ucnv_close(myData->currentConverter); /* if not closed above */
+
+        if(!converter->isCopyLocal){
             uprv_free (converter->extraInfo);
-        }else{
-            /* close the currentConverter if and only if the 
-             * ISO-2022 framework converter
-             */
-            if(!myData->isLocaleSpecified){  
-                ucnv_close(myData->currentConverter);
-            }
         }
     }
 }
@@ -3284,9 +3281,13 @@ struct cloneStruct
     UConverter cnv;
     UConverterDataISO2022 mydata;
     UConverter currentCnv; /**< for ISO_2022 converter if the current converter is open */
+
+    UConverter clonedConverters[1]; /* Actually a variable sized array for all of the sub converters to be cloned. */
 };
 
-static UConverter * 
+
+/* static */
+ UConverter * 
 _ISO_2022_SafeClone(
             const UConverter *cnv, 
             void *stackBuffer, 
@@ -3296,13 +3297,55 @@ _ISO_2022_SafeClone(
     struct cloneStruct * localClone;
     int32_t bufferSizeNeeded = sizeof(struct cloneStruct);
     UConverterDataISO2022* cnvData = (UConverterDataISO2022*)cnv->extraInfo;
+    int32_t i;
+    int32_t sizes[UCNV_2022_MAX_CONVERTERS];
+    int32_t numConverters = 0;
+    int32_t currentConverterIndex = -1;
+    int32_t fromUnicodeConverterIndex = -1;
+    int32_t currentConverterSize = 0;
+    char *ptr; /* buffer pointer */
 
-    if (U_FAILURE(*status)){
+    if (U_FAILURE(*status)) {
         return 0;
     }
 
-    if (*pBufferSize == 0){ /* 'preflighting' request - set needed size into *pBufferSize */
+    for(i=0;(i<UCNV_2022_MAX_CONVERTERS)&&cnvData->myConverterArray[i];i++) {
+        int32_t size;
+	
+        size = 0;
+        ucnv_safeClone(cnvData->myConverterArray[i], NULL, &size, status);
+        bufferSizeNeeded += size;
+        sizes[i] = size;
+        numConverters++;
+
+        if(cnvData->currentConverter == cnvData->myConverterArray[i]) {
+            currentConverterIndex = i;
+        }
+
+        if(cnvData->fromUnicodeConverter == cnvData->myConverterArray[i]) {
+            fromUnicodeConverterIndex = i;
+        }
+    }
+
+    if(currentConverterIndex == -1) {  /* -1 means - not found in array. Clone separately */
+	currentConverterSize = 0;
+	if(cnvData->currentConverter) { 
+	    ucnv_safeClone(cnvData->currentConverter, NULL, &currentConverterSize, status);
+	    bufferSizeNeeded += currentConverterSize;
+	}
+    }
+    
+    for(;i<UCNV_2022_MAX_CONVERTERS;i++) { /* zero the other sizes */
+        sizes[i]=0;
+    }
+
+    if (*pBufferSize == 0) { /* 'preflighting' request - set needed size into *pBufferSize */
         *pBufferSize = bufferSizeNeeded;
+        return 0;
+    }
+
+    if(*pBufferSize < bufferSizeNeeded) {
+        *status = U_BUFFER_OVERFLOW_ERROR;
         return 0;
     }
 
@@ -3311,21 +3354,47 @@ _ISO_2022_SafeClone(
 
     uprv_memcpy(&localClone->mydata, cnv->extraInfo, sizeof(UConverterDataISO2022));
 
-    /* clone the current converter if it is open in ISO-2022 converter and since it 
-     * preserves conversion state in currentConverter object we need to clone it
-     */
-    if((!cnvData->isLocaleSpecified && cnvData->currentConverter!=NULL) ||
+    /* clone back sub cnvs */
+    
+    ptr = (char*)&localClone->clonedConverters;
+    for(i=0;i<numConverters;i++) {
+        int32_t size;
+        size = sizes[i];
+        localClone->mydata.myConverterArray[i] = ucnv_safeClone(cnvData->myConverterArray[i], (UConverter*)ptr, &size, status);
+        ptr += size;
+    }
+    for(;i<UCNV_2022_MAX_CONVERTERS;i++) {
+        localClone->mydata.myConverterArray[i] = NULL;
+    }
+    
+    if(currentConverterIndex == -1) { /* -1 = not found in list */
         /* KR version 1 also uses the state in currentConverter for preserving state
          * so we need to clone it too!
          */
-        (cnvData->isLocaleSpecified && cnvData->locale[0]=='k' && cnvData->version==1)){
+        if(cnvData->currentConverter) { 
+            localClone->mydata.currentConverter = ucnv_safeClone(cnvData->currentConverter, ptr, &currentConverterSize, status);
+	    ptr += currentConverterSize;
+        } else {
+            localClone->mydata.currentConverter = NULL;
+        }
+    } else {
+        localClone->mydata.currentConverter = localClone->mydata.myConverterArray[currentConverterIndex];
+    }
 
-        uprv_memcpy(&localClone->currentCnv, cnvData->currentConverter, sizeof(UConverter));
-        
-        localClone->mydata.currentConverter = &localClone->currentCnv;       
+    if(fromUnicodeConverterIndex != -1) {
+        /* fromUnicodeConverter is in the list */
+        localClone->mydata.fromUnicodeConverter = localClone->mydata.myConverterArray[fromUnicodeConverterIndex];
+    } else if(cnvData->currentConverter == cnvData->fromUnicodeConverter) {
+        /* fromUnicodeConverter is the same as currentConverter */
+        localClone->mydata.fromUnicodeConverter = localClone->mydata.currentConverter;
+    } else {
+        /* fromUnicodeConverter is NULL */
+        localClone->mydata.fromUnicodeConverter = NULL;
     }
         
-    localClone->cnv.extraInfo = &localClone->mydata;
+    localClone->cnv.extraInfo = &localClone->mydata; /* set pointer to extra data */
 
     return &localClone->cnv;
 }
+
+

@@ -42,16 +42,43 @@ void UCNV_DEBUG_LOG(char *what, char *who, void *p, int l)
    static FILE *f = NULL;
    if(f==NULL)
    {
-       f = fopen("c:\\UCNV_DEBUG_LOG.txt", "w");
+     /* stderr, or open another file */
+     f = stderr;
+     /*  f = fopen("c:\\UCNV_DEBUG_LOG.txt", "w"); */
    }
-   fprintf(f, "%-20s %-10s %p@%d\n",
-        who,what,p,l);
+
+   fprintf(f, "%p\t:%d\t%-20s\t%-10s\n",
+           p, l, who, what);
+
    fflush(f);
 }
+
+
+/* dump the contents of a converter */
+static void UCNV_DEBUG_CNV(UConverter *c, int line)
+{
+    UErrorCode err = U_ZERO_ERROR;
+    fprintf(stderr, "%p\t:%d\t", c, line);
+    if(c!=NULL) {
+        fprintf(stderr, "%s\t", ucnv_getName(c, &err));
+        
+        fprintf(stderr, "shr=%p, ref=%x\n", 
+                c->sharedData,
+                c->sharedData->referenceCounter);
+    } else { 
+        fprintf(stderr, "DEMISED\n");
+    }
+}
+
+# define UCNV_DEBUG 1
 # define UCNV_DEBUG_LOG(x,y,z) UCNV_DEBUG_LOG(x,y,z,__LINE__)
+# define UCNV_DEBUG_CNV(c) UCNV_DEBUG_CNV(c, __LINE__)
 #else
 # define UCNV_DEBUG_LOG(x,y,z)
+# define UCNV_DEBUG_CNV(c)
 #endif
+
+
 
 /* size of intermediate and preflighting buffers in ucnv_convert() */
 #define CHUNK_SIZE 5*1024
@@ -86,11 +113,17 @@ U_CAPI UConverter* U_EXPORT2
 ucnv_open (const char *name,
                        UErrorCode * err)
 {
+    UConverter *r;
+
     if (err == NULL || U_FAILURE (*err)) {
+        UCNV_DEBUG_LOG("open", name, NULL);
         return NULL;
     }
 
-    return ucnv_createConverter(name, err);
+    r =  ucnv_createConverter(name, err);
+    UCNV_DEBUG_LOG("open", name, r);
+    UCNV_DEBUG_CNV(r);
+    return r;
 }
 
 U_CAPI UConverter* U_EXPORT2 
@@ -173,10 +206,16 @@ ucnv_safeClone(const UConverter* cnv, void *stackBuffer, int32_t *pBufferSize, U
     if (status == NULL || U_FAILURE(*status)){
         return 0;
     }
+
     if (!pBufferSize || !cnv){
        *status = U_ILLEGAL_ARGUMENT_ERROR;
         return 0;
     }
+
+    UCNV_DEBUG_LOG("cloning FROM", ucnv_getName(cnv,status), cnv);
+    UCNV_DEBUG_LOG("cloning WITH", "memory", stackBuffer);
+    UCNV_DEBUG_CNV(cnv);
+
     /* Pointers on 64-bit platforms need to be aligned
      * on a 64-bit boundry in memory.
      */
@@ -227,6 +266,16 @@ ucnv_safeClone(const UConverter* cnv, void *stackBuffer, int32_t *pBufferSize, U
         localConverter = (UConverter*) stackBuffer;
     }
 
+    /* Copy initial state */
+    uprv_memcpy(localConverter, cnv, sizeof(UConverter));
+    localConverter->isCopyLocal = FALSE;
+
+    /* now either call the safeclone fcn or not */
+    if (cnv->sharedData->impl->safeClone != NULL) {
+        /* call the custom safeClone function */
+        localConverter = cnv->sharedData->impl->safeClone(cnv, localConverter, pBufferSize, status);
+    }
+
     /* increment refcount of shared data if needed */
     if (cnv->sharedData->referenceCounter != ~0) {
         umtx_lock (NULL);
@@ -236,18 +285,24 @@ ucnv_safeClone(const UConverter* cnv, void *stackBuffer, int32_t *pBufferSize, U
         umtx_unlock (NULL);
     }
 
-    /* Copy initial state */
-    uprv_memcpy(localConverter, cnv, sizeof(UConverter));
-
-    /* now either call the safeclone fcn or not */
-    if (cnv->sharedData->impl->safeClone != NULL) {
-        /* call the custom safeClone function */
-        localConverter = cnv->sharedData->impl->safeClone(cnv, localConverter, pBufferSize, status);
+    if(localConverter==NULL || U_FAILURE(*status)) {
+        return NULL;
     }
 
     if(localConverter == (UConverter*)stackBuffer) {
         /* we're using user provided data - set to not destroy */
         localConverter->isCopyLocal = TRUE;
+#ifdef UCNV_DEBUG
+        fprintf(stderr, "%p\t:%d\t\t==stackbuffer %p, isCopyLocal TRUE\n",
+                localConverter, __LINE__, stackBuffer);
+#endif
+
+    } else {
+#ifdef UCNV_DEBUG
+        fprintf(stderr, "%p\t:%d\t\t!=stackbuffer %p, isCopyLocal left at %s\n",
+                localConverter, __LINE__, stackBuffer,
+                localConverter->isCopyLocal?"TRUE":"FALSE");
+#endif
     }
 
     /* allow callback functions to handle any memory allocation */
@@ -256,6 +311,11 @@ ucnv_safeClone(const UConverter* cnv, void *stackBuffer, int32_t *pBufferSize, U
     cnv->fromCharErrorBehaviour(cnv->toUContext, &toUArgs, NULL, 0, UCNV_CLONE, &cbErr);
     cbErr = U_ZERO_ERROR;
     cnv->fromUCharErrorBehaviour(cnv->fromUContext, &fromUArgs, NULL, 0, 0, UCNV_CLONE, &cbErr);
+
+    UCNV_DEBUG_LOG("cloning TO", ucnv_getName(localConverter,status), localConverter);
+    UCNV_DEBUG_CNV(localConverter);
+    UCNV_DEBUG_CNV(cnv);
+
 
     return localConverter;
 }
@@ -289,39 +349,54 @@ ucnv_close (UConverter * converter)
             NULL,
             NULL
     };
-    UErrorCode errorCode;
+    UErrorCode errorCode = U_ZERO_ERROR;
 
     if (converter == NULL)
     {
         return;
     }
 
+    UCNV_DEBUG_LOG("close", ucnv_getName(converter, &errorCode), converter);
+    UCNV_DEBUG_CNV(converter);
+
     toUArgs.converter = fromUArgs.converter = converter;
-    errorCode = U_ZERO_ERROR;
+
     converter->fromCharErrorBehaviour(converter->toUContext, &toUArgs, NULL, 0, UCNV_CLOSE, &errorCode);
     errorCode = U_ZERO_ERROR;
     converter->fromUCharErrorBehaviour(converter->fromUContext, &fromUArgs, NULL, 0, 0, UCNV_CLOSE, &errorCode);
 
+    UCNV_DEBUG_CNV(converter);
+        
     if (converter->sharedData->impl->close != NULL) {
         converter->sharedData->impl->close(converter);
     }
 
-#if 1
-    if(!converter->isCopyLocal)
-#endif
     if (converter->sharedData->referenceCounter != ~0) {
         umtx_lock (NULL);
         if (converter->sharedData->referenceCounter != 0) {
             converter->sharedData->referenceCounter--;
         }
         umtx_unlock (NULL);
+        
+#ifdef UCNV_DEBUG
+        {
+            char c[4];
+            c[1]=0;
+            c[0]='0'+converter->sharedData->referenceCounter;
+            UCNV_DEBUG_LOG("close--", c, converter);
+        }
+#endif
 
         if((converter->sharedData->referenceCounter == 0)&&(converter->sharedData->sharedDataCached == FALSE)) {
+            UCNV_DEBUG_CNV(converter);
+            UCNV_DEBUG_LOG("close:delDead", "??", converter);
             ucnv_deleteSharedConverterData(converter->sharedData);
         }
     }
 
+
     if(!converter->isCopyLocal){
+        UCNV_DEBUG_LOG("close:free", "", converter);
         uprv_free (converter);
     }
     return;
@@ -1373,4 +1448,3 @@ ucnv_detectUnicodeSignature( const char* source,
  * End:
  *
  */
-

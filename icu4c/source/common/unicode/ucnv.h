@@ -379,7 +379,7 @@ ucnv_safeClone(const UConverter *cnv,
                UErrorCode       *status);
 
 /** @draft ICU 1.8 */
-#define U_CNV_SAFECLONE_BUFFERSIZE 512
+#define U_CNV_SAFECLONE_BUFFERSIZE  3072
 
 /**
  * Deletes the unicode converter and releases resources associated
