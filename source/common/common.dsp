@@ -743,10 +743,6 @@ SOURCE=.\locmap.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\mutex.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=.\mutex.h
 # End Source File
 # Begin Source File
