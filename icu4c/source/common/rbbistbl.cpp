@@ -1,12 +1,12 @@
 //
 //  file:  rbbistbl.cpp    Implementation of the ICU RBBISymbolTable class
 //
-
-/********************************************************************
- * COPYRIGHT:
- * Copyright (c) 1997-2001, International Business Machines Corporation and
- * others. All Rights Reserved.
- ********************************************************************/
+/*
+**********************************************************************
+*   Copyright (C) 2002 International Business Machines Corporation   *
+*   and others. All rights reserved.                                 *
+**********************************************************************
+*/
 
 #include "unicode/unistr.h"
 #include "unicode/uniset.h"

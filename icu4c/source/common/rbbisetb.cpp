@@ -1,18 +1,20 @@
 //
 //  rbbisetb.cpp
+//
 /*
 **********************************************************************
-*   Copyright (c) 2001, International Business Machines
-*   Corporation and others.  All Rights Reserved.
+*   Copyright (C) 2002 International Business Machines Corporation   *
+*   and others. All rights reserved.                                 *
 **********************************************************************
 */
 //
-//  RBBISetBuilder   Handles processing of Unicode Sets from RBBI rules.
+//  RBBISetBuilder   Handles processing of Unicode Sets from RBBI rules
+//                   (part of the rule building process.)
 //
 //      Starting with the rules parse tree from the scanner,
 //
 //                   -  Enumerate the set of UnicodeSets that are referenced
-//                      by the RBBI rules. 
+//                      by the RBBI rules.
 //                   -  compute a set of non-overlapping character ranges
 //                      with all characters within a range belonging to the same
 //                      set of input uniocde sets.
@@ -62,10 +64,10 @@ RBBISetBuilder::RBBISetBuilder(RBBIRuleBuilder *rb)
 //   Destructor
 //
 //------------------------------------------------------------------------
-RBBISetBuilder::~RBBISetBuilder() 
+RBBISetBuilder::~RBBISetBuilder()
 {
     RangeDescriptor   *nextRangeDesc;
-    
+
     // Walk through & delete the linked list of RangeDescriptors
     for (nextRangeDesc = fRangeList; nextRangeDesc!=NULL;) {
         RangeDescriptor *r = nextRangeDesc;
@@ -227,7 +229,7 @@ void RBBISetBuilder::build() {
 
     if (fRB->fDebugEnv && strstr(fRB->fDebugEnv, "rgroup")) {printRangeGroups();}
     if (fRB->fDebugEnv && strstr(fRB->fDebugEnv, "esets")) {printSets();}
-    
+
     //
     // Build the Trie table for mapping UChar32 values to the corresponding
     //   range group number
@@ -278,7 +280,7 @@ utrie_serialize(fTrie,
                 TRUE,                    // Reduce to 16 bits
                 fStatus);
 }
-    
+
 //------------------------------------------------------------------------
 //
 //  addValToSets     Add a runtime-mapped input value to each uset from a
@@ -291,7 +293,7 @@ utrie_serialize(fTrie,
 //
 //                   The "logically equivalent expression" is the tree for an
 //                   or-ing together of all of the symbols that go into the set.
-//                   
+//
 //------------------------------------------------------------------------
 void  RBBISetBuilder::addValToSets(UVector *sets, uint32_t val) {
     int32_t       ix;
@@ -354,7 +356,7 @@ void RBBISetBuilder::printRanges() {
                 if (varRef != NULL  &&  varRef->fType == RBBINode::varRef) {
                     setName = varRef->fText;
                 }
-            } 
+            }
             RBBINode::printUnicodeString(setName); printf("  ");
         }
         printf("\n");
@@ -373,7 +375,7 @@ void RBBISetBuilder::printRangeGroups() {
     RangeDescriptor       *tRange;
     int                    i;
     int                    lastPrintedGroupNum = 0;
-    
+
     printf("\nRanges grouped by Unicode Set Membership...\n");
     for (rlRange = fRangeList; rlRange!=0; rlRange=rlRange->fNext) {
         int groupNum = rlRange->fNum & 0xbfff;
@@ -382,7 +384,7 @@ void RBBISetBuilder::printRangeGroups() {
             printf("%2i  ", groupNum);
 
             if (rlRange->fNum & 0x4000) { printf(" <DICT> ");};
-            
+
             for (i=0; i<rlRange->fIncludesSets->size(); i++) {
                 RBBINode       *usetNode    = (RBBINode *)rlRange->fIncludesSets->elementAt(i);
                 UnicodeString   setName = "anon";
@@ -392,8 +394,8 @@ void RBBISetBuilder::printRangeGroups() {
                     if (varRef != NULL  &&  varRef->fType == RBBINode::varRef) {
                         setName = varRef->fText;
                     }
-                } 
-                RBBINode::printUnicodeString(setName); printf(" "); 
+                }
+                RBBINode::printUnicodeString(setName); printf(" ");
             }
 
             i = 0;
@@ -410,7 +412,7 @@ void RBBISetBuilder::printRangeGroups() {
     }
     printf("\n");
 }
-    
+
 
 
 //------------------------------------------------------------------------
@@ -440,7 +442,7 @@ void RBBISetBuilder::printSets() {
             if (varRef != NULL  &&  varRef->fType == RBBINode::varRef) {
                 setName = varRef->fText;
             }
-        } 
+        }
         RBBINode::printUnicodeString(setName);
         printf("   ");
         RBBINode::printUnicodeString(usetNode->fText);

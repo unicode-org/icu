@@ -4,7 +4,7 @@
 
 /*
 **********************************************************************
-*   Copyright (c) 2001, International Business Machines
+*   Copyright (c) 2002, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 */
@@ -20,8 +20,8 @@
 #include <assert.h>
 
 
-RBBITableBuilder::RBBITableBuilder(RBBIRuleBuilder *rb, RBBINode *&rootNode) :
- fTree(rootNode) {
+RBBITableBuilder::RBBITableBuilder(RBBIRuleBuilder *rb, RBBINode **rootNode) :
+ fTree(*rootNode) {
     fRB             = rb;
     fStatus         = fRB->fStatus;
     fDStates        = new UVector(*fStatus);

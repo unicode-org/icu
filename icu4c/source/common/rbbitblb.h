@@ -4,7 +4,7 @@
 
 /*
 **********************************************************************
-*   Copyright (c) 2001, International Business Machines
+*   Copyright (c) 2002, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 */
@@ -21,6 +21,7 @@
 U_NAMESPACE_BEGIN
 
 class RBBIRuleScanner;
+class RBBIRuleBuilder;
 
 //
 //  class RBBITableBuilder is part of the RBBI rule compiler.
@@ -33,9 +34,7 @@ class RBBIRuleScanner;
 
 class RBBITableBuilder : public UObject {
 public:
-    // TODO:  add a root node param to the constructor.  We're going to have two
-    //        builders, one for the forward table, and one for the reverse table.
-    RBBITableBuilder(RBBIRuleBuilder *rb, RBBINode *&rootNode);
+    RBBITableBuilder(RBBIRuleBuilder *rb, RBBINode **rootNode);
     ~RBBITableBuilder();
 
     void     build();
@@ -46,7 +45,7 @@ public:
                                         //     the specified location.
 
     //  TODO:  add getter function(s) for the built table.
-    
+
 private:
     void     calcNullable(RBBINode *n);
     void     calcFirstPos(RBBINode *n);
@@ -71,7 +70,7 @@ private:
 private:
     RBBIRuleBuilder  *fRB;
     RBBINode         *&fTree;              // The root node of the parse tree to build a
-                                           //   table for.  
+                                           //   table for.
     UErrorCode       *fStatus;
 
     UVector          *fDStates;            //  D states (Aho's terminology)
