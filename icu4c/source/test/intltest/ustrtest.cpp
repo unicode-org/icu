@@ -726,7 +726,7 @@ UnicodeStringTest::TestSearching()
         errln("error: UnicodeString::indexOf(UChar32 surrogate) finds a partial supplementary code point");
     }
     if(test3.lastIndexOf((UChar32)0xd841, 0, 17) != 4 || test3.lastIndexOf((UChar32)0xdc02, 0, 17) != 16) {
-        errln("error: UnicodeString::indexOf(UChar32 surrogate) finds a partial supplementary code point");
+        errln("error: UnicodeString::lastIndexOf(UChar32 surrogate) finds a partial supplementary code point");
     }
 }
 
