@@ -123,8 +123,11 @@ u_shapeArabic(const UChar *source, int32_t sourceLength,
  */
 #define U_SHAPE_LENGTH_FIXED_SPACES_AT_END      2
 
-/** Not a valid option value. */
-#define U_SHAPE_LENGTH_RESERVED                 3
+/**
+ * Memory option: the result must have the same length as the source.
+ * If more room is necessary, then try to consume spaces at the beginning of the text.
+ */
+#define U_SHAPE_LENGTH_FIXED_SPACES_AT_BEGINNING 3
 
 /** Bit mask for memory options. */
 #define U_SHAPE_LENGTH_MASK                     3
@@ -152,8 +155,11 @@ u_shapeArabic(const UChar *source, int32_t sourceLength,
 /** Letter shaping option: replace "shaped" letter characters by abstract ones. */
 #define U_SHAPE_LETTERS_UNSHAPE                 0x10
 
-/** Not a valid option value. */
-#define U_SHAPE_LETTERS_RESERVED                0x18
+/**
+ * Letter shaping option: replace abstract letter characters by "shaped" ones,
+ * but do not process Tashkeel characters.
+ */
+#define U_SHAPE_LETTERS_EXCEPT_TASHKEEL         0x18
 
 /** Bit mask for letter shaping options. */
 #define U_SHAPE_LETTERS_MASK                    0x18
