@@ -109,7 +109,7 @@
 typedef uint8_t UVersionInfo[U_MAX_VERSION_LENGTH];
 
 #if U_HAVE_NAMESPACE && defined(XP_CPLUSPLUS)
-#define U_ICU_NAMESPACE icu_2_6
+#define U_ICU_NAMESPACE icu_2_8
 namespace U_ICU_NAMESPACE { }
 namespace icu = U_ICU_NAMESPACE;
 U_NAMESPACE_USE
