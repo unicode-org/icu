@@ -38,13 +38,19 @@ int32_t DateFormatRoundTripTest::SPARSENESS = 0;
 int32_t DateFormatRoundTripTest::TRIALS = 4;
 int32_t DateFormatRoundTripTest::DEPTH = 5;
 
+DateFormatRoundTripTest::DateFormatRoundTripTest() : dateFormat(0) {
+}
+
+DateFormatRoundTripTest::~DateFormatRoundTripTest() {
+    delete dateFormat;
+}
 
 #define CASE(id,test) case id: name = #test; if (exec) { logln(#test "---"); logln((UnicodeString)""); test(); } break;
 
 void 
-DateFormatRoundTripTest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* /*par*/ )
+DateFormatRoundTripTest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* par )
 {
-    // if (exec) logln((UnicodeString)"TestSuite NumberFormatRegressionTest");
+    optionv = (par && *par=='v');
     switch (index) {
         CASE(0,TestDateFormatRoundTrip)
         default: name = ""; break;
@@ -80,8 +86,6 @@ DateFormatRoundTripTest::failure(UErrorCode status, const char* msg, const Unico
 void DateFormatRoundTripTest::TestDateFormatRoundTrip() 
 {
     UErrorCode status = U_ZERO_ERROR;
-    dateFormat = new SimpleDateFormat((UnicodeString)"EEE MMM dd HH:mm:ss.SSS zzz yyyy G", status);
-    failure(status, "new SimpleDateFormat");
 
     getFieldCal = Calendar::createInstance(status);
     failure(status, "Calendar::createInstance");
@@ -124,7 +128,6 @@ void DateFormatRoundTripTest::TestDateFormatRoundTrip()
 # endif
 #endif
 
-    delete dateFormat;
     delete getFieldCal;
 }
 
@@ -345,17 +348,24 @@ void DateFormatRoundTripTest::test(DateFormat *fmt, const Locale &origLocale, UB
                     maxDmatch = 4;
             }
             
-            if(dmatch > maxDmatch || smatch > maxSmatch) {
-                errln(UnicodeString("Pattern: ") + pat + UnicodeString(" failed to match in Locale: ")
-                    + origLocale.getName());
-                logln(UnicodeString(" Date ") + dmatch + "  String " + smatch);
-
-                printf("dmatch:%d maxD:%d smatch:%d maxS:%d\n", dmatch,maxDmatch, smatch, maxSmatch);
+            // Use @v to see verbose results on successful cases
+            UBool fail = (dmatch > maxDmatch || smatch > maxSmatch);
+            if (optionv || fail) {
+                if (fail) {
+                    errln(UnicodeString("\nFAIL: Pattern: ") + pat +
+                          " in Locale: " + origLocale.getName());
+                } else {
+                    errln(UnicodeString("\nOk: Pattern: ") + pat +
+                          " in Locale: " + origLocale.getName());
+                }
                 
+                logln("Date iters until match=%d (max allowed=%d), string iters until match=%d (max allowed=%d)",
+                      dmatch,maxDmatch, smatch, maxSmatch);
+
                 for(int j = 0; j <= loop && j < DEPTH; ++j) {
                     UnicodeString temp;
                     FieldPosition pos(FieldPosition::DONT_CARE);
-                    errln((j>0?" P> ":"    ") + dateFormat->format(d[j], temp, pos) + " F> " +
+                    errln((j>0?" P> ":"    ") + fullFormat(d[j]) + " F> " +
                           escape(s[j], temp) + UnicodeString(" d=") + d[j] + 
                           (j > 0 && d[j]/*.getTime()*/==d[j-1]/*.getTime()*/?" d==":"") +
                           (j > 0 && s[j] == s[j-1]?" s==":""));
@@ -369,6 +379,22 @@ void DateFormatRoundTripTest::test(DateFormat *fmt, const Locale &origLocale, UB
         errln("Exception: " + e.getMessage());
         logln(e.toString());
     }*/
+}
+
+const UnicodeString& DateFormatRoundTripTest::fullFormat(UDate d) {
+    UErrorCode ec = U_ZERO_ERROR;
+    if (dateFormat == 0) {
+        dateFormat = new SimpleDateFormat((UnicodeString)"EEE MMM dd HH:mm:ss.SSS zzz yyyy G", ec);
+        if (U_FAILURE(ec) || dateFormat == 0) {
+            fgStr = "[FAIL: SimpleDateFormat constructor]";
+            delete dateFormat;
+            dateFormat = 0;
+            return fgStr;
+        }
+    }
+    fgStr.truncate(0);
+    dateFormat->format(d, fgStr);
+    return fgStr;
 }
 
 /**

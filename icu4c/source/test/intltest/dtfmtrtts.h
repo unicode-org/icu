@@ -28,6 +28,9 @@ class DateFormatRoundTripTest : public IntlTest {
     void runIndexedTest( int32_t index, UBool exec, const char* &name, char* par );
 
 public:
+    DateFormatRoundTripTest();
+    virtual ~DateFormatRoundTripTest();
+    
     void TestDateFormatRoundTrip(void);
     void test(const Locale& loc);
     void test(DateFormat *fmt, const Locale &origLocale, UBool timeOnly = FALSE );
@@ -80,13 +83,17 @@ protected:
     UBool failure(UErrorCode status, const char* msg);
     UBool failure(UErrorCode status, const char* msg, const UnicodeString& str);
 
+    const UnicodeString& fullFormat(UDate d);
+
 private:
 
     static int32_t SPARSENESS;
     static int32_t TRIALS;
     static int32_t DEPTH;
 
+    UBool optionv; // TRUE if @v option is given on command line
     SimpleDateFormat *dateFormat;
+    UnicodeString fgStr;
     Calendar *getFieldCal;
 };
 
