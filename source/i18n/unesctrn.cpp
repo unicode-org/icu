@@ -163,7 +163,6 @@ void UnescapeTransliterator::handleTransliterate(Replaceable& text, UTransPositi
     int32_t start = pos.start;
     int32_t limit = pos.limit;
     int32_t i, j, ipat;
-    UnicodeString str;
 
     while (start < limit) {
         // Loop over the forms in spec[].  Exit this loop when we
@@ -248,8 +247,7 @@ void UnescapeTransliterator::handleTransliterate(Replaceable& text, UTransPositi
 
                     if (match) {
                         // At this point, we have a match
-                        str.truncate(0);
-                        str.append(u);
+                        UnicodeString str(u);
                         text.handleReplaceBetween(start, s, str);
                         limit -= s - start - str.length();
                         // The following break statement leaves the
