@@ -151,7 +151,8 @@ static uint8_t utf16fixup[32] = {
 /* get weights from a CE */
 #define UCOL_PRIMARYORDER(order) (isLongPrimary((order))?(((order) & UCOL_LONGPRIMARYORDERMASK)>> UCOL_LONGPRIMARYORDERSHIFT):(((order) & UCOL_PRIMARYORDERMASK)>> UCOL_PRIMARYORDERSHIFT))
 #define UCOL_SECONDARYORDER(order) (isLongPrimary((order))?UCOL_UNMARKED:((order) & UCOL_SECONDARYORDERMASK)>> UCOL_SECONDARYORDERSHIFT)
-#define UCOL_TERTIARYORDER(order) ((order) & UCOL_TERTIARYORDERMASK)
+/*#define UCOL_TERTIARYORDER(order) ((order) & UCOL_TERTIARYORDERMASK)*/
+#define UCOL_TERTIARYORDER(order) ((order) & 0x3f)
 
 /**
  * Determine if a character is a Thai vowel (which sorts after
