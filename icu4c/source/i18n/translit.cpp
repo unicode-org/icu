@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 1999-2004, International Business Machines
+*   Copyright (C) 1999-2005, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   Date        Name        Description
@@ -46,6 +46,7 @@
 #include "uassert.h"
 #include "cmemory.h"
 #include "cstring.h"
+#include "uinvchar.h"
 
 static const UChar TARGET_SEP  = 0x002D; /*-*/
 static const UChar ID_DELIM    = 0x003B; /*;*/
@@ -746,65 +747,69 @@ UnicodeString& U_EXPORT2 Transliterator::getDisplayName(const UnicodeString& id,
     ID.append(TARGET_SEP).append(target).append(variant);
 
     // build the char* key
-    char key[200];
-    uprv_strcpy(key, RB_DISPLAY_NAME_PREFIX);
-    int32_t length=(int32_t)uprv_strlen(RB_DISPLAY_NAME_PREFIX);
-    ID.extract(0, (int32_t)(sizeof(key)-length), key+length, "");
+    if (uprv_isInvariantUString(ID.getBuffer(), ID.length())) {
+        char key[200];
+        uprv_strcpy(key, RB_DISPLAY_NAME_PREFIX);
+        int32_t length=(int32_t)uprv_strlen(RB_DISPLAY_NAME_PREFIX);
+        ID.extract(0, (int32_t)(sizeof(key)-length), key+length, (int32_t)(sizeof(key)-length), US_INV);
 
-    // Try to retrieve a UnicodeString from the bundle.
-    UnicodeString resString = bundle.getStringEx(key, status);
+        // Try to retrieve a UnicodeString from the bundle.
+        UnicodeString resString = bundle.getStringEx(key, status);
 
-    if (U_SUCCESS(status) && resString.length() != 0) {
-        return result = resString; // [sic] assign & return
-    }
+        if (U_SUCCESS(status) && resString.length() != 0) {
+            return result = resString; // [sic] assign & return
+        }
 
 #if !UCONFIG_NO_FORMATTING
-    // We have failed to get a name from the locale data.  This is
-    // typical, since most transliterators will not have localized
-    // name data.  The next step is to retrieve the MessageFormat
-    // pattern from the locale data and to use it to synthesize the
-    // name from the ID.
+        // We have failed to get a name from the locale data.  This is
+        // typical, since most transliterators will not have localized
+        // name data.  The next step is to retrieve the MessageFormat
+        // pattern from the locale data and to use it to synthesize the
+        // name from the ID.
 
-    status = U_ZERO_ERROR;
-    resString = bundle.getStringEx(RB_DISPLAY_NAME_PATTERN, status);
+        status = U_ZERO_ERROR;
+        resString = bundle.getStringEx(RB_DISPLAY_NAME_PATTERN, status);
 
-    if (U_SUCCESS(status) && resString.length() != 0) {
-        MessageFormat msg(resString, inLocale, status);
-        // Suspend checking status until later...
+        if (U_SUCCESS(status) && resString.length() != 0) {
+            MessageFormat msg(resString, inLocale, status);
+            // Suspend checking status until later...
 
-        // We pass either 2 or 3 Formattable objects to msg.
-        Formattable args[3];
-        int32_t nargs;
-        args[0].setLong(2); // # of args to follow
-        args[1].setString(source);
-        args[2].setString(target);
-        nargs = 3;
+            // We pass either 2 or 3 Formattable objects to msg.
+            Formattable args[3];
+            int32_t nargs;
+            args[0].setLong(2); // # of args to follow
+            args[1].setString(source);
+            args[2].setString(target);
+            nargs = 3;
 
-        // Use display names for the scripts, if they exist
-        UnicodeString s;
-        length=(int32_t)uprv_strlen(RB_SCRIPT_DISPLAY_NAME_PREFIX);
-        for (int j=1; j<=2; ++j) {
+            // Use display names for the scripts, if they exist
+            UnicodeString s;
+            length=(int32_t)uprv_strlen(RB_SCRIPT_DISPLAY_NAME_PREFIX);
+            for (int j=1; j<=2; ++j) {
+                status = U_ZERO_ERROR;
+                uprv_strcpy(key, RB_SCRIPT_DISPLAY_NAME_PREFIX);
+                args[j].getString(s);
+                if (uprv_isInvariantUString(s.getBuffer(), s.length())) {
+                    s.extract(0, sizeof(key)-length-1, key+length, sizeof(key)-length-1, US_INV);
+
+                    resString = bundle.getStringEx(key, status);
+
+                    if (U_SUCCESS(status)) {
+                        args[j] = resString;
+                    }
+                }
+            }
+
             status = U_ZERO_ERROR;
-            uprv_strcpy(key, RB_SCRIPT_DISPLAY_NAME_PREFIX);
-            args[j].getString(s);
-            s.extract(0, sizeof(key)-length-1, key+length, "");
-
-            resString = bundle.getStringEx(key, status);
-
+            FieldPosition pos; // ignored by msg
+            msg.format(args, nargs, result, pos, status);
             if (U_SUCCESS(status)) {
-                args[j] = resString;
+                result.append(variant);
+                return result;
             }
         }
-        
-        status = U_ZERO_ERROR;
-        FieldPosition pos; // ignored by msg
-        msg.format(args, nargs, result, pos, status);
-        if (U_SUCCESS(status)) {
-            result.append(variant);
-            return result;
-        }
-    }
 #endif
+    }
 
     // We should not reach this point unless there is something
     // wrong with the build or the RB_DISPLAY_NAME_PATTERN has
