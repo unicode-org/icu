@@ -1297,7 +1297,7 @@ TestKeyInRootRecursive(UResourceBundle *root, UResourceBundle *currentBundle, co
                     sameArray = FALSE;
                 }
                 if (strcmp(subBundleKey, "DateTimeElements") == 0
-                    && subBundleArr[idx] < 1 || 7 < subBundleArr[idx])
+                    && (subBundleArr[idx] < 1 || 7 < subBundleArr[idx]))
                 {
                     log_err("Value out of range with key \"%s\" at index %d in \"%s\" for locale \"%s\"\n",
                             subBundleKey,
@@ -1729,7 +1729,6 @@ compareConsistentCountryInfo(const char *fromLocale, const char *toLocale) {
         int32_t fromSize;
         int32_t toSize;
         int32_t idx;
-        UBool sameArray = TRUE;
         const int32_t *fromBundleArr = ures_getIntVector(fromDateTimeElements, &fromSize, &errorCode);
         const int32_t *toBundleArr = ures_getIntVector(toDateTimeElements, &toSize, &errorCode);
 

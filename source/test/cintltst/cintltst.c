@@ -49,7 +49,7 @@ void ctest_setICU_DATA(void);
 
 int main(int argc, const char* const argv[])
 {
-    int nerrors;
+    int nerrors = 0;
     TestNode *root;
 
     /* initial check for the default converter */
