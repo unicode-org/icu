@@ -1,0 +1,17 @@
+// *******************************************************************************
+// *
+// *   Copyright (C) 1997-2000, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// *******************************************************************************
+
+fr_LU {
+    CurrencyElements { 
+            "F",
+            "LUF",
+            ",",
+    }
+    LocaleString { "fr_LU" }
+    ShortCountry { "LUX" }
+    LocaleID { "140c" }
+}

@@ -1,0 +1,168 @@
+#******************************************************************************
+#
+#   Copyright (C) 1999, International Business Machines
+#   Corporation and others.  All Rights Reserved.
+#
+#******************************************************************************
+## Makefile.in for ICU - icu.so
+## Stephen F. Booth
+
+SO_TARGET_VERSION = @LIB_VERSION@
+SO_TARGET_VERSION_MAJOR = @LIB_VERSION_MAJOR@
+
+## Install directory information
+srcdir = @srcdir@
+top_srcdir = @top_srcdir@
+
+top_builddir = ..
+
+include $(top_builddir)/icudefs.mk
+
+## Platform-specific setup
+include @platform_make_fragment@
+
+## Build directory information
+subdir = common
+
+## Extra files to remove for 'make clean'
+CLEANFILES = *~ $(DEPS)
+
+## Target information
+
+ENABLE_STATIC = @ENABLE_STATIC@
+ENABLE_SHARED = @ENABLE_SHARED@
+
+ifneq ($(ENABLE_STATIC),)
+TARGET = $(LIBICU)uc.a
+RANLIB = @RANLIB@
+endif
+
+ifneq ($(ENABLE_SHARED),)
+SO_TARGET = $(LIBICU)uc.$(SO)
+ALL_SO_TARGETS = $(SO_TARGET) $(MIDDLE_SO_TARGET) $(FINAL_SO_TARGET)
+
+ifeq ($(OS390BATCH),1)
+BATCH_TARGET = "//'${LOADMOD}(IXMICUUC)'"
+endif   # OS390BATCH
+
+endif   # ENABLE_SHARED
+
+ALL_TARGETS = $(TARGET) $(ALL_SO_TARGETS) $(BATCH_TARGET)
+
+DYNAMICCPPFLAGS = $(SHAREDLIBCPPFLAGS)
+DYNAMICCFLAGS = $(SHAREDLIBCFLAGS)
+DYNAMICCXXFLAGS = $(SHAREDLIBCXXFLAGS)
+
+DEFS = @DEFS@
+CPPFLAGS = @CPPFLAGS@ $(LIBCPPFLAGS) -I. -I$(srcdir) -DICU_DATA_DIR=\"$(ICUDATA_DIR)/$(VERSION)/\" -DUDATA_SO_SUFFIX=\".$(SO)\" -DU_COMMON_LIBNAME=\"$(FINAL_SO_TARGET)\"
+CFLAGS = @CFLAGS@
+CXXFLAGS = @CXXFLAGS@
+ENABLE_RPATH = @ENABLE_RPATH@
+ifeq ($(ENABLE_RPATH),YES)
+RPATHLDFLAGS = $(LD_RPATH)$(LD_RPATH_PRE)$(libdir)
+endif
+LDFLAGS = @LDFLAGS@ $(RPATHLDFLAGS)
+LIBS = @LIBS@
+
+# Data packaging options are set at configure time with --with-data-packaging.
+CPPFLAGS += @DATA_PACKAGING_CPPFLAGS@
+
+OBJECTS = compdata.o dcmpdata.o normlzr.o unorm.o bidi.o ubidi.o \
+ubidiwrt.o ubidiln.o chariter.o compitr.o schriter.o uchriter.o \
+cpputils.o digitlst.o filestrm.o ushape.o umemstrm.o locid.o locmap.o uloc.o \
+mutex.o umutex.o putil.o udata.o uresbund.o uresdata.o rbdata.o resbund.o \
+uchar.o ucmp8.o ucmp16.o ucmp32.o uvector.o uhash.o uhash_us.o \
+unames.o unicode.o unistr.o ustring.o cstring.o utf_impl.o \
+scsu.o ucnv.o ucnv_bld.o ucnv_cb.o ucnv_cnv.o ucnv_err.o ucnv_io.o convert.o \
+ucnvlat1.o ucnvmbcs.o ucnv_utf.o ucnv2022.o ucnvhz.o ucnv_lmb.o ucnvscsu.o
+
+STATIC_OBJECTS = $(OBJECTS:.o=.$(STATIC_O))
+
+DEPS = $(OBJECTS:.o=.d)
+
+## Header files to install
+HEADERS = unicode/*.h $(srcdir)/unicode/*.h
+
+## List of phony targets
+.PHONY : all all-local install install-local clean clean-local	\
+distclean distclean-local install-library install-headers dist	\
+dist-local check check-local
+
+## Clear suffix list
+.SUFFIXES :
+
+## List of standard targets
+all: all-local
+install: install-local
+clean: clean-local
+distclean : distclean-local
+dist: dist-local
+check: all check-local
+
+all-local: $(ALL_TARGETS)
+
+install-local: install-headers install-library
+
+install-library: all-local
+	$(MKINSTALLDIRS) $(DESTDIR)$(libdir)
+ifneq ($(ENABLE_STATIC),)
+	$(INSTALL-L) $(TARGET) $(DESTDIR)$(libdir)/$(TARGET)
+endif
+ifneq ($(ENABLE_SHARED),)
+	$(INSTALL-L) $(FINAL_SO_TARGET) $(DESTDIR)$(libdir)/$(FINAL_SO_TARGET)
+ifneq ($(FINAL_SO_TARGET),$(SO_TARGET))
+	cd $(DESTDIR)$(libdir) && $(RM) $(MIDDLE_SO_TARGET) && ln -s $(FINAL_SO_TARGET) $(MIDDLE_SO_TARGET)
+	cd $(DESTDIR)$(libdir) && $(RM) $(SO_TARGET) && ln -s $(FINAL_SO_TARGET) $(SO_TARGET)
+endif
+endif
+
+install-headers:
+	$(MKINSTALLDIRS) $(DESTDIR)$(includedir)/unicode
+	@for file in $(HEADERS); do \
+	 echo "$(INSTALL_DATA) $$file $(DESTDIR)$(includedir)/unicode"; \
+	 $(INSTALL_DATA) $$file $(DESTDIR)$(includedir)/unicode || exit; \
+	done
+
+dist-local:
+
+clean-local:
+	test -z "$(CLEANFILES)" || $(RMV) $(CLEANFILES)
+	$(RMV) $(OBJECTS) $(STATIC_OBJECTS) $(ALL_TARGETS)
+
+distclean-local: clean-local
+	$(RMV) Makefile
+
+check-local:
+
+Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
+	cd $(top_builddir) \
+	 && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
+
+unicode/platform.h: $(srcdir)/unicode/platform.h.in $(top_builddir)/config.status
+	cd $(top_builddir) \
+	 && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
+
+ifneq ($(ENABLE_STATIC),)
+$(TARGET): $(TARGET)($(STATIC_OBJECTS))
+	$(RANLIB) $@
+endif
+
+ifneq ($(ENABLE_SHARED),)
+$(FINAL_SO_TARGET): $(OBJECTS)
+	$(SHLIB.cc) $(LD_SONAME) -o $@ $^ $(LIBS)
+
+ifeq ($(OS390BATCH),1)
+$(BATCH_TARGET): $(OBJECTS)
+	$(SHLIB.cc) $(LD_SONAME) -o $@ $^ $(LIBS)
+endif   # OS390BATCH
+
+endif   # ENABLE_SHARED
+
+ifeq (,$(MAKECMDGOALS))
+-include $(DEPS)
+else
+ifneq ($(patsubst %clean,,$(MAKECMDGOALS)),)
+-include $(DEPS)
+endif
+endif
+

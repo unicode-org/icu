@@ -1,0 +1,5 @@
+*.d
+Makefile
+testmap
+Debug
+Release

@@ -1,0 +1,32 @@
+// *   Copyright (C) 1997-2001, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// Tamil locale.  Based on Hindi locale
+
+ta_IN {
+    Version { "1.1" }
+    LocaleID { "449" }
+    ShortCountry { IND }
+
+    CurrencyElements {
+        "$",
+        INR,  // Rs. ? No.
+        "."
+    }
+    LocaleString { "ta_IN" }
+    DateTimePatterns {
+        "hh:mm:ss a z",
+        "hh:mm:ss a z",
+        "hh:mm:ss a",
+        "hh:mm a",
+        "EEEE d MMMM yyyy",
+        "d MMMM yyyy",
+        "dd mm yyyy",
+        "d m yy",
+        "{1} {0}"
+    }
+    DateTimeElements {
+        "1",
+        "1"
+    }
+
+}
