@@ -78,6 +78,16 @@ TransliterationRuleSet::~TransliterationRuleSet() {
     delete[] rules;
 }
 
+void TransliterationRuleSet::setData(const TransliterationRuleData* d) {
+    /**
+     * We assume that the ruleset has already been frozen.
+     */
+    int32_t len = index[256]; // see freeze()
+    for (int32_t i=0; i<len; ++i) {
+        rules[i]->setData(d);
+    }
+}
+
 /**
  * Return the maximum context length.
  * @return the length of the longest preceding context.
