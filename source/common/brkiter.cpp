@@ -29,6 +29,7 @@
 #include "cstring.h"
 #include "mutex.h"
 #include "iculserv.h"
+#include "locbased.h"
 
 // *****************************************************************************
 // class BreakIterator
@@ -306,6 +307,7 @@ BreakIterator::getDisplayName(const Locale& objectLocale,
 BreakIterator::BreakIterator()
 {
     fBufferClone = FALSE;
+    *validLocale = *actualLocale = 0;
 }
 
 BreakIterator::~BreakIterator()
@@ -402,7 +404,8 @@ BreakIterator::createInstance(const Locale& loc, UBreakIteratorType kind, UError
     if (hasService()) {
         Locale validLoc;
         BreakIterator *result = (BreakIterator*)gService->get(loc, kind, &validLoc, status);
-        uprv_strcpy(result->validLocale, validLoc.getName());
+        U_LOCALE_BASED(locBased, *result);
+        locBased.setLocaleIDs(validLoc.getName(), 0);
         return result;
     } else {
         return makeInstance(loc, kind, status);
@@ -477,47 +480,23 @@ BreakIterator::makeInstance(const Locale& loc, int32_t kind, UErrorCode& status)
     // this is more of a placeholder. All the break iterators have the same actual locale: root
     // except the Thai one
     ResourceBundle res(NULL, loc, status);
-    uprv_strcpy(result->validLocale, res.getLocale(ULOC_VALID_LOCALE, status).getName());
-    if(uprv_strcmp(loc.getLanguage(), "th") == 0) {
-        uprv_strcpy(result->actualLocale, "th");
-    } else {
-        uprv_strcpy(result->actualLocale, "root");
-    }
+    U_LOCALE_BASED(locBased, *result);
+    locBased.setLocaleIDs(res.getLocale(ULOC_VALID_LOCALE, status).getName(),
+                          (uprv_strcmp(loc.getLanguage(), "th") == 0) ?
+                          "th" : "root");
     return result;
 }
 
 Locale 
-BreakIterator::getLocale(ULocDataLocaleType type, UErrorCode& status) const
-{
-    switch(type) {
-    case ULOC_VALID_LOCALE:
-        // TODO: need bufferClone problems fixed before this code can work.
-        return Locale(validLocale);
-        break;
-    case ULOC_ACTUAL_LOCALE:
-        return Locale(actualLocale);
-        break;
-    default:
-        status = U_UNSUPPORTED_ERROR;
-        return Locale("");
-    }
+BreakIterator::getLocale(ULocDataLocaleType type, UErrorCode& status) const {
+    U_LOCALE_BASED(locBased, *this);
+    return locBased.getLocale(type, status);
 }
 
 const char *
-BreakIterator::getLocaleInternal(ULocDataLocaleType type, UErrorCode& status) const
-{
-    switch(type) {
-    case ULOC_VALID_LOCALE:
-        // TODO: need bufferClone problems fixed before this code can work.
-        return validLocale;
-        break;
-    case ULOC_ACTUAL_LOCALE:
-        return actualLocale;
-        break;
-    default:
-        status = U_UNSUPPORTED_ERROR;
-        return NULL;
-    }
+BreakIterator::getLocaleID(ULocDataLocaleType type, UErrorCode& status) const {
+    U_LOCALE_BASED(locBased, *this);
+    return locBased.getLocaleID(type, status);
 }
 
 U_NAMESPACE_END

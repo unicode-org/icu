@@ -736,46 +736,9 @@ NumberFormat::makeInstance(const Locale& desiredLocale,
         f = NULL;
         return NULL;
     }
-    uprv_strcpy(f->validLocale, numberPatterns.getLocale(ULOC_VALID_LOCALE, status).getName());
-    uprv_strcpy(f->actualLocale, numberPatterns.getLocale(ULOC_ACTUAL_LOCALE, status).getName());
+    f->setLocales(numberPatterns);
     return f;
 }
-
-Locale 
-NumberFormat::getLocale(ULocDataLocaleType type, UErrorCode& status) const 
-{
-  switch(type) {
-  case ULOC_VALID_LOCALE:
-    return Locale(validLocale);
-    break;
-  case ULOC_ACTUAL_LOCALE:
-    return Locale(actualLocale);
-    break;
-  default:
-    status = U_UNSUPPORTED_ERROR;
-    return Locale("");
-    break;
-  }
-}
-
-
-const char* 
-NumberFormat::getLocaleInternal(ULocDataLocaleType type, UErrorCode &status) const
-{
-  switch(type) {
-  case ULOC_VALID_LOCALE:
-    return validLocale;
-    break;
-  case ULOC_ACTUAL_LOCALE:
-    return actualLocale;
-    break;
-  default:
-    status = U_UNSUPPORTED_ERROR;
-    return NULL;
-    break;
-  }
-}
-
 
 U_NAMESPACE_END
 

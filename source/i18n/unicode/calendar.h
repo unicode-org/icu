@@ -1998,6 +1998,7 @@ private:
      */
     static uint8_t julianDayToDayOfWeek(double julian);
 
+ private:
     char validLocale[ULOC_FULLNAME_CAPACITY];
     char actualLocale[ULOC_FULLNAME_CAPACITY];
 
@@ -2085,7 +2086,7 @@ private:
      *  @return the locale
      *  @internal
      */
-    virtual const char* getLocaleInternal(ULocDataLocaleType type, UErrorCode &status) const;
+    virtual const char* getLocaleID(ULocDataLocaleType type, UErrorCode &status) const;
 
 };
 
