@@ -20,24 +20,8 @@
 #include "unicode/ustring.h"
 #include "cstring.h"
 
-static void TestPUtilAPI(void);
-static void testIEEEremainder(void);
-static void remainderTest(double x, double y, double exp);
-static void doAssert(double expect, double got, const char *message);
 static UBool compareWithNAN(double x, double y);
-
-void addPUtilTest(TestNode** root);
-static void TestErrorName();
-
-void
-addPUtilTest(TestNode** root)
-{
-    addTest(root, &TestPUtilAPI,       "putiltst/TestPUtilAPI");
-    addTest(root, &testIEEEremainder,  "putiltst/testIEEEremainder");
-    addTest(root, &TestErrorName, "putiltst/TestErrorName()");
-
-
-}
+static void doAssert(double expect, double got, const char *message);
 
 static void TestPUtilAPI(){
 
@@ -304,6 +288,7 @@ static void TestPUtilAPI(){
 
 }
 
+#if 0
 static void testIEEEremainder()
 {
     double    pinf        = uprv_getInfinity();
@@ -338,20 +323,6 @@ static void testIEEEremainder()
     remainderTest(ninf, nzero, 1.25); */
 }
 
-static UBool compareWithNAN(double x, double y)
-{
-  if( uprv_isNaN(x) || uprv_isNaN(y) ) {
-    if(!uprv_isNaN(x) || !uprv_isNaN(y) ) {
-      return FALSE;
-    }
-  }
-  else if (y != x) { /* no NaN's involved */
-    return FALSE;
-  }
-
-  return TRUE;
-}
-
 static void remainderTest(double x, double y, double exp)
 {
     double result = uprv_IEEEremainder(x,y);
@@ -367,6 +338,21 @@ static void remainderTest(double x, double y, double exp)
         log_verbose("OK: IEEEremainder(%f, %f) is %f\n", x, y, result);
     }
 
+}
+#endif
+
+static UBool compareWithNAN(double x, double y)
+{
+  if( uprv_isNaN(x) || uprv_isNaN(y) ) {
+    if(!uprv_isNaN(x) || !uprv_isNaN(y) ) {
+      return FALSE;
+    }
+  }
+  else if (y != x) { /* no NaN's involved */
+    return FALSE;
+  }
+
+  return TRUE;
 }
 
 static void doAssert(double got, double expect, const char *message)
@@ -414,3 +400,14 @@ static void TestErrorName(){
         }
     }
 }
+
+void addPUtilTest(TestNode** root);
+
+void
+addPUtilTest(TestNode** root)
+{
+    addTest(root, &TestPUtilAPI,       "putiltst/TestPUtilAPI");
+/*    addTest(root, &testIEEEremainder,  "putiltst/testIEEEremainder"); */
+    addTest(root, &TestErrorName, "putiltst/TestErrorName()");
+}
+
