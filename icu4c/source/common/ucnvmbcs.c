@@ -814,9 +814,12 @@ _MBCSOpen(UConverter *cnv,
         }
     }
 
-    if(uprv_strstr(name, "gb18030")!=NULL || uprv_strstr(name, "GB18030")!=NULL) {
-        /* set a flag for GB 18030 mode, which changes the callback behavior */
-        cnv->options|=_MBCS_OPTION_GB18030;
+
+    if(uprv_strstr(name, "18030")!=NULL) {
+        if(uprv_strstr(name, "gb18030")!=NULL || uprv_strstr(name, "GB18030")!=NULL) {
+            /* set a flag for GB 18030 mode, which changes the callback behavior */
+            cnv->options|=_MBCS_OPTION_GB18030;
+        }
     }
 
     _MBCSReset(cnv, UCNV_RESET_BOTH);
