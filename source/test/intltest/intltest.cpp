@@ -348,6 +348,31 @@ IntlTest::pathnameInContext( char* fullname, int32_t maxsize, const char* relPat
     const char inpSepChar = '|';
 
     mainDir = u_getDataDirectory();
+    sepChar = U_FILE_SEP_CHAR;
+    char sepString[] = U_FILE_SEP_STRING;
+
+    #if defined(_WIN32) || defined(WIN32) || defined(__OS2__) || defined(OS2)
+        char mainDirBuffer[200];
+        if(mainDir!=NULL) {
+            strcpy(mainDirBuffer, mainDir);
+            strcat(mainDirBuffer, "..\\..");
+        } else {
+            mainDirBuffer[0]='\0';
+        }
+        mainDir=mainDirBuffer;
+    #elif defined(_AIX) || defined(SOLARIS) || defined(LINUX) || defined(HPUX)
+        mainDir = getenv("HOME");
+    #elif defined(XP_MAC)
+        Str255 volName;
+        int16_t volNum;
+        OSErr err = GetVol( volName, &volNum );
+        if (err != noErr) volName[0] = 0;
+        mainDir = (char*) &(volName[1]);
+        mainDir[volName[0]] = 0;
+    #else
+        mainDir = "";
+    #endif
+/*
     #if defined(_WIN32) || defined(WIN32) || defined(__OS2__) || defined(OS2)
         char mainDirBuffer[200];
         if(mainDir!=NULL) {
@@ -373,7 +398,7 @@ IntlTest::pathnameInContext( char* fullname, int32_t maxsize, const char* relPat
         mainDir = "";
         sepChar = '\\';
     #endif
-    char sepString[] = { sepChar, 0 };
+*/
     
     if (relPath[0] == '|') relPath++;
     int32_t lenMainDir = strlen( mainDir );
