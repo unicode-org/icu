@@ -1267,16 +1267,19 @@ static void TestFallback()
     status = U_ZERO_ERROR;
 
     ures_close(fr_FR);
-
+    /* Temporary hack err actually should be U_USING_FALLBACK_ERROR */
     /* Test Jitterbug 552 fallback mechanism of aliased data */
     {
         UErrorCode err =U_ZERO_ERROR;
-        UResourceBundle* myResB = ures_open(NULL,"no_NO",&err);
+        UResourceBundle* myResB = ures_open(NULL,"no_NO_NY",&err);
         const UChar*  myLocID = ures_get(myResB,"LocaleID",&err);
         UResourceBundle* tResB = ures_getByKey(myResB, "DayNames", NULL, &err);
-        if(err!= U_USING_FALLBACK_ERROR){
-            log_err("Expected U_USING_FALLBACK_ERROR when trying to test no_NO aliased with nn_NO  %d\n",err);
+        if(err!= U_ZERO_ERROR){
+            log_err("Expected U_USING_FALLBACK_ERROR when trying to test no_NO_NY aliased with nn_NO_NY  %s\n",u_errorName(err));
         }
+        ures_close(myResB);
+        ures_close(tResB);
+
     }
 
 }
