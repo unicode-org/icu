@@ -209,7 +209,10 @@ DateFormatTest::escape(UnicodeString& s)
 }
  
 char* DateFormatTest::fieldNames[] = {
-    "ERA", "YEAR", "MONTH", "WEEK_OF_YEAR", "WEEK_OF_MONTH", "DAY_OF_MONTH", "DAY_OF_YEAR", "DAY_OF_WEEK", "DAY_OF_WEEK_IN_MONTH", "AM_PM", "HOUR", "HOUR_OF_DAY", "MINUTE", "SECOND", "MILLISECOND", "ZONE_OFFSET", "DST_OFFSET"
+    "ERA", "YEAR", "MONTH", "WEEK_OF_YEAR", "WEEK_OF_MONTH", "DAY_OF_MONTH", 
+        "DAY_OF_YEAR", "DAY_OF_WEEK", "DAY_OF_WEEK_IN_MONTH", "AM_PM", "HOUR", 
+        "HOUR_OF_DAY", "MINUTE", "SECOND", "MILLISECOND", "ZONE_OFFSET", //"DST_OFFSET", 
+        "YEAR_WOY", "DOW_LOCAL"
 };
  
 // -------------------------------------
@@ -233,6 +236,8 @@ DateFormatTest::fgCalendarToDateFormatField[] = {
     DateFormat::kSecondField, 
     DateFormat::kMillisecondField,
     DateFormat::kTimezoneField, 
+    DateFormat::kYearWOYField,
+    DateFormat::kDOWLocalField,
     (DateFormat::EField) -1
 };
 
@@ -257,12 +262,20 @@ DateFormatTest::TestFieldPosition(void)
 
     const char* expected[] = {
         "", "1997", "August", "", "", "13", "", "Wednesday", "", "PM", "2", "", 
-        "34", "12", "", "PDT", "", "", "1997", "ao\373t",/* 373 = 0xFB */  "", 
-        "", "13", "", "mercredi", "", "", "", "14", "34", "", "", "GMT-07:00", 
-        "", "AD", "97", "8", "33", "3", "13", "225", "Wed", "2", "PM", "2", 
-        "14", "34", "12", "5", "PDT", "", "AD", "1997", "August", "0033", 
+        "34", "12", "", "PDT", "", 
+        /* Following two added by weiv for two new fields */ "", "", 
+        "", "1997", "ao\373t",/* 373 = 0xFB */  "", "", "13", "", "mercredi", 
+        "", "", "", "14", "34", "", "", "GMT-07:00", "", 
+        /* Following two added by weiv for two new fields */ "", "", 
+        "AD", "97", "8", "33", "3", "13", "225", "Wed", "2", "PM", "2", 
+        "14", "34", "12", "5", "PDT", 
+        /* Following two added by weiv for two new fields */ "97", "4", "",
+        "AD", "1997", "August", "0033", 
         "0003", "0013", "0225", "Wednesday", "0002", "PM", "0002", "0014", 
-        "0034", "0012", "513", "Pacific Daylight Time", "" 
+        "0034", "0012", "513", "Pacific Daylight Time", 
+        /* Following two added by weiv for two new fields */ "1997", "0004",
+        ""
+
     };
 
     UDate someDate = 871508052513.0;
@@ -270,8 +283,8 @@ DateFormatTest::TestFieldPosition(void)
 
     dateFormats[0] = DateFormat::createDateTimeInstance(DateFormat::FULL, DateFormat::FULL, Locale::US);
     dateFormats[1] = DateFormat::createDateTimeInstance(DateFormat::FULL, DateFormat::FULL, Locale::FRANCE);
-    dateFormats[2] = new SimpleDateFormat("G, y, M, d, k, H, m, s, S, E, D, F, w, W, a, h, K, z", status);
-    dateFormats[3] = new SimpleDateFormat("GGGG, yyyy, MMMM, dddd, kkkk, HHHH, mmmm, ssss, SSSS, EEEE, DDDD, FFFF, wwww, WWWW, aaaa, hhhh, KKKK, zzzz", status);
+    dateFormats[2] = new SimpleDateFormat("G, y, M, d, k, H, m, s, S, E, D, F, w, W, a, h, K, z, Y, e", status);
+    dateFormats[3] = new SimpleDateFormat("GGGG, yyyy, MMMM, dddd, kkkk, HHHH, mmmm, ssss, SSSS, EEEE, DDDD, FFFF, wwww, WWWW, aaaa, hhhh, KKKK, zzzz, YYYY, eeee", status);
     for (j = 0, exp = 0; j < dateFormats_length;++j) {
         UnicodeString str;
         DateFormat* df = dateFormats[j];
