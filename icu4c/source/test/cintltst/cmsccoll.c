@@ -1944,35 +1944,202 @@ static void TestIncrementalNormalize() {
     int          sLen;
     int          i;
 
-    UChar        *strA;
-    UChar        *strB;
-    UCollator    *coll;
-    UErrorCode    status = U_ZERO_ERROR;
+    UCollator        *coll;
+    UErrorCode       status = U_ZERO_ERROR;
+    UCollationResult result;
 
-    strA = uprv_malloc((maxSLen+1) * sizeof(UChar));
-    strB = uprv_malloc((maxSLen+1) * sizeof(UChar));
-
-    coll = ucol_open("en_US", &status);
-    ucol_setNormalization(coll, UNORM_NFD);
-
-    /* for (sLen = 4; sLen<maxSLen; sLen++) { */
-    for (sLen = 1000; sLen<1001; sLen++) {
-        strA[0] = baseA;
-        strB[0] = baseA;
-        for (i=1; i<=sLen-1; i++) {
-            strA[i] = ccMix[i % 3];
-            strB[sLen-i] = ccMix[i % 3];
+    {
+        // Test 1.  Run very long unnormalized strings, to force overflow of
+        //          most buffers along the way.
+        UChar            *strA;
+        UChar            *strB;
+        
+        strA = uprv_malloc((maxSLen+1) * sizeof(UChar));
+        strB = uprv_malloc((maxSLen+1) * sizeof(UChar));
+        
+        coll = ucol_open("en_US", &status);
+        ucol_setNormalization(coll, UNORM_NFD);
+        
+        /* for (sLen = 4; sLen<maxSLen; sLen++) { */
+        for (sLen = 1000; sLen<1001; sLen++) {
+            strA[0] = baseA;
+            strB[0] = baseA;
+            for (i=1; i<=sLen-1; i++) {
+                strA[i] = ccMix[i % 3];
+                strB[sLen-i] = ccMix[i % 3];
+            }
+            strA[sLen]   = 0;
+            strB[sLen]   = 0;
+            
+            ucol_setStrength(coll, UCOL_TERTIARY);   // Do test with default strength, which runs
+            doTest(coll, strA, strB, UCOL_EQUAL);    //   optimized functions in the impl
+            ucol_setStrength(coll, UCOL_IDENTICAL);   // Do again with the slow, general impl.
+            doTest(coll, strA, strB, UCOL_EQUAL);
         }
-        strA[sLen]   = 0;
-        strB[sLen]   = 0;
+        uprv_free(strA);
+        uprv_free(strB);
+    }
 
+
+    //  Test 2:  Non-normal sequence in a string that extends to the last character
+    //         of the string.  Checks a couple of edge cases.
+    //
+    {
+        UChar strA[] = {0x41, 0x41, 0x300, 0x316, 0};   
+        UChar strB[] = {0x41, 0xc0, 0x316, 0};   
+        ucol_setStrength(coll, UCOL_TERTIARY);
         doTest(coll, strA, strB, UCOL_EQUAL);
     }
 
+    //  Test 3:  Non-normal sequence is terminated by a surrogate pair.
+    //
+    {
+        UChar strA[] = {0x41, 0x41, 0x300, 0x316, 0xD801, 0xDC00, 0};
+        UChar strB[] = {0x41, 0xc0, 0x316, 0xD800, 0xDC00, 0};
+        ucol_setStrength(coll, UCOL_TERTIARY);
+        doTest(coll, strA, strB, UCOL_GREATER);
+    }
+
+    //  Test 4:  Imbedded nulls do not terminate a string when length is specified.
+    //
+    {
+        UChar strA[] = {0x41, 0x00, 0x42, 0x00};
+        UChar strB[] = {0x41, 0x00, 0x00, 0x00};
+        char  sortKeyA[50];
+        char  sortKeyAz[50];
+        char  sortKeyB[50];
+        char  sortKeyBz[50];
+        int   r;
+
+        result = ucol_strcoll(coll, strA, -3, strB, -3);
+        if (result != UCOL_GREATER) {
+            log_err("ERROR 1 in test 4\n");
+        }
+        result = ucol_strcoll(coll, strA, -1, strB, -1);
+        if (result != UCOL_EQUAL) {
+            log_err("ERROR 2 in test 4\n");
+        }
+
+        ucol_getSortKey(coll, strA,  3, sortKeyA, sizeof(sortKeyA));
+        ucol_getSortKey(coll, strA, -1, sortKeyAz, sizeof(sortKeyAz));
+        ucol_getSortKey(coll, strB,  3, sortKeyB, sizeof(sortKeyB));
+        ucol_getSortKey(coll, strB, -1, sortKeyBz, sizeof(sortKeyBz));
+
+        r = strcmp(sortKeyA, sortKeyAz);
+        if (r <= 0) {
+            log_err("Error 3 in test 4\n");
+        }
+        r = strcmp(sortKeyA, sortKeyB);
+        if (r <= 0) {
+            log_err("Error 4 in test 4\n");
+        }
+        r = strcmp(sortKeyAz, sortKeyBz);
+        if (r != 0) {
+            log_err("Error 5 in test 4\n");
+        }
+
+        ucol_setStrength(coll, UCOL_IDENTICAL);
+        ucol_getSortKey(coll, strA,  3, sortKeyA, sizeof(sortKeyA));
+        ucol_getSortKey(coll, strA, -1, sortKeyAz, sizeof(sortKeyAz));
+        ucol_getSortKey(coll, strB,  3, sortKeyB, sizeof(sortKeyB));
+        ucol_getSortKey(coll, strB, -1, sortKeyBz, sizeof(sortKeyBz));
+
+        r = strcmp(sortKeyA, sortKeyAz);
+        if (r <= 0) {
+            log_err("Error 6 in test 4\n");
+        }
+        r = strcmp(sortKeyA, sortKeyB);
+        if (r <= 0) {
+            log_err("Error 7 in test 4\n");
+        }
+        r = strcmp(sortKeyAz, sortKeyBz);
+        if (r != 0) {
+            log_err("Error 8 in test 4\n");
+        }
+        ucol_setStrength(coll, UCOL_TERTIARY);
+    }
+
+    //
+    //  Test 5:  Null characters in non-normal source strings.
+    //
+    {
+        UChar strA[] = {0x41, 0x41, 0x300, 0x316, 0x00, 0x42, 0x00};
+        UChar strB[] = {0x41, 0x41, 0x300, 0x316, 0x00, 0x00, 0x00};
+        char  sortKeyA[50];
+        char  sortKeyAz[50];
+        char  sortKeyB[50];
+        char  sortKeyBz[50];
+        int   r;
+
+        result = ucol_strcoll(coll, strA, 6, strB, 6);
+        if (result != UCOL_GREATER) {
+            log_err("ERROR 1 in test 5\n");
+        }
+        result = ucol_strcoll(coll, strA, -1, strB, -1);
+        if (result != UCOL_EQUAL) {
+            log_err("ERROR 2 in test 5\n");
+        }
+
+        ucol_getSortKey(coll, strA,  6, sortKeyA, sizeof(sortKeyA));
+        ucol_getSortKey(coll, strA, -1, sortKeyAz, sizeof(sortKeyAz));
+        ucol_getSortKey(coll, strB,  6, sortKeyB, sizeof(sortKeyB));
+        ucol_getSortKey(coll, strB, -1, sortKeyBz, sizeof(sortKeyBz));
+
+        r = strcmp(sortKeyA, sortKeyAz);
+        if (r <= 0) {
+            log_err("Error 3 in test 5\n");
+        }
+        r = strcmp(sortKeyA, sortKeyB);
+        if (r <= 0) {
+            log_err("Error 4 in test 5\n");
+        }
+        r = strcmp(sortKeyAz, sortKeyBz);
+        if (r != 0) {
+            log_err("Error 5 in test 5\n");
+        }
+
+        ucol_setStrength(coll, UCOL_IDENTICAL);
+        ucol_getSortKey(coll, strA,  6, sortKeyA, sizeof(sortKeyA));
+        ucol_getSortKey(coll, strA, -1, sortKeyAz, sizeof(sortKeyAz));
+        ucol_getSortKey(coll, strB,  6, sortKeyB, sizeof(sortKeyB));
+        ucol_getSortKey(coll, strB, -1, sortKeyBz, sizeof(sortKeyBz));
+
+        r = strcmp(sortKeyA, sortKeyAz);
+        if (r <= 0) {
+            log_err("Error 6 in test 5\n");
+        }
+        r = strcmp(sortKeyA, sortKeyB);
+        if (r <= 0) {
+            log_err("Error 7 in test 5\n");
+        }
+        r = strcmp(sortKeyAz, sortKeyBz);
+        if (r != 0) {
+            log_err("Error 8 in test 5\n");
+        }
+        ucol_setStrength(coll, UCOL_TERTIARY);
+    }
+
+    //
+    //  Test 6:  Null character as base of a non-normal combining sequence.
+    //
+    {
+        UChar strA[] = {0x41, 0x0, 0x300, 0x316, 0x41, 0x302, 0x00};
+        UChar strB[] = {0x41, 0x0, 0x302, 0x316, 0x41, 0x300, 0x00};
+
+        result = ucol_strcoll(coll, strA, 5, strB, 5);
+        if (result != UCOL_LESS) {
+            log_err("Error 1 in test 6\n");
+        }
+        result = ucol_strcoll(coll, strA, -1, strB, -1);
+        if (result != UCOL_EQUAL) {
+            log_err("Error 2 in test 6\n");
+        }
+    }
+
     ucol_close(coll);
-    uprv_free(strA);
-    uprv_free(strB);
 }
+
+
 
 #if 0
 static void TestGetCaseBit() {
