@@ -302,7 +302,7 @@ void RegexTest::regex_find(const UnicodeString &pattern,
         goto cleanupAndReturn;
     }
 
-    if (flags.indexOf((UChar)'G') >= 0) {
+    if (flags.indexOf((UChar)0x47 /*G*/) >= 0) {
         // Only check for match / no match.  Don't check capture groups.
         if (isMatch && groupStarts.size() == 0) {
             errln("Error at line %d:  No match expected, but one found.\n", line);
