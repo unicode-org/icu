@@ -481,11 +481,18 @@ void CollationRegressionTest::Test4066696(/* char* par */)
     String[] tests = {
         "\u00e0",   "<",     "\u01fa",       // a-grave <  A-ring-acute
     };
+
+  should be:
+
+    String[] tests = {
+        "\u00e0",   ">",     "\u01fa",       // a-grave <  A-ring-acute
+    };
+
 */
 
     static const UChar tests[][CollationRegressionTest::MAX_TOKEN_LEN] =
     {
-        {0x00E0, 0}, {0x3c, 0}, {0x01FA, 0}
+        {0x00E0, 0}, {0x3e, 0}, {0x01FA, 0}
     };
 
     compareArray(*c, tests, ARRAY_LENGTH(tests));
@@ -854,7 +861,7 @@ void CollationRegressionTest::Test4132736(/* char* par */)
     static const UChar test1[][CollationRegressionTest::MAX_TOKEN_LEN] =
     {
         {0x65, 0x0300, 0x65, 0x0301, 0}, {0x3c, 0}, {0x65, 0x0301, 0x65, 0x0300, 0},
-        {0x65, 0x0300, 0x0301, 0},       {0x3e, 0}, {0x65, 0x0301, 0x0300, 0}
+        {0x65, 0x0300, 0x0301, 0},       {0x3c, 0}, {0x65, 0x0301, 0x0300, 0}
     };
 
     compareArray(*c, test1, ARRAY_LENGTH(test1));
