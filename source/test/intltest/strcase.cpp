@@ -24,6 +24,7 @@
 #include "unicode/locid.h"
 #include "unicode/ubrk.h"
 #include "ustrtest.h"
+#include "tedadrvr.h"
 
 void
 StringCaseTest::runIndexedTest(int32_t index, UBool exec, const char *&name, char * /*par*/) {
@@ -309,6 +310,40 @@ StringCaseTest::TestCaseConversion()
 
 void
 StringCaseTest::TestTitleCasing() {
+  UErrorCode status = U_ZERO_ERROR;
+  UBreakIterator *iter;
+  char cLocaleID[100];
+  const int32_t capacity = 4; // 4 test values per test case
+  int32_t noOfElements = 0;
+  UnicodeString testcase[4], result;
+  int32_t type;
+  TestDataDriver *driver = TestDataDriver::createTestInstance("casing", status);
+  if(U_SUCCESS(status)) {
+    driver->getTest("titlecasing", status);
+    while(noOfElements = driver->getNextTestCase(testcase, 4, status)) {
+      testcase[2].extract(0, 0x7fffffff, cLocaleID, sizeof(cLocaleID), "");
+      type = TestDataDriver::utoi(testcase[3]);
+
+      if(type<0) {
+          iter=0;
+      } else {
+          iter=ubrk_open((UBreakIteratorType)type, cLocaleID, testcase[0].getBuffer(), testcase[0].length(), &status);
+      }
+
+      if(U_FAILURE(status)) {
+          errln("error: TestTitleCasing() ubrk_open(%d) failed for test case  from casing.res: %s", type,  u_errorName(status));
+      } else {
+          result=testcase[0];
+          result.toTitle((BreakIterator *)iter, Locale(cLocaleID));
+          if(result!=testcase[1]) {
+              errln("error: TestTitleCasing() got a wrong result for test case from casing.res");
+          }
+      }
+    }
+  }
+  delete driver;
+
+#if 0
     char cLocaleID[100];
     UnicodeString in, expect, result, localeID;
     UResourceBundle *casing, *titlecasing, *test, *res;
@@ -378,4 +413,5 @@ StringCaseTest::TestTitleCasing() {
     }
 
     ures_close(casing);
+#endif
 }
