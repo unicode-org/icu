@@ -1159,7 +1159,7 @@ UnicodeStringTest::TestStackAllocation()
  * Test the unescape() function.
  */
 void UnicodeStringTest::TestUnescape(void) {
-    UnicodeString IN("abc\\u4567 \\n\\r \\U00101234xyz");
+    UnicodeString IN("abc\\u4567 \\n\\r \\U00101234xyz\\x1\\x{5289}\\x1b");
     UnicodeString OUT("abc");
     OUT.append((UChar)0x4567);
     OUT.append(" ");
@@ -1168,6 +1168,7 @@ void UnicodeStringTest::TestUnescape(void) {
     OUT.append(" ");
     OUT.append((UChar32)0x00101234);
     OUT.append("xyz");
+    OUT.append((UChar32)1).append((UChar32)0x5289).append((UChar)0x1b);
     UnicodeString result = IN.unescape();
     if (result != OUT) {
         errln("FAIL: " + prettify(IN) + ".unescape() -> " +
