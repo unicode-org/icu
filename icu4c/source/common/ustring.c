@@ -1273,6 +1273,7 @@ static const UChar UNESCAPE_MAP[] = {
     /*\   0x5C, 0x5C */
     /*a*/ 0x61, 0x07,
     /*b*/ 0x62, 0x08,
+    /*e*/ 0x65, 0x1b,
     /*f*/ 0x66, 0x0c,
     /*n*/ 0x6E, 0x0a,
     /*r*/ 0x72, 0x0d,
@@ -1377,6 +1378,19 @@ u_unescapeAt(UNESCAPE_CHAR_AT charAt,
         } else if (c < UNESCAPE_MAP[i]) {
             break;
         }
+    }
+
+    /* Map \cX to control-X: X & 0x1F */
+    if (c == 0x0063 /*'c'*/ && *offset < length) {
+        c = charAt((*offset)++, context);
+        if (UTF_IS_FIRST_SURROGATE(c) && *offset < length) {
+            UChar c2 = charAt(*offset, context);
+            if (UTF_IS_SECOND_SURROGATE(c2)) {
+                ++(*offset);
+                c = (UChar) UTF16_GET_PAIR_VALUE(c, c2); /* [sic] */
+            }
+        }
+        return 0x1F & c;
     }
 
     /* If no special forms are recognized, then consider

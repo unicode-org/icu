@@ -1067,28 +1067,30 @@ static void TestStringCopy()
 static void
 TestUnescape() {
     static UChar buffer[200];
+    
+    static const char* input =
+        "Sch\\u00f6nes Auto: \\u20ac 11240.\\fPrivates Zeichen: \\U00102345\\e\\cC\\n";
+
     static const UChar expect[]={
         0x53, 0x63, 0x68, 0xf6, 0x6e, 0x65, 0x73, 0x20, 0x41, 0x75, 0x74, 0x6f, 0x3a, 0x20,
         0x20ac, 0x20, 0x31, 0x31, 0x32, 0x34, 0x30, 0x2e, 0x0c,
         0x50, 0x72, 0x69, 0x76, 0x61, 0x74, 0x65, 0x73, 0x20,
-        0x5a, 0x65, 0x69, 0x63, 0x68, 0x65, 0x6e, 0x3a, 0x20, 0xdbc8, 0xdf45, 0x0a, 0
+        0x5a, 0x65, 0x69, 0x63, 0x68, 0x65, 0x6e, 0x3a, 0x20, 0xdbc8, 0xdf45, 0x1b, 0x03, 0x0a, 0
     };
+    static const int32_t explength = sizeof(expect)/sizeof(expect[0])-1;
     int32_t length;
 
     /* test u_unescape() */
-    length=u_unescape(
-        "Sch\\u00f6nes Auto: \\u20ac 11240.\\fPrivates Zeichen: \\U00102345\\n",
-        buffer, sizeof(buffer)/sizeof(buffer[0]));
-    if(length!=44 || u_strcmp(buffer, expect)!=0) {
-        log_err("failure in u_unescape(): length %d!=45 and/or incorrect result string\n", length);
+    length=u_unescape(input, buffer, sizeof(buffer)/sizeof(buffer[0]));
+    if(length!=explength || u_strcmp(buffer, expect)!=0) {
+        log_err("failure in u_unescape(): length %d!=%d and/or incorrect result string\n", length,
+                explength);
     }
 
     /* try preflighting */
-    length=u_unescape(
-        "Sch\\u00f6nes Auto: \\u20ac 11240.\\fPrivates Zeichen: \\U00102345\\n",
-        NULL, sizeof(buffer)/sizeof(buffer[0]));
-    if(length!=44 || u_strcmp(buffer, expect)!=0) {
-        log_err("failure in u_unescape(preflighting): length %d!=45\n", length);
+    length=u_unescape(input, NULL, sizeof(buffer)/sizeof(buffer[0]));
+    if(length!=explength || u_strcmp(buffer, expect)!=0) {
+        log_err("failure in u_unescape(preflighting): length %d!=%d\n", length, explength);
     }
 
     /* ### TODO: test u_unescapeAt() */
