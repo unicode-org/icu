@@ -17,16 +17,16 @@ import java.io.IOException;
 import java.io.*;
 
 /**
- * A subclass of RuleBasedBreakIterator that adds the ability to use a dictionary
+ * A subclass of RuleBasedBreakIterator_Old that adds the ability to use a dictionary
  * to further subdivide ranges of text beyond what is possible using just the
  * state-table-based algorithm.  This is necessary, for example, to handle
  * word and line breaking in Thai, which doesn't use spaces between words.  The
- * state-table-based algorithm used by RuleBasedBreakIterator is used to divide
+ * state-table-based algorithm used by RuleBasedBreakIterator_Old is used to divide
  * up text as far as possible, and then contiguous ranges of letters are
  * repeatedly compared against a list of known words (i.e., the dictionary)
  * to divide them up into words.
  *
- * DictionaryBasedBreakIterator uses the same rule language as RuleBasedBreakIterator,
+ * DictionaryBasedBreakIterator uses the same rule language as RuleBasedBreakIterator_Old,
  * but adds one more special substitution name: _dictionary_.  This substitution
  * name is used to identify characters in words in the dictionary.  The idea is that
  * if the iterator passes over a chunk of text that includes two or more characters
@@ -41,7 +41,7 @@ import java.io.*;
  *
  * @stable ICU 2.0
  */
-public class DictionaryBasedBreakIterator extends RuleBasedBreakIterator {
+public class DictionaryBasedBreakIterator extends RuleBasedBreakIterator_Old {
 
     /**
      * a list of known words that is used to divide up contiguous ranges of letters,
@@ -83,9 +83,9 @@ public class DictionaryBasedBreakIterator extends RuleBasedBreakIterator {
 
     /**
      * Constructs a DictionaryBasedBreakIterator.
-     * @param description Same as the description parameter on RuleBasedBreakIterator,
+     * @param description Same as the description parameter on RuleBasedBreakIterator_Old,
      * except for the special meaning of DICTIONARY_VAR.  This parameter is just
-     * passed through to RuleBasedBreakIterator's constructor.
+     * passed through to RuleBasedBreakIterator_Old's constructor.
      * @param dictionaryStream the stream containing the dictionary data
      * @stable ICU 2.0
      */
@@ -97,11 +97,11 @@ public class DictionaryBasedBreakIterator extends RuleBasedBreakIterator {
 
     /**
      * Returns a Builder that is customized to build a DictionaryBasedBreakIterator.
-     * This is the same as RuleBasedBreakIterator.Builder, except for the extra code
+     * This is the same as RuleBasedBreakIterator_Old.Builder, except for the extra code
      * to handle the DICTIONARY_VAR tag.
      * @internal
      */
-    protected RuleBasedBreakIterator.Builder makeBuilder() {
+    protected RuleBasedBreakIterator_Old.Builder makeBuilder() {
         return new Builder();
     }
 
@@ -313,7 +313,7 @@ switch (categoryFlags.length % 4) {
         // categories represented in the dictionary.  If it is, bump the dictionary-
         // character count.
         int result = super.lookupCategory(c);
-        if (result != RuleBasedBreakIterator.IGNORE && categoryFlags[result]) {
+        if (result != RuleBasedBreakIterator_Old.IGNORE && categoryFlags[result]) {
             ++dictionaryCharCount;
         }
         return result;
@@ -514,11 +514,11 @@ switch (categoryFlags.length % 4) {
 
     /**
      * The Builder class for DictionaryBasedBreakIterator inherits almost all of
-     * its functionality from the Builder class for RuleBasedBreakIterator, but
+     * its functionality from the Builder class for RuleBasedBreakIterator_Old, but
      * extends it with extra logic to handle the DICTIONARY_VAR token
      * @internal
      */
-    protected class Builder extends RuleBasedBreakIterator.Builder {
+    protected class Builder extends RuleBasedBreakIterator_Old.Builder {
 
         /**
          * A UnicodeSet that contains all the characters represented in the dictionary
