@@ -149,7 +149,7 @@ abstract public class TimeZone implements Serializable, Cloneable {
         // executed twice.
         for (int pass=0; ; ++pass) {
             int fields[] = new int[4];
-            int day = (int) floorDivide(date, MILLIS_PER_DAY, fields);
+            long day = floorDivide(date, MILLIS_PER_DAY, fields);
             int millis = fields[0];
             
             computeGregorianFields(day, fields);
@@ -218,9 +218,13 @@ abstract public class TimeZone implements Serializable, Cloneable {
      * Compute the Gregorian calendar year, month, and day of month from the
      * epoch day.
      */
-    final void computeGregorianFields(int day,
-                                                int fields[]) {
+    final void computeGregorianFields(long day, int fields[]) {
         int year, month, dayOfMonth, dayOfYear;
+
+        // Convert from 1970 CE epoch to 1 CE epoch (Gregorian calendar)
+        // JULIAN_1_CE    = 1721426; // January 1, 1 CE Gregorian
+        // JULIAN_1970_CE = 2440588; // January 1, 1970 CE Gregorian
+        day += (2440588 - 1721426);
 
         // Here we convert from the day number to the multiple radix
         // representation.  We use 400-year, 100-year, and 4-year cycles.
@@ -250,7 +254,7 @@ abstract public class TimeZone implements Serializable, Cloneable {
             GREGORIAN_MONTH_COUNT[month][isLeap?1:0] + 1; // one-based DOM
 
         // Jan 1 1970 is Thursday
-        int dayOfWeek = (day + Calendar.THURSDAY) % 7;
+        int dayOfWeek = (int) ((day + Calendar.THURSDAY) % 7);
         if (dayOfWeek < Calendar.SUNDAY) {
             dayOfWeek += 7;
         }
