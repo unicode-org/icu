@@ -605,8 +605,8 @@ void TestStringFunctions()
 {
    
     int32_t i,j,k;
-    UChar temp[20];
-    char test[20];
+    UChar temp[40];
+    char test[40];
     log_verbose("Testing u_strlen()\n");
     if( u_strlen(dataTable[0][0])!= u_strlen(dataTable[0][3]) || u_strlen(dataTable[0][0]) == u_strlen(dataTable[0][2]))
         log_err("There is an error in u_strlen()");
@@ -690,6 +690,11 @@ void TestStringFunctions()
     if(u_strcmp(temp, uchars) != 0)
         log_err("There is an error in u_uastrcpy() Expected %s Got %s\n", austrdup(uchars), austrdup(temp));
     
+    temp[0] = 0xFB; /* load garbage into it */
+    temp[1] = 0xFB;
+    temp[2] = 0xFB;
+    temp[3] = 0xFB;
+
     u_uastrncpy(temp, "abcabcabc", 3);
     if(u_strcmp(uchars, temp) != 0)
         log_err("There is an error in u_uastrncpy() Expected %s Got %s\n", austrdup(uchars), austrdup(temp));
