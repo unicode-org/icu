@@ -1142,6 +1142,7 @@ UConverter_toUnicode_ISCII_OFFSETS_LOGIC(UConverterToUnicodeArgs *args,
     const char *source = ( char *) args->source;
     UChar *target = args->target;
     const char *sourceLimit = args->sourceLimit;
+    const UChar* targetLimit = args->targetLimit;
     uint32_t targetUniChar = 0x0000;
     uint8_t sourceChar = 0x0000;
     UConverterDataISCII* data;
@@ -1158,11 +1159,11 @@ UConverter_toUnicode_ISCII_OFFSETS_LOGIC(UConverterToUnicodeArgs *args,
     contextCharToUnicode = &data->contextCharToUnicode; /* contains previous ISCII codepoint visited */
     toUnicodeStatus = (UChar32*)&args->converter->toUnicodeStatus;/* contains the mapping to Unicode of the above codepoint*/
 
-    while(source< args->sourceLimit){
+    while(source<sourceLimit){
 
         targetUniChar = missingCharMarker;
         
-        if(target < args->targetLimit){
+        if(target < targetLimit){
             sourceChar = (unsigned char)*(source)++;
 
             /* look at the post-context preform special processing */
@@ -1220,10 +1221,23 @@ UConverter_toUnicode_ISCII_OFFSETS_LOGIC(UConverterToUnicodeArgs *args,
                     *err = U_ILLEGAL_CHAR_FOUND;
                 }
                 goto CALLBACK;
+            }else if(*contextCharToUnicode==ISCII_INV){
+                if(sourceChar==ISCII_HALANT){
+                    targetUniChar = 0x0020; /* replace with space accoding to Indic FAQ */
+                }else{
+                    targetUniChar = ZWJ;
+                }
+                
+                /* write to target */
+                WRITE_TO_TARGET_TO_U(args,source,target,args->offsets,(source-args->source -2),
+                                                 targetUniChar,data->currentDeltaToUnicode,err);
+                /* reset */
+                *contextCharToUnicode=NO_CHAR_MARKER;
             }
 
             /* look at the pre-context and perform special processing */
             switch(sourceChar){
+            case ISCII_INV:
             case EXT: /*falls through*/
             case ATR:
                 *contextCharToUnicode = (UChar)sourceChar;
@@ -1287,7 +1301,7 @@ UConverter_toUnicode_ISCII_OFFSETS_LOGIC(UConverterToUnicodeArgs *args,
                         /* else fall through to default */
                     }
                     /* else fall through to default */
-                }                
+                }
             default:
                 GET_MAPPING(sourceChar,targetUniChar,data);
                 *contextCharToUnicode = sourceChar;
