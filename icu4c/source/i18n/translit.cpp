@@ -7,20 +7,20 @@
 *   11/17/99    aliu        Creation.
 **********************************************************************
 */
-#include "translit.h"
+#include "unicode/translit.h"
 #include "cmemory.h"
 #include "cstring.h"
-#include "hextouni.h"
-#include "locid.h"
-#include "msgfmt.h"
+#include "unicode/hextouni.h"
+#include "unicode/locid.h"
+#include "unicode/msgfmt.h"
 #include "mutex.h"
 #include "rbt_data.h"
 #include "rbt_pars.h"
-#include "rep.h"
-#include "resbund.h"
+#include "unicode/rep.h"
+#include "unicode/resbund.h"
 #include "uhash.h"
-#include "unifilt.h"
-#include "unitohex.h"
+#include "unicode/unifilt.h"
+#include "unicode/unitohex.h"
 
 /**
  * Dictionary of known transliterators.  Keys are <code>String</code>
@@ -328,7 +328,7 @@ void Transliterator::_keyboardTransliterate(Replaceable& text,
 
     handleKeyboardTransliterate(text, index);
 
-    index[START] = icu_max(index[CURSOR] - getMaximumContextLength(),
+    index[START] = uprv_max(index[CURSOR] - getMaximumContextLength(),
                            originalStart);
 }
 
@@ -394,8 +394,8 @@ UnicodeString& Transliterator::getDisplayName(const Locale& inLocale,
 
     // build the char* key
     char key[100];
-    icu_strcpy(key, RB_DISPLAY_NAME_PREFIX);
-    int32_t length=icu_strlen(RB_DISPLAY_NAME_PREFIX);
+    uprv_strcpy(key, RB_DISPLAY_NAME_PREFIX);
+    int32_t length=uprv_strlen(RB_DISPLAY_NAME_PREFIX);
     key[ID.extract(0, sizeof(key)-length-1, key+length, "")]=0;
 
     // Try to retrieve a UnicodeString* from the bundle.  The result,
@@ -554,18 +554,18 @@ const char* Transliterator::getDataDirectory(void) {
              * way.  File an rfe for this.
              */
             const char* data = Locale::getDataDirectory();
-            int32_t len = icu_strlen(data);
+            int32_t len = uprv_strlen(data);
             char sep[2];
             sep[0] = data[len-1];
             sep[1] = 0;
-            DATA_DIR = (char*) icu_malloc(
-                                 len + icu_strlen(RESOURCE_SUB_DIR) + 2);
+            DATA_DIR = (char*) uprv_malloc(
+                                 len + uprv_strlen(RESOURCE_SUB_DIR) + 2);
             if (DATA_DIR == 0) {
                 // This is a fatal unrecoverable error -- what should we do?
             }
-            icu_strcpy(DATA_DIR, data);
-            icu_strcat(DATA_DIR, RESOURCE_SUB_DIR);
-            icu_strcat(DATA_DIR, sep);
+            uprv_strcpy(DATA_DIR, data);
+            uprv_strcat(DATA_DIR, RESOURCE_SUB_DIR);
+            uprv_strcat(DATA_DIR, sep);
         }
     }
     return DATA_DIR;

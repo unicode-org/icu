@@ -17,7 +17,7 @@
 
 #include "rblist.h"
 #include "ustr.h"
-#include "ustring.h"
+#include "unicode/ustring.h"
 #include "cmemory.h"
 
 /* Protos */
@@ -33,13 +33,13 @@ make_rbitem(const UChar *tag,
 
   if(U_FAILURE(*status)) return 0;
   
-  item = (struct SRBItem*) icu_malloc(sizeof(struct SRBItem));
+  item = (struct SRBItem*) uprv_malloc(sizeof(struct SRBItem));
   if(item == 0) {
     *status = U_MEMORY_ALLOCATION_ERROR;
     return 0;
   }
 
-  s = (UChar*) icu_malloc(sizeof(UChar) * (u_strlen(tag) + 1));
+  s = (UChar*) uprv_malloc(sizeof(UChar) * (u_strlen(tag) + 1));
   if(s == 0) {
     *status = U_MEMORY_ALLOCATION_ERROR;
     return 0;
@@ -59,7 +59,7 @@ rblist_open(UErrorCode *status)
   
   if(U_FAILURE(*status)) return 0;
   
-  list = (struct SRBItemList*) icu_malloc(sizeof(struct SRBItemList));
+  list = (struct SRBItemList*) uprv_malloc(sizeof(struct SRBItemList));
   if(list == 0) {
     *status = U_MEMORY_ALLOCATION_ERROR;
     return 0;
@@ -103,10 +103,10 @@ void rblist_close(struct SRBItemList *list,
       break;
     }
   }
-  icu_free(list->fData);
-  icu_free(list->fLocale);
+  uprv_free(list->fData);
+  uprv_free(list->fLocale);
 
-  icu_free(list);
+  uprv_free(list);
 }
 
 void rblist_setlocale(struct SRBItemList *list, 
@@ -116,7 +116,7 @@ void rblist_setlocale(struct SRBItemList *list,
   if(U_FAILURE(*status)) return;
 
   /* Allocate enough space */
-  list->fLocale = (UChar*) icu_realloc(list->fLocale, 
+  list->fLocale = (UChar*) uprv_realloc(list->fLocale, 
 				       sizeof(UChar) * (u_strlen(locale) + 1));
   if(list->fLocale == 0) {
     *status = U_MEMORY_ALLOCATION_ERROR;
@@ -157,7 +157,7 @@ rblist_grow(struct SRBItemList *list,
   
   /* allocate space for the array of SRBItems */
   newData = (struct SRBItem**) 
-    icu_malloc(sizeof(struct SRBItem*) * newCapacity);
+    uprv_malloc(sizeof(struct SRBItem*) * newCapacity);
   if(newData == 0) {
     *status = U_MEMORY_ALLOCATION_ERROR;
     return;
@@ -168,7 +168,7 @@ rblist_grow(struct SRBItemList *list,
     newData[i] = list->fData[i];
   }
   
-  icu_free(list->fData);
+  uprv_free(list->fData);
   list->fData = newData;
   list->fCapacity = newCapacity;
 }

@@ -17,8 +17,8 @@
 // This file was generated from the java source file BreakIterator.java
 // *****************************************************************************
 
-#include "utypes.h"
-#include "brkiter.h"
+#include "unicode/utypes.h"
+#include "unicode/brkiter.h"
 #include "simtxbd.h"
 
 #include <string.h>

@@ -16,15 +16,15 @@
 #include "ucmp16.h"
 #include "ucmp8.h"
 #include "ucnv_io.h"
-#include "ucnv_bld.h"
-#include "ucnv_err.h"
+#include "unicode/ucnv_bld.h"
+#include "unicode/ucnv_err.h"
 #include "ucnv_imp.h"
 #include "cstring.h"
 #include "cmemory.h"
 #include "filestrm.h"
 #include "toolutil.h"
 
-#include "udata.h"
+#include "unicode/udata.h"
 #include "unewdata.h"
 #include "ucmpwrit.h"
 
@@ -80,7 +80,7 @@ static const char UNICODE_CODEPOINT_SEPARATORS[6] = {  '<', '>', 'U', ' ', '\t',
 char *
   removeComments (char *line)
 {
-  char *pound = icu_strchr (line, '#');
+  char *pound = uprv_strchr (line, '#');
 
   if (pound != NULL)
     *pound = '\0';
@@ -93,7 +93,7 @@ char *
 {
   int32_t i = 0;
 
-  while (name[i] = icu_toupper (name[i]))
+  while (name[i] = uprv_toupper (name[i]))
     i++;
 
   return name;
@@ -165,8 +165,8 @@ void writeConverterData(UConverterSharedData *mySharedData, const char *cName, U
 
   uint32_t sz2;
 
-  cnvName = icu_strrchr(cName, '/');
-  cnvName2 = icu_strrchr(cName, '\\'); /* aliu - this is for Windows - what we
+  cnvName = uprv_strrchr(cName, '/');
+  cnvName2 = uprv_strrchr(cName, '\\'); /* aliu - this is for Windows - what we
                                           really need is a platform-independent
                                           call to get the path separator */
   if (cnvName2 > cnvName) {
@@ -208,15 +208,15 @@ int main(int argc, char** argv)
       arg = getLongPathname(argv[argc]);
 
       /*removes the extension if any is found*/
-      icu_strcpy(outFileName, arg);
-      if (dot = icu_strchr(outFileName +   icu_strlen(outFileName) - 4, '.')) 
+      uprv_strcpy(outFileName, arg);
+      if (dot = uprv_strchr(outFileName +   uprv_strlen(outFileName) - 4, '.')) 
 	{
 	  *dot = '\0';
 	}
       /*Adds the target extension*/
-      icu_strcpy(cnvName, outFileName);
+      uprv_strcpy(cnvName, outFileName);
       
-      icu_strcat(outFileName, CONVERTER_FILE_EXTENSION);
+      uprv_strcat(outFileName, CONVERTER_FILE_EXTENSION);
       
       mySharedData = createConverterFromTableFile(arg, &err);
 
@@ -245,8 +245,8 @@ void copyPlatformString(char* platformString, UConverterPlatform pltfrm)
 {
   switch (pltfrm)
     {
-    case UCNV_IBM: {icu_strcpy(platformString, "ibm");break;}
-    default: {icu_strcpy(platformString, "");break;}
+    case UCNV_IBM: {uprv_strcpy(platformString, "ibm");break;}
+    default: {uprv_strcpy(platformString, "");break;}
     };
  
   return;
@@ -260,7 +260,7 @@ UConverterPlatform getPlatformFromName(char* name)
   getToken(myPlatform, name, mySeparators);
   strtoupper(myPlatform);
 
-  if (icu_strcmp(myPlatform, "IBM") == 0) return UCNV_IBM;
+  if (uprv_strcmp(myPlatform, "IBM") == 0) return UCNV_IBM;
   else return UCNV_UNKNOWN;
 }
 
@@ -301,7 +301,7 @@ void readHeaderFromFile(UConverter* myConverter,
 	  /*gets the key that will qualify adjacent information*/
 	  /*gets the adjacent value*/
 	  line = getToken(key, line, NLTC_SEPARATORS);
-	  if (icu_strcmp(key, "uconv_class"))
+	  if (uprv_strcmp(key, "uconv_class"))
 	    line = getToken(value, line, NLTC_SEPARATORS);	      
 	  else
 	    line = getToken(value, line, PLAIN_SEPARATORS);	      
@@ -313,35 +313,35 @@ void readHeaderFromFile(UConverter* myConverter,
 	     */
 	  
 	  /*Checks for end of header marker*/
-	  if (icu_strcmp(key, "CHARMAP") == 0) endOfHeader = TRUE;
+	  if (uprv_strcmp(key, "CHARMAP") == 0) endOfHeader = TRUE;
 
 	  /*get name tag*/
-	  else if (icu_strcmp(key, "code_set_name") == 0) 
+	  else if (uprv_strcmp(key, "code_set_name") == 0) 
 	    {
-	      icu_strcpy(myConverter->sharedData->name, value);
+	      uprv_strcpy(myConverter->sharedData->name, value);
 	      myConverter->sharedData->platform = getPlatformFromName(value);
 	      myConverter->sharedData->codepage = getCodepageNumberFromName(value);
 	      
 	    }
 
 	  /*get conversion type*/
-	  else if (icu_strcmp(key, "uconv_class") == 0)
+	  else if (uprv_strcmp(key, "uconv_class") == 0)
 	    {
 
 	      hasConvClass = TRUE;
-	      if (icu_strcmp(value, "DBCS") == 0) 
+	      if (uprv_strcmp(value, "DBCS") == 0) 
 		{
 		  myConverter->sharedData->conversionType = UCNV_DBCS;
 		}
-	      else if (icu_strcmp(value, "SBCS") == 0) 
+	      else if (uprv_strcmp(value, "SBCS") == 0) 
 		{
 		  myConverter->sharedData->conversionType = UCNV_SBCS;
 		}
-	      else if (icu_strcmp(value, "MBCS") == 0) 
+	      else if (uprv_strcmp(value, "MBCS") == 0) 
 		{
 		  myConverter->sharedData->conversionType = UCNV_MBCS;
 		}
-	      else if (icu_strcmp(value, "EBCDIC_STATEFUL") == 0) 
+	      else if (uprv_strcmp(value, "EBCDIC_STATEFUL") == 0) 
 		{
 		  myConverter->sharedData->conversionType = UCNV_EBCDIC_STATEFUL;
 		}
@@ -354,15 +354,15 @@ void readHeaderFromFile(UConverter* myConverter,
 	    }
 	  
 	  /*get mb_cur_max amount*/
-	  else if (icu_strcmp(key, "mb_cur_max") == 0) 
+	  else if (uprv_strcmp(key, "mb_cur_max") == 0) 
 	    myConverter->sharedData->maxBytesPerChar = (int8_t)T_CString_stringToInteger(value, 10);
 	  
 	  /*get mb_cur_max amount*/
-	  else if (icu_strcmp(key, "mb_cur_min") == 0)
+	  else if (uprv_strcmp(key, "mb_cur_min") == 0)
 	    myConverter->sharedData->minBytesPerChar = (int8_t)T_CString_stringToInteger(value, 10);
 	 
 	  
-	  else if (icu_strcmp(key, "subchar") == 0) 
+	  else if (uprv_strcmp(key, "subchar") == 0) 
 	    {
 	      hasSubChar = TRUE;
 	      myConverter->sharedData->defaultConverterValues.subCharLen = 0;
@@ -388,7 +388,7 @@ void readHeaderFromFile(UConverter* myConverter,
   else 
     {
       myConverter->subCharLen = myConverter->sharedData->defaultConverterValues.subCharLen;
-      icu_memcpy(myConverter->subChar,
+      uprv_memcpy(myConverter->subChar,
 		 myConverter->sharedData->defaultConverterValues.subChar, 
 		 myConverter->subCharLen);
     }
@@ -415,7 +415,7 @@ void loadSBCSTableFromFile(FileStream* convFile, UConverter* myConverter, UError
   
   if (U_FAILURE(*err)) return;
   replacementChar = myConverter->subChar[0];
-  myUConverterTable = (UConverterTable*)icu_malloc(sizeof(UConverterSBCSTable));
+  myUConverterTable = (UConverterTable*)uprv_malloc(sizeof(UConverterSBCSTable));
   if (myUConverterTable == NULL) 
     {
       *err = U_MEMORY_ALLOCATION_ERROR;
@@ -426,7 +426,7 @@ void loadSBCSTableFromFile(FileStream* convFile, UConverter* myConverter, UError
   myFromUnicode = ucmp8_open(0);  
   if (myFromUnicode == NULL) 
     {
-      icu_free(myUConverterTable);
+      uprv_free(myUConverterTable);
       *err = U_MEMORY_ALLOCATION_ERROR;
       return;
     } 
@@ -448,7 +448,7 @@ void loadSBCSTableFromFile(FileStream* convFile, UConverter* myConverter, UError
       if (line[nextTokenOffset(line, NLTC_SEPARATORS)] != '\0')
 	{
 	  line = getToken(codepointBytes, line, UNICODE_CODEPOINT_SEPARATORS);
-	  if (!icu_strcmp(codepointBytes, "END")) break;
+	  if (!uprv_strcmp(codepointBytes, "END")) break;
 	  unicodeValue = (UChar)T_CString_stringToInteger(codepointBytes, 16);
 	  line = getToken(codepointBytes, line, CODEPOINT_SEPARATORS);
 	  sbcsCodepageValue = T_CString_stringToInteger(codepointBytes, 16);
@@ -483,14 +483,14 @@ void loadMBCSTableFromFile(FileStream* convFile, UConverter* myConverter, UError
   /*Evaluates the replacement codepoint*/
   replacementChar = 0xFFFF;
 
-  myUConverterTable = (UConverterTable*)icu_malloc(sizeof(UConverterMBCSTable));
+  myUConverterTable = (UConverterTable*)uprv_malloc(sizeof(UConverterMBCSTable));
   if (myUConverterTable == NULL) 
     {
       *err = U_MEMORY_ALLOCATION_ERROR;
       return;
     }
   
-  myUConverterTable->mbcs.starters = (bool_t*)(icu_malloc(sizeof(bool_t)*256));
+  myUConverterTable->mbcs.starters = (bool_t*)(uprv_malloc(sizeof(bool_t)*256));
   if (myUConverterTable->mbcs.starters == NULL) 
     {
       *err = U_MEMORY_ALLOCATION_ERROR;
@@ -515,7 +515,7 @@ void loadMBCSTableFromFile(FileStream* convFile, UConverter* myConverter, UError
       if (line[nextTokenOffset(line, NLTC_SEPARATORS)] != '\0')
 	{
 	  line = getToken(codepointBytes, line, UNICODE_CODEPOINT_SEPARATORS);
-	  if (!icu_strcmp(codepointBytes, "END")) break;
+	  if (!uprv_strcmp(codepointBytes, "END")) break;
 	  unicodeValue = (UChar)T_CString_stringToInteger(codepointBytes, 16);
 	  line = getToken(codepointBytes, line, CODEPOINT_SEPARATORS);
 	  if (line[nextTokenOffset(line, CODEPOINT_SEPARATORS)] != '\0') 
@@ -564,7 +564,7 @@ void loadEBCDIC_STATEFULTableFromFile(FileStream* convFile, UConverter* myConver
   /*Evaluates the replacement codepoint*/
   replacementChar = 0xFFFF;
 
-  myUConverterTable = (UConverterTable*)icu_malloc(sizeof(UConverterMBCSTable));
+  myUConverterTable = (UConverterTable*)uprv_malloc(sizeof(UConverterMBCSTable));
   if (myUConverterTable == NULL) 
     {
       *err = U_MEMORY_ALLOCATION_ERROR;
@@ -582,7 +582,7 @@ void loadEBCDIC_STATEFULTableFromFile(FileStream* convFile, UConverter* myConver
       if (line[nextTokenOffset(line, NLTC_SEPARATORS)] != '\0')
 	{
 	  line = getToken(codepointBytes, line, UNICODE_CODEPOINT_SEPARATORS);
-	  if (!icu_strcmp(codepointBytes, "END")) break;
+	  if (!uprv_strcmp(codepointBytes, "END")) break;
 	  unicodeValue = (UChar)T_CString_stringToInteger(codepointBytes, 16);
 	  line = getToken(codepointBytes, line, CODEPOINT_SEPARATORS);
 	  if (line[nextTokenOffset(line, CODEPOINT_SEPARATORS)] != '\0') 
@@ -631,7 +631,7 @@ void loadDBCSTableFromFile(FileStream* convFile, UConverter* myConverter, UError
   /*Evaluates the replacement codepoint*/
   replacementChar = 0xFFFF;
 
-  myUConverterTable = (UConverterTable*)icu_malloc(sizeof(UConverterDBCSTable));
+  myUConverterTable = (UConverterTable*)uprv_malloc(sizeof(UConverterDBCSTable));
   if (myUConverterTable == NULL) 
     {
       *err = U_MEMORY_ALLOCATION_ERROR;
@@ -648,7 +648,7 @@ void loadDBCSTableFromFile(FileStream* convFile, UConverter* myConverter, UError
       if (line[nextTokenOffset(line, NLTC_SEPARATORS)] != '\0')
 	{
 	  line = getToken(codepointBytes, line, UNICODE_CODEPOINT_SEPARATORS);
-	  if (!icu_strcmp(codepointBytes, "END")) break;
+	  if (!uprv_strcmp(codepointBytes, "END")) break;
 	  unicodeValue = (UChar)T_CString_stringToInteger(codepointBytes, 16);
 	  
 	  /*first byte*/
@@ -681,26 +681,26 @@ bool_t deleteSharedConverterData(UConverterSharedData* deadSharedData)
   if (deadSharedData->conversionType == UCNV_SBCS)
     {
       ucmp8_close(deadSharedData->table->sbcs.fromUnicode);
-      icu_free(deadSharedData->table);
-      icu_free(deadSharedData);
+      uprv_free(deadSharedData->table);
+      uprv_free(deadSharedData);
     }
   else if (deadSharedData->conversionType == UCNV_MBCS)
     {
       ucmp16_close(deadSharedData->table->mbcs.fromUnicode);
       ucmp16_close(deadSharedData->table->mbcs.toUnicode);
-      icu_free(deadSharedData->table);
-      icu_free(deadSharedData);
+      uprv_free(deadSharedData->table);
+      uprv_free(deadSharedData);
     }
   else if ((deadSharedData->conversionType == UCNV_DBCS) || (deadSharedData->conversionType == UCNV_EBCDIC_STATEFUL))
     {
       ucmp16_close(deadSharedData->table->dbcs.fromUnicode);
       ucmp16_close(deadSharedData->table->dbcs.toUnicode);
-      icu_free(deadSharedData->table);
-      icu_free(deadSharedData);
+      uprv_free(deadSharedData->table);
+      uprv_free(deadSharedData);
     }
   else
     {
-      icu_free(deadSharedData);
+      uprv_free(deadSharedData);
     }
   return TRUE;
 }
@@ -726,7 +726,7 @@ UConverterSharedData* createConverterFromTableFile(const char* converterName, UE
     }
   
   
-  mySharedData = (UConverterSharedData*) icu_malloc(sizeof(UConverterSharedData));
+  mySharedData = (UConverterSharedData*) uprv_malloc(sizeof(UConverterSharedData));
   if (mySharedData == NULL)
     {
       *err = U_MEMORY_ALLOCATION_ERROR;

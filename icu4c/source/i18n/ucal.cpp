@@ -5,12 +5,12 @@
 *******************************************************************************
 */
 
-#include "ucal.h"
+#include "unicode/ucal.h"
 
-#include "uloc.h"
-#include "calendar.h"
-#include "timezone.h"
-#include "ustring.h"
+#include "unicode/uloc.h"
+#include "unicode/calendar.h"
+#include "unicode/timezone.h"
+#include "unicode/ustring.h"
 #include "cpputils.h"
 
 U_CAPI const UChar*

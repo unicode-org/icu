@@ -10,7 +10,7 @@
 #ifndef TRANSTST_H
 #define TRANSTST_H
 
-#include "utypes.h"
+#include "unicode/utypes.h"
 #include "intltest.h"
 
 class Transliterator;

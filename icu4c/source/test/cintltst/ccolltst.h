@@ -22,7 +22,7 @@
 #define _CCOLLTST
 
 #include "cintltst.h"
-#include "ucol.h"
+#include "unicode/ucol.h"
 
 /* Internal Functions used*/
 

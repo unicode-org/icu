@@ -5,19 +5,19 @@
 *******************************************************************************
 */
 
-#include "udat.h"
+#include "unicode/udat.h"
 
-#include "uloc.h"
-#include "datefmt.h"
-#include "timezone.h"
-#include "smpdtfmt.h"
-#include "fieldpos.h"
+#include "unicode/uloc.h"
+#include "unicode/datefmt.h"
+#include "unicode/timezone.h"
+#include "unicode/smpdtfmt.h"
+#include "unicode/fieldpos.h"
 #include "cpputils.h"
-#include "parsepos.h"
-#include "calendar.h"
-#include "numfmt.h"
-#include "dtfmtsym.h"
-#include "ustring.h"
+#include "unicode/parsepos.h"
+#include "unicode/calendar.h"
+#include "unicode/numfmt.h"
+#include "unicode/dtfmtsym.h"
+#include "unicode/ustring.h"
 
 U_CAPI UDateFormat*
 udat_open(            UDateFormatStyle        timeStyle, 
@@ -425,7 +425,7 @@ udat_setSymbols(    UDateFormat             *format,
       *status = U_MEMORY_ALLOCATION_ERROR;
       return;
     }
-    icu_arrayCopy(res, array, count);
+    uprv_arrayCopy(res, array, count);
     if(index < count)
       array[index] = val;
     syms->setEras(array, count);
@@ -438,7 +438,7 @@ udat_setSymbols(    UDateFormat             *format,
       *status = U_MEMORY_ALLOCATION_ERROR;
       return;
     }
-    icu_arrayCopy(res, array, count);
+    uprv_arrayCopy(res, array, count);
     if(index < count)
       array[index] = val;
     syms->setMonths(array, count);
@@ -451,7 +451,7 @@ udat_setSymbols(    UDateFormat             *format,
       *status = U_MEMORY_ALLOCATION_ERROR;
       return;
     }
-    icu_arrayCopy(res, array, count);
+    uprv_arrayCopy(res, array, count);
     if(index < count)
       array[index] = val;
     syms->setShortMonths(array, count);
@@ -464,7 +464,7 @@ udat_setSymbols(    UDateFormat             *format,
       *status = U_MEMORY_ALLOCATION_ERROR;
       return;
     }
-    icu_arrayCopy(res, array, count);
+    uprv_arrayCopy(res, array, count);
     if(index < count)
       array[index] = val;
     syms->setWeekdays(array, count);
@@ -477,7 +477,7 @@ udat_setSymbols(    UDateFormat             *format,
       *status = U_MEMORY_ALLOCATION_ERROR;
       return;
     }
-    icu_arrayCopy(res, array, count);
+    uprv_arrayCopy(res, array, count);
     if(index < count)
       array[index] = val;
     syms->setShortWeekdays(array, count);
@@ -490,7 +490,7 @@ udat_setSymbols(    UDateFormat             *format,
       *status = U_MEMORY_ALLOCATION_ERROR;
       return;
     }
-    icu_arrayCopy(res, array, count);
+    uprv_arrayCopy(res, array, count);
     if(index < count)
       array[index] = val;
     syms->setAmPmStrings(array, count);

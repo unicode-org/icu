@@ -1,7 +1,7 @@
 /* Wraps C++ internal utilities  needed in C
 Bertrand A. D.*/
 
-#include "utypes.h"
+#include "unicode/utypes.h"
 U_CAPI void  printUChar(const UChar*      uniString);
 U_CAPI void  printChar(   const char*         charString);
 

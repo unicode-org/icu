@@ -5,20 +5,20 @@
 *******************************************************************************
 */
 
-#include "ucol.h"
+#include "unicode/ucol.h"
 
-#include "uloc.h"
-#include "coll.h"
-#include "tblcoll.h"
-#include "coleitr.h"
-#include "ustring.h"
+#include "unicode/uloc.h"
+#include "unicode/coll.h"
+#include "unicode/tblcoll.h"
+#include "unicode/coleitr.h"
+#include "unicode/ustring.h"
 
 /*===============================================
 =================================================
     ---> MOVE SOMEWHERE ELSE !!! <---
 =================================================
 ===============================================*/
-#include "normlzr.h"
+#include "unicode/normlzr.h"
 #include "cpputils.h"
 U_CAPI int32_t
 u_normalize(const UChar*            source,
@@ -297,8 +297,8 @@ ucol_getSortKey(const    UCollator    *coll,
 
   bytes = key.getByteArray(count);
   
-  copyLen = icu_min(count, resultLength);
-  icu_arrayCopy((const int8_t*)bytes, (int8_t*)result, copyLen);
+  copyLen = uprv_min(count, resultLength);
+  uprv_arrayCopy((const int8_t*)bytes, (int8_t*)result, copyLen);
 
   //  if(count > resultLength) {
   //    *status = U_BUFFER_OVERFLOW_ERROR;

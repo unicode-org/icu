@@ -21,17 +21,17 @@
 */
 
 
-#include "utypes.h"
+#include "unicode/utypes.h"
 #include "cintltst.h"
-#include "utypes.h"
-#include  "ustring.h"
+#include "unicode/utypes.h"
+#include "unicode/ustring.h"
 #include "string.h"
 #include <time.h>
 
 #define RESTEST_HEAP_CHECK 0
 
-#include "uloc.h"
-#include "ures.h"
+#include "unicode/uloc.h"
+#include "unicode/ures.h"
 #include "crestst.h"
 #include "ctest.h"
 

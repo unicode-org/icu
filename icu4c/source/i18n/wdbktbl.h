@@ -21,7 +21,7 @@
 #ifndef WDBKTBL_H
 #define WDBKTBL_H
 
-#include "utypes.h"
+#include "unicode/utypes.h"
 #include "txtbdat.h"
 
 /**

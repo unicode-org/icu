@@ -12,12 +12,12 @@
 #ifndef _TIMEZONEREGRESSIONTEST_
 #define _TIMEZONEREGRESSIONTEST_
  
-#include "utypes.h"
-#include "timezone.h"
+#include "unicode/utypes.h"
+#include "unicode/timezone.h"
 
 #include "intltest.h"
 
-#include "gregocal.h"
+#include "unicode/gregocal.h"
 
 class SimpleTimeZone;
 

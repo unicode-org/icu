@@ -9,7 +9,7 @@
 #ifndef UNIRANGE_H
 #define UNIRANGE_H
 
-#include "utypes.h"
+#include "unicode/utypes.h"
 
 class UnicodeString;
 

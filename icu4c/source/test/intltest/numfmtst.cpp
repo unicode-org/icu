@@ -15,9 +15,9 @@
 */
 
 #include "numfmtst.h"
-#include "dcfmtsym.h"
-#include "decimfmt.h"
-#include "locid.h"
+#include "unicode/dcfmtsym.h"
+#include "unicode/decimfmt.h"
+#include "unicode/locid.h"
  
 // *****************************************************************************
 // class NumberFormatTest

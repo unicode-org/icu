@@ -15,9 +15,9 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "decimfmt.h"
-//#include "datefmt.h"
-#include "smpdtfmt.h"
+#include "unicode/decimfmt.h"
+//#include "unicode/datefmt.h"
+#include "unicode/smpdtfmt.h"
 
 // * test macros
 /*

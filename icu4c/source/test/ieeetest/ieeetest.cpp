@@ -22,7 +22,7 @@
 #include <float.h>		// DBL_MAX
 
 #include "ieeetest.h"
-#include "utypes.h"
+#include "unicode/utypes.h"
 
 //==============================
 
@@ -164,21 +164,21 @@ int
 IEEETest::testPositiveInfinity(void)
 {
   int errCount = 0;
-  double	pinf		= icu_getInfinity();
-  double	ninf		= -icu_getInfinity();
+  double	pinf		= uprv_getInfinity();
+  double	ninf		= -uprv_getInfinity();
   double	ten		= 10.0;
 
-  if(icu_isInfinite(pinf) != TRUE) {
+  if(uprv_isInfinite(pinf) != TRUE) {
     err("FAIL: isInfinite(+Infinity) returned FALSE, should be TRUE.").errln();
     errCount++;
   }
 
-  if(icu_isPositiveInfinity(pinf) != TRUE) {
+  if(uprv_isPositiveInfinity(pinf) != TRUE) {
     err("FAIL: isPositiveInfinity(+Infinity) returned FALSE, should be TRUE.").errln();
     errCount++;
   }
 
-  if(icu_isNegativeInfinity(pinf) != FALSE) {
+  if(uprv_isNegativeInfinity(pinf) != FALSE) {
     err("FAIL: isNegativeInfinity(+Infinity) returned TRUE, should be FALSE.").errln();
     errCount++;
   }
@@ -212,21 +212,21 @@ int
 IEEETest::testNegativeInfinity(void)
 {
   int errCount = 0;
-  double	pinf		= icu_getInfinity();
-  double	ninf		= -icu_getInfinity();
+  double	pinf		= uprv_getInfinity();
+  double	ninf		= -uprv_getInfinity();
   double	ten			= 10.0;
 
-  if(icu_isInfinite(ninf) != TRUE) {
+  if(uprv_isInfinite(ninf) != TRUE) {
     err("FAIL: isInfinite(-Infinity) returned FALSE, should be TRUE.").errln();
     errCount++;
   }
 
-  if(icu_isNegativeInfinity(ninf) != TRUE) {
+  if(uprv_isNegativeInfinity(ninf) != TRUE) {
     err("FAIL: isNegativeInfinity(-Infinity) returned FALSE, should be TRUE.").errln();
     errCount++;
   }
 
-  if(icu_isPositiveInfinity(ninf) != FALSE) {
+  if(uprv_isPositiveInfinity(ninf) != FALSE) {
     err("FAIL: isPositiveInfinity(-Infinity) returned TRUE, should be FALSE.").errln();
     errCount++;
   }
@@ -295,22 +295,22 @@ IEEETest::testZero(void)
     errCount++;
   }
 
-  if(icu_isInfinite(1/pzero) != TRUE) {
+  if(uprv_isInfinite(1/pzero) != TRUE) {
     err("FAIL: isInfinite(1/0.0) returned FALSE, should be TRUE.").errln();
     errCount++;
   }
 
-  if(icu_isInfinite(1/nzero) != TRUE) {
+  if(uprv_isInfinite(1/nzero) != TRUE) {
     err("FAIL: isInfinite(1/-0.0) returned FALSE, should be TRUE.").errln();
     errCount++;
   }
 
-  if(icu_isPositiveInfinity(1/pzero) != TRUE) {
+  if(uprv_isPositiveInfinity(1/pzero) != TRUE) {
     err("FAIL: isPositiveInfinity(1/0.0) returned FALSE, should be TRUE.").errln();
     errCount++;
   }
 
-  if(icu_isNegativeInfinity(1/nzero) != TRUE) {
+  if(uprv_isNegativeInfinity(1/nzero) != TRUE) {
     err("FAIL: isNegativeInfinity(1/-0.0) returned FALSE, should be TRUE.").errln();
     errCount++;
   }
@@ -324,27 +324,27 @@ int
 IEEETest::testIsNaN(void)
 {
   int numErrors	= 0;
-  double	pinf		= icu_getInfinity();
-  double	ninf		= -icu_getInfinity();
-  double	nan			= icu_getNaN();
+  double	pinf		= uprv_getInfinity();
+  double	ninf		= -uprv_getInfinity();
+  double	nan			= uprv_getNaN();
   double	ten			= 10.0;
 
-  if(icu_isNaN(nan) == FALSE) {
+  if(uprv_isNaN(nan) == FALSE) {
     err("FAIL: isNaN() returned FALSE for NaN.").errln();
     numErrors++;
   }
 
-  if(icu_isNaN(pinf) == TRUE) {
+  if(uprv_isNaN(pinf) == TRUE) {
     err("FAIL: isNaN() returned TRUE for +Infinity.").errln();
     numErrors++;
   }
 
-  if(icu_isNaN(ninf) == TRUE) {
+  if(uprv_isNaN(ninf) == TRUE) {
     err("FAIL: isNaN() returned TRUE for -Infinity.").errln();
     numErrors++;
   }
 
-  if(icu_isNaN(ten) == TRUE) {
+  if(uprv_isNaN(ten) == TRUE) {
     err("FAIL: isNaN() returned TRUE for 10.0.").errln();
     numErrors++;
   }
@@ -357,9 +357,9 @@ IEEETest::testIsNaN(void)
 int
 IEEETest::NaNGT(void)
 {
-  double	pinf		= icu_getInfinity();
-  double	ninf		= -icu_getInfinity();
-  double	nan			= icu_getNaN();
+  double	pinf		= uprv_getInfinity();
+  double	ninf		= -uprv_getInfinity();
+  double	nan			= uprv_getNaN();
   double	ten			= 10.0;
   int numErrors	= 0;
 
@@ -391,9 +391,9 @@ IEEETest::NaNGT(void)
 int				
 IEEETest::NaNLT(void)
 {
-  double	pinf		= icu_getInfinity();
-  double	ninf		= -icu_getInfinity();
-  double	nan			= icu_getNaN();
+  double	pinf		= uprv_getInfinity();
+  double	ninf		= -uprv_getInfinity();
+  double	nan			= uprv_getNaN();
   double	ten			= 10.0;
   int numErrors	= 0;
 
@@ -425,9 +425,9 @@ IEEETest::NaNLT(void)
 int				
 IEEETest::NaNGTE(void)
 {
-  double	pinf		= icu_getInfinity();
-  double	ninf		= -icu_getInfinity();
-  double	nan			= icu_getNaN();
+  double	pinf		= uprv_getInfinity();
+  double	ninf		= -uprv_getInfinity();
+  double	nan			= uprv_getNaN();
   double	ten			= 10.0;
   int numErrors	= 0;
 
@@ -459,9 +459,9 @@ IEEETest::NaNGTE(void)
 int				
 IEEETest::NaNLTE(void)
 {
-  double	pinf		= icu_getInfinity();
-  double	ninf		= -icu_getInfinity();
-  double	nan			= icu_getNaN();
+  double	pinf		= uprv_getInfinity();
+  double	ninf		= -uprv_getInfinity();
+  double	nan			= uprv_getNaN();
   double	ten			= 10.0;
   int numErrors	= 0;
 
@@ -493,9 +493,9 @@ IEEETest::NaNLTE(void)
 int				
 IEEETest::NaNE(void)
 {
-  double	pinf		= icu_getInfinity();
-  double	ninf		= -icu_getInfinity();
-  double	nan			= icu_getNaN();
+  double	pinf		= uprv_getInfinity();
+  double	ninf		= -uprv_getInfinity();
+  double	nan			= uprv_getNaN();
   double	ten			= 10.0;
   int numErrors	= 0;
 
@@ -527,9 +527,9 @@ IEEETest::NaNE(void)
 int				
 IEEETest::NaNNE(void)
 {
-  double	pinf		= icu_getInfinity();
-  double	ninf		= -icu_getInfinity();
-  double	nan			= icu_getNaN();
+  double	pinf		= uprv_getInfinity();
+  double	ninf		= -uprv_getInfinity();
+  double	nan			= uprv_getNaN();
   double	ten			= 10.0;
   int numErrors	= 0;
 

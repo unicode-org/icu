@@ -22,12 +22,12 @@
  * (Let me reiterate my position...)
  */
 
-#include "utypes.h"
-#include "ucol.h"
-#include "uloc.h"
+#include "unicode/utypes.h"
+#include "unicode/ucol.h"
+#include "unicode/uloc.h"
 #include "cintltst.h"
 #include "citertst.h"
-#include "ustring.h"
+#include "unicode/ustring.h"
 
 #define ARRAY_LENGTH(array) (sizeof array / sizeof array[0])
 

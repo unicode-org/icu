@@ -21,14 +21,14 @@
 
 #include <stdio.h>
 #include <string.h>
-#include "uchar.h"
-#include "utypes.h"
+#include "unicode/uchar.h"
+#include "unicode/utypes.h"
 #include "cstring.h"
 #include "cintltst.h"
 #include "cucdtst.h"
-#include "utypes.h"
-#include "ustring.h"
-#include "uloc.h"
+#include "unicode/utypes.h"
+#include "unicode/ustring.h"
+#include "unicode/uloc.h"
 
 /* prototypes --------------------------------------------------------------- */
 
@@ -604,7 +604,7 @@ TestCharNames() {
             log_err("u_charName(0x%lx) error %s\n", names[i].code, u_errorName(errorCode));
             return;
         }
-        if(length<=0 || 0!=icu_strcmp(name, names[i].name)) {
+        if(length<=0 || 0!=uprv_strcmp(name, names[i].name)) {
             log_err("u_charName(0x%lx) gets %s instead of %s\n", names[i].code, name, names[i].name);
         }
     }

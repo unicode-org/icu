@@ -30,7 +30,7 @@ UFILE*
 u_finit(FileStream *f, const char *cp,
 	UErrorCode *status)
 {
-  UFILE *result	= (UFILE*) icu_malloc(sizeof(UFILE));
+  UFILE *result	= (UFILE*) uprv_malloc(sizeof(UFILE));
   if(result == 0) {
     *status = U_MEMORY_ALLOCATION_ERROR;
     return 0;
@@ -45,14 +45,14 @@ u_finit(FileStream *f, const char *cp,
       result->fConverter = ucnv_open(0, status);
       if(U_FAILURE(*status) || result->fConverter == 0) {
         T_FileStream_close(result->fFile);
-        icu_free(result);
+        uprv_free(result);
         return 0;
       }
-  } else if (icu_strlen(cp)>icu_strlen("")) {    /*weiv: we're specifying the converter*/
+  } else if (uprv_strlen(cp)>uprv_strlen("")) {    /*weiv: we're specifying the converter*/
       result->fConverter = ucnv_open(cp, status);
       if(U_FAILURE(*status) || result->fConverter == 0) {
         T_FileStream_close(result->fFile);
-        icu_free(result);
+        uprv_free(result);
         return 0;
       }
   } else {                          /*weiv: we'll go for invariant converter */
@@ -70,7 +70,7 @@ u_fclose(UFILE *file)
     T_FileStream_close(file->fFile);
 
   ucnv_close(file->fConverter);
-  icu_free(file);
+  uprv_free(file);
 }
 
 /* private function used for buffering input */
@@ -92,7 +92,7 @@ ufile_fill_uchar_buffer(UFILE *f,
   /* shift the buffer if it isn't empty */
   dataSize = f->fUCLimit - f->fUCPos;
   if(dataSize != 0) {
-    icu_memmove(f->fUCBuffer, 
+    uprv_memmove(f->fUCBuffer, 
 		f->fUCPos, 
 		dataSize * sizeof(UChar));
   }

@@ -12,7 +12,7 @@
 */
 
 #include "citrtest.h"
-#include "schriter.h"
+#include "unicode/schriter.h"
 
 CharIterTest::CharIterTest()
 {

@@ -32,9 +32,9 @@ PUtilTest::runIndexedTest( int32_t index, bool_t exec, char* &name, char* par )
 void
 PUtilTest::testIEEEremainder()
 {
-    double    pinf        = icu_getInfinity();
-    double    ninf        = -icu_getInfinity();
-    double    nan            = icu_getNaN();
+    double    pinf        = uprv_getInfinity();
+    double    ninf        = -uprv_getInfinity();
+    double    nan            = uprv_getNaN();
     double    pzero        = 0.0;
     double    nzero        = 0.0;
 
@@ -74,10 +74,10 @@ PUtilTest::testIEEEremainder()
 void
 PUtilTest::remainderTest(double x, double y, double exp)
 {
-    double result = icu_IEEEremainder(x,y);
+    double result = uprv_IEEEremainder(x,y);
 
-    if(        icu_isNaN(result) && 
-        ! ( icu_isNaN(x) || icu_isNaN(y))) {
+    if(        uprv_isNaN(result) && 
+        ! ( uprv_isNaN(x) || uprv_isNaN(y))) {
         errln(UnicodeString("FAIL: got NaN as result without NaN as argument"));
         errln(UnicodeString("      IEEEremainder(") + x + ", " + y + ") is " + result + ", expected " + exp);
     }
@@ -91,9 +91,9 @@ PUtilTest::remainderTest(double x, double y, double exp)
 void
 PUtilTest::testMaxMin()
 {
-    double    pinf        = icu_getInfinity();
-    double    ninf        = -icu_getInfinity();
-    double    nan        = icu_getNaN();
+    double    pinf        = uprv_getInfinity();
+    double    ninf        = -uprv_getInfinity();
+    double    nan        = uprv_getNaN();
     double    pzero        = 0.0;
     double    nzero        = 0.0;
 
@@ -178,20 +178,20 @@ PUtilTest::maxMinTest(double a, double b, double exp, bool_t max)
   double result = 0.0;
   
   if(max)
-    result = icu_fmax(a, b);
+    result = uprv_fmax(a, b);
   else
-    result = icu_fmin(a, b);
+    result = uprv_fmin(a, b);
   
-  bool_t nanResultOK = (icu_isNaN(a) || icu_isNaN(b));
+  bool_t nanResultOK = (uprv_isNaN(a) || uprv_isNaN(b));
   
-  if(icu_isNaN(result) && ! nanResultOK) {
+  if(uprv_isNaN(result) && ! nanResultOK) {
     errln(UnicodeString("FAIL: got NaN as result without NaN as argument"));
     if(max)
       errln(UnicodeString("      max(") + a + ", " + b + ") is " + result + ", expected " + exp);
     else
       errln(UnicodeString("      min(") + a + ", " + b + ") is " + result + ", expected " + exp);
   }
-  else if(result != exp && ! (icu_isNaN(result) || icu_isNaN(exp)))
+  else if(result != exp && ! (uprv_isNaN(result) || uprv_isNaN(exp)))
     if(max)
       errln(UnicodeString("FAIL: max(") + a + ", " + b + ") is " + result + ", expected " + exp);
     else

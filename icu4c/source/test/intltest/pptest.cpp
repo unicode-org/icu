@@ -11,8 +11,8 @@
 
 #include "pptest.h"
 
-#include "numfmt.h"
-#include "decimfmt.h"
+#include "unicode/numfmt.h"
+#include "unicode/decimfmt.h"
  
 // *****************************************************************************
 // class ParsePositionTest

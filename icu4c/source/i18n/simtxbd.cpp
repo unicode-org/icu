@@ -24,7 +24,7 @@
 #include "simtxbd.h"
 #include "wdbktbl.h"
 #include "unicdcm.h"
-#include "schriter.h"
+#include "unicode/schriter.h"
 #ifdef _DEBUG
 #include "unistrm.h"
 #endif

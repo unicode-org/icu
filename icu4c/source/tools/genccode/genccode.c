@@ -21,7 +21,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include "utypes.h"
+#include "unicode/utypes.h"
 #include "cmemory.h"
 #include "cstring.h"
 #include "filestrm.h"
@@ -80,7 +80,7 @@ writeCCode(const char *filename) {
         exit(U_FILE_ACCESS_ERROR);
     }
 
-    T_FileStream_writeLine(out, "#include \"utypes.h\"\nU_CAPI const struct U_EXPORT2 {\n    double bogus;\n    uint8_t bytes ");
+    T_FileStream_writeLine(out, "#include \"unicode/utypes.h\"\nU_CAPI const struct U_EXPORT2 {\n    double bogus;\n    uint8_t bytes ");
 
     T_FileStream_writeLine(out, "[");
     sprintf(buffer, "%d",  T_FileStream_size(in) );
@@ -125,7 +125,7 @@ writeCCode(const char *filename) {
 
 static void
 getOutFilename(const char *inFilename, char *outFilename, char *entryName) {
-    const char *basename=findBasename(inFilename), *suffix=icu_strrchr(basename, '.');
+    const char *basename=findBasename(inFilename), *suffix=uprv_strrchr(basename, '.');
 
     /* copy path */
     while(inFilename<basename) {
@@ -134,9 +134,9 @@ getOutFilename(const char *inFilename, char *outFilename, char *entryName) {
 
     if(suffix==NULL) {
         /* the filename does not have a suffix */
-        icu_strcpy(entryName, inFilename);
-        icu_strcpy(outFilename, inFilename);
-        icu_strcat(outFilename, ".c");
+        uprv_strcpy(entryName, inFilename);
+        uprv_strcpy(outFilename, inFilename);
+        uprv_strcat(outFilename, ".c");
     } else {
         /* copy basename */
         while(inFilename<suffix) {

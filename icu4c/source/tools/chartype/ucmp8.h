@@ -14,7 +14,7 @@
 #define UCMP8_H
 
 
-#include "utypes.h"
+#include "unicode/utypes.h"
 
 /*====================================*/
 /* class CompactByteArray

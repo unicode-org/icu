@@ -22,11 +22,11 @@
 ********************************************************************************
 */
  
-#include "numfmt.h"
-#include "locid.h"
-#include "resbund.h"
-#include "dcfmtsym.h"
-#include "decimfmt.h"
+#include "unicode/numfmt.h"
+#include "unicode/locid.h"
+#include "unicode/resbund.h"
+#include "unicode/dcfmtsym.h"
+#include "unicode/decimfmt.h"
 #include <float.h>
 
 // *****************************************************************************
@@ -319,7 +319,7 @@ int32_t NumberFormat::getMaximumIntegerDigits() const
 void
 NumberFormat::setMaximumIntegerDigits(int32_t newValue)
 {
-    fMaxIntegerDigits = icu_max(0, icu_min(newValue, fgMaxIntegerDigits));
+    fMaxIntegerDigits = uprv_max(0, uprv_min(newValue, fgMaxIntegerDigits));
     if(fMinIntegerDigits > fMaxIntegerDigits)
         fMinIntegerDigits = fMaxIntegerDigits;
 }
@@ -341,7 +341,7 @@ NumberFormat::getMinimumIntegerDigits() const
 void
 NumberFormat::setMinimumIntegerDigits(int32_t newValue)
 {
-    fMinIntegerDigits = icu_max(0, icu_min(newValue, fgMinIntegerDigits));
+    fMinIntegerDigits = uprv_max(0, uprv_min(newValue, fgMinIntegerDigits));
     if(fMinIntegerDigits > fMaxIntegerDigits)
         fMaxIntegerDigits = fMinIntegerDigits;
 }
@@ -363,7 +363,7 @@ NumberFormat::getMaximumFractionDigits() const
 void
 NumberFormat::setMaximumFractionDigits(int32_t newValue)
 {
-    fMaxFractionDigits = icu_max(0, icu_min(newValue, fgMaxIntegerDigits));
+    fMaxFractionDigits = uprv_max(0, uprv_min(newValue, fgMaxIntegerDigits));
     if(fMaxFractionDigits < fMinFractionDigits)
         fMinFractionDigits = fMaxFractionDigits;
 }
@@ -385,7 +385,7 @@ NumberFormat::getMinimumFractionDigits() const
 void
 NumberFormat::setMinimumFractionDigits(int32_t newValue)
 {
-    fMinFractionDigits = icu_max(0, icu_min(newValue, fgMinIntegerDigits));
+    fMinFractionDigits = uprv_max(0, uprv_min(newValue, fgMinIntegerDigits));
     if (fMaxFractionDigits < fMinFractionDigits)
         fMaxFractionDigits = fMinFractionDigits;
 }

@@ -12,8 +12,8 @@
 */
 
 #include "intltest.h"
-#include "brkiter.h"
-#include "unicode.h"
+#include "unicode/brkiter.h"
+#include "unicode/unicode.h"
 #include <stdio.h>
 //#include "txbdapi.h"    // BreakIteratorAPIC
 
@@ -90,11 +90,11 @@ public:
  * IntlTestTextBoundary is medium top level test class for everything in the directory "findword".
  */
 
-#include "utypes.h"
+#include "unicode/utypes.h"
 #include "ittxtbd.h"
 
 #include <string.h>
-#include "schriter.h"
+#include "unicode/schriter.h"
 
 // [HSYS] Just to make it easier to use with UChar array.
 UnicodeString CharsToUnicodeString(const char* chars)

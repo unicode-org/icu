@@ -22,12 +22,12 @@
 #  include <windows.h>
 #endif
 
-#include "utypes.h"
-#include "ustring.h"
-#include "ucnv.h"
-#include "ucnv_err.h"
-#include "uloc.h"
-#include "uchar.h"
+#include "unicode/utypes.h"
+#include "unicode/ustring.h"
+#include "unicode/ucnv.h"
+#include "unicode/ucnv_err.h"
+#include "unicode/uloc.h"
+#include "unicode/uchar.h"
 
 #define MAXFILENAMELEN  1024
 #define RAWBUFSIZE       4096

@@ -18,7 +18,7 @@
 #ifndef WRITE_H
 #define WRITE_H 1
 
-#include "utypes.h"
+#include "unicode/utypes.h"
 #include "rblist.h"
 #include "filestrm.h"
 

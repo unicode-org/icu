@@ -10,7 +10,7 @@
 #ifndef _TESTUNISET
 #define _TESTUNISET
 
-#include "utypes.h"
+#include "unicode/utypes.h"
 #include "intltest.h"
 
 class UnicodeSet;

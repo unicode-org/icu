@@ -8,11 +8,11 @@
 **********************************************************************
 */
 #include "rbt_pars.h"
-#include "rbt.h"
+#include "unicode/rbt.h"
 #include "rbt_rule.h"
 #include "unirange.h"
 #include "rbt_data.h"
-#include "uniset.h"
+#include "unicode/uniset.h"
 
 // Operators
 const UChar TransliterationRuleParser::VARIABLE_DEF_OP = '=';

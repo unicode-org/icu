@@ -15,10 +15,10 @@
 #include <float.h> // DBL_MIN, DBL_MAX
 #include <limits.h> // LONG_MIN, LONG_MAX
 
-#include "dcfmtsym.h"
-#include "decimfmt.h"
-#include "locid.h"
-#include "resbund.h"
+#include "unicode/dcfmtsym.h"
+#include "unicode/decimfmt.h"
+#include "unicode/locid.h"
+#include "unicode/resbund.h"
 
 
 // *****************************************************************************
@@ -317,7 +317,7 @@ NumberFormatRegressionTest::assignFloatValue(float returnfloat)
     failure(status, "nfcommon->parse");
     float floatResult = (float) (result.getType() == Formattable::kDouble 
                                         ? result.getDouble() : result.getLong());
-    if( icu_fabs(floatResult - returnfloat) > 0.0001)
+    if( uprv_fabs(floatResult - returnfloat) > 0.0001)
     //String stringValue = nfcommon.format(returnfloat).substring(1);
     //if (Float.valueOf(stringValue).floatValue() != returnfloat)
         errln(UnicodeString("FAIL: expected ") + returnfloat + ", got " + floatResult + " (" + stringValue+")");

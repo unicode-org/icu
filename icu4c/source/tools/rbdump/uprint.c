@@ -17,8 +17,8 @@
 
 #include "uprint.h"
 
-#include "ucnv.h"
-#include "ustring.h"
+#include "unicode/ucnv.h"
+#include "unicode/ustring.h"
 
 #define BUF_SIZE 128
 

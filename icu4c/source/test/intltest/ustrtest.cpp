@@ -12,8 +12,8 @@
 */
 
 #include "ustrtest.h"
-#include "unistr.h"
-#include "locid.h"
+#include "unicode/unistr.h"
+#include "unicode/locid.h"
 #include <stdio.h>
 
 UnicodeStringTest::UnicodeStringTest()

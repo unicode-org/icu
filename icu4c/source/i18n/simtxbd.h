@@ -17,10 +17,10 @@
 #define SIMTXBD_H
 
 
-#include "utypes.h"
-#include "unistr.h"
-#include "chariter.h"
-#include "brkiter.h"
+#include "unicode/utypes.h"
+#include "unicode/unistr.h"
+#include "unicode/chariter.h"
+#include "unicode/brkiter.h"
 #include "txtbdat.h"
 
 

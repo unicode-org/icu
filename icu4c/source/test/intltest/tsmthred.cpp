@@ -1,4 +1,4 @@
-#include "utypes.h"
+#include "unicode/utypes.h"
 
 /* APP_NO_THREADS is an old symbol. We'll honour it if present. */
 #ifdef APP_NO_THREADS
@@ -48,13 +48,13 @@ void MultithreadTest::runIndexedTest( int32_t index, bool_t exec,
 #include <string.h>
 #include <ctype.h>    // tolower, toupper
 
-#include "putil.h"
+#include "unicode/putil.h"
 
 /* for mthreadtest*/
-#include "numfmt.h"
-#include "choicfmt.h"
-#include "msgfmt.h"
-#include "locid.h"
+#include "unicode/numfmt.h"
+#include "unicode/choicfmt.h"
+#include "unicode/msgfmt.h"
+#include "unicode/locid.h"
 
 /* HPUX */
 #ifdef sleep
@@ -322,11 +322,11 @@ public:
     virtual void run()
     {
         SimpleThread::sleep(1000);          // wait, make sure they aquire the lock
-        fElapsed = icu_getUTCtime();
+        fElapsed = uprv_getUTCtime();
         {
             Mutex m;                        // wait here
 
-            fElapsed = icu_getUTCtime() - fElapsed;
+            fElapsed = uprv_getUTCtime() - fElapsed;
 
             if(fOtherThread.fDone == FALSE) 
                 fErr = TRUE;                // they didnt get to it yet

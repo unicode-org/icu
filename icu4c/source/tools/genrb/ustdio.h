@@ -20,7 +20,7 @@
 #ifndef USTDIO_H
 #define USTDIO_H 1
 
-#include "utypes.h"
+#include "unicode/utypes.h"
 #include "ufile.h"
 
 #define U_EOF 0xFFFF

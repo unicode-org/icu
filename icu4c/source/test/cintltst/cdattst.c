@@ -21,12 +21,12 @@
 
 /* C API TEST FOR DATE FORMAT */
 
-#include "uloc.h"
-#include "utypes.h"
-#include "udat.h"
-#include "ucal.h"
-#include "unum.h"
-#include "ustring.h"
+#include "unicode/uloc.h"
+#include "unicode/utypes.h"
+#include "unicode/udat.h"
+#include "unicode/ucal.h"
+#include "unicode/unum.h"
+#include "unicode/ustring.h"
 #include "cintltst.h"
 #include "cdattst.h"
 #include<stdio.h>

@@ -7,10 +7,10 @@
 *   11/17/99    aliu        Creation.
 **********************************************************************
 */
-#include "hextouni.h"
-#include "rep.h"
-#include "unifilt.h"
-#include "unicode.h"
+#include "unicode/hextouni.h"
+#include "unicode/rep.h"
+#include "unicode/unifilt.h"
+#include "unicode/unicode.h"
 
 /**
  * ID for this transliterator.

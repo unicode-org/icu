@@ -22,13 +22,13 @@
 */
 #include "tmsgfmt.h"
 
-#include "format.h"
-#include "decimfmt.h"
-#include "locid.h"
-#include "msgfmt.h"
-#include "numfmt.h"
-#include "choicfmt.h"
-#include "gregocal.h"
+#include "unicode/format.h"
+#include "unicode/decimfmt.h"
+#include "unicode/locid.h"
+#include "unicode/msgfmt.h"
+#include "unicode/numfmt.h"
+#include "unicode/choicfmt.h"
+#include "unicode/gregocal.h"
 
 Formattable TestMessageFormat::testArgs[] = {
     Formattable(double(1)), Formattable(double(3456)),
@@ -202,7 +202,7 @@ void TestMessageFormat::testBug2()
 
 ostream& operator<<(ostream& stream,  const Formattable&   obj);
 
-#include "datefmt.h"
+#include "unicode/datefmt.h"
 #include <limits.h>
 #include <stdlib.h>
 #include <stdio.h>

@@ -23,12 +23,12 @@
 #include <string.h>
 #include <ctype.h>
 #include "ccapitst.h"
-#include "uloc.h"
-#include "ucnv.h"
-#include "ucnv_err.h"
+#include "unicode/uloc.h"
+#include "unicode/ucnv.h"
+#include "unicode/ucnv_err.h"
 #include "cintltst.h"
-#include "utypes.h"
-#include "ustring.h"
+#include "unicode/utypes.h"
+#include "unicode/ustring.h"
 
 #define NUM_CODEPAGE 1
 #define MAX_FILE_LEN 1024*20

@@ -13,7 +13,7 @@
 #ifndef _PARSEPOSITIONIONTEST_
 #define _PARSEPOSITIONIONTEST_
  
-#include "utypes.h"
+#include "unicode/utypes.h"
 #include "intltest.h"
 
 

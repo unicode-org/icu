@@ -9,7 +9,7 @@
 */
 #include "rbt_data.h"
 #include "uhash.h"
-#include "unistr.h"
+#include "unicode/unistr.h"
 
 TransliterationRuleData::TransliterationRuleData(UErrorCode& status) :
     variableNames(0), setVariables(0) {

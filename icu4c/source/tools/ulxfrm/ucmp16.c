@@ -28,7 +28,7 @@
 
 
 
-#define arrayRegionMatches(source, sourceStart, target, targetStart, len) (icu_memcmp(&source[sourceStart], &target[targetStart], len * sizeof(int16_t)) != 0)
+#define arrayRegionMatches(source, sourceStart, target, targetStart, len) (uprv_memcmp(&source[sourceStart], &target[targetStart], len * sizeof(int16_t)) != 0)
 
 /* internal constants*/
 #define UCMP16_kMaxUnicode_int 65535
@@ -76,7 +76,7 @@ int32_t ucmp16_getkIndexCount()
 CompactShortArray* ucmp16_open(int16_t defaultValue)
 {
   int32_t i;
-  CompactShortArray* this = (CompactShortArray*) icu_malloc(sizeof(CompactShortArray));
+  CompactShortArray* this = (CompactShortArray*) uprv_malloc(sizeof(CompactShortArray));
   if (this == NULL) return NULL;
   
   this->fCount = UCMP16_kUnicodeCount;
@@ -87,17 +87,17 @@ CompactShortArray* ucmp16_open(int16_t defaultValue)
   this->fHashes = NULL; 
   this->fDefaultValue = defaultValue;
   
-  this->fArray = (int16_t*)icu_malloc(UCMP16_kUnicodeCount * sizeof(int16_t));
+  this->fArray = (int16_t*)uprv_malloc(UCMP16_kUnicodeCount * sizeof(int16_t));
   if (this->fArray == NULL)
     {
       this->fBogus = TRUE;
       return NULL;
     }
   
-  this->fIndex = (uint16_t*)icu_malloc(UCMP16_kIndexCount * sizeof(uint16_t));
+  this->fIndex = (uint16_t*)uprv_malloc(UCMP16_kIndexCount * sizeof(uint16_t));
   if (this->fIndex == NULL)
     {
-      icu_free(this->fArray);
+      uprv_free(this->fArray);
       this->fArray = NULL;
       
       this->fBogus = TRUE;
@@ -111,11 +111,11 @@ CompactShortArray* ucmp16_open(int16_t defaultValue)
       this->fArray[i] = defaultValue;
     }
   
-  this->fHashes =(int32_t*)icu_malloc(UCMP16_kIndexCount * sizeof(int32_t));
+  this->fHashes =(int32_t*)uprv_malloc(UCMP16_kIndexCount * sizeof(int32_t));
   if (this->fHashes == NULL)
     {
-      icu_free(this->fArray);
-      icu_free(this->fIndex);
+      uprv_free(this->fArray);
+      uprv_free(this->fIndex);
       this->fBogus = TRUE;
       return NULL;
     }
@@ -134,7 +134,7 @@ CompactShortArray* ucmp16_openAdopt(uint16_t *indexArray,
                     int32_t count,
                     int16_t defaultValue)
 {
-  CompactShortArray* this = (CompactShortArray*) icu_malloc(sizeof(CompactShortArray));
+  CompactShortArray* this = (CompactShortArray*) uprv_malloc(sizeof(CompactShortArray));
   if (this == NULL) return NULL;
   this->fHashes = NULL;
   this->fCount = count; 
@@ -171,23 +171,23 @@ CompactShortArray* ucmp16_openAdoptWithBlockShift(uint16_t *indexArray,
  
 void ucmp16_close(CompactShortArray* this)
 {
-  icu_free(this->fArray);
-  icu_free(this->fIndex);
-  icu_free(this->fHashes);
-  icu_free(this);
+  uprv_free(this->fArray);
+  uprv_free(this->fIndex);
+  uprv_free(this->fHashes);
+  uprv_free(this);
 
   return;
 }
 
 CompactShortArray* setToBogus(CompactShortArray* this)
 {
-  icu_free(this->fArray);
+  uprv_free(this->fArray);
   this->fArray = NULL;
   
-  icu_free(this->fIndex);
+  uprv_free(this->fIndex);
   this->fIndex = NULL;
   
-  icu_free(this->fHashes);
+  uprv_free(this->fHashes);
   this->fHashes = NULL;
   
   this->fCount = 0;
@@ -203,7 +203,7 @@ void ucmp16_expand(CompactShortArray* this)
   if (this->fCompact)
     {
       int32_t i;
-      int16_t *tempArray = (int16_t*)icu_malloc(UCMP16_kUnicodeCount * sizeof(int16_t));
+      int16_t *tempArray = (int16_t*)uprv_malloc(UCMP16_kUnicodeCount * sizeof(int16_t));
       
       if (tempArray == NULL)
     {
@@ -221,7 +221,7 @@ void ucmp16_expand(CompactShortArray* this)
       this->fIndex[i] = (uint16_t)(i<<this->kBlockShift);
         }
       
-      icu_free(this->fArray);
+      uprv_free(this->fArray);
       this->fArray = tempArray;
       this->fCompact = FALSE;
     }
@@ -318,7 +318,7 @@ void ucmp16_compact(CompactShortArray* this)
           if (this->fIndex[i] == 0xFFFF)
         {
           /* we didn't match, so copy & update*/
-          icu_memcpy(&(this->fArray[jBlockStart]), 
+          uprv_memcpy(&(this->fArray[jBlockStart]), 
                  &(this->fArray[iBlockStart]),
                  (1 << this->kBlockShift)*sizeof(int16_t));
           
@@ -339,14 +339,14 @@ void ucmp16_compact(CompactShortArray* this)
         /* we are done compacting, so now make the array shorter*/
       {
     int32_t newSize = limitCompacted * (1 << this->kBlockShift);
-    int16_t *result = (int16_t*) icu_malloc(sizeof(int16_t) * newSize);
+    int16_t *result = (int16_t*) uprv_malloc(sizeof(int16_t) * newSize);
     
-    icu_memcpy(result, this->fArray, newSize * sizeof(int16_t));
+    uprv_memcpy(result, this->fArray, newSize * sizeof(int16_t));
     
-    icu_free(this->fArray);
+    uprv_free(this->fArray);
     this->fArray = result;
     this->fCount = newSize;
-    icu_free(this->fHashes);
+    uprv_free(this->fHashes);
     this->fHashes = NULL;
     
     this->fCompact = TRUE;

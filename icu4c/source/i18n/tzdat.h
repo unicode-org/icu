@@ -12,7 +12,7 @@
 #ifndef TZDAT_H
 #define TZDAT_H
 
-#include "utypes.h"
+#include "unicode/utypes.h"
 
 /* This file defines the format of the memory-mapped data file
  * containing system time zone data for icu.  See also gentz

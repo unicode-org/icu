@@ -18,7 +18,7 @@
 #ifndef USTR_H
 #define USTR_H 1
 
-#include "utypes.h"
+#include "unicode/utypes.h"
 
 /* A C representation of a string "object" (to avoid realloc all the time) */
 struct UString {

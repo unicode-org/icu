@@ -11,10 +11,10 @@
 ********************************************************************
 */
 
-#include "utypes.h"
+#include "unicode/utypes.h"
 #include "tsdtfmsy.h"
 
-#include "dtfmtsym.h"
+#include "unicode/dtfmtsym.h"
 
 
 void IntlTestDateFormatSymbols::runIndexedTest( int32_t index, bool_t exec, char* &name, char* par )

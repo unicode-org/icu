@@ -36,11 +36,11 @@
 *********************************************************************************/
 
 #include "uhash.h"
-#include "simpletz.h"
-#include "smpdtfmt.h"
-#include "calendar.h"
+#include "unicode/simpletz.h"
+#include "unicode/smpdtfmt.h"
+#include "unicode/calendar.h"
 #include "mutex.h"
-#include "udata.h"
+#include "unicode/udata.h"
 #include "tzdat.h"
 #include "cstring.h"
 
@@ -117,7 +117,7 @@ void TimeZone::loadZoneData() {
                     const char* name = (const char*)DATA + DATA->nameTableDelta;
                     for (uint32_t i=0; i<DATA->count; ++i) {
                         ZONE_IDS[i] = UnicodeString(name, ""); // invariant converter
-                        name += icu_strlen(name) + 1;
+                        name += uprv_strlen(name) + 1;
                     }
                 }
             }
@@ -274,13 +274,13 @@ TimeZone::initDefault()
             {
                 // NOTE: Global mutex here; TimeZone mutex above
                 Mutex lock; // mutexed to avoid threading issues in the platform fcns.
-                icu_tzset(); // Initialize tz... system data
+                uprv_tzset(); // Initialize tz... system data
                 
                 // get the timezone ID from the host.
-                hostID = icu_tzname(0);
+                hostID = uprv_tzname(0);
                 
                 // Invert sign because UNIX semantics are backwards
-                rawOffset = icu_timezone() * -U_MILLIS_PER_SECOND;
+                rawOffset = uprv_timezone() * -U_MILLIS_PER_SECOND;
             }
 
             // Try to create a system zone with the given ID.  This
@@ -327,7 +327,7 @@ TimeZone::initDefault()
 
             // If we _still_ don't have a time zone, use GMT.  This
             // can only happen if the raw offset returned by
-            // icu_timezone() does not correspond to any system zone.
+            // uprv_timezone() does not correspond to any system zone.
             if (fgDefaultZone == 0) {
                 fgDefaultZone = GMT->clone();
             }

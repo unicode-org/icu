@@ -15,7 +15,7 @@
  * MajorTestLevel is the top level test class for everything in the directory "IntlWork".
  */
 
-#include "utypes.h"
+#include "unicode/utypes.h"
 #include "itmajor.h"
 
 #include "itutil.h"

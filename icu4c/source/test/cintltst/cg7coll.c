@@ -40,13 +40,13 @@
  * co-p  
  * cop 
  */
-#include "utypes.h"
-#include "ucol.h"
-#include "uloc.h"
+#include "unicode/utypes.h"
+#include "unicode/ucol.h"
+#include "unicode/uloc.h"
 #include "cintltst.h"
 #include "cg7coll.h"
 #include "ccolltst.h"
-#include "ustring.h"
+#include "unicode/ustring.h"
 #include <string.h>
 #include <stdio.h>
 

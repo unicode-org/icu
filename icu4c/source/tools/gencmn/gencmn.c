@@ -19,7 +19,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include "utypes.h"
+#include "unicode/utypes.h"
 #include "cmemory.h"
 #include "cstring.h"
 #include "filestrm.h"
@@ -95,7 +95,7 @@ main(int argc, char *argv[]) {
         return U_ILLEGAL_ARGUMENT_ERROR;
     }
 
-    maxSize=icu_strtoul(argv[1], NULL, 0);
+    maxSize=uprv_strtoul(argv[1], NULL, 0);
     if(maxSize==0) {
         fprintf(stderr, "gencmn: maxSize %s not valid\n", argv[1]);
         exit(U_ILLEGAL_ARGUMENT_ERROR);
@@ -231,15 +231,15 @@ addFile(const char *filename) {
     files[fileCount].fileSize=length;
 
     /* store the pathname */
-    length=icu_strlen(filename)+1;
+    length=uprv_strlen(filename)+1;
     s=allocString(length);
-    icu_memcpy(s, filename, length);
+    uprv_memcpy(s, filename, length);
     files[fileCount].pathname=s;
 
     /* get the basename */
     s=(char *)findBasename(s);
     files[fileCount].basename=s;
-    length=icu_strlen(s)+1;
+    length=uprv_strlen(s)+1;
     files[fileCount].basenameLength=length;
     basenameTotal+=length;
 
@@ -263,5 +263,5 @@ allocString(uint32_t length) {
 static int
 compareFiles(const void *file1, const void *file2) {
     /* sort by basename */
-    return icu_strcmp(((File *)file1)->basename, ((File *)file2)->basename);
+    return uprv_strcmp(((File *)file1)->basename, ((File *)file2)->basename);
 }

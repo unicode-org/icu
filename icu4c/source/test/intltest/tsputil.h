@@ -12,7 +12,7 @@
 #ifndef _PUTILTEST_
 #define _PUTILTEST_
 
-#include "utypes.h"
+#include "unicode/utypes.h"
 #include "intltest.h"
 
 /** 

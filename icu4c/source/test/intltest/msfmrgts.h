@@ -13,7 +13,7 @@
 #ifndef _MESSAGEFORMATREGRESSIONTEST_
 #define _MESSAGEFORMATREGRESSIONTEST_
  
-#include "utypes.h"
+#include "unicode/utypes.h"
 #include "intltest.h"
 
 /** 
