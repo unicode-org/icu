@@ -803,6 +803,49 @@ UnicodeString::doIndexOf(UChar c,
   return -1;
 }
 
+UTextOffset
+UnicodeString::doIndexOf(UChar32 c,
+                         UTextOffset start,
+                         int32_t length) const {
+  // pin indices
+  pinIndices(start, length);
+  if(length == 0) {
+    return -1;
+  }
+
+  // c<0xd800 handled by inline function indexOf(UChar32 c, start, length)
+  if(c<=0xdfff) {
+    // surrogate code point
+    int32_t index;
+
+    while(length>0) {
+      index=doIndexOf((UChar)c, start, length);
+      if(index<0) {
+        return index;
+      }
+      if(
+        UTF_IS_SURROGATE_FIRST(c) ?
+          ((index+1)<fLength && UTF_IS_TRAIL(fArray[index+1])) :
+          (index>0 && UTF_IS_LEAD(fArray[index-1]))
+      ) {
+        // matched surrogate, not a surrogate code point, continue searching
+        length-=(index+1)-start;
+        start=index+1;
+      } else {
+        return index;
+      }
+    }
+    return -1;
+  } else if(c<=0xffff) {
+    // non-surrogate BMP code point
+    return doIndexOf((UChar)c, start, length);
+  } else {
+    // supplementary code point, search for string
+    UChar buffer[2] = { UTF16_LEAD(c), UTF16_TRAIL(c) };
+    return indexOf(buffer, 2, start, length);
+  }
+}
+
 UTextOffset 
 UnicodeString::lastIndexOf(const UChar *srcChars,
                UTextOffset srcStart,
@@ -878,6 +921,48 @@ UnicodeString::doLastIndexOf(UChar c,
   } while(limit > begin);
 
   return -1;
+}
+
+UTextOffset
+UnicodeString::doLastIndexOf(UChar32 c,
+                             UTextOffset start,
+                             int32_t length) const {
+  // pin indices
+  pinIndices(start, length);
+  if(length == 0) {
+    return -1;
+  }
+
+  // c<0xd800 handled by inline function lastIndexOf(UChar32 c, start, length)
+  if(c<=0xdfff) {
+    // surrogate code point
+    int32_t index;
+
+    while(length>0) {
+      index=doLastIndexOf((UChar)c, start, length);
+      if(index<0) {
+        return index;
+      }
+      if(
+        UTF_IS_SURROGATE_FIRST(c) ?
+          ((index+1)<fLength && UTF_IS_TRAIL(fArray[index+1])) :
+          (index>0 && UTF_IS_LEAD(fArray[index-1]))
+      ) {
+        // matched surrogate, not a surrogate code point, continue searching
+        length=index-start;
+      } else {
+        return index;
+      }
+    }
+    return -1;
+  } else if(c<=0xffff) {
+    // non-surrogate BMP code point
+    return doLastIndexOf((UChar)c, start, length);
+  } else {
+    // supplementary code point, search for string
+    UChar buffer[2] = { UTF16_LEAD(c), UTF16_TRAIL(c) };
+    return lastIndexOf(buffer, 2, start, length);
+  }
 }
 
 UnicodeString& 

@@ -855,11 +855,18 @@ UnicodeStringTest::TestSearching()
     UChar testChar = 0x74;
     
     UChar32 testChar32 = 0x20402;
-    UChar testData[]={0xd841, 0xdc02, 0x71, 0xdc02, 0xd841, 0x71, 0xd841, 0xdc02, 0x71, 0x72, 0xd841, 0xdc02, 0x71, 0xd841, 0xdc02, 0x71, 0xdc02, 0xd841, 0x73, 0x0000};
+    UChar testData[]={
+        //   0       1       2       3       4       5       6       7
+        0xd841, 0xdc02, 0x0071, 0xdc02, 0xd841, 0x0071, 0xd841, 0xdc02,
+
+        //   8       9      10      11      12      13      14      15
+        0x0071, 0x0072, 0xd841, 0xdc02, 0x0071, 0xd841, 0xdc02, 0x0071,
+
+        //  16      17      18      19
+        0xdc02, 0xd841, 0x0073, 0x0000
+    };
     UnicodeString test3(testData);
     UnicodeString test4(testChar32);
-
-
 
     uint16_t occurrences = 0;
     UTextOffset startPos = 0;
@@ -984,6 +991,17 @@ UnicodeStringTest::TestSearching()
     if (occurrences != 18)
         errln((UnicodeString)"indexOf failed: expected to find 18 occurrences, found " + occurrences);
     //---
+
+    // test that indexOf(UChar32) and lastIndexOf(UChar32)
+    // do not find surrogate code points when they are part of matched pairs
+    // (= part of supplementary code points)
+    // Jitterbug 1542
+    if(test3.indexOf((UChar32)0xd841) != 4 || test3.indexOf((UChar32)0xdc02) != 3) {
+        errln("error: UnicodeString::indexOf(UChar32 surrogate) finds a partial supplementary code point");
+    }
+    if(test3.lastIndexOf((UChar32)0xd841, 0, 17) != 4 || test3.lastIndexOf((UChar32)0xdc02, 0, 17) != 16) {
+        errln("error: UnicodeString::indexOf(UChar32 surrogate) finds a partial supplementary code point");
+    }
 }
 
 void
