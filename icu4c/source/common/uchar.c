@@ -2088,9 +2088,9 @@ uprv_isCaseSensitive(UChar32 ch) {
         if (s == NULL) {
             return FALSE;
         }
-        // Iterate over 16-bit code units and handle surrogate pairs
+        /* Iterate over 16-bit code units and handle surrogate pairs */
         for (i=0; i<CASE_SENSITIVE_RANGES_LENGTH; ) {
-            // Use UNSAFE macros; the data is well-formed
+            /* Use UNSAFE macros; the data is well-formed */
             U16_NEXT_UNSAFE(CASE_SENSITIVE_RANGES, i, start);
             U16_NEXT_UNSAFE(CASE_SENSITIVE_RANGES, i, end);
             uset_addRange(s, start, end);
