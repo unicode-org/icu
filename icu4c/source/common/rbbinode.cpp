@@ -168,7 +168,7 @@ RBBINode *RBBINode::cloneTree() {
 //                      reference, it remains unchanged - the root we started with
 //                      is the root we return.  If, however, the root was a variable
 //                      reference, the root of the newly cloned replacement tree will
-//                      be returned.
+//                      be returned, and the original tree deleted.
 //
 //                      This function works by recursively walking the tree
 //                      without doing anything until a variable reference is
@@ -178,7 +178,9 @@ RBBINode *RBBINode::cloneTree() {
 //-------------------------------------------------------------------------
 RBBINode *RBBINode::flattenVariables() {
     if (fType == varRef) {
-        return fLeftChild->cloneTree();
+        RBBINode *retNode = fLeftChild->cloneTree();
+        delete this;
+        return retNode;
     }
 
     if (fLeftChild != NULL) {
