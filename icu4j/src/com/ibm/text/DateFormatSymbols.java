@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/DateFormatSymbols.java,v $ 
- * $Date: 2000/05/12 23:19:35 $ 
- * $Revision: 1.4 $
+ * $Date: 2000/05/26 22:31:43 $ 
+ * $Revision: 1.5 $
  *
  *****************************************************************************************
  */
@@ -447,24 +447,61 @@ public class DateFormatSymbols implements Serializable, Cloneable {
     private String[][] loadZoneStrings(Locale desiredLocale,
 				       ResourceBundle rsrc)
     {
-	String[][] zones;
-	SoftReference data = (SoftReference)cachedZoneData.get(desiredLocale);
-	if (data == null || ((zones = (String[][])data.get()) == null)) {
-	    Vector vec = new Vector();
-	    Enumeration keys = rsrc.getKeys();
-	    while(keys.hasMoreElements()) {
-		String key = (String)keys.nextElement();
-		if (!key.equals("localPatternChars") &&
-		    !key.equals("zoneStrings")) {
-		    vec.add(rsrc.getObject(key));
-		}
-	    }
-	    zones = new String[vec.size()][];
-	    vec.toArray(zones);
-	    data = new SoftReference(zones);
-	    cachedZoneData.put(desiredLocale, data);
-	}
-	return zones;
+        /* We have to handle two different formats of DateFormatZoneData.
+         * The first is used in JDK 1.2.2:
+         * 
+         * | public Object[][] getContents() {
+         * |   return new Object[][] {
+         * |     {"zoneStrings",
+         * |       new String[][] {
+         * |         {"America/Los_Angeles", "Pacific Standard Time", "PST",
+         * |          "Pacific Daylight Time", "PDT" },
+         * |         //...
+         * |       }
+         * |     },
+         * |     {"localPatternChars", "GyMdkHmsSEDFwWahKz"},
+         * |   };
+         * | }
+         *
+         * The second is used in JDK 1.3:
+         * 
+         * | public Object[][] getContents() {
+         * |   return new Object[][] {
+         * |     {"America/Los_Angeles", new String[] {"America/Los_Angeles", "Pacific Standard Time", "PST",
+         * |                                           "Pacific Daylight Time", "PDT"}},
+         * |     {"localPatternChars", "GyMdkHmsSEDFwWahKz"},
+         * |   };
+         * | }
+         *
+         * Let's pray they don't alter it further.
+         */
+        String[][] zones = null;
+        SoftReference data = (SoftReference)cachedZoneData.get(desiredLocale);
+        if (data == null || ((zones = (String[][])data.get()) == null)) {
+            // For JDK 1.3, we have to enumerate over the keys.  For 1.2.2, a
+            // single getObject() call works.  As a heuristic, we assume that if
+            // the zoneStrings key is present, then we are have a 1.2.2 format.
+            // Otherwise we parse the 1.3 format. - liu
+            try {
+                zones = (String[][])rsrc.getObject("zoneStrings");
+            } catch (java.util.MissingResourceException e) {}
+            if (zones == null || zones.length == 0) {
+            Vector vec = new Vector();
+            Enumeration keys = rsrc.getKeys();
+            while(keys.hasMoreElements()) {
+                String key = (String)keys.nextElement();
+                if (!key.equals("localPatternChars") &&
+                    !key.equals("zoneStrings")) {
+                    vec.add(rsrc.getObject(key));
+                }
+            }
+            zones = new String[vec.size()][];
+            vec.toArray(zones);
+            }
+            data = new SoftReference(zones);
+            cachedZoneData.put(desiredLocale, data);
+        }
+        return zones;
     }
 
     private void initializeData(Locale desiredLocale)
