@@ -67,6 +67,12 @@ typedef enum ELocalePos {
     eMAX_LOCALES
 } ELocalePos;
 
+U_CFUNC int32_t locale_getKeywords(const char *localeID,
+            char prev,
+            char *keywords, int32_t keywordCapacity,
+            char *values, int32_t valuesCapacity, int32_t *valLen,
+            UBool valuesToo,
+            UErrorCode *status);
 
 static Locale        *gLocaleCache         = NULL;
 static const Locale  *gDefaultLocale       = NULL;
@@ -256,7 +262,8 @@ Locale::Locale(Locale::ELocaleType t)
 
 Locale::Locale( const   char * newLanguage, 
                 const   char * newCountry, 
-                const   char * newVariant) 
+                const   char * newVariant,
+                const   char * newKeywords) 
     : UObject(), fullName(fullNameBuffer)
 {
     if( (newLanguage==NULL) && (newCountry == NULL) && (newVariant == NULL) )
@@ -482,7 +489,11 @@ Locale& Locale::init(const char* localeID)
             fieldLen[fieldIdx-1] = separator - field[fieldIdx-1];
             fieldIdx++;
         }
-        fieldLen[fieldIdx-1] = length - (int32_t)(field[fieldIdx-1] - fullName);
+        if(separator = uprv_strchr(field[fieldIdx-1], '@')) {
+          fieldLen[fieldIdx-1] = separator - field[fieldIdx-1];
+        } else {
+          fieldLen[fieldIdx-1] = length - (int32_t)(field[fieldIdx-1] - fullName);
+        }
 
         if (fieldLen[0] >= (int32_t)(sizeof(language))
             || (fieldLen[1] == 4 && fieldLen[2] >= (int32_t)(sizeof(country)))
@@ -1088,6 +1099,110 @@ Locale::getLocaleCache(void)
         }
     }
     return gLocaleCache;
+}
+
+class KeywordEnumeration : public StringEnumeration {
+private:
+  char *keywords;
+  char *current;
+  UChar currUKey[256];
+  UnicodeString currUSKey;
+  static const char fgClassID;
+
+public:
+    static inline UClassID getStaticClassID(void) { return (UClassID)&fgClassID; }
+    virtual UClassID getDynamicClassID(void) const { return getStaticClassID(); }
+public:
+  KeywordEnumeration(const char *keys, int32_t keywordLen, UErrorCode &status) {
+    keywords = (char *)uprv_malloc(keywordLen+1);
+    uprv_memcpy(keywords, keys, keywordLen);
+    keywords[keywordLen] = 0;
+    current = keywords;
+  }
+
+  ~KeywordEnumeration() {
+    uprv_free(keywords);
+  }
+
+  int32_t count(UErrorCode &status) const {
+    char *kw = keywords;
+    int32_t result = 0;
+    while(*kw) {
+      result++;
+      kw += uprv_strlen(kw)+1;
+    }
+    return result;
+  }
+
+  const char* next(int32_t* resultLength, UErrorCode& status) {
+    const char* result = current;
+    if(*result) {
+      *resultLength = uprv_strlen(current);
+      current += *resultLength+1;
+    } else {
+      *resultLength = 0;
+      result = NULL;
+    }
+    return result;
+  }
+
+  const UChar* unext(int32_t* resultLength, UErrorCode& status) {
+    const char* starter = next(resultLength, status);
+    if(starter) {
+      u_charsToUChars(starter, currUKey, *resultLength);
+      currUKey[*resultLength] = 0;
+      return currUKey;
+    } else {
+      return NULL;
+    }
+  }
+
+  const UnicodeString* snext(UErrorCode& status) {
+    int32_t resultLength = 0;
+    const UChar* starter = unext(&resultLength, status);
+    if(starter) {
+      currUSKey.setTo(TRUE, starter, resultLength);
+      return &currUSKey;
+    } else {
+      return NULL;
+    }
+  }
+
+  void reset(UErrorCode& /*status*/) {
+      current = keywords;
+  }
+
+
+};
+
+const char KeywordEnumeration::fgClassID = '\0';
+
+StringEnumeration * 
+Locale::getKeywords(UErrorCode &status) const
+{
+  char keywords[256];
+  int32_t keywordCapacity = 256;
+  StringEnumeration *result = NULL;
+
+  const char* variantStart = uprv_strchr(fullName, '@');
+  const char* assignment = uprv_strchr(fullName, '=');
+  if(variantStart) {
+    if(assignment) { 
+      int32_t keyLen = locale_getKeywords(variantStart+1, '@', keywords, keywordCapacity, NULL, 0, NULL, FALSE, &status);
+      if(keyLen) {
+        result = new KeywordEnumeration(keywords, keyLen, status);
+      }
+    } else {
+      status = U_INVALID_FORMAT_ERROR;
+    }
+  }
+  return result;
+}
+
+int32_t
+Locale::getKeywordValue(const char* keywordName, char *buffer, int32_t bufLen, UErrorCode &status) const
+{
+  return uloc_getKeywordValue(fullName, keywordName, buffer, bufLen, &status);
 }
 
 //eof

@@ -756,10 +756,11 @@ compareKeywordStructs(const void *context, const void *left, const void *right) 
   return uprv_strcmp(leftString, rightString);
 }
 
-static int32_t
-_getKeywords(const char *localeID,
+U_CFUNC int32_t
+locale_getKeywords(const char *localeID,
             char prev,
             char *keywords, int32_t keywordCapacity,
+            char *values, int32_t valuesCapacity, int32_t *valLen,
             UBool valuesToo,
             UErrorCode *status) {
 
@@ -771,6 +772,7 @@ _getKeywords(const char *localeID,
   const char* nextSeparator = NULL;
   int32_t i = 0;
   int32_t keywordsLen = 0;
+  int32_t valuesLen = 0;
 
   if(prev == '@') { /* start of keyword definition */
     /* we will grab pairs, trim spaces, lowercase keywords, sort and return */
@@ -856,8 +858,20 @@ _getKeywords(const char *localeID,
           keywordsLen++;
         }
       }
+      if(values) {
+        if(valuesLen + keywordList[i].valueLen + 1< valuesCapacity) {
+          uprv_strcpy(values+valuesLen, keywordList[i].valueStart);
+          values[valuesLen + keywordList[i].valueLen] = 0;
+        }
+        valuesLen += keywordList[i].valueLen + 1;
+      }
     }
-
+    if(values) {
+      values[valuesLen] = 0;
+      if(valLen) {
+        *valLen = valuesLen;
+      }
+    }
     return u_terminateChars(keywords, keywordCapacity, keywordsLen, status);   
   } else {
     return 0;
@@ -1004,7 +1018,7 @@ uloc_getKeywords(const char* localeID,
 
     /* keywords are located after '@' */
     if((localeID = uprv_strchr(localeID, '@')) != NULL) {
-        i=_getKeywords(localeID+1, '@', keywords, keywordsCapacity, FALSE, status);
+        i=locale_getKeywords(localeID+1, '@', keywords, keywordsCapacity, NULL, 0, NULL, FALSE, status);
     }
 
     if(i) {
@@ -1095,7 +1109,7 @@ uloc_getName(const char* localeID,
         }
         ++i;
         ++fieldCount;
-        i += _getKeywords(localeID+1, '@', name+i, nameCapacity-i, TRUE, err);
+        i += locale_getKeywords(localeID+1, '@', name+i, nameCapacity-i, NULL, 0, NULL, TRUE, err);
       } else if(fieldCount < 2) {
         do {
             if(i<nameCapacity) {
