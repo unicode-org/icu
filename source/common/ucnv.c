@@ -90,7 +90,7 @@ ucnv_open (const char *name,
         return NULL;
     }
 
-    return ucnv_createConverter (name, err);
+    return ucnv_createConverter(name, err);
 }
 
 /*Extracts the UChar* to a char* and calls through createConverter */
@@ -100,16 +100,16 @@ ucnv_openU (const UChar * name,
 {
     char asciiName[UCNV_MAX_CONVERTER_NAME_LENGTH];
 
-    if (U_FAILURE (*err))
+    if (err == NULL || U_FAILURE(*err))
         return NULL;
     if (name == NULL)
         return ucnv_open (NULL, err);
-    if (u_strlen(name) > UCNV_MAX_CONVERTER_NAME_LENGTH)
+    if (u_strlen(name) >= UCNV_MAX_CONVERTER_NAME_LENGTH)
     {
         *err = U_ILLEGAL_ARGUMENT_ERROR;
         return NULL;
     }
-    return ucnv_open (u_austrcpy (asciiName, name), err);
+    return ucnv_open(u_austrcpy(asciiName, name), err);
 }
 
 /*Assumes a $platform-#codepage.$CONVERTER_FILE_EXTENSION scheme and calls
@@ -122,7 +122,7 @@ ucnv_openCCSID (int32_t codepage,
     char myName[UCNV_MAX_CONVERTER_NAME_LENGTH];
     int32_t myNameLen;
 
-    if (U_FAILURE (*err))
+    if (err == NULL || U_FAILURE (*err))
         return NULL;
 
     /* ucnv_copyPlatformString could return "ibm-" or "cp" */
