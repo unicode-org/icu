@@ -74,7 +74,7 @@ Formally, the file contains the following structures:
     A3 const uint16_t stage3Index; -- 16-bit unit index of stage3, new in formatVersion 1.1
     A4 const uint16_t propsIndex; -- 32-bit unit index, new in formatVersion 1.1
     A5 const uint16_t exceptionsTopIndex; -- 32-bit unit index to the first unit after exceptions units, new in formatVersion 1.1
-    A6 const uint16_t reservedIndex;
+    A6 const uint16_t ucharsTopIndex; -- 32-bit unit index to the first unit after the array of UChars for special casing
     A7 const uint16_t reservedIndex;
 
     S1 const uint16_t stage1[0x440];    -- 0x440=0x110000>>10
@@ -203,6 +203,7 @@ bit
  4      has numeric value (numerator)
  5      has denominator value
  6      has a mirror-image Unicode code point
+ 7      has SpecialCasing.txt entries
 
 According to the flags in this word, one or more uint32_t words follow it
 in the sequence of the bit flags in the flags word; if a flag is not set,
@@ -227,6 +228,23 @@ is implicitly 1. This means:
 
 For the denominator value, a uint32_t word contains the value directly.
 
+For special casing mappings, the 32-bit exception word contains:
+31      if set, this character has complex, conditional mappings
+        that are not stored;
+        otherwise, the mappings are stored according to the following bits
+30..24  number of UChars used for mappings
+23..16  reserved
+15.. 0  UChar offset from the beginning of the UChars array where the
+        UChars for the special case mappings are stored in the following format:
+
+Format of special casing UChars:
+One UChar value with lengths as follows:
+14..10  number of UChars for titlecase mapping
+ 9.. 5  number of UChars for uppercase mapping
+ 4.. 0  number of UChars for lowercase mapping
+
+Followed by the UChars for lowercase, uppercase, titlecase mappings in this order.
+
 Example:
 U+2160, ROMAN NUMERAL ONE, needs an exception because it has a lowercase
 mapping and a numeric value.
@@ -249,7 +267,7 @@ static UDataInfo dataInfo={
     0,
 
     0x55, 0x50, 0x72, 0x6f,     /* dataFormat="UPro" */
-    1, 1, 0, 0,                 /* formatVersion */
+    1, 2, 0, 0,                 /* formatVersion */
     3, 0, 0, 0                  /* dataVersion */
 };
 
@@ -305,7 +323,7 @@ static uint16_t exceptionsTop=0;
 
 /* Unicode characters, e.g. for special casing or decomposition */
 static UChar uchars[MAX_UCHAR_COUNT+20];
-static uint16_t ucharsTop=0;
+static uint32_t ucharsTop=0;
 
 /* statistics */
 static uint16_t exceptionsCount=0;
@@ -342,8 +360,8 @@ allocStage2(void);
 static uint16_t
 allocProps(void);
 
-static uint16_t
-addUChars(const UChar *s, uint16_t length);
+static uint32_t
+addUChars(const UChar *s, uint32_t length);
 
 /* -------------------------------------------------------------------------- */
 
@@ -507,6 +525,10 @@ addProps(Props *p) {
         }
         ++count;
     }
+    if(p->specialCasing!=NULL) {
+        x=EXCEPTION_BIT;
+        ++count;
+    }
 
     /* handle exceptions */
     if(count>1 || x!=0 || value<MIN_VALUE || MAX_VALUE<value) {
@@ -575,7 +597,43 @@ addProps(Props *p) {
                 first|=0x40;
                 exceptions[value+length++]=p->mirrorMapping;
             }
+            if(p->specialCasing!=NULL) {
+                if(p->specialCasing->isComplex) {
+                    /* complex special casing */
+                    first|=0x80;
+                    exceptions[value+length++]=0x80000000;
+                } else {
+                    /* unconditional special casing */
+                    UChar u[128];
+                    uint32_t i;
+                    uint16_t j, entry;
 
+                    i=1;
+                    entry=0;
+                    j=p->specialCasing->lowerCase[0];
+                    if(j>0) {
+                        uprv_memcpy(u+1, p->specialCasing->lowerCase+1, 2*j);
+                        i+=j;
+                        entry=j;
+                    }
+                    j=p->specialCasing->upperCase[0];
+                    if(j>0) {
+                        uprv_memcpy(u+i, p->specialCasing->upperCase+1, 2*j);
+                        i+=j;
+                        entry|=j<<5;
+                    }
+                    j=p->specialCasing->titleCase[0];
+                    if(j>0) {
+                        uprv_memcpy(u+i, p->specialCasing->titleCase+1, 2*j);
+                        i+=j;
+                        entry|=j<<10;
+                    }
+                    u[0]=entry;
+
+                    first|=0x80;
+                    exceptions[value+length++]=(i<<24)|addUChars(u, i);
+                }
+            }
             exceptions[value]=first;
             exceptionsTop+=length;
         }
@@ -595,7 +653,7 @@ addProps(Props *p) {
             printf("static uint32_t staticProps32Table[0xa0]={\n");
         }
         if(x&EXCEPTION_BIT) {
-            /* do something more intelligent if there is an exception */
+            /* ### TODO: do something more intelligent if there is an exception */
             printf("    /* 0x%02lx */ 0x%lx, /* has exception */\n", p->code, x&~EXCEPTION_BIT);
         } else {
             printf("    /* 0x%02lx */ 0x%lx,\n", p->code, x);
@@ -1066,6 +1124,10 @@ generateData(const char *dataDir) {
 
     offset+=exceptionsTop;                  /* uint32_t offset to the first unit after exceptions[] */
     indexes[5]=offset;
+
+    ucharsTop=(ucharsTop+1)&~1;
+    offset+=(uint16_t)(ucharsTop/2);        /* uint32_t offset to the first unit after uchars[] */
+    indexes[6]=offset;
     size=4*offset;                          /* total size of data */
 
     if(beVerbose) {
@@ -1092,6 +1154,7 @@ generateData(const char *dataDir) {
     udata_writePadding(pData, 2*((stage2Top+stage3Top)&1));
     udata_writeBlock(pData, props32, 4*propsTop);
     udata_writeBlock(pData, exceptions, 4*exceptionsTop);
+    udata_writeBlock(pData, uchars, 2*ucharsTop);
 
     /* finish up */
     dataLength=udata_finish(pData, &errorCode);
@@ -1177,11 +1240,9 @@ allocProps(void) {
     return i;
 }
 
-#if 0
-    /* not currently used, avoid compiler warning */
-static uint16_t
-addUChars(const UChar *s, uint16_t length) {
-    uint16_t top=(uint16_t)(ucharsTop+length+1);
+static uint32_t
+addUChars(const UChar *s, uint32_t length) {
+    uint32_t top=(uint16_t)(ucharsTop+length);
     UChar *p;
 
     if(top>=MAX_UCHAR_COUNT) {
@@ -1189,12 +1250,10 @@ addUChars(const UChar *s, uint16_t length) {
         exit(U_MEMORY_ALLOCATION_ERROR);
     }
     p=uchars+ucharsTop;
-    uprv_memcpy(p, s, length);
-    p[length]=0;
+    uprv_memcpy(p, s, 2*length);
     ucharsTop=top;
-    return (uint16_t)(p-uchars);
+    return (uint32_t)(p-uchars);
 }
-#endif
 
 /*
  * Hey, Emacs, please set the following:

@@ -47,6 +47,9 @@ static void
 parseMirror(const char *filename, UErrorCode *pErrorCode);
 
 static void
+parseSpecialCasing(const char *filename, UErrorCode *pErrorCode);
+
+static void
 parseDB(const char *filename, UErrorCode *pErrorCode);
 
 /* -------------------------------------------------------------------------- */
@@ -135,6 +138,17 @@ main(int argc, char* argv[]) {
     }
     parseMirror(filename, &errorCode);
 
+    /* process SpecialCasing.txt */
+    if(suffix==NULL) {
+        uprv_strcpy(basename, "SpecialCasing.txt");
+    } else {
+        uprv_strcpy(basename, "SpecialCasing");
+        basename[13]='-';
+        uprv_strcpy(basename+14, suffix);
+        uprv_strcat(basename+14, ".txt");
+    }
+    parseSpecialCasing(filename, &errorCode);
+
     /* process UnicodeData.txt */
     if(suffix==NULL) {
         uprv_strcpy(basename, "UnicodeData.txt");
@@ -162,6 +176,53 @@ main(int argc, char* argv[]) {
 
 static void
 init(void) {
+}
+
+static const char *
+skipWhitespace(const char *s) {
+    while(*s==' ' || *s=='\t') {
+        ++s;
+    }
+    return s;
+}
+
+static void
+parseCodePoints(const char *s,
+                UChar *dest, int32_t destSize,
+                UErrorCode *pErrorCode) {
+    char *end;
+    uint32_t value;
+    int32_t i;
+
+    i=1; /* leave dest[0] for the length value */
+    for(;;) {
+        s=skipWhitespace(s);
+        if(*s==';' || *s==0) {
+            dest[0]=(UChar)(i-1);
+            return;
+        }
+
+        /* read one code point */
+        value=uprv_strtoul(s, &end, 16);
+        if(end<=s || (*end!=' ' && *end!='\t' && *end!=';') || value>=0x110000) {
+            fprintf(stderr, "genprops: syntax error parsing code point at %s\n", s);
+            *pErrorCode=U_PARSE_ERROR;
+            return;
+        }
+
+        /* append it to the destination array */
+        UTF_APPEND_CHAR(dest, i, destSize, value);
+
+        /* overflow? */
+        if(i>=destSize) {
+            fprintf(stderr, "genprops: code point sequence too long at at %s\n", s);
+            *pErrorCode=U_INDEX_OUTOFBOUNDS_ERROR;
+            return;
+        }
+
+        /* go to the following characters */
+        s=end;
+    }
 }
 
 /* parser for Mirror.txt ---------------------------------------------------- */
@@ -209,6 +270,99 @@ parseMirror(const char *filename, UErrorCode *pErrorCode) {
     u_parseDelimitedFile(filename, ';', fields, 2, mirrorLineFn, NULL, pErrorCode);
 }
 
+/* parser for SpecialCasing.txt --------------------------------------------- */
+
+#define MAX_SPECIAL_CASING_COUNT 500
+
+static SpecialCasing specialCasings[MAX_SPECIAL_CASING_COUNT];
+static int32_t specialCasingCount=0;
+
+static void
+specialCasingLineFn(void *context,
+                    char *fields[][2], int32_t fieldCount,
+                    UErrorCode *pErrorCode) {
+    static int32_t mirrorIndex=0;
+    char *end;
+
+    /* get code point */
+    specialCasings[specialCasingCount].code=uprv_strtoul(skipWhitespace(fields[0][0]), &end, 16);
+    end=(char *)skipWhitespace(end);
+    if(end<=fields[0][0] || end!=fields[0][1]) {
+        fprintf(stderr, "genprops: syntax error in SpecialCasing.txt field 0 at %s\n", fields[0][0]);
+        *pErrorCode = U_PARSE_ERROR;
+        exit(U_PARSE_ERROR);
+    }
+
+    /* is this a complex mapping? */
+    if(*skipWhitespace(fields[4][0])!=0) {
+        /* there is some condition text in the fifth field */
+        specialCasings[specialCasingCount].isComplex=TRUE;
+
+        /* do not store any actual mappings for this */
+        specialCasings[specialCasingCount].lowerCase[0]=0;
+        specialCasings[specialCasingCount].upperCase[0]=0;
+        specialCasings[specialCasingCount].titleCase[0]=0;
+    } else {
+        /* just set the "complex" flag and get the case mappings */
+        specialCasings[specialCasingCount].isComplex=FALSE;
+        parseCodePoints(fields[1][0], specialCasings[specialCasingCount].lowerCase, 32, pErrorCode);
+        parseCodePoints(fields[3][0], specialCasings[specialCasingCount].upperCase, 32, pErrorCode);
+        parseCodePoints(fields[2][0], specialCasings[specialCasingCount].titleCase, 32, pErrorCode);
+        if(U_FAILURE(*pErrorCode)) {
+            fprintf(stderr, "genprops: error parsing special casing at %s\n", fields[0][0]);
+            exit(*pErrorCode);
+        }
+    }
+
+    if(++specialCasingCount==MAX_SPECIAL_CASING_COUNT) {
+        fprintf(stderr, "genprops: too many special casing mappings\n");
+        *pErrorCode = U_INDEX_OUTOFBOUNDS_ERROR;
+        exit(U_INDEX_OUTOFBOUNDS_ERROR);
+    }
+}
+
+static int
+compareSpecialCasings(const void *left, const void *right) {
+    return ((const SpecialCasing *)left)->code-((const SpecialCasing *)right)->code;
+}
+
+static void
+parseSpecialCasing(const char *filename, UErrorCode *pErrorCode) {
+    char *fields[5][2];
+    int32_t i, j;
+
+    if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
+        return;
+    }
+
+    u_parseDelimitedFile(filename, ';', fields, 5, specialCasingLineFn, NULL, pErrorCode);
+
+    /* sort the special casing entries by code point */
+    if(specialCasingCount>0) {
+        qsort(specialCasings, specialCasingCount, sizeof(SpecialCasing), compareSpecialCasings);
+    }
+
+    /* replace multiple entries for any code point by one "complex" one */
+    j=0;
+    for(i=1; i<specialCasingCount; ++i) {
+        if(specialCasings[i-1].code==specialCasings[i].code) {
+            /* there is a duplicate code point */
+            specialCasings[i-1].code=0x7fffffff;    /* remove this entry in the following qsort */
+            specialCasings[i].isComplex=TRUE;       /* make the following one complex */
+            specialCasings[i].lowerCase[0]=0;
+            specialCasings[i].upperCase[0]=0;
+            specialCasings[i].titleCase[0]=0;
+            ++j;
+        }
+    }
+
+    /* if some entries just were removed, then re-sort */
+    if(j>0) {
+        qsort(specialCasings, specialCasingCount, sizeof(SpecialCasing), compareSpecialCasings);
+        specialCasingCount-=j;
+    }
+}
+
 /* parser for UnicodeData.txt ----------------------------------------------- */
 
 /* general categories */
@@ -252,7 +406,7 @@ static void
 unicodeDataLineFn(void *context,
                   char *fields[][2], int32_t fieldCount,
                   UErrorCode *pErrorCode) {
-    static int32_t mirrorIndex=0;
+    static int32_t mirrorIndex=0, specialCasingIndex=0;
     Props p;
     char *end;
     uint32_t value;
@@ -398,6 +552,11 @@ unicodeDataLineFn(void *context,
     /* set additional properties from previously parsed files */
     if(mirrorIndex<mirrorCount && p.code==mirrorMappings[mirrorIndex][0]) {
         p.mirrorMapping=mirrorMappings[mirrorIndex++][1];
+    }
+    if(specialCasingIndex<specialCasingCount && p.code==specialCasings[specialCasingIndex].code) {
+        p.specialCasing=specialCasings+specialCasingIndex++;
+    } else {
+        p.specialCasing=NULL;
     }
 
     addProps(&p);

@@ -23,6 +23,13 @@
 #define DATA_NAME "uprops"
 #define DATA_TYPE "dat"
 
+/* special casing data */
+typedef struct {
+    uint32_t code;
+    UBool isComplex;
+    UChar lowerCase[32], upperCase[32], titleCase[32];
+} SpecialCasing;
+
 /* character properties */
 typedef struct {
     uint32_t code, lowerCase, upperCase, titleCase, mirrorMapping;
@@ -30,6 +37,7 @@ typedef struct {
     int32_t numericValue; /* see hasNumericValue */
     uint32_t denominator; /* 0: no value */
     uint8_t generalCategory, canonicalCombining, bidi, isMirrored, hasNumericValue;
+    SpecialCasing *specialCasing;
 } Props;
 
 /* global flags */
