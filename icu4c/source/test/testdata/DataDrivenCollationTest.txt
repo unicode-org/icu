@@ -464,5 +464,23 @@ DataDrivenCollationTest {
                  "<े<ै<ॉ<ॊ<ो<ौ"
            }
         }
+        fi_TestNewRules {
+            Info {
+                Description { "This test goes through new rules and tests against old rules" }
+            }
+            Settings {
+                {
+                    TestLocale { "fi" }
+                }
+            }
+            Cases { 
+                "xa<xA<Xa<XA<xá<Xá<xax<xAx<xáx<xd<Xd<xð<xÐ<Xð<XÐ<xđ<xĐ<Xđ<XĐ<"
+                "xdx<xðx<xÐx<xđx<xĐx<xe<Xe<xex<xn<Xn<xŋ<xŊ<Xŋ<XŊ<xnx<xŋx<xŊx<"
+                "xo<Xo<xó<Xó<xox<xóx<xs<Xs<xß<Xß<xßx<xsx<xt<Xt<xþ<xÞ<Xþ<XÞ<xþx<"
+                "xÞx<xtx<xu<Xu<xú<Xú<xux<xúx<xv<Xv<xw<Xw<xvx<xwx<xy<Xy<xü<Xü<"
+                "xű<Xű<xyx<xüx<xűx<xz<Xz<xzx<xå<Xå<xåx<xä<Xä<xæ<xÆ<Xæ<XÆ<xäx<"
+                "xæx<xÆx<xö<Xö<xø<Xø<xő<Xő<xõ<Xõ<xœ<xŒ<Xœ<XŒ<xöx<xøx<xőx<xõx<xœx<xŒx"
+            }
+        }      
     }
 }
