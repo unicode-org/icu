@@ -1,5 +1,5 @@
 /*
- * $RCSfile: UInfo.java,v $ $Revision: 1.1 $ $Date: 2000/02/10 06:25:52 $
+ * $RCSfile: UInfo.java,v $ $Revision: 1.2 $ $Date: 2000/02/28 04:14:47 $
  *
  * (C) Copyright IBM Corp. 1998 - All Rights Reserved
  *
@@ -429,7 +429,7 @@ public final class UInfo {
     }
 
     public UInfo() {
-        this("../src/data/unicode/UnicodeData-2.1.8.txt");
+        this("../src/data/unicode/UnicodeData.txt");
     }
 
     /*
