@@ -1349,26 +1349,67 @@ static void bug1()
 /* bug2: pre-flighting loop bug: simple overflow causes bug */
 static void bug2()
 {
-   /* US-ASCII "1234567890" */
-   static const char source[]={ 0x30, 0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37, 0x38, 0x39 };
-   static char target[5];
+    /* US-ASCII "1234567890" */
+    static const char source[]={ 0x30, 0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37, 0x38, 0x39 };
+    static const char sourceUTF8[]={ 0x30, 0x31, 0x32, 0x33, 0x34, 0x35, 0x36, (char)0xef, (char)0x80, (char)0x80 };
+    static const char sourceUTF32[]={ 0x00, 0x00, 0x00, 0x30,
+                                      0x00, 0x00, 0x00, 0x31,
+                                      0x00, 0x00, 0x00, 0x32,
+                                      0x00, 0x00, 0x00, 0x33,
+                                      0x00, 0x00, 0x00, 0x34,
+                                      0x00, 0x00, 0x00, 0x35,
+                                      0x00, 0x00, 0x00, 0x36,
+                                      0x00, 0x00, 0x00, 0x37,
+                                      0x00, 0x00, 0x00, 0x38,
+                                      0x00, 0x00, (char)0xf0, 0x00};
+    static char target[5];
 
-   UErrorCode err = U_ZERO_ERROR;
-   int32_t size;
+    UErrorCode err = U_ZERO_ERROR;
+    int32_t size;
 
-   /* do the conversion */
-   size = ucnv_convert("iso-8859-1", /* out */
-                       "us-ascii",  /* in */
-                       target,
-                       sizeof(target),
-                       source,
-                       sizeof(source),
-                       &err);
+    /* do the conversion */
+    size = ucnv_convert("iso-8859-1", /* out */
+                        "us-ascii",  /* in */
+                        target,
+                        sizeof(target),
+                        source,
+                        sizeof(source),
+                        &err);
 
-   if ( size != 10 ) {
-      /* bug2: size is 5, should be 10 */
-      log_err("error j932 bug 2: got preflighting size %d instead of 10\n", size);
-   }
+    if ( size != 10 ) {
+        /* bug2: size is 5, should be 10 */
+        log_err("error j932 bug 2 us-ascii->iso-8859-1: got preflighting size %d instead of 10\n", size);
+    }
+
+    err = U_ZERO_ERROR;
+    /* do the conversion */
+    size = ucnv_convert("UTF-32BE", /* out */
+                        "UTF-8",  /* in */
+                        target,
+                        sizeof(target),
+                        sourceUTF8,
+                        sizeof(sourceUTF8),
+                        &err);
+
+    if ( size != 32 ) {
+        /* bug2: size is 5, should be 32 */
+        log_err("error j932 bug 2 UTF-8->UTF-32BE: got preflighting size %d instead of 32\n", size);
+    }
+
+    err = U_ZERO_ERROR;
+    /* do the conversion */
+    size = ucnv_convert("UTF-8", /* out */
+                        "UTF-32BE",  /* in */
+                        target,
+                        sizeof(target),
+                        sourceUTF32,
+                        sizeof(sourceUTF32),
+                        &err);
+
+    if ( size != 12 ) {
+        /* bug2: size is 5, should be 12 */
+        log_err("error j932 bug 2 UTF-32BE->UTF-8: got preflighting size %d instead of 12\n", size);
+    }
 }
 
 /*
