@@ -81,6 +81,8 @@ print HEADER <<"EndOfHeaderComment";
 #ifndef $HEADERDEF
 #define $HEADERDEF
 
+#if !U_DISABLE_RENAMING
+
 EndOfHeaderComment
 
 for(;@ARGV; shift(@ARGV)) {
@@ -123,20 +125,21 @@ for(;@ARGV; shift(@ARGV)) {
     }
 }
 
-print HEADER "\n/* C exports renaming data */\n";
+print HEADER "\n/* C exports renaming data */\n\n";
 foreach(sort keys(%CFuncs)) {
     print HEADER "#define $_ $_$U_ICU_VERSION_SUFFIX\n";
 }
 
-print HEADER "\n/* C++ class names renaming defines */\n";
+print HEADER "\n/* C++ class names renaming defines */\n\n";
 print HEADER "#ifdef XP_CPLUSPLUS\n";
-print HEADER "#if !U_HAVE_NAMESPACE\n";
+print HEADER "#if !U_HAVE_NAMESPACE\n\n";
 foreach(sort keys(%CppClasses)) {
     print HEADER "#define $_ $_$U_ICU_VERSION_SUFFIX\n";
 }
+print HEADER "\n#endif\n";
 print HEADER "#endif\n";
-print HEADER "#endif\n";
-print HEADER "#endif\n";
+print HEADER "\n#endif\n";
+print HEADER "\n#endif\n";
 
 close HEADER;
 
@@ -162,11 +165,4 @@ EndHelpText
     exit 0;
 
 }
-
-
-
-
-
-
-
 
