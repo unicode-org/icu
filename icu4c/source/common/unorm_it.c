@@ -26,7 +26,7 @@
 /* UNormIterator ------------------------------------------------------------ */
 
 enum {
-    initialCapacity=100
+    INITIAL_CAPACITY=100
 };
 
 struct UNormIterator {
@@ -59,8 +59,8 @@ struct UNormIterator {
 
     UNormalizationMode mode;
 
-    UChar charsBuffer[initialCapacity];
-    uint32_t statesBuffer[initialCapacity+1]; /* one more than charsBuffer[]! */
+    UChar charsBuffer[INITIAL_CAPACITY];
+    uint32_t statesBuffer[INITIAL_CAPACITY+1]; /* one more than charsBuffer[]! */
 };
 
 static void
@@ -572,7 +572,6 @@ unorm_openIter(void *stackMem, int32_t stackMemSize, UErrorCode *pErrorCode) {
     }
 
     if(uni!=NULL) {
-        uprv_memset(uni, 0, sizeof(UNormIterator));
         uni->isStackAllocated=TRUE;
     } else {
         uni=(UNormIterator *)uprv_malloc(sizeof(UNormIterator));
@@ -580,13 +579,20 @@ unorm_openIter(void *stackMem, int32_t stackMemSize, UErrorCode *pErrorCode) {
             *pErrorCode=U_MEMORY_ALLOCATION_ERROR;
             return NULL;
         }
-        uprv_memset(uni, 0, sizeof(UNormIterator));
+        uni->isStackAllocated=FALSE;
     }
 
-    /* initialize */
+    /*
+     * initialize
+     * do not memset because that would unnecessarily initialize the arrays
+     */
+    uni->iter=NULL;
     uni->chars=uni->charsBuffer;
     uni->states=uni->statesBuffer;
-    uni->capacity=initialCapacity;
+    uni->capacity=INITIAL_CAPACITY;
+    uni->state=UITER_NO_STATE;
+    uni->hasPrevious=uni->hasNext=FALSE;
+    uni->mode=UNORM_NONE;
 
     /* set a no-op iterator into the api */
     uiter_setString(&uni->api, NULL, 0);
