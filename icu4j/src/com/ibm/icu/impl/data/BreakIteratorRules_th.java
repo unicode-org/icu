@@ -27,10 +27,10 @@ public class BreakIteratorRules_th extends ListResourceBundle {
             // iterator.  Notice we're now using DictionaryBasedBreakIterator
             // for word and line breaking.
             { "BreakIteratorClasses",
-                new String[] { "RuleBasedBreakIterator",           // character-break iterator class
+                new String[] { "RuleBasedBreakIterator_New",           // character-break iterator class
                                "DictionaryBasedBreakIterator",     // word-break iterator class
                                "DictionaryBasedBreakIterator",     // line-break iterator class
-                               "RuleBasedBreakIterator" }          // sentence-break iterator class
+                               "RuleBasedBreakIterator_New" }          // sentence-break iterator class
             },
 
             { "WordBreakRules",

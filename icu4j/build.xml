@@ -194,7 +194,7 @@
     <target name ="coreData" depends="init">
         <copy todir="${build.dir}/com/ibm/icu/impl/data">
               <fileset dir="${src.dir}/com/ibm/icu/impl/data"
-                 includes="Transliterator_*.txt,*.icu,*.spp"
+                 includes="Transliterator_*.txt,*.icu,*.spp,*.brk"
                  excludes="**/CVS/**/*,Transliterator_Han_Latin_*.txt"/>
         </copy>
     </target>

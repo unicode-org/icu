@@ -7,7 +7,9 @@
 package com.ibm.icu.text;
 
 import java.text.CharacterIterator;
-import java.text.StringCharacterIterator;
+import java.io.IOException;
+import java.io.InputStream;
+
 
 /**
  * Rule Based Break Iterator implementation.
@@ -27,7 +29,7 @@ public class RuleBasedBreakIterator_New extends RuleBasedBreakIterator {
      * The rule data for this BreakIterator instance
      * @internal
      */
-    private RBBIDataWrapper     fData;
+    private RBBIDataWrapper     fRData;
 
     /** Index of the Rule {tag} values for the most recent match. 
      *  @internal
@@ -61,7 +63,9 @@ public class RuleBasedBreakIterator_New extends RuleBasedBreakIterator {
     public Object clone()
     {
     	RuleBasedBreakIterator_New result = (RuleBasedBreakIterator_New) super.clone();
-        // TODO: real clone code
+        if (fText != null) {
+            fText = (CharacterIterator)fText.clone();   
+        }
         return result;
     }
 
@@ -71,8 +75,27 @@ public class RuleBasedBreakIterator_New extends RuleBasedBreakIterator {
      * @stable ICU 2.0
      */
     public boolean equals(Object that) {
-    	return false;  // TODO:
-    }
+        try {
+            RuleBasedBreakIterator_New other = (RuleBasedBreakIterator_New) that;
+            if (fRData != other.fRData && (fRData == null || other.fRData == null)) {
+                return false;   
+            }
+            if (fRData != null && other.fRData != null && 
+                    (!fRData.fRuleSource.equals(other.fRData.fRuleSource))) {
+                return false;
+            }
+            if (fText == null && other.fText == null) {
+                return true;   
+            }
+            if (fText == null || other.fText == null) {
+                return false;   
+            }
+            return fText.equals(other.fText);
+        }
+        catch(ClassCastException e) {
+            return false;
+        }
+     }
 
     /**
      * Returns the description (rules) used to create this iterator.
@@ -81,8 +104,8 @@ public class RuleBasedBreakIterator_New extends RuleBasedBreakIterator {
      */
     public String toString() {
         String   retStr = null;
-        if (fData != null) {
-            retStr =  fData.fRuleSource;
+        if (fRData != null) {
+            retStr =  fRData.fRuleSource;
         }
         return retStr;
     }
@@ -94,9 +117,23 @@ public class RuleBasedBreakIterator_New extends RuleBasedBreakIterator {
      */
     public int hashCode()
     {
-        return 0;        // TODO
+        return fRData.fRuleSource.hashCode(); 
     }
 
+    
+    //=======================================================================
+    // Constructors & Factories
+    //=======================================================================
+    public static RuleBasedBreakIterator getInstanceFromCompiledRules(InputStream is) throws IOException {
+        RuleBasedBreakIterator_New  This = new RuleBasedBreakIterator_New();
+        This.fRData = RBBIDataWrapper.get(is);
+        This.fText = new java.text.StringCharacterIterator("");  // Note: some old tests fail if fText is null
+                                                                 //       on a newly created instance.
+        return This;   
+    }
+
+    
+    
     //=======================================================================
     // BreakIterator overrides
     //=======================================================================
@@ -192,8 +229,8 @@ public class RuleBasedBreakIterator_New extends RuleBasedBreakIterator {
             return BreakIterator.DONE;
         }
 
-        if (fData.fSRTable != null || fData.fSFTable != null) {
-            return handlePrevious(fData.fRTable);
+        if (fRData.fSRTable != null || fRData.fSFTable != null) {
+            return handlePrevious(fRData.fRTable);
         }
 
         // old rule syntax
@@ -266,7 +303,7 @@ public class RuleBasedBreakIterator_New extends RuleBasedBreakIterator {
 
         int result = 0;
 
-        if (fData.fSRTable != null) {
+        if (fRData.fSRTable != null) {
             // Safe Point Reverse rules exist.
             //   This allows us to use the optimum algorithm.
             fText.setIndex(offset);
@@ -275,20 +312,20 @@ public class RuleBasedBreakIterator_New extends RuleBasedBreakIterator {
             // this handles offset being between a supplementary character
             CINext32(fText);
             // handlePrevious will move most of the time to < 1 boundary away
-            handlePrevious(fData.fSRTable);
+            handlePrevious(fRData.fSRTable);
             result = next();
             while (result <= offset) {
                 result = next();
             }
             return result;
         }
-        if (fData.fSFTable != null) {
+        if (fRData.fSFTable != null) {
             // No Safe point reverse table, but there is a safe pt forward table.
             // 
             fText.setIndex(offset);
             CIPrevious32(fText);
             // handle next will give result >= offset
-            handleNext(fData.fSFTable);
+            handleNext(fRData.fSFTable);
             // previous will give result 0 or 1 boundary away from offset,
             // most of the time
             // we have to
@@ -352,7 +389,7 @@ public class RuleBasedBreakIterator_New extends RuleBasedBreakIterator {
         // to carry out this operation
 
         int  result;
-        if (fData.fSFTable != null) {
+        if (fRData.fSFTable != null) {
             /// todo synwee
             // new rule syntax
             fText.setIndex(offset);
@@ -360,19 +397,19 @@ public class RuleBasedBreakIterator_New extends RuleBasedBreakIterator {
             // safe point.
             // this handles offset being between a supplementary character
             CIPrevious32(fText);
-            handleNext(fData.fSFTable);
+            handleNext(fRData.fSFTable);
             result = previous();
             while (result >= offset) {
                 result = previous();
             }
             return result;
         }
-        if (fData.fSRTable != null) {
+        if (fRData.fSRTable != null) {
             // backup plan if forward safe table is not available
             fText.setIndex(offset);
             CINext32(fText);
             // handle previous will give result <= offset
-            handlePrevious(fData.fSRTable);
+            handlePrevious(fRData.fSRTable);
 
             // next will give result 0 or 1 boundary away from offset,
             // most of the time
@@ -397,6 +434,19 @@ public class RuleBasedBreakIterator_New extends RuleBasedBreakIterator {
         return previous();
     }
 
+    /**
+     * Throw IllegalArgumentException unless begin <= offset < end.
+     * TODO:  subclassing interface from old RBBI is not really usable.
+     *        What to do with old protected functions tagged as stable?
+     * @stable ICU 2.0
+     */
+    protected static final void checkOffset(int offset, CharacterIterator text) {
+        if (offset < text.getBeginIndex() || offset > text.getEndIndex()) {
+            throw new IllegalArgumentException("offset out of bounds");
+        }
+    }
+
+
 /**
  * Returns true if the specfied position is a boundary position.  As a side
  * effect, leaves the iterator pointing to the first boundary position at
@@ -406,8 +456,10 @@ public class RuleBasedBreakIterator_New extends RuleBasedBreakIterator {
  * @stable ICU 2.0
  */
 public boolean isBoundary(int offset) {
+    checkOffset(offset, fText);
+    
     // the beginning index of the iterator is always a boundary position by definition
-    if (fText == null || offset == fText.getBeginIndex()) {
+    if (offset == fText.getBeginIndex()) {
         first();       // For side effects on current position, tag values.
         return true;
     }
@@ -502,8 +554,8 @@ public int  getRuleStatus() {
     //           Status val N-1  <--  the value we need to return
     //   The status values are sorted in ascending order.
     //   This function returns the last (largest) of the array of status values.
-    int  idx = fLastRuleStatusIndex + fData.fStatusTable[fLastRuleStatusIndex];
-    int  tagVal = fData.fStatusTable[idx];
+    int  idx = fLastRuleStatusIndex + fRData.fStatusTable[fLastRuleStatusIndex];
+    int  tagVal = fRData.fStatusTable[idx];
 
     return tagVal;
 }
@@ -532,11 +584,11 @@ public int  getRuleStatus() {
  */
 public int getRuleStatusVec(int[] fillInArray) {
     makeRuleStatusValid();
-    int numStatusVals = fData.fStatusTable[fLastRuleStatusIndex];
+    int numStatusVals = fRData.fStatusTable[fLastRuleStatusIndex];
     if (fillInArray != null) {  
         int numToCopy = Math.min(numStatusVals, fillInArray.length);
         for (int i=0; i<numToCopy; i++) {
-            fillInArray[i] = fData.fStatusTable[fLastRuleStatusIndex + i + 1];
+            fillInArray[i] = fRData.fStatusTable[fLastRuleStatusIndex + i + 1];
         }
     }
     return numStatusVals;
@@ -618,8 +670,7 @@ public int getRuleStatusVec(int[] fillInArray) {
         if (ci == null) {
             return false;
         }
-        int end = ci.getEndIndex();
-        if (end == 0 || ci.getIndex() < end) {
+        if (ci.getIndex() >= ci.getEndIndex()) {
             return false;
         }
         return true;
@@ -637,7 +688,7 @@ public int getRuleStatusVec(int[] fillInArray) {
      * @internal
      */
     private int handleNext() {
-        return handleNext(fData.fFTable);
+        return handleNext(fRData.fFTable);
     }
 
     
@@ -663,7 +714,7 @@ public int getRuleStatusVec(int[] fillInArray) {
         int               state           = START_STATE;
         short             category;
         int               c               = CICurrent32(fText);
-        int               row             = fData.getRowIndex(state); 
+        int               row             = fRData.getRowIndex(state); 
         int               lookaheadStatus = 0;
         int               lookaheadTagIdx = 0;
 
@@ -671,7 +722,7 @@ public int getRuleStatusVec(int[] fillInArray) {
 
         // Character Category fetch for starting character.
         //    See comments on character category code within loop, below.
-        category = (short)fData.fTrie.getCodePointValue(c);
+        category = (short)fRData.fTrie.getCodePointValue(c);
         if ((category & 0x4000) != 0)  {
               // fDictionaryCharCount++;
               category &= ~0x4000;
@@ -704,7 +755,7 @@ public int getRuleStatusVec(int[] fillInArray) {
             // look up the current character's character category, which tells us
             // which column in the state table to look at.
             //
-            category = (short)fData.fTrie.getCodePointValue(c);
+            category = (short)fRData.fTrie.getCodePointValue(c);
 
             //  Clear the dictionary flag bit in the character's category.
             //  Note:  not using the old style dictionary stuff in this Java engine.
@@ -725,7 +776,7 @@ public int getRuleStatusVec(int[] fillInArray) {
             // look up a state transition in the state table
             //     state = row->fNextState[category];
             state = stateTable[row + RBBIDataWrapper.NEXTSTATES + category];
-            row   = fData.getRowIndex(state);
+            row   = fRData.getRowIndex(state);
 
             // Get the next character.  Doing it here positions the iterator
             //    to the correct position for recording matches in the code that
@@ -793,15 +844,15 @@ public int getRuleStatusVec(int[] fillInArray) {
      * handlePrevious
      */
     private int  handlePrevious() {
-        if (fText == null || fData == null) {
+        if (fText == null || fRData == null) {
             return 0;
         }
-        if (fData.fRTable == null) {
+        if (fRData.fRTable == null) {
             fText.first();
             return fText.getIndex();
         }
 
-        short          stateTable[]    = fData.fRTable;
+        short          stateTable[]    = fRData.fRTable;
         int            state           = START_STATE;
         int            category;
         int            lastCategory    = 0;
@@ -812,8 +863,8 @@ public int getRuleStatusVec(int[] fillInArray) {
         int            c               = CICurrent32(fText);
         int            row;
 
-        row = fData.getRowIndex(state);
-        category = (short)fData.fTrie.getCodePointValue(c);
+        row = fRData.getRowIndex(state);
+        category = (short)fRData.fTrie.getCodePointValue(c);
         category &= ~0x4000;    // Clear the dictionary bit, just in case.
 
         if (fTrace) {
@@ -829,7 +880,7 @@ public int getRuleStatusVec(int[] fillInArray) {
             // save the last character's category and look up the current
             // character's category
             lastCategory = category;
-            category = (short)fData.fTrie.getCodePointValue(c);
+            category = (short)fRData.fTrie.getCodePointValue(c);
 
             // Check the dictionary bit in the character's category.
              //    Don't exist in this Java engine implementation.  Clear the bit.
@@ -848,7 +899,7 @@ public int getRuleStatusVec(int[] fillInArray) {
 
             // look up a state transition in the backwards state table
             state = stateTable[row + RBBIDataWrapper.NEXTSTATES + category];
-            row = fData.getRowIndex(state);
+            row = fRData.getRowIndex(state);
 
             continueOn: {
                 if (stateTable[row + RBBIDataWrapper.ACCEPTING] == 0 &&
@@ -942,9 +993,9 @@ public int getRuleStatusVec(int[] fillInArray) {
         boolean        lookAheadHardBreak = 
             (stateTable[RBBIDataWrapper.FLAGS+1] & RBBIDataWrapper.RBBI_LOOKAHEAD_HARD_BREAK) != 0;
   
-        int            row = fData.getRowIndex(state);
+        int            row = fRData.getRowIndex(state);
 
-        category = (short)fData.fTrie.getCodePointValue(c);
+        category = (short)fRData.fTrie.getCodePointValue(c);
         category &= ~0x4000;            // Mask off dictionary bit.
 
         if (fTrace) {
@@ -965,7 +1016,7 @@ public int getRuleStatusVec(int[] fillInArray) {
             // save the last character's category and look up the current
             // character's category
             lastCategory = category;
-            category = (short)fData.fTrie.getCodePointValue(c);
+            category = (short)fRData.fTrie.getCodePointValue(c);
 
             category &= ~0x4000;    // Clear the dictionary bit flag
                                     //   (Should be unused; holdover from old RBBI)
@@ -982,7 +1033,7 @@ public int getRuleStatusVec(int[] fillInArray) {
 
             // look up a state transition in the backwards state table
             state = stateTable[row + RBBIDataWrapper.NEXTSTATES + category];
-            row = fData.getRowIndex(state);
+            row = fRData.getRowIndex(state);
 
             if (stateTable[row + RBBIDataWrapper.ACCEPTING] == -1) {
                 // Match found, common case, could have lookahead so we move on to check it

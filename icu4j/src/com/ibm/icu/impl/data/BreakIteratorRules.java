@@ -29,11 +29,11 @@ public class BreakIteratorRules extends ListResourceBundle {
         // BreakIteratorClasses lists the class names to instantiate for each
         // built-in type of BreakIterator
         { "BreakIteratorClasses",
-            new String[] { "RuleBasedBreakIterator",     // character-break iterator class
-                           "RuleBasedBreakIterator",     // word-break iterator class
-                           "RuleBasedBreakIterator",     // line-break iterator class
-                           "RuleBasedBreakIterator",     // sentence-break iterator class
-                           "RuleBasedBreakIterator"}     // Title-Case break iterator class
+            new String[] { "RuleBasedBreakIterator_New",     // character-break iterator class
+                           "RuleBasedBreakIterator_New",     // word-break iterator class
+                           "RuleBasedBreakIterator_New",     // line-break iterator class
+                           "RuleBasedBreakIterator_New",     // sentence-break iterator class
+                           "RuleBasedBreakIterator_New"}     // Title-Case break iterator class
         },
 
         // rules describing how to break between logical characters
