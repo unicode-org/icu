@@ -49,6 +49,14 @@ static const char *moreCases[]={
     "0061 0301 0F73;00E1 0F71 0F72;0061 0F71 0F72 0301;00E1 0F71 0F72;0061 0F71 0F72 0301; # Markus 1"
 };
 
+void NormalizerConformanceTest::compare(const UnicodeString& s1, const UnicodeString& s2){
+    UErrorCode status=U_ZERO_ERROR;
+     // TODO: Re-enable this tests after UTC fixes UAX 21
+    if(s1.indexOf((UChar32)0x0345)>=0)return;
+    if(Normalizer::compare(s1,s2,U_FOLD_CASE_DEFAULT,status)!=0){
+        errln("Normalizer::compare() failed for s1: " + prettify(s1) + " s2: " +prettify(s2));
+    }
+}
 /**
  * Test the conformance of Normalizer to
  * http://www.unicode.org/unicode/reports/tr15/conformance/Draft-TestSuite.txt.
@@ -244,7 +252,8 @@ UBool NormalizerConformanceTest::checkConformance(const UnicodeString* field,
         iterativeNorm(field[i], UNORM_NFKD, out, -1);
         pass &= assertEqual("KD(-1)", field[i], out, field[4], "c5!=KD(c", fieldNum);
     }
-
+    compare(field[1],field[2]);
+    compare(field[0],field[1]);
     // test quick checks
     if(UNORM_NO == Normalizer::quickCheck(field[1], UNORM_NFC, status)) {
         errln("Normalizer error: quickCheck(NFC(s), UNORM_NFC) is UNORM_NO");
