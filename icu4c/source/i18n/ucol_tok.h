@@ -1,3 +1,23 @@
+/*
+*******************************************************************************
+*
+*   Copyright (C) 2001, International Business Machines
+*   Corporation and others.  All Rights Reserved.
+*
+*******************************************************************************
+*   file name:  ucol_tok.h
+*   encoding:   US-ASCII
+*   tab size:   8 (not used)
+*   indentation:4
+*
+*   created 02/22/2001
+*   created by: Vladimir Weinstein
+*
+* This module reads a tailoring rule string and produces a list of 
+* tokens that will be turned into collation elements
+* 
+*/
+
 #ifndef UCOL_TOKENS_H
 #define UCOL_TOKENS_H
 

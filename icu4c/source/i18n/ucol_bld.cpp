@@ -1,3 +1,22 @@
+/*
+*******************************************************************************
+*
+*   Copyright (C) 2001, International Business Machines
+*   Corporation and others.  All Rights Reserved.
+*
+*******************************************************************************
+*   file name:  ucol_tok.cpp
+*   encoding:   US-ASCII
+*   tab size:   8 (not used)
+*   indentation:4
+*
+*   created 02/22/2001
+*   created by: Vladimir Weinstein
+*
+* This module builds a collator based on the rule set.
+* 
+*/
+
 #include "ucol_bld.h"
 /* checkout this one - it might be replaceable by something faster */
 #include "dcmpdata.h"

@@ -1,24 +1,21 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2000-2001, International Business Machines
+*   Copyright (C) 2001, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
-*   file name:  genuca.cpp
+*   file name:  ucol_tok.cpp
 *   encoding:   US-ASCII
 *   tab size:   8 (not used)
 *   indentation:4
 *
-*   This program reads the Franctional UCA table and generates
-*   internal format for UCA table as well as inverse UCA table.
-*   It then writes binary files containing the data: ucadata.dat 
-*   & invuca.dat
+*   created 02/22/2001
+*   created by: Vladimir Weinstein
 *
-*   Change history:
-*
-*   02/08/2001  Vladimir Weinstein      Created this program
-*   02/23/2001  grhoten                 Made it into a tool
+* This module maintains a contraction table structure in expanded form
+* and provides means to flatten this structure
+* 
 */
 
 #ifndef UCOL_CNTTABLE_H
