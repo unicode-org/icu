@@ -43,21 +43,21 @@ PKGDATA_MODE=@DATA_PACKAGING_MODE@
 endif
 ifeq ($(PKGDATA_MODE),common)
 ICUDATA_DIR = $(pkgdatadir)
-ICUPKGDATA_DIR = $(ICUDATA_DIR)/$(VERSION)
+ICUPKGDATA_DIR = $(ICUDATA_DIR)
 else
 ifeq ($(PKGDATA_MODE),dll)
 ICUDATA_DIR = $(pkgdatadir)
 ICUPKGDATA_DIR = $(libdir)
 else
 ICUDATA_DIR = $(pkglibdir)
-ICUPKGDATA_DIR = $(ICUDATA_DIR)/$(VERSION)
+ICUPKGDATA_DIR = $(ICUDATA_DIR)
 endif
 endif
 
 # ICU specific directories
 
-pkgdatadir = $(datadir)/$(PACKAGE)
-pkglibdir = $(libdir)/$(PACKAGE)
+pkgdatadir = $(datadir)/$(PACKAGE)/$(VERSION)
+pkglibdir = $(libdir)/$(PACKAGE)/$(VERSION)
 pkgsysconfdir = $(sysconfdir)/$(PACKAGE)
 
 # Installation programs

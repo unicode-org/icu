@@ -79,10 +79,10 @@ all-local: $(TARGET) $(ALL_MAN_FILES)
 install-local: all-local install-man
 	$(MKINSTALLDIRS) $(DESTDIR)$(sbindir)
 	$(INSTALL) $(TARGET) $(DESTDIR)$(sbindir)/$(TARGET)
-#	$(MKINSTALLDIRS) $(DESTDIR)$(pkglibdir)/$(VERSION)
+#	$(MKINSTALLDIRS) $(DESTDIR)$(pkglibdir)
 #	@list='$(notdir $(CNV_FILES)) convrtrs.txt'; for file in $$list; do \
-#		echo $(INSTALL_DATA) $(top_builddir)/data/$$file $(DESTDIR)$(pkglibdir)/$(VERSION)/$$file; \
-#		$(INSTALL_DATA) $(top_builddir)/data/$$file $(DESTDIR)$(pkglibdir)/$(VERSION)/$$file; \
+#		echo $(INSTALL_DATA) $(top_builddir)/data/$$file $(DESTDIR)$(pkglibdir)/$$file; \
+#		$(INSTALL_DATA) $(top_builddir)/data/$$file $(DESTDIR)$(pkglibdir)/$$file; \
 #	done
 
 dist-local:

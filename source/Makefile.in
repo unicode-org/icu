@@ -86,19 +86,19 @@ clean-recursive-with-twist:
 
 all-local: $(srcdir)/configure icudefs.mk
 
-install-local: $(top_builddir)/config/Makefile.inc @platform_make_fragment@ README $(EXTRA_DATA:%=$(DESTDIR)$(pkglibdir)/$(VERSION)/%)
-	@$(MKINSTALLDIRS) $(DESTDIR)$(pkgdatadir)/$(VERSION)/config
-	@$(MKINSTALLDIRS) $(DESTDIR)$(pkglibdir)/$(VERSION)
+install-local: $(top_builddir)/config/Makefile.inc @platform_make_fragment@ README $(EXTRA_DATA:%=$(DESTDIR)$(pkglibdir)/%)
+	@$(MKINSTALLDIRS) $(DESTDIR)$(pkgdatadir)/config
+	@$(MKINSTALLDIRS) $(DESTDIR)$(pkglibdir)
 	@$(MKINSTALLDIRS) $(DESTDIR)$(sbindir)
-	$(INSTALL_DATA) $(top_builddir)/config/Makefile.inc $(DESTDIR)$(pkglibdir)/$(VERSION)/Makefile$(ICULIBSUFFIX).inc
-	cd $(DESTDIR)$(pkglibdir); \
+	$(INSTALL_DATA) $(top_builddir)/config/Makefile.inc $(DESTDIR)$(pkglibdir)/Makefile$(ICULIBSUFFIX).inc
+	cd $(DESTDIR)$(pkglibdir)/..; \
 	    $(RM) current && ln -s $(VERSION) current; \
 	    $(RM) Makefile$(ICULIBSUFFIX).inc && ln -s current/Makefile$(ICULIBSUFFIX).inc .
-	$(INSTALL_DATA) @platform_make_fragment@ $(DESTDIR)$(pkgdatadir)/$(VERSION)/config/@platform_make_fragment_name@
+	$(INSTALL_DATA) @platform_make_fragment@ $(DESTDIR)$(pkgdatadir)/config/@platform_make_fragment_name@
 	$(INSTALL_SCRIPT) $(top_srcdir)/mkinstalldirs $(DESTDIR)$(pkgdatadir)/mkinstalldirs
-	$(INSTALL_DATA) README $(DESTDIR)$(pkgdatadir)/$(VERSION)/README
+	$(INSTALL_DATA) README $(DESTDIR)$(pkgdatadir)/README
 
-$(DESTDIR)$(pkglibdir)/$(VERSION)/%: $(top_srcdir)/../data/%
+$(DESTDIR)$(pkglibdir)/%: $(top_srcdir)/../data/%
 	$(INSTALL_DATA) $< $@
 
 ## Generate HTML documentation
