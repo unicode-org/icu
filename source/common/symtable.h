@@ -59,9 +59,9 @@ public:
     /**
      * Lookup the characters associated with this string and return it.
      * Return <tt>NULL</tt> if no such name exists.  The resultant
-     * array may have length zero.
+     * string may have length zero.
      * @param s the symbolic name to lookup
-     * @return a char array containing the name's value, or NULL if
+     * @return a string containing the name's value, or <tt>NULL</tt> if
      * there is no mapping for s.
      */
     virtual const UnicodeString* lookup(const UnicodeString& s) const = 0;
@@ -78,7 +78,7 @@ public:
     /**
      * Parse a symbol reference name from the given string, starting
      * at the given position.  If no valid symbol reference name is
-     * found, return NULL and leave pos unchanged.  That is, if the
+     * found, return the empty string and leave pos unchanged.  That is, if the
      * character at pos cannot start a name, or if pos is at or after
      * text.length(), then return an empty string.  This indicates an
      * isolated SYMBOL_REF character.
