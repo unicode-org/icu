@@ -90,7 +90,7 @@ dv {
     LocaleScript:array {
         "THAA"
     }
-    ExemplarCharacters { "[:Thaa:]" }
+    ExemplarCharacters { "[[:Thaa:]\u200c\u200d\u200f\u200e]" }
     CollationElements {	    
         Version { "1.0" }
         Sequence { 

@@ -69,5 +69,5 @@ bn {
     LocaleScript:array{
         "Beng"
     }
-    ExemplarCharacters{"[:Beng:]"}
+    ExemplarCharacters{"[[:Beng:]\u200c\u200d]"}
 }

@@ -92,7 +92,7 @@ sa {
     }
 
     LocaleScript:array{ "Deva" }
-    ExemplarCharacters { "[[[:Deva:][\u0951-\u0954]]-[\u0958-\u095f]]" }
+    ExemplarCharacters { "[[[:Deva:][\u0951-\u0954]]-[\u0958-\u095f]\u200c\u200d]" }
     CollationElements {	    
         Version { "1.0" }
         Sequence { 

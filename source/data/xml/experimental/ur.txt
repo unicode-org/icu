@@ -81,7 +81,7 @@ ur {
 //    }
     LocaleScript:array { "Arab" }
 
-    ExemplarCharacters { "[:Arab:]" }
+    ExemplarCharacters { "[[:Arab:]\u200c\u200d\u200f\u200e]" }
     CollationElements {	    
         Version { "1.0" }
         Sequence { 
