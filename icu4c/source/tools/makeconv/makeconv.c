@@ -284,6 +284,8 @@ int main(int argc, char** argv)
   UConverterSharedData_1_4* mySharedData = NULL; 
   UErrorCode err = U_ZERO_ERROR;
   char outFileName[UCNV_MAX_FULL_FILE_NAME_LENGTH];
+  const char* destdir = u_getDataDirectory();
+  size_t destdirlen = uprv_strlen(destdir);
   char* dot = NULL, *arg;
   char cnvName[UCNV_MAX_FULL_FILE_NAME_LENGTH];
   
@@ -297,8 +299,36 @@ int main(int argc, char** argv)
 	  err = U_ZERO_ERROR;
       arg = getLongPathname(argv[argc]);
 
+      /*produces the right destination path for display*/
+      if (destdir)
+	{
+	  char *basename, *basename2;
+	  uprv_strcpy(outFileName, destdir);
+
+          /* find the last file sepator */
+          basename = uprv_strrchr(arg, '/');
+          if (!basename) {
+              basename = arg;
+          } else {
+              ++basename;
+          }
+ 
+          basename2 = uprv_strrchr(basename, '\\');
+          if (basename2) {
+              basename = basename2 + 1;
+          }       
+
+	  if (outFileName[destdirlen - 1] != '/') {
+	      outFileName[destdirlen] = '/';
+	  }
+	  uprv_strcat(outFileName, basename);
+        }
+      else
+	{
+      	  uprv_strcpy(outFileName, arg);
+        }
+
       /*removes the extension if any is found*/
-      uprv_strcpy(outFileName, arg);
       if (dot = uprv_strchr(outFileName +   uprv_strlen(outFileName) - 4, '.')) 
 	{
 	  *dot = '\0';
