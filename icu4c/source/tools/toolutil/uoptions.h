@@ -73,6 +73,8 @@ struct UOption {
 #define UOPTION_SOURCEDIR           UOPTION_DEF("sourcedir", 's', UOPT_REQUIRES_ARG)
 #define UOPTION_ENCODING            UOPTION_DEF("encoding", 'e', UOPT_REQUIRES_ARG)
 #define UOPTION_ICUDATADIR          UOPTION_DEF("icudatadir", 'i', UOPT_REQUIRES_ARG)
+#define UOPTION_WRITE_JAVA          UOPTION_DEF("write-java", 'j', UOPT_NO_ARG)
+
 
 /**
  * C Command line argument parser.
