@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/test/search/Attic/SearchTest.java,v $ 
- * $Date: 2000/05/18 19:11:27 $ 
- * $Revision: 1.3 $
+ * $Date: 2000/10/06 23:16:40 $ 
+ * $Revision: 1.4 $
  *
  *****************************************************************************************
  */
@@ -45,9 +45,9 @@ public class SearchTest extends com.ibm.test.TestFmwk {
             
             esColl = new RuleBasedCollator(enColl.getRules() + " & C < ch ; cH ; Ch ; CH");
             
-            deColl = new RuleBasedCollator(enColl.getRules() + " & ae ; ä & AE ; Ä"
-                                                             + " & oe ; ö & OE ; Ö"
-                                                             + " & ue ; ü & UE ; Ü"); 
+            deColl = new RuleBasedCollator(enColl.getRules() + " & ae ; \u00e4 & AE ; \u00c4"
+                                                             + " & oe ; \u00f6 & OE ; \u00d6"
+                                                             + " & ue ; \u00fc & UE ; \u00dc"); 
         }
         catch (ParseException e) {
         }

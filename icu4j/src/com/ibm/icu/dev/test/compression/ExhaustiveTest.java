@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/compression/ExhaustiveTest.java,v $ 
- * $Date: 2000/03/10 03:47:46 $ 
- * $Revision: 1.2 $
+ * $Date: 2000/10/06 23:15:50 $ 
+ * $Revision: 1.3 $
  *
  *****************************************************************************************
  */
@@ -258,8 +258,8 @@ public class ExhaustiveTest extends TestFmwk {
 
     private static final String [] fTestCases = {
         "Hello \u9292 \u9192 World!",
-        "Hell\u0429o \u9292 \u9192 W„rld!",
-        "Hell\u0429o \u9292 \u9292W„rld!",
+        "Hell\u0429o \u9292 \u9192 W\u0084rld!",
+        "Hell\u0429o \u9292 \u9292W\u0084rld!",
 
         "\u0648\u06c8", // catch missing reset
         "\u0648\u06c8",
@@ -270,8 +270,8 @@ public class ExhaustiveTest extends TestFmwk {
         "\u4444\uf188\uf288",
         "\u4444\uf188abc\0429\uf288",
         "\u9292\u2222",
-        "Hell\u0429\u04230o \u9292 \u9292W„\u0192rld!",
-        "Hell\u0429o \u9292 \u9292W„rld!",
+        "Hell\u0429\u04230o \u9292 \u9292W\u0084\u0192rld!",
+        "Hell\u0429o \u9292 \u9292W\u0084rld!",
         "Hello World!123456",
         "Hello W\u0081\u011f\u0082!", // Latin 1 run
 

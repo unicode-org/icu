@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/normalizer/BasicTest.java,v $ 
- * $Date: 2000/07/18 18:41:22 $ 
- * $Revision: 1.6 $
+ * $Date: 2000/10/06 23:12:54 $ 
+ * $Revision: 1.7 $
  *
  *****************************************************************************************
  */
@@ -45,10 +45,10 @@ public class BasicTest extends TestFmwk {
         { "\u212b",             "A\u030a",              "\u00c5"            }, // angstrom_sign
         { "\u00c5",             "A\u030a",              "\u00c5"            }, // A-ring
 
-//        { "ýffin",              "A\u0308ffin",          "ýffin"             },
-        { "ýffin",              "y\u0301ffin",          "ýffin"             },	//updated with 3.0
-//        { "ý\uFB03n",           "A\u0308\uFB03n",       "ý\uFB03n"          },
-        { "ý\uFB03n",           "y\u0301\uFB03n",       "ý\uFB03n"          },	//updated with 3.0
+//        { "\u00fdffin",              "A\u0308ffin",          "\u00fdffin"             },
+        { "\u00fdffin",              "y\u0301ffin",          "\u00fdffin"             },	//updated with 3.0
+//        { "\u00fd\uFB03n",           "A\u0308\uFB03n",       "\u00fd\uFB03n"          },
+        { "\u00fd\uFB03n",           "y\u0301\uFB03n",       "\u00fd\uFB03n"          },	//updated with 3.0
 
         { "Henry IV",           "Henry IV",             "Henry IV"          },
         { "Henry \u2163",       "Henry \u2163",         "Henry \u2163"      },
@@ -66,10 +66,10 @@ public class BasicTest extends TestFmwk {
             // Input                Decomposed              Composed
         { "\uFB4f",             "\u05D0\u05DC",         "\u05D0\u05DC",     }, // Alef-Lamed vs. Alef, Lamed
 
-//        { "ýffin",              "A\u0308ffin",          "ýffin"             },
-//       { "ý\uFB03n",           "A\u0308ffin",          "ýffin"             }, // ffi ligature -> f + f + i
-        { "ýffin",              "y\u0301ffin",          "ýffin"             },	//updated for 3.0
-        { "ý\uFB03n",           "y\u0301ffin",          "ýffin"             }, // ffi ligature -> f + f + i
+//        { "\u00fdffin",              "A\u0308ffin",          "\u00fdffin"             },
+//       { "\u00fd\uFB03n",           "A\u0308ffin",          "\u00fdffin"             }, // ffi ligature -> f + f + i
+        { "\u00fdffin",              "y\u0301ffin",          "\u00fdffin"             },	//updated for 3.0
+        { "\u00fd\uFB03n",           "y\u0301ffin",          "\u00fdffin"             }, // ffi ligature -> f + f + i
 
         { "Henry IV",           "Henry IV",             "Henry IV"          },
         { "Henry \u2163",       "Henry IV",             "Henry IV"          },
