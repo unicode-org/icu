@@ -2386,6 +2386,7 @@ uloc_getDisplayKeywordValue(   const char* locale,
     }
 
     /* get the keyword value */
+    keywordValue[0]=0;
     keywordValueLen = uloc_getKeywordValue(locale, keyword, keywordValue, capacity, status);
 
     /* 
