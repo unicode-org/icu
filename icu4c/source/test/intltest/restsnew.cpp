@@ -262,6 +262,7 @@ NewResourceBundleTest::TestConstruction()
         delete[] versionID1;
         delete[] versionID2;
     }
+#ifdef ICU_RESOURCEBUNDLE_USE_DEPRECATES
     {
         UErrorCode   err = U_ZERO_ERROR;
         const char* testdatapath;
@@ -295,6 +296,7 @@ NewResourceBundleTest::TestConstruction()
 
         delete[] wideDirectory;
     }
+#endif /* ICU_RESOURCEBUNDLE_USE_DEPRECATES */
 }
 void
 NewResourceBundleTest::TestIteration()
