@@ -636,23 +636,23 @@ static UResourceBundle *init_resb_result(const ResourceData *rdata, Resource r,
           u_UCharsToChars(alias, chAlias, len);
 
           if(*chAlias == RES_PATH_SEPARATOR) {
-              if(*(chAlias+1) == RES_PATH_SEPARATOR) {
-                /* this is an XPath alias, starting with "//" */
+              /* there is a path included */
+              locale = uprv_strchr(chAlias+1, RES_PATH_SEPARATOR);
+              if(locale == NULL) {
+                locale = uprv_strchr(chAlias, 0); /* avoid locale == NULL to make code below work */
+              } else {
+                *locale = 0;
+                locale++;
+              }
+              path = chAlias+1;
+              if(uprv_strcmp(path, "LOCALE") == 0) {
+                /* this is an XPath alias, starting with "/LOCALE/" */
                 /* it contains the path to a resource which should be looked up */
                 /* starting in parent */
+                keyPath = locale; 
                 locale = parent->fData->fName; /* this is the parent's name */
                 path = realData->fPath; /* we will be looking in the same package */
-                keyPath = chAlias+2; 
               } else {
-                /* there is a path included */
-                locale = uprv_strchr(chAlias+1, RES_PATH_SEPARATOR);
-                if(locale == NULL) {
-                  locale = uprv_strchr(chAlias, 0); /* avoid locale == NULL to make code below work */
-                } else {
-                  *locale = 0;
-                  locale++;
-                }
-                path = chAlias+1;
                 if(uprv_strcmp(path, "ICUDATA") == 0) { /* want ICU data */
                   path = NULL;
                 }
@@ -742,16 +742,45 @@ static UResourceBundle *init_resb_result(const ResourceData *rdata, Resource r,
                  *     anotheralias:alias { "/ICUDATA/sh/CollationElements" }
                  * aliastest resource should finally have the sequence, not collation elements.
                  */
-                result = mainRes;
-                while(*keyPath && U_SUCCESS(*status)) {
-                  r = res_findResource(&(result->fResData), result->fRes, &keyPath, &temp);
-                  if(r == RES_BOGUS) {
-                    *status = U_MISSING_RESOURCE_ERROR;
-                    result = resB;
-                    break;
+                UResourceDataEntry *dataEntry = mainRes->fData;
+                char path[URES_MAX_BUFFER_SIZE];
+                char *pathBuf = path, *myPath = pathBuf;
+                if(uprv_strlen(keyPath) > URES_MAX_BUFFER_SIZE) {
+                  pathBuf = (char *)uprv_malloc((uprv_strlen(keyPath)+1)*sizeof(char));
+                  if(pathBuf == NULL) {
+                    *status = U_MEMORY_ALLOCATION_ERROR;
+                    return NULL;
                   }
-                  resB = init_resb_result(&(result->fResData), r, key, -1, result->fData, parent, noAlias+1, resB, status);
+                }
+                uprv_strcpy(pathBuf, keyPath);
+                result = mainRes;
+                /* now we have fallback following here */
+                do {
+                  r = dataEntry->fData.rootRes;     
+                  /* this loop handles 'found' resources over several levels */
+                  while(*myPath && U_SUCCESS(*status)) {
+                    r = res_findResource(&(dataEntry->fData), r, &myPath, &temp);
+                    if(r != RES_BOGUS) { /* found a resource, but it might be an indirection */
+                      resB = init_resb_result(&(dataEntry->fData), r, key, -1, dataEntry, parent, noAlias+1, resB, status);
+                      result = resB;
+                      if(result) {
+                        r = result->fRes; /* switch to a new resource, possibly a new tree */
+                        dataEntry = result->fData;
+                      }
+                    } else { /* no resource found, we don't really want to look anymore on this level */
+                      break;
+                    }
+                  }
+                  dataEntry = dataEntry->fParent;
+                  uprv_strcpy(pathBuf, keyPath);
+                  myPath = pathBuf;
+                } while(r == RES_BOGUS && dataEntry != NULL);
+                if(r == RES_BOGUS) {
+                  *status = U_MISSING_RESOURCE_ERROR;
                   result = resB;
+                }
+                if(pathBuf != path) {
+                  uprv_free(pathBuf);
                 }
               }
             } else { /* we failed to open the resource we're aliasing to */
