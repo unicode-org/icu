@@ -283,13 +283,13 @@ UnicodeStringTest::TestCompare()
             { 0xd84d, 0xdc56, 0 }           /* U+23456 */
         };
         UnicodeString u[20]; // must be at least as long as strings[]
-        int i;
+        int32_t i;
 
-        for(i=0; i<sizeof(strings)/sizeof(strings[0]); ++i) {
+        for(i=0; i<(int32_t)(sizeof(strings)/sizeof(strings[0])); ++i) {
             u[i]=UnicodeString(TRUE, strings[i], -1);
         }
 
-        for(i=0; i<(sizeof(strings)/sizeof(strings[0])-1); ++i) {
+        for(i=0; i<(int32_t)(sizeof(strings)/sizeof(strings[0])-1); ++i) {
             if(u[i].compareCodePointOrder(u[i+1])>=0) {
                 errln("error: UnicodeString::compareCodePointOrder() fails for string %d and the following one\n", i);
             }

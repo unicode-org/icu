@@ -98,7 +98,7 @@ int main(int argc, const char* const argv[])
 
         /* If no ICU_DATA environment was set, try to fake up one. */
         
-        fprintf(stderr, "u_getDataDirectory() = %s\n", u_getDataDirectory());
+        fprintf(stdout, "u_getDataDirectory() = %s\n", u_getDataDirectory());
 
 #ifdef XP_MAC_CONSOLE
         argc = ccommand((char***)&argv);
@@ -177,7 +177,7 @@ int main(int argc, const char* const argv[])
     return nerrors ? 1 : 0;
 }
 
-void ctest_appendToDataDirectory(const char *toAppend)
+static void ctest_appendToDataDirectory(const char *toAppend)
 {
     const char *oldPath ="";
     char newBuf [1024];

@@ -443,7 +443,6 @@ static void TestBreakIteratorSafeClone(void)
 //     of the rules and error checking.
 */
 static UBreakIterator * testOpenRules(char *rules) {
-    UConverter*     conv         = NULL;
     UErrorCode      status       = U_ZERO_ERROR;
     UChar          *ruleSourceU  = NULL;
     void           *strCleanUp   = NULL;

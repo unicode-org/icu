@@ -125,6 +125,8 @@ static void EnumerationTest(void) {
     uenum_close(en);
 }
 
+void addEnumerationTest(TestNode** root);
+
 void addEnumerationTest(TestNode** root)
 {
     addTest(root, &EnumerationTest, "tsutil/uenumtst/EnumerationTest");

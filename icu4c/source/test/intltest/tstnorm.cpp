@@ -1099,7 +1099,7 @@ BasicNormalizerTest::TestCompare() {
         { U_COMPARE_CODE_POINT_ORDER|U_COMPARE_IGNORE_CASE|U_FOLD_CASE_EXCLUDE_SPECIAL_I, "code point order & ignore case & special i" }
     };
 
-    int32_t i, j, k, count=sizeof(strings)/sizeof(strings[0]);
+    int32_t i, j, k, count=(int32_t)(sizeof(strings)/sizeof(strings[0]));
     int32_t result, refResult;
 
     UErrorCode errorCode;
@@ -1112,7 +1112,7 @@ BasicNormalizerTest::TestCompare() {
     // test them each with each other
     for(i=0; i<count; ++i) {
         for(j=i; j<count; ++j) {
-            for(k=0; k<sizeof(opt)/sizeof(opt[0]); ++k) {
+            for(k=0; k<(int32_t)(sizeof(opt)/sizeof(opt[0])); ++k) {
                 // test Normalizer::compare
                 errorCode=U_ZERO_ERROR;
                 result=_norm_compare(s[i], s[j], opt[k].options, errorCode);

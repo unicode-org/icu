@@ -1053,16 +1053,15 @@ static void TestNewConvertWithBufferSizes(int32_t outsize, int32_t insize )
 }
 
 static void TestCoverageMBCS(){
-    char* saveDirectory = (char*)uprv_malloc(sizeof(char) *(strlen(u_getDataDirectory())+1));
-    const char *directory;
-    char* tdpath = NULL;
     UErrorCode status = U_ZERO_ERROR;
-    int len = 0;
-    char* index=NULL;
-    directory = loadTestData(&status);
+    const char *directory = loadTestData(&status);
 
 #if 0
-    len = strlen(directory);
+    char* tdpath = NULL;
+    char* saveDirectory = (char*)uprv_malloc(sizeof(char) *(strlen(u_getDataDirectory())+1));
+    int len = strlen(directory);
+    char* index=NULL;
+
     tdpath = (char*) uprv_malloc(sizeof(char) * (len * 2));
     uprv_strcpy(saveDirectory,u_getDataDirectory());
     log_verbose("Retrieved data directory %s \n",saveDirectory); 
