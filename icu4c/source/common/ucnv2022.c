@@ -182,17 +182,11 @@ typedef struct{
 
 /*Forward declaration */
 U_CFUNC void 
-T_UConverter_fromUnicode_UTF8 (UConverterFromUnicodeArgs * args,
-                                            UErrorCode * err);
+ucnv_fromUnicode_UTF8(UConverterFromUnicodeArgs * args,
+                      UErrorCode * err);
 U_CFUNC void 
-T_UConverter_fromUnicode_UTF8_OFFSETS_LOGIC (UConverterFromUnicodeArgs * args,
-                                                          UErrorCode * err);
-U_CFUNC void 
-_MBCSFromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
-                            UErrorCode *pErrorCode);
-U_CFUNC void 
-_MBCSToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
-                          UErrorCode *pErrorCode);
+ucnv_fromUnicode_UTF8_OFFSETS_LOGIC(UConverterFromUnicodeArgs * args,
+                                    UErrorCode * err);
 
 #define ESC_2022 0x1B /*ESC*/
 
@@ -1776,7 +1770,7 @@ getTrailByte:
                         tempBuf[0] = (char) (mySourceChar);
                         tempBuf[1] = trailByte = *mySource++;
                         mySourceChar = (mySourceChar << 8) | (uint8_t)(trailByte);
-                        targetUniChar = _MBCSSimpleGetNextUChar(myData->myConverterArray[cs], tempBuf, 2, FALSE);
+                        targetUniChar = ucnv_MBCSSimpleGetNextUChar(myData->myConverterArray[cs], tempBuf, 2, FALSE);
                     } else {
                         args->converter->toUBytes[0] = (uint8_t)mySourceChar;
                         args->converter->toULength = 1;
@@ -1844,7 +1838,7 @@ UConverter_fromUnicode_ISO_2022_KR_OFFSETS_LOGIC_IBM(UConverterFromUnicodeArgs* 
     args->converter=myConverterData->currentConverter;
 
     myConverterData->currentConverter->fromUChar32 = saveConv->fromUChar32;
-    _MBCSFromUnicodeWithOffsets(args,err);
+    ucnv_MBCSFromUnicodeWithOffsets(args,err);
     saveConv->fromUChar32 = myConverterData->currentConverter->fromUChar32;
 
     if(*err == U_BUFFER_OVERFLOW_ERROR) {
@@ -1903,7 +1897,7 @@ UConverter_fromUnicode_ISO_2022_KR_OFFSETS_LOGIC(UConverterFromUnicodeArgs* args
 
         if(target < (unsigned char*) args->targetLimit){
             sourceChar = *source++;
-           /* length= _MBCSFromUChar32(converterData->currentConverter->sharedData,
+           /* length= ucnv_MBCSFromUChar32(converterData->currentConverter->sharedData,
                 sourceChar,&targetByteUnit,args->converter->useFallback);*/
             MBCS_FROM_UCHAR32_ISO2022(sharedData,sourceChar,&targetByteUnit,useFallback,&length,MBCS_OUTPUT_2);
             /* only DBCS or SBCS characters are expected*/
@@ -2115,7 +2109,7 @@ UConverter_toUnicode_ISO_2022_KR_OFFSETS_LOGIC_IBM(UConverterToUnicodeArgs *args
              * Does not handle conversion extensions because the preToU[] state etc.
              * is not copied.
              */
-            _MBCSToUnicodeWithOffsets(&subArgs, err);
+            ucnv_MBCSToUnicodeWithOffsets(&subArgs, err);
 
             if(args->offsets != NULL && sourceStart != args->source) {
                 /* update offsets to base them on the actual start of the input */
@@ -2232,7 +2226,7 @@ getTrailByte:
                     tempBuf[1] = (char)(trailByte + 0x80);
                     mySourceChar = (mySourceChar << 8) | (uint8_t)(trailByte);
                     if((mySourceChar & 0x8080) == 0) {
-                        targetUniChar = _MBCSSimpleGetNextUChar(sharedData, tempBuf, 2, useFallback);
+                        targetUniChar = ucnv_MBCSSimpleGetNextUChar(sharedData, tempBuf, 2, useFallback);
                     } else {
                         /* illegal bytes > 0x7f */
                         targetUniChar = missingCharMarker;
@@ -2244,7 +2238,7 @@ getTrailByte:
                 }
             }
             else{
-                targetUniChar = _MBCSSimpleGetNextUChar(sharedData, mySource - 1, 1, useFallback);
+                targetUniChar = ucnv_MBCSSimpleGetNextUChar(sharedData, mySource - 1, 1, useFallback);
             }
             if(targetUniChar < 0xfffe){
                 if(args->offsets) {
@@ -2776,7 +2770,7 @@ getTrailByte:
                             /* return from a single-shift state to the previous one */
                             pToU2022State->g=pToU2022State->prevG;
                         }
-                        targetUniChar = _MBCSSimpleGetNextUChar(cnv, tempBuf, tempBufLen, FALSE);
+                        targetUniChar = ucnv_MBCSSimpleGetNextUChar(cnv, tempBuf, tempBufLen, FALSE);
                     } else {
                         args->converter->toUBytes[0] = (uint8_t)mySourceChar;
                         args->converter->toULength = 1;
@@ -3048,13 +3042,13 @@ _ISO_2022_GetUnicodeSet(const UConverter *cnv,
                 cnvData->version==0 && i==CNS_11643
             ) {
                 /* special handling for non-EXT ISO-2022-CN: add only code points for CNS planes 1 and 2 */
-                _MBCSGetUnicodeSetForBytes(
+                ucnv_MBCSGetUnicodeSetForBytes(
                         cnvData->myConverterArray[i],
                         sa, UCNV_ROUNDTRIP_SET,
                         0, 0x81, 0x82,
                         pErrorCode);
             } else {
-                _MBCSGetUnicodeSetForUnicode(cnvData->myConverterArray[i], sa, which, pErrorCode);
+                ucnv_MBCSGetUnicodeSetForUnicode(cnvData->myConverterArray[i], sa, which, pErrorCode);
             }
         }
     }
@@ -3073,8 +3067,8 @@ static const UConverterImpl _ISO2022Impl={
 #ifdef U_ENABLE_GENERIC_ISO_2022
     T_UConverter_toUnicode_ISO_2022_OFFSETS_LOGIC,
     T_UConverter_toUnicode_ISO_2022_OFFSETS_LOGIC,
-    T_UConverter_fromUnicode_UTF8,
-    T_UConverter_fromUnicode_UTF8_OFFSETS_LOGIC,
+    ucnv_fromUnicode_UTF8,
+    ucnv_fromUnicode_UTF8_OFFSETS_LOGIC,
 #else
     NULL,
     NULL,

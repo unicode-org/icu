@@ -284,7 +284,7 @@
  * Leading zero bytes are ignored, and the number of bytes is counted.
  * A zero byte mapping result is possible as a roundtrip result.
  * For some output types, the actual result is processed from this;
- * see _MBCSFromUnicodeWithOffsets().
+ * see ucnv_MBCSFromUnicodeWithOffsets().
  *
  * Note that stage 1 always contains 0x440=1088 entries (0x440==0x110000>>10),
  * or (version 3 and up) for BMP-only codepages, it contains 64 entries.
@@ -341,7 +341,7 @@ gb18030Ranges[13][4]={
 /* Miscellaneous ------------------------------------------------------------ */
 
 static uint32_t
-_MBCSSizeofFromUBytes(UConverterMBCSTable *mbcsTable) {
+ucnv_MBCSSizeofFromUBytes(UConverterMBCSTable *mbcsTable) {
     const uint16_t *table;
 
     uint32_t st3, maxStage3;
@@ -426,7 +426,7 @@ _MBCSSizeofFromUBytes(UConverterMBCSTable *mbcsTable) {
     }
 }
 
-/* similar to _MBCSGetNextUChar() but recursive */
+/* similar to ucnv_MBCSGetNextUChar() but recursive */
 static void
 _getUnicodeSetForBytes(const UConverterSharedData *sharedData,
                        const int32_t (*stateTable)[256], const uint16_t *unicodeCodeUnits,
@@ -506,7 +506,7 @@ _getUnicodeSetForBytes(const UConverterSharedData *sharedData,
  * Does not empty the set first.
  */
 U_CFUNC void
-_MBCSGetUnicodeSetForBytes(const UConverterSharedData *sharedData,
+ucnv_MBCSGetUnicodeSetForBytes(const UConverterSharedData *sharedData,
                            USetAdder *sa,
                            UConverterUnicodeSet which,
                            uint8_t state, int32_t lowByte, int32_t highByte,
@@ -519,7 +519,7 @@ _MBCSGetUnicodeSetForBytes(const UConverterSharedData *sharedData,
 }
 
 U_CFUNC void
-_MBCSGetUnicodeSetForUnicode(const UConverterSharedData *sharedData,
+ucnv_MBCSGetUnicodeSetForUnicode(const UConverterSharedData *sharedData,
                              USetAdder *sa,
                              UConverterUnicodeSet which,
                              UErrorCode *pErrorCode) {
@@ -560,7 +560,7 @@ _MBCSGetUnicodeSetForUnicode(const UConverterSharedData *sharedData,
                          * Add code points for which the roundtrip flag is set.
                          * Once we get a set for fallback mappings, we have to use
                          * a threshold variable with a value of 0x800.
-                         * See _MBCSSingleFromBMPWithOffsets() and
+                         * See ucnv_MBCSSingleFromBMPWithOffsets() and
                          * MBCS_SINGLE_RESULT_FROM_U() for details.
                          */
                         do {
@@ -599,7 +599,7 @@ _MBCSGetUnicodeSetForUnicode(const UConverterSharedData *sharedData,
                          * Add code points for which the roundtrip flag is set.
                          * Once we get a set for fallback mappings, we have to check
                          * non-roundtrip stage 3 results for whether they are 0.
-                         * See _MBCSFromUnicodeWithOffsets() for details.
+                         * See ucnv_MBCSFromUnicodeWithOffsets() for details.
                          *
                          * Ignore single-byte results (<0x100).
                          */
@@ -634,7 +634,7 @@ _MBCSGetUnicodeSetForUnicode(const UConverterSharedData *sharedData,
                          * Add code points for which the roundtrip flag is set.
                          * Once we get a set for fallback mappings, we have to check
                          * non-roundtrip stage 3 results for whether they are 0.
-                         * See _MBCSFromUnicodeWithOffsets() for details.
+                         * See ucnv_MBCSFromUnicodeWithOffsets() for details.
                          */
                         do {
                             if(st3&1) {
@@ -656,7 +656,7 @@ _MBCSGetUnicodeSetForUnicode(const UConverterSharedData *sharedData,
 }
 
 static void
-_MBCSGetUnicodeSet(const UConverter *cnv,
+ucnv_MBCSGetUnicodeSet(const UConverter *cnv,
                    USetAdder *sa,
                    UConverterUnicodeSet which,
                    UErrorCode *pErrorCode) {
@@ -664,7 +664,7 @@ _MBCSGetUnicodeSet(const UConverter *cnv,
         sa->addRange(sa->set, 0, 0xd7ff);
         sa->addRange(sa->set, 0xe000, 0x10ffff);
     } else {
-        _MBCSGetUnicodeSetForUnicode(cnv->sharedData, sa, which, pErrorCode);
+        ucnv_MBCSGetUnicodeSetForUnicode(cnv->sharedData, sa, which, pErrorCode);
     }
 }
 
@@ -905,7 +905,7 @@ _EBCDICSwapLFNL(UConverterSharedData *sharedData, UErrorCode *pErrorCode) {
      * - a modified from-Unicode output array
      * - a converter name string with the swap option appended
      */
-    sizeofFromUBytes=_MBCSSizeofFromUBytes(mbcsTable);
+    sizeofFromUBytes=ucnv_MBCSSizeofFromUBytes(mbcsTable);
     size=
         mbcsTable->countStates*1024+
         sizeofFromUBytes+
@@ -965,7 +965,7 @@ _EBCDICSwapLFNL(UConverterSharedData *sharedData, UErrorCode *pErrorCode) {
 /* MBCS setup functions ----------------------------------------------------- */
 
 static void
-_MBCSLoad(UConverterSharedData *sharedData,
+ucnv_MBCSLoad(UConverterSharedData *sharedData,
           UConverterLoadArgs *pArgs,
           const uint8_t *raw,
           UErrorCode *pErrorCode) {
@@ -1168,7 +1168,7 @@ _MBCSLoad(UConverterSharedData *sharedData,
 }
 
 static void
-_MBCSUnload(UConverterSharedData *sharedData) {
+ucnv_MBCSUnload(UConverterSharedData *sharedData) {
     UConverterMBCSTable *mbcsTable=&sharedData->mbcs;
 
     if(mbcsTable->swapLFNLStateTable!=NULL) {
@@ -1183,7 +1183,7 @@ _MBCSUnload(UConverterSharedData *sharedData) {
 }
 
 static void
-_MBCSOpen(UConverter *cnv,
+ucnv_MBCSOpen(UConverter *cnv,
           const char *name,
           const char *locale,
           uint32_t options,
@@ -1259,7 +1259,7 @@ _MBCSOpen(UConverter *cnv,
 }
 
 static const char *
-_MBCSGetName(const UConverter *cnv) {
+ucnv_MBCSGetName(const UConverter *cnv) {
     if((cnv->options&UCNV_OPTION_SWAP_LFNL)!=0 && cnv->sharedData->mbcs.swapLFNLName!=NULL) {
         return cnv->sharedData->mbcs.swapLFNLName;
     } else {
@@ -1270,7 +1270,7 @@ _MBCSGetName(const UConverter *cnv) {
 /* MBCS-to-Unicode conversion functions ------------------------------------- */
 
 static UChar32
-_MBCSGetFallback(UConverterMBCSTable *mbcsTable, uint32_t offset) {
+ucnv_MBCSGetFallback(UConverterMBCSTable *mbcsTable, uint32_t offset) {
     const _MBCSToUFallback *toUFallbacks;
     uint32_t i, start, limit;
 
@@ -1297,9 +1297,9 @@ _MBCSGetFallback(UConverterMBCSTable *mbcsTable, uint32_t offset) {
     return 0xfffe;
 }
 
-/* This version of _MBCSToUnicodeWithOffsets() is optimized for single-byte, single-state codepages. */
+/* This version of ucnv_MBCSToUnicodeWithOffsets() is optimized for single-byte, single-state codepages. */
 static void
-_MBCSSingleToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
+ucnv_MBCSSingleToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
                                 UErrorCode *pErrorCode) {
     UConverter *cnv;
     const uint8_t *source, *sourceLimit;
@@ -1445,13 +1445,13 @@ _MBCSSingleToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
 }
 
 /*
- * This version of _MBCSSingleToUnicodeWithOffsets() is optimized for single-byte, single-state codepages
+ * This version of ucnv_MBCSSingleToUnicodeWithOffsets() is optimized for single-byte, single-state codepages
  * that only map to and from the BMP.
  * In addition to single-byte optimizations, the offset calculations
  * become much easier.
  */
 static void
-_MBCSSingleToBMPWithOffsets(UConverterToUnicodeArgs *pArgs,
+ucnv_MBCSSingleToBMPWithOffsets(UConverterToUnicodeArgs *pArgs,
                             UErrorCode *pErrorCode) {
     UConverter *cnv;
     const uint8_t *source, *sourceLimit, *lastSource;
@@ -1672,7 +1672,7 @@ unrolled:
 }
 
 U_CFUNC void
-_MBCSToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
+ucnv_MBCSToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
                           UErrorCode *pErrorCode) {
     UConverter *cnv;
     const uint8_t *source, *sourceLimit;
@@ -1711,9 +1711,9 @@ _MBCSToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
 
     if(cnv->sharedData->mbcs.countStates==1) {
         if(!(cnv->sharedData->mbcs.unicodeMask&UCNV_HAS_SUPPLEMENTARY)) {
-            _MBCSSingleToBMPWithOffsets(pArgs, pErrorCode);
+            ucnv_MBCSSingleToBMPWithOffsets(pArgs, pErrorCode);
         } else {
-            _MBCSSingleToUnicodeWithOffsets(pArgs, pErrorCode);
+            ucnv_MBCSSingleToUnicodeWithOffsets(pArgs, pErrorCode);
         }
         return;
     }
@@ -1897,7 +1897,7 @@ _MBCSToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
                 }
                 byteIndex=0;
             } else if(c==0xfffe) {
-                if(UCNV_TO_U_USE_FALLBACK(cnv) && (entry=(int32_t)_MBCSGetFallback(&cnv->sharedData->mbcs, offset))!=0xfffe) {
+                if(UCNV_TO_U_USE_FALLBACK(cnv) && (entry=(int32_t)ucnv_MBCSGetFallback(&cnv->sharedData->mbcs, offset))!=0xfffe) {
                     /* output fallback BMP code point */
                     *target++=(UChar)entry;
                     if(offsets!=NULL) {
@@ -2057,11 +2057,11 @@ _MBCSToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
 }
 
 /*
- * This version of _MBCSGetNextUChar() is optimized for single-byte, single-state codepages.
+ * This version of ucnv_MBCSGetNextUChar() is optimized for single-byte, single-state codepages.
  * We still need a conversion loop in case we find reserved action codes, which are to be ignored.
  */
 static UChar32
-_MBCSSingleGetNextUChar(UConverterToUnicodeArgs *pArgs,
+ucnv_MBCSSingleGetNextUChar(UConverterToUnicodeArgs *pArgs,
                         UErrorCode *pErrorCode) {
     UConverter *cnv;
     const int32_t (*stateTable)[256];
@@ -2146,7 +2146,7 @@ _MBCSSingleGetNextUChar(UConverterToUnicodeArgs *pArgs,
  * All normal mappings and errors are handled here.
  */
 static UChar32
-_MBCSGetNextUChar(UConverterToUnicodeArgs *pArgs,
+ucnv_MBCSGetNextUChar(UConverterToUnicodeArgs *pArgs,
                   UErrorCode *pErrorCode) {
     UConverter *cnv;
     const uint8_t *source, *sourceLimit, *lastSource;
@@ -2177,7 +2177,7 @@ _MBCSGetNextUChar(UConverterToUnicodeArgs *pArgs,
          */
         return UCNV_GET_NEXT_UCHAR_USE_TO_U;
     } else if(cnv->sharedData->mbcs.countStates==1) {
-        return _MBCSSingleGetNextUChar(pArgs, pErrorCode);
+        return ucnv_MBCSSingleGetNextUChar(pArgs, pErrorCode);
     }
 
     /* set up the local pointers */
@@ -2245,7 +2245,7 @@ _MBCSGetNextUChar(UConverterToUnicodeArgs *pArgs,
                     /* output BMP code point */
                     break;
                 } else if(c==0xfffe) {
-                    if(UCNV_TO_U_USE_FALLBACK(cnv) && (c=_MBCSGetFallback(&cnv->sharedData->mbcs, offset))!=0xfffe) {
+                    if(UCNV_TO_U_USE_FALLBACK(cnv) && (c=ucnv_MBCSGetFallback(&cnv->sharedData->mbcs, offset))!=0xfffe) {
                         break;
                     }
                 } else {
@@ -2358,12 +2358,12 @@ _MBCSGetNextUChar(UConverterToUnicodeArgs *pArgs,
  * Removal improves code coverage.
  */
 /**
- * This version of _MBCSSimpleGetNextUChar() is optimized for single-byte, single-state codepages.
+ * This version of ucnv_MBCSSimpleGetNextUChar() is optimized for single-byte, single-state codepages.
  * It does not handle the EBCDIC swaplfnl option (set in UConverter).
  * It does not handle conversion extensions (_extToU()).
  */
 U_CFUNC UChar32
-_MBCSSingleSimpleGetNextUChar(UConverterSharedData *sharedData,
+ucnv_MBCSSingleSimpleGetNextUChar(UConverterSharedData *sharedData,
                               uint8_t b, UBool useFallback) {
     int32_t entry;
     uint8_t action;
@@ -2421,7 +2421,7 @@ _MBCSSingleSimpleGetNextUChar(UConverterSharedData *sharedData,
  * otherwise the Unicode code point
  */
 U_CFUNC UChar32
-_MBCSSimpleGetNextUChar(UConverterSharedData *sharedData,
+ucnv_MBCSSimpleGetNextUChar(UConverterSharedData *sharedData,
                         const char *source, int32_t length,
                         UBool useFallback) {
     const int32_t (*stateTable)[256];
@@ -2448,7 +2448,7 @@ _MBCSSimpleGetNextUChar(UConverterSharedData *sharedData,
     /* use optimized function if possible */
     if(sharedData->mbcs.countStates==1) {
         if(length==1) {
-            return _MBCSSingleSimpleGetNextUChar(sharedData, (uint8_t)*source, useFallback);
+            return ucnv_MBCSSingleSimpleGetNextUChar(sharedData, (uint8_t)*source, useFallback);
         } else {
             return 0xffff; /* illegal: more than a single byte for an SBCS converter */
         }
@@ -2485,7 +2485,7 @@ _MBCSSimpleGetNextUChar(UConverterSharedData *sharedData,
                 if(c!=0xfffe) {
                     /* done */
                 } else if(UCNV_TO_U_USE_FALLBACK(cnv)) {
-                    c=_MBCSGetFallback(&sharedData->mbcs, offset);
+                    c=ucnv_MBCSGetFallback(&sharedData->mbcs, offset);
                 /* else done with 0xfffe */
                 }
                 break;
@@ -2561,9 +2561,9 @@ _MBCSSimpleGetNextUChar(UConverterSharedData *sharedData,
 
 /* MBCS-from-Unicode conversion functions ----------------------------------- */
 
-/* This version of _MBCSFromUnicodeWithOffsets() is optimized for double-byte codepages. */
+/* This version of ucnv_MBCSFromUnicodeWithOffsets() is optimized for double-byte codepages. */
 static void
-_MBCSDoubleFromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
+ucnv_MBCSDoubleFromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
                                   UErrorCode *pErrorCode) {
     UConverter *cnv;
     const UChar *source, *sourceLimit;
@@ -2771,9 +2771,9 @@ unassigned:
     pArgs->offsets=offsets;
 }
 
-/* This version of _MBCSFromUnicodeWithOffsets() is optimized for single-byte codepages. */
+/* This version of ucnv_MBCSFromUnicodeWithOffsets() is optimized for single-byte codepages. */
 static void
-_MBCSSingleFromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
+ucnv_MBCSSingleFromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
                                   UErrorCode *pErrorCode) {
     UConverter *cnv;
     const UChar *source, *sourceLimit;
@@ -2938,13 +2938,13 @@ unassigned:
 }
 
 /*
- * This version of _MBCSFromUnicode() is optimized for single-byte codepages
+ * This version of ucnv_MBCSFromUnicode() is optimized for single-byte codepages
  * that map only to and from the BMP.
  * In addition to single-byte/state optimizations, the offset calculations
  * become much easier.
  */
 static void
-_MBCSSingleFromBMPWithOffsets(UConverterFromUnicodeArgs *pArgs,
+ucnv_MBCSSingleFromBMPWithOffsets(UConverterFromUnicodeArgs *pArgs,
                               UErrorCode *pErrorCode) {
     UConverter *cnv;
     const UChar *source, *sourceLimit, *lastSource;
@@ -3183,7 +3183,7 @@ getTrail:
 }
 
 U_CFUNC void
-_MBCSFromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
+ucnv_MBCSFromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
                             UErrorCode *pErrorCode) {
     UConverter *cnv;
     const UChar *source, *sourceLimit;
@@ -3223,13 +3223,13 @@ _MBCSFromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
     unicodeMask=cnv->sharedData->mbcs.unicodeMask;
     if(outputType==MBCS_OUTPUT_1 && !(unicodeMask&UCNV_HAS_SURROGATES)) {
         if(!(unicodeMask&UCNV_HAS_SUPPLEMENTARY)) {
-            _MBCSSingleFromBMPWithOffsets(pArgs, pErrorCode);
+            ucnv_MBCSSingleFromBMPWithOffsets(pArgs, pErrorCode);
         } else {
-            _MBCSSingleFromUnicodeWithOffsets(pArgs, pErrorCode);
+            ucnv_MBCSSingleFromUnicodeWithOffsets(pArgs, pErrorCode);
         }
         return;
     } else if(outputType==MBCS_OUTPUT_2) {
-        _MBCSDoubleFromUnicodeWithOffsets(pArgs, pErrorCode);
+        ucnv_MBCSDoubleFromUnicodeWithOffsets(pArgs, pErrorCode);
         return;
     }
 
@@ -3714,7 +3714,7 @@ unassigned:
  * Currently, the function assumes but does not check that 0<=c<=0x10ffff.
  */
 U_CFUNC int32_t
-_MBCSFromUChar32(UConverterSharedData *sharedData,
+ucnv_MBCSFromUChar32(UConverterSharedData *sharedData,
                  UChar32 c, uint32_t *pValue,
                  UBool useFallback) {
     const int32_t *cx;
@@ -3854,14 +3854,14 @@ _MBCSFromUChar32(UConverterSharedData *sharedData,
  */
 
 /**
- * This version of _MBCSFromUChar32() is optimized for single-byte codepages.
+ * This version of ucnv_MBCSFromUChar32() is optimized for single-byte codepages.
  * It does not handle the EBCDIC swaplfnl option (set in UConverter).
  * It does not handle conversion extensions (_extFromU()).
  *
  * It returns the codepage byte for the code point, or -1 if it is unassigned.
  */
 U_CFUNC int32_t
-_MBCSSingleFromUChar32(UConverterSharedData *sharedData,
+ucnv_MBCSSingleFromUChar32(UConverterSharedData *sharedData,
                        UChar32 c,
                        UBool useFallback) {
     const uint16_t *table;
@@ -3889,7 +3889,7 @@ _MBCSSingleFromUChar32(UConverterSharedData *sharedData,
 /* miscellaneous ------------------------------------------------------------ */
 
 static void
-_MBCSGetStarters(const UConverter* cnv,
+ucnv_MBCSGetStarters(const UConverter* cnv,
                  UBool starters[256],
                  UErrorCode *pErrorCode) {
     const int32_t *state0;
@@ -3907,12 +3907,12 @@ _MBCSGetStarters(const UConverter* cnv,
  * to check whether a byte is a lead byte.
  */
 U_CFUNC UBool
-_MBCSIsLeadByte(UConverterSharedData *sharedData, char byte) {
+ucnv_MBCSIsLeadByte(UConverterSharedData *sharedData, char byte) {
     return (UBool)MBCS_ENTRY_IS_TRANSITION(sharedData->mbcs.stateTable[0][(uint8_t)byte]);
 }
 
 static void
-_MBCSWriteSub(UConverterFromUnicodeArgs *pArgs,
+ucnv_MBCSWriteSub(UConverterFromUnicodeArgs *pArgs,
               int32_t offsetIndex,
               UErrorCode *pErrorCode) {
     UConverter *cnv=pArgs->converter;
@@ -3978,7 +3978,7 @@ _MBCSWriteSub(UConverterFromUnicodeArgs *pArgs,
 }
 
 U_CFUNC UConverterType
-_MBCSGetType(const UConverter* converter) {
+ucnv_MBCSGetType(const UConverter* converter) {
     /* SBCS, DBCS, and EBCDIC_STATEFUL are replaced by MBCS, but here we cheat a little */
     if(converter->sharedData->mbcs.countStates==1) {
         return (UConverterType)UCNV_SBCS;
@@ -3993,24 +3993,24 @@ _MBCSGetType(const UConverter* converter) {
 static const UConverterImpl _MBCSImpl={
     UCNV_MBCS,
 
-    _MBCSLoad,
-    _MBCSUnload,
+    ucnv_MBCSLoad,
+    ucnv_MBCSUnload,
 
-    _MBCSOpen,
+    ucnv_MBCSOpen,
     NULL,
     NULL,
 
-    _MBCSToUnicodeWithOffsets,
-    _MBCSToUnicodeWithOffsets,
-    _MBCSFromUnicodeWithOffsets,
-    _MBCSFromUnicodeWithOffsets,
-    _MBCSGetNextUChar,
+    ucnv_MBCSToUnicodeWithOffsets,
+    ucnv_MBCSToUnicodeWithOffsets,
+    ucnv_MBCSFromUnicodeWithOffsets,
+    ucnv_MBCSFromUnicodeWithOffsets,
+    ucnv_MBCSGetNextUChar,
 
-    _MBCSGetStarters,
-    _MBCSGetName,
-    _MBCSWriteSub,
+    ucnv_MBCSGetStarters,
+    ucnv_MBCSGetName,
+    ucnv_MBCSWriteSub,
     NULL,
-    _MBCSGetUnicodeSet
+    ucnv_MBCSGetUnicodeSet
 };
 
 

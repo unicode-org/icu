@@ -31,13 +31,9 @@
 
 /* Keep these here to make finicky compilers happy */
 
-/*U_CFUNC void T_UConverter_toUnicode_UTF8(UConverterToUnicodeArgs *args,
-                                         UErrorCode *err);
-U_CFUNC void T_UConverter_toUnicode_UTF8_OFFSETS_LOGIC(UConverterToUnicodeArgs *args,
-                                                       UErrorCode *err);*/
-U_CFUNC void T_UConverter_fromUnicode_UTF8(UConverterFromUnicodeArgs *args,
+U_CFUNC void ucnv_fromUnicode_UTF8(UConverterFromUnicodeArgs *args,
                                            UErrorCode *err);
-U_CFUNC void T_UConverter_fromUnicode_UTF8_OFFSETS_LOGIC(UConverterFromUnicodeArgs *args,
+U_CFUNC void ucnv_fromUnicode_UTF8_OFFSETS_LOGIC(UConverterFromUnicodeArgs *args,
                                                         UErrorCode *err);
 
 
@@ -88,7 +84,7 @@ static const int8_t bytesFromUTF8[256] = {
 static const uint32_t
 utf8_minChar32[7]={ 0, 0, 0x80, 0x800, 0x10000, 0xffffffff, 0xffffffff };
 
-static void T_UConverter_toUnicode_UTF8 (UConverterToUnicodeArgs * args,
+static void ucnv_toUnicode_UTF8 (UConverterToUnicodeArgs * args,
                                   UErrorCode * err)
 {
     const unsigned char *mySource = (unsigned char *) args->source;
@@ -215,7 +211,7 @@ donefornow:
     args->source = (const char *) mySource;
 }
 
-static void T_UConverter_toUnicode_UTF8_OFFSETS_LOGIC (UConverterToUnicodeArgs * args,
+static void ucnv_toUnicode_UTF8_OFFSETS_LOGIC (UConverterToUnicodeArgs * args,
                                                 UErrorCode * err)
 {
     const unsigned char *mySource = (unsigned char *) args->source;
@@ -344,7 +340,7 @@ donefornow:
     args->offsets = myOffsets;
 }
 
-U_CFUNC void T_UConverter_fromUnicode_UTF8 (UConverterFromUnicodeArgs * args,
+U_CFUNC void ucnv_fromUnicode_UTF8 (UConverterFromUnicodeArgs * args,
                                     UErrorCode * err)
 {
     UConverter *cnv = args->converter;
@@ -460,7 +456,7 @@ lowsurrogate:
     args->source = mySource;
 }
 
-U_CFUNC void T_UConverter_fromUnicode_UTF8_OFFSETS_LOGIC (UConverterFromUnicodeArgs * args,
+U_CFUNC void ucnv_fromUnicode_UTF8_OFFSETS_LOGIC (UConverterFromUnicodeArgs * args,
                                                   UErrorCode * err)
 {
     UConverter *cnv = args->converter;
@@ -591,7 +587,7 @@ lowsurrogate:
     args->offsets = myOffsets;
 }
 
-static UChar32 T_UConverter_getNextUChar_UTF8(UConverterToUnicodeArgs *args,
+static UChar32 ucnv_getNextUChar_UTF8(UConverterToUnicodeArgs *args,
                                                UErrorCode *err) {
     UConverter *cnv;
     const uint8_t *sourceInitial;
@@ -742,11 +738,11 @@ static const UConverterImpl _UTF8Impl={
     NULL,
     NULL,
 
-    T_UConverter_toUnicode_UTF8,
-    T_UConverter_toUnicode_UTF8_OFFSETS_LOGIC,
-    T_UConverter_fromUnicode_UTF8,
-    T_UConverter_fromUnicode_UTF8_OFFSETS_LOGIC,
-    T_UConverter_getNextUChar_UTF8,
+    ucnv_toUnicode_UTF8,
+    ucnv_toUnicode_UTF8_OFFSETS_LOGIC,
+    ucnv_fromUnicode_UTF8,
+    ucnv_fromUnicode_UTF8_OFFSETS_LOGIC,
+    ucnv_getNextUChar_UTF8,
 
     NULL,
     NULL,
@@ -786,10 +782,10 @@ static const UConverterImpl _CESU8Impl={
     NULL,
     NULL,
 
-    T_UConverter_toUnicode_UTF8,
-    T_UConverter_toUnicode_UTF8_OFFSETS_LOGIC,
-    T_UConverter_fromUnicode_UTF8,
-    T_UConverter_fromUnicode_UTF8_OFFSETS_LOGIC,
+    ucnv_toUnicode_UTF8,
+    ucnv_toUnicode_UTF8_OFFSETS_LOGIC,
+    ucnv_fromUnicode_UTF8,
+    ucnv_fromUnicode_UTF8_OFFSETS_LOGIC,
     NULL,
 
     NULL,

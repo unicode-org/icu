@@ -283,7 +283,7 @@ typedef struct {
  * otherwise the Unicode code point
  */
 U_CFUNC UChar32
-_MBCSSimpleGetNextUChar(UConverterSharedData *sharedData,
+ucnv_MBCSSimpleGetNextUChar(UConverterSharedData *sharedData,
                         const char *source, int32_t length,
                         UBool useFallback);
 
@@ -293,7 +293,7 @@ _MBCSSimpleGetNextUChar(UConverterSharedData *sharedData,
  * It does not handle conversion extensions (_extToU()).
  */
 U_CFUNC UChar32
-_MBCSSingleSimpleGetNextUChar(UConverterSharedData *sharedData,
+ucnv_MBCSSingleSimpleGetNextUChar(UConverterSharedData *sharedData,
                               uint8_t b, UBool useFallback);
 
 /**
@@ -310,7 +310,7 @@ _MBCSSingleSimpleGetNextUChar(UConverterSharedData *sharedData,
  * to check whether a byte is a lead byte.
  */
 U_CFUNC UBool
-_MBCSIsLeadByte(UConverterSharedData *sharedData, char byte);
+ucnv_MBCSIsLeadByte(UConverterSharedData *sharedData, char byte);
 
 /** This is a macro version of _MBCSIsLeadByte(). */
 #define _MBCS_IS_LEAD_BYTE(sharedData, byte) \
@@ -334,7 +334,7 @@ _MBCSIsLeadByte(UConverterSharedData *sharedData, char byte);
  * Currently, the function assumes but does not check that 0<=c<=0x10ffff.
  */
 U_CFUNC int32_t
-_MBCSFromUChar32(UConverterSharedData *sharedData,
+ucnv_MBCSFromUChar32(UConverterSharedData *sharedData,
                  UChar32 c, uint32_t *pValue,
                  UBool useFallback);
 
@@ -345,7 +345,7 @@ _MBCSFromUChar32(UConverterSharedData *sharedData,
  * It returns the codepage byte for the code point, or -1 if it is unassigned.
  */
 U_CFUNC int32_t
-_MBCSSingleFromUChar32(UConverterSharedData *sharedData,
+ucnv_MBCSSingleFromUChar32(UConverterSharedData *sharedData,
                        UChar32 c,
                        UBool useFallback);
 
@@ -354,13 +354,13 @@ _MBCSSingleFromUChar32(UConverterSharedData *sharedData,
  * we cheat a little about the type, returning the old types if appropriate.
  */
 U_CFUNC UConverterType
-_MBCSGetType(const UConverter* converter);
+ucnv_MBCSGetType(const UConverter* converter);
 
 U_CFUNC void 
-_MBCSFromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
+ucnv_MBCSFromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
                             UErrorCode *pErrorCode);
 U_CFUNC void 
-_MBCSToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
+ucnv_MBCSToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
                           UErrorCode *pErrorCode);
 
 /*
@@ -372,7 +372,7 @@ _MBCSToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
  * Does not empty the set first.
  */
 U_CFUNC void
-_MBCSGetUnicodeSetForBytes(const UConverterSharedData *sharedData,
+ucnv_MBCSGetUnicodeSetForBytes(const UConverterSharedData *sharedData,
                            USetAdder *sa,
                            UConverterUnicodeSet which,
                            uint8_t state, int32_t lowByte, int32_t highByte,
@@ -387,7 +387,7 @@ _MBCSGetUnicodeSetForBytes(const UConverterSharedData *sharedData,
  * Does not empty the set first.
  */
 U_CFUNC void
-_MBCSGetUnicodeSetForUnicode(const UConverterSharedData *sharedData,
+ucnv_MBCSGetUnicodeSetForUnicode(const UConverterSharedData *sharedData,
                              USetAdder *sa,
                              UConverterUnicodeSet which,
                              UErrorCode *pErrorCode);

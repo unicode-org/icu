@@ -176,10 +176,6 @@ U_CFUNC UBool U_EXPORT2 ucnv_cleanup(void) {
     return (SHARED_DATA_HASHTABLE == NULL);
 }
 
-U_CFUNC void ucnv_init(UErrorCode *status) {
-    umtx_init(&cnvCacheMutex);
-}
-
 static UBool U_CALLCONV
 isCnvAcceptable(void *context,
              const char *type, const char *name,
@@ -1159,7 +1155,7 @@ ucnv_swap(const UDataSwapper *ds,
                 uprv_memcpy(outBytes, inBytes, size);
             }
 
-            /* swap the _MBCSHeader */
+            /* swap the MBCSHeader */
             ds->swapArray32(ds, &inMBCSHeader->countStates, 7*4,
                                &outMBCSHeader->countStates, pErrorCode);
 

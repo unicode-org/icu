@@ -699,7 +699,7 @@ LMBCSConversionWorker (
    U_ASSERT(xcnv);
    U_ASSERT(group<ULMBCS_GRP_UNICODE);
 
-   bytesConverted = _MBCSFromUChar32(xcnv, *pUniChar, &value, FALSE);
+   bytesConverted = ucnv_MBCSFromUChar32(xcnv, *pUniChar, &value, FALSE);
 
    /* get the first result byte */
    if(bytesConverted > 0) {
@@ -1087,11 +1087,11 @@ _LMBCSGetNextUCharWorker(UConverterToUnicodeArgs*   args,
                 if (*args->source == group) {
                     /* single byte */
                     ++args->source;
-                    uniChar = _MBCSSimpleGetNextUChar(cnv, args->source, 1, FALSE);
+                    uniChar = ucnv_MBCSSimpleGetNextUChar(cnv, args->source, 1, FALSE);
                     ++args->source;
                 } else {
                     /* double byte */
-                    uniChar = _MBCSSimpleGetNextUChar(cnv, args->source, 2, FALSE);
+                    uniChar = ucnv_MBCSSimpleGetNextUChar(cnv, args->source, 2, FALSE);
                     args->source += 2;
                 }
             }
@@ -1116,7 +1116,7 @@ _LMBCSGetNextUCharWorker(UConverterToUnicodeArgs*   args,
                     /* Lookup value must include opt group */
                     bytes[0] = group;
                     bytes[1] = CurByte;
-                    uniChar = _MBCSSimpleGetNextUChar(cnv, bytes, 2, FALSE);
+                    uniChar = ucnv_MBCSSimpleGetNextUChar(cnv, bytes, 2, FALSE);
                 }
             }
         }
@@ -1127,18 +1127,18 @@ _LMBCSGetNextUCharWorker(UConverterToUnicodeArgs*   args,
             cnv = extraInfo->OptGrpConverter[group];
             if (group >= ULMBCS_DOUBLEOPTGROUP_START)    /* double byte conversion */
             {
-                if (!_MBCSIsLeadByte(cnv, CurByte))
+                if (!ucnv_MBCSIsLeadByte(cnv, CurByte))
                 {
                     CHECK_SOURCE_LIMIT(0);
 
                     /* let the MBCS conversion consume CurByte again */
-                    uniChar = _MBCSSimpleGetNextUChar(cnv, args->source - 1, 1, FALSE);
+                    uniChar = ucnv_MBCSSimpleGetNextUChar(cnv, args->source - 1, 1, FALSE);
                 }
                 else
                 {
                     CHECK_SOURCE_LIMIT(1);
                     /* let the MBCS conversion consume CurByte again */
-                    uniChar = _MBCSSimpleGetNextUChar(cnv, args->source - 1, 2, FALSE);
+                    uniChar = ucnv_MBCSSimpleGetNextUChar(cnv, args->source - 1, 2, FALSE);
                     ++args->source;
                 }
             }

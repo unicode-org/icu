@@ -28,7 +28,7 @@
 
 /* ISO 8859-1 --------------------------------------------------------------- */
 
-/* This is a table-less and callback-less version of _MBCSSingleToBMPWithOffsets(). */
+/* This is a table-less and callback-less version of ucnv_MBCSSingleToBMPWithOffsets(). */
 static void
 _Latin1ToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
                             UErrorCode *pErrorCode) {
@@ -128,7 +128,7 @@ _Latin1ToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
     }
 }
 
-/* This is a table-less and callback-less version of _MBCSSingleGetNextUChar(). */
+/* This is a table-less and callback-less version of ucnv_MBCSSingleGetNextUChar(). */
 static UChar32
 _Latin1GetNextUChar(UConverterToUnicodeArgs *pArgs,
                     UErrorCode *pErrorCode) {
@@ -143,7 +143,7 @@ _Latin1GetNextUChar(UConverterToUnicodeArgs *pArgs,
     return 0xffff;
 }
 
-/* This is a table-less version of _MBCSSingleFromBMPWithOffsets(). */
+/* This is a table-less version of ucnv_MBCSSingleFromBMPWithOffsets(). */
 static void
 _Latin1FromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
                               UErrorCode *pErrorCode) {
@@ -379,7 +379,7 @@ const UConverterSharedData _Latin1Data={
 
 /* US-ASCII ----------------------------------------------------------------- */
 
-/* This is a table-less version of _MBCSSingleToBMPWithOffsets(). */
+/* This is a table-less version of ucnv_MBCSSingleToBMPWithOffsets(). */
 static void
 _ASCIIToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
                            UErrorCode *pErrorCode) {
@@ -505,7 +505,7 @@ _ASCIIToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
     pArgs->offsets=offsets;
 }
 
-/* This is a table-less version of _MBCSSingleGetNextUChar(). */
+/* This is a table-less version of ucnv_MBCSSingleGetNextUChar(). */
 static UChar32
 _ASCIIGetNextUChar(UConverterToUnicodeArgs *pArgs,
                    UErrorCode *pErrorCode) {
