@@ -150,6 +150,7 @@ icu4j/src/com/ibm/demo/rbnf/package.html svneol=native#text/html
 icu4j/src/com/ibm/demo/translit/demo.html svneol=native#text/html
 icu4j/src/com/ibm/demo/translit/package.html svneol=native#text/html
 icu4j/src/com/ibm/icu/dev/data/holidays_jp.ucs -text svneol=native#application/octet-stream
+icu4j/src/com/ibm/icu/dev/data/thai6.ucs -text
 icu4j/src/com/ibm/icu/dev/data/unicode/Draft-TestSuite.txt -text svneol=unset#application/octet-stream
 icu4j/src/com/ibm/icu/dev/demo/calendar/package.html svneol=native#text/html
 icu4j/src/com/ibm/icu/dev/demo/holiday/package.html svneol=native#text/html
@@ -198,4 +199,5 @@ icu4j/src/com/ibm/tools/normalizer/package.html svneol=native#text/html
 icu4j/src/com/ibm/util/package.html svneol=native#text/html
 icu4j/src/com/ibm/util/resources/package.html svneol=native#text/html
 icu4j/src/data/holidays_jp.ucs -text svneol=native#application/octet-stream
+icu4j/src/data/thai6.ucs -text
 icu4j/src/data/unicode/Draft-TestSuite.txt -text svneol=unset#application/octet-stream
