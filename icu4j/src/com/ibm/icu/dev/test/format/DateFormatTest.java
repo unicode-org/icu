@@ -20,6 +20,7 @@ import java.text.ParseException;
 import java.text.ParsePosition;
 import java.util.Locale;
 import java.text.FieldPosition;
+import java.util.ResourceBundle;
 
 public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
     
@@ -1026,6 +1027,9 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         
         sym = new ChineseDateFormatSymbols();
         sym = new ChineseDateFormatSymbols(new ChineseCalendar(), foo);
+        // cover new ChineseDateFormatSymbols(Calendar, ULocale)
+        ChineseCalendar ccal = new ChineseCalendar();
+        sym = new ChineseDateFormatSymbols(ccal, ULocale.CHINA); //gclsh1 add
         
         StringBuffer buf = new StringBuffer();
         FieldPosition pos = new FieldPosition(0);
@@ -1318,6 +1322,39 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             }
         }
 
+        {
+            //cover getAvailableULocales
+            final ULocale[] locales = DateFormat.getAvailableULocales();
+            long count = locales.length;
+            if (count==0) {
+                errln(" got a empty list for getAvailableULocales");
+            }else{
+                logln("" + count + " available ulocales");            
+            }
+        }
+        
+        {
+            //cover DateFormatSymbols.getDateFormatBundle
+            cal = new GregorianCalendar();
+            Locale loc = Locale.getDefault();
+            DateFormatSymbols mysym = new DateFormatSymbols(cal, loc);
+            if (mysym == null) 
+                errln("FAIL: constructs DateFormatSymbols with calendar and locale failed");
+            
+            uloc = ULocale.getDefault();
+            ResourceBundle resb = DateFormatSymbols.getDateFormatBundle(cal, loc);
+            ResourceBundle resb2 = DateFormatSymbols.getDateFormatBundle(cal, uloc);
+            ResourceBundle resb3 = DateFormatSymbols.getDateFormatBundle(cal.getClass(), loc);
+            ResourceBundle resb4 = DateFormatSymbols.getDateFormatBundle(cal.getClass(), uloc);
+            
+            /* (ToDo) Not sure how to construct resourceBundle for this test
+                So comment out the verifying code. 
+            if (!resb.equals(resb2) || 
+                !resb.equals(resb3) ||
+                !resb.equals(resb4) )
+                errln("FAIL: getDateFormatBundle failed!");            
+            */
+        }
     }
 
     /**
