@@ -180,6 +180,7 @@ public:
   *
   * UCollationStrength is also used to determine the strength of sort keys 
   * generated from Collator objects.
+  * @stable
   */
   enum ECollationStrength 
   {
@@ -198,6 +199,7 @@ public:
   * GREATER is returned if source string is compared to be greater than
   * target string in the compare() method.
   * @see Collator#compare
+  * @stable
   */
   enum EComparisonResult 
   {
@@ -210,6 +212,7 @@ public:
   
   /**
   * Destructor
+  * @stable
   */
   virtual ~Collator();
 
@@ -219,6 +222,7 @@ public:
   * Returns true if "other" is the same as "this"
   * @param other Collator object to be compared
   * @return true if other is the same as this.
+  * @stable
   */
   virtual UBool operator==(const Collator& other) const;
 
@@ -226,12 +230,14 @@ public:
   * Returns true if "other" is not the same as "this".
   * @param other Collator object to be compared
   * @return true if other is not the same as this.
+  * @stable
   */
   virtual UBool operator!=(const Collator& other) const;
 
   /**
   * Makes a shallow copy of the current object.
   * @return a copy of this object
+  * @stable
   */
   virtual Collator* clone(void) const = 0;
 
@@ -250,6 +256,7 @@ public:
   * The caller owns the returned object and is responsible for deleting it.
   * @return the collation object of the default locale.(for example, en_US)
   * @see Locale#getDefault
+  * @stable
   */
   static Collator* createInstance(UErrorCode&  err);
 
@@ -274,6 +281,7 @@ public:
   *         locale.
   * @see Locale
   * @see ResourceLoader
+  * @stable
   */
   static Collator* createInstance(const Locale& loc, UErrorCode& err);
 
@@ -303,23 +311,6 @@ public:
   * The comparison function compares the character data stored in two
   * different strings. Returns information about whether a string is less 
   * than, greater than or equal to another string.
-  * <p>Example of use:
-  * <pre>
-  * \code
-  *   UErrorCode status = U_ZERO_ERROR;
-  *   Collator*myCollation = Collator::createInstance(Locale::US, 
-  *                                                          status);
-  *   if (U_FAILURE(status)) return;
-  *   myCollation->setStrength(Collator::PRIMARY);
-  *   // result would be Collator::EQUAL ("abc" == "ABC")
-  *   // (no primary difference between "abc" and "ABC")
-  *   UCollationResult result = myCollation->compare("abc", "ABC");
-  *   myCollation->setStrength(Collator::TERTIARY);
-  *   // result would be Collator::LESS ("abc" <<< "ABC")
-  *   // (with tertiary difference between "abc" and "ABC")
-  *   UCollationResult result = myCollation->compare("abc", "ABC");
-  * \endcode
-  * </pre>
   * @param source the source string to be compared with.
   * @param target the string that is to be compared with the source string.
   * @return Returns a byte value. GREATER if source is greater
@@ -333,26 +324,6 @@ public:
   /**
   * Does the same thing as compare but limits the comparison to a specified 
   * length
-  *
-  *
-  *
-  * <p>Example of use:
-  * <pre>
-  * \code
-  *   UErrorCode status = U_ZERO_ERROR;
-  *   Collator*myCollation = Collator::createInstance(Locale::US, 
-  *                                                          status);
-  *   if (U_FAILURE(status)) return;
-  *   myCollation->setStrength(Collator::PRIMARY);
-  *   // result would be Collator::EQUAL ("abc" == "ABC")
-  *   // (no primary difference between "abc" and "ABC")
-  *   UCollationResult result = myCollation->compare("abc", "ABC",3);
-  *   myCollation->setStrength(Collator::TERTIARY);
-  *   // result would be Collator::LESS (abc" <<< "ABC")
-  *   // (with tertiary difference between "abc" and "ABC")
-  *   UCollationResult result = myCollation->compare("abc", "ABC",3);
-  * \endcode
-  * </pre>
   * @param source the source string to be compared with.
   * @param target the string that is to be compared with the source string.
   * @param length the length the comparison is limitted to
@@ -360,6 +331,7 @@ public:
   *         length) is greater than target; EQUAL if source (up to specified 
   *         length) is equal to target; LESS if source (up to the specified 
   *         length) is less  than target.   
+  * @stable
   */
   virtual EComparisonResult compare(const UnicodeString& source,
                                     const UnicodeString& target,
@@ -369,23 +341,6 @@ public:
   * The comparison function compares the character data stored in two
   * different string arrays. Returns information about whether a string array 
   * is less than, greater than or equal to another string array.
-  * <p>Example of use:
-  * <pre>
-  * \code
-  *   UErrorCode status = U_ZERO_ERROR;
-  *   Collator*myCollation = Collator::createInstance(Locale::US, 
-  *                                                          status);
-  *   if (U_FAILURE(status)) return;
-  *   myCollation->setStrength(Collator::PRIMARY);
-  *   // result would be Collator::EQUAL ("abc" == "ABC")
-  *   // (no primary difference between "abc" and "ABC")
-  *   UCollationResult result = myCollation->compare(L"abc", 3, L"ABC", 3);
-  *   myCollation->setStrength(Collator::TERTIARY);
-  *   // result would be Collator::LESS (abc" <<< "ABC")
-  *   // (with tertiary difference between "abc" and "ABC")
-  *   UCollationResult result = myCollation->compare(L"abc", 3, L"ABC", 3);
-  * \endcode
-  * </pre>
   * @param source the source string array to be compared with.
   * @param sourceLength the length of the source string array.  If this value
   *        is equal to -1, the string array is null-terminated.
@@ -395,6 +350,7 @@ public:
   * @return Returns a byte value. GREATER if source is greater than target; 
   *         EQUAL if source is equal to target; LESS if source is less than 
   *         target
+  * @stable
   */
   virtual EComparisonResult compare(const UChar* source, int32_t sourceLength,
                                     const UChar* target, int32_t targetLength) 
@@ -407,51 +363,12 @@ public:
   * only a limited number of ignorable characters.
   * <p>Use CollationKey::equals or CollationKey::compare to compare the
   * generated sort keys.
-  * <p>Example of use:
-  * <pre>
-  * \code
-  *  UErrorCode status = U_ZERO_ERROR;
-  *  Collator*myCollation = Collator::createInstance(Locale::US, 
-  *                                                        status);
-  *  if (U_FAILURE(status)) return;
-  *  myCollation->setStrength(Collator::PRIMARY);
-  *  UErrorCode key1Status, key2Status;
-  *  CollationKey CollationKey1
-  *  CollationKey1 = myCollation->getCollationKey("abc", CollationKey1, 
-  *                                               key1Status);
-  *  CollationKey CollationKey2
-  *  CollationKey2 = myCollation->getCollationKey("ABC", CollationKey2, 
-  *                                               key2Status);
-  *  if (U_FAILURE(key1Status) || U_FAILURE(key2Status)) 
-  *  {
-  *    delete myCollation; 
-  *    return;
-  *  }
-  *  // Use CollationKey::compare() to compare the sort keys
-  *  // result would be 0 (CollationKey1 == CollationKey2)
-  *  int result = CollationKey1.compare(CollationKey2);
-  *  myCollation->setStrength(Collator::TERTIARY);
-  *  CollationKey1 = myCollation->getCollationKey("abc", CollationKey1, 
-  *                                               key1Status);
-  *  CollationKey2 = myCollation->getCollationKey("ABC", CollationKey2, 
-  *                                               key2Status);
-  *  if (U_FAILURE(key1Status) || U_FAILURE(key2Status)) 
-  *  { 
-  *    delete myCollation; 
-  *    return; 
-  *  }
-  *  // Use CollationKey::compareTo to compare the collation keys
-  *  // result would be -1 (CollationKey1 < CollationKey2)
-  *  result = CollationKey1.compareTo(CollationKey2);
-  *  delete myCollation;
-  * \endcode
-  * </pre>
-  * <p>
   * If the source string is null, a null collation key will be returned.
   * @param source the source string to be transformed into a sort key.
   * @param key the collation key to be filled in
   * @return the collation key of the string based on the collation rules.
   * @see CollationKey#compare
+  * @stable
   */
   virtual CollationKey& getCollationKey(const UnicodeString&  source,
                                         CollationKey& key,
@@ -470,6 +387,7 @@ public:
   * @param key the collation key to be filled in
   * @return the collation key of the string based on the collation rules.
   * @see CollationKey#compare
+  * @stable
   */
   virtual CollationKey& getCollationKey(const UChar*source, 
                                         int32_t sourceLength,
@@ -477,6 +395,7 @@ public:
 					                              UErrorCode& status) const = 0;
   /**
   * Generates the hash code for the collation object
+  * @stable
   */
   virtual int32_t hashCode(void) const = 0;
 
@@ -487,6 +406,7 @@ public:
   * @return true if the first string is greater than the second one,
   *         according to the collation rules. false, otherwise.
   * @see Collator#compare
+  * @stable
   */
   UBool greater(const UnicodeString& source, const UnicodeString& target) 
                 const;
@@ -498,6 +418,7 @@ public:
   * @return true if the first string is greater than or equal to the second 
   *         one, according to the collation rules. false, otherwise.
   * @see Collator#compare
+  * @stable
   */
   UBool greaterOrEqual(const UnicodeString& source, 
                        const UnicodeString& target) const;
@@ -508,24 +429,10 @@ public:
   * @return true if the strings are equal according to the collation rules.  
   *         false, otherwise.
   * @see Collator#compare
+  * @stable
   */
   UBool equals(const UnicodeString& source, const UnicodeString& target) const;
         
-  /**
-  * Get the decomposition mode of the Collator object.
-  * @return the decomposition mode
-  * @see Collator#setDecomposition
-  */
-  virtual Normalizer::EMode getDecomposition(void) const = 0;
-
-  /**
-  * Set the decomposition mode of the Collator object. success is equal to 
-  * U_ILLEGAL_ARGUMENT_ERROR if error occurs.
-  * @param the new decomposition mode
-  * @see Collator#getDecomposition
-  */
-  virtual void setDecomposition(Normalizer::EMode  mode) = 0;
-
   /**
   * Determines the minimum strength that will be use in comparison or
   * transformation.
@@ -534,6 +441,7 @@ public:
   * are ignored.
   * @return the current comparison level.
   * @see Collator#setStrength
+  * @stable
   */
   virtual ECollationStrength getStrength(void) const = 0;
   
@@ -566,6 +474,7 @@ public:
   * @param name the fill-in parameter of the return value
   * @return display-able name of the object for the object locale in the
   *         desired language
+  * @stable
   */
   static UnicodeString& getDisplayName(const Locale& objectLocale,
                                        const Locale& displayLocale,
@@ -576,6 +485,7 @@ public:
   * @param objectLocale must be from getAvailableLocales
   * @param name the fill-in parameter of the return value
   * @return name of the object for the desired locale in the default language
+  * @stable
   */
   static UnicodeString& getDisplayName(const Locale& objectLocale,
                                        UnicodeString& name);
@@ -584,12 +494,14 @@ public:
   * Get the set of Locales for which Collations are installed
   * @param count the output parameter of number of elements in the locale list
   * @return the list of available locales which collations are installed
+  * @stable
   */
   static const Locale* getAvailableLocales(int32_t& count);
 
   /**
   * Gets the version information for a Collator. 
   * @param info the version # information, the result will be filled in
+  * @stable
   */
   void getVersion(UVersionInfo info) const;
 
@@ -608,6 +520,7 @@ public:
   * @return The class ID for this object. All objects of a given class have 
   *         the same class ID.  Objects of other classes have different class 
   *         IDs.
+  * @stable
   */
   virtual UClassID getDynamicClassID(void) const = 0;
 
@@ -617,6 +530,7 @@ public:
   * @param value attribute value
   * @param status to indicate whether the operation went on smoothly or 
   *        there were errors
+  * @draft ICU 1.8
   */
   virtual void setAttribute(UColAttribute attr, UColAttributeValue value, 
                             UErrorCode &status) = 0;
@@ -627,6 +541,7 @@ public:
   * @param status to indicate whether the operation went on smoothly or 
   *        there were errors
   * @return attribute value
+  * @draft ICU 1.8
   */
   virtual UColAttributeValue getAttribute(UColAttribute attr, 
                                           UErrorCode &status) = 0;
@@ -639,7 +554,7 @@ public:
    *    U_CE_NOT_FOUND_ERROR if more than one character was passed and there is no such a contraction<br>
    *    U_PRIMARY_TOO_LONG_ERROR if the primary for the variable top has more than two bytes
    * @return a 32 bit value containing the value of the variable top in upper 16 bits. Lower 16 bits are undefined
-   * @draft
+   * @draft ICU 2.0
    */
   virtual uint32_t setVariableTop(const UChar *varTop, int32_t len, UErrorCode &status) = 0;
 
@@ -650,7 +565,7 @@ public:
    *    U_CE_NOT_FOUND_ERROR if more than one character was passed and there is no such a contraction<br>
    *    U_PRIMARY_TOO_LONG_ERROR if the primary for the variable top has more than two bytes
    * @return a 32 bit value containing the value of the variable top in upper 16 bits. Lower 16 bits are undefined
-   * @draft
+   * @draft ICU 2.0
    */
   virtual uint32_t setVariableTop(const UnicodeString varTop, UErrorCode &status) = 0;
 
@@ -659,7 +574,7 @@ public:
    * Lower 16 bits are ignored.
    * @param varTop CE value, as returned by setVariableTop or ucol)getVariableTop
    * @param status error code (not changed by function)
-   * @draft
+   * @draft ICU 2.0
    */
   virtual void setVariableTop(const uint32_t varTop, UErrorCode &status) = 0;
 
@@ -667,7 +582,7 @@ public:
    * Gets the variable top value of a Collator. 
    * Lower 16 bits are undefined and should be ignored.
    * @param status error code (not changed by function). If error code is set, the return value is undefined.
-   * @draft
+   * @draft ICU 2.0
    */
   virtual uint32_t getVariableTop(UErrorCode &status) const = 0;
 
@@ -675,6 +590,7 @@ public:
   /**
   * Thread safe cloning operation
   * @return pointer to the new clone, user should remove it.
+  * @draft ICU 1.8
   */
   virtual Collator* safeClone(void) = 0;
 
@@ -688,6 +604,7 @@ public:
   * @param resultLength length of the result buffer. If if not enough the 
   *        buffer will be filled to capacity. 
   * @return Number of bytes needed for storing the sort key
+  * @draft ICU 1.8
   */
   virtual int32_t getSortKey(const UnicodeString& source, uint8_t* result,
 						                 int32_t resultLength) const = 0;
@@ -705,9 +622,27 @@ public:
   * @param resultLength length of the result buffer. If if not enough the 
   *        buffer will be filled to capacity. 
   * @return Number of bytes needed for storing the sort key
+  * @draft ICU 1.8
   */
   virtual int32_t getSortKey(const UChar*source, int32_t sourceLength,
 						                 uint8_t*result, int32_t resultLength) const = 0;
+  // start deprecated APIs
+  /**
+  * Get the decomposition mode of the Collator object.
+  * @return the decomposition mode
+  * @see Collator#setDecomposition
+  * @deprecated To be removed after 2002-sep-30; use getAttribute().
+  */
+  virtual Normalizer::EMode getDecomposition(void) const = 0;
+
+  /**
+  * Set the decomposition mode of the Collator object. success is equal to 
+  * U_ILLEGAL_ARGUMENT_ERROR if error occurs.
+  * @param the new decomposition mode
+  * @see Collator#getDecomposition
+  * @deprecated To be removed after 2002-sep-30; use setAttribute().
+  */
+  virtual void setDecomposition(Normalizer::EMode  mode) = 0;
 
 protected:
 
