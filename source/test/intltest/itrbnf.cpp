@@ -49,7 +49,7 @@ void IntlTestRBNF::runIndexedTest(int32_t index, UBool exec, const char* &name, 
       TESTCASE(8, TestThaiSpellout);
       TESTCASE(9, TestAPI);
       TESTCASE(10, TestFractionalRuleSet);
-      // TESTCASE(11, TestLLong);
+      TESTCASE(11, TestSwedishSpellout);
 #else
       TESTCASE(0, TestRBNFDisabled);
 #endif
@@ -1271,6 +1271,77 @@ IntlTestRBNF::TestThaiSpellout()
     }
     delete formatter;
 }
+
+void
+IntlTestRBNF::TestSwedishSpellout()
+{
+    UErrorCode status = U_ZERO_ERROR;
+    RuleBasedNumberFormat* formatter
+        = new RuleBasedNumberFormat(URBNF_SPELLOUT, Locale("sv"), status);
+
+    if (U_FAILURE(status)) {
+        errln("FAIL: could not construct formatter");
+    } else {
+        static const char* testDataDefault[][2] = {
+            { "101", "etthundra\\u00aden" },
+            { "123", "etthundra\\u00adtjugotre" },
+            { "1,001", "ettusen en" },
+            { "1,100", "ettusen etthundra" },
+            { "1,101", "ettusen etthundra\\u00aden" },
+            { "1,234", "ettusen tv\\u00e5hundra\\u00adtrettiofyra" },
+            { "10,001", "tio\\u00adtusen en" },
+            { "11,000", "elva\\u00adtusen" },
+            { "12,000", "tolv\\u00adtusen" },
+            { "20,000", "tjugo\\u00adtusen" },
+            { "21,000", "tjugoen\\u00adtusen" },
+            { "21,001", "tjugoen\\u00adtusen en" },
+            { "200,000", "tv\\u00e5hundra\\u00adtusen" },
+            { "201,000", "tv\\u00e5hundra\\u00aden\\u00adtusen" },
+            { "200,200", "tv\\u00e5hundra\\u00adtusen tv\\u00e5hundra" },
+            { "2,002,000", "tv\\u00e5 miljoner tv\\u00e5\\u00adtusen" },
+            { "12,345,678", "tolv miljoner trehundra\\u00adfyrtiofem\\u00adtusen sexhundra\\u00adsjuttio\\u00e5tta" },
+            { "123,456.789", "etthundra\\u00adtjugotre\\u00adtusen fyrahundra\\u00adfemtiosex komma sju \\u00e5tta nio" },
+            { "-12,345.678", "minus tolv\\u00adtusen trehundra\\u00adfyrtiofem komma sex sju \\u00e5tta" },
+			{ NULL, NULL }
+        };
+        doTest(formatter, testDataDefault, TRUE);
+
+        static const char* testDataNeutrum[][2] = {
+            { "101", "etthundra\\u00adett" },
+            { "1,001", "ettusen ett" },
+            { "1,101", "ettusen etthundra\\u00adett" },
+            { "10,001", "tio\\u00adtusen ett" },
+            { "21,001", "tjugoen\\u00adtusen ett" },
+			{ NULL, NULL }
+        };
+
+        formatter->setDefaultRuleSet("%neutrum", status);
+		if (U_SUCCESS(status)) {
+			logln("testing neutrum rules");	
+			doTest(formatter, testDataNeutrum, TRUE);
+		}
+
+         static const char* testDataYear[][2] = {
+            { "101", "etthundra\\u00adett" },
+            { "900", "niohundra" },
+            { "1,001", "tiohundra\\u00adett" },
+            { "1,100", "elvahundra" },
+            { "1,101", "elvahundra\\u00adett" },
+            { "1,234", "tolvhundra\\u00adtrettiofyra" },
+            { "2,001", "tjugohundra\\u00adett" },
+            { "10,001", "tio\\u00adtusen ett" },
+			{ NULL, NULL }
+        };
+
+        formatter->setDefaultRuleSet("%year", status);
+		if (U_SUCCESS(status)) {
+			logln("testing year rules");
+			doTest(formatter, testDataYear, TRUE);
+		}
+    }
+	delete formatter;
+}
+
 
 void 
 IntlTestRBNF::doTest(RuleBasedNumberFormat* formatter, const char* testData[][2], UBool testParsing) 

@@ -85,6 +85,11 @@ class IntlTestRBNF : public IntlTest {
    */
   virtual void TestThaiSpellout();
 
+  /**
+   * Perform a simple spot check on the Swedish spellout rules
+   */
+  virtual void TestSwedishSpellout();
+
  protected:
   virtual void doTest(RuleBasedNumberFormat* formatter, const char* testData[][2], UBool testParsing);
   virtual void doLenientParseTest(RuleBasedNumberFormat* formatter, const char* testData[][2]);
