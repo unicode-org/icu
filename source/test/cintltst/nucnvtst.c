@@ -1474,7 +1474,7 @@ TestISO_2022_JP_Next() {
 }
 
 static void
-TestSmallTargetBuffer(const uint16_t* source, const UChar* sourceLimit,UConverter* cnv, char* cnvName){
+TestSmallTargetBuffer(const uint16_t* source, const UChar* sourceLimit,UConverter* cnv, const char* cnvName){
     const UChar* uSource;
     const UChar* uSourceLimit;
     const char* cSource;
@@ -1651,7 +1651,7 @@ static void TestSmallSourceBuffer(const uint16_t* source, const UChar* sourceLim
 
         uSource = source;
         test =uBuf;
-        for(len;len<(int)(source - sourceLimit);len++){
+        for(;len<(int)(source - sourceLimit);len++){
             if(uBuf[len]!=uSource[len]){
                 log_err("Expected : \\u%04X \t Got: \\u%04X\n",uSource[len],(int)uBuf[len]) ;
             }
