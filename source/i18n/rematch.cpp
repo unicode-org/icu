@@ -850,17 +850,37 @@ void RegexMatcher::MatchAt(int32_t startIdx, UErrorCode &status) {
                 // Test input against a literal string.
                 // Strings require two slots in the compiled pattern, one for the
                 //   offset to the string text, and one for the length.
-                int32_t stringStartIdx, stringLen;
-                stringStartIdx = opValue;
+                int32_t   stringStartIdx = opValue;
+                int32_t   stringLen;
 
-                op      = pat[fp->fPatIdx];
+                op      = pat[fp->fPatIdx];     // Fetch the second operand
                 fp->fPatIdx++;
-                opType  = URX_TYPE(op);
-                opValue = URX_VAL(op);
+                opType    = URX_TYPE(op);
+                stringLen = URX_VAL(op);
                 U_ASSERT(opType == URX_STRING_LEN);
-                stringLen = opValue;
+                U_ASSERT(stringLen >= 2);
 
-                int32_t stringEndIndex = fp->fInputIdx + stringLen;
+                const UChar * pInp = inputBuf + fp->fInputIdx;
+                const UChar * pPat = litText+stringStartIdx;
+                const UChar * pEnd = pInp + stringLen;
+                for(;;) {
+                    if (*pInp == *pPat) {
+                        pInp++;
+                        pPat++;
+                        if (pInp == pEnd) {
+                            // Successful Match.
+                            fp->fInputIdx += stringLen;
+                            break;
+                        }
+                    } else {
+                        // Match failed.
+                        fp = (REStackFrame *)fStack->popFrame(frameSize);
+                        break;
+                    }
+                }
+                break;
+
+#if 0
                 if (stringEndIndex <= inputLen &&
                     u_strncmp(inputBuf+fp->fInputIdx, litText+stringStartIdx, stringLen) == 0) {
                     // Success.  Advance the current input position.
@@ -869,6 +889,7 @@ void RegexMatcher::MatchAt(int32_t startIdx, UErrorCode &status) {
                     // No match.  Back up matching to a saved state
                     fp = (REStackFrame *)fStack->popFrame(frameSize);
                 }
+#endif
             }
             break;
 
