@@ -442,6 +442,30 @@ _getPrevCC(const UChar *start, const UChar *&p) {
 }
 
 /*
+ * is this a safe boundary character for NF*D?
+ * (lead cc==0)
+ */
+static inline UBool
+_isNFDSafe(uint32_t norm32, uint32_t ccOrQCMask, uint32_t decompQCMask) {
+    if((norm32&ccOrQCMask)==0) {
+        return TRUE; /* cc==0 and no decomposition: this is NF*D safe */
+    }
+
+    /* inspect its decomposition - maybe a Hangul but not a surrogate here */
+    if(isNorm32Regular(norm32) && (norm32&decompQCMask)!=0) {
+        int32_t length;
+        uint8_t cc, trailCC;
+
+        /* decomposes, get everything from the variable-length extra data */
+        _decompose(norm32, decompQCMask, length, cc, trailCC);
+        return cc==0;
+    } else {
+        /* no decomposition (or Hangul), test the cc directly */
+        return (norm32&_NORM_CC_MASK)==0;
+    }
+}
+
+/*
  * is this (or does its decomposition begin with) a "true starter"?
  * (cc==0 and NF*C_YES)
  */
@@ -2259,12 +2283,13 @@ typedef UBool
 IsPrevBoundaryFn(UCharIterator &src, uint32_t minC, uint32_t mask, UChar &c, UChar &c2);
 
 /*
- * read backwards and check if the combining class is 0
+ * for NF*D:
+ * read backwards and check if the lead combining class is 0
  * if c2!=0 then (c2, c) is a surrogate pair (reversed - c2 is first surrogate but read second!)
  */
 static UBool
-_isPrevCCZero(UCharIterator &src, uint32_t minC, uint32_t ccMask, UChar &c, UChar &c2) {
-    return (_getPrevNorm32(src, minC, ccMask, c, c2)&ccMask)==0;
+_isPrevNFDSafe(UCharIterator &src, uint32_t minC, uint32_t ccOrQCMask, UChar &c, UChar &c2) {
+    return _isNFDSafe(_getPrevNorm32(src, minC, ccOrQCMask, c, c2), ccOrQCMask, ccOrQCMask&_NORM_QC_MASK);
 }
 
 /*
@@ -2347,11 +2372,15 @@ unorm_previousNormalize(UChar *dest, int32_t destCapacity,
 
     switch(mode) {
     case UNORM_NFD:
-    case UNORM_NFKD:
     case UNORM_FCD:
-        isPreviousBoundary=_isPrevCCZero;
+        isPreviousBoundary=_isPrevNFDSafe;
         minC=_NORM_MIN_WITH_LEAD_CC;
-        mask=_NORM_CC_MASK;
+        mask=_NORM_CC_MASK|_NORM_QC_NFD;
+        break;
+    case UNORM_NFKD:
+        isPreviousBoundary=_isPrevNFDSafe;
+        minC=_NORM_MIN_WITH_LEAD_CC;
+        mask=_NORM_CC_MASK|_NORM_QC_NFKD;
         break;
     case UNORM_NFC:
         isPreviousBoundary=_isPrevTrueStarter;
@@ -2464,15 +2493,17 @@ typedef UBool
 IsNextBoundaryFn(UCharIterator &src, uint32_t minC, uint32_t mask, UChar &c, UChar &c2);
 
 /*
- * read forward and check if the combining class is 0
+ * for NF*D:
+ * read forward and check if the lead combining class is 0
  * if c2!=0 then (c, c2) is a surrogate pair
  */
 static UBool
-_isNextCCZero(UCharIterator &src, uint32_t minC, uint32_t ccMask, UChar &c, UChar &c2) {
-    return (_getNextNorm32(src, minC, ccMask, c, c2)&ccMask)==0;
+_isNextNFDSafe(UCharIterator &src, uint32_t minC, uint32_t ccOrQCMask, UChar &c, UChar &c2) {
+    return _isNFDSafe(_getNextNorm32(src, minC, ccOrQCMask, c, c2), ccOrQCMask, ccOrQCMask&_NORM_QC_MASK);
 }
 
 /*
+ * for NF*C:
  * read forward and check if the character is (or its decomposition begins with)
  * a "true starter" (cc==0 and NF*C_YES)
  * if c2!=0 then (c, c2) is a surrogate pair
@@ -2561,11 +2592,15 @@ unorm_nextNormalize(UChar *dest, int32_t destCapacity,
 
     switch(mode) {
     case UNORM_NFD:
-    case UNORM_NFKD:
     case UNORM_FCD:
-        isNextBoundary=_isNextCCZero;
+        isNextBoundary=_isNextNFDSafe;
         minC=_NORM_MIN_WITH_LEAD_CC;
-        mask=_NORM_CC_MASK;
+        mask=_NORM_CC_MASK|_NORM_QC_NFD;
+        break;
+    case UNORM_NFKD:
+        isNextBoundary=_isNextNFDSafe;
+        minC=_NORM_MIN_WITH_LEAD_CC;
+        mask=_NORM_CC_MASK|_NORM_QC_NFKD;
         break;
     case UNORM_NFC:
         isNextBoundary=_isNextTrueStarter;
