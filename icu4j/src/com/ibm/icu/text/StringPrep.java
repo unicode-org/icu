@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2003-2004, International Business Machines Corporation and         *
+ * Copyright (C) 2003-2005, International Business Machines Corporation and         *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -15,7 +15,10 @@ import com.ibm.icu.impl.CharTrie;
 import com.ibm.icu.impl.StringPrepDataReader;
 import com.ibm.icu.impl.Trie;
 import com.ibm.icu.impl.NormalizerImpl;
+import com.ibm.icu.impl.UBiDiProps;
+
 import com.ibm.icu.util.VersionInfo;
+
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.lang.UCharacterDirection;
 
@@ -102,23 +105,8 @@ public final class StringPrep {
      */
     private static final int DATA_BUFFER_SIZE = 25000;
     
-    /* Wrappers for Trie implementations */ 
-    private static final class StringPrepTrieImpl implements Trie.DataManipulate{
-        private CharTrie sprepTrie = null;
-       /**
-        * Called by com.ibm.icu.util.Trie to extract from a lead surrogate's 
-        * data the index array offset of the indexes for that lead surrogate.
-        * @param property data value for a surrogate from the trie, including 
-        *        the folding offset
-        * @return data offset or 0 if there is no data for the lead surrogate
-        */
-         public int getFoldingOffset(int value){
-            return value;
-        }
-    }
-    
     // CharTrie implmentation for reading the trie data
-    private StringPrepTrieImpl sprepTrieImpl;
+    private CharTrie sprepTrie;
     // Indexes read from the data file
     private int[] indexes;
     // mapping data read from the data file
@@ -135,10 +123,11 @@ public final class StringPrep {
     private boolean doNFKC;
     // Option to turn on checking for BiDi rules
     private boolean checkBiDi;
-
+    // bidi properties
+    private UBiDiProps bdp;
     
     private char getCodePointValue(int ch){
-        return sprepTrieImpl.sprepTrie.getCodePointValue(ch);
+        return sprepTrie.getCodePointValue(ch);
     }
   
     private static VersionInfo getVersionInfo(int comp){
@@ -181,8 +170,7 @@ public final class StringPrep {
         // load the rest of the data data and initialize the data members
         reader.read(sprepBytes,mappingData);
                                    
-        sprepTrieImpl           = new StringPrepTrieImpl();
-        sprepTrieImpl.sprepTrie = new CharTrie( new ByteArrayInputStream(sprepBytes),sprepTrieImpl  );
+        sprepTrie = new CharTrie(new ByteArrayInputStream(sprepBytes), null);
               
         // get the data format version                           
         formatVersion = reader.getDataFormatVersion();
@@ -200,6 +188,10 @@ public final class StringPrep {
             throw new IOException("Normalization Correction version not supported");
         }
         b.close();
+        
+        if(checkBiDi) {
+            bdp=UBiDiProps.getSingleton();
+        }
     }
  
     private static final class Values{
@@ -417,17 +409,19 @@ public final class StringPrep {
                                          StringPrepParseException.PROHIBITED_ERROR,iter.getText(),val.value);
             }
 
-            direction = UCharacter.getDirection(ch);
-            if(firstCharDir == UCharacterDirection.CHAR_DIRECTION_COUNT){
-                firstCharDir = direction;
-            }
-            if(direction == UCharacterDirection.LEFT_TO_RIGHT){
-                leftToRight = true;
-                ltrPos = iter.getIndex()-1;
-            }
-            if(direction == UCharacterDirection.RIGHT_TO_LEFT || direction == UCharacterDirection.RIGHT_TO_LEFT_ARABIC){
-                rightToLeft = true;
-                rtlPos = iter.getIndex()-1;
+            if(checkBiDi) {
+                direction = bdp.getClass(ch);
+                if(firstCharDir == UCharacterDirection.CHAR_DIRECTION_COUNT){
+                    firstCharDir = direction;
+                }
+                if(direction == UCharacterDirection.LEFT_TO_RIGHT){
+                    leftToRight = true;
+                    ltrPos = iter.getIndex()-1;
+                }
+                if(direction == UCharacterDirection.RIGHT_TO_LEFT || direction == UCharacterDirection.RIGHT_TO_LEFT_ARABIC){
+                    rightToLeft = true;
+                    rtlPos = iter.getIndex()-1;
+                }
             }
         }           
         if(checkBiDi == true){

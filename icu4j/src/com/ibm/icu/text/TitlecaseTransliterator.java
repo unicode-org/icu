@@ -1,12 +1,18 @@
 /*
- * Copyright (C) 1996-2004, International Business Machines Corporation and
+ * Copyright (C) 1996-2005, International Business Machines Corporation and
  * others. All Rights Reserved.
  *
  */
 package com.ibm.icu.text;
 
+import java.io.IOException;
+
+import com.ibm.icu.impl.UCaseProps;
 import com.ibm.icu.impl.UCharacterProperty;
+
 import com.ibm.icu.util.ULocale;
+
+import com.ibm.icu.text.ReplaceableContextIterator;
 
 /**
  * A transliterator that converts all letters (as defined by
@@ -18,28 +24,6 @@ import com.ibm.icu.util.ULocale;
 class TitlecaseTransliterator extends Transliterator {
 
     static final String _ID = "Any-Title";
-    private ULocale loc;
-
-    /**
-     * The set of characters we skip.  These are neither cased nor
-     * non-cased, to us; we copy them verbatim.
-     */
-    static UnicodeSet SKIP = null;
-
-    /**
-     * The set of characters that cause the next non-SKIP character
-     * to be lowercased.
-     */
-    static UnicodeSet CASED = null;
-
-    /**
-     * Initialize static variables.  We defer intilization because it
-     * is slow (typically over 1000 ms).
-     */
-    private static final void initStatics() {
-        SKIP = new UnicodeSet("[\u00AD \u2019 \\' [:Mn:] [:Me:] [:Cf:] [:Lm:] [:Sk:]]");
-        CASED = new UnicodeSet("[[:Lu:] [:Ll:] [:Lt:]]");
-    }
 
     /**
      * System registration hook.
@@ -54,94 +38,123 @@ class TitlecaseTransliterator extends Transliterator {
         registerSpecialInverse("Title", "Lower", false);
     }
 
+    private ULocale locale;
+
+    private UCaseProps csp;
+    private ReplaceableContextIterator iter;
+    private StringBuffer result;
+    private int[] locCache;
+
    /**
      * Constructs a transliterator.
      */
     public TitlecaseTransliterator(ULocale loc) {
         super(_ID, null);
-        this.loc = loc;
+        locale = loc;
         // Need to look back 2 characters in the case of "can't"
         setMaximumContextLength(2);
+        try {
+            csp=UCaseProps.getSingleton();
+        } catch (IOException e) {
+            csp=null;
+        }
+        iter=new ReplaceableContextIterator();
+        result = new StringBuffer();
+        int[] locCache = new int[1];
+        locCache[0]=0;
     }
      
     /**
      * Implements {@link Transliterator#handleTransliterate}.
      */
     protected void handleTransliterate(Replaceable text,
-                                       Position offsets, boolean incremental) {
-        if (SKIP == null) {
-            initStatics();
+                                       Position offsets, boolean isIncremental) {
+        // TODO reimplement, see ustrcase.c
+        // using a real word break iterator
+        //   instead of just looking for a transition between cased and uncased characters
+        // call CaseMapTransliterator::handleTransliterate() for lowercasing? (set fMap)
+        // needs to take isIncremental into account because case mappings are context-sensitive
+        //   also detect when lowercasing function did not finish because of context
+
+        if (offsets.start >= offsets.limit) {
+            return;
         }
+
+        // case type: >0 cased (UCaseProps.LOWER etc.)  ==0 uncased  <0 case-ignorable
+        int type;
 
         // Our mode; we are either converting letter toTitle or
         // toLower.
         boolean doTitle = true;
 
-        // Determine if there is a preceding context of CASED SKIP*,
+        // Determine if there is a preceding context of cased case-ignorable*,
         // in which case we want to start in toLower mode.  If the
         // prior context is anything else (including empty) then start
         // in toTitle mode.
-        int c;
-        for (int start = offsets.start - 1; start >= offsets.contextStart; start -= UTF16.getCharCount(c)) {
+        int c, start;
+        for (start = offsets.start - 1; start >= offsets.contextStart; start -= UTF16.getCharCount(c)) {
             c = text.char32At(start);
-            if (SKIP.contains(c)) {
-                continue;
+            type=csp.getTypeOrIgnorable(c);
+            if(type>0) { // cased
+                doTitle=false;
+                break;
+            } else if(type==0) { // uncased but not ignorable
+                break;
             }
-            doTitle = !CASED.contains(c);
-            break;
+            // else (type<0) case-ignorable: continue
         }
 
-        // Convert things after a CASED character toLower; things
-        // after a non-CASED, non-SKIP character toTitle.  SKIP
+        // Convert things after a cased character toLower; things
+        // after a uncased, non-case-ignorable character toTitle.  Case-ignorable
         // characters are copied directly and do not change the mode.
 
-        int textPos = offsets.start;
-        if (textPos >= offsets.limit) return;
+        iter.setText(text);
+        iter.setIndex(offsets.start);
+        iter.setLimit(offsets.limit);
+        iter.setContextLimits(offsets.contextStart, offsets.contextLimit);
 
-        // get string for context
-        // TODO: add convenience method to do this, since we do it all over
-        
-        UCharacterIterator original = UCharacterIterator.getInstance(text);
-        
+        result.setLength(0);
+
         // Walk through original string
         // If there is a case change, modify corresponding position in replaceable
-        
-        int limit = offsets.limit;
-        int cp;
-        int oldLen;
-        int newLen;
-        
-        while (textPos < limit) {
-            original.setIndex(textPos);
-            cp = original.currentCodePoint();
-            oldLen = UTF16.getCharCount(cp);
-            
-            if (!SKIP.contains(cp)) {
-                if (doTitle) {
-                    newLen = m_charppty_.toUpperOrTitleCase(loc, cp, original, false, buffer);
+        int delta;
+
+        while((c=iter.nextCaseMapCP())>=0) {
+            type=csp.getTypeOrIgnorable(c);
+            if(type>=0) { // not case-ignorable
+                if(doTitle) {
+                    c=csp.toFullTitle(c, iter, result, locale, locCache);
                 } else {
-                    newLen = m_charppty_.toLowerCase(loc, cp, original, buffer);
+                    c=csp.toFullLower(c, iter, result, locale, locCache);
                 }
-                doTitle = !CASED.contains(cp);
-                if (newLen >= 0) {
-                    text.replace(textPos, textPos + oldLen, buffer, 0, newLen);
-                    if (newLen != oldLen) {
-                        textPos += newLen;
-                        offsets.limit += newLen - oldLen;
-                        offsets.contextLimit += newLen - oldLen;
-                        continue;
-                    }
+                doTitle = type==0; // doTitle=isUncased
+
+                if(iter.didReachLimit() && isIncremental) {
+                    // the case mapping function tried to look beyond the context limit
+                    // wait for more input
+                    offsets.start=iter.getCaseMapCPStart();
+                    return;
+                }
+
+                /* decode the result */
+                if(c<0) {
+                    /* c mapped to itself, no change */
+                    continue;
+                } else if(c<=UCaseProps.MAX_STRING_LENGTH) {
+                    /* replace by the mapping string */
+                    delta=iter.replace(result.toString());
+                    result.setLength(0);
+                } else {
+                    /* replace by single-code point mapping */
+                    delta=iter.replace(UTF16.valueOf(c));
+                }
+
+                if(delta!=0) {
+                    offsets.limit += delta;
+                    offsets.contextLimit += delta;
                 }
             }
-            textPos += oldLen;
         }
         offsets.start = offsets.limit;
     }
-    
-    private char buffer[] = new char[UCharacterProperty.MAX_CASE_MAP_SIZE];
-    /**
-     * Character property database
-     */
-    private static final UCharacterProperty m_charppty_ = 
-                                            UCharacterProperty.getInstance();
 }

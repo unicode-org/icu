@@ -1,11 +1,12 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2004, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2005, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
 package com.ibm.icu.dev.test;
 
+import com.ibm.icu.text.UTF16;
 import com.ibm.icu.text.DecimalFormat;
 import com.ibm.icu.text.NumberFormat;
 import com.ibm.icu.util.TimeZone;
@@ -873,13 +874,20 @@ public class TestFmwk extends AbstractTestLog {
     }
     public static String prettify(String s) {
         StringBuffer result = new StringBuffer();
-        for (int i = 0; i < s.length(); ++i) {
-            char ch =s.charAt(i);
-            if(ch > 0x7f){
+        int ch;
+        for (int i = 0; i < s.length(); i+=UTF16.getCharCount(ch)) {
+            ch = UTF16.charAt(s, i);
+            if(ch > 0xfffff) {
+                result.append("\\U00");
+                result.append(hex(ch));
+            } else if(ch > 0xffff) {
+                result.append("\\U000");
+                result.append(hex(ch));
+            } else if(ch > 0x7f){
                 result.append("\\u");
                 result.append(hex(ch));
-            }else{
-                result.append(ch);
+            } else {
+                result.append((char)ch);
             }
 
         }

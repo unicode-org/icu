@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-* Copyright (C) 1996-2004, International Business Machines Corporation and   *
+* Copyright (C) 1996-2005, International Business Machines Corporation and   *
 * others. All Rights Reserved.                                               *
 ******************************************************************************
 */
@@ -67,6 +67,13 @@ public abstract class Trie
         * @draft 2.1
         */
         public int getFoldingOffset(int value); 
+    }
+
+    // default implementation
+    private static class DefaultGetFoldingOffset implements DataManipulate {
+        public int getFoldingOffset(int value) {
+            return value; 
+        }
     }
 
     // public methods --------------------------------------------------
@@ -147,8 +154,12 @@ public abstract class Trie
         if (!checkHeader(signature)) {
             throw new IllegalArgumentException("ICU data file error: Trie header authentication failed, please check if you have the most updated ICU data file");
         }
-        
-        m_dataManipulate_ = dataManipulate;
+
+        if(dataManipulate != null) {
+            m_dataManipulate_ = dataManipulate;
+        } else {
+            m_dataManipulate_ = new DefaultGetFoldingOffset();
+        }
         m_isLatin1Linear_ = (m_options_ &
                              HEADER_OPTIONS_LATIN1_IS_LINEAR_MASK_) != 0;
         m_dataOffset_     = input.readInt();
@@ -167,7 +178,11 @@ public abstract class Trie
     protected Trie(char index[], int options, DataManipulate dataManipulate)
     {
         m_options_ = options;
-        m_dataManipulate_ = dataManipulate;
+        if(dataManipulate != null) {
+            m_dataManipulate_ = dataManipulate;
+        } else {
+            m_dataManipulate_ = new DefaultGetFoldingOffset();
+        }
         m_isLatin1Linear_ = (m_options_ &
                              HEADER_OPTIONS_LATIN1_IS_LINEAR_MASK_) != 0;
         m_index_ = index;
@@ -325,21 +340,23 @@ public abstract class Trie
     protected final int getCodePointOffset(int ch)
     {
         // if ((ch >> 16) == 0) slower
-        if (ch >= UTF16.CODEPOINT_MIN_VALUE 
-            && ch < UTF16.SUPPLEMENTARY_MIN_VALUE) {
+        if (ch < 0) {
+            return -1;
+        } else if (ch < UTF16.LEAD_SURROGATE_MIN_VALUE) {
+            // fastpath for the part of the BMP below surrogates (D800) where getRawOffset() works
+            return getRawOffset(0, (char)ch);
+        } else if (ch < UTF16.SUPPLEMENTARY_MIN_VALUE) {
             // BMP codepoint
             return getBMPOffset((char)ch); 
-        }
-        // for optimization
-        if (ch >= UTF16.CODEPOINT_MIN_VALUE 
-            && ch <= UCharacter.MAX_VALUE) {
+        } else if (ch <= UCharacter.MAX_VALUE) {
             // look at the construction of supplementary characters
             // trail forms the ends of it.
             return getSurrogateOffset(UTF16.getLeadSurrogate(ch), 
                                       (char)(ch & SURROGATE_MASK_));
+        } else {
+            // return -1 if there is an error, in this case we return 
+            return -1;
         }
-        // return -1 if there is an error, in this case we return 
-        return -1;
     }
 
     /**

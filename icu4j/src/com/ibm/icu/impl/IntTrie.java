@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-* Copyright (C) 1996-2004, International Business Machines Corporation and   *
+* Copyright (C) 1996-2005, International Business Machines Corporation and   *
 * others. All Rights Reserved.                                               *
 ******************************************************************************
 */
@@ -56,7 +56,18 @@ public class IntTrie extends Trie
     */
     public final int getCodePointValue(int ch)
     {
-        int offset = getCodePointOffset(ch);
+        int offset;
+
+        // fastpath for U+0000..U+D7FF
+        if(0 <= ch && ch < UTF16.LEAD_SURROGATE_MIN_VALUE) {
+            // copy of getRawOffset()
+            offset = (m_index_[ch >> INDEX_STAGE_1_SHIFT_] << INDEX_STAGE_2_SHIFT_) 
+                    + (ch & INDEX_STAGE_3_MASK_);
+            return m_data_[offset];
+        }
+
+        // handle U+D800..U+10FFFF
+        offset = getCodePointOffset(ch);
         return (offset >= 0) ? m_data_[offset] : m_initialValue_;
     }
 
