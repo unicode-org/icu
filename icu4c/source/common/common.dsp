@@ -1169,6 +1169,14 @@ SOURCE=.\unicode\unorm.h
 
 !IF  "$(CFG)" == "common - Win32 Release"
 
+# Begin Custom Build
+InputPath=.\unicode\unorm.h
+
+"..\..\include\unorm.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy    unicode\unorm.h    ..\..\include\unorm.h
+
+# End Custom Build
+
 !ELSEIF  "$(CFG)" == "common - Win32 Debug"
 
 # Begin Custom Build
