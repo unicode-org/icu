@@ -464,6 +464,19 @@ NumberFormat::getAvailableLocales(int32_t& count)
 #if !UCONFIG_NO_SERVICE
 static ICULocaleService* gService = NULL;
 
+/**
+ * Release all static memory held by numberformat.  
+ */
+U_CDECL_BEGIN
+static UBool U_CALLCONV numfmt_cleanup(void) {
+    if (gService) {
+        delete gService;
+        gService = NULL;
+    }
+    return TRUE;
+}
+U_CDECL_END
+
 // -------------------------------------
 
 class ICUNumberFormatFactory : public ICUResourceBundleFactory {
@@ -586,7 +599,9 @@ getNumberFormatService(void)
             delete newservice;
         } else {
             // we won the contention, this thread can register cleanup.
-            ucln_i18n_registerCleanup();
+#if !UCONFIG_NO_SERVICE
+            ucln_i18n_registerCleanup(UCLN_I18N_NUMFMT, numfmt_cleanup);
+#endif
         }
     }
     return gService;
@@ -902,21 +917,6 @@ cleanup:
 }
 
 U_NAMESPACE_END
-
-// defined in ucln_cmn.h
-
-/**
- * Release all static memory held by numberformat.  
- */
-U_CFUNC UBool numfmt_cleanup(void) {
-#if !UCONFIG_NO_SERVICE
-  if (gService) {
-    delete gService;
-    gService = NULL;
-  }
-#endif
-  return TRUE;
-}
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
 

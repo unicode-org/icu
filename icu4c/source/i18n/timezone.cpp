@@ -104,7 +104,8 @@ static TimeZone*           _GMT = NULL; // cf. TimeZone::GMT
 static UnicodeString* OLSON_IDS = 0;
 #endif
 
-UBool timeZone_cleanup()
+U_CDECL_BEGIN
+static UBool U_CALLCONV timeZone_cleanup()
 {
 #ifdef U_USE_TIMEZONE_OBSOLETE_2_8
     delete []OLSON_IDS;
@@ -124,6 +125,7 @@ UBool timeZone_cleanup()
 
     return TRUE;
 }
+U_CDECL_END
 
 U_NAMESPACE_BEGIN
 
@@ -340,7 +342,7 @@ static UBool loadOlsonIDs() {
     if (OLSON_IDS == 0) {
         OLSON_IDS = ids;
         ids = 0;
-        ucln_i18n_registerCleanup();
+        ucln_i18n_registerCleanup(UCLN_I18N_TIMEZONE, timeZone_cleanup);
     }
     umtx_unlock(&LOCK);
 
@@ -363,7 +365,7 @@ TimeZone::getGMT(void)
     // be valid even if we can't load the time zone UDataMemory.
     if (_GMT == 0) {
         _GMT = new SimpleTimeZone(0, UnicodeString(GMT_ID, GMT_ID_LENGTH));
-        ucln_i18n_registerCleanup();
+        ucln_i18n_registerCleanup(UCLN_I18N_TIMEZONE, timeZone_cleanup);
     }
     return _GMT;
 }
@@ -578,7 +580,7 @@ TimeZone::initDefault()
     if (DEFAULT_ZONE == NULL) {
         DEFAULT_ZONE = default_zone;
         default_zone = NULL;
-        ucln_i18n_registerCleanup();
+        ucln_i18n_registerCleanup(UCLN_I18N_TIMEZONE, timeZone_cleanup);
     }
     umtx_unlock(&LOCK);
 
@@ -618,7 +620,7 @@ TimeZone::adoptDefault(TimeZone* zone)
         umtx_unlock(&LOCK);
 
         delete old;
-        ucln_i18n_registerCleanup();
+        ucln_i18n_registerCleanup(UCLN_I18N_TIMEZONE, timeZone_cleanup);
     }
 }
 // -------------------------------------

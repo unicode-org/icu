@@ -43,7 +43,23 @@
 #include "locbased.h"
 #include "uresimp.h"
 
-U_NAMESPACE_BEGIN
+#if !UCONFIG_NO_SERVICE
+static ICULocaleService* gService = NULL;
+#endif
+
+// INTERNAL - for cleanup
+
+U_CDECL_BEGIN
+static UBool calendar_cleanup(void) {
+#if !UCONFIG_NO_SERVICE
+  if (gService) {
+    delete gService;
+    gService = NULL;
+  }
+#endif
+  return TRUE;
+}
+U_CDECL_END
 
 // ------------------------------------------
 //
@@ -101,6 +117,8 @@ static const char * const gBasicCalendars[] = { "@calendar=gregorian", "@calenda
                                          "@calendar=islamic", "@calendar=hebrew", "@calendar=chinese",
                                          NULL };
 
+U_NAMESPACE_BEGIN
+
 static UBool isStandardSupportedID( const char *id, UErrorCode& status) { 
     if(U_FAILURE(status)) {
         return FALSE;
@@ -141,7 +159,6 @@ static Calendar *createStandardCalendar(char *calType, const Locale &canLoc, UEr
 }
 
 #if !UCONFIG_NO_SERVICE
-static ICULocaleService* gService = NULL;
 
 // -------------------------------------
 
@@ -326,7 +343,7 @@ public:
 // -------------------------------------
 
 static ICULocaleService* 
-getCalendarService(void)
+getCalendarService(UErrorCode &status)
 {
   UBool needInit;
   {
@@ -334,7 +351,6 @@ getCalendarService(void)
     needInit = (UBool)(gService == NULL);
   }
   if (needInit) {
-    UErrorCode status = U_ZERO_ERROR;
 #ifdef U_DEBUG_CALSVC
     fprintf(stderr, "Spinning up Calendar Service\n");
 #endif
@@ -369,7 +385,7 @@ getCalendarService(void)
       delete newservice;
     } else {
       // we won the contention - we can register the cleanup.
-      ucln_i18n_registerCleanup();
+      ucln_i18n_registerCleanup(UCLN_I18N_CALENDAR, calendar_cleanup);
     }
   }
   return gService;
@@ -377,11 +393,11 @@ getCalendarService(void)
 
 URegistryKey Calendar::registerFactory(ICUServiceFactory* toAdopt, UErrorCode& status)
 {
-  return getCalendarService()->registerFactory(toAdopt, status);
+  return getCalendarService(status)->registerFactory(toAdopt, status);
 }
 
 UBool Calendar::unregister(URegistryKey key, UErrorCode& status) {
-  return getCalendarService()->unregister(key, status);
+  return getCalendarService(status)->unregister(key, status);
 }
 #endif /* UCONFIG_NO_SERVICE */
 
@@ -610,13 +626,13 @@ Calendar::createInstance(TimeZone* zone, const Locale& aLocale, UErrorCode& succ
     int32_t calLocaleTypeLen = uprv_strlen(calLocaleType);
     int32_t keywordCapacity = aLocale.getKeywordValue("calendar", calLocaleType+calLocaleTypeLen, sizeof(calLocaleType)-calLocaleTypeLen, success);
     if (keywordCapacity == 0) {
-        // no calendar type.  Default to nothing.
-        calLocaleType[0] = 0;
-    }
+            // no calendar type.  Default to nothing.
+            calLocaleType[0] = 0;
+        }
     u = createStandardCalendar(calLocaleType, aLocale, success);
   }
 #else
-  u = getCalendarService()->get(aLocale, LocaleKey::KIND_ANY, &actualLoc, success);
+  u = getCalendarService(success)->get(aLocale, LocaleKey::KIND_ANY, &actualLoc, success);
 #endif
   Calendar* c = NULL;
 
@@ -660,7 +676,7 @@ Calendar::createInstance(TimeZone* zone, const Locale& aLocale, UErrorCode& succ
     // Don't overwrite actualLoc, since the actual loc from this call
     // may be something like "@calendar=gregorian" -- TODO investigate
     // further...
-    c = (Calendar*)getCalendarService()->get(l, LocaleKey::KIND_ANY, &actualLoc2, success);
+    c = (Calendar*)getCalendarService(success)->get(l, LocaleKey::KIND_ANY, &actualLoc2, success);
 
     if(U_FAILURE(success) || !c) {
       delete zone;
@@ -3005,26 +3021,6 @@ Calendar::getLocaleID(ULocDataLocaleType type, UErrorCode& status) const {
 }
 
 U_NAMESPACE_END
-
-// INTERNAL - for cleanup
-// clean up the astronomical data & cache
-U_CFUNC UBool calendar_islamic_cleanup(void);
-U_CFUNC UBool calendar_hebrew_cleanup(void);
-U_CFUNC UBool calendar_astro_cleanup(void);
-
-U_CFUNC UBool calendar_cleanup(void) {
-  calendar_islamic_cleanup();
-  calendar_hebrew_cleanup();
-  calendar_astro_cleanup();
-#if !UCONFIG_NO_SERVICE
-  if (gService) {
-    delete gService;
-    gService = NULL;
-  }
-#endif
-  return TRUE;
-}
-
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
 
