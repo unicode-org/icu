@@ -19,7 +19,8 @@
 
 // Useful for turning up subtle bugs: Change the following to TRUE, recompile,
 // and run while at lunch.
-UBool DateFormatRoundTripTest::INFINITE = FALSE; // Warning -- makes test run infinite loop!!!
+// Warning -- makes test run infinite loop!!!
+#define INFINITE 0
 
 // If SPARSENESS is > 0, we don't run each exhaustive possibility.
 // There are 24 total possible tests per each locale.  A SPARSENESS
@@ -78,20 +79,19 @@ void DateFormatRoundTripTest::TestDateFormatRoundTrip()
     logln("Default TimeZone:             " + tz->getID(temp));
     delete tz;
 
-    if (INFINITE) {
-        // Special infinite loop test mode for finding hard to reproduce errors
-        Locale loc = Locale::getDefault();
-        logln("ENTERING INFINITE TEST LOOP FOR Locale: " + loc.getDisplayName(temp));
-        for(;;) 
-            test(loc);
-    }
-    else {
-        test(Locale::getDefault());
+#if INFINITE
+    // Special infinite loop test mode for finding hard to reproduce errors
+    Locale loc = Locale::getDefault();
+    logln("ENTERING INFINITE TEST LOOP FOR Locale: " + loc.getDisplayName(temp));
+    for(;;) 
+        test(loc);
+#else
+    test(Locale::getDefault());
 
-        for (int i=0; i < locCount; ++i) {
-            test(avail[i]);
-        }
+    for (int i=0; i < locCount; ++i) {
+        test(avail[i]);
     }
+#endif
 
     delete dateFormat;
     delete getFieldCal;
@@ -116,8 +116,9 @@ static const char *styleName(DateFormat::EStyle s)
 void DateFormatRoundTripTest::test(const Locale& loc) 
 {
     UnicodeString temp;
-    if( ! INFINITE) 
-        logln("Locale: " + loc.getDisplayName(temp));
+#if !INFINITE
+    logln("Locale: " + loc.getDisplayName(temp));
+#endif
 
     // Total possibilities = 24
     //  4 date

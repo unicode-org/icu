@@ -80,7 +80,6 @@ protected:
 
 private:
 
-    static UBool INFINITE;
     static int32_t SPARSENESS;
     static int32_t TRIALS;
     static int32_t DEPTH;
