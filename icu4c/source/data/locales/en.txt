@@ -46,7 +46,7 @@ en {
         BZ { "Belize" }
 
         CA { "Canada" }
-        CC { "Cocos Islands"}
+        CC { "Cocos (Keeling) Islands"}
         CD { "Democratic Republic of the Congo" }
         CF { "Central African Republic" }
         CG { "Congo" }
@@ -100,7 +100,7 @@ en {
         GP { "Guadeloupe" }
         GQ { "Equatorial Guinea" }
         GR { "Greece" }
-        GS { "South Georgia and South Sandwich Islands" }
+        GS { "South Georgia and the South Sandwich Islands" }
         GT { "Guatemala" }
         GU { "Guam" }
         GW { "Guinea-Bissau" }
@@ -238,7 +238,7 @@ en {
         TH { "Thailand" }
         TJ { "Tajikistan" }
         TK { "Tokelau" }
-        TL { "Timor-Leste" }    // This was called East Timor
+        TL { "East Timor" }  // changed back to East Timor from Timor-Leste
         TM { "Turkmenistan" }
         TN { "Tunisia" }
         TO { "Tonga" }
