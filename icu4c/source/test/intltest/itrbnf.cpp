@@ -18,6 +18,7 @@
 #include "unicode/ures.h"
 #include "unicode/ustring.h"
 #include "unicode/decimfmt.h"
+#include "unicode/udata.h"
 //#include "llong.h"
 
 #include <string.h>
@@ -106,7 +107,7 @@ IntlTestRBNF::TestAPI() {
   // test rule constructor
   {
     logln("Testing rule constructor");
-    UResourceBundle *en = ures_open(NULL, "en", &status);
+    UResourceBundle *en = ures_open(U_ICUDATA_NAME U_TREE_SEPARATOR_STRING "rbnf", "en", &status);
     if(U_FAILURE(status)) {
       errln("Unable to access resource bundle with data!");
     } else {
