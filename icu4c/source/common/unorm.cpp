@@ -110,13 +110,16 @@ static UErrorCode dataErrorCode=U_ZERO_ERROR;
 static int8_t haveNormData=0;
 
 static int32_t indexes[_NORM_INDEX_TOP]={ 0 };
-static UTrie normTrie={ 0,0,0,0,0,0,0 }, fcdTrie={ 0,0,0,0,0,0,0 };
+static UTrie normTrie={ 0,0,0,0,0,0,0 }, fcdTrie={ 0,0,0,0,0,0,0 }, auxTrie={ 0,0,0,0,0,0,0 };
 
 /*
  * pointers into the memory-mapped unorm.dat
  */
 static const uint16_t *extraData=NULL,
                       *combiningTable=NULL;
+
+static uint8_t formatVersion[4]={ 0, 0, 0, 0 };
+static UBool formatVersion_2_1=FALSE;
 
 /* the Unicode version of the normalization data */
 static UVersionInfo dataVersion={ 3, 1, 0, 0 };
@@ -135,6 +138,29 @@ unorm_cleanup() {
     return TRUE;
 }
 
+/* normTrie: 32-bit trie result may contain a special extraData index with the folding offset */
+static int32_t U_CALLCONV
+getFoldingNormOffset(uint32_t norm32) {
+    if(isNorm32LeadSurrogate(norm32)) {
+        return
+            UTRIE_BMP_INDEX_LENGTH+
+                (((int32_t)norm32>>(_NORM_EXTRA_SHIFT-UTRIE_SURROGATE_BLOCK_BITS))&
+                 (0x3ff<<UTRIE_SURROGATE_BLOCK_BITS));
+    } else {
+        return 0;
+    }
+}
+
+/* auxTrie: if bit 31 is set, then the folding offset is in bits 29..20 of the 32-bit trie result */
+static int32_t U_CALLCONV
+getFoldingAuxOffset(uint32_t data) {
+    if((int32_t)data<0) {
+        return (int32_t)(data&_NORM_AUX_FNC_MASK)>>(_NORM_AUX_FNC_SHIFT-UTRIE_SURROGATE_BLOCK_BITS);
+    } else {
+        return 0;
+    }
+}
+
 static UBool U_CALLCONV
 isAcceptable(void * /* context */,
              const char * /* type */, const char * /* name */,
@@ -151,6 +177,7 @@ isAcceptable(void * /* context */,
         pInfo->formatVersion[2]==UTRIE_SHIFT &&
         pInfo->formatVersion[3]==UTRIE_INDEX_SHIFT
     ) {
+        uprv_memcpy(formatVersion, pInfo->formatVersion, 4);
         uprv_memcpy(dataVersion, pInfo->dataVersion, 4);
         return TRUE;
     } else {
@@ -164,9 +191,10 @@ static int8_t
 loadNormData(UErrorCode &errorCode) {
     /* load Unicode normalization data from file */
     if(haveNormData==0) {
-        UTrie _normTrie={ 0,0,0,0,0,0,0 }, _fcdTrie={ 0,0,0,0,0,0,0 };
+        UTrie _normTrie={ 0,0,0,0,0,0,0 }, _fcdTrie={ 0,0,0,0,0,0,0 }, _auxTrie={ 0,0,0,0,0,0,0 };
         UDataMemory *data;
         const int32_t *p=NULL;
+        const uint8_t *pb;
 
         if(&errorCode==NULL || U_FAILURE(errorCode)) {
             return 0;
@@ -180,13 +208,19 @@ loadNormData(UErrorCode &errorCode) {
         }
 
         p=(const int32_t *)udata_getMemory(data);
+        pb=(const uint8_t *)(p+_NORM_INDEX_TOP);
+        utrie_unserialize(&_normTrie, pb, p[_NORM_INDEX_TRIE_SIZE], &errorCode);
+        _normTrie.getFoldingOffset=getFoldingNormOffset;
 
-        utrie_unserialize(&_normTrie, (uint8_t *)(p+_NORM_INDEX_TOP), p[_NORM_INDEX_TRIE_SIZE], &errorCode);
-        utrie_unserialize(
-            &_fcdTrie,
-            (uint8_t *)(p+_NORM_INDEX_TOP)+p[_NORM_INDEX_TRIE_SIZE]+p[_NORM_INDEX_UCHAR_COUNT]*2+p[_NORM_INDEX_COMBINE_DATA_COUNT]*2,
-            p[_NORM_INDEX_FCD_TRIE_SIZE],
-            &errorCode);
+        pb+=p[_NORM_INDEX_TRIE_SIZE]+p[_NORM_INDEX_UCHAR_COUNT]*2+p[_NORM_INDEX_COMBINE_DATA_COUNT]*2;
+        utrie_unserialize(&_fcdTrie, pb, p[_NORM_INDEX_FCD_TRIE_SIZE], &errorCode);
+
+        if(p[_NORM_INDEX_FCD_TRIE_SIZE]!=0) {
+            pb+=p[_NORM_INDEX_FCD_TRIE_SIZE];
+            utrie_unserialize(&_auxTrie, pb, p[_NORM_INDEX_AUX_TRIE_SIZE], &errorCode);
+            _auxTrie.getFoldingOffset=getFoldingAuxOffset;
+        }
+
         if(U_FAILURE(errorCode)) {
             dataErrorCode=errorCode;
             udata_close(data);
@@ -202,6 +236,7 @@ loadNormData(UErrorCode &errorCode) {
             uprv_memcpy(&indexes, p, sizeof(indexes));
             uprv_memcpy(&normTrie, &_normTrie, sizeof(UTrie));
             uprv_memcpy(&fcdTrie, &_fcdTrie, sizeof(UTrie));
+            uprv_memcpy(&auxTrie, &_auxTrie, sizeof(UTrie));
         } else {
             p=(const int32_t *)udata_getMemory(normData);
         }
@@ -210,6 +245,7 @@ loadNormData(UErrorCode &errorCode) {
         /* initialize some variables */
         extraData=(uint16_t *)((uint8_t *)(p+_NORM_INDEX_TOP)+indexes[_NORM_INDEX_TRIE_SIZE]);
         combiningTable=extraData+indexes[_NORM_INDEX_UCHAR_COUNT];
+        formatVersion_2_1=formatVersion[0]>2 || (formatVersion[0]==2 && formatVersion[1]>=1);
         haveNormData=1;
 
         /* if a different thread set it first, then close the extra data */
@@ -488,17 +524,23 @@ u_getCombiningClass(UChar32 c) {
     if(_haveData(errorCode)) {
         uint32_t norm32;
 
-        if((uint32_t)c<=0xffff) {
-            norm32=_getNorm32((UChar)c);
-        } else {
-            norm32=_getNorm32(UTF16_LEAD(c));
-            if((norm32&_NORM_CC_MASK)!=0) {
-                norm32=_getNorm32FromSurrogatePair(norm32, UTF16_TRAIL(c));
-            }
-        }
+        UTRIE_GET32(&normTrie, c, norm32);
         return (uint8_t)(norm32>>_NORM_CC_SHIFT);
     } else {
         return 0;
+    }
+}
+
+U_CAPI UBool U_EXPORT2
+unorm_internalIsFullCompositionExclusion(UChar32 c) {
+    UErrorCode errorCode=U_ZERO_ERROR;
+    if(_haveData(errorCode) && formatVersion_2_1) {
+        uint32_t aux32;
+
+        UTRIE_GET32(&auxTrie, c, aux32);
+        return (UBool)((aux32&_NORM_AUX_COMP_EX_MASK)!=0);
+    } else {
+        return FALSE;
     }
 }
 
