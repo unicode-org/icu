@@ -171,7 +171,7 @@ _Latin1FromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
     }
 
     /* get the converter state from UConverter */
-    cp=cnv->fromUSurrogateLead;
+    cp=cnv->fromUChar32;
 
     /* sourceIndex=-1 if the current character began in the previous buffer */
     sourceIndex= cp==0 ? 0 : -1;
@@ -299,7 +299,7 @@ getTrail:
                 }
             } else {
                 /* no more input */
-                cnv->fromUSurrogateLead=(UChar)cp;
+                cnv->fromUChar32=cp;
                 break;
             }
         } else {
@@ -308,14 +308,7 @@ getTrail:
         }
 
         *pErrorCode= U_IS_SURROGATE(cp) ? U_ILLEGAL_CHAR_FOUND : U_INVALID_CHAR_FOUND;
-
-        /* write the code point as code units */
-        {
-            int32_t i=0;
-            U16_APPEND_UNSAFE(cnv->invalidUCharBuffer, i, cp);
-            cnv->invalidUCharLength=(int8_t)i;
-        }
-
+        cnv->fromUChar32=cp;
         break;
     }
 

@@ -402,7 +402,7 @@ U_ALIGN_CODE(16)
     offsets=pArgs->offsets;
 
     /* get the converter state from UConverter */
-    c=cnv->fromUSurrogateLead;
+    c=cnv->fromUChar32;
     prev=(int32_t)cnv->fromUnicodeStatus;
     if(prev==0) {
         prev=BOCU1_ASCII_PREV;
@@ -667,7 +667,7 @@ getTrail:
     }
 
     /* set the converter state back into UConverter */
-    cnv->fromUSurrogateLead= c<0 ? (UChar)-c : 0;
+    cnv->fromUChar32= c<0 ? -c : 0;
     cnv->fromUnicodeStatus=(uint32_t)prev;
 
     /* write back the updated pointers */
@@ -701,7 +701,7 @@ _Bocu1FromUnicode(UConverterFromUnicodeArgs *pArgs,
     targetCapacity=pArgs->targetLimit-pArgs->target;
 
     /* get the converter state from UConverter */
-    c=cnv->fromUSurrogateLead;
+    c=cnv->fromUChar32;
     prev=(int32_t)cnv->fromUnicodeStatus;
     if(prev==0) {
         prev=BOCU1_ASCII_PREV;
@@ -888,7 +888,7 @@ getTrail:
     }
 
     /* set the converter state back into UConverter */
-    cnv->fromUSurrogateLead= c<0 ? (UChar)-c : 0;
+    cnv->fromUChar32= c<0 ? -c : 0;
     cnv->fromUnicodeStatus=(uint32_t)prev;
 
     /* write back the updated pointers */

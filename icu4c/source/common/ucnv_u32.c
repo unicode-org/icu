@@ -311,10 +311,10 @@ T_UConverter_fromUnicode_UTF32_BE(UConverterFromUnicodeArgs * args,
 
     temp[0] = 0;
 
-    if (args->converter->fromUSurrogateLead)
+    if (args->converter->fromUChar32)
     {
-        ch = args->converter->fromUSurrogateLead;
-        args->converter->fromUSurrogateLead = 0;
+        ch = args->converter->fromUChar32;
+        args->converter->fromUChar32 = 0;
         goto lowsurogate;
     }
 
@@ -346,7 +346,7 @@ lowsurogate:
             else if (!args->flush)
             {
                 /* ran out of source */
-                args->converter->fromUSurrogateLead = (UChar)ch;
+                args->converter->fromUChar32 = ch;
                 break;
             }
 #endif
@@ -396,10 +396,10 @@ T_UConverter_fromUnicode_UTF32_BE_OFFSET_LOGIC(UConverterFromUnicodeArgs * args,
 
     temp[0] = 0;
 
-    if (args->converter->fromUSurrogateLead)
+    if (args->converter->fromUChar32)
     {
-        ch = args->converter->fromUSurrogateLead;
-        args->converter->fromUSurrogateLead = 0;
+        ch = args->converter->fromUChar32;
+        args->converter->fromUChar32 = 0;
         goto lowsurogate;
     }
 
@@ -423,7 +423,7 @@ lowsurogate:
             else if (!args->flush)
             {
                 /* ran out of source */
-                args->converter->fromUSurrogateLead = (UChar)ch;
+                args->converter->fromUChar32 = ch;
                 break;
             }
 #endif
@@ -790,10 +790,10 @@ T_UConverter_fromUnicode_UTF32_LE(UConverterFromUnicodeArgs * args,
 
     temp[3] = 0;
 
-    if (args->converter->fromUSurrogateLead)
+    if (args->converter->fromUChar32)
     {
-        ch = args->converter->fromUSurrogateLead;
-        args->converter->fromUSurrogateLead = 0;
+        ch = args->converter->fromUChar32;
+        args->converter->fromUChar32 = 0;
         goto lowsurogate;
     }
 
@@ -817,7 +817,7 @@ lowsurogate:
             else if (!args->flush)
             {
                 /* ran out of source */
-                args->converter->fromUSurrogateLead = (UChar)ch;
+                args->converter->fromUChar32 = ch;
                 break;
             }
 #endif
@@ -867,10 +867,10 @@ T_UConverter_fromUnicode_UTF32_LE_OFFSET_LOGIC(UConverterFromUnicodeArgs * args,
 
     temp[3] = 0;
 
-    if (args->converter->fromUSurrogateLead)
+    if (args->converter->fromUChar32)
     {
-        ch = args->converter->fromUSurrogateLead;
-        args->converter->fromUSurrogateLead = 0;
+        ch = args->converter->fromUChar32;
+        args->converter->fromUChar32 = 0;
         goto lowsurogate;
     }
 
@@ -894,7 +894,7 @@ lowsurogate:
             else if (!args->flush)
             {
                 /* ran out of source */
-                args->converter->fromUSurrogateLead = (UChar)ch;
+                args->converter->fromUChar32 = ch;
                 break;
             }
 #endif

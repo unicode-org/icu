@@ -443,14 +443,14 @@ U_CFUNC void T_UConverter_fromUnicode_UTF8 (UConverterFromUnicodeArgs * args,
     const UChar *sourceLimit = args->sourceLimit;
     const unsigned char *targetLimit = (unsigned char *) args->targetLimit;
     UBool isCESU8 = (UBool)(args->converter->sharedData == &_CESU8Data);
-    uint32_t ch, ch2;
+    UChar32 ch, ch2;
     int16_t indexToWrite;
     char temp[4];
 
-    if (cnv->fromUSurrogateLead && myTarget < targetLimit)
+    if (cnv->fromUChar32 && myTarget < targetLimit)
     {
-        ch = cnv->fromUSurrogateLead;
-        cnv->fromUSurrogateLead = 0;
+        ch = cnv->fromUChar32;
+        cnv->fromUChar32 = 0;
         goto lowsurrogate;
     }
 
@@ -494,63 +494,21 @@ lowsurrogate:
                         } else {
                             /* this is an unmatched lead code unit (1st surrogate) */
                             /* callback(illegal) */
-                            ch2 = ch;
+                            cnv->fromUChar32 = ch;
+                            *err = U_ILLEGAL_CHAR_FOUND;
+                            break;
                         }
                     } else {
                         /* no more input */
-                        cnv->fromUSurrogateLead = (UChar)ch;
+                        cnv->fromUChar32 = ch;
                         break;
                     }
                 } else {
                     /* this is an unmatched trail code unit (2nd surrogate) */
                     /* callback(illegal) */
-                    ch2 = ch;
-                }
-
-                if(ch2 != 0) {
-                    /* call the callback function with all the preparations and post-processing */
+                    cnv->fromUChar32 = ch;
                     *err = U_ILLEGAL_CHAR_FOUND;
-
-                    /* update the arguments structure */
-                    args->source=mySource;
-                    args->target=(char *)myTarget;
-
-                    /* write the code point as code units */
-                    cnv->invalidUCharBuffer[0] = (UChar)ch2;
-                    cnv->invalidUCharLength = 1;
-
-                    /* call the callback function */
-                    cnv->fromUCharErrorBehaviour(cnv->fromUContext, args, cnv->invalidUCharBuffer, 1, ch2, UCNV_ILLEGAL, err);
-
-                    /* get the converter state from UConverter */
-                    ch = cnv->fromUSurrogateLead;
-                    cnv->fromUSurrogateLead = 0;
-
-                    myTarget=(uint8_t *)args->target;
-                    mySource=args->source;
-
-                    /*
-                     * If the callback overflowed the target, then we need to
-                     * stop here with an overflow indication.
-                     */
-                    if(*err==U_BUFFER_OVERFLOW_ERROR) {
-                        break;
-                    } else if(U_FAILURE(*err)) {
-                        /* break on error */
-                        break;
-                    } else if(cnv->charErrorBufferLength>0) {
-                        /* target is full */
-                        *err=U_BUFFER_OVERFLOW_ERROR;
-                        break;
-                        /*
-                         * } else if(ch != 0) { ...
-                         * ### TODO 2002jul01 markus: It looks like this code (from ucnvmbcs.c)
-                         * does not handle the case where the callback leaves ch=fromUSurrogateLead!=0 .
-                         * We would have to check myTarget<targetLimit and goto lowsurrogate?!
-                         */
-                    }
-
-                    continue;
+                    break;
                 }
             }
 
@@ -602,15 +560,15 @@ U_CFUNC void T_UConverter_fromUnicode_UTF8_OFFSETS_LOGIC (UConverterFromUnicodeA
     const UChar *sourceLimit = args->sourceLimit;
     const unsigned char *targetLimit = (unsigned char *) args->targetLimit;
     UBool isCESU8 = (UBool)(args->converter->sharedData == &_CESU8Data);
-    uint32_t ch, ch2;
+    UChar32 ch, ch2;
     int32_t offsetNum, nextSourceIndex;
     int16_t indexToWrite;
     char temp[4];
 
-    if (cnv->fromUSurrogateLead && myTarget < targetLimit)
+    if (cnv->fromUChar32 && myTarget < targetLimit)
     {
-        ch = cnv->fromUSurrogateLead;
-        cnv->fromUSurrogateLead = 0;
+        ch = cnv->fromUChar32;
+        cnv->fromUChar32 = 0;
         offsetNum = -1;
         nextSourceIndex = 0;
         goto lowsurrogate;
@@ -664,69 +622,21 @@ lowsurrogate:
                         } else {
                             /* this is an unmatched lead code unit (1st surrogate) */
                             /* callback(illegal) */
-                            ch2 = ch;
+                            cnv->fromUChar32 = ch;
+                            *err = U_ILLEGAL_CHAR_FOUND;
+                            break;
                         }
                     } else {
                         /* no more input */
-                        cnv->fromUSurrogateLead = (UChar)ch;
+                        cnv->fromUChar32 = ch;
                         break;
                     }
                 } else {
                     /* this is an unmatched trail code unit (2nd surrogate) */
                     /* callback(illegal) */
-                    ch2 = ch;
-                }
-
-                if(ch2 != 0) {
-                    /* call the callback function with all the preparations and post-processing */
+                    cnv->fromUChar32 = ch;
                     *err = U_ILLEGAL_CHAR_FOUND;
-
-                    /* update the arguments structure */
-                    args->source=mySource;
-                    args->target=(char *)myTarget;
-                    args->offsets=myOffsets;
-
-                    /* write the code point as code units */
-                    cnv->invalidUCharBuffer[0] = (UChar)ch2;
-                    cnv->invalidUCharLength = 1;
-
-                    /* call the callback function */
-                    cnv->fromUCharErrorBehaviour(cnv->fromUContext, args, cnv->invalidUCharBuffer, 1, ch2, UCNV_ILLEGAL, err);
-
-                    /* get the converter state from UConverter */
-                    ch = cnv->fromUSurrogateLead;
-                    cnv->fromUSurrogateLead = 0;
-
-                    /* update target and deal with offsets if necessary */
-                    myOffsets=ucnv_updateCallbackOffsets(myOffsets, ((uint8_t *)args->target)-myTarget, offsetNum);
-                    myTarget=(uint8_t *)args->target;
-
-                    /* update the source pointer and index */
-                    offsetNum=nextSourceIndex+(args->source-mySource);
-                    mySource=args->source;
-
-                    /*
-                     * If the callback overflowed the target, then we need to
-                     * stop here with an overflow indication.
-                     */
-                    if(*err==U_BUFFER_OVERFLOW_ERROR) {
-                        break;
-                    } else if(U_FAILURE(*err)) {
-                        /* break on error */
-                        break;
-                    } else if(cnv->charErrorBufferLength>0) {
-                        /* target is full */
-                        *err=U_BUFFER_OVERFLOW_ERROR;
-                        break;
-                        /*
-                         * } else if(ch != 0) { ...
-                         * ### TODO 2002jul01 markus: It looks like this code (from ucnvmbcs.c)
-                         * does not handle the case where the callback leaves ch=fromUSurrogateLead!=0 .
-                         * We would have to check myTarget<targetLimit and goto lowsurrogate?!
-                         */
-                    }
-
-                    continue;
+                    break;
                 }
             }
 

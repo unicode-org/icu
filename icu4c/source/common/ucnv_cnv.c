@@ -116,3 +116,43 @@ ucnv_getNonSurrogateUnicodeSet(const UConverter *cnv,
     uset_addRange(set, 0, 0xd7ff);
     uset_addRange(set, 0xe000, 0x10ffff);
 }
+
+U_CFUNC void
+ucnv_fromUWriteBytes(UConverter *cnv,
+                     const char *bytes, int32_t length,
+                     char **target, const char *targetLimit,
+                     int32_t **offsets,
+                     int32_t sourceIndex,
+                     UErrorCode *pErrorCode) {
+    char *t=*target;
+    int32_t *o;
+
+    /* write bytes */
+    if(offsets==NULL || (o=*offsets)==NULL) {
+        while(length>0 && t<targetLimit) {
+            *t++=*bytes++;
+            --length;
+        }
+    } else {
+        /* output with offsets */
+        while(length>0 && t<targetLimit) {
+            *t++=*bytes++;
+            *o++=sourceIndex;
+            --length;
+        }
+        *offsets=o;
+    }
+    *target=t;
+
+    /* write overflow */
+    if(length>0) {
+        if(cnv!=NULL) {
+            t=(char *)cnv->charErrorBuffer;
+            cnv->charErrorBufferLength=(int8_t)length;
+            do {
+                *t++=(uint8_t)*bytes++;
+            } while(--length>0);
+        }
+        *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
+    }
+}
