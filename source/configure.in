@@ -4,7 +4,7 @@ dnl Copyright (c) 1999-2000, International Business Machines Corporation and
 dnl others. All Rights Reserved.
 dnl Stephen F. Booth, heavily modified by Yves and others
 
-dnl $Id: configure.in,v 1.126 2001/10/20 00:30:31 schererm Exp $
+dnl $Id: configure.in,v 1.127 2001/10/22 19:05:28 grhoten-oss Exp $
 
 dnl Process this file with autoconf to produce a configure script
 AC_INIT(common/unicode/utypes.h)
@@ -472,10 +472,10 @@ changequote(<<, >>)dnl
 >>,
 changequote([, ])dnl
 [timezone = 1;], ac_cv_var_timezone=yes, ac_cv_var_timezone=no)])
-dnl Give it a default value
-U_TIMEZONE=0
+U_HAVE_TIMEZONE=0
 if test $ac_cv_var_timezone = yes; then
   U_TIMEZONE=timezone
+  U_HAVE_TIMEZONE=1
 else
   AC_CACHE_CHECK(for __timezone,ac_cv_var___timezone,
   [AC_TRY_LINK(
@@ -486,6 +486,7 @@ else
   [__timezone = 1;], ac_cv_var___timezone=yes, ac_cv_var___timezone=no)])
   if test $ac_cv_var___timezone = yes; then
     U_TIMEZONE=__timezone
+    U_HAVE_TIMEZONE=1
   else
     AC_CACHE_CHECK(for _timezone,ac_cv_var__timezone,
     [AC_TRY_LINK(
@@ -496,9 +497,11 @@ else
     [_timezone = 1;], ac_cv_var__timezone=yes, ac_cv_var__timezone=no)])
     if test $ac_cv_var__timezone = yes; then
       U_TIMEZONE=_timezone
+      U_HAVE_TIMEZONE=1
     fi
   fi
 fi
+AC_SUBST(U_HAVE_TIMEZONE)
 AC_SUBST(U_TIMEZONE)
 
 ac_default_sizeof_wchar_t=4
