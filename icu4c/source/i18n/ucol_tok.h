@@ -128,7 +128,8 @@ U_CAPI const UChar U_EXPORT2 *ucol_tok_parseNextToken(UColTokenParser *src,
                         uint8_t *specs,
                         UBool startOfRules,
                         UErrorCode *status);
-extern const UChar* rulesToParse;
+
+
 #endif
 
 

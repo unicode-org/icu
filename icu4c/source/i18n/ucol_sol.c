@@ -20,6 +20,8 @@
 #include "ucol_sol.h"
 #include "ucol_tok.h"
 
+const UChar *rulesToParse = 0;
+
 int32_t
 uhash_hashTokens(const void *k) {
   int32_t hash = 0;

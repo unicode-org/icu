@@ -25,8 +25,8 @@
 #include "ucol_tok.h"
 #include "ucmp32.h"
 #include "ucol_sol.h"
-extern const UChar *rulesToParse = 0;
 
+U_CFUNC const UChar *rulesToParse;
 
 void deleteToken(void *token) {
     UColToken *tok = (UColToken *)token;
