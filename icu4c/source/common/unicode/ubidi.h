@@ -160,7 +160,7 @@ typedef struct UBiDi UBiDi;
  * Such an object is initially empty. It is assigned
  * the BiDi properties of a paragraph by <code>ubidi_setPara()</code>
  * or the BiDi properties of a line of a paragraph by
- * <code>ubidi_getLine()</code>.<p>
+ * <code>ubidi_setLine()</code>.<p>
  * This object can be reused for as long as it is not deallocated
  * by calling <code>ubidi_close()</code>.<p>
  * <code>ubidi_set()</code> will allocate additional memory for
@@ -229,6 +229,54 @@ U_CAPI void U_EXPORT2
 ubidi_close(UBiDi *pBiDi);
 
 /**
+ * Modify the operation of the BiDi algorithm such that it
+ * approximates an "inverse BiDi" algorithm. This function
+ * must be called before <code>ubidi_setPara()</code>.
+ *
+ * <p>The normal operation of the BiDi algorithm as described
+ * in the Unicode Technical Report is to take text stored in logical
+ * (keyboard, typing) order and to determine the reordering of it for visual
+ * rendering.
+ * Some legacy codepages store text in visual order, and for operations
+ * with standard, Unicode-based algorithms, the text needs to be transformed
+ * to logical order. This is effectively the inverse algorithm of the
+ * described BiDi algorithm. Note that there is no standard algorithm for
+ * this "inverse BiDi" and that the current implementation provides only an
+ * approximation of "inverse BiDi".</p>
+ * 
+ * <p>With <code>isInverse</code> set to <code>TRUE</code>,
+ * this function changes the behavior of some of the subsequent functions
+ * in a way that they can be used for the inverse BiDi algorithm.
+ * Specifically, runs of text with numeric characters will be treated in a
+ * special way and may need to be surrounded with LRM characters when they are
+ * written in reordered sequence.</p>
+ *
+ * <p>Output runs should be retrieved using <code>ubidi_getVisualRun()</code>.
+ * Since the actual input for "inverse BiDi" is visually ordered text and
+ * <code>ubidi_getVisualRun()</code> gets the reordered runs, these are actually
+ * the runs of the logically ordered output.</p>
+ *
+ * @param pBiDi is a <code>UBiDi</code> object.
+ *
+ * @param isInverse specifies "forward" or "inverse" BiDi operation
+ *
+ * @see ubidi_setPara
+ * @see ubidi_writeReordered
+ */
+U_CAPI void U_EXPORT2
+ubidi_setInverse(UBiDi *pBiDi, bool_t isInverse);
+
+/**
+ * Is this BiDi object set to perform the inverse BiDi algorithm?
+ *
+ * @param pBiDi is a <code>UBiDi</code> object.
+ *
+ * @see ubidi_setInverse
+ */
+U_CAPI bool_t U_EXPORT2
+ubidi_isInverse(UBiDi *pBiDi);
+
+/**
  * Perform the Unicode BiDi algorithm. It is defined in the
  * <a href="http://www.unicode.org/unicode/reports/tr9/">Unicode Technical Report 9</a>,
  * version 5,
@@ -258,6 +306,8 @@ ubidi_close(UBiDi *pBiDi);
  *        BiDi algorithm will be performed on
  *        (step (P1) of the algorithm is performed externally).
  *        <strong>The text must be (at least) <code>length</code> long.</strong>
+ *        This pointer is stored in the UBiDi object and can be retrieved
+ *        with <code>ubidi_getText()</code>.
  *
  * @param length is the length of the text; if <code>length==-1</code> then
  *        the text must be zero-terminated.
@@ -302,7 +352,7 @@ ubidi_setPara(UBiDi *pBiDi, const UChar *text, UTextOffset length,
               UErrorCode *pErrorCode);
 
 /**
- * <code>ubidi_getLine()</code> sets a <code>UBiDi</code> to
+ * <code>ubidi_setLine()</code> sets a <code>UBiDi</code> to
  * contain the reordering information, especially the resolved levels,
  * for all the characters in a line of text. This line of text is
  * specified by referring to a <code>UBiDi</code> object representing
@@ -322,7 +372,11 @@ ubidi_setPara(UBiDi *pBiDi, const UChar *text, UTextOffset length,
  * <code>pParaBiDi</code>.
  * You must destroy or reuse <code>pLineBiDi</code> before <code>pParaBiDi</code>.
  * In other words, you must destroy or reuse the <code>UBiDi</code> object for a line
- * before the object for its parent paragraph.
+ * before the object for its parent paragraph.<p>
+ *
+ * The text pointer that was stored in <code>pParaBiDi</code> is also copied,
+ * and <code>start</code> is added to it so that it points to the beginning of the
+ * line for this object.
  *
  * @param pParaBiDi is the parent paragraph object.
  *
@@ -358,6 +412,19 @@ ubidi_setLine(const UBiDi *pParaBiDi,
  */
 U_CAPI UBiDiDirection U_EXPORT2
 ubidi_getDirection(const UBiDi *pBiDi);
+
+/**
+ * Get the pointer to the text.
+ *
+ * @param pBiDi is the paragraph or line <code>UBiDi</code> object.
+ *
+ * @return The pointer to the text that the UBiDi object was created for.
+ *
+ * @see ubidi_setPara
+ * @see ubidi_setLine
+ */
+U_CAPI const UChar * U_EXPORT2
+ubidi_getText(const UBiDi *pBiDi);
 
 /**
  * Get the length of the text.
@@ -656,6 +723,173 @@ ubidi_reorderVisual(const UBiDiLevel *levels, UTextOffset length, UTextOffset *i
  */
 U_CAPI void U_EXPORT2
 ubidi_invertMap(const UTextOffset *srcMap, UTextOffset *destMap, UTextOffset length);
+
+/** option flags for ubidi_writeReordered() */
+
+/**
+ * option bit for ubidi_writeReordered():
+ * keep combining characters after their base characters in RTL runs
+ *
+ * @see ubidi_writeReordered
+ */
+#define UBIDI_KEEP_BASE_COMBINING       1
+
+/**
+ * option bit for ubidi_writeReordered():
+ * replace characters with the "mirrored" property in RTL runs
+ * by their mirror-image mappings
+ *
+ * @see ubidi_writeReordered
+ */
+#define UBIDI_DO_MIRRORING              2
+
+/**
+ * option bit for ubidi_writeReordered():
+ * surround the run with LRMs if necessary;
+ * this is part of the approximate "inverse BiDi" algorithm
+ *
+ * @see ubidi_setInverse
+ * @see ubidi_writeReordered
+ */
+#define UBIDI_INSERT_LRM_FOR_NUMERIC    4
+
+/**
+ * option bit for ubidi_writeReordered():
+ * remove BiDi control characters
+ * (this does not affect UBIDI_INSERT_LRM_FOR_NUMERIC)
+ *
+ * @see ubidi_writeReordered
+ */
+#define UBIDI_REMOVE_BIDI_CONTROLS      8
+
+/**
+ * option bit for ubidi_writeReordered():
+ * write the output in reverse order
+ *
+ * <p>This has the same effect as calling <code>ubidi_writeReordered()</code>
+ * first without this option, and then calling
+ * <code>ubidi_writeReverse()</code> without mirroring.
+ * Doing this in the same step is faster and avoids a temporary buffer.
+ * An example for using this option is output to a character terminal that
+ * is designed for RTL scripts and stores text in reverse order.</p>
+ *
+ * @see ubidi_writeReordered
+ */
+#define UBIDI_OUTPUT_REVERSE            16
+
+/**
+ * Take a <code>UBiDi</code> object containing the reordering
+ * information for one paragraph or line of text as set by
+ * <code>ubidi_setPara()</code> or <code>ubidi_setLine()</code> and
+ * write a reordered string to the destination buffer.
+ *
+ * This function preserves the integrity of characters with multiple
+ * code units and (optionally) modifier letters.
+ * Characters in RTL runs can be replaced by mirror-image characters
+ * in the destination buffer. Note that "real" mirroring has
+ * to be done in a rendering engine by glyph selection
+ * and that for many "mirrored" characters there are no
+ * Unicode characters as mirror-image equivalents.
+ * There are also options to insert or remove BiDi control
+ * characters; see the description of the <code>destSize</code>
+ * and <code>options</code> parameters and of the option bit flags.
+ *
+ * @param pBiDi A pointer to a <code>UBiDi</code> object that
+ *              is set by <code>ubidi_setPara()</code> or
+ *              <code>ubidi_setLine()</code> and contains the reordering
+ *              information for the text that it was defined for,
+ *              as well as a pointer to that text.
+ *              <p>The text was aliased (only the pointer was stored
+ *              without copying the contents) and must not have been modified
+ *              since the <code>ubidi_setPara()</code> call.</p>
+ *
+ * @param dest A pointer to where the reordered text is to be copied.
+ *             The source text and <code>dest[destSize]</code>
+ *             must not overlap.
+ *
+ * @param destSize The size of the <code>dest</code> buffer,
+ *                 in number of UChars.
+ *                 If the <code>UBIDI_INSERT_LRM_FOR_NUMERIC</code>
+ *                 option is set, then the destination length could be
+ *                 as large as
+ *                 <code>ubidi_getLength(pBiDi)+2*ubidi_countRuns(pBiDi)</code>.
+ *                 If the <code>UBIDI_REMOVE_BIDI_CONTROLS</code> option
+ *                 is set, then the destination length may be less than
+ *                 <code>ubidi_getLength(pBiDi)</code>.
+ *                 If none of these options is set, then the destination length
+ *                 will be exactly <code>ubidi_getLength(pBiDi)</code>.
+ *
+ * @param options A bit set of options for the reordering that control
+ *                how the reordered text is written.
+ *                The options include mirroring the characters on a code
+ *                point basis and inserting LRM characters, which is used
+ *                especially for transforming visually stored text
+ *                to logically stored text (although this is still an
+ *                imperfect implementation of an "inverse BiDi" algorithm
+ *                because it uses the "forward BiDi" algorithm at its core).
+ *
+ * @param pErrorCode must be a valid pointer to an error code value,
+ *        which must not indicate a failure before the function call.
+ *
+ * @return The number of characters that were written to <code>dest</code>.
+ */
+U_CAPI UTextOffset U_EXPORT2
+ubidi_writeReordered(UBiDi *pBiDi,
+                     UChar *dest, int32_t destSize,
+                     uint16_t options,
+                     UErrorCode *pErrorCode);
+
+/**
+ * Reverse a Right-To-Left run of Unicode text.
+ *
+ * This function preserves the integrity of characters with multiple
+ * code units and (optionally) modifier letters.
+ * Characters can be replaced by mirror-image characters
+ * in the destination buffer. Note that "real" mirroring has
+ * to be done in a rendering engine by glyph selection
+ * and that for many "mirrored" characters there are no
+ * Unicode characters as mirror-image equivalents.
+ * There are also options to insert or remove BiDi control
+ * characters.
+ *
+ * This function is the implementation for reversing RTL runs as part
+ * of <code>ubidi_writeReordered()</code>. For detailed descriptions
+ * of the parameters, see there.
+ * Since no BiDi controls are inserted here, this function will never
+ * write more than <code>srcLength</code> characters to <code>dest</code>.
+ *
+ * @see ubidi_writeReordered
+ *
+ * @param src A pointer to the RTL run text.
+ *
+ * @param srcLength The length of the RTL run.
+ *
+ * @param dest A pointer to where the reordered text is to be copied.
+ *             <code>src[srcLength]</code> and <code>dest[destSize]</code>
+ *             must not overlap.
+ *
+ * @param destSize The size of the <code>dest</code> buffer,
+ *                 in number of UChars.
+ *                 If the <code>UBIDI_REMOVE_BIDI_CONTROLS</code> option
+ *                 is set, then the destination length may be less than
+ *                 <code>srcLength</code>.
+ *                 If this option is not set, then the destination length
+ *                 will be exactly <code>srcLength</code>.
+ *
+ * @param options A bit set of options for the reordering that control
+ *                how the reordered text is written.
+ *                See <code>ubidi_writeReordered()</code>.
+ *
+ * @param pErrorCode must be a valid pointer to an error code value,
+ *        which must not indicate a failure before the function call.
+ *
+ * @return The number of characters that were written to <code>dest</code>.
+ */
+U_CAPI UTextOffset U_EXPORT2
+ubidi_writeReverse(const UChar *src, int32_t srcLength,
+                   UChar *dest, int32_t destSize,
+                   uint16_t options,
+                   UErrorCode *pErrorCode);
 
 /**
  * @name Sample code for the ICU BIDI API
