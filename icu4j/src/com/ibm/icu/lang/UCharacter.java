@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/lang/UCharacter.java,v $ 
-* $Date: 2002/03/13 05:44:14 $ 
-* $Revision: 1.29 $
+* $Date: 2002/03/13 18:14:21 $ 
+* $Revision: 1.30 $
 *
 *******************************************************************************
 */
@@ -1507,7 +1507,7 @@ public final class UCharacter
 	 */
 	public static boolean isULowercase(int ch) 
 	{
-		return hasBinaryProperty(ch, UProperty.LOWERCASE);;
+		return hasBinaryProperty(ch, UProperty.LOWERCASE);
 	}
 
 	/**

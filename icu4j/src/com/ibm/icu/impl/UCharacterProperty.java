@@ -6,8 +6,8 @@
 *
 * $Source: 
 *         /usr/cvs/icu4j/icu4j/src/com/ibm/icu/text/UCharacterPropertyDB.java $ 
-* $Date: 2002/03/13 05:44:14 $ 
-* $Revision: 1.3 $
+* $Date: 2002/03/13 18:15:44 $ 
+* $Revision: 1.4 $
 *
 *******************************************************************************
 */
@@ -677,7 +677,7 @@ public final class UCharacterProperty implements Trie.DataManipulate
     		default:
         		// not a known binary property
         		return false;
-    	};
+    	}
 	}
     
     // protected constructor ---------------------------------------------
