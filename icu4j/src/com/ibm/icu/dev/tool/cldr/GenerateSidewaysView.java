@@ -380,13 +380,13 @@ import com.ibm.icu.util.UResourceBundle;
     }
     
 
-    public static final Set IGNOREABLE = new HashSet();
-    /*
+    public static final Set IGNOREABLE = 
         new HashSet(Arrays.asList(new String[] {
             "draft", 
-            "references",
-            "standard"}));
-            */
+            //"references",
+            //"standard"
+        }));
+
 
     static class SimpleAttribute implements Comparable {
         String name;
