@@ -156,6 +156,7 @@
             srcdir="${src.dir}"
             destdir="${build.dir}"
             classpathref="build.classpath"
+            source="1.4"
             debug="on" deprecation="off"
         encoding="ascii"/>
     </target>
@@ -166,6 +167,7 @@
             srcdir="${src.dir}"
             destdir="${build.dir}"
             classpathref="build.classpath"
+            source="1.4"
             debug="on" deprecation="off"/>
     </target>
 
@@ -213,6 +215,7 @@
             bottom="&lt;font size=-1>Copyright (c) 2004 IBM Corporation and others.&lt;/font>"
             additionalparam="${doc.params}"
             link="http://java.sun.com/j2se/1.4/docs/api"
+            source="1.4"
         />
     </target>
 
