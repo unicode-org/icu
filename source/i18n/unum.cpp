@@ -26,7 +26,8 @@ unum_open(    UNumberFormatStyle    style,
         const   char*        locale,
         UErrorCode*        status)
 {
-  if(U_FAILURE(*status)) return 0;
+  if(U_FAILURE(*status))
+    return 0;
   UNumberFormat *retVal = 0;
   
   switch(style) {
@@ -58,6 +59,10 @@ unum_open(    UNumberFormatStyle    style,
     // Todo: TBD: Add spellout support
     //retVal = (UNumberFormat*)new NumberSpelloutFormat();
     //break;
+    *status = U_UNSUPPORTED_ERROR;
+    return 0;
+
+  default:
     *status = U_UNSUPPORTED_ERROR;
     return 0;
   }
