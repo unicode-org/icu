@@ -57,7 +57,7 @@ void TestStandardNames()
 
     /* Iterate over all standards. */
 
-    for (i = 0, count = ucnv_countStandards(&err); i < count; ++i) {
+    for (i = 0, count = ucnv_countStandards(); i < count; ++i) {
         const char *std;
 
         err = U_ZERO_ERROR;

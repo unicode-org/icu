@@ -264,6 +264,12 @@ ucnv_getAliases(const char *alias, const char **aliases, UErrorCode *pErrorCode)
     }
 }
 
+U_CAPI uint16_t
+ucnv_countStandards(void) {
+    UErrorCode err = U_ZERO_ERROR;
+    return ucnv_io_countStandards(&err);
+}
+
 void   ucnv_getSubstChars (const UConverter * converter,
                            char *mySubChar,
                            int8_t * len,
