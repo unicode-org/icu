@@ -4,21 +4,18 @@
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  *
- * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/BreakTransliterator.java,v $ 
- * $Date: 2002/11/22 00:29:00 $ 
- * $Revision: 1.3 $
+ * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/BreakTransliterator.java,v $
+ * $Date: 2003/01/28 18:55:41 $
+ * $Revision: 1.4 $
  *
  *****************************************************************************************
  */
 package com.ibm.icu.text;
-//import com.ibm.icu.dev.demo.impl.*;
-//import com.ibm.icu.lang.*;
+
 import com.ibm.icu.lang.UCharacter;
 import java.util.Locale;
 import java.text.CharacterIterator;
-//import java.util.*;
-//import java.util.ArrayList;
-//import java.io.*;
+
 
 /**
  * Inserts the specified characters at word breaks. To restrict it to particular characters, use a filter.
@@ -29,35 +26,35 @@ final class BreakTransliterator extends Transliterator {
     private String insertion;
     private int[] boundaries = new int[50];
     private int boundaryCount = 0;
-    
+
     public BreakTransliterator(String ID, UnicodeFilter filter, BreakIterator bi, String insertion) {
         super(ID, filter);
-        if (bi == null) bi = BreakIterator.getWordInstance(new Locale("th", "TH"));
+        if (bi == null) bi = (BreakIterator) BreakIterator.getWordInstance(new Locale("th", "TH"));
         this.bi = bi;
         this.insertion = insertion;
     }
-    
+
     public BreakTransliterator(String ID, UnicodeFilter filter) {
         this(ID, filter, null, " ");
     }
-    
+
     public String getInsertion() {
         return insertion;
     }
-    
+
     public void setInsertion(String insertion) {
         this.insertion = insertion;
     }
-    
+
     public BreakIterator getBreakIterator() {
         return bi;
     }
-    
+
     public void setBreakIterator(BreakIterator bi) {
         this.bi = bi;
     }
-    
-    static final int LETTER_OR_MARK_MASK = 
+
+    static final int LETTER_OR_MARK_MASK =
           (1<<Character.UPPERCASE_LETTER)
         | (1<<Character.LOWERCASE_LETTER)
         | (1<<Character.TITLECASE_LETTER)
@@ -78,10 +75,10 @@ final class BreakTransliterator extends Transliterator {
         bi.setText(new StringCharacterIterator(new String(tempBuffer), pos.start, pos.limit, pos.start));
         */
         // end debugging
-        
+
         // To make things much easier, we will stack the boundaries, and then insert at the end.
         // generally, we won't need too many, since we will be filtered.
-        
+
         for(boundary = bi.first(); boundary != bi.DONE && boundary < pos.limit; boundary = bi.next()) {
             if (boundary == 0) continue;
             // HACK: Check to see that preceeding item was a letter
@@ -90,44 +87,44 @@ final class BreakTransliterator extends Transliterator {
             int type = UCharacter.getType(cp);
             //System.out.println(Integer.toString(cp,16) + " (before): " + type);
             if (((1<<type) & LETTER_OR_MARK_MASK) == 0) continue;
-            
+
             cp = UTF16.charAt(text, boundary);
             type = UCharacter.getType(cp);
             //System.out.println(Integer.toString(cp,16) + " (after): " + type);
             if (((1<<type) & LETTER_OR_MARK_MASK) == 0) continue;
-            
+
             if (boundaryCount >= boundaries.length) {       // realloc if necessary
                 int[] temp = new int[boundaries.length * 2];
                 System.arraycopy(boundaries, 0, temp, 0, boundaries.length);
                 boundaries = temp;
             }
-            
+
             boundaries[boundaryCount++] = boundary;
             //System.out.println(boundary);
         }
-        
+
         int delta = 0;
         int lastBoundary = 0;
-        
+
         if (boundaryCount != 0) { // if we found something, adjust
             delta = boundaryCount * insertion.length();
             lastBoundary = boundaries[boundaryCount-1];
-            
+
             // we do this from the end backwards, so that we don't have to keep updating.
-            
+
             while (boundaryCount > 0) {
                 boundary = boundaries[--boundaryCount];
                 text.replace(boundary, boundary, insertion);
             }
         }
-        
+
         // Now fix up the return values
         pos.contextLimit += delta;
         pos.limit += delta;
         pos.start = incremental ? lastBoundary + delta : pos.limit;
     }
-    
-    
+
+
     /**
      * Registers standard variants with the system.  Called by
      * Transliterator during initialization.
@@ -144,9 +141,9 @@ final class BreakTransliterator extends Transliterator {
         });
         */
     }
-    
+
     // Hack, just to get a real character iterator.
-    
+
     static final class ReplaceableCharacterIterator implements CharacterIterator
     {
         private Replaceable text;
@@ -384,5 +381,5 @@ final class BreakTransliterator extends Transliterator {
         }
 
     }
-        
+
 }

@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/util/ICUServiceThreadTest.java,v $
- * $Date: 2002/10/02 20:20:25 $
- * $Revision: 1.5 $
+ * $Date: 2003/01/28 18:55:35 $
+ * $Revision: 1.6 $
  *
  *******************************************************************************
  */
@@ -23,6 +23,8 @@ import com.ibm.icu.impl.ICULocaleData;
 import com.ibm.icu.impl.ICULocaleService;
 import com.ibm.icu.impl.ICULocaleService.LocaleKey;
 import com.ibm.icu.impl.ICULocaleService.ICUResourceBundleFactory;
+import com.ibm.icu.text.Collator;
+
 import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -37,6 +39,7 @@ import java.util.Random;
 import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.SortedMap;
 
 public class ICUServiceThreadTest extends TestFmwk
 {    
@@ -83,7 +86,15 @@ public class ICUServiceThreadTest extends TestFmwk
 	    return "Factory_" + id;
 	}
     }
-
+    /**
+     * Convenience override of getDisplayNames(Locale, Comparator, String) that
+     * uses the default collator for the locale as the comparator to
+     * sort the display names, and null for the matchID.
+     */
+    public static SortedMap getDisplayNames(ICUService service, Locale locale) {
+        Collator col = Collator.getInstance(locale);
+        return service.getDisplayNames(locale, col, null);
+    }
     private static final Random r = new Random();
 
     private static String getCLV() {
@@ -178,6 +189,17 @@ public class ICUServiceThreadTest extends TestFmwk
 		log.errln(name + msg);
 	    }
 	}
+    public void info(String msg) {
+	    if (logging()) {
+		log.info(name + msg);
+	    }
+	}
+
+	public void infoln(String msg) {
+	    if (logging()) {
+		log.infoln(name + msg);
+	    }
+	}
     }
 
     static class RegisterFactoryThread extends TestThread {
@@ -263,7 +285,7 @@ public class ICUServiceThreadTest extends TestFmwk
 	}
 
 	protected void iterate() {
-	    Map names = service.getDisplayNames(locale);
+	    Map names = getDisplayNames(service,locale);
 	    Iterator iter = names.entrySet().iterator();
 	    int n = 10;
 	    while (--n >= 0 && iter.hasNext()) {

@@ -4,9 +4,9 @@
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  *
- * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/TestFmwk.java,v $ 
- * $Date: 2002/11/06 19:07:02 $ 
- * $Revision: 1.33 $
+ * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/TestFmwk.java,v $
+ * $Date: 2003/01/28 18:55:32 $
+ * $Revision: 1.34 $
  *
  *****************************************************************************************
  */
@@ -24,10 +24,6 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.Vector;
-
-import com.ibm.icu.impl.Utility;
-import com.ibm.icu.text.UnicodeSet;
-import com.ibm.icu.text.UTF16;
 
 /**
  * TestFmwk is a base class for tests that can be run conveniently from
@@ -71,7 +67,7 @@ public class TestFmwk implements TestLog {
             result = new HashMap();
             Method[] methods = getClass().getDeclaredMethods();
             for( int i=0; i<methods.length; i++ ) {
-                if( methods[i].getName().startsWith("Test") 
+                if( methods[i].getName().startsWith("Test")
                     || methods[i].getName().startsWith("test")) {
                     result.put(methods[i].getName(), methods[i] );
                 }
@@ -97,7 +93,7 @@ public class TestFmwk implements TestLog {
     private void _run() throws Exception {
         _run(getTestsToRun(null));
     }
-    
+
     private void _run(Map testsToRun) throws Exception {
         writeTestName(getClass().getName());
         params.indentLevel++;
@@ -108,48 +104,48 @@ public class TestFmwk implements TestLog {
             Iterator iter = getTestEntryIterator(testsToRun);
 
             // Run the list of tests given in the test arguments
-	    final Object[] NO_ARGS = new Object[0];
+        final Object[] NO_ARGS = new Object[0];
             while (iter.hasNext()) {
                 int oldCount = params.errorCount;
                 int oldInvalidCount = params.invalidCount;
 
                 Map.Entry entry = (Map.Entry)iter.next();
-		String testName = (String)entry.getKey();
+        String testName = (String)entry.getKey();
                 Method testMethod = (Method)entry.getValue();
 
                 writeTestName(testName);
 
-		if (validateMethod(testName)) {
-		    try {
-			testMethod.invoke(this, NO_ARGS);
-		    } catch( IllegalAccessException e ) {
-			errln("Can't access test method " + testName);
-		    } catch( InvocationTargetException e ) {
-			errln("Uncaught exception \"" + e
-                              +"\" thrown in test method " + testMethod.getName() 
+        if (validateMethod(testName)) {
+            try {
+            testMethod.invoke(this, NO_ARGS);
+            } catch( IllegalAccessException e ) {
+            errln("Can't access test method " + testName);
+            } catch( InvocationTargetException e ) {
+            errln("Uncaught exception \"" + e
+                              +"\" thrown in test method " + testMethod.getName()
                               +" accessed under name " + testName);
-			e.getTargetException().printStackTrace(this.params.log);
-		    }
-		} else {
-		    params.invalidCount++;
-		}
+            e.getTargetException().printStackTrace(this.params.log);
+            }
+        } else {
+            params.invalidCount++;
+        }
                 writeTestResult(params.errorCount - oldCount, params.invalidCount - oldInvalidCount);
             }
         } else {
             params.invalidCount++;
         }
         params.indentLevel--;
-    
+
         writeTestResult(params.errorCount - oldClassCount, params.invalidCount - oldClassInvalidCount);
     }
-    
+
     public void run(String[] args) throws Exception {
         if (params == null) params = new TestParams();
 
         // Parse the test arguments.  They can be either the flag
         // "-verbose" or names of test methods. Create a list of
         // tests to be run.
-	boolean usageError = false;
+    boolean usageError = false;
         Set testNames = null;
         for (int i = 0; i < args.length; i++) {
             if (args[i].equals("-verbose") || args[i].equals("-v")) {
@@ -159,8 +155,8 @@ public class TestFmwk implements TestLog {
                 params.prompt = true;
             } else if (args[i].equals("-nothrow") || args[i].equals("-n")) {
                 params.nothrow = true;
-	    } else if (args[i].equals("-describe")) {
-		params.describe = true;
+        } else if (args[i].equals("-describe")) {
+        params.describe = true;
             } else if (args[i].startsWith("-e")) {
                 // see above
                 params.inclusion = (args[i].length() == 2) ? 5 : Integer.parseInt(args[i].substring(2));
@@ -183,9 +179,9 @@ public class TestFmwk implements TestLog {
         }
         if (usageError ||
             (testNames != null && testsToRun.size() != testNames.size())) {
-	    usage();
-	    return;
-	}
+        usage();
+        return;
+    }
 
         _run(testsToRun);
 
@@ -210,15 +206,15 @@ public class TestFmwk implements TestLog {
     }
 
     protected String getDescription() {
-	return null;
+    return null;
     }
 
     protected boolean validateMethod(String name) {
-	return true;
+    return true;
     }
 
     protected String getMethodDescription(String name) {
-	return null;
+    return null;
     }
 
     protected void run(TestFmwk childTest) throws Exception {
@@ -257,11 +253,25 @@ public class TestFmwk implements TestLog {
      * Adds given string to the log if we are in verbose mode.
      */
     public void log( String message ) {
-        log(message, true, false);
+        log(message, true, false, false);
     }
 
     public void logln( String message ) {
         logln(message, true, false);
+    }
+
+    /**
+     * Adds given string to the log.
+     */
+    public void info( String message ) {
+        message = "INFO: " + message;
+        log(message,false,false,true);
+    }
+
+    public void infoln( String message ) {
+        message = " INFO: " + message;
+        log(message + System.getProperty("line.separator"), false, false,true);
+        params.suppressIndent = false; // time to indent again
     }
 
     /**
@@ -273,26 +283,33 @@ public class TestFmwk implements TestLog {
      * then increment the failure count; if pass is true, then this param
      * is ignored
      */
-    public void log( String message, boolean pass, boolean incrementCount ) {
-        if (!pass && incrementCount) {
-            params.errorCount++;
-        }
+    public void log( String message, boolean pass, boolean incrementCount,boolean isInfo ) {
+        if(!isInfo){
+            if (!pass && incrementCount) {
+                if(params==null) {params = new TestParams();}
+                params.errorCount++;
+            }
 
-        if (!pass || params.verbose) {
+            if (!pass || params.verbose) {
+                if (!params.suppressIndent) indent(params.indentLevel + 1);
+                params.log.print( message );
+                params.log.flush();
+            }
+
+            if (!pass && !params.nothrow) {
+                throw new RuntimeException(message);
+            }
+        }else{
             if (!params.suppressIndent) indent(params.indentLevel + 1);
             params.log.print( message );
             params.log.flush();
         }
-
-        if (!pass && !params.nothrow) {
-            throw new RuntimeException(message);
-        }
-
         params.suppressIndent = true; // don't indent on successive calls to log()
+
     }
 
     public void logln( String message, boolean pass, boolean incrementCount ) {
-        log(message + System.getProperty("line.separator"), pass, incrementCount);
+        log(message + System.getProperty("line.separator"), pass, incrementCount,false);
         params.suppressIndent = false; // time to indent again
     }
 
@@ -300,7 +317,7 @@ public class TestFmwk implements TestLog {
      * Convenience overloads
      */
     public void log( String message, boolean pass ) {
-        log(message, pass, true);
+        log(message, pass, true, false);
     }
 
     public void logln( String message, boolean pass ) {
@@ -311,7 +328,7 @@ public class TestFmwk implements TestLog {
      * Report an error
      */
     public void err( String message ) {
-        log(message, false, true);
+        log(message, false, true, false);
     }
 
     public void errln( String message ) {
@@ -370,29 +387,29 @@ public class TestFmwk implements TestLog {
         System.out.println(" -e<n> Set exhaustiveness from 0..10.  Default is 0, fewest tests.\n       To run all tests, specify -e10.  Giving -e with no <n> is\n       the same as -e5.");
         System.out.println(" -filter:<str> ?");
 
-	boolean valid = params.describe && validate();
-	if (valid) {
-	    String testDescription = getDescription();
-	    if (testDescription != null) {
-		System.out.println("-- " + testDescription);
-	    }
-	}
+    boolean valid = params.describe && validate();
+    if (valid) {
+        String testDescription = getDescription();
+        if (testDescription != null) {
+        System.out.println("-- " + testDescription);
+        }
+    }
 
         Iterator testEntries = getTestEntryIterator(getAvailableTests());
 
         System.out.println("Test names:");
         while(testEntries.hasNext() ) {
             Map.Entry e = (Map.Entry)testEntries.next();
-	    String methodName = (String)e.getKey();
+        String methodName = (String)e.getKey();
 
             System.out.print("\t" + methodName );
-	    if (valid) {
-		String methodDescription = getMethodDescription(methodName);
-		if (methodDescription != null) {
-		    System.out.print(" -- " + methodDescription);
-		}
-	    }
-	    System.out.println();
+        if (valid) {
+        String methodDescription = getMethodDescription(methodName);
+        if (methodDescription != null) {
+            System.out.print(" -- " + methodDescription);
+        }
+        }
+        System.out.println();
         }
     }
 
@@ -404,7 +421,7 @@ public class TestFmwk implements TestLog {
         }
         return result + foo;
     }
-    
+
     public static String hex(int ch) {
         StringBuffer result = new StringBuffer();
         String foo = Integer.toString(ch,16).toUpperCase();
@@ -430,11 +447,10 @@ public class TestFmwk implements TestLog {
     private static class ASCIIWriter extends PrintWriter {
         private Writer w;
         private StringBuffer buffer = new StringBuffer();
-        
+
         // Characters that we think are printable but that escapeUnprintable
         // doesn't
-        private static final UnicodeSet S =
-            new UnicodeSet("[\\u0009\\u000A\\u000D]");
+        private static final String S ="\u0009"+(char)0x000A+(char)0x000D;
 
         public ASCIIWriter(Writer w, boolean autoFlush) {
             super(w, autoFlush);
@@ -447,22 +463,22 @@ public class TestFmwk implements TestLog {
         public void write(int c) {
             synchronized(lock) {
                 buffer.setLength(0);
-                if (!S.contains(c) && Utility.escapeUnprintable(buffer, c)) {
+                if (S.indexOf(c)<0 && TestUtil.escapeUnprintable(buffer, c)) {
                     super.write(buffer.toString());
                 } else {
                     super.write(c);
                 }
             }
         }
-        
+
         public void write(char[] buf, int off, int len) {
             synchronized (lock) {
                 buffer.setLength(0);
                 int limit = off + len;
                 while (off < limit) {
-                    int c = UTF16.charAt(buf, 0, buf.length, off);
-                    off += UTF16.getCharCount(c);
-                    if (!S.contains(c) && Utility.escapeUnprintable(buffer, c)) {
+                    int c = UTF16Util.charAt(buf, 0, buf.length, off);
+                    off += UTF16Util.getCharCount(c);
+                    if (S.indexOf(c)<0 && TestUtil.escapeUnprintable(buffer, c)) {
                         super.write(buffer.toString());
                         buffer.setLength(0);
                     } else {
@@ -471,7 +487,7 @@ public class TestFmwk implements TestLog {
                 }
             }
         }
-    
+
         public void write(String s, int off, int len) {
             write(s.substring(off, off + len).toCharArray(), 0, len);
         }
@@ -481,7 +497,7 @@ public class TestFmwk implements TestLog {
         public boolean   prompt = false;
         public boolean   nothrow = false;
         public boolean   verbose = false;
-	public boolean   describe = false;
+    public boolean   describe = false;
         public int      inclusion = 0;
         public String    filter = null;
 

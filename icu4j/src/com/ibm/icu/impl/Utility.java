@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/Utility.java,v $
- * $Date: 2003/01/14 19:32:37 $
- * $Revision: 1.34 $
+ * $Date: 2003/01/28 18:55:38 $
+ * $Revision: 1.35 $
  *
  *****************************************************************************************
  */
@@ -19,7 +19,7 @@ public final class Utility {
 
     private static final char APOSTROPHE = '\'';
     private static final char BACKSLASH  = '\\';
-    
+
     /**
      * Convenience utility to compare two Object[]s.
      * Ought to be in System
@@ -110,7 +110,7 @@ public final class Utility {
         }
         return true;
     }
-    
+
     /**
      * Convenience utility to compare two int[]s.
      * @param len the length to compare.
@@ -1123,7 +1123,7 @@ public final class Utility {
         }
 
         return -1; // text ended before end of pat
-    }    
+    }
 
     /**
      * Parse an integer at pos, either of the form \d+ or of the form
@@ -1224,10 +1224,10 @@ public final class Utility {
     }
 
     static final char DIGITS[] = {
-		'0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
-		'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J',
-		'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T',
-		'U', 'V', 'W', 'X', 'Y', 'Z'
+        '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
+        'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J',
+        'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T',
+        'U', 'V', 'W', 'X', 'Y', 'Z'
     };
 
     /**
@@ -1243,57 +1243,57 @@ public final class Utility {
      * <code>StringBuffer</code> in the given radix. This is
      * done recursively since it is easiest to generate the low-
      * order digit first, but it must be appended last.
-     * 
+     *
      * @param result is the <code>StringBuffer</code> to append to
      * @param n is the positive integer
      * @param radix is the radix, from 2 to 36 inclusive
      * @param minDigits is the minimum number of digits to append.
      */
-	private static void recursiveAppendNumber(StringBuffer result, int n,
+    private static void recursiveAppendNumber(StringBuffer result, int n,
                                                 int radix, int minDigits)
-	{
-		int digit = n % radix;
+    {
+        int digit = n % radix;
 
-		if (n >= radix || minDigits > 1) {
-			recursiveAppendNumber(result, n / radix, radix, minDigits - 1);
-		}
+        if (n >= radix || minDigits > 1) {
+            recursiveAppendNumber(result, n / radix, radix, minDigits - 1);
+        }
 
-		result.append(DIGITS[digit]);
-	}
+        result.append(DIGITS[digit]);
+    }
 
-	/**
-	 * Append a number to the given StringBuffer in the given radix.
-	 * Standard digits '0'-'9' are used and letters 'A'-'Z' for
-	 * radices 11 through 36.
-	 * @param result the digits of the number are appended here
-	 * @param n the number to be converted to digits; may be negative.
-	 * If negative, a '-' is prepended to the digits.
-	 * @param radix a radix from 2 to 36 inclusive.
-	 * @param minDigits the minimum number of digits, not including
-	 * any '-', to produce.  Values less than 2 have no effect.  One
-	 * digit is always emitted regardless of this parameter.
-	 * @return a reference to result
-	 */
-	public static StringBuffer appendNumber(StringBuffer result, int n,
+    /**
+     * Append a number to the given StringBuffer in the given radix.
+     * Standard digits '0'-'9' are used and letters 'A'-'Z' for
+     * radices 11 through 36.
+     * @param result the digits of the number are appended here
+     * @param n the number to be converted to digits; may be negative.
+     * If negative, a '-' is prepended to the digits.
+     * @param radix a radix from 2 to 36 inclusive.
+     * @param minDigits the minimum number of digits, not including
+     * any '-', to produce.  Values less than 2 have no effect.  One
+     * digit is always emitted regardless of this parameter.
+     * @return a reference to result
+     */
+    public static StringBuffer appendNumber(StringBuffer result, int n,
                                              int radix, int minDigits)
-		throws IllegalArgumentException
-	{
-		if (radix < 2 || radix > 36) {
-			throw new IllegalArgumentException("Illegal radix " + radix);
-		}
+        throws IllegalArgumentException
+    {
+        if (radix < 2 || radix > 36) {
+            throw new IllegalArgumentException("Illegal radix " + radix);
+        }
 
 
-		int abs = n;
+        int abs = n;
 
-		if (n < 0) {
-			abs = -n;
-			result.append("-");
-		}
+        if (n < 0) {
+            abs = -n;
+            result.append("-");
+        }
 
-		recursiveAppendNumber(result, abs, radix, minDigits);
+        recursiveAppendNumber(result, abs, radix, minDigits);
 
-		return result;
-	}
+        return result;
+    }
 
     /**
      * Parse an unsigned 31-bit integer at the given offset.  Use
@@ -1407,91 +1407,27 @@ public final class Utility {
     }
 
     /**
-     * For debugging purposes; format the given text in the form
-     * aaa{bbb|ccc|ddd}eee, where the {} indicate the context start
-     * and limit, and the || indicate the start and limit.
-     */
-    public static String formatInput(ReplaceableString input,
-                                     Transliterator.Position pos) {
-        StringBuffer appendTo = new StringBuffer();
-        formatInput(appendTo, input, pos);
-        return com.ibm.icu.impl.Utility.escape(appendTo.toString());
-    }
-
-    /**
-     * For debugging purposes; format the given text in the form
-     * aaa{bbb|ccc|ddd}eee, where the {} indicate the context start
-     * and limit, and the || indicate the start and limit.
-     */
-    public static StringBuffer formatInput(StringBuffer appendTo,
-                                           ReplaceableString input,
-                                           Transliterator.Position pos) {
-        if (0 <= pos.contextStart &&
-            pos.contextStart <= pos.start &&
-            pos.start <= pos.limit &&
-            pos.limit <= pos.contextLimit &&
-            pos.contextLimit <= input.length()) {
-            
-            String a, b, c, d, e;
-            //a = input.substring(0, pos.contextStart);
-            b = input.substring(pos.contextStart, pos.start);
-            c = input.substring(pos.start, pos.limit);
-            d = input.substring(pos.limit, pos.contextLimit);
-            //e = input.substring(pos.contextLimit, input.length());
-            appendTo.//append(a).
-                append('{').append(b).
-                append('|').append(c).append('|').append(d).
-                append('}')
-                //.append(e)
-                ;
-        } else {
-            appendTo.append("INVALID Position {cs=" +
-                            pos.contextStart + ", s=" + pos.start + ", l=" +
-                            pos.limit + ", cl=" + pos.contextLimit + "} on " +
-                            input);
-        }
-        return appendTo;
-    }
-
-    /**
-     * Convenience method.
-     */
-    public static String formatInput(Replaceable input,
-                                     Transliterator.Position pos) {
-        return formatInput((ReplaceableString) input, pos);
-    }
-
-    /**
-     * Convenience method.
-     */
-    public static StringBuffer formatInput(StringBuffer appendTo,
-                                           Replaceable input,
-                                           Transliterator.Position pos) { 
-        return formatInput(appendTo, (ReplaceableString) input, pos);
-    }
-
-    /**
     * Similar to StringBuffer.getChars, version 1.3.
-    * Since JDK 1.2 implements StringBuffer.getChars differently, this method 
+    * Since JDK 1.2 implements StringBuffer.getChars differently, this method
     * is here to provide consistent results.
     * To be removed after JDK 1.2 ceased to be the reference platform.
     * @param src source string buffer
     * @param srcBegin offset to the start of the src to retrieve from
     * @param srcEnd offset to the end of the src to retrieve from
     * @param dst char array to store the retrieved chars
-    * @param dstBegin offset to the start of the destination char array to 
+    * @param dstBegin offset to the start of the destination char array to
     *                 store the retrieved chars
     * @draft since ICU4J 2.0
     */
-    public static void getChars(StringBuffer src, int srcBegin, int srcEnd, 
-                                char dst[], int dstBegin) 
-    {	
-        if (srcBegin == srcEnd) {	    
+    public static void getChars(StringBuffer src, int srcBegin, int srcEnd,
+                                char dst[], int dstBegin)
+    {
+        if (srcBegin == srcEnd) {
             return;
-        }	
+        }
         src.getChars(srcBegin, srcEnd, dst, dstBegin);
     }
-    
+
     /**
      * Append a character to a rule that is being built up.  To flush
      * the quoteBuf to rule, make one final call with isLiteral == true.
@@ -1631,15 +1567,15 @@ public final class Utility {
                          true, escapeUnprintable, quoteBuf);
         }
     }
-    
+
     /**
      * Compares 2 unsigned integers
      * @param source 32 bit unsigned integer
      * @param target 32 bit unsigned integer
-     * @return 0 if equals, 1 if source is greater than target and -1 
+     * @return 0 if equals, 1 if source is greater than target and -1
      *         otherwise
      */
-    public static final int compareUnsigned(int source, int target) 
+    public static final int compareUnsigned(int source, int target)
     {
         if (source == target) {
             return 0;
@@ -1647,7 +1583,7 @@ public final class Utility {
         if (source >= 0) {
             if (source < target || target < 0) {
                 return -1;
-            } 
+            }
         }
         else if (source < target && target < 0) {
             // source < 0, so
@@ -1656,48 +1592,48 @@ public final class Utility {
         return 1;
     }
 
-	/**
-	 * Find the highest bit in a positive integer. This is done
-	 * by doing a binary search through the bits.
-	 * 
-	 * @param n is the integer
-	 * 
-	 * @return the bit number of the highest bit, with 0 being
-	 * the low order bit, or -1 if <code>n</code> is not positive
-	 */
-	public static final byte highBit(int n)
-	{
-	    if (n <= 0) {
-	        return -1;
-	    }
-	
-	    byte bit = 0;
-	
-	    if (n >= 1 << 16) {
-	        n >>= 16;
-	        bit += 16;
-	    }
-	
-	    if (n >= 1 << 8) {
-	        n >>= 8;
-	        bit += 8;
-	    }
-	
-	    if (n >= 1 << 4) {
-	        n >>= 4;
-	        bit += 4;
-	    }
-	
-	    if (n >= 1 << 2) {
-	        n >>= 2;
-	        bit += 2;
-	    }
-	
-	    if (n >= 1 << 1) {
-	        n >>= 1;
-	        bit += 1;
-	    }
-	
-	    return bit;
-	}
+    /**
+     * Find the highest bit in a positive integer. This is done
+     * by doing a binary search through the bits.
+     *
+     * @param n is the integer
+     *
+     * @return the bit number of the highest bit, with 0 being
+     * the low order bit, or -1 if <code>n</code> is not positive
+     */
+    public static final byte highBit(int n)
+    {
+        if (n <= 0) {
+            return -1;
+        }
+
+        byte bit = 0;
+
+        if (n >= 1 << 16) {
+            n >>= 16;
+            bit += 16;
+        }
+
+        if (n >= 1 << 8) {
+            n >>= 8;
+            bit += 8;
+        }
+
+        if (n >= 1 << 4) {
+            n >>= 4;
+            bit += 4;
+        }
+
+        if (n >= 1 << 2) {
+            n >>= 2;
+            bit += 2;
+        }
+
+        if (n >= 1 << 1) {
+            n >>= 1;
+            bit += 1;
+        }
+
+        return bit;
+    }
 }

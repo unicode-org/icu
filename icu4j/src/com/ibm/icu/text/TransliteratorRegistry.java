@@ -115,27 +115,29 @@ class TransliteratorRegistry {
             top = theSpec;
             spec = null;
             scriptName = null;
-
-            Locale toploc = LocaleUtility.getLocaleFromName(top);
-            res = ICULocaleData.getLocaleElements(toploc);
-            // Make sure we got the bundle we wanted; otherwise, don't use it
-            if (LocaleUtility.isFallbackOf(res.getLocale().toString(), top)) {
-                isSpecLocale = true;
-            } else {
-                isSpecLocale = false;
-                res = null;
-            }
-
-            // Canonicalize script name -or- do locale->script mapping
-            int[] s = UScript.getCode(top);
-            if (s != null) {
-                scriptName = UScript.getName(s[0]);
-                // If the script name is the same as top then it's redundant
-                if (scriptName.equalsIgnoreCase(top)) {
-                    scriptName = null;
+            try{
+                Locale toploc = LocaleUtility.getLocaleFromName(top);
+                res = ICULocaleData.getLocaleElements(toploc);
+                // Make sure we got the bundle we wanted; otherwise, don't use it
+                if (res!=null && LocaleUtility.isFallbackOf(res.getLocale().toString(), top)) {
+                    isSpecLocale = true;
+                } else {
+                    isSpecLocale = false;
+                    res = null;
                 }
-            }
 
+                // Canonicalize script name -or- do locale->script mapping
+                int[] s = UScript.getCode(top);
+                if (s != null) {
+                    scriptName = UScript.getName(s[0]);
+                    // If the script name is the same as top then it's redundant
+                    if (scriptName.equalsIgnoreCase(top)) {
+                        scriptName = null;
+                    }
+                }
+            }catch(MissingResourceException e){
+                scriptName = null;
+            }
             // assert(spec != top);
             reset();
         }
@@ -167,11 +169,11 @@ class TransliteratorRegistry {
                 }
             } else {
                 // Fallback to the script, which may be null
-				if (nextSpec != scriptName) {
-					nextSpec = scriptName;
-				} else {
-					nextSpec = null;
-				}
+                if (nextSpec != scriptName) {
+                    nextSpec = scriptName;
+                } else {
+                    nextSpec = null;
+                }
             }
         }
 
@@ -212,13 +214,13 @@ class TransliteratorRegistry {
         public String getTop() {
             return top;
         }
-	}
+    }
 
     //----------------------------------------------------------------------
     // Entry classes
     //----------------------------------------------------------------------
 
-	static class ResourceEntry {
+    static class ResourceEntry {
         public String resourceName;
         public String encoding;
         public int direction;
@@ -369,7 +371,7 @@ class TransliteratorRegistry {
         removeSTV(stv[0], stv[1], stv[2]);
         availableIDs.removeElement(new CaseInsensitiveString(id));
     }
-    
+
     //----------------------------------------------------------------------
     // class TransliteratorRegistry: Public ID and spec management
     //----------------------------------------------------------------------
@@ -695,9 +697,9 @@ class TransliteratorRegistry {
                     return new Object[] { new LocaleEntry(subres[i+1], dir) };
                 }
 
-            } catch (MissingResourceException e) { 
-				if (DEBUG) System.out.println("missing resource: " + e); 
-			}
+            } catch (MissingResourceException e) {
+                if (DEBUG) System.out.println("missing resource: " + e);
+            }
         }
 
         // If we get here we had a missing resource exception or we
@@ -848,7 +850,7 @@ class TransliteratorRegistry {
                     // This should never happen; UTF8 is always supported
                     throw new RuntimeException(e.getMessage());
                 }
-                
+
                 parser.parse(r, re.direction);
             } catch (ClassCastException e) {
                 // If we pull a rule from a locale resource bundle it will

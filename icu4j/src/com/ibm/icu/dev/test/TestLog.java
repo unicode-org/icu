@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/TestLog.java,v $
- * $Date: 2002/08/13 22:02:16 $
- * $Revision: 1.3 $
+ * $Date: 2003/01/28 18:55:32 $
+ * $Revision: 1.4 $
  *
  *******************************************************************************
  */
@@ -27,4 +27,11 @@ public interface TestLog {
     void err(String message);
 
     void errln(String message);
+
+    /**
+     * Add infomational line to log
+     */
+     void info(String message);
+
+     void infoln(String message);
 }

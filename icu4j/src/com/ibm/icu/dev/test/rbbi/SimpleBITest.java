@@ -4,9 +4,9 @@
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  *
- * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/rbbi/SimpleBITest.java,v $ 
- * $Date: 2002/02/16 03:05:16 $ 
- * $Revision: 1.6 $
+ * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/rbbi/SimpleBITest.java,v $
+ * $Date: 2003/01/28 18:55:34 $
+ * $Revision: 1.7 $
  *
  *****************************************************************************************
  */
@@ -100,21 +100,21 @@ public class SimpleBITest extends TestFmwk{
 + "statesmayofrightdo.Andforthesupportofthisdeclaration,withafirmrelianceontheprotectionofDivineProvidence,we"
 + "mutuallypledgetoeachotherourlives,ourfortunesandoursacredhonor.\n";
 
-	public static void main(String[] args) throws Exception {
-		new SimpleBITest().run(args);
-	}
+    public static void main(String[] args) throws Exception {
+        new SimpleBITest().run(args);
+    }
 
     public void testWordBreak() throws Exception {
-        BreakIterator wordBreak = BreakIterator.getWordInstance(new Locale("en", "US", "TEST"));
+        BreakIterator wordBreak =(BreakIterator) BreakIterator.getWordInstance(new Locale("en", "US", "TEST"));
         int breaks = doTest(wordBreak);
         logln(String.valueOf(breaks));
-	}
+    }
 
     public void testLineBreak() throws Exception {
         BreakIterator lineBreak = BreakIterator.getLineInstance(new Locale("en", "US", "TEST"));
         int breaks = doTest(lineBreak);
         logln(String.valueOf(breaks));
-	}
+    }
 
     public void testSentenceBreak() throws Exception {
         BreakIterator sentenceBreak = BreakIterator.getSentenceInstance(new Locale("en", "US", "TEST"));
@@ -136,7 +136,7 @@ public class SimpleBITest extends TestFmwk{
                 fragment = testText.substring(lastP, p);
             } else {
                 fragment = testText.substring(lastP);
-			}
+            }
             debugPrintln(": >" + fragment + "<");
             ++breaks;
             lastP = p;

@@ -160,10 +160,10 @@ import java.util.Set;
  * to format dates.
  *
  * <p><strong>Field manipulation methods</strong></p>
- * 
+ *
  * <p><code>Calendar</code> fields can be changed using three methods:
  * <code>set()</code>, <code>add()</code>, and <code>roll()</code>.</p>
- * 
+ *
  * <p><strong><code>set(f, value)</code></strong> changes field
  * <code>f</code> to <code>value</code>.  In addition, it sets an
  * internal member variable to indicate that field <code>f</code> has
@@ -178,7 +178,7 @@ import java.util.Set;
  * <code>get(f)</code> will not necessarily return <code>value</code>
  * after the fields have been recomputed. The specifics are determined by
  * the concrete calendar class.</p>
- * 
+ *
  * <p><em>Example</em>: Consider a <code>GregorianCalendar</code>
  * originally set to August 31, 1999. Calling <code>set(Calendar.MONTH,
  * Calendar.SEPTEMBER)</code> sets the calendar to September 31,
@@ -187,11 +187,11 @@ import java.util.Set;
  * call to <code>set(Calendar.DAY_OF_MONTH, 30)</code> before the call to
  * <code>getTime()</code> sets the calendar to September 30, 1999, since
  * no recomputation occurs after <code>set()</code> itself.</p>
- * 
+ *
  * <p><strong><code>add(f, delta)</code></strong> adds <code>delta</code>
  * to field <code>f</code>.  This is equivalent to calling <code>set(f,
  * get(f) + delta)</code> with two adjustments:</p>
- * 
+ *
  * <blockquote>
  *   <p><strong>Add rule 1</strong>. The value of field <code>f</code>
  *   after the call minus the value of field <code>f</code> before the
@@ -199,7 +199,7 @@ import java.util.Set;
  *   field <code>f</code>. Overflow occurs when a field value exceeds its
  *   range and, as a result, the next larger field is incremented or
  *   decremented and the field value is adjusted back into its range.</p>
- * 
+ *
  *   <p><strong>Add rule 2</strong>. If a smaller field is expected to be
  *   invariant, but &nbsp; it is impossible for it to be equal to its
  *   prior value because of changes in its minimum or maximum after field
@@ -210,11 +210,11 @@ import java.util.Set;
  *   that are not expected to be invariant. The calendar system
  *   determines what fields are expected to be invariant.</p>
  * </blockquote>
- * 
+ *
  * <p>In addition, unlike <code>set()</code>, <code>add()</code> forces
  * an immediate recomputation of the calendar's milliseconds and all
  * fields.</p>
- * 
+ *
  * <p><em>Example</em>: Consider a <code>GregorianCalendar</code>
  * originally set to August 31, 1999. Calling <code>add(Calendar.MONTH,
  * 13)</code> sets the calendar to September 30, 2000. <strong>Add rule
@@ -226,19 +226,19 @@ import java.util.Set;
  * it is a smaller field, <code>DAY_OF_WEEK</code> is not adjusted by
  * rule 2, since it is expected to change when the month changes in a
  * <code>GregorianCalendar</code>.</p>
- * 
+ *
  * <p><strong><code>roll(f, delta)</code></strong> adds
  * <code>delta</code> to field <code>f</code> without changing larger
  * fields. This is equivalent to calling <code>add(f, delta)</code> with
  * the following adjustment:</p>
- * 
+ *
  * <blockquote>
  *   <p><strong>Roll rule</strong>. Larger fields are unchanged after the
  *   call. A larger field represents a larger unit of
  *   time. <code>DAY_OF_MONTH</code> is a larger field than
  *   <code>HOUR</code>.</p>
  * </blockquote>
- * 
+ *
  * <p><em>Example</em>: Consider a <code>GregorianCalendar</code>
  * originally set to August 31, 1999. Calling <code>roll(Calendar.MONTH,
  * 8)</code> sets the calendar to April 30, <strong>1999</strong>.  Add
@@ -247,7 +247,7 @@ import java.util.Set;
  * be 31 in the month April. Add rule 2 sets it to the closest possible
  * value, 30. Finally, the <strong>roll rule</strong> maintains the
  * <code>YEAR</code> field value of 1999.</p>
- * 
+ *
  * <p><em>Example</em>: Consider a <code>GregorianCalendar</code>
  * originally set to Sunday June 6, 1999. Calling
  * <code>roll(Calendar.WEEK_OF_MONTH, -1)</code> sets the calendar to
@@ -261,7 +261,7 @@ import java.util.Set;
  * when changing the <code>WEEK_OF_MONTH</code>, is set to Tuesday, the
  * closest possible value to Sunday (where Sunday is the first day of the
  * week).</p>
- * 
+ *
  * <p><strong>Usage model</strong>. To motivate the behavior of
  * <code>add()</code> and <code>roll()</code>, consider a user interface
  * component with increment and decrement buttons for the month, day, and
@@ -285,7 +285,7 @@ import java.util.Set;
  * may give invalid results.
  *
  * <p><big><big><b>Calendar Architecture in ICU4J</b></big></big></p>
- * 
+ *
  * <p>Recently the implementation of <code>Calendar</code> has changed
  * significantly in order to better support subclassing. The original
  * <code>Calendar</code> class was designed to support subclassing, but
@@ -298,26 +298,26 @@ import java.util.Set;
  * ways in which <code>com.ibm.icu.util.Calendar</code> differs from
  * <code>java.util.Calendar</code>.
  * </p>
- * 
+ *
  * <p><big><b>Changes</b></big></p>
- * 
+ *
  * <p>Overview of changes between the classic <code>Calendar</code>
  * architecture and the new architecture.
- * 
+ *
  * <ul>
- * 
+ *
  *   <li>The <code>fields[]</code> array is <code>private</code> now
  *     instead of <code>protected</code>.  Subclasses must access it
  *     using the methods {@link #internalSet} and
  *     {@link #internalGet}.  <b>Motivation:</b> Subclasses should
  *     not directly access data members.</li>
- * 
+ *
  *   <li>The <code>time</code> long word is <code>private</code> now
  *     instead of <code>protected</code>.  Subclasses may access it using
  *     the method {@link #internalGetTimeInMillis}, which does not
  *     provoke an update. <b>Motivation:</b> Subclasses should not
  *     directly access data members.</li>
- * 
+ *
  *   <li>The scope of responsibility of subclasses has been drastically
  *     reduced. As much functionality as possible is implemented in the
  *     <code>Calendar</code> base class. As a result, it is much easier
@@ -327,9 +327,9 @@ import java.util.Set;
  *     week-related fields and time fields, the arithmetic
  *     ({@link #add(int, int) add} and {@link #roll(int, int) roll}) behavior of many
  *     fields, and the field validation system.</li>
- * 
+ *
  *   <li>The subclassing API has been completely redesigned.</li>
- * 
+ *
  *   <li>The <code>Calendar</code> base class contains some Gregorian
  *     calendar algorithmic support that subclasses can use (specifically
  *     in {@link #handleComputeFields}).  Subclasses can use the
@@ -338,13 +338,13 @@ import java.util.Set;
  *     <code>Calendar</code> subclasses in order to implement consistent
  *     time zone behavior, and Gregorian-derived systems can use the
  *     already computed data.</li>
- * 
+ *
  *   <li>The <code>FIELD_COUNT</code> constant has been removed. Use
  *     {@link #getFieldCount}.  In addition, framework API has been
  *     added to allow subclasses to define additional fields.
  *     <b>Motivation: </b>The number of fields is not constant across
  *     calendar systems.</li>
- * 
+ *
  *   <li>The range of handled dates has been narrowed from +/-
  *     ~300,000,000 years to +/- ~5,000,000 years. In practical terms
  *     this should not affect clients. However, it does mean that client
@@ -362,29 +362,29 @@ import java.util.Set;
  *     special case code that was used to accomodate arithmetic overflow
  *     at millis near <code>Long.MIN_VALUE</code> and
  *     <code>Long.MAX_VALUE</code>.</li>
- * 
+ *
  *   <li>New fields are implemented: {@link #JULIAN_DAY} defines
  *     single-field specification of the
  *     date. {@link #MILLISECONDS_IN_DAY} defines a single-field
  *     specification of the wall time. {@link #DOW_LOCAL} and
  *     {@link #YEAR_WOY} implement localized day-of-week and
  *     week-of-year behavior.</li>
- * 
+ *
  *   <li>Subclasses can access millisecond constants
  *     {@link #ONE_SECOND}, {@link #ONE_MINUTE},
  *     {@link #ONE_HOUR}, {@link #ONE_DAY}, and
  *     {@link #ONE_WEEK} defined in <code>Calendar</code>.</li>
- * 
+ *
  *   <li>New API has been added to suport calendar-specific subclasses
  *     of <code>DateFormat</code>.</li>
- * 
+ *
  *   <li>Several subclasses have been implemented, representing
  *     various international calendar systems.</li>
- * 
+ *
  * </ul>
- * 
+ *
  * <p><big><b>Subclass API</b></big></p>
- * 
+ *
  * <p>The original <code>Calendar</code> API was based on the experience
  * of implementing a only a single subclass,
  * <code>GregorianCalendar</code>. As a result, all of the subclassing
@@ -396,29 +396,29 @@ import java.util.Set;
  * these. Subclasses are able to allocate the <code>fields</code> array
  * through a protected framework method; this allows subclasses to
  * specify additional fields. </p>
- * 
+ *
  * <p>More functionality has been moved into the base class. The base
  * class now contains much of the computational machinery to support the
  * Gregorian calendar. This is based on two things: (1) Many calendars
  * are based on the Gregorian calendar (such as the Buddhist and Japanese
  * imperial calendars). (2) <em>All</em> calendars require basic
  * Gregorian support in order to handle timezone computations. </p>
- * 
+ *
  * <p>Common computations have been moved into
  * <code>Calendar</code>. Subclasses no longer compute the week related
  * fields and the time related fields. These are commonly handled for all
  * calendars by the base class. </p>
- * 
+ *
  * <p><b>Subclass computation of time <tt>=&gt;</tt> fields</b>
- * 
+ *
  * <p>The {@link #ERA}, {@link #YEAR},
  * {@link #EXTENDED_YEAR}, {@link #MONTH},
  * {@link #DAY_OF_MONTH}, and {@link #DAY_OF_YEAR} fields are
  * computed by the subclass, based on the Julian day. All other fields
  * are computed by <code>Calendar</code>.
- * 
+ *
  * <ul>
- * 
+ *
  *   <li>Subclasses should implement {@link #handleComputeFields}
  *     to compute the {@link #ERA}, {@link #YEAR},
  *     {@link #EXTENDED_YEAR}, {@link #MONTH},
@@ -433,11 +433,11 @@ import java.util.Set;
  *     calendar. Within this method, subclasses may call
  *     <code>getGregorianXxx()</code> to obtain the Gregorian calendar
  *     month, day of month, and extended year for the given date.</li>
- * 
+ *
  * </ul>
- * 
+ *
  * <p><b>Subclass computation of fields <tt>=&gt;</tt> time</b>
- * 
+ *
  * <p>The interpretation of most field values is handled entirely by
  * <code>Calendar</code>. <code>Calendar</code> determines which fields
  * are set, which are not, which are set more recently, and so on. In
@@ -446,39 +446,39 @@ import java.util.Set;
  * thing the subclass must do is determine the extended year, based on
  * the year fields, and then, given an extended year and a month, it must
  * return a Julian day number.
- * 
+ *
  * <ul>
- * 
+ *
  *   <li>Subclasses should implement {@link #handleGetExtendedYear}
  *     to return the extended year for this calendar system, based on the
  *     {@link #YEAR}, {@link #EXTENDED_YEAR}, and any fields that
  *     the calendar system uses that are larger than a year, such as
  *     {@link #ERA}.</li>
- * 
+ *
  *   <li>Subclasses should implement {@link #handleComputeMonthStart}
  *     to return the Julian day number
  *     associated with a month and extended year. This is the Julian day
  *     number of the day before the first day of the month. The month
  *     number is zero-based. This computation should not depend on any
  *     field values.</li>
- * 
+ *
  * </ul>
- * 
+ *
  * <p><b>Other methods</b>
- * 
+ *
  * <ul>
- * 
+ *
  *   <li>Subclasses should implement {@link #handleGetMonthLength}
  *     to return the number of days in a
  *     given month of a given extended year. The month number, as always,
  *     is zero-based.</li>
- * 
+ *
  *   <li>Subclasses should implement {@link #handleGetYearLength}
  *     to return the number of days in the given
  *     extended year. This method is used by
  *     <tt>computeWeekFields</tt> to compute the
  *     {@link #WEEK_OF_YEAR} and {@link #YEAR_WOY} fields.</li>
- * 
+ *
  *   <li>Subclasses should implement {@link #handleGetLimit}
  *     to return the {@link #MINIMUM},
  *     {@link #GREATEST_MINIMUM}, {@link #LEAST_MAXIMUM}, or
@@ -491,7 +491,7 @@ import java.util.Set;
  *     {@link #EXTENDED_YEAR}.  Other fields are invariant (with
  *     respect to calendar system) and are handled by the base
  *     class.</li>
- * 
+ *
  *   <li>Optionally, subclasses may override {@link #validateField}
  *     to check any subclass-specific fields. If the
  *     field's value is out of range, the method should throw an
@@ -499,7 +499,7 @@ import java.util.Set;
  *     <code>super.validateField(field)</code> to handle fields in a
  *     generic way, that is, to compare them to the range
  *     <code>getMinimum(field)</code>..<code>getMaximum(field)</code>.</li>
- * 
+ *
  *   <li>Optionally, subclasses may override
  *     {@link #handleCreateFields} to create an <code>int[]</code>
  *     array large enough to hold the calendar's fields. This is only
@@ -507,14 +507,14 @@ import java.util.Set;
  *     defined by <code>Calendar</code>. The length of the result must be
  *     at least {@link #BASE_FIELD_COUNT} and no more than
  *     {@link #MAX_FIELD_COUNT}.</li>
- * 
+ *
  *   <li>Optionally, subclasses may override
  *     {@link #handleGetDateFormat} to create a
  *     <code>DateFormat</code> appropriate to this calendar. This is only
  *     required if a calendar subclass redefines the use of a field (for
  *     example, changes the {@link #ERA} field from a symbolic field
  *     to a numeric one) or defines an additional field.</li>
- * 
+ *
  *   <li>Optionally, subclasses may override {@link #roll roll} and
  *     {@link #add add} to handle fields that are discontinuous. For
  *     example, in the Hebrew calendar the month &quot;Adar I&quot; only
@@ -526,16 +526,16 @@ import java.util.Set;
  *     (Adar) in a non-leap year. The protected utility method {@link
  *     #pinField pinField} is often useful when implementing these two
  *     methods. </li>
- * 
+ *
  * </ul>
- * 
+ *
  * <p><big><b>Normalized behavior</b></big>
- * 
+ *
  * <p>The behavior of certain fields has been made consistent across all
  * calendar systems and implemented in <code>Calendar</code>.
- * 
+ *
  * <ul>
- * 
+ *
  *   <li>Time is normalized. Even though some calendar systems transition
  *     between days at sunset or at other times, all ICU4J calendars
  *     transition between days at <em>local zone midnight</em>.  This
@@ -545,7 +545,7 @@ import java.util.Set;
  *     {@link #HOUR}, {@link #HOUR_OF_DAY}, {@link #MINUTE},
  *     {@link #SECOND}, {@link #MILLISECOND},
  *     {@link #ZONE_OFFSET}, and {@link #DST_OFFSET}.</li>
- * 
+ *
  *   <li>DST behavior is normalized. Daylight savings time behavior is
  *     computed the same for all calendar systems, and depends on the
  *     value of several <code>GregorianCalendar</code> fields: the
@@ -553,7 +553,7 @@ import java.util.Set;
  *     {@link #DAY_OF_MONTH}. As a result, <code>Calendar</code>
  *     always computes these fields, even for non-Gregorian calendar
  *     systems. These fields are available to subclasses.</li>
- * 
+ *
  *   <li>Weeks are normalized. Although locales define the week
  *     differently, in terms of the day on which it starts, and the
  *     designation of week number one of a month or year, they all use a
@@ -568,11 +568,11 @@ import java.util.Set;
  *     {@link #EXTENDED_YEAR}, {@link #DAY_OF_YEAR},
  *     {@link #MONTH}, and {@link #DAY_OF_MONTH}, which are
  *     computed by the subclass.</li>
- * 
+ *
  * </ul>
- * 
+ *
  * <p><big><b>Supported range</b></big>
- * 
+ *
  * <p>The allowable range of <code>Calendar</code> has been
  * narrowed. <code>GregorianCalendar</code> used to attempt to support
  * the range of dates with millisecond values from
@@ -588,11 +588,11 @@ import java.util.Set;
  * {@link #MAX_DATE} (or {@link #MAX_MILLIS} or
  * {@link #MAX_JULIAN}) in <code>Calendar</code> to specify an
  * extremely early or extremely late date.</p>
- * 
+ *
  * <p><big><b>General notes</b></big>
- * 
+ *
  * <ul>
- * 
+ *
  *   <li>Calendars implementations are <em>proleptic</em>. For example,
  *     even though the Gregorian calendar was not instituted until the
  *     16th century, the <code>GregorianCalendar</code> class supports
@@ -606,7 +606,7 @@ import java.util.Set;
  *     {@link #YEAR}, {@link #ERA}, etc. fields. Then, if the
  *     calendar is set to not be lenient, out-of-range field values will
  *     trigger an exception.</li>
- * 
+ *
  *   <li>Calendar system subclasses compute a <em>extended
  *     year</em>. This differs from the {@link #YEAR} field in that
  *     it ranges over all integer values, including zero and negative
@@ -620,7 +620,7 @@ import java.util.Set;
  *     + 20 * BAKTUN)</code>. The <code>Calendar</code> base class uses
  *     the {@link #EXTENDED_YEAR} field to compute the week-related
  *     fields.</li>
- * 
+ *
  * </ul>
  *
  * @see          Date
@@ -935,7 +935,7 @@ public abstract class Calendar implements Serializable, Cloneable {
      * @stable ICU 2.0
      */
     public static final int MILLISECONDS_IN_DAY = 21;
-    
+
     /**
      * The number of fields defined by this class.  Subclasses may define
      * addition fields starting with this number.
@@ -1423,7 +1423,7 @@ public abstract class Calendar implements Serializable, Cloneable {
     //     areFieldsSet, and isTimeSet become transient, and isSet[] is
     //     removed. In JDK 1.1.6 we write a format compatible with version 2.
     // static final int        currentSerialVersion = 1;
-    
+
     /**
      * The version of the serialized data on the stream.  Possible values:
      * <dl>
@@ -1666,7 +1666,7 @@ public abstract class Calendar implements Serializable, Cloneable {
     /**
      * Registers a default CalendarFactory for the provided locale.
      * If the factory has not already been registered with
-     * registerFactory, it will be.  
+     * registerFactory, it will be.
      * @prototype
      */
     /* public */ static Object register(CalendarFactory factory, Locale locale, boolean visible) {
@@ -1680,12 +1680,12 @@ public abstract class Calendar implements Serializable, Cloneable {
     }
 
     /**
-     * Unregister the CalendarFactory associated with this key 
+     * Unregister the CalendarFactory associated with this key
      * (obtained from register).
      * @prototype
      */
     /* public */ static boolean unregister(Object registryKey) {
-        return service == null 
+        return service == null
             ? false
             : service.unregisterFactory((Factory)registryKey);
     }
@@ -1728,7 +1728,7 @@ public abstract class Calendar implements Serializable, Cloneable {
      * Note: Calling <code>setTime()</code> with
      * <code>Date(Long.MAX_VALUE)</code> or <code>Date(Long.MIN_VALUE)</code>
      * may yield incorrect field values from <code>get()</code>.
-     * @param date the given Date.  
+     * @param date the given Date.
      * @stable ICU 2.0
      */
     public final void setTime(Date date) {
@@ -1786,7 +1786,7 @@ public abstract class Calendar implements Serializable, Cloneable {
     {
         return fields[field];
     }
- 
+
     /**
      * Get the value for a given time field, or return the given default
      * value if the field is not set.  This is an internal method for
@@ -1960,7 +1960,7 @@ public abstract class Calendar implements Serializable, Cloneable {
      * the equals() method to return true, the other Calendar must
      * be set to the same time.
      *
-     * @param other the Calendar to be compared with this Calendar   
+     * @param other the Calendar to be compared with this Calendar
      * @draft ICU 2.4
      */
     public boolean isEquivalentTo(Calendar other) {
@@ -1973,7 +1973,7 @@ public abstract class Calendar implements Serializable, Cloneable {
 
     /**
      * Returns a hash code for this calendar.
-     * @return a hash code value for this object. 
+     * @return a hash code value for this object.
      * @stable ICU 2.0
      */
     public int hashCode() {
@@ -2045,7 +2045,7 @@ public abstract class Calendar implements Serializable, Cloneable {
      * DAY_OF_WEEK; it returns the maximum for any day of week in the
      * current month.  Likewise for the WEEK_OF_MONTH and WEEK_OF_YEAR
      * fields.
-     * 
+     *
      * @param field the field whose maximum is desired
      * @return the maximum of the given field for the current date of this calendar
      * @see #getMaximum
@@ -2054,7 +2054,7 @@ public abstract class Calendar implements Serializable, Cloneable {
      */
     public int getActualMaximum(int field) {
         int result;
-        
+
         switch (field) {
         case DAY_OF_MONTH:
             {
@@ -2095,7 +2095,7 @@ public abstract class Calendar implements Serializable, Cloneable {
         }
         return result;
     }
-    
+
     /**
      * Return the minimum value that this field could have, given the current date.
      * For most fields, this is the same as {@link #getMinimum getMinimum}
@@ -2108,7 +2108,7 @@ public abstract class Calendar implements Serializable, Cloneable {
      * there will be four or more days in the first week, so it will be week number 1,
      * and <code>getActualMinimum(WEEK_OF_MONTH)</code> will return 1.  However,
      * if the first of the month is a Thursday, Friday, or Saturday, there are
-     * <em>not</em> four days in that week, so it is week number 0, and 
+     * <em>not</em> four days in that week, so it is week number 0, and
      * <code>getActualMinimum(WEEK_OF_MONTH)</code> will return 0.
      * <p>
      * @param field the field whose actual minimum value is desired.
@@ -2120,7 +2120,7 @@ public abstract class Calendar implements Serializable, Cloneable {
      */
     public int getActualMinimum(int field) {
         int result;
-        
+
         switch (field) {
         case DAY_OF_WEEK:
         case AM_PM:
@@ -2137,7 +2137,7 @@ public abstract class Calendar implements Serializable, Cloneable {
             // These fields all have fixed minima/maxima
             result = getMinimum(field);
             break;
-            
+
         default:
             // For all other fields, do it the hard way....
             result = getActualHelper(field, getGreatestMinimum(field), getMinimum(field));
@@ -2176,7 +2176,7 @@ public abstract class Calendar implements Serializable, Cloneable {
         case EXTENDED_YEAR:
             set(DAY_OF_YEAR, getGreatestMinimum(DAY_OF_YEAR));
             break;
-                
+
         case MONTH:
             set(DAY_OF_MONTH, getGreatestMinimum(DAY_OF_MONTH));
             break;
@@ -2187,7 +2187,7 @@ public abstract class Calendar implements Serializable, Cloneable {
             set(DAY_OF_MONTH, 1);
             set(DAY_OF_WEEK, get(DAY_OF_WEEK)); // Make this user set
             break;
-                
+
         case WEEK_OF_MONTH:
         case WEEK_OF_YEAR:
             // If we're counting weeks, set the day of the week to either the
@@ -2216,7 +2216,7 @@ public abstract class Calendar implements Serializable, Cloneable {
         if (startValue == endValue) {
             // if we know that the maximum value is always the same, just return it
             return startValue;
-        } 
+        }
 
         final int delta = (endValue > startValue) ? 1 : -1;
 
@@ -2225,7 +2225,7 @@ public abstract class Calendar implements Serializable, Cloneable {
         Calendar work = (Calendar) clone();
         work.setLenient(true);
         work.prepareGetActual(field, delta < 0);
-        
+
         // now try each value from the start to the end one by one until
         // we get a value that normalizes to another value.  The last value that
         // normalizes to itself is the actual maximum for the current date
@@ -2242,7 +2242,7 @@ public abstract class Calendar implements Serializable, Cloneable {
 
         return result;
     }
-    
+
     /**
      * Rolls (up/down) a single unit of time on the given field.  If the
      * field is rolled past its maximum allowable value, it will "wrap" back
@@ -2299,7 +2299,7 @@ public abstract class Calendar implements Serializable, Cloneable {
      * example, to roll the current date up by three days, you can call
      * <code>roll(Calendar.DATE, 3)</code>.  If the
      * field is rolled past its maximum allowable value, it will "wrap" back
-     * to its minimum and continue rolling.  
+     * to its minimum and continue rolling.
      * For example, calling <code>roll(Calendar.DATE, 10)</code>
      * on a Gregorian calendar set to 4/25/96 will result in the date 4/5/96.
      * <p>
@@ -2336,7 +2336,7 @@ public abstract class Calendar implements Serializable, Cloneable {
      * down must overide <code>roll</code> to handle those fields specially.
      * For example, in the Hebrew calendar the month "Adar I"
      * only occurs in leap years; in other years the calendar jumps from
-     * Shevat (month #4) to Adar (month #6).  The 
+     * Shevat (month #4) to Adar (month #6).  The
      * {@link HebrewCalendar#roll HebrewCalendar.roll} method takes this into account,
      * so that rolling the month of Shevat by one gives the proper result (Adar) in a
      * non-leap year.
@@ -2415,12 +2415,12 @@ public abstract class Calendar implements Serializable, Cloneable {
             {
                 int max = getActualMaximum(MONTH);
                 int mon = (internalGet(MONTH) + amount) % (max+1);
-                
+
                 if (mon < 0) {
                     mon += (max + 1);
                 }
                 set(MONTH, mon);
-                
+
                 // Keep the day of month in range.  We don't want to spill over
                 // into the next month; e.g., we don't want jan31 + 1 mo -> feb31 ->
                 // mar3.
@@ -2636,11 +2636,11 @@ public abstract class Calendar implements Serializable, Cloneable {
                                                ") not supported");
         }
     }
-    
+
     /**
      * Add a signed amount to a specified field, using this calendar's rules.
      * For example, to add three days to the current date, you can call
-     * <code>add(Calendar.DATE, 3)</code>. 
+     * <code>add(Calendar.DATE, 3)</code>.
      * <p>
      * When adding to certain fields, the values of other fields may conflict and
      * need to be changed.  For example, when adding one to the {@link #MONTH MONTH} field
@@ -2673,7 +2673,7 @@ public abstract class Calendar implements Serializable, Cloneable {
      * down must overide <code>add</code> to handle those fields specially.
      * For example, in the Hebrew calendar the month "Adar I"
      * only occurs in leap years; in other years the calendar jumps from
-     * Shevat (month #4) to Adar (month #6).  The 
+     * Shevat (month #4) to Adar (month #6).  The
      * {@link HebrewCalendar#add HebrewCalendar.add} method takes this into account,
      * so that adding one month
      * to a date in Shevat gives the proper result (Adar) in a non-leap year.
@@ -2699,7 +2699,7 @@ public abstract class Calendar implements Serializable, Cloneable {
         // result of the add operation is to move from DST to Standard, or
         // vice versa, we need to adjust by an hour forward or back,
         // respectively.  For such fields we set keepHourInvariant to true.
-        
+
         // We only adjust the DST for fields larger than an hour.  For
         // fields smaller than an hour, we cannot adjust for DST without
         // causing problems.  for instance, if you add one hour to April 5,
@@ -2728,7 +2728,7 @@ public abstract class Calendar implements Serializable, Cloneable {
             set(field, get(field) + amount);
             pinField(DAY_OF_MONTH);
             return;
-            
+
         case WEEK_OF_YEAR:
         case WEEK_OF_MONTH:
         case DAY_OF_WEEK_IN_MONTH:
@@ -2791,7 +2791,7 @@ public abstract class Calendar implements Serializable, Cloneable {
             }
         }
     }
-    
+
     /**
      * Return the name of this calendar in the language of the given locale.
      * @stable ICU 2.0
@@ -2799,7 +2799,7 @@ public abstract class Calendar implements Serializable, Cloneable {
     public String getDisplayName(Locale loc) {
         return this.getClass().getName();
     }
-    
+
     //-------------------------------------------------------------------------
     // Interface for creating custon DateFormats for different types of Calendars
     //-------------------------------------------------------------------------
@@ -2830,7 +2830,7 @@ public abstract class Calendar implements Serializable, Cloneable {
         DateFormatSymbols symbols = new DateFormatSymbols(this, locale);
         return new SimpleDateFormat(pattern, symbols);
     }
-    
+
     static private DateFormat formatHelper(Calendar cal, Locale loc,
                                             int dateStyle, int timeStyle)
     {
@@ -2878,7 +2878,7 @@ public abstract class Calendar implements Serializable, Cloneable {
     // Protected utility methods for use by subclasses.  These are very handy
     // for implementing add, roll, and computeFields.
     //-------------------------------------------------------------------------
-    
+
     /**
      * Adjust the specified field so that it is within
      * the allowable range for the date to which this calendar is set.
@@ -2909,7 +2909,7 @@ public abstract class Calendar implements Serializable, Cloneable {
     protected void pinField(int field) {
         int max = getActualMaximum(field);
         int min = getActualMinimum(field);
-        
+
         if (fields[field] > max) {
             set(field, max);
         } else if (fields[field] < min) {
@@ -2921,10 +2921,10 @@ public abstract class Calendar implements Serializable, Cloneable {
      * Return the week number of a day, within a period. This may be the week number in
      * a year or the week number in a month. Usually this will be a value >= 1, but if
      * some initial days of the period are excluded from week 1, because
-     * {@link #getMinimalDaysInFirstWeek getMinimalDaysInFirstWeek} is > 1, then 
+     * {@link #getMinimalDaysInFirstWeek getMinimalDaysInFirstWeek} is > 1, then
      * the week number will be zero for those
      * initial days. This method requires the day number and day of week for some
-     * known date in the period in order to determine the day of week 
+     * known date in the period in order to determine the day of week
      * on the desired day.
      * <p>
      * <b>Subclassing:</b>
@@ -2986,7 +2986,7 @@ public abstract class Calendar implements Serializable, Cloneable {
      * some initial days of the period are excluded from week 1, because
      * {@link #getMinimalDaysInFirstWeek getMinimalDaysInFirstWeek} is > 1,
      * then the week number will be zero for those
-     * initial days. This method requires the day of week for the given date in order to 
+     * initial days. This method requires the day of week for the given date in order to
      * determine the result.
      * <p>
      * <b>Subclassing:</b>
@@ -3018,7 +3018,7 @@ public abstract class Calendar implements Serializable, Cloneable {
     //-------------------------------------------------------------------------
     // Constants
     //-------------------------------------------------------------------------
-    
+
     /**
      * [NEW]
      * Return the difference between the given time and the time this
@@ -3466,7 +3466,7 @@ public abstract class Calendar implements Serializable, Cloneable {
             if (dayOfWeek > weekendCease && dayOfWeek < weekendOnset) {
                 return WEEKDAY;
             }
-        } 
+        }
         if (dayOfWeek == weekendOnset) {
             return (weekendOnsetMillis == 0) ? WEEKEND : WEEKEND_ONSET;
         }
@@ -3600,11 +3600,11 @@ public abstract class Calendar implements Serializable, Cloneable {
     }
 
     /**
-     * Return a string representation of this calendar. This method 
-     * is intended to be used only for debugging purposes, and the 
-     * format of the returned string may vary between implementations. 
+     * Return a string representation of this calendar. This method
+     * is intended to be used only for debugging purposes, and the
+     * format of the returned string may vary between implementations.
      * The returned string may be empty but may not be <code>null</code>.
-     * 
+     *
      * @return  a string representation of this calendar.
      * @stable ICU 2.0
      */
@@ -3645,10 +3645,10 @@ public abstract class Calendar implements Serializable, Cloneable {
     {
     /* try to get the Locale data from the cache */
     int[] data = (int[]) cachedLocaleData.get(desiredLocale);
+
     if (data == null) {  /* cache miss */
         ResourceBundle resource = ICULocaleData.getLocaleElements(desiredLocale);
-        String[] dateTimePatterns =
-        resource.getStringArray("DateTimeElements");
+        String[] dateTimePatterns =  resource.getStringArray("DateTimeElements");
         data = new int[2];
         data[0] = Integer.parseInt(dateTimePatterns[0]);
         data[1] = Integer.parseInt(dateTimePatterns[1]);
@@ -3707,7 +3707,7 @@ public abstract class Calendar implements Serializable, Cloneable {
      */
     private void readObject(ObjectInputStream stream)
         throws IOException, ClassNotFoundException {
-        
+
         stream.defaultReadObject();
 
         initInternal();
@@ -3843,7 +3843,7 @@ public abstract class Calendar implements Serializable, Cloneable {
         }
         fields[DOW_LOCAL] = dowLocal;
     }
-    
+
     /**
      * Compute the Gregorian calendar year, month, and day of month from the
      * Julian day.  These values are not stored in fields, but in member
@@ -4094,7 +4094,7 @@ public abstract class Calendar implements Serializable, Cloneable {
     protected final int getStamp(int field) {
         return stamp[field];
     }
-    
+
     /**
      * Return the field that is newer, either defaultField, or
      * alternateField.  If neither is newer or neither is set, return defaultField.
@@ -4181,7 +4181,7 @@ public abstract class Calendar implements Serializable, Cloneable {
             validateFields();
         }
 
-        // Compute the Julian day 
+        // Compute the Julian day
         int julianDay = computeJulianDay();
 
         long millis = julianDayToMillis(julianDay);
@@ -4450,7 +4450,7 @@ public abstract class Calendar implements Serializable, Cloneable {
         if (first < 0) {
             first += 7;
         }
-        
+
         // Get zero-based localized DOW, valid range 0..6.  This is the DOW
         // we are looking for.
         int dowLocal = 0;
@@ -4484,7 +4484,7 @@ public abstract class Calendar implements Serializable, Cloneable {
             int dim = internalGet(DAY_OF_WEEK_IN_MONTH, 1);
             if (dim >= 0) {
                 date += 7*(dim - 1);
-                
+
             } else {
                 // Move date to the last of this day-of-week in this month,
                 // then back up as needed.  If dim==-1, we don't back up at
@@ -4565,7 +4565,7 @@ public abstract class Calendar implements Serializable, Cloneable {
      * <li>DAY_OF_MONTH
      * <li>DAY_OF_YEAR
      * <li>EXTENDED_YEAR</ul>
-     * 
+     *
      * Subclasses can refer to the DAY_OF_WEEK and DOW_LOCAL fields, which
      * will be set when this method is called.  Subclasses can also call
      * the getGregorianXxx() methods to obtain Gregorian calendar
@@ -4779,7 +4779,7 @@ public abstract class Calendar implements Serializable, Cloneable {
             remainder[0] = numerator % denominator;
             return numerator / denominator;
         }
-	int quotient = ((numerator + 1) / denominator) - 1;
+    int quotient = ((numerator + 1) / denominator) - 1;
         remainder[0] = numerator - (quotient * denominator);
         return quotient;
     }

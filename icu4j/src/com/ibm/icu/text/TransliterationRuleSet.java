@@ -5,15 +5,15 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/TransliterationRuleSet.java,v $
- * $Date: 2002/06/28 19:15:53 $
- * $Revision: 1.25 $
+ * $Date: 2003/01/28 18:55:42 $
+ * $Revision: 1.26 $
  *
  *****************************************************************************************
  */
 package com.ibm.icu.text;
 
 import java.util.*;
-import com.ibm.icu.impl.Utility;
+import com.ibm.icu.impl.UtilityExtensions;
 
 /**
  * A set of rules for a <code>RuleBasedTransliterator</code>.  This set encodes
@@ -28,7 +28,7 @@ import com.ibm.icu.impl.Utility;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: TransliterationRuleSet.java,v $ $Revision: 1.25 $ $Date: 2002/06/28 19:15:53 $
+ * @version $RCSfile: TransliterationRuleSet.java,v $ $Revision: 1.26 $ $Date: 2003/01/28 18:55:42 $
  */
 class TransliterationRuleSet {
     /**
@@ -204,14 +204,14 @@ class TransliterationRuleSet {
                 if (Transliterator.DEBUG) {
                     System.out.println((incremental ? "Rule.i: match ":"Rule: match ") +
                                        rules[i].toRule(true) + " => " +
-                                       Utility.formatInput(text, pos));
+                                       UtilityExtensions.formatInput(text, pos));
                 }
                 return true;
             case UnicodeMatcher.U_PARTIAL_MATCH:
                 if (Transliterator.DEBUG) {
                     System.out.println((incremental ? "Rule.i: partial match ":"Rule: partial match ") +
                                        rules[i].toRule(true) + " => " +
-                                       Utility.formatInput(text, pos));
+                                       UtilityExtensions.formatInput(text, pos));
                 }
                 return false;
             }
@@ -220,7 +220,7 @@ class TransliterationRuleSet {
         pos.start += UTF16.getCharCount(text.char32At(pos.start));
         if (Transliterator.DEBUG) {
             System.out.println((incremental ? "Rule.i: no match => ":"Rule: no match => ") +
-                               Utility.formatInput(text, pos));
+                               UtilityExtensions.formatInput(text, pos));
         }
         return true;
     }
@@ -254,9 +254,9 @@ class TransliterationRuleSet {
             TransliterationRule r =
                 (TransliterationRule) ruleVector.elementAt(i);
             if (getTarget) {
-            	r.addTargetSetTo(set);
+                r.addTargetSetTo(set);
             } else {
-	            r.addSourceSetTo(set);
+                r.addSourceSetTo(set);
             }
         }
         return set;
@@ -264,9 +264,12 @@ class TransliterationRuleSet {
 }
 
 /* $Log: TransliterationRuleSet.java,v $
- * Revision 1.25  2002/06/28 19:15:53  alan
- * jitterbug 1434: improve method names; minor cleanup
+ * Revision 1.26  2003/01/28 18:55:42  rviswanadha
+ * jitterbug 2309: Modularize ICU4J big bang commit
  *
+/* Revision 1.25  2002/06/28 19:15:53  alan
+/* jitterbug 1434: improve method names; minor cleanup
+/*
 /* Revision 1.24  2002/06/26 18:12:40  alan
 /* jitterbug 1434: initial public implementation of getSourceSet and getTargetSet
 /*

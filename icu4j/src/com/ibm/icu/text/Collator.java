@@ -4,9 +4,9 @@
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
-* $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/Collator.java,v $ 
-* $Date: 2002/12/11 23:36:58 $ 
-* $Revision: 1.19 $
+* $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/Collator.java,v $
+* $Date: 2003/01/28 18:55:41 $
+* $Revision: 1.20 $
 *
 *******************************************************************************
 */
@@ -26,64 +26,64 @@ import com.ibm.icu.impl.ICUService.Factory;
 * <p>Collator performs locale-sensitive string comparison. A concrete
 * subclass, RuleBasedCollator, allows customization of the collation
 * ordering by the use of rule sets.</p>
-* 
+*
 * <p>Following the <a href=http://www.unicode.org>Unicode
-* Consortium</a>'s specifications for the 
+* Consortium</a>'s specifications for the
 * <a href="http://www.unicode.org/unicode/reports/tr10/"> Unicode Collation
 * Algorithm (UCA)</a>, there are 5 different levels of strength used
 * in comparisons:
 *
 * <ul>
-* <li>PRIMARY strength: Typically, this is used to denote differences between 
-*     base characters (for example, "a" &lt; "b"). 
-*     It is the strongest difference. For example, dictionaries are divided 
-*     into different sections by base character. 
-* <li>SECONDARY strength: Accents in the characters are considered secondary 
-*     differences (for example, "as" &lt; "&agrave;s" &lt; "at"). Other 
-*     differences 
-*     between letters can also be considered secondary differences, depending 
-*     on the language. A secondary difference is ignored when there is a 
+* <li>PRIMARY strength: Typically, this is used to denote differences between
+*     base characters (for example, "a" &lt; "b").
+*     It is the strongest difference. For example, dictionaries are divided
+*     into different sections by base character.
+* <li>SECONDARY strength: Accents in the characters are considered secondary
+*     differences (for example, "as" &lt; "&agrave;s" &lt; "at"). Other
+*     differences
+*     between letters can also be considered secondary differences, depending
+*     on the language. A secondary difference is ignored when there is a
 *     primary difference anywhere in the strings.
-* <li>TERTIARY strength: Upper and lower case differences in characters are 
-*     distinguished at tertiary strength (for example, "ao" &lt; "Ao" &lt; 
-*     "a&ograve;"). In addition, a variant of a letter differs from the base 
-*     form on the tertiary strength (such as "A" and "&#9398;"). Another 
-*     example is the 
-*     difference between large and small Kana. A tertiary difference is ignored 
-*     when there is a primary or secondary difference anywhere in the strings. 
-* <li>QUATERNARY strength: When punctuation is ignored 
+* <li>TERTIARY strength: Upper and lower case differences in characters are
+*     distinguished at tertiary strength (for example, "ao" &lt; "Ao" &lt;
+*     "a&ograve;"). In addition, a variant of a letter differs from the base
+*     form on the tertiary strength (such as "A" and "&#9398;"). Another
+*     example is the
+*     difference between large and small Kana. A tertiary difference is ignored
+*     when there is a primary or secondary difference anywhere in the strings.
+* <li>QUATERNARY strength: When punctuation is ignored
 *     <a href=http://www-124.ibm.com/icu/userguide/Collate_Concepts.html#Ignoring_Punctuation>
-*     (see Ignoring Punctuations in the user guide)</a> at PRIMARY to TERTIARY 
-*     strength, an additional strength level can 
-*     be used to distinguish words with and without punctuation (for example, 
-*     "ab" &lt; "a-b" &lt; "aB"). 
-*     This difference is ignored when there is a PRIMARY, SECONDARY or TERTIARY 
-*     difference. The QUATERNARY strength should only be used if ignoring 
-*     punctuation is required. 
+*     (see Ignoring Punctuations in the user guide)</a> at PRIMARY to TERTIARY
+*     strength, an additional strength level can
+*     be used to distinguish words with and without punctuation (for example,
+*     "ab" &lt; "a-b" &lt; "aB").
+*     This difference is ignored when there is a PRIMARY, SECONDARY or TERTIARY
+*     difference. The QUATERNARY strength should only be used if ignoring
+*     punctuation is required.
 * <li>IDENTICAL strength:
-*     When all other strengths are equal, the IDENTICAL strength is used as a 
-*     tiebreaker. The Unicode code point values of the NFD form of each string 
-*     are compared, just in case there is no difference. 
-*     For example, Hebrew cantellation marks are only distinguished at this 
-*     strength. This strength should be used sparingly, as only code point 
-*     value differences between two strings is an extremely rare occurrence. 
-*     Using this strength substantially decreases the performance for both 
-*     comparison and collation key generation APIs. This strength also 
+*     When all other strengths are equal, the IDENTICAL strength is used as a
+*     tiebreaker. The Unicode code point values of the NFD form of each string
+*     are compared, just in case there is no difference.
+*     For example, Hebrew cantellation marks are only distinguished at this
+*     strength. This strength should be used sparingly, as only code point
+*     value differences between two strings is an extremely rare occurrence.
+*     Using this strength substantially decreases the performance for both
+*     comparison and collation key generation APIs. This strength also
 *     increases the size of the collation key.
 * </ul>
 *
-* Unlike the JDK, ICU4J's Collator deals only with 2 decomposition modes, 
+* Unlike the JDK, ICU4J's Collator deals only with 2 decomposition modes,
 * the canonical decomposition mode and one that does not use any decomposition.
 * The compatibility decomposition mode, java.text.Collator.FULL_DECOMPOSITION
 * is not supported here. If the canonical
-* decomposition mode is set, the Collator handles un-normalized text properly, 
-* producing the same results as if the text were normalized in NFD. If 
-* canonical decomposition is turned off, it is the user's responsibility to 
+* decomposition mode is set, the Collator handles un-normalized text properly,
+* producing the same results as if the text were normalized in NFD. If
+* canonical decomposition is turned off, it is the user's responsibility to
 * ensure that all text is already in the appropriate form before performing
 * a comparison or before getting a CollationKey.</p>
 *
-* <p>For more information about the collation service see the 
-* <a href="http://oss.software.ibm.com/icu/userguide/Collate_Intro.html">users 
+* <p>For more information about the collation service see the
+* <a href="http://oss.software.ibm.com/icu/userguide/Collate_Intro.html">users
 * guide</a>.</p>
 *
 * <p>Examples of use
@@ -94,7 +94,7 @@ import com.ibm.icu.impl.ICUService.Factory;
 * if (usCollator.compare("abc", "ABC") == 0) {
 *     System.out.println("Strings are equivalent");
 * }
-* 
+*
 * The following example shows how to compare two strings using the
 * Collator for the default locale.
 *
@@ -119,14 +119,14 @@ import com.ibm.icu.impl.ICUService.Factory;
 * @see RuleBasedCollator
 * @see CollationKey
 * @author Syn Wee Quek
-* @draft ICU 2.2 
+* @draft ICU 2.2
 */
 public abstract class Collator implements Comparator, Cloneable
-{     
+{
     // public data members ---------------------------------------------------
-        
+
     /**
-     * Strongest collator strength value. Typically used to denote differences 
+     * Strongest collator strength value. Typically used to denote differences
      * between base characters. See class documentation for more explanation.
      * @see #setStrength
      * @see #getStrength
@@ -135,10 +135,10 @@ public abstract class Collator implements Comparator, Cloneable
     public final static int PRIMARY = 0;
 
     /**
-     * Second level collator strength value. 
+     * Second level collator strength value.
      * Accents in the characters are considered secondary differences.
-     * Other differences between letters can also be considered secondary 
-     * differences, depending on the language. 
+     * Other differences between letters can also be considered secondary
+     * differences, depending on the language.
      * See class documentation for more explanation.
      * @see #setStrength
      * @see #getStrength
@@ -147,23 +147,23 @@ public abstract class Collator implements Comparator, Cloneable
     public final static int SECONDARY = 1;
 
     /**
-     * Third level collator strength value. 
+     * Third level collator strength value.
      * Upper and lower case differences in characters are distinguished at this
-     * strength level. In addition, a variant of a letter differs from the base 
+     * strength level. In addition, a variant of a letter differs from the base
      * form on the tertiary level.
      * See class documentation for more explanation.
      * @see #setStrength
      * @see #getStrength
      * @draft ICU 2.2
      */
-    public final static int TERTIARY = 2;                            
+    public final static int TERTIARY = 2;
 
     /**
-     * Fourth level collator strength value. 
-     * When punctuation is ignored 
+     * Fourth level collator strength value.
+     * When punctuation is ignored
      * <a href="http://www-124.ibm.com/icu/userguide/Collate_Concepts.html#Ignoring_Punctuation">
-     * (see Ignoring Punctuations in the user guide)</a> at PRIMARY to TERTIARY 
-     * strength, an additional strength level can 
+     * (see Ignoring Punctuations in the user guide)</a> at PRIMARY to TERTIARY
+     * strength, an additional strength level can
      * be used to distinguish words with and without punctuation.
      * See class documentation for more explanation.
      * @see #setStrength
@@ -174,10 +174,10 @@ public abstract class Collator implements Comparator, Cloneable
 
     /**
      * <p>
-     * Smallest Collator strength value. When all other strengths are equal, 
-     * the IDENTICAL strength is used as a tiebreaker. The Unicode code point 
-     * values of the NFD form of each string are compared, just in case there 
-     * is no difference. 
+     * Smallest Collator strength value. When all other strengths are equal,
+     * the IDENTICAL strength is used as a tiebreaker. The Unicode code point
+     * values of the NFD form of each string are compared, just in case there
+     * is no difference.
      * See class documentation for more explanation.
      * </p>
      * <p>
@@ -197,7 +197,7 @@ public abstract class Collator implements Comparator, Cloneable
      * @see #CANONICAL_DECOMPOSITION
      * @see #getDecomposition
      * @see #setDecomposition
-     * @draft ICU 2.2 
+     * @draft ICU 2.2
      */
     public final static int NO_DECOMPOSITION = 16;
 
@@ -213,20 +213,20 @@ public abstract class Collator implements Comparator, Cloneable
      * @see #NO_DECOMPOSITION
      * @see #getDecomposition
      * @see #setDecomposition
-     * @draft ICU 2.2 
+     * @draft ICU 2.2
      */
     public final static int CANONICAL_DECOMPOSITION = 17;
-    
+
     // public methods --------------------------------------------------------
-    
+
     // public setters --------------------------------------------------------
-    
+
     /**
-     * <p>Sets this Collator's strength property. The strength property 
-     * determines the minimum level of difference considered significant 
+     * <p>Sets this Collator's strength property. The strength property
+     * determines the minimum level of difference considered significant
      * during comparison.</p>
-     * 
-     * <p>The default strength for the Collator is TERTIARY, unless specified 
+     *
+     * <p>The default strength for the Collator is TERTIARY, unless specified
      * otherwise by the locale used to create the Collator.</p>
      *
      * <p>See the Collator class description for an example of use.</p>
@@ -237,11 +237,11 @@ public abstract class Collator implements Comparator, Cloneable
      * @see #TERTIARY
      * @see #QUATERNARY
      * @see #IDENTICAL
-     * @exception IllegalArgumentException if the new strength value is not one 
+     * @exception IllegalArgumentException if the new strength value is not one
      *                of PRIMARY, SECONDARY, TERTIARY, QUATERNARY or IDENTICAL.
      * @draft ICU 2.2
      */
-    public void setStrength(int newStrength) 
+    public void setStrength(int newStrength)
     {
         if ((newStrength != PRIMARY) &&
             (newStrength != SECONDARY) &&
@@ -252,7 +252,7 @@ public abstract class Collator implements Comparator, Cloneable
         }
         m_strength_ = newStrength;
     }
-    
+
     /**
      * <p>Set the decomposition mode of this Collator.  Setting this
      * decomposition property with CANONICAL_DECOMPOSITION allows the
@@ -263,27 +263,27 @@ public abstract class Collator implements Comparator, Cloneable
      * a comparison or before getting a CollationKey. Adjusting
      * decomposition mode allows the user to select between faster and
      * more complete collation behavior.</p>
-     * 
+     *
      * <p>Since a great many of the world's languages do not require
      * text normalization, most locales set NO_DECOMPOSITION as the
      * default decomposition mode.</p>
-     * 
+     *
      * The default decompositon mode for the Collator is
      * NO_DECOMPOSITON, unless specified otherwise by the locale used
      * to create the Collator.</p>
-     * 
+     *
      * <p>See getDecomposition for a description of decomposition
      * mode.</p>
-     * 
+     *
      * @param decomposition the new decomposition mode
      * @see #getDecomposition
      * @see #NO_DECOMPOSITION
      * @see #CANONICAL_DECOMPOSITION
-     * @exception IllegalArgumentException If the given value is not a valid 
+     * @exception IllegalArgumentException If the given value is not a valid
      *            decomposition mode.
-     * @draft ICU 2.2 
+     * @draft ICU 2.2
      */
-    public void setDecomposition(int decomposition) 
+    public void setDecomposition(int decomposition)
     {
         if ((decomposition != NO_DECOMPOSITION) &&
             (decomposition != CANONICAL_DECOMPOSITION)) {
@@ -291,21 +291,21 @@ public abstract class Collator implements Comparator, Cloneable
         }
         m_decomposition_ = decomposition;
     }
-    
+
     // public getters --------------------------------------------------------
-    
+
     /**
      * Gets the Collator for the current default locale.
      * The default locale is determined by java.util.Locale.getDefault().
      * @return the Collator for the default locale (for example, en_US) if it
      *         is created successfully. Otherwise if there is no Collator
-     *         associated with the current locale, the default UCA collator 
+     *         associated with the current locale, the default UCA collator
      *         will be returned.
      * @see java.util.Locale#getDefault()
      * @see #getInstance(Locale)
      * @draft ICU 2.2
      */
-    public static final Collator getInstance() 
+    public static final Collator getInstance()
     {
         return getInstance(Locale.getDefault());
     }
@@ -317,7 +317,7 @@ public abstract class Collator implements Comparator, Cloneable
      * @param locale the desired locale.
      * @return Collator for the desired locale if it is created successfully.
      *         Otherwise if there is no Collator
-     *         associated with the current locale, a default UCA collator will 
+     *         associated with the current locale, a default UCA collator will
      *         be returned.
      * @see java.util.Locale
      * @see java.util.ResourceBundle
@@ -374,12 +374,12 @@ public abstract class Collator implements Comparator, Cloneable
         }
         return false;
     }
-    
+
     ///CLOVER:ON
     /**
-     * Get the set of Locales for which Collators are installed. 
+     * Get the set of Locales for which Collators are installed.
      * @return the list of available locales which collators are installed.
-     *         The set of Locales returned will be the ones registered in 
+     *         The set of Locales returned will be the ones registered in
      *         ICULocaleService, if ICULocaleService is used. Otherwise it will
      *         be the set of Locales that are installed with ICU4J.
      * @draft ICU 2.4
@@ -396,14 +396,15 @@ public abstract class Collator implements Comparator, Cloneable
     ////CLOVER:OFF
     /* @prototype */
     /* public */ static final Map getDisplayNames(Locale locale) {
-        return getService().getDisplayNames(locale);
+        Collator col = Collator.getInstance(locale);
+        return getService().getDisplayNames(locale, col, null);
     }
     ////CLOVER:ON
-    
+
     // end registry stuff
 
     /**
-     * <p>Returns this Collator's strength property. The strength property 
+     * <p>Returns this Collator's strength property. The strength property
      * determines the minimum level of difference considered significant.
      * </p>
      * <p>
@@ -422,11 +423,11 @@ public abstract class Collator implements Comparator, Cloneable
     {
         return m_strength_;
     }
-    
+
     /**
      * <p>
      * Get the decomposition mode of this Collator. Decomposition mode
-     * determines how Unicode composed characters are handled. 
+     * determines how Unicode composed characters are handled.
      * </p>
      * <p>
      * See the Collator class description for more details.
@@ -441,20 +442,20 @@ public abstract class Collator implements Comparator, Cloneable
     {
         return m_decomposition_;
     }
-    
+
     /**
      * <p>
-     * Compares the source text String to the target text String according to 
+     * Compares the source text String to the target text String according to
      * this Collator's rules, strength and decomposition mode.
-     * Returns an integer less than, 
-     * equal to or greater than zero depending on whether the source String is 
+     * Returns an integer less than,
+     * equal to or greater than zero depending on whether the source String is
      * less than, equal to or greater than the target String. See the Collator
      * class description for an example of use.
      * </p>
      * @param source the source String.
      * @param target the target String.
-     * @return Returns an integer value. Value is less than zero if source is 
-     *         less than target, value is zero if source and target are equal, 
+     * @return Returns an integer value. Value is less than zero if source is
+     *         less than target, value is zero if source and target are equal,
      *         value is greater than zero if source is greater than target.
      * @see CollationKey
      * @see #getCollationKey
@@ -470,7 +471,7 @@ public abstract class Collator implements Comparator, Cloneable
         }
         return compare((String)source, (String)target);
     }
-    
+
     // public other methods -------------------------------------------------
 
     /**
@@ -484,23 +485,23 @@ public abstract class Collator implements Comparator, Cloneable
      * @exception NullPointerException thrown if either arguments is null.
      * @draft ICU 2.2
      */
-    public boolean equals(String source, String target) 
+    public boolean equals(String source, String target)
     {
         return (compare(source, target) == 0);
     }
 
-	  /**
-	   * Get an UnicodeSet that contains all the characters and sequences 
-	   * tailored in this collator.
-	   * @return a pointer to a UnicodeSet object containing all the 
-	   *         code points and sequences that may sort differently than
-	   *         in the UCA. 
-	   * @draft ICU 2.4
-	   */
-  	public UnicodeSet getTailoredSet()
-  	{
-  		return new UnicodeSet(0, 0x10FFFF);
-  	}
+      /**
+       * Get an UnicodeSet that contains all the characters and sequences
+       * tailored in this collator.
+       * @return a pointer to a UnicodeSet object containing all the
+       *         code points and sequences that may sort differently than
+       *         in the UCA.
+       * @draft ICU 2.4
+       */
+    public UnicodeSet getTailoredSet()
+    {
+        return new UnicodeSet(0, 0x10FFFF);
+    }
 
     /**
      * Compares the equality of two Collators.
@@ -510,7 +511,7 @@ public abstract class Collator implements Comparator, Cloneable
      * @draft ICU 2.2
      */
     public abstract boolean equals(Object that);
-    
+
     // public abstract methods -----------------------------------------------
 
     /**
@@ -522,17 +523,17 @@ public abstract class Collator implements Comparator, Cloneable
 
     /**
      * <p>
-     * Compares the source text String to the target text String according to 
+     * Compares the source text String to the target text String according to
      * this Collator's rules, strength and decomposition mode.
-     * Returns an integer less than, 
-     * equal to or greater than zero depending on whether the source String is 
+     * Returns an integer less than,
+     * equal to or greater than zero depending on whether the source String is
      * less than, equal to or greater than the target String. See the Collator
      * class description for an example of use.
      * </p>
      * @param source the source String.
      * @param target the target String.
-     * @return Returns an integer value. Value is less than zero if source is 
-     *         less than target, value is zero if source and target are equal, 
+     * @return Returns an integer value. Value is less than zero if source is
+     *         less than target, value is zero if source and target are equal,
      *         value is greater than zero if source is greater than target.
      * @see CollationKey
      * @see #getCollationKey
@@ -546,20 +547,20 @@ public abstract class Collator implements Comparator, Cloneable
      * Transforms the String into a CollationKey suitable for efficient
      * repeated comparison.  The resulting key depends on the collator's
      * rules, strength and decomposition mode.
-     * </p> 
+     * </p>
      * <p>See the CollationKey class documentation for more information.</p>
      * @param source the string to be transformed into a CollationKey.
-     * @return the CollationKey for the given String based on this Collator's 
-     *         collation rules. If the source String is null, a null 
+     * @return the CollationKey for the given String based on this Collator's
+     *         collation rules. If the source String is null, a null
      *         CollationKey is returned.
      * @see CollationKey
      * @see #compare(String, String)
      * @draft ICU 2.2
      */
     public abstract CollationKey getCollationKey(String source);
-    
+
     // protected constructor -------------------------------------------------
-  
+
     /**
      * Empty default constructor to make javadocs happy
      * @draft ICU 2.4
@@ -567,9 +568,9 @@ public abstract class Collator implements Comparator, Cloneable
     protected Collator()
     {
     }
-    
+
     // private data members --------------------------------------------------
-    
+
     /**
      * Collation strength
      */
@@ -577,7 +578,7 @@ public abstract class Collator implements Comparator, Cloneable
 
     /**
      * Decomposition mode
-     */ 
+     */
     private int m_decomposition_ = CANONICAL_DECOMPOSITION;
 }
 

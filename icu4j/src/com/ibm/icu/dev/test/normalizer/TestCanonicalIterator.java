@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/normalizer/TestCanonicalIterator.java,v $ 
- * $Date: 2002/12/11 23:29:28 $ 
- * $Revision: 1.11 $
+ * $Date: 2003/01/28 18:55:34 $ 
+ * $Revision: 1.12 $
  *
  *****************************************************************************************
  */
@@ -14,11 +14,18 @@ package com.ibm.icu.dev.test.normalizer;
 
 import java.text.CharacterIterator;
 import java.text.StringCharacterIterator;
-import java.util.*;
-import com.ibm.icu.dev.test.*;
-import com.ibm.icu.lang.*;
-import com.ibm.icu.text.*;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.SortedSet;
+import java.util.TreeSet;
+import java.util.Set;
+import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.impl.Utility;
+import com.ibm.icu.lang.UCharacter;
+import com.ibm.icu.text.CanonicalIterator;
+import com.ibm.icu.text.Normalizer;
+import com.ibm.icu.text.UTF16;
+
 
 // TODO: fit into test framework
 
@@ -49,7 +56,7 @@ public class TestCanonicalIterator extends TestFmwk {
     	CanonicalIterator slowIt = new CanonicalIterator("");
     	slowIt.SKIP_ZEROS = false;
     	*/
-    	Transliterator name = Transliterator.getInstance("[^\\u0020-\\u007F] name");
+    	//Transliterator name = Transliterator.getInstance("[^\\u0020-\\u007F] name");
     	Set itSet = new TreeSet();
     	Set slowItSet = new TreeSet();
     	
@@ -85,7 +92,7 @@ public class TestCanonicalIterator extends TestFmwk {
     					logln("");
     					lastMixedCounter = mixedCounter;
     				}
-                    logln("\t" + mixedCounter + "\t" + name.transliterate(item)
+                    logln("\t" + mixedCounter + "\t" + hex(item)
                     + (item.equals(s) ? "\t(*original*)" : "")
                     + (item.equals(decomp) ? "\t(*decomp*)" : "")
                     + (item.equals(comp) ? "\t(*comp*)" : "")
@@ -237,17 +244,17 @@ public class TestCanonicalIterator extends TestFmwk {
     	}
     }
     
-    Transliterator name = null;
-    Transliterator hex = null;
+    //Transliterator name = null;
+    //Transliterator hex = null;
         
     public String getReadable(Object obj) {
     	if (obj == null) return "null";
     	String s = obj.toString();
     	if (s.length() == 0) return "";
         // set up for readable display
-        if (name == null) name = Transliterator.getInstance("[^\\ -\\u007F] name");
-        if (hex == null) hex = Transliterator.getInstance("[^\\ -\\u007F] hex");
-        return "[" + (SHOW_NAMES ? name.transliterate(s) + "; " : "") + hex.transliterate(s) + "]";
+        //if (name == null) name = Transliterator.getInstance("[^\\ -\\u007F] name");
+        //if (hex == null) hex = Transliterator.getInstance("[^\\ -\\u007F] hex");
+        return "[" + (SHOW_NAMES ? hex(s) + "; " : "") + hex(s) + "]";
     }
     
     static String collectionToString(Collection col) {

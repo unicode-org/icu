@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/util/ICUServiceTest.java,v $
- * $Date: 2002/12/12 18:02:09 $
- * $Revision: 1.10 $
+ * $Date: 2003/01/28 18:55:35 $
+ * $Revision: 1.11 $
  *
  *******************************************************************************
  */
@@ -26,6 +26,7 @@ import com.ibm.icu.impl.ICULocaleService;
 import com.ibm.icu.impl.ICULocaleService.LocaleKey;
 import com.ibm.icu.impl.ICULocaleService.LocaleKeyFactory;
 import com.ibm.icu.impl.ICULocaleService.ICUResourceBundleFactory;
+import com.ibm.icu.text.Collator;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -68,6 +69,36 @@ public class ICUServiceTest extends TestFmwk
 
     public void confirmIdentical(String message, int lhs, int rhs) {
 	logln(message + " lhs: " + lhs + " rhs: " + rhs, lhs == rhs);
+    }
+    /**
+     * Convenience override of getDisplayNames(Locale, Comparator, String) that
+     * uses the current default Locale as the locale, the default collator for
+     * the locale as the comparator to sort the display names, and null for
+     * the matchID.
+     */
+    public SortedMap getDisplayNames(ICUService service) {
+        Locale locale = Locale.getDefault();
+        Collator col = Collator.getInstance(locale);
+        return service.getDisplayNames(locale, col, null);
+    }
+
+    /**
+     * Convenience override of getDisplayNames(Locale, Comparator, String) that
+     * uses the default collator for the locale as the comparator to
+     * sort the display names, and null for the matchID.
+     */
+    public SortedMap getDisplayNames(ICUService service, Locale locale) {
+        Collator col = Collator.getInstance(locale);
+        return service.getDisplayNames(locale, col, null);
+    }
+    /**
+     * Convenience override of getDisplayNames(Locale, Comparator, String) that
+     * uses the default collator for the locale as the comparator to
+     * sort the display names.
+     */
+    public SortedMap getDisplayNames(ICUService service, Locale locale, String matchID) {
+        Collator col = Collator.getInstance(locale);
+        return service.getDisplayNames(locale, col, matchID);
     }
 
     // use locale keys
@@ -236,7 +267,7 @@ public class ICUServiceTest extends TestFmwk
 
 	// iterate over the display names
 	{
-	    Map dids = service.getDisplayNames(Locale.GERMANY);
+	    Map dids = getDisplayNames(service,Locale.GERMANY);
 	    Iterator iter = dids.entrySet().iterator();
 	    int count = 0;
 	    while (iter.hasNext()) {
@@ -267,7 +298,7 @@ public class ICUServiceTest extends TestFmwk
 	// this time, we have seven display names
         // Rad dude's surfer gal 'replaces' later's surfer gal
 	{
-	    Map dids = service.getDisplayNames();
+	    Map dids = getDisplayNames(service);
 	    Iterator iter = dids.entrySet().iterator();
 	    int count = 0;
 	    while (iter.hasNext()) {
@@ -389,7 +420,7 @@ public class ICUServiceTest extends TestFmwk
         // list only the spanish display names for es, spanish collation order
         // since we're using the default Key, only "es" is matched
         {
-            logln("display names: " + service.getDisplayNames(LocaleUtility.getLocaleFromName("es"), "es"));
+            logln("display names: " + getDisplayNames(service,LocaleUtility.getLocaleFromName("es"), "es"));
         }
 
         // list the display names in reverse order
@@ -406,7 +437,7 @@ public class ICUServiceTest extends TestFmwk
 	// this should be fast since the display names were cached.
 	{
             logln("service display names for de_DE");
-	    Map names = service.getDisplayNames(LocaleUtility.getLocaleFromName("de_DE"));
+	    Map names = getDisplayNames(service,LocaleUtility.getLocaleFromName("de_DE"));
 	    StringBuffer buf = new StringBuffer("{");
 	    Iterator iter = names.entrySet().iterator();
 	    while (iter.hasNext()) {
@@ -431,7 +462,7 @@ public class ICUServiceTest extends TestFmwk
             for (int i = 0; i < idNames.length; ++i) {
                 String idName = idNames[i];
                 buf.append("\n  --- " + idName + " ---");
-                Map names = service.getDisplayNames(LocaleUtility.getLocaleFromName(idName));
+                Map names = getDisplayNames(service,LocaleUtility.getLocaleFromName(idName));
                 Iterator iter = names.entrySet().iterator();
                 while (iter.hasNext()) {
                     Entry e = (Entry)iter.next();

@@ -5,14 +5,14 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/ICUListResourceBundle.java,v $
- * $Date: 2002/08/13 23:40:52 $
- * $Revision: 1.9 $
+ * $Date: 2003/01/28 18:55:37 $
+ * $Revision: 1.10 $
  *
  *******************************************************************************
  */
 
 /**
- * A list resource bundle that does redirection 
+ * A list resource bundle that does redirection
  * because otherwise some of our resource class files
  * are too big for the java runtime to handle.
  */
@@ -34,7 +34,7 @@ public class ICUListResourceBundle extends ListResourceBundle {
     private static final String ICU_BUNDLE_NAME = "LocaleElements";
     private static final String ICU_PACKAGE_NAME ="com.ibm.icu.impl.data";
     private static final String ENCODING="UTF-8";
-    
+
     protected ICUListResourceBundle() {
     }
 
@@ -53,22 +53,22 @@ public class ICUListResourceBundle extends ListResourceBundle {
      * See base class description
      */
     protected Object[][] getContents(){
-		// we replace any redirected values with real values in a cloned array
-	
-		if (realContents == null) {
-		    realContents = contents;
-		    for (int i = 0; i < contents.length; ++i) {
-				Object newValue = getRedirectedResource((String)contents[i][0],contents[i][1]);
-				if (newValue != null) {
-				    if (realContents == contents) {
-					     realContents = (Object[][])contents.clone();
-				    }
-				    realContents[i] = new Object[] { contents[i][0], newValue };
-				}
-		    }
-		}
-	
-		return realContents;
+        // we replace any redirected values with real values in a cloned array
+
+        if (realContents == null) {
+            realContents = contents;
+            for (int i = 0; i < contents.length; ++i) {
+                Object newValue = getRedirectedResource((String)contents[i][0],contents[i][1]);
+                if (newValue != null) {
+                    if (realContents == contents) {
+                         realContents = (Object[][])contents.clone();
+                    }
+                    realContents[i] = new Object[] { contents[i][0], newValue };
+                }
+            }
+        }
+
+        return realContents;
     }
 
     /**
@@ -76,9 +76,9 @@ public class ICUListResourceBundle extends ListResourceBundle {
      * real value and return it.
      */
     private Object getRedirectedResource(String key, Object value) {
-	
-		if (value instanceof Object[][]) {
-		    Object[][] aValue = (Object[][])value;
+
+        if (value instanceof Object[][]) {
+            Object[][] aValue = (Object[][])value;
             int i=0;
             while(i < aValue.length){
                 int j=0;
@@ -87,91 +87,91 @@ public class ICUListResourceBundle extends ListResourceBundle {
                     j++;
                 }
                 i++;
-            }                  
-		}else if(value instanceof Alias){  
+            }
+        }else if(value instanceof Alias){
             String cName = this.getClass().getName();
             visited.clear();
-            visited.put(cName+key,"");        
+            visited.put(cName+key,"");
             return ((Alias)value).getResource(cName,key,visited);
         }else if(value instanceof RedirectedResource){
             return ((RedirectedResource)value).getResource(this);
-        }       
-			
-		return value;
+        }
+
+        return value;
     }
 
     private static byte[] readToEOS(InputStream stream) {
 
-		ArrayList vec = new ArrayList();
-		int count = 0;
-		int pos = 0;
-		final int MAXLENGTH = 0x8000; // max buffer size - 32K
-		int length = 0x80; // start with small buffers and work up
-		do {
-		    pos = 0;
-		    length = length >= MAXLENGTH ? MAXLENGTH : length * 2;
-		    byte[] buffer = new byte[length];
-		    try {
-				do {
-				    int n = stream.read(buffer, pos, length - pos);
-				    if (n == -1) {
-					break;
-				    }
-				    pos += n;
-				} while (pos < length);
-		    }
-		    catch (IOException e) {
-		    }
-		    vec.add(buffer);
-		    count += pos;
-		} while (pos == length);
-							
-							
-		byte[] data = new byte[count];
-		pos = 0;
-		for (int i = 0; i < vec.size(); ++i) {
-		    byte[] buf = (byte[])vec.get(i);
-		    int len = Math.min(buf.length, count - pos);
-		    System.arraycopy(buf, 0, data, pos, len);
-		    pos += len;
-		}
-		return data;
+        ArrayList vec = new ArrayList();
+        int count = 0;
+        int pos = 0;
+        final int MAXLENGTH = 0x8000; // max buffer size - 32K
+        int length = 0x80; // start with small buffers and work up
+        do {
+            pos = 0;
+            length = length >= MAXLENGTH ? MAXLENGTH : length * 2;
+            byte[] buffer = new byte[length];
+            try {
+                do {
+                    int n = stream.read(buffer, pos, length - pos);
+                    if (n == -1) {
+                    break;
+                    }
+                    pos += n;
+                } while (pos < length);
+            }
+            catch (IOException e) {
+            }
+            vec.add(buffer);
+            count += pos;
+        } while (pos == length);
+
+
+        byte[] data = new byte[count];
+        pos = 0;
+        for (int i = 0; i < vec.size(); ++i) {
+            byte[] buf = (byte[])vec.get(i);
+            int len = Math.min(buf.length, count - pos);
+            System.arraycopy(buf, 0, data, pos, len);
+            pos += len;
+        }
+        return data;
     }
 
     private static char[] readToEOS(InputStreamReader stream) {
-		ArrayList vec = new ArrayList();
-		int count = 0;
-		int pos = 0;
-		final int MAXLENGTH = 0x8000; // max buffer size - 32K
-		int length = 0x80; // start with small buffers and work up
-		do {
-		    pos = 0;
-		    length = length >= MAXLENGTH ? MAXLENGTH : length * 2;
-		    char[] buffer = new char[length];
-		    try {
-				do {
-				    int n = stream.read(buffer, pos, length - pos);
-				    if (n == -1) {
-					break;
-				    }
-				    pos += n;
-				} while (pos < length);
-		    }
-		    catch (IOException e) {
-		    }
-		    vec.add(buffer);
-		    count += pos;
-		} while (pos == length);
-							
-		char[] data = new char[count];
-		pos = 0;
-		for (int i = 0; i < vec.size(); ++i) {
-		    char[] buf = (char[])vec.get(i);
-		    int len = Math.min(buf.length, count - pos);
-		    System.arraycopy(buf, 0, data, pos, len);
-		    pos += len;
-		}
-		return data;
+        ArrayList vec = new ArrayList();
+        int count = 0;
+        int pos = 0;
+        final int MAXLENGTH = 0x8000; // max buffer size - 32K
+        int length = 0x80; // start with small buffers and work up
+        do {
+            pos = 0;
+            length = length >= MAXLENGTH ? MAXLENGTH : length * 2;
+            char[] buffer = new char[length];
+            try {
+                do {
+                    int n = stream.read(buffer, pos, length - pos);
+                    if (n == -1) {
+                    break;
+                    }
+                    pos += n;
+                } while (pos < length);
+            }
+            catch (IOException e) {
+            }
+            vec.add(buffer);
+            count += pos;
+        } while (pos == length);
+
+        char[] data = new char[count];
+        pos = 0;
+        for (int i = 0; i < vec.size(); ++i) {
+            char[] buf = (char[])vec.get(i);
+            int len = Math.min(buf.length, count - pos);
+            System.arraycopy(buf, 0, data, pos, len);
+            pos += len;
+        }
+        return data;
     }
     /*
     public static class CompressedString implements RedirectedResource{
@@ -201,18 +201,18 @@ public class ICUListResourceBundle extends ListResourceBundle {
             if(compressed==null){
                 return null;
             }
-            
+
             if(expanded==null){
                 expanded= Utility.RLEStringToByteArray(compressed);
             }
             return expanded;
         }
-    
+
     }
     private interface RedirectedResource{
         public Object getResource(Object obj);
     }
-    
+
     public static class ResourceBinary implements RedirectedResource{
         private byte[] expanded=null;
         private String resName=null;
@@ -221,16 +221,18 @@ public class ICUListResourceBundle extends ListResourceBundle {
         }
         public Object getResource(Object obj){
             if(expanded==null){
-	            InputStream stream = obj.getClass().getResourceAsStream(resName);
-                if(stream==null){
-                    throw new MissingResourceException("",obj.getClass().getName(),resName);
+                InputStream stream = obj.getClass().getResourceAsStream(resName);
+                if(stream!=null){
+                    //throw new MissingResourceException("",obj.getClass().getName(),resName);
+                    expanded = readToEOS(stream);
+                    return expanded;
                 }
-	            expanded = readToEOS(stream);
+
             }
-            return expanded;
+            return "";
         }
     }
-    
+
     public static class ResourceString implements RedirectedResource{
         private char[] expanded=null;
         private String resName=null;
@@ -241,32 +243,34 @@ public class ICUListResourceBundle extends ListResourceBundle {
             if(expanded==null){
                 // Resource strings are always UTF-8
                 InputStream stream = obj.getClass().getResourceAsStream(resName);
-                if(stream==null){
-                    throw new MissingResourceException("",obj.getClass().getName(),resName);
+                if(stream!=null){
+                    //throw new MissingResourceException("",obj.getClass().getName(),resName);
+
+                    try{
+                        InputStreamReader reader =  new InputStreamReader(stream,ENCODING);
+                        expanded = readToEOS(reader);
+                    }catch(UnsupportedEncodingException ex){
+                        throw new RuntimeException("Could open converter for encoding: " +ENCODING);
+                    }
+                    return new String(expanded);
                 }
-                try{
-                    InputStreamReader reader =  new InputStreamReader(stream,ENCODING);
-                    expanded = readToEOS(reader);
-                }catch(UnsupportedEncodingException ex){
-                    throw new RuntimeException("Could open converter for encoding: " +ENCODING);
-                }
-                
+
             }
-            return new String(expanded);
+            return "";
         }
     }
-    
+
     public static class Alias{
         public Alias(String path){
             pathToResource = path;
         };
         private final char RES_PATH_SEP_CHAR = '/';
         private String pathToResource;
-        
-        
+
+
         private Object getResource(String className,String parentKey, Hashtable visited){
             String packageName=null,bundleName=null, locale=null, keyPath=null;
-            
+
             if(pathToResource.indexOf(RES_PATH_SEP_CHAR)==0){
                 int i =pathToResource.indexOf(RES_PATH_SEP_CHAR,1);
                 int j =pathToResource.indexOf(RES_PATH_SEP_CHAR,i+1);
@@ -276,12 +280,12 @@ public class ICUListResourceBundle extends ListResourceBundle {
                     locale=pathToResource.substring(i+1,j);
                     keyPath=pathToResource.substring(j+1,pathToResource.length());
                 }
-                //there is a path included 
+                //there is a path included
                 if(bundleName.equals(ICUDATA)){
                     bundleName = ICU_BUNDLE_NAME;
                     packageName = ICU_PACKAGE_NAME;
                 }
-                
+
             }else{
                 //no path start with locale
                 int i =pathToResource.indexOf(RES_PATH_SEP_CHAR);
@@ -292,7 +296,7 @@ public class ICUListResourceBundle extends ListResourceBundle {
                 packageName=className.substring(0,j);
                 bundleName=className.substring(j+1,className.indexOf("_"));
                 keyPath=pathToResource.substring(i+1);
-                
+
                 if(i!=-1){
                     locale = pathToResource.substring(0,i);
                 }else{
@@ -300,19 +304,19 @@ public class ICUListResourceBundle extends ListResourceBundle {
                     keyPath=parentKey;
                     className=packageName+"."+bundleName+"_"+locale;
                 }
-          
+
             }
-          
+
             ResourceBundle bundle = null;
             // getResourceBundle guarantees that the CLASSPATH will be searched
             // for loading the resource with name <bundleName>_<localeName>.class
             bundle = ICULocaleData.getResourceBundle(packageName,bundleName,locale);
-            
+
             return findResource(bundle,className,keyPath, visited);
         }
-        
 
-        
+
+
         private boolean isIndex(String s){
              if(s.length()==1){
                 char c = s.charAt(0);
@@ -346,9 +350,9 @@ public class ICUListResourceBundle extends ListResourceBundle {
         private Object findResource(Object o , String[] keys, int start){
             Object obj = o;
             if( start < keys.length && keys[start] !=null){
-	            if(obj instanceof Object[][]){
-	                obj = findResource((Object[][])obj,keys[start]);   
-	            }else if(obj instanceof Object[] && isIndex(keys[start])){
+                if(obj instanceof Object[][]){
+                    obj = findResource((Object[][])obj,keys[start]);
+                }else if(obj instanceof Object[] && isIndex(keys[start])){
                     obj = ((Object[])obj)[getIndex(keys[start])];
                 }
                 if(start+1 < keys.length && keys[start+1] !=null){
@@ -364,9 +368,9 @@ public class ICUListResourceBundle extends ListResourceBundle {
             if(visited.get(className+key)!=null){
                 throw new MissingResourceException("Circular Aliases in bundle.",bundle.getClass().getName(),key);
             }
-            
+
             visited.put(className+key,"");
-            
+
             String[] keys = split(key,RES_PATH_SEP_CHAR);
             Object o =null;
             if(keys.length>0){
@@ -380,7 +384,7 @@ public class ICUListResourceBundle extends ListResourceBundle {
             if(o instanceof Object[][]){
                 o = resolveAliases((Object[][])o,className,key,visited);
             }else if(o instanceof Object[]){
-                 o = resolveAliases((Object[])o,className,key,visited);           
+                 o = resolveAliases((Object[])o,className,key,visited);
             }else if(o instanceof Alias){
                 return ((Alias)o).getResource(className,key,visited);
             }
@@ -402,9 +406,9 @@ public class ICUListResourceBundle extends ListResourceBundle {
             }
             return o;
         }
-        
+
         private String[] split(String source, char delimiter){
-           
+
             char[] src = source.toCharArray();
             int index = 0;
             int numdelimit=0;
@@ -420,8 +424,8 @@ public class ICUListResourceBundle extends ListResourceBundle {
             int old=0;
             for(int j=0;j<src.length;j++){
                 if(src[j]==delimiter){
-	                values[index++] = new String(src,old,j-old);
-	                old=j+1/* skip after the delimiter*/;
+                    values[index++] = new String(src,old,j-old);
+                    old=j+1/* skip after the delimiter*/;
                 }
             }
             if(old <src.length)
@@ -429,6 +433,6 @@ public class ICUListResourceBundle extends ListResourceBundle {
             return values;
         }
     }
-    
+
 }
 

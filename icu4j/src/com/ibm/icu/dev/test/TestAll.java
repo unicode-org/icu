@@ -4,9 +4,9 @@
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  *
- * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/TestAll.java,v $ 
- * $Date: 2002/12/18 19:58:25 $ 
- * $Revision: 1.44 $
+ * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/TestAll.java,v $
+ * $Date: 2003/01/28 18:55:32 $
+ * $Revision: 1.45 $
  *
  *****************************************************************************************
  */
@@ -18,7 +18,7 @@ import java.util.TimeZone;
 /**
  * Top level test used to run all other tests as a batch.
  */
- 
+
 public class TestAll extends TestFmwk {
 
     public static void main(String[] args) throws Exception {
@@ -29,7 +29,7 @@ public class TestAll extends TestFmwk {
     public void TestBigNumberFormat() throws Exception{
         run(new com.ibm.icu.dev.test.format.BigNumberFormatTest());
     }
-    
+
     public void TestCompression() throws Exception{
         run(new TestFmwk[] {
             new com.ibm.icu.dev.test.compression.DecompressionTest(),
@@ -72,7 +72,7 @@ public class TestAll extends TestFmwk {
         run(
             new com.ibm.icu.dev.test.search.SearchTest());
     }
-    
+
     public void TestCollator() throws Exception {
         run(new TestFmwk[] {
             new com.ibm.icu.dev.test.collator.CollationTest(),
@@ -96,7 +96,7 @@ public class TestAll extends TestFmwk {
             new com.ibm.icu.dev.test.collator.CollationMiscTest()
                 });
     }
-	
+
     public void TestArabicShaping() throws Exception {
         run(new com.ibm.icu.dev.test.shaping.ArabicShapingRegTest());
     }
@@ -134,34 +134,35 @@ public class TestAll extends TestFmwk {
             new com.ibm.icu.dev.test.lang.UTF16Test()
                 });
     }
-    
+
     public void TestTrie() throws Exception {
         run(new TestFmwk[] {
             new com.ibm.icu.dev.test.util.TrieTest()
             });
     }
-    
+
     public void TestUScript() throws Exception {
         run( new TestFmwk[] {
             new com.ibm.icu.dev.test.lang.TestUScript(),
         });
     }
-    
+
     public void TestNormalizer() throws Exception {
         run( new TestFmwk[] {
             new com.ibm.icu.dev.test.normalizer.BasicTest(),
             new com.ibm.icu.dev.test.normalizer.ConformanceTest(),
-            new com.ibm.icu.dev.test.normalizer.ExhaustiveTest(),
+            new com.ibm.icu.dev.test.normalizer.TestDeprecatedNormalizerAPI(),
             new com.ibm.icu.dev.test.normalizer.TestCanonicalIterator(),
+            new com.ibm.icu.dev.test.normalizer.NormalizationMonkeyTest(),
         });
     }
-    
+
     public void TestUScriptRun() throws Exception {
         run( new TestFmwk[] {
             new com.ibm.icu.dev.test.lang.TestUScriptRun(),
         });
     }
-    
+
     public void TestNumberFormat() throws Exception {
         run(new TestFmwk[] {
             new com.ibm.icu.dev.test.format.IntlTestNumberFormat(),
@@ -176,7 +177,7 @@ public class TestAll extends TestFmwk {
             new com.ibm.icu.dev.test.format.IntlTestDecimalFormatSymbolsC()
                 });
     }
-    
+
     public void TestDateFormat() throws Exception {
         run(new TestFmwk[] {
             new com.ibm.icu.dev.test.format.DateFormatMiscTests(),
@@ -193,28 +194,28 @@ public class TestAll extends TestFmwk {
     }
 
     public void TestService() throws Exception {
-	run(new TestFmwk[] {
-	    new com.ibm.icu.dev.test.util.ICUServiceTest(),
-	    new com.ibm.icu.dev.test.util.ICUServiceThreadTest()
-		});
+    run(new TestFmwk[] {
+        new com.ibm.icu.dev.test.util.ICUServiceTest(),
+        new com.ibm.icu.dev.test.util.ICUServiceThreadTest()
+        });
     }
-    
+
     public void TestVersionInfo() throws Exception {
         run(new TestFmwk[] {
         new com.ibm.icu.dev.test.util.VersionInfoTest()
-        });        
+        });
     }
-    
+
     public void TestIterator() throws Exception {
         run(new TestFmwk[] {
             new com.ibm.icu.dev.test.iterator.TestUCharacterIterator(),
         });
     }
-    
+
     public void TestUtil() throws Exception {
         run(new TestFmwk[] {
             new com.ibm.icu.dev.test.util.ICUListResourceBundleTest(),
-	    new com.ibm.icu.dev.test.util.CompactArrayTest(),
+        new com.ibm.icu.dev.test.util.CompactArrayTest(),
             new com.ibm.icu.dev.test.util.StringTokenizerTest(),
             new com.ibm.icu.dev.test.util.CurrencyTest(),
             });

@@ -5,20 +5,24 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/normalizer/ConformanceTest.java,v $ 
- * $Date: 2002/11/22 00:23:19 $ 
- * $Revision: 1.11 $
+ * $Date: 2003/01/28 18:55:34 $ 
+ * $Revision: 1.12 $
  *
  *****************************************************************************************
  */
 
 package com.ibm.icu.dev.test.normalizer;
 
+import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.dev.test.TestUtil;
+
+import java.io.BufferedReader;
+import java.io.IOException;
 import java.text.StringCharacterIterator;
-import java.io.*;
-import com.ibm.icu.dev.test.*;
-import com.ibm.icu.text.*;
 import com.ibm.icu.impl.Utility;
+import com.ibm.icu.text.Normalizer;
+import com.ibm.icu.text.UTF16;
+import com.ibm.icu.text.UnicodeSet;
 
 public class ConformanceTest extends TestFmwk {
 
@@ -174,6 +178,9 @@ public class ConformanceTest extends TestFmwk {
                 
                 out = iterativeNorm(new StringCharacterIterator(field[i]), Normalizer.NFD, buf, -1);
                 pass &= assertEqual("D(-1)", field[i], out, field[2], "c3!=D(c" + (i+1));
+                
+                cross(field[2] /*NFD String*/, field[1]/*NFC String*/, Normalizer.NFC);
+                cross(field[1] /*NFC String*/, field[2]/*NFD String*/, Normalizer.NFD);
             }
             out = Normalizer.normalize(field[i], Normalizer.NFKC);
             pass &= assertEqual("KC", field[i], out, field[3], "c4!=KC(c" + (i+1));
@@ -205,7 +212,10 @@ public class ConformanceTest extends TestFmwk {
             
             out = iterativeNorm(new StringCharacterIterator(field[i]), Normalizer.NFKD, buf, -1);
             pass &= assertEqual("KD(-1)", field[i], out, field[4], "c5!=KD(c" + (i+1));
-              
+            
+            cross(field[4] /*NFKD String*/, field[3]/*NFKC String*/, Normalizer.NFKC);
+            cross(field[3] /*NFKC String*/, field[4]/*NFKD String*/, Normalizer.NFKD);
+  
         }
         compare(field[1],field[2]);
         compare(field[0],field[1]);
@@ -314,6 +324,13 @@ public class ConformanceTest extends TestFmwk {
                         +Utility.hex(s1) + " s2: " + Utility.hex(s2));
             }    
         }    
+    }
+    private void cross(String s1, String s2,Normalizer.Mode mode){
+        String result = Normalizer.normalize(s1,mode);
+        if(!result.equals(s2)){
+            errln("cross test failed s1: " + Utility.hex(s1) + " s2: " 
+                        +Utility.hex(s2));
+        }
     }
     /**
      * Do a normalization using the iterative API in the given direction.

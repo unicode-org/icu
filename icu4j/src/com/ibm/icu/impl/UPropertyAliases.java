@@ -90,23 +90,23 @@ public final class UPropertyAliases implements ICUBinary.Authenticate {
      * See icu4c/src/common/propname.h.
      */
     private static final byte DATA_FORMAT_ID[] = {'p', 'n', 'a', 'm'};
-    
+
     /**
      * File version that this class understands.
      * See icu4c/src/common/propname.h.
      */
     private static final byte DATA_FORMAT_VERSION = 1;
-    
+
     /**
      * Name of the datafile
      */
     private static final String DATA_FILE_NAME = "data/pnames.icu";
-    
+
     /**
      * Buffer size of datafile.  The whole file is < 16k.
      */
     private static final int DATA_BUFFER_SIZE = 8192;
-    
+
     //----------------------------------------------------------------
     // Constructor
 
@@ -298,7 +298,9 @@ public final class UPropertyAliases implements ICUBinary.Authenticate {
 
         public short getShort(int enumProbe) {
             if (enumProbe < enumStart || enumProbe >= enumLimit) {
-                throw new IllegalArgumentException("Invalid enum");
+                throw new IllegalArgumentException("Invalid enum. enumStart = " +enumStart +
+                                                   " enumLimit = " + enumLimit +
+                                                   " enumProbe = " + enumProbe );
             }
             return offsetArray[enumProbe - enumStart];
         }
@@ -478,15 +480,15 @@ public final class UPropertyAliases implements ICUBinary.Authenticate {
      * and valueMap).  It also knows how to read various structures.
      */
     static class Builder extends ICUBinaryStream {
-        
+
         // map[i] = offset of object i.  We need maps for all of our
         // arrays.  The arrays are indexed by offset in the raw binary
         // file; we need to translate that to index.
-        
+
         private short stringPool_map[];
-        
+
         private short valueMap_map[];
-        
+
         private short nameGroup_map[];
 
         public Builder(byte raw[]) {

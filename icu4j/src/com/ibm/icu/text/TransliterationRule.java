@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/TransliterationRule.java,v $
- * $Date: 2002/06/28 19:15:53 $
- * $Revision: 1.47 $
+ * $Date: 2003/01/28 18:55:42 $
+ * $Revision: 1.48 $
  *
  *****************************************************************************************
  */
@@ -46,7 +46,7 @@ import com.ibm.icu.impl.Utility;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: TransliterationRule.java,v $ $Revision: 1.47 $ $Date: 2002/06/28 19:15:53 $
+ * @version $RCSfile: TransliterationRule.java,v $ $Revision: 1.48 $ $Date: 2003/01/28 18:55:42 $
  */
 class TransliterationRule {
 
@@ -127,13 +127,6 @@ class TransliterationRule {
      */
     private final RuleBasedTransliterator.Data data;
 
-    /**
-     * The character at index i, where i < contextStart || i >= contextLimit,
-     * is ETHER.  This allows explicit matching by rules and UnicodeSets
-     * of text outside the context.  In traditional terms, this allows anchoring
-     * at the start and/or end.
-     */
-    static final char ETHER = '\uFFFF';
 
     private static final String COPYRIGHT =
         "\u00A9 IBM Corporation 1999-2001. All rights reserved.";
@@ -430,7 +423,7 @@ class TransliterationRule {
         }
 
         oText = intRef[0];
-        
+
         minOText = posAfter(text, oText);
 
         // ------------------------ Start Anchor ------------------------
@@ -590,6 +583,9 @@ class TransliterationRule {
 
 /**
  * $Log: TransliterationRule.java,v $
+ * Revision 1.48  2003/01/28 18:55:42  rviswanadha
+ * jitterbug 2309: Modularize ICU4J big bang commit
+ *
  * Revision 1.47  2002/06/28 19:15:53  alan
  * jitterbug 1434: improve method names; minor cleanup
  *

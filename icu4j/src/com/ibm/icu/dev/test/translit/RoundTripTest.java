@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/translit/RoundTripTest.java,v $
- * $Date: 2002/12/09 17:12:26 $
- * $Revision: 1.49 $
+ * $Date: 2003/01/28 18:55:35 $
+ * $Revision: 1.50 $
  *
  *******************************************************************************
  */
@@ -25,10 +25,10 @@ import java.util.Locale;
  * @summary Round trip test of Transliterator
  */
 public class RoundTripTest extends TestFmwk {
-    
+
     static final boolean EXTRA_TESTS = true;
     static final boolean PRINT_RULES = true;
-    
+
     public static void main(String[] args) throws Exception {
         new RoundTripTest().run(args);
     }
@@ -38,10 +38,10 @@ public class RoundTripTest extends TestFmwk {
         String s = t.transliterate("\u0101\u0069");
     }
     */
-    
+
     /*
     Note: Unicode 3.2 added new Hiragana/Katakana characters:
-    
+
 3095..3096    ; 3.2 #   [2] HIRAGANA LETTER SMALL KA..HIRAGANA LETTER SMALL KE
 309F..30A0    ; 3.2 #   [2] HIRAGANA DIGRAPH YORI..KATAKANA-HIRAGANA DOUBLE HYPHEN
 30FF          ; 3.2 #       KATAKANA DIGRAPH KOTO
@@ -50,14 +50,14 @@ public class RoundTripTest extends TestFmwk {
     We will not add them to the rules until they are more supported (e.g. in fonts on Windows)
     A bug has been filed to remind us to do this: #1979.
     */
-    
+
     static String KATAKANA = "[[[:katakana:][\u30A1-\u30FA\u30FC]]-[\u30FF\u31F0-\u31FF]]";
     static String HIRAGANA = "[[[:hiragana:][\u3040-\u3094]]-[\u3095-\u3096\u309F-\u30A0]]";
     static String LENGTH = "[\u30FC]";
     static String HALFWIDTH_KATAKANA = "[\uFF65-\uFF9D]";
     static String KATAKANA_ITERATION = "[\u30FD\u30FE]";
     static String HIRAGANA_ITERATION = "[\u309D\u309E]";
-    
+
     //------------------------------------------------------------------
     // AbbreviatedUnicodeSetIterator
     //------------------------------------------------------------------
@@ -117,7 +117,7 @@ public class RoundTripTest extends TestFmwk {
           .test("[a-zA-Z]", HIRAGANA, HIRAGANA_ITERATION, this, new Legal());
         showElapsed(start, "TestHiragana");
     }
-    
+
     public void TestKatakana() throws IOException, ParseException {
         long start = System.currentTimeMillis();
         new Test("Latin-Katakana")
@@ -150,16 +150,16 @@ public class RoundTripTest extends TestFmwk {
         t.test("[a-zA-Z]", "[\uAC00-\uD7A4]", "", this, new Legal());
         showElapsed(start, "TestHangul");
     }
-    
+
     public void TestSingle() {
-		Transliterator t = Transliterator.getInstance("Latin-Greek");
-    	t.transliterate("\u0061\u0101\u0069");
+        Transliterator t = Transliterator.getInstance("Latin-Greek");
+        t.transliterate("\u0061\u0101\u0069");
     }
 
     public void TestGreek() throws IOException, ParseException {
         long start = System.currentTimeMillis();
         new Test("Latin-Greek", 50)
-        .test("[a-zA-Z]", "[\u003B\u00B7[:Greek:]-[\u03D7-\u03EF]]", 
+        .test("[a-zA-Z]", "[\u003B\u00B7[:Greek:]-[\u03D7-\u03EF]]",
             "[\u00B5\u037A\u03D0-\u03F5]", /* roundtrip exclusions */
             this, new LegalGreek(true));
         showElapsed(start, "TestGreek");
@@ -168,7 +168,7 @@ public class RoundTripTest extends TestFmwk {
     public void TestGreekUNGEGN() throws IOException, ParseException {
         long start = System.currentTimeMillis();
         new Test("Latin-Greek/UNGEGN")
-          .test("[a-zA-Z]", "[\u003B\u00B7[:Greek:]-[\u03D7-\u03EF]]", 
+          .test("[a-zA-Z]", "[\u003B\u00B7[:Greek:]-[\u03D7-\u03EF]]",
             "[\u00B5\u037A\u03D0-\uFFFF{\u039C\u03C0}]", /* roundtrip exclusions */
             this, new LegalGreek(false));
         showElapsed(start, "TestGreekUNGEGN");
@@ -177,7 +177,7 @@ public class RoundTripTest extends TestFmwk {
     public void Testel() throws IOException, ParseException {
         long start = System.currentTimeMillis();
         new Test("Latin-el")
-          .test("[a-zA-Z]", "[\u003B\u00B7[:Greek:]-[\u03D7-\u03EF]]", 
+          .test("[a-zA-Z]", "[\u003B\u00B7[:Greek:]-[\u03D7-\u03EF]]",
             "[\u00B5\u037A\u03D0-\uFFFF{\u039C\u03C0}]", /* roundtrip exclusions */
             this, new LegalGreek(false));
         showElapsed(start, "Testel");
@@ -189,48 +189,48 @@ public class RoundTripTest extends TestFmwk {
           .test("[a-zA-Z\u0110\u0111]", "[\u0400-\u045F]", null, this, new Legal());
         showElapsed(start, "TestCyrillic");
     }
-    
+
     static final String ARABIC = "[\u060C\u061B\u061F\u0621\u0627-\u063A\u0641-\u0655\u0660-\u066C\u067E\u0686\u0698\u06A4\u06AD\u06AF\u06CB-\u06CC\u06F0-\u06F9]";
 
     public void TestArabic() throws IOException, ParseException {
         long start = System.currentTimeMillis();
         new Test("Latin-Arabic")
-          .test("[a-zA-Z\u02BE\u02BF]", ARABIC, "[a-zA-Z\u02BE\u02BF\u207F]", null, this, new Legal()); // 
+          .test("[a-zA-Z\u02BE\u02BF]", ARABIC, "[a-zA-Z\u02BE\u02BF\u207F]", null, this, new Legal()); //
         showElapsed(start, "TestArabic");
     }
-    
+
     public void TestHebrew() throws IOException, ParseException {
         long start = System.currentTimeMillis();
         new Test("Latin-Hebrew")
           .test("[a-zA-Z\u02BC\u02BB]", "[[:hebrew:]-[\uFB00-\uFBFF]]", "[\u05F0\u05F1\u05F2]", this, new LegalHebrew());
         showElapsed(start, "TestHebrew");
     }
-    
+
     public void TestThai() throws IOException, ParseException {
         long start = System.currentTimeMillis();
         new Test("Latin-Thai")
           .test("[a-zA-Z\u0142\u1ECD\u00E6\u0131\u0268]", "[\u0E01-\u0E3A\u0E40-\u0E5B]", null, this, new LegalThai());
         showElapsed(start, "TestThai");
     }
-    
+
     //----------------------------------
     // Inter-Indic Tests
     //----------------------------------
     public static class LegalIndic extends Legal{
         UnicodeSet vowelSignSet = new UnicodeSet();
-        
+
         public LegalIndic(){
-            vowelSignSet.addAll(new UnicodeSet("[\u0901\u0902\u0903\u093e-\u094c\u0962\u0963]"));				/* Devanagari */
-            vowelSignSet.addAll(new UnicodeSet("[\u0981\u0982\u0983\u09be-\u09cc\u09e2\u09e3\u09D7]"));			/* Bengali */
-            vowelSignSet.addAll(new UnicodeSet("[\u0a01\u0a02\u0a03\u0a3e-\u0a4c\u0a62\u0a63\u0a70\u0a71]"));	/* Gurmukhi */
-            vowelSignSet.addAll(new UnicodeSet("[\u0a81\u0a82\u0a83\u0abe-\u0acc\u0ae2\u0ae3]"));				/* Gujarati */
-            vowelSignSet.addAll(new UnicodeSet("[\u0b01\u0b02\u0b03\u0b3e-\u0b4c\u0b62\u0b63\u0b56\u0b57]"));	/* Oriya */
-            vowelSignSet.addAll(new UnicodeSet("[\u0b81\u0b82\u0b83\u0bbe-\u0bcc\u0be2\u0be3\u0bd7]"));			/* Tamil */
-            vowelSignSet.addAll(new UnicodeSet("[\u0c01\u0c02\u0c03\u0c3e-\u0c4c\u0c62\u0c63\u0c55\u0c56]"));	/* Telugu */
-            vowelSignSet.addAll(new UnicodeSet("[\u0c81\u0c82\u0c83\u0cbe-\u0ccc\u0ce2\u0ce3\u0cd5\u0cd6]"));	/* Kannada */
-            vowelSignSet.addAll(new UnicodeSet("[\u0d01\u0d02\u0d03\u0d3e-\u0d4c\u0d62\u0d63\u0d57]"));			/* Malayalam */
+            vowelSignSet.addAll(new UnicodeSet("[\u0901\u0902\u0903\u093e-\u094c\u0962\u0963]"));               /* Devanagari */
+            vowelSignSet.addAll(new UnicodeSet("[\u0981\u0982\u0983\u09be-\u09cc\u09e2\u09e3\u09D7]"));         /* Bengali */
+            vowelSignSet.addAll(new UnicodeSet("[\u0a01\u0a02\u0a03\u0a3e-\u0a4c\u0a62\u0a63\u0a70\u0a71]"));   /* Gurmukhi */
+            vowelSignSet.addAll(new UnicodeSet("[\u0a81\u0a82\u0a83\u0abe-\u0acc\u0ae2\u0ae3]"));               /* Gujarati */
+            vowelSignSet.addAll(new UnicodeSet("[\u0b01\u0b02\u0b03\u0b3e-\u0b4c\u0b62\u0b63\u0b56\u0b57]"));   /* Oriya */
+            vowelSignSet.addAll(new UnicodeSet("[\u0b81\u0b82\u0b83\u0bbe-\u0bcc\u0be2\u0be3\u0bd7]"));         /* Tamil */
+            vowelSignSet.addAll(new UnicodeSet("[\u0c01\u0c02\u0c03\u0c3e-\u0c4c\u0c62\u0c63\u0c55\u0c56]"));   /* Telugu */
+            vowelSignSet.addAll(new UnicodeSet("[\u0c81\u0c82\u0c83\u0cbe-\u0ccc\u0ce2\u0ce3\u0cd5\u0cd6]"));   /* Kannada */
+            vowelSignSet.addAll(new UnicodeSet("[\u0d01\u0d02\u0d03\u0d3e-\u0d4c\u0d62\u0d63\u0d57]"));         /* Malayalam */
         }
-        
+
         String avagraha = "\u093d\u0abd\u0b3d";
         String nukta = "\u093c\u09bc\u0a3c\u0abc\u0b3c";
         String virama = "\u094d\u09cd\u0a4d\u0acd\u0b4d\u0bcd\u0c4d\u0ccd\u0d4d";
@@ -238,7 +238,7 @@ public class RoundTripTest extends TestFmwk {
         String chandrabindu = "\u0901\u0981\u0A81\u0b01\u0c01";
         public boolean is(String sourceString){
             int cp=sourceString.charAt(0);
-            
+
             // A vowel sign cannot be the first char
             if(vowelSignSet.contains(cp)){
                 return false;
@@ -250,8 +250,8 @@ public class RoundTripTest extends TestFmwk {
                 return false;
             }else if(sanskritStressSigns.indexOf(cp)!=-1){
                 return false;
-            }else if((chandrabindu.indexOf(cp)!=-1) && 
-                        (sourceString.length() >1 && 
+            }else if((chandrabindu.indexOf(cp)!=-1) &&
+                        (sourceString.length() >1 &&
                             vowelSignSet.contains(sourceString.charAt(1)))){
                 return false;
             }
@@ -275,17 +275,17 @@ public class RoundTripTest extends TestFmwk {
                                    "\u1FAF-\u1FB1\u1FB8-\u1FB9\u1FD0-\u1FD1\u1FD8-\u1FD9\u1FE0-\u1FE1\u1FE5"+
                                    "\u1FE8-\u1FE9\u1FEC\u212A-\u212B\uE04D\uE064]"+
                                    "-[\uE000-\uE080 \u01E2\u01E3]& [[:latin:][:mark:]]]";
-                                   
+
     public void TestDevanagariLatin() throws IOException, ParseException {
         long start = System.currentTimeMillis();
         new Test("Latin-DEVANAGARI", 50)
           .test(latinForIndic, "[[:Devanagari:][\u094d][\u0964\u0965]]", "[\u0965]", this, new LegalIndic());
         showElapsed(start, "TestDevanagariLatin");
     }
-    
+
     private static final String [][] array= new String[][]{
         new String [] {  "BENGALI-DEVANAGARI",
-            "[:BENGALI:]", "[:Devanagari:]", 
+            "[:BENGALI:]", "[:Devanagari:]",
                 "[\u0951-\u0954\u0943-\u0949\u094a\u0962\u0963\u090D\u090e\u0911\u0912\u0929\u0933\u0934\u0935\u093d\u0950\u0958\u0959\u095a\u095b\u095e\u09f0\u09f1]", /*roundtrip exclusions*/
                 },
         new String [] {  "DEVANAGARI-BENGALI",
@@ -294,7 +294,7 @@ public class RoundTripTest extends TestFmwk {
                   },
 
         new String [] {  "GURMUKHI-DEVANAGARI",
-          "[:GURMUKHI:]", "[:Devanagari:]", 
+          "[:GURMUKHI:]", "[:Devanagari:]",
                 "[\u0902\u0936\u0933\u0951-\u0954\u0902\u0903\u0943-\u0949\u094a\u0962\u0963\u090B\u090C\u090D\u090e\u0911\u0912\u0934\u0937\u093D\u0950\u0960\u0961\u0a72\u0a73\u0a74]", /*roundtrip exclusions*/
                 },
         new String [] {  "DEVANAGARI-GURMUKHI",
@@ -303,7 +303,7 @@ public class RoundTripTest extends TestFmwk {
                   },
 
         new String [] {  "GUJARATI-DEVANAGARI",
-          "[:GUJARATI:]", "[:Devanagari:]", 
+          "[:GUJARATI:]", "[:Devanagari:]",
                 "[\u0946\u094A\u0962\u0963\u0951-\u0954\u0961\u090c\u090e\u0912]", /*roundtrip exclusions*/
                 },
         new String [] {  "DEVANAGARI-GUJARATI",
@@ -312,7 +312,7 @@ public class RoundTripTest extends TestFmwk {
                   },
 
         new String [] {  "ORIYA-DEVANAGARI",
-          "[:ORIYA:]", "[:Devanagari:]", 
+          "[:ORIYA:]", "[:Devanagari:]",
                 "[\u0943-\u094a\u0962\u0963\u0951-\u0954\u0950\u090D\u090e\u0912\u0911\u0931\u0935]", /*roundtrip exclusions*/
                 },
         new String [] {  "DEVANAGARI-ORIYA",
@@ -321,7 +321,7 @@ public class RoundTripTest extends TestFmwk {
                   },
 
         new String [] {  "Tamil-DEVANAGARI",
-          "[:tamil:]", "[:Devanagari:]", 
+          "[:tamil:]", "[:Devanagari:]",
                   "[\u0901\u093c\u0943-\u094a\u0951-\u0954\u0962\u0963\u090B\u090C\u090D\u0911\u0916\u0917\u0918\u091B\u091D\u0920\u0921\u0922\u0925\u0926\u0927\u092B\u092C\u092D\u0936\u093d\u0950[\u0958-\u0961]]", /*roundtrip exclusions*/
                   },
         new String [] {  "DEVANAGARI-Tamil",
@@ -330,7 +330,7 @@ public class RoundTripTest extends TestFmwk {
                   },
 
         new String [] {  "Telugu-DEVANAGARI",
-          "[:telugu:]", "[:Devanagari:]", 
+          "[:telugu:]", "[:Devanagari:]",
                 "[\u093c\u0950\u0945\u0949\u0951-\u0954\u0962\u0963\u090D\u0911\u093d\u0929\u0934[\u0958-\u095f]]", /*roundtrip exclusions*/
                 },
         new String [] {  "DEVANAGARI-TELUGU",
@@ -339,16 +339,16 @@ public class RoundTripTest extends TestFmwk {
                   },
 
         new String [] {  "KANNADA-DEVANAGARI",
-          "[:KANNADA:]", "[:Devanagari:]", 
+          "[:KANNADA:]", "[:Devanagari:]",
                 "[\u0901\u0946\u093c\u0950\u0945\u0949\u0951-\u0954\u0962\u0963\u0950\u090D\u0911\u093d\u0929\u0934[\u0958-\u095f]]", /*roundtrip exclusions*/
                 },
         new String [] {  "DEVANAGARI-KANNADA",
            "[:Devanagari:]", "[:KANNADA:]",
-                  "[\u0cde\u0cd5\u0cd6\u0950\u090D\u0911\u093d\u0929\u0934[\u0958-\u095f]]", /*roundtrip exclusions*/ 
+                  "[\u0cde\u0cd5\u0cd6\u0950\u090D\u0911\u093d\u0929\u0934[\u0958-\u095f]]", /*roundtrip exclusions*/
                   },
 
         new String [] {  "MALAYALAM-DEVANAGARI",
-          "[:MALAYALAM:]", "[:Devanagari:]", 
+          "[:MALAYALAM:]", "[:Devanagari:]",
                 "[\u0901\u094a\u094b\u094c\u093c\u0950\u0944\u0945\u0949\u0951-\u0954\u0962\u0963\u090D\u0911\u093d\u0929\u0934[\u0958-\u095f]]", /*roundtrip exclusions*/
                 },
         new String [] {  "DEVANAGARI-MALAYALAM",
@@ -357,7 +357,7 @@ public class RoundTripTest extends TestFmwk {
                   },
 
         new String [] {  "GURMUKHI-BENGALI",
-          "[:GURMUKHI:]", "[:BENGALI:]",  
+          "[:GURMUKHI:]", "[:BENGALI:]",
                 "[\u0982\u09b6\u09e2\u09e3\u09c3\u09c4\u09d7\u098B\u098C\u09B7\u09E0\u09E1\u09F0\u09F1]", /*roundtrip exclusions*/
                 },
         new String [] {  "BENGALI-GURMUKHI",
@@ -366,16 +366,16 @@ public class RoundTripTest extends TestFmwk {
                   },
 
         new String [] {  "GUJARATI-BENGALI",
-          "[:GUJARATI:]", "[:BENGALI:]", 
+          "[:GUJARATI:]", "[:BENGALI:]",
                 "[\u09d7\u09e2\u09e3\u098c\u09e1\u09f0\u09f1]", /*roundtrip exclusions*/
                 },
         new String [] {  "BENGALI-GUJARATI",
            "[:BENGALI:]", "[:GUJARATI:]",
                   "[\u0A82\u0a83\u0Ac9\u0Ac5\u0ac7\u0A8D\u0A91\u0AB3\u0AB5\u0ABD\u0AD0]", /*roundtrip exclusions*/
                   },
- 
+
         new String [] {  "ORIYA-BENGALI",
-          "[:ORIYA:]", "[:BENGALI:]", 
+          "[:ORIYA:]", "[:BENGALI:]",
                 "[\u09c4\u09e2\u09e3\u09f0\u09f1]", /*roundtrip exclusions*/
                 },
         new String [] {  "BENGALI-ORIYA",
@@ -384,7 +384,7 @@ public class RoundTripTest extends TestFmwk {
                   },
 
         new String [] {  "Tamil-BENGALI",
-          "[:tamil:]", "[:BENGALI:]", 
+          "[:tamil:]", "[:BENGALI:]",
                   "[\u0981\u09bc\u09c3\u09c4\u09e2\u09e3\u09f0\u09f1\u098B\u098C\u0996\u0997\u0998\u099B\u099D\u09A0\u09A1\u09A2\u09A5\u09A6\u09A7\u09AB\u09AC\u09AD\u09B6\u09DC\u09DD\u09DF\u09E0\u09E1]", /*roundtrip exclusions*/
                   },
         new String [] {  "BENGALI-Tamil",
@@ -393,7 +393,7 @@ public class RoundTripTest extends TestFmwk {
                   },
 
         new String [] {  "Telugu-BENGALI",
-          "[:telugu:]", "[:BENGALI:]", 
+          "[:telugu:]", "[:BENGALI:]",
                 "[\u09e2\u09e3\u09bc\u09d7\u09f0\u09f1\u09dc\u09dd\u09df]", /*roundtrip exclusions*/
                 },
         new String [] {  "BENGALI-TELUGU",
@@ -402,16 +402,16 @@ public class RoundTripTest extends TestFmwk {
                   },
 
         new String [] {  "KANNADA-BENGALI",
-          "[:KANNADA:]", "[:BENGALI:]", 
+          "[:KANNADA:]", "[:BENGALI:]",
                 "[\u0981\u09e2\u09e3\u09bc\u09d7\u09f0\u09f1\u09dc\u09dd\u09df]", /*roundtrip exclusions*/
                 },
         new String [] {  "BENGALI-KANNADA",
            "[:BENGALI:]", "[:KANNADA:]",
-                  "[\u0cc6\u0cca\u0cd5\u0cd6\u0cc7\u0C8E\u0C92\u0CB1\u0cb3\u0cb5\u0cde]", /*roundtrip exclusions*/ 
+                  "[\u0cc6\u0cca\u0cd5\u0cd6\u0cc7\u0C8E\u0C92\u0CB1\u0cb3\u0cb5\u0cde]", /*roundtrip exclusions*/
                   },
 
         new String [] {  "MALAYALAM-BENGALI",
-          "[:MALAYALAM:]", "[:BENGALI:]", 
+          "[:MALAYALAM:]", "[:BENGALI:]",
                 "[\u0981\u09e2\u09e3\u09bc\u09c4\u09f0\u09f1\u09dc\u09dd\u09df]", /*roundtrip exclusions*/
                 },
         new String [] {  "BENGALI-MALAYALAM",
@@ -420,7 +420,7 @@ public class RoundTripTest extends TestFmwk {
                   },
 
         new String [] {  "GUJARATI-GURMUKHI",
-          "[:GUJARATI:]", "[:GURMUKHI:]", 
+          "[:GUJARATI:]", "[:GURMUKHI:]",
                 "[\u0A02\u0ab3\u0ab6\u0A70\u0a71\u0a82\u0a83\u0ac3\u0ac4\u0ac5\u0ac9\u0a5c\u0a72\u0a73\u0a74\u0a8b\u0a8d\u0a91\u0abd]", /*roundtrip exclusions*/
                 },
         new String [] {  "GURMUKHI-GUJARATI",
@@ -429,7 +429,7 @@ public class RoundTripTest extends TestFmwk {
                   },
 
         new String [] {  "ORIYA-GURMUKHI",
-          "[:ORIYA:]", "[:GURMUKHI:]", 
+          "[:ORIYA:]", "[:GURMUKHI:]",
                 "[\u0A02\u0a5c\u0a21\u0a47\u0a71\u0b02\u0b03\u0b33\u0b36\u0b43\u0b56\u0b57\u0B0B\u0B0C\u0B37\u0B3D\u0B5F\u0B60\u0B61\u0a35\u0a72\u0a73\u0a74]", /*roundtrip exclusions*/
                 },
         new String [] {  "GURMUKHI-ORIYA",
@@ -438,7 +438,7 @@ public class RoundTripTest extends TestFmwk {
                   },
 
         new String [] {  "TAMIL-GURMUKHI",
-          "[:TAMIL:]", "[:GURMUKHI:]", 
+          "[:TAMIL:]", "[:GURMUKHI:]",
                 "[\u0A02\u0a33\u0a36\u0a3c\u0a70\u0a71\u0a47\u0A16\u0A17\u0A18\u0A1B\u0A1D\u0A20\u0A21\u0A22\u0A25\u0A26\u0A27\u0A2B\u0A2C\u0A2D\u0A59\u0A5A\u0A5B\u0A5C\u0A5E\u0A72\u0A73\u0A74]", /*roundtrip exclusions*/
                 },
         new String [] {  "GURMUKHI-TAMIL",
@@ -447,7 +447,7 @@ public class RoundTripTest extends TestFmwk {
                   },
 
         new String [] {  "TELUGU-GURMUKHI",
-          "[:TELUGU:]", "[:GURMUKHI:]", 
+          "[:TELUGU:]", "[:GURMUKHI:]",
                 "[\u0A02\u0a33\u0a36\u0a3c\u0a70\u0a71\u0A59\u0A5A\u0A5B\u0A5C\u0A5E\u0A72\u0A73\u0A74]", /*roundtrip exclusions*/
                 },
         new String [] {  "GURMUKHI-TELUGU",
@@ -455,7 +455,7 @@ public class RoundTripTest extends TestFmwk {
                   "[\u0c02\u0c03\u0c33\u0c36\u0c44\u0c43\u0c46\u0c4a\u0c56\u0c55\u0C0B\u0C0C\u0C0E\u0C12\u0C31\u0C37\u0C60\u0C61]", /*roundtrip exclusions*/
                   },
         new String [] {  "KANNADA-GURMUKHI",
-          "[:KANNADA:]", "[:GURMUKHI:]", 
+          "[:KANNADA:]", "[:GURMUKHI:]",
                 "[\u0A02\u0a33\u0a36\u0a3c\u0a70\u0a71\u0A59\u0A5A\u0A5B\u0A5C\u0A5E\u0A72\u0A73\u0A74]", /*roundtrip exclusions*/
                 },
         new String [] {  "GURMUKHI-KANNADA",
@@ -464,7 +464,7 @@ public class RoundTripTest extends TestFmwk {
                   },
 
         new String [] {  "MALAYALAM-GURMUKHI",
-          "[:MALAYALAM:]", "[:GURMUKHI:]", 
+          "[:MALAYALAM:]", "[:GURMUKHI:]",
                 "[\u0A02\u0a4b\u0a4c\u0a33\u0a36\u0a3c\u0a70\u0a71\u0A59\u0A5A\u0A5B\u0A5C\u0A5E\u0A72\u0A73\u0A74]", /*roundtrip exclusions*/
                 },
         new String [] {  "GURMUKHI-MALAYALAM",
@@ -473,7 +473,7 @@ public class RoundTripTest extends TestFmwk {
                   },
 
         new String [] {  "GUJARATI-ORIYA",
-          "[:GUJARATI:]", "[:ORIYA:]", 
+          "[:GUJARATI:]", "[:ORIYA:]",
                 "[\u0b56\u0b57\u0B0C\u0B5F\u0B61]", /*roundtrip exclusions*/
                 },
         new String [] {  "ORIYA-GUJARATI",
@@ -482,7 +482,7 @@ public class RoundTripTest extends TestFmwk {
                   },
 
         new String [] {  "TAMIL-GUJARATI",
-          "[:TAMIL:]", "[:GUJARATI:]", 
+          "[:TAMIL:]", "[:GUJARATI:]",
                 "[\u0A81\u0abc\u0ac3\u0Ac4\u0Ac5\u0Ac9\u0Ac7\u0A8B\u0A8D\u0A91\u0A96\u0A97\u0A98\u0A9B\u0A9D\u0AA0\u0AA1\u0AA2\u0AA5\u0AA6\u0AA7\u0AAB\u0AAC\u0AAD\u0AB6\u0ABD\u0AD0\u0AE0]", /*roundtrip exclusions*/
                 },
         new String [] {  "GUJARATI-TAMIL",
@@ -491,7 +491,7 @@ public class RoundTripTest extends TestFmwk {
                   },
 
         new String [] {  "TELUGU-GUJARATI",
-          "[:TELUGU:]", "[:GUJARATI:]", 
+          "[:TELUGU:]", "[:GUJARATI:]",
                 "[\u0abc\u0Ac5\u0Ac9\u0A8D\u0A91\u0ABD\u0Ad0]", /*roundtrip exclusions*/
                 },
         new String [] {  "GUJARATI-TELUGU",
@@ -500,7 +500,7 @@ public class RoundTripTest extends TestFmwk {
                   },
 
         new String [] {  "KANNADA-GUJARATI",
-          "[:KANNADA:]", "[:GUJARATI:]", 
+          "[:KANNADA:]", "[:GUJARATI:]",
                 "[\u0A81\u0abc\u0Ac5\u0Ac9\u0A8D\u0A91\u0ABD\u0Ad0]", /*roundtrip exclusions*/
                 },
         new String [] {  "GUJARATI-KANNADA",
@@ -509,7 +509,7 @@ public class RoundTripTest extends TestFmwk {
                   },
 
         new String [] {  "MALAYALAM-GUJARATI",
-          "[:MALAYALAM:]", "[:GUJARATI:]", 
+          "[:MALAYALAM:]", "[:GUJARATI:]",
                 "[\u0A81\u0ac4\u0acb\u0acc\u0abc\u0Ac5\u0Ac9\u0A8D\u0A91\u0ABD\u0Ad0]", /*roundtrip exclusions*/
                 },
         new String [] {  "GUJARATI-MALAYALAM",
@@ -518,7 +518,7 @@ public class RoundTripTest extends TestFmwk {
                   },
 
         new String [] {  "TAMIL-ORIYA",
-          "[:TAMIL:]", "[:ORIYA:]", 
+          "[:TAMIL:]", "[:ORIYA:]",
                 "[\u0B01\u0b3c\u0b43\u0b56\u0B0B\u0B0C\u0B16\u0B17\u0B18\u0B1B\u0B1D\u0B20\u0B21\u0B22\u0B25\u0B26\u0B27\u0B2B\u0B2C\u0B2D\u0B36\u0B3D\u0B5C\u0B5D\u0B5F\u0B60\u0B61]", /*roundtrip exclusions*/
                 },
         new String [] {  "ORIYA-TAMIL",
@@ -527,7 +527,7 @@ public class RoundTripTest extends TestFmwk {
                   },
 
         new String [] {  "TELUGU-ORIYA",
-          "[:TELUGU:]", "[:ORIYA:]", 
+          "[:TELUGU:]", "[:ORIYA:]",
                 "[\u0b3c\u0b57\u0b56\u0B3D\u0B5C\u0B5D\u0B5F]", /*roundtrip exclusions*/
                 },
         new String [] {  "ORIYA-TELUGU",
@@ -536,7 +536,7 @@ public class RoundTripTest extends TestFmwk {
                   },
 
         new String [] {  "KANNADA-ORIYA",
-          "[:KANNADA:]", "[:ORIYA:]", 
+          "[:KANNADA:]", "[:ORIYA:]",
                 "[\u0B01\u0b3c\u0b57\u0B3D\u0B5C\u0B5D\u0B5F]", /*roundtrip exclusions*/
                 },
         new String [] {  "ORIYA-KANNADA",
@@ -545,7 +545,7 @@ public class RoundTripTest extends TestFmwk {
                   },
 
         new String [] {  "MALAYALAM-ORIYA",
-          "[:MALAYALAM:]", "[:ORIYA:]", 
+          "[:MALAYALAM:]", "[:ORIYA:]",
                 "[\u0B01\u0b3c\u0b56\u0B3D\u0B5C\u0B5D\u0B5F]", /*roundtrip exclusions*/
                 },
         new String [] {  "ORIYA-MALAYALAM",
@@ -554,7 +554,7 @@ public class RoundTripTest extends TestFmwk {
                   },
 
         new String [] {  "TELUGU-TAMIL",
-          "[:TELUGU:]", "[:TAMIL:]", 
+          "[:TELUGU:]", "[:TAMIL:]",
                 "[\u0bd7\u0ba9\u0bb4]", /*roundtrip exclusions*/
                 },
         new String [] {  "TAMIL-TELUGU",
@@ -563,7 +563,7 @@ public class RoundTripTest extends TestFmwk {
                   },
 
         new String [] {  "KANNADA-TAMIL",
-          "[:KANNADA:]", "[:TAMIL:]", 
+          "[:KANNADA:]", "[:TAMIL:]",
                 "[\u0bd7\u0bc6\u0ba9\u0bb4]", /*roundtrip exclusions*/
                 },
         new String [] {  "TAMIL-KANNADA",
@@ -572,7 +572,7 @@ public class RoundTripTest extends TestFmwk {
                   },
 
         new String [] {  "MALAYALAM-TAMIL",
-          "[:MALAYALAM:]", "[:TAMIL:]", 
+          "[:MALAYALAM:]", "[:TAMIL:]",
                 "[\u0ba9]", /*roundtrip exclusions*/
                 },
         new String [] {  "TAMIL-MALAYALAM",
@@ -581,7 +581,7 @@ public class RoundTripTest extends TestFmwk {
                   },
 
         new String [] {  "KANNADA-TELUGU",
-          "[:KANNADA:]", "[:TELUGU:]", 
+          "[:KANNADA:]", "[:TELUGU:]",
                 "[\u0C01\u0c3f\u0c46\u0c48\u0c4a]", /*roundtrip exclusions*/
                 },
         new String [] {  "TELUGU-KANNADA",
@@ -590,7 +590,7 @@ public class RoundTripTest extends TestFmwk {
                   },
 
         new String [] {  "MALAYALAM-TELUGU",
-          "[:MALAYALAM:]", "[:TELUGU:]", 
+          "[:MALAYALAM:]", "[:TELUGU:]",
                 "[\u0C01\u0c44\u0c4a\u0c4c\u0c4b\u0c55\u0c56]", /*roundtrip exclusions*/
                 },
         new String [] {  "TELUGU-MALAYALAM",
@@ -599,39 +599,39 @@ public class RoundTripTest extends TestFmwk {
                   },
 
         new String [] {  "MALAYALAM-KANNADA",
-          "[:MALAYALAM:]", "[:KANNADA:]", 
+          "[:MALAYALAM:]", "[:KANNADA:]",
                 "[\u0cc4\u0cc6\u0cca\u0ccc\u0ccb\u0cd5\u0cd6\u0cDe]", /*roundtrip exclusions*/
                 },
         new String [] {  "Latin-Bengali",
-            latinForIndic, "[[:Bengali:][\u0964\u0965]]", 
+            latinForIndic, "[[:Bengali:][\u0964\u0965]]",
                "[\u0965\u09f0\u09f1\u0965]", /*roundtrip exclusions*/
                 },
         new String [] {  "Latin-Gurmukhi",
-           latinForIndic, "[[:Gurmukhi:][\u0964\u0965]]", 
+           latinForIndic, "[[:Gurmukhi:][\u0964\u0965]]",
                "[\u0a02\u0965\u0a72\u0a73\u0a74]", /*roundtrip exclusions*/
                 },
         new String [] {  "Latin-Gujarati",
-            latinForIndic, "[[:Gujarati:][\u0964\u0965]]", 
+            latinForIndic, "[[:Gujarati:][\u0964\u0965]]",
                "[\u0965]", /*roundtrip exclusions*/
                 },
         new String [] {  "Latin-Oriya",
-            latinForIndic, "[[:Oriya:][\u0964\u0965]]", 
+            latinForIndic, "[[:Oriya:][\u0964\u0965]]",
                "[\u0965]", /*roundtrip exclusions*/
                 },
         new String [] {  "Latin-Tamil",
-            latinForIndic, "[:Tamil:]", 
+            latinForIndic, "[:Tamil:]",
                null, /*roundtrip exclusions*/
                 },
         new String [] {  "Latin-Telugu",
-            latinForIndic, "[:Telugu:]", 
+            latinForIndic, "[:Telugu:]",
                null, /*roundtrip exclusions*/
                 },
         new String [] {  "Latin-Kannada",
-            latinForIndic, "[:Kannada:]", 
+            latinForIndic, "[:Kannada:]",
                null, /*roundtrip exclusions*/
                 },
          new String [] {  "Latin-Malayalam",
-           latinForIndic, "[:Malayalam:]", 
+           latinForIndic, "[:Malayalam:]",
                null, /*roundtrip exclusions*/
                 },
         };
@@ -646,26 +646,26 @@ public class RoundTripTest extends TestFmwk {
         for(int i=0; i<num;i++){
            logln("Testing " + array[i][0] + " at index " + i   );
            new Test(array[i][0], 50)
-                .test(array[i][1], array[i][2], 
+                .test(array[i][1], array[i][2],
                 array[i][3],
                 this, new LegalIndic());
         }
         showElapsed(start, "TestInterIndic");
     }
- 
+
     //---------------
     // End Indic
     //---------------
-    
+
     public static class Legal {
         public boolean is(String sourceString) {return true;}
     }
-    
+
     public static class LegalJamo extends Legal {
         // any initial must be followed by a medial (or initial)
         // any medial must follow an initial (or medial)
         // any final must follow a medial (or final)
-        
+
         public boolean is(String sourceString) {
             try {
                 int t;
@@ -691,7 +691,7 @@ public class RoundTripTest extends TestFmwk {
                 return false;
             }
         }
-        
+
         public int getType(char c) {
             if ('\u1100' <= c && c <= '\u1112') return 0;
             else if ('\u1161' <= c && c  <= '\u1175') return 1;
@@ -699,7 +699,7 @@ public class RoundTripTest extends TestFmwk {
             return -1; // other
         }
     }
-    
+
     static BreakIterator thaiBreak = BreakIterator.getWordInstance(new Locale("th", "TH"));
     // anything is legal except word ending with Logical-order-exception
     public static class LegalThai extends Legal {
@@ -707,8 +707,8 @@ public class RoundTripTest extends TestFmwk {
             if (sourceString.length() == 0) return true;
             char ch = sourceString.charAt(sourceString.length() - 1); // don't worry about surrogates.
             if (UCharacter.hasBinaryProperty(ch, UProperty.LOGICAL_ORDER_EXCEPTION)) return false;
-            
-            
+
+
             // disallow anything with a wordbreak between
             /*
             if (UTF16.countCodePoint(sourceString) <= 1) return true;
@@ -723,7 +723,7 @@ public class RoundTripTest extends TestFmwk {
             return true;
         }
     }
-    
+
     // anything is legal except that Final letters can't be followed by letter; NonFinal must be
     public static class LegalHebrew extends Legal {
         static UnicodeSet FINAL = new UnicodeSet("[\u05DA\u05DD\u05DF\u05E3\u05E5]");
@@ -739,37 +739,37 @@ public class RoundTripTest extends TestFmwk {
                     if (LETTER.contains(next)) return false;
                 } else if (NON_FINAL.contains(ch)) {
                     if (!LETTER.contains(next)) return false;
-                }   
+                }
             }
             return true;
         }
     }
-    
-    
+
+
     public static class LegalGreek extends Legal {
-        
+
         boolean full;
-        
+
         public LegalGreek(boolean full) {
             this.full = full;
         }
-        
+
         static final char IOTA_SUBSCRIPT = '\u0345';
         static final UnicodeSet breathing = new UnicodeSet("[\\u0313\\u0314']");
         static final UnicodeSet validSecondVowel = new UnicodeSet("[\\u03C5\\u03B9\\u03A5\\u0399]");
-        
+
         public static boolean isVowel(char c) {
             return "\u03B1\u03B5\u03B7\u03B9\u03BF\u03C5\u03C9\u0391\u0395\u0397\u0399\u039F\u03A5\u03A9".indexOf(c) >= 0;
         }
-        
+
         public static boolean isRho(char c) {
             return "\u03C1\u03A1".indexOf(c) >= 0;
         }
-        
-        public boolean is(String sourceString) { 
+
+        public boolean is(String sourceString) {
             try {
                 String decomp = Normalizer.normalize(sourceString, Normalizer.NFD);
-                
+
                 // modern is simpler: don't care about anything but a grave
                 if (!full) {
                     //if (sourceString.equals("\u039C\u03C0")) return false;
@@ -782,12 +782,12 @@ public class RoundTripTest extends TestFmwk {
                     }
                     return true;
                 }
-                
+
                 // Legal full Greek has breathing marks IFF there is a vowel or RHO at the start
                 // IF it has them, it has exactly one.
                 // IF it starts with a RHO, then the breathing mark must come before the second letter.
                 // IF it starts with a vowel, then it must before the third letter.
-                //	it will only come after the second if of the format [vowel] [no iota subscript!] [upsilon or iota]
+                //  it will only come after the second if of the format [vowel] [no iota subscript!] [upsilon or iota]
                 // Since there are no surrogates in greek, don't worry about them
 
                 boolean firstIsVowel = false;
@@ -796,7 +796,7 @@ public class RoundTripTest extends TestFmwk {
                 int breathingCount = 0;
                 int letterCount = 0;
                 int breathingPosition = -1;
-                
+
                 for (int i = 0; i < decomp.length(); ++i) {
                     char c = decomp.charAt(i);
                     if (UCharacter.isLetter(c)) {
@@ -811,11 +811,11 @@ public class RoundTripTest extends TestFmwk {
                     }
                     if (c == IOTA_SUBSCRIPT && firstIsVowel && breathingCount == 0) return false;
                     if (breathing.contains(c)) {
-                    	breathingPosition = i;
+                        breathingPosition = i;
                         ++breathingCount;
                     }
                 }
-                
+
                 if (firstIsVowel || firstIsRho) return breathingCount == 1;
                 return breathingCount == 0;
             } catch (Throwable t) {
@@ -824,12 +824,12 @@ public class RoundTripTest extends TestFmwk {
             }
         }
     }
-    
+
     static class Test {
-    
+
         PrintWriter out;
-    
-        private String transliteratorID; 
+
+        private String transliteratorID;
         private int errorLimit = 500;
         private int errorCount = 0;
         private int pairLimit  = 0x10000;
@@ -839,33 +839,33 @@ public class RoundTripTest extends TestFmwk {
         UnicodeSet toSource;
         UnicodeSet toTarget;
         UnicodeSet roundtripExclusions;
-        
+
         RoundTripTest log;
         Legal legalSource;
         UnicodeSet badCharacters;
-    
+
         /*
          * create a test for the given script transliterator.
          */
         Test(String transliteratorID) {
             this(transliteratorID, 100);
         }
-    
+
         Test(String transliteratorID, int dens) {
             this.transliteratorID = transliteratorID;
             this.density = dens;
         }
-    
+
         public void setErrorLimit(int limit) {
             errorLimit = limit;
         }
-    
+
         public void setPairLimit(int limit) {
             pairLimit = limit;
         }
-        
+
         // Added to do better equality check.
-        
+
         public static boolean isSame(String a, String b) {
             if (a.equals(b)) return true;
             if (a.equalsIgnoreCase(b) && isCamel(a)) return true;
@@ -875,7 +875,7 @@ public class RoundTripTest extends TestFmwk {
             if (a.equalsIgnoreCase(b) && isCamel(a)) return true;
             return false;
         }
-        
+
         /*
         public boolean includesSome(UnicodeSet set, String a) {
             int cp;
@@ -886,7 +886,7 @@ public class RoundTripTest extends TestFmwk {
             return false;
         }
         */
-        
+
         public static boolean isCamel(String a) {
             //System.out.println("CamelTest");
             // see if string is of the form aB; e.g. lower, then upper or title
@@ -911,33 +911,33 @@ public class RoundTripTest extends TestFmwk {
             //System.out.println("FALSE");
             return false;
         }
-        
+
         static final UnicodeSet okAnyway = new UnicodeSet("[^[:Letter:]]");
         static final UnicodeSet neverOk = new UnicodeSet("[:Other:]");
-      
-        public void test(String sourceRange, String targetRange, 
-          String roundtripExclusions, RoundTripTest log, Legal legalSource) 
+
+        public void test(String sourceRange, String targetRange,
+          String roundtripExclusions, RoundTripTest log, Legal legalSource)
           throws java.io.IOException, java.text.ParseException {
             test(sourceRange, targetRange, sourceRange, roundtripExclusions, log, legalSource);
         }
 
         public void test(String sourceRange, String targetRange, String backtoSourceRange,
-          String roundtripExclusions, RoundTripTest log, Legal legalSource) 
+          String roundtripExclusions, RoundTripTest log, Legal legalSource)
           throws java.io.IOException, java.text.ParseException {
-            
+
             this.legalSource = legalSource;
             this.sourceRange = new UnicodeSet(sourceRange);
             this.sourceRange.removeAll(neverOk);
-            
+
             this.targetRange = new UnicodeSet(targetRange);
             this.targetRange.removeAll(neverOk);
-            
+
             this.toSource = new UnicodeSet(backtoSourceRange);
             this.toSource.addAll(okAnyway);
-            
+
             this.toTarget = new UnicodeSet(targetRange);
             this.toTarget.addAll(okAnyway);
-            
+
             if (roundtripExclusions != null && roundtripExclusions.length() > 0) {
                 this.roundtripExclusions = new UnicodeSet(roundtripExclusions);
             }else{
@@ -950,7 +950,7 @@ public class RoundTripTest extends TestFmwk {
             log.logln(Utility.escape("Target:  " + this.targetRange));
             log.logln(Utility.escape("Exclude: " + this.roundtripExclusions));
             if (log.isQuick()) log.logln("Abbreviated Test");
-            
+
             badCharacters = new UnicodeSet("[:other:]");
 
             // make a UTF-8 output file we can read with a browser
@@ -959,7 +959,7 @@ public class RoundTripTest extends TestFmwk {
 
             String logFileName = "test_" + transliteratorID.replace('/', '_') + ".html";
 
-            File lf = new File(logFileName); 
+            File lf = new File(logFileName);
             log.logln("Creating log file " + lf.getAbsoluteFile());
 
             out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(
@@ -979,7 +979,7 @@ public class RoundTripTest extends TestFmwk {
             out.close();
 
             if (errorCount > 0) {
-                log.errln(transliteratorID + " errors: " 
+                log.errln(transliteratorID + " errors: "
                     + errorCount + (errorCount > errorLimit ? " (at least!)" : "")
                     + ", see " + lf.getAbsoluteFile());
             } else {
@@ -987,7 +987,7 @@ public class RoundTripTest extends TestFmwk {
                 new File(logFileName).delete();
             }
         }
-        
+
         // ok if at least one is not equal
         public boolean checkIrrelevants(Transliterator t, String irrelevants) {
             for (int i = 0; i < irrelevants.length(); ++i) {
@@ -1005,18 +1005,18 @@ public class RoundTripTest extends TestFmwk {
             Transliterator targetToSource = sourceToTarget.getInverse();
             AbbreviatedUnicodeSetIterator usi = new AbbreviatedUnicodeSetIterator();
             AbbreviatedUnicodeSetIterator usi2 = new AbbreviatedUnicodeSetIterator();
-            
+
             log.logln("Checking that at least one irrevant characters is not NFC'ed");
-                
+
             String irrelevants = "\u2000\u2001\u2126\u212A\u212B\u2329"; // string is from NFC_NO in the UCD
-                
+
             if (!checkIrrelevants(sourceToTarget, irrelevants)) {
                 logFails("Source-Target, Must not NFC everything");
             }
             if (!checkIrrelevants(targetToSource, irrelevants)) {
                 logFails("Target-Source, irrelevants");
             }
-            
+
             if (EXTRA_TESTS) {
                 log.logln("Checking that toRules works");
                 String rules = "";
@@ -1044,11 +1044,11 @@ public class RoundTripTest extends TestFmwk {
                     out.flush();
                     throw e;
                 }
-                
+
                 usi.reset(sourceRange);
                 while (usi.next()) {
                     int c = usi.codepoint;
-                    
+
                     String cs = UTF16.valueOf(c);
                     String targ = sourceToTarget.transliterate(cs);
                     String targ2 = sourceToTarget2.transliterate(cs);
@@ -1056,11 +1056,11 @@ public class RoundTripTest extends TestFmwk {
                         logToRulesFails("Source-Target, toRules", cs, targ, targ2);
                     }
                 }
-                
+
                 usi.reset(targetRange);
                 while (usi.next()) {
                     int c = usi.codepoint;
-                    
+
                     String cs = UTF16.valueOf(c);
                     String targ = targetToSource.transliterate(cs);
                     String targ2 = targetToSource2.transliterate(cs);
@@ -1069,10 +1069,10 @@ public class RoundTripTest extends TestFmwk {
                     }
                 }
             }
-            
+
 
             log.logln("Checking that source characters convert to target - Singles");
-            
+
             UnicodeSet failSourceTarg = new UnicodeSet();
 
             /*
@@ -1082,20 +1082,20 @@ public class RoundTripTest extends TestFmwk {
             usi.reset(sourceRange);
             while (usi.next()) {
                 int c = usi.codepoint;
-                
+
                 String cs = UTF16.valueOf(c);
                 String targ = sourceToTarget.transliterate(cs);
-                if (!toTarget.containsAll(targ) 
+                if (!toTarget.containsAll(targ)
                         || badCharacters.containsSome(targ)) {
                     String targD = Normalizer.normalize(targ, Normalizer.NFD);
-                    if (!toTarget.containsAll(targD) 
+                    if (!toTarget.containsAll(targD)
                             || badCharacters.containsSome(targD)) {
                         logWrongScript("Source-Target", cs, targ);
                         failSourceTarg.add(c);
                         continue;
                     }
                 }
-                
+
                 String cs2 = Normalizer.normalize(cs, Normalizer.NFD);
                 String targ2 = sourceToTarget.transliterate(cs2);
                 if (!targ.equals(targ2)) {
@@ -1104,25 +1104,25 @@ public class RoundTripTest extends TestFmwk {
             }
 
             log.logln("Checking that source characters convert to target - Doubles");
-            
+
             /*
-            for (char c = 0; c < 0xFFFF; ++c) { 
+            for (char c = 0; c < 0xFFFF; ++c) {
                 if (TestUtility.isUnassigned(c) ||
                     !sourceRange.contains(c)) continue;
                 if (failSourceTarg.get(c)) continue;
-                
+
             */
-            
+
             UnicodeSet sourceRangeMinusFailures = new UnicodeSet(sourceRange);
             sourceRangeMinusFailures.removeAll(failSourceTarg);
-            
+
             boolean quickRt = log.getInclusion() < 10;
-            
+
             usi.reset(sourceRangeMinusFailures, quickRt, density);
-            
+
             while (usi.next()) {
                 int c = usi.codepoint;
-             
+
                 /*
                 for (char d = 0; d < 0xFFFF; ++d) {
                     if (TestUtility.isUnassigned(d) ||
@@ -1130,16 +1130,16 @@ public class RoundTripTest extends TestFmwk {
                     if (failSourceTarg.get(d)) continue;
                 */
                 usi2.reset(sourceRangeMinusFailures, quickRt, density);
-                
+
                 while (usi2.next()) {
                     int d = usi2.codepoint;
-                    
+
                     String cs = UTF16.valueOf(c) + UTF16.valueOf(d);
                     String targ = sourceToTarget.transliterate(cs);
-                    if (!toTarget.containsAll(targ) 
+                    if (!toTarget.containsAll(targ)
                             || badCharacters.containsSome(targ)) {
                         String targD = Normalizer.normalize(targ, Normalizer.NFD);
-                        if (!toTarget.containsAll(targD) 
+                        if (!toTarget.containsAll(targD)
                                 || badCharacters.containsSome(targD)) {
                             logWrongScript("Source-Target", cs, targ);
                             continue;
@@ -1154,7 +1154,7 @@ public class RoundTripTest extends TestFmwk {
             }
 
             log.logln("Checking that target characters convert to source and back - Singles");
-            
+
             UnicodeSet failTargSource = new UnicodeSet();
             UnicodeSet failRound = new UnicodeSet();
 
@@ -1162,7 +1162,7 @@ public class RoundTripTest extends TestFmwk {
                 if (TestUtility.isUnassigned(c) ||
                     !targetRange.contains(c)) continue;
                     */
-                    
+
             usi.reset(targetRange);
             while (usi.next()) {
                 String cs;
@@ -1174,14 +1174,14 @@ public class RoundTripTest extends TestFmwk {
                     c = usi.codepoint;
                     cs =UTF16.valueOf(c);
                 }
-                    
+
                 String targ = targetToSource.transliterate(cs);
                 String reverse = sourceToTarget.transliterate(targ);
-                
-                if (!toSource.containsAll(targ) 
+
+                if (!toSource.containsAll(targ)
                         || badCharacters.containsSome(targ)) {
                     String targD = Normalizer.normalize(targ, Normalizer.NFD);
-                    if (!toSource.containsAll(targD) 
+                    if (!toSource.containsAll(targD)
                             || badCharacters.containsSome(targD)) {
                         logWrongScript("Target-Source", cs, targ);
                         failTargSource.add(cs);
@@ -1203,43 +1203,43 @@ public class RoundTripTest extends TestFmwk {
 
             log.logln("Checking that target characters convert to source and back - Doubles");
             int count = 0;
-            
+
             UnicodeSet targetRangeMinusFailures = new UnicodeSet(targetRange);
             targetRangeMinusFailures.removeAll(failTargSource);
             targetRangeMinusFailures.removeAll(failRound);
-            
+
             //char[] buf = new char[4]; // maximum we can have with 2 code points
             /*
             for (char c = 0; c < 0xFFFF; ++c) {
                 if (TestUtility.isUnassigned(c) ||
                     !targetRange.contains(c)) continue;
                     */
-            
+
             usi.reset(targetRangeMinusFailures, quickRt, density);
-            	
+
             while (usi.next()) {
                 int c = usi.codepoint;
-                
+
                 if (++count > pairLimit) {
                     throw new TestTruncated("Test truncated at " + pairLimit + " x 64k pairs");
                 }
                 log.log(TestUtility.hex(c));
-                
+
                 /*
                 for (char d = 0; d < 0xFFFF; ++d) {
                     if (TestUtility.isUnassigned(d) ||
                         !targetRange.contains(d)) continue;
                         */
                 usi2.reset(targetRangeMinusFailures, quickRt, density);
-            	
-            	while (usi2.next()) {
+
+                while (usi2.next()) {
                     int d = usi2.codepoint;
                     if (d < 0) break;
-                    
+
                     String cs = UTF16.valueOf(c) + UTF16.valueOf(d);
                     String targ = targetToSource.transliterate(cs);
                     String reverse = sourceToTarget.transliterate(targ);
-                    
+
                     if (!toSource.containsAll(targ) /*&& !failTargSource.contains(c) && !failTargSource.contains(d)*/
                             || badCharacters.containsSome(targ)) {
                         String targD = Normalizer.normalize(targ, Normalizer.NFD);
@@ -1250,8 +1250,8 @@ public class RoundTripTest extends TestFmwk {
                         }
                     }
                     if (!isSame(cs, reverse) /*&& !failRound.contains(c) && !failRound.contains(d)*/
-                         && !roundtripExclusions.contains(c) 
-                         && !roundtripExclusions.contains(d) 
+                         && !roundtripExclusions.contains(c)
+                         && !roundtripExclusions.contains(d)
                          && !roundtripExclusions.contains(cs)) {
                         logRoundTripFailure(cs,targetToSource.getID(), targ,sourceToTarget.getID(), reverse);
                         continue;
@@ -1294,7 +1294,7 @@ public class RoundTripTest extends TestFmwk {
                         TestUtility.hex(toCan) + ")"
                         );
         }
-        
+
         final void logFails(String label) {
             if (++errorCount > errorLimit) {
                 throw new TestTruncated("Test truncated; too many failures");
@@ -1318,17 +1318,17 @@ public class RoundTripTest extends TestFmwk {
 
         final void logRoundTripFailure(String from,String toID, String to,String backID, String back) {
             if (!legalSource.is(from)) return; // skip illegals
-            
+
             if (++errorCount > errorLimit) {
                 throw new TestTruncated("Test truncated; too many failures");
             }
-            out.println("<br>Fail Roundtrip: \u200E" + 
+            out.println("<br>Fail Roundtrip: \u200E" +
                         from + "\u200E (" +
                         TestUtility.hex(from) + ") "+toID+"=> \u200E" +
                         to + "\u200E (" +
                         TestUtility.hex(to) + ") " + backID+"=> \u200E" +
                         back + "\u200E (" +
-                        TestUtility.hex(back) + ")" 
+                        TestUtility.hex(back) + ")"
                         );
         }
 
@@ -1367,7 +1367,7 @@ public class RoundTripTest extends TestFmwk {
             return true;
         }
         */
-        
+
         /*
          * Characters to check for target-source mapping
          * Typically the same as the source script, plus punctuation

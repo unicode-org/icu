@@ -4,14 +4,15 @@
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  *
- * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/CompoundTransliterator.java,v $ 
- * $Date: 2002/12/03 18:57:36 $ 
- * $Revision: 1.31 $
+ * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/CompoundTransliterator.java,v $
+ * $Date: 2003/01/28 18:55:41 $
+ * $Revision: 1.32 $
  *
  *****************************************************************************************
  */
 package com.ibm.icu.text;
 import com.ibm.icu.impl.Utility;
+import com.ibm.icu.impl.UtilityExtensions;
 import java.util.Enumeration;
 import java.util.Vector;
 
@@ -42,7 +43,7 @@ public class CompoundTransliterator extends Transliterator {
      * Otherwise, this should have a value of -1.  We need this
      * information to implement toRules().
      */
-    private int compoundRBTIndex;    
+    private int compoundRBTIndex;
 
     private static final String COPYRIGHT =
         "\u00A9 IBM Corporation 1999-2001. All rights reserved.";
@@ -80,7 +81,7 @@ public class CompoundTransliterator extends Transliterator {
     public CompoundTransliterator(Transliterator[] transliterators) {
         this(transliterators, null);
     }
-    
+
     /**
      * Constructs a new compound transliterator.
      * @param ID compound ID
@@ -94,7 +95,7 @@ public class CompoundTransliterator extends Transliterator {
         super(ID, filter);
         init(ID, direction, -1, null, true);
     }
-    
+
     /**
      * Constructs a new compound transliterator with no filter.
      * @param ID compound ID
@@ -104,7 +105,7 @@ public class CompoundTransliterator extends Transliterator {
     public CompoundTransliterator(String ID, int direction) {
         this(ID, direction, null);
     }
-    
+
     /**
      * Constructs a new forward compound transliterator with no filter.
      * @param ID compound ID
@@ -126,7 +127,7 @@ public class CompoundTransliterator extends Transliterator {
         super(ID, null);
         init(idBlock, FORWARD, idSplitPoint, splitTrans, false);
     }
-    
+
     /**
      * Package private constructor for Transliterator from a vector of
      * transliterators.  The caller is responsible for fixing up the
@@ -389,25 +390,25 @@ public class CompoundTransliterator extends Transliterator {
          * 1. h-u, changes hex to Unicode
          *
          *    4  7  a  d  0      4  7  a
-         *    abc/u0061/u    =>  abca/u    
+         *    abc/u0061/u    =>  abca/u
          *    C  S       L       C   S L   gl=f->a
          *
          * 2. upup, changes "x" to "XX"
          *
          *    4  7  a       4  7  a
-         *    abca/u    =>  abcAA/u    
-         *    C  SL         C    S   
+         *    abca/u    =>  abcAA/u
+         *    C  SL         C    S
          *                       L    gl=a->b
          * 3. u-h, changes Unicode to hex
          *
          *    4  7  a        4  7  a  d  0  3
-         *    abcAA/u    =>  abc/u0041/u0041/u    
+         *    abcAA/u    =>  abc/u0041/u0041/u
          *    C  S L         C              S
          *                                  L   gl=b->15
          * 4. return
          *
          *    4  7  a  d  0  3
-         *    abc/u0041/u0041/u    
+         *    abc/u0041/u0041/u
          *    C S L
          */
 
@@ -432,7 +433,7 @@ public class CompoundTransliterator extends Transliterator {
         if (DEBUG) {
             log = new StringBuffer("CompoundTransliterator{" + getID() +
                                    (incremental ? "}i: IN=" : "}: IN="));
-            Utility.formatInput(log, text, index);
+            UtilityExtensions.formatInput(log, text, index);
             System.out.println(Utility.escape(log.toString()));
         }
 
@@ -448,7 +449,7 @@ public class CompoundTransliterator extends Transliterator {
                     System.out.println("CompoundTransliterator[" + i +
                                        ".." + (trans.length-1) +
                                        (incremental ? "]i: " : "]: ") +
-                                       Utility.formatInput(text, index) +
+                                       UtilityExtensions.formatInput(text, index) +
                                        " (NOTHING TO DO)");
                 }
                 break;
@@ -459,7 +460,7 @@ public class CompoundTransliterator extends Transliterator {
                 log.append("CompoundTransliterator[" + i + "=" +
                            trans[i].getID() +
                            (incremental ? "]i: " : "]: "));
-                Utility.formatInput(log, text, index);
+                UtilityExtensions.formatInput(log, text, index);
             }
 
             trans[i].filteredTransliterate(text, index, incremental);
@@ -477,7 +478,7 @@ public class CompoundTransliterator extends Transliterator {
 
             if (DEBUG) {
                 log.append(" => ");
-                Utility.formatInput(log, text, index);
+                UtilityExtensions.formatInput(log, text, index);
                 System.out.println(Utility.escape(log.toString()));
             }
 
@@ -505,7 +506,7 @@ public class CompoundTransliterator extends Transliterator {
             log.setLength(0);
             log.append("CompoundTransliterator{" + getID() +
                        (incremental ? "}i: OUT=" : "}: OUT="));
-            Utility.formatInput(log, text, index);
+            UtilityExtensions.formatInput(log, text, index);
             System.out.println(Utility.escape(log.toString()));
         }
     }

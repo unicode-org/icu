@@ -4,20 +4,23 @@
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  *
- * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/normalizer/Attic/ExhaustiveTest.java,v $ 
- * $Date: 2002/06/20 01:16:24 $ 
- * $Revision: 1.11 $
+ * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/normalizer/TestDeprecatedNormalizerAPI.java,v $ 
+ * $Date: 2003/01/28 18:55:34 $ 
+ * $Revision: 1.1 $
  *
  *****************************************************************************************
  */
 package com.ibm.icu.dev.test.normalizer;
 
-import com.ibm.icu.dev.test.*;
-import com.ibm.icu.lang.*;
-import com.ibm.icu.text.*;
+import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.impl.NormalizerImpl;
+import com.ibm.icu.impl.Utility;
+import com.ibm.icu.lang.UCharacter;
+import com.ibm.icu.text.ComposedCharIter;
+import com.ibm.icu.text.Normalizer;
+import com.ibm.icu.text.StringCharacterIterator;
 
-public class ExhaustiveTest extends TestFmwk
+public class TestDeprecatedNormalizerAPI extends TestFmwk
 {
  	
     public static void main(String[] args) throws Exception
@@ -40,13 +43,46 @@ public class ExhaustiveTest extends TestFmwk
 
 
 
-        new ExhaustiveTest().run(args);
+        new TestDeprecatedNormalizerAPI().run(args);
     }
     
-    public ExhaustiveTest() {
+    public TestDeprecatedNormalizerAPI() {
     }
 
- 
+    public void TestNormalizerAPI(){
+         // instantiate a Normalizer from a CharacterIterator
+        String s=Utility.unescape("a\u0308\uac00\\U0002f800");
+        // make s a bit longer and more interesting
+        java.text.CharacterIterator iter = new StringCharacterIterator(s+s);
+        //test deprecated constructors
+        Normalizer norm = new Normalizer(iter, Normalizer.NFC,0);
+        Normalizer norm2 = new Normalizer(s,Normalizer.NFC,0);
+        if(norm.next()!=0xe4) {
+            errln("error in Normalizer(CharacterIterator).next()");
+        }       
+        // test clone(), ==, and hashCode()
+        Normalizer clone=(Normalizer)norm.clone();
+        if(clone.getBeginIndex()!= norm.getBeginIndex()){
+           errln("error in Normalizer.getBeginIndex()");
+        }
+        
+        if(clone.getEndIndex()!= norm.getEndIndex()){
+           errln("error in Normalizer.getEndIndex()");
+        }
+        // test setOption() and getOption()
+        clone.setOption(0xaa0000, true);
+        clone.setOption(0x20000, false);
+        if(clone.getOption(0x880000) ==0|| clone.getOption(0x20000)==1) {
+           errln("error in Normalizer::setOption() or Normalizer::getOption()");
+        }
+        //test deprecated normalize method
+        Normalizer.normalize(s,Normalizer.NFC,0);
+        //test deprecated compose method
+        Normalizer.compose(s,false,0);
+        //test deprecated decompose method
+        Normalizer.decompose(s,false,0);
+
+    }
 
     /**
      * Run through all of the characters returned by a composed-char iterator
