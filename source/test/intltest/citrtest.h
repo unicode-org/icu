@@ -8,6 +8,7 @@
 #define CHARITERTEST_H
 
 #include "intltest.h"
+#include "unicode/uiter.h"
 
 /**
  * Some tests for CharacterIterator and StringCharacterIterator
