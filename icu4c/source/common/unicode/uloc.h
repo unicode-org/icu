@@ -557,7 +557,7 @@ uloc_getDisplayCountry(const char* locale,
 
 
 /**
- * Gets the variant code suitable for display for the specified locale.
+ * Gets the variant name suitable for display for the specified locale.
  *
  * @param locale the locale to get the displayable variant code with. NULL may be used to specify the default.
  * @param displayLocale Specifies the locale to be used to display the name.  In other words,
@@ -579,6 +579,79 @@ uloc_getDisplayVariant(const char* locale,
                        int32_t variantCapacity,
                        UErrorCode* status);
 
+/**
+ * Gets the keyword name suitable for display for the specified locale.
+ * E.g: for the locale string de_DE@collation=PHONEBOOK, this API gets the display 
+ * string for the keyword collation. 
+ * Usage:
+ * <code>
+ *    UErrorCode status = U_ZERO_ERROR;
+ *    const char* keyword =NULL;
+ *    int32_t keywordLen = 0;
+ *    int32_t keywordCount = 0;
+ *    UChar displayKeyword[256];
+ *    int32_t displayKeywordLen = 0;
+ *    UEnumeration* keywordEnum = uloc_getKeywords("de_DE@collation=PHONEBOOK;calendar=TRADITIONAL", &status);
+ *    for(keywordCount = uenum_count(keywordEnum, &status); keywordCount > 0 ; keywordCount--){
+ *          if(U_FAILURE(status)){
+ *              ...something went wrong so handle the error...
+ *              break;
+ *          }
+ *          // the uenum_next returns NUL terminated string
+ *          keyword = uenum_next(keywordEnum, &keywordLen, &status);
+ *          displayKeywordLen = uloc_getDisplayKeyword(keyword, "en_US", displayKeyword, 256);
+ *          ... do something interesting .....
+ *    }
+ *    uenum_close(keywordEnum);
+ * </code>
+ * @param keyword           The keyword whose display string needs to be returned.
+ * @param displayLocale     Specifies the locale to be used to display the name.  In other words,
+ *                          if the locale's language code is "en", passing Locale::getFrench() for
+ *                          inLocale would result in "Anglais", while passing Locale::getGerman()
+ *                          for inLocale would result in "Englisch". NULL may be used to specify the default.
+ * @param dest              the buffer to which the displayable keyword should be written.
+ * @param destCapacity      The size of the buffer (number of UChars). If it is 0, then
+ *                          dest may be NULL and the function will only return the length of the 
+ *                          result without writing any of the result string (pre-flighting).
+ * @param status            error information if retrieving the displayable string failed. 
+ *                          Should not be NULL and should not indicate failure on entry.
+ * @return the actual buffer size needed for the displayable variant code.  
+ * @see #uloc_getKeywords
+ * @draft ICU 2.8
+ */
+U_CAPI int32_t U_EXPORT2
+uloc_getDisplayKeyword(const char* keyword,
+                       const char* displayLocale,
+                       UChar* dest,
+                       int32_t destCapacity,
+                       UErrorCode* status);
+/**
+ * Gets the value of the keyword suitable for display for the specified locale.
+ * E.g: for the locale string de_DE@collation=PHONEBOOK, this API gets the display 
+ * string for PHONEBOOK, in the display locale, when "collation" is specified as the keyword.
+ *
+ * @param locale            The locale to get the displayable variant code with. NULL may be used to specify the default.
+ * @param keyword           The keyword for whose value should be used.
+ * @param displayLocale     Specifies the locale to be used to display the name.  In other words,
+ *                          if the locale's language code is "en", passing Locale::getFrench() for
+ *                          inLocale would result in "Anglais", while passing Locale::getGerman()
+ *                          for inLocale would result in "Englisch". NULL may be used to specify the default.
+ * @param dest              the buffer to which the displayable keyword should be written.
+ * @param destCapacity      The size of the buffer (number of UChars). If it is 0, then
+ *                          dest may be NULL and the function will only return the length of the 
+ *                          result without writing any of the result string (pre-flighting).
+ * @param status            error information if retrieving the displayable string failed. 
+ *                          Should not be NULL and must not indicate failure on entry.
+ * @return the actual buffer size needed for the displayable variant code.  
+ * @draft ICU 2.8
+ */
+U_CAPI int32_t U_EXPORT2
+uloc_getDisplayKeywordValue(   const char* locale,
+                               const char* keyword,
+                               const char* displayLocale,
+                               UChar* dest,
+                               int32_t destCapacity,
+                               UErrorCode* status);
 /**
  * Gets the full name suitable for display for the specified locale.
  *
