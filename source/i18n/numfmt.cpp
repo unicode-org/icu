@@ -90,6 +90,7 @@ const UChar * const NumberFormat::fgLastResortNumberPatterns[] =
 
 // -------------------------------------
 // SimpleNumberFormatFactory implementation
+NumberFormatFactory::~NumberFormatFactory() {}
 SimpleNumberFormatFactory::~SimpleNumberFormatFactory() {}
 
 UBool SimpleNumberFormatFactory::visible(void) const {
