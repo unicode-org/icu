@@ -116,9 +116,6 @@ Package=<5>
 
 Package=<4>
 {{{
-    Begin Project Dependency
-    Project_Dep_Name pkgdata
-    End Project Dependency
 }}}
 
 ###############################################################################
@@ -437,6 +434,12 @@ Package=<4>
     Begin Project Dependency
     Project_Dep_Name toolutil
     End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name i18n
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name pkgdata
+    End Project Dependency
 }}}
 
 ###############################################################################
@@ -449,6 +452,24 @@ Package=<5>
 
 Package=<4>
 {{{
+    Begin Project Dependency
+    Project_Dep_Name common
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name i18n
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name genccode
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name gencmn
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name genrb
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name makeconv
+    End Project Dependency
 }}}
 
 ###############################################################################
