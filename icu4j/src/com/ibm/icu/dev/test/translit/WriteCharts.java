@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/translit/WriteCharts.java,v $
- * $Date: 2001/11/13 20:03:51 $
- * $Revision: 1.7 $
+ * $Date: 2001/11/13 21:13:58 $
+ * $Revision: 1.8 $
  *
  *****************************************************************************************
  */
@@ -67,7 +67,7 @@ public class WriteCharts {
                 scripts = UScript.getCode(target);
                 int targetScript = scripts[0];
                 if (targetScript == UScript.INVALID_CODE
-                        || targetScript < sourceScript) {
+                        || priority(targetScript) < priority(sourceScript)) {
                     // skip doing both directions
                     System.out.println("[Skipping '" + source + "-" + target + "']");
                     continue;
@@ -93,6 +93,11 @@ public class WriteCharts {
         set.toArray(results);
         return results;
     };
+    
+    public int priority(int script) {
+        if (script == UScript.LATIN) return -2;
+        return script;
+    }
     
     public static String showScripts(int[] scripts) {
         StringBuffer results = new StringBuffer();
