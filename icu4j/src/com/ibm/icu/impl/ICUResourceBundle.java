@@ -7,7 +7,9 @@
 
 package com.ibm.icu.impl;
 
+import java.io.File;
 import java.lang.ref.SoftReference;
+import java.net.URL;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -566,7 +568,6 @@ public abstract class ICUResourceBundle extends UResourceBundle{
         return instantiateBundle(baseName, localeName, ICU_DATA_CLASS_LOADER, disableFallback);   
     }
 
-    
     /**
      * Return a set of the locale names supported by a collection of resource bundles.
      * @param bundlePrefix the prefix of the resource bundles to use.
@@ -576,13 +577,27 @@ public abstract class ICUResourceBundle extends UResourceBundle{
     }
 
     /**
+     * Return a set of all the locale names supported by a collection of resource bundles.
+     */
+    public static Set getFullLocaleNameSet() {
+        return getFullLocaleNameSet(ICU_BASE_NAME);
+    }
+    
+    /**
+     * Return a set of all the locale names supported by a collection of resource bundles.
+     * @param bundlePrefix the prefix of the resource bundles to use.
+     */
+    public static Set getFullLocaleNameSet(String bundlePrefix) {
+        return getAvailEntry(bundlePrefix).getFullLocaleNameSet();
+    }
+
+    /**
      * Return a set of the locale names supported by a collection of resource bundles.
      */
     public static Set getAvailableLocaleNameSet() {
         return getAvailableLocaleNameSet(ICU_BASE_NAME);
     }
     
-
     /**
      * Get the set of Locales installed in the specified bundles.
      * @return the list of available locales
@@ -631,16 +646,10 @@ public abstract class ICUResourceBundle extends UResourceBundle{
             // if the ULocale does not contain a script code
             // only then convert it to a Locale object
             if(ulocales[i].getScript().length()==0){
-                list.add(new Locale(ulocales[i].getLanguage(), 
-                                    ulocales[i].getCountry(), 
-                                    ulocales[i].getVariant()));
+                list.add(ulocales[i].toLocale());
             }
          }
-         Locale[] locales = new Locale[list.size()];
-         for(int i=0; i<locales.length; i++){
-            locales[i] = (Locale)list.get(i);  
-         }
-         return locales;
+         return (Locale[])list.toArray(new Locale[list.size()]);
     }
 
     public Enumeration getKeys(){
@@ -656,6 +665,7 @@ public abstract class ICUResourceBundle extends UResourceBundle{
     public static ICUResourceBundle createBundle(String baseName, String localeID, ClassLoader root) {
         return ICUResourceBundleImpl.createBundle(baseName, localeID, root);
     }
+
     //====== protected members ==============
     protected int type = NONE;
     protected String key;
@@ -761,6 +771,7 @@ public abstract class ICUResourceBundle extends UResourceBundle{
         ULocale[] ulocales = getAvailEntry(baseName).getULocaleList();
         return getLocaleList(ulocales);
     }
+
     private static final String[] createLocaleNameArray(String baseName, ClassLoader root){
         ICUResourceBundle bundle = (ICUResourceBundle) instantiateBundle(baseName, ICU_RESOURCE_INDEX, root, true);
         bundle = bundle.get(INSTALLED_LOCALES);
@@ -775,17 +786,40 @@ public abstract class ICUResourceBundle extends UResourceBundle{
         bundle = null;
         return locales;
     }
+
+    private static final ArrayList createFullLocaleNameArray(String baseName, ClassLoader root){
+        URL url = root.getResource(baseName);
+        File file = new File(url.getPath());
+        File[] files = file.listFiles();
+        ArrayList list = new ArrayList();
+        
+        if(files!=null){
+            for(int i=0; i<files.length; i++){
+                if(!files[i].isDirectory()){
+                    String name = files[i].getName();
+                    if(name.indexOf("res_index")<0){
+                        name = name.substring(0, name.lastIndexOf('.'));
+                        list.add(name);
+                    }
+                }
+            }
+        }
+        return list;
+    }
+
+    private static Set createFullLocaleNameSet(String baseName) {
+        ArrayList list = createFullLocaleNameArray(baseName, ICU_DATA_CLASS_LOADER);
+        HashSet set = new HashSet();
+        set.addAll(list);
+        return Collections.unmodifiableSet(set);
+    }
+
     private static Set createLocaleNameSet(String baseName) {
         try {
             String[] locales = createLocaleNameArray(baseName,ICU_DATA_CLASS_LOADER);
 
             HashSet set = new HashSet();
             set.addAll(Arrays.asList(locales));
-            // add the obsolete ids, we really do support them
-            set.add("iw");
-            set.add("iw_IL");
-            set.add("in");
-            set.add("in_ID");
             return Collections.unmodifiableSet(set);
         }
         catch (MissingResourceException e) {
@@ -793,8 +827,6 @@ public abstract class ICUResourceBundle extends UResourceBundle{
                 System.out.println("couldn't find index for bundleName: " + baseName);
                 Thread.dumpStack();
             }
-            //System.out.println("couldn't find index for bundleName: " + baseName);
-            //e.printStackTrace();
         }
         return Collections.EMPTY_SET;
     }
@@ -807,6 +839,7 @@ public abstract class ICUResourceBundle extends UResourceBundle{
         private ULocale[] ulocales;
         private Locale[] locales;
         private Set nameSet;
+        private Set fullNameSet;
 
         AvailEntry(String prefix) {
             this.prefix = prefix;
@@ -829,6 +862,12 @@ public abstract class ICUResourceBundle extends UResourceBundle{
                 nameSet = createLocaleNameSet(prefix);
             }
             return nameSet;
+        }
+        Set getFullLocaleNameSet() {
+            if (fullNameSet == null) {
+                fullNameSet = createFullLocaleNameSet(prefix);
+            }
+            return fullNameSet;
         }
     }
 

@@ -54,7 +54,7 @@ public class ICULocaleService extends ICUService {
      * get(ULocale, int, ULocale[]) with KIND_ANY for kind.
      */
     public Object get(ULocale locale, ULocale[] actualReturn) {
-	return get(locale, LocaleKey.KIND_ANY, actualReturn);
+        return get(locale, LocaleKey.KIND_ANY, actualReturn);
     }
 
     /**
@@ -83,28 +83,37 @@ public class ICULocaleService extends ICUService {
 
     /**
      * Convenience override for callers using locales.  This calls
-     * registerObject(Object, ULocale, int kind, int coverage)
-     * passing KIND_ANY for the kind, and VISIBLE for the coverage.
+     * registerObject(Object, ULocale, int kind, boolean visible)
+     * passing KIND_ANY for the kind, and true for the visibility.
      */
     public Factory registerObject(Object obj, ULocale locale) {
-        return registerObject(obj, locale, LocaleKey.KIND_ANY, LocaleKeyFactory.VISIBLE);
+        return registerObject(obj, locale, LocaleKey.KIND_ANY, true);
+    }
+
+    /**
+     * Convenience override for callers using locales.  This calls
+     * registerObject(Object, ULocale, int kind, boolean visible)
+     * passing KIND_ANY for the kind.
+     */
+    public Factory registerObject(Object obj, ULocale locale, boolean visible) {
+        return registerObject(obj, locale, LocaleKey.KIND_ANY, visible);
     }
 
     /**
      * Convenience function for callers using locales.  This calls
-     * registerObject(Object, ULocale, int kind, int coverage)
-     * passing VISIBLE for the coverage.
+     * registerObject(Object, ULocale, int kind, boolean visible)
+     * passing true for the visibility.
      */
     public Factory registerObject(Object obj, ULocale locale, int kind) {
-        return registerObject(obj, locale, kind, LocaleKeyFactory.VISIBLE);
+        return registerObject(obj, locale, kind, true);
     }
 
     /**
      * Convenience function for callers using locales.  This  instantiates
      * a SimpleLocaleKeyFactory, and registers the factory.
      */
-    public Factory registerObject(Object obj, ULocale locale, int kind, int coverage) {
-        Factory factory = new SimpleLocaleKeyFactory(obj, locale, kind, coverage);
+    public Factory registerObject(Object obj, ULocale locale, int kind, boolean visible) {
+        Factory factory = new SimpleLocaleKeyFactory(obj, locale, kind, visible);
         return registerFactory(factory);
     }
 
@@ -284,7 +293,8 @@ public class ICULocaleService extends ICUService {
         public boolean fallback() {
             int x = currentID.lastIndexOf('_');
             if (x != -1) {
-                currentID = currentID.substring(0, x);
+                while (--x >= 0 && currentID.charAt(x) == '_'); // handle zh__PINYIN
+                currentID = currentID.substring(0, x+1);
                 return true;
             }
             if (fallbackID != null) {
@@ -306,77 +316,29 @@ public class ICULocaleService extends ICUService {
     }
 
     /**
-     * A subclass of Factory that uses LocaleKeys, and is able to
-     * 'cover' more specific locales with more general locales that it
-     * supports.  
-     *
-     * <p>Coverage may be either of the values VISIBLE or INVISIBLE.
-     *
-     * <p>'Visible' indicates that the specific locale(s) supported by
-     * the factory are registered in getSupportedIDs, 'Invisible'
-     * indicates that they are not.
-     *
-     * <p>Localization of visible ids is handled
-     * by the handling factory, regardless of kind.
+     * A subclass of Factory that uses LocaleKeys.  If 'visible' the
+     * factory reports its IDs.
      */
     public static abstract class LocaleKeyFactory implements Factory {
         protected final String name;
-        protected final int coverage;
+        protected final boolean visible;
 
-        /**
-         * Coverage value indicating that the factory makes
-         * its locales visible, and does not cover more specific 
-         * locales.
-         */
-        public static final int VISIBLE = 0;
+        public static final boolean VISIBLE = true;
+        public static final boolean INVISIBLE = false;
 
-        /**
-         * Coverage value indicating that the factory does not make
-         * its locales visible, and does not cover more specific
-         * locales.
-         */
-        public static final int INVISIBLE = 1;
-
-        // undefine these since hiding other factories opens a big bag of worms
-        /*
-         * Coverage value indicating that the factory makes
-         * its locales visible, covers more specific 
-         * locales, and provides localization for the covered
-         * locales.
-         *
-         public static final int VISIBLE_COVERS = 2;
-
-         /**
-         * Coverage value indicating that the factory does not
-         * make its locales visible, covers more specific
-         * locales, and also does not allow the locales it
-         * covers to be visible.
-         *
-         public static final int INVISIBLE_COVERS = 3;
-
-         /**
-         * Coverage value indicating that the factory makes
-         * its locales visible, covers more specific 
-         * locales, but does not allow the locales it covers
-         * to be visible.
-         *
-         public static final int VISIBLE_COVERS_REMOVE = 6;
-        */
-
-        
         /**
          * Constructor used by subclasses.
          */
-        protected LocaleKeyFactory(int coverage) {
-            this.coverage = coverage;
+        protected LocaleKeyFactory(boolean visible) {
+            this.visible = visible;
             this.name = null;
         }
 
         /**
          * Constructor used by subclasses.
          */
-        protected LocaleKeyFactory(int coverage, String name) {
-            this.coverage = coverage;
+        protected LocaleKeyFactory(boolean visible, String name) {
+            this.visible = visible;
             this.name = name;
         }
 
@@ -390,8 +352,8 @@ public class ICULocaleService extends ICUService {
                 LocaleKey lkey = (LocaleKey)key;
                 int kind = lkey.kind();
                 
-		ULocale uloc = lkey.currentLocale();
-		return handleCreate(uloc, kind, service);
+                ULocale uloc = lkey.currentLocale();
+                return handleCreate(uloc, kind, service);
             } else {
                 // System.out.println("factory: " + this + " did not support id: " + key.currentID());
                 // System.out.println("supported ids: " + getSupportedIDs());
@@ -400,76 +362,28 @@ public class ICULocaleService extends ICUService {
         }
 
         protected boolean handlesKey(Key key) {
-            if (key == null) {
-                return false;
+            if (key != null) {
+                String id = key.currentID();
+                Set supported = getSupportedIDs();
+                return supported.contains(id);
             }
-
-            String id = key.currentID();
-            Set supported = getSupportedIDs();
-            return supported.contains(id);
-            /*
-             * coverage not supported
-
-             if (supported.contains(id)) {
-             return true;
-             }
-             if ((coverage & 0x2) != 0) { 
-             Iterator iter = supported.iterator();
-             while (iter.hasNext()) {
-             String s = (String)iter.next();
-             if (LocaleUtility.isFallbackOf(s, id)) {
-             return true;
-             }
-             }
-             }
-             return false;
-            */
+            return false;
         }
 
         /**
-         * Override of superclass method.  This adjusts the result based
-         * on the coverage rule for this factory.
+         * Override of superclass method.
          */
         public void updateVisibleIDs(Map result) {
             Set cache = getSupportedIDs();
-            
-            boolean visible = (coverage & 0x1) == 0;
-            // boolean covers = (coverage & 0x2) != 0;
-            // boolean removes = !visible || (coverage & 0x4) != 0;
-
-            // System.out.println("vis: " + visible + " covers: " + covers + " removes: " + removes);
-            Map toRemap = new HashMap();
             Iterator iter = cache.iterator();
             while (iter.hasNext()) {
                 String id = (String)iter.next();
-                /*
-                 * Coverage not supported
-                 if (covers) {
-                 int idlen = id.length();
-                 Iterator miter = result.keySet().iterator();
-                 while (miter.hasNext()) {
-                 String mid = (String)miter.next();
-                 if (mid.startsWith(id) &&
-                 (mid.length() == idlen ||
-                 mid.charAt(idlen) == '_')) {
-
-                 if (removes) {
-                 miter.remove();
-                 } else {
-                 toRemap.put(mid, this);
-                 }
-                 }
-                 }
-                 }
-                */
-                if (!visible) {
-                    result.remove(id);
+                if (visible) {
+                    result.put(id, this);
                 } else {
-                    toRemap.put(id, this);
+                    result.remove(id);
                 }
-
-            }                    
-            result.putAll(toRemap);
+            }
         }
 
         /**
@@ -523,11 +437,8 @@ public class ICULocaleService extends ICUService {
                 buf.append(", name: ");
                 buf.append(name);
             }
-            buf.append(", coverage: ");
-            String[] coverage_names = {
-                "visible", "invisible", "visible_covers", "invisible_covers", "????", "visible_covers_remove"
-            };
-            buf.append(coverage_names[coverage]);
+            buf.append(", visible: ");
+            buf.append(visible);
             return buf.toString();
         }
     }
@@ -540,13 +451,13 @@ public class ICULocaleService extends ICUService {
         private final String id;
         private final int kind;
 
-	// TODO: remove when we no longer need this
-        public SimpleLocaleKeyFactory(Object obj, ULocale locale, int kind, int coverage) {
-            this(obj, locale, kind, coverage, null);
+        // TODO: remove when we no longer need this
+        public SimpleLocaleKeyFactory(Object obj, ULocale locale, int kind, boolean visible) {
+            this(obj, locale, kind, visible, null);
         }
 
-        public SimpleLocaleKeyFactory(Object obj, ULocale locale, int kind, int coverage, String name) {
-            super(coverage, name);
+        public SimpleLocaleKeyFactory(Object obj, ULocale locale, int kind, boolean visible, String name) {
+            super(visible, name);
             
             this.obj = obj;
             this.id = locale.getBaseName();
@@ -572,7 +483,7 @@ public class ICULocaleService extends ICUService {
         }
 
         public void updateVisibleIDs(Map result) {
-            if ((coverage & 0x1) == 0) {
+            if (visible) {
                 result.put(id, this);
             } else {
                 result.remove(id);
@@ -611,16 +522,28 @@ public class ICULocaleService extends ICUService {
          * with the given name.
          */
         public ICUResourceBundleFactory(String bundleName) {
-            super(VISIBLE);
+            super(true);
 
             this.bundleName = bundleName;
         }
 
         /**
-         * Return the supported IDs.  This is the set of all locale names in ICU_BASE_NAME.
+         * Return the supported IDs.  This is the set of all locale names for the bundleName.
          */
         protected Set getSupportedIDs() {
-            return ICUResourceBundle.getAvailableLocaleNameSet(bundleName);
+              return ICUResourceBundle.getFullLocaleNameSet(bundleName);
+        }
+
+        /**
+         * Override of superclass method.
+         */
+        public void updateVisibleIDs(Map result) {
+            Set visibleIDs = ICUResourceBundle.getAvailableLocaleNameSet(bundleName); // only visible ids
+            Iterator iter = visibleIDs.iterator();
+            while (iter.hasNext()) {
+                String id = (String)iter.next();
+                result.put(id, this);
+            }
         }
 
         /**
