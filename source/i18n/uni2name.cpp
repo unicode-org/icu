@@ -80,6 +80,7 @@ void UnicodeNameTransliterator::handleTransliterate(Replaceable& text, UTransPos
                                                     UBool /*isIncremental*/) const {
     // As of Unicode 3.0.0, the longest name is 83 characters long.
     // Adjust this buffer size as needed.
+
     char buf[128];
     
     int32_t cursor = offsets.start;
@@ -90,12 +91,15 @@ void UnicodeNameTransliterator::handleTransliterate(Replaceable& text, UTransPos
     UTextOffset len;
 
     while (cursor < limit) {
-        status = U_ZERO_ERROR;
         UChar32 c = text.char32At(cursor);
-        if ((len=u_charName(c, U_UNICODE_CHAR_NAME, buf, sizeof(buf), &status)) <= 0 || U_FAILURE(status)) {
+        status = U_ZERO_ERROR;
+        if ((len = u_charName(c, U_UNICODE_CHAR_NAME, buf, sizeof(buf), &status)) <= 0 || U_FAILURE(status)) {
+	    status = U_ZERO_ERROR;
+	    if ((len = u_charName(c, U_UNICODE_10_CHAR_NAME, buf,  sizeof(buf), &status)) <= 0 || U_FAILURE(status)) {
             sprintf(buf, "U+%04lX", c);
             len = uprv_strlen(buf);
-        }
+	    }
+	}
 
         str.truncate(1);
         str.append(UnicodeString(buf, len, "")).append(closeDelimiter);
