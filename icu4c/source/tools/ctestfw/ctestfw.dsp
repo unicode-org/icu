@@ -44,7 +44,6 @@ RSC=rc.exe
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MT /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "CTESTFW_EXPORTS" /YX /FD /c
 # ADD CPP /nologo /MD /W3 /GX /I "..\..\..\include" /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "CTESTFW_EXPORTS" /D "T_CTEST_IMPLEMENTATION" /YX /FD /c
-# SUBTRACT CPP /O<none>
 # ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /win32
 # ADD MTL /nologo /D "NDEBUG" /mktyplib203 /win32
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
@@ -101,17 +100,25 @@ SOURCE=.\ctest.c
 # PROP Default_Filter "h;hpp;hxx;hm;inl"
 # Begin Source File
 
-SOURCE=.\ctest.h
+SOURCE=.\unicode\ctest.h
 
 !IF  "$(CFG)" == "ctestfw - Win32 Release"
+
+# Begin Custom Build
+InputPath=.\unicode\ctest.h
+
+"..\..\..\include\unicode\ctest.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy         unicode\ctest.h         ..\..\..\include\unicode
+
+# End Custom Build
 
 !ELSEIF  "$(CFG)" == "ctestfw - Win32 Debug"
 
 # Begin Custom Build
-InputPath=.\ctest.h
+InputPath=.\unicode\ctest.h
 
-"..\..\..\include\ctest.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy          ctest.h         ..\..\..\include 
+"..\..\..\include\unicode\ctest.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy         unicode\ctest.h         ..\..\..\include\unicode
 
 # End Custom Build
 
