@@ -140,31 +140,33 @@ public class ICUListResourceBundle extends ListResourceBundle {
 	ArrayList vec = new ArrayList();
 	int count = 0;
 	int pos = 0;
-	final int LENGTH = 0x80; // buffer size
+	final int MAXLENGTH = 0x8000; // max buffer size - 32K
+	int length = 0x80; // start with small buffers and work up
 	do {
 	    pos = 0;
-	    byte[] buffer = new byte[LENGTH];
+	    length = length >= MAXLENGTH ? MAXLENGTH : length * 2;
+	    byte[] buffer = new byte[length];
 	    try {
 		do {
-		    int n = stream.read(buffer, pos, buffer.length - pos);
+		    int n = stream.read(buffer, pos, length - pos);
 		    if (n == -1) {
 			break;
 		    }
 		    pos += n;
-		} while (pos < LENGTH);
+		} while (pos < length);
 	    }
 	    catch (IOException e) {
 	    }
 	    vec.add(buffer);
 	    count += pos;
-	} while (pos == LENGTH);
+	} while (pos == length);
 						
 						
 	byte[] data = new byte[count];
 	pos = 0;
 	for (int i = 0; i < vec.size(); ++i) {
 	    byte[] buf = (byte[])vec.get(i);
-	    int len = Math.min(LENGTH, count - pos);
+	    int len = Math.min(buf.length, count - pos);
 	    System.arraycopy(buf, 0, data, pos, len);
 	    pos += len;
 	}
