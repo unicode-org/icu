@@ -7,6 +7,10 @@
 *   11/17/99    aliu        Creation.
 **********************************************************************
 */
+
+/* These APIs are becoming private */
+#define ICU_RULEBASEDTRANSLITERATOR_USE_DEPRECATES 1
+
 #include "unicode/rbt.h"
 #include "unicode/rep.h"
 #include "unicode/uniset.h"

@@ -49,7 +49,7 @@ U_NAMESPACE_BEGIN
  * and previous() could not be used after setIndex(), next(), first(), and current().
  *
  * Normalizer allows to start normalizing from anywhere in the input text by
- * calling setIndexOnly(), setIndex(), first(), or last().
+ * calling setIndexOnly(), first(), or last().
  * Without calling any of these, the iterator will start at the beginning of the text.
  *
  * At any time, next() returns the next normalized code point (UChar32),
@@ -57,13 +57,11 @@ U_NAMESPACE_BEGIN
  * previous() returns the previous normalized code point (UChar32),
  * with pre-decrement semantics (like CharacterIterator::previous32()).
  *
- * current() and setIndex() return the current code point
+ * current() returns the current code point
  * (respectively the one at the newly set index) without moving
  * the getIndex(). Note that if the text at the current position
  * needs to be normalized, then these functions will do that.
  * (This is why current() is not const.)
- * If you call setIndex() and then previous() then you normalize a piece of
- * text (and get a code point from setIndex()) that you probably do not need.
  * It is more efficient to call setIndexOnly() instead, which does not
  * normalize.
  *
@@ -454,6 +452,7 @@ public:
    */
   UChar32              previous(void);
 
+#ifdef ICU_NORMALIZER_USE_DEPRECATES
   /**
    * Set the iteration position in the input text that is being normalized
    * and return the first normalized character at that position.
@@ -474,6 +473,7 @@ public:
    * @deprecated To be removed after 2002-aug-31. Use setIndexOnly().
    */
   UChar32              setIndex(int32_t index);
+#endif
 
   /**
    * Set the iteration position in the input text that is being normalized,
@@ -691,6 +691,30 @@ public:
   // Deprecated APIs
   //-------------------------------------------------------------------------
 
+  /** The options for a Normalizer object */
+  enum {
+    /**
+     * Option to disable Hangul/Jamo composition and decomposition.
+     * This option applies to Korean text, 
+     * which can be represented either in the Jamo alphabet or in Hangul
+     * characters, which are really just two or three Jamo combined
+     * into one visual glyph.  Since Jamo takes up more storage space than
+     * Hangul, applications that process only Hangul text may wish to turn
+     * this option on when decomposing text.
+     * <p>
+     * The Unicode standard treates Hangul to Jamo conversion as a 
+     * canonical decomposition, so this option must be turned <b>off</b> if you
+     * wish to transform strings into one of the standard
+     * <a href="http://www.unicode.org/unicode/reports/tr15/" target="unicode">
+     * Unicode Normalization Forms</a>.
+     * <p>
+     * @see #setOption
+     * @deprecated To be removed (or moved to private for documentation) after 2002-aug-31. Obsolete option.
+     */
+    IGNORE_HANGUL     = 0x001
+  };
+
+#ifdef ICU_NORMALIZER_USE_DEPRECATES
   /**
    * This tells us what the bits in the "mode" mean.
    * @deprecated To be removed after 2002-sep-30. Use UNormalizationMode.
@@ -794,29 +818,6 @@ public:
      * @deprecated To be removed after 2002-sep-30. Use UNORM_FCD from UNormalizationMode.
      */
     FCD = FCD_BIT
-  };
-
-  /** The options for a Normalizer object */
-  enum {
-    /**
-     * Option to disable Hangul/Jamo composition and decomposition.
-     * This option applies to Korean text, 
-     * which can be represented either in the Jamo alphabet or in Hangul
-     * characters, which are really just two or three Jamo combined
-     * into one visual glyph.  Since Jamo takes up more storage space than
-     * Hangul, applications that process only Hangul text may wish to turn
-     * this option on when decomposing text.
-     * <p>
-     * The Unicode standard treates Hangul to Jamo conversion as a 
-     * canonical decomposition, so this option must be turned <b>off</b> if you
-     * wish to transform strings into one of the standard
-     * <a href="http://www.unicode.org/unicode/reports/tr15/" target="unicode">
-     * Unicode Normalization Forms</a>.
-     * <p>
-     * @see #setOption
-     * @deprecated To be removed (or moved to private for documentation) after 2002-aug-31. Obsolete option.
-     */
-    IGNORE_HANGUL     = 0x001
   };
 
   /**
@@ -1024,6 +1025,7 @@ public:
    * @deprecated To be removed after 2002-sep-30. Use UNormalizationMode.
    */
   inline EMode getMode(void) const;
+#endif /* ICU_NORMALIZER_USE_DEPRECATES */
 
 private:
   //-------------------------------------------------------------------------
@@ -1038,9 +1040,11 @@ private:
   void    init(CharacterIterator *iter);
   void    clearBuffer(void);
 
+#ifdef ICU_NORMALIZER_USE_DEPRECATES
   // Helper, without UErrorCode, for easier transitional code
   // remove after 2002-sep-30 with EMode etc.
   inline static UNormalizationMode getUMode(EMode mode);
+#endif  /* ICU_NORMALIZER_USE_DEPRECATES */
 
   //-------------------------------------------------------------------------
   // Private data
@@ -1075,21 +1079,6 @@ inline UBool
 Normalizer::operator!= (const Normalizer& other) const
 { return ! operator==(other); }
 
-inline void 
-Normalizer::normalize(const UnicodeString& source, 
-                      EMode mode, int32_t options,
-                      UnicodeString& result, 
-                      UErrorCode &status) {
-  normalize(source, getUNormalizationMode(mode, status), options, result, status);
-}
-
-inline UNormalizationCheckResult
-Normalizer::quickCheck(const UnicodeString& source,
-                       EMode mode, 
-                       UErrorCode &status) {
-  return quickCheck(source, getUNormalizationMode(mode, status), status);
-}
-
 inline UNormalizationCheckResult
 Normalizer::quickCheck(const UnicodeString& source,
                        UNormalizationMode mode, 
@@ -1123,6 +1112,22 @@ Normalizer::compare(const UnicodeString &s1, const UnicodeString &s2,
                        s2.getBuffer(), s2.length(),
                        options,
                        &errorCode);
+}
+
+#ifdef ICU_NORMALIZER_USE_DEPRECATES
+inline void 
+Normalizer::normalize(const UnicodeString& source, 
+                      EMode mode, int32_t options,
+                      UnicodeString& result, 
+                      UErrorCode &status) {
+  normalize(source, getUNormalizationMode(mode, status), options, result, status);
+}
+
+inline UNormalizationCheckResult
+Normalizer::quickCheck(const UnicodeString& source,
+                       EMode mode, 
+                       UErrorCode &status) {
+  return quickCheck(source, getUNormalizationMode(mode, status), status);
 }
 
 inline void
@@ -1208,6 +1213,7 @@ inline Normalizer::EMode Normalizer::getNormalizerEMode(
   }
   return Normalizer::DECOMP_COMPAT;
 }
+#endif /* ICU_NORMALIZER_USE_DEPRECATES */
 
 U_NAMESPACE_END
 #endif // _NORMLZR

@@ -10,6 +10,8 @@
 #define UNITOHEX_H
 
 #include "unicode/translit.h"
+
+#ifdef ICU_UNICODETOHEXTRANSLITERATOR_USE_DEPRECATES
 #include "unicode/unistr.h"
 
 U_NAMESPACE_BEGIN
@@ -221,5 +223,6 @@ public:
 inline UnicodeToHexTransliterator::~UnicodeToHexTransliterator() {}
 
 U_NAMESPACE_END
+#endif /* ICU_COMPOUNDTRANSLITERATOR_USE_DEPRECATES */
 
 #endif

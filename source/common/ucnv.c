@@ -256,7 +256,7 @@ ucnv_safeClone(const UConverter* cnv, void *stackBuffer, int32_t *pBufferSize, U
         }
         
         if (U_SUCCESS(*status)) {
-            *status = U_SAFECLONE_ALLOCATED_ERROR;
+            *status = U_SAFECLONE_ALLOCATED_WARNING;
         }
         
         /* record the fact that memory was allocated */

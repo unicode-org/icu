@@ -97,7 +97,7 @@ U_CDECL_BEGIN
  * @see u_getUnicodeVersion
  * @draft ICU 2.1
  */
-enum UProperty {
+typedef enum UProperty {
     /** Binary property Alphabetic. Same as u_isUAlphabetic, different from u_isalpha.
         Lu+Ll+Lt+Lm+Lo+Nl+Other_Alphabetic @draft ICU 2.1 */
     UCHAR_ALPHABETIC,
@@ -261,17 +261,14 @@ enum UProperty {
 
     /** One more than the last constant for enumerated/integer Unicode properties. @draft ICU 2.2 */
     UCHAR_INT_LIMIT
-};
-
-/** @draft ICU 2.1 */
-typedef enum UProperty UProperty;
+} UProperty;
 
 /**
  * Data for enumerated Unicode general category types.
  * See http://www.unicode.org/Public/UNIDATA/UnicodeData.html .
  * @stable
  */
-enum UCharCategory
+typedef enum UCharCategory
 {
     /** Non-category for unassigned and non-character code points. @stable */
     U_UNASSIGNED              = 0,
@@ -337,9 +334,7 @@ enum UCharCategory
     U_FINAL_PUNCTUATION       = 29,
     /** One higher than the last enum UCharCategory constant. @stable */
     U_CHAR_CATEGORY_COUNT
-};
-
-typedef enum UCharCategory UCharCategory;
+} UCharCategory;
 
 /**
  * U_GC_XX_MASK constants are bit flags corresponding to Unicode
@@ -470,394 +465,240 @@ typedef enum UCharDirection UCharDirection;
 enum UBlockCode {
     /** @draft ICU 2.0 */
     UBLOCK_BASIC_LATIN = 1,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
-    U_BASIC_LATIN = 1,
 
     /** @draft ICU 2.0 */
     UBLOCK_LATIN_1_SUPPLEMENT=2,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
-    U_LATIN_1_SUPPLEMENT=2,
 
     /** @draft ICU 2.0 */
     UBLOCK_LATIN_EXTENDED_A =3,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
-    U_LATIN_EXTENDED_A=3,
 
     /** @draft ICU 2.0 */
     UBLOCK_LATIN_EXTENDED_B =4,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
-    U_LATIN_EXTENDED_B=4,
 
     /** @draft ICU 2.0 */
     UBLOCK_IPA_EXTENSIONS =5,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
-    U_IPA_EXTENSIONS=5,
     
     /** @draft ICU 2.0 */
     UBLOCK_SPACING_MODIFIER_LETTERS =6,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
-    U_SPACING_MODIFIER_LETTERS=6,
 
     /** @draft ICU 2.0 */
     UBLOCK_COMBINING_DIACRITICAL_MARKS =7,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
-    U_COMBINING_DIACRITICAL_MARKS=7,
     
     /**
      * Unicode 3.2 renames this block to "Greek and Coptic".
      * @draft ICU 2.0
      */
     UBLOCK_GREEK =8,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
-    U_GREEK=8,
 
     /** @draft ICU 2.0 */
     UBLOCK_CYRILLIC =9,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
-    U_CYRILLIC=9,
 
     /** @draft ICU 2.0 */
     UBLOCK_ARMENIAN =10,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
-    U_ARMENIAN=10,
 
     /** @draft ICU 2.0 */
     UBLOCK_HEBREW =11,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
-    U_HEBREW=11,
 
     /** @draft ICU 2.0 */
     UBLOCK_ARABIC =12,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
-    U_ARABIC=12,
 
     /** @draft ICU 2.0 */
     UBLOCK_SYRIAC =13,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
-    U_SYRIAC=13,
 
     /** @draft ICU 2.0 */
     UBLOCK_THAANA =14,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
-    U_THAANA=14,
 
     /** @draft ICU 2.0 */
     UBLOCK_DEVANAGARI =15,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
-    U_DEVANAGARI=15,
 
     /** @draft ICU 2.0 */
     UBLOCK_BENGALI =16,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
-    U_BENGALI=16,
 
     /** @draft ICU 2.0 */
     UBLOCK_GURMUKHI =17,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
-    U_GURMUKHI=17,
 
     /** @draft ICU 2.0 */
     UBLOCK_GUJARATI =18,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
-    U_GUJARATI=18,
 
     /** @draft ICU 2.0 */
     UBLOCK_ORIYA =19,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
-    U_ORIYA=19,
 
     /** @draft ICU 2.0 */
     UBLOCK_TAMIL =20,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
-    U_TAMIL=20,
 
     /** @draft ICU 2.0 */
     UBLOCK_TELUGU =21,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
-    U_TELUGU=21,
 
     /** @draft ICU 2.0 */
     UBLOCK_KANNADA =22,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
-    U_KANNADA=22,
 
     /** @draft ICU 2.0 */
     UBLOCK_MALAYALAM =23,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
-    U_MALAYALAM=23,
 
     /** @draft ICU 2.0 */
     UBLOCK_SINHALA =24,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
-    U_SINHALA=24,
 
     /** @draft ICU 2.0 */
     UBLOCK_THAI =25,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
-    U_THAI=25,
 
     /** @draft ICU 2.0 */
     UBLOCK_LAO =26,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
-    U_LAO=26,
 
     /** @draft ICU 2.0 */
     UBLOCK_TIBETAN =27,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
-    U_TIBETAN=27,
 
     /** @draft ICU 2.0 */
     UBLOCK_MYANMAR =28,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
-    U_MYANMAR=28,
 
     /** @draft ICU 2.0 */
     UBLOCK_GEORGIAN =29,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
-    U_GEORGIAN=29,
 
     /** @draft ICU 2.0 */
     UBLOCK_HANGUL_JAMO =30,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
-    U_HANGUL_JAMO=30,
 
     /** @draft ICU 2.0 */
     UBLOCK_ETHIOPIC =31,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
-    U_ETHIOPIC=31,
 
     /** @draft ICU 2.0 */
     UBLOCK_CHEROKEE =32,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
-    U_CHEROKEE=32,
 
     /** @draft ICU 2.0 */
     UBLOCK_UNIFIED_CANADIAN_ABORIGINAL_SYLLABICS =33,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
-    U_UNIFIED_CANADIAN_ABORIGINAL_SYLLABICS=33,
 
     /** @draft ICU 2.0 */
     UBLOCK_OGHAM =34,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
-    U_OGHAM=34,
 
     /** @draft ICU 2.0 */
     UBLOCK_RUNIC =35,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
-    U_RUNIC=35,
 
     /** @draft ICU 2.0 */
     UBLOCK_KHMER =36,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
-    U_KHMER=36,
 
     /** @draft ICU 2.0 */
     UBLOCK_MONGOLIAN =37,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
-    U_MONGOLIAN=37,
 
     /** @draft ICU 2.0 */
     UBLOCK_LATIN_EXTENDED_ADDITIONAL =38,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
-    U_LATIN_EXTENDED_ADDITIONAL=38,
 
     /** @draft ICU 2.0 */
     UBLOCK_GREEK_EXTENDED =39,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
-    U_GREEK_EXTENDED=39,
 
     /** @draft ICU 2.0 */
     UBLOCK_GENERAL_PUNCTUATION =40,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
-    U_GENERAL_PUNCTUATION=40,
 
     /** @draft ICU 2.0 */
     UBLOCK_SUPERSCRIPTS_AND_SUBSCRIPTS =41,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
-    U_SUPERSCRIPTS_AND_SUBSCRIPTS=41,
     
     /** @draft ICU 2.0 */
     UBLOCK_CURRENCY_SYMBOLS =42,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
-    U_CURRENCY_SYMBOLS=42,
     
     /**
      * Unicode 3.2 renames this block to "Combining Diacritical Marks for Symbols".
      * @draft ICU 2.0
      */
     UBLOCK_COMBINING_MARKS_FOR_SYMBOLS =43,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
-    U_COMBINING_MARKS_FOR_SYMBOLS=43,
     
     /** @draft ICU 2.0 */
     UBLOCK_LETTERLIKE_SYMBOLS =44,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
-    U_LETTERLIKE_SYMBOLS=44,
     
     /** @draft ICU 2.0 */
     UBLOCK_NUMBER_FORMS =45,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
-    U_NUMBER_FORMS=45,
 
     /** @draft ICU 2.0 */
     UBLOCK_ARROWS =46,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
-    U_ARROWS=46,
 
     /** @draft ICU 2.0 */
     UBLOCK_MATHEMATICAL_OPERATORS =47,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
-    U_MATHEMATICAL_OPERATORS=47,
 
     /** @draft ICU 2.0 */
     UBLOCK_MISCELLANEOUS_TECHNICAL =48,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
-    U_MISCELLANEOUS_TECHNICAL=48,
 
     /** @draft ICU 2.0 */
     UBLOCK_CONTROL_PICTURES =49,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
-    U_CONTROL_PICTURES=49,
 
     /** @draft ICU 2.0 */
     UBLOCK_OPTICAL_CHARACTER_RECOGNITION =50,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
-    U_OPTICAL_CHARACTER_RECOGNITION=50,
 
     /** @draft ICU 2.0 */
     UBLOCK_ENCLOSED_ALPHANUMERICS =51,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
-    U_ENCLOSED_ALPHANUMERICS=51,
 
     /** @draft ICU 2.0 */
     UBLOCK_BOX_DRAWING =52,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
-    U_BOX_DRAWING=52,
 
     /** @draft ICU 2.0 */
     UBLOCK_BLOCK_ELEMENTS =53,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
-    U_BLOCK_ELEMENTS=53,
 
     /** @draft ICU 2.0 */
     UBLOCK_GEOMETRIC_SHAPES =54,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
-    U_GEOMETRIC_SHAPES=54,
 
     /** @draft ICU 2.0 */
     UBLOCK_MISCELLANEOUS_SYMBOLS =55,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
-    U_MISCELLANEOUS_SYMBOLS=55,
 
     /** @draft ICU 2.0 */
     UBLOCK_DINGBATS =56,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
-    U_DINGBATS=56,
 
     /** @draft ICU 2.0 */
     UBLOCK_BRAILLE_PATTERNS =57,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
-    U_BRAILLE_PATTERNS=57,
 
     /** @draft ICU 2.0 */
     UBLOCK_CJK_RADICALS_SUPPLEMENT =58,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
-    U_CJK_RADICALS_SUPPLEMENT=58,
 
     /** @draft ICU 2.0 */
     UBLOCK_KANGXI_RADICALS =59,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
-    U_KANGXI_RADICALS=59,
 
     /** @draft ICU 2.0 */
     UBLOCK_IDEOGRAPHIC_DESCRIPTION_CHARACTERS =60,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
-    U_IDEOGRAPHIC_DESCRIPTION_CHARACTERS=60,
 
     /** @draft ICU 2.0 */
     UBLOCK_CJK_SYMBOLS_AND_PUNCTUATION =61,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
-    U_CJK_SYMBOLS_AND_PUNCTUATION=61,
 
     /** @draft ICU 2.0 */
     UBLOCK_HIRAGANA =62,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
-    U_HIRAGANA=62,
 
     /** @draft ICU 2.0 */
     UBLOCK_KATAKANA =63,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
-    U_KATAKANA=63,
 
     /** @draft ICU 2.0 */
     UBLOCK_BOPOMOFO =64,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
-    U_BOPOMOFO=64,
 
     /** @draft ICU 2.0 */
     UBLOCK_HANGUL_COMPATIBILITY_JAMO =65,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
-    U_HANGUL_COMPATIBILITY_JAMO=65,
 
     /** @draft ICU 2.0 */
     UBLOCK_KANBUN =66,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
-    U_KANBUN=66,
 
     /** @draft ICU 2.0 */
     UBLOCK_BOPOMOFO_EXTENDED =67,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
-    U_BOPOMOFO_EXTENDED=67,
 
     /** @draft ICU 2.0 */
     UBLOCK_ENCLOSED_CJK_LETTERS_AND_MONTHS =68,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
-    U_ENCLOSED_CJK_LETTERS_AND_MONTHS=68,
 
     /** @draft ICU 2.0 */
     UBLOCK_CJK_COMPATIBILITY =69,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
-    U_CJK_COMPATIBILITY=69,
 
     /** @draft ICU 2.0 */
     UBLOCK_CJK_UNIFIED_IDEOGRAPHS_EXTENSION_A =70,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
-    U_CJK_UNIFIED_IDEOGRAPHS_EXTENSION_A=70,
 
     /** @draft ICU 2.0 */
     UBLOCK_CJK_UNIFIED_IDEOGRAPHS =71,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
-    U_CJK_UNIFIED_IDEOGRAPHS=71,
 
     /** @draft ICU 2.0 */
     UBLOCK_YI_SYLLABLES =72,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
-    U_YI_SYLLABLES=72,
 
     /** @draft ICU 2.0 */
     UBLOCK_YI_RADICALS =73,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
-    U_YI_RADICALS=73,
 
     /** @draft ICU 2.0 */
     UBLOCK_HANGUL_SYLLABLES =74,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
-    U_HANGUL_SYLLABLES=74,
 
     /** @draft ICU 2.0 */
     UBLOCK_HIGH_SURROGATES =75,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
-    U_HIGH_SURROGATES=75,
 
     /** @draft ICU 2.0 */
     UBLOCK_HIGH_PRIVATE_USE_SURROGATES =76,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
-    U_HIGH_PRIVATE_USE_SURROGATES=76,
 
     /** @draft ICU 2.0 */
     UBLOCK_LOW_SURROGATES =77,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
-    U_LOW_SURROGATES=77,
 
     /**
      * Same as UBLOCK_PRIVATE_USE_AREA.
@@ -879,53 +720,33 @@ enum UBlockCode {
      * @draft ICU 2.0
      */
     UBLOCK_PRIVATE_USE_AREA =UBLOCK_PRIVATE_USE,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
-    U_PRIVATE_USE_AREA=78,
 
     /** @draft ICU 2.0 */
     UBLOCK_CJK_COMPATIBILITY_IDEOGRAPHS =79,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
-    U_CJK_COMPATIBILITY_IDEOGRAPHS=79,
 
     /** @draft ICU 2.0 */
     UBLOCK_ALPHABETIC_PRESENTATION_FORMS =80,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
-    U_ALPHABETIC_PRESENTATION_FORMS=80,
 
     /** @draft ICU 2.0 */
     UBLOCK_ARABIC_PRESENTATION_FORMS_A =81,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
-    U_ARABIC_PRESENTATION_FORMS_A=81,
 
     /** @draft ICU 2.0 */
     UBLOCK_COMBINING_HALF_MARKS =82,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
-    U_COMBINING_HALF_MARKS=82,
 
     /** @draft ICU 2.0 */
     UBLOCK_CJK_COMPATIBILITY_FORMS =83,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
-    U_CJK_COMPATIBILITY_FORMS=83,
 
     /** @draft ICU 2.0 */
     UBLOCK_SMALL_FORM_VARIANTS =84,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
-    U_SMALL_FORM_VARIANTS=84,
 
     /** @draft ICU 2.0 */
     UBLOCK_ARABIC_PRESENTATION_FORMS_B =85,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
-    U_ARABIC_PRESENTATION_FORMS_B=85,
 
     /** @draft ICU 2.0 */
     UBLOCK_SPECIALS =86,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
-    U_SPECIALS=86,
 
     /** @draft ICU 2.0 */
     UBLOCK_HALFWIDTH_AND_FULLWIDTH_FORMS =87,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
-    U_HALFWIDTH_AND_FULLWIDTH_FORMS=87,
     
     /** @draft ICU 2.0 */
     UBLOCK_OLD_ITALIC = 88  ,
@@ -979,16 +800,192 @@ enum UBlockCode {
 
     /** @draft ICU 2.0 */
     UBLOCK_COUNT,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
-    U_SCRIPT_COUNT=UBLOCK_COUNT,
 
     /** @draft ICU 2.0 */
     UBLOCK_INVALID_CODE=-1,
 
+#ifdef ICU_UCHAR_USE_DEPRECATES
+    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    U_BASIC_LATIN = 1,
+    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    U_LATIN_1_SUPPLEMENT=2,
+    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    U_LATIN_EXTENDED_A=3,
+    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    U_LATIN_EXTENDED_B=4,
+    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    U_IPA_EXTENSIONS=5,
+    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    U_SPACING_MODIFIER_LETTERS=6,
+    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    U_COMBINING_DIACRITICAL_MARKS=7,
+    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    U_GREEK=8,
+    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    U_CYRILLIC=9,
+    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    U_ARMENIAN=10,
+    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    U_HEBREW=11,
+    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    U_ARABIC=12,
+    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    U_SYRIAC=13,
+    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    U_THAANA=14,
+    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    U_DEVANAGARI=15,
+    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    U_BENGALI=16,
+    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    U_GURMUKHI=17,
+    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    U_GUJARATI=18,
+    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    U_ORIYA=19,
+    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    U_TAMIL=20,
+    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    U_TELUGU=21,
+    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    U_KANNADA=22,
+    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    U_MALAYALAM=23,
+    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    U_SINHALA=24,
+    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    U_THAI=25,
+    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    U_LAO=26,
+    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    U_TIBETAN=27,
+    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    U_MYANMAR=28,
+    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    U_GEORGIAN=29,
+    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    U_HANGUL_JAMO=30,
+    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    U_ETHIOPIC=31,
+    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    U_CHEROKEE=32,
+    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    U_UNIFIED_CANADIAN_ABORIGINAL_SYLLABICS=33,
+    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    U_OGHAM=34,
+    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    U_RUNIC=35,
+    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    U_KHMER=36,
+    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    U_MONGOLIAN=37,
+    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    U_LATIN_EXTENDED_ADDITIONAL=38,
+    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    U_GREEK_EXTENDED=39,
+    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    U_GENERAL_PUNCTUATION=40,
+    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    U_SUPERSCRIPTS_AND_SUBSCRIPTS=41,
+    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    U_CURRENCY_SYMBOLS=42,
+    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    U_COMBINING_MARKS_FOR_SYMBOLS=43,
+    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    U_LETTERLIKE_SYMBOLS=44,
+    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    U_NUMBER_FORMS=45,
+    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    U_ARROWS=46,
+    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    U_MATHEMATICAL_OPERATORS=47,
+    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    U_MISCELLANEOUS_TECHNICAL=48,
+    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    U_CONTROL_PICTURES=49,
+    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    U_OPTICAL_CHARACTER_RECOGNITION=50,
+    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    U_ENCLOSED_ALPHANUMERICS=51,
+    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    U_BOX_DRAWING=52,
+    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    U_BLOCK_ELEMENTS=53,
+    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    U_GEOMETRIC_SHAPES=54,
+    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    U_MISCELLANEOUS_SYMBOLS=55,
+    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    U_DINGBATS=56,
+    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    U_BRAILLE_PATTERNS=57,
+    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    U_CJK_RADICALS_SUPPLEMENT=58,
+    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    U_KANGXI_RADICALS=59,
+    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    U_IDEOGRAPHIC_DESCRIPTION_CHARACTERS=60,
+    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    U_CJK_SYMBOLS_AND_PUNCTUATION=61,
+    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    U_HIRAGANA=62,
+    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    U_KATAKANA=63,
+    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    U_BOPOMOFO=64,
+    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    U_HANGUL_COMPATIBILITY_JAMO=65,
+    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    U_KANBUN=66,
+    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    U_BOPOMOFO_EXTENDED=67,
+    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    U_ENCLOSED_CJK_LETTERS_AND_MONTHS=68,
+    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    U_CJK_COMPATIBILITY=69,
+    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    U_CJK_UNIFIED_IDEOGRAPHS_EXTENSION_A=70,
+    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    U_CJK_UNIFIED_IDEOGRAPHS=71,
+    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    U_YI_SYLLABLES=72,
+    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    U_YI_RADICALS=73,
+    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    U_HANGUL_SYLLABLES=74,
+    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    U_HIGH_SURROGATES=75,
+    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    U_HIGH_PRIVATE_USE_SURROGATES=76,
+    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    U_LOW_SURROGATES=77,
+    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    U_PRIVATE_USE_AREA=78,
+    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    U_CJK_COMPATIBILITY_IDEOGRAPHS=79,
+    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    U_ALPHABETIC_PRESENTATION_FORMS=80,
+    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    U_ARABIC_PRESENTATION_FORMS_A=81,
+    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    U_COMBINING_HALF_MARKS=82,
+    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    U_CJK_COMPATIBILITY_FORMS=83,
+    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    U_SMALL_FORM_VARIANTS=84,
+    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    U_ARABIC_PRESENTATION_FORMS_B=85,
+    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    U_SPECIALS=86,
+    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    U_HALFWIDTH_AND_FULLWIDTH_FORMS=87,
+    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    U_SCRIPT_COUNT=UBLOCK_COUNT,
     /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
     U_CHAR_SCRIPT_COUNT =UBLOCK_COUNT,
     /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
     U_NO_SCRIPT = UBLOCK_COUNT
+#endif /* ICU_UCHAR_USE_DEPRECATES */
 };
 
 /** @draft ICU 2.0 */
@@ -998,7 +995,7 @@ typedef enum UBlockCode UBlockCode;
  * Values returned by the u_getCellWidth() function.
  * @deprecated To be removed after 2003-jun-30; use UCHAR_EAST_ASIAN_WIDTH.
  */
-enum UCellWidth
+typedef enum UCellWidth
 {
     /** @stable */
     U_ZERO_WIDTH              = 0,
@@ -1010,18 +1007,16 @@ enum UCellWidth
     U_NEUTRAL_WIDTH           = 3,
     /** @stable */
     U_CELL_WIDTH_COUNT
-};
-
-/** @deprecated To be removed after 2003-jun-30; use UCHAR_EAST_ASIAN_WIDTH. */
-typedef enum UCellWidth UCellWidth;
+} UCellWidth;
 
 /**
  * East Asian Width constants.
  *
  * @see UCHAR_EAST_ASIAN_WIDTH
+ * @see u_getIntPropertyValue
  * @draft ICU 2.2
  */
-enum UEastAsianWidth {
+typedef enum UEastAsianWidth {
     U_EA_NEUTRAL,
     U_EA_AMBIGUOUS,
     U_EA_HALFWIDTH,
@@ -1029,8 +1024,7 @@ enum UEastAsianWidth {
     U_EA_NARROW,
     U_EA_WIDE,
     U_EA_COUNT
-};
-typedef enum UEastAsianWidth UEastAsianWidth;
+} UEastAsianWidth;
 /*
  * Implementation note:
  * Keep UEastAsianWidth constant values in sync with names list in genprops/props2.c.
@@ -1047,15 +1041,12 @@ typedef enum UEastAsianWidth UEastAsianWidth;
  * @see u_charName
  * @stable
  */
-enum UCharNameChoice {
+typedef enum UCharNameChoice {
     U_UNICODE_CHAR_NAME,
     U_UNICODE_10_CHAR_NAME,
     U_EXTENDED_CHAR_NAME,
     U_CHAR_NAME_CHOICE_COUNT
-};
-
-/** @stable */
-typedef enum UCharNameChoice UCharNameChoice;
+} UCharNameChoice;
 
 /**
  * Decomposition Type constants.
@@ -1063,7 +1054,7 @@ typedef enum UCharNameChoice UCharNameChoice;
  * @see UCHAR_DECOMPOSITION_TYPE
  * @draft ICU 2.2
  */
-enum UDecompositionType {
+typedef enum UDecompositionType {
     U_DT_NONE,
     U_DT_CANONICAL,
     U_DT_COMPAT,
@@ -1083,8 +1074,7 @@ enum UDecompositionType {
     U_DT_VERTICAL,
     U_DT_WIDE,
     U_DT_COUNT /* 18 */
-};
-typedef enum UDecompositionType UDecompositionType;
+} UDecompositionType;
 
 /**
  * Joining Type constants.
@@ -1092,7 +1082,7 @@ typedef enum UDecompositionType UDecompositionType;
  * @see UCHAR_JOINING_TYPE
  * @draft ICU 2.2
  */
-enum UJoiningType {
+typedef enum UJoiningType {
     U_JT_NON_JOINING,
     U_JT_JOIN_CAUSING,
     U_JT_DUAL_JOINING,
@@ -1100,8 +1090,7 @@ enum UJoiningType {
     U_JT_RIGHT_JOINING,
     U_JT_TRANSPARENT,
     U_JT_COUNT /* 6 */
-};
-typedef enum UJoiningType UJoiningType;
+} UJoiningType;
 
 /**
  * Joining Group constants.
@@ -1109,7 +1098,7 @@ typedef enum UJoiningType UJoiningType;
  * @see UCHAR_JOINING_GROUP
  * @draft ICU 2.2
  */
-enum UJoiningGroup {
+typedef enum UJoiningGroup {
     U_JG_NO_JOINING_GROUP,
     U_JG_AIN,
     U_JG_ALAPH,
@@ -1162,8 +1151,7 @@ enum UJoiningGroup {
     U_JG_YUDH_HE,
     U_JG_ZAIN,
     U_JG_COUNT /* 51 */
-};
-typedef enum UJoiningGroup UJoiningGroup;
+} UJoiningGroup;
 
 /**
  * Line Break constants.
@@ -1171,7 +1159,7 @@ typedef enum UJoiningGroup UJoiningGroup;
  * @see UCHAR_LINE_BREAK
  * @draft ICU 2.2
  */
-enum ULineBreak {
+typedef enum ULineBreak {
     U_LB_UNKNOWN,
     U_LB_AMBIGUOUS,
     U_LB_ALPHABETIC,
@@ -1202,8 +1190,7 @@ enum ULineBreak {
     U_LB_BREAK_SYMBOLS,
     U_LB_ZWSPACE,
     U_LB_COUNT /* 29 */
-};
-typedef enum ULineBreak ULineBreak;
+} ULineBreak;
 
 /**
  * Numeric Type constants.
@@ -1211,14 +1198,13 @@ typedef enum ULineBreak ULineBreak;
  * @see UCHAR_NUMERIC_TYPE
  * @draft ICU 2.2
  */
-enum UNumericType {
+typedef enum UNumericType {
     U_NT_NONE,
     U_NT_DECIMAL,
     U_NT_DIGIT,
     U_NT_NUMERIC,
     U_NT_COUNT
-};
-typedef enum UNumericType UNumericType;
+} UNumericType;
 
 /**
  * Check a binary Unicode property for a code point.
@@ -2302,12 +2288,14 @@ U_CAPI int32_t U_EXPORT2
 u_getFC_NFKC_Closure(UChar32 c, UChar *dest, int32_t destCapacity, UErrorCode *pErrorCode);
 
 
+#ifdef ICU_UCHAR_USE_DEPRECATES
 /**
  *@deprecated Use u_charBlock instead. Remove after Aug,2002
  */
 #define u_charScript ublock_getCode
 /** @deprecated  Use the enum UCharBlock instead. Remove after Aug,2002*/
 typedef UBlockCode UCharScript;
+#endif /* ICU_UCHAR_USE_DEPRECATES */
 
 U_CDECL_END
 

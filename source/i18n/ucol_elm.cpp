@@ -25,6 +25,7 @@
 
 #include "unicode/uchar.h"
 #include "unicode/unistr.h"
+#include "unicode/ucoleitr.h"
 #include "ucol_elm.h"
 #include "unormimp.h"
 #include "caniter.h"
