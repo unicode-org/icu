@@ -293,7 +293,6 @@ icu4c/source/test/testdata/iscii.bin -text svneol=native#application/octet-strea
 icu4c/source/test/testdata/uni-text.bin -text
 icu4j/build.xml svneol=native#text/xml
 icu4j/license.html svneol=native#text/html
-icu4j/perf[!!-~]Nov[!!-~]20[!!-~]133153.html svneol=native#text/html
 icu4j/readme.html svneol=native#text/html
 icu4j/releasenotes.html svneol=native#text/html
 icu4j/src/com/ibm/icu/dev/data/ThaiWordFreq.xls -text
