@@ -1,6 +1,8 @@
 /*
- * ==========================================================================
- * Copyright (C) 1996-1999, International Business Machines Corporation
+ **********************************************************************
+ *   Copyright (C) 1995-1999, International Business Machines
+ *   Corporation and others.  All Rights Reserved.
+ **********************************************************************
  * and others. All Rights Reserved.
  * @version 1.0 23/10/96
  * @author  Helena Shih
@@ -73,7 +75,7 @@
  * @see                CompactIntArray
  * @see                CompactCharArray
  * @see                CompactStringArray
- * @version            $Revision: 1.4 $ 8/25/98
+ * @version            $Revision: 1.5 $ 8/25/98
  * @author             Helena Shih
  */
 /*====================================*/
