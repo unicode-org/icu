@@ -34,6 +34,8 @@ static const int32_t POW10[] = { 1, 10, 100, 1000, 10000, 100000,
 
 static const int32_t MAX_POW10 = (sizeof(POW10)/sizeof(POW10[0])) - 1;
 
+static const int32_t ISO_COUNTRY_CODE_LENGTH = 3;
+
 //------------------------------------------------------------
 // Resource tags
 
@@ -73,8 +75,8 @@ static const UChar CHOICE_FORMAT_MARK = 0x003D; // Equals sign
  */
 static inline char*
 myUCharsToChars(char* resultOfLen4, const UChar* currency) {
-    u_UCharsToChars(currency, resultOfLen4, 3);
-    resultOfLen4[3] = 0;
+    u_UCharsToChars(currency, resultOfLen4, ISO_COUNTRY_CODE_LENGTH);
+    resultOfLen4[ISO_COUNTRY_CODE_LENGTH] = 0;
     return resultOfLen4;
 }
 
@@ -100,7 +102,7 @@ _findMetaData(const UChar* currency) {
     }
 
     // Look up our currency, or if that's not available, then DEFAULT
-    char buf[4];
+    char buf[ISO_COUNTRY_CODE_LENGTH+1];
     ResourceBundle rb = currencyMeta.get(myUCharsToChars(buf, currency), ec);
     if (U_FAILURE(ec)) {
         rb = currencyMeta.get(DEFAULT_META, ec);
@@ -136,7 +138,7 @@ static CReg* gCRegHead = 0;
 
 struct CReg : public UMemory {
     CReg *next;
-    UChar iso[4];
+    UChar iso[ISO_COUNTRY_CODE_LENGTH+1];
     char  id[ULOC_FULLNAME_CAPACITY];
     
     CReg(const UChar* _iso, const char* _id)
@@ -148,8 +150,8 @@ struct CReg : public UMemory {
         }
         uprv_strncpy(id, _id, len);
         id[len] = 0;
-        uprv_memcpy(iso, _iso, 3 * sizeof(const UChar));
-        iso[3] = 0;
+        uprv_memcpy(iso, _iso, ISO_COUNTRY_CODE_LENGTH * sizeof(const UChar));
+        iso[ISO_COUNTRY_CODE_LENGTH] = 0;
     }
     
     static UCurrRegistryKey reg(const UChar* _iso, const char* _id, UErrorCode* status)
@@ -300,13 +302,18 @@ static UBool fallback(char *loc) {
     if (!*loc) {
         return FALSE;
     }
+    UErrorCode status = U_ZERO_ERROR;
+    uloc_getParent(loc, loc, uprv_strlen(loc), &status);
+ /*
     char *i = uprv_strrchr(loc, '_');
     if (i == NULL) {
         i = loc;
     }
     *i = 0;
+ */
     return TRUE;
 }
+
 
 U_CAPI const UChar* U_EXPORT2
 ucurr_getName(const UChar* currency,
@@ -357,7 +364,7 @@ ucurr_getName(const UChar* currency,
         return 0;
     }
 
-    char buf[4];
+    char buf[ISO_COUNTRY_CODE_LENGTH+1];
     myUCharsToChars(buf, currency);
 
     const UChar* s = NULL;
@@ -398,7 +405,7 @@ ucurr_getName(const UChar* currency,
     }
 
     // If we fail to find a match, use the ISO 4217 code
-    *len = u_strlen(currency); // Should == 3, but maybe not...?
+    *len = u_strlen(currency); // Should == ISO_COUNTRY_CODE_LENGTH, but maybe not...?
     return currency;
 }
 
