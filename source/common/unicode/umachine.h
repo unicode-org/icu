@@ -43,8 +43,6 @@
 
 #if defined(WIN32) || defined(_WIN32) || defined(WIN64) || defined(_WIN64)
 #   include "unicode/pwin32.h"
-#elif defined(__OS400__)
-#   include "unicode/pos400.h"
 #elif defined(__MWERKS__)
 #   include "unicode/pmacos.h"
 #else
