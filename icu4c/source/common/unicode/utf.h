@@ -128,6 +128,8 @@ typedef int32_t UTextOffset;
 
 #   define UTF_NEED_MULTIPLE_UCHAR(c)                   UTF16_NEED_MULTIPLE_UCHAR(c)
 #   define UTF_CHAR_LENGTH(c)                           UTF16_CHAR_LENGTH(c)
+#   define UTF_MAX_CHAR_LENGTH                          UTF16_MAX_CHAR_LENGTH
+#   define UTF_ARRAY_SIZE(size)                         UTF16_ARRAY_SIZE(size)
 
 #   define UTF_GET_CHAR_UNSAFE(s, i, c)                 UTF16_GET_CHAR_UNSAFE(s, i, c)
 #   define UTF_GET_CHAR_SAFE(s, i, length, c, strict)   UTF16_GET_CHAR_SAFE(s, i, length, c, strict)
