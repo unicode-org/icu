@@ -247,6 +247,7 @@ enum {
     NL      =0x0085,
     NBSP    =0x00a0,
     CGJ     =0x034f,
+    FIGURESP=0x2007,
     HAIRSP  =0x200a,
     ZWNJ    =0x200c,
     ZWJ     =0x200d,
