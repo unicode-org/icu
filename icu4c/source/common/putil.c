@@ -1645,7 +1645,6 @@ u_UCharsToChars(const UChar *us, char *cs, UTextOffset length) {
     }
 }
 
-/* this function will become public */
 U_CFUNC void
 u_versionFromString(UVersionInfo versionArray, const char *versionString) {
     char *end;
@@ -1670,11 +1669,58 @@ u_versionFromString(UVersionInfo versionArray, const char *versionString) {
     }
 }
 
-/* also, need
 U_CAPI void U_EXPORT2
 u_versionToString(UVersionInfo versionArray, char *versionString) {
+    uint16_t count, part;
+    uint8_t field;
+
+    if(versionString==NULL) {
+        return;
+    }
+
+    if(versionArray==NULL) {
+        versionString[0]=0;
+    }
+
+    /* count how many fields need to be written */
+    for(count=4; count>0 && versionArray[count-1]==0; --count) {}
+
+    if(count>0) {
+        /* write the first part */
+        /* write the decimal field value */
+        field=versionArray[0];
+        if(field>=100) {
+            *versionString++='0'+field/100;
+            field%=100;
+        }
+        if(field>=10) {
+            *versionString++='0'+field/10;
+            field%=10;
+        }
+        *versionString++='0'+field;
+
+        /* write the following parts */
+        for(part=1; part<count; ++part) {
+            /* write a dot first */
+            *versionString++=U_VERSION_DELIMITER;
+
+            /* write the decimal field value */
+            field=versionArray[part];
+            if(field>=100) {
+                *versionString++='0'+field/100;
+                field%=100;
+            }
+            if(field>=10) {
+                *versionString++='0'+field/10;
+                field%=10;
+            }
+            *versionString++='0'+field;
+        }
+    }
+
+    /* NUL-terminate */
+    *versionString=0;
 }
-*/
 
 U_CAPI void U_EXPORT2
 u_getVersion(UVersionInfo versionArray) {

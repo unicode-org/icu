@@ -878,10 +878,6 @@ u_charCellWidth(UChar32 ch)
     }
 }
 
-/* ### this function will become public */
-U_CFUNC void
-u_versionFromString(UVersionInfo versionArray, const char *versionString);
-
 void u_getUnicodeVersion(UVersionInfo versionArray) {
     if(versionArray!=NULL) {
         uprv_memcpy(versionArray, dataVersion, U_MAX_VERSION_LENGTH);
