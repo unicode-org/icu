@@ -7,8 +7,8 @@
 #
 # Instead of changing this file [unless you want to check it back in],
 # you should consider creating a 'reslocal.mk' file in this same directory.
-# Then, you can have your local changes remain even if you upgrade or re-
-# configure ICU.
+# Then, you can have your local changes remain even if you upgrade or
+# reconfigure ICU.
 #
 # Example 'reslocal.mk' files:
 #
@@ -30,7 +30,7 @@ GENRB_ALIAS_SOURCE = \
 iw.txt iw_IL.txt\
 no.txt no_NO.txt no_NO_NY.txt \
 ja_JP_TRADITIONAL.txt th_TH_TRADITIONAL.txt \
-zh_Hans.txt zh_Hans_SG.txt \
+zh_Hans.txt zh_Hans_CN.txt zh_Hans_SG.txt \
 zh_Hant.txt zh_Hant_HK.txt zh_Hant_MO.txt
 
 
