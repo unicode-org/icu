@@ -13,9 +13,6 @@
 **********************************************************************************
 */
 #include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <ctype.h>
 #include "unicode/uloc.h"
 #include "unicode/ucnv.h"
 #include "unicode/ucnv_err.h"
@@ -90,8 +87,7 @@ static void TestConverterFallBack(void)
 }
 
 
-
-
+void addTestConverterFallBack(TestNode** root);
 
 void addTestConverterFallBack(TestNode** root)
 {
