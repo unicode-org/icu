@@ -420,10 +420,12 @@ void TestSetChar(){
              log_err("ERROR: utf8_back1SafeBody failed for offset=%ld. Expected:%lx Got:%lx\n", offset, start_safe[i], setOffset);
          }
          */
-         setOffset=offset; 
-         UTF8_SET_CHAR_LIMIT_UNSAFE(input, setOffset);
-         if(setOffset != limit_unsafe[i]){
-             log_err("ERROR: UTF8_SET_CHAR_LIMIT_UNSAFE failed for offset=%ld. Expected:%lx Got:%lx\n", offset, limit_unsafe[i], setOffset);
+         if (offset != 0) { /* Can't have it go off the end of the array */
+             setOffset=offset; 
+             UTF8_SET_CHAR_LIMIT_UNSAFE(input, setOffset);
+             if(setOffset != limit_unsafe[i]){
+                 log_err("ERROR: UTF8_SET_CHAR_LIMIT_UNSAFE failed for offset=%ld. Expected:%lx Got:%lx\n", offset, limit_unsafe[i], setOffset);
+             }
          }
          setOffset=offset; 
          UTF8_SET_CHAR_LIMIT_SAFE(input,0, setOffset, sizeof(input));
