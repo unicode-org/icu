@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/components/Attic/AppletFrame.java,v $ 
- * $Date: 2000/03/10 04:07:26 $ 
- * $Revision: 1.2 $
+ * $Date: 2001/02/05 19:24:47 $ 
+ * $Revision: 1.3 $
  *
  *****************************************************************************************
  */
@@ -14,8 +14,11 @@ package com.ibm.text.components;
 import java.applet.*;
 import java.net.URL;
 import java.util.Enumeration;
+import java.util.Iterator;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.InputStream;
+import java.io.IOException;
 
 /**
  * <p>A Frame that runs an Applet within itself, making it possible
@@ -34,7 +37,7 @@ import java.awt.event.*;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: AppletFrame.java,v $ $Revision: 1.2 $ $Date: 2000/03/10 04:07:26 $
+ * @version $RCSfile: AppletFrame.java,v $ $Revision: 1.3 $ $Date: 2001/02/05 19:24:47 $
  */
 public class AppletFrame extends Frame implements AppletStub, AppletContext {
 
@@ -42,7 +45,7 @@ public class AppletFrame extends Frame implements AppletStub, AppletContext {
 
     private static final String COPYRIGHT =
         "\u00A9 IBM Corporation 1999. All rights reserved.";
-
+    
     /**
      * Construct a Frame running the given Applet with the default size
      * of 640 by 480.
@@ -134,5 +137,16 @@ public class AppletFrame extends Frame implements AppletStub, AppletContext {
 
     public void showStatus(String status) {
         System.out.println(status);
+    }
+    
+    public void setStream(String key, InputStream stream) throws IOException {
+    }
+    
+    public InputStream getStream(String key) {
+        return null;
+    }
+    
+    public Iterator getStreamKeys() {
+        return null;
     }
 }
