@@ -102,7 +102,8 @@ public class TimeZoneTest extends TestFmwk
             new ZoneDescriptor("ART", 120, true),
             new ZoneDescriptor("EET", 120, true),
             new ZoneDescriptor("EAT", 180, false),
-            new ZoneDescriptor("MET", 210, true),
+            // new ZoneDescriptor("MET", 210, true),
+            // This is a standard Unix zone, so don't remap it - Liu 3Jan01
             // new ZoneDescriptor("NET", 240, false);
             // As of bug 4191164, fix NET
             new ZoneDescriptor("NET", 240, true),
@@ -110,14 +111,21 @@ public class TimeZoneTest extends TestFmwk
             new ZoneDescriptor("IST", 330, false),
             new ZoneDescriptor("BST", 360, false),
             new ZoneDescriptor("VST", 420, false),
-            new ZoneDescriptor("CTT", 480, false),
+            new ZoneDescriptor("CTT", 480, true), // Revised Liu 3Jan01, std->dst
             new ZoneDescriptor("JST", 540, false),
-            new ZoneDescriptor("ACT", 570, false),
+            new ZoneDescriptor("ACT", 570, true), // Revised Liu 3Jan01, std->dst
             new ZoneDescriptor("AET", 600, true),
             new ZoneDescriptor("SST", 660, false),
             // new ZoneDescriptor("NST", 720, false),
             // As of bug 4130885, fix NST (New Zealand)
             new ZoneDescriptor("NST", 720, true), // Pacific/Auckland
+
+            // [3Jan01 Liu] Three of these zones have been updated.
+            // The CTT and ACT zones just remap to Asia/Shanghai
+            // and Australia/Darwin.  Since those zones have changed,
+            // I have updated the table.  The MET zone used to be mapped
+            // to Asia/Tehran but since MET is a standard Unix zone named
+            // in the source data we no longer do this in icu or icu4j.
         };
 
         Hashtable hash = new Hashtable();
@@ -510,7 +518,8 @@ public class TimeZoneTest extends TestFmwk
         }
         else{
             if (tz.getRawOffset() != (-4*millisPerHour))
-                errln("FAIL: Offset for PRT should be -4");
+                errln("FAIL: Offset for PRT should be -4, got " +
+                      tz.getRawOffset() / (double)millisPerHour);
         }
 
     }
