@@ -9,15 +9,18 @@
 #export DH_VERBOSE=1
 
 # This is the debhelper compatability version to use.
-export DH_COMPAT=1
+export DH_COMPAT=2
+firstdir := $(shell sed -n 's/Package: \(.*\)/\1/p' debian/control | head -1)
 
 # Where the source for ICU is, where to build
 srcdir = source
 builddir = build
 
 # ICU installation directories, w/o the initial slash
-icudatadir = usr/share/icu/$(version)
-iculibdir = usr/lib/icu/$(version)
+pkgdatadir = usr/share/icu
+icudatadir = $(pkgdatadir)/$(version)
+pkglibdir = usr/lib/icu
+iculibdir = $(pkglibdir)/$(version)
 datasrcdir = usr/share/icu/$(version)/data
 
 # shared library versions, option 1
@@ -82,8 +85,8 @@ install: build
 	dh_clean -k
 	dh_installdirs
 
-	# Add here commands to install the package into debian/tmp.
-	$(MAKE) -C $(builddir) install DESTDIR=`pwd`/debian/tmp
+	# Add here commands to install the package into debian/$(firstdir).
+	$(MAKE) -C $(builddir) install DESTDIR=`pwd`/debian/$(firstdir)
 
 
 # Build architecture-independent files here.
@@ -92,7 +95,7 @@ binary-indep: build install
 
 # Build some Debian files
 debian/%: debian/%.in
-	cd source \
+	cd $(builddir) \
 	  && CONFIG_FILES=../$@ CONFIG_HEADERS= $(SHELL) ./config.status
 
 DEBIAN_FILES = icu.conffiles icu.postinst icu.prerm
@@ -102,11 +105,11 @@ binary-arch: build install $(addprefix debian/,$(DEBIAN_FILES))
 #	dh_testversion
 	dh_testdir
 	dh_testroot
-	rm debian/tmp/usr/sbin/gentest
+	rm debian/$(firstdir)/usr/sbin/gentest
 	#
 	# build libicu${major} package by moving files from icu-dev
 	#
-	dh_movefiles -plibicu$(major) \
+	dh_movefiles --sourcedir=debian/$(firstdir) -plibicu$(major) \
 	    usr/lib/libicuuc.so.* \
 	    usr/lib/libicui18n.so.* \
 	    usr/lib/libicutoolutil.so.* \
@@ -114,7 +117,7 @@ binary-arch: build install $(addprefix debian/,$(DEBIAN_FILES))
 	#
 	# build icu package by moving files from icu-dev
 	#
-	dh_movefiles -picu \
+	dh_movefiles --sourcedir=debian/$(firstdir) -picu \
 	    etc \
 	    usr/sbin \
 	    $(icudatadir)/README \
@@ -122,12 +125,14 @@ binary-arch: build install $(addprefix debian/,$(DEBIAN_FILES))
 	    $(iculibdir)/u*.dat \
 	    $(iculibdir)/tz.dat \
 	    usr/share/man
-	rm debian/tmp/$(iculibdir)/cnvalias.dat
+	rm debian/$(firstdir)/$(pkglibdir)/current
+	rm debian/$(firstdir)/$(iculibdir)/cnvalias.dat
 	#
 	# build icu-locales package by moving files from icu-dev
 	#
-	dh_movefiles -picu-locales \
-	    $(iculibdir)
+	dh_movefiles --sourcedir=debian/$(firstdir) -picu-locales \
+	    $(iculibdir)/*.res \
+	    $(iculibdir)/*.brk
 	#
 	# build icu-data from the source data
 	#
@@ -154,9 +159,8 @@ binary-arch: build install $(addprefix debian/,$(DEBIAN_FILES))
 	#
 	# do a bit of cleanup
 	#
-	rm -rf debian/tmp/etc debian/tmp/usr/sbin \
-	    debian/tmp/$(iculibdir) \
-	    debian/tmp/usr/share/man
+	rm -rf debian/$(firstdir)/etc debian/$(firstdir)/usr/sbin \
+	    debian/$(firstdir)/usr/share/man
 	#
 	# continue to prepare packages
 	#
@@ -178,7 +182,7 @@ binary-arch: build install $(addprefix debian/,$(DEBIAN_FILES))
 	dh_compress
 	dh_fixperms
 	# CVS fixup
-	if test -d CVS; then find debian/tmp -name CVS -print | xargs rm -r; fi
+	if test -d CVS; then find debian/$(firstdir) -name CVS -print | xargs rm -r; fi
 	# You may want to make some executables suid here.
 	dh_suidregister
 	dh_makeshlibs
