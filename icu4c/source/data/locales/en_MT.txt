@@ -28,5 +28,9 @@ en_MT {
         "dd/MM/yy",
         "{1} {0}",
     }
+    Currencies{
+        MTP { "\u00A3", "Maltese Pound"} 
+        GBP { "GBP", "British Pound Sterling" } // British Pound Sterling
+    }
 
 }

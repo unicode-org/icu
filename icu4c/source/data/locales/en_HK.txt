@@ -41,4 +41,8 @@ en_HK {
         "#,##0%",
         "#E0",
     }
+    Currencies{
+        HKD { "$",  "Hong Kong Dollar"     } 
+        USD { "US$",     "USD" } // US Dollar
+    }
 }
