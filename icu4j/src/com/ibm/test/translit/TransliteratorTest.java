@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/test/translit/Attic/TransliteratorTest.java,v $
- * $Date: 2001/11/28 17:40:40 $
- * $Revision: 1.82 $
+ * $Date: 2001/11/29 01:00:29 $
+ * $Revision: 1.83 $
  *
  *****************************************************************************************
  */
@@ -267,12 +267,12 @@ public class TransliteratorTest extends TestFmwk {
             // insertion, buffer
             "a", "A",
             "p", "Ap",
-            "s", "Ay",
-            "c", "Ayc",
+            "s", "Aps", // modified for rollback - "Ay",
+            "c", "Apsc", // modified for rollback - "Ayc",
             "a", "AycA",
             "p", "AycAp",
-            "s", "AycAy",
-            "c", "AycAyc",
+            "s", "AycAps", // modified for rollback - "AycAy",
+            "c", "AycApsc", // modified for rollback - "AycAyc",
             "h", "AycAY",
             null, "AycAY", // null means finishKeyboardTransliteration
         };
@@ -298,9 +298,9 @@ public class TransliteratorTest extends TestFmwk {
             //           keyboard xliteration.
             "a", "a",
             "b", "ab",
-            "t", "aby",
+            "t", "abt", // modified for rollback - "aby",
             "c", "abyc",
-            "t", "abycy",
+            "t", "abyct", // modified for rollback - "abycy",
             "h", "abycz",
             null, "abycz", // null means finishKeyboardTransliteration
         };
@@ -323,15 +323,8 @@ public class TransliteratorTest extends TestFmwk {
                 log = new StringBuffer(s.toString() + " => ");
                 t.finishTransliteration(s, index);
             }
-            String str = s.toString();
-            // Show the start index '{' and the cursor '|'
-            log.append(str.substring(0, index.contextStart)).
-                append('{').
-                append(str.substring(index.contextStart,
-                                     index.start)).
-                append('|').
-                append(str.substring(index.start));
-            if (str.equals(DATA[i+1])) {
+            formatInput(log, s, index);
+            if (s.toString().equals(DATA[i+1])) {
                 logln(log.toString());
             } else {
                 errln("FAIL: " + log.toString() + ", expected " + DATA[i+1]);
@@ -1547,7 +1540,7 @@ public class TransliteratorTest extends TestFmwk {
         // Katakana should be untouched
         expect(t, "a\u3042\u30A2", "\u3042\u3042\u30A2");
 
-        if (false) {
+        if (true) {
             // This test will only work if Transliterator.ROLLBACK is
             // true.  Otherwise, this test will fail, revealing a
             // limitation of global filters in incremental mode.

@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/Transliterator.java,v $
- * $Date: 2001/11/21 22:21:45 $
- * $Revision: 1.65 $
+ * $Date: 2001/11/29 01:00:10 $
+ * $Revision: 1.66 $
  *
  *****************************************************************************************
  */
@@ -242,7 +242,7 @@ import com.ibm.util.Utility;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: Transliterator.java,v $ $Revision: 1.65 $ $Date: 2001/11/21 22:21:45 $
+ * @version $RCSfile: Transliterator.java,v $ $Revision: 1.66 $ $Date: 2001/11/29 01:00:10 $
  */
 public abstract class Transliterator {
     /**
@@ -464,7 +464,7 @@ public abstract class Transliterator {
         }
 
         Position pos = new Position(start, limit, start);
-        filteredTransliterate(text, pos, false);
+        filteredTransliterate(text, pos, false, true);
         return pos.limit;
     }
 
@@ -555,7 +555,7 @@ public abstract class Transliterator {
             return;
         }
 
-        filteredTransliterate(text, index, true);
+        filteredTransliterate(text, index, true, true);
 
 // TODO
 // This doesn't work once we add quantifier support.  Need to rewrite
@@ -613,7 +613,7 @@ public abstract class Transliterator {
     public final void finishTransliteration(Replaceable text,
                                             Position index) {
         index.validate(text.length());
-        filteredTransliterate(text, index, false);
+        filteredTransliterate(text, index, false, true);
     }
 
     /**
@@ -657,33 +657,60 @@ public abstract class Transliterator {
                                                 Position pos, boolean incremental);
 
     /**
-     * Rollback makes global filters and compound transliterators very
-     * bulletproof, but it also makes some transliterators completely
-     * non-incremental -- that is, for some transliterators, rollback
-     * is always triggered, until finishTransliteration() is called.
-     * Since this eliminates most of the usefulness of incremental
-     * mode, rollback should usually be disabled.
+     * Top-level transliteration method, handling filtering, incremental and
+     * non-incremental transliteration, and rollback.  All transliteration
+     * public API methods eventually call this method with a rollback argument
+     * of TRUE.  Other entities may call this method but rollback should be
+     * FALSE.
+     * 
+     * <p>If this transliterator has a filter, break up the input text into runs
+     * of unfiltered characters.  Pass each run to
+     * <subclass>.handleTransliterate().
      *
-     * This is used by Transliterator and CompoundTransliterator.
-     */
-    static final boolean ROLLBACK = false;
-
-    /**
-     * This method breaks up the input text into runs of unfiltered
-     * characters.  It passes each such run to
-     * <subclass>.handleTransliterate().  Subclasses that can handle the
-     * filter logic more efficiently themselves may override this method.
+     * <p>In incremental mode, if rollback is TRUE, perform a special
+     * incremental procedure in which several passes are made over the input
+     * text, adding one character at a time, and committing successful
+     * transliterations as they occur.  Unsuccessful transliterations are rolled
+     * back and retried with additional characters to give correct results.
      *
-     * All transliteration calls in this class go through this method.
+     * @param text the text to be transliterated
+     * @param index the position indices
+     * @param incremental if TRUE, then assume more characters may be inserted
+     * at index.limit, and postpone processing to accomodate future incoming
+     * characters
+     * @param rollback if TRUE and if incremental is TRUE, then perform special
+     * incremental processing, as described above, and undo partial
+     * transliterations where necessary.  If incremental is FALSE then this
+     * parameter is ignored.
      */
-    protected void filteredTransliterate(Replaceable text,
-                                         Position index,
-                                         boolean incremental) {
-        if (filter == null) {
-            // Short circuit path for transliterators with no filter
+    private void filteredTransliterate(Replaceable text,
+                                       Position index,
+                                       boolean incremental,
+                                       boolean rollback) {
+        // Short circuit path for transliterators with no filter in
+        // non-incremental mode.
+        if (filter == null && !rollback) {
             handleTransliterate(text, index, incremental);
             return;
         }
+
+        //----------------------------------------------------------------------
+        // This method processes text in two groupings:
+        //
+        // RUNS -- A run is a contiguous group of characters which are contained
+        // in the filter for this transliterator (filter.contains(ch) == true).
+        // Text outside of runs may appear as context but it is not modified.
+        // The start and limit Position values are narrowed to each run.
+        //
+        // PASSES (incremental only) -- To make incremental mode work correctly,
+        // each run is broken up into n passes, where n is the length (in code
+        // points) of the run.  Each pass contains the first n characters.  If a
+        // pass is completely transliterated, it is committed, and further passes
+        // include characters after the committed text.  If a pass is blocked,
+        // and does not transliterate completely, then this method rolls back
+        // the changes made during the pass, extends the pass by one code point,
+        // and tries again.
+        //----------------------------------------------------------------------
 
         // globalLimit is the limit value for the entire operation.  We
         // set index.limit to the end of each unfiltered run before
@@ -693,32 +720,35 @@ public abstract class Transliterator {
         // happened.
         int globalLimit = index.limit;
 
-        // Break the input text up.  Say the input text has the form:
+        // If there is a non-null filter, then break the input text up.  Say the
+        // input text has the form:
         //   xxxabcxxdefxx
-        // where 'x' represents a filtered character.  Then we break this
-        // up into:
+        // where 'x' represents a filtered character (filter.contains('x') ==
+        // false).  Then we break this up into:
         //   xxxabc xxdef xx
         // Each pass through the loop consumes a run of filtered
         // characters (which are ignored) and a subsequent run of
-        // unfiltered characters (which are transliterated).  If, at any
-        // point, we fail to consume our entire segment, we stop.
+        // unfiltered characters (which are transliterated).
+
         for (;;) {
-            // Narrow the range to be transliterated to the first segment
-            // of unfiltered characters at or after index.start.
 
-            int c;
-
-            // Advance compoundStart past filtered chars
-            while (index.start < globalLimit &&
-                   !filter.contains(c=UTF16.charAt(text, index.start))) {
-                index.start += UTF16.getCharCount(c);
-            }
-
-            // Find the end of this run of unfiltered chars
-            index.limit = index.start;
-            while (index.limit < globalLimit &&
-                   filter.contains(c=UTF16.charAt(text, index.limit))) {
-                index.limit += UTF16.getCharCount(c);
+            if (filter != null) {
+                // Narrow the range to be transliterated to the first run
+                // of unfiltered characters at or after index.start.
+                
+                // Advance past filtered chars
+                int c;
+                while (index.start < globalLimit &&
+                       !filter.contains(c=UTF16.charAt(text, index.start))) {
+                    index.start += UTF16.getCharCount(c);
+                }
+                
+                // Find the end of this run of unfiltered chars
+                index.limit = index.start;
+                while (index.limit < globalLimit &&
+                       filter.contains(c=UTF16.charAt(text, index.limit))) {
+                    index.limit += UTF16.getCharCount(c);
+                }
             }
 
             // Check to see if the unfiltered run is empty.  This only
@@ -729,14 +759,14 @@ public abstract class Transliterator {
                 break;
             }
 
-            int limit = index.limit;
-
-            // Is this segment incremental?  If there is additional
+            // Is this run incremental?  If there is additional
             // filtered text (if limit < globalLimit) then we pass in
             // an incremental value of FALSE to force the subclass to
-            // complete the transliteration for this segment.
-            boolean isIncrementalSegment =
-                (limit < globalLimit ? false : incremental);
+            // complete the transliteration for this run.
+            boolean isIncrementalRun =
+                (index.limit < globalLimit ? false : incremental);
+
+            int delta;
 
             // Implement rollback.  To understand the need for rollback,
             // consider the following transliterator:
@@ -745,101 +775,170 @@ public abstract class Transliterator {
             //  "u" is "A > b;"
             //  "v" is a compound of "t; NFD; u" with a filter [:Ll:]
             //
-            // Now apply "c" to the input text "a".  The result is "b".  But if
+            // Now apply "v" to the input text "a".  The result is "b".  But if
             // the transliteration is done incrementally, then the NFD holds
             // things up after "t" has already transformed "a" to "A".  When
             // finishTransliterate() is called, "A" is _not_ processed because
             // it gets excluded by the [:Ll:] filter, and the end result is "A"
             // -- incorrect.  The problem is that the filter is applied to a
             // partially-transliterated result, when we only want it to apply to
-            // input text.  Although this example hinges on a compound
+            // input text.  Although this example describes a compound
             // transliterator containing NFD and a specific filter, it can
-            // actually happen with any transliterator which may do a partial
+            // happen with any transliterator which does a partial
             // transformation in incremental mode into characters outside its
             // filter.
             //
-            // There are two solutions.  The first is to add two new index
-            // values to the position structure, a filteredStart and a
-            // filteredLimit.  Then filteredTransliterate() can set and read
-            // these, and avoid filtering partially transliterated results.  A
-            // variant of this solution is to retain an internal state object
-            // with the filtered range that is indexed by the text pointer and
-            // the position object pointer, in analogy to strtok().  The third
-            // solution involves no change to the API and no internal state
-            // cache.  It is to roll back any partially transliterated results
-            // if (a) there is a filter, and (b) the transliteration is
-            // incremental.  This is the solution implemented here.
-            int rollbackStart = 0;
-            int rollbackCopy = 0;
-            if (ROLLBACK) {
-                if (isIncrementalSegment) {
-                    // Make a rollback copy at the end of the string
-                    rollbackStart = index.start;
-                    rollbackCopy = text.length();
-                    text.copy(rollbackStart, limit, rollbackCopy);
-                }
-            }
+            // To handle this, when in incremental mode we supply characters to
+            // handleTransliterate() in several passes.  Each pass adds one more
+            // input character to the input text.  That is, for input "ABCD", we
+            // first try "A", then "AB", then "ABC", and finally "ABCD".  If at
+            // any point we block (upon return, start < limit) then we roll
+            // back.  If at any point we complete the run (upon return start ==
+            // limit) then we commit that run.
 
-            // Delegate to subclass for actual transliteration.
-            handleTransliterate(text, index, isIncrementalSegment);
+            if (rollback && isIncrementalRun) {
 
-            int delta = index.limit - limit; // change in length
+                int runStart = index.start;
+                int runLimit = index.limit;
+                int runLength =  runLimit - runStart;
 
-            // Adjust overall limit for insertions/deletions.  Don't need
-            // to worry about contextLimit because handleTransliterate()
-            // maintains that.
-            globalLimit += delta;
+                // Make a rollback copy at the end of the string
+                int rollbackOrigin = text.length();
+                text.copy(runStart, runLimit, rollbackOrigin);
 
-            if (ROLLBACK) {
-                // If we failed to complete transliterate this segment,
-                // then we are done.  If rollback is required, then do so.
-                if (index.start != index.limit) {
-                    if (isIncrementalSegment) {
-                        // Replace [rollbackStart, limit) -- this is the
-                        // original filtered segment -- with
-                        // [rollbackCopy, text.length()), the rollback
-                        // copy, then delete the rollback copy.
-                        rollbackCopy += delta;
-                        int rollbackLen = text.length() - rollbackCopy;
-                    
-                        // Delete the partially transliterated segment
-                        rollbackCopy -= index.limit - rollbackStart;
-                        text.replace(rollbackStart, index.limit, "");
-                    
-                        // Copy the rollback copy back
-                        text.copy(rollbackCopy, text.length(), rollbackStart);
-                    
-                        // Delete the rollback copy
-                        rollbackCopy += rollbackLen;
-                        text.replace(rollbackCopy, text.length(), "");
-                    
-                        // Restore indices
-                        index.start = rollbackStart;
-                        index.limit = limit;
-                        index.contextLimit -= delta;
-                        globalLimit -= delta;
+                // Variables reflecting the commitment of completely
+                // transliterated text.  passStart is the runStart, advanced
+                // past committed text.  rollbackStart is the rollbackOrigin,
+                // advanced past rollback text that corresponds to committed
+                // text.
+                int passStart = runStart;
+                int rollbackStart = rollbackOrigin;
+
+                // The limit for each pass; we advance by one code point with
+                // each iteration.
+                int passLimit = index.start;
+
+                // Total length, in 16-bit code units, of uncommitted text.
+                // This is the length to be rolled back.
+                int uncommittedLength = 0;
+
+                // Total delta (change in length) for all passes
+                int totalDelta = 0;
+
+                // PASS MAIN LOOP -- Start with a single character, and extend
+                // the text by one character at a time.  Roll back partial
+                // transliterations and commit complete transliterations.
+                for (;;) {
+                    // Length of additional code point, either one or two
+                    int charLength =
+                        UTF16.getCharCount(UTF16.charAt(text, passLimit));
+                    passLimit += charLength;
+                    if (passLimit > runLimit) {
+                        break;
                     }
-                    break;
-                } else if (isIncrementalSegment) {
-                    // We finished this segment; delete the rollback copy
-                    rollbackCopy += delta;
-                    text.replace(rollbackCopy, text.length(), "");
+                    uncommittedLength += charLength;
+
+                    index.limit = passLimit;
+
+                    // Delegate to subclass for actual transliteration.  Upon
+                    // return, start will be updated to point after the
+                    // transliterated text, and limit and contextLimit will be
+                    // adjusted for length changes.
+                    handleTransliterate(text, index, true);
+
+                    delta = index.limit - passLimit; // change in length
+            
+                    // We failed to completely transliterate this pass.
+                    // Roll back the text.  Indices remain unchanged; reset
+                    // them where necessary.
+                    if (index.start != index.limit) {
+                        // Find the rollbackStart, adjusted for length changes
+                        // and the deletion of partially transliterated text.
+                        int rs = rollbackStart + delta - (index.limit - passStart);
+                    
+                        // Delete the partially transliterated text
+                        text.replace(passStart, index.limit, "");
+                    
+                        // Copy the rollback text back
+                        text.copy(rs, rs + uncommittedLength, passStart);
+                    
+                        // Restore indices to their original values
+                        index.start = passStart;
+                        index.limit = passLimit;
+                        index.contextLimit -= delta;
+                    }
+
+                    // We did completely transliterate this pass.  Update the
+                    // commit indices to record how far we got.  Adjust indices
+                    // for length change.
+                    else {
+                        // Move the pass indices past the committed text.
+                        passStart = passLimit = index.start;
+
+                        // Adjust the rollbackStart for length changes and move
+                        // it past the committed text.  All characters we've
+                        // processed to this point are committed now, so zero
+                        // out the uncommittedLength.
+                        rollbackStart += delta + uncommittedLength;
+                        uncommittedLength = 0;
+
+                        // Adjust indices for length changes.
+                        runLimit += delta;
+                        totalDelta += delta;
+                    }
                 }
-            } else {
-                // If we failed to complete transliterate this segment,
-                // then we are done.
-                if (index.start != index.limit) {
-                    break;
-                }
+
+                // Adjust overall limit and rollbackOrigin for insertions and
+                // deletions.  Don't need to worry about contextLimit because
+                // handleTransliterate() maintains that.
+                rollbackOrigin += totalDelta;
+                globalLimit += totalDelta;
+
+                // Delete the rollback copy
+                text.replace(rollbackOrigin, rollbackOrigin + runLength, "");
             }
 
+            else {
+                // Delegate to subclass for actual transliteration.
+                int limit = index.limit;
+                handleTransliterate(text, index, isIncrementalRun);
+                delta = index.limit - limit; // change in length
+
+                // Adjust overall limit for insertions/deletions.  Don't need
+                // to worry about contextLimit because handleTransliterate()
+                // maintains that.
+                globalLimit += delta;
+            }
+
+            // If we failed to complete transliterate this run,
+            // then we are done.
+            if (index.start != index.limit) {
+                break;
+            }
+            
             // If we did completely transliterate this
-            // segment, then repeat with the next unfiltered segment.
+            // run, then repeat with the next unfiltered run.
         }
 
         // Start is valid where it is.  Limit needs to be put back where
         // it was, modulo adjustments for deletions/insertions.
         index.limit = globalLimit;
+    }
+
+    /**
+     * Transliterate a substring of text, as specified by index, taking filters
+     * into account.  This method is for subclasses that need to delegate to
+     * another transliterator, such as CompoundTransliterator.
+     * @param text the text to be transliterated
+     * @param index the position indices
+     * @param incremental if TRUE, then assume more characters may be inserted
+     * at index.limit, and postpone processing to accomodate future incoming
+     * characters
+     */
+    protected void filteredTransliterate(Replaceable text,
+                                         Position index,
+                                         boolean incremental) {
+        filteredTransliterate(text, index, incremental, false);
     }
 
     /**
@@ -1726,9 +1825,7 @@ public abstract class Transliterator {
      *
      * <p><b>Note:</b> Most subclasses that implement
      * handleTransliterator() will <em>not</em> want to use this
-     * method, since characters they see are already filtered.  Only
-     * subclasses with special requirements, such as those overriding
-     * filteredTransliterate(), should need this method.
+     * method, since characters they see are already filtered.
      *
      * @deprecated the new architecture provides filtering at the top
      * level.  This method will be removed Dec 31 2001.

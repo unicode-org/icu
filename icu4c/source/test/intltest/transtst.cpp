@@ -394,12 +394,12 @@ void TransliteratorTest::TestKeyboard2(void) {
         // insertion, buffer
         "a", "A",
         "p", "Ap",
-        "s", "Ay",
-        "c", "Ayc",
+        "s", "Aps", // modified for rollback - "Ay",
+        "c", "Apsc", // modified for rollback - "Ayc",
         "a", "AycA",
         "p", "AycAp",
-        "s", "AycAy",
-        "c", "AycAyc",
+        "s", "AycAps", // modified for rollback - "AycAy",
+        "c", "AycApsc", // modified for rollback - "AycAyc",
         "h", "AycAY",
         0, "AycAY", // null means finishKeyboardTransliteration
     };
@@ -423,9 +423,9 @@ void TransliteratorTest::TestKeyboard3(void) {
         //           keyboard xliteration.
         "a", "a",
         "b", "ab",
-        "t", "aby",
+        "t", "abt", // modified for rollback - "aby",
         "c", "abyc",
-        "t", "abycy",
+        "t", "abyct", // modified for rollback - "abycy",
         "h", "abycz",
         0, "abycz", // null means finishKeyboardTransliteration
     };
@@ -2110,7 +2110,7 @@ void TransliteratorTest::TestNewEngine() {
 
     delete t;
 
-#if 0
+#if 1
     // This test will only work if Transliterator.ROLLBACK is
     // true.  Otherwise, this test will fail, revealing a
     // limitation of global filters in incremental mode.
