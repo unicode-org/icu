@@ -31,7 +31,7 @@ static const UChar ANY[] = { 65, 110, 121, 0 }; // Any
 /**
  * Resource bundle key for the RuleBasedTransliterator rule.
  */
-static const char* RB_RULE = "Rule";
+static const char RB_RULE[] = "Rule";
 
 U_NAMESPACE_BEGIN
 

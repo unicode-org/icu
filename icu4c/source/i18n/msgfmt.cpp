@@ -54,7 +54,7 @@ static const UChar g_umsg_choice[]    = {
 };
 
 // MessageFormat Type List  Number, Date, Time or Choice
-static const UChar *g_umsgTypeList[] = {
+static const UChar * const g_umsgTypeList[] = {
     NULL,           NULL,           g_umsg_number,
     NULL,           g_umsg_date,    NULL,
     g_umsg_time,    NULL,           g_umsg_choice
@@ -71,7 +71,7 @@ static const UChar g_umsg_integer[]   = {
 };
 
 // NumberFormat modifier list, default, currency, percent or integer
-static const UChar *g_umsgModifierList[] = {
+static const UChar * const g_umsgModifierList[] = {
     NULL,           NULL,           g_umsg_currency,
     NULL,           g_umsg_percent, NULL,
     g_umsg_integer, NULL,           NULL
@@ -91,7 +91,7 @@ static const UChar g_umsg_full[]      = {
 };
 
 // DateFormat modifier list, default, short, medium, long or full
-static const UChar *g_umsgDateModifierList[] = {
+static const UChar * const g_umsgDateModifierList[] = {
     NULL,           NULL,           g_umsg_short,
     NULL,           g_umsg_medium,  NULL,
     g_umsg_long,    NULL,           g_umsg_full
@@ -1310,7 +1310,7 @@ MessageFormat::makeFormat(/*int32_t position, */
 // -------------------------------------
 // Finds the string, s, in the string array, list. 
 int32_t MessageFormat::findKeyword(const UnicodeString& s, 
-                           const UChar **list)
+                           const UChar * const *list)
 {
     if (s.length() == 0)
         return 0;

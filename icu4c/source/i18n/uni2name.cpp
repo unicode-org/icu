@@ -13,7 +13,7 @@
 
 U_NAMESPACE_BEGIN
 
-const char* UnicodeNameTransliterator::_ID = "Any-Name";
+const char UnicodeNameTransliterator::_ID[] = "Any-Name";
 
 /**
  * Constructs a transliterator.

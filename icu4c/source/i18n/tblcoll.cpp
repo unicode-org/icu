@@ -631,8 +631,8 @@ const int32_t RuleBasedCollator::PRIMIGNORABLE = 0x0202;
 /* unique file id for parity check */
 const int16_t RuleBasedCollator::FILEID = 0x5443;
 /* binary collation file extension */
-const char* RuleBasedCollator::kFilenameSuffix = ".col";
+const char RuleBasedCollator::kFilenameSuffix[] = ".col";
 /* class id ? Value is irrelevant */
-char  RuleBasedCollator::fgClassID = 0;
+const char  RuleBasedCollator::fgClassID = 0;
 
 U_NAMESPACE_END

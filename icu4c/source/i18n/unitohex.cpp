@@ -16,7 +16,7 @@ U_NAMESPACE_BEGIN
 /**
  * ID for this transliterator.
  */
-const char* UnicodeToHexTransliterator::_ID = "Any-Hex";
+const char UnicodeToHexTransliterator::_ID[] = "Any-Hex";
 
 const UChar UnicodeToHexTransliterator::HEX_DIGITS[32] = {
     // Use Unicode hex values for EBCDIC compatibility
