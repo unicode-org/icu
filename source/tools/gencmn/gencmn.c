@@ -65,7 +65,7 @@ static uint32_t fileCount=0;
 /* prototypes --------------------------------------------------------------- */
 
 static void
-addFile(const char *filename, UBool sourceTOC);
+addFile(const char *filename, UBool sourceTOC, UBool verbose);
 
 static char *
 allocString(uint32_t length);
@@ -97,8 +97,8 @@ main(int argc, char* argv[]) {
     FileStream *in, *file;
     char *s;
     UErrorCode errorCode=U_ZERO_ERROR;
-    uint32_t i, fileOffset, basenameOffset, length;
-    UBool sourceTOC;
+    uint32_t i, fileOffset, basenameOffset, length, nread;
+    UBool sourceTOC, verbose;
     const char *entrypointName = NULL;
 
     /* preset then read command line options */
@@ -164,6 +164,8 @@ main(int argc, char* argv[]) {
 
     sourceTOC=options[8].doesOccur;
 
+    verbose = options[2].doesOccur;
+
     maxSize=(uint32_t)uprv_strtoul(argv[1], NULL, 0);
 
     if(argc==2) {
@@ -176,11 +178,11 @@ main(int argc, char* argv[]) {
         }
     }
 
-    if (options[2].doesOccur) {
+    if (verbose) {
         if(sourceTOC) {
-            printf("Generating %s_%s.c Table of Contents source file\n", options[6].value, options[7].value);
+            printf("generating %s_%s.c (table of contents source file)\n", options[6].value, options[7].value);
         } else {
-            printf("Generating %s.%s common data file with Table of Contents\n", options[6].value, options[7].value);
+            printf("generating %s.%s (common data file with table of contents)\n", options[6].value, options[7].value);
         }
     }
 
@@ -204,7 +206,7 @@ main(int argc, char* argv[]) {
 
         /* add the file */
 
-        addFile(getLongPathname(line), sourceTOC);
+        addFile(getLongPathname(line), sourceTOC, verbose);
     }
 
     if(in!=T_FileStream_stdin()) {
@@ -265,21 +267,31 @@ main(int argc, char* argv[]) {
                 udata_writePadding(out, 16-length);
             }
 
+            if (verbose) {
+                printf("adding %s (%ld byte%s)\n", files[i].pathname, files[i].fileSize, files[i].fileSize == 1 ? "" : "s");
+            }
+
             /* copy the next file */
             file=T_FileStream_open(files[i].pathname, "rb");
             if(file==NULL) {
                 fprintf(stderr, "gencmn: unable to open listed file %s\n", files[i].pathname);
                 exit(U_FILE_ACCESS_ERROR);
             }
-            for(;;) {
+            for(nread = 0;;) {
                 length=T_FileStream_read(file, buffer, sizeof(buffer));
-                if(length==0) {
+                if(length <= 0) {
                     break;
                 }
+                nread += length;
                 udata_writeBlock(out, buffer, length);
             }
             T_FileStream_close(file);
             length=files[i].fileSize;
+
+            if (nread != files[i].fileSize) {
+                fprintf(stderr, "gencmn: unable to read %s properly (got %ld/%ld byte%s)\n", files[i].pathname, nread, files[i].fileSize, files[i].fileSize == 1 ? "" : "s");
+                exit(U_FILE_ACCESS_ERROR);
+            }
         }
 
         /* finish */
@@ -391,7 +403,7 @@ main(int argc, char* argv[]) {
 }
 
 static void
-addFile(const char *filename, UBool sourceTOC) {
+addFile(const char *filename, UBool sourceTOC, UBool verbose) {
     char *s;
     uint32_t length;
 
@@ -433,6 +445,9 @@ addFile(const char *filename, UBool sourceTOC) {
 
         /* do not add files that are longer than maxSize */
         if(maxSize && length>maxSize) {
+            if (verbose) {
+                printf("%s ignored (size %ld > %ld)\n", length, maxSize);
+            }
             return;
         }
         files[fileCount].fileSize=length;
