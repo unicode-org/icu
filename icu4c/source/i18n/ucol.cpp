@@ -469,6 +469,11 @@ U_CFUNC void ucol_doCE(uint32_t *CEparts, UColToken *tok, UHashtable *tailored, 
     } else {
       value = 0;
     }
+
+    if(tok->caseBit == TRUE) {
+      value |= 0x40;
+    }
+
     if(2*CEi<noOfBytes[0]) {
       value |= ((CEparts[0]>>(32-16*(CEi+1))) & 0xFFFF) << 16;
     }
