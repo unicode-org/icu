@@ -207,8 +207,9 @@ typedef int32_t UTextOffset;
  * Is a given 32-bit code point a Unicode noncharacter?
  */
 #define UTF_IS_UNICODE_NONCHAR(c) \
-    (((((c) & 0xfffe) == 0xfffe) || ((c) >= 0xfdd0 && (c) <= 0xfdef)) && \
-    ((c) <= 0x10ffff))
+    ((c)>=0xfdd0 && \
+     ((uint32_t)(c)<=0xfdef || ((c)&0xfffe)==0xfffe) && \
+     (uint32_t)(c)<=0x10ffff)
 
 /**
  * Is a given 32-bit code point/Unicode scalar value
