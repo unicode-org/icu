@@ -64,7 +64,8 @@ static UOption options[]={
     UOPTION_DEF( "nooutput",'n', UOPT_NO_ARG),
     UOPTION_DEF( "rebuild", 'F', UOPT_NO_ARG),
     UOPTION_DEF( "tempdir", 'T', UOPT_REQUIRES_ARG),
-    UOPTION_DEF( "install", 'I', UOPT_REQUIRES_ARG)
+    UOPTION_DEF( "install", 'I', UOPT_REQUIRES_ARG),
+    UOPTION_DEF( "srcdir",  's', UOPT_REQUIRES_ARG)
 };
 
 const char options_help[][80]={
@@ -81,7 +82,8 @@ const char options_help[][80]={
   "Suppress output of data, just list files to be created",
   "Force rebuilding of all data",
   "Specify temporary dir (default: output dir)",
-  "Install the data (specify target)"
+  "Install the data (specify target)",
+  "Specify a custom source directory"
 };
 
 
@@ -204,6 +206,11 @@ main(int argc, const char *argv[]) {
     o.install  = options[13].value;
   }
 
+  if( options[14].doesOccur ) {
+    o.srcDir   = options[12].value;
+  } else {
+    o.srcDir   = ".";
+  }
   /* OK options are set up. Now the file lists. */
   tail = NULL;
   for( i=1; i<argc; i++) {
@@ -263,6 +270,7 @@ main(int argc, const char *argv[]) {
   /* POSIX - execute makefile */
   {
     char cmd[1024];
+    char pwd[1024];
     char *make;
     int rc;
     
@@ -272,8 +280,8 @@ main(int argc, const char *argv[]) {
       make = "gmake";
     }
 
-    sprintf(cmd, "cd %s && %s %s%s -f %s %s %s %s",
-            o.tmpDir,
+    getcwd(pwd, 1024);
+    sprintf(cmd, "%s %s%s -f %s %s %s %s",
             make,
             o.install ? "INSTALLTO=" : "",
             o.install ? o.install    : "",

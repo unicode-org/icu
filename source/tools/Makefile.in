@@ -53,6 +53,10 @@ endif
 ICUDATADIR=$(pkgdatadir)/$(VERSION)
 SRCDATADIR=$(top_srcdir)/../data
 OBJDATADIR=$(top_builddir)/@RELATIVEDATADIR@
+# tmpdir is INSIDE pkgdata dir
+TMPDATADIR=./pkgdata/tmp
+
+PKGDATA=./pkgdata -T ./tmp -s @DATABUILDDIR@ -O @DATABUILDDIR@/icupkg.inc -d @DATABUILDDIR@ -v -m $(MODE) 
 
 ## Install program information
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
@@ -74,7 +78,7 @@ SUBDIRS = ctestfw toolutil makeconv genrb rbdump \
 genccode genprops gennames gencmn gencnval gentz gentest pkgdata
 
 ## List of phony targets
-.PHONY : all all-local all-recursive install install-local install-everything install-files install-dlls build-data build-cmnfile build-dll		\
+.PHONY : all all-local all-recursive install install-local install-files install-dlls build-cmnfile build-dll		\
 install-recursive clean clean-local clean-recursive distclean		\
 distclean-local distclean-recursive dist dist-local dist-recursive	\
 check check-local check-recursive build-testdlls build-basetestdata build-local
@@ -148,68 +152,62 @@ DATAFILESR=$(RES_FILES)
 DATAFILES=$(DATAFILESD) $(DATAFILESC) $(DATAFILESB) $(DATAFILESR)
 
 ## Files to remove for 'make clean'
-CLEANFILES = *~ $(BRK_FILES) 
+CLEANFILES = *~ $(BRK_FILES)  ./pkgdata/tmp/
 
 
 install-udata: install-pkgdata
 
 install-local: build-local install-udata
 
-install-everything: install-files install-dlls
-
-install-files:
-	$(mkinstalldirs) $(DESTDIR)$(pkgdatadir)/$(VERSION)/
-	@for file in $(UDATA_FILES); do \
-	  echo $(INSTALL_DATA) @DATABUILDDIR@/$$file $(DESTDIR)$(pkgdatadir)/$(VERSION)/$$file; \
-	  $(INSTALL_DATA) @DATABUILDDIR@/$$file $(DESTDIR)$(pkgdatadir)/$(VERSION)/$$file || exit; \
-	done
-
-install-dlls:
-	$(mkinstalldirs) $(DESTDIR)$(pkgdatadir)/$(VERSION)/
-	@for file in $(UDATA_DLLS); do \
-	  echo $(INSTALL_DATA) @DATABUILDDIR@/$$file $(DESTDIR)$(pkgdatadir)/$(VERSION)/$$file; \
-	  $(INSTALL-S) @DATABUILDDIR@/$$file $(DESTDIR)$(pkgdatadir)/$(VERSION)/$$file || exit; \
-	done
-
-
 dist-local:
 
-clean-local:
+clean-local: clean-pkgdata
 	test -z "$(CLEANFILES)" || $(RMV) $(CLEANFILES)
 
+# Clean up any old variations.. 
 distclean-local: clean-local
 	$(RMV) Makefile $(SRCDATAFILES) $(DATAFILES) $(TESTDATAD) $(BASETESTDATA) icupkg.inc
-	# Clean up any old variations.. 
-	-@if [ -f @DATABUILDDIR@/icudata_dll.mak ]; then \
-		(cd pkgdata; ./pkgdata -m dll -p icudata -O @DATABUILDDIR@/icupkg.inc @DATABUILDDIR@/icudata.lst -d @DATABUILDDIR@ --clean ) \
+	-@if [ -f $(TMPDATADIR)/icudata_dll.mak ]; then \
+		(cd pkgdata ; ./pkgdata -T ./tmp -m dll -p icudata -O @DATABUILDDIR@/icupkg.inc ./tmp/icudata.lst -d @DATABUILDDIR@ --clean ) \
 	fi
-	-@if [ -f @DATABUILDDIR@/icudata_common.mak ]; then \
-		(cd pkgdata; ./pkgdata -m common -p icudata -O @DATABUILDDIR@/icupkg.inc @DATABUILDDIR@/icudata.lst -d @DATABUILDDIR@ --clean ) \
+	-@if [ -f $(TMPDATADIR)/icudata_common.mak ]; then \
+		(cd pkgdata; ./pkgdata -T ./tmp -m common -p icudata -O @DATABUILDDIR@/icupkg.inc ./tmp/icudata.lst -d @DATABUILDDIR@ --clean ) \
 	fi
-	-@$(RMV) @DATABUILDDIR@/icudata.lst  @DATABUILDDIR@/icupkg.inc @DATABUILDDIR@/*.o @DATABUILDDIR@/*.c @DATABUILDDIR@/*.mak @DATABUILDDIR@/*.lst
+	-@$(RMV) ./tmp/icudata.lst  @DATABUILDDIR@/icupkg.inc @DATABUILDDIR@/*.o @DATABUILDDIR@/*.c @DATABUILDDIR@/*.mak @DATABUILDDIR@/*.lst
+	-@$(RMV) $(TMPDATADIR)
 
-@DATABUILDDIR@/icudata.lst: Makefile
+@DATABUILDDIR@/icudata.lst: Makefile genrb/genrbfiles.mk
 	@echo Generating $@ list of data files
 	@-$(RMV) @DATABUILDDIR@/icudata.lst
 	@for file in $(DATAFILES); do \
 	  echo `pwd`/$$file >>@DATABUILDDIR@/icudata.lst; \
 	done;
 
+@DATABUILDDIR@/testdata.lst: Makefile
+	@echo @DATABUILDDIR@/test.dat > $@
+
 @DATABUILDDIR@/icupkg.inc: icupkg.inc
 	cp icupkg.inc @DATABUILDDIR@/icupkg.inc
 
-build-local build-pkgdata: @DATABUILDDIR@/icudata.lst @DATABUILDDIR@/icupkg.inc $(DATAFILES)
-	(cd pkgdata; ./pkgdata -v -m $(MODE) -p icudata -O @DATABUILDDIR@/icupkg.inc @DATABUILDDIR@/icudata.lst -d @DATABUILDDIR@  )
+# build the ICU and test data
+
+build-local build-pkgdata: @DATABUILDDIR@/icudata.lst @DATABUILDDIR@/testdata.lst  @DATABUILDDIR@/icupkg.inc $(DATAFILES) @DATABUILDDIR@/test.dat
+	$(mkinstalldirs) $(TMPDATADIR)
+	(cd pkgdata; $(PKGDATA) -p icudata @DATABUILDDIR@/icudata.lst   )
+	(cd pkgdata; $(PKGDATA) -p base    @DATABUILDDIR@/testdata.lst  )
+	(cd pkgdata; $(PKGDATA) -p base_test  @DATABUILDDIR@/testdata.lst )
 
 install-pkgdata: @DATABUILDDIR@/icudata.lst @DATABUILDDIR@/icupkg.inc
-	(cd pkgdata; ./pkgdata -v -m $(MODE) -p icudata -O @DATABUILDDIR@/icupkg.inc @DATABUILDDIR@/icudata.lst -d @DATABUILDDIR@ -I $(DESTDIR)$(pkgdatadir)/$(VERSION) )
+	$(mkinstalldirs) $(TMPDATADIR)  $(DESTDIR)$(pkgdatadir)/$(VERSION)
+	(cd pkgdata; $(PKGDATA) -p icudata @DATABUILDDIR@/icudata.lst -I $(DESTDIR)$(pkgdatadir)/$(VERSION) )
 
 icupkg.inc: $(srcdir)/icupkg.inc.in  $(top_builddir)/config.status
 	cd $(top_builddir) \
 	&& CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
 
 clean-pkgdata:  @DATABUILDDIR@/icudata.lst @DATABUILDDIR@/icupkg.inc
-	-(cd pkgdata; ./pkgdata -m $(MODE) -p icudata -O @DATABUILDDIR@/icupkg.inc @DATABUILDDIR@/icudata.lst -d @DATABUILDDIR@ --clean ) 
+	@$(mkinstalldirs) $(TMPDATADIR)
+	-@(cd pkgdata; $(PKGDATA) -p icudata @DATABUILDDIR@/icudata.lst --clean || echo '### Warning, cannot clean up icu/data if pkgdata is already gone.' )
 	-$(RMV) @DATABUILDDIR@/icudata.lst @DATABUILDDIR@/icupkg.inc
 
 check-local:
