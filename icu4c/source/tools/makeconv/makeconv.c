@@ -896,12 +896,13 @@ UConverterSharedData* createConverterFromTableFile(const char* converterName, UE
   mySharedData->structSize = sizeof(UConverterSharedData);
 
   myStaticData =  (UConverterStaticData*) uprv_malloc(sizeof(UConverterStaticData));
+  uprv_memset(myStaticData, 0, sizeof(UConverterStaticData));
   mySharedData->staticData = myStaticData;
   if (myStaticData == NULL)
     {
       *err = U_MEMORY_ALLOCATION_ERROR;
       T_FileStream_close(convFile);
-      return;
+      return NULL;
     }  
   myStaticData->structSize = sizeof(UConverterStaticData);
   mySharedData->staticDataOwned = TRUE;
