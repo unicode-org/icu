@@ -3,9 +3,9 @@
 // Corporation and others.  All Rights Reserved.
 //---------------------------------------------------------
 // Build tool: tz2icu
-// Build date: Mon May 24 14:57:11 2004
+// Build date: Mon Oct 25 13:21:25 2004
 // Olson source: ftp://elsie.nci.nih.gov/pub/
-// Olson version: 2003e
+// Olson version: 2004e
 //---------------------------------------------------------
 // >> !!! >>   THIS IS A MACHINE-GENERATED FILE   << !!! <<
 // >> !!! >>>            DO NOT EDIT             <<< !!! <<
@@ -21,9 +21,12 @@ public final class ZoneMetaData {
     { "Africa/Tripoli", "Libya" },
     { "America/Adak", "America/Atka", "US/Aleutian" },
     { "AST", "America/Anchorage", "SystemV/YST9YDT", "US/Alaska" },
-    { "AGT", "America/Buenos_Aires" },
+    { "AGT", "America/Argentina/Buenos_Aires", "America/Buenos_Aires" },
+    { "America/Argentina/Catamarca", "America/Catamarca" },
+    { "America/Argentina/Cordoba", "America/Cordoba", "America/Rosario" },
+    { "America/Argentina/Jujuy", "America/Jujuy" },
+    { "America/Argentina/Mendoza", "America/Mendoza" },
     { "America/Chicago", "CST", "CST6CDT", "SystemV/CST6CDT", "US/Central" },
-    { "America/Cordoba", "America/Rosario" },
     { "America/Denver", "America/Shiprock", "MST7MDT", "Navajo", "SystemV/MST7MDT", "US/Mountain" },
     { "America/Detroit", "US/Michigan" },
     { "America/Edmonton", "Canada/Mountain" },
@@ -92,6 +95,7 @@ public final class ZoneMetaData {
     { "Europe/Belgrade", "Europe/Ljubljana", "Europe/Sarajevo", "Europe/Skopje", "Europe/Zagreb" },
     { "Europe/Chisinau", "Europe/Tiraspol" },
     { "Eire", "Europe/Dublin" },
+    { "Europe/Helsinki", "Europe/Mariehamn" },
     { "Asia/Istanbul", "Europe/Istanbul", "Turkey" },
     { "Europe/Lisbon", "Portugal" },
     { "Europe/London", "GB", "GB-Eire" },
@@ -124,11 +128,12 @@ public final class ZoneMetaData {
     { "AN", "America/Curacao" },
     { "AO", "Africa/Luanda" },
     { "AQ", "Antarctica/Casey", "Antarctica/Davis", "Antarctica/DumontDUrville", "Antarctica/Mawson", "Antarctica/McMurdo", "Antarctica/Palmer", "Antarctica/Rothera", "Antarctica/South_Pole", "Antarctica/Syowa", "Antarctica/Vostok" },
-    { "AR", "AGT", "America/Buenos_Aires", "America/Catamarca", "America/Cordoba", "America/Jujuy", "America/Mendoza", "America/Rosario" },
+    { "AR", "AGT", "America/Argentina/Buenos_Aires", "America/Argentina/Catamarca", "America/Argentina/ComodRivadavia", "America/Argentina/Cordoba", "America/Argentina/Jujuy", "America/Argentina/La_Rioja", "America/Argentina/Mendoza", "America/Argentina/Rio_Gallegos", "America/Argentina/San_Juan", "America/Argentina/Tucuman", "America/Argentina/Ushuaia", "America/Buenos_Aires", "America/Catamarca", "America/Cordoba", "America/Jujuy", "America/Mendoza", "America/Rosario" },
     { "AS", "Pacific/Pago_Pago", "Pacific/Samoa", "US/Samoa" },
     { "AT", "Europe/Vienna" },
     { "AU", "ACT", "AET", "Australia/ACT", "Australia/Adelaide", "Australia/Brisbane", "Australia/Broken_Hill", "Australia/Canberra", "Australia/Darwin", "Australia/Hobart", "Australia/LHI", "Australia/Lindeman", "Australia/Lord_Howe", "Australia/Melbourne", "Australia/NSW", "Australia/North", "Australia/Perth", "Australia/Queensland", "Australia/South", "Australia/Sydney", "Australia/Tasmania", "Australia/Victoria", "Australia/West", "Australia/Yancowinna" },
     { "AW", "America/Aruba" },
+    { "AX", "Europe/Mariehamn" },
     { "AZ", "Asia/Baku" },
     { "BA", "Europe/Sarajevo" },
     { "BB", "America/Barbados" },
