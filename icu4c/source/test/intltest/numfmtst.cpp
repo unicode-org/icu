@@ -18,6 +18,7 @@
 #include "unicode/ucurr.h"
 #include "unicode/ustring.h"
 #include <float.h>
+#include "digitlst.h"
 
 static const UChar EUR[] = {69,85,82,0}; // "EUR"
  
@@ -52,6 +53,8 @@ void NumberFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &n
 
         CASE(14,TestCurrencyObject);
         CASE(15,TestCurrencyPatterns);
+
+        CASE(16,TestDigitListAPI);
 
         default: name = ""; break;
     }
@@ -123,6 +126,33 @@ NumberFormatTest::TestPatterns(void)
             logln((UnicodeString)"Min integer digits = " + fmt.getMinimumIntegerDigits());
         }
     }
+}
+
+void 
+NumberFormatTest::TestDigitListAPI(void)
+{
+  // API coverage for DigitList
+  /*
+    icu_2_4::DigitList::operator== 0 0 2 icuuc24d.dll digitlst.cpp Doug  
+    icu_2_4::DigitList::append 0 0 4 icuin24d.dll digitlst.h Doug  
+    icu_2_4::DigitList::getDynamicClassID 0 0 1 icuin24d.dll digitlst.h Doug  
+    icu_2_4::DigitList::getDynamicClassID 0 0 1 icuuc24d.dll digitlst.h Doug  
+    icu_2_4::DigitList::getStaticClassID 0 0 1 icuin24d.dll digitlst.h Doug  
+    icu_2_4::DigitList::getStaticClassID 0 0 1 icuuc24d.dll digitlst.h Doug  
+    icu_2_4::DigitList::operator!= 0 0 1 icuuc24d.dll digitlst.h Doug 
+  */
+  DigitList list1;
+  if (list1.getDynamicClassID() != DigitList::getStaticClassID()) {
+    errln("digitlist rtti failed");
+  }
+
+  list1.append('1');
+  list1.fDecimalAt = 1;
+  DigitList list2;
+  list2.set(1);
+  if (list1 != list2) {
+    errln("digitlist append or set failed");
+  }
 }
 
 // -------------------------------------

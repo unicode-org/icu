@@ -42,11 +42,15 @@ public:
      * Test different format patterns
      **/
     virtual void TestPatterns(void);
- 
+    /**
+     * API coverage for DigitList
+     **/
+    virtual void TestDigitListAPI(void);
+    
 public: // package
     // internal utility routine
     static UnicodeString& escape(UnicodeString& s);
- 
+
 public:
     /**
      * Test localized currency patterns.
