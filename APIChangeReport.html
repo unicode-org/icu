@@ -1,0 +1,559 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>ICU4J API Comparison: ICU4J 2.8 with ICU4J 3.0</title>
+</head>
+<body>
+<h1>ICU4J API Comparison: ICU4J 2.8 with ICU4J 3.0</h1>
+
+<hr/>
+<h2>Removed from ICU4J 2.8</h2>
+
+<h3>Package com.ibm.icu.lang</h3>
+<ul>
+<li>UCharacterCategory
+<ul>
+    <li>(stable)     public static final int CHAR_CATEGORY_COUNT</li>
+    <li>(stable)     public static final int COMBINING_SPACING_MARK</li>
+    <li>(stable)     public static final int CONNECTOR_PUNCTUATION</li>
+    <li>(stable)     public static final int CONTROL</li>
+    <li>(stable)     public static final int CURRENCY_SYMBOL</li>
+    <li>(stable)     public static final int DASH_PUNCTUATION</li>
+    <li>(stable)     public static final int DECIMAL_DIGIT_NUMBER</li>
+    <li>(stable)     public static final int ENCLOSING_MARK</li>
+    <li>(stable)     public static final int END_PUNCTUATION</li>
+    <li>(stable)     public static final int FINAL_PUNCTUATION</li>
+    <li>(draft)      public static final int FINAL_QUOTE_PUNCTUATION</li>
+    <li>(stable)     public static final int FORMAT</li>
+    <li>(stable)     public static final int GENERAL_OTHER_TYPES</li>
+    <li>(stable)     public static final int INITIAL_PUNCTUATION</li>
+    <li>(draft)      public static final int INITIAL_QUOTE_PUNCTUATION</li>
+    <li>(stable)     public static final int LETTER_NUMBER</li>
+    <li>(stable)     public static final int LINE_SEPARATOR</li>
+    <li>(stable)     public static final int LOWERCASE_LETTER</li>
+    <li>(stable)     public static final int MATH_SYMBOL</li>
+    <li>(stable)     public static final int MODIFIER_LETTER</li>
+    <li>(stable)     public static final int MODIFIER_SYMBOL</li>
+    <li>(stable)     public static final int NON_SPACING_MARK</li>
+    <li>(stable)     public static final int OTHER_LETTER</li>
+    <li>(stable)     public static final int OTHER_NUMBER</li>
+    <li>(stable)     public static final int OTHER_PUNCTUATION</li>
+    <li>(stable)     public static final int OTHER_SYMBOL</li>
+    <li>(stable)     public static final int PARAGRAPH_SEPARATOR</li>
+    <li>(stable)     public static final int PRIVATE_USE</li>
+    <li>(stable)     public static final int SPACE_SEPARATOR</li>
+    <li>(stable)     public static final int START_PUNCTUATION</li>
+    <li>(stable)     public static final int SURROGATE</li>
+    <li>(stable)     public static final int TITLECASE_LETTER</li>
+    <li>(stable)     public static final int UNASSIGNED</li>
+    <li>(stable)     public static final int UPPERCASE_LETTER</li>
+</ul>
+<li>UCharacterDirection
+<ul>
+    <li>(stable)     public static final int ARABIC_NUMBER</li>
+    <li>(stable)     public static final int BLOCK_SEPARATOR</li>
+    <li>(stable)     public static final int BOUNDARY_NEUTRAL</li>
+    <li>(stable)     public static final int CHAR_DIRECTION_COUNT</li>
+    <li>(stable)     public static final int COMMON_NUMBER_SEPARATOR</li>
+    <li>(stable)     public static final int DIR_NON_SPACING_MARK</li>
+    <li>(stable)     public static final int EUROPEAN_NUMBER</li>
+    <li>(stable)     public static final int EUROPEAN_NUMBER_SEPARATOR</li>
+    <li>(stable)     public static final int EUROPEAN_NUMBER_TERMINATOR</li>
+    <li>(stable)     public static final int LEFT_TO_RIGHT</li>
+    <li>(stable)     public static final int LEFT_TO_RIGHT_EMBEDDING</li>
+    <li>(stable)     public static final int LEFT_TO_RIGHT_OVERRIDE</li>
+    <li>(stable)     public static final int OTHER_NEUTRAL</li>
+    <li>(stable)     public static final int POP_DIRECTIONAL_FORMAT</li>
+    <li>(stable)     public static final int RIGHT_TO_LEFT</li>
+    <li>(stable)     public static final int RIGHT_TO_LEFT_ARABIC</li>
+    <li>(stable)     public static final int RIGHT_TO_LEFT_EMBEDDING</li>
+    <li>(stable)     public static final int RIGHT_TO_LEFT_OVERRIDE</li>
+    <li>(stable)     public static final int SEGMENT_SEPARATOR</li>
+    <li>(stable)     public static final int WHITE_SPACE_NEUTRAL</li>
+</ul>
+</ul>
+
+<h3>Package com.ibm.icu.text</h3>
+<ul>
+<li>(deprecated) public class CompoundTransliterator</li>
+<li>(deprecated) public class HexToUnicodeTransliterator</li>
+<li>(draft)      public class ImplicitCEGenerator</li>
+<li>(deprecated) public class NullTransliterator</li>
+<li>(deprecated) public class RuleBasedTransliterator</li>
+<li>(deprecated) public final class UnicodeFilterLogic</li>
+<li>(deprecated) public class UnicodeToHexTransliterator</li>
+<li>ChineseDateFormat
+<ul>
+    <li>(stable)     protected java.lang.String subFormat(char, int, int, java.text.FieldPosition, DateFormatSymbols, Calendar)</li>
+</ul>
+<li>ChineseDateFormatSymbols
+<ul>
+    <li>(stable)     protected void constructCalendarSpecific(java.util.ResourceBundle)</li>
+</ul>
+<li>DateFormatSymbols
+<ul>
+    <li>(stable)     protected void constructCalendarSpecific(java.util.ResourceBundle)</li>
+</ul>
+<li>RuleBasedBreakIterator
+<ul>
+    <li>(stable)     protected static final byte IGNORE</li>
+    <li>(stable)     protected static final void checkOffset(int, java.text.CharacterIterator)</li>
+    <li>(stable)     protected int handleNext()</li>
+    <li>(stable)     protected int handlePrevious()</li>
+    <li>(stable)     protected RuleBasedBreakIterator.Builder makeBuilder()</li>
+</ul>
+<li>Transliterator
+<ul>
+    <li>(deprecated) protected static final char ID_DELIM</li>
+    <li>(deprecated) protected static final char ID_SEP</li>
+    <li>(deprecated) protected static final char VARIANT_SEP</li>
+</ul>
+</ul>
+
+<h3>Package com.ibm.icu.util</h3>
+<ul>
+<li>(draft)      public final class CompactByteArray</li>
+<li>(draft)      public final class CompactCharArray</li>
+<li>Currency
+<ul>
+    <li>(stable)     public boolean equals(Currency)</li>
+</ul>
+<li>LocaleData
+<ul>
+    <li>(draft)      public static UnicodeSet getExemplarSet(java.util.Locale)</li>
+    <li>(draft)      public static final LocaleData.MeasurementSystem getMeasurementSystem(java.util.Locale)</li>
+    <li>(draft)      public static final LocaleData.PaperSize getPaperSize(java.util.Locale)</li>
+</ul>
+</ul>
+
+
+<hr/>
+<h2>Changed in ICU4J 3.0 (old, new)</h2>
+
+<h3>Package com.ibm.icu.lang</h3>
+<ul>
+<li>(stable)     public final class UCharacter extends java.lang.Object</br>
+(stable)     public final class UCharacter extends java.lang.Object implements com.ibm.icu.lang.UCharacterEnums.ECharacterCategory, com.ibm.icu.lang.UCharacterEnums.ECharacterDirection</li>
+<li>(stable)     public final class UCharacterCategory extends java.lang.Object</br>
+(stable)     public final class UCharacterCategory extends java.lang.Object implements com.ibm.icu.lang.UCharacterEnums.ECharacterCategory</li>
+<li>(stable)     public final class UCharacterDirection extends java.lang.Object</br>
+(stable)     public final class UCharacterDirection extends java.lang.Object implements com.ibm.icu.lang.UCharacterEnums.ECharacterDirection</li>
+</ul>
+
+<h3>Package com.ibm.icu.text</h3>
+<ul>
+<li>(stable)     public class DictionaryBasedBreakIterator extends com.ibm.icu.text.RuleBasedBreakIterator</br>
+(stable)     public class DictionaryBasedBreakIterator extends com.ibm.icu.text.RuleBasedBreakIterator_Old</li>
+</ul>
+
+<h3>Package com.ibm.icu.util</h3>
+<ul>
+<li>(stable)     public class Currency extends java.lang.Object implements java.io.Serializable</br>
+(stable)     public class Currency extends com.ibm.icu.util.MeasureUnit implements java.io.Serializable</li>
+</ul>
+
+
+<hr/>
+<h2>Promoted to stable in ICU4J 3.0</h2>
+
+<h3>Package com.ibm.icu.lang</h3>
+<ul>
+<li>(stable)     public static interface UCharacter.DecompositionType</li>
+<li>(stable)     public static interface UCharacter.EastAsianWidth</li>
+<li>(stable)     public static interface UCharacter.JoiningGroup</li>
+<li>(stable)     public static interface UCharacter.JoiningType</li>
+<li>(stable)     public static interface UCharacter.LineBreak</li>
+<li>(stable)     public static interface UCharacter.NumericType</li>
+<li>(stable)     public static final class UCharacter.UnicodeBlock</li>
+<li>(stable)     public static interface UProperty.NameChoice</li>
+<li>UCharacter
+<ul>
+    <li>(stable)     public static final double NO_NUMERIC_VALUE</li>
+    <li>(stable)     public static java.lang.String getISOComment(int)</li>
+    <li>(stable)     public static int getIntPropertyMaxValue(int)</li>
+    <li>(stable)     public static int getIntPropertyMinValue(int)</li>
+    <li>(stable)     public static int getIntPropertyValue(int, int)</li>
+    <li>(stable)     public static int getPropertyEnum(java.lang.String)</li>
+    <li>(stable)     public static java.lang.String getPropertyName(int, int)</li>
+    <li>(stable)     public static int getPropertyValueEnum(int, java.lang.String)</li>
+    <li>(stable)     public static java.lang.String getPropertyValueName(int, int, int)</li>
+    <li>(stable)     public static double getUnicodeNumericValue(int)</li>
+</ul>
+<li>UProperty
+<ul>
+    <li>(stable)     public static final int AGE</li>
+    <li>(stable)     public static final int BIDI_CLASS</li>
+    <li>(stable)     public static final int BIDI_MIRRORING_GLYPH</li>
+    <li>(stable)     public static final int BLOCK</li>
+    <li>(stable)     public static final int CANONICAL_COMBINING_CLASS</li>
+    <li>(stable)     public static final int CASE_FOLDING</li>
+    <li>(stable)     public static final int DECOMPOSITION_TYPE</li>
+    <li>(stable)     public static final int DOUBLE_LIMIT</li>
+    <li>(stable)     public static final int DOUBLE_START</li>
+    <li>(stable)     public static final int EAST_ASIAN_WIDTH</li>
+    <li>(stable)     public static final int GENERAL_CATEGORY</li>
+    <li>(stable)     public static final int GENERAL_CATEGORY_MASK</li>
+    <li>(stable)     public static final int INT_LIMIT</li>
+    <li>(stable)     public static final int INT_START</li>
+    <li>(stable)     public static final int ISO_COMMENT</li>
+    <li>(stable)     public static final int JOINING_GROUP</li>
+    <li>(stable)     public static final int JOINING_TYPE</li>
+    <li>(stable)     public static final int LINE_BREAK</li>
+    <li>(stable)     public static final int LOWERCASE_MAPPING</li>
+    <li>(stable)     public static final int MASK_LIMIT</li>
+    <li>(stable)     public static final int MASK_START</li>
+    <li>(stable)     public static final int NAME</li>
+    <li>(stable)     public static final int NUMERIC_TYPE</li>
+    <li>(stable)     public static final int NUMERIC_VALUE</li>
+    <li>(stable)     public static final int SCRIPT</li>
+    <li>(stable)     public static final int SIMPLE_CASE_FOLDING</li>
+    <li>(stable)     public static final int SIMPLE_LOWERCASE_MAPPING</li>
+    <li>(stable)     public static final int SIMPLE_TITLECASE_MAPPING</li>
+    <li>(stable)     public static final int SIMPLE_UPPERCASE_MAPPING</li>
+    <li>(stable)     public static final int STRING_LIMIT</li>
+    <li>(stable)     public static final int STRING_START</li>
+    <li>(stable)     public static final int TITLECASE_MAPPING</li>
+    <li>(stable)     public static final int UNICODE_1_NAME</li>
+    <li>(stable)     public static final int UPPERCASE_MAPPING</li>
+</ul>
+</ul>
+
+<h3>Package com.ibm.icu.text</h3>
+<ul>
+<li>(stable)     public final class CanonicalIterator</li>
+<li>(stable)     public abstract class UCharacterIterator</li>
+<li>(stable)     public interface UForwardCharacterIterator</li>
+<li>(stable)     public final class UnicodeCompressor</li>
+<li>(stable)     public final class UnicodeDecompressor</li>
+<li>BreakIterator
+<ul>
+    <li>(stable)     public static final int KIND_CHARACTER</li>
+    <li>(stable)     public static final int KIND_LINE</li>
+    <li>(stable)     public static final int KIND_SENTENCE</li>
+    <li>(stable)     public static final int KIND_TITLE</li>
+    <li>(stable)     public static final int KIND_WORD</li>
+    <li>(stable)     public static java.lang.Object registerInstance(BreakIterator, java.util.Locale, int)</li>
+    <li>(stable)     public static boolean unregister(java.lang.Object)</li>
+</ul>
+<li>Collator
+<ul>
+    <li>(stable)     protected Collator()</li>
+    <li>(stable)     public static java.util.Locale[] getAvailableLocales()</li>
+    <li>(stable)     public UnicodeSet getTailoredSet()</li>
+</ul>
+<li>DateFormat
+<ul>
+    <li>(deprecated) public static final int MILLISECOND_FIELD</li>
+</ul>
+<li>RuleBasedCollator
+<ul>
+    <li>(stable)     public UnicodeSet getTailoredSet()</li>
+</ul>
+<li>UTF16
+<ul>
+    <li>(stable)     public static boolean hasMoreCodePointsThan(char[], int, int, int)</li>
+    <li>(stable)     public static boolean hasMoreCodePointsThan(java.lang.String, int)</li>
+    <li>(stable)     public static boolean hasMoreCodePointsThan(java.lang.StringBuffer, int)</li>
+</ul>
+<li>UTF16.StringComparator
+<ul>
+    <li>(stable)     public static final int FOLD_CASE_DEFAULT</li>
+    <li>(stable)     public static final int FOLD_CASE_EXCLUDE_SPECIAL_I</li>
+    <li>(stable)     public UTF16.StringComparator(boolean, boolean, int)</li>
+    <li>(stable)     public int compare(java.lang.Object, java.lang.Object)</li>
+    <li>(stable)     public boolean getCodePointCompare()</li>
+    <li>(stable)     public boolean getIgnoreCase()</li>
+    <li>(stable)     public int getIgnoreCaseOption()</li>
+    <li>(stable)     public void setCodePointCompare(boolean)</li>
+    <li>(stable)     public void setIgnoreCase(boolean, int)</li>
+</ul>
+<li>UnicodeSet
+<ul>
+    <li>(stable)     public UnicodeSet applyIntPropertyValue(int, int)</li>
+    <li>(stable)     public UnicodeSet applyPropertyAlias(java.lang.String, java.lang.String)</li>
+</ul>
+</ul>
+
+<h3>Package com.ibm.icu.util</h3>
+<ul>
+<li>(stable)     public final class StringTokenizer</li>
+<li>Calendar
+<ul>
+    <li>(stable)     public boolean isEquivalentTo(Calendar)</li>
+</ul>
+<li>GregorianCalendar
+<ul>
+    <li>(stable)     public boolean isEquivalentTo(Calendar)</li>
+</ul>
+<li>RangeValueIterator.Element
+<ul>
+    <li>(stable)     public RangeValueIterator.Element()</li>
+</ul>
+<li>ValueIterator.Element
+<ul>
+    <li>(stable)     public ValueIterator.Element()</li>
+</ul>
+</ul>
+
+
+<hr/>
+<h2>Added in ICU4J 3.0</h2>
+
+<h3>Package com.ibm.icu.lang</h3>
+<ul>
+<li>(draft)      public class UCharacterEnums</li>
+<li>(draft)      public static interface UCharacterEnums.ECharacterCategory</li>
+<li>(draft)      public static interface UCharacterEnums.ECharacterDirection</li>
+<li>UCharacter
+<ul>
+    <li>(draft)      public static final int MAX_CODE_POINT</li>
+    <li>(draft)      public static final char MAX_HIGH_SURROGATE</li>
+    <li>(draft)      public static final char MAX_LOW_SURROGATE</li>
+    <li>(draft)      public static final char MAX_SURROGATE</li>
+    <li>(draft)      public static final int MIN_CODE_POINT</li>
+    <li>(draft)      public static final char MIN_HIGH_SURROGATE</li>
+    <li>(draft)      public static final char MIN_LOW_SURROGATE</li>
+    <li>(draft)      public static final int MIN_SUPPLEMENTARY_CODE_POINT</li>
+    <li>(draft)      public static final char MIN_SURROGATE</li>
+    <li>(draft)      public static int charCount(int)</li>
+    <li>(draft)      public static final int codePointAt(char[], int)</li>
+    <li>(draft)      public static final int codePointAt(java.lang.CharSequence, int)</li>
+    <li>(draft)      public static final int codePointBefore(char[], int)</li>
+    <li>(draft)      public static final int codePointBefore(java.lang.CharSequence, int)</li>
+    <li>(draft)      public static int codePointCount(char[], int, int)</li>
+    <li>(draft)      public static int codePointCount(java.lang.CharSequence, int, int)</li>
+    <li>(draft)      public static char forDigit(int, int)</li>
+    <li>(draft)      public static byte getDirectionality(int)</li>
+    <li>(draft)      public static boolean isHighSurrogate(char)</li>
+    <li>(draft)      public static boolean isLowSurrogate(char)</li>
+    <li>(draft)      public static final boolean isSupplementaryCodePoint(int)</li>
+    <li>(draft)      public static final boolean isSurrogatePair(char, char)</li>
+    <li>(draft)      public static final boolean isValidCodePoint(int)</li>
+    <li>(draft)      public static int offsetByCodePoints(char[], int, int, int, int)</li>
+    <li>(draft)      public static int offsetByCodePoints(java.lang.CharSequence, int, int)</li>
+    <li>(draft)      public static final char[] toChars(int)</li>
+    <li>(draft)      public static final int toChars(int, char[], int)</li>
+    <li>(draft)      public static final int toCodePoint(char, char)</li>
+</ul>
+<li>UCharacter.LineBreak
+<ul>
+    <li>(draft)      public static final int INSEPARABLE</li>
+</ul>
+<li>UCharacter.UnicodeBlock
+<ul>
+    <li>(draft)      public static final UCharacter.UnicodeBlock CYRILLIC_SUPPLEMENT</li>
+    <li>(draft)      public static final int CYRILLIC_SUPPLEMENT_ID</li>
+    <li>(draft)      public static final UCharacter.UnicodeBlock forName(java.lang.String)</li>
+</ul>
+<li>UProperty
+<ul>
+    <li>(draft)      public static final int LEAD_CANONICAL_COMBINING_CLASS</li>
+    <li>(draft)      public static final int NFC_INERT</li>
+    <li>(draft)      public static final int NFC_QUICK_CHECK</li>
+    <li>(draft)      public static final int NFD_INERT</li>
+    <li>(draft)      public static final int NFD_QUICK_CHECK</li>
+    <li>(draft)      public static final int NFKC_INERT</li>
+    <li>(draft)      public static final int NFKC_QUICK_CHECK</li>
+    <li>(draft)      public static final int NFKD_INERT</li>
+    <li>(draft)      public static final int NFKD_QUICK_CHECK</li>
+    <li>(draft)      public static final int SEGMENT_STARTER</li>
+    <li>(draft)      public static final int S_TERM</li>
+    <li>(draft)      public static final int TRAIL_CANONICAL_COMBINING_CLASS</li>
+    <li>(draft)      public static final int VARIATION_SELECTOR</li>
+</ul>
+<li>UScript
+<ul>
+    <li>(draft)      public static final int KATAKANA_OR_HIRAGANA</li>
+    <li>(draft)      public static final int[] getCode(ULocale)</li>
+</ul>
+</ul>
+
+<h3>Package com.ibm.icu.text</h3>
+<ul>
+<li>(draft)      public abstract class MeasureFormat</li>
+<li>(draft)      public class MessageFormat</li>
+<li>ChineseDateFormatSymbols
+<ul>
+    <li>(draft)      protected void initializeData(ULocale, CalendarData)</li>
+</ul>
+<li>Collator
+<ul>
+    <li>(draft)      public static final ULocale[] getAvailableULocales()</li>
+    <li>(draft)      public static final ULocale getFunctionalEquivalent(java.lang.String, ULocale)</li>
+    <li>(draft)      public static final ULocale getFunctionalEquivalent(java.lang.String, ULocale, boolean[])</li>
+    <li>(draft)      public static final Collator getInstance(ULocale)</li>
+    <li>(draft)      public static final java.lang.String[] getKeywordValues(java.lang.String)</li>
+    <li>(draft)      public static final java.lang.String[] getKeywords()</li>
+</ul>
+<li>DateFormat
+<ul>
+    <li>(draft)      public static final int DOW_LOCAL_FIELD</li>
+    <li>(draft)      public static final int EXTENDED_YEAR_FIELD</li>
+    <li>(draft)      public static final int FIELD_COUNT</li>
+    <li>(draft)      public static final int FRACTIONAL_SECOND_FIELD</li>
+    <li>(draft)      public static final int JULIAN_DAY_FIELD</li>
+    <li>(draft)      public static final int MILLISECONDS_IN_DAY_FIELD</li>
+    <li>(draft)      public static final int TIMEZONE_RFC_FIELD</li>
+    <li>(draft)      public static final int YEAR_WOY_FIELD</li>
+</ul>
+<li>DateFormatSymbols
+<ul>
+    <li>(draft)      protected void initializeData(ULocale, CalendarData)</li>
+    <li>(draft)      protected void initializeData(ULocale, java.lang.String)</li>
+</ul>
+<li>DecimalFormat
+<ul>
+    <li>(draft)      public boolean areSignificantDigitsUsed()</li>
+    <li>(draft)      public int getMaximumSignificantDigits()</li>
+    <li>(draft)      public int getMinimumSignificantDigits()</li>
+    <li>(draft)      public void setMaximumSignificantDigits(int)</li>
+    <li>(draft)      public void setMinimumSignificantDigits(int)</li>
+    <li>(draft)      public void setSignificantDigitsUsed(boolean)</li>
+</ul>
+<li>DecimalFormatSymbols
+<ul>
+    <li>(draft)      public char getSignificantDigit()</li>
+    <li>(draft)      public void setSignificantDigit(char)</li>
+</ul>
+<li>Normalizer
+<ul>
+    <li>(stable)     public static int compare(int, java.lang.String, int)</li>
+</ul>
+<li>NumberFormat
+<ul>
+    <li>(draft)      public final java.lang.String format(CurrencyAmount)</li>
+    <li>(draft)      public java.lang.StringBuffer format(CurrencyAmount, java.lang.StringBuffer, java.text.FieldPosition)</li>
+</ul>
+<li>RuleBasedBreakIterator
+<ul>
+    <li>(draft)      public static final int WORD_IDEO</li>
+    <li>(draft)      public static final int WORD_IDEO_LIMIT</li>
+    <li>(draft)      public static final int WORD_KANA</li>
+    <li>(draft)      public static final int WORD_KANA_LIMIT</li>
+    <li>(draft)      public static final int WORD_LETTER</li>
+    <li>(draft)      public static final int WORD_LETTER_LIMIT</li>
+    <li>(draft)      public static final int WORD_NONE</li>
+    <li>(draft)      public static final int WORD_NONE_LIMIT</li>
+    <li>(draft)      public static final int WORD_NUMBER</li>
+    <li>(draft)      public static final int WORD_NUMBER_LIMIT</li>
+    <li>(draft)      public static RuleBasedBreakIterator getInstanceFromCompiledRules(java.io.InputStream)</li>
+    <li>(draft)      public int getRuleStatus()</li>
+    <li>(draft)      public int getRuleStatusVec(int[])</li>
+</ul>
+<li>RuleBasedNumberFormat
+<ul>
+    <li>(draft)      public java.lang.String getDefaultRuleSetName()</li>
+</ul>
+<li>Transliterator
+<ul>
+    <li>(draft)      public Transliterator[] getElements()</li>
+</ul>
+<li>UTF16
+<ul>
+    <li>(draft)      public static java.lang.StringBuffer appendCodePoint(java.lang.StringBuffer, int)</li>
+    <li>(draft)      public static java.lang.String newString(int[], int, int)</li>
+</ul>
+</ul>
+
+<h3>Package com.ibm.icu.util</h3>
+<ul>
+<li>(draft)      public class CharArrayWrapper</li>
+<li>(draft)      public class CurrencyAmount</li>
+<li>(draft)      public abstract class Measure</li>
+<li>(draft)      public abstract class MeasureUnit</li>
+<li>(draft)      public abstract class UResourceBundle</li>
+<li>(draft)      public class UResourceTypeMismatchException</li>
+<li>LocaleData
+<ul>
+    <li>(draft)      public static UnicodeSet getExemplarSet(ULocale, int)</li>
+    <li>(draft)      public static final LocaleData.MeasurementSystem getMeasurementSystem(ULocale)</li>
+    <li>(draft)      public static final LocaleData.PaperSize getPaperSize(ULocale)</li>
+</ul>
+<li>ULocale
+<ul>
+    <li>(draft)      public static final ULocale CANADA</li>
+    <li>(draft)      public static final ULocale CANADA_FRENCH</li>
+    <li>(draft)      public static final ULocale CHINA</li>
+    <li>(draft)      public static final ULocale CHINESE</li>
+    <li>(draft)      public static final ULocale ENGLISH</li>
+    <li>(draft)      public static final ULocale FRANCE</li>
+    <li>(draft)      public static final ULocale FRENCH</li>
+    <li>(draft)      public static final ULocale GERMAN</li>
+    <li>(draft)      public static final ULocale GERMANY</li>
+    <li>(draft)      public static final ULocale ITALIAN</li>
+    <li>(draft)      public static final ULocale ITALY</li>
+    <li>(draft)      public static final ULocale JAPAN</li>
+    <li>(draft)      public static final ULocale JAPANESE</li>
+    <li>(draft)      public static final ULocale KOREA</li>
+    <li>(draft)      public static final ULocale KOREAN</li>
+    <li>(draft)      public static final ULocale PRC</li>
+    <li>(draft)      public static final ULocale SIMPLIFIED_CHINESE</li>
+    <li>(draft)      public static final ULocale TAIWAN</li>
+    <li>(draft)      public static final ULocale TRADITIONAL_CHINESE</li>
+    <li>(draft)      public static final ULocale UK</li>
+    <li>(draft)      public static final ULocale US</li>
+    <li>(draft)      public ULocale(java.lang.String, java.lang.String, java.lang.String)</li>
+    <li>(draft)      public static java.lang.String canonicalize(java.lang.String)</li>
+    <li>(draft)      public java.lang.Object clone()</li>
+    <li>(draft)      public static ULocale createCanonical(java.lang.String)</li>
+    <li>(draft)      public boolean equals(java.lang.Object)</li>
+    <li>(draft)      public static ULocale[] getAvailableLocales()</li>
+    <li>(draft)      public java.lang.String getBaseName()</li>
+    <li>(draft)      public static java.lang.String getBaseName(java.lang.String)</li>
+    <li>(draft)      public java.lang.String getCountry()</li>
+    <li>(draft)      public static java.lang.String getCountry(java.lang.String)</li>
+    <li>(draft)      public java.lang.String getDisplayCountry()</li>
+    <li>(draft)      public java.lang.String getDisplayCountry(ULocale)</li>
+    <li>(draft)      public static java.lang.String getDisplayCountry(java.lang.String, ULocale)</li>
+    <li>(draft)      public static java.lang.String getDisplayCountry(java.lang.String, java.lang.String)</li>
+    <li>(draft)      public static java.lang.String getDisplayKeyword(java.lang.String)</li>
+    <li>(draft)      public static java.lang.String getDisplayKeyword(java.lang.String, ULocale)</li>
+    <li>(draft)      public static java.lang.String getDisplayKeyword(java.lang.String, java.lang.String)</li>
+    <li>(draft)      public java.lang.String getDisplayKeywordValue(java.lang.String)</li>
+    <li>(draft)      public java.lang.String getDisplayKeywordValue(java.lang.String, ULocale)</li>
+    <li>(draft)      public static java.lang.String getDisplayKeywordValue(java.lang.String, java.lang.String, ULocale)</li>
+    <li>(draft)      public static java.lang.String getDisplayKeywordValue(java.lang.String, java.lang.String, java.lang.String)</li>
+    <li>(draft)      public java.lang.String getDisplayLanguage()</li>
+    <li>(draft)      public java.lang.String getDisplayLanguage(ULocale)</li>
+    <li>(draft)      public static java.lang.String getDisplayLanguage(java.lang.String, ULocale)</li>
+    <li>(draft)      public static java.lang.String getDisplayLanguage(java.lang.String, java.lang.String)</li>
+    <li>(draft)      public java.lang.String getDisplayName()</li>
+    <li>(draft)      public java.lang.String getDisplayName(ULocale)</li>
+    <li>(draft)      public static java.lang.String getDisplayName(java.lang.String, ULocale)</li>
+    <li>(draft)      public static java.lang.String getDisplayName(java.lang.String, java.lang.String)</li>
+    <li>(draft)      public java.lang.String getDisplayScript()</li>
+    <li>(draft)      public java.lang.String getDisplayScript(ULocale)</li>
+    <li>(draft)      public static java.lang.String getDisplayScript(java.lang.String, ULocale)</li>
+    <li>(draft)      public static java.lang.String getDisplayScript(java.lang.String, java.lang.String)</li>
+    <li>(draft)      public java.lang.String getDisplayVariant()</li>
+    <li>(draft)      public java.lang.String getDisplayVariant(ULocale)</li>
+    <li>(draft)      public static java.lang.String getDisplayVariant(java.lang.String, ULocale)</li>
+    <li>(draft)      public static java.lang.String getDisplayVariant(java.lang.String, java.lang.String)</li>
+    <li>(draft)      public java.lang.String getISO3Country()</li>
+    <li>(draft)      public static java.lang.String getISO3Country(java.lang.String)</li>
+    <li>(draft)      public java.lang.String getISO3Language()</li>
+    <li>(draft)      public static java.lang.String getISO3Language(java.lang.String)</li>
+    <li>(draft)      public static java.lang.String[] getISOCountries()</li>
+    <li>(draft)      public static java.lang.String[] getISOLanguages()</li>
+    <li>(draft)      public java.lang.String getKeywordValue(java.lang.String)</li>
+    <li>(draft)      public static java.lang.String getKeywordValue(java.lang.String, java.lang.String)</li>
+    <li>(draft)      public java.util.Iterator getKeywords()</li>
+    <li>(draft)      public static java.util.Iterator getKeywords(java.lang.String)</li>
+    <li>(draft)      public java.lang.String getLanguage()</li>
+    <li>(draft)      public static java.lang.String getLanguage(java.lang.String)</li>
+    <li>(draft)      public java.lang.String getName()</li>
+    <li>(draft)      public static java.lang.String getName(java.lang.String)</li>
+    <li>(draft)      public java.lang.String getScript()</li>
+    <li>(draft)      public static java.lang.String getScript(java.lang.String)</li>
+    <li>(draft)      public java.lang.String getVariant()</li>
+    <li>(draft)      public static java.lang.String getVariant(java.lang.String)</li>
+    <li>(draft)      public int hashCode()</li>
+    <li>(draft)      public static synchronized void setDefault(ULocale)</li>
+</ul>
+</ul>
+
+<hr/>
+<p><i>Contents generated by ReportAPI tool on Thu Jun 10 01:01:48 PDT 2004<br/>Copyright (C) 2004, International Business Machines Corporation, All Rights Reserved.</i></p>
+</body>
+</html>
