@@ -351,7 +351,7 @@ CLEAN : GODATA
 # Batch inference rule for creating converters
 {$(ICUSRCDATA_RELATIVE_PATH)\$(ICUUCM)}.ucm.cnv::
 	@echo Generating converters
-	@"$(ICUTOOLS)\makeconv\$(CFG)\makeconv" -t -p"$(ICUPKG)" -d"$(ICUBLD)" $<
+	@"$(ICUTOOLS)\makeconv\$(CFG)\makeconv" -c -t -p"$(ICUPKG)" -d"$(ICUBLD)" $<
 
 # Batch inference rule for creating transliterator resource files
 {$(ICUSRCDATA_RELATIVE_PATH)\$(ICUTRNS)}.txt.res::
