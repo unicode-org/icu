@@ -344,7 +344,7 @@ public final class UScriptRun
 					int pi = pairIndex & ~1;
 
 					while (parenSP >= 0 && parenStack[parenSP].pairIndex != pi) {
-						parenSP -= 1;
+						parenStack[parenSP--] = null;
 					}
 
 					if (parenSP < startSP) {
