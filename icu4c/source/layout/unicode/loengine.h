@@ -296,7 +296,7 @@ inline int32_t ICULayoutEngine::layoutChars(const UChar chars[],
                                       startOffset,
                                       endOffset - startOffset,
                                       maxOffset,
-                                      rightToLeft,
+                                      rightToLeft != 0,
                                       x, y,
                                       (LEErrorCode &) success);
 }
@@ -314,7 +314,7 @@ inline int32_t ICULayoutEngine::layoutString(const UnicodeString &str,
                                       startOffset,
                                       endOffset - startOffset,
                                       str.length(),
-                                      rightToLeft,
+                                      rightToLeft != 0,
                                       x, y,
                                       (LEErrorCode &) success);
 }
