@@ -1317,18 +1317,19 @@ UChar Transliterator::filteredCharAt(const Replaceable& text, int32_t i) const {
 
 #endif
 
-void Transliterator::initializeRegistry(void) {
     // Lock first, check registry pointer second
     Mutex lock(&registryMutex);
+
+
+void Transliterator::initializeRegistry(void) {
     if (registry != 0) {
-        // We were blocked by another thread in initializeRegistry()
         return;
     }
 
     UErrorCode status = U_ZERO_ERROR;
 
-    registry = new TransliteratorRegistry(status);
-    if (registry == 0 || U_FAILURE(status)) {
+    TransliteratorRegistry* _registry = new TransliteratorRegistry(status);
+    if (_registry == 0 || U_FAILURE(status)) {
         return; // out of memory, no recovery
     }
 
@@ -1385,12 +1386,12 @@ void Transliterator::initializeRegistry(void) {
                                 (ures_getUnicodeStringByIndex(colBund, 3, &status).charAt(0) ==
                                  0x0046 /*F*/) ?
                                 UTRANS_FORWARD : UTRANS_REVERSE;
-                            registry->put(id, resString, dir, visible);
+                            _registry->put(id, resString, dir, visible);
                         }
                         break;
                     case 0x61: // 'a'
                         // 'alias'; row[2]=createInstance argument
-                        registry->put(id, resString, TRUE);
+                        _registry->put(id, resString, TRUE);
                         break;
                     }
                 }
@@ -1403,26 +1404,38 @@ void Transliterator::initializeRegistry(void) {
     ures_close(transIDs);
     ures_close(bundle);
 
-    _registerSpecialInverse(NullTransliterator::SHORT_ID,
-                            NullTransliterator::SHORT_ID, FALSE);
-
     // Manually add prototypes that the system knows about to the
     // cache.  This is how new non-rule-based transliterators are
     // added to the system.
 
-    registry->put(new NullTransliterator(), TRUE);
-    registry->put(new LowercaseTransliterator(), TRUE);
-    registry->put(new UppercaseTransliterator(), TRUE);
-    registry->put(new TitlecaseTransliterator(), TRUE);
+    _registry->put(new NullTransliterator(), TRUE);
+    _registry->put(new LowercaseTransliterator(), TRUE);
+    _registry->put(new UppercaseTransliterator(), TRUE);
+    _registry->put(new TitlecaseTransliterator(), TRUE);
+    _registry->put(new UnicodeNameTransliterator(), TRUE);
+    _registry->put(new NameUnicodeTransliterator(), TRUE);
+
+    // Keep the number of operations within the mutex to a minimum.
+    // The SUBCLASS::registerIDs() calls must occur within the mutex.
+    umtx_lock(&registryMutex);
+    if (registry == NULL) {
+        registry = _registry;
+        _registry = NULL;
+
+        RemoveTransliterator::registerIDs(); // Must be within mutex
+        EscapeTransliterator::registerIDs();
+        UnescapeTransliterator::registerIDs();
+        NormalizationTransliterator::registerIDs();
+        AnyTransliterator::registerIDs();
+    }
+    umtx_unlock(&registryMutex);
+    delete _registry;
+
+    _registerSpecialInverse(NullTransliterator::SHORT_ID,
+                            NullTransliterator::SHORT_ID, FALSE);
     _registerSpecialInverse("Upper", "Lower", TRUE);
     _registerSpecialInverse("Title", "Lower", FALSE);
-    registry->put(new UnicodeNameTransliterator(), TRUE);
-    registry->put(new NameUnicodeTransliterator(), TRUE);
-    RemoveTransliterator::registerIDs();
-    EscapeTransliterator::registerIDs();
-    UnescapeTransliterator::registerIDs();
-    NormalizationTransliterator::registerIDs();
-    AnyTransliterator::registerIDs();
+
     ucln_i18n_registerCleanup();
 }
 
