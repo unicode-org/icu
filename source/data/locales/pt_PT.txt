@@ -9,7 +9,6 @@
 pt_PT{
     Countries{
         AE{"Emiratos Árabes Unidos"}
-        AG{"Antígua e Barbuda"}
         AM{"Arménia"}
         AQ{"Antárctica"}
         AZ{"Azerbeijão"}
@@ -30,7 +29,6 @@ pt_PT{
         HK{"Hong Kong - Região Administrativa Especial da China"}
         KE{"Quénia"}
         KG{"Quirguizistão"}
-        KH{"Camboja"}
         KN{"Saint Kitts e Nevis"}
         KP{"Coreia do Norte"}
         KR{"Coreia do Sul"}
@@ -60,7 +58,6 @@ pt_PT{
         TF{"Territórios Franceses a Sul"}
         TJ{"Tajiquistão"}
         TM{"Turquemenistão"}
-        TW{"Formosa, Província Chinesa"}
         UM{"Ilhas Minor Outlying (E.U.A)"}
         UZ{"Uzbaquistão"}
         VA{"Santa Sé (Estado da Cidade do Vaticano)"}
@@ -83,10 +80,8 @@ pt_PT{
         }
     }
     Languages{
-        ar{"árabe"}
         cs{"checo"}
         et{"estónio"}
-        lv{"letão"}
         pl{"polaco"}
         sl{"esloveno"}
     }
@@ -99,10 +94,6 @@ pt_PT{
     Version{"1.2"}
     calendar{
         gregorian{
-            DateTimeElements:intvector{
-                2,
-                1,
-            }
             DateTimePatterns{
                 "HH'H'mm'm'ss's' z",
                 "HH:mm:ss z",

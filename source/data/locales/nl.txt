@@ -2073,10 +2073,6 @@ nl{
     Version{"1.2"}
     calendar{
         gregorian{
-            DateTimeElements:intvector{
-                2,
-                4,
-            }
             DateTimePatterns{
                 "H:mm:ss' uur' z",
                 "H:mm:ss z",
@@ -2224,28 +2220,12 @@ nl{
     }
     zoneStrings{
         {
-            "PST",
-            "Pacific-standaardtijd",
-            "PST",
-            "Pacific-zomertijd",
-            "PDT",
-            "Los Angeles",
-        }
-        {
             "America/Los_Angeles",
             "Pacific-standaardtijd",
             "PST",
             "Pacific-zomertijd",
             "PDT",
             "Los Angeles",
-        }
-        {
-            "MST",
-            "Mountain-standaardtijd",
-            "MST",
-            "Mountain-zomertijd",
-            "MDT",
-            "Denver",
         }
         {
             "America/Denver",
@@ -2256,28 +2236,12 @@ nl{
             "Denver",
         }
         {
-            "PNT",
-            "Mountain-standaardtijd",
-            "MST",
-            "Mountain-standaardtijd",
-            "MST",
-            "Phoenix",
-        }
-        {
             "America/Phoenix",
             "Mountain-standaardtijd",
             "MST",
             "Mountain-standaardtijd",
             "MST",
             "Phoenix",
-        }
-        {
-            "CST",
-            "Central-standaardtijd",
-            "CST",
-            "Central-zomertijd",
-            "CDT",
-            "Chicago",
         }
         {
             "America/Chicago",
@@ -2288,28 +2252,12 @@ nl{
             "Chicago",
         }
         {
-            "EST",
-            "Eastern-standaardtijd",
-            "EST",
-            "Eastern-zomertijd",
-            "EDT",
-            "New York",
-        }
-        {
             "America/New_York",
             "Eastern-standaardtijd",
             "EST",
             "Eastern-zomertijd",
             "EDT",
             "New York",
-        }
-        {
-            "IET",
-            "Eastern-standaardtijd",
-            "EST",
-            "Eastern-standaardtijd",
-            "EST",
-            "Indianapolis",
         }
         {
             "America/Indianapolis",
@@ -2320,28 +2268,12 @@ nl{
             "Indianapolis",
         }
         {
-            "HST",
-            "Hawaï-standaardtijd",
-            "HST",
-            "Hawaï-standaardtijd",
-            "HST",
-            "Honolulu",
-        }
-        {
             "Pacific/Honolulu",
             "Hawaï-standaardtijd",
             "HST",
             "Hawaï-standaardtijd",
             "HST",
             "Honolulu",
-        }
-        {
-            "AST",
-            "Alaska-standaardtijd",
-            "AST",
-            "Alaska-zomertijd",
-            "ADT",
-            "Anchorage",
         }
         {
             "America/Anchorage",
@@ -2360,28 +2292,12 @@ nl{
             "Halifax",
         }
         {
-            "CNT",
-            "Newfoundland-standaardtijd",
-            "CNT",
-            "Newfoundland-zomertijd",
-            "CDT",
-            "St. Johns",
-        }
-        {
             "America/St_Johns",
             "Newfoundland-standaardtijd",
             "CNT",
             "Newfoundland-zomertijd",
             "CDT",
             "St. Johns",
-        }
-        {
-            "ECT",
-            "Midden-Europese standaardtijd",
-            "CET",
-            "Midden-Europese zomertijd",
-            "CEST",
-            "Paris",
         }
         {
             "Europe/Paris",
@@ -2392,7 +2308,7 @@ nl{
             "Parijs",
         }
         {
-            "GMT",
+            "Etc/GMT",
             "Greenwich Mean Time",
             "GMT",
             "Greenwich Mean Time",
@@ -2416,14 +2332,6 @@ nl{
             "Jeruzalem",
         }
         {
-            "JST",
-            "Japanse standaardtijd",
-            "JST",
-            "Japanse standaardtijd",
-            "JST",
-            "Tokyo",
-        }
-        {
             "Asia/Tokyo",
             "Japanse standaardtijd",
             "JST",
@@ -2438,14 +2346,6 @@ nl{
             "Oost-Europese zomertijd",
             "EEST",
             "Boekarest",
-        }
-        {
-            "CTT",
-            "Chinese standaardtijd",
-            "CTT",
-            "Chinese standaardtijd",
-            "CDT",
-            "Shanghai",
         }
         {
             "Asia/Shanghai",

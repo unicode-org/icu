@@ -12,10 +12,6 @@ en_NZ{
             "$",
             "New Zealand Dollar",
         }
-        USD{
-            "US$",
-            "US Dollar",
-        }
     }
     Version{"1.2"}
     calendar{

@@ -382,16 +382,9 @@ ca{
     Version{"1.2"}
     calendar{
         gregorian{
-            DateTimePatterns{
-                "HH:mm:ss z",
-                "HH:mm:ss z",
-                "HH:mm:ss",
-                "HH:mm",
-                "EEEE dd MMMM yyyy",
-                "d MMMM yyyy",
-                "dd/MM/yyyy",
-                "dd/MM/yy",
-                "{1} {0}",
+            DateTimeElements:intvector{
+                2,
+                1,
             }
             dayNames{
                 format{

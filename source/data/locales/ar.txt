@@ -433,6 +433,12 @@ ar{
                     }
                 }
             }
+            weekend:intvector{
+                5,
+                0,
+                6,
+                86400000,
+            }
         }
         islamic{
             eras{

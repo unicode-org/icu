@@ -13,12 +13,6 @@ en_ZW{
             "Zimbabwean Dollar",
         }
     }
-    NumberPatterns{
-        "#,##0.###;-#,##0.###",
-        "¤#,##0.00;-¤#,##0.00",
-        "#,##0%",
-        "#E0",
-    }
     Version{"1.2"}
     calendar{
         gregorian{

@@ -228,7 +228,6 @@ lt{
         TR{"Turkija"}
         TT{"Trinidadas ir Tobagas"}
         TV{"Tuvalu"}
-        TW{"Taivanis, Kinijos provincija"}
         TZ{"Tanzanija"}
         UA{"Ukraina"}
         UG{"Uganda"}

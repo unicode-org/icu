@@ -10,11 +10,7 @@
  *  ICU <specials> source: ../../../locale/icu/main\th.xml
  */
 th{
-    BreakDictionaryData:import { "../brkitr/thaidict.brk" }
-    boundaries {
-        word { "word_th" }
-        line { "line_th" }
-    }
+    BreakDictionaryData:import{"../brkitr/thaidict.brk"}
     Countries{
         AD{"อันดอร์รา"}
         AE{"สหรัฐอาหรับเอมิเรตส์"}
@@ -91,7 +87,6 @@ th{
         GT{"กัวเตมาลา"}
         GW{"กิวนี-บิสโซ"}
         GY{"กูยาน่า"}
-        HK{"ฮ่องกง"}
         HN{"ฮอนดูรัส"}
         HR{"โครเอเชีย"}
         HT{"ไฮตี"}
@@ -134,7 +129,6 @@ th{
         ML{"มาลี"}
         MM{"สหภาพพม่า"}
         MN{"มองโกเลีย"}
-        MO{"มาเก๊า"}
         MQ{"มาร์ตินิก"}
         MR{"มอริทาเนีย"}
         MS{"มอนต์เซอราต"}
@@ -367,6 +361,10 @@ th{
         "Thai",
     }
     Version{"1.2"}
+    boundaries{
+        line{"line_th"}
+        word{"word_th"}
+    }
     calendar{
         buddhist{
             DateTimePatterns{

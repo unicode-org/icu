@@ -16,6 +16,10 @@ bn_IN{
     Version{"1.2"}
     calendar{
         gregorian{
+            DateTimeElements:intvector{
+                2,
+                1,
+            }
             DateTimePatterns{
                 "h:mm:ss a z",
                 "h:mm:ss a z",
@@ -30,8 +34,8 @@ bn_IN{
             weekend:intvector{
                 1,
                 0,
-                2,
-                0,
+                1,
+                86400000,
             }
         }
     }

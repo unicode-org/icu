@@ -12,6 +12,10 @@ so_ET{
             "$",
             "ETB",
         }
+        USD{
+            "US$",
+            "USD",
+        }
     }
     NumberPatterns{
         "#,##0.###;-#,##0.###",

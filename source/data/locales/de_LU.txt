@@ -25,12 +25,4 @@ de_LU{
         "#E0",
     }
     Version{"1.2"}
-    calendar{
-        gregorian{
-            DateTimeElements:intvector{
-                2,
-                1,
-            }
-        }
-    }
 }

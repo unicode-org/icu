@@ -228,7 +228,6 @@ ro{
         TR{"Turcia"}
         TT{"Trinidad şi Tobago"}
         TV{"Tuvalu"}
-        TW{"Taiwan, Provincia Chineză"}
         TZ{"Tanzania"}
         UA{"Ucraina"}
         UG{"Uganda"}

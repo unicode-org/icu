@@ -27,12 +27,6 @@ ms_MY{
                 "dd/MM/yyyy",
                 "{1} {0}",
             }
-            weekend:intvector{
-                7,
-                0,
-                1,
-                86400000,
-            }
         }
     }
 }

@@ -34,6 +34,7 @@ en_GB{
             "GMT",
             "British Summer Time",
             "BST",
+            "London",
         }
     }
 }

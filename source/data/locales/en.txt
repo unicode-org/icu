@@ -2338,7 +2338,7 @@ en{
         }
     }
     Variants{
-        POSIX{"Posix"}
+        POSIX{"Computer"}
         REVISED{"Revised Orthography"}
     }
     Version{"1.2"}
@@ -2442,14 +2442,6 @@ en{
     }
     zoneStrings{
         {
-            "PST",
-            "Pacific Standard Time",
-            "PST",
-            "Pacific Daylight Time",
-            "PDT",
-            "Los Angeles",
-        }
-        {
             "America/Los_Angeles",
             "Pacific Standard Time",
             "PST",
@@ -2458,12 +2450,12 @@ en{
             "Los Angeles",
         }
         {
-            "MST",
-            "Mountain Standard Time",
-            "MST",
-            "Mountain Daylight Time",
-            "MDT",
-            "Denver",
+            "America/Vancouver",
+            "Pacific Standard Time (CA)",
+            "PST (CA)",
+            "Pacific Daylight Time (CA)",
+            "PDT (CA)",
+            "Vancouver",
         }
         {
             "America/Denver",
@@ -2474,28 +2466,20 @@ en{
             "Denver",
         }
         {
-            "PNT",
-            "Mountain Standard Time",
-            "MST",
-            "Mountain Standard Time",
-            "MST",
-            "Phoenix",
+            "America/Edmonton",
+            "Mountain Standard Time (CA)",
+            "MST (CA)",
+            "Mountain Daylight Time (CA)",
+            "MDT (CA)",
+            "Edmonton",
         }
         {
             "America/Phoenix",
             "Mountain Standard Time",
             "MST",
-            "Mountain Standard Time",
-            "MST",
+            "Mountain Daylight Time",
+            "MDT",
             "Phoenix",
-        }
-        {
-            "CST",
-            "Central Standard Time",
-            "CST",
-            "Central Daylight Time",
-            "CDT",
-            "Chicago",
         }
         {
             "America/Chicago",
@@ -2506,12 +2490,12 @@ en{
             "Chicago",
         }
         {
-            "EST",
-            "Eastern Standard Time",
-            "EST",
-            "Eastern Daylight Time",
-            "EDT",
-            "New York",
+            "America/Winnipeg",
+            "Central Standard Time (CA)",
+            "CST (CA)",
+            "Central Daylight Time (CA)",
+            "CDT (CA)",
+            "Winnipeg",
         }
         {
             "America/New_York",
@@ -2522,51 +2506,35 @@ en{
             "New York",
         }
         {
-            "IET",
-            "Eastern Standard Time",
-            "EST",
-            "Eastern Standard Time",
-            "EST",
-            "Indianapolis",
+            "America/Montreal",
+            "Eastern Standard Time (CA)",
+            "EST (CA)",
+            "Eastern Daylight Time (CA)",
+            "EDT (CA)",
+            "Montreal",
         }
         {
             "America/Indianapolis",
             "Eastern Standard Time",
             "EST",
-            "Eastern Standard Time",
-            "EST",
+            "Eastern Daylight Time",
+            "EDT",
             "Indianapolis",
-        }
-        {
-            "HST",
-            "Hawaii Standard Time",
-            "HST",
-            "Hawaii Standard Time",
-            "HST",
-            "Honolulu",
         }
         {
             "Pacific/Honolulu",
             "Hawaii Standard Time",
             "HST",
-            "Hawaii Standard Time",
-            "HST",
+            "Hawaii Daylight Time",
+            "HDT",
             "Honolulu",
-        }
-        {
-            "AST",
-            "Alaska Standard Time",
-            "AST",
-            "Alaska Daylight Time",
-            "ADT",
-            "Anchorage",
         }
         {
             "America/Anchorage",
             "Alaska Standard Time",
-            "AST",
+            "AKST",
             "Alaska Daylight Time",
-            "ADT",
+            "AKDT",
             "Anchorage",
         }
         {
@@ -2578,52 +2546,36 @@ en{
             "Halifax",
         }
         {
-            "CNT",
-            "Newfoundland Standard Time",
-            "CNT",
-            "Newfoundland Daylight Time",
-            "CDT",
-            "St. Johns",
-        }
-        {
             "America/St_Johns",
             "Newfoundland Standard Time",
-            "CNT",
+            "NST",
             "Newfoundland Daylight Time",
-            "CDT",
+            "NDT",
             "St. Johns",
-        }
-        {
-            "ECT",
-            "Central European Standard Time",
-            "CET",
-            "Central European Daylight Time",
-            "CEST",
-            "Paris",
         }
         {
             "Europe/Paris",
             "Central European Standard Time",
-            "CET",
-            "Central European Daylight Time",
             "CEST",
+            "Central European Daylight Time",
+            "CEDT",
             "Paris",
         }
         {
-            "GMT",
+            "Etc/GMT",
             "Greenwich Mean Time",
             "GMT",
             "Greenwich Mean Time",
             "GMT",
-            "London",
+            "(GMT)",
         }
         {
-            "Africa/Casablanca",
-            "Greenwich Mean Time",
-            "GMT",
-            "Greenwich Mean Time",
-            "GMT",
-            "Casablanca",
+            "Europe/London",
+            "British Standard Time",
+            "BST",
+            "British Daylight Time",
+            "BDT",
+            "London",
         }
         {
             "Asia/Jerusalem",
@@ -2634,19 +2586,11 @@ en{
             "Jerusalem",
         }
         {
-            "JST",
-            "Japan Standard Time",
-            "JST",
-            "Japan Standard Time",
-            "JST",
-            "Tokyo",
-        }
-        {
             "Asia/Tokyo",
             "Japan Standard Time",
             "JST",
-            "Japan Standard Time",
-            "JST",
+            "Japan Daylight Time",
+            "JDT",
             "Tokyo",
         }
         {
@@ -2658,18 +2602,10 @@ en{
             "Bucharest",
         }
         {
-            "CTT",
-            "China Standard Time",
-            "CTT",
-            "China Standard Time",
-            "CDT",
-            "Shanghai",
-        }
-        {
             "Asia/Shanghai",
             "China Standard Time",
-            "CTT",
-            "China Standard Time",
+            "CST",
+            "China Daylight Time",
             "CDT",
             "Shanghai",
         }

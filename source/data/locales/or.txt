@@ -3,11 +3,11 @@
 // * Copyright (C) 2004 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File: ../../../locale/common/main/or.xml
+// * Source File: ../../../locale/common/main\or.xml
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: ../../../locale/icu/main/or.xml
+ *  ICU <specials> source: ../../../locale/icu/main\or.xml
  */
 or{
     Countries{
@@ -40,12 +40,6 @@ or{
     Version{"1.0"}
     calendar{
         gregorian{
-            weekend:intvector{
-                1,
-                0,
-                2,
-                0,
-            }
             dayNames{
                 format{
                     abbreviated{

@@ -14,11 +14,15 @@ sr_Latn{
         AD{"Andora"}
         AE{"Ujedinjeni Arapski Emirati"}
         AF{"Avganistan"}
+        AG{"Antigva i Barbuda"}
+        AI{"Angvila"}
         AL{"Albanija"}
         AM{"Armenija"}
         AN{"Holandski Antili"}
         AO{"Angola"}
+        AQ{"Antarktika"}
         AR{"Argentina"}
+        AS{"Američka Samoa"}
         AT{"Austrija"}
         AU{"Australija"}
         AW{"Aruba"}
@@ -38,20 +42,26 @@ sr_Latn{
         BR{"Brazil"}
         BS{"Bahami"}
         BT{"Butan"}
+        BV{"Buve Ostrva"}
         BW{"Bocvana"}
         BY{"Belorusija"}
         BZ{"Belise"}
         CA{"Kanada"}
+        CC{"Kokos (Keling) Ostrva"}
+        CD{"Demokratska Republika Kongo"}
         CF{"Centralno Afrička Republika"}
         CG{"Kongo"}
         CH{"Švajcarska"}
         CI{"Obala Slonovače"}
+        CK{"Kukova Ostrva"}
         CL{"Čile"}
         CM{"Kamerun"}
         CN{"Kina"}
         CO{"Kolumbija"}
         CR{"Kostarika"}
         CU{"Kuba"}
+        CV{"Kape Verde"}
+        CX{"Uskršnja Ostrva"}
         CY{"Kipar"}
         CZ{"Češka"}
         DE{"Nemačka"}
@@ -69,7 +79,9 @@ sr_Latn{
         ET{"Etiopija"}
         FI{"Finska"}
         FJ{"Fidži"}
+        FK{"Folklendska Ostrva"}
         FM{"Mikronezija"}
+        FO{"Farska Ostrva"}
         FR{"Francuska"}
         GA{"Gabon"}
         GB{"Velika Britanija"}
@@ -78,15 +90,19 @@ sr_Latn{
         GF{"Francuska Gvajana"}
         GH{"Gana"}
         GI{"Gibraltar"}
+        GL{"Grenland"}
         GM{"Gambija"}
         GN{"Gvineja"}
         GP{"Gvadelupe"}
         GQ{"Ekvatorijalna Gvineja"}
         GR{"Grčka"}
+        GS{"Južna Džordžija i Južna Sendvič Ostrva"}
         GT{"Gvatemala"}
         GU{"Guam"}
         GW{"Gvineja-Bisao"}
         GY{"Gvajana"}
+        HK{"Hong Kong"}
+        HM{"Herd i Mekdonald Ostrva"}
         HN{"Honduras"}
         HR{"Hrvatska"}
         HT{"Haiti"}
@@ -107,13 +123,17 @@ sr_Latn{
         KG{"Kirgistan"}
         KH{"Kambodža"}
         KI{"Kiribati"}
+        KM{"Komorska Ostrva"}
+        KN{"Sent Kits i Nevis"}
         KP{"Severna Koreja"}
         KR{"Južna Koreja"}
         KW{"Kuvajt"}
+        KY{"Kajmanska Ostrva"}
         KZ{"Kazahstan"}
         LA{"Laos"}
         LB{"Liban"}
-        LI{"Lihenštajn"}
+        LC{"Sent Lucija"}
+        LI{"Lihtenštajn"}
         LK{"Šrilanka"}
         LR{"Liberija"}
         LS{"Lesoto"}
@@ -125,21 +145,27 @@ sr_Latn{
         MC{"Monako"}
         MD{"Moldavija"}
         MG{"Madagaskar"}
+        MH{"Maršalska Ostrva"}
         MK{"Makedonija"}
         ML{"Mali"}
-        MM{"Mijnamar"}
+        MM{"Mijanmar"}
         MN{"Mongolija"}
+        MO{"Makao"}
+        MP{"Severna Marijanska Ostrva"}
         MQ{"Martinik"}
         MR{"Mauritanija"}
         MS{"Montserrat"}
         MT{"Malta"}
         MU{"Mauricius"}
+        MV{"Maldivi"}
+        MW{"Malavi"}
         MX{"Meksiko"}
         MY{"Malezija"}
         MZ{"Mozambik"}
         NA{"Namibija"}
         NC{"Nova Kaledonija"}
         NE{"Niger"}
+        NF{"Norfolk Ostrvo"}
         NG{"Nigerija"}
         NI{"Nikaragva"}
         NL{"Holandija"}
@@ -156,12 +182,15 @@ sr_Latn{
         PH{"Filipini"}
         PK{"Pakistan"}
         PL{"Poljska"}
+        PM{"Sen Pjer i Mikelon"}
         PN{"Pitcairn"}
         PR{"Porto Riko"}
+        PS{"Palestinska Teritorija"}
         PT{"Portugal"}
         PW{"Palau"}
         PY{"Paragvaj"}
         QA{"Katar"}
+        RE{"Rejunion"}
         RO{"Rumunija"}
         RU{"Rusija"}
         RW{"Ruanda"}
@@ -173,16 +202,18 @@ sr_Latn{
         SG{"Singapur"}
         SH{"Saint Helena"}
         SI{"Slovenija"}
+        SJ{"Svalbard i Jan Majen"}
         SK{"Slovačka"}
         SL{"Sijera Leone"}
         SM{"San Marino"}
         SN{"Senegal"}
         SO{"Somalija"}
-        SP{"Srbija"}
         SR{"Surinam"}
+        ST{"Sao Tome i Principe"}
         SV{"Salvador"}
         SY{"Sirija"}
         SZ{"Svazilend"}
+        TC{"Turks i Kajkos Ostrva"}
         TD{"Čad"}
         TF{"Francuske Južne Teritorije"}
         TG{"Togo"}
@@ -200,15 +231,18 @@ sr_Latn{
         TZ{"Tanzanija"}
         UA{"Ukrajina"}
         UG{"Uganda"}
+        UM{"Manja Udaljena Ostrva SAD"}
         US{"Sjedinjene Američke Države"}
         UY{"Urugvaj"}
         UZ{"Uzbekistan"}
         VA{"Vatikan"}
+        VC{"Sent Vinsent i Grenadini"}
         VE{"Venecuela"}
         VG{"Britanska Devičanska Ostrva"}
         VI{"S.A.D. Devičanska Ostrva"}
         VN{"Vijetnam"}
         VU{"Vanuatu"}
+        WF{"Valis i Futuna"}
         WS{"Samoa"}
         YE{"Jemen"}
         YT{"Mayotte"}
@@ -253,7 +287,7 @@ sr_Latn{
         it{"Italijanski"}
         ja{"Japanski"}
         ka{"Gruzijski"}
-        km{"Kambodžanski"}
+        km{"Kmerski"}
         ko{"Korejski"}
         ku{"Kurdski"}
         ky{"Kirgiski"}
@@ -287,27 +321,29 @@ sr_Latn{
     LocaleScript{
         "Latn",
     }
-    NumberElements{
-        ",",
-        ".",
-        ";",
-        "%",
-        "0",
-        "#",
-        "-",
-        "E",
-        "‰",
-        "∞",
-        "�",
-        "+",
+    Scripts{
+        Arab{"arapsko pismo"}
+        Armn{"jermensko pismo"}
+        Beng{"bengalsko pismo"}
+        Brai{"Brajevo pismo"}
+        Cher{"Čeroki"}
+        Copt{"koptičko pismo"}
+        Cyrl{"Ćirilica"}
+        Deva{"Devanagari"}
+        Dsrt{"Dezeret"}
+        Ethi{"etiopsko pismo"}
+        Geor{"gruzijsko pismo"}
+        Goth{"Gotika"}
+        Grek{"grčko pismo"}
+        Hebr{"hebrejsko pismo"}
+        Hira{"Hiragana"}
+        Hrkt{"Katakana ili Hiragana"}
+        Kana{"Katakana"}
+        Latn{"Latinica"}
     }
     Version{"1.2"}
     calendar{
         gregorian{
-            DateTimeElements:intvector{
-                2,
-                1,
-            }
             DateTimePatterns{
                 "HH.mm.ss z",
                 "HH.mm.ss z",
@@ -329,6 +365,15 @@ sr_Latn{
                         "čet",
                         "pet",
                         "sub",
+                    }
+                    narrow{
+                        "n",
+                        "p",
+                        "u",
+                        "s",
+                        "č",
+                        "p",
+                        "s",
                     }
                     wide{
                         "nedelja",
@@ -363,32 +408,36 @@ sr_Latn{
                         "nov",
                         "dec",
                     }
+                    narrow{
+                        "j",
+                        "f",
+                        "m",
+                        "a",
+                        "m",
+                        "j",
+                        "j",
+                        "a",
+                        "s",
+                        "o",
+                        "n",
+                        "d",
+                    }
                     wide{
-                        "januara",
-                        "februara",
-                        "marta",
-                        "aprila",
-                        "maja",
-                        "juna",
-                        "jula",
-                        "avgusta",
-                        "septembra",
-                        "oktobra",
-                        "novembra",
-                        "decembra",
+                        "januar",
+                        "februar",
+                        "mart",
+                        "april",
+                        "maj",
+                        "jun",
+                        "jul",
+                        "avgust",
+                        "septembar",
+                        "oktobar",
+                        "novembar",
+                        "decembar",
                     }
                 }
             }
-        }
-    }
-    localPatternChars{"GanjkHmsSEDFwWxhKzAeugXZ"}
-    zoneStrings{
-        {
-            "Europe/Belgrade",
-            "Centralno Evropsko Vreme",
-            "CET",
-            "Centralno Evropsko Letnje Vreme",
-            "CET",
         }
     }
 }
