@@ -126,4 +126,25 @@ public class CurrencyTest extends TestFmwk {
             errln("found locale" + fu_FU + " in currency locales after unregister");
         }
     }
+
+    /**
+     * Test names.
+     */
+    public void TestNames() {
+        // Do a basic check of getName()
+        // USD { "US$", "US Dollar"            } // 04/04/1792-
+        Locale en = Locale.ENGLISH;
+        boolean[] isChoiceFormat = new boolean[1];
+        Currency usd = Currency.getInstance("USD");
+        // Warning: HARD-CODED LOCALE DATA in this test.  If it fails, CHECK
+        // THE LOCALE DATA before diving into the code.
+        assertEquals("USD.getName(SYMBOL_NAME)",
+                     "US$",
+                     usd.getName(en, Currency.SYMBOL_NAME, isChoiceFormat));
+        assertEquals("USD.getName(LONG_NAME)",
+                     "US Dollar",
+                     usd.getName(en, Currency.LONG_NAME, isChoiceFormat));
+        
+        // TODO add more tests later
+    }
 }

@@ -266,7 +266,7 @@ public class Currency extends MeasureUnit implements Serializable {
             // We can't cast this to String[][]; the cast has to happen later
             try {
                 ICUResourceBundle currencies = rb.get("Currencies");
-                s = currencies.get(isoCode).getString(0);
+                s = currencies.get(isoCode).getString(nameStyle);
                 /*
                 Object[][] currencies = (Object[][]) rb.getObject("Currencies");
                 // Do a linear search
