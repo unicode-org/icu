@@ -119,8 +119,16 @@ public:
 #endif /* U_HAVE_PLACEMENT_NEW */
 #endif /* U_OVERRIDE_CXX_ALLOCATION */
 
-private:
-    UMemory &UMemory::operator=(const UMemory &); // not implemented
+    /*
+     * Assignment operator not declared. The compiler will provide one
+     * which does nothing since this class does not contain any data members.
+     * API/code coverage may show the assignment operator as present and
+     * untested - ignore.
+     * Subclasses need this assignment operator if they use compiler-provided
+     * assignment operators of their own. An alternative to not declaring one
+     * here would be to declare and empty-implement a protected or public one.
+    UMemory &UMemory::operator=(const UMemory &);
+     */
 };
 
 /**
@@ -194,8 +202,16 @@ protected:
     // virtual UObject *clone() const;
 #endif
 
-private:
-    UObject &UObject::operator=(const UObject &); // not implemented
+    /*
+     * Assignment operator not declared. The compiler will provide one
+     * which does nothing since this class does not contain any data members.
+     * API/code coverage may show the assignment operator as present and
+     * untested - ignore.
+     * Subclasses need this assignment operator if they use compiler-provided
+     * assignment operators of their own. An alternative to not declaring one
+     * here would be to declare and empty-implement a protected or public one.
+    UObject &UObject::operator=(const UObject &);
+     */
 };
 
 U_NAMESPACE_END
