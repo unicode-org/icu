@@ -8,19 +8,31 @@
 
 # This file can be freely redistributed under the same license as ICU.
 
+%define _unpackaged_files_terminate_build 0
+
 Name: icu
 Version: 3.0
 Release: 1
-Requires: libicu30 >= 3.0
+Requires: libicu30 >= %{version}
 Summary: International Components for Unicode
 Packager: Ian Holsman (CNET Networks) <ianh@cnet.com>
 Copyright: X License
 Group: System Environment/Libraries
-Source: icu-3.0.tgz
-BuildRoot: /var/tmp/%{name}
+Source: icu-%{version}.tgz
+BuildRoot: /var/tmp/%{name}-%{version}
 %description
 ICU is a C++ and C library that provides robust and full-featured Unicode
-support. This package contains the runtime libraries for ICU. It does
+and locale support. The library provides calendar support, conversions
+for many character sets, language sensitive collation, date
+and time formatting, support for many locales, message catalogs
+and resources, message formatting, normalization, number and currency
+formatting, time zones support, transliteration, word, line and
+sentence breaking, etc.
+
+This package contains the Unicode character database and derived
+properties, along with converters and time zones data.
+
+This package contains the runtime libraries for ICU. It does
 not contain any of the data files needed at runtime and present in the
 `icu' and `icu-locales` packages.
 
@@ -36,7 +48,7 @@ not contain any of the data files needed at runtime and present in the
 %package -n libicu-devel
 Summary: International Components for Unicode (development files)
 Group: Development/Libraries
-Requires: libicu30 = 3.0
+Requires: libicu30 = %{version}
 %description -n libicu-devel
 ICU is a C++ and C library that provides robust and full-featured Unicode
 support. This package contains the development files for ICU.
@@ -44,7 +56,7 @@ support. This package contains the development files for ICU.
 %package locales
 Summary: Locale data for ICU
 Group: System Environment/Libraries
-Requires: libicu30 >= 3.0
+Requires: libicu30 >= %{version}
 %description locales
 The locale data are used by ICU to provide localization (l10n) and
 internationalization (i18n) support to ICU applications. This package
@@ -61,13 +73,13 @@ then
     ln -s "$icucurrent" current
 fi
 
-#ICU_DATA=/usr/lib/icu/3.0
+#ICU_DATA=/usr/share/icu/%{version}
 #export ICU_DATA
 
 %preun
 # Adjust the current ICU link in /usr/lib/icu
 
-icucurrent=`2>/dev/null ls -dp /usr/lib/icu/* | sed -n -e '/\/3.0\//d' -e 's,.*/\([^/]*\)/$,\1,p'| sort -rn | head -1`
+icucurrent=`2>/dev/null ls -dp /usr/lib/icu/* | sed -n -e '/\/%{version}\//d' -e 's,.*/\([^/]*\)/$,\1,p'| sort -rn | head -1`
 cd /usr/lib/icu
 rm -f /usr/lib/icu/current
 if test x"$icucurrent" != x
@@ -91,7 +103,7 @@ fi
 %preun -n libicu30
 # Adjust the current ICU link in /usr/lib/icu
 
-icucurrent=`2>/dev/null ls -dp /usr/lib/icu/* | sed -n -e '/\/3.0\//d' -e 's,.*/\([^/]*\)/$,\1,p'| sort -rn | head -1`
+icucurrent=`2>/dev/null ls -dp /usr/lib/icu/* | sed -n -e '/\/%{version}\//d' -e 's,.*/\([^/]*\)/$,\1,p'| sort -rn | head -1`
 cd /usr/lib/icu
 rm -f /usr/lib/icu/current
 if test x"$icucurrent" != x
@@ -100,33 +112,27 @@ then
 fi
 
 %prep
-%setup -q
+%setup -q -n icu
 
 %build
 cd source
 chmod a+x ./configure
 CFLAGS="-O3" CXXFLAGS="-O" ./configure --prefix=/usr --sysconfdir=/etc --with-data-packaging=files --enable-shared --enable-static --disable-samples
-echo 'CPPFLAGS += -DICU_DATA_DIR=\"/usr/lib/icu/3.0\"' >> icudefs.mk
+echo 'CPPFLAGS += -DICU_DATA_DIR=\"/usr/share/icu/%{version}\"' >> icudefs.mk
 make RPM_OPT_FLAGS="$RPM_OPT_FLAGS"
 
 %install
 rm -rf $RPM_BUILD_ROOT
 cd source
 make install DESTDIR=$RPM_BUILD_ROOT
-# static causes a static icudata lib to be built... - it's not needed, remove it.
-##cp stubdata/libicudata.a $RPM_BUILD_ROOT/usr/lib/icu/3.0/
-rm -f $RPM_BUILD_ROOT/usr/lib/icu/3.0/libicudata.a
-
 
 %files
 %defattr(-,root,root)
 %doc readme.html
 %doc license.html
-%config /etc/icu/convrtrs.txt
-/usr/share/icu/3.0/README
-/usr/share/icu/3.0/license.html
-/usr/lib/icu/3.0/*.cnv
-/usr/lib/icu/3.0/*.icu
+/usr/share/icu/%{version}/license.html
+/usr/share/icu/%{version}/*.cnv
+/usr/share/icu/%{version}/*.icu
 
 /usr/bin/derb
 /usr/bin/genbrk
@@ -147,7 +153,7 @@ rm -f $RPM_BUILD_ROOT/usr/lib/icu/3.0/libicudata.a
 /usr/sbin/gensprep
 /usr/sbin/genuca
 /usr/sbin/icuswap
-/usr/share/icu/3.0/mkinstalldirs
+/usr/share/icu/%{version}/mkinstalldirs
 
 /usr/man/man1/gencnval.1.*
 /usr/man/man1/derb.1.*
@@ -166,8 +172,10 @@ rm -f $RPM_BUILD_ROOT/usr/lib/icu/3.0/libicudata.a
 /usr/man/man8/genidna.8.*
 
 %files -n icu-locales
-/usr/lib/icu/3.0/*.brk
-/usr/lib/icu/3.0/*.res
+/usr/share/icu/%{version}/*.brk
+/usr/share/icu/%{version}/*.res
+/usr/share/icu/%{version}/coll/*.res
+
 %files -n libicu30
 %doc license.html
 /usr/lib/libicui18n.so.30
@@ -204,13 +212,14 @@ rm -f $RPM_BUILD_ROOT/usr/lib/icu/3.0/libicudata.a
 /usr/lib/libsiculx.a
 /usr/include/unicode/*.h
 /usr/include/layout/*.h
-/usr/lib/icu/3.0/Makefile.inc
+/usr/lib/icu/%{version}/Makefile.inc
 /usr/lib/icu/Makefile.inc
-/usr/share/icu/3.0/config
-/usr/share/icu/3.0/README
-/usr/share/doc/icu-3.0/*
+/usr/share/icu/%{version}/config
+/usr/share/doc/icu-%{version}/*
 
 %changelog
+* Mon Jun 07 2004 Alexei Dets <adets@idsk.com>
+- update to 3.0
 * Tue Aug 16 2003 Steven Loomis <srl@jtcsv.com>
 - update to 2.6.1 - include license
 * Thu Jun 05 2003 Steven Loomis <srl@jtcsv.com>
