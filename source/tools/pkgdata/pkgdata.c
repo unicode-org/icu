@@ -305,14 +305,16 @@ main(int argc, char* argv[]) {
   o.makeFile = uprv_strdup(tmp);
 
   out = T_FileStream_open(o.makeFile, "w");
-
-  pkg_mak_writeHeader(out, &o); /* need to take status */
-
-  o.fcn(&o, out, &status);
-
-  pkg_mak_writeFooter(out, &o);
-
-  T_FileStream_close(out);
+  if (out) {
+      pkg_mak_writeHeader(out, &o); /* need to take status */
+      o.fcn(&o, out, &status);
+      pkg_mak_writeFooter(out, &o);
+      T_FileStream_close(out);
+  } else if (o.install) {
+      fprintf(stderr, "warning: couldn't create %s, will use existing file if any\n", o.makeFile);
+  } else {
+      status = U_FILE_ACCESS_ERROR;
+  }
 
   if(U_FAILURE(status)) {
     fprintf(stderr, "Error creating makefile [%s]: %s\n", o.mode,
