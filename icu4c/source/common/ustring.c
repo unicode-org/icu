@@ -402,41 +402,146 @@ u_strcmp(const UChar *s1,
     return (int32_t)c1 - (int32_t)c2;
 }
 
-/* rotate surrogates to the top to get code point order; assume c>=0xd800 */
-#define UTF16FIXUP(c) {                  \
-    if ((c) >= 0xe000) {                 \
-        (c) -= 0x800;                    \
-    } else {                             \
-        (c) += 0x2000;                   \
-    }                                    \
-}
-
-
-/* String compare in code point order - u_strcmp() compares in code unit order. */
-U_CAPI int32_t U_EXPORT2
-u_strcmpCodePointOrder(const UChar *s1, const UChar *s2) {
+U_CFUNC int32_t
+u_strCompareCodePointOrder(const UChar *s1, int32_t length1,
+                           const UChar *s2, int32_t length2,
+                           UBool strncmpStyle) {
+    const UChar *start1, *start2, *limit1, *limit2;
     UChar c1, c2;
 
+    /* setup for fix-up */
+    start1=s1;
+    start2=s2;
+
     /* compare identical prefixes - they do not need to be fixed up */
-    for(;;) {
-        c1=*s1++;
-        c2=*s2++;
-        if (c1 != c2) {
-            break;
-        }
-        if (c1 == 0) {
+    if(length1<0 && length2<0) {
+        /* strcmp style, both NUL-terminated */
+        if(s1==s2) {
             return 0;
         }
+
+        for(;;) {
+            c1=*s1;
+            c2=*s2;
+            if(c1!=c2) {
+                break;
+            }
+            if(c1==0) {
+                return 0;
+            }
+            ++s1;
+            ++s2;
+        }
+
+        /* setup for fix-up */
+        limit1=limit2=NULL;
+    } else if(strncmpStyle) {
+        /* special handling for strncmp, assume length1==length2>=0 but also check for NUL */
+        if(s1==s2) {
+            return 0;
+        }
+
+        limit1=start1+length1;
+
+        for(;;) {
+            /* both lengths are same, check only one limit */
+            if(s1==limit1) {
+                return 0;
+            }
+
+            c1=*s1;
+            c2=*s2;
+            if(c1!=c2) {
+                break;
+            }
+            if(c1==0) {
+                return 0;
+            }
+            ++s1;
+            ++s2;
+        }
+
+        /* setup for fix-up */
+        limit2=start2+length1; /* use length1 here, too, to enforce assumption */
+    } else {
+        /* memcmp/UnicodeString style, both length-specified */
+        int32_t lengthResult;
+
+        if(length1<0) {
+            length1=u_strlen(s1);
+        }
+        if(length2<0) {
+            length2=u_strlen(s2);
+        }
+
+        /* limit1=start1+min(lenght1, length2) */
+        if(length1<length2) {
+            lengthResult=-1;
+            limit1=start1+length1;
+        } else if(length1==length2) {
+            lengthResult=0;
+            limit1=start1+length1;
+        } else /* length1>length2 */ {
+            lengthResult=1;
+            limit1=start1+length2;
+        }
+
+        if(s1==s2) {
+            return lengthResult;
+        }
+
+        for(;;) {
+            /* check pseudo-limit */
+            if(s1==limit1) {
+                return lengthResult;
+            }
+
+            c1=*s1;
+            c2=*s2;
+            if(c1!=c2) {
+                break;
+            }
+            ++s1;
+            ++s2;
+        }
+
+        /* setup for fix-up */
+        limit1=start1+length1;
+        limit2=start2+length2;
     }
 
-   /*  if both values are in or above the surrogate range, Fix them up. */
-   if (c1 >= 0xD800 && c2 >= 0xD800) {
-        UTF16FIXUP(c1);
-        UTF16FIXUP(c2);
+    /* if both values are in or above the surrogate range, fix them up */
+    if(c1>=0xd800 && c2>=0xd800) {
+        /* subtract 0x2800 from BMP code points to make them smaller than supplementary ones */
+        if(
+            (c1<=0xdbff && (++s1)!=limit1 && UTF_IS_TRAIL(*s1)) ||
+            (UTF_IS_TRAIL(c1) && start1!=s1 && UTF_IS_LEAD(*(s1-1)))
+        ) {
+            /* part of a surrogate pair, leave >=d800 */
+        } else {
+            /* BMP code point - may be surrogate code point - make <d800 */
+            c1-=0x2800;
+        }
+
+        if(
+            (c2<=0xdbff && (++s2)!=limit2 && UTF_IS_TRAIL(*s2)) ||
+            (UTF_IS_TRAIL(c2) && start2!=s2 && UTF_IS_LEAD(*(s2-1)))
+        ) {
+            /* part of a surrogate pair, leave >=d800 */
+        } else {
+            /* BMP code point - may be surrogate code point - make <d800 */
+            c2-=0x2800;
+        }
     }
 
     /* now c1 and c2 are in UTF-32-compatible order */
     return (int32_t)c1-(int32_t)c2;
+}
+
+/* String compare in code point order - u_strcmp() compares in code unit order. */
+U_CAPI int32_t U_EXPORT2
+u_strcmpCodePointOrder(const UChar *s1, const UChar *s2) {
+    return u_strCompareCodePointOrder(s1, -1, s2, -1, FALSE);
 }
 
 U_CAPI int32_t   U_EXPORT2
@@ -461,35 +566,7 @@ u_strncmp(const UChar     *s1,
 
 U_CAPI int32_t U_EXPORT2
 u_strncmpCodePointOrder(const UChar *s1, const UChar *s2, int32_t n) {
-    UChar c1, c2;
-
-    if(n<=0) {
-        return 0;
-    }
-
-    /* compare identical prefixes - they do not need to be fixed up */
-    for(;;) {
-        c1=*s1;
-        c2=*s2;
-        if(c1==c2) {
-            if(c1==0 || --n==0) {
-                return 0;
-            }
-            ++s1;
-            ++s2;
-        } else {
-            break;
-        }
-    }
-
-   /* c1!=c2, fix up each one if they're both in or above the surrogate range, then compare them */
-   if (c1 >= 0xD800 && c2 >= 0xD800) {
-        UTF16FIXUP(c1);
-        UTF16FIXUP(c2);
-    }
-
-    /* now c1 and c2 are in UTF-32-compatible order */
-    return (int32_t)c1-(int32_t)c2;
+    return u_strCompareCodePointOrder(s1, n, s2, n, TRUE);
 }
 
 U_CAPI UChar* U_EXPORT2
@@ -617,37 +694,7 @@ u_memcmp(const UChar *buf1, const UChar *buf2, int32_t count) {
 
 U_CAPI int32_t U_EXPORT2
 u_memcmpCodePointOrder(const UChar *s1, const UChar *s2, int32_t count) {
-    const UChar *limit;
-    UChar c1, c2;
-
-    if(count<=0) {
-        return 0;
-    }
-
-    limit=s1+count;
-
-    /* compare identical prefixes - they do not need to be fixed up */
-    for(;;) {
-        c1=*s1;
-        c2=*s2;
-        if(c1!=c2) {
-            break;
-        }
-        ++s1;
-        ++s2;
-        if(s1==limit) {
-            return 0;
-        }
-    }
-
-   /* c1!=c2, fix up each one if they're both in or above the surrogate range, then compare them */
-   if (c1 >= 0xD800 && c2 >= 0xD800) {
-        UTF16FIXUP(c1);
-        UTF16FIXUP(c2);
-    }
-
-    /* now c1 and c2 are in UTF-32-compatible order */
-    return (int32_t)c1-(int32_t)c2;
+    return u_strCompareCodePointOrder(s1, count, s2, count, FALSE);
 }
 
 U_CAPI UChar * U_EXPORT2
