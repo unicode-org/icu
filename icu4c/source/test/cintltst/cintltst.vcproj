@@ -501,6 +501,25 @@
 			Name="regex"
 			Filter="">
 		</Filter>
+		<Filter
+			Name="sprep &amp; idna"
+			Filter="">
+			<File
+				RelativePath="idnatest.c">
+			</File>
+			<File
+				RelativePath="nfsprep.c">
+			</File>
+			<File
+				RelativePath="nfsprep.h">
+			</File>
+			<File
+				RelativePath="spreptst.c">
+			</File>
+			<File
+				RelativePath="sprpdata.c">
+			</File>
+		</Filter>
 	</Files>
 	<Globals>
 	</Globals>
