@@ -23,8 +23,8 @@ root {
     }
     Keys{
         collation { "COLLATION" }
-        calendar  { "CALDENDAR" }
-	currency  { "CURRENCY" }
+        calendar  { "CALENDAR" }
+        currency  { "CURRENCY" }
     }
     Types{
         // keys for collation (traditional may also be used for traditional chinese)
@@ -38,14 +38,14 @@ root {
           traditional { "TRADITIONAL" }
         }
         calendar{
-	  Fallback{ "" }
+          Fallback{ "" }
           traditional { "TRADITIONAL" }
           japanese    { "JAPANESE"  }
-	  buddhist    { "BUDDHIST"  }
-	  islamic     { "ISLAMIC"   }
-	  hebrew      { "HEBREW"    }
-	  chinese     { "CHINESE"   }
-	  gregorian   { "GREGORIAN" }
+          buddhist    { "BUDDHIST"  }
+          islamic     { "ISLAMIC"   }
+          hebrew      { "HEBREW"    }
+          chinese     { "CHINESE"   }
+          gregorian   { "GREGORIAN" }
 
         }
     }
