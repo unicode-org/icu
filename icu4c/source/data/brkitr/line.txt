@@ -98,7 +98,7 @@ $EndingsHard = ($ZW* $SP)* $ZW* $NLF;
 #  Openings  Sequences that can precede Words, and that should not be separated from them.
 #            Rules LB 9, 10
 #
-$Openings = (($QUcm ($ZW* $SP)*)? $OPcm ($ZW* $SP)*)*;
+$Openings = ((($QUcm ($ZW* $SP)*)? $OPcm ($ZW* $SP)*) | $GLcm)+;
 
 #
 #  Closings  Seqences that follow words, and that should not be separated from them,
@@ -133,19 +133,20 @@ $HYMinus = $HYcm ($NUcm ($NUcm | $IS)* $CL? $POcm?)?;       # For Rle LB15, Don'
  
         
 $Word15 = $Openings? (
-             ($BBcm* $Openings ($Word | $Number | $Dashes)? ($BAcm | $HYMinus | $NScm)*) |   # Rule 15. Stuff sticks around words.
+             ($BBcm* $Openings? ($Word | $Number | $Dashes)? ($BAcm | $HYMinus | $NScm)*) |   # Rule 15. Stuff sticks around words.
              $BBcm* [^[:Cc:] $BK $CR $LF $NL $ZW ($ZW* $SP) $GL ] $CM*  |                 # Allow characters that don't meet the
              $BBcm* [^$BK $CR $LF $NL $ZW ($ZW* $SP) $GL ]                                 #  more elaborate definitions for WORD
              )  $WordClosings?;                                                          #  to be glued.
        
-$GluedWord  = $Openings? (($ZW* $SP)* $GLcm | $QUcm)? $Word15 ((($ZW* $SP)* $GLcm | $QUcm) $Word15)*;  # "Glue" will stick anything below it together.
+$GluedWord  = $Openings? $Word15 ((($ZW* $SP)* $GLcm | $QUcm) $Word15)*;  # "Glue" will stick anything below it together.
+ #$GluedWord  = $Openings? $Word15 ((($ZW* $SP)* $Openings) $Word15)*;  # "Glue" will stick anything below it together.
                                                                     # Rules 13, 14
 
 #
 #  The actual rule, a combination of everything defined above.
 #
-$Openings $GluedWord  $Closings $EndingsSoft{0};
-$Openings $GluedWord  $Closings $EndingsHard{100};
+$Openings? $GluedWord  $Closings $EndingsSoft{0};
+$Openings? $GluedWord  $Closings $EndingsHard{100};
 # $GluedWord;
 
 
