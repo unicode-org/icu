@@ -36,10 +36,6 @@
 #include "uoptions.h"
 #include "tzdat.h"
 
-#ifdef XP_MAC_CONSOLE
-# include <console.h>
-#endif
-
 #define INPUT_FILE "tz.txt"
 #define OUTPUT_FILE "tz.dat"
 
@@ -147,9 +143,9 @@ private:
 
 int main(int argc, char *argv[]) {
     gentz x;
-#ifdef XP_MAC_CONSOLE
-	argc=ccommand((char***)&argv);
-#endif
+
+    U_MAIN_INIT_ARGS(argc, argv);
+
     return x.MMain(argc, argv);
 }
 
@@ -192,11 +188,11 @@ int gentz::MMain(int argc, char* argv[]) {
         fprintf(stderr,
             "usage: %s [-options] timezone-file\n"
             "\tread the timezone file produced by tz.pl and create " TZ_DATA_NAME "." TZ_DATA_TYPE "\n"
-            "\toptions:\n"
-            "\t\t-h or -? or --help  this usage text\n"
-            "\t\t-v or --verbose     turn on verbose output\n"
-            "\t\t-c or --copyright   include a copyright notice\n"
-            "\t\t-d or --destdir     destination directory, followed by the path\n",
+            "options:\n"
+            "\t-h or -? or --help  this usage text\n"
+            "\t-v or --verbose     turn on verbose output\n"
+            "\t-c or --copyright   include a copyright notice\n"
+            "\t-d or --destdir     destination directory, followed by the path\n",
             argv[0]);
         return argc<0 ? U_ILLEGAL_ARGUMENT_ERROR : U_ZERO_ERROR;
     }

@@ -30,10 +30,6 @@
 
 #include "cmemory.h"
 
-#ifdef XP_MAC_CONSOLE
-#include <console.h>
-#endif
-
 UCAElements le;
 
 /*
@@ -737,7 +733,8 @@ static UOption options[]={
     UOPTION_VERSION,             /* 3 */
     UOPTION_DESTDIR,             /* 4 */
     UOPTION_SOURCEDIR,           /* 5 */
-    UOPTION_VERBOSE              /* 6 */
+    UOPTION_VERBOSE,             /* 6 */
+    UOPTION_ICUDATADIR           /* 7 */
     /* weiv can't count :))))) */
 };
 
@@ -749,9 +746,7 @@ int main(int argc, char* argv[]) {
     char *basename = NULL;
     const char *copyright = NULL;
 
-#ifdef XP_MAC_CONSOLE
-    argc = ccommand((char***)&argv);
-#endif
+    U_MAIN_INIT_ARGS(argc, argv);
 
     /* preset then read command line options */
     options[4].value=u_getDataDirectory();
@@ -770,13 +765,15 @@ int main(int argc, char* argv[]) {
         fprintf(stderr,
             "usage: %s [-options] file\n"
             "\tRead in UCA collation text data and write out the binary collation data\n"
-            "\toptions:\n"
-            "\t\t-h or -? or --help  this usage text\n"
-            "\t\t-V or --version     show a version message\n"
-            "\t\t-c or --copyright   include a copyright notice\n"
-            "\t\t-d or --destdir     destination directory, followed by the path\n"
-            "\t\t-s or --sourcedir   source directory, followed by the path\n"
-            "\t\t-v or --verbose     Turn on verbose output\n",
+            "options:\n"
+            "\t-h or -? or --help  this usage text\n"
+            "\t-V or --version     show a version message\n"
+            "\t-c or --copyright   include a copyright notice\n"
+            "\t-d or --destdir     destination directory, followed by the path\n"
+            "\t-s or --sourcedir   source directory, followed by the path\n"
+            "\t-v or --verbose     turn on verbose output\n"
+            "\t-i or --icudatadir  directory for locating any needed intermediate data files,\n"
+            "\t                    followed by path, defaults to %s\n",
             argv[0]);
         return argc<0 ? U_ILLEGAL_ARGUMENT_ERROR : U_ZERO_ERROR;
     }
@@ -798,12 +795,16 @@ int main(int argc, char* argv[]) {
         copyright = U_COPYRIGHT_STRING;
     }
 
+    if (options[7].doesOccur) {
+        u_setDataDirectory(options[7].value);
+    }
+
     /* prepare the filename beginning with the source dir */
     uprv_strcpy(filename, srcDir);
     basename=filename+uprv_strlen(filename);
 
     if(basename>filename && *(basename-1)!=U_FILE_SEP_CHAR) {
-        *basename++=U_FILE_SEP_CHAR;
+        *basename++ = U_FILE_SEP_CHAR;
     }
 
     if(argc < 0) { 

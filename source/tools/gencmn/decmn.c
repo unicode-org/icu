@@ -118,6 +118,8 @@ main(int argc, char *argv[]) {
     int32_t i, length, count, baseOffset;
     int result, ishelp = 0;
 
+    U_MAIN_INIT_ARGS(argc, argv);
+
     pname = uprv_strchr(*argv, U_FILE_SEP_CHAR);
 #ifdef WIN32
     if (!pname) {

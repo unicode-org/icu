@@ -74,6 +74,8 @@ extern int
 main(int argc, char* argv[]) {
     UBool verbose = FALSE;
 
+    U_MAIN_INIT_ARGS(argc, argv);
+
     options[2].value = ".";
 
     /* read command line options */
@@ -105,13 +107,13 @@ main(int argc, char* argv[]) {
             "usage: %s [-options] filename1 filename2 ...\n"
             "\tread each binary input file and \n"
             "\tcreate a .c file with a byte array that contains the input file's data\n"
-            "\toptions:\n"
-            "\t\t-h or -? or --help  this usage text\n"
-            "\t\t-d or --destdir     destination directory, followed by the path\n"
-            "\t\t-n or --name        symbol prefix, followed by the prefix\n"
-            "\t\t-e or --entrypoint  entry point name, followed by the name\n"
+            "options:\n"
+            "\t-h or -? or --help  this usage text\n"
+            "\t-d or --destdir     destination directory, followed by the path\n"
+            "\t-n or --name        symbol prefix, followed by the prefix\n"
+            "\t-e or --entrypoint  entry point name, followed by the name\n"
 #ifdef CAN_GENERATE_OBJECTS
-            "\t\t-o or --object      write a .obj file instead of .c\n"
+            "\t-o or --object      write a .obj file instead of .c\n"
 #endif
             , argv[0]);
     } else {
