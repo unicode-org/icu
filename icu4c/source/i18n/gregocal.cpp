@@ -44,6 +44,7 @@
 
 #include "unicode/gregocal.h"
 #include "unicode/smpdtfmt.h"  /* for the public field (!) SimpleDateFormat::fgSystemDefaultCentury */
+#include "gregoimp.h"
 #include "mutex.h"
 #include "uassert.h"
 
@@ -317,7 +318,7 @@ GregorianCalendar::setGregorianChange(UDate date, UErrorCode& status)
     // normalized cutover is in pure date milliseconds; it contains no time
     // of day or timezone component, and it used to compare against other
     // pure date values.
-    UDate cutoverDay = floorDivide(fGregorianCutover, kOneDay);
+    UDate cutoverDay = Math::floorDivide(fGregorianCutover, kOneDay);
     fNormalizedGregorianCutover = cutoverDay * kOneDay;
 
     // Handle the rare case of numeric overflow.  If the user specifies a
@@ -395,10 +396,10 @@ GregorianCalendar::timeToFields(UDate theTime, UBool quick, UErrorCode& status)
         // For example, the 4-year cycle has 4 years + 1 leap day; giving
         // 1461 == 365*4 + 1 days.
         int32_t rem;
-        int32_t n400 = floorDivide(gregorianEpochDay, 146097, rem); // 400-year cycle length
-        int32_t n100 = floorDivide(rem, 36524, rem); // 100-year cycle length
-        int32_t n4 = floorDivide(rem, 1461, rem); // 4-year cycle length
-        int32_t n1 = floorDivide(rem, 365, rem);
+        int32_t n400 = Math::floorDivide(gregorianEpochDay, 146097, rem); // 400-year cycle length
+        int32_t n100 = Math::floorDivide(rem, 36524, rem); // 100-year cycle length
+        int32_t n4 = Math::floorDivide(rem, 1461, rem); // 4-year cycle length
+        int32_t n1 = Math::floorDivide(rem, 365, rem);
         rawYear = 400*n400 + 100*n100 + 4*n4 + n1;
         dayOfYear = rem; // zero-based day of year
         if (n100 == 4 || n1 == 4) 
@@ -416,10 +417,10 @@ GregorianCalendar::timeToFields(UDate theTime, UBool quick, UErrorCode& status)
         // The Julian epoch day (not the same as Julian Day)
         // is zero on Saturday December 30, 0 (Gregorian).
         double julianEpochDay = millisToJulianDay(theTime) - (kJan1_1JulianDay - 2);
-        rawYear = (int32_t) floorDivide(4*julianEpochDay + 1464, 1461.0);
+        rawYear = (int32_t) Math::floorDivide(4*julianEpochDay + 1464, 1461.0);
         
         // Compute the Julian calendar day number for January 1, rawYear
-        double january1 = 365.0 * (rawYear - 1) + floorDivide((double)(rawYear - 1), 4.0);
+        double january1 = 365.0 * (rawYear - 1) + Math::floorDivide((double)(rawYear - 1), 4.0);
         dayOfYear = (int32_t)(julianEpochDay - january1); // 0-based
         
         // Julian leap years occurred historically every 4 years starting
@@ -725,9 +726,7 @@ GregorianCalendar::getEpochDay(UErrorCode& status)
     // dealing with UDate(Long.MIN_VALUE) and UDate(Long.MAX_VALUE).
     double wallSec = internalGetTime()/1000 + (internalGet(UCAL_ZONE_OFFSET) + internalGet(UCAL_DST_OFFSET))/1000;
     
-    // {sfb} force conversion to double
-    return uprv_trunc(wallSec / (kOneDay/1000.0));
-    //return floorDivide(wallSec, kOneDay/1000.0);
+    return Math::floorDivide(wallSec, kOneDay/1000.0);
 }
 
 // -------------------------------------
@@ -879,12 +878,12 @@ double GregorianCalendar::computeJulianDayOfYear(UBool isGregorian,
                                                  int32_t year, UBool& isLeap) {
     isLeap = year%4 == 0;
     int32_t y = year - 1;
-    double julianDay = 365.0*y + floorDivide(y, 4) + (kJan1_1JulianDay - 3);
+    double julianDay = 365.0*y + Math::floorDivide(y, 4) + (kJan1_1JulianDay - 3);
 
     if (isGregorian) {
         isLeap = isLeap && ((year%100 != 0) || (year%400 == 0));
         // Add 2 because Gregorian calendar starts 2 days after Julian calendar
-        julianDay += floorDivide(y, 400) - floorDivide(y, 100) + 2;
+        julianDay += Math::floorDivide(y, 400) - Math::floorDivide(y, 100) + 2;
     }
 
     return julianDay;
@@ -1094,7 +1093,7 @@ GregorianCalendar::computeJulianDay(UBool isGregorian, int32_t year)
         // If the month is out of range, adjust it into range
         if (month < 0 || month > 11) {
             int32_t rem;
-            year += floorDivide(month, 12, rem);
+            year += Math::floorDivide(month, 12, rem);
             month = rem;
         }
     }
@@ -1206,8 +1205,7 @@ GregorianCalendar::computeJulianDay(UBool isGregorian, int32_t year)
 double 
 GregorianCalendar::millisToJulianDay(UDate millis)
 {
-    return (double)kEpochStartAsJulianDay + floorDivide(millis, kOneDay);
-    //return kEpochStartAsJulianDay + uprv_trunc(millis / kOneDay);
+    return (double)kEpochStartAsJulianDay + Math::floorDivide(millis, kOneDay);
 }
 
 // -------------------------------------
@@ -1217,63 +1215,6 @@ GregorianCalendar::julianDayToMillis(double julian)
 {
     return (UDate) ((julian - kEpochStartAsJulianDay) * (double) kOneDay);
 }
-
-// -------------------------------------
-
-double
-GregorianCalendar::floorDivide(double numerator, double denominator) 
-{
-    return uprv_floor(numerator / denominator);
-}
-
-// -------------------------------------
-
-int32_t 
-GregorianCalendar::floorDivide(int32_t numerator, int32_t denominator) 
-{
-    // We do this computation in order to handle
-    // a numerator of Long.MIN_VALUE correctly
-    return (numerator >= 0) ?
-        numerator / denominator :
-        ((numerator + 1) / denominator) - 1;
-}
-
-// -------------------------------------
-
-int32_t 
-GregorianCalendar::floorDivide(int32_t numerator, int32_t denominator, int32_t& remainder)
-{
-    if (numerator >= 0) {
-        remainder = numerator % denominator;
-        return numerator / denominator;
-    }
-    int32_t quotient = ((numerator + 1) / denominator) - 1;
-    remainder = numerator - (quotient * denominator);
-    return quotient;
-}
-
-// -------------------------------------
-
-int32_t
-GregorianCalendar::floorDivide(double numerator, int32_t denominator, int32_t& remainder) 
-{
-    double quotient;
-    if (numerator >= 0) {
-        quotient = uprv_trunc(numerator / denominator);
-        remainder = (int32_t)uprv_fmod(numerator, denominator);
-    } else {
-        quotient = uprv_trunc((numerator + 1) / denominator) - 1;
-        remainder = (int32_t)(numerator - (quotient * denominator));
-    }
-    if (quotient < INT32_MIN || quotient > INT32_MAX) {
-        // Normalize out of range values.  It doesn't matter what
-        // we return for these cases; the data is wrong anyway.  This
-        // only occurs for years near 2,000,000,000 CE/BCE.
-        quotient = 0.0; // Or whatever
-    }
-    return (int32_t)quotient;
-}
-
 
 // -------------------------------------
 
