@@ -45,7 +45,7 @@ MessageFormatRegressionTest::runIndexedTest( int32_t index, UBool exec, const ch
         CASE(17,Test4120552)
         CASE(18,Test4142938)
         CASE(19,TestChoicePatternQuote)
-        CASE(20,Test4112104);
+        CASE(20,Test4112104)
 
         default: name = ""; break;
     }
@@ -311,7 +311,7 @@ void MessageFormatRegressionTest::Test4104976()
         UnicodeString("xyz"), 
         UnicodeString("abc")
     };
-    int32_t formats_length = sizeof(formats)/sizeof(formats[0]);
+    int32_t formats_length = (int32_t)(sizeof(formats)/sizeof(formats[0]));
     UErrorCode status = U_ZERO_ERROR;
     ChoiceFormat *cf = new ChoiceFormat(limits, formats, formats_length);
     failure(status, "new ChoiceFormat");
