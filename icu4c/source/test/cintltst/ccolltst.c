@@ -13,6 +13,7 @@
 *********************************************************************************
 */
 #include <stdlib.h>
+#include <stdio.h>
 #include <string.h>
 #include "cintltst.h"
 #include "ccolltst.h"
@@ -46,6 +47,17 @@ void addCollTest(TestNode** root)
 
 
 /*Internal functions used*/
+static char* dumpSk(uint8_t *sourceKey, char *sk) {
+  uint32_t kLen = strlen(sourceKey);
+  uint32_t i = 0;
+
+  *sk = 0;
+
+  for(i = 0; i<kLen; i++) {
+    sprintf(sk+2*i, "%02X", sourceKey[i]);
+  }
+  return sk;
+}
 
 void reportCResult( const UChar source[], const UChar target[], 
                          uint8_t *sourceKey, uint8_t *targetKey,
@@ -104,6 +116,14 @@ void reportCResult( const UChar source[], const UChar target[],
 
     
     }
+
+    if(keyResult != expectedResult || keyResult != compareResult)
+    {
+      char sk[256];
+      log_verbose("SortKey1: %s\n", dumpSk(sourceKey, sk));
+      log_verbose("SortKey2: %s\n", dumpSk(targetKey, sk));
+    }
+
     free(sExpect);
     free(sResult);
 }
