@@ -1142,18 +1142,21 @@ CalendarTest::TestDOW_LOCALandYEAR_WOY()
     if (U_FAILURE(status)) { errln("Couldn't create SimpleDateFormat"); return; }
     sdf->applyLocalizedPattern(UnicodeString("JJJJ'-W'ww-dd"), status);
     if (U_FAILURE(status)) { errln("Couldn't apply localized pattern"); return; }
+    cal->clear();
     cal->set(1997, Calendar::DECEMBER, 25);
 	doYEAR_WOYLoop(cal, sdf, times, status);
     loop_addroll(cal, sdf, times, Calendar::YEAR_WOY, Calendar::YEAR,  status);
     loop_addroll(cal, sdf, times, Calendar::DOW_LOCAL, Calendar::DAY_OF_WEEK, status);
     if (U_FAILURE(status)) { errln("Error in parse/calculate test for 1997"); return; }
+    cal->clear();
     cal->set(1998, Calendar::DECEMBER, 25);
 	doYEAR_WOYLoop(cal, sdf, times, status);
     loop_addroll(cal, sdf, times, Calendar::YEAR_WOY, Calendar::YEAR,  status);
     loop_addroll(cal, sdf, times, Calendar::DOW_LOCAL, Calendar::DAY_OF_WEEK, status);
     if (U_FAILURE(status)) { errln("Error in parse/calculate test for 1998"); return; }
+    cal->clear();
     cal->set(1582, Calendar::OCTOBER, 1);
-//	doYEAR_WOYLoop(cal, sdf, times, status);
+	doYEAR_WOYLoop(cal, sdf, times, status);
     loop_addroll(cal, sdf, times, Calendar::YEAR_WOY, Calendar::YEAR,  status);
     loop_addroll(cal, sdf, times, Calendar::DOW_LOCAL, Calendar::DAY_OF_WEEK, status);
     if (U_FAILURE(status)) { errln("Error in parse/calculate test for 1582"); return; }
@@ -1188,7 +1191,7 @@ void CalendarTest::loop_addroll(Calendar *cal, SimpleDateFormat *sdf, int times,
         if (U_FAILURE(errorCode)) { errln("Error in roll"); delete calclone; return; }
         if(cal->getTime(errorCode) != calclone->getTime(errorCode)) {
             delete calclone;
-            errln("Different!");
+            errln("Results of roll differ!");
             return;
         }
         delete calclone;
@@ -1221,7 +1224,7 @@ CalendarTest::doYEAR_WOYLoop(Calendar *cal, SimpleDateFormat *sdf,
         //logln("got: "+us);
         if (U_FAILURE(errorCode)) { errln("Get time error"); return; }
         s[us.extract(0, us.length(), s)]=0;
-        if(fabs(original-tst)>U_MILLIS_PER_DAY) {
+        if(original!=tst) {
             us.remove();
             sdf->format(original, us, errorCode);
             errln("Parsed time doesn't match with regular");
@@ -1229,8 +1232,6 @@ CalendarTest::doYEAR_WOYLoop(Calendar *cal, SimpleDateFormat *sdf,
             us.remove();
             sdf->format(tst, us, errorCode);
             logln("got "+us);
-//            errorCode = U_INTERNAL_PROGRAM_ERROR;
-//            return;
         }
         tstres->clear();
         tstres->set(Calendar::YEAR_WOY, cal->get(Calendar::YEAR_WOY, errorCode));
