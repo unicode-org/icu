@@ -48,6 +48,7 @@
 #include "ucln_in.h"
 #include "cstring.h"
 #include "cmemory.h"
+#include "unicode/strenum.h"
 
 // static initialization
 
@@ -459,6 +460,233 @@ TimeZone::setDefault(const TimeZone& zone)
 
 // -------------------------------------
 
+// New available IDs API as of ICU 2.4.  Uses StringEnumeration API.
+
+class TZEnumeration : public StringEnumeration {
+    // Map into to ZONE_IDS.  Our results are ZONE_IDS[map[i]] for
+    // i=0..len-1.  If map==NULL then our results are ZONE_IDS[i]
+    // for i=0..len-1.  Len will be zero iff the zone data could
+    // not be loaded.
+    int32_t* map;
+    int32_t  len;
+    int32_t  pos;
+    void* _bufp;
+    int32_t _buflen;
+    enum { BUFFER_GROW = 8 }; // must be >= 1
+
+public:
+    TZEnumeration() {
+        map = NULL;
+		_bufp = NULL;
+        len = pos = _buflen = 0;
+        if (!DATA_LOADED) {
+            loadZoneData();
+        }
+        if (DATA != NULL) {
+            len = DATA->count;
+        }
+    }
+
+    TZEnumeration(int32_t rawOffset) {
+        map = NULL;
+		_bufp = NULL;
+        len = pos = _buflen = 0;
+        if (!DATA_LOADED) {
+            loadZoneData();
+        }
+        if (DATA == NULL) return;
+
+        /* The offset index table is a table of variable-sized objects.
+         * Each entry has an offset to the next entry; the last entry has
+         * a next entry offset of zero.
+         *
+         * The entries are sorted in ascending numerical order of GMT
+         * offset.  Each entry lists all the system zones at that offset,
+         * in lexicographic order of ID.  Note that this ordering is
+         * somewhat significant in that the _first_ zone in each list is
+         * what will be chosen as the default under certain fallback
+         * conditions.  We currently just let that be the
+         * lexicographically first zone, but we could also adjust the list
+         * to pick which zone was first for this situation -- probably not
+         * worth the trouble, except for the fact that this fallback is
+         * _always_ used to determine the default zone on Windows.
+         *
+         * The list of zones is actually just a list of integers, from
+         * 0..n-1, where n is the total number of system zones.  The
+         * numbering corresponds exactly to the ordering of ZONE_IDS.
+         */
+        const OffsetIndex* index = INDEX_BY_OFFSET;
+        
+        for (;;) {
+            if (index->gmtOffset > rawOffset) {
+                // Went past our desired offset; no match found
+                break;
+            }
+            if (index->gmtOffset == rawOffset) {
+                // Found our desired offset
+                map = (int32_t*)uprv_malloc(sizeof(int32_t) * index->count);
+                if (map != NULL) {
+                    len = index->count;
+                    const uint16_t* zoneNumberArray = &(index->zoneNumber);
+                    for (uint16_t i=0; i<len; ++i) {
+                        map[i] = zoneNumberArray[i];
+                    }
+                }
+            }
+            // Compute the position of the next entry.  If the delta value
+            // in this entry is zero, then there is no next entry.
+            uint16_t delta = index->nextEntryDelta;
+            if (delta == 0) {
+                break;
+            }
+            index = (const OffsetIndex*)((int8_t*)index + delta);
+        }
+    }
+
+    TZEnumeration(const char* country) {
+        map = NULL;
+		_bufp = NULL;
+        len = pos = _buflen = 0;
+        if (!DATA_LOADED) {
+            loadZoneData();
+        }
+        if (DATA == NULL) return;
+
+        /* The country index table is a table of variable-sized objects.
+         * Each entry has an offset to the next entry; the last entry has
+         * a next entry offset of zero.
+         *
+         * The entries are sorted in ascending numerical order of intcode.
+         * This is an integer representation of the 2-letter ISO 3166
+         * country code.  It is computed as (c1-'A')*32 + (c0-'A'), where
+         * the country code is c1 c0, with 'A' <= ci <= 'Z'.
+         *
+         * The list of zones is a list of integers, from 0..n-1, where n
+         * is the total number of system zones.  The numbering corresponds
+         * exactly to the ordering of ZONE_IDS.
+         */
+        const CountryIndex* index = INDEX_BY_COUNTRY;
+
+        uint16_t intcode = 0;
+        if (country != NULL && *country != 0) {
+            intcode = (uint16_t)((U_UPPER_ORDINAL(country[0]) << 5)
+                + U_UPPER_ORDINAL(country[1]));
+        }
+
+        for (;;) {
+            if (index->intcode > intcode) {
+                // Went past our desired country; no match found
+                break;
+            }
+            if (index->intcode == intcode) {
+                // Found our desired country
+                map = (int32_t*)uprv_malloc(sizeof(int32_t) * index->count);
+                if (map != NULL) {
+                    len = index->count;
+                    const uint16_t* zoneNumberArray = &(index->zoneNumber);
+                    for (uint16_t i=0; i<len; ++i) {
+                        map[i] = zoneNumberArray[i];
+                    }
+                }
+            }
+            // Compute the position of the next entry.  If the delta value
+            // in this entry is zero, then there is no next entry.
+            uint16_t delta = index->nextEntryDelta;
+            if (delta == 0) {
+                break;
+            }
+            index = (const CountryIndex*)((int8_t*)index + delta);
+        }
+    }
+
+    virtual ~TZEnumeration() {
+        uprv_free(map);
+		uprv_free(_bufp);
+    }
+
+    int32_t count(UErrorCode& status) const {
+        return U_FAILURE(status) ? 0 : len;
+    }
+
+    const char* next(UErrorCode& status) {
+        const UnicodeString* us = snext(status);
+        if (us) {
+            int newlen;
+            for (newlen = us->extract((char*)_bufp, _buflen / sizeof(char), NULL, status);
+                 status == U_STRING_NOT_TERMINATED_WARNING || status == U_BUFFER_OVERFLOW_ERROR;
+                 ) {
+                resizeBuffer((newlen + BUFFER_GROW) * sizeof(char));
+                status = U_ZERO_ERROR;
+            }
+            if (U_SUCCESS(status)) {
+                ((char*)_bufp)[newlen] = 0;
+                return (const char*)_bufp;
+            }
+        }
+        return NULL;
+    }
+
+    const UChar* unext(UErrorCode& status) {
+        const UnicodeString* us = snext(status);
+        if (us) {
+            int newlen;
+            for (newlen = us->extract((UChar*)_bufp, _buflen / sizeof(UChar), status);
+                 status == U_STRING_NOT_TERMINATED_WARNING || status == U_BUFFER_OVERFLOW_ERROR;
+                 ) {
+                resizeBuffer((newlen + BUFFER_GROW) * sizeof(UChar));
+                status = U_ZERO_ERROR;
+            }
+            if (U_SUCCESS(status)) {
+                ((UChar*)_bufp)[newlen] = 0;
+                return (const UChar*)_bufp;
+            }
+        }
+        return NULL;
+    }
+
+    const UnicodeString* snext(UErrorCode& status) {
+        if (U_SUCCESS(status) && pos < len) {
+            return (map != NULL) ?
+                &ZONE_IDS[map[pos++]] : &ZONE_IDS[pos++];
+        }
+        return NULL;
+    }
+
+    void reset(UErrorCode& status) {
+        pos = 0;
+    }
+
+private:
+    void resizeBuffer(int32_t newlen) {
+        if (_bufp) {
+            _bufp = uprv_realloc(_bufp, newlen);
+        } else {
+            _bufp = uprv_malloc(newlen);
+        }
+        _buflen = newlen;
+    }
+};
+
+StringEnumeration*
+TimeZone::createEnumeration() {
+    return new TZEnumeration();
+}
+
+StringEnumeration*
+TimeZone::createEnumeration(int32_t rawOffset) {
+    return new TZEnumeration(rawOffset);
+}
+
+StringEnumeration*
+TimeZone::createEnumeration(const char* country) {
+    return new TZEnumeration(country);
+}
+
+// -------------------------------------
+
+// TODO: #ifdef out this code after 8-Nov-2003
+// #ifdef ICU_TIMEZONE_USE_DEPRECATES
+
 const UnicodeString** 
 TimeZone::createAvailableIDs(int32_t rawOffset, int32_t& numIDs)
 {
@@ -630,6 +858,10 @@ TimeZone::createAvailableIDs(int32_t& numIDs)
     numIDs = DATA->count;
     return result;
 }
+
+// ICU_TIMEZONE_USE_DEPRECATES
+// #endif
+// see above
 
 // ---------------------------------------
 
