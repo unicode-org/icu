@@ -63,7 +63,8 @@ static char stringStore[STRING_STORE_SIZE];
 static uint32_t stringTop=0;
 
 typedef struct {
-    const char *alias, *converter;
+    const char *alias;
+    uint16_t converter;
 } Alias;
 
 static Alias aliases[MAX_ALIAS_COUNT];
@@ -83,9 +84,9 @@ static void
 parseLine(const char *line);
 
 static void
-addAlias(const char *alias, const char *converter);
+addAlias(const char *alias, uint16_t converter);
 
-static Converter *
+static uint16_t
 addConverter(const char *converter);
 
 static char *
@@ -161,9 +162,8 @@ main(int argc, char *argv[]) {
 
     T_FileStream_close(in);
 
-    /* sort the aliases and the converters */
+    /* sort the aliases */
     qsort(aliases, aliasCount, sizeof(Alias), compareAliases);
-    qsort(converters, converterCount, sizeof(Converter), compareConverters);
 
     /* create the output file */
     out=udata_create(DATA_TYPE, DATA_NAME, &dataInfo,
@@ -180,7 +180,7 @@ main(int argc, char *argv[]) {
     udata_write16(out, aliasCount);
     for(i=0; i<aliasCount; ++i) {
         udata_write16(out, (uint16_t)(stringOffset+(aliases[i].alias-stringStore)));
-        udata_write16(out, (uint16_t)(stringOffset+(aliases[i].converter-stringStore)));
+        udata_write16(out, aliases[i].converter);
     }
 
     /* write the table of converters */
@@ -205,9 +205,8 @@ main(int argc, char *argv[]) {
 
 static void
 parseLine(const char *line) {
-    Converter *cnv;
-    uint16_t pos=0, start, limit, length;
-    char *converter, *alias, *s;
+    uint16_t pos=0, start, limit, length, cnv;
+    char *converter, *alias;
 
     /* skip leading white space */
     while(line[pos]!=0 && isspace((unsigned char)line[pos])) {
@@ -229,22 +228,17 @@ parseLine(const char *line) {
     /* store the converter name */
     length=limit-start;
     converter=allocString(length+1);
-    icu_strncpy(converter, line+start, length);
+    icu_memcpy(converter, line+start, length);
     converter[length]=0;
 
     /* add the converter to the converter table */
     cnv=addConverter(converter);
 
-    /* add a lowercase version of the converter name as the first alias */
-    alias=s=allocString(length+1);
-    while(length>0) {
-        *s++=icu_tolower(line[start++]);
-        --length;
-    }
-    *s=0;
+    /* add the converter as its own alias to the alias table */
+    addAlias(converter, cnv);
 
-    /* add the alias/converter pair to the alias table */
-    addAlias(alias, converter);
+    /* count it for the converter */
+    ++converters[cnv].aliasCount;
 
     /* get all the real aliases */
     for(;;) {
@@ -265,26 +259,22 @@ parseLine(const char *line) {
         }
         limit=pos;
 
-        /* store the alias name in lowercase */
+        /* store the alias name */
         length=limit-start;
-        alias=s=allocString(length+1);
-        while(length>0) {
-            *s++=icu_tolower(line[start++]);
-            --length;
-        }
-        *s=0;
+        alias=allocString(length+1);
+        icu_memcpy(alias, line+start, length);
+        alias[length]=0;
 
         /* add the alias/converter pair to the alias table */
-        addAlias(alias, converter);
+        addAlias(alias, cnv);
 
         /* count it for the converter */
-        ++cnv->aliasCount;
-
+        ++converters[cnv].aliasCount;
     }
 }
 
 static void
-addAlias(const char *alias, const char *converter) {
+addAlias(const char *alias, uint16_t converter) {
     if(aliasCount==MAX_ALIAS_COUNT) {
         fprintf(stderr, "gencnval: too many aliases\n");
         exit(U_BUFFER_OVERFLOW_ERROR);
@@ -296,7 +286,7 @@ addAlias(const char *alias, const char *converter) {
     ++aliasCount;
 }
 
-static Converter *
+static uint16_t
 addConverter(const char *converter) {
     if(converterCount==MAX_ALIAS_COUNT) {
         fprintf(stderr, "gencnval: too many converters\n");
@@ -306,9 +296,7 @@ addConverter(const char *converter) {
     converters[converterCount].converter=converter;
     converters[converterCount].aliasCount=0;
 
-    ++converterCount;
-
-    return converters+converterCount-1;
+    return converterCount++;
 }
 
 static char *
@@ -327,10 +315,5 @@ allocString(uint32_t length) {
 
 static int
 compareAliases(const void *alias1, const void *alias2) {
-    return icu_strcmp(((Alias *)alias1)->alias, ((Alias *)alias2)->alias);
-}
-
-static int
-compareConverters(const void *converter1, const void *converter2) {
-    return icu_strcmp(((Converter *)converter1)->converter, ((Converter *)converter2)->converter);
+    return icu_stricmp(((Alias *)alias1)->alias, ((Alias *)alias2)->alias);
 }
