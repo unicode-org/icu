@@ -131,17 +131,17 @@ public class CollationMiscTest extends TestFmwk {
             // have a  code point associated to it anymore  
             // "&[before 3][last primary ignorable]<<<k",
             // - all befores here amount to zero       
-            "&[before 1][first tertiary ignorable]<<<a",
-            "&[before 1][last tertiary ignorable]<<<a",  
-            "&[before 1][first secondary ignorable]<<<a",
-            "&[before 1][last secondary ignorable]<<<a", 
+            "&[before 3][first tertiary ignorable]<<<a",
+            "&[before 3][last tertiary ignorable]<<<a",  
+            "&[before 3][first secondary ignorable]<<<a",
+            "&[before 3][last secondary ignorable]<<<a", 
             // 'normal' befores  
-            "&[before 1][first primary ignorable]<<<c<<<b &[first primary ignorable]<a",
+            "&[before 3][first primary ignorable]<<<c<<<b &[first primary ignorable]<a",
             // we don't have a code point that corresponds to the last primary 
             // ignorable 
-            "&[before 2][last primary ignorable]<<<c<<<b &[last primary ignorable]<a",
-            "&[before 1][first variable]<<<c<<<b &[first variable]<a",
-            "&[last variable]<a &[before 1][last variable]<<<c<<<b ",
+            "&[before 3][last primary ignorable]<<<c<<<b &[last primary ignorable]<a",
+            "&[before 3][first variable]<<<c<<<b &[first variable]<a",
+            "&[last variable]<a &[before 3][last variable]<<<c<<<b ",
             "&[first regular]<a &[before 1][first regular]<b", 
             "&[before 1][last regular]<b &[last regular]<a",
             "&[before 1][first implicit]<b &[first implicit]<a",
@@ -1110,7 +1110,7 @@ public class CollationMiscTest extends TestFmwk {
     public void TestRedundantRules() {
         String[] rules = {
             //"& a <<< b <<< c << d <<< e& [before 1] e <<< x",
-            "& b <<< c <<< d << e <<< f& [before 1] f <<< x",
+            "& b <<< c <<< d << e <<< f& [before 3] f <<< x",
             "& a < b <<< c << d <<< e& [before 1] e <<< x",
             "& a < b < c < d& [before 1] c < m",
             "& a < b <<< c << d <<< e& [before 3] e <<< x",
