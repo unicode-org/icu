@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/test/search/Attic/SearchTest.java,v $ 
- * $Date: 2001/09/08 01:17:24 $ 
- * $Revision: 1.7 $
+ * $Date: 2001/09/12 00:22:19 $ 
+ * $Revision: 1.8 $
  *
  *****************************************************************************************
  */
@@ -383,6 +383,58 @@ public class SearchTest extends com.ibm.test.TestFmwk {
         }
 
         logln("end");
+    }
+    
+    /**
+    * Tests jitterbug #11
+    */
+    public void TestJitterBug11() 
+    {
+        String pattern = "c";
+        String text = "Scott Ganyo";
+        StringSearch ss = new StringSearch(pattern, text);
+        ss.setStrength(Collator.PRIMARY);
+        if (ss.next() != 1) {
+            errln("Error finding character c at index 1 in \"Scott Ganyo\"");
+        }
+    
+        /* empty pattern not handled yet
+        pattern = " ";
+        ss.setPattern(pattern);
+        ss.setStrength(Collator.PRIMARY);
+        if (ss.next() != 5) {
+            errln("Error finding character ' ' at index 1 in \"Scott Ganyo\"");
+        }
+        */
+    }
+    
+    /**
+    * Tests jitterbug #35
+    */
+    public void TestJitterBug35() 
+    {
+        String pattern = "dss";
+		String strings[] = {"<HTML xxx=\".dss\">", "<BODY>",
+			                "<A A=\".dss\">",      "<B B=\".dss\">",
+			                "<AB A=\".dss\">",     "<A A=\"dss\">",
+			                "<AB A=\"dss\">",      "<AB AB=\".dss\">",
+			                "<AB AB=\"dss\">",     " <A A=\".dss\">",
+			                "A A=\".dss\"",        "&lt;A A=\".dss\"&gt;"};
+		int result[] = {12, SearchIterator.DONE, 7, 7, 8, 6, 7, 9, 8, 8, 6, 
+		                10};
+
+        StringSearch ss = new StringSearch( pattern, "empty" );
+		for ( int i = 0; i < strings.length; i++ )
+	    {
+			StringCharacterIterator source = 
+			                          new StringCharacterIterator(strings[i]);
+		    ss.setTarget(source);
+			int offset = ss.first();
+			if ( offset != result[i] ) {
+			    errln("Error finding pattern \"" + pattern + 
+			    "\" match in text \"" + strings[i] + "\"");
+			}
+        }
     }
     
     //-------------------------------------------------------------------------
