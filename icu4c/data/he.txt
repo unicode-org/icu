@@ -98,8 +98,8 @@ he {
                 "GMT",
         }
     }
-    LocaleScript{ 
-                "Hebr"    // ISO 15924 Name 
+    LocaleScript:array { 
+        "Hebr"    // ISO 15924 Name 
     }
 
     //------------------------------------------------------------

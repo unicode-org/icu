@@ -140,8 +140,7 @@ uk {
                 "GMT",
         }
     }
-    LocaleScript{ 
-               "Cyrl"      // ISO 15924 Name 
-
+    LocaleScript:array {
+        "Cyrl"      // ISO 15924 Name 
     }
 }
