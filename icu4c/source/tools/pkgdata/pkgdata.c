@@ -284,7 +284,7 @@ main(int argc, char* argv[]) {
     if( options[8].doesOccur ) {
         o.targetDir = options[8].value;
     } else {
-        o.targetDir = "";  /* cwd */
+        o.targetDir = ".";  /* cwd */
     }
 
     o.clean     = options[9].doesOccur;
@@ -536,9 +536,26 @@ static void loadLists(UPKGOptions *o, UErrorCode *status)
 			    baseName = findBasename(s);
 
 
-				if(s != baseName) { /* s was something long, so we leave it as it is */
-	 				 o->files = pkg_appendToList(o->files, &tail, uprv_strdup(baseName));
-					 o->filePaths = pkg_appendToList(o->filePaths, &tail2, uprv_strdup(s));
+				if(s != baseName) { /* s was something 'long' with a path */
+
+                     if(!uprv_strncmp(pkgPrefix, baseName, pkgPrefixLen))
+                     {      
+                         /* paths already have the prefix */
+    	 				 o->files = pkg_appendToList(o->files, &tail, uprv_strdup(baseName));
+	    				 o->filePaths = pkg_appendToList(o->filePaths, &tail2, uprv_strdup(s));
+                     } else {
+                         /* path don't have the prefix, add package prefix to short and longname */
+                         uprv_strcpy(tmp, pkgPrefix);
+                         uprv_strcpy(tmp+pkgPrefixLen, baseName);
+
+                         uprv_strncpy(tmp2, s, uprv_strlen(s)-uprv_strlen(baseName));  /* should be:   dirpath only, ending in sep */
+                         tmp2[uprv_strlen(s)-uprv_strlen(baseName)]=0;
+                         uprv_strcat(tmp2, pkgPrefix);
+                         uprv_strcat(tmp2, baseName);
+
+    	 				 o->files = pkg_appendToList(o->files, &tail, uprv_strdup(tmp));
+	    				 o->filePaths = pkg_appendToList(o->filePaths, &tail2, uprv_strdup(tmp2));
+                     }
 				} else { /* s was just a basename, we want to prepend source dir*/
 					/* check for prefix of package */
 					uprv_strcpy(tmp, o->srcDir);
