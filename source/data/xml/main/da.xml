@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE ldml SYSTEM "http://oss.software.ibm.com/cvs/icu/~checkout~/locale/ldml.dtd">
+<!DOCTYPE ldml SYSTEM " 	http://oss.software.ibm.com/cvs/icu/~checkout~/locale/ldml.dtd" 
+[
+      <!ENTITY % icu SYSTEM " http://oss.software.ibm.com/cvs/icu/~checkout~/locale/ldmlICU.dtd"> 
+%icu;
+]
+>
 <ldml>
 	<identity>
 		<version number="3.0"/>
@@ -401,6 +406,11 @@
 	</localeDisplayNames>
 	<characters>
 		<exemplarCharacters>[a-z æ å ø á é í ó ú ý]</exemplarCharacters>
+		<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
+			<icu:scripts>
+				<icu:script type="1">Latn</icu:script>
+			</icu:scripts>
+		</special>
 	</characters>
 	<dates>
 		<localizedPatternChars>GuMtkHmsSEDFwWahKzUeygAZ</localizedPatternChars>
@@ -1951,4 +1961,32 @@
 			</currency>
 		</currencies>
 	</numbers>
+	<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
+		<icu:ruleBasedNumberFormats>
+			<icu:ruleBasedNumberFormat type="spellout">
+-x: minus &gt;&gt;;
+nol; en; to; tre; fire; fem; seks; syv; otte; ni;
+ti; elleve; tolv; tretten; fjorten; femten; seksten; sytten; atten; nitten;
+20: [&gt;&gt;og]tvye;
+30: [&gt;&gt;og]tredive;
+40: [&gt;&gt;og]fyrre;
+50: [&gt;&gt;og]femti;
+60: [&gt;&gt;og]seksti;
+70: [&gt;&gt;og]syvti;
+80: [&gt;&gt;og]otteti;
+90: [&gt;&gt;og]niti;
+100: et hundrede[&gt;&gt;];
+200: &lt;&lt; hundrede[&gt;&gt;];
+1000: et tusinde[ &gt;&gt;];
+2000: &lt;&lt; tusinde[ &gt;&gt;];
+1,000,000: en million[ &gt;&gt;];
+2,000,000: &lt;&lt; million[ &gt;&gt;];
+1,000,000,000: en milliarde[ &gt;&gt;];
+2,000,000,000: &lt;&lt; milliarde[ &gt;&gt;];
+1,000,000,000,000: en billione[ &gt;&gt;];
+2,000,000,000,000: &lt;&lt; billione[ &gt;&gt;];
+1,000,000,000,000,000: =#,##0=;
+			</icu:ruleBasedNumberFormat>
+		</icu:ruleBasedNumberFormats>
+	</special>
 </ldml>

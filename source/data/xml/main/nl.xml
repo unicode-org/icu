@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE ldml SYSTEM "http://oss.software.ibm.com/cvs/icu/~checkout~/locale/ldml.dtd">
+<!DOCTYPE ldml SYSTEM " 	http://oss.software.ibm.com/cvs/icu/~checkout~/locale/ldml.dtd" 
+[
+      <!ENTITY % icu SYSTEM " http://oss.software.ibm.com/cvs/icu/~checkout~/locale/ldmlICU.dtd"> 
+%icu;
+]
+>
 <ldml>
 	<identity>
 		<version number="2.0"/>
@@ -318,6 +323,11 @@
 	</localeDisplayNames>
 	<characters>
 		<exemplarCharacters>[a-záéíóúäëïöüĳ]</exemplarCharacters>
+		<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
+			<icu:scripts>
+				<icu:script type="1">Latn</icu:script>
+			</icu:scripts>
+		</special>
 	</characters>
 	<dates>
 		<calendars>
@@ -605,4 +615,29 @@
 			</currency>
 		</currencies>
 	</numbers>
+	<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
+		<icu:ruleBasedNumberFormats>
+			<icu:ruleBasedNumberFormat type="spellout">
+-x: min &gt;&gt;;
+x.x: &lt;&lt; komma &gt;&gt;;
+nul; een; twee; drie; vier; vijf; zes; zeven; acht; negen;
+tien; elf; twaalf; dertien; veertien; vijftien; zestien;
+zeventien; achtien; negentien;
+20: [&gt;&gt; en ]twintig;
+30: [&gt;&gt; en ]dertig;
+40: [&gt;&gt; en ]veertig;
+50: [&gt;&gt; en ]vijftig;
+60: [&gt;&gt; en ]zestig;
+70: [&gt;&gt; en ]zeventig;
+80: [&gt;&gt; en ]tachtig;
+90: [&gt;&gt; en ]negentig;
+100: &lt;&lt; honderd[ &gt;&gt;];
+1000: &lt;&lt; duizend[ &gt;&gt;];
+1,000,000: &lt;&lt; miljoen[ &gt;&gt;];
+1,000,000,000: &lt;&lt; biljoen[ &gt;&gt;];
+1,000,000,000,000: &lt;&lt; triljoen[ &gt;&gt;];
+1,000,000,000,000,000: =#,##0=
+			</icu:ruleBasedNumberFormat>
+		</icu:ruleBasedNumberFormats>
+	</special>
 </ldml>
