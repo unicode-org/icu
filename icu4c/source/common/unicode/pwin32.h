@@ -150,6 +150,9 @@ typedef unsigned int uint32_t;
 /* 1 or 0 to enable or disable threads.  If undefined, default is: enable threads. */
 #define ICU_USE_THREADS 1
 
+/* Windows currently only runs on x86 CPUs which currently all have strong memory models. */
+#define UMTX_STRONG_MEMORY_MODEL 1
+
 #ifndef U_DEBUG
 #ifdef _DEBUG
 #define U_DEBUG 1
