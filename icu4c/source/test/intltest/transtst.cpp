@@ -708,13 +708,18 @@ void TransliteratorTest::TestSegments(void) {
         "([a-z]) '.' ([0-9]) > $2 '-' $1",
         "abc.123.xyz.456",
         "ab1-c23.xy4-z56",
+
+        // nested
+        "(([a-z])([0-9])) > $1 '.' $2 '.' $3;",
+        "a1 b2",
+        "a1.a.1 b2.b.2",
     };
     int32_t DATA_length = (int32_t)(sizeof(DATA)/sizeof(*DATA));
 
     for (int32_t i=0; i<DATA_length; i+=3) {
         logln("Pattern: " + prettify(DATA[i]));
         UErrorCode status = U_ZERO_ERROR;
-        RuleBasedTransliterator t("<ID>", DATA[i], status);
+        RuleBasedTransliterator t("ID", DATA[i], status);
         if (U_FAILURE(status)) {
             errln("FAIL: RBT constructor");
         } else {
@@ -1504,6 +1509,10 @@ void TransliteratorTest::TestSupplemental() {
 
 void TransliteratorTest::TestQuantifier() { 
 
+    expect("(ab)? c > d;",
+           "c abc ababc",
+           "d d abd");
+    
     expect("(ab)+ {x} > '(' $1 ')';",
            "x abx ababxy",
            "x ab(ab) abab(abab)y");
