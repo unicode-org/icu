@@ -1,7 +1,9 @@
 default: classes
 
-# JAVAC=      javac -classpath $(CLASSPATH) -sourcepath $(SRCDIR) -d $(CLASSDIR) $(JAVACFLAGS)
-JAVAC=      javac -classpath $(CLASSPATH) -d $(CLASSDIR) $(JAVACFLAGS)
+include $(TOPDIR)/src/build/CancelImplicits.gmk
+
+JAVAC=      javac -classpath $(CLASSPATH) -sourcepath $(SRCDIR) -d $(CLASSDIR) $(JAVACFLAGS)
+#JAVAC=      javac -classpath $(CLASSPATH) -d $(CLASSDIR) $(JAVACFLAGS)
 
 .SUFFIXES: .java .class 
 
@@ -24,10 +26,10 @@ $(CLASS_DEST_DIR) :
 $(FILES_class) : $(CLASS_DEST_DIR)%.class: $(SRCDIR)/$(PKGPATH)%.java
 	@echo $? >> $(CLASSLIST)
 
-.compile.classlist:
+.compile.classlist: $(FILES_class)
 	@if [ -s $(CLASSLIST) ] ; then echo Compiling { ; fi 
 	@if [ -s $(CLASSLIST) ] ; then cat $(CLASSLIST) ; fi 
-	if [ -s $(CLASSLIST) ] ; then $(JAVAC) $(shell cat $(CLASSLIST)) ; fi 
+	@if [ -s $(CLASSLIST) ] ; then $(JAVAC) $(shell cat $(CLASSLIST)) ; fi 
 	@if [ -s $(CLASSLIST) ] ; then echo } ; fi 
 	@rm -f $(CLASSLIST)
 
@@ -38,23 +40,18 @@ SRC_FILES_dict= $(subst classes,src,$(FILES_dict))
 endif
 
 classes: $(CLASS_DEST_DIR) delete.classlist $(FILES_class) $(FILES_dics) .compile.classlist
-#classes: delete.classlist $(FILES_class) $(FILES_dics) $(CLASSDIR)/$(PKGPATH)
-#	@if [ -s $(CLASSLIST) ] ; then echo Compiling { ; fi 
-#	@if [ -s $(CLASSLIST) ] ; then cat $(CLASSLIST) ; fi 
-#	@if [ -s $(CLASSLIST) ] ; then $(JAVAC) @$(CLASSLIST) ; fi 
-#	@rm -f $(CLASSLIST)
 ifdef FILES_dict
-	cp $(SRC_FILES_dict) $(CLASSDIR)/$(PKGPATH)/$(notdir $(SRC_FILES_dict))
+	@cp $(SRC_FILES_dict) $(CLASSDIR)/$(PKGPATH)/$(notdir $(SRC_FILES_dict))
 endif
 ifdef SUBDIRS
-	@for D in $(SUBDIRS) ; do cd $$D ; gmake -f makefile.gmk classes ; cd .. ; done
-#	@for %%d in ( $(SUBDIRS) ) do cd %d && gmake -f makefile.gmk classes && cd ..
+	@for D in $(SUBDIRS) ; do cd $$D ; gnumake -f makefile.gmk classes ; cd .. ; done
+#	@for %%d in ( $(SUBDIRS) ) do cd %d && gnumake -f makefile.gmk classes && cd ..
 endif
 
 dict: $(SRC_FILES_dict) $(CLASSDIR)/$(PKGPATH)
-	echo $(FILES_dict)
-	echo $(SRC_FILES_dict)
-	cp $(SRC_FILES_dict) $(CLASSDIR)/$(PKGPATH)/$(notdir $(SRC_FILES_dict))
+	@echo $(FILES_dict)
+	@echo $(SRC_FILES_dict)
+	@cp $(SRC_FILES_dict) $(CLASSDIR)/$(PKGPATH)/$(notdir $(SRC_FILES_dict))
 
 delete.classlist:
 	@rm -f $(CLASSLIST)
