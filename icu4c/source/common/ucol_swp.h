@@ -19,12 +19,30 @@
 #include "unicode/utypes.h"
 #include "udataswp.h"
 
+/**
+ * Swap a header-less collation binary, inside a resource bundle or ucadata.icu.
+ * See udataswp.h.
+ * @internal
+ */
 U_CAPI int32_t U_EXPORT2
 ucol_swapBinary(const UDataSwapper *ds,
                 const void *inData, int32_t length, void *outData,
                 UErrorCode *pErrorCode);
 
+/**
+ * Swap ICU collation data like ucadata.icu. See udataswp.h.
+ * @internal
+ */
 U_CAPI int32_t U_EXPORT2
 ucol_swap(const UDataSwapper *ds,
           const void *inData, int32_t length, void *outData,
           UErrorCode *pErrorCode);
+
+/**
+ * Swap inverse UCA collation data (invuca.icu). See udataswp.h.
+ * @internal
+ */
+U_CAPI int32_t U_EXPORT2
+ucol_swapInverseUCA(const UDataSwapper *ds,
+                    const void *inData, int32_t length, void *outData,
+                    UErrorCode *pErrorCode);

@@ -257,8 +257,9 @@ static const struct {
 } swapFns[]={
     { { 0x52, 0x65, 0x73, 0x42 }, ures_swap },          /* dataFormat="ResB" */
     /* insert data formats here, descending by expected frequency of occurrence */
-    { { 0x55, 0x43, 0x6f, 0x6c }, ucol_swap },          /* dataFormat="UCol" */
     { { 0x55, 0x50, 0x72, 0x6f }, uprops_swap },        /* dataFormat="UPro" */
+    { { 0x55, 0x43, 0x6f, 0x6c }, ucol_swap },          /* dataFormat="UCol" */
+    { { 0x49, 0x6e, 0x76, 0x43 }, ucol_swapInverseUCA },/* dataFormat="InvC" */
     { { 0x43, 0x76, 0x41, 0x6c }, ucnv_swapAliases }    /* dataFormat="CvAl" */
 };
 
