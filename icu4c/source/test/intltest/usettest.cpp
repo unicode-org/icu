@@ -46,7 +46,7 @@ UnicodeSetTest::TestPatterns(void) {
     // Throw in a test of complement
     set.complement();
     UnicodeString exp;
-    exp.append((UChar)0x0000).append("aeeoouu").append((UChar)('z'+1)).append((UChar)0xFFFF);
+    exp.append((UChar)0x0000).append(UNICODE_STRING("aeeoouu", 7)).append(0x7b).append((UChar)0xFFFF);
     expectPairs(set, exp);
 }
 
@@ -67,21 +67,21 @@ UnicodeSetTest::TestAddRemove(void) {
 	UErrorCode status = U_ZERO_ERROR;
 
     UnicodeSet set; // Construct empty set
-    set.add('a', 'z');
+    set.add(0x61, 0x7a);
     expectPairs(set, "az");
-    set.remove('m', 'p');
+    set.remove(0x6d, 0x70);
     expectPairs(set, "alqz");
-    set.remove('e', 'g');
+    set.remove(0x65, 0x67);
     expectPairs(set, "adhlqz");
-    set.remove('d', 'i');
+    set.remove(0x64, 0x69);
     expectPairs(set, "acjlqz");
-    set.remove('c', 'r');
+    set.remove(0x63, 0x72);
     expectPairs(set, "absz");
-    set.add('f', 'q');
+    set.add(0x66, 0x71);
     expectPairs(set, "abfqsz");
-    set.remove('a', 'g');
+    set.remove(0x61, 0x67);
     expectPairs(set, "hqsz");
-    set.remove('a', 'z');
+    set.remove(0x61, 0x7a);
     expectPairs(set, "");
 
     // Try removing an entire set from another set
@@ -180,10 +180,10 @@ UnicodeSetTest::escape(const UnicodeString& s) {
     for (int32_t i=0; i<s.length(); ++i)
     {
         UChar c = s[(UTextOffset)i];
-        if (' ' <= c && c <= (UChar)0x7F) {
+        if (0x20 <= c && c <= (UChar)0x7F) {
             buf += c;
         } else {
-            buf += '\\'; buf += 'u';
+            buf += 0x5c; buf += 'u';
             buf += toHexString((c & 0xF000) >> 12);
             buf += toHexString((c & 0x0F00) >> 8);
             buf += toHexString((c & 0x00F0) >> 4);

@@ -18,26 +18,6 @@
 #include "rbbiapts.h"
 #include "string.h"
 #include "stdio.h"
-//Just to make it easier to use with UChar array.
-UnicodeString CharsToUnicodeString(const char* chars)
-{
-	int i;
-	int unicode;
-    int len = strlen(chars);
-    
-    UnicodeString buffer;
-    for (i = 0; i < len;) {
-        if ((chars[i] == '\\') && (i+1 < len) && (chars[i+1] == 'u')) {
-            
-            sscanf(&(chars[i+2]), "%4X", &unicode);
-            buffer += (UChar)unicode;
-            i += 6;
-        } else {
-            buffer += (UChar)chars[i++];
-        }
-    }
-    return buffer;
-}
 
 /**
  * API Test the RuleBasedBreakIterator class

@@ -206,9 +206,9 @@ void CollationIteratorTest::TestMaxExpansion(char *par)
     rule1 += " < b < e";
     ExpansionRecord test1[] =
     {
-        {'a', 1},
-        {'b', 1},
-        {'e', 2}
+        {0x61, 1},
+        {0x62, 1},
+        {0x65, 2}
     };
     verifyExpansion(rule1, test1, ARRAY_LENGTH(test1));
     
@@ -219,10 +219,10 @@ void CollationIteratorTest::TestMaxExpansion(char *par)
     UnicodeString rule2("< a & ae = a1 & aeef = z < b < e < f");
     ExpansionRecord test2[] =
     {
-        {'a', 1},
-        {'b', 1},
-        {'e', 2},
-        {'f', 4}
+        {0x61, 1},
+        {0x62, 1},
+        {0x65, 2},
+        {0x66, 4}
     };
     verifyExpansion(rule2, test2, ARRAY_LENGTH(test2));
 }

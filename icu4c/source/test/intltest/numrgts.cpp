@@ -230,7 +230,7 @@ void NumberFormatRegressionTest::Test4087245 (void)
     FieldPosition pos(FieldPosition::DONT_CARE);
     logln(UnicodeString("format(") + n + ") = " + 
         df->format(n, buf1, pos));
-    symbols->setDecimalSeparator(UChar('p')); // change value of field
+    symbols->setDecimalSeparator(0x70); // change value of field
     logln(UnicodeString("format(") + n + ") = " +
         df->format(n, buf2, pos));
     if(buf1 != buf2)
@@ -421,11 +421,11 @@ void NumberFormatRegressionTest::Test4086575(void)
     // Space as group separator
 
     logln("...applyLocalizedPattern # ###,00;(# ###,00) ");
-    // nbsp = \u00a0 = ' '
+    // nbsp = \u00a0
     //nf->applyLocalizedPattern("#\u00a0###,00;(#\u00a0###,00)");
     UChar patChars[] = {
-             '#', 0x00a0, '#', '#', '#', ',', '0', '0', ';', 
-        '(', '#', 0x00a0, '#', '#', '#', ',', '0', '0', ')'
+             0x23, 0x00a0, 0x23, 0x23, 0x23, 0x2c, 0x30, 0x30, 0x3b, 
+        0x28, 0x23, 0x00a0, 0x23, 0x23, 0x23, 0x2c, 0x30, 0x30, 0x29
     };
     UnicodeString pat(patChars, 19, 19);
     nf->applyLocalizedPattern(pat, status);
@@ -436,7 +436,7 @@ void NumberFormatRegressionTest::Test4086575(void)
     buffer = nf->format((int32_t)1234, buffer, pos);
     //if (buffer != UnicodeString("1\u00a0234,00"))
     UChar c[] = {
-        '1', 0x00a0, '2', '3', '4', ',', '0', '0'
+        0x31, 0x00a0, 0x32, 0x33, 0x34, 0x2c, 0x30, 0x30
     };
     UnicodeString cc(c, 8, 8);
     if (buffer != cc)
@@ -445,7 +445,7 @@ void NumberFormatRegressionTest::Test4086575(void)
     buffer.remove();
     buffer = nf->format((int32_t)-1234, buffer, pos);
     UChar c1[] = {
-        '(', '1', 0x00a0, '2', '3', '4', ',', '0', '0', ')'
+        0x28, 0x31, 0x00a0, 0x32, 0x33, 0x34, 0x2c, 0x30, 0x30, 0x29
     };
     UnicodeString cc1(c1, 10, 10);
     if (buffer != cc1)
@@ -740,13 +740,13 @@ void NumberFormatRegressionTest::Test4070798 (void)
     String expectedPercent = "-578\u00a0998%";
     */
     UChar chars1 [] = {
-        '-', '5', 0x00a0, '7', '8', '9', ',', '9', '8', '8'
+        0x2d, 0x35, 0x00a0, 0x37, 0x38, 0x39, 0x2c, 0x39, 0x38, 0x38
     };
     UChar chars2 [] = {
-        '5', 0x00a0, '7', '8', '9', ',', '9', '9', ' ', 'F'
+        0x35, 0x00a0, 0x37, 0x38, 0x39, 0x2c, 0x39, 0x39, 0x20, 0x46
     };
     UChar chars3 [] = {
-        '-', '5', '7', '8', 0x00a0, '9', '9', '9', '%'
+        0x2d, 0x35, 0x37, 0x38, 0x00a0, 0x39, 0x39, 0x39, 0x25
     };
     UnicodeString expectedDefault(chars1, 10, 10);
     UnicodeString expectedCurrency(chars2, 10, 10);
@@ -808,13 +808,13 @@ void NumberFormatRegressionTest::Test4071005 (void)
     String expectedPercent = "-578\u00a0998%";
     */
     UChar chars1 [] = {
-        '-', '5', 0x00a0, '7', '8', '9', ',', '9', '8', '8'
+        0x2d, 0x35, 0x00a0, 0x37, 0x38, 0x39, 0x2c, 0x39, 0x38, 0x38
     };
     UChar chars2 [] = {
-        '5', 0x00a0, '7', '8', '9', ',', '9', '9', ' ', '$'
+        0x35, 0x00a0, 0x37, 0x38, 0x39, 0x2c, 0x39, 0x39, 0x20, 0x24
     };
     UChar chars3 [] = {
-        '-', '5', '7', '8', 0x00a0, '9', '9', '9', '%'
+        0x2d, 0x35, 0x37, 0x38, 0x00a0, 0x39, 0x39, 0x39, 0x25
     };
     UnicodeString expectedDefault(chars1, 10, 10);
     UnicodeString expectedCurrency(chars2, 10, 10);
@@ -1363,14 +1363,20 @@ void NumberFormatRegressionTest::Test4106667(void)
 /* @bug 4110936
  * DecimalFormat.setMaximumIntegerDigits() works incorrectly.
  */
+#ifdef OS390
+#   define MAX_INT_DIGITS 70
+#else
+#   define MAX_INT_DIGITS 128
+#endif
+
 void NumberFormatRegressionTest::Test4110936(void)
 {
     UErrorCode status = U_ZERO_ERROR;
     NumberFormat *nf = NumberFormat::createInstance(status);
     failure(status, "NumberFormat::createInstance");
-    nf->setMaximumIntegerDigits(128);
-    logln("setMaximumIntegerDigits(128)");
-    if (nf->getMaximumIntegerDigits() != 128)
+    nf->setMaximumIntegerDigits(MAX_INT_DIGITS);
+    logln("setMaximumIntegerDigits(MAX_INT_DIGITS)");
+    if (nf->getMaximumIntegerDigits() != MAX_INT_DIGITS)
         errln("getMaximumIntegerDigits() returns " +
             nf->getMaximumIntegerDigits());
 
@@ -1840,7 +1846,11 @@ NumberFormatRegressionTest::Test4162852(void)
         logln(UnicodeString("") +
               d + " -> " +
               '"' + s + '"' + " -> " + e);
+#if !defined(OS390) || defined(IEEE_ON)
         if (e != 0.0 || 1.0/e > 0.0) {
+#else
+        if (e != 0.0) {
+#endif
             logln("Failed to parse negative zero");
         }
         delete f;
@@ -1995,7 +2005,7 @@ void NumberFormatRegressionTest::Test4212072(void) {
     UnicodeString s;
     FieldPosition pos;
 
-    sym.setMinusSign('^');
+    sym.setMinusSign(0x5e);
     fmt.setDecimalFormatSymbols(sym);
     s.remove();
     if (fmt.format((int32_t)-1, s, pos) != UnicodeString("^1")) {
@@ -2007,11 +2017,11 @@ void NumberFormatRegressionTest::Test4212072(void) {
         errln(UnicodeString("FAIL: (minus=^).getNegativePrefix -> ") +
               s + ", exp ^");
     }
-    sym.setMinusSign('-');
+    sym.setMinusSign(0x2d);
 
     fmt.applyPattern(UnicodeString("#%"), status);
     failure(status, "applyPattern percent");
-    sym.setPercent('^');
+    sym.setPercent(0x5e);
     fmt.setDecimalFormatSymbols(sym);
     s.remove();
     if (fmt.format(0.25, s, pos) != UnicodeString("25^")) {
@@ -2023,11 +2033,11 @@ void NumberFormatRegressionTest::Test4212072(void) {
         errln(UnicodeString("FAIL: (percent=^).getPositiveSuffix -> ") +
               s + ", exp ^");
     }
-    sym.setPercent('%');
+    sym.setPercent(0x25);
 
     fmt.applyPattern(str("#\\u2030"), status);
     failure(status, "applyPattern permill");
-    sym.setPerMill('^');
+    sym.setPerMill(0x5e);
     fmt.setDecimalFormatSymbols(sym);
     s.remove();
     if (fmt.format(0.25, s, pos) != UnicodeString("250^")) {

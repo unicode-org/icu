@@ -6,6 +6,7 @@
 
 #include "ucdtest.h"
 #include "unicode/unicode.h"
+#include "unicode/ustring.h"
 #include <stdio.h>
 #include <string.h>
 #include <assert.h>
@@ -98,9 +99,12 @@ const char dirStrings[][5] = {
 //====================================================
 void UnicodeTest::TestUpperLower()
 {
-    static char* upperTest = "abcdefg123hij.?:klmno";
-    static char* lowerTest = "ABCDEFG123HIJ.?:KLMNO";
+    U_STRING_DECL(upperTest, "abcdefg123hij.?:klmno", 21);
+    U_STRING_DECL(lowerTest, "ABCDEFG123HIJ.?:KLMNO", 21);
     uint16_t i;
+
+    U_STRING_INIT(upperTest, "abcdefg123hij.?:klmno", 21);
+    U_STRING_INIT(lowerTest, "ABCDEFG123HIJ.?:KLMNO", 21);
 
 //Checks LetterLike Symbols which were previously a source of confusion
 //[Bertrand A. D. 02/04/98]
@@ -160,7 +164,7 @@ void UnicodeTest::TestLetterNumber()
 void UnicodeTest::TestMisc()
 {
     const UChar sampleSpaces[] = {0x0020, 0x00a0, 0x2000, 0x2001, 0x2005};
-    const UChar sampleNonSpaces[] = {'a', 'b', 'c', 'd', 't'};
+    const UChar sampleNonSpaces[] = {0x61, 0x62, 0x63, 0x64, 0x74};
     const UChar sampleUndefined[] = {0xfff1, 0xfff7, 0xfa30};
     const UChar sampleDefined[] = {0x523E, 0x4f88, 0xfffd};
     const UChar sampleBase[] = {0x0061, 0x0031, 0x03d2};
@@ -215,7 +219,7 @@ void UnicodeTest::TestMisc()
 void UnicodeTest::TestControlPrint()
 {
     const UChar sampleControl[] = {0x001b, 0x0097, 0x0082};
-    const UChar sampleNonControl[] = {'a', 0x0031, 0x00e2};
+    const UChar sampleNonControl[] = {0x61, 0x0031, 0x00e2};
     const UChar samplePrintable[] = {0x0042, 0x005f, 0x2014};
     const UChar sampleNonPrintable[] = {0x200c, 0x009f, 0x001c};
     int32_t i;

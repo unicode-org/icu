@@ -110,9 +110,11 @@ NumberFormatRoundTripTest::test(NumberFormat *fmt)
 {
     if (TRUE)
     {
+#if !defined(OS390) || defined(IEEE_ON)
         test(fmt, uprv_getNaN());
         test(fmt, uprv_getInfinity());
         test(fmt, -uprv_getInfinity());
+#endif
 
         test(fmt, (int32_t)500);
         test(fmt, (int32_t)0);
@@ -129,7 +131,11 @@ NumberFormatRoundTripTest::test(NumberFormat *fmt)
             test(fmt, uprv_floor((randomDouble(10000))));
             test(fmt, randomDouble(1e50));
             test(fmt, randomDouble(1e-50));
+#ifndef OS390
             test(fmt, randomDouble(1e100));
+#elif defined(IEEE_ON)
+            test(fmt, randomDouble(1e75));    /*OS390*/
+#endif
             // {sfb} When formatting with a percent instance, numbers very close to
             // DBL_MAX will fail the round trip.  This is because:
             // 1) Format the double into a string --> INF% (since 100 * double > DBL_MAX)
@@ -141,16 +147,32 @@ NumberFormatRoundTripTest::test(NumberFormat *fmt)
             // the double will stay in range.
             //if(fmt->getMultipler() == 1)
             if(fmt->getDynamicClassID() == DecimalFormat::getStaticClassID())
+#ifndef OS390
                 test(fmt, randomDouble(1e308) / ((DecimalFormat*)fmt)->getMultiplier());
-
-#ifndef XP_MAC
-            test(fmt, randomDouble(1e-323));
 #else
+#   ifdef IEEE_ON
+                test(fmt, randomDouble(1e75) / ((DecimalFormat*)fmt)->getMultiplier());   
+#   else
+                test(fmt, randomDouble(1e65) / ((DecimalFormat*)fmt)->getMultiplier());   /*OS390*/
+#   endif
+#endif
+
+#ifdef XP_MAC
 // PowerPC doesn't support denormalized doubles, so the low-end range
 // doesn't match NT
             test(fmt, randomDouble(1e-290));
+#elif defined(OS390)
+#   ifdef IEEE_ON
+            test(fmt, randomDouble(1e-78));  /*OS390*/
+#   endif
+#else
+            test(fmt, randomDouble(1e-323));
 #endif
+#ifndef OS390
             test(fmt, randomDouble(1e-100));
+#elif defined(IEEE_ON)
+            test(fmt, randomDouble(1e-78));  /*OS390*/
+#endif
         }
     }
 }

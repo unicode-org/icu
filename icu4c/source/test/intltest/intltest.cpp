@@ -965,3 +965,43 @@ main(int argc, char* argv[])
 
     return major.getErrors();
 }
+
+/*
+ * This is a variant of cintltst/ccolltst.c:CharsToUChars().
+ * It converts a character string into a UnicodeString, with
+ * unescaping \u sequences.
+ */
+UnicodeString CharsToUnicodeString(const char* chars)
+{
+    int unicode;
+    int i;
+    UnicodeString result;
+    UChar buffer[400];
+
+    for (;;) {
+        /* repeat the following according to the length of the buffer */
+        do {
+            /* search for \u or the end */
+            for(i = 0; i < 400 && chars[i] != 0 && !(chars[i] == '\\' && chars[i+1] == 'u'); ++i) {}
+
+            /* convert characters between escape sequences */
+            if(i > 0) {
+                u_charsToUChars(chars, buffer, i);
+                result.append(buffer, i);
+                chars += i;
+            }
+        } while(i == 400);
+
+        /* did we reach the end or an escape sequence? */
+        if(*chars == 0) {
+            break;
+        }
+
+        /* unescape one character: we know that there is a \u sequence at chars[limit] */
+        chars += 2;
+        sscanf(chars, "%4X", &unicode);
+        result.append((UChar)unicode);
+        chars += 4;
+    }
+    return result;
+}
