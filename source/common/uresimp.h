@@ -94,4 +94,43 @@ U_CFUNC void ures_freeResPath(UResourceBundle *resB);
 
 /* Candidates for export */
 U_CFUNC UResourceBundle *ures_copyResb(UResourceBundle *r, const UResourceBundle *original, UErrorCode *status);
+
+/**
+ * Returns a resource that can be located using the pathToResource argument. One needs optional package, locale
+ * and path inside the locale, for example: "/myData/en/zoneStrings/3". Keys and indexes are supported. Keys
+ * need to reference data in named structures, while indexes can reference both named and anonymous resources.
+ * Features a fill-in parameter. 
+ *
+ * @param pathToResource    a path that will lead to the requested resource
+ * @param fillIn            if NULL a new UResourceBundle struct is allocated and must be deleted by the caller.
+ *                          Alternatively, you can supply a struct to be filled by this function.
+ * @param status            fills in the outgoing error code.
+ * @return                  a pointer to a UResourceBundle struct. If fill in param was NULL, caller must delete it
+ * @draft ICU 2.2
+ */
+U_CAPI UResourceBundle* U_EXPORT2
+ures_findResource(const char* pathToResource, 
+                  UResourceBundle *fillIn, UErrorCode *status); 
+
+/**
+ * Returns a sub resource that can be located using the pathToResource argument. One needs a path inside 
+ * the supplied resource, for example, if you have "en_US" resource bundle opened, you might ask for
+ * "zoneStrings/3". Keys and indexes are supported. Keys
+ * need to reference data in named structures, while indexes can reference both 
+ * named and anonymous resources.
+ * Features a fill-in parameter. 
+ *
+ * @param resourceBundle    a resource
+ * @param pathToResource    a path that will lead to the requested resource
+ * @param fillIn            if NULL a new UResourceBundle struct is allocated and must be deleted by the caller.
+ *                          Alternatively, you can supply a struct to be filled by this function.
+ * @param status            fills in the outgoing error code.
+ * @return                  a pointer to a UResourceBundle struct. If fill in param was NULL, caller must delete it
+ * @draft ICU 2.2
+ */
+U_CAPI UResourceBundle* U_EXPORT2
+ures_findSubResource(const UResourceBundle *resB, 
+                     const char* pathToResource, 
+                     UResourceBundle *fillIn, UErrorCode *status);
+
 #endif /*URESIMP_H*/
