@@ -205,6 +205,7 @@ int main(int argc, char** argv)
     }
   while (--argc)
     {
+	  err = U_ZERO_ERROR;
       arg = getLongPathname(argv[argc]);
 
       /*removes the extension if any is found*/
@@ -223,7 +224,8 @@ int main(int argc, char** argv)
       if (U_FAILURE(err) || (mySharedData == NULL))
 	{
 	  /* in an error is found, print out a error msg and keep going*/
-	  printf("Error creating \"%s\" file for \"%s\" (error code %d)\n", outFileName, arg, err);
+	  printf("Error creating \"%s\" file for \"%s\" (error code %d - %s)\n", outFileName, arg, err,
+			u_errorName(err));
 	  err = U_ZERO_ERROR;
 	}
       else
@@ -231,7 +233,17 @@ int main(int argc, char** argv)
 /*  	  writeUConverterSharedDataToFile(outFileName, mySharedData, &err); */
 	  writeConverterData(mySharedData, cnvName, &err);
 	  deleteSharedConverterData(mySharedData);
-	  puts(outFileName);
+
+	  if(U_FAILURE(err))
+	  {
+		  /* in an error is found, print out a error msg and keep going*/
+		  printf("Error writing \"%s\" file for \"%s\" (error code %d - %s)\n", outFileName, arg, err,
+				u_errorName(err));
+	  }
+	  else
+	  {
+		  puts(outFileName);
+	  }
 	}
       
     }
