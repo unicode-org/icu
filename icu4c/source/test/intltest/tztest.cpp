@@ -332,6 +332,7 @@ TimeZoneTest::TestGetAvailableIDs913()
     UErrorCode ec = U_ZERO_ERROR;
     int32_t i;
 
+#ifdef U_USE_TIMEZONE_OBSOLETE_2_8
     // Test legacy API -- remove these tests when the corresponding API goes away (duh)
     int32_t numIDs = -1;
     const UnicodeString** ids = TimeZone::createAvailableIDs(numIDs);
@@ -379,6 +380,8 @@ TimeZoneTest::TestGetAvailableIDs913()
         // we own the array; the caller owns the contained strings (yuck)
         uprv_free(ids);
     }
+#endif
+
     UnicodeString str;
     UnicodeString *buf = new UnicodeString("TimeZone::createEnumeration() = { ");
     int32_t s_length;
