@@ -230,4 +230,11 @@ uprv_comparePropertyNames(const char *name1, const char *name2);
 #define _Pi     FLAG(U_INITIAL_PUNCTUATION)
 #define _Pf     FLAG(U_FINAL_PUNCTUATION)
 
+/**
+ * Is this character a "white space" in the sense of ICU rule parsers?
+ * @internal
+ */
+U_CAPI UBool U_EXPORT2
+uprv_isRuleWhiteSpace(UChar32 c);
+
 #endif
