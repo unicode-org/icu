@@ -66,8 +66,7 @@ static const char _kCurrencies[]      = "Currencies";
 static char** _installedLocales = NULL;
 static int32_t _installedLocalesCount = 0;
 
-/* tables updated per http://www.egt.ie/standards/iso639 
-    and http://lcweb.loc.gov/standards/iso639-2/ 
+/* tables updated per http://lcweb.loc.gov/standards/iso639-2/ 
     to include the revisions up to 2001/7/27 *CWB*/
 /* The 3 character codes are the terminology codes like RFC 3066.  
     This is compatible with prior ICU codes */
@@ -1833,7 +1832,7 @@ uloc_getDisplayName(const char *locale,
           if(U_FAILURE(*pErrorCode)){
               break;
           }
-          // the uenum_next returns NUL terminated string
+          /* the uenum_next returns NUL terminated string */
           keyword = uenum_next(keywordEnum, &keywordLen, pErrorCode);
           if(length + length3 < destCapacity) {
             length3 += uloc_getDisplayKeyword(keyword, displayLocale, dest+length+length3, destCapacity-length-length3, pErrorCode);
