@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/util/RangeDateRule.java,v $ 
- * $Date: 2003/12/01 21:29:33 $ 
- * $Revision: 1.8 $
+ * $Date: 2003/12/13 00:30:57 $ 
+ * $Revision: 1.9 $
  *
  *****************************************************************************************
  */
@@ -33,12 +33,12 @@ public class RangeDateRule implements DateRule
      * @internal
      */
     // Range is a package-private class so this should be package-private too, probably
-    public RangeDateRule(Range[] ranges)
-    {
-        for (int i = 0; i < ranges.length; i++) {
-            this.ranges.addElement(ranges[i]);
-        }
-    }
+//    public RangeDateRule(Range[] ranges)
+//    {
+//        for (int i = 0; i < ranges.length; i++) {
+//            this.ranges.addElement(ranges[i]);
+//        }
+//    }
 
     /**
      * @draft ICU 2.8
@@ -91,19 +91,23 @@ public class RangeDateRule implements DateRule
      */
     public Date firstBetween(Date start, Date end)
     {
+    	if (end == null) {
+    		return firstAfter(start);
+    	}
+    	
         // Find the range that I should look at
         int index = startIndex(start);
         Date result = null;
 
         Range next = rangeAt(index);
 
-        while (result == null && next != null && ! next.start.after(end))
+        while (result == null && next != null && !next.start.after(end))
         {
             Range r = next;
             next = rangeAt(index+1);
 
             if (r.rule != null) {
-                Date e = (next != null && next.start.before(end)) ? next.start
+                Date e = (next != null && !next.start.after(end)) ? next.start
                                                                   : end;
                 result = r.rule.firstBetween(start, e);
             }

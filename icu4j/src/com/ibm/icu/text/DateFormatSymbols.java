@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/DateFormatSymbols.java,v $
- * $Date: 2003/11/21 22:52:05 $
- * $Revision: 1.21 $
+ * $Date: 2003/12/13 00:30:56 $
+ * $Revision: 1.22 $
  *
  *****************************************************************************************
  */
@@ -365,7 +365,9 @@ public class DateFormatSymbols implements Serializable, Cloneable {
             copyMembers(this, other);
             return other;
         } catch (CloneNotSupportedException e) {
+        	///CLOVER:OFF
             throw new InternalError();
+            ///CLOVER:ON
         }
     }
 
@@ -618,12 +620,15 @@ public class DateFormatSymbols implements Serializable, Cloneable {
             try {
                 bundle = getDateFormatBundle(calendarClass, locale);
             } catch (MissingResourceException e) {
+            	///CLOVER:OFF
+            	// coverage requires test without data, so skip
                 //if (!(cal instanceof GregorianCalendar)) {
                 if (!(GregorianCalendar.class.isAssignableFrom(calendarClass))) {
                     // Ok for symbols to be missing for a Gregorian calendar, but
                     // not for any other type.
                     throw e;
                 }
+                ///CLOVER:ON
             }
             constructCalendarSpecific(bundle);
         }
@@ -715,12 +720,15 @@ public class DateFormatSymbols implements Serializable, Cloneable {
             result = ICULocaleData.getResourceBundle(bundleName, locale);
         }
         catch (MissingResourceException e) {
+        	///CLOVER:OFF
+        	// coverage requires test without data, so skip
             //if (!(cal instanceof GregorianCalendar)) {
             if (!(GregorianCalendar.class.isAssignableFrom(calendarClass))) {
                 // Ok for symbols to be missing for a Gregorian calendar, but
                 // not for any other type.
                 throw e;
             }
+            ///CLOVER:ON
         }
         return result;
     }
@@ -731,8 +739,8 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * @see #getDateFormatBundle(java.lang.Class, java.util.Locale)
      * @stable ICU 2.2
      */
-    static public ResourceBundle getDateFormatBundle(Calendar cal, Locale locale)
+    public static ResourceBundle getDateFormatBundle(Calendar cal, Locale locale)
         throws MissingResourceException {
-        return getDateFormatBundle(cal==null?null:cal.getClass(), locale);
+        return getDateFormatBundle(cal.getClass(), locale);
     }
 }

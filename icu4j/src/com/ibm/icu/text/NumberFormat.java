@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/NumberFormat.java,v $ 
- * $Date: 2003/11/21 22:52:05 $ 
- * $Revision: 1.33 $
+ * $Date: 2003/12/13 00:30:56 $ 
+ * $Revision: 1.34 $
  *
  *****************************************************************************************
  */
@@ -1040,6 +1040,8 @@ public abstract class NumberFormat extends UFormat {
          throws IOException, ClassNotFoundException
     {
         stream.defaultReadObject();
+        ///CLOVER:OFF
+        // we don't have serialization data for this format
         if (serialVersionOnStream < 1) {
             // Didn't have additional int fields, reassign to use them.
             maximumIntegerDigits = maxIntegerDigits;
@@ -1047,6 +1049,7 @@ public abstract class NumberFormat extends UFormat {
             maximumFractionDigits = maxFractionDigits;
             minimumFractionDigits = minFractionDigits;
         }
+        ///CLOVER:ON
         /*Bug 4185761
           Validate the min and max fields [Richard/GCL]
         */

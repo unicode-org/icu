@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/util/SimpleDateRule.java,v $ 
- * $Date: 2003/12/01 21:33:37 $ 
- * $Revision: 1.11 $
+ * $Date: 2003/12/13 00:30:57 $ 
+ * $Revision: 1.12 $
  *
  *****************************************************************************************
  */
@@ -76,10 +76,7 @@ public class SimpleDateRule implements DateRule
      */
     public Date firstAfter(Date start)
     {
-        if (startDate != null && start.before(startDate)) {
-            start = startDate;
-        }
-        return doFirstBetween(start, endDate);
+        return doFirstBetween(start, null);
     }
 
     /**
@@ -99,12 +96,6 @@ public class SimpleDateRule implements DateRule
     public Date firstBetween(Date start, Date end)
     {
         // Pin to the min/max dates for this rule
-        if (startDate != null && start.before(startDate)) {
-            start = startDate;
-        }
-        if (endDate != null && end.after(endDate)) {
-            end = endDate;
-        }
         return doFirstBetween(start, end);
     }
 
@@ -122,13 +113,6 @@ public class SimpleDateRule implements DateRule
      */
     public boolean isOn(Date date)
     {
-        if (startDate != null && date.before(startDate)) {
-            return false;
-        }
-        if (endDate != null && date.after(endDate)) {
-            return false;
-        }
-
         Calendar c = calendar;
 
         synchronized(c) {
@@ -189,8 +173,6 @@ public class SimpleDateRule implements DateRule
 
     private Date computeInYear(int year, Calendar c)
     {
-        if (c == null) c = calendar;
-
         synchronized(c) {
             c.clear();
             c.set(Calendar.ERA, c.getMaximum(Calendar.ERA));
@@ -213,7 +195,7 @@ public class SimpleDateRule implements DateRule
                     // on or after the specified date in the month.
                     delta = (dayOfWeek - weekday + 7) % 7;
                 }
-                else if (dayOfWeek < 0) {
+                else {
                     // We want the first occurrance of the (-dayOfWeek)
                     // on or before the specified date in the month.
                     delta = -((dayOfWeek + weekday + 7) % 7);
@@ -229,9 +211,9 @@ public class SimpleDateRule implements DateRule
     /**
      * @draft ICU 2.8
      */
-    public void setCalendar(Calendar c) {
-        calendar = c;
-    }
+//    public void setCalendar(Calendar c) {
+//        calendar = c;
+//    }
 
     private static GregorianCalendar gCalendar = new GregorianCalendar();
 
@@ -240,7 +222,4 @@ public class SimpleDateRule implements DateRule
     private int     month;
     private int     dayOfMonth;
     private int     dayOfWeek;
-
-    private Date    startDate = null;
-    private Date    endDate = null;
 };

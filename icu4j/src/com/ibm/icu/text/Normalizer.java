@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/Normalizer.java,v $ 
- * $Date: 2003/12/02 01:34:31 $ 
- * $Revision: 1.38 $
+ * $Date: 2003/12/13 00:30:50 $ 
+ * $Revision: 1.39 $
  *
  *******************************************************************************
  */
@@ -537,7 +537,7 @@ public final class Normalizer implements Cloneable{
      * altogether.
      * <p>
      * @see #setMode
-     * @obsolete ICU 2.8. To be removed after 2004-Aug-31. Use Nomalizer.NONE
+     * @deprecated ICU 2.8. Use Nomalizer.NONE
      * @see #NONE
      */
     public static final Mode NO_OP = NONE;
@@ -555,7 +555,7 @@ public final class Normalizer implements Cloneable{
      * <b>C</b>.
      * <p>
      * @see #setMode
-     * @obsolete ICU 2.8. To be removed after 2004-Aug-31. Use Normalier.NFC
+     * @deprecated ICU 2.8. Use Normalier.NFC
      * @see #NFC
      */
     public static final Mode COMPOSE = NFC;
@@ -573,7 +573,7 @@ public final class Normalizer implements Cloneable{
      * <b>KC</b>.
      * <p>
      * @see #setMode
-     * @obsolete ICU 2.8. To be removed after 2004-Aug-31. Use Normalizer.NFKC
+     * @deprecated ICU 2.8. Use Normalizer.NFKC
      * @see #NFKC
      */
     public static final Mode COMPOSE_COMPAT = NFKC;
@@ -591,7 +591,7 @@ public final class Normalizer implements Cloneable{
      * <b>D</b>.
      * <p>
      * @see #setMode
-     * @obsolete ICU 2.8. To be removed after 2004-Aug-31.Use Normalizer.NFD
+     * @deprecated ICU 2.8. Use Normalizer.NFD
      * @see #NFD
      */
     public static final Mode DECOMP = NFD;
@@ -609,7 +609,7 @@ public final class Normalizer implements Cloneable{
      * <b>KD</b>.
      * <p>
      * @see #setMode
-     * @obsolete ICU 2.8. To be removed after 2004-Aug-31. Use Normalizer.NFKD
+     * @deprecated ICU 2.8. Use Normalizer.NFKD
      * @see #NFKD
      */
     public static final Mode DECOMP_COMPAT = NFKD;
@@ -630,7 +630,7 @@ public final class Normalizer implements Cloneable{
      * Unicode Normalization Forms</a>.
      * <p>
      * @see #setOption
-     * @obsolete ICU 2.8. To be removed after 2004-Aug-31.
+     * @deprecated ICU 2.8. This option is no longer supported. TODO: check with Ram
      */
     public static final int IGNORE_HANGUL = 0x0001;
           
@@ -1843,18 +1843,17 @@ public final class Normalizer implements Cloneable{
      * @throws IllegalArgumentException if the given index is less than
      *          {@link #getBeginIndex} or greater than {@link #getEndIndex}.
      * @return The codepoint as an int
-     * @obsolete ICU 2.8. To be removed after 2004-Aug-31
      */
-    public int setIndex(int index) {
-		setIndexOnly(index);
-		return current();
-    }
+//    public int setIndex(int index) {
+//		setIndexOnly(index);
+//		return current();
+//    }
  
     /**
      * Retrieve the index of the start of the input text. This is the begin 
      * index of the <tt>CharacterIterator</tt> or the start (i.e. 0) of the 
      * <tt>String</tt> over which this <tt>Normalizer</tt> is iterating
-     * @deprecated ICU 2.2. To be removed after 2003-aug-31. Use startIndex() instead.
+     * @deprecated ICU 2.2. Use startIndex() instead.
      * @return The codepoint as an int
      * @see #startIndex
      */
@@ -1866,7 +1865,7 @@ public final class Normalizer implements Cloneable{
      * Retrieve the index of the end of the input text.  This is the end index
      * of the <tt>CharacterIterator</tt> or the length of the <tt>String</tt>
      * over which this <tt>Normalizer</tt> is iterating
-     * @obsolete ICU 2.2. To be removed after 2003-aug-31. Use endIndex() instead.
+     * @deprecated ICU 2.2. Use endIndex() instead.
      * @return The codepoint as an int
      * @see #endIndex
      */

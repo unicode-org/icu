@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/DecimalFormatSymbols.java,v $ 
- * $Date: 2003/11/21 22:52:05 $ 
- * $Revision: 1.13 $
+ * $Date: 2003/12/13 00:30:56 $ 
+ * $Revision: 1.14 $
  *
  *****************************************************************************************
  */
@@ -424,7 +424,9 @@ final public class DecimalFormatSymbols implements Cloneable, Serializable {
             return (DecimalFormatSymbols)super.clone();
             // other fields are bit-copied
         } catch (CloneNotSupportedException e) {
+        	///CLOVER:OFF
             throw new InternalError();
+            ///CLOVER:ON
         }
     }
 
@@ -435,7 +437,6 @@ final public class DecimalFormatSymbols implements Cloneable, Serializable {
     public boolean equals(Object obj) {
         if (obj == null) return false;
         if (this == obj) return true;
-        if (getClass() != obj.getClass()) return false;
         DecimalFormatSymbols other = (DecimalFormatSymbols) obj;
         return (zeroDigit == other.zeroDigit &&
         groupingSeparator == other.groupingSeparator &&
@@ -491,24 +492,28 @@ final public class DecimalFormatSymbols implements Cloneable, Serializable {
 	// {dlf} clean up below now that we have our own resource data
         decimalSeparator = numberElements[0].charAt(0);
         groupingSeparator = numberElements[1].charAt(0);
-        // [NEW] Temporary hack to support old JDK 1.1 resources
-        patternSeparator = numberElements[2].length() > 0 ?
-            numberElements[2].charAt(0) : ';';
-        // patternSeparator = numberElements[2].charAt(0);
+        // Temporary hack to support old JDK 1.1 resources
+//        patternSeparator = numberElements[2].length() > 0 ?
+//            numberElements[2].charAt(0) : ';';
+        patternSeparator = numberElements[2].charAt(0);
         percent = numberElements[3].charAt(0);
         zeroDigit = numberElements[4].charAt(0); //different for Arabic,etc.
         digit = numberElements[5].charAt(0);
         minusSign = numberElements[6].charAt(0);
         
-        // [NEW] Temporary hack to support JDK versions before 1.1.6 (?)
-        exponentSeparator = numberElements.length >= 9 ?
-            numberElements[7] : DecimalFormat.PATTERN_EXPONENT;
-        perMill = numberElements.length >= 9 ?
-            numberElements[8].charAt(0) : '\u2030';
-        infinity  = numberElements.length >= 10 ?
-            numberElements[9] : "\u221e";
-        NaN = numberElements.length >= 11 ?
-            numberElements[10] : "\ufffd";
+        // Temporary hack to support JDK versions before 1.1.6 (?)
+//        exponentSeparator = numberElements.length >= 9 ?
+//            numberElements[7] : DecimalFormat.PATTERN_EXPONENT;
+//        perMill = numberElements.length >= 9 ?
+//            numberElements[8].charAt(0) : '\u2030';
+//        infinity  = numberElements.length >= 10 ?
+//            numberElements[9] : "\u221e";
+//        NaN = numberElements.length >= 11 ?
+//            numberElements[10] : "\ufffd";
+		exponentSeparator = numberElements[7];
+		perMill = numberElements[8].charAt(0);
+		infinity = numberElements[9];
+		NaN = numberElements[10];
         
         // [NEW] Temporarily hard code; retrieve from resource later
         plusSign  = DecimalFormat.PATTERN_PLUS_SIGN;
@@ -535,8 +540,9 @@ final public class DecimalFormatSymbols implements Cloneable, Serializable {
             currencySymbol = "\u00A4"; // 'OX' currency symbol
         }
         // If there is a currency decimal, use it.
-        monetarySeparator =
-            numberElements[numberElements.length >= 12 ? 11 : 0].charAt(0);
+//        monetarySeparator =
+//            numberElements[numberElements.length >= 12 ? 11 : 0].charAt(0);
+		monetarySeparator = numberElements[11].charAt(0);
     }
 
     /**
@@ -551,13 +557,15 @@ final public class DecimalFormatSymbols implements Cloneable, Serializable {
     private void readObject(ObjectInputStream stream)
         throws IOException, ClassNotFoundException {
         stream.defaultReadObject();
+        ///CLOVER:OFF
+        // we don't have data for these old serialized forms any more
         if (serialVersionOnStream < 1) {
             // Didn't have monetarySeparator or exponential field;
             // use defaults.
             monetarySeparator = decimalSeparator;
             exponential = 'E';
         }
-        if (serialVersionOnStream < 2) { // [NEW]
+        if (serialVersionOnStream < 2) {
             padEscape = DecimalFormat.PATTERN_PAD_ESCAPE;
             plusSign = DecimalFormat.PATTERN_PLUS_SIGN;
             exponentSeparator = String.valueOf(exponential);
@@ -566,6 +574,7 @@ final public class DecimalFormatSymbols implements Cloneable, Serializable {
             // notation isn't supported by the old classes, even though the
             // symbol is there.
         }
+        ///CLOVER:ON
         if (serialVersionOnStream < 3) {
             // Resurrected objects from old streams will have no
             // locale.  There is no 100% fix for this.  A
@@ -759,8 +768,11 @@ final public class DecimalFormatSymbols implements Cloneable, Serializable {
     
     private ULocale validLocale;
     
+    ///CLOVER:OFF
+    // temporarily off (2.8d1) until tests are completed
     ULocale getLocale(ULocale.ULocaleDataType type) {
     	return validLocale;
     }
-    
+    ///CLOVER:ON
+    ///CLOVER:ON
 }
