@@ -69,7 +69,7 @@ CollationElementIterator::CollationElementIterator( const UnicodeString& sourceT
         return;
     }
 
-    if ( sourceText.size() != 0 ) {
+    if ( sourceText.length() != 0 ) {
         //
         // A CollationElementIterator is really a two-layered beast.
         // Internally it uses a Normalizer to munge the source text

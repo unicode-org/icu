@@ -444,11 +444,11 @@ UnicodeString showDifference(const UnicodeString& expected, const UnicodeString&
 {
     UnicodeString res;
     res = expected + "<Expected\n";
-    if(expected.size() != result.size())
+    if(expected.length() != result.length())
         res += " [ Different lengths ] \n";
     else
     {
-        for(int32_t i=0;i<expected.size();i++)
+        for(int32_t i=0;i<expected.length();i++)
         {
             if(expected[i] == result[i])
             {

@@ -129,7 +129,7 @@ CollationAPITest::TestProperty( char* par )
 
     logln("Default collation property test ended.");
     logln("Collator::getRules() testing ...");  
-    doAssert(((RuleBasedCollator*)col)->getRules().size() != 0, "getRules() result incorrect" );                
+    doAssert(((RuleBasedCollator*)col)->getRules().length() != 0, "getRules() result incorrect" );                
     logln("getRules tests end.");
 
     delete col; col = 0;

@@ -129,12 +129,12 @@ void CollationIteratorTest::TestOffset(char *par)
 
     int32_t offset = iter->getOffset();
 
-    if (offset != test1.size())
+    if (offset != test1.length())
     {
         UnicodeString msg1("offset at end != length: ");
         UnicodeString msg2(" vs ");
 
-        errln(msg1 + offset + msg2 + test1.size());
+        errln(msg1 + offset + msg2 + test1.length());
     }
 
     // Now set the offset back to the beginning and see if it works

@@ -151,7 +151,7 @@ void LocaleTest::TestBasicGetters() {
         if (testLocale.getCountry(temp) != (dataTable[CTRY][i]))
             errln("  Country code mismatch: " + temp + " versus "
                         + dataTable[CTRY][i]);
-        if (testLocale.getVariant(temp).size() != 0)
+        if (testLocale.getVariant(temp).length() != 0)
             errln("  Variant code mismatch: " + temp + " versus \"\"");
     }
 
@@ -496,27 +496,27 @@ void LocaleTest::doTestDisplayNames(Locale& inLocale,
         UnicodeString  expectedName;
 
         expectedLang = dataTable[compareIndex][i];
-        if (expectedLang.size() == 0 && defaultIsFrench)
+        if (expectedLang.length() == 0 && defaultIsFrench)
             expectedLang = dataTable[DLANG_FR][i];
-        if (expectedLang.size() == 0)
+        if (expectedLang.length() == 0)
             expectedLang = dataTable[DLANG_EN][i];
 
         expectedCtry = dataTable[compareIndex + 1][i];
-        if (expectedCtry.size() == 0 && defaultIsFrench)
+        if (expectedCtry.length() == 0 && defaultIsFrench)
             expectedCtry = dataTable[DCTRY_FR][i];
-        if (expectedCtry.size() == 0)
+        if (expectedCtry.length() == 0)
             expectedCtry = dataTable[DCTRY_EN][i];
 
         expectedVar = dataTable[compareIndex + 2][i];
-        if (expectedVar.size() == 0 && defaultIsFrench)
+        if (expectedVar.length() == 0 && defaultIsFrench)
             expectedVar = dataTable[DVAR_FR][i];
-        if (expectedVar.size() == 0)
+        if (expectedVar.length() == 0)
             expectedVar = dataTable[DVAR_EN][i];
 
         expectedName = dataTable[compareIndex + 3][i];
-        if (expectedName.size() == 0 && defaultIsFrench)
+        if (expectedName.length() == 0 && defaultIsFrench)
             expectedName = dataTable[DNAME_FR][i];
-        if (expectedName.size() == 0)
+        if (expectedName.length() == 0)
             expectedName = dataTable[DNAME_EN][i];
 
         if (testLang != expectedLang)
@@ -703,7 +703,7 @@ LocaleTest::TestGetLangsAndCountries()
         UnicodeString lc(test[i]);
         if (test[i] != lc.toLower())
             errln(test[i] + " is not all lower case.");
-        if (test[i].size() != 2)
+        if (test[i].length() != 2)
             errln(test[i] + " is not two characters long.");
         if (i > 0 && test[i].compare(test[i - 1]) <= 0)
             errln(test[i] + " appears in an out-of-order position in the list.");
@@ -732,7 +732,7 @@ LocaleTest::TestGetLangsAndCountries()
         UnicodeString uc(test[i]);
         if (test[i] != uc.toUpper())
             errln(test[i] + " is not all upper case.");
-        if (test[i].size() != 2)
+        if (test[i].length() != 2)
             errln(test[i] + " is not two characters long.");
         if (i > 0 && test[i].compare(test[i - 1]) <= 0)
             errln(test[i] + " appears in an out-of-order position in the list.");

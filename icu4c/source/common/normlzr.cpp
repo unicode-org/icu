@@ -188,14 +188,14 @@ Normalizer::compose(const UnicodeString& source,
   uint16_t minDecomp = compat ? 0 : DecompData::MAX_COMPAT;
   
     UTextOffset i = 0;
-    while (i < source.size() || explodePos != EMPTY) {
+    while (i < source.length() || explodePos != EMPTY) {
         // Get the next char from either the buffer or the source
       UChar ch;
       if (explodePos == EMPTY) {
     ch = source[i++];
       } else {
     ch = explodeBuf[explodePos++];
-    if (explodePos >= explodeBuf.size()) {
+    if (explodePos >= explodeBuf.length()) {
       explodePos = EMPTY;
       explodeBuf.truncate(0);
     }
@@ -209,7 +209,7 @@ Normalizer::compose(const UnicodeString& source,
       if (type == ComposeData::BASE) {
     classesSeen = 0;
     baseIndex = index;
-    basePos = result.size();
+    basePos = result.length();
     result += ch;
       }
       else if (type == ComposeData::COMBINING || type == ComposeData::NON_COMPOSING_COMBINING)
@@ -244,7 +244,7 @@ Normalizer::compose(const UnicodeString& source,
           // base character.  There are only four characters in Unicode that have
           // this problem.  If they are fixed in Unicode 3.0, this code can go away.
           //
-          UTextOffset len = result.size();
+          UTextOffset len = result.length();
           if (len - basePos > 1) {
         for (UTextOffset j = basePos+1; j < len; j++) {
           explodeBuf += result[j];
@@ -273,7 +273,7 @@ Normalizer::compose(const UnicodeString& source,
       else if (type == ComposeData::INITIAL_JAMO) {
     classesSeen = 0;
     baseIndex = ComposeData::INITIAL_JAMO_INDEX;
-    basePos = result.size();
+    basePos = result.length();
     result += ch;
       }
       else if (type == ComposeData::MEDIAL_JAMO && classesSeen == 0
@@ -345,14 +345,14 @@ UChar Normalizer::nextCompose()
         uint16_t index = charInfo >> ComposeData::INDEX_SHIFT;
         
         if (type == ComposeData::BASE) {
-            if (buffer.size() > 0 && chFromText && explodePos == EMPTY) {
+            if (buffer.length() > 0 && chFromText && explodePos == EMPTY) {
                 // When we hit a base char in the source text, we can return the text
                 // that's been composed so far.  We'll re-process this char next time through.
                 break;
             }
             classesSeen = 0;
             baseIndex = index;
-            basePos = buffer.size();
+            basePos = buffer.length();
             buffer += ch;
             lastBase = ch;
         }
@@ -390,7 +390,7 @@ UChar Normalizer::nextCompose()
                 // base character.  There are only four characters in Unicode that have
                 // this problem.  If they are fixed in Unicode 3.0, this code can go away.
                 //
-                UTextOffset len = buffer.size();
+                UTextOffset len = buffer.length();
                 if (len - basePos > 1) {
                     for (UTextOffset j = basePos+1; j < len; j++) {
                         explodeBuf += buffer[j];
@@ -417,14 +417,14 @@ UChar Normalizer::nextCompose()
             explodePos = 0;
         }
         else if (type == ComposeData::INITIAL_JAMO) {
-            if (buffer.size() > 0 && chFromText && explodePos == EMPTY) {
+            if (buffer.length() > 0 && chFromText && explodePos == EMPTY) {
                 // When we hit a base char in the source text, we can return the text
                 // that's been composed so far.  We'll re-process this char next time through.
                 break;
             }
             classesSeen = 0;
             baseIndex = ComposeData::INITIAL_JAMO_INDEX;
-            basePos = buffer.size();
+            basePos = buffer.length();
             buffer += ch;
         }
         else if (type == ComposeData::MEDIAL_JAMO && classesSeen == 0
@@ -461,15 +461,15 @@ UChar Normalizer::nextCompose()
             chFromText = TRUE;
         } else {
             ch = explodeBuf[explodePos++];
-            if (explodePos >= explodeBuf.size()) {
+            if (explodePos >= explodeBuf.length()) {
                 explodePos = EMPTY;
                 explodeBuf.truncate(0);
             }
             chFromText = FALSE;
         }
     }
-    if (buffer.size() > 0) {
-        bufferLimit = buffer.size() - 1;
+    if (buffer.length() > 0) {
+        bufferLimit = buffer.length() - 1;
         ch = buffer[0];
     } else {
         ch = DONE;
@@ -514,7 +514,7 @@ UChar Normalizer::prevCompose()
         }
     }
     // If there's more than one character in the buffer, compose it all at once....
-    if (buffer.size() > 0) {
+    if (buffer.length() > 0) {
         // TODO: The performance of this is awful; add a way to compose
         // a UnicodeString& in place.
       UnicodeString composed;
@@ -522,8 +522,8 @@ UChar Normalizer::prevCompose()
       buffer.truncate(0);
       buffer += composed;
         
-        if (buffer.size() > 1) {
-            bufferLimit = bufferPos = buffer.size() - 1;
+        if (buffer.length() > 1) {
+            bufferLimit = bufferPos = buffer.length() - 1;
             ch = buffer[bufferPos];
         } else {
             ch = buffer[0];
@@ -538,7 +538,7 @@ UChar Normalizer::prevCompose()
 
 void Normalizer::bubbleAppend(UnicodeString& target, UChar ch, uint32_t cclass) {
     UTextOffset i;
-    for (i = target.size() - 1; i > 0; --i) {
+    for (i = target.length() - 1; i > 0; --i) {
         uint32_t iClass = getComposeClass(target[i]);
 
         if (iClass == 1 || iClass <= cclass) {      // 1 means combining class 0
@@ -602,7 +602,7 @@ Normalizer::decompose(const UnicodeString& source,
   
   result.truncate(0);
   
-  for (UTextOffset i = 0; i < source.size(); ++i) {
+  for (UTextOffset i = 0; i < source.length(); ++i) {
     UChar ch = source[i];
     
     uint16_t offset = ucmp16_getu(DecompData::offsets, ch);
@@ -666,14 +666,14 @@ UChar Normalizer::nextDecomp()
       buffer += ch;
         }
       
-      if (buffer.size() > 1 && needToReorder) {
+      if (buffer.length() > 1 && needToReorder) {
     // If there is more than one combining character in the buffer,
     // put them into the canonical order.
     // But we don't need to sort if only characters are the ones that
     // resulted from decomosing the base character.
     fixCanonical(buffer);
       }
-      bufferLimit = buffer.size() - 1;
+      bufferLimit = buffer.length() - 1;
       ch = buffer[0];
     } else {
       // Just use this character, but first advance to the next one
@@ -683,7 +683,7 @@ UChar Normalizer::nextDecomp()
       if (hangul && ch >= HANGUL_BASE && ch < HANGUL_LIMIT) {
     initBuffer();
     hangulToJamo(ch, buffer, minDecomp);
-    bufferLimit = buffer.size() - 1;
+    bufferLimit = buffer.length() - 1;
     ch = buffer[0];
       }
     }
@@ -733,18 +733,18 @@ UChar Normalizer::prevDecomp() {
             text->next();
         }
 
-        if (buffer.size() > 1) {
+        if (buffer.length() > 1) {
             // If there is more than one combining character in the buffer,
             // put them into the canonical order.
             fixCanonical(buffer);
         }
-        bufferLimit = bufferPos = buffer.size() - 1;
+        bufferLimit = bufferPos = buffer.length() - 1;
         ch = buffer[bufferPos];
     }
     else if (hangul && ch >= HANGUL_BASE && ch < HANGUL_LIMIT) {
         initBuffer();
         hangulToJamo(ch, buffer, minDecomp);
-        bufferLimit = bufferPos = buffer.size() - 1;
+        bufferLimit = bufferPos = buffer.length() - 1;
         ch = buffer[bufferPos];
     }
     return ch;
@@ -762,7 +762,7 @@ uint8_t Normalizer::getClass(UChar ch) {
  * @param result the string to fix.
  */
 void Normalizer::fixCanonical(UnicodeString& result) {
-    UTextOffset i = result.size() - 1;
+    UTextOffset i = result.length() - 1;
     uint8_t currentType = getClass(result[i]);
     uint8_t lastType;
     
@@ -781,7 +781,7 @@ void Normalizer::fixCanonical(UnicodeString& result) {
             result[i+1] = temp;
 
             // if not at end, backup (one further, to compensate for for-loop)
-            if (i < result.size() - 2) {
+            if (i < result.length() - 2) {
                 i += 2;
             }
             // reset type, since we swapped.
@@ -1159,7 +1159,7 @@ void Normalizer::jamoAppend(UChar ch, uint16_t decompLimit, UnicodeString& dest)
 
 void Normalizer::jamoToHangul(UnicodeString& buffer, UTextOffset start) {
     UTextOffset out = start;
-    UTextOffset limit = buffer.size() - 1;
+    UTextOffset limit = buffer.length() - 1;
 
     UTextOffset in;
     uint16_t l, v, t;
@@ -1188,7 +1188,7 @@ void Normalizer::jamoToHangul(UnicodeString& buffer, UTextOffset start) {
             buffer[out++] = ch;
         }
     }
-    while (in < buffer.size()) {
+    while (in < buffer.length()) {
         buffer[out++] = buffer[in++];
     }
 

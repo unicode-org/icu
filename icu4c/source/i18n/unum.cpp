@@ -538,12 +538,12 @@ unum_getSymbols(const UNumberFormat* fmt,
   syms->minusSign         = dfs->getMinusSign();
   
   dfs->getCurrencySymbol(temp);
-  len = icu_min(temp.size(), UNFSYMBOLSMAXSIZE);
+  len = icu_min(temp.length(), UNFSYMBOLSMAXSIZE);
   u_strncpy(syms->currency, temp.getUChars(), len);
   syms->currency[len > 0 ? len + 1 : 0] = 0x0000;
 
   dfs->getInternationalCurrencySymbol(temp);
-  len = icu_min(temp.size(), UNFSYMBOLSMAXSIZE);
+  len = icu_min(temp.length(), UNFSYMBOLSMAXSIZE);
   u_strncpy(syms->intlCurrency, temp.getUChars(), len);
   syms->intlCurrency[len > 0 ? len + 1 : 0] = 0x0000;
   
@@ -553,12 +553,12 @@ unum_getSymbols(const UNumberFormat* fmt,
   syms->padEscape       = dfs->getPadEscape();
 
   dfs->getInfinity(temp);
-  len = icu_min(temp.size(), UNFSYMBOLSMAXSIZE);
+  len = icu_min(temp.length(), UNFSYMBOLSMAXSIZE);
   u_strncpy(syms->infinity, temp.getUChars(), len);
   syms->infinity[len > 0 ? len + 1 : 0] = 0x0000;
 
   dfs->getNaN(temp);
-  len = icu_min(temp.size(), UNFSYMBOLSMAXSIZE);
+  len = icu_min(temp.length(), UNFSYMBOLSMAXSIZE);
   u_strncpy(syms->naN, temp.getUChars(), len);
   syms->naN[len > 0 ? len + 1 : 0] = 0x0000;
 }

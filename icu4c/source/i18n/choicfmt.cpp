@@ -240,11 +240,11 @@ ChoiceFormat::applyPattern(const UnicodeString& newPattern,
     double startValue = 0;
     double oldStartValue = icu_getNaN();
     bool_t inQuote = FALSE;
-    for(int i = 0; i < newPattern.size(); ++i) {
+    for(int i = 0; i < newPattern.length(); ++i) {
         UChar ch = newPattern[i];
         if(ch == 0x0027 /*'\''*/) {
             // Check for "''" indicating a literal quote
-            if((i+1) < newPattern.size() && newPattern[i+1] == ch) {
+            if((i+1) < newPattern.length() && newPattern[i+1] == ch) {
                 segments[part] += ch;
                 ++i;
             }
@@ -367,7 +367,7 @@ ChoiceFormat::toPattern(UnicodeString& result) const
         if (text.indexOf(0x0027 /*'\''*/) < 0) 
             result += text;
         else {
-            for (int j = 0; j < text.size(); ++j) {
+            for (int j = 0; j < text.length(); ++j) {
                 UChar c = text[j];
                 result += c;
                 if (c == 0x0027 /*'\''*/) 
@@ -532,13 +532,13 @@ ChoiceFormat::parse(const UnicodeString& text,
     double tempNumber = 0.0;
     for (int i = 0; i < fCount; ++i) {
         UnicodeString tempString = fChoiceFormats[i];
-        if(text.compareBetween(start, tempString.size(), tempString, 0, tempString.size()) == 0) {
-            status.setIndex(start + tempString.size());
+        if(text.compareBetween(start, tempString.length(), tempString, 0, tempString.length()) == 0) {
+            status.setIndex(start + tempString.length());
             tempNumber = fChoiceLimits[i];
             if (status.getIndex() > furthest) {
                 furthest = status.getIndex();
                 bestNumber = tempNumber;
-                if (furthest == text.size()) 
+                if (furthest == text.length()) 
                     break;
             }
         }

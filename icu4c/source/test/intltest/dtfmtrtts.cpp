@@ -305,7 +305,7 @@ int32_t DateFormatRoundTripTest::getField(UDate d, int32_t f) {
 UnicodeString& DateFormatRoundTripTest::escape(const UnicodeString& src, UnicodeString& dst ) 
 {
     dst.remove();
-    for (int32_t i = 0; i < src.size(); ++i) {
+    for (int32_t i = 0; i < src.length(); ++i) {
         UChar c = src[i];
         if(c < 0x0080) 
             dst += c;

@@ -537,7 +537,7 @@ TimeZone::createCustomTimeZone(const UnicodeString& id)
     UnicodeString idUppercase = id;
     idUppercase.toUpper();
 
-    if (id.size() > GMT_ID_LENGTH &&
+    if (id.length() > GMT_ID_LENGTH &&
         idUppercase.startsWith(GMT_ID))
     {
         ParsePosition pos(GMT_ID_LENGTH);
@@ -564,7 +564,7 @@ TimeZone::createCustomTimeZone(const UnicodeString& id)
         if (pos.getIndex() == start) return 0;
         offset = n.getLong();
 
-        if (pos.getIndex() < id.size() &&
+        if (pos.getIndex() < id.length() &&
             id[pos.getIndex()] == 0x003A /*':'*/)
         {
             // hh:mm

@@ -82,10 +82,10 @@ UnicodeStringTest::TestBasicManipulation()
     if (test2 != expectedValue)
         errln("operator+=() failed:  expected \"" + expectedValue + "\"\n,got \"" + test2 + "\"");
     
-    if (test1.size() != 70)
-        errln("size() failed: expected 70, got " + test1.size());
-    if (test2.size() != 30)
-        errln("size() failed: expected 30, got " + test2.size());
+    if (test1.length() != 70)
+        errln("length() failed: expected 70, got " + test1.length());
+    if (test2.length() != 30)
+        errln("length() failed: expected 30, got " + test2.length());
 }
 
 void
@@ -225,7 +225,7 @@ UnicodeStringTest::TestRemoveReplace()
               "  expected \"The SPAM in SPAM SPAM SPAM on the SPAM\",\n"
               "  got \"" + test1 + "\"");
 
-    for (UTextOffset i = 0; i < test1.size(); i++)
+    for (UTextOffset i = 0; i < test1.length(); i++)
         if (test5[i] != 'S' && test5[i] != 'P' && test5[i] != 'A' && test5[i] != 'M' && test5[i] != ' ')
             test1[i] = 'x';
 
@@ -235,7 +235,7 @@ UnicodeStringTest::TestRemoveReplace()
               "  got \"" + test1 + "\"");
 
     test1.remove();
-    if (test1.size() != 0)
+    if (test1.length() != 0)
         errln("Remove() failed: expected empty string, got \"" + test1 + "\"");
 }
 
@@ -301,14 +301,14 @@ UnicodeStringTest::TestCaseConversion()
     if (test3 != expectedResult)
         errln("toUpper failed: expected \"" + expectedResult + "\", got \"" + test3 + "\".");
     
-    test4.replace(0, test4.size(), uppercaseGreek);
+    test4.replace(0, test4.length(), uppercaseGreek);
 
     test4.toLower(Locale("el", "GR"));
     expectedResult = lowercaseGreek;
     if (test4 != expectedResult)
         errln("toLower failed: expected \"" + expectedResult + "\", got \"" + test4 + "\".");
     
-    test4.replace(0, test4.size(), lowercaseGreek);
+    test4.replace(0, test4.length(), lowercaseGreek);
 
     test4.toUpper();
     expectedResult = uppercaseGreek;
@@ -326,14 +326,14 @@ UnicodeStringTest::TestSearching()
     uint16_t occurrences = 0;
     UTextOffset startPos = 0;
     for ( ;
-          startPos != -1 && startPos < test1.size();
+          startPos != -1 && startPos < test1.length();
           (startPos = test1.indexOf(test2, startPos)) != -1 ? (++occurrences, startPos += 4) : 0)
         ;
     if (occurrences != 6)
         errln("indexOf failed: expected to find 6 occurrences, found " + occurrences);
 
     for ( occurrences = 0, startPos = 10;
-          startPos != -1 && startPos < test1.size();
+          startPos != -1 && startPos < test1.length();
           (startPos = test1.indexOf(test2, startPos)) != -1 ? (++occurrences, startPos += 4) : 0)
         ;
     if (occurrences != 4)
@@ -341,28 +341,28 @@ UnicodeStringTest::TestSearching()
 
     UTextOffset endPos = 28;
     for ( occurrences = 0, startPos = 5;
-          startPos != -1 && startPos < test1.size();
+          startPos != -1 && startPos < test1.length();
           (startPos = test1.indexOf(test2, startPos, endPos - startPos)) != -1 ? (++occurrences, startPos += 4) : 0)
         ;
     if (occurrences != 4)
         errln("indexOf with starting and ending offsets failed: expected to find 4 occurrences, found " + occurrences);
 
     for ( occurrences = 0, startPos = 0;
-          startPos != -1 && startPos < test1.size();
+          startPos != -1 && startPos < test1.length();
           (startPos = test1.indexOf(testChar, startPos)) != -1 ? (++occurrences, startPos += 1) : 0)
         ;
     if (occurrences != 16)
         errln("indexOf with character failed: expected to find 16 occurrences, found " + occurrences);
 
     for ( occurrences = 0, startPos = 10;
-          startPos != -1 && startPos < test1.size();
+          startPos != -1 && startPos < test1.length();
           (startPos = test1.indexOf(testChar, startPos)) != -1 ? (++occurrences, startPos += 1) : 0)
         ;
     if (occurrences != 12)
         errln("indexOf with character & start offset failed: expected to find 12 occurrences, found " + occurrences);
 
     for ( occurrences = 0, startPos = 5, endPos = 28;
-          startPos != -1 && startPos < test1.size();
+          startPos != -1 && startPos < test1.length();
           (startPos = test1.indexOf(testChar, startPos, endPos - startPos)) != -1 ? (++occurrences, startPos += 1) : 0)
         ;
     if (occurrences != 10)
@@ -553,16 +553,16 @@ UnicodeStringTest::TestMiscellaneous()
         errln("getUChars() affected the string!");
 
     UTextOffset i;
-    for (i = 0; i < test2.size(); i++)
+    for (i = 0; i < test2.length(); i++)
         if (test2[i] != test4[i])
             errln(UnicodeString("getUChars() failed: strings differ at position ") + i);
 
     test4 = test1.orphanStorage();
 
-    if (test1.size() != 0)
+    if (test1.length() != 0)
         errln("orphanStorage() failed: orphaned string's contents is " + test1);
 
-    for (i = 0; i < test2.size(); i++)
+    for (i = 0; i < test2.length(); i++)
         if (test2[i] != test4[i])
             errln(UnicodeString("orphanStorage() failed: strings differ at position ") + i);
 

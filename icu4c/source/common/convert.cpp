@@ -43,7 +43,7 @@ UnicodeConverterCPP::UnicodeConverterCPP(const UnicodeString& name, UErrorCode& 
 {
   char myName[UCNV_MAX_CONVERTER_NAME_LENGTH];
   int i;
-  name.extract(0, i = name.size(), myName);
+  name.extract(0, i = name.length(), myName);
   myName[i]='\0';
   myUnicodeConverter = ucnv_open(myName, &err);
 }
@@ -139,7 +139,7 @@ UnicodeConverterCPP::fromUnicodeString(char*                    target,
   ucnv_reset(&myConverter);
 
 
-  mySourceLength = source.size();
+  mySourceLength = source.length();
   mySource = source.getUChars();
   myTarget = target;
   ucnv_fromUnicode(&myConverter,
@@ -211,7 +211,7 @@ UnicodeConverterCPP::toUnicodeString(UnicodeString&         target,
 		     &err);
 
       /*appends what we got thus far to the UnicodeString*/
-      target.replace((UTextOffset)target.size(),
+      target.replace((UTextOffset)target.length(),
              myTargetUCharsAlias - myTargetUChars,
              myTargetUChars,
              myTargetUCharsAlias - myTargetUChars);

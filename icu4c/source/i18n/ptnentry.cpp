@@ -140,7 +140,7 @@ void PatternEntry::addToBuffer(UnicodeString& toAddTo,
                    bool_t showWhiteSpace,
                    const PatternEntry* lastEntry) const
 {
-  if (showWhiteSpace && toAddTo.size() > 0)
+  if (showWhiteSpace && toAddTo.length() > 0)
     // Adds new line before each primary strength entry.
     if (strength == Collator::PRIMARY || lastEntry != NULL)
       toAddTo += 0x000A/*'\n'*/;
@@ -169,7 +169,7 @@ void PatternEntry::addToBuffer(UnicodeString& toAddTo,
   appendQuoted(chars,toAddTo);
   // If there's an expending char and needs to be shown, 
   // append that after the entry
-  if (showExtension && extension.size() != 0) {
+  if (showExtension && extension.length() != 0) {
     toAddTo += 0x002F/*'/'*/;
     appendQuoted(extension,toAddTo);
   }
@@ -249,7 +249,7 @@ PatternEntry *PatternEntry::Parser::next(UErrorCode &status)
   newChars.remove();
   newExtensions.remove();
 
-  while (index < pattern.size())
+  while (index < pattern.length())
     {
       UChar ch = pattern[index];
 
@@ -261,7 +261,7 @@ PatternEntry *PatternEntry::Parser::next(UErrorCode &status)
         }
       else
         {
-          if ((newChars.size() == 0) || inChars)
+          if ((newChars.length() == 0) || inChars)
         {
           newChars += ch;
         }
@@ -338,7 +338,7 @@ PatternEntry *PatternEntry::Parser::next(UErrorCode &status)
           inQuote = TRUE;
           ch = pattern[++index];
 
-          if (newChars.size() == 0)
+          if (newChars.length() == 0)
         {
           newChars += ch;
         }
@@ -394,7 +394,7 @@ PatternEntry *PatternEntry::Parser::next(UErrorCode &status)
       return NULL;
     }
 
-  if (newChars.size() == 0)
+  if (newChars.length() == 0)
     {
       status = U_INVALID_FORMAT_ERROR;
       return NULL;
