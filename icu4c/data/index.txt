@@ -56,7 +56,6 @@ index {
         en_GB,
         en_IE,
         en_IE_EURO,
-        en_MT,
         en_NZ,
         en_SG,
         en_US,
