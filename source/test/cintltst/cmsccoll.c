@@ -574,7 +574,12 @@ static void BillFairmanTest( ) {
 static void testPrimary(UCollator* col, const UChar* p,const UChar* q){
     UChar source[256] = { '\0'};
     UChar target[256] = { '\0'};
-
+    UChar preP = 0x31a3;
+    UChar preQ = 0x310d;
+/*
+    UChar preP = (*p>0x0400 && *p<0x0500)?0x00e1:0x491;
+    UChar preQ = (*p>0x0400 && *p<0x0500)?0x0041:0x413;
+*/
     /*log_verbose("Testing primary\n");*/
 
     doTest(col, p, q, UCOL_LESS);
@@ -587,9 +592,9 @@ static void testPrimary(UCollator* col, const UChar* p,const UChar* q){
        fprintf(file,"Primary failed  source: %s target: %s \n", utfSource,utfTarget);
     }
 */
-    source[0] = 0x0491;
+    source[0] = preP;
     u_strcpy(source+1,p);
-    target[0] = 0x0413;
+    target[0] = preQ;
     u_strcpy(target+1,q);
     doTest(col, source, target, UCOL_LESS);
 /*
@@ -1080,8 +1085,8 @@ static const char* localesToTest[] = {
 "hr", "hu", "is", "iw", "ja", 
 "ko", "lt", "lv", "mk", "mt", 
 "nb", "nn", "nn_NO", "pl", "ro", 
-/*"ru",*/ /*"sh",*/ "sk", "sl", "sq", /* sh test is turned off until we do closure in contractions */
-/*"sr",*/ "sv", "th", "tr", /*"uk", */
+"ru", /*"sh",*/ "sk", "sl", "sq", /* sh test is turned off until we do closure in contractions */
+"sr", "sv", "th", "tr", /*"uk", */
 "vi", "zh", "zh_TW"
 };
 
@@ -1205,6 +1210,65 @@ static void IsTailoredTest( ) {
   }
 }
 
+/**
+* Tests the [variable top] tag in rule syntax. Since the default [alternate]
+* tag has the value shifted, any codepoints before [variable top] should give
+* a primary ce of 0.
+*/
+static void TestVariableTop(void) {
+    const char       *str          = "[alternate shifted] &B [variable top]";
+          int         len          = strlen(str);
+          UChar      *rules;
+          UCollator  *myCollation;
+          UCollator  *enCollation;
+          UErrorCode  status       = U_ZERO_ERROR;
+          UChar       source[1];
+          UChar       ch;
+          uint8_t     result[20];
+
+    rules = (UChar*)malloc(sizeof(UChar*) * (len + 1));
+    u_uastrcpy(rules, str);
+
+    enCollation = ucol_open("en_US", &status);
+    myCollation = ucol_openRules(rules, len, UCOL_NO_NORMALIZATION, 
+                                 UCOL_PRIMARY, &status);
+    if (U_FAILURE(status)) {
+        log_err("ERROR: in creation of rule based collator :%s\n", 
+                myErrorName(status));
+    }
+
+    ucol_setStrength(enCollation, UCOL_PRIMARY);
+    ucol_setAttribute(enCollation, UCOL_ALTERNATE_HANDLING, UCOL_SHIFTED,
+                      &status);
+    ucol_setAttribute(myCollation, UCOL_ALTERNATE_HANDLING, UCOL_SHIFTED,
+                      &status);
+    if (ucol_getAttribute(myCollation, UCOL_ALTERNATE_HANDLING, &status) !=
+        UCOL_SHIFTED || U_FAILURE(status)) {
+        log_err("ERROR: ALTERNATE_HANDLING value can not be set to SHIFTED\n");
+    }
+
+    /* space is supposed to be a variable */
+    source[0] = ' ';
+    len = ucol_getSortKey(enCollation, source, 1, result, 
+                          sizeof(result));
+
+    ch = 'A';
+    while (ch < 'z') {
+        source[0] = ch;
+        len = ucol_getSortKey(enCollation, source, 1, result, 
+                              sizeof(result));
+        len = ucol_getSortKey(myCollation, source, 1, result,
+                              sizeof(result));
+        ch ++;
+    }
+  
+    free(rules);
+    ucol_close(enCollation);
+    ucol_close(myCollation);
+    enCollation = NULL;
+    myCollation = NULL;
+}
+
 void addMiscCollTest(TestNode** root)
 { 
     addTest(root, &TestCase, "tscoll/cmsccoll/TestCase");
@@ -1216,5 +1280,6 @@ void addMiscCollTest(TestNode** root)
     addTest(root, &IsTailoredTest, "tscoll/cmsccoll/IsTailoredTest");
     addTest(root, &testCollations, "tscoll/cmsccoll/testCollations");
     /*addTest(root, &PrintMarkDavis, "tscoll/cmsccoll/PrintMarkDavis");*/
+    /*addTest(root, &TestVariableTop, "tscoll/cmsccoll/TestVariableTop");*/
 }
 
