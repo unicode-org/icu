@@ -130,7 +130,7 @@ void TestSurrogateBehaviour(){
                (char)0xed, (char)0xb0, (char)0x81, (char)0x32};
         const char expectedFlushFalse[] = 
             {  (char)0xe4, (char)0xb8, (char)0x80, (char)0xdc, (char)0x81, (char)0x31, (char)0xeb, (char)0xbf, 
-               (char)0x81, (char)0xF0, (char)0xF0, (char)0x90, (char)0x81, (char)0x32};
+               (char)0x81, (char)0xF0, (char)0x90, (char)0x90, (char)0x81, (char)0x32};
         
         int32_t fromOffsets[] = { 0x0000, 0x0002, 0x0005, 0x0006, 0x0009, 0x000C, 0x000F }; 
         /*UTF-8*/
@@ -143,10 +143,10 @@ void TestSurrogateBehaviour(){
          /*UTF-8*/
         if(!convertFromU(sampleText, sizeof(sampleText)/sizeof(sampleText[0]),
             expected, sizeof(expected), "UTF8", 0, TRUE, U_ZERO_ERROR ))
-            log_err("u-> UTF8 did not match.\n");
+            log_err("u-> UTF8 did not match with flush true.\n");
         if(!convertFromU(sampleText, sizeof(sampleText)/sizeof(sampleText[0]),
             expectedFlushFalse, sizeof(expectedFlushFalse), "UTF8", 0, FALSE, U_ZERO_ERROR ))
-            log_err("u-> UTF8 did not match.\n");
+            log_err("u-> UTF8 did not match with flush false.\n");
 
 
         if(!convertToU(expected, sizeof(expected), 
@@ -450,7 +450,9 @@ UBool convertFromU( const UChar *source, int sourceLen,  const char *expect, int
     }
     else {    
         log_err("String does not match. FROM Unicode to codePage%s\n", codepage);
+        printf("\nGot:");
         printSeqErr((const unsigned char *)buffer, expectLen);
+        printf("\nExpected:");
         printSeqErr((const unsigned char *)expect, expectLen);
         return FALSE;
     }
@@ -560,7 +562,9 @@ UBool convertToU( const char *source, int sourceLen, const UChar *expect, int ex
     }
     else {    
         log_err("String does not match. FROM Unicode to codePage%s\n", codepage);
+        printf("\nGot:");
         printUSeq(buffer, expectLen);
+        printf("\nExpected:");
         printUSeq(expect, expectLen);
         return FALSE;
     }
