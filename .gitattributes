@@ -77,6 +77,9 @@ icu4c/source/data/brkitr/word_thBE.brk -text
 icu4c/source/data/brkitr/word_thLE.brk -text
 icu4c/source/test/testdata/en_US.uni -text
 icu4c/source/test/testdata/uni-text.txt -text
+icu4j/src/com/ibm/demo/rbbi/genesis.dict -text
+icu4j/src/com/ibm/icu/dev/data/holidays_jp.ucs -text
+icu4j/src/data/holidays_jp.ucs -text
 
 # The following file types are stored in Git-LFS.
 *.jar filter=lfs diff=lfs merge=lfs -text

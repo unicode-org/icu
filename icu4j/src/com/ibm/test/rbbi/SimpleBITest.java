@@ -1,0 +1,261 @@
+/*
+ * (C) IBM Corp. 1997-1998.  All Rights Reserved.
+ *
+ * The program is provided "as is" without any warranty express or
+ * implied, including the warranty of non-infringement and the implied
+ * warranties of merchantibility and fitness for a particular purpose.
+ * IBM will not be liable for any damages suffered by you as a result
+ * of using the Program. In no event will IBM be liable for any
+ * special, indirect or consequential damages or lost profits even if
+ * IBM has been advised of the possibility of their occurrence. IBM
+ * will not be liable for any third party claims against you.
+ */
+package com.ibm.test.RuleBasedBreakIterator;
+
+import java.util.Locale;
+import com.ibm.text.BreakIterator;
+
+public class SimpleBITest {
+    public static final String testText =
+//        "The rain in Spain stays mainly on the plain.  The plains in Spain are mainly pained with rain.";
+//"one-two now--  Hah!  You owe me exactly $1,345.67...  Pay up, huh?  By the way, why don't I send you my re\u0301sume\u0301?  This is a line\r\nbreak.";
+//"nowisthetimeforallgoodmen...  tocometothehelpoftheircountry";
+"When, in the course of human events, it becomes necessary for one people to dissolve the political bonds which have "
+//"When,inthecourseofhumanevents,itbecomesnecessaryforonepeopletodissolvethepoliticalbondswhichhave"
++ "connectedthemwithanother,andtoassumeamongthepowersoftheearth,theseparateandequalstationtowhichthelaws"
++ "ofnatureandofnature'sGodentitlethem,adecentrespecttotheopinionsofmankindrequiresthattheyshoulddeclarethe"
++ "causeswhichimpelthemtotheseparation\n"
++ "Weholdthesetruthstobeself-evident,thatallmenarecreatedequal,thattheyareendowedbytheirCreatorwithcertain"
++ "unalienablerights,thatamongthesearelife,libertyandthepursuitofhappiness.Thattosecuretheserights,governmentsare"
++ "institutedamongmen,derivingtheirjustpowersfromtheconsentofthegoverned.Thatwheneveranyformofgovernment"
++ "becomesdestructivetotheseends,itistherightofthepeopletoalterortoabolishit,andtoinstitutenewgovernment,laying"
++ "itsfoundationonsuchprinciplesandorganizingitspowersinsuchform,astothemshallseemmostlikelytoeffecttheirsafety"
++ "andhappiness.Prudence,indeed,willdictatethatgovernmentslongestablishedshouldnotbechangedforlightandtransient"
++ "causes;andaccordinglyallexperiencehathshownthatmankindaremoredisposedtosuffer,whileevilsaresufferable,than"
++ "torightthemselvesbyabolishingtheformstowhichtheyareaccustomed.Butwhenalongtrainofabusesandusurpations,"
++ "pursuinginvariablythesameobjectevincesadesigntoreducethemunderabsolutedespotism,itistheirright,itistheirduty,"
++ "tothrowoffsuchgovernment,andtoprovidenewguardsfortheirfuturesecurity.--Suchhasbeenthepatientsufferanceof"
++ "thesecolonies;andsuchisnowthenecessitywhichconstrainsthemtoaltertheirformersystemsofgovernment.Thehistory"
++ "ofthepresentKingofGreatBritainisahistoryofrepeatedinjuriesandusurpations,allhavingindirectobjectthe"
++ "establishmentofanabsolutetyrannyoverthesestates.Toprovethis,letfactsbesubmittedtoacandidworld.\n"
++ "Hehasrefusedhisassenttolaws,themostwholesomeandnecessaryforthepublicgood.\n"
++ "Hehasforbiddenhisgovernorstopasslawsofimmediateandpressingimportance,unlesssuspendedintheiroperationtill"
++ "hisassentshouldbeobtained;andwhensosuspended,hehasutterlyneglectedtoattendtothem.\n"
++ "Hehasrefusedtopassotherlawsfortheaccommodationoflargedistrictsofpeople,unlessthosepeoplewouldrelinquish"
++ "therightofrepresentationinthelegislature,arightinestimabletothemandformidabletotyrantsonly.\n"
++ "Hehascalledtogetherlegislativebodiesatplacesunusual,uncomfortable,anddistantfromthedepositoryoftheirpublic"
++ "records,forthesolepurposeoffatiguingthemintocompliancewithhismeasures.\n"
++ "Hehasdissolvedrepresentativehousesrepeatedly,foropposingwithmanlyfirmnesshisinvasionsontherightsofthepeople.\n"
++ "Hehasrefusedforalongtime,aftersuchdissolutions,tocauseotherstobeelected;wherebythelegislativepowers,"
++ "incapableofannihilation,havereturnedtothepeopleatlargefortheirexercise;thestateremaininginthemeantimeexposed"
++ "toallthedangersofinvasionfromwithout,andconvulsionswithin.\n"
++ "Hehasendeavoredtopreventthepopulationofthesestates;forthatpurposeobstructingthelawsfornaturalizationof"
++ "foreigners;refusingtopassotherstoencouragetheirmigrationhither,andraisingtheconditionsofnewappropriationsof"
++ "lands.\n"
++ "Hehasobstructedtheadministrationofjustice,byrefusinghisassenttolawsforestablishingjudiciarypowers.\n"
++ "Hehasmadejudgesdependentonhiswillalone,forthetenureoftheiroffices,andtheamountandpaymentoftheirsalaries.\n"
++ "Hehaserectedamultitudeofnewoffices,andsenthitherswarmsofofficerstoharassourpeople,andeatouttheir"
++ "substance.\n"
++ "Hehaskeptamongus,intimesofpeace,standingarmieswithouttheconsentofourlegislature.\n"
++ "Hehasaffectedtorenderthemilitaryindependentofandsuperiortocivilpower.\n"
++ "Hehascombinedwithotherstosubjectustoajurisdictionforeigntoourconstitution,andunacknowledgedbyourlaws;"
++ "givinghisassenttotheiractsofpretendedlegislation:\n"
++ "Forquarteringlargebodiesofarmedtroopsamongus:\n"
++ "Forprotectingthem,bymocktrial,frompunishmentforanymurderswhichtheyshouldcommitontheinhabitantsofthese"
++ "states:\n"
++ "Forcuttingoffourtradewithallpartsoftheworld:\n"
++ "Forimposingtaxesonuswithoutourconsent:\n"
++ "Fordeprivingusinmanycases,ofthebenefitsoftrialbyjury:\n"
++ "Fortransportingusbeyondseastobetriedforpretendedoffenses:\n"
++ "ForabolishingthefreesystemofEnglishlawsinaneighboringprovince,establishingthereinanarbitrarygovernment,and"
++ "enlargingitsboundariessoastorenderitatonceanexampleandfitinstrumentforintroducingthesameabsoluteruleinthese"
++ "colonies:\n"
++ "Fortakingawayourcharters,abolishingourmostvaluablelaws,andalteringfundamentallytheformsofourgovernments:\n"
++ "Forsuspendingourownlegislatures,anddeclaringthemselvesinvestedwithpowertolegislateforusinallcaseswhatsoever.\n"
++ "Hehasabdicatedgovernmenthere,bydeclaringusoutofhisprotectionandwagingwaragainstus.\n"
++ "Hehasplunderedourseas,ravagedourcoasts,burnedourtowns,anddestroyedthelivesofourpeople.\n"
++ "Heisatthistimetransportinglargearmiesofforeignmercenariestocompletetheworksofdeath,desolationandtyranny,"
++ "alreadybegunwithcircumstancesofcrueltyandperfidyscarcelyparalleledinthemostbarbarousages,andtotalyunworth"
++ "theheadofacivilizednation.\n"
++ "Hehasconstrainedourfellowcitizenstakencaptiveonthehighseastobeararmsagainsttheircountry,tobecomethe"
++ "executionersoftheirfriendsandbrethren,ortofallthemselvesbytheirhands.\n"
++ "Hehasexciteddomesticinsurrectionsamongstus,andhasendeavoredtobringontheinhabitantsofourfrontiers,the"
++ "mercilessIndiansavages,whoseknownruleofwarfare,isundistinguisheddestructionofallages,sexesandconditions.\n"
++ "Ineverystageoftheseoppressionswehavepetitionedforredressinthemosthumbleterms:ourrepeatedpetitionshave"
++ "beenansweredonlybyrepeatedinjury.Aprince,whosecharacteristhusmarkedbyeveryactwhichmaydefineatyrant,is"
++ "unfittobetherulerofafreepeople.\n"
++ "NorhavewebeenwantinginattentiontoourBritishbrethren.Wehavewarnedthemfromtimetotimeofattemptsbytheir"
++ "legislaturetoextendanunwarrantablejurisdictionoverus.Wehaveremindedthemofthecircumstancesofouremigration"
++ "andsettlementhere.Wehaveappealedtotheirnativejusticeandmagnanimity,andwehaveconjuredthembythetiesofour"
++ "commonkindredtodisavowtheseusurpations,which,wouldinevitablyinterruptourconnectionsandcorrespondence.We"
++ "must,therefore,acquiesceinthenecessity,whichdenouncesourseparation,andholdthem,asweholdtherestofmankind,"
++ "enemiesinwar,inpeacefriends.\n"
++ "We,therefore,therepresentativesoftheUnitedStatesofAmerica,inGeneralCongress,assembled,appealingtothe"
++ "SupremeJudgeoftheworldfortherectitudeofourintentions,do,inthename,andbytheauthorityofthegoodpeopleof"
++ "thesecolonies,solemnlypublishanddeclare,thattheseunitedcoloniesare,andofrightoughttobefreeandindependent"
++ "states;thattheyareabsolvedfromallallegiancetotheBritishCrown,andthatallpoliticalconnectionbetweenthemandthe"
++ "stateofGreatBritain,isandoughttobetotallydissolved;andthatasfreeandindependentstates,theyhavefullpowerto"
++ "leveywar,concludepeace,contractalliances,establishcommerce,andtodoallotheractsandthingswhichindependent"
++ "statesmayofrightdo.Andforthesupportofthisdeclaration,withafirmrelianceontheprotectionofDivineProvidence,we"
++ "mutuallypledgetoeachotherourlives,ourfortunesandoursacredhonor.\n";
+
+    public static void main(String[] args) throws java.io.IOException {
+        Locale locale = new Locale("en", "US", "TEST");
+
+/*
+        System.out.println("==================================");
+        System.out.println("Character break:");
+        BreakIterator charBreak = BreakIterator.getCharacterInstance(locale);
+        doTest(charBreak);
+*/
+
+        System.out.println("==================================");
+        System.out.println("Word break:");
+        BreakIterator wordBreak = BreakIterator.getWordInstance(locale);
+        doTest(wordBreak);
+
+        System.out.println("==================================");
+        System.out.println("Line break:");
+        BreakIterator lineBreak = BreakIterator.getLineInstance(locale);
+        doTest(lineBreak);
+
+        System.out.println("==================================");
+        System.out.println("Sentence break:");
+        BreakIterator sentenceBreak = BreakIterator.getSentenceInstance(locale);
+        doTest(sentenceBreak);
+/*
+java.io.BufferedReader in = new java.io.BufferedReader(new java.io.InputStreamReader(System.in));
+System.out.print("?");
+String line = in.readLine();
+while (line.length() != 0) {
+System.out.println(line);
+RuleBasedBreakIterator test = new RuleBasedBreakIterator(line);
+System.out.print("?");
+line = in.readLine();
+}
+*/
+    }
+
+    public static void doTest(BreakIterator bi) {
+        {
+//System.out.println("Total number of characters in test string = " + testText.length());
+            // forward
+            bi.setText(testText);
+            int p = bi.first();
+            int lastP = p;
+            String fragment;
+            int breaks = 0;
+            System.out.println("Forward...");
+            while (p != BreakIterator.DONE) {
+//System.out.print(">>>");
+                p = bi.next();
+System.out.print(p);
+                if (p != BreakIterator.DONE)
+                    fragment = testText.substring(lastP, p);
+                else
+                    fragment = testText.substring(lastP);
+//System.out.println();
+                debugPrintln(": >" + fragment + "<");
+                ++breaks;
+                lastP = p;
+            }
+//RuleBasedBreakIterator.printVisitedCharCount();
+//System.out.println("Total number of break positions encountered = " + breaks);
+        }
+/*
+        {
+            // backward
+            bi.setText(testText);
+            int p = bi.last();
+            int lastP = p;
+            int breaks = 0;
+            String fragment;
+            System.out.println("Backward...");
+            while (p != BreakIterator.DONE) {
+//System.out.print(">>>");
+                p = bi.previous();
+                if (p != BreakIterator.DONE)
+                    fragment = testText.substring(p, lastP);
+                else
+                    fragment = testText.substring(0, lastP);
+//System.out.println();
+                debugPrintln(">" + fragment + "<");
+                ++breaks;
+                lastP = p;
+            }
+//RuleBasedBreakIterator.printVisitedCharCount();
+//System.out.println("Total number of break positions encountered = " + breaks);
+        }
+
+        {
+            // forward with following()
+            bi.setText(testText);
+            int p = 0;
+            int lastP = p;
+            int breaks = 0;
+            String fragment;
+            System.out.println("Following...");
+            while (p < testText.length()) {
+//System.out.print(">>>");
+                p = bi.following(p);
+                fragment = testText.substring(lastP, p);
+//System.out.println();
+                debugPrintln(">" + fragment + "<");
+                ++breaks;
+                lastP = p;
+            }
+        }
+        {
+            // backward with preceding()
+            bi.setText(testText);
+            int p = testText.length();
+            int lastP = p;
+            int breaks = 0;
+            String fragment;
+            System.out.println("Preceding...");
+            while (p > 0) {
+//System.out.print(">>>");
+                p = bi.preceding(p);
+                fragment = testText.substring(p, lastP);
+//System.out.println();
+                debugPrintln(">" + fragment + "<");
+                ++breaks;
+                lastP = p;
+            }
+//RuleBasedBreakIterator.printVisitedCharCount();
+//System.out.println("Total number of break positions encountered = " + breaks);
+        }
+*/
+    }
+
+    public static void debugPrintln(String s) {
+        final String zeros = "0000";
+        String temp;
+        StringBuffer out = new StringBuffer();
+        for (int i = 0; i < s.length(); i++) {
+            char c = s.charAt(i);
+            if (c >= ' ' && c < '\u007f')
+                out.append(c);
+            else {
+                out.append("\\u");
+                temp = Integer.toHexString((int)c);
+                out.append(zeros.substring(0, 4 - temp.length()));
+                out.append(temp);
+            }
+        }
+        System.out.println(out);
+    }
+
+    public static void debugPrintln2(String s) {
+        StringBuffer out = new StringBuffer();
+        for (int i = 0; i < s.length(); i++) {
+            char c = s.charAt(i);
+            if (c >= '\u0100')
+                out.append("<" + ((int)c - 0x100) + ">");
+            else
+                out.append(c);
+        }
+        System.out.println(out);
+    }
+}
+
