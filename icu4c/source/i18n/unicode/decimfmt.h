@@ -27,7 +27,6 @@
 #include "unicode/utypes.h"
 #include "unicode/numfmt.h"
 #include "unicode/locid.h"
-
 class DecimalFormatSymbols;
 class DigitList;
 
@@ -249,6 +248,29 @@ public:
                     DecimalFormatSymbols* symbolsToAdopt,
                     UErrorCode& status);
 
+    /**
+     * Create a DecimalFormat from the given pattern and symbols.
+     * Use this constructor when you need to completely customize the
+     * behavior of the format.
+     * <P>
+     * To obtain standard formats for a given
+     * locale, use the factory methods on NumberFormat such as
+     * getInstance or getCurrencyInstance. If you need only minor adjustments
+     * to a standard format, you can modify the format returned by
+     * a NumberFormat factory method.
+     *
+     * @param pattern           a non-localized pattern string
+     * @param symbolsToAdopt    the set of symbols to be used.  The caller should not
+     *                          delete this object after making this call.
+     * @param parseError        Output param to receive errors occured during parsing 
+     * @param status            Output param set to success/failure code. If the
+     *                          pattern is invalid this will be set to a failure code.
+     * @stable
+     */
+    DecimalFormat(  const UnicodeString& pattern,
+                    DecimalFormatSymbols* symbolsToAdopt,
+                    UParseError& parseError,
+                    UErrorCode& status);
     /**
      * Create a DecimalFormat from the given pattern and symbols.
      * Use this constructor when you need to completely customize the
@@ -841,14 +863,28 @@ public:
      * In negative patterns, the minimum and maximum counts are ignored;
      * these are presumed to be set in the positive pattern.
      *
+     * @param pattern    The pattern to be applied.
+     * @param pattern    The pattern to be applied.
+     * @param parseError Struct to recieve information on position 
+     *                   of error if an error is encountered
+     * @param status     Output param set to success/failure code on
+     *                   exit. If the pattern is invalid, this will be
+     *                   set to a failure result.
+     * @stable
+     */
+    virtual void applyPattern(const UnicodeString& pattern,
+                             UParseError& parseError,
+                             UErrorCode& status);
+    /**
+     * Sets the pattern.
      * @param pattern   The pattern to be applied.
      * @param status    Output param set to success/failure code on
      *                  exit. If the pattern is invalid, this will be
      *                  set to a failure result.
      * @stable
-     */
+     */  
     virtual void applyPattern(const UnicodeString& pattern,
-                              UErrorCode& status);
+                             UErrorCode& status);
 
     /**
      * Apply the given pattern to this Format object.  The pattern
@@ -879,7 +915,13 @@ public:
      * @stable
      */
     virtual void applyLocalizedPattern(const UnicodeString& pattern,
+                                       UParseError& parseError,
                                        UErrorCode& status);
+
+    virtual void applyLocalizedPattern(const UnicodeString& pattern,
+                                       UErrorCode& status);
+
+
 
     /**
      * Sets the maximum number of digits allowed in the integer portion of a
@@ -950,14 +992,16 @@ public:
 
 private:
     static char fgClassID;
-
+    static UParseError fParseError;
     /**
      * Do real work of constructing a new DecimalFormat.
      */
     void construct(UErrorCode&               status,
+                   UParseError&             parseErr,
                    const UnicodeString*     pattern = 0,
                    DecimalFormatSymbols*    symbolsToAdopt = 0,
-                   const Locale&            locale = Locale::getDefault());
+                   const Locale&            locale = Locale::getDefault()
+                   );
 
     /**
      * Does the real work of generating a pattern.
@@ -966,16 +1010,18 @@ private:
 
     /**
      * Does the real work of applying a pattern.
-     * @param pattern   The pattern to be applied.
-     * @param localized If true, the pattern is localized; else false.
-     * @param status    Output param set to success/failure code on
-     *                  exit. If the pattern is invalid, this will be
-     *                  set to a failure result.
+     * @param pattern    The pattern to be applied.
+     * @param localized  If true, the pattern is localized; else false.
+     * @param parseError Struct to recieve information on position 
+     *                   of error if an error is encountered
+     * @param status     Output param set to success/failure code on
+     *                   exit. If the pattern is invalid, this will be
+     *                   set to a failure result.
      */
     void applyPattern(const UnicodeString& pattern,
                             UBool localized,
+                            UParseError& parseError,
                             UErrorCode& status);
-
     /**
      * Do the work of formatting a number, either a double or a long.
      */

@@ -2,12 +2,24 @@
 *******************************************************************************
 * Copyright (C) 1996-2001, International Business Machines Corporation and others. All Rights Reserved.
 *******************************************************************************
+*
+*   file name:  umsg.h
+*   encoding:   US-ASCII
+*   tab size:   8 (not used)
+*   indentation:4
+*
+*   Change history:
+*
+*   08/5/2001  Ram         Added C wrappers for C++ API.
+*                          
+*
 */
 
 #ifndef UMSG_H
 #define UMSG_H
 
 #include "unicode/utypes.h"
+#include "unicode/parseerr.h"
 #include <stdarg.h>
 /**
  * \file
@@ -167,57 +179,165 @@
  */
 
 /**
-* Format a message for a locale.
-* This function may perform re-ordering of the arguments depending on the
-* locale. For all numeric arguments, double is assumed unless the type is
-* explicitly integer.  All choice format arguments must be of type double.
-* @param locale The locale for which the message will be formatted
-* @param pattern The pattern specifying the message's format
-* @param patternLength The length of pattern
-* @param result A pointer to a buffer to receive the formatted message.
-* @param resultLength The maximum size of result.
-* @param status A pointer to an UErrorCode to receive any errors
-* @param ... A variable-length argument list containing the arguments specified
-* in pattern.
-* @return The total buffer size needed; if greater than resultLength, the
-* output was truncated.
-* @see u_parseMessage
-* @draft  should this just be usprintf?
-*/
+ * Format a message for a locale.
+ * This function may perform re-ordering of the arguments depending on the
+ * locale. For all numeric arguments, double is assumed unless the type is
+ * explicitly integer.  All choice format arguments must be of type double.
+ * @param locale The locale for which the message will be formatted
+ * @param pattern The pattern specifying the message's format
+ * @param patternLength The length of pattern
+ * @param result A pointer to a buffer to receive the formatted message.
+ * @param resultLength The maximum size of result.
+ * @param status A pointer to an UErrorCode to receive any errors
+ * @param ... A variable-length argument list containing the arguments specified
+ * in pattern.
+ * @return The total buffer size needed; if greater than resultLength, the
+ * output was truncated.
+ * @see u_parseMessage
+ * @draft  should this just be usprintf?
+ */
 U_CAPI int32_t
-u_formatMessage(    const    char        *locale,
-            const    UChar        *pattern,
-                int32_t        patternLength,
-                UChar        *result,
-                int32_t        resultLength,
-                UErrorCode    *status,
+u_formatMessage(const char  *locale,
+                 const UChar *pattern,
+                int32_t     patternLength,
+                UChar       *result,
+                int32_t     resultLength,
+                UErrorCode  *status,
                 ...);
 
 /**
-* Format a message for a locale.
-* This function may perform re-ordering of the arguments depending on the
-* locale. For all numeric arguments, double is assumed unless the type is
-* explicitly integer.  All choice format arguments must be of type double.
-* @param locale The locale for which the message will be formatted
-* @param pattern The pattern specifying the message's format
-* @param patternLength The length of pattern
-* @param result A pointer to a buffer to receive the formatted message.
-* @param resultLength The maximum size of result.
-* @param ap A variable-length argument list containing the arguments specified
-* @param status A pointer to an UErrorCode to receive any errors
-* in pattern.
-* @return The total buffer size needed; if greater than resultLength, the
-* output was truncated.
-* @see u_parseMessage
-*/
+ * Format a message for a locale.
+ * This function may perform re-ordering of the arguments depending on the
+ * locale. For all numeric arguments, double is assumed unless the type is
+ * explicitly integer.  All choice format arguments must be of type double.
+ * @param locale The locale for which the message will be formatted
+ * @param pattern The pattern specifying the message's format
+ * @param patternLength The length of pattern
+ * @param result A pointer to a buffer to receive the formatted message.
+ * @param resultLength The maximum size of result.
+ * @param ap A variable-length argument list containing the arguments specified
+ * @param status A pointer to an UErrorCode to receive any errors
+ * in pattern.
+ * @return The total buffer size needed; if greater than resultLength, the
+ * output was truncated.
+ * @see u_parseMessage
+ */
 U_CAPI int32_t
-u_vformatMessage(    const    char        *locale,
-            const    UChar        *pattern,
-                int32_t        patternLength,
-                UChar        *result,
-                int32_t        resultLength,
-                va_list       ap,
-                UErrorCode    *status);
+u_vformatMessage(   const char  *locale,
+                    const UChar *pattern,
+                    int32_t     patternLength,
+                    UChar       *result,
+                    int32_t     resultLength,
+                    va_list     ap,
+                    UErrorCode  *status);
+
+/**
+ * Parse a message.
+ * For numeric arguments, this function will always use doubles.  Integer types
+ * should not be passed.
+ * This function is not able to parse all output from \Ref{u_formatMessage}.
+ * @param locale The locale for which the message is formatted
+ * @param pattern The pattern specifying the message's format
+ * @param patternLength The length of pattern
+ * @param source The text to parse.
+ * @param sourceLength The length of source, or -1 if null-terminated.
+ * @param status A pointer to an UErrorCode to receive any errors
+ * @param ... A variable-length argument list containing the arguments
+ * specified in pattern.
+ * @see u_formatMessage
+ * @draft
+ */
+U_CAPI void
+u_parseMessage( const char   *locale,
+                const UChar  *pattern,
+                int32_t      patternLength,
+                const UChar  *source,
+                int32_t      sourceLength,
+                UErrorCode   *status,
+                ...);
+
+/**
+ * Parse a message.
+ * For numeric arguments, this function will always use doubles.  Integer types
+ * should not be passed.
+ * This function is not able to parse all output from \Ref{u_formatMessage}.
+ * @param locale The locale for which the message is formatted
+ * @param pattern The pattern specifying the message's format
+ * @param patternLength The length of pattern
+ * @param source The text to parse.
+ * @param sourceLength The length of source, or -1 if null-terminated.
+ * @param ap A variable-length argument list containing the arguments
+ * @param status A pointer to an UErrorCode to receive any errors
+ * specified in pattern.
+ * @see u_formatMessage
+ */
+U_CAPI void
+u_vparseMessage(const char  *locale,
+                const UChar *pattern,
+                int32_t     patternLength,
+                const UChar *source,
+                int32_t     sourceLength,
+                va_list     ap,
+                UErrorCode  *status);
+
+/**
+ * Format a message for a locale.
+ * This function may perform re-ordering of the arguments depending on the
+ * locale. For all numeric arguments, double is assumed unless the type is
+ * explicitly integer.  All choice format arguments must be of type double.
+ * @param locale The locale for which the message will be formatted
+ * @param pattern The pattern specifying the message's format
+ * @param patternLength The length of pattern
+ * @param result A pointer to a buffer to receive the formatted message.
+ * @param resultLength The maximum size of result.
+ * @param status A pointer to an UErrorCode to receive any errors
+ * @param ... A variable-length argument list containing the arguments specified
+ * in pattern.
+ * @param parseError  A pointer to UParseError to receive information about errors
+ *                     occurred during parsing.
+ * @return The total buffer size needed; if greater than resultLength, the
+ * output was truncated.
+ * @see u_parseMessage
+ * @draft  
+ */
+U_CAPI int32_t
+u_formatMessageWithError(   const char    *locale,
+                            const UChar   *pattern,
+                            int32_t       patternLength,
+                            UChar         *result,
+                            int32_t       resultLength,
+                            UParseError   *parseError,
+                            UErrorCode    *status,
+                            ...);
+
+/**
+ * Format a message for a locale.
+ * This function may perform re-ordering of the arguments depending on the
+ * locale. For all numeric arguments, double is assumed unless the type is
+ * explicitly integer.  All choice format arguments must be of type double.
+ * @param locale The locale for which the message will be formatted
+ * @param pattern The pattern specifying the message's format
+ * @param patternLength The length of pattern
+ * @param result A pointer to a buffer to receive the formatted message.
+ * @param resultLength The maximum size of result.
+ * @param parseError  A pointer to UParseError to receive information about errors
+ *                    occurred during parsing.
+ * @param ap A variable-length argument list containing the arguments specified
+ * @param status A pointer to an UErrorCode to receive any errors
+ * in pattern.
+ * @return The total buffer size needed; if greater than resultLength, the
+ * output was truncated.
+ */
+U_CAPI int32_t
+u_vformatMessageWithError(  const char   *locale,
+                            const UChar  *pattern,
+                            int32_t      patternLength,
+                            UChar        *result,
+                            int32_t      resultLength,
+                            UParseError* parseError,
+                            va_list      ap,
+                            UErrorCode   *status);
+
 /**
 * Parse a message.
 * For numeric arguments, this function will always use doubles.  Integer types
@@ -228,6 +348,8 @@ u_vformatMessage(    const    char        *locale,
 * @param patternLength The length of pattern
 * @param source The text to parse.
 * @param sourceLength The length of source, or -1 if null-terminated.
+* @param parseError  A pointer to UParseError to receive information about errors
+*                     occurred during parsing.
 * @param status A pointer to an UErrorCode to receive any errors
 * @param ... A variable-length argument list containing the arguments
 * specified in pattern.
@@ -235,13 +357,14 @@ u_vformatMessage(    const    char        *locale,
 * @draft
 */
 U_CAPI void
-u_parseMessage(    const    char        *locale,
-        const    UChar        *pattern,
-            int32_t        patternLength,
-        const    UChar        *source,
-            int32_t        sourceLength,
-            UErrorCode    *status,
-            ...);
+u_parseMessageWithError(const char  *locale,
+                        const UChar *pattern,
+                        int32_t     patternLength,
+                        const UChar *source,
+                        int32_t     sourceLength,
+                        UParseError *error,
+                        UErrorCode  *status,
+                        ...);
 
 /**
 * Parse a message.
@@ -254,17 +377,204 @@ u_parseMessage(    const    char        *locale,
 * @param source The text to parse.
 * @param sourceLength The length of source, or -1 if null-terminated.
 * @param ap A variable-length argument list containing the arguments
+* @param parseError  A pointer to UParseError to receive information about errors
+*                     occurred during parsing.
 * @param status A pointer to an UErrorCode to receive any errors
 * specified in pattern.
 * @see u_formatMessage
 */
 U_CAPI void
-u_vparseMessage(    const    char        *locale,
-        const    UChar        *pattern,
-            int32_t        patternLength,
-        const    UChar        *source,
-            int32_t        sourceLength,
-            va_list       ap,
-            UErrorCode    *status);
+u_vparseMessageWithError(const char  *locale,
+                         const UChar *pattern,
+                         int32_t     patternLength,
+                         const UChar *source,
+                         int32_t     sourceLength,
+                         va_list     ap,
+                         UParseError *error,
+                         UErrorCode* status);
 
+/////////// New experimental API //////////////////////////////////////////////////
+
+typedef void* UMessageFormat;
+
+
+/**
+ * Open a message formatter with given pattern and for the given locale.
+ * @param pattern       A pattern specifying the format to use.
+ * @param patternLength Length of the pattern to use
+ * @param locale        The locale for which the messages are formatted.
+ * @param parseError    A pointer to UParseError struct to receive any errors 
+ *                      occured during parsing. Can be NULL.
+ * @param status        A pointer to an UErrorCode to receive any errors.
+ * @return              A pointer to a UMessageFormat to use for formatting 
+ *                      messages, or 0 if an error occurred. 
+ * @draft
+ */
+U_CAPI UMessageFormat*
+umsg_open(  const UChar     *pattern,
+            int32_t         patternLength,
+            const  char     *locale,
+            UParseError     *parseError,
+            UErrorCode      *status);
+
+/**
+ * Close a UMessageFormat.
+ * Once closed, a UMessageFormat may no longer be used.
+ * @param fmt The formatter to close.
+ * @draft
+ */
+U_CAPI void
+umsg_close(UMessageFormat* format);
+
+/**
+ * Open a copy of a UMessageFormat.
+ * This function performs a deep copy.
+ * @param fmt The formatter to copy
+ * @param status A pointer to an UErrorCode to receive any errors.
+ * @return A pointer to a UDateFormat identical to fmt.
+ * @draft
+ */
+U_CAPI UMessageFormat
+umsg_clone(const UMessageFormat *fmt,
+           UErrorCode *status);
+/**
+ * Sets the locale. This locale is used for fetching default number or date
+ * format information.
+ * @param fmt The formatter to set
+ * @param locale The locale the formatter should use.
+ */
+U_CAPI void 
+umsg_setLocale(UMessageFormat *fmt,
+               const char* locale);
+
+/**
+ * Gets the locale. This locale is used for fetching default number or date
+ * format information.
+ * @param The formatter to querry
+ * @draft
+ */
+U_CAPI const char* 
+umsg_getLocale(UMessageFormat *fmt);
+
+/**
+ * Sets the pattern.
+ * @param fmt           The formatter to use
+ * @param pattern       The pattern to be applied.
+ * @param patternLength Length of the pattern to use
+ * @param parseError    Struct to receive information on position 
+ *                      of error if an error is encountered.Can be NULL.
+ * @param status        Output param set to success/failure code on
+ *                      exit. If the pattern is invalid, this will be
+ *                      set to a failure result.
+ * @draft
+ */
+U_CAPI void 
+umsg_applyPattern( UMessageFormat *fmt,
+                   const UChar* pattern,
+                   int32_t patternLength,
+                   UParseError* parseError,
+                   UErrorCode* status);
+
+/**
+ * Gets the pattern.
+ * @param fmt          The formatter to use
+ * @param result       A pointer to a buffer to receive the pattern.
+ * @param resultLength The maximum size of result.
+ * @param status       Output param set to success/failure code on
+ *                     exit. If the pattern is invalid, this will be
+ *                     set to a failure result.   
+ * @draft
+ */
+U_CAPI int32_t 
+umsg_toPattern(UMessageFormat *fmt,
+               UChar* result, 
+               int32_t resultLength,
+               UErrorCode* status);
+
+/**
+ * Format a message for a locale.
+ * This function may perform re-ordering of the arguments depending on the
+ * locale. For all numeric arguments, double is assumed unless the type is
+ * explicitly integer.  All choice format arguments must be of type double.
+ * @param fmt           The formatter to use
+ * @param result        A pointer to a buffer to receive the formatted message.
+ * @param resultLength  The maximum size of result.
+ * @param status        A pointer to an UErrorCode to receive any errors
+ * @param ...           A variable-length argument list containing the arguments 
+ *                      specified in pattern.
+ * @return              The total buffer size needed; if greater than resultLength, 
+ *                      the output was truncated.
+ * @draft
+ */
+U_CAPI int32_t
+umsg_format(    UMessageFormat *fmt,
+                UChar          *result,
+                int32_t        resultLength,
+                UErrorCode     *status,
+                ...);
+
+/**
+ * Format a message for a locale.
+ * This function may perform re-ordering of the arguments depending on the
+ * locale. For all numeric arguments, double is assumed unless the type is
+ * explicitly integer.  All choice format arguments must be of type double.
+ * @param fmt          The formatter to use 
+ * @param result       A pointer to a buffer to receive the formatted message.
+ * @param resultLength The maximum size of result.
+ * @param ap           A variable-length argument list containing the arguments 
+ * @param status       A pointer to an UErrorCode to receive any errors
+ *                     specified in pattern.
+ * @return             The total buffer size needed; if greater than resultLength, 
+ *                     the output was truncated.
+ */
+U_CAPI int32_t
+umsg_vformat(   UMessageFormat *fmt,
+                UChar          *result,
+                int32_t        resultLength,
+                va_list        ap,
+                UErrorCode     *status);
+
+/**
+ * Parse a message.
+ * For numeric arguments, this function will always use doubles.  Integer types
+ * should not be passed.
+ * This function is not able to parse all output from \Ref{umsg_format}.
+ * @param fmt           The formatter to use 
+ * @param source        The text to parse.
+ * @param sourceLength  The length of source, or -1 if null-terminated.
+ * @param count         Output param to receive number of elements returned.
+ * @param status        A pointer to an UErrorCode to receive any errors
+ * @param ...           A variable-length argument list containing the arguments
+ *                      specified in pattern.
+ * @draft
+ */
+U_CAPI void
+umsg_parse( UMessageFormat *fmt,
+            const UChar    *source,
+            int32_t        sourceLength,
+            int32_t        *count,
+            UErrorCode     *status,
+            ...);
+
+/**
+ * Parse a message.
+ * For numeric arguments, this function will always use doubles.  Integer types
+ * should not be passed.
+ * This function is not able to parse all output from \Ref{umsg_format}.
+ * @param fmt           The formatter to use 
+ * @param source        The text to parse.
+ * @param sourceLength  The length of source, or -1 if null-terminated.
+ * @param count         Output param to receive number of elements returned.
+ * @param ap            A variable-length argument list containing the arguments
+ * @param status        A pointer to an UErrorCode to receive any errors
+ *                      specified in pattern.
+ * @see u_formatMessage
+ */
+U_CAPI void
+umsg_vparse(UMessageFormat *fmt,
+            const UChar    *source,
+            int32_t        sourceLength,
+            int32_t        *count,
+            va_list        ap,
+            UErrorCode     *status);
 #endif
