@@ -5,8 +5,8 @@
 ******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/tools/normalizer/Attic/QuickCheckBuilder.java,v $ 
-* $Date: 2001/03/03 04:13:37 $ 
-* $Revision: 1.2 $
+* $Date: 2001/03/08 02:06:48 $ 
+* $Revision: 1.3 $
 *
 ******************************************************************************
 */
@@ -23,8 +23,8 @@ import java.io.EOFException;
 import java.util.StringTokenizer;
 
 import com.ibm.util.ByteTrie;
-import com.ibm.icu.text.UCharacter;
-import com.ibm.icu.text.UTF16;
+import com.ibm.text.UCharacter;
+import com.ibm.text.UTF16;
 
 /**
 * Class to generate modified quickcheck data for collation.
@@ -125,56 +125,70 @@ public class QuickCheckBuilder
     byte value = NFD_MAYBE_MASK_;
     byte clear = NFD_NO_MASK_;
 
-    if (normalizationformat.equals(NFC_))
-    {
+    if (normalizationformat.equals(NFC_)) {
       clear = NFC_NO_MASK_;
-      if (state.equals(NO_))
+      if (state.equals(NO_)) {
         value = NFC_NO_MASK_;
-      else
-        if (state.equals(YES_))
-          value = NFC_YES_MASK_;
-        else
-          value = NFC_MAYBE_MASK_;
-    }
-    else
-      if (normalizationformat.equals(NFD_))
-      {
-        if (state.equals(NO_))
-          value = NFD_NO_MASK_;
-        else
-          if (state.equals(YES_))
-            value = NFD_YES_MASK_;
       }
-      else 
-        if (normalizationformat.equals(NFKC_))
-        {
-          clear = NFKC_NO_MASK_;
-          if (state.equals(NO_))
-            value = NFKC_NO_MASK_;
-          else
-            if (state.equals(YES_))
-              value = NFKC_YES_MASK_;
-            else
-              value = NFKC_MAYBE_MASK_;
+      else {
+        if (state.equals(YES_)) {
+          value = NFC_YES_MASK_;
         }
-        else 
-          if (normalizationformat.equals(NFKD_))
-          {
-            clear = NFKD_NO_MASK_;
-            if (state.equals(NO_))
-              value = NFKD_NO_MASK_;
-            else
-              if (state.equals(YES_))
-                value = NFKD_YES_MASK_;
-              else
-                value = NFKD_MAYBE_MASK_;
+        else {
+          value = NFC_MAYBE_MASK_;
+        }
+      }
+    }
+    else {
+      if (normalizationformat.equals(NFD_)) {
+        if (state.equals(NO_)) {
+          value = NFD_NO_MASK_;
+        }
+        else {
+          if (state.equals(YES_)) {
+            value = NFD_YES_MASK_;
           }
+        }
+      }
+      else {
+        if (normalizationformat.equals(NFKC_)) {
+          clear = NFKC_NO_MASK_;
+          if (state.equals(NO_)) {
+            value = NFKC_NO_MASK_;
+          }
+          else {
+            if (state.equals(YES_)) {
+              value = NFKC_YES_MASK_;
+            }
+            else {
+              value = NFKC_MAYBE_MASK_; 
+            }
+          }
+        }
+        else {
+          if (normalizationformat.equals(NFKD_)) {
+            clear = NFKD_NO_MASK_;
+            if (state.equals(NO_)) {
+              value = NFKD_NO_MASK_;
+            }
+            else {
+              if (state.equals(YES_)) {
+                value = NFKD_YES_MASK_;
+              }
+              else {
+                value = NFKD_MAYBE_MASK_;
+              }
+            }
+          }
+        }
+      }
+    }
 
-    for (; startcp <= endcp; startcp ++)
-    {
+    for (; startcp <= endcp; startcp ++) {
       array[startcp] &= clear;
-      if (value != clear)
+      if (value != clear) {
         array[startcp] |= value;
+      }
     }
   }
 
