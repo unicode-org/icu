@@ -319,7 +319,35 @@ IntlTest::prettify(const UnicodeString &source,
 
   return target;
 }
+// Replace nonprintable characters with unicode escapes
+UnicodeString 
+IntlTest::prettify(const UnicodeString &source) 
+           
+{
+  int32_t i;
+  UnicodeString target;
+  target.remove();
+  target += "\"";
+  
+  for (i = 0; i < source.length(); i += 1)
+    {
+      UChar ch = source[i];
 
+      if (ch < 0x09 || (ch > 0x0A && ch < 0x20)|| ch > 0x7E)
+    {
+      target += "\\u";
+      appendHex(ch, 4, target);
+        }
+      else
+    {
+      target += ch;
+        }
+    }
+
+  target += "\"";
+
+  return target;
+}
 // Produce a printable representation of a CollationKey
 UnicodeString &IntlTest::prettify(const CollationKey &source, UnicodeString &target)
 {
