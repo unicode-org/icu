@@ -342,7 +342,7 @@ ucol_openRules(    const    UChar                  *rules,
 
   /*src.source = rules;*/
   src.source = (UChar *)uprv_malloc((2*rulesLength+UCOL_TOK_EXTRA_RULE_SPACE_SIZE)*sizeof(UChar));
-  nSize = unorm_normalize(rules, rulesLength, UNORM_NFD, 0, src.source, rulesLength+UCOL_TOK_EXTRA_RULE_SPACE_SIZE, status);
+  nSize = unorm_normalize(rules, rulesLength, UNORM_NFD, 0, src.source, 2*rulesLength+UCOL_TOK_EXTRA_RULE_SPACE_SIZE, status);
   if(nSize > 2*rulesLength+UCOL_TOK_EXTRA_RULE_SPACE_SIZE || *status == U_BUFFER_OVERFLOW_ERROR) {
     *status = U_ZERO_ERROR;
     src.source = (UChar *)realloc(src.source, (nSize+UCOL_TOK_EXTRA_RULE_SPACE_SIZE)*sizeof(UChar));
