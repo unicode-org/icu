@@ -45,6 +45,12 @@ U_CFUNC const char *
 ucnv_io_getAlias(const char *alias, uint16_t n, UErrorCode *pErrorCode);
 
 /**
+ * Return the number of all standard names.
+ */
+U_CFUNC uint16_t
+ucnv_io_countStandards(UErrorCode *pErrorCode);
+
+/**
  * Return the number of all converter names.
  */
 U_CFUNC uint16_t
