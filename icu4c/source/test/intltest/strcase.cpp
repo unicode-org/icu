@@ -25,8 +25,6 @@
 #include "unicode/ubrk.h"
 #include "ustrtest.h"
 
-class U_NAMESPACE_QUALIFIER BreakIterator;
-
 void
 StringCaseTest::runIndexedTest(int32_t index, UBool exec, const char *&name, char * /*par*/) {
     if (exec) logln("TestSuite StringCaseTest: ");
