@@ -269,9 +269,6 @@ pkg_mak_writeObjRules(UPKGOptions *o,  FileStream *makefile, CharList **objects,
     int32_t genFileOffset = 0;  /* offset from beginning of .c and .o file name, use to chop off package name for AS/400 */
     static int serNo = 0; /* counter for numeric file names */
     char serName[100];
-    int32_t pkgNameOffset;
-
-    pkgNameOffset = uprv_strlen(o->shortName) + 1; /* "icudt28l/" */
 
     if(o->embed) {
       infiles = o->filePaths;
@@ -293,7 +290,7 @@ pkg_mak_writeObjRules(UPKGOptions *o,  FileStream *makefile, CharList **objects,
       if(o->embed) {
         baseName = findBasename(infiles->str); 
       } else {
-        baseName = infiles->str + pkgNameOffset; /* skip the icudt28b/ part */
+        baseName = infiles->str; /* skip the icudt28b/ part */
       }
       p = uprv_strrchr(baseName, '.');
       if( (p == NULL) || (*p == '\0' ) ) {
