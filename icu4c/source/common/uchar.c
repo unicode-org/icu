@@ -183,17 +183,6 @@ loadPropsData(void) {
 }
 
 /* constants and macros for access to the data */
-enum {
-    EXC_UPPERCASE,
-    EXC_LOWERCASE,
-    EXC_TITLECASE,
-    EXC_UNUSED,
-    EXC_NUMERIC_VALUE,
-    EXC_DENOMINATOR_VALUE,
-    EXC_MIRROR_MAPPING,
-    EXC_SPECIAL_CASING,
-    EXC_CASE_FOLDING
-};
 
 /* getting a uint32_t properties word from the data */
 #define HAVE_DATA (havePropsData>0 || (havePropsData==0 && loadPropsData()>0))
@@ -207,13 +196,6 @@ enum {
     } else { \
         (result)=0; \
     }
-#define PROPS_VALUE_IS_EXCEPTION(props) ((props)&UPROPS_EXCEPTION_BIT)
-#define GET_CATEGORY(props) ((props)&0x1f)
-#define GET_NUMERIC_TYPE(props) (((props)>>UPROPS_NUMERIC_TYPE_SHIFT)&7)
-/* ### TODO: 2 or 3 bits for numericType?! */
-#define GET_UNSIGNED_VALUE(props) ((props)>>UPROPS_VALUE_SHIFT)
-#define GET_SIGNED_VALUE(props) ((int32_t)(props)>>UPROPS_VALUE_SHIFT)
-#define GET_EXCEPTIONS(props) (exceptionsTable+GET_UNSIGNED_VALUE(props))
 
 /* finding an exception value */
 #define HAVE_EXCEPTION_VALUE(flags, index) ((flags)&(1UL<<(index)))
@@ -606,6 +588,61 @@ u_charDigitValue(UChar32 c) {
     }
 }
 
+U_CAPI double U_EXPORT2
+u_getNumericValue(UChar32 c) {
+    uint32_t props, numericType;
+    GET_PROPS(c, props);
+    numericType=GET_NUMERIC_TYPE(props);
+
+    if(numericType==0 || numericType>=(int32_t)U_NT_COUNT) {
+        return U_NO_NUMERIC_VALUE;
+    } else {
+        if(!PROPS_VALUE_IS_EXCEPTION(props)) {
+            return GET_SIGNED_VALUE(props);
+        } else {
+            const uint32_t *pe;
+            uint32_t firstExceptionValue;
+
+            int32_t numerator;
+            uint32_t denominator;
+
+            pe=GET_EXCEPTIONS(props);
+            firstExceptionValue=*pe++;
+
+            if(HAVE_EXCEPTION_VALUE(firstExceptionValue, EXC_NUMERIC_VALUE)) {
+                uint32_t flags=firstExceptionValue;
+                int i=EXC_NUMERIC_VALUE;
+                const uint32_t *p=pe;
+                ADD_EXCEPTION_OFFSET(flags, i, p);
+                numerator=(int32_t)*p;
+            } else {
+                numerator=0;
+            }
+            if(HAVE_EXCEPTION_VALUE(firstExceptionValue, EXC_DENOMINATOR_VALUE)) {
+                uint32_t flags=firstExceptionValue;
+                int i=EXC_DENOMINATOR_VALUE;
+                const uint32_t *p=pe;
+                ADD_EXCEPTION_OFFSET(flags, i, p);
+                denominator=*p;
+            } else {
+                denominator=0;
+            }
+
+            switch(firstExceptionValue&((1UL<<EXC_NUMERIC_VALUE)|(1UL<<EXC_DENOMINATOR_VALUE))) {
+            case 1UL<<EXC_NUMERIC_VALUE:
+                return numerator;
+            case 1UL<<EXC_DENOMINATOR_VALUE:
+                return (double)1./(double)denominator;
+            case (1UL<<EXC_NUMERIC_VALUE)|(1UL<<EXC_DENOMINATOR_VALUE):
+                return (double)numerator/(double)denominator;
+            case 0: /* none (should not occur with numericType>0) */
+            default:
+                return U_NO_NUMERIC_VALUE;
+            }
+        }
+    }
+}
+
 /* Gets the character's linguistic directionality.*/
 U_CAPI UCharDirection U_EXPORT2
 u_charDirection(UChar32 c) {   
@@ -775,15 +812,19 @@ U_CFUNC uint32_t
 u_getUnicodeProperties(UChar32 c, int32_t column) {
     uint16_t vecIndex;
 
-    if( !HAVE_DATA || countPropsVectors==0 ||
-        (uint32_t)c>0x10ffff ||
-        column<0 || column>=propsVectorsColumns
+    if(column==-1) {
+        uint32_t props;
+        GET_PROPS(c, props);
+        return props;
+    } else if( !HAVE_DATA || countPropsVectors==0 ||
+               (uint32_t)c>0x10ffff ||
+               column<0 || column>=propsVectorsColumns
     ) {
         return 0;
+    } else {
+        UTRIE_GET16(&propsVectorsTrie, c, vecIndex);
+        return propsVectors[vecIndex+column];
     }
-
-    UTRIE_GET16(&propsVectorsTrie, c, vecIndex);
-    return propsVectors[vecIndex+column];
 }
 
 /* string casing ------------------------------------------------------------ */
