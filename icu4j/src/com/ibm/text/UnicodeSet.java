@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/UnicodeSet.java,v $
- * $Date: 2001/09/26 18:00:06 $
- * $Revision: 1.35 $
+ * $Date: 2001/10/05 23:22:37 $
+ * $Revision: 1.36 $
  *
  *****************************************************************************************
  */
@@ -255,7 +255,7 @@ import com.ibm.util.Utility;
  * *Unsupported by Java (and hence unsupported by UnicodeSet).
  *
  * @author Alan Liu
- * @version $RCSfile: UnicodeSet.java,v $ $Revision: 1.35 $ $Date: 2001/09/26 18:00:06 $ */
+ * @version $RCSfile: UnicodeSet.java,v $ $Revision: 1.36 $ $Date: 2001/10/05 23:22:37 $ */
 public class UnicodeSet extends UnicodeFilter {
 
     /* Implementation Notes.
@@ -1603,6 +1603,9 @@ public class UnicodeSet extends UnicodeFilter {
      * not currently cache single-letter categories such as "L" or
      * complements such as "^Lu" or "^L".  It would be easy to cache
      * these as well in a hashtable should the need arise.
+     *
+     * NEW: The category name can now be a script name, as defined
+     * by UScript.
      */
     private void applyCategory(String catName) {
         boolean invert = (catName.length() > 1 &&
@@ -1644,7 +1647,33 @@ public class UnicodeSet extends UnicodeFilter {
         }
 
         if (!match) {
-            throw new IllegalArgumentException("Bad category");
+            // TODO: Add caching of these, if desired
+            int script = UScript.getCode(catName);
+            if (script != UScript.USCRIPT_INVALID_CODE) {
+                match = true;
+                clear();
+                int start = -1;
+                int end = -2;
+                for (int i=0; i<=0xFFFF; ++i) {
+                    if (UScript.getScript(i) == script) {
+                        if ((end+1) == i) {
+                            end = i;
+                        } else {
+                            if (start >= 0) {
+                                add((char) start, (char) end);
+                            }
+                            start = end = i;
+                        }
+                    }
+                }
+                if (start >= 0) {
+                    add((char) start, (char) end);
+                }
+            }
+        }
+
+        if (!match) {
+            throw new IllegalArgumentException("Illegal category [:" + catName + ":]");
         }
 
         if (invert) {
