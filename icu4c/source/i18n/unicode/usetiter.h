@@ -4,7 +4,7 @@
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * $Source: /xsrl/Nsvn/icu/icu/source/i18n/unicode/Attic/usetiter.h,v $ 
-* $Revision: 1.4 $
+* $Revision: 1.5 $
 **********************************************************************
 */
 #ifndef USETITER_H
@@ -113,26 +113,26 @@ class U_I18N_API UnicodeSetIterator {
      * with <tt>getCodepoint()</tt> and, for a range,
      * <tt>getCodepointEnd()</tt>.
      */
-    inline UBool UnicodeSetIterator::isString() const;
+    inline UBool isString() const;
 
     /**
      * Returns the current code point, if <tt>isString()</tt> returned
      * false.  Otherwise returns an undefined result.
      */
-    inline UChar32 UnicodeSetIterator::getCodepoint() const;
+    inline UChar32 getCodepoint() const;
 
     /**
      * Returns the end of the current code point range, if
      * <tt>isString()</tt> returned false and <tt>nextRange()</tt> was
      * called.  Otherwise returns an undefined result.
      */
-    inline UChar32 UnicodeSetIterator::getCodepointEnd() const;
+    inline UChar32 getCodepointEnd() const;
 
     /**
      * Returns the current string, if <tt>isString()</tt> returned
      * true.  Otherwise returns an undefined result.
      */
-    inline const UnicodeString& UnicodeSetIterator::getString() const;
+    inline const UnicodeString& getString() const;
 
     /**
      * Returns the next element in the set, either a single code point
