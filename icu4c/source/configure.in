@@ -327,13 +327,13 @@ U_NL_LANGINFO_CODESET=0
 AC_CHECK_FUNC(nl_langinfo,[U_HAVE_NL_LANGINFO=1],[U_HAVE_NL_LANGINFO=0])
 AC_SUBST(U_HAVE_NL_LANGINFO)
 if test $U_HAVE_NL_LANGINFO -eq 1; then
-  AC_CACHE_CHECK([what to pass nl_langinfo to obtain the codeset],
+  AC_CACHE_CHECK([for nl_langinfo's argument to obtain the codeset],
   ac_cv_nl_langinfo_codeset,
-  [ac_cv_nl_langinfo_codeset="not found"
+  [ac_cv_nl_langinfo_codeset="unknown"
   for a in CODESET _NL_CTYPE_CODESET_NAME; do
   AC_TRY_LINK([#include <langinfo.h>],[nl_langinfo($a);],[ac_cv_nl_langinfo_codeset="$a"; break])]
   done)
-  if test x$ac_cv_nl_langinfo_codeset != x"not found"
+  if test x$ac_cv_nl_langinfo_codeset != unknown
   then
       U_HAVE_NL_LANGINFO_CODESET=1
       U_NL_LANGINFO_CODESET=$ac_cv_nl_langinfo_codeset

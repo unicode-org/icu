@@ -2782,12 +2782,12 @@ fi
 
 
 if test $U_HAVE_NL_LANGINFO -eq 1; then
-  echo $ac_n "checking what to pass nl_langinfo to obtain the codeset""... $ac_c" 1>&6
-echo "configure:2787: checking what to pass nl_langinfo to obtain the codeset" >&5
+  echo $ac_n "checking for nl_langinfo's argument to obtain the codeset""... $ac_c" 1>&6
+echo "configure:2787: checking for nl_langinfo's argument to obtain the codeset" >&5
 if eval "test \"`echo '$''{'ac_cv_nl_langinfo_codeset'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
-  ac_cv_nl_langinfo_codeset="not found"
+  ac_cv_nl_langinfo_codeset="unknown"
   for a in CODESET _NL_CTYPE_CODESET_NAME; do
   cat > conftest.$ac_ext <<EOF
 #line 2794 "configure"
@@ -2809,7 +2809,7 @@ rm -f conftest*
 fi
 
 echo "$ac_t""$ac_cv_nl_langinfo_codeset" 1>&6
-  if test x$ac_cv_nl_langinfo_codeset != x"not found"
+  if test x$ac_cv_nl_langinfo_codeset != unknown
   then
       U_HAVE_NL_LANGINFO_CODESET=1
       U_NL_LANGINFO_CODESET=$ac_cv_nl_langinfo_codeset
