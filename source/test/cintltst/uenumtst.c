@@ -20,73 +20,73 @@
 #include "cstring.h"
 
 static const char* test1[] = {
-  "first",
+    "first",
     "second",
     "third",
     "fourth"
 };
 
 struct chArrayContext {
-  int32_t currIndex;
-  int32_t maxIndex;
-  char *currChar;
-  UChar *currUChar;
-  char **array;
+    int32_t currIndex;
+    int32_t maxIndex;
+    char *currChar;
+    UChar *currUChar;
+    char **array;
 };
 
 typedef struct chArrayContext chArrayContext;
 
 #define cont ((chArrayContext *)en->context)
 
-void U_CALLCONV
+static void U_CALLCONV
 chArrayClose(UEnumeration *en) {
-  if(cont->currUChar != NULL) {
-    uprv_free(cont->currUChar);
-  }
-  uprv_free(en);
+    if(cont->currUChar != NULL) {
+        uprv_free(cont->currUChar);
+    }
+    uprv_free(en);
 }
 
-int32_t U_CALLCONV
+static int32_t U_CALLCONV
 chArrayCount(UEnumeration *en, UErrorCode *status) {
-  return cont->maxIndex;
+    return cont->maxIndex;
 }
 
-const UChar* U_CALLCONV 
+static const UChar* U_CALLCONV 
 chArrayUNext(UEnumeration *en, int32_t *resultLength, UErrorCode *status) {
-  if(cont->currIndex >= cont->maxIndex) {
-    return NULL;
-  }
-  
-  if(cont->currUChar == NULL) {
-    cont->currUChar = (UChar *)uprv_malloc(1024*sizeof(UChar));
-  }
-
-  cont->currChar = (cont->array)[cont->currIndex];
-  *resultLength = uprv_strlen(cont->currChar);
-  u_charsToUChars(cont->currChar, cont->currUChar, *resultLength);
-  cont->currIndex++;
-  return cont->currUChar;
+    if(cont->currIndex >= cont->maxIndex) {
+        return NULL;
+    }
+    
+    if(cont->currUChar == NULL) {
+        cont->currUChar = (UChar *)uprv_malloc(1024*sizeof(UChar));
+    }
+    
+    cont->currChar = (cont->array)[cont->currIndex];
+    *resultLength = uprv_strlen(cont->currChar);
+    u_charsToUChars(cont->currChar, cont->currUChar, *resultLength);
+    cont->currIndex++;
+    return cont->currUChar;
 }
 
-const char* U_CALLCONV
+static const char* U_CALLCONV
 chArrayNext(UEnumeration *en, int32_t *resultLength, UErrorCode *status) {
-  if(cont->currIndex >= cont->maxIndex) {
-    return NULL;
-  }
-  
-  cont->currChar = (cont->array)[cont->currIndex];
-  *resultLength = uprv_strlen(cont->currChar);
-  cont->currIndex++;
-  return cont->currChar;
+    if(cont->currIndex >= cont->maxIndex) {
+        return NULL;
+    }
+    
+    cont->currChar = (cont->array)[cont->currIndex];
+    *resultLength = uprv_strlen(cont->currChar);
+    cont->currIndex++;
+    return cont->currChar;
 }
 
-void U_CALLCONV
+static void U_CALLCONV
 chArrayReset(UEnumeration *en, UErrorCode *status) {
-  cont->currIndex = 0;
+    cont->currIndex = 0;
 }
 
 chArrayContext myCont = {
-  0, 0,
+    0, 0,
     NULL, NULL,
     NULL
 };
@@ -101,28 +101,28 @@ UEnumeration chEnum = {
 };
 
 static UEnumeration *getchArrayEnum(const char** source, int32_t size) {
-  UEnumeration *en = (UEnumeration *)uprv_malloc(sizeof(UEnumeration));
-  memcpy(en, &chEnum, sizeof(UEnumeration));
-  cont->array = (char **)source;
-  cont->maxIndex = size;
-  return en;
+    UEnumeration *en = (UEnumeration *)uprv_malloc(sizeof(UEnumeration));
+    memcpy(en, &chEnum, sizeof(UEnumeration));
+    cont->array = (char **)source;
+    cont->maxIndex = size;
+    return en;
 }
 
 static void EnumerationTest(void) {
-  UErrorCode status = U_ZERO_ERROR;
-  int32_t len = 0;
-  UEnumeration *en = getchArrayEnum(test1, sizeof(test1)/sizeof(test1[0]));
-  const char *string = NULL;
-  const UChar *uString = NULL;
-  while(string = uenum_next(en, &len, &status)) {
-    log_verbose("read %s, length %i\n", string, len);
-  }
-  uenum_reset(en, &status);
-  while(uString = uenum_unext(en, &len, &status)) {
-    log_verbose("read uchar of len %i\n", len);
-  }
-
-  uenum_close(en);
+    UErrorCode status = U_ZERO_ERROR;
+    int32_t len = 0;
+    UEnumeration *en = getchArrayEnum(test1, sizeof(test1)/sizeof(test1[0]));
+    const char *string = NULL;
+    const UChar *uString = NULL;
+    while ((string = uenum_next(en, &len, &status))) {
+        log_verbose("read %s, length %i\n", string, len);
+    }
+    uenum_reset(en, &status);
+    while ((uString = uenum_unext(en, &len, &status))) {
+        log_verbose("read uchar of len %i\n", len);
+    }
+    
+    uenum_close(en);
 }
 
 void addEnumerationTest(TestNode** root)
