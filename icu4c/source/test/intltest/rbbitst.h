@@ -23,6 +23,7 @@
 class Vector;
 class Enumeration;
 class BITestData;
+struct TestParams;
 
 /**
  * Test the RuleBasedBreakIterator class giving different rules
@@ -42,14 +43,6 @@ public:
      * Tests default rules based word iteration
      **/ 
     void TestDefaultRuleBasedWordIteration(void);
-    /**
-     * Tests default rules based word iteration
-     **/
-    void TestDefaultRuleBasedSentenceIteration(void);
-    /**
-     * Tests default rules based word iteration
-     **/
-    void TestDefaultRuleBasedLineIteration(void);
     /**
      * Tests Hindi(Devanagiri) character iteration
      **/  
@@ -73,6 +66,10 @@ public:
      **/  
     void TestLineBreakData();
 
+    /**
+     * Run tests from external test data file.
+     */
+
     void TestSentenceInvariants();
     void TestCharacterInvariants();
     void TestWordInvariants();
@@ -87,35 +84,13 @@ public:
     void TestMixedThaiLineBreak(); 
     void TestMaiyamok(); 
     void TestThaiWordBreak();
-    
-    
-    /**
-    * Test Hindi Danda i.e make sure we have a break point before and after danda 
-    **/ 
-//    void TestDanda(void); 
-    /**
-    *  Test Hindi Charactet Wrapping behaviour
-    **/
-//    void TestHindiCharacterWrapping(void);
-       
 
-    /**
-     * Adds rules for telugu support and tests the behaviour of chracterIterator of RBBI 
-     **/
-//    void TestTeluguRuleBasedCharacterIteration(void)
-    /**
-     * Tests the behaviour of character iteration of RBBI with custom rules
-     **/
-//    void TestCustomRuleBasedCharacterIteration(void);
-    /**
-     * Tests custom rules based word iteration
-     **/
-//    void TestCustomRuleBasedWordIteration(void);
-    /**
-     * Adds extra rules to deal with abbrevations(limited) and test the word Iteration
-     **/
-//  void TestAbbrRuleBasedWordIteration(void);
-   
+    void TestExtended();
+    UChar *ReadAndConvertFile(const char *fileName, int &ulen, UErrorCode &status);
+    void executeTest(TestParams *);
+
+    
+ 
     
     
 /***********************/

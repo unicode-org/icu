@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 1999-2001, International Business Machines Corporation and
+ * Copyright (c) 1999-2003, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /************************************************************************
@@ -13,17 +13,21 @@
 
 #if !UCONFIG_NO_BREAK_ITERATION
 
-#include "intltest.h"
 #include "unicode/utypes.h"
 #include "unicode/brkiter.h"
 #include "unicode/rbbi.h"
 #include "unicode/uchar.h"
 #include "unicode/utf16.h"
-#include <stdio.h>
+#include "unicode/ucnv.h"
+#include "unicode/schriter.h"
+#include "unicode/regex.h"
+#include "intltest.h"
 #include "rbbitst.h"
 #include <string.h>
-#include "unicode/schriter.h"
 #include "uvector.h"
+#include "uvectr32.h"
+#include "charstr.h"
+#include <stdio.h>
 
 
 
@@ -592,338 +596,7 @@ void RBBITest::TestDefaultRuleBasedWordIteration()
 
 
 
-//--------------------------------------------------------------------
-//tests default rules based sentence iteration
-//--------------------------------------------------------------------
-void RBBITest::TestDefaultRuleBasedSentenceIteration()
-{
-      logln((UnicodeString)"Testing the RBBI for sentence iteration using default rules");
-     // RuleBasedBreakIterator *rbbi=(RuleBasedBreakIterator*)RuleBasedBreakIterator::createSentenceInstance();
-      //fetch the rules used to create the above RuleBasedBreakIterator
-    //  UnicodeString defaultRules=rbbi->getRules();
-    //  RuleBasedBreakIterator sentIterDefault = new RuleBasedBreakIterator(defaultRules);
-      UErrorCode status=U_ZERO_ERROR;
-      RuleBasedBreakIterator* sentIterDefault=(RuleBasedBreakIterator*)RuleBasedBreakIterator::createSentenceInstance(Locale::getDefault(), status);
-      if(U_FAILURE(status)){
-          errln("FAIL : in construction");
-          return;
-      }
-      BITestData sentdata(status);
-      ADD_DATACHUNK(sentdata, NULL, 0, status);      // Mark start of data
-      ADD_DATACHUNK(sentdata, "(This is it.) ", 0, status);
-      ADD_DATACHUNK(sentdata, "Testing the sentence iterator. ", 0, status);
-      ADD_DATACHUNK(sentdata, "\"This isn\'t it.\" ", 0, status);
-      ADD_DATACHUNK(sentdata, "Hi! ", 0, status);
-      ADD_DATACHUNK(sentdata, "This is a simple sample sentence. ", 0, status);
-      ADD_DATACHUNK(sentdata, "(This is it.) ", 0, status);
-      ADD_DATACHUNK(sentdata, "This is a simple sample sentence. ", 0, status);
-      ADD_DATACHUNK(sentdata, "\"This isn\'t it.\" ", 0, status);
-      ADD_DATACHUNK(sentdata, "Hi! ", 0, status);
-      ADD_DATACHUNK(sentdata, "This is a simple sample sentence. ", 0, status);
-      ADD_DATACHUNK(sentdata, "It does not have to make any sense as you can see. ", 0, status);
-      ADD_DATACHUNK(sentdata, "Nel mezzo del cammin di nostra vita, mi ritrovai in una selva oscura. ", 0, status);
-      ADD_DATACHUNK(sentdata, "Che la dritta via aveo smarrita. ", 0, status);
-      ADD_DATACHUNK(sentdata, "He said, that I said, that you said!! ", 0, status);
 
-      ADD_DATACHUNK(sentdata, "Don't rock the boat.\\u2029", 0, status);    // Paragraph Separator
-
-      ADD_DATACHUNK(sentdata, "Because I am the daddy, that is why. ", 0, status);
-      ADD_DATACHUNK(sentdata, "Not on my time (el timo.)! ", 0, status);
-
-      ADD_DATACHUNK(sentdata, "So what!!\\u2029", 0, status);              // Paragraph Separator
-      ADD_DATACHUNK(sentdata, "\"But now,\" he said, \"I know!\" ", 0, status);
-      ADD_DATACHUNK(sentdata, "Harris thumbed down several, including \"Away We Go\" (which became the huge success Oklahoma!). ", 0, status);
-      ADD_DATACHUNK(sentdata, "One species, B. anthracis, is highly virulent.\n", 0, status);
-      ADD_DATACHUNK(sentdata, "Wolf said about Sounder:\"Beautifully thought-out and directed.\" ", 0, status);
-      ADD_DATACHUNK(sentdata, "Have you ever said, \"This is where\tI shall live\"? ", 0, status);
-      ADD_DATACHUNK(sentdata, "He answered, \"You may not!\" ", 0, status);
-      ADD_DATACHUNK(sentdata, "Another popular saying is: \"How do you do?\". ", 0, status);
-      ADD_DATACHUNK(sentdata, "Yet another popular saying is: \'I\'m fine thanks.\' ", 0, status);
-      ADD_DATACHUNK(sentdata, "What is the proper use of the abbreviation pp.? ", 0, status);
-      ADD_DATACHUNK(sentdata, "Yes, I am definatelly 12\" tall!!", 0, status);
-      // test for bug #4113835: \n and \r count as spaces, not as paragraph breaks
-      //   And then, revised again for TR29.   \n and \r do count as paragraph breaks.
-      ADD_DATACHUNK(sentdata, "Now\r", 0, status);
-      ADD_DATACHUNK(sentdata, "is\n", 0, status);
-      ADD_DATACHUNK(sentdata, "the\r\n", 0, status);
-      ADD_DATACHUNK(sentdata, "time\n", 0, status);
-      ADD_DATACHUNK(sentdata, "\r", 0, status);
-      ADD_DATACHUNK(sentdata, "for\r", 0, status);
-      ADD_DATACHUNK(sentdata, "\r", 0, status);
-     // ADD_DATACHUNK(sentdata, "all\\u037e", 0, status);  TODO:  Greek question mark
-      //                                                           Why isn't it a sentence ender?
-
-      ADD_DATACHUNK(sentdata, "No breaks when . is followed .Immediately by an .Upper case Letter.  ", 0, status);
-
-    // test that it doesn't break sentences at the boundary between CJK
-    // and other letters
-      ADD_DATACHUNK(sentdata, "\\u5487\\u67ff\\ue591\\u5017\\u61b3\\u60a1\\u9510\\u8165:\"JAVA\\u821c"
-           "\\u8165\\u7fc8\\u51ce\\u306d,\\u2494\\u56d8\\u4ec0\\u60b1\\u8560\\u51ba"
-           "\\u611d\\u57b6\\u2510\\u5d46\".\\u2029", 0, status);
-      ADD_DATACHUNK(sentdata, "\\u5487\\u67ff\\ue591\\u5017\\u61b3\\u60a1\\u9510\\u8165\\u9de8"
-           "\\u97e4JAVA\\u821c\\u8165\\u7fc8\\u51ce\\u306d\\ue30b\\u2494\\u56d8\\u4ec0"
-           "\\u60b1\\u8560\\u51ba\\u611d\\u57b6\\u2510\\u5d46\\u97e5\\u7751\\u3002", 0, status);
-      ADD_DATACHUNK(sentdata, "\\u5487\\u67ff\\ue591\\u5017\\u61b3\\u60a1\\u9510\\u8165\\u9de8\\u97e4"
-           "\\u6470\\u8790JAVA\\u821c\\u8165\\u7fc8\\u51ce\\u306d\\ue30b\\u2494\\u56d8"
-           "\\u4ec0\\u60b1\\u8560\\u51ba\\u611d\\u57b6\\u2510\\u5d46\\u97e5\\u7751\\u2048", 0, status);
-      ADD_DATACHUNK(sentdata, "He said, \"I can go there.\"\\u2029", 0, status);
-
-      // Treat fullwidth variants of .!? the same as their
-      // normal counterparts
-      ADD_DATACHUNK(sentdata, "I know I'm right\\uff0e ", 0, status);
-      ADD_DATACHUNK(sentdata, "Right\\uff1f ", 0, status);
-      ADD_DATACHUNK(sentdata, "Right\\uff01 ", 0, status);
-
-      // Don't break sentences at boundary between CJK and digits
-      ADD_DATACHUNK(sentdata, "\\u5487\\u67ff\\ue591\\u5017\\u61b3\\u60a1\\u9510\\u8165\\u9de8"
-                   "\\u97e48888\\u821c\\u8165\\u7fc8\\u51ce\\u306d\\ue30b\\u2494\\u56d8\\u4ec0"
-                   "\\u60b1\\u8560\\u51ba\\u611d\\u57b6\\u2510\\u5d46\\u97e5\\u7751\\u3002", 0, status);
-
-      // Break sentence between a sentence terminator and
-      // opening punctuation
-      ADD_DATACHUNK(sentdata, "How do you do?", 0, status);
-      ADD_DATACHUNK(sentdata, "(fine). ", 0, status);
-
-      // test for bug #4158381: Don't break sentence after period if it isn't
-      // followed by a space
-      ADD_DATACHUNK(sentdata, "Test <code>Flags.Flag</code> class.  ", 0, status);
-      ADD_DATACHUNK(sentdata, "Another test.\\u2029", 0, status);
-      
-      // test for bug #4158381: No breaks when there are no terminators around
-      ADD_DATACHUNK(sentdata, "<P>Provides a set of &quot;lightweight&quot; (all-java<FONT SIZE=\"-2\">"
-                              "<SUP>TM</SUP></FONT> language) components that, to the maximum degree possible,"
-                              "work the same on all platforms.  ", 0, status);
-      ADD_DATACHUNK(sentdata, "Another test.\\u2029", 0, status);
-      
-      // test for bug #4143071: Make sure sentences that end with digits
-      // work right
-      ADD_DATACHUNK(sentdata, "Today is the 27th of May, 1998.  ", 0, status);
-      ADD_DATACHUNK(sentdata, "Tomorrow with be 28 May 1998.  ", 0, status);
-      ADD_DATACHUNK(sentdata, "The day after will be the 30th.\\u2029", 0, status);
-      
-      // test for bug #4152416: Make sure sentences ending with a capital
-      // letter are treated correctly
-      // Unicode TR29 reverses above bug:  Don't break a sentence if the last word begins with an upper case letter.
-      ADD_DATACHUNK(sentdata, "The type of all primitive <code>boolean</code> values accessed in the "            
-          "target VM.  ", 0, status);
-      ADD_DATACHUNK(sentdata, "Calls to xxx will return an implementor of this interface.  \\u2029", 0, status);
-      
-      // test for bug #4152117: Make sure sentence breaking is handling
-      // punctuation correctly [COULD NOT REPRODUCE THIS BUG, BUT TEST IS
-      // HERE TO MAKE SURE IT DOESN'T CROP UP]
-      ADD_DATACHUNK(sentdata, "Constructs a randomly generated BigInteger, uniformly distributed "
-                              "over the range <tt>0</tt> to <tt>(2<sup>numBits</sup> - 1)</tt>, inclusive.  ", 0, status);
-      ADD_DATACHUNK(sentdata, "The uniformity of the distribution assumes that a fair source of random bits "
-                              "is provided in <tt>rnd</tt>.  ", 0, status);
-      ADD_DATACHUNK(sentdata, "Note that this constructor always constructs a non-negative biginteger.  \n", 0, status);
-      ADD_DATACHUNK(sentdata, "Ahh abc.  \n", 0, status);
-
-      //sentence breaks for hindi which used Devanagari script
-      //make sure there is sentence break after ?,danda(hindi phrase separator),fullstop followed by space and no break after \n \r
-      ADD_DATACHUNK(sentdata,  "\\u0928\\u092e" halfSA
-                                    "\\u0924\\u0947 "
-                                    "\\u0930\\u092e\\u0947\\u0936, "
-                                    "\\u0905\\u093e\\u092a"
-                                    "\\u0915\\u0948\\u0938\\u0947 "
-                                    "\\u0939\\u0948?", 0, status);
-      ADD_DATACHUNK(sentdata,
-              "\\u092e\\u0948 \\u0905"  halfCHA "\\u091b\\u093e \\u0939\\u0942\\u0901\\u0964 ", 0, status);
-      ADD_DATACHUNK(sentdata, "\\u0905\\u093e\\u092a\r\n", 0, status);
-      ADD_DATACHUNK(sentdata, "\\u0915\\u0948\\u0938\\u0947 \\u0939\\u0948?", 0, status);
-      ADD_DATACHUNK(sentdata, "\\u0935\\u0939 " halfKA "\\u092f\\u093e\n", 0, status);
-      ADD_DATACHUNK(sentdata, "\\u0939\\u0948?", 0, status);
-      ADD_DATACHUNK(sentdata, "\\u092f\\u0939 \\u0905\\u093e\\u092e \\u0939\\u0948. ", 0, status);
-      ADD_DATACHUNK(sentdata, "\\u092f\\u0939 means \"this\". ", 0, status);
-      ADD_DATACHUNK(sentdata, "\"\\u092a\\u095d\\u093e\\u0908\" meaning \"education\" or \"studies\". ", 0, status);
-      ADD_DATACHUNK(sentdata, "\\u0905\\u093e\\u091c("  halfSA "\\u0935\\u0924\\u0902"  deadTA "\\u0930 "
-                                   "\\u0926\\u093f\\u0935\\u093e\\u0938) "
-                                   "\\u0939\\u0948\\u0964 ", 0, status);
-      ADD_DATACHUNK(sentdata, "Let's end here. ", 0, status);
-
-      // Regression test for bug #1984, Sentence break in Arabic text.
-      ADD_DATACHUNK(sentdata, 
-          "\\u0623\\u0633\\u0627\\u0633\\u064b\\u0627\\u060c\\u0020\\u062a\\u062a\\u0639\\u0627"
-          "\\u0645\\u0644\\u0020\\u0627\\u0644\\u062d\\u0648\\u0627\\u0633\\u064a\\u0628\\u0020"
-          "\\u0641\\u0642\\u0637\\u0020\\u0645\\u0639\\u0020\\u0627\\u0644\\u0623\\u0631\\u0642"
-          "\\u0627\\u0645\\u060c\\u0648\\u062a\\u0642\\u0648\\u0645\\u0020\\u0628\\u062a\\u062e"
-          "\\u0632\\u064a\\u0646\\u0020\\u0627\\u0644\\u0623\\u062d\\u0631\\u0641\\u0020\\u0648"
-          "\\u0627\\u0644\\u0645\\u062d\\u0627\\u0631\\u0641\\u0020\\u0627\\u0644\\u0623\\u062e"
-          "\\u0631\\u0649\\u0020\\u0628\\u0639\\u062f\\u0020\\u0623\\u0646\\u062a\\u064f\\u0639"
-          "\\u0637\\u064a\\u0020\\u0631\\u0642\\u0645\\u0627\\u0020\\u0645\\u0639\\u064a\\u0646"
-          "\\u0627\\u0020\\u0644\\u0643\\u0644\\u0020\\u0648\\u0627\\u062d\\u062f\\u0020\\u0645"
-          "\\u0646\\u0647\\u0627\\u002e\\u0020" , 0, status);
-      ADD_DATACHUNK(sentdata, 
-          "\\u0648\\u0642\\u0628\\u0644\\u0020\\u0627\\u062e\\u062a\\u0631\\u0627\\u0639\\u0022"
-          "\\u064a\\u0648\\u0646\\u0650\\u0643\\u0648\\u062f\\u0022\\u060c\\u0020\\u0643\\u0627"
-          "\\u0646\\u0020\\u0647\\u0646\\u0627\\u0643\\u0020\\u0645\\u0626\\u0627\\u062a\\u0020"
-          "\\u0627\\u0644\\u0623\\u0646\\u0638\\u0645\\u0629\\u0020\\u0644\\u0644\\u062a\\u0634"
-          "\\u0641\\u064a\\u0631\\u0648\\u062a\\u062e\\u0635\\u064a\\u0635\\u0020\\u0647\\u0630"
-          "\\u0647\\u0020\\u0627\\u0644\\u0623\\u0631\\u0642\\u0627\\u0645\\u0020\\u0644\\u0644"
-          "\\u0645\\u062d\\u0627\\u0631\\u0641\\u060c\\u0020\\u0648\\u0644\\u0645\\u0020\\u064a"
-          "\\u0648\\u062c\\u062f\\u0020\\u0646\\u0638\\u0627\\u0645\\u062a\\u0634\\u0641\\u064a"
-          "\\u0020\\u0639\\u0644\\u0649\\u0020\\u062c\\u0645\\u064a\\u0639\\u0020\\u0627\\u0644"
-          "\\u0645\\u062d\\u0627\\u0631\\u0641\\u0020\\u0627\\u0644\\u0636\\u0631\\u0648\\u0631"
-          "\\u064a\\u0629.  ", 0, status);
-
-      // Try a few more of the less common sentence endings.
-      ADD_DATACHUNK(sentdata, "Hello, world\\u3002 ", 0, status);
-      // ADD_DATACHUNK(sentdata, "Hello, world\\u037e ", 0, status);  // Greek Question Mark, omitted from TR29.  TODO:
-      ADD_DATACHUNK(sentdata, "Hello, world\\u2048 ", 0, status);
-      ADD_DATACHUNK(sentdata, "Hello, world\\u203c ", 0, status);
-      ADD_DATACHUNK(sentdata, "Let's end here. ", 0, status);
-
-      generalIteratorTest(*sentIterDefault, sentdata);
-
-      delete sentIterDefault;
-}
-
-
-//--------------------------------------------------------------------
-//tests default rules based line iteration
-//--------------------------------------------------------------------
-void RBBITest::TestDefaultRuleBasedLineIteration()
-{
-    UErrorCode status= U_ZERO_ERROR;
-    RuleBasedBreakIterator* lineIterDefault=(RuleBasedBreakIterator*)RuleBasedBreakIterator::createLineInstance(Locale::getDefault(), status);
-    if(U_FAILURE(status)){
-          errln("FAIL : in construction");
-          return;
-      }
-      BITestData linedata(status);
-      ADD_DATACHUNK(linedata, NULL, 0, status);           // Break at start of data
-      ADD_DATACHUNK(linedata, "Multi-", 0, status);
-      ADD_DATACHUNK(linedata, "Level ", 0, status);
-      ADD_DATACHUNK(linedata, "example ", 0, status);
-      ADD_DATACHUNK(linedata, "of ", 0, status);
-      ADD_DATACHUNK(linedata, "a ", 0, status);
-      ADD_DATACHUNK(linedata, "semi-", 0, status);
-      ADD_DATACHUNK(linedata, "idiotic ", 0, status);
-      ADD_DATACHUNK(linedata, "non-", 0, status);
-      ADD_DATACHUNK(linedata, "sensical ", 0, status);
-      ADD_DATACHUNK(linedata, "(non-", 0, status);
-      ADD_DATACHUNK(linedata, "important) ", 0, status);
-      ADD_DATACHUNK(linedata, "sentence. ", 0, status);
-
-      ADD_DATACHUNK(linedata, "Hi  ", 0, status);
-      ADD_DATACHUNK(linedata, "Hello ", 0, status);
-      ADD_DATACHUNK(linedata, "How\n", 0, status);
-      ADD_DATACHUNK(linedata, "are\r", 0, status);
-      ADD_DATACHUNK(linedata, "you\\u2028", 0, status);    // Line Separator
-      ADD_DATACHUNK(linedata, "fine.\t", 0, status);
-      ADD_DATACHUNK(linedata, "good.  ", 0, status);
-
-      ADD_DATACHUNK(linedata, "Now\r", 0, status);
-      ADD_DATACHUNK(linedata, "is\n", 0, status);
-      ADD_DATACHUNK(linedata, "the\r\n", 0, status);
-      ADD_DATACHUNK(linedata, "time\n", 0, status);
-      ADD_DATACHUNK(linedata, "\r", 0, status);
-      ADD_DATACHUNK(linedata, "for\r", 0, status);
-      ADD_DATACHUNK(linedata, "\r", 0, status);
-      ADD_DATACHUNK(linedata, "all", 0, status);
-
-    // to test for bug #4068133
-      ADD_DATACHUNK(linedata, "\\u96f6", 0, status);
-      ADD_DATACHUNK(linedata, "\\u4e00\\u3002", 0, status);
-      ADD_DATACHUNK(linedata, "\\u4e8c\\u3001", 0, status);
-      ADD_DATACHUNK(linedata, "\\u4e09\\u3002\\u3001", 0, status);
-      ADD_DATACHUNK(linedata, "\\u56db\\u3001\\u3002\\u3001", 0, status);
-      ADD_DATACHUNK(linedata, "\\u4e94,", 0, status);
-      ADD_DATACHUNK(linedata, "\\u516d.", 0, status);
-      ADD_DATACHUNK(linedata, "\\u4e03.\\u3001,\\u3002", 0, status);
-      ADD_DATACHUNK(linedata, "\\u516b", 0, status);
-
-    // to test for bug #4086052
-      ADD_DATACHUNK(linedata, "foo\\u00a0bar ", 0, status);
-//          ADD_DATACHUNK(linedata, "foo\\ufeffbar", 0);
-
-    // to test for bug #4097920
-      ADD_DATACHUNK(linedata, "dog,", 0, status);
-      ADD_DATACHUNK(linedata, "cat,", 0, status);
-      ADD_DATACHUNK(linedata, "mouse ", 0, status);
-      ADD_DATACHUNK(linedata, "(one)", 0, status);
-      ADD_DATACHUNK(linedata, "(two)\n", 0, status);
-
-    // to test for bug #4035266
-      ADD_DATACHUNK(linedata, "The ", 0, status);
-      ADD_DATACHUNK(linedata, "balance ", 0, status);
-      ADD_DATACHUNK(linedata, "is ", 0, status);
-      ADD_DATACHUNK(linedata, "$-23,456.78, ", 0, status);
-      ADD_DATACHUNK(linedata, "not ", 0, status);
-      // ADD_DATACHUNK(linedata, "-$32,456.78!\n", 0);    // Doesn't break this way according to TR29
-      ADD_DATACHUNK(linedata, "-", 0, status);
-      ADD_DATACHUNK(linedata, "$32,456.78!\n", 0, status);
-
-    // to test for bug #4098467
-    // What follows is a string of Korean characters (I found it in the Yellow Pages
-    // ad for the Korean Presbyterian Church of San Francisco, and I hope I transcribed
-    // it correctly), first as precomposed syllables, and then as conjoining jamo.
-    // Both sequences should be semantically identical and break the same way.
-    // precomposed syllables...
-
-      // By TR14, precomposed Hangul syllables should not be grouped together.
-#if 0
-      ADD_DATACHUNK(linedata, "\\uc0c1\\ud56d ", 0, status);
-      ADD_DATACHUNK(linedata, "\\ud55c\\uc778 ", 0, status);
-      ADD_DATACHUNK(linedata, "\\uc5f0\\ud569 ", 0, status);
-      ADD_DATACHUNK(linedata, "\\uc7a5\\ub85c\\uad50\\ud68c ", 0, status);
-#endif
-      ADD_DATACHUNK(linedata, "\\uc0c1", 0, status);
-      ADD_DATACHUNK(linedata, "\\ud56d ", 0, status);
-      ADD_DATACHUNK(linedata, "\\ud55c", 0, status);
-      ADD_DATACHUNK(linedata, "\\uc778 ", 0, status);
-      ADD_DATACHUNK(linedata, "\\uc5f0", 0, status);
-      ADD_DATACHUNK(linedata, "\\ud569 ", 0, status);
-      ADD_DATACHUNK(linedata, "\\uc7a5", 0, status);
-      ADD_DATACHUNK(linedata, "\\ub85c", 0, status);
-      ADD_DATACHUNK(linedata, "\\uad50", 0, status);
-      ADD_DATACHUNK(linedata, "\\ud68c ", 0, status);
-
-    // conjoining jamo...
-      ADD_DATACHUNK(linedata, "\\u1109\\u1161\\u11bc", 0, status);
-      ADD_DATACHUNK(linedata, "\\u1112\\u1161\\u11bc ", 0, status);
-      ADD_DATACHUNK(linedata, "\\u1112\\u1161\\u11ab", 0, status);
-      ADD_DATACHUNK(linedata, "\\u110b\\u1175\\u11ab ", 0, status);
-      ADD_DATACHUNK(linedata, "\\u110b\\u1167\\u11ab", 0, status);
-      ADD_DATACHUNK(linedata, "\\u1112\\u1161\\u11b8 ", 0, status);
-      ADD_DATACHUNK(linedata, "\\u110c\\u1161\\u11bc", 0, status);
-      ADD_DATACHUNK(linedata, "\\u1105\\u1169", 0, status);
-      ADD_DATACHUNK(linedata, "\\u1100\\u116d", 0, status);
-      ADD_DATACHUNK(linedata, "\\u1112\\u116c", 0, status);
-
-    // to test for bug #4117554: Fullwidth .!? should be treated as postJwrd
-      ADD_DATACHUNK(linedata, "\\u4e01\\uff0e", 0, status);
-      ADD_DATACHUNK(linedata, "\\u4e02\\uff01", 0, status);
-      ADD_DATACHUNK(linedata, "\\u4e03\\uff1f", 0, status);
-
-    // Surrogate line break tests.
-      ADD_DATACHUNK(linedata, "\\u4e01", 0, status);          // BMP ideograph
-      ADD_DATACHUNK(linedata, "\\ud840\\udc01", 0, status);   // Extended ideograph
-      ADD_DATACHUNK(linedata, "\\u4e02", 0, status);          // BMP Ideograph
-      ADD_DATACHUNK(linedata, "abc", 0, status);              // latin
-      ADD_DATACHUNK(linedata, "\\ue000", 0, status);          // PUA
-      ADD_DATACHUNK(linedata, "\\udb80\\udc01", 0, status);   // Extended PUA.  Treated as ideograph.
-
-      // Regression for bug 836
-      ADD_DATACHUNK(linedata, "AAA", 0, status);
-      ADD_DATACHUNK(linedata, "(AAA ", 0, status);
-
-      // 
-      // Try some words from other scripts.
-      //
-      ADD_DATACHUNK(linedata, "\\u0391\\u0392\\u0393 ", 0, status);   //  Greek
-      ADD_DATACHUNK(linedata, "\\u0411\\u0412\\u0413 ", 0, status);   //  Cyrillic
-      ADD_DATACHUNK(linedata, "\\u05D0\\u05D1\\u05D2\\u0593 ", 0, status);   //  Hebrew
-      ADD_DATACHUNK(linedata, "\\u0627\\u0628\\u062A ", 0, status);   //  Arabic
-      ADD_DATACHUNK(linedata, "\\u0661\\u0662\\u0663 ", 0, status);   //  Arabic
-      ADD_DATACHUNK(linedata, "\\u10A0\\u10A1\\u10A2 ", 0, status);   //  Georgian
-      ADD_DATACHUNK(linedata, "ABC ", 0, status);   //  Latin
-
-
-
-    generalIteratorTest(*lineIterDefault, linedata);
-
-    delete lineIterDefault;
-}
 
 
 
@@ -1631,12 +1304,12 @@ void RBBITest::runIndexedTest( int32_t index, UBool exec, const char* &name, cha
 
         case 0: name = "TestDefaultRuleBasedCharacterIteration";
             if(exec) TestDefaultRuleBasedCharacterIteration(); break;
-        case 1: name = "TestDefaultRuleBasedWordIteration";
-            if(exec) TestDefaultRuleBasedWordIteration();      break;
-        case 2: name = "TestDefaultRuleBasedSentenceIteration";
-            if(exec) TestDefaultRuleBasedSentenceIteration();  break;
-        case 3: name = "TestDefaulRuleBasedLineIteration";
-            if(exec) TestDefaultRuleBasedLineIteration();      break;
+        case 1: name = "TestExtended";
+             if(exec) TestExtended();                          break;
+        case 2: name = "TestDefaultRuleBasedWordIteration";
+             if(exec) TestDefaultRuleBasedWordIteration();      break;
+        case 3: name = "";
+             break;
         case 4: name = "TestHindiCharacterBreak";
             if(exec) TestHindiCharacterBreak();                break;
         case 5: name = "TestHindiWordBreak";
@@ -1668,18 +1341,19 @@ void RBBITest::runIndexedTest( int32_t index, UBool exec, const char* &name, cha
             if(exec) TestEndBehaviour();                       break;
         case 16: name = "TestBug4153072";
             if(exec) TestBug4153072();                         break;
-        case 17: name = "TestJapaneseLineBreak()";
+        case 17: name = "TestJapaneseLineBreak";
              if(exec) TestJapaneseLineBreak();                 break;
 
 
-        case 18: name = "TestThaiLineBreak()";
+        case 18: name = "TestThaiLineBreak";
              if(exec) TestThaiLineBreak();                     break;
-        case 19: name = "TestMixedThaiLineBreak()";
+        case 19: name = "TestMixedThaiLineBreak";
              if(exec) TestMixedThaiLineBreak();                break;
-        case 20: name = "TestMaiyamok()";
+        case 20: name = "TestMaiyamok";
              if(exec) TestMaiyamok();                          break;
-        case 21: name = "TestThaiWordBreak()";
+        case 21: name = "TestThaiWordBreak";
              if(exec) TestThaiWordBreak();                     break;
+
 
 //      case 7: name = "TestHindiCharacterWrapping()";
 //           if(exec) TestHindiCharacterWrapping();            break;
@@ -2417,6 +2091,522 @@ void RBBITest::TestJapaneseLineBreak()
                         + "' (" + ((int)(followingChars[i])) + ")");
     }
     delete iter;
+}
+
+
+//------------------------------------------------------------------------------
+//
+//   RBBITest::Extended    Run  RBBI Tests from an external test data file
+//
+//------------------------------------------------------------------------------
+
+struct TestParams {
+    BreakIterator   *bi;
+    UnicodeString    dataToBreak;
+    UVector32       *expectedBreaks;
+    UVector32       *srcLine;
+    UVector32       *srcCol;
+};
+
+void RBBITest::executeTest(TestParams *t) {
+    int32_t    bp;
+    int32_t    prevBP;
+    int32_t    i;
+
+    t->bi->setText(t->dataToBreak);
+    //
+    //  Run the iterator forward
+    //
+    prevBP = -1;
+    for (bp = t->bi->first(); bp != BreakIterator::DONE; bp = t->bi->next()) {
+        if (prevBP ==  bp) {
+            // Fail for lack of forward progress.
+            errln("Forward Iteration, no forward progress.  Break Pos=%4d  File line,col=%4d,%4d",
+                bp, t->srcLine->elementAti(bp), t->srcCol->elementAti(bp));
+            break;
+        }
+
+        // Check that there were we didn't miss an expected break between the last one
+        //  and this one.
+        for (i=prevBP+1; i<bp; i++) {
+            if (t->expectedBreaks->elementAti(i) != 0) {
+                errln("Forward Itertion, break expected, but not found.  Pos=%4d  File line,col= %4d,%4d",
+                      i, t->srcLine->elementAti(i), t->srcCol->elementAti(i));
+            }
+        }
+
+        // Check that the break we did find was expected
+        if (t->expectedBreaks->elementAti(bp) == 0) {
+            errln("Forward Itertion, break found, but not expected.  Pos=%4d  File line,col= %4d,%4d",
+                bp, t->srcLine->elementAti(bp), t->srcCol->elementAti(bp));
+        } else {
+            // The break was expected.
+            //   Check that the {nnn} tag value is correct.
+            int32_t expectedTagVal = t->expectedBreaks->elementAti(bp);
+            if (expectedTagVal == -1) {
+                expectedTagVal = 0;
+            }
+            int32_t rs = ((RuleBasedBreakIterator *)t->bi)->getRuleStatus();
+            if (rs != expectedTagVal) {
+                errln("Incorrect status for break.  Pos=%4d  File line,col= %4d,%4d.\n"
+                      "          Actual, Expected status = %4d, %4d",
+                    bp, t->srcLine->elementAti(bp), t->srcCol->elementAti(bp), rs, expectedTagVal);
+            }
+        }
+        
+        
+        prevBP = bp;
+    }
+    
+    // Verify that there were no missed expected breaks after the last one found
+    for (i=prevBP+1; i<t->expectedBreaks->size(); i++) {
+        if (t->expectedBreaks->elementAti(i) != 0) {
+            errln("Forward Itertion, break expected, but not found.  Pos=%4d  File line,col= %4d,%4d",
+                      i, t->srcLine->elementAti(i), t->srcCol->elementAti(i));
+        }
+    }
+
+    //
+    //  Run the iterator backwards, verify that the same breaks are found.
+    //
+    prevBP = t->dataToBreak.length()+2;  // start with a phony value for the last break pos seen.
+    for (bp = t->bi->last(); bp != BreakIterator::DONE; bp = t->bi->previous()) {
+        if (prevBP ==  bp) {
+            // Fail for lack of progress.
+            errln("Reverse Iteration, no progress.  Break Pos=%4d  File line,col=%4d,%4d",
+                bp, t->srcLine->elementAti(bp), t->srcCol->elementAti(bp));
+            break;
+        }
+
+        // Check that there were we didn't miss an expected break between the last one
+        //  and this one.  (UVector returns zeros for index out of bounds.)
+        for (i=prevBP-1; i>bp; i--) {
+            if (t->expectedBreaks->elementAti(i) != 0) {
+                errln("Reverse Itertion, break expected, but not found.  Pos=%4d  File line,col= %4d,%4d",
+                      i, t->srcLine->elementAti(i), t->srcCol->elementAti(i));
+            }
+        }
+
+        // Check that the break we did find was expected
+        if (t->expectedBreaks->elementAti(bp) == 0) {
+            errln("Reverse Itertion, break found, but not expected.  Pos=%4d  File line,col= %4d,%4d",
+                   bp, t->srcLine->elementAti(bp), t->srcCol->elementAti(bp));
+        } else {
+            // The break was expected.
+            //   Check that the {nnn} tag value is correct.
+            int32_t expectedTagVal = t->expectedBreaks->elementAti(bp);
+            if (expectedTagVal == -1) {
+                expectedTagVal = 0;
+            }
+            int32_t rs = ((RuleBasedBreakIterator *)t->bi)->getRuleStatus();
+            if (rs != expectedTagVal) {
+                errln("Incorrect status for break.  Pos=%4d  File line,col= %4d,%4d.\n"
+                      "          Actual, Expected status = %4d, %4d",
+                    bp, t->srcLine->elementAti(bp), t->srcCol->elementAti(bp), rs, expectedTagVal);
+            }
+        }
+        
+        prevBP = bp;
+    }
+    
+    // Verify that there were no missed breaks prior to the last one found
+    for (i=prevBP-1; i>=0; i--) {
+        if (t->expectedBreaks->elementAti(i) != 0) {
+            errln("Forward Itertion, break expected, but not found.  Pos=%4d  File line,col= %4d,%4d",
+                      i, t->srcLine->elementAti(i), t->srcCol->elementAti(i));
+        }
+    }
+}
+
+
+void RBBITest::TestExtended() {
+    UErrorCode      status  = U_ZERO_ERROR;
+    Locale          locale   = Locale::getDefault();
+
+    UnicodeString       rules;
+    TestParams          tp;
+    tp.bi             = NULL;
+    tp.expectedBreaks = new UVector32(status);
+    tp.srcLine        = new UVector32(status);
+    tp.srcCol         = new UVector32(status);
+
+
+    //
+    //  Open and read the test data file.
+    //
+    const char *testDataDirectory = loadTestData(status);
+    UnicodeString tdd(testDataDirectory);
+    // TODO: Remove regexp dependency
+    tdd = RegexMatcher("([/\\\\])out[/\\\\]testdata", tdd, 0, status).
+        replaceFirst("$1rbbitst.txt", status);
+
+    int    len;
+    UChar *testFile = ReadAndConvertFile((const char *)CharString(tdd), len, status);
+
+    //
+    //  Put the test data into a UnicodeString
+    //
+    UnicodeString testString(FALSE, testFile, len);
+
+    enum EParseState{
+        PARSE_COMMENT,
+        PARSE_TAG,
+        PARSE_RULE,
+        PARSE_DATA,
+        PARSE_NUM
+    } 
+    parseState = PARSE_TAG;
+
+    EParseState savedState = PARSE_TAG;
+
+    const UChar CH_LF        = 0x0a;
+    const UChar CH_CR        = 0x0d;
+    const UChar CH_HASH      = 0x23;
+    const UChar CH_PERIOD    = 0x2e;
+    const UChar CH_LT        = 0x3c;
+    const UChar CH_GT        = 0x3e;
+    const UChar CH_BACKSLASH = 0x5c;
+    const UChar CH_BULLET    = 0x2022;
+    
+    int32_t    lineNum  = 1;
+    int32_t    colStart = 0;
+    int32_t    column   = 0;
+    int32_t    charIdx  = 0;
+
+    int32_t    tagValue = 0;       // The numeric value of a <nnn> tag.
+
+    for (charIdx = 0; charIdx < len; ) {
+        UChar  c = testString.charAt(charIdx);
+        charIdx++;
+        if (c == CH_CR && charIdx<len && testString.charAt(charIdx) == CH_LF) {
+            // treat CRLF as a unit
+            c = CH_LF;
+            charIdx++;
+        }
+        if (c == CH_LF || c == CH_CR) {
+            lineNum++;
+            colStart = charIdx;
+        }
+        column = charIdx - colStart + 1;
+            
+        switch (parseState) {
+        case PARSE_COMMENT:
+            if (c == 0x0a || c == 0x0d) {
+                parseState = savedState;
+            }
+            break;
+
+        case PARSE_TAG:
+            {
+            if (c == CH_HASH) {
+                parseState = PARSE_COMMENT;
+                savedState = PARSE_TAG;
+                break;
+            }
+            if (u_isUWhiteSpace(c)) {
+                break;
+            }
+            if (testString.compare(charIdx-1, 6, "<word>") == 0) {
+                delete tp.bi;
+                tp.bi = BreakIterator::createWordInstance(locale,  status);
+                charIdx += 5;
+                break;
+            }
+            if (testString.compare(charIdx-1, 6, "<char>") == 0) {
+                delete tp.bi;
+                tp.bi = BreakIterator::createCharacterInstance(locale,  status);
+                charIdx += 5;
+                break;
+            }
+            if (testString.compare(charIdx-1, 6, "<line>") == 0) {
+                delete tp.bi;
+                tp.bi = BreakIterator::createLineInstance(locale,  status);
+                charIdx += 5;
+                break;
+            }
+            if (testString.compare(charIdx-1, 6, "<sent>") == 0) {
+                delete tp.bi;
+                tp.bi = BreakIterator::createSentenceInstance(locale,  status);
+                charIdx += 5;
+                break;
+            }
+            if (testString.compare(charIdx-1, 7, "<title>") == 0) {
+                delete tp.bi;
+                tp.bi = BreakIterator::createTitleInstance(locale,  status);
+                charIdx += 6;
+                break;
+            }
+            if (testString.compare(charIdx-1, 6, "<data>") == 0) {
+                parseState = PARSE_DATA;
+                charIdx += 5;
+                tp.dataToBreak = "";
+                tp.expectedBreaks->removeAllElements();
+                tp.srcCol ->removeAllElements();
+                tp.srcLine->removeAllElements();
+                break;
+            }
+
+            errln("line %d: Tag expected in test file.", lineNum);
+            parseState = PARSE_COMMENT;
+            savedState = PARSE_DATA;
+            }
+            break;
+
+        case PARSE_DATA:
+            if (c == CH_BULLET) {
+                int32_t  breakIdx = tp.dataToBreak.length();
+                tp.expectedBreaks->setSize(breakIdx+1);
+                tp.expectedBreaks->setElementAt(-1, breakIdx);
+                tp.srcLine->setSize(breakIdx+1);
+                tp.srcLine->setElementAt(lineNum, breakIdx);
+                tp.srcCol ->setSize(breakIdx+1);
+                tp.srcCol ->setElementAt(column, breakIdx);
+                break;
+            }
+
+            if (testString.compare(charIdx-1, 7, "</data>") == 0) {
+                // Add final entry to mappings from break location to source file position.
+                //  Need one extra because last break position returned is after the
+                //    last char in the data, not at the last char.
+                tp.srcLine->addElement(lineNum, status);
+                tp.srcCol ->addElement(column, status);
+
+                parseState = PARSE_TAG;
+                charIdx += 7;
+
+                // RUN THE TEST!
+                executeTest(&tp);
+                break;
+            }
+
+            if (testString.compare(charIdx-1, 2, "<>") == 0) {
+                charIdx++;
+                int32_t  breakIdx = tp.dataToBreak.length();
+                tp.expectedBreaks->setSize(breakIdx+1);
+                tp.expectedBreaks->setElementAt(-1, breakIdx);
+                tp.srcLine->setSize(breakIdx+1);
+                tp.srcLine->setElementAt(lineNum, breakIdx);
+                tp.srcCol ->setSize(breakIdx+1);
+                tp.srcCol ->setElementAt(column, breakIdx);
+                break;
+            }
+
+            if (c == CH_LT) {
+                tagValue   = 0;
+                parseState = PARSE_NUM;
+                break;
+            }
+
+            if (c == CH_HASH && column==3) {   // TODO:  why is column off so far?
+                parseState = PARSE_COMMENT;
+                savedState = PARSE_DATA;
+                break;
+            }
+
+            if (c == CH_BACKSLASH) {
+                // Check for \ at end of line, a line continuation.
+                //     Advance over (discard) the newline
+                UChar32 cp = testString.char32At(charIdx);
+                if (cp == CH_CR && charIdx<len && testString.charAt(charIdx+1) == CH_LF) {
+                    // We have a CR LF
+                    //  Need an extra increment of the input ptr to move over both of them
+                    charIdx++;
+                }
+                if (cp == CH_LF || cp == CH_CR) {
+                    lineNum++;
+                    colStart = charIdx;
+                    charIdx++;
+                    break;
+                }
+
+                // Let unescape handle the back slash.
+                cp = testString.unescapeAt(charIdx);
+                if (cp != -1) {
+                    // Escape sequence was recognized.  Insert the char
+                    //   into the test data.
+                    tp.dataToBreak.append(cp);
+                    while (tp.dataToBreak.length() > tp.srcLine->size()) {
+                        tp.srcLine->addElement(lineNum, status);
+                        tp.srcCol ->addElement(column, status);
+                    }
+                    break;
+                }
+
+                
+                // Not a recognized backslash escape sequence.  
+                // Take the next char as a literal.
+                //  TODO:  Should this be an error?
+                c = testString.charAt(charIdx);
+                charIdx = testString.moveIndex32(charIdx, 1);
+            }
+
+            // Normal, non-escaped data char.
+            tp.dataToBreak.append(c);
+
+            // Save the mapping from offset in the data to line/column numbers in
+            //   the original input file.  Will be used for better error messages only.
+            //   If there's an expected break before this char, the slot in the mapping
+            //     vector will already be set for this char; don't overwrite it.
+            if (tp.dataToBreak.length() > tp.srcLine->size()) {
+                tp.srcLine->addElement(lineNum, status);
+                tp.srcCol ->addElement(column, status);
+            }
+            break;
+
+
+        case PARSE_NUM:
+            // We are parsing an expected numeric tag value, like <1234>,
+            //   within a chunk of data.
+            if (u_isUWhiteSpace(c)) {
+                break;
+            }
+
+            if (c == CH_GT) {
+                // Finished the number.  Add the info to the expected break data,
+                //   and switch parse state back to doing plain data.
+                parseState = PARSE_DATA;
+                if (tagValue == 0) {
+                    tagValue = -1;
+                }
+                int32_t  breakIdx = tp.dataToBreak.length();
+                tp.expectedBreaks->setSize(breakIdx+1);
+                tp.expectedBreaks->setElementAt(tagValue, breakIdx);
+                tp.srcLine->setSize(breakIdx+1);
+                tp.srcLine->setElementAt(lineNum, breakIdx);
+                tp.srcCol ->setSize(breakIdx+1);
+                tp.srcCol ->setElementAt(column, breakIdx);
+                break;
+            }
+
+            if (u_isdigit(c)) {
+                tagValue = tagValue*10 + u_charDigitValue(c);
+                break;
+            }
+
+            errln("Syntax Error in test file at line %d, col %d", 
+                lineNum, column);
+            parseState = PARSE_COMMENT;
+            break;
+        }
+
+
+        if (U_FAILURE(status)) {
+            errln("ICU Error %s while parsing test file at line %d.", 
+                u_errorName(status), lineNum);
+            status = U_ZERO_ERROR;
+        }
+
+    }
+
+    delete tp.bi;
+    delete tp.expectedBreaks;
+    delete tp.srcLine;
+    delete tp.srcCol;
+    delete [] testFile;
+}
+
+
+//-------------------------------------------------------------------------------
+//
+//    ReadAndConvertFile   Read a text data file, convert it to UChars, and
+//    return the datain one big UChar * buffer, which the caller must delete.
+//
+//    TODO:  This is a clone of RegexTest::ReadAndConvertFile.
+//           Move this function to some common place.
+//
+//--------------------------------------------------------------------------------
+UChar *RBBITest::ReadAndConvertFile(const char *fileName, int &ulen, UErrorCode &status) {
+    UChar       *retPtr  = NULL;
+    char        *fileBuf = NULL;
+    UConverter* conv     = NULL;
+    FILE        *f       = NULL;
+ 
+    ulen = 0;
+    if (U_FAILURE(status)) {
+        return retPtr;
+    }
+    
+    //
+    //  Open the file.
+    //
+    f = fopen(fileName, "rb");
+    if (f == 0) {
+        errln("Error opening test data file %s\n", fileName);
+        goto cleanUpAndReturn;
+    }
+    //
+    //  Read it in
+    //
+    int   fileSize;
+    int   amt_read;
+    
+    fseek( f, 0, SEEK_END);
+    fileSize = ftell(f);
+    fileBuf = new char[fileSize];
+    fseek(f, 0, SEEK_SET);
+    amt_read = fread(fileBuf, 1, fileSize, f);
+    if (amt_read != fileSize || fileSize <= 0) {
+        errln("Error reading test data file.");
+        goto cleanUpAndReturn;
+    }
+    
+    //
+    // Look for a Unicode Signature (BOM) on the data just read
+    //
+    int32_t        signatureLength;
+    const char *   fileBufC;
+    const char*    encoding;
+    
+    fileBufC = fileBuf;
+    encoding = ucnv_detectUnicodeSignature(
+        fileBuf, fileSize, &signatureLength, &status);
+    if(encoding!=NULL ){
+        fileBufC  += signatureLength;
+        fileSize  -= signatureLength;
+    }
+    
+    //
+    // Open a converter to take the rule file to UTF-16
+    //
+    conv = ucnv_open(encoding, &status);
+    if (U_FAILURE(status)) {
+        goto cleanUpAndReturn;
+    }
+    
+    //
+    // Convert the rules to UChar.
+    //  Preflight first to determine required buffer size.
+    //
+    ulen = ucnv_toUChars(conv,
+        NULL,           //  dest,
+        0,              //  destCapacity,
+        fileBufC,
+        fileSize,
+        &status);
+    if (status == U_BUFFER_OVERFLOW_ERROR) {
+        // Buffer Overflow is expected from the preflight operation.
+        status = U_ZERO_ERROR;
+        
+        retPtr = new UChar[ulen+1];
+        ucnv_toUChars(conv,
+            retPtr,       //  dest,
+            ulen+1,
+            fileBufC,
+            fileSize,
+            &status);
+    }
+
+cleanUpAndReturn:
+    fclose(f);
+    delete fileBuf;
+    ucnv_close(conv);
+    if (U_FAILURE(status)) {
+        errln("ucnv_toUChars: ICU Error \"%s\"\n", u_errorName(status));
+        delete retPtr;
+        retPtr = 0;
+        ulen   = 0;
+    };
+    return retPtr;
 }
 
 
