@@ -92,7 +92,6 @@ pt {
             "\uFFFD",
     }
     ShortLanguage { "por" }
-    localPatternChars { "GyMdkHmsSEDFwWahKzYe" }
     zoneStrings { 
         {
                 "Africa/Casablanca",
