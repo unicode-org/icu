@@ -152,7 +152,10 @@ class TransliteratorTest : public IntlTest {
      * Test liberalized ID syntax.  1006c
      */
     void TestLiberalizedID(void);
-
+    /**
+     * Test Jitterbug 912
+     */
+    void TestCreateInstance(void);
 
     //======================================================================
     // Support methods
