@@ -57,7 +57,6 @@ U_CAPI double   U_EXPORT2 uprv_fabs(double x);
 U_CAPI double   U_EXPORT2 uprv_modf(double x, double* y);
 U_CAPI double   U_EXPORT2 uprv_fmod(double x, double y);
 U_CAPI double   U_EXPORT2 uprv_pow10(int32_t x);
-U_CAPI double   U_EXPORT2 uprv_IEEEremainder(double x, double y);
 U_CAPI double   U_EXPORT2 uprv_fmax(double x, double y);
 U_CAPI double   U_EXPORT2 uprv_fmin(double x, double y);
 U_CAPI int32_t  U_EXPORT2 uprv_max(int32_t x, int32_t y);

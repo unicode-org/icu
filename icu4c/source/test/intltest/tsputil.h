@@ -18,11 +18,11 @@ class PUtilTest : public IntlTest {
     void runIndexedTest( int32_t index, UBool exec, const char* &name, char* par );
 public:
 
-    void testIEEEremainder(void);
+//    void testIEEEremainder(void);
     void testMaxMin(void);
 
 private:
-    void remainderTest(double x, double y, double exp);
+//    void remainderTest(double x, double y, double exp);
     void maxMinTest(double a, double b, double exp, UBool max);
 
 };
