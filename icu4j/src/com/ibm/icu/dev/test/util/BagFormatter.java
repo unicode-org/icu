@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/util/BagFormatter.java,v $
- * $Date: 2003/11/21 01:03:38 $
- * $Revision: 1.1 $
+ * $Date: 2003/11/21 19:10:43 $
+ * $Revision: 1.2 $
  *
  *****************************************************************************************
  */
@@ -19,7 +19,7 @@ import com.ibm.icu.impl.*;
 
 import java.io.*;
 import java.util.*;
-import java.util.regex.*;
+//import java.util.regex.*;
 import java.text.MessageFormat;
 
 public class BagFormatter {
