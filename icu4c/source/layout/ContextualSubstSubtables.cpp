@@ -45,9 +45,17 @@ void ContextualSubstitutionBase::applySubstitutionLookups(
 }
 
 le_bool ContextualSubstitutionBase::matchGlyphIDs(const LEGlyphID *glyphArray, le_uint16 glyphCount,
-                                               GlyphIterator *glyphIterator)
+                                               GlyphIterator *glyphIterator, le_bool backtrack)
 {
-    for (le_uint16 match = 0; match < glyphCount; match += 1) {
+    le_int32 direction = 1;
+    le_int32 match = 0;
+
+    if (backtrack) {
+        match = glyphCount -1;
+        direction = -1;
+    }
+
+    while (glyphCount > 0) {
         if (! glyphIterator->next()) {
             return false;
         }
@@ -57,6 +65,9 @@ le_bool ContextualSubstitutionBase::matchGlyphIDs(const LEGlyphID *glyphArray, l
         if (glyph != SWAPW(glyphArray[match])) {
             return false;
         }
+
+        glyphCount -= 1;
+        match += direction;
     }
 
     return true;
@@ -64,9 +75,18 @@ le_bool ContextualSubstitutionBase::matchGlyphIDs(const LEGlyphID *glyphArray, l
 
 le_bool ContextualSubstitutionBase::matchGlyphClasses(const le_uint16 *classArray, le_uint16 glyphCount,
                                                GlyphIterator *glyphIterator,
-                                               const ClassDefinitionTable *classDefinitionTable)
+                                               const ClassDefinitionTable *classDefinitionTable,
+                                               le_bool backtrack)
 {
-    for (le_uint16 match = 0; match < glyphCount; match += 1) {
+    le_int32 direction = 1;
+    le_int32 match = 0;
+
+    if (backtrack) {
+        match = glyphCount - 1;
+        direction = -1;
+    }
+
+    while (glyphCount > 0) {
         if (! glyphIterator->next()) {
             return false;
         }
@@ -84,15 +104,26 @@ le_bool ContextualSubstitutionBase::matchGlyphClasses(const le_uint16 *classArra
                 return false;
             }
         }
+
+        glyphCount -= 1;
+        match += direction;
     }
 
     return true;
 }
 
 le_bool ContextualSubstitutionBase::matchGlyphCoverages(const Offset *coverageTableOffsetArray, le_uint16 glyphCount,
-                                                     GlyphIterator *glyphIterator, const char *offsetBase)
+                                                     GlyphIterator *glyphIterator, const char *offsetBase, le_bool backtrack)
 {
-    for (le_uint16 glyph = 0; glyph < glyphCount; glyph += 1) {
+    le_int32 direction = 1;
+    le_int32 glyph = 0;
+
+    if (backtrack) {
+        glyph = glyphCount - 1;
+        direction = -1;
+    }
+
+    while (glyphCount > 0) {
         Offset coverageTableOffset = SWAPW(coverageTableOffsetArray[glyph]);
         const CoverageTable *coverageTable = (const CoverageTable *) (offsetBase + coverageTableOffset);
 
@@ -103,6 +134,9 @@ le_bool ContextualSubstitutionBase::matchGlyphCoverages(const Offset *coverageTa
         if (coverageTable->getGlyphCoverage((LEGlyphID) glyphIterator->getCurrGlyphID()) < 0) {
             return false;
         }
+
+        glyphCount -= 1;
+        glyph += direction;
     }
 
     return true;
@@ -322,8 +356,13 @@ le_uint32 ChainingContextualSubstitutionFormat1Subtable::process(const LookupPro
                 le_uint16 substCount = (le_uint16) SWAPW(lookaheadGlyphArray[lookaheadGlyphCount]);
 
                 tempIterator.setCurrStreamPosition(position);
-                tempIterator.prev(backtrackGlyphCount + 1);
-                if (! matchGlyphIDs(chainSubRuleTable->backtrackGlyphArray, backtrackGlyphCount, &tempIterator)) {
+
+                if (! tempIterator.prev(backtrackGlyphCount)) {
+                    continue;
+                }
+
+                tempIterator.prev();
+                if (! matchGlyphIDs(chainSubRuleTable->backtrackGlyphArray, backtrackGlyphCount, &tempIterator, true)) {
                     continue;
                 }
 
@@ -390,9 +429,14 @@ le_uint32 ChainingContextualSubstitutionFormat2Subtable::process(const LookupPro
                 
 
                 tempIterator.setCurrStreamPosition(position);
-                tempIterator.prev(backtrackGlyphCount + 1);
+
+                if (! tempIterator.prev(backtrackGlyphCount)) {
+                    continue;
+                }
+
+                tempIterator.prev();
                 if (! matchGlyphClasses(chainSubClassRuleTable->backtrackClassArray, backtrackGlyphCount,
-                    &tempIterator, backtrackClassDefinitionTable)) {
+                    &tempIterator, backtrackClassDefinitionTable, true)) {
                     continue;
                 }
 
@@ -433,9 +477,13 @@ le_uint32 ChainingContextualSubstitutionFormat3Subtable::process(const LookupPro
     le_int32 position = glyphIterator->getCurrStreamPosition();
     GlyphIterator tempIterator(*glyphIterator);
 
-    tempIterator.prev(backtrkGlyphCount + 1);
+    if (! tempIterator.prev(backtrkGlyphCount)) {
+        return 0;
+    }
+
+    tempIterator.prev();
     if (! ContextualSubstitutionBase::matchGlyphCoverages(backtrackCoverageTableOffsetArray,
-        backtrkGlyphCount, &tempIterator, (const char *) this)) {
+        backtrkGlyphCount, &tempIterator, (const char *) this, true)) {
         return 0;
     }
 
