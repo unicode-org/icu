@@ -771,10 +771,14 @@ int main(int argc, char **argv)
             iter++;
             if (iter != end)
                 fromcpage = *iter;
+            else
+                usage(pname, 1);
         } else if (strcmp("-t", *iter) == 0 || !strcmp("--to-code", *iter)) {
             iter++;
             if (iter != end)
                 tocpage = *iter;
+            else
+                usage(pname, 1);
         } else if (strcmp("-x", *iter) == 0) {
             iter++;
             if (iter != end)
