@@ -597,6 +597,12 @@ U_CFUNC void ucol_createElements(UColTokenParser *src, tempUCATable *t, UColTokL
     fprintf(stderr, "Adding: %04X with %08X\n", el.cPoints[0], el.CEs[0]);
 #endif
     uprv_uca_addAnElement(t, &el, status);
+#if UCOL_DEBUG_DUPLICATES
+    if(*status != U_ZERO_ERROR) {
+      fprintf(stderr, "replaced CE for %04X with CE for %04X\n", el.cPoints[0], tok->debugSource);
+      *status = U_ZERO_ERROR;
+    }
+#endif
 
     tok = tok->next;
   }
@@ -828,7 +834,7 @@ UCATableHeader *ucol_assembleTailoringTable(UColTokenParser *src, UErrorCode *st
   {
     UChar decomp[256];
     uint32_t noOfDec = 0, i = 0, CE = UCOL_NOT_FOUND;
-    uint32_t u = 0;
+    UChar u = 0;
     UCAElements el;
     el.isThai = FALSE;
     collIterate colIt;
@@ -837,8 +843,8 @@ UCATableHeader *ucol_assembleTailoringTable(UColTokenParser *src, UErrorCode *st
     uint32_t compRes = 0;
 
     /* produce canonical closure */
-    for(u = 0; u < 0x10000; u++) {
-      if((noOfDec = unorm_normalize((const UChar *)&u, 1, UNORM_NFD, 0, decomp, 256, status)) > 1
+    for(u = 0; u < 0xFFFF; u++) {
+      if((noOfDec = unorm_normalize(&u, 1, UNORM_NFD, 0, decomp, 256, status)) > 1
         || (noOfDec == 1 && *decomp != (UChar)u))
       /*if((noOfDec = uprv_ucol_decompose ((UChar)u, decomp)) > 1 || (noOfDec == 1 && *decomp != (UChar)u))*/
       {
