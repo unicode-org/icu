@@ -160,7 +160,7 @@ llong& llong::operator/=(const llong& rhs)
         llong r;
         llong m((int32_t)1);
 
-        while (ule(b, a)) { // a positive so topmost bit is 0, this will always terminate
+        while (b.ule(a)) { // a positive so topmost bit is 0, this will always terminate
             m <<= 1;
             b <<= 1;
         }
@@ -214,7 +214,7 @@ static const uint8_t digitInfo[] = {
     0xa1u, 0xa2u, 0xa3u,     0,     0,     0,     0,     0,
 };
 
-llong atoll(const char* str, uint32_t radix)
+llong llong::atoll(const char* str, uint32_t radix)
 {
     if (radix > 36) {
         radix = 36;
@@ -240,7 +240,7 @@ llong atoll(const char* str, uint32_t radix)
     return result;
 }
 
-llong u_atoll(const UChar* str, uint32_t radix)
+llong llong::u_atoll(const UChar* str, uint32_t radix)
 {
     if (radix > 36) {
         radix = 36;
@@ -267,7 +267,7 @@ llong u_atoll(const UChar* str, uint32_t radix)
     return result;
 }
 
-uint32_t lltoa(const llong& val, char* buf, uint32_t len, uint32_t radix, UBool raw)
+uint32_t llong::lltoa(char* buf, uint32_t len, uint32_t radix, UBool raw) const
 {    
     if (radix > 36) {
         radix = 36;
@@ -277,7 +277,7 @@ uint32_t lltoa(const llong& val, char* buf, uint32_t len, uint32_t radix, UBool 
     llong base(radix);
 
     char* p = buf;
-    llong w(val);
+    llong w(*this);
     if (len && w.isNegative()) {
         w.negate();
         *p++ = kMinus;
@@ -287,7 +287,7 @@ uint32_t lltoa(const llong& val, char* buf, uint32_t len, uint32_t radix, UBool 
     while (len && w.notZero()) {
         llong n = w / base;
         llong m = n * base;
-        int32_t d = llong_asInt(w-m);
+        int32_t d = (w-m).asInt();
         *p++ = raw ? (char)d : asciiDigits[d];
         w = n;
         --len;
@@ -310,7 +310,7 @@ uint32_t lltoa(const llong& val, char* buf, uint32_t len, uint32_t radix, UBool 
     return len;
 }
 
-uint32_t u_lltoa(const llong& val, UChar* buf, uint32_t len, uint32_t radix, UBool raw)
+uint32_t llong::u_lltoa(UChar* buf, uint32_t len, uint32_t radix, UBool raw) const
 {    
     if (radix > 36) {
         radix = 36;
@@ -320,7 +320,7 @@ uint32_t u_lltoa(const llong& val, UChar* buf, uint32_t len, uint32_t radix, UBo
     llong base(radix);
 
     UChar* p = buf;
-    llong w(val);
+    llong w(*this);
     if (len && w.isNegative()) {
         w.negate();
         *p++ = kUMinus;
@@ -330,7 +330,7 @@ uint32_t u_lltoa(const llong& val, UChar* buf, uint32_t len, uint32_t radix, UBo
     while (len && w.notZero()) {
         llong n = w / base;
         llong m = n * base;
-        int32_t d = llong_asInt(w-m);
+        int32_t d = (w-m).asInt();
         *p++ = (UChar)(raw ? d : asciiDigits[d]);
         w = n;
         --len;
