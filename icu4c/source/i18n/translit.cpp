@@ -158,7 +158,11 @@ Transliterator& Transliterator::operator=(const Transliterator& other) {
 int32_t Transliterator::transliterate(Replaceable& text,
                                       int32_t start, int32_t limit) const {
 
-    UTransPosition offsets = { start, limit, start, limit };
+    UTransPosition offsets;
+    offsets.contextStart= start;
+    offsets.contextLimit = limit;
+    offsets.start = start;
+    offsets.limit = limit;
     handleTransliterate(text, offsets, FALSE);
     return offsets.limit;
 }
