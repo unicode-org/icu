@@ -111,7 +111,7 @@ public:
      */
     enum EField
     {
-        kEraField,          // ERA field alignment.
+        kEraField = 0,      // ERA field alignment.
         kYearField,         // YEAR field alignment.
         kMonthField,        // MONTH field alignment.
         kDateField,         // DATE field alignment.
@@ -175,15 +175,23 @@ public:
      */
     enum EStyle
     {
-        kFull,
-        kLong,
-        kMedium,
-        kShort,
+        kNone   = -1,
 
-        kDefault     = kMedium,
-        kDateOffset = 4,
-        kNone         = -1,
-        kDateTime     = 8,
+        kFull   = 0,
+        kLong   = 1,
+        kMedium = 2,
+        kShort  = 3,
+
+        kDateOffset   = kShort + 1,
+     // kFull   + kDateOffset = 4
+     // kLong   + kDateOffset = 5
+     // kMedium + kDateOffset = 6
+     // kShort  + kDateOffset = 7
+
+        kDateTime             = 8,
+
+        kDefault      = kMedium,
+
         
         
     /**
