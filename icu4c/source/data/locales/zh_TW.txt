@@ -1301,7 +1301,7 @@ zh_TW {
         EH { "西撒哈拉" }
         YE { "葉門" }
         YU { "南斯拉夫" }
-        ZR { "薩伊共和國" }
+        //ZR { "薩伊共和國" } // It's now called CD { "Democratic Republic of the Congo" }
         ZM { "尚比亞" }
         ZW { "辛巴威" }
     }

@@ -2238,7 +2238,7 @@ ko {
         EH { "\uc11c\uc0ac\ud558\ub77c" }
         YE { "\uc608\uba58" }
         YU { "\uc720\uace0\uc2ac\ub77c\ube44\uc544" }
-        ZR { "\uc790\uc774\ub974" }
+        //ZR { "\uc790\uc774\ub974" } // It's now called CD { "Democratic Republic of the Congo" }
         ZM { "\uc7a0\ube44\uc544" }
         ZW { "\uc9d0\ubc14\ube0c\uc6e8" }
 

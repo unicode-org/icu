@@ -672,7 +672,7 @@ mt {
         YU { "Jugoslavja" } 	// Yugoslavia
         ZA { "Afrika t'Isfel" } 	// South Africa
         ZM { "Żambja" } 	// Zambia
-        ZR { "Żaire" } 	// Zaire
+        //ZR { "Żaire" } 	// Zaire // It's now called CD { "Democratic Republic of the Congo" }
         ZW { "Żimbabwe" } 	// Zimbabwe
 
     }
