@@ -2753,7 +2753,8 @@ public class LDML2ICUConverter {
         return table;
     }
     
-    ICUResourceWriter.Resource parseCollations(Node root, StringBuffer xpath){
+    public ICUResourceWriter.Resource parseCollations(Node root, StringBuffer xpath){
+
         ICUResourceWriter.ResourceTable table = new ICUResourceWriter.ResourceTable();
         ICUResourceWriter.Resource current = null;
         table.name = root.getNodeName();
