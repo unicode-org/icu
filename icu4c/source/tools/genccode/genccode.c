@@ -50,7 +50,7 @@ static UOption options[]={
 };
 
 extern int
-main(int argc, char *argv[]) {
+main(int argc, const char *argv[]) {
     /* read command line options */
     argc=u_parseArgs(argc, argv, sizeof(options)/sizeof(options[0]), options);
 

@@ -296,7 +296,12 @@ Formattable::adoptArray(Formattable* array, int32_t count)
 //----------------------------------------------------
 #ifdef _DEBUG
 
+#if U_IOSTREAM_SOURCE >= 199711
+#include <iostream>
+using namespace std;
+#elif U_IOSTREAM_SOURCE >= 198506
 #include <iostream.h>
+#endif
 
 #include "unicode/datefmt.h"
 #include "unistrm.h"
