@@ -125,9 +125,12 @@ RB_SOURCE_DIR = $(GENRB_SOURCE:$=$)
 #
 # ALL  
 #     This target builds all the data files.  The world starts here.
+#			Note: we really want the common data dll to go to $(DLL_OUTPUT), not $(ICUBLD).  But specifying
+#				that here seems to cause confusion with the building of the stub library of the same name.
+#				Building the common dll in $(ICUBLD) unconditionally copies it to $(DLL_OUTPUT) too.
 #
 #############################################################################
-ALL : GODATA  testdata "$(DLL_OUTPUT)\$(U_ICUDATA_NAME).dll" $(TESTDATAOUT)\test1.cnv $(TESTDATAOUT)\test3.cnv $(TESTDATAOUT)\test4.cnv 
+ALL : GODATA  testdata "$(ICUDBLD)\$(U_ICUDATA_NAME).dll" $(TESTDATAOUT)\test1.cnv $(TESTDATAOUT)\test3.cnv $(TESTDATAOUT)\test4.cnv 
 	@echo All targets are up to date
 
 #
@@ -145,7 +148,7 @@ BRK_FILES = "$(ICUDBLD)\sent.brk" "$(ICUDBLD)\char.brk" "$(ICUDBLD)\line.brk" "$
 #  pkgdata will drop all output files (.dat, .dll, .lib) into the target (ICUDBLD) directory.
 #  move the .dll and .lib files to their final destination afterwards.
 #
-"$(DLL_OUTPUT)\$(U_ICUDATA_NAME).dll" :  $(CNV_FILES) $(BRK_FILES) qchk.dat fchk.dat uprops.dat unames.dat unorm.dat cnvalias.dat tz.dat ucadata.dat invuca.dat $(ALL_RES) icudata.res
+"$(ICUDBLD)\$(U_ICUDATA_NAME).dll" :  $(CNV_FILES) $(BRK_FILES) qchk.dat fchk.dat uprops.dat unames.dat unorm.dat cnvalias.dat tz.dat ucadata.dat invuca.dat $(ALL_RES) icudata.res
 	@echo Building icu data
 	@cd "$(ICUDBLD)"
  	"$(ICUTOOLS)\pkgdata\$(CFG)\pkgdata" -e $(U_ICUDATA_NAME) -v -m dll -c -p $(U_ICUDATA_NAME) -O "$(PKGOPT)" -d "$(ICUDBLD)" -s . <<pkgdatain.txt
@@ -222,9 +225,9 @@ CLEAN :
 	-@erase "word_th.brk"
 	-@erase "test*.*"
 	-@erase "base*.*"
+	-@erase $(U_ICUDATA_NAME).dll
 	@cd "$(DLL_OUTPUT)"
 	-@erase "*.cnv"
-	-@erase $(U_ICUDATA_NAME).dll
 	@cd "$(TESTDATA)"
 	-@erase "*.res"
 	@cd "$(ICUTOOLS)"
@@ -282,7 +285,7 @@ unames.dat: {"$(ICUDATA)"}\unidata\UnicodeData.txt "$(ICUTOOLS)\gennames\$(CFG)\
 	@"$(ICUTOOLS)\gennames\$(CFG)\gennames" -1 $(ICUDATA)\unidata\UnicodeData.txt
 
 # Targets for uprops.dat
-uprops.dat: "$(ICUDATA)\unidata\UnicodeData.txt" "$(ICUTOOLS)\genprops\$(CFG)\genprops.exe"
+uprops.dat: "$(ICUDATA)\unidata\UnicodeData.txt" "$(ICUTOOLS)\genprops\$(CFG)\genprops.exe" "$(DLL_OUTPUT)\$(U_ICUDATA_NAME).dll"
 	@echo Creating data file for Unicode Character Properties
 	@set ICU_DATA=$(ICUDBLD)
 	@"$(ICUTOOLS)\genprops\$(CFG)\genprops" -s "$(ICUDATA)\unidata"
