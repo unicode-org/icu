@@ -245,6 +245,7 @@ static void TestUnicodeChar()
           return;
       }
       /* A basic test to see if it's working at all */
+      log_verbose("codepoint testing %x\n", codepoint);
       backAndForth(iter);
       ucol_closeElements(iter);
 
@@ -1133,7 +1134,7 @@ static void TestCEs() {
 
     uprv_strcpy(pDir, getenv("ICU_DATA"));
     pDir += uprv_strlen(pDir);
-    if (*pDir != U_FILE_SEP_CHAR) {
+    if (*(pDir - 1) != U_FILE_SEP_CHAR) {
         *pDir = U_FILE_SEP_CHAR;
         pDir ++;
     }
@@ -1266,6 +1267,8 @@ static void TestDiscontiguos() {
 
         u_unescape(tgt[count], tstr, 20);
         s = tstr;
+
+        log_verbose("count %d\n", count);
         
         while (TRUE) {
             uint32_t  ce;
