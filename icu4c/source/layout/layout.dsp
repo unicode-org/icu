@@ -170,6 +170,10 @@ SOURCE=.\ArabicShaping.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\CanonData.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\ClassDefinitionTables.cpp
 # End Source File
 # Begin Source File
@@ -435,6 +439,14 @@ SOURCE=.\ArabicShaping.h
 # Begin Source File
 
 SOURCE=.\AttachmentPosnSubtables.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\CanonShaping.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\CharSubstitutionFilter.h
 # End Source File
 # Begin Source File
 
