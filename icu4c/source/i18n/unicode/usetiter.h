@@ -4,7 +4,7 @@
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * $Source: /xsrl/Nsvn/icu/icu/source/i18n/unicode/Attic/usetiter.h,v $ 
-* $Revision: 1.3 $
+* $Revision: 1.4 $
 **********************************************************************
 */
 #ifndef USETITER_H
@@ -27,10 +27,10 @@ class UnicodeString;
  * <pre>
  * UnicodeSetIterator it(set);
  * while (set.next()) {
- *   if (set.codepoint != UnicodeSetIterator::IS_STRING) {
- *     processCodepoint(set.codepoint);
+ *   if (set.isString()) {
+ *     processString(set.getString());
  *   } else {
- *     processString(set.string);
+ *     processCodepoint(set.getCodepoint());
  *   }
  * }
  * </pre>
@@ -39,10 +39,10 @@ class UnicodeString;
  * <pre>
  * UnicodeSetIterator it(set);
  * while (set.nextRange()) {
- *   if (set.codepoint != UnicodeSetIterator::IS_STRING) {
- *     processCodepointRange(set.codepoint, set.codepointEnd);
+ *   if (set.isString()) {
+ *     processString(set.getString());
  *   } else {
- *     processString(set.string);
+ *     processCodepointRange(set.getCodepoint(), set.getCodepointEnd());
  *   }
  * }
  * </pre>
@@ -51,7 +51,7 @@ class UnicodeString;
  */
 class U_I18N_API UnicodeSetIterator {
 
- public:
+ protected:
 	
     /**
      * Value of <tt>codepoint</tt> if the iterator points to a string.
@@ -83,6 +83,8 @@ class U_I18N_API UnicodeSetIterator {
      */
 	const UnicodeString* string;
 
+ public:
+
     /**
      * Create an iterator over the given set.  The iterator is valid
      * only so long as <tt>set</tt> is valid.
@@ -100,7 +102,37 @@ class U_I18N_API UnicodeSetIterator {
     /**
      * Destructor.
      */
-    ~UnicodeSetIterator();
+    virtual ~UnicodeSetIterator();
+
+    /**
+     * Returns true if the current element is a string.  If so, the
+     * caller can retrieve it with <tt>getString()</tt>.  If this
+     * method returns false, the current element is a code point or
+     * code point range, depending on whether <tt>next()</tt> or
+     * <tt>nextRange()</tt> was called, and the caller can retrieve it
+     * with <tt>getCodepoint()</tt> and, for a range,
+     * <tt>getCodepointEnd()</tt>.
+     */
+    inline UBool UnicodeSetIterator::isString() const;
+
+    /**
+     * Returns the current code point, if <tt>isString()</tt> returned
+     * false.  Otherwise returns an undefined result.
+     */
+    inline UChar32 UnicodeSetIterator::getCodepoint() const;
+
+    /**
+     * Returns the end of the current code point range, if
+     * <tt>isString()</tt> returned false and <tt>nextRange()</tt> was
+     * called.  Otherwise returns an undefined result.
+     */
+    inline UChar32 UnicodeSetIterator::getCodepointEnd() const;
+
+    /**
+     * Returns the current string, if <tt>isString()</tt> returned
+     * true.  Otherwise returns an undefined result.
+     */
+    inline const UnicodeString& UnicodeSetIterator::getString() const;
 
     /**
      * Returns the next element in the set, either a single code point
@@ -156,21 +188,9 @@ class U_I18N_API UnicodeSetIterator {
      */
     void reset();
     
-    /**
-     * INTERNAL: Causes the interation to only visit part of long ranges
-     * @internal used only for testing
-     */
-    void setAbbreviated(UBool abbr);
-    
-    /**
-     * INTERNAL: Causes the interation to only visit part of long ranges
-     * @internal used only for testing
-     */
-    UBool getAbbreviated();
-    
     // ======================= PRIVATES ===========================
     
- private:
+ protected:
 
     // endElement and nextElements are really UChar32's, but we keep
     // them as signed int32_t's so we can do comparisons with
@@ -180,16 +200,32 @@ class U_I18N_API UnicodeSetIterator {
     int32_t range;
     int32_t endElement;
     int32_t nextElement;
-    UBool abbreviated;
+    //UBool abbreviated;
     int32_t nextString;
     int32_t stringCount;
-
-    void loadRange(int32_t range);
 
     UnicodeSetIterator(const UnicodeSetIterator&); // disallow
 
     UnicodeSetIterator& operator=(const UnicodeSetIterator&); // disallow
+
+    virtual void loadRange(int32_t range);
 };
+
+inline UBool UnicodeSetIterator::isString() const {
+    return codepoint == IS_STRING;
+}
+
+inline UChar32 UnicodeSetIterator::getCodepoint() const {
+    return codepoint;
+}
+
+inline UChar32 UnicodeSetIterator::getCodepointEnd() const {
+    return codepointEnd;
+}
+
+inline const UnicodeString& UnicodeSetIterator::getString() const {
+    return *string;
+}
 
 U_NAMESPACE_END
 
