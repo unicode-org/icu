@@ -71,10 +71,10 @@ void NormalizerConformanceTest::TestConformance(void) {
     strcat(backupPath, TEST_SUITE_FILE);
 
       
-    input = T_FileStream_open(newPath, "r");
+    input = T_FileStream_open(newPath, "rb");
 
     if (input == 0) {
-      input = T_FileStream_open(backupPath, "r");
+      input = T_FileStream_open(backupPath, "rb");
       if (input == 0) {
         errln("Failed to open either " + UnicodeString(newPath) + " or " + UnicodeString(backupPath) );
         return;
@@ -141,35 +141,38 @@ UBool NormalizerConformanceTest::checkConformance(const UnicodeString* field,
     UBool pass = TRUE;
     UErrorCode status = U_ZERO_ERROR;
     UnicodeString out;
+    int32_t fieldNum;
+
     for (int32_t i=0; i<FIELD_COUNT; ++i) {
+        fieldNum = i+1;
         if (i<3) {
             Normalizer::normalize(field[i], Normalizer::COMPOSE, 0, out, status);
-            pass &= assertEqual("C", field[i], out, field[1], (UnicodeString)"c2!=C(c" + (i+1));
+            pass &= assertEqual("C", field[i], out, field[1], "c2!=C(c", fieldNum);
             iterativeNorm(field[i], Normalizer::COMPOSE, out, +1);
-            pass &= assertEqual("C(+1)", field[i], out, field[1], (UnicodeString)"c2!=C(c" + (i+1));
+            pass &= assertEqual("C(+1)", field[i], out, field[1], "c2!=C(c", fieldNum);
             iterativeNorm(field[i], Normalizer::COMPOSE, out, -1);
-            pass &= assertEqual("C(-1)", field[i], out, field[1], (UnicodeString)"c2!=C(c" + (i+1));
+            pass &= assertEqual("C(-1)", field[i], out, field[1], "c2!=C(c", fieldNum);
 
             Normalizer::normalize(field[i], Normalizer::DECOMP, 0, out, status);
-            pass &= assertEqual("D", field[i], out, field[2], (UnicodeString)"c3!=D(c" + (i+1));
+            pass &= assertEqual("D", field[i], out, field[2], "c3!=D(c", fieldNum);
             iterativeNorm(field[i], Normalizer::DECOMP, out, +1);
-            pass &= assertEqual("D(+1)", field[i], out, field[2], (UnicodeString)"c3!=D(c" + (i+1));
+            pass &= assertEqual("D(+1)", field[i], out, field[2], "c3!=D(c", fieldNum);
             iterativeNorm(field[i], Normalizer::DECOMP, out, -1);
-            pass &= assertEqual("D(-1)", field[i], out, field[2], (UnicodeString)"c3!=D(c" + (i+1));
+            pass &= assertEqual("D(-1)", field[i], out, field[2], "c3!=D(c", fieldNum);
         }
         Normalizer::normalize(field[i], Normalizer::COMPOSE_COMPAT, 0, out, status);
-        pass &= assertEqual("KC", field[i], out, field[3], (UnicodeString)"c4!=KC(c" + (i+1));
+        pass &= assertEqual("KC", field[i], out, field[3], "c4!=KC(c", fieldNum);
         iterativeNorm(field[i], Normalizer::COMPOSE_COMPAT, out, +1);
-        pass &= assertEqual("KC(+1)", field[i], out, field[3], (UnicodeString)"c4!=KC(c" + (i+1));
+        pass &= assertEqual("KC(+1)", field[i], out, field[3], "c4!=KC(c", fieldNum);
         iterativeNorm(field[i], Normalizer::COMPOSE_COMPAT, out, -1);
-        pass &= assertEqual("KC(-1)", field[i], out, field[3], (UnicodeString)"c4!=KC(c" + (i+1));
+        pass &= assertEqual("KC(-1)", field[i], out, field[3], "c4!=KC(c", fieldNum);
 
         Normalizer::normalize(field[i], Normalizer::DECOMP_COMPAT, 0, out, status);
-        pass &= assertEqual("KD", field[i], out, field[4], (UnicodeString)"c5!=KD(c" + (i+1));
+        pass &= assertEqual("KD", field[i], out, field[4], "c5!=KD(c", fieldNum);
         iterativeNorm(field[i], Normalizer::DECOMP_COMPAT, out, +1);
-        pass &= assertEqual("KD(+1)", field[i], out, field[4], (UnicodeString)"c5!=KD(c" + (i+1));
+        pass &= assertEqual("KD(+1)", field[i], out, field[4], "c5!=KD(c", fieldNum);
         iterativeNorm(field[i], Normalizer::DECOMP_COMPAT, out, -1);
-        pass &= assertEqual("KD(-1)", field[i], out, field[4], (UnicodeString)"c5!=KD(c" + (i+1));
+        pass &= assertEqual("KD(-1)", field[i], out, field[4], "c5!=KD(c", fieldNum);
     }
     if (U_FAILURE(status)) {
         errln("Normalizer::normalize returned error status");
@@ -218,15 +221,37 @@ void NormalizerConformanceTest::iterativeNorm(const UnicodeString& str,
  * @param msg description of this test
  * @param return true if got == exp
  */
-UBool NormalizerConformanceTest::assertEqual(const UnicodeString& op,
+UBool NormalizerConformanceTest::assertEqual(const char *op,
                                              const UnicodeString& s,
                                              const UnicodeString& got,
                                              const UnicodeString& exp,
-                                             const UnicodeString& msg) {
-    if (exp == got) return TRUE;
-    errln((UnicodeString)"      " + msg + ") " + op + "(" +
-          prettify(s) + ")=" + prettify(got) +
-          ", exp. " + prettify(exp));
+                                             const char *msg,
+                                             int32_t field)
+{
+    if (exp == got)
+        return TRUE;
+
+    char *sChars, *gotChars, *expChars;
+    UnicodeString sPretty(prettify(s));
+    UnicodeString gotPretty(prettify(got));
+    UnicodeString expPretty(prettify(exp));
+
+    sChars = new char[sPretty.length() + 1];
+    gotChars = new char[gotPretty.length() + 1];
+    expChars = new char[expPretty.length() + 1];
+
+    sPretty.extract(0, sPretty.length(), sChars, sPretty.length() + 1);
+    sChars[sPretty.length()] = 0;
+    gotPretty.extract(0, gotPretty.length(), gotChars, gotPretty.length() + 1);
+    gotChars[gotPretty.length()] = 0;
+    expPretty.extract(0, expPretty.length(), expChars, expPretty.length() + 1);
+    expChars[expPretty.length()] = 0;
+
+    errln("    %s%d)%s(%s)=%s, exp. %s", msg, field, op, sChars, gotChars, expChars);
+
+    delete []sChars;
+    delete []gotChars;
+    delete []expChars;
     return FALSE;
 }
 
