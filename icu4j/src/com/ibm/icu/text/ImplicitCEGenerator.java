@@ -22,7 +22,7 @@ import com.ibm.icu.impl.Utility;
 # Last CJK: E0A9DD00
 # First CJK_A: E0A9DF00
 # Last CJK_A: E0DE3100
-
+@internal
  */
 public class ImplicitCEGenerator {
     

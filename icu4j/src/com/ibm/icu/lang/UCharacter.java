@@ -4658,34 +4658,6 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
         return c1;
     }
 
-    /*
-    public static final int codePointAt(String seq, int index) {
-        char c1 = seq.charAt(index++);
-        if (isHighSurrogate(c1)) {
-            if (index < seq.length()) {
-                char c2 = seq.charAt(index);
-                if (isLowSurrogate(c2)) {
-                    return toCodePoint(c1, c2);
-                }
-            }
-        }
-        return c1;
-    }
-
-    public static final int codePointAt(StringBuffer seq, int index) {
-        char c1 = seq.charAt(index++);
-        if (isHighSurrogate(c1)) {
-            if (index < seq.length()) {
-                char c2 = seq.charAt(index);
-                if (isLowSurrogate(c2)) {
-                    return toCodePoint(c1, c2);
-                }
-            }
-        }
-        return c1;
-    }
-    */
-
     /**
      * Cover the JDK 1.5 API, for convenience.  Return the code point at index.
      * <br/><b>Note</b>: the semantics of this API is different from the related UTF16
@@ -4729,34 +4701,6 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
         }
         return c2;
     }
-
-    /*
-    public static final int codePointBefore(String seq, int index) {
-        char c2 = seq.charAt(--index);
-        if (isLowSurrogate(c2)) {
-            if (index > 0) {
-                char c1 = seq.charAt(--index);
-                if (isHighSurrogate(c1)) {
-                    return toCodePoint(c1, c2);
-                }
-            }
-        }
-        return c2;
-    }
-
-    public static final int codePointBefore(StringBuffer seq, int index) {
-        char c2 = seq.charAt(--index);
-        if (isLowSurrogate(c2)) {
-            if (index > 0) {
-                char c1 = seq.charAt(--index);
-                if (isHighSurrogate(c1)) {
-                    return toCodePoint(c1, c2);
-                }
-            }
-        }
-        return c2;
-    }
-    */
 
     /**
      * Cover the JDK 1.5 API, for convenience.  Return the code point before index.
