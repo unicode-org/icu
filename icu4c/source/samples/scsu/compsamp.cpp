@@ -25,6 +25,7 @@
 #include <stdio.h>
 #include <ctype.h>            /* for isspace, etc.    */
 #include <assert.h>
+#include <string.h>
 
 #include "unicode/utypes.h"   /* Basic ICU data types */
 #include "unicode/scsu.h"     
@@ -201,7 +202,7 @@ int32_t getOurDataString(int32_t i, UChar *s, int32_t size)
   return len;
 }
 
-UErrorCode compsample_02()
+void compsample_02()
 {
   printf("\n\n==============================================\n"
          "Sample 02: C: bulk Unicode compression\n");
