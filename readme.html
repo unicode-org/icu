@@ -2,6 +2,7 @@
 
 <html lang="en-US">
   <head>
+    <meta name="generator" content="HTML Tidy, see www.w3.org">
     <title>ReadMe for ICU</title>
     <meta name="COPYRIGHT" content=
     "Copyright (c) 1997-2004 IBM Corporation and others. All Rights Reserved.">
@@ -1494,7 +1495,8 @@ del common/libicuuc.so
 
         <td>libicui18n.so.<i>XY</i>.<i>Z</i></td>
 
-        <td>Contains many locale based i18n functions.</td>
+        <td>A library that contains many locale based internationalization
+        (i18n) functions.</td>
       </tr>
 
       <tr>
@@ -1504,7 +1506,7 @@ del common/libicuuc.so
 
         <td>libicule.so.<i>XY</i>.<i>Z</i></td>
 
-        <td>Contains an optional engine for doing font layout.</td>
+        <td>An optional engine for doing font layout.</td>
       </tr>
 
       <tr>
@@ -1514,8 +1516,8 @@ del common/libicuuc.so
 
         <td>libiculx.so.<i>XY</i>.<i>Z</i></td>
 
-        <td>Contains an optional engine for doing font layout that uses parts
-        of ICU.</td>
+        <td>An optional engine for doing font layout that uses parts of
+        ICU.</td>
       </tr>
 
       <tr>
@@ -1523,10 +1525,22 @@ del common/libicuuc.so
 
         <td>icuio<i>XY</i>.dll</td>
 
-        <td>libustdio.so.<i>XY</i>.<i>Z</i></td>
+        <td>libicuio.so.<i>XY</i>.<i>Z</i></td>
 
-        <td>An unsupported optional library that provides a stdio like API with
-        Unicode support.</td>
+        <td>An optional library that provides a stdio like API with Unicode
+        support.</td>
+      </tr>
+
+      <tr>
+        <td>Tool Utility Library</td>
+
+        <td>icutu<i>XY</i>.dll</td>
+
+        <td>libicutu.so.<i>XY</i>.<i>Z</i></td>
+
+        <td>An internal library that contains internal APIs that are only used
+        by ICU's tools. If you do not use ICU's tools, you do not need this
+        library.</td>
       </tr>
     </table>
 
@@ -1954,22 +1968,29 @@ del common/libicuuc.so
 
     <h4>Data For a New Platform</h4>
 
-    <p>It may not be necessary for your use of ICU to make a full ICU build
-    work. Most of the makefiles and build targets are for tools that are used
-    for building ICU's data, and an application's data, if the application uses
-    ICU resource bundles and similar for its data.</p>
+    <p>For some people, it may not be necessary for completely build ICU. Most
+    of the makefiles and build targets are for tools that are used for building
+    ICU's data, and an application's data (when an application uses ICU
+    resource bundles for its data).</p>
 
-    <p>Data files can be built on a different platform if both platforms share
-    the same endianness and the same charset family, and if memory-mappable,
-    binary data files are used instead of DLLs/shared libraries. For details
+    <p>Data files can be built on a different platform when both platforms
+    share the same endianness and the same charset family. This assertion does
+    not include platform dependent DLLs/shared/static libraries. For details
     see the User Guide <a href=
     "http://oss.software.ibm.com/icu/userguide/icudata.html">ICU Data</a>
     chapter.</p>
 
-    <p>ICU 2.8 eliminates the first condition: It adds the icuswap tool which
-    can be run on any platform to turn binary ICU data files from any one of
-    the three formats into any one of the other. This allows to use ICU data
-    built anywhere to be used for any target platform.</p>
+    <p>ICU 2.8 removes the requirement that ICU be completely built in the
+    native operating environment. It adds the icuswap tool which can be run on
+    any platform to turn binary ICU data files from any one of the three
+    formats into any one of the other data formats. This allows a application
+    to use ICU data built anywhere to be used for any other target
+    platform.</p>
+
+    <p><strong>WARNING!</strong> Building ICU without running the tests is not
+    recommended. The tests verify that ICU is safe to use. It is recommended
+    that you try to completely port and test ICU before using the libraries for
+    your own application.</p>
 
     <h4>Adapting Makefiles For a New Platform</h4>
 
