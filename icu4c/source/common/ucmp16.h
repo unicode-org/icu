@@ -70,7 +70,7 @@
  * @see                CompactIntArray
  * @see                CompactCharArray
  * @see                CompactStringArray
- * @version            $Revision: 1.12 $ 8/25/98
+ * @version            $Revision: 1.13 $ 8/25/98
  * @author             Helena Shih
  */
 
@@ -161,6 +161,13 @@ U_CAPI  CompactShortArray* U_EXPORT2 ucmp16_initAlias(CompactShortArray *this_ob
                                                       int32_t count,
                                                       int16_t defaultValue );
 
+
+U_CAPI  CompactShortArray* U_EXPORT2 ucmp16_initAliasWithBlockShift(CompactShortArray *this_obj,
+                                                      uint16_t *indexArray,
+                                                      int16_t *newValues,
+                                                      int32_t count,
+                                                      int16_t defaultValue,
+                                                      int32_t blockShift);
 
 U_CAPI  void U_EXPORT2 ucmp16_close(CompactShortArray* array);
  /**
