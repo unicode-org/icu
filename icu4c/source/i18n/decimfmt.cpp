@@ -1875,14 +1875,14 @@ void DecimalFormat::expandAffix(const UnicodeString& pattern,
                                 UnicodeString& affix) const {
     affix.remove();
     for (int i=0; i<pattern.length(); ) {
-        UChar c = pattern.charAt(i++);
+        UChar32 c = pattern.char32At(i++);
         if (c == kQuote) {
-            c = pattern.charAt(i++);
+            c = pattern.char32At(i++);
             switch (c) {
             case kCurrencySign:
                 {
                     if (i<pattern.length() &&
-                        pattern.charAt(i) == kCurrencySign) {
+                        pattern.char32At(i) == kCurrencySign) {
                         ++i;
                         affix += fSymbols->getSymbol(DecimalFormatSymbols::kIntlCurrencySymbol);
                     } else {
@@ -2108,11 +2108,16 @@ DecimalFormat::toPattern(UnicodeString& result, UBool localized) const
             if (! roundingDigits.empty()) {
                 int32_t pos = roundingDecimalPos - i;
                 if (pos >= 0 && pos < roundingDigits.length()) {
-                    result.append((UChar) (roundingDigits.charAt(pos) - kPatternZeroDigit + zero));
+                    result.append((UChar) (roundingDigits.char32At(pos) - kPatternZeroDigit + zero));
                     continue;
                 }
             }
-            result.append((i<=getMinimumIntegerDigits() ? zero : digit));
+            if (i<=getMinimumIntegerDigits()) {
+                result.append(zero);
+            }
+            else {
+                result.append(digit);
+            }
         }
         if (getMaximumFractionDigits() > 0 || fDecimalSeparatorAlwaysShown) {
             if (localized) {
@@ -2125,8 +2130,12 @@ DecimalFormat::toPattern(UnicodeString& result, UBool localized) const
         int32_t pos = roundingDecimalPos;
         for (i = 0; i < getMaximumFractionDigits(); ++i) {
             if (! roundingDigits.empty() && pos < roundingDigits.length()) {
-                result.append((UChar)(pos < 0 ? zero :
-                  (UChar) (roundingDigits.charAt(pos) - kPatternZeroDigit + zero)));
+                if (pos < 0) {
+                    result.append(zero);
+                }
+                else {
+                    result.append((UChar)(roundingDigits.char32At(pos) - kPatternZeroDigit + zero));
+                }
                 ++pos;
                 continue;
             }
