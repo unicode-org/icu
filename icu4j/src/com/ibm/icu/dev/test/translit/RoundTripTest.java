@@ -47,7 +47,7 @@ public class RoundTripTest extends TestFmwk {
     public void TestJamo() throws IOException, ParseException {
         Test t = new Test("Latin-Jamo", 
           TestUtility.LATIN_SCRIPT, TestUtility.JAMO_SCRIPT);
-        t.setErrorLimit(100); // Don't run full test -- too long
+        t.setErrorLimit(200); // Don't run full test -- too long
         t.test(null, null, this);
     }
 
