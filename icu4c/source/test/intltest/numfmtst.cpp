@@ -393,13 +393,13 @@ NumberFormatTest::TestInt64() {
 	DecimalFormat fmt("#.#E0",status);
 	fmt.setMaximumFractionDigits(20);
 	if (U_SUCCESS(status)) {
-		expect(fmt, (int64_t)0, "0E0");
-		expect(fmt, (int64_t)-1, "-1E0");
-		expect(fmt, (int64_t)1, "1E0");
-		expect(fmt, (int64_t)2147483647, "2.147483647E9");
-		expect(fmt, (int64_t)-2147483647-1, "-2.147483648E9");
-		expect(fmt, (int64_t)9223372036854775807, "9.223372036854775807E18");
-		expect(fmt, (int64_t)-9223372036854775807-1, "-9.223372036854775808E18");
+		expect(fmt, (Formattable)(int64_t)0, "0E0");
+		expect(fmt, (Formattable)(int64_t)-1, "-1E0");
+		expect(fmt, (Formattable)(int64_t)1, "1E0");
+		expect(fmt, (Formattable)(int64_t)2147483647, "2.147483647E9");
+		expect(fmt, (Formattable)((int64_t)-2147483647-1), "-2.147483648E9");
+		expect(fmt, (Formattable)(int64_t)9223372036854775807, "9.223372036854775807E18");
+		expect(fmt, (Formattable)((int64_t)-9223372036854775807-1), "-9.223372036854775808E18");
 	}
 
 	// also test digitlist
