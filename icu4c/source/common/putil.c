@@ -1933,8 +1933,8 @@ u_errorName(UErrorCode code) {
 
 struct
 {
-  char loc[20];
-  char charmap[40];
+  const char *loc;
+  const char *charmap;
 } 
 _localeToDefaultCharmapTable [] =
 {
