@@ -25,6 +25,7 @@ MSGNAME=uconvmsg
 include @platform_make_fragment@
 
 # RESSRC comes from resfiles.mk
+FILESEPCHAR=/
 include $(srcdir)/resfiles.mk
 
 RESDIR=$(MSGNAME)
