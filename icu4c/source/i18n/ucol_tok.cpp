@@ -544,6 +544,8 @@ USet *ucol_uprv_tok_readAndSetUnicodeSet(const UChar *start, const UChar *end, U
 static
 int32_t ucol_uprv_tok_readOption(const UChar *start, const UChar *end, const UChar **optionArg) {
   int32_t i = 0;
+  ucol_uprv_tok_initData();
+
   while(u_isWhitespace(*start)) { /* eat whitespace */
     start++;
   }
@@ -581,8 +583,6 @@ uint8_t ucol_uprv_tok_readAndSetOption(UColTokenParser *src, UErrorCode *status)
   const UChar *optionArg = NULL;
 
   uint8_t result = 0;
-
-  ucol_uprv_tok_initData();
 
   start++; /*skip opening '['*/
   i = ucol_uprv_tok_readOption(start, src->end, &optionArg);
