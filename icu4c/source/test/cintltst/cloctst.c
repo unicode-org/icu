@@ -187,6 +187,7 @@ void addLocaleTest(TestNode** root)
     /*addTest(root, &MoreVariants,             "tsutil/cloctst/MoreVariants");*/
     addTest(root, &TestKeywordVariants,      "tsutil/cloctst/TestKeywordVariants");
     addTest(root, &TestKeywordVariantParsing,"tsutil/cloctst/TestKeywordVariantParsing");
+    addTest(root, &TestVariantCanonization,  "tsutil/cloctst/TestVariantCanonization");
 }
 
 
@@ -2117,17 +2118,19 @@ static void TestKeywordVariants(void)
   struct {
     const char *localeID;
     const char *expectedLocaleID;
+    const char *expectedLocaleIDNoKeywords;
     const char *expectedKeywords[10];
     int32_t numKeywords;
     UErrorCode expectedStatus;
   } testCases[] = {
     { "de_DE@  currency = euro; C o ll A t i o n   = Phonebook   ; C alen dar = budhist   ", 
       "de_DE@c alen dar=budhist;c o ll a t i o n=Phonebook;currency=euro", 
+      "de_DE",
     { "c alen dar", "c o ll a t i o n", "currency"},
       3,
       U_ZERO_ERROR
     },
-    { "de_DE@euro", "de_DE_EURO", {""}, 0, U_INVALID_FORMAT_ERROR},
+    { "de_DE@euro", "de_DE_EURO", "de_DE", {""}, 0, U_INVALID_FORMAT_ERROR},
     /*{ "de_DE@euro;collation=phonebook", "", "", U_INVALID_FORMAT_ERROR}*/
   };
   UErrorCode status = U_ZERO_ERROR;
@@ -2202,6 +2205,68 @@ static void TestKeywordVariantParsing(void)
         testCases[i].expectedValue, testCases[i].localeID, testCases[i].keyword, buffer);
     }
   }
-
-
 }
+
+static void TestVariantCanonization(void)
+{
+  struct {
+    const char *localeID;
+    const char *expectedValue;
+    const char *expectedValueNoKeywords;
+  } testCases[] = {
+    { "ca_ES_PREEURO", "ca_ES@currency=ESP", "ca_ES"},
+    { "de_AT_PREEURO", "de_AT@currency=ATS", "de_AT" },
+    { "de_DE_PREEURO", "de_DE@currency=DEM", "de_DE" },
+    { "de_LU_PREEURO", "de_LU@currency=EUR", "de_LU" },
+    { "el_GR_PREEURO", "el_GR@currency=GRD", "el_GR" },
+    { "en_BE_PREEURO", "en_BE@currency=BEF", "en_BE" },
+    { "en_IE_PREEURO", "en_IE@currency=IEP", "en_IE" },
+    { "es_ES_PREEURO", "es_ES@currency=ESP", "es_ES" },
+    { "eu_ES_PREEURO", "eu_ES@currency=ESP", "eu_ES" },
+    { "fi_FI_PREEURO", "fi_FI@currency=FIM", "fi_FI" },
+    { "fr_BE_PREEURO", "fr_BE@currency=BEF", "fr_BE" },
+    { "fr_FR_PREEURO", "fr_FR@currency=FRF", "fr_FR" },
+    { "fr_LU_PREEURO", "fr_LU@currency=LUF", "fr_LU" },
+    { "ga_IE_PREEURO", "ga_IE@currency=IEP", "ga_IE" },
+    { "gl_ES_PREEURO", "gl_ES@currency=ESP", "gl_ES" },
+    { "it_IT_PREEURO", "it_IT@currency=ITL", "it_IT" },
+    { "nl_BE_PREEURO", "nl_BE@currency=BEF", "nl_BE" },
+    { "nl_NL_PREEURO", "nl_NL@currency=NLG", "nl_NL" },
+    { "pt_PT_PREEURO", "pt_PT@currency=PTE", "pt_PT" },
+    { "de__PHONEBOOK", "de@collation=phonebook", "de" },
+    { "en_GB_EURO", "en_GB@currency=EUR", "en_GB" },
+    { "es__TRADITIONAL", "es@collation=traditional", "es" },
+    { "hi__DIRECT", "hi@collation=direct", "hi" },
+    { "ja_JP_TRADITIONAL", "ja_JP@calendar=japanese", "ja_JP" },
+    { "th_TH_TRADITIONAL", "th_TH@calendar=buddhist", "th_TH" },
+    { "zh_TW_STROKE", "zh_TW@collation=stroke", "zh_TW" },
+    { "zh__PINYIN", "zh@collation=pinyin", "zh" },
+    { "en_US_POSIX", "en_US_POSIX", "en_US_POSIX" }, 
+    { "hy_AM_REVISED", "hy_AM_REVISED", "hy_AM_REVISED" }, 
+    { "no_NO_NY", "no_NO_NY", "no_NO_NY" }
+  };
+
+  UErrorCode status = U_ZERO_ERROR;
+
+  int32_t i = 0;
+  int32_t resultLen = 0;
+  char buffer[256];
+  /* this test should be enabled if we decide to do canonization of variants using uloc_getName */
+  /* otherwise, use this data to test another API */
+  return;
+
+  for(i = 0; i < sizeof(testCases)/sizeof(testCases[0]); i++) {
+    *buffer = 0;
+    resultLen = uloc_getName(testCases[i].localeID, buffer, 256, &status);
+    if(uprv_strcmp(testCases[i].expectedValue, buffer) != 0) {
+      log_err("Expected to get \"%s\" from \"%s\". Got \"%s\" instead\n",
+        testCases[i].expectedValue, testCases[i].localeID, buffer);
+    }
+    resultLen = uloc_getNameNoKeywords(testCases[i].localeID, buffer, 256, &status);
+    if(uprv_strcmp(testCases[i].expectedValueNoKeywords, buffer) != 0) {
+      log_err("Expected to get \"%s\" from \"%s\". Got \"%s\" instead\n",
+        testCases[i].expectedValueNoKeywords, testCases[i].localeID, buffer);
+    }
+  }
+}
+
