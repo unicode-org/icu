@@ -36,7 +36,9 @@ public:
     void runIndexedTest(int32_t index, bool_t exec, char *&name, char *par=NULL);
 
 private:
+    void TestEndian();
     void TestSizeofWCharT();
+    void TestCharsetFamily();
 };
 
 #endif
