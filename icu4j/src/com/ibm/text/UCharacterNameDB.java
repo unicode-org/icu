@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/UCharacterNameDB.java,v $ 
-* $Date: 2001/03/23 19:51:38 $ 
-* $Revision: 1.3 $
+* $Date: 2001/07/03 16:34:22 $ 
+* $Revision: 1.4 $
 *
 *******************************************************************************
 */
@@ -17,6 +17,7 @@ import java.io.InputStream;
 import java.io.DataInputStream;
 import java.io.BufferedInputStream;
 import java.io.IOException;
+import com.ibm.util.Utility;
 
 /**
 * Internal class used for Unicode character name database.
@@ -711,7 +712,7 @@ final class UCharacterNameDB extends UCharacterDB
       {
         case TYPE_0_: 
           // prefix followed by hex digits indicating variants
-          str.append(Integer.toHexString(ch));
+          Utility.hex(ch, m_variant_, str);
           break;
         case TYPE_1_: 
           // prefix followed by factorized-elements
