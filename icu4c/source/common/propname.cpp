@@ -12,6 +12,9 @@
 #include "unicode/uchar.h"
 #include "unicode/udata.h"
 #include "umutex.h"
+#include "cmemory.h"
+#include "cstring.h"
+#include "uarrsort.h"
 
 U_NAMESPACE_BEGIN
 
@@ -194,6 +197,381 @@ u_getPropertyValueEnum(UProperty property,
                        const char* alias) {
     return load() ? PNAME->getPropertyValueEnum(property, alias)
                   : UCHAR_INVALID_CODE;
+}
+
+/* data swapping ------------------------------------------------------------ */
+
+/*
+ * Sub-structure-swappers use the temp array (which is as large as the
+ * actual data) for intermediate storage,
+ * as well as to indicate if a particular structure has been swapped already.
+ * The temp array is initially reset to all 0.
+ * pos is the byte offset of the sub-structure in the inBytes/outBytes/temp arrays.
+ */
+
+int32_t
+EnumToOffset::swap(const UDataSwapper *ds,
+                   const uint8_t *inBytes, int32_t length, uint8_t *outBytes,
+                   uint8_t *temp, int32_t pos,
+                   UErrorCode *pErrorCode) {
+    const EnumToOffset *inMap;
+    EnumToOffset *outMap, *tempMap;
+    int32_t size;
+
+    tempMap=(EnumToOffset *)(temp+pos);
+    if(tempMap->enumStart!=0 || tempMap->enumLimit!=0) {
+        /* this map was swapped already */
+        size=tempMap->getSize();
+        return size;
+    }
+
+    inMap=(const EnumToOffset *)(inBytes+pos);
+    outMap=(EnumToOffset *)(outBytes+pos);
+
+    tempMap->enumStart=udata_readInt32(ds, inMap->enumStart);
+    tempMap->enumLimit=udata_readInt32(ds, inMap->enumLimit);
+    size=tempMap->getSize();
+
+    if(length>=0) {
+        if(length<(pos+size)) {
+            if(length<sizeof(PropertyAliases)) {
+                udata_printError(ds, "upname_swap(EnumToOffset): too few bytes (%d after header)\n"
+                                     "    for pnames.icu EnumToOffset{%d..%d} at %d\n",
+                                 length, tempMap->enumStart, tempMap->enumLimit, pos);
+                *pErrorCode=U_INDEX_OUTOFBOUNDS_ERROR;
+                return 0;
+            }
+        }
+
+        /* swap enumStart and enumLimit */
+        ds->swapArray32(ds, inMap, 2*sizeof(EnumValue), outMap, pErrorCode);
+
+        /* swap _offsetArray[] */
+        ds->swapArray16(ds, inMap->getOffsetArray(), (tempMap->enumLimit-tempMap->enumStart)*sizeof(Offset),
+                           outMap->getOffsetArray(), pErrorCode);
+    }
+
+    return size;
+}
+
+int32_t
+NonContiguousEnumToOffset::swap(const UDataSwapper *ds,
+                   const uint8_t *inBytes, int32_t length, uint8_t *outBytes,
+                   uint8_t *temp, int32_t pos,
+                   UErrorCode *pErrorCode) {
+    const NonContiguousEnumToOffset *inMap;
+    NonContiguousEnumToOffset *outMap, *tempMap;
+    int32_t size;
+
+    tempMap=(NonContiguousEnumToOffset *)(temp+pos);
+    if(tempMap->count!=0) {
+        /* this map was swapped already */
+        size=tempMap->getSize();
+        return size;
+    }
+
+    inMap=(const NonContiguousEnumToOffset *)(inBytes+pos);
+    outMap=(NonContiguousEnumToOffset *)(outBytes+pos);
+
+    tempMap->count=udata_readInt32(ds, inMap->count);
+    size=tempMap->getSize();
+
+    if(length>=0) {
+        if(length<(pos+size)) {
+            if(length<sizeof(PropertyAliases)) {
+                udata_printError(ds, "upname_swap(NonContiguousEnumToOffset): too few bytes (%d after header)\n"
+                                     "    for pnames.icu NonContiguousEnumToOffset[%d] at %d\n",
+                                 length, tempMap->count, pos);
+                *pErrorCode=U_INDEX_OUTOFBOUNDS_ERROR;
+                return 0;
+            }
+        }
+
+        /* swap count and _enumArray[] */
+        length=(1+tempMap->count)*sizeof(EnumValue);
+        ds->swapArray32(ds, inMap, length,
+                           outMap, pErrorCode);
+
+        /* swap _offsetArray[] */
+        pos+=length;
+        ds->swapArray16(ds, inBytes+pos, tempMap->count*sizeof(Offset),
+                           outBytes+pos, pErrorCode);
+    }
+
+    return size;
+}
+
+struct NameAndIndex {
+    Offset name, index;
+};
+
+static int32_t
+upname_compareRows(const void *context, const void *left, const void *right) {
+    const char *chars=(const char *)context;
+    return (int32_t)uprv_strcmp(chars+((const NameAndIndex *)left)->name,
+                                chars+((const NameAndIndex *)right)->name);
+}
+
+int32_t
+NameToEnum::swap(const UDataSwapper *ds,
+                   const uint8_t *inBytes, int32_t length, uint8_t *outBytes,
+                   uint8_t *temp, int32_t pos,
+                   UErrorCode *pErrorCode) {
+    const NameToEnum *inMap;
+    NameToEnum *outMap, *tempMap;
+
+    const EnumValue *inEnumArray;
+    EnumValue *outEnumArray;
+
+    const Offset *inNameArray;
+    Offset *outNameArray;
+
+    NameAndIndex *sortArray;
+
+    int32_t i, size, oldIndex;
+
+    tempMap=(NameToEnum *)(temp+pos);
+    if(tempMap->count!=0) {
+        /* this map was swapped already */
+        size=tempMap->getSize();
+        return size;
+    }
+
+    inMap=(const NameToEnum *)(inBytes+pos);
+    outMap=(NameToEnum *)(outBytes+pos);
+
+    tempMap->count=udata_readInt32(ds, inMap->count);
+    size=tempMap->getSize();
+
+    if(length>=0) {
+        if(length<(pos+size)) {
+            if(length<sizeof(PropertyAliases)) {
+                udata_printError(ds, "upname_swap(NameToEnum): too few bytes (%d after header)\n"
+                                     "    for pnames.icu NameToEnum[%d] at %d\n",
+                                 length, tempMap->count, pos);
+                *pErrorCode=U_INDEX_OUTOFBOUNDS_ERROR;
+                return 0;
+            }
+        }
+
+        /* swap count */
+        ds->swapArray32(ds, inMap, 4, outMap, pErrorCode);
+
+        inEnumArray=inMap->getEnumArray();
+        outEnumArray=outMap->getEnumArray();
+
+        inNameArray=(const Offset *)(inEnumArray+tempMap->count);
+        outNameArray=(Offset *)(outEnumArray+tempMap->count);
+
+        /*
+         * ### TODO optimize
+         * After some testing, add a test
+         * if(inCharset==outCharset) { only swap enums and names, do not sort; }
+         * else { sort/copy/swap/permutate as below; }
+         */
+
+        /*
+         * The name and enum arrays are sorted by names and must be resorted
+         * if inCharset!=outCharset.
+         * We use the corresponding part of the temp array to sort an array
+         * of pairs of name offsets and sorting indexes.
+         * Then the sorting indexes are used to permutate-swap the name and enum arrays.
+         *
+         * The outBytes must already contain the swapped strings.
+         */
+        sortArray=(NameAndIndex *)tempMap->getEnumArray();
+        for(i=0; i<tempMap->count; ++i) {
+            sortArray[i].name=udata_readInt16(ds, inNameArray[i]);
+            sortArray[i].index=(Offset)i;
+        }
+
+        uprv_sortArray(sortArray, tempMap->count, sizeof(NameAndIndex),
+                       upname_compareRows, outBytes,
+                       FALSE, pErrorCode);
+        if(U_FAILURE(*pErrorCode)) {
+            udata_printError(ds, "upname_swap(NameToEnum).uprv_sortArray(%d items) failed - %s\n",
+                             tempMap->count, u_errorName(*pErrorCode));
+            return 0;
+        }
+
+        /* copy/swap/permutate _enumArray[] and _nameArray[] */
+        for(i=0; i<tempMap->count; ++i) {
+            oldIndex=sortArray[i].index;
+            ds->swapArray32(ds, inEnumArray+oldIndex, 4, outEnumArray+i, pErrorCode);
+            ds->swapArray16(ds, inNameArray+oldIndex, 2, outNameArray+i, pErrorCode);
+        }
+    }
+
+    return size;
+}
+
+int32_t
+PropertyAliases::swap(const UDataSwapper *ds,
+                      const uint8_t *inBytes, int32_t length, uint8_t *outBytes,
+                      UErrorCode *pErrorCode) {
+    const PropertyAliases *inAliases;
+    PropertyAliases *outAliases;
+    PropertyAliases aliases;
+
+    const ValueMap *inValueMaps;
+    ValueMap *outValueMaps;
+    ValueMap valueMap;
+
+    uint8_t *temp;
+
+    int32_t i;
+
+    inAliases=(const PropertyAliases *)inBytes;
+    outAliases=(PropertyAliases *)outBytes;
+
+    /* read the input PropertyAliases - all 16-bit values */
+    for(i=0; i<sizeof(PropertyAliases)/2; ++i) {
+        ((uint16_t *)&aliases)[i]=ds->readUInt16(((const uint16_t *)inBytes)[i]);
+    }
+
+    if(length>=0) {
+        if(length<aliases.total_size) {
+            udata_printError(ds, "upname_swap(): too few bytes (%d after header) for all of pnames.icu\n",
+                             length);
+            *pErrorCode=U_INDEX_OUTOFBOUNDS_ERROR;
+            return 0;
+        }
+
+        /* copy the data for inaccessible bytes */
+        if(inBytes!=outBytes) {
+            uprv_memcpy(outBytes, inBytes, aliases.total_size);
+        }
+
+        /* swap the PropertyAliases class fields */
+        ds->swapArray16(ds, inAliases, sizeof(PropertyAliases), outAliases, pErrorCode);
+
+        /* swap the name groups */
+        ds->swapArray16(ds, inBytes+aliases.nameGroupPool_offset,
+                                aliases.stringPool_offset-aliases.nameGroupPool_offset,
+                           outBytes+aliases.nameGroupPool_offset, pErrorCode);
+
+        /* swap the strings */
+        udata_swapInvStringBlock(ds, inBytes+aliases.stringPool_offset,
+                                        aliases.total_size-aliases.stringPool_offset,
+                                    outBytes+aliases.stringPool_offset, pErrorCode);
+
+        /*
+         * alloc uint8_t temp[total_size] and reset it
+         * swap each top-level struct, put at least the count fields into temp
+         *   use subclass-specific swap() functions
+         * enumerate value maps, for each
+         *   if temp does not have count!=0 yet
+         *     read count, put it into temp
+         *     swap the array(s)
+         *     resort strings in name->enum maps
+         * swap value maps
+         */
+        temp=(uint8_t *)uprv_malloc(aliases.total_size);
+        if(temp==NULL) {
+            udata_printError(ds, "upname_swap(): unable to allocate temp memory (%d bytes)\n",
+                             aliases.total_size);
+            *pErrorCode=U_MEMORY_ALLOCATION_ERROR;
+            return 0;
+        }
+        uprv_memset(temp, 0, aliases.total_size);
+
+        /* swap properties->name groups map */
+        NonContiguousEnumToOffset::swap(ds, inBytes, length, outBytes,
+                                        temp, aliases.enumToName_offset, pErrorCode);
+
+        /* swap name->properties map */
+        NameToEnum::swap(ds, inBytes, length, outBytes,
+                         temp, aliases.nameToEnum_offset, pErrorCode);
+
+        /* swap properties->value maps map */
+        NonContiguousEnumToOffset::swap(ds, inBytes, length, outBytes,
+                                        temp, aliases.enumToValue_offset, pErrorCode);
+
+        /* enumerate all ValueMaps and swap them */
+        inValueMaps=(const ValueMap *)(inBytes+aliases.valueMap_offset);
+        outValueMaps=(ValueMap *)(outBytes+aliases.valueMap_offset);
+
+        for(i=0; i<aliases.valueMap_count; ++i) {
+            valueMap.enumToName_offset=udata_readInt16(ds, inValueMaps[i].enumToName_offset);
+            valueMap.ncEnumToName_offset=udata_readInt16(ds, inValueMaps[i].ncEnumToName_offset);
+            valueMap.nameToEnum_offset=udata_readInt16(ds, inValueMaps[i].nameToEnum_offset);
+
+            if(valueMap.enumToName_offset!=0) {
+                EnumToOffset::swap(ds, inBytes, length, outBytes,
+                                   temp, valueMap.enumToName_offset,
+                                   pErrorCode);
+            } else if(valueMap.ncEnumToName_offset!=0) {
+                NonContiguousEnumToOffset::swap(ds, inBytes, length, outBytes,
+                                                temp, valueMap.ncEnumToName_offset,
+                                                pErrorCode);
+            }
+            if(valueMap.nameToEnum_offset!=0) {
+                NameToEnum::swap(ds, inBytes, length, outBytes,
+                                 temp, valueMap.nameToEnum_offset,
+                                 pErrorCode);
+            }
+        }
+
+        /* swap the ValueMaps array itself */
+        ds->swapArray16(ds, inValueMaps, aliases.valueMap_count*sizeof(ValueMap),
+                           outValueMaps, pErrorCode);
+
+        /* name groups and strings were swapped above */
+
+        /* release temp */
+        uprv_free(temp);
+    }
+
+    return aliases.total_size;
+}
+
+U_CAPI int32_t U_EXPORT2
+upname_swap(const UDataSwapper *ds,
+            const void *inData, int32_t length, void *outData,
+            UErrorCode *pErrorCode) {
+    const UDataInfo *pInfo;
+    int32_t headerSize;
+
+    const uint8_t *inBytes;
+    uint8_t *outBytes;
+
+    /* udata_swapDataHeader checks the arguments */
+    headerSize=udata_swapDataHeader(ds, inData, length, outData, pErrorCode);
+    if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
+        return 0;
+    }
+
+    /* check data format and format version */
+    pInfo=(const UDataInfo *)((const char *)inData+4);
+    if(!(
+        pInfo->dataFormat[0]==0x70 &&   /* dataFormat="pnam" */
+        pInfo->dataFormat[1]==0x6e &&
+        pInfo->dataFormat[2]==0x61 &&
+        pInfo->dataFormat[3]==0x6d &&
+        pInfo->formatVersion[0]==1
+    )) {
+        udata_printError(ds, "upname_swap(): data format %02x.%02x.%02x.%02x (format version %02x) is not recognized as pnames.icu\n",
+                         pInfo->dataFormat[0], pInfo->dataFormat[1],
+                         pInfo->dataFormat[2], pInfo->dataFormat[3],
+                         pInfo->formatVersion[0]);
+        *pErrorCode=U_UNSUPPORTED_ERROR;
+        return 0;
+    }
+
+    inBytes=(const uint8_t *)inData+headerSize;
+    outBytes=(uint8_t *)outData+headerSize;
+
+    if(length>=0) {
+        length-=headerSize;
+        if(length<sizeof(PropertyAliases)) {
+            udata_printError(ds, "upname_swap(): too few bytes (%d after header) for pnames.icu\n",
+                             length);
+            *pErrorCode=U_INDEX_OUTOFBOUNDS_ERROR;
+            return 0;
+        }
+    }
+
+    return headerSize+PropertyAliases::swap(ds, inBytes, length, outBytes, pErrorCode);
 }
 
 //eof
