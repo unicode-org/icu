@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/test/rbbi/Attic/BreakIteratorTest.java,v $ 
- * $Date: 2000/03/10 03:47:46 $ 
- * $Revision: 1.4 $
+ * $Date: 2000/05/18 19:11:55 $ 
+ * $Revision: 1.5 $
  *
  *****************************************************************************************
  */
@@ -37,9 +37,9 @@ public class BreakIteratorTest extends TestFmwk
         characterBreak = BreakIterator.getCharacterInstance();
         wordBreak = BreakIterator.getWordInstance();
         lineBreak = BreakIterator.getLineInstance();
-System.out.println("Creating sentence iterator...");
+        //logln("Creating sentence iterator...");
         sentenceBreak = BreakIterator.getSentenceInstance();
-System.out.println("Finished creating sentence iterator...");
+        //logln("Finished creating sentence iterator...");
     }
 
     //=========================================================================
