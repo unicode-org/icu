@@ -8,16 +8,10 @@
 package com.ibm.icu.text;
 
 import java.io.InputStream;
-import java.io.BufferedInputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
-import java.util.Locale;
 
-import com.ibm.icu.util.RangeValueIterator;
 import com.ibm.icu.util.VersionInfo;
-import com.ibm.icu.lang.UCharacter;
-import com.ibm.icu.lang.UCharacterCategory;
-import com.ibm.icu.lang.UProperty;
 import com.ibm.icu.impl.ICUData;
 import com.ibm.icu.impl.Trie;
 import com.ibm.icu.impl.CharTrie;
@@ -69,9 +63,13 @@ public class RBBIDataWrapper {
     
     //  Getters for fields from the state table header
     //
-    final static int   getNumStates(int  table[]) {
-        return table[NUMSTATES]<<16 + (table[NUMSTATES+1]&0xffff);
-    }
+    final static int   getNumStates(short  table[]) {
+        int  hi = table[NUMSTATES];
+        int  lo = table[NUMSTATES+1];
+        int  val = (hi<<16) + (lo&0x0000ffff);
+        return val;
+     }
+    
     
     /**
      * Data Header.  A struct-like class with the fields from the RBBI data file header.
@@ -119,14 +117,14 @@ public class RBBIDataWrapper {
     
     static class TrieFoldingFunc implements  Trie.DataManipulate {
         public int getFoldingOffset(int data) {
-            if ((data & 0x8000) == 0) {
+            if ((data & 0x8000) != 0) {
                 return data & 0x7fff;
             } else {
                 return 0;
             }
         }
     };
-    static TrieFoldingFunc  fTrieFoldingFunc;
+    static TrieFoldingFunc  fTrieFoldingFunc = new TrieFoldingFunc();
  
     
     RBBIDataWrapper() {
@@ -299,19 +297,148 @@ public class RBBIDataWrapper {
     /** Debug function to display the break iterator data.  */
     void dump() {
         System.out.println("RBBI Data Wrapper dump ...");
+        System.out.println();
+        System.out.println("Forward State Table");
+        dumpTable(fFTable);
+        System.out.println("Reverse State Table");
+        dumpTable(fRTable);
+        System.out.println("Forward Safe Points Table");
+        dumpTable(fSFTable);
+        System.out.println("Reverse Safe Points Table");
+        dumpTable(fSRTable);
+        
+        dumpCharCategories();
         System.out.println("Source Rules: " + fRuleSource);
+        
+    }
+    
+    /** Fixed width int-to-string conversion.   
+     *  TODO:  there must be easy built-in way to do this  */
+    private static String intToString(int n, int width) {
+        StringBuffer  dest = new StringBuffer(width);   
+        dest.append(n);
+        while (dest.length() < width) {
+           dest.insert(0, ' ');   
+        }
+        return dest.toString();
+    }
+    
+    /** Dump a state table.  (A full set of RBBI rules has 4 state tables.)  */
+    private void dumpTable(short table[]) {
+        int n;
+        int state;
+        String header = " Row  Acc Look  Tag";
+        for (n=0; n<fHeader.fCatCount; n++) {
+            header += intToString(n, 5);     
+        }
+        System.out.println(header);
+        for (n=0; n<header.length(); n++) {
+        	System.out.print("-");
+        }
+        System.out.println();
+        for (state=0; state< getNumStates(table); state++) {
+            dumpRow(table, state);   
+        }
+        System.out.println();
+    }
+    
+    /**
+     * Dump (for debug) a single row of an RBBI state table
+     * @param table
+     * @param state
+     * @internal
+     */
+    private void dumpRow(short table[], int   state) {
+        StringBuffer dest = new StringBuffer(fHeader.fCatCount*5 + 20);
+        dest.append(intToString(state, 4));
+        int row = getRowIndex(state);
+        if (table[row+ACCEPTING] != 0) {
+           dest.append(intToString(table[row+ACCEPTING], 5)); 
+        }else {
+            dest.append("     ");
+        }
+        if (table[row+LOOKAHEAD] != 0) {
+        System.out.println(dest);
+        dest.append(intToString(table[row+LOOKAHEAD], 5)); 
+        }else {
+            dest.append("     ");
+        }
+        dest.append(intToString(table[row+TAGIDX], 5)); 
+        
+        for (int col=0; col<fHeader.fCatCount; col++) {
+            dest.append(intToString(table[row+NEXTSTATES+col], 5));   
+        }
+
+        System.out.println(dest);
+    }
+    
+    private void dumpCharCategories() {
+        int n = fHeader.fCatCount;
+        String   catStrings[] = new  String[n+1];
+        int      rangeStart = 0;
+        int      rangeEnd = 0;
+        int      lastCat = -1;
+        int      char32;
+        int      category;
+        int      lastNewline[] = new int[n+1];
+        
+        for (category = 0; category <= fHeader.fCatCount; category ++) {
+            catStrings[category] = "";   
+        }
+        System.out.println("\nCharacter Categories");
+        System.out.println("--------------------");
+        for (char32 = 0; char32<=0x10ffff; char32++) {
+            category = fTrie.getCodePointValue(char32);
+            category &= ~0x4000;            // Mask off dictionary bit.
+            if (category < 0 || category > fHeader.fCatCount) {
+                System.out.println("Error, bad category " + Integer.toHexString(category) + 
+                        " for char " + Integer.toHexString(char32)); 
+                break;
+            }
+            if (category == lastCat ) {
+                rangeEnd = char32;   
+            } else {
+            	if (lastCat >= 0) {
+            		if (catStrings[lastCat].length() > lastNewline[lastCat] + 70) {
+            			lastNewline[lastCat] = catStrings[lastCat].length() + 10;
+            			catStrings[lastCat] += "\n       ";
+            		}
+            		
+            		catStrings[lastCat] += " " + Integer.toHexString(rangeStart);
+            		if (rangeEnd != rangeStart) {
+            			catStrings[lastCat] += "-" + Integer.toHexString(rangeEnd);   
+            		}
+            	}
+            	lastCat = category;
+            	rangeStart = rangeEnd = char32;
+            }
+        }
+        catStrings[lastCat] += " " + Integer.toHexString(rangeStart);
+        if (rangeEnd != rangeStart) {
+            catStrings[lastCat] += "-" + Integer.toHexString(rangeEnd);   
+        }
+        
+        for (category = 0; category <= fHeader.fCatCount; category ++) {
+            System.out.println (intToString(category, 5) + "  " + catStrings[category]);   
+        }
+        System.out.println();
     }
     
     public static void main(String[] args) {
         String s;
         if (args.length == 0) {
-            s = "icudt28b_char.brk";
+            s = "char";
         } else {
             s = args[0];
         }
         System.out.println("RBBIDataWrapper.main(" + s + ") ");
+        
+        String versionedName = 
+            "icudt" + VersionInfo.ICU_VERSION.getMajor() +
+            VersionInfo.ICU_VERSION.getMinor() + "b_" + s + ".brk";
+        
         try {
-            RBBIDataWrapper This = RBBIDataWrapper.get(s);
+            RBBIDataWrapper This = RBBIDataWrapper.get(versionedName);
             This.dump();
         }
        catch (Exception e) {

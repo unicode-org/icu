@@ -9,6 +9,7 @@ package com.ibm.icu.dev.test.rbbi;
 //Regression testing of RuleBasedBreakIterator
 import com.ibm.icu.dev.test.*;
 import com.ibm.icu.text.RuleBasedBreakIterator;
+import com.ibm.icu.text.RuleBasedBreakIterator_Old;
 import java.util.Vector;
 
 public class RBBITest extends TestFmwk 
@@ -43,6 +44,15 @@ public class RBBITest extends TestFmwk
   public void TestDefaultRuleBasedCharacterIteration(){
       RuleBasedBreakIterator rbbi=(RuleBasedBreakIterator)RuleBasedBreakIterator.getCharacterInstance();
       logln("Testing the RBBI for character iteration by using default rules");
+      try {
+      	RuleBasedBreakIterator_Old obi = (RuleBasedBreakIterator_Old)rbbi;
+      }
+      catch (ClassCastException e) {
+      	// Bail out if using new RBBI implementation
+      	logln("Test Skipped.");
+      	return;
+      }
+
       //fetch the rules used to create the above RuleBasedBreakIterator
       String defaultRules=rbbi.toString();
       
@@ -172,6 +182,14 @@ public class RBBITest extends TestFmwk
   public void TestDefaultRuleBasedWordIteration(){
       logln("Testing the RBBI for word iteration using default rules");
       RuleBasedBreakIterator rbbi=(RuleBasedBreakIterator)RuleBasedBreakIterator.getWordInstance();
+      try {
+      	RuleBasedBreakIterator_Old obi = (RuleBasedBreakIterator_Old)rbbi;
+      }
+      catch (ClassCastException e) {
+      	// Bail out if using new RBBI implementation
+      	logln("Test Skipped.");
+      	return;
+      }
       //fetch the rules used to create the above RuleBasedBreakIterator
       String defaultRules=rbbi.toString();
       
@@ -325,6 +343,14 @@ public class RBBITest extends TestFmwk
       logln("Testing the RBBI for sentence iteration using default rules");
       RuleBasedBreakIterator rbbi=(RuleBasedBreakIterator)RuleBasedBreakIterator.getSentenceInstance();
       //fetch the rules used to create the above RuleBasedBreakIterator
+      try {
+      	RuleBasedBreakIterator_Old obi = (RuleBasedBreakIterator_Old)rbbi;
+      }
+      catch (ClassCastException e) {
+      	// Bail out if using new RBBI implementation
+      	logln("Test Skipped.");
+      	return;
+      }
       String defaultRules=rbbi.toString();
       RuleBasedBreakIterator sentIterDefault=null;
       try{
@@ -418,16 +444,24 @@ public class RBBITest extends TestFmwk
   }
    
   public void TestDefaultRuleBasedLineIteration(){
-     logln("Testing the RBBI for line iteration using default rules");
-     RuleBasedBreakIterator rbbi=(RuleBasedBreakIterator)RuleBasedBreakIterator.getLineInstance();
-     //fetch the rules used to create the above RuleBasedBreakIterator
-     String defaultRules=rbbi.toString();
-     RuleBasedBreakIterator lineIterDefault=null;
-     try{
-     lineIterDefault   = new RuleBasedBreakIterator(defaultRules); 
-     }catch(IllegalArgumentException iae){
-         errln("ERROR: failed construction in TestDefaultRuleBasedLineIteration()" + iae.toString());
-     }
+  	logln("Testing the RBBI for line iteration using default rules");
+  	RuleBasedBreakIterator rbbi=(RuleBasedBreakIterator)RuleBasedBreakIterator.getLineInstance();
+  	//fetch the rules used to create the above RuleBasedBreakIterator
+  	try {
+  		RuleBasedBreakIterator_Old obi = (RuleBasedBreakIterator_Old)rbbi;
+  	}
+  	catch (ClassCastException e) {
+  		// Bail out if using new RBBI implementation
+  		logln("Test Skipped.");
+  		return;
+  	}
+  	String defaultRules=rbbi.toString();
+  	RuleBasedBreakIterator lineIterDefault=null;
+  	try{
+  		lineIterDefault   = new RuleBasedBreakIterator(defaultRules); 
+  	}catch(IllegalArgumentException iae){
+  		errln("ERROR: failed construction in TestDefaultRuleBasedLineIteration()" + iae.toString());
+  	}
 
      Vector linedata = new Vector();
      linedata.addElement("Multi-");
@@ -524,6 +558,15 @@ public class RBBITest extends TestFmwk
         // get overridden.
                  rbbi.toString();
     RuleBasedBreakIterator lineIter=null;
+    try {
+    	RuleBasedBreakIterator_Old obi = (RuleBasedBreakIterator_Old)rbbi;
+    }
+    catch (ClassCastException e) {
+        // Bail out if using new RBBI implementation
+    	logln("Test Skipped.");
+    	return;
+    }
+
     try{
      lineIter   = new RuleBasedBreakIterator(rules); 
        }catch(IllegalArgumentException iae){
@@ -651,7 +694,15 @@ public class RBBITest extends TestFmwk
   public void TestAbbrRuleBasedWordIteration(){
       logln("Testing the RBBI for word iteration by adding rules to support abbreviation");
       RuleBasedBreakIterator rb =(RuleBasedBreakIterator)RuleBasedBreakIterator.getWordInstance();
-      
+      try {
+        // This test won't work with the new break iterators.  Cast will fail in this case.
+         RuleBasedBreakIterator_Old  obi =  (RuleBasedBreakIterator_Old) rb;
+      }
+      catch (ClassCastException e) {
+          logln("Test skipped.");
+          return;
+      }
+       
       String wrules2="$abbr=((Mr.)|(Mrs.)|(Ms.)|(Dr.)|(U.S.));" + // abbreviations. 
                      rb.toString()                             +
                      "($abbr$ws)*$word;";
@@ -701,6 +752,10 @@ public class RBBITest extends TestFmwk
              buffer.append(text);
          }
          text = buffer.toString();
+         if (rbbi == null) {
+             errln("null iterator, test skipped.");
+             return;
+         }
 
          rbbi.setText(text);
 

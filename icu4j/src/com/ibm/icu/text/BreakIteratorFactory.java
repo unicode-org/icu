@@ -18,6 +18,7 @@ import com.ibm.icu.impl.ICULocaleService;
 import com.ibm.icu.impl.ICUService;
 import com.ibm.icu.impl.ICUService.Factory;
 import com.ibm.icu.util.ULocale;
+import com.ibm.icu.util.VersionInfo;
 
 /**
  * @author Ram
@@ -76,10 +77,26 @@ final class BreakIteratorFactory extends BreakIterator.BreakIteratorServiceShim 
     }
     static final ICULocaleService service = new BFService();
 
+    // KIND_NAMES are used in synthesizing the resource name that holds the source
+    //            break rules.   For old-style (ICU 2.8 and previous) break iterators.
+    //            The resources are com.ibm.icu.impl.data.BreakIteratorRules, and have
+    //            names like "CharacterBreakRules", where the "Character" part of the
+    //            name comes from here (this array).
     private static final String[] KIND_NAMES = {
         "Character", "Word", "Line", "Sentence", "Title"
     };
 
+    /** KIND_NAMES_2 are used in synthesizing the names for
+     *  the precompiled break rules used with the new (ICU 3.0) RBBI.
+     *  The fully assembled names look like icudt30b_char.brk, which is the
+     *  file name of the brk file as produced by the ICU4C build.
+     *  @internal
+     */
+    private static final String[] KIND_NAMES_2 = {
+            "char", "word", "line", "sent", "title"
+        };
+
+    
     private static BreakIterator createBreakInstance(Locale locale, int kind) {
         String prefix = KIND_NAMES[kind];
         return createBreakInstance(locale, kind, 
@@ -97,7 +114,24 @@ final class BreakIteratorFactory extends BreakIterator.BreakIteratorServiceShim 
         String[] classNames = bundle.getStringArray("BreakIteratorClasses");
         String rules = bundle.getString(rulesName);
         if (classNames[kind].equals("RuleBasedBreakIterator")) {
+            // Old style (2.8 and previous) Break Iterator.
+            // Not used by default, but if someone wants to specify the old class
+            //   in some locale's resources, it should still work.
             iter = new RuleBasedBreakIterator_Old(rules);
+        }
+        else if (classNames[kind].equals("RuleBasedBreakIterator_New")) {
+            try {
+            // Class for new RBBI engine.
+            // Set up path to precompiled rule data.
+            String rulesFileName = 
+                "data/icudt" + VersionInfo.ICU_VERSION.getMajor() +
+                VersionInfo.ICU_VERSION.getMinor() + "b_" + KIND_NAMES_2[kind] + ".brk";
+            InputStream is = ICUData.getRequiredStream(rulesFileName);
+            iter = RuleBasedBreakIterator_New.getInstanceFromCompiledRules(is);   
+            }
+            catch (IOException e) {
+                throw    new IllegalArgumentException(e.toString());
+            }
         }
         else if (classNames[kind].equals("DictionaryBasedBreakIterator")) {
             try {
