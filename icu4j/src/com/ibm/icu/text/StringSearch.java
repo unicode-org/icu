@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/StringSearch.java,v $ 
- * $Date: 2002/12/18 01:28:05 $ 
- * $Revision: 1.19 $
+ * $Date: 2003/04/09 20:03:43 $ 
+ * $Revision: 1.20 $
  *
  *****************************************************************************************
  */
@@ -1248,7 +1248,7 @@ public final class StringSearch extends SearchIterator
 	        }
 	        // we are only concerned with the first composite character
 	        String str = getString(targetText, start, end);
-	        if (Normalizer.quickCheck(str, Normalizer.NFD) 
+	        if (Normalizer.quickCheck(str, Normalizer.NFD,0) 
 	        										== Normalizer.NO) {
 	            int safeoffset = getNextSafeOffset(start, end);
 	            if (safeoffset != end) {
@@ -1429,12 +1429,12 @@ public final class StringSearch extends SearchIterator
 	    }
 	
 		String textstr = getString(targetText, start, end - start);
-		if (Normalizer.quickCheck(textstr, Normalizer.NFD) 
+		if (Normalizer.quickCheck(textstr, Normalizer.NFD,0) 
 	        										== Normalizer.NO) {
 	        textstr = Normalizer.decompose(textstr, false);
 	    }
 	    String patternstr = m_pattern_.targetText;
-	    if (Normalizer.quickCheck(patternstr, Normalizer.NFD) 
+	    if (Normalizer.quickCheck(patternstr, Normalizer.NFD,0) 
 	        										== Normalizer.NO) {
 	        patternstr = Normalizer.decompose(patternstr, false);
 	    }
@@ -1750,7 +1750,7 @@ public final class StringSearch extends SearchIterator
 	    StringBuffer accents = new StringBuffer();
 	    String accentstr = getString(targetText, start, offset - start);
 	    // normalizing the offensive string
-	    if (Normalizer.quickCheck(accentstr, Normalizer.NFD) 
+	    if (Normalizer.quickCheck(accentstr, Normalizer.NFD,0) 
 	        										== Normalizer.NO) {
 	        accentstr = Normalizer.decompose(accentstr, false);
 	    }
@@ -1968,7 +1968,7 @@ public final class StringSearch extends SearchIterator
 	    // normalizing the offensive string
 	    String accentstr = getString(targetText, baseoffset, 
 	    							 textoffset - baseoffset);
-	    if (Normalizer.quickCheck(accentstr, Normalizer.NFD) 
+	    if (Normalizer.quickCheck(accentstr, Normalizer.NFD,0) 
 	        										== Normalizer.NO) {
 	        accentstr = Normalizer.decompose(accentstr, false);
 	    }
@@ -2361,7 +2361,7 @@ public final class StringSearch extends SearchIterator
 	    int offset = getPreviousBaseOffset(targetText, end);
 	    // normalizing the offensive string
 	    String accentstr = getString(targetText, offset, end - offset);
-	    if (Normalizer.quickCheck(accentstr, Normalizer.NFD) 
+	    if (Normalizer.quickCheck(accentstr, Normalizer.NFD,0) 
 	        										== Normalizer.NO) {
 	        accentstr = Normalizer.decompose(accentstr, false);
 	    }
@@ -2552,7 +2552,7 @@ public final class StringSearch extends SearchIterator
 	    // normalizing the offensive string
 	    String textstr = getString(targetText, textoffset, 
 	    											baseoffset - textoffset);
-	    if (Normalizer.quickCheck(textstr, Normalizer.NFD) 
+	    if (Normalizer.quickCheck(textstr, Normalizer.NFD,0) 
 	        										== Normalizer.NO) {
 	        textstr = Normalizer.decompose(textstr, false);
 	    }

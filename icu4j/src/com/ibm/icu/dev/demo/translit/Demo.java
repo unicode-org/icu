@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/demo/translit/Demo.java,v $ 
- * $Date: 2002/07/26 19:56:58 $ 
- * $Revision: 1.24 $
+ * $Date: 2003/04/09 20:03:44 $ 
+ * $Revision: 1.25 $
  *
  *****************************************************************************************
  */
@@ -31,7 +31,7 @@ import java.io.*;
  * <p>Copyright (c) IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: Demo.java,v $ $Revision: 1.24 $ $Date: 2002/07/26 19:56:58 $
+ * @version $RCSfile: Demo.java,v $ $Revision: 1.25 $ $Date: 2003/04/09 20:03:44 $
  */
 public class Demo extends Frame {
 
@@ -895,7 +895,7 @@ public class Demo extends Frame {
             while (it.next()) {
                 if (it.codepoint == it.IS_STRING) base = it.string;
                 else base = UTF16.valueOf(it.codepoint);
-                if (Normalizer.isNormalized(base, Normalizer.NFKD)) continue;
+                if (Normalizer.isNormalized(base, Normalizer.NFKD,0)) continue;
                 String decomp = Normalizer.normalize(base, Normalizer.NFKD);
                 additions.add(decomp);
             }
@@ -904,7 +904,7 @@ public class Demo extends Frame {
             // Now add any other character that decomposes to a character in source
             for (cp = 0; cp < 0x10FFFF; ++cp) {
                 if (!UCharacter.isDefined(cp)) continue;
-                if (Normalizer.isNormalized(cp, Normalizer.NFKD)) continue;
+                if (Normalizer.isNormalized(cp, Normalizer.NFKD,0)) continue;
                 if (source.contains(cp)) continue;
                 
                 String decomp = Normalizer.normalize(cp, Normalizer.NFKD);
@@ -981,7 +981,7 @@ public class Demo extends Frame {
             UnicodeSetIterator it = new UnicodeSetIterator(s);
             while (it.next()) {
                 if (!UCharacter.isDefined(it.codepoint)) continue;
-                if (!Normalizer.isNormalized(it.codepoint, Normalizer.NFD)) {
+                if (!Normalizer.isNormalized(it.codepoint, Normalizer.NFD,0)) {
                     String decomp = Normalizer.normalize(it.codepoint, Normalizer.NFD);
                     others.addAll(decomp);
                     continue;

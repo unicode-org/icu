@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/NormalizerImpl.java,v $
- * $Date: 2003/04/03 22:52:00 $
- * $Revision: 1.16 $
+ * $Date: 2003/04/09 20:03:44 $
+ * $Revision: 1.17 $
  *******************************************************************************
  */
  
@@ -19,6 +19,7 @@ import java.io.InputStream;
 import com.ibm.icu.text.Normalizer;
 import com.ibm.icu.text.UTF16;	
 import com.ibm.icu.text.UnicodeSet;
+import com.ibm.icu.text.UnicodeSetIterator;
 import com.ibm.icu.util.RangeValueIterator;
 import com.ibm.icu.lang.UCharacter;
 
@@ -168,7 +169,7 @@ public final class NormalizerImpl {
 	 * If not set, just do strcasecmp().
 	 * @internal
 	 */
-	 private static final int COMPARE_EQUIV = 0x80000;
+	 public static final int COMPARE_EQUIV = 0x80000;
 	
 	/*******************************/
 
@@ -844,7 +845,8 @@ public final class NormalizerImpl {
 
     
       
-    public static boolean checkFCD(char[] src,int srcStart, int srcLimit) {
+    public static boolean checkFCD(char[] src,int srcStart, int srcLimit,
+    							   UnicodeSet nx) {
 
 	    char fcd16,c,c2;
 	    int prevCC=0, cc;
@@ -870,8 +872,16 @@ public final class NormalizerImpl {
 	                ++i;
 	                fcd16=getFCD16FromSurrogatePair(fcd16, c2);
 	            } else {
+	            	c2=0;
 	                fcd16=0;
 	            }
+	        }else{
+	        	c2=0;
+	        }
+	        
+	        if(nx_contains(nx, c, c2)) {
+	            prevCC=0; /* excluded: fcd16==0 */
+	            continue;
 	        }
 
 	        // prevCC has values from the following ranges:
@@ -888,9 +898,14 @@ public final class NormalizerImpl {
 	                // the previous character was <_NORM_MIN_WITH_LEAD_CC, 
                     // we need to get its trail cc 
                     //
-	                prevCC=(int)(fcdTrieImpl.fcdTrie.getBMPValue(
-                                                             (char)-prevCC)&0xff
-                                                             );
+                    if(!nx_contains(nx, (int)-prevCC)) {
+    	                prevCC=(int)(fcdTrieImpl.fcdTrie.getBMPValue(
+                                             (char)-prevCC)&0xff
+                                             ); 
+	                } else {
+	                    prevCC=0; /* excluded: fcd16==0 */
+	                }
+                                      
 	            }
 	
 	            if(cc<prevCC) {
@@ -906,7 +921,8 @@ public final class NormalizerImpl {
                                                             int srcLimit,
                                                             int minNoMaybe,
                                                             int qcMask,
-                                                            boolean allowMaybe){
+                                                            boolean allowMaybe,
+                                                            UnicodeSet nx){
         
         int ccOrQCMask;
         long norm32;
@@ -946,8 +962,15 @@ public final class NormalizerImpl {
                     norm32=getNorm32FromSurrogatePair(norm32,c2);
                 } else {
                     norm32=0;
+                    c2=0;
                 }
+            }else{
+            	c2=0;
             }
+            if(nx_contains(nx, c, c2)) {
+	            /* excluded: norm32==0 */
+	            norm32=0;
+	        }
     
             // check the combining order 
             cc=(char)((norm32>>CC_SHIFT)&0xFF);
@@ -995,7 +1018,7 @@ public final class NormalizerImpl {
                     args.prevCC = prevCC;
                        
                     // decompose and recompose [prevStarter..src[ 
-                    buffer = composePart(args,prevStarter,src,srcStart,srcLimit,qcMask);
+                    buffer = composePart(args,prevStarter,src,srcStart,srcLimit,qcMask,nx);
     
                     // compare the normalized version with the original 
                     if(0!=strCompare(buffer,0,args.length,src,prevStarter,(srcStart-prevStarter), false)) {
@@ -1009,7 +1032,8 @@ public final class NormalizerImpl {
         }
         return result;
     } 
-    
+ 
+	   
     //------------------------------------------------------ 
     // make NFD & NFKD 
     //------------------------------------------------------
@@ -1104,7 +1128,8 @@ public final class NormalizerImpl {
 	
 	public static int decompose(char[] src,int srcIndex,int srcLimit,
 								char[] dest,int destIndex,int destLimit,
-						 		boolean compat,int[] outTrailCC) {
+						 		boolean compat,int[] outTrailCC,
+						 		UnicodeSet nx) {
 	           			 	
 	    char[] buffer = new char[3];
 	    int prevSrc;
@@ -1130,6 +1155,8 @@ public final class NormalizerImpl {
 	    norm32=0;
 	    c=0;
 		pStart=0;
+	    
+	    cc=trailCC=-1;//initialize to bogus value
 	    
 	    for(;;) {
 	        /* count code units below the minimum or with irrelevant data for 
@@ -1180,11 +1207,11 @@ public final class NormalizerImpl {
 	         * otherwise, p[length] is merged in with _mergeOrdered()
 	         */
 	        if(isNorm32HangulOrJamo(norm32)) {
-//	            if(ignoreHangul) {
-//	                c2=0;
-//	                p=NULL;
-//	                length=1;
-//	            } else {
+	            if(nx_contains(nx, c)) {
+	                c2=0;
+	                p=null;
+	                length=1;
+	            } else {
 	                // Hangul syllable: decompose algorithmically 
 	                p=buffer;
 	                pStart=0;
@@ -1203,7 +1230,7 @@ public final class NormalizerImpl {
 	
 	                buffer[1]=(char)(JAMO_V_BASE+c%JAMO_V_COUNT);
 	                buffer[0]=(char)(JAMO_L_BASE+c/JAMO_V_COUNT);
-//	            }
+	            }
 	        } else {
 	            if(isNorm32Regular(norm32)) {
 	                c2=0;
@@ -1223,7 +1250,11 @@ public final class NormalizerImpl {
 	            }
 	
 	            /* get the decomposition and the lead and trail cc's */
-	            if((norm32&qcMask)==0) {
+	            if(nx_contains(nx, c, c2)) {
+	                /* excluded: norm32==0 */
+	                cc=trailCC=0;
+	                p=null;
+            	} else if((norm32&qcMask)==0) {
 	                /* c does not decompose */
 	                cc=trailCC=(int)((UNSIGNED_BYTE_MASK) & (norm32>>CC_SHIFT));
 	                p=null;
@@ -1317,26 +1348,28 @@ public final class NormalizerImpl {
 	
 	/* get the composition properties of the next character */
 	private static int /*unsigned*/	getNextCombining(NextCombiningArgs args,
-                                                    int limit) {
+                                                    int limit,
+                                                    UnicodeSet nx) {
 	    long/*unsigned*/ norm32; 
         int combineFlags;
-	
+	    /* get properties */
 	    args.c=args.source[args.start++];
 	    norm32=getNorm32(args.c);
+	    
+	    /* preset output values for most characters */
+        args.c2=0;
+		args.combiningIndex=0;
+		args.cc=0;
+		
 	    if((norm32&(CC_MASK|COMBINES_ANY))==0) {
-	        args.c2=0;
-	        args.combiningIndex=0;
-	        args.cc=0;
 	        return 0;
 	    } else {
 	        if(isNorm32Regular(norm32)) {
-	            args.c2=0;
+	            /* set cc etc. below */
 	        } else if(isNorm32HangulOrJamo(norm32)) {
 	            /* a compatibility decomposition contained Jamos */
-	            args.c2=0;
 	            args.combiningIndex=(int)((UNSIGNED_INT_MASK)&(0xfff0|
                                                         (norm32>>EXTRA_SHIFT)));
-	            args.cc=0;
 	            return (int)(norm32&COMBINES_ANY);
 	        } else {
 	            /* c is a lead surrogate, get the real norm32 */
@@ -1346,19 +1379,22 @@ public final class NormalizerImpl {
 	                norm32=getNorm32FromSurrogatePair(norm32, args.c2);
 	            } else {
 	                args.c2=0;
-	                args.combiningIndex=0;
-	                args.cc=0;
 	                return 0;
 	            }
 	        }
+	        
+	        if(nx_contains(nx, args.c, args.c2)) {
+	            return 0; /* excluded: norm32==0 */
+	        }
 	
+	        args.cc= (char)(byte)(norm32>>CC_SHIFT);
+        
 	        combineFlags=(int)(norm32&COMBINES_ANY);
 	        if(combineFlags!=0) {
                 int index = getExtraDataIndex(norm32);
 	            args.combiningIndex=index>0 ? extraData[(index-1)] :0;
 	        }
 	
-	        args.cc=(char)((UNSIGNED_BYTE_MASK)&(norm32>>CC_SHIFT));
 	        return combineFlags;
 	    }
 	}
@@ -1472,11 +1508,11 @@ public final class NormalizerImpl {
      * starter, while the combining mark that is removed has at least one code 
      * unit
      */
-    private static char/*unsigned byte*/ recompose(RecomposeArgs args) {
+    private static char/*unsigned byte*/ recompose(RecomposeArgs args, UnicodeSet nx) {
         int  remove, q, r;
         int /*unsigned*/ combineFlags;
         int /*unsigned*/ combineFwdIndex, combineBackIndex;
-        int /*unsigned*/ result, value, value2;
+        int /*unsigned*/ result, value=0, value2=0;
         int /*unsigned byte*/  prevCC;
         boolean starterIsSupplementary;
     	int starter;
@@ -1494,7 +1530,7 @@ public final class NormalizerImpl {
 
         for(;;) {
             ncArg.start = args.start;
-            combineFlags=getNextCombining(ncArg,args.limit);
+            combineFlags=getNextCombining(ncArg,args.limit,nx);
             combineBackIndex=ncArg.combiningIndex;
             args.start = ncArg.start;
                         
@@ -1520,7 +1556,16 @@ public final class NormalizerImpl {
                                 ++args.start;
                                 ncArg.c+=ncArg.c2;
                             }
-                            args.source[starter]=ncArg.c;
+                            if(!nx_contains(nx, ncArg.c)) {
+                            	args.source[starter]=ncArg.c;
+                           	} else {
+	                            /* excluded */
+	                            if(!isHangulWithoutJamoT(ncArg.c)) {
+	                                --args.start; /* undo the ++args.start from reading the Jamo T */
+	                            }
+	                            /* c is modified but not used any more -- c=*(p-1); -- re-read the Jamo V/T */
+	                            remove=args.start;
+	                        }
                         }
 
                     }
@@ -1554,7 +1599,9 @@ public final class NormalizerImpl {
                     (prevCC<ncArg.cc || prevCC==0) &&
                     /* the starter and the combining mark (c, c2) do combine */
                     0!=(result=combine(combiningTable,combineFwdIndex, 
-                                       combineBackIndex, outValues))
+                                       combineBackIndex, outValues)) &&
+                    /* the composition result is not excluded */
+                	!nx_contains(nx, (char)value, (char)value2)
                 ) {
                 	value=outValues[0];
                 	value2=outValues[1];
@@ -1637,7 +1684,7 @@ public final class NormalizerImpl {
     
             /* if (c, c2) did not combine, then check if it is a starter */
             if(ncArg.cc==0) {
-                /* found a new starter */
+                /* found a new starter; combineFlags==0 if (c, c2) is excluded */
                 if((combineFlags&COMBINES_FWD)!=0) {
                     /* it may combine with something, prepare for it */
                     if(ncArg.c2==0) {
@@ -1748,11 +1795,12 @@ public final class NormalizerImpl {
         int length;   /* length of decomposed part */
 	}
 	    
- 
+ 	/* decompose and recompose [prevStarter..src[ */
 	private static char[] composePart(ComposePartArgs args, 
                                       int prevStarter, 
 				       	              char[] src, int start, int limit,
-	             			          int/*unsigned*/ qcMask) {
+	             			          int/*unsigned*/ qcMask,
+	             			          UnicodeSet nx) {
 	    int recomposeLimit;
         boolean compat =((qcMask&QC_NFKC)!=0);
         
@@ -1763,7 +1811,7 @@ public final class NormalizerImpl {
         for(;;){
             args.length=decompose(src,prevStarter,(start),
                                       buffer,0,buffer.length, 
-                                      compat,outTrailCC);
+                                      compat,outTrailCC,nx);
             if(args.length<=buffer.length){
                 break;
             }else{
@@ -1779,7 +1827,7 @@ public final class NormalizerImpl {
 	        rcArgs.source	= buffer;
 	        rcArgs.start    = 0;
 	        rcArgs.limit	= recomposeLimit; 
-	        args.prevCC=recompose(rcArgs);
+	        args.prevCC=recompose(rcArgs,nx);
 	        recomposeLimit = rcArgs.limit;
 	    }
         
@@ -1792,7 +1840,8 @@ public final class NormalizerImpl {
 								         long/*unsigned*/ norm32, 
 								         char[] src,int[] srcIndex, int limit,
 	               				         boolean compat, 
-                                         char[] dest,int destIndex) {
+                                         char[] dest,int destIndex,
+                                         UnicodeSet nx) {
 	    int start=srcIndex[0];
 	    if(isJamoVTNorm32JamoV(norm32)) {
 	        /* c is a Jamo V, compose with previous Jamo L and 
@@ -1830,7 +1879,12 @@ public final class NormalizerImpl {
 	                    }
 	                }
 	            }
-
+				if(nx_contains(nx, c)) {
+	                if(!isHangulWithoutJamoT(c)) {
+	                    --start; /* undo ++start from reading the Jamo T */
+	                }
+	                return false;
+	            }
                 dest[destIndex]=c;
                 srcIndex[0]=start;
 	            return true;
@@ -1838,21 +1892,25 @@ public final class NormalizerImpl {
 	    } else if(isHangulWithoutJamoT(prev)) {
 	        /* c is a Jamo T, compose with previous Hangul LV that does not 
              * contain a Jamo T */
-            dest[destIndex]=(char)(prev+(c-JAMO_T_BASE));
+            c=(char)(prev+(c-JAMO_T_BASE));
+	        if(nx_contains(nx, c)) {
+	            return false;
+	        }
+            dest[destIndex]=c;
 	        srcIndex[0]=start;
 	        return true;
 	    }
 	    return false;
 	}
     
-    public static int compose(char[] src, char[] dest,boolean compat){
-        return compose(src,0,src.length,dest,0,dest.length,compat);
+    public static int compose(char[] src, char[] dest,boolean compat, UnicodeSet nx){
+        return compose(src,0,src.length,dest,0,dest.length,compat, nx);
     }
     
     
     public static int compose(char[] src, int srcIndex, int srcLimit,
                               char[] dest,int destIndex,int destLimit,
-                              boolean compat) {
+                              boolean compat,UnicodeSet nx) {
         
         int prevSrc, prevStarter;
         long/*unsigned*/ norm32; 
@@ -1984,11 +2042,12 @@ public final class NormalizerImpl {
                 prevCC=cc=0;
                 reorderStartIndex=destIndex;
                 ioIndex[0]=srcIndex;
-                if( /* ### TODO: do we need to do this? !ignoreHangul && ### */
-                    destIndex>0 &&
+                if( 
+                	destIndex>0 &&
                     composeHangul(src[(prevSrc-1)], c, norm32,src, ioIndex,
                                   srcLimit, compat, dest,
-                                  destIndex<=destLimit ? destIndex-1: 0)
+                                  destIndex<=destLimit ? destIndex-1: 0,
+                                  nx)
                 ) {
                     srcIndex=ioIndex[0];
                     prevStarter=srcIndex;
@@ -2023,7 +2082,10 @@ public final class NormalizerImpl {
                 ComposePartArgs args =new ComposePartArgs();
                 
                 /* we are looking at the character (c, c2) at [prevSrc..src[ */
-                if((norm32&qcMask)==0) {
+                if(nx_contains(nx, c, c2)) {
+	                /* excluded: norm32==0 */
+	                cc=0;
+            	} else if((norm32&qcMask)==0) {
                     cc=(int)((UNSIGNED_BYTE_MASK)&(norm32>>CC_SHIFT));
                 } else {
                     char[] p;
@@ -2061,7 +2123,7 @@ public final class NormalizerImpl {
                     args.prevCC	= prevCC;                    
                     //args.destIndex = destIndex;
                     args.length = length;
-                    p=composePart(args,prevStarter,src,srcIndex,srcLimit,qcMask);
+                    p=composePart(args,prevStarter,src,srcIndex,srcLimit,qcMask,nx);
                         
                     if(p==null) {
                         /* an error occurred (out of memory) */
@@ -2176,7 +2238,8 @@ public final class NormalizerImpl {
 	private static int/*unsigned byte*/ decomposeFCD(char[] src, 
                                                      int start,int decompLimit,
 	                                                 char[] dest, 
-                                                     int[] destIndexArr) {
+                                                     int[] destIndexArr,
+                                                     UnicodeSet nx) {
 	    char[] p=null;
         int pStart=-1;
         
@@ -2228,7 +2291,11 @@ public final class NormalizerImpl {
 	        }
 	
 	        /* get the decomposition and the lead and trail cc's */
-	        if((norm32&QC_NFD)==0) {
+	        if(nx_contains(nx, c, c2)) {
+	            /* excluded: norm32==0 */
+	            args.cc=args.trailCC=0;
+	            p=null;
+        	} else if((norm32&QC_NFD)==0) {
 	            /* c does not decompose */
 	            args.cc=args.trailCC=(int)((UNSIGNED_BYTE_MASK)&
                                                             (norm32>>CC_SHIFT));
@@ -2299,7 +2366,8 @@ public final class NormalizerImpl {
 	}
 	
 	public static int makeFCD(char[] src,  int srcStart,  int srcLimit,
-                              char[] dest, int destStart, int destLimit) {
+                              char[] dest, int destStart, int destLimit,
+                              UnicodeSet nx) {
                            
 	    int prevSrc, decompStart;
 	    int destIndex, length;
@@ -2358,8 +2426,11 @@ public final class NormalizerImpl {
 	            if(prevCC<0) {
 	                /* the previous character was <_NORM_MIN_WITH_LEAD_CC, we 
                      * need to get its trail cc */
-	                prevCC=(int)(getFCD16((char)-prevCC)&0xff);
-	
+	                if(!nx_contains(nx, (int)-prevCC)) {
+	                    prevCC=(int)(getFCD16((int)-prevCC)&0xff);
+	                } else {
+	                    prevCC=0; /* excluded: fcd16==0 */
+	                }
 	                /*
 	                 * set a pointer to this below-U+0300 character;
 	                 * if prevCC==0 then it will moved to after this character 
@@ -2404,7 +2475,9 @@ public final class NormalizerImpl {
 	        }
 	
 	        /* we are looking at the character (c, c2) at [prevSrc..src[ */
-	
+	        if(nx_contains(nx, c, c2)) {
+	            fcd16=0; /* excluded: fcd16==0 */
+	        }
 	        /* check the combining order, get the lead cc */
 	        cc=(int)(fcd16>>8);
 	        if(cc==0 || cc>=prevCC) {
@@ -2445,7 +2518,7 @@ public final class NormalizerImpl {
 	             */
                 destIndexArr[0] = destIndex;
 	            prevCC=decomposeFCD(src,decompStart, srcStart,dest, 
-                                    destIndexArr);
+                                    destIndexArr,nx);
 	            decompStart=srcStart;
                 destIndex=destIndexArr[0];
 	        }
@@ -2671,43 +2744,7 @@ public final class NormalizerImpl {
     
         /* } else { FCC, test fcd<=1 instead of the above } */
     }
-    /*
-    private static final boolean
-    _enumPropertyStartsRange(const void *context, UChar32 start, UChar32 limit, uint32_t value) {
-        // add the start code point to the USet 
-        uset_add((USet *)context, start);
-        return TRUE;
-    }
-    */
-
-    public static UnicodeSet addPropertyStarts(UnicodeSet set) {
-        int c;
-       
-        /* add the start code point of each same-value range of each trie */
-        //utrie_enum(&normTrie, NULL, _enumPropertyStartsRange, set);
-        TrieIterator normIter = new TrieIterator(normTrieImpl.normTrie);
-        RangeValueIterator.Element result = new RangeValueIterator.Element();
-        
-        while(normIter.next(result)){
-            set.add(result.start);
-        }
-        
-        TrieIterator fcdIter  = new TrieIterator(fcdTrieImpl.fcdTrie);
-        //utrie_enum(&fcdTrie, NULL, _enumPropertyStartsRange, set);
-        while(normIter.next(result)){
-            set.add(result.start);
-        }
-    
-        /* add Hangul LV syllables and LV+1 because of skippables */
-        for(c=HANGUL_BASE; c<HANGUL_BASE+HANGUL_COUNT; c+=JAMO_T_COUNT) {
-            set.add(c);
-            set.add(c+1);
-        }
-        set.add(HANGUL_BASE+HANGUL_COUNT); /* add Hangul+1 to continue with other properties */
-        return set; // for chaining
-    }
-
-	/**
+    	/**
 	 * Internal API, used by collation code.
 	 * Get access to the internal FCD trie table to be able to perform
 	 * incremental, per-code unit, FCD checks in collation.
@@ -2867,9 +2904,9 @@ public final class NormalizerImpl {
 	}
 
     private static int foldCase(int c, char[] dest, int destStart, int destLimit,
-                         boolean defaultMapping){
+                         		int options){
         String src = UTF16.valueOf(c);
-        String foldedStr = UCharacter.foldCase(src,defaultMapping);
+        String foldedStr = UCharacter.foldCase(src,options);
         char[] foldedC = foldedStr.toCharArray();
         for(int i=0;i<foldedC.length;i++){
             if(destStart<destLimit){
@@ -2884,9 +2921,9 @@ public final class NormalizerImpl {
     
     private static int foldCase(char[] src,int srcStart,int srcLimit,
                                 char[] dest, int destStart, int destLimit,
-                                boolean defaultMapping){
+                                int options){
         String source =new String(src,srcStart,(srcLimit-srcStart));
-        String foldedStr = UCharacter.foldCase(source,defaultMapping);
+        String foldedStr = UCharacter.foldCase(source,options);
         char[] foldedC = foldedStr.toCharArray();
         for(int i=0;i<foldedC.length;i++){
             if(destStart<destLimit){
@@ -3078,7 +3115,7 @@ public final class NormalizerImpl {
 	        // go down one level for each string
 	        // continue with the main loop as soon as there is a real change
 	        if( level1<2 && ((options & Normalizer.COMPARE_IGNORE_CASE)!=0)&&
-                (length=foldCase(cp1, fold1, 0,32, ((options&Normalizer.FOLD_CASE_EXCLUDE_SPECIAL_I)==0)))>=0
+                (length=foldCase(cp1, fold1, 0,32,options))>=0
             ) {
                 // cp1 case-folds to fold1[length]
                 if(UTF16.isSurrogate((char)c1)) {
@@ -3114,7 +3151,7 @@ public final class NormalizerImpl {
             }
     
             if( level2<2 && ((options& Normalizer.COMPARE_IGNORE_CASE)!=0) &&
-                (length=foldCase(cp2, fold2,0,32, ((options&Normalizer.FOLD_CASE_EXCLUDE_SPECIAL_I)==0)))>=0
+                (length=foldCase(cp2, fold2,0,32, options))>=0
             ) {
                 // cp2 case-folds to fold2[length]
                 if(UTF16.isSurrogate((char)c2)) {
@@ -3384,132 +3421,200 @@ public final class NormalizerImpl {
         return (int)c1-(int)c2;
     }
 
-	public static int compare(char[] s1, int s1Start,int s1Limit,
-	                          char[] s2, int s2Start,int s2Limit,
-	                          int options) {
-                                  
-	    char[] fcd1  = new char[300];
-        char[] fcd2  = new char[300];
-        
-        int result;
+
+	/*
+	 * Status of tailored normalization
+	 *
+	 * This was done initially for investigation on Unicode public review issue 7
+	 * (http://www.unicode.org/review/). See Jitterbug 2481.
+	 * While the UTC at meeting #94 (2003mar) did not take up the issue, this is
+	 * a permanent feature in ICU 2.6 in support of IDNA which requires true
+	 * Unicode 3.2 normalization.
+	 * (NormalizationCorrections are rolled into IDNA mapping tables.)
+	 *
+	 * Tailored normalization as implemented here allows to "normalize less"
+	 * than full Unicode normalization would.
+	 * Based internally on a UnicodeSet of code points that are
+	 * "excluded from normalization", the normalization functions leave those
+	 * code points alone ("inert"). This means that tailored normalization
+	 * still transforms text into a canonically equivalent form.
+	 * It does not add decompositions to code points that do not have any or
+	 * change decomposition results.
+	 *
+	 * Any function that searches for a safe boundary has not been touched,
+	 * which means that these functions will be over-pessimistic when
+	 * exclusions are applied.
+	 * This should not matter because subsequent checks and normalizations
+	 * do apply the exclusions; only a little more of the text may be processed
+	 * than necessary under exclusions.
+	 *
+	 * Normalization exclusions have the following effect on excluded code points c:
+	 * - c is not decomposed
+	 * - c is not a composition target
+	 * - c does not combine forward or backward for composition
+	 *   except that this is not implemented for Jamo
+	 * - c is treated as having a combining class of 0
+	 */
+	 
+	/* ### TODO prototype 
+	 * Constants for the bit fields in the options bit set parameter. 
+	 * These need not be public. 
+	 * A user only needs to know the currently assigned values. 
+	 * The number and positions of reserved bits per field can remain private. 
+	 */ 
+     private static final int OPTIONS_NX_MASK=0x1f;
+     private static final int OPTIONS_UNICODE_MASK=0xe0; 
+     private static final int OPTIONS_SETS_MASK=0xff;
+     private static final int OPTIONS_UNICODE_SHIFT=5;  
+     private static final UnicodeSet[] nxCache = new UnicodeSet[OPTIONS_SETS_MASK+1];
+     
+	/* Constants for options flags for normalization.*/
+
+    /** 
+     * Options bit 0, do not decompose Hangul syllables. 
+     * @draft ICU 2.6 
+     */
+    private static final int NX_HANGUL = 1;
+    /** 
+     * Options bit 1, do not decompose CJK compatibility characters.
+     * @draft ICU 2.6 
+     */
+    private static final int NX_CJK_COMPAT=2;
+	/* normalization exclusion sets --------------------------------------------- */
 	
-	    if(    s1==null || s1Start<0 || s1Limit<0 || 
-               s2==null || s2Start<0 || s2Limit<0
-          ) {
-	        
-	        throw new IllegalArgumentException();
+	/*
+	 * Normalization exclusion UnicodeSets are used for tailored normalization;
+	 * see the comment near the beginning of this file.
+	 *
+	 * By specifying one or several sets of code points,
+	 * those code points become inert for normalization.
+	 */
+	
+	private static final synchronized UnicodeSet internalGetNXHangul() {
+	    /* internal function, does not check for incoming U_FAILURE */
+	
+	    if(nxCache[NX_HANGUL]==null) {
+	         nxCache[NX_HANGUL]=new UnicodeSet(0xac00, 0xd7a3);
 	    }
+	    return nxCache[NX_HANGUL];
+	}
+	
+	private static final synchronized UnicodeSet internalGetNXCJKCompat() {
+	    /* internal function, does not check for incoming U_FAILURE */
+	
+	    if(nxCache[NX_CJK_COMPAT]==null) {
 
-	    options|=COMPARE_EQUIV;
-	    /*
-         * UAX #21 Case Mappings, as fixed for Unicode version 4
-         * (see Jitterbug 2021), defines a canonical caseless match as
-         *
-         * A string X is a canonical caseless match
-         * for a string Y if and only if
-         * NFD(toCasefold(NFD(X))) = NFD(toCasefold(NFD(Y)))
-         *
-         * For better performance, we check for FCD (or let the caller tell us that
-         * both strings are in FCD) for the inner normalization.
-         * BasicNormalizerTest::FindFoldFCDExceptions() makes sure that
-         * case-folding preserves the FCD-ness of a string.
-         * The outer normalization is then only performed by unorm_cmpEquivFold()
-         * when there is a difference.
-         */
-	    if((options& Normalizer.INPUT_IS_FCD)==0) {
-	        char[] dest;
-	        int fcdLen1, fcdLen2;
-            int foldLen1, foldLen2;
-	        boolean isFCD1, isFCD2;
+	        /* build a set from [CJK Ideographs]&[has canonical decomposition] */
+	        UnicodeSet set, hasDecomp;
 	
-	        // check if s1 and/or s2 fulfill the FCD conditions
-	        isFCD1=checkFCD(s1, s1Start, s1Limit);
-	        isFCD2=checkFCD(s2, s2Start, s2Limit);
-
-	        if(!isFCD1 && !isFCD2) {
-	            // if both strings need normalization then make them NFD right 
-                // away and turn off normalization in the comparison function
-	            int[] trailCC = new int[1];;
+	        set=new UnicodeSet("[:Ideographic:]");
 	
-	            // fully decompose (NFD) s1 and s2
+	        /* start with an empty set for [has canonical decomposition] */
+	        hasDecomp=new UnicodeSet();
 	
-	            fcdLen1=decompose( s1,s1Start,s1Limit,fcd1,0,fcd1.length,
-                                   false, trailCC);
-                                      
-	            if(fcdLen1<=fcd1.length) {
-	                s1=fcd1;
-	            } else {
-	                dest=new char[fcdLen1];
-	                fcdLen1= decompose( s1,s1Start,s1Limit,dest,0,dest.length,
-                                        false, trailCC);
+	        /* iterate over all ideographs and remember which canonically decompose */
+	        UnicodeSetIterator it = new UnicodeSetIterator(set);
+	        int start, end;
+	        long norm32;
 	
-	                s1=dest;
-	            }
-                
-	            s1Limit=fcdLen1;
-	            s2Start=0;
-	            fcdLen2=decompose( s2,s2Start,s2Limit, fcd2,0,fcd2.length,
-                                   false, trailCC);
-	            if(fcdLen2<=fcd2.length) {
-	                s2=fcd2;
-	            } else {
-	                dest=new char[fcdLen2];
-	                
-	                fcdLen2=decompose( s2,s2Start,s2Limit,dest,0,dest.length,
-                                      false, trailCC);
-	
-	                s2=dest;
-	            }
-	            s2Limit=fcdLen2;
-	            s2Start=0;
-	            // compare NFD strings
-	            options&=~COMPARE_EQUIV;
-	        } else {
-	            // if at least one string is already in FCD then only makeFCD 
-                // the other and compare for equivalence
-	            if(!isFCD1) {
-	                fcdLen1=makeFCD(s1,s1Start,s1Limit,fcd1,0,fcd1.length);
-                    
-	                if(fcdLen1>fcd1.length){
-	                    dest=new char[fcdLen1];
-	                    fcdLen1=makeFCD(s1,s1Start,s1Limit,dest,0,dest.length);
-	                    s1=dest;
-	                }else{
-                        s1=fcd1;
-                    }
-	                s1Limit=fcdLen1;
-                    s1Start=0;
-	            }
-	
-	            if(!isFCD2) {
-	                fcdLen2=makeFCD(s2,s2Start,s2Limit,fcd2,0,fcd2.length);
-                    
-	                if(fcdLen2>fcd2.length){
-                        dest=new char[fcdLen2];
-                        fcdLen2=makeFCD(s2,s2Start,s2Limit,dest,0,dest.length);
-                        s2=dest;
-                    }else{
-                        s2=fcd2;
-                    }
-                    s2Limit=fcdLen2;
-                    s2Start=0;
+	        while(it.nextRange() && (it.codepoint != it.IS_STRING)) {
+	            start=it.codepoint;
+	            end=it.codepointEnd;
+	            while(start<=end) {
+	                norm32 = getNorm32(start);
+	                if((norm32 & QC_NFD)>0) {
+	                    hasDecomp.add(start);
+	                }
+	                ++start;
 	            }
 	        }
+	
+	        /* hasDecomp now contains all ideographs that decompose canonically */
+ 	        nxCache[NX_CJK_COMPAT]=hasDecomp;
+         
 	    }
 	
-        if((options&(COMPARE_EQUIV|Normalizer.COMPARE_IGNORE_CASE))==0) {
-	        // compare NFD strings case-sensitive: just use normal comparison
-	        result=strCompare(s1, s1Start, s1Limit, s2,s2Start,s2Limit, 
-                              (0!=(options & 
-                                     Normalizer.COMPARE_CODE_POINT_ORDER
-                                  )
-                              )
-                             );
-	    } else {
-	        result=cmpEquivFold(s1, s1Start, s1Limit, 
-                                s2, s2Start, s2Limit, options);
-	    }
-	    return result;
+	    return nxCache[NX_CJK_COMPAT];
 	}
+	
+	private static final synchronized UnicodeSet internalGetNXUnicode(int options) {
+	    options &= OPTIONS_UNICODE_MASK;
+	    if(options==0) {
+	        return null;
+	    }
+	
+	    if(nxCache[options]==null) {
+	        /* build a set with all code points that were not designated by the specified Unicode version */
+	        UnicodeSet set = new UnicodeSet();
+
+	        switch(options) {
+	        case Normalizer.UNICODE_3_2:
+	            set.applyPattern("[:^Age=3.2:]");
+	            break;
+	        default:
+	            return null;
+	        }
+            
+	        nxCache[options]=set;
+	    }
+	
+	    return nxCache[options];
+	}
+	
+	/* Get a decomposition exclusion set. The data must be loaded. */
+	private static final synchronized UnicodeSet internalGetNX(int options) {
+	    options&=OPTIONS_SETS_MASK;
+	
+	    if(nxCache[options]==null) {
+	        /* return basic sets */	        
+            if(options==NX_HANGUL) {
+	            return internalGetNXHangul();
+	        }
+	        if(options==NX_CJK_COMPAT) {
+	            return internalGetNXCJKCompat();
+	        }
+	        if((options & OPTIONS_UNICODE_MASK)!=0 && (options & OPTIONS_NX_MASK)==0) {
+	            return internalGetNXUnicode(options);
+	        }
+	
+	        /* build a set from multiple subsets */
+	        UnicodeSet set;
+	        UnicodeSet other;
+	
+	        set=new UnicodeSet();
+
+	
+	        if((options & NX_HANGUL)!=0 && null!=(other=internalGetNXHangul())) {
+	            set.addAll(other);
+	        }
+	        if((options&NX_CJK_COMPAT)!=0 && null!=(other=internalGetNXCJKCompat())) {
+	            set.addAll(other);
+	        }
+	        if((options&OPTIONS_UNICODE_MASK)!=0 && null!=(other=internalGetNXUnicode(options))) {
+	            set.addAll(other);
+	        }
+
+   	        nxCache[options]=set;
+        }
+	    return nxCache[options];
+	}
+	
+	public static final UnicodeSet getNX(int options) {
+	    if((options&=OPTIONS_SETS_MASK)==0) {
+	        /* incoming failure, or no decomposition exclusions requested */
+	        return null;
+	    } else {
+	        return internalGetNX(options);
+	    }
+	}
+	
+	private static final boolean nx_contains(UnicodeSet nx, int c) {
+	    return nx!=null && nx.contains(c);
+	}
+	
+	private static final boolean nx_contains(UnicodeSet nx, char c, char c2) {
+	    return nx!=null && nx.contains(c2==0 ? c : UCharacterProperty.getRawSupplementary(c, c2));
+	}
+
 
 }

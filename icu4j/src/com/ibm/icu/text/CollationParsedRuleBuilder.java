@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/CollationParsedRuleBuilder.java,v $ 
-* $Date: 2003/03/22 07:35:01 $ 
-* $Revision: 1.15 $
+* $Date: 2003/04/09 20:03:43 $ 
+* $Revision: 1.16 $
 *
 *******************************************************************************
 */
@@ -1958,7 +1958,7 @@ final class CollationParsedRuleBuilder
 	        m_utilCanIter_.setSource(element.m_cPoints_);
 		    String source = m_utilCanIter_.next();
 		    while (source != null && source.length() > 0) {
-		        if (Normalizer.quickCheck(source, Normalizer.FCD) 
+		        if (Normalizer.quickCheck(source, Normalizer.FCD,0) 
                     != Normalizer.NO) {
 		            element.m_uchars_ = source;
 		            element.m_cPoints_ = element.m_uchars_;
