@@ -125,11 +125,19 @@ SOURCE=.\reslist.c
 # End Source File
 # Begin Source File
 
+SOURCE=.\rle.c
+# End Source File
+# Begin Source File
+
 SOURCE=.\ustr.c
 # End Source File
 # Begin Source File
 
 SOURCE=.\util.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\writejava.c
 # End Source File
 # End Group
 # Begin Group "Header Files"
@@ -150,6 +158,10 @@ SOURCE=.\read.h
 # Begin Source File
 
 SOURCE=.\reslist.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\rle.h
 # End Source File
 # Begin Source File
 

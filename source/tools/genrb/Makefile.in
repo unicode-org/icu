@@ -49,15 +49,15 @@ LDFLAGS = @LDFLAGS@ $(RPATHLDFLAGS)
 LIBS = $(LIBICUI18N) $(LIBICUTOOLUTIL) $(LIBICUUC) @LIBS@ @LIB_M@ 
 
 ##OBJECTS = error.o genrb.o ustr.o parse.o read.o write.o list.o	\
-##rblist.o  util.o
-OBJECTS = error.o genrb.o parse.o read.o reslist.o ustr.o util.o
+##rblist.o	util.o
+OBJECTS = error.o genrb.o parse.o read.o reslist.o ustr.o util.o  wrtjava.o rle.o
 
 DEPS = $(OBJECTS:.o=.d)
 
 
 ## List of phony targets
 .PHONY : all all-local install install-local clean clean-local		\
-distclean distclean-local dist dist-local check	\
+distclean distclean-local dist dist-local check \
 check-local install-man
 
 ## Clear suffix list

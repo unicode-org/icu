@@ -16,26 +16,7 @@
 *******************************************************************************
 */
 
-#include <stdio.h>
-#include "unicode/utypes.h"
-#include "unicode/putil.h"
-#include "cmemory.h"
-#include "cstring.h"
-#include "filestrm.h"
-
-
-#include "ucbuf.h"
-#include "error.h"
-#include "parse.h"
-#include "util.h"
-#include "reslist.h"
-
-
-#include "toolutil.h"
-#include "uoptions.h"
-
-#include "unicode/ucol.h"
-#include "unicode/uloc.h"
+#include "genrb.h"
 
 /* Protos */
 static void  processFile(const char *filename, const char* cp, const char *inputDir, const char *outputDir, UErrorCode *status);
@@ -45,10 +26,10 @@ static char *make_res_filename(const char *filename, const char *outputDir, UErr
 #define RES_SUFFIX ".res"
 #define COL_SUFFIX ".col"
 
-/* The version of genrb */
-#define GENRB_VERSION "3.0"
-
 const char *gCurrentFileName;
+#ifdef XP_MAC_CONSOLE
+#include <console.h>
+#endif
 
 enum
 {
@@ -61,25 +42,27 @@ enum
     DESTDIR,
     ENCODING,
     ICUDATADIR,
+    WRITE_JAVA,
     COPYRIGHT
 };
 
 UOption options[]={
-    UOPTION_HELP_H,
-    UOPTION_HELP_QUESTION_MARK,
-    UOPTION_VERBOSE,
-    UOPTION_QUIET,
-    UOPTION_VERSION,
-    UOPTION_SOURCEDIR,
-    UOPTION_DESTDIR,
-    UOPTION_ENCODING,
-    UOPTION_ICUDATADIR,
-    UOPTION_COPYRIGHT
-};
-
+                      UOPTION_HELP_H,
+                      UOPTION_HELP_QUESTION_MARK,
+                      UOPTION_VERBOSE,
+                      UOPTION_QUIET,
+                      UOPTION_VERSION,
+                      UOPTION_SOURCEDIR,
+                      UOPTION_DESTDIR,
+                      UOPTION_ENCODING,
+                      UOPTION_ICUDATADIR,
+                      UOPTION_WRITE_JAVA,
+                      UOPTION_COPYRIGHT
+                  };
 
 static     UBool       verbose = FALSE;
-
+static     UBool       write_java = FALSE;
+static     const char* outputEnc ="";
 int
 main(int argc,
      char* argv[])
@@ -133,7 +116,9 @@ main(int argc,
                 "\t-d of --destdir      destination directory, followed by the path, defaults to %s\n"
                 "\t-s or --sourcedir    source directory for files followed by path, defaults to %s\n"
                 "\t-i or --icudatadir   directory for locating any needed intermediate data files,\n"
-                "\t                     followed by path, defaults to %s\n",
+                "\t                     followed by path, defaults to %s\n"
+                "\t-j or --wirte-java   write a Java ListResourceBundle for ICU4J, followed by optional encoding\n",
+                "\t                     defaults to ASCII and \\uXXXX format.\n",
                 u_getDataDirectory(), u_getDataDirectory(), u_getDataDirectory());
         return argc < 0 ? U_ILLEGAL_ARGUMENT_ERROR : U_ZERO_ERROR;
     }
@@ -164,6 +149,10 @@ main(int argc,
 
     if(options[ICUDATADIR].doesOccur) {
         u_setDataDirectory(options[ICUDATADIR].value);
+    }
+    if(options[WRITE_JAVA].doesOccur) {
+        write_java = TRUE;
+        outputEnc = options[WRITE_JAVA].value;
     }
 
     initParser();
@@ -276,9 +265,12 @@ processFile(const char *filename, const char *cp, const char *inputDir, const ch
     if(U_FAILURE(*status)) {
         goto finish;
     }
-
-    /* Write the data to the file */
-    bundle_write(data, outputDir, status);
+    if(write_java== FALSE){
+        /* Write the data to the file */
+        bundle_write(data, outputDir, status);
+    }else{
+        bundle_write_java(data,outputDir,outputEnc, status);
+    }
     bundle_close(data, status);
 
 finish:
