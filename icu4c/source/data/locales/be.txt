@@ -98,7 +98,7 @@ be {
         ",",
         "+",
     }
-    localPatternChars { "GanjkHmsSEDFwWxhKzAe" }
+    localPatternChars { "GanjkHmsSEDFwWxhKzAeugXZ" }
 
     LocaleScript{
         "Cyrl",     // Abbreviation 

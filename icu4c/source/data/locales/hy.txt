@@ -314,7 +314,7 @@ hy{
     Languages{
         hy { "\u0540\u0561\u0575\u0565\u0580\u0567\u0576" }
     }
-//    localPatternChars{ "GyMdkHmsSEDFwWahKz" }
+//    localPatternChars{ "GyMdkHmsSEDFwWahKzugAZ" }
 
     NumberPatterns{
         "#0.###;-#0.###",

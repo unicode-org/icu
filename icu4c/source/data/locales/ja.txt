@@ -1835,7 +1835,7 @@ ja {
 //        "\u221E",
 //        "\uFFFD",
 //    }
-    localPatternChars { "GanjkHmsSEDFwWxhKzAe" }
+    localPatternChars { "GanjkHmsSEDFwWxhKzAeugXZ" }
     zoneStrings { 
         {
             "Asia/Tokyo",

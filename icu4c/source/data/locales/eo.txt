@@ -499,7 +499,7 @@ eo {
         ",",
         "+",
     }
-    localPatternChars { "GjMtkHmslTDUSnahKzJd" }
+    localPatternChars { "GjMtkHmslTDUSnahKzJdugAZ" }
     LocaleScript:array{ 
         "Latn",  // ISO 15924 Name 
     }

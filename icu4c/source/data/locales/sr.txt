@@ -341,7 +341,7 @@ sr {
         ",",
         "+",
     }
-    localPatternChars { "GanjkHmsSEDFwWxhKzAe" }
+    localPatternChars { "GanjkHmsSEDFwWxhKzAeugXZ" }
     zoneStrings { 
         {
             "Europe/Belgrade",

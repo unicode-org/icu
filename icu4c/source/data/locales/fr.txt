@@ -407,7 +407,7 @@ fr {
         "av. J.-C.",
         "ap. J.-C.",
     }
-    localPatternChars { "GaMjkHmsSEDFwWxhKzAe" }
+    localPatternChars { "GaMjkHmsSEDFwWxhKzAeugXZ" }
     LocaleScript{  
         "Latn",  // ISO 15924 Name 
     }
