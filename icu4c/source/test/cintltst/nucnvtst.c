@@ -1031,17 +1031,39 @@ static void TestNewConvertWithBufferSizes(int32_t outsize, int32_t insize )
 }
 
 static void TestCoverageMBCS(){
-    char testdatapath[256];
+    char tdpath[256];
+    char tdfallbackpath[256];
     char saveDirectory[256];
     const char *directory= u_getDataDirectory();
     const char* tdrelativepath = ".."U_FILE_SEP_STRING"test"U_FILE_SEP_STRING"testdata"U_FILE_SEP_STRING"out"U_FILE_SEP_STRING;
-    
+    UConverter* conv = NULL;
+    UErrorCode status = U_ZERO_ERROR;
+
     /*save the data directory */
     strcpy(saveDirectory, directory);
+    
+    strcpy(tdpath, directory);
+    strcat(tdpath,tdrelativepath);
+    
+    /* set the fallback path for Memory Mapped build */
+    strcpy(tdfallbackpath,directory);
+    strcat(tdfallbackpath,".."U_FILE_SEP_STRING);
+    strcat(tdfallbackpath,tdrelativepath);
 
-    strcpy(testdatapath, directory);
-    strcat(testdatapath,tdrelativepath);
-    u_setDataDirectory(testdatapath);
+    u_setDataDirectory(tdpath);
+    /* test if we can open test1.cnv from testdatapath */
+    conv = ucnv_open("test1",&status);
+    if(U_FAILURE(status)){
+        status=U_ZERO_ERROR;
+        /* try the fallback path */
+        u_setDataDirectory(tdfallbackpath);
+        conv= ucnv_open("test1",&status);
+        if(U_FAILURE(status)){
+            log_err("Could not open converters from fallback path :%s . Error : %s \n",tdfallbackpath,u_errorName(status));
+        }
+        ucnv_close(conv);
+    }
+    ucnv_close(conv);
 
     /*some more test to increase the code coverage in MBCS.  Create an test converter from test1.ucm
       which is test file for MBCS conversion with single-byte codepage data.*/

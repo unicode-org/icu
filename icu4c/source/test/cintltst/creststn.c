@@ -291,14 +291,14 @@ static void TestNewTypes() {
     UChar expected[] = { 'a','b','c','\0','d','e','f' };
     const char* expect ="tab:\t cr:\r ff:\f newline:\n backslash:\\\\ quote=\\\' doubleQuote=\\\" singlequoutes=''";
     UChar uExpect[200];
-    const char* tdrelativepath = ".."U_FILE_SEP_STRING"test"U_FILE_SEP_STRING"testdata"U_FILE_SEP_STRING"out"U_FILE_SEP_STRING;
-    
-    u_charsToUChars(expect,uExpect,uprv_strlen(expect)+1);
-    strcpy(action, "Construction of testtypes bundle");
 
-    strcpy(testdatapath, directory);
-    strcat(testdatapath,tdrelativepath);
-    strcat(testdatapath, "testdata");
+    loadTestData(testdatapath,256,&status);
+    if(U_FAILURE(status))
+    {
+        log_err("Could not load testdata.dat %s \n",myErrorName(status));
+        return;
+    }
+
     theBundle = ures_open(testdatapath, "testtypes", &status);
 
     empty = ures_getStringByKey(theBundle, "emptystring", &len, &status);
@@ -407,8 +407,9 @@ static void TestNewTypes() {
         const UChar* str = ures_getStringByKey(theBundle,"testescape",&len,&status);
         CONFIRM_ErrorCode(status, U_ZERO_ERROR);
         if(U_SUCCESS(status)){
+            u_charsToUChars(expect,uExpect,uprv_strlen(expect)+1);
             if(u_strcmp(uExpect,str)){
-                log_err("Did not get the expected string for testescape");
+                log_err("Did not get the expected string for testescape\n");
             }
         }
     }
@@ -419,7 +420,7 @@ static void TestNewTypes() {
         u_charsToUChars(expect,uExpect,uprv_strlen(expect)+1);
         CONFIRM_ErrorCode(status, U_ZERO_ERROR);
         if(u_strcmp(uExpect,str)){
-            log_err("Did not get the expected string for test_underscores.");
+            log_err("Did not get the expected string for test_underscores.\n");
         }
     }
     ures_close(res);
@@ -440,13 +441,16 @@ static void TestEmptyTypes() {
     int32_t intResult = 0;
     const UChar *zeroString;
     const int32_t *zeroIntVect;
-    const char* tdrelativepath = ".."U_FILE_SEP_STRING"test"U_FILE_SEP_STRING"testdata"U_FILE_SEP_STRING"out"U_FILE_SEP_STRING;
 
     strcpy(action, "Construction of testtypes bundle");
-
-    strcpy(testdatapath, directory);
-    strcat(testdatapath,tdrelativepath);
-    strcat(testdatapath, "testdata");
+    
+    loadTestData(testdatapath,256,&status);
+    if(U_FAILURE(status))
+    {
+        log_err("Could not load testdata.dat %s \n",myErrorName(status));
+        return;
+    }
+    
     theBundle = ures_open(testdatapath, "testtypes", &status);
 
     CONFIRM_ErrorCode(status, U_ZERO_ERROR);
@@ -574,11 +578,13 @@ static void TestEmptyBundle(){
     char testdatapath[256];
     const char *directory= u_getDataDirectory();
     UResourceBundle *resb=0, *dResB=0;
-    const char* tdrelativepath = ".."U_FILE_SEP_STRING"test"U_FILE_SEP_STRING"testdata"U_FILE_SEP_STRING"out"U_FILE_SEP_STRING;
-
-    strcpy(testdatapath, directory);
-    strcat(testdatapath,tdrelativepath);
-    strcat(testdatapath, "testdata");
+    
+    loadTestData(testdatapath,256,&status);
+    if(U_FAILURE(status))
+    {
+        log_err("Could not load testdata.dat %s \n",myErrorName(status));
+        return;
+    }
     resb = ures_open(testdatapath, "testempty", &status);
 
     if(U_SUCCESS(status)){
@@ -594,7 +600,6 @@ static void TestEmptyBundle(){
 
 static void TestBinaryCollationData(){
     UErrorCode status=U_ZERO_ERROR;
-    const char*        directory=NULL;
     const char*      locale="te";
     char testdatapath[256];
     UResourceBundle *teRes = NULL;
@@ -603,14 +608,16 @@ static void TestBinaryCollationData(){
     uint8_t *binResult = NULL;
     int32_t len=0;
     const char* action="testing the binary collaton data";
-    const char* tdrelativepath = ".."U_FILE_SEP_STRING"test"U_FILE_SEP_STRING"testdata"U_FILE_SEP_STRING"out"U_FILE_SEP_STRING;
-
-    directory= u_getDataDirectory();
-    uprv_strcpy(testdatapath, directory);
-    uprv_strcat(testdatapath,tdrelativepath);
-    uprv_strcat(testdatapath, "testdata");
-
+ 
     log_verbose("Testing binary collation data resource......\n");
+
+    loadTestData(testdatapath,256,&status);
+    if(U_FAILURE(status))
+    {
+        log_err("Could not load testdata.dat %s \n",myErrorName(status));
+        return;
+    }
+
 
     teRes=ures_open(testdatapath, locale, &status);
     if(U_FAILURE(status)){
@@ -658,17 +665,21 @@ static void TestAPI() {
     UResourceBundle *teRes = NULL;
     UResourceBundle *teFillin=NULL;
     UResourceBundle *teFillin2=NULL;
-    char* tdrelativepath = ".."U_FILE_SEP_STRING"test"U_FILE_SEP_STRING"testdata"U_FILE_SEP_STRING"out"U_FILE_SEP_STRING;
-
-    directory= u_getDataDirectory();
-    uprv_strcpy(testdatapath, directory);
-    uprv_strcat(testdatapath,tdrelativepath);
-    uprv_strcat(testdatapath, "testdata");
+    
+    log_verbose("Testing ures_openU()......\n");
+    
+    loadTestData(testdatapath,256,&status);
+    if(U_FAILURE(status))
+    {
+        log_err("Could not load testdata.dat %s \n",myErrorName(status));
+        return;
+    }
+    
     u_charsToUChars(testdatapath, utestdatapath, strlen(testdatapath)+1);
     /*u_uastrcpy(utestdatapath, testdatapath);*/
 
     /*Test ures_openU */
-    log_verbose("Testing ures_openU()......\n");
+
     teRes=ures_openU(utestdatapath, "te", &status);
     if(U_FAILURE(status)){
         log_err("ERROR: ures_openU() failed path =%s with %s", austrdup(utestdatapath), myErrorName(status));
@@ -780,13 +791,15 @@ static void TestErrorConditions(){
     UResourceBundle *teFillin2=NULL;
     uint8_t *binResult = NULL;
     int32_t resultLen;
-    const char* tdrelativepath = ".."U_FILE_SEP_STRING"test"U_FILE_SEP_STRING"testdata"U_FILE_SEP_STRING"out"U_FILE_SEP_STRING;
+    
+    
+    loadTestData(testdatapath,256,&status);
+    if(U_FAILURE(status))
+    {
+        log_err("Could not load testdata.dat %s \n",myErrorName(status));
+        return;
+    }
 
-
-    directory= u_getDataDirectory();
-    uprv_strcpy(testdatapath, directory);
-    uprv_strcat(testdatapath,tdrelativepath);
-    uprv_strcat(testdatapath, "testdata");
     u_uastrcpy(utestdatapath, testdatapath);
   
     /*Test ures_openU with status != U_ZERO_ERROR*/
@@ -1042,8 +1055,6 @@ static void TestConstruction1()
     const char*      locale="te_IN";
     char testdatapath[256];
 
-    const char* tdrelativepath = ".."U_FILE_SEP_STRING"test"U_FILE_SEP_STRING"testdata"U_FILE_SEP_STRING"out"U_FILE_SEP_STRING;
-    
     int32_t len1=0;
     int32_t len2=0;
     UVersionInfo versionInfo;
@@ -1056,10 +1067,13 @@ static void TestConstruction1()
     U_STRING_INIT(rootVal, "ROOT", 4);
     U_STRING_INIT(te_inVal, "TE_IN", 5);
 
-    directory= u_getDataDirectory();
-    uprv_strcpy(testdatapath, directory);
-    uprv_strcat(testdatapath, tdrelativepath);
-    uprv_strcat(testdatapath,"testdata");
+    loadTestData(testdatapath,256,&status);
+    if(U_FAILURE(status))
+    {
+        log_err("Could not load testdata.dat %s \n",myErrorName(status));
+        return;
+    }
+    
     log_verbose("Testing ures_open()......\n");
 
     empty = ures_open(testdatapath, "testempty", &status);
@@ -1206,12 +1220,12 @@ static UBool testTag(const char* frag,
     UResourceBundle* tags=NULL;
     UResourceBundle* arrayItem1=NULL;
 
-    const char*    directory =  u_getDataDirectory();
-    const char* tdrelativepath = ".."U_FILE_SEP_STRING"test"U_FILE_SEP_STRING"testdata"U_FILE_SEP_STRING"out"U_FILE_SEP_STRING;
-
-    uprv_strcpy(testdatapath, directory);
-    uprv_strcat(testdatapath,tdrelativepath);
-    uprv_strcat(testdatapath, "testdata");
+    loadTestData(testdatapath,256,&status);
+    if(U_FAILURE(status))
+    {
+        log_err("Could not load testdata.dat %s \n",myErrorName(status));
+        return FALSE;
+    }
 
     is_in[0] = in_Root;
     is_in[1] = in_te;

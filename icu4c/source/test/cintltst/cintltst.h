@@ -61,7 +61,7 @@ U_CFUNC char *aescstrdup(const UChar* unichars);
 U_CFUNC void *ctst_malloc(size_t size);
 U_CFUNC void ctst_freeAll();
 
-
+U_CFUNC void loadTestData(char* testdatapath,int32_t len, UErrorCode* err );
 
 /**
  * function used to specify the error
