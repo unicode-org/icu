@@ -107,7 +107,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /machine:IX86 /machine:IA64
-# ADD LINK32 /nologo /dll /machine:IX86 /out:"..\..\..\bin\ctestfw.dll" /machine:IA64
+# ADD LINK32 /nologo /dll /machine:IA64 /out:"..\..\..\bin\ctestfw.dll"
 
 !ELSEIF  "$(CFG)" == "ctestfw - Win64 Debug"
 
@@ -133,7 +133,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /debug /machine:IX86 /pdbtype:sept /machine:IA64
-# ADD LINK32 /nologo /dll /incremental:no /debug /machine:IX86 /out:"..\..\..\bin\ctestfwd.dll" /pdbtype:sept /machine:IA64
+# ADD LINK32 /nologo /dll /incremental:no /debug /machine:IA64 /out:"..\..\..\bin\ctestfwd.dll" /pdbtype:sept
 
 !ENDIF 
 
@@ -149,19 +149,6 @@ LINK32=link.exe
 # Begin Source File
 
 SOURCE=.\ctest.c
-
-!IF  "$(CFG)" == "ctestfw - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "ctestfw - Win32 Debug"
-
-# ADD CPP /G6
-
-!ELSEIF  "$(CFG)" == "ctestfw - Win64 Release"
-
-!ELSEIF  "$(CFG)" == "ctestfw - Win64 Debug"
-
-!ENDIF 
-
 # End Source File
 # End Group
 # Begin Group "Header Files"
