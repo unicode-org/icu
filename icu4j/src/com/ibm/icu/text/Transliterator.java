@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/Transliterator.java,v $
- * $Date: 2002/07/13 03:27:09 $
- * $Revision: 1.80 $
+ * $Date: 2002/07/16 22:56:09 $
+ * $Revision: 1.81 $
  *
  *****************************************************************************************
  */
@@ -250,7 +250,7 @@ import java.util.Vector;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: Transliterator.java,v $ $Revision: 1.80 $ $Date: 2002/07/13 03:27:09 $
+ * @version $RCSfile: Transliterator.java,v $ $Revision: 1.81 $ $Date: 2002/07/16 22:56:09 $
  */
 public abstract class Transliterator {
     /**
@@ -1434,7 +1434,7 @@ public abstract class Transliterator {
      * @param trans the Transliterator object
      */
     static void registerInstance(Transliterator trans, boolean visible) {
-        registry.put(trans.getID(), trans, true);
+        registry.put(trans.getID(), trans, visible);
     }
 
     /**
