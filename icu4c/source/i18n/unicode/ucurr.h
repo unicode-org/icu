@@ -4,7 +4,7 @@
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * $Source: /xsrl/Nsvn/icu/icu/source/i18n/unicode/ucurr.h,v $ 
-* $Revision: 1.5 $
+* $Revision: 1.6 $
 **********************************************************************
 */
 #ifndef _UCURR_H_
@@ -37,8 +37,7 @@
  * @param locale the locale for which to retrieve a currency code
  * @param ec error code
  * @return a pointer to a 3-character ISO 4217 currency code, or
- * NULL if none is found.  The result string may NOT be null
- * terminated.
+ * NULL if none is found.
  * @draft ICU 2.2
  */
 U_CAPI const UChar* U_EXPORT2
@@ -78,11 +77,10 @@ typedef enum UCurrNameStyle {
  * is a ChoiceFormat pattern; otherwise it is a static string
  * @param len fill-in parameter to receive length of result
  * @param ec error code
- * @return pointer to display string of 'len' UChars.  If the
- * resource data contains no entry for 'currency', then
- * 'currency' itself is returned.  The result string may NOT be
- * null terminated.  If *isChoiceFormat is TRUE, then the result
- * is a ChoiceFormat pattern.  Otherwise it is a static string.
+ * @return pointer to display string of 'len' UChars.  If the resource
+ * data contains no entry for 'currency', then 'currency' itself is
+ * returned.  If *isChoiceFormat is TRUE, then the result is a
+ * ChoiceFormat pattern.  Otherwise it is a static string.
  * @draft ICU 2.6
  */
 U_CAPI const UChar* U_EXPORT2
