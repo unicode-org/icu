@@ -110,7 +110,10 @@ require 'dumpvar.pl';
 @ISA = qw(Exporter);
 @EXPORT = qw(ZoneEquals
              RuleEquals
+             ZoneCompare
+             RuleCompare
              FormZoneEquivalencyGroups
+             ParseOffset
              );
 $VERSION = '0.1';
 
@@ -120,16 +123,47 @@ $STANDARD = '-'; # Name of the Standard Time rule
 # Param: zone object (hash ref)
 # Param: zone object (hash ref)
 # Param: ref to hash of all rules
-# Return: true if two zones are equivalent
-sub ZoneEquals {
+# Return: 0, -1, or 1
+sub ZoneCompare {
     my $z1 = shift;
     my $z2 = shift;
     my $RULES = shift;
 
     ($z1, $z2) = ($z1->{rule}, $z2->{rule});
 
-    return ($z1 eq $z2) || 
-        RuleEquals($RULES->{$z1}, $RULES->{$z2});
+    return RuleCompare($RULES->{$z1}, $RULES->{$z2});
+}
+
+######################################################################
+# Param: rule object (hash ref)
+# Param: rule object (hash ref)
+# Return: 0, -1, or 1
+sub RuleCompare {
+    my $r1 = shift;
+    my $r2 = shift;
+
+    # Just compare the precomputed encoding strings.
+    # defined() catches undefined rules.  The only undefined
+    # rule is $STANDARD; any others would be caught by
+    # Postprocess().
+
+    defined($r1)
+        ? (defined($r2) ? ($r1->[2] cmp $r2->[2]) : 1)
+        : (defined($r2) ? -1 : 0);
+
+    # In theory, there's actually one more level of equivalency
+    # analysis we could do.  This is to recognize that Sun >=1 is the
+    # same as First Sun.  We don't do this yet, but it doesn't matter;
+    # such a date is always referred to as Sun>=1, never as firstSun.
+}
+
+######################################################################
+# Param: zone object (hash ref)
+# Param: zone object (hash ref)
+# Param: ref to hash of all rules
+# Return: true if two zones are equivalent
+sub ZoneEquals {
+    ZoneCompare(@_) == 0;
 }
 
 ######################################################################
@@ -137,18 +171,7 @@ sub ZoneEquals {
 # Param: rule object (hash ref)
 # Return: true if two rules are equivalent
 sub RuleEquals {
-    my $r1 = shift;
-    my $r2 = shift;
-
-    # Just compare the precomputed encoding strings.
-    # defined() catches undefined rules.  The only undefined
-    # rule is $STANDARD; any others would be cause by
-    # Postprocess().
-    return defined($r1) && defined($r2) && $r1->[2] eq $r2->[2];
-
-    # There's actually one more level of equivalency analysis we could
-    # do.  This is to recognize that Sun >=1 is the same as First Sun.
-    # We don't do this yet.
+    RuleCompare(@_) == 0;
 }
 
 ######################################################################
@@ -162,26 +185,26 @@ sub RuleEquals {
 # Param: IN  ref to hash of all rules
 # Param: OUT ref to array to receive group refs
 sub FormZoneEquivalencyGroups {
-    my ($ZONES, $RULES, $EQUIV) = @_;
+    my ($zones, $rules, $equiv) = @_;
 
     # Group the zones by offset.  This improves efficiency greatly;
     # instead of an n^2 computation, we just need to do n^2 within
     # each offset; a much smaller total number.
-    my %ZONES_BY_OFFSET;
-    foreach (keys %$ZONES) {
-        push @{$ZONES_BY_OFFSET{$ZONES->{$_}->{gmtoff}}}, $_;
+    my %zones_by_offset;
+    foreach (keys %$zones) {
+        push @{$zones_by_offset{ParseOffset($zones->{$_}->{gmtoff})}}, $_;
     }
 
     # Find equivalent rules
-    foreach my $gmtoff (keys %ZONES_BY_OFFSET) {
+    foreach my $gmtoff (keys %zones_by_offset) {
         # Make an array of equivalency groups
         # (array of refs to array of names)
         my @equiv;
-        foreach my $name1 (@{$ZONES_BY_OFFSET{$gmtoff}}) {
+        foreach my $name1 (@{$zones_by_offset{$gmtoff}}) {
             my $found = 0;
             foreach my $group (@equiv) {
                 my $name2 = $group->[0];
-                if (ZoneEquals($ZONES->{$name1}, $ZONES->{$name2}, $RULES)) {
+                if (ZoneEquals($zones->{$name1}, $zones->{$name2}, $rules)) {
                     push @$group, $name1;
                     $found = 1;
                     last;
@@ -192,6 +215,23 @@ sub FormZoneEquivalencyGroups {
                 push @equiv, \@newGroup;
             }
         }
-        push @$EQUIV, @equiv;
+        push @$equiv, @equiv;
+    }
+}
+
+######################################################################
+# Parse an offset of the form d, d:dd, or d:dd:dd, or any of the above
+# preceded by a '-'.  Return the total number of seconds represented.
+# Param: String
+# Return: Integer number of seconds
+sub ParseOffset {
+    local $_ = shift;
+    if (/^(-)?(\d{1,2})(:(\d\d))?(:(\d\d))?$/) {
+        #        1   2      4        6
+        my $a = (($2 * 60) + (defined $4?$4:0)) * 60 + (defined $6?$6:0);
+        $a = -$a if (defined $1 && $1 eq '-');
+        return $a;
+    } else {
+        confess "Cannot parse offset \"$_\"";
     }
 }

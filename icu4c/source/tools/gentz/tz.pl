@@ -30,75 +30,60 @@
 # - Lines may be followed by a comment; the parser must ignore
 #   anything of the form /\s+#.*$/ in each line.
 #   |3065,14400 # Asia/Dubai GMT+4:00
-# - The file contains a header and 5 lists.
-# - The header contains the version of the unix data, the total
-#   zone count, the maximum number of zones sharing the same value
-#   of gmtOffset, the length of the name table in bytes, and
-#   the length of the longest name (not including the terminating
-#   zero byte).
+# - The file contains a header and 3 lists.
+# - The header contains the version of this data file:
+#    2 original version, without equivalency groups
+#    3 current version, described here
+#   then the version of the unix data, and other counts:
+#   | 3 # format version number of this file
 #   | 1999 # (tzdata1999j) version of Olson zone
 #   | 10 #  data from ftp://elsie.nci.nih.gov
-#   | 387 # total zone count
-#   | 40 # max count of zones with same gmtOffset
-#   | 25 # max name length not incl final zero
-#   | 5906 # length of name table in bytes
+#   | 402 # total zone count
+#   | 40 # maximum zones per offset (used by gentz)
 # - Lists start with a count of the records to follow, the records
 #   themselves (one per line), and a single line with the keyword
 #   'end'.
-# - The first list is the list of standard zones:
-#   | 208 # count of standard zones to follow
-#   | 0,0 # Africa/Abidjan GMT+0:00
-#   | 28,10800 # Africa/Addis_Ababa GMT+3:00
+# - The first list is the name table:
+#   | 387 # count of names to follow
+#   | 34,Africa/Abidjan
+#   | 23,Africa/Accra
 #   ...
 #   | end
-#   Each standard zone record contains two integers.  The first
-#   is a byte offset into the name table for the name of the zone.
-#   The second integer is the GMT offset in SECONDS for this zone.
-# - The second list is the list of DST zones:
-#   | 179 # count of dst zones to follow
-#   | 15,0,8,1,0,0,w,11,31,0,0,w,20 # Africa/Accra GMT+0:00 Sep 1...
-#   | 184,7200,3,-1,6,0,s,8,-1,5,1380,s,60 # Africa/Cairo GMT+2:0...
+#   Each name is terminated by a newline (like all lines in the file).
+#   The zone numbers in other lists refer to this table.  The
+#   integer that precedes the name is an index into the equivalency
+#   table, with the first table entry being entry 0.
+# - The second list is the equivalency table.  It lists, in sorted
+#   order, the equivalency groups.  Each group represents a
+#   set of one or more zones that have the same GMT offset and the
+#   same rules.  While there are about 400 zones, there are less than
+#   120 equivalency groups (as of this writing).
+#   | 120 # count of equivalency groups to follow
+#   | s,0,1,0 # GMT+0:00
+#   | d,0,8,1,0,0,w,11,31,0,0,w,20,4,15,16,17,18 # GMT+0:00 Sep 1...
 #   ...
 #   | end
-#   Each record starts with the same two integers as a standard
-#   zone record.  Following this are data for the onset rule and
-#   the cease rule.  Each rule is described by the following integers:
+#   Entries start with 's' for standard zones, or 'd' for DST zones.
+#   Both zone descriptors start with the GMT offset in SECONDS.  DST
+#   zones contain, in addition, data for the onset rule and the cease
+#   rule.  Each rule is described by the following integers:
 #     month (JAN = 0)
 #     dowim } These two values are in SimpleTimeZone encoded
 #     dow   } format for DOM, DOWIM, DOW>=DOM, or DOW<=DOM.
 #     time MINUTES
 #     time mode ('w', 's', 'u')
-#   The last integer in the record is the DST savings in MINUTES,
+#   The last rule integer in the record is the DST savings in MINUTES,
 #   typically 60.
-# - The third list is the name table:
-#   | 387 # count of names to follow
-#   | Africa/Abidjan
-#   | Africa/Accra
-#   ...
-#   | end
-#   Each name is terminated by a newline (like all lines in the file).
-#   The offsets in the first two lists refer to this table.
-# - The fourth list is an index list by name.  The index entries
-#   themselves are of the form /[sd]\d+/, where the first character
-#   indicates standard or DST, and the number that follows indexes
-#   into the correpsonding array.
-#   | 416 # count of name index table entries to follow
-#   | d0 # ACT
-#   | d1 # AET
-#   | d2 # AGT
-#   | d3 # ART
-#   | d4 # AST
-#   | s0 # Africa/Abidjan
-#   ...
-#   | end
-# - The fifth list is an index by GMT offset.  Each line lists the
-#   zones with the same offset.  The first number on the line
-#   is the GMT offset in seconds.  The second number is the default
-#   zone number in the following list, taken from tz.default.  The
-#   third number is the count
-#   of zone numbers to follow.  Each zone number is an integer from
-#   0..n-1, where n is the total number of zones.  The zone numbers
-#   refer to the zone list in alphabetical order.
+
+#   After either a standard or a DST zone, there is a list of the
+#   members of the equivalency group.  This consists of a number of
+#   entries to follow (>=1), then the zone numbers themselves.
+# - The third list is an index by GMT offset.  Each line lists the
+#   zones with the same offset.  The first number on the line is the
+#   GMT offset in seconds.  The second number is the default zone
+#   number in the following list, taken from tz.default.  The list
+#   consists of a number of entries to follow (>=1), then the zone
+#   numbers themselves.
 #   | 39 # index by offset entries to follow
 #   | -43200,280,1,280 # -12:00 d=Etc/GMT+12 Etc/GMT+12
 #   | -39600,374,6,279,366,374,394,396,399 # -11:00 d=Pacific/Apia Etc/GMT+11 MIT Pacific/Apia Pacific/Midway Pacific/Niue Pacific/Pago_Pago
@@ -114,7 +99,7 @@
 # letter: -, D, GHST, GMT, HS, S, SLST
 # on: 1, 12, 15, 18, 2, 20, 21, 22, 23, 25, 28, 3, 30, 31, 4, 7, Fri>=1,
 #     Fri>=15, Sat>=1, Sat>=15, Sun<=14, Sun>=1, Sun>=10, Sun>=11, Sun>=15,
-#     Sun>=16, Sun>=23, S un>=8, Sun>=9, lastFri, lastSun, lastThu
+#     Sun>=16, Sun>=23, Sun>=8, Sun>=9, lastFri, lastSun, lastThu
 # save: 0, 0:20, 0:30, 1:00
 # type: -
 
@@ -123,10 +108,18 @@ use strict;
 use Getopt::Long;
 use vars qw(@FILES $YEAR $DATA_DIR $OUT $SEP @MONTH
             $VERSION_YEAR $VERSION_SUFFIX $RAW_VERSION
-            $TZ_ALIAS $TZ_DEFAULT $URL $HTML_FILE);
+            $TZ_ALIAS $TZ_DEFAULT $URL $HTML_FILE
+            $TZ_TXT_VERSION %ZONE_ID_TO_INDEX $END_MARKER);
 require 'dumpvar.pl';
 use tzparse;
 use tzutil;
+
+# Current version of the data file.  Matches formatVersion[0] in the
+# binary data file.  SEE tzdat.h
+# 1 - unreleased version (?)
+# 2 - original version
+# 3 - added equivalency groups
+$TZ_TXT_VERSION = 3;
 
 # File names
 $OUT = 'tz.txt';
@@ -138,6 +131,9 @@ $URL = "ftp://elsie.nci.nih.gov/pub";
 
 # Separator between fields in the output file
 $SEP = ','; # Don't use ':'!
+
+# Marker between sections
+$END_MARKER = 'end';
 
 @FILES = qw(africa      
             antarctica  
@@ -194,6 +190,7 @@ $HTML_FILE = shift;
             jul aug sep oct nov dec);
 
 main();
+exit();
 
 sub usage {
     print STDERR "Usage: $0 data_dir [html_out]\n\n";
@@ -242,55 +239,21 @@ sub main {
         $ZONES{GMT} = \%GMT;
     }
 
-    # Write out the zone data in a compact readable format.
-
-    # Create a name table from the zone names.  The format of
-    # the name table is:
-    #
-    # The names are listed in lexical order, and each name
-    # is assigned an offset.  The first name's offset is 0.
-    # The offset of name i+1 is the offset of name i + the
-    # length of name i + 1 (for the zero byte).
-    #
-    # Store the offsets in a hash %NAME_OFFSET.  Store the
-    # names in a big scalar, $NAME_LIST, with "\n" between
-    # each name and after the last.
-    #
-    # Store the length of the entire name table in $NAME_SIZE.
-    #
-    # Also, count the number of standard and DST zones.
-    my $offset = 0;
-    my $NAME_LIST = '';
-    my %NAME_OFFSET;
-    my $STD_COUNT = 0; # Count of standard zones
-    my $DST_COUNT = 0; # Count of DST zones
-    my $maxNameLen = 0;
-    # IMPORTANT: This sort must correspond to the sort
-    #            order of UnicodeString::compare.  That
-    #            is, it must be a plain sort.
-    foreach my $z (sort keys %ZONES) {
+    # Validate names and count total size
+    my $NAME_SIZE = 0;
+    foreach my $z (keys %ZONES) {
         # Make sure zone IDs only contain invariant chars
         assertInvariantChars($z);
 
-        my $len = length($z);
-        $NAME_OFFSET{$z} = $offset;
-        $offset += $len + 1;
-        $NAME_LIST .= "$z\n";
-        $maxNameLen = $len if ($len > $maxNameLen);
-        if ($ZONES{$z}->{rule} eq $TZ::STANDARD) {
-            $STD_COUNT++;
-        } else {
-            $DST_COUNT++;
-        }
+        $NAME_SIZE += 1 + length($z);
     }
-    my $NAME_SIZE = $offset;
 
     # Find the maximum number of zones with the same value of
     # gmtOffset.
     my %perOffset; # Hash of offset -> count
     foreach my $z (keys %ZONES) {
-        # Use parseOffset to normalize values - probably unnecessary
-        ++$perOffset{parseOffset($ZONES{$z}->{gmtoff})};
+        # Use TZ::ParseOffset to normalize values - probably unnecessary
+        ++$perOffset{TZ::ParseOffset($ZONES{$z}->{gmtoff})};
     }
     my $maxPerOffset = 0;
     foreach (values %perOffset) {
@@ -304,72 +267,116 @@ sub main {
     # zones for the offset, in sorted order, including the default.
     my $offsetIndex = createOffsetIndex(\%ZONES, $TZ_DEFAULT);
 
+    # Group zones into equivalency groups
+    my $maxPerEquiv = 0;
+    TZ::FormZoneEquivalencyGroups(\%ZONES, \%RULES, \@EQUIV);
+    print
+        "Equivalency groups (including unique zones): ",
+        scalar @EQUIV, "\n";
+    foreach my $eg (@EQUIV) {
+        $maxPerEquiv = @$eg if (@$eg > $maxPerEquiv);
+    }
+
+    # Sort equivalency table first by GMT offset, then by
+    # alphabetic order of encoded rule string.
+    @EQUIV = sort { my $x = $ZONES{$a->[0]};
+                    my $y = $ZONES{$b->[0]};
+                TZ::ParseOffset($x->{gmtoff}) <=>
+                TZ::ParseOffset($y->{gmtoff}) ||
+                TZ::ZoneCompare($x, $y, \%RULES); } @EQUIV;
+
+    # Sort the zones in each equivalency table entry
+    foreach my $eg (@EQUIV) {
+        next unless (@$eg > 1); # Skip single-zone entries
+        my @zoneList = sort @$eg;
+        $eg = \@zoneList;
+    }
+
+    # Create an index from zone ID to index #
+    my $i = 0;
+    foreach my $z (sort keys %ZONES) {
+        $ZONE_ID_TO_INDEX{$z} = $i++;
+    }
+
     open(OUT,">$OUT") or die "Can't open $OUT for writing: $!";
 
     ############################################################
     # EMIT HEADER
     ############################################################
     # Zone data version
+    print OUT "#--- Header ---\n";
+    print OUT $TZ_TXT_VERSION, " # format version number of this file\n";
     print OUT $VERSION_YEAR, " # ($RAW_VERSION) version of Olson zone\n";
     print OUT $VERSION_SUFFIX, " #  data from $URL\n";
     print OUT scalar keys %ZONES, " # total zone count\n";
-    print OUT $maxPerOffset, " # max count of zones with same gmtOffset\n";
-    print OUT $maxNameLen, " # max name length not incl final zero\n";
+    # The following counts are all used by gentz during its parse
+    # of the tz.txt file and creation of the tz.dat file, even
+    # if they don't show up in the tz.dat file header.  For example,
+    # gentz needs the maxPerOffset to preallocate the offset index
+    # entries.  It needs the NAME_SIZE to allocate the big buffer
+    # that will receive all the names.
+    print OUT scalar @EQUIV, " # equivalency groups count\n";
+    print OUT $maxPerOffset, " # max zones with same gmtOffset\n";
+    print OUT $maxPerEquiv, " # max zones in an equivalency group\n";
     print OUT $NAME_SIZE, " # length of name table in bytes\n";
+    print OUT $END_MARKER, "\n\n";
 
     ############################################################
-    # EMIT ZONE TABLES
-    ############################################################
-    # Output first the standard zones, then the dst zones.
-    # Precede each list with the count of zones to follow,
-    # and follow it with the keyword 'end'.
-    for my $type (qw(standard dst)) {
-        print OUT ($type eq 'standard'
-            ? $STD_COUNT : $DST_COUNT), " # count of $type zones to follow\n";
-        foreach my $z (sort keys %ZONES) {
-            my $isStd = ($ZONES{$z}->{rule} eq $TZ::STANDARD);
-            next if ($isStd ne ($type eq 'standard'));
-            print OUT $NAME_OFFSET{$z}, ",";
-            print OUT formatZone($z, $ZONES{$z}, \%RULES), "\n";
-        }
-        print OUT "end\n"; # 'end' keyword for error checking
-    }
-
-    ############################################################
-    # EMIT NAME TABLE
+    # EMIT ZONE TABLE
     ############################################################
     # Output the name table, followed by 'end' keyword
-    print OUT scalar keys %ZONES, " # count of names to follow\n";
-    print OUT $NAME_LIST, "end\n";
+    print OUT "#--- Zone table ---\n";
+    print OUT "#| equiv_index,name\n";
+    print OUT scalar keys %ZONES, " # count of zones to follow\n";
+
+    # IMPORTANT: This sort must correspond to the sort
+    #            order of UnicodeString::compare.  That
+    #            is, it must be a plain sort.
+    foreach my $z (sort keys %ZONES) {
+        # Make sure zone IDs only contain invariant chars
+        assertInvariantChars($z);
+
+        print OUT equivIndexOf($z, \@EQUIV), ',', $z, "\n";        
+    }
+    print OUT $END_MARKER, "\n\n";
 
     ############################################################
-    # EMIT INDEX BY NAME
+    # EMIT EQUIVALENCY TABLE
     ############################################################
-    # Output the name index table.  Since we don't know structure
-    # sizes, we output the index number of each zone.  For example,
-    # "s0" is the first standard zone, "s1" is the second, etc.
-    # Likewise, "d0" is the first DST zone, "d1" is the second, etc.
-    
-    # First compute index IDs, as described above.
-    my %indexID;
-    my $s = 0;
-    my $d = 0;
-    foreach my $z (sort keys %ZONES) {
-        if ($ZONES{$z}->{rule} eq $TZ::STANDARD) {
-            $indexID{$z} = "s$s";
-            $s++;
-        } else {
-            $indexID{$z} = "d$d";
-            $d++;
+    print OUT "#--- Equivalency table ---\n";
+    print OUT "#| ('s'|'d'),zone_spec,id_count,id_list\n";
+    print OUT scalar @EQUIV, " # count of equivalency groups to follow\n";
+    $i = 0;
+    foreach my $aref (@EQUIV) {
+        # $aref is an array ref; the array is full of zone IDs
+        # Use the ID of the first array element
+        my $z = $aref->[0];
+
+        # Output either 's' or 'd' to indicate standard or DST
+        my $isStd = ($ZONES{$z}->{rule} eq $TZ::STANDARD);
+        print OUT $isStd ? 's,' : 'd,';
+        
+        # Format the zone
+        my ($spec, $notes) = formatZone($z, $ZONES{$z}, \%RULES);
+
+        # Now add the equivalency list
+        push @$spec, scalar @$aref;
+        push @$notes, "[";
+        my $min = -1;
+        foreach $z (@$aref) {
+            my $index = $ZONE_ID_TO_INDEX{$z};
+            # Make sure they are in order
+            die("Unsorted equiv table indices") if ($index <= $min);
+            $min = $index;
+            push @$spec, $index;
+            push @$notes, $z;
         }
+        push @$notes, "]";
+        
+        unshift @$notes, $i++; # Insert index of this group at front
+        print OUT join($SEP, @$spec) . " # " . join(' ', @$notes), "\n";
     }
-    
-    # Now emit table sorted by name
-    print OUT scalar keys %ZONES, " # count of name index table entries to follow\n";
-    foreach my $z (sort keys %ZONES) {
-        print OUT $indexID{$z}, " # $z\n";
-    }
-    print OUT "end\n";
+    print OUT $END_MARKER, "\n\n";
 
     ############################################################
     # EMIT INDEX BY GMT OFFSET
@@ -378,13 +385,15 @@ sub main {
     # Create an array mapping zone number -> name.
     my %zoneNumber;
     my @zoneName;
-    my $i = 0;
+    $i = 0;
     foreach (sort keys %ZONES) {
         $zoneName[$i] = $_;
         $zoneNumber{$_} = $i++;
     }
 
     # Emit offset index
+    print OUT "#--- Offset index ---\n";
+    print OUT "#| gmt_offset,default_id,id_count,id_list\n";
     print OUT scalar keys %{$offsetIndex}, " # index by offset entries to follow\n";
     foreach (sort {$a <=> $b} keys %{$offsetIndex}) {
         my $aref = $offsetIndex->{$_};
@@ -399,7 +408,7 @@ sub main {
             join(" ", @b), "\n";
     }
 
-    print OUT "end\n";
+    print OUT $END_MARKER, "\n";
 
     ############################################################
     # END
@@ -409,15 +418,8 @@ sub main {
 
     # Emit the HTML file
     if ($HTML_FILE) {
-        emitHTML($HTML_FILE, \%ZONES, \%RULES, $offsetIndex, $aliases);
+        emitHTML($HTML_FILE, \%ZONES, \%RULES, \@EQUIV, $offsetIndex, $aliases);
         print "$HTML_FILE written.\n";
-    }
-
-    if (0) {
-        TZ::FormZoneEquivalencyGroups(\%ZONES, \%RULES, \@EQUIV);
-        print
-            "Equivalency groups (including unique zones): ",
-            scalar @EQUIV, "\n";
     }
 
     #::dumpValue($ZONES{"America/Los_Angeles"});
@@ -466,7 +468,7 @@ sub createOffsetIndex {
     # Create an index by gmtoff.
     my %offsetMap;
     foreach (sort keys %{$zones}) {
-        my $offset = parseOffset($zones->{$_}->{gmtoff});
+        my $offset = TZ::ParseOffset($zones->{$_}->{gmtoff});
         push @{$offsetMap{$offset}}, $_;
     }
 
@@ -487,7 +489,7 @@ sub createOffsetIndex {
                 $ok = 0;
                 next;
             }
-            my $offset = parseOffset($zones->{$z}->{gmtoff});
+            my $offset = TZ::ParseOffset($zones->{$z}->{gmtoff});
             if (exists $defaults{$offset}) {
                 print
                     "Error: Offset ", formatOffset($offset), " has both ",
@@ -560,7 +562,7 @@ sub isDefault {
     my $name = shift;
     my $offset = shift;
     my $offsetIndex = shift;
-    my $aref = $offsetIndex->{parseOffset($offset)};
+    my $aref = $offsetIndex->{TZ::ParseOffset($offset)};
     return ($aref->[0] eq $name);
 }
 
@@ -568,17 +570,20 @@ sub isDefault {
 # Param: File name
 # Param: ref to zone hash
 # Param: ref to rule hash
+# Param: ref to equiv table
 # Param: ref to offset index
 # Param: ref to alias hash
 sub emitHTML {
     my $file = shift;
     my $zones = shift;
     my $rules = shift;
+    my $equiv = shift;
     my $offsetIndex = shift;
     my $aliases = shift;
 
     # These are variables for the template
     my $_count = scalar keys %{$zones};
+    my $_equiv = scalar @$equiv;
 
     # Build table in order of zone offset
     my $_offsetTable = "<p><table>\n";
@@ -617,6 +622,21 @@ sub emitHTML {
     }
     $_nameTable .= "</table>\n";
 
+    # Build equivalency group table
+    my $_equivTable = "<p><table>\n";
+    $_equivTable .= "<tr><td>Offset</td><td>DST Begins</td><td>DST Ends</td>";
+    $_equivTable .= "<td>Savings</td><td>Zones</td></tr>\n";
+
+    $_equivTable .= "<tr><td><hr></td>";
+    $_equivTable .= "<td><hr></td><td><hr></td>";
+    $_equivTable .= "<td><hr></td><td><hr></td><td><hr></td></tr>\n";
+
+    # Equiv table is sorted elsewhere -- output it in native order
+    foreach my $eg (@$equiv) {
+        $_equivTable .= emitHTMLEquiv($eg, $zones, $rules);
+    }
+    $_equivTable .= "</table>\n";
+
     # Time stamp
     my $_timeStamp = localtime;
 
@@ -641,7 +661,7 @@ sub emitHTML {
   </tr>
   <tr>
     <td>Total zone count</td>
-    <td><strong>$_count</strong></td>
+    <td><strong>$_count</strong> in <strong>$_equiv</strong> equivalency groups</td>
   </tr>
   <tr>
     <td>Original source</td>
@@ -757,6 +777,20 @@ Times without suffixes are in wall time (that is, either standard time or daylig
 time, depending on which is in effect).</p>
 
 $_nameTable
+<hr>
+
+<h2>Time Zone Equivalency Groups</h2>
+
+<p>ICU groups zones into <em>equivalency groups</em>.  These are
+groups of zones that are identical in GMT offset and in rules, but
+that have different IDs.  Knowledge of equivalency groups allows ICU
+to reduce the amount of data stored.  More importantly, it allows ICU
+to apply data for one zone to other equivalent zones when appropriate
+(e.g., in formatting).  Equivalency groups are formed at build time,
+not at runtime, so the runtime cost to lookup the equivalency group of
+a given zone is negligible.</p>
+
+$_equivTable
 </body>
 </html>
 END
@@ -779,6 +813,40 @@ sub bookmark {
     $_;
 }
 
+# Emit an equivalency group as an HTML table row.  Return the string.
+# Param: ref to array of zone IDs
+# Param: ref to zone hash
+# Param: ref to rule hash
+sub emitHTMLEquiv {
+    my $eg = shift;
+    my $zone = shift;
+    my $rule = shift;
+    local $_ = "<tr valign=top>";
+    $_ .= _emitHTMLZone($zone->{$eg->[0]}, $rule);
+    # Don't sort @$eg -- output in native order
+    $_ .= "<td>" . join(" ", @$eg) . "</td>";
+    $_ .= "</tr>\n";
+    $_;
+}
+
+# Emit a zone description without ID, alias info etc.
+# Param: zone OBJECT hash ref
+# Param: rule hash ref
+sub _emitHTMLZone {
+    my ($zone, $rules) = @_;
+    my $gmtoff = "GMT" . formatOffset(TZ::ParseOffset($zone->{gmtoff}));
+    local $_ = "<td><a href=\"#" . bookmark($gmtoff) . "\">$gmtoff</a></td>";
+    if ($zone->{rule} ne $TZ::STANDARD) {
+        my $rule = $rules->{$zone->{rule}};
+        $_ .= "<td nowrap>" . emitHTMLRule($rule->[0]) . "</td>";
+        $_ .= "<td nowrap>" . emitHTMLRule($rule->[1]) . "</td>";
+        $_ .= "<td>" . $rule->[0]->{save} . "</td>";
+    } else {
+        $_ .= "<td colspan=3></td>";
+    }
+    $_;
+}
+
 # Emit a single zone description as HTML table row.  Return the string.
 # Param: Zone name
 # Param: Zone hash object ref
@@ -793,16 +861,7 @@ sub emitHTMLZone {
     my $revalias = exists $revaliases->{$name} ? $revaliases->{$name} : '';
     local $_ = "<tr><td>" . ($isDefault?"<b>":"") .
         "<a name=\"" . bookmark($name) . "\">$name</a>" . ($isDefault?"</b>":"") . "</td>";
-    my $gmtoff = "GMT" . formatOffset(parseOffset($zone->{gmtoff}));
-    $_ .= "<td><a href=\"#" . bookmark($gmtoff) . "\">$gmtoff</a></td>";
-    if ($zone->{rule} ne $TZ::STANDARD) {
-        my $rule = $rules->{$zone->{rule}};
-        $_ .= "<td>" . emitHTMLRule($rule->[0]) . "</td>";
-        $_ .= "<td>" . emitHTMLRule($rule->[1]) . "</td>";
-        $_ .= "<td>" . $rule->[0]->{save} . "</td>";
-    } else {
-        $_ .= "<td colspan=3></td>";
-    }
+    $_ .= _emitHTMLZone($zone, $rules);
     if ($alias) {
         $_ .= "<td><em>alias for</em> <a href=\"#" .
             bookmark($alias) . "\">$alias</a></td>";
@@ -867,18 +926,19 @@ sub incorporateAliases {
 # Param: Zone name
 # Param: Zone hash
 # Param: Ref to hash of all rules
-# Return: One line description of this zone.
+# Return: Two array refs, one to the specs, one to the notes
 sub formatZone { # ($z, $ZONES{$z}, \%RULES)
     my $name = shift;
     my $zone = shift;
     my $rules = shift;
 
     my @spec;
-    my @notes = ( $name );
+    #my @notes = ( $name );
+    my @notes;
     
     # GMT offset
     push @notes, ($zone->{gmtoff}=~/^-/?"GMT":"GMT+") . $zone->{gmtoff};
-    push @spec, parseOffset($zone->{gmtoff});
+    push @spec, TZ::ParseOffset($zone->{gmtoff});
 
     #|rawOffset      The new SimpleTimeZone's raw GMT offset
     #|ID             The new SimpleTimeZone's time zone ID.
@@ -917,7 +977,7 @@ sub formatZone { # ($z, $ZONES{$z}, \%RULES)
         push @spec, $a[0];
     }
 
-    join($SEP, @spec) . " # " . join(' ', @notes);
+    (\@spec, \@notes);
 }
 
 # Format a rule and return the string
@@ -932,22 +992,6 @@ sub formatRule {
     push @$spec, parseMonth($rule->{in}); # Month
     push @$spec, parseDaySpecifier($rule->{on}); # Day
     push @$spec, parseTime($rule->{at}); # Time
-}
-
-# Parse an offset of the form d, d:dd, or d:dd:dd, or any of the above
-# preceded by a '-'.  Return the total number of seconds represented.
-# Param: String
-# Return: Integer number of seconds
-sub parseOffset {
-    local $_ = shift;
-    if (/^(-)?(\d{1,2})(:(\d\d))?(:(\d\d))?$/) {
-        #        1   2      4        6
-        my $a = (($2 * 60) + (defined $4?$4:0)) * 60 + (defined $6?$6:0);
-        $a = -$a if (defined $1 && $1 eq '-');
-        return $a;
-    } else {
-        die "Cannot parse offset \"$_\"";
-    }
 }
 
 # Format an offset in seconds and return a string of the form
@@ -1084,6 +1128,26 @@ sub assertInvariantChars {
     if (/[^A-Za-z0-9 \"%&\'()*+,-.\/:;<=>?_]/) {
         die "Error: Zone ID \"$_\" contains non-invariant characters\n";
     }
+}
+
+# Map ID to equivalency table index.  Return the index of the given ID
+# in the equivalency array.  The array contains array refs.  Each ref
+# points to an array of strings.
+# Param: ID to find
+# Param: Ref to equiv array (ref to array of refs to arrays of IDs)
+# Return: Index into array where ID is found, or -1 if not found
+# NOTE: This function can be eliminated by generating a reverse
+#       mapping hash when we create the equivalency table.
+sub equivIndexOf {
+    my $id = shift;
+    my $a = shift;
+    for (my $i=0; $i < scalar @{$a}; ++$i) {
+        my $aa = $a->[$i];
+        foreach (@$aa) {
+            return $i if ($_ eq $id);
+        }
+    }
+    return -1;
 }
 
 __END__
