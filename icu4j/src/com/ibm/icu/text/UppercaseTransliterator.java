@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/UppercaseTransliterator.java,v $ 
- * $Date: 2002/03/15 22:48:07 $ 
- * $Revision: 1.8 $
+ * $Date: 2002/04/02 23:59:59 $ 
+ * $Revision: 1.9 $
  *
  *****************************************************************************************
  */
@@ -70,7 +70,7 @@ class UppercaseTransliterator extends Transliterator {
         
         while (textPos < limit) {
         	original.setIndex(textPos);
-            cp = original.currentCodepoint();
+            cp = original.currentCodePoint();
             oldLen = UTF16.getCharCount(cp);
             int newLen = m_charppty_.toUpperOrTitleCase(loc, cp, original, true, buffer);
             if (newLen >= 0) {

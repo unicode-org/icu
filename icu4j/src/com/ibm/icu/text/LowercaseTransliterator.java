@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/LowercaseTransliterator.java,v $ 
- * $Date: 2002/03/15 22:48:07 $ 
- * $Revision: 1.9 $
+ * $Date: 2002/04/03 00:00:00 $ 
+ * $Revision: 1.10 $
  *
  *****************************************************************************************
  */
@@ -74,7 +74,7 @@ class LowercaseTransliterator extends Transliterator{
         
         while (textPos < limit) {
         	original.setIndex(textPos);
-            cp = original.currentCodepoint();
+            cp = original.currentCodePoint();
             oldLen = UTF16.getCharCount(cp);
             int newLen = m_charppty_.toLowerCase(loc, cp, original, buffer);
             if (newLen >= 0) {
