@@ -189,7 +189,7 @@ es {
         UYP { "UYP", "Nuevo Peso de Uruguay" }
         UYU { "NU$", "UYU" }
         VEB { "Bs", "Bolivar de Venezuela" }
-        VND { "\u20AB", "Dong de Vietn\u00E1m" }
+        VND { "\u0111", "Dong de Vietn\u00E1m" }
         VUV { "VUV", "Vatu de Vanuatu" }
         WST { "WST", "Tala de Samoa" }
         XAF { "XAF", "Franco de Gab\u00F3n" }
