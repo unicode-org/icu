@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/lang/UCharacter.java,v $ 
-* $Date: 2001/06/26 22:45:08 $ 
-* $Revision: 1.9 $
+* $Date: 2001/07/03 16:34:22 $ 
+* $Revision: 1.10 $
 *
 *******************************************************************************
 */
@@ -1143,7 +1143,9 @@ public final class UCharacter
     }
       
     /**
-    * Retrieve the most current Unicode name of the argument code point.<br>
+    * Retrieve the most current Unicode name of the argument code point, or 
+    * null if the character is unassigned or outside the range 
+    * UCharacter.MIN_VALUE and UCharacter.MAX_VALUE.<br>
     * Note calling any methods related to code point names, e.g. get*Name*() 
     * incurs a one-time initialisation cost to construct the name tables.
     * @param ch the code point for which to get the name
@@ -1156,7 +1158,9 @@ public final class UCharacter
     }
       
     /**
-    * Retrieve the earlier version 1.0 Unicode name of the argument code point.
+    * Retrieve the earlier version 1.0 Unicode name of the argument code point,
+    * or null if the character is unassigned or outside the range 
+    * UCharacter.MIN_VALUE and UCharacter.MAX_VALUE.<br>
     * <br>
     * Note calling any methods related to code point names, e.g. get*Name*() 
     * incurs a one-time initialisation cost to construct the name tables.
@@ -1176,7 +1180,7 @@ public final class UCharacter
     * incurs a one-time initialisation cost to construct the name tables.
     * @param name most current Unicode character name whose code point is to be 
     *        returned
-    * @return code point
+    * @return code point or -1 if name is not found
     */
     public static int getCharFromName(String name)
     {
@@ -1191,7 +1195,7 @@ public final class UCharacter
     * incurs a one-time initialisation cost to construct the name tables.
     * @param name Unicode 1.0 code point name whose code point is to 
     *             returned
-    * @return code point
+    * @return code point or -1 if name is not found
     */
     public static int getCharFromName1_0(String name)
     {
