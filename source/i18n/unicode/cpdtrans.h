@@ -12,6 +12,8 @@
 
 #include "unicode/translit.h"
 
+class U_I18N_API UVector;
+
 /**
  * A transliterator that is composed of two or more other
  * transliterator objects linked together.  For example, if one
@@ -32,7 +34,7 @@
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: cpdtrans.h,v $ $Revision: 1.12 $ $Date: 2000/12/09 02:37:40 $
+ * @version $RCSfile: cpdtrans.h,v $ $Revision: 1.13 $ $Date: 2001/07/13 21:17:11 $
  * @draft
  */
 class U_I18N_API CompoundTransliterator : public Transliterator {
@@ -45,6 +47,14 @@ class U_I18N_API CompoundTransliterator : public Transliterator {
     UnicodeFilter** filters;
 
     int32_t count;
+
+    /**
+     * For compound RBTs (those with an ::id block before and/or after
+     * the main rule block) we record the index of the RBT here.
+     * Otherwise, this should have a value of -1.  We need this
+     * information to implement toRules().
+     */
+    int32_t compoundRBTIndex;
 
 public:
 
@@ -148,6 +158,20 @@ public:
     virtual void adoptFilter(UnicodeFilter* f);
 
     /**
+     * Override Transliterator:
+     * Create a rule string that can be passed to createFromRules()
+     * to recreate this transliterator.
+     * @param result the string to receive the rules.  Previous
+     * contents will be deleted.
+     * @param escapeUnprintable if TRUE then convert unprintable
+     * character to their hex escape representations, \uxxxx or
+     * \Uxxxxxxxx.  Unprintable characters are those other than
+     * U+000A, U+0020..U+007E.
+     */
+    virtual UnicodeString& toRules(UnicodeString& result,
+                                   UBool escapeUnprintable) const;
+
+    /**
      * Implements {@link Transliterator#handleTransliterate}.
      * @draft
      */
@@ -156,9 +180,39 @@ public:
 
 private:
 
+    friend Transliterator; // to access private ct
+
+    /**
+     * Private constructor for compound RBTs.  Construct a compound
+     * transliterator using the given idBlock, with the adoptedTrans
+     * inserted at the idSplitPoint.
+     */
+    CompoundTransliterator(const UnicodeString& ID,
+                           const UnicodeString& idBlock,
+                           int32_t idSplitPoint,
+                           Transliterator *adoptedTrans,
+                           UErrorCode& status);
+                           
+    /**
+     * Private constructor for Transliterator.
+     */
+    CompoundTransliterator(const UnicodeString& ID,
+                           UTransDirection dir,
+                           UVector& list,
+                           UErrorCode& status);
+
     void init(const UnicodeString& id,
-              UTransDirection dir,
+              UTransDirection direction,
               UnicodeFilter* adoptedFilter,
+              int32_t idSplitPoint,
+              Transliterator *adoptedRbt,
+              UBool fixReverseID,
+              UErrorCode& status);
+
+    void init(UVector& list,
+              UTransDirection direction,
+              UnicodeFilter* adoptedFilter,
+              UBool fixReverseID,
               UErrorCode& status);
 
     /**
@@ -172,9 +226,9 @@ private:
     /**
      * Splits a string, as in JavaScript
      */
-    UnicodeString* split(const UnicodeString& s,
-                         UChar divider,
-                         int32_t* countPtr);
+    //UnicodeString* split(const UnicodeString& s,
+    //                     UChar divider,
+    //                     int32_t* countPtr);
 
     void freeTransliterators(void);
 
