@@ -101,6 +101,7 @@ ucal_getDSTSavings(const UChar* zoneID, UErrorCode* ec) {
     return result;
 }
 
+#ifdef U_USE_UCAL_OBSOLETE_2_8
 U_CAPI const UChar* U_EXPORT2
 ucal_getAvailableTZIDs(        int32_t         rawOffset,
                 int32_t         index,
@@ -146,6 +147,7 @@ ucal_countAvailableTZIDs(int32_t rawOffset)
   uprv_free(tzs);
   return count;
 }
+#endif
 
 U_CAPI UDate  U_EXPORT2
 ucal_getNow()
