@@ -137,7 +137,7 @@
  * .
  * .          //print each sentence in forward and reverse order
  * .          boundary = BreakIterator::createSentenceInstance( Locale::US );
- * .          boundary->setText(&stringToExamine);
+ * .          boundary->setText(stringToExamine);
  * .          cout &lt;&lt; "----- forward: -----------" &lt;&lt; endl;
  * .          printEachForward(*boundary);
  * .          cout &lt;&lt; "----- backward: ----------" &lt;&lt; endl;
@@ -146,7 +146,7 @@
  * .
  * .          //print each word in order
  * .          boundary = BreakIterator::createWordInstance();
- * .          boundary->setText(&stringToExamine);
+ * .          boundary->setText(stringToExamine);
  * .          cout &lt;&lt; "----- forward: -----------" &lt;&lt; endl;
  * .          printEachForward(*boundary);
  * .          //print first element
@@ -217,9 +217,16 @@ public:
     /**
      * Change the text over which this operates. The text boundary is
      * reset to the start.
-     * @deprecated This function should be modified to take a const UnicodeString& agrument.
+     * @deprecated This function should be modified to take a const UnicodeString& argument.
      */
     virtual void  setText(const UnicodeString* it) = 0;
+
+    /**
+     * Change the text over which this operates. The text boundary is
+     * reset to the start.
+     * @draft
+     */
+    virtual void  setText(const UnicodeString &text) = 0;
 
     /**
      * Change the text over which this operates. The text boundary is
