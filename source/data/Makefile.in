@@ -143,13 +143,12 @@ testdata: $(SPECIALTESTDATA)
 %.cnv: build/%.cnv
 	ln -sf $< .
 
-###################
-###################
-################### 390 support
+####
+####
+#### 390 support
+#### $(LIB_ICUDATA_NAME)$(BATCH_SUFFIX) is the subset data for batch mode
 package390: build/icudata390.lst build/icudata.lst $(top_builddir)/tools/pkgdata/icupkg.inc
-#### 	@$(MKINSTALLDIRS) tmp390A
 	@$(MKINSTALLDIRS) tmp3901
-####	( cd build ; $(INVOKE) $(PKGDATA) -s . -T ../tmp390A -p IXMICUDA icudata.lst )
-####	( cd build ; $(INVOKE) $(PKGDATA) -s . -T ../tmp3901 -p IXMICUD1 icudata390.lst )
-	( cd build ; $(INVOKE) $(PKGDATA) -s . -T ../tmp3901 -p $(ICUDATA_NAME)_390 icudata390.lst -m dll)
+	( cd build ; $(INVOKE) $(PKGDATA) -s . -T ../tmp3901 -p $(ICUDATA_NAME)_390 -e $(ICUDATA_BASENAME_VERSION) icudata390.lst -m dll)
+	cp $(top_builddir)/data/$(LIB_ICUDATA_NAME)$(BATCH_STUB_SUFFIX).$(SO) $(top_builddir)/stubdata/$(LIB_ICUDATA_NAME)$(BATCH_STUB_SUFFIX).$(SO)
 
