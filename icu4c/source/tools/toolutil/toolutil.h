@@ -36,8 +36,8 @@
  * This function is especially useful in tools that are called
  * by a batch file for loop, which yields short pathnames on Win9x.
  */
-U_CFUNC char *
-getLongPathname(char *pathname);
+U_CFUNC const char *
+getLongPathname(const char *pathname);
 
 /*
  * Find the basename at the end of a pathname, i.e., the part
