@@ -533,5 +533,17 @@ public class ChineseTest extends CalendarTest {
         } catch (java.text.ParseException ex) {
             logln(ex.getMessage()); // chinese calendar can't parse this, no error for now
         }
+
+        //new ChineseCalendar(TimeZone,ULocale)
+        ChineseCalendar ccal2 = new ChineseCalendar(TimeZone.getDefault(),
+                                                   ULocale.CHINA);
+        if(ccal2==null){
+            errln("could not create ChineseCalendar with TimeZone ULocale");
+        } else {
+            fmt = (ChineseDateFormat)DateFormat.getDateInstance(ccal2, DateFormat.DEFAULT, ULocale.CHINA);
+            time = getDate(2001, Calendar.MAY, 23);
+            str = fmt.format(time);
+            logln("Chinese calendar time: " + time + " result: " + str);
+        }        
     }
 }

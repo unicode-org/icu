@@ -196,6 +196,22 @@ public class IBMCalendarTest extends CalendarTest {
     }
 
     public void TestBuddhistCoverage() {
+    {    
+        // new BuddhistCalendar(ULocale)
+        BuddhistCalendar cal = new BuddhistCalendar(ULocale.getDefault());
+        if(cal == null){        
+            errln("could not create BuddhistCalendar with ULocale");
+        }
+    }
+    
+    {    
+        // new BuddhistCalendar(TimeZone,ULocale)
+        BuddhistCalendar cal = new BuddhistCalendar(TimeZone.getDefault(),ULocale.getDefault());
+        if(cal == null){        
+            errln("could not create BuddhistCalendar with TimeZone ULocale");
+        }
+    }    
+    
     {
         // new BuddhistCalendar(TimeZone)
         BuddhistCalendar cal = new BuddhistCalendar(TimeZone.getDefault());
@@ -711,6 +727,20 @@ public class IBMCalendarTest extends CalendarTest {
             /*int x=*/ cal.getWeekendTransition(weekendCease);
         } catch (IllegalArgumentException e) {}
         /*int x=*/ cal.isWeekend(new Date());
-
+        
+        // new GregorianCalendar(ULocale)
+        GregorianCalendar gcal = new GregorianCalendar(ULocale.getDefault());
+        if(gcal==null){
+            errln("could not create GregorianCalendar with ULocale");
+        } else {
+            logln("Calendar display name: " + gcal.getDisplayName(ULocale.getDefault()));
+        }
+        
+        //cover getAvailableULocales
+        final ULocale[] locales = Calendar.getAvailableULocales();
+        long count = locales.length;
+        if (count == 0)
+            errln("getAvailableULocales return empty list");
+        logln("" + count + " available ulocales in Calendar.");
     }
 }

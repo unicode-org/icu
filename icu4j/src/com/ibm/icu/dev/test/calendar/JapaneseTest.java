@@ -14,6 +14,7 @@ import com.ibm.icu.text.DateFormat;
 import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.JapaneseCalendar;
 import com.ibm.icu.util.TimeZone;
+import com.ibm.icu.util.ULocale;
 
 /**
  * Tests for the <code>IslamicCalendar</code> class.
@@ -29,6 +30,22 @@ public class JapaneseTest extends CalendarTest {
         JapaneseCalendar cal = new JapaneseCalendar(TimeZone.getDefault());
         if(cal == null){
             errln("could not create JapaneseCalendar with TimeZone");
+        }
+    }
+
+    {
+        // new JapaneseCalendar(ULocale)
+        JapaneseCalendar cal = new JapaneseCalendar(ULocale.getDefault());
+        if(cal == null){
+            errln("could not create JapaneseCalendar with ULocale");
+        }
+    }
+
+    {
+        // new JapaneseCalendar(TimeZone, ULocale)
+        JapaneseCalendar cal = new JapaneseCalendar(TimeZone.getDefault(), ULocale.getDefault());
+        if(cal == null){
+            errln("could not create JapaneseCalendar with TimeZone ULocale");
         }
     }
     
