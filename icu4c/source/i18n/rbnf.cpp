@@ -322,16 +322,16 @@ private:
         
 
 UChar LocDataParser::DQUOTE_STOPLIST[] = { 
-  LocDataParser::QUOTE, NULL 
+  LocDataParser::QUOTE, 0
 };
 
 UChar LocDataParser::SQUOTE_STOPLIST[] = { 
-  LocDataParser::TICK, NULL 
+  LocDataParser::TICK, 0
 };
 
 UChar LocDataParser::NOQUOTE_STOPLIST[] = { 
   LocDataParser::SPACE, LocDataParser::COMMA, LocDataParser::CLOSE_ANGLE, LocDataParser::OPEN_ANGLE, 
-  LocDataParser::TICK, LocDataParser::QUOTE, NULL 
+  LocDataParser::TICK, LocDataParser::QUOTE, 0
 };
 
 void
