@@ -57,14 +57,17 @@ DEFS = @DEFS@
 CPPFLAGS = @CPPFLAGS@ -I$(top_builddir)/common -I$(top_srcdir)/common -I$(top_srcdir)/i18n -I$(srcdir)/../toolutil
 CFLAGS = @CFLAGS@
 CXXFLAGS = @CXXFLAGS@
-LDFLAGS = @LDFLAGS@ \
-$(LD_RPATH)$(LD_RPATH_PRE)$(top_builddir)/common@ld_rpath_suf@$(LD_RPATH_PRE)$(top_builddir)/tools/toolutil@ld_rpath_suf@$(LD_RPATH_PRE)$(libdir)
+ENABLE_RPATH = @ENABLE_RPATH@
+ifeq ($(ENABLE_RPATH),YES)
+RPATHLDFLAGS = $(LD_RPATH)$(LD_RPATH_PRE)$(libdir)
+endif
+LDFLAGS = @LDFLAGS@ $(RPATHLDFLAGS)
+INVOKE = $(LDLIBRARYPATH_ENVVAR)=$(top_builddir)/common:$(top_builddir)/tools/toolutil:$$$(LDLIBRARYPATH_ENVVAR)
 LIBS = $(LIBICU-TOOLUTIL) $(LIBICU-UC) @LIBS@ @LIB_M@
 
 OBJECTS = gentz.o
 
 DEPS = $(OBJECTS:.o=.d)
-
 
 ## List of phony targets
 .PHONY : all all-local install install-local clean clean-local		\
@@ -93,7 +96,7 @@ build-data: $(ICUDATADIR)/tz.dat
 # we set the ICU_DATA directory here so that tz.dat ends up in 
 # icu/data rather than PREFIX/share/icu/VERSION/
 $(ICUDATADIR)/tz.dat: $(TZFILE) $(TZALIAS) $(TARGET)
-	ICU_DATA=$(ICUDATADIR) ./$(TARGET) $(TZFILE)
+	ICU_DATA=$(ICUDATADIR) $(INVOKE) ./$(TARGET) $(TZFILE)
 
 dist-local:
 

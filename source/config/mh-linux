@@ -32,6 +32,9 @@ SHLIB.cc=	$(CXX) $(DEFS) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS) -shared
 LD_RPATH=	
 LD_RPATH_PRE=	-Wl,-rpath,
 
+## Environment variable to set a runtime search path
+LDLIBRARYPATH_ENVVAR = LD_LIBRARY_PATH
+
 ## Compiler switch to embed a library name
 LD_SONAME = -Wl,-soname -Wl,$(MIDDLE_SO_TARGET)
 
