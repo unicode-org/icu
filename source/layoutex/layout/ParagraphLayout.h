@@ -33,19 +33,287 @@ U_NAMESPACE_BEGIN
 class U_LAYOUTEX_API ParagraphLayout : public UObject
 {
 public:
-    /**
-     * A class which represents one line in the paragraph.
-     *
-     * @draft ICU 2.6
-     */
-    class Line;
+    class VisualRun;
 
     /**
-     * A class which represents one visual run in a line.
+     * This class represents a single line of text in a <code>ParagraphLayout</code>. They
+     * can only be created by calling <code>ParagraphLayout::nextLine()</code>. Each line
+     * consists of multiple visual runs, represented by <code>ParagraphLayout::VisualRun</code>
+     * objects.
+     *
+     * @see ParagraphLayout
+     * @see ParagraphLayout::VisualRun
      *
      * @draft ICU 2.6
      */
-    class VisualRun;
+    class U_LAYOUTEX_API Line : public UObject
+    {
+    public:
+        /**
+         * The constructor is private since these objects can only be
+         * created by <code>ParagraphLayout</code>. However, it is the
+         * clients responsibility to destroy the objects, so the destructor
+         * is public.
+         */
+        ~Line();
+
+        /**
+         * Count the number of visual runs in the line.
+         *
+         * @return the number of visual runs.
+         *
+         * @draft ICU 2.6
+         */
+        le_int32 countRuns() const;
+
+        /**
+         * Get the ascent of the line. This is the maximum ascent
+         * of all the fonts on the line.
+         *
+         * @return the ascent of the line.
+         *
+         * @draft ICU 2.6
+         */
+        le_int32 getAscent() const;
+
+        /**
+         * Get the descent of the line. This is the maximum descent
+         * of all the fonts on the line.
+         *
+         * @return the descent of the line.
+         *
+         * @draft ICU 2.6
+         */
+        le_int32 getDescent() const;
+
+        /**
+         * Get the leading of the line. This is the maximum leading
+         * of all the fonts on the line.
+         *
+         * @return the leading of the line.
+         *
+         * @draft ICU 2.6
+         */
+        le_int32 getLeading() const;
+    
+        /**
+         * Get a <code>ParagraphLayout::VisualRun</code> object for a given
+         * visual run in the line.
+         *
+         * @param runIndex is the index of the run, in visual order.
+         *
+         * @return the <code>ParagraphLayout::VisualRun</code> object representing the
+         *         visual run. This object is owned by the <code>Line</code> object which
+         *         created it, and will remain valid for as long as the <code>Line</code>
+         *         object is valid.
+         *
+         * @see ParagraphLayout::VisualRun
+         *
+         * @draft ICU 2.6
+         */
+        const VisualRun *getVisualRun(le_int32 runIndex) const;
+
+        /**
+         * ICU "poor man's RTTI", returns a UClassID for the actual class.
+         *
+         * @draft ICU 2.6
+         */
+        virtual inline UClassID getDynamicClassID() const { return getStaticClassID(); }
+
+        /**
+         * ICU "poor man's RTTI", returns a UClassID for this class.
+         *
+         * @draft ICU 2.6
+         */
+        static inline UClassID getStaticClassID() { return (UClassID)&fgClassID; }
+
+    private:
+
+        /**
+         * The address of this static class variable serves as this class's ID
+         * for ICU "poor man's RTTI".
+         */
+        static const char fgClassID;
+
+        friend class ParagraphLayout;
+
+        le_int32 fAscent;
+        le_int32 fDescent;
+        le_int32 fLeading;
+
+        le_int32 fRunCount;
+        le_int32 fRunCapacity;
+
+        VisualRun **fRuns;
+
+        Line();
+
+        void computeMetrics();
+
+        void append(const LEFontInstance *font, UBiDiDirection direction, le_int32 glyphCount,
+                    const LEGlyphID glyphs[], const float positions[], const le_int32 glyphToCharMap[]);
+    };
+
+    /**
+     * This object represents a single visual run in a line of text in
+     * a paragraph. A visual run is text which is in the same font, 
+     * script, and direction. The text is represented by an array of
+     * <code>LEGlyphIDs</code>, an array of (x, y) glyph positions and
+     * a table which maps indices into the glyph array to indices into
+     * the original character array which was used to create the paragraph.
+     *
+     * These objects are only created by <code>ParagraphLayout::Line<code> objects,
+     * so their constructors and destructors are private.
+     *
+     * @see ParagraphLayout::Line
+     *
+     * @draft ICU 2.6
+     */
+    class U_LAYOUTEX_API VisualRun : public UObject
+    {
+    public:
+        /**
+         * Get the <code>LEFontInstance</code> object which
+         * represents the font of the visual run. This will always
+         * be a non-composite font.
+         *
+         * @return the <code>LEFontInstance</code> object which represents the
+         *         font of the visual run.
+         *
+         * @see LEFontInstance
+         *
+         * @draft ICU 2.6
+         */
+        const LEFontInstance *getFont() const;
+
+        /**
+         * Get the direction of the visual run.
+         *
+         * @return the direction of the run. This will be UBIDI_LTR if the
+         *         run is left-to-right and UBIDI_RTL if the line is right-to-left.
+         *
+         * @draft ICU 2.6
+         */
+        UBiDiDirection getDirection() const;
+
+        /**
+         * Get the number of glyphs in the visual run.
+         *
+         * @return the number of glyphs.
+         *
+         * @draft ICU 2.6
+         */
+        le_int32 getGlyphCount() const;
+
+        /**
+         * Get the glyphs in the visual run. Glyphs with the values <code>0xFFFE</code> and
+         * <code>0xFFFF</code> should be ignored.
+         *
+         * @return the address of the array of glyphs for this visual run. The storage
+         *         is owned by the <code>VisualRun</code> object and must not be deleted.
+         *         It will remain valid as long as the <code>VisualRun</code> object is valid.
+         *
+         * @draft ICU 2.6
+         */
+        const LEGlyphID *getGlyphs() const;
+
+        /**
+         * Get the (x, y) positions of the glyphs in the visual run. To simplify storage
+         * management, the x and y positions are stored in a single array with the x positions
+         * at even offsets in the array and the corresponding y position in the following even offset.
+         * There is an extra (x, y) pair at the end of the array which represents the advance of
+         * the final glyph in the run.
+         *
+         * @return the address of the array of glyph positions for this visual run. The storage
+         *         is owned by the <code>VisualRun</code> object and must not be deleted.
+         *         It will remain valid as long as the <code>VisualRun</code> object is valid.
+         *
+         * @draft ICU 2.6
+         */
+        const float *getPositions() const;
+
+        /**
+         * Get the glyph-to-character map for this visual run. This maps the indices into
+         * the glyph array to indices into the character array used to create the paragraph.
+         *
+         * @return the address of the character-to-glyph map for this visual run. The storage
+         *         is owned by the <code>VisualRun</code> object and must not be deleted.
+         *         It will remain valid as long as the <code>VisualRun</code> object is valid.
+         *
+         * @draft ICU 2.6
+         */
+        const le_int32 *getGlyphToCharMap() const;
+
+        /**
+         * A convenience method which returns the ascent value for the font
+         * associated with this run.
+         *
+         * @return the ascent value of this run's font.
+         *
+         * @draft ICU 2.6
+         */
+        le_int32 getAscent() const;
+
+        /**
+         * A convenience method which returns the descent value for the font
+         * associated with this run.
+         *
+         * @return the descent value of this run's font.
+         *
+         * @draft ICU 2.6
+         */
+        le_int32 getDescent() const;
+
+        /**
+         * A convenience method which returns the leading value for the font
+         * associated with this run.
+         *
+         * @return the leading value of this run's font.
+         *
+         * @draft ICU 2.6
+         */
+        le_int32 getLeading() const;
+
+        /**
+         * ICU "poor man's RTTI", returns a UClassID for the actual class.
+         *
+         * @draft ICU 2.6
+         */
+        virtual inline UClassID getDynamicClassID() const { return getStaticClassID(); }
+
+        /**
+         * ICU "poor man's RTTI", returns a UClassID for this class.
+         *
+         * @draft ICU 2.6
+         */
+        static inline UClassID getStaticClassID() { return (UClassID)&fgClassID; }
+
+    private:
+
+        /**
+         * The address of this static class variable serves as this class's ID
+         * for ICU "poor man's RTTI".
+         */
+        static const char fgClassID;
+
+        const LEFontInstance *fFont;
+        const UBiDiDirection  fDirection;
+
+        const le_int32 fGlyphCount;
+
+        const LEGlyphID *fGlyphs;
+        const float     *fPositions;
+        const le_int32  *fGlyphToCharMap;
+
+        friend class Line;
+
+        VisualRun();
+
+        VisualRun(const LEFontInstance *font, UBiDiDirection direction, le_int32 glyphCount,
+                  const LEGlyphID glyphs[], const float positions[], const le_int32 glyphToCharMap[]);
+
+        ~VisualRun();
+};
 
     /**
      * Construct a <code>ParagraphLayout</code> object for a styled paragraph. The paragraph is specified
@@ -216,8 +484,20 @@ private:
      */
     static const char fgClassID;
 
-    struct VisualRunInfo;
-    struct StyleRunInfo;
+    struct StyleRunInfo
+    {
+          LayoutEngine   *engine;
+    const LEFontInstance *font;
+    const Locale         *locale;
+          LEGlyphID      *glyphs;
+          float          *positions;
+          UScriptCode     script;
+          UBiDiLevel      level;
+          le_int32        runBase;
+          le_int32        runLimit;
+          le_int32        glyphBase;
+          le_int32        glyphCount;
+    };
 
     ParagraphLayout() {};
 
@@ -300,125 +580,6 @@ inline void ParagraphLayout::reflow()
     fLineEnd = 0;
 }
 
-/**
- * This class represents a single line of text in a <code>ParagraphLayout</code>. They
- * can only be created by calling <code>ParagraphLayout::nextLine()</code>. Each line
- * consists of multiple visual runs, represented by <code>ParagraphLayout::VisualRun</code>
- * objects.
- *
- * @see ParagraphLayout
- * @see ParagraphLayout::VisualRun
- *
- * @draft ICU 2.6
- */
-class U_LAYOUTEX_API ParagraphLayout::Line : public UObject
-{
-public:
-    /**
-     * The constructor is private since these objects can only be
-     * created by <code>ParagraphLayout</code>. However, it is the
-     * clients responsibility to destroy the objects, so the destructor
-     * is public.
-     */
-    ~Line();
-
-    /**
-     * Count the number of visual runs in the line.
-     *
-     * @return the number of visual runs.
-     *
-     * @draft ICU 2.6
-     */
-    le_int32 countRuns() const;
-
-    /**
-     * Get the ascent of the line. This is the maximum ascent
-     * of all the fonts on the line.
-     *
-     * @return the ascent of the line.
-     *
-     * @draft ICU 2.6
-     */
-    le_int32 getAscent() const;
-
-    /**
-     * Get the descent of the line. This is the maximum descent
-     * of all the fonts on the line.
-     *
-     * @return the descent of the line.
-     *
-     * @draft ICU 2.6
-     */
-    le_int32 getDescent() const;
-
-    /**
-     * Get the leading of the line. This is the maximum leading
-     * of all the fonts on the line.
-     *
-     * @return the leading of the line.
-     *
-     * @draft ICU 2.6
-     */
-    le_int32 getLeading() const;
-    
-    /**
-     * Get a <code>ParagraphLayout::VisualRun</code> object for a given
-     * visual run in the line.
-     *
-     * @param runIndex is the index of the run, in visual order.
-     *
-     * @return the <code>ParagraphLayout::VisualRun</code> object representing the
-     *         visual run. This object is owned by the <code>Line</code> object which
-     *         created it, and will remain valid for as long as the <code>Line</code>
-     *         object is valid.
-     *
-     * @see ParagraphLayout::VisualRun
-     *
-     * @draft ICU 2.6
-     */
-    const ParagraphLayout::VisualRun *getVisualRun(le_int32 runIndex) const;
-
-    /**
-     * ICU "poor man's RTTI", returns a UClassID for the actual class.
-     *
-     * @draft ICU 2.6
-     */
-    virtual inline UClassID getDynamicClassID() const { return getStaticClassID(); }
-
-    /**
-     * ICU "poor man's RTTI", returns a UClassID for this class.
-     *
-     * @draft ICU 2.6
-     */
-    static inline UClassID getStaticClassID() { return (UClassID)&fgClassID; }
-
-private:
-
-    /**
-     * The address of this static class variable serves as this class's ID
-     * for ICU "poor man's RTTI".
-     */
-    static const char fgClassID;
-
-    friend class ParagraphLayout;
-
-    le_int32 fAscent;
-    le_int32 fDescent;
-    le_int32 fLeading;
-
-    le_int32 fRunCount;
-    le_int32 fRunCapacity;
-
-    ParagraphLayout::VisualRun **fRuns;
-
-    Line();
-
-    void computeMetrics();
-
-    void append(const LEFontInstance *font, UBiDiDirection direction, le_int32 glyphCount,
-                const LEGlyphID glyphs[], const float positions[], const le_int32 glyphToCharMap[]);
-};
-
 inline ParagraphLayout::Line::Line()
     : fAscent(0), fDescent(0), fLeading(0), fRunCount(0), fRunCapacity(0), fRuns(NULL)
 {
@@ -429,167 +590,6 @@ inline le_int32 ParagraphLayout::Line::countRuns() const
 {
     return fRunCount;
 }
-
-/**
- * This object represents a single visual run in a line of text in
- * a paragraph. A visual run is text which is in the same font, 
- * script, and direction. The text is represented by an array of
- * <code>LEGlyphIDs</code>, an array of (x, y) glyph positions and
- * a table which maps indices into the glyph array to indices into
- * the original character array which was used to create the paragraph.
- *
- * These objects are only created by <code>ParagraphLayout::Line<code> objects,
- * so their constructors and destructors are private.
- *
- * @see ParagraphLayout::Line
- *
- * @draft ICU 2.6
- */
-class U_LAYOUTEX_API ParagraphLayout::VisualRun : public UObject
-{
-public:
-    /**
-     * Get the <code>LEFontInstance</code> object which
-     * represents the font of the visual run. This will always
-     * be a non-composite font.
-     *
-     * @return the <code>LEFontInstance</code> object which represents the
-     *         font of the visual run.
-     *
-     * @see LEFontInstance
-     *
-     * @draft ICU 2.6
-     */
-    const LEFontInstance *getFont() const;
-
-    /**
-     * Get the direction of the visual run.
-     *
-     * @return the direction of the run. This will be UBIDI_LTR if the
-     *         run is left-to-right and UBIDI_RTL if the line is right-to-left.
-     *
-     * @draft ICU 2.6
-     */
-    UBiDiDirection getDirection() const;
-
-    /**
-     * Get the number of glyphs in the visual run.
-     *
-     * @return the number of glyphs.
-     *
-     * @draft ICU 2.6
-     */
-    le_int32 getGlyphCount() const;
-
-    /**
-     * Get the glyphs in the visual run. Glyphs with the values <code>0xFFFE</code> and
-     * <code>0xFFFF</code> should be ignored.
-     *
-     * @return the address of the array of glyphs for this visual run. The storage
-     *         is owned by the <code>VisualRun</code> object and must not be deleted.
-     *         It will remain valid as long as the <code>VisualRun</code> object is valid.
-     *
-     * @draft ICU 2.6
-     */
-    const LEGlyphID *getGlyphs() const;
-
-    /**
-     * Get the (x, y) positions of the glyphs in the visual run. To simplify storage
-     * management, the x and y positions are stored in a single array with the x positions
-     * at even offsets in the array and the corresponding y position in the following even offset.
-     * There is an extra (x, y) pair at the end of the array which represents the advance of
-     * the final glyph in the run.
-     *
-     * @return the address of the array of glyph positions for this visual run. The storage
-     *         is owned by the <code>VisualRun</code> object and must not be deleted.
-     *         It will remain valid as long as the <code>VisualRun</code> object is valid.
-     *
-     * @draft ICU 2.6
-     */
-    const float *getPositions() const;
-
-    /**
-     * Get the glyph-to-character map for this visual run. This maps the indices into
-     * the glyph array to indices into the character array used to create the paragraph.
-     *
-     * @return the address of the character-to-glyph map for this visual run. The storage
-     *         is owned by the <code>VisualRun</code> object and must not be deleted.
-     *         It will remain valid as long as the <code>VisualRun</code> object is valid.
-     *
-     * @draft ICU 2.6
-     */
-    const le_int32 *getGlyphToCharMap() const;
-
-    /**
-     * A convenience method which returns the ascent value for the font
-     * associated with this run.
-     *
-     * @return the ascent value of this run's font.
-     *
-     * @draft ICU 2.6
-     */
-    le_int32 getAscent() const;
-
-    /**
-     * A convenience method which returns the descent value for the font
-     * associated with this run.
-     *
-     * @return the descent value of this run's font.
-     *
-     * @draft ICU 2.6
-     */
-    le_int32 getDescent() const;
-
-    /**
-     * A convenience method which returns the leading value for the font
-     * associated with this run.
-     *
-     * @return the leading value of this run's font.
-     *
-     * @draft ICU 2.6
-     */
-    le_int32 getLeading() const;
-
-    /**
-     * ICU "poor man's RTTI", returns a UClassID for the actual class.
-     *
-     * @draft ICU 2.6
-     */
-    virtual inline UClassID getDynamicClassID() const { return getStaticClassID(); }
-
-    /**
-     * ICU "poor man's RTTI", returns a UClassID for this class.
-     *
-     * @draft ICU 2.6
-     */
-    static inline UClassID getStaticClassID() { return (UClassID)&fgClassID; }
-
-private:
-
-    /**
-     * The address of this static class variable serves as this class's ID
-     * for ICU "poor man's RTTI".
-     */
-    static const char fgClassID;
-
-    const LEFontInstance *fFont;
-    const UBiDiDirection  fDirection;
-
-    const le_int32 fGlyphCount;
-
-    const LEGlyphID *fGlyphs;
-    const float     *fPositions;
-    const le_int32  *fGlyphToCharMap;
-
-    friend class ParagraphLayout::Line;
-
-    VisualRun();
-
-    VisualRun(const LEFontInstance *font, UBiDiDirection direction, le_int32 glyphCount,
-              const LEGlyphID glyphs[], const float positions[], const le_int32 glyphToCharMap[]);
-
-    ~VisualRun();
-};
 
 inline const LEFontInstance *ParagraphLayout::VisualRun::getFont() const
 {
