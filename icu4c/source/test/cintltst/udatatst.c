@@ -1466,7 +1466,7 @@ static const struct {
     3,                  /* count        */
     0,                  /* Reserved     */
     {                   /*  TOC structure */
-        { "OffsetTOCAppData/a/gOffsetTOCAppDataItem1", &gOffsetTOCAppDataItem1 },
+        { "OffsetTOCAppData/a/b", &gOffsetTOCAppDataItem1 },
         { "OffsetTOCAppData/gOffsetTOCAppDataItem1", &gOffsetTOCAppDataItem1 },
         { "OffsetTOCAppData/gOffsetTOCGarbage", &gOffsetTOCGarbage }
     }
@@ -1501,7 +1501,7 @@ static void PointerTableOfContents() {
     }
     udata_close(dataItem);
 
-    dataItem = udata_open("OffsetTOCAppData-a", "", "gOffsetTOCAppDataItem1", &status);
+    dataItem = udata_open("OffsetTOCAppData-a", "", "b", &status);
     if (U_FAILURE(status)) {
         log_err("FAIL: gOffsetTOCAppDataItem1 in tree \"a\" could not be opened. status = %s\n", u_errorName(status));
     }
