@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/NFRuleSet.java,v $ 
- * $Date: 2002/07/26 22:51:50 $ 
- * $Revision: 1.4 $
+ * $Date: 2002/07/30 21:37:07 $ 
+ * $Revision: 1.5 $
  *
  *****************************************************************************************
  */
@@ -23,7 +23,7 @@ import java.util.Vector;
  * appropriate rule for formatting a particular number and dispatch
  * control to it, and to arbitrate between different rules when parsing
  * a number.
- * $RCSfile: NFRuleSet.java,v $ $Revision: 1.4 $ $Date: 2002/07/26 22:51:50 $
+ * $RCSfile: NFRuleSet.java,v $ $Revision: 1.5 $ $Date: 2002/07/30 21:37:07 $
  */
 final class NFRuleSet {
     //-----------------------------------------------------------------------
@@ -491,30 +491,33 @@ final class NFRuleSet {
         // the next rule's base value)
         int lo = 0;
         int hi = rules.length;
-        while (lo < hi) {
-            int mid = (lo + hi) / 2;
-            if (rules[mid].getBaseValue() == number) {
-                return rules[mid];
-            }
-            else if (rules[mid].getBaseValue() > number) {
-                hi = mid;
-            }
-            else {
-                lo = mid + 1;
-            }
-        }
-        NFRule result = rules[hi - 1];
+	if (hi > 0) {
+	    while (lo < hi) {
+		int mid = (lo + hi) / 2;
+		if (rules[mid].getBaseValue() == number) {
+		    return rules[mid];
+		}
+		else if (rules[mid].getBaseValue() > number) {
+		    hi = mid;
+		}
+		else {
+		    lo = mid + 1;
+		}
+	    }
+	    NFRule result = rules[hi - 1];
 
-        // use shouldRollBack() to see whether we need to invoke the
-        // rollback rule (see shouldRollBack()'s documentation for
-        // an explanation of the rollback rule).  If we do, roll back
-        // one rule and return that one instead of the one we'd normally
-        // return
-        if (result.shouldRollBack(number)) {
-            result = rules[hi - 2];
-        }
-
-        return result;
+	    // use shouldRollBack() to see whether we need to invoke the
+	    // rollback rule (see shouldRollBack()'s documentation for
+	    // an explanation of the rollback rule).  If we do, roll back
+	    // one rule and return that one instead of the one we'd normally
+	    // return
+	    if (result.shouldRollBack(number)) {
+		result = rules[hi - 2];
+	    }
+	    return result;
+	}
+	// else use the master rule
+	return fractionRules[2];
     }
 
     /**
