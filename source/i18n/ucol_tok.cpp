@@ -263,7 +263,7 @@ U_STRING_DECL(option_13,    "hiraganaQ",      9);
 U_STRING_DECL(option_14,    "strength",       8);
 U_STRING_DECL(option_15,    "first",          5);
 U_STRING_DECL(option_16,    "last",           4);
-U_STRING_DECL(option_17,    "copy",           4);
+U_STRING_DECL(option_17,    "optimize",       8);
 U_STRING_DECL(option_18,    "suppressContractions",         20);
 
 
@@ -334,8 +334,8 @@ static const ucolTokOption rulesOptions[UTOK_OPTION_COUNT] = {
  /*10*/ {option_05,  3, NULL, 0, UCOL_ATTRIBUTE_COUNT}, /*"top"            */
  /*11*/ {option_15,  5, firstLastSub, 7, UCOL_ATTRIBUTE_COUNT}, /*"first" */
  /*12*/ {option_16,  4, firstLastSub, 7, UCOL_ATTRIBUTE_COUNT}, /*"last" */
- /*13*/ {option_17,  4, NULL, 0, UCOL_ATTRIBUTE_COUNT}, /*"copy"      */
- /*14*/ {option_18, 20, NULL, 0, UCOL_ATTRIBUTE_COUNT}, /*"remove"      */
+ /*13*/ {option_17,  8, NULL, 0, UCOL_ATTRIBUTE_COUNT}, /*"optimize"      */
+ /*14*/ {option_18, 20, NULL, 0, UCOL_ATTRIBUTE_COUNT}, /*"suppressContractions"      */
  /*15*/ {option_00,  9, NULL, 0, UCOL_ATTRIBUTE_COUNT}, /*"undefined"      */
  /*16*/ {option_09, 11, NULL, 0, UCOL_ATTRIBUTE_COUNT}, /*"scriptOrder"    */
  /*17*/ {option_10, 11, NULL, 0, UCOL_ATTRIBUTE_COUNT}, /*"charsetname"    */
@@ -404,7 +404,7 @@ void ucol_uprv_tok_initData() {
     U_STRING_INIT(option_14, "strength",       8);
     U_STRING_INIT(option_15, "first",          5);
     U_STRING_INIT(option_16, "last",           4);
-    U_STRING_INIT(option_17, "copy",           4);
+    U_STRING_INIT(option_17, "optimize",       8);
     U_STRING_INIT(option_18, "suppressContractions",         20);
     didInit = TRUE;
   }
