@@ -692,7 +692,7 @@ uint32_t uprv_uca_addPrefix(tempUCATable *t, uint32_t CE,
         uint32_t newCE = uprv_uca_processContraction(contractions, element, eCE, status);
         uprv_cnttab_setContraction(contractions, CE, position, *(element->prefix), newCE, status);
       } else {                  /* if it isn't, we will have to create a new sequence */
-        uint32_t newCE = uprv_uca_processContraction(contractions, element, UCOL_NOT_FOUND, status);
+        uprv_uca_processContraction(contractions, element, UCOL_NOT_FOUND, status);
         uprv_cnttab_insertContraction(contractions, CE, *(element->prefix), element->mapCE, status);
       }
     }
