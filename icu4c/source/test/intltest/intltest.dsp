@@ -364,6 +364,10 @@ SOURCE=.\reptest.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\resbtddr.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\restest.cpp
 # End Source File
 # Begin Source File
@@ -393,6 +397,10 @@ SOURCE=.\strtest.cpp
 # Begin Source File
 
 SOURCE=.\tchcfmt.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\tedadrvr.cpp
 # End Source File
 # Begin Source File
 
@@ -725,6 +733,10 @@ SOURCE=.\reptest.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\resbtddr.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\restest.h
 # End Source File
 # Begin Source File
@@ -750,6 +762,10 @@ SOURCE=.\strtest.h
 # Begin Source File
 
 SOURCE=.\tchcfmt.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\tedadrvr.h
 # End Source File
 # Begin Source File
 
