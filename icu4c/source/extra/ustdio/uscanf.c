@@ -1381,8 +1381,8 @@ u_vfscanf_u(    UFILE        *f,
   int32_t         ufmt_types     [U_SCANF_MAX_ARGS];
   ufmt_args       args         [U_SCANF_MAX_ARGS];
 
-  u_scanf_info        info;
-  u_scanf_handler    handler;
+  u_scanf_info    info;
+  u_scanf_handler handler;
 
   int32_t         cur_arg;
 
@@ -1393,7 +1393,7 @@ u_vfscanf_u(    UFILE        *f,
 
   /* alias the pattern */
   alias = patternSpecification;
-  
+
   /* haven't converted anything yet */
   converted = 0;
 
@@ -1402,23 +1402,23 @@ u_vfscanf_u(    UFILE        *f,
     
     /* match any characters up to the next '%' */
     while(*alias != UP_PERCENT && *alias != 0x0000 && u_fgetc(f) == *alias) {
-      *alias++;
+      alias++;
     }
 
     /* if we aren't at a '%', or if we're at end of string, break*/
     if(*alias != UP_PERCENT || *alias == 0x0000)
       break;
-    
+
     /* parse the specifier */
     count = u_scanf_parse_spec(alias, &spec);
-    
+
     /* update the pointer in pattern */
     alias += count;
-    
+
     /* skip the argument, if necessary */
     if(spec.fSkipArg)
       va_arg(ap, int);
-    
+
     /* query the info function for argument information */
     info = g_u_scanf_infos[ (unsigned char) spec.fInfo.fSpec ];
     if(info != 0) { 
@@ -1433,61 +1433,61 @@ u_vfscanf_u(    UFILE        *f,
     for(cur_arg = 0; 
     cur_arg < num_args_wanted && cur_arg < U_SCANF_MAX_ARGS; 
     ++cur_arg) {
-      
+
       switch(ufmt_types[cur_arg]) {
 
       case ufmt_count:
-    args[cur_arg].intValue = va_arg(ap, int);
-    /* set the spec's width to the # of items converted */
-    spec.fInfo.fWidth = converted;
-    break;
+        args[cur_arg].intValue = va_arg(ap, int);
+        /* set the spec's width to the # of items converted */
+        spec.fInfo.fWidth = converted;
+        break;
 
       case ufmt_int:
-    args[cur_arg].ptrValue = va_arg(ap, int*);
-    break;
-    
+        args[cur_arg].ptrValue = va_arg(ap, int*);
+        break;
+
       case ufmt_char:
-    args[cur_arg].ptrValue = va_arg(ap, int*);
-    break;
-    
+        args[cur_arg].ptrValue = va_arg(ap, int*);
+        break;
+
       case ufmt_wchar:
-    args[cur_arg].ptrValue = va_arg(ap, wchar_t*);
-    break;
-    
+        args[cur_arg].ptrValue = va_arg(ap, wchar_t*);
+        break;
+
       case ufmt_string:
-    args[cur_arg].ptrValue = va_arg(ap, char*);
-    break;
-    
+        args[cur_arg].ptrValue = va_arg(ap, char*);
+        break;
+
       case ufmt_wstring:
-    args[cur_arg].ptrValue = va_arg(ap, wchar_t*);
-    break;
-    
+        args[cur_arg].ptrValue = va_arg(ap, wchar_t*);
+        break;
+
       case ufmt_pointer:
-    args[cur_arg].ptrValue = va_arg(ap, void*);
-    break;
-    
+        args[cur_arg].ptrValue = va_arg(ap, void*);
+        break;
+
       case ufmt_float:
-    args[cur_arg].ptrValue = va_arg(ap, float*);
-    break;
-    
+        args[cur_arg].ptrValue = va_arg(ap, float*);
+        break;
+
       case ufmt_double:
-    args[cur_arg].ptrValue = va_arg(ap, double*);
-    break;
+        args[cur_arg].ptrValue = va_arg(ap, double*);
+        break;
 
       case ufmt_date:
-    args[cur_arg].ptrValue = va_arg(ap, UDate*);
-    break;
+        args[cur_arg].ptrValue = va_arg(ap, UDate*);
+        break;
 
       case ufmt_ustring:
-    args[cur_arg].ptrValue = va_arg(ap, UChar*);
-    break;
+        args[cur_arg].ptrValue = va_arg(ap, UChar*);
+        break;
 
       case ufmt_uchar:
-    args[cur_arg].ptrValue = va_arg(ap, int*);
-    break;
+        args[cur_arg].ptrValue = va_arg(ap, int*);
+        break;
       }
     }
-    
+
     /* call the handler function */
     handler = g_u_scanf_handlers[ (unsigned char) spec.fInfo.fSpec ];
     if(handler != 0) {
@@ -1499,7 +1499,7 @@ u_vfscanf_u(    UFILE        *f,
 
       /* if the handler encountered an error condition, break */
       if(temp == -1)
-    break;
+        break;
 
       /* add to the # of items converted */
       converted += temp;
