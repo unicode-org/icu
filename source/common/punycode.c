@@ -68,7 +68,7 @@ Disclaimer and license
 #define _HYPHEN         0X2d
 #define DELIMITER       _HYPHEN
 
-#define _ZERO           0X30
+#define _ZERO_          0X30
 #define _NINE           0x39
 
 #define _SMALL_A        0X61
@@ -97,7 +97,7 @@ digitToBasic(int32_t digit, UBool uppercase) {
             return (char)(_SMALL_A+digit);
         }
     } else {
-        return (char)((_ZERO-26)+digit);
+        return (char)((_ZERO_-26)+digit);
     }
 }
 
