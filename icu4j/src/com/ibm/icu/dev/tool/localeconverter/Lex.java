@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/tool/localeconverter/Lex.java,v $ 
- * $Date: 2002/01/31 01:21:32 $ 
- * $Revision: 1.1 $
+ * $Date: 2002/01/31 03:00:29 $ 
+ * $Revision: 1.2 $
  *
  *****************************************************************************************
  */
@@ -179,6 +179,8 @@ public final class Lex {
          */
     public void accept(final int neededState) throws IOException {
         if (neededState != nextToken()) {
+            Exception e = new Exception();
+            e.printStackTrace();
             throw new ParseException("Unexpected token - "+getData());
         }
     }
@@ -192,6 +194,8 @@ public final class Lex {
     public void accept(final int neededState, final String neededValue) throws IOException {
         accept(neededState);
         if (!dataEquals(neededValue)) {
+            Exception e = new Exception();
+            e.printStackTrace();
             throw new ParseException("Unexpected token - "+getData());
         }
     }
