@@ -1696,7 +1696,7 @@ testUNormIteratorWithText(const UChar *text, int32_t textLength, int32_t middle,
 
     /* open a normalizing iterator */
     errorCode=U_ZERO_ERROR;
-    uni=unorm_openIter(&errorCode);
+    uni=unorm_openIter(NULL, 0, &errorCode);
     if(U_FAILURE(errorCode)) {
         log_err("unorm_openIter() fails: %s\n", u_errorName(errorCode));
         return;

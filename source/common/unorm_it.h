@@ -83,15 +83,27 @@ struct UNormIterator;
 typedef struct UNormIterator UNormIterator;
 
 /**
+ * Size of a stack buffer to hold a UNormIterator, see the stackMem parameter
+ * of unorm_openIter().
+ *
+ * @internal
+ */
+#define UNORM_ITER_SIZE 1024
+
+/**
  * Open a normalizing iterator. Must be closed later.
  * Use unorm_setIter().
  *
+ * @param stackMem Pointer to preallocated (stack-allocated) buffer to hold
+ *                 the UNormIterator if possible; can be NULL.
+ * @param stackMemSize Number of bytes at stackMem; can be 0,
+ *                     or should be >= UNORM_ITER_SIZE for a non-NULL stackMem.
  * @param pErrorCode ICU error code
  * @return an allocated and pre-initialized UNormIterator
  * @internal
  */
 U_CAPI UNormIterator * U_EXPORT2
-unorm_openIter(UErrorCode *pErrorCode);
+unorm_openIter(void *stackMem, int32_t stackMemSize, UErrorCode *pErrorCode);
 
 /**
  * Close a normalizing iterator.
