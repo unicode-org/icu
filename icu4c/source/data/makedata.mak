@@ -229,7 +229,7 @@ ALL : GODATA "$(DLL_OUTPUT)\$(U_ICUDATA_NAME).dll" "$(TESTDATAOUT)\testdata.dat"
 #
 # testdata - nmake will invoke pkgdata, which will create testdata.dat 
 #
-"$(TESTDATAOUT)\testdata.dat": $(ICUDT)ucadata.dat $(TRANSLIT_FILES) $(RB_FILES)  {"$(ICUTOOLS)\genrb\$(CFG)"}genrb.exe
+"$(TESTDATAOUT)\testdata.dat": $(ICUDT)ucadata.icu $(TRANSLIT_FILES) $(RB_FILES)  {"$(ICUTOOLS)\genrb\$(CFG)"}genrb.exe
 	@cd "$(TESTDATA)"
 	@echo building testdata...
 	nmake /nologo /f "$(TESTDATA)\testdata.mk" TESTDATA=. ICUTOOLS="$(ICUTOOLS)" PKGOPT="$(PKGOPT)" CFG=$(CFG) TESTDATAOUT="$(TESTDATAOUT)" ICUDATA="$(ICUDATA)" TESTDATABLD="$(TESTDATABLD)"
@@ -244,17 +244,17 @@ BRK_FILES = "$(ICUBLD)\$(ICUDT)sent.brk" "$(ICUBLD)\$(ICUDT)char.brk" "$(ICUBLD)
 #  move the .dll and .lib files to their final destination afterwards.
 #  The $(U_ICUDATA_NAME).lib and $(U_ICUDATA_NAME).exp should already be in the right place due to stubdata.
 #
-"$(DLL_OUTPUT)\$(U_ICUDATA_NAME).dll" : "$(ICUTOOLS)\pkgdata\$(CFG)\pkgdata.exe" $(CNV_FILES) $(BRK_FILES) "$(ICUBLD)\$(ICUDT)uprops.dat" "$(ICUBLD)\$(ICUDT)unames.dat" "$(ICUBLD)\$(ICUDT)unorm.dat" "$(ICUBLD)\$(ICUDT)cnvalias.icu" "$(ICUBLD)\$(ICUDT)tz.dat" "$(ICUBLD)\$(ICUDT)ucadata.dat" "$(ICUBLD)\$(ICUDT)invuca.dat" $(ALL_RES) "$(ICUBLD)\$(ICUDT)icudata.res" "$(ICUP)\source\stubdata\stubdatabuilt.txt"
+"$(DLL_OUTPUT)\$(U_ICUDATA_NAME).dll" : "$(ICUTOOLS)\pkgdata\$(CFG)\pkgdata.exe" $(CNV_FILES) $(BRK_FILES) "$(ICUBLD)\$(ICUDT)uprops.icu" "$(ICUBLD)\$(ICUDT)unames.icu" "$(ICUBLD)\$(ICUDT)unorm.icu" "$(ICUBLD)\$(ICUDT)cnvalias.icu" "$(ICUBLD)\$(ICUDT)tz.icu" "$(ICUBLD)\$(ICUDT)ucadata.icu" "$(ICUBLD)\$(ICUDT)invuca.icu" $(ALL_RES) "$(ICUBLD)\$(ICUDT)icudata.res" "$(ICUP)\source\stubdata\stubdatabuilt.txt"
 	@echo Building icu data
 	@cd "$(ICUBLD)"
  	@"$(ICUTOOLS)\pkgdata\$(CFG)\pkgdata" -e $(U_ICUDATA_NAME) -v -m dll -c -p $(ICUPKG) -O "$(PKGOPT)" -d "$(ICUBLD)" -s . <<pkgdatain.txt
-$(ICUDT)uprops.dat
-$(ICUDT)unames.dat
-$(ICUDT)unorm.dat
+$(ICUDT)uprops.icu
+$(ICUDT)unames.icu
+$(ICUDT)unorm.icu
 $(ICUDT)cnvalias.icu
-$(ICUDT)tz.dat
-$(ICUDT)ucadata.dat
-$(ICUDT)invuca.dat
+$(ICUDT)tz.icu
+$(ICUDT)ucadata.icu
+$(ICUDT)invuca.icu
 $(CNV_FILES:.cnv =.cnv
 )
 $(ALL_RES:.res =.res
@@ -275,25 +275,25 @@ $(BRK_FILES:.brk" =.brk"
 #      TODO:  set up an inference rule, so these don't need to be written out one by one...
 #
 
-"$(ICUBLD)\$(ICUDT)char.brk" : "$(ICUBRK)\char.txt" "$(ICUBLD)\$(ICUDT)uprops.dat"
+"$(ICUBLD)\$(ICUDT)char.brk" : "$(ICUBRK)\char.txt" "$(ICUBLD)\$(ICUDT)uprops.icu"
 	genbrk -r "$(ICUBRK)\char.txt" -o "$(ICUBLD)\$(ICUDT)char.brk"
 
-"$(ICUBLD)\$(ICUDT)word.brk" : "$(ICUBRK)\word.txt" "$(ICUBLD)\$(ICUDT)uprops.dat"
+"$(ICUBLD)\$(ICUDT)word.brk" : "$(ICUBRK)\word.txt" "$(ICUBLD)\$(ICUDT)uprops.icu"
 	genbrk -r "$(ICUBRK)\word.txt" -o "$(ICUBLD)\$(ICUDT)word.brk"
 
-"$(ICUBLD)\$(ICUDT)line.brk" : "$(ICUBRK)\line.txt" "$(ICUBLD)\$(ICUDT)uprops.dat"
+"$(ICUBLD)\$(ICUDT)line.brk" : "$(ICUBRK)\line.txt" "$(ICUBLD)\$(ICUDT)uprops.icu"
 	genbrk -r "$(ICUBRK)\line.txt" -o "$(ICUBLD)\$(ICUDT)line.brk"
 
-"$(ICUBLD)\$(ICUDT)sent.brk" : "$(ICUBRK)\sent.txt" "$(ICUBLD)\$(ICUDT)uprops.dat"
+"$(ICUBLD)\$(ICUDT)sent.brk" : "$(ICUBRK)\sent.txt" "$(ICUBLD)\$(ICUDT)uprops.icu"
 	genbrk -r "$(ICUBRK)\sent.txt" -o "$(ICUBLD)\$(ICUDT)sent.brk"
 
-"$(ICUBLD)\$(ICUDT)title.brk" : "$(ICUBRK)\title.txt" "$(ICUBLD)\$(ICUDT)uprops.dat"
+"$(ICUBLD)\$(ICUDT)title.brk" : "$(ICUBRK)\title.txt" "$(ICUBLD)\$(ICUDT)uprops.icu"
 	genbrk -r "$(ICUBRK)\title.txt" -o "$(ICUBLD)\$(ICUDT)title.brk"
 
-"$(ICUBLD)\$(ICUDT)word_th.brk" : "$(ICUBRK)\word_th.txt" "$(ICUBLD)\$(ICUDT)uprops.dat"
+"$(ICUBLD)\$(ICUDT)word_th.brk" : "$(ICUBRK)\word_th.txt" "$(ICUBLD)\$(ICUDT)uprops.icu"
 	genbrk -r "$(ICUBRK)\word_th.txt" -o "$(ICUBLD)\$(ICUDT)word_th.brk"
 
-"$(ICUBLD)\$(ICUDT)line_th.brk" : "$(ICUBRK)\line_th.txt" "$(ICUBLD)\$(ICUDT)uprops.dat"
+"$(ICUBLD)\$(ICUDT)line_th.brk" : "$(ICUBRK)\line_th.txt" "$(ICUBLD)\$(ICUDT)uprops.icu"
 	genbrk -r "$(ICUBRK)\line_th.txt" -o "$(ICUBLD)\$(ICUDT)line_th.brk"
 
 
@@ -314,6 +314,7 @@ CLEAN : GODATA
 	-@erase "*.dat"
 	-@erase "*.exp"
 	-@erase "*.obj"
+	-@erase "*.icu"
 	-@erase "*.lib"
 	-@erase "*.mak"
 	-@erase "*.res"
@@ -359,20 +360,20 @@ res_index {
 	@echo Creating data DLL version information from $**
 	@rc.exe /i "..\..\..\..\include" /r /fo $@ $**
 
-# Targets for unames.dat
-"$(ICUBLD)\$(ICUDT)unames.dat": "$(ICUUNIDATA)\*.txt" "$(ICUTOOLS)\gennames\$(CFG)\gennames.exe"
+# Targets for unames.icu
+"$(ICUBLD)\$(ICUDT)unames.icu": "$(ICUUNIDATA)\*.txt" "$(ICUTOOLS)\gennames\$(CFG)\gennames.exe"
 	@echo Creating data file for Unicode Names
 	@set ICU_DATA=$(ICUBLD)
 	@"$(ICUTOOLS)\gennames\$(CFG)\gennames" -1 -u $(UNICODE_VERSION) "$(ICUUNIDATA)\UnicodeData.txt"
 
-# Targets for uprops.dat
-"$(ICUBLD)\$(ICUDT)uprops.dat": "$(ICUUNIDATA)\*.txt" "$(ICUTOOLS)\genprops\$(CFG)\genprops.exe"
+# Targets for uprops.icu
+"$(ICUBLD)\$(ICUDT)uprops.icu": "$(ICUUNIDATA)\*.txt" "$(ICUTOOLS)\genprops\$(CFG)\genprops.exe"
 	@echo Creating data file for Unicode Character Properties
 	@set ICU_DATA=$(ICUBLD)
 	@"$(ICUTOOLS)\genprops\$(CFG)\genprops" -u $(UNICODE_VERSION) -s "$(ICUUNIDATA)"
 
-# Targets for unorm.dat
-"$(ICUBLD)\$(ICUDT)unorm.dat": "$(ICUUNIDATA)\*.txt" "$(ICUTOOLS)\gennorm\$(CFG)\gennorm.exe"
+# Targets for unorm.icu
+"$(ICUBLD)\$(ICUDT)unorm.icu": "$(ICUUNIDATA)\*.txt" "$(ICUTOOLS)\gennorm\$(CFG)\gennorm.exe"
 	@echo Creating data file for Unicode Normalization
 	@set ICU_DATA=$(ICUBLD)
 	@"$(ICUTOOLS)\gennorm\$(CFG)\gennorm" -u $(UNICODE_VERSION) -s "$(ICUUNIDATA)"
@@ -384,13 +385,13 @@ res_index {
 	@"$(ICUTOOLS)\gencnval\$(CFG)\gencnval" "$(ICUSRCDATA)\$(ICUUCM)\convrtrs.txt"
 
 # Targets for tz
-"$(ICUBLD)\$(ICUDT)tz.dat" : {"$(ICUMISC)"}timezone.txt {"$(ICUTOOLS)\gentz\$(CFG)"}gentz.exe
+"$(ICUBLD)\$(ICUDT)tz.icu" : {"$(ICUMISC)"}timezone.txt {"$(ICUTOOLS)\gentz\$(CFG)"}gentz.exe
 	@echo Creating data file for Timezones
 	@set ICU_DATA=$(ICUBLD)
 	@"$(ICUTOOLS)\gentz\$(CFG)\gentz" "$(ICUMISC)\timezone.txt"
 
-# Targets for ucadata.dat & invuca.dat
-"$(ICUBLD)\$(ICUDT)invuca.dat" "$(ICUBLD)\$(ICUDT)ucadata.dat": "$(ICUUNIDATA)\FractionalUCA.txt" "$(ICUTOOLS)\genuca\$(CFG)\genuca.exe" $(ICUDT)uprops.dat $(ICUDT)unorm.dat
+# Targets for ucadata.icu & invuca.icu
+"$(ICUBLD)\$(ICUDT)invuca.icu" "$(ICUBLD)\$(ICUDT)ucadata.icu": "$(ICUUNIDATA)\FractionalUCA.txt" "$(ICUTOOLS)\genuca\$(CFG)\genuca.exe" $(ICUDT)uprops.icu $(ICUDT)unorm.icu
 	@echo Creating UCA data files
 	@set ICU_DATA=$(ICUBLD)
 	@"$(ICUTOOLS)\genuca\$(CFG)\genuca" -s "$(ICUUNIDATA)"
@@ -399,5 +400,5 @@ res_index {
 
 $(UCM_SOURCE) : {"$(ICUTOOLS)\makeconv\$(CFG)"}makeconv.exe
 
-$(TRANSLIT_SOURCE) $(GENRB_SOURCE) : {"$(ICUTOOLS)\genrb\$(CFG)"}genrb.exe $(ICUDT)ucadata.dat $(ICUDT)uprops.dat $(ICUDT)unorm.dat
+$(TRANSLIT_SOURCE) $(GENRB_SOURCE) : {"$(ICUTOOLS)\genrb\$(CFG)"}genrb.exe $(ICUDT)ucadata.icu $(ICUDT)uprops.icu $(ICUDT)unorm.icu
 
