@@ -43,8 +43,6 @@ inline const char*
 PropertyAliases::getPropertyName(EnumValue prop,
                                  UPropertyNameChoice choice) const {
     NonContiguousEnumToOffset* e2n = (NonContiguousEnumToOffset*) getPointer(enumToName_offset);
-    //    (prop < UCHAR_BINARY_LIMIT) ? enumToName_binaryOffset :
-    //                                  enumToName_enumeratedOffset);
     return chooseNameInGroup(e2n->getOffset(prop), choice);
 }
 
