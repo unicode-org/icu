@@ -12,11 +12,34 @@
 
 #if !UCONFIG_NO_FORMATTING
 
+#include <stdio.h>
+
 #define CHECK(status, msg) \
     if (U_FAILURE(status)) { \
       errln((UnicodeString(u_errorName(status)) + UnicodeString(" : " ) )+ msg); \
         return; \
     }
+
+
+static UnicodeString escape( const UnicodeString&src)
+{
+  UnicodeString dst;
+    dst.remove();
+    for (int32_t i = 0; i < src.length(); ++i) {
+        UChar c = src[i];
+        if(c < 0x0080) 
+            dst += c;
+        else {
+            dst += UnicodeString("[");
+            char buf [8];
+            sprintf(buf, "%#x", c);
+            dst += UnicodeString(buf);
+            dst += UnicodeString("]");
+        }
+    }
+
+    return dst;
+}
 
 
 #include "incaltst.h"
@@ -298,6 +321,7 @@ void IntlCalendarTest::TestBuddhistFormat() {
 
   // Test simple parse/format with adopt
   
+  // First, a contrived english test..
   UDate aDate = 999932400000.0; 
   SimpleDateFormat *fmt = new SimpleDateFormat(UnicodeString("MMMM d, yyyy G"), Locale("en_US"), status);
   CHECK(status, "creating date format instance");
@@ -311,23 +335,34 @@ void IntlCalendarTest::TestBuddhistFormat() {
     fmt->adoptCalendar(cal);
     cal = NULL;
     fmt->format(aDate, str);
-    logln(UnicodeString() + "as Buddhist Calendar: " + str);
+    logln(UnicodeString() + "as Buddhist Calendar: " + escape(str));
     UnicodeString expected("September 8, 2544 BE");
     if(str != expected) {
-      errln("Expected " + expected + " but got " + str);
+      errln("Expected " + escape(expected) + " but got " + escape(str));
     }
     UDate otherDate = fmt->parse(expected, status);
     if(otherDate != aDate) { 
       UnicodeString str3;
       fmt->format(otherDate, str3);
-      errln("Parse incorrect of " + expected + " - wanted " + aDate + " but got " +  otherDate + ", " + str3);
+      errln("Parse incorrect of " + escape(expected) + " - wanted " + aDate + " but got " +  otherDate + ", " + escape(str3));
     } else {
       logln("Parsed OK: " + expected);
     }
     delete fmt;
   }
   delete cal;
-  CHECK(status, "Error occured");
+
+  CHECK(status, "Error occured testing Buddhist Calendar in English ");
+
+  status = U_ZERO_ERROR;
+  // Now, try in Thai
+  {
+    UnicodeString expect = CharsToUnicodeString("\\u0E27\\u0E31\\u0E19\\u0E40\\u0E2A\\u0E32\\u0E23\\u0E4C, \\u0E01\\u0E31\\u0e19\\u0e22\\u0e32\\u0e22\\u0e19 8, 44 \\u0e1e.\\u0e28.");
+    UDate         expectDate = 999932400000.0;
+    Locale        loc("th_TH_TRADITIONAL");
+
+    simpleTest(loc, expect, expectDate, status);
+  }
 }
 
 
@@ -375,8 +410,54 @@ void IntlCalendarTest::TestJapaneseFormat() {
   delete cal;
   delete cal2;
   CHECK(status, "Error occured");
+
+  // Now, try in Japanese
+  {
+    UnicodeString expect = CharsToUnicodeString("\\u5e73\\u621013\\u5e749\\u67088\\u65e5");
+    UDate         expectDate = 999932400000.0;
+    Locale        loc("ja_JP_TRADITIONAL");
+
+    status = U_ZERO_ERROR;
+    simpleTest(loc, expect, expectDate, status);
+  }
+  {
+    UnicodeString expect = CharsToUnicodeString("\\u5b89\\u6c3805\\u5e747\\u67084\\u65e5");
+    UDate         expectDate = -6106035600000;
+    Locale        loc("ja_JP_TRADITIONAL");
+
+    status = U_ZERO_ERROR;
+    simpleTest(loc, expect, expectDate, status);    
+
+  }
 }
 
+void IntlCalendarTest::simpleTest(const Locale& loc, const UnicodeString& expect, UDate expectDate, UErrorCode& status)
+{
+  UnicodeString tmp;
+  UDate         d;
+  DateFormat *fmt0 = DateFormat::createDateTimeInstance(DateFormat::kFull, DateFormat::kFull);
+
+  logln("Try format/parse of " + (UnicodeString)loc.getName());
+  DateFormat *fmt2 = DateFormat::createDateInstance(DateFormat::kFull, loc);
+  if(fmt2) { 
+    fmt2->format(expectDate, tmp);
+    logln(escape(tmp) + " ( in locale " + loc.getName() + ")");
+    if(tmp != expect) {
+      errln(UnicodeString("Failed to format " ) + loc.getName() + " expected " + escape(expect) + " got " + escape(tmp) );
+    }
+    
+    d = fmt2->parse(expect,status);
+    CHECK(status, "Error occured parsing " + UnicodeString(loc.getName()));
+    if(d != expectDate) {
+      fmt2->format(d,tmp);
+      errln(UnicodeString("Failed to parse " ) + escape(expect) + ", " + loc.getName() + " expect " + (double)expectDate + " got " + (double)d  + " " + escape(tmp));
+      logln( "wanted " + escape(fmt0->format(expectDate,tmp)) + " but got " + escape(fmt0->format(d,tmp)));
+    }
+    delete fmt2;
+  } else {
+    errln((UnicodeString)"Can't create " + loc.getName() + " date instance");
+  }
+}
 
 #undef CHECK
 
