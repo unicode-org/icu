@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/translit/UnicodeSetTest.java,v $ 
- * $Date: 2002/04/26 21:30:48 $ 
- * $Revision: 1.28 $
+ * $Date: 2002/06/06 16:28:58 $ 
+ * $Revision: 1.29 $
  *
  *****************************************************************************************
  */
@@ -684,12 +684,56 @@ public class UnicodeSetTest extends TestFmwk {
      * Test the [:Latin:] syntax.
      */
     public void TestPropertySet() {
-        UnicodeSet set = new UnicodeSet("[:Latin:]");
-        expectContainment(set, "aA", "\u0391\u03B1");
-        set = new UnicodeSet("[\\p{Greek}]");
-        expectContainment(set, "\u0391\u03B1", "aA");
-        set = new UnicodeSet("\\P{ GENERAL Category = upper case letter }");
-        expectContainment(set, "abc", "ABC");
+        String[] DATA = {
+            // Pattern, Chars IN, Chars NOT in
+
+            "[:Latin:]",
+            "aA",
+            "\u0391\u03B1",
+
+            "[\\p{Greek}]",
+            "\u0391\u03B1",
+            "aA",
+
+            "\\P{ GENERAL Category = upper case letter }",
+            "abc",
+            "ABC",
+
+            // Combining class: @since ICU 2.2
+            // Check both symbolic and numeric
+            "\\p{cc=Nuktas}",
+            "\u0ABC",
+            "abc",
+
+            "\\p{Combining Class = 11}",
+            "\u05B1",
+            "\u05B2",
+
+            "[:c c = iota subscript :]",
+            "\u0345",
+            "xyz",
+
+            // Bidi class: @since ICU 2.2
+            "\\p{bidiclass=lefttoright}",
+            "abc",
+            "\u0671\u0672",
+
+            // Binary properties: @since ICU 2.2
+            /* TODO: Enable when supported
+            "\\p{ideographic}",
+            "\u4E0A",
+            "x",
+
+            "[:^math:]",
+            "q",
+            "(*+)",
+            */
+        };
+
+        for (int i=0; i<DATA.length; i+=3) {
+            UnicodeSet set = new UnicodeSet(DATA[i]);
+            expectContainment(set, DATA[i+1], DATA[i+2]);
+        }
     }
 
     /**
