@@ -112,6 +112,12 @@ static uint32_t array_write(UNewDataMemory *mem, struct SResource *res,
 
 static uint32_t intvector_write(UNewDataMemory *mem, struct SResource *res,
                                 uint32_t usedOffset, UErrorCode *status) {
+  uint32_t i = 0;
+    udata_write32(mem, res->u.fIntVector.fCount);
+    for(i = 0; i<res->u.fIntVector.fCount; i++) {
+      udata_write32(mem, res->u.fIntVector.fArray[i]);
+    }
+
     return usedOffset;
 }
 
@@ -394,7 +400,7 @@ struct SResource* intvector_open(struct SRBRoot *bundle, char *tag, UErrorCode *
         return NULL;
     }
 
-    res->fType = RES_ARRAY;
+    res->fType = RES_INT_VECTOR;
     res->fKey  = bundle_addtag(bundle, tag, status);
 
     if (U_FAILURE(*status)) {

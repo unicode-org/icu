@@ -211,6 +211,14 @@ res_getBinary(const ResourceData *pResData, const Resource res, int32_t *pLength
     return (uint8_t *)p;
 }
 
+
+U_CFUNC const int32_t *
+res_getIntVector(const ResourceData *pResData, const Resource res, int32_t *pLength) {
+    int32_t *p=(int32_t *)RES_GET_POINTER(pResData->pRoot, res);
+    *pLength=*p++;
+    return (const int32_t *)p;
+}
+
 U_CFUNC int32_t
 res_countArrayItems(const ResourceData *pResData, const Resource res) {
     if(res!=RES_BOGUS) {
