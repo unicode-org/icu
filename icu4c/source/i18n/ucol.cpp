@@ -474,7 +474,7 @@ ucol_setReqValidLocales(UCollator *coll, char *requestedLocaleToAdopt, char *val
 U_CAPI void U_EXPORT2
 ucol_close(UCollator *coll)
 {
-  UTRACE_ENTRY(UTRACE_UCNV_CLOSE);
+  UTRACE_ENTRY(UTRACE_UCOL_CLOSE);
   UTRACE_DATA1(UTRACE_INFO, "coll = %p", coll);
   if(coll != NULL) {
       // these are always owned by each UCollator struct, 
