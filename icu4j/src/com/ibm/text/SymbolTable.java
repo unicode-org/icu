@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/SymbolTable.java,v $ 
- * $Date: 2000/04/21 22:16:29 $ 
- * $Revision: 1.3 $
+ * $Date: 2000/04/25 01:42:58 $ 
+ * $Revision: 1.4 $
  *
  *****************************************************************************************
  */
@@ -32,10 +32,17 @@ public interface SymbolTable {
     final char SYMBOL_REF = '$';
 
     /**
-     * Lookup the object associated with this string and return it.
-     * Return <tt>null</tt> if no such name exists.
+     * Lookup the characters associated with this string and return it.
+     * Return <tt>null</tt> if no such name exists.  The resultant
+     * array may have length zero.
      */
-    Object lookup(String s);
+    char[] lookup(String s);
+
+    /**
+     * Lookup the UnicodeSet associated with the given character, and
+     * return it.  Return <tt>null</tt> if not found.
+     */
+    UnicodeSet lookupSet(char ch);
 
     /**
      * Parse a symbol reference name from the given string, starting

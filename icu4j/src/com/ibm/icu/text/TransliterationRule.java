@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/TransliterationRule.java,v $ 
- * $Date: 2000/04/22 01:25:10 $ 
- * $Revision: 1.18 $
+ * $Date: 2000/04/25 01:42:58 $ 
+ * $Revision: 1.19 $
  *
  *****************************************************************************************
  */
@@ -44,7 +44,7 @@ import com.ibm.util.Utility;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: TransliterationRule.java,v $ $Revision: 1.18 $ $Date: 2000/04/22 01:25:10 $
+ * @version $RCSfile: TransliterationRule.java,v $ $Revision: 1.19 $ $Date: 2000/04/25 01:42:58 $
  */
 class TransliterationRule {
     /**
@@ -240,7 +240,7 @@ class TransliterationRule {
             return -1;
         }
         char c = pattern.charAt(anteContextLength);
-        return variables.lookup(c) == null ? (c & 0xFF) : -1;
+        return variables.lookupSet(c) == null ? (c & 0xFF) : -1;
     }
 
     /**
@@ -300,7 +300,7 @@ class TransliterationRule {
             return true;
         }
         char c = pattern.charAt(anteContextLength);
-        UnicodeSet set = variables.lookup(c);
+        UnicodeSet set = variables.lookupSet(c);
         return set == null ? (c & 0xFF) == v : set.containsIndexValue(v);
     }
 
@@ -486,13 +486,16 @@ class TransliterationRule {
                                                UnicodeFilter filter) {
         UnicodeSet set = null;
         return (filter == null || filter.contains(textChar)) &&
-            (((set = variables.lookup(keyChar)) == null) ?
+            (((set = variables.lookupSet(keyChar)) == null) ?
              keyChar == textChar : set.contains(textChar));
     }
 }
 
 /**
  * $Log: TransliterationRule.java,v $
+ * Revision 1.19  2000/04/25 01:42:58  alan
+ * Allow arbitrary length variable values. Clean up Data API. Update javadocs.
+ *
  * Revision 1.18  2000/04/22 01:25:10  alan
  * Add support for cursor positioner '@'; update javadoc
  *
