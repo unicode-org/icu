@@ -506,6 +506,9 @@ Calendar::complete(UErrorCode& status)
 }
 
 // -------------------------------------
+int32_t Calendar::fieldDifference(UDate when, EDateFields field, UErrorCode& status) {
+	return fieldDifference(when, (UCalendarDateFields) field, status);
+}
 
 int32_t Calendar::fieldDifference(UDate targetMs, UCalendarDateFields field, UErrorCode& ec) {
     if (U_FAILURE(ec)) return 0;

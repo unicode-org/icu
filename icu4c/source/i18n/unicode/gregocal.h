@@ -348,7 +348,21 @@ public:
      * @param status  Output param set to success/failure code on exit. If any value
      *                previously set in the time field is invalid, this will be set to
      *                an error status.
-     * @stable ICU 2.0
+     * @deprecated ICU 2.6. Use add(UCalendarDateFields field, int32_t amount, UErrorCode& status) instead.
+     */
+    virtual void add(EDateFields field, int32_t amount, UErrorCode& status);
+
+    /**
+     * (Overrides Calendar) UDate Arithmetic function. Adds the specified (signed) amount
+     * of time to the given time field, based on the calendar's rules.  For more
+     * information, see the documentation for Calendar::add().
+     *
+     * @param field   The time field.
+     * @param amount  The amount of date or time to be added to the field.
+     * @param status  Output param set to success/failure code on exit. If any value
+     *                previously set in the time field is invalid, this will be set to
+     *                an error status.
+     * @draft ICU 2.6.
      */
     virtual void add(UCalendarDateFields field, int32_t amount, UErrorCode& status);
 
@@ -361,7 +375,20 @@ public:
      * @param status  Output param set to success/failure code on exit. If any value
      *                previously set in the time field is invalid, this will be set to
      *                an error status.
-     * @stable ICU 2.0
+     * @deprecated ICU 2.6. Use roll(UCalendarDateFields field, int32_t amount, UErrorCode& status) instead.
+     */
+    virtual void roll(EDateFields field, int32_t amount, UErrorCode& status);
+
+    /**
+     * (Overrides Calendar) Rolls up or down by the given amount in the specified field.
+     * For more information, see the documentation for Calendar::roll().
+     *
+     * @param field   The time field.
+     * @param amount  Indicates amount to roll.
+     * @param status  Output param set to success/failure code on exit. If any value
+     *                previously set in the time field is invalid, this will be set to
+     *                an error status.
+     * @draft ICU 2.6.
      */
     virtual void roll(UCalendarDateFields field, int32_t amount, UErrorCode& status);
 
@@ -370,7 +397,16 @@ public:
      * Gregorian DAY_OF_MONTH, 1.
      * @param field    the time field.
      * @return         minimum value for the given field
-     * @stable ICU 2.0
+     * @deprecated ICU 2.6. Use getMinimum(UCalendarDateFields field) instead.
+     */
+    virtual int32_t getMinimum(EDateFields field) const;
+
+    /**
+     * (Overrides Calendar) Returns minimum value for the given field. e.g. for
+     * Gregorian DAY_OF_MONTH, 1.
+     * @param field    the time field.
+     * @return         minimum value for the given field
+     * @draft ICU 2.6.
      */
     virtual int32_t getMinimum(UCalendarDateFields field) const;
 
@@ -379,7 +415,16 @@ public:
      * Gregorian DAY_OF_MONTH, 31.
      * @param field    the time field.
      * @return         maximum value for the given field
-     * @stable ICU 2.0
+     * @deprecated ICU 2.6. Use getMaximum(UCalendarDateFields field) instead.
+     */
+    virtual int32_t getMaximum(EDateFields field) const;
+
+    /**
+     * (Overrides Calendar) Returns maximum value for the given field. e.g. for
+     * Gregorian DAY_OF_MONTH, 31.
+     * @param field    the time field.
+     * @return         maximum value for the given field
+     * @draft ICU 2.6.
      */
     virtual int32_t getMaximum(UCalendarDateFields field) const;
 
@@ -389,7 +434,17 @@ public:
      * @param field    the time field.
      * @return         highest minimum value for the given field if varies.
      *                 Otherwise same as getMinimum().
-     * @stable ICU 2.0
+     * @deprecated ICU 2.6. Use getGreatestMinimum(UCalendarDateFields field) instead.
+     */
+    virtual int32_t getGreatestMinimum(EDateFields field) const;
+
+    /**
+     * (Overrides Calendar) Returns highest minimum value for the given field if varies.
+     * Otherwise same as getMinimum(). For Gregorian, no difference.
+     * @param field    the time field.
+     * @return         highest minimum value for the given field if varies.
+     *                 Otherwise same as getMinimum().
+     * @draft ICU 2.6.
      */
     virtual int32_t getGreatestMinimum(UCalendarDateFields field) const;
 
@@ -399,7 +454,17 @@ public:
      * @param field    the time field.
      * @return         lowest maximum value for the given field if varies.
      *                 Otherwise same as getMaximum(). 
-     * @stable ICU 2.0
+     * @deprecated ICU 2.6. Use getLeastMaximum(UCalendarDateFields field) instead.
+     */
+    virtual int32_t getLeastMaximum(EDateFields field) const;
+
+    /**
+     * (Overrides Calendar) Returns lowest maximum value for the given field if varies.
+     * Otherwise same as getMaximum(). For Gregorian DAY_OF_MONTH, 28.
+     * @param field    the time field.
+     * @return         lowest maximum value for the given field if varies.
+     *                 Otherwise same as getMaximum(). 
+     * @draft ICU 2.6.
      */
     virtual int32_t getLeastMaximum(UCalendarDateFields field) const;
 
@@ -408,7 +473,16 @@ public:
      * For the Gregorian calendar, this is the same as getMinimum() and getGreatestMinimum().
      * @param field    the time field.
      * @return         the minimum value that this field could have, given the current date.
-     * @stable ICU 2.0
+     * @deprecated ICU 2.6. Use getActualMinimum(UCalendarDateFields field) instead.
+     */
+    int32_t getActualMinimum(EDateFields field) const;
+
+    /**
+     * Return the minimum value that this field could have, given the current date.
+     * For the Gregorian calendar, this is the same as getMinimum() and getGreatestMinimum().
+     * @param field    the time field.
+     * @return         the minimum value that this field could have, given the current date.
+     * @draft ICU 2.6.
      */
     int32_t getActualMinimum(UCalendarDateFields field) const;
 
@@ -419,7 +493,18 @@ public:
      * for some years the actual maximum for MONTH is 12, and for others 13.
      * @param field    the time field.
      * @return         the maximum value that this field could have, given the current date.
-     * @stable ICU 2.0
+     * @deprecated ICU 2.6. Use getActualMaximum(UCalendarDateFields field) instead.
+     */
+    int32_t getActualMaximum(EDateFields field) const;
+
+    /**
+     * Return the maximum value that this field could have, given the current date.
+     * For example, with the date "Feb 3, 1997" and the DAY_OF_MONTH field, the actual
+     * maximum would be 28; for "Feb 3, 1996" it s 29.  Similarly for a Hebrew calendar,
+     * for some years the actual maximum for MONTH is 12, and for others 13.
+     * @param field    the time field.
+     * @return         the maximum value that this field could have, given the current date.
+     * @draft ICU 2.6.
      */
     int32_t getActualMaximum(UCalendarDateFields field) const;
 
