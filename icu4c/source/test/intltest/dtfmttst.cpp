@@ -1042,11 +1042,12 @@ void DateFormatTest::TestExactCountFormat() {
 
         // pattern, input, expected parse or NULL if expect parse failure
         "HHmmss", "123456", "1970 01 01 12:34:56",
-        NULL, "12345", "1970 01 01 12:34:05",
+        NULL,     "12345",  "1970 01 01 01:23:45",
         NULL,     "1234",   NULL,
         NULL,     "00-05",  NULL,
         NULL,     "12-34",  NULL,
         NULL,     "00+05",  NULL,
+        "ahhmm",  "PM730",  "1970 01 01 19:30:00",
     };
     const int32_t DATA_len = sizeof(DATA)/sizeof(DATA[0]);
 
