@@ -69,7 +69,7 @@ cfrtst.o cg7coll.o chashtst.o cintltst.o citertst.o cjaptst.o cloctst.o cmsgtst.
 cnmdptst.o cnormtst.o cnumtst.o cregrtst.o crestst.o creststn.o cturtst.o		\
 cucdtst.o cutiltst.o encoll.o nucnvtst.o susctest.o nccbtst.o \
 cbiditst.o cbididat.o eurocreg.o udatatst.o utf16tst.o utransts.o \
-ncnvfbts.o ncnvtst.o putiltst.o cstrtest.o mstrmtst.o utf8tst.o
+ncnvfbts.o ncnvtst.o putiltst.o cstrtest.o mstrmtst.o utf8tst.o ucmptst.o
 
 DEPS = $(OBJECTS:.o=.d)
 
