@@ -849,12 +849,17 @@ ures_swapResource(const UDataSwapper *ds,
                 }
             }
 
-            /*
-             * ### TODO optimize
-             * After some testing, add a test
-             * if(inCharset==outCharset) { only swap keys and items, do not sort; }
-             * else { sort/copy/swap/permutate as below; }
-             */
+            if(ds->inCharset==ds->outCharset) {
+                /* no need to sort, just swap the offset/value arrays */
+                if(pKey16!=NULL) {
+                    ds->swapArray16(ds, pKey16, count*2, qKey16, pErrorCode);
+                    ds->swapArray32(ds, p, count*4, q, pErrorCode);
+                } else {
+                    /* swap key offsets and items as one array */
+                    ds->swapArray32(ds, pKey32, count*2*4, qKey32, pErrorCode);
+                }
+                break;
+            }
 
             /*
              * We need to sort tables by outCharset key strings because they
