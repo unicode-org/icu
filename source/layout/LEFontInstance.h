@@ -72,8 +72,6 @@ public:
      * 
      * @return <code>true</code> if the instance represents a composite font, <code>false</code> otherwise.
      *
-     * @see LECompositeFont?
-     *
      * @draft ICU 2.6
      */
     virtual le_bool isComposite() const;
@@ -162,7 +160,7 @@ public:
      *
      * @return the glyph index
      *
-     * @draft ICU 2.2
+     * @draft ICU 2.6
      */
     virtual LEGlyphID mapCharToGlyph(LEUnicode32 ch, const LECharMapper *mapper) const;
 
@@ -176,7 +174,7 @@ public:
      *
      * @see LECharMapper
      *
-     * @draft ICU 2.2
+     * @draft ICU 2.6
      */
     virtual LEGlyphID mapCharToGlyph(LEUnicode32 ch) const = 0;
 
@@ -191,7 +189,7 @@ public:
      *
      * @return the number of characters in the name
      *
-     * @draft ICU 2.2
+     * @draft ICU 2.6
      */
     virtual le_int32 getName(le_uint16 platformID, le_uint16 scriptID, le_uint16 languageID, le_uint16 nameID, LEUnicode *name) const;
 
@@ -297,7 +295,7 @@ public:
      *
      * @return font design units in the Y direction
      *
-     * @draft ICU 2.2
+     * @draft ICU 2.6
      */
     virtual float yPixelsToUnits(float yPixels) const;
 
