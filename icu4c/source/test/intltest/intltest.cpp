@@ -1120,10 +1120,8 @@ main(int argc, char* argv[])
     }
 
     UResourceBundle *rb = ures_open(0, "en", &errorCode);
-    if(U_SUCCESS(errorCode)) {
-        // ok
-        ures_close(rb);
-    } else {
+    ures_close(rb);
+    if(U_FAILURE(errorCode)) {
         fprintf(stdout,
                 "*** %s! The \"en\" locale resource bundle cannot be opened.\n"
                 "*** Check the ICU_DATA environment variable and \n"
