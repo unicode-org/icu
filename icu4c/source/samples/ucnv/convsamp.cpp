@@ -25,6 +25,8 @@
 *
 */
 
+#define DEBUG_TMI 0  /* define to 1 to enable Too Much Information */
+
 #include <stdio.h>
 #include <ctype.h>            /* for isspace, etc.    */
 #include <assert.h>
@@ -641,7 +643,6 @@ UErrorCode convsample_12()
   return U_ZERO_ERROR;
 }
 
-
 /******************************************************************
    C: Convert from codepage to Unicode one at a time. 
 */
@@ -707,8 +708,9 @@ UBool convsample_20_didSubstitute(const char *source)
   UConverter *conv = NULL;
   UErrorCode status = U_ZERO_ERROR;
   uint32_t len, len2;
+  UBool  flagVal;
   
-  FromUFLAGContext context;
+  FromUFLAGContext * context = NULL;
 
   printf("\n\n==============================================\n"
          "Sample 20: C: Test for substitution using callbacks\n");
@@ -737,28 +739,29 @@ UBool convsample_20_didSubstitute(const char *source)
   /* Converter starts out with the SUBSTITUTE callback set. */
 
   /* initialize our callback */
-  context.subCallback = NULL;
-  context.subContext  = NULL;
-  context.flag        = FALSE;
+  context = flagCB_fromU_openContext();
 
   /* Set our special callback */
   ucnv_setFromUCallBack(conv,
-                        UCNV_FROM_U_CALLBACK_FLAG,
-                        &context,
-                        &context.subCallback,
-                        &context.subContext,
+                        flagCB_fromU,
+                        context,
+                        &(context->subCallback),
+                        &(context->subContext),
                         &status);
+
   U_ASSERT(status);
 
   len2 = ucnv_fromUChars(conv, bytes, 100, uchars, len, &status);
   U_ASSERT(status);
+
+  flagVal = context->flag;  /* it's about to go away when we close the cnv */
 
   ucnv_close(conv);
 
   /* print out the original source */
   printBytes("bytes", bytes, len2);
 
-  return context.flag; /* true if callback was called */
+  return flagVal; /* true if callback was called */
 }
 
 UErrorCode convsample_20()
@@ -787,6 +790,165 @@ UErrorCode convsample_20()
 
   return U_ZERO_ERROR;
 }
+
+// 21  - C, callback, with clone and debug
+
+
+
+UBool convsample_21_didSubstitute(const char *source)
+{
+  UChar uchars[100];
+  char bytes[100];
+  UConverter *conv = NULL, *cloneCnv = NULL;
+  UErrorCode status = U_ZERO_ERROR;
+  uint32_t len, len2;
+  int32_t  cloneLen;
+  UBool  flagVal = FALSE;
+  UConverterFromUCallback junkCB;
+  
+  FromUFLAGContext *flagCtx = NULL, 
+                   *cloneFlagCtx = NULL;
+
+  debugCBContext   *debugCtx1 = NULL,
+                   *debugCtx2 = NULL,
+                   *cloneDebugCtx = NULL;
+
+  printf("\n\n==============================================\n"
+         "Sample 21: C: Test for substitution w/ callbacks & clones \n");
+
+  /* print out the original source */
+  printBytes("src", source);
+  printf("\n");
+
+  /* First, convert from UTF8 to unicode */
+  conv = ucnv_open("utf-8", &status);
+  U_ASSERT(status);
+
+  len = ucnv_toUChars(conv, uchars, 100, source, strlen(source), &status);
+  U_ASSERT(status);
+ 
+  printUChars("uch", uchars, len);
+  printf("\n");
+
+  /* Now, close the converter */
+  ucnv_close(conv);
+
+  /* Now, convert to windows-1252 */
+  conv = ucnv_open("windows-1252", &status);
+  U_ASSERT(status);
+
+  /* Converter starts out with the SUBSTITUTE callback set. */
+
+  /* initialize our callback */
+  /* from the 'bottom' innermost, out
+   *   CNV ->  debugCtx1[debug]  ->  flagCtx[flag] -> debugCtx2[debug]  */
+
+#if DEBUG_TMI
+  printf("flagCB_fromU = %p\n", &flagCB_fromU);
+  printf("debugCB_fromU = %p\n", &debugCB_fromU);
+#endif
+
+  debugCtx1 = debugCB_openContext();
+   flagCtx  = flagCB_fromU_openContext();
+  debugCtx2 = debugCB_openContext();
+
+  debugCtx1->subCallback =  flagCB_fromU;  /* debug1 -> flag */
+  debugCtx1->subContext  =  flagCtx;
+
+  flagCtx->subCallback   =  debugCB_fromU; /*  flag -> debug2 */
+  flagCtx->subContext    =  debugCtx2;
+
+  debugCtx2->subCallback =  UCNV_FROM_U_CALLBACK_SUBSTITUTE;
+  debugCtx2->subContext  = NULL;
+
+  /* Set our special callback */
+
+  ucnv_setFromUCallBack(conv,
+                        debugCB_fromU,
+                        debugCtx1,
+                        &(debugCtx2->subCallback),
+                        &(debugCtx2->subContext),
+                        &status);
+
+  U_ASSERT(status);
+
+#if DEBUG_TMI
+  printf("Callback chain now: Converter %p -> debug1:%p-> (%p:%p)==flag:%p -> debug2:%p -> cb %p\n",
+         conv, debugCtx1, debugCtx1->subCallback,
+         debugCtx1->subContext, flagCtx, debugCtx2, debugCtx2->subCallback);
+#endif
+
+  cloneLen = 1; /* but passing in null so it will clone */
+  cloneCnv = ucnv_safeClone(conv,  NULL,  &cloneLen, &status);
+
+  U_ASSERT(status);
+
+#if DEBUG_TMI
+  printf("Cloned converter from %p -> %p.  Closing %p.\n", conv, cloneCnv, conv);
+#endif
+  
+  ucnv_close(conv);
+
+#if DEBUG_TMI
+  printf("%p closed.\n", conv);
+#endif 
+
+  U_ASSERT(status);
+  /* Now, we have to extract the context */
+  cloneDebugCtx = NULL;
+  cloneFlagCtx  = NULL;
+
+  ucnv_getFromUCallBack(cloneCnv, &junkCB, (const void **)&cloneDebugCtx);
+  if(cloneDebugCtx != NULL) {
+      cloneFlagCtx = (FromUFLAGContext*) cloneDebugCtx -> subContext;
+  }
+
+  printf("Cloned converter chain: %p -> %p[debug1] -> %p[flag] -> %p[debug2] -> substitute\n",
+         cloneCnv, cloneDebugCtx, cloneFlagCtx, cloneFlagCtx?cloneFlagCtx->subContext:NULL );
+
+  len2 = ucnv_fromUChars(cloneCnv, bytes, 100, uchars, len, &status);
+  U_ASSERT(status);
+
+  if(cloneFlagCtx != NULL) {
+      flagVal = cloneFlagCtx->flag;  /* it's about to go away when we close the cnv */
+  } else {
+      printf("** Warning, couldn't get the subcallback \n");
+  }
+
+  ucnv_close(cloneCnv);
+
+  /* print out the original source */
+  printBytes("bytes", bytes, len2);
+
+  return flagVal; /* true if callback was called */
+}
+
+UErrorCode convsample_21()
+{
+  const char *sample1 = "abc\xdf\xbf";
+  const char *sample2 = "abc_def";
+
+  if(convsample_21_didSubstitute(sample1))
+  {
+    printf("DID substitute.\n******\n");
+  }
+  else
+  {
+    printf("Did NOT substitute.\n*****\n");
+  }
+
+  if(convsample_21_didSubstitute(sample2))
+  {
+    printf("DID substitute.\n******\n");
+  }
+  else
+  {
+    printf("Did NOT substitute.\n*****\n");
+  }
+
+  return U_ZERO_ERROR;
+}
+
 
 //  40-  C, cp37 -> UTF16 [data02.bin -> data40.utf16]
 
@@ -978,8 +1140,8 @@ UErrorCode convsample_41()
                (size_t)(target-uBuf));
         total += (target-uBuf);
 
-        fprintf(stderr, "srcLeft=%d, wrote %d, err %s\n",
-                sourceLimit - source, target-uBuf, u_errorName(status));
+        //fprintf(stderr, "srceft=Left=%d, wrote %d, err %s\n",
+        //sourceLimit - source, target-uBuf, u_errorName(status));
 
     } while (source < sourceLimit); // while simply out of space
   }
@@ -1210,23 +1372,29 @@ int main()
 
   printf("Default Converter=%s\n", ucnv_getDefaultName() );
   
-    convsample_01();  // C++, u->koi8r, conv
-    convsample_02();  // C  , u->koi8r, conv
-    convsample_03();  // C,   iterate
- //  convsample_04();  /* not written yet */
-    convsample_05();  // C,  utf8->u, getNextUChar
-    convsample_06(); // C freq counter thingy
-    convsample_11();  // C++, sjis->u, conv
-    convsample_12();  // C,  sjis->u, conv
-    convsample_13();  // C,  big5->u, getNextU
+  convsample_01();  // C++, u->koi8r, conv
+  convsample_02();  // C  , u->koi8r, conv
+  convsample_03();  // C,   iterate
+//   //  convsample_04();  /* not written yet */
+  convsample_05();  // C,  utf8->u, getNextUChar
+  convsample_06(); // C freq counter thingy
+  convsample_11();  // C++, sjis->u, conv
+  convsample_12();  // C,  sjis->u, conv
+  convsample_13();  // C,  big5->u, getNextU
   
-    convsample_20();  // C, callback
+  convsample_20();  // C, callback
+  convsample_21();  // C, callback debug
   
-    convsample_40();  // C,   cp37 -> UTF16 [data02.bin -> data40.utf16]
-    convsample_41();  // C++, cp37 -> UTF16 [data02.bin -> data41.utf16]
+  convsample_40();  // C,   cp37 -> UTF16 [data02.bin -> data40.utf16]
+  convsample_41();  // C++, cp37 -> UTF16 [data02.bin -> data41.utf16]
   
-    convsample_46();  // C,  UTF16 -> latin3 [data41.utf16 -> data46.out]
-    convsample_47();  // C++,UTF16 -> latin3 [data40.utf16 -> data47.out]
-        
-   return 0;
+  convsample_46();  // C,  UTF16 -> latin3 [data41.utf16 -> data46.out]
+  convsample_47();  // C++,UTF16 -> latin3 [data40.utf16 -> data47.out]
+  
+  printf("End of converter samples.\n");
+  
+  fflush(stdout);
+  fflush(stderr);
+  
+  return 0;
 }
