@@ -5,8 +5,8 @@
  *****************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/rbm/BundleGroup.java,v $ 
- * $Date: 2002/05/20 18:53:10 $ 
- * $Revision: 1.1 $
+ * $Date: 2004/06/29 18:45:42 $ 
+ * $Revision: 1.2 $
  *
  *****************************************************************************
  */
@@ -59,7 +59,7 @@ public class BundleGroup {
 	
     // This should be changed anywhere it is used
 	
-    protected Vector getItemsAsVector() {
+    public Vector getItemsAsVector() {
         Vector v = new Vector();
         Iterator iter = items.iterator();
         while (iter.hasNext()) {
@@ -150,11 +150,11 @@ public class BundleGroup {
         this.bundle = bundle;
     }
 	
-    protected void setComment(String comment) {
+    public void setComment(String comment) {
         this.comment = comment;
     }
 	
-    protected void setName(String name) {
+    public void setName(String name) {
         this.name = name;
     }
 	

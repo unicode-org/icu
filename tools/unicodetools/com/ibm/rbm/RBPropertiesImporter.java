@@ -8,6 +8,9 @@ package com.ibm.rbm;
 
 import java.io.*;
 import javax.swing.filechooser.*;
+
+import com.ibm.rbm.gui.RBManagerGUI;
+
 import java.util.*;
 
 /**

@@ -14,6 +14,8 @@ import java.text.MessageFormat;
 import java.util.*;
 import java.util.zip.ZipEntry;
 
+import com.ibm.rbm.gui.RBManagerGUI;
+
 /**
  * A class not to be instantiated. Provides methods for translating items from a resource bundle. To use this class
  * make sure you first call initBundle(). Once this is done, calling any of the getTranslation() methods will return

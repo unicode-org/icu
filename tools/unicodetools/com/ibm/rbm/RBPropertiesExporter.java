@@ -5,8 +5,8 @@
  *****************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/rbm/RBPropertiesExporter.java,v $ 
- * $Date: 2002/05/20 18:53:09 $ 
- * $Revision: 1.1 $
+ * $Date: 2004/06/29 18:45:43 $ 
+ * $Revision: 1.2 $
  *
  *****************************************************************************
  */
@@ -47,7 +47,7 @@ public class RBPropertiesExporter extends RBExporter {
         } // end if
     }
 	
-    protected void export(RBManager rbm) throws IOException {
+    public void export(RBManager rbm) throws IOException {
         if (rbm == null) return;
         // Open the Save Dialog
         int ret_val = chooser.showSaveDialog(null);

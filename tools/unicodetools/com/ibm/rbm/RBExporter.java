@@ -6,6 +6,8 @@
  */
 package com.ibm.rbm;
 
+import java.io.IOException;
+
 import javax.swing.*;
 
 /**
@@ -15,13 +17,14 @@ import javax.swing.*;
  * @author Jared Jackson
  * @see com.ibm.rbm.RBManager
  */
-public class RBExporter {
+public abstract class RBExporter {
     protected static JFileChooser chooser;
 	
     /**
      * Basic empty constructor.
      */
     public RBExporter() {
-        
     }
+    
+    public abstract void export(RBManager rbm) throws IOException;
 }

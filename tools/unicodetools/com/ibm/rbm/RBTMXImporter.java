@@ -15,6 +15,8 @@ import org.apache.xerces.dom.*;
 import org.w3c.dom.*;
 import org.xml.sax.*;
 
+import com.ibm.rbm.gui.RBManagerGUI;
+
 
 /**
  * This is the super class for all importer plug-in classes. This class defines the methods

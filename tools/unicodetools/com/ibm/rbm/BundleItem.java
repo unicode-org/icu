@@ -5,8 +5,8 @@
  *****************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/rbm/BundleItem.java,v $ 
- * $Date: 2002/05/20 18:53:10 $ 
- * $Revision: 1.1 $
+ * $Date: 2004/06/29 18:45:42 $ 
+ * $Revision: 1.2 $
  *
  *****************************************************************************
  */
@@ -169,7 +169,7 @@ public class BundleItem {
      * Given a hashtable of lookups, associates those lookups with this item.
      */
 	
-    protected void setLookups(Hashtable lookups) {
+    public void setLookups(Hashtable lookups) {
         this.lookups = lookups;
     }
     
