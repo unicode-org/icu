@@ -294,7 +294,7 @@ IntlTestNumberFormat::tryIt(double aNumber)
         if (number[i].getType() == Formattable::kLong)
             number[i].setDouble(number[i].getLong());
 		else if (number[i].getType() == Formattable::kInt64)
-			number[i].setDouble(number[i].getInt64());
+			number[i].setDouble((double)number[i].getInt64());
         else if (number[i].getType() != Formattable::kDouble)
         {
             errMsg = ("**** FAIL: Parse of " + prettify(string[i-1])
