@@ -14,7 +14,7 @@ SHAREDLIBCPPFLAGS =
 
 ## Additional flags when building libraries and with threads
 LIBCPPFLAGS = -D_REENTRANT
-THREADSCPPFLAGS = -D_REENTRANT
+THREADSCPPFLAGS = -D_REENTRANT -pthread
 
 # Use int for int32_t
 DEFS += -D_LP64
