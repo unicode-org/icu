@@ -316,12 +316,17 @@ void DateFormatRoundTripTest::test(DateFormat *fmt, const Locale &origLocale, UB
 
             // String usually matches in 1.  Exceptions are checked for here.
             if(smatch > maxSmatch) { // Don't compute unless necessary
+                UBool in0;
                 // Starts in BC, with no era in pattern
                 if( ! hasEra && getField(d[0], UCAL_ERA) == GregorianCalendar::BC)
                     maxSmatch = 2;
                 // Starts in DST, no year in pattern
-                else if(fmt->getTimeZone().inDaylightTime(d[0], status) && ! failure(status, "gettingDaylightTime") &&
+                else if(in0=fmt->getTimeZone().inDaylightTime(d[0], status) && ! failure(status, "gettingDaylightTime") &&
                          pat.indexOf(UnicodeString("yyyy")) == -1)
+                    maxSmatch = 2;
+                // If we start not in DST, but transition into DST
+                else if (!in0 &&
+                         fmt->getTimeZone().inDaylightTime(d[1], status) && !failure(status, "gettingDaylightTime"))
                     maxSmatch = 2;
                 // Two digit year with no time zone change,
                 // unless timezone isn't used or we aren't close to the DST changover
