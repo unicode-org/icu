@@ -624,7 +624,7 @@ Hashtable *CanonicalIterator::extract(UChar32 comp, const UChar *segment, int32_
 
             if (decompPos == decompLen) { // done, have all decomp characters!
                 //u_strcat(buff+bufLen, segment+i);
-                memcpy(buff+bufLen, segment+i, (segLen-i)*sizeof(UChar));
+                uprv_memcpy(buff+bufLen, segment+i, (segLen-i)*sizeof(UChar));
                 bufLen+=segLen-i;
 
                 ok = TRUE;

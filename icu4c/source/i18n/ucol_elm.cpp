@@ -1325,7 +1325,7 @@ uprv_uca_assembleTable(tempUCATable *t, UErrorCode *status) {
     /* copy expansions */
     /*myData->expansion = (uint32_t *)dataStart+tableOffset;*/
     myData->expansion = tableOffset;
-    memcpy(dataStart+tableOffset, expansions->CEs, expansions->position*sizeof(uint32_t));
+    uprv_memcpy(dataStart+tableOffset, expansions->CEs, expansions->position*sizeof(uint32_t));
     tableOffset += (uint32_t)(paddedsize(expansions->position*sizeof(uint32_t)));
 
     /* contractions block */
@@ -1333,13 +1333,13 @@ uprv_uca_assembleTable(tempUCATable *t, UErrorCode *status) {
       /* copy contraction index */
       /*myData->contractionIndex = (UChar *)(dataStart+tableOffset);*/
       myData->contractionIndex = tableOffset;
-      memcpy(dataStart+tableOffset, contractions->codePoints, contractionsSize*sizeof(UChar));
+      uprv_memcpy(dataStart+tableOffset, contractions->codePoints, contractionsSize*sizeof(UChar));
       tableOffset += (uint32_t)(paddedsize(contractionsSize*sizeof(UChar)));
 
       /* copy contraction collation elements */
       /*myData->contractionCEs = (uint32_t *)(dataStart+tableOffset);*/
       myData->contractionCEs = tableOffset;
-      memcpy(dataStart+tableOffset, contractions->CEs, contractionsSize*sizeof(uint32_t));
+      uprv_memcpy(dataStart+tableOffset, contractions->CEs, contractionsSize*sizeof(uint32_t));
       tableOffset += (uint32_t)(paddedsize(contractionsSize*sizeof(uint32_t)));
     } else {
       myData->contractionIndex = 0;
@@ -1349,7 +1349,7 @@ uprv_uca_assembleTable(tempUCATable *t, UErrorCode *status) {
     /* copy mapping table */
     /*myData->mappingPosition = dataStart+tableOffset;*/
     /*myData->mappingPosition = tableOffset;*/
-    /*memcpy(dataStart+tableOffset, flattened, mappingSize);*/
+    /*uprv_memcpy(dataStart+tableOffset, flattened, mappingSize);*/
 
     myData->mappingPosition = tableOffset;
     utrie_serialize(mapping, dataStart+tableOffset, toAllocate-tableOffset, getFoldedValue, FALSE, status);
