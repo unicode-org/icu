@@ -15,8 +15,6 @@
 #include "symtable.h"
 #include "cmemory.h"
 #include "rbt_rule.h"
-#include "umutex.h"
-#include "ucln_in.h"
 #include "upropset.h"
 #include "util.h"
 
@@ -85,15 +83,6 @@ static const UChar CATEGORY_NAMES[] = {
  * ":]".  Example: "[:Lu:]".
  */
 static const UChar CATEGORY_CLOSE[] = {COLON, SET_CLOSE, 0x0000}; /* ":]" */
-
-/**
- * Cleanup function for transliterator component; delegates to
- * Transliterator::cleanupRegistry().
- */
-U_CFUNC UBool unicodeset_cleanup(void) {
-    UnicodePropertySet::cleanup();
-    return TRUE;
-}
 
 U_NAMESPACE_BEGIN
 

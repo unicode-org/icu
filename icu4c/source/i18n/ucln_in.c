@@ -20,7 +20,7 @@
 static UBool i18n_cleanup(void)
 {
     transliterator_cleanup();
-    unicodeset_cleanup();
+    unicodePropertySet_cleanup();
     dateFormatSymbols_cleanup();
     timeZone_cleanup();
     ucol_cleanup();
