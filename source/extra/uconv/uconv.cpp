@@ -541,14 +541,15 @@ cnvSigType(UConverter *cnv) {
 class ConvertFile {
 public:
     ConvertFile() :
-        buf(NULL), fromoffsets(NULL),
+        buf(NULL), outbuf(NULL), fromoffsets(NULL),
         bufsz(0), signature(0) {}
 
     void
     setBufferSize(size_t bufferSize) {
         bufsz = bufferSize;
 
-        buf = new char[bufsz];
+        buf = new char[2 * bufsz];
+        outbuf = buf + bufsz;
 
         // +1 for an added U+FEFF in the intermediate Unicode buffer
         fromoffsets = new int32_t[bufsz + 1];
@@ -573,7 +574,7 @@ public:
 private:
     friend int main(int argc, char **argv);
 
-    char *buf;
+    char *buf, *outbuf;
     int32_t *fromoffsets;
 
     size_t bufsz;
@@ -925,12 +926,12 @@ ConvertFile::convertFile(const char *pname,
             unibuf = unibufbp = u.getBuffer();
 
             do {
-                bufp = buf;
+                bufp = outbuf;
 
                 // Use fromSawEndOfBytes in addition to the flush flag -
                 // it indicates whether the intermediate Unicode string
                 // contains the very last UChars for the very last input bytes.
-                ucnv_fromUnicode(convto, &bufp, buf + bufsz,
+                ucnv_fromUnicode(convto, &bufp, outbuf + bufsz,
                                  &unibufbp,
                                  unibuf + ulen,
                                  NULL, (UBool)(flush && fromSawEndOfBytes), &err);
@@ -985,7 +986,7 @@ ConvertFile::convertFile(const char *pname,
                         // be different from what the offsets refer to.
 
                         // output file offset
-                        ferroffset = (int32_t)(outfoffset + (bufp - buf));
+                        ferroffset = (int32_t)(outfoffset + (bufp - outbuf));
                         errtag = "problemCvtFromUOut";
                     }
 
@@ -1025,8 +1026,8 @@ ConvertFile::convertFile(const char *pname,
                 // looping until they are; message key "premEnd" now obsolete.
 
                 // Finally, write the converted buffer to the output file
-                size_t outlen = (size_t) (bufp - buf);
-                outfoffset += (int32_t)(wr = fwrite(buf, 1, outlen, outfile));
+                size_t outlen = (size_t) (bufp - outbuf);
+                outfoffset += (int32_t)(wr = fwrite(outbuf, 1, outlen, outfile));
                 if (wr != outlen) {
                     UnicodeString str(strerror(errno));
                     initMsg(pname);
