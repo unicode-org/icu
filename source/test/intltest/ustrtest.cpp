@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2002, International Business Machines Corporation and
+ * Copyright (c) 1997-2003, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -63,11 +63,19 @@ UnicodeStringTest::TestBasicManipulation()
 {
     UnicodeString   test1("Now is the time for all men to come swiftly to the aid of the party.\n");
     UnicodeString   expectedValue;
+    UnicodeString   *c;
 
+    c=(UnicodeString *)test1.clone();
     test1.insert(24, "good ");
     expectedValue = "Now is the time for all good men to come swiftly to the aid of the party.\n";
     if (test1 != expectedValue)
         errln("insert() failed:  expected \"" + expectedValue + "\"\n,got \"" + test1 + "\"");
+
+    c->insert(24, "good ");
+    if(*c != expectedValue) {
+        errln("clone()->insert() failed:  expected \"" + expectedValue + "\"\n,got \"" + *c + "\"");
+    }
+    delete c;
 
     test1.remove(41, 8);
     expectedValue = "Now is the time for all good men to come to the aid of the party.\n";
@@ -1117,10 +1125,18 @@ UnicodeStringTest::TestStackAllocation()
     if(test->length() != 2 || test->charAt(0) != 0x20ac || test->charAt(1) != 0x125) {
         errln("UnicodeString.setTo(readonly alias) does not alias correctly");
     }
+
+    UnicodeString *c=(UnicodeString *)test->clone();
+
     workingBuffer[1] = 0x109;
     if(test->charAt(1) != 0x109) {
         errln("UnicodeString.setTo(readonly alias) made a copy: did not see change in buffer");
     }
+
+    if(c->length() != 2 || c->charAt(1) != 0x125) {
+        errln("clone(alias) did not copy the buffer");
+    }
+    delete c;
 
     test->setTo(TRUE, workingBuffer, -1);
     if(test->length() != 2 || test->charAt(0) != 0x20ac || test->charAt(1) != 0x109) {

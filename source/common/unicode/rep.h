@@ -1,6 +1,6 @@
 /*
 **************************************************************************
-* Copyright (C) 1999-2001, International Business Machines Corporation and
+* Copyright (C) 1999-2003, International Business Machines Corporation and
 * others. All Rights Reserved.
 **************************************************************************
 *   Date        Name        Description
@@ -178,6 +178,23 @@ public:
      */
     virtual UBool hasMetaData() const;
 
+    /**
+     * Clone this object, an instance of a subclass of Replaceable.
+     * Clones can be used concurrently in multiple threads.
+     * If a subclass does not implement clone(), or if an error occurs,
+     * then NULL is returned.
+     * The clone functions in all subclasses return a pointer to a Replaceable
+     * because some compilers do not support covariant (same-as-this)
+     * return types; cast to the appropriate subclass if necessary.
+     * The caller must delete the clone.
+     *
+     * @return a clone of this object
+     *
+     * @see getDynamicClassID
+     * @draft ICU 2.6
+     */
+    virtual Replaceable *clone() const;
+
 protected:
 
     /**
@@ -224,7 +241,7 @@ Replaceable::char32At(int32_t offset) const {
     return getChar32At(offset);
 }
 
-// See unistr.cpp for Replaceable::hasMetaData()
+// There is no rep.cpp, see unistr.cpp for Replaceable function implementations.
 
 U_NAMESPACE_END
 

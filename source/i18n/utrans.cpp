@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-*   Copyright (C) 1997-2001, International Business Machines
+*   Copyright (C) 1997-2003, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 *   Date        Name        Description
@@ -35,12 +35,8 @@
 U_NAMESPACE_BEGIN
 class ReplaceableGlue : public Replaceable {
 
-    UChar *buf;
-    int32_t bufLen;
     UReplaceable *rep;
     UReplaceableCallbacks *func;
-
-    enum { BUF_PAD = 8 };
 
     /**
      * The address of this static class variable serves as this class's ID
@@ -64,6 +60,8 @@ public:
                                 UnicodeString& target) const;
 
     virtual void copy(int32_t start, int32_t limit, int32_t dest);
+
+    // virtual Replaceable *clone() const { return NULL; } same as default
 
     /**
      * ICU "poor man's RTTI", returns a UClassID for the actual class.
@@ -97,13 +95,9 @@ ReplaceableGlue::ReplaceableGlue(UReplaceable *replaceable,
 {
     this->rep = replaceable;
     this->func = funcCallback;
-    buf = 0;
-    bufLen = 0;
 }
 
-ReplaceableGlue::~ReplaceableGlue() {
-    uprv_free(buf);
-}
+ReplaceableGlue::~ReplaceableGlue() {}
 
 int32_t ReplaceableGlue::getLength() const {
     return (*func->length)(rep);
@@ -120,14 +114,7 @@ UChar32 ReplaceableGlue::getChar32At(int32_t offset) const {
 void ReplaceableGlue::handleReplaceBetween(int32_t start,
                           int32_t limit,
                           const UnicodeString& text) {
-    int32_t len = text.length();
-    if (buf == 0 || bufLen < len) {
-        uprv_free(buf);
-        bufLen = len + BUF_PAD;
-        buf = (UChar*) uprv_malloc(sizeof(UChar) * bufLen);
-    }
-    text.extract(0, len, buf);
-    (*func->replace)(rep, start, limit, buf, len);
+    (*func->replace)(rep, start, limit, text.getBuffer(), text.length());
 }
 
 void ReplaceableGlue::extractBetween(int32_t start,
