@@ -38,6 +38,30 @@
 *******************************************************************************
 */
 
+/* include system headers */
+#ifdef WIN32
+#   include <wtypes.h>
+#   include <winnls.h>
+#   include "locmap.h"
+#elif defined(OS2)
+#   define INCL_DOSMISC
+#   define INCL_DOSERRORS
+#   include <os2.h>
+#elif defined(OS400)
+#   include <float.h>
+#elif defined(XP_MAC)
+#   include <Files.h>
+#   include <IntlResources.h>
+#   include <Script.h>
+#elif defined(AIX)
+#   include <sys/ldr.h>
+#elif defined(SOLARIS) || defined(LINUX)
+#   include <dlfcn.h>
+#elif defined(HPUX)
+#   include <dl.h>
+#endif
+
+/* include standard headers */
 #include <time.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -45,28 +69,14 @@
 #include <math.h>
 #include <locale.h>
 
+/* include ICU headers */
 #include "utypes.h"
-
 #include "umutex.h"
 #include "cmemory.h"
 #include "cstring.h"
+#include "filestrm.h"
 
-#ifdef OS400
-#include <float.h>
-#endif
-
-#ifdef XP_MAC
-#include "Files.h"
-#include "IntlResources.h"
-#include "Script.h"
-#endif
-
-
-#ifdef WIN32
-#include "locmap.h"
-#include <wtypes.h>
-#include <winnls.h>
-#endif
+/* floating point implementations ------------------------------------------- */
 
 /* We return QNAN rather than SNAN*/
 #ifdef IEEE_754
@@ -644,89 +654,392 @@ icu_tzname(int index)
 #endif
 }
 
-const char* 
-icu_getDefaultDataDirectory()
-{
-#ifdef POSIX
-  static char *PATH = 0;
-#ifndef OS390
-  if(PATH == 0) {
-    umtx_lock(NULL);
-    if(PATH == 0) {
-#endif
-      /* Normally, the locale and converter data will be installed in
-         the same tree as the ICU libraries - typically /usr/local/lib
-         for the libraries, /usr/local/include for the headers, and
-         /usr/local/share for the binary data.  However, the directory
-         where the ICU looks for the binary data can be overridden by
-         setting the environment variable ICU_DATA */
-      char *dir = getenv("ICU_DATA");
+/* Get and set the ICU data directory --------------------------------------- */
 
-      /* If the environment variable is set, use it */
-      if(dir != 0) {
-        PATH = dir;
-      }
-      /* Otherwise, use the compiled in default */
-      else {
-        PATH = ICU_DATA_DIR;
-      }
+static bool_t
+gHaveDataDirectory=FALSE;
+
+static char
+gDataDirectory[1024];
+
+/*
+ * Here, we use a mutex to make sure that setting the data directory
+ * is thread-safe; however, reading it after calling u_getDataDirectory()
+ * may still occur while it is (re)set and is therefore not thread-safe.
+ * The best is to not call it after the initialization.
+ */
+U_CAPI void U_EXPORT2
+u_setDataDirectory(const char *directory) {
+    if(directory!=NULL) {
+        int length=icu_strlen(directory);
+
+        if(length<sizeof(gDataDirectory)-1) {
+            umtx_lock(NULL);
+            if(length==0) {
+                *gDataDirectory=0;
+            } else {
+                icu_memcpy(gDataDirectory, directory, length);
+
+                /* terminate the directory with a separator (/ or \) */
+                if(gDataDirectory[length-1]!=U_FILE_SEP_CHAR) {
+                    gDataDirectory[length++]=U_FILE_SEP_CHAR;
+                }
+
+                /* zero-terminate it */
+                gDataDirectory[length]=0;
+            }
+            gHaveDataDirectory=TRUE;
+            umtx_unlock(NULL);
+        }
     }
-#ifndef OS390
-  }
-    umtx_unlock(NULL);
-  }
-#endif
-  return PATH;
-#endif
-
-#ifdef OS400
-  return "/icu/data/";
-#endif
-
-#ifdef XP_MAC
-  static char path[256];
-  char* mainDir;
-  char* relPath = ":icu:data:";
-  
-  Str255 volName;
-  int16_t volNum;
-  OSErr err = GetVol( volName, &volNum );
-  if (err != noErr) 
-    volName[0] = 0;
-  mainDir = (char*) &(volName[1]);
-  mainDir[volName[0]] = 0;
-  int32_t lenMainDir = strlen( mainDir );
-  int32_t lenRelPath = strlen( relPath );
-  if (sizeof(path) < lenMainDir + lenRelPath + 2) { 
-    path[0] = 0; 
-    return path; 
-  }
-  icu_strcpy( path, mainDir );
-  icu_strcat( path, relPath );
-  
-  return path;
-#endif
-
-#ifdef WIN32
-  char * dpath;
-  dpath = getenv("ICU_DATA");
-  if (!dpath || !*dpath)
-      return "\\icu\\data\\";
-  return dpath;
-#endif
-
-#ifdef OS2
-  char * dpath;
-  dpath = getenv("ICU_DATA");
-  if (!dpath || !*dpath)
-      return "\\icu\\data\\";
-  return dpath;
-#endif
-
-
 }
 
-/* Macintosh-specific locale information */
+/*
+ * get the system drive or volume path
+ * (Windows: e.g. "C:" or "D:")
+ * do not terminate with a U_FILE_SEP_CHAR separator
+ * return the length of the path, or 0 if none
+ */
+static int
+getSystemPath(char *path, int size) {
+#   if defined(XP_MAC)
+        int16_t volNum;
+
+        path[0]=0;
+        OSErr err=GetVol(path, &volNum);
+        if(err!=noErr) {
+            int length=(uint8_t)volName[0];
+            if(length>0) {
+                /* convert the Pascal string to a C string */
+                icu_memmove(path, path+1, length);
+                path[length]=0;
+            }
+            return length;
+        }
+#   elif defined(WIN32)
+        if(GetSystemDirectory(path, size)>=2 && path[1]==':') {
+            /* remove the rest of the path - "\\winnt\\system32" or similar */
+            path[2]=0;
+            return 2;
+        }
+#   elif defined(OS2)
+        APIRET rc;
+        ULONG bootDrive=0;  /* 1=A, 2=B, 3=C, ... */
+    
+        rc=DosQuerySysInfo(QSV_BOOT_DRIVE, QSV_BOOT_DRIVE, (PVOID)&bootDrive, sizeof(ULONG));
+        if(rc==NO_ERROR) {
+            /* convert the numeric boot drive to a string */
+            path[0]='A'+bootDrive-1;
+            path[1]=':';
+            path[2]=0;
+            return 2;
+        }
+#   endif
+    return 0;
+}
+
+/*
+ * get the path to the ICU dynamic library
+ * do not terminate with a U_FILE_SEP_CHAR separator
+ * return the length of the path, or 0 if none
+ */
+static int
+getLibraryPath(char *path, int size) {
+#   ifdef WIN32
+        HINSTANCE mod=GetModuleHandle("icuuc.dll");
+        if(mod!=NULL) {
+            if(GetModuleFileName(mod, path, size)>0) {
+                /* remove the basename and the last file separator */
+                char *lastSep=icu_strrchr(path, U_FILE_SEP_CHAR);
+                if(lastSep!=NULL) {
+                    *lastSep=0;
+                    return lastSep-path;
+                }
+            }
+        }
+#   elif defined(OS2)
+#   elif defined(OS390)
+#   elif defined(OS400)
+#   elif defined(XP_MAC)
+#   elif defined(SOLARIS)
+        void *handle=dlopen("libicuuc.so", RTLD_LAZY);
+        if(handle!=NULL) {
+            Link_map *p=NULL;
+            char *s;
+            int rc, length=0;
+
+            /* get the Link_map list */
+            rc=dlinfo(handle, RTLD_DI_LINKMAP, (void *)&p);
+            if(rc>=0) {
+                /* search for the list item for the library itself */
+                while(p!=NULL) {
+                    s=icu_strstr(p->l_name, "libicuuc.so");
+                    if(s!=NULL) {
+                        if(s>p->l_name) {
+                            /* copy the path, without the basename and the last separator */
+                            length=(s-p->l_name)-1;
+                            if(0<length && length<size) {
+                                icu_memcpy(path, p->l_name, length);
+                                path[length]=0;
+                            } else {
+                                length=0;
+                            }
+                        }
+                        break;
+                    }
+                    p=p->l_next;
+                }
+            }
+            dlclose(handle);
+            return length;
+        }
+#   elif defined(LINUX)
+#   elif defined(AIX)
+        void *handle=load("libicuuc.a", L_LIBPATH_EXEC, ".");
+        if(handle!=NULL) {
+            uint8_t buffer[4096];
+            struct ld_info *p=NULL;
+            char *s;
+            int rc, length=0;
+
+            /* copy the linked list of loaded libraries into the buffer */
+            rc=loadquery(L_GETINFO, buffer, sizeof(buffer));
+            if(rc>=0) {
+                /* search for the list item for the library itself */
+                p=(struct ld_info *)buffer;
+                for(;;) {
+                    /* advance (ignore the first list item) */
+                    if(p->ldinfo_next==0) {
+                        break;
+                    }
+                    p=(struct ld_info *)((uint8_t *)p+p->ldinfo_next);
+
+                    s=icu_strstr(p->ldinfo_filename, "libicuuc.a");
+                    if(s!=NULL) {
+                        if(s>p->ldinfo_filename) {
+                            /* copy the path, without the basename and the last separator */
+                            length=(s-p->ldinfo_filename)-1;
+                            if(0<length && length<size) {
+                                icu_memcpy(path, p->ldinfo_filename, length);
+                                path[length]=0;
+                            } else {
+                                length=0;
+                            }
+                        }
+                        break;
+                    }
+                    p=p->l_next;
+                }
+            }
+            unload(handle);
+            return length;
+        }
+#   elif defined(HPUX)
+        shl_descriptor *p=NULL;
+        char *s;
+        int i=1, rc, length=0;
+
+        /* walk the list of shared libraries */
+        /* search for the list item for the library itself */
+        for(;;) {
+            rc=shl_get(i, &p);
+            if(rc<0) {
+                break;
+            }
+
+            s=icu_strstr(p->filename, "libicuuc.sl");
+            if(s!=NULL) {
+                if(s>p->l_name) {
+                    /* copy the path, without the basename and the last separator */
+                    length=(s-p->l_name)-1;
+                    if(0<length && length<size) {
+                        icu_memcpy(path, p->l_name, length);
+                        path[length]=0;
+                    } else {
+                        length=0;
+                    }
+                }
+                break;
+            }
+            ++i;
+        }
+        return length;
+#   elif defined(TANDEM)
+#   elif defined(POSIX)
+#   endif
+    return 0;
+}
+
+/*
+ * search for the ICU dynamic library and set the path
+ * do not terminate with a U_FILE_SEP_CHAR separator
+ * return the length of the path, or 0 if none
+ */
+static int
+findLibraryPath(char *path, int size) {
+#   ifdef WIN32
+#       define LIB_PATH_VAR "PATH"
+#       define LIB_FILENAME "icuuc.dll"
+#   elif defined(OS2)
+#       define LIB_PATH_VAR "LIBPATH"
+#       define LIB_FILENAME "icuuc.dll"
+#   elif defined(OS390)
+#       define LIB_PATH_VAR "LIBPATH"
+#       define LIB_FILENAME "libicuuc.a"
+#   elif defined(OS400)
+#   elif defined(XP_MAC)
+#   elif defined(SOLARIS)
+#   elif defined(LINUX)
+#       define LIB_PATH_VAR "LD_LIBRARY_PATH"
+#       define LIB_FILENAME "libicuuc.so"
+#   elif defined(AIX)
+#   elif defined(HPUX)
+#   elif defined(TANDEM)
+#       define LIB_PATH_VAR "LIBPATH"
+#       define LIB_FILENAME "libicuuc.a"
+#   elif defined(POSIX)
+#       define LIB_PATH_VAR "LIBPATH"
+#       define LIB_FILENAME "libicuuc.so"
+#   endif
+
+    /* common implementation for searching the library path */
+#   ifdef LIB_FILENAME
+        const char *libPath=getenv(LIB_PATH_VAR);
+
+        if(libPath!=NULL) {
+            /* loop over all paths */
+            FileStream *f;
+            const char *end;
+            int length;
+
+            for(;;) {
+                /* find the end of the path */
+                end=libPath;
+                while(*end!=0 && *end!=U_PATH_SEP_CHAR) {
+                    ++end;
+                }
+
+                if(end!=libPath) {
+                    /* try this non-empty path */
+                    length=end-libPath;
+
+                    /* do not terminate the path */
+                    if(*(end-1)==U_FILE_SEP_CHAR) {
+                        --length;
+                    }
+
+                    /* copy the path and add the library filename */
+                    icu_memcpy(path, libPath, length);
+                    icu_strcpy(path+length, U_FILE_SEP_STRING LIB_FILENAME);
+
+                    /* does this file exist in this path? */
+                    f=T_FileStream_open(path, "rb");
+                    if(f!=NULL) {
+                        /* yes, clean up and return */
+                        T_FileStream_close(f);
+                        path[length]=0;
+                        return length;
+                    }
+                }
+
+                if(*end==0) {
+                    break;  /* no more path */
+                }
+
+                /* *end==U_PATH_SEP_CHAR, go to the next path */
+                libPath=end+1;
+            }
+        }
+#   endif
+    return 0;
+}
+
+U_CAPI const char * U_EXPORT2
+u_getDataDirectory(void) {
+    /* if we have the directory, then return it immediately */
+    if(!gHaveDataDirectory) {
+        /* we need to look for it */
+        char pathBuffer[1024];
+        char *path;
+        int length;
+
+#       if !defined(OS400) && !defined(XP_MAC)
+            /* first try to get the environment variable */
+            path=getenv("ICU_DATA");
+#       endif
+
+#       ifdef WIN32
+            /* next, try to read the path from the registry */
+            if(path==NULL || *path==0) {
+                HKEY key;
+
+                if(ERROR_SUCCESS==RegOpenKeyEx(HKEY_LOCAL_MACHINE, "SOFTWARE\\IBM\\Unicode\\Data", 0, KEY_QUERY_VALUE, &key)) {
+                    DWORD type=REG_EXPAND_SZ, size=sizeof(pathBuffer);
+
+                    if(ERROR_SUCCESS==RegQueryValueEx(key, "Path", NULL, &type, pathBuffer, &size) && size>1) {
+                        if(type==REG_EXPAND_SZ) {
+                            /* replace environment variable references by their values */
+                            char temporaryPath[1024];
+
+                            /* copy the path with variables to the temporary one */
+                            icu_memcpy(temporaryPath, pathBuffer, size);
+
+                            /* do the replacement and store it in the pathBuffer */
+                            size=ExpandEnvironmentStrings(temporaryPath, pathBuffer, sizeof(pathBuffer));
+                            if(size>0 && size<sizeof(pathBuffer)) {
+                                path=pathBuffer;
+                            }
+                        } else if(type==REG_SZ) {
+                            path=pathBuffer;
+                        }
+                    }
+                    RegCloseKey(key);
+                }
+            }
+#       endif
+
+        /* next, try to get the path to the ICU dynamic library */
+        if(path==NULL || *path==0) {
+            length=getLibraryPath(pathBuffer, sizeof(pathBuffer));
+            if(length>0) {
+                icu_strcpy(pathBuffer+length, U_FILE_SEP_STRING "icu" U_FILE_SEP_STRING "data" U_FILE_SEP_STRING);
+                path=pathBuffer;
+            }
+        }
+
+        /* next, search for the ICU dynamic library */
+        if(path==NULL || *path==0) {
+            length=findLibraryPath(pathBuffer, sizeof(pathBuffer));
+            if(length>0) {
+                icu_strcpy(pathBuffer+length, U_FILE_SEP_STRING "icu" U_FILE_SEP_STRING "data" U_FILE_SEP_STRING);
+                path=pathBuffer;
+            }
+        }
+
+        /* last resort: use hardcoded path */
+        if(path==NULL || *path==0) {
+            /* ICU_DATA_DIR may be set as a compile option */
+#           ifdef ICU_DATA_DIR
+                path=ICU_DATA_DIR;
+#           else
+                length=getSystemPath(pathBuffer, sizeof(pathBuffer));
+                if(length>0) {
+                    icu_strcpy(pathBuffer+length, U_FILE_SEP_STRING "icu" U_FILE_SEP_STRING "data" U_FILE_SEP_STRING);
+                    path=pathBuffer;
+                } else {
+                    path=U_FILE_SEP_STRING "icu" U_FILE_SEP_STRING "data" U_FILE_SEP_STRING;
+                }
+#           endif
+        }
+
+        u_setDataDirectory(path);
+    }
+
+    /* we did set the directory if necessary */
+    return gDataDirectory;
+}
+
+/* Macintosh-specific locale information ------------------------------------ */
 #ifdef XP_MAC
 
 struct mac_lc_rec {
