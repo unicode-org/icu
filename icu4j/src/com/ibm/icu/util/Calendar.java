@@ -644,7 +644,7 @@ import java.util.ResourceBundle;
  * @see          GregorianCalendar
  * @see          TimeZone
  * @see          DateFormat
- * @version      $Revision: 1.25 $ $Date: 2002/03/20 05:11:17 $
+ * @version      $Revision: 1.26 $ $Date: 2002/03/29 19:34:20 $
  * @author Mark Davis, David Goldsmith, Chen-Lieh Huang, Alan Liu, Laura Werner
  * @since JDK1.1
  */
@@ -2801,9 +2801,17 @@ public abstract class Calendar implements Serializable, Cloneable {
         int result = 0;
         long targetMs = when.getTime();
         long ms = getTimeInMillis();
+        long start = ms;
+        // Always add from the start millis.  This accomodates
+        // operations like adding years from February 29, 2000 up to
+        // February 29, 2004.  If 1, 1, 1, 1 is added to the year
+        // field, the DOM gets pinned to 28 and stays there, giving an
+        // incorrect DOM difference of 1.  We have to add 1, reset, 2,
+        // reset, 3, reset, 4.
         if (ms < targetMs) {
             for (;;) {
-                add(field, 1);
+                setTimeInMillis(start);
+                add(field, result+1);
                 long newMs = getTimeInMillis();
                 if (newMs > targetMs) {
                     setTimeInMillis(ms);
@@ -2814,7 +2822,8 @@ public abstract class Calendar implements Serializable, Cloneable {
             }
         } else if (ms > targetMs) {
             for (;;) {
-                add(field, -1);
+                setTimeInMillis(start);
+                add(field, result-1);
                 long newMs = getTimeInMillis();
                 if (newMs < targetMs) {
                     setTimeInMillis(ms);

@@ -4,8 +4,8 @@
  * others. All Rights Reserved.
  *******************************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/calendar/IBMCalendarTest.java,v $ 
- * $Date: 2002/02/16 03:05:06 $ 
- * $Revision: 1.6 $
+ * $Date: 2002/03/29 19:33:56 $ 
+ * $Revision: 1.7 $
  *******************************************************************************
  */
 package com.ibm.icu.dev.test.calendar;
@@ -214,5 +214,18 @@ public class IBMCalendarTest extends CalendarTest {
         Calendar cal = Calendar.getInstance();
         cal.set(2004, Calendar.JANUARY, 1);
         doLimitsTest(new GregorianCalendar(), null, cal.getTime(), -10);
+    }
+    
+    /**
+     * Test behavior of fieldDifference around leap years.
+     */
+    public void TestLeapFieldDifference() {
+        Calendar cal = Calendar.getInstance();
+        cal.set(2004, Calendar.FEBRUARY, 29);
+        Date target = cal.getTime();
+        cal.set(2000, Calendar.FEBRUARY, 29);
+        int y = cal.fieldDifference(target, Calendar.YEAR);
+        int d = cal.fieldDifference(target, Calendar.DAY_OF_YEAR);
+        logln("2004/Feb/29 - 2000/Feb/29 = " + y + " years, " + d + " days");
     }
 }
