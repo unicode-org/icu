@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/timezone/TimeZoneRegression.java,v $
- * $Date: 2003/10/02 20:50:59 $
- * $Revision: 1.12 $
+ * $Date: 2003/10/09 22:30:05 $
+ * $Revision: 1.13 $
  *
  *******************************************************************************
  */
@@ -673,6 +673,7 @@ public class TimeZoneRegression extends TestFmwk {
     public void Test4162593() {
         SimpleDateFormat fmt = new SimpleDateFormat("z", Locale.US);
         final int ONE_HOUR = 60*60*1000;
+        final float H = (float) ONE_HOUR;
 	TimeZone initialZone = TimeZone.getDefault();
         SimpleDateFormat sdf = new SimpleDateFormat("MMM dd yyyy HH:mm z"); 
 
@@ -688,15 +689,15 @@ public class TimeZoneRegression extends TestFmwk {
             new SimpleTimeZone(2*ONE_HOUR, "Asia/Damascus" /*EE%sT*/,
                 Calendar.APRIL, 1, 0 /*DOM*/, 0*ONE_HOUR,
                 Calendar.OCTOBER, 1, 0 /*DOM*/, 0*ONE_HOUR, 1*ONE_HOUR),
-            new int[] {98, Calendar.SEPTEMBER, 30, 22, 0},
+            new int[] {1998, Calendar.SEPTEMBER, 30, 22, 0},
             Boolean.TRUE,
 
             asuncion,
-            new int[] {100, Calendar.FEBRUARY, 28, 22, 0},
+            new int[] {2000, Calendar.FEBRUARY, 28, 22, 0},
             Boolean.FALSE,
 
             asuncion,
-            new int[] {100, Calendar.FEBRUARY, 29, 22, 0},
+            new int[] {2000, Calendar.FEBRUARY, 29, 22, 0},
             Boolean.TRUE,
         };
         
@@ -710,24 +711,48 @@ public class TimeZoneRegression extends TestFmwk {
 
             // Must construct the Date object AFTER setting the default zone
             int[] p = (int[])DATA[j+1];
-            java.util.Calendar tempcal = java.util.Calendar.getInstance();
-            tempcal.clear();
-            tempcal.set(p[0] + 1900, p[1], p[2], p[3], p[4]);
-            Date d = tempcal.getTime();
+            Calendar cal = Calendar.getInstance();
+            cal.clear();
+            cal.set(p[0], p[1], p[2], p[3], p[4]);
+            long start = cal.getTime().getTime();
             boolean transitionExpected = ((Boolean)DATA[j+2]).booleanValue();
 
             logln(tz.getID() + ":");
             for (int i=0; i<4; ++i) {
+                Date d = new Date(start + i*ONE_HOUR);
                 zone[i] = fmt.format(d);
-                logln("" + i + ": " + sdf.format(d) + " => " + zone[i]);
-                d = new Date(d.getTime() + ONE_HOUR);
+                logln("" + i + ": " + sdf.format(d) + " => " + zone[i] +
+                      " (" + d.getTime()/H + ")");
+            }
+            cal.set(p[0], p[1], p[2], 0, 0);
+            for (int i=0; i<4; ++i) {
+                int h = 22+i;
+                int dom = p[2]+(h>=24?1:0);
+                h %= 24;
+                int ms = h*ONE_HOUR;
+                cal.clear();
+                cal.set(p[0], p[1], dom, 0, 0);
+                int off = tz.getOffset(GregorianCalendar.AD,
+                                       cal.get(Calendar.YEAR),
+                                       cal.get(Calendar.MONTH),
+                                       cal.get(Calendar.DATE),
+                                       cal.get(Calendar.DAY_OF_WEEK),
+                                       ms);
+                cal.add(Calendar.HOUR, h);
+                int x = cal.get(Calendar.DST_OFFSET);
+                logln("h=" + h + "; dom=" + dom +
+                      "; ZONE_OFFSET=" + cal.get(Calendar.ZONE_OFFSET)/H +
+                      "; DST_OFFSET=" + cal.get(Calendar.DST_OFFSET)/H +
+                      "; getOffset()=" + off/H +
+                      " (" + cal.getTime().getTime()/H + ")");
             }
             if (zone[0].equals(zone[1]) &&
                 (zone[1].equals(zone[2]) != transitionExpected) &&
                 zone[2].equals(zone[3])) {
                 logln("Ok: transition " + transitionExpected);
             } else {
-                errln("Fail: boundary transition incorrect");
+                errln("FAIL: expected " +
+                      (transitionExpected?"transition":"no transition"));
             }
         }
 
