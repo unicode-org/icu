@@ -153,7 +153,7 @@ void TransliterationRuleParser::parseRules(void) {
         }
         // Skip lines starting with the comment character
         if (c == RULE_COMMENT_CHAR) {
-            pos = rules.indexOf("\n", pos) + 1;
+            pos = rules.indexOf((UChar)0x000A /*\n*/, pos) + 1;
             if (pos == 0) {
                 break; // No "\n" found; rest of rule is a commnet
             }
