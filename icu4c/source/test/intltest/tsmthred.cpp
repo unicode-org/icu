@@ -426,14 +426,14 @@ void MultithreadTest::TestMutex()
     //  return; 
 
     if(verbose)
-        printf("Before mutex.");
+        printf("Before mutex.\n");
     {
         Mutex m;
         if(verbose)
-            printf(" Exited 2nd mutex");
+            printf(" Exited 2nd mutex\n");
     }
     if(verbose)
-        printf("exitted 1st mutex. Now testing with threads:");
+        printf("exited 1st mutex. Now testing with threads:");
 
     TestMutexThread1  thread1;
     TestMutexThread2  thread2(thread1);
@@ -443,15 +443,13 @@ void MultithreadTest::TestMutex()
     for(int32_t patience = 12; patience > 0;patience--)
     {
         if(thread1.fDone && verbose)
-            printf("Thread1 done");
+            printf("Thread1 done\n");
 
         if(thread1.fDone && thread2.fDone)
         {
-            char tmp[999];
-            sprintf(tmp,"%lu",thread2.fElapsed);
             if(thread2.fErr)
                 errln("Thread 2 says: thread1 didn't run before I aquired the mutex.");
-            logln("took " + UnicodeString(tmp) + " seconds for thread2 to aquire the mutex.");
+            logln("took %lu seconds for thread2 to aquire the mutex.", thread2.fElapsed);
             return;
         }
         SimpleThread::sleep(1000);
