@@ -43,7 +43,7 @@ enum {
     MBCS_STAGE_2_FIRST_ASSIGNED=MBCS_STAGE_2_BLOCK_SIZE, /* start of the first stage 2 block after the all-unassigned one */
 
     MBCS_MAX_STATE_COUNT=128,
-    MBCS_MAX_FALLBACK_COUNT=1000
+    MBCS_MAX_FALLBACK_COUNT=8192
 };
 
 typedef struct MBCSData {
