@@ -237,7 +237,9 @@ U_CAPI void U_EXPORT2 usearch_close(UStringSearch *strsrch);
 * Search positions that may render incorrect results are highlighted in the
 * header comments
 * @param strsrch search iterator data struct
-* @param position position to start next search from.
+* @param position position to start next search from. If position is less
+* 			than or greater than the text range for searching, 
+*          an U_INDEX_OUTOFBOUNDS_ERROR will be returned
 * @param status error status if any.
 * @draft ICU 2.0
 */
@@ -485,7 +487,8 @@ U_CAPI int32_t U_EXPORT2 usearch_first(UStringSearch *strsrch,
 * the iterator will be adjusted to the index USEARCH_DONE
 * <p>
 * Search positions that may render incorrect results are highlighted in the
-* header comments.
+* header comments. If position is less than or greater than the text range 
+* for searching, an U_INDEX_OUTOFBOUNDS_ERROR will be returned
 * @param strsrch search iterator data struct
 * @param position to start the search at
 * @param status for errors if it occurs
@@ -522,7 +525,8 @@ U_CAPI int32_t U_EXPORT2 usearch_last(UStringSearch *strsrch,
 * the iterator will be adjusted to the index USEARCH_DONE
 * <p>
 * Search positions that may render incorrect results are highlighted in the
-* header comments.
+* header comments. If position is less than or greater than the text range 
+* for searching, an U_INDEX_OUTOFBOUNDS_ERROR will be returned
 * @param strsrch search iterator data struct
 * @param position index position the search is to begin at
 * @param status for errors if it occurs

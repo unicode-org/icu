@@ -59,7 +59,6 @@ struct UStringSearch {
     // iteration.
            UCollationElements *utilIter;
            UBool               ownCollator;
-           UBool               toNormalize;
            UCollationStrength  strength;
            uint32_t            ceMask;
            uint32_t            variableTop;
