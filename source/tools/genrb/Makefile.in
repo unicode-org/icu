@@ -164,14 +164,13 @@ $(TARGET) : $(OBJECTS)
 
 # the 'mv' will always fail if you are building in the source dir
 
-
-ifneq ($(patsubst %clean,,$(MAKECMDGOALS)),)
--include $(DEPS)
-endif
-
-
 all-local:
 install-local:
 
-
-
+ifeq (,$(MAKECMDGOALS))
+-include $(DEPS)
+else
+ifneq ($(patsubst %clean,,$(MAKECMDGOALS)),)
+-include $(DEPS)
+endif
+endif

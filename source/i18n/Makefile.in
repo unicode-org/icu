@@ -117,9 +117,10 @@ Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
 $(TARGET) : $(OBJECTS)
 	$(SHLIB.cc) -o $@ $^ $(LIBS)
 
+ifeq (,$(MAKECMDGOALS))
+-include $(DEPS)
+else
 ifneq ($(patsubst %clean,,$(MAKECMDGOALS)),)
 -include $(DEPS)
 endif
-
-
-
+endif
