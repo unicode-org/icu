@@ -264,7 +264,5 @@ UResourceBundle* CalendarData::getByKey2(const char *key, const char *subKey, UE
     return fFillin;
 }
 
-UOBJECT_DEFINE_RTTI_IMPLEMENTATION(CalendarData)
-
 #endif
 //eof
