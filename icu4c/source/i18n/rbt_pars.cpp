@@ -160,24 +160,12 @@ private:
     int32_t size() const; // size of the UVectors
 };
 
-// Store int32_t as a void* in a UVector.  DO NOT ASSUME sizeof(void*)
-// is 32.  Assume sizeof(void*) >= 32.
-inline void* _int32_to_voidPtr(int32_t x) {
-    void* a = 0; // May be > 32 bits
-    *(int32_t*)&a = x; // Careful here...
-    return a;
-}
-inline int32_t _voidPtr_to_int32(void* x) {
-    void* a = x; // Copy to stack (portability)
-    return *(int32_t*)&a; // Careful here...
-}
-
 int32_t Segments::offset(int32_t i) const {
-    return _voidPtr_to_int32(offsets.elementAt(i));
+    return offsets.elementAti(i);
 }
 
 UBool Segments::isOpen(int32_t i) const {
-    return _voidPtr_to_int32(isOpenParen.elementAt(i)) != 0;
+    return isOpenParen.elementAti(i) != 0;
 }
 
 int32_t Segments::size() const {
@@ -189,8 +177,8 @@ Segments::Segments() {}
 Segments::~Segments() {}
 
 void Segments::addParenthesisAt(int32_t offset, UBool isOpen) {
-    offsets.addElement(_int32_to_voidPtr(offset));
-    isOpenParen.addElement(_int32_to_voidPtr(isOpen ? 1 : 0));
+    offsets.addElement(offset);
+    isOpenParen.addElement(isOpen ? 1 : 0);
 }
 
 int32_t Segments::getLastParenOffset(UBool& isOpenParen) const {
@@ -226,7 +214,7 @@ UBool Segments::extractLastParenSubstring(int32_t& start, int32_t& limit) {
     // Reset all segment pairs from i to size() - 1 to [start, start+1).
     while (i<size()) {
         int32_t o = isOpen(i) ? start : (start+1);
-        offsets.setElementAt(_int32_to_voidPtr(o), i);
+        offsets.setElementAt(o, i);
         ++i;
     }
     return TRUE;
@@ -301,10 +289,10 @@ int32_t* Segments::createArray() const {
         // Close parens are at 2*seg+1 in array 2.
         if (open) {
             array[a2offset + 2*nextOpen] = 2+i;
-            stack.push(_int32_to_voidPtr(nextOpen));
+            stack.push(nextOpen);
             ++nextOpen;
         } else {
-            int32_t nextClose = _voidPtr_to_int32(stack.pop());
+            int32_t nextClose = stack.popi();
             array[a2offset + 2*nextClose+1] = 2+i;
         }
     }
