@@ -132,7 +132,6 @@ void pkg_mode_dll(UPKGOptions *o, FileStream *makefile, UErrorCode *status)
       T_FileStream_writeLine(makefile, "\nDLL_LDFLAGS=$(LD_SONAME) $(RPATH_LDFLAGS) $(BIR_LDFLAGS)\nDLL_DEPS=$(BIR_DEPS)\n");
   } else {
       T_FileStream_writeLine(makefile, "\nDLL_LDFLAGS=$(BIR_LDFLAGS)\nDLL_DEPS=$(BIR_DEPS)\n"); 
-      T_FileStream_writeLine(makefile, "MIDDLE_SO_TARGET=$(TARGET)\n");
   }
   T_FileStream_writeLine(makefile, "\n");
 
@@ -155,6 +154,7 @@ void pkg_mode_dll(UPKGOptions *o, FileStream *makefile, UErrorCode *status)
       T_FileStream_writeLine(makefile, tmp);
   } else {
       T_FileStream_writeLine(makefile, "FINAL_SO_TARGET=$(TARGET)\n");
+      T_FileStream_writeLine(makefile, "MIDDLE_SO_TARGET=$(TARGET)\n");
   }
 
   uprv_strcpy(tmp, "all: $(TARGETDIR)/$(FINAL_SO_TARGET) $(BATCH_TARGET)");
