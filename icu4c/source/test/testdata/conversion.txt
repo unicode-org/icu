@@ -280,5 +280,30 @@ conversion {
         { "UTF-8", "a\U0010FFFF", :bin{ 61F48FBFBF }, :intvector{ 0, 1, 1, 1, 1 }, :int{1}, :int{0}, "", "", "" }
       }
     }
+
+    getUnicodeSet {
+      // charset - will be opened, and ucnv_getUnicodeSet() called on it
+      // map - set of code points and strings that must be in the returned set
+      // mapnot - set of code points and strings that must *not* be in the returned set
+      // which - numeric UConverterUnicodeSet value
+      Headers { "charset", "map", "mapnot", "which" }
+      Cases {
+        {
+          "ibm-1390",
+          "[\x00-\x0d\x10-\u017f\u0254\u309b-\u30ff\u4e00-\u4e05\U00023d00\U000243bc\U0002a6b2"
+              "{\u0254\u0300}{\u0254\u0301}{\u304b\u309a}{\u30ad\u309a}{\u30af\u309a}]",
+          "[\x0e\x0f\u0200-\u024f\U00010000-\U0001ffff\U0002a61b-\U0002a6b1]",
+          :int{0}
+        }
+
+        {
+          "*test3",
+          "[\x05\x0b\xc0\u20ac\U00023456\U00101234"
+              "{\U00101234\U00050005\U00060006}{\U00101234\U00050005}{\U00101234\U00060006}{\xc4\xc4\U00101234\x05}]",
+          "[\x06\x0e\U00034567\U000febcd{\U00101234\U00070007}]",
+          :int{0}
+        }
+      }
+    }
   }
 }
