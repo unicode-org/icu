@@ -1352,7 +1352,7 @@ TestISO_2022_JP() {
         return;
     }
     uSource = &in[0];
-	while(*uSource){
+	while(uSource<uSourceLimit){
 		if(*test!=*uSource){
 			log_err("Expected : \\u%04X \t Got: \\u%04X\n",*uSource,(int)*test) ;
 		}
