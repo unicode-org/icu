@@ -23,9 +23,6 @@
 
 
 /* C exports renaming data */
-#define CONCAT_ESCAPE_EX CONCAT_ESCAPE_EX_2_0
-#define MBCS_FROM_UCHAR32_ISO2022 MBCS_FROM_UCHAR32_ISO2022_2_0
-#define MBCS_SINGLE_FROM_UCHAR32 MBCS_SINGLE_FROM_UCHAR32_2_0
 #define T_CString_integerToString T_CString_integerToString_2_0
 #define T_CString_stricmp T_CString_stricmp_2_0
 #define T_CString_stringToInteger T_CString_stringToInteger_2_0
@@ -974,22 +971,8 @@
 #define _cnttab_getCE _cnttab_getCE_2_0
 #define _cnttab_getContractionTable _cnttab_getContractionTable_2_0
 #define addATableElement addATableElement_2_0
-#define atoll atoll_2_0
-#define indicClassTables indicClassTables_2_0
 #define llong llong_2_0
-#define llong_abs llong_abs_2_0
-#define llong_asDouble llong_asDouble_2_0
-#define llong_asInt llong_asInt_2_0
-#define llong_pow llong_pow_2_0
-#define lltoa lltoa_2_0
 #define locale_set_default_internal locale_set_default_internal_2_0
-#define max max_2_0
-#define operator& operator&_2_0
-#define posAfter posAfter_2_0
-#define posBefore posBefore_2_0
-#define u_atoll u_atoll_2_0
-#define u_lltoa u_lltoa_2_0
-#define ule ule_2_0
 #define unorm_getFCD16 unorm_getFCD16_2_0
 #define unorm_getFCD16FromSurrogatePair unorm_getFCD16FromSurrogatePair_2_0
 #define uprv_cnttab_addContraction uprv_cnttab_addContraction_2_0
