@@ -1789,8 +1789,9 @@ public class CollationMiscTest extends TestFmwk{
     public void TestUCARules() 
     {
        try {
+            // only root locale can have empty tailorings .. not English!
             RuleBasedCollator coll 
-                = (RuleBasedCollator)Collator.getInstance(Locale.ENGLISH);
+                = (RuleBasedCollator)Collator.getInstance(new Locale("","",""));
             String rule 
                 = coll.getRules(false);
             if (!rule.equals("")) {
