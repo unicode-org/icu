@@ -71,12 +71,12 @@ static const char NAME_PROP[] = "na"; // Unicode name property alias
 // these four C99-compatibility properties are implemented
 // as enums/names.
 U_CDECL_BEGIN
-    typedef UBool (U_CALLCONV *_C99_Property_Function)(UChar32);
+    typedef UBool (U_CALLCONV *C99_Property_Function)(UChar32);
 U_CDECL_END
-static const struct _C99_Map {
+static const struct C99_Map {
     const char* name;
-    _C99_Property_Function func;
-} _C99_DISPATCH[] = {
+    C99_Property_Function func;
+} C99_DISPATCH[] = {
     // These three entries omitted; they clash with PropertyAliases
     // names for Unicode properties, so UnicodeSet already maps them
     // to those properties.
@@ -95,7 +95,7 @@ static const struct _C99_Map {
     { "title", u_istitle },
     { "xdigit", u_isxdigit }
 };
-#define _C99_COUNT (9)
+#define C99_COUNT (9)
 
 // TEMPORARY: Remove when deprecated category code constructor is removed.
 static const UChar CATEGORY_NAMES[] = {
@@ -141,8 +141,6 @@ static const UChar CATEGORY_CLOSE[] = {COLON, SET_CLOSE, 0x0000}; /* ":]" */
 
 U_NAMESPACE_BEGIN
 
-UOBJECT_DEFINE_RTTI_IMPLEMENTATION(ParsePosition)
-ParsePosition::~ParsePosition() {}
 SymbolTable::~SymbolTable() {}
 
 /**
@@ -2760,7 +2758,7 @@ static UBool mungeCharName(char* dst, const char* src, int32_t dstCapacity) {
 // these four C99-compatibility properties are implemented
 // as enums/names.
 static UBool c99Filter(UChar32 ch, void* context) {
-    struct _C99_Map* m = (struct _C99_Map*) context;
+    struct C99_Map* m = (struct C99_Map*) context;
     return m->func(ch);
 }
 
@@ -2925,10 +2923,10 @@ UnicodeSet::applyPropertyAlias(const UnicodeString& prop,
                     // TODO: Remove the following special-case code when
                     // these four C99-compatibility properties are implemented
                     // as enums/names.
-                    for (int32_t i=0; i<_C99_COUNT; ++i) {
-                        int32_t c = uprv_comparePropertyNames(pname, _C99_DISPATCH[i].name);
+                    for (int32_t i=0; i<C99_COUNT; ++i) {
+                        int32_t c = uprv_comparePropertyNames(pname, C99_DISPATCH[i].name);
                         if (c == 0) {
-                            applyFilter(c99Filter, (void*) &_C99_DISPATCH[i], ec);
+                            applyFilter(c99Filter, (void*) &C99_DISPATCH[i], ec);
                             return *this;
                         } else if (c < 0) {
                             // Further entries will not match; bail out

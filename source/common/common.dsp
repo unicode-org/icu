@@ -683,6 +683,10 @@ SOURCE=.\uhash_us.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\ustack.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\ustrenum.cpp
 # End Source File
 # Begin Source File
@@ -1602,6 +1606,10 @@ InputPath=.\unicode\parseerr.h
 
 !ENDIF 
 
+# End Source File
+# Begin Source File
+
+SOURCE=.\parsepos.cpp
 # End Source File
 # Begin Source File
 

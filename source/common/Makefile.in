@@ -53,23 +53,23 @@ DEFS += -DU_COMMON_IMPLEMENTATION
 # $(LIBICUDT) is either stub data or the real DLL common data.
 LIBS = $(LIBICUDT) $(DEFAULT_LIBS)
 
-OBJECTS = putil.o uobject.o locmap.o umutex.o \
-udata.o ucmndata.o udatamem.o udataswp.o umapfile.o filestrm.o \
-uresbund.o uresdata.o resbund.o cwchar.o uloc.o locid.o uhash.o uhash_us.o \
+OBJECTS = putil.o uobject.o cmemory.o umutex.o \
+udata.o ucmndata.o udatamem.o udataswp.o umapfile.o \
+uresbund.o uresdata.o resbund.o ucat.o locmap.o uloc.o locid.o \
+uhash.o uhash_us.o \
 ucnv.o ucnv_bld.o ucnv_cb.o ucnv_cnv.o ucnv_err.o ucnv_io.o ucnvlat1.o \
-ucnv_u7.o ucnv_u8.o ucnv_u16.o ucnv_u32.o \
-ucnvmbcs.o ucnv2022.o ucnvhz.o ucnv_lmb.o ucnvscsu.o \
-ucnvbocu.o ucnvisci.o \
+ucnv_u7.o ucnv_u8.o ucnv_u16.o ucnv_u32.o ucnvscsu.o ucnvbocu.o \
+ucnvmbcs.o ucnv2022.o ucnvhz.o ucnv_lmb.o ucnvisci.o \
 unistr.o utf_impl.o ustring.o ustrcase.o cstring.o ustrfmt.o ustrtrns.o \
 normlzr.o unorm.o unorm_it.o chariter.o schriter.o uchriter.o uiter.o \
 uchar.o uprops.o propname.o ubidi.o ubidiwrt.o ubidiln.o ushape.o unames.o \
-ucln_cmn.o uscript.o usc_impl.o umemstrm.o ucmp8.o uvector.o uvectr32.o digitlst.o \
+ucln_cmn.o uscript.o usc_impl.o uvector.o ustack.o uvectr32.o ucmp8.o \
+uarrsort.o utrie.o uset.o uniset.o caniter.o unifilt.o unifunct.o usetiter.o \
 brkiter.o brkdict.o ubrk.o dbbi.o dbbi_tbl.o \
 rbbi.o rbbidata.o rbbinode.o rbbirb.o rbbiscan.o rbbisetb.o rbbistbl.o rbbitblb.o \
-uarrsort.o utrie.o uset.o cmemory.o caniter.o \
-unifilt.o unifunct.o uniset.o usetiter.o util.o uenum.o \
-icuserv.o iculserv.o icunotif.o ustrenum.o \
-uidna.o usprep.o punycode.o ucat.o
+icuserv.o iculserv.o icunotif.o uenum.o ustrenum.o \
+uidna.o usprep.o punycode.o \
+cwchar.o filestrm.o umemstrm.o digitlst.o util.o parsepos.o 
 
 STATIC_OBJECTS = $(OBJECTS:.o=.$(STATIC_O))
 
