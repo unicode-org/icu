@@ -2258,3 +2258,726 @@ const UConverterSharedData _UTF32LEData = {
     NULL, NULL, &_UTF32LEStaticData, FALSE, &_UTF32LEImpl, 
     0
 };
+
+/* UTF-7 -------------------------------------------------------------------- */
+
+/* ### TODO: document version option (=1 for escaping set O characters) */
+/*
+ * UTF-7 is a stateful encoding of Unicode, somewhat like UTF7.
+ * It is defined in RFC 2152  http://www.imc.org/rfc2152 .
+ * It was intended for use in Internet email systems, using in its bytewise
+ * encoding only a subset of 7-bit US-ASCII.
+ * UTF-7 is deprecated in favor of UTF-8/16/32 and UTF7, but still
+ * occasionally used.
+ */
+
+/*
+ * Tests for US-ASCII characters belonging to character classes
+ * defined in UTF-7.
+ *
+ * Set D (directly encoded characters) consists of the following
+ * characters: the upper and lower case letters A through Z
+ * and a through z, the 10 digits 0-9, and the following nine special
+ * characters (note that "+" and "=" are omitted):
+ *     '(),-./:?
+ *
+ * Set O (optional direct characters) consists of the following
+ * characters (note that "\" and "~" are omitted):
+ *     !"#$%&*;<=>@[]^_`{|}
+ */
+#define inSetD(c) \
+    ((uint8_t)((c)-97)<26 || (uint8_t)((c)-65)<26 || /* letters */ \
+     (uint8_t)((c)-48)<10 ||  /* digits */ \
+     (uint8_t)((c)-39)<3 ||     /* '() */ \
+     (uint8_t)((c)-44)<4 ||     /* ,-./ */ \
+     (c)==58 || (c)==63         /* :? */ \
+    )
+
+#define inSetO(c) \
+    ((uint8_t)((c)-33)<6 ||         /* !"#$%& */ \
+     (uint8_t)((c)-59)<4 ||         /* ;<=> */ \
+     (uint8_t)((c)-93)<4 ||         /* ]^_` */ \
+     (uint8_t)((c)-123)<3 ||        /* {|} */ \
+     (c)==42 || (c)==64 || (c)==91  /* *@[ */ \
+    )
+
+#define isCRLFTAB(c) ((c)==13 || (c)==10 || (c)==9)
+#define isCRLFSPTAB(c) ((c)==32 || (c)==13 || (c)==10 || (c)==9)
+
+#define PLUS  43
+#define MINUS 45
+#define BACKSLASH 92
+#define TILDE 126
+
+static const uint8_t
+toBase64[64]={
+    /* A-Z */
+    65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77,
+    78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90,
+    /* a-z */
+    97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109,
+    110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122,
+    /* 0-9 */
+    48, 49, 50, 51, 52, 53, 54, 55, 56, 57,
+    /* +/ */
+    43, 47
+};
+
+static const int8_t
+fromBase64[128]={
+    /* C0 controls */
+    -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+    -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+
+    /* general punctuation with + and / and a special value (-2) for - */
+    -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 62, -1, -2, -1, 63,
+    /* digits */
+    52, 53, 54, 55, 56, 57, 58, 59, 60, 61, -1, -1, -1, -1, -1, -1,
+
+    /* A-Z */
+    -1,  0,  1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14,
+    15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, -1, -1, -1, -1, -1,
+
+    /* a-z */
+    -1, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40,
+    41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, -1, -1, -1, -1, -1,
+};
+
+/*
+ * converter status values:
+ *
+ * toUnicodeStatus:
+ *     24 inDirectMode (boolean)
+ * 23..16 base64Counter (-1..7)
+ * 15..0  bits (up to 14 bits incoming base64)
+ *
+ * fromUnicodeStatus:
+ * 31..28 version (0: set O direct  1: set O escaped)
+ *     24 inDirectMode (boolean)
+ * 23..16 base64Counter (0..2)
+ *  7..0  bits (6 bits outgoing base64)
+ *
+ */
+
+U_CFUNC void
+_UTF7Reset(UConverter *cnv, UConverterResetChoice choice) {
+    if(choice<=UCNV_RESET_TO_UNICODE) {
+        /* reset toUnicode */
+        cnv->toUnicodeStatus=0x1000000; /* inDirectMode=TRUE */
+        cnv->invalidCharLength=0;
+    }
+    if(choice!=UCNV_RESET_TO_UNICODE) {
+        /* reset fromUnicode */
+        cnv->fromUnicodeStatus=(cnv->fromUnicodeStatus&0xf0000000)|0x1000000; /* keep version, inDirectMode=TRUE */
+    }
+}
+
+U_CFUNC void
+_UTF7Open(UConverter *cnv,
+          const char *name,
+          const char *locale,
+          uint32_t options,
+          UErrorCode *pErrorCode) {
+    if((options&0xf)<=1) {
+        cnv->fromUnicodeStatus=(options&0xf)<<28;
+        _UTF7Reset(cnv, UCNV_RESET_BOTH);
+    } else {
+        *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
+    }
+}
+
+/* ### TODO: check/test callback behavior */
+U_CFUNC void
+_UTF7ToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
+                          UErrorCode *pErrorCode) {
+    UConverter *cnv;
+    const uint8_t *source, *sourceLimit;
+    UChar *target;
+    const UChar *targetLimit;
+    int32_t *offsets;
+
+    uint8_t *bytes;
+    uint8_t byteIndex;
+
+    int32_t length, targetCapacity;
+
+    /* UTF-7 state */
+    uint16_t bits;
+    int8_t base64Counter;
+    UBool inDirectMode;
+
+    int8_t base64Value;
+
+    int32_t sourceIndex, nextSourceIndex;
+
+    uint8_t b;
+
+    /* set up the local pointers */
+    cnv=pArgs->converter;
+
+    source=(const uint8_t *)pArgs->source;
+    sourceLimit=(const uint8_t *)pArgs->sourceLimit;
+    target=pArgs->target;
+    targetLimit=pArgs->targetLimit;
+    offsets=pArgs->offsets;
+
+    /* get the state machine state */
+    {
+        uint32_t status=cnv->toUnicodeStatus;
+        inDirectMode=(UBool)((status>>24)&1);
+        base64Counter=(int8_t)(status>>16);
+        bits=(uint16_t)status;
+    }
+    bytes=cnv->toUBytes;
+    byteIndex=cnv->toULength;
+
+    /* sourceIndex=-1 if the current character began in the previous buffer */
+    sourceIndex=byteIndex==0 ? 0 : -1;
+    nextSourceIndex=0;
+
+loop:
+    if(inDirectMode) {
+directMode:
+        /*
+         * In Direct Mode, most US-ASCII characters are encoded directly, i.e.,
+         * with their US-ASCII byte values.
+         * Backslash and Tilde and most control characters are not allowed in UTF-7.
+         * A plus sign starts Unicode (or "escape") Mode.
+         *
+         * In Direct Mode, only the sourceIndex is used.
+         */
+        byteIndex=0;
+        length=sourceLimit-source;
+        targetCapacity=targetLimit-target;
+        if(length>targetCapacity) {
+            length=targetCapacity;
+        }
+        while(length>0) {
+            b=*source++;
+            if((uint8_t)(b-32)>=96 && !isCRLFTAB(b) || b==BACKSLASH || b==TILDE) {
+                /* illegal */
+                bytes[0]=b;
+                byteIndex=1;
+                nextSourceIndex=sourceIndex+1;
+                goto callback;
+            } else if(b!=PLUS) {
+                /* write directly encoded character */
+                *target++=b;
+                if(offsets!=NULL) {
+                    *offsets++=sourceIndex++;
+                }
+            } else {
+                /* switch to Unicode mode */
+                nextSourceIndex=++sourceIndex;
+                inDirectMode=FALSE;
+                byteIndex=0;
+                bits=0;
+                base64Counter=-1;
+                goto unicodeMode;
+            }
+            --length;
+        }
+        if(source<sourceLimit && target>=targetLimit) {
+            /* target is full */
+            *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
+        }
+    } else {
+unicodeMode:
+        /*
+         * In Unicode (or "escape") Mode, UTF-16BE is base64-encoded.
+         * The base64 sequence ends with any character that is not in the base64 alphabet.
+         * A terminating minus sign is consumed.
+         *
+         * In Unicode Mode, the sourceIndex has the index to the start of the current
+         * base64 bytes, while nextSourceIndex is precisely parallel to source,
+         * keeping the index to the following byte.
+         * Note that in 2 out of 3 cases, UChars overlap within a base64 byte.
+         */
+        while(source<sourceLimit) {
+            if(target<targetLimit) {
+                bytes[byteIndex++]=b=*source++;
+                ++nextSourceIndex;
+                if((uint8_t)(b-32)>=96 && !isCRLFTAB(b) || b==BACKSLASH || b==TILDE) {
+                    /* illegal */
+                    inDirectMode=TRUE;
+                    goto callback;
+                } else if((base64Value=fromBase64[b])>=0) {
+                    /* collect base64 bytes into UChars */
+                    switch(base64Counter) {
+                    case -1: /* -1 is immediately after the + */
+                    case 0:
+                        bits=base64Value;
+                        base64Counter=1;
+                        break;
+                    case 1:
+                    case 3:
+                    case 4:
+                    case 6:
+                        bits=(bits<<6)|base64Value;
+                        ++base64Counter;
+                        break;
+                    case 2:
+                        *target++=(bits<<4)|(base64Value>>2);
+                        if(offsets!=NULL) {
+                            *offsets++=sourceIndex;
+                            sourceIndex=nextSourceIndex-1;
+                        }
+                        bytes[0]=b; /* keep this byte in case an error occurs */
+                        byteIndex=1;
+                        bits=base64Value&3;
+                        base64Counter=3;
+                        break;
+                    case 5:
+                        *target++=(bits<<2)|(base64Value>>4);
+                        if(offsets!=NULL) {
+                            *offsets++=sourceIndex;
+                            sourceIndex=nextSourceIndex-1;
+                        }
+                        bytes[0]=b; /* keep this byte in case an error occurs */
+                        byteIndex=1;
+                        bits=base64Value&15;
+                        base64Counter=6;
+                        break;
+                    case 7:
+                        *target++=(bits<<6)|base64Value;
+                        if(offsets!=NULL) {
+                            *offsets++=sourceIndex;
+                            sourceIndex=nextSourceIndex;
+                        }
+                        byteIndex=0;
+                        bits=0;
+                        base64Counter=0;
+                        break;
+                    default:
+                        /* will never occur */
+                        break;
+                    }
+                } else if(base64Value==-2) {
+                    /* minus sign terminates the base64 sequence */
+                    inDirectMode=TRUE;
+                    if(base64Counter==-1) {
+                        /* +- i.e. a minus immediately following a plus */
+                        *target++=PLUS;
+                        if(offsets!=NULL) {
+                            *offsets++=sourceIndex-1;
+                        }
+                    } else {
+                        /* absorb the minus and leave the Unicode Mode */
+                        if(bits!=0) {
+                            /* bits are illegally left over, a UChar is incomplete */
+                            goto callback;
+                        }
+                    }
+                    sourceIndex=nextSourceIndex;
+                    goto directMode;
+                } else /* base64Value==-1 for any other character */ {
+                    /* leave the Unicode Mode */
+                    inDirectMode=TRUE;
+                    if(bits==0) {
+                        /* un-read the character in case it is a plus sign */
+                        --source;
+                        sourceIndex=nextSourceIndex-1;
+                        goto directMode;
+                    } else {
+                        /* bits are illegally left over, a UChar is incomplete */
+                        goto callback;
+                    }
+                }
+            } else {
+                /* target is full */
+                *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
+                break;
+            }
+        }
+    }
+endloop:
+
+    if(pArgs->flush && source>=sourceLimit) {
+        /* reset the state for the next conversion */
+        if(!inDirectMode && bits!=0 && U_SUCCESS(*pErrorCode)) {
+            /* a character byte sequence remains incomplete */
+            *pErrorCode=U_TRUNCATED_CHAR_FOUND;
+        }
+        cnv->toUnicodeStatus=0x1000000; /* inDirectMode=TRUE */
+        cnv->invalidCharLength=0;
+    } else {
+        /* set the converter state back into UConverter */
+        cnv->toUnicodeStatus=((uint32_t)inDirectMode<<24)|((uint32_t)((uint8_t)base64Counter)<<16)|(uint32_t)bits;
+    }
+
+finish:
+    /* write back the updated pointers */
+    pArgs->source=(const char *)source;
+    pArgs->target=target;
+    pArgs->offsets=offsets;
+    return;
+
+callback:
+    /* call the callback function with all the preparations and post-processing */
+    /* update the arguments structure */
+    pArgs->source=(const char *)source;
+    pArgs->target=target;
+    pArgs->offsets=offsets;
+
+    /* copy the current bytes to invalidCharBuffer */
+    for(b=0; b<(uint8_t)byteIndex; ++b) {
+        cnv->invalidCharBuffer[b]=(char)bytes[b];
+    }
+    cnv->invalidCharLength=byteIndex;
+
+    /* set the converter state in UConverter to deal with the next character */
+    cnv->toUnicodeStatus=(uint32_t)inDirectMode<<24;
+    cnv->toULength=0;
+
+    /* call the callback function */
+    *pErrorCode=U_ILLEGAL_CHAR_FOUND;
+    cnv->fromCharErrorBehaviour(cnv->toUContext, pArgs, cnv->invalidCharBuffer, cnv->invalidCharLength, UCNV_ILLEGAL, pErrorCode);
+
+    /* get the converter state from UConverter */
+    {
+        uint32_t status=cnv->toUnicodeStatus;
+        inDirectMode=(UBool)((status>>24)&1);
+        base64Counter=(int8_t)(status>>16);
+        bits=(uint16_t)status;
+    }
+    byteIndex=cnv->toULength;
+
+    /* update target and deal with offsets if necessary */
+    offsets=ucnv_updateCallbackOffsets(offsets, pArgs->target-target, sourceIndex);
+    target=pArgs->target;
+
+    /* update the source pointer and index */
+    sourceIndex=nextSourceIndex+((const uint8_t *)pArgs->source-source);
+    source=(const uint8_t *)pArgs->source;
+
+    /*
+     * If the callback overflowed the target, then we need to
+     * stop here with an overflow indication.
+     */
+    if(*pErrorCode==U_BUFFER_OVERFLOW_ERROR) {
+        goto endloop;
+    } else if(cnv->UCharErrorBufferLength>0) {
+        /* target is full */
+        *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
+        goto endloop;
+    } else if(U_FAILURE(*pErrorCode)) {
+        /* break on error */
+        cnv->toUnicodeStatus=0x1000000; /* inDirectMode=TRUE */
+        cnv->invalidCharLength=0;
+        goto finish;
+    } else {
+        goto loop;
+    }
+}
+
+U_CFUNC void
+_UTF7FromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
+                            UErrorCode *pErrorCode) {
+    UConverter *cnv;
+    const UChar *source, *sourceLimit;
+    uint8_t *target, *targetLimit;
+    int32_t *offsets;
+
+    int32_t length, targetCapacity, sourceIndex;
+    UChar c;
+
+    /* UTF-7 state */
+    uint8_t bits;
+    int8_t base64Counter;
+    UBool inDirectMode, setODirect;
+
+    /* set up the local pointers */
+    cnv=pArgs->converter;
+
+    /* set up the local pointers */
+    source=pArgs->source;
+    sourceLimit=pArgs->sourceLimit;
+    target=(uint8_t *)pArgs->target;
+    targetLimit=(uint8_t *)pArgs->targetLimit;
+    offsets=pArgs->offsets;
+
+    /* get the state machine state */
+    {
+        uint32_t status=cnv->fromUnicodeStatus;
+        setODirect= status<0x10000000;
+        inDirectMode=(UBool)((status>>24)&1);
+        base64Counter=(int8_t)(status>>16);
+        bits=(uint8_t)status;
+    }
+
+    /* UTF-7 always encodes UTF-16 code units, therefore we need only a simple sourceIndex */
+    sourceIndex=0;
+
+    if(inDirectMode) {
+directMode:
+        length=sourceLimit-source;
+        targetCapacity=targetLimit-target;
+        if(length>targetCapacity) {
+            length=targetCapacity;
+        }
+        while(length>0) {
+            c=*source++;
+            /* currently always encode CR LF SP TAB directly */
+            if(c<=127 && (inSetD(c) || isCRLFSPTAB(c) || setODirect && inSetO(c))) {
+                /* encode directly */
+                *target++=(uint8_t)c;
+                if(offsets!=NULL) {
+                    *offsets++=sourceIndex++;
+                }
+            } else if(c==PLUS) {
+                /* output +- for + */
+                *target++=PLUS;
+                if(target<targetLimit) {
+                    *target++=MINUS;
+                    if(offsets!=NULL) {
+                        *offsets++=sourceIndex;
+                        *offsets++=sourceIndex++;
+                    }
+                    /* realign length and targetCapacity */
+                    goto directMode;
+                } else {
+                    if(offsets!=NULL) {
+                        *offsets++=sourceIndex++;
+                    }
+                    cnv->charErrorBuffer[0]=MINUS;
+                    cnv->charErrorBufferLength=1;
+                    *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
+                    break;
+                }
+            } else {
+                /* un-read this character and switch to Unicode Mode */
+                --source;
+                *target++=PLUS;
+                if(offsets!=NULL) {
+                    *offsets++=sourceIndex;
+                }
+                inDirectMode=FALSE;
+                base64Counter=0;
+                goto unicodeMode;
+            }
+            --length;
+        }
+        if(source<sourceLimit && target>=targetLimit) {
+            /* target is full */
+            *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
+        }
+    } else {
+unicodeMode:
+        while(source<sourceLimit) {
+            if(target<targetLimit) {
+                c=*source++;
+                if(c<=127 && (inSetD(c) || isCRLFSPTAB(c) || setODirect && inSetO(c))) {
+                    /* encode directly */
+                    inDirectMode=TRUE;
+
+                    /* trick: back out this character to make this easier */
+                    --source;
+
+                    /* terminate the base64 sequence */
+                    if(base64Counter!=0) {
+                        /* write remaining bits for the previous character */
+                        *target++=toBase64[bits];
+                        if(offsets!=NULL) {
+                            *offsets++=sourceIndex-1;
+                        }
+                    }
+                    if(fromBase64[c]!=-1) {
+                        /* need to terminate with a minus */
+                        if(target<targetLimit) {
+                            *target++=MINUS;
+                            if(offsets!=NULL) {
+                                *offsets++=sourceIndex;
+                            }
+                        } else {
+                            cnv->charErrorBuffer[0]=MINUS;
+                            cnv->charErrorBufferLength=1;
+                            *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
+                            break;
+                        }
+                    }
+                    goto directMode;
+                } else {
+                    /*
+                     * base64 this character:
+                     * Output 2 or 3 base64 bytes for the remaining bits of the previous character
+                     * and the bits of this character, each implicitly in UTF-16BE.
+                     *
+                     * Here, bits is an 8-bit variable because only 6 bits need to be kept from one
+                     * character to the next. The actual 2 or 4 bits are shifted to the left edge
+                     * of the 6-bits field 5..0 to make the termination of the base64 sequence easier.
+                     */
+                    switch(base64Counter) {
+                    case 0:
+                        *target++=toBase64[c>>10];
+                        if(target<targetLimit) {
+                            *target++=toBase64[(c>>4)&0x3f];
+                            if(offsets!=NULL) {
+                                *offsets++=sourceIndex;
+                                *offsets++=sourceIndex++;
+                            }
+                        } else {
+                            if(offsets!=NULL) {
+                                *offsets++=sourceIndex++;
+                            }
+                            cnv->charErrorBuffer[0]=toBase64[(c>>4)&0x3f];
+                            cnv->charErrorBufferLength=1;
+                            *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
+                        }
+                        bits=(uint8_t)((c&15)<<2);
+                        base64Counter=1;
+                        break;
+                    case 1:
+                        *target++=toBase64[bits|(c>>14)];
+                        if(target<targetLimit) {
+                            *target++=toBase64[(c>>8)&0x3f];
+                            if(target<targetLimit) {
+                                *target++=toBase64[(c>>2)&0x3f];
+                                if(offsets!=NULL) {
+                                    *offsets++=sourceIndex;
+                                    *offsets++=sourceIndex;
+                                    *offsets++=sourceIndex++;
+                                }
+                            } else {
+                                if(offsets!=NULL) {
+                                    *offsets++=sourceIndex;
+                                    *offsets++=sourceIndex++;
+                                }
+                                cnv->charErrorBuffer[0]=toBase64[(c>>2)&0x3f];
+                                cnv->charErrorBufferLength=1;
+                                *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
+                            }
+                        } else {
+                            if(offsets!=NULL) {
+                                *offsets++=sourceIndex++;
+                            }
+                            cnv->charErrorBuffer[0]=toBase64[(c>>8)&0x3f];
+                            cnv->charErrorBuffer[1]=toBase64[(c>>2)&0x3f];
+                            cnv->charErrorBufferLength=2;
+                            *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
+                        }
+                        bits=(uint8_t)((c&3)<<4);
+                        base64Counter=2;
+                        break;
+                    case 2:
+                        *target++=toBase64[bits|(c>>12)];
+                        if(target<targetLimit) {
+                            *target++=toBase64[(c>>6)&0x3f];
+                            if(target<targetLimit) {
+                                *target++=toBase64[c&0x3f];
+                                if(offsets!=NULL) {
+                                    *offsets++=sourceIndex;
+                                    *offsets++=sourceIndex;
+                                    *offsets++=sourceIndex++;
+                                }
+                            } else {
+                                if(offsets!=NULL) {
+                                    *offsets++=sourceIndex;
+                                    *offsets++=sourceIndex++;
+                                }
+                                cnv->charErrorBuffer[0]=toBase64[c&0x3f];
+                                cnv->charErrorBufferLength=1;
+                                *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
+                            }
+                        } else {
+                            if(offsets!=NULL) {
+                                *offsets++=sourceIndex++;
+                            }
+                            cnv->charErrorBuffer[0]=toBase64[(c>>6)&0x3f];
+                            cnv->charErrorBuffer[1]=toBase64[c&0x3f];
+                            cnv->charErrorBufferLength=2;
+                            *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
+                        }
+                        bits=0;
+                        base64Counter=0;
+                        break;
+                    default:
+                        /* will never occur */
+                        break;
+                    }
+                }
+            } else {
+                /* target is full */
+                *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
+                break;
+            }
+        }
+    }
+
+    if(pArgs->flush && source>=sourceLimit) {
+        /* flush remaining bits to the target */
+        if(!inDirectMode && base64Counter!=0) {
+            if(target<targetLimit) {
+                *target++=toBase64[bits];
+                if(offsets!=NULL) {
+                    *offsets++=sourceIndex-1;
+                }
+            } else {
+                cnv->charErrorBuffer[0]=toBase64[bits];
+                cnv->charErrorBufferLength=1;
+                *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
+            }
+        }
+        /* reset the state for the next conversion */
+        cnv->fromUnicodeStatus=(cnv->fromUnicodeStatus&0xf0000000)|0x1000000; /* keep version, inDirectMode=TRUE */
+    } else {
+        /* set the converter state back into UConverter */
+        cnv->fromUnicodeStatus=
+            (cnv->fromUnicodeStatus&0xf0000000)|    /* keep version*/
+            ((uint32_t)inDirectMode<<24)|((uint32_t)base64Counter<<16)|(uint32_t)bits;
+    }
+
+    /* write back the updated pointers */
+    pArgs->source=source;
+    pArgs->target=(char *)target;
+    pArgs->offsets=offsets;
+    return;
+}
+
+U_CFUNC const char *
+_UTF7GetName(const UConverter *cnv) {
+    switch(cnv->fromUnicodeStatus>>28) {
+    case 1:
+        return "UTF-7,version=1";
+    default:
+        return "UTF-7";
+    }
+}
+
+static const UConverterImpl _UTF7Impl={
+    UCNV_UTF7,
+
+    NULL,
+    NULL,
+
+    _UTF7Open,
+    NULL,
+    _UTF7Reset,
+
+    _UTF7ToUnicodeWithOffsets,
+    _UTF7ToUnicodeWithOffsets,
+    _UTF7FromUnicodeWithOffsets,
+    _UTF7FromUnicodeWithOffsets,
+    NULL,
+
+    NULL,
+    _UTF7GetName,
+    NULL /* we don't need writeSub() because we never call a callback at fromUnicode() */
+};
+
+static const UConverterStaticData _UTF7StaticData={
+    sizeof(UConverterStaticData),
+    "UTF-7",
+    0, /* CCSID for UTF-7 */
+    UCNV_IBM, UCNV_UTF7,
+    1, 4,
+    { 0x3f, 0, 0, 0 }, 1, /* the subchar is not used */
+    FALSE, FALSE,
+    0,
+    { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 } /* reserved */
+};
+
+const UConverterSharedData _UTF7Data={
+    sizeof(UConverterSharedData), ~((uint32_t)0),
+    NULL, NULL, &_UTF7StaticData, FALSE, &_UTF7Impl,
+    0
+};

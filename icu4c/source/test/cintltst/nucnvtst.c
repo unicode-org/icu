@@ -213,7 +213,7 @@ static void setNuConvTestName(const char *codepage, const char *direction)
 }
 
 static UBool testConvertFromU( const UChar *source, int sourceLen,  const uint8_t *expect, int expectLen, 
-                const char *codepage, int32_t *expectOffsets)
+                const char *codepage, const int32_t *expectOffsets)
 {
     UErrorCode status = U_ZERO_ERROR;
     UConverter *conv = 0;
@@ -340,14 +340,19 @@ static UBool testConvertFromU( const UChar *source, int sourceLen,  const uint8_
     {
         log_verbose("comparing %d offsets..\n", targ-junkout);
         if(memcmp(junokout,expectOffsets,(targ-junkout) * sizeof(int32_t) )){
-            log_err("did not get the expected offsets. %s", gNuConvTestName);
-            log_err("Got  : ");
+            log_err("did not get the expected offsets. %s\n", gNuConvTestName);
             printSeqErr((const unsigned char*)junkout, targ-junkout);
-            for(p=junkout;p<targ;p++)
-                log_err("%d, ", junokout[p-junkout]); 
-            log_err("\nExpected: ");
-            for(i=0; i<(targ-junkout); i++)
+            log_err("\n");
+            log_err("Got  :     ");
+            for(p=junkout;p<targ;p++) {
+                log_err("%d, ", junokout[p-junkout]);
+            }
+            log_err("\n");
+            log_err("Expected:  ");
+            for(i=0; i<(targ-junkout); i++) {
                 log_err("%d,", expectOffsets[i]);
+            }
+            log_err("\n");
         }
     }
 
@@ -371,7 +376,7 @@ static UBool testConvertFromU( const UChar *source, int sourceLen,  const uint8_
 }
 
 static UBool testConvertToU( const uint8_t *source, int sourcelen, const UChar *expect, int expectlen, 
-               const char *codepage, int32_t *expectOffsets)
+               const char *codepage, const int32_t *expectOffsets)
 {
     UErrorCode status = U_ZERO_ERROR;
     UConverter *conv = 0;
@@ -492,19 +497,27 @@ static UBool testConvertToU( const uint8_t *source, int sourcelen, const UChar *
     if (checkOffsets && (expectOffsets != 0))
     {
         if(memcmp(junokout,expectOffsets,(targ-junkout) * sizeof(int32_t))){
-            
-            log_err("did not get the expected offsets. %s",gNuConvTestName);
-            for(p=junkout;p<targ;p++)
-              log_err("%d, ", junokout[p-junkout]); 
-            log_err("\nExpected: ");
-            for(i=0; i<(targ-junkout); i++)
-              log_err("%d,", expectOffsets[i]);
-            log_err("");
-            for(i=0; i<(targ-junkout); i++)
-              log_err("%X,", junkout[i]);
-            log_err("");
-            for(i=0; i<(src-source); i++)
-              log_err("%X,", (unsigned char)source[i]);
+            log_err("did not get the expected offsets. %s\n",gNuConvTestName);
+            log_err("Got:      ");
+            for(p=junkout;p<targ;p++) {
+                log_err("%d,", junokout[p-junkout]);
+            }
+            log_err("\n");
+            log_err("Expected: ");
+            for(i=0; i<(targ-junkout); i++) {
+                log_err("%d,", expectOffsets[i]);
+            }
+            log_err("\n");
+            log_err("output:   ");
+            for(i=0; i<(targ-junkout); i++) {
+                log_err("%X,", junkout[i]);
+            }
+            log_err("\n");
+            log_err("input:    ");
+            for(i=0; i<(src-source); i++) {
+                log_err("%X,", (unsigned char)source[i]);
+            }
+            log_err("\n");
         }
     }
 
@@ -877,9 +890,88 @@ static void TestNewConvertWithBufferSizes(int32_t outsize, int32_t insize )
 
     }
 
+    /* UTF-7 examples are mostly from http://www.imc.org/rfc2152 */
+    {
+        /* encode directly set D and set O */
+        static const uint8_t utf7[] = {
+            /*
+                Hi Mom -+Jjo--!
+                A+ImIDkQ.
+                +-
+                +ZeVnLIqe
+            */
+            0x48, 0x69, 0x20, 0x4d, 0x6f, 0x6d, 0x20, 0x2d, 0x2b, 0x4a, 0x6a, 0x6f, 0x2d, 0x2d, 0x21,
+            0x41, 0x2b, 0x49, 0x6d, 0x49, 0x44, 0x6b, 0x51, 0x2e,
+            0x2b, 0x2d,
+            0x2b, 0x5a, 0x65, 0x56, 0x6e, 0x4c, 0x49, 0x71, 0x65
+        };
+        static const UChar unicode[] = {
+            /*
+                Hi Mom -<WHITE SMILING FACE>-!
+                A<NOT IDENTICAL TO><ALPHA>.
+                +
+                [Japanese word "nihongo"]
+            */
+            0x48, 0x69, 0x20, 0x4d, 0x6f, 0x6d, 0x20, 0x2d, 0x263a, 0x2d, 0x21,
+            0x41, 0x2262, 0x0391, 0x2e,
+            0x2b,
+            0x65e5, 0x672c, 0x8a9e
+        };
+        static const int32_t toUnicodeOffsets[] = {
+            0, 1, 2, 3, 4, 5, 6, 7, 9, 13, 14,
+            15, 17, 19, 23,
+            24,
+            27, 29, 32
+        };
+        static const int32_t fromUnicodeOffsets[] = {
+            0, 1, 2, 3, 4, 5, 6, 7, 8, 8, 8, 8, 9, 9, 10,
+            11, 12, 12, 12, 13, 13, 13, 13, 14,
+            15, 15,
+            16, 16, 16, 17, 17, 17, 18, 18, 18
+        };
 
+        /* same but escaping set O (the exclamation mark) */
+        static const uint8_t utf7Restricted[] = {
+            /*
+                Hi Mom -+Jjo--+ACE-
+                A+ImIDkQ.
+                +-
+                +ZeVnLIqe
+            */
+            0x48, 0x69, 0x20, 0x4d, 0x6f, 0x6d, 0x20, 0x2d, 0x2b, 0x4a, 0x6a, 0x6f, 0x2d, 0x2d, 0x2b, 0x41, 0x43, 0x45, 0x2d,
+            0x41, 0x2b, 0x49, 0x6d, 0x49, 0x44, 0x6b, 0x51, 0x2e,
+            0x2b, 0x2d,
+            0x2b, 0x5a, 0x65, 0x56, 0x6e, 0x4c, 0x49, 0x71, 0x65
+        };
+        static const int32_t toUnicodeOffsetsR[] = {
+            0, 1, 2, 3, 4, 5, 6, 7, 9, 13, 15,
+            19, 21, 23, 27,
+            28,
+            31, 33, 36
+        };
+        static const int32_t fromUnicodeOffsetsR[] = {
+            0, 1, 2, 3, 4, 5, 6, 7, 8, 8, 8, 8, 9, 9, 10, 10, 10, 10, 11,
+            11, 12, 12, 12, 13, 13, 13, 13, 14,
+            15, 15,
+            16, 16, 16, 17, 17, 17, 18, 18, 18
+        };
 
- 
+        if(!testConvertFromU(unicode, sizeof(unicode)/U_SIZEOF_UCHAR, utf7, sizeof(utf7), "UTF-7", fromUnicodeOffsets)) {
+            log_err("u-> UTF-7 did not match.\n");
+        }
+
+        if(!testConvertToU(utf7, sizeof(utf7), unicode, sizeof(unicode)/U_SIZEOF_UCHAR, "UTF-7", toUnicodeOffsets)) {
+            log_err("UTF-7 -> u  did not match.\n");
+        }
+
+        if(!testConvertFromU(unicode, sizeof(unicode)/U_SIZEOF_UCHAR, utf7Restricted, sizeof(utf7Restricted), "UTF-7,version=1", fromUnicodeOffsetsR)) {
+            log_err("u-> UTF-7,version=1 did not match.\n");
+        }
+
+        if(!testConvertToU(utf7Restricted, sizeof(utf7Restricted), unicode, sizeof(unicode)/U_SIZEOF_UCHAR, "UTF-7,version=1", toUnicodeOffsetsR)) {
+            log_err("UTF-7,version=1 -> u  did not match.\n");
+        }
+    }
 }  
      
 
