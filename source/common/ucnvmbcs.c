@@ -231,7 +231,7 @@ _MBCSGetFallback(UConverterMBCSTable *mbcsTable, uint32_t offset) {
         }
 
         /* did we really find it? */
-        if(offset=toUFallbacks[start].offset) {
+        if(offset==toUFallbacks[start].offset) {
             return toUFallbacks[start].codePoint;
         }
     }
@@ -1030,6 +1030,15 @@ getTrail:
                     break;
                 default:
                     /* must not occur */
+                    /*
+                     * To avoid compiler warnings that value & length may be
+                     * used without having been initialized, we set them here.
+                     * In reality, this is unreachable code.
+                     * Not having a default branch also causes warnings with
+                     * some compilers.
+                     */
+                    value=0;
+                    length=0;
                     break;
                 }
 
