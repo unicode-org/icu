@@ -680,14 +680,14 @@ public:
    * @return a UClassID for the actual class.
    * @draft ICU 2.2
    */
-  virtual inline UClassID getDynamicClassID() const { return getStaticClassID(); }
+  virtual inline UClassID getDynamicClassID() const;
 
   /**
    * ICU "poor man's RTTI", returns a UClassID for this class.
    * @returns a UClassID for this class.
    * @draft ICU 2.2
    */
-  static inline UClassID getStaticClassID() { return (UClassID)&fgClassID; }
+  static inline UClassID getStaticClassID();
 
   //-------------------------------------------------------------------------
   // Obsolete APIs
@@ -1076,6 +1076,14 @@ private:
 //-------------------------------------------------------------------------
 // Inline implementations
 //-------------------------------------------------------------------------
+
+inline UClassID
+Normalizer::getStaticClassID()
+{ return (UClassID)&fgClassID; }
+
+inline UClassID
+Normalizer::getDynamicClassID() const
+{ return Normalizer::getStaticClassID(); }
 
 inline UBool
 Normalizer::operator!= (const Normalizer& other) const

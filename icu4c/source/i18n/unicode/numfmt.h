@@ -542,7 +542,7 @@ public:
      * @return The class ID for all objects of this class.
      * @stable ICU 2.0
      */
-    static UClassID getStaticClassID(void) { return (UClassID)&fgClassID; }
+    static inline UClassID getStaticClassID(void);
 
     /**
      * Override Calendar
@@ -614,6 +614,10 @@ private:
 };
 
 // -------------------------------------
+
+inline UClassID
+NumberFormat::getStaticClassID(void)
+{ return (UClassID)&fgClassID; }
 
 inline UBool
 NumberFormat::isParseIntegerOnly() const

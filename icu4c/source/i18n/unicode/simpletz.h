@@ -699,7 +699,7 @@ public:
      *           same class ID. Objects of other classes have different class IDs.
      * @stable ICU 2.0
      */
-    virtual UClassID getDynamicClassID(void) const { return (UClassID)&fgClassID; }
+    virtual UClassID getDynamicClassID(void) const;
 
     /**
      * Return the class ID for this class. This is useful only for comparing to a return
@@ -712,7 +712,7 @@ public:
      * @return   The class ID for all objects of this class.
      * @stable ICU 2.0
      */
-    static UClassID getStaticClassID(void) { return (UClassID)&fgClassID; }
+    static UClassID getStaticClassID(void);
 
 private:
     /**
@@ -813,6 +813,14 @@ private:
      */
     int32_t dstSavings;
 };
+
+inline UClassID
+SimpleTimeZone::getStaticClassID(void)
+{ return (UClassID)&fgClassID; }
+
+inline UClassID
+SimpleTimeZone::getDynamicClassID(void) const
+{ return SimpleTimeZone::getStaticClassID(); }
 
 inline void SimpleTimeZone::setStartRule(int32_t month, int32_t dayOfWeekInMonth,
                                          int32_t dayOfWeek,
