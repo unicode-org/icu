@@ -1999,8 +1999,9 @@ void LocaleTest::TestCanonicalization(void)
         const char *getNameID;   /* expected getName() result */
         const char *canonicalID; /* expected canonicalize() result */
     } testCases[] = {
-        /* { "ca_ES_PREEURO-with-extra-stuff-that really doesn't make any sense-unless-you're trying to increase code coverage",
-           "ca_ES_PREEURO_WITH_EXTRA_STUFF_THAT REALLY DOESN'T MAKE ANY SENSE_UNLESS_YOU'RE TRYING TO INCREASE CODE COVERAGE"}, */
+        { "ca_ES_PREEURO-with-extra-stuff-that really doesn't make any sense-unless-you're trying to increase code coverage",
+          "ca_ES_PREEURO_WITH_EXTRA_STUFF_THAT REALLY DOESN'T MAKE ANY SENSE_UNLESS_YOU'RE TRYING TO INCREASE CODE COVERAGE",
+          "ca_ES_PREEURO_WITH_EXTRA_STUFF_THAT REALLY DOESN'T MAKE ANY SENSE_UNLESS_YOU'RE TRYING TO INCREASE CODE COVERAGE"},
         { "ca_ES_PREEURO", "ca_ES_PREEURO", "ca_ES@currency=ESP" },
         { "de_AT_PREEURO", "de_AT_PREEURO", "de_AT@currency=ATS" },
         { "de_DE_PREEURO", "de_DE_PREEURO", "de_DE@currency=DEM" },
@@ -2074,10 +2075,11 @@ void LocaleTest::TestCanonicalization(void)
 
         /* test cases reflecting internal resource bundle usage */
         { "root@kw=foo", "root@kw=foo", "root@kw=foo" },
-        { "@calendar=gregorian", "@calendar=gregorian", "en_US_POSIX@calendar=gregorian" }
+        { "@calendar=gregorian", "@calendar=gregorian", "@calendar=gregorian" },
+        { "ja_JP@calendar=Japanese", "ja_JP@calendar=Japanese", "ja_JP@calendar=Japanese" }
     };
     
-    static const char* label[] = { "createFromName", "crateCanonical", "Locale" };
+    static const char* label[] = { "createFromName", "createCanonical", "Locale" };
 
     int32_t i, j;
     
