@@ -42,22 +42,9 @@
 #define UPPER_U         ((UChar)0x0055) /*U*/
 #define LOWER_U         ((UChar)0x0075) /*u*/
 
-U_NAMESPACE_BEGIN
-
-/**
- * Minimum value that can be stored in a UnicodeSet.
- */
-const UChar32 UnicodeSet::MIN_VALUE = UNICODESET_LOW;
-
-/**
- * Maximum value that can be stored in a UnicodeSet.
- */
-const UChar32 UnicodeSet::MAX_VALUE = UNICODESET_HIGH - 1;
-
 // N.B.: This mapping is different in ICU and Java
 //const UnicodeString UnicodeSet::CATEGORY_NAMES(
 //    "CnLuLlLtLmLoMnMeMcNdNlNoZsZlZpCcCfCoCsPdPsPePcPoSmScSkSoPiPf", "");
-
 static const UChar CATEGORY_NAMES[] = {
     0x43, 0x6E, /* "Cn" */
     0x4C, 0x75, /* "Lu" */
@@ -117,6 +104,18 @@ U_CFUNC UBool unicodeset_cleanup(void) {
     }
     return TRUE;
 }
+
+U_NAMESPACE_BEGIN
+
+/**
+ * Minimum value that can be stored in a UnicodeSet.
+ */
+const UChar32 UnicodeSet::MIN_VALUE = UNICODESET_LOW;
+
+/**
+ * Maximum value that can be stored in a UnicodeSet.
+ */
+const UChar32 UnicodeSet::MAX_VALUE = UNICODESET_HIGH - 1;
 
 //----------------------------------------------------------------
 // Constructors &c
