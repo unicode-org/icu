@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/CollationParsedRuleBuilder.java,v $ 
-* $Date: 2002/10/25 22:05:19 $ 
-* $Revision: 1.8 $
+* $Date: 2002/10/29 22:55:40 $ 
+* $Revision: 1.9 $
 *
 *******************************************************************************
 */
@@ -380,7 +380,7 @@ final class CollationParsedRuleBuilder
      */
     void setRules(RuleBasedCollator collator) throws Exception
     {
-        if (m_parser_.m_resultLength_ > 0) { 
+        if (m_parser_.m_resultLength_ > 0 || m_parser_.m_removeSet_ != null) { 
 		    // we have a set of rules, let's make something of it 
 		    assembleTailoringTable(collator);
 		} 
@@ -392,6 +392,37 @@ final class CollationParsedRuleBuilder
         m_parser_.setDefaultOptionsInCollator(collator);
     }
     
+    private void copyRangeFromUCA(BuildTable t, int start, int end) {
+        StringBuffer str = new StringBuffer();
+        for (char u = (char)start; u <= (char)end; u ++) {
+            // if ((CE = ucmpe32_get(t.m_mapping, u)) == UCOL_NOT_FOUND
+            int CE = t.m_mapping_.getValue((int)u);
+            if (CE == CE_NOT_FOUND_ 
+                // this test is for contractions that are missing the starting 
+                // element. Looks like latin-1 should be done before 
+                // assembling the table, even if it results in more false 
+                // closure elements
+                || (isContractionTableElement(CE) 
+                   && getCE(t.m_contractions_, CE, 0) == CE_NOT_FOUND_)) {
+                str.delete(0, str.length());
+                str.append(u);
+                m_utilElement_.m_uchars_ = str.toString();
+                m_utilElement_.m_cPoints_ = m_utilElement_.m_uchars_;
+                m_utilElement_.m_prefix_ = 0;
+                m_utilElement_.m_CELength_ = 0;
+                m_utilColEIter_.setText(m_utilElement_.m_uchars_);
+                while (CE != CollationElementIterator.NULLORDER) {
+                    CE = m_utilColEIter_.next();
+                    if (CE != CollationElementIterator.NULLORDER) {
+                        m_utilElement_.m_CEs_[m_utilElement_.m_CELength_ ++] 
+                        = CE;
+                    }
+                }
+                addAnElement(t, m_utilElement_);
+            }
+        }
+    }
+            
     /**
      * 2.  Eliminate the negative lists by doing the following for each 
      * non-null negative list: 
@@ -482,33 +513,16 @@ final class CollationParsedRuleBuilder
         StringBuffer str = new StringBuffer();
         
 		// add latin-1 stuff
-		for (char u = 0; u < 0x100; u ++) {
-            // if ((CE = ucmpe32_get(t.m_mapping, u)) == UCOL_NOT_FOUND
-            int CE = t.m_mapping_.getValue((int)u);
-            if (CE == CE_NOT_FOUND_ 
-		        // this test is for contractions that are missing the starting 
-                // element. Looks like latin-1 should be done before 
-                // assembling the table, even if it results in more false 
-                // closure elements
-		        || (isContractionTableElement(CE) 
-                   && getCE(t.m_contractions_, CE, 0) == CE_NOT_FOUND_)) {
-                str.delete(0, str.length());
-                str.append(u);
-		        m_utilElement_.m_uchars_ = str.toString();
-		        m_utilElement_.m_cPoints_ = m_utilElement_.m_uchars_;
-		        m_utilElement_.m_prefix_ = 0;
-                m_utilElement_.m_CELength_ = 0;
-                m_utilColEIter_.setText(m_utilElement_.m_uchars_);
-		        while (CE != CollationElementIterator.NULLORDER) {
-		            CE = m_utilColEIter_.next();
-		            if (CE != CollationElementIterator.NULLORDER) {
-		                m_utilElement_.m_CEs_[m_utilElement_.m_CELength_ ++] 
-                        = CE;
-		            }
-		        }
-                addAnElement(t, m_utilElement_);
-		    }
-		}
+      /* add latin-1 stuff */
+      copyRangeFromUCA(t, 0, 0xFF);
+    
+      /* add stuff for copying */
+      if(m_parser_.m_copySet_ != null) {
+        int i = 0;
+        for(i = 0; i < m_parser_.m_copySet_.getRangeCount(); i++) {
+          copyRangeFromUCA(t, m_parser_.m_copySet_.getRangeStart(i), m_parser_.m_copySet_.getRangeEnd(i));
+        }
+      }
         
         // copy contractions from the UCA - this is felt mostly for cyrillic
 		char conts[] = RuleBasedCollator.UCA_CONTRACTIONS_;
@@ -524,6 +538,11 @@ final class CollationParsedRuleBuilder
 		                needToAdd = false;
 		            }
 		        }
+                if(m_parser_.m_removeSet_ != null && m_parser_.m_removeSet_.contains(conts[offset])) {
+                    needToAdd = false;
+                }
+
+                
                 if (needToAdd == true) { 
                     // we need to add if this contraction is not tailored.
 		            m_utilElement_.m_prefix_ = 0;
@@ -550,7 +569,10 @@ final class CollationParsedRuleBuilder
                     }
                     addAnElement(t, m_utilElement_);
                 }
-		    }
+		    } else if(m_parser_.m_removeSet_ != null && m_parser_.m_removeSet_.contains(conts[offset])) {
+                copyRangeFromUCA(t, conts[offset], conts[offset]);
+            }
+            
 		    offset += 3;
 		}
         

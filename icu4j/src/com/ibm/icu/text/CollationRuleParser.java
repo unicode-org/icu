@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/CollationRuleParser.java,v $ 
-* $Date: 2002/09/17 21:31:58 $ 
-* $Revision: 1.8 $
+* $Date: 2002/10/29 22:55:41 $ 
+* $Revision: 1.9 $
 *
 *******************************************************************************
 */
@@ -43,6 +43,7 @@ final class CollationRuleParser
      */
     CollationRuleParser(String rules) throws ParseException
     {
+        extractSetsFromRules(rules);
         m_source_ = new StringBuffer(Normalizer.decompose(rules, false).trim());
         m_rules_ = m_source_.toString();
         m_current_ = 0;
@@ -390,6 +391,11 @@ final class CollationRuleParser
     private String m_rules_;
     private int m_current_;
     /**
+     * End of the option while reading. 
+     * Need it for UnicodeSet reading support. 
+     */
+    private int m_optionEnd_;
+    /**
      * Current offset in m_source
      */
     private int m_sourceLimit_;
@@ -397,6 +403,18 @@ final class CollationRuleParser
      * Offset to m_source_ ofr the extra expansion characters
      */
     private int m_extraCurrent_;
+    
+    /** 
+     * UnicodeSet that contains code points to be copied from the UCA
+     */
+    UnicodeSet m_copySet_;
+    
+    /**
+     * UnicodeSet that contains code points for which we want to remove
+     * UCA contractions. It implies copying of these code points from 
+     * the UCA.
+     */
+    UnicodeSet m_removeSet_;
     /** 
      * This is space for the extra strings that need to be unquoted during the 
      * parsing of the rules 
@@ -534,7 +552,7 @@ final class CollationRuleParser
         INDIRECT_BOUNDARIES_[14].m_limitCE_ 
                  = RuleBasedCollator.UCA_CONSTANTS_.PRIMARY_SPECIAL_MIN_ << 24; 
 
-		RULES_OPTIONS_ = new TokenOption[17];
+		RULES_OPTIONS_ = new TokenOption[19];
 		String option[] = {"non-ignorable", "shifted"};
 		int value[] = {RuleBasedCollator.AttributeValue.NON_IGNORABLE_, 
 	                   RuleBasedCollator.AttributeValue.SHIFTED_};
@@ -627,16 +645,22 @@ final class CollationRuleParser
         RULES_OPTIONS_[12] = new TokenOption("last", 
                                   RuleBasedCollator.Attribute.LIMIT_, 
 	    	                      firstlastoption, firstlastvalue);
-	    RULES_OPTIONS_[13] = new TokenOption("undefined", 
+        RULES_OPTIONS_[13] = new TokenOption("optimize", 
+                                  RuleBasedCollator.Attribute.LIMIT_, 
+                                  null, null);
+        RULES_OPTIONS_[14] = new TokenOption("suppressContractions", 
+                                  RuleBasedCollator.Attribute.LIMIT_, 
+                                  null, null);                                  
+	    RULES_OPTIONS_[15] = new TokenOption("undefined", 
 	                              RuleBasedCollator.Attribute.LIMIT_, 
                                   null, null);
-	    RULES_OPTIONS_[14] = new TokenOption("scriptOrder", 
+	    RULES_OPTIONS_[16] = new TokenOption("scriptOrder", 
 	                              RuleBasedCollator.Attribute.LIMIT_, 
                                   null, null);
-	    RULES_OPTIONS_[15] = new TokenOption("charsetname", 
+	    RULES_OPTIONS_[17] = new TokenOption("charsetname", 
 	                              RuleBasedCollator.Attribute.LIMIT_, 
                                   null, null);
-	    RULES_OPTIONS_[16] = new TokenOption("charset", 
+	    RULES_OPTIONS_[18] = new TokenOption("charset", 
 	                              RuleBasedCollator.Attribute.LIMIT_, 
                                   null, null);
 	};
@@ -1265,10 +1289,10 @@ final class CollationRuleParser
 		                break;
 		            case 0x005b : // '['
 		                // options - read an option, analyze it
-		                int optionend = m_rules_.indexOf(0x005d, m_current_);
-		                if (optionend != -1) { // ']'
-		                    byte result = readAndSetOption(optionend);
-		                    m_current_ = optionend;
+		                m_optionEnd_ = m_rules_.indexOf(0x005d, m_current_);
+		                if (m_optionEnd_ != -1) { // ']'
+		                    byte result = readAndSetOption();
+		                    m_current_ = m_optionEnd_;
 		                    if ((result & TOKEN_TOP_MASK_) != 0) {
 		                        if (newstrength == TOKEN_RESET_) { 
                                     top = doSetTop();
@@ -1637,40 +1661,80 @@ final class CollationRuleParser
                || (ch <= 0x0060 && ch >= 0x005B) 
                || (ch <= 0x007E && ch >= 0x007D) || ch == 0x007B;
 	}
-	
+    
+    private
+    UnicodeSet readAndSetUnicodeSet(String source, int start) throws ParseException 
+    {
+      while(source.charAt(start) != 0x005b) { /* advance while we find the first '[' */
+        start++;
+      }
+      // now we need to get a balanced set of '[]'. The problem is that a set can have 
+      // many, and *end point to the first closing '['
+      int noOpenBraces = 1;
+      int current = 1; // skip the opening brace
+      while(start+current < source.length() && noOpenBraces != 0) {
+        if(source.charAt(start+current) == 0x005b) {
+          noOpenBraces++;
+        } else if(source.charAt(start+current) == 0x005D) { // closing brace
+          noOpenBraces--;
+        }
+        current++;
+      }
+      int nextBrace = -1;
+    
+      if(noOpenBraces != 0 || (nextBrace = source.indexOf("]", start+current) /*']'*/) == -1) {
+        throwParseException(m_rules_, start);
+      }
+      return new UnicodeSet(source.substring(start, start+current)); //uset_openPattern(start, current);
+    }
+    
+    
+    /** in C, optionarg is passed by reference to function.
+     *  We use a private int to simulate this.
+     */
+    private int m_optionarg_ = 0;
+
+	private int readOption(String rules, int start, int optionend) 
+    {
+        m_optionarg_ = 0;
+        int i = 0;
+        while (i < RULES_OPTIONS_.length) {
+            String option = RULES_OPTIONS_[i].m_name_;
+            int optionlength = option.length();
+            if (rules.length() > start + optionlength
+                && option.equalsIgnoreCase(rules.substring(start, 
+                                                      start + optionlength))) {
+                if (optionend - start > optionlength) {
+                    m_optionarg_ = start + optionlength + 1; 
+                    // start of the options, skip space
+                    while (m_optionarg_ < optionend && UCharacter.isWhitespace(rules.charAt(m_optionarg_))) 
+                    {   // eat whitespace
+                        m_optionarg_ ++;
+                    }
+                }     
+                break;
+            }
+            i ++;
+        }
+        if(i == RULES_OPTIONS_.length) {
+            i = -1;
+        }
+        return i;
+    }
 	/**
 	 * Reads and set collation options
 	 * @param optionend offset to the end of the option in rules
 	 * @return TOKEN_SUCCESS if option is set correct, 0 otherwise
      * @exception ParseException thrown when options in rules are wrong
 	 */
-	private byte readAndSetOption(int optionend) throws ParseException
+	private byte readAndSetOption() throws ParseException
 	{
 		int start = m_current_ + 1; // skip opening '['
-	    int i = 0;
-	    boolean foundoption = false;
-	    int optionarg = 0;
-	    while (i < RULES_OPTIONS_.length) {
-            String option = RULES_OPTIONS_[i].m_name_;
-            int optionlength = option.length();
-            if (m_rules_.length() > start + optionlength
-                && option.equalsIgnoreCase(m_rules_.substring(start, 
-                                                      start + optionlength))) {
-                foundoption = true;
-	            if (optionend - start > optionlength) {
-	                optionarg = start + optionlength + 1; 
-                    // start of the options, skip space
-	                while (UCharacter.isWhitespace(m_rules_.charAt(optionarg))) 
-                    {   // eat whitespace
-	                    optionarg ++;
-	                }
-	            }     
-	            break;
-	        }
-	        i ++;
-	    }
+	    int i = readOption(m_rules_, start, m_optionEnd_);
+        
+        int optionarg = m_optionarg_;
 	
-	    if (!foundoption) {
+	    if (i < 0) {
 	        throwParseException(m_rules_, start);
 	    }
 	
@@ -1734,6 +1798,21 @@ final class CollationRuleParser
 	        }	        
             throwParseException(m_rules_, optionarg);
 	    } 
+        else if(i == 13 || i == 14) { // copy and remove are handled before normalization
+            // we need to move end here
+            int noOpenBraces = 1;
+            m_current_++; // skip opening brace
+            while(m_current_ < m_source_.length() && noOpenBraces != 0) {
+                if(m_source_.charAt(m_current_) == 0x005b) {
+                  noOpenBraces++;
+                } else if(m_source_.charAt(m_current_) == 0x005D) { // closing brace
+                  noOpenBraces--;
+                }
+                m_current_++;
+            }
+            m_optionEnd_ = m_current_-1;
+            return TOKEN_SUCCESS_MASK_; // we will never reach here.
+        }
         else {
 	        throwParseException(m_rules_, optionarg);
 	    }
@@ -1817,5 +1896,33 @@ final class CollationRuleParser
             }
         }
         return tailored;
+    }
+    
+    final private void extractSetsFromRules(String rules) throws ParseException {
+      int optionNumber = -1;
+      int setStart = 0;
+      int i = 0;
+      while(i < rules.length()) {
+        if(rules.charAt(i) == 0x005B) {
+          optionNumber = readOption(rules, i+1, rules.length());
+          setStart = m_optionarg_;
+          if(optionNumber == 13) { /* copy - parts of UCA to tailoring */
+            UnicodeSet newSet = readAndSetUnicodeSet(rules, setStart);
+              if(m_copySet_ == null) {
+                m_copySet_ = newSet;
+              } else {
+                m_copySet_.addAll(newSet);
+              }
+          } else if(optionNumber == 14) {
+            UnicodeSet newSet = readAndSetUnicodeSet(rules, setStart);
+              if(m_removeSet_ == null) {
+                m_removeSet_ = newSet;
+              } else {
+                m_removeSet_.addAll(newSet);
+              }
+          }
+        }
+        i++;
+      }        
     }
 }
