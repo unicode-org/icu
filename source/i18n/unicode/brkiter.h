@@ -26,7 +26,7 @@
 #include "unicode/locid.h"
 
 
-//class Locale;
+U_NAMESPACE_BEGIN
 
 /**
  * The BreakIterator class implements methods for finding the location
@@ -491,6 +491,8 @@ inline UBool BreakIterator::isBufferClone()
 {
     return fBufferClone;
 }
+
+U_NAMESPACE_END
 
 #endif // _BRKITER
 //eof

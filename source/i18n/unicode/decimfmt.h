@@ -27,6 +27,9 @@
 #include "unicode/utypes.h"
 #include "unicode/numfmt.h"
 #include "unicode/locid.h"
+
+U_NAMESPACE_BEGIN
+
 class DecimalFormatSymbols;
 class DigitList;
 
@@ -1173,6 +1176,8 @@ inline void
 DecimalFormat::setPadCharacter(UChar padChar) {
     setPadCharacter(UnicodeString(padChar));
 }
+
+U_NAMESPACE_END
 
 #endif // _DECIMFMT
 //eof

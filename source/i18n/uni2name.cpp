@@ -11,6 +11,8 @@
 #include "unicode/uni2name.h"
 #include "unicode/unifilt.h"
 
+U_NAMESPACE_BEGIN
+
 const char* UnicodeNameTransliterator::_ID = "Any-Name";
 
 /**
@@ -103,3 +105,6 @@ void UnicodeNameTransliterator::handleTransliterate(Replaceable& text, UTransPos
     offsets.limit = limit;
     offsets.start = cursor;
 }
+
+U_NAMESPACE_END
+

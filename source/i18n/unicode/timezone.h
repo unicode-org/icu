@@ -28,6 +28,8 @@
 
 #include "unicode/unistr.h"
 
+U_NAMESPACE_BEGIN
+
 /**
  * <code>TimeZone</code> represents a time zone offset, and also figures out daylight
  * savings.
@@ -565,6 +567,7 @@ TimeZone::setID(const UnicodeString& ID)
 {
     fID = ID;
 }
+U_NAMESPACE_END
 
 #endif //_TIMEZONE
 //eof

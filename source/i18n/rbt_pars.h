@@ -12,6 +12,8 @@
 #include "uvector.h"
 #include "unicode/parseerr.h"
 
+U_NAMESPACE_BEGIN
+
 class TransliterationRuleData;
 class UnicodeMatcher;
 class ParseData;
@@ -220,5 +222,7 @@ private:
     TransliteratorParser(const TransliteratorParser&);
     TransliteratorParser& operator=(const TransliteratorParser&);
 };
+
+U_NAMESPACE_END
 
 #endif

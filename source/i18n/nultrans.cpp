@@ -9,6 +9,9 @@
 */
 #include "unicode/nultrans.h"
 
+U_NAMESPACE_BEGIN
+
+
 // "Any-Null"
 const UChar NullTransliterator::ID[] = {65,110,121,45,0x4E, 0x75, 0x6C, 0x6C, 0x00};
 
@@ -23,3 +26,6 @@ void NullTransliterator::handleTransliterate(Replaceable& /*text*/, UTransPositi
                                              UBool /*isIncremental*/) const {
     offsets.start = offsets.limit;
 }
+
+U_NAMESPACE_END
+

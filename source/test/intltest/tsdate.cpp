@@ -5,10 +5,9 @@
  ********************************************************************/
 
 #include "unicode/utypes.h"
-#include "tsdate.h"
-
 #include "unicode/datefmt.h"
 #include "unicode/smpdtfmt.h"
+#include "tsdate.h"
 
 #include <stdlib.h>
 

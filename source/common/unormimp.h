@@ -256,7 +256,7 @@ unorm_getFCD16FromSurrogatePair(const uint16_t *fcdTrieIndex, uint16_t fcd16, UC
  */
 U_CFUNC int32_t
 unorm_nextNormalize(UChar *&dest, int32_t &destCapacity,
-                    CharacterIterator &src,
+                    U_NAMESPACE_QUALIFIER CharacterIterator &src,
                     UNormalizationMode mode, UBool ignoreHangul,
                     UGrowBuffer *growBuffer, void *context,
                     UErrorCode *pErrorCode);
@@ -267,7 +267,7 @@ unorm_nextNormalize(UChar *&dest, int32_t &destCapacity,
  */
 U_CFUNC int32_t
 unorm_previousNormalize(UChar *&dest, int32_t &destCapacity,
-                        CharacterIterator &src,
+                        U_NAMESPACE_QUALIFIER CharacterIterator &src,
                         UNormalizationMode mode, UBool ignoreHangul,
                         UGrowBuffer *growBuffer, void *context,
                         UErrorCode *pErrorCode);

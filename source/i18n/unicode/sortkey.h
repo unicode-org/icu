@@ -27,6 +27,8 @@
 #include "unicode/unistr.h"
 #include "unicode/coll.h"
 
+U_NAMESPACE_BEGIN
+
 /* forward declaration */
 class RuleBasedCollator;
 
@@ -246,4 +248,7 @@ CollationKey::getByteArray(int32_t &count) const
     count = fCount;
     return fBytes;
 }
+
+U_NAMESPACE_END
+
 #endif

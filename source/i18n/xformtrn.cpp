@@ -11,6 +11,8 @@
 #include "unicode/xformtrn.h"
 #include "unicode/unifilt.h"
 
+U_NAMESPACE_BEGIN
+
 /**
  * Constructs a transliterator.  For use by subclasses.
  */
@@ -57,3 +59,5 @@ void TransformTransliterator::handleTransliterate(Replaceable& text, UTransPosit
     // assert(start == offsets.limit);
     offsets.start = offsets.limit;
 }
+
+U_NAMESPACE_END

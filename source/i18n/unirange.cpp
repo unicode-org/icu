@@ -11,6 +11,8 @@
 #include "uvector.h"
 #include "unicode/unistr.h"
 
+U_NAMESPACE_BEGIN
+
 UnicodeRange::UnicodeRange(UChar theStart, int32_t theLength) {
     start = theStart;
     length = theLength;
@@ -109,3 +111,6 @@ UnicodeRange::largestUnusedSubrange(const UnicodeString& str, UErrorCode &status
 void U_CALLCONV UnicodeRange::deleter(void* e) {
     delete (UnicodeRange*) e;
 }
+
+U_NAMESPACE_END
+

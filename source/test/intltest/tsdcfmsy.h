@@ -7,9 +7,9 @@
 #ifndef _INTLTESTDECIMALFORMATSYMBOLS
 #define _INTLTESTDECIMALFORMATSYMBOLS
 
-
-#include "intltest.h"
+#include "unicode/unistr.h"
 #include "unicode/dcfmtsym.h"
+#include "intltest.h"
 /**
  * Tests for DecimalFormatSymbols
  **/

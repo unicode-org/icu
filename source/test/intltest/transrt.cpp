@@ -7,13 +7,13 @@
 *   05/23/00    aliu        Creation.
 **********************************************************************
 */
-#include "transrt.h"
-#include "testutil.h"
 #include "unicode/utypes.h"
 #include "unicode/translit.h"
 #include "unicode/rbt.h"
 #include "unicode/uniset.h"
 #include "unicode/unicode.h"
+#include "transrt.h"
+#include "testutil.h"
 
 #define CASE(id,test) case id:                          \
                           name = #test;                 \

@@ -32,6 +32,8 @@ static const UChar ANY[] = { 65, 110, 121, 0 }; // Any
  */
 static const char* RB_RULE = "Rule";
 
+U_NAMESPACE_BEGIN
+
 //----------------------------------------------------------------------
 // class CharString
 //----------------------------------------------------------------------
@@ -982,5 +984,6 @@ Transliterator* TransliteratorRegistry::instantiateEntry(const UnicodeString& ID
 
     return 0; // failed
 }
+U_NAMESPACE_END
 
 //eof

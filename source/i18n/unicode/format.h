@@ -27,6 +27,8 @@
 #include "unicode/fieldpos.h"
 #include "unicode/parsepos.h"
 #include "unicode/parseerr.h" 
+
+U_NAMESPACE_BEGIN
 /**
  * Base class for all formats.  This is an abstract base class which
  * specifies the protocol for classes which convert other objects or
@@ -261,6 +263,8 @@ protected:
         parseError.postContext[stop-start]= 0;
     }
 };
+
+U_NAMESPACE_END
 
 #endif // _FORMAT
 //eof

@@ -41,6 +41,8 @@
 #define UPPER_U         ((UChar)0x0055) /*U*/
 #define LOWER_U         ((UChar)0x0075) /*u*/
 
+U_NAMESPACE_BEGIN
+
 /**
  * Minimum value that can be stored in a UnicodeSet.
  */
@@ -898,6 +900,7 @@ void UnicodeSet::_applyPattern(const UnicodeString& pattern,
                                const SymbolTable* symbols,
                                UnicodeString& rebuiltPat,
                                UErrorCode& status) {
+
     if (U_FAILURE(status)) {
         return;
     }
@@ -1692,3 +1695,6 @@ void UnicodeSet::retain(const UChar32* other, int32_t otherLen, int8_t polarity)
     swapBuffers();
     pat.truncate(0);
 }
+
+U_NAMESPACE_END
+

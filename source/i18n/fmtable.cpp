@@ -24,6 +24,8 @@
 // class Formattable
 // *****************************************************************************
 
+U_NAMESPACE_BEGIN
+
 // -------------------------------------
 // default constructor.
 // Creates a formattable object with a long value 0.
@@ -370,4 +372,7 @@ FormattableStreamer::streamOut(ostream& stream, const Formattable& obj)
 #endif
 
 #endif
+
+U_NAMESPACE_END
+
 //eof

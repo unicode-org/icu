@@ -520,6 +520,7 @@ U_CAPI const UChar* U_EXPORT2 ures_getStringByKey(const UResourceBundle *resB, c
 #ifdef XP_CPLUSPLUS
 #include "unicode/unistr.h"
 
+U_NAMESPACE_BEGIN
 /**
  * returns a string from a string resource type
  *
@@ -599,6 +600,8 @@ inline UnicodeString ures_getUnicodeStringByKey(const UResourceBundle *resB, con
     const UChar* r = ures_getStringByKey(resB, key, &len, status);
     return UnicodeString(TRUE, r, len);
 }
+
+U_NAMESPACE_END
 
 #endif
 

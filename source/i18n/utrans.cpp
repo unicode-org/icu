@@ -28,6 +28,7 @@
 /**
  * Make a UReplaceable + UReplaceableCallbacks into a Replaceable object.
  */
+U_NAMESPACE_BEGIN
 class ReplaceableGlue : public Replaceable {
 
     UChar *buf;
@@ -102,10 +103,11 @@ void ReplaceableGlue::handleReplaceBetween(UTextOffset start,
 void ReplaceableGlue::copy(int32_t start, int32_t limit, int32_t dest) {
     (*func->copy)(rep, start, limit, dest);
 }
-
+U_NAMESPACE_END
 /********************************************************************
  * General API
  ********************************************************************/
+U_NAMESPACE_USE
 #if 0
 
 U_CAPI UTransliterator*

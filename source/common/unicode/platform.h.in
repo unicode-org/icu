@@ -73,6 +73,12 @@
 #define HAVE_BOOL_T @HAVE_BOOL_T@
 #endif
 
+
+/* Define whether namespace is supported */
+#ifndef U_HAVE_NAMESPACE
+#define U_HAVE_NAMESPACE @U_HAVE_NAMESPACE@
+#endif
+
 /* Determines the endianness of the platform */
 #define U_IS_BIG_ENDIAN @U_IS_BIG_ENDIAN@
 

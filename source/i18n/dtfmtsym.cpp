@@ -25,7 +25,6 @@
 // *****************************************************************************
 // class DateFormatSymbols
 // *****************************************************************************
-
 /**
  * These are static arrays we use only in the case where we have no
  * resource data.
@@ -101,6 +100,9 @@ static const UChar gLastResortZoneStrings[5][4] =
     {0x0047, 0x004D, 0x0054, 0x0000}, /* "GMT" */
     {0x0047, 0x004D, 0x0054, 0x0000}  /* "GMT" */
 };
+
+
+U_NAMESPACE_BEGIN
 
 /**
  * These are the tags we expect to see in normal resource bundle files associated
@@ -641,5 +643,7 @@ int32_t DateFormatSymbols::_getZoneIndex(const UnicodeString& ID) const
 
     return -1;
 }
+
+U_NAMESPACE_END
 
 //eof

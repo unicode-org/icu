@@ -10,6 +10,8 @@
 
 #include "unicode/translit.h"
 
+U_NAMESPACE_BEGIN
+
 /**
  * A transliterator that converts from hexadecimal Unicode escape
  * sequences to the characters they represent.  For example, "U+0040"
@@ -22,7 +24,7 @@
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: hextouni.h,v $ $Revision: 1.9 $ $Date: 2001/08/06 23:57:45 $
+ * @version $RCSfile: hextouni.h,v $ $Revision: 1.10 $ $Date: 2001/10/08 23:25:22 $
  * @draft
  */
 class U_I18N_API HexToUnicodeTransliterator : public Transliterator {
@@ -153,5 +155,7 @@ public:
 };
 
 inline HexToUnicodeTransliterator::~HexToUnicodeTransliterator() {}
+
+U_NAMESPACE_END
 
 #endif

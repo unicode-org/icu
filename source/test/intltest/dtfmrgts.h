@@ -6,10 +6,10 @@
 
 #ifndef _DATEFORMATREGRESSIONTEST_
 #define _DATEFORMATREGRESSIONTEST_
- 
-#include "caltztst.h"
 
-class SimpleDateFormat;
+#include "unicode/unistr.h"
+#include "unicode/smpdtfmt.h" 
+#include "caltztst.h"
 
 /** 
  * Performs regression test for DateFormat

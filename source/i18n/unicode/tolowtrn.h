@@ -13,6 +13,8 @@
 #include "unicode/xformtrn.h"
 #include "unicode/locid.h"
 
+U_NAMESPACE_BEGIN
+
 /**
  * A transliterator that performs locale-sensitive toLower()
  * case mapping.
@@ -66,5 +68,7 @@ class U_I18N_API LowercaseTransliterator : public TransformTransliterator {
 
     static const char* _ID;
 };
+
+U_NAMESPACE_END
 
 #endif

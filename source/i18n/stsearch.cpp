@@ -11,6 +11,8 @@
 #include "cmemory.h"
 #include "usrchimp.h"
 
+U_NAMESPACE_BEGIN
+
 // public constructors and destructors -----------------------------------
 
 StringSearch::StringSearch(const UnicodeString &pattern, 
@@ -385,5 +387,6 @@ UTextOffset StringSearch::handlePrev(int32_t position, UErrorCode &status)
     return USEARCH_DONE;
 }
 
+U_NAMESPACE_END
 
 

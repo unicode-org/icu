@@ -6,10 +6,10 @@
  
 #ifndef _NUMBERFORMATTEST_
 #define _NUMBERFORMATTEST_
- 
+
+#include "unicode/numfmt.h"
+#include "unicode/decimfmt.h" 
 #include "caltztst.h"
-class NumberFormat;
-class DecimalFormat;
 
 /**
  * Performs various in-depth test on NumberFormat

@@ -9,6 +9,8 @@
 */
 #include "unicode/remtrans.h"
 
+U_NAMESPACE_BEGIN
+
 const UChar RemoveTransliterator::ID[] = {65, 110, 121, 45, 0x52, 0x65, 0x6D, 0x6F, 0x76, 0x65, 0x00}; /* "Any-Remove" */
 
 Transliterator* RemoveTransliterator::clone(void) const {
@@ -25,3 +27,5 @@ void RemoveTransliterator::handleTransliterate(Replaceable& text, UTransPosition
     index.contextLimit -= len;
     index.limit -= len;
 }
+U_NAMESPACE_END
+

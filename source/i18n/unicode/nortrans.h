@@ -14,10 +14,12 @@
 #include "unicode/translit.h"
 #include "unicode/normlzr.h"
 
+U_NAMESPACE_BEGIN
+
 /**
  * A transliterator that performs normalization.
  * @author Alan Liu
- * @version $RCSfile: nortrans.h,v $ $Revision: 1.3 $ $Date: 2001/09/27 23:19:22 $
+ * @version $RCSfile: nortrans.h,v $ $Revision: 1.4 $ $Date: 2001/10/08 23:25:22 $
  */
 class U_I18N_API NormalizationTransliterator : public Transliterator {
 
@@ -88,5 +90,7 @@ class U_I18N_API NormalizationTransliterator : public Transliterator {
     NormalizationTransliterator(const UnicodeString& id,
                                 UNormalizationMode mode, int32_t opt);
 };
+
+U_NAMESPACE_END
 
 #endif

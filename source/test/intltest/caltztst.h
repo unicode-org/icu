@@ -9,10 +9,9 @@
 #define _CALTZTST
 
 #include "unicode/unistr.h"
+#include "unicode/calendar.h"
+#include "unicode/datefmt.h"
 #include "intltest.h"
-class SimpleDateFormat;
-class DateFormat;
-class Calendar;
 
 /** 
  * This class doesn't perform any tests, but provides utility methods to its subclasses.

@@ -64,6 +64,8 @@
 
 /* public RuleBasedCollator constructor ---------------------------------- */
 
+U_NAMESPACE_BEGIN
+
 /**
 * Copy constructor
 */
@@ -632,3 +634,5 @@ const int16_t RuleBasedCollator::FILEID = 0x5443;
 const char* RuleBasedCollator::kFilenameSuffix = ".col";
 /* class id ? Value is irrelevant */
 char  RuleBasedCollator::fgClassID = 0;
+
+U_NAMESPACE_END

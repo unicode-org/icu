@@ -8,6 +8,8 @@
 #include "unicode/uchriter.h"
 #include "uhash.h"
 
+U_NAMESPACE_BEGIN
+
 const char UCharCharacterIterator::fgClassID = 0;
 
 UCharCharacterIterator::UCharCharacterIterator()
@@ -357,3 +359,4 @@ UCharCharacterIterator::getText(UnicodeString& result) {
     result = UnicodeString(text, textLength);
 }
 
+U_NAMESPACE_END

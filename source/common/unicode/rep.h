@@ -15,6 +15,7 @@
 #define REP_H
 
 #include "unicode/utypes.h"
+U_NAMESPACE_BEGIN
 
 class UnicodeString;
 
@@ -193,5 +194,7 @@ inline UChar32
 Replaceable::char32At(UTextOffset offset) const {
     return getChar32At(offset);
 }
+
+U_NAMESPACE_END
 
 #endif

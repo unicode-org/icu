@@ -22,6 +22,8 @@ typedef struct _CompactByteArray CompactByteArray;
 #endif
 U_CDECL_END
 
+U_NAMESPACE_BEGIN
+
 /* forward declarations */
 class RuleBasedBreakIterator;
 class DictionaryBasedBreakIterator;
@@ -220,5 +222,6 @@ RuleBasedBreakIteratorTables::removeReference(void) {
     if (--refCount <= 0)
         delete this;
 }
+U_NAMESPACE_END
 
 #endif

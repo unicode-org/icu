@@ -14,6 +14,8 @@
 #include "uhash.h"
 #include "unicode/unistr.h"
 
+U_NAMESPACE_BEGIN
+
 /**
  * Hashtable is a thin C++ wrapper around UHashtable, a general-purpose void*
  * hashtable implemented in C.  Hashtable is designed to be idiomatic and
@@ -120,5 +122,7 @@ inline const UHashElement* Hashtable::find(const UnicodeString& key) const {
 inline const UHashElement* Hashtable::nextElement(int32_t& pos) const {
     return uhash_nextElement(hash, &pos);
 }
+
+U_NAMESPACE_END
 
 #endif

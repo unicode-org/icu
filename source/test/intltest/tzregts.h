@@ -8,12 +8,11 @@
 #define _TIMEZONEREGRESSIONTEST_
  
 #include "unicode/timezone.h"
-
+#include "unicode/gregocal.h"
+#include "unicode/simpletz.h"
 #include "intltest.h"
 
-#include "unicode/gregocal.h"
 
-class SimpleTimeZone;
 
 /** 
  * Performs regression test for Calendar

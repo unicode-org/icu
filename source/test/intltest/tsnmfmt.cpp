@@ -5,9 +5,8 @@
  ********************************************************************/
 
 #include "unicode/utypes.h"
-#include "tsnmfmt.h"
-
 #include "unicode/decimfmt.h"
+#include "tsnmfmt.h"
 
 
 static const char * formattableTypeName(Formattable::Type t)

@@ -9,12 +9,11 @@
  
 #include <stdlib.h>
 
-#include "intltest.h"
 #include "unicode/unistr.h"
-
-class DateFormat;
-class SimpleDateFormat;
-class Calendar;
+#include "unicode/datefmt.h"
+#include "unicode/smpdtfmt.h"
+#include "unicode/calendar.h"
+#include "intltest.h"
 
 /** 
  * Performs round-trip tests for DateFormat

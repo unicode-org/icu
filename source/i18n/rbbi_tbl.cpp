@@ -11,6 +11,8 @@
 #include "cmemory.h"
 #include "rbbi_tbl.h"
 
+U_NAMESPACE_BEGIN
+
 //=======================================================================
 // constructor
 //=======================================================================
@@ -144,3 +146,5 @@ UBool
 RuleBasedBreakIteratorTables::isLookaheadState(int32_t state) const {
     return lookaheadStates[state];
 }
+U_NAMESPACE_END
+

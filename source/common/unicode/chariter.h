@@ -13,6 +13,7 @@
 #include "unicode/utypes.h"
 #include "unicode/unistr.h"
 
+U_NAMESPACE_BEGIN
 /**
  * Abstract class that defines an API for forward-only iteration
  * on text objects.
@@ -587,4 +588,5 @@ CharacterIterator::getLength(void) const {
   return textLength;
 }
 
+U_NAMESPACE_END
 #endif

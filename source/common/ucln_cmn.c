@@ -37,6 +37,7 @@ ucln_registerCleanup(ECleanupLibraryType type,
 
 void u_cleanup(void)
 {
+
     ECleanupLibraryType libType = UCLN_START;
     while (++libType < UCLN_COMMON)
     {

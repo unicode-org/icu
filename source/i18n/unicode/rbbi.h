@@ -14,6 +14,8 @@
 #include "unicode/brkiter.h"
 #include "unicode/udata.h"
 
+U_NAMESPACE_BEGIN
+
 class RuleBasedBreakIteratorTables;
 class BreakIterator;
 
@@ -480,5 +482,7 @@ inline UClassID RuleBasedBreakIterator::getDynamicClassID(void) const {
 inline UClassID RuleBasedBreakIterator::getStaticClassID(void) {
     return (UClassID)(&fgClassID);
 }
+
+U_NAMESPACE_END
 
 #endif

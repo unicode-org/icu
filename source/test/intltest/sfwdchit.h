@@ -8,6 +8,7 @@
 #define SFDWCHIT_H
 
 #include "unicode/chariter.h"
+#include "intltest.h"
 
 class SimpleFwdCharIterator : public ForwardCharacterIterator {
 public:

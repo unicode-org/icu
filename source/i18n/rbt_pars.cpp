@@ -61,6 +61,8 @@ static const UChar gOPERATORS[] = {
 static const int32_t ID_TOKEN_LEN = 2;
 static const UChar   ID_TOKEN[]   = { 0x3A, 0x3A }; // ':', ':'
 
+U_NAMESPACE_BEGIN
+
 //----------------------------------------------------------------------
 // BEGIN ParseData
 //----------------------------------------------------------------------
@@ -1347,3 +1349,5 @@ int32_t TransliteratorParser::quotedIndexOf(const UnicodeString& text,
     }
     return -1;
 }
+
+U_NAMESPACE_END

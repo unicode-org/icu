@@ -15,8 +15,9 @@
 
 #include "unicode/utypes.h"
 #include "unicode/unistr.h"
+#include "unicode/fmtable.h"
 
-class Formattable;
+U_NAMESPACE_USE
 
 #ifdef OS390
 // avoid collision with math.h/log()

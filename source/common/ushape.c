@@ -21,6 +21,7 @@
 #include "unicode/ustring.h"
 #include "cmemory.h"
 #include "unicode/ushape.h"
+#include "ustr_imp.h"
 
 #if UTF_SIZE<16
     /*

@@ -10,6 +10,9 @@
 
 #include "unicode/nortrans.h"
 
+U_NAMESPACE_BEGIN
+
+
 /**
  * System registration hook.
  */
@@ -202,3 +205,6 @@ void NormalizationTransliterator::handleTransliterate(Replaceable& text, UTransP
         offsets.start = limit + delta;
     }
 }
+
+U_NAMESPACE_END
+

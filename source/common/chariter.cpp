@@ -7,6 +7,8 @@
 
 #include "unicode/chariter.h"
 
+U_NAMESPACE_BEGIN
+
 CharacterIterator::CharacterIterator(int32_t length)
 : textLength(length), pos(0), begin(0), end(length) {
     if(textLength < 0) {
@@ -77,3 +79,5 @@ CharacterIterator::first32PostInc(void) {
     setToStart();
     return next32PostInc();
 }
+
+U_NAMESPACE_END

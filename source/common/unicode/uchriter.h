@@ -11,6 +11,7 @@
 #include "unicode/utypes.h"
 #include "unicode/chariter.h"
 
+U_NAMESPACE_BEGIN
 
 /**
  * A concrete subclass of CharacterIterator that iterates over the
@@ -315,4 +316,5 @@ private:
   static const char       fgClassID;
 };
 
+U_NAMESPACE_END
 #endif

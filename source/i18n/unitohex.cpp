@@ -11,6 +11,8 @@
 #include "unicode/rep.h"
 #include "unicode/unifilt.h"
 
+U_NAMESPACE_BEGIN
+
 /**
  * ID for this transliterator.
  */
@@ -257,3 +259,6 @@ void UnicodeToHexTransliterator::handleTransliterate(Replaceable& text, UTransPo
     offsets.limit = limit;
     offsets.start = cursor;
 }
+
+U_NAMESPACE_END
+

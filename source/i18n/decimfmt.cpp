@@ -44,6 +44,8 @@
 #include "unicode/unicode.h"
 #include "cmemory.h"
 
+U_NAMESPACE_BEGIN
+
 //#define FMT_DEBUG
 
 #ifdef FMT_DEBUG
@@ -2867,5 +2869,7 @@ void DecimalFormat::setMaximumFractionDigits(int32_t newValue) {
 void DecimalFormat::setMinimumFractionDigits(int32_t newValue) {
     NumberFormat::setMinimumFractionDigits(uprv_min(newValue, kDoubleFractionDigits));
 }
+
+U_NAMESPACE_END
 
 //eof

@@ -7,8 +7,9 @@
 #ifndef _DATEFORMATTEST_
 #define _DATEFORMATTEST_
  
-#include "caltztst.h"
 #include "unicode/datefmt.h"
+#include "unicode/smpdtfmt.h"
+#include "caltztst.h"
 
 /** 
  * Performs many different tests for DataeFormat and SimpleDateFormat

@@ -19,6 +19,8 @@
 #include "unicode/utypes.h"
 #include "unicode/unistr.h"
 
+U_NAMESPACE_BEGIN
+
 /**
  * Formattable objects can be passed to the Format class or
  * its subclasses for formatting.  Formattable is a thin wrapper
@@ -270,6 +272,8 @@ inline const UnicodeString& Formattable::getString(void) const {
 inline UnicodeString& Formattable::getString(void) {
     return *fValue.fString;
 }
+
+U_NAMESPACE_END
 
 #endif //_FMTABLE
 //eof

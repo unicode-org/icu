@@ -14,7 +14,6 @@
 #include "unicode/translit.h"
 #include "intltest.h"
 #include "transtst.h"
-class Transliterator;
 
 /**
  * @test

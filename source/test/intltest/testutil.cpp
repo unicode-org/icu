@@ -7,9 +7,9 @@
 *   05/23/00    aliu        Creation.
 **********************************************************************
 */
-#include "testutil.h"
 #include "unicode/unicode.h"
 #include "unicode/unistr.h"
+#include "testutil.h"
 
 struct Split {
     UChar ch;

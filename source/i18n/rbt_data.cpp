@@ -12,6 +12,8 @@
 #include "unicode/unistr.h"
 #include "unicode/uniset.h"
 
+U_NAMESPACE_BEGIN
+
 TransliterationRuleData::TransliterationRuleData(UErrorCode& status)
  : ruleSet(status),
     variableNames(0), variables(0)
@@ -78,3 +80,5 @@ TransliterationRuleData::lookupSegmentReference(UChar32 c) const {
     int32_t i = segmentBase - c;
     return (i >= 0 && i < segmentCount) ? i : -1;
 }
+
+U_NAMESPACE_END

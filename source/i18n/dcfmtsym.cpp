@@ -25,6 +25,8 @@
 // class DecimalFormatSymbols
 // *****************************************************************************
  
+U_NAMESPACE_BEGIN
+
 const char DecimalFormatSymbols::fgNumberElements[] = "NumberElements";
 const char DecimalFormatSymbols::fgCurrencyElements[] = "CurrencyElements";
 
@@ -204,5 +206,7 @@ DecimalFormatSymbols::initialize() {
     fSymbols[kInfinitySymbol] = (UChar)0x221e;          // 'oo' infinite
     fSymbols[kNaNSymbol] = (UChar)0xfffd;               // SUB NaN
 }
+
+U_NAMESPACE_END
 
 //eof

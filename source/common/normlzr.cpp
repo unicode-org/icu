@@ -14,6 +14,8 @@
 #include "unicode/normlzr.h"
 #include "unormimp.h"
 
+U_NAMESPACE_BEGIN
+
 //-------------------------------------------------------------------------
 // Constructors and other boilerplate
 //-------------------------------------------------------------------------
@@ -525,3 +527,4 @@ Normalizer::previousNormalize() {
     currentIndex=text->getIndex();
     return U_SUCCESS(errorCode) && buffer.length()>0;
 }
+U_NAMESPACE_END

@@ -13,15 +13,15 @@
 #include "cmemory.h"
 
 static void U_CALLCONV _deleteRule(void *rule) {
-    delete (TransliterationRule *)rule;
+    delete (U_NAMESPACE_QUALIFIER TransliterationRule *)rule;
 }
 
 // Fill the precontext and postcontext with the patterns of the rules
 // that are masking one another.
-static void maskingError(const TransliterationRule& rule1,
-                         const TransliterationRule& rule2,
+static void maskingError(const U_NAMESPACE_QUALIFIER TransliterationRule& rule1,
+                         const U_NAMESPACE_QUALIFIER TransliterationRule& rule2,
                          UParseError& parseError) {
-    UnicodeString r;
+    U_NAMESPACE_QUALIFIER UnicodeString r;
     int32_t len;
 
     parseError.line = 0;
@@ -40,6 +40,8 @@ static void maskingError(const TransliterationRule& rule1,
     r.extract(0, len, parseError.postContext);
     parseError.postContext[len] = 0;   
 }
+
+U_NAMESPACE_BEGIN
 
 /**
  * Construct a new empty rule set.
@@ -289,3 +291,5 @@ UnicodeString& TransliterationRuleSet::toRules(UnicodeString& ruleSource,
     }
     return ruleSource;
 }
+
+U_NAMESPACE_END

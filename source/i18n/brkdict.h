@@ -14,6 +14,8 @@
 #include "ucmp8.h"
 #include "umemstrm.h"
 
+U_NAMESPACE_BEGIN
+
 /**
  * This is the class that represents the list of known words used by
  * DictionaryBasedBreakIterator.  The conceptual data structure used
@@ -160,5 +162,6 @@ private:
     BreakDictionary& operator=(const BreakDictionary& that);
 };
 
+U_NAMESPACE_END
 
 #endif

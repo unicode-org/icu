@@ -39,6 +39,8 @@ typedef enum EDigitListValues {
     MAX_DEC_DIGITS = DBL_DIG + DIGIT_PADDING + MAX_EXPONENT
 } EDigitListValues;
 
+U_NAMESPACE_BEGIN
+
 /**
  * Digit List. Private to DecimalFormat.  Handles the transcoding
  * between numeric values and strings of characters.  Only handles
@@ -197,5 +199,6 @@ DigitList::append(char digit)
 }
 
 #endif // _DIGITLST
+U_NAMESPACE_END
 
 //eof

@@ -25,6 +25,9 @@
 
 #include "unicode/utypes.h"
 #include "unicode/datefmt.h"
+
+U_NAMESPACE_BEGIN
+
 class DateFormatSymbols;
 class DateFormat;
 
@@ -748,6 +751,8 @@ inline UnicodeString&
 SimpleDateFormat::format(UDate date, UnicodeString& result) const {
     return DateFormat::format(date, result);
 }
+
+U_NAMESPACE_END
 
 #endif // _SMPDTFMT
 //eof

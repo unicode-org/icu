@@ -8,9 +8,9 @@
 #define __TimeZoneBoundaryTest__
  
 #include "unicode/utypes.h"
+#include "unicode/timezone.h"
+#include "unicode/simpletz.h"
 #include "caltztst.h"
-class TimeZone;
-class SimpleTimeZone;
 
 /**
  * A test which discovers the boundaries of DST programmatically and verifies
