@@ -1,7 +1,7 @@
 /*
  * @(#)Features.h	1.4 00/03/15
  *
- * (C) Copyright IBM Corp. 1998, 1999, 2000 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998, 1999, 2000, 2001 - All Rights Reserved
  *
  */
 
@@ -13,23 +13,23 @@
 
 struct FeatureRecord
 {
-    ATag    featureTag;
-    Offset  featureTableOffset;
+    ATag		featureTag;
+    Offset		featureTableOffset;
 };
 
 struct FeatureTable
 {
-    Offset  featureParamsOffset;
-    le_uint16  lookupCount;
-    le_uint16  lookupListIndexArray[ANY_NUMBER];
+    Offset		featureParamsOffset;
+    le_uint16	lookupCount;
+    le_uint16	lookupListIndexArray[ANY_NUMBER];
 };
 
 struct FeatureListTable
 {
-    le_uint16          featureCount;
-    FeatureRecord   featureRecordArray[ANY_NUMBER];
+    le_uint16			featureCount;
+    FeatureRecord		featureRecordArray[ANY_NUMBER];
 
-    FeatureTable    *getFeatureTable(le_uint16 featureIndex, LETag *featureTag);
+    const FeatureTable	*getFeatureTable(le_uint16 featureIndex, LETag *featureTag) const;
 };
 
 #endif

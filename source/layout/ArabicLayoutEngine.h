@@ -2,7 +2,7 @@
 /*
  * @(#)ArabicLayoutEngine.h	1.3 00/03/15
  *
- * (C) Copyright IBM Corp. 1998, 1999, 2000 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998, 1999, 2000, 2001 - All Rights Reserved
  *
  */
 
@@ -44,7 +44,7 @@ public:
 	 * @see ScriptAndLangaugeTags.h for script and language codes
 	 */
     ArabicOpenTypeLayoutEngine(const LEFontInstance *fontInstance, le_int32 scriptCode, le_int32 languageCode,
-                            GlyphSubstitutionTableHeader *gsubTable);
+                            const GlyphSubstitutionTableHeader *gsubTable);
 
  	/**
 	 * This constructor is used when the font requires a "canned" GSUB table which can't be known

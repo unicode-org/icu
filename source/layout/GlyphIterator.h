@@ -1,7 +1,7 @@
 /*
  * @(#)GlyphIterator.h	1.9 00/03/15
  *
- * (C) Copyright IBM Corp. 1998, 1999, 2000 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998, 1999, 2000, 2001 - All Rights Reserved
  *
  */
 
@@ -18,7 +18,7 @@ class GlyphIterator
 public:
     GlyphIterator(LEGlyphID *theGlyphs, GlyphPositionAdjustment *theGlyphPositionAdjustments, le_int32 theGlyphCount,
         le_bool rightToLeft, le_uint16 theLookupFlags, LETag theFeatureTag, const LETag *theGlyphTags[],
-        GlyphDefinitionTableHeader *theGlyphDefinitionTableHeader);
+        const GlyphDefinitionTableHeader *theGlyphDefinitionTableHeader);
 
     GlyphIterator(GlyphIterator &that);
 
@@ -30,13 +30,13 @@ public:
     le_bool prev(le_uint32 delta = 1);
     le_bool findFeatureTag();
 
-    le_bool isRightToLeft();
+    le_bool isRightToLeft() const;
 
-    LEGlyphID getCurrGlyphID();
-    le_int32  getCurrStreamPosition();
-    void   getCurrGlyphPositionAdjustment(GlyphPositionAdjustment& adjustment);
+    LEGlyphID getCurrGlyphID() const;
+    le_int32  getCurrStreamPosition() const;
+    void   getCurrGlyphPositionAdjustment(GlyphPositionAdjustment& adjustment) const;
 
-    le_int32  getMarkComponent(le_int32 markPosition);
+    le_int32  getMarkComponent(le_int32 markPosition) const;
 
     void setCurrGlyphID(LEGlyphID glyphID);
     void setCurrStreamPosition(le_int32 position);
@@ -46,8 +46,8 @@ public:
 
 private:
     GlyphIterator();
-    le_bool filterGlyph(le_uint32 index);
-    le_bool hasFeatureTag();
+    le_bool filterGlyph(le_uint32 index) const;
+    le_bool hasFeatureTag() const;
     le_bool nextInternal(le_uint32 delta = 1);
     le_bool prevInternal(le_uint32 delta = 1);
 
@@ -60,8 +60,8 @@ private:
     le_uint16 lookupFlags;
     LETag    featureTag;
     const LETag **glyphTags;
-    GlyphClassDefinitionTable *glyphClassDefinitionTable;
-    MarkAttachClassDefinitionTable *markAttachClassDefinitionTable;
+    const GlyphClassDefinitionTable *glyphClassDefinitionTable;
+    const MarkAttachClassDefinitionTable *markAttachClassDefinitionTable;
 };
 
 #endif

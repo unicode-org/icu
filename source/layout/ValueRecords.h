@@ -1,7 +1,7 @@
 /*
  * @(#)ValueRecords.h	1.6 00/03/15
  *
- * (C) Copyright IBM Corp. 1998, 1999, 2000 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998, 1999, 2000, 2001 - All Rights Reserved
  *
  */
 
@@ -21,12 +21,12 @@ struct ValueRecord
 {
     le_int16   values[ANY_NUMBER];
 
-    le_int16   getFieldValue(ValueFormat valueFormat, ValueRecordField field);
-    le_int16   getFieldValue(le_int16 index, ValueFormat valueFormat, ValueRecordField field);
-    void    adjustPosition(ValueFormat valueFormat, char *base, GlyphPositionAdjustment &positionAdjustment,
-                const LEFontInstance *fontInstance);
-    void    adjustPosition(le_int16 index, ValueFormat valueFormat, char *base, GlyphPositionAdjustment &positionAdjustment,
-                const LEFontInstance *fontInstance);
+    le_int16   getFieldValue(ValueFormat valueFormat, ValueRecordField field) const;
+    le_int16   getFieldValue(le_int16 index, ValueFormat valueFormat, ValueRecordField field) const;
+    void    adjustPosition(ValueFormat valueFormat, const char *base, GlyphPositionAdjustment &positionAdjustment,
+                const LEFontInstance *fontInstance) const;
+    void    adjustPosition(le_int16 index, ValueFormat valueFormat, const char *base, GlyphPositionAdjustment &positionAdjustment,
+                const LEFontInstance *fontInstance) const;
 
     static le_int16    getSize(ValueFormat valueFormat);
 

@@ -48,9 +48,9 @@ struct BinarySearchLookupTable : LookupTable
     le_int16 entrySelector;
     le_int16 rangeShift;
 
-    LookupSegment *lookupSegment(LookupSegment *segments, le_uint32 glyph);
+    const LookupSegment *lookupSegment(const LookupSegment *segments, le_uint32 glyph) const;
 
-    LookupSingle *lookupSingle(LookupSingle *entries, le_uint32 glyph);
+    const LookupSingle *lookupSingle(const LookupSingle *entries, le_uint32 glyph) const;
 };
 
 struct SimpleArrayLookupTable : LookupTable

@@ -1,7 +1,7 @@
 /*
  * @(#)PairPositioningSubtables.cpp	1.7 00/03/15
  *
- * (C) Copyright IBM Corp. 1998, 1999, 2000 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998, 1999, 2000, 2001 - All Rights Reserved
  *
  */
 
@@ -16,7 +16,7 @@
 #include "OpenTypeUtilities.h"
 #include "LESwaps.h"
 
-le_uint32 PairPositioningSubtable::process(GlyphIterator *glyphIterator, const LEFontInstance *fontInstance)
+le_uint32 PairPositioningSubtable::process(GlyphIterator *glyphIterator, const LEFontInstance *fontInstance) const
 {
     switch(SWAPW(subtableFormat))
     {
@@ -25,14 +25,14 @@ le_uint32 PairPositioningSubtable::process(GlyphIterator *glyphIterator, const L
 
     case 1:
     {
-        PairPositioningFormat1Subtable *subtable = (PairPositioningFormat1Subtable *) this;
+        const PairPositioningFormat1Subtable *subtable = (const PairPositioningFormat1Subtable *) this;
 
         return subtable->process(glyphIterator, fontInstance);
     }
 
     case 2:
     {
-        PairPositioningFormat2Subtable *subtable = (PairPositioningFormat2Subtable *) this;
+        const PairPositioningFormat2Subtable *subtable = (const PairPositioningFormat2Subtable *) this;
 
         return subtable->process(glyphIterator, fontInstance);
     }
@@ -42,7 +42,7 @@ le_uint32 PairPositioningSubtable::process(GlyphIterator *glyphIterator, const L
     }
 }
 
-le_uint32 PairPositioningFormat1Subtable::process(GlyphIterator *glyphIterator, const LEFontInstance *fontInstance)
+le_uint32 PairPositioningFormat1Subtable::process(GlyphIterator *glyphIterator, const LEFontInstance *fontInstance) const
 {
     LEGlyphID firstGlyph = (LEGlyphID) glyphIterator->getCurrGlyphID();
     le_int32 coverageIndex = getGlyphCoverage(firstGlyph);
@@ -55,7 +55,7 @@ le_uint32 PairPositioningFormat1Subtable::process(GlyphIterator *glyphIterator, 
         le_int16 valueRecord2Size = ValueRecord::getSize(SWAPW(valueFormat2));
         le_int16 recordSize = sizeof(PairValueRecord) - sizeof(ValueRecord) + valueRecord1Size + valueRecord2Size;
         LEGlyphID secondGlyph = (LEGlyphID) glyphIterator->getCurrGlyphID();
-        PairValueRecord *pairValueRecord =
+        const PairValueRecord *pairValueRecord =
             findPairValueRecord(secondGlyph, pairSetTable->pairValueRecordArray, SWAPW(pairSetTable->pairValueCount), recordSize);
 
         if (pairValueRecord == NULL) {
@@ -71,7 +71,7 @@ le_uint32 PairPositioningFormat1Subtable::process(GlyphIterator *glyphIterator, 
         }
 
         if (valueFormat2 != 0) {
-            ValueRecord *valueRecord2 = (ValueRecord *) ((char *) &pairValueRecord->valueRecord1 + valueRecord1Size);
+            const ValueRecord *valueRecord2 = (const ValueRecord *) ((char *) &pairValueRecord->valueRecord1 + valueRecord1Size);
             GlyphPositionAdjustment adjustment;
 
             glyphIterator->getCurrGlyphPositionAdjustment(adjustment);
@@ -85,7 +85,7 @@ le_uint32 PairPositioningFormat1Subtable::process(GlyphIterator *glyphIterator, 
     return 0;
 }
 
-le_uint32 PairPositioningFormat2Subtable::process(GlyphIterator *glyphIterator, const LEFontInstance *fontInstance)
+le_uint32 PairPositioningFormat2Subtable::process(GlyphIterator *glyphIterator, const LEFontInstance *fontInstance) const
 {
     LEGlyphID firstGlyph = (LEGlyphID) glyphIterator->getCurrGlyphID();
     le_int32 coverageIndex = getGlyphCoverage(firstGlyph);
@@ -93,16 +93,16 @@ le_uint32 PairPositioningFormat2Subtable::process(GlyphIterator *glyphIterator, 
 
     if (coverageIndex >= 0 && glyphIterator->next()) {
         LEGlyphID secondGlyph = (LEGlyphID) glyphIterator->getCurrGlyphID();
-        ClassDefinitionTable *classDef1 = (ClassDefinitionTable *) ((char *) this + SWAPW(classDef1Offset));
-        ClassDefinitionTable *classDef2 = (ClassDefinitionTable *) ((char *) this + SWAPW(classDef2Offset));
+        const ClassDefinitionTable *classDef1 = (const ClassDefinitionTable *) ((char *) this + SWAPW(classDef1Offset));
+        const ClassDefinitionTable *classDef2 = (const ClassDefinitionTable *) ((char *) this + SWAPW(classDef2Offset));
         le_int32 class1 = classDef1->getGlyphClass(firstGlyph);
         le_int32 class2 = classDef2->getGlyphClass(secondGlyph);
         le_int16 valueRecord1Size = ValueRecord::getSize(SWAPW(valueFormat1));
         le_int16 valueRecord2Size = ValueRecord::getSize(SWAPW(valueFormat2));
         le_int16 class2RecordSize = valueRecord1Size + valueRecord2Size;
         le_int16 class1RecordSize = class2RecordSize * SWAPW(class2Count);
-        Class1Record *class1Record = (Class1Record *) ((char *) class1RecordArray + (class1RecordSize * class1));
-        Class2Record *class2Record = (Class2Record *) ((char *) class1Record->class2RecordArray + (class2RecordSize * class2));
+        const Class1Record *class1Record = (const Class1Record *) ((char *) class1RecordArray + (class1RecordSize * class1));
+        const Class2Record *class2Record = (const Class2Record *) ((char *) class1Record->class2RecordArray + (class2RecordSize * class2));
 
 
         if (valueFormat1 != 0) {
@@ -114,11 +114,11 @@ le_uint32 PairPositioningFormat2Subtable::process(GlyphIterator *glyphIterator, 
         }
 
         if (valueFormat2 != 0) {
-            ValueRecord *valueRecord2 = (ValueRecord *) ((char *) &class2Record->valueRecord1 + valueRecord1Size);
+            const ValueRecord *valueRecord2 = (const ValueRecord *) ((char *) &class2Record->valueRecord1 + valueRecord1Size);
             GlyphPositionAdjustment adjustment;
 
             glyphIterator->getCurrGlyphPositionAdjustment(adjustment);
-            valueRecord2->adjustPosition(SWAPW(valueFormat2), (char *) this, adjustment, fontInstance);
+            valueRecord2->adjustPosition(SWAPW(valueFormat2), (const char *) this, adjustment, fontInstance);
             glyphIterator->setCurrGlyphPositionAdjustment(&adjustment);
         }
 
@@ -128,14 +128,14 @@ le_uint32 PairPositioningFormat2Subtable::process(GlyphIterator *glyphIterator, 
     return 0;
 }
 
-PairValueRecord *PairPositioningFormat1Subtable::findPairValueRecord(LEGlyphID glyphID, PairValueRecord *records, le_uint16 recordCount, le_uint16 recordSize)
+const PairValueRecord *PairPositioningFormat1Subtable::findPairValueRecord(LEGlyphID glyphID, const PairValueRecord *records, le_uint16 recordCount, le_uint16 recordSize) const
 {
     le_uint8 bit = OpenTypeUtilities::highBit(recordCount);
     le_uint16 power = 1 << bit;
     le_uint16 extra = (recordCount - power) * recordSize;
     le_uint16 probe = power * recordSize;
-    PairValueRecord *record = records;
-    PairValueRecord *trial = (PairValueRecord *) ((char *) record + extra);
+    const PairValueRecord *record = records;
+    const PairValueRecord *trial = (const PairValueRecord *) ((char *) record + extra);
 
     if (SWAPW(trial->secondGlyph) <= glyphID) {
         record = trial;
@@ -143,7 +143,7 @@ PairValueRecord *PairPositioningFormat1Subtable::findPairValueRecord(LEGlyphID g
 
     while (probe > recordSize) {
         probe >>= 1;
-        trial = (PairValueRecord *) ((char *) record + probe);
+        trial = (const PairValueRecord *) ((char *) record + probe);
 
         if (SWAPW(trial->secondGlyph) <= glyphID) {
             record = trial;

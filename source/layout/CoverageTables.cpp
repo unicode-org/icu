@@ -1,7 +1,7 @@
 /*
  * @(#)CoverageTables.cpp	1.5 00/03/15
  *
- * (C) Copyright IBM Corp. 1998, 1999, 2000 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998, 1999, 2000, 2001 - All Rights Reserved
  *
  */
 
@@ -11,7 +11,7 @@
 #include "CoverageTables.h"
 #include "LESwaps.h"
 
-le_int32 CoverageTable::getGlyphCoverage(LEGlyphID glyphID)
+le_int32 CoverageTable::getGlyphCoverage(LEGlyphID glyphID) const
 {
     switch(SWAPW(coverageFormat))
     {
@@ -20,14 +20,14 @@ le_int32 CoverageTable::getGlyphCoverage(LEGlyphID glyphID)
 
     case 1:
     {
-        CoverageFormat1Table *f1Table = (CoverageFormat1Table *) this;
+        const CoverageFormat1Table *f1Table = (const CoverageFormat1Table *) this;
 
         return f1Table->getGlyphCoverage(glyphID);
     }
 
     case 2:
     {
-        CoverageFormat2Table *f2Table = (CoverageFormat2Table *) this;
+        const CoverageFormat2Table *f2Table = (const CoverageFormat2Table *) this;
 
         return f2Table->getGlyphCoverage(glyphID);
     }
@@ -37,7 +37,7 @@ le_int32 CoverageTable::getGlyphCoverage(LEGlyphID glyphID)
     }
 }
 
-le_int32 CoverageFormat1Table::getGlyphCoverage(LEGlyphID glyphID)
+le_int32 CoverageFormat1Table::getGlyphCoverage(LEGlyphID glyphID) const
 {
     le_uint16 count = SWAPW(glyphCount);
     le_uint8 bit = OpenTypeUtilities::highBit(count);
@@ -46,37 +46,32 @@ le_int32 CoverageFormat1Table::getGlyphCoverage(LEGlyphID glyphID)
     le_uint16 probe = power;
     le_uint16 index = 0;
 
-    if (SWAPW(glyphArray[extra]) <= glyphID)
-    {
+    if (SWAPW(glyphArray[extra]) <= glyphID) {
         index = extra;
     }
 
-    while (probe > (1 << 0))
-    {
+    while (probe > (1 << 0)) {
         probe >>= 1;
 
-        if (SWAPW(glyphArray[index + probe]) <= glyphID)
-        {
+        if (SWAPW(glyphArray[index + probe]) <= glyphID) {
             index += probe;
         }
     }
 
-    if (SWAPW(glyphArray[index]) == glyphID)
-    {
+    if (SWAPW(glyphArray[index]) == glyphID) {
         return index;
     }
 
     return -1;
 }
 
-le_int32 CoverageFormat2Table::getGlyphCoverage(LEGlyphID glyphID)
+le_int32 CoverageFormat2Table::getGlyphCoverage(LEGlyphID glyphID) const
 {
     le_uint16 count = SWAPW(rangeCount);
     le_int32 rangeIndex =
         OpenTypeUtilities::getGlyphRangeIndex(glyphID, rangeRecordArray, count);
 
-    if (rangeIndex < 0)
-    {
+    if (rangeIndex < 0) {
         return -1;
     }
 

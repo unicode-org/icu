@@ -1,7 +1,7 @@
 /*
  * @(#)MarkArrays.cpp	1.5 00/03/15
  *
- * (C) Copyright IBM Corp. 1998, 1999, 2000 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998, 1999, 2000, 2001 - All Rights Reserved
  *
  */
 
@@ -13,7 +13,7 @@
 #include "LESwaps.h"
 
 le_int32 MarkArray::getMarkClass(LEGlyphID glyphID, le_int32 coverageIndex, const LEFontInstance *fontInstance,
-                              LEPoint &anchor)
+                              LEPoint &anchor) const
 {
     le_int32 markClass = -1;
 
@@ -21,9 +21,9 @@ le_int32 MarkArray::getMarkClass(LEGlyphID glyphID, le_int32 coverageIndex, cons
         le_uint16 mCount = SWAPW(markCount);
 
         if (coverageIndex < mCount) {
-            MarkRecord *markRecord = &markRecordArray[coverageIndex];
+            const MarkRecord *markRecord = &markRecordArray[coverageIndex];
             Offset anchorTableOffset = SWAPW(markRecord->markAnchorTableOffset);
-            AnchorTable *anchorTable = (AnchorTable *) ((char *) this + anchorTableOffset);
+            const AnchorTable *anchorTable = (AnchorTable *) ((char *) this + anchorTableOffset);
 
             anchorTable->getAnchor(glyphID, fontInstance, anchor);
             markClass = SWAPW(markRecord->markClass);

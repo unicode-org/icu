@@ -1,7 +1,7 @@
 /*
  * @(#)ContextualGlyphSubstProc.h	1.6 00/03/15
  *
- * (C) Copyright IBM Corp. 1998, 1999, 2000 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998, 1999, 2000, 2001 - All Rights Reserved
  *
  */
 
@@ -24,7 +24,7 @@ public:
 
     virtual void endStateTable();
 
-    ContextualGlyphSubstitutionProcessor(MorphSubtableHeader *morphSubtableHeader);
+    ContextualGlyphSubstitutionProcessor(const MorphSubtableHeader *morphSubtableHeader);
     virtual ~ContextualGlyphSubstitutionProcessor();
 
 private:
@@ -32,11 +32,11 @@ private:
 
 protected:
     ByteOffset substitutionTableOffset;
-    ContextualGlyphSubstitutionStateEntry *entryTable;
+    const ContextualGlyphSubstitutionStateEntry *entryTable;
 
     le_int32 markGlyph;
 
-    ContextualGlyphSubstitutionHeader *contextualGlyphSubstitutionHeader;
+    const ContextualGlyphSubstitutionHeader *contextualGlyphSubstitutionHeader;
 };
 
 #endif

@@ -1,7 +1,7 @@
 /*
  * @(#)MarkToBasePosnSubtables.cpp	1.5 00/03/15
  *
- * (C) Copyright IBM Corp. 1998, 1999, 2000 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998, 1999, 2000, 2001 - All Rights Reserved
  *
  */
 
@@ -16,7 +16,7 @@
 #include "GlyphIterator.h"
 #include "LESwaps.h"
 
-LEGlyphID MarkToBasePositioningSubtable::findBaseGlyph(GlyphIterator *glyphIterator)
+LEGlyphID MarkToBasePositioningSubtable::findBaseGlyph(GlyphIterator *glyphIterator) const
 {
     if (glyphIterator->prev()) {
         return glyphIterator->getCurrGlyphID();
@@ -25,7 +25,7 @@ LEGlyphID MarkToBasePositioningSubtable::findBaseGlyph(GlyphIterator *glyphItera
     return 0xFFFF;
 }
 
-le_int32 MarkToBasePositioningSubtable::process(GlyphIterator *glyphIterator, const LEFontInstance *fontInstance)
+le_int32 MarkToBasePositioningSubtable::process(GlyphIterator *glyphIterator, const LEFontInstance *fontInstance) const
 {
     LEGlyphID markGlyph = glyphIterator->getCurrGlyphID();
     le_int32 markCoverage = getGlyphCoverage((LEGlyphID) markGlyph);
@@ -36,7 +36,7 @@ le_int32 MarkToBasePositioningSubtable::process(GlyphIterator *glyphIterator, co
     }
 
     LEPoint markAnchor;
-    MarkArray *markArray = (MarkArray *) ((char *) this + SWAPW(markArrayOffset));
+    const MarkArray *markArray = (const MarkArray *) ((char *) this + SWAPW(markArrayOffset));
     le_int32 markClass = markArray->getMarkClass(markGlyph, markCoverage, fontInstance, markAnchor);
     le_uint16 mcCount = SWAPW(classCount);
 
@@ -50,7 +50,7 @@ le_int32 MarkToBasePositioningSubtable::process(GlyphIterator *glyphIterator, co
     GlyphIterator baseIterator(*glyphIterator, lfIgnoreMarks /*| lfIgnoreLigatures*/);
     LEGlyphID baseGlyph = findBaseGlyph(&baseIterator);
     le_int32 baseCoverage = getBaseCoverage((LEGlyphID) baseGlyph);
-    BaseArray *baseArray = (BaseArray *) ((char *) this + SWAPW(baseArrayOffset));
+    const BaseArray *baseArray = (const BaseArray *) ((char *) this + SWAPW(baseArrayOffset));
     le_uint16 baseCount = SWAPW(baseArray->baseRecordCount);
 
     if (baseCoverage < 0 || baseCoverage >= baseCount) {
@@ -60,9 +60,9 @@ le_int32 MarkToBasePositioningSubtable::process(GlyphIterator *glyphIterator, co
         return 0;
     }
 
-    BaseRecord *baseRecord = &baseArray->baseRecordArray[baseCoverage * mcCount];
+    const BaseRecord *baseRecord = &baseArray->baseRecordArray[baseCoverage * mcCount];
     Offset anchorTableOffset = SWAPW(baseRecord->baseAnchorTableOffsetArray[markClass]);
-    AnchorTable *anchorTable = (AnchorTable *) ((char *) baseArray + anchorTableOffset);
+    const AnchorTable *anchorTable = (const AnchorTable *) ((char *) baseArray + anchorTableOffset);
     LEPoint baseAnchor, markAdvance, pixels;
 
     anchorTable->getAnchor(baseGlyph, fontInstance, baseAnchor);
