@@ -27,6 +27,9 @@ void UnicodeTest::runIndexedTest( int32_t index, bool_t exec, char* &name, char*
         case 1: name = "TestLetterNumber"; if (exec) TestLetterNumber(); break;
         case 2: name = "TestMisc"; if (exec) TestMisc(); break;
         case 3: name = "TestUnicodeData"; if (exec) TestUnicodeData(); break;
+        case 4: name = "TestCodeUnit"; if(exec) TestCodeUnit(); break;
+        case 5: name = "TestCodePoint"; if(exec) TestCodePoint(); break;
+        case 6: name = "TestCharLength"; if(exec) TestCharLength(); break;
 
         default: name = ""; break; //needed to end loop
     }
@@ -394,4 +397,161 @@ int32_t UnicodeTest::MakeDir(char* str)
     }
     return -1;
 }
+/*Tests added by Madhu*/
 
+/* Tests for isSingle(), isLead(), isTrial(), isSurrogate */
+void UnicodeTest::TestCodeUnit(){
+	const UChar codeunit[]={0x0000,0xe065,0x20ac,0xd7ff,0xd800,0xd841,0xd905,0xdbff,0xdc00,0xdc02,0xddee,0xdfff,0};
+	
+	int16_t i;
+	
+	for(i=0; i<sizeof(codeunit)/sizeof(codeunit[0]); i++){
+	    UChar c=codeunit[i];
+		UnicodeString msg;
+		msg.append((UChar32)c);
+		logln((UnicodeString)"Testing code unit value of " + prettify(msg));
+		if(i<4){
+			if(!(Unicode::isSingle(c)) || (Unicode::isLead(c)) || (Unicode::isTrail(c)) ||(Unicode::isSurrogate(c))){
+				errln((UnicodeString)"ERROR:" + prettify(msg) + " is a single");
+			}
+		
+		}
+		if(i >= 4 && i< 8){
+			if(!(Unicode::isLead(c)) || Unicode::isSingle(c) || Unicode::isTrail(c) || !(Unicode::isSurrogate(c))){
+				errln((UnicodeString)"ERROR:" + prettify(msg) + " is a first surrogate");
+			}
+		}
+		if(i >= 8 && i< 12){
+			if(!(Unicode::isTrail(c)) || Unicode::isSingle(c) || Unicode::isLead(c) || !(Unicode::isSurrogate(c))){
+				errln((UnicodeString)"ERROR:" + prettify(msg) + " is a second surrogate");
+			}
+		}
+	}
+
+}
+/* Tests for isSurrogate(), isUnicodeChar(), isError(), isValid() */
+void UnicodeTest::TestCodePoint(){
+	const UChar32 codePoint[]={
+		//surrogate, notvalid(codepoint), not a UnicodeChar, not Error
+		0xd800,
+        0xdbff,
+        0xdc00,
+		0xdfff,
+		0xdc04,
+		0xd821,
+	    //not a surrogate, valid, isUnicodeChar , not Error
+		0x20ac,
+		0xd7ff,
+		0xe000,
+		0xe123,
+		0x0061,
+		0xe065, 
+	    0x20402,
+        0x24506,
+		0x23456,
+		0x20402,
+		0x10402,
+		0x23456,
+        //not a surrogate, not valid, isUnicodeChar, isError
+		0x0015,
+		0x009f,
+		//not a surrogate, not valid, not isUnicodeChar, isError
+		0xffff,
+		0xfffe,
+	};
+    int16_t i;
+	for(i=0; i<sizeof(codePoint)/sizeof(codePoint[0]); i++){
+	    UChar32 c=codePoint[i];
+		UnicodeString msg;
+		msg.append(c);
+		logln((UnicodeString)"Testing code Point value of " + prettify(msg));
+		if(i<6){
+			if(!Unicode::isSurrogate(c)){
+				errln((UnicodeString)"ERROR: isSurrogate() failed for" + prettify(msg));
+			}
+			if(Unicode::isValid(c)){
+                errln((UnicodeString)"ERROR: isValid() failed for "+ prettify(msg));
+			}
+			if(Unicode::isUnicodeChar(c)){
+				errln((UnicodeString)"ERROR: isUnicodeChar() failed for "+ prettify(msg));
+			}
+			if(Unicode::isError(c)){
+				errln((UnicodeString)"ERROR: isError() failed for "+ prettify(msg));
+			}
+		}else if(i >=6 && i<18){
+			if(Unicode::isSurrogate(c)){
+				errln((UnicodeString)"ERROR: isSurrogate() failed for" + prettify(msg));
+			}
+			if(!Unicode::isValid(c)){
+                errln((UnicodeString)"ERROR: isValid() failed for "+ prettify(msg));
+			}
+			if(!Unicode::isUnicodeChar(c)){
+				errln((UnicodeString)"ERROR: isUnicodeChar() failed for "+ prettify(msg));
+			}
+			if(Unicode::isError(c)){
+				errln((UnicodeString)"ERROR: isError() failed for "+ prettify(msg));
+			}
+		}else if(i >=18 && i<20){
+			if(Unicode::isSurrogate(c)){
+				errln((UnicodeString)"ERROR: isSurrogate() failed for" + prettify(msg));
+			}
+			if(Unicode::isValid(c)){
+                errln((UnicodeString)"ERROR: isValid() failed for "+ prettify(msg));
+			}
+			if(!Unicode::isUnicodeChar(c)){
+				errln((UnicodeString)"ERROR: isUnicodeChar() failed for "+ prettify(msg));
+			}
+			if(!Unicode::isError(c)){
+				errln((UnicodeString)"ERROR: isError() failed for "+ prettify(msg));
+			}
+		}
+		else if(i >=18 && i<sizeof(codePoint)/sizeof(codePoint[0])){
+		    if(Unicode::isSurrogate(c)){
+				errln((UnicodeString)"ERROR: isSurrogate() failed for" + prettify(msg));
+			}
+			if(Unicode::isValid(c)){
+                errln((UnicodeString)"ERROR: isValid() failed for "+ prettify(msg));
+			}
+			if(Unicode::isUnicodeChar(c)){
+				errln((UnicodeString)"ERROR: isUnicodeChar() failed for "+ prettify(msg));
+			}
+			if(!Unicode::isError(c)){
+				errln((UnicodeString)"ERROR: isError() failed for "+ prettify(msg));
+			}
+		}
+	}
+ 
+}
+void UnicodeTest::TestCharLength()
+{
+	const int32_t codepoint[]={
+		1, 0x0061,
+        1, 0xe065,
+		1, 0x20ac,
+	    2, 0x20402,
+		2, 0x23456,
+		2, 0x24506,
+		2, 0x20402,
+		2, 0x10402,
+		1, 0xd7ff,
+		1, 0xe000
+	};
+	
+	int16_t i;
+	bool_t multiple;
+	for(i=0; i<sizeof(codepoint)/sizeof(codepoint[0]); i=i+2){
+		UChar32 c=codepoint[i+1];
+		UnicodeString msg;
+		msg.append(c);
+		if(Unicode::charLength(c) != codepoint[i]){
+			errln((UnicodeString)"The no: of code units for" + prettify(msg)+
+				":- Expected: " + (int32_t)codepoint[i] + " Got: " + Unicode::charLength(c));
+		}else{
+			logln((UnicodeString)"The no: of code units for" + prettify(msg) + " is " + Unicode::charLength(c)); 
+		}
+        multiple=codepoint[i] == 1 ? FALSE : TRUE;
+		if(Unicode::needMultipleUChar(c) != multiple){
+			  errln("ERROR: Unicode::needMultipleUChar() failed for" + prettify(msg));
+		}
+	}
+}
