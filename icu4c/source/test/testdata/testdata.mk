@@ -10,13 +10,12 @@
 
 .SUFFIXES : .res .txt
 
-
-ALL : "$(DLL_OUTPUT)\testdata.dll" 
+ALL : "$(TESTDATAOUT)\testdata.dat" 
 	@echo Test data is built.
 
-"$(DLL_OUTPUT)\testdata.dll" :  "$(TESTDATA)\root.res" "$(TESTDATA)\te.res" "$(TESTDATA)\te_IN.res" "$(TESTDATA)\testtypes.res" "$(TESTDATA)\empty.res" test.dat
+"$(TESTDATAOUT)\testdata.dat" :  "$(TESTDATAOUT)\root.res" "$(TESTDATAOUT)\te.res" "$(TESTDATAOUT)\te_IN.res" "$(TESTDATAOUT)\testtypes.res" "$(TESTDATAOUT)\empty.res" $(TESTDATAOUT)test.dat
 	@echo Building test data
- 	@"$(ICUTOOLS)\pkgdata\$(CFG)\pkgdata" -v -m dll -c -p testdata -O "$(PKGOPT)" -d "$(DLL_OUTPUT)" -T "$(TESTDATAOUT)" -s "$(TESTDATA)" <<
+ 	@"$(ICUTOOLS)\pkgdata\$(CFG)\pkgdata" -v -m common -c -p testdata -O "$(PKGOPT)" -d "$(TESTDATAOUT)" -T "$(TESTDATAOUT)" -s "$(TESTDATAOUT)" <<
 root.res
 te.res
 te_IN.res
@@ -28,7 +27,7 @@ test.dat
 # Inference rule for creating resource bundles
 {$(TESTDATA)}.txt.res:
         @echo Making Test Resource Bundle files
-        @"$(ICUTOOLS)\genrb\$(CFG)\genrb" -s$(TESTDATA) -d$(TESTDATA) $(?F)
+        @"$(ICUTOOLS)\genrb\$(CFG)\genrb" -s$(TESTDATA) -d$(TESTDATAOUT) $(?F)
 
-test.dat : {"$(ICUTOOLS)\gentest\$(CFG)"}gentest.exe
-	"$(ICUTOOLS)\gentest\$(CFG)\gentest" -d$(TESTDATA)
+$(TESTDATAOUT)test.dat : {"$(ICUTOOLS)\gentest\$(CFG)"}gentest.exe
+	"$(ICUTOOLS)\gentest\$(CFG)\gentest" -d$(TESTDATAOUT)
