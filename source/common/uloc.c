@@ -50,6 +50,8 @@ U_CFUNC const char *locale_get_default(void);
 static const char _kLocaleID[]       = "LocaleID";
 static const char _kLanguages[]      = "Languages";
 static const char _kCountries[]      = "Countries";
+static const char _kIndexLocaleName[] = "index";
+static const char _kIndexTag[]       = "InstalledLocales";
 
 #if 0
 /* We don't use these resources currently */
@@ -1227,8 +1229,8 @@ static void _lazyEvaluate_installedLocales()
     int32_t localeCount;
     
     ures_setIsStackObject(&installed, TRUE);
-    index = ures_open(NULL, kIndexLocaleName, &status);
-    ures_getByKey(index, kIndexTag, &installed, &status);
+    index = ures_open(NULL, _kIndexLocaleName, &status);
+    ures_getByKey(index, _kIndexTag, &installed, &status);
     
     if(U_SUCCESS(status)) {
         localeCount = ures_getSize(&installed);
