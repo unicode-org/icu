@@ -57,7 +57,7 @@ all-local: $(TARGET) $(ALL_MAN_FILES)
 
 install-local: all-local install-man
 	$(MKINSTALLDIRS) $(DESTDIR)$(sbindir)
-	$(INSTALL) $(TARGET) $(DESTDIR)$(sbindir)/$(TARGET)
+	$(INSTALL) $(TARGET) $(DESTDIR)$(sbindir)
 
 # man page
 install-man: install-manx

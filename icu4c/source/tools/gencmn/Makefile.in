@@ -61,8 +61,8 @@ all-local: $(TARGET) $(DECMN) $(ALL_MAN_FILES)
 
 install-local: all-local install-man
 	$(MKINSTALLDIRS) $(DESTDIR)$(sbindir)
-	$(INSTALL) $(TARGET) $(DESTDIR)$(sbindir)/$(TARGET)
-	$(INSTALL) $(DECMN) $(DESTDIR)$(sbindir)/$(DECMN)
+	$(INSTALL) $(TARGET) $(DESTDIR)$(sbindir)
+	$(INSTALL) $(DECMN) $(DESTDIR)$(sbindir)
 
 dist-local:
 

@@ -56,7 +56,7 @@ install-local: all-local
 	$(MKINSTALLDIRS) $(DESTDIR)$(bindir)
 	$(INSTALL) $(TARGET) $(DESTDIR)$(bindir)
 
-<dist-local:
+dist-local:
 
 clean-local: 
 	test -z "$(CLEANFILES)" || $(RMV) $(CLEANFILES)
