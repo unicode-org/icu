@@ -97,7 +97,7 @@ public:
 UOBJECT_DEFINE_ABSTRACT_RTTI_IMPLEMENTATION(LocalizationInfo)
 
 // if both strings are NULL, this returns TRUE
-UBool 
+static UBool 
 streq(const UChar* lhs, const UChar* rhs) {
     if (rhs == lhs) {
         return TRUE;
@@ -262,6 +262,15 @@ private:
 };
 
 
+enum {
+    OPEN_ANGLE = 0x003c, /* '<' */
+    CLOSE_ANGLE = 0x003e, /* '>' */
+    COMMA = 0x002c,
+    TICK = 0x0027,
+    QUOTE = 0x0022,
+    SPACE = 0x0020
+};
+
 /**
  * Utility for parsing a localization string and returning a StringLocalizationInfo*.
  */
@@ -285,14 +294,6 @@ public:
     StringLocalizationInfo* parse(UChar* data, int32_t len);
     
 private:
-    enum {
-        OPEN_ANGLE = 0x003c, /* '<' */
-        CLOSE_ANGLE = 0x003e, /* '>' */
-        COMMA = 0x002c,
-        TICK = 0x0027,
-        QUOTE = 0x0022,
-        SPACE = 0x0020
-    };
     
     void inc(void) { ++p; ch = 0xffff; }
     UBool checkInc(UChar c) { if (p < e && (ch == c || *p == c)) { inc(); return TRUE; } return FALSE; }
@@ -308,10 +309,6 @@ private:
         
     UChar** nextArray(int32_t& requiredLength);
     UChar*  nextString(void);
-    
-    static UChar DQUOTE_STOPLIST[];
-    static UChar SQUOTE_STOPLIST[];
-    static UChar NOQUOTE_STOPLIST[];
 };
 
 #ifdef DEBUG
@@ -321,20 +318,19 @@ private:
 #endif
         
 
-UChar LocDataParser::DQUOTE_STOPLIST[] = { 
-  LocDataParser::QUOTE, 0
+static const UChar DQUOTE_STOPLIST[] = { 
+    QUOTE, 0
 };
 
-UChar LocDataParser::SQUOTE_STOPLIST[] = { 
-  LocDataParser::TICK, 0
+static const UChar SQUOTE_STOPLIST[] = { 
+    TICK, 0
 };
 
-UChar LocDataParser::NOQUOTE_STOPLIST[] = { 
-  LocDataParser::SPACE, LocDataParser::COMMA, LocDataParser::CLOSE_ANGLE, LocDataParser::OPEN_ANGLE, 
-  LocDataParser::TICK, LocDataParser::QUOTE, 0
+static const UChar NOQUOTE_STOPLIST[] = { 
+    SPACE, COMMA, CLOSE_ANGLE, OPEN_ANGLE, TICK, QUOTE, 0
 };
 
-void
+static void
 DeleteFn(void* p) {
   uprv_free(p);
 }

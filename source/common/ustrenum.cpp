@@ -17,6 +17,7 @@
 #include "cmemory.h"
 #include "uassert.h"
 
+U_NAMESPACE_BEGIN
 // StringEnumeration implementation ---------------------------------------- ***
 
 StringEnumeration::StringEnumeration()
@@ -140,6 +141,7 @@ void UStringEnumeration::reset(UErrorCode& status) {
 }
 
 UOBJECT_DEFINE_RTTI_IMPLEMENTATION(UStringEnumeration/*, StringEnumeration*/)
+U_NAMESPACE_END
 
 // C wrapper --------------------------------------------------------------- ***
 
