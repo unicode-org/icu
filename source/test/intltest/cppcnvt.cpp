@@ -107,7 +107,7 @@ void ConvertTest::TestConvert()
 
     const char*      CodePagesTestFiles[NUM_CODEPAGE] =
     {
-        "uni-text.txt" 
+        "uni-text.bin" 
     };
 
     const UConverterPlatform CodePagesPlatform[NUM_CODEPAGE] =
