@@ -651,8 +651,10 @@ generateData(const char *dataDir, const char *packageName, const char* bundleNam
         exit(U_INTERNAL_PROGRAM_ERROR);
     }
 
+#if !UCONFIG_NO_IDNA
     /* done with writing the data .. close the hashtable */
     uhash_close(hashTable);
+#endif
 }
 
 #if !UCONFIG_NO_IDNA

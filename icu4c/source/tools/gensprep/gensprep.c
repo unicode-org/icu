@@ -190,7 +190,7 @@ main(int argc, char* argv[]) {
         "gensprep writes dummy " U_ICUDATA_NAME "_" DATA_NAME "." DATA_TYPE
         " because UCONFIG_NO_IDNA is set, \n"
         "see icu/source/common/unicode/uconfig.h\n");
-    generateData(destDir);
+    generateData(destDir, packageName, bundleName);
 
 #else
 
