@@ -24,61 +24,9 @@
 #include "cmemory.h"
 #include "ucol_tok.h"
 #include "ucmp32.h"
+#include "ucol_sol.h"
+extern const UChar *rulesToParse = 0;
 
-static const UChar *rulesToParse = 0;
-
-/* will use a small structure, tokHash */
-
-int32_t
-uhash_hashTokens(const void *k) {
-  int32_t hash = 0;
-  if (k != NULL) {
-      const uint32_t key = (const uint32_t)k;
-      int32_t len = (key & 0xFF000000)>>24;
-      int32_t inc = ((len - 32) / 32) + 1;
-
-      const UChar *p = (key & 0x00FFFFFF) + rulesToParse;
-      const UChar *limit = p + len;    
-
-      while (p<limit) {
-          hash = (hash * 37) + *p;
-          p += inc;
-      }
-  }
-  return hash;
-}
-
-UBool uhash_compareTokens(const void *key1, const void *key2) {
-    const uint32_t p1 = (const uint32_t) key1;
-    const uint32_t p2 = (const uint32_t) key2;
-    const UChar *s1 = (p1 & 0x00FFFFFF) + rulesToParse;
-    const UChar *s2 = (p2 & 0x00FFFFFF) + rulesToParse;
-    uint32_t s1L = ((p1 & 0xFF000000) >> 24);
-    uint32_t s2L = ((p2 & 0xFF000000) >> 24);
-
-    if (p1 == p2) {
-        return TRUE;
-    }
-    if (p1 == 0 || p2 == 0) {
-        return FALSE;
-    }
-    if(s1L != s2L) {
-      return FALSE;
-    }
-    if(p1 == p2) {
-      return TRUE;
-    }
-    const UChar *end = s1+s1L-1;
-    while((s1 < end) && *s1 == *s2) {
-      ++s1;
-      ++s2;
-    }
-    if(*s1 == *s2) {
-      return TRUE;
-    } else {
-      return FALSE;
-    }
-}
 
 void deleteToken(void *token) {
     UColToken *tok = (UColToken *)token;
