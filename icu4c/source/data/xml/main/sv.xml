@@ -1,14 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE ldml SYSTEM " 	http://www.openi18n.org/spec/ldml/1.0/ldml.dtd" 
-[
-      <!ENTITY % icu SYSTEM " 	http://www.openi18n.org/spec/ldml/1.0/ldmlICU.dtd"> 
-%icu;
-]
->
+<!DOCTYPE ldml SYSTEM "http://oss.software.ibm.com/cvs/icu/~checkout~/locale/ldml.dtd">
 <ldml>
 	<identity>
 		<version number="2.0"/>
-		<generation date="2003-12-19" />
+		<generation date="2004-05-13" />
 		<language type="sv" /> 
 	</identity>
 	<localeDisplayNames>
@@ -24,6 +19,7 @@
 			<language type="akk">akkadiska</language>
 			<language type="ale">aleutiska</language>
 			<language type="am">amhariska</language>
+			<language type="an">aragonesiska</language>
 			<language type="ar">arabiska</language>
 			<language type="arc">arameiska</language>
 			<language type="arn">araukanska</language>
@@ -51,6 +47,7 @@
 			<language type="bik">bikol</language>
 			<language type="bin">bini</language>
 			<language type="bla">siksika</language>
+			<language type="bm">bambara</language>
 			<language type="bn">bengali</language>
 			<language type="bo">tibetanska</language>
 			<language type="br">bretonska</language>
@@ -77,6 +74,7 @@
 			<language type="cop">koptiska</language>
 			<language type="cr">cree</language>
 			<language type="cs">tjeckiska</language>
+			<language type="cu">kyrkoslaviska</language>
 			<language type="cv">tjuvasjiska</language>
 			<language type="cy">walesiska</language>
 			<language type="da">danska</language>
@@ -137,14 +135,16 @@
 			<language type="hmn">hmong</language>
 			<language type="ho">hiri motu</language>
 			<language type="hr">kroatiska</language>
+			<language type="ht">haitiska</language>
 			<language type="hu">ungerska</language>
 			<language type="hup">hupa</language>
 			<language type="hy">armeniska</language>
 			<language type="hz">herero</language>
 			<language type="iba">iban</language>
 			<language type="id">indonesiska</language>
+			<language type="ie">interlingue</language>
 			<language type="ig">ibo</language>
-			<language type="ii">yi</language>
+			<language type="ii">sichuan yi</language>
 			<language type="ik">inupiaq</language>
 			<language type="ilo">iloko</language>
 			<language type="is">isländska</language>
@@ -365,6 +365,32 @@
 			<language type="zu">zulu</language>
 			<language type="zun">zuñi</language>
 		</languages>
+		<scripts>
+			<script type="Arab">arabiskt</script>
+			<script type="Armn">armeniskt</script>
+			<script type="Beng">bengaliskt</script>
+			<script type="Cprt">cypriotiskt</script>
+			<script type="Cyrl">kyrilliskt</script>
+			<script type="Ethi">etiopiskt</script>
+			<script type="Geor">georgiskt</script>
+			<script type="Goth">gotiskt</script>
+			<script type="Grek">grekiskt</script>
+			<script type="Hans">förenklad han</script>
+			<script type="Hant">traditionell han</script>
+			<script type="Hebr">hebreiskt</script>
+			<script type="Ital">fornitaliskt</script>
+			<script type="Laoo">laotiskt</script>
+			<script type="Latn">latinskt</script>
+			<script type="Mong">mongoliskt</script>
+			<script type="Osma">osmanskt</script>
+			<script type="Qaac">koptiskt</script>
+			<script type="Runr">runskrift</script>
+			<script type="Syrc">syriskt</script>
+			<script type="Taml">tamilskt</script>
+			<script type="Thai">thailändskt</script>
+			<script type="Tibt">tibetanskt</script>
+			<script type="Ugar">ugaritiskt</script>
+		</scripts>
 		<territories>
 			<territory type="AD">Andorra</territory>
 			<territory type="AE">Förenade Arabemiraten</territory>
@@ -506,7 +532,7 @@
 			<territory type="ML">Mali</territory>
 			<territory type="MM">Myanmar</territory>
 			<territory type="MN">Mongoliet</territory>
-			<territory type="MO">Macao S.A.R. China</territory>
+			<territory type="MO">Macao S.A.R., China</territory>
 			<territory type="MP">Nordmarianerna</territory>
 			<territory type="MQ">Martinique</territory>
 			<territory type="MR">Mauretanien</territory>
@@ -617,22 +643,44 @@
 			<key type="currency">Valuta</key>
 		</keys>
 		<types>
-			<type type="traditional" key="calendar">Traditionell Kalendar</type>
-			<type type="traditional" key="collation">Traditionell Sortera</type>
+			<type type="buddhist" key="calendar">Buddistisk kalender</type>
+			<type type="chinese" key="calendar">Kinesisk kalender</type>
+			<type type="gregorian" key="calendar">Gregoriansk kalender</type>
+			<type type="hebrew" key="calendar">Hebreisk kalender</type>
+			<type type="islamic" key="calendar">Islamisk kalender</type>
+			<type type="islamic-civil" key="calendar">Islamisk civil kalender</type>
+			<type type="japanese" key="calendar">Japansk kalender</type>
+			<type type="direct" key="collation">Direkt ordning</type>
+			<type type="phonebook" key="collation">Telefonboksordning</type>
+			<type type="pinyin" key="collation">Pinyinordning</type>
+			<type type="stroke" key="collation">Raderingsordning</type>
+			<type type="traditional" key="collation">Traditionell ordning</type>
 		</types>
 	</localeDisplayNames>
 	<characters>
-		<exemplarCharacters>[a-z ä ö å á é ë ü]</exemplarCharacters>
-		<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
-			<icu:scripts>
-				<icu:script type="1">Latn</icu:script>
-			</icu:scripts>
-		</special>
+		<exemplarCharacters>[a-zäöåáéëü]</exemplarCharacters>
 	</characters>
 	<dates>
 		<calendars>
 			<calendar type="gregorian">
-				<monthNames>
+				<monthNames context="format" width="abbreviated">
+					<month type="1">jan</month>
+					<month type="2">feb</month>
+					<month type="3">mar</month>
+					<month type="4">apr</month>
+					<month type="5">maj</month>
+					<month type="6">jun</month>
+					<month type="7">jul</month>
+					<month type="8">aug</month>
+					<month type="9">sep</month>
+					<month type="10">okt</month>
+					<month type="11">nov</month>
+					<month type="12">dec</month>
+				</monthNames>
+				<monthNames context="format" width="narrow">
+					<month type="1">JFMAMJJASOND</month>
+				</monthNames>
+				<monthNames context="format" width="wide">
 					<month type="1">januari</month>
 					<month type="2">februari</month>
 					<month type="3">mars</month>
@@ -646,21 +694,25 @@
 					<month type="11">november</month>
 					<month type="12">december</month>
 				</monthNames>
-				<monthAbbr>
-					<month type="1">jan</month>
-					<month type="2">feb</month>
-					<month type="3">mar</month>
-					<month type="4">apr</month>
-					<month type="5">maj</month>
-					<month type="6">jun</month>
-					<month type="7">jul</month>
-					<month type="8">aug</month>
-					<month type="9">sep</month>
-					<month type="10">okt</month>
-					<month type="11">nov</month>
-					<month type="12">dec</month>
-				</monthAbbr>
-				<dayNames>
+				<dayNames context="format" width="abbreviated" >
+					<day type="sun">sö</day>
+					<day type="mon">må</day>
+					<day type="tue">ti</day>
+					<day type="wed">on</day>
+					<day type="thu">to</day>
+					<day type="fri">fr</day>
+					<day type="sat">lö</day>
+				</dayNames>
+				<dayNames context="format" width="narrow" >
+					<day type="sun">S</day>
+					<day type="mon">M</day>
+					<day type="tue">T</day>
+					<day type="wed">O</day>
+					<day type="thu">T</day>
+					<day type="fri">F</day>
+					<day type="sat">L</day>
+				</dayNames>
+				<dayNames context="format" width="wide" >
 					<day type="sun">söndag</day>
 					<day type="mon">måndag</day>
 					<day type="tue">tisdag</day>
@@ -669,27 +721,8 @@
 					<day type="fri">fredag</day>
 					<day type="sat">lördag</day>
 				</dayNames>
-				<dayAbbr>
-					<day type="sun">sö</day>
-					<day type="mon">må</day>
-					<day type="tue">ti</day>
-					<day type="wed">on</day>
-					<day type="thu">to</day>
-					<day type="fri">fr</day>
-					<day type="sat">lö</day>
-				</dayAbbr>
-				<week>
-					<minDays count="4"/>
-					<firstDay day="mon"/>
-				</week>
 				<am>fm</am>
 				<pm>em</pm>
-				<eras>
-					<eraAbbr>
-						<era type="1">f.Kr.</era>
-						<era type="2">e.Kr.</era>
-					</eraAbbr>
-				</eras>
 				<dateFormats>
 					<default type="medium"/>
 					<dateFormatLength type="full">
@@ -762,72 +795,22 @@
 			<nan>�</nan>
 		</symbols>
 		<currencies>
+			<currency type="EUR">
+				<displayName>Euro</displayName>
+				<symbol>€</symbol>
+			</currency>
+			<currency type="INR">
+				<displayName>Indisk rupie</displayName>
+				<symbol>=0#Rs.|1#Re.|1&lt;Rs.</symbol>
+			</currency>
+			<currency type="JPY">
+				<displayName>Japansk yen</displayName>
+				<symbol>¥</symbol>
+			</currency>
 			<currency type="SEK">
-				<displayName>SEK</displayName>
+				<displayName>Svensk krona</displayName>
 				<symbol>kr</symbol>
 			</currency>
 		</currencies>
 	</numbers>
-	<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
-		<icu:ruleBasedNumberFormats>
-			<icu:ruleBasedNumberFormat type="spellout">
-%year:
-=%neutrum=;
-1000&gt;: &lt;%neutrum&lt;hundra[­&gt;&gt;];
-10,000: =%neutrum=;
-%neutrum:
--x: minus &gt;&gt;;
-x.x: &lt;&lt; komma &gt;&gt;;
-noll; ett; två; tre; fyra; fem; sex; sju; åtta; nio;
-tio; elva; tolv; tretton; fjorton; femton; sexton; sjutton; arton; nitton;
-20: tjugo[&gt;&gt;];
-30: trettio[&gt;&gt;];
-40: fyrtio[&gt;&gt;];
-50: femtio[&gt;&gt;];
-60: sextio[&gt;&gt;];
-70: sjuttio[&gt;&gt;];
-80: åttio[&gt;&gt;];
-90: nittio[&gt;&gt;];
-100: &lt;&lt;hundra[­&gt;&gt;];
-1000: ettusen[ &gt;&gt;];
-2000: &lt;%default&lt;­tusen[ &gt;&gt;];
-1,000,000: en miljon[ &gt;&gt;];
-2,000,000: &lt;%default&lt; miljoner[ &gt;&gt;];
-1,000,000,000: en miljard[ &gt;&gt;];
-2,000,000,000: &lt;%default&lt; miljarder[ &gt;&gt;];
-1,000,000,000,000: en biljon[ &gt;&gt;];
-2,000,000,000,000: &lt;%default&lt; biljoner[ &gt;&gt;];
-1,000,000,000,000,000: en triljon[ &gt;&gt;];
-2,000,000,000,000,000: &lt;%default&lt; triljoner[ &gt;&gt;];
-1,000,000,000,000,000,000: =#,##0=;
-%default:
- -x: minus &gt;&gt;;
-x.x: &lt;&lt; komma &gt;&gt;;
-noll; en; två; tre; fyra; fem; sex; sju; åtta; nio;
-tio; elva; tolv; tretton; fjorton; femton; sexton; sjutton; arton; nitton;
-20: tjugo[&gt;&gt;];
-30: trettio[&gt;&gt;];
-40: fyrtio[&gt;&gt;];
-50: femtio[&gt;&gt;];
-60: sextio[&gt;&gt;];
-70: sjuttio[&gt;&gt;];
-80: åttio[&gt;&gt;];
-90: nittio[&gt;&gt;];
-100: etthundra[­&gt;&gt;];
-200: &lt;&lt;hundra[­&gt;&gt;];
-1000: ettusen[ &gt;&gt;];
-2000: &lt;&lt;­tusen[ &gt;&gt;];
-1,000,000: en miljon[ &gt;&gt;];
-2,000,000: &lt;&lt; miljoner[ &gt;&gt;];
-1,000,000,000: en miljard[ &gt;&gt;];
-2,000,000,000: &lt;&lt; miljarder[ &gt;&gt;];
-1,000,000,000,000: en biljon[ &gt;&gt;];
-2,000,000,000,000: &lt;&lt; biljoner[ &gt;&gt;];
-1,000,000,000,000,000: en triljon[ &gt;&gt;];
-2,000,000,000,000,000: &lt;&lt; triljoner[ &gt;&gt;];
-1,000,000,000,000,000,000: =#,##0=;
-
-			</icu:ruleBasedNumberFormat>
-		</icu:ruleBasedNumberFormats>
-	</special>
 </ldml>

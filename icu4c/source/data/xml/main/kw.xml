@@ -1,14 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE ldml SYSTEM " 	http://www.openi18n.org/spec/ldml/1.0/ldml.dtd" 
-[
-      <!ENTITY % icu SYSTEM " 	http://www.openi18n.org/spec/ldml/1.0/ldmlICU.dtd"> 
-%icu;
-]
->
+<!DOCTYPE ldml SYSTEM "http://oss.software.ibm.com/cvs/icu/~checkout~/locale/ldml.dtd">
 <ldml>
 	<identity>
 		<version number="2.0"/>
-		<generation date="2003-12-19" />
+		<generation date="2004-05-13" />
 		<language type="kw" /> 
 	</identity>
 	<localeDisplayNames>
@@ -21,16 +16,25 @@
 	</localeDisplayNames>
 	<characters>
 		<exemplarCharacters>[a-z]</exemplarCharacters>
-		<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
-			<icu:scripts>
-				<icu:script type="1">Latn</icu:script>
-			</icu:scripts>
-		</special>
 	</characters>
 	<dates>
 		<calendars>
 			<calendar type="gregorian">
-				<monthNames>
+				<monthNames context="format" width="abbreviated">
+					<month type="1">Gen</month>
+					<month type="2">Whe</month>
+					<month type="3">Mer</month>
+					<month type="4">Ebr</month>
+					<month type="5">Me</month>
+					<month type="6">Efn</month>
+					<month type="7">Gor</month>
+					<month type="8">Est</month>
+					<month type="9">Gwn</month>
+					<month type="10">Hed</month>
+					<month type="11">Du</month>
+					<month type="12">Kev</month>
+				</monthNames>
+				<monthNames context="format" width="wide">
 					<month type="1">Mys Genver</month>
 					<month type="2">Mys Whevrel</month>
 					<month type="3">Mys Merth</month>
@@ -44,21 +48,16 @@
 					<month type="11">Mys Du</month>
 					<month type="12">Mys Kevardhu</month>
 				</monthNames>
-				<monthAbbr>
-					<month type="1">Gen</month>
-					<month type="2">Whe</month>
-					<month type="3">Mer</month>
-					<month type="4">Ebr</month>
-					<month type="5">Me</month>
-					<month type="6">Efn</month>
-					<month type="7">Gor</month>
-					<month type="8">Est</month>
-					<month type="9">Gwn</month>
-					<month type="10">Hed</month>
-					<month type="11">Du</month>
-					<month type="12">Kev</month>
-				</monthAbbr>
-				<dayNames>
+				<dayNames context="format" width="abbreviated" >
+					<day type="sun">Sul</day>
+					<day type="mon">Lun</day>
+					<day type="tue">Mth</day>
+					<day type="wed">Mhr</day>
+					<day type="thu">Yow</day>
+					<day type="fri">Gwe</day>
+					<day type="sat">Sad</day>
+				</dayNames>
+				<dayNames context="format" width="wide" >
 					<day type="sun">De Sul</day>
 					<day type="mon">De Lun</day>
 					<day type="tue">De Merth</day>
@@ -67,23 +66,8 @@
 					<day type="fri">De Gwener</day>
 					<day type="sat">De Sadorn</day>
 				</dayNames>
-				<dayAbbr>
-					<day type="sun">Sul</day>
-					<day type="mon">Lun</day>
-					<day type="tue">Mth</day>
-					<day type="wed">Mhr</day>
-					<day type="thu">Yow</day>
-					<day type="fri">Gwe</day>
-					<day type="sat">Sad</day>
-				</dayAbbr>
 				<am>a.m.</am>
 				<pm>p.m.</pm>
-				<eras>
-					<eraAbbr>
-						<era type="1">RC</era>
-						<era type="2">AD</era>
-					</eraAbbr>
-				</eras>
 			</calendar>
 		</calendars>
 	</dates>

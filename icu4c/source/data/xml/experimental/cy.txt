@@ -9,57 +9,11 @@
 
 cy{
     Version { "x0.1" }
-    DayAbbreviations { 
-        "Sul",
-        "Llun",
-        "Maw",
-        "Mer",
-        "Iau",
-        "Gwen",
-        "Sad",
-    }
-    DayNames { 
-        "Dydd Sul",
-        "Dydd Llun",
-        "Dydd Mawrth",
-        "Dydd Mercher",
-        "Dydd Iau",
-        "Dydd Gwener",
-        "Dydd Sadwrn",
-    }
     Countries {
         GB { "Prydain Fawr" }
     }
     Languages {
         cy { "Cymraeg" }
-    }
-    MonthAbbreviations { 
-        "Ion",
-        "Chwef",
-        "Mawrth",
-        "Ebrill",
-        "Mai",
-        "Meh",
-        "Gorff",
-        "Awst",
-        "Medi",
-        "Hyd",
-        "Tach",
-        "Rhag",
-    }
-    MonthNames { 
-        "Ionawr",
-        "Chwefror",
-        "Mawrth",
-        "Ebrill",
-        "Mai",
-        "Mehefin",
-        "Gorffenaf",
-        "Awst",
-        "Medi",
-        "Hydref",
-        "Tachwedd",
-        "Rhagfyr",
     }
     LocaleScript:array{ 
         "Latn",  // ISO 15924 Name 
@@ -72,4 +26,62 @@ cy{
     // Currencies{}
     // localPatternChars{}
     //
+    calendar{
+        gregorian{
+            dayNames{
+                format{
+                    abbreviated{
+                        "Sul",
+                        "Llun",
+                        "Maw",
+                        "Mer",
+                        "Iau",
+                        "Gwen",
+                        "Sad",
+                    }
+                    wide{
+                        "Dydd Sul",
+                        "Dydd Llun",
+                        "Dydd Mawrth",
+                        "Dydd Mercher",
+                        "Dydd Iau",
+                        "Dydd Gwener",
+                        "Dydd Sadwrn",
+                    }
+                }
+            }
+            monthNames{
+                format{
+                    abbreviated{
+                        "Ion",
+                        "Chwef",
+                        "Mawrth",
+                        "Ebrill",
+                        "Mai",
+                        "Meh",
+                        "Gorff",
+                        "Awst",
+                        "Medi",
+                        "Hyd",
+                        "Tach",
+                        "Rhag",
+                    }
+                    wide{
+                        "Ionawr",
+                        "Chwefror",
+                        "Mawrth",
+                        "Ebrill",
+                        "Mai",
+                        "Mehefin",
+                        "Gorffenaf",
+                        "Awst",
+                        "Medi",
+                        "Hydref",
+                        "Tachwedd",
+                        "Rhagfyr",
+                    }
+                }
+            }
+        }
+    }
 }

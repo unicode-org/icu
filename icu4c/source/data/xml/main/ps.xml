@@ -1,14 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE ldml SYSTEM " 	http://www.openi18n.org/spec/ldml/1.0/ldml.dtd" 
-[
-      <!ENTITY % icu SYSTEM " 	http://www.openi18n.org/spec/ldml/1.0/ldmlICU.dtd"> 
-%icu;
-]
->
+<!DOCTYPE ldml SYSTEM "http://oss.software.ibm.com/cvs/icu/~checkout~/locale/ldml.dtd">
 <ldml>
 	<identity>
 		<version number="1.0"/>
-		<generation date="2003-12-19" />
+		<generation date="2004-05-13" />
 		<language type="ps" /> 
 	</identity>
 	<localeDisplayNames>
@@ -118,16 +113,25 @@
 	</layout>
 	<characters>
 		<exemplarCharacters>[ء-ؤئ-غفقل-وي-ْٰٔټپځڅ-چډړږژښکګڼی-ۍې ‌‍‏‎]</exemplarCharacters>
-		<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
-			<icu:scripts>
-				<icu:script type="1">Arab</icu:script>
-			</icu:scripts>
-		</special>
 	</characters>
 	<dates>
 		<calendars>
 			<calendar type="gregorian">
-				<monthNames>
+				<monthNames context="format" width="abbreviated">
+					<month type="1">جنو</month>
+					<month type="2">فبر</month>
+					<month type="3">مار</month>
+					<month type="4">اپر</month>
+					<month type="5">مـی</month>
+					<month type="6">جون</month>
+					<month type="7">جول</month>
+					<month type="8">اګس</month>
+					<month type="9">سپت</month>
+					<month type="10">اکت</month>
+					<month type="11">نوم</month>
+					<month type="12">دسم</month>
+				</monthNames>
+				<monthNames context="format" width="wide">
 					<month type="1">جنوري</month>
 					<month type="2">فبروري</month>
 					<month type="3">مارچ</month>
@@ -141,21 +145,16 @@
 					<month type="11">نومبر</month>
 					<month type="12">دسمبر</month>
 				</monthNames>
-				<monthAbbr>
-					<month type="1">جنو</month>
-					<month type="2">فبر</month>
-					<month type="3">مار</month>
-					<month type="4">اپر</month>
-					<month type="5">مـی</month>
-					<month type="6">جون</month>
-					<month type="7">جول</month>
-					<month type="8">اګس</month>
-					<month type="9">سپت</month>
-					<month type="10">اکت</month>
-					<month type="11">نوم</month>
-					<month type="12">دسم</month>
-				</monthAbbr>
-				<dayNames>
+				<dayNames context="format" width="abbreviated" >
+					<day type="sun">ی.</day>
+					<day type="mon">د.</day>
+					<day type="tue">س.</day>
+					<day type="wed">چ.</day>
+					<day type="thu">پ.</day>
+					<day type="fri">ج.</day>
+					<day type="sat">ش.</day>
+				</dayNames>
+				<dayNames context="format" width="wide" >
 					<day type="sun">یکشنبه</day>
 					<day type="mon">دوشنبه</day>
 					<day type="tue">سه‌شنبه</day>
@@ -164,23 +163,8 @@
 					<day type="fri">جمعه</day>
 					<day type="sat">شنبه</day>
 				</dayNames>
-				<dayAbbr>
-					<day type="sun">ی.</day>
-					<day type="mon">د.</day>
-					<day type="tue">س.</day>
-					<day type="wed">چ.</day>
-					<day type="thu">پ.</day>
-					<day type="fri">ج.</day>
-					<day type="sat">ش.</day>
-				</dayAbbr>
 				<am>غ.م.</am>
 				<pm>غ.و.</pm>
-				<eras>
-					<eraAbbr>
-						<era type="1">ق.م.</era>
-						<era type="2">م.</era>
-					</eraAbbr>
-				</eras>
 				<dateFormats>
 					<default type="medium"/>
 					<dateFormatLength type="full">

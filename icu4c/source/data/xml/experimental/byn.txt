@@ -11,10 +11,6 @@
 
 byn{ 
     Version{ "x0.1" }
-    AmPmMarkers {
-        "\u134B\u12F1\u1235\u0020\u1303\u1265",
-        "\u134B\u12F1\u1235\u0020\u12F0\u121D\u1262",
-    }
     Countries:alias { "am" }
     // Currency display names
     Currencies {
@@ -24,59 +20,75 @@ byn{
         7,
         1,
     }
-    DayAbbreviations {
-        "\u1230\u002F\u1245",
-        "\u1230\u1291",
-        "\u1230\u120A\u131D",
-        "\u1208\u1313",
-        "\u12A3\u121D\u12F5",
-        "\u12A3\u122D\u1265",
-        "\u1230\u002F\u123D",
-    }
-    DayNames {
-        "\u1230\u1295\u1260\u122D\u0020\u1245\u12F3\u12C5",
-        "\u1230\u1291",
-        "\u1230\u120A\u131D",
-        "\u1208\u1313\u0020\u12C8\u122A\u0020\u1208\u1265\u12CB",
-        "\u12A3\u121D\u12F5",
-        "\u12A3\u122D\u1265",
-        "\u1230\u1295\u1260\u122D\u0020\u123D\u1313\u12C5",
-    }
-    Eras {
-        "\u12ED\u1305", // short for \u12E8\u1231\u1235\u122D\u0020\u1303\u1265
-        "\u12A3\u12F5", // short for \u12A3<U1218<U122B<U0020<U12F0<U12A3<U1292<U12BD<U12CD
-    }
     Languages:alias { "am" }
     LocaleScript{ "Ethi", }
     ExemplarCharacters{"[:Ethi:]"}
     // Month names are identical to Tigrigna
-    MonthAbbreviations {
-        "\u120D\u12F0\u1275",
-        "\u12AB\u1265\u12BD",
-        "\u12AD\u1265\u120B",
-        "\u134B\u1305\u12BA",
-        "\u12AD\u1262\u1245",
-        "\u121D\u002F\u1275",
-        "\u12B0\u122D",
-        "\u121B\u122D\u12EB",
-        "\u12EB\u12B8\u1292",
-        "\u1218\u1270\u1209",
-        "\u121D\u002F\u121D",
-        "\u1270\u1215\u1233",
-    }
-    MonthNames {
-        "\u120D\u12F0\u1275\u122A",
-        "\u12AB\u1265\u12BD\u1265\u1272",
-        "\u12AD\u1265\u120B",
-        "\u134B\u1305\u12BA\u122A",
-        "\u12AD\u1262\u1245\u122A",
-        // \u1313\u0305 is short-term until unicode supports the missing character
-        "\u121D\u12AA\u12A4\u120D\u0020\u1275\u1313\u0305\u1292\u122A",
-        "\u12B0\u122D\u12A9",
-        "\u121B\u122D\u12EB\u121D\u0020\u1275\u122A",
-        "\u12EB\u12B8\u1292\u0020\u1218\u1233\u1245\u1208\u122A",
-        "\u1218\u1270\u1209",
-        "\u121D\u12AA\u12A4\u120D\u0020\u1218\u123D\u12C8\u122A",
-        "\u1270\u1215\u1233\u1235\u122A",
+    calendar{
+        gregorian{
+            AmPmMarkers{
+                "\u134B\u12F1\u1235\u0020\u1303\u1265",
+                "\u134B\u12F1\u1235\u0020\u12F0\u121D\u1262",
+            }
+            dayNames{
+                format{
+                    abbreviated{
+                        "\u1230\u002F\u1245",
+                        "\u1230\u1291",
+                        "\u1230\u120A\u131D",
+                        "\u1208\u1313",
+                        "\u12A3\u121D\u12F5",
+                        "\u12A3\u122D\u1265",
+                        "\u1230\u002F\u123D",
+                    }
+                    wide{
+                        "\u1230\u1295\u1260\u122D\u0020\u1245\u12F3\u12C5",
+                        "\u1230\u1291",
+                        "\u1230\u120A\u131D",
+                        "\u1208\u1313\u0020\u12C8\u122A\u0020\u1208\u1265\u12CB",
+                        "\u12A3\u121D\u12F5",
+                        "\u12A3\u122D\u1265",
+                        "\u1230\u1295\u1260\u122D\u0020\u123D\u1313\u12C5",
+                    }
+                }
+            }
+            eras{
+                "\u12ED\u1305", // short for \u12E8\u1231\u1235\u122D\u0020\u1303\u1265
+                "\u12A3\u12F5", // short for \u12A3<U1218<U122B<U0020<U12F0<U12A3<U1292<U12BD<U12CD
+            }
+            monthNames{
+                format{
+                    abbreviated{
+                        "\u120D\u12F0\u1275",
+                        "\u12AB\u1265\u12BD",
+                        "\u12AD\u1265\u120B",
+                        "\u134B\u1305\u12BA",
+                        "\u12AD\u1262\u1245",
+                        "\u121D\u002F\u1275",
+                        "\u12B0\u122D",
+                        "\u121B\u122D\u12EB",
+                        "\u12EB\u12B8\u1292",
+                        "\u1218\u1270\u1209",
+                        "\u121D\u002F\u121D",
+                        "\u1270\u1215\u1233",
+                    }
+                    wide{
+                        "\u120D\u12F0\u1275\u122A",
+                        "\u12AB\u1265\u12BD\u1265\u1272",
+                        "\u12AD\u1265\u120B",
+                        "\u134B\u1305\u12BA\u122A",
+                        "\u12AD\u1262\u1245\u122A",
+                        // \u1313\u0305 is short-term until unicode supports the missing character
+                        "\u121D\u12AA\u12A4\u120D\u0020\u1275\u1313\u0305\u1292\u122A",
+                        "\u12B0\u122D\u12A9",
+                        "\u121B\u122D\u12EB\u121D\u0020\u1275\u122A",
+                        "\u12EB\u12B8\u1292\u0020\u1218\u1233\u1245\u1208\u122A",
+                        "\u1218\u1270\u1209",
+                        "\u121D\u12AA\u12A4\u120D\u0020\u1218\u123D\u12C8\u122A",
+                        "\u1270\u1215\u1233\u1235\u122A",
+                    }
+                }
+            }
+        }
     }
 }

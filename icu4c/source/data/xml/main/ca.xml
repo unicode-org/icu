@@ -1,14 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE ldml SYSTEM " 	http://www.openi18n.org/spec/ldml/1.0/ldml.dtd" 
-[
-      <!ENTITY % icu SYSTEM " 	http://www.openi18n.org/spec/ldml/1.0/ldmlICU.dtd"> 
-%icu;
-]
->
+<!DOCTYPE ldml SYSTEM "http://oss.software.ibm.com/cvs/icu/~checkout~/locale/ldml.dtd">
 <ldml>
 	<identity>
 		<version number="4.0"/>
-		<generation date="2003-12-19" />
+		<generation date="2004-05-13" />
 		<language type="ca" /> 
 	</identity>
 	<localeDisplayNames>
@@ -355,17 +350,26 @@
 	</localeDisplayNames>
 	<characters>
 		<exemplarCharacters>[a-z é í ó ú à è ò ï ü ŀ ç ñ]</exemplarCharacters>
-		<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
-			<icu:scripts>
-				<icu:script type="1">Latn</icu:script>
-			</icu:scripts>
-		</special>
 	</characters>
 	<dates>
-		<localizedPatternChars>GuMtkHmsSEDFwWahKzUe</localizedPatternChars>
+		<localizedPatternChars>GuMtkHmsSEDFwWahKzUeygAZ</localizedPatternChars>
 		<calendars>
 			<calendar type="gregorian">
-				<monthNames>
+				<monthNames context="format" width="abbreviated">
+					<month type="1">gen.</month>
+					<month type="2">feb.</month>
+					<month type="3">març</month>
+					<month type="4">abr.</month>
+					<month type="5">maig</month>
+					<month type="6">juny</month>
+					<month type="7">jul.</month>
+					<month type="8">ag.</month>
+					<month type="9">set.</month>
+					<month type="10">oct.</month>
+					<month type="11">nov.</month>
+					<month type="12">des.</month>
+				</monthNames>
+				<monthNames context="format" width="wide">
 					<month type="1">gener</month>
 					<month type="2">febrer</month>
 					<month type="3">març</month>
@@ -379,21 +383,16 @@
 					<month type="11">novembre</month>
 					<month type="12">desembre</month>
 				</monthNames>
-				<monthAbbr>
-					<month type="1">gen.</month>
-					<month type="2">feb.</month>
-					<month type="3">març</month>
-					<month type="4">abr.</month>
-					<month type="5">maig</month>
-					<month type="6">juny</month>
-					<month type="7">jul.</month>
-					<month type="8">ag.</month>
-					<month type="9">set.</month>
-					<month type="10">oct.</month>
-					<month type="11">nov.</month>
-					<month type="12">des.</month>
-				</monthAbbr>
-				<dayNames>
+				<dayNames context="format" width="abbreviated" >
+					<day type="sun">dg.</day>
+					<day type="mon">dl.</day>
+					<day type="tue">dt.</day>
+					<day type="wed">dc.</day>
+					<day type="thu">dj.</day>
+					<day type="fri">dv.</day>
+					<day type="sat">ds.</day>
+				</dayNames>
+				<dayNames context="format" width="wide" >
 					<day type="sun">diumenge</day>
 					<day type="mon">dilluns</day>
 					<day type="tue">dimarts</day>
@@ -402,15 +401,6 @@
 					<day type="fri">divendres</day>
 					<day type="sat">dissabte</day>
 				</dayNames>
-				<dayAbbr>
-					<day type="sun">dg.</day>
-					<day type="mon">dl.</day>
-					<day type="tue">dt.</day>
-					<day type="wed">dc.</day>
-					<day type="thu">dj.</day>
-					<day type="fri">dv.</day>
-					<day type="sat">ds.</day>
-				</dayAbbr>
 				<dateFormats>
 					<default type="medium"/>
 					<dateFormatLength type="full">

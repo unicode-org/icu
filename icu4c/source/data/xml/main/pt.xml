@@ -1,14 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE ldml SYSTEM " 	http://www.openi18n.org/spec/ldml/1.0/ldml.dtd" 
-[
-      <!ENTITY % icu SYSTEM " 	http://www.openi18n.org/spec/ldml/1.0/ldmlICU.dtd"> 
-%icu;
-]
->
+<!DOCTYPE ldml SYSTEM "http://oss.software.ibm.com/cvs/icu/~checkout~/locale/ldml.dtd">
 <ldml>
 	<identity>
 		<version number="2.0"/>
-		<generation date="2003-12-19" />
+		<generation date="2004-05-13" />
 		<language type="pt" /> 
 	</identity>
 	<localeDisplayNames>
@@ -343,22 +338,44 @@
 			<key type="currency">Moeda Corrente</key>
 		</keys>
 		<types>
-			<type type="traditional" key="calendar">Tradicional Caledário</type>
 			<type type="traditional" key="collation">Tradicional Sorte</type>
 		</types>
 	</localeDisplayNames>
 	<characters>
 		<exemplarCharacters>[a-zãõçáéíóúàâêôüò]</exemplarCharacters>
-		<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
-			<icu:scripts>
-				<icu:script type="1">Latn</icu:script>
-			</icu:scripts>
-		</special>
 	</characters>
 	<dates>
 		<calendars>
 			<calendar type="gregorian">
-				<monthNames>
+				<monthNames context="format" width="abbreviated">
+					<month type="1">jan</month>
+					<month type="2">fev</month>
+					<month type="3">mar</month>
+					<month type="4">abr</month>
+					<month type="5">mai</month>
+					<month type="6">jun</month>
+					<month type="7">jul</month>
+					<month type="8">ago</month>
+					<month type="9">set</month>
+					<month type="10">out</month>
+					<month type="11">nov</month>
+					<month type="12">dez</month>
+				</monthNames>
+				<monthNames context="format" width="narrow">
+					<month type="1">J</month>
+					<month type="2">F</month>
+					<month type="3">M</month>
+					<month type="4">A</month>
+					<month type="5">M</month>
+					<month type="6">J</month>
+					<month type="7">J</month>
+					<month type="8">A</month>
+					<month type="9">S</month>
+					<month type="10">O</month>
+					<month type="11">N</month>
+					<month type="12">D</month>
+				</monthNames>
+				<monthNames context="format" width="wide">
 					<month type="1">janeiro</month>
 					<month type="2">fevereiro</month>
 					<month type="3">março</month>
@@ -372,21 +389,25 @@
 					<month type="11">novembro</month>
 					<month type="12">dezembro</month>
 				</monthNames>
-				<monthAbbr>
-					<month type="1">jan</month>
-					<month type="2">fev</month>
-					<month type="3">mar</month>
-					<month type="4">abr</month>
-					<month type="5">mai</month>
-					<month type="6">jun</month>
-					<month type="7">jul</month>
-					<month type="8">ago</month>
-					<month type="9">set</month>
-					<month type="10">out</month>
-					<month type="11">nov</month>
-					<month type="12">dez</month>
-				</monthAbbr>
-				<dayNames>
+				<dayNames context="format" width="abbreviated" >
+					<day type="sun">dom</day>
+					<day type="mon">seg</day>
+					<day type="tue">ter</day>
+					<day type="wed">qua</day>
+					<day type="thu">qui</day>
+					<day type="fri">sex</day>
+					<day type="sat">sáb</day>
+				</dayNames>
+				<dayNames context="format" width="narrow" >
+					<day type="sun">D</day>
+					<day type="mon">S</day>
+					<day type="tue">T</day>
+					<day type="wed">Q</day>
+					<day type="thu">Q</day>
+					<day type="fri">S</day>
+					<day type="sat">S</day>
+				</dayNames>
+				<dayNames context="format" width="wide" >
 					<day type="sun">domingo</day>
 					<day type="mon">segunda-feira</day>
 					<day type="tue">terça-feira</day>
@@ -395,21 +416,6 @@
 					<day type="fri">sexta-feira</day>
 					<day type="sat">sábado</day>
 				</dayNames>
-				<dayAbbr>
-					<day type="sun">dom</day>
-					<day type="mon">seg</day>
-					<day type="tue">ter</day>
-					<day type="wed">qua</day>
-					<day type="thu">qui</day>
-					<day type="fri">sex</day>
-					<day type="sat">sáb</day>
-				</dayAbbr>
-				<eras>
-					<eraAbbr>
-						<era type="1">a.C.</era>
-						<era type="2">d.C.</era>
-					</eraAbbr>
-				</eras>
 				<dateFormats>
 					<default type="medium"/>
 					<dateFormatLength type="full">
@@ -1176,38 +1182,4 @@
 			</currency>
 		</currencies>
 	</numbers>
-	<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
-		<icu:ruleBasedNumberFormats>
-			<icu:ruleBasedNumberFormat type="spellout">
--x: menos &gt;&gt;;
-x.x: &lt;&lt; ponto &gt;&gt;;
-zero; um; dois; três; qtro; cinco; seis; sete; oito; nove;
-dez; onze; doze; treze; catorze; quinze; dezasseis;    dezassete; dezoito; dezanove;
-vinte; vinte e um; vinte e dois; vinte e três; vete e quatro;    vinte cinco; vinte seis; vinte sete; vinte e oito;    vinte e nove;
-30: trinta[ e &gt;&gt;];
-40: cuarenta[ e &gt;&gt;];
-50: cincuenta[ e &gt;&gt;];
-60: sessenta[ e &gt;&gt;];
-70: setenta[ e &gt;&gt;];
-80: oitenta[ e &gt;&gt;];
-90: noventa[ e &gt;&gt;];
-100: cem;
-200: doscentos[ &gt;&gt;];
-300: trèsentos[ &gt;&gt;];
-400: cuatrocentos[ &gt;&gt;];
-500: quinientos[ &gt;&gt;];
-600: seiscentos[ &gt;&gt;];
-700: setecentos[ &gt;&gt;];
-800: oitocentos[ &gt;&gt;];
-900: novecentos[ &gt;&gt;];
-1000: mil[ &gt;&gt;];
-2000: &lt;&lt; mil[ &gt;&gt;];
-1,000,000: um milhão[ &gt;&gt;];
-2,000,000: &lt;&lt; milhões[ &gt;&gt;];
-1,000,000,000: um bilhão[&gt;&gt;];
-2,000,000,000: &lt;&lt; bilhões[&gt;&gt;];
-1,000,000,000,000: =#,##0=;
-			</icu:ruleBasedNumberFormat>
-		</icu:ruleBasedNumberFormats>
-	</special>
 </ldml>

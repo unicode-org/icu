@@ -1,14 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE ldml SYSTEM " 	http://www.openi18n.org/spec/ldml/1.0/ldml.dtd" 
-[
-      <!ENTITY % icu SYSTEM " 	http://www.openi18n.org/spec/ldml/1.0/ldmlICU.dtd"> 
-%icu;
-]
->
+<!DOCTYPE ldml SYSTEM "http://oss.software.ibm.com/cvs/icu/~checkout~/locale/ldml.dtd">
 <ldml>
 	<identity>
 		<version number="2.0"/>
-		<generation date="2003-12-19" />
+		<generation date="2004-05-13" />
 		<language type="nl" /> 
 	</identity>
 	<localeDisplayNames>
@@ -318,22 +313,104 @@
 			<key type="currency">Muntsoort</key>
 		</keys>
 		<types>
-			<type type="traditional" key="calendar">Traditioneel Soorten</type>
-			<type type="traditional" key="collation">Traditioneel Kalendar</type>
+			<type type="traditional" key="collation">Traditioneel Soorten</type>
 		</types>
 	</localeDisplayNames>
 	<characters>
 		<exemplarCharacters>[a-záéíóúäëïöüĳ]</exemplarCharacters>
-		<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
-			<icu:scripts>
-				<icu:script type="1">Latn</icu:script>
-			</icu:scripts>
-		</special>
 	</characters>
 	<dates>
 		<calendars>
+			<calendar type="arabic">
+				<monthNames context="format" width="abrreviated">
+					<month type="1">Moeharram</month>
+					<month type="2">Safar</month>
+					<month type="3">Rabi'a al awal</month>
+					<month type="4">Rabi'a al thani</month>
+					<month type="5">Joemad'al awal</month>
+					<month type="6">Joemad'al thani</month>
+					<month type="7">Rajab</month>
+					<month type="8">Sja'aban</month>
+					<month type="9">Ramadan</month>
+					<month type="10">Sjawal</month>
+					<month type="11">Doe al ka'aba</month>
+					<month type="12">Doe al hizja</month>
+				</monthNames>
+				<monthNames context="format" width="wide">
+					<month type="1">Moeharram</month>
+					<month type="2">Safar</month>
+					<month type="3">Rabi'a al awal</month>
+					<month type="4">Rabi'a al thani</month>
+					<month type="5">Joemad'al awal</month>
+					<month type="6">Joemad'al thani</month>
+					<month type="7">Rajab</month>
+					<month type="8">Sja'aban</month>
+					<month type="9">Ramadan</month>
+					<month type="10">Sjawal</month>
+					<month type="11">Doe al ka'aba</month>
+					<month type="12">Doe al hizja</month>
+				</monthNames>
+			</calendar>
+			<calendar type="arabic-civil">
+				<monthNames context="format" width="abrreviated">
+					<month type="1">Moeharram</month>
+					<month type="2">Safar</month>
+					<month type="3">Rabi'a al awal</month>
+					<month type="4">Rabi'a al thani</month>
+					<month type="5">Joemad'al awal</month>
+					<month type="6">Joemad'al thani</month>
+					<month type="7">Rajab</month>
+					<month type="8">Sja'aban</month>
+					<month type="9">Ramadan</month>
+					<month type="10">Sjawal</month>
+					<month type="11">Doe al ka'aba</month>
+					<month type="12">Doe al hizja</month>
+				</monthNames>
+				<monthNames context="format" width="wide">
+					<month type="1">Moeharram</month>
+					<month type="2">Safar</month>
+					<month type="3">Rabi'a al awal</month>
+					<month type="4">Rabi'a al thani</month>
+					<month type="5">Joemad'al awal</month>
+					<month type="6">Joemad'al thani</month>
+					<month type="7">Rajab</month>
+					<month type="8">Sja'aban</month>
+					<month type="9">Ramadan</month>
+					<month type="10">Sjawal</month>
+					<month type="11">Doe al ka'aba</month>
+					<month type="12">Doe al hizja</month>
+				</monthNames>
+			</calendar>
 			<calendar type="gregorian">
-				<monthNames>
+				<monthNames context="format" width="abbreviated">
+					<month type="1">jan</month>
+					<month type="2">feb</month>
+					<month type="3">mrt</month>
+					<month type="4">apr</month>
+					<month type="5">mei</month>
+					<month type="6">jun</month>
+					<month type="7">jul</month>
+					<month type="8">aug</month>
+					<month type="9">sep</month>
+					<month type="10">okt</month>
+					<month type="11">nov</month>
+					<month type="12">dec</month>
+				</monthNames>
+				<monthNames context="format" width="narrow">
+					<month type="1">J</month>
+					<month type="2">F</month>
+					<month type="3">M</month>
+					<month type="4">A</month>
+					<month type="5">M</month>
+					<month type="6">J</month>
+					<month type="7">J</month>
+					<month type="8">A</month>
+					<month type="9">S</month>
+					<month type="10">O</month>
+					<month type="11">N</month>
+					<month type="12">D</month>
+				</monthNames>
+				<monthNames context="format" width="wide">
 					<month type="1">januari</month>
 					<month type="2">februari</month>
 					<month type="3">maart</month>
@@ -347,21 +424,25 @@
 					<month type="11">november</month>
 					<month type="12">december</month>
 				</monthNames>
-				<monthAbbr>
-					<month type="1">jan</month>
-					<month type="2">feb</month>
-					<month type="3">mrt</month>
-					<month type="4">apr</month>
-					<month type="5">mei</month>
-					<month type="6">jun</month>
-					<month type="7">jul</month>
-					<month type="8">aug</month>
-					<month type="9">sep</month>
-					<month type="10">okt</month>
-					<month type="11">nov</month>
-					<month type="12">dec</month>
-				</monthAbbr>
-				<dayNames>
+				<dayNames context="format" width="abbreviated" >
+					<day type="sun">zo</day>
+					<day type="mon">ma</day>
+					<day type="tue">di</day>
+					<day type="wed">wo</day>
+					<day type="thu">do</day>
+					<day type="fri">vr</day>
+					<day type="sat">za</day>
+				</dayNames>
+				<dayNames context="format" width="narrow" >
+					<day type="sun">Z</day>
+					<day type="mon">M</day>
+					<day type="tue">D</day>
+					<day type="wed">W</day>
+					<day type="thu">D</day>
+					<day type="fri">V</day>
+					<day type="sat">Z</day>
+				</dayNames>
+				<dayNames context="format" width="wide" >
 					<day type="sun">zondag</day>
 					<day type="mon">maandag</day>
 					<day type="tue">dinsdag</day>
@@ -370,25 +451,6 @@
 					<day type="fri">vrijdag</day>
 					<day type="sat">zaterdag</day>
 				</dayNames>
-				<dayAbbr>
-					<day type="sun">zo</day>
-					<day type="mon">ma</day>
-					<day type="tue">di</day>
-					<day type="wed">wo</day>
-					<day type="thu">do</day>
-					<day type="fri">vr</day>
-					<day type="sat">za</day>
-				</dayAbbr>
-				<week>
-					<minDays count="4"/>
-					<firstDay day="mon"/>
-				</week>
-				<eras>
-					<eraAbbr>
-						<era type="1">v. Chr.</era>
-						<era type="2">n. Chr.</era>
-					</eraAbbr>
-				</eras>
 				<dateFormats>
 					<default type="medium"/>
 					<dateFormatLength type="full">
@@ -443,6 +505,38 @@
 					</dateTimeFormatLength >
 				</dateTimeFormats>
 			</calendar>
+			<calendar type="hebrew">
+				<monthNames context="format" width="abbreviated">
+					<month type="1">Tisjrie</month>
+					<month type="2">Chesjwan</month>
+					<month type="3">Kislev</month>
+					<month type="4">Tevet</month>
+					<month type="5">Sjevat</month>
+					<month type="6">Adar</month>
+					<month type="7">Adar B</month>
+					<month type="8">Nisan</month>
+					<month type="9">Ijar</month>
+					<month type="10">Sivan</month>
+					<month type="11">Tammoez</month>
+					<month type="12">Av</month>
+					<month type="13">Elloel</month>
+				</monthNames>
+				<monthNames context="format" width="wide">
+					<month type="1">Tisjrie</month>
+					<month type="2">Chesjwan</month>
+					<month type="3">Kislev</month>
+					<month type="4">Tevet</month>
+					<month type="5">Sjevat</month>
+					<month type="6">Adar</month>
+					<month type="7">Adar B</month>
+					<month type="8">Nisan</month>
+					<month type="9">Ijar</month>
+					<month type="10">Sivan</month>
+					<month type="11">Tammoez</month>
+					<month type="12">Av</month>
+					<month type="13">Elloel</month>
+				</monthNames>
+			</calendar>
 		</calendars>
 	</dates>
 	<numbers>
@@ -471,29 +565,4 @@
 			</currency>
 		</currencies>
 	</numbers>
-	<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
-		<icu:ruleBasedNumberFormats>
-			<icu:ruleBasedNumberFormat type="spellout">
--x: min &gt;&gt;;
-x.x: &lt;&lt; komma &gt;&gt;;
-nul; een; twee; drie; vier; vijf; zes; zeven; acht; negen;
-tien; elf; twaalf; dertien; veertien; vijftien; zestien;
-zeventien; achtien; negentien;
-20: [&gt;&gt; en ]twintig;
-30: [&gt;&gt; en ]dertig;
-40: [&gt;&gt; en ]veertig;
-50: [&gt;&gt; en ]vijftig;
-60: [&gt;&gt; en ]zestig;
-70: [&gt;&gt; en ]zeventig;
-80: [&gt;&gt; en ]tachtig;
-90: [&gt;&gt; en ]negentig;
-100: &lt;&lt; honderd[ &gt;&gt;];
-1000: &lt;&lt; duizend[ &gt;&gt;];
-1,000,000: &lt;&lt; miljoen[ &gt;&gt;];
-1,000,000,000: &lt;&lt; biljoen[ &gt;&gt;];
-1,000,000,000,000: &lt;&lt; triljoen[ &gt;&gt;];
-1,000,000,000,000,000: =#,##0=
-			</icu:ruleBasedNumberFormat>
-		</icu:ruleBasedNumberFormats>
-	</special>
 </ldml>

@@ -1,14 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE ldml SYSTEM " 	http://www.openi18n.org/spec/ldml/1.0/ldml.dtd" 
-[
-      <!ENTITY % icu SYSTEM " 	http://www.openi18n.org/spec/ldml/1.0/ldmlICU.dtd"> 
-%icu;
-]
->
+<!DOCTYPE ldml SYSTEM "http://oss.software.ibm.com/cvs/icu/~checkout~/locale/ldml.dtd">
 <ldml>
 	<identity>
 		<version number="2.0"/>
-		<generation date="2003-12-19" />
+		<generation date="2004-05-13" />
 		<language type="sr" /> 
 	</identity>
 	<localeDisplayNames>
@@ -264,17 +259,26 @@
 	</localeDisplayNames>
 	<characters>
 		<exemplarCharacters>[а-и к-ш ђ ј љ њ ћ џ]</exemplarCharacters>
-		<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
-			<icu:scripts>
-				<icu:script type="1">Cyrl</icu:script>
-			</icu:scripts>
-		</special>
 	</characters>
 	<dates>
-		<localizedPatternChars>GanjkHmsSEDFwWxhKzAe</localizedPatternChars>
+		<localizedPatternChars>GanjkHmsSEDFwWxhKzAeugXZ</localizedPatternChars>
 		<calendars>
 			<calendar type="gregorian">
-				<monthNames>
+				<monthNames context="format" width="abbreviated">
+					<month type="1">јан</month>
+					<month type="2">феб</month>
+					<month type="3">мар</month>
+					<month type="4">апр</month>
+					<month type="5">мај</month>
+					<month type="6">јун</month>
+					<month type="7">јул</month>
+					<month type="8">авг</month>
+					<month type="9">сеп</month>
+					<month type="10">окт</month>
+					<month type="11">нов</month>
+					<month type="12">дец</month>
+				</monthNames>
+				<monthNames context="format" width="wide">
 					<month type="1">јануар</month>
 					<month type="2">фебруар</month>
 					<month type="3">март</month>
@@ -288,21 +292,16 @@
 					<month type="11">новембар</month>
 					<month type="12">децембар</month>
 				</monthNames>
-				<monthAbbr>
-					<month type="1">јан</month>
-					<month type="2">феб</month>
-					<month type="3">мар</month>
-					<month type="4">апр</month>
-					<month type="5">мај</month>
-					<month type="6">јун</month>
-					<month type="7">јул</month>
-					<month type="8">авг</month>
-					<month type="9">сеп</month>
-					<month type="10">окт</month>
-					<month type="11">нов</month>
-					<month type="12">дец</month>
-				</monthAbbr>
-				<dayNames>
+				<dayNames context="format" width="abbreviated" >
+					<day type="sun">нед</day>
+					<day type="mon">пон</day>
+					<day type="tue">уто</day>
+					<day type="wed">сре</day>
+					<day type="thu">чет</day>
+					<day type="fri">пет</day>
+					<day type="sat">суб</day>
+				</dayNames>
+				<dayNames context="format" width="wide" >
 					<day type="sun">недеља</day>
 					<day type="mon">понедељак</day>
 					<day type="tue">уторак</day>
@@ -311,25 +310,6 @@
 					<day type="fri">петак</day>
 					<day type="sat">субота</day>
 				</dayNames>
-				<dayAbbr>
-					<day type="sun">нед</day>
-					<day type="mon">пон</day>
-					<day type="tue">уто</day>
-					<day type="wed">сре</day>
-					<day type="thu">чет</day>
-					<day type="fri">пет</day>
-					<day type="sat">суб</day>
-				</dayAbbr>
-				<week>
-					<minDays count="1"/>
-					<firstDay day="mon"/>
-				</week>
-				<eras>
-					<eraAbbr>
-						<era type="1">п. н. е.</era>
-						<era type="2">н. е</era>
-					</eraAbbr>
-				</eras>
 				<dateFormats>
 					<default type="medium"/>
 					<dateFormatLength type="full">

@@ -1,14 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE ldml SYSTEM " 	http://www.openi18n.org/spec/ldml/1.0/ldml.dtd" 
-[
-      <!ENTITY % icu SYSTEM " 	http://www.openi18n.org/spec/ldml/1.0/ldmlICU.dtd"> 
-%icu;
-]
->
+<!DOCTYPE ldml SYSTEM "http://oss.software.ibm.com/cvs/icu/~checkout~/locale/ldml.dtd">
 <ldml>
 	<identity>
 		<version number="2.0"/>
-		<generation date="2003-12-19" />
+		<generation date="2004-05-13" />
 		<language type="tr" /> 
 	</identity>
 	<localeDisplayNames>
@@ -398,17 +393,26 @@
 	</localeDisplayNames>
 	<characters>
 		<exemplarCharacters>[a-zâûöüıçşğ]</exemplarCharacters>
-		<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
-			<icu:scripts>
-				<icu:script type="1">Latn</icu:script>
-			</icu:scripts>
-		</special>
 	</characters>
 	<dates>
-		<localizedPatternChars>GanjkHmsSEDFwWxhKzAe</localizedPatternChars>
+		<localizedPatternChars>GanjkHmsSEDFwWxhKzAeugXZ</localizedPatternChars>
 		<calendars>
 			<calendar type="gregorian">
-				<monthNames>
+				<monthNames context="format" width="abbreviated">
+					<month type="1">Oca</month>
+					<month type="2">Şub</month>
+					<month type="3">Mar</month>
+					<month type="4">Nis</month>
+					<month type="5">May</month>
+					<month type="6">Haz</month>
+					<month type="7">Tem</month>
+					<month type="8">Ağu</month>
+					<month type="9">Eyl</month>
+					<month type="10">Eki</month>
+					<month type="11">Kas</month>
+					<month type="12">Ara</month>
+				</monthNames>
+				<monthNames context="format" width="wide">
 					<month type="1">Ocak</month>
 					<month type="2">Şubat</month>
 					<month type="3">Mart</month>
@@ -422,21 +426,16 @@
 					<month type="11">Kasım</month>
 					<month type="12">Aralık</month>
 				</monthNames>
-				<monthAbbr>
-					<month type="1">Oca</month>
-					<month type="2">Şub</month>
-					<month type="3">Mar</month>
-					<month type="4">Nis</month>
-					<month type="5">May</month>
-					<month type="6">Haz</month>
-					<month type="7">Tem</month>
-					<month type="8">Ağu</month>
-					<month type="9">Eyl</month>
-					<month type="10">Eki</month>
-					<month type="11">Kas</month>
-					<month type="12">Ara</month>
-				</monthAbbr>
-				<dayNames>
+				<dayNames context="format" width="abbreviated" >
+					<day type="sun">Paz</day>
+					<day type="mon">Pzt</day>
+					<day type="tue">Sal</day>
+					<day type="wed">Çar</day>
+					<day type="thu">Per</day>
+					<day type="fri">Cum</day>
+					<day type="sat">Cmt</day>
+				</dayNames>
+				<dayNames context="format" width="wide" >
 					<day type="sun">Pazar</day>
 					<day type="mon">Pazartesi</day>
 					<day type="tue">Salı</day>
@@ -445,25 +444,6 @@
 					<day type="fri">Cuma</day>
 					<day type="sat">Cumartesi</day>
 				</dayNames>
-				<dayAbbr>
-					<day type="sun">Paz</day>
-					<day type="mon">Pzt</day>
-					<day type="tue">Sal</day>
-					<day type="wed">Çar</day>
-					<day type="thu">Per</day>
-					<day type="fri">Cum</day>
-					<day type="sat">Cmt</day>
-				</dayAbbr>
-				<week>
-					<minDays count="1"/>
-					<firstDay day="mon"/>
-				</week>
-				<eras>
-					<eraAbbr>
-						<era type="1">MÖ</era>
-						<era type="2">MS</era>
-					</eraAbbr>
-				</eras>
 				<dateFormats>
 					<default type="medium"/>
 					<dateFormatLength type="full">

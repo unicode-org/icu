@@ -13,25 +13,6 @@
 aa_ER_SAAHO {
     Version{ "x0.1" }
 
-    DayAbbreviations {
-        //"Aca", // Too many days, and this doesn't look right.
-        "Nab",
-        "San",
-        "Sal",
-        "Rab",
-        "Cam",
-        "Jum",
-        "Qun",
-    }
-    DayNames {
-        "Naba Sambat",
-        "Sani",
-        "Salus",
-        "Rabuq",
-        "Camus",
-        "Jumqata",
-        "Qunxa Sambat",
-    }
 
     // Measurement { "Metric" }
 //    NumberElements {
@@ -58,4 +39,31 @@ aa_ER_SAAHO {
     //    Width { "210" }
     //    Units { "mm" }
     // }
- }
+    calendar{
+        gregorian{
+            dayNames{
+                format{
+                    abbreviated{
+                        //"Aca", // Too many days, and this doesn't look right.
+                        "Nab",
+                        "San",
+                        "Sal",
+                        "Rab",
+                        "Cam",
+                        "Jum",
+                        "Qun",
+                    }
+                    wide{
+                        "Naba Sambat",
+                        "Sani",
+                        "Salus",
+                        "Rabuq",
+                        "Camus",
+                        "Jumqata",
+                        "Qunxa Sambat",
+                    }
+                }
+            }
+        }
+    }
+}

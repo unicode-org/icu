@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE ldml SYSTEM "http://oss.software.ibm.com/cvs/icu/~checkout~/locale/ldml.dtd">
+<ldml draft="true">
+	<identity>
+		<version number="x0.1"/>
+		<generation date="2004-05-13" />
+		<language type="aa" /> 
+		<territory type="ER" /> 
+		<variant type="SAAHO" /> 
+	</identity>
+	<dates>
+		<calendars>
+			<calendar type="gregorian">
+				<dayNames context="format" width="abbreviated" >
+					<day type="sun">Nab</day>
+					<day type="mon">San</day>
+					<day type="tue">Sal</day>
+					<day type="wed">Rab</day>
+					<day type="thu">Cam</day>
+					<day type="fri">Jum</day>
+					<day type="sat">Qun</day>
+				</dayNames>
+				<dayNames context="format" width="wide" >
+					<day type="sun">Naba Sambat</day>
+					<day type="mon">Sani</day>
+					<day type="tue">Salus</day>
+					<day type="wed">Rabuq</day>
+					<day type="thu">Camus</day>
+					<day type="fri">Jumqata</day>
+					<day type="sat">Qunxa Sambat</day>
+				</dayNames>
+			</calendar>
+		</calendars>
+	</dates>
+	<numbers>
+		<decimalFormats>
+			<decimalFormatLength >
+				<decimalFormat >
+					<pattern>#,##0.###;-#,##0.###</pattern>
+				</decimalFormat>
+			</decimalFormatLength >
+		</decimalFormats>
+		<scientificFormats>
+			<scientificFormatLength >
+				<scientificFormat >
+					<pattern>#E0</pattern>
+				</scientificFormat>
+			</scientificFormatLength >
+		</scientificFormats>
+		<percentFormats>
+			<percentFormatLength >
+				<percentFormat >
+					<pattern>#,##0%</pattern>
+				</percentFormat>
+			</percentFormatLength >
+		</percentFormats>
+		<currencyFormats>
+			<currencyFormatLength >
+				<currencyFormat >
+					<pattern>¤#,##0.00;-¤#,##0.00</pattern>
+				</currencyFormat>
+			</currencyFormatLength >
+		</currencyFormats>
+	</numbers>
+</ldml>

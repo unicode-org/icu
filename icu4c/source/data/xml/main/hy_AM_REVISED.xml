@@ -1,14 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE ldml SYSTEM " 	http://www.openi18n.org/spec/ldml/1.0/ldml.dtd" 
-[
-      <!ENTITY % icu SYSTEM " 	http://www.openi18n.org/spec/ldml/1.0/ldmlICU.dtd"> 
-%icu;
-]
->
+<!DOCTYPE ldml SYSTEM "http://oss.software.ibm.com/cvs/icu/~checkout~/locale/ldml.dtd">
 <ldml>
 	<identity>
 		<version number="2.0"/>
-		<generation date="2003-12-19" />
+		<generation date="2004-05-13" />
 		<language type="hy" /> 
 		<territory type="AM" /> 
 		<variant type="REVISED" /> 
@@ -16,7 +11,21 @@
 	<dates>
 		<calendars>
 			<calendar type="gregorian">
-				<monthNames>
+				<monthNames context="format" width="abbreviated">
+					<month type="1">Հնվ</month>
+					<month type="2">Փտվ</month>
+					<month type="3">Մրտ</month>
+					<month type="4">Ապր</month>
+					<month type="5">Մյս</month>
+					<month type="6">Հնս</month>
+					<month type="7">Հլս</month>
+					<month type="8">Օգս</month>
+					<month type="9">Սեպ</month>
+					<month type="10">Հոկ</month>
+					<month type="11">Նոյ</month>
+					<month type="12">Դեկ</month>
+				</monthNames>
+				<monthNames context="format" width="wide">
 					<month type="1">Հունվար</month>
 					<month type="2">Փետրվար</month>
 					<month type="3">Մարտ</month>
@@ -30,28 +39,8 @@
 					<month type="11">Նոյեմբեր</month>
 					<month type="12">Դեկտեմբեր</month>
 				</monthNames>
-				<monthAbbr>
-					<month type="1">Հնվ</month>
-					<month type="2">Փտվ</month>
-					<month type="3">Մրտ</month>
-					<month type="4">Ապր</month>
-					<month type="5">Մյս</month>
-					<month type="6">Հնս</month>
-					<month type="7">Հլս</month>
-					<month type="8">Օգս</month>
-					<month type="9">Սեպ</month>
-					<month type="10">Հոկ</month>
-					<month type="11">Նոյ</month>
-					<month type="12">Դեկ</month>
-				</monthAbbr>
 				<am>Առ․</am>
 				<pm>Կե․</pm>
-				<eras>
-					<eraAbbr>
-						<era type="1">Մ․Թ․Ա․</era>
-						<era type="2">Մ․Թ․</era>
-					</eraAbbr>
-				</eras>
 			</calendar>
 		</calendars>
 	</dates>

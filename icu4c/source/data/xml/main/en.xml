@@ -1,14 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE ldml SYSTEM " 	http://www.openi18n.org/spec/ldml/1.0/ldml.dtd" 
-[
-      <!ENTITY % icu SYSTEM " 	http://www.openi18n.org/spec/ldml/1.0/ldmlICU.dtd"> 
-%icu;
-]
->
+<!DOCTYPE ldml SYSTEM "http://oss.software.ibm.com/cvs/icu/~checkout~/locale/ldml.dtd">
 <ldml>
 	<identity>
 		<version number="3.0"/>
-		<generation date="2003-12-19" />
+		<generation date="2004-05-13" />
 		<language type="en" /> 
 	</identity>
 	<localeDisplayNames>
@@ -509,6 +504,7 @@
 			<script type="Hant">Traditional Han</script>
 			<script type="Hebr">Hebrew</script>
 			<script type="Hira">Hiragana</script>
+			<script type="Hrkt">Katakana or Hiragana</script>
 			<script type="Ital">Old Italic</script>
 			<script type="Kana">Katakana</script>
 			<script type="Khmr">Khmer</script>
@@ -680,7 +676,7 @@
 			<territory type="ML">Mali</territory>
 			<territory type="MM">Myanmar</territory>
 			<territory type="MN">Mongolia</territory>
-			<territory type="MO">Macao S.A.R. China</territory>
+			<territory type="MO">Macao S.A.R., China</territory>
 			<territory type="MP">Northern Mariana Islands</territory>
 			<territory type="MQ">Martinique</territory>
 			<territory type="MR">Mauritania</territory>
@@ -792,14 +788,13 @@
 			<key type="currency">Currency</key>
 		</keys>
 		<types>
+			<type type="arabic" key="calendar">Arabic Calendar</type>
+			<type type="arabic-civil" key="calendar">Arabic-Civil Calendar</type>
 			<type type="buddhist" key="calendar">Buddhist Calendar</type>
 			<type type="chinese" key="calendar">Chinese Calendar</type>
 			<type type="gregorian" key="calendar">Gregorian Calendar</type>
 			<type type="hebrew" key="calendar">Hebrew Calendar</type>
-			<type type="islamic" key="calendar">Islamic Calendar</type>
-			<type type="islamic-civil" key="calendar">Islamic-Civil Calendar</type>
 			<type type="japanese" key="calendar">Japanese Calendar</type>
-			<type type="traditional" key="calendar">Traditional Calendar</type>
 			<type type="direct" key="collation">Direct Order</type>
 			<type type="phonebook" key="collation">Phonebook Order</type>
 			<type type="pinyin" key="collation">Pinyin Order</type>
@@ -809,16 +804,25 @@
 	</localeDisplayNames>
 	<characters>
 		<exemplarCharacters>[a-z]</exemplarCharacters>
-		<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
-			<icu:scripts>
-				<icu:script type="1">Latn</icu:script>
-			</icu:scripts>
-		</special>
 	</characters>
 	<dates>
 		<calendars>
 			<calendar type="gregorian">
-				<monthNames>
+				<monthNames context="format" width="abbreviated">
+					<month type="1">Jan</month>
+					<month type="2">Feb</month>
+					<month type="3">Mar</month>
+					<month type="4">Apr</month>
+					<month type="5">May</month>
+					<month type="6">Jun</month>
+					<month type="7">Jul</month>
+					<month type="8">Aug</month>
+					<month type="9">Sep</month>
+					<month type="10">Oct</month>
+					<month type="11">Nov</month>
+					<month type="12">Dec</month>
+				</monthNames>
+				<monthNames context="format" width="wide">
 					<month type="1">January</month>
 					<month type="2">February</month>
 					<month type="3">March</month>
@@ -832,21 +836,16 @@
 					<month type="11">November</month>
 					<month type="12">December</month>
 				</monthNames>
-				<monthAbbr>
-					<month type="1">Jan</month>
-					<month type="2">Feb</month>
-					<month type="3">Mar</month>
-					<month type="4">Apr</month>
-					<month type="5">May</month>
-					<month type="6">Jun</month>
-					<month type="7">Jul</month>
-					<month type="8">Aug</month>
-					<month type="9">Sep</month>
-					<month type="10">Oct</month>
-					<month type="11">Nov</month>
-					<month type="12">Dec</month>
-				</monthAbbr>
-				<dayNames>
+				<dayNames context="format" width="abbreviated" >
+					<day type="sun">Sun</day>
+					<day type="mon">Mon</day>
+					<day type="tue">Tue</day>
+					<day type="wed">Wed</day>
+					<day type="thu">Thu</day>
+					<day type="fri">Fri</day>
+					<day type="sat">Sat</day>
+				</dayNames>
+				<dayNames context="format" width="wide" >
 					<day type="sun">Sunday</day>
 					<day type="mon">Monday</day>
 					<day type="tue">Tuesday</day>
@@ -855,21 +854,6 @@
 					<day type="fri">Friday</day>
 					<day type="sat">Saturday</day>
 				</dayNames>
-				<dayAbbr>
-					<day type="sun">Sun</day>
-					<day type="mon">Mon</day>
-					<day type="tue">Tue</day>
-					<day type="wed">Wed</day>
-					<day type="thu">Thu</day>
-					<day type="fri">Fri</day>
-					<day type="sat">Sat</day>
-				</dayAbbr>
-				<eras>
-					<eraAbbr>
-						<era type="1">BC</era>
-						<era type="2">AD</era>
-					</eraAbbr>
-				</eras>
 				<dateFormats>
 					<default type="medium"/>
 					<dateFormatLength type="full">
@@ -1711,7 +1695,7 @@
 			</currency>
 			<currency type="ESP">
 				<displayName>Spanish Peseta</displayName>
-				<symbol>ESP</symbol>
+				<symbol>₧</symbol>
 			</currency>
 			<currency type="ETB">
 				<displayName>Ethiopian Birr</displayName>
@@ -2807,84 +2791,4 @@
 			</currency>
 		</currencies>
 	</numbers>
-	<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
-		<icu:ruleBasedNumberFormats>
-			<icu:ruleBasedNumberFormat type="spellout">
-%simplified:
--x: minus &gt;&gt;;
-x.x: &lt;&lt; point &gt;&gt;;
-zero; one; two; three; four; five; six; seven; eight; nine;
-ten; eleven; twelve; thirteen; fourteen; fifteen; sixteen;
-seventeen; eighteen; nineteen;
-20: twenty[-&gt;&gt;];
-30: thirty[-&gt;&gt;];
-40: forty[-&gt;&gt;];
-50: fifty[-&gt;&gt;];
-60: sixty[-&gt;&gt;];
-70: seventy[-&gt;&gt;];
-80: eighty[-&gt;&gt;];
-90: ninety[-&gt;&gt;];
-100: &lt;&lt; hundred[ &gt;&gt;];
-1000: &lt;&lt; thousand[ &gt;&gt;];
-1,000,000: &lt;&lt; million[ &gt;&gt;];
-1,000,000,000: &lt;&lt; billion[ &gt;&gt;];
-1,000,000,000,000: &lt;&lt; trillion[ &gt;&gt;];
-1,000,000,000,000,000: =#,##0=;
-%default:
--x: minus &gt;&gt;;
-x.x: &lt;&lt; point &gt;&gt;;
-=%simplified=;
-100: &lt;&lt; hundred[ &gt;%%and&gt;];
-1000: &lt;&lt; thousand[ &gt;%%and&gt;];
-100,000&gt;&gt;: &lt;&lt; thousand[&gt;%%commas&gt;];
-1,000,000: &lt;&lt; million[&gt;%%commas&gt;];
-1,000,000,000: &lt;&lt; billion[&gt;%%commas&gt;];
-1,000,000,000,000: &lt;&lt; trillion[&gt;%%commas&gt;];
-1,000,000,000,000,000: =#,##0=;
-%%and:
-and =%default=;
-100: =%default=;
-%%commas:
-' and =%default=;
-100: , =%default=;
-1000: , &lt;%default&lt; thousand, &gt;%default&gt;;
-1,000,000: , =%default=;%%lenient-parse:
-   &amp;<cp hex="0000" /> &lt;&lt; ' ' &lt;&lt; ',' &lt;&lt; '-'; 
-
-			</icu:ruleBasedNumberFormat>
-			<icu:ruleBasedNumberFormat type="ordinal">
-%main:
-=#,##0==%%abbrev=;
-%%abbrev:
-th; st; nd; rd; th;
-20: &gt;&gt;;
-100: &gt;&gt;;
-
-			</icu:ruleBasedNumberFormat>
-			<icu:ruleBasedNumberFormat type="duration">
-%with-words:
-0 seconds; 1 second; =0= seconds;
-60/60: &lt;%%min&lt;[, &gt;&gt;];
-3600/60: &lt;%%hr&lt;[, &gt;&gt;&gt;];
-%%min:
-0 minutes; 1 minute; =0= minutes;
-%%hr:
-0 hours; 1 hour; =0= hours;
-%in-numerals:
-=0= sec.;
-60: =%%min-sec=;
-3600: =%%hr-min-sec=;
-%%min-sec:
-0: :=00=;
-60/60: &lt;0&lt;&gt;&gt;;
-%%hr-min-sec:
-0: :=00=;
-60/60: &lt;00&lt;&gt;&gt;;
-3600/60: &lt;#,##0&lt;:&gt;&gt;&gt;;
-%%lenient-parse:
-&amp; ':' = '.' = ' ' = '-';
-
-			</icu:ruleBasedNumberFormat>
-		</icu:ruleBasedNumberFormats>
-	</special>
 </ldml>

@@ -1,28 +1,40 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE ldml SYSTEM " 	http://www.openi18n.org/spec/ldml/1.0/ldml.dtd" 
-[
-      <!ENTITY % icu SYSTEM " 	http://www.openi18n.org/spec/ldml/1.0/ldmlICU.dtd"> 
-%icu;
-]
->
+<!DOCTYPE ldml SYSTEM "http://oss.software.ibm.com/cvs/icu/~checkout~/locale/ldml.dtd">
 <ldml>
 	<identity>
 		<version number="2.0"/>
-		<generation date="2003-12-19" />
+		<generation date="2004-05-13" />
 		<language type="gv" /> 
 	</identity>
+	<localeDisplayNames>
+		<languages>
+			<language type="gv">Gaelg</language>
+		</languages>
+		<territories>
+			<territory type="GB">Rywvaneth Unys</territory>
+		</territories>
+	</localeDisplayNames>
 	<characters>
-		<exemplarCharacters>[a-z ç]</exemplarCharacters>
-		<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
-			<icu:scripts>
-				<icu:script type="1">Latn</icu:script>
-			</icu:scripts>
-		</special>
+		<exemplarCharacters>[a-zç]</exemplarCharacters>
 	</characters>
 	<dates>
 		<calendars>
 			<calendar type="gregorian">
-				<monthNames>
+				<monthNames context="format" width="abbreviated">
+					<month type="1">J-guer</month>
+					<month type="2">T-arree</month>
+					<month type="3">Mayrnt</month>
+					<month type="4">Avrril</month>
+					<month type="5">Boaldyn</month>
+					<month type="6">M-souree</month>
+					<month type="7">J-souree</month>
+					<month type="8">Luanistyn</month>
+					<month type="9">M-fouyir</month>
+					<month type="10">J-fouyir</month>
+					<month type="11">M.Houney</month>
+					<month type="12">M.Nollick</month>
+				</monthNames>
+				<monthNames context="format" width="wide">
 					<month type="1">Jerrey-geuree</month>
 					<month type="2">Toshiaght-arree</month>
 					<month type="3">Mayrnt</month>
@@ -36,21 +48,16 @@
 					<month type="11">Mee Houney</month>
 					<month type="12">Mee ny Nollick</month>
 				</monthNames>
-				<monthAbbr>
-					<month type="1">J-guer</month>
-					<month type="2">T-arree</month>
-					<month type="3">Mayrnt</month>
-					<month type="4">Avrril</month>
-					<month type="5">Boaldyn</month>
-					<month type="6">M-souree</month>
-					<month type="7">J-souree</month>
-					<month type="8">Luanistyn</month>
-					<month type="9">M-fouyir</month>
-					<month type="10">J-fouyir</month>
-					<month type="11">M.Houney</month>
-					<month type="12">M.Nollick</month>
-				</monthAbbr>
-				<dayNames>
+				<dayNames context="format" width="abbreviated" >
+					<day type="sun">Jed</day>
+					<day type="mon">Jel</day>
+					<day type="tue">Jem</day>
+					<day type="wed">Jerc</day>
+					<day type="thu">Jerd</day>
+					<day type="fri">Jeh</day>
+					<day type="sat">Jes</day>
+				</dayNames>
+				<dayNames context="format" width="wide" >
 					<day type="sun">Jedoonee</day>
 					<day type="mon">Jelhein</day>
 					<day type="tue">Jemayrt</day>
@@ -59,23 +66,8 @@
 					<day type="fri">Jeheiney</day>
 					<day type="sat">Jesarn</day>
 				</dayNames>
-				<dayAbbr>
-					<day type="sun">Jed</day>
-					<day type="mon">Jel</day>
-					<day type="tue">Jem</day>
-					<day type="wed">Jerc</day>
-					<day type="thu">Jerd</day>
-					<day type="fri">Jeh</day>
-					<day type="sat">Jes</day>
-				</dayAbbr>
 				<am>a.m.</am>
 				<pm>p.m.</pm>
-				<eras>
-					<eraAbbr>
-						<era type="1">RC</era>
-						<era type="2">AD</era>
-					</eraAbbr>
-				</eras>
 			</calendar>
 		</calendars>
 	</dates>

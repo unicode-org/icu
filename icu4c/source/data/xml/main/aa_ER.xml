@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE ldml SYSTEM "http://oss.software.ibm.com/cvs/icu/~checkout~/locale/ldml.dtd">
+<ldml draft="true">
+	<identity>
+		<version number="x0.1"/>
+		<generation date="2004-05-13" />
+		<language type="aa" /> 
+		<territory type="ER" /> 
+	</identity>
+	<dates>
+		<calendars>
+			<calendar type="gregorian">
+				<monthNames context="format" width="wide">
+					<month type="1">Qunxa Garablu</month>
+					<month type="2">Kudo</month>
+					<month type="3">Ciggilta Kudo</month>
+					<month type="4">Agda Baxis</month>
+					<month type="5">Caxah Alsa</month>
+					<month type="6">Qasa Dirri</month>
+					<month type="7">Qado Dirri</month>
+					<month type="8">Liiqen</month>
+					<month type="9">Waysu</month>
+					<month type="10">Diteli</month>
+					<month type="11">Ximoli</month>
+					<month type="12">Kaxxa Garablu</month>
+				</monthNames>
+			</calendar>
+		</calendars>
+	</dates>
+	<numbers>
+		<decimalFormats>
+			<decimalFormatLength >
+				<decimalFormat >
+					<pattern>#,##0.###;-#,##0.###</pattern>
+				</decimalFormat>
+			</decimalFormatLength >
+		</decimalFormats>
+		<scientificFormats>
+			<scientificFormatLength >
+				<scientificFormat >
+					<pattern>#E0</pattern>
+				</scientificFormat>
+			</scientificFormatLength >
+		</scientificFormats>
+		<percentFormats>
+			<percentFormatLength >
+				<percentFormat >
+					<pattern>#,##0%</pattern>
+				</percentFormat>
+			</percentFormatLength >
+		</percentFormats>
+		<currencyFormats>
+			<currencyFormatLength >
+				<currencyFormat >
+					<pattern>¤#,##0.00;-¤#,##0.00</pattern>
+				</currencyFormat>
+			</currencyFormatLength >
+		</currencyFormats>
+	</numbers>
+</ldml>

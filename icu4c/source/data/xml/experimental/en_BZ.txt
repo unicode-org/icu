@@ -11,15 +11,19 @@ en_BZ{
         2,
         1,
     }
-    DateTimePatterns { 
-        "HH:mm:ss z",
-        "HH:mm:ss z",
-        "HH:mm:ss",
-        "HH:mm",
-        "dd MMMM yyyy",
-        "dd MMMM yyyy",
-        "dd-MMM-yy",
-        "dd/MM/yy",
-        "{1} {0}",
+    calendar{
+        gregorian{
+            DateTimePatterns{
+                "HH:mm:ss z",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "dd MMMM yyyy",
+                "dd MMMM yyyy",
+                "dd-MMM-yy",
+                "dd/MM/yy",
+                "{1} {0}",
+            }
+        }
     }
 }

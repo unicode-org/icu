@@ -1,14 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE ldml SYSTEM " 	http://www.openi18n.org/spec/ldml/1.0/ldml.dtd" 
-[
-      <!ENTITY % icu SYSTEM " 	http://www.openi18n.org/spec/ldml/1.0/ldmlICU.dtd"> 
-%icu;
-]
->
+<!DOCTYPE ldml SYSTEM "http://oss.software.ibm.com/cvs/icu/~checkout~/locale/ldml.dtd">
 <ldml>
 	<identity>
 		<version number="2.0"/>
-		<generation date="2003-12-19" />
+		<generation date="2004-05-13" />
 		<language type="kn" /> 
 	</identity>
 	<localeDisplayNames>
@@ -16,77 +11,25 @@
 			<language type="kn">ಕನ್ನಡ</language>
 		</languages>
 		<territories>
+			<territory type="AU">ಆಸ್ಟ್ರೆಲಿಯ</territory>
+			<territory type="CN">ಚೀನ</territory>
+			<territory type="EE">ಎಸ್ತೊನಿಯ</territory>
 			<territory type="IN">ಭಾರತ</territory>
+			<territory type="MV">ಮಾಲ್ಡಿವ ದ್ವೀಪಗಳು</territory>
+			<territory type="NP">ನೆಪಾಳ</territory>
+			<territory type="SG">ಸಿಂಗಪುರ</territory>
+			<territory type="TR">ತುರ್ಕಿ</territory>
 		</territories>
 	</localeDisplayNames>
 	<characters>
 		<exemplarCharacters>[:Knda:]</exemplarCharacters>
-		<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
-			<icu:scripts>
-				<icu:script type="1">Knda</icu:script>
-			</icu:scripts>
-		</special>
 	</characters>
-	<dates>
-		<calendars>
-			<calendar type="gregorian">
-				<monthNames>
-					<month type="1">ಜನವರೀ</month>
-					<month type="2">ಫೆಬ್ರವರೀ</month>
-					<month type="3">ಮಾರ್ಚ್</month>
-					<month type="4">ಎಪ್ರಿಲ್</month>
-					<month type="5">ಮೆ</month>
-					<month type="6">ಜೂನ್</month>
-					<month type="7">ಜುಲೈ</month>
-					<month type="8">ಆಗಸ್ಟ್</month>
-					<month type="9">ಸಪ್ಟೆಂಬರ್</month>
-					<month type="10">ಅಕ್ಟೋಬರ್</month>
-					<month type="11">ನವೆಂಬರ್</month>
-					<month type="12">ಡಿಸೆಂಬರ್</month>
-				</monthNames>
-				<monthAbbr>
-					<month type="1">ಜನವರೀ</month>
-					<month type="2">ಫೆಬ್ರವರೀ</month>
-					<month type="3">ಮಾರ್ಚ್</month>
-					<month type="4">ಎಪ್ರಿಲ್</month>
-					<month type="5">ಮೆ</month>
-					<month type="6">ಜೂನ್</month>
-					<month type="7">ಜುಲೈ</month>
-					<month type="8">ಆಗಸ್ಟ್</month>
-					<month type="9">ಸಪ್ಟೆಂಬರ್</month>
-					<month type="10">ಅಕ್ಟೋಬರ್</month>
-					<month type="11">ನವೆಂಬರ್</month>
-					<month type="12">ಡಿಸೆಂಬರ್</month>
-				</monthAbbr>
-				<dayNames>
-					<day type="sun">ರವಿವಾರ</day>
-					<day type="mon">ಸೋಮವಾರ</day>
-					<day type="tue">ಮಂಗಳವಾರ</day>
-					<day type="wed">ಬುಧವಾರ</day>
-					<day type="thu">ಗುರುವಾರ</day>
-					<day type="fri">ಶುಕ್ರವಾರ</day>
-					<day type="sat">ಶನಿವಾರ</day>
-				</dayNames>
-				<dayAbbr>
-					<day type="sun">ರ.</day>
-					<day type="mon">ಸೋ.</day>
-					<day type="tue">ಮಂ.</day>
-					<day type="wed">ಬು.</day>
-					<day type="thu">ಗು.</day>
-					<day type="fri">ಶು.</day>
-					<day type="sat">ಶನಿ.</day>
-				</dayAbbr>
-				<am>ಪೂರ್ವಾಹ್ನ</am>
-				<pm>ಅಪರಾಹ್ನ</pm>
-			</calendar>
-		</calendars>
-	</dates>
-	<numbers>
-		<currencies>
-			<currency type="INR">
-				<displayName>INR</displayName>
-				<symbol>रु</symbol>
-			</currency>
-		</currencies>
-	</numbers>
+<numbers>
+	<currencies>
+		<currency type="INR">
+			<displayName>INR</displayName>
+			<symbol>रु</symbol>
+		</currency>
+	</currencies>
+</numbers>
 </ldml>

@@ -1,14 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE ldml SYSTEM " 	http://www.openi18n.org/spec/ldml/1.0/ldml.dtd" 
-[
-      <!ENTITY % icu SYSTEM " 	http://www.openi18n.org/spec/ldml/1.0/ldmlICU.dtd"> 
-%icu;
-]
->
+<!DOCTYPE ldml SYSTEM "http://oss.software.ibm.com/cvs/icu/~checkout~/locale/ldml.dtd">
 <ldml>
 	<identity>
 		<version number="2.0"/>
-		<generation date="2003-12-19" />
+		<generation date="2004-05-13" />
 		<language type="hi" /> 
 	</identity>
 	<localeDisplayNames>
@@ -331,16 +326,11 @@
 	</localeDisplayNames>
 	<characters>
 		<exemplarCharacters>[[:Deva:]‌‍]</exemplarCharacters>
-		<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
-			<icu:scripts>
-				<icu:script type="1">Deva</icu:script>
-			</icu:scripts>
-		</special>
 	</characters>
 	<dates>
 		<calendars>
 			<calendar type="gregorian">
-				<monthNames>
+				<monthNames context="format" width="abbreviated">
 					<month type="1">जनवरी</month>
 					<month type="2">फरवरी</month>
 					<month type="3">मार्च</month>
@@ -354,7 +344,7 @@
 					<month type="11">नवम्बर</month>
 					<month type="12">दिसम्बर</month>
 				</monthNames>
-				<monthAbbr>
+				<monthNames context="format" width="wide">
 					<month type="1">जनवरी</month>
 					<month type="2">फरवरी</month>
 					<month type="3">मार्च</month>
@@ -367,8 +357,8 @@
 					<month type="10">अक्तूबर</month>
 					<month type="11">नवम्बर</month>
 					<month type="12">दिसम्बर</month>
-				</monthAbbr>
-				<dayNames>
+				</monthNames>
+				<dayNames context="format" width="wide" >
 					<day type="sun">रविवार</day>
 					<day type="mon">सोमवार</day>
 					<day type="tue">मंगलवार</day>
@@ -377,23 +367,8 @@
 					<day type="fri">शुक्रवार</day>
 					<day type="sat">शनिवार</day>
 				</dayNames>
-				<dayAbbr>
-					<day type="sun">रवि</day>
-					<day type="mon">सोम</day>
-					<day type="tue">मंगल</day>
-					<day type="wed">बुध</day>
-					<day type="thu">गुरु</day>
-					<day type="fri">शुक्र</day>
-					<day type="sat">शनि</day>
-				</dayAbbr>
 				<am>पूर्वाह्न</am>
 				<pm>अपराह्न</pm>
-				<eras>
-					<eraAbbr>
-						<era type="1">ईसापूर्व</era>
-						<era type="2">सन</era>
-					</eraAbbr>
-				</eras>
 			</calendar>
 		</calendars>
 		<timeZoneNames>

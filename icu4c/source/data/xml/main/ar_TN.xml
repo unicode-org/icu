@@ -1,14 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE ldml SYSTEM " 	http://www.openi18n.org/spec/ldml/1.0/ldml.dtd" 
-[
-      <!ENTITY % icu SYSTEM " 	http://www.openi18n.org/spec/ldml/1.0/ldmlICU.dtd"> 
-%icu;
-]
->
+<!DOCTYPE ldml SYSTEM "http://oss.software.ibm.com/cvs/icu/~checkout~/locale/ldml.dtd">
 <ldml>
 	<identity>
 		<version number="2.0"/>
-		<generation date="2003-12-19" />
+		<generation date="2004-05-13" />
 		<language type="ar" /> 
 		<territory type="TN" /> 
 	</identity>
@@ -18,7 +13,7 @@
 	<dates>
 		<calendars>
 			<calendar type="gregorian">
-				<monthAbbr>
+				<monthNames context="format" width="abbreviated">
 					<month type="1">يناير</month>
 					<month type="2">فبراير</month>
 					<month type="3">مارس</month>
@@ -31,8 +26,8 @@
 					<month type="10">أكتوبر</month>
 					<month type="11">نوفمبر</month>
 					<month type="12">ديسمبر</month>
-				</monthAbbr>
-				<dayAbbr>
+				</monthNames>
+				<dayNames context="format" width="abbreviated" >
 					<day type="sun">الأحد</day>
 					<day type="mon">الاثنين</day>
 					<day type="tue">الثلاثاء</day>
@@ -40,7 +35,7 @@
 					<day type="thu">الخميس</day>
 					<day type="fri">الجمعة</day>
 					<day type="sat">السبت</day>
-				</dayAbbr>
+				</dayNames>
 			</calendar>
 		</calendars>
 	</dates>
