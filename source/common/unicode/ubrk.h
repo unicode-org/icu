@@ -285,7 +285,7 @@ typedef enum USentenceBreakTag {
       */
     UBRK_SENTENCE_SEP        = 100,
     /** Upper bound for tags for sentences ended by a separator.              */
-    UBRK_SENTENCE_SEP_LIMIT  = 200,
+    UBRK_SENTENCE_SEP_LIMIT  = 200
     /** Tag value for a hard, or mandatory line break  */
 } USentenceBreakTag;
 
