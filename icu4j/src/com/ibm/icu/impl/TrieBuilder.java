@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-* Copyright (C) 1996-2004, International Business Machines Corporation and   *
+* Copyright (C) 1996-2005, International Business Machines Corporation and   *
 * others. All Rights Reserved.                                               *
 ******************************************************************************
 */
@@ -193,8 +193,20 @@ public class TrieBuilder
         m_isCompacted_ = table.m_isCompacted_;
     }
         
-    // protected data member ----------------------------------------------
-    
+    // protected functions ------------------------------------------------
+
+    /**
+     * Compare two sections of an array for equality.
+     */
+    protected static final boolean equal_int(int[] array, int start1, int start2, int length) {
+        while(length>0 && array[start1]==array[start2]) {
+            ++start1;
+            ++start2;
+            --length;
+        }
+        return length==0;
+    }
+
     /**
      * Set a value in the trie index map to indicate which data block
      * is referenced and which one is not.
@@ -229,13 +241,7 @@ public class TrieBuilder
     {
         for (int block = BMP_INDEX_LENGTH_; block < indexLength; 
              block += SURROGATE_BLOCK_COUNT_) {
-            int i = 0;
-            for (; i < SURROGATE_BLOCK_COUNT_; ++ i) {
-                if (index[block + i] != index[otherBlock + i]) {
-                    break;
-                }
-            }
-            if (i == SURROGATE_BLOCK_COUNT_) {
+            if(equal_int(index, block, otherBlock, SURROGATE_BLOCK_COUNT_)) {
                 return block;
             }
         }
