@@ -723,61 +723,51 @@ void TestStringFunctions()
     if(temp[3] != 0xFB) {
       log_err("u_austrncpy wrote past it's bounds. Expected undisturbed byte at 3\n");
     }
-    /*Testing u_strstr(), and u_strchr()*/
+    /*Testing u_strchr()*/
     log_verbose("Testing u_strchr\n");
-    u_uastrcpy(temp, "");
-    u_uastrcpy(temp, "bc");
-    result=u_strchr(uchars, (UChar)0x62);
-    if(u_strcmp(temp, result) !=0){
-        log_err("There is an error in u_strchr() Expected %s Got %s\n", austrdup(temp), austrdup(result));
+    temp[0]=0x42;
+    temp[1]=0x62;
+    temp[2]=0x62;
+    temp[3]=0x63;
+    temp[4]=0xd841;
+    temp[5]=0xd841;
+    temp[6]=0xdc02;
+    temp[7]=0;
+    result=u_strchr(temp, (UChar)0x62);
+    if(result != temp+1){
+        log_err("There is an error in u_strchr() Expected match at position 1 Got %ld (pointer 0x%lx)\n", result-temp, result);
     }
+    /*Testing u_strstr()*/
     log_verbose("Testing u_strstr\n");
-    u_uastrcpy(subString, "");
-    u_uastrcpy(subString, "b");
-    u_uastrcpy(temp, "bc");
-    result=u_strstr(uchars, subString);
-    if(u_strcmp(result, temp) != 0){
-        log_err("There is an error in u_strstr() Expected %s Got %s\n", austrdup(temp), austrdup(result));
+    subString[0]=0x62;
+    subString[1]=0x63;
+    subString[2]=0;
+    result=u_strstr(temp, subString);
+    if(result != temp+2){
+        log_err("There is an error in u_strstr() Expected match at position 2 Got %ld (pointer 0x%lx)\n", result-temp, result);
     }
-    u_uastrcpy(subString, "");
-    result=u_strstr(uchars, subString);
-    if(u_strcmp(result, uchars) != 0){
-        log_err("There is an error in u_strstr() Expected %s Got %s\n", austrdup(uchars), austrdup(result));
+    result=u_strstr(temp, subString+2); /* subString+2 is an empty string */
+    if(result != temp){
+        log_err("There is an error in u_strstr() Expected match at position 0 Got %ld (pointer 0x%lx)\n", result-temp, result);
     }
-    u_uastrcpy(subString, "");
-    u_uastrcpy(subString, "ab");
-    u_strcpy(temp, subString);
-    result=u_strstr(uchars, subString);
-    if(u_strncmp(result, temp, 2) != 0){
-        log_err("There is an error in u_strstr() Expected %s Got %s\n", austrdup(temp), austrdup(result));
-    }
-    result=u_strstr(subString, uchars);
+    result=u_strstr(subString, temp);
     if(result != NULL){
-        log_err("There is an error in u_strstr() Expected NULL Got %s\n", austrdup(result));
+        log_err("There is an error in u_strstr() Expected NULL \"not found\" Got non-NULL \"found\" result\n");
     }
     
-    /*Testing u_strstr32*/
-    log_verbose("Testing u_strchr\n");
-    u_uastrcpy(temp, "");
-    u_uastrcpy(temp, "bc");
-    result=u_strchr32(uchars, (UChar32)0x0062);
-    if(u_strcmp(temp, result) !=0){
-        log_err("There is an error in u_strstr32() Expected %s Got %s\n", austrdup(temp), austrdup(result));
+    /*Testing u_strchr32*/
+    log_verbose("Testing u_strchr32\n");
+    result=u_strchr32(temp, (UChar32)0x62);
+    if(result != temp+1){
+        log_err("There is an error in u_strchr32() Expected match at position 1 Got %ld (pointer 0x%lx)\n", result-temp, result);
     }
-    result=u_strchr32(uchars, (UChar32)0x00FB);
+    result=u_strchr32(temp, (UChar32)0xfb);
     if(result != NULL){
-        log_err("There is an error in u_strstr32() Expected NULL Got %s\n", austrdup(result));
+        log_err("There is an error in u_strchr32() Expected NULL \"not found\" Got non-NULL \"found\" result\n");
     }
-    
-    
-    u_uastrcpy(subString, "");
-    subString[0]=0xd841;
-    subString[1]=0xdc02;
-    subString[2]=0x0000;
-    u_strcpy(temp, subString);
-    result=u_strchr32(subString, (UChar32)0x20402);
-    if(u_strcmp(temp, result) !=0){
-        log_err("There is an error in u_strstr32() Expected %s Got %s\n", austrdup(temp), austrdup(result));
+    result=u_strchr32(temp, (UChar32)0x20402);
+    if(result != temp+5){
+        log_err("There is an error in u_strchr32() Expected match at position 5 Got %ld (pointer 0x%lx)\n", result-temp, result);
     }
    
   }
