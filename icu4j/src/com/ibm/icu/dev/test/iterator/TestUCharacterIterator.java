@@ -44,6 +44,21 @@ public class TestUCharacterIterator extends TestFmwk{
             }
          }
     }
+    public void getText(UCharacterIterator iterator, String result){
+        /* test getText */
+        char[] buf= new char[1];
+		for(;;){
+		    try{
+		        iterator.getText(buf);
+		        break;
+		    }catch(IndexOutOfBoundsException e){
+		        buf = new char[iterator.getLength()];
+		    }
+		}
+        if(result.compareTo(new String(buf,0,iterator.getLength()))!=0){
+            errln("getText failed for iterator");
+        }
+    }
     
     /**
      * Testing iteration
@@ -255,9 +270,44 @@ public class TestUCharacterIterator extends TestFmwk{
         UCharacterIterator iter1 = UCharacterIterator.getInstance(new ReplaceableString(new String(src)));
         UCharacterIterator iter2 = UCharacterIterator.getInstance(src/*char array*/);
         UCharacterIterator iter3 = UCharacterIterator.getInstance(new StringCharacterIterator(new String(src)));
+        UCharacterIterator iter4 = UCharacterIterator.getInstance(new StringBuffer(new String(src)));
         previousNext(iter1);
         previousNext(iter2);
         previousNext(iter3);
+        previousNext(iter4);
+        getText(iter1,new String(src));
+        getText(iter2,new String(src));
+        getText(iter3,new String(src));
+        /* getCharacterIterator */
+        CharacterIterator citer1 = iter1.getCharacterIterator();
+        CharacterIterator citer2 = iter2.getCharacterIterator();
+        CharacterIterator citer3 = iter3.getCharacterIterator();
+        if(citer1.first() !=iter1.current()){
+            errln("getCharacterIterator for iter1 failed");
+        }
+        if(citer2.first() !=iter2.current()){
+            errln("getCharacterIterator for iter2 failed");
+        }
+        if(citer3.first() !=iter3.current()){
+            errln("getCharacterIterator for iter3 failed");
+        }
+        /* Test clone()  && moveIndex()*/
+        try{
+	        UCharacterIterator clone1 = (UCharacterIterator)iter1.clone();
+	        UCharacterIterator clone2 = (UCharacterIterator)iter2.clone();
+	        UCharacterIterator clone3 = (UCharacterIterator)iter3.clone();
+	        if(clone1.moveIndex(3)!=iter1.moveIndex(3)){
+	            errln("moveIndex for iter1 failed");
+	        }
+	        if(clone2.moveIndex(3)!=iter2.moveIndex(3)){
+	            errln("moveIndex for iter2 failed");
+	        }
+	        if(clone3.moveIndex(3)!=iter3.moveIndex(3)){
+	            errln("moveIndex for iter1 failed");
+	        }
+        }catch (Exception e){
+            errln("could not clone the iterator");
+        }
     }
     public void previousNext(UCharacterIterator iter) {
 
@@ -379,7 +429,26 @@ public class TestUCharacterIterator extends TestFmwk{
                 break;
             }
         }
-        
+        if(ci.first()!=wrap_ci.first()){
+            errln("CharacterIteratorWrapper.first() failed. expected: " + ci.first() + " got: " +wrap_ci.first());
+        }
+        if(ci.last()!=wrap_ci.last()){
+            errln("CharacterIteratorWrapper.last() failed expected: " + ci.last() + " got: " +wrap_ci.last());
+        }
+        if(ci.getBeginIndex()!=wrap_ci.getBeginIndex()){
+            errln("CharacterIteratorWrapper.getBeginIndex() failed expected: " + ci.getBeginIndex() + " got: " +wrap_ci.getBeginIndex());
+        }
+        if(ci.getEndIndex()!=wrap_ci.getEndIndex()){
+            errln("CharacterIteratorWrapper.getEndIndex() failed expected: " + ci.getEndIndex() + " got: " +wrap_ci.getEndIndex());
+        }
+        try{
+            CharacterIterator cloneWCI = (CharacterIterator) wrap_ci.clone();
+            if(wrap_ci.getIndex()!=cloneWCI.getIndex()){
+                errln("CharacterIteratorWrapper.clone() failed expected: " +wrap_ci.getIndex() + " got: " + cloneWCI.getIndex());
+            }
+        }catch(Exception e){
+             errln("CharacterIterator.clone() failed");
+        }
     }
     // private data members ---------------------------------------------
     
