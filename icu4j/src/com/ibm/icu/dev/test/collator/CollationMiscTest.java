@@ -1008,6 +1008,37 @@ public class CollationMiscTest extends TestFmwk{
         genericRulesStarter("[backwards 2]&A<<\u00e6/e<<<\u00c6/E", data);
     }
     
+    public void TestJ3087()
+    {
+        String rule[] = {"&h<H&CH=\u0427",
+                         "&CH=\u0427&h<H",
+                         "&CH=\u0427"}; 
+        RuleBasedCollator rbc = null;
+        CollationElementIterator iter1;
+        CollationElementIterator iter2;
+        for (int i = 0; i < rule.length; i ++) {
+            try {
+                rbc = new RuleBasedCollator(rule[i]); 
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+            iter1 = rbc.getCollationElementIterator("CH"); 
+            iter2 = rbc.getCollationElementIterator("\u0427");
+            int ce1 = CollationElementIterator.IGNORABLE;
+            int ce2 = CollationElementIterator.IGNORABLE;
+            while (ce1 != CollationElementIterator.NULLORDER
+                 && ce2 != CollationElementIterator.NULLORDER) {
+                ce1 = iter1.next();
+                ce2 = iter2.next();
+                if (ce1 != ce2) {
+                    errln("Error generating RuleBasedCollator with the rule "
+                          + rule[i]);
+                    errln("CH != \\u0427");
+                }
+            }
+        }
+    }
+    
     public void TestJ831() {
         String[] data = {
             "I",
