@@ -28,11 +28,6 @@
 
 U_CFUNC const UChar *rulesToParse;
 
-void deleteToken(void *token) {
-    UColToken *tok = (UColToken *)token;
-    uprv_free(tok);
-}
-
 void ucol_tok_initTokenList(UColTokenParser *src, const UChar *rules, const uint32_t rulesLength, UCollator *UCA, UErrorCode *status) {
   uint32_t nSize = 0;
   if(U_FAILURE(*status)) {
