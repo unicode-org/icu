@@ -222,8 +222,6 @@ UConverter*  ucnv_openCCSID (int32_t codepage,
 
 void ucnv_close (UConverter * converter)
 {
-  Mutex *updateReferenceCounterMutex = NULL;
-
   if (converter == NULL)
     return;
   if ((converter->sharedData->conversionType == UCNV_ISO_2022) &&
@@ -248,7 +246,6 @@ int32_t  ucnv_flushCache ()
   UConverterSharedData *mySharedData = NULL;
   int32_t pos = -1;
   int32_t tableDeletedNum = 0;
-  Mutex *flushCacheMutex = NULL;
 
   /*if shared data hasn't even been lazy evaluated yet
    * return 0
