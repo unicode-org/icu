@@ -242,7 +242,7 @@ static void TestMisc()
 {
     const UChar sampleSpaces[] = {0x0020, 0x00a0, 0x2000, 0x2001, 0x2005};
     const UChar sampleNonSpaces[] = {0x61, 0x62, 0x63, 0x64, 0x74};
-    const UChar sampleUndefined[] = {0xfff1, 0xfff7, 0xfa30};
+    const UChar sampleUndefined[] = {0xfff1, 0xfff7, 0xfa6b };
     const UChar sampleDefined[] = {0x523E, 0x4f88, 0xfffd};
     const UChar sampleBase[] = {0x0061, 0x0031, 0x03d2};
     const UChar sampleNonBase[] = {0x002B, 0x0020, 0x203B};
@@ -299,7 +299,7 @@ static void TestMisc()
         if ((u_isdefined(sampleUndefined[i])) ||
                 !(u_isdefined(sampleDefined[i])))
         {
-            log_err("Undefined char test error : %d  or  %d\n", (int32_t)sampleUndefined[i], (int32_t)sampleDefined[i]);
+            log_err("Undefined char test error : U+%04x or U+%04x\n", (int32_t)sampleUndefined[i], (int32_t)sampleDefined[i]);
         }
     }
     for (i = 0; i < 3; i++) {
@@ -2343,6 +2343,7 @@ TestAdditionalProperties() {
 
     UVersionInfo version;
     int32_t i, uVersion;
+    UBool result;
 
     /* what is our Unicode version? */
     u_getUnicodeVersion(version);
@@ -2377,9 +2378,10 @@ TestAdditionalProperties() {
             }
         }
 
-        if(u_hasBinaryProperty((UChar32)props[i][0], (UProperty)props[i][1])!=(UBool)props[i][2]) {
+        result=u_hasBinaryProperty((UChar32)props[i][0], (UProperty)props[i][1]);
+        if(result!=(UBool)props[i][2]) {
             log_err("error: u_hasBinaryProperty(U+%04lx, %d)=%d is wrong (props[%d])\n",
-                    props[i][0], props[i][1], props[i][2], i);
+                    props[i][0], props[i][1], result, i);
         }
 
         /* test separate functions, too */
@@ -2387,25 +2389,25 @@ TestAdditionalProperties() {
         case UCHAR_ALPHABETIC:
             if(u_isUAlphabetic((UChar32)props[i][0])!=(UBool)props[i][2]) {
                 log_err("error: u_isUAlphabetic(U+%04lx)=%d is wrong (props[%d])\n",
-                        props[i][0], props[i][2], i);
+                        props[i][0], result, i);
             }
             break;
         case UCHAR_LOWERCASE:
             if(u_isULowercase((UChar32)props[i][0])!=(UBool)props[i][2]) {
                 log_err("error: u_isULowercase(U+%04lx)=%d is wrong (props[%d])\n",
-                        props[i][0], props[i][2], i);
+                        props[i][0], result, i);
             }
             break;
         case UCHAR_UPPERCASE:
             if(u_isUUppercase((UChar32)props[i][0])!=(UBool)props[i][2]) {
                 log_err("error: u_isUUppercase(U+%04lx)=%d is wrong (props[%d])\n",
-                        props[i][0], props[i][2], i);
+                        props[i][0], result, i);
             }
             break;
         case UCHAR_WHITE_SPACE:
             if(u_isUWhiteSpace((UChar32)props[i][0])!=(UBool)props[i][2]) {
                 log_err("error: u_isUWhiteSpace(U+%04lx)=%d is wrong (props[%d])\n",
-                        props[i][0], props[i][2], i);
+                        props[i][0], result, i);
             }
             break;
         default:
