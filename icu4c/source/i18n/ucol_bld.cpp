@@ -254,7 +254,7 @@ int32_t ucol_inv_getNext(UColTokListHeader *lh, uint32_t strength) {
   return iCE;
 }
 
-U_CFUNC void ucol_inv_getGapPositions(UColTokenParser *src, UColTokListHeader *lh, UErrorCode *status) {
+U_CFUNC void ucol_inv_getGapPositions(/*UColTokenParser *src,*/ UColTokListHeader *lh, UErrorCode *status) {
   /* reset all the gaps */
   int32_t i = 0;
   uint32_t *CETable = (uint32_t *)((uint8_t *)invUCA+invUCA->table);
@@ -383,9 +383,6 @@ U_CFUNC uint32_t ucol_getNextGenerated(ucolCEGenerator *g, UErrorCode *status) {
   return g->current;
 }
 
-static uint32_t fbHigh[3] = {0, /*0,*/UCOL_COMMON_TOP2, 0};
-static uint32_t fbLow[3] = {0, /*0,*/UCOL_COMMON_BOT2, 0};
-
 U_CFUNC uint32_t ucol_getSimpleCEGenerator(ucolCEGenerator *g, UColToken *tok, uint32_t strength, UErrorCode *status) {
 /* TODO: rename to enum names */
   uint32_t high, low, count=1;
@@ -420,7 +417,7 @@ U_CFUNC uint32_t ucol_getCEGenerator(ucolCEGenerator *g, uint32_t* lows, uint32_
   uint32_t high = highs[fStrength*3+strength];
   uint32_t maxByte = (strength == UCOL_TERTIARY)?0x3F:0xFF;
 
-  uint32_t count = tok->toInsert/*+(fbHigh[strength]-fbLow[strength])*/;
+  uint32_t count = tok->toInsert;
 
   if(low == high && strength > UCOL_PRIMARY) {
     int32_t s = strength;
@@ -448,10 +445,10 @@ U_CFUNC uint32_t ucol_getCEGenerator(ucolCEGenerator *g, uint32_t* lows, uint32_
   }
 
   if(strength == UCOL_SECONDARY) { /* similar as simple */
-    if(low >= UCOL_COMMON_BOT2<<24 && low < UCOL_COMMON_TOP2<<24) {
+    if(low >= (UCOL_COMMON_BOT2<<24) && low < (uint32_t)(UCOL_COMMON_TOP2<<24)) {
       low = UCOL_COMMON_TOP2<<24;
     }
-    if(high > UCOL_COMMON_BOT2<<24 && high < UCOL_COMMON_TOP2<<24) {
+    if(high > (UCOL_COMMON_BOT2<<24) && high < (uint32_t)(UCOL_COMMON_TOP2<<24)) {
       high = UCOL_COMMON_TOP2<<24;
     } 
     if(low < UCOL_COMMON_BOT2<<24) {
@@ -526,7 +523,7 @@ U_CFUNC void ucol_doCE(uint32_t *CEparts, UColToken *tok, UHashtable *tailored, 
 #endif
 }
 
-U_CFUNC void ucol_initBuffers(UColTokenParser *src, UColTokListHeader *lh, UHashtable *tailored, UErrorCode *status) {
+U_CFUNC void ucol_initBuffers(/*UColTokenParser *src,*/ UColTokListHeader *lh, UHashtable *tailored, UErrorCode *status) {
 
   ucolCEGenerator Gens[UCOL_CE_STRENGTH_LIMIT];
   uint32_t CEparts[UCOL_CE_STRENGTH_LIMIT];
@@ -557,7 +554,7 @@ U_CFUNC void ucol_initBuffers(UColTokenParser *src, UColTokListHeader *lh, UHash
   } 
 
   tok->toInsert = t[tok->strength];
-  ucol_inv_getGapPositions(src, lh, status);
+  ucol_inv_getGapPositions(lh, status);
 
 #if UCOL_DEBUG
   fprintf(stderr, "BaseCE: %08X %08X\n", lh->baseCE, lh->baseContCE);
@@ -639,11 +636,9 @@ U_CFUNC void ucol_initBuffers(UColTokenParser *src, UColTokListHeader *lh, UHash
 
 uint8_t ucol_uprv_getCaseBits(const UCollator *UCA, const UChar *src, uint32_t len, UErrorCode *status) {
   UChar n[128];
-  //UChar nu[128];
   uint32_t i = 0;
 
   uint32_t nLen = 0;
-  uint32_t nuLen = 0;
 
   collIterate s;
   uint32_t order = 0;
@@ -1009,6 +1004,7 @@ uint32_t uprv_ucol_getNextDynamicCE(tempUCATable *t, collIterate *collationSourc
   return order; /* return the CE */
 }
 
+#if 0
 uint32_t ucol_getDynamicCEs(UColTokenParser *src, tempUCATable *t, UChar *decomp, uint32_t noOfDec, uint32_t *result, uint32_t resultSize, UErrorCode *status) {
   uint32_t resLen = 0;
   collIterate colIt;
@@ -1023,6 +1019,7 @@ uint32_t ucol_getDynamicCEs(UColTokenParser *src, tempUCATable *t, UChar *decomp
 
   return resLen;
 }
+#endif
   
 UCATableHeader *ucol_assembleTailoringTable(UColTokenParser *src, UErrorCode *status) {
   uint32_t i = 0;
@@ -1078,7 +1075,7 @@ UCATableHeader *ucol_assembleTailoringTable(UColTokenParser *src, UErrorCode *st
     /* We stuff the initial value in the buffers, and increase the appropriate buffer */
     /* According to strength                                                          */
     if(U_SUCCESS(*status)) {
-      ucol_initBuffers(src, &src->lh[i], tailored, status);
+      ucol_initBuffers(&src->lh[i], tailored, status);
     }
   }
 
@@ -1122,7 +1119,6 @@ UCATableHeader *ucol_assembleTailoringTable(UColTokenParser *src, UErrorCode *st
     UCAElements el;
     el.isThai = FALSE;
     collIterate colIt;
-    uint32_t compRes = 0;
 
     /* add latin-1 stuff */
     if(U_SUCCESS(*status)) {
