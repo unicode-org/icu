@@ -1,0 +1,88 @@
+// *******************************************************************************
+// *
+// *   Copyright (C) 1997-2000, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// *******************************************************************************
+// $Revision: 1.1 $
+// $Tag: Experimental$
+// Singapore English locale: Data By Syn Wee Quek
+
+
+zh_SG {
+
+      Version { "x0.3" }
+
+    NumberPatterns { 
+            "#,##0.###;-#,##0.###",
+            "\u00A4#,##0.00;-\u00A4#,##0.00",
+            "#,##0%",
+    }
+    CurrencyElements { 
+    // Only 3 elements here!
+
+            // most commonly used currency sign
+//            "$",
+            "S$",   // #1 symbol
+            "SGD",  // #2 int'l symbol
+//            "SGD$",
+            ".",    // #3 decimal sep
+//            ","
+    }
+    AmPmMarkers { 
+            "\u4E0A\u5348", // am
+            // this means 12pm.
+//            "\u4E2D\u5348",      // [new feature? --srl]
+            "\u4E0B\u5348" // pm
+    }
+    DateTimePatterns {
+// too many here....... --srl
+            // most commonly used formal time format 
+            "a hh:mm:ss",
+            "a hh:mm:ss",
+            "a hh:mm",
+            "hh:mm",
+//            "hh:mm a",
+//            "hh:mm:ss a",
+            // most commonly used time format
+//            "hh:mm:ss",
+            "dd MMMM yyyy",
+            "dd MMM yyyy",
+//            "dd MMM yy",
+//            "dd-MMM-yyyy",
+            "dd-MMM-yy",
+//            "dd/MM/yyyy",
+            "dd/MM/yy",
+            "{1} {0}"
+    }
+    
+    
+    LocaleID { "1004" }
+
+//    ShortCountry { "\u65B0\u5240\u5761" } [ASCII three letter code]
+    ShortCountry { "SIN" } // copied from zh_EN.txt
+
+    zoneStrings { 
+        {
+                "SST",
+                "Singapore Standard Time",
+                "SST",
+                "Singapore Standard Time",
+                "Singapore"
+        }
+    }
+
+    Languages
+    {
+       root { "\u6839 \u6e90" }
+    }
+
+    Countries
+    {
+        ZA { "\u5357\u975e" }
+        AL { "\u963f\u5c14\u5df4\u5c3c\u4e9a" }
+    }
+
+
+}
+

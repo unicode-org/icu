@@ -33,6 +33,7 @@ mt {
 
  ar { G\u0127arbi }
  bg { "Bulgaru" }
+ ca { "Katalan" } // bu
  cs { "\u010Aek" }
  cy { "Welx" }  // [rc]
  da { "Dani\u017C" }  // [rc]
@@ -45,22 +46,27 @@ mt {
  fa { "Persjan" }
  fi { "Finlandi\u017C" } // [rc]
  fr { "Fran\u010Bi\u017c" } 
+ he { "Ebrajk" } // rz  { see: iw }
  hr { "Kroat" }
  hu { "Ungeri\u017C" }
  hy { "Armenjan" }
  id { "Indone\u017Cjan" }
  is { "Islandi\u017C" }
  it { Taljan }  // CI dictionary
+ iw { "Ebrajk" } // rz { see: he }
  ja { "\u0120appuni\u017C" } // srl, after [BM]
  lt { "Litwanjan" }
  lv { "Latvjan" }
  mt { Malti }
+ no { "Norvegi\u017C" } // bu
+ nl { "Olandi\u017C" } // bu
  pl { "Pollakk" }
  pt { "Portugi\u017c" }
  ro { "Rumen" }
  ru { "Russu" }
  sh { "Serbo-Kroat" }
  sk { "Slovakk" }
+ sl { "Slav" } // rz [mhux Slovenjan] 
  sq { "Albani\u017C" }
  sr { "Serb" }
  sv { "Svedi\u017C" }
@@ -81,6 +87,7 @@ mt {
     }
     Countries {
 
+        AE { "l-Emirati G\u0127arab" } // rz
         AL { Albanija }
         AR { Ar\u0121entina }
         AT { Awstrija }
@@ -91,22 +98,26 @@ mt {
         BO { "Bolivja" } // [rc]
         BR { Bra\u017Cil }
         CA { Kanada }
-        CH { \u017Bvizzera }
+        CH { Svizzera } // rz [S not dotted Z]
         CN { \u010Aina }
+        CO { "Kolumbja" } // bu
         CU { "Kuba" }
         CY { \u010Aipru }
         CZ { Rep. \u010Aeka  }
         DE { \u0120ermanja }
         DK { Danimarka  }
+        DO { "Republikka Domenikana" } // bu
         DZ { Al\u0121erija }
+        EC { "Ekwador" } // bu
         EE { Estonja }
         EG { E\u0121ittu }
         ES { Spanja }
         FI { Finlandja }
         FR { Franza }
-        GB { Gran Brittanja }
+        GB { "Ingilterra" } // rz, 'Gran Brittanja is more Italian than Maltese'
         GL { "Grinlandja" } // [rc]
-        GR { "Grecja" } // [rc]
+        GR { "Gre\u010Bja" } // [rc]/bu
+        GT { "Gwatemala" } // bu
         HR { Kroazja }
         HU { Ungerija }
         IE { Irlanda }
@@ -136,7 +147,7 @@ mt {
         SA { "Sawdi Arabja" }
         SE { \u017Bvezja }
         SI { Slovenja }
-        SK { Rep. Slovakka }
+        SK { "Slovakkja" } // rz
         SY { "Sirja" }
         TH { "Tajlandja" }
         TN { "Tune\u017c" }
