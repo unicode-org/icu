@@ -1542,11 +1542,11 @@ LocaleTest::Test4105828()
 void
 LocaleTest::TestSetIsBogus() {
   Locale l("en_US");
-  l.setBogus(TRUE);
+  l.setToBogus();
   if(l.isBogus() != TRUE) {
     errln("After setting bogus, didn't return TRUE");
   }
-  l.setBogus(FALSE);
+  l = "en_US"; // This should reset bogus
   if(l.isBogus() != FALSE) {
     errln("After resetting bogus, didn't return FALSE");
   }
