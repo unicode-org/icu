@@ -707,7 +707,7 @@ uloc_getCountry(const char* localeID,
     return u_terminateChars(country, countryCapacity, i, err);
 }
 
-U_CFUNC const char * 
+static const char * 
 locale_getKeywordsStart(const char *localeID) {
     const char *result = NULL;
     const uint8_t ebcdicSigns[] = { 0x44, 0x66, 0x80, 0xAC, 0xAE, 0xAF, 0xB5, 0xEC, 0xEF, 0x00 };
