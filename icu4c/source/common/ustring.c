@@ -1299,6 +1299,10 @@ u_growBufferFromStatic(void *context,
         if(length<destCapacity) {                                       \
             /* NUL-terminate the string, the NUL fits */                \
             dest[length]=0;                                             \
+            /* unset the not-terminated warning but leave all others */ \
+            if(*pErrorCode==U_STRING_NOT_TERMINATED_WARNING) {          \
+                *pErrorCode=U_ZERO_ERROR;                               \
+            }                                                           \
         } else if(length==destCapacity) {                               \
             /* unable to NUL-terminate, but the string itself fit - set a warning code */ \
             *pErrorCode=U_STRING_NOT_TERMINATED_WARNING;                \
