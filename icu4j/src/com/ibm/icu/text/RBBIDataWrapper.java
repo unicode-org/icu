@@ -76,7 +76,8 @@ final class RBBIDataWrapper {
      */
     final static class RBBIDataHeader {
         int         fMagic;         //  == 0xbla0 
-        int         fVersion;       //  == 1 
+        int         fVersion;       //  == 1 (for ICU 3.2 and earlier. 
+        byte[]      fFormatVersion; //  For ICU 3.4 and later.
         int         fLength;        //  Total length in bytes of this RBBI Data, 
                                        //      including all sections, not just the header. 
         int         fCatCount;      //  Number of character categories. 
@@ -103,6 +104,7 @@ final class RBBIDataWrapper {
 
         public RBBIDataHeader() {
             fMagic = 0;
+            fFormatVersion = new byte[4];
         };
     };
     
@@ -154,6 +156,10 @@ final class RBBIDataWrapper {
         This.fHeader = new  RBBIDataHeader();
         This.fHeader.fMagic          = dis.readInt();
         This.fHeader.fVersion        = dis.readInt();
+        This.fHeader.fFormatVersion[0] = (byte) (This.fHeader.fVersion >> 24);
+        This.fHeader.fFormatVersion[1] = (byte) (This.fHeader.fVersion >> 16);
+        This.fHeader.fFormatVersion[2] = (byte) (This.fHeader.fVersion >> 8);
+        This.fHeader.fFormatVersion[3] = (byte) (This.fHeader.fVersion);
         This.fHeader.fLength         = dis.readInt();
         This.fHeader.fCatCount       = dis.readInt();
         This.fHeader.fFTable         = dis.readInt();
@@ -173,8 +179,11 @@ final class RBBIDataWrapper {
         dis.skip(6 * 4);    // uint32_t  fReserved[6];
         
         
-        if (This.fHeader.fMagic != 0xb1a0) {
-            throw new IOException("Break Iterator Rule Data Magic Number Incorrect");
+        if (This.fHeader.fMagic != 0xb1a0 || 
+                ! (This.fHeader.fVersion == 1  ||         // ICU 3.2 and earlier
+                   This.fHeader.fFormatVersion[0] == 3)   // ICU 3.4
+            ) {
+            throw new IOException("Break Iterator Rule Data Magic Number Incorrect, or unsupported data version.");
         }
         
         // Current position in input stream.  
@@ -299,7 +308,7 @@ final class RBBIDataWrapper {
         }
         This.fRuleSource = sb.toString();
         
-        
+        // This.dump();
         return This;
     }
     
@@ -386,8 +395,7 @@ final class RBBIDataWrapper {
             dest.append("     ");
         }
         if (table[row+LOOKAHEAD] != 0) {
-        System.out.println(dest);
-        dest.append(intToString(table[row+LOOKAHEAD], 5)); 
+            dest.append(intToString(table[row+LOOKAHEAD], 5)); 
         }else {
             dest.append("     ");
         }

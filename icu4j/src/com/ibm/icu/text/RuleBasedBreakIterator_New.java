@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2004 International Business Machines Corporation and          *
+ * Copyright (C) 2005 International Business Machines Corporation and          *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -1063,20 +1063,17 @@ public int getRuleStatusVec(int[] fillInArray) {
 
         int            state              = START_STATE;
         int            category;
-        int            lastCategory       = 0;
         int            c                  = CIPrevious32(fText);
         // previous character
         int            result             = fText.getIndex();
         int            lookaheadStatus    = 0;
         int            lookaheadResult    = 0;
-        int            lookaheadTagIdx    = 0;
         boolean        lookAheadHardBreak = 
             (stateTable[RBBIDataWrapper.FLAGS+1] & RBBIDataWrapper.RBBI_LOOKAHEAD_HARD_BREAK) != 0;
   
         int            row = fRData.getRowIndex(state);
 
         category = (short)fRData.fTrie.getCodePointValue(c);
-        // category &= ~0x4000;            // Mask off dictionary bit.
 
         if (fTrace) {
             System.out.println("Handle Prev   pos   char  state category ");
@@ -1085,18 +1082,23 @@ public int getRuleStatusVec(int[] fillInArray) {
         // loop until we reach the beginning of the text or transition to state 0
         for (;;) {
             if (c==CI_DONE32) {
-                // if we have already considered the start of the text
-                if (stateTable[row + RBBIDataWrapper.LOOKAHEAD] != 0 &&
-                        lookaheadResult == 0) {
-                    result = 0;
+                if (fRData.fHeader.fVersion == 1) {
+                    // This is the old (ICU 3.2 and earlier) format data.
+                    //  No explicit support for matching {eof}.  Did have hacke, though...
+                    if (stateTable[row + RBBIDataWrapper.LOOKAHEAD] != 0 &&
+                            lookaheadResult == 0) {
+                        result = 0;
+                    }
+                    break;
                 }
-                break;
+                // Newer data format, with support for {eof}.
+                //    end of input is hardwired by rule builder as category 1
+                category = 1;
+            } else {
+                // not at {eof}  
+                //  look up the current character's category (the table column)
+                category = (short)fRData.fTrie.getCodePointValue(c);
             }
-
-            // save the last character's category and look up the current
-            // character's category
-            lastCategory = category;
-            category = (short)fRData.fTrie.getCodePointValue(c);
 
             // category &= ~0x4000;    // Clear the dictionary bit flag
             //                         //   (Should be unused; holdover from old RBBI)
@@ -1118,7 +1120,6 @@ public int getRuleStatusVec(int[] fillInArray) {
             if (stateTable[row + RBBIDataWrapper.ACCEPTING] == -1) {
                 // Match found, common case, could have lookahead so we move on to check it
                 result = fText.getIndex();
-                fLastRuleStatusIndex   = stateTable[row + RBBIDataWrapper.TAGIDX];
             }
 
             if (stateTable[row + RBBIDataWrapper.LOOKAHEAD] != 0) {
@@ -1127,7 +1128,6 @@ public int getRuleStatusVec(int[] fillInArray) {
                     // Lookahead match is completed.  Set the result accordingly, but only
                     // if no other rule has matched further in the mean time.
                     result               = lookaheadResult;
-                    fLastRuleStatusIndex = lookaheadTagIdx;
                     lookaheadStatus      = 0;
                     /// i think we have to back up to read the lookahead character again
                     /// fText->setIndex(lookaheadResult);
@@ -1143,20 +1143,26 @@ public int getRuleStatusVec(int[] fillInArray) {
                     if (lookAheadHardBreak) {
                         break;
                     }
-                    category = lastCategory;
                     fText.setIndex(result);
                 } else {
                     // Hit a possible look-ahead match.  We are at the
                     // position of the '/'.  Remember this position.
                     lookaheadResult      = fText.getIndex();
                     lookaheadStatus      = stateTable[row + RBBIDataWrapper.LOOKAHEAD];
-                    fLastRuleStatusIndex = stateTable[row + RBBIDataWrapper.TAGIDX];
                 }
             } else {               
                 // not lookahead...                
                 if (stateTable[row + RBBIDataWrapper.ACCEPTING] != 0) {
-                    // Normal style Accepting state.
-                    lookaheadStatus = 0;     //  Clear out any pending look-ahead matches.
+                    // This is a plain (non-look-ahead) acceptiong state.
+                    if (!lookAheadHardBreak) {
+                        lookaheadStatus = 0;     //  Clear out any pending look-ahead matches,
+                                                 //   but only if not doing the lookAheadHardBreak option
+                                                 //   which needs to force a break no matter what is going
+                                                 //   on with the rest of the match, i.e. we can't abandon
+                                                 //   a partially completed look-ahead match because some
+                                                 //   other rule matched further than the '/' position
+                                                 //   in the look-ahead match.
+                    }
                 }
             }
             
@@ -1168,9 +1174,6 @@ public int getRuleStatusVec(int[] fillInArray) {
             c = CIPrevious32(fText);
         }
 
-        // Note:  the result postion isn't what is returned to the user by previous(),
-        //        but where the implementation of previous() turns around and
-        //        starts iterating forward again.
         fText.setIndex(result);
 
         return result;
