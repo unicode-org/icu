@@ -49,7 +49,7 @@ void ctest_setICU_DATA(void);
 
 static UBool gMutexInitialized = FALSE;
 
-static TestMutex(void) {
+static void TestMutex(void) {
     if (!gMutexInitialized) {
         log_err("*** Failure! The global mutex was not initialized.\n"
                 "*** Make sure the right linker was used.\n");
