@@ -61,13 +61,8 @@ then
     ln -s "$icucurrent" current
 fi
 
-ICU_DATA=/usr/lib/icu/2.6.1
-export ICU_DATA
-if test ! -f $ICU_DATA/cnvalias.dat -o /etc/icu/convrtrs.txt -nt $ICU_DATA/cnvalias.dat
-then
-    echo Compiling converters and aliases list from /etc/icu/convrtrs.txt
-    /usr/bin/gencnval /etc/icu/convrtrs.txt
-fi
+#ICU_DATA=/usr/lib/icu/2.6.1
+#export ICU_DATA
 
 %preun
 # Adjust the current ICU link in /usr/lib/icu
