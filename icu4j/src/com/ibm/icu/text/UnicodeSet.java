@@ -229,7 +229,7 @@ import java.text.*;
  * *Unsupported by Java (and hence unsupported by UnicodeSet).
  *
  * @author Alan Liu
- * @version $RCSfile: UnicodeSet.java,v $ $Revision: 1.10 $ $Date: 2000/02/24 20:45:08 $
+ * @version $RCSfile: UnicodeSet.java,v $ $Revision: 1.11 $ $Date: 2000/02/26 02:21:37 $
  */
 public class UnicodeSet implements UnicodeFilter {
     /**
@@ -710,7 +710,8 @@ public class UnicodeSet implements UnicodeFilter {
         // mode 3: '[:' seen; parse category and close with ':]'
         int mode = 0;
         int openPos = 0; // offset to opening '['
-        int i = pos.getIndex();
+        int start = pos.getIndex();
+        int i = start;
         int limit = pattern.length();
         for (; i<limit; ++i) {
             /* If the next element is a single character, c will be set to it,
@@ -926,7 +927,8 @@ public class UnicodeSet implements UnicodeFilter {
          * ParsePosition to the next character to be parsed.
          */
         if (i == limit) {
-            throw new IllegalArgumentException("Missing ']'");
+            throw new IllegalArgumentException("Missing ']' in \"" +
+                                               pattern.substring(start) + '"');
         }
         pos.setIndex(i+1);
 
