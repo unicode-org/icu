@@ -327,20 +327,23 @@ uint32_t llong::u_lltoa(UChar* buf, uint32_t len, uint32_t radix, UBool raw) con
 
     UChar* p = buf;
     llong w(*this);
-    if (len && w.isNegative()) {
+    if (len && w.isNegative() && (radix == 10) && !raw) {
         w.negate();
         *p++ = kUMinus;
         --len;
-    }
+    } else if (len && w.isZero()) {
+		*p++ = (UChar)raw ? 0 : asciiDigits[0];
+		--len;
+	}
 
-    while (len && w.notZero()) {
-        llong n = w / base;
-        llong m = n * base;
-        int32_t d = (w-m).asInt();
-        *p++ = (UChar)(raw ? d : asciiDigits[d]);
-        w = n;
-        --len;
-    }
+	while (len && w.notZero()) {
+		llong n = w / base;
+		llong m = n * base;
+		int32_t d = (w-m).asInt();
+		*p++ = (UChar)(raw ? d : asciiDigits[d]);
+		w = n;
+		--len;
+	}
     if (len) {
         *p = 0; // null terminate if room for caller convenience
     }
