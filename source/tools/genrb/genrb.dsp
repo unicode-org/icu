@@ -56,7 +56,7 @@ InputPath=.\Release\genrb.exe
 InputName=genrb
 SOURCE="$(InputPath)"
 
-"..\..\..\bin\$(InputName)" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+"..\..\..\bin\$(InputName).exe" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
 	copy $(InputPath) ..\..\..\bin
 
 # End Custom Build
@@ -89,7 +89,7 @@ InputPath=.\Debug\genrb.exe
 InputName=genrb
 SOURCE="$(InputPath)"
 
-"..\..\..\bin\$(InputName)" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+"..\..\..\bin\$(InputName).exe" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
 	copy $(InputPath) ..\..\..\bin
 
 # End Custom Build
