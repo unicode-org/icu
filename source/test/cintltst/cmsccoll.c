@@ -2957,16 +2957,21 @@ static void TestNonChars() {
 }
 
 static void TestExtremeCompression() {
-  static const char *test[4][2048];
+  static char *test[4];
   int32_t i = 0;
 
   for(i = 0; i<4; i++) {
+    test[i] = (char *)uprv_malloc(2048*sizeof(char));
     uprv_memset(test[i], 'a', 2046*sizeof(char));
-    test[i][2046] = 'a'+i;
+    test[i][2046] = (char)('a'+i);
     test[i][2047] = 0;
   }
 
   genericLocaleStarter("en_US", test, 4);
+
+  for(i = 0; i<4; i++) {
+    uprv_free(test[i]);
+  }
 }
 
 static void TestSurrogates() {
@@ -3287,9 +3292,24 @@ static void TestPrefixCompose() {
 }
 
 
+static void TestMergeSortKeys() {
+  UErrorCode status = U_ZERO_ERROR;
+
+  const char* cases[] = {
+    "abc",
+      "abcd",
+      "abcde"
+  };
+
+  UCollator *coll = ucol_open("en", &status);
+
+  /* need to finish this up */
+}
+
 void addMiscCollTest(TestNode** root)
 {
     /*addTest(root, &TestBeforePrefixFailure, "tscoll/cmsccoll/TestBeforePrefixFailure");*/
+    addTest(root, &TestMergeSortKeys, "tscoll/cmsccoll/TestMergeSortKeys");
     addTest(root, &TestPrefixCompose, "tscoll/cmsccoll/TestPrefixCompose");
     addTest(root, &TestStrCollIdenticalPrefix, "tscoll/cmsccoll/TestStrCollIdenticalPrefix");
     addTest(root, &TestPrefix, "tscoll/cmsccoll/TestPrefix");
