@@ -769,6 +769,7 @@ inline UBool collIterFCD(collIterate *collationSource) {
             if (count >= length) {
                 break;
             }
+            int savedCount = count;
             UTF_NEXT_CHAR(srcP, count, length, codepoint);
 
             /* trie access */
@@ -778,7 +779,8 @@ inline UBool collIterFCD(collIterate *collationSource) {
                 (codepoint & STAGE_3_MASK_)];
             leadingCC = (uint8_t)(fcd >> SECOND_LAST_BYTE_SHIFT_);
             if (leadingCC == 0) {
-                count --;
+                count = savedCount;    // Hit char that is not part of combining sequence.
+                                       //   back up over it.  (Could be surrogate pair!)
                 break;
             }
 
@@ -791,14 +793,6 @@ inline UBool collIterFCD(collIterate *collationSource) {
     }
 
     collationSource->fcdPosition = srcP + count;
-
-    // if (codepoint == 0 && (collationSource->flags & UCOL_ITER_HASLEN)==0) {
-        /*
-        We checked the string's trailing null, which would advance
-        fcdPosition past the null. back it up to point to the null.
-        */
-        /*collationSource->fcdPosition--;
-    }*/
 
     return needNormalize;
 }
