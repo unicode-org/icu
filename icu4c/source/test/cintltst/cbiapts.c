@@ -24,11 +24,14 @@
 #include "cintltst.h"
 #include "cbiapts.h"
 
+static void TestBreakIteratorSafeClone(void);
+
 void addBrkIterAPITest(TestNode** root);
 
 void addBrkIterAPITest(TestNode** root)
 {
     addTest(root, &TestBreakIteratorCAPI, "tstxtbd/cbiapts/TestBreakIteratorCAPI");
+    addTest(root, &TestBreakIteratorSafeClone, "tstxtbd/cbiapts/TestBreakIteratorSafeClone");
 
 }
 
@@ -42,13 +45,7 @@ static void TestBreakIteratorCAPI()
     int32_t i;
     int32_t count = 0;
 
-    UBreakIterator * someIterators [CLONETEST_ITERATOR_COUNT];
-    UBreakIterator * someClonedIterators [CLONETEST_ITERATOR_COUNT];
-    UBreakIterator * brk;
-    UChar text[51];     /* Keep this odd to test for 64-bit memory alignment */
-                        /*  NOTE:  This doesn't reliably force mis-alignment of following items. */ 
-    uint8_t buffer [CLONETEST_ITERATOR_COUNT] [U_BRK_SAFECLONE_BUFFERSIZE];
-    int32_t bufferSize = U_BRK_SAFECLONE_BUFFERSIZE;
+    UChar text[50];
 
     /* Note:  the adjacent "" are concatenating strings, not adding a \" to the
        string, which is probably what whoever wrote this intended.  Don't fix,
@@ -222,8 +219,30 @@ static void TestBreakIteratorCAPI()
     ubrk_close(sentence);
     ubrk_close(line);
     ubrk_close(character);
+}
+
+static void TestBreakIteratorSafeClone(void)
+{
+    UChar text[51];     /* Keep this odd to test for 64-bit memory alignment */
+                        /*  NOTE:  This doesn't reliably force mis-alignment of following items. */ 
+    uint8_t buffer [CLONETEST_ITERATOR_COUNT] [U_BRK_SAFECLONE_BUFFERSIZE];
+    int32_t bufferSize = U_BRK_SAFECLONE_BUFFERSIZE;
+
+    UBreakIterator * someIterators [CLONETEST_ITERATOR_COUNT];
+    UBreakIterator * someClonedIterators [CLONETEST_ITERATOR_COUNT];
+
+    UBreakIterator * brk;
+    UErrorCode status = U_ZERO_ERROR;
+    int32_t start,pos;
+    int32_t i;
 
     /*Testing ubrk_safeClone */
+
+    /* Note:  the adjacent "" are concatenating strings, not adding a \" to the
+       string, which is probably what whoever wrote this intended.  Don't fix,
+       because it would throw off the hard coded break positions in the following
+       tests. */
+    u_uastrcpy(text, "He's from Africa. ""Mr. Livingston, I presume?"" Yeah");
 
     /* US & Thai - rule-based & dictionary based */
     someIterators[0] = ubrk_open(UBRK_WORD, "en_US", text, u_strlen(text), &status);
