@@ -14,7 +14,7 @@
 #include "unicode/uniset.h"
 #include "unicode/uchar.h"
 #include "unicode/usetiter.h"
-
+#include "unicode/ustring.h"
 
 UnicodeString operator+(const UnicodeString& left, const UnicodeSet& set) {
     UnicodeString pat;
@@ -52,6 +52,7 @@ UnicodeSetTest::runIndexedTest(int32_t index, UBool exec,
         CASE(13,TestStringPatterns);
         CASE(14,Testj2268);
         CASE(15,TestCloseOver);
+        CASE(16,TestEscapePattern);
         default: name = ""; break;
     }
 }
@@ -892,6 +893,59 @@ void UnicodeSetTest::TestCloseOver() {
     }
 }
 
+void UnicodeSetTest::TestEscapePattern() {
+    const char pattern[] =
+        "[\\uFEFF \\uFFF9-\\uFFFC \\U0001D173-\\U0001D17A \\U000F0000-\\U000FFFFD ]";
+    const char exp[] =
+        "[\\uFEFF\\uFFF9-\\uFFFC\\U0001D173-\\U0001D17A\\U000F0000-\\U000FFFFD]";
+    UErrorCode ec = U_ZERO_ERROR;
+    UnicodeSet set;
+
+    // We used to test this with two passes; in the second pass we 
+    // would pre-unescape the pattern.  The problem is that U+FEFF
+    // is rule whitespace, so this doesn't work.
+    // (Keep code in place in case we need it later)
+    //for (int32_t pass=1; pass<=2; ++pass) {
+    for (int32_t pass=1; pass<=1; ++pass) {
+        UnicodeString pat(pattern);
+        //if (pass==2) {
+        //    pat = pat.unescape();
+        //}
+
+        set.applyPattern(pat, ec);
+        if (U_FAILURE(ec)){
+            errln((UnicodeString)"FAIL: applyPattern(" +
+                  escape(pat) + ") failed: " +
+                  u_errorName(ec));
+            continue;
+        }
+        if (set.contains((UChar)0x0644)){
+            errln((UnicodeString)"FAIL: " + escape(pat) + " contains(U+0664)");
+        }
+
+        UnicodeString newpat;
+        set.toPattern(newpat, TRUE);
+        if (newpat == exp) {
+            logln(escape(pat) + " => " + newpat);
+        } else {
+            errln((UnicodeString)"FAIL: " + escape(pat) + " => " + newpat);
+        }
+
+        // Dump ranges, for debugging -- not needed during std. test
+        /*
+        for (int32_t i=0; i<set.getRangeCount(); ++i) {
+            UnicodeString str(" ");
+            str.append((UChar)(0x30 + i))
+                .append(": ")
+                .append((UChar32)set.getRangeStart(i))
+                .append(" - ")
+                .append((UChar32)set.getRangeEnd(i));
+            logln(escape(str));
+        }
+        */
+    }
+}
+
 void UnicodeSetTest::TestExhaustive() {
     // exhaustive tests. Simulate UnicodeSets with integers.
     // That gives us very solid tests (except for large memory tests).
@@ -1294,18 +1348,27 @@ UnicodeSetTest::doAssert(UBool condition, const char *message)
 UnicodeString
 UnicodeSetTest::escape(const UnicodeString& s) {
     UnicodeString buf;
-    for (int32_t i=0; i<s.length(); ++i)
+    for (int32_t i=0; i<s.length(); )
     {
-        UChar c = s[(int32_t)i];
+        UChar32 c = s.char32At(i);
         if (0x0020 <= c && c <= 0x007F) {
             buf += c;
         } else {
-            buf += (UChar)0x5c; buf += (UChar)0x55;
+            if (c <= 0xFFFF) {
+                buf += (UChar)0x5c; buf += (UChar)0x75;
+            } else {
+                buf += (UChar)0x5c; buf += (UChar)0x55;
+                buf += toHexString((c & 0xF0000000) >> 28);
+                buf += toHexString((c & 0x0F000000) >> 24);
+                buf += toHexString((c & 0x00F00000) >> 20);
+                buf += toHexString((c & 0x000F0000) >> 16);
+            }
             buf += toHexString((c & 0xF000) >> 12);
             buf += toHexString((c & 0x0F00) >> 8);
             buf += toHexString((c & 0x00F0) >> 4);
             buf += toHexString(c & 0x000F);
         }
+        i += U16_LENGTH(c);
     }
     return buf;
 }
