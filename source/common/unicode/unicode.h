@@ -770,6 +770,15 @@ public:
     static inline int8_t getType(UChar32 ch);
 
     /**
+     * Returns the combining class of the code point as specified in UnicodeData.txt.
+     *
+     * @param c the code point of the character
+     * @return the combining class of the character
+     * @draft
+     */
+    static inline uint8_t getCombiningClass(UChar32 c);
+
+    /**
      * Returns the linguistic direction property of a character.
      * <P>
      * Returns the linguistic direction property of a character.
@@ -1171,6 +1180,11 @@ Unicode::isWhitespace(UChar32 ch) {
 inline int8_t
 Unicode::getType(UChar32 ch) {
     return u_charType(ch);
+}
+
+inline uint8_t
+Unicode::getCombiningClass(UChar32 c) {
+    return u_getCombiningClass(c);
 }
 
 // Gets the character's linguistic directionality.
