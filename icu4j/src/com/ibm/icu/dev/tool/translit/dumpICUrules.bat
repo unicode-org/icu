@@ -228,6 +228,8 @@ END
         # Content lines
         chomp;
         my $prefix = '';
+        #replace \p with \\p
+        $_=~ s/\\p/\\\\p/g;
         my @a = split(':', $_);
         if ($a[1] eq 'file' || $a[1] eq 'internal') {
             # Convert the file name
@@ -236,6 +238,7 @@ END
             if ($a[2] eq $JAVA_ONLY) {
                 $prefix = '// Java only: ';
             }
+
             # Delete the encoding field
             splice(@a, 3, 1);
         } elsif ($a[1] eq 'alias') {
@@ -405,10 +408,10 @@ sub hideEscapes {
 sub restoreEscapes {
     # Restore escaped characters
     s|<<bs>>|\\\\|g;
-    s|<<dq>>|\\\"|g;
-    s|<<sq>>|\\\'|g;
-    s|<<lb>>|\\\#|g;
-    s|<<q(.)>>|\\$1|g;
+    s|<<dq>>|\\\\\\\"|g;
+    s|<<sq>>|\\\\\\\'|g;
+    s|<<lb>>|\\\\\\\#|g;
+    s|<<q(.)>>|\\\\\\$1|g;
     s|<<u0000>>|\\\\u0000|g; # Double escape U+0000
     s|<<u(....)>>|\\u$1|g;
 }
