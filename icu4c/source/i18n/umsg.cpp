@@ -726,7 +726,7 @@ umsg_toPattern(UMessageFormat *fmt,
 
     UnicodeString res(result, 0, resultLength);
     ((MessageFormat*)fmt)->toPattern(res);
-    return uprv_fillOutputString(res, result, resultLength, status);
+    return res.extract(result, resultLength, *status);
 }
 
 U_CAPI int32_t

@@ -1049,36 +1049,7 @@ unorm_decompose(UChar *dest, int32_t destCapacity,
                          trailCC,
                          pErrorCode);
 
-#if 1
-    /* ### TODO: this passes the tests but seems weird */
-    /* we may NUL-terminate if it fits as a convenience */
-    if(destIndex<destCapacity) {
-        dest[destIndex]=0;
-    } else if(destIndex>destCapacity) {
-        *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
-    }
-#else
-    /* ### TODO: this looks slightly to much more reasonable but fails some tests, esp. /tscoll/cmsccoll/TestIncrementalNormalize */
-    if(limit==NULL) {
-        /* assume that we must NUL-terminate */
-        if(destIndex<destCapacity) {
-            /* ### TODO: this one would make sense -- dest[destIndex++]=0; -- but the following is more compatible */
-            dest[destIndex]=0;
-        } else {
-            /* ### TODO: same as above -- ++destIndex; */
-            *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
-        }
-    } else {
-        /* we may NUL-terminate if it fits as a convenience */
-        if(destIndex<destCapacity) {
-            dest[destIndex]=0;
-        } else if(destIndex>destCapacity) {
-            *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
-        }
-    }
-#endif
-
-    return destIndex;
+    return u_terminateUChars(dest, destCapacity, destIndex, pErrorCode);
 }
 
 /* make FCD ----------------------------------------------------------------- */
@@ -1414,36 +1385,7 @@ unorm_makeFCD(UChar *dest, int32_t destCapacity,
         }
     }
 
-#if 1
-    /* ### TODO: this passes the tests but seems weird */
-    /* we may NUL-terminate if it fits as a convenience */
-    if(destIndex<destCapacity) {
-        dest[destIndex]=0;
-    } else if(destIndex>destCapacity) {
-        *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
-    }
-#else
-    /* ### TODO: this looks slightly to much more reasonable but fails some tests, esp. /tscoll/cmsccoll/TestIncrementalNormalize */
-    if(limit==NULL) {
-        /* assume that we must NUL-terminate */
-        if(destIndex<destCapacity) {
-            /* ### TODO: this one would make sense -- dest[destIndex++]=0; -- but the following is more compatible */
-            dest[destIndex]=0;
-        } else {
-            /* ### TODO: same as above -- ++destIndex; */
-            *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
-        }
-    } else {
-        /* we may NUL-terminate if it fits as a convenience */
-        if(destIndex<destCapacity) {
-            dest[destIndex]=0;
-        } else if(destIndex>destCapacity) {
-            *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
-        }
-    }
-#endif
-
-    return destIndex;
+    return u_terminateUChars(dest, destCapacity, destIndex, pErrorCode);
 }
 
 /* make NFC & NFKC ---------------------------------------------------------- */
@@ -2170,40 +2112,7 @@ unorm_compose(UChar *dest, int32_t destCapacity,
         }
     }
 
-#if 1
-    /* ### TODO: this passes the tests but seems weird */
-    /* we may NUL-terminate if it fits as a convenience */
-    if(destIndex<destCapacity) {
-        dest[destIndex]=0;
-    } else if(destIndex>destCapacity) {
-        *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
-    }
-#else
-    /* ### TODO: this looks slightly to much more reasonable but fails some tests, esp. /tscoll/cmsccoll/TestIncrementalNormalize */
-    if(limit==NULL) {
-        /* assume that we must NUL-terminate */
-        if(destIndex<destCapacity) {
-            /* ### TODO: this one would make sense -- dest[destIndex++]=0; -- but the following is more compatible */
-            dest[destIndex]=0;
-        } else {
-            /* ### TODO: same as above -- ++destIndex; */
-            *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
-        }
-    } else {
-        /* we may NUL-terminate if it fits as a convenience */
-        if(destIndex<destCapacity) {
-            dest[destIndex]=0;
-        } else if(destIndex>destCapacity) {
-            *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
-        }
-    }
-#endif
-
-    if(buffer!=stackBuffer) {
-        uprv_free(buffer);
-    }
-
-    return destIndex;
+    return u_terminateUChars(dest, destCapacity, destIndex, pErrorCode);
 }
 
 /*
@@ -2266,16 +2175,8 @@ unorm_internalNormalize(UChar *dest, int32_t destCapacity,
             (growBuffer!=NULL && growBuffer(context, &dest, &destCapacity, srcLength+1, 0))
         ) {
             uprv_memcpy(dest, src, srcLength*U_SIZEOF_UCHAR);
-            /* ### TODO: revise NUL-termination parallel to rest of API */
-            /* we may NUL-terminate if it fits as a convenience */
-            if(srcLength<destCapacity) {
-                dest[srcLength]=0;
-            } else if(srcLength>destCapacity) {
-                *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
-            }
         }
-        /* ### TODO: revise NUL-termination parallel to rest of API */
-        return srcLength;
+        return u_terminateUChars(dest, destCapacity, srcLength, pErrorCode);
     default:
         *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
         return 0;
