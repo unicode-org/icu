@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/lang/UCharacterTest.java,v $ 
-* $Date: 2002/03/02 02:04:07 $ 
-* $Revision: 1.30 $
+* $Date: 2002/03/08 02:03:16 $ 
+* $Revision: 1.31 $
 *
 *******************************************************************************
 */
@@ -24,6 +24,7 @@ import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.lang.UCharacterCategory;
 import com.ibm.icu.lang.UCharacterDirection;
 import com.ibm.icu.util.RangeValueIterator;
+import com.ibm.icu.util.ValueIterator;
 import com.ibm.icu.text.UTF16;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.text.BreakIterator;
@@ -53,6 +54,21 @@ public final class UCharacterTest extends TestFmwk
   }
   
   // public methods ================================================
+  
+  public static void main(String[] arg)
+  {
+    try
+    {
+      UCharacterTest test = new UCharacterTest();
+      UCharacter.getName1_0(0x1d18b);
+      test.TestNameIteration();
+      //test.run(arg);
+    }
+    catch (Exception e)
+    {
+      e.printStackTrace();
+    }
+  }
   
   /**
   * Testing the uppercase and lowercase function of UCharacter
@@ -635,8 +651,7 @@ public final class UCharacterTest extends TestFmwk
         errln(
           "FAIL: 'LATin smALl letTER A' should result in character U+0061"); 
     } 
-
-    
+	    
     // extra testing different from icu
     for (int i = UCharacter.MIN_VALUE; i < UCharacter.MAX_VALUE; i ++)
     {
@@ -648,6 +663,123 @@ public final class UCharacterTest extends TestFmwk
         break;
       }
     }
+  }
+  
+  /**
+   * Testing name iteration
+   */
+  public void TestNameIteration()
+  {
+  	ValueIterator iterator = UCharacter.getNameIterator();
+  	ValueIterator.Element element = new ValueIterator.Element();
+    ValueIterator.Element old     = new ValueIterator.Element();
+    // testing subrange
+ 	iterator.setRange(0xF, 0x45);
+ 	while (iterator.next(element)) {
+    	if (element.integer <= old.integer) {
+         	errln("FAIL next returned a less codepoint \\u" + 
+         	      Integer.toHexString(element.integer) + " than \\u" + 
+         	      Integer.toHexString(old.integer));
+         	break;
+        }
+        if (!UCharacter.getName(element.integer).equals(element.value)) {
+         	errln("FAIL next codepoint \\u" + 
+         	      Integer.toHexString(element.integer) + 
+         	      " does not have the expected name " + 
+         	      UCharacter.getName(element.integer) + 
+         	      " instead have the name " + (String)element.value);
+         	break;
+        }
+        old.integer = element.integer; 
+    }
+    
+    iterator.reset();
+    iterator.next(element);
+    if (element.integer != 0x20) {
+    	errln("FAIL reset in iterator");
+    }
+ 
+    iterator.setRange(0, 0x110000);
+    old.integer = 0; 
+    while (iterator.next(element)) {
+    	if (element.integer != 0 && element.integer <= old.integer) {
+         	errln("FAIL next returned a less codepoint \\u" + 
+         	      Integer.toHexString(element.integer) + " than \\u" + 
+         	      Integer.toHexString(old.integer));
+         	break;
+        }
+        if (!UCharacter.getName(element.integer).equals(element.value)) {
+         	errln("FAIL next codepoint \\u" + 
+         	      Integer.toHexString(element.integer) + 
+         	      " does not have the expected name " + 
+         	      UCharacter.getName(element.integer) + 
+         	      " instead have the name " + (String)element.value);
+         	break;
+        }
+        for (int i = old.integer + 1; i < element.integer; i ++) {
+        	if (UCharacter.getName(i) != null) {
+         		errln("FAIL between codepoints are not null \\u" + 
+         	      	Integer.toHexString(old.integer) + " and " + 
+         	      	Integer.toHexString(element.integer) + " has " + 
+         	      	Integer.toHexString(i) + " with a name " + 
+         	      	UCharacter.getName(i));
+         		break;
+        	}
+        }
+        old.integer = element.integer; 
+    }
+    
+    iterator = UCharacter.getExtendedNameIterator();
+    old.integer = 0;
+    while (iterator.next(element)) {
+    	if (element.integer != 0 && element.integer != old.integer) {
+         	errln("FAIL next returned a codepoint \\u" + 
+         	      Integer.toHexString(element.integer) + 
+         	      " different from \\u" + 
+         	      Integer.toHexString(old.integer));
+         	break;
+        }
+        if (!UCharacter.getExtendedName(element.integer).equals(
+                                                          element.value)) {
+         	errln("FAIL next codepoint \\u" + 
+         	      Integer.toHexString(element.integer) + " name should be "
+         	      + UCharacter.getExtendedName(element.integer) + 
+         	      " instead of " + (String)element.value);
+         	break;
+        }
+        old.integer++; 
+    }
+	iterator = UCharacter.getName1_0Iterator();
+    old.integer = 0;
+    while (iterator.next(element)) {
+    	System.out.println(Integer.toHexString(element.integer) + " " +
+    	                   (String)element.value);
+    	if (element.integer != 0 && element.integer <= old.integer) {
+         	errln("FAIL next returned a less codepoint \\u" + 
+         	      Integer.toHexString(element.integer) + " than \\u" + 
+         	      Integer.toHexString(old.integer));
+         	break;
+        }
+        if (!element.value.equals(UCharacter.getName1_0(element.integer))) {
+         	errln("FAIL next codepoint \\u" + 
+         	      Integer.toHexString(element.integer) + 
+         	      " name cannot be null");
+         	break;
+        }
+        for (int i = old.integer + 1; i < element.integer; i ++) {
+        	if (UCharacter.getName1_0(i) != null) {
+         		errln("FAIL between codepoints are not null \\u" + 
+         	      	Integer.toHexString(old.integer) + " and " + 
+         	      	Integer.toHexString(element.integer) + " has " + 
+         	      	Integer.toHexString(i) + " with a name " + 
+         	      	UCharacter.getName1_0(i));
+         		break;
+        	}
+        }
+        old.integer = element.integer; 
+    }
+
+    /* ### TODO: test error cases and other interesting things */
   }
   
   /**
@@ -1068,20 +1200,6 @@ public final class UCharacterTest extends TestFmwk
         result[i] = (String)v.elementAt(i);
     }
     return result;
-  }
- 
-  public static void main(String[] arg)
-  {
-    try
-    {
-      UCharacterTest test = new UCharacterTest();
-      test.TestCaseTitle();
-      //test.run(arg);
-    }
-    catch (Exception e)
-    {
-      e.printStackTrace();
-    }
   }
 }
 

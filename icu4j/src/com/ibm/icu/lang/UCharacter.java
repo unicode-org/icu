@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/lang/UCharacter.java,v $ 
-* $Date: 2002/03/02 02:04:09 $ 
-* $Revision: 1.27 $
+* $Date: 2002/03/08 02:04:00 $ 
+* $Revision: 1.28 $
 *
 *******************************************************************************
 */
@@ -18,6 +18,7 @@ import com.ibm.icu.impl.UnicodeProperty;
 import com.ibm.icu.impl.UCharacterProperty;
 import com.ibm.icu.impl.Utility; 
 import com.ibm.icu.util.RangeValueIterator;
+import com.ibm.icu.util.ValueIterator;
 import com.ibm.icu.text.BreakIterator;
 
 /**
@@ -879,7 +880,7 @@ public final class UCharacter
     */
     public static String getUnicodeVersion()
     {
-        return PROPERTY_.m_unicodeVersion_;
+        return PROPERTY_.m_unicodeVersion_.toString();
     }
       
     /**
@@ -1067,6 +1068,7 @@ public final class UCharacter
     * @param breakiter break iterator to determine the positions in which
     *        the character should be title cased.
     * @return lowercase version of the argument string
+    * @draft 2.1
     */
     public static String toTitleCase(String str, BreakIterator breakiter)
     {
@@ -1117,6 +1119,7 @@ public final class UCharacter
     * @param breakiter break iterator to determine the positions in which
     *        the character should be title cased.
     * @return lowercase version of the argument string
+    * @draft 2.1
     */
     public static String toTitleCase(Locale locale, String str, 
                                      BreakIterator breakiter)
@@ -1340,13 +1343,14 @@ public final class UCharacter
     * Example of use:<br>
     * <pre>
     * RangeValueIterator iterator = UCharacter.getTypeIterator();
-    * while (iterator.next()) {
+    * RangeValueIterator.Element element = new RangeValueIterator.Element();
+    * while (iterator.next(element)) {
     *     System.out.println("Codepoint \\u" + 
-    *                        Integer.toHexString(iterator.getStart()) + 
+    *                        Integer.toHexString(element.start) + 
     *                        " to codepoint \\u" +
-    *                        Integer.toHexString(iterator.getLimit() - 1) + 
+    *                        Integer.toHexString(element.limit - 1) + 
     *                        " has the character type " + 
-    *                        iterator.getValue());
+    *                        element.value);
     * }
     * </pre>
     * @return an iterator 
@@ -1355,6 +1359,98 @@ public final class UCharacter
     public static RangeValueIterator getTypeIterator()
     {
         return new UCharacterTypeIterator();
+    }
+
+	/**
+    * <p>Gets an iterator for character names, iterating over codepoints.</p>
+    * <p>This API only gets the iterator for the modern, most up-to-date 
+    * Unicode names. For older 1.0 Unicode names use get1_0NameIterator() or
+    * for extended names use getExtendedNameIterator().</p>
+    * Example of use:<br>
+    * <pre>
+    * ValueIterator iterator = UCharacter.getNameIterator();
+    * ValueIterator.Element element = new ValueIterator.Element();
+    * while (iterator.next(element)) {
+    *     System.out.println("Codepoint \\u" + 
+    *                        Integer.toHexString(element.codepoint) +
+    *                        " has the name " + (String)element.value);
+    * }
+    * </pre>
+    * @return an iterator 
+    * @draft 2.1
+    */
+    public static ValueIterator getNameIterator()
+    {
+        return new UCharacterNameIterator(NAME_,
+                                   UCharacterNameChoice.U_UNICODE_CHAR_NAME);
+    }
+    
+    /**
+    * <p>Gets an iterator for character names, iterating over codepoints.</p>
+    * <p>This API only gets the iterator for the older 1.0 Unicode names. 
+    * For modern, most up-to-date Unicode names use getNameIterator() or
+    * for extended names use getExtendedNameIterator().</p>
+    * Example of use:<br>
+    * <pre>
+    * ValueIterator iterator = UCharacter.get1_0NameIterator();
+    * ValueIterator.Element element = new ValueIterator.Element();
+    * while (iterator.next(element)) {
+    *     System.out.println("Codepoint \\u" + 
+    *                        Integer.toHexString(element.codepoint) +
+    *                        " has the name " + (String)element.value);
+    * }
+    * </pre>
+    * @return an iterator 
+    * @draft 2.1
+    */
+    public static ValueIterator getName1_0Iterator()
+    {
+        return new UCharacterNameIterator(NAME_,
+                                 UCharacterNameChoice.U_UNICODE_10_CHAR_NAME);
+    }
+    
+    /**
+    * <p>Gets an iterator for character names, iterating over codepoints.</p>
+    * <p>This API only gets the iterator for the extended names. 
+    * For modern, most up-to-date Unicode names use getNameIterator() or
+    * for older 1.0 Unicode names use get1_0NameIterator().</p>
+    * Example of use:<br>
+    * <pre>
+    * ValueIterator iterator = UCharacter.getExtendedNameIterator();
+    * ValueIterator.Element element = new ValueIterator.Element();
+    * while (iterator.next(element)) {
+    *     System.out.println("Codepoint \\u" + 
+    *                        Integer.toHexString(element.codepoint) +
+    *                        " has the name " + (String)element.value);
+    * }
+    * </pre>
+    * @return an iterator 
+    * @draft 2.1
+    */
+    public static ValueIterator getExtendedNameIterator()
+    {
+        return new UCharacterNameIterator(NAME_,
+                                 UCharacterNameChoice.U_EXTENDED_CHAR_NAME);
+    }
+    
+    // protected data members --------------------------------------------
+    
+    /**
+    * Database storing the sets of character name
+    */
+    protected static final UCharacterName NAME_;
+      
+    // block to initialise name database and unicode 1.0 data indicator
+    static
+    {
+        try
+        {
+            NAME_ = new UCharacterName();
+        }
+        catch (Exception e)
+        {
+            throw new RuntimeException(e.getMessage());
+        }
     }
     
     // protected methods -------------------------------------------------
@@ -1382,24 +1478,6 @@ public final class UCharacter
     private static final UCharacterProperty PROPERTY_ = 
                                                     UnicodeProperty.PROPERTY;
    
-    /**
-    * Database storing the sets of character name
-    */
-    private static final UCharacterName NAME_;
-      
-    // block to initialise name database and unicode 1.0 data indicator
-    static
-    {
-        try
-        {
-            NAME_ = new UCharacterName();
-        }
-        catch (Exception e)
-        {
-            throw new RuntimeException(e.getMessage());
-        }
-    }
-
     /**
     * To get the last character out from a data type
     */
