@@ -27,7 +27,7 @@ ICUDATADIR=$(top_builddir)/data
 UNICODEDATADIR=$(top_srcdir)/../data/unidata
 
 ## Extra files to remove for 'make clean'
-CLEANFILES = *~ $(DEPS) $(RES_FILES) $(TEST_FILES)
+CLEANFILES = *~ $(DEPS) $(RES_FILES) $(TEST_FILES) $(MANUAL_FILES)
 
 ## Target information
 TARGET = genprops
