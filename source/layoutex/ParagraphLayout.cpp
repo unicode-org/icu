@@ -458,7 +458,7 @@ le_int32 ParagraphLayout::getLeading() const
     return fLeading;
 }
 
-const ParagraphLayout::Line *ParagraphLayout::nextLine(float width)
+ParagraphLayout::Line *ParagraphLayout::nextLine(float width)
 {
     if (fLineEnd >= fCharCount) {
         return NULL;
@@ -749,7 +749,7 @@ le_int32 ParagraphLayout::previousBreak(le_int32 charIndex)
     return fBreakIterator->preceding(charIndex + 1);
 }
 
-const ParagraphLayout::Line *ParagraphLayout::computeVisualRuns()
+ParagraphLayout::Line *ParagraphLayout::computeVisualRuns()
 {
     UErrorCode bidiStatus = U_ZERO_ERROR;
     le_int32 dirRunCount, visualRun;
