@@ -185,7 +185,7 @@ static uint8_t utf16fixup[32] = {
         (collationSource).CEpos = (collationSource).toReturn = (collationSource).CEs; \
       }                                                                               \
     } else if((collationSource).pos < (collationSource).len) {                        \
-      UChar ch = *(collationSource).pos;                                              \
+      UChar ch = *(collationSource).pos++;                                              \
       if(ch <= 0xFF) {                                                                \
       (order) = (coll)->latinOneMapping[ch];                                          \
       } else {                                                                        \
@@ -197,7 +197,6 @@ static uint8_t utf16fixup[32] = {
           (order) = ucol_getNextUCA(ch, &(collationSource), (status));                \
         }                                                                             \
       }                                                                               \
-      (collationSource).pos++;                                                        \
     } else {                                                                          \
       (order) = UCOL_NO_MORE_CES;                                                     \
     }                                                                                 \
@@ -227,6 +226,14 @@ ucol_calcSortKey(const    UCollator    *coll,
         UBool allocatePrimary,
         UErrorCode *status);
 
+int32_t
+ucol_calcSortKeySimpleTertiary(const    UCollator    *coll,
+        const    UChar        *source,
+        int32_t        sourceLength,
+        uint8_t        **result,
+        int32_t        resultLength,
+        UBool allocatePrimary,
+        UErrorCode *status);
 
 /**
  * Makes a copy of the Collator's rule data. The format is

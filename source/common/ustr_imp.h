@@ -46,4 +46,12 @@ u_internalStrToUpper(UChar *dest, int32_t destCapacity,
                      GrowBuffer *growBuffer, void *context,
                      UErrorCode *pErrorCode);
 
+/*
+ * Internal, somewhat faster version of u_getCombiningClass()
+ * for use by normalization quick check etc.
+ * First make sure that data is loaded by u_getCombiningClass(0x300)!=0
+ */
+U_CFUNC uint8_t
+u_internalGetCombiningClass(UChar32 c);
+
 #endif
