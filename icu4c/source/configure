@@ -1226,7 +1226,7 @@ fi
 
 ICU_USE_THREADS=0
 
-if test $threads = yes; then
+if test $threads = true; then
    echo $ac_n "checking for pthread_create in -lpthread""... $ac_c" 1>&6
 echo "configure:1232: checking for pthread_create in -lpthread" >&5
 ac_lib_var=`echo pthread'_'pthread_create | sed 'y%./+-%__p_%'`
