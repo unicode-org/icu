@@ -465,7 +465,7 @@ static void   T_UConverter_fromUnicode_MBCS (UConverter * _this,
               args.pSource = &srcTemp;
               args.sourceLimit = sourceLimit;
               args.flush = flush;
-              args.offsets = offsets+myTargetIndex;
+              args.offsets = (offsets)?offsets+myTargetIndex:0;
               args.size = sizeof(args);
 /* Needed explicit cast for myTarget on MVS to make compiler happy - JJD */
               /* HSYS: to do: more smarts */

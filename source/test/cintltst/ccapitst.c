@@ -470,7 +470,7 @@ void TestConvert()
     MIA1 = ucnv_getFromUCallBack(myConverter);
             
     log_verbose("\n---Testing ucnv_setFromUCallBack...\n");
-    ucnv_setFromUCallBack(myConverter, otherUnicodeAction(MIA1), NULL, oldFromUAction, &oldFromUContext, err);
+    ucnv_setFromUCallBack(myConverter, otherUnicodeAction(MIA1), NULL, oldFromUAction, &oldFromUContext, &err);
     if (U_FAILURE(err)) 
     { log_err("FAILURE! %s\n", myErrorName(err)); }
     
