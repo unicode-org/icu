@@ -22,54 +22,78 @@ public class TestIDNARef extends TestFmwk {
     }
     private StringPrepParseException unassignedException = new StringPrepParseException("",StringPrepParseException.UNASSIGNED_ERROR);
     public void TestToUnicode() throws Exception{
-        for(int i=0; i<TestData.asciiIn.length; i++){
-            // test StringBuffer toUnicode
-            doTestToUnicode(TestData.asciiIn[i],new String(TestData.unicodeIn[i]),IDNAReference.DEFAULT, null);
-            doTestToUnicode(TestData.asciiIn[i],new String(TestData.unicodeIn[i]),IDNAReference.ALLOW_UNASSIGNED, null);
-            //doTestToUnicode(TestData.asciiIn[i],new String(TestData.unicodeIn[i]),IDNAReference.USE_STD3_RULES, null); 
-            //doTestToUnicode(TestData.asciiIn[i],new String(TestData.unicodeIn[i]),IDNAReference.USE_STD3_RULES|IDNAReference.ALLOW_UNASSIGNED, null); 
-    
-        }
+        try{
+            for(int i=0; i<TestData.asciiIn.length; i++){
+                // test StringBuffer toUnicode
+                doTestToUnicode(TestData.asciiIn[i],new String(TestData.unicodeIn[i]),IDNAReference.DEFAULT, null);
+                doTestToUnicode(TestData.asciiIn[i],new String(TestData.unicodeIn[i]),IDNAReference.ALLOW_UNASSIGNED, null);
+                //doTestToUnicode(TestData.asciiIn[i],new String(TestData.unicodeIn[i]),IDNAReference.USE_STD3_RULES, null); 
+                //doTestToUnicode(TestData.asciiIn[i],new String(TestData.unicodeIn[i]),IDNAReference.USE_STD3_RULES|IDNAReference.ALLOW_UNASSIGNED, null); 
+        
+            }
+        }catch(java.lang.ExceptionInInitializerError ex){
+            warnln("Could not load NamePrepTransform data");
+        }catch(java.lang.NoClassDefFoundError ex){
+            warnln("Could not load NamePrepTransform data");
+        } 
     }
     
     public void TestToASCII() throws Exception{
-        for(int i=0; i<TestData.asciiIn.length; i++){
-            // test StringBuffer toUnicode
-            doTestToASCII(new String(TestData.unicodeIn[i]),TestData.asciiIn[i],IDNAReference.DEFAULT, null);
-            doTestToASCII(new String(TestData.unicodeIn[i]),TestData.asciiIn[i],IDNAReference.ALLOW_UNASSIGNED, null);
-            //doTestToUnicode(TestData.asciiIn[i],new String(TestData.unicodeIn[i]),IDNAReference.USE_STD3_RULES, null); 
-            //doTestToUnicode(TestData.asciiIn[i],new String(TestData.unicodeIn[i]),IDNAReference.USE_STD3_RULES|IDNAReference.ALLOW_UNASSIGNED, null); 
-    
-        }
+        try{
+            for(int i=0; i<TestData.asciiIn.length; i++){
+                // test StringBuffer toUnicode
+                doTestToASCII(new String(TestData.unicodeIn[i]),TestData.asciiIn[i],IDNAReference.DEFAULT, null);
+                doTestToASCII(new String(TestData.unicodeIn[i]),TestData.asciiIn[i],IDNAReference.ALLOW_UNASSIGNED, null);
+                //doTestToUnicode(TestData.asciiIn[i],new String(TestData.unicodeIn[i]),IDNAReference.USE_STD3_RULES, null); 
+                //doTestToUnicode(TestData.asciiIn[i],new String(TestData.unicodeIn[i]),IDNAReference.USE_STD3_RULES|IDNAReference.ALLOW_UNASSIGNED, null); 
+        
+            }
+        }catch(java.lang.ExceptionInInitializerError ex){
+            warnln("Could not load NamePrepTransform data");
+        }catch(java.lang.NoClassDefFoundError ex){
+            warnln("Could not load NamePrepTransform data");
+        } 
     }
     
     public void TestIDNToASCII() throws Exception{
-        for(int i=0; i<TestData.domainNames.length; i++){
-            doTestIDNToASCII(TestData.domainNames[i],TestData.domainNames[i],IDNAReference.DEFAULT, null);
-            doTestIDNToASCII(TestData.domainNames[i],TestData.domainNames[i],IDNAReference.ALLOW_UNASSIGNED, null);
-            doTestIDNToASCII(TestData.domainNames[i],TestData.domainNames[i],IDNAReference.USE_STD3_RULES, null);
-            doTestIDNToASCII(TestData.domainNames[i],TestData.domainNames[i],IDNAReference.ALLOW_UNASSIGNED|IDNAReference.USE_STD3_RULES, null);
-        }
-        
-        for(int i=0; i<TestData.domainNames1Uni.length; i++){
-            doTestIDNToASCII(TestData.domainNames1Uni[i],TestData.domainNamesToASCIIOut[i],IDNAReference.DEFAULT, null);
-            doTestIDNToASCII(TestData.domainNames1Uni[i],TestData.domainNamesToASCIIOut[i],IDNAReference.ALLOW_UNASSIGNED, null);
-            doTestIDNToASCII(TestData.domainNames1Uni[i],TestData.domainNamesToASCIIOut[i],IDNAReference.USE_STD3_RULES, null);
-            doTestIDNToASCII(TestData.domainNames1Uni[i],TestData.domainNamesToASCIIOut[i],IDNAReference.ALLOW_UNASSIGNED|IDNAReference.USE_STD3_RULES, null);
-
-        }
+        try{
+            for(int i=0; i<TestData.domainNames.length; i++){
+                doTestIDNToASCII(TestData.domainNames[i],TestData.domainNames[i],IDNAReference.DEFAULT, null);
+                doTestIDNToASCII(TestData.domainNames[i],TestData.domainNames[i],IDNAReference.ALLOW_UNASSIGNED, null);
+                doTestIDNToASCII(TestData.domainNames[i],TestData.domainNames[i],IDNAReference.USE_STD3_RULES, null);
+                doTestIDNToASCII(TestData.domainNames[i],TestData.domainNames[i],IDNAReference.ALLOW_UNASSIGNED|IDNAReference.USE_STD3_RULES, null);
+            }
+            
+            for(int i=0; i<TestData.domainNames1Uni.length; i++){
+                doTestIDNToASCII(TestData.domainNames1Uni[i],TestData.domainNamesToASCIIOut[i],IDNAReference.DEFAULT, null);
+                doTestIDNToASCII(TestData.domainNames1Uni[i],TestData.domainNamesToASCIIOut[i],IDNAReference.ALLOW_UNASSIGNED, null);
+                doTestIDNToASCII(TestData.domainNames1Uni[i],TestData.domainNamesToASCIIOut[i],IDNAReference.USE_STD3_RULES, null);
+                doTestIDNToASCII(TestData.domainNames1Uni[i],TestData.domainNamesToASCIIOut[i],IDNAReference.ALLOW_UNASSIGNED|IDNAReference.USE_STD3_RULES, null);
+    
+            }
+        }catch(java.lang.ExceptionInInitializerError ex){
+            warnln("Could not load NamePrepTransform data");
+        }catch(java.lang.NoClassDefFoundError ex){
+            warnln("Could not load NamePrepTransform data");
+        } 
     }
     public void TestIDNToUnicode() throws Exception{
-        for(int i=0; i<TestData.domainNames.length; i++){
-            doTestIDNToUnicode(TestData.domainNames[i],TestData.domainNames[i],IDNAReference.DEFAULT, null);
-            doTestIDNToUnicode(TestData.domainNames[i],TestData.domainNames[i],IDNAReference.ALLOW_UNASSIGNED, null);
-            doTestIDNToUnicode(TestData.domainNames[i],TestData.domainNames[i],IDNAReference.USE_STD3_RULES, null);
-            doTestIDNToUnicode(TestData.domainNames[i],TestData.domainNames[i],IDNAReference.ALLOW_UNASSIGNED|IDNAReference.USE_STD3_RULES, null);
-        }
-        for(int i=0; i<TestData.domainNamesToASCIIOut.length; i++){
-            doTestIDNToUnicode(TestData.domainNamesToASCIIOut[i],TestData.domainNamesToUnicodeOut[i],IDNAReference.DEFAULT, null);
-            doTestIDNToUnicode(TestData.domainNamesToASCIIOut[i],TestData.domainNamesToUnicodeOut[i],IDNAReference.ALLOW_UNASSIGNED, null);
-        }
+        try{
+            for(int i=0; i<TestData.domainNames.length; i++){
+                doTestIDNToUnicode(TestData.domainNames[i],TestData.domainNames[i],IDNAReference.DEFAULT, null);
+                doTestIDNToUnicode(TestData.domainNames[i],TestData.domainNames[i],IDNAReference.ALLOW_UNASSIGNED, null);
+                doTestIDNToUnicode(TestData.domainNames[i],TestData.domainNames[i],IDNAReference.USE_STD3_RULES, null);
+                doTestIDNToUnicode(TestData.domainNames[i],TestData.domainNames[i],IDNAReference.ALLOW_UNASSIGNED|IDNAReference.USE_STD3_RULES, null);
+            }
+            for(int i=0; i<TestData.domainNamesToASCIIOut.length; i++){
+                doTestIDNToUnicode(TestData.domainNamesToASCIIOut[i],TestData.domainNamesToUnicodeOut[i],IDNAReference.DEFAULT, null);
+                doTestIDNToUnicode(TestData.domainNamesToASCIIOut[i],TestData.domainNamesToUnicodeOut[i],IDNAReference.ALLOW_UNASSIGNED, null);
+            }
+        }catch(java.lang.ExceptionInInitializerError ex){
+            warnln("Could not load NamePrepTransform data");
+        }catch(java.lang.NoClassDefFoundError ex){
+            warnln("Could not load NamePrepTransform data");
+        } 
     }
     
     private void doTestToUnicode(String src, String expected, int options, Object expectedException) 
@@ -224,6 +248,7 @@ public class TestIDNARef extends TestFmwk {
     }
     private void doTestIDNToASCII(String src, String expected, int options, Object expectedException) 
                 throws Exception{
+        
         StringBuffer inBuf = new StringBuffer(src);
         UCharacterIterator inIter = UCharacterIterator.getInstance(src);
         try{
@@ -273,89 +298,107 @@ public class TestIDNARef extends TestFmwk {
         }
     }
     public void TestConformance()throws Exception{
-        for(int i=0; i<TestData.conformanceTestCases.length;i++){
-            
-            TestData.ConformanceTestCase testCase = TestData.conformanceTestCases[i];
-            if(testCase.expected != null){
-                //Test toASCII
-                doTestToASCII(testCase.input,testCase.output,IDNAReference.DEFAULT,testCase.expected);
-                doTestToASCII(testCase.input,testCase.output,IDNAReference.ALLOW_UNASSIGNED,testCase.expected);
+        try{
+            for(int i=0; i<TestData.conformanceTestCases.length;i++){
+                
+                TestData.ConformanceTestCase testCase = TestData.conformanceTestCases[i];
+                if(testCase.expected != null){
+                    //Test toASCII
+                    doTestToASCII(testCase.input,testCase.output,IDNAReference.DEFAULT,testCase.expected);
+                    doTestToASCII(testCase.input,testCase.output,IDNAReference.ALLOW_UNASSIGNED,testCase.expected);
+                }
+                //Test toUnicode
+                //doTestToUnicode(testCase.input,testCase.output,IDNAReference.DEFAULT,testCase.expected);
             }
-            //Test toUnicode
-            //doTestToUnicode(testCase.input,testCase.output,IDNAReference.DEFAULT,testCase.expected);
-        }
+        }catch(java.lang.ExceptionInInitializerError ex){
+            warnln("Could not load NamePrepTransform data");
+        }catch(java.lang.NoClassDefFoundError ex){
+            warnln("Could not load NamePrepTransform data");
+        } 
     }
     public void TestNamePrepConformance() throws Exception{
-        NamePrepTransform namePrep = NamePrepTransform.getInstance();
-        for(int i=0; i<TestData.conformanceTestCases.length;i++){
-            TestData.ConformanceTestCase testCase = TestData.conformanceTestCases[i];
-            UCharacterIterator iter = UCharacterIterator.getInstance(testCase.input);
-            try{
-                StringBuffer output = namePrep.prepare(iter,NamePrepTransform.NONE);
-                if(testCase.output !=null && output!=null && !testCase.output.equals(output.toString())){
-                    errln("Did not get the expected output. Expected: " + prettify(testCase.output)+
-                          " Got: "+ prettify(output) );
+        try{
+            NamePrepTransform namePrep = NamePrepTransform.getInstance();
+            for(int i=0; i<TestData.conformanceTestCases.length;i++){
+                TestData.ConformanceTestCase testCase = TestData.conformanceTestCases[i];
+                UCharacterIterator iter = UCharacterIterator.getInstance(testCase.input);
+                try{
+                    StringBuffer output = namePrep.prepare(iter,NamePrepTransform.NONE);
+                    if(testCase.output !=null && output!=null && !testCase.output.equals(output.toString())){
+                        errln("Did not get the expected output. Expected: " + prettify(testCase.output)+
+                              " Got: "+ prettify(output) );
+                    }
+                    if(testCase.expected!=null && !unassignedException.equals(testCase.expected)){
+                        errln("Did not get the expected exception. The operation succeeded!");
+                    }
+                }catch(StringPrepParseException ex){
+                    if(testCase.expected == null || !ex.equals(testCase.expected)){
+                        errln("Did not get the expected exception for source: " +testCase.input +" Got:  "+ ex.toString());
+                    }
                 }
-                if(testCase.expected!=null && !unassignedException.equals(testCase.expected)){
-                    errln("Did not get the expected exception. The operation succeeded!");
-                }
-            }catch(StringPrepParseException ex){
-                if(testCase.expected == null || !ex.equals(testCase.expected)){
-                    errln("Did not get the expected exception for source: " +testCase.input +" Got:  "+ ex.toString());
+                
+                try{
+                    iter.setToStart();
+                    StringBuffer output = namePrep.prepare(iter,NamePrepTransform.ALLOW_UNASSIGNED);
+                    if(testCase.output !=null && output!=null && !testCase.output.equals(output.toString())){
+                        errln("Did not get the expected output. Expected: " + prettify(testCase.output)+
+                              " Got: "+ prettify(output) );
+                    }
+                    if(testCase.expected!=null && !unassignedException.equals(testCase.expected)){
+                        errln("Did not get the expected exception. The operation succeeded!");
+                    }
+                }catch(StringPrepParseException ex){
+                    if(testCase.expected == null || !ex.equals(testCase.expected)){
+                        errln("Did not get the expected exception for source: " +testCase.input +" Got:  "+ ex.toString());
+                    }
                 }
             }
-            
-            try{
-                iter.setToStart();
-                StringBuffer output = namePrep.prepare(iter,NamePrepTransform.ALLOW_UNASSIGNED);
-                if(testCase.output !=null && output!=null && !testCase.output.equals(output.toString())){
-                    errln("Did not get the expected output. Expected: " + prettify(testCase.output)+
-                          " Got: "+ prettify(output) );
-                }
-                if(testCase.expected!=null && !unassignedException.equals(testCase.expected)){
-                    errln("Did not get the expected exception. The operation succeeded!");
-                }
-            }catch(StringPrepParseException ex){
-                if(testCase.expected == null || !ex.equals(testCase.expected)){
-                    errln("Did not get the expected exception for source: " +testCase.input +" Got:  "+ ex.toString());
-                }
-            }
-        }
+        }catch(java.lang.ExceptionInInitializerError e){
+            warnln("Could not load NamePrepTransformData");
+        }catch(java.lang.NoClassDefFoundError ex){
+            warnln("Could not load NamePrepTransform data");
+        } 
         
     }
     public void TestErrorCases() throws Exception{
-        for(int i=0; i < TestData.errorCases.length; i++){
-            TestData.ErrorCase errCase = TestData.errorCases[i];
-            if(errCase.testLabel==true){
-                // Test ToASCII
-                doTestToASCII(new String(errCase.unicode),errCase.ascii,IDNAReference.DEFAULT,errCase.expected);
-                doTestToASCII(new String(errCase.unicode),errCase.ascii,IDNAReference.ALLOW_UNASSIGNED,errCase.expected);
-                if(errCase.useSTD3ASCIIRules){
-                    doTestToASCII(new String(errCase.unicode),errCase.ascii,IDNAReference.USE_STD3_RULES,errCase.expected);
+        try{
+            for(int i=0; i < TestData.errorCases.length; i++){
+                TestData.ErrorCase errCase = TestData.errorCases[i];
+                if(errCase.testLabel==true){
+                    // Test ToASCII
+                    doTestToASCII(new String(errCase.unicode),errCase.ascii,IDNAReference.DEFAULT,errCase.expected);
+                    doTestToASCII(new String(errCase.unicode),errCase.ascii,IDNAReference.ALLOW_UNASSIGNED,errCase.expected);
+                    if(errCase.useSTD3ASCIIRules){
+                        doTestToASCII(new String(errCase.unicode),errCase.ascii,IDNAReference.USE_STD3_RULES,errCase.expected);
+                    }
                 }
-            }
-            if(errCase.useSTD3ASCIIRules!=true){
-                
-                // Test IDNToASCII
-                doTestIDNToASCII(new String(errCase.unicode),errCase.ascii,IDNAReference.DEFAULT,errCase.expected);
-                doTestIDNToASCII(new String(errCase.unicode),errCase.ascii,IDNAReference.ALLOW_UNASSIGNED,errCase.expected);
-                
-            }else{
-                doTestIDNToASCII(new String(errCase.unicode),errCase.ascii,IDNAReference.USE_STD3_RULES,errCase.expected);
-            }
-            
-            //TestToUnicode
-            if(errCase.testToUnicode==true){
                 if(errCase.useSTD3ASCIIRules!=true){
-                    // Test IDNToUnicode
-                    doTestIDNToUnicode(errCase.ascii,new String(errCase.unicode),IDNAReference.DEFAULT,errCase.expected);
-                    doTestIDNToUnicode(errCase.ascii,new String(errCase.unicode),IDNAReference.ALLOW_UNASSIGNED,errCase.expected);
-                
+                    
+                    // Test IDNToASCII
+                    doTestIDNToASCII(new String(errCase.unicode),errCase.ascii,IDNAReference.DEFAULT,errCase.expected);
+                    doTestIDNToASCII(new String(errCase.unicode),errCase.ascii,IDNAReference.ALLOW_UNASSIGNED,errCase.expected);
+                    
                 }else{
-                    doTestIDNToUnicode(errCase.ascii,new String(errCase.unicode),IDNAReference.USE_STD3_RULES,errCase.expected);
+                    doTestIDNToASCII(new String(errCase.unicode),errCase.ascii,IDNAReference.USE_STD3_RULES,errCase.expected);
+                }
+                
+                //TestToUnicode
+                if(errCase.testToUnicode==true){
+                    if(errCase.useSTD3ASCIIRules!=true){
+                        // Test IDNToUnicode
+                        doTestIDNToUnicode(errCase.ascii,new String(errCase.unicode),IDNAReference.DEFAULT,errCase.expected);
+                        doTestIDNToUnicode(errCase.ascii,new String(errCase.unicode),IDNAReference.ALLOW_UNASSIGNED,errCase.expected);
+                    
+                    }else{
+                        doTestIDNToUnicode(errCase.ascii,new String(errCase.unicode),IDNAReference.USE_STD3_RULES,errCase.expected);
+                    }
                 }
             }
-        }
+        }catch(java.lang.ExceptionInInitializerError ex){
+            warnln("Could not load NamePrepTransform data");
+        }catch(java.lang.NoClassDefFoundError ex){
+            warnln("Could not load NamePrepTransform data");
+        } 
     }
     private void doTestCompare(String s1, String s2, boolean isEqual){
         try{
@@ -397,7 +440,7 @@ public class TestIDNARef extends TestFmwk {
             }
         }catch(Exception e){
             errln("Unexpected exception thrown by IDNAReference.compare");
-        }
+        }     
     }
     public void TestCompare() throws Exception{
         String www = "www.";
@@ -419,35 +462,39 @@ public class TestIDNARef extends TestFmwk {
 
         ascii1.append(TestData.asciiIn[1]);
         ascii1.append(com);
-
-        for(int i=0;i< TestData.unicodeIn.length; i++){
-
-            // for every entry in unicodeIn array
-            // prepend www. and append .com
-            source.setLength(4);
-            source.append(TestData.unicodeIn[i]);
-            source.append(com);
+        try{
+            for(int i=0;i< TestData.unicodeIn.length; i++){
+    
+                // for every entry in unicodeIn array
+                // prepend www. and append .com
+                source.setLength(4);
+                source.append(TestData.unicodeIn[i]);
+                source.append(com);
+                
+                // a) compare it with itself
+                doTestCompare(source.toString(),source.toString(),true);
             
-            // a) compare it with itself
-            doTestCompare(source.toString(),source.toString(),true);
-        
-            // b) compare it with asciiIn equivalent
-            doTestCompare(source.toString(),www+TestData.asciiIn[i]+com,true);
-        
-            // c) compare it with unicodeIn not equivalent
-            if(i==0){
-                doTestCompare(source.toString(), uni1.toString(), false);
-            }else{
-                doTestCompare(source.toString(),uni0.toString(), false);
+                // b) compare it with asciiIn equivalent
+                doTestCompare(source.toString(),www+TestData.asciiIn[i]+com,true);
+            
+                // c) compare it with unicodeIn not equivalent
+                if(i==0){
+                    doTestCompare(source.toString(), uni1.toString(), false);
+                }else{
+                    doTestCompare(source.toString(),uni0.toString(), false);
+                }
+                // d) compare it with asciiIn not equivalent
+                if(i==0){
+                    doTestCompare(source.toString(),ascii1.toString(), false);
+                }else{
+                    doTestCompare(source.toString(),ascii0.toString(), false);
+                }
             }
-            // d) compare it with asciiIn not equivalent
-            if(i==0){
-                doTestCompare(source.toString(),ascii1.toString(), false);
-            }else{
-                doTestCompare(source.toString(),ascii0.toString(), false);
-            }
-
-        }
+        }catch(java.lang.ExceptionInInitializerError ex){
+            warnln("Could not load NamePrepTransform data");
+        }catch(java.lang.NoClassDefFoundError ex){
+            warnln("Could not load NamePrepTransform data");
+        } 
     }
 
     //  test and ascertain
@@ -473,7 +520,8 @@ public class TestIDNARef extends TestFmwk {
         }
         if(!expected.toString().equals(chained.toString())){
             errln("Chaining test failed for convertToASCII");
-        }   
+        } 
+        
     }
     //  test and ascertain
     //  func(func(func(src))) == func(src)
@@ -498,15 +546,22 @@ public class TestIDNARef extends TestFmwk {
         }
         if(!expected.toString().equals(chained.toString())){
             errln("Chaining test failed for convertToUnicode");
-        }   
+        }
+
     }
     public void TestChaining() throws Exception{
-        for(int i=0; i< TestData.unicodeIn.length; i++){
-            doTestChainingToASCII(new String(TestData.unicodeIn[i]));
-        }
-        for(int i=0; i< TestData.asciiIn.length; i++){
-            doTestChainingToUnicode(TestData.asciiIn[i]);
-        }
+        try{
+            for(int i=0; i< TestData.unicodeIn.length; i++){
+                doTestChainingToASCII(new String(TestData.unicodeIn[i]));
+            }
+            for(int i=0; i< TestData.asciiIn.length; i++){
+                doTestChainingToUnicode(TestData.asciiIn[i]);
+            }
+        }catch(java.lang.ExceptionInInitializerError ex){
+            warnln("Could not load NamePrepTransform data");
+        }catch(java.lang.NoClassDefFoundError ex){
+            warnln("Could not load NamePrepTransform data");
+        } 
     }
     public void TestRootLabelSeparator() throws Exception{
         String www = "www.";
@@ -528,35 +583,39 @@ public class TestIDNARef extends TestFmwk {
 
         ascii1.append(TestData.asciiIn[1]);
         ascii1.append(com);
-
-        for(int i=0;i< TestData.unicodeIn.length; i++){
-
-            // for every entry in unicodeIn array
-            // prepend www. and append .com
-            source.setLength(4);
-            source.append(TestData.unicodeIn[i]);
-            source.append(com);
+        try{
+            for(int i=0;i< TestData.unicodeIn.length; i++){
+    
+                // for every entry in unicodeIn array
+                // prepend www. and append .com
+                source.setLength(4);
+                source.append(TestData.unicodeIn[i]);
+                source.append(com);
+                
+                // a) compare it with itself
+                doTestCompare(source.toString(),source.toString(),true);
             
-            // a) compare it with itself
-            doTestCompare(source.toString(),source.toString(),true);
-        
-            // b) compare it with asciiIn equivalent
-            doTestCompare(source.toString(),www+TestData.asciiIn[i]+com,true);
-        
-            // c) compare it with unicodeIn not equivalent
-            if(i==0){
-                doTestCompare(source.toString(), uni1.toString(), false);
-            }else{
-                doTestCompare(source.toString(),uni0.toString(), false);
+                // b) compare it with asciiIn equivalent
+                doTestCompare(source.toString(),www+TestData.asciiIn[i]+com,true);
+            
+                // c) compare it with unicodeIn not equivalent
+                if(i==0){
+                    doTestCompare(source.toString(), uni1.toString(), false);
+                }else{
+                    doTestCompare(source.toString(),uni0.toString(), false);
+                }
+                // d) compare it with asciiIn not equivalent
+                if(i==0){
+                    doTestCompare(source.toString(),ascii1.toString(), false);
+                }else{
+                    doTestCompare(source.toString(),ascii0.toString(), false);
+                }
             }
-            // d) compare it with asciiIn not equivalent
-            if(i==0){
-                doTestCompare(source.toString(),ascii1.toString(), false);
-            }else{
-                doTestCompare(source.toString(),ascii0.toString(), false);
-            }
-
-        }
+        }catch(java.lang.ExceptionInInitializerError ex){
+            warnln("Could not load NamePrepTransform data");
+        }catch(java.lang.NoClassDefFoundError ex){
+            warnln("Could not load NamePrepTransform data");
+        } 
 
     }
 }
