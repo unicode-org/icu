@@ -76,7 +76,7 @@ ucbuf_autodetect_fs(FileStream* in, const char** cp, UConverter** conv, int32_t*
     pTarget = target;
     pStart = start;
     ucnv_toUnicode(*conv, &pTarget, target+1, &pStart, start+*signatureLength, NULL, FALSE, error);
-    *signatureLength = pStart - start;
+    *signatureLength = (int32_t)(pStart - start);
     if(*error==U_BUFFER_OVERFLOW_ERROR) {
         *error=U_ZERO_ERROR;
     }
@@ -85,7 +85,6 @@ ucbuf_autodetect_fs(FileStream* in, const char** cp, UConverter** conv, int32_t*
     if(U_SUCCESS(*error) && (pTarget!=(target+1) || target[0]!=0xfeff)) {
         *error=U_INTERNAL_PROGRAM_ERROR;
     }
-
 
 
     return TRUE; 
@@ -112,13 +111,10 @@ static UBool ucbuf_isCPKnown(const char* cp){
     if(ucnv_compareNames("UTF-32LE",cp)==0){
         return TRUE;
     }
-    if(ucnv_compareNames("UTF-32BE",cp)==0){
-        return TRUE;
-    }
     if(ucnv_compareNames("SCSU",cp)==0){
         return TRUE;
     }
-    if(ucnv_compareNames("BOCU",cp)==0){
+    if(ucnv_compareNames("BOCU-1",cp)==0){
         return TRUE;
     }
     if(ucnv_compareNames("UTF-7",cp)==0){
@@ -611,7 +607,7 @@ ucbuf_size(UCHARBUF* buf){
         if(buf->isBuffered){
             return (T_FileStream_size(buf->in)-buf->signatureLength)/ucnv_getMinCharSize(buf->conv);
         }else{
-            return buf->bufLimit-buf->buffer;
+            return (int32_t)(buf->bufLimit - buf->buffer);
         }
     }
     return 0;
@@ -626,7 +622,7 @@ ucbuf_getBuffer(UCHARBUF* buf,int32_t* len,UErrorCode* error){
         *error = U_ILLEGAL_ARGUMENT_ERROR;
         return NULL;
     }
-    *len = buf->bufLimit-buf->buffer;
+    *len = (int32_t)(buf->bufLimit - buf->buffer);
     return buf->buffer;
 }
 
@@ -712,8 +708,8 @@ ucbuf_readline(UCHARBUF* buf,int32_t* len,UErrorCode* err){
     UChar* savePos =NULL;
     UChar c=0x0000;
     if(buf->isBuffered){
-    /* The input is buffered we have to do more 
-    * for returning a pointer U_TRUNCATED_CHAR_FOUND
+        /* The input is buffered we have to do more
+        * for returning a pointer U_TRUNCATED_CHAR_FOUND
         */
         for(;;){
             c = *temp++;
@@ -735,7 +731,7 @@ ucbuf_readline(UCHARBUF* buf,int32_t* len,UErrorCode* err){
              */
             /* Windows CR LF */
             if(c ==0x0d && temp+1<=buf->bufLimit && *(temp+1) == 0x0a ){
-                *len = temp++ - buf->currentPos;
+                *len = (int32_t)(temp++ - buf->currentPos);
                 savePos = buf->currentPos;
                 buf->currentPos = temp;
                 return savePos;
@@ -743,7 +739,7 @@ ucbuf_readline(UCHARBUF* buf,int32_t* len,UErrorCode* err){
             /* else */
 
             if (temp>=buf->bufLimit|| ucbuf_isCharNewLine(c)){  /* Unipad inserts 2028 line separators! */
-                *len = temp - buf->currentPos;
+                *len = (int32_t)(temp - buf->currentPos);
                 savePos = buf->currentPos;
                 buf->currentPos = temp;
                 return savePos;
@@ -762,14 +758,14 @@ ucbuf_readline(UCHARBUF* buf,int32_t* len,UErrorCode* err){
             }
             /* Windows CR LF */
             if(c ==0x0d && temp+1<=buf->bufLimit && *(temp+1) == 0x0a ){
-                *len = temp++ - buf->currentPos;
+                *len = (int32_t)(temp++ - buf->currentPos);
                 savePos = buf->currentPos;
                 buf->currentPos = temp;
                 return savePos;
             }
             /* else */
             if (temp>=buf->bufLimit|| ucbuf_isCharNewLine(c)) {  /* Unipad inserts 2028 line separators! */
-                *len = temp - buf->currentPos;
+                *len = (int32_t)(temp - buf->currentPos);
                 savePos = buf->currentPos;
                 buf->currentPos = temp;
                 return savePos;
