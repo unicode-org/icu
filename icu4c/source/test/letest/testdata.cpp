@@ -15,7 +15,7 @@
  */
 
 #include "unicode/utypes.h"
-#include "unicode/unicode.h"
+#include "unicode/uscript.h"
 #include "letest.h"
 
 UChar inputText0[] =
@@ -608,10 +608,10 @@ float resultPositions3[] =
 
 TestInput testInputs[] = 
 {
-    {"Devamt.ttf", inputText0, 136, Unicode::kDevanagari, false},
-    {"Times.TTF", inputText1, 252, Unicode::kArabic, true},
-    {"LucidaSansRegular.ttf", inputText2, 252, Unicode::kArabic, true},
-    {"Thonburi.ttf", inputText3, 168, Unicode::kThai, false},
+    {"Devamt.ttf", inputText0, 136, USCRIPT_DEVANAGARI, false},
+    {"Times.TTF", inputText1, 252, USCRIPT_ARABIC, true},
+    {"LucidaSansRegular.ttf", inputText2, 252, USCRIPT_ARABIC, true},
+    {"Thonburi.ttf", inputText3, 168, USCRIPT_THAI, false},
 };
 
 int32_t testCount = ARRAY_LENGTH(testInputs);

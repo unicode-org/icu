@@ -12,7 +12,7 @@
  */
 
 #include "unicode/utypes.h"
-#include "unicode/unicode.h"
+#include "unicode/uscript.h"
 
 #define ARRAY_LENGTH(array) (sizeof array / sizeof array[0])
 
@@ -21,7 +21,7 @@ struct TestInput
 	char *fontName;
 	UChar *text;
 	int32_t textLength;
-	Unicode::EUnicodeScript scriptCode;
+	UScriptCode scriptCode;
 	UBool rightToLeft;
 };
 

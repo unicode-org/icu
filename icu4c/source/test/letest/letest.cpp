@@ -14,7 +14,7 @@
 #include "math.h"
 
 #include "unicode/utypes.h"
-#include "unicode/unicode.h"
+#include "unicode/uscript.h"
 #include "unicode/locid.h"
 
 #include "unicode/loengine.h"
