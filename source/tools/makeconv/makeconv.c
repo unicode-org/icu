@@ -380,157 +380,162 @@ int main(int argc, char* argv[])
     }
 #endif
 
-  err = U_ZERO_ERROR;
-  for (++argv; --argc; ++argv)
+    err = U_ZERO_ERROR;
+    for (++argv; --argc; ++argv)
     {
-      arg = getLongPathname(*argv);
+        arg = getLongPathname(*argv);
 
-      /*produces the right destination path for display*/
-      if (destdirlen != 0)
+        /*produces the right destination path for display*/
+        if (destdirlen != 0)
         {
-          const char *basename;
+            const char *basename;
 
-          /* find the last file sepator */
-          basename = uprv_strrchr(arg, U_FILE_SEP_CHAR);
-          if (basename == NULL) {
-              basename = arg;
-          } else {
-              ++basename;
-          }
+            /* find the last file sepator */
+            basename = uprv_strrchr(arg, U_FILE_SEP_CHAR);
+            if (basename == NULL) {
+                basename = uprv_strrchr(arg, U_FILE_ALT_SEP_CHAR);
+                if (basename == NULL) {
+                    basename = arg;
+                } else {
+                    ++basename;
+                }
+            } else {
+                ++basename;
+            }
 
-          uprv_strcpy(outBasename, basename);
+            uprv_strcpy(outBasename, basename);
         }
-      else
+        else
         {
-          uprv_strcpy(outFileName, arg);
-        }
-
-      /*removes the extension if any is found*/
-      dot = uprv_strrchr(outBasename, '.');
-      if (dot)
-        {
-          *dot = '\0';
+            uprv_strcpy(outFileName, arg);
         }
 
-      /* the basename without extension is the converter name */
-      uprv_strcpy(cnvName, outBasename);
+        /*removes the extension if any is found*/
+        dot = uprv_strrchr(outBasename, '.');
+        if (dot)
+        {
+            *dot = '\0';
+        }
 
-      if(TOUCHFILE)
-      {
-          uprv_strcpy(touchFileName, outBasename);
-          uprv_strcat(touchFileName, ".cnv");
-      }
+        /* the basename without extension is the converter name */
+        uprv_strcpy(cnvName, outBasename);
 
-      if(pkgName != NULL)
-      {
-          /* changes both baename and filename */
-          uprv_strcpy(outBasename, pkgName);
-          uprv_strcat(outBasename, "_");
-          uprv_strcat(outBasename, cnvName);
-      }
+        if(TOUCHFILE)
+        {
+            uprv_strcpy(touchFileName, outBasename);
+            uprv_strcat(touchFileName, ".cnv");
+        }
+
+        if(pkgName != NULL)
+        {
+            /* changes both baename and filename */
+            uprv_strcpy(outBasename, pkgName);
+            uprv_strcat(outBasename, "_");
+            uprv_strcat(outBasename, cnvName);
+        }
 
 
-      /*Adds the target extension*/
-      uprv_strcat(outBasename, CONVERTER_FILE_EXTENSION);
+        /*Adds the target extension*/
+        uprv_strcat(outBasename, CONVERTER_FILE_EXTENSION);
 
 #if DEBUG
         printf("makeconv: processing %s  ...\n", arg);
         fflush(stdout);
 #endif
-      localError = U_ZERO_ERROR;
-      mySharedData = createConverterFromTableFile(arg, &localError);
+        localError = U_ZERO_ERROR;
+        mySharedData = createConverterFromTableFile(arg, &localError);
 
-      if (U_FAILURE(localError) || (mySharedData == NULL))
+        if (U_FAILURE(localError) || (mySharedData == NULL))
         {
-          /* if an error is found, print out an error msg and keep going */
-          fprintf(stderr, "Error creating converter for \"%s\" file for \"%s\" (%s)\n", outFileName, arg,
-                        u_errorName(localError));
-          if(U_SUCCESS(err)) {
-              err = localError;
-          }
+            /* if an error is found, print out an error msg and keep going */
+            fprintf(stderr, "Error creating converter for \"%s\" file for \"%s\" (%s)\n", outFileName, arg,
+                u_errorName(localError));
+            if(U_SUCCESS(err)) {
+                err = localError;
+            }
         }
-      else
+        else
         {
-          /* Make the static data name equal to the file name */
-          if( /*VERBOSE &&  */ uprv_stricmp(cnvName,mySharedData->staticData->name))
-          {
-            fprintf(stderr, "Warning: %s%s claims to be '%s'\n",
+            /* Make the static data name equal to the file name */
+            if( /*VERBOSE &&  */ uprv_stricmp(cnvName,mySharedData->staticData->name))
+            {
+                fprintf(stderr, "Warning: %s%s claims to be '%s'\n",
                     cnvName,
                     CONVERTER_FILE_EXTENSION,
                     mySharedData->staticData->name);
-          }
+            }
 
-          uprv_strcpy((char*)mySharedData->staticData->name, cnvName);
+            uprv_strcpy((char*)mySharedData->staticData->name, cnvName);
 
-          if(!uprv_isInvariantString((char*)mySharedData->staticData->name, -1)) {
-              fprintf(stderr,
-                  "Error: A converter name must contain only invariant characters.\n"
-                  "%s is not a valid converter name.\n",
-                  mySharedData->staticData->name);
-              if(U_SUCCESS(err)) {
-                  err = U_INVALID_TABLE_FORMAT;
-              }
-          }
+            if(!uprv_isInvariantString((char*)mySharedData->staticData->name, -1)) {
+                fprintf(stderr,
+                    "Error: A converter name must contain only invariant characters.\n"
+                    "%s is not a valid converter name.\n",
+                    mySharedData->staticData->name);
+                if(U_SUCCESS(err)) {
+                    err = U_INVALID_TABLE_FORMAT;
+                }
+            }
 
-          if(pkgName == NULL)
-          {
-              uprv_strcpy(cnvNameWithPkg, cnvName);
-          }
-          else
-          {
-              uprv_strcpy(cnvNameWithPkg, pkgName);
-              uprv_strcat(cnvNameWithPkg, "_");
-              uprv_strcat(cnvNameWithPkg, cnvName);
-          }
+            if(pkgName == NULL)
+            {
+                uprv_strcpy(cnvNameWithPkg, cnvName);
+            }
+            else
+            {
+                uprv_strcpy(cnvNameWithPkg, pkgName);
+                uprv_strcat(cnvNameWithPkg, "_");
+                uprv_strcat(cnvNameWithPkg, cnvName);
+            }
 
-          localError = U_ZERO_ERROR;
-          writeConverterData(mySharedData, cnvNameWithPkg, destdir, &localError);
-          ((NewConverter *)mySharedData->table)->close((NewConverter *)mySharedData->table);
-          if(TOUCHFILE)
-          {
-              FileStream *q;
-              char msg[1024];
+            localError = U_ZERO_ERROR;
+            writeConverterData(mySharedData, cnvNameWithPkg, destdir, &localError);
+            ((NewConverter *)mySharedData->table)->close((NewConverter *)mySharedData->table);
+            if(TOUCHFILE)
+            {
+                FileStream *q;
+                char msg[1024];
 
-              sprintf(msg, "This empty file tells nmake that %s in package %s has been updated.\n",
-                  cnvName, pkgName);
+                sprintf(msg, "This empty file tells nmake that %s in package %s has been updated.\n",
+                    cnvName, pkgName);
 
-              q = T_FileStream_open(touchFileName, "w");
-              if(q == NULL)
-              {
-                  fprintf(stderr, "Error writing touchfile \"%s\"\n", touchFileName);
-                  localError = U_FILE_ACCESS_ERROR;
-              }
+                q = T_FileStream_open(touchFileName, "w");
+                if(q == NULL)
+                {
+                    fprintf(stderr, "Error writing touchfile \"%s\"\n", touchFileName);
+                    localError = U_FILE_ACCESS_ERROR;
+                }
 
-              else
-              {
-                  T_FileStream_write(q, msg, uprv_strlen(msg));
-                  T_FileStream_close(q);
-              }
-          }
+                else
+                {
+                    T_FileStream_write(q, msg, uprv_strlen(msg));
+                    T_FileStream_close(q);
+                }
+            }
 
-    /* write the information data */
-          uprv_free((UConverterStaticData *)mySharedData->staticData);
-          uprv_free(mySharedData);
+            /* write the information data */
+            uprv_free((UConverterStaticData *)mySharedData->staticData);
+            uprv_free(mySharedData);
 
-          if(U_FAILURE(localError))
-          {
-                  /* if an error is found, print out an error msg and keep going*/
-            fprintf(stderr, "Error writing \"%s\" file for \"%s\" (%s)\n", outFileName, arg,
+            if(U_FAILURE(localError))
+            {
+                /* if an error is found, print out an error msg and keep going*/
+                fprintf(stderr, "Error writing \"%s\" file for \"%s\" (%s)\n", outFileName, arg,
                     u_errorName(localError));
-              if(U_SUCCESS(err)) {
-                  err = localError;
-              }
-          }
-          else
-          {
-              puts(outFileName);
-          }
+                if(U_SUCCESS(err)) {
+                    err = localError;
+                }
+            }
+            else
+            {
+                puts(outFileName);
+            }
         }
-      fflush(stdout);
-      fflush(stderr);
+        fflush(stdout);
+        fflush(stderr);
     }
 
-  return err;
+    return err;
 }
 
 static void
