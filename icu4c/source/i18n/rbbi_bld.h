@@ -1,6 +1,5 @@
 /*
-**********************************************************************
-*   Copyright (C) 1999 Alan Liu and others. All rights reserved.
+* Copyright © {1999}, International Business Machines Corporation and others. All Rights Reserved.
 **********************************************************************
 *   Date        Name        Description
 *   10/22/99    alan        Creation.  This is an internal header; it
