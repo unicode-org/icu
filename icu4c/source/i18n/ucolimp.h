@@ -234,7 +234,9 @@ ucol_cloneRuleData(UCollator *coll, int32_t *length, UErrorCode *status);
 #define UCOL_THAI 0xF3000000
 
 #define isSpecial(CE) ((((CE)&UCOL_SPECIAL_FLAG)>>28)==0xF)
+#define isContinuation(CE) isSpecial((CE))
 #define getCETag(CE) (((CE)&UCOL_TAG_MASK)>>UCOL_TAG_SHIFT)
+#define isContraction(CE) (isSpecial((CE)) && (getCETag((CE)) == CONTRACTION_TAG))
 #define constructContractCE(CE) (UCOL_SPECIAL_FLAG | (CONTRACTION_TAG<<UCOL_TAG_SHIFT) | ((CE))&0xFFFFFF)
 #define getContractOffset(CE) ((CE)&0xFFFFFF)
 #define getExpansionOffset(CE) (((CE)&0x00FFFFF0)>>4)
