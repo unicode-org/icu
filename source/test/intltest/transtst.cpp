@@ -22,6 +22,51 @@
 #include "unicode/unitohex.h"
 #include "unicode/utypes.h"
 
+/***********************************************************************
+
+                     HOW TO USE THIS TEST FILE
+                               -or-
+                  How I developed on two platforms
+                without losing (too much of) my mind
+
+
+1. Add new tests by copying/pasting/changing existing tests.  On Java,
+   any public void method named Test...() taking no parameters becomes
+   a test.  On C++, you need to modify the header and add a line to
+   the runIndexedTest() dispatch method.
+
+2. Make liberal use of the expect() method; it is your friend.
+
+3. The tests in this file exactly match those in a sister file on the
+   other side.  The two files are:
+
+   icu4j:  src/com/ibm/test/translit/TransliteratorTest.java
+   icu4c:  source/test/intltest/transtst.cpp
+
+                  ==> THIS IS THE IMPORTANT PART <==
+
+   When you add a test here, add it there.  Give it the same name and
+   put it in the same relative place.  This makes maintenance a lot
+   simpler for any poor soul who ends up trying to synchronize the
+   tests between icu4j and icu4c.
+
+4. If you MUST enter a test that is NOT paralleled in the sister file,
+   then add it in the special non-mirrored section.  These are
+   labeled
+
+     "icu4j ONLY"
+
+   or
+
+     "icu4c ONLY"
+
+   Make sure you document the reason the test is here and not there.
+
+
+Thank you.
+The Management
+***********************************************************************/
+
 // Define character constants thusly to be EBCDIC-friendly
 enum {
     LEFT_BRACE=((UChar)0x007B), /*{*/
@@ -73,6 +118,11 @@ TransliteratorTest::runIndexedTest(int32_t index, UBool exec,
         TESTCASE(36,TestSTV);
         TESTCASE(37,TestCompoundInverse);
         TESTCASE(38,TestNFDChainRBT);
+        TESTCASE(39,TestNullInverse);
+        TESTCASE(40,TestAliasInverseID);
+        TESTCASE(41,TestCompoundInverseID);
+        TESTCASE(42,TestUndefinedVariable);
+        TESTCASE(43,TestEmptyContext);
         default: name = ""; break;
     }
 }
@@ -1762,7 +1812,201 @@ void TransliteratorTest::TestNFDChainRBT() {
                                UTRANS_FORWARD, pe, ec);
     expect(*t, "aa", "Q");
     delete t;
+
+    // TEMPORARY TESTS -- BEING DEBUGGED
+//=-    UnicodeString s, s2;
+//=-    t = Transliterator::createInstance("Latin-Devanagari", UTRANS_FORWARD, pe, ec);
+//=-    s = CharsToUnicodeString("rmk\\u1E63\\u0113t");
+//=-    s2 = CharsToUnicodeString("\\u0930\\u094D\\u092E\\u094D\\u0915\\u094D\\u0937\\u0947\\u0924\\u094D");
+//=-    expect(*t, s, s2);
+//=-    delete t;
+//=-
+//=-    t = Transliterator::createInstance("Devanagari-Latin", UTRANS_FORWARD, pe, ec);
+//=-    expect(*t, s2, s);
+//=-    delete t;
+//=-
+//=-    t = Transliterator::createInstance("Latin-Devanagari;Devanagari-Latin", UTRANS_FORWARD, pe, ec);
+//=-    s = CharsToUnicodeString("rmk\\u1E63\\u0113t");
+//=-    expect(*t, s, s);
+//=-    delete t;
+
+//    const char* source[] = {
+//        /*
+//        "\\u015Br\\u012Bmad",
+//        "bhagavadg\\u012Bt\\u0101",
+//        "adhy\\u0101ya",
+//        "arjuna",
+//        "vi\\u1E63\\u0101da",
+//        "y\\u014Dga",
+//        "dhr\\u0325tar\\u0101\\u1E63\\u1E6Dra",
+//        "uv\\u0101cr\\u0325",
+//        */
+//        "rmk\\u1E63\\u0113t",
+//		//"dharmak\\u1E63\\u0113tr\\u0113",
+//        /*
+//        "kuruk\\u1E63\\u0113tr\\u0113",
+//        "samav\\u0113t\\u0101",
+//        "yuyutsava-\\u1E25",
+//        "m\\u0101mak\\u0101-\\u1E25",
+//     // "p\\u0101\\u1E47\\u1E0Dav\\u0101\\u015Bcaiva",
+//        "kimakurvata",
+//        "san\\u0304java",
+//        */
+//
+//        0
+//    };
+//    const char* expected[] = {
+//        /*
+//        "\\u0936\\u094d\\u0930\\u0940\\u092e\\u0926\\u094d",
+//        "\\u092d\\u0917\\u0935\\u0926\\u094d\\u0917\\u0940\\u0924\\u093e",
+//        "\\u0905\\u0927\\u094d\\u092f\\u093e\\u092f",
+//        "\\u0905\\u0930\\u094d\\u091c\\u0941\\u0928",
+//        "\\u0935\\u093f\\u0937\\u093e\\u0926",
+//        "\\u092f\\u094b\\u0917",
+//        "\\u0927\\u0943\\u0924\\u0930\\u093e\\u0937\\u094d\\u091f\\u094d\\u0930",
+//        "\\u0909\\u0935\\u093E\\u091A\\u0943",
+//        */
+//        "\\u0927",
+//        //"\\u0927\\u0930\\u094d\\u092e\\u0915\\u094d\\u0937\\u0947\\u0924\\u094d\\u0930\\u0947",
+//        /*
+//        "\\u0915\\u0941\\u0930\\u0941\\u0915\\u094d\\u0937\\u0947\\u0924\\u094d\\u0930\\u0947",
+//        "\\u0938\\u092e\\u0935\\u0947\\u0924\\u093e",
+//        "\\u092f\\u0941\\u092f\\u0941\\u0924\\u094d\\u0938\\u0935\\u0903",
+//        "\\u092e\\u093e\\u092e\\u0915\\u093e\\u0903",
+//    //  "\\u092a\\u093e\\u0923\\u094d\\u0921\\u0935\\u093e\\u0936\\u094d\\u091a\\u0948\\u0935",
+//        "\\u0915\\u093f\\u092e\\u0915\\u0941\\u0930\\u094d\\u0935\\u0924",
+//        "\\u0938\\u0902\\u091c\\u0935",
+//        */
+//        0
+//    };
+//    UErrorCode status = U_ZERO_ERROR;
+//    UParseError parseError;
+//    UnicodeString message;
+//    Transliterator* latinToDevToLatin=Transliterator::createInstance("Latin-Devanagari;Devanagari-Latin", UTRANS_FORWARD, parseError, status);
+//    Transliterator* devToLatinToDev=Transliterator::createInstance("Devanagari-Latin;Latin-Devanagari", UTRANS_FORWARD, parseError, status);
+//    if(U_FAILURE(status)){
+//        errln("FAIL: construction " +   UnicodeString(" Error: ") + u_errorName(status));
+//        errln("PreContext: " + prettify(parseError.preContext) + "PostContext: " + prettify( parseError.postContext) );
+//        delete latinToDevToLatin;
+//        delete devToLatinToDev;
+//        return;
+//    }
+//    UnicodeString gotResult;
+//    for(int i= 0; source[i] != 0; i++){
+//        gotResult = source[i];
+//        expect(*latinToDevToLatin,CharsToUnicodeString(source[i]),CharsToUnicodeString(source[i]));
+//        expect(*devToLatinToDev,CharsToUnicodeString(expected[i]),CharsToUnicodeString(expected[i]));
+//    }
+//    delete latinToDevToLatin;
+//    delete devToLatinToDev;
 }
+
+/**
+ * Inverse of "Null" should be "Null". (J21)
+ */
+void TransliteratorTest::TestNullInverse() {
+    UParseError pe;
+    UErrorCode ec = U_ZERO_ERROR;
+    Transliterator *t = Transliterator::createInstance("Null", UTRANS_FORWARD, pe, ec);
+    if (t == 0 || U_FAILURE(ec)) {
+        errln("FAIL: createInstance");
+        return;
+    }
+    Transliterator *u = t->createInverse(ec);
+    if (u == 0 || U_FAILURE(ec)) {
+        errln("FAIL: createInverse");
+        delete t;
+        return;
+    }
+    if (u->getID() != "Null") {
+        errln("FAIL: Inverse of Null should be Null");
+    }
+    delete t;
+    delete u;
+}
+
+/**
+ * Check ID of inverse of alias. (J22)
+ */
+void TransliteratorTest::TestAliasInverseID() {
+    UnicodeString ID("Latin-Hangul", ""); // This should be any alias ID with an inverse
+    UParseError pe;
+    UErrorCode ec = U_ZERO_ERROR;
+    Transliterator *t = Transliterator::createInstance(ID, UTRANS_FORWARD, pe, ec);
+    if (t == 0 || U_FAILURE(ec)) {
+        errln("FAIL: createInstance");
+        return;
+    }
+    Transliterator *u = t->createInverse(ec);
+    if (u == 0 || U_FAILURE(ec)) {
+        errln("FAIL: createInverse");
+        delete t;
+        return;
+    }
+    UnicodeString exp = "Hangul-Latin";
+    UnicodeString got = u->getID();
+    if (got != exp) {
+        errln((UnicodeString)"FAIL: Inverse of " + ID + " is " + got +
+              ", expected " + exp);
+    }
+}
+
+/**
+ * Test IDs of inverses of compound transliterators. (J20)
+ */
+void TransliteratorTest::TestCompoundInverseID() {
+    UnicodeString ID = "Latin-Jamo;NFC(NFD)";
+    UParseError pe;
+    UErrorCode ec = U_ZERO_ERROR;
+    Transliterator *t = Transliterator::createInstance(ID, UTRANS_FORWARD, pe, ec);
+    if (t == 0 || U_FAILURE(ec)) {
+        errln("FAIL: createInstance");
+        return;
+    }
+    Transliterator *u = t->createInverse(ec);
+    if (u == 0 || U_FAILURE(ec)) {
+        errln("FAIL: createInverse");
+        delete t;
+        return;
+    }
+    UnicodeString exp = "NFD(NFC);Jamo-Latin";
+    UnicodeString got = u->getID();
+    if (got != exp) {
+        errln((UnicodeString)"FAIL: Inverse of " + ID + " is " + got +
+              ", expected " + exp);
+    }
+}
+
+/**
+ * Test undefined variable.
+ */
+void TransliteratorTest::TestUndefinedVariable() {
+    UnicodeString rule = "$initial } a <> \\u1161;";
+    UParseError pe;
+    UErrorCode ec = U_ZERO_ERROR;
+    Transliterator *t = new RuleBasedTransliterator("<ID>", rule, UTRANS_FORWARD, 0, pe, ec);
+    delete t;
+    if (U_FAILURE(ec)) {
+        logln((UnicodeString)"OK: Got exception for " + rule + ", as expected: " +
+              u_errorName(ec));
+        return;
+    }
+    errln((UnicodeString)"Fail: bogus rule " + rule + " compiled with error " +
+          u_errorName(ec));
+}
+
+/**
+ * Test empty context.
+ */
+void TransliteratorTest::TestEmptyContext() {
+    expect(" { a } > b;", "xay a ", "xby b ");
+}
+
+//======================================================================
+// icu4c ONLY
+// These tests are not mirrored (yet) in icu4j at
+// src/com/ibm/test/translit/TransliteratorTest.java
+//======================================================================
 
 //======================================================================
 // Support methods

@@ -182,6 +182,31 @@ class TransliteratorTest : public IntlTest {
 
     void TestNFDChainRBT(void);
 
+    /**
+     * Inverse of "Null" should be "Null". (J21)
+     */
+    void TestNullInverse(void);
+    
+    /**
+     * Check ID of inverse of alias. (J22)
+     */
+    void TestAliasInverseID(void);
+    
+    /**
+     * Test IDs of inverses of compound transliterators. (J20)
+     */
+    void TestCompoundInverseID(void);
+    
+    /**
+     * Test undefined variable.
+     */
+    void TestUndefinedVariable(void);
+    
+    /**
+     * Test empty context.
+     */
+    void TestEmptyContext(void);
+
     //======================================================================
     // Support methods
     //======================================================================
