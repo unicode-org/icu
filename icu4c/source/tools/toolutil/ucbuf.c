@@ -301,6 +301,7 @@ ucbuf_fillucbuf( UCHARBUF* buf,UErrorCode* error){
     }
     buf->currentPos = pTarget;
     buf->bufLimit=pTarget+outputWritten;
+    *buf->bufLimit=0; /*NUL terminate*/
     if(cbuf!=carr){
         uprv_free(cbuf);
     }
@@ -483,12 +484,11 @@ ucbuf_open(const char* fileName,const char** cp,UBool showWarning, UBool buffere
             }
             buf->remaining=fileSize-buf->signatureLength;
             if(buf->isBuffered){
-                buf->buffer=(UChar*) uprv_malloc(U_SIZEOF_UCHAR* MAX_U_BUF);
                 buf->bufCapacity=MAX_U_BUF;
             }else{
-                buf->buffer=(UChar*) uprv_malloc(U_SIZEOF_UCHAR * (buf->remaining+buf->signatureLength));
-                buf->bufCapacity=buf->remaining+buf->signatureLength;
+                buf->bufCapacity=buf->remaining+buf->signatureLength+1/*for terminating nul*/;               
             }
+            buf->buffer=(UChar*) uprv_malloc(U_SIZEOF_UCHAR * buf->bufCapacity );
             if (buf->buffer == NULL) {
                 *error = U_MEMORY_ALLOCATION_ERROR;
                 return NULL;
