@@ -56,7 +56,7 @@ InputPath=.\Release\makeconv.exe
 InputName=makeconv
 SOURCE="$(InputPath)"
 
-"..\..\..\bin\$(InputName)" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+"..\..\..\bin\$(InputName).exe" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
 	copy $(InputPath) ..\..\..\bin
 
 # End Custom Build
@@ -89,7 +89,7 @@ InputPath=.\Debug\makeconv.exe
 InputName=makeconv
 SOURCE="$(InputPath)"
 
-"..\..\..\bin\$(InputName)" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+"..\..\..\bin\$(InputName).exe" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
 	copy $(InputPath) ..\..\..\bin
 
 # End Custom Build
