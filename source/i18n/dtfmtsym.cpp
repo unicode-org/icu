@@ -102,6 +102,24 @@ static const UChar gLastResortZoneStrings[5][4] =
     {0x0047, 0x004D, 0x0054, 0x0000}  /* "GMT" */
 };
 
+/**
+ * These are the tags we expect to see in normal resource bundle files associated
+ * with a locale.
+ */
+const char *DateFormatSymbols::fgErasTag="Eras";
+const char *DateFormatSymbols::fgMonthNamesTag="MonthNames";
+const char *DateFormatSymbols::fgMonthAbbreviationsTag="MonthAbbreviations";
+const char *DateFormatSymbols::fgDayNamesTag="DayNames";
+const char *DateFormatSymbols::fgDayAbbreviationsTag="DayAbbreviations";
+const char *DateFormatSymbols::fgAmPmMarkersTag="AmPmMarkers";
+
+/**
+ * These are the tags we expect to see in time zone data resource bundle files
+ * associated with a locale.
+ */
+const char *DateFormatSymbols::fgZoneStringsTag="zoneStrings";
+const char *DateFormatSymbols::fgLocalPatternCharsTag="localPatternChars";
+
 //------------------------------------------------------
 
 DateFormatSymbols::DateFormatSymbols(const Locale& locale,
@@ -517,13 +535,13 @@ DateFormatSymbols::initializeData(const Locale& locale, UErrorCode& status, UBoo
     // if we make it to here, the resource data is cool, and we can get everything out
     // of it that we need except for the time-zone and localized-pattern data, which
     // are stoerd in a separate file
-    initField(&fEras, fErasCount, resource.get(SimpleDateFormat::fgErasTag, status), status);
-    initField(&fMonths, fMonthsCount, resource.get(SimpleDateFormat::fgMonthNamesTag, status), status);
-    initField(&fShortMonths, fShortMonthsCount, resource.get(SimpleDateFormat::fgMonthAbbreviationsTag, status), status);
-    initField(&fAmPms, fAmPmsCount, resource.get(SimpleDateFormat::fgAmPmMarkersTag, status), status);
-    fLocalPatternChars = resource.getStringEx(SimpleDateFormat::fgLocalPatternCharsTag, status);
+    initField(&fEras, fErasCount, resource.get(fgErasTag, status), status);
+    initField(&fMonths, fMonthsCount, resource.get(fgMonthNamesTag, status), status);
+    initField(&fShortMonths, fShortMonthsCount, resource.get(fgMonthAbbreviationsTag, status), status);
+    initField(&fAmPms, fAmPmsCount, resource.get(fgAmPmMarkersTag, status), status);
+    fLocalPatternChars = resource.getStringEx(fgLocalPatternCharsTag, status);
 
-    ResourceBundle zoneArray = resource.get(SimpleDateFormat::fgZoneStringsTag, status);
+    ResourceBundle zoneArray = resource.get(fgZoneStringsTag, status);
     fZoneStringsRowCount = zoneArray.getSize();
     ResourceBundle zoneRow = zoneArray.get((int32_t)0, status);
     fZoneStringsColCount = zoneRow.getSize();
@@ -537,7 +555,7 @@ DateFormatSymbols::initializeData(const Locale& locale, UErrorCode& status, UBoo
     }
 
     // {sfb} fixed to handle 1-based weekdays
-    ResourceBundle weekdaysData = resource.get(SimpleDateFormat::fgDayNamesTag, status);
+    ResourceBundle weekdaysData = resource.get(fgDayNamesTag, status);
     fWeekdaysCount = weekdaysData.getSize();
     fWeekdays = new UnicodeString[fWeekdaysCount+1];
     fWeekdays[0] = UnicodeString();
@@ -545,7 +563,7 @@ DateFormatSymbols::initializeData(const Locale& locale, UErrorCode& status, UBoo
         fWeekdays[i+1] = weekdaysData.getStringEx(i, status);
     }
 
-    ResourceBundle lsweekdaysData = resource.get(SimpleDateFormat::fgDayAbbreviationsTag, status);
+    ResourceBundle lsweekdaysData = resource.get(fgDayAbbreviationsTag, status);
     fShortWeekdaysCount = lsweekdaysData.getSize();
     fShortWeekdays = new UnicodeString[fShortWeekdaysCount+1];
     fShortWeekdays[0] = UnicodeString();
