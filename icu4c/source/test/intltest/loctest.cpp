@@ -260,8 +260,9 @@ void LocaleTest::TestSimpleResourceInfo() {
   UnicodeString   temp;
   char            temp2[20];
   UErrorCode err = U_ZERO_ERROR;
-  
-  for (int32_t i = 0; i <= MAX_LOCALES; i++) {
+  int32_t i = 0;
+
+  for (i = 0; i <= MAX_LOCALES; i++) {
     Locale testLocale(rawData[LANG][i], rawData[CTRY][i], rawData[VAR][i]);
     logln("Testing " + (temp=testLocale.getName()) + "...");
     
