@@ -286,6 +286,10 @@ SOURCE=.\ucol_elm.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\ucol_sol.c
+# End Source File
+# Begin Source File
+
 SOURCE=.\ucol_tok.cpp
 # End Source File
 # Begin Source File
@@ -1332,6 +1336,10 @@ SOURCE=.\ucol_elm.h
 # Begin Source File
 
 SOURCE=.\ucol_imp.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\ucol_sol.h
 # End Source File
 # Begin Source File
 
