@@ -130,14 +130,14 @@ ALL : GODATA  testdata "$(DLL_OUTPUT)\$(U_ICUDATA_NAME).dll" $(DLL_OUTPUT)\test1
 
 testdata: ucadata.dat $(RB_FILES) {"$(ICUTOOLS)\genrb\$(CFG)"}genrb.exe
 	@cd "$(TESTDATA)"
-	nmake /f $(TESTDATA)\testdata.mk TESTDATA=$(TESTDATA) ICUTOOLS=$(ICUTOOLS) PKGOPT=$(PKGOPT) CFG=$(CFG) DLL_OUTPUT=$(DLL_OUTPUT) TESTDATAOUT=$(TESTDATAOUT)
+	nmake /nologo /f $(TESTDATA)\testdata.mk TESTDATA=$(TESTDATA) ICUTOOLS=$(ICUTOOLS) PKGOPT=$(PKGOPT) CFG=$(CFG) DLL_OUTPUT=$(DLL_OUTPUT) TESTDATAOUT=$(TESTDATAOUT)
 	@cd "$(ICUDBLD)"
 
 
 BRK_FILES = "$(ICUDBLD)\sent.brk" "$(ICUDBLD)\char.brk" "$(ICUDBLD)\line.brk" "$(ICUDBLD)\word.brk" "$(ICUDBLD)\line_th.brk" "$(ICUDBLD)\word_th.brk"
 
 #invoke pkgdata
-"$(DLL_OUTPUT)\$(U_ICUDATA_NAME).dll" :  $(CNV_FILES) $(BRK_FILES) qchk.dat fchk.dat uprops.dat unames.dat cnvalias.dat tz.dat ucadata.dat invuca.dat $(ALL_RES) 
+"$(DLL_OUTPUT)\$(U_ICUDATA_NAME).dll" :  $(CNV_FILES) $(BRK_FILES) qchk.dat fchk.dat uprops.dat unames.dat cnvalias.dat tz.dat ucadata.dat invuca.dat $(ALL_RES) icudata.res
 	@echo Building icu data
 	@cd "$(ICUDBLD)"
  	"$(ICUTOOLS)\pkgdata\$(CFG)\pkgdata" -e icudata -v -T . -m dll -c -p $(U_ICUDATA_NAME) -O "$(PKGOPT)" -d "$(DLL_OUTPUT)" -s . <<pkgdatain.txt
@@ -244,6 +244,11 @@ $(DLL_OUTPUT)\test4.cnv: "$(TESTDATA)\test4.ucm"
 	@cd "$(ICUDATA)"
 	@set ICU_DATA=$(DLL_OUTPUT)
 	@"$(ICUTOOLS)\makeconv\$(CFG)\makeconv" $**
+
+# DLL version information
+icudata.res: "$(ICUDATA)\icudata.rc"
+	@echo Creating data DLL version information from $**
+	@rc.exe /i ..\..\..\include\ /r /fo "$@" $**
 
 # Targets for qchk.dat
 qchk.dat: "$(ICUDATA)\unidata\QuickCheck.txt" "$(ICUTOOLS)\genqchk\$(CFG)\genqchk.exe"
