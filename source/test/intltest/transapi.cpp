@@ -150,8 +150,8 @@ void TransliteratorAPITest::TestgetInverse() {
        "Latin-Cyrillic", 
        "Devanagari-Latin", 
        "Latin-Devanagari", 
-       "Unicode-Hex",
-       "Hex-Unicode"
+       "Any-Hex",
+       "Hex-Any"
      };
      for(uint32_t i=0; i<sizeof(TransID)/sizeof(TransID[0]); i=i+2){
          t1=Transliterator::createInstance(TransID[i]);
@@ -195,13 +195,13 @@ void TransliteratorAPITest::TestGetDisplayName() {
     UnicodeString dispNames[]= { 
          //ID, displayName
           "CurlyQuotes-StraightQuotes" ,"CurlyQuotes to StraightQuotes",
-          "Unicode-Hex"                ,"Unicode to Hex Escape",
+          "Any-Hex"                ,"Any to Hex Escape",
           "Halfwidth-Fullwidth"        ,"Halfwidth to Fullwidth" ,
           "Latin-Arabic"               ,"Latin to Arabic"      ,
           "Latin-Devanagari"           ,"Latin to Devanagari"  ,
           "Greek-Latin"                ,"Greek to Latin"       ,
           "Arabic-Latin"               ,"Arabic to Latin"      ,
-          "Hex-Unicode"                ,"Hex Escape to Unicode",
+          "Hex-Any"                ,"Hex Escape to Any",
           "Cyrillic-Latin"             ,"Cyrillic to Latin"    ,
           "Latin-Greek"                ,"Latin to Greek"       ,
           "Latin-Kana"                 ,"Latin to Kana"        ,
@@ -239,8 +239,8 @@ void TransliteratorAPITest::TestTransliterate1(){
 
     UnicodeString Data[]={ 
          //ID, input string, transliterated string
-         "Unicode-Hex",         "hello",                                                  UnicodeString("\\u0068\\u0065\\u006C\\u006C\\u006F", "") ,
-         "Hex-Unicode",         UnicodeString("\\u0068\\u0065\\u006C\\u006C\\u006F", ""), "hello"  ,
+         "Any-Hex",         "hello",                                                  UnicodeString("\\u0068\\u0065\\u006C\\u006C\\u006F", "") ,
+         "Hex-Any",         UnicodeString("\\u0068\\u0065\\u006C\\u006C\\u006F", ""), "hello"  ,
          "Latin-Devanagari",    "bhaarata",                                                CharsToUnicodeString("\\u092D\\u093E\\u0930\\u0924") ,
          "Devanagari-Latin",    CharsToUnicodeString("\\u092D\\u093E\\u0930\\u0924"),        "bhaarata" ,
      //  "Contracted-Expanded", CharsToUnicodeString("\\u00C0\\u00C1\\u0042"),               CharsToUnicodeString("\\u0041\\u0300\\u0041\\u0301\\u0042") ,
@@ -283,9 +283,9 @@ void TransliteratorAPITest::TestTransliterate2(){
      //testing tranliterate(String text, int start, int limit, StringBuffer result)
    UnicodeString Data2[]={
          //ID, input string, start, limit, transliterated string
-         "Unicode-Hex",         "hello! How are you?",  "0", "5", UnicodeString("\\u0068\\u0065\\u006C\\u006C\\u006F", ""), UnicodeString("\\u0068\\u0065\\u006C\\u006C\\u006F! How are you?", "") ,
-         "Unicode-Hex",         "hello! How are you?",  "7", "12", UnicodeString("\\u0048\\u006F\\u0077\\u0020\\u0061", ""), UnicodeString("hello! \\u0048\\u006F\\u0077\\u0020\\u0061re you?", ""),
-         "Hex-Unicode",         CharsToUnicodeString("\\u0068\\u0065\\u006C\\u006C\\u006F\\u0021\\u0020"), "0", "5",  "hello", "hello! "  ,
+         "Any-Hex",         "hello! How are you?",  "0", "5", UnicodeString("\\u0068\\u0065\\u006C\\u006C\\u006F", ""), UnicodeString("\\u0068\\u0065\\u006C\\u006C\\u006F! How are you?", "") ,
+         "Any-Hex",         "hello! How are you?",  "7", "12", UnicodeString("\\u0048\\u006F\\u0077\\u0020\\u0061", ""), UnicodeString("hello! \\u0048\\u006F\\u0077\\u0020\\u0061re you?", ""),
+         "Hex-Any",         CharsToUnicodeString("\\u0068\\u0065\\u006C\\u006C\\u006F\\u0021\\u0020"), "0", "5",  "hello", "hello! "  ,
        //  "Contracted-Expanded", CharsToUnicodeString("\\u00C0\\u00C1\\u0042"),        "1", "2",  CharsToUnicodeString("\\u0041\\u0301"), CharsToUnicodeString("\\u00C0\\u0041\\u0301\\u0042") ,
          "Devanagari-Latin",    CharsToUnicodeString("\\u092D\\u093E\\u0930\\u0924"), "0", "1",  "bha", CharsToUnicodeString("bha\\u093E\\u0930\\u0924") ,
          "Devanagari-Latin",    CharsToUnicodeString("\\u092D\\u093E\\u0930\\u0924"), "1", "2",  "aa", CharsToUnicodeString("\\u092Daa\\u0930\\u0924")  
@@ -316,7 +316,7 @@ void TransliteratorAPITest::TestTransliterate2(){
 
 
     logln("\n   Try calling transliterate with illegal start and limit values");
-    t=Transliterator::createInstance("Unicode-Hex");
+    t=Transliterator::createInstance("Any-Hex");
     gotResBuf = temp = "try start greater than limit";
     t->transliterate(gotResBuf, 10, 5);
     if(gotResBuf == temp)
@@ -337,7 +337,7 @@ void TransliteratorAPITest::TestTransliterate3(){
     };
     int start, limit;
     UnicodeString message;
-    Transliterator *t=Transliterator::createInstance("Unicode-Hex");
+    Transliterator *t=Transliterator::createInstance("Any-Hex");
     if(t == 0)
         errln("FAIL : construction");
     for(uint32_t i=0; i<sizeof(Data)/sizeof(Data[0]); i=i+3){
@@ -352,7 +352,7 @@ void TransliteratorAPITest::TestTransliterate3(){
 void TransliteratorAPITest::TestSimpleKeyboardTransliterator(){
     logln("simple call to transliterate");
     UErrorCode status=U_ZERO_ERROR;
-    Transliterator* t=Transliterator::createInstance("Unicode-Hex");
+    Transliterator* t=Transliterator::createInstance("Any-Hex");
     if(t == 0)
         errln("FAIL : construction");
     UTransPosition index={19,20,20,20};
@@ -400,7 +400,7 @@ void TransliteratorAPITest::TestKeyboardTransliterator1(){
         "",    UnicodeString("\\u0061\\u0062\\u007A", "")                              
 
     };
-    Transliterator* t=Transliterator::createInstance("Unicode-Hex");
+    Transliterator* t=Transliterator::createInstance("Any-Hex");
     //keyboardAux(t, Data);
     UTransPosition index={0, 0, 0, 0};
     UErrorCode status=U_ZERO_ERROR;
@@ -452,7 +452,7 @@ void TransliteratorAPITest::TestKeyboardTransliterator1(){
 void TransliteratorAPITest::TestKeyboardTransliterator2(){
     UnicodeString Data[]={
         //insertion, buffer, index[START], index[LIMIT], index[CURSOR]
-        //data for Unicode-Hex
+        //data for Any-Hex
         "abc",    UnicodeString("Initial String: add-\\u0061\\u0062\\u0063-", ""),                     "19", "20", "20",
         "a",      UnicodeString("In\\u0069\\u0061tial String: add-\\u0061\\u0062\\u0063-", ""),        "2",  "3",  "2" ,
         "b",      UnicodeString("\\u0062In\\u0069\\u0061tial String: add-\\u0061\\u0062\\u0063-", ""), "0",  "0",  "0" ,
@@ -473,7 +473,7 @@ void TransliteratorAPITest::TestKeyboardTransliterator2(){
     logln("Testing transliterate(Replaceable, int32_t, UnicodeString, UErrorCode)");       
 
     rs="Initial String: add--";
-    t=Transliterator::createInstance("Unicode-Hex");
+    t=Transliterator::createInstance("Any-Hex");
     if(t == 0)
         errln("FAIL : construction");
     else {
@@ -508,7 +508,7 @@ void TransliteratorAPITest::TestKeyboardTransliterator3(){
     UErrorCode status=U_ZERO_ERROR;
     UTransPosition index={0, 0, 0, 0};
     logln("Testing transliterate(Replaceable, int32_t, UErrorCode)");
-    Transliterator *t=Transliterator::createInstance("Unicode-Hex");
+    Transliterator *t=Transliterator::createInstance("Any-Hex");
     if(t == 0)
         errln("FAIL : construction");
     for(uint32_t i=0; i<sizeof(Data)/sizeof(Data[0]); i=i+4){
@@ -650,7 +650,7 @@ class TestFilter3 : public UnicodeFilter {
 
 
 void TransliteratorAPITest::TestGetAdoptFilter(){
-    Transliterator *t=Transliterator::createInstance("Unicode-Hex");
+    Transliterator *t=Transliterator::createInstance("Any-Hex");
     if(t == 0)
         errln("FAIL : construction");
     const UnicodeFilter *u=t->getFilter();

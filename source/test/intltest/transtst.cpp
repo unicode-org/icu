@@ -69,6 +69,7 @@ TransliteratorTest::runIndexedTest(int32_t index, UBool exec,
         TESTCASE(33,TestContext);
         TESTCASE(34,TestSupplemental);
         TESTCASE(35,TestQuantifier);
+        TESTCASE(36,TestSTV);
         default: name = ""; break;
     }
 }
@@ -444,8 +445,8 @@ void TransliteratorTest::TestCompoundKana(void) {
  * Compose the hex transliterators forward and reverse.
  */
 void TransliteratorTest::TestCompoundHex(void) {
-    Transliterator* a = Transliterator::createInstance("Unicode-Hex");
-    Transliterator* b = Transliterator::createInstance("Hex-Unicode");
+    Transliterator* a = Transliterator::createInstance("Any-Hex");
+    Transliterator* b = Transliterator::createInstance("Hex-Any");
     Transliterator* transab[] = { a, b };
     Transliterator* transba[] = { b, a };
     if (a == 0 || b == 0) {
@@ -490,9 +491,9 @@ class TestFilter : public UnicodeFilter {
  * Do some basic tests of filtering.
  */
 void TransliteratorTest::TestFiltering(void) {
-    Transliterator* hex = Transliterator::createInstance("Unicode-Hex");
+    Transliterator* hex = Transliterator::createInstance("Any-Hex");
     if (hex == 0) {
-        errln("FAIL: createInstance(Unicode-Hex) failed");
+        errln("FAIL: createInstance(Any-Hex) failed");
         return;
     }
     hex->adoptFilter(new TestFilter());
@@ -644,7 +645,7 @@ void TransliteratorTest::TestJ243(void) {
     UErrorCode status = U_ZERO_ERROR;
     
 #if !defined(HPUX)
-    // Test default Hex-Unicode, which should handle
+    // Test default Hex-Any, which should handle
     // \u, \U, u+, and U+
     HexToUnicodeTransliterator hex;
     expect(hex, UnicodeString("\\u0041+\\U0042,u+0043uu+0044z", ""), "A+B,CuDz");
@@ -654,7 +655,7 @@ void TransliteratorTest::TestJ243(void) {
     HexToUnicodeTransliterator hex2(UnicodeString("\\\\u###0;&\\#x###0\\;", ""), status);
     expect(hex2, UnicodeString("\\u61\\u062\\u0063\\u00645\\u66x&#x30;&#x031;&#x0032;&#x00033;", ""),
            "abcd5fx012&#x00033;");
-    // Try custom Unicode-Hex (default is tested elsewhere)
+    // Try custom Any-Hex (default is tested elsewhere)
     status = U_ZERO_ERROR;
     UnicodeToHexTransliterator hex3(UnicodeString("&\\#x###0;", ""), status);
     expect(hex3, "012", "&#x30;&#x31;&#x32;");
@@ -952,13 +953,13 @@ void TransliteratorTest::TestFilterIDs(void) {
     // Array of 3n strings:
     // <id>, <inverse id>, <input>, <expected output>
     const char* DATA[] = {
-        "Unicode[aeiou]-Hex",
-        "Hex[aeiou]-Unicode",
+        "Any[aeiou]-Hex",
+        "Hex[aeiou]-Any",
         "quizzical",
         "q\\u0075\\u0069zz\\u0069c\\u0061l",
         
-        "Unicode[aeiou]-Hex;Hex[^5]-Unicode",
-        "Unicode[^5]-Hex;Hex[aeiou]-Unicode",
+        "Any[aeiou]-Hex;Hex[^5]-Any",
+        "Any[^5]-Hex;Hex[aeiou]-Any",
         "quizzical",
         "q\\u0075izzical",
 
@@ -1218,7 +1219,7 @@ void TransliteratorTest::TestCompoundRBT(void) {
     // Careful with spacing and ';' here:  Phrase this exactly
     // as toRules() is going to return it.  If toRules() changes
     // with regard to spacing or ';', then adjust this string.
-    UnicodeString rule("::Hex-Unicode;\n"
+    UnicodeString rule("::Hex-Any;\n"
                        "::Any-Lower;\n"
                        "a > '.A.';\n"
                        "b > '.B.';\n"
@@ -1551,6 +1552,42 @@ void TransliteratorTest::TestQuantifier() {
     expect("$var = ab; $var+ > x;",
            "bb ab ababb",
            "bb x xb");
+}
+
+/**
+ * Test Source-Target/Variant.
+ */
+void TransliteratorTest::TestSTV(void) {
+    int32_t ns = Transliterator::countAvailableSources();
+    for (int32_t i=0; i<ns; ++i) {
+        UnicodeString source;
+        Transliterator::getAvailableSource(i, source);
+        logln((UnicodeString)"" + i + ": " + source);
+        if (source.length() == 0) {
+            errln("FAIL: empty source");
+            continue;
+        }
+        int32_t nt = Transliterator::countAvailableTargets(source);
+        for (int32_t j=0; j<nt; ++j) {
+            UnicodeString target;
+            Transliterator::getAvailableTarget(j, source, target);
+            logln((UnicodeString)" " + j + ": " + target);
+            if (target.length() == 0) {
+                errln("FAIL: empty target");
+                continue;
+            }
+            int32_t nv = Transliterator::countAvailableVariants(source, target);
+            for (int32_t k=0; j<nv; ++k) {
+                UnicodeString variant;
+                Transliterator::getAvailableVariant(k, source, target, variant);
+                logln((UnicodeString)"  " + k + ": " + variant);
+                if (variant.length() == 0) {
+                    errln("FAIL: empty variant");
+                    break;
+                }
+            }
+        }
+    }
 }
 
 //======================================================================

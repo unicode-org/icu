@@ -174,6 +174,11 @@ class TransliteratorTest : public IntlTest {
 
     void TestQuantifier(void);
 
+    /**
+     * Test Source-Target/Variant.
+     */
+    void TestSTV(void);
+
     //======================================================================
     // Support methods
     //======================================================================
