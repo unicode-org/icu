@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/RuleBasedNumberFormat.java,v $ 
- * $Date: 2003/05/14 19:03:31 $ 
- * $Revision: 1.13 $
+ * $Date: 2003/05/21 18:55:27 $ 
+ * $Revision: 1.14 $
  *
  *****************************************************************************************
  */
@@ -190,7 +190,9 @@ import java.util.ResourceBundle;
  * The body of <tt>%%lenient-parse</tt> isn't a set of number-formatting rules, but a <tt>RuleBasedCollator</tt>
  * description which is used to define equivalences for lenient parsing. For more information
  * on the syntax, see <tt>RuleBasedCollator</tt>. For more information on lenient parsing,
- * see <tt>setLenientParse()</tt>.</p>
+ * see <tt>setLenientParse()</tt>. <em>Note:</em> symbols that have syntactic meaning
+ * in collation rules, such as '&amp;', have no particular meaning when appearing outside
+ * of the <tt>lenient-parse</tt> rule set.</p>
  *
  * <p>The body of a rule set consists of an ordered, semicolon-delimited list of <em>rules.</em>
  * Internally, every rule has a base value, a divisor, rule text, and zero, one, or two <em>substtutions.</em>
@@ -472,7 +474,7 @@ import java.util.ResourceBundle;
  * using these features.</p>
  *
  * @author Richard Gillam
- * $RCSfile: RuleBasedNumberFormat.java,v $ $Revision: 1.13 $ $Date: 2003/05/14 19:03:31 $
+ * $RCSfile: RuleBasedNumberFormat.java,v $ $Revision: 1.14 $ $Date: 2003/05/21 18:55:27 $
  * @see NumberFormat
  * @see DecimalFormat
  * @stable ICU 2.0
