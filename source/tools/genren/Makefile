@@ -12,10 +12,11 @@ SO=so
 COM=$(ICUDIR)/common/libicuuc.$(SO)
 I18=$(ICUDIR)/i18n/libicui18n.$(SO)
 LAY=$(ICUDIR)/layout/libicule.$(SO)
+LEX=$(ICUDIR)/layoutex/libiculx.$(SO)
 DAT=$(ICUDIR)/stubdata/libicudata.$(SO)
-UIO=$(ICUDIR)/extra/ustdio/libustdio.$(SO)
+UIO=$(ICUDIR)/extra/ustdio/libicuio.$(SO)
 
-LIBS=$(COM) $(I18) $(LAY) $(UIO)
+LIBS=$(COM) $(I18) $(LAY) $(LEX) $(UIO)
 
 all:
 	@cat README
@@ -44,8 +45,11 @@ $(I18): $(DAT) $(COM) $(ICUDIR)/config.status Makefile
 $(LAY): $(DAT) $(I18) $(COM) $(ICUDIR)/config.status Makefile
 	gmake -C $(ICUDIR)/layout libicule.$(SO)
 
+$(LEX): $(DAT) $(I18) $(COM) $(ICUDIR)/config.status Makefile
+	gmake -C $(ICUDIR)/layoutex libiculx.$(SO)
+
 $(UIO):	$(DAT) $(I18) $(COM) $(ICUDIR)/config.status Makefile
-	gmake -C $(ICUDIR)/extra/ustdio libustdio.$(SO)
+	gmake -C $(ICUDIR)/extra/ustdio libicuio.$(SO)
 
 # the header itself
 urename.h: $(LIBS) genren.pl
