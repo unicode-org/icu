@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/tool/layout/ScriptData.java,v $
- * $Date: 2003/06/03 18:49:31 $
- * $Revision: 1.3 $
+ * $Date: 2003/12/09 01:18:11 $
+ * $Revision: 1.4 $
  *
  *******************************************************************************
  */
@@ -21,7 +21,7 @@ import com.ibm.icu.text.UnicodeSet;
 import com.ibm.icu.text.UnicodeSetIterator;
 import com.ibm.icu.impl.Utility;
 
-public class ScriptData
+public class ScriptData extends TagValueData
 {
     public static class Record
     {
@@ -138,12 +138,12 @@ public class ScriptData
         System.out.println("Done.");
     }
     
-    public int getMinScript()
+    public int getMinValue()
     {
         return fMinScript;
     }
     
-    public int getMaxScript()
+    public int getMaxValue()
     {
         return fMaxScript;
     }
@@ -153,33 +153,33 @@ public class ScriptData
         return fRecords.length;
     }
     
-    public String getScriptTag(int scriptCode)
+    public String getTag(int value)
     {
-        if (scriptCode >= fMinScript && scriptCode <= fMaxScript) {
-            return fScriptTags[scriptCode - fMinScript];
+        if (value >= fMinScript && value <= fMaxScript) {
+            return fScriptTags[value - fMinScript];
         }
         
         return "zyyx";
     }
     
-    public String getScriptTagLabel(int scriptCode)
+    public String getTagLabel(int value)
     {
-        return getScriptTag(scriptCode);
+        return getTag(value);
     }
     
-    public String makeScriptTag(int scriptCode)
+    public String makeTag(int value)
     {
-        if (scriptCode >= fMinScript && scriptCode <= fMaxScript) {
-            return TagUtilities.makeTag(fScriptTags[scriptCode - fMinScript]);
+        if (value >= fMinScript && value <= fMaxScript) {
+            return TagUtilities.makeTag(fScriptTags[value - fMinScript]);
         } else {
             return "0x00000000";
         }
     }
     
-    public String getScriptName(int scriptCode)
+    public String getName(int value)
     {
-        if (scriptCode >= fMinScript && scriptCode <= fMaxScript) {
-            return fScriptNames[scriptCode - fMinScript];
+        if (value >= fMinScript && value <= fMaxScript) {
+            return fScriptNames[value - fMinScript];
         }
         
         return "COMMON";

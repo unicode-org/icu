@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/tool/layout/ScriptNameBuilder.java,v $
- * $Date: 2003/06/03 18:49:32 $
- * $Revision: 1.3 $
+ * $Date: 2003/12/09 01:18:12 $
+ * $Revision: 1.4 $
  *
  *******************************************************************************
  */
@@ -25,10 +25,10 @@ public class ScriptNameBuilder
         ScriptData scriptData = new ScriptData();
         LanguageData languageData = new LanguageData();
         
-        ScriptModuleWriter scriptModuleWriter = new ScriptModuleWriter(scriptData, languageData);
+        ScriptIDModuleWriter scriptIDModuleWriter = new ScriptIDModuleWriter(scriptData, languageData);
         
-        scriptModuleWriter.writeScriptHeader("LEScripts.h");
-        scriptModuleWriter.writeLanguageHeader("LELanguages.h");
+        scriptIDModuleWriter.writeScriptHeader("LEScripts.h");
+        scriptIDModuleWriter.writeLanguageHeader("LELanguages.h");
         
         ScriptTagModuleWriter scriptTagModuleWriter = new ScriptTagModuleWriter(scriptData, languageData);
         

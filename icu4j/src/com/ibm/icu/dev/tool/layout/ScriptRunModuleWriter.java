@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/tool/layout/ScriptRunModuleWriter.java,v $
- * $Date: 2003/06/03 18:49:32 $
- * $Revision: 1.3 $
+ * $Date: 2003/12/09 01:18:11 $
+ * $Revision: 1.4 $
  *
  *******************************************************************************
  */
@@ -15,7 +15,7 @@ package com.ibm.icu.dev.tool.layout;
 import java.util.*;
 import com.ibm.icu.impl.Utility;
 
-public class ScriptRunModuleWriter extends ModuleWriter
+public class ScriptRunModuleWriter extends ScriptModuleWriter
 {
     public ScriptRunModuleWriter(ScriptData theScriptData)
     {
@@ -24,12 +24,12 @@ public class ScriptRunModuleWriter extends ModuleWriter
     
     public void writeScriptRuns(String fileName)
     {
-        int minScript   = scriptData.getMinScript();
-        int maxScript   = scriptData.getMaxScript();
+        int minScript   = scriptData.getMinValue();
+        int maxScript   = scriptData.getMaxValue();
         int recordCount = scriptData.getRecordCount();
         
         openFile(fileName);
-        writeHeader();
+        writeHeader(null, includeFiles);
         output.println(preamble);
         
         for (int record = 0; record < recordCount; record += 1) {
@@ -40,11 +40,11 @@ public class ScriptRunModuleWriter extends ModuleWriter
             output.print(", 0x");
             output.print(Utility.hex(scriptData.getRecord(record).endChar(), 6));
             output.print(", ");
-            output.print(scriptData.getScriptTag(script));
+            output.print(scriptData.getTag(script));
             output.print("ScriptCode}");
             output.print((record == recordCount - 1) ? " " : ",");
             output.print(" // ");
-            output.println(scriptData.getScriptName(script));
+            output.println(scriptData.getName(script));
         }
         
         output.println(postamble);
@@ -77,9 +77,9 @@ public class ScriptRunModuleWriter extends ModuleWriter
             Vector offsets = scriptRangeOffsets[script - minScript];
             
             output.print("le_int16 ");
-            output.print(scriptData.getScriptTag(script));
+            output.print(scriptData.getTag(script));
             output.println("ScriptRanges[] = {");
-            output.print("   ");
+            output.print("    ");
             
             for (int offset = 0; offset < offsets.size(); offset += 1) {
                 Integer i = (Integer) offsets.elementAt(offset);
@@ -89,29 +89,29 @@ public class ScriptRunModuleWriter extends ModuleWriter
             }
             
             output.println("-1");
-            output.println("};\n");
+            output.println(postamble);
         }
         
         output.println("le_int16 *ScriptRun::scriptRangeOffsets[] = {");
         
         for (int script = minScript; script <= maxScript; script += 1) {
             output.print("    ");
-            output.print(scriptData.getScriptTag(script));
+            output.print(scriptData.getTag(script));
             output.print("ScriptRanges");
             output.print(script == maxScript? "  " : ", ");
             output.print("// ");
-            output.println(scriptData.getScriptName(script));
+            output.println(scriptData.getName(script));
         }
         
-        output.println("};");
+        output.println(postamble);
         
+        writeTrailer();
         closeFile();
     }
     
+    private static final String[] includeFiles = {"LETypes.h", "LEScripts.h", "ScriptRun.h"};
+    
     private static final String preamble = 
-    "#include \"LETypes.h\"\n" +
-    "#include \"LEScripts.h\"\n" +
-    "#include \"ScriptRun.h\"\n" +
     "\n" +
     "ScriptRecord ScriptRun::scriptRecords[] = {";
     
