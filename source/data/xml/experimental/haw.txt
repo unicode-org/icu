@@ -35,25 +35,25 @@ haw {
         }
     }
     Countries {
-        AU { "\u02bbAukekulelia" }
-        CA { "Kanaka" }
-        CN { "P\u0101k\u0113" }
+        AU { "N\u016bh\u014dlani" }
+        CA { "Kanak\u0101" }
+        CN { "Kina" }
         DE { "Kelem\u0101nia" }
         DK { "Kenemaka" }
         ES { "Kepania" }
         FR { "Palani" }
-        GB { "Pelekania" }
+        GB { "Aupuni M\u014d\u02bb\u012b Hui P\u016b \u02bbIa" }
         GR { "Helene" }
         IE { "\u02bbIlelani" }
-        IL { "Ielukalema" }
-        IN { "\u02bb\u012Ania" }
-        IT { "Ikalia" }
+        IL { "\u02bbIsera\u02bbela" }
+        IN { "\u02bb\u012ania" }
+        IT { "\u02bb\u012ak\u0101lia" }
         JP { "I\u0101pana" }
         MX { "Mekiko" }
         NL { "H\u014Dlani" }
-        NZ { "Nuk\u012Blani" }
+        NZ { "Aotearoa" }
         PH { "\u02bb\u0100ina Pilipino" }
-        RU { "Lukia" }
+        RU { "L\u016bkia" }
         US { "\u02bbAmelika Hui P\u016b \u02bbIa" }
     }
     DayAbbreviations {
@@ -80,18 +80,18 @@ haw {
     }
     LocaleScript:array{ "Latn" }
     MonthAbbreviations {
-        "Ian",
-        "Pep",
-        "Mal",
-        "\u02bbAp",
+        "Ian.",
+        "Pep.",
+        "Mal.",
+        "\u02bbAp.",
         "Mei",
-        "Iun",
-        "Iul",
-        "\u02bbAu",
-        "Kep",
-        "\u02bbOk",
-        "Now",
-        "Kek"
+        "Iun.",
+        "Iul.",
+        "\u02bbAu.",
+        "Kep.",
+        "\u02bbOk.",
+        "Now.",
+        "Kek."
     }
     MonthNames {
         "Ianuali",
@@ -108,3 +108,4 @@ haw {
         "Kekemapa"
     }
 }
+
