@@ -19,6 +19,7 @@
 #include "uoptions.h"
 #include "uprops.h"
 #include "propname.h"
+#include "uassert.h"
 
 // TODO: Clean up and comment this code.
 
@@ -151,11 +152,6 @@ void die(const char* msg) {
     exit(1);
 }
 
-void assert(UBool condition) {
-    if (condition) return;
-    die("Assertion failure");
-}
-
 //----------------------------------------------------------------------
 
 /**
@@ -204,29 +200,6 @@ public:
         return n;
     }
 };
-
-///**
-// * Two arrays.
-// */
-//class PropertyDoubleArrayList : public AliasList {
-//    const Alias* a1;
-//    const Property* a2;
-//    int32_t n1, n2;
-//public:
-//    PropertyDoubleArrayList(const Alias* _a1, int32_t _n1,
-//                            const Property* _a2, int32_t _n2) {
-//        a1 = _a1;
-//        n1 = _n1;
-//        a2 = _a2;
-//        n2 = _n2;
-//    }
-//    virtual const Alias& operator[](int32_t i) const {
-//        return *((i < n1) ? &a1[i] : &a2[i-n1]);
-//    }
-//    virtual int32_t count() const {
-//        return n1 + n2;
-//    }
-//};
 
 //----------------------------------------------------------------------
 
@@ -320,14 +293,8 @@ class Builder {
     NonContiguousEnumToOffset* enumToName;
     int32_t enumToName_size;
     Offset enumToName_offset;
-    //EnumToOffset* enumToName_binary;
-    //int32_t enumToName_binary_size;
-    //Offset enumToName_binary_offset;
 
-    // 1:
-    //EnumToOffset* enumToName_enumerated;
-    //int32_t enumToName_enumerated_size;
-    //Offset enumToName_enumerated_offset;
+    // 1: (deleted)
 
     // 2:
     NameToEnum* nameToEnum;
@@ -335,9 +302,6 @@ class Builder {
     Offset nameToEnum_offset;
 
     // 3:
-    //EnumToOffset* enumToValue;
-    //int32_t enumToValue_size;
-    //Offset enumToValue_offset;
     NonContiguousEnumToOffset* enumToValue;
     int32_t enumToValue_size;
     Offset enumToValue_offset;
@@ -365,7 +329,7 @@ class Builder {
 
     // 98:
     Offset* nameGroupPool;
-    int32_t nameGroupPoolCount;
+    int32_t nameGroupPool_count;
     int32_t nameGroupPool_size;
     Offset nameGroupPool_offset;
 
@@ -389,8 +353,6 @@ public:
                                  int32_t propNameCount,
                                  const EnumToNameGroupEntry* propEnum,
                                  int32_t propEnumCount);
-                                 //const EnumToNameGroupEntry* propBinaryEnum,
-                                 //const EnumToNameGroupEntry* propEnumeratedEnum);
 
     void buildValues(const EnumToValueEntry* e2v,
                      int32_t count);
@@ -439,8 +401,6 @@ private:
 
 Builder::Builder(int32_t debugLevel) {
     debug = debugLevel;
-    //enumToName_binary = 0;
-    //enumToName_enumerated = 0;
     enumToName = 0;
     nameToEnum = 0;
     enumToValue = 0;
@@ -459,8 +419,6 @@ Builder::Builder(int32_t debugLevel) {
 }
 
 Builder::~Builder() {
-    //uprv_free(enumToName_binary);
-    //uprv_free(enumToName_enumerated);
     uprv_free(enumToName);
     uprv_free(nameToEnum);
     uprv_free(enumToValue);
@@ -483,7 +441,7 @@ Builder::~Builder() {
 }
 
 int32_t Builder::align(int32_t a) {
-    assert(a >= 0);
+    U_ASSERT(a >= 0);
     int32_t k = a % sizeof(int32_t);
     if (k == 0) {
         return a;
@@ -493,7 +451,7 @@ int32_t Builder::align(int32_t a) {
 }
 
 void Builder::erase(void* p, int32_t size) {
-    assert(size >= 0);
+    U_ASSERT(size >= 0);
     int8_t* q = (int8_t*) p;
     while (size--) {
         *q++ = 0;
@@ -503,7 +461,7 @@ void Builder::erase(void* p, int32_t size) {
 EnumToOffset* Builder::buildEnumToOffset(const EnumToNameGroupEntry* e2ng,
                                          int32_t count,
                                          int32_t& size) {
-    assert(e2ng->isContiguous(count));
+    U_ASSERT(e2ng->isContiguous(count));
     size = align(EnumToOffset::getSize(count));
     EnumToOffset* result = (EnumToOffset*) uprv_malloc(size);
     erase(result, size);
@@ -513,7 +471,7 @@ EnumToOffset* Builder::buildEnumToOffset(const EnumToNameGroupEntry* e2ng,
     for (int32_t i=0; i<count; ++i) {
         // set these to NGI index values
         // fix them up to NGI offset values
-        assert(IS_VALID_OFFSET(e2ng[i].nameGroupIndex));
+        U_ASSERT(IS_VALID_OFFSET(e2ng[i].nameGroupIndex));
         p[i] = (Offset) e2ng[i].nameGroupIndex; // FIXUP later
     }
     return result;
@@ -523,7 +481,7 @@ NonContiguousEnumToOffset*
 Builder::buildNCEnumToNameGroup(const EnumToNameGroupEntry* e2ng,
                                 int32_t count,
                                 int32_t& size) {
-    assert(!e2ng->isContiguous(count));
+    U_ASSERT(!e2ng->isContiguous(count));
     size = align(NonContiguousEnumToOffset::getSize(count));
     NonContiguousEnumToOffset* nc = (NonContiguousEnumToOffset*) uprv_malloc(size);
     erase(nc, size);
@@ -534,7 +492,7 @@ Builder::buildNCEnumToNameGroup(const EnumToNameGroupEntry* e2ng,
         // set these to NGI index values
         // fix them up to NGI offset values
         e[i] = e2ng[i].enumValue;
-        assert(IS_VALID_OFFSET(e2ng[i].nameGroupIndex));
+        U_ASSERT(IS_VALID_OFFSET(e2ng[i].nameGroupIndex));
         p[i] = (Offset) e2ng[i].nameGroupIndex; // FIXUP later
     }
     return nc;
@@ -544,7 +502,7 @@ NonContiguousEnumToOffset*
 Builder::buildNCEnumToValue(const EnumToValueEntry* e2v,
                             int32_t count,
                             int32_t& size) {
-    assert(!e2v->isContiguous(count));
+    U_ASSERT(!e2v->isContiguous(count));
     size = align(NonContiguousEnumToOffset::getSize(count));
     NonContiguousEnumToOffset* result = (NonContiguousEnumToOffset*) uprv_malloc(size);
     erase(result, size);
@@ -576,7 +534,7 @@ Offset Builder::stringIndexToOffset(int32_t index, UBool allowNegative) const {
             die("String pool index too large");
         }
         Offset result = stringPool_offset + stringPool_offsetArray[index];
-        assert(result >= 0 && result < total_size);
+        U_ASSERT(result >= 0 && result < total_size);
         return result;
     }
     return 0; // never executed; make compiler happy
@@ -594,7 +552,7 @@ NameToEnum* Builder::buildNameToEnum(const NameToEnumEntry* nameToEnum,
     for (int32_t i=0; i<count; ++i) {
         // set these to SP index values
         // fix them up to SP offset values
-        assert(IS_VALID_OFFSET(nameToEnum[i].nameIndex));
+        U_ASSERT(IS_VALID_OFFSET(nameToEnum[i].nameIndex));
         p[i] = (Offset) nameToEnum[i].nameIndex; // FIXUP later
         e[i] = nameToEnum[i].enumValue;
     }
@@ -606,14 +564,6 @@ void Builder::buildTopLevelProperties(const NameToEnumEntry* propName,
                                       int32_t propNameCount,
                                       const EnumToNameGroupEntry* propEnum,
                                       int32_t propEnumCount) {
-                                      //const EnumToNameGroupEntry* propBinaryEnum,
-                                      //const EnumToNameGroupEntry* propEnumeratedEnum) {
-    //enumToName_binary = buildEnumToOffset(propBinaryEnum,
-    //                                      BINARY_PROPERTY_COUNT,
-    //                                      enumToName_binary_size);
-    //enumToName_enumerated = buildEnumToOffset(propEnumeratedEnum,
-    //                                          ENUMERATED_PROPERTY_COUNT,
-    //                                          enumToName_enumerated_size);
     enumToName = buildNCEnumToNameGroup(propEnum,
                                         propEnumCount,
                                         enumToName_size);
@@ -626,7 +576,7 @@ void Builder::buildValues(const EnumToValueEntry* e2v,
                           int32_t count) {
     int32_t i;
     
-    assert(!e2v->isContiguous(count));
+    U_ASSERT(!e2v->isContiguous(count));
 
     valueMap_count = count;
 
@@ -672,22 +622,22 @@ void Builder::buildStringPool(const AliasName* propertyNames,
                               int32_t nameGroupIndicesCount) {
     int32_t i;
 
-    nameGroupPoolCount = nameGroupIndicesCount;
-    nameGroupPool_size = sizeof(Offset) * nameGroupPoolCount;
-    nameGroupPool = MALLOC(Offset, nameGroupPoolCount);
+    nameGroupPool_count = nameGroupIndicesCount;
+    nameGroupPool_size = sizeof(Offset) * nameGroupPool_count;
+    nameGroupPool = MALLOC(Offset, nameGroupPool_count);
 
-    for (i=0; i<nameGroupPoolCount; ++i) {
+    for (i=0; i<nameGroupPool_count; ++i) {
         // Some indices are negative.
         int32_t a = nameGroupIndices[i];
         if (a < 0) a = -a;
-        assert(IS_VALID_OFFSET(a));
+        U_ASSERT(IS_VALID_OFFSET(a));
         nameGroupPool[i] = (Offset) nameGroupIndices[i];
     }
 
     stringPool_count = propertyNameCount;
     stringPool_size = 0;
     // first string must be "" -- we skip it
-    assert(*propertyNames[0].str == 0);
+    U_ASSERT(*propertyNames[0].str == 0);
     for (i=1 /*sic*/; i<propertyNameCount; ++i) {
         stringPool_size += uprv_strlen(propertyNames[i].str) + 1;
     }
@@ -705,8 +655,8 @@ void Builder::buildStringPool(const AliasName* propertyNames,
         stringPool_offsetArray[i] = soFar;
         soFar += len+1;
     }
-    assert(soFar == stringPool_size);
-    assert(p == (stringPool + stringPool_size));
+    U_ASSERT(soFar == stringPool_size);
+    U_ASSERT(p == (stringPool + stringPool_size));
 }
 
 void Builder::computeOffsets() {
@@ -714,48 +664,52 @@ void Builder::computeOffsets() {
     Offset off = sizeof(header);
 
     if (debug>0) {
-        printf("header offset=0, size=%d\n", off);
+        printf("header   \t offset=%4d  size=%5d\n", 0, off);
     }
 
-    #define COMPUTE_OFFSET(foo) \
-      if (debug>0) printf(#foo " offset=%d, size=%d\n", off, foo##_size); \
+    U_ASSERT(sizeof(header) % sizeof(int32_t) == 0);
+
+    #define COMPUTE_OFFSET(foo) COMPUTE_OFFSET2(foo,int32_t)
+
+    #define COMPUTE_OFFSET2(foo,type) \
+      if (debug>0) printf(#foo "\t offset=%4d  size=%5d\n", off, foo##_size); \
       foo##_offset = off;       \
-      assert(IS_VALID_OFFSET(off + foo##_size)); \
+      U_ASSERT(IS_VALID_OFFSET(off + foo##_size)); \
+      U_ASSERT(foo##_offset % sizeof(type) == 0); \
       off = (Offset) (off + foo##_size);
 
     COMPUTE_OFFSET(enumToName);     // 0:
-    //COMPUTE_OFFSET(enumToName_binary);     // 0:
-    //COMPUTE_OFFSET(enumToName_enumerated); // 1:
     COMPUTE_OFFSET(nameToEnum);            // 2:
     COMPUTE_OFFSET(enumToValue);           // 3:
     COMPUTE_OFFSET(valueMap);              // 4:
         
     for (i=0; i<valueMap_count; ++i) {
         if (debug>0) {
-            printf(" value{NC}EnumToName[%d] offset=%d, size=%d\n",
+            printf(" enumToName[%d]\t offset=%4d  size=%5d\n",
                    i, off, valueEnumToName_size[i]);
         }
 
         valueEnumToName_offset[i] = off;   // 5:
-        assert(IS_VALID_OFFSET(off + valueEnumToName_size[i]));
+        U_ASSERT(IS_VALID_OFFSET(off + valueEnumToName_size[i]));
         off = (Offset) (off + valueEnumToName_size[i]);
 
         if (debug>0) {
-            printf(" valueNameToEnum[%d] offset=%d, size=%d\n",
+            printf(" nameToEnum[%d]\t offset=%4d  size=%5d\n",
                    i, off, valueNameToEnum_size[i]);
         }
 
         valueNameToEnum_offset[i] = off;   // 6:
-        assert(IS_VALID_OFFSET(off + valueNameToEnum_size[i]));
+        U_ASSERT(IS_VALID_OFFSET(off + valueNameToEnum_size[i]));
         off = (Offset) (off + valueNameToEnum_size[i]);
     }
     
-    COMPUTE_OFFSET(nameGroupPool);         // 98:
-    COMPUTE_OFFSET(stringPool);            // 99:
+    // These last two chunks have weaker alignment needs
+    COMPUTE_OFFSET2(nameGroupPool,Offset); // 98:
+    COMPUTE_OFFSET2(stringPool,char);      // 99:
 
     total_size = off;
-    if (debug>0) printf("total size=%d\n\n", total_size);
-    assert(total_size <= (MAX_OFFSET+1));
+    if (debug>0) printf("total                         size=%5d\n\n", total_size);
+    U_ASSERT(total_size <= (MAX_OFFSET+1));
 }
 
 void Builder::fixupNameToEnum(NameToEnum* n) {
@@ -778,7 +732,7 @@ void Builder::fixupStringPoolOffsets() {
     }
 
     // 98:
-    for (i=0; i<nameGroupPoolCount; ++i) {
+    for (i=0; i<nameGroupPool_count; ++i) {
         nameGroupPool[i] = stringIndexToOffset(nameGroupPool[i], TRUE);
     }
 }
@@ -806,10 +760,8 @@ void Builder::fixupNameGroupPoolOffsets() {
 
     // 0:
     fixupNCEnumToNameGroup(enumToName);
-    //fixupEnumToNameGroup(enumToName_binary);
 
-    // 1:
-    //fixupEnumToNameGroup(enumToName_enumerated);
+    // 1: (deleted)
 
     // 5:
     for (i=0; i<valueMap_count; ++i) {
@@ -828,16 +780,25 @@ void Builder::fixupMiscellaneousOffsets() {
     int32_t i;
 
     // header:
-    //header.enumToName_binaryOffset = enumToName_binary_offset;
-    //header.enumToName_enumeratedOffset = enumToName_enumerated_offset;
+    erase(&header, sizeof(header));
     header.enumToName_offset = enumToName_offset;
     header.nameToEnum_offset = nameToEnum_offset;
     header.enumToValue_offset = enumToValue_offset;
+    header.valueMap_offset = valueMap_offset;
+    header.valueMap_count = (int16_t) valueMap_count;
+    header.nameGroupPool_offset = nameGroupPool_offset;
+    header.nameGroupPool_count = (int16_t) nameGroupPool_count;
+    header.stringPool_offset = stringPool_offset;
+    header.stringPool_count = (int16_t) stringPool_count;
+
+	U_ASSERT(valueMap_count <= 0x7FFF);
+	U_ASSERT(nameGroupPool_count <= 0x7FFF);
+	U_ASSERT(stringPool_count <= 0x7FFF);
 
     // 3:
     Offset* p = enumToValue->getOffsetArray();
     EnumValue* e = enumToValue->getEnumArray();
-    assert(valueMap_count == enumToValue->count);
+    U_ASSERT(valueMap_count == enumToValue->count);
     for (i=0; i<valueMap_count; ++i) {
         p[i] = valueMap_offset + sizeof(ValueMap) * i;
     }
@@ -871,7 +832,7 @@ int8_t* Builder::createData(int32_t& length) const {
     int8_t* limit = result + length;
     
     #define APPEND2(x, size)   \
-      assert((p+size)<=limit); \
+      U_ASSERT((p+size)<=limit); \
       uprv_memcpy(p, x, size); \
       p += size
 
@@ -879,14 +840,12 @@ int8_t* Builder::createData(int32_t& length) const {
 
     APPEND2(&header, sizeof(header));
     APPEND(enumToName);
-    //APPEND(enumToName_binary);
-    //APPEND(enumToName_enumerated);
     APPEND(nameToEnum);
     APPEND(enumToValue);
     APPEND(valueMap);
  
     for (int32_t i=0; i<valueMap_count; ++i) {
-        assert((valueEnumToName[i] != 0 && valueNCEnumToName[i] == 0) ||
+        U_ASSERT((valueEnumToName[i] != 0 && valueNCEnumToName[i] == 0) ||
                (valueEnumToName[i] == 0 && valueNCEnumToName[i] != 0));
         if (valueEnumToName[i] != 0) {
             APPEND2(valueEnumToName[i], valueEnumToName_size[i]);
@@ -900,7 +859,7 @@ int8_t* Builder::createData(int32_t& length) const {
     APPEND(nameGroupPool);
     APPEND(stringPool);
 
-    assert(p == limit);
+    U_ASSERT(p == limit);
     return result;
 }
 
@@ -983,7 +942,7 @@ NameToEnumEntry* genpname::createNameIndex(const AliasList& list,
         const Alias& p = list[i];
         int32_t n = p.getUniqueNames(names);
         for (j=0; j<n; ++j) {
-            assert(nameIndexCount < nameIndexCapacity);
+            U_ASSERT(nameIndexCount < nameIndexCapacity);
             nameIndex[nameIndexCount++] =
                 NameToEnumEntry(names[j], p.enumValue);
         }
@@ -1134,49 +1093,17 @@ int genpname::MMain(int argc, char* argv[]) {
     // ------------------------------------------------------------
     // Create top-level property indices
 
-    //PropertyDoubleArrayList props(BINARY_PROPERTY, BINARY_PROPERTY_COUNT,
-    //                              ENUMERATED_PROPERTY, ENUMERATED_PROPERTY_COUNT);
     PropertyArrayList props(PROPERTY, PROPERTY_COUNT);
     int32_t propNameCount;
     NameToEnumEntry* propName = createNameIndex(props, propNameCount);
-
-    //PropertyArrayList binProp(BINARY_PROPERTY, BINARY_PROPERTY_COUNT);
-    //EnumToNameGroupEntry* propBinaryEnum = createEnumIndex(binProp);
-
-    //PropertyArrayList enumProp(ENUMERATED_PROPERTY, ENUMERATED_PROPERTY_COUNT);
-    //EnumToNameGroupEntry* propEnumeratedEnum = createEnumIndex(enumProp);
-
     EnumToNameGroupEntry* propEnum = createEnumIndex(props);
 
     // ------------------------------------------------------------
     // Create indices for the value list for each enumerated property
 
-/*    int32_t* valueNameCounts =  MALLOC(int32_t, ENUMERATED_PROPERTY_COUNT);
-    NameToEnumEntry** valueNames = MALLOC(NameToEnumEntry*, ENUMERATED_PROPERTY_COUNT);
-
-    EnumToNameGroupEntry** valueEnums = MALLOC(EnumToNameGroupEntry*, ENUMERATED_PROPERTY_COUNT);
-
-    for (i=0; i<ENUMERATED_PROPERTY_COUNT; ++i) {
-        PropertyArrayList values(ENUMERATED_PROPERTY[i].valueList,
-                                 ENUMERATED_PROPERTY[i].valueCount);
-        valueEnums[i] = createEnumIndex(values);
-        valueNames[i] = createNameIndex(values, valueNameCounts[i]);        
-    }*/
-
     // This will have more entries than we need...
     EnumToValueEntry* enumToValue = MALLOC(EnumToValueEntry, PROPERTY_COUNT);
     int32_t enumToValue_count = 0;
-    /*
-    for (i=0; i<ENUMERATED_PROPERTY_COUNT; ++i) {
-        PropertyArrayList values(ENUMERATED_PROPERTY[i].valueList,
-                                 ENUMERATED_PROPERTY[i].valueCount);
-        enumToValue[i].enumValue = ENUMERATED_PROPERTY[i].enumValue;
-        enumToValue[i].enumToName = createEnumIndex(values);
-        enumToValue[i].enumToName_count = ENUMERATED_PROPERTY[i].valueCount;
-        enumToValue[i].nameToEnum = createNameIndex(values,
-                                                    enumToValue[i].nameToEnum_count);
-    }
-    */
     for (i=0, j=0; i<PROPERTY_COUNT; ++i) {
         if (PROPERTY[i].valueCount == 0) continue;
         AliasArrayList values(PROPERTY[i].valueList,
@@ -1201,8 +1128,6 @@ int genpname::MMain(int argc, char* argv[]) {
                                     propNameCount,
                                     propEnum,
                                     PROPERTY_COUNT);
-                                    //propBinaryEnum,
-                                    //propEnumeratedEnum);
     
     builder.buildValues(enumToValue,
                         enumToValue_count);

@@ -87,7 +87,17 @@ class PropertyAliases {
     // to ValueMap objects
     Offset enumToValue_offset;
 
-    int8_t reserved[2];
+    // The following are needed by external readers of this data.
+    // We don't use them ourselves.
+    Offset valueMap_offset; // offset to start of array
+    int16_t valueMap_count; // number of entries
+    Offset nameGroupPool_offset; // offset to start of array
+    int16_t nameGroupPool_count; // number of entries (not groups)
+    Offset stringPool_offset; // offset to start of pool
+    int16_t stringPool_count; // number of strings
+
+    int16_t reserved;
+
     // -- end pnames data --
 
     friend class Builder;
