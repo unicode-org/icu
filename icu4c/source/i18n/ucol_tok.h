@@ -38,7 +38,7 @@
 
 /* this is space for the extra strings that need to be unquoted */
 /* during the parsing of the rules */
-#define UCOL_TOK_EXTRA_RULE_SPACE_SIZE 1024
+#define UCOL_TOK_EXTRA_RULE_SPACE_SIZE 2048
 typedef struct UColToken UColToken;
 
 typedef struct  {
@@ -62,12 +62,14 @@ typedef struct  {
 struct UColToken {
   UChar debugSource;
   UChar debugExpansion;
+  UChar debugPrefix;
   uint32_t CEs[128];
   uint32_t noOfCEs;
   uint32_t expCEs[128];
   uint32_t noOfExpCEs;
   uint32_t source;
   uint32_t expansion;
+  uint32_t prefix;
   uint32_t strength;
   uint32_t toInsert;
   uint32_t polarity; /* 1 for <, <<, <<<, , ; and -1 for >, >>, >>> */
@@ -110,7 +112,8 @@ typedef struct {
     (((((ch) <= 0x002F) && ((ch) >= 0x0020)) || \
       (((ch) <= 0x003F) && ((ch) >= 0x003A)) || \
       (((ch) <= 0x0060) && ((ch) >= 0x005B)) || \
-      (((ch) <= 0x007E) && ((ch) >= 0x007B))))
+      (((ch) <= 0x007E) && ((ch) >= 0x007D)) || \
+      (ch) == 0x007B))
 
 
 U_CFUNC uint32_t ucol_tok_assembleTokenList(UColTokenParser *src,UParseError *parseError, UErrorCode *status);
@@ -125,6 +128,7 @@ U_CAPI const UChar U_EXPORT2 *ucol_tok_parseNextToken(UColTokenParser *src,
                         uint32_t *strength, 
                         uint32_t *chOffset, uint32_t *chLen, 
                         uint32_t *exOffset, uint32_t *exLen,
+                        uint32_t *prefixOffset, uint32_t *prefixLen,
                         uint8_t *specs,
                         UBool startOfRules,
                         UParseError *parseError,
