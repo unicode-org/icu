@@ -89,7 +89,7 @@ TransliteratorAlias::~TransliteratorAlias() {
 
 Transliterator* TransliteratorAlias::create(UParseError& pe,
                                                       UErrorCode& ec) {
-    if (trans != 0) {
+    if (trans == 0) {
         return Transliterator::createInstance(aliasID, UTRANS_FORWARD, pe, ec);
     } else {
         Transliterator *t = trans;
