@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/Utility.java,v $ 
- * $Date: 2000/09/22 20:06:12 $ 
- * $Revision: 1.4 $
+ * $Date: 2001/01/09 20:07:16 $ 
+ * $Revision: 1.5 $
  *
  *****************************************************************************************
  */
@@ -560,7 +560,7 @@ public final class Utility {
 
     /**
      * Format a String for representation in a source file.  This includes
-     * breaking it into lines escaping characters using octal notation
+     * breaking it into lines and escaping characters using octal notation
      * when necessary (control characters and double quotes).
      */
     static public final String formatForSource(String s) {
