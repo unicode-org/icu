@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/lang/UCharacterTest.java,v $ 
-* $Date: 2002/02/28 23:55:47 $ 
-* $Revision: 1.29 $
+* $Date: 2002/03/02 02:04:07 $ 
+* $Revision: 1.30 $
 *
 *******************************************************************************
 */
@@ -26,6 +26,7 @@ import com.ibm.icu.lang.UCharacterDirection;
 import com.ibm.icu.util.RangeValueIterator;
 import com.ibm.icu.text.UTF16;
 import com.ibm.icu.impl.Utility;
+import com.ibm.icu.text.BreakIterator;
 
 /**
 * Testing class for UCharacter
@@ -56,15 +57,15 @@ public final class UCharacterTest extends TestFmwk
   /**
   * Testing the uppercase and lowercase function of UCharacter
   */
-  public void TestUpperLower()
+  public void TestUpperLowercharacter()
   {
     // variables to test the uppercase and lowercase characters
-    int upper[] = {0x41, 0x42, 0x43, 0x44, 0x45, 0x46, 0x47, 0xb1, 0xb2, 
-                   0xb3, 0x48, 0x49, 0x4a, 0x2e, 0x3f, 0x3a, 0x4b, 0x4c,
-                   0x4d, 0x4e, 0x4f, 0x01c4, 0x01c8, 0x000c, 0x0000};
-    int lower[] = {0x61, 0x62, 0x63, 0x64, 0x65, 0x66, 0x67, 0xb1, 0x00b2, 
-                   0xb3, 0x68, 0x69, 0x6a, 0x2e, 0x3f, 0x3a, 0x6b, 0x6c,
-                   0x6d, 0x6e, 0x6f, 0x01c6, 0x01c9, 0x000c, 0x0000};
+    int upper[] = {0x41, 0x0042, 0x0043, 0x0044, 0x0045, 0x0046, 0x0047, 0x00b1, 0x00b2, 
+                   0xb3, 0x0048, 0x0049, 0x004a, 0x002e, 0x003f, 0x003a, 0x004b, 0x004c,
+                   0x4d, 0x004e, 0x004f, 0x01c4, 0x01c8, 0x000c, 0x0000};
+    int lower[] = {0x61, 0x0062, 0x0063, 0x0064, 0x0065, 0x0066, 0x0067, 0x00b1, 0x00b2, 
+                   0xb3, 0x0068, 0x0069, 0x006a, 0x002e, 0x003f, 0x003a, 0x006b, 0x006c,
+                   0x6d, 0x006e, 0x006f, 0x01c6, 0x01c9, 0x000c, 0x0000};
         
     int size = upper.length;
     
@@ -136,10 +137,10 @@ public final class UCharacterTest extends TestFmwk
   */
   public void TestSpaces()
   {
-    int spaces[] = {0x0020, 0x00a0, 0x2000, 0x2001, 0x2005};
-    int nonspaces[] = {0x61, 0x62, 0x63, 0x64, 0x74};
-    int whitespaces[] = {0x2008, 0x2009, 0x200a, 0x001c, 0x000c};
-    int nonwhitespaces[] = {0x61, 0x62, 0x3c, 0x28, 0x3f};
+    int spaces[] = {0x0020, 0x0000a0, 0x002000, 0x002001, 0x002005};
+    int nonspaces[] = {0x61, 0x0062, 0x0063, 0x0064, 0x0074};
+    int whitespaces[] = {0x2008, 0x002009, 0x00200a, 0x00001c, 0x00000c};
+    int nonwhitespaces[] = {0x61, 0x0062, 0x003c, 0x0028, 0x003f};
                        
     int size = spaces.length;
     for (int i = 0; i < size; i ++)
@@ -181,8 +182,8 @@ public final class UCharacterTest extends TestFmwk
   */
   public void TestDefined()
   {
-    int undefined[] = {0xfff1, 0xfff7, 0xfa30};
-    int defined[] = {0x523E, 0x4f88, 0xfffd};
+    int undefined[] = {0xfff1, 0x00fff7, 0x00fa30};
+    int defined[] = {0x523E, 0x004f88, 0x00fffd};
     
     int size = undefined.length;
     for (int i = 0; i < size; i ++) 
@@ -206,8 +207,8 @@ public final class UCharacterTest extends TestFmwk
   */
   public void TestBase()
   {
-    int base[] = {0x0061, 0x0031, 0x03d2};
-    int nonbase[] = {0x002B, 0x0020, 0x203B};    
+    int base[] = {0x0061, 0x000031, 0x0003d2};
+    int nonbase[] = {0x002B, 0x000020, 0x00203B};    
     int size = base.length;
     for (int i = 0; i < size; i ++) 
     {
@@ -230,12 +231,12 @@ public final class UCharacterTest extends TestFmwk
   */
   public void TestDigits()
   {
-    int digits[] = {0x0030, 0x0662, 0x0F23, 0x0ED5, 0x2160};
+    int digits[] = {0x0030, 0x000662, 0x000F23, 0x000ED5, 0x002160};
     
     //special characters not in the properties table
-    int digits2[] = {0x3007, 0x4e00, 0x4e8c, 0x4e09, 0x56d8, 0x4e94, 0x516d, 
-                     0x4e03, 0x516b, 0x4e5d}; 
-    int nondigits[] = {0x0010, 0x0041, 0x0122, 0x68FE};
+    int digits2[] = {0x3007, 0x004e00, 0x004e8c, 0x004e09, 0x0056d8, 0x004e94, 0x00516d, 
+                     0x4e03, 0x00516b, 0x004e5d}; 
+    int nondigits[] = {0x0010, 0x000041, 0x000122, 0x0068FE};
     
     int digitvalues[] = {0, 2, 3, 5, 1};
     int digitvalues2[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};     
@@ -285,8 +286,8 @@ public final class UCharacterTest extends TestFmwk
   /* isControl is deprecated
   public void TestControl()
   {
-    int control[] = {0x001b, 0x0097, 0x0082};
-    int noncontrol[] = {0x61, 0x0031, 0x00e2};
+    int control[] = {0x001b, 0x000097, 0x000082};
+    int noncontrol[] = {0x61, 0x000031, 0x0000e2};
     
     int size = control.length;
     for (int i = 0; i < size; i ++) 
@@ -315,8 +316,8 @@ public final class UCharacterTest extends TestFmwk
   */
   public void TestPrint()
   {
-    int printable[] = {0x0042, 0x005f, 0x2014};
-    int nonprintable[] = {0x200c, 0x009f, 0x001b};
+    int printable[] = {0x0042, 0x00005f, 0x002014};
+    int nonprintable[] = {0x200c, 0x00009f, 0x00001b};
     
     int size = printable.length;
     for (int i = 0; i < size; i ++)
@@ -365,12 +366,12 @@ public final class UCharacterTest extends TestFmwk
   */
   public void TestIdentifier()
   {
-    int unicodeidstart[] = {0x0250, 0x00e2, 0x0061};
-    int nonunicodeidstart[] = {0x2000, 0x000a, 0x2019};
-    int unicodeidpart[] = {0x005f, 0x0032, 0x0045};
-    int nonunicodeidpart[] = {0x2030, 0x00a3, 0x0020};
-    int idignore[] = {0x070F, 0x180B, 0x180C};
-    int nonidignore[] = {0x0075, 0x00a3, 0x0061};
+    int unicodeidstart[] = {0x0250, 0x0000e2, 0x000061};
+    int nonunicodeidstart[] = {0x2000, 0x00000a, 0x002019};
+    int unicodeidpart[] = {0x005f, 0x000032, 0x000045};
+    int nonunicodeidpart[] = {0x2030, 0x0000a3, 0x000020};
+    int idignore[] = {0x070F, 0x00180B, 0x00180C};
+    int nonidignore[] = {0x0075, 0x0000a3, 0x000061};
 
     int size = unicodeidstart.length;
     for (int i = 0; i < size; i ++) 
@@ -542,8 +543,8 @@ public final class UCharacterTest extends TestFmwk
   */
   public void TestNames()
   {
-    int c[] = {0x0061, 0x0284, 0x3401, 0x7fed, 0xac00, 0xd7a3, 0xd800, 0xdc00, 
-               0xff08, 0xffe5, 0xffff, 0x23456, 0x9};
+    int c[] = {0x0061, 0x000284, 0x003401, 0x007fed, 0x00ac00, 0x00d7a3, 0x00d800, 0x00dc00, 
+               0xff08, 0x00ffe5, 0x00ffff, 0x0023456, 0x009};
     String name[] = {"LATIN SMALL LETTER A", 
                      "LATIN SMALL LETTER DOTLESS J WITH STROKE AND HOOK", 
                      "CJK UNIFIED IDEOGRAPH-3401", 
@@ -654,10 +655,10 @@ public final class UCharacterTest extends TestFmwk
   */
   public void TestIsLegal() 
   {
-    int illegal[] = {0xFFFE, 0xFFFF, 0x5FFFE, 0x5FFFF, 0x10FFFE, 0x10FFFF,
-                     0x110000, 0xFDD0, 0xFDDF, 0xFDE0, 0xFDEF};
-    int legal[] = {0x61, 0xFFFD, 0x10000, 0x5FFFD, 0x60000, 0x10FFFD,
-                   0xFDCF, 0xFDF0};
+    int illegal[] = {0xFFFE, 0x00FFFF, 0x005FFFE, 0x005FFFF, 0x0010FFFE, 0x0010FFFF,
+                     0x110000, 0x00FDD0, 0x00FDDF, 0x00FDE0, 0x00FDEF};
+    int legal[] = {0x61, 0x00FFFD, 0x0010000, 0x005FFFD, 0x0060000, 0x0010FFFD,
+                   0xFDCF, 0x00FDF0};
     for (int count = 0; count < illegal.length; count ++) {
         if (UCharacter.isLegal(illegal[count])) {
             errln("FAIL \\u" + hex(illegal[count]) + 
@@ -680,30 +681,41 @@ public final class UCharacterTest extends TestFmwk
         0x49,   0x69,  0x69,
         0x131,  0x69,  0x131,
         0xdf,   0xdf,  0xdf,
-        0xfb03, 0xfb03, 0xfb03,
+        0xfb03, 0x00fb03, 0x00fb03,
         0x5ffff,0x5ffff,0x5ffff
     };
     
-    // TODO after ICU 1.8: if u_getUnicodeVersion() >= 3.1.0.0 then test 
-    // exclude-special-i cases as well
-    
+    boolean isUnicode31 = UCharacter.getUnicodeVersion().compareTo("3.1") >= 0;           
+	    
     // test simple case folding
     for (int i = 0; i < simple.length; i += 3) {
         if (UCharacter.foldCase(simple[i], true) != simple[i + 1]) {
             errln("FAIL: foldCase(\\u" + hex(simple[i]) + 
                   ", true) should be \\u" + hex(simple[i + 1]));
-            return;
+        }
+        if (isUnicode31 && 
+            UCharacter.foldCase(simple[i], false) != simple[i + 2]) {
+            errln("FAIL: foldCase(\\u" + hex(simple[i]) + 
+                  ", false) should be \\u" + hex(simple[i + 2]));
         }
     }
 
     // test full string case folding with default option and separate buffers
     String mixed                 = "\u0061\u0042\u0131\u03d0\u00df\ufb03\ud93f\udfff",
-           // not used foldedExcludeSpecialI = "\u0061\u0062\u0131\u03c2\u0073\u0073\u0066\u0066\u0069\ud93f\udfff",
            foldedDefault         = "\u0061\u0062\u0069\u03b2\u0073\u0073\u0066\u0066\u0069\ud93f\udfff";
-           // foldedExcludeSpecialI = "\u0061\u0062\u0131\u03b2\u0073\u0073\u0066\u0066\u0069\ud93f\udfff";
+    String foldedExcludeSpecialI = "\u0061\u0062\u0131\u03b2\u0073\u0073\u0066\u0066\u0069\ud93f\udfff";
+    
     String foldedstr = UCharacter.foldCase(mixed, true);
     if (!foldedDefault.equals(foldedstr)) {
-        errln("FAIL: foldCase(\\uabcd, true) should be " + foldedDefault);
+        errln("FAIL: foldCase(" + hex(mixed) + ", true) should be " + 
+              foldedDefault);
+    }
+    
+    if (isUnicode31) {
+        if (!UCharacter.foldCase(mixed, false).equals(foldedExcludeSpecialI)) {
+        	errln("FAIL: foldCase(" + hex(mixed) + ", true) should be " + 
+                  foldedExcludeSpecialI);
+        }
     }
     
     String str1 = "A\u00df\u00b5\ufb03\uD801\uDC0C\u0131",
@@ -717,67 +729,86 @@ public final class UCharacterTest extends TestFmwk
     if (!str3.equals(UCharacter.foldCase(str1, false))) {
         errln("FAIL: foldCase(" + hex(str1) + " should be " + hex(str3));
     }
-       
-    // ### TODO: add the following tests similar to TestCaseMapping, follow icu's test cases 
-
-    // test full string case folding with default option and in the same buffer
-
-    // test preflighting 
-
-    // test error handling
   }
 
-  /**
-  * Testing the strings case mapping methods
-  */
-  public void TestCaseMapping() 
-  {
-    String beforeLower =  "\u0061\u0042\u0049\u03a3\u00df\u03a3\u002f\ud93f\udfff",
-           lowerRoot =    "\u0061\u0062\u0069\u03c3\u00df\u03c2\u002f\ud93f\udfff",
-           lowerTurkish = "\u0061\u0062\u0131\u03c3\u00df\u03c2\u002f\ud93f\udfff",
-           beforeUpper =  "\u0061\u0042\u0069\u03c2\u00df\u03c3\u002f\ufb03\ud93f\udfff",
-           upperRoot =    "\u0041\u0042\u0049\u03a3\u0053\u0053\u03a3\u002f\u0046\u0046\u0049\ud93f\udfff",
-           upperTurkish = "\u0041\u0042\u0130\u03a3\u0053\u0053\u03a3\u002f\u0046\u0046\u0049\ud93f\udfff";
+  	/**
+  	* Testing the strings case mapping methods
+  	*/
+  	public void TestCaseUpper() 
+  	{	
+    	String beforeUpper =  "\u0061\u0042\u0069\u03c2\u00df\u03c3\u002f\ufb03\ud93f\udfff",
+           	   upperRoot =    "\u0041\u0042\u0049\u03a3\u0053\u0053\u03a3\u002f\u0046\u0046\u0049\ud93f\udfff",
+               upperTurkish = "\u0041\u0042\u0130\u03a3\u0053\u0053\u03a3\u002f\u0046\u0046\u0049\ud93f\udfff";
 
-    String result = UCharacter.toLowerCase(beforeLower);
-    if (!lowerRoot.equals(result)) 
-      errln("Fail " + beforeLower + " after lowercase should be " + lowerRoot);
-   
-    // lowercase with turkish locale
-    result = UCharacter.toLowerCase(new Locale("tr", "TR"), beforeLower);
-    if (!lowerTurkish.equals(result)) 
-      errln("Fail " + beforeLower + " after turkish-sensitive lowercase " +
-            "should be " + lowerRoot);
-            
-    // uppercase with root locale and in the same buffer
-    result = UCharacter.toUpperCase(beforeUpper);
-    if (!upperRoot.equals(result)) 
-      errln("Fail " + beforeUpper + " after uppercase should be " + upperRoot);
+    	// uppercase with root locale and in the same buffer
+    	String result = UCharacter.toUpperCase(beforeUpper);
+    	if (result == null || !upperRoot.equals(result)) {
+      		errln("Fail " + beforeUpper + " after uppercase should be " + 
+      		      upperRoot);
+    	}
       
-    // uppercase with turkish locale and separate buffers
-    result = UCharacter.toUpperCase(new Locale("tr", "TR"), beforeUpper);
-    if (!upperTurkish.equals(result)) 
-      errln("Fail " + beforeUpper + " after turkish-sensitive uppercase " +
-            "should be " + upperTurkish);
-            
-    // test preflighting
-    result = UCharacter.toLowerCase(beforeLower);
-    if (!lowerRoot.equals(result)) 
-      errln("Fail " + beforeLower + " after lower case should be " + 
-            lowerRoot);
-            
-    // testing titlecase, since toTitleCase is a simple API that makes use of  
-    // the transliterator, which has its own test, the test here will be 
-    // simple
-    /*
-    String beforeTitle = "the chinese name for a very happy cat is \u5f00\u5fc3\u732b";
-    String afterTitle = "The Chinese Name For A Very Happy Cat Is \u5f00\u5fc3\u732b";
-    if (!afterTitle.equals(UCharacter.toTitleCase(beforeTitle))) {
-        errln("Fail " + beforeTitle + " after titlecase " + "should be " + 
-              afterTitle);
-    }
-    */
-  }
+    	// uppercase with turkish locale and separate buffers
+    	result = UCharacter.toUpperCase(new Locale("tr", "TR"), beforeUpper);
+    	if (result == null || !upperTurkish.equals(result)) {
+      		errln("Fail " + beforeUpper + " after turkish-sensitive uppercase " 
+      		      + "should be " + upperTurkish);
+  		}
+  	}
+  
+ 	public void TestCaseLower() 
+ 	{
+  	  	String beforeLower =  "\u0061\u0042\u0049\u03a3\u00df\u03a3\u002f\ud93f\udfff",
+               lowerRoot =    "\u0061\u0062\u0069\u03c3\u00df\u03c2\u002f\ud93f\udfff",
+               lowerTurkish = "\u0061\u0062\u0131\u03c3\u00df\u03c2\u002f\ud93f\udfff";
+
+        String result = UCharacter.toLowerCase(beforeLower);
+   		if (result == null || !lowerRoot.equals(result)) {
+      		errln("Fail " + beforeLower + " after lowercase should be " + 
+      		      lowerRoot);
+   		}
+   
+    	// lowercase with turkish locale
+    	result = UCharacter.toLowerCase(new Locale("tr", "TR"), beforeLower);
+    	if (result == null || !lowerTurkish.equals(result)) {
+     		errln("Fail " + beforeLower + 
+     		      " after turkish-sensitive lowercase " +
+                  "should be " + lowerRoot);
+    	}
+  	}
+  	
+  	public void TestCaseTitle() {
+    	String beforeTitle = "\u0061\u0042\u0020\u0069\u03c2\u0020\u00df\u03c3\u002f\ufb03\ud93f\udfff";
+    	String titleWord   = "\u0041\u0062\u0020\u0049\u03c2\u0020\u0053\u0073\u03c3\u002f\u0046\u0066\u0069\ud93f\udfff";
+    	String titleChar   = "\u0041\u0042\u0020\u0049\u03a3\u0020\u0053\u0073\u03a3\u002f\u0046\u0066\u0069\ud93f\udfff";
+
+    	BreakIterator titleIterChars = BreakIterator.getCharacterInstance();
+	    if (titleIterChars == null) {
+ 	        errln("error: character break iterator not opened");
+   		}
+
+    	String result = UCharacter.toTitleCase(beforeTitle, null);
+    	if (result == null || result.length() == 0 ||
+    	    !result.equals(titleWord)) {
+        	errln("error in toTitleCase(standard iterator) unable to return title case of string or title case of string does not match word breaker");
+        }
+
+	    // titlecase with UBRK_CHARACTERS and separate buffers
+    	result = UCharacter.toTitleCase(beforeTitle, titleIterChars);
+    	if (result == null || !result.equals(titleChar)) {
+        	errln("error in toTitleCase(character iterator) expected result " +
+        	      titleChar);
+        }
+
+		BreakIterator titleIterWord = BreakIterator.getWordInstance();
+	    if (titleIterWord == null) {
+ 	        errln("error: word break iterator not opened");
+   		}
+    	result = UCharacter.toTitleCase(beforeTitle, titleIterWord);
+	    if (result == null || !result.equals(titleWord)) {
+        	errln("error in toTitleCase(word iterator) expected result " +
+        	      titleWord);
+        }
+	}
   
   /**
   * Tests for case mapping in the file SpecialCasing.txt
@@ -1044,7 +1075,7 @@ public final class UCharacterTest extends TestFmwk
     try
     {
       UCharacterTest test = new UCharacterTest();
-      test.TestCaseMapping();
+      test.TestCaseTitle();
       //test.run(arg);
     }
     catch (Exception e)
