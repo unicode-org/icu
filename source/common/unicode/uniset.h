@@ -535,6 +535,17 @@ public:
                              int32_t start, int32_t limit,
                              const UnicodeString& s);
     
+    /**
+     * Returns the smallest value i such that c < list[i].  Caller
+     * must ensure that c is a legal value or this method will enter
+     * an infinite loop.  This method performs a binary search.
+     * @param c a character in the range MIN_VALUE..MAX_VALUE
+     * inclusive
+     * @return the smallest integer i in the range 0..len-1,
+     * inclusive, such that c < list[i]
+     */
+    int32_t UnicodeSet::findCodePoint(UChar32 c) const;
+
  public:
 
     /**
