@@ -426,7 +426,7 @@ static void ucnv_io_loadAvailableConverterList(void) {
 
     umtx_lock(NULL);
     if (availableConverters == NULL) {
-        availableConverters = localConverterList;
+        availableConverters = (const char **)localConverterList;
         availableConverterCount = localConverterCount;
     }
     else {
