@@ -127,6 +127,12 @@ class TransliteratorTest : public IntlTest {
      */
     void TestCopyJ476(void);
 
+    /**
+     * Test inter-Indic transliterators.  These are composed.
+     * ICU4C Jitterbug 483.
+     */
+    void TestInterIndic(void);
+
     //======================================================================
     // Support methods
     //======================================================================
