@@ -1278,7 +1278,7 @@ Locale::createKeywords(UErrorCode &status) const
     const char* variantStart = uprv_strchr(fullName, '@');
     const char* assignment = uprv_strchr(fullName, '=');
     if(variantStart) {
-        if(assignment) {
+        if(assignment > variantStart) {
             int32_t keyLen = locale_getKeywords(variantStart+1, '@', keywords, keywordCapacity, NULL, 0, NULL, FALSE, &status);
             if(keyLen) {
                 result = new KeywordEnumeration(keywords, keyLen, 0, status);
