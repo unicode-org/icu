@@ -4,7 +4,7 @@ dnl Copyright (c) 1999-2000, International Business Machines Corporation and
 dnl others. All Rights Reserved.
 dnl Stephen F. Booth, heavily modified by Yves and others
 
-dnl $Id: configure.in,v 1.122 2001/10/09 17:52:43 hshih Exp $
+dnl $Id: configure.in,v 1.123 2001/10/12 22:33:02 grhoten-oss Exp $
 
 dnl Process this file with autoconf to produce a configure script
 AC_INIT(common/unicode/utypes.h)
@@ -519,7 +519,9 @@ AC_CHECK_TYPE(int16_t,signed short)
 AC_CHECK_TYPE(uint16_t,unsigned short)
 AC_CHECK_TYPE(int32_t,signed long)
 AC_CHECK_TYPE(uint32_t,unsigned long)
-AC_CHECK_TYPE(bool_t,signed char)
+dnl Not sure if this is a good idea to have in ICU
+AC_CHECK_TYPE(int64_t,signed long)
+AC_CHECK_TYPE(uint64_t,unsigned long)
 
 if test $ac_cv_type_int8_t = no; then
 HAVE_INT8_T=0
@@ -563,12 +565,19 @@ HAVE_UINT32_T=1
 fi
 AC_SUBST(HAVE_UINT32_T)
 
-if test $ac_cv_type_bool_t = no; then
-HAVE_BOOL_T=0
+if test $ac_cv_type_int64_t = no; then
+HAVE_INT64_T=0
 else
-HAVE_BOOL_T=1
+HAVE_INT64_T=1
 fi
-AC_SUBST(HAVE_BOOL_T)
+AC_SUBST(HAVE_INT64_T)
+
+if test $ac_cv_type_uint64_t = no; then
+HAVE_UINT64_T=0
+else
+HAVE_UINT64_T=1
+fi
+AC_SUBST(HAVE_UINT64_T)
 
 dnl Echo
 ECHO_N=$ac_n
@@ -751,7 +760,7 @@ case "${host}" in
 		for file in samples/date/date \
 		  samples/cal/cal test/cintltst/cintltst \
 		  tools/makeconv/makeconv tools/genrb/genrb \
-		  tools/rbdump/read tools/genccode/genccode \
+		  tools/genccode/genccode \
 		  tools/gencmn/gencmn tools/gencmn/decmn \
 		  tools/gencnval/gencnval tools/gennorm/gennorm \
 		  tools/gennames/gennames tools/gentest/gentest \
