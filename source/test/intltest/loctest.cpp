@@ -391,8 +391,9 @@ void LocaleTest::TestSimpleObjectStuff() {
     Locale  test3(test1);
     Locale  test4("zz", "ZZ");
     Locale  test5("aa", "AA", ""); 
-    Locale  test6("aa", "AA", "Antares"); 
-    Locale  test7("aa", "AA", "Jupiter");
+    Locale  test6("aa", "AA", "ANTARES"); 
+    Locale  test7("aa", "AA", "JUPITER");
+    Locale  test8 = Locale::createFromName("aa-aa.utf8@jupiter");
 
     // now list them all for debugging usage.
     test_dumpLocale(test1);
@@ -401,7 +402,8 @@ void LocaleTest::TestSimpleObjectStuff() {
     test_dumpLocale(test4);
     test_dumpLocale(test5);
     test_dumpLocale(test6);
-    test_dumpLocale(test7)
+    test_dumpLocale(test7);
+    test_dumpLocale(test8);
 
     // Make sure things compare to themselves!
     test_assert(test1 == test1);
@@ -411,6 +413,7 @@ void LocaleTest::TestSimpleObjectStuff() {
     test_assert(test5 == test5);
     test_assert(test6 == test6);
     test_assert(test7 == test7);
+    test_assert(test8 == test8);
 
     // make sure things are not equal to themselves.
     test_assert(!(test1 != test1));
@@ -420,6 +423,7 @@ void LocaleTest::TestSimpleObjectStuff() {
     test_assert(!(test5 != test5));
     test_assert(!(test6 != test6));
     test_assert(!(test7 != test7));
+    test_assert(!(test8 != test8));
 
     // make sure things that are equal to each other don't show up as unequal.
     test_assert(!(test1 != test2));
@@ -436,6 +440,8 @@ void LocaleTest::TestSimpleObjectStuff() {
     test_assert(!(test1 == test4));
     test_assert(!(test2 == test4));
     test_assert(!(test3 == test4));
+
+    test_assert(test7 == test8);
 
     // test for hash codes to be the same.
     int32_t hash1 = test1.hashCode();

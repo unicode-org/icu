@@ -124,6 +124,7 @@ enum {
 void addLocaleTest(TestNode** root)
 {
     addTest(root, &TestBasicGetters,         "tsutil/cloctst/TestBasicGetters");
+    addTest(root, &TestPrefixes,             "tsutil/cloctst/TestPrefixes");
     addTest(root, &TestSimpleResourceInfo,   "tsutil/cloctst/TestSimpleResourceInfo");
     addTest(root, &TestDisplayNames,         "tsutil/cloctst/TestDisplayNames");
     addTest(root, &TestGetAvailableLocales,  "tsutil/cloctst/TestGetAvailableLocales");
@@ -195,6 +196,8 @@ static void TestBasicGetters() {
             status=U_ZERO_ERROR;
             name=(char*)malloc(sizeof(char) * (cap+1));
             uloc_getName(testLocale, name, cap, &status);
+        } else if(status==U_ZERO_ERROR) {
+          log_err("ERROR: in uloc_getName(%s,NULL,0,..), expected U_BUFFER_OVERFLOW_ERROR!\n", testLocale);
         }
         if(U_FAILURE(status)){
             log_err("ERROR: in uloc_getName   %s\n", myErrorName(status));
@@ -210,6 +213,112 @@ static void TestBasicGetters() {
         free(testLocale);
     }
 }
+
+/* Test the i- and x- and @ and . functionality 
+*/
+
+#define PREFIXBUFSIZ 128
+
+static void TestPrefixes() {
+  int row = 0;
+  int n;
+  const char *loc;
+  
+  const char *testData[][5] = 
+  {
+    {"sv", "FI", "AL", "sv-fi-al", "sv_FI_AL" },
+    {"en", "GB", "", "en-gb", "en_GB" },
+    {"i-hakka", "MT", "XEMXIJA", "i-hakka_MT_XEMXIJA", "i-hakka_MT_XEMXIJA"},
+    {"i-hakka", "CN", "", "i-hakka_CN", "i-hakka_CN"},
+    {"i-hakka", "MX", "", "I-hakka_MX", "i-hakka_MX"},
+    {"x-klingon", "US", "SANJOSE", "X-KLINGON_us_SANJOSE", "x-klingon_US_SANJOSE"},
+
+    {"mr", "", "", "mr.utf8", "mr"},
+    {"de", "TV", "", "de-tv.koi8r", "de_TV"},
+    {"x-piglatin", "ML", "", "x-piglatin_ML.MBE", "x-piglatin_ML"},  /* Multibyte English */
+    {"i-cherokee","US", "", "i-Cherokee_US.utf7", "i-cherokee_US"},
+    {"x-filfli", "MT", "FILFLA", "x-filfli_MT_FILFLA.gb-18030", "x-filfli_MT_FILFLA"},
+    {"no", "NO", "NY", "no-no-ny.utf32@B", "no_NO_NY"}, /* @ ignored unless variant is empty */
+    {"no", "NO", "B",  "no-no.utf32@B", "no_NO_B" },
+    {"no", "",   "NY", "no__ny", "no__NY" },
+    {"no", "",   "NY", "no@ny", "no__NY" },
+
+    { "","","","",""}
+  };
+
+  const char *testTitles[] = { "uloc_getLanguage()", "uloc_getCountry()", "uloc_getVariant()", "name", "uloc_getName()", "country3", "lcid" };
+
+  char buf[PREFIXBUFSIZ];
+  int len;
+  UErrorCode err;
+
+
+  for(row=0;testData[row][0][0] != 0;row++) {
+    loc = testData[row][NAME];
+    log_verbose("Test #%d: %s\n", row, loc);
+    
+    err = U_ZERO_ERROR;
+    len=0;
+    buf[0]=0;
+    for(n=0;n<=(NAME+1);n++) {
+      if(n==NAME) continue;
+
+      for(len=0;len<PREFIXBUFSIZ;len++) {
+        buf[len] = '%'; /* Set a tripwire.. */
+      }
+      len = 0;
+
+      switch(n) {
+      case LANG:
+        len = uloc_getLanguage(loc, buf, 526, &err);
+        break;
+
+      case CTRY:
+        len = uloc_getCountry(loc, buf, 526, &err);
+        break;
+
+      case VAR:
+        len = uloc_getVariant(loc, buf, 526, &err);
+        break;
+
+      case NAME+1:
+        len = uloc_getName(loc, buf, 526, &err);
+        break;
+        
+      default:
+        strcpy(buf, "**??");
+        len=4;
+      }
+      
+      if(U_FAILURE(err)) {
+        log_err("#%d: %s on %s: err %s\n",
+                row, testTitles[n], loc, u_errorName(err));
+      } else {
+        log_verbose("#%d: %s on %s: -> [%s] (length %d)\n",
+                row, testTitles[n], loc, buf, len);
+
+        if(len != strlen(buf)+1) {
+          log_err("#%d: %s on %s: -> [%s] (length returned %d, actual %d!)\n",
+                row, testTitles[n], loc, buf, len, strlen(buf)+1);
+
+        }
+        
+        /* see if they smashed somehting */
+        if(buf[len+1] != '%') {
+          log_err("#%d: %s on %s: -> [%s] - wrote [%X] out ofbounds!\n",
+                row, testTitles[n], loc, buf, buf[len+1]);
+        }
+
+        if(strcmp(buf, testData[row][n])) {
+          log_err("#%d: %s on %s: -> [%s] (expected '%s'!)\n",
+                row, testTitles[n], loc, buf, testData[row][n]);
+
+        }
+      }
+    }
+  }
+}
+
 
 /* testing uloc_getISO3Language(), uloc_getISO3Country(),  */
 static void TestSimpleResourceInfo() {
