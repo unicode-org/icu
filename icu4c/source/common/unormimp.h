@@ -21,6 +21,10 @@
 
 #if !UCONFIG_NO_NORMALIZATION
 
+#ifdef XP_CPLUSPLUS
+#include "unicode/uniset.h"
+#endif
+
 #include "unicode/uiter.h"
 #include "unicode/unorm.h"
 #include "unicode/uset.h"
@@ -30,7 +34,7 @@
 
 /*
  * This new implementation of the normalization code loads its data from
- * unorm.dat, which is generated with the gennorm tool.
+ * unorm.icu, which is generated with the gennorm tool.
  * The format of that file is described at the end of this file.
  */
 
@@ -221,6 +225,22 @@ unorm_internalNormalize(UChar *dest, int32_t destCapacity,
                         UNormalizationMode mode, int32_t options,
                         UErrorCode *pErrorCode);
 
+#ifdef XP_CPLUSPLUS
+
+/**
+ * Internal API for normalizing.
+ * Does not check for bad input.
+ * Requires _haveData() to be true.
+ * @internal
+ */
+U_CFUNC int32_t
+unorm_internalNormalizeWithNX(UChar *dest, int32_t destCapacity,
+                              const UChar *src, int32_t srcLength,
+                              UNormalizationMode mode, int32_t options, const UnicodeSet *nx,
+                              UErrorCode *pErrorCode);
+
+#endif
+
 /**
  * internal API, used by normlzr.cpp
  * @internal
@@ -240,6 +260,22 @@ unorm_compose(UChar *dest, int32_t destCapacity,
               const UChar *src, int32_t srcLength,
               UBool compat, int32_t options,
               UErrorCode *pErrorCode);
+
+#ifdef XP_CPLUSPLUS
+
+/**
+ * internal API, used by unormcmp.cpp
+ * @internal
+ */
+U_CFUNC UNormalizationCheckResult
+unorm_internalQuickCheck(const UChar *src,
+                         int32_t srcLength,
+                         UNormalizationMode mode,
+                         UBool allowMaybe,
+                         const UnicodeSet *nx,
+                         UErrorCode *pErrorCode);
+
+#endif
 
 #endif /* #if !UCONFIG_NO_NORMALIZATION */
 
@@ -349,7 +385,21 @@ U_CAPI void U_EXPORT2
 unorm_getUnicodeVersion(UVersionInfo *versionInfo, UErrorCode *pErrorCode);
 
 /**
+ * Get the canonical decomposition for one code point.
+ * Requires unorm_haveData() and buffer!=NULL and pLength!=NULL.
+ * @param c code point
+ * @param buffer out-only buffer for algorithmic decompositions of Hangul
+ * @param length out-only, takes the length of the decomposition, if any
+ * @return pointer to decomposition, or 0 if none
+ * @internal
+ */
+U_CFUNC const UChar *
+unorm_getCanonicalDecomposition(UChar32 c, UChar buffer[4], int32_t *pLength);
+
+/**
  * internal API, used by the canonical iterator
+ * TODO Consider using signature similar to unorm_getCanonicalDecomposition()
+ * for more efficiency
  * @internal
  */
 U_CAPI int32_t U_EXPORT2
@@ -383,6 +433,18 @@ unorm_getCanonStartSet(UChar32 c, USerializedSet *fillSet);
  */
 U_CAPI UBool U_EXPORT2
 unorm_isNFSkippable(UChar32 c, UNormalizationMode mode);
+
+#ifdef XP_CPLUSPLUS
+
+/**
+ * Get normalization exclusion set for the options.
+ * Requires unorm_haveData().
+ * @internal
+ */
+U_CFUNC const UnicodeSet *
+unorm_getNX(int32_t options, UErrorCode *pErrorCode);
+
+#endif
 
 /**
  * Enumerate each normalization data trie and add the

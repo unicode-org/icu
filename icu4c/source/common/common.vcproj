@@ -1331,6 +1331,9 @@
 				RelativePath=".\unorm_it.h">
 			</File>
 			<File
+				RelativePath=".\unormcmp.cpp">
+			</File>
+			<File
 				RelativePath=".\unormimp.h">
 			</File>
 		</Filter>
