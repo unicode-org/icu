@@ -994,6 +994,7 @@ static void TestNewConvertWithBufferSizes(int32_t outsize, int32_t insize )
         static const uint8_t utf32[]={
             0x00, 0x00, 0x00, 0x61,
             0x00, 0x11, 0x00, 0x00,         /* 0x110000 out of range */
+            0x00, 0x10, 0xff, 0xff,         /* 0x10FFFF in range */
             0x00, 0x00, 0x00, 0x62,
             0xff, 0xff, 0xff, 0xff,         /* 0xffffffff out of range */
             0x7f, 0xff, 0xff, 0xff,         /* 0x7fffffff out of range */
@@ -1004,6 +1005,8 @@ static void TestNewConvertWithBufferSizes(int32_t outsize, int32_t insize )
         static const uint16_t utf32Expected[]={
             0x0061,
             0xfffd,         /* 0x110000 out of range */
+            0xDBFF,         /* 0x10FFFF in range */
+            0xDFFF,
             0x0062,
             0xfffd,         /* 0xffffffff out of range */
             0xfffd,         /* 0x7fffffff out of range */
@@ -1012,7 +1015,7 @@ static void TestNewConvertWithBufferSizes(int32_t outsize, int32_t insize )
         };
 
         static const int32_t utf32Offsets[]={
-            0, 4, 8, 12, 16, 20, 24
+            0, 4, 8, 8, 12, 16, 20, 24, 28
         };
         if(!testConvertToU(utf32, sizeof(utf32),
                 utf32Expected, sizeof(utf32Expected)/sizeof(utf32Expected[0]), "utf-32be", utf32Offsets ,FALSE))
@@ -1025,6 +1028,7 @@ static void TestNewConvertWithBufferSizes(int32_t outsize, int32_t insize )
         static const uint8_t utf32[]={
             0x61, 0x00, 0x00, 0x00,
             0x00, 0x00, 0x11, 0x00,         /* 0x110000 out of range */
+            0xff, 0xff, 0x10, 0x00,         /* 0x10FFFF in range */
             0x62, 0x00, 0x00, 0x00,
             0xff, 0xff, 0xff, 0xff,         /* 0xffffffff out of range */
             0xff, 0xff, 0xff, 0x7f,         /* 0x7fffffff out of range */
@@ -1035,6 +1039,8 @@ static void TestNewConvertWithBufferSizes(int32_t outsize, int32_t insize )
         static const uint16_t utf32Expected[]={
             0x0061,
             0xfffd,         /* 0x110000 out of range */
+            0xDBFF,         /* 0x10FFFF in range */
+            0xDFFF,
             0x0062,
             0xfffd,         /* 0xffffffff out of range */
             0xfffd,         /* 0x7fffffff out of range */
@@ -1043,7 +1049,7 @@ static void TestNewConvertWithBufferSizes(int32_t outsize, int32_t insize )
         };
 
         static const int32_t utf32Offsets[]={
-            0, 4, 8, 12, 16, 20, 24
+            0, 4, 8, 8, 12, 16, 20, 24, 28
         };
         if(!testConvertToU(utf32, sizeof(utf32),
                 utf32Expected, sizeof(utf32Expected)/sizeof(utf32Expected[0]), "utf-32le", utf32Offsets,FALSE ))
