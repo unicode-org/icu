@@ -13,6 +13,7 @@
 #if !UCONFIG_NO_REGULAR_EXPRESSIONS
 
 #include "unicode/regex.h"
+#include "unicode/uclean.h"
 #include "uassert.h"
 #include "uvector.h"
 #include "uvectr32.h"
@@ -28,6 +29,8 @@ U_NAMESPACE_BEGIN
 //
 //--------------------------------------------------------------------------
 RegexPattern::RegexPattern() {
+    UErrorCode status = U_ZERO_ERROR;
+    u_init(&status);
     // Init all of this instances data.
     init();
 

@@ -342,12 +342,17 @@ ucol_open(const char *loc,
 		  UErrorCode *status)
 {
   UCollator *result = NULL;
-  if (status && U_SUCCESS(*status)) {
-	  result = Collator::createUCollator(loc, status);
-	if (result) {
-	  return result;
-	}	
+  if (status==NULL || U_FAILURE(*status)) {
+      return result;
   }
+  u_init(status);
+  if (U_FAILURE(*status)) {
+      return result;
+  }
+  result = Collator::createUCollator(loc, status);
+  if (result) {
+	  return result;
+  }	
   return ucol_open_internal(loc, status);
 }
 
@@ -526,6 +531,11 @@ ucol_openRules( const UChar        *rules,
   
   if(status == NULL || U_FAILURE(*status)){
     return 0;
+  }
+
+  u_init(status);
+  if (U_FAILURE(*status)) {
+      return NULL;
   }
 
   if(rulesLength < -1 || (rules == NULL && rulesLength != 0)) {

@@ -91,6 +91,8 @@ U_CAPI void U_EXPORT2
 u_cleanup(void);
 
 
+
+
 /**
   * An opaque pointer type that represents an ICU mutex.
   * For user-implemented mutexes, the value will typically point to a
@@ -113,6 +115,8 @@ typedef void *UMTX;
   *                 identify the mutex by the UMTX value.
   *  @param status  Error status.  Report errors back to ICU by setting this variable
   *                 with an error code.
+  *  @draft ICU 2.8
+  *  @system
   */
 typedef void U_CALLCONV UMtxInitFn (const void *context, UMTX  *mutex, UErrorCode* status);
 

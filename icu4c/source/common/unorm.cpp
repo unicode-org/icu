@@ -4022,7 +4022,8 @@ unorm_cmpEquivFold(const UChar *s1, int32_t length1,
 
     // normalization/properties data loaded?
     if( ((options&_COMPARE_EQUIV)!=0 && !_haveData(*pErrorCode)) ||
-        ((options&U_COMPARE_IGNORE_CASE)!=0 && !uprv_haveProperties(pErrorCode))
+        ((options&U_COMPARE_IGNORE_CASE)!=0 && !uprv_haveProperties(pErrorCode)) ||
+        U_FAILURE(*pErrorCode)
     ) {
         return 0;
     }

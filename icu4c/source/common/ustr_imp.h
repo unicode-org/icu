@@ -57,10 +57,22 @@ uprv_strCompare(const UChar *s1, int32_t length1,
  * Are the Unicode properties loaded?
  * This must be used before internal functions are called that do
  * not perform this check.
+ * Generate a debug assertion failure if data is not loaded, to flag the fact
+ *   that u_init() wasn't called first, before trying to access character properties.
  * @internal
  */
 U_CFUNC UBool
 uprv_haveProperties(UErrorCode *pErrorCode);
+
+/**
+  * Load the Unicode property data.
+  * Intended primarily for use from u_init().
+  * Has no effect if property data is already loaded.
+  * NOT thread safe.
+  * @internal
+  */
+U_CFUNC int8_t
+uprv_loadPropsData(UErrorCode *errorCode);
 
 /**
  * Type of a function that may be passed to the internal case mapping functions
