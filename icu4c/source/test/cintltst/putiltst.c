@@ -267,7 +267,11 @@ void TestPUtilAPI(){
     expn1=uprv_nextDouble(uprv_getNaN(), TRUE);
     doAssert(expn1, uprv_getNaN(), "uprv_nextDouble(uprv_getNaN(), TRUE) failed.");
 #ifdef OS390
+#if IEEE_754
+    y1=4.9406564584125e-324;
+#else
     y1=4.9406564584125e-78;
+#endif
 #else
     y1=4.9406564584125e-324;
 #endif
