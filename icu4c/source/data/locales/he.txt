@@ -98,7 +98,7 @@ he {
     LocaleScript:array { 
         "Hebr"    // ISO 15924 Name 
     }
-
+    ExemplarCharacters{"[:Hebr:]"}
     //------------------------------------------------------------
     // Rule Based Number Format Support
     //------------------------------------------------------------

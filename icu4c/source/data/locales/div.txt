@@ -87,8 +87,8 @@ div {
     LocaleScript:array {
         "THAA"
     }
-
-    CollationElements {     
+    ExemplarCharacters { "[:Thaa:]" }
+    CollationElements {	    
         Version { "1.0" }
         Sequence { 
              "[normalization on]"

@@ -79,7 +79,8 @@ gu {
         "\ufffd",
     }
     LocaleScript:array { "Gujr" }
-    CollationElements {     
+    ExemplarCharacters { "[:Gujr:]" }
+    CollationElements {	    
         Version { "1.0" }
         Sequence { 
             "[normalization on]"

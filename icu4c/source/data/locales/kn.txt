@@ -89,6 +89,7 @@ kn {
 //        "\ufffd",
 //    }
     LocaleScript:array { "Knda" }
+    ExemplarCharacters { "[:Knda:]" }
     CollationElements {	    
         Version { "1.0" }
         Sequence { 

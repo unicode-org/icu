@@ -76,6 +76,7 @@ hy{
     LocaleScript{
         "Armn", // Script Name
     }
+    ExemplarCharacters{"[:Armn:]"}
     Countries{
         AM { "\u0540\u0561\u0575\u0561\u057D\u057F\u0561\u0576\u056B\u0020"
             "\u0540\u0561\u0576\u0580\u0561\u057A\u0565\u057F\u0578\u0582\u0569"

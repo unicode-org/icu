@@ -144,4 +144,5 @@ bg {
     LocaleScript{
         "Cyrl",     // Abbreviation 
     }
+    ExemplarCharacters { "[\u0430-\u044c \u044e\u044f\u0463\u046b]" }
 }

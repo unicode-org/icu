@@ -74,6 +74,8 @@ mn{
         "\u221e",
         "\ufffd",
     }
+
+    ExemplarCharacters { "[\u0430-\u0448 \u0456 \u0454 \u0457 \u0491]" }   
     LocaleScript:array{ "Cyrl" }
     CollationElements {     
         Version { "1.0" }

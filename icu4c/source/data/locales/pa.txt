@@ -86,6 +86,8 @@ pa {
         "#E0",
     }
     LocaleScript:array { "Guru" }
+
+    ExemplarCharacters { "[:Guru:]" }
     CollationElements {     
         Version { "1.0" }
         Sequence { 

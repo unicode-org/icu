@@ -113,4 +113,5 @@ cs {
 //    LocaleScript{ 
 //        "Latn",  // ISO 15924 Name 
 //    }
+    ExemplarCharacters { "[a-z \u00fd \u00e1 \u00e9 \u00ed \u00f3 \u00fa \u011b \u016f \u010d \u010f \u0148 \u0159 \u0161 \u0165 \u017e]" }
 }

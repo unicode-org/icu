@@ -66,5 +66,7 @@ ti{
         ER { "\u12A4\u122D\u1275\u122B" }
         ET { "\u12A2\u1275\u12EE\u1335\u12EB" }
     }
+    LocaleScript{ "Ethi", }
+    ExemplarCharacters{"[:Ethi:]"}
 }
 

@@ -139,4 +139,5 @@ mk {
     LocaleScript{   
         "Cyrl",     // ISO 15924 Name 
     }
+    ExemplarCharacters { "[\u0430-\u0438 \u043a-\u0448 \u0450 \u0453 \u0455 \u0458 \u0459 \u045a \u045c \u045d \u045f]" }
 }

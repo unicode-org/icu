@@ -117,4 +117,5 @@ pl {
 //    LocaleScript{ 
 //        "Latn",  // ISO 15924 Name 
 //    }
+    ExemplarCharacters { "[a-z \u00f3 \u0105 \u0119 \u0107 \u0144 \u015b \u017a \u0142 \u017c]" }
 }

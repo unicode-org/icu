@@ -74,7 +74,9 @@ tt{
         "\ufffd",
     }
     LocaleScript:array { "Cyrl" }
-    CollationElements {     
+
+    ExemplarCharacters { "[\u0430-\u044f \u0451 \u0456 \u0463 \u0473 \u0475]" }
+    CollationElements {	    
         Version { "1.0" }
         Sequence { 
             "[normalization on]"
