@@ -965,7 +965,7 @@ void UnicodeSetTest::TestCloseOver() {
 
         CASE_MAPPINGS,
         "[aq\\u00DF{Bc}{bC}{Fi}]",
-        "[aAqQ\\u00DF{Ss}{SS}{Bc}{BC}{bc}{FI}{Fi}{fi}]",
+        "[aAqQ\\u00DF{ss}{Ss}{SS}{Bc}{BC}{bC}{bc}{FI}{Fi}{fi}]",
 
         CASE_MAPPINGS,
         "[\\u01F1]", // 'DZ'
