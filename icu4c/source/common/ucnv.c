@@ -654,8 +654,9 @@ void ucnv_fromUnicode (UConverter * _this,
   /*
    * Make sure that the target buffer size does not exceed the number range for int32_t
    * because some functions use the size rather than comparing pointers.
+   * size_t is guaranteed to be unsigned.
    */
-  if(targetLimit - t < 0 && targetLimit > t) {
+  if((size_t)(targetLimit - t) > (size_t)0x7fffffff && targetLimit > t) {
     targetLimit = t + 0x7fffffff;
   }
 
@@ -743,8 +744,9 @@ void   ucnv_toUnicode (UConverter * _this,
   /*
    * Make sure that the target buffer size does not exceed the number range for int32_t
    * because some functions use the size rather than comparing pointers.
+   * size_t is guaranteed to be unsigned.
    */
-  if(targetLimit - t < 0 && targetLimit > t) {
+  if((size_t)(targetLimit - t) > (size_t)0x3fffffff && targetLimit > t) {
     targetLimit = t + 0x3fffffff;
   }
 
