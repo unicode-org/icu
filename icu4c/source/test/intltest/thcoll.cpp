@@ -72,6 +72,7 @@ void CollationThaiTest::runIndexedTest(int32_t index, UBool exec, const char* &n
         CASE(1,TestCornerCases)
         CASE(2,TestNamesList)
         CASE(3,TestInvalidThai)
+        CASE(4,TestReordering)
         default: name = ""; break;
     }
 }
@@ -332,18 +333,18 @@ void CollationThaiTest::TestCornerCases(void) {
 // Internal utilities
 //------------------------------------------------------------------------
 
-void CollationThaiTest::compareArray(const Collator& c, const char* tests[],
+void CollationThaiTest::compareArray(Collator& c, const char* tests[],
                                      int32_t testsLength) {
     UErrorCode status = U_ZERO_ERROR;
     for (int32_t i = 0; i < testsLength; i += 3) {
 
-        int32_t expect = 0;
+        Collator::EComparisonResult expect;
         if (tests[i+1][0] == '<') {
-            expect = -1;
+          expect = Collator::LESS;
         } else if (tests[i+1][0] == '>') {
-            expect = 1;
+          expect = Collator::GREATER;
         } else if (tests[i+1][0] == '=') {
-            expect = 0;
+          expect = Collator::EQUAL;
         } else {
             // expect = Integer.decode(tests[i+1]).intValue();
             errln((UnicodeString)"Error: unknown operator " + tests[i+1]);
@@ -354,6 +355,8 @@ void CollationThaiTest::compareArray(const Collator& c, const char* tests[],
         parseChars(s1, tests[i]);
         parseChars(s2, tests[i+2]);
 
+        doTest(&c, s1, s2, expect);
+#if 0
         int32_t result = c.compare(s1, s2);
         if (sign(result) != sign(expect))
         {
@@ -395,6 +398,7 @@ void CollationThaiTest::compareArray(const Collator& c, const char* tests[],
                 errln((UnicodeString)"  " + prettify(k1, t1) + " vs. " + prettify(k2, t2));
             }
         }
+#endif
     }
 }
 
@@ -480,5 +484,55 @@ void CollationThaiTest::TestInvalidThai(void) {
   ucol_close(thaiColl);
   delete c;
 }
+
+void CollationThaiTest::TestReordering(void) {
+  const char *tests[] = { 
+                          "\\u0E41c\\u0301",       "=", "\\u0E41\\u0107", // composition
+                          "\\u0E41\\uD834\\uDC00", "<", "\\u0E41\\uD834\\uDC01", // supplementaries
+                          "\\u0E41\\uD834\\uDD5F", "=", "\\u0E41\\uD834\\uDD58\\uD834\\uDD65", // supplementary composition decomps to supplementary
+                          "\\u0E41\\uD87E\\uDC02", "=", "\\u0E41\\u4E41", // supplementary composition decomps to BMP
+                          "\\u0E41\\u0301",        "=", "\\u0E41\\u0301", // unsafe (just checking backwards iteration)
+                          "\\u0E41\\u0301\\u0316", "=", "\\u0E41\\u0316\\u0301",
+
+                          "abc\\u0E41c\\u0301",       "=", "abc\\u0E41\\u0107", // composition
+                          "abc\\u0E41\\uD834\\uDC00", "<", "abc\\u0E41\\uD834\\uDC01", // supplementaries
+                          "abc\\u0E41\\uD834\\uDD5F", "=", "abc\\u0E41\\uD834\\uDD58\\uD834\\uDD65", // supplementary composition decomps to supplementary
+                          "abc\\u0E41\\uD87E\\uDC02", "=", "abc\\u0E41\\u4E41", // supplementary composition decomps to BMP
+                          "abc\\u0E41\\u0301",        "=", "abc\\u0E41\\u0301", // unsafe (just checking backwards iteration)
+                          "abc\\u0E41\\u0301\\u0316", "=", "abc\\u0E41\\u0316\\u0301",
+
+                          "\\u0E41c\\u0301abc",       "=", "\\u0E41\\u0107abc", // composition
+                          "\\u0E41\\uD834\\uDC00abc", "<", "\\u0E41\\uD834\\uDC01abc", // supplementaries
+                          "\\u0E41\\uD834\\uDD5Fabc", "=", "\\u0E41\\uD834\\uDD58\\uD834\\uDD65abc", // supplementary composition decomps to supplementary
+                          "\\u0E41\\uD87E\\uDC02abc", "=", "\\u0E41\\u4E41abc", // supplementary composition decomps to BMP
+                          "\\u0E41\\u0301abc",        "=", "\\u0E41\\u0301abc", // unsafe (just checking backwards iteration)
+                          "\\u0E41\\u0301\\u0316abc", "=", "\\u0E41\\u0316\\u0301abc",
+
+                          "abc\\u0E41c\\u0301abc",       "=", "abc\\u0E41\\u0107abc", // composition
+                          "abc\\u0E41\\uD834\\uDC00abc", "<", "abc\\u0E41\\uD834\\uDC01abc", // supplementaries
+                          "abc\\u0E41\\uD834\\uDD5Fabc", "=", "abc\\u0E41\\uD834\\uDD58\\uD834\\uDD65abc", // supplementary composition decomps to supplementary
+                          "abc\\u0E41\\uD87E\\uDC02abc", "=", "abc\\u0E41\\u4E41abc", // supplementary composition decomps to BMP
+                          "abc\\u0E41\\u0301abc",        "=", "abc\\u0E41\\u0301abc", // unsafe (just checking backwards iteration)
+                          "abc\\u0E41\\u0301\\u0316abc", "=", "abc\\u0E41\\u0316\\u0301abc",
+                        };
+
+  compareArray(*coll, tests, sizeof(tests)/sizeof(tests[0]));
+ 
+  const char *rule = "& c < ab";
+  const char *testcontraction[] = { "\\u0E41ab", "<", "\\u0E41c"};
+  UnicodeString rules;
+  UErrorCode status = U_ZERO_ERROR;
+  parseChars(rules, rule);
+  RuleBasedCollator *rcoll = new RuleBasedCollator(rules, status);
+  if(U_SUCCESS(status)) {
+    //compareArray(*rcoll, testcontraction, 3);
+    delete rcoll;
+  } else {
+    errln("Couldn't instantiate collator from rules");
+  }
+  //genericRulesStarter(rule, test10, 2);
+
+}
+
 
 #endif /* #if !UCONFIG_NO_COLLATION */
