@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/translit/TransliteratorTest.java,v $
- * $Date: 2001/11/05 20:25:23 $
- * $Revision: 1.63 $
+ * $Date: 2001/11/09 00:11:01 $
+ * $Revision: 1.64 $
  *
  *****************************************************************************************
  */
@@ -1933,6 +1933,28 @@ public class TransliteratorTest extends TestFmwk {
             Transliterator t = Transliterator.getInstance(DATA[i]);
             expect(t, DATA[i+1], DATA[i+2]);
         }
+    }
+
+    /**
+     * Make sure parse errors reference the right line.
+     */
+    public void TestParseError() {
+        String rule =
+            "a > b;\n" +
+            "# more stuff\n" +
+            "d << b;";
+        try {
+            Transliterator t = Transliterator.createFromRules("ID", rule, Transliterator.FORWARD);
+        } catch (IllegalArgumentException e) {
+            String err = e.getMessage();
+            if (err.indexOf("d << b") >= 0) {
+                logln("Ok: " + err);
+            } else {
+                errln("FAIL: " + err);
+            }
+            return;
+        }
+        errln("FAIL: no syntax error");
     }
 
     //======================================================================
