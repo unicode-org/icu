@@ -41,18 +41,6 @@ public:
     Transliterator* clone(void) const;
 
     /**
-     * Transliterates a segment of a string.  <code>Transliterator</code> API.
-     * @param text the string to be transliterated
-     * @param start the beginning index, inclusive; <code>0 <= start
-     * <= limit</code>.
-     * @param limit the ending index, exclusive; <code>start <= limit
-     * <= text.length()</code>.
-     * @return the new limit index
-     */
-    virtual int32_t transliterate(Replaceable &text,
-                                  int32_t start, int32_t limit) const;
-
-    /**
      * Implements {@link Transliterator#handleTransliterate}.
      */
     virtual void handleTransliterate(Replaceable& text, UTransPosition& offset,
