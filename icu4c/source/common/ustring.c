@@ -1174,3 +1174,28 @@ u_unescape(const char *src, UChar *dest, int32_t destCapacity) {
     }
     return 0;
 }
+
+/* C GrowBuffer implementation ---------------------------------------------- */
+
+U_CAPI UBool U_CALLCONV U_EXPORT2
+u_growBufferFromStatic(void *context,
+                       UChar **pBuffer, int32_t *pCapacity, int32_t reqCapacity,
+                       int32_t length) {
+    UChar *newBuffer=(UChar *)uprv_malloc(reqCapacity*U_SIZEOF_UCHAR);
+    if(newBuffer!=NULL) {
+        if(length>0) {
+            uprv_memcpy(newBuffer, *pBuffer, length*U_SIZEOF_UCHAR);
+        }
+        *pCapacity=reqCapacity;
+    } else {
+        *pCapacity=0;
+    }
+
+    /* release the old pBuffer if it was not statically allocated */
+    if(*pBuffer!=(UChar *)context) {
+        uprv_free(*pBuffer);
+    }
+
+    *pBuffer=newBuffer;
+    return (UBool)(newBuffer!=NULL);
+}

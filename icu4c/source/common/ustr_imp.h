@@ -28,19 +28,31 @@ uprv_haveProperties(void);
 
 /**
  * Type of a function that may be passed to the internal case mapping functions
- * for growing the destination buffer.
+ * or similar for growing the destination buffer.
  * @internal
  */
 typedef UBool U_CALLCONV
 GrowBuffer(void *context,       /* opaque pointer for this function */
-           UChar **buffer,      /* in/out destination buffer pointer */
+           UChar **pBuffer,     /* in/out destination buffer pointer */
            int32_t *pCapacity,  /* in/out buffer capacity in numbers of UChars */
            int32_t reqCapacity, /* requested capacity */
            int32_t length);     /* number of UChars to be copied to new buffer */
 
+/**
+ * Default implementation of GrowBuffer.
+ * Takes a static buffer as context, allocates a new buffer,
+ * and releases the old one if it is not the same as the one passed as context.
+ * @internal
+ */
+U_CAPI UBool U_CALLCONV U_EXPORT2
+u_growBufferFromStatic(void *context,
+                       UChar **pBuffer, int32_t *pCapacity, int32_t reqCapacity,
+                       int32_t length);
+
 /*
  * Internal string casing functions implementing ustring.c and UnicodeString
  * case mapping functions.
+ * @internal
  */
 U_CFUNC int32_t
 u_internalStrToLower(UChar *dest, int32_t destCapacity,
@@ -49,6 +61,9 @@ u_internalStrToLower(UChar *dest, int32_t destCapacity,
                      GrowBuffer *growBuffer, void *context,
                      UErrorCode *pErrorCode);
 
+/**
+ * @internal
+ */
 U_CFUNC int32_t
 u_internalStrToUpper(UChar *dest, int32_t destCapacity,
                      const UChar *src, int32_t srcLength,
