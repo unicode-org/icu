@@ -708,6 +708,8 @@ static void TestAPI() {
     ures_resetIterator(teRes);    
     /*Test ures_getNextResource() where resource is table*/
     status=U_ZERO_ERROR;
+#if (U_CHARSET_FAMILY == U_ASCII_FAMILY)
+    /* The next key varies depending on the charset. */
     teFillin=ures_getNextResource(teRes, teFillin, &status);
     if(U_FAILURE(status)){
         log_err("ERROR: ures_getNextResource() failed \n");
@@ -717,6 +719,7 @@ static void TestAPI() {
     if(strcmp(key, "CollationElements") != 0){
         log_err("ERROR: ures_getNextResource() failed\n");
     }
+#endif
 
     /*Test ures_getByIndex on string Resource*/
     teFillin=ures_getByKey(teRes, "string_only_in_te", teFillin, &status);
