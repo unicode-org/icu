@@ -281,6 +281,57 @@ u_fgetc(UFILE        *f)
   }
 }
 
+/* u_unescapeAt() callback to return a UChar from a UFILE */
+static UChar _charAt(int32_t offset, void *context) {
+    return ((UFILE*) context)->fUCPos[offset];
+}
+
+/* Read a UChar from a UFILE and process escape sequences */
+UChar32
+u_fgetcx(UFILE        *f) {
+    int32_t length;
+    int32_t offset;
+    UChar32 c32;
+    UChar c16;
+    
+    /* Fill the buffer if it is empty */
+    if (f->fUCPos >= f->fUCLimit) {
+        ufile_fill_uchar_buffer(f);        
+    }
+
+    /* Get the next character in the buffer */
+    if (f->fUCPos < f->fUCLimit) {
+        c16 = *(f->fUCPos)++;
+    } else {
+        c16 = U_EOF;
+    }
+
+    /* If it isn't a backslash, return it */
+    if (c16 != 0x005C /*'\\'*/) {
+        return c16;
+    }
+
+    /* Determine the amount of data in the buffer */
+    length = f->fUCLimit - f->fUCPos;
+
+    /* The longest escape sequence is \Uhhhhhhhh; make sure
+       we have at least that many characters */
+    if (length < 10) {
+        /* fill the buffer */
+        ufile_fill_uchar_buffer(f);
+        length = f->fUCLimit - f->fUCPos;
+    }
+    
+    /* Process the escape */
+    offset = 0;
+    c32 = u_unescapeAt(_charAt, &offset, length, (void*)f);
+
+    /* Update the current buffer position */
+    f->fUCPos += offset;
+
+    return c32;
+}
+
 UChar
 u_fungetc(UChar        c,
       UFILE        *f)
