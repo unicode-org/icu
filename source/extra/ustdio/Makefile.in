@@ -56,8 +56,8 @@ DEFS += -DU_USTDIO_IMPLEMENTATION
 LIBS = $(LIBICUUC) $(LIBICUI18N) $(DEFAULT_LIBS)
 
 OBJECTS = locbund.o ufile.o ufmt_cmn.o uprintf.o uprntf_p.o \
-uscanf.o uscanf_p.o uscanset.o ustdio.o sprintf.o \
-sscanf.o ustream.o
+uscanf.o uscanf_p.o ustdio.o sprintf.o sscanf.o \
+ustream.o
 
 STATIC_OBJECTS = $(OBJECTS:.o=.$(STATIC_O))
 
