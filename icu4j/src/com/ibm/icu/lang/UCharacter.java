@@ -4457,6 +4457,42 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
         }
         return 0; // undefined
     }
+    /**
+     * Returns a string version of the property value.
+     * @param propertyEnum
+     * @param codepoint
+     * @param nameChoice
+     * @return value as string
+     * @internal
+     * @deprecated
+     */
+    public static String getStringPropertyValue(int propertyEnum, int codepoint, int nameChoice) {
+        // TODO some of these are less efficient, since a string is forced!
+        if ((propertyEnum >= UProperty.BINARY_START && propertyEnum < UProperty.BINARY_LIMIT) ||
+                (propertyEnum >= UProperty.INT_START && propertyEnum < UProperty.INT_LIMIT)) {
+            return getPropertyValueName(propertyEnum, getIntPropertyValue(codepoint, propertyEnum), nameChoice);
+        }
+        if (propertyEnum == UProperty.NUMERIC_VALUE) {
+        	return String.valueOf(getUnicodeNumericValue(codepoint));
+        }
+        // otherwise must be string property
+        switch (propertyEnum) {
+        case UProperty.AGE: return getAge(codepoint).toString();
+        case UProperty.ISO_COMMENT: return getISOComment(codepoint);
+        case UProperty.BIDI_MIRRORING_GLYPH: return UTF16.valueOf(getMirror(codepoint));
+        case UProperty.CASE_FOLDING: return foldCase(UTF16.valueOf(codepoint), true);
+        case UProperty.LOWERCASE_MAPPING: return toLowerCase(UTF16.valueOf(codepoint));
+        case UProperty.NAME: return getName(codepoint);
+        case UProperty.SIMPLE_CASE_FOLDING: return UTF16.valueOf(foldCase(codepoint,true));
+        case UProperty.SIMPLE_LOWERCASE_MAPPING: return UTF16.valueOf(toLowerCase(codepoint));
+        case UProperty.SIMPLE_TITLECASE_MAPPING: return UTF16.valueOf(toTitleCase(codepoint));
+        case UProperty.SIMPLE_UPPERCASE_MAPPING: return UTF16.valueOf(toUpperCase(codepoint));
+        case UProperty.TITLECASE_MAPPING: return toTitleCase(UTF16.valueOf(codepoint),null);
+        case UProperty.UNICODE_1_NAME: return getName1_0(codepoint);
+        case UProperty.UPPERCASE_MAPPING: return toUpperCase(UTF16.valueOf(codepoint));        
+        }
+        throw new IllegalArgumentException("Illegal Property Enum");
+    }
     
     /**
      * Get the minimum value for an integer/binary Unicode property type.

@@ -3844,6 +3844,14 @@ public class DecimalFormat extends NumberFormat {
         // given currency.
 
         super.setCurrency(theCurrency);
+        if (theCurrency != null) {
+            boolean[] isChoiceFormat = new boolean[1];
+            String s = theCurrency.getName(symbols.getLocale(),
+                    Currency.SYMBOL_NAME,
+                    isChoiceFormat);
+        	symbols.setCurrencySymbol(s);
+        	symbols.setInternationalCurrencySymbol(theCurrency.getCurrencyCode());
+        }
 
         if (isCurrencyFormat) {
             if (theCurrency != null) {

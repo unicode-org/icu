@@ -1691,7 +1691,7 @@ public final class RuleBasedCollator extends Collator
                 }
             }
             catch (Exception e) {
-                e.printStackTrace();
+                // e.printStackTrace();
                 // if failed use UCA.
             }
         }
