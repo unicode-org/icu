@@ -1074,7 +1074,7 @@ static void testCEs(UCollator *coll, UErrorCode *status) {
   collIterate c;
   UCollator *UCA = ucol_open("root", status);
   UCAConstants *consts = (UCAConstants *)((uint8_t *)UCA->image + UCA->image->UCAConsts);
-  uint32_t UCOL_RESET_TOP_VALUE = consts->UCA_LAST_NON_VARIABLE[0], UCOL_RESET_TOP_CONT = consts->UCA_LAST_NON_VARIABLE[1], 
+  uint32_t UCOL_RESET_TOP_VALUE = consts->UCA_LAST_NON_VARIABLE[0], /*UCOL_RESET_TOP_CONT = consts->UCA_LAST_NON_VARIABLE[1], */
            UCOL_NEXT_TOP_VALUE = consts->UCA_FIRST_IMPLICIT[0], UCOL_NEXT_TOP_CONT = consts->UCA_FIRST_IMPLICIT[1];
   
   baseCE=baseContCE=nextCE=nextContCE=currCE=currContCE=lastCE=lastContCE = UCOL_NOT_FOUND;
@@ -1603,6 +1603,7 @@ static void TestComposeDecompose(void) {
     */
 
     ucol_close(coll);
+    coll = NULL;
 
     log_verbose("Testing locales, number of cases = %i\n", noCases);
     iter = ucol_openElements(coll, t[u]->NFD, u_strlen(t[u]->NFD), &status);
