@@ -14,8 +14,8 @@
 *                           testing.
 *   07/29/97    aliu        Ported source bodies back from Java version with
 *                           numerous feature enhancements and bug fixes.
-*    08/10/98    stephen        JDK 1.2 sync.
-*    09/17/98    stephen        Fixed getOffset() for last hour of year and DST
+*   08/10/98    stephen     JDK 1.2 sync.
+*   09/17/98    stephen     Fixed getOffset() for last hour of year and DST
 *   12/02/99    aliu        Added TimeMode and constructor and setStart/EndRule
 *                           methods that take TimeMode. Whitespace cleanup.
 ********************************************************************************
@@ -38,7 +38,7 @@ const int8_t SimpleTimeZone::staticMonthLength[] = {31,28,31,30,31,30,31,31,30,3
 // *****************************************************************************
 
 
-SimpleTimeZone::SimpleTimeZone(int32_t rawOffset, const UnicodeString& ID)
+SimpleTimeZone::SimpleTimeZone(int32_t rawOffsetGMT, const UnicodeString& ID)
 :   startMonth(0),
     startDay(0),
     startDayOfWeek(0),
@@ -50,7 +50,7 @@ SimpleTimeZone::SimpleTimeZone(int32_t rawOffset, const UnicodeString& ID)
     endDayOfWeek(0),
     endTime(0),
     startYear(0),
-    rawOffset(rawOffset),
+    rawOffset(rawOffsetGMT),
     useDaylight(FALSE),
     startMode(DOM_MODE),
     endMode(DOM_MODE),
@@ -61,50 +61,52 @@ SimpleTimeZone::SimpleTimeZone(int32_t rawOffset, const UnicodeString& ID)
 
 // -------------------------------------
 
-SimpleTimeZone::SimpleTimeZone(int32_t rawOffset, const UnicodeString& ID,
-    int8_t startMonth, int8_t startDay,
-    int8_t startDayOfWeek, int32_t startTime,
-    int8_t endMonth, int8_t endDay,
-    int8_t endDayOfWeek, int32_t endTime,
+SimpleTimeZone::SimpleTimeZone(int32_t rawOffsetGMT, const UnicodeString& ID,
+    int8_t savingsStartMonth, int8_t savingsStartDay,
+    int8_t savingsStartDayOfWeek, int32_t savingsStartTime,
+    int8_t savingsEndMonth, int8_t savingsEndDay,
+    int8_t savingsEndDayOfWeek, int32_t savingsEndTime,
     UErrorCode& status) {
-    construct(rawOffset, ID,
-              startMonth, startDay, startDayOfWeek,
-              startTime, WALL_TIME,
-              endMonth, endDay, endDayOfWeek,
-              endTime, WALL_TIME,
+    construct(rawOffsetGMT, ID,
+              savingsStartMonth, savingsStartDay, savingsStartDayOfWeek,
+              savingsStartTime, WALL_TIME,
+              savingsEndMonth, savingsEndDay, savingsEndDayOfWeek,
+              savingsEndTime, WALL_TIME,
               U_MILLIS_PER_HOUR, status);
 }
 
 // -------------------------------------
 
-SimpleTimeZone::SimpleTimeZone(int32_t rawOffset, const UnicodeString& ID,
-    int8_t startMonth, int8_t startDay,
-    int8_t startDayOfWeek, int32_t startTime,
-    int8_t endMonth, int8_t endDay,
-    int8_t endDayOfWeek, int32_t endTime,
-    int32_t dstSavings, UErrorCode& status) {
-    construct(rawOffset, ID,
-              startMonth, startDay, startDayOfWeek,
-              startTime, WALL_TIME,
-              endMonth, endDay, endDayOfWeek,
-              endTime, WALL_TIME,
-              dstSavings, status);
+SimpleTimeZone::SimpleTimeZone(int32_t rawOffsetGMT, const UnicodeString& ID,
+    int8_t savingsStartMonth, int8_t savingsStartDay,
+    int8_t savingsStartDayOfWeek, int32_t savingsStartTime,
+    int8_t savingsEndMonth, int8_t savingsEndDay,
+    int8_t savingsEndDayOfWeek, int32_t savingsEndTime,
+    int32_t savingsDST, UErrorCode& status) {
+    construct(rawOffsetGMT, ID,
+              savingsStartMonth, savingsStartDay, savingsStartDayOfWeek,
+              savingsStartTime, WALL_TIME,
+              savingsEndMonth, savingsEndDay, savingsEndDayOfWeek,
+              savingsEndTime, WALL_TIME,
+              savingsDST, status);
 }
 
 // -------------------------------------
 
-SimpleTimeZone::SimpleTimeZone(int32_t rawOffset, const UnicodeString& ID,
-    int8_t startMonth, int8_t startDay,
-    int8_t startDayOfWeek, int32_t startTime, TimeMode startTimeMode,
-    int8_t endMonth, int8_t endDay,
-    int8_t endDayOfWeek, int32_t endTime, TimeMode endTimeMode,
-    int32_t dstSavings, UErrorCode& status) {
-    construct(rawOffset, ID,
-              startMonth, startDay, startDayOfWeek,
-              startTime, startTimeMode,
-              endMonth, endDay, endDayOfWeek,
-              endTime, endTimeMode,
-              dstSavings, status);
+SimpleTimeZone::SimpleTimeZone(int32_t rawOffsetGMT, const UnicodeString& ID,
+    int8_t savingsStartMonth, int8_t savingsStartDay,
+    int8_t savingsStartDayOfWeek, int32_t savingsStartTime,
+    TimeMode savingsStartTimeMode,
+    int8_t savingsEndMonth, int8_t savingsEndDay,
+    int8_t savingsEndDayOfWeek, int32_t savingsEndTime,
+    TimeMode savingsEndTimeMode,
+    int32_t savingsDST, UErrorCode& status) {
+    construct(rawOffsetGMT, ID,
+              savingsStartMonth, savingsStartDay, savingsStartDayOfWeek,
+              savingsStartTime, savingsStartTimeMode,
+              savingsEndMonth, savingsEndDay, savingsEndDayOfWeek,
+              savingsEndTime, savingsEndTimeMode,
+              savingsDST, status);
 }
 
 /**
@@ -140,24 +142,31 @@ SimpleTimeZone::SimpleTimeZone(const DSTZone& dstZone,
 /**
  * Internal construction method.
  */
-void SimpleTimeZone::construct(int32_t rawOffset, const UnicodeString& ID,
-                               int8_t startMonth, int8_t startDay, int8_t startDayOfWeek,
-                               int32_t startTime, TimeMode startTimeMode,
-                               int8_t endMonth, int8_t endDay, int8_t endDayOfWeek,
-                               int32_t endTime, TimeMode endTimeMode,
-                               int32_t dstSavings, UErrorCode& status) {
-    this->rawOffset      = rawOffset;
-    this->startMonth     = startMonth;
-    this->startDay       = startDay;
-    this->startDayOfWeek = startDayOfWeek;
-    this->startTime      = startTime;
-    this->startTimeMode  = startTimeMode;
-    this->endMonth       = endMonth;
-    this->endDay         = endDay;
-    this->endDayOfWeek   = endDayOfWeek;
-    this->endTime        = endTime;
-    this->endTimeMode    = endTimeMode;
-    this->dstSavings     = dstSavings;
+void SimpleTimeZone::construct(int32_t rawOffsetGMT, const UnicodeString& ID,
+                               int8_t savingsStartMonth,
+                               int8_t savingsStartDay,
+                               int8_t savingsStartDayOfWeek,
+                               int32_t savingsStartTime,
+                               TimeMode savingsStartTimeMode,
+                               int8_t savingsEndMonth,
+                               int8_t savingsEndDay,
+                               int8_t savingsEndDayOfWeek,
+                               int32_t savingsEndTime,
+                               TimeMode savingsEndTimeMode,
+                               int32_t savingsDST,
+                               UErrorCode& status) {
+    this->rawOffset      = rawOffsetGMT;
+    this->startMonth     = savingsStartMonth;
+    this->startDay       = savingsStartDay;
+    this->startDayOfWeek = savingsStartDayOfWeek;
+    this->startTime      = savingsStartTime;
+    this->startTimeMode  = savingsStartTimeMode;
+    this->endMonth       = savingsEndMonth;
+    this->endDay         = savingsEndDay;
+    this->endDayOfWeek   = savingsEndDayOfWeek;
+    this->endTime        = savingsEndTime;
+    this->endTimeMode    = savingsEndTimeMode;
+    this->dstSavings     = savingsDST;
 
     setID(ID);
     this->startYear      = 0;
@@ -166,7 +175,7 @@ void SimpleTimeZone::construct(int32_t rawOffset, const UnicodeString& ID,
 
     decodeRules(status);
 
-    if (dstSavings <= 0) {
+    if (savingsDST <= 0) {
         status = U_ILLEGAL_ARGUMENT_ERROR;
     }
 }

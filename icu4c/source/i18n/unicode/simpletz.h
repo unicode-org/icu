@@ -99,12 +99,12 @@ public:
      * TimeZone::createInstance() to create a TimeZone instead of creating a
      * SimpleTimeZone directly with this constructor.
      *
-     * @param rawOffset  The given base time zone offset to GMT.
+     * @param rawOffsetGMT  The given base time zone offset to GMT.
      * @param ID         The timezone ID which is obtained from
      *                   TimeZone.getAvailableIDs.
      * @stable
      */
-    SimpleTimeZone(int32_t rawOffset, const UnicodeString& ID);
+    SimpleTimeZone(int32_t rawOffsetGMT, const UnicodeString& ID);
 
     /**
      * Construct a SimpleTimeZone with the given raw GMT offset, time zone ID,
@@ -119,54 +119,55 @@ public:
      * complete explanation of how these parameters work, see the documentation for
      * setStartRule().
      *
-     * @param rawOffset       The new SimpleTimeZone's raw GMT offset
-     * @param ID              The new SimpleTimeZone's time zone ID.
-     * @param startMonth      The daylight savings starting month. Month is
-     *                        0-based. eg, 0 for January.
-     * @param startDay        The daylight savings starting
-     *                        day-of-week-in-month. See setStartRule() for a
-     *                        complete explanation.
-     * @param startDayOfWeek  The daylight savings starting day-of-week. See setStartRule()
-     *                        for a complete explanation.
-     * @param startTime       The daylight savings starting time, expressed as the
-     *                        number of milliseconds after midnight.
-     * @param startTimeMode   Whether the start time is local wall time, local
-     *                        standard time, or UTC time. Default is local wall time.
-     * @param endMonth        The daylight savings ending month. Month is
-     *                        0-based. eg, 0 for January.
-     * @param endDay          The daylight savings ending day-of-week-in-month.
-     *                        See setStartRule() for a complete explanation.
-     * @param endDayOfWeek    The daylight savings ending day-of-week. See setStartRule()
-     *                        for a complete explanation.
-     * @param endTime         The daylight savings ending time, expressed as the
-     *                        number of milliseconds after midnight.
-     * @param endTimeMode     Whether the end time is local wall time, local
-     *                        standard time, or UTC time. Default is local wall time.
-     * @param dstSavings      The number of milliseconds added to standard time
-     *                        to get DST time. Default is one hour.
-     * @param status          An UErrorCode to receive the status.
+     * @param rawOffsetGMT      The new SimpleTimeZone's raw GMT offset
+     * @param ID                The new SimpleTimeZone's time zone ID.
+     * @param savingsStartMonth The daylight savings starting month. Month is
+     *                          0-based. eg, 0 for January.
+     * @param savingsStartDay   The daylight savings starting
+     *                          day-of-week-in-month. See setStartRule() for a
+     *                          complete explanation.
+     * @param savingsStartDayOfWeek The daylight savings starting day-of-week.
+     *                          See setStartRule() for a complete explanation.
+     * @param savingsStartTime  The daylight savings starting time, expressed as the
+     *                          number of milliseconds after midnight.
+     * @param savingsStartTimeMode Whether the start time is local wall time, local
+     *                          standard time, or UTC time. Default is local wall time.
+     * @param savingsEndMonth   The daylight savings ending month. Month is
+     *                          0-based. eg, 0 for January.
+     * @param savingsEndDay     The daylight savings ending day-of-week-in-month.
+     *                          See setStartRule() for a complete explanation.
+     * @param savingsEndDayOfWeek The daylight savings ending day-of-week.
+     *                          See setStartRule() for a complete explanation.
+     * @param savingsEndTime    The daylight savings ending time, expressed as the
+     *                          number of milliseconds after midnight.
+     * @param savingsEndTimeMode Whether the end time is local wall time, local
+     *                          standard time, or UTC time. Default is local wall time.
+     * @param savingsDST        The number of milliseconds added to standard time
+     *                          to get DST time. Default is one hour.
+     * @param status            An UErrorCode to receive the status.
      * @stable
      */
-    SimpleTimeZone(int32_t rawOffset, const UnicodeString& ID,
-        int8_t startMonth, int8_t startDayOfWeekInMonth,
-        int8_t startDayOfWeek, int32_t startTime,
-        int8_t endMonth, int8_t endDayOfWeekInMonth,
-        int8_t endDayOfWeek, int32_t endTime,
+    SimpleTimeZone(int32_t rawOffsetGMT, const UnicodeString& ID,
+        int8_t savingsStartMonth, int8_t savingsStartDayOfWeekInMonth,
+        int8_t savingsStartDayOfWeek, int32_t savingsStartTime,
+        int8_t savingsEndMonth, int8_t savingsEndDayOfWeekInMonth,
+        int8_t savingsEndDayOfWeek, int32_t savingsEndTime,
         UErrorCode& status);
 
-    SimpleTimeZone(int32_t rawOffset, const UnicodeString& ID,
-        int8_t startMonth, int8_t startDayOfWeekInMonth,
-        int8_t startDayOfWeek, int32_t startTime,
-        int8_t endMonth, int8_t endDayOfWeekInMonth,
-        int8_t endDayOfWeek, int32_t endTime,
-        int32_t dstSavings, UErrorCode& status);
+    SimpleTimeZone(int32_t rawOffsetGMT, const UnicodeString& ID,
+        int8_t savingsStartMonth, int8_t savingsStartDayOfWeekInMonth,
+        int8_t savingsStartDayOfWeek, int32_t savingsStartTime,
+        int8_t savingsEndMonth, int8_t savingsEndDayOfWeekInMonth,
+        int8_t savingsEndDayOfWeek, int32_t savingsEndTime,
+        int32_t savingsDST, UErrorCode& status);
 
-    SimpleTimeZone(int32_t rawOffset, const UnicodeString& ID,
-        int8_t startMonth, int8_t startDayOfWeekInMonth,
-        int8_t startDayOfWeek, int32_t startTime, TimeMode startTimeMode,
-        int8_t endMonth, int8_t endDayOfWeekInMonth,
-        int8_t endDayOfWeek, int32_t endTime, TimeMode endTimeMode,
-        int32_t dstSavings, UErrorCode& status);
+    SimpleTimeZone(int32_t rawOffsetGMT, const UnicodeString& ID,
+        int8_t savingsStartMonth, int8_t savingsStartDayOfWeekInMonth,
+        int8_t savingsStartDayOfWeek, int32_t savingsStartTime,
+        TimeMode savingsStartTimeMode,
+        int8_t savingsEndMonth, int8_t savingsEndDayOfWeekInMonth,
+        int8_t savingsEndDayOfWeek, int32_t savingsEndTime, TimeMode savingsEndTimeMode,
+        int32_t savingsDST, UErrorCode& status);
 
     /**
      * Sets the daylight savings starting year, that is, the year this time zone began
@@ -516,7 +517,7 @@ private:
     /**
      * Internal construction method.
      */
-    void construct(int32_t rawOffset, const UnicodeString& ID,
+    void construct(int32_t rawOffsetGMT, const UnicodeString& ID,
                    int8_t startMonth, int8_t startDay, int8_t startDayOfWeek,
                    int32_t startTime, TimeMode startTimeMode,
                    int8_t endMonth, int8_t endDay, int8_t endDayOfWeek,
