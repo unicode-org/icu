@@ -58,6 +58,7 @@ $NAME_MAP = <<'END';
         { "Latin-Hebrew",        "Hebrew-Latin",        "lhebrew"  }
         { "Latin-Jamo",          "Jamo-Latin",          "ljamo"    }
         { "Latin-Kana",          "Kana-Latin",          "lkana"    }
+        { "Hiragana-Katakana",   "Katakana-Hiragana",   "kana"     }
 
         // Other miscellaneous rules
         { "StraightQuotes-CurlyQuotes", "CurlyQuotes-StraightQuotes", "quotes" }
