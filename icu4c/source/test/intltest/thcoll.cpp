@@ -336,7 +336,6 @@ void CollationThaiTest::TestCornerCases(void) {
 
 void CollationThaiTest::compareArray(Collator& c, const char* tests[],
                                      int32_t testsLength) {
-    UErrorCode status = U_ZERO_ERROR;
     for (int32_t i = 0; i < testsLength; i += 3) {
 
         Collator::EComparisonResult expect;
@@ -358,6 +357,7 @@ void CollationThaiTest::compareArray(Collator& c, const char* tests[],
 
         doTest(&c, s1, s2, expect);
 #if 0
+        UErrorCode status = U_ZERO_ERROR;
         int32_t result = c.compare(s1, s2);
         if (sign(result) != sign(expect))
         {
@@ -458,7 +458,7 @@ void CollationThaiTest::TestInvalidThai(void) {
 
   CollationElementIterator* c = ((RuleBasedCollator *)coll)->createCollationElementIterator( iteratorText );
 
-  for(i = 0; i < sizeof(tests)/sizeof(tests[0]); i++) {
+  for(i = 0; i < (int32_t)(sizeof(tests)/sizeof(tests[0])); i++) {
     len = u_unescape(tests[i], strings[i], 20);
     strings[i][len] = 0;
     toSort[i] = strings[i];
