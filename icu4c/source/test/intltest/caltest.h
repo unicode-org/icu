@@ -46,6 +46,8 @@ public:
      * Test various API methods for API completeness.
      */
     virtual void TestGenericAPI(void); // New to C++ -- needs to be back ported to Java
+
+    virtual void TestWOY(void);
  
 public: // package
     /**
@@ -163,6 +165,7 @@ public:
         int times, Calendar::EDateFields field, Calendar::EDateFields field2, 
         UErrorCode& errorCode);
 
+    void yearAddTest(Calendar& cal, UErrorCode& status);
  
 public: // package
     // test subroutine use by TestDOWProgression
