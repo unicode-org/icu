@@ -19,7 +19,7 @@
 #include "unicode/ucnv.h"
 
 #ifdef UDATA_MAP_DLL
-extern const uint8_t icudata_dat[]; 
+extern const uint8_t U_IMPORT icudata_dat[]; 
 #endif
 
 int
