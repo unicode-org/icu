@@ -94,13 +94,15 @@ UConverter* UnicodeString::fgDefaultConverter  = 0;
 // Constructors
 //========================================
 UnicodeString::UnicodeString()
-  : fCapacity(US_STACKBUF_SIZE),
+  : fLength(0),
+    fCapacity(US_STACKBUF_SIZE),
     fArray(fStackBuffer),
     fFlags(kShortString)
 {}
 
 UnicodeString::UnicodeString(int32_t capacity, UChar32 c, int32_t count)
-  : fCapacity(US_STACKBUF_SIZE),
+  : fLength(0),
+    fCapacity(US_STACKBUF_SIZE),
     fArray(0),
     fFlags(0)
 {
@@ -164,7 +166,7 @@ UnicodeString::UnicodeString(int32_t capacity, UChar32 c, int32_t count)
 }
 
 UnicodeString::UnicodeString(UChar ch)
-  : Replaceable(1),
+  : fLength(1),
     fCapacity(US_STACKBUF_SIZE),
     fArray(fStackBuffer),
     fFlags(kShortString)
@@ -173,7 +175,7 @@ UnicodeString::UnicodeString(UChar ch)
 }
 
 UnicodeString::UnicodeString(UChar32 ch)
-  : Replaceable(1),
+  : fLength(1),
     fCapacity(US_STACKBUF_SIZE),
     fArray(fStackBuffer),
     fFlags(kShortString)
@@ -184,7 +186,8 @@ UnicodeString::UnicodeString(UChar32 ch)
 }
 
 UnicodeString::UnicodeString(const UChar *text)
-  : fCapacity(US_STACKBUF_SIZE),
+  : fLength(0),
+    fCapacity(US_STACKBUF_SIZE),
     fArray(fStackBuffer),
     fFlags(kShortString)
 {
@@ -193,7 +196,8 @@ UnicodeString::UnicodeString(const UChar *text)
 
 UnicodeString::UnicodeString(const UChar *text,
                              int32_t textLength)
-  : fCapacity(US_STACKBUF_SIZE),
+  : fLength(0),
+    fCapacity(US_STACKBUF_SIZE),
     fArray(fStackBuffer),
     fFlags(kShortString)
 {
@@ -203,7 +207,7 @@ UnicodeString::UnicodeString(const UChar *text,
 UnicodeString::UnicodeString(UBool isTerminated,
                              const UChar *text,
                              int32_t textLength)
-  : Replaceable(textLength),
+  : fLength(textLength),
     fCapacity(isTerminated ? textLength + 1 : textLength),
     fArray((UChar *)text),
     fFlags(kReadonlyAlias)
@@ -220,7 +224,7 @@ UnicodeString::UnicodeString(UBool isTerminated,
 UnicodeString::UnicodeString(UChar *buff,
                              int32_t bufLength,
                              int32_t buffCapacity)
-  : Replaceable(bufLength),
+  : fLength(bufLength),
     fCapacity(buffCapacity),
     fArray(buff),
     fFlags(kWriteableAlias)
@@ -232,7 +236,8 @@ UnicodeString::UnicodeString(UChar *buff,
 
 UnicodeString::UnicodeString(const char *codepageData,
                              const char *codepage)
-  : fCapacity(US_STACKBUF_SIZE),
+  : fLength(0),
+    fCapacity(US_STACKBUF_SIZE),
     fArray(fStackBuffer),
     fFlags(kShortString)
 {
@@ -245,7 +250,8 @@ UnicodeString::UnicodeString(const char *codepageData,
 UnicodeString::UnicodeString(const char *codepageData,
                              int32_t dataLength,
                              const char *codepage)
-  : fCapacity(US_STACKBUF_SIZE),
+  : fLength(0),
+    fCapacity(US_STACKBUF_SIZE),
     fArray(fStackBuffer),
     fFlags(kShortString)
 {
@@ -255,7 +261,7 @@ UnicodeString::UnicodeString(const char *codepageData,
 }
 
 UnicodeString::UnicodeString(const UnicodeString& that)
-  : Replaceable(),
+  : fLength(0),
     fCapacity(US_STACKBUF_SIZE),
     fArray(fStackBuffer),
     fFlags(kShortString)
@@ -616,6 +622,11 @@ UnicodeString::doCaseCompare(UTextOffset start,
   } else {
     return 0;
   }
+}
+
+int32_t
+UnicodeString::getLength() const {
+    return length();
 }
 
 UChar
