@@ -504,7 +504,7 @@ ucmp8_compact(CompactByteArray* this_obj,
         if (destAddr) {\
             uprv_memcpy(destAddr+sizeSoFar, source, len);\
         }\
-        size += (len)
+        sizeSoFar += (len)
 
 U_CAPI  uint32_t U_EXPORT2 ucmp8_flattenMem (const CompactByteArray* array, uint8_t *MS)
 {
