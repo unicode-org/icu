@@ -167,7 +167,7 @@ static UCollationResult compareUsingPartials(UCollator *coll, const UChar source
   UCharIterator sIter, tIter;
   uint32_t sState[2], tState[2];
   int32_t sSize = pieceSize, tSize = pieceSize;
-  int32_t i = 0;
+  /*int32_t i = 0;*/
   uint8_t sBuf[16384], tBuf[16384];
   if(pieceSize > 16384) {
     log_err("Partial sortkey size buffer too small. Please consider increasing the buffer!\n");
