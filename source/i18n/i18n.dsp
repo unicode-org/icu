@@ -599,7 +599,7 @@ SOURCE=.\ucol_elm.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\ucol_tok.c
+SOURCE=.\ucol_tok.cpp
 # End Source File
 # Begin Source File
 
