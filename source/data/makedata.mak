@@ -336,8 +336,6 @@ CLEAN :
 "$(ICUDBLD)\icudata.res": "$(ICUMISC)\icudata.rc"
 	@echo Creating data DLL version information from $**
 	@rc.exe /i $(ICUP)\include\ /r /fo "$@" $**
-	-@copy icudata.res $(ICUDBLD)
-	-@erase icudata.res
 
 # Targets for unames.dat
 "$(ICUDBLD)\unames.dat": "$(ICUUNIDATA)\UnicodeData.txt" "$(ICUTOOLS)\gennames\$(CFG)\gennames.exe"
