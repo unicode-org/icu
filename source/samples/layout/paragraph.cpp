@@ -11,12 +11,13 @@
  *   created by: Eric R. Mader
  */
 
-#include "RenderingFontInstance.h"
-
 #include "unicode/utypes.h"
 #include "unicode/uchar.h"
 #include "unicode/ubidi.h"
 #include "usc_impl.h" /* this is currently private! */
+
+#include "RenderingSurface.h"
+#include "ScriptCompositeFontInstance.h"
 
 #include "paragraph.h"
 #include "UnicodeReader.h"
@@ -27,6 +28,7 @@
 #define MARGIN 10
 #define LINE_GROW 32
 
+#if 0
 class LineRun
 {
 public:
@@ -36,12 +38,12 @@ public:
           le_int32 draw(RenderingSurface *surface, le_int32 x, le_int32 y, le_int32 width, le_int32 height) const;
 
 private:
-          le_int32               fGlyphCount;
-    const RenderingFontInstance *fFont;
-          UBiDiDirection         fDirection;
-    const LEGlyphID             *fGlyphs;
-          le_int32              *fDX;
-          le_int32              *fDY;
+          le_int32        fGlyphCount;
+    const LEFontInstance *fFont;
+          UBiDiDirection  fDirection;
+    const LEGlyphID      *fGlyphs;
+          le_int32       *fDX;
+          le_int32       *fDY;
 };
 
 LineRun::LineRun(ParagraphLayout *paragraphLayout, le_int32 runIndex)
@@ -56,14 +58,14 @@ LineRun::LineRun(ParagraphLayout *paragraphLayout, le_int32 runIndex)
         return;
     }
 
-    fGlyphs   = new LEGlyphID[fGlyphCount];
-    fDX       = new le_int32[fGlyphCount];
-    fDY       = new le_int32[fGlyphCount];
-    positions = new float[fGlyphCount * 2 + 2];
+    fGlyphs   = LE_NEW_ARRAY(LEGlyphID, fGlyphCount);
+    fDX       = LE_NEW_ARRAY(le_int32, fGlyphCount);
+    fDY       = LE_NEW_ARRAY(le_int32, fGlyphCount);
+    positions = LE_NEW_ARRAY(float, fGlyphCount * 2 + 2);
 
     glyphs = (LEGlyphID *) fGlyphs;
 
-    paragraphLayout->getVisualRun(runIndex, glyphs, (float *) positions, NULL, (const LEFontInstance **) &fFont, &fDirection);
+    paragraphLayout->getVisualRun(runIndex, glyphs, positions, NULL, &fFont, &fDirection);
 
     for (i = 0; i < fGlyphCount; i += 1) {
         TTGlyphID ttGlyph = (TTGlyphID) LE_GET_GLYPH(glyphs[i]);
@@ -76,15 +78,15 @@ LineRun::LineRun(ParagraphLayout *paragraphLayout, le_int32 runIndex)
         fDY[i] = (le_int32)  positions[i * 2 + 1];
     }
 
-    delete[] positions;
+    LE_DELETE_ARRAY(positions);
 }
 
 
 LineRun::~LineRun()
 {
-    delete[] fDY;
-    delete[] fDX;
-    delete[] (LEGlyphID *) fGlyphs;
+    LE_DELETE_ARRAY(fDY);
+    LE_DELETE_ARRAY(fDX);
+    LE_DELETE_ARRAY(fGlyphs);
 }
 
 le_int32 LineRun::draw(RenderingSurface *surface, le_int32 x, le_int32 y, le_int32 width, le_int32 height) const
@@ -128,7 +130,7 @@ private:
 LineInfo::LineInfo(ParagraphLayout *paragraphLayout)
 {
     fRunCount = paragraphLayout->countLineRuns();
-    fRuns     = new LineRun *[fRunCount];
+    fRuns     = LE_NEW_ARRAY(LineRun *, fRunCount);
     le_int32 run;
 
     for (run = 0; run < fRunCount; run += 1) {
@@ -144,7 +146,7 @@ LineInfo::~LineInfo()
         delete fRuns[run];
     }
 
-    delete[] fRuns;
+    LE_DELETE_ARRAY(fRuns);
 }
 
 void LineInfo::draw(RenderingSurface *surface, le_int32 x, le_int32 y, le_int32 width, le_int32 height)
@@ -155,49 +157,31 @@ void LineInfo::draw(RenderingSurface *surface, le_int32 x, le_int32 y, le_int32 
         x = fRuns[run]->draw(surface, x, y, width, height);
     }
 }
+#endif
 
-Paragraph::Paragraph(const LEUnicode chars[], int32_t charCount,
-          const RenderingFontInstance *runFonts[], const UScriptCode runScripts[],
-          const le_int32 runLimits[], le_int32 runCount)
+Paragraph::Paragraph(const LEUnicode chars[], int32_t charCount, const FontRuns *fontRuns)
   : fParagraphLayout(NULL), fLineCount(0), fLinesMax(0), fLinesGrow(LINE_GROW), fLines(NULL),
     fLineHeight(-1), fAscent(-1), fWidth(-1), fHeight(-1)
 {
-    le_int32 run, maxAscent = -1, maxDescent = -1, maxLeading = -1;
+    fParagraphLayout = new ParagraphLayout(chars, charCount, fontRuns, NULL, NULL, UBIDI_LTR, false);
 
-    for (run = 0; run < runCount; run += 1) {
-        le_int32 runAscent  = runFonts[run]->getAscent();
-        le_int32 runDescent = runFonts[run]->getDescent();
-        le_int32 runLeading = runFonts[run]->getLeading();
+    le_int32 ascent  = fParagraphLayout->getAscent();
+    le_int32 descent = fParagraphLayout->getDescent();
+    le_int32 leading = fParagraphLayout->getLeading();
 
+    fLineHeight = ascent + descent + leading;
+    fAscent     = ascent;
 
-        if (runAscent > maxAscent) {
-            maxAscent = runAscent;
-        }
-
-        if (runDescent > maxDescent) {
-            maxDescent = runDescent;
-        }
-
-        if (runLeading > maxLeading) {
-            maxLeading = runLeading;
-        }
-    }
-
-    fLineHeight = maxAscent + maxDescent + maxLeading;
-    fAscent     = maxAscent;
-
-    // NOTE: We're passing the same array in for both font and script run limits...
-    fParagraphLayout = new ParagraphLayout(chars, charCount, (const LEFontInstance **) runFonts, runLimits, runCount, NULL, NULL, 0,
-        runScripts, runLimits, runCount, UBIDI_LTR, false);
+    delete fontRuns;
 }
 
 Paragraph::~Paragraph()
 {
     for (le_int32 line = 0; line < fLineCount; line += 1) {
-        delete (LineInfo *) fLines[line];
+        delete /*(LineInfo *)*/ fLines[line];
     }
 
-    delete[] fLines;
+    LE_DELETE_ARRAY(fLines);
 }
 
 void Paragraph::breakLines(le_int32 width, le_int32 height)
@@ -212,47 +196,50 @@ void Paragraph::breakLines(le_int32 width, le_int32 height)
     fWidth  = width;
 
     float lineWidth = (float) (width - 2 * MARGIN);
-    le_int32 line;
+    const ParagraphLayout::Line *line;
+    le_int32 li;
 
     // Free the old LineInfo's...
-    for (line = 0; line < fLineCount; line += 1) {
-        delete fLines[line];
+    for (li = 0; li < fLineCount; li += 1) {
+        delete fLines[li];
     }
 
-    line = 0;
+    li = 0;
     fParagraphLayout->reflow();
-    while (fParagraphLayout->nextLineBreak(lineWidth) >= 0) {
-        LineInfo *lineInfo = new LineInfo(fParagraphLayout);
-        
+    while ((line = fParagraphLayout->nextLine(lineWidth)) != NULL) {
         // grow the line array, if we need to.
-        if (line >= fLinesMax) {
-            LineInfo **newLines = new LineInfo *[fLinesMax + fLinesGrow];
-
-            if (fLines != NULL) {
-                LE_ARRAY_COPY(newLines, fLines, fLinesMax);
-
-                delete[] fLines;
-            }
-
+        if (li >= fLinesMax) {
+            fLines = (const ParagraphLayout::Line **) LE_GROW_ARRAY(fLines, fLinesMax + fLinesGrow);
             fLinesMax += fLinesGrow;
-            fLines     = newLines;
         }
 
-        fLines[line++] = lineInfo;
+        fLines[li++] = line;
     }
 
-    fLineCount = line;
+    fLineCount = li;
 }
 
 void Paragraph::draw(RenderingSurface *surface, le_int32 firstLine, le_int32 lastLine)
 {
-    le_int32 line, x, y;
+    le_int32 li, x, y;
 
     x = MARGIN;
     y = fAscent;
 
-    for (line = firstLine; line <= lastLine; line += 1) {
-        fLines[line]->draw(surface, x, y, fWidth, fHeight);
+    for (li = firstLine; li <= lastLine; li += 1) {
+        const ParagraphLayout::Line *line = fLines[li];
+        le_int32 runCount = line->countRuns();
+        le_int32 run;
+
+        for (run = 0; run < runCount; run += 1) {
+            const ParagraphLayout::VisualRun *visualRun = line->getVisualRun(run);
+            le_int32 glyphCount = visualRun->getGlyphCount();
+            const LEFontInstance *font = visualRun->getFont();
+            const LEGlyphID *glyphs = visualRun->getGlyphs();
+            const float *positions = visualRun->getPositions();
+
+            surface->drawGlyphs(font, glyphs, glyphCount, positions, x, y, fWidth, fHeight);
+        }
 
         y += fLineHeight;
     }
@@ -260,53 +247,18 @@ void Paragraph::draw(RenderingSurface *surface, le_int32 firstLine, le_int32 las
 
 Paragraph *Paragraph::paragraphFactory(const char *fileName, FontMap *fontMap, GUISupport *guiSupport)
 {
-    RFIErrorCode fontStatus = RFI_NO_ERROR;
+    LEErrorCode fontStatus  = LE_NO_ERROR;
     UErrorCode scriptStatus = U_ZERO_ERROR;
-    le_int32 charCount, runCount;
-    UScriptRun *sr;
+    le_int32 charCount;
     const UChar *text = UnicodeReader::readFile(fileName, guiSupport, charCount);
 
     if (text == NULL) {
         return NULL;
     }
 
-    sr = uscript_openRun(text, charCount, &scriptStatus);
-    
-    runCount = 0;
+    ScriptCompositeFontInstance *font = new ScriptCompositeFontInstance(fontMap);
+    FontRuns  *fontRuns = new FontRuns((const LEFontInstance **) &font, &charCount, 1);
 
-    while (uscript_nextRun(sr, NULL, NULL, NULL)) {
-        runCount += 1;
-    }
-
-    uscript_resetRun(sr);
-
-    UScriptCode            *scripts   = new UScriptCode[runCount];
-    RenderingFontInstance **fonts     = new RenderingFontInstance *[runCount];
-    le_int32               *runLimits = new le_int32[runCount];
-
-    le_int32 limit, run;
-    UScriptCode script;
-
-    run = 0;
-    while (uscript_nextRun(sr, NULL, &limit, &script)) {
-        scripts[run]   = script;
-        runLimits[run] = limit;
-        fonts[run]     = (RenderingFontInstance *) fontMap->getScriptFont(script, fontStatus);
-
-        if (fonts[run] == NULL) {
-            delete[] runLimits;
-            delete[] fonts;
-            delete[] scripts;
-
-            uscript_closeRun(sr);
-            return NULL;
-        }
-
-        run += 1;
-    }
-
-    uscript_closeRun(sr);
-
-    return new Paragraph(text, charCount, (const RenderingFontInstance **) fonts, scripts, runLimits, runCount);
+    return new Paragraph(text, charCount, fontRuns);
 }
 

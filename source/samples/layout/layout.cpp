@@ -81,7 +81,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
     HACCEL hAccel;
     MSG msg;
     WNDCLASS wndclass;
-    RFIErrorCode status = RFI_NO_ERROR;
+    LEErrorCode status = LE_NO_ERROR;
 
     wndclass.style         = CS_HREDRAW | CS_VREDRAW;
     wndclass.lpfnWndProc   = WndProc;
@@ -133,7 +133,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
     switch (message) {
     case WM_CREATE:
     {
-        RFIErrorCode fontStatus = RFI_NO_ERROR;
+        LEErrorCode fontStatus = LE_NO_ERROR;
 
         hdc = GetDC(hwnd);
         surface = new GDISurface(hdc);

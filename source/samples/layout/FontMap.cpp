@@ -14,13 +14,13 @@
 
 #include "layout/LETypes.h"
 #include "layout/LEScripts.h"
+#include "layout/LEFontInstance.h"
 
-#include "RenderingFontInstance.h"
 #include "GUISupport.h"
 #include "FontMap.h"
 
-FontMap::FontMap(const char *fileName, le_int16 pointSize, GUISupport *guiSupport, RFIErrorCode &status)
-    : fPointSize(pointSize), fFontCount(0), fGUISupport(guiSupport)
+FontMap::FontMap(const char *fileName, le_int16 pointSize, GUISupport *guiSupport, LEErrorCode &status)
+    : fPointSize(pointSize), fFontCount(0), fAscent(0), fDescent(0), fLeading(0), fGUISupport(guiSupport)
 {
     le_int32 defaultFont = -1, i, script;
 
@@ -42,7 +42,7 @@ FontMap::FontMap(const char *fileName, le_int16 pointSize, GUISupport *guiSuppor
     if (file == NULL) {
         sprintf(errorMessage, "Could not open the font map file: %s.", fileName);
         fGUISupport->postErrorMessage(errorMessage, "Font Map Error");
-        status = RFI_FONT_FILE_NOT_FOUND_ERROR;
+        status = LE_FONT_FILE_NOT_FOUND_ERROR;
         return;
     }
 
@@ -72,7 +72,7 @@ FontMap::FontMap(const char *fileName, le_int16 pointSize, GUISupport *guiSuppor
             scriptStatus == U_USING_DEFAULT_WARNING) {
             sprintf(errorMessage, "The script name %s is invalid.", line);
             fGUISupport->postErrorMessage(errorMessage, "Font Map Error");
-            status = RFI_ILLEGAL_ARGUMENT_ERROR;
+            status = LE_ILLEGAL_ARGUMENT_ERROR;
             fclose(file);
             return;
         }
@@ -131,7 +131,7 @@ le_int32 FontMap::getFontIndex(const char *fontName)
         // The font name table is full. Since there can
         // only be scriptCodeCount fonts in use at once,
         // there should be at least one that's not being
-        // reference; find it and resue it's index.
+        // referenced; find it and resue it's index.
 
         for (index = 0; index < fFontCount; index += 1) {
             le_int32 script;
@@ -183,14 +183,14 @@ char *FontMap::strip(char *s)
     return &s[start];
 }
 
-const RenderingFontInstance *FontMap::getScriptFont(le_int32 scriptCode, RFIErrorCode &status)
+const LEFontInstance *FontMap::getScriptFont(le_int32 scriptCode, LEErrorCode &status)
 {
     if (LE_FAILURE(status)) {
         return NULL;
     }
 
     if (scriptCode <= -1 || scriptCode >= scriptCodeCount) {
-        status = RFI_ILLEGAL_ARGUMENT_ERROR;
+        status = LE_ILLEGAL_ARGUMENT_ERROR;
         return NULL;
     }
 
@@ -200,7 +200,7 @@ const RenderingFontInstance *FontMap::getScriptFont(le_int32 scriptCode, RFIErro
     if (fontIndex < 0) {
         sprintf(errorMessage, "No font was set for script %s", uscript_getName((UScriptCode) scriptCode));
         fGUISupport->postErrorMessage(errorMessage, "Font Map Error");
-        status = RFI_FONT_FILE_NOT_FOUND_ERROR;
+        status = LE_FONT_FILE_NOT_FOUND_ERROR;
         return NULL;
     }
 
@@ -217,5 +217,62 @@ const RenderingFontInstance *FontMap::getScriptFont(le_int32 scriptCode, RFIErro
     return fFontInstances[fontIndex];
 }
 
+le_int32 FontMap::getAscent() const
+{
+    if (fAscent <= 0) {
+        ((FontMap *) this)->getMaxMetrics();
+    }
 
+    return fAscent;
+}
+
+le_int32 FontMap::getDescent() const
+{
+    if (fDescent <= 0) {
+        ((FontMap *) this)->getMaxMetrics();
+    }
+
+    return fDescent;
+}
+
+le_int32 FontMap::getLeading() const
+{
+    if (fLeading <= 0) {
+        ((FontMap *) this)->getMaxMetrics();
+    }
+
+    return fLeading;
+}
+
+void FontMap::getMaxMetrics()
+{
+    for (le_int32 i = 0; i < fFontCount; i += 1) {
+        LEErrorCode status = LE_NO_ERROR;
+        le_int32 ascent, descent, leading;
+
+        if (fFontInstances[i] == NULL) {
+            fFontInstances[i] = openFont(fFontNames[i], fPointSize, status);
+
+            if (LE_FAILURE(status)) {
+                continue;
+            }
+        }
+
+        ascent  = fFontInstances[i]->getAscent();
+        descent = fFontInstances[i]->getDescent();
+        leading = fFontInstances[i]->getLeading();
+
+        if (ascent > fAscent) {
+            fAscent = ascent;
+        }
+
+        if (descent > fDescent) {
+            fDescent = descent;
+        }
+
+        if (leading > fLeading) {
+            fLeading = leading;
+        }
+    }
+}
 
