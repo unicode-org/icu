@@ -972,7 +972,7 @@ MessageFormat::format(const Formattable* arguments,
         }
         // If the obj data type is a number, use a NumberFormat instance.
         else if ((type == Formattable::kDouble) || (type == Formattable::kLong)) {
-            const NumberFormat* nf = getDefaultNumberFormat();
+            const NumberFormat* nf = getDefaultNumberFormat(success);
             if (nf == NULL) { 
                 return appendTo; 
             }
@@ -984,7 +984,7 @@ MessageFormat::format(const Formattable* arguments,
         }
         // If the obj data type is a Date instance, use a DateFormat instance.
         else if (type == Formattable::kDate) {
-            const DateFormat* df = getDefaultDateFormat();
+            const DateFormat* df = getDefaultDateFormat(success);
             if (df == NULL) { 
                 return appendTo; 
             }
@@ -1352,14 +1352,15 @@ MessageFormat::createIntegerFormat(const Locale& locale, UErrorCode& status) con
  *
  * Semantically const but may modify *this.
  */
-const NumberFormat* MessageFormat::getDefaultNumberFormat() const {
+const NumberFormat* MessageFormat::getDefaultNumberFormat(UErrorCode& ec) const {
     if (defaultNumberFormat == NULL) {
         MessageFormat* t = (MessageFormat*) this;
-        UErrorCode ec = U_ZERO_ERROR;
         t->defaultNumberFormat = NumberFormat::createInstance(fLocale, ec);
         if (U_FAILURE(ec)) { 
             delete t->defaultNumberFormat;
             t->defaultNumberFormat = NULL;
+        } else if (t->defaultNumberFormat == NULL) {
+            ec = U_MEMORY_ALLOCATION_ERROR;
         }
     }
     return defaultNumberFormat;
@@ -1372,10 +1373,13 @@ const NumberFormat* MessageFormat::getDefaultNumberFormat() const {
  *
  * Semantically const but may modify *this.
  */
-const DateFormat* MessageFormat::getDefaultDateFormat() const {
+const DateFormat* MessageFormat::getDefaultDateFormat(UErrorCode& ec) const {
     if (defaultDateFormat == NULL) {
         MessageFormat* t = (MessageFormat*) this;
         t->defaultDateFormat = DateFormat::createDateTimeInstance(DateFormat::kShort, DateFormat::kShort, fLocale);
+        if (t->defaultDateFormat == NULL) {
+            ec = U_MEMORY_ALLOCATION_ERROR;
+        }
     }
     return defaultDateFormat;
 }

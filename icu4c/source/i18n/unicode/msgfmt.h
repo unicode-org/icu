@@ -678,8 +678,8 @@ private:
      * Method to retrieve default formats (or NULL on failure).
      * These are semantically const, but may modify *this.
      */
-    const NumberFormat* getDefaultNumberFormat() const;
-    const DateFormat*   getDefaultDateFormat() const;
+    const NumberFormat* getDefaultNumberFormat(UErrorCode&) const;
+    const DateFormat*   getDefaultDateFormat(UErrorCode&) const;
 
     /**
      * Finds the word s, in the keyword list and returns the located index.
