@@ -51,7 +51,6 @@
 static void debugout(UnicodeString s) {
     char buf[2000];
     s.extract((UTextOffset) 0, s.length(), buf);
-    buf[s.length()] = 0;
     printf("%s", buf);
 }
 #define debug(x) printf("%s", x);

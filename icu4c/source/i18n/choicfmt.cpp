@@ -243,7 +243,7 @@ ChoiceFormat::stod(const UnicodeString& string)
     char source[256];
     char* end;
 
-    source[string.extract(0, string.length(), source, 256, "")] = 0;    /* invariant codepage */
+    string.extract(0, string.length(), source, sizeof(source), "");    /* invariant codepage */
     return uprv_strtod(source,&end);
 }
 
