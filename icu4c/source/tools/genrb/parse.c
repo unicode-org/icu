@@ -533,7 +533,7 @@ parse(UCHARBUF* buf, const char *inputDir,
                     ucbuf= ucbuf_open(in,status);
 
                     /*read the rules into the buffer */
-                    while(c!=U_EOF && (target<targetLimit)){
+                    while(target<targetLimit){
                         c = ucbuf_getc(ucbuf,status);
                         if(c==0x005c){
                             c = unescape(ucbuf,status);
@@ -548,7 +548,11 @@ parse(UCHARBUF* buf, const char *inputDir,
                             continue;
                         }
                         /* Append UChar* after dissembling if c>0xffff*/
-                        U_APPEND_CHAR32(c,target);
+                        if(c!=U_EOF) {
+                          U_APPEND_CHAR32(c,target);
+                        } else {
+                          break;
+                        }
                     }
                                     
                     /* Add it to bundle */
