@@ -4,8 +4,8 @@
  * others. All Rights Reserved.
  *******************************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/test/calendar/Attic/IBMCalendarTest.java,v $ 
- * $Date: 2000/10/17 18:32:50 $ 
- * $Revision: 1.3 $
+ * $Date: 2000/11/18 00:17:58 $ 
+ * $Revision: 1.4 $
  *******************************************************************************
  */
 package com.ibm.test.calendar;
@@ -19,7 +19,7 @@ import java.util.Locale;
  * @test
  * @summary Tests of new functionality in IBMCalendar
  */
-public class IBMCalendarTest extends TestFmwk {
+public class IBMCalendarTest extends CalendarTest {
 
     public static void main(String[] args) throws Exception {
         new IBMCalendarTest().run(args);
@@ -125,5 +125,90 @@ public class IBMCalendarTest extends TestFmwk {
                 }
             }
         }
+    }
+
+    /**
+     * Run a test of a quasi-Gregorian calendar.  This is a calendar
+     * that behaves like a Gregorian but has different year/era mappings.
+     * The int[] data array should have the format:
+     * 
+     * { era, year, gregorianYear, month, dayOfMonth, ... }
+     */
+    void quasiGregorianTest(Calendar cal, int[] data) {
+        for (int i=0; i<data.length; ) {
+            int era = data[i++];
+            int year = data[i++];
+            int gregorianYear = data[i++];
+            int month = data[i++];
+            int dayOfMonth = data[i++];
+
+            Date D = new Date(gregorianYear - 1900, month, dayOfMonth);
+
+            cal.clear();
+            cal.set(Calendar.ERA, era);
+            cal.set(year, month, dayOfMonth);
+            Date d = cal.getTime();
+            if (d.equals(D)) {
+                logln("OK: " + era + ":" + year + "/" + (month+1) + "/" + dayOfMonth +
+                      " => " + d);
+            } else {
+                errln("Fail: " + era + ":" + year + "/" + (month+1) + "/" + dayOfMonth +
+                      " => " + d + ", expected " + D);
+            }
+
+            cal.clear();
+            cal.setTime(D);
+            int e = cal.get(Calendar.ERA);
+            int y = cal.get(Calendar.YEAR);
+            if (y == year && e == era) {
+                logln("OK: " + D + " => " + cal.get(Calendar.ERA) + ":" +
+                      cal.get(Calendar.YEAR) + "/" +
+                      (cal.get(Calendar.MONTH)+1) + "/" + cal.get(Calendar.DATE));
+            } else {
+                logln("Fail: " + D + " => " + cal.get(Calendar.ERA) + ":" +
+                      cal.get(Calendar.YEAR) + "/" +
+                      (cal.get(Calendar.MONTH)+1) + "/" + cal.get(Calendar.DATE) +
+                      ", expected " + era + ":" + year + "/" + (month+1) + "/" +
+                      dayOfMonth);
+            }
+        }
+    }
+
+    /**
+     * Verify that BuddhistCalendar shifts years to Buddhist Era but otherwise
+     * behaves like GregorianCalendar.
+     */
+    public void TestBuddhist() {
+        quasiGregorianTest(new BuddhistCalendar(),
+                           new int[] {
+                               // BE 2542 == 1999 CE
+                               0, 2542, 1999, Calendar.JUNE, 4
+                           });
+    }
+
+    /**
+     * Verify that JapaneseCalendar shifts years to Buddhist Era but otherwise
+     * behaves like GregorianCalendar.
+     */
+    public void TestJapanese() {
+        int[] data = {
+            JapaneseCalendar.MEIJI, 1, 1868, Calendar.SEPTEMBER, 8,
+            JapaneseCalendar.MEIJI, 1, 1868, Calendar.SEPTEMBER, 9,
+            JapaneseCalendar.MEIJI, 2, 1869, Calendar.JUNE, 4,
+            JapaneseCalendar.MEIJI, 45, 1912, Calendar.JULY, 29,
+            JapaneseCalendar.TAISHO, 1, 1912, Calendar.JULY, 30,
+            JapaneseCalendar.TAISHO, 1, 1912, Calendar.AUGUST, 1,
+        };
+        quasiGregorianTest(new JapaneseCalendar(), data);
+    }
+
+    /**
+     * Test limits of the Gregorian calendar.
+     */
+    public void TestGregorianLimits() {
+        // Final parameter is either number of days, if > 0, or test
+        // duration in seconds, if < 0.
+        doLimitsTest(new GregorianCalendar(), null,
+                     new Date(2004-1900, Calendar.JANUARY, 1), -10);
     }
 }

@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/calendar/TestCase.java,v $ 
- * $Date: 2000/10/17 18:32:50 $ 
- * $Revision: 1.5 $
+ * $Date: 2000/11/18 00:17:58 $ 
+ * $Revision: 1.6 $
  *
  *****************************************************************************************
  */
@@ -20,7 +20,7 @@ import com.ibm.util.SimpleTimeZone;
 import java.util.Locale;
 
 /**
- * A dummy <code>Calendar</code> subclass that is useful for testing
+ * A pseudo <code>Calendar</code> that is useful for testing
  * new calendars.  A <code>TestCase</code> object is used to hold the
  * field and millisecond values that the calendar should have at one
  * particular instant in time.  The applyFields and applyTime
@@ -28,15 +28,63 @@ import java.util.Locale;
  * tested, and the equals and fieldsEqual methods are used to ensure
  * that the calendar has ended up in the right state.
  */
-public class TestCase extends Calendar {
-    
+public class TestCase {
+
+    //------------------------------------------------------------------
+    // Pseudo-Calendar fields and methods
+    //------------------------------------------------------------------
+
+    protected int[] fields = new int[32];
+    protected boolean[] isSet = new boolean[32];
+    protected long time;
+
+    protected void set(int field, int value) {
+        fields[field] = value;
+        isSet[field] = true;
+    }
+
+    protected int get(int field) {
+        return fields[field];
+    }
+
+    protected boolean isSet(int field) {
+        return isSet[field];
+    }
+
+    protected void setTime(Date d) {
+        time = d.getTime();
+    }
+
+    public Date getTime() {
+        return new Date(time);
+    }
+
+    /**
+     * Return a String representation of this test case's time.
+     */
+    public String toString() {
+        return dowToString(get(Calendar.DAY_OF_WEEK)) +
+            get(Calendar.YEAR) + "/" + (get(Calendar.MONTH)+1) + "/" +
+            get(Calendar.DATE);
+    }
+
+    private static final String[] DOW_NAMES = {
+        "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"
+    };
+
+    public static String dowToString(int dow) {
+        --dow;
+        return (dow < 0 || dow > 6) ?
+            ("<DOW " + dow + ">") : DOW_NAMES[dow];
+    }
+
     /**
      * Initialize a TestCase object using a julian day number and
      * the corresponding fields for the calendar being tested.
      *
      * @param era       The ERA field of tested calendar on the given julian day
      * @param year      The YEAR field of tested calendar on the given julian day
-     * @param month     The MONTH (0-based) field of tested calendar on the given julian day
+     * @param month     The MONTH (1-based) field of tested calendar on the given julian day
      * @param day       The DAY_OF_MONTH field of tested calendar on the given julian day
      * @param dayOfWeek The DAY_OF_WEEK field of tested calendar on the given julian day
      * @param hour      The HOUR field of tested calendar on the given julian day
@@ -44,22 +92,20 @@ public class TestCase extends Calendar {
      * @param sec       The SECOND field of tested calendar on the given julian day
      */
     public TestCase(double julian,
-                   int era, int year, int month, int day,
-                   int dayOfWeek,
-                   int hour, int min, int sec)
+                    int era, int year, int month, int day,
+                    int dayOfWeek,
+                    int hour, int min, int sec)
     {
-        super(UTC, Locale.getDefault());
+        setTime(new Date(JULIAN_EPOCH + (long)(ONE_DAY * julian)));
         
-        setTime(new Date(JULIAN_EPOCH + (long)(DAY_MS * julian)));
-        
-        set(ERA, era);
-        set(YEAR, year);
-        set(MONTH, month - 1);
-        set(DATE, day);
-        set(DAY_OF_WEEK, dayOfWeek);
-        set(HOUR, hour);
-        set(MINUTE, min);
-        set(SECOND, sec);
+        set(Calendar.ERA, era);
+        set(Calendar.YEAR, year);
+        set(Calendar.MONTH, month - 1);
+        set(Calendar.DATE, day);
+        set(Calendar.DAY_OF_WEEK, dayOfWeek);
+        set(Calendar.HOUR, hour);
+        set(Calendar.MINUTE, min);
+        set(Calendar.SECOND, sec);
     }
 
     /**
@@ -80,27 +126,30 @@ public class TestCase extends Calendar {
      * @param sec       The SECOND field of tested calendar on the given gregorian date
      */
     public TestCase(int gregYear, int gregMonth, int gregDay,
-                   int era, int year, int month, int day,
-                   int dayOfWeek,
-                   int hour, int min, int sec)
+                    int era, int year, int month, int day,
+                    int dayOfWeek,
+                    int hour, int min, int sec)
     {
-        super(UTC, Locale.getDefault());
-        
         GregorianCalendar greg = new GregorianCalendar(UTC, Locale.getDefault());
         greg.clear();
         greg.set(gregYear, gregMonth-1, gregDay);
         setTime(greg.getTime());
         
-        set(ERA, era);
-        set(YEAR, year);
-        set(MONTH, month - 1);
-        set(DATE, day);
-        set(DAY_OF_WEEK, dayOfWeek);
-        set(HOUR, hour);
-        set(MINUTE, min);
-        set(SECOND, sec);
+        set(Calendar.ERA, era);
+        set(Calendar.YEAR, year);
+        set(Calendar.MONTH, month - 1);
+        set(Calendar.DATE, day);
+        set(Calendar.DAY_OF_WEEK, dayOfWeek);
+        set(Calendar.HOUR, hour);
+        set(Calendar.MINUTE, min);
+        set(Calendar.SECOND, sec);
     }
     
+    /**
+     * For subclasses.
+     */
+    protected TestCase() {}
+
     /**
      * Apply this test case's field values to another calendar
      * by calling its set method for each field.  This is useful in combination
@@ -109,13 +158,11 @@ public class TestCase extends Calendar {
      * @see #equal
      */
     public void applyFields(Calendar c) {
-        c.set(ERA,     fields[ERA]);
-        c.set(YEAR,    fields[YEAR]);
-        c.set(MONTH,   fields[MONTH]);
-        c.set(DATE,    fields[DATE]);
-        c.set(HOUR,    fields[HOUR]);
-        c.set(MINUTE,  fields[MINUTE]);
-        c.set(SECOND,  fields[SECOND]);
+        for (int i=0; i < c.getFieldCount(); i++) {
+            if (isSet(i)) {
+                c.set(i, get(i));
+            }
+        }
     }
     
     /**
@@ -145,10 +192,22 @@ public class TestCase extends Calendar {
      * 
      * @see #applyTime
      */
-    public boolean fieldsEqual(Calendar c) {
-        for (int i=0; i < Calendar.FIELD_COUNT; i++) {
+    public boolean fieldsEqual(Calendar c, TestLog log) {
+        for (int i=0; i < c.getFieldCount(); i++) {
             if (isSet(i) && get(i) != c.get(i)) {
-                System.out.println("field " + i + ": expected " + get(i) + ", got " + c.get(i));
+                log.errln("Fail: " + CalendarTest.fieldName(i) + " = " + c.get(i) +
+                          ", expected " + get(i));
+                for (int j=0; j<c.getFieldCount(); ++j) {
+                    if (isSet(j)) {
+                        if (get(j) == c.get(j)) {
+                            log.errln(" OK: " + CalendarTest.fieldName(j) + " = " +
+                                      c.get(j));
+                        } else {
+                            log.errln(" Fail: " + CalendarTest.fieldName(j) + " = " +
+                                      c.get(j) + ", expected " + get(j));
+                        }
+                    }
+                }
                 return false;
             }
         }
@@ -176,38 +235,11 @@ public class TestCase extends Calendar {
         return time == ((Calendar)obj).getTime().getTime();
     }
     
-    /**
-     * Determine whether time of this calendar (as returned by getTime)
-     * is before that of the specified calendar
-     */
-    public boolean before(Object obj) {
-        return time < ((Calendar)obj).getTime().getTime();
-    }
-
-    /**
-     * Determine whether time of this calendar (as returned by getTime)
-     * is after that of the specified calendar
-     */
-    public boolean after(Object obj) {
-        return time > ((Calendar)obj).getTime().getTime();
-    }
-    
-    // This object is only pretending to be a Calendar; it doesn't do any real
-    // calendar computatations.  But we have to pretend it does, because Calendar
-    // declares all of these abstract methods....
-    protected void computeTime() {}
-    protected void computeFields() {}
-    public void add(int field, int amt) {}
-    public int getMinimum(int field) { return 0; }
-    public int getMaximum(int field) { return 0; }
-    public int getGreatestMinimum(int field) { return 0; }
-    public int getLeastMaximum(int field) { return 0; }
-    
-    private static final int  SECOND_MS = 1000;
-    private static final int  MINUTE_MS = 60*SECOND_MS;
-    private static final int  HOUR_MS   = 60*MINUTE_MS;
-    private static final long DAY_MS    = 24*HOUR_MS;
-    private static final long JULIAN_EPOCH = -210866760000000L;   // 1/1/4713 BC 12:00
+    protected static final int  ONE_SECOND = 1000;
+    protected static final int  ONE_MINUTE = 60*ONE_SECOND;
+    protected static final int  ONE_HOUR   = 60*ONE_MINUTE;
+    protected static final long ONE_DAY    = 24*ONE_HOUR;
+    protected static final long JULIAN_EPOCH = -210866760000000L;   // 1/1/4713 BC 12:00
 
     public final static SimpleTimeZone UTC = new SimpleTimeZone(0, "GMT");
 }

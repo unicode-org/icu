@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/calendar/HebrewTest.java,v $ 
- * $Date: 2000/03/10 03:47:45 $ 
- * $Revision: 1.2 $
+ * $Date: 2000/11/18 00:17:58 $ 
+ * $Revision: 1.3 $
  *
  *****************************************************************************************
  */
@@ -14,9 +14,8 @@
 package com.ibm.test.calendar;
 
 import com.ibm.test.*;
-import java.util.*;
-import java.text.*;
 import com.ibm.util.*;
+import java.util.Locale;
 
 /**
  * Tests for the <code>HebrewCalendar</code> class.
@@ -55,6 +54,7 @@ public class HebrewTest extends CalendarTest {
             {   5759, SHEVAT,    2,     MONTH,   1,     5759, ADAR,      2 },
             {   5759, SHEVAT,    2,     MONTH,   2,     5759, NISAN,     2 },
             {   5759, SHEVAT,    2,     MONTH,  12,     5759, SHEVAT,    2 },
+            {   5759, AV,        1,     MONTH,  12,     5759, AV,        1 }, // Alan
 
             {   5757, HESHVAN,   2,     MONTH,   1,     5757, KISLEV,    2 },   // leap years
             {   5757, SHEVAT,    2,     MONTH,   1,     5757, ADAR_1,    2 },
@@ -62,6 +62,7 @@ public class HebrewTest extends CalendarTest {
             {   5757, SHEVAT,    2,     MONTH,   3,     5757, NISAN,     2 },
             {   5757, SHEVAT,    2,     MONTH,  12,     5757, TEVET,     2 },
             {   5757, SHEVAT,    2,     MONTH,  13,     5757, SHEVAT,    2 },
+            {   5757, AV,        1,     MONTH,  12,     5757, TAMUZ,     1 }, // Alan
             
             {   5757, KISLEV,    1,     DATE,   30,     5757, KISLEV,    2 },   // 29-day month
             {   5758, KISLEV,    1,     DATE,   31,     5758, KISLEV,    2 },   // 30-day month
@@ -198,5 +199,116 @@ public class HebrewTest extends CalendarTest {
         new TestCase(2487223.5,  0,  5858,    1,   1,  SAT,   0,  0,  0),
     };
     
-    
+    /**
+     * Problem reported by Armand Bendanan in which setting of the MONTH
+     * field in a Hebrew calendar causes the time fields to go negative.
+     */
+    public void TestTimeFields() {
+        HebrewCalendar calendar = new HebrewCalendar(5761, 0, 11, 12, 28, 15);
+		calendar.set(Calendar.YEAR, 5717);
+		calendar.set(Calendar.MONTH, 2);
+		calendar.set(Calendar.DAY_OF_MONTH, 23);
+        if (calendar.get(Calendar.HOUR_OF_DAY) != 12) {
+            errln("Fail: HebrewCalendar HOUR_OF_DAY = " + calendar.get(Calendar.HOUR_OF_DAY));
+        }
+    }
+
+    /**
+     * Test of the behavior of the month field.  This requires special
+     * handling in the Hebrew calendar because of the pattern of leap
+     * years.
+     */
+    public void TestMonthMovement() {
+        HebrewCalendar cal = new HebrewCalendar();
+        // Leap years are:
+        // 3 6 8 11 14 17 19 (and so on - 19-year cycle)
+        // We can't test complete() on some lines below because of ADAR_1 -- if
+        // the calendar is set to ADAR_1 on a non-leap year, the result is undefined.
+        int[] DATA = {
+            // c     - test complete() or not
+            // m/y   - before and after month/year
+            // delta - amount to add to month field
+            //c m1  y1 delta  m2  y2
+            1,  10,  2,  +24,  9,  4, // (year 2, month 10) + 24 months -> (y 4, m 9)
+            1,  10,  2,  +60,  8,  7, // (y 2, m 10) + 60 months -> (y 7, m 8)
+            1,   1,  2,  +12,  1,  3, // (y 2, m 1) + 12 months -> (y 3, m 1)
+            1,   3, 18,  -24,  4, 16, // (y 18, m 3) - 24 months -> (y 16, m 4)
+            1,   1,  6,  -24,  1,  4,
+            1,   4,  3,   +2,  6,  3, // Leap year - no skip 4,5,6,7,8
+            1,   8,  3,   -2,  6,  3, // Leap year - no skip
+            0,   4,  2,   +2,  7,  2, // Skip over leap month 4,5,(6),7,8
+            0,   8,  2,   -2,  5,  2, // Skip over leap month going backward
+        };
+        for (int i=0; i<DATA.length; ) {
+            boolean testComplete = DATA[i++] != 0;
+            int m = DATA[i++], y = DATA[i++];
+            int monthDelta = DATA[i++];
+            int m2 = DATA[i++], y2 = DATA[i++];
+            int mact, yact;
+
+            cal.clear();
+            cal.set(Calendar.YEAR, y);
+            cal.set(Calendar.MONTH, m-1);
+            cal.add(Calendar.MONTH, monthDelta);
+            yact = cal.get(Calendar.YEAR); mact = cal.get(Calendar.MONTH) + 1;
+            if (y2 != yact || m2 != mact) {
+                errln("Fail: " + m + "/" + y +
+                      " -> add(MONTH, " + monthDelta + ") -> " +
+                      mact + "/" + yact + ", expected " +
+                      m2 + "/" + y2);
+                cal.clear();
+                cal.set(Calendar.YEAR, y);
+                cal.set(Calendar.MONTH, m-1);
+                logln("Start: " + m + "/" + y);
+                int delta = monthDelta > 0 ? 1 : -1;
+                for (int c=0; c!=monthDelta; c+=delta) {
+                    cal.add(Calendar.MONTH, delta);
+                    logln("+ " + delta + " MONTH -> " +
+                          (cal.get(Calendar.MONTH) + 1) + "/" + cal.get(Calendar.YEAR));
+                }
+            }
+            
+            if (testComplete) {
+                cal.clear();
+                cal.set(Calendar.YEAR, y);
+                cal.set(Calendar.MONTH, m + monthDelta - 1);
+                yact = cal.get(Calendar.YEAR); mact = cal.get(Calendar.MONTH) + 1;
+                if (y2 != yact || m2 != mact) {
+                    errln("Fail: " + (m+monthDelta) + "/" + y +
+                          " -> complete() -> " +
+                          mact + "/" + yact + ", expected " +
+                          m2 + "/" + y2);
+                }
+            }
+        }
+    }
+
+    /**
+     * Test handling of ADAR_1.
+     */
+    /*
+    public void TestAdar1() {
+        HebrewCalendar cal = new HebrewCalendar();
+        cal.clear();
+        cal.set(Calendar.YEAR, 1903); // leap
+        cal.set(Calendar.MONTH, HebrewCalendar.ADAR_1);
+        logln("1903(leap)/ADAR_1 => " +
+              cal.get(Calendar.YEAR) + "/" + (cal.get(Calendar.MONTH)+1));
+
+        cal.clear();
+        cal.set(Calendar.YEAR, 1904); // non-leap
+        cal.set(Calendar.MONTH, HebrewCalendar.ADAR_1);
+        logln("1904(non-leap)/ADAR_1 => " +
+              cal.get(Calendar.YEAR) + "/" + (cal.get(Calendar.MONTH)+1));
+    }
+    */
+
+    /**
+     * With no fields set, the calendar should use default values.
+     */
+    public void TestDefaultFieldValues() {
+        HebrewCalendar cal = new HebrewCalendar();
+        cal.clear();
+        logln("cal.clear() -> " + cal.getTime());
+    }
 };
