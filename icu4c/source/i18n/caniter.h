@@ -11,9 +11,6 @@
 #include "unicode/utypes.h"
 #include "unicode/uobject.h"
 #include "unicode/unistr.h"
-#include "unicode/uniset.h"
-#include "unicode/normlzr.h"
-#include "unicode/unicode.h"
 
 #define SKIP_ZEROES TRUE
 
