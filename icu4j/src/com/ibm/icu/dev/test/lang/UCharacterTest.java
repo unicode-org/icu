@@ -1611,11 +1611,13 @@ public final class UCharacterTest extends TestFmwk
 	        { 0x0C4E, UProperty.BLOCK, UCharacter.UnicodeBlock.TELUGU.getID()},
 	        { 0x155A, UProperty.BLOCK, UCharacter.UnicodeBlock.UNIFIED_CANADIAN_ABORIGINAL_SYLLABICS.getID() },
 	        { 0x1717, UProperty.BLOCK, UCharacter.UnicodeBlock.TAGALOG.getID() },
+            { 0x1900, UProperty.BLOCK, UCharacter.UnicodeBlock.LIMBU.getID() },
 	        { 0x1AFF, UProperty.BLOCK, UCharacter.UnicodeBlock.NO_BLOCK.getID()},
 	        { 0x3040, UProperty.BLOCK, UCharacter.UnicodeBlock.HIRAGANA.getID()},
 	        { 0x1D0FF, UProperty.BLOCK, UCharacter.UnicodeBlock.BYZANTINE_MUSICAL_SYMBOLS.getID()},
+            { 0x50000, UProperty.BLOCK, UCharacter.UnicodeBlock.NO_BLOCK.getID() },
+            { 0xEFFFF, UProperty.BLOCK, UCharacter.UnicodeBlock.NO_BLOCK.getID() },
 	        { 0x10D0FF, UProperty.BLOCK, UCharacter.UnicodeBlock.SUPPLEMENTARY_PRIVATE_USE_AREA_B.getID() },
-	        { 0xEFFFF, UProperty.BLOCK, UCharacter.UnicodeBlock.NO_BLOCK.getID() },
 	
 	        /* UProperty.CANONICAL_COMBINING_CLASS tested for assigned characters in TestUnicodeData() */
 	        { 0xd7d7, UProperty.CANONICAL_COMBINING_CLASS, 0 },
