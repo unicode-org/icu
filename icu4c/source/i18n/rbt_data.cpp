@@ -34,8 +34,6 @@ TransliterationRuleData::TransliterationRuleData(const TransliterationRuleData& 
     variablesBase(other.variablesBase),
     variablesLength(other.variablesLength)
 {
-    ruleSet.setData(this); // ruleSet must already be frozen
-
     UErrorCode status = U_ZERO_ERROR;
     variableNames = new Hashtable(status);
     if (U_SUCCESS(status)) {
@@ -56,6 +54,9 @@ TransliterationRuleData::TransliterationRuleData(const TransliterationRuleData& 
             variables[i] = other.variables[i]->clone();
         }
     }    
+
+    // Do this last, _after_ setting up variables[].
+    ruleSet.setData(this); // ruleSet must already be frozen
 }
 
 TransliterationRuleData::~TransliterationRuleData() {
