@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/lang/UCharacterCaseTest.java,v $ 
-* $Date: 2002/03/15 02:13:29 $ 
-* $Revision: 1.1 $
+* $Date: 2002/03/15 22:39:20 $ 
+* $Revision: 1.2 $
 *
 *******************************************************************************
 */
@@ -251,19 +251,16 @@ public final class UCharacterCaseTest extends TestFmwk
 	public void TestTitle() 
 	{
 	    for (int i = 0; i < TITLE_BREAKITERATORS_.length; i ++) {
-	    	/* synwee todo: debug
-	    	if (!TITLE_DATA_[(i << 1) + 1].equals(
-	    	    UCharacter.toTitleCase(TITLE_DATA_[i << 1],
+	    	String test = TITLE_DATA_[i << 1];
+	    	String expected = TITLE_DATA_[(i << 1) + 1];
+	    	if (!expected.equals(
+	    	    UCharacter.toTitleCase(test,
 	    	                           TITLE_BREAKITERATORS_[i]))) {
-	            errln("error: titlecasing for " + hex(TITLE_DATA_[i << 1]) +
-	                  " should be " + hex(TITLE_DATA_[(i << 1) + 1]) + 
-	                  " but got " +
-	                  hex(UCharacter.toTitleCase(TITLE_DATA_[i << 1], 
-	                                         TITLE_BREAKITERATORS_[i])));
+	            errln("error: titlecasing for " + hex(test) + " should be " + 
+	                  hex(expected) + " but got " +
+	                  hex(UCharacter.toTitleCase(test, 
+	                                             TITLE_BREAKITERATORS_[i])));
 	        }
-	        if (i >= 2)
-		        System.out.println("count " + i);
-		        */
 	    }
 	}
 	
@@ -593,11 +590,16 @@ public final class UCharacterCaseTest extends TestFmwk
 		"\u0041\u0062\u0020\u0049\u03c2\u0020\u0053\u0073\u03c3\u002f\u0046\u0066\u0069\ud93f\udfff",
 		
 		" tHe QUIcK bRoWn", " The Quick Brown",
-		"ǄǅǆǇǈǉǊǋǌ", "ǅǅǅǈǈǈǋǋǋ", // UBRK_CHARACTER
-    	"ǉubav ljubav", "ǈubav Ljubav", // Lj vs. L+j
+		
+		"\u01c4\u01c5\u01c6\u01c7\u01c8\u01c9\u01ca\u01cb\u01cc", 
+		"\u01c5\u01c5\u01c5\u01c8\u01c8\u01c8\u01cb\u01cb\u01cb", // UBRK_CHARACTER
+		
+    	"\u01c9ubav ljubav", "\u01c8ubav Ljubav", // Lj vs. L+j
+    	
     	"'oH dOn'T tItLeCaSe AfTeR lEtTeR+'", 
     	"'Oh Don't Titlecase After Letter+'"
-	};       
+	};
+	       
     private static final BreakIterator TITLE_BREAKITERATORS_[] =
     {
     	BREAKITERATOR_CHARACTER_,
