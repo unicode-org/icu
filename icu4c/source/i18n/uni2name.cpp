@@ -69,9 +69,11 @@ Transliterator* UnicodeNameTransliterator::clone(void) const {
 
 /**
  * Implements {@link Transliterator#handleTransliterate}.
+ * Ignore isIncremental since we don't need the context, and
+ * we work on codepoints.
  */
 void UnicodeNameTransliterator::handleTransliterate(Replaceable& text, UTransPosition& offsets,
-                                                    UBool isIncremental) const {
+                                                    UBool /*isIncremental*/) const {
     // As of Unicode 3.0.0, the longest name is 83 characters long.
     // Adjust this buffer size as needed.
     char buf[128];
