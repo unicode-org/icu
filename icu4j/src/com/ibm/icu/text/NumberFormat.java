@@ -229,8 +229,10 @@ public abstract class NumberFormat extends UFormat {
      * @stable ICU 2.0
      */
     public final String format(long number) {
-        return format(number,new StringBuffer(),
-                      new FieldPosition(0)).toString();
+	StringBuffer buf = new StringBuffer(19);
+	FieldPosition pos = new FieldPosition(0);
+        format(number, buf, pos);
+	return buf.toString();
     }
 
     /**
@@ -987,12 +989,13 @@ public abstract class NumberFormat extends UFormat {
 
     // Hook for service
     private static NumberFormat getInstance(Locale desiredLocale, int choice) {
-        if (shim == null) {
-            return createInstance(desiredLocale, choice);
-        } else {
-            // TODO: shims must call setLocale() on object they create
-            return getShim().createInstance(desiredLocale, choice);
-        }
+//          if (shim == null) {
+//              return createInstance(desiredLocale, choice);
+//          } else {
+//              // TODO: shims must call setLocale() on object they create
+//              return getShim().createInstance(desiredLocale, choice);
+//          }
+         return getShim().createInstance(desiredLocale, choice);
     }
 
     // [NEW]
