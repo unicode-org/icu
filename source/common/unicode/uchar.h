@@ -283,9 +283,22 @@ typedef enum UProperty {
     /** One more than the last constant for enumerated/integer Unicode properties. @draft ICU 2.2 */
     UCHAR_INT_LIMIT,
 
+    /** Enumerated property General_Category, returned as a bit mask.
+        When used in u_getIntPropertyValue(c), same as U_MASK(u_charType(c)),
+        returns bit masks for UCharCategory values where exactly one bit is set.
+        When used with u_getPropertyValueName() and u_getPropertyValueEnum(),
+        a multi-bit mask is used for sets of categories like "Letters".
+        Mask values should be cast to uint32_t.
+        @draft ICU 2.4 */
+    UCHAR_GENERAL_CATEGORY_MASK=0x2000,
+    /** First constant for bit-mask Unicode properties. @draft ICU 2.4 */
+    UCHAR_MASK_START=UCHAR_GENERAL_CATEGORY_MASK,
+    /** One more than the last constant for bit-mask Unicode properties. @draft ICU 2.4 */
+    UCHAR_MASK_LIMIT,
+
     /** Double property Numeric_Value.
         Corresponds to u_getNumericValue. @draft ICU 2.4 */
-    UCHAR_NUMERIC_VALUE=0x2000,
+    UCHAR_NUMERIC_VALUE=0x3000,
     /** First constant for double Unicode properties. @draft ICU 2.4 */
     UCHAR_DOUBLE_START=UCHAR_NUMERIC_VALUE,
     /** One more than the last constant for double Unicode properties. @draft ICU 2.4 */
@@ -293,7 +306,7 @@ typedef enum UProperty {
 
     /** String property Age.
         Corresponds to u_charAge. @draft ICU 2.4 */
-    UCHAR_AGE=0x3000,
+    UCHAR_AGE=0x4000,
     /** First constant for string Unicode properties. @draft ICU 2.4 */
     UCHAR_STRING_START=UCHAR_AGE,
     /** String property Bidi_Mirroring_Glyph.
@@ -1422,7 +1435,8 @@ u_isUWhiteSpace(UChar32 c);
  * @param c Code point to test.
  * @param which UProperty selector constant, identifies which property to check.
  *        Must be UCHAR_BINARY_START<=which<UCHAR_BINARY_LIMIT
- *        or UCHAR_INT_START<=which<UCHAR_INT_LIMIT.
+ *        or UCHAR_INT_START<=which<UCHAR_INT_LIMIT
+ *        or UCHAR_MASK_START<=which<UCHAR_MASK_LIMIT.
  * @return Numeric value that is directly the property value or,
  *         for enumerated properties, corresponds to the numeric value of the enumerated
  *         constant of the respective property value enumeration type
@@ -1448,7 +1462,8 @@ u_getIntPropertyValue(UChar32 c, UProperty which);
  *
  * @param which UProperty selector constant, identifies which binary property to check.
  *        Must be UCHAR_BINARY_START<=which<UCHAR_BINARY_LIMIT
- *        or UCHAR_INT_START<=which<UCHAR_INT_LIMIT.
+ *        or UCHAR_INT_START<=which<UCHAR_INT_LIMIT
+ *        or UCHAR_MASK_START<=which<UCHAR_MASK_LIMIT.
  * @return Minimum value returned by u_getIntPropertyValue for a Unicode property.
  *         0 if the property selector is out of range.
  *
@@ -1477,7 +1492,8 @@ u_getIntPropertyMinValue(UProperty which);
  *
  * @param which UProperty selector constant, identifies which binary property to check.
  *        Must be UCHAR_BINARY_START<=which<UCHAR_BINARY_LIMIT
- *        or UCHAR_INT_START<=which<UCHAR_INT_LIMIT.
+ *        or UCHAR_INT_START<=which<UCHAR_INT_LIMIT
+ *        or UCHAR_MASK_START<=which<UCHAR_MASK_LIMIT.
  * @return Maximum value returned by u_getIntPropertyValue for a Unicode property.
  *         <=0 if the property selector is out of range.
  *
@@ -2097,9 +2113,11 @@ u_getPropertyEnum(const char* alias);
  * Return the Unicode name for a given property value, as given in the
  * Unicode database file PropertyValueAliases.txt.
  *
- * @param property UProperty selector in the range UCHAR_INT_START <=
- *         x < UCHAR_INT_LIMIT or UCHAR_BINARY_START <= x <
- *         UCHAR_BINARY_LIMIT.  If out of range, NULL is returned.
+ * @param property UProperty selector constant.
+ *        Must be UCHAR_BINARY_START<=which<UCHAR_BINARY_LIMIT
+ *        or UCHAR_INT_START<=which<UCHAR_INT_LIMIT
+ *        or UCHAR_MASK_START<=which<UCHAR_MASK_LIMIT.
+ *        If out of range, NULL is returned.
  *
  * @param value selector for a value for the given property.  If out
  *         of range, NULL is returned.  In general, valid values range
@@ -2142,12 +2160,12 @@ u_getPropertyValueName(UProperty property,
  * specified in the Unicode database file PropertyValueAliases.txt.
  * Short, long, and any other variants are recognized.
  *
- * @param prop the UProperty selector for the property to which
- *         the given value alias belongs.  It should be in the range
- *         UCHAR_INT_START <= x < UCHAR_INT_LIMIT or
- *         UCHAR_BINARY_START <= x < UCHAR_BINARY_LIMIT; only these
- *         properties define value names and enums.  If out of range,
- *         UCHAR_INVALID_CODE is returned.
+ * @param property UProperty selector constant.
+ *        Must be UCHAR_BINARY_START<=which<UCHAR_BINARY_LIMIT
+ *        or UCHAR_INT_START<=which<UCHAR_INT_LIMIT
+ *        or UCHAR_MASK_START<=which<UCHAR_MASK_LIMIT.
+ *        Only these properties can be enumerated.
+ *        If out of range, UCHAR_INVALID_CODE is returned.
  *
  * @param alias the value name to be matched.  The name is compared
  *         using "loose matching" as described in
