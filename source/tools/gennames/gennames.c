@@ -128,7 +128,7 @@ static int
 compareWords(const void *word1, const void *word2);
 
 static void
-generateData();
+generateData(const char *dataDir);
 
 static uint32_t
 generateAlgorithmicData(UNewDataMemory *pData);
@@ -172,6 +172,7 @@ extern int
 main(int argc, char *argv[]) {
     FileStream *in;
     char *arg, *filename=NULL;
+    const char *destdir = 0;
     int i;
     bool_t store10Names=FALSE;
 
@@ -221,10 +222,14 @@ main(int argc, char *argv[]) {
         }
     }
 
+    if (!destdir) {
+        destdir = u_getDataDirectory();
+    }
+
     init();
     parseDB(in, store10Names);
     compress();
-    generateData();
+    generateData(destdir);
 
     if(in!=T_FileStream_stdin()) {
         T_FileStream_close(in);
@@ -620,7 +625,7 @@ compareWords(const void *word1, const void *word2) {
 /* generate output data ----------------------------------------------------- */
 
 static void
-generateData() {
+generateData(const char *dataDir) {
     UNewDataMemory *pData;
     UErrorCode errorCode=U_ZERO_ERROR;
     uint16_t groupWords[3];
@@ -629,7 +634,7 @@ generateData() {
     long dataLength;
     int16_t token;
 
-    pData=udata_create(DATA_TYPE, DATA_NAME, &dataInfo,
+    pData=udata_create(DATA_TYPE, DATA_NAME, dataDir, &dataInfo,
                        haveCopyright ? U_COPYRIGHT_STRING : NULL, &errorCode);
     if(U_FAILURE(errorCode)) {
         fprintf(stderr, "gennames: unable to create data memory, error %d\n", errorCode);
@@ -1021,3 +1026,12 @@ allocWord(uint32_t length) {
     wordBottom=bottom;
     return stringStore+bottom;
 }
+
+/*
+ * Hey, Emacs, please set the following:
+ *
+ * Local Variables:
+ * indent-tabs-mode: nil
+ * End:
+ *
+ */

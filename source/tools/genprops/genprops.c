@@ -37,7 +37,7 @@ extern bool_t beVerbose=FALSE, haveCopyright=TRUE;
 
 extern const char *const
 genCategoryNames[U_CHAR_CATEGORY_COUNT]={
-	NULL,
+        NULL,
     "Lu", "Ll", "Lt", "Lm", "Lo", "Mn", "Me",
     "Mc", "Nd", "Nl", "No",
     "Zs", "Zl", "Zp",
@@ -50,7 +50,7 @@ genCategoryNames[U_CHAR_CATEGORY_COUNT]={
 
 extern const char *const
 bidiNames[U_CHAR_DIRECTION_COUNT]={
-	"L", "R", "EN", "ES", "ET", "AN", "CS", "B", "S",
+        "L", "R", "EN", "ES", "ET", "AN", "CS", "B", "S",
     "WS", "ON", "LRE", "LRO", "AL", "RLE", "RLO", "PDF", "NSM", "BN"
 };
 
@@ -73,6 +73,7 @@ checkLineIndex(uint32_t code, int16_t limit, int16_t length);
 extern int
 main(int argc, char *argv[]) {
     FileStream *in;
+    const char *destdir = 0;
     char *arg, *filename=NULL;
     int i;
 
@@ -117,6 +118,10 @@ main(int argc, char *argv[]) {
         }
     }
 
+    if (!destdir) {
+        destdir = u_getDataDir();
+    }
+
     init();
     initStore();
     parseDB(in);
@@ -124,7 +129,7 @@ main(int argc, char *argv[]) {
     compactProps();
     compactStage3();
     compactStage2();
-    generateData();
+    generateData(destdir);
 
     if(in!=T_FileStream_stdin()) {
         T_FileStream_close(in);
@@ -369,3 +374,12 @@ checkLineIndex(uint32_t code, int16_t index, int16_t length) {
         exit(U_PARSE_ERROR);
     }
 }
+
+/*
+ * Hey, Emacs, please set the following:
+ *
+ * Local Variables:
+ * indent-tabs-mode: nil
+ * End:
+ *
+ */
