@@ -850,7 +850,7 @@ static const UConverterImpl _UTF8Impl={
     NULL
 };
 
-/* Todo: verify that UTF-8 == (ccsid (ibm-codepage) 1208) for unicode version 2.0 and 3.0 */
+/* The 1208 CCSID refers to any version of Unicode of UTF-8 */
 static const UConverterStaticData _UTF8StaticData={
     sizeof(UConverterStaticData),
     "UTF-8",
@@ -1280,7 +1280,7 @@ static const UConverterImpl _UTF16BEImpl={
     NULL
 };
 
-/* Todo: verify that UTF-16BE == (ccsid (ibm-codepage) 1200) for unicode version 2.0 and 3.0 */
+/* The 1200 CCSID refers to any version of Unicode with any endianess of UTF-16 */
 static const UConverterStaticData _UTF16BEStaticData={
     sizeof(UConverterStaticData),
     "UTF-16BE",
@@ -1381,7 +1381,7 @@ static const UConverterImpl _UTF16LEImpl={
 };
 
 
-/* Todo: verify that UTF-16LE == (ccsid (ibm-codepage) 1200) for unicode version 2.0 and 3.0 */
+/* The 1200 CCSID refers to any version of Unicode with any endianess of UTF-16 */
 static const UConverterStaticData _UTF16LEStaticData={
     sizeof(UConverterStaticData),
     "UTF-16LE",
@@ -1860,6 +1860,7 @@ static const UConverterImpl _UTF32BEImpl = {
     NULL
 };
 
+/* The 1232 CCSID refers to any version of Unicode with any endianess of UTF-32 */
 static const UConverterStaticData _UTF32BEStaticData = {
     sizeof(UConverterStaticData),
     "UTF-32BE",
@@ -2340,6 +2341,7 @@ static const UConverterImpl _UTF32LEImpl = {
     NULL
 };
 
+/* The 1232 CCSID refers to any version of Unicode with any endianess of UTF-32 */
 static const UConverterStaticData _UTF32LEStaticData = {
     sizeof(UConverterStaticData),
     "UTF-32LE",
