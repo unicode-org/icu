@@ -1,3 +1,11 @@
+/*
+*******************************************************************************
+*
+*   Copyright (C) 1999, International Business Machines
+*   Corporation and others.  All Rights Reserved.
+*
+*******************************************************************************
+*/
 /* common/icucfg.h.in.  Generated automatically from configure.in by autoheader.  */
 
 /* Define if you have the ANSI C header files.  */

@@ -1,20 +1,16 @@
 /*
-   ********************************************************************************
-   *                                                                              *
-   * COPYRIGHT:                                                                   *
-   *   (C) Copyright International Business Machines Corporation, 1998            *
-   *   Licensed Material - Program-Property of IBM - All Rights Reserved.         *
-   *   US Government Users Restricted Rights - Use, duplication, or disclosure    *
-   *   restricted by GSA ADP Schedule Contract with IBM Corp.                     *
-   *                                                                              *
-   ********************************************************************************
-   *
-   *
-   *   uconv_cnv.c:
-   *   Implements all the low level conversion functions
-   *   T_UnicodeConverter_{to,from}Unicode_$ConversionType
-   *
- */
+*******************************************************************************
+*
+*   Copyright (C) 1998-1999, International Business Machines
+*   Corporation and others.  All Rights Reserved.
+*
+*******************************************************************************
+*
+*   uconv_cnv.c:
+*   Implements all the low level conversion functions
+*   T_UnicodeConverter_{to,from}Unicode_$ConversionType
+*
+*/
 
 #include "unicode/utypes.h"
 #include "uhash.h"
