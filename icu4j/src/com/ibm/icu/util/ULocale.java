@@ -1226,7 +1226,15 @@ public final class ULocale implements Serializable {
          * and IDSeparator.  Return the start of the country code in the buffer.
          */
         private int parseCountry() {
-            if (!atTerminator()) {
+	    // we need to add an underscore even if we're at a terminator (except DONE) since
+	    // we must add the underscore in case there's a variant.  POSIX can
+	    // put variants after a terminator.  There are some odd POSIX ids that
+	    // require this, e.g. 'no@ny'.
+            if (atTerminator()) {
+		if (index < id.length) { // might have variant
+		    append(UNDERSCORE);
+		}
+	    } else {
                 int oldIndex = index;
                 ++index;
 
@@ -1301,9 +1309,10 @@ public final class ULocale implements Serializable {
             boolean first = true;
             char c = next();
             if (c == DOT) {
+		// if we have a DOT, we ignore anything after the '@'
                 while (!isTerminator(c = next())); // skip to terminator, assume no more DOTs
-            }
-            if (c != DONE && (c != KEYWORD_SEPARATOR || !haveKeywordAssign())) {
+            } 
+	    if (c != DONE && (c != KEYWORD_SEPARATOR || !haveKeywordAssign())) {
                 // we have more text, and either had an id separator, or 
                 // had a keyword separator in a POSIX locale
                 // either way, we accumulate text until a terminator
@@ -1388,8 +1397,8 @@ public final class ULocale implements Serializable {
             parseCountry();
             parseVariant();
             
-            // catch unwanted trailing hyphen after country if there was no variant
-            if (blen > 1 && buffer[blen-1] == HYPHEN) {
+            // catch unwanted trailing underscore after country if there was no variant
+            if (blen > 1 && buffer[blen-1] == UNDERSCORE) {
                 --blen;
             }
         }
@@ -1552,7 +1561,7 @@ public final class ULocale implements Serializable {
      * @draft ICU 3.0
      */
     public static String canonicalize(String localeID){
-        String locStr = new IDParser(localeID).getBaseName();
+        String locStr = new IDParser(localeID).getName();
         // now we have an ID in the form xx_Yyyy_ZZ_KKKKK
         /* See if this is an already known locale */
         for (int i = 0; i < variantsToKeywords.length; i++) {
@@ -1600,7 +1609,12 @@ public final class ULocale implements Serializable {
         int offset = findIndex(languages, language);
         if(offset>=0){
             return languages3[offset];
-        }
+        } else {
+	    offset = findIndex(obsoleteLanguages, language);
+	    if (offset >= 0) {
+		return obsoleteLanguages3[offset];
+	    }
+	}
         return EMPTY_STRING;
     }
     
