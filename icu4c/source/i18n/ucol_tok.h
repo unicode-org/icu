@@ -79,7 +79,23 @@ struct UColToken {
   UChar *rulesToParse;
 };
 
+// This is a token that has been parsed
+// but not yet processed. Used to reduce
+// the number of arguments in the parser
 typedef struct {
+  uint32_t strength;
+  uint32_t charsOffset;
+  uint32_t charsLen;
+  uint32_t extensionOffset;
+  uint32_t extensionLen;
+  uint32_t prefixOffset;
+  uint32_t prefixLen;
+  uint8_t flags;
+} UColParsedToken;
+
+
+typedef struct {
+  UColParsedToken parsedToken;
   UChar *source;
   UChar *end;
   UChar *current;
@@ -128,11 +144,6 @@ void ucol_tok_initTokenList(UColTokenParser *src, const UChar *rules, const uint
 U_CFUNC void ucol_tok_closeTokenList(UColTokenParser *src);
 
 U_CAPI const UChar* U_EXPORT2 ucol_tok_parseNextToken(UColTokenParser *src, 
-                        uint32_t *strength, 
-                        uint32_t *chOffset, uint32_t *chLen, 
-                        uint32_t *exOffset, uint32_t *exLen,
-                        uint32_t *prefixOffset, uint32_t *prefixLen,
-                        uint8_t *specs,
                         UBool startOfRules,
                         UParseError *parseError,
                         UErrorCode *status);
