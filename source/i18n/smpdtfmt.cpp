@@ -534,7 +534,13 @@ SimpleDateFormat::subFormat(UnicodeString& result,
 
     // for "yyyy", write out the whole year; for "yy", write out the last 2 digits
     case kYearField:
-	case kYearWOYField:
+        if (count >= 4) 
+            zeroPaddingNumber(result, value, 4, maxIntCount);
+        else 
+            zeroPaddingNumber(result, value, 2, 2);
+        break;
+
+    case kYearWOYField:
         if (count >= 4) 
             zeroPaddingNumber(result, value, 4, maxIntCount);
         else 
@@ -721,6 +727,9 @@ SimpleDateFormat::parse(const UnicodeString& text, ParsePosition& pos) const
     int32_t oldStart = start;
     bool_t ambiguousYear[] = { FALSE };
 
+    char s[100];
+            s[text.extract(0, text.length(), s)]=0;
+
     fCalendar->clear();
 
     bool_t inQuote = FALSE;
@@ -877,6 +886,7 @@ SimpleDateFormat::parse(const UnicodeString& text, ParsePosition& pos) const
                     // handle cases like: 'MMMM   dd' in pattern vs.
                     // "jan,,,20" in time text, where "   " doesn't
                     // match with ",,,".
+
                     pos.setErrorIndex(start);
                     pos.setIndex(oldStart);
                     // {sfb} correct Date?
@@ -1097,7 +1107,8 @@ int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UC
     if (patternCharIndex == kHourOfDay1Field /*HOUR_OF_DAY1_FIELD*/ ||
         patternCharIndex == kHour1Field /*HOUR1_FIELD*/ ||
         (patternCharIndex == kMonthField /*MONTH_FIELD*/ && count <= 2) ||
-        patternCharIndex == kYearField /*YEAR*/)
+        patternCharIndex == kYearField /*YEAR*/ ||
+        patternCharIndex == kYearWOYField)
     {
         int32_t parseStart = pos.getIndex(); // WORK AROUND BUG IN NUMBER FORMAT IN 1.2B3
         // It would be good to unify this with the obeyCount logic below,
@@ -1146,6 +1157,19 @@ int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UC
                 (value < ambiguousTwoDigitYear ? 100 : 0);
         }
         fCalendar->set(Calendar::YEAR, value);
+        return pos.getIndex();
+    case kYearWOYField:
+        // Comment is the same as for kYearFiels - look above
+        if (count <= 2 && (pos.getIndex() - start) == 2
+            && Unicode::isDigit(text.charAt(start))
+            && Unicode::isDigit(text.charAt(start+1)))
+        {
+            int32_t ambiguousTwoDigitYear = fDefaultCenturyStartYear % 100;
+            ambiguousYear[0] = (value == ambiguousTwoDigitYear);
+            value += (fDefaultCenturyStartYear/100)*100 +
+                (value < ambiguousTwoDigitYear ? 100 : 0);
+        }
+        fCalendar->set(Calendar::YEAR_WOY, value);
         return pos.getIndex();
     case kMonthField:
         if (count <= 2) // i.e., M or MM.
@@ -1361,6 +1385,7 @@ int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UC
     // case 12: // 'w' - WEEK_OF_YEAR
     // case 13: // 'W' - WEEK_OF_MONTH
     // case 16: // 'K' - HOUR: 0-based.  eg, 11PM + 1 hour =>> 0 AM
+	// 'e' - DOW_LOCAL
 
         // WORK AROUND BUG IN NUMBER FORMAT IN 1.2B3
         int32_t parseStart = pos.getIndex();
