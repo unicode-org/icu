@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/ReplaceableUCharacterIterator.java,v $ 
- * $Date: 2002/07/16 00:41:10 $ 
- * $Revision: 1.1 $
+ * $Date: 2002/07/19 22:08:46 $ 
+ * $Revision: 1.2 $
  *
  *******************************************************************************
  */
@@ -216,13 +216,7 @@ public class ReplaceableUCharacterIterator extends UCharacterIterator {
         replaceable.getChars(0,length,fillIn,offset);
         return length;
     }       
-    
-    public String getString(){
-        char[] arr = new char[length];
-        replaceable.getChars(0,length,arr,0);
-        return new String(arr);
-    }
-    
+        
     // private data members ----------------------------------------------------
     
     /**

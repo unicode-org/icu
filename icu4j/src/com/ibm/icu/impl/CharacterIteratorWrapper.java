@@ -4,7 +4,7 @@
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  *
- * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/Attic/ICUCharacterIterator.java,v $ 
+ * $Source: /usr/cvs/icu4j/icu4j/src/com/ibm/icu/impl/ICUCharacterIterator.java,v $ 
  * $Date: 2002/06/20 01:18:07 $ 
  * $Revision: 1.1 $
  *
@@ -14,7 +14,13 @@ package com.ibm.icu.impl;
 
 import java.text.CharacterIterator;
 
-public class ICUCharacterIterator extends UCharacterIterator {
+/**
+ * This class is a wrapper around CharacterIterator and implements the 
+ * UCharacterIterator protocol
+ * @author ram
+ */
+
+public class CharacterIteratorWrapper extends UCharacterIterator {
     
     private CharacterIterator iterator;
     
@@ -33,7 +39,7 @@ public class ICUCharacterIterator extends UCharacterIterator {
      */
     private int beginIndex;
     
-    public ICUCharacterIterator(CharacterIterator iter){
+    public CharacterIteratorWrapper(CharacterIterator iter){
         if(iter==null){
             throw new IllegalArgumentException();
         }
@@ -126,7 +132,7 @@ public class ICUCharacterIterator extends UCharacterIterator {
      */
     public Object clone(){
 		try {
-		    ICUCharacterIterator result = (ICUCharacterIterator) super.clone();
+		    CharacterIteratorWrapper result = (CharacterIteratorWrapper) super.clone();
 		    result.iterator = (CharacterIterator)this.iterator.clone();
 		    return result;
 		} catch (CloneNotSupportedException e) {      

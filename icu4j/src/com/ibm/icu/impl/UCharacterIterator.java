@@ -5,15 +5,14 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/Attic/UCharacterIterator.java,v $ 
- * $Date: 2002/07/16 18:51:59 $ 
- * $Revision: 1.9 $
+ * $Date: 2002/07/19 22:08:45 $ 
+ * $Revision: 1.10 $
  *
  *******************************************************************************
  */
 package com.ibm.icu.impl;
 
 import com.ibm.icu.text.Replaceable;
-import com.ibm.icu.text.StringCharacterIterator;
 import com.ibm.icu.text.UTF16;
 
 import java.text.CharacterIterator;
@@ -109,7 +108,7 @@ public abstract class UCharacterIterator
      * @exception IllegalArgumentException if the argument is null
      */    
     public static final UCharacterIterator getInstance(CharacterIterator source){
-        return new ICUCharacterIterator(source);
+        return new CharacterIteratorWrapper(source);
     }
        
     // public methods ----------------------------------------------------------
@@ -120,7 +119,7 @@ public abstract class UCharacterIterator
      * @return java.text.CharacterIterator object 
      */
     public CharacterIterator getCharacterIterator(){
-        return new StringCharacterIterator(this.getText());
+        return new UCharacterIteratorWrapper(this);
     }    
    
     /**
