@@ -1,0 +1,171 @@
+
+# Make definitions that are shared by the different subprojects of ICU.
+#
+# Yves Arrouye.
+#
+# Copyright (C) 2000-2003, International Business Machines Corporation and others.
+# All Rights Reserved.
+
+#
+# Some of these variables are overridden in the config/mh-* files.
+#
+
+# Shell to use
+
+SHELL = @SHELL@
+
+# Standard directories
+
+prefix = @prefix@
+exec_prefix = @exec_prefix@
+
+bindir = @bindir@
+sbindir = @sbindir@
+datadir = @datadir@
+libdir = @libdir@
+includedir = @includedir@
+mandir = @mandir@
+sysconfdir = @sysconfdir@
+
+# Package information
+
+PACKAGE = @PACKAGE@
+VERSION = @VERSION@
+UNICODE_VERSION = @UNICODE_VERSION@
+SO_TARGET_VERSION = @LIB_VERSION@
+SO_TARGET_VERSION_MAJOR = @LIB_VERSION_MAJOR@
+
+# The ICU data external name is usually icudata; the entry point name is
+# the version-dependent name (for no particula reason except it was easier
+# to change the build this way). When building in common mode, the data
+# name is the versioned platform-dependent one. 
+
+ICUDATA_DIR = @pkgicudatadir@/$(PACKAGE)$(ICULIBSUFFIX)/$(VERSION)
+
+ICUDATA_BASENAME_VERSION = $(ICUPREFIX)dt@LIB_VERSION_MAJOR@
+ICUDATA_ENTRY_POINT = $(ICUDATA_BASENAME_VERSION)
+ICUDATA_PLATFORM_NAME = $(ICUDATA_BASENAME_VERSION)@ICUDATA_CHAR@
+ifeq ($(strip $(PKGDATA_MODE)),)
+PKGDATA_MODE=@DATA_PACKAGING_MODE@
+endif
+ifeq ($(PKGDATA_MODE),common)
+ICUDATA_NAME = $(ICUDATA_PLATFORM_NAME)
+ICUPKGDATA_DIR = $(ICUDATA_DIR)
+else
+ifeq ($(PKGDATA_MODE),dll)
+ICUDATA_NAME = $(ICUPREFIX)data$(ICULIBSUFFIX)
+ICUPKGDATA_DIR = $(libdir)
+else
+ICUDATA_NAME = $(ICUPREFIX)data
+ICUPKGDATA_DIR = $(ICUDATA_DIR)
+endif
+endif
+
+# ICU specific directories
+
+pkgdatadir = $(datadir)/$(PACKAGE)$(ICULIBSUFFIX)/$(VERSION)
+pkglibdir = $(libdir)/$(PACKAGE)$(ICULIBSUFFIX)/$(VERSION)
+pkgsysconfdir = $(sysconfdir)/$(PACKAGE)$(ICULIBSUFFIX)
+
+# Installation programs
+
+MKINSTALLDIRS = $(SHELL) $(top_srcdir)/mkinstalldirs
+
+INSTALL = @INSTALL@
+INSTALL_PROGRAM = @INSTALL_PROGRAM@
+INSTALL_DATA = @INSTALL_DATA@
+INSTALL_SCRIPT = @INSTALL_SCRIPT@
+
+# Library suffix (to support different C++ compilers)
+
+ICULIBSUFFIX=@ICULIBSUFFIX@
+
+# Compiler and tools
+
+EXEEXT = @EXEEXT@
+CC = @CC@
+CXX = @CXX@
+AIX_SHLIB = @AIX_SHLIB@
+AR = @AR@
+ARFLAGS := @ARFLAGS@ $(ARFLAGS)
+RANLIB = @RANLIB@
+COMPILE_LINK_ENVVAR = @COMPILE_LINK_ENVVAR@
+
+# Various flags for the tools
+
+# DEFS is for common macro definitions
+DEFS = @DEFS@
+# CFLAGS is for C only flags
+CFLAGS = @CFLAGS@
+# CXXFLAGS is for C++ only flags
+CXXFLAGS = @CXXFLAGS@
+# CPPFLAGS is for C Pre-Processor flags
+CPPFLAGS = @CPPFLAGS@
+# DEFAULT_LIBS are the default libraries to link against
+DEFAULT_LIBS = @LIBS@
+# LIB_M is for linking against the math library
+LIB_M = @LIB_M@
+# OUTOPT is for creating a specific output name
+OUTOPT = -o 
+
+ENABLE_RPATH = @ENABLE_RPATH@
+ifeq ($(ENABLE_RPATH),YES)
+RPATHLDFLAGS = $(LD_RPATH)$(LD_RPATH_PRE)$(libdir)
+endif
+LDFLAGS = @LDFLAGS@ $(RPATHLDFLAGS)
+
+# What kind of libraries are we building and linking against?
+ENABLE_STATIC = @ENABLE_STATIC@
+ENABLE_SHARED = @ENABLE_SHARED@
+
+# Echo w/o newline
+
+ECHO_N = @ECHO_N@
+ECHO_C = @ECHO_C@
+
+# Commands to compile
+COMPILE.c=    $(CC) $(CPPFLAGS) $(DEFS) $(CFLAGS) -c
+COMPILE.cc=   $(CXX) $(CPPFLAGS) $(DEFS) $(CXXFLAGS) -c
+
+# Commands to link
+LINK.c=       $(CC) $(CFLAGS) $(LDFLAGS)
+LINK.cc=      $(CXX) $(CXXFLAGS) $(LDFLAGS)
+
+# Commands to make a shared library
+SHLIB.c=      $(CC) $(CFLAGS) $(LDFLAGS) -shared
+SHLIB.cc=     $(CXX) $(CXXFLAGS) $(LDFLAGS) -shared
+
+# Environment variable to set a runtime search path
+LDLIBRARYPATH_ENVVAR = LD_LIBRARY_PATH
+
+# Versioned target for a shared library.
+FINAL_SO_TARGET = $(SO_TARGET).$(SO_TARGET_VERSION)
+MIDDLE_SO_TARGET = $(SO_TARGET).$(SO_TARGET_VERSION_MAJOR)
+
+##  How ICU libraries are named...  ex. $(LIBICU)uc$(SO)
+# Prefix for the ICU library names
+ICUPREFIX = icu
+LIBICU = lib$(ICUPREFIX)
+
+# Force removal [for make clean]
+RMV = rm -rf
+# Platform commands to remove or move executable and library targets
+INSTALL-S = $(INSTALL_PROGRAM)
+INSTALL-L = $(INSTALL_DATA)
+
+# Link commands to link to ICU libs
+LIBICUDT=       -L$(top_builddir)/data/out -L$(top_builddir)/stubdata -l$(ICUPREFIX)data$(ICULIBSUFFIX)$(SO_TARGET_VERSION_SUFFIX)
+LIBICUUC=       -L$(top_builddir)/common -l$(ICUPREFIX)uc$(ICULIBSUFFIX)$(SO_TARGET_VERSION_SUFFIX) $(LIBICUDT)
+LIBICUI18N=     -L$(top_builddir)/i18n -l$(ICUPREFIX)i18n$(ICULIBSUFFIX)$(SO_TARGET_VERSION_SUFFIX)
+LIBICULE=       -L$(top_builddir)/layout -l$(ICUPREFIX)le$(ICULIBSUFFIX)$(SO_TARGET_VERSION_SUFFIX)
+LIBICULX=       -L$(top_builddir)/layoutex -l$(ICUPREFIX)lx$(ICULIBSUFFIX)$(SO_TARGET_VERSION_SUFFIX)
+LIBCTESTFW=     -L$(top_builddir)/tools/ctestfw -l$(ICUPREFIX)ctestfw$(ICULIBSUFFIX)$(SO_TARGET_VERSION_SUFFIX)
+LIBICUTOOLUTIL= -L$(top_builddir)/tools/toolutil -l$(ICUPREFIX)toolutil$(ICULIBSUFFIX)$(SO_TARGET_VERSION_SUFFIX)
+LIBUSTDIO=      -L$(top_builddir)/extra/ustdio -licuio$(ICULIBSUFFIX)$(SO_TARGET_VERSION_SUFFIX)
+
+# Invoke, set library path for all ICU libraries.
+INVOKE = $(LDLIBRARYPATH_ENVVAR)=$(top_builddir)/common:$(top_builddir)/i18n:$(top_builddir)/tools/toolutil:$(top_builddir)/layout:$(top_builddir)/layoutex:$(top_builddir)/extra/ustdio:$(top_builddir)/tools/ctestfw:$(top_builddir)/data/out:$(top_builddir)/data:$(top_builddir)/stubdata/:$$$(LDLIBRARYPATH_ENVVAR) $(LEAK_CHECKER)
+
+# Platform-specific setup
+include @platform_make_fragment@
+

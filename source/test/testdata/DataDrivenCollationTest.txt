@@ -1,0 +1,337 @@
+﻿// Copyright (c) 2001-2003 International Business Machines
+// Corporation and others. All Rights Reserved.
+DataDrivenCollationTest {
+    Info {
+        Headers { "sequence" }
+        Description { "These are the data driven tests" }
+        LongDescription {     "The following entries are separate tests containing test data for various locales."
+                      "Each entry has the following fields: "
+                      "Info/Description - short descrioption of the test"
+                      "Settings - settings for the test."
+                      "Settings/TestLocale - locale for the collator OR"
+                      "Settings/Rules - rules for the collator (can't have both)"
+                      "Settings/Arguments - arguments to be passed to the collator before testing. Use rule syntax."
+                      "Cases - set of test cases, which are sequences of strings that will be parsed"
+                      "Sequences must not change the sign of relation, i.e. we can only have < and = or"
+                      "> and = in single sequence. Cannot mix < and > in the same sequence. Whitespace is"
+                      "is ignored unless quoted."
+                     }
+    }
+    TestData {
+        TestThaiPartialSortKeyProblems {
+            Info {
+                Description { "These are examples of strings that caused trouble in partial sort key testing." }
+            }
+            Settings {
+                {
+                    TestLocale { "th_TH" }
+                }
+            }
+            // TODO: the tests that are commented out should be enabled when j2720 is fixed
+            Cases { "\u0E01\u0E01\u0E38\u0E18\u0E20\u0E31\u0E13\u0E11\u0E4C"
+                    "<\u0E01\u0E01\u0E38\u0E2A\u0E31\u0E19\u0E42\u0E18",
+                    "\u0E01\u0E07\u0E01\u0E32\u0E23"
+                    "<\u0E01\u0E07\u0E42\u0E01\u0E49",
+                    //"\u0E01\u0E23\u0E19\u0E17\u0E32"
+                    //"<\u0E01\u0E23\u0E19\u0E19\u0E40\u0E0A\u0E49\u0E32",
+                    "\u0E01\u0E23\u0E30\u0E40\u0E08\u0E35\u0E22\u0E27"
+                    "<\u0E01\u0E23\u0E30\u0E40\u0E08\u0E35\u0E4A\u0E22\u0E27",
+                    //"\u0E01\u0E23\u0E23\u0E40\u0E0A\u0E2D"
+                    //"<\u0E01\u0E23\u0E23\u0E40\u0E0A\u0E49\u0E32"
+          }
+        }
+        TestJavaStyleRule {
+            Info {
+                Description { "java.text allows rules to start as '<<<x<<<y...' "
+                              "we emulate this by assuming a &[first tertiary ignorable] "
+                              "in this case."
+                }
+            }
+            Settings {
+                {
+                    Rules { "=equal<<<z<<x<<<w<y &[first tertiary ignorable]=a &[first primary ignorable]=b" }
+                }
+            }
+            Cases { "a = equal < z < x < w < b < y" }
+        }
+        TestShiftedIgnorable {
+            Info {
+                Description { "New UCA states that primary ignorables should be completely "
+                              "ignorable when following a shifted code point."
+                            }
+            }
+            Settings {
+                {
+                    TestLocale { "root" }
+                    Arguments { "[alternate shifted][strength 4]" }
+                }
+            }
+            Cases {
+                "a' 'b="
+                "a' '\u0300b="
+                "a' '\u0301b<"
+                "a_b="
+                "a_\u0300b="
+                "a_\u0301b<"
+                "A' 'b="
+                "A' '\u0300b="
+                "A' '\u0301b<"
+                "A_b="
+                "A_\u0300b="
+                "A_\u0301b<"
+                "a\u0301b<"
+                "A\u0301b<"
+                "a\u0300b<"
+                "A\u0300b"
+
+            }
+        }
+
+        TestNShiftedIgnorable {
+            Info {
+                Description { "New UCA states that primary ignorables should be completely "
+                              "ignorable when following a shifted code point."
+                            }
+            }
+            Settings {
+                {
+                    TestLocale { "root" }
+                    Arguments { "[alternate non-ignorable][strength 3]" }
+                }
+            }
+            Cases {
+                "a' 'b<"
+                "A' 'b<"
+                "a' '\u0301b<"
+                "A' '\u0301b<"
+                "a' '\u0300b<"
+                "A' '\u0300b<"
+                "a_b<"
+                "A_b<"
+                "a_\u0301b<"
+                "A_\u0301b<"
+                "a_\u0300b<"
+                "A_\u0300b<"
+                "a\u0301b<"
+                "A\u0301b<"
+                "a\u0300b<"
+                "A\u0300b<"
+            }
+        }
+
+        TestSafeSurrogates {
+            Info {
+                Description { "It turned out that surrogates were not skipped properly "
+                              "when iterating backwards if they were in the middle of a "
+                              "contraction. This test assures that this is fixed."
+                            }
+            }
+            Settings {
+                {
+                    Rules {
+                                "&a < x\ud800\udc00b"
+                    }
+                }
+            }
+            Cases {
+                "a<x\ud800\udc00b"
+            }
+        }
+                
+        TestCIgnorableContraction {
+            Info {
+                Description { "Checks whether completely ignorable code points are "
+                              "skipped in contractions."
+                              }
+            }
+            Settings {
+                {
+                    TestLocale { "sh" }
+                }
+                {
+                    Rules {
+                                "& L < lj, Lj <<< LJ"
+                                "& N < nj, Nj <<< NJ "
+                    }
+                }
+            }
+            Cases {
+                "njiva=n\ud834\udd65jiva=n\uD834\uDD79jiva=n\u0000\u0000\u0000jiva=n\u0000jiva=n\ud800jiva=n\ufffejiva",
+                "ljubav=l\u0000jubav=l\uD834\uDD79jubav=l\u0000\u0000\u0000jubav=l\ud800jubav=l\ufffejubav",
+                "Ljubav=L\u0000jubav=L\uD834\uDD79jubav=L\u0000\u0000\u0000jubav=L\ud800jubav=L\ufffejubav",
+            }
+        }
+                
+
+        TestCIgnorablePrefix {
+            Info {
+                Description { "Checks whether completely ignorable code points are "
+                              "skipped in prefix processing."
+                              }
+            }
+            Settings {
+                {
+                    TestLocale { "ja" }
+                }
+            }
+            Cases {
+               "\u30A1\u30FC"
+               "= \u30A1\uDB40\uDC30\u30FC"
+               "= \u30A1\uD800\u30FC"
+               "= \u30A1\uFFFE\u30FC"
+               "= \u30A1\uD834\uDD79\u30FC"
+               "= \u30A1\u0000\u0000\u0000\u30FC"
+               "= \u30A1\u0000\u30FC"
+               "= \u30A1\u30FC"
+               "= \u30A1\u0000\u059a\u30FC"
+               "= \u30A1\u30FC"
+            }
+        }
+  
+        da_TestPrimary {
+            Info {
+                Description { "This test goes through primary strength cases" }
+            }
+            Settings {
+                {
+                    TestLocale { "da" }
+                    Arguments { "[strength 1]" }
+                }
+            }
+            Cases {
+                "Lvi=Lwi",
+                "L\u00e4vi<L\u00f6wi",
+                "L\u00fcbeck=Lybeck",
+            }
+        }
+        da_TestTertiary {
+            Info {
+                Description { "This test goes through tertiary strength cases" }
+            }
+            Settings {
+                {
+                    TestLocale { "da" }
+                    Arguments { "[strength 3]" }
+                }
+            }
+            Cases {
+                "Luc<luck",
+                "luck<L\u00fcbeck",
+                "L\u00fcbeck>lybeck",
+                "L\u00e4vi<L\u00f6we",
+                "L\u00f6ww<mast",
+                // constUCharCollationDanishTest::testBugs[][CollationDanishTest::MAX_TOKEN_LEN]="
+                "A/S<"
+                "ANDRE<"
+                "ANDR\u00c9<"
+                "ANDREAS<"
+                "AS<"
+                "CA<"
+                "\u00c7A<"
+                "CB<"
+                "\u00c7C<"
+                "D.S.B.<"
+                "DA<"
+                "DB<"
+                "DSB<"
+                "DSC<"
+                "\u00d0A<"
+                "\u00d0C<"
+                "EKSTRA_ARBEJDE<"
+                "EKSTRABUD0<"
+                "H\u00d8ST<"
+                "HAAG<"
+                "H\u00c5NDBOG<"
+                "HAANDV\u00c6RKSBANKEN<"
+                "karl<"
+                "Karl<"
+                "'NIELS J\u00d8RGEN'<"
+                "NIELS-J\u00d8RGEN<"
+                "NIELSEN<"
+                "'R\u00c9E, A'<"
+                "'REE, B'<"
+                "'R\u00c9E, L'<"
+                "'REE, V'<"
+                "'SCHYTT, B'<"
+                "'SCHYTT, H'<"
+                "'SCH\u00dcTT, H'<"
+                "'SCHYTT, L'<"
+                "'SCH\u00dcTT, M'<"
+                "SS<"
+                "\u00df<"
+                "SSA<"
+                "'STORE VILDMOSE'<"
+                "STOREK\u00c6R0<"
+                "'STORM PETERSEN'<"
+                "STORMLY<"
+                "THORVALD<"
+                "THORVARDUR<"
+                "THYGESEN<"
+                "\u00feORVAR\u00d0UR<"
+                "'VESTERG\u00c5RD, A'<"
+                "'VESTERGAARD, A'<"
+                "'VESTERG\u00c5RD, B'<"
+                "\u00c6BLE<"
+                "\u00c4BLE<"
+                "\u00d8BERG<"
+                "\u00d6BERG",
+
+                // constUCharCollationDanishTest::testNTList[][CollationDanishTest::MAX_TOKEN_LEN]="
+                "andere<"
+                "chaque<"
+                "chemin<"
+                "cote<"
+                "cot\u00e9<"
+                "c\u00f4te<"
+                "c\u00f4t\u00e9<"
+                "\u010du\u010d\u0113t<"
+                "Czech<"
+                "hi\u0161a<"
+                "irdisch<"
+                "lie<"
+                "lire<"
+                "llama<"
+                "l\u00f5ug<"
+                "l\u00f2za<"
+                "lu\u010d<"
+                "luck<"
+                "L\u00fcbeck<"
+                "lye<"
+                "l\u00e4vi<"
+                "L\u00f6wen<"
+                "m\u00e0\u0161ta<"
+                "m\u00eer<"
+                "myndig<"
+                "M\u00e4nner<"
+                "m\u00f6chten<"
+                "pi\u00f1a<"
+                "pint<"
+                "pylon<"
+                "\u0161\u00e0ran<"
+                "savoir<"
+                "\u0160erb\u016bra<"
+                "Sietla<"
+                "\u015blub<"
+                "subtle<"
+                "symbol<"
+                "s\u00e4mtlich<"
+                "waffle<"
+                "verkehrt<"
+                "wood<"
+                "vox<"
+                "v\u00e4ga<"
+                "yen<"
+                "yuan<"
+                "yucca<"
+                "\u017eal<"
+                "\u017eena<"
+                "\u017den\u0113va<"
+                "zoo0<"
+                "Zviedrija<"
+                "Z\u00fcrich<"
+                "zysk0<"
+                "\u00e4ndere"
+            }
+        }
+    }
+}

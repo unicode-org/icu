@@ -1,0 +1,368 @@
+## Makefile.in for ICU data
+## Copyright (c) 1999-2003, International Business Machines Corporation and
+## others. All Rights Reserved.
+
+## Source directory information
+srcdir = @srcdir@
+top_srcdir = @top_srcdir@
+
+# So that you have $(top_builddir)/config.status
+top_builddir = ..
+
+## All the flags and other definitions are included here.
+include $(top_builddir)/icudefs.mk
+
+## Build directory information
+# So that  $(top_builddir)/$(subdir) ~= "here"
+subdir = data
+
+#lib icu data for link
+LIB_ICUDATA_NAME=lib$(ICUDATA_NAME)
+
+# sanity!
+ICUDT=$(ICUDATA_PLATFORM_NAME)_
+
+top_builddir_from_tmp = $(patsubst ..%,../..%,$(top_builddir))
+CURDIR=$(shell pwd)
+PKGDATA = $(top_builddir)/tools/pkgdata/pkgdata -O $(top_builddir)/data/icupkg.inc -d $(CURDIR)/out
+PKGDATA_VERSIONING = -r $(SO_TARGET_VERSION)
+
+# OBJDATADIR must be a short path (with ..'s) to the data.
+
+SRCDATADIR=$(top_srcdir)/data
+OUTDIR=$(top_builddir)/data/out
+BUILDDIR=$(OUTDIR)/build
+UNICODEDATADIR=$(SRCDATADIR)/unidata
+LOCSRCDIR=$(SRCDATADIR)/locales
+TRNSSRCDIR=$(SRCDATADIR)/translit
+BRKSRCDIR=$(SRCDATADIR)/brkitr
+MISCSRCDIR=$(SRCDATADIR)/misc
+UCMSRCDIR=$(SRCDATADIR)/mappings
+COMINCDIR=$(top_srcdir)/common/unicode
+SRCLISTDEPS=Makefile $(srcdir)/Makefile.in
+
+# relative lib links from pkgdata are the same as for tmp
+TOOLDIR=$(top_builddir)/tools
+
+## List of phony targets
+.PHONY : all all-local all-recursive install install-local install-files install-dlls build-cmnfile build-dll		\
+install-recursive clean clean-local clean-recursive distclean		\
+distclean-local distclean-recursive dist dist-local dist-recursive	\
+check check-local check-recursive build-testdlls build-basetestdata build-local
+
+## Clear suffix list
+.SUFFIXES :
+
+## List of standard targets
+all: all-local
+install: all-local install-local 
+clean: clean-local
+distclean : distclean-local
+dist: 
+check: all
+
+
+distclean-local: clean
+	$(RMV) Makefile
+
+ifeq ($(OS390_STUBDATA),1)
+OS390PKG=package390
+OS390INSTALL=install390
+
+# Additional data for 390
+OS390LIST=$(BUILDDIR)/icudata390.lst
+endif
+
+all-local: icupkg.inc build-local packagedata testdata packagetest $(OS390PKG)
+
+dist-local:
+
+clean-map:
+	-test -z *.map || $(RMV) *.map
+
+clean-local: cleanpackage cleanfiles clean-map
+	$(RMV) $(TESTOUTDIR)/testdata.dat
+
+cleanfiles:
+	test -z "$(CLEANFILES)" || $(RMV) $(CLEANFILES)
+
+cleanpackage:
+	$(RMV) $(OUTDIR)
+	$(RMV) $(TESTOUTDIR)
+
+
+check-local:
+
+# During this INVOKE we only want to use stubdata.
+# We don't want to try to write over files that we are using.
+PKGDATA_INVOKE:=$(subst :$(top_builddir)/data/out,,$(INVOKE))
+
+packagedata: icupkg.inc $(BUILDDIR)/icudata.lst 
+	$(PKGDATA_INVOKE) $(PKGDATA) -e $(ICUDATA_ENTRY_POINT) -T $(BUILDDIR) -p $(ICUDATA_NAME) -m $(PKGDATA_MODE) $(PKGDATA_VERSIONING) $(BUILDDIR)/icudata.lst
+ifneq ($(ENABLE_STATIC),)
+	$(PKGDATA_INVOKE) $(PKGDATA) -e $(ICUDATA_ENTRY_POINT) -T $(BUILDDIR) -p $(ICUDATA_NAME) -m static $(BUILDDIR)/icudata.lst
+endif
+
+## Install ICU data.
+install-local:  $(BUILDDIR)/icudata.lst ./icupkg.inc install-convrtrstxt $(OS390INSTALL)
+	$(MKINSTALLDIRS) $(TMPDATADIR) $(DESTDIR)$(ICUPKGDATA_DIR)
+	$(PKGDATA_INVOKE) $(PKGDATA) -m $(PKGDATA_MODE) $(PKGDATA_VERSIONING) -e $(ICUDATA_ENTRY_POINT) -T $(BUILDDIR) -s $(BUILDDIR) -p $(ICUDATA_NAME) $(BUILDDIR)/icudata.lst -I $(DESTDIR)$(ICUPKGDATA_DIR)
+ifneq ($(ENABLE_STATIC),)
+	$(PKGDATA_INVOKE) $(PKGDATA) -m static -e $(ICUDATA_ENTRY_POINT) -T $(BUILDDIR) -s $(BUILDDIR) -p $(ICUDATA_NAME) $(BUILDDIR)/icudata.lst -I $(DESTDIR)$(ICUPKGDATA_DIR)
+endif
+
+install-convrtrstxt: $(DESTDIR)$(pkgsysconfdir)/convrtrs.txt
+$(DESTDIR)$(pkgsysconfdir)/convrtrs.txt: $(UCMSRCDIR)/convrtrs.txt
+	$(MKINSTALLDIRS) $(DESTDIR)$(pkgsysconfdir)
+	$(INSTALL_DATA) $< $@
+
+####
+####
+#### 390 support
+install390: $(BUILDDIR)/icudata390.lst ./icupkg.inc
+	$(MKINSTALLDIRS) $(TMPDATADIR) $(DESTDIR)$(libdir)
+	$(INVOKE) $(PKGDATA) -s $(BUILDDIR) -T $(BUILDDIR)/tmp3901 -p $(ICUDATA_NAME)$(STUB_SUFFIX) -e $(ICUDATA_ENTRY_POINT) $(BUILDDIR)/icudata390.lst -m dll $(PKGDATA_VERSIONING) -I $(DESTDIR)$(ICUPKGDATA_DIR)
+ifeq ($(PKGDATA_MODE),dll)
+	$(INSTALL-L) $(OUTDIR)/$(LIB_ICUDATA_NAME)$(STUB_SUFFIX)$(IMPORT_LIB_EXT) $(DESTDIR)$(ICUPKGDATA_DIR)/$(LIB_ICUDATA_NAME)$(STUB_SUFFIX)$(IMPORT_LIB_EXT)
+endif
+
+#### $(LIB_ICUDATA_NAME)$(BATCH_SUFFIX) is the subset data for batch mode
+package390: $(BUILDDIR)/icudata390.lst $(BUILDDIR)/icudata.lst ./icupkg.inc
+	@$(MKINSTALLDIRS) $(BUILDDIR)/tmp3901
+	$(INVOKE) $(PKGDATA) -s $(BUILDDIR) -T $(BUILDDIR)/tmp3901 -p $(ICUDATA_NAME)$(STUB_SUFFIX) -e $(ICUDATA_ENTRY_POINT) $(BUILDDIR)/icudata390.lst -m dll $(PKGDATA_VERSIONING)
+	cp $(OUTDIR)/$(LIB_ICUDATA_NAME)$(STUB_SUFFIX).$(SO) $(top_builddir)/stubdata/$(LIB_ICUDATA_NAME)$(STUB_SUFFIX).$(SO)
+
+
+##### Define all the data files. the build rule that depends on them is below.
+
+## DAT files - Misc. data files.
+DAT_FILES_SHORT=uprops.icu pnames.icu unames.icu unorm.icu cnvalias.icu tz.icu ucadata.icu invuca.icu uidna.icu 
+DAT_FILES=$(DAT_FILES_SHORT:%=$(BUILDDIR)/$(ICUDT)%)
+
+## BRK files
+# ALL of these files can be deleted (the following BRK files) - they are copied
+BRK_FILES_SHORT=char.brk line.brk line_th.brk sent.brk word.brk title.brk word_th.brk
+BRK_FILES=$(BRK_FILES_SHORT:%=$(BUILDDIR)/$(ICUDT)%)
+# don't include thaidict.brk - it goes into a resource bundle - plus it isn't deleted
+
+## UCM files 
+-include $(UCMSRCDIR)/ucmcore.mk
+-include $(UCMSRCDIR)/ucmfiles.mk
+-include $(UCMSRCDIR)/ucmebcdic.mk
+-include $(UCMSRCDIR)/ucmlocal.mk
+ALL_UCM_SOURCE=ibm-37_P100-1995.ucm ibm-1047_P100-1995.ucm $(UCM_SOURCE_CORE) $(UCM_SOURCE_FILES) $(UCM_SOURCE_EBCDIC) $(UCM_SOURCE_LOCAL)
+UCM_FILES = $(ALL_UCM_SOURCE:%=$(SRCDATADIR)/%)
+CNV_FILES = $(ALL_UCM_SOURCE:%.ucm=$(BUILDDIR)/$(ICUDT)%.cnv)
+
+## RES files
+-include $(LOCSRCDIR)/resfiles.mk
+-include $(LOCSRCDIR)/reslocal.mk
+RES_SOURCE= root.txt $(GENRB_SOURCE) $(GENRB_ALIAS_SOURCE) $(GENRB_SOURCE_LOCAL)
+RES_SRC_FILES = $(RES_SOURCE:%=$(LOCSRCDIR)/%)
+INSTALLED_RB_FILES = $(GENRB_SOURCE:%.txt=%) $(GENRB_SOURCE_LOCAL:%.txt=%)
+GENRBOPTS=-k -q
+
+## TRNS files
+-include $(TRNSSRCDIR)/trnsfiles.mk
+-include $(TRNSSRCDIR)/trnslocal.mk
+TRNS_SOURCE= $(TRANSLIT_SOURCE) $(TRANSLIT_SOURCE_LOCAL) 
+TRNS_SRC_FILES=$(TRNS_SOURCE:%=$(TRNSSRCDIR)/%)
+
+ALL_RES_SOURCE= $(RES_SOURCE) $(TRNS_SOURCE)
+RES_FILES = $(ALL_RES_SOURCE:%.txt=$(BUILDDIR)/$(ICUDT)%.res)
+
+INDEX_FILES=$(BUILDDIR)/res_index.txt
+INDEX_RES_FILES=$(INDEX_FILES:$(BUILDDIR)/%.txt=$(BUILDDIR)/$(ICUDT)%.res)
+
+## All generated files
+ALL_FILES = $(DAT_FILES) $(CNV_FILES) $(BRK_FILES) $(RES_FILES) $(INDEX_RES_FILES)
+
+#####################################################
+# General data build rules
+
+## Files to remove for 'make clean'
+CLEANFILES = *~ icupkg.inc
+
+$(BUILDDIR)/icudata.lst: $(SRCLISTDEPS)
+	@echo "generating $@ (list of data files)"
+	@-$(RMV) $@
+	@for file in $(ALL_FILES); do \
+	  echo $$file >> $@; \
+	done;
+
+build-local: build-data build-testdata
+
+build-data: build-dir $(ALL_FILES) $(BUILDDIR)/icudata.lst $(OS390LIST)
+
+build-dir:
+	-$(MKINSTALLDIRS) $(OUTDIR) $(BUILDDIR) $(TESTOUTDIR) $(TESTBUILDDIR)
+
+
+# Now, sections for building each kind of data.
+
+####################################################    DAT
+# DAT FILES
+
+# uprops.icu
+$(BUILDDIR)/$(ICUDT)uprops.icu: $(UNICODEDATADIR)/UnicodeData.txt $(UNICODEDATADIR)/BidiMirroring.txt $(TOOLDIR)/genprops/genprops$(EXEEXT) $(BUILDDIR)/$(ICUDT)pnames.icu
+	ICU_DATA=$(BUILDDIR) $(INVOKE) $(TOOLDIR)/genprops/genprops -s $(UNICODEDATADIR) -d $(BUILDDIR) -u $(UNICODE_VERSION)
+
+# pnames.icu
+$(BUILDDIR)/$(ICUDT)pnames.icu: $(UNICODEDATADIR)/PropertyAliases.txt $(UNICODEDATADIR)/PropertyValueAliases.txt $(UNICODEDATADIR)/Blocks.txt $(COMINCDIR)/uscript.h $(COMINCDIR)/uchar.h $(TOOLDIR)/genpname/genpname$(EXEEXT)
+	ICU_DATA=$(BUILDDIR) $(INVOKE) $(TOOLDIR)/genpname/genpname -d $(BUILDDIR)
+
+# unorm.icu
+$(BUILDDIR)/$(ICUDT)unorm.icu: $(UNICODEDATADIR)/UnicodeData.txt $(UNICODEDATADIR)/DerivedNormalizationProps.txt $(UNICODEDATADIR)/BidiMirroring.txt $(TOOLDIR)/gennorm/gennorm$(EXEEXT)
+	ICU_DATA=$(BUILDDIR) $(INVOKE) $(TOOLDIR)/gennorm/gennorm -s $(UNICODEDATADIR) -d $(BUILDDIR) -u $(UNICODE_VERSION)
+
+# ucadata.icu
+$(BUILDDIR)/$(ICUDT)ucadata.icu $(BUILDDIR)/$(ICUDT)invuca.icu: $(UNICODEDATADIR)/FractionalUCA.txt $(TOOLDIR)/genuca/genuca$(EXEEXT) $(BUILDDIR)/$(ICUDT)unorm.icu
+	$(INVOKE) $(TOOLDIR)/genuca/genuca -s $(UNICODEDATADIR) -d $(BUILDDIR) -i $(BUILDDIR) 
+
+# unames.icu
+$(BUILDDIR)/$(ICUDT)unames.icu: $(UNICODEDATADIR)/UnicodeData.txt $(TOOLDIR)/gennames/gennames$(EXEEXT)
+	ICU_DATA=$(BUILDDIR) $(INVOKE) $(TOOLDIR)/gennames/gennames -1 -d $(BUILDDIR) $(UNICODEDATADIR)/UnicodeData.txt -u $(UNICODE_VERSION)
+
+# cnvalias.icu
+$(BUILDDIR)/$(ICUDT)cnvalias.icu: $(UCMSRCDIR)/convrtrs.txt $(TOOLDIR)/gencnval/gencnval$(EXEEXT)
+	ICU_DATA=$(BUILDDIR) $(INVOKE) $(TOOLDIR)/gencnval/gencnval -d $(BUILDDIR) $(UCMSRCDIR)/convrtrs.txt
+
+# tz.icu
+$(BUILDDIR)/$(ICUDT)tz.icu: $(MISCSRCDIR)/timezone.txt $(TOOLDIR)/gentz/gentz$(EXEEXT)
+	ICU_DATA=$(BUILDDIR) $(INVOKE) $(TOOLDIR)/gentz/gentz -d $(BUILDDIR) $(MISCSRCDIR)/timezone.txt
+
+# uidna.icu
+$(BUILDDIR)/$(ICUDT)uidna.icu: $(MISCSRCDIR)/rfc3454_A_1.txt $(MISCSRCDIR)/rfc3454_B_1.txt $(MISCSRCDIR)/rfc3454_B_2.txt $(MISCSRCDIR)/rfc3454_C_X.txt $(TOOLDIR)/genidna/genidna$(EXEEXT)
+	ICU_DATA=$(BUILDDIR) $(INVOKE) $(TOOLDIR)/genidna/genidna -d $(BUILDDIR) -s $(SRCDATADIR)
+
+####################################################    BRK
+# BRK FILES
+
+thaidict.brk: $(SRCDATADIR)/thaidict.brk
+	$(RMV) $@ && ln -s $(BUILDDIR) $@
+
+$(BUILDDIR)/$(ICUDT)%.brk: $(BRKSRCDIR)/%.txt $(TOOLDIR)/genbrk/genbrk$(EXEEXT)
+	ICU_DATA=$(BUILDDIR) $(INVOKE) $(TOOLDIR)/genbrk/genbrk -r $< -o $@
+
+####################################################    CNV
+# CNV FILES
+$(BUILDDIR)/$(ICUDT)%.cnv: $(UCMSRCDIR)/%.ucm $(TOOLDIR)/makeconv/makeconv$(EXEEXT)
+	ICU_DATA=$(BUILDDIR) $(INVOKE) $(TOOLDIR)/makeconv/makeconv -p $(ICUDATA_PLATFORM_NAME) -c -d $(BUILDDIR) $(UCMSRCDIR)/$(<F)
+
+####################################################    RES
+# RES FILES
+
+all-RES:  $(RES_FILES)
+
+$(BUILDDIR)/$(ICUDT)%.res: $(LOCSRCDIR)/%.txt $(TOOLDIR)/genrb/genrb$(EXEEXT) $(BUILDDIR)/$(ICUDT)ucadata.icu $(BUILDDIR)/$(ICUDT)uprops.icu $(BUILDDIR)/$(ICUDT)unorm.icu
+	ICU_DATA=$(BUILDDIR) $(INVOKE) $(TOOLDIR)/genrb/genrb $(GENRBOPTS) -p $(ICUDATA_PLATFORM_NAME) -s $(LOCSRCDIR) -d $(BUILDDIR) $(<F)
+
+$(BUILDDIR)/$(ICUDT)%.res: $(TRNSSRCDIR)/%.txt $(TOOLDIR)/genrb/genrb$(EXEEXT)
+	ICU_DATA=$(BUILDDIR) $(INVOKE) $(TOOLDIR)/genrb/genrb $(GENRBOPTS) -p $(ICUDATA_PLATFORM_NAME) -s $(TRNSSRCDIR) -d $(BUILDDIR) $(<F)
+
+$(BUILDDIR)/res_index.txt: $(SRCLISTDEPS)
+	@echo "generating $@ (list of installed locales)"; \
+	$(RMV) $@; \
+	echo "// Warning this file is automatically generated" > $@; \
+	echo "res_index {" >> $@; \
+	echo "    InstalledLocales {" >> $@; \
+	for file in $(INSTALLED_RB_FILES); do \
+	  echo "        $$file {\"\"}" >> $@; \
+	done; \
+	echo "    }" >> $@; \
+	echo "}" >> $@;
+
+$(BUILDDIR)/$(ICUDT)%.res: $(INDEX_FILES) $(TOOLDIR)/genrb/genrb$(EXEEXT)
+	ICU_DATA=$(BUILDDIR) $(INVOKE) $(TOOLDIR)/genrb/genrb $(GENRBOPTS) -p $(ICUDATA_PLATFORM_NAME) -d $(BUILDDIR) $(INDEX_FILES)
+
+###################################################################
+Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
+	cd $(top_builddir) \
+	&& CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
+
+icupkg.inc: $(srcdir)/icupkg.inc.in  $(top_builddir)/config.status
+	cd $(top_builddir) \
+	&& CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
+
+###########
+########### 390 (z/OS) support
+UCMFILES390=ebcdic-xml-us.ucm ibm-37_P100-1995.ucm ibm-1047_P100-1995.ucm ibm-4909_P100-1999.ucm
+ALLFILES390=uprops.icu pnames.icu unorm.icu cnvalias.icu $(UCMFILES390:.ucm=.cnv)
+
+$(BUILDDIR)/icudata390.lst:  $(SRCLISTDEPS)
+	@echo "generating $@ (list of 390 data files)"
+	@-$(RMV) $@
+	@for file in $(ALLFILES390); do \
+	  echo $(BUILDDIR)/$(ICUDT)$$file >> $@; \
+	done;
+
+#########################################################################
+############################## Test ## stuff ############################
+
+TESTSRCDATADIR=$(top_srcdir)/test/testdata
+TESTOUTDIR=$(top_builddir)/test/testdata/out
+
+# Contains all 'intermediate' files (and temp files) except for 'unpackaged data' below
+TESTBUILDDIR=$(TESTOUTDIR)/build
+
+# unpackaged files  - live in 'out' so that the path can find them as part of the pkg
+UNPACKAGEDTESTDATA=$(TESTOUTDIR)/$(TESTDT)nam.typ
+
+# pkg name for testdata
+TESTDATA=testdata
+# prefix for files that are testdata
+TESTDT=$(TESTDATA)_
+
+# File definitions 
+TEST_DAT_FILES=$(TESTBUILDDIR)/$(TESTDT)test.icu
+
+TEST_UCM_SOURCE= test1.ucm test3.ucm test4.ucm ibm9027.ucm
+TEST_UCM_FILES=$(TEST_UCM_SOURCE:%=$(TESTSRCDATADIR)/data/%)
+TEST_CNV_FILES=$(TEST_UCM_SOURCE:%.ucm=$(TESTBUILDDIR)/$(TESTDT)%.cnv)
+
+TEST_RES = casing.txt mc.txt root.txt te.txt te_IN.txt testtypes.txt testaliases.txt testempty.txt DataDrivenCollationTest.txt idna_rules.txt 
+TEST_RES_FILES=$(TEST_RES:%.txt=$(TESTBUILDDIR)/$(TESTDT)%.res) $(TESTBUILDDIR)/$(TESTDT)iscii.res
+
+ALL_TEST_FILES = $(TEST_DAT_FILES) $(TEST_BRK_FILES) $(TEST_CNV_FILES) $(TEST_RES_FILES) $(TESTOUTDIR)/$(TESTDT)nam.typ
+
+# list
+
+$(TESTBUILDDIR)/testdata.lst: $(SRCLISTDEPS)
+	@echo "generating $@ (list of data files)"
+	@-$(RMV) $@
+	@for file in $(TEST_RES_FILES) $(TEST_DAT_FILES) $(TEST_CNV_FILES); do \
+	  echo $$file >> $@; \
+	done;
+
+
+build-testdata:  $(ALL_TEST_FILES) $(TESTBUILDDIR)/testdata.lst $(TESTBUILDDIR)/$(TESTDT)iscii.res
+
+# test.icu
+$(TESTBUILDDIR)/$(TESTDT)test.icu: $(TOOLDIR)/gentest/gentest$(EXEEXT)
+	ICU_DATA=$(BUILDDIR) $(INVOKE) $(TOOLDIR)/gentest/gentest -d $(TESTBUILDDIR) 
+
+$(TESTBUILDDIR)/$(TESTDT)%.cnv: $(TESTSRCDATADIR)/%.ucm $(TOOLDIR)/makeconv/makeconv$(EXEEXT)
+	ICU_DATA=$(BUILDDIR) $(INVOKE) $(TOOLDIR)/makeconv/makeconv -p $(TESTDATA) -c -d $(TESTBUILDDIR) $(TESTSRCDATADIR)/$(<F)
+
+$(TESTBUILDDIR)/$(TESTDT)%.res: $(TESTSRCDATADIR)/%.txt $(TOOLDIR)/genrb/genrb$(EXEEXT)
+	ICU_DATA=$(BUILDDIR) $(INVOKE) $(TOOLDIR)/genrb/genrb $(GENRBOPTS) -p $(TESTDATA) -q -s $(TESTSRCDATADIR) -d $(TESTBUILDDIR) $(<F)
+
+
+$(TESTBUILDDIR)/$(TESTDT)iscii.res:  $(TESTSRCDATADIR)/iscii.bin $(TOOLDIR)/genrb/genrb$(EXEEXT)
+	@echo Testing genrb -e option
+	@ICU_DATA=$(BUILDDIR) $(INVOKE) $(TOOLDIR)/genrb/genrb $(GENRBOPTS) -s $(TESTSRCDATADIR) -p $(TESTDATA) -eISCII,version=0 -d $(TESTBUILDDIR) $(<F) >/dev/null  || ( echo "WARNING: could not open ISCII - it may have been disabled." | tee $@ )
+	@echo Finished testing genrb -e option
+
+################################################################### TYP
+# TYP FILES
+
+$(TESTOUTDIR)/$(TESTDT)nam.typ: $(TESTBUILDDIR)/$(TESTDT)te_IN.res
+	cp $< $@
+
+
+testdata: $(ALL_TEST_FILES) $(UNPACKAGEDTESTDATA)
+
+packagetest: testdata icupkg.inc $(TESTBUILDDIR)/testdata.lst 
+	$(INVOKE) $(PKGDATA) -T $(TESTBUILDDIR) -d $(TESTOUTDIR) -s $(TESTBUILDDIR) -p $(TESTDATA) -m common $(TESTBUILDDIR)/testdata.lst
+
+

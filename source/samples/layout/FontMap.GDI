@@ -1,0 +1,28 @@
+# Copyright (C) 2001-2003, International Business Machines
+# Corporation and others.  All Rights Reserved.
+
+# This is a sample FontMap file for Windows.
+# Fonts are specified by font name, as shown
+# in the "Fonts" folder.
+
+#     LATIN: Times New Roman
+#DEVANAGARI: Devanagari MT for IBM
+#DEVANAGARI: Devanagari MT
+ DEVANAGARI: Raghindi
+#    ARABIC: Times New Roman
+#    ARABIC: Arabic Typesetting
+#    ARABIC: Traditional Arabic
+#    ARABIC: MS Farsi
+#    ARABIC: Noori Nastaliq MT
+#    ARABIC: Nafees Naskh
+     ARABIC: Noori DLCursivePre MT
+       THAI: Thonburi
+      TAMIL: Latha
+     TELUGU: Gautami
+   GURMUKHI: Raavi
+   GUJARATI: Shruti
+    KANNADA: Tunga
+  MALAYALAM: MalOtf
+    DEFAULT: Code2000
+#   DEFAULT: Arial Unicode MS
+

@@ -1,0 +1,99 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+
+<head>
+<meta http-equiv="Content-Type"
+content="text/html; charset=iso-8859-1">
+<meta name="Copyright" content="Copyright (c) 2002, International Business Machines Corporation and others. All Rights Reserved.">
+<meta name="GENERATOR" content="Microsoft FrontPage 2.0">
+<title>ReadMe: Character Set Conversion Tool for Unicode</title>
+</head>
+
+<body bgcolor="#FFFFFF">
+
+<p><font size="5"><b>ReadMe: The Character Set Conversion Tool
+for Unicode</b></font> </p>
+
+<p>Version:&nbsp;<!--webbot bot="Timestamp" startspan
+s-type="EDITED" s-format="%m/%d/%y" -->10/01/98<!--webbot
+bot="Timestamp" i-checksum="13821" endspan --> <br>
+</p>
+
+<hr>
+
+<p>COPYRIGHT: <br>
+(C) Copyright International Business Machines Corporation, 1998 <br>
+Licensed Material - Program-Property of IBM - All Rights
+Reserved. <br>
+US Government Users Restricted Rights - Use, duplication, or
+disclosure restricted by GSA ADP Schedule Contract with IBM Corp.
+<br>
+</p>
+
+<hr>
+
+<p><font size="4"><b>Introduction</b></font> </p>
+
+<p><b>makeconv</b> is a tool that converts character set
+conversion data into binary files for use by the UnicodeConverter
+C code. The UnicodeConverter code will not function with text
+format data files. The user of charset conversion library will
+need to convert all the data files in text format into binary
+format. </p>
+
+<p>For a IBM registered code page to/from Unicode conversion data
+file in the specified data path, it generates .cnv files, which
+it puts in the same directory. The tool takes a list of file
+names as argument, with their absolute or relative path, and will
+generate a corresponding &quot;.cnv&quot; file with the same
+path. On Unix shells one can easily convert all the
+&quot;.cnv&quot; files from the text files in the data directory
+by using wildcards (e.g. <b>makeconv ../../data/locales/*.ucm</b>).
+On Win32 we have provided a batch file &quot;<b>mkcnvfle.bat</b>&quot;
+in the same directory you will find <b>makeconv.c</b>. <b>mkcnvfle</b>
+converts all the &quot;.ucm&quot; files in intlwork/data/locales
+to &quot;.cnv&quot; files. It requires one argument : Debug or
+Release so it knows where to look for the makeconv.exe. <br>
+(Win32 usage:<b> \intlwork\tools\makeconv\mkcnvfle.bat Debug</b>
+for debug build, <b>\intlwork\tools\makeconv\mkcnvfle.bat Release</b>,
+otherwise<b>.</b>) </p>
+
+<ul>
+    <li><b>Create a binary file for codepage IBM-949 in the data
+        path &quot;\intlwork\data\locales\&quot;</b>: type in at
+        the command prompt, &quot;<b>makeconv</b><font
+        face="Courier"> \intlwork\data\locales\ibm-949.ucm&quot;.
+        </font>The generated binary file will be located in the
+        same directory.</li>
+    <li><b>Look for the codepage IBM-949 data file in the current
+        working directory</b>: type in at the command prompt,
+        &quot;<b>makeconv</b><font face="Courier"> ibm-949.ucm</font>&quot;.
+        The tool will try to locate the file &quot;<font
+        face="Courier">ibm-949.ucm</font>&quot; in the current
+        directory. The generated binary file, &quot;<font
+        face="Courier">ibm-949.cnv</font>&quot; will be located
+        in current working directory.</li>
+</ul>
+
+<p><font size="4"><b>Building the Tool</b></font> </p>
+
+<p><font size="3">To build the tool on Win32 environment is very
+easy, simply open the &quot;makeconv</font><font size="3"
+face="Courier">.dsw</font><font size="3">&quot; workspace project
+file in MSVC++ 5.0 compiler.</font> <br>
+On Unix the process of building the tool and the &quot;.cnv&quot;
+files is included in the build process of the library. The
+provided makefiles will <br>
+attempt to build <b>makeconv</b> as it builds other parts of the
+library. It will also convert all the initial &quot;.ucm&quot;
+files in data/locales to &quot;.cnv&quot; files. </p>
+
+<p><font size="4"><b>Limitations</b></font> </p>
+
+<p>The tools uses stdio.h functions to communicate success or
+failure to the user. Platforms that don't support stdio will have
+to adapt <br>
+that portion of the code. <br>
+&nbsp; </p>
+</body>
+</html>

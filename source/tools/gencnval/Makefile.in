@@ -1,0 +1,116 @@
+## Makefile.in for ICU - tools/gencnval
+## Copyright (c) 1999-2003, International Business Machines Corporation and
+## others. All Rights Reserved.
+## Steven R. Loomi
+
+## Install directory information
+srcdir = @srcdir@
+top_srcdir = @top_srcdir@
+
+top_builddir = ../..
+
+include $(top_builddir)/icudefs.mk
+
+## Build directory information
+subdir = tools/gencnval
+
+##
+
+SECTION = 1
+
+MANX_FILES = $(TARGET:$(EXEEXT)=).$(SECTION)
+MAN5_FILES = convrtrs.txt.5 $(srcdir)/cnvalias.dat.5
+
+GENERATED_MAN_FILES = $(TARGET).$(SECTION) convrtrs.txt.5
+
+ALL_MAN_FILES = $(MANX_FILES) $(MAN5_FILES)
+
+ICUDATADIR=$(top_builddir)/data/
+CONVRTRSFILE=$(top_srcdir)/../data/convrtrs.txt
+
+## Extra files to remove for 'make clean'
+CLEANFILES = *~ $(GENERATED_MAN_FILES) $(DEPS) $(RES_FILES) $(TEST_FILES)
+
+## Target information
+TARGET = gencnval$(EXEEXT)
+
+CPPFLAGS += -I$(top_builddir)/common -I$(top_srcdir)/common -I$(srcdir)/../toolutil
+LIBS = $(LIBICUTOOLUTIL) $(LIBICUUC) $(DEFAULT_LIBS) $(LIB_M)
+
+OBJECTS = gencnval.o
+
+DEPS = $(OBJECTS:.o=.d)
+
+
+## List of phony targets
+.PHONY : all all-local install install-local clean clean-local		\
+distclean distclean-local dist dist-local check	\
+check-local build-data install-man install-man5 install-manx
+
+## Clear suffix list
+.SUFFIXES :
+
+## List of standard targets
+all: all-local
+install: install-local
+clean: clean-local
+distclean : distclean-local
+dist: dist-local
+check: all check-local
+
+all-local: $(TARGET) $(ALL_MAN_FILES) build-data
+
+install-local: all-local build-data install-man
+	$(MKINSTALLDIRS) $(DESTDIR)$(bindir)
+	$(INSTALL) $(TARGET) $(DESTDIR)$(bindir)/$(TARGET)
+
+
+dist-local:
+
+clean-local:
+	test -z "$(CLEANFILES)" || $(RMV) $(CLEANFILES)
+	$(RMV) $(TARGET) $(OBJECTS)
+
+distclean-local: clean-local
+	$(RMV) Makefile
+
+check-local: all-local
+
+Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
+	cd $(top_builddir) \
+	 && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
+
+$(TARGET) : $(OBJECTS)
+	$(LINK.cc) $(OUTOPT)$@ $^ $(LIBS) 
+
+# man page
+install-man: install-man5 install-manx
+install-man5: $(MAN5_FILES)
+	$(MKINSTALLDIRS) $(DESTDIR)$(mandir)/man5
+	$(INSTALL_DATA) $? $(DESTDIR)$(mandir)/man5
+install-manx: $(MANX_FILES)
+	$(MKINSTALLDIRS) $(DESTDIR)$(mandir)/man$(SECTION)
+	$(INSTALL_DATA) $? $(DESTDIR)$(mandir)/man$(SECTION)
+
+%.$(SECTION): $(srcdir)/%.$(SECTION).in
+	cd $(top_builddir) \
+	 && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
+%.5: $(srcdir)/%.5.in
+	cd $(top_builddir) \
+	 && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
+
+# only on linux probably ?
+#$(TARGET).ps: $(TARGET).$(SECTION)
+#	groff -man < $< > $@
+
+#$(TARGET).pdf: $(TARGET).ps
+#	ps2pdf $< $@
+
+ifeq (,$(MAKECMDGOALS))
+-include $(DEPS)
+else
+ifneq ($(patsubst %clean,,$(MAKECMDGOALS)),)
+-include $(DEPS)
+endif
+endif
+

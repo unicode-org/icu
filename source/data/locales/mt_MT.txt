@@ -1,0 +1,26 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 1998-2003, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+// Maltese, Malta locale
+// srl@monkey.sbay.org
+
+mt_MT {
+      
+    Version { "2.0" }
+
+//    ShortCountry { MLT }
+
+
+    NumberPatterns {
+        "#,##0.###;-#,##0.###",
+        "\u00A4#,##0.00;(\u00A4#,##0.00)",
+        "#,##0%",
+        "#E0",
+    }
+
+    LocaleID:int { 0x043A }
+
+}

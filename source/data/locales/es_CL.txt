@@ -1,0 +1,50 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 1997-2003, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+
+es_CL {
+    Version { "2.0" }
+    DateTimePatterns { 
+        "HH:mm:ss z",
+        "H:mm:ss z",
+        "H:mm:ss",
+        "H:mm",
+        "EEEE d' de 'MMMM' de 'yyyy",
+        "d' de 'MMMM' de 'yyyy",
+        "dd-MM-yyyy",
+        "dd-MM-yy",
+        "{1} {0}",
+    }
+    LocaleID:int { 0x340a }
+//    LocaleString { "es_CL" }
+    NumberElements {
+        ",",
+        ".",
+        ";",
+        "%",
+        "0",
+        "#",
+        "-",
+        "E",
+        "\u2030",
+        "\u221E",
+        "\uFFFD",
+        ",",
+    }
+    NumberPatterns { 
+        "#,##0.###;-#,##0.###",
+        "\u00A4#,##0.00;\u00A4-#,##0.00",
+        "#,##0%",
+        "#E0",
+    }
+//    ShortCountry { "CHL" }
+
+    // Currency display names
+    Currencies {
+        CLP { "$", "Peso Chileno" }
+        USD { "US$", "D\u00F3lar Americano" }
+    }
+}

@@ -1,0 +1,41 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 2001-2002, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *   Generated from Universal Locales for Linux Project
+// ***************************************************************************
+
+fa_IN {
+    Version{ "1.2" }
+    DateTimePatterns { 
+        "h:mm:ss a z",
+        "h:mm:ss a z",
+        "h:mm:ss a",
+        "h:mm a",
+        "EEEE d MMMM yyyy",
+        "d MMMM yyyy",
+        "dd-MM-yyyy",
+        "d-M-yy",
+        "{1} {0}",
+    }
+//    NumberElements { 
+//        ".",
+//        ",",
+//        ";",
+//        "%",
+//        "0",
+//        "#",
+//        "-",
+//        "E",
+//        "\u2030",
+//        "\u221e",
+//        "\ufffd",
+//    }
+    NumberPatterns {
+        "##,##,##0.###;-##,##,##0.###",
+        "\u00A4##,##,##0.00;-\u00A4##,##,##0.00",
+        "##,##,##0%",
+        "#E0",
+    }
+//    LocaleString{ "fa_IN" }
+}

@@ -1,0 +1,20 @@
+Copyright (c) 2002, International Business Machines Corporation and others. All Rights Reserved.
+
+The ICU data files moved!
+
+Depending on the ICU packaging mode, ICU data files were moved to
+new locations.
+
+@thelibdir@/@PACKAGE@/@VERSION@
+
+    For the data library (--with-packaging-mode=dll) and individual
+    data files (--with-packaging-mode=files).
+
+@thedatadir@/@PACKAGE@/@VERSION@
+
+    For the data common file (--with-packaging-mode=archive).
+
+This move happened post ICU 1.6. The rationale for the move is to be able
+to share @thedatadir@ across machines with different architectures, as
+it is supposed to be the case.
+

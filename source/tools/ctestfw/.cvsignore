@@ -1,0 +1,8 @@
+*.d
+*.pdb
+Debug
+Makefile
+Release
+libicuctestfw*
+pkgdata
+tmp
