@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/RuleBasedTransliterator.java,v $ 
- * $Date: 2000/05/23 16:48:27 $ 
- * $Revision: 1.31 $
+ * $Date: 2000/05/24 22:21:00 $ 
+ * $Revision: 1.32 $
  *
  *****************************************************************************************
  */
@@ -252,7 +252,7 @@ import com.ibm.util.Utility;
  * <p>Copyright (c) IBM Corporation 1999-2000. All rights reserved.</p>
  * 
  * @author Alan Liu
- * @version $RCSfile: RuleBasedTransliterator.java,v $ $Revision: 1.31 $ $Date: 2000/05/23 16:48:27 $
+ * @version $RCSfile: RuleBasedTransliterator.java,v $ $Revision: 1.32 $ $Date: 2000/05/24 22:21:00 $
  */
 public class RuleBasedTransliterator extends Transliterator {
 
@@ -1123,21 +1123,6 @@ public class RuleBasedTransliterator extends Transliterator {
         }
 
         /**
-         * Allocate a private-use substitution character for the given set,
-         * register it in the setVariables hash, and return the substitution
-         * character.
-         */
-        /*
-        private final char registerSet(UnicodeSet set) {
-            if (variableNext >= variableLimit) {
-                throw new RuntimeException("Private use variables exhausted");
-            }
-            setVariablesVector.addElement(set);
-            return variableNext++;
-        }
-        */
-
-        /**
          * Parse a UnicodeSet out, store it, and return the stand-in character
          * used to represent it.
          */
@@ -1146,6 +1131,7 @@ public class RuleBasedTransliterator extends Transliterator {
             if (variableNext >= variableLimit) {
                 throw new RuntimeException("Private use variables exhausted");
             }
+            set.compact();
             setVariablesVector.addElement(set);
             return variableNext++;
         }
@@ -1342,6 +1328,9 @@ public class RuleBasedTransliterator extends Transliterator {
 
 /**
  * $Log: RuleBasedTransliterator.java,v $
+ * Revision 1.32  2000/05/24 22:21:00  alan4j
+ * Compact UnicodeSets
+ *
  * Revision 1.31  2000/05/23 16:48:27  alan4j
  * Fix doc; remove unused auto
  *
