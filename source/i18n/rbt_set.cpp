@@ -17,6 +17,7 @@
 #include "rbt_set.h"
 #include "rbt_rule.h"
 #include "cmemory.h"
+#include "putilimp.h"
 
 U_CDECL_BEGIN
 static void U_EXPORT2 U_CALLCONV _deleteRule(void *rule) {

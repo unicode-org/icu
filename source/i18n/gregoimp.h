@@ -15,6 +15,7 @@
 
 #include "unicode/ures.h"
 #include "unicode/locid.h"
+#include "putilimp.h"
 
 U_NAMESPACE_BEGIN
 

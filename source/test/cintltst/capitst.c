@@ -27,6 +27,7 @@
 #include "cintltst.h"
 #include "capitst.h"
 #include "ccolltst.h"
+#include "putilimp.h"
 
 static void TestAttribute(void);
         int TestBufferSize();	/* defined in "colutil.c" */

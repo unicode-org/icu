@@ -33,6 +33,7 @@
 #include "cpputils.h"
 #include "ustrfmt.h"
 #include "cstring.h"
+#include "putilimp.h"
 
 // *****************************************************************************
 // class ChoiceFormat

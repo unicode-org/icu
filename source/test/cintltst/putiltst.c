@@ -19,6 +19,7 @@
 #include "unicode/putil.h"
 #include "unicode/ustring.h"
 #include "cstring.h"
+#include "putilimp.h"
 
 static UBool compareWithNAN(double x, double y);
 static void doAssert(double expect, double got, const char *message);

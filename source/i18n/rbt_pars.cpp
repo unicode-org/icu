@@ -35,6 +35,7 @@
 #include "util.h"
 #include "cmemory.h"
 #include "uprops.h"
+#include "putilimp.h"
 
 // Operators
 #define VARIABLE_DEF_OP ((UChar)0x003D) /*=*/

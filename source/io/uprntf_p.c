@@ -26,6 +26,7 @@
 #include "uprintf.h"
 #include "ufmt_cmn.h"
 #include "cmemory.h"
+#include "putilimp.h"
 
 /* ANSI style formatting */
 /* Use US-ASCII characters only for formatting */

@@ -23,6 +23,7 @@
 #include "textfile.h"
 #include "tokiter.h"
 #include "charstr.h"
+#include "putilimp.h"
 #include <float.h>
 #include <string.h>
 

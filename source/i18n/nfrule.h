@@ -14,6 +14,7 @@
 #include "unicode/utypes.h"
 #include "unicode/uobject.h"
 #include "unicode/unistr.h"
+#include "putilimp.h"
 
 U_NAMESPACE_BEGIN
 

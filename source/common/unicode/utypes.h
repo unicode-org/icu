@@ -783,13 +783,4 @@ U_STABLE const char * U_EXPORT2
 u_errorName(UErrorCode code);
 
 
-
-
-
-/*===========================================================================*/
-/* Include header for platform utilies */
-/*===========================================================================*/
-
-#include "unicode/putil.h"
-
 #endif /* _UTYPES */
