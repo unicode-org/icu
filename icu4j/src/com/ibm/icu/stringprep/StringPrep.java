@@ -4,8 +4,8 @@
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/stringprep/Attic/StringPrep.java,v $
- * $Date: 2003/08/21 23:40:41 $
- * $Revision: 1.1 $ 
+ * $Date: 2003/08/27 03:09:08 $
+ * $Revision: 1.2 $ 
  *
  *****************************************************************************************
  */
@@ -27,12 +27,37 @@ import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.lang.UCharacterDirection;
 
 /**
- * @author ram
- *
- * To change the template for this generated type comment go to
- * Window>Preferences>Java>Code Generation>Code and Comments
+ * StringPrep API implements the StingPrep framework as described by RFC 3454.
+ * StringPrep prepares Unicode strings for use in network protocols.
+ * Profiles of StingPrep are set of rules and data according to with the
+ * Unicode Strings are prepared. Each profiles contains tables which describe
+ * how a code point should be treated. The tables are broadly classied into
+ * <ul>
+ *     <li> Unassinged Table: Contains code points that are unassigned 
+ *          in the Unicode Version supported by StringPrep. Currently 
+ *          RFC 3454 supports Unicode 3.2. </li>
+ *     <li> Prohibited Table: Contains code points that are prohibted from
+ *          the output of the StringPrep processing function. </li>
+ *     <li> Mapping Table: Contains code ponts that are deleted from the output or case mapped. </li>
+ * </ul>
+ * 
+ * The procedure for preparing Unicode strings:
+ * <ol>
+ *      <li> Map: For each character in the input, check if it has a mapping
+ *           and, if so, replace it with its mapping. </li>
+ *      <li> Normalize: Possibly normalize the result of step 1 using Unicode
+ *           normalization. </li>
+ *      <li> Prohibit: Check for any characters that are not allowed in the
+ *        output.  If any are found, return an error.</li>
+ *      <li> Check bidi: Possibly check for right-to-left characters, and if
+ *           any are found, make sure that the whole string satisfies the
+ *           requirements for bidirectional strings.  If the string does not
+ *           satisfy the requirements for bidirectional strings, return an
+ *           error.  </li>
+ * </ol>
+ * @author Ram Viswanadha
  */
-public class StringPrep {
+public final class StringPrep {
     /** 
      * Option to prohibit processing of unassigned code points in the input
      * 

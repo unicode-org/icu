@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/TestAll.java,v $
- * $Date: 2003/06/03 18:49:28 $
- * $Revision: 1.50 $
+ * $Date: 2003/08/27 03:07:43 $
+ * $Revision: 1.51 $
  *
  *****************************************************************************************
  */
@@ -40,7 +40,8 @@ public class TestAll extends TestGroup {
                   "com.ibm.icu.dev.test.util.TestAll",
                   "com.ibm.icu.dev.test.iterator.TestUCharacterIterator", // not a group
                   "com.ibm.icu.dev.test.bigdec.DiagBigDecimal", // not a group
-                  "com.ibm.icu.dev.test.impl.TestAll"
+                  "com.ibm.icu.dev.test.impl.TestAll",
+                  "com.ibm.icu.dev.test.stringprep.TestAll"
               },
               "All tests in ICU");
     }

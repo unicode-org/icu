@@ -4,48 +4,140 @@
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/stringprep/Attic/ParseException.java,v $
- * $Date: 2003/08/21 23:40:39 $
- * $Revision: 1.1 $ 
+ * $Date: 2003/08/27 03:09:08 $
+ * $Revision: 1.2 $ 
  *
  *****************************************************************************************
  */
 package com.ibm.icu.stringprep;
 
 /**
- * @author ram
+ * Exception that signals an error has occurred while parsing the 
+ * input to StringPrep or IDNA. 
  *
- * To change the template for this generated type comment go to
- * Window>Preferences>Java>Code Generation>Code and Comments
+ * @author Ram Viswanadha
  */
 public class ParseException extends Exception {
-    
+    /**
+     * @draft ICU 2.8
+     */
     public static final int INVALID_CHAR_FOUND      = 0;
+    /**
+     * @draft ICU 2.8
+     */
     public static final int ILLEGAL_CHAR_FOUND      = 1;
+    /**
+     * @draft ICU 2.8
+     */
     public static final int PROHIBITED_ERROR        = 2;
+    /**
+     * @draft ICU 2.8
+     */
     public static final int UNASSIGNED_ERROR        = 3;
+    /**
+     * @draft ICU 2.8
+     */
     public static final int CHECK_BIDI_ERROR        = 4;
+    /**
+     * @draft ICU 2.8
+     */
     public static final int STD3_ASCII_RULES_ERROR  = 5;
+    /**
+     * @draft ICU 2.8
+     */
     public static final int ACE_PREFIX_ERROR        = 6;
+    /**
+     * @draft ICU 2.8
+     */
     public static final int VERIFICATION_ERROR      = 7;
+    /**
+     * @draft ICU 2.8
+     */
     public static final int LABEL_TOO_LONG_ERROR    = 8;
+    /**
+     * @draft ICU 2.8
+     */
     public static final int BUFFER_OVERFLOW_ERROR   = 9;
     
+    /**
+     * Construct a ParseException object with the given message
+     * and error code
+     * 
+     * @param message A string describing the type of error that occurred
+     * @param error   The error that has occurred
+     * @draft ICU 2.8
+     */
     public ParseException(String message,int error){
         super(message);
         this.error = error;
+        this.offset = -1;
+        this.line = 0;
     }
+    
+    /**
+     * Construct a ParseException object with the given message and
+     * error code
+     * 
+     * @param message A string describing the type of error that occurred
+     * @param error   The error that has occurred
+     * @param rules   The input rules string 
+     * @param pos     The position of error in the rules string
+     * @draft ICU 2.8
+     */
     public ParseException(String message,int error, String rules, int pos){
         super(message);
         this.error = error;
-        setContext(rules,pos);    
+        setContext(rules,pos);  
+        this.offset = -1;  
+        this.line = 0;
     }
-    
+    /**
+     * Construct  a ParseException object with the given message and error code
+     * 
+     * @param message    A string describing the type of error that occurred
+     * @param error      The error that has occurred
+     * @param rules      The input rules string 
+     * @param pos        The position of error in the rules string
+     * @param offset     The character offset to the error.  If the line field is
+     *                   being used, then this offset is from the start of the line.
+     *                   If the line field is not being used, then this offset is from
+     *                   the start of the text.The default value of this field
+     *                   is -1. 
+     * @param lineNumber The line number at which the error has occurred. 
+     *                   If the parse engine is not using this field, it should set it to zero.  Otherwise
+     *                   it should be a positive integer. The default value of this field
+     *                   is -1. It will be set to 0 if the code populating this struct is not
+     *                   using line numbers.
+     */
+    public ParseException(String message, int error, String rules, int pos, int offset, int lineNumber){
+        super(message);
+        this.error = error;
+        setContext(rules,pos);  
+        this.offset = offset;  
+        this.line = lineNumber;
+    }
+    /**
+     * Compare this ParseException to another and evaluate if they are equal.
+     * The comparison works only on the type of error and does not compare
+     * the rules strings, if any, for equality.
+     * 
+     * @param other The exception that this object should be compared to
+     * @return true if the objects are equal, false if unequal
+     * @draft ICU 2.8
+     */
     public boolean equals(Object other){
         if(!(other instanceof ParseException)){
             return false;
         }
         return ((ParseException)other).error == this.error;
+        
     }
+    /**
+     * Returns the position of error in the rules string
+     * 
+     * @return String
+     * @draft ICU 2.8
+     */
     public String toString(){
         StringBuffer buf = new StringBuffer();
         buf.append(super.getMessage());
@@ -58,13 +150,14 @@ public class ParseException extends Exception {
     }
 
     private int error;
+    
     /**
      * The line on which the error occured.  If the parse engine
      * is not using this field, it should set it to zero.  Otherwise
      * it should be a positive integer. The default value of this field
      * is -1. It will be set to 0 if the code populating this struct is not
      * using line numbers.
-     * @stable ICU 2.0    
+     * @draft ICU 2.8  
      */
     private int line;
 
@@ -75,68 +168,51 @@ public class ParseException extends Exception {
      * the start of the text.The default value of this field
      * is -1. It will be set to appropriate value by the code that 
      * populating the struct.
-     * @stable ICU 2.0   
+     * @draft ICU 2.8 
      */
     private int    offset;
 
     /**
      * Textual context before the error.  Null-terminated.
      * May be the empty string if not implemented by parser.
-     * @stable ICU 2.0   
+     * @draft ICU 2.8
      */
     private StringBuffer preContext = new StringBuffer();
 
     /**
      * Textual context after the error.  Null-terminated.
      * May be the empty string if not implemented by parser.
-     * @stable ICU 2.0   
+     * @draft ICU 2.8   
      */
     private StringBuffer postContext =  new StringBuffer();
     
     public static final int PARSE_CONTEXT_LEN = 16;
     
-    public void setOffset(int offset){
-        this.offset = offset;
-    }
-    public int getOffset(){
-        return offset;
-    }
-    public int getLineNumber(){
-        return line;
-    }
-    public int setLineNumber(int lineNumber){
-        return line;
-    }
-    public String getPreContext(){
-        return preContext.toString();
-    }
-    public String getPostContext(){
-        return postContext.toString();
-    }
+
     
-    public void setPreContext(String str, int pos){
+    private void setPreContext(String str, int pos){
         setPreContext(str.toCharArray(),pos);
     }
-    public void setPreContext(char[] str, int pos){
+    
+    private void setPreContext(char[] str, int pos){
         int start = (pos <= PARSE_CONTEXT_LEN)? 0 : (pos - (PARSE_CONTEXT_LEN-1));
         int len = (start <= PARSE_CONTEXT_LEN)? start : PARSE_CONTEXT_LEN;
         preContext.append(str,start,len);
  
     }
-    public void setPostContext(String str, int pos){
+    
+    private void setPostContext(String str, int pos){
         setPostContext(str.toCharArray(),pos);
     }
-    public void setPostContext(char[] str, int pos){
+    
+    private void setPostContext(char[] str, int pos){
         int start = pos;
         int len  = str.length - start; 
         postContext.append(str,start,len);
 
     }
-    public void setContext(char[]str,int pos){
-        setPreContext(str,pos);
-        setPostContext(str,pos);
-    }
-    public void setContext(String str,int pos){
+    
+    private void setContext(String str,int pos){
         setPreContext(str,pos);
         setPostContext(str,pos);
     }

@@ -4,8 +4,8 @@
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/stringprep/Attic/IDNA.java,v $
- * $Date: 2003/08/21 23:40:42 $
- * $Revision: 1.1 $ 
+ * $Date: 2003/08/27 03:09:08 $
+ * $Revision: 1.2 $ 
  *
  *****************************************************************************************
  */
@@ -19,7 +19,7 @@ import com.ibm.icu.text.UCharacterIterator;
 
 /**
  *
- * UIDNA API implements the IDNA protocol as defined in the IDNA draft 
+ * IDNA API implements the IDNA protocol as defined in the IDNA draft 
  * (http://www.ietf.org/rfc/rfc3490.txt).
  * The draft defines 2 operations: ToASCII and ToUnicode. Domain labels 
  * containing non-ASCII code points are required to be processed by
@@ -38,7 +38,8 @@ import com.ibm.icu.text.UCharacterIterator;
  * once.
  * ToUnicode(ToUnicode(ToUnicode...(ToUnicode(string)))) == ToUnicode(string) 
  * ToASCII(ToASCII(ToASCII...(ToASCII(string))) == ToASCII(string).
- *
+ * 
+ * @author Ram Viswanadha
  */
 public final class IDNA {
 
@@ -59,26 +60,27 @@ public final class IDNA {
      * do not check if the input conforms to STD-3 ASCII rules.
      * 
      * @see  convertToASCII convertToUnicode
-     * @draft ICU 2.6
+     * @draft ICU 2.8
      */
     public static final int DEFAULT             = 0x0000;
     /** 
      * Option to allow processing of unassigned codepoints in the input
      * 
      * @see  convertToASCII convertToUnicode
-     * @draft ICU 2.6
+     * @draft ICU 2.8
      */
     public static final int ALLOW_UNASSIGNED    = 0x0001;
     /** 
      * Option to check if input conforms to STD-3 ASCII rules
      * 
      * @see convertToASCII convertToUnicode
-     * @draft ICU 2.6
+     * @draft ICU 2.8
      */
     public static final int USE_STD3_RULES      = 0x0002;
     
     private static StringPrep prep  = null;
     
+  
     private static synchronized void loadInstance()
                                 throws IOException{
         if(prep==null){
@@ -186,6 +188,9 @@ public final class IDNA {
         }
         return false;
     }
+    
+    /* private constructor to prevent construction of the object */
+    private IDNA(){}
     
     /**
      * This function implements the ToASCII operation as defined in the IDNA RFC.
@@ -380,7 +385,7 @@ public final class IDNA {
      * and then convert. This function does not offer that level of granularity. The options once  
      * set will apply to all labels in the domain name
      *
-     * @param src       The input string as UCharacterIterator to be processed
+     * @param iter      The input string as UCharacterIterator to be processed
      * @param options   A bit set of options:
      *  - IDNA.DEFAULT              Use default options, i.e., do not process unassigned code points
      *                              and do not use STD3 ASCII rules
@@ -566,7 +571,7 @@ public final class IDNA {
      * separated by dots; for e.g." "www.example.com" is composed of 3 labels 
      * "www","example", and "com".
      * 
-     * @param src       The input string as UCharacterIterator to be processed
+     * @param iter       The input string as UCharacterIterator to be processed
      * @param options   A bit set of options:
      *  - IDNA.DEFAULT              Use default options, i.e., do not process unassigned code points
      *                              and do not use STD3 ASCII rules
@@ -690,7 +695,7 @@ public final class IDNA {
      * and then convert. This function does not offer that level of granularity. The options once  
      * set will apply to all labels in the domain name
      *
-     * @param src       The input string as UCharacterIterator to be processed
+     * @param iter       The input string as UCharacterIterator to be processed
      * @param options   A bit set of options:
      *  - IDNA.DEFAULT              Use default options, i.e., do not process unassigned code points
      *                              and do not use STD3 ASCII rules

@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/stringprep/NFS4StringPrep.java,v $
- * $Date: 2003/08/21 23:42:25 $
- * $Revision: 1.1 $
+ * $Date: 2003/08/27 03:08:29 $
+ * $Revision: 1.2 $
  *
  *******************************************************************************
 */
@@ -44,11 +44,7 @@ public final class NFS4StringPrep {
     //singleton instance
     private static NFS4StringPrep prep = null;
     
-    // we donot synchronize the constructor because we
-    // know that the constructor is only called from
-    // getInstance method if and only if the the singleton
-    // intance is null, which means this constructor is called
-    // only once
+
     private  NFS4StringPrep ()throws IOException{
       
       InputStream  nfscssFile = TestUtil.getDataStream(NFS4DataFileNames[0]);
