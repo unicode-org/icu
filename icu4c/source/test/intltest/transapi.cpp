@@ -664,9 +664,9 @@ void TransliteratorAPITest::displayOutput(const UnicodeString& got, const Unicod
 			got.extractBetween(index.start, index.cursor, b);
 			got.extractBetween(index.cursor, got.length(), c);
 			log.append(a).
-				append('{').
+				append((UChar)0x7b/*{*/).
 				append(b).
-				append('|').
+				append((UChar)0x7c/*|*/).
 				append(c);
             if (got == expected) 
                 logln("OK:" + prettify(log));

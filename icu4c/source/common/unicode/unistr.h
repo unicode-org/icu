@@ -509,18 +509,27 @@ public:
               int32_t length) const;
 
   /**
-   * Locate in this the first occurrence of the character <TT>c</TT>, 
+   * Locate in this the first occurrence of the code unit <TT>c</TT>, 
    * using bitwise comparison.
-   * @param c The character to search for.
+   * @param c The code unit to search for.
    * @return The offset into this of <TT>c</TT>, or -1 if not found.
    * @draft
    */
   inline UTextOffset indexOf(UChar c) const;
 
   /**
-   * Locate in this the first occurrence of the character <TT>c</TT>
+   * Locate in this the first occurrence of the code point <TT>c</TT>, 
+   * using bitwise comparison.
+   * @param c The code point to search for.
+   * @return The offset into this of <TT>c</TT>, or -1 if not found.
+   * @draft
+   */
+  inline UTextOffset indexOf(UChar32 c) const;
+
+  /**
+   * Locate in this the first occurrence of the code unit <TT>c</TT>
    * starting at offset <TT>start</TT>, using bitwise comparison.
-   * @param c The character to search for.
+   * @param c The code unit to search for.
    * @param start The offset at which searching will start.
    * @return The offset into this of <TT>c</TT>, or -1 if not found.
    * @draft
@@ -529,16 +538,41 @@ public:
               UTextOffset start) const;
 
   /**
-   * Locate in this the first occurrence of the character <TT>c</TT> 
+   * Locate in this the first occurrence of the code point <TT>c</TT>
+   * starting at offset <TT>start</TT>, using bitwise comparison.
+   * @param c The code point to search for.
+   * @param start The offset at which searching will start.
+   * @return The offset into this of <TT>c</TT>, or -1 if not found.
+   * @draft
+   */
+  inline UTextOffset indexOf(UChar32 c,
+              UTextOffset start) const;
+
+  /**
+   * Locate in this the first occurrence of the code unit <TT>c</TT> 
    * in the range [<TT>start</TT>, <TT>start + length</TT>), 
    * using bitwise comparison.   
-   * @param c The character to search for.
+   * @param c The code unit to search for.
    * @param start the offset into this at which to start matching
    * @param length the number of characters in this to search
    * @return The offset into this of <TT>c</TT>, or -1 if not found.
    * @draft
    */
   inline UTextOffset indexOf(UChar c,
+              UTextOffset start,
+              int32_t length) const;
+
+  /**
+   * Locate in this the first occurrence of the code point <TT>c</TT> 
+   * in the range [<TT>start</TT>, <TT>start + length</TT>), 
+   * using bitwise comparison.   
+   * @param c The code point to search for.
+   * @param start the offset into this at which to start matching
+   * @param length the number of characters in this to search
+   * @return The offset into this of <TT>c</TT>, or -1 if not found.
+   * @draft
+   */
+  inline UTextOffset indexOf(UChar32 c,
               UTextOffset start,
               int32_t length) const;
 
@@ -655,18 +689,27 @@ public:
               int32_t length) const;
 
   /**
-   * Locate in this the last occurrence of the character <TT>c</TT>, 
+   * Locate in this the last occurrence of the code unit <TT>c</TT>, 
    * using bitwise comparison.
-   * @param c The character to search for.
+   * @param c The code unit to search for.
    * @return The offset into this of <TT>c</TT>, or -1 if not found.
    * @draft
    */
   inline UTextOffset lastIndexOf(UChar c) const;
 
   /**
-   * Locate in this the last occurrence of the character <TT>c</TT>
+   * Locate in this the last occurrence of the code point <TT>c</TT>, 
+   * using bitwise comparison.
+   * @param c The code point to search for.
+   * @return The offset into this of <TT>c</TT>, or -1 if not found.
+   * @draft
+   */
+  inline UTextOffset lastIndexOf(UChar32 c) const;
+
+  /**
+   * Locate in this the last occurrence of the code unit <TT>c</TT>
    * starting at offset <TT>start</TT>, using bitwise comparison.
-   * @param c The character to search for.
+   * @param c The code unit to search for.
    * @param start The offset at which searching will start.
    * @return The offset into this of <TT>c</TT>, or -1 if not found.
    * @draft
@@ -675,16 +718,41 @@ public:
               UTextOffset start) const;
 
   /**
-   * Locate in this the last occurrence of the character <TT>c</TT> 
+   * Locate in this the last occurrence of the code point <TT>c</TT>
+   * starting at offset <TT>start</TT>, using bitwise comparison.
+   * @param c The code point to search for.
+   * @param start The offset at which searching will start.
+   * @return The offset into this of <TT>c</TT>, or -1 if not found.
+   * @draft
+   */
+  inline UTextOffset lastIndexOf(UChar32 c,
+              UTextOffset start) const;
+
+  /**
+   * Locate in this the last occurrence of the code unit <TT>c</TT> 
    * in the range [<TT>start</TT>, <TT>start + length</TT>), 
    * using bitwise comparison.   
-   * @param c The character to search for.
+   * @param c The code unit to search for.
    * @param start the offset into this at which to start matching
    * @param length the number of characters in this to search
    * @return The offset into this of <TT>c</TT>, or -1 if not found.
    * @draft
    */
   inline UTextOffset lastIndexOf(UChar c,
+              UTextOffset start,
+              int32_t length) const;
+
+  /**
+   * Locate in this the last occurrence of the code point <TT>c</TT> 
+   * in the range [<TT>start</TT>, <TT>start + length</TT>), 
+   * using bitwise comparison.   
+   * @param c The code point to search for.
+   * @param start the offset into this at which to start matching
+   * @param length the number of characters in this to search
+   * @return The offset into this of <TT>c</TT>, or -1 if not found.
+   * @draft
+   */
+  inline UTextOffset lastIndexOf(UChar32 c,
               UTextOffset start,
               int32_t length) const;
 
@@ -718,6 +786,36 @@ public:
    */
   inline UChar32 char32At(UTextOffset offset) const;
 
+  /**
+   * Adjust a random-access offset so that
+   * it points to the beginning of a Unicode character.
+   * The offset that is passed in points to
+   * any code unit of a code point,
+   * while the returned offset will point to the first code unit
+   * of the same code point.
+   * In UTF-16, if the input offset points to a second surrogate
+   * of a surrogate pair, then the returned offset will point
+   * to the first surrogate.
+   * @param offset a valid offset into one code point of the text
+   * @return offset of the first code unit of the same code point
+   */
+  inline UTextOffset getCharStart(UTextOffset offset);
+
+  /**
+   * Adjust a random-access offset so that
+   * it points behind a Unicode character.
+   * The offset that is passed in points behind
+   * any code unit of a code point,
+   * while the returned offset will point behind the last code unit
+   * of the same code point.
+   * In UTF-16, if the input offset points behind the first surrogate
+   * (i.e., to the second surrogate)
+   * of a surrogate pair, then the returned offset will point
+   * behind the second surrogate (i.e., to the first surrogate).
+   * @param offset a valid offset after any code unit of a code point of the text
+   * @return offset of the first code unit after the same code point
+   */
+  inline UTextOffset getCharLimit(UTextOffset offset);
 
   /* Substring extraction */
 
@@ -971,13 +1069,22 @@ public:
   /* Append operations */
 
   /**
-   * Append operator. Append the character <TT>ch</TT> to the UnicodeString
+   * Append operator. Append the code unit <TT>ch</TT> to the UnicodeString
    * object.
-   * @param ch the character to be appended
+   * @param ch the code unit to be appended
    * @return a reference to this
    * @draft
    */
  inline  UnicodeString& operator+= (UChar ch);
+
+  /**
+   * Append operator. Append the code point <TT>ch</TT> to the UnicodeString
+   * object.
+   * @param ch the code point to be appended
+   * @return a reference to this
+   * @draft
+   */
+ inline  UnicodeString& operator+= (UChar32 ch);
 
   /**
    * Append operator. Append the characters in <TT>srcText</TT> to the
@@ -1045,12 +1152,20 @@ public:
             int32_t srcLength);
 
   /**
-   * Append the character <TT>srcChar</TT> to the UnicodeString object.
-   * @param srcChar the character to append
+   * Append the code unit <TT>srcChar</TT> to the UnicodeString object.
+   * @param srcChar the code unit to append
    * @return a reference to this
    * @draft
    */
   inline UnicodeString& append(UChar srcChar);
+
+  /**
+   * Append the code point <TT>srcChar</TT> to the UnicodeString object.
+   * @param srcChar the code point to append
+   * @return a reference to this
+   * @draft
+   */
+  inline UnicodeString& append(UChar32 srcChar);
 
 
   /* Insert operations */
@@ -1547,7 +1662,7 @@ public:
    * @stable
    */
   UnicodeString(bool_t isTerminated,
-                UChar *text,
+                const UChar *text,
                 int32_t textLength);
 
   /**
@@ -2008,15 +2123,54 @@ UnicodeString::indexOf(UChar c) const
 { return doIndexOf(c, 0, fLength); }
 
 inline UTextOffset 
+UnicodeString::indexOf(UChar32 c) const {
+  if(!UTF_NEED_MULTIPLE_UCHAR(c)) {
+    return doIndexOf((UChar)c, 0, fLength);
+  } else {
+    UChar buffer[UTF_MAX_CHAR_LENGTH];
+    int32_t length = 0;
+    UTF_APPEND_CHAR_UNSAFE(buffer, length, c);
+    return indexOf(buffer, length, 0);
+  }
+}
+
+inline UTextOffset 
 UnicodeString::indexOf(UChar c,
                UTextOffset start) const
 { return doIndexOf(c, start, fLength - start); }
+
+inline UTextOffset 
+UnicodeString::indexOf(UChar32 c,
+               UTextOffset start) const {
+  if(!UTF_NEED_MULTIPLE_UCHAR(c)) {
+    return doIndexOf((UChar)c, start, fLength - start);
+  } else {
+    UChar buffer[UTF_MAX_CHAR_LENGTH];
+    int32_t length = 0;
+    UTF_APPEND_CHAR_UNSAFE(buffer, length, c);
+    return indexOf(buffer, length, start);
+  }
+}
 
 inline UTextOffset 
 UnicodeString::indexOf(UChar c,
                UTextOffset start,
                int32_t length) const
 { return doIndexOf(c, start, length); }
+
+inline UTextOffset 
+UnicodeString::indexOf(UChar32 c,
+               UTextOffset start,
+               int32_t length) const {
+  if(!UTF_NEED_MULTIPLE_UCHAR(c)) {
+    return doIndexOf((UChar)c, start, length);
+  } else {
+    UChar buffer[UTF_MAX_CHAR_LENGTH];
+    int32_t cLength = 0;
+    UTF_APPEND_CHAR_UNSAFE(buffer, cLength, c);
+    return indexOf(buffer, cLength, start, length);
+  }
+}
 
 inline UTextOffset 
 UnicodeString::lastIndexOf(const UnicodeString& text) const
@@ -2067,15 +2221,54 @@ UnicodeString::lastIndexOf(UChar c) const
 { return doLastIndexOf(c, 0, fLength); }
 
 inline UTextOffset 
+UnicodeString::lastIndexOf(UChar32 c) const {
+  if(!UTF_NEED_MULTIPLE_UCHAR(c)) {
+    return doLastIndexOf((UChar)c, 0, fLength);
+  } else {
+    UChar buffer[UTF_MAX_CHAR_LENGTH];
+    int32_t count = 0;
+    UTF_APPEND_CHAR_UNSAFE(buffer, count, c);
+    return lastIndexOf(buffer, count, 0);
+  }
+}
+
+inline UTextOffset 
 UnicodeString::lastIndexOf(UChar c,
                UTextOffset start) const
 { return doLastIndexOf(c, start, fLength - start); }
+
+inline UTextOffset 
+UnicodeString::lastIndexOf(UChar32 c,
+               UTextOffset start) const {
+  if(!UTF_NEED_MULTIPLE_UCHAR(c)) {
+    return doLastIndexOf((UChar)c, start, fLength - start);
+  } else {
+    UChar buffer[UTF_MAX_CHAR_LENGTH];
+    int32_t count = 0;
+    UTF_APPEND_CHAR_UNSAFE(buffer, count, c);
+    return lastIndexOf(buffer, count, start);
+  }
+}
 
 inline UTextOffset 
 UnicodeString::lastIndexOf(UChar c,
                UTextOffset start,
                int32_t length) const
 { return doLastIndexOf(c, start, length); }
+
+inline UTextOffset 
+UnicodeString::lastIndexOf(UChar32 c,
+               UTextOffset start,
+               int32_t length) const {
+  if(!UTF_NEED_MULTIPLE_UCHAR(c)) {
+    return doLastIndexOf((UChar)c, start, length);
+  } else {
+    UChar buffer[UTF_MAX_CHAR_LENGTH];
+    int32_t count = 0;
+    UTF_APPEND_CHAR_UNSAFE(buffer, count, c);
+    return lastIndexOf(buffer, count, start, length);
+  }
+}
 
 inline bool_t 
 UnicodeString::startsWith(const UnicodeString& text) const
@@ -2253,6 +2446,26 @@ UnicodeString::char32At(UTextOffset offset) const
   }
 }
 
+inline UTextOffset
+UnicodeString::getCharStart(UTextOffset offset) {
+  if((uint32_t)offset < (uint32_t)fLength) {
+    UTF_SET_CHAR_START(fArray, offset);
+    return offset;
+  } else {
+    return 0;
+  }
+}
+
+inline UTextOffset
+UnicodeString::getCharLimit(UTextOffset offset) {
+  if((uint32_t)offset < (uint32_t)fLength) {
+    UTF_SET_CHAR_LIMIT(fArray, offset, fLength);
+    return offset;
+  } else {
+    return fLength;
+  }
+}
+
 inline bool_t
 UnicodeString::empty() const
 { return fLength == 0; }
@@ -2300,6 +2513,14 @@ UnicodeString::operator+= (UChar ch)
 { return doReplace(fLength, 0, &ch, 0, 1); }
 
 inline UnicodeString& 
+UnicodeString::operator+= (UChar32 ch) {
+  UChar buffer[UTF_MAX_CHAR_LENGTH];
+  int32_t length = 0;
+  UTF_APPEND_CHAR_UNSAFE(buffer, length, ch);
+  return doReplace(fLength, 0, buffer, 0, length);
+}
+
+inline UnicodeString& 
 UnicodeString::operator+= (const UnicodeString& srcText)
 { return doReplace(fLength, 0, srcText, 0, srcText.fLength); }
 
@@ -2327,6 +2548,14 @@ UnicodeString::append(const UChar *srcChars,
 inline UnicodeString& 
 UnicodeString::append(UChar srcChar)
 { return doReplace(fLength, 0, &srcChar, 0, 1); }
+
+inline UnicodeString& 
+UnicodeString::append(UChar32 srcChar) {
+  UChar buffer[UTF_MAX_CHAR_LENGTH];
+  int32_t length = 0;
+  UTF_APPEND_CHAR_UNSAFE(buffer, length, srcChar);
+  return doReplace(fLength, 0, buffer, 0, length);
+}
 
 inline UnicodeString& 
 UnicodeString::insert(UTextOffset start, 

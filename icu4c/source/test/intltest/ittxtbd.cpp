@@ -130,7 +130,7 @@ IntlTestTextBoundary::IntlTestTextBoundary()
 {
     UnicodeString temp(cannedTestArray);
     cannedTestChars = new UnicodeString();
-    *cannedTestChars += 0x0000;
+    *cannedTestChars += (UChar)0x0000;
     *cannedTestChars += temp;
     addTestWordData();
     addTestSentenceData();

@@ -180,7 +180,7 @@ DateFormatTest::TestTwoDigitYearDSTParse(void)
  
 // -------------------------------------
  
-char toHexString(int32_t i) { return i + (i < 10 ? '0' : ('A' - 10)); }
+UChar toHexString(int32_t i) { return i + (i < 10 ? 0x30 : (0x41 - 10)); }
 
 UnicodeString&
 DateFormatTest::escape(UnicodeString& s)
@@ -191,7 +191,7 @@ DateFormatTest::escape(UnicodeString& s)
         UChar c = s[(UTextOffset)i];
         if (c <= (UChar)0x7F) buf += c;
         else {
-            buf += '\\'; buf += 'U';
+            buf += (UChar)0x5c; buf += (UChar)0x55;
             buf += toHexString((c & 0xF000) >> 12);
             buf += toHexString((c & 0x0F00) >> 8);
             buf += toHexString((c & 0x00F0) >> 4);
@@ -292,7 +292,7 @@ DateFormatTest::TestFieldPosition(void)
                 expStr=UnicodeString(expected[exp]);
             } else {
                 /* we cannot have latin-1 characters in source code, therefore we fix up the string for "aou^t" */
-                expStr.append(0x61).append(0x6f).append(0xfb).append(0x74);
+                expStr.append((UChar)0x61).append((UChar)0x6f).append((UChar32)0xfb).append((UChar)0x74);
             }
             
             if (!(field == expStr)) errln(UnicodeString("FAIL: field #") + i + " " +

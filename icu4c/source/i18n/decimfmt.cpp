@@ -1920,8 +1920,8 @@ DecimalFormat::appendAffix(    UnicodeString& buffer,
             || affix.indexOf(kCurrencySign) >= 0;
     }
     if (needQuote)
-        buffer += 0x0027 /*'\''*/;
-    if (affix.indexOf(0x0027 /*'\''*/) < 0)
+        buffer += (UChar)0x0027 /*'\''*/;
+    if (affix.indexOf((UChar)0x0027 /*'\''*/) < 0)
         buffer += affix;
     else {
         for (int32_t j = 0; j < affix.length(); ++j) {
@@ -1930,7 +1930,7 @@ DecimalFormat::appendAffix(    UnicodeString& buffer,
             if (c == 0x0027 /*'\''*/) buffer += c;
         }
     }
-    if (needQuote) buffer += 0x0027 /*'\''*/;
+    if (needQuote) buffer += (UChar)0x0027 /*'\''*/;
 }
 
 //------------------------------------------------------------------------------
@@ -1959,7 +1959,7 @@ DecimalFormat::toPattern(UnicodeString& result, bool_t localized) const
     }
     if(fRoundingIncrement != NULL) {
       for(i=0; i<fRoundingIncrement->fCount; ++i) {
-	roundingDigits.append(fRoundingIncrement->fDigits[i]);
+        roundingDigits.append((UChar)fRoundingIncrement->fDigits[i]);
       }
       roundingDecimalPos = fRoundingIncrement->fDecimalAt;
     }

@@ -75,18 +75,18 @@
 #define UTF16_GET_CHAR_SAFE(s, i, length, c, strict) { \
     (c)=(s)[i]; \
     if(UTF_IS_SURROGATE(c)) { \
-        uint16_t c2; \
+        uint16_t __c2; \
         if(UTF_IS_SURROGATE_FIRST(c)) { \
-            if((i)+1<(length) && UTF_IS_SECOND_SURROGATE(c2=(s)[(i)+1])) { \
-                (c)=UTF16_GET_PAIR_VALUE((c), c2); \
+            if((i)+1<(length) && UTF_IS_SECOND_SURROGATE(__c2=(s)[(i)+1])) { \
+                (c)=UTF16_GET_PAIR_VALUE((c), __c2); \
                 /* strict: ((c)&0xfffe)==0xfffe is caught by UTF_IS_ERROR() */ \
             } else if(strict) {\
                 /* unmatched first surrogate */ \
                 (c)=UTF_ERROR_VALUE; \
             } \
         } else { \
-            if((i)>0 && UTF_IS_FIRST_SURROGATE(c2=(s)[(i)-1])) { \
-                (c)=UTF16_GET_PAIR_VALUE(c2, (c)); \
+            if((i)>0 && UTF_IS_FIRST_SURROGATE(__c2=(s)[(i)-1])) { \
+                (c)=UTF16_GET_PAIR_VALUE(__c2, (c)); \
                 /* strict: ((c)&0xfffe)==0xfffe is caught by UTF_IS_ERROR() */ \
             } else if(strict) {\
                 /* unmatched second surrogate */ \
@@ -135,10 +135,10 @@
 }
 
 #define UTF16_FWD_N_UNSAFE(s, i, n) { \
-    UTextOffset N=(n); \
-    while(N>0) { \
+    UTextOffset __N=(n); \
+    while(__N>0) { \
         UTF16_FWD_1_UNSAFE(s, i); \
-        --N; \
+        --__N; \
     } \
 }
 
@@ -162,10 +162,10 @@
 #define UTF16_NEXT_CHAR_SAFE(s, i, length, c, strict) { \
     (c)=(s)[(i)++]; \
     if(UTF_IS_FIRST_SURROGATE(c)) { \
-        uint16_t c2; \
-        if((i)<(length) && UTF_IS_SECOND_SURROGATE(c2=(s)[(i)])) { \
+        uint16_t __c2; \
+        if((i)<(length) && UTF_IS_SECOND_SURROGATE(__c2=(s)[(i)])) { \
             ++(i); \
-            (c)=UTF16_GET_PAIR_VALUE((c), c2); \
+            (c)=UTF16_GET_PAIR_VALUE((c), __c2); \
             /* strict: ((c)&0xfffe)==0xfffe is caught by UTF_IS_ERROR() */ \
         } else if(strict) {\
             /* unmatched first surrogate */ \
@@ -200,10 +200,10 @@
 }
 
 #define UTF16_FWD_N_SAFE(s, i, length, n) { \
-    UTextOffset N=(n); \
-    while(N>0 && (i)<(length)) { \
+    UTextOffset __N=(n); \
+    while(__N>0 && (i)<(length)) { \
         UTF16_FWD_1_SAFE(s, i, length); \
-        --N; \
+        --__N; \
     } \
 }
 
@@ -243,10 +243,10 @@
 }
 
 #define UTF16_BACK_N_UNSAFE(s, i, n) { \
-    UTextOffset N=(n); \
-    while(N>0) { \
+    UTextOffset __N=(n); \
+    while(__N>0) { \
         UTF16_BACK_1_UNSAFE(s, i); \
-        --N; \
+        --__N; \
     } \
 }
 
@@ -270,10 +270,10 @@
 #define UTF16_PREV_CHAR_SAFE(s, i, c, strict) { \
     (c)=(s)[--(i)]; \
     if(UTF_IS_SECOND_SURROGATE(c)) { \
-        uint16_t c2; \
-        if((i)>0 && UTF_IS_FIRST_SURROGATE(c2=(s)[(i)-1])) { \
+        uint16_t __c2; \
+        if((i)>0 && UTF_IS_FIRST_SURROGATE(__c2=(s)[(i)-1])) { \
             --(i); \
-            (c)=UTF16_GET_PAIR_VALUE(c2, (c)); \
+            (c)=UTF16_GET_PAIR_VALUE(__c2, (c)); \
             /* strict: ((c)&0xfffe)==0xfffe is caught by UTF_IS_ERROR() */ \
         } else if(strict) {\
             /* unmatched second surrogate */ \
@@ -293,10 +293,10 @@
 }
 
 #define UTF16_BACK_N_SAFE(s, i, n) { \
-    UTextOffset N=(n); \
-    while(N>0 && (i)>0) { \
+    UTextOffset __N=(n); \
+    while(__N>0 && (i)>0) { \
         UTF16_BACK_1_SAFE(s, i); \
-        --N; \
+        --__N; \
     } \
 }
 

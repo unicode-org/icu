@@ -325,7 +325,7 @@ NumberFormatTest::TestCurrencySign(void)
  
 // -------------------------------------
 
-static char toHexString(int32_t i) { return i + (i < 10 ? '0' : ('A' - 10)); }
+static UChar toHexString(int32_t i) { return i + (i < 10 ? 0x30 : (0x41 - 10)); }
 
 UnicodeString&
 NumberFormatTest::escape(UnicodeString& s)
@@ -336,7 +336,7 @@ NumberFormatTest::escape(UnicodeString& s)
         UChar c = s[(UTextOffset)i];
         if (c <= (UChar)0x7F) buf += c;
         else {
-            buf += '\\'; buf += 'U';
+            buf += (UChar)0x5c; buf += (UChar)0x55;
             buf += toHexString((c & 0xF000) >> 12);
             buf += toHexString((c & 0x0F00) >> 8);
             buf += toHexString((c & 0x00F0) >> 4);

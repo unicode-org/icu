@@ -50,7 +50,7 @@ findKeyword(const     UnicodeString&     s,
     // Determine if there is a ','
     // If so, the string contains a modifier, and we only want to 
     // parse the type
-    int32_t commaPos = buffer.indexOf(0x002C);
+    int32_t commaPos = buffer.indexOf((UChar)0x002C);
     commaPos = (commaPos == -1 ? buffer.length() : commaPos);
     buffer.truncate(commaPos);
     if(buffer == list[i]) {
@@ -89,7 +89,7 @@ matchType(const UChar         *pat,
     kw = findKeyword(type, fgTypeList, matchLen);
 
     // there is a modifier if type contains a ','
-    bool_t hasModifier = (type.indexOf(0x002C) != -1);
+    bool_t hasModifier = (type.indexOf((UChar)0x002C) != -1);
     
     switch(kw) {
 

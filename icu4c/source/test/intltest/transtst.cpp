@@ -345,9 +345,9 @@ void TransliteratorTest::keyboardAux(const Transliterator& t,
         s.extractBetween(index.start, index.cursor, b);
         s.extractBetween(index.cursor, s.length(), c);
         log.append(a).
-            append(LEFT_BRACE).
+            append((UChar)LEFT_BRACE).
             append(b).
-            append(PIPE).
+            append((UChar)PIPE).
             append(c);
         if (s == DATA[i+1] && U_SUCCESS(status)) {
             logln(log);
@@ -679,7 +679,7 @@ void TransliteratorTest::expect(const Transliterator& t,
         UnicodeString left, right;
         rsource.extractBetween(0, index.cursor, left);
         rsource.extractBetween(index.cursor, rsource.length(), right);
-        log.append(left).append(PIPE).append(right);
+        log.append(left).append((UChar)PIPE).append(right);
     }
     
     // As a final step in keyboard transliteration, we must call
