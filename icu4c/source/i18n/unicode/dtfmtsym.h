@@ -19,6 +19,7 @@
 #define DTFMTSYM_H
  
 #include "unicode/utypes.h"
+#include "unicode/uobject.h"
 #include "unicode/locid.h"
 #include "unicode/resbund.h"
 
@@ -57,7 +58,7 @@ class SimpleDateFormat;
  * New DateFormatSymbols sub-classes may be added to support SimpleDateFormat
  * for date-time formatting for additional locales.
  */
-class U_I18N_API DateFormatSymbols {
+class U_I18N_API DateFormatSymbols : public UObject {
 public:
     /**
      * Construct a DateFormatSymbols object by loading format data from

@@ -13,15 +13,13 @@
 
 U_NAMESPACE_BEGIN
 
-class Shaper
-{
+class Shaper : public UObject {
 public:
     virtual void init(LEUnicode ch, le_int32 outIndex, le_bool isloate) = 0;
     virtual void shape(le_int32 outIndex, le_int32 shapeOffset) = 0;
 };
 
-class ArabicShaping
-{
+class ArabicShaping : public UObject {
 public:
     // shaping bit masks
     enum ShapingBitMasks

@@ -25,6 +25,7 @@
 #define DIGITLST_H
  
 #include "unicode/utypes.h"
+#include "unicode/uobject.h"
 #include <float.h>
 
 // Decimal digits in a 32-bit int
@@ -60,7 +61,7 @@ U_NAMESPACE_BEGIN
  * derived by placing all the digits of the list to the right of the
  * decimal point, by 10^exponent.
  */
-class U_COMMON_API DigitList { // Declare external to make compiler happy
+class U_COMMON_API DigitList : public UObject { // Declare external to make compiler happy
 public:
     DigitList();
     ~DigitList();

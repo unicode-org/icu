@@ -11,6 +11,7 @@
 #define UNIFUNCT_H
 
 #include "unicode/utypes.h"
+#include "unicode/uobject.h"
 
 U_NAMESPACE_BEGIN
 
@@ -23,7 +24,7 @@ class TransliterationRuleData;
  * that perform match and/or replace operations on Unicode strings.
  * @author Alan Liu
  */
-class U_COMMON_API UnicodeFunctor {
+class U_COMMON_API UnicodeFunctor : public UObject {
 
  public:
 

@@ -20,8 +20,7 @@ U_NAMESPACE_BEGIN
  * and character mirroring - replacing a character which has both a left and a right
  * hand form with the opposite form.
  */
-class LECharMapper
-{
+class LECharMapper /* not : public UObject because this is an interface/mixin class */ {
 public:
     /**
      * This method does the adjustments.
@@ -43,8 +42,7 @@ public:
  * Each instance of an LEFontInstance represents a renerable instance of a font. (i.e. a
  * single font at a particular point size, with a particular transform)
  */
-class LEFontInstance
-{
+class LEFontInstance /* not : public UObject because this is an interface/mixin class */ {
 public:
 
     /**

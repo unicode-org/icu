@@ -22,6 +22,7 @@
 #define FIELDPOS_H
 
 #include "unicode/utypes.h"
+#include "unicode/uobject.h"
 
 U_NAMESPACE_BEGIN
 
@@ -91,7 +92,7 @@ U_NAMESPACE_BEGIN
  *  \endcode
  * </pre>
 */
-class U_I18N_API FieldPosition {
+class U_I18N_API FieldPosition : public UObject {
 public:
     /**
      * DONT_CARE may be specified as the field to indicate that the

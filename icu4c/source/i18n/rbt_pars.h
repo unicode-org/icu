@@ -8,6 +8,8 @@
 #ifndef RBT_PARS_H
 #define RBT_PARS_H
 
+#include "unicode/utypes.h"
+#include "unicode/uobject.h"
 #include "unicode/rbt.h"
 #include "unicode/parseerr.h"
 #include "unicode/unorm.h"
@@ -22,7 +24,7 @@ class ParsePosition;
 class UVector;
 class StringMatcher;
 
-class TransliteratorParser {
+class TransliteratorParser : public UObject {
 
  public:
 

@@ -14,6 +14,7 @@
 
 
 #include "unicode/utypes.h"
+#include "unicode/uobject.h"
 #include "unicode/ustream.h"
 #include "unicode/ucnv.h"
 #include "unicode/uchar.h"
@@ -141,8 +142,7 @@ operator>>(STD_ISTREAM& stream, UnicodeString& str)
 #include "unicode/unistr.h"
 
 
-class U_COMMON_API UnicodeStringStreamer
-{
+class U_COMMON_API UnicodeStringStreamer : public UObject {
 public:
     static void streamIn(UnicodeString* string, FileStream* is);
     static void streamOut(const UnicodeString* string, FileStream* os);

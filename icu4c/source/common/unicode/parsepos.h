@@ -17,6 +17,7 @@
 #define PARSEPOS_H
 
 #include "unicode/utypes.h"
+#include "unicode/uobject.h"
 
 U_NAMESPACE_BEGIN
 
@@ -36,7 +37,7 @@ U_NAMESPACE_BEGIN
  * @see         java.text.Format
  */
 
-class U_COMMON_API ParsePosition {
+class U_COMMON_API ParsePosition : public UObject {
 public:
     /**
      * Default constructor, the index starts with 0 as default.

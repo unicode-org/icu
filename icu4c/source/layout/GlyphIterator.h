@@ -15,8 +15,7 @@
 
 U_NAMESPACE_BEGIN
 
-class GlyphIterator
-{
+class GlyphIterator : public UObject {
 public:
     GlyphIterator(LEGlyphID *theGlyphs, GlyphPositionAdjustment *theGlyphPositionAdjustments, le_int32 theGlyphCount,
         le_bool rightToLeft, le_uint16 theLookupFlags, LETag theFeatureTag, const LETag *theGlyphTags[],

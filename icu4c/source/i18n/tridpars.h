@@ -11,6 +11,7 @@
 #define TRIDPARS_H
 
 #include "unicode/utypes.h"
+#include "unicode/uobject.h"
 #include "unicode/unistr.h"
 
 U_NAMESPACE_BEGIN
@@ -41,7 +42,7 @@ class UVector;
  *
  * @author Alan Liu
  */
-class TransliteratorIDParser {
+class TransliteratorIDParser : public UObject {
 
  public:
 
@@ -59,7 +60,7 @@ class TransliteratorIDParser {
      * 'filter' is the parsed filter pattern, or null if there was no
      * filter.
      */
-    class Specs {
+    class Specs : public UObject {
     public:
         UnicodeString source; // not null
         UnicodeString target; // not null
@@ -86,7 +87,7 @@ class TransliteratorIDParser {
      * 'filter' may be null, if there is none, or non-null and
      * non-empty.
      */
-    class SingleID {
+    class SingleID : public UObject {
     public:
         UnicodeString canonID;
         UnicodeString basicID;

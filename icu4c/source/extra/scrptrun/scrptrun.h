@@ -15,6 +15,7 @@
 #define __SCRPTRUN_H
 
 #include "unicode/utypes.h"
+#include "unicode/uobject.h"
 #include "unicode/uscript.h"
 
 struct ScriptRecord
@@ -30,8 +31,7 @@ struct ParenStackEntry
     UScriptCode scriptCode;
 };
 
-class ScriptRun
-{
+class ScriptRun : public UObject {
 public:
     ScriptRun();
 

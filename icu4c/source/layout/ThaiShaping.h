@@ -32,8 +32,7 @@ public:
     virtual le_bool filter(LEGlyphID glyph);
 };
 
-class ThaiShaping
-{
+class ThaiShaping : public UObject {
 public:
 
     enum {

@@ -16,8 +16,7 @@ U_NAMESPACE_BEGIN
  * This is a helper class that is used to
  * recognize a set of glyph indices.
  */
-class LEGlyphFilter
-{
+class LEGlyphFilter /* not : public UObject because this is an interface/mixin class */ {
 public:
     /**
      * This method is used to test a particular

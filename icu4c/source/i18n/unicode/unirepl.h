@@ -26,7 +26,7 @@ class UnicodeString;
  * <p>This is a mixin class.
  * @author Alan Liu
  */
-class U_I18N_API UnicodeReplacer {
+class U_I18N_API UnicodeReplacer /* not : public UObject because this is an interface/mixin class */ {
 
  public:
 

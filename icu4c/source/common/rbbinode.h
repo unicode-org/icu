@@ -1,6 +1,8 @@
 #ifndef RBBINODE_H
 #define RBBINODE_H
 
+#include "unicode/utypes.h"
+#include "unicode/uobject.h"
 
 //
 //  class RBBINode
@@ -14,7 +16,7 @@ U_NAMESPACE_BEGIN
 class    UnicodeSet;
 class    UVector;
 
-class RBBINode {
+class RBBINode : public UObject {
     public:
         enum NodeType {
             setRef,

@@ -11,6 +11,8 @@
 #ifndef RBBIRB_H
 #define RBBIRB_H
 
+#include "unicode/utypes.h"
+#include "unicode/uobject.h"
 #include "unicode/rbbi.h"
 #include "unicode/uniset.h"
 #include "unicode/parseerr.h"
@@ -39,7 +41,7 @@ class               RBBITableBuilder;
 //                       UnicodeSet parser to resolve references to $variables.
 //
 //--------------------------------------------------------------------------------
-class  RBBISymbolTableEntry  {                // The symbol table hash table contains one
+class RBBISymbolTableEntry : public UObject { // The symbol table hash table contains one
 public:                                       //   of these structs for each entry.
     UnicodeString          key;
     RBBINode               *val;
@@ -82,7 +84,7 @@ public:
 //  class RBBIRuleBuilder       The top-level class handling RBBI rule compiling.
 //
 //--------------------------------------------------------------------------------
-class RBBIRuleBuilder {
+class RBBIRuleBuilder : public UObject {
 public:
 
     //  Create a rule based break iterator from a set of rules.

@@ -16,6 +16,8 @@
 #ifndef NFRS_H
 #define NFRS_H
 
+#include "unicode/utypes.h"
+#include "unicode/uobject.h"
 #include "unicode/rbnf.h"
 
 #if U_HAVE_RBNF
@@ -27,7 +29,7 @@
 
 U_NAMESPACE_BEGIN
 
-class NFRuleSet {
+class NFRuleSet : public UObject {
  public:
   NFRuleSet(UnicodeString* descriptions, int32_t index, UErrorCode& status);
   void parseRules(UnicodeString& rules, const RuleBasedNumberFormat* owner, UErrorCode& status);

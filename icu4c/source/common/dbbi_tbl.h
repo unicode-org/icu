@@ -11,8 +11,10 @@
 #ifndef DBBI_TBL_H
 #define DBBI_TBL_H
 
-#include "brkdict.h"
+#include "unicode/utypes.h"
+#include "unicode/uobject.h"
 #include "unicode/udata.h"
+#include "brkdict.h"
 
 U_NAMESPACE_BEGIN
 
@@ -32,7 +34,7 @@ class DictionaryBasedBreakIterator;
 //        BreakDictionary and get rid of this class, but doing it this way
 //        was a convenient transition from earlier code, and time is short...
 //
-class DictionaryBasedBreakIteratorTables {
+class DictionaryBasedBreakIteratorTables : public UObject {
 
 private:
     int32_t      fRefCount;

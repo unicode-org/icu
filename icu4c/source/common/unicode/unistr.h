@@ -22,6 +22,7 @@
 #define UNISTR_H
 
 #include "unicode/utypes.h"
+#include "unicode/uobject.h"
 #include "unicode/rep.h"
 
 struct UConverter;          // unicode/ucnv.h
@@ -3980,8 +3981,7 @@ U_NAMESPACE_BEGIN
 //========================================
 // class UCharReference
 //========================================
-class U_COMMON_API UCharReference
-{
+class U_COMMON_API UCharReference : public UObject {
 public:
   UCharReference();
   inline UCharReference(UnicodeString *string,

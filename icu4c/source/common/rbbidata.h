@@ -26,6 +26,8 @@
 #ifndef __RBBIDATA_H__
 #define __RBBIDATA_H__
 
+#include "unicode/utypes.h"
+#include "unicode/uobject.h"
 #include "unicode/unistr.h"
 #include "unicode/udata.h"
 #include "utrie.h"
@@ -95,7 +97,7 @@ struct RBBIStateTable {
 //
 //  The reference counting wrapper class
 //
-class RBBIDataWrapper {
+class RBBIDataWrapper : public UObject {
 public:
     RBBIDataWrapper(const RBBIDataHeader *data, UErrorCode &status);
     RBBIDataWrapper(UDataMemory* udm, UErrorCode &status);

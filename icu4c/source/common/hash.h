@@ -11,8 +11,9 @@
 #ifndef HASH_H
 #define HASH_H
 
-#include "uhash.h"
 #include "unicode/unistr.h"
+#include "unicode/uobject.h"
+#include "uhash.h"
 
 U_NAMESPACE_BEGIN
 
@@ -23,7 +24,7 @@ U_NAMESPACE_BEGIN
  *
  * Hashtable is an INTERNAL CLASS.
  */
-class Hashtable {
+class Hashtable : public UObject {
     UHashtable* hash;
 
 public:

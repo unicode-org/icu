@@ -308,10 +308,12 @@ using namespace std;
 #include "unicode/datefmt.h"
 #include "unistrm.h"
 
-class FormattableStreamer
-{
+class FormattableStreamer /* not : public UObject because all methods are static */ {
 public:
     static void streamOut(ostream& stream, const Formattable& obj);
+
+private:
+    FormattableStreamer() {} // private - forbid instantiation
 };
 
 // This is for debugging purposes only.  This will send a displayable

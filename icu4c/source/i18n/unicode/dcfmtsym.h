@@ -26,6 +26,7 @@
 #define DCFMTSYM_H
  
 #include "unicode/utypes.h"
+#include "unicode/uobject.h"
 #include "unicode/locid.h"
 
 U_NAMESPACE_BEGIN
@@ -69,7 +70,7 @@ U_NAMESPACE_BEGIN
  * contiguous in Unicode, from 0 to 9. Other digits sets (such as
  * superscripts) would need a different subclass.
  */
-class U_I18N_API DecimalFormatSymbols {
+class U_I18N_API DecimalFormatSymbols : public UObject {
 public:
     /**
      * Constants for specifying a number format symbol.

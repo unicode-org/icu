@@ -15,6 +15,8 @@
 #define REP_H
 
 #include "unicode/utypes.h"
+#include "unicode/uobject.h"
+
 U_NAMESPACE_BEGIN
 
 class UnicodeString;
@@ -54,7 +56,7 @@ class UnicodeString;
  * @author Alan Liu
  * @stable
  */
-class U_COMMON_API Replaceable {
+class U_COMMON_API Replaceable : public UObject {
 
 public:
     /**

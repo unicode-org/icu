@@ -8,8 +8,10 @@
 #ifndef RBT_SET_H
 #define RBT_SET_H
 
-#include "uvector.h"
+#include "unicode/utypes.h"
+#include "unicode/uobject.h"
 #include "unicode/utrans.h"
+#include "uvector.h"
 
 U_NAMESPACE_BEGIN
 
@@ -23,7 +25,7 @@ class UnicodeString;
  * A set of rules for a <code>RuleBasedTransliterator</code>.
  * @author Alan Liu
  */
-class U_I18N_API TransliterationRuleSet {
+class U_I18N_API TransliterationRuleSet : public UObject {
     /**
      * Vector of rules, in the order added.  This is used while the
      * rule set is getting built.  After that, freeze() reorders and
