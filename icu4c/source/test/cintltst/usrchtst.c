@@ -284,6 +284,7 @@ static UBool assertEqualWithUStringSearch(      UStringSearch *strsrch,
                                           const SearchData     search)
 {
     int         count       = 0;
+    int         matchlimit  = 0;
     UErrorCode  status      = U_ZERO_ERROR;
     UTextOffset matchindex  = search.offset[count];
     int32_t     textlength;
@@ -334,7 +335,9 @@ static UBool assertEqualWithUStringSearch(      UStringSearch *strsrch,
     }
     /* start of preceding matches */
     count = count == 0 ? 0 : count - 1;
+    matchlimit = count;
     matchindex = search.offset[count];
+
     while (U_SUCCESS(status) && matchindex >= 0) {
         uint32_t matchlength = search.size[count];
         usearch_previous(strsrch, &status);
@@ -373,6 +376,7 @@ static UBool assertEqualWithUStringSearch(      UStringSearch *strsrch,
                     usearch_getMatchedLength(strsrch));
         return FALSE;
     }
+
     return TRUE;
 }
 
@@ -539,6 +543,9 @@ static void TestBreakIterator() {
     int             count = 0;
 
     open();
+    if (usearch_getBreakIterator(NULL) != NULL) {
+        log_err("Expected NULL breakiterator from NULL string search\n");
+    }
     u_unescape(BREAKITERATOR[0].text, text, 128);
     u_unescape(BREAKITERATOR[0].pattern, pattern, 32);
     strsrch = usearch_openFromCollator(pattern, -1, text, -1, EN_US_, NULL, 
@@ -716,6 +723,9 @@ static void TestCollator()
           UStringSearch *strsrch; 
           
     open();
+    if (usearch_getCollator(NULL) != NULL) {
+        log_err("Expected NULL collator from NULL string search\n");
+    }
     u_unescape(COLLATOR[0].text, text, 128);
     u_unescape(COLLATOR[0].pattern, pattern, 32);
 
@@ -772,6 +782,14 @@ static void TestPattern()
           UErrorCode     status = U_ZERO_ERROR;
 
     open();
+    if (usearch_getPattern(NULL, &templength) != NULL) {
+        log_err("Error NULL string search expected returning NULL pattern\n");
+    }
+    usearch_setPattern(NULL, pattern, 3, &status);
+    if (U_SUCCESS(status)) {
+        log_err("Error expected setting pattern in NULL strings search\n");
+    }
+    status = U_ZERO_ERROR;
     u_unescape(PATTERN[0].text, text, 128);
     u_unescape(PATTERN[0].pattern, pattern, 32);
 
@@ -779,6 +797,17 @@ static void TestPattern()
     strsrch = usearch_openFromCollator(pattern, -1, text, -1, EN_US_, 
                                        NULL, &status);
 
+    status = U_ZERO_ERROR;
+    usearch_setPattern(strsrch, NULL, 3, &status);
+    if (U_SUCCESS(status)) {
+        log_err("Error expected setting NULL pattern in strings search\n");
+    }
+    status = U_ZERO_ERROR;
+    usearch_setPattern(strsrch, pattern, 0, &status);
+    if (U_SUCCESS(status)) {
+        log_err("Error expected setting pattern with length 0 in strings search\n");
+    }
+    status = U_ZERO_ERROR;
     if (U_FAILURE(status)) {
         log_err("Error opening string search %s\n", u_errorName(status));
         goto ENDTESTPATTERN;
@@ -851,6 +880,17 @@ static void TestText()
     u_unescape(TEXT[0].pattern, pattern, 32);
 
     open();
+
+    if (usearch_getText(NULL, &templength) != NULL) {
+        log_err("Error NULL string search should return NULL text\n");
+    }
+
+    usearch_setText(NULL, text, 10, &status);
+    if (U_SUCCESS(status)) {
+        log_err("Error NULL string search should have an error when setting text\n");
+    }
+
+    status = U_ZERO_ERROR;
     strsrch = usearch_openFromCollator(pattern, -1, text, -1, EN_US_, 
                                        NULL, &status);
 
@@ -923,6 +963,9 @@ static void TestGetSetOffset()
     UStringSearch *strsrch;
 
     open();
+    if (usearch_getOffset(NULL) != USEARCH_DONE) {
+        log_err("usearch_getOffset(NULL) expected USEARCH_DONE\n");
+    }
     strsrch = usearch_openFromCollator(pattern, 16, text, 32, EN_US_, NULL, 
                                        &status);
     /* testing out of bounds error */
@@ -960,6 +1003,21 @@ static void TestGetSetOffset()
                         usearch_getMatchedLength(strsrch));
                 return;
             }
+            usearch_setOffset(strsrch, matchindex + matchlength, &status);
+            usearch_previous(strsrch, &status);
+            if (matchindex != usearch_getMatchedStart(strsrch) || 
+                matchlength != (uint32_t)usearch_getMatchedLength(strsrch)) {
+                char *str = toCharString(usearch_getText(strsrch, 
+                                                         &textlength));
+                log_err("Text: %s\n", str);
+                str = toCharString(usearch_getPattern(strsrch, &textlength));
+                log_err("Pattern: %s\n", str);
+                log_err("Error match found at %d %d\n", 
+                        usearch_getMatchedStart(strsrch), 
+                        usearch_getMatchedLength(strsrch));
+                return;
+            }
+            usearch_setOffset(strsrch, matchindex + matchlength, &status);
             matchindex = search.offset[count + 1] == -1 ? -1 : 
                          search.offset[count + 2];
             if (search.offset[count + 1] != -1) {
@@ -997,6 +1055,12 @@ static void TestGetSetAttribute()
           UStringSearch  *strsrch;
           
     open();
+    if (usearch_getAttribute(NULL, USEARCH_OVERLAP) != USEARCH_DEFAULT ||
+        usearch_getAttribute(NULL, USEARCH_CANONICAL_MATCH) != 
+                                                         USEARCH_DEFAULT) {
+        log_err(
+            "Attributes for NULL string search should be USEARCH_DEFAULT\n");
+    }
     strsrch = usearch_openFromCollator(pattern, 16, text, 32, EN_US_, NULL, 
                                        &status);
     if (U_FAILURE(status)) {
@@ -1075,6 +1139,13 @@ static void TestGetMatch()
     UChar          matchtext[128];
     
     open();
+
+    if (usearch_getMatchedStart(NULL) != USEARCH_DONE || 
+        usearch_getMatchedLength(NULL) != USEARCH_DONE) {
+        log_err(
+   "Expected start and length of NULL string search should be USEARCH_DONE\n");
+    }
+
     u_unescape(search.text, text, 128);
     u_unescape(search.pattern, pattern, 32);
     strsrch = usearch_openFromCollator(pattern, -1, text, -1, EN_US_, 
@@ -1164,6 +1235,11 @@ static void TestSetMatch()
         UChar          pattern[32];
         UStringSearch *strsrch;
         UErrorCode status = U_ZERO_ERROR;
+
+        if (usearch_first(NULL, &status) != USEARCH_DONE ||
+            usearch_last(NULL, &status) != USEARCH_DONE) {
+            log_err("Error getting the first and last match of a NULL string search\n");
+        }
         u_unescape(search.text, text, 128);
         u_unescape(search.pattern, pattern, 32);
         strsrch = usearch_openFromCollator(pattern, -1, text, -1, EN_US_, 
@@ -1226,13 +1302,14 @@ static void TestSetMatch()
 
 static void TestReset()
 {
-    UErrorCode     status      = U_ZERO_ERROR;
-    UChar          text[128];
-    UChar          pattern[32];
+    UErrorCode     status    = U_ZERO_ERROR;
+    UChar          text[]    = {0x66, 0x69, 0x73, 0x68, 0x20, 
+                                0x66, 0x69, 0x73, 0x68};
+    UChar          pattern[] = {0x73};
     UStringSearch *strsrch;
     
     open();
-    strsrch = usearch_openFromCollator(pattern, 16, text, 32, 
+    strsrch = usearch_openFromCollator(pattern, 1, text, 9, 
                                                       EN_US_, NULL, &status);
     if (U_FAILURE(status)) {
         log_err("Error opening string search %s\n", u_errorName(status));
@@ -1244,7 +1321,7 @@ static void TestReset()
     usearch_setAttribute(strsrch, USEARCH_OVERLAP, USEARCH_ON, &status);
     usearch_setAttribute(strsrch, USEARCH_CANONICAL_MATCH, USEARCH_ON, 
                          &status);
-    usearch_setOffset(strsrch, 10, &status);
+    usearch_setOffset(strsrch, 9, &status);
     if (U_FAILURE(status)) {
         log_err("Error setting attributes and offsets\n");
     }
@@ -1256,6 +1333,11 @@ static void TestReset()
             usearch_getOffset(strsrch) != 0 ||
             usearch_getMatchedLength(strsrch) != 0 ||
             usearch_getMatchedStart(strsrch) != USEARCH_DONE) {
+            log_err("Error resetting string search\n");
+        }
+        usearch_previous(strsrch, &status);
+        if (usearch_getMatchedStart(strsrch) != 7 ||
+            usearch_getMatchedLength(strsrch) != 1) {
             log_err("Error resetting string search\n");
         }
     }

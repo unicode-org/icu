@@ -66,15 +66,14 @@ USearchAttributeValue SearchIterator::getAttribute(
                                           USearchAttribute  attribute) const
 {
     switch (attribute) {
-    case USEARCH_ATTRIBUTE_COUNT :
-        return USEARCH_DEFAULT;
     case USEARCH_OVERLAP :
         return (m_search_->isOverlap == TRUE ? USEARCH_ON : USEARCH_OFF);
     case USEARCH_CANONICAL_MATCH :
         return (m_search_->isCanonicalMatch == TRUE ? USEARCH_ON : 
                                                                 USEARCH_OFF);
+    default :
+        return USEARCH_DEFAULT;
     }
-    return USEARCH_DEFAULT;
 }
     
 UTextOffset SearchIterator::getMatchedStart() const
@@ -234,6 +233,7 @@ UTextOffset SearchIterator::previous(UErrorCode &status)
             offset                       = m_search_->textLength;
             m_search_->isForwardSearching = FALSE;
             m_search_->reset              = FALSE;
+            setOffset(offset, status);
         }
         else {
             offset = getOffset();
