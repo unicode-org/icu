@@ -117,6 +117,22 @@ UnicodeStringTest::TestBasicManipulation()
     ) {
         errln((UnicodeString)"simple UChar32 overloads for replace, insert, setTo or = failed");
     }
+
+    {
+        // test moveIndex32()
+        UnicodeString s=UNICODE_STRING("\\U0002f999\\U0001d15f\\u00c4\\u1ed0", 32).unescape();
+
+        if(
+            s.moveIndex32(2, -1)!=0 ||
+            s.moveIndex32(2, 1)!=4 ||
+            s.moveIndex32(2, 2)!=5 ||
+            s.moveIndex32(5, -2)!=2 ||
+            s.moveIndex32(0, -1)!=0 ||
+            s.moveIndex32(6, 1)!=6
+        ) {
+            errln("UnicodeString::moveIndex32() failed");
+        }
+    }
 }
 
 void
