@@ -1875,9 +1875,8 @@ const char* uprv_getDefaultCodepage()
   return "ibm-1275"; /* Macintosh Roman. There must be a better way. fixme! */
 
 #elif defined(WIN32)
-  static char tempString[10] = "";
-  static char codepage[12]={ "cp" };
-  uprv_strcpy(codepage+2, _itoa(GetACP(), tempString, 10));
+  static char codepage[16];
+  sprintf(codepage, "cp%d", GetACP());
   return codepage;
 
 #elif U_POSIX_LOCALE
