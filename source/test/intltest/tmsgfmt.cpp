@@ -189,12 +189,18 @@ void TestMessageFormat::testBug2()
     delete fmt;
 }
 
-#ifdef _DEBUG
+#if defined(_DEBUG) && U_IOSTREAM_SOURCE!=0
 //----------------------------------------------------
 // console I/O
 //----------------------------------------------------
 
-ostream& operator<<(ostream& stream,  const Formattable&   obj);
+#if U_IOSTREAM_SOURCE >= 199711
+#   include <iostream>
+    std::ostream& operator<<(std::ostream& stream,  const Formattable&   obj);
+#elif U_IOSTREAM_SOURCE >= 198506
+#   include <iostream.h>
+    ostream& operator<<(ostream& stream,  const Formattable&   obj);
+#endif
 
 #include "unicode/datefmt.h"
 #include <limits.h>
