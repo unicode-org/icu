@@ -30,6 +30,7 @@
 #include "unicode/udata.h"
 #include "unewdata.h"
 #include "genprops.h"
+#include "unicode/putil.h"
 
 extern bool_t beVerbose=FALSE, haveCopyright=TRUE;
 
@@ -119,7 +120,7 @@ main(int argc, char *argv[]) {
     }
 
     if (!destdir) {
-        destdir = u_getDataDir();
+        destdir = u_getDataDirectory();
     }
 
     init();
