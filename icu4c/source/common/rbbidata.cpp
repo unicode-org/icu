@@ -201,6 +201,7 @@ void  RBBIDataWrapper::printTable(const char *heading, const RBBIStateTable *tab
     uint32_t   s;
 
     RBBIDebugPrintf("   %s\n", heading);
+
     RBBIDebugPrintf("State |  Acc  LA   Tag");
     for (c=0; c<fHeader->fCatCount; c++) {RBBIDebugPrintf("%3d ", c);}
     RBBIDebugPrintf("\n------|---------------"); for (c=0;c<fHeader->fCatCount; c++) {
@@ -208,6 +209,10 @@ void  RBBIDataWrapper::printTable(const char *heading, const RBBIStateTable *tab
     }
     RBBIDebugPrintf("\n");
 
+    if (table == NULL) {
+        RBBIDebugPrintf("         N U L L   T A B L E\n\n");
+        return;
+    }
     for (s=0; s<table->fNumStates; s++) {
         RBBIStateTableRow *row = (RBBIStateTableRow *)
                                   (table->fTableData + (table->fRowLen * s));

@@ -284,11 +284,15 @@ void RBBINode::print() {
                 "opLParen"
     };
 
-    RBBIDebugPrintf("%10p  %12s  %10p  %10p  %10p      %4d     %6d   %d ",
-        (void *)this, nodeTypeNames[fType], (void *)fParent, (void *)fLeftChild, (void *)fRightChild,
-        fSerialNum, fFirstPos, fVal);
-    if (fType == varRef) {
-        printUnicodeString(fText);
+    if (this==NULL) {
+        RBBIDebugPrintf("%10p", (void *)this);
+    } else {
+        RBBIDebugPrintf("%10p  %12s  %10p  %10p  %10p      %4d     %6d   %d ",
+            (void *)this, nodeTypeNames[fType], (void *)fParent, (void *)fLeftChild, (void *)fRightChild,
+            fSerialNum, fFirstPos, fVal);
+        if (fType == varRef) {
+            printUnicodeString(fText);
+        }
     }
     RBBIDebugPrintf("\n");
 #endif
@@ -317,7 +321,7 @@ void RBBINode::printUnicodeString(const UnicodeString &s, int minWidth)
 //    print.         Print out the tree of nodes rooted at "this"
 //
 //-------------------------------------------------------------------------
-#ifdef RBBI_DEBUG
+#ifndef RBBI_DEBUG
 void RBBINode::printTree(UBool, UBool) {}
 #else
 void RBBINode::printTree(UBool printHeading, UBool doVars) {
@@ -327,15 +331,17 @@ void RBBINode::printTree(UBool printHeading, UBool doVars) {
               );
     }
     this->print();
-    // Only dump the definition under a variable reference if asked to.
-    // Unconditinally dump children of all other node types.
-    if (fType != varRef || doVars) {
-        if (fLeftChild != NULL) {
-            fLeftChild->printTree(FALSE);
-        }
-
-        if (fRightChild != NULL) {
-            fRightChild->printTree(FALSE);
+    if (this != NULL) {
+        // Only dump the definition under a variable reference if asked to.
+        // Unconditinally dump children of all other node types.
+        if (fType != varRef || doVars) {
+            if (fLeftChild != NULL) {
+                fLeftChild->printTree(FALSE);
+            }
+            
+            if (fRightChild != NULL) {
+                fRightChild->printTree(FALSE);
+            }
         }
     }
 }
