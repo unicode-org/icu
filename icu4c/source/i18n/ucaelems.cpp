@@ -99,16 +99,21 @@ tempUCATable * uprv_uca_initTempTable(UCATableHeader *image, const UCollator *UC
   /* copy UCA's maxexpansion and merge as we go along */
   t->maxExpansions       = maxet;
   if (UCA != NULL) {
-    maxet->size            = UCA->lastEndExpansionCE - UCA->endExpansionCE;
-    maxet->position        = maxet->size;
+    /* adding an extra initial value for easier manipulation */
+    maxet->size            = (UCA->lastEndExpansionCE - UCA->endExpansionCE) 
+                             + 2;
+    maxet->position        = maxet->size - 1;
     maxet->endExpansionCE  = 
                       (uint32_t *)uprv_malloc(sizeof(uint32_t) * maxet->size);
     maxet->expansionCESize =
                         (uint8_t *)uprv_malloc(sizeof(uint8_t) * maxet->size);
-    uprv_memcpy(maxet->endExpansionCE, UCA->endExpansionCE, 
-                sizeof(uint32_t) * maxet->size);
-    uprv_memcpy(maxet->expansionCESize, UCA->expansionCESize, 
-                sizeof(uint8_t) * maxet->size);
+    /* initialized value */
+    *(maxet->endExpansionCE)  = 0;
+    *(maxet->expansionCESize) = 0;
+    uprv_memcpy(maxet->endExpansionCE + 1, UCA->endExpansionCE, 
+                sizeof(uint32_t) * (maxet->size - 1));
+    uprv_memcpy(maxet->expansionCESize + 1, UCA->expansionCESize, 
+                sizeof(uint8_t) * (maxet->size - 1));
   }
   else {
     maxet->size     = 0;
@@ -149,6 +154,7 @@ int uprv_uca_setMaxExpansion(uint32_t           endexpansion,
                              UErrorCode        *status)
 {
   if (maxexpansion->size == 0) {
+    /* we'll always make the first element 0, for easier manipulation */
     maxexpansion->endExpansionCE = 
                (uint32_t *)uprv_malloc(INIT_EXP_TABLE_SIZE * sizeof(int32_t));
     *(maxexpansion->endExpansionCE) = 0;
@@ -159,7 +165,7 @@ int uprv_uca_setMaxExpansion(uint32_t           endexpansion,
     maxexpansion->position = 0;
   }
 
-  if (maxexpansion->position == maxexpansion->size) {
+  if (maxexpansion->position + 1 == maxexpansion->size) {
     uint32_t *neweece = (uint32_t *)uprv_realloc(maxexpansion->endExpansionCE, 
                                    2 * maxexpansion->size * sizeof(uint32_t));
     uint8_t  *neweces = (uint8_t *)uprv_realloc(maxexpansion->expansionCESize, 
@@ -233,7 +239,7 @@ int uprv_uca_setMaxExpansion(uint32_t           endexpansion,
     }
     maxexpansion->position ++;
 
-#ifdef UCOL_DEBUG
+#ifdef _DEBUG
     int   temp;
     UBool found = FALSE;
     for (temp = 0; temp < maxexpansion->position; temp ++) {
