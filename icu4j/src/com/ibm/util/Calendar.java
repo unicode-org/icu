@@ -641,7 +641,7 @@ import com.ibm.text.SimpleDateFormat;
  * @see          GregorianCalendar
  * @see          TimeZone
  * @see          DateFormat
- * @version      $Revision: 1.16 $ $Date: 2000/11/28 01:10:06 $
+ * @version      $Revision: 1.17 $ $Date: 2000/11/28 16:40:59 $
  * @author Mark Davis, David Goldsmith, Chen-Lieh Huang, Alan Liu, Laura Werner
  * @since JDK1.1
  */
@@ -3609,24 +3609,31 @@ public abstract class Calendar implements Serializable, Cloneable {
     // Fields -> Time
     //----------------------------------------------------------------------
 
+    /**
+     * Value to OR against resolve table field values for remapping.
+     * @see #resolveFields
+     */
+    protected static final int RESOLVE_REMAP = 32;
+    // A power of 2 greater than or equal to MAX_FIELD_COUNT
+
     // Default table for day in year
     static final int[][][] DATE_PRECEDENCE = {
         {
-            { Calendar.DAY_OF_MONTH },
-            { Calendar.WEEK_OF_YEAR, Calendar.DAY_OF_WEEK },
-            { Calendar.WEEK_OF_MONTH, Calendar.DAY_OF_WEEK },
-            { Calendar.DAY_OF_WEEK_IN_MONTH, Calendar.DAY_OF_WEEK },
-            { Calendar.WEEK_OF_YEAR, Calendar.DOW_LOCAL },
-            { Calendar.WEEK_OF_MONTH, Calendar.DOW_LOCAL },
-            { Calendar.DAY_OF_WEEK_IN_MONTH, Calendar.DOW_LOCAL },
-            { Calendar.DAY_OF_YEAR },
+            { DAY_OF_MONTH },
+            { WEEK_OF_YEAR, DAY_OF_WEEK },
+            { WEEK_OF_MONTH, DAY_OF_WEEK },
+            { DAY_OF_WEEK_IN_MONTH, DAY_OF_WEEK },
+            { WEEK_OF_YEAR, DOW_LOCAL },
+            { WEEK_OF_MONTH, DOW_LOCAL },
+            { DAY_OF_WEEK_IN_MONTH, DOW_LOCAL },
+            { DAY_OF_YEAR },
         },
         {
-            { Calendar.WEEK_OF_YEAR },
-            { Calendar.WEEK_OF_MONTH },
-            { Calendar.DAY_OF_WEEK_IN_MONTH },
-            { Calendar.DAY_OF_WEEK },
-            { Calendar.DOW_LOCAL },
+            { WEEK_OF_YEAR },
+            { WEEK_OF_MONTH },
+            { DAY_OF_WEEK_IN_MONTH },
+            { RESOLVE_REMAP | DAY_OF_WEEK_IN_MONTH, DAY_OF_WEEK },
+            { RESOLVE_REMAP | DAY_OF_WEEK_IN_MONTH, DOW_LOCAL },
         },
     };
 
@@ -3636,8 +3643,6 @@ public abstract class Calendar implements Serializable, Cloneable {
             { DOW_LOCAL },
         },
     };
-
-    static final boolean DEBUG_RESOLVE = false;
 
     /**
      * Given a precedence table, return the newest field combination in
@@ -3652,6 +3657,14 @@ public abstract class Calendar implements Serializable, Cloneable {
      * the newest time stamp is selected.  The first field of the line is
      * returned to indicate which line matched.
      *
+     * <p>In some cases, it may be desirable to map a line to field that
+     * whose stamp is NOT examined.  For example, if the best field is
+     * DAY_OF_WEEK then the DAY_OF_WEEK_IN_MONTH algorithm may be used.  In
+     * order to do this, insert the value <code>REMAP_RESOLVE | F</code> at
+     * the start of the line, where <code>F</code> is the desired return
+     * field value.  This field will NOT be examined; it only determines
+     * the return value if the other fields in the line are the newest.
+     *
      * <p>If all lines of a group contain at least one unset field, then no
      * line will match, and the group as a whole will fail to match.  In
      * that case, the next group will be processed.  If all groups fail to
@@ -3662,30 +3675,28 @@ public abstract class Calendar implements Serializable, Cloneable {
         for (int g=0; g<precedenceTable.length && bestField < 0; ++g) {
             int[][] group = precedenceTable[g];
             int bestStamp = UNSET;
-            if (DEBUG_RESOLVE) System.out.println("Resolve group " + g);
         linesInGroup:
             for (int l=0; l<group.length; ++l) {
                 int[] line= group[l];
                 int lineStamp = UNSET;
-                for (int i=0; i<line.length; ++i) {
+                // Skip over first entry if it is negative
+                for (int i=(line[0]>=RESOLVE_REMAP)?1:0; i<line.length; ++i) {
                     int s = stamp[line[i]];
                     // If any field is unset then don't use this line
                     if (s == UNSET) {
-                        if (DEBUG_RESOLVE) System.out.println("Resolve line " + fieldName(line[0]) + " UNSET");
                         continue linesInGroup;
                     } else {
                         lineStamp = Math.max(lineStamp, s);
                     }
                 }
                 // Record new maximum stamp & field no.
-                if (DEBUG_RESOLVE) System.out.println("Resolve line " + fieldName(line[0]) + " " + lineStamp);                
                 if (lineStamp > bestStamp) {
                     bestStamp = lineStamp;
                     bestField = line[0]; // First field refers to entire line
                 }
             }
         }
-        return bestField;
+        return (bestField>=RESOLVE_REMAP)?(bestField&(RESOLVE_REMAP-1)):bestField;
     }
 
     /**
@@ -3928,15 +3939,23 @@ public abstract class Calendar implements Serializable, Cloneable {
             }
         }
 
-        int bestField = resolveFields(DATE_PRECEDENCE);
-
-        if (bestField == DAY_OF_WEEK || bestField == DOW_LOCAL) {
-            bestField = DAY_OF_WEEK_IN_MONTH;
-        } else if (bestField < 0) {
+        int bestField = resolveFields(getFieldResolutionTable());
+        if (bestField < 0) {
             bestField = DAY_OF_MONTH;
         }
 
         return handleComputeJulianDay(bestField);
+    }
+
+    /**
+     * Return the field resolution array for this calendar.  Calendars that
+     * define additional fields or change the semantics of existing fields
+     * should override this method to adjust the field resolution semantics
+     * accordingly.  Other subclasses should not override this method.
+     * @see #resolveFields
+     */
+    protected int[][][] getFieldResolutionTable() {
+        return DATE_PRECEDENCE;
     }
 
     /**
