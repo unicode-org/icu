@@ -6,8 +6,8 @@
 *
 * $Source: 
 *     /usr/cvs/icu4j/icu4j/src/com/ibm/icu/text/UCharacterName.java $ 
-* $Date: 2002/03/01 02:09:37 $ 
-* $Revision: 1.12 $
+* $Date: 2002/03/02 01:50:51 $ 
+* $Revision: 1.13 $
 *
 *******************************************************************************
 */
@@ -386,8 +386,6 @@ final class UCharacterName
         UCharacterNameReader reader = new UCharacterNameReader(b);
         reader.read(this);
         i.close();
-        UNICODE_1_ = (';' >= m_tokentable_.length) || 
-                     (m_tokentable_[(int)';'] == 0xFFFF);
     }
       
     // protected methods -------------------------------------------------
@@ -410,26 +408,14 @@ final class UCharacterName
             choice >= UCharacterNameChoice.U_CHAR_NAME_CHOICE_COUNT) {
             return null;
         }
+        
+        String result = null;
+        
+        result = getAlgName(ch, choice);
           
-        int tempChoice = choice;
-        if (tempChoice == UCharacterNameChoice.U_EXTENDED_CHAR_NAME) {
-            tempChoice = UCharacterNameChoice.U_UNICODE_CHAR_NAME;
-        }
-            
-        String result = "";
-        
-        // Do not write algorithmic Unicode 1.0 names because Unihan names are 
-        // the same as the modern ones, extension A was only introduced with 
-        // Unicode 3.0, and the Hangul syllable block was moved and changed around 
-        // Unicode 1.1.5.
-        if (tempChoice == UCharacterNameChoice.U_UNICODE_CHAR_NAME) {
-        // try getting algorithmic name first
-            result = getAlgName(ch);
-        }
-        
         // getting normal character name
         if (result == null || result.length() == 0) {
-            if (choice == UCharacterNameChoice.U_EXTENDED_CHAR_NAME) {	  
+        	if (choice == UCharacterNameChoice.U_EXTENDED_CHAR_NAME) {	  
                 result = getExtendedName(ch);	
             } else {
                 result = getGroupName(ch, choice);
@@ -455,40 +441,40 @@ final class UCharacterName
         }
         
         // try extended names first  
-        int result = getExtendedChar(name, choice);
+        int result = getExtendedChar(name.toLowerCase(), choice);
         if (result >= -1) {
             return result;
         }
+        
+        String upperCaseName = name.toUpperCase();
         // try algorithmic names first, if fails then try group names
         // int result = getAlgorithmChar(choice, uppercasename);
-        int tempChoice = choice;    
+        
+        if (choice != UCharacterNameChoice.U_UNICODE_10_CHAR_NAME) {
+        	int count = 0;
+        	if (m_algorithm_ != null) {
+        	    count = m_algorithm_.length;
+        	}
+        	for (count --; count >= 0; count --) {
+         	    result = m_algorithm_[count].getAlgorithmChar(upperCaseName); 
+          	    if (result >= 0) {
+           	        return result;
+            	}
+        	}
+        }
+            
         if (choice == UCharacterNameChoice.U_EXTENDED_CHAR_NAME) {
-            tempChoice = UCharacterNameChoice.U_UNICODE_CHAR_NAME;
+	        result = getGroupChar(upperCaseName, 
+	                              UCharacterNameChoice.U_UNICODE_CHAR_NAME);
+        	if (result == -1) {
+	            result = getGroupChar(upperCaseName, 
+	                              UCharacterNameChoice.U_UNICODE_10_CHAR_NAME);
+        	}
         }
-        
-        String upperCaseName = UCharacter.toUpperCase(Locale.ENGLISH, name);
-        // try algorithmic names now, 1.0 has no algorithmic names
-        if (choice != UCharacterNameChoice.U_UNICODE_CHAR_NAME) {
-            return getGroupChar(upperCaseName, tempChoice);
+        else {
+        	result = getGroupChar(upperCaseName, choice);
         }
-        int count = 0;
-        if (m_algorithm_ != null) {
-            count = m_algorithm_.length;
-        }
-        for (count --; count >= 0; count --) {
-            result = m_algorithm_[count].getAlgorithmChar(name); 
-            if (result >= 0) {
-                return result;
-            }
-        }
-        
-        result = getGroupChar(upperCaseName, tempChoice);
-        if (result == -1 && 
-            choice == UCharacterNameChoice.U_EXTENDED_CHAR_NAME) {
-            result = getGroupChar(upperCaseName, 
-                                UCharacterNameChoice.U_UNICODE_10_CHAR_NAME);        
-        } 
-        return result;
+    	return result;
     }
     
     /**
@@ -607,12 +593,6 @@ final class UCharacterName
     * Position of offsetlow in group information array
     */
     private static final int OFFSET_LOW_OFFSET_ = 2;
-      
-    /**
-    * Indicator of if Unicode 1.0 names are available
-    */
-    private static boolean UNICODE_1_;
-      
     /**
     * Double nibble indicator, any nibble > this number has to be combined
     * with its following nibble
@@ -624,19 +604,26 @@ final class UCharacterName
     /**
     * Gets the algorithmic name for the argument character
     * @param ch character to determine name for
+    * @param choice name choice
     * @return the algorithmic name or null if not found
     */
-    private String getAlgName(int ch) 
+    private String getAlgName(int ch, int choice) 
     {
-        // index in terms integer index
-        StringBuffer s = new StringBuffer();
+    	// Do not write algorithmic Unicode 1.0 names because Unihan names are 
+        // the same as the modern ones, extension A was only introduced with 
+        // Unicode 3.0, and the Hangul syllable block was moved and changed 
+        // around Unicode 1.1.5.
+        if (choice != UCharacterNameChoice.U_UNICODE_10_CHAR_NAME) {
+       	 	// index in terms integer index
+        	StringBuffer s = new StringBuffer();
         
-        for (int index = m_algorithm_.length - 1; index >= 0; index --) {
-            if (m_algorithm_[index].contains(ch)) {
-                if (index >= 0) {
-                    m_algorithm_[index].appendName(ch, s);
-                    return s.toString();
-                }
+        	for (int index = m_algorithm_.length - 1; index >= 0; index --) {
+         	   if (m_algorithm_[index].contains(ch)) {
+          	      if (index >= 0) {
+           	 	      m_algorithm_[index].appendName(ch, s);
+            	      return s.toString();
+             	   }
+         	   }
             }
         }
         return null;
@@ -733,7 +720,7 @@ final class UCharacterName
     */
     private String getGroupName(int index, int length, int choice) 
     {
-        if (choice != UCharacterNameChoice.U_UNICODE_CHAR_NAME) {
+        if (choice == UCharacterNameChoice.U_UNICODE_10_CHAR_NAME) {
             int oldindex = index;
             index += UCharacterUtil.skipByteSubString(m_groupstring_, index, 
                                                       length, (byte)';');
@@ -804,7 +791,7 @@ final class UCharacterName
             nindex = 0;
             len = length[result];
               
-            if (choice != UCharacterNameChoice.U_UNICODE_CHAR_NAME) {
+            if (choice == UCharacterNameChoice.U_UNICODE_10_CHAR_NAME) {
                 int oldindex = index;
                 index += UCharacterUtil.skipByteSubString(m_groupstring_, 
                                                      index, len, (byte)';');
@@ -898,16 +885,7 @@ final class UCharacterName
     * @param choice name choice selector to choose a unicode 1.0 or newer name
     */
     private String getGroupName(int ch, int choice) 
-    {
-        if (choice != UCharacterNameChoice.U_UNICODE_CHAR_NAME && 
-            !UNICODE_1_) {
-            // if not modern name requested and semicolon byte value is a 
-            // character, not a token number, otherwise since only modern 
-            // names are stored in unames.dat and there is no such requested 
-            // Unicode 1.0 name here
-            return null;
-        }
-            
+    {            
         // gets the msb
         int msb = ch >> GROUP_SHIFT_,
             end = m_groupcount_,
@@ -950,14 +928,6 @@ final class UCharacterName
     */
     private int getGroupChar(int index, String name, int choice) 
     {
-        if (choice != UCharacterNameChoice.U_UNICODE_CHAR_NAME && 
-            !UNICODE_1_) {
-            // semicolon byte value is a token number , therefore only 
-            // modern names are stored in unames.dat and there is no such 
-            // requested Unicode 1.0 name here
-            return -1;
-        }
-                
         // populating the data set of grouptable
         char offsets[] = new char[LINES_PER_GROUP_ + 1];
         char lengths[] = new char[LINES_PER_GROUP_ + 1];
@@ -1002,7 +972,7 @@ final class UCharacterName
                         String type = name.substring(1, startIndex - 1);
                         int length = UCharacterCategory.TYPE_NAMES_.length;
                         for (int i = 0; i < length; ++ i) {             
-                            if (type.compareToIgnoreCase(
+                            if (type.compareTo(
                                    UCharacterCategory.TYPE_NAMES_[i]) == 0) { 
                                 if (getType(result) == i) { 
                                     return result;     
