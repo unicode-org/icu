@@ -79,7 +79,7 @@ typedef const void* URegistryKey;
  *         myString += " ; ";
  *     }
  *     cout << " Example 2: " << myString << endl;
- * \endcide
+ * \endcode
  * </pre>
  * To format a number for a different Locale, specify it in the
  * call to createInstance().
