@@ -899,13 +899,13 @@ BreakIterator *  RuleBasedBreakIterator::createBufferClone(void *stackBuffer,
     //  Allocate heap memory if the user supplied memory is insufficient.
     //
     char    *buf   = (char *)stackBuffer;
-    int32_t s      = bufferSize;
+    uint32_t s      = bufferSize;
 
     if (stackBuffer == NULL) {
         s = 0;   // Ignore size, force allocation if user didn't give us a buffer.
     }
     if (U_ALIGNMENT_OFFSET(stackBuffer) != 0) {
-        int32_t offsetUp = (int32_t)U_ALIGNMENT_OFFSET_UP(buf);
+        uint32_t offsetUp = (uint32_t)U_ALIGNMENT_OFFSET_UP(buf);
         s   -= offsetUp;
         buf += offsetUp;
     }

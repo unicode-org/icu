@@ -276,7 +276,6 @@ void RBBITableBuilder::calcFollowPos(RBBINode *n) {
         uint32_t     ix;
 
         UVector *LastPosOfLeftChild = n->fLeftChild->fLastPosSet;
-        UVector *FirstPosOfRightChild = n->fRightChild->fFirstPosSet;
 
         for (ix=0; ix<(uint32_t)LastPosOfLeftChild->size(); ix++) {
             i = (RBBINode *)LastPosOfLeftChild->elementAt(ix);
@@ -364,7 +363,7 @@ void RBBITableBuilder::buildStateTable() {
             }
 
             // if U is not empty and not in DStates then
-            int32_t  ux;
+            int32_t  ux = 0;
             UBool    UinDstates = FALSE;
             if (U != NULL) {
                 U_ASSERT(U->size() > 0);
@@ -540,7 +539,7 @@ UBool RBBITableBuilder::setEquals(UVector *a, UVector *b) {
     int32_t  bx;
     int32_t  firstBx = 0;
     void     *aVal;
-    void     *bVal;
+    void     *bVal = NULL;
 
     for (ax=0; ax<aSize; ax++) {
         aVal = a->elementAt(ax);
@@ -671,7 +670,7 @@ void RBBITableBuilder::printSet(UVector *s) {
     int32_t  i;
     for (i=0; i<s->size(); i++) {
         void *v = s->elementAt(i);
-        printf("%10x", v);
+        printf("%10p", v);
     }
     printf("\n");
 }

@@ -54,15 +54,16 @@ RBBINode::RBBINode(NodeType t) : UObject() {
     fNullable     = FALSE;
     fLookAheadEnd = FALSE;
     fVal          = 0;
+	fPrecedence   = precZero;
 
     UErrorCode     status = U_ZERO_ERROR;
     fFirstPosSet  = new UVector(status);  // TODO - get a real status from somewhere
     fLastPosSet   = new UVector(status);
     fFollowPos    = new UVector(status);
-    if      (t==opCat) {fPrecedence = precOpCat;}
-    else if (t==opOr)  {fPrecedence = precOpOr;}
-    else if (t==opStart) {fPrecedence = precStart;}
-    else if (t= opLParen) {fPrecedence = precLParen;}
+    if      (t==opCat)    {fPrecedence = precOpCat;}
+    else if (t==opOr)     {fPrecedence = precOpOr;}
+    else if (t==opStart)  {fPrecedence = precStart;}
+    else if (t==opLParen) {fPrecedence = precLParen;}
 
 };
 
@@ -290,7 +291,7 @@ static const char *nodeTypeNames[] = {
 };
 
 void RBBINode::print() {
-    printf("%10x  %12s  %10x  %10x  %10x      %4d     %6d   %d ",
+    printf("%10p  %12s  %10p  %10p  %10p      %4d     %6d   %d ",
         this, nodeTypeNames[fType], fParent, fLeftChild, fRightChild,
         fSerialNum, fFirstPos, fVal);
     if (fType == varRef) {
