@@ -979,10 +979,20 @@ void TestGetAll()
 
 }
 
+
+struct teststruct {
+    const char *original;
+    uint8_t key[256];
+  } ;
+
+int compare_teststruct(const void *string1, const void *string2) {
+  return(strcmp(((struct teststruct *)string1)->key, ((struct teststruct *)string2)->key));
+}
+
 void TestBounds() {
   UErrorCode status = U_ZERO_ERROR;
 
-  UCollator *coll = ucol_open("en_US", &status);
+  UCollator *coll = ucol_open("sh", &status);
   
   uint8_t sortkey[512], lower[512], upper[512];
   UChar buffer[512];
@@ -993,23 +1003,137 @@ void TestBounds() {
       "john SMITH",
       "j\\u00F6hn sm\\u00EFth",
       "J\\u00F6hn Sm\\u00EFth",
-      "J\\u00D6HN SM\\u00CFTH"
+      "J\\u00D6HN SM\\u00CFTH",
+      "john smithsonian",
+      "John Smithsonian",
   };
 
-  int32_t i = 0, j = 0, buffSize = 0, skSize = 0, lowerSize = 0, upperSize = 0;
+  static struct teststruct tests[] = {  
+ {"\\u010CAKI MIHALJ" } ,
+ {"\\u010CAKI MIHALJ" } ,
+ {"\\u010CAKI PIRO\\u0160KA" },
+{ "\\u010CABAI ANDRIJA" } ,
+ {"\\u010CABAI LAJO\\u0160" } ,
+ {"\\u010CABAI MARIJA" } ,
+ {"\\u010CABAI STEVAN" } ,
+ {"\\u010CABAI STEVAN" } ,
+ {"\\u010CABARKAPA BRANKO" } ,
+ {"\\u010CABARKAPA MILENKO" } ,
+ {"\\u010CABARKAPA MIROSLAV" } ,
+ {"\\u010CABARKAPA SIMO" } ,
+ {"\\u010CABARKAPA STANKO" } ,
+ {"\\u010CABARKAPA TAMARA" } ,
+ {"\\u010CABARKAPA TOMA\\u0160" } ,
+ {"\\u010CABDARI\\u0106 NIKOLA" } ,
+ {"\\u010CABDARI\\u0106 ZORICA" } ,
+ {"\\u010CABI NANDOR" } ,
+ {"\\u010CABOVI\\u0106 MILAN" } ,
+ {"\\u010CABRADI AGNEZIJA" } ,
+ {"\\u010CABRADI IVAN" } ,
+ {"\\u010CABRADI JELENA" } ,
+ {"\\u010CABRADI LJUBICA" } ,
+ {"\\u010CABRADI STEVAN" } ,
+ {"\\u010CABRDA MARTIN" } ,
+ {"\\u010CABRILO BOGDAN" } ,
+ {"\\u010CABRILO BRANISLAV" } ,
+ {"\\u010CABRILO LAZAR" } ,
+ {"\\u010CABRILO LJUBICA" } ,
+ {"\\u010CABRILO SPASOJA" } ,
+ {"\\u010CADE\\u0160 ZDENKA" } ,
+ {"\\u010CADESKI BLAGOJE" } ,
+ {"\\u010CADOVSKI VLADIMIR" } ,
+ {"\\u010CAGLJEVI\\u0106 TOMA" } ,
+ {"\\u010CAGOROVI\\u0106 VLADIMIR" } ,
+ {"\\u010CAJA VANKA" } ,
+ {"\\u010CAJI\\u0106 BOGOLJUB" } ,
+ {"\\u010CAJI\\u0106 BORISLAV" } ,
+ {"\\u010CAJI\\u0106 RADOSLAV" } ,
+ {"\\u010CAK\\u0160IRAN MILADIN" } ,
+ {"\\u010CAKAN EUGEN" } ,
+ {"\\u010CAKAN EVGENIJE" } ,
+ {"\\u010CAKAN IVAN" } ,
+ {"\\u010CAKAN JULIJAN" } ,
+ {"\\u010CAKAN MIHAJLO" } ,
+ {"\\u010CAKAN STEVAN" } ,
+ {"\\u010CAKAN VLADIMIR" } ,
+ {"\\u010CAKAN VLADIMIR" } ,
+ {"\\u010CAKAN VLADIMIR" } ,
+ {"\\u010CAKARA ANA" } ,
+ {"\\u010CAKAREVI\\u0106 MOMIR" } ,
+ {"\\u010CAKAREVI\\u0106 NEDELJKO" } ,
+ {"\\u010CAKI \\u0160ANDOR" } ,
+ {"\\u010CAKI AMALIJA" } ,
+ {"\\u010CAKI ANDRA\\u0160" } ,
+ {"\\u010CAKI LADISLAV" } ,
+ {"\\u010CAKI LAJO\\u0160" } ,
+ {"\\u010CAKI LASLO" } ,
+  };
 
-  UColAttributeValue strength = 1;
+
+
+  int32_t i = 0, j = 0, k = 0, buffSize = 0, skSize = 0, lowerSize = 0, upperSize = 0;
+  int32_t lowerRND = 0, upperRND = 0;
+  int32_t arraySize = sizeof(tests)/sizeof(tests[0]);
+
+  for(i = 0; i<arraySize; i++) {
+    buffSize = u_unescape(tests[i].original, buffer, 512);
+    skSize = ucol_getSortKey(coll, buffer, buffSize, tests[i].key, 512);
+  }
+
+  qsort(tests, arraySize, sizeof(struct teststruct), compare_teststruct);
+
+  for(i = 0; i < arraySize-1; i++) {
+    for(j = i+1; j < arraySize; j++) {
+      lowerSize = ucol_getBound(tests[i].key, -1, UCOL_BOUND_LOWER, 1, lower, 512, &status);
+      upperSize = ucol_getBound(tests[j].key, -1, UCOL_BOUND_UPPER, 1, upper, 512, &status);
+      for(k = i; k <= j; k++) {
+        if(strcmp(lower, tests[k].key) > 0) {
+          log_err("Problem with lower! j = %i (%s vs %s)\n", k, tests[k].original, tests[i].original);
+        }
+        if(strcmp(upper, tests[k].key) <= 0) {
+          log_err("Problem with upper! j = %i (%s vs %s)\n", k, tests[k].original, tests[j].original);
+        }
+      }
+    }
+  }
+
+
+#if 0
+  for(i = 0; i < 1000; i++) {
+    lowerRND = (rand()/(RAND_MAX/arraySize));
+    upperRND = lowerRND + (rand()/(RAND_MAX/(arraySize-lowerRND)));
+
+    lowerSize = ucol_getBound(tests[lowerRND].key, -1, UCOL_BOUND_LOWER, 1, lower, 512, &status);
+    upperSize = ucol_getBound(tests[upperRND].key, -1, UCOL_BOUND_UPPER_LONG, 1, upper, 512, &status);
+
+    for(j = lowerRND; j<=upperRND; j++) {
+      if(strcmp(lower, tests[j].key) > 0) {
+        log_err("Problem with lower! j = %i (%s vs %s)\n", j, tests[j].original, tests[lowerRND].original);
+      }
+      if(strcmp(upper, tests[j].key) <= 0) {
+        log_err("Problem with upper! j = %i (%s vs %s)\n", j, tests[j].original, tests[upperRND].original);
+      }
+    }
+  }
+#endif
+
+
+
+
 
   for(i = 0; i<sizeof(test)/sizeof(test[0]); i++) {
     buffSize = u_unescape(test[i], buffer, 512);
     skSize = ucol_getSortKey(coll, buffer, buffSize, sortkey, 512);
-    lowerSize = ucol_getBound(sortkey, skSize, UCOL_BOUND_LOWER, strength, lower, 512, &status);
-    upperSize = ucol_getBound(sortkey, skSize, UCOL_BOUND_UPPER, strength, upper, 512, &status);
+    lowerSize = ucol_getBound(sortkey, skSize, UCOL_BOUND_LOWER, 1, lower, 512, &status);
+    upperSize = ucol_getBound(sortkey, skSize, UCOL_BOUND_UPPER_LONG, 1, upper, 512, &status);
     for(j = i+1; j<sizeof(test)/sizeof(test[0]); j++) {
       buffSize = u_unescape(test[j], buffer, 512);
       skSize = ucol_getSortKey(coll, buffer, buffSize, sortkey, 512);
-      if(strcmp(lower, sortkey) == 1 || strcmp(upper, sortkey) != 1) {
-        log_err("Problem! i = %i, j = %i (%s vs %s)\n", i, j, test[i], test[j]);
+      if(strcmp(lower, sortkey) > 0) {
+        log_err("Problem with lower! i = %i, j = %i (%s vs %s)\n", i, j, test[i], test[j]);
+      }
+      if(strcmp(upper, sortkey) <= 0) {
+        log_err("Problem with upper! i = %i, j = %i (%s vs %s)\n", i, j, test[i], test[j]);
       }
     }
   }
