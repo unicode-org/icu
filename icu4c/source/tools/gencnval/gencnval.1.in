@@ -1,0 +1,50 @@
+.TH GENCNVAL 1 @VERSION@ "ICU" \" -*-nroff-*-   $Revision: 1.1 $ 
+.SH NAME
+gencnval \- Compile the converter alias file
+.SH SYNOPSIS
+.ta 6n
+\fBgencnval\fP  	[-\fIoptions\fP ...] [ \fIconvrtrs.txt\fP ]
+.SH DESCRIPTION
+The 
+.I gencnval
+program converts the ICU alias file
+.I convrtrs.txt
+into the binary file
+.I cnvalias.dat
+.SH OPTIONS
+.PP
+.TP 8
+.B \-\-help\fP or \fB \-h \fP or \fB \-?
+Display a short help text
+.TP 8
+.B \-\-copyright \fP or \fB \-c
+Include a copyright notice in the binary data
+.TP 8
+.B \-\-destdir=\fIpath\fP\fR \fP or \fB \-d=\fIpath\fP
+Change the output destination directory. Default is ICU_DATA directory.
+See
+.B ENVIRONMENT
+below.
+.TP 8
+.B \-\-sourcedir=\fIpath\fP\fR \fP or \fB \-s=\fIpath\fP
+Change the default source directory. Default is ICU_DATA directory.
+See
+.B ENVIRONMENT
+below.
+.TP 8
+.I convrtrs.txt
+Specify an alternate file to read for the alias source. Default: convrtrs.txt
+.fi
+.sp
+.SH ENVIRONMENT
+.PP
+.TP 8
+.B ICU_DATA
+Specifies the directory containing ICU data.  Default is \fI@prefix@share/icu/@VERSION@/\fP
+- Make sure there is a trailing slash.
+.SH FILES
+convrtrs.txt - specifies alias source file
+\".SH SEE ALSO
+\" blah(1)
+.SH COPYRIGHT
+Copyright (c) 2000 IBM, Inc. and others.

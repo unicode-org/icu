@@ -6,6 +6,7 @@
 ## Shell to use
 SHELL = @SHELL@
 VERSION = @VERSION@
+SECTION=1
 
 ICUDATADIR=$(top_builddir)/data/
 CONVRTRSFILE=$(top_srcdir)/../data/convrtrs.txt
@@ -20,6 +21,7 @@ bindir = @bindir@
 sbindir = @sbindir@
 datadir = @datadir@
 libdir = @libdir@
+mandir = @mandir@
 includedir = @includedir@
 
 pkgdatadir = $(datadir)/@PACKAGE@
@@ -47,7 +49,7 @@ top_builddir = ../..
 subdir = tools/gencnval
 
 ## Extra files to remove for 'make clean'
-CLEANFILES = *~
+CLEANFILES = *~ $(TARGET).$(SECTION)
 
 ## Target information
 TARGET = gencnval
@@ -68,7 +70,7 @@ DEPS = $(OBJECTS:.o=.d)
 ## List of phony targets
 .PHONY : all all-local install install-local clean clean-local		\
 distclean distclean-local dist dist-local check	\
-check-local build-data
+check-local build-data install-man
 
 ## Clear suffix list
 .SUFFIXES :
@@ -83,7 +85,7 @@ check: all check-local
 
 all-local: $(TARGET) build-data
 
-install-local: all-local build-data
+install-local: all-local build-data install-man
 	$(mkinstalldirs) $(DESTDIR)$(sbindir)
 	$(INSTALL) $(TARGET) $(DESTDIR)$(sbindir)/$(TARGET)
 
@@ -111,6 +113,22 @@ Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
 
 $(TARGET) : $(OBJECTS)
 	$(LINK.cc) -o $@ $^ $(LIBS) 
+
+# man page
+install-man: $(TARGET).$(SECTION)
+	$(mkinstalldirs) $(DESTDIR)$(mandir)/man$(SECTION)
+	$(INSTALL_DATA) $< $(DESTDIR)$(mandir)/man$(SECTION)
+
+$(TARGET).$(SECTION): $(TARGET).$(SECTION).in
+	cd $(top_builddir) \
+	 && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
+
+# only on linux probably ?
+$(TARGET).ps: $(TARGET).$(SECTION)
+	groff -man < $< > $@
+
+$(TARGET).pdf: $(TARGET).ps
+	ps2pdf $< $@
 
 ifeq (,$(MAKECMDGOALS))
 -include $(DEPS)
