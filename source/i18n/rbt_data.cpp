@@ -71,6 +71,6 @@ TransliterationRuleData::lookup(UChar32 standIn) const {
 
 int32_t
 TransliterationRuleData::lookupSegmentReference(UChar32 c) const {
-    int32_t i = c - segmentBase;
-    return (i >= 0 && i < 9) ? i : -1;
+    int32_t i = segmentBase - c;
+    return (i >= 0 && i < segmentCount) ? i : -1;
 }
