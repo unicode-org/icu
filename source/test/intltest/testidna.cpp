@@ -1069,9 +1069,8 @@ void printPunycodeOutput(){
 }
 #endif
 
-void TestIDNA::testErrorCases(const char* toASCIIName, TestFunc toASCII,
-                    const char* IDNToASCIIName, TestFunc IDNToASCII,
-                    const char* IDNToUnicodeName, TestFunc IDNToUnicode){
+void TestIDNA::testErrorCases(const char* IDNToASCIIName, TestFunc IDNToASCII,
+                              const char* IDNToUnicodeName, TestFunc IDNToUnicode){
     UChar buf[MAX_DEST_SIZE];
     int32_t bufLen=0;
 
@@ -1450,7 +1449,7 @@ void TestIDNA::TestCompare(){
     testCompare("uidna_compare",uidna_compare);
 }
 void TestIDNA::TestErrorCases(){
-    testErrorCases("uidna_toASCII",uidna_toASCII, "uidna_IDNToASCII",uidna_IDNToASCII,
+    testErrorCases( "uidna_IDNToASCII",uidna_IDNToASCII,
                     "uidna_IDNToUnicode",uidna_IDNToUnicode);
 }
 void TestIDNA::TestRootLabelSeparator(){
@@ -1717,7 +1716,7 @@ void TestIDNA::TestRefIDNA(){
     testIDNToASCII("idnaref_IDNToASCII", idnaref_IDNToASCII);
     testIDNToUnicode("idnaref_IDNToUnicode", idnaref_IDNToUnicode);
     testCompare("idnaref_compare",idnaref_compare);
-    testErrorCases("idnaref_toASCII",idnaref_toASCII, "idnaref_IDNToASCII",idnaref_IDNToASCII,
+    testErrorCases( "idnaref_IDNToASCII",idnaref_IDNToASCII,
                     "idnaref_IDNToUnicode",idnaref_IDNToUnicode);
     testChaining("idnaref_toASCII",idnaref_toASCII, "idnaref_toUnicode", idnaref_toUnicode);
 

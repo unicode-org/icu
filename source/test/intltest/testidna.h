@@ -87,8 +87,7 @@ private:
                         const char* testName, CompareFunc func,
                         UBool isEqual);
 
-    void testErrorCases(const char* toASCIIName, TestFunc toASCII,
-                    const char* IDNToASCIIName, TestFunc IDNToASCII,
+    void testErrorCases(const char* IDNToASCIIName, TestFunc IDNToASCII,
                     const char* IDNToUnicodeName, TestFunc IDNToUnicode);
 
     void testChaining(UChar* src,int32_t numIterations,const char* testName,
