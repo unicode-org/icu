@@ -10,7 +10,6 @@
 #include "unicode/datefmt.h"
 #include "unicode/smpdtfmt.h"
 #include <float.h>
-#include <math.h>
 
 void CalendarLimitTest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* /*par*/ )
 {

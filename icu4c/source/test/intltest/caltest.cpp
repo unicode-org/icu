@@ -9,7 +9,6 @@
 #include "unicode/gregocal.h"
 #include "unicode/smpdtfmt.h"
 #include "unicode/simpletz.h"
-#include <math.h>
  
 // *****************************************************************************
 // class CalendarTest
