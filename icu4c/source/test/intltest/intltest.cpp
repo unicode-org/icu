@@ -1078,7 +1078,10 @@ main(int argc, char* argv[])
                 "*** Check the ICU_DATA environment variable and\n"
                 "*** check that the data files are present.\n",
                 u_errorName(errorCode));
-        return 1;
+        if(!warnOnMissingData) {
+          fprintf(stdout, "*** Exitting.  Use the '-w' option if data files were\n*** purposely removed, to continue test anyway.\n");
+          return 1;
+        }
     }
 
 
