@@ -50,7 +50,7 @@ static void TestISO_2022_CN(void);
 static void TestISO_2022_CN_EXT(void);
 static void TestJIS(void);
 static void TestHZ(void);
-static void TestISO_2022_JP_Next(void);
+static void TestSCSU(void);
 static void TestEBCDIC_STATEFUL(void);
 static void TestGB18030(void);
 static void TestLMBCS(void);
@@ -195,7 +195,7 @@ void addTestNewConvert(TestNode** root)
    addTest(root, &TestISO_2022_CN, "tsconv/nucnvtst/TestISO_2022_CN");
    addTest(root, &TestISO_2022_CN_EXT, "tsconv/nucnvtst/TestISO_2022_CN_EXT");
    addTest(root, &TestHZ, "tsconv/nucnvtst/TestHZ");
-   addTest(root, &TestISO_2022_JP_Next, "tsconv/nucnvtst/TestISO_2022_JP_Next");
+   addTest(root, &TestSCSU, "tsconv/nucnvtst/TestSCSU");
    addTest(root, &TestEBCDIC_STATEFUL, "tsconv/nucnvtst/TestEBCDIC_STATEFUL");
    addTest(root, &TestGB18030, "tsconv/nucnvtst/TestGB18030");
    addTest(root, &TestLMBCS, "tsconv/nucnvtst/TestLMBCS");
@@ -1808,10 +1808,6 @@ TestISO_2022() {
 }
 
 static void
-TestISO_2022_JP_Next() {
-}
-
-static void
 TestSmallTargetBuffer(const uint16_t* source, const UChar* sourceLimit,UConverter* cnv, const char* cnvName){
     const UChar* uSource;
     const UChar* uSourceLimit;
@@ -1825,11 +1821,11 @@ TestSmallTargetBuffer(const uint16_t* source, const UChar* sourceLimit,UConverte
     UChar *uBuf,*test;
     int32_t uBufSize = 120;
     int len=0;
-    int i=5;
+    int i=1;
     UErrorCode errorCode=U_ZERO_ERROR;
     uBuf =  (UChar*)malloc(uBufSize * sizeof(UChar)*5);
     cBuf =(char*)malloc(uBufSize * sizeof(char) * 10);
-
+    ucnv_reset(cnv);
     for(;--i>0; ){
         uSource = (UChar*) source;
         uSourceLimit=(const UChar*)sourceLimit;
@@ -1941,13 +1937,13 @@ static void TestSmallSourceBuffer(const uint16_t* source, const UChar* sourceLim
     UChar *uBuf,*test;
     int32_t uBufSize = 120;
     int len=0;
-    int i=5;
+    int i=1;
     const UChar *temp = sourceLimit;
     UErrorCode errorCode=U_ZERO_ERROR;
     uBuf =  (UChar*)malloc(uBufSize * sizeof(UChar)*5);
     cBuf =(char*)malloc(uBufSize * sizeof(char) * 10);
    
-
+    ucnv_reset(cnv);
     for(;--i>0;){
         uSource = (UChar*) source;
         cTarget = cBuf;
@@ -2005,18 +2001,26 @@ TestGetNextUChar2022(UConverter* cnv, const char* source, const char* limit,
      const char* s=(char*)source;
      const uint16_t *r=results;
      UErrorCode errorCode=U_ZERO_ERROR;
-     uint32_t c;
+     uint32_t c,exC;
+     ucnv_reset(cnv);
      while(s<limit) {
         s0=s;
         c=ucnv_getNextUChar(cnv, &s, limit, &errorCode);
         if(U_FAILURE(errorCode)) {
             log_err("%s ucnv_getNextUChar() failed: %s\n", message, u_errorName(errorCode));
             break;
-        } else if(c!=(uint32_t)(*r)) {
-            log_err("%s ucnv_getNextUChar() Expected:  \\u%04X Got:  \\u%04X ",message,(uint32_t) (*r),c);
-            break;
+        } else {
+            if(UTF_IS_FIRST_SURROGATE(*r)){
+                int i =0, len = 2;
+                UTF_NEXT_CHAR_SAFE(r, i, len, exC, FALSE);
+                r++;
+            }else{
+                exC = *r;
+            }
+            if(c!=(uint32_t)(exC))
+                log_err("%s ucnv_getNextUChar() Expected:  \\u%04X Got:  \\u%04X \n",message,(uint32_t) (*r),c);
         }
-        r+=1;
+        r++;
     }
 }
 
@@ -2177,6 +2181,167 @@ TestISO_2022_JP() {
     free(offsets);
 }
 
+static void TestConv(uint16_t in[],int len, char* conv, char* lang,uint8_t byteArr[],int byteArrLen){
+    const UChar* uSource;
+    const UChar* uSourceLimit;
+    const char* cSource;
+    const char* cSourceLimit;
+    UChar *uTargetLimit =NULL;
+    UChar *uTarget;
+    char *cTarget;
+    const char *cTargetLimit;
+    char *cBuf; 
+    UChar *uBuf,*test;
+    int32_t uBufSize = 120;
+    UErrorCode errorCode=U_ZERO_ERROR;
+    UConverter *cnv;
+    int32_t* offsets = (int32_t*) malloc(uBufSize * sizeof(int32_t) * 5);
+    int32_t* myOff= offsets;
+    cnv=ucnv_open(conv, &errorCode);
+    if(U_FAILURE(errorCode)) {
+        log_err("Unable to open a SCSU converter: %s\n", u_errorName(errorCode));
+        return;
+    }
+
+    uBuf =  (UChar*)malloc(uBufSize * sizeof(UChar)*5);
+    cBuf =(char*)malloc(uBufSize * sizeof(char) * 5);
+    uSource = (const UChar*)&in[0];
+    uSourceLimit=uSource+len;
+    cTarget = cBuf;
+    cTargetLimit = cBuf +uBufSize*5;
+    uTarget = uBuf;
+    uTargetLimit = uBuf+ uBufSize*5;
+    ucnv_fromUnicode( cnv , &cTarget, cTargetLimit,&uSource,uSourceLimit,myOff,TRUE, &errorCode);
+    if(U_FAILURE(errorCode)){
+        log_err("ucnv_fromUnicode conversion failed reason %s\n", u_errorName(errorCode));
+        return;
+    }
+    log_verbose("length of compressed string for language %s using SCSU:%i \n",lang,(cTarget-cBuf));
+    cSource = cBuf;
+    cSourceLimit =cTarget;
+    test =uBuf;
+    myOff=offsets;
+    ucnv_toUnicode(cnv,&uTarget,uTargetLimit,&cSource,cSourceLimit,myOff,TRUE,&errorCode);
+    if(U_FAILURE(errorCode)){
+        log_err("ucnv_toUnicode conversion failed reason %s\n", u_errorName(errorCode));
+        return;
+    }
+
+    uSource = (const UChar*)&in[0];
+    while(uSource<uSourceLimit){
+        if(*test!=*uSource){
+
+            log_err("Expected : \\u%04X \t Got: \\u%04X\n",*uSource,(int)*test) ;
+        }
+        uSource++;
+        test++;
+    }
+    TestSmallTargetBuffer(&in[0],(const UChar*)&in[len],cnv,conv);
+    TestSmallSourceBuffer(&in[0],(const UChar*)&in[len],cnv,conv);
+    TestGetNextUChar2022(cnv, cBuf, cTarget, in, conv);
+    TestGetNextUChar2022(cnv, byteArr, (byteArr+byteArrLen), in, lang);   
+    TestToAndFromUChars(&in[0],(const UChar*)&in[len],cnv,conv);
+    {
+        cSource = byteArr;
+        cSourceLimit = cSource+byteArrLen;
+        test=uBuf;
+        myOff = offsets;
+        ucnv_toUnicode(cnv,&uTarget,uTargetLimit,&cSource,cSourceLimit,myOff,TRUE,&errorCode);
+        if(U_FAILURE(errorCode)){
+            log_err("ucnv_toUnicode conversion failed reason %s\n", u_errorName(errorCode));
+            return;
+        }
+
+        uSource = (const UChar*)&in[0];
+        while(uSource<uSourceLimit){
+            if(*test!=*uSource){
+                log_err("Expected : \\u%04X \t Got: \\u%04X\n",*uSource,(int)*test) ;
+            }
+            uSource++;
+            test++;
+        }
+    }
+    ucnv_close(cnv);
+    free(uBuf);
+    free(cBuf);
+    free(offsets);
+}
+static void
+TestSCSU() {
+    
+   uint16_t germanUTF16[]={
+        0x00d6, 0x006c, 0x0020, 0x0066, 0x006c, 0x0069, 0x0065, 0x00df, 0x0074
+    };
+
+    uint8_t germanSCSU[]={
+        0xd6, 0x6c, 0x20, 0x66, 0x6c, 0x69, 0x65, 0xdf, 0x74
+    };
+
+    uint16_t russianUTF16[]={
+        0x041c, 0x043e, 0x0441, 0x043a, 0x0432, 0x0430
+    };
+
+    uint8_t russianSCSU[]={
+        0x12, 0x9c, 0xbe, 0xc1, 0xba, 0xb2, 0xb0
+    };
+
+    uint16_t japaneseUTF16[]={
+        0x3000, 0x266a, 0x30ea, 0x30f3, 0x30b4, 0x53ef, 0x611b,
+        0x3044, 0x3084, 0x53ef, 0x611b, 0x3044, 0x3084, 0x30ea, 0x30f3,
+        0x30b4, 0x3002, 0x534a, 0x4e16, 0x7d00, 0x3082, 0x524d, 0x306b,
+        0x6d41, 0x884c, 0x3057, 0x305f, 0x300c, 0x30ea, 0x30f3, 0x30b4,
+        0x306e, 0x6b4c, 0x300d, 0x304c, 0x3074, 0x3063, 0x305f, 0x308a,
+        0x3059, 0x308b, 0x304b, 0x3082, 0x3057, 0x308c, 0x306a, 0x3044,
+        0x3002, 0x7c73, 0x30a2, 0x30c3, 0x30d7, 0x30eb, 0x30b3, 0x30f3,
+        0x30d4, 0x30e5, 0x30fc, 0x30bf, 0x793e, 0x306e, 0x30d1, 0x30bd,
+        0x30b3, 0x30f3, 0x300c, 0x30de, 0x30c3, 0x30af, 0xff08, 0x30de,
+        0x30c3, 0x30ad, 0x30f3, 0x30c8, 0x30c3, 0x30b7, 0x30e5, 0xff09,
+        0x300d, 0x3092, 0x3001, 0x3053, 0x3088, 0x306a, 0x304f, 0x611b,
+        0x3059, 0x308b, 0x4eba, 0x305f, 0x3061, 0x306e, 0x3053, 0x3068,
+        0x3060, 0x3002, 0x300c, 0x30a2, 0x30c3, 0x30d7, 0x30eb, 0x4fe1,
+        0x8005, 0x300d, 0x306a, 0x3093, 0x3066, 0x8a00, 0x3044, 0x65b9,
+        0x307e, 0x3067, 0x3042, 0x308b, 0x3002
+    };
+
+    // SCSUEncoder produces a slightly longer result (179B vs. 178B) because of one different choice:
+    // it uses an SQn once where a longer look-ahead could have shown that SCn is more efficient
+    uint8_t japaneseSCSU[]={
+        0x08, 0x00, 0x1b, 0x4c, 0xea, 0x16, 0xca, 0xd3, 0x94, 0x0f, 0x53, 0xef, 0x61, 0x1b, 0xe5, 0x84,
+        0xc4, 0x0f, 0x53, 0xef, 0x61, 0x1b, 0xe5, 0x84, 0xc4, 0x16, 0xca, 0xd3, 0x94, 0x08, 0x02, 0x0f,
+        0x53, 0x4a, 0x4e, 0x16, 0x7d, 0x00, 0x30, 0x82, 0x52, 0x4d, 0x30, 0x6b, 0x6d, 0x41, 0x88, 0x4c,
+        0xe5, 0x97, 0x9f, 0x08, 0x0c, 0x16, 0xca, 0xd3, 0x94, 0x15, 0xae, 0x0e, 0x6b, 0x4c, 0x08, 0x0d,
+        0x8c, 0xb4, 0xa3, 0x9f, 0xca, 0x99, 0xcb, 0x8b, 0xc2, 0x97, 0xcc, 0xaa, 0x84, 0x08, 0x02, 0x0e,
+        0x7c, 0x73, 0xe2, 0x16, 0xa3, 0xb7, 0xcb, 0x93, 0xd3, 0xb4, 0xc5, 0xdc, 0x9f, 0x0e, 0x79, 0x3e,
+        0x06, 0xae, 0xb1, 0x9d, 0x93, 0xd3, 0x08, 0x0c, 0xbe, 0xa3, 0x8f, 0x08, 0x88, 0xbe, 0xa3, 0x8d,
+        0xd3, 0xa8, 0xa3, 0x97, 0xc5, 0x17, 0x89, 0x08, 0x0d, 0x15, 0xd2, 0x08, 0x01, 0x93, 0xc8, 0xaa,
+        0x8f, 0x0e, 0x61, 0x1b, 0x99, 0xcb, 0x0e, 0x4e, 0xba, 0x9f, 0xa1, 0xae, 0x93, 0xa8, 0xa0, 0x08,
+        0x02, 0x08, 0x0c, 0xe2, 0x16, 0xa3, 0xb7, 0xcb, 0x0f, 0x4f, 0xe1, 0x80, 0x05, 0xec, 0x60, 0x8d,
+        0xea, 0x06, 0xd3, 0xe6, 0x0f, 0x8a, 0x00, 0x30, 0x44, 0x65, 0xb9, 0xe4, 0xfe, 0xe7, 0xc2, 0x06,
+        0xcb, 0x82
+    };
+
+    uint16_t allFeaturesUTF16[]={
+        0x0041, 0x00df, 0x0401, 0x015f, 0x00df, 0x01df, 0xf000, 0xdbff,
+        0xdfff, 0x000d, 0x000a, 0x0041, 0x00df, 0x0401, 0x015f, 0x00df, 
+        0x01df, 0xf000, 0xdbff, 0xdfff
+    };
+
+    /* see comment at japaneseSCSU: the same kind of different choice yields a slightly shorter
+     * result here (34B vs. 35B)
+     */
+    uint8_t allFeaturesSCSU[]={
+        0x41, 0xdf, 0x12, 0x81, 0x03, 0x5f, 0x10, 0xdf, 0x1b, 0x03, 
+        0xdf, 0x1c, 0x88, 0x80, 0x0b, 0xbf, 0xff, 0xff, 0x0d, 0x0a,
+        0x41, 0x10, 0xdf, 0x12, 0x81, 0x03, 0x5f, 0x10, 0xdf, 0x13,
+        0xdf, 0x14, 0x80, 0x15, 0xff 
+    };
+    TestConv(allFeaturesUTF16,(sizeof(allFeaturesUTF16)/2),"SCSU,locale=ja","all features",allFeaturesSCSU,sizeof(allFeaturesSCSU));
+    TestConv(allFeaturesUTF16,(sizeof(allFeaturesUTF16)/2),"SCSU","all features",allFeaturesSCSU,sizeof(allFeaturesSCSU));
+    TestConv(japaneseUTF16,(sizeof(japaneseUTF16)/2),"SCSU","japaneese",japaneseSCSU,sizeof(japaneseSCSU));
+    TestConv(japaneseUTF16,(sizeof(japaneseUTF16)/2),"SCSU,locale=ja","japaneese",japaneseSCSU,sizeof(japaneseSCSU));
+    TestConv(germanUTF16,(sizeof(germanUTF16)/2),"SCSU","german",germanSCSU,sizeof(germanSCSU));
+    TestConv(russianUTF16,(sizeof(russianUTF16)/2), "SCSU","russian",russianSCSU,sizeof(russianSCSU));
+}
 static void
 TestISO_2022_JP_1() {
     /* test input */
