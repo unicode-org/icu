@@ -1400,4 +1400,41 @@ System.err.println(filename2 + ":" + e.getLineNumber() +  (col>=0?":" + col:"") 
 //         }
 //     }
 
+
+    static public String getFullPath(boolean fileType, String fName, String sourceDir, String destDir){
+        String str;
+        int lastIndex1 = fName.lastIndexOf(File.separator, fName.length()) + 1/* add  1 to skip past the separator */; 
+        int lastIndex2 = fName.lastIndexOf('.', fName.length());
+        if (fileType == true) {
+            if(lastIndex2 == -1){
+                fName = fName.trim() + ".txt";
+            }else{
+                if(!fName.substring(lastIndex2).equalsIgnoreCase(".txt")){
+                    fName =  fName.substring(lastIndex1,lastIndex2) + ".txt";
+                }
+            }
+            if (destDir != null && fName != null) {
+                str = destDir + "/" + fName.trim();                   
+            } else {
+                str = System.getProperty("user.dir") + "/" + fName.trim();
+            }
+        } else {
+            if(lastIndex2 == -1){
+                fName = fName.trim() + ".xml";
+            }else{
+                if(!fName.substring(lastIndex2).equalsIgnoreCase(".xml") && fName.substring(lastIndex2).equalsIgnoreCase(".xlf")){
+                    fName = fName.substring(lastIndex1,lastIndex2) + ".xml";
+                }
+            }
+            if(sourceDir != null && fName != null) {
+                str = sourceDir + "/" + fName;
+            } else if (lastIndex1 > 0) {
+                str = fName;
+            } else {
+                str = System.getProperty("user.dir") + "/" + fName;
+            }
+        }
+        return str;
+    } 
+
 }
