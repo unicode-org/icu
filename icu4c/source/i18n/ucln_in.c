@@ -1,11 +1,11 @@
 /*
 ******************************************************************************
 *                                                                            *
-* Copyright (C) 2001-2003, International Business Machines                   *
+* Copyright (C) 2001-2004, International Business Machines                   *
 *                Corporation and others. All Rights Reserved.                *
 *                                                                            *
 ******************************************************************************
-*   file name:  ucln_cmn.c
+*   file name:  ucln_in.c
 *   encoding:   US-ASCII
 *   tab size:   8 (not used)
 *   indentation:4
@@ -25,7 +25,7 @@ static cleanupFunc *gCleanupFunctions[UCLN_I18N_COUNT];
 
 static UBool i18n_cleanup(void)
 {
-    ECleanupLibraryType libType;
+    ECleanupI18NType libType;
 
     for (libType = UCLN_I18N_START+1; libType<UCLN_I18N_COUNT; libType++) {
         if (gCleanupFunctions[libType])
