@@ -1133,6 +1133,16 @@ doOpenChoice(const char *path, const char *type, const char *name,
         }
       } else {
         treeChar = uprv_strchr(path, U_TREE_SEPARATOR);
+#if (U_FILE_SEP_CHAR != U_TREE_SEPARATOR)
+	if(treeChar == NULL) {
+	  treeChar = uprv_strchr(path, U_FILE_SEP_CHAR);
+	}
+#endif
+#if (U_FILE_ALT_SEP_CHAR != U_TREE_SEPARATOR)
+	if(treeChar == NULL) {
+	  treeChar = uprv_strchr(path, U_FILE_ALT_SEP_CHAR);
+	}
+#endif
         if(treeChar) { 
           TinyString_append(&treeName, treeChar+1); /* following '/' */
           TinyString_appendn(&pkgName, path, treeChar-path);
