@@ -59,7 +59,22 @@ UDataMemory_normalizeDataPointer(const void *p) {
     if(pdh==NULL || (pdh->dataHeader.magic1==0xda && pdh->dataHeader.magic2==0x27)) {
         return pdh;
     } else {
+#ifdef OS400
+        /*
+        WARNING! WARNING! WARNING!
+        This is a hack. This is here because this platform can't properly put
+        const data into the read-only pages of an object or
+        shared library (service program). Only strings are allowed in read-only
+        pages, so we use char * strings to store the data.
+
+        In order to prevent the beginning of the data from ever matching the
+        magic numbers we must skip the initial double.
+        [grhoten 4/24/2003]
+        */
+        return (const DataHeader *)*((const char **)((const double *)p+1));
+#else
         return (const DataHeader *)((const double *)p+1);
+#endif
     }
 }
 

@@ -51,7 +51,7 @@
 #include "toolutil.h"
 #include "uoptions.h"
 
-static uint16_t column=0xffff;
+static uint32_t column=UINT32_MAX;
 
 #ifdef WIN32
 #define CAN_GENERATE_OBJECTS
@@ -71,6 +71,10 @@ getOutFilename(const char *inFilename, const char *destdir, char *outFilename, c
 static void
 write8(FileStream *out, uint8_t byte);
 
+#ifdef OS400
+static void
+write8str(FileStream *out, uint8_t byte);
+#endif
 /* -------------------------------------------------------------------------- */
 
 static UOption options[]={
@@ -139,7 +143,7 @@ main(int argc, char* argv[]) {
             if (verbose) {
                 fprintf(stdout, message, filename);
             }
-            column=0xffff;
+            column=UINT32_MAX;
             writeCode(filename, options[2].value);
         }
     }
@@ -174,6 +178,41 @@ writeCCode(const char *filename, const char *destdir) {
         }
     }
 
+#ifdef OS400
+    /*
+    WARNING! WARNING! WARNING!
+    This is a hack. This is here because this platform can't properly put
+    const data into the read-only pages of an object or
+    shared library (service program). Only strings are allowed in read-only
+    pages, so we use char * strings to store the data.
+
+    In order to prevent the beginning of the data from ever matching the
+    magic numbers we must still use the initial double.
+    [grhoten 4/24/2003]
+    */
+    sprintf(buffer,
+        "#define U_DISABLE_RENAMING 1\n"
+        "#include \"unicode/umachine.h\"\n"
+        "U_CDECL_BEGIN\n"
+        "const struct {\n"
+        "    double bogus;\n"
+        "    const char *bytes; \n"
+        "} %s%s={ 0.0, \n",
+        symPrefix, entry);
+    T_FileStream_writeLine(out, buffer);
+
+    for(;;) {
+        length=T_FileStream_read(in, buffer, sizeof(buffer));
+        if(length==0) {
+            break;
+        }
+        for(i=0; i<length; ++i) {
+            write8str(out, (uint8_t)buffer[i]);
+        }
+    }
+
+    T_FileStream_writeLine(out, "\"\n};\nU_CDECL_END\n");
+#else
     /* Function renaming shouldn't be done in data */
     sprintf(buffer,
         "#define U_DISABLE_RENAMING 1\n"
@@ -197,6 +236,7 @@ writeCCode(const char *filename, const char *destdir) {
     }
 
     T_FileStream_writeLine(out, "\n}\n};\nU_CDECL_END\n");
+#endif
 
     if(T_FileStream_error(in)) {
         fprintf(stderr, "genccode: file read error while generating from file %s\n", filename);
@@ -406,7 +446,7 @@ write8(FileStream *out, uint8_t byte) {
     s[i]=0;
 
     /* write the value, possibly with comma and newline */
-    if(column==0xffff) {
+    if(column==UINT32_MAX) {
         /* first byte */
         column=1;
     } else if(column<16) {
@@ -418,3 +458,25 @@ write8(FileStream *out, uint8_t byte) {
     }
     T_FileStream_writeLine(out, s);
 }
+
+#ifdef OS400
+static void
+write8str(FileStream *out, uint8_t byte) {
+    char s[8];
+
+    sprintf(s, "\\x%02X", byte);
+
+    /* write the value, possibly with comma and newline */
+    if(column==UINT32_MAX) {
+        /* first byte */
+        column=1;
+        T_FileStream_writeLine(out, "\"");
+    } else if(column<16) {
+        ++column;
+    } else {
+        T_FileStream_writeLine(out, "\"\n\"");
+        column=1;
+    }
+    T_FileStream_writeLine(out, s);
+}
+#endif
