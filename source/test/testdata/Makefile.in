@@ -29,6 +29,7 @@ subdir = test/testdata
 @SAMPLES_TRUE@SAMPLE = samples
 @SAMPLES_FALSE@SAMPLE = 
 
+
 ## Files to remove for 'make clean'
 CLEANFILES = *~ 
 
@@ -77,19 +78,6 @@ all-local: builddata
 
 install-local: 
 
-## Generate HTML documentation
-doc:
-	@uniq=`date '+%y%m%d9/30/99M%S'`; \
-	tmpdir="/tmp/icu-$$uniq"; \
-	list='$(DOCDIRS)'; for subdir in $$list; do \
-	  echo "Making install-headers in $$subdir"; \
-	  (cd $$subdir && \
-		$(MAKE) includedir=$$tmpdir/include install-headers); \
-	done; \
-	echo "generating HTML documentation"; \
-	doc++ -H -d $$tmpdir/html $$tmpdir/include/*.h > /dev/null 2>&1; \
-	$(RMV) $$tmpdir
-
 dist-local:
 
 clean-local:
@@ -106,10 +94,6 @@ check-local:
 Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
 	cd $(top_builddir) \
 		&& CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
-
-$(top_builddir)/config/Makefile.inc: $(top_srcdir)/config/Makefile.inc.in  $(top_builddir)/config.status
-	cd $(top_builddir) \
-		&& CONFIG_FILES=$@ CONFIG_HEADERS= $(SHELL) ./config.status
 
 builddata: default.goo
 
