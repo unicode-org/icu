@@ -265,8 +265,7 @@ U_CAPI char* U_EXPORT2 u_austrcpy(char *s1,
  *
  * This function is similar to UnicodeString::unescape() but not
  * identical to it.  The latter takes a source UnicodeString, so it
- * does escape recognition but no conversion.  It also recognizes a
- * wider variety of hexadecimal and octal digit characters.
+ * does escape recognition but no conversion.
  *
  * @param src a zero-terminated string of invariant characters
  * @param dest pointer to buffer to receive converted and unescaped
@@ -278,7 +277,9 @@ U_CAPI char* U_EXPORT2 u_austrcpy(char *s1,
  * dest.  Ignored if dest == NULL.
  * @return the capacity required to fully convert all of the source
  * text, including the zero terminator, or 0 on error.
- * @see UnicodeString::unescape()
+ * @see u_unescapeAt
+ * @see UnicodeString#unescape()
+ * @see UnicodeString#unescapeAt()
  */
 U_CAPI int32_t U_EXPORT2
 u_unescape(const char *src,
@@ -288,6 +289,7 @@ u_unescape(const char *src,
  * Callback function for u_unescapeAt() that returns a character of
  * the source text given an offset and a context pointer.  The context
  * pointer will be whatever is passed into u_unescapeAt().
+ * @see u_unescapeAt
  */
 typedef UChar (*UNESCAPE_CHAR_AT)(int32_t offset, void *context);
 
@@ -314,6 +316,9 @@ typedef UChar (*UNESCAPE_CHAR_AT)(int32_t offset, void *context);
  * @param context an opaque pointer passed directly into charAt.
  * @return the character represented by the escape sequence at
  * offset, or (UChar32)0xFFFFFFFF on error.
+ * @see u_unescape()
+ * @see UnicodeString#unescape()
+ * @see UnicodeString#unescapeAt()
  */
 U_CAPI int32_t U_EXPORT2
 u_unescapeAt(UNESCAPE_CHAR_AT charAt,
