@@ -44,7 +44,7 @@ class U_I18N_API MeasureFormat : public Format {
      * @return a formatter object, or NULL upon error
      * @draft ICU 3.0
      */
-    static MeasureFormat* createCurrencyFormat(const Locale& locale,
+    static MeasureFormat* U_EXPORT2 createCurrencyFormat(const Locale& locale,
                                                UErrorCode& ec);
 
     /**
@@ -54,7 +54,7 @@ class U_I18N_API MeasureFormat : public Format {
      * @return a formatter object, or NULL upon error
      * @draft ICU 3.0
      */
-    static MeasureFormat* createCurrencyFormat(UErrorCode& ec);
+    static MeasureFormat* U_EXPORT2 createCurrencyFormat(UErrorCode& ec);
 
  protected:
 

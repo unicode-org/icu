@@ -571,7 +571,7 @@ Calendar::operator=(const Calendar &right)
 
 // -------------------------------------
 
-Calendar*
+Calendar* U_EXPORT2
 Calendar::createInstance(UErrorCode& success)
 {
   return createInstance(TimeZone::createDefault(), Locale::getDefault(), success);
@@ -579,7 +579,7 @@ Calendar::createInstance(UErrorCode& success)
 
 // -------------------------------------
 
-Calendar*
+Calendar* U_EXPORT2
 Calendar::createInstance(const TimeZone& zone, UErrorCode& success)
 {
   return createInstance(zone, Locale::getDefault(), success);
@@ -587,7 +587,7 @@ Calendar::createInstance(const TimeZone& zone, UErrorCode& success)
 
 // -------------------------------------
 
-Calendar*
+Calendar* U_EXPORT2
 Calendar::createInstance(const Locale& aLocale, UErrorCode& success)
 {
   return createInstance(TimeZone::createDefault(), aLocale, success);
@@ -597,7 +597,7 @@ Calendar::createInstance(const Locale& aLocale, UErrorCode& success)
 
 // Note: this is the bottleneck that actually calls the service routines.
 
-Calendar*
+Calendar* U_EXPORT2
 Calendar::createInstance(TimeZone* zone, const Locale& aLocale, UErrorCode& success)
 {
   Locale actualLoc;
@@ -711,7 +711,7 @@ Calendar::createInstance(TimeZone* zone, const Locale& aLocale, UErrorCode& succ
 
 // -------------------------------------
 
-Calendar*
+Calendar* U_EXPORT2
 Calendar::createInstance(const TimeZone& zone, const Locale& aLocale, UErrorCode& success)
 {
   Calendar* c = createInstance(aLocale, success);
@@ -772,7 +772,7 @@ Calendar::after(const Calendar& when, UErrorCode& status) const
 // -------------------------------------
 
 
-const Locale*
+const Locale* U_EXPORT2
 Calendar::getAvailableLocales(int32_t& count)
 {
     return Locale::getAvailableLocales(count);
@@ -780,7 +780,7 @@ Calendar::getAvailableLocales(int32_t& count)
 
 // -------------------------------------
 
-UDate
+UDate U_EXPORT2
 Calendar::getNow()
 {
     return uprv_getUTCtime(); // return as milliseconds

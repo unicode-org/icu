@@ -22,7 +22,7 @@
 
 U_NAMESPACE_BEGIN
 
-const char BuddhistCalendar::fgClassID = 0; // Value is irrelevant
+UOBJECT_DEFINE_RTTI_IMPLEMENTATION(BuddhistCalendar)
 
 static const int32_t kMaxEra = 0; // only 1 era
 

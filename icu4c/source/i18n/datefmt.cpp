@@ -218,7 +218,7 @@ DateFormat::parseObject(const UnicodeString& source,
 
 //----------------------------------------------------------------------
 
-DateFormat*
+DateFormat* U_EXPORT2
 DateFormat::createTimeInstance(DateFormat::EStyle style,
                                const Locale& aLocale)
 {
@@ -227,36 +227,36 @@ DateFormat::createTimeInstance(DateFormat::EStyle style,
 
 //----------------------------------------------------------------------
 
-DateFormat*
+DateFormat* U_EXPORT2
 DateFormat::createDateInstance(DateFormat::EStyle style,
                                const Locale& aLocale)
 {
-  // +4 to set the correct index for getting data out of
-  // LocaleElements.
-  if(style != kNone)
-  {
-    style = (EStyle) (style + kDateOffset);
-  }
-  return create(kNone, (EStyle) (style), aLocale);
+    // +4 to set the correct index for getting data out of
+    // LocaleElements.
+    if(style != kNone)
+    {
+        style = (EStyle) (style + kDateOffset);
+    }
+    return create(kNone, (EStyle) (style), aLocale);
 }
 
 //----------------------------------------------------------------------
 
-DateFormat*
+DateFormat* U_EXPORT2
 DateFormat::createDateTimeInstance(EStyle dateStyle,
                                    EStyle timeStyle,
                                    const Locale& aLocale)
 {
-  if(dateStyle != kNone)
-  {
-    dateStyle = (EStyle) (dateStyle + kDateOffset);
-  }
-  return create(timeStyle, dateStyle, aLocale);
+    if(dateStyle != kNone)
+    {
+        dateStyle = (EStyle) (dateStyle + kDateOffset);
+    }
+    return create(timeStyle, dateStyle, aLocale);
 }
 
 //----------------------------------------------------------------------
 
-DateFormat*
+DateFormat* U_EXPORT2
 DateFormat::createInstance()
 {
     return create(kShort, (EStyle) (kShort + kDateOffset), Locale::getDefault());
@@ -264,7 +264,7 @@ DateFormat::createInstance()
 
 //----------------------------------------------------------------------
 
-DateFormat*
+DateFormat* U_EXPORT2
 DateFormat::create(EStyle timeStyle, EStyle dateStyle, const Locale& locale)
 {
     // Try to create a SimpleDateFormat of the desired style.
@@ -288,7 +288,7 @@ DateFormat::create(EStyle timeStyle, EStyle dateStyle, const Locale& locale)
 
 //----------------------------------------------------------------------
 
-const Locale*
+const Locale* U_EXPORT2
 DateFormat::getAvailableLocales(int32_t& count)
 {
     // Get the list of installed locales.

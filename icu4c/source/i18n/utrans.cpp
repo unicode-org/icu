@@ -40,12 +40,6 @@ class ReplaceableGlue : public Replaceable {
     UReplaceable *rep;
     UReplaceableCallbacks *func;
 
-    /**
-     * The address of this static class variable serves as this class's ID
-     * for ICU "poor man's RTTI".
-     */
-    static const char fgClassID;
-
 public:
 
     ReplaceableGlue(UReplaceable *replaceable,
@@ -70,14 +64,14 @@ public:
      *
      * @draft ICU 2.2
      */
-    virtual inline UClassID getDynamicClassID() const { return getStaticClassID(); }
+    virtual inline UClassID getDynamicClassID() const;
 
     /**
      * ICU "poor man's RTTI", returns a UClassID for this class.
      *
      * @draft ICU 2.2
      */
-    static inline UClassID getStaticClassID() { return (UClassID)&fgClassID; }
+    static inline UClassID U_EXPORT2 getStaticClassID();
 
 protected:
 
@@ -88,8 +82,7 @@ protected:
     virtual UChar32 getChar32At(int32_t offset) const;
 };
 
-
-const char ReplaceableGlue::fgClassID=0;
+UOBJECT_DEFINE_RTTI_IMPLEMENTATION(ReplaceableGlue)
 
 ReplaceableGlue::ReplaceableGlue(UReplaceable *replaceable,
                                  UReplaceableCallbacks *funcCallback)

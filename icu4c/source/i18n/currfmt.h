@@ -99,7 +99,7 @@ class U_I18N_API CurrencyFormat : public MeasureFormat {
     /**
      * Returns the class ID for this class.
      */
-    static UClassID getStaticClassID();
+    static UClassID U_EXPORT2 getStaticClassID();
 
  private:
 

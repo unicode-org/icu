@@ -3646,7 +3646,7 @@ void TransliteratorTest::TestMulticharStringSet() {
 Transliterator* _TUFF[4];
 UnicodeString* _TUFID[4];
 
-static Transliterator* _TUFFactory(const UnicodeString& /*ID*/,
+static Transliterator* U_EXPORT2 _TUFFactory(const UnicodeString& /*ID*/,
                                    Transliterator::Token context) {
     return _TUFF[context.integer]->clone();
 }

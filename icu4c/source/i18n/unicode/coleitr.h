@@ -195,7 +195,7 @@ public:
     * @return the primary order of a collation order.
     * @stable ICU 2.0
     */
-    static int32_t primaryOrder(int32_t order);
+    static inline int32_t primaryOrder(int32_t order);
 
     /**
     * Gets the secondary order of a collation order.
@@ -203,7 +203,7 @@ public:
     * @return the secondary order of a collation order.
     * @stable ICU 2.0
     */
-    static int32_t secondaryOrder(int32_t order);
+    static inline int32_t secondaryOrder(int32_t order);
 
     /**
     * Gets the tertiary order of a collation order.
@@ -211,7 +211,7 @@ public:
     * @return the tertiary order of a collation order.
     * @stable ICU 2.0
     */
-    static int32_t tertiaryOrder(int32_t order);
+    static inline int32_t tertiaryOrder(int32_t order);
 
     /**
     * Return the maximum length of any expansion sequences that end with the 
@@ -254,7 +254,7 @@ public:
     * @return TRUE if a character is ignorable, FALSE otherwise.
     * @stable ICU 2.0
     */
-    static UBool isIgnorable(int32_t order);
+    static inline UBool isIgnorable(int32_t order);
 
     /**
     * Gets the offset of the currently processed character in the source string.
@@ -284,7 +284,7 @@ public:
     *
     * @stable ICU 2.2
     */
-    static UClassID getStaticClassID();
+    static UClassID U_EXPORT2 getStaticClassID();
 
 protected:
   

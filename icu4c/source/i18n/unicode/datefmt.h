@@ -18,7 +18,7 @@
 
 #ifndef DATEFMT_H
 #define DATEFMT_H
- 
+
 #include "unicode/utypes.h"
 
 #if !UCONFIG_NO_FORMATTING
@@ -158,12 +158,12 @@ public:
 
         kDefault      = kMedium,
 
-        
-        
+
+
     /**
      * These constants are provided for backwards compatibility only.
      * Please use the C++ style constants defined above.
-     */       
+     */
         FULL        = kFull,
         LONG        = kLong,
         MEDIUM        = kMedium,
@@ -211,11 +211,11 @@ public:
      * <P>
      * On input, the FieldPosition parameter may have its "field" member filled with
      * an enum value specifying a field.  On output, the FieldPosition will be filled
-     * in with the text offsets for that field.  
+     * in with the text offsets for that field.
      * <P> For example, given a time text
      * "1996.07.10 AD at 15:08:56 PDT", if the given fieldPosition.field is
      * UDAT_YEAR_FIELD, the offsets fieldPosition.beginIndex and
-     * statfieldPositionus.getEndIndex will be set to 0 and 4, respectively. 
+     * statfieldPositionus.getEndIndex will be set to 0 and 4, respectively.
      * <P> Notice
      * that if the same time field appears more than once in a pattern, the status will
      * be set for the first occurence of that time field. For instance,
@@ -243,11 +243,11 @@ public:
      * <P>
      * On input, the FieldPosition parameter may have its "field" member filled with
      * an enum value specifying a field.  On output, the FieldPosition will be filled
-     * in with the text offsets for that field.  
+     * in with the text offsets for that field.
      * <P> For example, given a time text
      * "1996.07.10 AD at 15:08:56 PDT", if the given fieldPosition.field is
      * UDAT_YEAR_FIELD, the offsets fieldPosition.beginIndex and
-     * statfieldPositionus.getEndIndex will be set to 0 and 4, respectively. 
+     * statfieldPositionus.getEndIndex will be set to 0 and 4, respectively.
      * <P> Notice
      * that if the same time field appears more than once in a pattern, the status will
      * be set for the first occurence of that time field. For instance,
@@ -393,38 +393,38 @@ public:
      * @return A date/time formatter which the caller owns.
      * @stable ICU 2.0
      */
-    static DateFormat* createInstance(void);
+    static DateFormat* U_EXPORT2 createInstance(void);
 
     /**
      * Creates a time formatter with the given formatting style for the given
      * locale.
-     * 
+     *
      * @param style     The given formatting style. For example,
      *                  SHORT for "h:mm a" in the US locale.
      * @param aLocale   The given locale.
      * @return          A time formatter which the caller owns.
      * @stable ICU 2.0
      */
-    static DateFormat* createTimeInstance(EStyle style = kDefault,
+    static DateFormat* U_EXPORT2 createTimeInstance(EStyle style = kDefault,
                                           const Locale& aLocale = Locale::getDefault());
 
     /**
      * Creates a date formatter with the given formatting style for the given
      * const locale.
-     * 
+     *
      * @param style     The given formatting style. For example,
      *                  SHORT for "M/d/yy" in the US locale.
      * @param aLocale   The given locale.
      * @return          A date formatter which the caller owns.
      * @stable ICU 2.0
      */
-    static DateFormat* createDateInstance(EStyle style = kDefault,
+    static DateFormat* U_EXPORT2 createDateInstance(EStyle style = kDefault,
                                           const Locale& aLocale = Locale::getDefault());
 
     /**
      * Creates a date/time formatter with the given formatting styles for the
      * given locale.
-     * 
+     *
      * @param dateStyle The given formatting style for the date portion of the result.
      *                  For example, SHORT for "M/d/yy" in the US locale.
      * @param timeStyle The given formatting style for the time portion of the result.
@@ -433,7 +433,7 @@ public:
      * @return          A date/time formatter which the caller owns.
      * @stable ICU 2.0
      */
-    static DateFormat* createDateTimeInstance(EStyle dateStyle = kDefault,
+    static DateFormat* U_EXPORT2 createDateTimeInstance(EStyle dateStyle = kDefault,
                                               EStyle timeStyle = kDefault,
                                               const Locale& aLocale = Locale::getDefault());
 
@@ -444,8 +444,8 @@ public:
      *  does NOT own this list and must not delete it.
      * @stable ICU 2.0
      */
-    static const Locale* getAvailableLocales(int32_t& count);
-  
+    static const Locale* U_EXPORT2 getAvailableLocales(int32_t& count);
+
     /**
      * Returns true if the formatter is set for lenient parsing.
      * @stable ICU 2.0
@@ -457,20 +457,20 @@ public:
      * parsing, the parser may use heuristics to interpret inputs that do not
      * precisely match this object's format. With strict parsing, inputs must
      * match this object's format.
-     * 
+     *
      * @param lenient  True specifies date/time interpretation to be lenient.
      * @see Calendar::setLenient
      * @stable ICU 2.0
      */
     virtual void setLenient(UBool lenient);
-    
+
     /**
      * Gets the calendar associated with this date/time formatter.
      * @return the calendar associated with this date/time formatter.
      * @stable ICU 2.0
      */
     virtual const Calendar* getCalendar(void) const;
-    
+
     /**
      * Set the calendar to be used by this date format. Initially, the default
      * calendar for the specified or default locale is used.  The caller should
@@ -491,7 +491,7 @@ public:
      */
     virtual void setCalendar(const Calendar& newCalendar);
 
-   
+
     /**
      * Gets the number formatter which this date/time formatter uses to format
      * and parse the numeric portions of the pattern.
@@ -499,7 +499,7 @@ public:
      * @stable ICU 2.0
      */
     virtual const NumberFormat* getNumberFormat(void) const;
-    
+
     /**
      * Allows you to set the number formatter.  The caller should
      * not delete the NumberFormat object after it is adopted by this call.
@@ -521,7 +521,7 @@ public:
      * @stable ICU 2.0
      */
     virtual const TimeZone& getTimeZone(void) const;
-    
+
     /**
      * Sets the time zone for the calendar of this DateFormat object. The caller
      * no longer owns the TimeZone object and should not delete it after this call.
@@ -583,7 +583,7 @@ private:
      * @param inLocale the given locale.
      * @return a date/time formatter, or 0 on failure.
      */
-    static DateFormat* create(EStyle timeStyle, EStyle dateStyle, const Locale&);
+    static DateFormat* U_EXPORT2 create(EStyle timeStyle, EStyle dateStyle, const Locale&);
 
 public:
     /**

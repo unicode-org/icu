@@ -300,7 +300,7 @@ private:
      *                the registration ID is being instantiated with this factory.
      * @stable ICU 2.4
      */
-    typedef Transliterator* (*Factory)(const UnicodeString& ID, Token context);
+    typedef Transliterator* (U_EXPORT2 *Factory)(const UnicodeString& ID, Token context);
 
 protected:
 
@@ -723,7 +723,7 @@ public:
      * @return       A reference to 'result'.
      * @stable ICU 2.0
      */
-    static UnicodeString& getDisplayName(const UnicodeString& ID,
+    static UnicodeString& U_EXPORT2 getDisplayName(const UnicodeString& ID,
                                          UnicodeString& result);
 
     /**
@@ -747,7 +747,7 @@ public:
      * @return         A reference to 'result'.
      * @stable ICU 2.0
      */
-    static UnicodeString& getDisplayName(const UnicodeString& ID,
+    static UnicodeString& U_EXPORT2 getDisplayName(const UnicodeString& ID,
                                          const Locale& inLocale,
                                          UnicodeString& result);
 
@@ -820,7 +820,7 @@ public:
      * @see #getID
      * @stable ICU 2.0
      */
-    static Transliterator* createInstance(const UnicodeString& ID,
+    static Transliterator* U_EXPORT2 createInstance(const UnicodeString& ID,
                                           UTransDirection dir,
                                           UParseError& parseError,
                                           UErrorCode& status);
@@ -835,9 +835,10 @@ public:
      * @return A <code>Transliterator</code> object with the given ID
      * @stable ICU 2.0
      */
-    static Transliterator* createInstance(const UnicodeString& ID,
+    static Transliterator* U_EXPORT2 createInstance(const UnicodeString& ID,
                                           UTransDirection dir,
                                           UErrorCode& status);
+
     /**
      * Returns a <code>Transliterator</code> object constructed from
      * the given rule string.  This will be a RuleBasedTransliterator,
@@ -853,7 +854,7 @@ public:
      * @param status        Output param set to success/failure code.
      * @stable ICU 2.0
      */
-    static Transliterator* createFromRules(const UnicodeString& ID,
+    static Transliterator* U_EXPORT2 createFromRules(const UnicodeString& ID,
                                            const UnicodeString& rules,
                                            UTransDirection dir,
                                            UParseError& parseError,
@@ -969,7 +970,7 @@ public:
      * the registration ID is being instantiated with this factory.
      * @stable ICU 2.0
      */
-    static void registerFactory(const UnicodeString& id,
+    static void U_EXPORT2 registerFactory(const UnicodeString& id,
                                 Factory factory,
                                 Token context);
 
@@ -990,7 +991,7 @@ public:
      * @see #unregister
      * @stable ICU 2.0
      */
-    static void registerInstance(Transliterator* adoptedObj);
+    static void U_EXPORT2 registerInstance(Transliterator* adoptedObj);
 
 protected:
 
@@ -1064,7 +1065,7 @@ public:
      * @see #registerFactory
      * @stable ICU 2.0
      */
-    static void unregister(const UnicodeString& ID);
+    static void U_EXPORT2 unregister(const UnicodeString& ID);
 
 public:
 
@@ -1077,14 +1078,14 @@ public:
      * when done using it.
      * @draft ICU 3.0
      */
-    static StringEnumeration* getAvailableIDs(UErrorCode& ec);
+    static StringEnumeration* U_EXPORT2 getAvailableIDs(UErrorCode& ec);
 
     /**
      * Return the number of registered source specifiers.
      * @return the number of registered source specifiers.
      * @stable ICU 2.0
      */
-    static int32_t countAvailableSources(void);
+    static int32_t U_EXPORT2 countAvailableSources(void);
 
     /**
      * Return a registered source specifier.
@@ -1095,7 +1096,7 @@ public:
      * @return reference to result
      * @stable ICU 2.0
      */
-    static UnicodeString& getAvailableSource(int32_t index,
+    static UnicodeString& U_EXPORT2 getAvailableSource(int32_t index,
                                              UnicodeString& result);
 
     /**
@@ -1106,7 +1107,7 @@ public:
      *         source specifier.
      * @stable ICU 2.0
      */
-    static int32_t countAvailableTargets(const UnicodeString& source);
+    static int32_t U_EXPORT2 countAvailableTargets(const UnicodeString& source);
 
     /**
      * Return a registered target specifier for a given source.
@@ -1119,7 +1120,7 @@ public:
      * @return reference to result
      * @stable ICU 2.0
      */
-    static UnicodeString& getAvailableTarget(int32_t index,
+    static UnicodeString& U_EXPORT2 getAvailableTarget(int32_t index,
                                              const UnicodeString& source,
                                              UnicodeString& result);
 
@@ -1130,7 +1131,7 @@ public:
      * @param target    the target specifiers.
      * @stable ICU 2.0
      */
-    static int32_t countAvailableVariants(const UnicodeString& source,
+    static int32_t U_EXPORT2 countAvailableVariants(const UnicodeString& source,
                                           const UnicodeString& target);
 
     /**
@@ -1146,7 +1147,7 @@ public:
      * @return reference to result
      * @stable ICU 2.0
      */
-    static UnicodeString& getAvailableVariant(int32_t index,
+    static UnicodeString& U_EXPORT2 getAvailableVariant(int32_t index,
                                               const UnicodeString& source,
                                               const UnicodeString& target,
                                               UnicodeString& result);
@@ -1210,7 +1211,7 @@ public:
 
     /**
      * Return the class ID for this class.  This is useful only for
-     * comparing to a return value from getDynamicClassID().  
+     * comparing to a return value from getDynamicClassID().
      * Note that Transliterator is an abstract base class, and therefor
      * no fully constructed object will  have a dynamic
      * UCLassID that equals the UClassID returned from
@@ -1218,7 +1219,7 @@ public:
      * @return       The class ID for class Transliterator.
      * @stable ICU 2.0
      */
-    static UClassID getStaticClassID(void);
+    static UClassID U_EXPORT2 getStaticClassID(void);
 
     /**
      * Returns a unique class ID <b>polymorphically</b>.  This method
@@ -1248,7 +1249,7 @@ public:
      * @return the number of IDs currently registered with the system.
      * @obsolete ICU 3.4 use getAvailableIDs() instead
      */
-    static int32_t countAvailableIDs(void);
+    static int32_t U_EXPORT2 countAvailableIDs(void);
 
     /**
      * Return the index-th available ID.  index must be between 0
@@ -1262,7 +1263,7 @@ public:
      * is not thread safe, since it returns a reference to storage that
      * may become invalid if another thread calls unregister
      */
-    static const UnicodeString& getAvailableID(int32_t index);
+    static const UnicodeString& U_EXPORT2 getAvailableID(int32_t index);
 };
 
 inline int32_t Transliterator::getMaximumContextLength(void) const {

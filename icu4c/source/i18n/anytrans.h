@@ -50,7 +50,7 @@ class U_I18N_API AnyTransliterator : public Transliterator {
     UScriptCode targetScript;
 
 public:
-    
+
     /**
      * Destructor.
      */
@@ -71,7 +71,7 @@ public:
      */
     virtual void handleTransliterate(Replaceable& text, UTransPosition& index,
                                      UBool incremental) const;
-    
+
     /**
      * ICU "poor man's RTTI", returns a UClassID for the actual class.
      *
@@ -84,7 +84,7 @@ public:
      *
      * @draft ICU 2.2
      */
-    static UClassID getStaticClassID();
+    static UClassID U_EXPORT2 getStaticClassID();
 
 private:
 
@@ -124,7 +124,7 @@ private:
     static void registerIDs();
 
     friend class Transliterator; // for registerIDs()
-    
+
     /**
      * Return the script code for a given name, or
      * USCRIPT_INVALID_CODE if not found.

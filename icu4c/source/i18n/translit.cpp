@@ -697,7 +697,7 @@ const UnicodeString& Transliterator::getID(void) const {
  * display to the user in the default locale.  See {@link
  * #getDisplayName(Locale)} for details.
  */
-UnicodeString& Transliterator::getDisplayName(const UnicodeString& ID,
+UnicodeString& U_EXPORT2 Transliterator::getDisplayName(const UnicodeString& ID,
                                               UnicodeString& result) {
     return getDisplayName(ID, Locale::getDefault(), result);
 }
@@ -720,7 +720,7 @@ UnicodeString& Transliterator::getDisplayName(const UnicodeString& ID,
  * localized.
  * @see java.text.MessageFormat
  */
-UnicodeString& Transliterator::getDisplayName(const UnicodeString& id,
+UnicodeString& U_EXPORT2 Transliterator::getDisplayName(const UnicodeString& id,
                                               const Locale& inLocale,
                                               UnicodeString& result) {
     UErrorCode status = U_ZERO_ERROR;
@@ -872,9 +872,11 @@ Transliterator* Transliterator::createInverse(UErrorCode& status) const {
     return Transliterator::createInstance(ID, UTRANS_REVERSE,parseError,status);
 }
 
-Transliterator* Transliterator::createInstance(const UnicodeString& ID,
-                                               UTransDirection dir,
-                                               UErrorCode& status) {
+Transliterator* U_EXPORT2
+Transliterator::createInstance(const UnicodeString& ID,
+                                UTransDirection dir,
+                                UErrorCode& status)
+{
     UParseError parseError;
     return createInstance(ID, dir, parseError, status);
 }
@@ -890,10 +892,12 @@ Transliterator* Transliterator::createInstance(const UnicodeString& ID,
  * @see #getAvailableIDs
  * @see #getID
  */
-Transliterator* Transliterator::createInstance(const UnicodeString& ID,
-                                               UTransDirection dir,
-                                               UParseError& parseError,
-                                               UErrorCode& status) {
+Transliterator* U_EXPORT2
+Transliterator::createInstance(const UnicodeString& ID,
+                                UTransDirection dir,
+                                UParseError& parseError,
+                                UErrorCode& status)
+{
     if (U_FAILURE(status)) {
         return 0;
     }
@@ -1027,11 +1031,13 @@ Transliterator* Transliterator::createBasicInstance(const UnicodeString& id,
  * NullTransliterator, if it contains ID blocks which parse as
  * empty for the given direction.
  */
-Transliterator* Transliterator::createFromRules(const UnicodeString& ID,
-                                                const UnicodeString& rules,
-                                                UTransDirection dir,
-                                                UParseError& parseError,
-                                                UErrorCode& status) {
+Transliterator* U_EXPORT2
+Transliterator::createFromRules(const UnicodeString& ID,
+                                const UnicodeString& rules,
+                                UTransDirection dir,
+                                UParseError& parseError,
+                                UErrorCode& status)
+{
     Transliterator* t = NULL;
 
     TransliteratorParser parser;
@@ -1174,7 +1180,7 @@ UnicodeSet& Transliterator::getTargetSet(UnicodeSet& result) const {
 }
 
 // For public consumption
-void Transliterator::registerFactory(const UnicodeString& id,
+void U_EXPORT2 Transliterator::registerFactory(const UnicodeString& id,
                                      Transliterator::Factory factory,
                                      Transliterator::Token context) {
     umtx_init(&registryMutex);
@@ -1213,7 +1219,7 @@ void Transliterator::_registerSpecialInverse(const UnicodeString& target,
  * @see #getInstance
  * @see #unregister
  */
-void Transliterator::registerInstance(Transliterator* adoptedPrototype) {
+void U_EXPORT2 Transliterator::registerInstance(Transliterator* adoptedPrototype) {
     umtx_init(&registryMutex);
     Mutex lock(&registryMutex);
     if (HAVE_REGISTRY) {
@@ -1233,7 +1239,7 @@ void Transliterator::_registerInstance(Transliterator* adoptedPrototype) {
  * @see #registerInstance
 
  */
-void Transliterator::unregister(const UnicodeString& ID) {
+void U_EXPORT2 Transliterator::unregister(const UnicodeString& ID) {
     umtx_init(&registryMutex);
     Mutex lock(&registryMutex);
     if (HAVE_REGISTRY) {
@@ -1247,7 +1253,7 @@ void Transliterator::unregister(const UnicodeString& ID) {
  * To retrieve the actual IDs, call getAvailableID(i) with
  * i from 0 to countAvailableIDs() - 1.
  */
-int32_t Transliterator::countAvailableIDs(void) {
+int32_t U_EXPORT2 Transliterator::countAvailableIDs(void) {
     umtx_init(&registryMutex);
     Mutex lock(&registryMutex);
     return HAVE_REGISTRY ? registry->countAvailableIDs() : 0;
@@ -1259,7 +1265,7 @@ int32_t Transliterator::countAvailableIDs(void) {
  * and countAvailableIDs() - 1, inclusive.  If index is out of
  * range, the result of getAvailableID(0) is returned.
  */
-const UnicodeString& Transliterator::getAvailableID(int32_t index) {
+const UnicodeString& U_EXPORT2 Transliterator::getAvailableID(int32_t index) {
     const UnicodeString* result = NULL;
     umtx_init(&registryMutex);
     umtx_lock(&registryMutex);
@@ -1271,7 +1277,7 @@ const UnicodeString& Transliterator::getAvailableID(int32_t index) {
     return *result;
 }
 
-StringEnumeration* Transliterator::getAvailableIDs(UErrorCode& ec) {
+StringEnumeration* U_EXPORT2 Transliterator::getAvailableIDs(UErrorCode& ec) {
     if (U_FAILURE(ec)) return NULL;
     StringEnumeration* result = NULL;
     umtx_init(&registryMutex);
@@ -1286,13 +1292,13 @@ StringEnumeration* Transliterator::getAvailableIDs(UErrorCode& ec) {
     return result;
 }
 
-int32_t Transliterator::countAvailableSources(void) {
+int32_t U_EXPORT2 Transliterator::countAvailableSources(void) {
     umtx_init(&registryMutex);
     Mutex lock(&registryMutex);
     return HAVE_REGISTRY ? _countAvailableSources() : 0;
 }
 
-UnicodeString& Transliterator::getAvailableSource(int32_t index,
+UnicodeString& U_EXPORT2 Transliterator::getAvailableSource(int32_t index,
                                                   UnicodeString& result) {
     umtx_init(&registryMutex);
     Mutex lock(&registryMutex);
@@ -1302,13 +1308,13 @@ UnicodeString& Transliterator::getAvailableSource(int32_t index,
     return result;
 }
 
-int32_t Transliterator::countAvailableTargets(const UnicodeString& source) {
+int32_t U_EXPORT2 Transliterator::countAvailableTargets(const UnicodeString& source) {
     umtx_init(&registryMutex);
     Mutex lock(&registryMutex);
     return HAVE_REGISTRY ? _countAvailableTargets(source) : 0;
 }
 
-UnicodeString& Transliterator::getAvailableTarget(int32_t index,
+UnicodeString& U_EXPORT2 Transliterator::getAvailableTarget(int32_t index,
                                                   const UnicodeString& source,
                                                   UnicodeString& result) {
     umtx_init(&registryMutex);
@@ -1319,14 +1325,14 @@ UnicodeString& Transliterator::getAvailableTarget(int32_t index,
     return result;
 }
 
-int32_t Transliterator::countAvailableVariants(const UnicodeString& source,
+int32_t U_EXPORT2 Transliterator::countAvailableVariants(const UnicodeString& source,
                                                const UnicodeString& target) {
     umtx_init(&registryMutex);
     Mutex lock(&registryMutex);
     return HAVE_REGISTRY ? _countAvailableVariants(source, target) : 0;
 }
 
-UnicodeString& Transliterator::getAvailableVariant(int32_t index,
+UnicodeString& U_EXPORT2 Transliterator::getAvailableVariant(int32_t index,
                                                    const UnicodeString& source,
                                                    const UnicodeString& target,
                                                    UnicodeString& result) {

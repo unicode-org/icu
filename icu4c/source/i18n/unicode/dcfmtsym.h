@@ -224,7 +224,7 @@ public:
      *
      * @stable ICU 2.2
      */
-    static UClassID getStaticClassID();
+    static UClassID U_EXPORT2 getStaticClassID();
 
 private:
     DecimalFormatSymbols(); // default constructor not implemented

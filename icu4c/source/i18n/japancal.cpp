@@ -28,7 +28,7 @@
 
 U_NAMESPACE_BEGIN
 
-const char JapaneseCalendar::fgClassID = 0; // Value is irrelevant
+UOBJECT_DEFINE_RTTI_IMPLEMENTATION(JapaneseCalendar)
 
 //  Gregorian date of each emperor's ascension
 //  Years are AD, months are 1-based.
