@@ -176,12 +176,13 @@ abstract public class TimeZone implements Serializable, Cloneable {
      * Unlike the built-in division, this is mathematically well-behaved.
      * E.g., <code>-1/4</code> => 0
      * but <code>floorDivide(-1,4)</code> => -1.
+     * TODO: This duplicates a method in Calendar; clean up and
+     * consolidate in ICU 3.0.
      * @param numerator the numerator
      * @param denominator a divisor which must be > 0
      * @return the floor of the quotient.
-     * @stable ICU 2.0
      */
-    static final long floorDivide(long numerator, long denominator) {
+    static long floorDivide(long numerator, long denominator) {
         // We do this computation in order to handle
         // a numerator of Long.MIN_VALUE correctly
         return (numerator >= 0) ?
@@ -196,15 +197,16 @@ abstract public class TimeZone implements Serializable, Cloneable {
      * Unlike the built-in division, this is mathematically well-behaved.
      * E.g., <code>-1/4</code> => 0 and <code>-1%4</code> => -1,
      * but <code>floorDivide(-1,4)</code> => -1 with <code>remainder[0]</code> => 3.
+     * TODO: This duplicates a method in Calendar; clean up and
+     * consolidate in ICU 3.0.
      * @param numerator the numerator
      * @param denominator a divisor which must be > 0
      * @param remainder an array of at least one element in which the value
      * <code>numerator mod denominator</code> is returned. Unlike <code>numerator
      * % denominator</code>, this will always be non-negative.
      * @return the floor of the quotient.
-     * @stable ICU 2.0
      */
-    static final int floorDivide(long numerator, int denominator, int[] remainder) {
+    static int floorDivide(long numerator, int denominator, int[] remainder) {
         if (numerator >= 0) {
             remainder[0] = (int)(numerator % denominator);
             return (int)(numerator / denominator);
@@ -215,10 +217,12 @@ abstract public class TimeZone implements Serializable, Cloneable {
     }
 
     /**
-     * Compute the Gregorian calendar year, month, and day of month from the
-     * epoch day.
+     * Compute the Gregorian calendar year, month, and day of month
+     * from the epoch day, and return them in the given array.
+     * TODO: This duplicates a method in Calendar; clean up and
+     * consolidate in ICU 3.0.
      */
-    final void computeGregorianFields(long day, int fields[]) {
+    static void computeGregorianFields(long day, int fields[]) {
         int year, month, dayOfMonth, dayOfYear;
 
         // Convert from 1970 CE epoch to 1 CE epoch (Gregorian calendar)
@@ -267,15 +271,18 @@ abstract public class TimeZone implements Serializable, Cloneable {
     }
 
     /**
-     * The number of milliseconds in one day.  Although ONE_DAY and
-     * ONE_WEEK can fit into ints, they must be longs in order to prevent
-     * arithmetic overflow when performing (bug 4173516).
-     * @stable ICU 2.0
+     * The number of milliseconds in one day.
      */
-    protected static final int MILLIS_PER_DAY    = 24*60*60*1000;
+    static final int MILLIS_PER_DAY = 24*60*60*1000;
 
-    private static final int[][] GREGORIAN_MONTH_COUNT = {
-        // st  st2
+    /**
+     * For each month, the days in a non-leap year before the start
+     * the of month, and the days in a leap year before the start of
+     * the month.
+     * TODO: This duplicates data in Calendar.java; clean up and
+     * consolidate in ICU 3.0.
+     */
+    static final int[][] GREGORIAN_MONTH_COUNT = {
         {   0,   0 }, // Jan
         {  31,  31 }, // Feb
         {  59,  60 }, // Mar
@@ -288,8 +295,6 @@ abstract public class TimeZone implements Serializable, Cloneable {
         { 273, 274 }, // Oct
         { 304, 305 }, // Nov
         { 334, 335 }  // Dec
-        // st   days in year before start of month
-        // st2  days in year before month in leap year
     };
 
     /**
