@@ -33,14 +33,9 @@ class TransliterationRuleSet {
     /**
      * Vector of rules, in the order added.  This is only used while the rule
      * set is getting built.  After that, freeze() reorders and indexes the
-     * rules, and this Vector is freed.
+     * rules into rules[].  However, the vector is kept until destruction.
      */
     UVector* ruleVector;
-
-    /**
-     * freeing vector after freeze leaks rules. It should not be freed until destruction time
-     */
-    UBool isFrozen;
 
     /**
      * Length of the longest preceding context
@@ -85,19 +80,23 @@ public:
 
     /**
      * Add a rule to this set.  Rules are added in order, and order is
-     * significant.
+     * significant.  The last call to this method must be followed by
+     * a call to <code>freeze()</code> before the rule set is used.
      *
-     * <p>Once freeze() is called, this method must not be called.
      * @param adoptedRule the rule to add
      */
     virtual void addRule(TransliterationRule* adoptedRule,
                          UErrorCode& status);
 
     /**
-     * Close this rule set to further additions, check it for masked rules,
-     * and index it to optimize performance.  Once this method is called,
-     * addRule() can no longer be called.
-     * @exception IllegalArgumentException if some rules are masked
+     * Check this for masked rules and index it to optimize performance.
+     * The sequence of operations is: (1) add rules to a set using
+     * <code>addRule()</code>; (2) freeze the set using
+     * <code>freeze()</code>; (3) use the rule set.  If
+     * <code>addRule()</code> is called after calling this method, it
+     * invalidates this object, and this method must be called again.
+     * That is, <code>freeze()</code> may be called multiple times,
+     * although for optimal performance it shouldn't be.
      */
     virtual void freeze(const TransliterationRuleData& data,
                         UErrorCode& status);
