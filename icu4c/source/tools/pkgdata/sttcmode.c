@@ -181,11 +181,11 @@ void pkg_mode_static(UPKGOptions *o, FileStream *makefile, UErrorCode *status)
 
     T_FileStream_writeLine(makefile,"$(TEMP_DIR)/%.$(STATIC_O): $(TEMP_DIR)/%.c\n\t  $(COMPILE.c) -o $@ $<\n\n");
 
-    T_FileStream_writeLine(makefile, "$(TARGETDIR)/$(LIB_TARGET):$(TARGETDIR)/$(LIB_TARGET)($(OBJECTS)) $(HPUX_JUNK_OBJ) $(LISTFILES)\n"
+    T_FileStream_writeLine(makefile, "$(TARGETDIR)/$(LIB_TARGET):$(TARGETDIR)/$(LIB_TARGET)($(OBJECTS)) $(LISTFILES)\n"
                             "\t$(RANLIB) $@\n\n");
 
 
-    T_FileStream_writeLine(makefile, "CLEANFILES= $(CMNLIST) $(OBJECTS) $(HPUX_JUNK_OBJ) $(TARGETDIR)/$(LIB_TARGET) $(TARGETDIR)/$(MIDDLE_STATIC_LIB_TARGET) $(TARGETDIR)/$(TARGET)\n\nclean:\n\t-$(RMV) $(CLEANFILES) $(MAKEFILE)");
+    T_FileStream_writeLine(makefile, "CLEANFILES= $(CMNLIST) $(OBJECTS) $(TARGETDIR)/$(LIB_TARGET) $(TARGETDIR)/$(MIDDLE_STATIC_LIB_TARGET) $(TARGETDIR)/$(TARGET)\n\nclean:\n\t-$(RMV) $(CLEANFILES) $(MAKEFILE)");
     T_FileStream_writeLine(makefile, "\n\n");
 
     T_FileStream_writeLine(makefile, "# static mode shouldn't need to be installed, but we will install the header and static library for them.\n");
