@@ -652,6 +652,23 @@ UnicodeString::doExtract(UTextOffset start,
   }
 }
 
+int32_t
+UnicodeString::extract(UChar *dest, int32_t destCapacity,
+                       UErrorCode &errorCode) const {
+  if(U_SUCCESS(errorCode)) {
+    if(isBogus() || destCapacity<0 || (destCapacity>0 && dest==NULL)) {
+      errorCode=U_ILLEGAL_ARGUMENT_ERROR;
+    } else {
+      if(fLength<=destCapacity) {
+        doExtract(0, fLength, dest, 0);
+      }
+      return u_terminateUChars(dest, destCapacity, fLength, &errorCode);
+    }
+  }
+
+  return fLength;
+}
+
 UTextOffset 
 UnicodeString::indexOf(const UChar *srcChars,
                UTextOffset srcStart,
