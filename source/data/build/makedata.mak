@@ -118,7 +118,7 @@ ALL_RES = $(RB_FILES) $(TRANSLIT_FILES)
 RB_SOURCE_DIR = $(GENRB_SOURCE:$=$)
 
 # This target should build all the data files
-ALL : GODATA  test.dat  "$(DLL_OUTPUT)\testdata.dll" "$(DLL_OUTPUT)\$(U_ICUDATA_NAME).dll" $(TESTDATA)\test1.cnv $(TESTDATA)\test3.cnv $(TESTDATA)\test4.cnv GOBACK #$(U_ICUDATA_NAME).dat
+ALL : GODATA  test.dat  "$(DLL_OUTPUT)\testdata.dll" "$(DLL_OUTPUT)\$(U_ICUDATA_NAME).dll" $(DLL_OUTPUT)\test1.cnv $(DLL_OUTPUT)\test3.cnv $(DLL_OUTPUT)\test4.cnv GOBACK #$(U_ICUDATA_NAME).dat
 	@echo All targets are up to date
 
 BRK_FILES = "$(ICUDBLD)\sent.brk" "$(ICUDBLD)\char.brk" "$(ICUDBLD)\line.brk" "$(ICUDBLD)\word.brk" "$(ICUDBLD)\line_th.brk" "$(ICUDBLD)\word_th.brk"
@@ -209,9 +209,10 @@ CLEAN :
 	-@erase "word_th.brk"
 	-@erase "test*.*"
 	-@erase "base*.*"
+	@cd "$(DLL_OUTPUT)"
+	-@erase "*.cnv"
 	@cd "$(TESTDATA)"
 	-@erase "*.res"
-	-@erase "*.cnv"
 	@cd "$(ICUTOOLS)"
 
 $(TESTDATA)\root.res:$(TESTDATA)\root.txt
@@ -246,19 +247,19 @@ $(TESTDATA)\testtypes.res:$(TESTDATA)\testtypes.txt
 	@"$(ICUTOOLS)\makeconv\$(CFG)\makeconv" $<
 
 # Targets for test converter data
-$(TESTDATA)\test1.cnv: "$(TESTDATA)\test1.ucm"
+$(DLL_OUTPUT)\test1.cnv: "$(TESTDATA)\test1.ucm"
 	@cd "$(ICUDATA)"
-	@set ICU_DATA=$(TESTDATA)
+	@set ICU_DATA=$(DLL_OUTPUT)
 	@"$(ICUTOOLS)\makeconv\$(CFG)\makeconv" $**
 
-$(TESTDATA)\test3.cnv: "$(TESTDATA)\test3.ucm"
+$(DLL_OUTPUT)\test3.cnv: "$(TESTDATA)\test3.ucm"
 	@cd "$(ICUDATA)"
-	@set ICU_DATA=$(TESTDATA)
+	@set ICU_DATA=$(DLL_OUTPUT)
 	@"$(ICUTOOLS)\makeconv\$(CFG)\makeconv" $**
 
-$(TESTDATA)\test4.cnv: "$(TESTDATA)\test4.ucm"
+$(DLL_OUTPUT)\test4.cnv: "$(TESTDATA)\test4.ucm"
 	@cd "$(ICUDATA)"
-	@set ICU_DATA=$(TESTDATA)
+	@set ICU_DATA=$(DLL_OUTPUT)
 	@"$(ICUTOOLS)\makeconv\$(CFG)\makeconv" $**
 
 # Targets for unames.dat
