@@ -184,8 +184,8 @@ _processLocaleElement(CollatorSpec *spec, uint32_t value, const char* string,
         *status = U_BUFFER_OVERFLOW_ERROR;
         return string;
     }
-    // skip the underscore at the end
-    return ++string;
+    // don't skip the underscore at the end
+    return string;
 }
 U_CDECL_END
 
@@ -202,7 +202,7 @@ _processRFC3066Locale(CollatorSpec *spec, uint32_t value1, const char* string,
         return string;
     } else {
         uprv_strncpy(spec->locale, string, end-string);
-        return end+2;
+        return end+1;
     }
 }
 
@@ -217,9 +217,8 @@ _processCollatorOption(CollatorSpec *spec, uint32_t option, const char* string,
     spec->options[option] = ucol_sit_letterToAttributeValue(*string, status);
     if((*(++string) != '_' && *string) || U_FAILURE(*status)) {
         *status = U_ILLEGAL_ARGUMENT_ERROR;
-        return string;
     }
-    return ++string;
+    return string;
 }
 U_CDECL_END
 
@@ -264,10 +263,8 @@ _processVariableTop(CollatorSpec *spec, uint32_t value1, const char* string, UEr
     }
     if(U_SUCCESS(*status)) {
         spec->variableTopSet = TRUE;
-        return string+1; // to move over the '_'
-    } else {
-        return string;
-    }
+    } 
+    return string;
 }
 U_CDECL_END
 
@@ -310,7 +307,7 @@ const char* ucol_sit_readOption(const char *start, CollatorSpec *spec,
       if(*start == options[i].optionStart) {
           spec->entries[i].start = start;
           const char* end = options[i].action(spec, options[i].attr, start+1, status);
-          spec->entries[i].len = end - start - 1;
+          spec->entries[i].len = end - start;
           return end;
       }
   }
@@ -337,6 +334,10 @@ ucol_sit_readSpecs(CollatorSpec *s, const char *string,
     const char *definition = string;
     while(U_SUCCESS(*status) && *string) { 
         string = ucol_sit_readOption(string, s, status);
+        // advance over '_'
+        while(*string && *string == '_') {
+            string++;
+        }
     }
     if(U_FAILURE(*status)) {
         parseError->offset = string - definition;
