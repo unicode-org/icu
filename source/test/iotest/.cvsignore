@@ -1,0 +1,7 @@
+*.d
+Debug
+Release
+Makefile
+*.plg
+*.ncb
+*.opt

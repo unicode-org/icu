@@ -1,0 +1,101 @@
+## -*-makefile-*-
+## Cygwin-specific setup
+## Copyright (c) 2001-2003, International Business Machines Corporation and
+## others. All Rights Reserved.
+##
+## $Id: mh-cygwin,v 1.12 2003/06/03 20:52:55 alan Exp $
+
+## Commands to generate dependency files
+GEN_DEPS.c=	$(CC) -E -MM $(DEFS) $(CPPFLAGS)
+GEN_DEPS.cc=	$(CXX) -E -MM $(DEFS) $(CPPFLAGS)
+
+## Flags for position independent code
+SHAREDLIBCFLAGS = 
+SHAREDLIBCXXFLAGS = 
+SHAREDLIBCPPFLAGS = -DPIC
+
+## Additional flags when building libraries and with threads
+LIBCPPFLAGS = -D_REENTRANT
+THREADSCPPFLAGS = -D_REENTRANT
+
+## Commands to make a shared library
+SHLIB.c=	$(CC) $(DEFS) $(CPPFLAGS) $(CFLAGS) $(LDFLAGS) -shared
+SHLIB.cc=	$(CXX) $(DEFS) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS) -shared
+
+## Compiler switch to embed a runtime search path
+LD_RPATH=	
+LD_RPATH_PRE=	-Wl,-rpath,
+
+## Compiler switch to embed a library name
+LD_SONAME = -Wl,-soname -Wl,$(MIDDLE_SO_TARGET)
+
+## Shared object suffix
+SO = dll
+## Non-shared intermediate object suffix
+STATIC_O = o
+#LIBICU = $(ICUPREFIX)
+
+## Link commands to link to ICU libs
+LIBICUDT=	-L$(top_builddir)/stubdata/ -l$(ICUPREFIX)data$(ICULIBSUFFIX)$(SO_TARGET_VERSION_MAJOR)
+LIBICUUC=	-L$(top_builddir)/common/ -l$(ICUPREFIX)uc$(ICULIBSUFFIX)$(SO_TARGET_VERSION_MAJOR)
+LIBICUI18N=	-L$(top_builddir)/i18n/ -l$(ICUPREFIX)i18n$(ICULIBSUFFIX)$(SO_TARGET_VERSION_MAJOR)
+LIBICULE=	-L$(top_builddir)/layout/ -l$(ICUPREFIX)le$(ICULIBSUFFIX)$(SO_TARGET_VERSION_MAJOR)
+LIBICULX=	-L$(top_builddir)/layoutex/ -l$(ICUPREFIX)lx$(ICULIBSUFFIX)$(SO_TARGET_VERSION_MAJOR)
+LIBCTESTFW=	-L$(top_builddir)/tools/ctestfw/ -l$(ICUPREFIX)ctestfw$(ICULIBSUFFIX)$(SO_TARGET_VERSION_MAJOR)
+LIBICUTOOLUTIL=	-L$(top_builddir)/tools/toolutil/ -l$(ICUPREFIX)toolutil$(ICULIBSUFFIX)$(SO_TARGET_VERSION_MAJOR)
+LIBUSTDIO=	-L$(top_builddir)/extra/ustdio/ -l$(ICUPREFIX)io$(ICULIBSUFFIX)$(SO_TARGET_VERSION_MAJOR)
+
+
+## Compilation rules
+%.$(STATIC_O): $(srcdir)/%.c
+	$(COMPILE.c) $(STATICCPPFLAGS) $(STATICCFLAGS) -o $@ $<
+%.o: $(srcdir)/%.c
+	$(COMPILE.c) $(DYNAMICCPPFLAGS) $(DYNAMICCFLAGS) -o $@ $<
+
+%.$(STATIC_O): $(srcdir)/%.cpp
+	$(COMPILE.cc) $(STATICCPPFLAGS) $(STATICCXXFLAGS) -o $@ $<
+%.o: $(srcdir)/%.cpp
+	$(COMPILE.cc) $(DYNAMICCPPFLAGS) $(DYNAMICCXXFLAGS) -o $@ $<
+
+../data/%.o: ../data/%.c
+	$(COMPILE.c) $(DYNAMICCPPFLAGS) $(DYNAMICCFLAGS) -o $@ $<
+
+## Dependency rules
+%.d: $(srcdir)/%.c
+	@echo "generating dependency information for $<"
+	@$(SHELL) -ec '$(GEN_DEPS.c) $< \
+		| sed '\''s%\($*\)\.o[ :]*%\1.o $@ : %g'\'' > $@; \
+		[ -s $@ ] || rm -f $@'
+
+%.d: $(srcdir)/%.cpp
+	@echo "generating dependency information for $<"
+	@$(SHELL) -ec '$(GEN_DEPS.cc) $< \
+		| sed '\''s%\($*\)\.o[ :]*%\1.o $@ : %g'\'' > $@; \
+		[ -s $@ ] || rm -f $@'
+
+## Versioned target for a shared library.
+FINAL_SO_TARGET=  $(basename $(SO_TARGET))$(SO_TARGET_VERSION)$(ICULIBSUFFIX).$(SO)
+MIDDLE_SO_TARGET= $(basename $(SO_TARGET))$(SO_TARGET_VERSION_MAJOR)$(ICULIBSUFFIX).$(SO)
+
+## Versioned libraries rules
+%$(SO_TARGET_VERSION_MAJOR).$(SO): %$(SO_TARGET_VERSION)$(ICULIBSUFFIX).$(SO)
+	$(RM) $@ && cp $< $@
+%.$(SO): %$(SO_TARGET_VERSION)$(ICULIBSUFFIX).$(SO)
+	$(RM) $@ && ln -s $< $@
+
+##  Bind internal references
+
+# LDflags that pkgdata will use
+BIR_LDFLAGS= -Wl,-Bsymbolic
+
+# CPPflags for genccode/gencmn
+BIR_CPPFLAGS= -DU_HAVE_BIND_INTERNAL_REFERENCES
+
+# Dependencies [i.e. map files] for the final library
+BIR_DEPS=
+
+# Environment variable to set a runtime search path
+LDLIBRARYPATH_ENVVAR = PATH
+
+## End Cygwin-specific setup
+

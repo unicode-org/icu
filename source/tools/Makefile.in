@@ -1,0 +1,206 @@
+## Makefile.in for ICU tools
+## Copyright (c) 1999-2003, International Business Machines Corporation and
+## others. All Rights Reserved.
+
+## Source directory information
+srcdir = @srcdir@
+top_srcdir = @top_srcdir@
+
+top_builddir = ..
+
+include $(top_builddir)/icudefs.mk
+
+include @platform_make_fragment@
+
+##
+
+CPPFLAGS = @CPPFLAGS@ -I$(top_srcdir)/common -I$(top_builddir)/common
+CFLAGS = @CFLAGS@
+CXXFLAGS = @CXXFLAGS@
+
+## Build directory information
+subdir = tools
+
+# OBJDATADIR must be a short path (with ..'s) to the data.
+
+SRCDATADIR=$(top_srcdir)/../data
+
+OBJDATADIR=$(top_builddir)/data
+# tmpdir is INSIDE pkgdata dir. if you change TMPDATADIR then the invokation
+# of pkgdata will break...
+TMPDATADIR=tmp
+
+# DATABUILDDIR must be an absolute path because of the way pkgdata is invoked
+# from the temporary directory.
+
+DATABUILDDIR=$(OBJDATADIR)
+
+# relative lib links from pkgdata are the same as for tmp
+top_builddir_from_tmp = $(patsubst ..%,../..%,$(top_builddir))
+INVOKE = $(LDLIBRARYPATH_ENVVAR)=$(top_builddir_from_tmp)/common:$(top_builddir_from_tmp)/tools/toolutil:$$$(LDLIBRARYPATH_ENVVAR)
+PKGDATA = ../pkgdata/pkgdata -T . -s $(DATABUILDDIR) -O ./icupkg.inc -d $(DATABUILDDIR) 
+PKGDATA_VERSIONING = -r $(SO_TARGET_VERSION)
+
+## Install program information
+MKINSTALLDIRS = $(SHELL) $(top_srcdir)/mkinstalldirs
+
+INSTALL = @INSTALL@
+INSTALL_PROGRAM = @INSTALL_PROGRAM@
+INSTALL_DATA = @INSTALL_DATA@
+INSTALL_SCRIPT = @INSTALL_SCRIPT@
+
+## for cleaning up libraries
+STRIP = @STRIP@
+
+## Package information
+PACKAGE = @PACKAGE@
+VERSION = @VERSION@
+
+
+SUBDIRS = ctestfw toolutil makeconv genrb genuca genbrk \
+genccode genprops gennames genpname gennorm gencmn gencnval gentz gentest genidna pkgdata
+
+## List of phony targets
+.PHONY : all all-local all-recursive install install-local install-files install-dlls build-cmnfile build-dll		\
+install-recursive clean clean-local clean-recursive distclean		\
+distclean-local distclean-recursive dist dist-local dist-recursive	\
+check check-local check-recursive build-testdlls build-basetestdata build-local
+
+## Clear suffix list
+.SUFFIXES :
+
+## List of standard targets
+all: all-recursive
+install: install-recursive
+clean: clean-local clean-recursive
+distclean : distclean-recursive
+dist: dist-recursive 
+check: all check-recursive
+
+## Recursive targets
+all-recursive install-recursive clean-recursive distclean-recursive dist-recursive check-recursive:
+	@dot_seen=no; \
+	target=`echo $@ | sed s/-recursive//`; \
+	list='$(SUBDIRS)'; for subdir in $$list; do \
+	  echo "$(MAKE)[$(MAKELEVEL)]: Making \`$$target' in \`$$subdir'"; \
+	  if test "$$subdir" = "."; then \
+		dot_seen=yes; \
+		local_target="$$target-local"; \
+	  else \
+		local_target="$$target"; \
+	  fi; \
+	  (cd $$subdir && $(MAKE) $$local_target) || exit; \
+	done; \
+	if test "$$dot_seen" = "no"; then \
+	  $(MAKE) "$$target-local" || exit; \
+	fi
+
+all-local: build-local
+
+DAT_FILES=uprops.dat unames.dat cnvalias.dat tz.dat
+# ALL of these files can be deleted (the following BRK files) - they are copied
+BRK_FILES=char.brk line.brk line_th.brk sent.brk word.brk title.brk word_th.brk
+# don't include thaidict.brk - it goes into a resource bundle - plus it isn't deleted
+
+DATAFILESD=$(DAT_FILES:%=$(OBJDATADIR)/%)
+DATAFILESB=$(BRK_FILES:%=$(OBJDATADIR)/%)
+
+# copy the right endianness
+
+ifeq (@U_IS_BIG_ENDIAN@,1)
+$(OBJDATADIR)/%.brk: $(SRCDATADIR)/%BE.brk
+	cp $< $@
+else
+$(OBJDATADIR)/%.brk: $(SRCDATADIR)/%LE.brk
+	cp $< $@
+endif
+
+#include $(srcdir)/makeconv/ucmfiles.mk
+#-include $(srcdir)/makeconv/ucmebcdic.mk
+#-include $(srcdir)/makeconv/ucmlocal.mk
+ALL_UCM_SOURCE= $(UCM_SOURCE) $(UCM_EBCDIC_SOURCE) $(UCM_SOURCE_LOCAL)
+
+#include $(srcdir)/genrb/genrbfiles.mk
+#-include $(srcdir)/genrb/reslocal.mk
+ALL_RES_SOURCE= $(GENRB_SOURCE) $(TRANSLIT_SOURCE) $(RESOURCE_SRC) $(GENRB_SOURCE_LOCAL)
+
+UCM_FILES = $(ALL_UCM_SOURCE:%=$(SRCDATADIR)/%)
+CNV_FILES = $(ALL_UCM_SOURCE:%.ucm=$(OBJDATADIR)/%.cnv)
+CNV_FILESL = $(ALL_UCM_SOURCE:%.ucm=%.cnv)
+
+RES_SRC_FILES = $(ALL_RES_SOURCE:%=$(SRCDATADIR)/%)
+RES_FILES = $(ALL_RES_SOURCE:%.txt=$(OBJDATADIR)/%.res)
+RES_FILESL = $(ALL_RES_SOURCE:%.txt=%.res)
+
+DATAFILESC=$(CNV_FILES)
+DATAFILESR=$(RES_FILES)
+
+DATAFILES=$(DATAFILESD) $(CNV_FILES) $(DATAFILESB) $(RES_FILES)
+DATAFILESL=$(DAT_FILES) $(CNV_FILESL) $(BRK_FILES) $(RES_FILESL)
+
+
+## Files to remove for 'make clean'
+CLEANFILES = *~ $(BRK_FILES)
+
+install-local:
+
+dist-local:
+
+clean-local: clean-pkgdata
+	test -z "$(CLEANFILES)" || $(RMV) $(CLEANFILES)
+	test -z "$(SRCDATAFILES)" || $(RMV) $(SRCDATAFILES)
+	$(RMV) $(DATAFILES)
+	$(RMV) icupkg.inc
+	-@if [ -f $(TMPDATADIR)/$(ICUDATA_NAME)_dll.mak ]; then \
+		(cd pkgdata ; $(INVOKE) ./pkgdata -T $(TMPDATADIR) -m dll $(PKGDATA_VERSIONING) -p $(ICUDATA_NAME) -O $(DATABUILDDIR)/icupkg.inc $(TMPDATADIR)/$(ICUDATA_NAME).lst -d $(DATABUILDDIR) --clean ) \
+	fi
+	-@if [ -f $(TMPDATADIR)/$(ICUDATA_NAME)_common.mak ]; then \
+		(cd pkgdata; $(INVOKE) ./pkgdata -T $(TMPDATADIR) -m common -p $(ICUDATA_NAME) -O $(DATABUILDDIR)/icupkg.inc $(TMPDATADIR)/$(ICUDATA_NAME).lst -d $(DATABUILDDIR) --clean ) \
+	fi
+	-@$(RMV) $(TMPDATADIR) $(TMPDATADIR)2
+
+# Clean up any old variations.. 
+distclean-local: clean-local
+	$(RMV) Makefile
+
+$(TMPDATADIR)/$(ICUDATA_NAME).lst: Makefile $(srcdir)/Makefile.in $(srcdir)/genrb/genrbfiles.mk $(srcdir)/makeconv/ucmfiles.mk
+	@echo "generating $@ (list of data files)"
+	@$(MKINSTALLDIRS) $(TMPDATADIR)
+	@-$(RMV) $(TMPDATADIR)/$(ICUDATA_NAME).lst
+	@for file in $(DATAFILESL); do \
+	  echo $(OBJDATADIR)/$$file >> $(TMPDATADIR)/$(ICUDATA_NAME).lst; \
+	done;
+
+$(TMPDATADIR)/testdata.lst: Makefile
+	$(MKINSTALLDIRS) $(TMPDATADIR)
+	echo $(DATABUILDDIR)/test.dat > $@
+
+$(TMPDATADIR)2/testdata.lst: Makefile $(top_builddir)/test/testdata/root.res
+	$(MKINSTALLDIRS) $(TMPDATADIR)2
+	echo $(DATABUILDDIR)/test.dat > $@
+	echo $(DATABUILDDIR)/../test/testdata/root.res >> $@
+
+$(TMPDATADIR)/icupkg.inc: pkgdata/icupkg.inc
+	$(MKINSTALLDIRS) $(TMPDATADIR)
+	cp pkgdata/icupkg.inc $(TMPDATADIR)/icupkg.inc
+
+$(TMPDATADIR)2/icupkg.inc: pkgdata/icupkg.inc
+	$(MKINSTALLDIRS) $(TMPDATADIR)2
+	cp pkgdata/icupkg.inc $(TMPDATADIR)2/icupkg.inc
+
+# build the ICU and test data
+
+build-local:
+
+clean-pkgdata:
+	-(cd $(TMPDATADIR); $(INVOKE) $(PKGDATA) -m dll -p $(ICUDATA_NAME) ./$(ICUDATA_NAME).lst --clean || echo '### Warning, cannot clean up icu/data if pkgdata is already gone.' )
+	-(cd $(TMPDATADIR); $(INVOKE) $(PKGDATA) -m common -p testdat1  ./testdata.lst --clean || echo '### Warning, cannot clean up icu/data if pkgdata is already gone.' )
+	-(cd $(TMPDATADIR)2; $(INVOKE) $(PKGDATA) -m common -p testdat2  ./testdata.lst --clean || echo '### Warning, cannot clean up icu/data if pkgdata is already gone.' )
+	-$(RMV) $(TMPDATADIR)/$(ICUDATA_NAME).lst $(TMPDATADIR)/testdata.lst $(TMPDATADIR)/icupkg.inc $(TMPDATADIR)2/testdata.lst
+
+check-local:
+
+Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
+	cd $(top_builddir) \
+	&& CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
+

@@ -1,0 +1,10 @@
+
+*.d
+*.pdb
+*.plg
+Debug
+Makefile
+Release
+genccode
+genccode.8
+tmp
