@@ -18,7 +18,7 @@ import org.w3c.dom.*;
 /**
  * This class is a plug-in to RBManager that allows the user to export Resource Bundles
  * along with some of the meta-data associated by RBManager to the TMX specification.
- * For more information on TMX visit the web site <A HREF=http://www.lis.org/tmx>http://www.lisa.org/tmx</A>
+ * For more information on TMX visit the web site <a href="http://www.lisa.org/tmx/">http://www.lisa.org/tmx/</a>
  * 
  * @author Jared Jackson
  * @see com.ibm.rbm.RBManager
