@@ -110,11 +110,14 @@ Creating Template Files for New Platforms
 Let the cc compiler help you get started.
 Compile this program
     const unsigned int x[5] = {1, 2, 0xdeadbeef, 0xffffffff, 16};
-with the -S option to produce assembly output
+with the -S option to produce assembly output.
 
-This will produce a .s file, something like
+For example, this will generate array.s:
+gcc -S array.c
 
-    .file   "foo.c"
+This will produce a .s file that may look like this:
+
+    .file   "array.c"
     .version        "01.01"
 gcc2_compiled.:
     .globl x
@@ -131,11 +134,16 @@ x:
     .ident  "GCC: (GNU) 2.96 20000731 (Red Hat Linux 7.1 2.96-85)"
 
 which gives a starting point that will compile, and can be transformed
-to become the  template, generally with some consulting of as docs and
+to become the template, generally with some consulting of as docs and
 some experimentation.
+
+If you want ICU to automatically use this assembly, you should
+specify "GENCCODE_ASSEMBLY=-a name" in the specific config/mh-* file,
+where the name is the compiler or platform that you used in this
+assemblyHeader data structure.
 */
 static const struct AssemblyType {
-    const char *compiler;
+    const char *name;
     const char *header;
     const char *beginLine;
 } assemblyHeader[] = {
@@ -245,9 +253,9 @@ main(int argc, char* argv[]) {
         fprintf(stderr,
             "\t-a or --assembly    Create assembly file. (possible values are: ");
 
-        fprintf(stderr, "%s", assemblyHeader[0].compiler);
+        fprintf(stderr, "%s", assemblyHeader[0].name);
         for (idx = 1; idx < (int32_t)(sizeof(assemblyHeader)/sizeof(assemblyHeader[0])); idx++) {
-            fprintf(stderr, ", %s", assemblyHeader[idx].compiler);
+            fprintf(stderr, ", %s", assemblyHeader[idx].name);
         }
         fprintf(stderr,
             ")\n");
@@ -259,7 +267,7 @@ main(int argc, char* argv[]) {
             message="generating assembly code for %s\n";
             writeCode=&writeAssemblyCode;
             for (idx = 0; idx < (int32_t)(sizeof(assemblyHeader)/sizeof(assemblyHeader[0])); idx++) {
-                if (uprv_strcmp(options[kOptAssembly].value, assemblyHeader[idx].compiler) == 0) {
+                if (uprv_strcmp(options[kOptAssembly].value, assemblyHeader[idx].name) == 0) {
                     assemblyHeaderIndex = idx;
                     break;
                 }
