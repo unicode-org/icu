@@ -10,7 +10,7 @@
 
 // Gurmukhi_InterIndic
 
-Gurmukhi-InterIndic {
+Gurmukhi_InterIndic {
   Rule {
 //--------------------------------------------------------------------
 // Copyright (c) 1999-2001, International Business Machines

@@ -10,7 +10,7 @@
 
 // Oriya_InterIndic
 
-Oriya-InterIndic {
+Oriya_InterIndic {
   Rule {
 //--------------------------------------------------------------------
 // Copyright (c) 1999-2001, International Business Machines

@@ -104,7 +104,7 @@ vi.txt vi_VN.txt\
 zh.txt zh__PINYIN.txt zh_CN.txt zh_HK.txt zh_SG.txt zh_TW.txt zh_TW_STROKE.txt
 
 TRANSLIT_SOURCE=fullhalf.txt translit_index.txt kana.txt kbdescl1.txt\
-larabic.txt lcyril.txt ldevan.txt\
+larabic.txt lcyril.txt\
 lgreek.txt lhebrew.txt ljamo.txt\
 lkana.txt quotes.txt\
 Bengali_InterIndic.txt\
