@@ -5,15 +5,15 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/NumberFormat.java,v $ 
- * $Date: 2003/06/06 21:09:43 $ 
- * $Revision: 1.29 $
+ * $Date: 2003/09/18 21:03:14 $ 
+ * $Revision: 1.30 $
  *
  *****************************************************************************************
  */
 package com.ibm.icu.text;
 
-import java.io.InvalidObjectException; //Bug 4185761 [Richard/GCL]
 import java.io.IOException;
+import java.io.InvalidObjectException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.math.BigInteger;
@@ -22,14 +22,13 @@ import java.text.Format;
 import java.text.ParseException;
 import java.text.ParsePosition;
 import java.util.Collections;
-import java.util.Hashtable;
 import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.Set;
 
-import com.ibm.icu.util.Currency;
 import com.ibm.icu.impl.ICULocaleData;
 import com.ibm.icu.impl.LocaleUtility;
+import com.ibm.icu.util.Currency;
 
 /**
  * <code>NumberFormat</code> is the abstract base class for all number
