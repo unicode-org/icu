@@ -27,6 +27,7 @@
 #include "ucol_tok.h"
 #include "cmemory.h"
 #include "ucmp32.h"
+#include "cstring.h"
 
 #ifdef WIN32
 #define UNICODE
@@ -2192,6 +2193,88 @@ static void TestHangulTailoring() {
   
 }
 
+static void TestCompressOverlap() {
+    UChar       secstr[150];
+    UChar       tertstr[150];
+    UErrorCode  status = U_ZERO_ERROR;
+    UCollator  *coll;
+    uint8_t     result[200];
+    uint32_t    resultlen;
+    int         count = 0;
+    uint8_t     *tempptr;
+
+    coll = ucol_open("", &status);
+
+    if (U_FAILURE(status)) {
+        log_err("Collator can't be created\n");
+        return;
+    }
+    while (count < 149) {
+        secstr[count] = 0x0020; /* [06, 05, 05] */
+        tertstr[count] = 0x0020;
+        count ++;
+    }
+
+    /* top down compression ----------------------------------- */
+    secstr[count] = 0x0332; /* [, 87, 05] */
+    tertstr[count] = 0x3000; /* [06, 05, 07] */
+
+    /* no compression secstr should have 150 secondary bytes, tertstr should 
+    have 150 tertiary bytes.
+    with correct overlapping compression, secstr should have 4 secondary 
+    bytes, tertstr should have > 2 tertiary bytes */
+    resultlen = ucol_getSortKey(coll, secstr, 150, result, 250);
+    tempptr = uprv_strchr(result, 1) + 1;
+    while (*(tempptr + 1) != 1) {
+        /* the last secondary collation element is not checked since it is not 
+        part of the compression */
+        if (*tempptr < UCOL_COMMON_TOP2 - UCOL_TOP_COUNT2) {
+            log_err("Secondary compression overlapped\n");
+        }
+        tempptr ++;
+    }
+    
+    /* tertiary top/bottom/common for en_US is similar to the secondary
+    top/bottom/common */
+    resultlen = ucol_getSortKey(coll, tertstr, 150, result, 250);
+    tempptr = uprv_strrchr(result, 1) + 1;
+    while (*(tempptr + 1) != 0) {
+        /* the last secondary collation element is not checked since it is not 
+        part of the compression */
+        if (*tempptr < coll->tertiaryTop - coll->tertiaryTopCount) {
+            log_err("Tertiary compression overlapped\n");
+        }
+        tempptr ++;
+    }
+
+    /* bottom up compression ------------------------------------- */
+    secstr[count] = 0;
+    tertstr[count] = 0;
+    resultlen = ucol_getSortKey(coll, secstr, 150, result, 250);
+    tempptr = uprv_strchr(result, 1) + 1;
+    while (*(tempptr + 1) != 1) {
+        /* the last secondary collation element is not checked since it is not 
+        part of the compression */
+        if (*tempptr > UCOL_COMMON_BOT2 + UCOL_BOT_COUNT2) {
+            log_err("Secondary compression overlapped\n");
+        }
+        tempptr ++;
+    }
+    
+    /* tertiary top/bottom/common for en_US is similar to the secondary
+    top/bottom/common */
+    resultlen = ucol_getSortKey(coll, tertstr, 150, result, 250);
+    tempptr = uprv_strrchr(result, 1) + 1;
+    while (*(tempptr + 1) != 0) {
+        /* the last secondary collation element is not checked since it is not 
+        part of the compression */
+        if (*tempptr > coll->tertiaryBottom + coll->tertiaryBottomCount) {
+            log_err("Tertiary compression overlapped\n");
+        }
+        tempptr ++;
+    }
+}
+
 void addMiscCollTest(TestNode** root)
 {
     addTest(root, &TestCase, "tscoll/cmsccoll/TestCase");
@@ -2219,5 +2302,6 @@ void addMiscCollTest(TestNode** root)
     addTest(root, &TestIncrementalNormalize, "tscoll/cmsccoll/TestIncrementalNormalize");
     addTest(root, &TestComposeDecompose, "tscoll/cmsccoll/TestComposeDecompose");
     /*addTest(root, &TestGetCaseBit, "tscoll/cmsccoll/TestGetCaseBit");*/
+    addTest(root, &TestCompressOverlap, "tscoll/cmsccoll/TestCompressOverlap");
 }
 
