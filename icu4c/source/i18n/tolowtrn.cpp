@@ -74,8 +74,9 @@ Transliterator* LowercaseTransliterator::clone(void) const {
  */
 void LowercaseTransliterator::handleTransliterate(Replaceable& text,
                                  UTransPosition& offsets, 
-                                 UBool isIncremental) const
+                                 UBool /*isIncremental*/) const
 {
+    /* TODO: Verify that isIncremental can be ignored */
     int32_t textPos = offsets.start;
     if (textPos >= offsets.limit) return;
 

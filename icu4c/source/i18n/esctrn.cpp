@@ -127,8 +127,11 @@ Transliterator* EscapeTransliterator::clone() const {
 /**
  * Implements {@link Transliterator#handleTransliterate}.
  */
-void EscapeTransliterator::handleTransliterate(Replaceable& text, UTransPosition& pos,
-                                               UBool isIncremental) const {
+void EscapeTransliterator::handleTransliterate(Replaceable& text,
+                                               UTransPosition& pos,
+                                               UBool /*isIncremental*/) const
+{
+    /* TODO: Verify that isIncremental can be ignored */
     int32_t start = pos.start;
     int32_t limit = pos.limit;
 
