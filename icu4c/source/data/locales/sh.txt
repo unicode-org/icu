@@ -305,7 +305,7 @@ sh {
         ji { "Jidi\u0161" }
         yi { "Jidi\u0161" }
     }
-    LocaleID { "1a" }
+    LocaleID { "081a" }
     LocaleString { "sh" }
     MonthAbbreviations { 
             "jan",
