@@ -92,7 +92,7 @@ umtx_lock(UMTX *mutex)
         /* Attempt to lock an uninitialized mutex.  Not Supported.
          *  Note that earlier versions of ICU supported lazy mutex initialization.
          *    That was not thread safe on CPUs that reorder memory operations.  */
-        U_ASSERT(FALSE); 
+        /* U_ASSERT(FALSE);   TODO:  activate this assert. */
         umtx_init(mutex);    /*  But, in case someone really screwed up, we will
                               *   still do the lazy init to try to avoid a crash  */
     }

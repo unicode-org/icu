@@ -102,15 +102,6 @@ main(int argc, char* argv[]) {
     UBool sourceTOC, verbose;
     const char *entrypointName = NULL;
 
-    /* Initialize ICU */
-    u_init(&errorCode);
-    if (U_FAILURE(errorCode)) {
-        fprintf(stderr, "%s: can not initialize ICU.  errorCode = %s\n",
-            argv[0], u_errorName(errorCode));
-        exit(1);
-    }
-    errorCode = U_ZERO_ERROR;
-
     U_MAIN_INIT_ARGS(argc, argv);
 
     /* preset then read command line options */
