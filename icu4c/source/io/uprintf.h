@@ -65,6 +65,15 @@ typedef struct u_printf_stream_handler {
     u_printf_pad_and_justify_stream *pad_and_justify;
 } u_printf_stream_handler;
 
+/* Used by sprintf */
+typedef struct u_localized_print_string {
+    UChar     *str;     /* Place to write the string */
+    int32_t   available;/* Number of codeunits available to write to */
+    int32_t   len;      /* Maximum number of code units that can be written to output */
+
+    ULocaleBundle  fBundle;     /* formatters */
+} u_localized_print_string;
+
 #define UP_PERCENT 0x0025
 
 /**
@@ -72,16 +81,19 @@ typedef struct u_printf_stream_handler {
  * @param fmt A pointer to a '%' character in a u_printf format specification.
  * @param spec A pointer to a <TT>u_printf_spec</TT> to receive the parsed
  * format specifier.
+ * @param locStringContext If present, will make sure that it will only write
+ *          to the buffer when space is available. It's done this way because
+ *          va_list sometimes can't be passed by pointer.
  * @return The number of characters contained in this specifier.
  */
 U_CFUNC int32_t
-u_printf_print_spec(const u_printf_stream_handler *streamHandler,
-                    const UChar     *fmt,
-                    void            *context,
-                    ULocaleBundle   *formatBundle,
-                    int32_t         patCount,
-                    int32_t         *written,
-                    va_list         *ap);
+u_printf_parse(const u_printf_stream_handler *streamHandler,
+               const UChar     *fmt,
+               void            *context,
+               u_localized_print_string *locStringContext,
+               ULocaleBundle   *formatBundle,
+               int32_t         *written,
+               va_list         ap);
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
 
