@@ -20,4 +20,9 @@
 			</icu:scripts>
 		</special>
 	</characters>
+  <special xmlns:icu="http://oss.software.ibm.com/icu/"  >
+    <icu:boundaries>
+      <icu:word icu:class="RuleBased" icu:append="true" icu:import="word_ja"/>
+    </icu:boundaries>
+  </special>
 </ldml>
