@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu/source/i18n/Attic/caniter.h,v $ 
- * $Date: 2002/03/13 18:29:24 $ 
- * $Revision: 1.2 $
+ * $Date: 2002/03/19 07:16:01 $ 
+ * $Revision: 1.3 $
  *
  *****************************************************************************************
  */
@@ -18,6 +18,8 @@
 #include "unicode/uniset.h"
 #include "unicode/normlzr.h"
 #include "unicode/unicode.h"
+
+#define SKIP_ZEROES TRUE
 
 U_NAMESPACE_BEGIN
 
@@ -61,7 +63,7 @@ public:
     /**
      *@param source string to get results for
      */
-    CanonicalIterator(UnicodeString source, UErrorCode status);    
+    CanonicalIterator(UnicodeString source, UErrorCode &status);    
 
     /** Destructor
      *  Cleans pieces
@@ -88,7 +90,7 @@ public:
      *@param set the source string to iterate against. This allows the same iterator to be used
      * while changing the source string, saving object creation.
      */
-    void setSource(UnicodeString newSource, UErrorCode status);    
+    void setSource(const UnicodeString &newSource, UErrorCode &status);    
 
     /**
      * Dumb recursive implementation of permutation. 
@@ -96,7 +98,7 @@ public:
      * @param source the string to find permutations for
      * @return the results in a set.
      */
-    static Hashtable *permute(UnicodeString &source, UErrorCode status);     
+    static void permute(UnicodeString &source, UBool skipZeros, Hashtable *result, UErrorCode &status);     
     
 private:
     // ===================== PRIVATES ==============================
@@ -119,10 +121,10 @@ private:
     UnicodeString buffer;
     
     // we have a segment, in NFD. Find all the strings that are canonically equivalent to it.
-    UnicodeString *getEquivalents(UnicodeString segment, int32_t &result_len, UErrorCode status); //private String[] getEquivalents(String segment)
+    UnicodeString *getEquivalents(const UnicodeString &segment, int32_t &result_len, UErrorCode &status); //private String[] getEquivalents(String segment)
     
     //Set getEquivalents2(String segment);
-    Hashtable *getEquivalents2(UnicodeString segment, UErrorCode status);
+    Hashtable *getEquivalents2(const UnicodeString &segment, UErrorCode &status);
     
     /**
      * See if the decomposition of cp2 is at segment starting at segmentPos 
@@ -130,7 +132,7 @@ private:
      * If so, take the remainder, and return the equivalents 
      */
     //Set extract(int comp, String segment, int segmentPos, StringBuffer buffer);
-    Hashtable *extract(UChar32 comp, UnicodeString segment, int32_t segmentPos, UnicodeString buffer, UErrorCode status);
+    Hashtable *extract(UChar32 comp, const UnicodeString &segment, int32_t segmentPos, UnicodeString &buffer, UErrorCode &status);
 
     void cleanPieces();
 };
