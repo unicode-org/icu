@@ -846,8 +846,10 @@ void TestConverterTypesAndStarters()
   log_verbose("Testing KSC, ibm-930, ibm-878  for starters and their conversion types.");
 
     myConverter[0] = ucnv_open("ksc", &err);
-    if (U_FAILURE(err))
+    if (U_FAILURE(err)) {
       log_err("Failed to create an ibm-ksc converter\n");
+      return;
+    }
     else
       {
         if (ucnv_getType(myConverter[0])!=UCNV_MBCS) log_err("ucnv_getType Failed for ibm-949\n");
@@ -864,8 +866,10 @@ void TestConverterTypesAndStarters()
       }
 
     myConverter[1] = ucnv_open("ibm-930", &err);
-    if (U_FAILURE(err))
+    if (U_FAILURE(err)) {
       log_err("Failed to create an ibm-930 converter\n");
+      return;
+    }
     else
       {
         if (ucnv_getType(myConverter[1])!=UCNV_EBCDIC_STATEFUL) log_err("ucnv_getType Failed for ibm-930\n");
@@ -873,8 +877,10 @@ void TestConverterTypesAndStarters()
       }
 
     myConverter[2] = ucnv_open("ibm-878", &err);
-    if (U_FAILURE(err))
+    if (U_FAILURE(err)) {
       log_err("Failed to create an ibm-815 converter\n");
+      return;
+    }
     else
       {
         if (ucnv_getType(myConverter[2])!=UCNV_SBCS) log_err("ucnv_getType Failed for ibm-815\n");
@@ -992,6 +998,7 @@ TestUTF8() {
     UConverter *cnv=ucnv_open("UTF-8", &errorCode);
     if(U_FAILURE(errorCode)) {
         log_err("Unable to open a UTF-8 converter: %s\n", u_errorName(errorCode));
+        return;
     }
     TestNextUChar(cnv, source, limit, results, "UTF-8");
     /*Test the condition when source > sourceLimit*/
@@ -1028,6 +1035,7 @@ TestUTF16BE() {
     UConverter *cnv=ucnv_open("utf-16be", &errorCode);
     if(U_FAILURE(errorCode)) {
         log_err("Unable to open a UTF16-BE converter: %s\n", u_errorName(errorCode));
+        return;
     }
     TestNextUChar(cnv, source, limit, results, "UTF-16BE");
     /*Test the condition when source > sourceLimit*/
@@ -1070,6 +1078,7 @@ TestUTF16LE() {
     UConverter *cnv=ucnv_open("utf-16le", &errorCode);
     if(U_FAILURE(errorCode)) {
         log_err("Unable to open a UTF16-LE converter: %s\n", u_errorName(errorCode));
+        return;
     }
     TestNextUChar(cnv, source, limit, results, "UTF-16LE");
     /*Test the condition when source > sourceLimit*/
@@ -1117,6 +1126,7 @@ TestLATIN1() {
     UConverter *cnv=ucnv_open("LATIN_1", &errorCode);
     if(U_FAILURE(errorCode)) {
         log_err("Unable to open a LATIN_1 converter: %s\n", u_errorName(errorCode));
+        return;
     }
     TestNextUChar(cnv, source, limit, results, "LATIN_1");
     /*Test the condition when source > sourceLimit*/
@@ -1144,6 +1154,7 @@ TestSBCS() {
     UConverter *cnv=ucnv_open("ibm-1281", &errorCode);
     if(U_FAILURE(errorCode)) {
         log_err("Unable to open a SBCS(ibm-1281) converter: %s\n", u_errorName(errorCode));
+        return;
     }
     TestNextUChar(cnv, source, limit, results, "SBCS(ibm-1281)");
     /*Test the condition when source > sourceLimit*/
@@ -1186,6 +1197,7 @@ TestDBCS() {
     UConverter *cnv=ucnv_open("ibm-9027", &errorCode);
     if(U_FAILURE(errorCode)) {
         log_err("Unable to open a DBCS(ibm-9027) converter: %s\n", u_errorName(errorCode));
+        return;
     }
     TestNextUChar(cnv, source, limit, results, "DBCS(ibm-9027)");
     /*Test the condition when source > sourceLimit*/
@@ -1234,6 +1246,7 @@ TestMBCS() {
     UConverter *cnv=ucnv_open("ibm-1363", &errorCode);
     if(U_FAILURE(errorCode)) {
         log_err("Unable to open a MBCS(ibm-1363) converter: %s\n", u_errorName(errorCode));
+        return;
     }
     TestNextUChar(cnv, source, limit, results, "MBCS(ibm-1363)");
     /*Test the condition when source > sourceLimit*/
@@ -1622,7 +1635,6 @@ TestISO_2022_KR() {
 
     cnv=ucnv_open("ISO_2022,locale=kr", &errorCode);
     if(U_FAILURE(errorCode)) {
-       
         log_err("Unable to open a iso-2022 converter: %s\n", u_errorName(errorCode));
         return;
     }
@@ -1786,6 +1798,7 @@ TestEBCDIC_STATEFUL() {
     UConverter *cnv=ucnv_open("ibm-930", &errorCode);
     if(U_FAILURE(errorCode)) {
         log_err("Unable to open a EBCDIC_STATEFUL(ibm-930) converter: %s\n", u_errorName(errorCode));
+        return;
     }
     TestNextUChar(cnv, source, limit, results, "EBCDIC_STATEFUL(ibm-930)");
     ucnv_reset(cnv);
@@ -1867,6 +1880,7 @@ TestGB18030() {
     UConverter *cnv=ucnv_open("gb18030", &errorCode);
     if(U_FAILURE(errorCode)) {
         log_err("Unable to open a gb18030 converter: %s\n", u_errorName(errorCode));
+        return;
     }
     TestNextUChar(cnv, (const char *)in, (const char *)in+sizeof(in), results, "gb18030");
     ucnv_close(cnv);
@@ -1977,10 +1991,12 @@ TestLMBCS() {
       cnv1=ucnv_open(NAME_LMBCS_1, &errorCode);
       if(U_FAILURE(errorCode)) {
          log_err("Unable to open a LMBCS-1 converter: %s\n", u_errorName(errorCode));
+         return;
       }
       cnv2=ucnv_open(NAME_LMBCS_2, &errorCode);
       if(U_FAILURE(errorCode)) {
          log_err("Unable to open a LMBCS-2 converter: %s\n", u_errorName(errorCode));
+         return;
       }
 
       /* Name */
@@ -2046,6 +2062,7 @@ TestLMBCS() {
       cnv=ucnv_open("lmbcs", &errorCode); /* use generic name for LMBCS-1 */
       if(U_FAILURE(errorCode)) {
            log_err("Unable to open a LMBCS converter: %s\n", u_errorName(errorCode));
+           return;
       }
 
 
@@ -2084,6 +2101,7 @@ TestLMBCS() {
       cnv=ucnv_open("LMBCS-1", &errorCode);
       if(U_FAILURE(errorCode)) {
            log_err("Unable to open a LMBCS-1 converter: %s\n", u_errorName(errorCode));
+           return;
       }
       else
       {
@@ -2206,6 +2224,7 @@ TestLMBCS() {
       cnv = ucnv_open(NAME_LMBCS_1, &errorCode);
       if(U_FAILURE(errorCode)) {
          log_err("Unable to open a LMBCS-1 converter: %s\n", u_errorName(errorCode));
+         return;
       }
 
 
