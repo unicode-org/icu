@@ -791,361 +791,361 @@ withinErr(double a, double b, double err) {
 }
 
 static void TestInt64Format() {
-  UChar temp1[512];
-  UChar result[512];
-  UNumberFormat *fmt;
-  UErrorCode status = U_ZERO_ERROR;
-  const double doubleInt64Max = (double)U_INT64_MAX;
-  const double doubleInt64Min = (double)U_INT64_MIN;
-  const double doubleBig = 10.0 * (double)U_INT64_MAX;      
-  int32_t val32;
-  int64_t val64;
-  double  valDouble;
-  int32_t parsepos;
+    UChar temp1[512];
+    UChar result[512];
+    UNumberFormat *fmt;
+    UErrorCode status = U_ZERO_ERROR;
+    const double doubleInt64Max = (double)U_INT64_MAX;
+    const double doubleInt64Min = (double)U_INT64_MIN;
+    const double doubleBig = 10.0 * (double)U_INT64_MAX;      
+    int32_t val32;
+    int64_t val64;
+    double  valDouble;
+    int32_t parsepos;
 
-  /* create a number format using unum_openPattern(....) */
-  log_verbose("\nTesting Int64Format\n");
-  u_uastrcpy(temp1, "#.#E0");
-  fmt = unum_open(UNUM_IGNORE, temp1, u_strlen(temp1), NULL, NULL, &status);
-  if(U_FAILURE(status)) {
-    log_err("error in unum_openPattern(): %s\n", myErrorName(status));
-  } else {
-    unum_setAttribute(fmt, UNUM_MAX_FRACTION_DIGITS, 20);
-    unum_formatInt64(fmt, U_INT64_MAX, result, 512, NULL, &status);
-    if (U_FAILURE(status)) {
-      log_err("error in unum_format(): %s\n", myErrorName(status));
+    /* create a number format using unum_openPattern(....) */
+    log_verbose("\nTesting Int64Format\n");
+    u_uastrcpy(temp1, "#.#E0");
+    fmt = unum_open(UNUM_IGNORE, temp1, u_strlen(temp1), NULL, NULL, &status);
+    if(U_FAILURE(status)) {
+        log_err("error in unum_openPattern(): %s\n", myErrorName(status));
     } else {
-      log_verbose("format int64max: '%s'\n", result);
-      parsepos = 0;
-      val32 = unum_parse(fmt, result, u_strlen(result), &parsepos, &status);
-      if (status != U_INVALID_FORMAT_ERROR) {
-        log_err("parse didn't report error: %s\n", myErrorName(status));
-      } else if (val32 != INT32_MAX) {
-        log_err("parse didn't pin return value, got: %d\n", val32);
-      }
+        unum_setAttribute(fmt, UNUM_MAX_FRACTION_DIGITS, 20);
+        unum_formatInt64(fmt, U_INT64_MAX, result, 512, NULL, &status);
+        if (U_FAILURE(status)) {
+            log_err("error in unum_format(): %s\n", myErrorName(status));
+        } else {
+            log_verbose("format int64max: '%s'\n", result);
+            parsepos = 0;
+            val32 = unum_parse(fmt, result, u_strlen(result), &parsepos, &status);
+            if (status != U_INVALID_FORMAT_ERROR) {
+                log_err("parse didn't report error: %s\n", myErrorName(status));
+            } else if (val32 != INT32_MAX) {
+                log_err("parse didn't pin return value, got: %d\n", val32);
+            }
 
-      status = U_ZERO_ERROR;
-      parsepos = 0;
-      val64 = unum_parseInt64(fmt, result, u_strlen(result), &parsepos, &status);
-      if (U_FAILURE(status)) {
-        log_err("parseInt64 returned error: %s\n", myErrorName(status));
-      } else if (val64 != U_INT64_MAX) {
-        log_err("parseInt64 returned incorrect value, got: %ld\n", val64);
-      }
+            status = U_ZERO_ERROR;
+            parsepos = 0;
+            val64 = unum_parseInt64(fmt, result, u_strlen(result), &parsepos, &status);
+            if (U_FAILURE(status)) {
+                log_err("parseInt64 returned error: %s\n", myErrorName(status));
+            } else if (val64 != U_INT64_MAX) {
+                log_err("parseInt64 returned incorrect value, got: %ld\n", val64);
+            }
 
-      status = U_ZERO_ERROR;
-      parsepos = 0;
-      valDouble = unum_parseDouble(fmt, result, u_strlen(result), &parsepos, &status);
-      if (U_FAILURE(status)) {
-        log_err("parseDouble returned error: %s\n", myErrorName(status));
-      } else if (valDouble != doubleInt64Max) {
-        log_err("parseDouble returned incorrect value, got: %g\n", valDouble);
-      }
+            status = U_ZERO_ERROR;
+            parsepos = 0;
+            valDouble = unum_parseDouble(fmt, result, u_strlen(result), &parsepos, &status);
+            if (U_FAILURE(status)) {
+                log_err("parseDouble returned error: %s\n", myErrorName(status));
+            } else if (valDouble != doubleInt64Max) {
+                log_err("parseDouble returned incorrect value, got: %g\n", valDouble);
+            }
+        }
+
+        unum_formatInt64(fmt, U_INT64_MIN, result, 512, NULL, &status);
+        if (U_FAILURE(status)) {
+            log_err("error in unum_format(): %s\n", myErrorName(status));
+        } else {
+            log_verbose("format int64min: '%s'\n", result);
+            parsepos = 0;
+            val32 = unum_parse(fmt, result, u_strlen(result), &parsepos, &status);
+            if (status != U_INVALID_FORMAT_ERROR) {
+                log_err("parse didn't report error: %s\n", myErrorName(status));
+            } else if (val32 != INT32_MIN) {
+                log_err("parse didn't pin return value, got: %d\n", val32);
+            }
+
+            status = U_ZERO_ERROR;
+            parsepos = 0;
+            val64 = unum_parseInt64(fmt, result, u_strlen(result), &parsepos, &status);
+            if (U_FAILURE(status)) {
+                log_err("parseInt64 returned error: %s\n", myErrorName(status));
+            } else if (val64 != U_INT64_MIN) {
+                log_err("parseInt64 returned incorrect value, got: %ld\n", val64);
+            }
+
+            status = U_ZERO_ERROR;
+            parsepos = 0;
+            valDouble = unum_parseDouble(fmt, result, u_strlen(result), &parsepos, &status);
+            if (U_FAILURE(status)) {
+                log_err("parseDouble returned error: %s\n", myErrorName(status));
+            } else if (valDouble != doubleInt64Min) {
+                log_err("parseDouble returned incorrect value, got: %g\n", valDouble);
+            }
+        }
+
+        unum_formatDouble(fmt, doubleBig, result, 512, NULL, &status);
+        if (U_FAILURE(status)) {
+            log_err("error in unum_format(): %s\n", myErrorName(status));
+        } else {
+            log_verbose("format doubleBig: '%s'\n", result);
+            parsepos = 0;
+            val32 = unum_parse(fmt, result, u_strlen(result), &parsepos, &status);
+            if (status != U_INVALID_FORMAT_ERROR) {
+                log_err("parse didn't report error: %s\n", myErrorName(status));
+            } else if (val32 != INT32_MAX) {
+                log_err("parse didn't pin return value, got: %d\n", val32);
+            }
+
+            status = U_ZERO_ERROR;
+            parsepos = 0;
+            val64 = unum_parseInt64(fmt, result, u_strlen(result), &parsepos, &status);
+            if (status != U_INVALID_FORMAT_ERROR) {
+                log_err("parseInt64 didn't report error error: %s\n", myErrorName(status));
+            } else if (val64 != U_INT64_MAX) {
+                log_err("parseInt64 returned incorrect value, got: %ld\n", val64);
+            }
+
+            status = U_ZERO_ERROR;
+            parsepos = 0;
+            valDouble = unum_parseDouble(fmt, result, u_strlen(result), &parsepos, &status);
+            if (U_FAILURE(status)) {
+                log_err("parseDouble returned error: %s\n", myErrorName(status));
+            } else if (!withinErr(valDouble, doubleBig, 1e-15)) {
+                log_err("parseDouble returned incorrect value, got: %g\n", valDouble);
+            }
+        }
     }
-
-    unum_formatInt64(fmt, U_INT64_MIN, result, 512, NULL, &status);
-    if (U_FAILURE(status)) {
-      log_err("error in unum_format(): %s\n", myErrorName(status));
-    } else {
-      log_verbose("format int64min: '%s'\n", result);
-      parsepos = 0;
-      val32 = unum_parse(fmt, result, u_strlen(result), &parsepos, &status);
-      if (status != U_INVALID_FORMAT_ERROR) {
-        log_err("parse didn't report error: %s\n", myErrorName(status));
-      } else if (val32 != INT32_MIN) {
-        log_err("parse didn't pin return value, got: %d\n", val32);
-      }
-
-      status = U_ZERO_ERROR;
-      parsepos = 0;
-      val64 = unum_parseInt64(fmt, result, u_strlen(result), &parsepos, &status);
-      if (U_FAILURE(status)) {
-        log_err("parseInt64 returned error: %s\n", myErrorName(status));
-      } else if (val64 != U_INT64_MIN) {
-        log_err("parseInt64 returned incorrect value, got: %ld\n", val64);
-      }
-
-      status = U_ZERO_ERROR;
-      parsepos = 0;
-      valDouble = unum_parseDouble(fmt, result, u_strlen(result), &parsepos, &status);
-      if (U_FAILURE(status)) {
-        log_err("parseDouble returned error: %s\n", myErrorName(status));
-      } else if (valDouble != doubleInt64Min) {
-        log_err("parseDouble returned incorrect value, got: %g\n", valDouble);
-      }
-    }
-
-    unum_formatDouble(fmt, doubleBig, result, 512, NULL, &status);
-    if (U_FAILURE(status)) {
-      log_err("error in unum_format(): %s\n", myErrorName(status));
-    } else {
-      log_verbose("format doubleBig: '%s'\n", result);
-      parsepos = 0;
-      val32 = unum_parse(fmt, result, u_strlen(result), &parsepos, &status);
-      if (status != U_INVALID_FORMAT_ERROR) {
-        log_err("parse didn't report error: %s\n", myErrorName(status));
-      } else if (val32 != INT32_MAX) {
-        log_err("parse didn't pin return value, got: %d\n", val32);
-      }
-
-      status = U_ZERO_ERROR;
-      parsepos = 0;
-      val64 = unum_parseInt64(fmt, result, u_strlen(result), &parsepos, &status);
-      if (status != U_INVALID_FORMAT_ERROR) {
-        log_err("parseInt64 didn't report error error: %s\n", myErrorName(status));
-      } else if (val64 != U_INT64_MAX) {
-        log_err("parseInt64 returned incorrect value, got: %ld\n", val64);
-      }
-
-      status = U_ZERO_ERROR;
-      parsepos = 0;
-      valDouble = unum_parseDouble(fmt, result, u_strlen(result), &parsepos, &status);
-      if (U_FAILURE(status)) {
-        log_err("parseDouble returned error: %s\n", myErrorName(status));
-      } else if (!withinErr(valDouble, doubleBig, 1e-15)) {
-        log_err("parseDouble returned incorrect value, got: %g\n", valDouble);
-      }
-    }
-  }
-  unum_close(fmt);
+    unum_close(fmt);
 }
 
 
 void test_fmt(UNumberFormat* fmt, UBool isDecimal) {
-  UChar buffer[512];
-  int BUFSIZE = sizeof(buffer)/sizeof(buffer[0]);
-  char temp[512];
-  double vals[] = {
-    -.2, 0, .2, 5.5, 15.2, 250, 123456789
-  };
-  int i;
+    UChar buffer[512];
+    int BUFSIZE = sizeof(buffer)/sizeof(buffer[0]);
+    char temp[512];
+    double vals[] = {
+        -.2, 0, .2, 5.5, 15.2, 250, 123456789
+    };
+    int i;
 
-  for (i = 0; i < sizeof(vals)/sizeof(vals[0]); ++i) {
-    UErrorCode status = U_ZERO_ERROR;
-    unum_formatDouble(fmt, vals[i], buffer, BUFSIZE, NULL, &status);
-    if (U_FAILURE(status)) {
-      log_err("failed to format: %g, returned %s\n", vals[i], u_errorName(status));
-    } else {
-      u_austrcpy(temp, buffer);
-      log_verbose("formatting %g returned '%s'\n", vals[i], temp);
+    for (i = 0; i < sizeof(vals)/sizeof(vals[0]); ++i) {
+        UErrorCode status = U_ZERO_ERROR;
+        unum_formatDouble(fmt, vals[i], buffer, BUFSIZE, NULL, &status);
+        if (U_FAILURE(status)) {
+            log_err("failed to format: %g, returned %s\n", vals[i], u_errorName(status));
+        } else {
+            u_austrcpy(temp, buffer);
+            log_verbose("formatting %g returned '%s'\n", vals[i], temp);
+        }
     }
-  }
 
-  // check APIs now
-  {
-      UChar temp[128];
-      UErrorCode status = U_ZERO_ERROR;
-      UParseError perr;
-      u_uastrcpy(temp, "#,##0.0#");
-      unum_applyPattern(fmt, FALSE, temp, -1, &perr, &status);
-      if (isDecimal ? U_FAILURE(status) : (status != U_UNSUPPORTED_ERROR)) {
-          log_err("got unexpected error for applyPattern: '%s'\n", u_errorName(status));
-      }
-  }
-
-  {
-      int isLenient = unum_getAttribute(fmt, UNUM_LENIENT_PARSE);
-      log_verbose("lenient: 0x%x\n", isLenient);
-      if (isDecimal ? (isLenient != -1) : (isLenient == TRUE)) {
-          log_err("didn't expect lenient value: %d\n", isLenient);
-      }
-
-      unum_setAttribute(fmt, UNUM_LENIENT_PARSE, TRUE);
-      isLenient = unum_getAttribute(fmt, UNUM_LENIENT_PARSE);
-      if (isDecimal ? (isLenient != -1) : (isLenient == FALSE)) {
-          log_err("didn't expect lenient value after set: %d\n", isLenient);
-      }
-  }
-
-  {
-      double val2;
-      double val = unum_getDoubleAttribute(fmt, UNUM_LENIENT_PARSE);
-      if (val != -1) {
-          log_err("didn't expect double attribute\n");
-      }
-      val = unum_getDoubleAttribute(fmt, UNUM_ROUNDING_INCREMENT);
-      if ((val == -1) == isDecimal) {
-          log_err("didn't expect -1 rounding increment\n");
-      }
-      unum_setDoubleAttribute(fmt, UNUM_ROUNDING_INCREMENT, val+.5);
-      val2 = unum_getDoubleAttribute(fmt, UNUM_ROUNDING_INCREMENT);
-      if (isDecimal && (val2 - val != .5)) {
-          log_err("set rounding increment had no effect on decimal format");
-      }
-  }
-
-  {
-      UErrorCode status = U_ZERO_ERROR;
-      char temp[512];
-      UChar buffer[512];
-      int BUFSIZE = sizeof(buffer)/sizeof(buffer[0]);
-      int len = unum_getTextAttribute(fmt, UNUM_DEFAULT_RULESET, buffer, BUFSIZE, &status);
-      if (isDecimal ? (status != U_UNSUPPORTED_ERROR) : U_FAILURE(status)) {
-          log_err("got unexpected error for get default ruleset: '%s'\n", u_errorName(status));
-      }
-      if (U_SUCCESS(status)) {
-          u_austrcpy(temp, buffer);
-          log_verbose("default ruleset: '%s'\n", temp);
-      }
-
-      status = U_ZERO_ERROR;
-      len = unum_getTextAttribute(fmt, UNUM_PUBLIC_RULESETS, buffer, BUFSIZE, &status);
-      if (isDecimal ? (status != U_UNSUPPORTED_ERROR) : U_FAILURE(status)) {
-          log_err("got unexpected error for get public rulesets: '%s'\n", u_errorName(status));
-      }
-      if (U_SUCCESS(status)) {
-          u_austrcpy(temp, buffer);
-          log_verbose("public rulesets: '%s'\n", temp);
-
-          // set the default ruleset to the first one found, and retry
-
-          if (len > 0) {
-              int i;
-              for (i = 0; i < len && temp[i] != ';'; ++i){};
-              if (i < len) {
-                   buffer[i] = 0;
-                   unum_setTextAttribute(fmt, UNUM_DEFAULT_RULESET, buffer, -1, &status);
-                   if (U_FAILURE(status)) {
-                       log_err("unexpected error setting default ruleset: '%s'\n", u_errorName(status));
-                   } else {
-                       int len2 = unum_getTextAttribute(fmt, UNUM_DEFAULT_RULESET, buffer, BUFSIZE, &status);
-                       if (U_FAILURE(status)) {
-                           log_err("could not fetch default ruleset: '%s'\n", u_errorName(status));
-                       } else if (len2 != i) {
-                           u_austrcpy(temp, buffer);
-                           log_err("unexpected ruleset len: %d ex: %d val: %s\n", len2, i, temp);
-                       } else {
-  for (i = 0; i < sizeof(vals)/sizeof(vals[0]); ++i) {
-    UErrorCode status = U_ZERO_ERROR;
-    unum_formatDouble(fmt, vals[i], buffer, BUFSIZE, NULL, &status);
-    if (U_FAILURE(status)) {
-      log_err("failed to format: %g, returned %s\n", vals[i], u_errorName(status));
-    } else {
-      u_austrcpy(temp, buffer);
-      log_verbose("formatting %g returned '%s'\n", vals[i], temp);
+    /* check APIs now */
+    {
+        UChar temp[128];
+        UErrorCode status = U_ZERO_ERROR;
+        UParseError perr;
+        u_uastrcpy(temp, "#,##0.0#");
+        unum_applyPattern(fmt, FALSE, temp, -1, &perr, &status);
+        if (isDecimal ? U_FAILURE(status) : (status != U_UNSUPPORTED_ERROR)) {
+            log_err("got unexpected error for applyPattern: '%s'\n", u_errorName(status));
+        }
     }
-  }
-                       }
-                   }
-              }
-          }
-      }
-  }
 
-  {
-      UErrorCode status = U_ZERO_ERROR;
-      int len = unum_toPattern(fmt, FALSE, buffer, BUFSIZE, &status);
-      if (U_SUCCESS(status)) {
-          u_austrcpy(temp, buffer);
-          log_verbose("pattern: '%s'\n", temp);
-      } else if (status != U_BUFFER_OVERFLOW_ERROR) {
-          log_err("toPattern failed unexpectedly: %s\n", u_errorName(status));
-      } else {
-          log_verbose("pattern too long to display\n");
-      }
-  }
+    {
+        int isLenient = unum_getAttribute(fmt, UNUM_LENIENT_PARSE);
+        log_verbose("lenient: 0x%x\n", isLenient);
+        if (isDecimal ? (isLenient != -1) : (isLenient == TRUE)) {
+            log_err("didn't expect lenient value: %d\n", isLenient);
+        }
 
-  {
-      UErrorCode status = U_ZERO_ERROR;
-      int len = unum_getSymbol(fmt, UNUM_CURRENCY_SYMBOL, buffer, BUFSIZE, &status);
-      if (isDecimal ? U_FAILURE(status) : (status != U_UNSUPPORTED_ERROR)) {
-          log_err("unexpected error getting symbol: '%s'\n", u_errorName(status));
-      }
+        unum_setAttribute(fmt, UNUM_LENIENT_PARSE, TRUE);
+        isLenient = unum_getAttribute(fmt, UNUM_LENIENT_PARSE);
+        if (isDecimal ? (isLenient != -1) : (isLenient == FALSE)) {
+            log_err("didn't expect lenient value after set: %d\n", isLenient);
+        }
+    }
 
-      unum_setSymbol(fmt, UNUM_CURRENCY_SYMBOL, buffer, len, &status);
-      if (isDecimal ? U_FAILURE(status) : (status != U_UNSUPPORTED_ERROR)) {
-          log_err("unexpected error setting symbol: '%s'\n", u_errorName(status));
-      }
-  }
+    {
+        double val2;
+        double val = unum_getDoubleAttribute(fmt, UNUM_LENIENT_PARSE);
+        if (val != -1) {
+            log_err("didn't expect double attribute\n");
+        }
+        val = unum_getDoubleAttribute(fmt, UNUM_ROUNDING_INCREMENT);
+        if ((val == -1) == isDecimal) {
+            log_err("didn't expect -1 rounding increment\n");
+        }
+        unum_setDoubleAttribute(fmt, UNUM_ROUNDING_INCREMENT, val+.5);
+        val2 = unum_getDoubleAttribute(fmt, UNUM_ROUNDING_INCREMENT);
+        if (isDecimal && (val2 - val != .5)) {
+            log_err("set rounding increment had no effect on decimal format");
+        }
+    }
+
+    {
+        UErrorCode status = U_ZERO_ERROR;
+        char temp[512];
+        UChar buffer[512];
+        int BUFSIZE = sizeof(buffer)/sizeof(buffer[0]);
+        int len = unum_getTextAttribute(fmt, UNUM_DEFAULT_RULESET, buffer, BUFSIZE, &status);
+        if (isDecimal ? (status != U_UNSUPPORTED_ERROR) : U_FAILURE(status)) {
+            log_err("got unexpected error for get default ruleset: '%s'\n", u_errorName(status));
+        }
+        if (U_SUCCESS(status)) {
+            u_austrcpy(temp, buffer);
+            log_verbose("default ruleset: '%s'\n", temp);
+        }
+
+        status = U_ZERO_ERROR;
+        len = unum_getTextAttribute(fmt, UNUM_PUBLIC_RULESETS, buffer, BUFSIZE, &status);
+        if (isDecimal ? (status != U_UNSUPPORTED_ERROR) : U_FAILURE(status)) {
+            log_err("got unexpected error for get public rulesets: '%s'\n", u_errorName(status));
+        }
+        if (U_SUCCESS(status)) {
+            u_austrcpy(temp, buffer);
+            log_verbose("public rulesets: '%s'\n", temp);
+
+            /* set the default ruleset to the first one found, and retry */
+
+            if (len > 0) {
+                int i;
+                for (i = 0; i < len && temp[i] != ';'; ++i){};
+                if (i < len) {
+                    buffer[i] = 0;
+                    unum_setTextAttribute(fmt, UNUM_DEFAULT_RULESET, buffer, -1, &status);
+                    if (U_FAILURE(status)) {
+                        log_err("unexpected error setting default ruleset: '%s'\n", u_errorName(status));
+                    } else {
+                        int len2 = unum_getTextAttribute(fmt, UNUM_DEFAULT_RULESET, buffer, BUFSIZE, &status);
+                        if (U_FAILURE(status)) {
+                            log_err("could not fetch default ruleset: '%s'\n", u_errorName(status));
+                        } else if (len2 != i) {
+                            u_austrcpy(temp, buffer);
+                            log_err("unexpected ruleset len: %d ex: %d val: %s\n", len2, i, temp);
+                        } else {
+                            for (i = 0; i < sizeof(vals)/sizeof(vals[0]); ++i) {
+                                UErrorCode status = U_ZERO_ERROR;
+                                unum_formatDouble(fmt, vals[i], buffer, BUFSIZE, NULL, &status);
+                                if (U_FAILURE(status)) {
+                                    log_err("failed to format: %g, returned %s\n", vals[i], u_errorName(status));
+                                } else {
+                                    u_austrcpy(temp, buffer);
+                                    log_verbose("formatting %g returned '%s'\n", vals[i], temp);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    {
+        UErrorCode status = U_ZERO_ERROR;
+        int len = unum_toPattern(fmt, FALSE, buffer, BUFSIZE, &status);
+        if (U_SUCCESS(status)) {
+            u_austrcpy(temp, buffer);
+            log_verbose("pattern: '%s'\n", temp);
+        } else if (status != U_BUFFER_OVERFLOW_ERROR) {
+            log_err("toPattern failed unexpectedly: %s\n", u_errorName(status));
+        } else {
+            log_verbose("pattern too long to display\n");
+        }
+    }
+
+    {
+        UErrorCode status = U_ZERO_ERROR;
+        int len = unum_getSymbol(fmt, UNUM_CURRENCY_SYMBOL, buffer, BUFSIZE, &status);
+        if (isDecimal ? U_FAILURE(status) : (status != U_UNSUPPORTED_ERROR)) {
+            log_err("unexpected error getting symbol: '%s'\n", u_errorName(status));
+        }
+
+        unum_setSymbol(fmt, UNUM_CURRENCY_SYMBOL, buffer, len, &status);
+        if (isDecimal ? U_FAILURE(status) : (status != U_UNSUPPORTED_ERROR)) {
+            log_err("unexpected error setting symbol: '%s'\n", u_errorName(status));
+        }
+    }
 }
 
 static void TestRBNFFormat() {
-  int status;
-  UParseError perr;
-  UChar temp[768];
-  UNumberFormat *formats[5];
-  int COUNT = sizeof(formats)/sizeof(formats[0]);
-  int i;
-  const char* pat;
+    int status;
+    UParseError perr;
+    UChar temp[768];
+    UNumberFormat *formats[5];
+    int COUNT = sizeof(formats)/sizeof(formats[0]);
+    int i;
+    const char* pat;
 
-  for (i = 0; i < COUNT; ++i) {
-    formats[i] = 0;
-  }
+    for (i = 0; i < COUNT; ++i) {
+        formats[i] = 0;
+    }
 
-  // instantiation
+    /* instantiation */
     status = U_ZERO_ERROR;
     u_uastrcpy(temp, "#,##0.0#;(#,##0.0#)");
     formats[0] = unum_open(UNUM_PATTERN_DECIMAL, temp, -1, "en_US", &perr, &status);
     if (U_FAILURE(status)) {
-      log_err("unable to open decimal pattern");
+        log_err("unable to open decimal pattern");
     }
 
     status = U_ZERO_ERROR;
     formats[1] = unum_open(UNUM_SPELLOUT, NULL, 0, "en_US", &perr, &status);
     if (U_FAILURE(status)) {
-      log_err("unable to open spellout");
+        log_err("unable to open spellout");
     }
 
     status = U_ZERO_ERROR;
     formats[2] = unum_open(UNUM_ORDINAL, NULL, 0, "en_US", &perr, &status);
     if (U_FAILURE(status)) {
-      log_err("unable to open ordinal");
+        log_err("unable to open ordinal");
     }
 
     status = U_ZERO_ERROR;
     formats[3] = unum_open(UNUM_DURATION, NULL, 0, "en_US", &perr, &status);
     if (U_FAILURE(status)) {
-      log_err("unable to open duration");
+        log_err("unable to open duration");
     }
 
     status = U_ZERO_ERROR;
     pat =
-      "%standard:\n"
-      "-x: minus >>;\n"
-      "x.x: << point >>;\n"
-      "zero; one; two; three; four; five; six; seven; eight; nine;\n"
-      "ten; eleven; twelve; thirteen; fourteen; fifteen; sixteen;\n"
-      "seventeen; eighteen; nineteen;\n"
-      "20: twenty[->>];\n"
-      "30: thirty[->>];\n"
-      "40: forty[->>];\n"
-      "50: fifty[->>];\n"
-      "60: sixty[->>];\n"
-      "70: seventy[->>];\n"
-      "80: eighty[->>];\n"
-      "90: ninety[->>];\n"
-      "100: =#,##0=;\n"
-      "%simple:\n"
-      "=%standard=;\n"
-      "20: twenty[ and change];\n"
-      "30: thirty[ and change];\n"
-      "40: forty[ and change];\n"
-      "50: fifty[ and change];\n"
-      "60: sixty[ and change];\n"
-      "70: seventy[ and change];\n"
-      "80: eighty[ and change];\n"
-      "90: ninety[ and change];\n"
-      "100: =#,##0=;\n"
-      "%bogus:\n"
-      "0.x: tiny;\n"
-      "x.x: << point something;\n"
-      "=%standard=;\n"
-      "20: some reasonable number;\n"
-      "100: some substantial number;\n"
-      "100,000,000: some huge number;\n";
+        "%standard:\n"
+        "-x: minus >>;\n"
+        "x.x: << point >>;\n"
+        "zero; one; two; three; four; five; six; seven; eight; nine;\n"
+        "ten; eleven; twelve; thirteen; fourteen; fifteen; sixteen;\n"
+        "seventeen; eighteen; nineteen;\n"
+        "20: twenty[->>];\n"
+        "30: thirty[->>];\n"
+        "40: forty[->>];\n"
+        "50: fifty[->>];\n"
+        "60: sixty[->>];\n"
+        "70: seventy[->>];\n"
+        "80: eighty[->>];\n"
+        "90: ninety[->>];\n"
+        "100: =#,##0=;\n"
+        "%simple:\n"
+        "=%standard=;\n"
+        "20: twenty[ and change];\n"
+        "30: thirty[ and change];\n"
+        "40: forty[ and change];\n"
+        "50: fifty[ and change];\n"
+        "60: sixty[ and change];\n"
+        "70: seventy[ and change];\n"
+        "80: eighty[ and change];\n"
+        "90: ninety[ and change];\n"
+        "100: =#,##0=;\n"
+        "%bogus:\n"
+        "0.x: tiny;\n"
+        "x.x: << point something;\n"
+        "=%standard=;\n"
+        "20: some reasonable number;\n"
+        "100: some substantial number;\n"
+        "100,000,000: some huge number;\n";
     u_uastrcpy(temp, pat);
     formats[4] = unum_open(UNUM_PATTERN_RULEBASED, temp, -1, "en_US", &perr, &status);
     if (U_FAILURE(status)) {
-      log_err("unable to open rulebased pattern");
+        log_err("unable to open rulebased pattern");
     }
 
     for (i = 0; i < COUNT; ++i) {
-      log_verbose("\n\ntesting format %d\n", i);
-      test_fmt(formats[i], i == 0);
+        log_verbose("\n\ntesting format %d\n", i);
+        test_fmt(formats[i], (UBool)(i == 0));
     }
 
     for (i = 0; i < COUNT; ++i) {
-      unum_close(formats[i]);
+        unum_close(formats[i]);
     }
 }
 
