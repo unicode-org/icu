@@ -2627,7 +2627,21 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * @see #getUnicodeNumericValue
      */
     public static final double NO_NUMERIC_VALUE = -123456789;
-    
+
+    /**
+     * Compatibility constant for Java Character's MIN_RADIX.
+     * @draft ICU 3.4
+     * @deprecated This is a draft API and might change in a future release of ICU.
+     */
+    public static final int MIN_RADIX = java.lang.Character.MIN_RADIX;
+
+    /**
+     * Compatibility constant for Java Character's MAX_RADIX.
+     * @draft ICU 3.4
+     * @deprecated This is a draft API and might change in a future release of ICU.
+     */
+    public static final int MAX_RADIX = java.lang.Character.MAX_RADIX;
+
     // public methods ----------------------------------------------------
       
     /**
@@ -2854,6 +2868,20 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
     }
   
     /**
+     * Compatibility override of Java deprecated method.  This
+     * method will always remain deprecated.  Delegates to
+     * java.lang.Character.isSpace.
+     * @param cp the code point
+     * @return true if the code point is a space character as
+     * defined by java.lang.Character.isSpace.
+     * @draft ICU 3.4
+     * @deprecated
+     */
+    public static boolean isSpace(int ch) {
+	return java.lang.Character.isSpace((char)(ch & 0xffff));
+    }
+
+    /**
      * Returns a value indicating a code point's Unicode category.
      * Up-to-date Unicode implementation of java.lang.Character.getType() 
      * except for the above mentioned code points that had their category 
@@ -2958,7 +2986,59 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
            | (1 << UCharacterCategory.OTHER_LETTER)
            | (1 << UCharacterCategory.DECIMAL_DIGIT_NUMBER))) != 0;
     }
-        
+     
+    /**
+     * Compatibility override of Java deprecated method.  This
+     * method will always remain deprecated.  Delegates to
+     * java.lang.Character.isJavaIdentifierStart.
+     * @param cp the code point
+     * @return true if the code point can start a java identifier.
+     * @draft ICU 3.4
+     * @deprecated
+     */
+    public static boolean isJavaLetter(int cp) {
+	return isJavaIdentifierStart(cp);
+    }
+
+    /**
+     * Compatibility override of Java deprecated method.  This
+     * method will always remain deprecated.  Delegates to
+     * java.lang.Character.isJavaIdentifierPart.
+     * @param cp the code point
+     * @return true if the code point can continue a java identifier.
+     * @draft ICU 3.4
+     * @deprecated
+     */
+    public static boolean isJavaLetterOrDigit(int cp) {
+	return isJavaLetterOrDigit(cp);
+    }
+
+    /**
+     * Compatibility override of Java method, delegates to
+     * java.lang.Character.isJavaIdentifierStart.
+     * @param cp the code point
+     * @return true if the code point can start a java identifier.
+     * @draft ICU 3.4
+     * @deprecated This is a draft API and might change in a future release of ICU.
+     */
+    public static boolean isJavaIdentifierStart(int cp) {
+	// note, downcast to char for jdk 1.4 compatibility
+	return java.lang.Character.isJavaIdentifierStart((char)cp);
+    }
+
+    /**
+     * Compatibility override of Java method, delegates to
+     * java.lang.Character.isJavaIdentifierPart.
+     * @param cp the code point
+     * @return true if the code point can continue a java identifier.
+     * @draft ICU 3.4
+     * @deprecated This is a draft API and might change in a future release of ICU.
+     */
+    public static boolean isJavaIdentifierPart(int cp) {
+	// note, downcast to char for jdk 1.4 compatibility
+	return java.lang.Character.isJavaIdentifierPart((char)cp);
+    }
+
     /**
      * Determines if the specified code point is a lowercase character.
      * UnicodeData only contains case mappings for code points where they are 

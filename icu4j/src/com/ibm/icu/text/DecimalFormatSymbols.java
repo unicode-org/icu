@@ -322,6 +322,40 @@ final public class DecimalFormatSymbols implements Cloneable, Serializable {
     }
 
     /**
+     * Returns the currency symbol, for JDK 1.4 compatibility only.
+     * ICU clients should use the Currency API directly.
+     * @return the currency used, or null
+     * @draft ICU 3.4
+     */
+    public Currency getCurrency() {
+        return currency;
+    }
+    
+    /**
+     * ICU does not use the DecimalFormatSymbols for the 
+     * currency any more.  This API is present
+     * for API compatibility only.
+     *
+     * This also sets the currency symbol attribute to the currency's symbol
+     * in the DecimalFormatSymbols' locale, and the international currency
+     * symbol attribute to the currency's ISO 4217 currency code.
+     *
+     * @param currency the new currency to be used
+     * @throws NullPointerException if <code>currency</code> is null
+     * @draft ICU 3.4
+     * @see #setCurrencySymbol
+     * @see #setInternationalCurrencySymbol
+     */
+    public void setCurrency(Currency currency) {
+        if (currency == null) {
+            throw new NullPointerException();
+        }
+        this.currency = currency;
+        intlCurrencySymbol = currency.getCurrencyCode();
+        currencySymbol = currency.getSymbol(locale);
+    }
+    
+    /**
      * Return the monetary decimal separator.
      * @return the monetary decimal separator character
      * @stable ICU 2.0
@@ -564,11 +598,11 @@ final public class DecimalFormatSymbols implements Cloneable, Serializable {
         // for backward compatibility; we don't use DecimalFormatSymbols
         // for currency data anymore.
         String currname = null;
-        Currency curr = Currency.getInstance(locale);
-        if (curr != null) {
-            intlCurrencySymbol = curr.getCurrencyCode();
+        currency = Currency.getInstance(locale);
+        if (currency != null) {
+            intlCurrencySymbol = currency.getCurrencyCode();
             boolean[] isChoiceFormat = new boolean[1];
-            currname = curr.getName(locale,
+            currname = currency.getName(locale,
                                     Currency.SYMBOL_NAME,
                                     isChoiceFormat);
             // If this is a ChoiceFormat currency, then format an
@@ -632,6 +666,9 @@ final public class DecimalFormatSymbols implements Cloneable, Serializable {
             ulocale = ULocale.forLocale(locale);
         }
         serialVersionOnStream = currentSerialVersion;
+
+	// recreate
+	currency = Currency.getInstance(intlCurrencySymbol);
     }
 
     /**
@@ -904,6 +941,9 @@ final public class DecimalFormatSymbols implements Cloneable, Serializable {
      * @internal
      */
     private ULocale actualLocale;
+
+    // not serialized, reconstructed from intlCurrencyCode
+    private transient Currency currency;
 
     // -------- END ULocale boilerplate --------
 }
