@@ -412,6 +412,7 @@ public class UnicodeSet extends UnicodeFilter {
      * @exception java.lang.IllegalArgumentException if the pattern
      * contains a syntax error.
      * @draft ICU 3.2
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public UnicodeSet(String pattern, ParsePosition pos, SymbolTable symbols, int options) {
         this();

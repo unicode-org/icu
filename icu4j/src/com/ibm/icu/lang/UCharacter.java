@@ -4481,7 +4481,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * @param nameChoice
      * @return value as string
      * @internal
-     * @deprecated
+     * @deprecated This API is ICU internal only.
      */
     public static String getStringPropertyValue(int propertyEnum, int codepoint, int nameChoice) {
         // TODO some of these are less efficient, since a string is forced!
