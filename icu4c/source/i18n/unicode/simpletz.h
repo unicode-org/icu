@@ -262,7 +262,8 @@ public:
      * setStartRule(TimeFields.APRIL, 1, TimeFields.SUNDAY, 2*60*60*1000);
      * The dayOfWeekInMonth and dayOfWeek parameters together specify how to calculate
      * the exact starting date.  Their exact meaning depend on their respective signs,
-     * allowing various types of rules to be constructed, as follows:<ul>
+     * allowing various types of rules to be constructed, as follows:
+     * <ul>
      *   <li>If both dayOfWeekInMonth and dayOfWeek are positive, they specify the
      *       day of week in the month (e.g., (2, WEDNESDAY) is the second Wednesday
      *       of the month).</li>
@@ -284,7 +285,7 @@ public:
      *       last specified day of the week on or before the specified day of the month.
      *       (e.g., (-20, -TUESDAY) is the last Tuesday before the 20th of the month
      *       [or the 20th itself if the 20th is a Tuesday].)</li>
-     *   </ul>
+     * </ul>
      * @param month the daylight savings starting month. Month is 0-based.
      * eg, 0 for January.
      * @param dayOfWeekInMonth the daylight savings starting
@@ -305,7 +306,8 @@ public:
      * setStartRule(TimeFields.APRIL, 1, TimeFields.SUNDAY, 2*60*60*1000);
      * The dayOfWeekInMonth and dayOfWeek parameters together specify how to calculate
      * the exact starting date.  Their exact meaning depend on their respective signs,
-     * allowing various types of rules to be constructed, as follows:<ul>
+     * allowing various types of rules to be constructed, as follows:
+     * <ul>
      *   <li>If both dayOfWeekInMonth and dayOfWeek are positive, they specify the
      *       day of week in the month (e.g., (2, WEDNESDAY) is the second Wednesday
      *       of the month).</li>
@@ -327,7 +329,7 @@ public:
      *       last specified day of the week on or before the specified day of the month.
      *       (e.g., (-20, -TUESDAY) is the last Tuesday before the 20th of the month
      *       [or the 20th itself if the 20th is a Tuesday].)</li>
-     *   </ul>
+     * </ul>
      * @param month the daylight savings starting month. Month is 0-based.
      * eg, 0 for January.
      * @param dayOfWeekInMonth the daylight savings starting
