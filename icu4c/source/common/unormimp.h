@@ -19,12 +19,16 @@
 
 #include "unicode/utypes.h"
 #include "unicode/unorm.h"
+#ifdef XP_CPLUSPLUS
+#   include "unicode/chariter.h"
+#endif
 #include "ustr_imp.h"
 
 /* trie constants */
 enum {
-    /*
-     * must be <=10:
+    /**
+     * Normalization trie table shift value.
+     * This value must be <=10:
      * above 10, a lead surrogate's block is smaller than a stage 2 block
      */
     _NORM_TRIE_SHIFT=5,
@@ -172,7 +176,7 @@ unorm_compose(UChar *dest, int32_t destCapacity,
               UErrorCode *pErrorCode);
 
 /**
- * internal API, used by collation code
+ * Internal API, used by collation code.
  * Get access to the internal FCD trie table to be able to perform
  * incremental, per-code unit, FCD checks in collation.
  * One pointer is sufficient because the trie index values are offset
@@ -185,7 +189,7 @@ unorm_getFCDTrie(UErrorCode *pErrorCode);
 #ifdef XP_CPLUSPLUS
 
 /**
- * internal API, used by collation code
+ * Internal API, used by collation code.
  * Get the FCD value for a code unit, with
  * bits 15..8   lead combining class
  * bits  7..0   trail combining class
@@ -209,7 +213,7 @@ unorm_getFCD16(const uint16_t *fcdTrieIndex, UChar c) {
 }
 
 /**
- * internal API, used by collation code
+ * Internal API, used by collation code.
  * Get the FCD value for a supplementary code point, with
  * bits 15..8   lead combining class
  * bits  7..0   trail combining class
@@ -233,6 +237,70 @@ unorm_getFCD16FromSurrogatePair(const uint16_t *fcdTrieIndex, uint16_t fcd16, UC
             (c&_NORM_STAGE_2_MASK)
         ];
 }
+
+/**
+ * Internal API for iterative normalizing - see Normalizer.
+ * @internal
+ */
+U_CFUNC int32_t
+unorm_nextDecompose(UChar *dest, int32_t destCapacity,
+                    CharacterIterator &src,
+                    UBool compat, UBool ignoreHangul,
+                    UGrowBuffer *growBuffer, void *context,
+                    UErrorCode *pErrorCode);
+
+/**
+ * Internal API for iterative normalizing - see Normalizer.
+ * @internal
+ */
+U_CFUNC int32_t
+unorm_prevDecompose(UChar *dest, int32_t destCapacity,
+                    CharacterIterator &src,
+                    UBool compat, UBool ignoreHangul,
+                    UGrowBuffer *growBuffer, void *context,
+                    UErrorCode *pErrorCode);
+
+/**
+ * Internal API for iterative normalizing - see Normalizer.
+ * @internal
+ */
+U_CFUNC int32_t
+unorm_nextFCD(UChar *dest, int32_t destCapacity,
+              CharacterIterator &src,
+              UGrowBuffer *growBuffer, void *context,
+              UErrorCode *pErrorCode);
+
+/**
+ * Internal API for iterative normalizing - see Normalizer.
+ * @internal
+ */
+U_CFUNC int32_t
+unorm_prevFCD(UChar *dest, int32_t destCapacity,
+              CharacterIterator &src,
+              UGrowBuffer *growBuffer, void *context,
+              UErrorCode *pErrorCode);
+
+/**
+ * Internal API for iterative normalizing - see Normalizer.
+ * @internal
+ */
+U_CFUNC int32_t
+unorm_nextCompose(UChar *dest, int32_t destCapacity,
+                  CharacterIterator &src,
+                  UBool compat, UBool ignoreHangul,
+                  UGrowBuffer *growBuffer, void *context,
+                  UErrorCode *pErrorCode);
+
+/**
+ * Internal API for iterative normalizing - see Normalizer.
+ * @internal
+ */
+U_CFUNC int32_t
+unorm_prevCompose(UChar *dest, int32_t destCapacity,
+                  CharacterIterator &src,
+                  UBool compat, UBool ignoreHangul,
+                  UGrowBuffer *growBuffer, void *context,
+                  UErrorCode *pErrorCode);
 
 #endif
 
