@@ -23,6 +23,7 @@
 #include "unicode/utypes.h"
 
 #include "filestrm.h"
+#include "umemstrm.h"
 
 /* INTERNAL CONSTANTS */
 #define UCMP32_kBlockShift  7
@@ -75,7 +76,7 @@
  * @see                CompactIntArray
  * @see                CompactCharArray
  * @see                CompactStringArray
- * @version            $Revision: 1.9 $ 8/25/98
+ * @version            $Revision: 1.10 $ 8/25/98
  * @author             Helena Shih
  */
 /*====================================*/
@@ -197,6 +198,9 @@ U_CAPI  const uint16_t* U_EXPORT2 ucmp32_getIndex(const CompactIntArray* array);
 
 U_CAPI void U_EXPORT2 ucmp32_streamIn( CompactIntArray* array, FileStream* is);
 U_CAPI void U_EXPORT2 ucmp32_streamOut(CompactIntArray* array, FileStream* os);
+
+U_CAPI void U_EXPORT2 ucmp32_streamMemIn( CompactIntArray* array, UMemoryStream* is);
+U_CAPI void U_EXPORT2 ucmp32_streamMemOut(CompactIntArray* array, UMemoryStream* os);
 
 
 #endif
