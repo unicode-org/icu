@@ -2207,6 +2207,9 @@ public:
    * The standard titlecase iterator for the root locale implements the
    * algorithm of Unicode TR 21.
    *
+   * This function uses only the first() and next() methods of the
+   * provided break iterator.
+   *
    * @param titleIter A break iterator to find the first characters of words
    *                  that are to be titlecased.
    *                  If none is provided (0), then a standard titlecase
@@ -2230,6 +2233,9 @@ public:
    * opening and closing one for each string.
    * The standard titlecase iterator for the root locale implements the
    * algorithm of Unicode TR 21.
+   *
+   * This function uses only the first() and next() methods of the
+   * provided break iterator.
    *
    * @param titleIter A break iterator to find the first characters of words
    *                  that are to be titlecased.
