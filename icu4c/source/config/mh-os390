@@ -26,12 +26,12 @@ else
 ICU_IEEE          = 
 endif
 
-CFLAGS390=      -Wc,"langlvl(extended),spill(2000)"  $(ICU_IEEE) -Wc,dll,expo
+CFLAGS390=      -Wc,"langlvl(extended),spill(2000)" $(ICU_BUILD_OPTIONS)  $(ICU_IEEE) -Wc,dll,expo
 ## OS390BATCH
 ifeq (${OS390BATCH},1)
-DEFS390=        -D_OPEN_THREADS -D_XOPEN_SOURCE_EXTENDED -DOS390BATCH -D_SHARE_EXT_VARS
+DEFS390=        -D_OPEN_THREADS -D_XOPEN_SOURCE_EXTENDED -DOS390BATCH -D_SHR_TZNAME -D_SHR_TIMEZONE
 else
-DEFS390=        -D_OPEN_THREADS -D_XOPEN_SOURCE_EXTENDED -D_SHARE_EXT_VARS
+DEFS390=        -D_OPEN_THREADS -D_XOPEN_SOURCE_EXTENDED -D_SHR_TZNAME -D_SHR_TIMEZONE
 endif
 ARFLAGS=        -cr
 
@@ -76,9 +76,6 @@ LIBICU-TOOLUTIL=$(top_builddir)/tools/toolutil/libicu-toolutil.x
 
 %.o :$(srcdir)/%.cpp
 	$(COMPILE.cc) -o $@ $<
-
-../data/%.o : ../data/%.c
-	$(COMPILE.c) -o $@ $<
 
 ## Dependency rules
 %.d : %.u

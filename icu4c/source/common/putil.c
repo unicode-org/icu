@@ -1002,10 +1002,6 @@ u_getDataDirectory(void) {
 /* 		puts(__environ[i]); */
 /* 	    } */
 #       endif
-#ifdef OS390BATCH
-  path = "DD:ICUDATA";
-#endif
-
 #       ifdef WIN32
             /* next, try to read the path from the registry */
             if(path==NULL || *path==0) {
@@ -1365,7 +1361,7 @@ const char* uprv_getDefaultCodepage()
 #if defined(OS400)
   return "ibm-37";
 #elif defined(OS390)
-  return "ibm-1047";
+  return "ibm-37-s390";
 #elif defined(XP_MAC)
   /* TBD */
 #elif defined(WIN32)
