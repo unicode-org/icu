@@ -70,25 +70,7 @@ typedef uint8_t le_uint8;
  *
  * @stable ICU 2.4
  */
-typedef UBool le_bool;
-
-#ifndef true
-/**
- * Used for <code>le_bool</code> values which are <code>true</code>.
- *
- * @stable ICU 2.4
- */
-#define true 1
-#endif
-
-#ifndef false
-/**
- * Used for <code>le_bool</code> values which are <code>false</code>.
- *
- * @stable ICU 2.4
- */
-#define false 0
-#endif
+typedef bool le_bool;
 
 #ifndef NULL
 /**
