@@ -256,6 +256,7 @@ CollationKey::compareTo(const CollationKey& target) const
 UCollationResult
 CollationKey::compareTo(const CollationKey& target, UErrorCode &status) const
 {
+  if(U_SUCCESS(status)) {
     uint8_t *src = this->fBytes;
     uint8_t *tgt = target.fBytes;
 
@@ -294,6 +295,9 @@ CollationKey::compareTo(const CollationKey& target, UErrorCode &status) const
     }
 
     return result;
+  } else {
+    return UCOL_EQUAL;
+  }
 }
 
 CollationKey&

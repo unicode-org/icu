@@ -348,7 +348,11 @@ UCollationResult RuleBasedCollator::compare(const UChar* source,
                                                        int32_t targetLength, 
                                                        UErrorCode &status) const
 {
-  return  ucol_strcoll(ucollator, source, sourceLength, target, targetLength);
+  if(U_SUCCESS(status)) {
+    return  ucol_strcoll(ucollator, source, sourceLength, target, targetLength);
+  } else {
+    return UCOL_EQUAL;
+  }
 }
 
 /**
@@ -367,8 +371,12 @@ UCollationResult RuleBasedCollator::compare(
                                              const UnicodeString& target, 
                                              UErrorCode &status) const
 {
-  return ucol_strcoll(ucollator, source.getBuffer(), source.length(), 
-                                 target.getBuffer(), target.length());
+  if(U_SUCCESS(status)) {
+    return ucol_strcoll(ucollator, source.getBuffer(), source.length(), 
+			target.getBuffer(), target.length());
+  } else {
+    return UCOL_EQUAL;
+  }
 }
 
 /**
