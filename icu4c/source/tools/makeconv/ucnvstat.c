@@ -17,36 +17,40 @@
 
 
 static const UConverterStaticData _SBCSStaticData={
-  sizeof(UConverterStaticData),
-  "SBCS",
+    sizeof(UConverterStaticData),
+    "SBCS",
     0, UCNV_IBM, UCNV_SBCS, 1, 1,
     { 0, 0, 0, 0 }, 1, FALSE, FALSE,
-  { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 } /* reserved bytes */
+    0,
+    { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 } /* reserved */
 };
 
 
 static const UConverterStaticData _DBCSStaticData={
-  sizeof(UConverterStaticData),
-  "DBCS",
+    sizeof(UConverterStaticData),
+    "DBCS",
     0, UCNV_IBM, UCNV_DBCS, 2, 2,
     { 0, 0, 0, 0 },1, FALSE, FALSE, /* subchar */
-  { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 } /* reserved bytes */
+    0,
+    { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 } /* reserved */
 };
 
 static const UConverterStaticData _MBCSStaticData={
-  sizeof(UConverterStaticData),
-  "MBCS",
+    sizeof(UConverterStaticData),
+    "MBCS",
     0, UCNV_IBM, UCNV_MBCS, 1, 1,
     { 0, 0, 0, 0 }, 1, FALSE, FALSE,
-  { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 } /* reserved bytes */
+    0,
+    { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 } /* reserved */
 };
 
 static const UConverterStaticData _EBCDICStatefulStaticData={
-  sizeof(UConverterStaticData),
- "EBCDICStateful",
+    sizeof(UConverterStaticData),
+    "EBCDICStateful",
     0, UCNV_IBM, UCNV_EBCDIC_STATEFUL, 1, 1,
-  { 0, 0, 0, 0 },1, FALSE, FALSE,
-  { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 } /* reserved bytes */
+    { 0, 0, 0, 0 },1, FALSE, FALSE,
+    0,
+    { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 } /* reserved */
 };
 
 /* NULLs for algorithmic types, their tables live in ucnv_bld.c */
