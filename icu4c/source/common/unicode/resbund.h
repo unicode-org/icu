@@ -184,6 +184,9 @@ public:
     /**
      * Returns the size of a resource. Size for scalar types is always 1, and for vector/table types is
      * the number of child resources.
+     * @warning Integer array is treated as a scalar type. There are no 
+     *          APIs to access individual members of an integer array. It
+     *          is always returned as a whole.
      *
      * @return number of resources in a given resource.
      * @stable ICU 2.0
@@ -400,7 +403,7 @@ public:
      * @return  A version number string as specified in the resource bundle or its parent.
      *          The caller does not own this string.
      * @see getVersion
-     * @stable ICU 2.0
+     * @deprecated ICU 2.8 Use getVersion instead.
      */
     const char*   
       getVersionNumber(void) const;
@@ -419,10 +422,23 @@ public:
      * Return the Locale associated with this ResourceBundle. 
      *
      * @return a Locale object
-     * @stable ICU 2.0
+     * @deprecated ICU 2.8 Use getLocale(ULocDataLocaleType type, UErrorCode &status) overload instead.
      */
     const Locale&
       getLocale(void) const;
+
+    /**
+     * Return the Locale associated with this ResourceBundle. 
+     * @param type You can choose between requested, valid and actual
+     *             locale. For description see the definition of
+     *             ULocDataLocaleType in uloc.h
+     * @param status just for catching illegal arguments
+     *
+     * @return a Locale object
+     * @draft ICU 2.8
+     */
+    const Locale 
+      getLocale(ULocDataLocaleType type, UErrorCode &status) const;
 
     /**
      * ICU "poor man's RTTI", returns a UClassID for the actual class.
