@@ -3,7 +3,7 @@
 ## Copyright (c) 1999-2000, International Business Machines Corporation and
 ## others. All Rights Reserved.
 ##
-## $Id: mh-aix-va,v 1.14 2001/11/01 22:45:17 grhoten-oss Exp $
+## $Id: mh-aix-va,v 1.15 2001/11/02 01:18:43 grhoten-oss Exp $
 
 ## Commands to generate dependency files
 GEN_DEPS.c=	$(CC) -E -M $(DEFS) $(CPPFLAGS)
@@ -23,8 +23,8 @@ LINK.cc=	$(CXX) -brtl $(DEFS) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS)
 ## -G means -berok -brtl -bnortllib -bnosymbolic -bnoautoexp
 ## -bh:8 means halt on errors or worse.  We don't display warnings about
 ##      duplicate inline symbols.
-SHLIB.c=	xlC_r -qmkshrobj -G -bh:8
-SHLIB.cc=	xlC_r -qmkshrobj -G -bh:8
+SHLIB.c=	xlC_r -qmkshrobj -G -bh:5
+SHLIB.cc=	xlC_r -qmkshrobj -G -bh:5
 
 ## Compiler switch to embed a runtime search path
 LD_RPATH=	-I
