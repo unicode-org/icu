@@ -79,15 +79,13 @@ u_strncat(UChar     *dst,
 }
 
 UChar*
-u_strchr(const UChar     *s, 
-    UChar     c) 
+u_strchr(const UChar *s, UChar c) 
 {
-  while(*s != 0) {
-    if(*s == c) {
-      return (UChar *)s;
-    }
+  while (*s && *s != c) {
     ++s;
   }
+  if (*s == c)
+    return (UChar *)s;
   return NULL;
 }
 

@@ -695,17 +695,26 @@ void TestStringFunctions()
     
     for(i=2,j=0;j<4;j++)
     {
-        
-        log_verbose("%s ", austrdup(u_strchr(dataTable[i][j],'_')));
+        UChar *findPtr = u_strchr(dataTable[i][j],'_');
+        log_verbose("%s ", austrdup(findPtr));
+
+        if (findPtr == NULL || *findPtr != '_') {
+            log_err("strchr can't find '_' in the string\n");
+        }
+
+        findPtr = u_strchr(dataTable[i][j], 0);
+        if (findPtr != (&(dataTable[i][j][u_strlen(dataTable[i][j])]))) {
+            log_err("strchr can't find NULL in the string\n");
+        }
     }
 
-    
+
     log_verbose("Testing u_austrcpy()");
     u_austrcpy(test,dataTable[0][0]);
     if(strcmp(test,raw[0][0])!=0)
         log_err("There is an error in u_austrcpy()");
 
-   
+
     log_verbose("Testing u_uastrncpy() and u_uastrcpy()");
     {
     UChar *result=0;
@@ -715,7 +724,7 @@ void TestStringFunctions()
     if(u_strcmp(temp, uchars) != 0){
         log_err("There is an error in u_uastrcpy() Expected %s Got %s\n", austrdup(uchars), austrdup(temp));
     }
-    
+
     temp[0] = 0xFB; /* load garbage into it */
     temp[1] = 0xFB;
     temp[2] = 0xFB;
