@@ -473,9 +473,11 @@ le_bool GlyphIterator::hasFeatureTag() const
 	LEErrorCode success = LE_NO_ERROR;
     const LETag *tagList = (const LETag *) glyphStorage.getAuxData(position, success);
 
-    for (le_int32 tag = 0; tagList[tag] != emptyTag; tag += 1) {
-        if (tagList[tag] == featureTag) {
-            return TRUE;
+    if (tagList != NULL) {
+        for (le_int32 tag = 0; tagList[tag] != emptyTag; tag += 1) {
+            if (tagList[tag] == featureTag) {
+                return TRUE;
+            }
         }
     }
 
