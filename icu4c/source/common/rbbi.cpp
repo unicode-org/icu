@@ -730,8 +730,10 @@ int32_t RuleBasedBreakIterator::handleNext(const RBBIStateTable *statetable) {
                 lookaheadStatus = 0;
             } else if (result == initialPosition) {
                 // Ran off end, no match found.
-                // Treat as a break at the end of the input string.
-                result = fText->endIndex();
+                // move forward one
+                fText->setIndex(initialPosition);
+                fText->next32();
+                fText->getIndex();
             }
             break;
         }

@@ -44,6 +44,7 @@ $SA = [:LineBreak =  Complex_Context:];
 $SG = [:LineBreak =  Surrogate:];
 $SP = [:LineBreak =  Space:];
 $SY = [:LineBreak =  Break_Symbols:];
+$WJ = [:LineBreak =  Word_Joiner:];
 $XX = [:LineBreak =  Unknown:];
 $ZW = [:LineBreak =  ZWSpace:];
 
@@ -59,7 +60,6 @@ $LV  = [:Hangul_Syllable_Type = LV:];
 $LVT = [:Hangul_Syllable_Type = LVT:];
 
 $HangulSyllable = $L+ | ($L* ($LV? $V+ | $LV | $LVT) $T*) | $T+;
-
 
 #
 #  Rule LB1.  By default, treat AI  (characters with ambiguous east Asian width),
@@ -91,6 +91,7 @@ $PRcm = $PR $CM*;
 $QUcm = $QU $CM*;
 $SPcm = $SP $CM*;
 $SYcm = $SY $CM*;
+$WJcm = $WJ $CM*;
 
 #
 #  Each class of character can stand by itself as an unbroken token, with trailing combining stuff
@@ -114,6 +115,7 @@ $PR $CM+;
 $QU $CM+;
 $SP $CM+;
 $SY $CM+;
+$WJ $CM+;
 
 ## -------------------------------------------------
 
@@ -131,11 +133,18 @@ $CR $LF {100};
 
 # LB 4         x SP
 #              x ZW
-$LB3NonBreaks      [$SP $ZW];
+$ZW [$SP $ZW];
 $LB5NonBreaks $CM* [$SP $ZW];
 
 # LB 5         Break after zero width space
 $LB5Breaks = [$LB3Breaks $ZW];
+
+# LB 6
+#
+# Korean Syllable Definitions
+#
+
+($HangulSyllable) $CM*;
 
 # LB 7     Combining marks.  TODO:  get it right!
 #                                   $SP $CM needs to behave like $ID.
@@ -163,10 +172,8 @@ $CLcm $SP* $NScm;
 ($B2cm)+;
 
 # LB 11b
-$LB5NonBreaks $CM* $GLcm .?;
-$LB5NonBreaks $CM* $GLcm $LB5NonBreaks $CM*;
-$GLcm $LB3NonBreaks?;
-$GLcm $LB5NonBreaks $CM*;
+$LB5NonBreaks $CM* ($GLcm | $WJcm);
+($GLcm | $WJcm) .?;
 
 # LB 12
 $LB12NonBreaks = [$LB5NonBreaks - $SP];
@@ -184,14 +191,12 @@ $QUcm $LB5NonBreaks $CM*;    # Don't let a combining mark go onto $CR, $BK, etc.
 $LB14NonBreaks = [$LB12NonBreaks - $CB];
 $LB14CanBreakAfter = $LB14NonBreaks $CM* | $SP $CM+;
 
-
 # LB 15
 $LB14CanBreakAfter ($BAcm | $HYcm | $NScm);   
 $BBcm [^$CB];
 $BBcm [^$CB $CR $LF $BK $NL $ZW] $CM*;  
 
 # LB 16
-#($ALcm | $IDcm | $SP $CM+ | $INcm | $NUcm) $INcm;
 $ALcm    $INcm;
 $CM+     $INcm;     #  by rule 7c, any otherwise unattached CM behaves as AL
 $IDcm    $INcm;
@@ -206,11 +211,8 @@ $ALcm+ $NUcm;       # includes $LB19
 $CM+   $NUcm;       # Rule 7c
 $NUcm $ALcm+;
 
-
-
 # LB 18
 $PRcm? ($OPcm | $HYcm)? $NUcm ($NUcm | $IScm)* $CLcm? $POcm?;
-#$PRcm? ($OPcm | $HYcm)? $NUcm ($NUcm | $IScm)* $CLcm?;
 
 # LB 19
 $CM* $ALcm+;    # The $CM* is from rule 7C, and unattached CM is treated as AL
@@ -225,7 +227,6 @@ $CM* $ALcm+;    # The $CM* is from rule 7C, and unattached CM is treated as AL
 ## -------------------------------------------------
 
 !!reverse;
-
 
 $CM+ $ALPlus;
 $CM+ $BA;
@@ -246,6 +247,7 @@ $CM+ $PR;
 $CM+ $QU;
 $CM+ $SP;
 $CM+ $SY;
+$CM+ $WJ;
 
 # LB 3
 
@@ -261,6 +263,9 @@ $LF $CR;
 # LB 5 Break after zero width space
 
 # LB 6 Jamo is treated like an alphabet
+
+$BackHangulSyllable = $L+ | ($T* ($V+$LV? | $LV | $LVT) $L*) | $T+;
+$CM* $BackHangulSyllable;
 
 # LB 7 Combining marks. 
 #    $SP $CM needs to behave like $ID.
@@ -288,9 +293,9 @@ $CM* $NS $SP* $CM* $CL;
 ($CM* $B2)+;
 
 # LB 11b
-$CM* $GL $CM* $LB5NonBreaks;
-$CM* $LB5NonBreaks $CM* $GL;
-$LB3NonBreaks $CM* $GL;
+$CM* ($GL | $WJ) $CM* $LB5NonBreaks;
+$CM* $LB5NonBreaks $CM* ($GL | $WJ);
+. $CM* ($GL | $WJ);
 
 # LB 12
 
@@ -340,6 +345,9 @@ $CM* $ALPlus $CM+ / $LB5Breaks;
 
 !!safe_reverse;
 
+# LB 6
+$V+ $L;
+
 # LB 7
 $CM+ [^$CM $BK $CR $LF $NL $ZW $SP];
 $CM+ $SP / .;
@@ -354,12 +362,15 @@ $SP+ $CM* $QU;
 $SP+ $CM* $CL;
 
 # LB 18
-$IS+ $CM* $NU;
+($CM* $IS)+ $CM* $NU;
 $CL $CM* ($NU | $IS);
 
 ## -------------------------------------------------
 
 !!safe_forward;
+
+# LB 6
+$V+ $T;
 
 # LB 7
 [^$BK $CR $LF $NL $ZW $SP] $CM+;
