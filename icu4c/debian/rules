@@ -99,7 +99,6 @@ clean:
 	-$(RM) `find $(builddir) -name Makefile -print`
 	dh_clean
 	$(RM) $(addprefix debian/,$(DEBIAN_FILES))
-	$(RM) debian/*docs
 
 	if test -d $(builddir) -a $(builddir) != $(srcdir); then rmdir `find $(builddir) -type d -print | sort -r`; fi
 
@@ -130,6 +129,7 @@ binary-arch: build install
 	    usr/lib/libicui18n.so.* \
 	    usr/lib/libicutoolutil.so.* \
 	    usr/lib/libustdio.so.*
+	mkdir debian/libicu$(major)/usr/lib/icu
 	#
 	# build icu package by moving files from icu-dev
 	#
@@ -186,7 +186,7 @@ binary-arch: build install
 	# continue to prepare packages
 	#
 #	dh_installdebconf
-	dh_installdocs docs
+	dh_installdocs
 	dh_installexamples $(srcdir)/samples/*
 	dh_installmenu
 #	dh_installemacsen
@@ -203,11 +203,10 @@ binary-arch: build install
 	dh_compress
 	dh_fixperms
 	# You may want to make some executables suid here.
-	dh_suidregister
 	dh_makeshlibs
 	dh_installdeb
 #	dh_perl
-	dh_shlibdeps && \
+	dh_shlibdeps -ldebian/libicu$(lib_version_major)/usr/lib && \
 	    sed 's/ libicu$(lib_version_major)[^,]*,//' debian/libicu$(major).substvars >debian/libicu$(major).substvars.new && mv debian/libicu$(major).substvars.new debian/libicu$(major).substvars
 	dh_gencontrol -- -Vversion=$(version) -Vmajor=$(major)
 	dh_md5sums
