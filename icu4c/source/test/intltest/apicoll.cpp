@@ -571,6 +571,10 @@ CollationAPITest::TestElemIter(/* char* par */)
     CollationElementIterator *iterator3 = ((RuleBasedCollator*)col)->createCollationElementIterator(testString2);
 
     UTextOffset offset = iterator1->getOffset();
+    if (offset != 0) {
+        errln("Error in getOffset for collation element iterator\n");
+        return;
+    }
     iterator1->setOffset(6, success);
     if (U_FAILURE(success)) {
         errln("Error in setOffset for collation element iterator\n");
