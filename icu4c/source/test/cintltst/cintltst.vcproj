@@ -181,9 +181,6 @@
 				RelativePath=".\ccolltst.h">
 			</File>
 			<File
-				RelativePath=".\cctest.c">
-			</File>
-			<File
 				RelativePath=".\ccurrtst.c">
 			</File>
 			<File
@@ -295,6 +292,9 @@
 			</File>
 			<File
 				RelativePath=".\cconvtst.c">
+			</File>
+			<File
+				RelativePath=".\cctest.c">
 			</File>
 			<File
 				RelativePath=".\eurocreg.c">
