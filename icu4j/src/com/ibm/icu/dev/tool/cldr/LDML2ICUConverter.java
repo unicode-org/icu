@@ -133,7 +133,7 @@ public class LDML2ICUConverter {
             System.exit(0);
         }
         if((writeDraft == false) && (specialsDir != null)) {
-            System.out.println("INFO: Reading alias table searching for draft overrides");
+           // System.out.println("INFO: Reading alias table searching for draft overrides");
             writeDeprecated(); // actually just reads the alias
         }
         if(options[SUPPLEMENTAL].doesOccur) {
@@ -195,23 +195,21 @@ public class LDML2ICUConverter {
                  * }
                  */ 
                 // TODO : uncomment 
-                System.out.println("INFO: Creating fully resolved LDML document for: " + sourceDir+File.separator+ args[i]);
+                System.out.println("INFO: Resolving: " + sourceDir+File.separator+ args[i]);
                 fullyResolvedDoc =  LDMLUtilities.getFullyResolvedLDML(sourceDir, args[i], false, false, false);
+                locName = args[i];
+                int index = locName.indexOf(".xml");
+                if(index > -1){
+                    locName = locName.substring(0,index);
+                }
+                if((writeDraft==false) && (overrideMap.containsKey(locName))) {
+                    System.out.println("INFO: Overriding draft status, and including: " + locName);
+                    writeDraft = true;
+                    // TODO: save/restore writeDraft
+                }
                 if(specialsDir!=null){
-                    locName = args[i];
-                    System.out.println("INFO: Parsing LDML document for: " + specialsDir+File.separator+ args[i]);
+                    System.out.println("INFO: Parsing: " + specialsDir+File.separator+ args[i]);
                     specialsDoc = LDMLUtilities.parseAndResolveAliases(args[i], specialsDir, true);
-                    if(specialsDoc != null) {
-                        int index = locName.indexOf(".xml");
-                        if(index > -1){
-                            locName = locName.substring(0,index);
-                        }
-                        if((writeDraft==false) && (overrideMap.containsKey(locName))) {
-                            System.out.println("INFO: Overriding draft status for " + locName);
-                            writeDraft = true;
-                            // TODO: save/restore writeDraft
-                        }
-                    }
                     /*
                     try{ 
                         OutputStreamWriter writer = new
@@ -225,7 +223,9 @@ public class LDML2ICUConverter {
                 }
                 createResourceBundle(xmlfileName);
                 long stop = System.currentTimeMillis();
-                System.out.println("Time taken: "+ (stop-start));
+                long total = (stop-start);
+                double s = total/1000.;
+                System.out.println("INFO: Elapsed time: " + s + "s");
             }
         }
     }
@@ -268,7 +268,7 @@ public class LDML2ICUConverter {
     private void createResourceBundle(String xmlfileName) {
          try {
 
-             System.out.println("INFO: Parsing LDML document for: "+xmlfileName);
+             System.out.println("INFO: Parsing "+xmlfileName);
              
              Document doc = LDMLUtilities.parse(xmlfileName, false);
              // Create the Resource linked list which will hold the
@@ -678,7 +678,7 @@ public class LDML2ICUConverter {
         // now fetch the specials and append to the real bundle
         if(specialsDir!=null && ULocale.getCountry(locName).equals("")){
             if(specialsDoc == null) {
-                System.err.println("INFO: writing ICU res bundle without specials, missing " + specialsDir + File.separator + locName + ".xml");
+                System.err.println("INFO: Writing ICU res bundle without specials, missing " + specialsDir + File.separator + locName + ".xml");
             } else {
                 if(table.comment == null) {
                     table.comment = "";
@@ -757,7 +757,10 @@ public class LDML2ICUConverter {
                 str.val = LDMLUtilities.getAttributeValue(node, LDMLConstants.NUMBER);
                 str.name = (String)keyNameMap.get(LDMLConstants.VERSION);
                 if(LDMLUtilities.isDraft(root,new StringBuffer("//ldml"))) { // x for experimental
-                    str.val = "x" + str.val;
+                    if(!overrideMap.containsKey(locName)) {
+                        str.val = "x" + str.val;
+                    }
+                    str.comment = "Draft";
                 }
                 res = str;
             }else if(name.equals(LDMLConstants.LANGUAGE)|| 
@@ -2533,7 +2536,7 @@ public class LDML2ICUConverter {
             String name = node.getNodeName();
             ICUResourceWriter.Resource res = null;
             if(name.equals(LDMLConstants.MESSAGES)){
-                res = parseMessages(node, xpath);
+                //res = parseMessages(node, xpath); // messages ignored (for now)
             }else if(name.equals(LDMLConstants.ALIAS)){
                 res = parseAliasResource(node, xpath);
             }else{
@@ -3301,7 +3304,7 @@ public class LDML2ICUConverter {
             
             FileOutputStream file = new FileOutputStream(outputFileName);
             BufferedOutputStream writer = new BufferedOutputStream(file);
-            System.out.println("INFO: writing ICU res bundle: "+outputFileName);
+            System.out.println("INFO: Writing ICU: "+outputFileName);
             //TODO: fix me
             writeHeader(writer,sourceFileName);
 
@@ -3411,7 +3414,7 @@ public class LDML2ICUConverter {
                     String aName = node.getNodeName();
                     if(aName.equals("overrideDraft")) {
                         String theLocale = LDMLUtilities.getAttributeValue(node, "locale");
-                        System.out.println("INFO: added override-draft locale " + theLocale);
+                        //System.out.println("INFO: added override-draft locale " + theLocale);
                         overrideMap.put(theLocale,theLocale); // TODO: waste.
                         continue;
                     } else if(!aName.equals("deprecates")) {
@@ -3451,7 +3454,7 @@ public class LDML2ICUConverter {
                         
                         int nrInFiles = inFiles.length;
                         if(writeDraft == false) {
-                            System.out.print("Parsing " + nrInFiles + " LDML locale files to check draft status: ");
+                            System.out.print("Parsing: " + nrInFiles + " LDML locale files to check draft status: ");
                         }
                         for(int i=0;i<nrInFiles;i++) {
                             boolean thisOK = true;
@@ -3469,18 +3472,20 @@ public class LDML2ICUConverter {
                                     System.exit(-1); // TODO: should be full 'parser error' stuff.
                                 }
                             }
+                            String localeName = inFiles[i].getName();
+                            localeName = localeName.substring(0,localeName.indexOf('.'));
                             // System.out.println("FN put " + inFiles[i].getName());
                             if(thisOK) {
-                                System.out.print(".");
+                                System.out.print("."); // regular file
                                 fromFiles.put(inFiles[i].getName(),inFiles[i]); // add to hash
                             } else {
-                                String localeName = inFiles[i].getName();
-                                localeName = localeName.substring(0,localeName.indexOf('.'));
                                 if(overrideMap.containsKey(localeName)) {
                                     fromFiles.put(inFiles[i].getName(),inFiles[i]); // add to hash
-                                    System.out.print("[o:"+localeName+"]");
+                                    System.out.print("o"); // override
+//                                    System.out.print("[o:"+localeName+"]");
                                 } else {
-                                    System.out.print("d");
+                                    System.out.print("d"); //draft
+//                                    System.out.print("[d:"+localeName+"]" );
                                 }
                             }
                         }
@@ -3702,7 +3707,7 @@ public class LDML2ICUConverter {
         
         String resfiles_mk_name = destDir + File.separator +  shortstub+"files.mk";
         try {
-            System.out.println("INFO: writing ICU build file: " + resfiles_mk_name);
+            System.out.println("INFO: Writing ICU build file: " + resfiles_mk_name);
             PrintStream resfiles_mk = new PrintStream(new  FileOutputStream(resfiles_mk_name) ); 
             resfiles_mk.println( "# *   Copyright (C) 1997-2004, International Business Machines" );
             resfiles_mk.println( "# *   Corporation and others.  All Rights Reserved." );
