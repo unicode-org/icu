@@ -205,7 +205,7 @@ public final class UScript {
         target = target.toUpperCase();
         while(left <= right){
             middle = (left+right)/2;
-            rc=sortedArr[middle].name.toUpperCase().compareTo(target);
+            rc=comparePropertyNames(sortedArr[middle].name,target);
             if(rc<0){
                 left = middle+1;
             }else if(rc >0){
@@ -368,6 +368,41 @@ public final class UScript {
             return scriptAbbr[index].name;
         }else{
             throw new IllegalArgumentException(Integer.toString(scriptCode));
+        }
+    }
+    private static int comparePropertyNames( String s1, String s2) {    
+	    int rc;
+	    char c1, c2;
+	    char[] name1 = s1.toCharArray();
+        char[] name2 = s2.toCharArray();
+        int i=0;
+        int j=0;
+        
+	    for(;;) {
+            if((i>=name1.length)||(j>=name2.length)) {
+                return (name1.length - name2.length);
+            }
+            // Ignore delimiters '-', '_', and ASCII White_Space 
+	        while((c1=name1[i])=='-' || c1=='_' ||
+	              c1==' ' || c1=='\t' || c1=='\n' || c1==0x0B || c1=='\f' || c1=='\r'
+	        ) {
+	            ++i;
+	        }
+	        while((c2=name2[j])=='-' || c2=='_' ||
+	              c2==' ' || c2=='\t' || c2=='\n' || c2==0x0B || c2=='\f' || c2=='\r'
+	        ) {
+	            ++j;
+	        }
+	        // Case-insensitive comparison
+	        if(c1!=c2) {
+	            rc=(int)(char)UCharacter.toLowerCase(c1)-(int)(char)UCharacter.toLowerCase(c2);
+	            if(rc!=0) {
+	                return rc;
+	            }
+	        }
+	
+	        ++i;
+	        ++j;
         }
     }
 }

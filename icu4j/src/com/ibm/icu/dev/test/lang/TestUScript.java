@@ -78,7 +78,7 @@ public class TestUScript extends TestFmwk{
 
         final String[] testNames={
             /* test locale */                
-            "en", "en_US", "sr", "ta" , "te_IN",                
+            "en", "en_US", "sr", "ta","  ___    ---ta" , "te_IN",                
             "hi", "he", "ar",
             /* test abbr */
             "Hani", "Hang","Hebr","Hira",
@@ -99,7 +99,7 @@ public class TestUScript extends TestFmwk{
         final int[] expected ={
             /* locales should return */
             UScript.LATIN, UScript.LATIN, 
-            UScript.CYRILLIC, UScript.TAMIL, 
+            UScript.CYRILLIC, UScript.TAMIL, UScript.TAMIL, 
             UScript.TELUGU,UScript.DEVANAGARI, 
             UScript.HEBREW, UScript.ARABIC,
             /* abbr should return */
