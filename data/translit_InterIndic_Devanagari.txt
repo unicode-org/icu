@@ -6,7 +6,7 @@
 // THIS IS A MACHINE-GENERATED FILE
 // Tool: dumpICUrules.bat
 // Source: ../../text/resources/Transliterator_InterIndic_Devanagari.txt
-// Date: Tue Nov 13 00:51:07 2001
+// Date: Tue Nov 20 21:43:01 2001
 //--------------------------------------------------------------------
 
 // InterIndic_Devanagari
@@ -49,7 +49,6 @@ translit_InterIndic_Devanagari {
  "0 > \u0966;"       // FALLBACK FOR TAMIL
  "1 > \u0967;"
 
- "\ue046\ue056 > \u0948;" // FALLBACK FOR TELUGU
  "\ue055>;" // FALLBACK BLOW AWAY KANNADA AND TELUGU LENGTH MARK
  "\ue056>;" // FALLBACK BLOW AWAY KANNADA AND TELUGU AI LENGTH MARK
  "\ue057>;" // FALLBACK BLOW AWAY TAMIL AU LENGTH MARK
@@ -58,10 +57,7 @@ translit_InterIndic_Devanagari {
  "\ue072>;" // FALLBACK BLOW AWAY GURMUKHI
  "\ue073>;" // FALLBACK BLOW AWAY GURMUKHI
  "\ue074>;" // FALLBACK BLOW AWAY GURMUKHI
- 
- //Decomposed compatibility transliterations
- "\ue032\ue03C > \u0933;" // FALLBACK FOR GURMUKHI
- "\ue038\ue03c > \u0936;" // FALLBACK FOR GURMUKHI
+
 
  "\ue001 >  \u0901;"  // SIGN CANDRABINDU
  "\ue002 >  \u0902;"  // SIGN ANUSVARA
@@ -144,10 +140,10 @@ translit_InterIndic_Devanagari {
  "\ue04c >  \u094c;"  // VOWEL SIGN AU
  "\ue04d >  \u094d;"  // SIGN VIRAMA
  "\ue050 >  \u0950;"  // OM
-//         \u0951  # UNMAPPED STRESS SIGN UDATTA
-//         \u0952  # UNMAPPED STRESS SIGN ANUDATTA
-//         \u0953  # UNMAPPED GRAVE ACCENT
-//         \u0954  # UNMAPPED ACUTE ACCENT
+ "\ue051 >  \u0951;"  // UNMAPPED STRESS SIGN UDATTA
+ "\ue052 >  \u0952;"  // UNMAPPED STRESS SIGN ANUDATTA
+ "\ue053 >  \u0953;"  // UNMAPPED GRAVE ACCENT
+ "\ue054 >  \u0954;"  // UNMAPPED ACUTE ACCENT
  "\ue058 >  \u0958;"  // LETTER QA   (For Urdu)
  "\ue059 >  \u0959;"  // LETTER KHHA (For Urdu)
  "\ue05a >  \u095a;"  // LETTER GHHA (For Urdu)

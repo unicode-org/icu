@@ -6,7 +6,7 @@
 // THIS IS A MACHINE-GENERATED FILE
 // Tool: dumpICUrules.bat
 // Source: ../../text/resources/Transliterator_InterIndic_Telugu.txt
-// Date: Tue Nov 13 00:51:08 2001
+// Date: Tue Nov 20 21:43:01 2001
 //--------------------------------------------------------------------
 
 // InterIndic_Telugu
@@ -77,7 +77,9 @@ translit_InterIndic_Telugu {
 "\ue02d>\u0c2d;" // LETTER BHA
 "\ue02e>\u0c2e;" // LETTER MA
 "\ue02f>\u0c2f;" // LETTER YA
+"\ue030\ue03c>\u0c31;"
 "\ue030>\u0c30;" // LETTER RA
+"\ue031>\u0c31;" // LETTER RRA
 "\ue032>\u0c32;" // LETTER LA
 "\ue033>\u0c33;" // LETTER LLA
 "\ue034>\u0c33;" // REMAP (indicExceptions.txt): \u0c34>\u0c33 = LETTER LLLA>LETTER LLA
@@ -105,6 +107,10 @@ translit_InterIndic_Telugu {
 "\ue04c>\u0c4c;" // VOWEL SIGN AU
 "\ue04d>\u0c4d;" // SIGN VIRAMA
 "\ue050>\u0c13\u0c02;" // REMAP (indicExceptions.txt): \u0c50>\u0c13\u0c02 = OM>LETTER OO.SIGN ANUSVARA
+"\ue051>;"
+"\ue052>;"
+"\ue053>;"
+"\ue054>;"
 "\ue055>\u0c55;" // LENGTH MARK
 "\ue056>\u0c56;" // AI LENGTH MARK
 "\ue057>\u0c4c;" // REMAP (indicExceptions.txt): \u0c57>\u0c4c = AU LENGTH MARK>VOWEL SIGN AU
@@ -132,14 +138,16 @@ translit_InterIndic_Telugu {
 "\ue06f>\u0c6f;" // DIGIT NINE
 // \ue080>; # UNMAPPED InterIndic-Telugu: ISSHAR
 
-"\ue031>\u0c31;" // LETTER RRA
+
 "\ue046>\u0c46;" // VOWEL SIGN E
 "\ue04a>\u0c4a;" // VOWEL SIGN O
+"\ue070>;"
+"\ue071>;"
 "\ue072>;"
 "\ue073>;"
 "\ue074>;"
-"0 > \u0966;"       // FALLBACK FOR TAMIL
-"1 > \u0967;"
+"0 > \u0c66;"       // FALLBACK FOR TAMIL
+"1 > \u0c67;"
 "\ue0f0 >  \u0c30;"  // FALLBACK RA 
 "\ue0f1 >  \u0c30;"  // FALLBACK RA
 //    :: NFC (NFD) ;

@@ -6,7 +6,7 @@
 // THIS IS A MACHINE-GENERATED FILE
 // Tool: dumpICUrules.bat
 // Source: ../../text/resources/Transliterator_Telugu_InterIndic.txt
-// Date: Tue Nov 13 00:51:08 2001
+// Date: Tue Nov 20 21:43:02 2001
 //--------------------------------------------------------------------
 
 // Telugu_InterIndic
@@ -31,6 +31,7 @@ translit_Telugu_InterIndic {
 //--------------------------------------------------------------------
 // Telugu-InterIndic
 //:: NFD (NFC) ;
+"\u0c46\u0c4d\u0c56>\ue048\ue04d;"
 "\u0C46\u0C56>\uE048;"// VOWEL SIGN AI
 "\u0C01>\uE001;"      // SIGN CANDRABINDU
 "\u0C02>\uE002;"      // SIGN ANUSVARA

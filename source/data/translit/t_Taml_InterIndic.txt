@@ -6,7 +6,7 @@
 // THIS IS A MACHINE-GENERATED FILE
 // Tool: dumpICUrules.bat
 // Source: ../../text/resources/Transliterator_Tamil_InterIndic.txt
-// Date: Tue Nov 13 00:51:08 2001
+// Date: Tue Nov 20 21:43:02 2001
 //--------------------------------------------------------------------
 
 // Tamil_InterIndic
@@ -94,7 +94,7 @@ translit_Tamil_InterIndic {
 "\u0BEF>\uE06F;"      // DIGIT NINE
 "\u0BF0>10;"          // UNMAPPED Tamil-InterIndic: NUMBER TEN
 "\u0BF1>100;"         // UNMAPPED Tamil-InterIndic: NUMBER ONE HUNDRED
-"\u0BF2>100;"         // UNMAPPED Tamil-InterIndic: NUMBER ONE THOUSAND
+"\u0BF2>1000;"        // UNMAPPED Tamil-InterIndic: NUMBER ONE THOUSAND
 //    :: NFC (NFD) ;
 // eof
   }
