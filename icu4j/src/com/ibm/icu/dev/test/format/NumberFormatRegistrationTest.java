@@ -4,8 +4,8 @@
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/format/NumberFormatRegistrationTest.java,v $
- * $Date: 2003/02/25 23:39:44 $
- * $Revision: 1.1 $
+ * $Date: 2003/02/26 05:32:57 $
+ * $Revision: 1.2 $
  *******************************************************************************
  */
 package com.ibm.icu.dev.test.format;
@@ -68,5 +68,4 @@ public class NumberFormatRegistrationTest extends com.ibm.icu.dev.test.TestFmwk 
             errln("unregistered service did not match original");
         }
     }
-
 }
