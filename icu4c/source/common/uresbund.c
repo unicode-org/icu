@@ -1044,6 +1044,29 @@ U_CAPI UResourceBundle* ures_openW(const wchar_t* myPath,
     return r;
 }
 
+
+U_CAPI UResourceBundle* U_EXPORT2 ures_openU(const UChar* myPath, 
+                  const char* localeID, 
+                  UErrorCode* status)
+{
+    char path[100];
+    UResourceBundle *r;
+    int32_t pathlen = u_strlen(myPath);
+
+
+    u_UCharsToChars(myPath, path, pathlen);
+    path[pathlen] = 0;
+
+    r = ures_open(path, localeID, status);
+
+    if (r == FALSE || U_FAILURE(*status)) {
+        return NULL;
+    }
+
+    return r;
+}
+
+
 U_CAPI const UChar* ures_get(    const UResourceBundle*    resB,
                 const char*              resourceTag,
                 UErrorCode*               status) 
@@ -1232,6 +1255,10 @@ U_CAPI const char* ures_getVersionNumber(const UResourceBundle*   resourceBundle
     }
 
     return resourceBundle->fVersion;
+}
+
+U_CAPI void U_EXPORT2 ures_getVersion(const UResourceBundle* resB, UVersionInfo versionInfo) {
+    if (!resB) return;
 }
 
 /**
