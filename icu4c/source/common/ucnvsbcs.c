@@ -152,7 +152,7 @@ U_CFUNC void T_UConverter_toUnicode_SBCS (UConverterToUnicodeArgs * args,
   return;
 }
 
-void T_UConverter_fromUnicode_SBCS (UConverterFromUnicodeArgs * args,
+U_CFUNC void T_UConverter_fromUnicode_SBCS (UConverterFromUnicodeArgs * args,
                                  UErrorCode * err)
 {
   const UChar *mySource = args->source;
@@ -279,7 +279,7 @@ void T_UConverter_fromUnicode_SBCS (UConverterFromUnicodeArgs * args,
   return;
 }
 
-UChar32 T_UConverter_getNextUChar_SBCS(UConverterToUnicodeArgs* args,
+U_CFUNC UChar32 T_UConverter_getNextUChar_SBCS(UConverterToUnicodeArgs* args,
                                                UErrorCode* err)
 {
   UChar myUChar;
@@ -530,7 +530,7 @@ U_CFUNC void   T_UConverter_toUnicode_DBCS (UConverterToUnicodeArgs * args,
   return;
 }
 
-void   T_UConverter_fromUnicode_DBCS (UConverterFromUnicodeArgs * args,
+U_CFUNC void   T_UConverter_fromUnicode_DBCS (UConverterFromUnicodeArgs * args,
                                       UErrorCode * err)
 {
   const UChar *mySource = args->source;
@@ -674,7 +674,7 @@ void   T_UConverter_fromUnicode_DBCS (UConverterFromUnicodeArgs * args,
   return;
 }
 
-UChar32 T_UConverter_getNextUChar_DBCS(UConverterToUnicodeArgs* args,
+U_CFUNC UChar32 T_UConverter_getNextUChar_DBCS(UConverterToUnicodeArgs* args,
                                                UErrorCode* err)
 {
   UChar myUChar;
