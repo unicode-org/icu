@@ -466,7 +466,7 @@ res_index {
 # Targets for unames.icu
 "$(ICUBLD)\unames.icu": "$(ICUUNIDATA)\*.txt" "$(ICUTOOLS)\gennames\$(CFG)\gennames.exe"
 	@echo Creating data file for Unicode Names
-	@"$(ICUTOOLS)\gennames\$(CFG)\gennames" -1 -u $(UNICODE_VERSION) "$(ICUUNIDATA)\UnicodeData.txt"
+	@"$(ICUTOOLS)\gennames\$(CFG)\gennames" -1 -u $(UNICODE_VERSION) -d "$(ICUBLD)" "$(ICUUNIDATA)\UnicodeData.txt"
 
 # Targets for pnames.icu
 # >> Depends on the Unicode data as well as uchar.h and uscript.h <<
@@ -482,12 +482,12 @@ res_index {
 # Targets for unorm.icu
 "$(ICUBLD)\unorm.icu": "$(ICUUNIDATA)\*.txt" "$(ICUTOOLS)\gennorm\$(CFG)\gennorm.exe"
 	@echo Creating data file for Unicode Normalization
-	@"$(ICUTOOLS)\gennorm\$(CFG)\gennorm" -u $(UNICODE_VERSION) -s "$(ICUUNIDATA)"
+	@"$(ICUTOOLS)\gennorm\$(CFG)\gennorm" -u $(UNICODE_VERSION) -d "$(ICUBLD)" -s "$(ICUUNIDATA)"
 
 # Targets for converters
 "$(ICUBLD)\cnvalias.icu" : {"$(ICUSRCDATA)\$(ICUUCM)"}\convrtrs.txt "$(ICUTOOLS)\gencnval\$(CFG)\gencnval.exe"
 	@echo Creating data file for Converter Aliases
-	@"$(ICUTOOLS)\gencnval\$(CFG)\gencnval" "$(ICUSRCDATA)\$(ICUUCM)\convrtrs.txt"
+	@"$(ICUTOOLS)\gencnval\$(CFG)\gencnval" -d "$(ICUBLD)" "$(ICUSRCDATA)\$(ICUUCM)\convrtrs.txt"
 
 # Targets for ucadata.icu & invuca.icu
 "$(ICUBLD)\invuca.icu" "$(ICUBLD)\ucadata.icu": "$(ICUUNIDATA)\FractionalUCA.txt" "$(ICUTOOLS)\genuca\$(CFG)\genuca.exe" "$(ICUBLD)\uprops.icu" "$(ICUBLD)\unorm.icu"
