@@ -317,7 +317,6 @@ checkBaseExtUnicode(UCMStates *baseStates, UCMTable *base, UCMTable *ext,
     UCMapping *mb, *me, *mbLimit, *meLimit;
     int32_t cmp;
     uint8_t result;
-    UBool isSISO;
 
     mb=base->mappings;
     mbLimit=mb+base->mappingsLength;
@@ -326,8 +325,6 @@ checkBaseExtUnicode(UCMStates *baseStates, UCMTable *base, UCMTable *ext,
     meLimit=me+ext->mappingsLength;
 
     result=0;
-
-    isSISO=(UBool)(baseStates->outputType==MBCS_OUTPUT_2_SISO);
 
     for(;;) {
         /* skip irrelevant mappings on both sides */
@@ -358,11 +355,11 @@ checkBaseExtUnicode(UCMStates *baseStates, UCMTable *base, UCMTable *ext,
         /* compare the base and extension mappings */
         cmp=compareUnicode(base, mb, ext, me);
         if(cmp<0) {
-            if(intersectBase && (!(isSISO && intersectBase==2) || mb->bLen>1)) {
+            if(intersectBase && (intersectBase!=2 || mb->bLen>1)) {
                 /*
                  * mapping in base but not in ext, move it
                  *
-                 * if base is EBCDIC_STATEFUL and ext is DBCS, move DBCS mappings here
+                 * if ext is DBCS, move DBCS mappings here
                  * and check SBCS ones for Unicode prefix below
                  */
                 mb->moveFlag|=MOVE_TO_EXT;
@@ -446,9 +443,9 @@ checkBaseExtBytes(UCMStates *baseStates, UCMTable *base, UCMTable *ext,
             }
             mb=base->mappings+baseMap[b];
 
-            if(isSISO && intersectBase==2 && mb->bLen==1) {
+            if(intersectBase==2 && mb->bLen==1) {
                 /*
-                 * comparing an EBCDIC_STATEFUL base against a DBCS extension:
+                 * comparing a base against a DBCS extension:
                  * leave SBCS base mappings alone
                  */
                 continue;
