@@ -302,7 +302,7 @@ UBool testConvertFromU( const UChar *source, int sourceLen,  const char *expect,
               }
            }
         }
-      } while ( (status == U_INDEX_OUTOFBOUNDS_ERROR) || (sourceLimit < realSourceEnd) );
+      } while ( (status == U_INDEX_OUTOFBOUNDS_ERROR) || (U_SUCCESS(status) && sourceLimit < realSourceEnd) );
         
     if(U_FAILURE(status))
       {
