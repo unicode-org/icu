@@ -240,6 +240,14 @@ uint32_t ucol_tok_assembleTokenList(UColTokenParser *src, UErrorCode *status) {
 
               break;
 
+            /* '@' is french only if the strength is not currently set */
+            /* if it is, it's just a regular character in collation rules */
+            case 0x0040/*'@'*/:
+              if (newStrength == UCOL_TOK_UNSET) {
+                src->image->frenchCollation = UCOL_ON;
+                break;
+              }
+
             default:
               if (newStrength == UCOL_TOK_UNSET) {
                 *status = U_INVALID_FORMAT_ERROR;
@@ -316,6 +324,8 @@ uint32_t ucol_tok_assembleTokenList(UColTokenParser *src, UErrorCode *status) {
           sourceToken->polarity = UCOL_TOK_POLARITY_POSITIVE; /* TODO: this should also handle reverse */
           sourceToken->next = NULL;
           sourceToken->previous = NULL;
+          sourceToken->noOfCEs = 0;
+          sourceToken->noOfExpCEs = 0;
           uhash_put(uchars2tokens, sourceToken, sourceToken, status);
         } else {
           /* we could have fished out a reset here */
