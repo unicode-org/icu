@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/RuleBasedCollator.java,v $ 
-* $Date: 2002/07/30 02:38:11 $ 
-* $Revision: 1.12 $
+* $Date: 2002/08/07 01:01:18 $ 
+* $Revision: 1.13 $
 *
 *******************************************************************************
 */
@@ -23,6 +23,7 @@ import com.ibm.icu.impl.IntTrie;
 import com.ibm.icu.impl.Trie;
 import com.ibm.icu.impl.ICULocaleData;
 import com.ibm.icu.impl.BOCU;
+import com.ibm.icu.impl.Utility;
 
 /**
  * <p>RuleBasedCollator is a concrete subclass of Collator. It allows
@@ -82,33 +83,9 @@ import com.ibm.icu.impl.BOCU;
  * supported to ensure a correct sorting order. If a '!' is encountered, it is
  * ignored.
  * </p>
- * <li>According to the JDK documentation:
- * <i>
- * <p>
- * If, however, the first relation is not "&lt;", then all the all 
- * text-arguments up to the first "&lt;" are ignorable. For example, 
- * ", - &lt; a &lt; b" makes "-" an ignorable character, as we saw earlier in 
- * the word "black-birds".
- * </p>
- * </i>
- * <p>
- * The above allows random characters before the first '&lt;' not in any 
- * specific sequence to be ignorable. ICU4J does not support this feature.
- * To define ignorable characters in PRIMARY to TERTIARY strength, users can 
- * use the rule "& X &lt; [variable top]" to set the variable top to the 
- * PRIMARY strength of "X". Once alternate handling is set to shifted 
- * (setAlternateHandling(true)), the Collator using strengths PRIMARY, 
- * SECONDARY or TERTIARY will ignore all code points with PRIMARY strengths 
- * less than variable top.    
- * See the user guide's section on 
- * <a href="http://oss.software.ibm.com/icu/userguide/Collate_Customization.html">
- * Collation Customization</a> for details.</p>
- *
- * <p>
  * <li>As mentioned in the documentation of the base class Collator, 
  *     compatibility decomposition mode is not supported.
  * </ul>
- * </p>
  * <p>
  * <strong>Examples</strong>
  * </p>
@@ -607,10 +584,19 @@ public final class RuleBasedCollator extends Collator
     	
     	int bottomCount4 = 0xFF - commonBottom4;
     	// If we need to normalize, we'll do it all at once at the beginning!
-    	if ((compare[5] || getDecomposition() != NO_DECOMPOSITION)
-    		&& Normalizer.quickCheck(source, Normalizer.NFD) 
+    	if (compare[5] && Normalizer.quickCheck(source, Normalizer.NFD) 
+                                                    != Normalizer.YES) {
+            // if it is identical strength, we have to normalize the string to
+            // NFD so that it will be appended correctly to the end of the sort
+            // key
+            source = Normalizer.decompose(source, false);
+        }
+        else if (getDecomposition() != NO_DECOMPOSITION
+    		&& Normalizer.quickCheck(source, Normalizer.FCD) 
     												!= Normalizer.YES) {
-        	source = Normalizer.decompose(source, false);
+            // for the rest of the strength, if decomposition is on, FCD is                                            
+            // enough for us to work on.
+        	source = Normalizer.FCD.dispatch(source);
     	}
 		getSortKeyBytes(source, compare, bytes, bytescount, count, doFrench,
 						hiragana4, commonBottom4, bottomCount4);
@@ -1764,11 +1750,11 @@ public final class RuleBasedCollator extends Collator
                     	} 
                     	else if (p1 < BYTE_FIRST_NON_LATIN_PRIMARY_
                     		  || (p1 
-                    > ((RuleBasedCollator.UCA_CONSTANTS_.LAST_NON_VARIABLE_[0] 
-                                                                 >> 24) & 0xFF)
+                    > (RuleBasedCollator.UCA_CONSTANTS_.LAST_NON_VARIABLE_[0] 
+                                                                 >>> 24)
                     			&& p1 
-                    < ((RuleBasedCollator.UCA_CONSTANTS_.FIRST_IMPLICIT_[0] 
-                                                             >> 24) & 0xFF))) {
+                    < (RuleBasedCollator.UCA_CONSTANTS_.FIRST_IMPLICIT_[0] 
+                                                                    >>> 24))) {
                     			// not compressible
                         		leadPrimary = 0;
                         		append(bytes, bytescount, 1, (byte)p1);
@@ -2446,15 +2432,19 @@ public final class RuleBasedCollator extends Collator
 	        	tchar = target.charAt(result);
 	        }
 	        else {
-	        	if (slength == tlength) {
-	        		return result;
-	        	}
-	        	else if (slength < tlength) {
-	        		tchar = target.charAt(result);
-	        	}
-	        	else {
-	        		schar = source.charAt(result);
-	        	}
+                schar = source.charAt(minlength - 1); 
+                if (isUnsafe(schar)) {
+                    tchar = schar;
+                }
+    	        else if (slength == tlength) {
+    	        		return result;
+    	        }
+    	        else if (slength < tlength) {
+    	        	tchar = target.charAt(result);
+    	        }
+    	        else {
+    	        	schar = source.charAt(result);
+    	        }
 	        }
 	        if (isUnsafe(schar) || isUnsafe(tchar))
 	        {
@@ -2722,12 +2712,13 @@ public final class RuleBasedCollator extends Collator
 	            }
 	        } 
 	        else { // regular
-	        	if ((result & CE_PRIMARY_MASK_) > lowestpvalue) {
+                if (Utility.compareUnsigned(result & CE_PRIMARY_MASK_, 
+                                            lowestpvalue) > 0) {
 	             	append(cebuffer, cebuffersize, cebufferindex, result);
 	             	break;
 	            } 
 	            else {
-	            	if ((result & CE_PRIMARY_MASK_) > 0) {
+	            	if ((result & CE_PRIMARY_MASK_) != 0) {
 	                	shifted = true;
 	                	result &= CE_PRIMARY_MASK_;
 	                	append(cebuffer, cebuffersize, cebufferindex, result);
@@ -3015,7 +3006,7 @@ public final class RuleBasedCollator extends Collator
 	              		continue;
 	            	}
 	          	} 
-	          	else if (sorder > lowestpvalue 
+	          	else if (Utility.compareUnsigned(sorder, lowestpvalue) > 0 
 	          				|| (sorder & CE_PRIMARY_MASK_) 
 	          						== CollationElementIterator.IGNORABLE) { 
 	          		// non continuation
@@ -3035,7 +3026,7 @@ public final class RuleBasedCollator extends Collator
 	              		continue;
 	            	}
 	          	} 
-	          	else if (torder > lowestpvalue 
+	          	else if (Utility.compareUnsigned(torder, lowestpvalue) > 0 
 	          				|| (torder & CE_PRIMARY_MASK_) 
 	          						== CollationElementIterator.IGNORABLE) { 
 	          		// non continuation
