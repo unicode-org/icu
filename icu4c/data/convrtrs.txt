@@ -84,10 +84,9 @@ ibm-949                 KS_C_5601-1987 iso-ir-149 KS_C_5601-1989 csKSC56011987 K
 ibm-1370                Big5 csBig5 x-big5 cp950                # Taiwan Big-5 (w/ euro update)
 ibm-950                 # Taiwan Big-5 
 ibm-1386                GB_2312-80 iso-ir-58 csISO58GB231280 gbk chinese gb gb2312 gb2312-1980 cp936 zh_cn # Chinese GBK removed
-ibm-954                 EUC-JP ibm-eucJP eucjis extended_unix_code_packed_format_for_japanese cseuckdfmtjapanese X-EUC-JP  # Japan EUC
+ibm-5050                EUC-JP ibm-eucJP eucjis extended_unix_code_packed_format_for_japanese cseuckdfmtjapanese X-EUC-JP  # Japan EUC
 ibm-970                 EUC-KR ibm-eucKR csEUCKR                       # Korean EUC
 #ibm-964                EUC-TW ibm-eucTW cns11643              # Taiwan EUC
-#ibm-1361                cp949 ksc korean                              # Korean KSC
 ibm-1383                EUC-CN ibm-eucCN                       # China EUC
 #ibm-1162               tis-620 cp874 windows-874 ms874       # Thai (w/ euro support) #what is the connection between this and the one below!!!
 ibm-874                 ibm-1161 #same as 1162 (w/o euro update) ***This is commented out in Helena's
