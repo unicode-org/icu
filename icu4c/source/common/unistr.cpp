@@ -996,7 +996,8 @@ UnicodeString::extract(UTextOffset start,
   // there is no loop here since we assume the buffer is large enough
   myTargetLimit = myTarget + arraySize;
 
-  if(myTargetLimit < myTarget)  /* ptr wrapped around: pin to U_MAX_PTR */
+  /* Pin the limit to U_MAX_PTR.  NULL check is for AS/400. */
+  if((myTargetLimit < myTarget) || (myTargetLimit == NULL))
     myTargetLimit = (char*)U_MAX_PTR; 
 
   ucnv_fromUnicode(converter, &myTarget,  myTargetLimit,
