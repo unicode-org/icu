@@ -3,7 +3,7 @@
 ## Copyright (c) 1999-2002, International Business Machines Corporation and
 ## others. All Rights Reserved.
 ##
-## $Id: mh-aix,v 1.32 2002/05/31 19:18:29 srl Exp $
+## $Id: mh-aix,v 1.33 2003/06/09 22:35:07 srl Exp $
 ##
 ## Please note: AIX does NOT have library versioning per se (there is no 'SONAME' capability). 
 ## So, we are using 'windows' style library names, that is, libicuuc20.1.so instead of libicuuc.so.20.1
@@ -18,15 +18,23 @@ CXXFLAGS += -qroconst
 
 LDFLAGS += -brtl
 
+## We need to delete things prior to linking, or else we'll get
+## SEVERE ERROR: output file in use ..  on AIX.
+## But, shell script version should NOT delete target as we don't
+## have $@ in that context.  (SH = only shell script, icu-config)
+AIX_PREDELETE=rm -f $@ ;
+#SH# AIX_PREDELETE=
+
+
 ## Commands to link
 ## We need to use the C++ linker, even when linking C programs, since
 ##  our libraries contain C++ code (C++ static init not called)
-LINK.c=		$(CXX) $(CXXFLAGS) $(LDFLAGS)
-LINK.cc=	$(CXX) $(CXXFLAGS) $(LDFLAGS)
+LINK.c=		$(AIX_PREDELETE) $(CXX) $(CXXFLAGS) $(LDFLAGS)
+LINK.cc=	$(AIX_PREDELETE) $(CXX) $(CXXFLAGS) $(LDFLAGS)
 
 ## Commands to make a shared library
-SHLIB.c=	$(AIX_SHLIB) -p 5000 $(LDFLAGS)
-SHLIB.cc=	$(AIX_SHLIB) -p 5000 $(LDFLAGS)
+SHLIB.c=	$(AIX_PREDELETE) $(AIX_SHLIB) -p 5000 $(LDFLAGS)
+SHLIB.cc=	$(AIX_PREDELETE) $(AIX_SHLIB) -p 5000 $(LDFLAGS)
 
 ## Compiler switch to embed a runtime search path
 LD_RPATH=	-I
