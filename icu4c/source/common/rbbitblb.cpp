@@ -323,7 +323,7 @@ void RBBITableBuilder::calcFollowPos(RBBINode *n) {
 //                            to implement rule chaining.  NOT described by Aho
 //
 //-----------------------------------------------------------------------------
-void RBBITableBuilder::calcChainedFollowPos(RBBINode *fTree) {
+void RBBITableBuilder::calcChainedFollowPos(RBBINode *tree) {
 
     UVector         endMarkerNodes(*fStatus);
     UVector         leafNodes(*fStatus);
@@ -334,16 +334,16 @@ void RBBITableBuilder::calcChainedFollowPos(RBBINode *fTree) {
     }
 
     // get a list of all endmarker nodes.
-    fTree->findNodes(&endMarkerNodes, RBBINode::endMark, *fStatus);
+    tree->findNodes(&endMarkerNodes, RBBINode::endMark, *fStatus);
 
     // get a list all leaf nodes 
-    fTree->findNodes(&leafNodes, RBBINode::leafChar, *fStatus);
+    tree->findNodes(&leafNodes, RBBINode::leafChar, *fStatus);
     if (U_FAILURE(*fStatus)) {
         return;
     }
 
     // Get all nodes that can be the start a match, which is FirstPosition(root)
-    UVector *matchStartNodes = fTree->fFirstPosSet;
+    UVector *matchStartNodes = tree->fFirstPosSet;
 
 
     // Iteratate over all leaf nodes,

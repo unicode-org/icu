@@ -64,7 +64,7 @@ public:
     void TestIDNAMonkeyTest();
     void TestConformance();
     static NamePrepTransform* getInstance(UErrorCode& status);
-    static NamePrepTransform* prep;
+    static NamePrepTransform* gPrep;
     virtual ~TestIDNA();
 
 private:
