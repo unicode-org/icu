@@ -1,6 +1,6 @@
 // -*- Coding: US-ASCII -*-
 // Copyright (c) 2000 IBM, Inc. and others.
-// $Revision: 1.3 $
+// $Revision: 1.4 $
 //
 // Telugu Locale. Data by Ram [ram@jtcsv.com]
 
@@ -72,6 +72,6 @@ te {
 	LocaleID { "4a"}
 	CollationElements {
 	    Version { "1.0" }
-		Sequence { "[normalizaton on]" }
+		Sequence { "[normalization on]" }
 	}
 }
