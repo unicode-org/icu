@@ -229,7 +229,7 @@ import java.text.*;
  * *Unsupported by Java (and hence unsupported by UnicodeSet).
  *
  * @author Alan Liu
- * @version $RCSfile: UnicodeSet.java,v $ $Revision: 1.14 $ $Date: 2000/03/08 23:55:34 $
+ * @version $RCSfile: UnicodeSet.java,v $ $Revision: 1.15 $ $Date: 2000/03/09 00:37:19 $
  */
 public class UnicodeSet implements UnicodeFilter {
     /**
@@ -308,7 +308,7 @@ public class UnicodeSet implements UnicodeFilter {
      * a syntax error.
      */
     public UnicodeSet(String pattern) {
-        applyPattern(pattern, true);
+        this(pattern, true);
     }
 
     /**
@@ -363,7 +363,21 @@ public class UnicodeSet implements UnicodeFilter {
     /**
      * Modifies this set to represent the set specified by the given pattern.
      * See the class description for the syntax of the pattern language.
+     * Whitespace is ignored.
      * @param pattern a string specifying what characters are in the set
+     * @exception java.lang.IllegalArgumentException if the pattern
+     * contains a syntax error.
+     */
+    public final void applyPattern(String pattern) {
+        applyPattern(pattern, true);
+    }
+
+    /**
+     * Modifies this set to represent the set specified by the given pattern.
+     * See the class description for the syntax of the pattern language.
+     * @param pattern a string specifying what characters are in the set
+     * @param ignoreWhitespace if true then characters for which
+     * Character.isWhitespace() returns true are ignored
      * @exception java.lang.IllegalArgumentException if the pattern
      * contains a syntax error.
      */
