@@ -77,10 +77,6 @@
 
 static const char SHIFT_IN_STR[]  = "\x0F";
 static const char SHIFT_OUT_STR[] = "\x0E";
-static const char UCNV_SS2[] = "\x1B\x4E";
-static const char UCNV_SS3[] = "\x1B\x4F";
-#define UCNV_SS2_LEN 2
-#define UCNV_SS3_LEN 2
 
 #define CR      0x0D
 #define LF      0x0A
