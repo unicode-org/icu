@@ -75,11 +75,12 @@ debian/%: debian/%.in
 	cd $(builddir) \
 	  && CONFIG_FILES=$(builddir_relative_topdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
 
+debian/libicu$(lib_version_major).%: debian/libicu.%
+	cp $< $@
+
 debian-files: $(addprefix debian/,$(DEBIAN_FILES))
 
 $(builddir)/build-stamp:
-	@$(MAKE) -f debian/rules 
-
 	dh_testdir
 
 	# Add here commands to compile the package.
