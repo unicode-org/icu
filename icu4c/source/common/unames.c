@@ -20,11 +20,12 @@
 #endif
 
 #include "unicode/utypes.h"
+#include "unicode/uchar.h"
+#include "unicode/udata.h"
+#include "ustr_imp.h"
 #include "umutex.h"
 #include "cmemory.h"
 #include "cstring.h"
-#include "unicode/uchar.h"
-#include "unicode/udata.h"
 #include "ucln_cmn.h"
 
 
@@ -143,22 +144,23 @@ u_charName(UChar32 code, UCharNameChoice nameChoice,
     AlgorithmicRange *algRange;
     uint32_t *p;
     uint32_t i;
+    int32_t length;
 
     /* check the argument values */
     if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
         return 0;
-    } else if(nameChoice>=U_CHAR_NAME_CHOICE_COUNT || buffer==NULL) {
+    } else if(nameChoice>=U_CHAR_NAME_CHOICE_COUNT ||
+              bufferLength<0 || (bufferLength>0 && buffer==NULL)
+    ) {
         *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
         return 0;
     }
 
-    if((uint32_t)code>0x10ffff) {
-        return 0;
+    if((uint32_t)code>0x10ffff || !isDataLoaded(pErrorCode)) {
+        return u_terminateChars(buffer, bufferLength, 0, pErrorCode);
     }
 
-    if(!isDataLoaded(pErrorCode)) {
-        return 0;
-    }
+    length=0;
 
     /* try algorithmic names first */
     p=(uint32_t *)((uint8_t *)uCharNames+uCharNames->algNamesOffset);
@@ -166,14 +168,19 @@ u_charName(UChar32 code, UCharNameChoice nameChoice,
     algRange=(AlgorithmicRange *)(p+1);
     while(i>0) {
         if(algRange->start<=(uint32_t)code && (uint32_t)code<=algRange->end) {
-            return getAlgName(algRange, (uint32_t)code, nameChoice, buffer, (uint16_t)bufferLength);
+            length=getAlgName(algRange, (uint32_t)code, nameChoice, buffer, (uint16_t)bufferLength);
+            break;
         }
         algRange=(AlgorithmicRange *)((uint8_t *)algRange+algRange->size);
         --i;
     }
 
-    /* normal character name */
-    return getName(uCharNames, (uint32_t)code, nameChoice, buffer, (uint16_t)bufferLength);
+    if(i==0) {
+        /* normal character name */
+        length=getName(uCharNames, (uint32_t)code, nameChoice, buffer, (uint16_t)bufferLength);
+    }
+
+    return u_terminateChars(buffer, bufferLength, length, pErrorCode);
 }
 
 U_CAPI UChar32 U_EXPORT2
