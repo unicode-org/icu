@@ -7,7 +7,7 @@
 
 // Thanks to:
 //  -  Shehnaz Nagpurwala and Anwar Nagpurwala [first version]
-//  -  IBM NLTC:  http://w3.torolab.ibm.com/reference/software/global/documents/India/hi-nlsgg.htm
+//  -  IBM NLTC:  http://w3.torolab.ibm.com/gcoc/documents/india/hi-nlsgg.htm
 //  -  Arundhati Bhowmick [IBM Cupertino]
 
 hi {
