@@ -21,7 +21,11 @@ StringEnumeration::StringEnumeration()
     : chars(charsBuffer), charsCapacity(sizeof(charsBuffer)) {
 }
 
-StringEnumeration::~StringEnumeration() {}
+StringEnumeration::~StringEnumeration() {
+    if (chars != NULL && chars != charsBuffer) {
+        uprv_free(chars);
+    }
+}
 
 // StringEnumeration base class clone() default implementation, does not clone
 StringEnumeration *

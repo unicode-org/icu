@@ -317,7 +317,7 @@ ucurr_forLocale(const char* locale,
                 
                 // Look up the CurrencyMap element in the root bundle.
                 UResourceBundle *rb = ures_open(NULL, "", &localStatus);
-                UResourceBundle *cm = ures_getByKey(rb, CURRENCY_MAP, NULL, &localStatus);
+                UResourceBundle *cm = ures_getByKey(rb, CURRENCY_MAP, rb, &localStatus);
                 s = ures_getStringByKey(cm, id, &resLen, &localStatus);
                 
                 if ((s == NULL || U_FAILURE(localStatus)) && variantType != VARIANT_IS_EMPTY
@@ -330,6 +330,7 @@ ucurr_forLocale(const char* locale,
                     else {
                         uloc_getParent(locale, id, sizeof(id), ec);
                         *ec = U_USING_FALLBACK_WARNING;
+                        ures_close(cm);
                         return ucurr_forLocale(id, buff, buffCapacity, ec);
                     }
                 }
@@ -343,7 +344,6 @@ ucurr_forLocale(const char* locale,
                     }
                 }
                 ures_close(cm);
-                ures_close(rb);
             }
             return u_terminateUChars(buff, buffCapacity, resLen, ec);
         } else {
