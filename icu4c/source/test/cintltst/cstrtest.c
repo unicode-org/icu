@@ -82,13 +82,13 @@ static void TestAPI(void)
     if(intValue != 256){
         log_err("FAIL: ****T_CString_stringToInteger(\"100\", 16) failed. Expected: 256, Got: %d\n", intValue);
     }
-    T_CString_integerToString(src, 34556, 10);
-    if(uprv_strcmp(src, "34556") != 0){
+    i = T_CString_integerToString(src, 34556, 10);
+    if(uprv_strcmp(src, "34556") != 0 || i != 5){
         log_err("FAIL: ****integerToString(src, 34566, 10); failed. Expected: \"34556\", Got: %s\n", src);
     }
-    T_CString_integerToString(src, 256, 16);
-    if(uprv_strcmp(src, "100") != 0){
-        log_err("FAIL: ****integerToString(src, 256, 16); failed. Expected: \"100\", Got: %s\n", src);
+    i = T_CString_integerToString(src, 431, 16);
+    if(uprv_stricmp(src, "1AF") != 0 || i != 3){
+        log_err("FAIL: ****integerToString(src, 431, 16); failed. Expected: \"1AF\", Got: %s\n", src);
     }
 
     uprv_strcpy(src, "this is lower case");
