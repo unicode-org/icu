@@ -44,9 +44,6 @@ static char* _testDirectory=NULL;
  */
 void ctest_setICU_DATA();
 
-
-
-
 int main(int argc, const char* const argv[])
 {
     int nerrors;

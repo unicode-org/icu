@@ -153,7 +153,7 @@ static void TestG7Locales()
         defRules = ucol_getRules(myCollation, &rlen);
         status = U_ZERO_ERROR;
         tblColl1 = ucol_openRules(defRules, rlen, UCOL_NO_NORMALIZATION, 
-                   UCOL_DEFAULT_STRENGTH, &status);
+                   UCOL_DEFAULT_STRENGTH,NULL, &status);
         if (U_FAILURE(status))
         {
             
@@ -193,7 +193,7 @@ static void TestDemo1()
     log_verbose("Demo Test 1 : Create a new table collation with rules \" & Z < p, P \" \n");
 
     myCollation = ucol_openRules(temp, len, UCOL_NO_NORMALIZATION, 
-                                                    UCOL_DEFAULT_STRENGTH, &status);
+                                                    UCOL_DEFAULT_STRENGTH,NULL, &status);
 
     if (U_FAILURE(status))
     {
@@ -226,7 +226,7 @@ static void TestDemo2()
     log_verbose("Demo Test 2 : Create a new table collation with rules \"& C < ch , cH, Ch, CH\"");
 
     myCollation = ucol_openRules(temp, len, UCOL_NO_NORMALIZATION, 
-                                                    UCOL_DEFAULT_STRENGTH, &status);
+                                                    UCOL_DEFAULT_STRENGTH, NULL, &status);
 
     if (U_FAILURE(status))
     {
@@ -257,7 +257,7 @@ static void TestDemo3()
     log_verbose("Demo Test 3 : Create a new table collation with rules \"& Question'-'mark ; '?' & Hash'-'mark ; '#' & Ampersand ; '&'\" \n");
 
     myCollation = ucol_openRules(temp, len, UCOL_NO_NORMALIZATION, 
-                                                    UCOL_DEFAULT_STRENGTH, &status);
+                                                    UCOL_DEFAULT_STRENGTH, NULL, &status);
     
     if (U_FAILURE(status))
     {
@@ -289,7 +289,7 @@ static void TestDemo4()
     log_verbose("Demo Test 4 : Create a new table collation with rules \" & aa ; a'-' & ee ; e'-' & ii ; i'-' & oo ; o'-' & uu ; u'-' \"\n");
 
     myCollation = ucol_openRules(temp, len, UCOL_NO_NORMALIZATION, 
-                                                    UCOL_DEFAULT_STRENGTH, &status);
+                                                    UCOL_DEFAULT_STRENGTH, NULL, &status);
     
     if (U_FAILURE(status))
     {

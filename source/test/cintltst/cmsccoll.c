@@ -28,6 +28,7 @@
 #include "cmemory.h"
 #include "ucmp32.h"
 #include "cstring.h"
+#include "unicode/parseerr.h"
 
 #define MAX_TOKEN_LEN 16
 
@@ -182,7 +183,7 @@ static void IncompleteCntTest( )
   u_uastrcpy(temp, " & Z < ABC < Q < B");
 
   coll = ucol_openRules(temp, u_strlen(temp), UCOL_NO_NORMALIZATION,
-                                                UCOL_DEFAULT_STRENGTH, &status);
+                                                UCOL_DEFAULT_STRENGTH, NULL,&status);
 
   if(U_SUCCESS(status)) {
     size = sizeof(cnt1)/sizeof(cnt1[0]);
@@ -209,7 +210,7 @@ static void IncompleteCntTest( )
 
   u_uastrcpy(temp, " & Z < DAVIS < MARK <DAV");
   coll = ucol_openRules(temp, u_strlen(temp), UCOL_NO_NORMALIZATION,
-                                                UCOL_DEFAULT_STRENGTH, &status);
+                                                UCOL_DEFAULT_STRENGTH,NULL, &status);
 
   if(U_SUCCESS(status)) {
     size = sizeof(cnt2)/sizeof(cnt2[0]);
@@ -638,7 +639,7 @@ static void testCollator(UCollator *coll, UErrorCode *status) {
   UChar first[256];
   UChar second[256];
   UChar *rulesCopy = NULL;
-
+  UParseError parseError;
   src.opts = &opts;
 
   rules = ucol_getRules(coll, &ruleLen);
@@ -650,10 +651,10 @@ static void testCollator(UCollator *coll, UErrorCode *status) {
     src.extraCurrent = src.end;
     src.extraEnd = src.end+UCOL_TOK_EXTRA_RULE_SPACE_SIZE;
     *first = *second = 0;
-
+    
     while ((current = ucol_tok_parseNextToken(&src, &strength,
                       &chOffset, &chLen, &exOffset, &exLen,
-                      &specs, startOfRules, status)) != NULL) {
+                      &specs, startOfRules,&parseError, status)) != NULL) {
       startOfRules = FALSE;
       varT = (UBool)((specs & UCOL_TOK_VARIABLE_TOP) != 0);
       top_ = (UBool)((specs & UCOL_TOK_TOP) != 0);
@@ -961,6 +962,7 @@ static void testAgainstUCA(UCollator *coll, UCollator *UCA, const char *refName,
 
   uint32_t UCAdiff = 0;
   uint32_t Windiff = 1;
+  UParseError parseError;
 
   src.opts = &opts;
 
@@ -979,7 +981,7 @@ static void testAgainstUCA(UCollator *coll, UCollator *UCA, const char *refName,
 
     while ((current = ucol_tok_parseNextToken(&src, &strength,
                       &chOffset, &chLen, &exOffset, &exLen,
-                      &specs, startOfRules, status)) != NULL) {
+                      &specs, startOfRules, &parseError,status)) != NULL) {
       startOfRules = FALSE;
       varT = (UBool)((specs & UCOL_TOK_VARIABLE_TOP) != 0);
       top_ = (UBool)((specs & UCOL_TOK_TOP) != 0);
@@ -1042,7 +1044,7 @@ static void testCEs(UCollator *coll, UErrorCode *status) {
   UBool startOfRules = TRUE;
   UColTokenParser src;
   UColOptionSet opts;
-
+  UParseError parseError;
   UChar *rulesCopy = NULL;
   collIterate c;
 
@@ -1064,7 +1066,7 @@ static void testCEs(UCollator *coll, UErrorCode *status) {
 
     while ((current = ucol_tok_parseNextToken(&src, &strength,
                       &chOffset, &chLen, &exOffset, &exLen,
-                      &specs, startOfRules, status)) != NULL) {
+                      &specs, startOfRules, &parseError,status)) != NULL) {
       startOfRules = FALSE;
       varT = (UBool)((specs & UCOL_TOK_VARIABLE_TOP) != 0);
       top_ = (UBool)((specs & UCOL_TOK_TOP) != 0);
@@ -1262,7 +1264,7 @@ static void RamsRulesTest( ) {
     log_verbose("Testing rule: %s\n", rulesToTest[i]);
     u_uastrcpy(rule, rulesToTest[i]);
     ruleLen = u_strlen(rule);
-    coll = ucol_openRules(rule, ruleLen, UCOL_NO_NORMALIZATION, UCOL_TERTIARY, &status);
+    coll = ucol_openRules(rule, ruleLen, UCOL_NO_NORMALIZATION, UCOL_TERTIARY, NULL,&status);
     if(U_SUCCESS(status)) {
       testCollator(coll, &status);
       testCEs(coll, &status);
@@ -1292,7 +1294,7 @@ static void IsTailoredTest( ) {
   u_uastrcpy(notTailored, "ZabD");
   notTailoredLen = u_strlen(notTailored);
 
-  coll = ucol_openRules(rule, ruleLen, UCOL_NO_NORMALIZATION, UCOL_TERTIARY, &status);
+  coll = ucol_openRules(rule, ruleLen, UCOL_NO_NORMALIZATION, UCOL_TERTIARY, NULL,&status);
   if(U_SUCCESS(status)) {
     for(i = 0; i<tailoredLen; i++) {
       if(!isTailored(coll, tailored[i], &status)) {
@@ -1347,7 +1349,7 @@ static void genericRulesStarterWithOptions(const char *rules, const char *s[], u
   uint32_t i;
 
   /* Changed UCOL_DEFAULT -> UCOL_DEFAULT_NORMALIZATION due to an inconsistent API and compiler errors */
-  UCollator *coll = ucol_openRules(rlz, rlen, UCOL_DEFAULT_NORMALIZATION, UCOL_DEFAULT, &status);
+  UCollator *coll = ucol_openRules(rlz, rlen, UCOL_DEFAULT_NORMALIZATION, UCOL_DEFAULT,NULL, &status);
 
   log_verbose("Rules starter for %s\n", rules);
 
@@ -1369,7 +1371,7 @@ static void genericRulesStarter(const char *rules, const char *s[], uint32_t siz
   uint32_t rlen = u_unescape(rules, rlz, 2048);
 
   /* Changed UCOL_DEFAULT -> UCOL_DEFAULT_NORMALIZATION due to an inconsistent API and compiler errors */
-  UCollator *coll = ucol_openRules(rlz, rlen, UCOL_DEFAULT_NORMALIZATION, UCOL_DEFAULT, &status);
+  UCollator *coll = ucol_openRules(rlz, rlen, UCOL_DEFAULT_NORMALIZATION, UCOL_DEFAULT,NULL, &status);
 
   log_verbose("Rules starter for %s\n", rules);
 
@@ -1445,7 +1447,7 @@ static void TestImplicitTailoring(void) {
   UCollator *coll = NULL;
   ruleLen = u_unescape(rule, t1, 256);
 
-  coll = ucol_openRules(t1, ruleLen, UCOL_NO_NORMALIZATION, UCOL_TERTIARY, &status);
+  coll = ucol_openRules(t1, ruleLen, UCOL_NO_NORMALIZATION, UCOL_TERTIARY,NULL, &status);
 
   if(U_SUCCESS(status)) {
     size = sizeof(impTest)/sizeof(impTest[0]);
@@ -1564,7 +1566,7 @@ static void TestComposeDecompose(void) {
 static void TestEmptyRule() {
   UErrorCode status = U_ZERO_ERROR;
   UChar rulez[] = { 0 };
-  UCollator *coll = ucol_openRules(rulez, 0, UCOL_NO_NORMALIZATION, UCOL_TERTIARY, &status);
+  UCollator *coll = ucol_openRules(rulez, 0, UCOL_NO_NORMALIZATION, UCOL_TERTIARY,NULL, &status);
 
   ucol_close(coll);
 }
@@ -1583,7 +1585,7 @@ static void TestUCARules() {
     ruleLen = ucol_getRulesEx(coll, UCOL_FULL_RULES, rules, ruleLen);
   }
   log_verbose("Rules length is %d\n", ruleLen);
-  UCAfromRules = ucol_openRules(rules, ruleLen, UNORM_NONE, UCOL_TERTIARY, &status);
+  UCAfromRules = ucol_openRules(rules, ruleLen, UNORM_NONE, UCOL_TERTIARY, NULL,&status);
   if(U_SUCCESS(status)) {
     ucol_close(UCAfromRules);
   } else {
@@ -1783,9 +1785,9 @@ static void TestRedundantRules() {
     rlen = u_unescape(rules[i], rlz, 2048);
 
     /* Changed UCOL_DEFAULT -> UCOL_DEFAULT_NORMALIZATION due to an inconsistent API and compiler errors */
-    credundant = ucol_openRules(rlz, rlen, UCOL_DEFAULT_NORMALIZATION, UCOL_DEFAULT, &status);
+    credundant = ucol_openRules(rlz, rlen, UCOL_DEFAULT_NORMALIZATION, UCOL_DEFAULT, NULL,&status);
     rlen = u_unescape(expectedRules[i], rlz, 2048);
-    cresulting = ucol_openRules(rlz, rlen, UCOL_DEFAULT_NORMALIZATION, UCOL_DEFAULT, &status);
+    cresulting = ucol_openRules(rlz, rlen, UCOL_DEFAULT_NORMALIZATION, UCOL_DEFAULT, NULL,&status);
 
     testAgainstUCA(cresulting, credundant, "expected", TRUE, &status);
 
@@ -1839,9 +1841,9 @@ static void TestExpansionSyntax() {
     rlen = u_unescape(rules[i], rlz, 2048);
 
     /* Changed UCOL_DEFAULT -> UCOL_DEFAULT_NORMALIZATION due to an inconsistent API and compiler errors */
-    credundant = ucol_openRules(rlz, rlen, UCOL_DEFAULT_NORMALIZATION, UCOL_DEFAULT, &status);
+    credundant = ucol_openRules(rlz, rlen, UCOL_DEFAULT_NORMALIZATION, UCOL_DEFAULT,NULL, &status);
     rlen = u_unescape(expectedRules[i], rlz, 2048);
-    cresulting = ucol_openRules(rlz, rlen, UCOL_DEFAULT_NORMALIZATION, UCOL_DEFAULT, &status);
+    cresulting = ucol_openRules(rlz, rlen, UCOL_DEFAULT_NORMALIZATION, UCOL_DEFAULT, NULL,&status);
 
     /* testAgainstUCA still doesn't handle expansions correctly, so this is not run */
     /* as a hard error test, but only in information mode */
@@ -1910,7 +1912,7 @@ static void TestCase( )
     }
     ucol_close(myCollation);
 
-    myCollation = ucol_openRules(gRules, u_strlen(gRules), UNORM_NONE, UCOL_TERTIARY, &status);
+    myCollation = ucol_openRules(gRules, u_strlen(gRules), UNORM_NONE, UCOL_TERTIARY,NULL, &status);
     if(U_FAILURE(status)){
         log_err("ERROR: in creation of rule based collator: %s\n", myErrorName(status));
         return;
@@ -2373,7 +2375,7 @@ static void TestContraction() {
         int j = 0;
         log_verbose("Rule %s for testing\n", testrules[i]);
         rlen = u_unescape(testrules[i], rule, 32);
-        coll = ucol_openRules(rule, rlen, UNORM_NFD, UCOL_TERTIARY, &status);
+        coll = ucol_openRules(rule, rlen, UNORM_NFD, UCOL_TERTIARY,NULL, &status);
         if (U_FAILURE(status)) {
             log_err("Collator creation failed %s\n", testrules[i]);
             return;
@@ -2412,7 +2414,7 @@ static void TestContraction() {
     }
 
     rlen = u_unescape("& a < b < c < ch < d & c = ch / h", rule, 256);
-    coll = ucol_openRules(rule, rlen, UNORM_NFD, UCOL_TERTIARY, &status);
+    coll = ucol_openRules(rule, rlen, UNORM_NFD, UCOL_TERTIARY,NULL, &status);
     if (ucol_strcoll(coll, testdata2[0], 2, testdata2[1], 2) != UCOL_LESS) {
         log_err("Expected \\u%04x\\u%04x < \\u%04x\\u%04x\n",
                 testdata2[0][0], testdata2[0][1], testdata2[1][0], 
@@ -2435,9 +2437,9 @@ static void TestContraction() {
         UChar               ch = 0x0042 /* 'B' */;
         uint32_t            ce;
         rlen = u_unescape(testrules3[i], rule, 32);
-        coll1 = ucol_openRules(rule, rlen, UNORM_NFD, UCOL_TERTIARY, &status);
+        coll1 = ucol_openRules(rule, rlen, UNORM_NFD, UCOL_TERTIARY,NULL, &status);
         rlen = u_unescape(testrules3[i + 1], rule, 32);
-        coll2 = ucol_openRules(rule, rlen, UNORM_NFD, UCOL_TERTIARY, &status);
+        coll2 = ucol_openRules(rule, rlen, UNORM_NFD, UCOL_TERTIARY,NULL, &status);
         if (U_FAILURE(status)) {
             log_err("Collator creation failed %s\n", testrules[i]);
             return;
@@ -2499,7 +2501,7 @@ static void TestExpansion() {
         int j = 0;
         log_verbose("Rule %s for testing\n", testrules[i]);
         rlen = u_unescape(testrules[i], rule, 32);
-        coll = ucol_openRules(rule, rlen, UNORM_NFD, UCOL_TERTIARY, &status);
+        coll = ucol_openRules(rule, rlen, UNORM_NFD, UCOL_TERTIARY,NULL, &status);
         if (U_FAILURE(status)) {
             log_err("Collator creation failed %s\n", testrules[i]);
             return;
@@ -2644,7 +2646,7 @@ static void TestVariableTopSetting() {
 
   UChar first[256] = { 0 };
   UChar second[256] = { 0 };
-
+  UParseError parseError;
   src.opts = &opts;
 
   log_verbose("Slide variable top over UCARules\n");
@@ -2661,7 +2663,7 @@ static void TestVariableTopSetting() {
 
     while ((current = ucol_tok_parseNextToken(&src, &strength,
                       &chOffset, &chLen, &exOffset, &exLen,
-                      &specs, startOfRules, &status)) != NULL) {
+                      &specs, startOfRules, &parseError,&status)) != NULL) {
       startOfRules = FALSE;
       if(0) {
         log_verbose("%04X %d ", *(rulesCopy+chOffset), chLen);

@@ -69,37 +69,37 @@ static void TestNumberFormat()
     /* Testing unum_open() with various Numberformat styles and locales*/
     status = U_ZERO_ERROR;
     log_verbose("Testing  unum_open() with default style and locale\n");
-    def=unum_open(style, NULL, &status);
+    def=unum_open(style, NULL,0,NULL, NULL,&status);
     if(U_FAILURE(status))
         log_err("Error in creating NumberFormat default using unum_open(): %s\n", myErrorName(status));
 
     log_verbose("\nTesting unum_open() with french locale and default style(decimal)\n");
-    fr=unum_open(style, "fr_FR", &status);
+    fr=unum_open(style,NULL,0, "fr_FR",NULL, &status);
     if(U_FAILURE(status))
         log_err("Error: could not create NumberFormat (french): %s\n", myErrorName(status));
 
     log_verbose("\nTesting unum_open(currency,NULL,status)\n");
     style=UNUM_CURRENCY;
     /* Can't hardcode the result to assume the default locale is "en_US". */
-    cur_def=unum_open(style, "en_US", &status);
+    cur_def=unum_open(style, NULL,0,"en_US", NULL, &status);
     if(U_FAILURE(status))
         log_err("Error: could not create NumberFormat using \n unum_open(currency, NULL, &status) %s\n",
                         myErrorName(status) );
 
     log_verbose("\nTesting unum_open(currency, frenchlocale, status)\n");
-    cur_fr=unum_open(style, "fr_FR", &status);
+    cur_fr=unum_open(style,NULL,0, "fr_FR", NULL, &status);
     if(U_FAILURE(status))
         log_err("Error: could not create NumberFormat using unum_open(currency, french, &status): %s\n", 
                 myErrorName(status));
 
     log_verbose("\nTesting unum_open(percent, NULL, status)\n");
     style=UNUM_PERCENT;
-    per_def=unum_open(style, NULL, &status);
+    per_def=unum_open(style,NULL,0, NULL,NULL, &status);
     if(U_FAILURE(status))
         log_err("Error: could not create NumberFormat using unum_open(percent, NULL, &status): %s\n", myErrorName(status));
 
     log_verbose("\nTesting unum_open(percent,frenchlocale, status)\n");
-    per_fr=unum_open(style, "fr_FR", &status);
+    per_fr=unum_open(style, NULL,0,"fr_FR", NULL,&status);
     if(U_FAILURE(status))
         log_err("Error: could not create NumberFormat using unum_open(percent, french, &status): %s\n", myErrorName(status));
 
@@ -293,7 +293,7 @@ uprv_free(result);
     /* create a number format using unum_openPattern(....)*/
     log_verbose("\nTesting unum_openPattern()\n");
     u_uastrcpy(temp1, "#,##0.0#;(#,##0.0#)");
-    pattern=unum_openPattern(temp1, u_strlen(temp1), NULL, &status);
+    pattern=unum_open(UNUM_IGNORE,temp1, u_strlen(temp1), NULL, NULL,&status);
     if(U_FAILURE(status))
     {
         log_err("error in unum_openPattern(): %s\n", myErrorName(status) );;
@@ -343,7 +343,7 @@ uprv_free(result);
     }
 
     status=U_ZERO_ERROR;
-    cur_frpattern=unum_openPattern(result, u_strlen(result), "fr_FR", &status);
+    cur_frpattern=unum_open(UNUM_IGNORE,result, u_strlen(result), "fr_FR",NULL, &status);
     if(U_FAILURE(status))
     {
         log_err("error in unum_openPattern(): %s\n", myErrorName(status));
@@ -375,7 +375,7 @@ uprv_free(result);
     if(U_FAILURE(status)){
         log_err("Fail: error in unum_setSymbols: %s\n", myErrorName(status));
     }
-    unum_applyPattern(cur_frpattern, FALSE, result, u_strlen(result));
+    unum_applyPattern(cur_frpattern, FALSE, result, u_strlen(result),NULL,NULL);
     unum_getSymbols(cur_frpattern, &symbols2);
     if((symbols1.decimalSeparator != symbols2.decimalSeparator) ||
        (symbols1.groupingSeparator != symbols2.groupingSeparator) ||
@@ -623,7 +623,7 @@ static void TestNumberFormatPadding()
     log_verbose("\nTesting unum_openPattern() with padding\n");
     u_uastrcpy(temp1, "*#,##0.0#*;(#,##0.0#)");
     status=U_ZERO_ERROR;
-    pattern=unum_openPattern(temp1, u_strlen(temp1), NULL, &status);
+    pattern=unum_open(UNUM_IGNORE,temp1, u_strlen(temp1), NULL, NULL,&status);
     if(U_SUCCESS(status))
     {
         log_err("error in unum_openPattern(%s): %s\n", temp1, myErrorName(status) );;
@@ -636,7 +636,7 @@ static void TestNumberFormatPadding()
 /*    u_uastrcpy(temp1, "*x#,###,###,##0.0#;(*x#,###,###,##0.0#)"); */
     u_uastrcpy(temp1, "*x#,###,###,##0.0#;*x(###,###,##0.0#)");
     status=U_ZERO_ERROR;
-    pattern=unum_openPattern(temp1, u_strlen(temp1), "en_US", &status);
+    pattern=unum_open(UNUM_IGNORE,temp1, u_strlen(temp1), "en_US",NULL, &status);
     if(U_FAILURE(status))
     {
         log_err("error in padding unum_openPattern(%s): %s\n", temp1, myErrorName(status) );;
