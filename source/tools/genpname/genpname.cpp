@@ -692,21 +692,22 @@ void Builder::computeOffsets() {
     #define COMPUTE_OFFSET(foo) COMPUTE_OFFSET2(foo,int32_t)
 
     #define COMPUTE_OFFSET2(foo,type) \
-      if (debug>0) printf(#foo "\t offset=%4d  size=%5d\n", off, foo##_size); \
-      foo##_offset = off;       \
-      U_ASSERT(IS_VALID_OFFSET(off + foo##_size)); \
-      U_ASSERT(foo##_offset % sizeof(type) == 0); \
+      if (debug>0)\
+        printf(#foo "\t offset=%4d  size=%5d\n", off, (int)foo##_size);\
+      foo##_offset = off;\
+      U_ASSERT(IS_VALID_OFFSET(off + foo##_size));\
+      U_ASSERT(foo##_offset % sizeof(type) == 0);\
       off = (Offset) (off + foo##_size);
 
     COMPUTE_OFFSET(enumToName);     // 0:
-    COMPUTE_OFFSET(nameToEnum);            // 2:
-    COMPUTE_OFFSET(enumToValue);           // 3:
-    COMPUTE_OFFSET(valueMap);              // 4:
+    COMPUTE_OFFSET(nameToEnum);     // 2:
+    COMPUTE_OFFSET(enumToValue);    // 3:
+    COMPUTE_OFFSET(valueMap);       // 4:
         
     for (i=0; i<valueMap_count; ++i) {
         if (debug>0) {
             printf(" enumToName[%d]\t offset=%4d  size=%5d\n",
-                   i, off, valueEnumToName_size[i]);
+                   (int)i, off, (int)valueEnumToName_size[i]);
         }
 
         valueEnumToName_offset[i] = off;   // 5:
@@ -715,7 +716,7 @@ void Builder::computeOffsets() {
 
         if (debug>0) {
             printf(" nameToEnum[%d]\t offset=%4d  size=%5d\n",
-                   i, off, valueNameToEnum_size[i]);
+                   (int)i, off, (int)valueNameToEnum_size[i]);
         }
 
         valueNameToEnum_offset[i] = off;   // 6:
@@ -728,7 +729,7 @@ void Builder::computeOffsets() {
     COMPUTE_OFFSET2(stringPool,char);      // 99:
 
     total_size = off;
-    if (debug>0) printf("total                         size=%5d\n\n", total_size);
+    if (debug>0) printf("total                         size=%5d\n\n", (int)total_size);
     U_ASSERT(total_size <= (MAX_OFFSET+1));
 }
 
@@ -990,11 +991,11 @@ NameToEnumEntry* genpname::createNameIndex(const AliasList& list,
     uprv_sortArray(nameIndex, nameIndexCount, sizeof(nameIndex[0]),
                    compareNameToEnumEntry, NULL, TRUE, &errorCode);
     if (debug>1) {
-        printf("Alias names: %d\n", nameIndexCount);
+        printf("Alias names: %d\n", (int)nameIndexCount);
         for (i=0; i<nameIndexCount; ++i) {
             printf("%s => %d\n",
                    STRING_TABLE[nameIndex[i].nameIndex].str,
-                   nameIndex[i].enumValue);
+                   (int)nameIndex[i].enumValue);
         }
         printf("\n");
     }
@@ -1044,11 +1045,11 @@ EnumToNameGroupEntry* genpname::createEnumIndex(const AliasList& list) {
     uprv_sortArray(enumIndex, count, sizeof(enumIndex[0]),
                    compareEnumToNameGroupEntry, NULL, FALSE, &errorCode);
     if (debug>1) {
-        printf("Property enums: %d\n", count);
+        printf("Property enums: %d\n", (int)count);
         for (i=0; i<count; ++i) {
             printf("%d => %d: ",
-                   enumIndex[i].enumValue,
-                   enumIndex[i].nameGroupIndex);
+                   (int)enumIndex[i].enumValue,
+                   (int)enumIndex[i].nameGroupIndex);
             UBool done = FALSE;
             for (j=enumIndex[i].nameGroupIndex; !done; ++j) {
                 k = NAME_GROUP[j];
@@ -1117,12 +1118,12 @@ int genpname::MMain(int argc, char* argv[])
     // The NameToEnum sorter sorts each such map's string offsets instead.
 
     if (debug>1) {
-        printf("String pool: %d\n", STRING_COUNT);
+        printf("String pool: %d\n", (int)STRING_COUNT);
         for (i=0; i<STRING_COUNT; ++i) {
             if (i != 0) {
                 printf(", ");
             }
-            printf("%s (%d)", STRING_TABLE[i].str, STRING_TABLE[i].index);
+            printf("%s (%d)", STRING_TABLE[i].str, (int)STRING_TABLE[i].index);
         }
         printf("\n\n");
     }
