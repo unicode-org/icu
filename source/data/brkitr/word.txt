@@ -118,13 +118,12 @@ $Hangul_Sequence = ((($L+ $LV?) | ($L* $LV)) $V* $T* ) | ($L* $LVT $T*);
 ####################################################################################
 #
 #  Word Break Rules.    Definitions and Rules specific to word break begin
-#                       Here.  Preceding stuff is copied from line or char break rules.
+#                       Here.  Preceding definitions are copied from line or char break rules.
 #
 ####################################################################################
-$LineBreak  = [$Ideographic $Hiragana $Katakana];
-$Letter     = [[[:L:] [:Sk:]] & [^$LineBreak]];
-$MidLetter  = [\u0027 \u2019 \u003a \u0029 \u00ad \u05f3 \u05f4];
-
+$LineBreak     = [$Ideographic $Hiragana $Katakana];
+$Letter        = [[[:L:] [:Sk:]] & [^$LineBreak]];
+$MidLetter     = [\u0027 \u2019 \u003a \u0029 \u00ad \u05f3 \u05f4];
 
 #
 #  LetterEx - extended letter, includes combining chars, CGJ sequences, Hangul sequences.
@@ -163,10 +162,15 @@ $MidLetNum* ($LetterEx | $MidLetterSequence) $MidLetNum* {200};
 
 
 #
-#  Hiragana and KataKana
+#  Hiragana and Katakana
 #
 ($Hiragana $Extend*)+ {300};
 ($Katakana $Extend*)+ {300};
+
+#
+#  Ideographic Characters.  Stand by themselves as words.
+#
+$Ideographic $Extend* {400};
 
 #
 #  Everything Else.
