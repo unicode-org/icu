@@ -40,10 +40,8 @@ public class CollationMiscTest extends TestFmwk{
         ICUResourceBundle rb = (ICUResourceBundle)UResourceBundle.getBundleInstance(UResourceBundle.ICU_BASE_NAME,locale);
         if (rb != null) {
             try {
-                 String collkey 
-                 = (String)rb.getObjectWithFallback("collations/default"); 
-                 Object elements
-                 = rb.getObjectWithFallback("collations/" + collkey);
+                 String collkey = rb.getStringWithFallback("collations/default"); 
+                 ICUResourceBundle elements = rb.getWithFallback("collations/" + collkey);
                  if (elements != null) {
                      return true;
                  }
@@ -1588,10 +1586,8 @@ public class CollationMiscTest extends TestFmwk{
             Locale l = locale[i];
             try {
                 ICUResourceBundle rb = (ICUResourceBundle)UResourceBundle.getBundleInstance(UResourceBundle.ICU_COLLATION_BASE_NAME,l);
-                String collkey 
-                    = (String)rb.getObjectWithFallback("collations/default"); 
-                ICUResourceBundle elements 
-                            = (ICUResourceBundle)rb.getObjectWithFallback("collations/" + collkey);
+                String collkey = rb.getStringWithFallback("collations/default"); 
+                ICUResourceBundle elements = rb.getWithFallback("collations/" + collkey);
                 if (elements == null) {
                     continue;
                 }

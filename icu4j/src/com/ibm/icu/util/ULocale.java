@@ -592,8 +592,8 @@ public final class ULocale implements Serializable {
      * Private constructor used by static initializers.
      */
     private ULocale(String localeID, Locale locale) {
-	this.localeID = localeID;
-	this.locale = locale;
+        this.localeID = localeID;
+        this.locale = locale;
     }
 
     /**
@@ -645,16 +645,16 @@ public final class ULocale implements Serializable {
         if(script!=null && script.length() > 0){
             buf.append(UNDERSCORE);
             buf.append(script.substring(0, 1).toUpperCase());
-	    buf.append(script.substring(1).toLowerCase());
+            buf.append(script.substring(1).toLowerCase());
         }
         if(country!=null && country.length() > 0){
             buf.append(UNDERSCORE);
             buf.append(country.toUpperCase());
         }
         if(variant!=null && variant.length() > 0){
-	    if (country == null || country.length() == 0) {
-		buf.append(UNDERSCORE);
-	    }
+            if (country == null || country.length() == 0) {
+                buf.append(UNDERSCORE);
+            }
             buf.append(UNDERSCORE);
             buf.append(variant.toUpperCase());
         }
@@ -669,7 +669,7 @@ public final class ULocale implements Serializable {
      */
     public Locale toLocale() {
         if (locale == null) {
-	    String[] names = new IDParser(localeID).getLanguageScriptCountryVariant();
+            String[] names = new IDParser(localeID).getLanguageScriptCountryVariant();
             locale = new Locale(names[0], names[2], names[3]);
         }
         return locale;
@@ -685,13 +685,13 @@ public final class ULocale implements Serializable {
      * @draft ICU 2.8
      */ 
     public static ULocale getDefault() {
-	synchronized (ULocale.class) {
-	    Locale defaultLocale = Locale.getDefault();
-	    if (defaultULocale == null || defaultULocale.toLocale() != defaultLocale) {
-		defaultULocale = new ULocale(defaultLocale);
-	    }
-	    return defaultULocale;
-	}
+        synchronized (ULocale.class) {
+            Locale defaultLocale = Locale.getDefault();
+            if (defaultULocale == null || defaultULocale.toLocale() != defaultLocale) {
+                defaultULocale = new ULocale(defaultLocale);
+            }
+            return defaultULocale;
+        }
     }
 
     /**
@@ -710,7 +710,7 @@ public final class ULocale implements Serializable {
      */
     public static synchronized void setDefault(ULocale newLocale){
         Locale.setDefault(newLocale.toLocale());
-	defaultULocale = newLocale;
+        defaultULocale = newLocale;
     }
     
     /**
@@ -719,7 +719,7 @@ public final class ULocale implements Serializable {
      * @draft ICU 3.0
      */
     public Object clone() {
-	return this;
+        return this;
     }
 
     /**
@@ -743,14 +743,14 @@ public final class ULocale implements Serializable {
      */
     public boolean equals(Object obj) {
         if (this == obj) {
-	    return true;
+            return true;
         }
         if (obj instanceof String) {
             return localeID.equals((String)obj);   
         }
         if (obj instanceof ULocale) {
-	    return localeID.equals(((ULocale)obj).localeID);
-	}
+            return localeID.equals(((ULocale)obj).localeID);
+        }
         return false;
     }
     
@@ -759,7 +759,7 @@ public final class ULocale implements Serializable {
      * @draft ICU 3.0
      */
     public static ULocale[] getAvailableLocales() {
-	return ICUResourceBundle.getAvailableULocales();
+        return ICUResourceBundle.getAvailableULocales();
     }
 
     /**
@@ -867,7 +867,7 @@ public final class ULocale implements Serializable {
      * @draft ICU 3.0
      */
     public String getBaseName() {
-	return getBaseName(localeID);
+        return getBaseName(localeID);
     }
     
     /**
@@ -877,7 +877,7 @@ public final class ULocale implements Serializable {
      * @draft ICU 3.0
      */
     public static String getBaseName(String localeID){
-	return new IDParser(localeID).getBaseName();
+        return new IDParser(localeID).getBaseName();
     }
 
     /**
@@ -915,7 +915,7 @@ public final class ULocale implements Serializable {
      * @draft ICU 3.0
      */
     public Iterator getKeywords() {
-	return getKeywords(localeID);
+        return getKeywords(localeID);
     }
 
     /**
@@ -924,7 +924,7 @@ public final class ULocale implements Serializable {
      * @draft ICU 3.0
      */
     public static Iterator getKeywords(String localeID){
-	return new IDParser(localeID).getKeywords();
+        return new IDParser(localeID).getKeywords();
     }
 
     /**
@@ -934,7 +934,7 @@ public final class ULocale implements Serializable {
      * @draft ICU 3.0
      */
     public String getKeywordValue(String keywordName){
-	return getKeywordValue(localeID, keywordName);
+        return getKeywordValue(localeID, keywordName);
     }
     
     /**
@@ -944,7 +944,7 @@ public final class ULocale implements Serializable {
      * @draft ICU 3.0
      */
     public static String getKeywordValue(String localeID, String keywordName) {
-	return new IDParser(localeID).getKeywordValue(keywordName);
+        return new IDParser(localeID).getKeywordValue(keywordName);
     }
 
     /**
@@ -956,578 +956,578 @@ public final class ULocale implements Serializable {
         private char[] buffer;
         private int blen;
 
-	/**
-	 * Parsing constants.
-	 */
-	private static final char KEYWORD_SEPARATOR     = '@';
-	private static final char HYPHEN                = '-';
-	private static final char KEYWORD_ASSIGN        = '=';
-	private static final char COMMA                 = ',';
-	private static final char ITEM_SEPARATOR        = ';';
-	private static final char DOT                   = '.';
+        /**
+         * Parsing constants.
+         */
+        private static final char KEYWORD_SEPARATOR     = '@';
+        private static final char HYPHEN                = '-';
+        private static final char KEYWORD_ASSIGN        = '=';
+        private static final char COMMA                 = ',';
+        private static final char ITEM_SEPARATOR        = ';';
+        private static final char DOT                   = '.';
 
         private IDParser(String localeID){
             id = localeID.toCharArray();
             index = 0;
-	    buffer = new char[id.length + 5];
-	    blen = 0;
+            buffer = new char[id.length + 5];
+            blen = 0;
         }
 
-	private void reset() {
-	    index = blen = 0;
-	}
+        private void reset() {
+            index = blen = 0;
+        }
 
-	// utilities for working on text in the buffer
+        // utilities for working on text in the buffer
 
-	/**
-	 * Append c to the buffer.
-	 */
-	private void append(char c) {
-	    try {
-		buffer[blen] = c;
-	    }
-	    catch (IndexOutOfBoundsException e) {
-		if (buffer.length > 512) {
-		    // something is seriously wrong, let this go
-		    throw e;
-		}
-		char[] nbuffer = new char[buffer.length * 2];
-		System.arraycopy(buffer, 0, nbuffer, 0, buffer.length);
-		nbuffer[blen] = c;
-		buffer = nbuffer;
-	    }
-	    ++blen;
-	}
+        /**
+         * Append c to the buffer.
+         */
+        private void append(char c) {
+            try {
+                buffer[blen] = c;
+            }
+            catch (IndexOutOfBoundsException e) {
+                if (buffer.length > 512) {
+                    // something is seriously wrong, let this go
+                    throw e;
+                }
+                char[] nbuffer = new char[buffer.length * 2];
+                System.arraycopy(buffer, 0, nbuffer, 0, buffer.length);
+                nbuffer[blen] = c;
+                buffer = nbuffer;
+            }
+            ++blen;
+        }
 
-	/**
-	 * Return the text in the buffer from start to blen as a String.
-	 */
-	private String getString(int start) {
-	    if (start == blen) {
-		return EMPTY_STRING;
-	    }
-	    return new String(buffer, start, blen-start);
-	}
+        /**
+         * Return the text in the buffer from start to blen as a String.
+         */
+        private String getString(int start) {
+            if (start == blen) {
+                return EMPTY_STRING;
+            }
+            return new String(buffer, start, blen-start);
+        }
 
-	/**
-	 * Set the length of the buffer to pos, then append the string.
-	 */
-	private void set(int pos, String s) {
-	    this.blen = pos; // no safety
-	    append(s);
-	}
+        /**
+         * Set the length of the buffer to pos, then append the string.
+         */
+        private void set(int pos, String s) {
+            this.blen = pos; // no safety
+            append(s);
+        }
 
-	/**
-	 * Append the string to the buffer.
-	 */
-	private void append(String s) {
-	    for (int i = 0; i < s.length(); ++i) {
-		append(s.charAt(i));
-	    }
-	}
+        /**
+         * Append the string to the buffer.
+         */
+        private void append(String s) {
+            for (int i = 0; i < s.length(); ++i) {
+                append(s.charAt(i));
+            }
+        }
 
-	// utilities for parsing text out of the id
+        // utilities for parsing text out of the id
 
-	/**
-	 * Character to indicate no more text is available in the id.
-	 */
-	private static final char DONE = '\uffff';
+        /**
+         * Character to indicate no more text is available in the id.
+         */
+        private static final char DONE = '\uffff';
 
-	/**
-	 * Return the character at index in the id, and advance index.  The returned character
-	 * is DONE if index was at the limit of the buffer.  The index is advanced regardless
-	 * so that decrementing the index will always 'unget' the last character returned.
-	 */
+        /**
+         * Return the character at index in the id, and advance index.  The returned character
+         * is DONE if index was at the limit of the buffer.  The index is advanced regardless
+         * so that decrementing the index will always 'unget' the last character returned.
+         */
         private char next() {
-	    if (index == id.length) {
-	      index++;
-	      return DONE; // 
-	    }
+            if (index == id.length) {
+              index++;
+              return DONE; // 
+            }
 
-	    return id[index++];
-	}
+            return id[index++];
+        }
 
-	/**
-	 * Advance index until the next terminator or id separator, and leave it there.
-	 */
-	private void skipUntilTerminatorOrIDSeparator() {
-	    while (!isTerminatorOrIDSeparator(next()));
-	    --index;
-	}
+        /**
+         * Advance index until the next terminator or id separator, and leave it there.
+         */
+        private void skipUntilTerminatorOrIDSeparator() {
+            while (!isTerminatorOrIDSeparator(next()));
+            --index;
+        }
 
-	/**
-	 * Return true if the character at index in the id is a terminator.
-	 */
-	private boolean atTerminator() {
-	    return index >= id.length || isTerminator(id[index]);
-	}
+        /**
+         * Return true if the character at index in the id is a terminator.
+         */
+        private boolean atTerminator() {
+            return index >= id.length || isTerminator(id[index]);
+        }
 
-	/**
-	 * Return true if the character is an id separator (underscore or hyphen).
-	 */
-	private static boolean isIDSeparator(char c) {
-	    return c == UNDERSCORE || c == HYPHEN;
-	}
+        /**
+         * Return true if the character is an id separator (underscore or hyphen).
+         */
+        private static boolean isIDSeparator(char c) {
+            return c == UNDERSCORE || c == HYPHEN;
+        }
 
-	/**
-	 * Return true if the character is a terminator (keyword separator, dot, or DONE).
-	 * Dot is a terminator because of the POSIX form, where dot precedes the codepage.
-	 */
-	private static boolean isTerminator(char c){
-	    return c == KEYWORD_SEPARATOR || c == DOT || c == DONE;   
-	}
+        /**
+         * Return true if the character is a terminator (keyword separator, dot, or DONE).
+         * Dot is a terminator because of the POSIX form, where dot precedes the codepage.
+         */
+        private static boolean isTerminator(char c){
+            return c == KEYWORD_SEPARATOR || c == DOT || c == DONE;   
+        }
 
-	/**
-	 * Return true if the character is a terminator or id separator.
-	 */
-	private static boolean isTerminatorOrIDSeparator(char c) {
-	    return (c == KEYWORD_SEPARATOR) || (c == DOT) || 
-		(c == UNDERSCORE || c == HYPHEN) || 
-		(c == DONE);   
-	}
+        /**
+         * Return true if the character is a terminator or id separator.
+         */
+        private static boolean isTerminatorOrIDSeparator(char c) {
+            return (c == KEYWORD_SEPARATOR) || (c == DOT) || 
+                (c == UNDERSCORE || c == HYPHEN) || 
+                (c == DONE);   
+        }
 
-	/**
-	 * Return true if the start of the buffer has an experimental or private language 
-	 * prefix, the pattern '[ixIX][-_].' shows the syntax checked.
-	 */
-	private boolean haveExperimentalLanguagePrefix() {
-	    if (id.length > 2) {
-		char c = id[1];
-		if (c == HYPHEN || c == UNDERSCORE) {
-		    c = id[0];
-		    return c == 'x' || c == 'X' || c == 'i' || c == 'I';
-		}
-	    }
-	    return false;
-	}
+        /**
+         * Return true if the start of the buffer has an experimental or private language 
+         * prefix, the pattern '[ixIX][-_].' shows the syntax checked.
+         */
+        private boolean haveExperimentalLanguagePrefix() {
+            if (id.length > 2) {
+                char c = id[1];
+                if (c == HYPHEN || c == UNDERSCORE) {
+                    c = id[0];
+                    return c == 'x' || c == 'X' || c == 'i' || c == 'I';
+                }
+            }
+            return false;
+        }
 
-	/**
-	 * Return true if a value separator occurs at or after index.
-	 */
-	private boolean haveKeywordAssign() {
-	    // assume it is safe to start from index
-	    for (int i = index; i < id.length; ++i) {
-		if (id[i] == KEYWORD_ASSIGN) {
-		    return true;
-		}
-	    }
-	    return false;
-	}
+        /**
+         * Return true if a value separator occurs at or after index.
+         */
+        private boolean haveKeywordAssign() {
+            // assume it is safe to start from index
+            for (int i = index; i < id.length; ++i) {
+                if (id[i] == KEYWORD_ASSIGN) {
+                    return true;
+                }
+            }
+            return false;
+        }
 
-	/**
-	 * Advance index past language, and accumulate normalized language code in buffer.
-	 * Index must be at 0 when this is called.  Index is left at a terminator or id 
-	 * separator.  Returns the start of the language code in the buffer.
-	 */
-	private int parseLanguage() {
-	    if (haveExperimentalLanguagePrefix()) {
-		append(Character.toLowerCase(id[0]));
-		append(HYPHEN);
-		index = 2;
-	    }
+        /**
+         * Advance index past language, and accumulate normalized language code in buffer.
+         * Index must be at 0 when this is called.  Index is left at a terminator or id 
+         * separator.  Returns the start of the language code in the buffer.
+         */
+        private int parseLanguage() {
+            if (haveExperimentalLanguagePrefix()) {
+                append(Character.toLowerCase(id[0]));
+                append(HYPHEN);
+                index = 2;
+            }
         
-	    char c;
-	    while(!isTerminatorOrIDSeparator(c = next())) {
-		append(Character.toLowerCase(c));
-	    }
-	    --index;
+            char c;
+            while(!isTerminatorOrIDSeparator(c = next())) {
+                append(Character.toLowerCase(c));
+            }
+            --index;
 
-	    if (blen == 3) {
-		/* convert 3 character code to 2 character code if possible *CWB*/
-		String lang = getString(0);
-		int offset = findIndex(languages3, lang);
-		if (offset >= 0) {
-		    set(0, languages[offset]);
-		} else {
-		    offset = findIndex(obsoleteLanguages3, lang);
-		    if (offset >= 0) {
-			set(0, obsoleteLanguages[offset]);
-		    }
-		}
-	    }
+            if (blen == 3) {
+                /* convert 3 character code to 2 character code if possible *CWB*/
+                String lang = getString(0);
+                int offset = findIndex(languages3, lang);
+                if (offset >= 0) {
+                    set(0, languages[offset]);
+                } else {
+                    offset = findIndex(obsoleteLanguages3, lang);
+                    if (offset >= 0) {
+                        set(0, obsoleteLanguages[offset]);
+                    }
+                }
+            }
 
-	    return 0;
-	}
+            return 0;
+        }
 
-	/**
-	 * Advance index past language.  Index must be at 0 when this is called.  Index
-	 * is left at a terminator or id separator.
-	 */
-	private void skipLanguage() {
-	    if (haveExperimentalLanguagePrefix()) {
-		index = 2;
-	    }
-	    skipUntilTerminatorOrIDSeparator();
-	}
+        /**
+         * Advance index past language.  Index must be at 0 when this is called.  Index
+         * is left at a terminator or id separator.
+         */
+        private void skipLanguage() {
+            if (haveExperimentalLanguagePrefix()) {
+                index = 2;
+            }
+            skipUntilTerminatorOrIDSeparator();
+        }
 
-	/**
-	 * Advance index past script, and accumulate normalized script in buffer.
-	 * Index must be immediately after the language.
-	 * If the item at this position is not a script (is not four characters
-	 * long) leave index and buffer unchanged.  Otherwise index is left at
-	 * a terminator or id separator.  Returns the start of the script code
-	 * in the buffer (this may be equal to the buffer length, if there is no
-	 * script).
-	 */
-	private int parseScript() {
-	    if (!atTerminator()) {
-		int oldIndex = index; // save original index
-		++index;
+        /**
+         * Advance index past script, and accumulate normalized script in buffer.
+         * Index must be immediately after the language.
+         * If the item at this position is not a script (is not four characters
+         * long) leave index and buffer unchanged.  Otherwise index is left at
+         * a terminator or id separator.  Returns the start of the script code
+         * in the buffer (this may be equal to the buffer length, if there is no
+         * script).
+         */
+        private int parseScript() {
+            if (!atTerminator()) {
+                int oldIndex = index; // save original index
+                ++index;
 
-		int oldBlen = blen; // get before append hyphen, if we truncate everything is undone
-		boolean first = true;
-		char c;
-		while(!isTerminatorOrIDSeparator(c = next())) {
-		    if (first) {
-			append(UNDERSCORE); // note, adds to length
-			append(Character.toUpperCase(c));
-			first = false;
-		    } else {
-			append(Character.toLowerCase(c));
-		    }
-		}
-		--index; // unget
+                int oldBlen = blen; // get before append hyphen, if we truncate everything is undone
+                boolean first = true;
+                char c;
+                while(!isTerminatorOrIDSeparator(c = next())) {
+                    if (first) {
+                        append(UNDERSCORE); // note, adds to length
+                        append(Character.toUpperCase(c));
+                        first = false;
+                    } else {
+                        append(Character.toLowerCase(c));
+                    }
+                }
+                --index; // unget
 
-		/* If it's not exactly 4 characters long, then it's not a script. */
-		if (index - oldIndex != 5) { // +1 to account for separator
-		    index = oldIndex;
-		    blen = oldBlen;
-		} else {
-		    oldBlen++; // index past hyphen, for clients who want to extract just the script
-		}
+                /* If it's not exactly 4 characters long, then it's not a script. */
+                if (index - oldIndex != 5) { // +1 to account for separator
+                    index = oldIndex;
+                    blen = oldBlen;
+                } else {
+                    oldBlen++; // index past hyphen, for clients who want to extract just the script
+                }
 
-		return oldBlen;
-	    }
-	    return blen;
-	}
+                return oldBlen;
+            }
+            return blen;
+        }
 
-	/**
-	 * Advance index past script.
-	 * Index must be immediately after the language and IDSeparator.
-	 * If the item at this position is not a script (is not four characters
-	 * long) leave index.  Otherwise index is left at a terminator or
-	 * id separator.
-	 */
-	private void skipScript() {
-	    if (!atTerminator()) {
-		int oldIndex = index;
-		++index;
+        /**
+         * Advance index past script.
+         * Index must be immediately after the language and IDSeparator.
+         * If the item at this position is not a script (is not four characters
+         * long) leave index.  Otherwise index is left at a terminator or
+         * id separator.
+         */
+        private void skipScript() {
+            if (!atTerminator()) {
+                int oldIndex = index;
+                ++index;
 
-		skipUntilTerminatorOrIDSeparator();
-		if (index - oldIndex != 5) { // +1 to account for separator
-		    index = oldIndex;
-		}
-	    }
-	}
+                skipUntilTerminatorOrIDSeparator();
+                if (index - oldIndex != 5) { // +1 to account for separator
+                    index = oldIndex;
+                }
+            }
+        }
 
-	/**
-	 * Advance index past country, and accumulate normalized country in buffer.
-	 * Index must be immediately after the script (if there is one, else language)
-	 * and IDSeparator.  Return the start of the country code in the buffer.
-	 */
-	private int parseCountry() {
-	    if (!atTerminator()) {
-		int oldIndex = index;
-		++index;
+        /**
+         * Advance index past country, and accumulate normalized country in buffer.
+         * Index must be immediately after the script (if there is one, else language)
+         * and IDSeparator.  Return the start of the country code in the buffer.
+         */
+        private int parseCountry() {
+            if (!atTerminator()) {
+                int oldIndex = index;
+                ++index;
 
-		// even if there is no country code, we insert a hyphen to mark
-		// the space in case there is a following variant.  if there's no
-		// variant, we'll trim it later.
-		append(UNDERSCORE);
+                // even if there is no country code, we insert a hyphen to mark
+                // the space in case there is a following variant.  if there's no
+                // variant, we'll trim it later.
+                append(UNDERSCORE);
 
-		int oldBlen = blen; // after hyphen
+                int oldBlen = blen; // after hyphen
 
-		char c;
-		while (!isTerminatorOrIDSeparator(c = next())) {
-		    append(Character.toUpperCase(c));
-		}
-		--index; // unget
+                char c;
+                while (!isTerminatorOrIDSeparator(c = next())) {
+                    append(Character.toUpperCase(c));
+                }
+                --index; // unget
 
-		if (blen - oldBlen == 3) {
-		    /* convert 3 character code to 2 character code if possible *CWB*/
-		    int offset = findIndex(countries3, getString(oldBlen));
-		    if (offset >= 0) {
-			set(oldBlen, countries[offset]);
-		    } else {
-			offset = findIndex(obsoleteCountries3, getString(oldBlen));
-			if (offset >= 0) {
-			    set(oldBlen, obsoleteCountries[offset]);
-			}
-		    }
-		}
+                if (blen - oldBlen == 3) {
+                    /* convert 3 character code to 2 character code if possible *CWB*/
+                    int offset = findIndex(countries3, getString(oldBlen));
+                    if (offset >= 0) {
+                        set(oldBlen, countries[offset]);
+                    } else {
+                        offset = findIndex(obsoleteCountries3, getString(oldBlen));
+                        if (offset >= 0) {
+                            set(oldBlen, obsoleteCountries[offset]);
+                        }
+                    }
+                }
 
-		return oldBlen;
-	    }
+                return oldBlen;
+            }
 
-	    return blen;
-	}
+            return blen;
+        }
 
-	/**
-	 * Advance index past country.
-	 * Index must be immediately after the script (if there is one, else language)
-	 * and IDSeparator.
-	 */
-	private void skipCountry() {
-	    if (!atTerminator()) {
-		++index;
-		skipUntilTerminatorOrIDSeparator();
-	    }
-	}
+        /**
+         * Advance index past country.
+         * Index must be immediately after the script (if there is one, else language)
+         * and IDSeparator.
+         */
+        private void skipCountry() {
+            if (!atTerminator()) {
+                ++index;
+                skipUntilTerminatorOrIDSeparator();
+            }
+        }
 
-	/**
-	 * Advance index past variant, and accumulate normalized variant in buffer.  This ignores
-	 * the codepage information from POSIX ids.  Index must be immediately after the country
-	 * or script.  Index is left at the keyword separator or at the end of the text.  Return
-	 * the start of the variant code in the buffer.
-	 *
-	 * In standard form, we can have the following forms:
-	 * ll__VVVV
-	 * ll_CC_VVVV
-	 * ll_Ssss_VVVV
-	 * ll_Ssss_CC_VVVV
-	 *
-	 * This also handles POSIX ids, which can have the following forms (pppp is code page id):
-	 * ll_CC.pppp          --> ll_CC
-	 * ll_CC.pppp@VVVV     --> ll_CC_VVVV
-	 * ll_CC@VVVV          --> ll_CC_VVVV
-	 *
-	 * We identify this use of '@' in POSIX ids by looking for an '=' following
-	 * the '@'.  If there is one, we consider '@' to start a keyword list, instead of
-	 * being part of a POSIX id.
-	 */
-	private int parseVariant() {
-	    int oldBlen = blen;
+        /**
+         * Advance index past variant, and accumulate normalized variant in buffer.  This ignores
+         * the codepage information from POSIX ids.  Index must be immediately after the country
+         * or script.  Index is left at the keyword separator or at the end of the text.  Return
+         * the start of the variant code in the buffer.
+         *
+         * In standard form, we can have the following forms:
+         * ll__VVVV
+         * ll_CC_VVVV
+         * ll_Ssss_VVVV
+         * ll_Ssss_CC_VVVV
+         *
+         * This also handles POSIX ids, which can have the following forms (pppp is code page id):
+         * ll_CC.pppp          --> ll_CC
+         * ll_CC.pppp@VVVV     --> ll_CC_VVVV
+         * ll_CC@VVVV          --> ll_CC_VVVV
+         *
+         * We identify this use of '@' in POSIX ids by looking for an '=' following
+         * the '@'.  If there is one, we consider '@' to start a keyword list, instead of
+         * being part of a POSIX id.
+         */
+        private int parseVariant() {
+            int oldBlen = blen;
 
-	    boolean first = true;
-	    char c = next();
-	    if (c == DOT) {
-		while (!isTerminator(c = next())); // skip to terminator, assume no more DOTs
-	    }
-	    if (c != DONE && (c != KEYWORD_SEPARATOR || !haveKeywordAssign())) {
-		// we have more text, and either had an id separator, or 
-		// had a keyword separator in a POSIX locale
-		// either way, we accumulate text until a terminator
-		while (!isTerminator(c = next())) {
-		    if (first) {
-			first = false;
-			append(UNDERSCORE); // separate from previous script or country
-		    }
-		    c = Character.toUpperCase(c);
-		    if (c == HYPHEN || c == COMMA) {
-			c = UNDERSCORE;
-		    }
-		    append(c);
-		}
-	    }
-	    --index; // unget
-	    
-	    if (blen > oldBlen) { // we had variant data
-		++oldBlen; // skip hyphen
-	    }
-	    return oldBlen;
-	}
+            boolean first = true;
+            char c = next();
+            if (c == DOT) {
+                while (!isTerminator(c = next())); // skip to terminator, assume no more DOTs
+            }
+            if (c != DONE && (c != KEYWORD_SEPARATOR || !haveKeywordAssign())) {
+                // we have more text, and either had an id separator, or 
+                // had a keyword separator in a POSIX locale
+                // either way, we accumulate text until a terminator
+                while (!isTerminator(c = next())) {
+                    if (first) {
+                        first = false;
+                        append(UNDERSCORE); // separate from previous script or country
+                    }
+                    c = Character.toUpperCase(c);
+                    if (c == HYPHEN || c == COMMA) {
+                        c = UNDERSCORE;
+                    }
+                    append(c);
+                }
+            }
+            --index; // unget
+            
+            if (blen > oldBlen) { // we had variant data
+                ++oldBlen; // skip hyphen
+            }
+            return oldBlen;
+        }
 
-	// no need for skipvariant, to get the keywords we'll just scan directly for 
-	// the keyword separator
+        // no need for skipvariant, to get the keywords we'll just scan directly for 
+        // the keyword separator
 
-	/**
-	 * Return the normalized language id, or the empty string.
-	 */
-	public String getLanguage() {
-	    reset();
-	    return getString(parseLanguage());
-	}
+        /**
+         * Return the normalized language id, or the empty string.
+         */
+        public String getLanguage() {
+            reset();
+            return getString(parseLanguage());
+        }
    
-	/**
-	 * Return the normalized script id, or the empty string.
-	 */
-	public String getScript() {
-	    reset();
-	    skipLanguage();
-	    return getString(parseScript());
-	}
+        /**
+         * Return the normalized script id, or the empty string.
+         */
+        public String getScript() {
+            reset();
+            skipLanguage();
+            return getString(parseScript());
+        }
     
-	/**
-	 * return the normalized country id, or the empty string.
-	 */
-	public String getCountry() {
-	    reset();
-	    skipLanguage();
-	    skipScript();
-	    return getString(parseCountry());
-	}
+        /**
+         * return the normalized country id, or the empty string.
+         */
+        public String getCountry() {
+            reset();
+            skipLanguage();
+            skipScript();
+            return getString(parseCountry());
+        }
 
-	/**
-	 * Return the normalized variant id, or the empty string.
-	 */
-	public String getVariant() {
-	    reset();
-	    skipLanguage();
-	    skipScript();
-	    skipCountry();
-	    return getString(parseVariant());
-	}
+        /**
+         * Return the normalized variant id, or the empty string.
+         */
+        public String getVariant() {
+            reset();
+            skipLanguage();
+            skipScript();
+            skipCountry();
+            return getString(parseVariant());
+        }
 
-	/**
-	 * Return the language, script, country, and variant as separate strings.
-	 */
-	public String[] getLanguageScriptCountryVariant() {
-	    reset();
-	    return new String[] {
-		getString(parseLanguage()),
-		getString(parseScript()),
-		getString(parseCountry()),
-		getString(parseVariant())
-	    };
-	}
+        /**
+         * Return the language, script, country, and variant as separate strings.
+         */
+        public String[] getLanguageScriptCountryVariant() {
+            reset();
+            return new String[] {
+                getString(parseLanguage()),
+                getString(parseScript()),
+                getString(parseCountry()),
+                getString(parseVariant())
+            };
+        }
 
-	public void parseBaseName() {
-	    reset();
-	    parseLanguage();
-	    parseScript();
-	    parseCountry();
-	    parseVariant();
-	    
-	    // catch unwanted trailing hyphen after country if there was no variant
-	    if (blen > 1 && buffer[blen-1] == HYPHEN) {
-		--blen;
-	    }
-	}
+        public void parseBaseName() {
+            reset();
+            parseLanguage();
+            parseScript();
+            parseCountry();
+            parseVariant();
+            
+            // catch unwanted trailing hyphen after country if there was no variant
+            if (blen > 1 && buffer[blen-1] == HYPHEN) {
+                --blen;
+            }
+        }
 
-	/**
-	 * Return the normalized base form of the locale id.  The base
-	 * form does not include keywords.
-	 */
-	public String getBaseName() {
-	    parseBaseName();
-	    return getString(0);
-	}
+        /**
+         * Return the normalized base form of the locale id.  The base
+         * form does not include keywords.
+         */
+        public String getBaseName() {
+            parseBaseName();
+            return getString(0);
+        }
 
-	/**
-	 * Return the normalized full form of the locale id.  The full
-	 * form includes keywords.
-	 */
-	public String getName() {
-	    parseBaseName();
-	    parseKeywords();
-	    return getString(0);
-	}
+        /**
+         * Return the normalized full form of the locale id.  The full
+         * form includes keywords.
+         */
+        public String getName() {
+            parseBaseName();
+            parseKeywords();
+            return getString(0);
+        }
 
-	// keyword utilities
+        // keyword utilities
 
-	/**
-	 * If we have keywords, advance index to the start of the keywords and return true, 
-	 * otherwise return false.
-	 */
-	private boolean setToKeywordStart() {
-	    for (int i = index; i < id.length; ++i) {
-		if (id[i] == KEYWORD_SEPARATOR) {
-		    for (int j = ++i; j < id.length; ++j) { // increment i past separator for return
-			if (id[j] == KEYWORD_ASSIGN) {
-			    index = i;
-			    return true;
-			}
-		    }
-		}
-	    }
-	    return false;
-	}
+        /**
+         * If we have keywords, advance index to the start of the keywords and return true, 
+         * otherwise return false.
+         */
+        private boolean setToKeywordStart() {
+            for (int i = index; i < id.length; ++i) {
+                if (id[i] == KEYWORD_SEPARATOR) {
+                    for (int j = ++i; j < id.length; ++j) { // increment i past separator for return
+                        if (id[j] == KEYWORD_ASSIGN) {
+                            index = i;
+                            return true;
+                        }
+                    }
+                }
+            }
+            return false;
+        }
         
-	private static boolean isDoneOrKeywordAssign(char c) {
-	    return c == DONE || c == KEYWORD_ASSIGN;
-	}
+        private static boolean isDoneOrKeywordAssign(char c) {
+            return c == DONE || c == KEYWORD_ASSIGN;
+        }
 
-	private static boolean isDoneOrItemSeparator(char c) {
-	    return c == DONE || c == ITEM_SEPARATOR;
-	}
+        private static boolean isDoneOrItemSeparator(char c) {
+            return c == DONE || c == ITEM_SEPARATOR;
+        }
 
-	private String getKeyword() {
-	    int start = index;
-	    while (!isDoneOrKeywordAssign(next()));
-	    --index;
-	    return new String(id, start, index-start).trim().toLowerCase();
-	}
+        private String getKeyword() {
+            int start = index;
+            while (!isDoneOrKeywordAssign(next()));
+            --index;
+            return new String(id, start, index-start).trim().toLowerCase();
+        }
 
-	private String getValue() {
-	    int start = index;
-	    while (!isDoneOrItemSeparator(next()));
-	    --index;
-	    return new String(id, start, index-start).trim().toLowerCase();
-	}
+        private String getValue() {
+            int start = index;
+            while (!isDoneOrItemSeparator(next()));
+            --index;
+            return new String(id, start, index-start).trim(); // leave case alone
+        }
 
-	/**
-	 * Return a map of the keywords and values.
-	 */
-	private Map getKeywordMap() {
-	    Map m = null;
+        /**
+         * Return a map of the keywords and values.
+         */
+        private Map getKeywordMap() {
+            Map m = null;
 
-	    if (setToKeywordStart()) {
-		// trim spaces and convert to lower case, both keywords and values.
-		do {
-		    String key = getKeyword();
-		    if (key.length() == 0) {
-			break;
-		    }
-		    if (next() != KEYWORD_ASSIGN) {
-			throw new IllegalArgumentException("key '" + key + "' missing a value.");
-		    }
-		    String value = getValue();
-		    if (value.length() == 0) {
-			throw new IllegalArgumentException("key '" + key + "' missing a value.");
-		    }
-		    if (m == null) {
-			final Comparator comp = new Comparator() {
-				public int compare(Object lhs, Object rhs) {
-				    return ((String)lhs).compareTo(rhs);
-				}
-			    };
-			m = new TreeMap(comp);
-		    }
-		    if (m.containsKey(key)) {
-			throw new IllegalArgumentException("key '" + key + "' already has a value.");
-		    }
-		    m.put(key, value);
-		} while (next() == ITEM_SEPARATOR);
-	    }
-	    return m == null ? Collections.EMPTY_MAP : m;
-	}
+            if (setToKeywordStart()) {
+                // trim spaces and convert to lower case, both keywords and values.
+                do {
+                    String key = getKeyword();
+                    if (key.length() == 0) {
+                        break;
+                    }
+                    if (next() != KEYWORD_ASSIGN) {
+                        throw new IllegalArgumentException("key '" + key + "' missing a value.");
+                    }
+                    String value = getValue();
+                    if (value.length() == 0) {
+                        throw new IllegalArgumentException("key '" + key + "' missing a value.");
+                    }
+                    if (m == null) {
+                        final Comparator comp = new Comparator() {
+                                public int compare(Object lhs, Object rhs) {
+                                    return ((String)lhs).compareTo(rhs);
+                                }
+                            };
+                        m = new TreeMap(comp);
+                    }
+                    if (m.containsKey(key)) {
+                        throw new IllegalArgumentException("key '" + key + "' already has a value.");
+                    }
+                    m.put(key, value);
+                } while (next() == ITEM_SEPARATOR);
+            }
+            return m == null ? Collections.EMPTY_MAP : m;
+        }
 
-	/**
-	 * Parse the keywords and return start of the string in the buffer.
-	 */
-	private int parseKeywords() {
-	    int oldBlen = blen;
-	    Map m = getKeywordMap();
-	    Iterator iter = m.entrySet().iterator();
-	    boolean first = true;
-	    while (iter.hasNext()) {
-		append(first ? KEYWORD_SEPARATOR : ITEM_SEPARATOR);
-		first = false;
-		Map.Entry e = (Map.Entry)iter.next();
-		append((String)e.getKey());
-		append(KEYWORD_ASSIGN);
-		append((String)e.getValue());
-	    }
-	    if (blen != oldBlen) {
-		++oldBlen;
-	    }
-	    return oldBlen;
-	}
+        /**
+         * Parse the keywords and return start of the string in the buffer.
+         */
+        private int parseKeywords() {
+            int oldBlen = blen;
+            Map m = getKeywordMap();
+            Iterator iter = m.entrySet().iterator();
+            boolean first = true;
+            while (iter.hasNext()) {
+                append(first ? KEYWORD_SEPARATOR : ITEM_SEPARATOR);
+                first = false;
+                Map.Entry e = (Map.Entry)iter.next();
+                append((String)e.getKey());
+                append(KEYWORD_ASSIGN);
+                append((String)e.getValue());
+            }
+            if (blen != oldBlen) {
+                ++oldBlen;
+            }
+            return oldBlen;
+        }
 
-	/**
-	 * Return an iterator over the keywords.
-	 */
-	public Iterator getKeywords() {
-	    return getKeywordMap().keySet().iterator();
-	}
+        /**
+         * Return an iterator over the keywords.
+         */
+        public Iterator getKeywords() {
+            return getKeywordMap().keySet().iterator();
+        }
 
-	/**
-	 * Return the value for the named keyword, or null if the keyword is not
-	 * present.
-	 */
-	public String getKeywordValue(String keywordName) {
-	    return (String)getKeywordMap().get(keywordName.trim().toLowerCase());
-	}
+        /**
+         * Return the value for the named keyword, or null if the keyword is not
+         * present.
+         */
+        public String getKeywordValue(String keywordName) {
+            return (String)getKeywordMap().get(keywordName.trim().toLowerCase());
+        }
     }
 
     /**
@@ -1535,12 +1535,12 @@ public final class ULocale implements Serializable {
      * two-letter target code, not the three-letter search code, which seems backwards.
      */
     private static int findIndex(String[] array, String target){
-	for (int i = 0; i < array.length; i++) {
-	    if (target.equals(array[i])) {
-		return i;
-	    }
-	}
-	return -1;
+        for (int i = 0; i < array.length; i++) {
+            if (target.equals(array[i])) {
+                return i;
+            }
+        }
+        return -1;
     }    
 
     /**
@@ -1552,23 +1552,23 @@ public final class ULocale implements Serializable {
      * @draft ICU 3.0
      */
     public static String canonicalize(String localeID){
-	String locStr = new IDParser(localeID).getBaseName();
-	// now we have an ID in the form xx_Yyyy_ZZ_KKKKK
-	/* See if this is an already known locale */
-	for (int i = 0; i < variantsToKeywords.length; i++) {
-	    if (variantsToKeywords[i][0].equals(locStr)) {
-		locStr = variantsToKeywords[i][1];
-		break;
-	    }
-	}
+        String locStr = new IDParser(localeID).getBaseName();
+        // now we have an ID in the form xx_Yyyy_ZZ_KKKKK
+        /* See if this is an already known locale */
+        for (int i = 0; i < variantsToKeywords.length; i++) {
+            if (variantsToKeywords[i][0].equals(locStr)) {
+                locStr = variantsToKeywords[i][1];
+                break;
+            }
+        }
 
-	/* convert the Euro variant to appropriate ID */
-	int idx = locStr.indexOf("_EURO");
-	if (idx > -1) {
-	    locStr = locStr.substring(0,idx)+"@currency=EUR";       
-	}
+        /* convert the Euro variant to appropriate ID */
+        int idx = locStr.indexOf("_EURO");
+        if (idx > -1) {
+            locStr = locStr.substring(0,idx)+"@currency=EUR";       
+        }
         
-	return locStr;
+        return locStr;
     }
     
     /**
@@ -1582,7 +1582,7 @@ public final class ULocale implements Serializable {
      * @draft ICU 3.0
      */
     public String getISO3Language(){
-	return getISO3Language(localeID);
+        return getISO3Language(localeID);
     }
 
     /**
@@ -1596,12 +1596,12 @@ public final class ULocale implements Serializable {
      * @draft ICU 3.0
      */
     public static String getISO3Language(String localeID){
-	String language = getLanguage(localeID);
-	int offset = findIndex(languages, language);
-	if(offset>=0){
-	    return languages3[offset];
-	}
-	return EMPTY_STRING;
+        String language = getLanguage(localeID);
+        int offset = findIndex(languages, language);
+        if(offset>=0){
+            return languages3[offset];
+        }
+        return EMPTY_STRING;
     }
     
     /**
@@ -1613,7 +1613,7 @@ public final class ULocale implements Serializable {
      * @draft ICU 3.0
      */
     public String getISO3Country(){
-	return getISO3Country(localeID);
+        return getISO3Country(localeID);
     }
     /**
      * Returns a three-letter abbreviation for this locale's country.  If the locale
@@ -1624,17 +1624,17 @@ public final class ULocale implements Serializable {
      * @draft ICU 3.0
      */
     public static String getISO3Country(String localeID){
-	String country = getCountry(localeID);
-	int offset = findIndex(countries, country);
-	if(offset>=0){
-	    return countries3[offset];
-	}else{
-	    offset = findIndex(obsoleteCountries, country);
-	    if(offset>=0){
-		return obsoleteCountries3[offset];   
-	    }
-	}
-	return EMPTY_STRING;
+        String country = getCountry(localeID);
+        int offset = findIndex(countries, country);
+        if(offset>=0){
+            return countries3[offset];
+        }else{
+            offset = findIndex(obsoleteCountries, country);
+            if(offset>=0){
+                return obsoleteCountries3[offset];   
+            }
+        }
+        return EMPTY_STRING;
     }
     
     // display names
@@ -1643,18 +1643,37 @@ public final class ULocale implements Serializable {
      * Utility to fetch locale display data from resource bundle tables.
      */
     private static String getTableString(String tableName, String subtableName, String item, ULocale displayLocale) {
-	try {
-	    ICUResourceBundle bundle = (ICUResourceBundle)UResourceBundle.getBundleInstance(displayLocale);
-	    ICUResourceBundle table = bundle.get(tableName);
-	    if (subtableName != null) {
-		table = bundle.get(subtableName);
-	    }
-	    return table.getString(item);
-	}
-	catch (Exception e) {
-	    System.out.println(e.getMessage());
-	}
-	return item;
+        try {
+            ICUResourceBundle bundle = (ICUResourceBundle)UResourceBundle.getBundleInstance(displayLocale);
+            return getTableString(tableName, subtableName, item, bundle);
+        } catch (Exception e) {
+//          System.out.println("gtsu: " + e.getMessage());
+        }
+        return item;
+    }
+        
+    /**
+     * Utility to fetch locale display data from resource bundle tables.
+     */
+    private static String getTableString(String tableName, String subtableName, String item, ICUResourceBundle bundle) {
+        try {
+            // special case currency
+            if ("currency".equals(subtableName)) {
+                ICUResourceBundle table = bundle.get("Currencies");
+                table = table.getWithFallback(item);
+                return table.getString(1);
+            } else {
+                ICUResourceBundle table = bundle.get(tableName);
+                if (subtableName != null) {
+                    table = bundle.get(subtableName);
+                }
+                return table.getString(item);
+            }
+        }
+        catch (Exception e) {
+//          System.out.println("gtsi: " + e.getMessage());
+        }
+        return item;
     }
 
     /**
@@ -1663,7 +1682,7 @@ public final class ULocale implements Serializable {
      * @draft ICU 3.0
      */
     public String getDisplayLanguage() {
-	return getDisplayLanguage(getDefault());
+        return getDisplayLanguage(getDefault());
     }
 
     /**
@@ -1673,7 +1692,7 @@ public final class ULocale implements Serializable {
      * @draft ICU 3.0
      */
     public String getDisplayLanguage(ULocale displayLocale) {
-	return getDisplayLanguage(localeID, displayLocale);
+        return getDisplayLanguage(localeID, displayLocale);
     }
     
     /**
@@ -1685,7 +1704,7 @@ public final class ULocale implements Serializable {
      * @draft ICU 3.0
      */
     public static String getDisplayLanguage(String localeID, String displayLocaleID) {
-	return getDisplayLanguage(localeID, new ULocale(displayLocaleID));
+        return getDisplayLanguage(localeID, new ULocale(displayLocaleID));
     }
 
     /**
@@ -1697,7 +1716,7 @@ public final class ULocale implements Serializable {
      * @draft ICU 3.0
      */
     public static String getDisplayLanguage(String localeID, ULocale displayLocale) {
-	return getTableString("Languages", null, new IDParser(localeID).getLanguage(), displayLocale);
+        return getTableString("Languages", null, new IDParser(localeID).getLanguage(), displayLocale);
     }
     
     /**
@@ -1706,7 +1725,7 @@ public final class ULocale implements Serializable {
      * @draft ICU 3.0
      */
     public String getDisplayScript() {
-	return getDisplayScript(getDefault());
+        return getDisplayScript(getDefault());
     }
 
     /**
@@ -1716,7 +1735,7 @@ public final class ULocale implements Serializable {
      * @draft ICU 3.0
      */
     public String getDisplayScript(ULocale displayLocale) {
-	return getDisplayScript(localeID, displayLocale.localeID);
+        return getDisplayScript(localeID, displayLocale.localeID);
     }
     
     /**
@@ -1728,7 +1747,7 @@ public final class ULocale implements Serializable {
      * @draft ICU 3.0
      */
     public static String getDisplayScript(String localeID, String displayLocaleID) {
-	return getDisplayScript(localeID, new ULocale(displayLocaleID));
+        return getDisplayScript(localeID, new ULocale(displayLocaleID));
     }
     
     /**
@@ -1739,7 +1758,7 @@ public final class ULocale implements Serializable {
      * @draft ICU 3.0
      */
     public static String getDisplayScript(String localeID, ULocale displayLocale) {
-	return getTableString("Scripts", null, new IDParser(localeID).getScript(), displayLocale);
+        return getTableString("Scripts", null, new IDParser(localeID).getScript(), displayLocale);
     }
 
     /**
@@ -1748,7 +1767,7 @@ public final class ULocale implements Serializable {
      * @draft ICU 3.0
      */
     public String getDisplayCountry() {
-	return getDisplayCountry(getDefault());
+        return getDisplayCountry(getDefault());
     }
     
     /**
@@ -1758,7 +1777,7 @@ public final class ULocale implements Serializable {
      * @draft ICU 3.0
      */
     public String getDisplayCountry(ULocale displayLocale){
-	return getDisplayCountry(localeID, displayLocale);   
+        return getDisplayCountry(localeID, displayLocale);   
     }
     
     /**
@@ -1770,7 +1789,7 @@ public final class ULocale implements Serializable {
      * @draft ICU 3.0
      */
     public static String getDisplayCountry(String localeID, String displayLocaleID) {
-	return getDisplayCountry(localeID, new ULocale(displayLocaleID));
+        return getDisplayCountry(localeID, new ULocale(displayLocaleID));
     }
 
     /**
@@ -1782,7 +1801,7 @@ public final class ULocale implements Serializable {
      * @draft ICU 3.0
      */
     public static String getDisplayCountry(String localeID, ULocale displayLocale) {
-	return getTableString("Countries", null, new IDParser(localeID).getCountry(), displayLocale);
+        return getTableString("Countries", null, new IDParser(localeID).getCountry(), displayLocale);
     }
     
     /**
@@ -1791,7 +1810,7 @@ public final class ULocale implements Serializable {
      * @draft ICU 3.0
      */
     public String getDisplayVariant() {
-	return getDisplayVariant(getDefault());   
+        return getDisplayVariant(getDefault());   
     }
 
     /**
@@ -1801,7 +1820,7 @@ public final class ULocale implements Serializable {
      * @draft ICU 3.0
      */
     public String getDisplayVariant(ULocale displayLocale){
-	return getDisplayVariant(localeID, displayLocale);   
+        return getDisplayVariant(localeID, displayLocale);   
     }
     
     /**
@@ -1813,7 +1832,7 @@ public final class ULocale implements Serializable {
      * @draft ICU 3.0
      */
     public static String getDisplayVariant(String localeID, String displayLocaleID){
-	return getDisplayVariant(localeID, new ULocale(displayLocaleID));
+        return getDisplayVariant(localeID, new ULocale(displayLocaleID));
     }
     
     /**
@@ -1825,7 +1844,7 @@ public final class ULocale implements Serializable {
      * @draft ICU 3.0
      */
     public static String getDisplayVariant(String localeID, ULocale displayLocale) {
-	return getTableString("Variants", null, new IDParser(localeID).getVariant(), displayLocale);
+        return getTableString("Variants", null, new IDParser(localeID).getVariant(), displayLocale);
     }
 
     /**
@@ -1836,7 +1855,7 @@ public final class ULocale implements Serializable {
      * @draft ICU 3.0
      */
     public static String getDisplayKeyword(String keyword) {
-	return getDisplayKeyword(keyword, getDefault());   
+        return getDisplayKeyword(keyword, getDefault());   
     }
     
     /**
@@ -1848,7 +1867,7 @@ public final class ULocale implements Serializable {
      * @draft ICU 3.0
      */
     public static String getDisplayKeyword(String keyword, String displayLocaleID) {
-	return getDisplayKeyword(keyword, new ULocale(displayLocaleID));   
+        return getDisplayKeyword(keyword, new ULocale(displayLocaleID));   
     }
 
     /**
@@ -1860,7 +1879,7 @@ public final class ULocale implements Serializable {
      * @draft ICU 3.0
      */
     public static String getDisplayKeyword(String keyword, ULocale displayLocale) {
-	return getTableString("Keys", null, keyword.trim().toLowerCase(), displayLocale);
+        return getTableString("Keys", null, keyword.trim().toLowerCase(), displayLocale);
     }
 
     /**
@@ -1870,7 +1889,7 @@ public final class ULocale implements Serializable {
      * @draft ICU 3.0
      */
     public String getDisplayKeywordValue(String keyword) {
-	return getDisplayKeywordValue(keyword, getDefault());   
+        return getDisplayKeywordValue(keyword, getDefault());   
     }
     
     /**
@@ -1881,7 +1900,7 @@ public final class ULocale implements Serializable {
      * @draft ICU 3.0
      */
     public String getDisplayKeywordValue(String keyword, ULocale displayLocale) {
-	return getDisplayKeywordValue(localeID, keyword, displayLocale);   
+        return getDisplayKeywordValue(localeID, keyword, displayLocale);   
     }
 
     /**
@@ -1893,7 +1912,7 @@ public final class ULocale implements Serializable {
      * @draft ICU 3.0
      */
     public String getDisplayKeywordValue(String localeID, String keyword, String displayLocaleID) {
-	return getDisplayKeywordValue(localeID, keyword, new ULocale(displayLocaleID));
+        return getDisplayKeywordValue(localeID, keyword, new ULocale(displayLocaleID));
     }
 
     /**
@@ -1905,11 +1924,9 @@ public final class ULocale implements Serializable {
      * @draft ICU 3.0
      */
     public static String getDisplayKeywordValue(String localeID, String keyword, ULocale displayLocale) {
-	// TODO: funky currency fallback
-
-	keyword = keyword.trim().toLowerCase();
-	String value = new IDParser(localeID).getKeywordValue(keyword);
-	return getTableString("Types", keyword, value, displayLocale);
+        keyword = keyword.trim().toLowerCase();
+        String value = new IDParser(localeID).getKeywordValue(keyword);
+        return getTableString("Types", keyword, value, displayLocale);
     }
     
     /**
@@ -1918,7 +1935,7 @@ public final class ULocale implements Serializable {
      * @draft ICU 3.0
      */
     public String getDisplayName() {
-	return getDisplayName(getDefault());
+        return getDisplayName(getDefault());
     }
     
     /**
@@ -1928,7 +1945,7 @@ public final class ULocale implements Serializable {
      * @draft ICU 3.0
      */
     public String getDisplayName(ULocale displayLocale) {
-	return getDisplayName(localeID, displayLocale);
+        return getDisplayName(localeID, displayLocale);
     }
     
     /**
@@ -1939,7 +1956,7 @@ public final class ULocale implements Serializable {
      * @draft ICU 3.0
      */
     public static String getDisplayName(String localeID, String displayLocaleID) {
-	return getDisplayName(localeID, new ULocale(displayLocaleID));
+        return getDisplayName(localeID, new ULocale(displayLocaleID));
     }
 
     /**
@@ -1950,61 +1967,60 @@ public final class ULocale implements Serializable {
      * @draft ICU 3.0
      */
     public static String getDisplayName(String localeID, ULocale displayLocale) {
-	// the ICU4C code takes care to generate display names when the language is empty,
-	// but i'm not sure when this can happen???
+        // lang
+        // lang (script, country, variant, keyword=value, ...)
+        // script, country, variant, keyword=value, ...
 
-	// lang
-	// lang (script, country, variant, keyword=value, ...)
-	// script, country, variant, keyword=value, ...
-	final String[] tableNames = { "Languages", "Scripts", "Countries", "Variants" };
+        final String[] tableNames = { "Languages", "Scripts", "Countries", "Variants" };
 
-	IDParser parser = new IDParser(localeID);
-	String[] names = parser.getLanguageScriptCountryVariant();
-	Iterator keys = parser.getKeywordMap().entrySet().iterator();
+        ICUResourceBundle bundle = (ICUResourceBundle)UResourceBundle.getBundleInstance(displayLocale);
 
-	StringBuffer buf = new StringBuffer();
+        StringBuffer buf = new StringBuffer();
 
-	boolean haveLanguage = names[0].length() > 0;
-	boolean openParen = false;
+        IDParser parser = new IDParser(localeID);
+        String[] names = parser.getLanguageScriptCountryVariant();
 
-	for (int i = 0; i < names.length; ++i) {
-	    String name = names[i];
-	    if (name.length() > 0) {
-		name = getTableString(tableNames[i], null, name, displayLocale);
-		if (buf.length() > 0) { // need a separator
-		    if (haveLanguage & !openParen) {
-			buf.append(" (");
-			openParen = true;
-		    } else {
-			buf.append(", ");
-		    }
-		}
-		buf.append(name);
-	    }
-	}
+        boolean haveLanguage = names[0].length() > 0;
+        boolean openParen = false;
+        for (int i = 0; i < names.length; ++i) {
+            String name = names[i];
+            if (name.length() > 0) {
+                name = getTableString(tableNames[i], null, name, bundle);
+                if (buf.length() > 0) { // need a separator
+                    if (haveLanguage & !openParen) {
+                        buf.append(" (");
+                        openParen = true;
+                    } else {
+                        buf.append(", ");
+                    }
+                }
+                buf.append(name);
+            }
+        }
 
-	while (keys.hasNext()) {
-	    if (buf.length() > 0) {
-		if (haveLanguage & !openParen) {
-		    buf.append(" (");
-		    openParen = true;
-		} else {
-		    buf.append(", ");
-		}
-	    }
-	    Map.Entry e = (Map.Entry)keys.next();
-	    String key = (String)e.getKey();
-	    String val = (String)e.getValue();
-	    buf.append(getTableString("Keys", null, key, displayLocale));
-	    buf.append("=");
-	    buf.append(getTableString("Types", key, val, displayLocale));
-	}
+        Iterator keys = parser.getKeywordMap().entrySet().iterator();
+        while (keys.hasNext()) {
+            if (buf.length() > 0) {
+                if (haveLanguage & !openParen) {
+                    buf.append(" (");
+                    openParen = true;
+                } else {
+                    buf.append(", ");
+                }
+            }
+            Map.Entry e = (Map.Entry)keys.next();
+            String key = (String)e.getKey();
+            String val = (String)e.getValue();
+            buf.append(getTableString("Keys", null, key, bundle));
+            buf.append("=");
+            buf.append(getTableString("Types", key, val, bundle));
+        }
 
-	if (openParen) {
-	    buf.append(")");
-	}
-	    
-	return buf.toString();
+        if (openParen) {
+            buf.append(")");
+        }
+            
+        return buf.toString();
     }
 
     /** 
@@ -2042,7 +2058,7 @@ public final class ULocale implements Serializable {
      * @draft ICU 2.8
      */
     public static final class Type {
-	private int localeType;
-	private Type(int type) { localeType = type; }
+        private int localeType;
+        private Type(int type) { localeType = type; }
     }
 }

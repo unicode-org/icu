@@ -1619,13 +1619,11 @@ public final class RuleBasedCollator extends Collator
             try {
                 // TODO: this is to be updated after the key word search
                 //       is implemented.
-                Object collkey 
-                    = rb.getObjectWithFallback("collations/default");
+                String collkey = rb.getStringWithFallback("collations/default");
                 // collations/default will always give a string back
                 // keyword for the real collation data
                 // if "collations/collkey" will return null if collkey == null 
-                ICUResourceBundle elements 
-                            = (ICUResourceBundle)rb.getObjectWithFallback("collations/" + collkey);
+                ICUResourceBundle elements = rb.getWithFallback("collations/" + collkey);
                 if (elements != null) {
                     // TODO: Determine actual & valid locale correctly
                     ULocale uloc = rb.getULocale();

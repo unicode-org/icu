@@ -530,15 +530,15 @@ public final class ICUResourceBundleTest extends TestFmwk {
         }
     }    
     
-    public void TestGetObjectWithFallback(){
+    public void TestGetWithFallback(){
         ICUResourceBundle bundle =(ICUResourceBundle) UResourceBundle.getBundleInstance(UResourceBundle.ICU_BASE_NAME,"te_IN");
-        String key = (String) bundle.getObjectWithFallback("Keys/collation");
+        String key = bundle.getStringWithFallback("Keys/collation");
         if(!key.equals("COLLATION")){
-            errln("Did not get the expected result from getObjectWithFallback method.");
+            errln("Did not get the expected result from getStringWithFallback method.");
         }
-        String type = (String) bundle.getObjectWithFallback("Types/collation/direct");
+        String type = bundle.getStringWithFallback("Types/collation/direct");
         if(!type.equals("DIRECT")){
-            errln("Did not get the expected result form getObjectWithFallback method.");
+            errln("Did not get the expected result form getStringWithFallback method.");
         }
 
         try{
@@ -546,9 +546,9 @@ public final class ICUResourceBundleTest extends TestFmwk {
             if(!bundle.getULocale().equals("de")){
                 errln("did not get the expected bundle");   
             }
-            key = (String) bundle.getObjectWithFallback("collations/collation/default");
+            key = bundle.getStringWithFallback("collations/collation/default");
             if(!key.equals("phonebook")){
-                errln("Did not get the expected result from getObjectWithFallback method.");
+                errln("Did not get the expected result from getStringWithFallback method.");
             }
 
         }catch(MissingResourceException ex){
@@ -557,9 +557,9 @@ public final class ICUResourceBundleTest extends TestFmwk {
 
        
         bundle = (ICUResourceBundle) UResourceBundle.getBundleInstance(UResourceBundle.ICU_COLLATION_BASE_NAME,"fr_FR");
-        key = (String) bundle.getObjectWithFallback("collations/default");
+        key = bundle.getStringWithFallback("collations/default");
         if(!key.equals("standard")){
-            errln("Did not get the expected result from getObjectWithFallback method.");
+            errln("Did not get the expected result from getStringWithFallback method.");
         }  
     }
     
