@@ -217,8 +217,10 @@ IntlTestNumberFormat::tryIt(double aNumber)
     for (i=0; i<DEPTH; ++i)
     {
         UErrorCode status = U_ZERO_ERROR;
-        if (i == 0) number[i].setDouble(aNumber);
-        else fFormat->parse(string[i-1], number[i], status);
+        if (i == 0)
+            number[i].setDouble(aNumber);
+        else
+            fFormat->parse(string[i-1], number[i], status);
         if (U_FAILURE(status))
         {
             errln("********** FAIL: Parse of " + string[i-1] + " failed.");
@@ -226,7 +228,8 @@ IntlTestNumberFormat::tryIt(double aNumber)
             break;
         }
         // Convert from long to double
-        if (number[i].getType() == Formattable::kLong) number[i].setDouble(number[i].getLong());
+        if (number[i].getType() == Formattable::kLong)
+            number[i].setDouble(number[i].getLong());
         else if (number[i].getType() != Formattable::kDouble)
         {
             errln("********** FAIL: Parse of " + string[i-1] + " returned non-numeric Formattable.");
@@ -236,14 +239,16 @@ IntlTestNumberFormat::tryIt(double aNumber)
         fFormat->format(number[i].getDouble(), string[i]);
         if (i > 0)
         {
-            if (numberMatch == 0 && number[i] == number[i-1]) numberMatch = i;
+            if (numberMatch == 0 && number[i] == number[i-1])
+                numberMatch = i;
             else if (numberMatch > 0 && number[i] != number[i-1])
             {
                 errln("********** FAIL: Numeric mismatch after match.");
                 dump = TRUE;
                 break;
             }
-            if (stringMatch == 0 && string[i] == string[i-1]) stringMatch = i;
+            if (stringMatch == 0 && string[i] == string[i-1])
+                stringMatch = i;
             else if (stringMatch > 0 && string[i] != string[i-1])
             {
                 errln("********** FAIL: String mismatch after match.");
@@ -253,7 +258,8 @@ IntlTestNumberFormat::tryIt(double aNumber)
         }
         if (numberMatch > 0 && stringMatch > 0) break;
     }
-    if (i == DEPTH) --i;
+    if (i == DEPTH)
+        --i;
 
     if (stringMatch > 2 || numberMatch > 2)
     {
