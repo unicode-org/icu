@@ -17,15 +17,25 @@ uprv_strtod(const char* source, char** end)
 U_CAPI char* 
 uprv_dtostr(double value, char *buffer, int maximumDigits,UBool fixedPoint)
 {
-    int start = 0;
-    int end =0;
-    sprintf(buffer,"%.3f",value);
-    /* truncate trailing zeros */
-    end = uprv_strlen(buffer);
-    start=(uprv_strchr(buffer, '.')+2-buffer);
-    while(end-- > start){
-        if(buffer[end]=='0'){
-            buffer[end]=0;
+    char *itrPtr = buffer + 1;  /* skip '-' or a number before the decimal */
+    char *startPtr;
+
+    sprintf(buffer,"%f",value);
+
+    /* Find the decimal point.
+       Some unusal machines use a comma when the system locale changes
+    */
+    while (isalnum(*itrPtr)) {
+        itrPtr++;
+    }
+    *itrPtr = '.';
+
+    /* truncate trailing zeros, except the one after '.' */
+    startPtr = itrPtr + 1;
+    itrPtr = uprv_strchr(startPtr, 0);
+    while(--itrPtr > startPtr){
+        if(*itrPtr == '0'){
+            *itrPtr = 0;
         }else{
             break;
         }
