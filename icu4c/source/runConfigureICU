@@ -68,87 +68,87 @@ fi
 
 case $platform in
         AIX4.1.5xlC)
-                echo Running configure $*  for AIX using xlC compiler ...
+                echo Running configure "$@"  for AIX using xlC compiler ...
                 CC=/usr/lpp/xlC/bin/xlc; export CC
                 CXX=/usr/lpp/xlC/bin/xlC_r; export CXX
                 #CPPFLAGS=-I/usr/lpp/xlC/include; export CPPFLAGS
                 #LDFLAGS=-L/usr/lpp/xlC/lib; export LDFLAGS
-                $configure $*  ;;
+                $configure "$@"  ;;
         AIX4.3xlC)
-                echo Running configure $*  for AIX using xlC compiler ...
+                echo Running configure "$@"  for AIX using xlC compiler ...
                 CC=/usr/ibmcxx/bin/xlc; export CC
                 CXX=/usr/ibmcxx/bin/xlC_r; export CXX
                 #CPPFLAGS=-I/usr/lpp/xlC/include; export CPPFLAGS
                 #LDFLAGS=-L/usr/lpp/xlC/lib; export LDFLAGS
-                ./configure $*  ;;
+                ./configure "$@"  ;;
         AIX4.3VA)
-                echo Running configure $*  for AIX using xlC compiler ...
+                echo Running configure "$@"  for AIX using xlC compiler ...
                 CC=/usr/vacpp/bin/xlc; export CC
                 CXX=/usr/vacpp/bin/xlC_r; export CXX
                 #CPPFLAGS=-I/usr/lpp/xlC/include; export CPPFLAGS
                 #LDFLAGS=-L/usr/lpp/xlC/lib; export LDFLAGS
-                $configure $*  ;;
+                $configure "$@"  ;;
         SOLARISCC)
-                echo Running configure $*  for SOLARIS using native CC compiler ...
+                echo Running configure "$@"  for SOLARIS using native CC compiler ...
                 CC=/usr/local/SUNWspro/bin/cc; export CC
                 CXX=/usr/local/SUNWspro/bin/CC; export CXX
-                $configure $*  ;;
+                $configure "$@"  ;;
         SOLARISGCC)
-                echo Running configure $*  for Solaris using gcc compiler ...
+                echo Running configure "$@"  for Solaris using gcc compiler ...
                 CXXFLAGS=-I/usr/local/include/g++; export CXXFLAGS
 				LDFLAGS=-R/usr/local/lib; export LDFLAGS
-                $configure $*  ;;
+                $configure "$@"  ;;
         SOL2.7CC)
-                echo Running configure $*  for SOLARIS2.7cc using native CC compiler
+                echo Running configure "$@"  for SOLARIS2.7cc using native CC compiler
                 CC=/usr/local/SUNWspro/bin/cc; export CC
                 CXX=/usr/local/SUNWspro/bin/CC; export CXX 
-                $configure $*  ;;
+                $configure "$@"  ;;
 
         SOLARISX86)
-                echo Running configure $* for SOLARISX86 using native CC
+                echo Running configure "$@" for SOLARISX86 using native CC
 compiler
                 CC=cc; export CC
                 CXX=CC; export CXX
                 CXX_FLAGS="-w -O";export CXX_FLAGS
                 C_FLAGS="-w -O";export C_FLAGS
                 LDFLAGS="-L -lCrun";export LDFLAGS
-                $configure $* ;;
+                $configure "$@" ;;
 
         LinuxRedHat*)
-                echo Running configure $*  for Linux using gcc compiler ...
+                echo Running configure "$@"  for Linux using gcc compiler ...
                 CXX=g++; export CXX 
 		        CC=gcc; export CC
                 CXXFLAGS=-g; export CXXFLAGS
 		        CFLAGS=-g; export CFLAGS
-                $configure $*  ;;
+                $configure "$@"  ;;
         HP/UX10.2CC)
-                echo Running configure $*  for HP10.2 using native CC compiler ...
+                echo Running configure "$@"  for HP10.2 using native CC compiler ...
 				CC=cc; export CC
 				CXX=CC; export CXX
-			    $configure $* ;;
+			    $configure "$@" ;;
         HP/UX10.2ACC)
-                echo Running configure $*  for HP10.2 using aCC compiler ...
+                echo Running configure "$@"  for HP10.2 using aCC compiler ...
 				CC=cc; export CC
 				CXX=aCC; export CXX
-                $configure $* ;;
+                $configure "$@" ;;
         HP/UX11CC)
-                echo Running configure $*  for HP11 using native CC compiler ...
+                echo Running configure "$@"  for HP11 using native CC compiler ...
                 CC=cc; export CC
 				CXX=/opt/CC/bin/CC; export CXX
-                $configure $* ;;
+                $configure "$@" ;;
         HP/UX11ACC)
-                echo Running configure $*  for HP11 using aCC compiler ...
+                echo Running configure "$@"  for HP11 using aCC compiler ...
                 CC=cc; export CC
 				CXX=/opt/aCC/bin/aCC; export CXX
-			    $configure $* ;;
+			    $configure "$@" ;;
         PTX)
-                echo Running configure $*  for PTX using c++ compiler ...
+                echo Running configure "$@"  for PTX using c++ compiler ...
                 CC=cc; export CC
 				CXX=c++; export CXX
 		if test ${XMLINSTALL}o = "o"; then 
 			XMLINSTALL=/usr/local; export XMLINSTALL
 		fi
-		$configure --prefix=$XMLINSTALL $*;;
+		$configure --prefix=$XMLINSTALL "$@" ;;
         *)
                 echo I do not recognize the option \"$platform\". Please type ${0} -h for help.
                 exit 0;;
