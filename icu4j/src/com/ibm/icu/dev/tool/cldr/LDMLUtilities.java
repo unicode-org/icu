@@ -651,6 +651,22 @@ public class LDMLUtilities {
         }
         return false;
     }
+    public static boolean isSiblingDraft(Node root){
+        Node current = root;
+        String draft = null;
+        while(current!=null && current.getNodeType()== Node.ELEMENT_NODE){
+            draft = getAttributeValue(current, LDMLConstants.DRAFT);
+            if(draft!=null){
+                if(draft.equals("true")){
+                    return true;
+                }else{
+                    return false;
+                }
+            }
+            current = current.getNextSibling();
+        }
+        return false;
+    }
     /**
      * Appends the attribute values that make differentiate 2 siblings
      * in LDML
@@ -964,6 +980,25 @@ public class LDMLUtilities {
         return value;
     }
     /**
+     * Utility method to set the attribute value on the given 
+     * element node
+     * @param sNode
+     * @param attribName
+     * @param val
+     * @return
+     */
+    public static void setAttributeValue(Node sNode, String attribName, String val){
+        String value=null;
+        Node attr = sNode.getAttributes().getNamedItem(attribName);
+        if(attr!=null){
+            attr.setNodeValue(val);
+        } else {
+            attr = sNode.getOwnerDocument().createAttribute(attribName);
+            attr.setNodeValue(val);
+            sNode.getAttributes().setNamedItem(attr);
+        }
+    }
+    /**
      * Utility method to fetch the value of the element node
      * @param node
      * @return
@@ -989,8 +1024,7 @@ public class LDMLUtilities {
      * otherwise throws an unchecked RuntimeException if there 
      * is any fatal problem
      */
-    public static Document parse(String filename, boolean ignoreError)throws RuntimeException
-    {
+    public static Document parse(String filename, boolean ignoreError)throws RuntimeException {
         // Force filerefs to be URI's if needed: note this is independent of any other files
         String docURI = filenameToURL(filename);
         return parse(new InputSource(docURI),filename,ignoreError);
@@ -1017,19 +1051,10 @@ public class LDMLUtilities {
         return null;
 
     }
-    public static Document parse(InputSource docSrc, String filename, boolean ignoreError){
-        
-        DocumentBuilderFactory dfactory = DocumentBuilderFactory.newInstance();
-        // Always set namespaces on
-        dfactory.setNamespaceAware(true);
-        dfactory.setValidating(true);
-        dfactory.setIgnoringComments(false);
-        // Set other attributes here as needed
-        //applyAttributes(dfactory, attributes);
-        
+    
+    private static ErrorHandler getNullErrorHandler(final String filename2){
         // Local class: cheap non-printing ErrorHandler
         // This is used to suppress validation warnings
-        final String filename2 = filename;
         ErrorHandler nullHandler = new ErrorHandler() {
             public void warning(SAXParseException e) throws SAXException {                int col = e.getColumnNumber();
  System.err.println(filename2 + ":" + e.getLineNumber() +  (col>=0?":" + col:"") + ": WARNING: " + e.getMessage());}
@@ -1040,14 +1065,38 @@ System.err.println(filename2 + ":" + e.getLineNumber() +  (col>=0?":" + col:"") 
                 throw e;
             }
         };
-
+        return nullHandler;
+    }
+    public static Document newDocument() {
+        return newDocumentBuilder(false).newDocument();
+    }
+    private static DocumentBuilder newDocumentBuilder(boolean validating) {
+        try
+        {
+            DocumentBuilderFactory dfactory = DocumentBuilderFactory.newInstance();
+            // Always set namespaces on
+            dfactory.setNamespaceAware(true);
+            dfactory.setValidating(validating);
+            dfactory.setIgnoringComments(false);
+            // Set other attributes here as needed
+            //applyAttributes(dfactory, attributes);
+            
+            DocumentBuilder docBuilder = dfactory.newDocumentBuilder();
+            docBuilder.setEntityResolver(new CachingEntityResolver());
+            return docBuilder;
+        } catch(Throwable se) {
+            System.err.println(": ERROR : trying to create documentBuilder: " + se.getMessage());
+            se.printStackTrace();
+            throw new RuntimeException(se);
+        }
+    }
+    public static Document parse(InputSource docSrc, String filename, boolean ignoreError){
         Document doc = null;
         try
         {
             // First, attempt to parse as XML (preferred)...
-            DocumentBuilder docBuilder = dfactory.newDocumentBuilder();
-            docBuilder.setEntityResolver(new CachingEntityResolver());
-            docBuilder.setErrorHandler(nullHandler);
+            DocumentBuilder docBuilder = newDocumentBuilder(true);
+            docBuilder.setErrorHandler(getNullErrorHandler(filename));
             doc = docBuilder.parse(docSrc);
         }
         catch (Throwable se)
