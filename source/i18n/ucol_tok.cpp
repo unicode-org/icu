@@ -1020,9 +1020,11 @@ void ucol_tok_closeTokenList(UColTokenParser *src) {
   if(src->lh != NULL) {
     uprv_free(src->lh);
   }
-
   if(src->source != NULL) {
     uprv_free(src->source);
+  }
+  if(src->opts != NULL) {
+    uprv_free(src->opts);
   }
 }
 
