@@ -46,11 +46,19 @@ void addAllTests(TestNode** root)
     addUCharTransformTest(root);
     addStandardNamesTest(root);
     addCompactArrayTest(root);
+#if !UCONFIG_NO_FORMATTING
     addFormatTest(root);
+#endif
+#if !UCONFIG_NO_BREAK_ITERATION
     addBreakIter(root);
+#endif
+#if !UCONFIG_NO_COLLATION
     addCollTest(root);
+#endif
     addComplexTest(root);
+#if !UCONFIG_NO_TRANSLITERATION
     addUTransTest(root);
+#endif
     addUSetTest(root);
     addTestDeprecatedAPI(root);
 }

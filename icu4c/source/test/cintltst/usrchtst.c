@@ -9,6 +9,10 @@
  * synwee         July 19 2001     creation
  ********************************************************************/
 
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_COLLATION
+
 #include "unicode/usearch.h"
 #include "unicode/ustring.h"
 #include "ccolltst.h"
@@ -2043,3 +2047,4 @@ void addSearchTest(TestNode** root)
     addTest(root, &TestEnd, "tscoll/usrchtst/TestEnd");
 }
 
+#endif /* #if !UCONFIG_NO_COLLATION */

@@ -14,8 +14,11 @@
 
 /* C API AND FUNCTIONALITY TEST FOR CALENDAR (ucol.h)*/
 
-#include "unicode/uloc.h"
 #include "unicode/utypes.h"
+
+#if !UCONFIG_NO_FORMATTING
+
+#include "unicode/uloc.h"
 #include "unicode/ucal.h"
 #include "unicode/udat.h"
 #include "unicode/ustring.h"
@@ -1171,4 +1174,4 @@ static void verify2(const char* msg, UCalendar* c, UDateFormat* dat, int32_t yea
         
 }
 
-/*--------------------------------------------- */
+#endif /* #if !UCONFIG_NO_FORMATTING */

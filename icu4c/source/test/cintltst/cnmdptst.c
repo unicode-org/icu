@@ -17,8 +17,11 @@
 
 /* C DEPTH TEST FOR NUMBER FORMAT */
 
-#include "unicode/uloc.h"
 #include "unicode/utypes.h"
+
+#if !UCONFIG_NO_FORMATTING
+
+#include "unicode/uloc.h"
 #include "unicode/unum.h"
 #include "unicode/ustring.h"
 #include "cintltst.h"
@@ -754,3 +757,5 @@ static void TestSecondaryGrouping(void) {
     unum_close(f);
     unum_close(us);
 }
+
+#endif /* #if !UCONFIG_NO_FORMATTING */

@@ -14,8 +14,11 @@
 */
 /* C API TEST FOR MESSAGE FORMAT */
 
-#include "unicode/uloc.h"
 #include "unicode/utypes.h"
+
+#if !UCONFIG_NO_FORMATTING
+
+#include "unicode/uloc.h"
 #include "unicode/umsg.h"
 #include "unicode/udat.h"
 #include "unicode/umsg.h"
@@ -978,3 +981,5 @@ void addMsgForTest(TestNode** root)
     addTest(root, &TestJ904, "tsformat/cmsgtst/TestJ904");
 
 }
+
+#endif /* #if !UCONFIG_NO_FORMATTING */

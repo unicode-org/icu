@@ -148,7 +148,9 @@ void addUnicodeTest(TestNode** root)
     addTest(root, &TestUnescape, "tsutil/cucdtst/TestUnescape");
     addTest(root, &TestCaseLower, "tsutil/cucdtst/TestCaseLower");
     addTest(root, &TestCaseUpper, "tsutil/cucdtst/TestCaseUpper");
+#if !UCONFIG_NO_BREAK_ITERATION
     addTest(root, &TestCaseTitle, "tsutil/cucdtst/TestCaseTitle");
+#endif
     addTest(root, &TestCaseFolding, "tsutil/cucdtst/TestCaseFolding");
     addTest(root, &TestCaseCompare, "tsutil/cucdtst/TestCaseCompare");
     addTest(root, &TestUScriptCodeAPI, "tsutil/cucdtst/TestUScriptCodeAPI");

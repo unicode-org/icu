@@ -20,10 +20,13 @@
 #ifndef _CITERCOLLTST
 #define _CITERCOLLTST
 
-#include "cintltst.h"
 #include "unicode/utypes.h"
+
+#if !UCONFIG_NO_COLLATION
+
 #include "unicode/ucol.h"
 #include "unicode/ucoleitr.h"
+#include "cintltst.h"
 
 #define MAX_TOKEN_LEN 16
 
@@ -118,6 +121,6 @@
     static  UChar *test1;
     static  UChar *test2;
 
-
+#endif /* #if !UCONFIG_NO_COLLATION */
 
 #endif

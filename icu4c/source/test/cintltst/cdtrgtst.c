@@ -15,8 +15,11 @@
 */
 /* REGRESSION TEST FOR DATE FORMAT */
 
-#include "unicode/uloc.h"
 #include "unicode/utypes.h"
+
+#if !UCONFIG_NO_FORMATTING
+
+#include "unicode/uloc.h"
 #include "unicode/udat.h"
 #include "unicode/ucal.h"
 #include "unicode/unum.h"
@@ -509,5 +512,7 @@ UChar* myFormatit(UDateFormat* datdef, UDate d1)
     return result1;
 
 }
+
+#endif /* #if !UCONFIG_NO_FORMATTING */
 
 /*eof*/

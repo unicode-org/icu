@@ -17,9 +17,13 @@
 * try to test the full functionality.  It just calls each function in the class and
 * verifies that it works on a basic level.
 **/
+
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_BREAK_ITERATION
+
 #include "unicode/uloc.h"
 #include "unicode/ubrk.h"
-#include "unicode/utypes.h"
 #include "unicode/ustring.h"
 #include "unicode/ucnv.h"
 #include "ustr_imp.h"
@@ -557,5 +561,4 @@ static void TestBreakIteratorRuleError() {
     freeToUCharStrings(&freeHook);
 }
 
-
-
+#endif /* #if !UCONFIG_NO_BREAK_ITERATION */

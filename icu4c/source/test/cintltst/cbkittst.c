@@ -12,6 +12,11 @@
 *     Madhu Katragadda               Creation
 *********************************************************************************
 */
+
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_BREAK_ITERATION
+
 #include "cintltst.h"
 
 void addBrkIterAPITest(TestNode**);
@@ -24,3 +29,5 @@ void addBreakIter(TestNode** root)
     addBrkIterAPITest(root);
     addBrkIterRegrTest(root);
 }
+
+#endif /* #if !UCONFIG_NO_BREAK_ITERATION */
