@@ -486,6 +486,11 @@ public class RBManagerGUI extends JFrame implements ActionListener, MouseListene
 																					   // Menu -> File -> Import -> TMX
 				if (rbm == null || rbm.getBundles() == null) return;
 				RBTMXImporter importer = new RBTMXImporter(Resources.getTranslation("import_TMX_title"), rbm, this);
+			} else if (ev.getActionCommand().equals(Resources.getTranslation("menu_file_import_XLF"))) {
+				   // Menu -> File -> Import -> XLIFF
+				if (rbm == null || rbm.getBundles() == null)
+				    return;
+				RBxliffImporter importer = new RBxliffImporter(Resources.getTranslation("import_XLF_title"), rbm, this);
 			} else if (ev.getActionCommand().equals(Resources.getTranslation("menu_file_export_properties"))) {
 																					   // Menu -> File -> Export -> Properties
 				RBPropertiesExporter exp = new RBPropertiesExporter();
@@ -522,6 +527,16 @@ public class RBManagerGUI extends JFrame implements ActionListener, MouseListene
 					JOptionPane.showMessageDialog(this, Resources.getTranslation("error_export"),
 												  Resources.getTranslation("error"), JOptionPane.ERROR_MESSAGE);
 				}
+			} else if (ev.getActionCommand().equals(Resources.getTranslation("menu_file_export_XLF"))) {
+				   // Menu -> File -> Export -> XLIFF
+/*				RBxliffExporter exp = new RBxliffExporter();
+				try {
+					if (rbm != null && rbm.getBundles() != null)
+					    exp.export(rbm);
+				} catch (IOException ioe) {
+					JOptionPane.showMessageDialog(this, Resources.getTranslation("error_export"),
+					Resources.getTranslation("error"), JOptionPane.ERROR_MESSAGE);
+				}*/
 			} else if (ev.getActionCommand().equals(Resources.getTranslation("menu_options_addfile"))) {
 																					   // Menu -> Options -> Add New Resource
 				createResourceFile();
@@ -1401,11 +1416,13 @@ class RBManagerMenuBar extends JMenuBar {
 	JMenuItem    jMenuFileImportJava = new JMenuItem();
 	JMenuItem    jMenuFileImportProperties = new JMenuItem();
 	JMenuItem    jMenuFileImportTMX = new JMenuItem();
+	JMenuItem    jMenuFileImportXLF = new JMenuItem();
 	JMenu        jMenuFileExportResourceBundle = new JMenu();                 // Menu -> File -> Export
 	JMenuItem    jMenuFileExportJava = new JMenuItem();
 	JMenuItem    jMenuFileExportICU = new JMenuItem();
 	JMenuItem    jMenuFileExportProperties = new JMenuItem();
 	JMenuItem    jMenuFileExportTMX = new JMenuItem();
+	JMenuItem    jMenuFileExportXLF = new JMenuItem();
 	JMenuItem    jMenuFileExit = new JMenuItem();
 	JMenu        jMenuEdit = new JMenu();                                     // Menu -> Edit
 	JMenuItem    jMenuEditCut = new JMenuItem();
@@ -1443,6 +1460,8 @@ class RBManagerMenuBar extends JMenuBar {
 		jMenuFileImportProperties.setMnemonic(getKeyEventKey(Resources.getTranslation("menu_file_import_properties_trigger")));
 		jMenuFileImportTMX.setText(Resources.getTranslation("menu_file_import_TMX"));
 		jMenuFileImportTMX.setMnemonic(getKeyEventKey(Resources.getTranslation("menu_file_import_TMX_trigger")));
+		jMenuFileImportXLF.setText(Resources.getTranslation("menu_file_import_XLF"));
+		jMenuFileImportXLF.setMnemonic(getKeyEventKey(Resources.getTranslation("menu_file_import_XLF_trigger")));
 		jMenuFileExportResourceBundle.setText(Resources.getTranslation("menu_file_export"));
 		jMenuFileExportResourceBundle.setMnemonic(getKeyEventKey(Resources.getTranslation("menu_file_export_trigger")));
 		jMenuFileExportJava.setText(Resources.getTranslation("menu_file_export_java"));
@@ -1453,6 +1472,8 @@ class RBManagerMenuBar extends JMenuBar {
 		jMenuFileExportProperties.setMnemonic(getKeyEventKey(Resources.getTranslation("menu_file_export_properties_trigger")));
 		jMenuFileExportTMX.setText(Resources.getTranslation("menu_file_export_TMX"));
 		jMenuFileExportTMX.setMnemonic(getKeyEventKey(Resources.getTranslation("menu_file_export_TMX_trigger")));
+		jMenuFileExportXLF.setText(Resources.getTranslation("menu_file_export_XLF"));
+		jMenuFileExportXLF.setMnemonic(getKeyEventKey(Resources.getTranslation("menu_file_export_XLF_trigger")));
 		jMenuFileExit.setText(Resources.getTranslation("menu_file_quit"));
 		jMenuFileExit.setMnemonic(getKeyEventKey(Resources.getTranslation("menu_file_quit_trigger")));
 		//EDIT
@@ -1544,11 +1565,15 @@ class RBManagerMenuBar extends JMenuBar {
 		jMenuFileImportResourceBundle.add(jMenuFileImportProperties);
         jMenuFileImportTMX.setEnabled(xmlAvailable);
 		jMenuFileImportResourceBundle.add(jMenuFileImportTMX);
+        jMenuFileImportXLF.setEnabled(xmlAvailable);
+		jMenuFileImportResourceBundle.add(jMenuFileImportXLF);
 		jMenuFileExportResourceBundle.add(jMenuFileExportJava);
 		jMenuFileExportResourceBundle.add(jMenuFileExportICU);
 		jMenuFileExportResourceBundle.add(jMenuFileExportProperties);
         jMenuFileExportTMX.setEnabled(xmlAvailable);
 		jMenuFileExportResourceBundle.add(jMenuFileExportTMX);
+        jMenuFileExportXLF.setEnabled(xmlAvailable);
+		jMenuFileExportResourceBundle.add(jMenuFileExportXLF);
 
 		jMenuFileNewResourceBundle.setVisible(true);
 		jMenuFileNewResourceBundle.setText(Resources.getTranslation("menu_file_new"));
@@ -1598,6 +1623,11 @@ class RBManagerMenuBar extends JMenuBar {
 		jMenuFileImportTMX.setMnemonic(getKeyEventKey(Resources.getTranslation("menu_file_import_TMX_trigger")));
 		jMenuFileImportTMX.addActionListener(listener);
 		
+		jMenuFileImportXLF.setVisible(true);
+		jMenuFileImportXLF.setText(Resources.getTranslation("menu_file_import_XLF"));
+		jMenuFileImportXLF.setMnemonic(getKeyEventKey(Resources.getTranslation("menu_file_import_XLF_trigger")));
+		jMenuFileImportXLF.addActionListener(listener);
+		
 		jMenuFileExportResourceBundle.setVisible(true);
 		jMenuFileExportResourceBundle.setText(Resources.getTranslation("menu_file_export"));
 		jMenuFileExportResourceBundle.setMnemonic(getKeyEventKey(Resources.getTranslation("menu_file_export_trigger")));
@@ -1623,6 +1653,11 @@ class RBManagerMenuBar extends JMenuBar {
 		jMenuFileExportTMX.setMnemonic(getKeyEventKey(Resources.getTranslation("menu_file_export_TMX_trigger")));
 		jMenuFileExportTMX.addActionListener(listener);
 		
+		jMenuFileExportXLF.setVisible(true);
+		jMenuFileExportXLF.setText(Resources.getTranslation("menu_file_export_XLF"));
+		jMenuFileExportXLF.setMnemonic(getKeyEventKey(Resources.getTranslation("menu_file_export_XLF_trigger")));
+		jMenuFileExportXLF.addActionListener(listener);
+
 		jMenuFileExit.setVisible(true);
 		jMenuFileExit.setText(Resources.getTranslation("menu_file_quit"));
 		jMenuFileExit.setMnemonic(getKeyEventKey(Resources.getTranslation("menu_file_quit_trigger")));
