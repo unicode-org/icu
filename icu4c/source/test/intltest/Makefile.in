@@ -26,7 +26,7 @@ CPPFLAGS += -I$(top_builddir)/common -I$(top_srcdir)/common -I$(top_srcdir)/i18n
 DEFS += -D'U_TOPSRCDIR="$(top_srcdir)/"' -D'U_TOPBUILDDIR="$(BUILDDIR)"'
 LIBS = $(LIBICUI18N) $(LIBICUUC) $(LIBICUTOOLUTIL) $(DEFAULT_LIBS) $(LIB_M)
 
-OBJECTS = allcoll.o apicoll.o callimts.o calregts.o caltest.o		\
+OBJECTS = allcoll.o apicoll.o astrotst.o callimts.o calregts.o caltest.o \
 caltztst.o canittst.o citrtest.o cntabcol.o convtest.o cputilst.o currcoll.o dacoll.o	\
 dadrcoll.o dcfmapts.o decoll.o dtfmapts.o dtfmrgts.o dtfmtrtts.o dtfmttst.o	\
 encoll.o escoll.o ficoll.o frcoll.o g7coll.o intltest.o	\

@@ -187,7 +187,14 @@ void CalendarTest::runIndexedTest( int32_t index, UBool exec, const char* &name,
                 TestYWOY();
             }
             break;
-          
+        case 20:
+          name = "TestJD";
+          if(exec) {
+            logln("TestJD---"); logln("");
+            TestJD();
+          }
+          break;
+           
         default: name = ""; break;
     }
 }
@@ -1828,6 +1835,33 @@ void CalendarTest::TestYWOY()
      logln(calToStr(cal));
      errln("FAIL:  DOW_LOCAL did not take precedence");
    }
+
+}
+
+void CalendarTest::TestJD()
+{
+  int32_t jd;
+  static const int32_t kEpochStartAsJulianDay = 2440588;
+  UErrorCode status = U_ZERO_ERROR;
+  GregorianCalendar cal(status);
+  cal.setTimeZone(*TimeZone::getGMT());
+  cal.clear();
+  jd = cal.get(UCAL_JULIAN_DAY, status);
+  if(jd != kEpochStartAsJulianDay) {
+    errln("Wanted JD of %d at time=0, [epoch 1970] but got %d\n", kEpochStartAsJulianDay, jd);
+  } else {
+    logln("Wanted JD of %d at time=0, [epoch 1970], got %d\n", kEpochStartAsJulianDay, jd);
+  }
+  
+  cal.setTime(Calendar::getNow(), status);
+  cal.clear();
+  cal.set(UCAL_JULIAN_DAY, kEpochStartAsJulianDay);
+  UDate epochTime = cal.getTime(status);
+  if(epochTime != 0) {
+    errln("Wanted time of 0 at jd=%d, got %.1lf\n", kEpochStartAsJulianDay, epochTime);
+  } else {
+    logln("Wanted time of 0 at jd=%d, got %.1lf\n", kEpochStartAsJulianDay, epochTime);
+  }
 
 }
 
