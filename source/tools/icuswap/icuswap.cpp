@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2003, International Business Machines
+*   Copyright (C) 2003-2004, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -32,6 +32,7 @@
 #include "uarrsort.h"
 #include "ucmndata.h"
 #include "udataswp.h"
+#include "toolutil.h"
 #include "uoptions.h"
 
 /* swapping implementations in common */
@@ -99,6 +100,14 @@ udata_swapPackage(const UDataSwapper *ds,
                   const void *inData, int32_t length, void *outData,
                   UErrorCode *pErrorCode);
 
+/*
+ * udata_swapPackage() needs to rename ToC name entries from the old package
+ * name to the new one.
+ * We store the filenames here, and udata_swapPackage() will extract the
+ * package names.
+ */
+static const char *inFilename, *outFilename;
+
 U_CDECL_BEGIN
 static void U_CALLCONV
 printError(void *context, const char *fmt, va_list args) {
@@ -118,7 +127,7 @@ printUsage(const char *pname, UBool ishelp) {
                 "         to the -t or --type option, and write the result to the output file.\n"
                 "         -tl               change to little-endian/ASCII charset family\n"
                 "         -tb               change to big-endian/ASCII charset family\n"
-                "         -te               change to little-endian/EBCDIC charset family\n");
+                "         -te               change to big-endian/EBCDIC charset family\n");
     }
 
     return !ishelp;
@@ -182,6 +191,10 @@ main(int argc, char *argv[]) {
 
     in=out=NULL;
     data=NULL;
+
+    /* udata_swapPackage() needs the filenames */
+    inFilename=argv[1];
+    outFilename=argv[2];
 
     /* open the input file, get its length, allocate memory for it, read the file */
     in=fopen(argv[1], "rb");
@@ -391,6 +404,41 @@ udata_swap(const UDataSwapper *ds,
     return 0;
 }
 
+/* swap .dat package files -------------------------------------------------- */
+
+static int32_t
+extractPackageName(const UDataSwapper *ds, const char *filename,
+                   char pkg[], int32_t capacity,
+                   UErrorCode *pErrorCode) {
+    const char *basename;
+    int32_t len;
+
+    if(U_FAILURE(*pErrorCode)) {
+        return 0;
+    }
+
+    basename=findBasename(filename);
+    len=(int32_t)uprv_strlen(basename)-4; /* -4: subtract the length of ".dat" */
+
+    if(len<=0 || 0!=uprv_strcmp(basename+len, ".dat")) {
+        udata_printError(ds, "udata_swapPackage(): \"%s\" is not recognized as a package filename (must end with .dat)\n",
+                         basename);
+        *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
+        return 0;
+    }
+
+    if(len>=capacity) {
+        udata_printError(ds, "udata_swapPackage(): the package name \"%s\" is too long (>=%ld)\n",
+                         (long)capacity);
+        *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
+        return 0;
+    }
+
+    uprv_memcpy(pkg, basename, len);
+    pkg[len]=0;
+    return len;
+}
+
 struct ToCEntry {
     uint32_t nameOffset, inOffset, outOffset, length;
 };
@@ -422,6 +470,9 @@ udata_swapPackage(const UDataSwapper *ds,
 
     ToCEntry *table;
 
+    char inPkgName[32], outPkgName[32];
+    int32_t inPkgNameLength, outPkgNameLength;
+
     /* udata_swapDataHeader checks the arguments */
     headerSize=udata_swapDataHeader(ds, inData, length, outData, pErrorCode);
     if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
@@ -442,6 +493,35 @@ udata_swapPackage(const UDataSwapper *ds,
                          pInfo->dataFormat[2], pInfo->dataFormat[3],
                          pInfo->formatVersion[0]);
         *pErrorCode=U_UNSUPPORTED_ERROR;
+        return 0;
+    }
+
+    /*
+     * We need to change the ToC name entries so that they have the correct
+     * package name prefix.
+     * Extract the package names from the in/out filenames.
+     */
+    inPkgNameLength=extractPackageName(
+                        ds, inFilename,
+                        inPkgName, (int32_t)sizeof(inPkgName),
+                        pErrorCode);
+    outPkgNameLength=extractPackageName(
+                        ds, outFilename,
+                        outPkgName, (int32_t)sizeof(outPkgName),
+                        pErrorCode);
+    if(U_FAILURE(*pErrorCode)) {
+        return 0;
+    }
+
+    /*
+     * It is possible to work with inPkgNameLength!=outPkgNameLength,
+     * but then the length of the data file would change more significantly,
+     * which we are not currently prepared for.
+     */
+    if(inPkgNameLength!=outPkgNameLength) {
+        udata_printError(ds, "udata_swapPackage(): the package names \"%s\" and \"%s\" must have the same length\n",
+                         inPkgName, outPkgName);
+        *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
         return 0;
     }
 
@@ -510,6 +590,36 @@ udata_swapPackage(const UDataSwapper *ds,
             return 0;
         }
         /* keep offset and itemLength in case we allocate and copy the strings below */
+
+        /* swap the package names into the output charset */
+        if(ds->outCharset!=U_CHARSET_FAMILY) {
+            UDataSwapper *ds2;
+            ds2=udata_openSwapper(TRUE, U_CHARSET_FAMILY, TRUE, ds->outCharset, pErrorCode);
+            ds2->swapInvChars(ds2, inPkgName, inPkgNameLength, inPkgName, pErrorCode);
+            ds2->swapInvChars(ds2, outPkgName, outPkgNameLength, outPkgName, pErrorCode);
+            udata_closeSwapper(ds2);
+            if(U_FAILURE(*pErrorCode)) {
+                udata_printError(ds, "udata_swapPackage() failed to swap the input/output package names\n");
+            }
+        }
+
+        /* change the prefix of each ToC entry name from the old to the new package name */
+        {
+            char *entryName;
+
+            for(i=0; i<itemCount; ++i) {
+                entryName=(char *)inBytes+ds->readUInt32(inEntries[i].nameOffset);
+
+                if(0==uprv_memcmp(entryName, inPkgName, inPkgNameLength)) {
+                    uprv_memcpy(entryName, outPkgName, inPkgNameLength);
+                } else {
+                    udata_printError(ds, "udata_swapPackage() failed: ToC item %ld does not have the input package name as a prefix\n",
+                                     (long)i);
+                    *pErrorCode=U_INVALID_FORMAT_ERROR;
+                    return 0;
+                }
+            }
+        }
 
         /*
          * Allocate the ToC table and, if necessary, a temporary buffer for
