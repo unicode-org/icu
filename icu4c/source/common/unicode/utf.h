@@ -258,6 +258,22 @@ typedef int32_t UChar32;
          !U_IS_UNICODE_NONCHAR(c)))
 
 /**
+ * Is this code point a BMP code point (U+0000..U+ffff)?
+ * @param c 32-bit code point
+ * @return TRUE or FALSE
+ * @draft ICU 2.8
+ */
+#define U_IS_BMP(c) ((uint32_t)(c)<=0xffff)
+
+/**
+ * Is this code point a supplementary code point (U+10000..U+10ffff)?
+ * @param c 32-bit code point
+ * @return TRUE or FALSE
+ * @draft ICU 2.8
+ */
+#define U_IS_SUPPLEMENTARY(c) ((uint32_t)((c)-0x10000)<=0xfffff)
+
+/**
  * Is this code point a lead surrogate (U+d800..U+dbff)?
  * @param c 32-bit code point
  * @return TRUE or FALSE
