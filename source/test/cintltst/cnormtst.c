@@ -113,16 +113,17 @@ void TestDecomp()
         neededLen= u_normalize(source, u_strlen(source), UCOL_DECOMP_CAN, UCOL_IGNORE_HANGUL, NULL, 0, &status); 
         if(status==U_BUFFER_OVERFLOW_ERROR)
         {
-        status=U_ZERO_ERROR;
-        resLen=neededLen+1;
-        result=(UChar*)malloc(sizeof(UChar*) * resLen);
-        u_normalize(source, u_strlen(source), UCOL_DECOMP_CAN, UCOL_IGNORE_HANGUL, result, resLen, &status); 
+            status=U_ZERO_ERROR;
+            resLen=neededLen+1;
+            result=(UChar*)malloc(sizeof(UChar*) * resLen);
+            u_normalize(source, u_strlen(source), UCOL_DECOMP_CAN, UCOL_IGNORE_HANGUL, result, resLen, &status); 
         }
         if(U_FAILURE(status)){
             log_err("ERROR in u_normalize at %s:  %s\n", austrdup(source), myErrorName(status) );
         }
-        assertEqual(result, CharsToUChars(canonTests[x][1]), x);
+        assertEqual(result, canonTests[x][1], x);
         free(result);
+        free(source);
     }
     ucol_close(myCollation);
 }
@@ -145,19 +146,21 @@ void TestCompatDecomp()
         neededLen= u_normalize(source, u_strlen(source), UCOL_DECOMP_COMPAT, UCOL_IGNORE_HANGUL, NULL, 0, &status); 
         if(status==U_BUFFER_OVERFLOW_ERROR)
         {
-        status=U_ZERO_ERROR;
-        resLen=neededLen+1;
-        result=(UChar*)malloc(sizeof(UChar*) * resLen);
-        u_normalize(source, u_strlen(source), UCOL_DECOMP_COMPAT,UCOL_IGNORE_HANGUL, result, resLen, &status); 
+            status=U_ZERO_ERROR;
+            resLen=neededLen+1;
+            result=(UChar*)malloc(sizeof(UChar*) * resLen);
+            u_normalize(source, u_strlen(source), UCOL_DECOMP_COMPAT,UCOL_IGNORE_HANGUL, result, resLen, &status); 
         }
         if(U_FAILURE(status)){
             log_err("ERROR in u_normalize at %s:  %s\n", austrdup(source), myErrorName(status) );
         }
-        assertEqual(result, CharsToUChars(compatTests[x][1]), x);
+        assertEqual(result, compatTests[x][1], x);
         free(result);
+        free(source);
     }
     ucol_close(myCollation);            
 }
+
 void TestCanonDecompCompose() 
 {
     UErrorCode status = U_ZERO_ERROR;
@@ -176,24 +179,26 @@ void TestCanonDecompCompose()
         neededLen= u_normalize(source, u_strlen(source), UCOL_DECOMP_CAN_COMP_COMPAT, UCOL_IGNORE_HANGUL, NULL, 0, &status); 
         if(status==U_BUFFER_OVERFLOW_ERROR)
         {
-        status=U_ZERO_ERROR;
-        resLen=neededLen+1;
-        result=(UChar*)malloc(sizeof(UChar*) * resLen);
-        u_normalize(source, u_strlen(source), UCOL_DECOMP_CAN_COMP_COMPAT, UCOL_IGNORE_HANGUL, result, resLen, &status); 
+            status=U_ZERO_ERROR;
+            resLen=neededLen+1;
+            result=(UChar*)malloc(sizeof(UChar*) * resLen);
+            u_normalize(source, u_strlen(source), UCOL_DECOMP_CAN_COMP_COMPAT, UCOL_IGNORE_HANGUL, result, resLen, &status); 
         }
         if(U_FAILURE(status)){
             log_err("ERROR in u_normalize at %s:  %s\n", austrdup(source),myErrorName(status) );
         }
-        assertEqual(result, CharsToUChars(canonTests[x][2]), x);
+        assertEqual(result, canonTests[x][2], x);
         free(result);
+        free(source);
     }
     ucol_close(myCollation);            
 }
+
 void TestCompatDecompCompose() 
 {
     UErrorCode status = U_ZERO_ERROR;
     int32_t x, neededLen, resLen;
-    UChar *source=NULL, *result=NULL; 
+    UChar *source=NULL, *result=NULL;
     status = U_ZERO_ERROR;
     myCollation = ucol_open("en_US", &status);
     if(U_FAILURE(status)){
@@ -207,28 +212,40 @@ void TestCompatDecompCompose()
         neededLen= u_normalize(source, u_strlen(source), UCOL_DECOMP_COMPAT_COMP_CAN, UCOL_IGNORE_HANGUL, NULL, 0, &status); 
         if(status==U_BUFFER_OVERFLOW_ERROR)
         {
-        status=U_ZERO_ERROR;
-        resLen=neededLen+1;
-        result=(UChar*)malloc(sizeof(UChar*) * resLen);
-        u_normalize(source, u_strlen(source), UCOL_DECOMP_COMPAT_COMP_CAN, UCOL_IGNORE_HANGUL, result, resLen, &status); 
+            status=U_ZERO_ERROR;
+            resLen=neededLen+1;
+            result=(UChar*)malloc(sizeof(UChar*) * resLen);
+            u_normalize(source, u_strlen(source), UCOL_DECOMP_COMPAT_COMP_CAN, UCOL_IGNORE_HANGUL, result, resLen, &status); 
         }
         if(U_FAILURE(status)){
             log_err("ERROR in u_normalize at %s:  %s\n", austrdup(source), myErrorName(status) );
         }
-        assertEqual(result, CharsToUChars(compatTests[x][2]), x);
+        assertEqual(result, compatTests[x][2], x);
         free(result);
+        free(source);
     }
     ucol_close(myCollation);            
 }
 
 
-
+/*
 static void assertEqual(const UChar* result, const UChar* expected, int32_t index)
 {
     if(u_strcmp(result, expected)!=0){
         log_err("ERROR in decomposition at index = %d. EXPECTED: %s , GOT: %s\n", index, austrdup(expected),
             austrdup(result) );
     }
+}
+*/
+
+static void assertEqual(const UChar* result, const char* expected, int32_t index)
+{
+    UChar *expectedUni = CharsToUChars(expected);
+    if(u_strcmp(result, expectedUni)!=0){
+        log_err("ERROR in decomposition at index = %d. EXPECTED: %s , GOT: %s\n", index, expected,
+            austrdup(result) );
+    }
+    free(expectedUni);
 }
 
 static void TestNull_check(UChar *src, int32_t srcLen, 
