@@ -154,7 +154,9 @@ uint32_t contSize = 0;
 #define UCOL_INV_SHIFTVALUE 20
 
 void addNewInverse(UCAElements *element, UErrorCode *status) {
-
+  if(U_FAILURE(*status)) {
+    return;
+  }
   if(VERBOSE && isContinuation(element->CEs[1])) {
     fprintf(stdout, "+");
   }
@@ -176,6 +178,10 @@ void addNewInverse(UCAElements *element, UErrorCode *status) {
 
 void insertInverse(UCAElements *element, uint32_t position, UErrorCode *status) {
   uint8_t space[4096];
+
+  if(U_FAILURE(*status)) {
+    return;
+  }
 
   if(VERBOSE && isContinuation(element->CEs[1])) {
     fprintf(stdout, "+");
@@ -202,6 +208,10 @@ void insertInverse(UCAElements *element, uint32_t position, UErrorCode *status) 
 }
 
 void addToExistingInverse(UCAElements *element, uint32_t position, UErrorCode *status) {
+
+  if(U_FAILURE(*status)) {
+    return;
+  }
 
       if((inverseTable[position][2] & UCOL_INV_SIZEMASK) == 0) { /* single element, have to make new extension place and put both guys there */
         stringContinue[sContPos] = (UChar)inverseTable[position][2];
@@ -425,7 +435,7 @@ UCAElements *readAnElement(FILE *data, UErrorCode *status) {
     spacePointer = strchr(buffer, ' ');
     if(sscanf(buffer, "%04X", &theValue) != 1) /* read first code point */
     {
-      fprintf(stderr, " scanf(hex) failed on [%s]\n ");
+      fprintf(stderr, " scanf(hex) failed!\n ");
     }
     element->cPoints[0] = theValue;
 
@@ -548,7 +558,7 @@ UCAElements *readAnElement(FILE *data, UErrorCode *status) {
             *status=U_INVALID_FORMAT_ERROR;
             break;
         }
-        *pointer++;
+        pointer++;
     }
 
     /*
@@ -609,7 +619,7 @@ write_uca_table(const char *filename,
                 UErrorCode *status)
 {
     FILE *data = fopen(filename, "r");
-    int32_t line = 0;
+    uint32_t line = 0;
     int32_t sizesPrim[35], sizesSec[35], sizesTer[35];
     int32_t terValue[0xffff], secValue[0xffff];
     int32_t sizeBreakDown[35][35][35];
@@ -656,7 +666,7 @@ write_uca_table(const char *filename,
 
     while(!feof(data)) {
         if(U_FAILURE(*status)) {
-            fprintf(stderr, "Something returned an error %i while processing line: %i\nExiting...", status, line);
+            fprintf(stderr, "Something returned an error %i while processing line: %i\nExiting...", *status, line);
             exit(*status);
         }
 
@@ -693,8 +703,8 @@ write_uca_table(const char *filename,
 
             /* we're first adding to inverse, because addAnElement will reverse the order */
             /* of code points and stuff... we don't want that to happen */
-            uint32_t invResult = addToInverse(element, status);
-            uint32_t result = uprv_uca_addAnElement(t, element, status);
+            addToInverse(element, status);
+            uprv_uca_addAnElement(t, element, status);
             //deleteElement(element);
         }
     }

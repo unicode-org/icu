@@ -251,14 +251,14 @@ uint32_t uprv_cnttab_insertContraction(CntTable *table, uint32_t element, UChar 
 
     uprv_growTable(tbl, status);
 
-    int32_t offset = 0;
+    uint32_t offset = 0;
 
 
     while(tbl->codePoints[offset] < codePoint && offset<tbl->position) {
         offset++;
     }
 
-    int32_t i = tbl->position;
+    uint32_t i = tbl->position;
     for(i = tbl->position; i > offset; i--) {
         tbl->CEs[i] = tbl->CEs[i-1];
         tbl->codePoints[i] = tbl->codePoints[i-1];
@@ -303,7 +303,7 @@ uint32_t uprv_cnttab_addContraction(CntTable *table, uint32_t element, UChar cod
 }
 
 /* sets a part of contraction sequence in table. If element is non existant, it creates on. Returns element handle */
-uint32_t uprv_cnttab_setContraction(CntTable *table, uint32_t element, int32_t offset, UChar codePoint, uint32_t value, UBool forward, UErrorCode *status) {
+uint32_t uprv_cnttab_setContraction(CntTable *table, uint32_t element, uint32_t offset, UChar codePoint, uint32_t value, UBool forward, UErrorCode *status) {
 
     element &= 0xFFFFFF;
     ContractionTable *tbl = NULL;
@@ -348,7 +348,7 @@ uint32_t uprv_cnttab_findCP(CntTable *table, uint32_t element, UChar codePoint, 
         tbl = tbl->reversed;
     }
 
-    int32_t position = 0;
+    uint32_t position = 0;
 
     while(codePoint > tbl->codePoints[position]) {
       position++;
@@ -363,7 +363,7 @@ uint32_t uprv_cnttab_findCP(CntTable *table, uint32_t element, UChar codePoint, 
     }
 }
 
-uint32_t uprv_cnttab_getCE(CntTable *table, uint32_t element, int32_t position, UBool forward, UErrorCode *status) {
+uint32_t uprv_cnttab_getCE(CntTable *table, uint32_t element, uint32_t position, UBool forward, UErrorCode *status) {
 
     element &= 0xFFFFFF;
     ContractionTable *tbl = NULL;
@@ -405,7 +405,7 @@ uint32_t uprv_cnttab_changeContraction(CntTable *table, uint32_t element, UChar 
         tbl = tbl->reversed;
     }
 
-    int32_t position = 0;
+    uint32_t position = 0;
 
     while(codePoint > tbl->codePoints[position]) {
       position++;
