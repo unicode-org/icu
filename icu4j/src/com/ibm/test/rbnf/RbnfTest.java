@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/test/rbnf/Attic/RbnfTest.java,v $ 
- * $Date: 2001/10/24 19:57:38 $ 
- * $Revision: 1.5 $
+ * $Date: 2001/11/07 00:30:01 $ 
+ * $Revision: 1.6 $
  *
  *****************************************************************************************
  */
@@ -35,6 +35,55 @@ public class RbnfTest extends TestFmwk {
             System.out.println("Entire test failed because of exception: "
                             + e.toString());
             e.printStackTrace();
+        }
+    }
+
+    public void TestUndefinedSpellout() {
+        Locale greek = new Locale("el", "", "");
+        RuleBasedNumberFormat[] formatters = {
+            new RuleBasedNumberFormat(greek, RuleBasedNumberFormat.SPELLOUT),
+            new RuleBasedNumberFormat(greek, RuleBasedNumberFormat.ORDINAL),
+            new RuleBasedNumberFormat(greek, RuleBasedNumberFormat.DURATION),
+        };
+
+        String[] data = {
+            "0",
+            "1",
+            "15",
+            "20",
+            "23",
+            "73",
+            "88",
+            "100",
+            "106",
+            "127",
+            "200",
+            "579",
+            "1,000",
+            "2,000",
+            "3,004",
+            "4,567",
+            "15,943",
+            "105,000",
+            "2,345,678",
+            "-36",
+            "-36.91215",
+            "234.56789"
+        };
+
+        NumberFormat decFormat = NumberFormat.getInstance(Locale.US);
+        for (int j = 0; j < formatters.length; ++j) {
+            com.ibm.text.NumberFormat formatter = formatters[j];
+            logln("formatter[" + j + "]");
+            for (int i = 0; i < data.length; ++i) {
+                try {
+                    String result = formatter.format(decFormat.parse(data[i]));
+                    logln("[" + i + "] " + data[i] + " ==> " + result);
+                }
+                catch (Exception e) {
+                    errln("formatter[" + j + "], data[" + i + "] " + data[i] + " threw exception " + e.getMessage());
+                }
+            }
         }
     }
 
