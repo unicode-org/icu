@@ -1085,7 +1085,7 @@ uloc_getNameInternal(const char* localeID,
              UBool stripKeywords,
              UErrorCode* err)  
 {
-    int32_t i, fieldCount;
+    int32_t i, fieldCount, scriptSize;
     UBool alreadyAddedAKeyword = FALSE;
 
     if(err==NULL || U_FAILURE(*err)) {
@@ -1100,7 +1100,6 @@ uloc_getNameInternal(const char* localeID,
     fieldCount=0;
     i=_getLanguage(localeID, name, nameCapacity, &localeID);
     if(_isIDSeparator(*localeID)) {
-        int32_t scriptSize;
         const char *scriptID;
 
         ++fieldCount;
@@ -1153,7 +1152,7 @@ uloc_getNameInternal(const char* localeID,
                 ++i;
                 ++fieldCount;
                 i += locale_getKeywords(localeID+1, '@', name+i, nameCapacity-i, NULL, 0, NULL, TRUE, err);
-            } else if(fieldCount < 2) {
+            } else if(fieldCount < 2 || (fieldCount < 3 && scriptSize > 0)) {
                 do {
                     if(i<nameCapacity) {
                         name[i]='_';

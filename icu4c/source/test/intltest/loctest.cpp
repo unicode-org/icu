@@ -282,32 +282,36 @@ void LocaleTest::TestBasicGetters() {
         logln("Testing " + (temp=testLocale.getName()) + "...");
 
         if ( (temp=testLocale.getLanguage()) != (dataTable[LANG][i]))
-            errln("  Language code mismatch: " + temp + " versus "
+            errln("Language code mismatch: " + temp + " versus "
                         + dataTable[LANG][i]);
         if ( (temp=testLocale.getScript()) != (dataTable[SCRIPT][i]))
-            errln("  Script code mismatch: " + temp + " versus "
+            errln("Script code mismatch: " + temp + " versus "
                         + dataTable[SCRIPT][i]);
         if ( (temp=testLocale.getCountry()) != (dataTable[CTRY][i]))
-            errln("  Country code mismatch: " + temp + " versus "
+            errln("Country code mismatch: " + temp + " versus "
                         + dataTable[CTRY][i]);
         if (testLocale.getVariant()[0] != 0)
-            errln("  Variant code mismatch: something versus \"\"");
+            errln("Variant code mismatch: something versus \"\"");
     }
 
     logln("Testing long language names and getters");
-    Locale  test8 = Locale::createFromName("x-klingon-zx.utf32be@special");
+    Locale  test8 = Locale::createFromName("x-klingon-latn-zx.utf32be@special");
 
     temp = test8.getLanguage();
     if (temp != UnicodeString("x-klingon") )
-        errln("  Language code mismatch: " + temp + "  versus \"x-klingon\"");
+        errln("Language code mismatch: " + temp + "  versus \"x-klingon\"");
+
+    temp = test8.getScript();
+    if (temp != UnicodeString("Latn") )
+        errln("Script code mismatch: " + temp + "  versus \"Latn\"");
 
     temp = test8.getCountry();
     if (temp != UnicodeString("ZX") )
-        errln("  Country code mismatch: " + temp + "  versus \"ZX\"");
+        errln("Country code mismatch: " + temp + "  versus \"ZX\"");
 
     temp = test8.getVariant();
     if (temp != UnicodeString("SPECIAL") )
-        errln("  Variant code mismatch: " + temp + "  versus \"SPECIAL\"");
+        errln("Variant code mismatch: " + temp + "  versus \"SPECIAL\"");
 
     if (Locale::getDefault() != Locale::createFromName(NULL))
         errln("Locale::getDefault() == Locale::createFromName(NULL)");
