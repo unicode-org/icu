@@ -26,7 +26,7 @@ struct USet;
 typedef struct USet USet;
 
 struct USerializedSet {
-    uint16_t *array;
+    const uint16_t *array;
     int32_t bmpLength, length;
 };
 typedef struct USerializedSet USerializedSet;
@@ -60,7 +60,7 @@ U_CAPI int32_t U_EXPORT2
 uset_serialize(const USet *set, uint16_t *dest, int32_t destCapacity, UErrorCode *pErrorCode);
 
 U_CAPI UBool U_EXPORT2
-uset_getSerializedSet(USerializedSet *fillSet, uint16_t *src, int32_t srcCapacity);
+uset_getSerializedSet(USerializedSet *fillSet, const uint16_t *src, int32_t srcCapacity);
 
 U_CAPI UBool U_EXPORT2
 uset_serializedContains(const USerializedSet *set, UChar32 c);
