@@ -42,7 +42,7 @@ enum {
 
 LEUnicode ThaiShaping::leftAboveVowel(LEUnicode vowel, le_uint8 glyphSet)
 {
-    static LEUnicode leftAboveVowels[][7] = {
+    static const LEUnicode leftAboveVowels[][7] = {
         {0x0E61, 0x0E32, 0x0E33, 0x0E64, 0x0E65, 0x0E66, 0x0E67},
         {0xF710, 0x0E32, 0x0E33, 0xF701, 0xF702, 0xF703, 0xF704},
         {0xF884, 0x0E32, 0x0E33, 0xF885, 0xF886, 0xF887, 0xF788},
@@ -62,7 +62,7 @@ LEUnicode ThaiShaping::leftAboveVowel(LEUnicode vowel, le_uint8 glyphSet)
 
 LEUnicode ThaiShaping::lowerRightTone(LEUnicode tone, le_uint8 glyphSet)
 {
-    static LEUnicode lowerRightTones[][7] = {
+    static const LEUnicode lowerRightTones[][7] = {
         {0x0E68, 0x0E69, 0x0E6A, 0x0E6B, 0x0E6C, 0x0E6D, 0x0E6E},
         {0x0E47, 0xF70A, 0xF70B, 0xF70C, 0xF70D, 0xF70E, 0x0E4D},
         {0x0E47, 0xF88B, 0xF88E, 0xF891, 0xF894, 0xF897, 0x0E4D},
@@ -78,7 +78,7 @@ LEUnicode ThaiShaping::lowerRightTone(LEUnicode tone, le_uint8 glyphSet)
 
 LEUnicode ThaiShaping::lowerLeftTone(LEUnicode tone, le_uint8 glyphSet)
 {
-    static LEUnicode lowerLeftTones[][7] = {
+    static const LEUnicode lowerLeftTones[][7] = {
         {0x0E76, 0x0E77, 0x0E78, 0x0E79, 0x0E7A, 0x0E7B, 0x0E7C},
         {0xF712, 0xF705, 0xF706, 0xF707, 0xF708, 0xF709, 0xF711},
         {0xF889, 0xF88C, 0xF88F, 0xF892, 0xF895, 0xF898, 0xF899},
@@ -94,7 +94,7 @@ LEUnicode ThaiShaping::lowerLeftTone(LEUnicode tone, le_uint8 glyphSet)
 
 LEUnicode ThaiShaping::upperLeftTone(LEUnicode tone, le_uint8 glyphSet)
 {
-    static LEUnicode upperLeftTones[][7] = {
+    static const LEUnicode upperLeftTones[][7] = {
         {0x0E6F, 0x0E70, 0x0E71, 0x0E72, 0x0E73, 0x0E74, 0x0E75},
         {0xF712, 0xF713, 0xF714, 0xF715, 0xF716, 0xF717, 0xF711},
         {0xF889, 0xF88A, 0xF88D, 0xF890, 0xF893, 0xF896, 0xF899},
@@ -110,7 +110,7 @@ LEUnicode ThaiShaping::upperLeftTone(LEUnicode tone, le_uint8 glyphSet)
 
 LEUnicode ThaiShaping::lowerBelowVowel(LEUnicode vowel, le_uint8 glyphSet)
 {
-    static LEUnicode lowerBelowVowels[][3] = {
+    static const LEUnicode lowerBelowVowels[][3] = {
         {0x0E3C, 0x0E3D, 0x0E3E},
         {0xF718, 0xF719, 0xF71A},
         {0x0E38, 0x0E39, 0x0E3A},
@@ -127,7 +127,7 @@ LEUnicode ThaiShaping::lowerBelowVowel(LEUnicode vowel, le_uint8 glyphSet)
 
 LEUnicode ThaiShaping::noDescenderCOD(LEUnicode cod, le_uint8 glyphSet)
 {
-    static LEUnicode noDescenderCODs[][4] = {
+    static const LEUnicode noDescenderCODs[][4] = {
         {0x0E60, 0x0E0E, 0x0E0F, 0x0E63},
         {0xF70F, 0x0E0E, 0x0E0F, 0xF700},
         {0x0E0D, 0x0E0E, 0x0E0F, 0x0E10},
