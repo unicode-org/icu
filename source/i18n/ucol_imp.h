@@ -72,7 +72,8 @@ static const UDataInfo invUcaDataInfo={
 
     {0x49, 0x6E, 0x76, 0x43},     /* dataFormat="InvC"            */
     /* 03/26/2002 bumped up version since format has changed */
-    {2, 0, 0, 0},                 /* formatVersion                */
+    /* 04/29/2003 2.1 format - we have added UCA & UCD versions to header */
+    {2, 1, 0, 0},                 /* formatVersion                */
     {3, 0, 0, 0}                  /* dataVersion = Unicode Version*/
 };
 
@@ -706,7 +707,9 @@ typedef struct {
   uint32_t contsSize;
   uint32_t table;
   uint32_t conts;
-} InverseTableHeader;
+  UVersionInfo UCAVersion;              /* version of the UCA, read from file */
+  uint8_t padding[8];
+} InverseUCATableHeader;
 
 typedef int32_t U_CALLCONV
 SortKeyGenerator(const    UCollator    *coll,
@@ -724,7 +727,7 @@ struct UCollator {
     char* validLocale;
     char* requestedLocale;
     UResourceBundle *rb;
-    UResourceBundle *binary;
+    UResourceBundle *elements;
     const UCATableHeader *image;
     /*CompactEIntArray *mapping;*/
     UTrie *mapping;
@@ -797,8 +800,9 @@ U_CDECL_END
 
 /* various internal functions */
 
+/* do not close UCA returned by ucol_initUCA! */
 U_CFUNC
-void ucol_initUCA(UErrorCode *status);
+UCollator* ucol_initUCA(UErrorCode *status);
 
 U_CFUNC
 UCollator* ucol_initCollator(const UCATableHeader *image, UCollator *fillIn, UErrorCode *status);
@@ -818,7 +822,7 @@ U_CAPI uint32_t U_EXPORT2 ucol_getFirstCE(const UCollator *coll, UChar u, UError
 U_CAPI char* U_EXPORT2 ucol_sortKeyToString(const UCollator *coll, const uint8_t *sortkey, char *buffer, uint32_t *len);
 U_CAPI UBool U_EXPORT2 ucol_isTailored(const UCollator *coll, const UChar u, UErrorCode *status);
 
-U_CAPI const InverseTableHeader* U_EXPORT2 ucol_initInverseUCA(UErrorCode *status);
+U_CAPI const InverseUCATableHeader* U_EXPORT2 ucol_initInverseUCA(UErrorCode *status);
 U_CAPI int32_t U_EXPORT2 ucol_inv_getNextCE(uint32_t CE, uint32_t contCE,
                                             uint32_t *nextCE, uint32_t *nextContCE,
                                             uint32_t strength);

@@ -50,7 +50,8 @@ enum
     BUNDLE_NAME,
     WRITE_XML,
     TOUCHFILE,
-    STRICT
+    STRICT,
+    NO_BINARY_COLLATION
 };
 
 UOption options[]={
@@ -69,7 +70,8 @@ UOption options[]={
                       UOPTION_BUNDLE_NAME,
                       UOPTION_DEF( "write-xml", 'x', UOPT_NO_ARG),
                       UOPTION_DEF( "touchfile", 't', UOPT_NO_ARG),
-                      UOPTION_DEF( "strict",    'k', UOPT_NO_ARG) /* 14 */
+                      UOPTION_DEF( "strict",    'k', UOPT_NO_ARG), /* 14 */
+                      UOPTION_DEF( "noBinaryCollation", 'C', UOPT_NO_ARG)/* 15 */
 
                   };
 
@@ -211,7 +213,12 @@ main(int argc,
     if(options[WRITE_XML].doesOccur) {
         write_xml = TRUE;
     }
-    initParser();
+
+    if(options[NO_BINARY_COLLATION].doesOccur) {
+      initParser(FALSE);
+    } else {
+      initParser(TRUE);
+    }
 
     /* generate the binary files */
     for(i = 1; i < argc; ++i) {
