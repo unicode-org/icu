@@ -34,8 +34,11 @@
 /* convert from a country code (only the first 2 chars are significant)  */
 /* to an IBM codepage */
 
+/* TODO: We should consider using uprv_defaultCodePageForLocale() instead of this table
+ (less to maintain when the ISO-639 standard changes */
+
 /* thanks to http://czyborra.com/charsets/iso8859.htm for most of this info */
-static const char ufile_locale2codepage[][256] = {
+static const char *ufile_locale2codepage[] = {
   "af", "latin-1",  /* Afrikaans */
   "ar", "ibm-1256", /* arabic */
 
