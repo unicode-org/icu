@@ -89,7 +89,7 @@ clean-local: cleanpackage cleanfiles
 check-local:
 
 packagedata: icupkg.inc $(BUILDDIR)/icudata.lst 
-	$(INVOKE) $(PKGDATA) -e $(ICUDATA_BASENAME_VERSION) -T $(BUILDDIR) -p $(ICUDATA_NAME) -m $(PKGDATA_MODE) $(PKGDATA_VERSIONING) $(BUILDDIR)/icudata.lst
+	$(INVOKE) $(PKGDATA) -e $(ICUDATA_ENTRY_POINT) -T $(BUILDDIR) -p $(ICUDATA_NAME) -m $(PKGDATA_MODE) $(PKGDATA_VERSIONING) $(BUILDDIR)/icudata.lst
 
 packagetest: icupkg.inc $(TESTBUILDDIR)/testdata.lst 
 	$(INVOKE) $(PKGDATA) -T $(TESTBUILDDIR) -d $(TESTOUTDIR) -s $(BUILDDIR) -p testdata -m common $(TESTBUILDDIR)/testdata.lst
@@ -100,7 +100,7 @@ cleanpackage:
 ## Install ICU data. Make a convenience link 'icudata' library if it's a library mode.
 install-local:  $(BUILDDIR)/icudata.lst ./icupkg.inc install-convrtrstxt $(OS390INSTALL)
 	$(MKINSTALLDIRS) $(TMPDATADIR) $(DESTDIR)$(ICUPKGDATA_DIR)
-	$(INVOKE) $(PKGDATA) -m $(PKGDATA_MODE) $(PKGDATA_VERSIONING) -e $(ICUDATA_BASENAME_VERSION) -T $(BUILDDIR) -s $(BUILDDIR) -p $(ICUDATA_NAME) $(BUILDDIR)/icudata.lst -I $(DESTDIR)$(ICUPKGDATA_DIR)
+	$(INVOKE) $(PKGDATA) -m $(PKGDATA_MODE) $(PKGDATA_VERSIONING) -e $(ICUDATA_ENTRY_POINT) -T $(BUILDDIR) -s $(BUILDDIR) -p $(ICUDATA_NAME) $(BUILDDIR)/icudata.lst -I $(DESTDIR)$(ICUPKGDATA_DIR)
 
 install-convrtrstxt: $(UCMSRCDIR)/convrtrs.txt
 	$(MKINSTALLDIRS) $(DESTDIR)$(pkgsysconfdir)
@@ -115,12 +115,12 @@ testdata: $(SPECIALTESTDATA)
 #### 390 support
 install390: build/icudata390.lst ./icupkg.inc
 	$(MKINSTALLDIRS) $(TMPDATADIR) $(DESTDIR)$(libdir)
-	cd build ; $(INVOKE) $(PKGDATA) -s $(BUILDDIR) -T $(BUILDDIR)/tmp3901 -p $(ICUDATA_NAME)$(BATCH_STUB_SUFFIX) -e $(ICUDATA_BASENAME_VERSION) icudata390.lst -m dll $(PKGDATA_VERSIONING) -I $(DESTDIR)$(ICUPKGDATA_DIR)
+	cd build ; $(INVOKE) $(PKGDATA) -s $(BUILDDIR) -T $(BUILDDIR)/tmp3901 -p $(ICUDATA_NAME)$(BATCH_STUB_SUFFIX) -e $(ICUDATA_ENTRY_POINT) icudata390.lst -m dll $(PKGDATA_VERSIONING) -I $(DESTDIR)$(ICUPKGDATA_DIR)
 
 #### $(LIB_ICUDATA_NAME)$(BATCH_SUFFIX) is the subset data for batch mode
 package390: build/icudata390.lst build/icudata.lst ./icupkg.inc
 	@$(MKINSTALLDIRS) tmp3901
-	cd build ; $(INVOKE) $(PKGDATA) -s $(BUILDDIR)  -T $(BUILDDIR)/tmp3901 -p $(ICUDATA_NAME)$(BATCH_STUB_SUFFIX) -e $(ICUDATA_BASENAME_VERSION) icudata390.lst -m dll
+	cd build ; $(INVOKE) $(PKGDATA) -s $(BUILDDIR)  -T $(BUILDDIR)/tmp3901 -p $(ICUDATA_NAME)$(BATCH_STUB_SUFFIX) -e $(ICUDATA_ENTRY_POINT) icudata390.lst -m dll
 	cp $(top_builddir)/data/$(LIB_ICUDATA_NAME)$(BATCH_STUB_SUFFIX).$(SO) $(top_builddir)/stubdata/$(LIB_ICUDATA_NAME)$(BATCH_STUB_SUFFIX).$(SO)
 
 
