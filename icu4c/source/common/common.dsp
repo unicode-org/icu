@@ -1151,14 +1151,14 @@ SOURCE=.\unormimp.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\unicode\ureni18n.h
+SOURCE=.\unicode\urename.h
 
 !IF  "$(CFG)" == "common - Win32 Release"
 
 # Begin Custom Build
-InputPath=.\unicode\ureni18n.h
+InputPath=.\unicode\urename.h
 
-"..\..\include\unicode\ureni18n.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+"..\..\include\unicode\urename.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
 	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
@@ -1166,36 +1166,9 @@ InputPath=.\unicode\ureni18n.h
 !ELSEIF  "$(CFG)" == "common - Win32 Debug"
 
 # Begin Custom Build
-InputPath=.\unicode\ureni18n.h
+InputPath=.\unicode\urename.h
 
-"..\..\include\unicode\ureni18n.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy    $(InputPath)    ..\..\include\unicode
-
-# End Custom Build
-
-!ENDIF 
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\unicode\urenuc.h
-
-!IF  "$(CFG)" == "common - Win32 Release"
-
-# Begin Custom Build
-InputPath=.\unicode\urenuc.h
-
-"..\..\include\unicode\urenuc.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy    $(InputPath)    ..\..\include\unicode
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "common - Win32 Debug"
-
-# Begin Custom Build
-InputPath=.\unicode\urenuc.h
-
-"..\..\include\unicode\urenuc.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+"..\..\include\unicode\urename.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
 	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
