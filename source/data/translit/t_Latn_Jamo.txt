@@ -6,12 +6,12 @@
 // THIS IS A MACHINE-GENERATED FILE
 // Tool: dumpICUrules.bat
 // Source: ../../text/resources/Transliterator_Latin_Jamo.txt
-// Date: Mon Jan 21 10:41:16 2002
+// Date: Fri Feb  8 15:53:55 2002
 //--------------------------------------------------------------------
 
 // Latin_Jamo
 
-Latin_Jamo {
+t_Latn_Jamo {
   Rule {
 //--------------------------------------------------------------------
 // Copyright (c) 1999-2001, International Business Machines

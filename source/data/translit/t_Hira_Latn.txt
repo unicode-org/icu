@@ -6,20 +6,20 @@
 // THIS IS A MACHINE-GENERATED FILE
 // Tool: dumpICUrules.bat
 // Source: ../../text/resources/Transliterator_Hiragana_Latin.txt
-// Date: Mon Jan 21 10:41:16 2002
+// Date: Fri Feb  8 15:53:54 2002
 //--------------------------------------------------------------------
 
 // Hiragana_Latin
 
-Hiragana_Latin {
+t_Hira_Latn {
   Rule {
 //--------------------------------------------------------------------
 // Copyright (c) 1999-2001, International Business Machines
 // Corporation and others. All Rights Reserved.
 //--------------------------------------------------------------------
 // $Source: /xsrl/Nsvn/icu/icu/source/data/translit/Attic/t_Hira_Latn.txt,v $
-// $Date: 2002/01/24 17:24:32 $
-// $Revision: 1.6 $
+// $Date: 2002/02/09 00:27:08 $
+// $Revision: 1.7 $
 //--------------------------------------------------------------------
 
 ":: [\u3041-\u3094\u3099\u309D-\u309E\u30AC\u30AE\u30B0\u30B2\u30B4\u30B6\u30B8\u30BA\u30BC\u30BE\u30C0\u30C2\u30C5\u30C7\u30C9\u30D0\u30D3\u30D6\u30D9\u30DC\u30F4\u30F7-\u30FA\u30FE] ;"
