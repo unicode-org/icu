@@ -121,9 +121,6 @@ static void TestTertiary( )
 	return;
     }
     log_verbose("Testing Kanna(Japan) Collation with Tertiary strength\n");
-    /* for one case, strcollinc fails, since it doesn't have good handling of contractions*/
-    /* normalization is turned off to stop strcollinc from executing */
-    ucol_setAttribute(myCollation, UCOL_NORMALIZATION_MODE, UCOL_ON, &status);
     ucol_setStrength(myCollation, UCOL_TERTIARY);
     ucol_setAttribute(myCollation, UCOL_CASE_LEVEL, UCOL_ON, &status);
     for (i = 0; i < 6 ; i++)
@@ -192,9 +189,6 @@ static void TestSmallLarge(void)
   }
   
   log_verbose("Testing Japanese Small and Large Characters Collation\n");
-  /* for one case, strcollinc fails, since it doesn't have good handling of contractions*/
-  /* normalization is turned off to stop strcollinc from executing */
-  ucol_setAttribute(myCollation, UCOL_NORMALIZATION_MODE, UCOL_ON, &status);
   ucol_setStrength(myCollation, UCOL_TERTIARY);
   ucol_setAttribute(myCollation, UCOL_CASE_LEVEL, UCOL_ON, &status);
   for (i = 0; i < 3 ; i++)
@@ -220,7 +214,6 @@ static void TestKatakanaHiragana(void)
   }
   
   log_verbose("Testing Japanese Katakana, Hiragana Characters Collation\n");
-  ucol_setNormalization(myCollation, UCOL_DECOMP_COMPAT);
   ucol_setStrength(myCollation, UCOL_QUATERNARY);
   ucol_setAttribute(myCollation, UCOL_CASE_LEVEL, UCOL_ON, &status);
   for (i = 0; i < 3 ; i++) {
@@ -247,9 +240,6 @@ static void TestChooonKigoo(void)
   }
   
   log_verbose("Testing Japanese Choo-on Kigoo Characters Collation\n");
-  /* for one case, strcollinc fails, since it has a bogus expansion at the end*/
-  /* normalization is turned off to stop strcollinc from executing */
-  ucol_setAttribute(myCollation, UCOL_NORMALIZATION_MODE, UCOL_ON, &status);
   ucol_setAttribute(myCollation, UCOL_CASE_LEVEL, UCOL_ON, &status);
   for (i = 0; i < 7 ; i++) {
     doTest(myCollation, testChooonKigooCases[i], testChooonKigooCases[i + 1], 
