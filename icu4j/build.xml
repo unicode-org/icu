@@ -6,8 +6,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/build.xml,v $ 
-* $Date: 2000/04/27 23:34:06 $ 
-* $Revision: 1.16 $
+* $Date: 2000/05/09 22:44:28 $ 
+* $Revision: 1.17 $
 *
 *******************************************************************************
 * This is the ant build file for ICU4J.  See readme.html for more information.
@@ -66,8 +66,8 @@
     	   destdir="${build.dir}" 
     	   classpath="${classpath}"
            debug="on" deprecation="off" target="1.2"/>
-    <copyfile src="${src.dir}/com/ibm/demo/rbbi/english_dict"
-    	   dest="${build.dir}/com/ibm/text/resources/english_dict"/>
+    <copyfile src="${src.dir}/com/ibm/demo/rbbi/english.dict"
+    	   dest="${build.dir}/com/ibm/demo/rbbi/english.dict"/>
   </target>
   
   <target name="tools" depends="core">
