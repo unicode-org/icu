@@ -629,6 +629,32 @@ public abstract class Calendar implements Serializable, Cloneable {
      */
     public final static int PM = 1;
 
+    /**
+     * Value returned by getDayOfWeekType(int dayOfWeek) to indicate a
+     * weekday.
+     */
+    public static final int WEEKDAY = 0;
+
+    /**
+     * Value returned by getDayOfWeekType(int dayOfWeek) to indicate a
+     * weekend day.
+     */
+    public static final int WEEKEND = 1;
+
+    /**
+     * Value returned by getDayOfWeekType(int dayOfWeek) to indicate a
+     * day that starts as a weekday and transitions to the weekend.
+     * Call getWeekendTransition() to get the point of transition.
+     */
+    public static final int WEEKEND_ONSET = 2;
+
+    /**
+     * Value returned by getDayOfWeekType(int dayOfWeek) to indicate a
+     * day that starts as the weekend and transitions to a weekday.
+     * Call getWeekendTransition() to get the point of transition.
+     */
+    public static final int WEEKEND_CEASE = 3;
+
     // Internal notes:
     // Calendar contains two kinds of time representations: current "time" in
     // milliseconds, and a set of time "fields" representing the current time.
@@ -725,6 +751,12 @@ public abstract class Calendar implements Serializable, Cloneable {
      */
     private int             minimalDaysInFirstWeek;
 
+    // Weekend onset and cease
+    private int weekendOnset;
+    private int weekendOnsetMillis;
+    private int weekendCease;
+    private int weekendCeaseMillis;
+
     /**
      * Cache to hold the firstDayOfWeek and minimalDaysInFirstWeek
      * of a Locale.
@@ -803,6 +835,7 @@ public abstract class Calendar implements Serializable, Cloneable {
 
         this.zone = zone;
         setWeekCountData(aLocale);
+        setWeekendData(aLocale);
     }
 
     /**
@@ -1418,6 +1451,139 @@ public abstract class Calendar implements Serializable, Cloneable {
 
         return result;
     }
+
+    //-------------------------------------------------------------------------
+    // Weekend support -- determining which days of the week are the weekend
+    // in a given locale
+    //-------------------------------------------------------------------------
+
+    /**
+     * Return whether the given day of the week is a weekday, a
+     * weekend day, or a day that transitions from one to the other,
+     * in this calendar system.  If a transition occurs at midnight,
+     * then the days before and after the transition will have the
+     * type WEEKDAY or WEEKEND.  If a transition occurs at a time
+     * other than midnight, then the day of the transition will have
+     * the type WEEKEND_ONSET or WEEKEND_CEASE.  In this case, the
+     * method getWeekendTransition() will return the point of
+     * transition.
+     * @param dayOfWeek either SUNDAY, MONDAY, TUESDAY, WEDNESDAY,
+     * THURSDAY, FRIDAY, or SATURDAY
+     * @return either WEEKDAY, WEEKEND, WEEKEND_ONSET, or
+     * WEEKEND_CEASE
+     * @exception IllegalArgumentException if dayOfWeek is not
+     * between SUNDAY and SATURDAY, inclusive
+     */
+    public int getDayOfWeekType(int dayOfWeek) {
+        if (dayOfWeek < SUNDAY || dayOfWeek > SATURDAY) {
+            throw new IllegalArgumentException("Invalid day of week");
+        }
+        if (weekendOnset < weekendCease) {
+            if (dayOfWeek < weekendOnset || dayOfWeek > weekendCease) {
+                return WEEKDAY;
+            }
+        } else {
+            if (dayOfWeek > weekendCease && dayOfWeek < weekendOnset) {
+                return WEEKDAY;
+            }
+        } 
+        if (dayOfWeek == weekendOnset) {
+            return (weekendOnsetMillis == 0) ? WEEKEND : WEEKEND_ONSET;
+        }
+        if (dayOfWeek == weekendCease) {
+            return (weekendCeaseMillis == 0) ? WEEKDAY : WEEKEND_CEASE;
+        }
+        return WEEKEND;
+    }
+
+    /**
+     * Return the time during the day at which the weekend begins in
+     * this calendar system, if getDayOfWeekType(dayOfWeek) ==
+     * WEEKEND_ONSET, or at which the weekend ends, if
+     * getDayOfWeekType(dayOfWeek) == WEEKEND_CEASE.  If
+     * getDayOfWeekType(dayOfWeek) has some other value, then an
+     * exception is thrown.
+     * @param dayOfWeek either SUNDAY, MONDAY, TUESDAY, WEDNESDAY,
+     * THURSDAY, FRIDAY, or SATURDAY
+     * @return the milliseconds after midnight at which the
+     * weekend begins or ends
+     * @exception IllegalArgumentException if dayOfWeek is not
+     * WEEKEND_ONSET or WEEKEND_CEASE
+     */
+    public int getWeekendTransition(int dayOfWeek) {
+        if (dayOfWeek == weekendOnset) {
+            return weekendOnsetMillis;
+        } else if (dayOfWeek == weekendCease) {
+            return weekendCeaseMillis;
+        }
+        throw new IllegalArgumentException("Not weekend transition day");
+    }
+
+    /**
+     * Return true if the given date and time is in the weekend in
+     * this calendar system.  Equivalent to calling setTime() followed
+     * by isWeekend().  Note: This method changes the time this
+     * calendar is set to.
+     * @param date the date and time
+     * @return true if the given date and time is part of the
+     * weekend
+     */
+    public boolean isWeekend(Date date) {
+        setTime(date);
+        return isWeekend();
+    }
+
+    /**
+     * Return true if this Calendar's current date and time is in the
+     * weekend in this calendar system.
+     * @return true if the given date and time is part of the
+     * weekend
+     */
+    public boolean isWeekend() {
+        int dow =  get(DAY_OF_WEEK);
+        int dowt = getDayOfWeekType(dow);
+        switch (dowt) {
+        case WEEKDAY:
+            return false;
+        case WEEKEND:
+            return true;
+        default: // That is, WEEKEND_ONSET or WEEKEND_CEASE
+            // Use internalGet() because the above call to get() populated
+            // all fields.
+            // [Note: There should be a better way to get millis in day.
+            //  For ICU4J, submit request for a MILLIS_IN_DAY field
+            //  and a DAY_NUMBER field (could be Julian day #). - aliu]
+            int millisInDay = internalGet(MILLISECOND) + 1000 * (internalGet(SECOND) +
+                60 * (internalGet(MINUTE) + 60 * internalGet(HOUR_OF_DAY)));
+            int transition = getWeekendTransition(dow);
+            return (dowt == WEEKEND_ONSET)
+                ? (millisInDay >= transition)
+                : (millisInDay <  transition);
+        }
+        // (We can never reach this point.)
+    }
+
+    /**
+     * Read the locale weekend data for the given locale.
+     *
+     * This is the initial placement and format of this data -- it may very
+     * well change in the future.  See the locale files themselves for
+     * details.
+     */
+    private void setWeekendData(Locale loc) {
+        ResourceBundle resource =
+            ResourceBundle.getBundle("com.ibm.util.resources.CalendarData",
+                                     loc);
+        String[] data = resource.getStringArray("Weekend");
+        weekendOnset       = Integer.parseInt(data[0]);
+        weekendOnsetMillis = Integer.parseInt(data[1]);
+        weekendCease       = Integer.parseInt(data[2]);
+        weekendCeaseMillis = Integer.parseInt(data[3]);
+    }
+
+    //-------------------------------------------------------------------------
+    // End of weekend support
+    //-------------------------------------------------------------------------
 
     /**
      * Overrides Cloneable
