@@ -19,8 +19,15 @@ U_NAMESPACE_BEGIN
 
 class NFRuleSet;
 
+/** Tags for the predefined rulesets. */
+enum URBNFRuleSetTag {
+	URBNF_SPELLOUT,
+	URBNF_ORDINAL,
+	URBNF_DURATION,
+	URBNF_COUNT
+};
+
 /**
- * \file
  * \brief C++ API: RuleBasedNumberFormat
  *
  * <h2> Rule Based Number Format C++ API </h2>
@@ -477,15 +484,6 @@ class NFRuleSet;
  * @see DecimalFormat
  * @draft ICU 2.0
  */
-
-/** Tags for the predefined rulesets. */
-enum URBNFRuleSetTag {
-	URBNF_SPELLOUT,
-	URBNF_ORDINAL,
-	URBNF_DURATION,
-	URBNF_COUNT
-};
-
 class U_I18N_API RuleBasedNumberFormat : public NumberFormat {
 public:
 

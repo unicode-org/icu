@@ -58,10 +58,6 @@ U_NAMESPACE_BEGIN
  *
  * @see StringSearch
  */
-
-/**
-* Data structure for searching
-*/
 class U_I18N_API SearchIterator {
 
 public:
