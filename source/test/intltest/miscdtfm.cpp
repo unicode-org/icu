@@ -338,23 +338,23 @@ DateFormatMiscTests::test4117335()
 
     int32_t rowCount, colCount;
     const UnicodeString **zones = symbols->getZoneStrings(rowCount, colCount);
-    logln(UnicodeString("Long zone name = ") + zones[0][1]);
-    if (zones[0][1] != jstLong) {
+    logln(UnicodeString("Long zone name = ") + zones[24][1]);
+    if (zones[24][1] != jstLong) {
         errln("*** Should have been " + jstLong);
         //throw new Exception("Error in long TZ name");
     }
-    logln(UnicodeString("Short zone name = ") + zones[0][2]);
-    if (zones[0][2] != jstShort) {
+    logln(UnicodeString("Short zone name = ") + zones[24][2]);
+    if (zones[24][2] != jstShort) {
         errln("*** Should have been " + jstShort);
         //throw new Exception("Error in short TZ name");
     }
-    logln(UnicodeString("Long zone name = ") + zones[0][3]);
-    if (zones[0][3] != jstLong) {
+    logln(UnicodeString("Long zone name = ") + zones[24][3]);
+    if (zones[24][3] != jstLong) {
         errln("*** Should have been " + jstLong);
         //throw new Exception("Error in long TZ name");
     }
-    logln(UnicodeString("SHORT zone name = ") + zones[0][4]);
-    if (zones[0][4] != jstShort) {
+    logln(UnicodeString("SHORT zone name = ") + zones[24][4]);
+    if (zones[24][4] != jstShort) {
         errln("*** Should have been " + jstShort);
         //throw new Exception("Error in short TZ name");
     }

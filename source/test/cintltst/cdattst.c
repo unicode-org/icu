@@ -170,17 +170,17 @@ static void TestDateFormat()
         log_err("FAIL: Date Format for US locale failed using udat_format()\n");
     /*format using fr */
     
-    u_uastrcpy(temp, "10 juil. 96 16 h 05 GMT-07:00");
+    u_uastrcpy(temp, "10 juil. 96 16 h 05 PDT");
     if(result != NULL) {
         free(result);
         result = NULL;
     }
     result=myDateFormat(fr, d);
     if(u_strcmp(result, temp)==0)
-        log_verbose("PASS: Date Format for french locale successful uisng udat_format()\n");
+        log_verbose("PASS: Date Format for french locale successful using udat_format()\n");
     else
         log_data_err("FAIL: Date Format for french locale failed using udat_format()\n");
-    /*foramt using it */
+    /*format using it */
     u_uastrcpy(temp, "10/lug/96 16:05:28");
     
     if(u_strcmp(myDateFormat(it,d), temp)==0)
