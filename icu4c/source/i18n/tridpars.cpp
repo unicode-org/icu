@@ -201,6 +201,9 @@ TransliteratorIDParser::parseSingleID(const UnicodeString& id, int32_t& pos,
         single->filter = specsA->filter;
     }
 
+    delete specsA;
+    delete specsB;
+
     return single;
 }
 
