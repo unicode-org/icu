@@ -2,8 +2,8 @@
  * (C) Copyright IBM Corp. 1998-2003 - All Rights Reserved
  *
  * $Source: /xsrl/Nsvn/icu/icu/source/layout/IndicReordering.h,v $
- * $Date: 2004/02/13 19:34:17 $
- * $Revision: 1.11 $
+ * $Date: 2004/02/13 19:56:03 $
+ * $Revision: 1.12 $
  *
  */
 
@@ -106,14 +106,6 @@ struct IndicClassTable
     le_bool isVattu(LEUnicode ch) const;
     le_bool isMatra(LEUnicode ch) const;
     le_bool isSplitMatra(LEUnicode ch) const;
-    
-#if 0
-    le_bool isMpre(LEUnicode ch) const;
-    le_bool isMbelow(LEUnicode ch) const;
-    le_bool isMabove(LEUnicode ch) const;
-    le_bool isMpost(LEUnicode ch) const;
-#endif
-
     le_bool isLengthMark(LEUnicode ch) const;
     le_bool hasPostOrBelowBaseForm(LEUnicode ch) const;
     le_bool hasPostBaseForm(LEUnicode ch) const;
@@ -128,21 +120,7 @@ struct IndicClassTable
     static le_bool isVattu(CharClass charClass);
     static le_bool isMatra(CharClass charClass);
     static le_bool isSplitMatra(CharClass charClass);
-#if 0
-    static le_bool isMpre(CharClass charClass);
-    static le_bool isMbelow(CharClass charClass);
-    static le_bool isMabove(CharClass charClass);
-    static le_bool isMpost(CharClass charClass);
-#endif
-
     static le_bool isLengthMark(CharClass charClass);
-    
-#if 0
-    static le_bool isBefore(CharClass charClass);
-    static le_bool isBelow(CharClass charClass);
-    static le_bool isAbove(CharClass charClass);
-    static le_bool isAfter(CharClass charClass);
-#endif
     static le_bool hasPostOrBelowBaseForm(CharClass charClass);
     static le_bool hasPostBaseForm(CharClass charClass);
     static le_bool hasBelowBaseForm(CharClass charClass);
@@ -227,54 +205,10 @@ inline le_bool IndicClassTable::isSplitMatra(CharClass charClass)
     return (charClass & CF_INDEX_MASK) != 0;
 }
 
-#if 0
-inline le_bool IndicClassTable::isMpre(CharClass charClass)
-{
-    return (charClass & CF_MATRA_PRE) != 0;
-}
-
-inline le_bool IndicClassTable::isMbelow(CharClass charClass)
-{
-    return (charClass & CF_MATRA_BELOW) != 0;
-}
-
-inline le_bool IndicClassTable::isMabove(CharClass charClass)
-{
-    return (charClass & CF_MATRA_ABOVE) != 0;
-}
-
-inline le_bool IndicClassTable::isMpost(CharClass charClass)
-{
-    return (charClass & CF_MATRA_POST) != 0;
-}
-#endif
-
 inline le_bool IndicClassTable::isLengthMark(CharClass charClass)
 {
     return (charClass & CF_LENGTH_MARK) != 0;
 }
-
-#if 0
-inline le_bool IndicClassTable::isBefore(CharClass charClass)
-{
-    return (charClass & CF_POS_MASK) == CF_POS_BEFORE;
-}
-
-inline le_bool IndicClassTable::isAbove(CharClass charClass)
-{
-    return (charClass & CF_POS_MASK) == CF_POS_ABOVE;
-}
-
-inline le_bool IndicClassTable::isBelow(CharClass charClass)
-{
-    return (charClass & CF_POS_MASK) == CF_POS_BELOW;
-}
-
-inline le_bool IndicClassTable::isAfter(CharClass charClass)
-{
-    return (charClass & CF_POS_MASK) == CF_POS_AFTER;
-}
-#endif
 
 inline le_bool IndicClassTable::hasPostOrBelowBaseForm(CharClass charClass)
 {
@@ -335,28 +269,6 @@ inline le_bool IndicClassTable::isSplitMatra(LEUnicode ch) const
 {
     return isSplitMatra(getCharClass(ch));
 }
-
-#if 0
-inline le_bool IndicClassTable::isMpre(LEUnicode ch) const
-{
-    return isMpre(getCharClass(ch));
-}
-
-inline le_bool IndicClassTable::isMbelow(LEUnicode ch) const
-{
-    return isMbelow(getCharClass(ch));
-}
-
-inline le_bool IndicClassTable::isMabove(LEUnicode ch) const
-{
-    return isMabove(getCharClass(ch));
-}
-
-inline le_bool IndicClassTable::isMpost(LEUnicode ch) const
-{
-    return isMpost(getCharClass(ch));
-}
-#endif
 
 inline le_bool IndicClassTable::isLengthMark(LEUnicode ch) const
 {
