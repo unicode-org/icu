@@ -3904,6 +3904,7 @@ trap 'rm -fr `echo "README icudefs.mk \
 		extra/Makefile extra/ustdio/Makefile \
 		tools/Makefile tools/ctestfw/Makefile tools/makeconv/Makefile \
 		tools/genrb/Makefile  \
+		tools/genuca/Makefile  \
 		tools/pkgdata/Makefile tools/pkgdata/icupkg.inc \
 		tools/genccode/Makefile tools/gencmn/Makefile tools/gencnval/Makefile tools/gentz/Makefile \
 	        tools/gennames/Makefile tools/toolutil/Makefile tools/gentest/Makefile tools/genprops/Makefile \
@@ -4061,6 +4062,7 @@ CONFIG_FILES=\${CONFIG_FILES-"README icudefs.mk \
 		extra/Makefile extra/ustdio/Makefile \
 		tools/Makefile tools/ctestfw/Makefile tools/makeconv/Makefile \
 		tools/genrb/Makefile  \
+		tools/genuca/Makefile  \
 		tools/pkgdata/Makefile tools/pkgdata/icupkg.inc \
 		tools/genccode/Makefile tools/gencmn/Makefile tools/gencnval/Makefile tools/gentz/Makefile \
 	        tools/gennames/Makefile tools/toolutil/Makefile tools/gentest/Makefile tools/genprops/Makefile \
