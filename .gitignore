@@ -127,6 +127,13 @@ icu4c/source/samples/date/Debug
 icu4c/source/samples/date/Makefile
 icu4c/source/samples/date/Release
 icu4c/source/samples/date/date
+icu4c/source/stubdata/*.ao
+icu4c/source/stubdata/*.d
+icu4c/source/stubdata/*.plg
+icu4c/source/stubdata/Debug
+icu4c/source/stubdata/Makefile
+icu4c/source/stubdata/Release
+icu4c/source/stubdata/libicu*.*
 icu4c/source/test/Makefile
 icu4c/source/test/cintltst/*.d
 icu4c/source/test/cintltst/*.plg
