@@ -25,6 +25,7 @@
 
 #include <stdio.h>
 #include "unicode/utypes.h"
+#include "unicode/putil.h"
 #include "unicode/udata.h"
 #include "unicode/uclean.h"
 #include "ucol_imp.h"

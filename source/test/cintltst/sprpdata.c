@@ -20,6 +20,7 @@
 #if !UCONFIG_NO_IDNA
 
 #include "unicode/ustring.h"
+#include "unicode/putil.h"
 #include "cintltst.h"
 #include "unicode/usprep.h"
 #include "sprpimpl.h"

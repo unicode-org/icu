@@ -12,6 +12,7 @@
 #include "unicode/uchar.h"
 #include "unicode/normlzr.h"
 #include "unicode/uniset.h"
+#include "unicode/putil.h"
 #include "unormimp.h"
 #include "cstring.h"
 #include "filestrm.h"
@@ -71,7 +72,7 @@ NormalizerConformanceTest::openNormalizationTestFile(const char *filename) {
     UErrorCode errorCode;
 
     // look inside ICU_DATA first
-    folder=u_getDataDirectory();
+    folder=pathToDataDirectory();
     if(folder!=NULL) {
         strcpy(unidataPath, folder);
         strcat(unidataPath, "unidata" U_FILE_SEP_STRING);

@@ -20,6 +20,7 @@
 #include "reslist.h"
 #include "unewdata.h"
 #include "unicode/ures.h"
+#include "unicode/putil.h"
 #include "errmsg.h"
 
 #define BIN_ALIGNMENT 16
