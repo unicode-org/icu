@@ -1,8 +1,8 @@
-tmp
 Debug
 Release
 Makefile
 *.d
+*.o
 *.pdb
 icuswap
 icuswap.[0-9]

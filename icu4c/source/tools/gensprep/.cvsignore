@@ -1,4 +1,5 @@
 *.d
+*.o
 *.pdb
 Debug
 Makefile

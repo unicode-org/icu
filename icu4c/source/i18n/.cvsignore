@@ -1,7 +1,7 @@
 *.d
-libicu*.*
 Debug
 Release
 Makefile
 *.ao
+*.o
 *.plg
