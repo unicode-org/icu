@@ -6,7 +6,7 @@ import java.io.*;
  * resource data is loaded through the class loader, so it will
  * typically be a file in the same directory as the *.class files, or
  * a file within a JAR file in the corresponding subdirectory.  The
- * file must be a text file in one of the supported encoding; when the
+ * file must be a text file in one of the supported encodings; when the
  * resource is opened by constructing a <code>ResourceReader</code>
  * object the encoding is specified.
  *
@@ -18,13 +18,13 @@ import java.io.*;
 public class ResourceReader {
     private BufferedReader reader;
     private String resourceName;
-    private String encoding;
+    private String encoding; // null for default encoding
     private boolean isReset; // TRUE if we are at the start of the file
 
     /**
      * Construct a reader object for the text file of the given name
-     * in this package, in the given encoding.
-     * @param resourceName thqe name of the text file located in this
+     * in this package, using the given encoding.
+     * @param resourceName the name of the text file located in this
      * package
      * @param encoding the encoding of the text file; if unsupported
      * an exception is thrown
@@ -38,6 +38,21 @@ public class ResourceReader {
         this.encoding = encoding;
         isReset = false;
         _reset();
+    }
+
+    /**
+     * Construct a reader object for the text file of the given name
+     * in this package, using the default encoding.
+     * @param resourceName the name of the text file located in this
+     * package
+     */
+    public ResourceReader(String resourceName) {
+        this.resourceName = resourceName;
+        this.encoding = null;
+        isReset = false;
+        try {
+            _reset();
+        } catch (UnsupportedEncodingException e) {}
     }
 
     /**
@@ -81,7 +96,9 @@ public class ResourceReader {
         if (is == null) {
             throw new IllegalArgumentException("Can't open " + resourceName);
         }
-        InputStreamReader isr = new InputStreamReader(is, encoding);
+        InputStreamReader isr =
+            (encoding == null) ? new InputStreamReader(is) :
+                                 new InputStreamReader(is, encoding);
         reader = new BufferedReader(isr);
         isReset = true;
     }
