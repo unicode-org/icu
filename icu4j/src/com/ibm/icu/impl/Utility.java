@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/Utility.java,v $
- * $Date: 2002/11/01 14:45:10 $
- * $Revision: 1.32 $
+ * $Date: 2002/11/07 23:14:46 $
+ * $Revision: 1.33 $
  *
  *****************************************************************************************
  */
@@ -953,6 +953,22 @@ public final class Utility {
      */
     public static void skipWhitespace(String str, int[] pos) {
         pos[0] = skipWhitespace(str, pos[0]);
+    }
+
+    /**
+     * Remove all rule white space from a string.
+     */
+    public static String deleteRuleWhiteSpace(String str) {
+        StringBuffer buf = new StringBuffer();
+        for (int i=0; i<str.length(); ) {
+            int ch = UTF16.charAt(str, i);
+            i += UTF16.getCharCount(ch);
+            if (UCharacterProperty.isRuleWhiteSpace(ch)) {
+                continue;
+            }
+            UTF16.append(buf, ch);
+        }
+        return buf.toString();
     }
 
     /**
