@@ -159,6 +159,8 @@ CalendarRegressionTest::test4028518()
     failure(status, "cal1->add");
     printdate(cal1, "cal1 after adding 1 day:") ;
     printdate(cal2, "cal2 should be unmodified:") ;
+    delete cal1;
+    delete cal2;
 }
 
 void 
@@ -266,6 +268,7 @@ CalendarRegressionTest::test4031502()
             errln(UnicodeString("Fail: Calendar::add misbehaves"));
     
         delete calendar;
+        delete ids;
     }
 
     /**
@@ -548,6 +551,7 @@ CalendarRegressionTest::test4031502()
     
         delete saveZone;
         delete newZone;
+        delete cal;
     }
 
     /**
@@ -587,6 +591,9 @@ CalendarRegressionTest::test4031502()
         logln("*** THE RESULTS OF THIS TEST MUST BE VERIFIED MANUALLY ***");
     
     delete newZone;
+    delete cal;
+    delete date;
+    delete saveZone;
 }
 
     /**
@@ -1183,6 +1190,7 @@ CalendarRegressionTest::test4031502()
             errln("Calendar not proleptic");
     
         delete cal;
+        delete fmt;
     }
 
     /**
@@ -1401,8 +1409,10 @@ void
 CalendarRegressionTest::Test4162587() 
 {
     UErrorCode status = U_ZERO_ERROR;
+    TimeZone *savedef = TimeZone::createDefault();
     TimeZone *tz = TimeZone::createTimeZone("PST");
-    TimeZone::adoptDefault(tz);
+    //TimeZone::adoptDefault(tz);
+    TimeZone::setDefault(*tz);
     
     GregorianCalendar *cal = new GregorianCalendar(tz, status);
     if(U_FAILURE(status)) {
@@ -1442,6 +1452,10 @@ CalendarRegressionTest::Test4162587()
             errln("Fail: All three lines must match");
         }
     }
+    TimeZone::setDefault(*savedef);
+    //delete tz;
+    delete cal;
+    delete savedef;
 }
 
 /**

@@ -249,6 +249,7 @@ void MessageFormatRegressionTest::Test4031438()
     /*} catch (Exception foo) {
         errln("Exception when formatting in bug 4031438. "+foo.getMessage());
     }*/
+        delete messageFormatter;
 }
 
 void MessageFormatRegressionTest::Test4052223()
@@ -439,6 +440,7 @@ void MessageFormatRegressionTest::Test4114743()
         if (!originalPattern.equals(mf.toPattern()))
             errln("pattern after: \"" + mf.toPattern() + "\"");
     }*/
+    delete mf;
 }
 
 /* @bug 4116444
@@ -479,6 +481,7 @@ void MessageFormatRegressionTest::Test4116444()
                         log(",");
                 }
                 log("}") ;
+                delete[] array;
             } else {
                 log("null");
             }
@@ -695,11 +698,11 @@ void MessageFormatRegressionTest::Test4118592()
                 logln((UnicodeString)"  " + objs[0].getString(temp));
             else
                 logln((UnicodeString)"  " + (objs[0].getType() == Formattable::kLong ? objs[0].getLong() : objs[0].getDouble()));
+            delete[] objs;
 
         }
     }
 
-    delete [] objs;
     delete mf;
 }
 /* @bug 4118594
@@ -814,8 +817,10 @@ void MessageFormatRegressionTest::Test4120552()
                 errln(UnicodeString("Incorrect error index: ") + pp.getErrorIndex());
         } else {
             logln("  (correctly formatted string)");
+            delete[] objs;
         }
     }
+    delete mf;
 }
 
 /**
@@ -937,5 +942,6 @@ void MessageFormatRegressionTest::Test4112104()
     catch (NullPointerException e) {
         errln("MessageFormat.equals(null) throws " + e);
     }*/
+    delete format;
 }
 

@@ -1192,6 +1192,9 @@ CalendarTest::TestDOW_LOCALandYEAR_WOY()
     loop_addroll(cal, sdf, times, Calendar::DOW_LOCAL, Calendar::DAY_OF_WEEK, status);
     if (U_FAILURE(status)) { errln("Error in parse/calculate test for 1582"); return; }
 
+    delete sdf;
+    delete cal;
+
     return;
 }
 

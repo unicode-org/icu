@@ -335,6 +335,10 @@ void MultithreadTest::TestThreads()
         if(count == THREADTEST_NRTHREADS)
         {
             logln("->" + UnicodeString(threadTestChars) + "<- Got all threads! cya");
+            for(i=0;i<THREADTEST_NRTHREADS;i++)
+            {
+                delete threads[i];
+            }
             return;
         }
 
@@ -343,6 +347,10 @@ void MultithreadTest::TestThreads()
     }
 
     errln("->" + UnicodeString(threadTestChars) + "<- PATIENCE EXCEEDED!! Still missing some.");
+    for(i=0;i<THREADTEST_NRTHREADS;i++)
+    {
+        delete threads[i];
+    }
 }
 
 

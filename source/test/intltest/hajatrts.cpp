@@ -303,6 +303,7 @@ void HangToJamoTransliteratorTest::expectTranslit(const HangulJamoTransliterator
     uprv_memcpy(&index, &_index, sizeof(index));
 	equal.handleTransliterate(rsource2, index, TRUE);
 	expectAux(t.getID() + "=OPERATOR:handleTransliterator(increment=TRUE) "+ message, source + "-->" + rsource2, rsource2==expectedResult, expectedResult);
+    delete clone;
 
 }
 void HangToJamoTransliteratorTest::expect(const HangulJamoTransliterator& t,
