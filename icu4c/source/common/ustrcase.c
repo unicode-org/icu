@@ -169,6 +169,7 @@ u_strCaseMap(UChar *dest, int32_t destCapacity,
     }
 
     ownTitleIter=FALSE;
+    destLength=0;
 
     if(toWhichCase==TO_LOWER) {
         destLength=u_internalStrToLower(temp, destCapacity,
