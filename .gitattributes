@@ -48,7 +48,31 @@ README text !eol
 *.spp -text
 *.tri2 -text
 
+icu4c/data/charBE.brk -text
+icu4c/data/charLE.brk -text
+icu4c/data/lineBE.brk -text
+icu4c/data/lineLE.brk -text
+icu4c/data/line_thBE.brk -text
+icu4c/data/line_thLE.brk -text
+icu4c/data/sentBE.brk -text
+icu4c/data/sentLE.brk -text
+icu4c/data/wordBE.brk -text
+icu4c/data/wordLE.brk -text
+icu4c/data/word_thBE.brk -text
+icu4c/data/word_thLE.brk -text
 icu4c/docs/collflow.gif -text
+icu4c/source/data/brkitr/charBE.brk -text
+icu4c/source/data/brkitr/charLE.brk -text
+icu4c/source/data/brkitr/lineBE.brk -text
+icu4c/source/data/brkitr/lineLE.brk -text
+icu4c/source/data/brkitr/line_thBE.brk -text
+icu4c/source/data/brkitr/line_thLE.brk -text
+icu4c/source/data/brkitr/sentBE.brk -text
+icu4c/source/data/brkitr/sentLE.brk -text
+icu4c/source/data/brkitr/wordBE.brk -text
+icu4c/source/data/brkitr/wordLE.brk -text
+icu4c/source/data/brkitr/word_thBE.brk -text
+icu4c/source/data/brkitr/word_thLE.brk -text
 icu4c/source/test/testdata/en_US.uni -text
 icu4c/source/test/testdata/uni-text.txt -text
 
