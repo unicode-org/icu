@@ -29,10 +29,9 @@ CPPFLAGS = @CPPFLAGS@ -I$(top_srcdir)/common
 # Data packaging options are set at configure time with --with-data-packaging.
 CPPFLAGS += @DATA_PACKAGING_CPPFLAGS@
 
-@MAPPED_DLL_TRUE@CPPFLAGS += -DUDATA_MAP_DLL
-@MAPPED_DLL_FALSE@
-
-@MAPPED_DLL_TRUE@LIBICUDATA= -L$(top_srcdir)/../data -licudata
+#ifeq ($(PKGDATA_MODE),dll)
+#CPPFLAGS += -DUDATA_MAP_DLL
+#LIBICUDATA= -L$(top_srcdir)/../data -licudata
 
 CFLAGS = @CFLAGS@
 CXXFLAGS = @CXXFLAGS@
@@ -73,7 +72,7 @@ distclean-local: clean-local
 	$(RMV) Makefile
 
 check-local: all-local
-	ICU_DATA=NOTHING $(INVOKE) ./$(TARGET)
+	$(INVOKE) ./$(TARGET)
 
 Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
 	cd $(top_builddir) \
