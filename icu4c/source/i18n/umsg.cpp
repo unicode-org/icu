@@ -93,47 +93,36 @@ matchType(const UChar         *pat,
     
     switch(kw) {
 
-      // number
+        // number
     case 1: case 2:
 
-      if(hasModifier) {
-    UnicodeString modifier((UChar*)pat + openBrace + 1 + 1 + 2 + matchLen, 
-                   len - 2 - matchLen - 1, 
-                   len - 2 - matchLen - 1);
+        result = Formattable::kDouble;
+        if(hasModifier) {
+            UnicodeString modifier((UChar*)pat + openBrace + 1 + 1 + 2 + matchLen, 
+                                   len - 2 - matchLen - 1, 
+                                   len - 2 - matchLen - 1);
     
-    switch(findKeyword(modifier, fgModifierList, matchLen)) {
-    
-      // default
-    case 0:
-      // currency
-    case 1: case 2:
-      // percent
-    case 3: case 4:
-      result = Formattable::kDouble;
-      break;
+            switch(findKeyword(modifier, fgModifierList, matchLen)) {
+     
+                // integer
+            case 5: case 6:
+                result = Formattable::kLong;
+                break;
+            }
+        }
+        break;
       
-      // integer
-    case 5: case 6:
-      result = Formattable::kLong;
-      break;
-    }
-      }
-      else {
-    result = Formattable::kDouble;
-      }
-      break;
-      
-      // date
+        // date
     case 3: case 4:
-      // time
+        // time
     case 5: case 6:
-      result = Formattable::kDate;
-      break;
+        result = Formattable::kDate;
+        break;
 
-      // choice      
+        // choice      
     case 7: case 8:
-      result = Formattable::kDouble;
-      break;
+        result = Formattable::kDouble;
+        break;
     }
   }
   

@@ -26,6 +26,7 @@
 #include "cintltst.h"
 #include "cmsgtst.h"
 #include "cformtst.h"
+#include "cstring.h"
 
 static const char* txt_testCasePatterns[] = {
    "Quotes '', '{', a {0,number,integer} '{'0}",
@@ -552,6 +553,44 @@ static void TestParseMessageWithValist()
         log_err("FAIL: Error in parseMessage on test#10 \n");    
 }
 
+/**
+ * Regression test for ICU4C Jitterbug 904
+ */
+void TestJ904(void) {
+    UChar pattern[256];
+    UChar result[256];
+    UChar string[16];
+    char cresult[256];
+    int32_t length;
+    UErrorCode status = U_ZERO_ERROR;
+    const char* PAT = "Number {1,number,#0.000}, String {0}, Date {2,date,12:mm:ss.SSS}";
+    const char* EXP = "Number 0,143, String foo, Date 12:34:56.789";
+
+    u_uastrcpy(string, "foo");
+    /* Slight hack here -- instead of date pattern HH:mm:ss.SSS, use
+     * 12:mm:ss.SSS.  Why?  So this test generates the same output --
+     * "12:34:56.789" -- regardless of time zone (as long as we aren't
+     * in one of the 30 minute offset zones!). */
+    u_uastrcpy(pattern, PAT);
+    length = u_formatMessage("nl", pattern, u_strlen(pattern),
+                             result, 256, &status,
+                             string, 1/7.0,
+                             789.0+1000*(56+60*(34+60*12)));
+
+    u_austrcpy(cresult, result);
+
+    /* This test passes if it DOESN'T CRASH.  However, we test the
+     * output anyway.  If the string doesn't match in the date part,
+     * check to see that the machine doesn't have an unusual time zone
+     * offset, that is, one with a non-zero minutes/seconds offset
+     * from GMT -- see above. */
+    if (uprv_strcmp(cresult, EXP) == 0) {
+        log_verbose("Ok: \"%s\"\n", cresult);
+    } else {
+        log_err("FAIL: got \"%s\", expected \"%s\"\n", cresult, EXP);
+    }
+}
+
 void addMsgForTest(TestNode** root)
 {
     addTest(root, &MessageFormatTest, "tsformat/cmsgtst/MessageFormatTest");
@@ -561,5 +600,6 @@ void addMsgForTest(TestNode** root)
     addTest(root, &TestParseMessage, "tsformat/cmsgtst/TestParseMessage");
     addTest(root, &TestMessageFormatWithValist, "tsformat/cmsgtst/TestMessageFormatWithValist");
     addTest(root, &TestParseMessageWithValist, "tsformat/cmsgtst/TestParseMessageWithValist");
+    addTest(root, &TestJ904, "tsformat/cmsgtst/TestJ904");
 
 }
