@@ -203,9 +203,21 @@ processFile(const char *filename, const char *cp, const char *inputDir, const ch
         int32_t filelen = (int32_t)uprv_strlen(filename);
         if(inputDir[dirlen-1] != U_FILE_SEP_CHAR) {
             openFileName = (char *) uprv_malloc(dirlen + filelen + 2);
-
-            uprv_strcpy(openFileName, inputDir);
-            openFileName[dirlen]     = U_FILE_SEP_CHAR;
+            /*
+             * append the input dir to openFileName if the first char in 
+             * filename is not file seperation char and the last char input directory is  not '.'.
+             * This is to support :
+             * genrb -s. /home/icu/data
+             * genrb -s. icu/data
+             * The user cannot mix notations like
+             * genrb -s. /icu/data --- the absolute path specified. -s redundant
+             * user should use
+             * genrb -s. icu/data  --- start from CWD and look in icu/data dir
+             */
+            if( (filename[0] != U_FILE_SEP_CHAR) && (inputDir[dirlen-1] !='.')){
+                uprv_strcpy(openFileName, inputDir);
+                openFileName[dirlen]     = U_FILE_SEP_CHAR;
+            }
             openFileName[dirlen + 1] = '\0';
             uprv_strcat(openFileName, filename);
         } else {
