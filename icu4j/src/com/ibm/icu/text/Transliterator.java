@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/Transliterator.java,v $ 
- * $Date: 2001/04/04 18:06:25 $ 
- * $Revision: 1.31 $
+ * $Date: 2001/05/23 19:42:56 $ 
+ * $Revision: 1.32 $
  *
  *****************************************************************************************
  */
@@ -240,7 +240,7 @@ import com.ibm.text.resources.ResourceReader;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: Transliterator.java,v $ $Revision: 1.31 $ $Date: 2001/04/04 18:06:25 $
+ * @version $RCSfile: Transliterator.java,v $ $Revision: 1.32 $ $Date: 2001/05/23 19:42:56 $
  */
 public abstract class Transliterator {
     /**
@@ -742,7 +742,7 @@ public abstract class Transliterator {
      * Returns the filter used by this transliterator, or <tt>null</tt>
      * if this transliterator uses no filter.
      */
-    public UnicodeFilter getFilter() {
+    public final UnicodeFilter getFilter() {
         return filter;
     }
 
@@ -794,8 +794,7 @@ public abstract class Transliterator {
             if (direction == REVERSE) {
                 int i = id.indexOf('-');
                 if (i < 0) {
-                    if (!id.equals(NullTransliterator._ID) &&
-                        !id.equals(RemoveTransliterator._ID)) {
+                    if (!id.equals(NullTransliterator._ID)) {
                         throw new IllegalArgumentException("No inverse for: "
                                                            + id);
                     }
@@ -1086,5 +1085,9 @@ public abstract class Transliterator {
                       NullTransliterator.class, null);
         registerClass(RemoveTransliterator._ID,
                       RemoveTransliterator.class, null);
+        registerClass(UpperLowerTransliterator._ID,
+                      UpperLowerTransliterator.class, null);
+        registerClass(LowerUpperTransliterator._ID,
+                      LowerUpperTransliterator.class, null);
     }
 }
