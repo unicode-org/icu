@@ -90,6 +90,7 @@ class NormalizerConformanceTest : public IntlTest {
                    UnicodeString output[], int32_t outputLength);
 
     void _testOneLine(const char *line);
+    void compare(const UnicodeString& s1,const UnicodeString& s2);
 };
 
 #endif
