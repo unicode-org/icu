@@ -75,7 +75,9 @@ different purposes.
 The default packaging
 .I mode
 is
-.IR common .
+.BR common ,
+or
+.BR archive .
 In this mode, the different data files are bundled together as an
 architecture-dependent file that can later be memory mapped for use by
 ICU. Data packaged using this mode will be looked up under the ICU
@@ -84,7 +86,9 @@ bundles, for example, as long as the application can install the
 packaged file in the ICU data directory.
 .PP
 Another packaging mode is the
-.I dll
+.BR dll ,
+or
+.BR library ,
 mode, where the data files are compiled into a shared library. ICU
 used to be able to dynamically load these shared libraries, but as of
 ICU 2.0, such support has been removed. This mode is still useful for
@@ -98,8 +102,8 @@ the ICU data directory.
 Finally,
 .B pkgdata
 supports a
-.I files
-mode which simply moves the data files around instead of packaging
+.B files
+mode which simply copies the data files instead of packaging
 them as a single file or library. This mode is mainly intended to
 provide support for building ICU before it is packaged as separate
 small packages for distribution with operating systems such as Debian
@@ -129,7 +133,15 @@ to be used by
 .BR pkgdata .
 The different modes and their meaning are explained in the
 .B DESCRIPTION
-section above.
+section above. The valid mode names are
+.BR common
+(or
+.BR archive ),
+.BR dll
+(or
+.BR library ),
+and
+.BR files .
 .TP
 .BI "\-O\fP, \fB\-\-bldopt" " options"
 Specify options for the builder. The builder is used internally by
@@ -174,7 +186,7 @@ Clean temporary files and other build residues.
 .TP
 .BI "\-I\fP, \fB\-\-install"
 Install the packaged file (or all the files in the
-.I files
+.B files
 mode). If the variable
 .B DESTDIR
 is set it will be used for installation.
