@@ -10,4 +10,8 @@
  * validSubLocale of "be"
  */
 be_BY{
+    /**
+     * so genrb doesn't issue warnings
+     */
+    ___{""}
 }

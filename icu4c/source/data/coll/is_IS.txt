@@ -10,4 +10,8 @@
  * validSubLocale of "is"
  */
 is_IS{
+    /**
+     * so genrb doesn't issue warnings
+     */
+    ___{""}
 }

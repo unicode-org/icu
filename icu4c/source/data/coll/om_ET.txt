@@ -10,4 +10,8 @@
  * validSubLocale of "om"
  */
 om_ET{
+    /**
+     * so genrb doesn't issue warnings
+     */
+    ___{""}
 }

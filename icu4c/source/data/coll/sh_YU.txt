@@ -10,4 +10,8 @@
  * validSubLocale of "sh"
  */
 sh_YU{
+    /**
+     * so genrb doesn't issue warnings
+     */
+    ___{""}
 }

@@ -10,4 +10,8 @@
  * validSubLocale of "de"
  */
 de_BE{
+    /**
+     * so genrb doesn't issue warnings
+     */
+    ___{""}
 }

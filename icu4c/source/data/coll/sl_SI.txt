@@ -10,4 +10,8 @@
  * validSubLocale of "sl"
  */
 sl_SI{
+    /**
+     * so genrb doesn't issue warnings
+     */
+    ___{""}
 }

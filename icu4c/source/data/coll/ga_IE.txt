@@ -10,4 +10,8 @@
  * validSubLocale of "root"
  */
 ga_IE{
+    /**
+     * so genrb doesn't issue warnings
+     */
+    ___{""}
 }

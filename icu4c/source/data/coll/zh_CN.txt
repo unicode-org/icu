@@ -10,4 +10,8 @@
  * validSubLocale of "zh"
  */
 zh_CN{
+    /**
+     * so genrb doesn't issue warnings
+     */
+    ___{""}
 }
