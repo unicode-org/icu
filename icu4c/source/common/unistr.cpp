@@ -502,13 +502,13 @@ UnicodeString::doCompare( UTextOffset start,
   if(minLength > 0) {
     int32_t result;
 
-    if(U_IS_BIG_ENDIAN) {
+#   if U_IS_BIG_ENDIAN 
       // big-endian: byte comparison works
       result = uprv_memcmp(chars + start, srcChars + srcStart, minLength * sizeof(UChar));
       if(result != 0) {
         return (int8_t)(result >> 15 | 1);
       }
-    } else {
+#   else
       // little-endian: compare UChar units
       chars += start;
       srcChars += srcStart;
@@ -520,7 +520,7 @@ UnicodeString::doCompare( UTextOffset start,
         ++chars;
         ++srcChars;
       } while(--minLength > 0);
-    }
+#   endif
   }
   return lengthResult;
 }
