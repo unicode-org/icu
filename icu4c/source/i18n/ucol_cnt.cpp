@@ -188,7 +188,6 @@ ContractionTable *uprv_cnttab_cloneContraction(ContractionTable *t) {
 
   r->position = t->position;
   r->size = t->size;
-  r->backSize = t->backSize;
 
   r->codePoints = (UChar *)uprv_malloc(sizeof(UChar)*t->size);
   r->CEs = (uint32_t *)uprv_malloc(sizeof(uint32_t)*t->size);
