@@ -35,6 +35,7 @@
 #include "propname.h"
 #include "unormimp.h"
 #include "ucase.h"
+#include "ubidi_props.h"
 #include "uinvchar.h"
 #include "charstr.h"
 #include "cstring.h"
@@ -1345,6 +1346,9 @@ const UnicodeSet* UnicodeSet::getInclusions(int32_t src, UErrorCode &status) {
 #endif
             case UPROPS_SRC_CASE:
                 ucase_addPropertyStarts(ucase_getSingleton(&status), &sa, &status);
+                break;
+            case UPROPS_SRC_BIDI:
+                ubidi_addPropertyStarts(ubidi_getSingleton(&status), &sa, &status);
                 break;
             default:
                 status = U_INTERNAL_PROGRAM_ERROR;

@@ -26,6 +26,7 @@
 #include "unicode/uscript.h"
 #include "cstring.h"
 #include "unormimp.h"
+#include "ubidi_props.h"
 #include "uprops.h"
 
 #define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
@@ -46,8 +47,8 @@ static const struct {
      */
     {  1,               U_MASK(UPROPS_ALPHABETIC) },
     {  1,               U_MASK(UPROPS_ASCII_HEX_DIGIT) },
-    {  1,               U_MASK(UPROPS_BIDI_CONTROL) },
-    { -1,               U_MASK(UPROPS_MIRROR_SHIFT) },
+    { UPROPS_SRC_BIDI,  0 },                                    /* UCHAR_BIDI_CONTROL */
+    { UPROPS_SRC_BIDI,  0 },                                    /* UCHAR_BIDI_MIRRORED */
     {  1,               U_MASK(UPROPS_DASH) },
     {  1,               U_MASK(UPROPS_DEFAULT_IGNORABLE_CODE_POINT) },
     {  1,               U_MASK(UPROPS_DEPRECATED) },
@@ -64,7 +65,7 @@ static const struct {
     {  1,               U_MASK(UPROPS_IDEOGRAPHIC) },
     {  1,               U_MASK(UPROPS_IDS_BINARY_OPERATOR) },
     {  1,               U_MASK(UPROPS_IDS_TRINARY_OPERATOR) },
-    {  1,               U_MASK(UPROPS_JOIN_CONTROL) },
+    { UPROPS_SRC_BIDI,  0 },                                    /* UCHAR_JOIN_CONTROL */
     {  1,               U_MASK(UPROPS_LOGICAL_ORDER_EXCEPTION) },
     { UPROPS_SRC_CASE,  0 },                                    /* UCHAR_LOWERCASE */
     {  1,               U_MASK(UPROPS_MATH) },
@@ -136,6 +137,23 @@ u_hasBinaryProperty(UChar32 c, UProperty which) {
                     break;
                 }
 #endif
+            } else if(column==UPROPS_SRC_BIDI) {
+                /* bidi/shaping properties */
+                UErrorCode errorCode=U_ZERO_ERROR;
+                UBiDiProps *bdp=ubidi_getSingleton(&errorCode);
+                if(U_FAILURE(errorCode)) {
+                    return FALSE;
+                }
+                switch(which) {
+                case UCHAR_BIDI_MIRRORED:
+                    return ubidi_isMirrored(bdp, c);
+                case UCHAR_BIDI_CONTROL:
+                    return ubidi_isBidiControl(bdp, c);
+                case UCHAR_JOIN_CONTROL:
+                    return ubidi_isJoinControl(bdp, c);
+                default:
+                    break;
+                }
             }
         }
     }
@@ -171,9 +189,25 @@ u_getIntPropertyValue(UChar32 c, UProperty which) {
         case UCHAR_GENERAL_CATEGORY:
             return (int32_t)u_charType(c);
         case UCHAR_JOINING_GROUP:
-            return (int32_t)(u_getUnicodeProperties(c, 2)&UPROPS_JG_MASK)>>UPROPS_JG_SHIFT;
+            {
+                UErrorCode errorCode=U_ZERO_ERROR;
+                UBiDiProps *bdp=ubidi_getSingleton(&errorCode);
+                if(bdp!=NULL) {
+                    return ubidi_getJoiningGroup(bdp, c);
+                } else {
+                    return 0;
+                }
+            }
         case UCHAR_JOINING_TYPE:
-            return (int32_t)(u_getUnicodeProperties(c, 2)&UPROPS_JT_MASK)>>UPROPS_JT_SHIFT;
+            {
+                UErrorCode errorCode=U_ZERO_ERROR;
+                UBiDiProps *bdp=ubidi_getSingleton(&errorCode);
+                if(bdp!=NULL) {
+                    return ubidi_getJoiningType(bdp, c);
+                } else {
+                    return 0;
+                }
+            }
         case UCHAR_LINE_BREAK:
             return (int32_t)(u_getUnicodeProperties(c, 0)&UPROPS_LB_MASK)>>UPROPS_LB_SHIFT;
         case UCHAR_NUMERIC_TYPE:
@@ -222,7 +256,12 @@ u_getIntPropertyMaxValue(UProperty which) {
     } else if(which<UCHAR_INT_LIMIT) {
         switch(which) {
         case UCHAR_BIDI_CLASS:
-            return (int32_t)U_CHAR_DIRECTION_COUNT-1;
+        case UCHAR_JOINING_GROUP:
+        case UCHAR_JOINING_TYPE:
+            {
+                UErrorCode errorCode=U_ZERO_ERROR;
+                return ubidi_getMaxValue(ubidi_getSingleton(&errorCode), which);
+            }
         case UCHAR_BLOCK:
             max=(uprv_getMaxValues(0)&UPROPS_BLOCK_MASK)>>UPROPS_BLOCK_SHIFT;
             return max!=0 ? max : (int32_t)UBLOCK_COUNT-1;
@@ -238,12 +277,6 @@ u_getIntPropertyMaxValue(UProperty which) {
             return max!=0 ? max : (int32_t)U_EA_COUNT-1;
         case UCHAR_GENERAL_CATEGORY:
             return (int32_t)U_CHAR_CATEGORY_COUNT-1;
-        case UCHAR_JOINING_GROUP:
-            max=(uprv_getMaxValues(2)&UPROPS_JG_MASK)>>UPROPS_JG_SHIFT;
-            return max!=0 ? max : (int32_t)U_JG_COUNT-1;
-        case UCHAR_JOINING_TYPE:
-            max=(uprv_getMaxValues(2)&UPROPS_JT_MASK)>>UPROPS_JT_SHIFT;
-            return max!=0 ? max : (int32_t)U_JT_COUNT-1;
         case UCHAR_LINE_BREAK:
             max=(uprv_getMaxValues(0)&UPROPS_LB_MASK)>>UPROPS_LB_SHIFT;
             return max!=0 ? max : (int32_t)U_LB_COUNT-1;
@@ -286,6 +319,7 @@ uprops_getSource(UProperty which) {
         switch(which) {
         case UCHAR_HANGUL_SYLLABLE_TYPE:
             return UPROPS_SRC_HST;
+
         case UCHAR_CANONICAL_COMBINING_CLASS:
         case UCHAR_NFD_QUICK_CHECK:
         case UCHAR_NFKD_QUICK_CHECK:
@@ -294,6 +328,12 @@ uprops_getSource(UProperty which) {
         case UCHAR_LEAD_CANONICAL_COMBINING_CLASS:
         case UCHAR_TRAIL_CANONICAL_COMBINING_CLASS:
             return UPROPS_SRC_NORM;
+
+        case UCHAR_BIDI_CLASS:
+        case UCHAR_JOINING_GROUP:
+        case UCHAR_JOINING_TYPE:
+            return UPROPS_SRC_BIDI;
+
         default:
             return UPROPS_SRC_CHAR;
         }
@@ -409,7 +449,9 @@ uprv_getInclusions(const USetAdder *sa, UErrorCode *pErrorCode) {
     unorm_addPropertyStarts(sa, pErrorCode);
 #endif
     uchar_addPropertyStarts(sa, pErrorCode);
+    uhst_addPropertyStarts(sa, pErrorCode);
     ucase_addPropertyStarts(ucase_getSingleton(pErrorCode), sa, pErrorCode);
+    ubidi_addPropertyStarts(ubidi_getSingleton(pErrorCode), sa, pErrorCode);
 }
 
 #endif
