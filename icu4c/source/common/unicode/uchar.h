@@ -967,12 +967,10 @@ enum UBlockCode {
 
     /**
      * Unicode 4.0.1 renames the "Cyrillic Supplementary" block to "Cyrillic Supplement".
-     * @draft ICU 3.0
+     * @stable ICU 2.2
      */
     UBLOCK_CYRILLIC_SUPPLEMENTARY = 97, 
-    /** @stable ICU 2.2
-     * Vladimir moved below to try to fool the perl script
-     */
+    /** @draft ICU 3.0  */
     UBLOCK_CYRILLIC_SUPPLEMENT = UBLOCK_CYRILLIC_SUPPLEMENTARY, /*[0500]*/
     /** @stable ICU 2.2 */
     UBLOCK_TAGALOG = 98, /*[1700]*/
