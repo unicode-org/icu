@@ -30,21 +30,37 @@ static uint32_t uprv_uca_processContraction(CntTable *contractions, UCAElements 
 
 static int32_t prefixLookupHash(const UHashKey e) {
   UCAElements *element = (UCAElements *)e.pointer;
+  UChar buf[256];
   UHashKey key;
-  key.pointer = element->cPoints;
-  element->cPoints[element->cSize] = 0;
+  key.pointer = buf;
+  uprv_memcpy(buf, element->cPoints, element->cSize*sizeof(UChar));
+  buf[element->cSize] = 0;
+  //key.pointer = element->cPoints;
+  //element->cPoints[element->cSize] = 0;
   return uhash_hashUChars(key);
 }
 
 static int8_t prefixLookupComp(const UHashKey e1, const UHashKey e2) {
   UCAElements *element1 = (UCAElements *)e1.pointer;
   UCAElements *element2 = (UCAElements *)e2.pointer;
+
+  UChar buf1[256];
   UHashKey key1;
+  key1.pointer = buf1;
+  uprv_memcpy(buf1, element1->cPoints, element1->cSize*sizeof(UChar));
+  buf1[element1->cSize] = 0;
+
+  UChar buf2[256];
   UHashKey key2;
-  key1.pointer = element1->cPoints;
-  key2.pointer = element2->cPoints;
-  element1->cPoints[element1->cSize] = 0;
-  element2->cPoints[element2->cSize] = 0;
+  key2.pointer = buf2;
+  uprv_memcpy(buf2, element2->cPoints, element2->cSize*sizeof(UChar));
+  buf2[element2->cSize] = 0;
+
+  //key1.pointer = element1->cPoints;
+  //key2.pointer = element2->cPoints;
+  //element1->cPoints[element1->cSize] = 0;
+  //element2->cPoints[element2->cSize] = 0;
+
   return uhash_compareUChars(key1, key2);
 }
 
@@ -515,11 +531,28 @@ static void unsafeCPSet(uint8_t *table, UChar c) {
 
 
 /*  to the UnsafeCP hash table, add all chars with combining class != 0     */
-void uprv_uca_unsafeCPAddCCNZ(tempUCATable *t) {
+static void uprv_uca_unsafeCPAddCCNZ(tempUCATable *t) {
     UChar       c;
     for (c=0; c<0xffff; c++) {
         if (u_getCombiningClass(c) != 0)
             unsafeCPSet(t->unsafeCP, c);
+    }
+    if(t->prefixLookup != NULL) {
+      int32_t i = -1;
+      const UHashElement *e = NULL;
+      UCAElements *element = NULL;
+      UChar NFCbuf[256];
+      uint32_t NFCbufLen = 0;
+      UErrorCode status = U_ZERO_ERROR;
+      while((e = uhash_nextElement(t->prefixLookup, &i)) != NULL) {
+        element = (UCAElements *)e->value;
+        // codepoints here are in the NFD form. We need to add the
+        // first code point of the NFC form to unsafe, because 
+        // strcoll needs to backup over them.
+        NFCbufLen = unorm_normalize(element->cPoints, element->cSize, UNORM_NFC, 0,
+          NFCbuf, 256, &status);
+        unsafeCPSet(t->unsafeCP, NFCbuf[0]);
+      } 
     }
 }
 
@@ -538,32 +571,44 @@ uint32_t uprv_uca_addPrefix(tempUCATable *t, uint32_t CE,
 
     contractions->currentTag = SPEC_PROC_TAG;
 
-    // I'm quite unhappy with the two following loops, as they probably affect prefix analysis
-    // in strcoll. Basically, if we have a contraction we add the starting contraction character
-    // to the unsafe table, so that backward contraction skips it, as it has to pick the whole 
-    // prefix, which won't happen if start is safe.
+    // here, we will normalize & add prefix to the table.
     uint32_t j = 0;
-    //if(element->cSize > 1) {
-      if(!(UTF_IS_TRAIL(element->cPoints[0]))) {
-        unsafeCPSet(t->unsafeCP, element->cPoints[0]);
-      }
-    //}
-
-    // The second loop I'm unhappy with as it increases the number of unsafe characters. 
-    // Now, all the characters in a prefix are unsafe and that will pick the whole contraction,
-    // and the prefixes for forward processing.
-      
-      if(!(UTF_IS_TRAIL(element->prefix[0]))) {
-        unsafeCPSet(t->unsafeCP, element->prefix[0]);
-      }
-      // This should affect only prefixes larger than 3
-      for (j=1; j<element->prefixSize-1; j++) {   /* First add contraction chars to unsafe CP hash table */
+    for (j = 1; j<element->prefixSize; j++) {   /* First add NFD prefix chars to unsafe CP hash table */
       // Unless it is a trail surrogate, which is handled algoritmically and 
       // shouldn't take up space in the table.
       if(!(UTF_IS_TRAIL(element->prefix[j]))) {
         unsafeCPSet(t->unsafeCP, element->prefix[j]);
       }
     }
+
+    // These are all fairly small prefixes... We should be fine...
+    UChar nfcBuffer[256];
+    uint32_t nfcSize = unorm_normalize(element->prefix, element->prefixSize, UNORM_NFC, 0, nfcBuffer, 256, status);
+    for (j = 1; j<nfcSize; j++) {   /* First add NFC prefix chars to unsafe CP hash table */
+      // Unless it is a trail surrogate, which is handled algoritmically and 
+      // shouldn't take up space in the table.
+      if(!(UTF_IS_TRAIL(nfcBuffer[j]))) {
+        unsafeCPSet(t->unsafeCP, nfcBuffer[j]);
+      }
+    }
+
+    element->prefixSize = nfcSize;
+    for(j = 0; j < element->prefixSize; j++) { // prefixes are going to be looked up backwards
+      // therefore, we will promptly reverse the prefix buffer...
+      element->prefix[j] = *(nfcBuffer+element->prefixSize-j-1);
+    }
+
+    // the first codepoint is also unsafe, as it forms a 'contraction' with the prefix
+    if(!(UTF_IS_TRAIL(element->cPoints[0]))) {
+      unsafeCPSet(t->unsafeCP, element->cPoints[0]);
+    }
+
+    // Maybe we need this... To handle prefixes completely in the forward direction...
+    //if(element->cSize == 1) {
+    //  if(!(UTF_IS_TRAIL(element->cPoints[0]))) {
+    //    ContrEndCPSet(t->contrEndCP, element->cPoints[0]);
+    //  }
+    //}
 
     element->cPoints = element->prefix;
     element->cSize = element->prefixSize;
@@ -814,14 +859,10 @@ uint32_t uprv_uca_addAnElement(tempUCATable *t, UCAElements *element, UErrorCode
   // prefix buffer is already reversed.
 
   if(element->prefixSize!=0) {
-    // This is CRAP! We cannot find the good CE unless go over contractions
-    // Just the first CP will confuse single CPs and contractions.
-    // if it is NOT_FOUND, that is more - less ok. However, it is 
-    // problematic in other cases. Some sort of cacheing is required
-    // WE CANNOT LOOK SIMPLY IN THE CE TABLE!
-    // The current solution is to keep the added elements in a hashtable
-    // keys would be codepoints, but we use the whole element as a key.
-    // NOTE: hasher & comparer will zero terminate codepoints array.
+    // We keep the seen prefix starter elements in a hashtable
+    // we need it to be able to distinguish between the simple
+    // codepoints and prefix starters. Also, we need to use it
+    // for canonical closure.
     if(t->prefixLookup != NULL) {
       UCAElements *uCE = (UCAElements *)uhash_get(t->prefixLookup, element);
       if(uCE != NULL) { // there is already a set of code points here
