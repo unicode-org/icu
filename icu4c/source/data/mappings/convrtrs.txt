@@ -162,10 +162,10 @@ ibm-1370                Big5 { MIME     } csBig5 x-big5 cp950 950 # Taiwan Big-5
 ibm-950                 # Taiwan Big-5 (w/o euro update)
 ibm-1386                gbk cp936 zh_cn # Chinese GBK removed
 ibm-33722_P120-2000     ibm-33722_VASCII_VPUA ibm-33722 cp33722 33722 ibm-5050 # Japan EUC with \ <-> Yen mapping
-ibm-33722_P12A-2000     ibm-33722_VPUA EUC-JP { MIME } ibm-eucJP eucjis extended_unix_code_packed_format_for_japanese cseucpkdfmtjapanese X-EUC-JP # Japan EUC
-ibm-970                 EUC-KR { IANA MIME } ibm-eucKR csEUCKR                       # Korean EUC
-ibm-964                 EUC-TW ibm-eucTW cns11643              # Taiwan EUC
-ibm-1383                EUC-CN ibm-eucCN GB_2312-80 { IANA } chinese gb iso-ir-58 csISO58GB231280 GB2312 { MIME } gb2312-1980 cp1383 1383  csGB2312# China EUC
+ibm-33722_P12A-2000     ibm-33722_VPUA EUC-JP { MIME } ibm-eucJP eucjis extended_unix_code_packed_format_for_japanese cseucpkdfmtjapanese X-EUC-JP # Japan EUC. x-euc-jp is a MIME name
+ibm-970                 EUC-KR { IANA MIME } ibm-eucKR csEUCKR  # Korean EUC. x-euc-kr is a MIME name
+ibm-964                 EUC-TW ibm-eucTW cns11643               # Taiwan EUC. x-euc-tw is a MIME name
+ibm-1383                EUC-CN ibm-eucCN GB_2312-80 { IANA } chinese gb iso-ir-58 csISO58GB231280 GB2312 { MIME } gb2312-1980 cp1383 1383  csGB2312# China EUC. x-euc-cn is a MIME name
 ibm-1162                tis-620 cp874 windows-874 ms874 cp9066 874 # Thai (w/ euro update)
 ibm-874                 ibm-1161 # Same as 1162 (w/o euro update)
 
@@ -175,9 +175,9 @@ ibm-437                 cp437 csPC8CodePage437 437         # PC US
 ibm-850                 IBM850 { IANA } cp850 { MIME } 850 csPC850Multilingual    # PC latin1
 ibm-851                 IBM851 { IANA } cp851 { MIME } 851 csPC851           # PC DOS Greek (w/o euro)
 ibm-858                 cp858  { MIME } IBM00858 { IANA }       # PC latin1     with Euro cp850 removed
-ibm-9044                852 csPCp852 cp852  # PC latin2 (w/ euro update)
+ibm-9044                852 csPCp852 cp852  # PC latin2 (w/ euro update) cp852 is a MIME name for IBM-852
 ibm-852                 IBM852 { IANA }     # PC latin2 (w/o euro update)
-ibm-872                 855 csIBM855 cp855 csPCp855 # PC cyrillic (w/ euro update)
+ibm-872                 855 csIBM855 cp855 csPCp855 # PC cyrillic (w/ euro update) cp855 is a MIME name for IBM-855
 ibm-855                 IBM855 { IANA }             # PC cyrillic (w/o euro update)
 ibm-856                 cp856 { MIME }  856 # PC Hebrew (old)
 ibm-9049                857 csIBM857 cp857 { MIME } # PC Latin 5 (Turkish) (w/ euro     update)
