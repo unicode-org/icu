@@ -24,9 +24,10 @@
 #include "unicode/datefmt.h"
 #include "unicode/smpdtfmt.h"
 #include "unicode/choicfmt.h"
-#include "mutex.h"
+//#include "mutex.h"
 #include "unicode/ustring.h"
-#include "umsg_imp.h"
+#include "unicode/ucnv_err.h"
+
 
 // *****************************************************************************
 // class MessageFormat
@@ -40,9 +41,72 @@
 // -------------------------------------
 char MessageFormat::fgClassID = 0; // Value is irrelevant
 
+//---------------------------------------
+// static data
+
+static const UChar g_umsg_number[]    = {
+    0x6E, 0x75, 0x6D, 0x62, 0x65, 0x72, 0  /* "number" */
+};
+static const UChar g_umsg_date[]      = {
+    0x64, 0x61, 0x74, 0x65, 0  /* "date" */
+};
+static const UChar g_umsg_time[]      = {
+    0x74, 0x69, 0x6D, 0x65, 0  /* "time" */
+};
+static const UChar g_umsg_choice[]    = {
+    0x63, 0x68, 0x6F, 0x69, 0x63, 0x65, 0  /* "choice" */
+};
+
+// MessageFormat Type List  Number, Date, Time or Choice
+static const UChar *g_umsgTypeList[] = {
+    NULL,           NULL,           g_umsg_number,
+    NULL,           g_umsg_date,    NULL,
+    g_umsg_time,    NULL,           g_umsg_choice
+};
+ 
+static const UChar g_umsg_currency[]  = {
+    0x63, 0x75, 0x72, 0x72, 0x65, 0x6E, 0x63, 0x79, 0  /* "currency" */
+};
+static const UChar g_umsg_percent[]   = {
+    0x70, 0x65, 0x72, 0x63, 0x65, 0x6E, 0x74, 0    /* "percent" */
+};
+static const UChar g_umsg_integer[]   = {
+    0x69, 0x6E, 0x74, 0x65, 0x67, 0x65, 0x72, 0    /* "integer" */
+};
+
+// NumberFormat modifier list, default, currency, percent or integer
+static const UChar *g_umsgModifierList[] = {
+    NULL,           NULL,           g_umsg_currency,
+    NULL,           g_umsg_percent, NULL,
+    g_umsg_integer, NULL,           NULL
+};
+ 
+static const UChar g_umsg_short[]     = {
+    0x73, 0x68, 0x6F, 0x72, 0x74, 0    /* "short" */
+};
+static const UChar g_umsg_medium[]    = {
+    0x6D, 0x65, 0x64, 0x69, 0x75, 0x6D, 0  /* "medium" */
+};
+static const UChar g_umsg_long[]      = {
+    0x6C, 0x6F, 0x6E, 0x67, 0  /* "long" */
+};
+static const UChar g_umsg_full[]      = {
+    0x66, 0x75, 0x6C, 0x6C, 0  /* "full" */
+};
+
+// DateFormat modifier list, default, short, medium, long or full
+static const UChar *g_umsgDateModifierList[] = {
+    NULL,           NULL,           g_umsg_short,
+    NULL,           g_umsg_medium,  NULL,
+    g_umsg_long,    NULL,           g_umsg_full
+};
+ 
+static const int32_t g_umsgListLength = 9;
+
+//--------------------------------------
 // This global NumberFormat instance is shared by all MessageFormat to 
 // convert a number to(format)/from(parse) a string.
-NumberFormat* MessageFormat::fgNumberFormat = 0;
+//NumberFormat* MessageFormat::fgNumberFormat = 0;
 
 // -------------------------------------
 // Creates a MessageFormat instance based on the pattern.
@@ -51,10 +115,9 @@ MessageFormat::MessageFormat(const UnicodeString& pattern,
                              UErrorCode& success)
 : fLocale(Locale::getDefault()),  // Uses the default locale
   fOffsets(NULL),
-  fCount(0),
+  fCount(kMaxFormat),
   fArgumentNumbers(NULL)
 {
-    fCount = kMaxFormat;
     fOffsets = new int32_t[fCount];
     fArgumentNumbers = new int32_t[fCount];
     for (int32_t i = 0; i < fCount; i++) {
@@ -82,6 +145,26 @@ MessageFormat::MessageFormat(const UnicodeString& pattern,
         fArgumentNumbers[i] = 0;  // Argument numbers.
     }
     applyPattern(pattern, success);
+}
+
+MessageFormat::MessageFormat(const UnicodeString& pattern,
+                             const Locale& newLocale,
+                             UParseError& parseError,
+                             UErrorCode& success)
+: fLocale(newLocale),  // Uses the default locale
+  fOffsets(NULL),
+  fCount(0),
+  fArgumentNumbers(NULL)
+{
+    fCount = kMaxFormat;
+    fOffsets = new int32_t[fCount];
+    fArgumentNumbers = new int32_t[fCount];
+    for (int32_t i = 0; i < fCount; i++) {
+        fFormats[i] = NULL;       // Format instances
+        fOffsets[i] = 0;          // Starting offset
+        fArgumentNumbers[i] = 0;  // Argument numbers.
+    }
+    applyPattern(pattern,parseError, success);
 }
 
 MessageFormat::~MessageFormat()
@@ -203,7 +286,9 @@ MessageFormat::getLocale() const
 {
     return fLocale;
 }
- 
+
+
+#if 0 
 // -------------------------------------
 // Applies the new pattern and returns an error if the pattern
 // is not correct.
@@ -287,7 +372,103 @@ MessageFormat::applyPattern(const UnicodeString& newPattern,
     }
     fPattern = segments[0];
 }
- 
+#endif 
+
+
+void
+MessageFormat::applyPattern(const UnicodeString& newPattern, 
+                            UErrorCode& status)
+{
+    UParseError parseError;
+    applyPattern(newPattern,parseError,status);
+}
+
+
+void
+MessageFormat::applyPattern(const UnicodeString& newPattern, 
+                            UParseError& parseError,
+                            UErrorCode& success)
+{
+    
+    if(U_FAILURE(success))
+    {
+        return;
+    }
+    UnicodeString segments[4];
+    int32_t part = 0;
+    int32_t formatNumber = 0;
+    UBool inQuote = FALSE;
+    int32_t braceStack = 0;
+    fMaxOffset = -1;
+    // Clear error struct
+    parseError.offset = 0;
+    parseError.preContext[0] = parseError.postContext[0] = (UChar)0;
+    int i = 0;
+    for (; i < newPattern.length(); ++i) {
+        UChar ch = newPattern[i];
+        if (part == 0) {
+            if (ch == SINGLE_QUOTE) {
+                if (i + 1 < newPattern.length()
+                    && newPattern[i+1] == SINGLE_QUOTE) {
+                    segments[part] += ch;  // handle doubles
+                    ++i;
+                } else {
+                    inQuote = !inQuote;
+                }
+            } else if (ch == LEFT_CURLY_BRACE && !inQuote) {
+                part = 1;
+            } else {
+                segments[part] += ch;
+            }
+        } else  if (inQuote) {              // just copy quotes in parts
+            segments[part] += ch;
+            if (ch == SINGLE_QUOTE) {
+                inQuote = FALSE;
+            }
+        } else {
+            switch (ch) {
+            case COMMA:
+                if (part < 3)
+                    part += 1;
+                else
+                    segments[part] += ch;
+                break;
+            case LEFT_CURLY_BRACE:
+                ++braceStack;
+                segments[part] += ch;
+                break;
+            case RIGHT_CURLY_BRACE:
+                if (braceStack == 0) {
+                    part = 0;
+                    makeFormat(/*i,*/ formatNumber, segments, parseError,success);
+                    if(U_FAILURE(success)){
+                        parseError.offset=i;
+                        return;
+                    }
+                    formatNumber++;
+                } else {
+                    --braceStack;
+                    segments[part] += ch;
+                }
+                break;
+            case SINGLE_QUOTE:
+                inQuote = TRUE;
+                // fall through, so we keep quotes in other parts
+            default:
+                segments[part] += ch;
+                break;
+            }
+        }
+    }
+    if (braceStack == 0 && part != 0) {
+        fMaxOffset = -1;
+        syntaxError(newPattern,i,parseError,success);
+        return;
+        //throw new IllegalArgumentException("Unmatched braces in the pattern.");
+    }
+    fPattern = segments[0];
+    fListCount = formatNumber;
+}
 // -------------------------------------
 // Converts this MessageFormat instance to a pattern. 
 UnicodeString&
@@ -693,64 +874,6 @@ MessageFormat::format(const Formattable* arguments,
     return result;
 }
 
-extern const UChar g_umsg_number[]    = {
-    0x6E, 0x75, 0x6D, 0x62, 0x65, 0x72, 0  /* "number" */
-};
-extern const UChar g_umsg_date[]      = {
-    0x64, 0x61, 0x74, 0x65, 0  /* "date" */
-};
-extern const UChar g_umsg_time[]      = {
-    0x74, 0x69, 0x6D, 0x65, 0  /* "time" */
-};
-extern const UChar g_umsg_choice[]    = {
-    0x63, 0x68, 0x6F, 0x69, 0x63, 0x65, 0  /* "choice" */
-};
-
-// MessageFormat Type List  Number, Date, Time or Choice
-extern const UChar *g_umsgTypeList[] = {
-    NULL,           NULL,           g_umsg_number,
-    NULL,           g_umsg_date,    NULL,
-    g_umsg_time,    NULL,           g_umsg_choice
-};
- 
-extern const UChar g_umsg_currency[]  = {
-    0x63, 0x75, 0x72, 0x72, 0x65, 0x6E, 0x63, 0x79, 0  /* "currency" */
-};
-extern const UChar g_umsg_percent[]   = {
-    0x70, 0x65, 0x72, 0x63, 0x65, 0x6E, 0x74, 0    /* "percent" */
-};
-extern const UChar g_umsg_integer[]   = {
-    0x69, 0x6E, 0x74, 0x65, 0x67, 0x65, 0x72, 0    /* "integer" */
-};
-
-// NumberFormat modifier list, default, currency, percent or integer
-extern const UChar *g_umsgModifierList[] = {
-    NULL,           NULL,           g_umsg_currency,
-    NULL,           g_umsg_percent, NULL,
-    g_umsg_integer, NULL,           NULL
-};
- 
-extern const UChar g_umsg_short[]     = {
-    0x73, 0x68, 0x6F, 0x72, 0x74, 0    /* "short" */
-};
-extern const UChar g_umsg_medium[]    = {
-    0x6D, 0x65, 0x64, 0x69, 0x75, 0x6D, 0  /* "medium" */
-};
-extern const UChar g_umsg_long[]      = {
-    0x6C, 0x6F, 0x6E, 0x67, 0  /* "long" */
-};
-extern const UChar g_umsg_full[]      = {
-    0x66, 0x75, 0x6C, 0x6C, 0  /* "full" */
-};
-
-// DateFormat modifier list, default, short, medium, long or full
-extern const UChar *g_umsgDateModifierList[] = {
-    NULL,           NULL,           g_umsg_short,
-    NULL,           g_umsg_medium,  NULL,
-    g_umsg_long,    NULL,           g_umsg_full
-};
- 
-extern const int32_t g_umsgListLength = 9;
 
 // -------------------------------------
 // Parses the source pattern and returns the Formattable objects array,
@@ -894,6 +1017,7 @@ MessageFormat::parseObject( const UnicodeString& source,
 // -------------------------------------
 // NumberFormat cache management
 
+/*
 NumberFormat* 
 MessageFormat::getNumberFormat(UErrorCode &status)
 {
@@ -937,7 +1061,7 @@ MessageFormat::releaseNumberFormat(NumberFormat *adopt)
 
     delete adopt;
 }
-
+*/
 
 /**
  * Converts a string to an integer value using a default NumberFormat object
@@ -948,6 +1072,7 @@ int32_t
 MessageFormat::stoi(const UnicodeString& string,
                     UErrorCode& status)
 {
+    /*
     NumberFormat *myFormat = getNumberFormat(status);
 
     if(U_FAILURE(status))
@@ -965,6 +1090,21 @@ MessageFormat::stoi(const UnicodeString& string,
 
 
     return value;
+    */
+    
+    /* this ignores any white spaces between '{' and digit char
+     * so now we can have {  0, date} {0 , date }
+     */
+    for(int i=0;i<string.length();i++){
+        UChar32 ch = string.char32At(i);
+        if(u_isdigit(ch)){
+            return u_charDigitValue(ch);
+        }else if(!u_isspace(ch)){
+            break;
+        }
+
+    }
+    return -1;
 }
 
 // -------------------------------------
@@ -978,11 +1118,12 @@ UnicodeString&
 MessageFormat::itos(int32_t i,
                     UnicodeString& string)
 {
+    /*
     UErrorCode status = U_ZERO_ERROR;
     NumberFormat *myFormat = getNumberFormat(status);
 
     if(U_FAILURE(status)) {
-        /* "<ERROR>" */
+        // "<ERROR>" 
         static const UChar ERROR[] = {0x3C, 0x45, 0x52, 0x52, 0x4F, 0x52, 0x3E, 0};
 
         return string = ERROR; // TODO: maybe toPattern should take an errorcode.
@@ -991,8 +1132,12 @@ MessageFormat::itos(int32_t i,
     UnicodeString &retval = myFormat->format(i, string);
 
     releaseNumberFormat(myFormat);
-
     return retval;
+    */
+    UChar temp[10] = { '\0' };
+    uprv_itou(temp,i,16,0);
+    string.append(temp);
+    return string;
 }
 
 // -------------------------------------
@@ -1002,6 +1147,7 @@ void
 MessageFormat::makeFormat(/*int32_t position, */
                           int32_t offsetNumber, 
                           UnicodeString* segments,
+                          UParseError& parseError,
                           UErrorCode& success)
 {
     if(U_FAILURE(success))
@@ -1018,14 +1164,18 @@ MessageFormat::makeFormat(/*int32_t position, */
     fMaxOffset = offsetNumber;
     fOffsets[offsetNumber] = segments[0].length();
     fArgumentNumbers[offsetNumber] = argumentNumber;
-
+    int test = 0;
     // now get the format
     Format *newFormat = NULL;
     switch (findKeyword(segments[2], g_umsgTypeList)) {
     case 0:
+        fFormatTypeList[argumentNumber] = Formattable::kString;
         break;
     case 1: case 2:// number
-        switch (findKeyword(segments[3], g_umsgModifierList)) {
+        test=findKeyword(segments[3], g_umsgModifierList);
+        fFormatTypeList[argumentNumber] = Formattable::kDouble;
+
+        switch (test) {
         case 0: // default;
             newFormat = NumberFormat::createInstance(fLocale, success);
             break;
@@ -1036,6 +1186,7 @@ MessageFormat::makeFormat(/*int32_t position, */
             newFormat = NumberFormat::createPercentInstance(fLocale, success);
             break;
         case 5: case 6:// integer
+            fFormatTypeList[argumentNumber] = Formattable::kLong;
             newFormat = createIntegerFormat(fLocale, success);
             break;
         default: // pattern
@@ -1044,11 +1195,11 @@ MessageFormat::makeFormat(/*int32_t position, */
                 newFormat = NULL;
                 return;
             }
-            if(newFormat->getDynamicClassID() == DecimalFormat::getStaticClassID())
-                ((DecimalFormat*)newFormat)->applyPattern(segments[3], success);
+            if(newFormat->getDynamicClassID() == DecimalFormat::getStaticClassID()){
+                ((DecimalFormat*)newFormat)->applyPattern(segments[3],parseError,success);
+            }
             if(U_FAILURE(success)) {
                 fMaxOffset = oldMaxOffset;
-                success = U_ILLEGAL_ARGUMENT_ERROR;
                 return;
             }
             break;
@@ -1056,6 +1207,8 @@ MessageFormat::makeFormat(/*int32_t position, */
         break;
 
     case 3: case 4: // date
+        fFormatTypeList[argumentNumber] = Formattable::kDate;
+
         switch (findKeyword(segments[3], g_umsgDateModifierList)) {
         case 0: // default
             newFormat = DateFormat::createDateInstance(DateFormat::kDefault, fLocale);
@@ -1074,17 +1227,24 @@ MessageFormat::makeFormat(/*int32_t position, */
             break;
         default:
             newFormat = DateFormat::createDateInstance(DateFormat::kDefault, fLocale);
-                if(newFormat->getDynamicClassID() == SimpleDateFormat::getStaticClassID())
+            if(newFormat->getDynamicClassID() == SimpleDateFormat::getStaticClassID()){
                     ((SimpleDateFormat*)newFormat)->applyPattern(segments[3]);
+            }
+                /* Ram: 'success' is not passed to above methods 
+                   and is not set so we donot have to check for failure.
                 if(U_FAILURE(success)) {
                     fMaxOffset = oldMaxOffset;
                     success = U_ILLEGAL_ARGUMENT_ERROR;
                     return;
                 }
+                */
             break;
         }
         break;
     case 5: case 6:// time
+
+        fFormatTypeList[argumentNumber]= Formattable::kDate;
+        
         switch (findKeyword(segments[3], g_umsgDateModifierList)) {
         case 0: // default
             newFormat = DateFormat::createTimeInstance(DateFormat::kDefault, fLocale);
@@ -1103,21 +1263,26 @@ MessageFormat::makeFormat(/*int32_t position, */
             break;
         default:
             newFormat = DateFormat::createTimeInstance(DateFormat::kDefault, fLocale);
-                if(newFormat->getDynamicClassID() == SimpleDateFormat::getStaticClassID())
+            if(newFormat->getDynamicClassID() == SimpleDateFormat::getStaticClassID()){
                     ((SimpleDateFormat*)newFormat)->applyPattern(segments[3]);
+            }
+                /* Ram: 'success' is not passed to above methods 
+                   and is not set so we donot have to check for failure.
                 if(U_FAILURE(success)) {
                     fMaxOffset = oldMaxOffset;
                     success = U_ILLEGAL_ARGUMENT_ERROR;
                     return;
                 }
+                */
             break;
         }
         break;
     case 7: case 8:// choice
-            newFormat = new ChoiceFormat(segments[3], success);
+        fFormatTypeList[argumentNumber] = Formattable::kDouble;
+
+        newFormat = new ChoiceFormat(segments[3],parseError,success);
         if(U_FAILURE(success)) {
             fMaxOffset = oldMaxOffset;
-            success = U_ILLEGAL_ARGUMENT_ERROR;
             return;
         }
         break;

@@ -18,7 +18,7 @@
 #include "unicode/numfmt.h"
 #include "unicode/dtfmtsym.h"
 #include "unicode/ustring.h"
-
+/*
 U_CAPI UDateFormat*
 udat_open(            UDateFormatStyle        timeStyle, 
                 UDateFormatStyle        dateStyle,
@@ -86,6 +86,75 @@ udat_openPattern(    const   UChar           *pattern,
   }
   return retVal;
 }
+*/
+U_CAPI UDateFormat*
+udat_open(UDateFormatStyle  timeStyle,
+          UDateFormatStyle  dateStyle,
+          const char        *locale,
+	      const UChar       *tzID,
+	      int32_t           tzIDLength,
+          const UChar       *pattern,
+          int32_t           patternLength,
+          UErrorCode        *status)
+{
+  if(U_FAILURE(*status)) 
+  {
+      return 0;
+  }
+  if(timeStyle != UDAT_IGNORE)
+  {
+      DateFormat *fmt;
+      if(locale == 0)
+        fmt = DateFormat::createDateTimeInstance((DateFormat::EStyle)dateStyle,
+                             (DateFormat::EStyle)timeStyle);
+      else
+        fmt = DateFormat::createDateTimeInstance((DateFormat::EStyle)dateStyle,
+                             (DateFormat::EStyle)timeStyle,
+                                                 Locale(locale));
+  
+      if(fmt == 0) {
+        *status = U_MEMORY_ALLOCATION_ERROR;
+        return 0;
+      }
+
+      if(tzID != 0) {
+        TimeZone *zone = 0;
+        int32_t length = (tzIDLength == -1 ? u_strlen(tzID) : tzIDLength);
+        zone = TimeZone::createTimeZone(UnicodeString((UChar*)tzID,
+						      length, length));
+        if(zone == 0) {
+          *status = U_MEMORY_ALLOCATION_ERROR;
+          delete fmt;
+          return 0;
+        }
+        fmt->adoptTimeZone(zone);
+      }
+  
+      return (UDateFormat*)fmt;
+  }
+  else
+  {
+      int32_t len = (patternLength == -1 ? u_strlen(pattern) : patternLength);
+      UDateFormat *retVal = 0;
+
+      if(locale == 0)
+        retVal = (UDateFormat*)new SimpleDateFormat(UnicodeString((UChar*)pattern,
+                                      len, len),
+                            *status);
+      else
+        retVal = (UDateFormat*)new SimpleDateFormat(UnicodeString((UChar*)pattern,
+                                      len, len),
+                            Locale(locale),
+                            *status);
+
+      if(retVal == 0) {
+        *status = U_MEMORY_ALLOCATION_ERROR;
+        return 0;
+      }
+      return retVal;
+  }
+}
+
 
 U_CAPI void
 udat_close(UDateFormat* format)
@@ -490,3 +559,5 @@ udat_setSymbols(    UDateFormat             *format,
   ((SimpleDateFormat*)format)->adoptDateFormatSymbols(syms);
   delete [] array;
 }
+
+

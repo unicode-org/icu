@@ -20,7 +20,7 @@
 #include "cpputils.h"
 #include "unicode/fmtable.h"
 #include "unicode/dcfmtsym.h"
-
+/*
 U_CAPI UNumberFormat*
 unum_open(    UNumberFormatStyle    style,
         const   char*        locale,
@@ -81,32 +81,100 @@ unum_openPattern(    const    UChar*            pattern,
             const    char*        locale,
             UErrorCode*        status)
 {
-  if(U_FAILURE(*status)) return 0;
+    UParseError parseError;
+    return unum_openPatternWithError( pattern,patternLength,locale,&parseError,status);
+}*/
 
-  int32_t len = (patternLength == -1 ? u_strlen(pattern) : patternLength);
-  const UnicodeString pat((UChar*)pattern, len, len);
-  DecimalFormatSymbols *syms = 0;
 
-  if(locale == 0)
-    syms = new DecimalFormatSymbols(*status);
-  else
-    syms = new DecimalFormatSymbols(Locale(locale),
-                    *status);
+U_CAPI UNumberFormat*
+unum_open(  UNumberFormatStyle    style,  
+            const    UChar*    pattern,
+            int32_t            patternLength,
+            const    char*     locale,
+            UParseError*       parseErr,
+            UErrorCode*        status)
+{
+  if(U_FAILURE(*status))
+  { 
+      return 0;
+  }
+  if(style!=0){
+       UNumberFormat *retVal = 0;
   
-  if(syms == 0) {
-    *status = U_MEMORY_ALLOCATION_ERROR;
-    return 0;
-  }
+      switch(style) {
+      case UNUM_DECIMAL:
+        if(locale == 0)
+          retVal = (UNumberFormat*)NumberFormat::createInstance(*status);
+        else
+          retVal = (UNumberFormat*)NumberFormat::createInstance(Locale(locale),
+                                    *status);
+        break;
 
-  DecimalFormat *fmt = 0;
-  fmt = new DecimalFormat(pat, syms, *status);
-  if(fmt == 0) {
-    *status = U_MEMORY_ALLOCATION_ERROR;
-    delete syms;
-    return 0;
-  }
+      case UNUM_CURRENCY:
+        if(locale == 0)
+          retVal = (UNumberFormat*)NumberFormat::createCurrencyInstance(*status);
+        else
+          retVal = (UNumberFormat*)NumberFormat::createCurrencyInstance(Locale(locale),
+                                        *status);
+        break;
 
-  return (UNumberFormat*) fmt;
+      case UNUM_PERCENT:
+        if(locale == 0)
+          retVal = (UNumberFormat*)NumberFormat::createPercentInstance(*status);
+        else
+          retVal = (UNumberFormat*)NumberFormat::createPercentInstance(Locale(locale),
+                                    *status);
+        break;
+
+      case UNUM_SPELLOUT:
+        // Todo: TBD: Add spellout support
+        //retVal = (UNumberFormat*)new NumberSpelloutFormat();
+        //break;
+        *status = U_UNSUPPORTED_ERROR;
+        return 0;
+
+      default:
+        *status = U_UNSUPPORTED_ERROR;
+        return 0;
+      }
+
+      if(retVal == 0) {
+        *status = U_MEMORY_ALLOCATION_ERROR;
+        return 0;
+      }
+
+      return retVal;
+  }else{
+      UParseError tErr;
+      int32_t len = (patternLength == -1 ? u_strlen(pattern) : patternLength);
+      const UnicodeString pat((UChar*)pattern, len, len);
+      DecimalFormatSymbols *syms = 0;
+      
+      if(parseErr==NULL){
+          parseErr = &tErr;
+      }
+      
+      if(locale == 0)
+        syms = new DecimalFormatSymbols(*status);
+      else
+        syms = new DecimalFormatSymbols(Locale(locale),
+                        *status);
+  
+      if(syms == 0) {
+        *status = U_MEMORY_ALLOCATION_ERROR;
+        return 0;
+      }
+
+      DecimalFormat *fmt = 0;
+      fmt = new DecimalFormat(pat, syms, *parseErr, *status);
+      if(fmt == 0) {
+        *status = U_MEMORY_ALLOCATION_ERROR;
+        delete syms;
+        return 0;
+      }
+
+      return (UNumberFormat*) fmt;
+  }
 }
 
 U_CAPI void
@@ -640,19 +708,45 @@ unum_setSymbol(UNumberFormat *fmt,
   ((DecimalFormat *)fmt)->setDecimalFormatSymbols(symbols);
 }
 
+/*
 U_CAPI void
 unum_applyPattern(            UNumberFormat     *format,
                     UBool          localized,
                     const   UChar           *pattern,
-                    int32_t         patternLength)
+                    int32_t         patternLength
+                    )
 {
+    UErrorCode status = U_ZERO_ERROR;
+    UParseError parseError;
+    unum_applyPatternWithError(format,localized,pattern,patternLength,&parseError,&status);
+}
+*/
+
+U_CAPI void
+unum_applyPattern(  UNumberFormat  *format,
+                    UBool          localized,
+                    const UChar    *pattern,
+                    int32_t        patternLength,
+                    UParseError    *parseError,
+                    UErrorCode*    status)
+{
+  UErrorCode tStatus = U_ZERO_ERROR;
+  UParseError tParseError;
+  
+  if(parseError == NULL){
+      parseError = &tParseError;
+  }
+  
+  if(status==NULL){
+      status = &tStatus;
+  }
+
   int32_t len = (patternLength == -1 ? u_strlen(pattern) : patternLength);
   const UnicodeString pat((UChar*)pattern, len, len);
-  UErrorCode status = U_ZERO_ERROR;
 
   if(localized)
-    ((DecimalFormat*)format)->applyLocalizedPattern(pat, status);
+    ((DecimalFormat*)format)->applyLocalizedPattern(pat,*parseError, *status);
   else
-    ((DecimalFormat*)format)->applyPattern(pat, status);
+    ((DecimalFormat*)format)->applyPattern(pat,*parseError, *status);
 }
 

@@ -1012,7 +1012,7 @@ Transliterator* Transliterator::parseID(const UnicodeString& ID,
     else {
         // Create the actual transliterator from the registry
         if (parseError != 0) {
-            parseError->code = parseError->line = parseError->offset = 0;
+            parseError->line = parseError->offset = 0;
             parseError->preContext[0] = parseError->postContext[0] = 0;
         }
         if (registry == 0) {

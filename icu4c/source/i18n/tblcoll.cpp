@@ -130,7 +130,7 @@ RuleBasedCollator::RuleBasedCollator(const UnicodeString& rules,
   pucharrules[length] = 0;
 
   ucollator = ucol_openRules(pucharrules, length, UCOL_DEFAULT_NORMALIZATION,
-                             UCOL_DEFAULT_STRENGTH, &status);
+                             UCOL_DEFAULT_STRENGTH, NULL, &status);
 
   if (U_SUCCESS(status))
   {
@@ -169,7 +169,7 @@ RuleBasedCollator::RuleBasedCollator(const UnicodeString& rules,
 
   UCollationStrength strength = getUCollationStrength(collationStrength);
   ucollator = ucol_openRules(pucharrules, length, UCOL_DEFAULT_NORMALIZATION,
-                             strength, &status);
+                             strength, NULL,&status);
 
   if (U_SUCCESS(status))
   {
@@ -209,7 +209,7 @@ RuleBasedCollator::RuleBasedCollator(const UnicodeString& rules,
   UNormalizationMode mode = Normalizer::getUNormalizationMode(
                                                    decompositionMode, status);
   ucollator = ucol_openRules(pucharrules, length, mode,
-                             UCOL_DEFAULT_STRENGTH, &status);
+                             UCOL_DEFAULT_STRENGTH, NULL, &status);
 
   if (U_SUCCESS(status))
   {
@@ -249,7 +249,7 @@ RuleBasedCollator::RuleBasedCollator(const UnicodeString& rules,
   UCollationStrength strength = getUCollationStrength(collationStrength);
   UNormalizationMode mode = Normalizer::getUNormalizationMode(
                                                    decompositionMode, status);
-  ucollator = ucol_openRules(pucharrules, length, mode, strength, &status);
+  ucollator = ucol_openRules(pucharrules, length, mode, strength,NULL, &status);
   if (U_SUCCESS(status))
   {
     const UChar *r = ucol_getRules(ucollator, &length);
