@@ -427,5 +427,41 @@ ar {
     }
 
     // (ICU 2.6) International Calendar Data.  Note, THE FORMAT OF THIS DATA WILL CHANGE IN FUTURE RELEASES.
+    
     Eras_buddhist:array{ "\u0627\u0644\u062A\u0642\u0648\u064A\u0645 \u0627\u0644\u0628\u0648\u0630\u064A" }
+
+    // Islamic calendar
+    Eras_islamic:array { 
+            "\u0647\u200D"  // AH
+    }
+
+    MonthAbbreviations_islamic {
+            "\u0645\u062D\u0631\u0645",                                             // Muharram
+            "\u0635\u0641\u0631",                                                   // Safar
+            "\u0631\u0628\u064A\u0639 \u0627\u0644\u0623\u0648\u0644",              // Rabi' I
+            "\u0631\u0628\u064A\u0639 \u0627\u0644\u0622\u062E\u0631",              // Rabi' II
+            "\u062C\u0645\u0627\u062F\u0649 \u0627\u0644\u0623\u0648\u0644\u0649",  // Jumada I
+            "\u062C\u0645\u0627\u062F\u0649 \u0627\u0644\u0622\u062E\u0631\u0629",  // Jumada I
+            "\u0631\u062C\u0628",                                                   // Rajab
+            "\u0634\u0639\u0628\u0627\u0646",                                       // Sha'ban
+            "\u0631\u0645\u0636\u0627\u0646",                                       // Ramadan
+            "\u0634\u0648\u0627\u0644",                                             // Shawwal
+            "\u0630\u0648 \u0627\u0644\u0642\u0639\u062F\u0629",                    // Dhu'l-Qi'dah
+            "\u0630\u0648 \u0627\u0644\u062D\u062C\u0629"                          // Dhu'l-Hijjah
+    }
+
+    MonthNames_islamic {
+            "\u0645\u062D\u0631\u0645",                                             // Muharram
+            "\u0635\u0641\u0631",                                                   // Safar
+            "\u0631\u0628\u064A\u0639 \u0627\u0644\u0623\u0648\u0644",              // Rabi' I
+            "\u0631\u0628\u064A\u0639 \u0627\u0644\u0622\u062E\u0631",              // Rabi' II
+            "\u062C\u0645\u0627\u062F\u0649 \u0627\u0644\u0623\u0648\u0644\u0649",  // Jumada I
+            "\u062C\u0645\u0627\u062F\u0649 \u0627\u0644\u0622\u062E\u0631\u0629",  // Jumada I
+            "\u0631\u062C\u0628",                                                   // Rajab
+            "\u0634\u0639\u0628\u0627\u0646",                                       // Sha'ban
+            "\u0631\u0645\u0636\u0627\u0646",                                       // Ramadan
+            "\u0634\u0648\u0627\u0644",                                             // Shawwal
+            "\u0630\u0648 \u0627\u0644\u0642\u0639\u062F\u0629",                    // Dhu'l-Qi'dah
+            "\u0630\u0648 \u0627\u0644\u062D\u062C\u0629"                          // Dhu'l-Hijjah
+     }
 }

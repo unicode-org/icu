@@ -399,4 +399,40 @@ hu {
 
     // (ICU 2.6) International Calendar Data.  Note, THE FORMAT OF THIS DATA WILL CHANGE IN FUTURE RELEASES.
     Eras_buddhist:array { "BK" }
+
+    // Islamic calendar
+    Eras_islamic:array { 
+            "MF"
+
+    }
+
+    MonthAbbreviations_islamic { // Copied from MonthNames
+            "Moharrem",                 // Muharram
+            "Safar",                    // Safar
+            "R\u00E9bi el avvel",       // Rabi' al-awwal
+            "R\u00E9bi el accher",      // Rabi' al-thani
+            "Dsem\u00E1di el avvel",    // Jumada al-awwal
+            "Dsem\u00E1di el accher",   // Jumada al-thani
+            "Redseb",                   // Rajab
+            "Sab\u00E1n",               // Sha'ban
+            "Ramad\u00E1n",             // Ramadan
+            "Sevv\u00E1l",              // Shawwal
+            "Ds\u00FCl kade",           // Dhu al-Qi'dah
+            "Ds\u00FCl hedse",          // Dhu al-Hijjah
+    }
+
+    MonthNames_islamic {
+            "Moharrem",                 // Muharram
+            "Safar",                    // Safar
+            "R\u00E9bi el avvel",       // Rabi' al-awwal
+            "R\u00E9bi el accher",      // Rabi' al-thani
+            "Dsem\u00E1di el avvel",    // Jumada al-awwal
+            "Dsem\u00E1di el accher",   // Jumada al-thani
+            "Redseb",                   // Rajab
+            "Sab\u00E1n",               // Sha'ban
+            "Ramad\u00E1n",             // Ramadan
+            "Sevv\u00E1l",              // Shawwal
+            "Ds\u00FCl kade",           // Dhu al-Qi'dah
+            "Ds\u00FCl hedse",          // Dhu al-Hijjah
+    }
 }
