@@ -347,24 +347,24 @@ ParagraphLayout::ParagraphLayout(const LEUnicode chars[], le_int32 count,
 
 ParagraphLayout::~ParagraphLayout()
 {
-    delete fFontRuns;
+    delete (FontRuns *) fFontRuns;
 
     if (! fClientLevels) {
-        delete fLevelRuns;
+        delete (ValueRuns *) fLevelRuns;
         fLevelRuns = NULL;
 
         fClientLevels = true;
     }
 
     if (! fClientScripts) {
-        delete fScriptRuns;
+        delete (ValueRuns *) fScriptRuns;
         fScriptRuns = NULL;
 
         fClientScripts = true;
     }
 
     if (! fClientLocales) {
-        delete fLocaleRuns;
+        delete (LocaleRuns *) fLocaleRuns;
         fLocaleRuns = NULL;
 
         fClientLocales = true;
