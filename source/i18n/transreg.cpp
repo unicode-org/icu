@@ -984,7 +984,10 @@ Transliterator* TransliteratorRegistry::instantiateEntry(const UnicodeString& ID
             }
         } else {
             if (entry->u.data == 0) {
-                // idBlock, no data -- this is an alias
+                // idBlock, no data -- this is an alias.  The ID has
+                // been munged from reverse into forward mode, if
+                // necessary, so instantiate the ID in the forward
+                // direction.
                 entry->entryType = Entry::ALIAS;
             } else {
                 // idBlock and data -- this is a compound
