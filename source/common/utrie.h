@@ -80,7 +80,7 @@ enum {
 
     /**
      * Number of index (stage 1) entries per lead surrogate.
-     * Same as number of indexe entries for 1024 trail surrogates,
+     * Same as number of index entries for 1024 trail surrogates,
      * ==0x400>>UTRIE_SHIFT
      */
     UTRIE_SURROGATE_BLOCK_COUNT=(1<<UTRIE_SURROGATE_BLOCK_BITS),
@@ -662,6 +662,19 @@ utrie_serialize(UNewTrie *trie, void *data, int32_t capacity,
                 UNewTrieGetFoldedValue *getFoldedValue,
                 UBool reduceTo16Bits,
                 UErrorCode *pErrorCode);
+
+/* forward declaration */
+struct UDataSwapper;
+typedef struct UDataSwapper UDataSwapper;
+
+/**
+ * Swap a serialized UTrie.
+ * @internal
+ */
+U_CAPI int32_t U_EXPORT2
+utrie_swap(const UDataSwapper *ds,
+           const void *inData, int32_t length, void *outData,
+           UErrorCode *pErrorCode);
 
 U_CDECL_END
 
