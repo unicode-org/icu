@@ -83,10 +83,8 @@
 /*
  * ANSI C headers:
  * stddef.h defines wchar_t
- * limits.h defines CHAR_MAX
  */
 #include <stddef.h>
-#include <limits.h>
 #include "unicode/umachine.h"
 /* include the utfXX.h after the following definitions */
 
@@ -207,6 +205,12 @@ typedef int32_t UTextOffset;
 #if UTF_SIZE==8
 
 #   error UTF-8 is not implemented, undefine UTF_SIZE or define it to 16
+
+/*
+ * ANSI C header:
+ * limits.h defines CHAR_MAX
+ */
+#   include <limits.h>
 
     /* Define UChar to be compatible with char if possible. */
 #   if CHAR_MAX>=255
