@@ -47,7 +47,8 @@ public:
      * Construct a <code>RunArray</code> object from a pre-existing
      * array of limit indices.
      *
-     * @param limits is an array of limit indices.
+     * @param limits is an array of limit indices. This array must remain
+	 *               valid until the <code>RunArray</code> object is destroyed.
      *
      * @param count is the number of entries in the limit array.
      *
@@ -253,9 +254,12 @@ public:
      * Construct a <code>FontRuns</code> object from pre-existing arrays of fonts
      * and limit indices.
      *
-     * @param fonts is the address of an array of pointers to <code>LEFontInstance</code> objects.
+     * @param fonts is the address of an array of pointers to <code>LEFontInstance</code> objects. This
+	 *              array, and the <code>LEFontInstance</code> objects to which it points must remain
+	 *              valid until the <code>FontRuns</code> object is destroyed.
      *
-     * @param limits is the address of an array of limit indices.
+     * @param limits is the address of an array of limit indices. This array must remain valid until
+	 *               the <code>FontRuns</code> object is destroyed.
      *
      * @param count is the number of entries in the two arrays.
      *
@@ -312,7 +316,8 @@ public:
      * The new <code>add</code> method should first call this method to grow the font and limit indices
      * arrays, and use the returned run index to store data their own arrays.
      *
-     * @param font is the address of the <code>LEFontInstance</code> to add
+     * @param font is the address of the <code>LEFontInstance</code> to add. This object must
+	 *             remain valid until the <code>FontRuns</code> object is destroyed.
      *
      * @param limit is the limit index to add
      *
@@ -386,9 +391,12 @@ public:
      * Construct a <code>LocaleRuns</code> object from pre-existing arrays of locales
      * and limit indices.
      *
-     * @param locales is the address of an array of pointers to <code>Locale</code> objects.
+     * @param locales is the address of an array of pointers to <code>Locale</code> objects. This array,
+	 *                and the <code>Locale</code> objects to which it points, must remain valid until
+	 *                the <code>LocaleRuns</code> object is destroyed.
      *
-     * @param limits is the address of an array of limit indices.
+     * @param limits is the address of an array of limit indices. This array must remain valid until the
+	 *               <code>LocaleRuns</code> object is destroyed.
      *
      * @param count is the number of entries in the two arrays.
      *
@@ -445,7 +453,8 @@ public:
      * The new <code>add</code> method should first call this method to grow the font and limit indices
      * arrays, and use the returned run index to store data their own arrays.
      *
-     * @param locale is the address of the <code>Locale</code> to add
+     * @param locale is the address of the <code>Locale</code> to add. This object must remain valid
+	 *               until the <code>LocaleRuns</code> object is destroyed.
      *
      * @param limit is the limit index to add
      *
@@ -518,9 +527,11 @@ public:
      * Construct a <code>ValueRuns</code> object from pre-existing arrays of values
      * and limit indices.
      *
-     * @param values is the address of an array of integer.
+     * @param values is the address of an array of integer. This array must remain valid until
+	 *               the <code>ValueRuns</code> object is destroyed.
      *
-     * @param limits is the address of an array of limit indices.
+     * @param limits is the address of an array of limit indices. This array must remain valid until
+	 *               the <code>ValueRuns</code> object is destroyed.
      *
      * @param count is the number of entries in the two arrays.
      *
