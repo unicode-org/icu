@@ -708,6 +708,7 @@ static void testCollator(UCollator *coll, UErrorCode *status) {
 /*  uint32_t rExpsLen = 0; */
   uint32_t firstLen = 0;
   UBool varT = FALSE; UBool top_ = TRUE;
+  uint8_t specs = 0;
   UBool startOfRules = TRUE;
   UBool lastReset = FALSE;
   UColTokenParser src;
@@ -731,9 +732,10 @@ static void testCollator(UCollator *coll, UErrorCode *status) {
 
     while ((current = ucol_tok_parseNextToken(&src, &strength, 
                       &chOffset, &chLen, &exOffset, &exLen,
-                      &varT, &top_, startOfRules, status)) != NULL) {
+                      &specs, startOfRules, status)) != NULL) {
       startOfRules = FALSE;
-
+      varT = ((specs & UCOL_TOK_VARIABLE_TOP) != 0);
+      top_ = ((specs & UCOL_TOK_TOP) != 0);
       u_strncpy(second,rulesCopy+chOffset, chLen);
       second[chLen] = 0;
 
@@ -1013,6 +1015,7 @@ static void testAgainstUCA(UCollator *coll, UCollator *UCA, LCID lcid, UErrorCod
 /*  uint32_t rExpsLen = 0; */
   uint32_t firstLen = 0, secondLen = 0;
   UBool varT = FALSE; UBool top_ = TRUE;
+  uint8_t specs = 0;
   UBool startOfRules = TRUE;
   UColTokenParser src;
   UColOptionSet opts;
@@ -1041,8 +1044,10 @@ static void testAgainstUCA(UCollator *coll, UCollator *UCA, LCID lcid, UErrorCod
 
     while ((current = ucol_tok_parseNextToken(&src, &strength, 
                       &chOffset, &chLen, &exOffset, &exLen,
-                      &varT, &top_, startOfRules, status)) != NULL) {
+                      &specs, startOfRules, status)) != NULL) { 
       startOfRules = FALSE;
+      varT = ((specs & UCOL_TOK_VARIABLE_TOP) != 0);
+      top_ = ((specs & UCOL_TOK_TOP) != 0);
 
       u_strncpy(second,rulesCopy+chOffset, chLen);
       second[chLen] = 0;
@@ -1097,6 +1102,7 @@ static void testCEs(UCollator *coll, UErrorCode *status) {
 
   /* uint32_t rExpsLen = 0; */
   /* uint32_t firstLen = 0; */
+  uint8_t specs = 0;
   UBool varT = FALSE; UBool top_ = TRUE;
   UBool startOfRules = TRUE;
   UColTokenParser src;
@@ -1123,8 +1129,10 @@ static void testCEs(UCollator *coll, UErrorCode *status) {
 
     while ((current = ucol_tok_parseNextToken(&src, &strength, 
                       &chOffset, &chLen, &exOffset, &exLen,
-                      &varT, &top_, startOfRules, status)) != NULL) {
+                      &specs, startOfRules, status)) != NULL) {
       startOfRules = FALSE;
+      varT = ((specs & UCOL_TOK_VARIABLE_TOP) != 0);
+      top_ = ((specs & UCOL_TOK_TOP) != 0);
 
       init_collIterate(coll, rulesCopy+chOffset, chLen, &c);
 
@@ -1448,10 +1456,9 @@ static void genericLocaleStarter(const char *locale, const char *s[], uint32_t s
 static void genericRulesStarter(const char *rules, const char *s[], uint32_t size) {
   UErrorCode status = U_ZERO_ERROR;
   UChar rlz[2048] = { 0 };
-  UCollator *coll = NULL;
   uint32_t rlen = u_unescape(rules, rlz, 2048);
 
-  ucol_openRules(rlz, rlen, UCOL_DEFAULT, UCOL_DEFAULT, &status);
+  UCollator *coll = ucol_openRules(rlz, rlen, UCOL_DEFAULT, UCOL_DEFAULT, &status);
 
   if(U_SUCCESS(status)) {
     genericOrderingTest(coll, s, size);
@@ -1461,7 +1468,7 @@ static void genericRulesStarter(const char *rules, const char *s[], uint32_t siz
 }
 
 const static char chTest[][20] = {
-  /*"c",
+  "c",
   "C",
   "ca", "cb", "cx", "cy", "CZ",
   "c\\u030C", "C\\u030C",
@@ -1469,7 +1476,7 @@ const static char chTest[][20] = {
   "H",
   "ha", "Ha", "harly", "hb", "HB", "hx", "HX", "hy", "HY",
   "ch", "cH", "Ch", "CH",
-  "cha", "charly", "che", */"chh", "chch"/*, "chr",
+  "cha", "charly", "che", "chh", "chch", "chr",
   "i", "I", "iarly", 
   "r", "R",
   "r\\u030C", "R\\u030C",
@@ -1477,7 +1484,7 @@ const static char chTest[][20] = {
   "S",
   "s\\u030C", "S\\u030C",
   "z", "Z",
-  "z\\u030C", "Z\\u030C"*/
+  "z\\u030C", "Z\\u030C"
 };
 
 static void TestChMove(void) {
@@ -1679,6 +1686,26 @@ However, in testing we got the following order:
 .. (\u01d8) 
       < .. (\u01dc) < .. (\u01da) < .. (\u01d6) < .. (\u016b)
 */
+
+static void TestBefore() {
+  const static char *data[] = {
+      "\\u0101", "\\u00e1", "\\u01ce", "\\u00e0", "A", 
+      "\\u0113", "\\u00e9", "\\u011b", "\\u00e8", "E", 
+      "\\u012b", "\\u00ed", "\\u01d0", "\\u00ec", "I", 
+      "\\u014d", "\\u00f3", "\\u01d2", "\\u00f2", "O", 
+      "\\u016b", "\\u00fa", "\\u01d4", "\\u00f9", "U", 
+      "\\u01d6", "\\u01d8", "\\u01da", "\\u01dc", "\\u00fc"
+  };
+  genericRulesStarter(
+    "&[before 1]a<\\u0101<\\u00e1<\\u01ce<\\u00e0"
+    "&[before 1]e<\\u0113<\\u00e9<\\u011b<\\u00e8"
+    "&[before 1]i<\\u012b<\\u00ed<\\u01d0<\\u00ec"
+    "&[before 1]o<\\u014d<\\u00f3<\\u01d2<\\u00f2"
+    "&[before 1]u<\\u016b<\\u00fa<\\u01d4<\\u00f9"
+    "&u<\\u01d6<\\u01d8<\\u01da<\\u01dc<\\u00fc",
+    data, sizeof(data)/sizeof(data[0]));
+}
+
 static void TestJ784() {
   const static char *data[] = {
       "A", "\\u0101", "\\u00e1", "\\u01ce", "\\u00e0",
@@ -1721,6 +1748,7 @@ static void TestJ815() {
       "B"
   };
   genericLocaleStarter("fr", data, sizeof(data)/sizeof(data[0]));
+  genericRulesStarter("[backwards 2]&A<<\\u00e6/e<<<\\u00c6/E", data, sizeof(data)/sizeof(data[0]));
 }
 
 
@@ -1741,6 +1769,7 @@ void addMiscCollTest(TestNode** root)
     addTest(root, &TestJ784, "tscoll/cmsccoll/TestJ784");
     addTest(root, &TestJ815, "tscoll/cmsccoll/TestJ815");
     addTest(root, &TestJ831, "tscoll/cmsccoll/TestJ831");
+    addTest(root, &TestBefore, "tscoll/cmsccoll/TestBefore");
     /*addTest(root, &TestUCAZero, "tscoll/cmsccoll/TestUCAZero");*/
     /*addTest(root, &TestUnmappedSpaces, "tscoll/cmsccoll/TestUnmappedSpaces");*/   
     /*addTest(root, &PrintMarkDavis, "tscoll/cmsccoll/PrintMarkDavis");*/

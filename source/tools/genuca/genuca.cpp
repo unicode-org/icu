@@ -149,10 +149,6 @@ uint32_t stringContSize[0xFFFF];
 uint32_t sContPos = 0;
 uint32_t contSize = 0;
 
-#define UCOL_INV_SIZEMASK 0xFFF00000
-#define UCOL_INV_OFFSETMASK 0x000FFFFF
-#define UCOL_INV_SHIFTVALUE 20
-
 void addNewInverse(UCAElements *element, UErrorCode *status) {
   if(U_FAILURE(*status)) {
     return;
