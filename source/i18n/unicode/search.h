@@ -368,6 +368,7 @@ protected:
 
     /**
     * C search data struct
+	* @draft ICU 2.0.
     */
     USearch *m_search_;
 
@@ -377,11 +378,13 @@ protected:
     * another in C. Hence we keep the original around and do the verification
     * at the end of the match. The user is responsible for deleting this
     * break iterator.
+	* @draft ICU 2.0.
     */
     BreakIterator *m_breakiterator_;
     
     /**
     * Unicode string version of the search text
+	* @draft ICU 2.0.
     */
     UnicodeString  m_text_;
 
@@ -390,6 +393,7 @@ protected:
     /**
     * Default constructor.
     * Initializes data to the default values.
+	* @draft ICU 2.0
     */
     SearchIterator();
 
@@ -403,7 +407,8 @@ protected:
      *                boundary as determined by the <tt>BreakIterator</tt>, 
      *                the match is rejected and <tt>handleNext</tt> or 
      *                <tt>handlePrev</tt> is called again. If this parameter 
-     *                is <tt>NULL</tt>, no break detection is attempted.                .
+     *                is <tt>NULL</tt>, no break detection is attempted.  
+	 * @draft ICU 2.0.
      */
     SearchIterator(const UnicodeString &text, 
                          BreakIterator *breakiter = NULL);
@@ -423,6 +428,7 @@ protected:
      *                the match is rejected and <tt>handleNext</tt> or 
      *                <tt>handlePrev</tt> is called again. If this parameter 
      *                is <tt>NULL</tt>, no break detection is attempted.
+	 * @draft ICU 2.0.
      */
     SearchIterator(CharacterIterator &text, BreakIterator *breakiter = NULL);
 
@@ -432,6 +438,7 @@ protected:
      * Assignment operator. Sets this iterator to have the same behavior,
      * and iterate over the same text, as the one passed in.
      * @param that instance to be copied.
+	 * @draft ICU 2.0.
      */
     SearchIterator & operator=(const SearchIterator &that);
 
@@ -451,6 +458,7 @@ protected:
      * @param status for error codes if it occurs.
      * @return index at which the match starts, else if match is not found 
      *         USEARCH_DONE is returned
+	 * @draft ICU 2.0.
      */
     virtual int32_t handleNext(int32_t position, UErrorCode &status) 
                                                                          = 0;
@@ -471,6 +479,7 @@ protected:
      * @param status for error codes if it occurs.
      * @return index at which the match starts, else if match is not found 
      *         USEARCH_DONE is returned
+	 * @draft ICU 2.0.
      */
      virtual int32_t handlePrev(int32_t position, UErrorCode &status) 
                                                                          = 0;
@@ -481,6 +490,7 @@ protected:
      * Subclasses' <tt>handleNext</tt> and <tt>handlePrev</tt>
      * methods should call this when they find a match in the target text.
      * @param length length of the matched text.
+	 * @draft ICU 2.0.
      */
     virtual void setMatchLength(int32_t length);
 
@@ -490,11 +500,13 @@ protected:
      * Subclasses' <tt>handleNext</tt> and <tt>handlePrev</tt>
      * methods should call this when they find a match in the target text.
      * @param position start offset of the matched text.
+	 * @draft ICU 2.0.
      */
     virtual void setMatchStart(int32_t position);
 
     /**
     * sets match not found 
+	* @draft ICU 2.0.
     */
     void setMatchNotFound();
 };

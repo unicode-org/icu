@@ -117,6 +117,7 @@ public:
 
   /**
   * NULLORDER indicates that an error has occured while processing
+  * @stable
   */
   static int32_t const NULLORDER;
 
@@ -280,7 +281,9 @@ public:
 protected:
   
   // CollationElementIterator protected constructors --------------------------
-
+  /**
+  * @stable
+  */
   friend class RuleBasedCollator;
 
   /**
@@ -291,6 +294,7 @@ protected:
   * @param sourceText    the source string.
   * @param order         the collation object.
   * @param status        the error code status.
+  * @stable
   */
   CollationElementIterator(const UnicodeString& sourceText,
                            const RuleBasedCollator* order, UErrorCode& status);
@@ -303,6 +307,7 @@ protected:
   * @param sourceText    the source string.
   * @param order         the collation object.
   * @param status        the error code status.
+  * @stable
   */
   CollationElementIterator(const CharacterIterator& sourceText,
                            const RuleBasedCollator* order, UErrorCode& status);
@@ -313,6 +318,7 @@ protected:
   * Assignment operator
   *
   * @param other    the object to be copied
+  * @stable
   */
   const CollationElementIterator&
                               operator=(const CollationElementIterator& other);

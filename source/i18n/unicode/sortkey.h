@@ -232,16 +232,49 @@ private:
     /*
     * Creates a collation key with a string.
     */
+
+	/**
+	* If this CollationKey has capacity less than newSize,
+	* its internal capacity will be increased to newSize.
+	* @param newSize minimum size this CollationKey has to have
+	* @return this CollationKey
+	*/
     CollationKey&           ensureCapacity(int32_t newSize);
+	/**
+	* Set the CollationKey to a "bogus" or invalid state
+	* @return this CollationKey
+	*/
     CollationKey&           setToBogus(void);
+	/**
+	* Resets this CollationKey to an empty state
+	* @return this CollationKey
+	*/
     CollationKey&           reset(void);
-
+	
+	/**
+	* Allow private access to RuleBasedCollator
+	*/
     friend  class           RuleBasedCollator;
-
+	/**
+	* Bogus status
+	*/
     UBool                   fBogus;
+	/**
+	* Size of fBytes used to store the sortkey. i.e. up till the 
+	* null-termination.
+	*/
     int32_t                 fCount;
+	/**
+	* Full size of the fBytes
+	*/
     int32_t                 fCapacity;
+	/**
+	* Unique hash value of this CollationKey
+	*/
     int32_t                 fHashCode;
+	/**
+	* Array to store the sortkey
+	*/
     uint8_t*                fBytes;
 
     /**
