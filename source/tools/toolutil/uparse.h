@@ -117,6 +117,14 @@ u_parseCodePointRange(const char *s,
                       uint32_t *pStart, uint32_t *pEnd,
                       UErrorCode *pErrorCode);
 
+
+U_CAPI const UChar * U_EXPORT2
+u_strSkipWhiteSpace(const UChar *s, int32_t length);
+
+
+U_CAPI const UChar * U_EXPORT2
+u_strTrailingWhiteSpaceStart(const UChar *s, int32_t length);
+
 U_CDECL_END
 
 #endif

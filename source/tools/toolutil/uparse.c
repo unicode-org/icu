@@ -22,6 +22,8 @@
 #include "cstring.h"
 #include "filestrm.h"
 #include "uparse.h"
+#include "unicode/uchar.h"
+#include "unicode/ustring.h"
 
 U_CAPI const char * U_EXPORT2
 u_skipWhitespace(const char *s) {
@@ -306,4 +308,70 @@ u_parseCodePointRange(const char *s,
         *pErrorCode=U_PARSE_ERROR;
         return 0;
     }
+}
+
+
+U_CAPI const UChar * U_EXPORT2
+u_strSkipWhiteSpace(const UChar *s, int32_t length) {
+  int32_t i = 0, toReturn;
+  UChar32 c = 0;
+  if(s == NULL) {
+    return NULL;
+  }
+  if(length == 0) {
+    return s;
+  }
+  if(length > 0) {
+    for(;;) {
+      if(i >= length) {
+        break;
+      }
+      toReturn = i;
+      U16_NEXT(s, i, length, c);
+      if(!(c == 0x20 || u_isUWhiteSpace(c))) {
+        break;
+      }
+    }
+  } else {
+    for(;;) {
+      toReturn = i;
+      U16_NEXT(s, i, length, c);
+      if(!(c == 0x20 || u_isUWhiteSpace(c)) || c == 0) {
+        break;
+      }
+    }
+  }
+  return s+toReturn;
+}
+
+
+U_CAPI const UChar * U_EXPORT2
+u_strTrailingWhiteSpaceStart(const UChar *s, int32_t length) {
+  int32_t i = 0, toReturn = 0;
+  UChar32 c = 0;
+
+  if(s == NULL) {
+    return NULL;
+  }
+  if(length == 0) {
+    return s;
+  }
+
+  if(length < 0) {
+    length = u_strlen(s);
+  }
+
+  i = length;
+  for(;;) {
+    toReturn = i;
+    if(i <= 0) {
+      break;
+    }
+    U16_PREV(s, 0, i, c);
+    if(!(c == 0x20 || u_isUWhiteSpace(c))) {
+      break;
+    }
+  }
+
+  return s+toReturn;
 }
