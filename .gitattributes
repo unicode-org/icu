@@ -1,0 +1,79 @@
+* text=auto !eol
+
+*.c text !eol
+*.cc text !eol
+*.classpath text !eol
+*.cpp text !eol
+*.css text !eol
+*.dsp text !eol
+*.dsw text !eol
+*.filters text !eol
+*.h text !eol
+*.htm text !eol
+*.html text !eol
+*.in text !eol
+*.java text !eol
+*.launch text !eol
+*.mak text !eol
+*.md text !eol
+*.MF text !eol
+*.mk text !eol
+*.pl text !eol
+*.pm text !eol
+*.project text !eol
+*.properties text !eol
+*.py text !eol
+*.rc text !eol
+*.sh text eol=lf
+*.sln text !eol
+*.stub text !eol
+*.txt text !eol
+*.ucm text !eol
+*.vcproj text !eol
+*.vcxproj text !eol
+*.xml text !eol
+*.xsl text !eol
+*.xslt text !eol
+Makefile text !eol
+configure text !eol
+LICENSE text !eol
+README text !eol
+
+*.bin -text
+*.brk -text
+*.cnv -text
+*.icu -text
+*.res -text
+*.nrm -text
+*.spp -text
+*.tri2 -text
+
+data/charBE.brk -text
+data/charLE.brk -text
+data/lineBE.brk -text
+data/lineLE.brk -text
+data/line_thBE.brk -text
+data/line_thLE.brk -text
+data/sentBE.brk -text
+data/sentLE.brk -text
+data/thaidict.brk -text
+data/unidata/Draft-TestSuite.txt -text
+data/wordBE.brk -text
+data/wordLE.brk -text
+data/word_thBE.brk -text
+data/word_thLE.brk -text
+source/samples/translit/U0080.pdf -text
+source/samples/ucnv/data01.ut8 -text
+source/samples/ucnv/data02.bin -text
+source/test/testdata/en_US.uni -text
+source/test/testdata/importtest.bin -text
+source/test/testdata/uni-text.txt -text
+
+# The following file types are stored in Git-LFS.
+*.jar filter=lfs diff=lfs merge=lfs -text
+*.dat filter=lfs diff=lfs merge=lfs -text
+*.zip filter=lfs diff=lfs merge=lfs -text
+*.gz filter=lfs diff=lfs merge=lfs -text
+*.bz2 filter=lfs diff=lfs merge=lfs -text
+*.gif filter=lfs diff=lfs merge=lfs -text
+

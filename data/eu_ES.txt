@@ -1,0 +1,36 @@
+﻿
+// *******************************************************************************
+// *
+// *   Copyright (C) 1997-2000, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// *******************************************************************************
+
+eu_ES {
+   // /* Discarding duplicate data for tag: AmPmMarkers */
+   Version { "x0.0" }
+
+    CurrencyElements { 
+            "Pts",
+            "ESP ",
+            ",",
+    }
+    DateTimePatterns { 
+            "HH:mm:ss",
+            "HH:mm:ss",
+            "HH:mm:ss",
+            "HH:mm:ss",
+            "yy'-'MM'-'dd  z",
+            "yy'-'MM'-'dd  z",
+            "EEE, YYYY'eko' MMMren ss'a'",
+            "EEE, YYYY'eko' MMMren ss'a'",
+            "{1} {0}",
+    }
+
+    NumberPatterns { 
+            "#,#0.##;-#,#0.##",
+            "¤ #,##0.#;-¤ #,##0.#",
+            "#,#0%",
+    }
+    LocaleID{ "042D"}
+}

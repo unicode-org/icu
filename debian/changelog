@@ -1,0 +1,33 @@
+icu (1.7-1) unstable; urgency=low
+
+  * Update to ICU version 1.7.
+
+ -- Yves Arrouye <yves@debian.org>  Tue, 21 Nov 2000 22:54:52 -0800
+
+icu (1.6.0.1-20001113-2) unstable; urgency=low
+
+  * New snapshot with better ISO-2022.
+
+ -- Yves Arrouye <yves@debian.org>  Mon, 13 Nov 2000 21:05:00 -0800
+
+icu (1.6.0.1-20001027-1) unstable; urgency=low
+
+  * Move architecture-dependent files into /usr/lib, instead of
+    /usr/share.
+  * Move convrtrs.txt into /etc/icu, make it a conffile, and generate
+    /usr/lib/icu/1.6.0.1/cnvalias.dat from it at postinst time.
+  * Manage a /usr/lib/icu/current symbolic link across installations
+    of the libicuXX packages. The symlink will always point to the
+    highest numbered version of ICU.
+
+ -- Yves Arrouye <yves@debian.org>  Fri, 27 Oct 2000 15:40:12 -0700
+
+icu (1.6.0.1-20001017-1) unstable; urgency=low
+
+  * Initial Release.
+
+ -- Yves Arrouye <yves@debian.org>  Tue, 24 Oct 2000 16:14:12 -0700
+
+Local variables:
+mode: debian-changelog
+End:
