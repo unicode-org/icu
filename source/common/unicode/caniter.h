@@ -76,7 +76,7 @@ public:
      *  Cleans pieces
      * @stable ICU 2.4
      */
-    ~CanonicalIterator();
+    virtual ~CanonicalIterator();
 
     /**
      * Gets the NFD form of the current source we are iterating over.
