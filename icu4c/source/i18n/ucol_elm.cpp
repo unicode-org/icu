@@ -556,8 +556,6 @@ static void uprv_uca_unsafeCPAddCCNZ(tempUCATable *t) {
     }
 }
 
-#include <stdio.h>
-
 uint32_t uprv_uca_addPrefix(tempUCATable *t, uint32_t CE, 
                                  UCAElements *element, UErrorCode *status) {
   // currently the longest prefix we're supporting in Japanese is two characters
@@ -575,6 +573,7 @@ uint32_t uprv_uca_addPrefix(tempUCATable *t, uint32_t CE,
 
     // here, we will normalize & add prefix to the table.
     uint32_t j = 0;
+#ifdef UCOL_DEBUG
     for(j=0; j<element->cSize; j++) {
       fprintf(stdout, "CP: %04X ", element->cPoints[j]);
     }
@@ -583,6 +582,7 @@ uint32_t uprv_uca_addPrefix(tempUCATable *t, uint32_t CE,
       fprintf(stdout, "%04X ", element->prefix[j]);
     }
     fprintf(stdout, "%08X ", element->mapCE);
+#endif
 
     for (j = 1; j<element->prefixSize; j++) {   /* First add NFD prefix chars to unsafe CP hash table */
       // Unless it is a trail surrogate, which is handled algoritmically and 
@@ -616,11 +616,14 @@ uint32_t uprv_uca_addPrefix(tempUCATable *t, uint32_t CE,
       element->prefix[j] = tempPrefix;
     }
 
+#ifdef UCOL_DEBUG
     fprintf(stdout, "Reversed: ");
     for(j=0; j<element->prefixSize; j++) {
       fprintf(stdout, "%04X ", element->prefix[j]);
     }
     fprintf(stdout, "%08X\n", element->mapCE);
+#endif
+
     // the first codepoint is also unsafe, as it forms a 'contraction' with the prefix
     if(!(UTF_IS_TRAIL(element->cPoints[0]))) {
       unsafeCPSet(t->unsafeCP, element->cPoints[0]);
