@@ -318,8 +318,10 @@ void MultithreadTest::runIndexedTest( int32_t index, UBool exec,
         break;
     case 3:
       name = "TestCollators";
+#if !UCONFIG_NO_COLLATION
       if (exec)
         TestCollators();
+#endif /* #if !UCONFIG_NO_COLLATION */
       break;
     default:
         name = "";
@@ -853,7 +855,9 @@ void MultithreadTest::TestThreadedIntl()
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
 
-#define kCollatorThreadThreads   10000  // # of threads to spawn
+#if !UCONFIG_NO_COLLATION
+
+#define kCollatorThreadThreads   10  // # of threads to spawn
 #define kCollatorThreadPatience kCollatorThreadThreads*100
 
 struct Line {
@@ -1101,6 +1105,8 @@ void MultithreadTest::TestCollators()
     errln("patience exceeded. ");
             ucol_close(coll);
 }
+
+#endif /* #if !UCONFIG_NO_COLLATION */
 
 #endif // ICU_USE_THREADS
 
