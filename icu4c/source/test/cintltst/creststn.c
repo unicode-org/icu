@@ -278,6 +278,12 @@ static void TestDecodedBundle(){
     len = u_unescape(src,uSrc, len);  
     resB = ures_open(testdatapath, "iscii", &error);
     srcFromRes=ures_getStringByKey(resB,"str",&len,&error);
+    if(U_FAILURE(error)){
+	log_err("Could not find iscii.bin from test data bundle. Error: %s\n", u_errorName(error));
+	uprv_free(uSrc);
+	ures_close(resB);
+	return;
+    }
     if(u_strncmp(srcFromRes,uSrc,len)!=0){
         log_err("Genrb produced res files after decoding failed\n");
     }
