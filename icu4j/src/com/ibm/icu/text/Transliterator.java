@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/Transliterator.java,v $
- * $Date: 2004/02/20 00:17:28 $
- * $Revision: 1.94 $
+ * $Date: 2004/02/25 01:28:42 $
+ * $Revision: 1.95 $
  *
  *****************************************************************************************
  */
@@ -482,21 +482,21 @@ public abstract class Transliterator {
 
     /**
      * Delimiter between elements in a compound ID.
-     * @deprecated ICU 2.4 To be made package private after 2003-12-01.
+     * @internal
      */
-    protected static final char ID_DELIM = ';';
+    static final char ID_DELIM = ';';
 
     /**
      * Delimiter before target in an ID.
-     * @deprecated ICU 2.4 To be made package private after 2003-12-01.
+     * @internal
      */
-    protected static final char ID_SEP = '-';
+    static final char ID_SEP = '-';
 
     /**
      * Delimiter before variant in an ID.
-     * @deprecated ICU 2.4 To be made package private after 2003-12-01.
+     * @internal
      */
-    protected static final char VARIANT_SEP = '/';
+    static final char VARIANT_SEP = '/';
 
     /**
      * To enable debugging output in the Transliterator component, set
@@ -1473,6 +1473,34 @@ public abstract class Transliterator {
             return rulesSource.toString();
         }
         return "::" + getID() + ID_DELIM;
+    }
+
+    /**
+     * Return the elements that make up this transliterator.  For
+     * example, if the transliterator "NFD;Jamo-Latin;Latin-Greek"
+     * were created, the return value of this method would be an array
+     * of the three transliterator objects that make up that
+     * transliterator: [NFD, Jamo-Latin, Latin-Greek].
+     *
+     * <p>If this transliterator is not composed of other
+     * transliterators, then this method will return an array of
+     * length one containing a reference to this transliterator.
+     * @return an array of one or more transliterators that make up
+     * this transliterator
+     * @draft ICU 3.0
+     */
+    public Transliterator[] getElements() {
+        Transliterator result[];
+        if (this instanceof CompoundTransliterator) {
+            CompoundTransliterator cpd = (CompoundTransliterator) this;
+            result = new Transliterator[cpd.getCount()];
+            for (int i=0; i<result.length; ++i) {
+                result[i] = cpd.getTransliterator(i);
+            }
+        } else {
+            result = new Transliterator[] { this };
+        }
+        return result;
     }
 
     /**
