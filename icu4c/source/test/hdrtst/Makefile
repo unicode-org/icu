@@ -23,12 +23,18 @@
 
 include ../../config/Makefile
 
+CPPFLAGS=-I.
 
 all: 
 	@echo Please read this Makefile for more information.
 	@echo run \'$(MAKE) check\' to run the test 
 
-check: genfiles
+check: hdrdir genfiles
+
+hdrdir:
+	-$(RMV) ./unicode
+	mkdir ./unicode
+	( cd ./unicode ; ln -s ../../../common/unicode/*.h ../../../i18n/unicode/*.h . )
 
 genfiles:
 	@rm -f Makefile.sub
@@ -39,11 +45,12 @@ genfiles:
 	  echo -n "  unicode/$$incfile.h 	- " ; \
 	  echo '#include "'unicode/$$incfile'.h"' > ht_$$incfile.cpp ; \
 	  echo 'junk(){}' >> ht_$$incfile.cpp ; \
-          $(COMPILE.cc) -c -I../../common -I../../i18n ht_$$incfile.cpp ; \
+          $(COMPILE.cc) -c -I. ht_$$incfile.cpp ; \
 	  RES=$$? ; \
 	  echo $$RES ; \
 	done
 	make clean
 
 distclean clean:
-	-rm -f *.h *.cpp *.o 
+	-rm -f *.h *.cpp *.o
+	-$(RMV) ./unicode
