@@ -52,8 +52,7 @@
  * <P>
  * Helper function to output text
  * <pre>
- * .   void printTextRange(UChar* str, UTextOffset start, UTextOffset end )
- * .   {
+ * .   void printTextRange(UChar* str, UTextOffset start, UTextOffset end ) {
  * .        UChar* result;
  * .        UChar* temp;
  * .        const char* res;
@@ -68,32 +67,27 @@
  * </pre>
  * Print each element in order:
  * <pre>
- * .   void printEachForward( UBreakIterator* boundary, UChar* str)
- * .   {
+ * .   void printEachForward( UBreakIterator* boundary, UChar* str) {
  * .      UTextOffset end;
  * .      UTextOffset start = ubrk_first(boundary);
- * .      for (end = ubrk_next(boundary)); end != UBRK_DONE; start = end, end = ubrk_next(boundary))
- * .        {
+ * .      for (end = ubrk_next(boundary)); end != UBRK_DONE; start = end, end = ubrk_next(boundary)) {
  * .            printTextRange(str, start, end );
  * .        }
  * .   }
  * </pre>
  * Print each element in reverse order:
  * <pre>
- * .   void printEachBackward( UBreakIterator* boundary, UChar* str)
- * .   {
+ * .   void printEachBackward( UBreakIterator* boundary, UChar* str) {
  * .      UTextOffset start;
  * .      UTextOffset end = ubrk_last(boundary);
- * .      for (start = ubrk_previous(boundary); start != UBRK_DONE;  end = start, start =ubrk_previous(boundary))
- * .        {
+ * .      for (start = ubrk_previous(boundary); start != UBRK_DONE;  end = start, start =ubrk_previous(boundary)) {
  * .            printTextRange( str, start, end );
  * .        }
  * .   }
  * </pre>
  * Print first element
  * <pre>
- * .   void printFirst(UBreakIterator* boundary, UChar* str)
- * .   {
+ * .   void printFirst(UBreakIterator* boundary, UChar* str) {
  * .       UTextOffset end;
  * .       UTextOffset start = ubrk_first(boundary);
  * .       end = ubrk_next(boundary);
@@ -102,8 +96,7 @@
  * </pre>
  * Print last element
  * <pre>
- * .   void printLast(UBreakIterator* boundary, UChar* str)
- * .   {
+ * .   void printLast(UBreakIterator* boundary, UChar* str) {
  * .       UTextOffset start;
  * .       UTextOffset end = ubrk_last(boundary);
  * .       start = ubrk_previous(boundary);
@@ -112,8 +105,7 @@
  * </pre>
  * Print the element at a specified position
  * <pre>
- * .   void printAt(UBreakIterator* boundary, UTextOffset pos , UChar* str)
- * .   {
+ * .   void printAt(UBreakIterator* boundary, UTextOffset pos , UChar* str) {
  * .       UTextOffset start;
  * .       UTextOffset end = ubrk_following(boundary, pos);
  * .       start = ubrk_previous(boundary);
@@ -122,8 +114,7 @@
  * </pre>
  * Creating and using text boundaries
  * <pre>
- * .      void BreakIterator_Example( void )
- * .      {
+ * .      void BreakIterator_Example( void ) {
  * .          UBreakIterator* boundary;
  * .          UChar *stringToExamine;
  * .          stringToExamine=(UChar*)malloc(sizeof(UChar) * (strlen("Aaa bbb ccc. Ddd eee fff.")+1) );
