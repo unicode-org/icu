@@ -37,6 +37,10 @@ static void TestRounding487(void);
 /* Test localized currency patterns. */
 static void TestCurrency(void);
 
+/* Test getDoubleAttribute and getDoubleAttribute */
+static void TestDoubleAttribute(void);
+
+
 /*Internal functions used*/
 static void roundingTest(UNumberFormat*, double,  int32_t, const char*);
 

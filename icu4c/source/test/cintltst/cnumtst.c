@@ -63,7 +63,7 @@ void TestNumberFormat()
     UErrorCode status=U_ZERO_ERROR;
     UNumberFormatStyle style= UNUM_DEFAULT;
     UNumberFormat *pattern;
-    UNumberFormat *def, *fr, *cur_def, *cur_fr, *per_def, *per_fr, *cur_frpattern;
+    UNumberFormat *def, *fr, *cur_def, *cur_fr, *per_def, *per_fr, *cur_frpattern, *myclone;
     /* Testing unum_open() with various Numberformat styles and locales*/
     status = U_ZERO_ERROR;
     log_verbose("Testing  unum_open() with default style and locale\n");
@@ -108,20 +108,35 @@ void TestNumberFormat()
     if(U_FAILURE(status))
         log_err("Error: could not create NumberFormat using unum_open(spellout, NULL, &status): %s\n", myErrorName(status));
     */
-    
+    /* Testing unum_clone(..) */
+    log_verbose("\nTesting unum_clone(fmt, status)");
+    status = U_ZERO_ERROR;
+    myclone = unum_clone(def,&status);
+    if(U_FAILURE(status))
+        log_err("Error: could not clone unum_clone(def, &status): %s\n", myErrorName(status));
+    else
+	{
+        log_verbose("unum_clone() successful\n");
+	}
     
     /*Testing unum_getAvailable() and unum_countAvailable()*/ 
     log_verbose("\nTesting getAvailableLocales and countAvailable()\n");
     numlocales=unum_countAvailable();
-    /* use something sensible w/o hardcoding the count */
     if(numlocales < 0)
         log_err("error in countAvailable");
     else{
         log_verbose("unum_countAvialable() successful\n");
         log_verbose("The no: of locales where number formattting is applicable is %d\n", numlocales);
     }
-    /*for(i=0;i<numlocales;i++)
-        log_verbose("%s\n", uloc_getName(unum_getAvailable(i))); */
+    for(i=0;i<numlocales;i++)
+	{
+        log_verbose("%s\n", unum_getAvailable(i)); 
+		if (unum_getAvailable(i) == 0)
+			log_err("No locale for which number formatting patterns are applicable\n");
+		else 
+			log_verbose("A locale %s for which number formatting patterns are applicable\n",unum_getAvailable(i));
+	}
+    
 
     
     /*Testing unum_format() and unum_formatdouble()*/
@@ -353,6 +368,7 @@ free(result);
         log_err("Formatting failed after setting symbols - got different result\n");
     }
 
+    
     /*----------- */
     
 free(result);
@@ -368,7 +384,6 @@ free(temp1);
             return;
         }
     }
-
     for(i = 0; i < UNUM_FORMAT_SYMBOL_COUNT; ++i) {
         resultlength = unum_getSymbol(cur_frpattern, i, symbol, sizeof(symbol)/U_SIZEOF_UCHAR, &status);
         if(U_FAILURE(status)) {
@@ -379,7 +394,17 @@ free(temp1);
             log_err("Failure in unum_getSymbol(%d): got unexpected symbol\n", i);
         }
     }
-
+    /*try getting from a bogus symbol*/
+    unum_getSymbol(cur_frpattern, i, symbol, sizeof(symbol)/U_SIZEOF_UCHAR, &status);
+    if(U_SUCCESS(status)){
+        log_err("Error : Expected U_ILLEGAL_ARGUMENT_ERROR for bogus symbol");
+    }
+    if(U_FAILURE(status)){
+        if(status != U_ILLEGAL_ARGUMENT_ERROR){
+            log_err("Error: Expected U_ILLEGAL_ARGUMENT_ERROR for bogus symbol, Got %s\n", myErrorName(status)); 
+        }
+    }
+    status=U_ZERO_ERROR;
 
     /* Testing unum_getTextAttribute() and unum_setTextAttribute()*/
     log_verbose("\nTesting getting and setting text attributes\n");
@@ -457,6 +482,23 @@ free(temp1);
         log_err("ERROR: get and setTextAttributes with negative suffix failed\n");
     else
         log_verbose("Pass: get and settextAttributes with negative suffix works fine\n");
+
+    u_uastrcpy(suffix, "++");
+    unum_setTextAttribute(def, UNUM_POSITIVE_SUFFIX, suffix, u_strlen(suffix) , &status);
+    if(U_FAILURE(status))
+    {
+        log_err("error in setting the text attributes: %s\n", myErrorName(status));
+    }
+    
+    unum_getTextAttribute(def, UNUM_POSITIVE_SUFFIX, temp, resultlength, &status);
+    if(U_FAILURE(status))
+    {
+        log_err("error in getting the text attributes : %s\n", myErrorName(status));
+    }
+    if(u_strcmp(suffix, temp)!=0) 
+        log_err("ERROR: get and setTextAttributes with negative suffix failed\n");
+    else
+        log_verbose("Pass: get and settextAttributes with negative suffix works fine\n");
     
     
     
@@ -483,7 +525,7 @@ free(temp1);
     
     /*testing set and get Attributes extensively */
     log_verbose("\nTesting get and set attributes extensively\n");
-    for(attr=UNUM_PARSE_INT_ONLY; attr<= UNUM_GROUPING_SIZE; attr=(UNumberFormatAttribute)((int32_t)attr + 1) ){
+    for(attr=UNUM_PARSE_INT_ONLY; attr<= UNUM_PADDING_POSITION; attr=(UNumberFormatAttribute)((int32_t)attr + 1) ){
     newvalue=unum_getAttribute(fr, attr);
     unum_setAttribute(def, attr, newvalue);
     if(unum_getAttribute(def,attr)!=unum_getAttribute(fr, attr))

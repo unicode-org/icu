@@ -30,7 +30,7 @@ void UnicodeTest::runIndexedTest( int32_t index, UBool exec, char* &name, char* 
         case 4: name = "TestCodeUnit"; if(exec) TestCodeUnit(); break;
         case 5: name = "TestCodePoint"; if(exec) TestCodePoint(); break;
         case 6: name = "TestCharLength"; if(exec) TestCharLength(); break;
-
+        case 7: name = "TestIdentifier"; if(exec) TestIdentifier(); break;  
         default: name = ""; break; //needed to end loop
     }
 }
@@ -167,6 +167,8 @@ void UnicodeTest::TestMisc()
 {
     const UChar sampleSpaces[] = {0x0020, 0x00a0, 0x2000, 0x2001, 0x2005};
     const UChar sampleNonSpaces[] = {0x61, 0x62, 0x63, 0x64, 0x74};
+    const UChar sampleWhiteSpaces[] = {0x2008, 0x2009, 0x200a, 0x001c, 0x000c};
+    const UChar sampleNonWhiteSpaces[] = {0x61, 0x62, 0x3c, 0x28, 0x3f};
     const UChar sampleUndefined[] = {0xfff1, 0xfff7, 0xfa30};
     const UChar sampleDefined[] = {0x523E, 0x4f88, 0xfffd};
     const UChar sampleBase[] = {0x0061, 0x0031, 0x03d2};
@@ -186,6 +188,15 @@ void UnicodeTest::TestMisc()
                 (Unicode::isSpaceChar(sampleNonSpaces[i])))
             errln((UnicodeString)"Space char test error : " + (int32_t)sampleSpaces[i] +
             " or " + (int32_t)sampleNonSpaces[i]);
+    }
+    for (i = 0; i < 5; i++) {
+//      log_ln("Testing for isWhitespace and nonWhitespaces\n");
+        if (!(Unicode::isWhitespace(sampleWhiteSpaces[i])) ||
+                (Unicode::isWhitespace(sampleNonWhiteSpaces[i])))
+        {
+            errln((UnicodeString)"White Space char test error : " + (int32_t)sampleWhiteSpaces[i] +
+                "or" + (int32_t)sampleNonWhiteSpaces[i]);
+        }
     }
     for (i = 0; i < 3; i++) {
 //      logln((UnicodeString)"testing " + (int32_t)i + "...");
@@ -250,9 +261,9 @@ void UnicodeTest::TestIdentifier()
     const UChar sampleUnicodeIDStart[] = {0x0250, 0x00e2, 0x0061};
     const UChar sampleNonUnicodeIDStart[] = {0x2000, 0x000a, 0x2019};
     const UChar sampleJavaIDPart[] = {0x005f, 0x0032, 0x0045};
-    const UChar sampleNonJavaIDPart[] = {0x007f, 0x2020, 0x0020};
+    const UChar sampleNonJavaIDPart[] = {0x2030, 0x2020, 0x0020};
     const UChar sampleUnicodeIDPart[] = {0x005f, 0x0032, 0x0045};
-    const UChar sampleNonUnicodeIDPart[] = {0x007f, 0x00a3, 0x0020};
+    const UChar sampleNonUnicodeIDPart[] = {0x2030, 0x00a3, 0x0020};
     const UChar sampleIDIgnore[] = {0x0006, 0x0010, 0x206b};
     const UChar sampleNonIDIgnore[] = {0x0075, 0x00a3, 0x0061};
 
