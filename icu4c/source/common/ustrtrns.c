@@ -217,7 +217,7 @@ U_CAPI UChar* U_EXPORT2
 u_strFromUTF8(UChar *dest,             
               int32_t destCapacity,
               int32_t *pDestLength,
-              const uint8_t *pSrc, 
+              const char* src, 
               int32_t srcLength,
               UErrorCode *pErrorCode){
 
@@ -226,7 +226,8 @@ u_strFromUTF8(UChar *dest,
     UChar32 ch=0;
     int32_t index = 0;
     int32_t reqLength = 0;
-
+    uint8_t* pSrc = (uint8_t*) src;
+    
     /* args check */
     if(pErrorCode && U_FAILURE(*pErrorCode)){
         return NULL;
@@ -289,7 +290,7 @@ u_strFromUTF8(UChar *dest,
     return dest;
 }
     
-U_CAPI uint8_t* U_EXPORT2 
+U_CAPI char* U_EXPORT2 
 u_strToUTF8(uint8_t *dest,           
             int32_t destCapacity,
             int32_t *pDestLength,
@@ -369,7 +370,7 @@ u_strToUTF8(uint8_t *dest,
     /* Terminate the buffer */
     u_terminateChars((char*)dest,destCapacity,reqLength,pErrorCode);
 
-    return dest;
+    return (char*)dest;
 }
 
 /* helper function */
