@@ -25,6 +25,9 @@
 
 #include "timezone.h"
 
+struct StandardZone;
+struct DSTZone;
+
 /**
  * <code>SimpleTimeZone</code> is a concrete subclass of <code>TimeZone</code>
  * that represents a time zone for use with a Gregorian calendar. This
@@ -474,6 +477,14 @@ private:
         DOW_GE_DOM_MODE,
         DOW_LE_DOM_MODE
     };
+
+    friend class TimeZone; // for access to these 2 constructors:
+
+    /**
+     * Construct from memory-mapped data.
+     */
+    SimpleTimeZone(const StandardZone& stdZone, const UnicodeString& id);
+    SimpleTimeZone(const DSTZone& dstZone, const UnicodeString& id);
 
     /**
      * Internal construction method.
