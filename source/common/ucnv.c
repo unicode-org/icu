@@ -753,15 +753,10 @@ int32_t   ucnv_fromUChars (const UConverter * converter,
 
   /*Updates targetCapacity to contain the number of bytes written to target */
 
-  if (targetSize == 0)
-    {
-      *err = U_INDEX_OUTOFBOUNDS_ERROR;
-    }
-
   /* If the output buffer is exhausted, we need to stop writing
    * to it but continue the conversion in order to store in targetSize
    * the number of bytes that was required*/
-  if (*err == U_INDEX_OUTOFBOUNDS_ERROR)
+  if (*err == U_BUFFER_OVERFLOW_ERROR || targetSize == 0)
     {
       char target2[CHUNK_SIZE];
       const char *target2_limit = target2 + CHUNK_SIZE;
@@ -769,20 +764,17 @@ int32_t   ucnv_fromUChars (const UConverter * converter,
       /*We use a stack allocated buffer around which we loop
        *(in case the output is greater than CHUNK_SIZE)
        */
-
-      while (*err == U_INDEX_OUTOFBOUNDS_ERROR)
+      do
         {
           *err = U_ZERO_ERROR;
           args.target = target2;
           args.targetLimit = target2_limit;
           args.converter->sharedData->impl->fromUnicode(&args, err); 
-
           /*updates the output parameter to contain the number of char required */
-          targetCapacity += (args.target - target2) + 1;
-        }
-      /*We will set the erro code to U_BUFFER_OVERFLOW_ERROR only if
+          targetCapacity += (args.target - target2);
+        } while (*err == U_BUFFER_OVERFLOW_ERROR);
+      /*We will set the error code to U_BUFFER_OVERFLOW_ERROR only if
        *nothing graver happened in the previous loop*/
-      (targetCapacity)--;
       if (U_SUCCESS (*err))
         *err = U_BUFFER_OVERFLOW_ERROR;
     }
@@ -863,34 +855,29 @@ int32_t ucnv_toUChars (const UConverter * converter,
   /*Updates targetCapacity to contain the number of bytes written to target */
   targetCapacity = 1;
   targetCapacity += args.target - target;
-  if (targetSize == 0)
-    {
-      *err = U_INDEX_OUTOFBOUNDS_ERROR;
-    }
+
   /* If the output buffer is exhausted, we need to stop writing
    * to it but if the input buffer is not exhausted,
    * we need to continue the conversion in order to store in targetSize
    * the number of bytes that was required
    */
-  if (*err == U_INDEX_OUTOFBOUNDS_ERROR)
+  if (*err == U_BUFFER_OVERFLOW_ERROR || targetSize == 0)
     {
       UChar target2[CHUNK_SIZE];
       const UChar *target2_limit = target2 + CHUNK_SIZE;
 
       /*We use a stack allocated buffer around which we loop
          (in case the output is greater than CHUNK_SIZE) */
-
-      while (*err == U_INDEX_OUTOFBOUNDS_ERROR)
+      do
         {
           *err = U_ZERO_ERROR;
           args.target = target2;
           args.targetLimit = target2_limit;
           args.converter->sharedData->impl->toUnicode(&args, err); 
-
           /*updates the output parameter to contain the number of char required */
-          targetCapacity += args.target - target2 + 1;
-        }
-      (targetCapacity)--;   /*adjust for last one */
+          targetCapacity += args.target - target2;
+        } while (*err == U_BUFFER_OVERFLOW_ERROR);
+
       if (U_SUCCESS (*err))
         *err = U_BUFFER_OVERFLOW_ERROR;
     }
@@ -996,11 +983,10 @@ T_UConverter_fromCodepageToCodepage (UConverter * outConverter,
                       flush,
                       err);
 
-      /*U_INDEX_OUTOFBOUNDS_ERROR means that the output "CHUNK" is full
+      /*U_BUFFER_OVERFLOW_ERROR means that the output "CHUNK" is full
        *we will require at least another loop (it's a recoverable error)
        */
-
-      if (U_SUCCESS (*err) || (*err == U_INDEX_OUTOFBOUNDS_ERROR))
+      if (U_SUCCESS (*err) || (*err == U_BUFFER_OVERFLOW_ERROR))
         {
           *err = U_ZERO_ERROR;
           out_chunk_alias2 = out_chunk;
@@ -1015,7 +1001,6 @@ T_UConverter_fromCodepageToCodepage (UConverter * outConverter,
                                 NULL,
                                 TRUE,
                                 err);
-
             }
         }
       else
@@ -1080,20 +1065,14 @@ int32_t  ucnv_convert(const char *toConverterName,
                                            NULL,
                                            TRUE,
                                            err);
+      /*Updates targetCapacity to contain the number of bytes written to target */
+      targetCapacity = myTarget - target;
     }
 
-
-  /*Updates targetCapacity to contain the number of bytes written to target */
-  targetCapacity = myTarget - target;
-  if (targetSize == 0)
-    {
-      *err = U_INDEX_OUTOFBOUNDS_ERROR;
-    }
-
-  /* If the output buffer is exhausted, we need to stop writing
+  /* If the output buffer is exhausted (or we are "pre-flighting"), we need to stop writing
    * to it but continue the conversion in order to store in targetSize
    * the number of bytes that was required*/
-  if (*err == U_INDEX_OUTOFBOUNDS_ERROR)
+  if (*err == U_BUFFER_OVERFLOW_ERROR || targetSize == 0)
     {
       char target2[CHUNK_SIZE];
       char *target2_alias = target2;
@@ -1103,7 +1082,7 @@ int32_t  ucnv_convert(const char *toConverterName,
        *(in case the output is greater than CHUNK_SIZE)
        */
 
-      while (*err == U_INDEX_OUTOFBOUNDS_ERROR)
+      do
         {
           *err = U_ZERO_ERROR;
           target2_alias = target2;
@@ -1118,11 +1097,11 @@ int32_t  ucnv_convert(const char *toConverterName,
                                                err);
 
           /*updates the output parameter to contain the number of char required */
-          targetCapacity += (target2_alias - target2) + 1;
-        }
-      /*We will set the erro code to U_BUFFER_OVERFLOW_ERROR only if
+          targetCapacity += (target2_alias - target2);
+    } while (*err == U_BUFFER_OVERFLOW_ERROR);
+
+      /*We will set the error code to U_BUFFER_OVERFLOW_ERROR only if
        *nothing graver happened in the previous loop*/
-      (targetCapacity)--;
       if (U_SUCCESS (*err))
         *err = U_BUFFER_OVERFLOW_ERROR;
     }
