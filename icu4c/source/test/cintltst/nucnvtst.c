@@ -1469,7 +1469,9 @@ TestSignatureDetection(){
                 "\x2B\x2F\x76\x38\x41", /* UTF-7    */
                 "\x2B\x2F\x76\x39\x41", /* UTF-7    */
                 "\x2B\x2F\x76\x2B\x41", /* UTF-7    */
-                "\x2B\x2F\x76\x2F\x41"  /* UTF-7    */
+                "\x2B\x2F\x76\x2F\x41",  /* UTF-7    */
+
+                "\xDD\x73\x66\x73"      /* UTF-EBCDIC */
         };
         static const char* expected[] = {
                 "UTF-16BE",
@@ -1491,7 +1493,8 @@ TestSignatureDetection(){
                 "UTF-7",
                 "UTF-7",
                 "UTF-7",
-                "UTF-7"
+                "UTF-7",
+                "UTF-EBCDIC"
         };
         static const int32_t expectedLength[] ={
             2,
@@ -1510,6 +1513,7 @@ TestSignatureDetection(){
             3,
 
             5,
+            4,
             4,
             4,
             4,

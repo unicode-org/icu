@@ -2424,7 +2424,11 @@ ucnv_detectUnicodeSignature( const char* source,
             *signatureLength=4;
             return "UTF-7";
         }
+    }else if(start[0]=='\xDD' && start[1]== '\x73'&& start[2]=='\x66' && start[3]=='\x73'){
+        *signatureLength=4;
+        return "UTF-EBCDIC";
     }
+
 
     /* no known Unicode signature byte sequence recognized */
     *signatureLength=0;
