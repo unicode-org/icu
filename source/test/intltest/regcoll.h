@@ -248,8 +248,5 @@ private:
 
     RuleBasedCollator *en_us;
 
-    static const UnicodeString test1;
-    static const UnicodeString test2;
-    static const UnicodeString test3;
 };
 #endif
