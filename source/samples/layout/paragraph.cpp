@@ -21,7 +21,6 @@
 #include "usc_impl.h" /* this is currently private! */
 
 #include "paragraph.h"
-#include "scrptrun.h"
 #include "UnicodeReader.h"
 #include "FontMap.h"
 
