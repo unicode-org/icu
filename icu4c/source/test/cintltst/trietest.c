@@ -122,7 +122,7 @@ _testEnumValue(const void *context, uint32_t value) {
     return value^0x5555;
 }
 
-static void U_CALLCONV
+static UBool U_CALLCONV
 _testEnumRange(const void *context, UChar32 start, UChar32 limit, uint32_t value) {
     const CheckRange **pb=(const CheckRange **)context;
     const CheckRange *b=(*pb)++;
@@ -133,6 +133,7 @@ _testEnumRange(const void *context, UChar32 start, UChar32 limit, uint32_t value
             start, limit, value,
             (b-1)->limit, b->limit, b->value);
     }
+    return TRUE;
 }
 
 static void
