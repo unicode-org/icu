@@ -16,8 +16,6 @@
 /* C FUNCTIONALITY AND REGRESSION TEST FOR BREAKITERATOR */
 
 #include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
 #include "unicode/uloc.h"
 #include "unicode/ubrk.h"
 #include "unicode/uchar.h"
@@ -28,7 +26,7 @@
 #include "cregrtst.h"
 #include "ccolltst.h"
 
-/* -------------------------------------------------------------------------------------- */
+/* -------------------------------------------------------------------------- */
 /**
  * "Vector" structure for holding test tables
  * (this strucure is actually a linked list, but we use the name and API of the
@@ -1749,6 +1747,7 @@ void sample(UBreakIterator* tb, UChar* text)
     
 }
 
+void addBrkIterRegrTest(TestNode** root);
 
 void addBrkIterRegrTest(TestNode** root)
 {
