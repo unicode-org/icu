@@ -121,7 +121,7 @@ const UChar * u_file_translit(UFILE *f, const UChar *src, int32_t *count, UBool 
 
   if ((!f)||(!f->fTranslit)||(!f->fTranslit->translit))
   {
-    // short circuit
+    /* fast path */
     return src;
   }
 
@@ -134,7 +134,7 @@ const UChar * u_file_translit(UFILE *f, const UChar *src, int32_t *count, UBool 
   f->fTranslit->length -= f->fTranslit->pos; /* always */
   f->fTranslit->pos = 0;
 
-  // Calculate new buffer size needed
+  /* Calculate new buffer size needed */
   newlen = (*count + f->fTranslit->length) * 4;
   
   if(newlen > f->fTranslit->capacity)
@@ -150,13 +150,13 @@ const UChar * u_file_translit(UFILE *f, const UChar *src, int32_t *count, UBool 
     f->fTranslit->capacity = newlen;
   }
 
-  // Now, copy any data over
+  /* Now, copy any data over */
   u_strncpy(f->fTranslit->buffer + f->fTranslit->length, 
 	    src,
 	    *count);
   f->fTranslit->length += *count;
   
-  // Now, translit in place as much as we can 
+  /* Now, translit in place as much as we can  */
   if(flush == FALSE)
   {
     textLength = f->fTranslit->length;
