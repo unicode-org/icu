@@ -143,13 +143,11 @@ void TestMessageFormat::testBug2()
     MessageFormat *fmt = new MessageFormat(pattern, status);
     if (U_FAILURE(status)) {
         errln("MessageFormat pattern creation failed.");
-        logln("MessageFormat pattern creation failed.");
         return;
     }
     logln("The output pattern is : " + fmt->toPattern(result));
     if (pattern != result) {
         errln("MessageFormat::toPattern() failed.");
-        logln("MessageFormat::toPattern() failed.");
     }
     delete fmt;
 }
