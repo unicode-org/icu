@@ -36,6 +36,10 @@
 #define INPUT_FILE "tz.txt"
 #define OUTPUT_FILE "tz.dat"
 
+#define DATA_COPYRIGHT \
+    "Copyright (C) 1999, International Business Machines " \
+    "Corporation and others.  All Rights Reserved."
+
 /* UDataInfo cf. udata.h */
 static const UDataInfo dataInfo = {
     sizeof(UDataInfo),
@@ -224,7 +228,7 @@ int32_t gentz::writeTzDatFile() {
     *(uint16_t*)&(dataInfo.dataVersion[2]) = header.versionSuffix;
 
     pdata = udata_create(TZ_DATA_TYPE, TZ_DATA_NAME, &dataInfo,
-                         useCopyright ? U_COPYRIGHT_STRING : 0, &status);
+                         useCopyright ? DATA_COPYRIGHT : 0, &status);
     if (U_FAILURE(status)) {
         die("Unable to create data memory");
     }
@@ -333,8 +337,14 @@ OffsetIndex* gentz::parseOffsetIndexTable(FileStream* in) {
     // We don't know how big the whole thing will be yet, but we can use
     // the maxPerOffset number to compute an upper limit.
     //
-    // Structs will not be 4-aligned because we'll be writing them out
-    // ourselves.  Don't try to compute the exact size in advance
+    // Structs MUST be 4-aligned.  We accomplish this by
+    //   (a) a padding byte before the zoneNumber field 
+    //       in the OffsetIndex structure and
+    // 
+    //   (b) rounding index->count to the least greatest
+    //       even number.
+    //
+    // Don't try to compute the exact size in advance
     // (unless we want to avoid the use of sizeof(), which may
     // introduce padding that we won't actually employ).
     int32_t maxPossibleSize = n * (sizeof(OffsetIndex) +
@@ -348,6 +358,7 @@ OffsetIndex* gentz::parseOffsetIndexTable(FileStream* in) {
     // Read each line and construct the corresponding entry
     OffsetIndex* index = (OffsetIndex*)result;
     for (uint32_t i=0; i<n; ++i) {
+	uint16_t alignedCount;
         readLine(in);
         char* p = buffer;
         index->gmtOffset = 1000 * // Convert s -> ms
@@ -367,7 +378,13 @@ OffsetIndex* gentz::parseOffsetIndexTable(FileStream* in) {
         if (!sawOffset) {
             die("Error: bad offset index entry; default not in zone list");
         }
-        int8_t* nextIndex = (int8_t*)&(zoneNumberArray[index->count]);
+	alignedCount = index->count;
+	if((alignedCount%2)==1) /* force count to be even (thus 32 bit aligned)*/
+	{
+		alignedCount++;
+	}
+        int8_t* nextIndex = (int8_t*)&(zoneNumberArray[alignedCount]);
+	
         index->nextEntryDelta = (i==(n-1)) ? 0 : (nextIndex - (int8_t*)index);
         index = (OffsetIndex*)nextIndex;
     }
