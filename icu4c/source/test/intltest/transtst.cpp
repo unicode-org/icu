@@ -917,7 +917,8 @@ void TransliteratorTest::TestHiraganaKatakana(void) {
             break;
         }
     }
-
+    delete hk;
+    delete kh;
 }
 
 /**
@@ -1138,6 +1139,7 @@ void TransliteratorTest::TestCreateInstance(){
     if(newID!=UnicodeString("Hangul-Latin")){
         errln(UnicodeString("Test for Jitterbug 912 Transliterator::createInstance(id,UTRANS_REVERSE) failed"));
     }
+    delete myTrans;
 }
 
 /**

@@ -70,29 +70,29 @@ void TransliteratorAPITest::TestgetID() {
     Transliterator* t= Transliterator::createInstance(trans, UTRANS_FORWARD, parseError, status);
     if(t==0 || U_FAILURE(status)){
         errln("FAIL: construction");
-        status = U_ZERO_ERROR;
+        return;
     }else{
         ID= t->getID();
         if(ID != trans)
             errln("FAIL: getID returned " + ID + " instead of Latin-Greek");
+        delete t;
     }
     int i;
     for (i=0; i<Transliterator::countAvailableIDs(); i++){
-       ID = (UnicodeString) Transliterator::getAvailableID(i);
-       t = Transliterator::createInstance(ID, UTRANS_FORWARD, parseError, status);
-       if(t == 0){
-           errln("FAIL: " + ID);
-          continue;
-       }
-       if(ID != t->getID())
-           errln("FAIL: getID() returned " + t->getID() + " instead of " + ID);
+        ID = (UnicodeString) Transliterator::getAvailableID(i);
+        t = Transliterator::createInstance(ID, UTRANS_FORWARD, parseError, status);
+        if(t == 0){
+            errln("FAIL: " + ID);
+            continue;
+        }
+        if(ID != t->getID())
+            errln("FAIL: getID() returned " + t->getID() + " instead of " + ID);
+        delete t;
     }
     ID=(UnicodeString)Transliterator::getAvailableID(i);
     if(ID != (UnicodeString)Transliterator::getAvailableID(0)){
         errln("FAIL: calling getAvailableID(index > coundAvailableIDs) should make index=0\n");
     }
-
-    delete t;
 
     Transliterator* t1=Transliterator::createInstance("Latin-Devanagari", UTRANS_FORWARD, parseError, status);
     Transliterator* t2=Transliterator::createInstance("Latin-Hebrew", UTRANS_FORWARD, parseError, status);
@@ -160,19 +160,23 @@ void TransliteratorAPITest::TestgetInverse() {
        "Hex-Any"
      };
      for(uint32_t i=0; i<sizeof(TransID)/sizeof(TransID[0]); i=i+2){
-         t1=Transliterator::createInstance(TransID[i], UTRANS_FORWARD, parseError, status);
+         Transliterator *trans1=Transliterator::createInstance(TransID[i], UTRANS_FORWARD, parseError, status);
          if(t1 == 0){
            errln("FAIL: in instantiation for" + TransID[i]);
            continue;
          }
-         inverse1=t1->createInverse(status);
-         if(inverse1->getID() != TransID[i+1] )
-             errln("FAIL :getInverse() for " + TransID[i] + " returned " + inverse1->getID() + " instead of " + TransID[i+1]);
+         Transliterator *inver1=trans1->createInverse(status);
+         if(inver1->getID() != TransID[i+1] )
+             errln("FAIL :getInverse() for " + TransID[i] + " returned " + inver1->getID() + " instead of " + TransID[i+1]);
+         delete inver1;
+         delete trans1;
      }
      delete t1;
      delete t2;
      delete invt1;
      delete invt2;
+     delete inverse1;
+     delete inverse2;
 
 }
 
@@ -196,6 +200,8 @@ void TransliteratorAPITest::TestClone(){
      
     delete t1;
     delete t2;
+    delete t3;
+    delete t4;
 
 }
 
@@ -332,6 +338,8 @@ void TransliteratorAPITest::TestTransliterate2(){
         t->transliterate(temp, start, limit);
         doTest(t->getID() + ".transliterate(Replaceable, int32_t, int32_t, ):(" + start + "," + limit + ")  for \n\t source: " + prettify(Data2[i+1]), temp, Data2[i+5]);
         status = U_ZERO_ERROR;
+        delete t;
+        t = NULL;
     }
 
     status = U_ZERO_ERROR;
@@ -369,6 +377,7 @@ void TransliteratorAPITest::TestTransliterate3(){
         message=t->getID() + ".transliterate(ReplaceableString, start, limit):("+start+","+limit+"):";
         doTest(message, rs, Data[i+2]); 
     }
+    delete t;
 }
 
 void TransliteratorAPITest::TestSimpleKeyboardTransliterator(){

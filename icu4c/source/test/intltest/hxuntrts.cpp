@@ -94,8 +94,8 @@ void HexToUniTransliteratorTest::TestConstruction(){
         status=U_ZERO_ERROR;
     } else {
         errln("Error: calling the HexToUnicodeTransliterator constructor with illegal pattern should fail");
-        delete trans1;
     }
+    delete trans1;
 
     logln("Testing the construction HexToUnicodeTransliterator(pattern, adoptedFilter, status)");
     trans1=new HexToUnicodeTransliterator(pattern, NULL, status);
@@ -184,6 +184,9 @@ void HexToUniTransliteratorTest::TestCloneEqual(){
         trans2clone->toPattern() != trans2equal->toPattern()  ){
             errln("Error: equal() or clone() failed");
     }
+    delete transdefaultclone;
+    delete trans1clone;
+    delete trans2clone;
     delete transdefaultequal;
     delete trans1equal;
     delete trans2equal;
@@ -344,6 +347,7 @@ void HexToUniTransliteratorTest::expectTranslit(const HexToUnicodeTransliterator
     uprv_memcpy(&index, &_index, sizeof(index));
     clone->handleTransliterate(rsource2, index, TRUE);
     expectAux(t.getID() + "CLONE:handleTransliterator(increment=TRUE) "+ message, source + "-->" + rsource2, rsource2==expectedResult, expectedResult);
+    delete clone;
 
     /*Uses the assignment operator to create a transliterator and tests transliteration*/
     HexToUnicodeTransliterator equal=t;
@@ -358,7 +362,6 @@ void HexToUniTransliteratorTest::expectTranslit(const HexToUnicodeTransliterator
     uprv_memcpy(&index, &_index, sizeof(index));
     equal.handleTransliterate(rsource2, index, TRUE);
     expectAux(t.getID() + "=OPERATOR:handleTransliterator(increment=TRUE) "+ message, source + "-->" + rsource2, rsource2==expectedResult, expectedResult);
-
 
 }
 

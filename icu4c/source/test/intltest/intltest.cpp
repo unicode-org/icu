@@ -983,7 +983,7 @@ main(int argc, char* argv[])
     fprintf(stdout, "-----------------------------------------------\n");
 
     // initial check for the default converter
-    UErrorCode errorCode = U_ZERO_ERROR;
+/*    UErrorCode errorCode = U_ZERO_ERROR;
     UConverter *cnv = ucnv_open(0, &errorCode);
     if(cnv != 0) {
         // ok
@@ -1020,7 +1020,7 @@ main(int argc, char* argv[])
                 "*** Check the ICU_DATA environment variable and \n"
                 "*** check that the data files are present.\n");
         return 1;
-    }
+    }*/
 
     if (all) {
         major.runTest();

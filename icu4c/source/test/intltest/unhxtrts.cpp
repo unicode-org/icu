@@ -106,8 +106,8 @@ void UniToHexTransliteratorTest::TestConstruction(){
         status=U_ZERO_ERROR;
     } else {
         errln("Error: calling the UnicodeToHexTransliterator constructor with illegal pattern should fail");
-        delete trans1;
     }
+    delete trans1;
 
     logln("Testing the construction UnicodeToHexTransliterator(pattern, isUppercase, adoptedFilter, status)");
     trans1=new UnicodeToHexTransliterator(pattern, FALSE, NULL, status);
@@ -208,6 +208,9 @@ void UniToHexTransliteratorTest::TestCloneEqual(){
         trans2clone->isUppercase() != trans2equal->isUppercase() ) {
         errln("Error: equal() or clone() failed");
     }
+    delete transdefaultclone;
+    delete trans1clone;
+    delete trans2clone;
     delete transdefaultequal;
     delete trans1equal;
     delete trans2equal;
@@ -410,6 +413,7 @@ void UniToHexTransliteratorTest::expectTranslit(const UnicodeToHexTransliterator
     index=_index;
     pseudoHandleTransliterate(clone, rsource2, index, TRUE);
     expectAux(t.getID() + "CLONE:handleTransliterator(increment=TRUE) "+ message, source + "-->" + rsource2, rsource2==expectedResult, expectedResult);
+    delete clone;
 
     /*Uses the assignment operator to create a transliterator and tests transliteration*/
     UnicodeToHexTransliterator equal=t;
