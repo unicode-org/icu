@@ -8,7 +8,7 @@
 **********************************************************************
 */
 
-#include "unicode/toupptrn.h"
+#include "toupptrn.h"
 
 U_NAMESPACE_BEGIN
 

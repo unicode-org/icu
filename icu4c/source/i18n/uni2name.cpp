@@ -8,7 +8,7 @@
 **********************************************************************
 */
 
-#include "unicode/uni2name.h"
+#include "uni2name.h"
 #include "unicode/unifilt.h"
 
 U_NAMESPACE_BEGIN
