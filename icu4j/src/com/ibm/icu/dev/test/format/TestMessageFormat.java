@@ -740,4 +740,55 @@ public class TestMessageFormat extends com.ibm.icu.dev.test.TestFmwk {
             errln("FAIL: constructor failed");
         }
     }
+
+    // test RBNF extensions to message format
+    public void TestRBNF() {
+        // WARNING: this depends on the RBNF formats for en_US
+        Locale locale = Locale.US;
+        String[] values = {
+            // decimal values do not format completely for ordinal or duration, and 
+            // do not always parse, so do not include them
+            "0", "1", "12", "100", "123", "1001", "123,456", "-17",
+        };
+        String[] formats = {
+            "There are {0,spellout} files to search.",
+            "There are {0,spellout,%simplified} files to search.",
+            "The bogus spellout {0,spellout,%BOGUS} files behaves like the default.",
+            "This is the {0,ordinal} file to search.", // TODO fix bug, ordinal does not parse
+            "Searching this file will take {0,duration} to complete.",
+            "Searching this file will take {0,duration,%with-words} to complete.",
+        };
+        final NumberFormat numFmt = NumberFormat.getInstance(locale);
+        Object[] args = new Object[1];
+        Number num = null;
+        for (int i = 0; i < formats.length; ++i) {
+            MessageFormat fmt = new MessageFormat(formats[i], locale);
+            logln("Testing format pattern: '" + formats[i] + "'");
+            for (int j = 0; j < values.length; ++j) {
+                try {
+                    num = numFmt.parse(values[j]);
+                }
+                catch (Exception e) {
+                    throw new InternalError("failed to parse test argument");
+                }
+                args[0] = num;
+                String result = fmt.format(args);
+                logln("value: " + num + " --> " + result);
+
+                if (i != 3) { // TODO: fix this, for now skip ordinal parsing (format string at index 3)
+                    try {
+                        Object[] parsedArgs = fmt.parse(result);
+                        if (parsedArgs.length != 1) {
+                            errln("parse returned " + parsedArgs.length + " args");
+                        } else if (!parsedArgs[0].equals(num)) {
+                            errln("parsed argument " + parsedArgs[0] + " != " + num);
+                        }
+                    }
+                    catch (Exception e) {
+                        errln("parse of '" + result + " returned exception: " + e.getMessage());
+                    }
+                }
+            }
+        }
+    }
 }
