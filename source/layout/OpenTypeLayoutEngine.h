@@ -270,7 +270,7 @@ protected:
      * @internal
      */
     virtual le_int32 glyphProcessing(const LEUnicode chars[], le_int32 offset, le_int32 count, le_int32 max, le_bool rightToLeft,
-            const LETag **featureTags, LEGlyphID *&glyphs, le_int32 *&charIndices, LEErrorCode &success);
+            const LETag **&featureTags, LEGlyphID *&glyphs, le_int32 *&charIndices, LEErrorCode &success);
 
     /**
      * This method does any processing necessary to convert "fake"

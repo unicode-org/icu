@@ -143,36 +143,36 @@ LEUnicode ThaiShaping::noDescenderCOD(LEUnicode cod, le_uint8 glyphSet)
 }
 
 le_uint8 ThaiShaping::doTransition (StateTransition transition, LEUnicode currChar, le_int32 inputIndex, le_uint8 glyphSet,
-        LEUnicode errorChar, LEUnicode *outputBuffer, le_int32 *charIndicies, le_int32 &outputIndex)
+        LEUnicode errorChar, LEUnicode *outputBuffer, le_int32 *charIndices, le_int32 &outputIndex)
 {
     switch (transition.action) {
     case tA:
-        charIndicies[outputIndex] = inputIndex;
+        charIndices[outputIndex] = inputIndex;
         outputBuffer[outputIndex++] = currChar;
         break;
         
     case tC:
-        charIndicies[outputIndex] = inputIndex;
+        charIndices[outputIndex] = inputIndex;
         outputBuffer[outputIndex++] = currChar;
         break;
         
     case tD:
-        charIndicies[outputIndex] = inputIndex;
+        charIndices[outputIndex] = inputIndex;
         outputBuffer[outputIndex++] = leftAboveVowel(currChar, glyphSet);
         break;
         
     case tE:
-        charIndicies[outputIndex] = inputIndex;
+        charIndices[outputIndex] = inputIndex;
         outputBuffer[outputIndex++] = lowerRightTone(currChar, glyphSet);
         break;
         
     case tF:
-        charIndicies[outputIndex] = inputIndex;
+        charIndices[outputIndex] = inputIndex;
         outputBuffer[outputIndex++] = lowerLeftTone(currChar, glyphSet);
         break;
     
     case tG:
-        charIndicies[outputIndex] = inputIndex;
+        charIndices[outputIndex] = inputIndex;
         outputBuffer[outputIndex++] = upperLeftTone(currChar, glyphSet);
         break;
         
@@ -184,38 +184,38 @@ le_uint8 ThaiShaping::doTransition (StateTransition transition, LEUnicode currCh
         if (cod != coa) {
             outputBuffer[outputIndex - 1] = coa;
             
-            charIndicies[outputIndex] = inputIndex;
+            charIndices[outputIndex] = inputIndex;
             outputBuffer[outputIndex++] = currChar;
             break;
         }
 
-        charIndicies[outputIndex] = inputIndex;
+        charIndices[outputIndex] = inputIndex;
         outputBuffer[outputIndex++] = lowerBelowVowel(currChar, glyphSet);
         break;
     }
         
     case tR:
-        charIndicies[outputIndex] = inputIndex;
+        charIndices[outputIndex] = inputIndex;
         outputBuffer[outputIndex++] = errorChar;
 
-        charIndicies[outputIndex] = inputIndex;
+        charIndices[outputIndex] = inputIndex;
         outputBuffer[outputIndex++] = currChar;
         break;
         
     case tS:
         if (currChar == CH_SARA_AM) {
-            charIndicies[outputIndex] = inputIndex;
+            charIndices[outputIndex] = inputIndex;
             outputBuffer[outputIndex++] = errorChar;
         }
 
-        charIndicies[outputIndex] = inputIndex;
+        charIndices[outputIndex] = inputIndex;
         outputBuffer[outputIndex++] = currChar;
         break;
         
     default:
         // FIXME: if we get here, there's an error
         // in the state table!
-        charIndicies[outputIndex] = inputIndex;
+        charIndices[outputIndex] = inputIndex;
         outputBuffer[outputIndex++] = currChar;
         break;
      }
@@ -224,14 +224,14 @@ le_uint8 ThaiShaping::doTransition (StateTransition transition, LEUnicode currCh
 }
 
 le_uint8 ThaiShaping::getNextState(LEUnicode ch, le_uint8 prevState, le_int32 inputIndex, le_uint8 glyphSet, LEUnicode errorChar,
-                              le_uint8 &charClass, LEUnicode *output, le_int32 *charIndicies, le_int32 &outputIndex)
+                              le_uint8 &charClass, LEUnicode *output, le_int32 *charIndices, le_int32 &outputIndex)
 {
     StateTransition transition;
 
     charClass = getCharClass(ch);
     transition = getTransition(prevState, charClass);
     
-    return doTransition(transition, ch, inputIndex, glyphSet, errorChar, output, charIndicies, outputIndex);
+    return doTransition(transition, ch, inputIndex, glyphSet, errorChar, output, charIndices, outputIndex);
 }
 
 le_bool ThaiShaping::isLegalHere(LEUnicode ch, le_uint8 prevState)
@@ -261,7 +261,7 @@ le_bool ThaiShaping::isLegalHere(LEUnicode ch, le_uint8 prevState)
 }
     
 le_int32 ThaiShaping::compose(const LEUnicode *input, le_int32 offset, le_int32 charCount, le_uint8 glyphSet,
-                          LEUnicode errorChar, LEUnicode *output, le_int32 *charIndicies)
+                          LEUnicode errorChar, LEUnicode *output, le_int32 *charIndices)
 {
     le_uint8 state = 0;
     le_int32 inputIndex;
@@ -278,19 +278,19 @@ le_int32 ThaiShaping::compose(const LEUnicode *input, le_int32 offset, le_int32 
         if (ch == CH_SARA_AM && isLegalHere(ch, state)) {
             outputIndex = conOutput;
             state = getNextState(CH_NIKHAHIT, conState, inputIndex, glyphSet, errorChar, charClass,
-                output, charIndicies, outputIndex);
+                output, charIndices, outputIndex);
             
             for (int j = conInput + 1; j < inputIndex; j += 1) {
                 ch = input[j + offset];
                 state = getNextState(ch, state, j, glyphSet, errorChar, charClass,
-                    output, charIndicies, outputIndex);
+                    output, charIndices, outputIndex);
             }
             
             ch = CH_SARA_AA;
         }
         
         state = getNextState(ch, state, inputIndex, glyphSet, errorChar, charClass,
-            output, charIndicies, outputIndex);
+            output, charIndices, outputIndex);
         
         if (charClass >= CON && charClass <= COD) {
             conState = state;

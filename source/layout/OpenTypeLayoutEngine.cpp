@@ -109,8 +109,8 @@ le_int32 OpenTypeLayoutEngine::characterProcessing(const LEUnicode /*chars*/[], 
 
 // Input: characters, tags
 // Output: glyphs, char indices
-le_int32 OpenTypeLayoutEngine::glyphProcessing(const LEUnicode chars[], le_int32 offset, le_int32 count, le_int32 max, le_bool rightToLeft, const LETag **featureTags,
-                LEGlyphID *&glyphs, le_int32 *&charIndices, LEErrorCode &success)
+le_int32 OpenTypeLayoutEngine::glyphProcessing(const LEUnicode chars[], le_int32 offset, le_int32 count, le_int32 max, le_bool rightToLeft,
+											   const LETag **&featureTags, LEGlyphID *&glyphs, le_int32 *&charIndices, LEErrorCode &success)
 {
     if (LE_FAILURE(success)) {
         return 0;
@@ -128,7 +128,7 @@ le_int32 OpenTypeLayoutEngine::glyphProcessing(const LEUnicode chars[], le_int32
     }
 
     if (fGSUBTable != NULL) {
-        fGSUBTable->process(glyphs, featureTags, count, rightToLeft, fScriptTag, fLangSysTag, fGDEFTable, fSubstitutionFilter, fFeatureOrder);
+        count = fGSUBTable->process(glyphs, featureTags, charIndices, count, rightToLeft, fScriptTag, fLangSysTag, fGDEFTable, fSubstitutionFilter, fFeatureOrder);
     }
 
     return count;

@@ -580,7 +580,8 @@ private:
           le_int32 fLeading;
 
           le_int32 *fGlyphToCharMap;
-          le_int32 *fCharToGlyphMap;
+          le_int32 *fCharToMinGlyphMap;
+		  le_int32 *fCharToMaxGlyphMap;
           float    *fGlyphWidths;
           le_int32  fGlyphCount;
 

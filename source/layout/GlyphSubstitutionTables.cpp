@@ -18,14 +18,14 @@
 
 U_NAMESPACE_BEGIN
 
-void GlyphSubstitutionTableHeader::process(LEGlyphID *glyphs, const LETag **glyphTags, le_int32 glyphCount,
+le_int32 GlyphSubstitutionTableHeader::process(LEGlyphID *&glyphs, const LETag **&glyphTags, le_int32 *&charIndices, le_int32 glyphCount,
                                            le_bool rightToLeft, LETag scriptTag, LETag languageTag,
                                            const GlyphDefinitionTableHeader *glyphDefinitionTableHeader,
                                            const LEGlyphFilter *filter, const LETag *featureOrder) const
 {
     GlyphSubstitutionLookupProcessor processor(this, scriptTag, languageTag, filter, featureOrder);
 
-    processor.process(glyphs, NULL, glyphTags, glyphCount, rightToLeft, glyphDefinitionTableHeader, NULL);
+    return processor.process(glyphs, NULL, glyphTags, charIndices, glyphCount, rightToLeft, glyphDefinitionTableHeader, NULL);
 }
 
 le_bool GlyphSubstitutionTableHeader::coversScript(LETag scriptTag) const

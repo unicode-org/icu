@@ -29,7 +29,7 @@ public:
     static const LETag notSelected;
     static const LETag defaultFeature;
 
-    void process(LEGlyphID *glyphs, GlyphPositionAdjustment *glyphPositionAdjustments, const LETag **glyphTags, le_int32 glyphCount,
+    le_int32 process(LEGlyphID *&glyphs, GlyphPositionAdjustment *glyphPositionAdjustments, const LETag **&glyphTags, le_int32 *&charIndices, le_int32 glyphCount,
                  le_bool rightToLeft, const GlyphDefinitionTableHeader *glyphDefinitionTableHeader, const LEFontInstance *fontInstance) const;
 
     le_uint32 applyLookupTable(const LookupTable *lookupTable, GlyphIterator *glyphIterator, const LEFontInstance *fontInstance) const;
