@@ -106,7 +106,7 @@ check: all check-local
 
 all-local: $(TARGET)
 
-install-local: all-local
+install-local:
 
 dist-local:
 
