@@ -62,6 +62,27 @@ U_CDECL_BEGIN
  * See the individual function documentation,
  * and see the JDK 1.4.1 java.lang.Character documentation
  * at http://java.sun.com/j2se/1.4.1/docs/api/java/lang/Character.html
+ *
+ * There are also functions that provide easy migration from C/POSIX functions
+ * like isblank(). Their use is generally discouraged because the C/POSIX
+ * standards do not define their semantics beyond the ASCII range, which means
+ * that different implementations exhibit very different behavior.
+ * Instead, Unicode properties should be used directly.
+ *
+ * There are also only a few, broad C/POSIX character classes, and they tend
+ * to be used for conflicting purposes. For example, the "isalpha()" class
+ * is sometimes used to determine word boundaries, while a more sophisticated
+ * approach would at least distinguish initial letters from continuation
+ * characters (the latter including combining marks).
+ * (In ICU, BreakIterator is the most sophisticated API for word boundaries.)
+ * Another example: There is no "istitle()" class for titlecase characters.
+ *
+ * A summary of the behavior of some C/POSIX character classification implementations
+ * for Unicode is available at http://oss.software.ibm.com/cvs/icu/~checkout~/icuhtml/design/posix_classes.html
+ *
+ * <strong>Important</strong>:
+ * The behavior of the ICU C/POSIX-style character classification
+ * functions is subject to change according to discussion of the above summary.
  */
 
 /**
@@ -1332,11 +1353,12 @@ u_isUUppercase(UChar32 c);
  *
  * Comparison:
  * - u_isUWhiteSpace=UCHAR_WHITE_SPACE: Unicode White_Space property;
- *       general categories "Z" (separators) + whitespace ISO controls
- *       (including no-break spaces)
+ *       most of general categories "Z" (separators) + most whitespace ISO controls
+ *       (including no-break spaces, but excluding IS1..IS4 and ZWSP)
  * - u_isWhitespace: Java isWhitespace; Z + whitespace ISO controls but excluding no-break spaces
  * - u_isJavaSpaceChar: Java isSpaceChar; just Z (including no-break spaces)
  * - u_isspace: Z + whitespace ISO controls (including no-break spaces)
+ * - u_isblank: "horizontal spaces" = TAB + Zs - ZWSP
  *
  * @param c Code point to test
  * @return true if the code point has the White_Space Unicode property, false otherwise.
@@ -1483,6 +1505,11 @@ u_getNumericValue(UChar32 c);
  * have a different general category value.
  * In order to include those, use UCHAR_LOWERCASE.
  *
+ * In addition to being equivalent to a Java function, this also serves
+ * as a C/POSIX migration function.
+ * See the comments about C/POSIX character classification functions in the
+ * documentation at the top of this header file.
+ *
  * @param c the code point to be tested
  * @return TRUE if the code point is an Ll lowercase letter
  *
@@ -1504,6 +1531,11 @@ u_islower(UChar32 c);
  * This misses some characters that are also uppercase but
  * have a different general category value.
  * In order to include those, use UCHAR_UPPERCASE.
+ *
+ * In addition to being equivalent to a Java function, this also serves
+ * as a C/POSIX migration function.
+ * See the comments about C/POSIX character classification functions in the
+ * documentation at the top of this header file.
  *
  * @param c the code point to be tested
  * @return TRUE if the code point is an Lu uppercase letter
@@ -1542,6 +1574,11 @@ u_istitle(UChar32 c);
  *
  * Same as java.lang.Character.isDigit().
  *
+ * In addition to being equivalent to a Java function, this also serves
+ * as a C/POSIX migration function.
+ * See the comments about C/POSIX character classification functions in the
+ * documentation at the top of this header file.
+ *
  * @param c the code point to be tested
  * @return TRUE if the code point is a digit character according to Character.isDigit()
  *
@@ -1555,6 +1592,11 @@ u_isdigit(UChar32 c);
  * True for general categories "L" (letters).
  *
  * Same as java.lang.Character.isLetter().
+ *
+ * In addition to being equivalent to a Java function, this also serves
+ * as a C/POSIX migration function.
+ * See the comments about C/POSIX character classification functions in the
+ * documentation at the top of this header file.
  *
  * @param c the code point to be tested
  * @return TRUE if the code point is a letter character
@@ -1574,6 +1616,11 @@ u_isalpha(UChar32 c);
  *
  * Same as java.lang.Character.isLetterOrDigit().
  *
+ * In addition to being equivalent to a Java function, this also serves
+ * as a C/POSIX migration function.
+ * See the comments about C/POSIX character classification functions in the
+ * documentation at the top of this header file.
+ *
  * @param c the code point to be tested
  * @return TRUE if the code point is an alphanumeric character according to Character.isLetterOrDigit()
  *
@@ -1583,13 +1630,106 @@ U_CAPI UBool U_EXPORT2
 u_isalnum(UChar32 c);
 
 /**
+ * Determines whether the specified code point is a hexadecimal digit.
+ * This is equivalent to u_digit(c, 16)>=0.
+ * True for characters with general category "Nd" (decimal digit numbers)
+ * as well as Latin letters a-f and A-F in both ASCII and Fullwidth ASCII.
+ * (That is, for letters with code points
+ * 0041..0046, 0061..0066, FF21..FF26, FF41..FF46.)
+ *
+ * In order to narrow the definition of hexadecimal digits to only ASCII
+ * characters, use (c<=0x7f && u_isxdigit(c)).
+ *
+ * This is a C/POSIX migration function.
+ * See the comments about C/POSIX character classification functions in the
+ * documentation at the top of this header file.
+ *
+ * @param c the code point to be tested
+ * @return TRUE if the code point is a hexadecimal digit
+ *
+ * @draft ICU 2.6
+ */
+U_CAPI UBool U_EXPORT2
+u_isxdigit(UChar32 c);
+
+/**
+ * Determines whether the specified code point is a punctuation character.
+ * True for characters with general categories "P" (punctuation).
+ *
+ * This is a C/POSIX migration function.
+ * See the comments about C/POSIX character classification functions in the
+ * documentation at the top of this header file.
+ *
+ * @param c the code point to be tested
+ * @return TRUE if the code point is a punctuation character
+ *
+ * @draft ICU 2.6
+ */
+U_CAPI UBool U_EXPORT2
+u_ispunct(UChar32 c);
+
+/**
+ * Determines whether the specified code point is a "graphic" character
+ * (printable, excluding spaces).
+ * TRUE for all characters except those with general categories
+ * "Cc" (control codes), "Cf" (format controls), "Cs" (surrogates),
+ * "Cn" (unassigned), and "Z" (separators).
+ *
+ * This is a C/POSIX migration function.
+ * See the comments about C/POSIX character classification functions in the
+ * documentation at the top of this header file.
+ *
+ * @param c the code point to be tested
+ * @return TRUE if the code point is a "graphic" character
+ *
+ * @draft ICU 2.6
+ */
+U_CAPI UBool U_EXPORT2
+u_isgraph(UChar32 c);
+
+/**
+ * Determines whether the specified code point is a "blank" or "horizontal space",
+ * a character that visibly separates words on a line.
+ * The following are equivalent definitions:
+ *
+ * TRUE for Unicode White_Space characters except for "vertical space controls"
+ * where "vertical space controls" contains
+ * U+000A (LF) U+000B (VT) U+000C (FF) U+000D (CR) U+0085 (NEL) U+2028 (LS) U+2029 (PS)
+ *
+ * same as
+ *
+ * TRUE for U+0009 (TAB) and characters with general category "Zs" (space separators)
+ * except Zero Width Space (ZWSP, U+200B).
+ *
+ * Comparison:
+ * - u_isUWhiteSpace=UCHAR_WHITE_SPACE: Unicode White_Space property;
+ *       most of general categories "Z" (separators) + most whitespace ISO controls
+ *       (including no-break spaces, but excluding IS1..IS4 and ZWSP)
+ * - u_isWhitespace: Java isWhitespace; Z + whitespace ISO controls but excluding no-break spaces
+ * - u_isJavaSpaceChar: Java isSpaceChar; just Z (including no-break spaces)
+ * - u_isspace: Z + whitespace ISO controls (including no-break spaces)
+ * - u_isblank: "horizontal spaces" = TAB + Zs - ZWSP
+ *
+ * This is a C/POSIX migration function.
+ * See the comments about C/POSIX character classification functions in the
+ * documentation at the top of this header file.
+ *
+ * @param c the code point to be tested
+ * @return TRUE if the code point is a "blank"
+ *
+ * @draft ICU 2.6
+ */
+U_CAPI UBool U_EXPORT2
+u_isblank(UChar32 c);
+
+/**
  * Determines whether the specified code point is "defined",
  * which usually means that it is assigned a character.
  * True for general categories other than "Cn" (other, not assigned),
  * i.e., true for all code points mentioned in UnicodeData.txt.
  *
- * Note that it is true for non-character code points (e.g., U+FDD0)
- * but not for surrogate code points (Cs).
+ * Note that non-character code points (e.g., U+FDD0) are not "defined"
+ * (they are Cn), but surrogate code points are "defined" (Cs).
  *
  * Same as java.lang.Character.isDefined().
  *
@@ -1612,11 +1752,16 @@ u_isdefined(UChar32 c);
  *
  * Comparison:
  * - u_isUWhiteSpace=UCHAR_WHITE_SPACE: Unicode White_Space property;
- *       general categories "Z" (separators) + whitespace ISO controls
- *       (including no-break spaces)
+ *       most of general categories "Z" (separators) + most whitespace ISO controls
+ *       (including no-break spaces, but excluding IS1..IS4 and ZWSP)
  * - u_isWhitespace: Java isWhitespace; Z + whitespace ISO controls but excluding no-break spaces
  * - u_isJavaSpaceChar: Java isSpaceChar; just Z (including no-break spaces)
  * - u_isspace: Z + whitespace ISO controls (including no-break spaces)
+ * - u_isblank: "horizontal spaces" = TAB + Zs - ZWSP
+ *
+ * This is a C/POSIX migration function.
+ * See the comments about C/POSIX character classification functions in the
+ * documentation at the top of this header file.
  *
  * @param c    the character to be tested
  * @return  true if the character is a space character; false otherwise.
@@ -1638,11 +1783,12 @@ u_isspace(UChar32 c);
  *
  * Comparison:
  * - u_isUWhiteSpace=UCHAR_WHITE_SPACE: Unicode White_Space property;
- *       general categories "Z" (separators) + whitespace ISO controls
- *       (including no-break spaces)
+ *       most of general categories "Z" (separators) + most whitespace ISO controls
+ *       (including no-break spaces, but excluding IS1..IS4 and ZWSP)
  * - u_isWhitespace: Java isWhitespace; Z + whitespace ISO controls but excluding no-break spaces
  * - u_isJavaSpaceChar: Java isSpaceChar; just Z (including no-break spaces)
  * - u_isspace: Z + whitespace ISO controls (including no-break spaces)
+ * - u_isblank: "horizontal spaces" = TAB + Zs - ZWSP
  *
  * @param c the code point to be tested
  * @return TRUE if the code point is a space character according to Character.isSpaceChar()
@@ -1677,11 +1823,12 @@ u_isJavaSpaceChar(UChar32 c);
  *
  * Comparison:
  * - u_isUWhiteSpace=UCHAR_WHITE_SPACE: Unicode White_Space property;
- *       general categories "Z" (separators) + whitespace ISO controls
- *       (including no-break spaces)
+ *       most of general categories "Z" (separators) + most whitespace ISO controls
+ *       (including no-break spaces, but excluding IS1..IS4 and ZWSP)
  * - u_isWhitespace: Java isWhitespace; Z + whitespace ISO controls but excluding no-break spaces
  * - u_isJavaSpaceChar: Java isSpaceChar; just Z (including no-break spaces)
  * - u_isspace: Z + whitespace ISO controls (including no-break spaces)
+ * - u_isblank: "horizontal spaces" = TAB + Zs - ZWSP
  *
  * @param c the code point to be tested
  * @return TRUE if the code point is a whitespace character according to Java/ICU
@@ -1703,6 +1850,10 @@ u_isWhitespace(UChar32 c);
  * - U_FORMAT_CHAR (Cf)
  * - U_LINE_SEPARATOR (Zl)
  * - U_PARAGRAPH_SEPARATOR (Zp)
+ *
+ * This is a C/POSIX migration function.
+ * See the comments about C/POSIX character classification functions in the
+ * documentation at the top of this header file.
  *
  * @param c the code point to be tested
  * @return TRUE if the code point is a control character
@@ -1732,6 +1883,10 @@ u_isISOControl(UChar32 c);
 /**
  * Determines whether the specified code point is a printable character.
  * True for general categories <em>other</em> than "C" (controls).
+ *
+ * This is a C/POSIX migration function.
+ * See the comments about C/POSIX character classification functions in the
+ * documentation at the top of this header file.
  *
  * @param c the code point to be tested
  * @return TRUE if the code point is a printable character
@@ -2520,11 +2675,12 @@ u_foldCase(UChar32 c, uint32_t options);
  * <li>The character is one of the lowercase Latin letters
  *     <code>'a'</code> through <code>'z'</code>.
  *     In this case the value is <code>ch-'a'+10</code>.</li>
- * <li>The character is one of the primary numeric Han characters.
- *     In this case, the value is the digit value for that Han character.</li>
+ * <li>Latin letters from both the ASCII range (0061..007A, 0041..005A)
+ *     as well as from the Fullwidth ASCII range (FF41..FF5A, FF21..FF3A)
+ *     are recognized.</li>
  * </ul>
  *
- * Same as java.lang.Character.digit() except that Java does not handle Han digits.
+ * Same as java.lang.Character.digit().
  *
  * @param   c       the code point to be tested.
  * @param   radix   the radix.
