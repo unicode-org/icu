@@ -10,10 +10,12 @@ package com.ibm.icu.dev.test.perf;
 import com.ibm.icu.dev.tool.UOption;
 import com.ibm.icu.text.NumberFormat;
 import com.ibm.icu.text.DecimalFormat;
+import com.ibm.icu.impl.LocaleUtility;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.Locale;
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -31,30 +33,8 @@ import java.lang.reflect.*;
  * (beyond those handled automatically by this calss) then it should
  * override setup() to handle its arguments.
  * 
- * The command-line argument list should have the form:
- *   arg-list := options* meth-spec+ '-'? ...
- *   meth-spec := meth-name count+
- *   options := -gc | -nogc
- * where:
- *   meth-name a method name, case insensitive, optionally
- *             with the initial "test" omitted
- *   count     an integer, > 0, giving the number of time
- *             to call the method setup by meth-name.  If 'count' is
- *             an integer < 0, then iterations are varied to achieve a
- *             total duration of at least -count seconds.
- *   '-'       an optional separator; if seen, all subsequent
- *             arguments are passed to the subclass
- *   ...       extra arguments, not recognized as either a
- *             meth-name or a count, or following a '-',
- *             passed to the setup() method, which the
- *             subclass may override
- * options:
- *   -gc       calls Runtime.gc() repeatedly until heap
- *             stabilizes before doing any timing
- *   -nogc     disable -gc (default)
- *
  * Example invocation:
- * java -cp classes -verbose:gc com.ibm.icu.dev.test.perf.UnicodeSetPerf -gc UnicodeSetAdd 100 100 100 100 [[:l:][:c:]]
+ * java -cp classes -verbose:gc com.ibm.icu.dev.test.perf.UnicodeSetPerf --gc --passes 4 --iterations 100 UnicodeSetAdd [[:l:][:c:]]
  * 
  * Example output:
  * [GC 511K->192K(1984K), 0.0086170 secs]
@@ -113,6 +93,7 @@ public abstract class PerfTest {
     protected int            time;
     protected boolean        line_mode;
     protected boolean        bulk_mode;
+    protected Locale         locale;
     protected boolean        doPriorGC;
 
     /**
@@ -214,7 +195,8 @@ public abstract class PerfTest {
     static final int TIME = 9;
     static final int LINE_MODE = 10;
     static final int BULK_MODE = 11;
-    static final int GARBAGE_COLLECT = 11;
+    static final int LOCALE = 12;
+    static final int GARBAGE_COLLECT = 13;
 
     UOption[] getOptions() {
         return new UOption[] {
@@ -230,6 +212,7 @@ public abstract class PerfTest {
             UOption.DEF( "time",          't', UOption.REQUIRES_ARG),
             UOption.DEF( "line-mode",     'l', UOption.NO_ARG),
             UOption.DEF( "bulk-mode",     'b', UOption.NO_ARG),
+            UOption.DEF( "locale",        'L', UOption.REQUIRES_ARG),
 
             UOption.DEF( "gc",            'g', UOption.NO_ARG), 
         };
@@ -259,10 +242,11 @@ public abstract class PerfTest {
         verbose = false;
         bulk_mode = false;
         passes = iterations = time = 0;
+        locale = null;
 
         UOption[] options = getOptions();
         int remainingArgc = UOption.parseArgs(args, options);
-
+        
         if(args.length==0 || options[HELP1].doesOccur || options[HELP2].doesOccur) {
             throw new UsageException();
         }
@@ -319,6 +303,10 @@ public abstract class PerfTest {
             line_mode = false;
         }
     
+        if(options[LOCALE].doesOccur) {
+            locale = LocaleUtility.getLocaleFromName(options[LOCALE].value);
+        }
+
         if(options[GARBAGE_COLLECT].doesOccur) {
             doPriorGC = true;
         }
@@ -340,7 +328,14 @@ public abstract class PerfTest {
         }
 
         if (methodList.size() < 1) {
-            throw new UsageException("Must specify at least one method name");
+            StringBuffer buf = new StringBuffer();
+            while (i<remainingArgc) {
+                if (buf.length() != 0) {
+                    buf.append(", ");
+                }
+                buf.append('"').append(args[i]).append('"');
+            }
+            throw new UsageException("Must specify at least one method name.  Unprocessed args: {" + buf.toString() + '}');
         }
 
         // Pass remaining arguments, if any, through to the subclass
@@ -356,7 +351,7 @@ public abstract class PerfTest {
             gc();
         }
 
-	    final Object[] NO_ARGS = new Object[0];
+        final Object[] NO_ARGS = new Object[0];
 
         // Run the tests
         for (i=0; i<methodList.size(); ++i) {
