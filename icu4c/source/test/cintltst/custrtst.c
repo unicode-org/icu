@@ -1765,7 +1765,7 @@ TestUNormIterator() {
     testUNormIteratorWithText(text, length, length, "UCharIterEnd", "UNormIterEnd1");
 
     /* test again, this time with an insane string to cause internal buffer overflows */
-    middle=u_strchr(text, 0x327)-text; /* see comment at text[] */
+    middle=(int32_t)(u_strchr(text, 0x327)-text); /* see comment at text[] */
     memcpy(longText, text, middle*U_SIZEOF_UCHAR);
     for(i=0; i<150; ++i) {
         longText[middle+i]=0x30a; /* insert many rings between 'A-ring' and cedilla */

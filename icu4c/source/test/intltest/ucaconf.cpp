@@ -115,7 +115,7 @@ void UCAConformanceTest::openTestFile(const char *type)
   char buffer[1024];
   uprv_strcpy(buffer, testDataPath);
   uprv_strcat(buffer, type);
-  int32_t bufLen = uprv_strlen(buffer);
+  int32_t bufLen = (int32_t)uprv_strlen(buffer);
 
   // we try to open 3 files:
   // path/CollationTest_type.txt

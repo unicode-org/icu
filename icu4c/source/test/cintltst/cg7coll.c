@@ -189,7 +189,7 @@ static void TestDemo1()
     UCollator *myCollation;
     int32_t j, n;
     const char *rules = "& Z < p, P";
-    int32_t len=strlen(rules);
+    int32_t len=(int32_t)strlen(rules);
     UChar *temp = (UChar*)malloc(sizeof(UChar) * (len+1));
     UErrorCode status = U_ZERO_ERROR;
     u_uastrcpy(temp, rules);
@@ -221,7 +221,7 @@ static void TestDemo2()
     UCollator *myCollation;
     int32_t j, n;
     const char *rules = "& C < ch , cH, Ch, CH";
-    int32_t len=strlen(rules);
+    int32_t len=(int32_t)strlen(rules);
     UChar *temp = (UChar*)malloc(sizeof(UChar) * (len+1));
     UErrorCode status = U_ZERO_ERROR;
     u_uastrcpy(temp, rules);
@@ -251,7 +251,7 @@ static void TestDemo3()
     UCollator *myCollation;
     int32_t j, n;
     const char *rules = "& Question'-'mark ; '?' & Hash'-'mark ; '#' & Ampersand ; '&'";
-    int32_t len=strlen(rules);
+    int32_t len=(int32_t)strlen(rules);
     UChar *temp = (UChar*)malloc(sizeof(UChar) * (len+1));
     UErrorCode status = U_ZERO_ERROR;
     u_uastrcpy(temp, rules);
@@ -282,7 +282,7 @@ static void TestDemo4()
     UCollator *myCollation;
     int32_t j, n;
     const char *rules = " & aa ; a'-' & ee ; e'-' & ii ; i'-' & oo ; o'-' & uu ; u'-' ";
-    int32_t len=strlen(rules);
+    int32_t len=(int32_t)strlen(rules);
     UChar *temp = (UChar*)malloc(sizeof(UChar) * (len+1));
     UErrorCode status = U_ZERO_ERROR;
     u_uastrcpy(temp, rules);

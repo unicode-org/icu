@@ -695,7 +695,7 @@ static void TestFileStream(void){
     FileStream* pStderr = T_FileStream_stderr();
 
     const char* testline = "This is a test line";
-    int32_t bufLen =uprv_strlen(testline)+10;
+    int32_t bufLen = (int32_t)strlen(testline)+10;
     char* buf = (char*) malloc(bufLen);
     int32_t retLen = 0;
 
@@ -786,7 +786,7 @@ static void TestFileStream(void){
       }
 
       T_FileStream_rewind(stream);
-      T_FileStream_write(stream,testline,uprv_strlen(testline));
+      T_FileStream_write(stream,testline,(int32_t)strlen(testline));
       T_FileStream_rewind(stream);
       retLen = T_FileStream_read(stream, buf, bufLen);
       if(uprv_strncmp(testline, buf,retLen)!=0){
