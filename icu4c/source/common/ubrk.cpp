@@ -201,3 +201,10 @@ ubrk_countAvailable()
 
   return uloc_countAvailable();
 }
+
+
+U_CAPI  UBool U_EXPORT2 
+ubrk_isBoundary(UBreakIterator *bi, int32_t offset)
+{
+    return ((BreakIterator *)bi)->isBoundary(offset);
+};
