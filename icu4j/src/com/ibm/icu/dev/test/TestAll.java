@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/TestAll.java,v $ 
- * $Date: 2002/04/03 04:31:59 $ 
- * $Revision: 1.25 $
+ * $Date: 2002/06/14 19:08:57 $ 
+ * $Revision: 1.26 $
  *
  *****************************************************************************************
  */
@@ -123,6 +123,12 @@ public class TestAll extends TestFmwk {
     public void TestUScript() throws Exception {
         run( new TestFmwk[] {
             new com.ibm.icu.dev.test.lang.TestUScript(),
+        });
+    }
+    
+    public void TestUScriptRun() throws Exception {
+        run( new TestFmwk[] {
+            new com.ibm.icu.dev.test.lang.TestUScriptRun(),
         });
     }
     
