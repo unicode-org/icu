@@ -225,7 +225,7 @@ import java.text.*;
  * *Unsupported by Java (and hence unsupported by UnicodeSet).
  *
  * @author Alan Liu
- * @version $RCSfile: UnicodeSet.java,v $ $Revision: 1.1 $ $Date: 1999/12/20 18:29:21 $ */
+ * @version $RCSfile: UnicodeSet.java,v $ $Revision: 1.2 $ $Date: 2000/01/04 21:43:58 $ */
 public class UnicodeSet {
     /**
      * The internal representation is a StringBuffer of even length.
@@ -454,6 +454,34 @@ public class UnicodeSet {
      */
     public boolean contains(char c) {
         return contains(c, c);
+    }
+
+    /**
+     * Returns <tt>true</tt> if this set contains any character whose low byte
+     * is the given value.  This is used by <tt>RuleBasedTransliterator</tt> for
+     * indexing.
+     */
+    public boolean containsIndexValue(int v) {
+        /* The index value v, in the range [0,255], is contained in this set if
+         * it is contained in any pair of this set.  Pairs either have the high
+         * bytes equal, or unequal.  If the high bytes are equal, then we have
+         * aaxx..aayy, where aa is the high byte.  Then v is contained if xx <=
+         * v <= yy.  If the high bytes are unequal we have aaxx..bbyy, bb>aa.
+         * Then v is contained if xx <= v || v <= yy.  (This is identical to the
+         * time zone month containment logic.)
+         */
+        for (int i=0; i<pairs.length(); i+=2) {
+            char low = pairs.charAt(i);
+            char high = pairs.charAt(i+1);
+            if ((low & 0xFF00) == (high & 0xFF00)) {
+                if ((low & 0xFF) <= v && v <= (high & 0xFF)) {
+                    return true;
+                }
+            } else if ((low & 0xFF) <= v || v <= (high & 0xFF)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
