@@ -798,8 +798,8 @@ void TestMessageFormat::testAdopt()
 {
     UErrorCode err = U_ZERO_ERROR;
 
-    UnicodeString formatStr = "{0,date},{1},{2,number}";
-    UnicodeString formatStrChange = "{0,number},{1,number},{2,date}";
+    UnicodeString formatStr("{0,date},{1},{2,number}", "");
+    UnicodeString formatStrChange("{0,number},{1,number},{2,date}", "");
     err = U_ZERO_ERROR;
     MessageFormat msg( formatStr, err);
     MessageFormat msgCmp( formatStr, err);
@@ -815,32 +815,34 @@ void TestMessageFormat::testAdopt()
     UnicodeString patAct;
     Format** formatsToAdopt;
 
-    UBool ok = FALSE;
     if (!formats || !formatsCmp || (count <= 0) || (count != countCmp)) {
-        goto endtest;
+        errln("Error getting Formats");
+        return;
     }
 
     int32_t i;
 
-    UBool equal;
-    equal = TRUE;
     for (i = 0; i < count; i++) {
         a = formats[i];
         b = formatsCmp[i];
         if ((a != NULL) && (b != NULL)) {
             if (*a != *b) {
-                equal = FALSE;
+                errln("a != b");
+                return;
             }
         }else if ((a != NULL) || (b != NULL)) {
-            equal = FALSE;
+            errln("(a != NULL) || (b != NULL)");
+            return;
         }
     }
-    if (!equal) goto endtest;
 
     msg.applyPattern( formatStrChange, err ); //set msg formats to something different
     int32_t countChg;
     formatsChg = msg.getFormats(countChg); // tested function
-    if (!formatsChg || (countChg != count)) goto endtest;
+    if (!formatsChg || (countChg != count)) {
+        errln("Error getting Formats");
+        return;
+    }
 
     UBool diff;
     diff = TRUE;
@@ -854,16 +856,21 @@ void TestMessageFormat::testAdopt()
             }
         }
     }
-    if (!diff) { it_errln("*** MSG getFormats err."); goto endtest; }
+    if (!diff) {
+        errln("*** MSG getFormats diff err.");
+        return;
+    }
 
     it_out << "MSG getFormats tested." << endl;
 
     msg.setFormats( formatsCmp, countCmp ); //tested function
 
     formatsAct = msg.getFormats(countAct);
-    if (!formatsAct || (countAct <=0) || (countAct != countCmp)) goto endtest;
+    if (!formatsAct || (countAct <=0) || (countAct != countCmp)) {
+        errln("Error getting Formats");
+        return;
+    }
 
-    
 #if 1
     msgCmp.toPattern( patCmp );
     it_out << "MSG patCmp: " << patCmp << endl;
@@ -871,24 +878,21 @@ void TestMessageFormat::testAdopt()
     it_out << "MSG patAct: " << patAct << endl;
 #endif
 
-    equal = TRUE;//=
     for (i = 0; i < countAct; i++) {
         a = formatsAct[i];
         b = formatsCmp[i];
         if ((a != NULL) && (b != NULL)) {
             if (*a != *b) {
                 it_out << "formatsAct != formatsCmp at index " << i << endl;
-                equal = FALSE;
+                errln("a != b");
+                return;
             }
         }else if ((a != NULL) || (b != NULL)) {
-            equal = FALSE;
+            errln("(a != NULL) || (b != NULL)");
+            return;
         }
     }
-    if (equal) {
-        it_out << "MSG setFormats tested." << endl;
-    }else{
-        it_errln("*** MSG setFormats err.");
-    }
+    it_out << "MSG setFormats tested." << endl;
 
 
     //----
@@ -896,14 +900,20 @@ void TestMessageFormat::testAdopt()
     msg.applyPattern( formatStrChange, err ); //set msg formats to something different
 
     formatsToAdopt = new Format* [countCmp];
-    if (!formatsToAdopt) goto endtest;
+    if (!formatsToAdopt) {
+        errln("memory allocation error");
+        return;
+    }
 
     for (i = 0; i < countCmp; i++) {
         if (formatsCmp[i] == NULL) {
             formatsToAdopt[i] = NULL;
         }else{
             formatsToAdopt[i] = formatsCmp[i]->clone();
-            if (!formatsToAdopt[i]) goto endtest;
+            if (!formatsToAdopt[i]) {
+                errln("Can't clone format at index %d", i);
+                return;
+            }
         }
     }
     msg.adoptFormats( formatsToAdopt, countCmp ); // function to test
@@ -917,39 +927,45 @@ void TestMessageFormat::testAdopt()
 #endif
 
     formatsAct = msg.getFormats(countAct);
-    if (!formatsAct || (countAct <=0) || (countAct != countCmp)) goto endtest;
+    if (!formatsAct || (countAct <=0) || (countAct != countCmp)) {
+        errln("Error getting Formats");
+        return;
+    }
 
-    equal = TRUE;
     for (i = 0; i < countAct; i++) {
         a = formatsAct[i];
         b = formatsCmp[i];
         if ((a != NULL) && (b != NULL)) {
             if (*a != *b) {
-                equal = FALSE;
+                errln("a != b");
+                return;
             }
         }else if ((a != NULL) || (b != NULL)) {
-            equal = FALSE;
+            errln("(a != NULL) || (b != NULL)");
+            return;
         }
     }
-    if (equal) {
-        it_out << "MSG adoptFormats tested." << endl;
-    }else{
-        it_errln("*** MSG adoptFormats err.");
-    }
+    it_out << "MSG adoptFormats tested." << endl;
 
     //---- adoptFormat
 
     msg.applyPattern( formatStrChange, err ); //set msg formats to something different
 
     formatsToAdopt = new Format* [countCmp];
-    if (!formatsToAdopt) goto endtest;
+    if (!formatsToAdopt) {
+        errln("memory allocation error");
+        return;
+    }
 
     for (i = 0; i < countCmp; i++) {
         if (formatsCmp[i] == NULL) {
             formatsToAdopt[i] = NULL;
         }else{
             formatsToAdopt[i] = formatsCmp[i]->clone();
-            if (!formatsToAdopt[i]) goto endtest;
+            if (!formatsToAdopt[i]) {
+                errln("Can't clone format at index %d", i);
+                return;
+            }
         }
     }
 
@@ -966,32 +982,25 @@ void TestMessageFormat::testAdopt()
 #endif
 
     formatsAct = msg.getFormats(countAct);
-    if (!formatsAct || (countAct <=0) || (countAct != countCmp)) goto endtest;
+    if (!formatsAct || (countAct <=0) || (countAct != countCmp)) {
+        errln("Error getting Formats");
+        return;
+    }
 
-    equal = TRUE;
     for (i = 0; i < countAct; i++) {
         a = formatsAct[i];
         b = formatsCmp[i];
         if ((a != NULL) && (b != NULL)) {
             if (*a != *b) {
-                equal = FALSE;
+                errln("a != b");
+                return;
             }
         }else if ((a != NULL) || (b != NULL)) {
-            equal = FALSE;
+            errln("(a != NULL) || (b != NULL)");
+            return;
         }
     }
-    if (equal) {
-        it_out << "MSG adoptFormat tested." << endl;
-    }else{
-        it_errln("*** MSG adoptFormat err.");
-    }
-
-    // ===============
-
-    ok = TRUE; // doesn't mean no error, only that no additional error msg is necessary.
-
-endtest:
-    if (!ok) it_errln("*** MSG testAdopt err.");
+    it_out << "MSG adoptFormat tested." << endl;
 }
 
 // This test is a regression test for a fixed bug in the copy constructor.
@@ -1003,8 +1012,8 @@ endtest:
 static void testCopyConstructor2()
 {
     UErrorCode status = U_ZERO_ERROR;
-    UnicodeString formatStr("Hello World on {0,date,full}");
-    UnicodeString resultStr(" ");
+    UnicodeString formatStr("Hello World on {0,date,full}", "");
+    UnicodeString resultStr(" ", "");
     UnicodeString result;
     FieldPosition fp(0);
     UDate d = Calendar::getNow();
