@@ -3680,6 +3680,12 @@ void DecimalFormat::setCurrency(const UChar* theCurrency, UErrorCode& ec) {
     }
 }
 
+// Deprecated variant with no UErrorCode parameter
+void DecimalFormat::setCurrency(const UChar* theCurrency) {
+    UErrorCode ec = U_ZERO_ERROR;
+    setCurrency(theCurrency, ec);
+}
+
 void DecimalFormat::getEffectiveCurrency(UChar* result, UErrorCode& /*ec*/) const {
     const UChar* c = getCurrency();
     if (*c == 0) {
