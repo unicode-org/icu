@@ -1,4 +1,4 @@
-icu (1.6.0.1-20001026-1) unstable; urgency=low
+icu (1.6.0.1-20001027-1) unstable; urgency=low
 
   * Move architecture-dependent files into /usr/lib, instead of
     /usr/share.
