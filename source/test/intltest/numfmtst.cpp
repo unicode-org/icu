@@ -939,7 +939,7 @@ void NumberFormatTest::expectPad(DecimalFormat& fmt, const UnicodeString& pat,
 void NumberFormatTest::expectPad(DecimalFormat& fmt, const UnicodeString& pat,
                                  int32_t pos, int32_t width, const UnicodeString& pad) {
     int32_t apos = 0, awidth = 0;
-    UnicodeString apadStr="";
+    UnicodeString apadStr;
     UErrorCode status = U_ZERO_ERROR;
     fmt.applyPattern(pat, status);
     if (U_SUCCESS(status)) {
