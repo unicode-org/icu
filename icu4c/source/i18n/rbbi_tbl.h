@@ -10,12 +10,10 @@
 #ifndef RBBI_TBL_H
 #define RBBI_TBL_H
 
-#include "ucmp8.h"
-#include "utypes.h"
-#include "unistr.h"
+#include "unicode/utypes.h"
+#include "unicode/unistr.h"
 #include "unicode/brkiter.h"
 #include "filestrm.h"
-
 /**
  * This class contains the internal static tables that are used by the
  * RuleBasedBreakIterator.  Once created, these tables are immutable,
