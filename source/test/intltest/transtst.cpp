@@ -142,6 +142,7 @@ TransliteratorTest::runIndexedTest(int32_t index, UBool exec,
         TESTCASE(60,TestToRulesMark);
         TESTCASE(61,TestEscape);
         TESTCASE(62,TestAnchorMasking);
+        TESTCASE(63,TestDisplayName);
         default: name = ""; break;
     }
 }
@@ -2910,6 +2911,58 @@ void TransliteratorTest::TestAnchorMasking(){
               ", rules: " + prettify(rule, TRUE));
     }
 }
+
+/**
+ * Make sure display names of variants look reasonable.
+ */
+void TransliteratorTest::TestDisplayName() {
+    static const char* DATA[] = {
+        // ID, forward name, reverse name
+        // Update the text as necessary -- the important thing is
+        // not the text itself, but how various cases are handled.
+        
+        // Basic test
+        "Any-Hex", "Any to Hex Escape", "Hex Escape to Any",
+        
+        // Variants
+        "Any-Hex/Perl", "Any to Hex Escape/Perl", "Hex Escape to Any/Perl",
+        
+        // Target-only IDs
+        "NFC", "Any to NFC", "Any to NFD",
+    };
+
+    int32_t DATA_length = sizeof(DATA) / sizeof(DATA[0]);
+    
+    Locale US("en", "US");
+    
+    for (int32_t i=0; i<DATA_length; i+=3) {
+        UnicodeString name;
+        Transliterator::getDisplayName(DATA[i], US, name);
+        if (name != DATA[i+1]) {
+            errln((UnicodeString)"FAIL: " + DATA[i] + ".getDisplayName() => " +
+                  name + ", expected " + DATA[i+1]);
+        } else {
+            logln((UnicodeString)"Ok: " + DATA[i] + ".getDisplayName() => " + name);
+        }
+        UErrorCode ec = U_ZERO_ERROR;
+        UParseError pe;
+        Transliterator *t = Transliterator::createInstance(DATA[i], UTRANS_REVERSE, pe, ec);
+        if (U_FAILURE(ec)) {
+            delete t;
+            errln("FAIL: createInstance failed");
+            continue;
+        }
+        name = Transliterator::getDisplayName(t->getID(), US, name);
+        if (name != DATA[i+2]) {
+            errln((UnicodeString)"FAIL: " + t->getID() + ".getDisplayName() => " +
+                  name + ", expected " + DATA[i+2]);
+        } else {
+            logln((UnicodeString)"Ok: " + t->getID() + ".getDisplayName() => " + name);
+        }
+        delete t;
+    }
+}
+
 //======================================================================
 // Support methods
 //======================================================================
