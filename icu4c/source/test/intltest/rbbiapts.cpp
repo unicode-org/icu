@@ -73,6 +73,21 @@ void RBBIAPITest::TestCloneEquals()
         return;
     }
 
+    RuleBasedBreakIterator biDefault, biDefault2;
+    if(U_FAILURE(status)){
+        errln((UnicodeString)"FAIL : in construction of default iterator");
+        return;
+    }
+    if (biDefault == *bix) {
+        errln((UnicodeString)"ERROR: iterators should not compare ==");
+        return;
+    }
+    if (biDefault != biDefault2) {
+        errln((UnicodeString)"ERROR: iterators should compare ==");
+        return;
+    }
+
+
     UnicodeString   HelloString("Hello Kitty");
     bix->setText(HelloString);
     if (*bix == *bi2) {
