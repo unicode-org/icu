@@ -11,7 +11,6 @@
  * IntlTest is a base class for tests.
  */
 
-#include <limits.h>
 #include <stdio.h>
 #include <string.h>
 #include <assert.h>
@@ -20,9 +19,7 @@
 
 #include "unicode/unistr.h"
 #include "unicode/ures.h"
-#include "unicode/coll.h"
 #include "unicode/smpdtfmt.h"
-#include "unicode/ustring.h"
 #include "unicode/ucnv.h"
 
 #include "intltest.h"
@@ -33,8 +30,6 @@
 #include "Files.h"
 #endif
 
-/* ### TODO: remove when the new normalization implementation is finished */
-#include "unormimp.h"
 
 static char* _testDirectory=NULL;
 
@@ -887,6 +882,7 @@ UBool
 IntlTest::run_phase2( char* name, char* par ) // supports reporting memory leaks
 {
     UnicodeString* strLeak = new UnicodeString("forced leak"); // for verifying purify filter
+    strLeak->append(" for verifying purify filter");
     return this->runTest( name, par );
 }
 
