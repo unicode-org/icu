@@ -768,7 +768,11 @@ void TransliteratorTest::TestPositionHandling(void) {
             errln("FAIL: RBT constructor");
             return;
         }
-        UTransPosition pos = {POS[4*i], POS[4*i+1], POS[4*i+2], POS[4*i+3]};
+        UTransPosition pos;
+        pos.contextStart= POS[4*i];
+        pos.contextLimit = POS[4*i+1];
+        pos.start = POS[4*i+2];
+        pos.limit = POS[4*i+3];
         UnicodeString rsource(DATA[3*i+1]);
         t->transliterate(rsource, pos, status);
         if (U_FAILURE(status)) {
