@@ -15,7 +15,7 @@ ALL : "$(TESTDATAOUT)\testdata.dat"
 
 "$(TESTDATAOUT)\testdata.dat" : TESTDATA_ENC  "$(TESTDATAOUT)\root.res" "$(TESTDATAOUT)\te.res" "$(TESTDATAOUT)\te_IN.res" "$(TESTDATAOUT)\testtypes.res" "$(TESTDATAOUT)\testempty.res" "$(TESTDATAOUT)\ja_data.res" $(TESTDATAOUT)test.dat
 	@echo Building test data
-	copy $(TESTDATAOUT)\te.res $(TESTDATAOUT)\testudata_nam.typ
+	copy "$(TESTDATAOUT)\te.res" "$(TESTDATAOUT)\testudata_nam.typ"
 	@"$(ICUTOOLS)\pkgdata\$(CFG)\pkgdata" -v -m common -c -p testdata -O "$(PKGOPT)" -d "$(TESTDATAOUT)" -T "$(TESTDATAOUT)" -s "$(TESTDATAOUT)" <<
 root.res
 te.res
@@ -31,11 +31,11 @@ test.dat
 # The -q option is there on purpose, so we don't see it normally.
 {$(TESTDATA)}.txt.res: 
 	@echo Making Test Resource Bundle files
-	@"$(ICUTOOLS)\genrb\$(CFG)\genrb" -q -s$(TESTDATA) -d$(TESTDATAOUT) $(?F)
+	@"$(ICUTOOLS)\genrb\$(CFG)\genrb" -q -s"$(TESTDATA)" -d"$(TESTDATAOUT)" $(?F)
 
 TESTDATA_ENC:
 	@echo Making Test Resource Bundle file with encoding ISO-2022-JP
-	@"$(ICUTOOLS)\genrb\$(CFG)\genrb" -q -s$(TESTDATA) -eISO_2022_JP -d$(TESTDATAOUT) ja_data.bin >null
+	@"$(ICUTOOLS)\genrb\$(CFG)\genrb" -q -s"$(TESTDATA)" -eISO_2022_JP -d"$(TESTDATAOUT)" ja_data.bin >null
 
 $(TESTDATAOUT)test.dat : {"$(ICUTOOLS)\gentest\$(CFG)"}gentest.exe
-	"$(ICUTOOLS)\gentest\$(CFG)\gentest" -d$(TESTDATAOUT)
+	"$(ICUTOOLS)\gentest\$(CFG)\gentest" -d"$(TESTDATAOUT)"

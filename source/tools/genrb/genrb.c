@@ -217,8 +217,11 @@ processFile(const char *filename, const char *cp, const char *inputDir, const ch
             if( (filename[0] != U_FILE_SEP_CHAR) && (inputDir[dirlen-1] !='.')){
                 uprv_strcpy(openFileName, inputDir);
                 openFileName[dirlen]     = U_FILE_SEP_CHAR;
+                openFileName[dirlen + 1] = '\0';
             }
-            openFileName[dirlen + 1] = '\0';
+            else {
+                openFileName[0] = '\0';
+            }
             uprv_strcat(openFileName, filename);
         } else {
             openFileName = (char *) uprv_malloc(dirlen + filelen + 1);
@@ -230,7 +233,7 @@ processFile(const char *filename, const char *cp, const char *inputDir, const ch
 
     if(in == 0) {
         *status = U_FILE_ACCESS_ERROR;
-        fprintf(stderr, "Couldn't open file %s", openFileName == NULL ? filename : openFileName);
+        fprintf(stderr, "Couldn't open file %s\n", openFileName == NULL ? filename : openFileName);
         goto finish;
     } else {
         /* auto detect popular encodings */
