@@ -892,6 +892,7 @@ TestUTF16BE() {
         0x00, 0x31, 
         0x00, 0xf4, 
         0xce, 0xfe,
+        0xd8, 0x01, 0xdc, 0x01,
                 
     };
 
@@ -902,7 +903,8 @@ TestUTF16BE() {
         2, 0xc0,
         2, 0x31, 
         2, 0xf4,
-        2, 0xffcefe,
+        2, 0xcefe,
+        4, 0x10401,
         
     };
 
@@ -922,8 +924,8 @@ TestUTF16BE() {
     }
     /*Test for the condition where there is a surrogate pair*/
     {
-      /*    static const uint8_t source2[]={};
-	    TestNextUCharError(cnv, (const char*)source2, (const char*)source2+sizeof(source2), U_TRUNCATED_CHAR_FOUND, "an invalid character"); */
+        const uint8_t source2[]={0xd8, 0x01};
+	    TestNextUCharError(cnv, (const char*)source2, (const char*)source2+sizeof(source2), U_TRUNCATED_CHAR_FOUND, "an truncated surrogate character"); 
     }
     ucnv_close(cnv);
 }
@@ -935,6 +937,7 @@ TestUTF16LE() {
         0x31, 0x00,
         0x4e, 0x2e, 
         0x4e, 0x00,
+        0x01, 0xd8, 0x01, 0xdc,
     };
 
     /* expected test results */
@@ -944,6 +947,7 @@ TestUTF16LE() {
         2, 0x31,
         2, 0x2e4e,
         2, 0x4e,
+        4, 0x10401,
     };
 
     const char *source=(const char *)in, *limit=(const char *)in+sizeof(in);
@@ -959,6 +963,11 @@ TestUTF16LE() {
     {
         static const uint8_t source2[]={0x61};
         TestNextUCharError(cnv, (const char*)source2, (const char*)source2+sizeof(source2), U_TRUNCATED_CHAR_FOUND, "an invalid character");
+    }
+    /*Test for the condition where there is a surrogate character*/
+    {
+        static const uint8_t source2[]={0x01, 0xd8};
+        TestNextUCharError(cnv, (const char*)source2, (const char*)source2+sizeof(source2), U_TRUNCATED_CHAR_FOUND, "an truncated surrogate character");
     }
    
     ucnv_close(cnv);
