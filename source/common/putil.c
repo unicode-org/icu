@@ -1448,7 +1448,7 @@ u_UCharsToChars(const UChar *us, char *cs, UTextOffset length) {
 #if U_CHARSET_FAMILY==U_ASCII_FAMILY
         *cs++=(char)(*us++);
 #elif U_CHARSET_FAMILY==U_EBCDIC_FAMILY
-        *cs++=(char)ebcdicFromAscii[*us++];
+        *cs++=(char)ebcdicFromAscii[(uint8_t)(*us++)];
 #else
 #   error U_CHARSET_FAMILY is not valid
 #endif
