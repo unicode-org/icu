@@ -209,13 +209,11 @@ UBool ures_cleanup(void)
 {
     if (cache != NULL) {
         ures_flushCache();
-        umtx_lock(NULL);
         if (cache != NULL && uhash_count(cache) == 0) {
             uhash_close(cache);
             cache = NULL;
             umtx_destroy(&resbMutex);
         }
-        umtx_unlock(NULL);
     }
     return (cache == NULL);
 }
@@ -352,6 +350,7 @@ static UResourceDataEntry *init_entry(const char *localeID, const char *path, UE
                 if(r->fPath != NULL) {
                     uprv_free(r->fPath);
                 }
+                res_unload(&(r->fData));
                 uprv_free(r);
                 r = oldR;
                 r->fCountExisting++;
