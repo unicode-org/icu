@@ -122,13 +122,13 @@ public:
 
   /**
    * Return a class ID for this object (not really public) */
-  virtual ClassID         getDynamicClassID(void) const 
+  virtual UClassID         getDynamicClassID(void) const 
     { return getStaticClassID(); }
 
   /**
    * Return a class ID for this class (not really public) */
-  static ClassID          getStaticClassID(void) 
-    { return (ClassID)(&fgClassID); }
+  static UClassID          getStaticClassID(void) 
+    { return (UClassID)(&fgClassID); }
 
 private:
   UCharCharacterIterator();

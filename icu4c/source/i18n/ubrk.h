@@ -188,7 +188,7 @@ typedef enum UBreakIteratorType UBreakIteratorType;
  * @return A UBreakIterator for the specified locale.
  * @see ubrk_openRules
  */
-CAPI UBreakIterator*
+U_CAPI UBreakIterator*
 ubrk_open(UBreakIteratorType type,
       const char *locale,
       const UChar *text,
@@ -206,7 +206,7 @@ ubrk_open(UBreakIteratorType type,
  * @return A UBreakIterator for the specified rules.
  * @see ubrk_open
  */
-CAPI UBreakIterator*
+U_CAPI UBreakIterator*
 ubrk_openRules(const UChar *rules,
            int32_t rulesLength,
            const UChar *text,
@@ -218,7 +218,7 @@ ubrk_openRules(const UChar *rules,
 * Once closed, a UBreakIterator may no longer be used.
 * @param bi The break iterator to close.
 */
-CAPI void
+U_CAPI void
 ubrk_close(UBreakIterator *bi);
 
 /**
@@ -228,7 +228,7 @@ ubrk_close(UBreakIterator *bi);
  * @return The character index most recently returned by \Ref{ubrk_next}, \Ref{ubrk_previous}, 
  * \Ref{ubrk_first}, or \Ref{ubrk_last}.
  */
-CAPI UTextOffset
+U_CAPI UTextOffset
 ubrk_current(const UBreakIterator *bi);
 
 /**
@@ -239,7 +239,7 @@ ubrk_current(const UBreakIterator *bi);
  * if all text boundaries have been returned.
  * @see ubrk_previous
  */
-CAPI UTextOffset
+U_CAPI UTextOffset
 ubrk_next(UBreakIterator *bi);
 
 /**
@@ -250,7 +250,7 @@ ubrk_next(UBreakIterator *bi);
  * if all text boundaries have been returned.
  * @see ubrk_next
  */
-CAPI UTextOffset
+U_CAPI UTextOffset
 ubrk_previous(UBreakIterator *bi);
 
 /**
@@ -260,7 +260,7 @@ ubrk_previous(UBreakIterator *bi);
  * @return The character index of the first character in the text being scanned.
  * @see ubrk_last
  */
-CAPI UTextOffset
+U_CAPI UTextOffset
 ubrk_first(UBreakIterator *bi);
 
 /**
@@ -272,7 +272,7 @@ ubrk_first(UBreakIterator *bi);
  * text being scanned.
  * @see ubrk_first
  */
-CAPI UTextOffset
+U_CAPI UTextOffset
 ubrk_last(UBreakIterator *bi);
 
 /**
@@ -283,7 +283,7 @@ ubrk_last(UBreakIterator *bi);
  * @return The text boundary preceding offset, or UBRK_DONE.
  * @see ubrk_following
  */
-CAPI UTextOffset
+U_CAPI UTextOffset
 ubrk_preceding(UBreakIterator *bi,
            UTextOffset offset);
 
@@ -295,7 +295,7 @@ ubrk_preceding(UBreakIterator *bi,
  * @return The text boundary following offset, or UBRK_DONE.
  * @see ubrk_preceding
  */
-CAPI UTextOffset
+U_CAPI UTextOffset
 ubrk_following(UBreakIterator *bi,
            UTextOffset offset);
 
@@ -307,7 +307,7 @@ ubrk_following(UBreakIterator *bi,
 * @return A locale for which number text breaking information is available, or 0 if none.
 * @see ubrk_countAvailable
 */
-CAPI const char*
+U_CAPI const char*
 ubrk_getAvailable(int32_t index);
 
 /**
@@ -317,7 +317,7 @@ ubrk_getAvailable(int32_t index);
 * @return The number of locales for which text breaking information is available.
 * @see ubrk_getAvailable
 */
-CAPI int32_t
+U_CAPI int32_t
 ubrk_countAvailable(void);
 
 #endif

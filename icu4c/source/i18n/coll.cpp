@@ -87,7 +87,7 @@ Collator::operator=(const   Collator&   other)
 
 Collator*
 Collator::createInstance(UErrorCode& success) {
-  if (FAILURE(success))
+  if (U_FAILURE(success))
     return 0;
   return createInstance(Locale::getDefault(), success);
 }
@@ -96,7 +96,7 @@ Collator*
 Collator::createInstance(const Locale&  desiredLocale, 
                          UErrorCode&     status)
 {
-  if (FAILURE(status)) return 0;
+  if (U_FAILURE(status)) return 0;
 
   /**
    * A bit of explanation is required here.  Although in the current implementation
@@ -119,7 +119,7 @@ Collator::createInstance(const Locale&  desiredLocale,
    * have no way of checking.
    */
   RuleBasedCollator* collation = new RuleBasedCollator(desiredLocale, status);
-  if (FAILURE(status))
+  if (U_FAILURE(status))
     {
       delete collation;
       collation = 0;

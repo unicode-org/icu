@@ -22,7 +22,7 @@
 #include "schriter.h"
 
 
-ClassID StringCharacterIterator::fgClassID = 0;
+UClassID StringCharacterIterator::fgClassID = 0;
 
 StringCharacterIterator::StringCharacterIterator()
   : CharacterIterator(),

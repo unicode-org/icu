@@ -35,7 +35,7 @@ class ResourceBundleData
 {
 public:
   virtual ~ResourceBundleData() {}
-  virtual ClassID getDynamicClassID(void) const = 0;
+  virtual UClassID getDynamicClassID(void) const = 0;
 };
 
 /** Concrete data class representing a list of strings.  */
@@ -46,10 +46,10 @@ public:
   StringList(UnicodeString* adopted, int32_t count);
   virtual ~StringList();
   const UnicodeString& operator[](int32_t i) const;
-  virtual ClassID getDynamicClassID(void) const;
-  static ClassID getStaticClassID(void);
+  virtual UClassID getDynamicClassID(void) const;
+  static UClassID getStaticClassID(void);
 
-  static ClassID  fgClassID;
+  static UClassID  fgClassID;
   int32_t         fCount;
   UnicodeString   *fStrings;
 };
@@ -62,10 +62,10 @@ public:
   String2dList(UnicodeString** adopted, int32_t rowCount, int32_t colCount);
   virtual ~String2dList();
   const UnicodeString& getString(int32_t rowIndex, int32_t colIndex);
-  virtual ClassID getDynamicClassID(void) const;
-  static ClassID getStaticClassID(void);
+  virtual UClassID getDynamicClassID(void) const;
+  static UClassID getStaticClassID(void);
 
-  static ClassID  fgClassID;
+  static UClassID  fgClassID;
   int32_t         fRowCount;
   int32_t         fColCount;
   UnicodeString   **fStrings;
@@ -82,12 +82,12 @@ public:
   virtual ~TaggedList();
   void put(const UnicodeString& tag, const UnicodeString& data);
   const UnicodeString* get(const UnicodeString& tag) const;
-  virtual ClassID getDynamicClassID(void) const;
-  static ClassID getStaticClassID(void);
+  virtual UClassID getDynamicClassID(void) const;
+  static UClassID getStaticClassID(void);
 
   static void deleteValue(void* value);
 
-  static ClassID  fgClassID;
+  static UClassID  fgClassID;
   UHashtable      *fHashtableValues;
   UHashtable      *fHashtableKeys;
 };

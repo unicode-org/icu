@@ -198,7 +198,7 @@ public:
      * Return a polymorphic class ID for this object. Different subclasses
      * will return distinct unequal values.
      */
-    virtual ClassID getDynamicClassID(void) const = 0;
+    virtual UClassID getDynamicClassID(void) const = 0;
 
     /**
      * Get the text for which this object is finding the boundaries.

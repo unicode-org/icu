@@ -41,26 +41,26 @@
  * functions may have to be re-implemented.  */
 
 /* Floating point utilities */
-CAPI bool_t  U_EXPORT2  icu_isNaN(double);
-CAPI bool_t  U_EXPORT2 icu_isInfinite(double);
-CAPI bool_t   U_EXPORT2 icu_isPositiveInfinity(double);
-CAPI bool_t   U_EXPORT2 icu_isNegativeInfinity(double);
-CAPI double   U_EXPORT2 icu_getNaN(void);
-CAPI double   U_EXPORT2 icu_getInfinity(void);
+U_CAPI bool_t  U_EXPORT2  icu_isNaN(double);
+U_CAPI bool_t  U_EXPORT2 icu_isInfinite(double);
+U_CAPI bool_t   U_EXPORT2 icu_isPositiveInfinity(double);
+U_CAPI bool_t   U_EXPORT2 icu_isNegativeInfinity(double);
+U_CAPI double   U_EXPORT2 icu_getNaN(void);
+U_CAPI double   U_EXPORT2 icu_getInfinity(void);
 
-CAPI double   U_EXPORT2 icu_floor(double x);
-CAPI double   U_EXPORT2 icu_ceil(double x);
-CAPI double   U_EXPORT2 icu_fabs(double x);
-CAPI double   U_EXPORT2 icu_modf(double x, double* y);
-CAPI double   U_EXPORT2 icu_fmod(double x, double y);
-CAPI double   U_EXPORT2 icu_pow10(int32_t x);
-CAPI double   U_EXPORT2 icu_IEEEremainder(double x, double y);
-CAPI double   U_EXPORT2 icu_fmax(double x, double y);
-CAPI double   U_EXPORT2 icu_fmin(double x, double y);
-CAPI int32_t  U_EXPORT2 icu_max(int32_t x, int32_t y);
-CAPI int32_t  U_EXPORT2 icu_min(int32_t x, int32_t y);
-CAPI double   U_EXPORT2 icu_trunc(double d);
-CAPI void     U_EXPORT2 icu_longBitsFromDouble(double d, int32_t *hi, uint32_t *lo);
+U_CAPI double   U_EXPORT2 icu_floor(double x);
+U_CAPI double   U_EXPORT2 icu_ceil(double x);
+U_CAPI double   U_EXPORT2 icu_fabs(double x);
+U_CAPI double   U_EXPORT2 icu_modf(double x, double* y);
+U_CAPI double   U_EXPORT2 icu_fmod(double x, double y);
+U_CAPI double   U_EXPORT2 icu_pow10(int32_t x);
+U_CAPI double   U_EXPORT2 icu_IEEEremainder(double x, double y);
+U_CAPI double   U_EXPORT2 icu_fmax(double x, double y);
+U_CAPI double   U_EXPORT2 icu_fmin(double x, double y);
+U_CAPI int32_t  U_EXPORT2 icu_max(int32_t x, int32_t y);
+U_CAPI int32_t  U_EXPORT2 icu_min(int32_t x, int32_t y);
+U_CAPI double   U_EXPORT2 icu_trunc(double d);
+U_CAPI void     U_EXPORT2 icu_longBitsFromDouble(double d, int32_t *hi, uint32_t *lo);
 
 /*
  * Return the floor of the log base 10 of a given double.
@@ -74,13 +74,13 @@ CAPI void     U_EXPORT2 icu_longBitsFromDouble(double d, int32_t *hi, uint32_t *
  * @param d the double value to apply the common log function for.
  * @return the log of value d.
  */
-CAPI int16_t  U_EXPORT2 icu_log10(double d);
+U_CAPI int16_t  U_EXPORT2 icu_log10(double d);
 
 /**
  * Returns the number of digits after the decimal point in a double number x.
  * @param x the double number
  */
-CAPI int32_t  U_EXPORT2 icu_digitsAfterDecimal(double x);
+U_CAPI int32_t  U_EXPORT2 icu_digitsAfterDecimal(double x);
 
 /**
  * Time zone utilities
@@ -113,29 +113,22 @@ CAPI int32_t  U_EXPORT2 icu_digitsAfterDecimal(double x);
  * and Windows 95, this information is specified in the Control Panel’s
  * Date/Time application.
  */
-CAPI void     U_EXPORT2 icu_tzset(void);
-CAPI int32_t  U_EXPORT2 icu_timezone(void);
-CAPI char*    U_EXPORT2 icu_tzname(int index);
+U_CAPI void     U_EXPORT2 icu_tzset(void);
+U_CAPI int32_t  U_EXPORT2 icu_timezone(void);
+U_CAPI char*    U_EXPORT2 icu_tzname(int index);
 
 /* Get UTC (GMT) time measured in seconds since 0:00 on 1/1/70. */
-CAPI int32_t  U_EXPORT2 icu_getUTCtime(void);
+U_CAPI int32_t  U_EXPORT2 icu_getUTCtime(void);
 
 /* Return the default data directory for this platform.  See Locale. */
-CAPI const char*  U_EXPORT2 icu_getDefaultDataDirectory(void);
+U_CAPI const char*  U_EXPORT2 icu_getDefaultDataDirectory(void);
 
 /* Return the default codepage for this platform and locale */
-CAPI const char*  U_EXPORT2 icu_getDefaultCodepage(void);
+U_CAPI const char*  U_EXPORT2 icu_getDefaultCodepage(void);
 
 /* Return the default locale ID string by querying ths system, or
        zero if one cannot be found. */
-CAPI const char*  U_EXPORT2 icu_getDefaultLocaleID(void);
-
-/**
- * Retrun true if this platform is big-endian, that is, if the number
- * 0x1234 is stored 0x12, 0x34 in memory.  Return false if this platform
- * is little-endian, and is, if 0x1234 is stored 0x34, 0x12 in memory.
- */
-CAPI bool_t           U_EXPORT2 icu_isBigEndian(void);
+U_CAPI const char*  U_EXPORT2 icu_getDefaultLocaleID(void);
 
 /*
  * Finds the least double greater than d (if positive == true),
@@ -145,7 +138,7 @@ CAPI bool_t           U_EXPORT2 icu_isBigEndian(void);
  * documentation.
  * It is not a general purpose function and not defined for NaN or Infinity
  */
-CAPI double           U_EXPORT2 icu_nextDouble(double d, bool_t positive);
+U_CAPI double           U_EXPORT2 icu_nextDouble(double d, bool_t positive);
 
 #endif
 

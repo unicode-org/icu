@@ -37,69 +37,69 @@
 
 typedef struct _FileStream FileStream;
 
-CAPI FileStream* U_EXPORT2
+U_CAPI FileStream* U_EXPORT2
 T_FileStream_open(const char* filename, const char* mode);
 
-CAPI FileStream* U_EXPORT2
+U_CAPI FileStream* U_EXPORT2
 T_FileStream_wopen(const wchar_t* filename, const wchar_t* mode);
 
-CAPI void U_EXPORT2
+U_CAPI void U_EXPORT2
 T_FileStream_close(FileStream* fileStream);
 
-CAPI bool_t U_EXPORT2
+U_CAPI bool_t U_EXPORT2
 T_FileStream_file_exists(const char* filename);
 
 
-CAPI FileStream* U_EXPORT2
+U_CAPI FileStream* U_EXPORT2
 T_FileStream_tmpfile(void);
 
-CAPI int32_t U_EXPORT2
+U_CAPI int32_t U_EXPORT2
 T_FileStream_read(FileStream* fileStream, void* addr, int32_t len);
 
-CAPI int32_t U_EXPORT2
+U_CAPI int32_t U_EXPORT2
 T_FileStream_write(FileStream* fileStream, const void* addr, int32_t len);
 
-CAPI void U_EXPORT2
+U_CAPI void U_EXPORT2
 T_FileStream_rewind(FileStream* fileStream);
 
 /*Added by Bertrand A. D. */
-CAPI char * U_EXPORT2
+U_CAPI char * U_EXPORT2
 T_FileStream_readLine(FileStream* fileStream, char* buffer, int32_t length);
 
-CAPI int32_t U_EXPORT2
+U_CAPI int32_t U_EXPORT2
 T_FileStream_writeLine(FileStream* fileStream, const char* buffer);
 
-CAPI int32_t U_EXPORT2
+U_CAPI int32_t U_EXPORT2
 T_FileStream_putc(FileStream* fileStream, int32_t ch);
 
-CAPI int U_EXPORT2
+U_CAPI int U_EXPORT2
 T_FileStream_getc(FileStream* fileStream);
 
-CAPI int32_t U_EXPORT2
+U_CAPI int32_t U_EXPORT2
 T_FileStream_ungetc(int32_t ch, FileStream *fileStream);
 
-CAPI int32_t U_EXPORT2
+U_CAPI int32_t U_EXPORT2
 T_FileStream_peek(FileStream* fileStream);
 
-CAPI int32_t U_EXPORT2
+U_CAPI int32_t U_EXPORT2
 T_FileStream_size(FileStream* fileStream);
 
-CAPI int U_EXPORT2
+U_CAPI int U_EXPORT2
 T_FileStream_eof(FileStream* fileStream);
 
-CAPI int U_EXPORT2
+U_CAPI int U_EXPORT2
 T_FileStream_error(FileStream* fileStream);
 
-CAPI void U_EXPORT2
+U_CAPI void U_EXPORT2
 T_FileStream_setError(FileStream* fileStream);
 
-CAPI FileStream* U_EXPORT2
+U_CAPI FileStream* U_EXPORT2
 T_FileStream_stdin(void);
 
-CAPI FileStream* U_EXPORT2
+U_CAPI FileStream* U_EXPORT2
 T_FileStream_stdout(void);
 
-CAPI FileStream* U_EXPORT2
+U_CAPI FileStream* U_EXPORT2
 T_FileStream_stderr(void);
 
 #endif /* _FILESTRM*/

@@ -393,7 +393,7 @@ public:
      * </pre>
      * @return The class ID for all objects of this class.
      */
-    static ClassID getStaticClassID(void) { return (ClassID)&fgClassID; }
+    static UClassID getStaticClassID(void) { return (UClassID)&fgClassID; }
 
     /**
      * Returns a unique class ID POLYMORPHICALLY. Pure virtual method. This method is to
@@ -403,13 +403,13 @@ public:
      * Concrete subclasses of TimeZone must implement getDynamicClassID() and also a
      * static method and data member:
      * <pre>
-     * .     static ClassID getStaticClassID() { return (ClassID)&fgClassID; }
+     * .     static UClassID getStaticClassID() { return (UClassID)&fgClassID; }
      * .     static char fgClassID;
      * </pre>
      * @return   The class ID for this object. All objects of a given class have the
      *           same class ID. Objects of other classes have different class IDs.
      */
-    virtual ClassID getDynamicClassID(void) const = 0;
+    virtual UClassID getDynamicClassID(void) const = 0;
 
 protected:
 
