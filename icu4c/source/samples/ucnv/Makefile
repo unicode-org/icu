@@ -1,5 +1,5 @@
 # Copyright (c) 2000 IBM, Inc. and others
-# conversion sample code $Revision: 1.3 $
+# conversion sample code $Revision: 1.4 $
 
 
 # Usage:
@@ -37,7 +37,7 @@ CLEANFILES=*~ $(TARGET).out
 DEPS=$(OBJECTS:.o=.d)
 
 # turn on super warnings
-CPPFLAGS += -Wall
+#CPPFLAGS += -Wall
 
 
 all: $(TARGET)
