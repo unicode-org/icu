@@ -50,6 +50,7 @@
 *         - udatamem.c has code for managing UDataMemory structs.  These are little
 *                     descriptor objects for blocks of memory holding ICU data of
 *                     various types.
+*/
 
 /* configuration ---------------------------------------------------------- */
 
