@@ -318,7 +318,7 @@ packDiff(int32_t diff) {
              */
             result|=BOCU1_TRAIL_TO_BYTE(diff)<<16;
 
-            result|=BOCU1_START_POS_4<<24;
+            result|=((uint32_t)BOCU1_START_POS_4)<<24;
         }
     } else {
         /* two- to four-byte negative differences */
