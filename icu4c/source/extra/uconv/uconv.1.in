@@ -386,7 +386,7 @@ in this example):
 .RS 4
 .B \fR$ \fPecho '\eu30ab' | uconv \-x 'hex-any; any-name'; echo
 .br
-{KATAKANA LETTER KA}{<control-000A>}
+{KATAKANA LETTER KA}{LINE FEED}
 .br
 $ 
 .RE
