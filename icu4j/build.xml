@@ -172,6 +172,41 @@
     </target>
 
     <target name="tests" depends="core,testData" description="build tests">
+        <javac includes="com/ibm/icu/dev/test/calendar/**/*.java"
+            excludes="**/CVS/**/*"
+            srcdir="${src.dir}"
+            destdir="${build.dir}"
+            classpathref="build.classpath"
+            source="1.4"
+            debug="on" deprecation="off"/>
+        <javac includes="com/ibm/icu/dev/test/collator/**/*.java"
+            excludes="**/CVS/**/*"
+            srcdir="${src.dir}"
+            destdir="${build.dir}"
+            classpathref="build.classpath"
+            source="1.4"
+            debug="on" deprecation="off"/>
+        <javac includes="com/ibm/icu/dev/test/format/**/*.java"
+            excludes="**/CVS/**/*"
+            srcdir="${src.dir}"
+            destdir="${build.dir}"
+            classpathref="build.classpath"
+            source="1.4"
+            debug="on" deprecation="off"/>
+        <javac includes="com/ibm/icu/dev/test/translit/**/*.java"
+            excludes="**/CVS/**/*"
+            srcdir="${src.dir}"
+            destdir="${build.dir}"
+            classpathref="build.classpath"
+            source="1.4"
+            debug="on" deprecation="off"/>
+        <javac includes="com/ibm/icu/dev/test/lang/**/*.java, com/ibm/icu/dev/test/normalizer/**/*.java"
+            excludes="**/CVS/**/*"
+            srcdir="${src.dir}"
+            destdir="${build.dir}"
+            classpathref="build.classpath"
+            source="1.4"
+            debug="on" deprecation="off"/>
         <javac includes="com/ibm/icu/dev/test/**/*.java"
             excludes="**/CVS/**/*"
             srcdir="${src.dir}"
