@@ -149,6 +149,7 @@ ConversionTest::TestToUnicode() {
                             i, u_errorName(errorCode));
                     errorCode=U_ZERO_ERROR;
                 } else {
+                    infoln("TestToUnicode[%d] %s", i, charset);
                     ToUnicodeCase(cc, callback, option);
                 }
             }
@@ -238,11 +239,13 @@ ConversionTest::TestFromUnicode() {
                     if(length>=sizeof(cc.subchar)) {
                         errorCode=U_ILLEGAL_ARGUMENT_ERROR;
                     } else {
-                        for(i=0; i<length; ++i) {
-                            cc.subchar[i]=(char)p[i];
+                        int32_t j;
+
+                        for(j=0; j<length; ++j) {
+                            cc.subchar[j]=(char)p[j];
                         }
                         // NUL-terminate the subchar
-                        cc.subchar[i]=0;
+                        cc.subchar[j]=0;
                     }
 
                     // remove the NUL and subchar from s
@@ -285,6 +288,7 @@ ConversionTest::TestFromUnicode() {
                             i, u_errorName(errorCode));
                     errorCode=U_ZERO_ERROR;
                 } else {
+                    infoln("TestFromUnicode[%d] %s", i, charset);
                     FromUnicodeCase(cc, callback, option);
                 }
             }
@@ -365,6 +369,8 @@ ConversionTest::TestGetUnicodeSet() {
                     errorCode=U_ZERO_ERROR;
                     continue;
                 }
+
+                infoln("TestGetUnicodeSet[%d] %s", i, charset);
 
                 cnv=cnv_open(charset, errorCode);
                 if(U_FAILURE(errorCode)) {
