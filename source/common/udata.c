@@ -369,12 +369,16 @@ typedef struct {
         }
 
         /* get a view of the mapping */
-        data=mmap(0, length, PROT_READ, MAP_SHARED, fd, 0);
+#ifndef HPUX
+        data=mmap(0, length, PROT_READ, MAP_SHARED,  fd, 0);
+#else
+        data=mmap(0, length, PROT_READ, MAP_PRIVATE, fd, 0);
+#endif
         close(fd); /* no longer needed */
         if(data==MAP_FAILED) {
 
 #       ifdef UDATA_DEBUG
-            perror("mmap");
+              perror("mmap");
 #       endif
 
             return FALSE;
@@ -1058,6 +1062,10 @@ unloadDataMemory(UDataMemory *pData) {
 U_CAPI UDataMemory * U_EXPORT2
 udata_open(const char *path, const char *type, const char *name,
            UErrorCode *pErrorCode) {
+#ifdef UDATA_DEBUG
+  fprintf(stderr, "udata_open(): Opening: %s . %s\n", name, type);
+#endif
+
     if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
         return NULL;
     } else if(name==NULL || *name==0) {
