@@ -36,6 +36,7 @@ pkg_mak_writeHeader(FileStream *f, const UPKGOptions *o)
           "TEMP_DIR=%s\n"
           "MODE=%s\n"
           "MAKEFILE=%s\n"
+          "ENTRYPOINT=%s\n"
           "include %s\n"
           "\n\n\n",
           o->shortName,
@@ -43,6 +44,7 @@ pkg_mak_writeHeader(FileStream *f, const UPKGOptions *o)
           o->tmpDir,
           o->mode,
           o->makeFile,
+          o->entryName,
           o->options);
   T_FileStream_writeLine(f, linebuf);
 
