@@ -1778,64 +1778,93 @@ TestCaseCompare() {
 }
 
 static void TestUScriptCodeAPI(){
-    const char* testNames[]={
-    /* test locale */
-    "en", "en_US", "sr", "ta" , "te_IN",
-    "hi", "he", "ar",
-    /* test abbr */
-    "Hani", "Hang","Hebr","Hira",
-    "Knda","Kana","Khmr","Lao",
-    "Latn",/*"Latf","Latg",*/ 
-    "Mlym", "Mong",
-    
-    /* test names */
-    "CYRILLIC","DESERET","DEVANAGARI","ETHIOPIC","GEORGIAN", 
-    "GOTHIC",  "GREEK",  "GUJARATI", 
-    /* test lower case names */
-    "malayalam", "mongolian", "myanmar", "ogham", "old-italic",
-    "oriya",     "runic",     "sinhala", "syriac","tamil",     
-    "telugu",    "thaana",    "thai",    "tibetan", 
-    /* test the bounds*/
-    "ucas", "arabic",
-    /* test bogus */
-    "asfdasd", "5464", "12235",
-    '\0'  
-    };
-    UScriptCode expected[] ={
-        /* locales should return */
-        USCRIPT_LATIN, USCRIPT_LATIN, USCRIPT_CYRILLIC, USCRIPT_TAMIL, USCRIPT_TELUGU, 
-        USCRIPT_DEVANAGARI, USCRIPT_HEBREW, USCRIPT_ARABIC,
-        /* abbr should return */
-        USCRIPT_HAN, USCRIPT_HANGUL, USCRIPT_HEBREW, USCRIPT_HIRAGANA,
-        USCRIPT_KANNADA, USCRIPT_KATAKANA, USCRIPT_KHMER, USCRIPT_LAO,
-        USCRIPT_LATIN,/* USCRIPT_LATIN, USCRIPT_LATIN,*/ 
-        USCRIPT_MALAYALAM, USCRIPT_MONGOLIAN,
-        /* names should return */
-        USCRIPT_CYRILLIC, USCRIPT_DESERET, USCRIPT_DEVANAGARI, USCRIPT_ETHIOPIC, USCRIPT_GEORGIAN,
-        USCRIPT_GOTHIC, USCRIPT_GREEK, USCRIPT_GUJARATI,
-        /* lower case names should return */    
-        USCRIPT_MALAYALAM, USCRIPT_MONGOLIAN, USCRIPT_MYANMAR, USCRIPT_OGHAM, USCRIPT_OLD_ITALIC,
-        USCRIPT_ORIYA, USCRIPT_RUNIC, USCRIPT_SINHALA, USCRIPT_SYRIAC, USCRIPT_TAMIL,
-        USCRIPT_TELUGU, USCRIPT_THAANA, USCRIPT_THAI, USCRIPT_TIBETAN,
-        /* bounds */
-        USCRIPT_UCAS, USCRIPT_ARABIC,
-        /* bogus names should return invalid code */
-        USCRIPT_INVALID_CODE, USCRIPT_INVALID_CODE, USCRIPT_INVALID_CODE,
-    };
     int i =0;
     int numErrors =0;
-    UErrorCode err = U_ZERO_ERROR;
-    for( ; testNames[i]!='\0'; i++){
-        UScriptCode code = uscript_getCode(testNames[i],&err);
-        if( code != expected[i]){
-               log_verbose("Error getting script code Got: %i  Expected: %i for name %s\n",
-                   code,expected[i],testNames[i]);
-               numErrors++;
+    {
+        const char* testNames[]={
+        /* test locale */
+        "en", "en_US", "sr", "ta" , "te_IN",
+        "hi", "he", "ar",
+        /* test abbr */
+        "Hani", "Hang","Hebr","Hira",
+        "Knda","Kana","Khmr","Lao",
+        "Latn",/*"Latf","Latg",*/ 
+        "Mlym", "Mong",
+    
+        /* test names */
+        "CYRILLIC","DESERET","DEVANAGARI","ETHIOPIC","GEORGIAN", 
+        "GOTHIC",  "GREEK",  "GUJARATI", 
+        /* test lower case names */
+        "malayalam", "mongolian", "myanmar", "ogham", "old-italic",
+        "oriya",     "runic",     "sinhala", "syriac","tamil",     
+        "telugu",    "thaana",    "thai",    "tibetan", 
+        /* test the bounds*/
+        "ucas", "arabic",
+        /* test bogus */
+        "asfdasd", "5464", "12235",
+        '\0'  
+        };
+        UScriptCode expected[] ={
+            /* locales should return */
+            USCRIPT_LATIN, USCRIPT_LATIN, USCRIPT_CYRILLIC, USCRIPT_TAMIL, USCRIPT_TELUGU, 
+            USCRIPT_DEVANAGARI, USCRIPT_HEBREW, USCRIPT_ARABIC,
+            /* abbr should return */
+            USCRIPT_HAN, USCRIPT_HANGUL, USCRIPT_HEBREW, USCRIPT_HIRAGANA,
+            USCRIPT_KANNADA, USCRIPT_KATAKANA, USCRIPT_KHMER, USCRIPT_LAO,
+            USCRIPT_LATIN,/* USCRIPT_LATIN, USCRIPT_LATIN,*/ 
+            USCRIPT_MALAYALAM, USCRIPT_MONGOLIAN,
+            /* names should return */
+            USCRIPT_CYRILLIC, USCRIPT_DESERET, USCRIPT_DEVANAGARI, USCRIPT_ETHIOPIC, USCRIPT_GEORGIAN,
+            USCRIPT_GOTHIC, USCRIPT_GREEK, USCRIPT_GUJARATI,
+            /* lower case names should return */    
+            USCRIPT_MALAYALAM, USCRIPT_MONGOLIAN, USCRIPT_MYANMAR, USCRIPT_OGHAM, USCRIPT_OLD_ITALIC,
+            USCRIPT_ORIYA, USCRIPT_RUNIC, USCRIPT_SINHALA, USCRIPT_SYRIAC, USCRIPT_TAMIL,
+            USCRIPT_TELUGU, USCRIPT_THAANA, USCRIPT_THAI, USCRIPT_TIBETAN,
+            /* bounds */
+            USCRIPT_UCAS, USCRIPT_ARABIC,
+            /* bogus names should return invalid code */
+            USCRIPT_INVALID_CODE, USCRIPT_INVALID_CODE, USCRIPT_INVALID_CODE,
+        };
+
+        UErrorCode err = U_ZERO_ERROR;
+
+        const int32_t capacity = 10;
+
+        for( ; testNames[i]!='\0'; i++){
+            UScriptCode script[10]={USCRIPT_INVALID_CODE};
+            int32_t num = uscript_getCode(testNames[i],script,capacity, &err);
+            if( script[0] != expected[i]){
+                   log_verbose("Error getting script code Got: %i  Expected: %i for name %s\n",
+                       script[0],expected[i],testNames[i]);
+                   numErrors++;
+            }
+        }
+        if(numErrors >0 ){
+            log_err("Errors uchar_getScriptCode() : %i \n",numErrors);
         }
     }
-    if(numErrors >0 ){
-        log_err("Errors uchar_getScriptCode() : %i \n",numErrors);
+    {
+        UErrorCode err = U_ZERO_ERROR;
+        int32_t capacity=0;
+        UScriptCode jaCode[2]={ USCRIPT_KATAKANA,USCRIPT_HIRAGANA};
+        UScriptCode script[10]={USCRIPT_INVALID_CODE};
+        int32_t num = uscript_getCode("ja",script,capacity, &err);
+        /* preflight */
+        if(err==U_BUFFER_OVERFLOW_ERROR){
+            err = U_ZERO_ERROR;
+            capacity = 10;
+            num = uscript_getCode("ja",script,capacity, &err);
+            if(num!=(sizeof(jaCode)/sizeof(UScriptCode)) || script[0]!=jaCode[0] || script[1]!=jaCode[1]){
+                log_err("Errors uscript_getScriptCode() for Japaneese locale \n");
+            }
+        }else{
+            log_err("Errors in uscript_getScriptCode() expected error : %s got: %s \n", 
+                "U_BUFFER_OVERFLOW_ERROR",
+                 u_errorName(err));
+        }
+
     }
+
     {
         UScriptCode testAbbr[]={
             /* names should return */
