@@ -1241,6 +1241,8 @@ inline int32_t Transliterator::getMaximumContextLength(void) const {
 
 inline void Transliterator::setID(const UnicodeString& id) {
     ID = id;
+    // NUL-terminate the ID string
+    ID.getTerminatedBuffer();
 }
 
 inline Transliterator::Token Transliterator::integerToken(int32_t i) {
