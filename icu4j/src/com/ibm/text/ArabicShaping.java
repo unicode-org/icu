@@ -226,10 +226,10 @@ public final class ArabicShaping {
     /**
      * Letter shaping option: replace normative letter characters in the U+0600 (Arabic) block,
      * except for the TASHKEEL characters at U+064B...U+0652, by shaped ones in the U+Fe70
-     * (Presentation Forms B) block.
-     * !!! Currently unsupported and ignored.  Will be treated as LETTERS_SHAPE.
+     * (Presentation Forms B) block.  The TASHKEEL characters will always be converted to
+     * the isolated forms rather than to their correct shape.
      */
-    private static final int LETTERS_SHAPE_EXCEPT_TASHKEEL = 0x18;
+    public static final int LETTERS_SHAPE_TASHKEEL_ISOLATED = 0x18;
 
     /** 
      * Bit mask for letter shaping options. 
@@ -323,7 +323,7 @@ public final class ArabicShaping {
         switch (options & LETTERS_MASK) {
         case LETTERS_NOOP: buf.append(", no letter shaping"); break;
         case LETTERS_SHAPE: buf.append(", shape letters"); break;
-        case LETTERS_SHAPE_EXCEPT_TASHKEEL:
+        case LETTERS_SHAPE_TASHKEEL_ISOLATED: buf.append(", shape letters tashkeel isolated"); break;
         case LETTERS_UNSHAPE: buf.append(", unshape letters"); break;
         }
         switch (options & DIGITS_MASK) {
@@ -696,7 +696,7 @@ public final class ArabicShaping {
 
         switch (options & LETTERS_MASK) {
         case LETTERS_SHAPE:
-        case LETTERS_SHAPE_EXCEPT_TASHKEEL:
+        case LETTERS_SHAPE_TASHKEEL_ISOLATED:
             if (isLogical) {
                 for (int i = sourceStart, e = sourceStart + sourceLength - 1; i < e; ++i) {
                     if (source[i] == '\u0644' && isAlefChar(source[i+1])) {
@@ -920,7 +920,7 @@ public final class ArabicShaping {
                              int start,
                              int length,
                              int destSize,
-                             boolean tashkeel) {
+                             int tashkeelFlag) {
 
 
         normalize(dest, start, length);
@@ -928,6 +928,7 @@ public final class ArabicShaping {
         // resolve the link between the characters.
         // Arabic characters have four forms: Isolated, Initial, Medial and Final.
         // Tashkeel characters have two, isolated or medial, and sometimes only isolated.
+        // tashkeelFlag == 0: shape normally, 1: shape isolated, 2: don't shape
 
         boolean lamalef_found = false;
         int i = start + length - 1;
@@ -986,7 +987,7 @@ public final class ArabicShaping {
                 if (flag == 1) {
                     shape &= 0x1;
                 } else if (flag == 2) {
-                    if (tashkeel &&
+                    if (tashkeelFlag == 0 &&
                         ((lastLink & LINKL) != 0) && 
                         ((nextLink & LINKR) != 0) && 
                         dest[i] != '\u064C' && 
@@ -1001,7 +1002,7 @@ public final class ArabicShaping {
                 }
 
                 if (flag == 2) {
-                    if (tashkeel) {
+                    if (tashkeelFlag < 2) {
                         dest[i] = (char)('\uFE70' + irrelevantPos[dest[i] - '\u064B'] + shape);
                     } // else leave tashkeel alone                    
                 } else {
@@ -1093,9 +1094,12 @@ public final class ArabicShaping {
         int outputSize = sourceLength;
 
         switch (options & LETTERS_MASK) {
-        case LETTERS_SHAPE_EXCEPT_TASHKEEL:
+        case LETTERS_SHAPE_TASHKEEL_ISOLATED:
+            outputSize = shapeUnicode(temp, 0, sourceLength, destSize, 1);
+            break;
+
         case LETTERS_SHAPE:
-            outputSize = shapeUnicode(temp, 0, sourceLength, destSize, true);
+            outputSize = shapeUnicode(temp, 0, sourceLength, destSize, 0);
             break;
 
         case LETTERS_UNSHAPE:

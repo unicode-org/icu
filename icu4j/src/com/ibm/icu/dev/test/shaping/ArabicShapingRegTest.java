@@ -28,6 +28,7 @@ public class ArabicShapingRegTest extends TestFmwk {
 
     public static final int LETTERS_NOOP = 0;
     public static final int LETTERS_SHAPE = 8;
+    public static final int LETTERS_SHAPE_TASHKEEL_ISOLATED = 0x18;
     public static final int LETTERS_UNSHAPE = 0x10;
 
     public static final int DIGITS_NOOP = 0;
@@ -174,9 +175,10 @@ public class ArabicShapingRegTest extends TestFmwk {
                           "\ufe8d\u0020\ufee5\u0655\ufef9\ufe8d" +
                           "\u0020\ufee5\u0654\ufef5\ufe8d\u0020" +
                           "\ufefc\ufecb"),
-        /* TASHKEEL unsupported
+
+        /* TASHKEEL */
         TestData.standard(lamAlefSpecialVLTR,
-                          LETTERS_SHAPE_EXCEPT_TASHKEEL | TEXT_DIRECTION_VISUAL_LTR | LENGTH_FIXED_SPACES_NEAR,
+                          LETTERS_SHAPE_TASHKEEL_ISOLATED | TEXT_DIRECTION_VISUAL_LTR | LENGTH_FIXED_SPACES_NEAR,
                           "\u0020\ufee5\u0020\ufef5\ufe8d\u0020" +
                           "\ufee5\u0020\ufe76\ufef7\ufe8d\u0020" +
                           "\ufee5\u0020\u0670\ufefb\ufe8d\u0020" +
@@ -185,7 +187,7 @@ public class ArabicShapingRegTest extends TestFmwk {
                           "\ufee5\u0020\u0654\ufef5\ufe8d\u0020" +
                           "\ufefc\ufecb"),
         TestData.standard(lamAlefSpecialVLTR,
-                          LETTERS_SHAPE_EXCEPT_TASHKEEL | TEXT_DIRECTION_VISUAL_LTR | LENGTH_FIXED_SPACES_AT_END,
+                          LETTERS_SHAPE_TASHKEEL_ISOLATED | TEXT_DIRECTION_VISUAL_LTR | LENGTH_FIXED_SPACES_AT_END,
                           "\u0020\ufee5\ufef5\ufe8d\u0020\ufee5" +
                           "\ufe76\ufef7\ufe8d\u0020\ufee5\u0670" +
                           "\ufefb\ufe8d\u0020\ufee5\u0653\ufef5" +
@@ -194,7 +196,7 @@ public class ArabicShapingRegTest extends TestFmwk {
                           "\ufefc\ufecb\u0020\u0020\u0020\u0020" +
                           "\u0020\u0020"),
         TestData.standard(lamAlefSpecialVLTR,
-                          LETTERS_SHAPE_EXCEPT_TASHKEEL | TEXT_DIRECTION_VISUAL_LTR | LENGTH_FIXED_SPACES_AT_BEGINNING,
+                          LETTERS_SHAPE_TASHKEEL_ISOLATED | TEXT_DIRECTION_VISUAL_LTR | LENGTH_FIXED_SPACES_AT_BEGINNING,
                           "\u0020\u0020\u0020\u0020\u0020\u0020" +
                           "\u0020\ufee5\ufef5\ufe8d\u0020\ufee5" +
                           "\ufe76\ufef7\ufe8d\u0020\ufee5\u0670" +
@@ -203,14 +205,13 @@ public class ArabicShapingRegTest extends TestFmwk {
                           "\u0020\ufee5\u0654\ufef5\ufe8d\u0020" +
                           "\ufefc\ufecb"),
         TestData.standard(lamAlefSpecialVLTR,
-                          LETTERS_SHAPE_EXCEPT_TASHKEEL | TEXT_DIRECTION_VISUAL_LTR | LENGTH_GROW_SHRINK,
+                          LETTERS_SHAPE_TASHKEEL_ISOLATED | TEXT_DIRECTION_VISUAL_LTR | LENGTH_GROW_SHRINK,
                           "\u0020\ufee5\ufef5\ufe8d\u0020\ufee5" +
                           "\ufe76\ufef7\ufe8d\u0020\ufee5\u0670" +
                           "\ufefb\ufe8d\u0020\ufee5\u0653\ufef5" +
                           "\ufe8d\u0020\ufee5\u0655\ufef9\ufe8d" +
                           "\u0020\ufee5\u0654\ufef5\ufe8d\u0020" +
                           "\ufefc\ufecb"),
-        */
 
         /* tashkeel special visual ltr */
         TestData.standard(tashkeelSpecialVLTR,
@@ -222,9 +223,9 @@ public class ArabicShapingRegTest extends TestFmwk {
                           "\ufe8f\u0653\ufeae\u0653\ufecb\u0020" +
                           "\ufe8f\u0654\ufeae\u0654\ufecb\u0020" +
                           "\ufe8f\u0655\ufeae\u0655\ufecb\u0020"),
-        /* TASHKEEL unsupported
+
         TestData.standard(tashkeelSpecialVLTR,
-                          LETTERS_SHAPE_EXCEPT_TASHKEEL | TEXT_DIRECTION_VISUAL_LTR | LENGTH_FIXED_SPACES_NEAR,
+                          LETTERS_SHAPE_TASHKEEL_ISOLATED | TEXT_DIRECTION_VISUAL_LTR | LENGTH_FIXED_SPACES_NEAR,
                           "\ufef2\ufe91\ufeae\ufecb\u0020" +
                           "\ufef2\ufe91\ufe7c\ufeae\ufe76\ufecb\u0020" +
                           "\ufe72\ufef2\ufe91\ufeae\ufe78\ufecb\u0020" +
@@ -232,7 +233,6 @@ public class ArabicShapingRegTest extends TestFmwk {
                           "\ufe8f\u0653\ufeae\u0653\ufecb\u0020" +
                           "\ufe8f\u0654\ufeae\u0654\ufecb\u0020" +
                           "\ufe8f\u0655\ufeae\u0655\ufecb\u0020"),
-        */
 
         /* logical unshape */
         TestData.standard(logicalUnshape,
