@@ -23,22 +23,27 @@
 
 /* A resource bundle data item */
 struct SRBItem {
-  UChar *fTag;
+  char *fTag;
+  int16_t fStrKey;
   struct SList *fData;
+  struct SRBItem *fNext;
 };
-
-struct SRBItem* make_rbitem(const UChar *tag, const struct SList *data, 
-			    UErrorCode *status);
 
 /* A list of RBItems */
 struct SRBItemList {
   UChar *fLocale;
-  struct SRBItem **fData;
+  char *fKeys;
+  int16_t fKeyPoint;
   int32_t fCount;
   int32_t fCapacity;
+  struct SRBItem *fFirst;
 };
 
 struct SRBItemList* rblist_open(UErrorCode *status);
+
+struct SRBItem* make_rbitem(const UChar *tag, const struct SList *data, 
+			    UErrorCode *status);
+
 void rblist_close(struct SRBItemList *list, UErrorCode *status);
 
 void rblist_setlocale(struct SRBItemList *list, const UChar *locale, 

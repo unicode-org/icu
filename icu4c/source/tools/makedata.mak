@@ -24,14 +24,16 @@ CFG=Debug
 ICUDATA=$(ICUP)\icu\data
 ICU_DATA=$(ICUDATA)\
 DATA_PATH=$(ICUP)\icu\data^\
-TRANS=translit^\
+#TRANS=translit^\
 TEST=..\source\test\testdata^\
+TESTDATA=$(ICUP)\icu\source\test\testdata^\
 ICUTOOLS=$(ICUP)\icu\source\tools
 !ENDIF
 
 LINK32 = link.exe
 LINK32_FLAGS = /out:"$(ICUDATA)/icudata.dll" /DLL /NOENTRY /base:"0x4ad00000" /comment:" Copyright (C) 1999-2000 International Business Machines Corporation and others.  All Rights Reserved. "
-CPP_FLAGS = /I$(ICUP)\icu\include /GD /c
+#CPP_FLAGS = /I$(ICUP)\icu\include /GD /c
+CPP_FLAGS = /I$(ICUP)\icu\include /GD /c /Fo$@
 
 #Here we test if configuration is given
 !IF "$(CFG)" != "Release" && "$(CFG)" != "release" && "$(CFG)" != "Debug" && "$(CFG)" != "debug"
@@ -92,7 +94,13 @@ GENRB_SOURCE=$(GENRB_SOURCE) $(GENRB_SOURCE_LOCAL)
 !ELSE
 !ERROR ERROR: cannot find "genrbfiles.mk"
 !ENDIF
-RB_FILES = $(GENRB_SOURCE:.txt=.res)
+RB_FILES = $(GENRB_SOURCE:.txt=.res) 
+TRANSLIT_FILES = $(TRANSLIT_SOURCE:.txt=.res)
+#TRANSLIT_SOURCE = $(TRANSLIT_SOURCE: = translit\)
+!MESSAGE $(TRANSLIT_SOURCE) $(RB_FILES)
+C_RB_FILES = $(RB_FILES:.res=_res.c) $(TRANSLIT_FILES:.res=_res.c) 
+OBJ_RB_FILES = $(C_RB_FILES:.c=.obj)
+
 
 # Read list of resource bundle files for colation
 !IF EXISTS("$(ICUTOOLS)\gencol\gencolfiles.mk")
@@ -110,13 +118,13 @@ COL_FILES = $(GENCOL_SOURCE:.txt=.col)
 
 
 # This target should build all the data files
-ALL : GODATA $(RB_FILES) $(CNV_FILES) $(COL_FILES) test.dat base_test.dat test_dat.dll base_test_dat.dll base_dat.dll icudata.dat icudata.dll GOBACK
+ALL : GODATA  test.dat base_test.dat test_dat.dll base_test_dat.dll base_dat.dll icudata.dat $(TESTDATA)testdata.dll icudata.dll $(COL_FILES) GOBACK
 	@echo All targets are up to date
 
 BRK_FILES = $(ICUDATA)\sent.brk $(ICUDATA)\char.brk $(ICUDATA)\line.brk $(ICUDATA)\word.brk $(ICUDATA)\line_th.brk $(ICUDATA)\word_th.brk
 BRK_CSOURCES = $(BRK_FILES:.brk=_brk.c)
 
-CPP_SOURCES = $(C_CNV_FILES) uprops_dat.c unames_dat.c cnvalias_dat.c tz_dat.c $(BRK_CSOURCES)
+CPP_SOURCES = $(C_CNV_FILES) uprops_dat.c unames_dat.c cnvalias_dat.c tz_dat.c $(BRK_CSOURCES) $(C_RB_FILES)
 LINK32_OBJS = $(CPP_SOURCES:.c=.obj)
 
 # target for DLL
@@ -158,7 +166,35 @@ icudata.dll: icudata.dat
 LINK32_TEST_FLAGS = /out:"$(ICUDATA)/test_dat.dll" /DLL /NOENTRY 
 LINK32_BASE_TEST_FLAGS = /out:"$(ICUDATA)/base_test_dat.dll" /DLL /NOENTRY 
 LINK32_BASE_FLAGS = /out:"$(ICUDATA)/base_dat.dll" /DLL /NOENTRY 
+LINK32_TESTDATA_FLAGS = /out:"$(TESTDATA)/testdata.dll" /DLL /NOENTRY
 
+#Targets for testdata.dll
+testdata.dll : $(TESTDATA)testdata.dll
+        @cd $(TESTDATA)
+
+$(TESTDATA)testdata.dll : $(TESTDATA)root_res.obj $(TESTDATA)te_res.obj $(TESTDATA)te_IN_res.obj
+	@echo Creating DLL file
+	@cd $(TESTDATA)
+	@$(LINK32) @<<
+$(LINK32_TESTDATA_FLAGS) root_res.obj te_res.obj te_IN_res.obj
+<<        
+
+$(TESTDATA)root_res.c $(TESTDATA)te_res.c $(TESTDATA)te_IN_res.c : $(TESTDATA)root.res $(TESTDATA)te.res $(TESTDATA)te_IN.res
+        @echo generating .c file for testdata
+        @cd $(TESTDATA)
+	@$(ICUTOOLS)\genccode\$(CFG)\genccode $?
+	
+#Targets for testdata.dat
+#testdata.dat : $(TESTDATA)root.res $(TESTDATA)te.res $(TESTDATA)te_IN.res
+#        @echo Creating testdata.dat
+#	@set ICU_DATA=$(ICUDATA)
+#	@cd $(TESTDATA)
+# 	@$(ICUTOOLS)\gencmn\$(CFG)\gencmn 1000000 <<
+#root.res
+#te.res
+#te_IN.res
+#<<      
+     
 # Targets for test.dat 
 test.dat : 
 	@echo Creating data file for test
@@ -174,6 +210,7 @@ test_dat.obj : test_dat.c
 	@$(CPP) @<<
 $(CPP_FLAGS) $(ICUDATA)\$?
 <<
+
 
 #Targets for base_test.dat
 base_test.dat :
@@ -227,7 +264,8 @@ $(ICUDATA)\word_th.brk : $(ICUDATA)\word_thLE.brk
     copy $(ICUDATA)\word_thLE.brk $(ICUDATA)\word_th.brk
 
 # target for memory mapped file
-icudata.dat : $(CNV_FILES) $(BRK_FILES) uprops.dat unames.dat cnvalias.dat tz.dat
+
+icudata.dat : $(CNV_FILES) $(BRK_FILES) uprops.dat unames.dat cnvalias.dat tz.dat $(RB_FILES) $(TRANSLIT_FILES)
 	@echo Creating memory-mapped file
 	@cd $(ICUDATA)
  	@$(ICUTOOLS)\gencmn\$(CFG)\gencmn -c -d $(ICUDATA) 1000000 <<
@@ -235,11 +273,21 @@ $(ICUDATA)\uprops.dat
 $(ICUDATA)\unames.dat
 $(ICUDATA)\cnvalias.dat
 $(ICUDATA)\tz.dat
-$(BRK_FILES:.brk =.brk
-)
 $(CNV_FILES:.cnv =.cnv
 )
+$(RB_FILES:.res =.res
+)
+$(TRANSLIT_FILES:.res =.res
+)
+$(BRK_FILES:.brk =.brk
+)
 <<
+
+# nothing works without this target, but we're making
+# these files while creating converters
+$(C_RB_FILES) : $(RB_FILES)
+	@$(ICUTOOLS)\genccode\$(CFG)\genccode $(RB_FILES)
+
 
 # nothing works without this target, but we're making
 # these files while creating converters
@@ -286,11 +334,18 @@ CLEAN :
 	-@erase "*.res"
 	@cd $(ICUTOOLS)
 
+{$(ICUDATA)$(TRANS)}$(TRANSLIT_FILES) : $(TRANSLIT_SOURCE)
+        @echo Making transliteration bundles
+        cd $(ICUDATA)$(TRANS)
+	set ICU_DATA=$(ICUDATA)
+	$(ICUTOOLS)\genrb\$(CFG)\genrb -s$(ICUDATA)$(TRANS) -d$(ICUDATA) $(TRANSLIT_SOURCE)
+        
 # Inference rule for creating resource bundles
-.txt.res::
+.txt.res:
 	@echo Making Resource Bundle files
-	@cd $(ICUDATA)
-	@$(ICUTOOLS)\genrb\$(CFG)\genrb $<
+	@echo cd $(ICUDATA)
+	@echo set ICU_DATA=$(ICUDATA)
+	$(ICUTOOLS)\genrb\$(CFG)\genrb -s$(@D) -d$(@D) $(?F)
 
 # Inference rule for creating converters, with a kludge to create
 # c versions of converters at the same time
@@ -306,13 +361,14 @@ CLEAN :
 .txt.col::
 	@echo Making Collation files
 	@cd $(ICUDATA)
-	@$(ICUTOOLS)\genrb\$(CFG)\genrb $<
+	@set ICU_DATA=$(ICUDATA)
+	$(ICUTOOLS)\gencol\$(CFG)\gencol $<
 
 # Inference rule for compiling :)
-.c.obj::
+.c.obj:
 	@cd $(ICUDATA)
 	@$(CPP) @<<
-$(CPP_FLAGS) $<
+$(CPP_FLAGS) $?
 <<
 
 # Targets for uprops.dat

@@ -19,17 +19,16 @@
 #include "ustr.h"
 #include "unicode/ustring.h"
 #include "cmemory.h"
+#include "cstring.h"
 
-/* Protos */
-static void rblist_grow(struct SRBItemList *list, UErrorCode *status);
 
 struct SRBItem* 
 make_rbitem(const UChar *tag, 
-	    const struct SList *data, 
-	    UErrorCode *status)
+        const struct SList *data, 
+        UErrorCode *status)
 {
   struct SRBItem *item;
-  UChar *s;
+  char *s;
 
   if(U_FAILURE(*status)) return 0;
   
@@ -39,15 +38,18 @@ make_rbitem(const UChar *tag,
     return 0;
   }
 
-  s = (UChar*) uprv_malloc(sizeof(UChar) * (u_strlen(tag) + 1));
+  //s = (UChar*) uprv_malloc(sizeof(UChar) * (u_strlen(tag) + 1));
+  s = (char*) uprv_malloc(sizeof(char) * (u_strlen(tag) + 1));
   if(s == 0) {
     *status = U_MEMORY_ALLOCATION_ERROR;
     return 0;
   }
-  u_strcpy(s, tag);
+  u_UCharsToChars(tag, s, u_strlen(tag)+1);
+  //u_strcpy(s, tag);
 
   item->fTag = s;
   item->fData = (struct SList*) data;
+  item->fNext = NULL;
 
   return item;
 }
@@ -66,58 +68,67 @@ rblist_open(UErrorCode *status)
   }
 
   list->fLocale = 0;
+  list->fFirst = NULL;
 
-  list->fData = 0;
+//  list->fData = 0; 
   list->fCount = 0;
   list->fCapacity = 32;
-
-  rblist_grow(list, status);
+  list->fKeys = (char *) uprv_malloc(sizeof(char) * 65532);
+  list->fKeyPoint = 0;
 
   return list;
 }
 
 void rblist_close(struct SRBItemList *list,
-		 UErrorCode *status)
+         UErrorCode *status)
 {
-  int32_t i;
+//  int32_t i;
+  struct SRBItem *current;
+  struct SRBItem *prev = NULL;
 
   if(U_FAILURE(*status)) return;
-  
+  current = list->fFirst;
   /* deallocate each list */
-  for(i = 0; i < list->fCount; ++i) {
+//  for(i = 0; i < list->fCount; ++i) {
+  while(current != NULL) { 
     
-    switch(list->fData[i]->fData->fType) {
-    case eStringList:
-      strlist_close(list->fData[i]->fData, status);
-      break;
+//    switch(list->fData[i]->fData->fType) {
+    switch(current->fData->fType) {
+        case eStringList:
+          strlist_close(current->fData, status);
+          break;
       
-    case eStringList2d:
-      strlist2d_close(list->fData[i]->fData, status);
-      break;
+        case eStringList2d:
+          strlist2d_close(current->fData, status);
+          break;
       
-    case eTaggedList:
-      taglist_close(list->fData[i]->fData, status);
-      break;
+        case eTaggedList:
+          taglist_close(current->fData, status);
+          break;
 
-    case eEmpty:
-      break;
+        case eEmpty:
+          break;
     }
+    prev = current;
+    current=current->fNext;
+    uprv_free(prev);
   }
-  uprv_free(list->fData);
+//  uprv_free(list->fData);
   uprv_free(list->fLocale);
+  uprv_free(list->fKeys);
 
   uprv_free(list);
 }
 
 void rblist_setlocale(struct SRBItemList *list, 
-		      const UChar *locale, 
-		      UErrorCode *status)
+              const UChar *locale, 
+              UErrorCode *status)
 {
   if(U_FAILURE(*status)) return;
 
   /* Allocate enough space */
   list->fLocale = (UChar*) uprv_realloc(list->fLocale, 
-				       sizeof(UChar) * (u_strlen(locale) + 1));
+                       sizeof(UChar) * (u_strlen(locale) + 1));
   if(list->fLocale == 0) {
     *status = U_MEMORY_ALLOCATION_ERROR;
     return;
@@ -127,48 +138,53 @@ void rblist_setlocale(struct SRBItemList *list,
 }
 
 void rblist_add(struct SRBItemList *list,
-		struct SRBItem *s,
-		UErrorCode *status)
+        struct SRBItem *s,
+        UErrorCode *status)
 {
-  int32_t index;
-  
-  if(U_FAILURE(*status)) return;
-  
-  index = list->fCount;
-  
-  if(list->fCount == list->fCapacity) 
-    rblist_grow(list, status);
-  
-  list->fData[index] = s;
-  ++(list->fCount);
+//  int32_t index;
+
+    struct SRBItem *current;
+    struct SRBItem *prev = NULL;
+
+    if(U_FAILURE(*status)) return;
+    /* here we need to traverse the list */  
+
+    ++(list->fCount);
+
+    s->fStrKey = list->fKeyPoint;
+
+    uprv_strcpy((list->fKeys)+list->fKeyPoint, s->fTag);
+
+    list->fKeyPoint += uprv_strlen(s->fTag)+1;
+
+
+
+    /* is list still empty? */
+    if(list->fFirst == NULL) {
+        list->fFirst = s;
+        s->fNext = NULL;
+        return;
+    } else {
+        current = list->fFirst;
+    }
+
+    while(current != NULL) {
+        if(uprv_strcmp(current->fTag, s->fTag)<0) {
+            prev = current;
+            current = current->fNext;
+        } else { /*we're either in front of list, or in middle*/
+            if(prev == NULL) { /*front of the list*/
+                list->fFirst = s;
+            } else { /*middle of the list*/
+                prev->fNext = s;
+            }
+            s->fNext = current;
+            return;
+        }
+    }
+
+    /* end of list */
+    prev->fNext = s;
+    s->fNext = NULL;
 }
 
-static void 
-rblist_grow(struct SRBItemList *list,
-	    UErrorCode *status)
-{
-  int32_t i;
-  int32_t newCapacity;
-  struct SRBItem **newData;
-  
-  if(U_FAILURE(*status)) return;
-  
-  newCapacity = list->fCapacity << 1; 
-  
-  /* allocate space for the array of SRBItems */
-  newData = (struct SRBItem**) 
-    uprv_malloc(sizeof(struct SRBItem*) * newCapacity);
-  if(newData == 0) {
-    *status = U_MEMORY_ALLOCATION_ERROR;
-    return;
-  }
-
-  /* copy each item */
-  for(i = 0; i < list->fCount; ++i) {
-    newData[i] = list->fData[i];
-  }
-  
-  uprv_free(list->fData);
-  list->fData = newData;
-  list->fCapacity = newCapacity;
-}

@@ -97,66 +97,210 @@ SOURCE=.\brkdict.cpp
 # Begin Source File
 
 SOURCE=.\brkiter.cpp
+
+!IF  "$(CFG)" == "i18n - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
+
+# ADD CPP /Ze
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=.\calendar.cpp
+
+!IF  "$(CFG)" == "i18n - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
+
+# ADD CPP /Ze
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=.\choicfmt.cpp
+
+!IF  "$(CFG)" == "i18n - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
+
+# ADD CPP /Ze
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=.\colcache.cpp
+
+!IF  "$(CFG)" == "i18n - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
+
+# ADD CPP /Ze
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=.\coleitr.cpp
+
+!IF  "$(CFG)" == "i18n - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
+
+# ADD CPP /Ze
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=.\coll.cpp
+
+!IF  "$(CFG)" == "i18n - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
+
+# ADD CPP /Ze
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=.\colrules.cpp
+
+!IF  "$(CFG)" == "i18n - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
+
+# ADD CPP /Ze
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=.\cpdtrans.cpp
+
+!IF  "$(CFG)" == "i18n - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
+
+# ADD CPP /Ze
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=.\datefmt.cpp
+
+!IF  "$(CFG)" == "i18n - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
+
+# ADD CPP /Ze
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=.\dbbi.cpp
+
+!IF  "$(CFG)" == "i18n - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
+
+# ADD CPP /Ze
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=.\dbbi_tbl.cpp
+
+!IF  "$(CFG)" == "i18n - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
+
+# ADD CPP /Ze
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=.\dcfmtsym.cpp
+
+!IF  "$(CFG)" == "i18n - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
+
+# ADD CPP /Ze
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=.\decimfmt.cpp
+
+!IF  "$(CFG)" == "i18n - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
+
+# ADD CPP /Ze
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=.\dtfmtsym.cpp
+
+!IF  "$(CFG)" == "i18n - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
+
+# ADD CPP /Ze
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=.\fmtable.cpp
+
+!IF  "$(CFG)" == "i18n - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
+
+# ADD CPP /Ze
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=.\format.cpp
+
+!IF  "$(CFG)" == "i18n - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
+
+# ADD CPP /Ze
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
@@ -166,94 +310,301 @@ SOURCE=.\gregocal.cpp
 # Begin Source File
 
 SOURCE=.\hangjamo.cpp
+
+!IF  "$(CFG)" == "i18n - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
+
+# ADD CPP /Ze
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=.\hextouni.cpp
+
+!IF  "$(CFG)" == "i18n - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
+
+# ADD CPP /Ze
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=.\jamohang.cpp
+
+!IF  "$(CFG)" == "i18n - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
+
+# ADD CPP /Ze
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=.\mergecol.cpp
+
+!IF  "$(CFG)" == "i18n - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
+
+# ADD CPP /Ze
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=.\msgfmt.cpp
+
+!IF  "$(CFG)" == "i18n - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
+
+# ADD CPP /Ze
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=.\nultrans.cpp
+
+!IF  "$(CFG)" == "i18n - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
+
+# ADD CPP /Ze
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=.\numfmt.cpp
+
+!IF  "$(CFG)" == "i18n - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
+
+# ADD CPP /Ze
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=.\ptnentry.cpp
+
+!IF  "$(CFG)" == "i18n - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
+
+# ADD CPP /Ze
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=.\rbbi.cpp
+
+!IF  "$(CFG)" == "i18n - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
+
+# ADD CPP /Ze
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=.\rbbi_tbl.cpp
+
+!IF  "$(CFG)" == "i18n - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
+
+# ADD CPP /Ze
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=.\rbt.cpp
+
+!IF  "$(CFG)" == "i18n - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
+
+# ADD CPP /Ze
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=.\rbt_data.cpp
+
+!IF  "$(CFG)" == "i18n - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
+
+# ADD CPP /Ze
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=.\rbt_pars.cpp
+
+!IF  "$(CFG)" == "i18n - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
+
+# ADD CPP /Ze
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=.\rbt_rule.cpp
+
+!IF  "$(CFG)" == "i18n - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
+
+# ADD CPP /Ze
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=.\rbt_set.cpp
+
+!IF  "$(CFG)" == "i18n - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
+
+# ADD CPP /Ze
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=.\simpletz.cpp
+
+!IF  "$(CFG)" == "i18n - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
+
+# ADD CPP /Ze
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=.\smpdtfmt.cpp
+
+!IF  "$(CFG)" == "i18n - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
+
+# ADD CPP /Ze
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=.\sortkey.cpp
+
+!IF  "$(CFG)" == "i18n - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
+
+# ADD CPP /Ze
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=.\tables.cpp
+
+!IF  "$(CFG)" == "i18n - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
+
+# ADD CPP /Ze
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=.\tblcoll.cpp
+
+!IF  "$(CFG)" == "i18n - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
+
+# ADD CPP /Ze
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=.\tcoldata.cpp
+
+!IF  "$(CFG)" == "i18n - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
+
+# ADD CPP /Ze
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=.\timezone.cpp
+
+!IF  "$(CFG)" == "i18n - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
+
+# ADD CPP /Ze
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=.\translit.cpp
+
+!IF  "$(CFG)" == "i18n - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
+
+# ADD CPP /Ze
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
@@ -262,22 +613,67 @@ SOURCE=.\txtbdry.cpp
 # Begin Source File
 
 SOURCE=.\ubrk.cpp
+
+!IF  "$(CFG)" == "i18n - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
+
+# ADD CPP /Ze
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=.\ucal.cpp
+
+!IF  "$(CFG)" == "i18n - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
+
+# ADD CPP /Ze
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=.\ucol.cpp
+
+!IF  "$(CFG)" == "i18n - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
+
+# ADD CPP /Ze
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=.\udat.cpp
+
+!IF  "$(CFG)" == "i18n - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
+
+# ADD CPP /Ze
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=.\umsg.cpp
+
+!IF  "$(CFG)" == "i18n - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
+
+# ADD CPP /Ze
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
@@ -286,18 +682,54 @@ SOURCE=.\unifltlg.cpp
 # Begin Source File
 
 SOURCE=.\unirange.cpp
+
+!IF  "$(CFG)" == "i18n - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
+
+# ADD CPP /Ze
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=.\uniset.cpp
+
+!IF  "$(CFG)" == "i18n - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
+
+# ADD CPP /Ze
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=.\unitohex.cpp
+
+!IF  "$(CFG)" == "i18n - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
+
+# ADD CPP /Ze
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=.\unum.cpp
+
+!IF  "$(CFG)" == "i18n - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
+
+# ADD CPP /Ze
+
+!ENDIF 
+
 # End Source File
 # End Group
 # Begin Group "Header Files"

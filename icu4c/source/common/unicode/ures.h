@@ -23,8 +23,6 @@
 #define URES_H
 
 #include "unicode/utypes.h"
-
-
 #include "unicode/uloc.h"
 
 /**
@@ -116,9 +114,22 @@
 /** A UResourceBundle.
  *  For usage in C programs.
  */
-typedef void* UResourceBundle;
+struct UResourceBundle;
 
- 
+typedef struct UResourceBundle UResourceBundle;
+
+typedef enum {
+    RES_STRING=0,
+    RES_BINARY=1,
+    RES_TABLE=2,
+
+    RES_INT=7,
+    RES_ARRAY=8,
+
+    RES_INT_VECTOR=14,
+    RES_RESERVED=15
+} UResType;
+
  /**
  * Functions to create and destroy resource bundles.
  */
@@ -186,16 +197,17 @@ U_CAPI UResourceBundle* U_EXPORT2 ures_openW(const wchar_t* path,
  *                could be <TT>U_MISSING_RESOURCE_ERROR</T> if the key is not found
  *                could be a non-failing error 
  *                e.g.: <TT>U_USING_FALLBACK_ERROR</TT>,<TT>U_USING_DEFAULT_ERROR </TT>
- * @return: a library-owned zero-terminated unicode string (its lifetime
+ * @return a library-owned zero-terminated unicode string (its lifetime
  * is that of the resource bundle.)
  * @see ures_getArrayItem
  * @see ures_get2dArrayItem
  * @see ures_getTaggedItem
- *@draft
+ * @deprecated
  */
 U_CAPI const UChar* U_EXPORT2 ures_get(const UResourceBundle*    resourceBundle,
                const char*              resourceTag,
                UErrorCode*               status);
+
 
 /**
  * Returns a resource string which is part of an array, given a resource bundle
@@ -213,12 +225,13 @@ U_CAPI const UChar* U_EXPORT2 ures_get(const UResourceBundle*    resourceBundle,
  * @see ures_get
  * @see ures_get2dArrayItem
  * @see ures_getTaggedItem
- *@draft
+ * @deprecated
  */
 U_CAPI const UChar* U_EXPORT2 ures_getArrayItem(const UResourceBundle*     resourceBundle,
                     const char*               resourceTag,
                     int32_t                   resourceIndex,
                     UErrorCode*                status);
+
 
 /**
  * Returns a resource string which is part of a 2D array, given a resource bundle
@@ -237,7 +250,7 @@ U_CAPI const UChar* U_EXPORT2 ures_getArrayItem(const UResourceBundle*     resou
  * @see ures_get
  * @see ures_getArrayItem
  * @see ures_getTaggedItem
- *@draft
+ * @deprecated
  */
 
 U_CAPI const UChar* U_EXPORT2 ures_get2dArrayItem(const UResourceBundle*   resourceBundle,
@@ -262,14 +275,13 @@ U_CAPI const UChar* U_EXPORT2 ures_get2dArrayItem(const UResourceBundle*   resou
  * @see ures_get
  * @see ures_getArrayItem
  * @see ures_get2dItem
- *@draft
+ * @deprecated
  */
 
 U_CAPI const UChar* U_EXPORT2 ures_getTaggedArrayItem(const UResourceBundle*   resourceBundle,
                       const char*             resourceTag,
                       const char*             itemTag,
                       UErrorCode*              status);
-
 
 
 /**
@@ -306,9 +318,10 @@ U_CAPI int32_t U_EXPORT2 ures_countArrayItems(const UResourceBundle* resourceBun
  *                e.g.: <TT>U_USING_FALLBACK_ERROR</TT>,<TT>U_USING_DEFAULT_ERROR </TT>
  * @see ures_open
  * @see ures_openW
- *@draft
+ * @draft
  */
 U_CAPI void U_EXPORT2 ures_close(UResourceBundle*    resourceBundle);
+
 /**
  * Return the version number associated with this ResourceBundle. This version
  * number is a string of the form MAJOR.MINOR, where MAJOR is the version number of
@@ -325,8 +338,9 @@ U_CAPI void U_EXPORT2 ures_close(UResourceBundle*    resourceBundle);
  *          representing the code version, and n is the minor version number,
  *          representing the resource data file. The caller does not own this
  *          string.
- *@draft
+ * @draft
  */
+
 U_CAPI const char* U_EXPORT2 ures_getVersionNumber(const UResourceBundle*   resourceBundle);
 
 /**
@@ -334,8 +348,159 @@ U_CAPI const char* U_EXPORT2 ures_getVersionNumber(const UResourceBundle*   reso
  * @param resourceBundle: resource bundle in question
  * @param status: just for catching illegal arguments
  * @return  A Locale name
- *@draft
+ * @draft
  */
 U_CAPI const char* ures_getLocale(const UResourceBundle* resourceBundle, UErrorCode* status);
+
+
+/** New API */
+U_CAPI void ures_openFillIn(UResourceBundle *r, const char* path,
+                    const char* localeID, UErrorCode* status);
+
+/**
+ * returns a string from a string resource type
+ *
+ * @param resourceBundle: a string resource
+ * @param len:    fills in the length of resulting string
+ * @param status: fills in the outgoing error code
+ *                could be <TT>U_MISSING_RESOURCE_ERROR</T> if the key is not found
+ *                could be a non-failing error 
+ *                e.g.: <TT>U_USING_FALLBACK_ERROR</TT>,<TT>U_USING_DEFAULT_ERROR </TT>
+ * @return a pointer to a zero-terminated UChar array which lives in a memory mapped/DLL file.
+ * @draft
+ */
+U_CAPI const UChar* U_EXPORT2 ures_getString(const UResourceBundle* resourceBundle, int32_t* len, 
+               UErrorCode*               status);
+
+/**
+ * Returns the size of a resource. Size for scalar types is always 1, and for vector/table types is
+ * the number of child resources.
+ *
+ * @param resourceBundle: a resource
+ * @return number of resources in a given resource.
+ * @draft
+ */
+U_CAPI int32_t U_EXPORT2 ures_getSize(UResourceBundle *resourceBundle);
+
+/**
+ * Returns the type of a resource. Available types are defined in enum UResType
+ *
+ * @param resourceBundle: a resource
+ * @return type of the given resource.
+ * @draft
+ */
+U_CAPI UResType U_EXPORT2 ures_getType(UResourceBundle *resourceBundle);
+
+/**
+ * Returns the key associated with a given resource. Not all the resources have a key - only 
+ * those that are members of a table.
+ *
+ * @param resourceBundle: a resource
+ * @return a key associated to this resource, or NULL if it doesn't have a key
+ * @draft
+ */
+U_CAPI const char * U_EXPORT2 ures_getKey(UResourceBundle *resB);
+
+/* ITERATION API 
+    This API provides means for iterating through a resource
+*/
+
+/**
+ * Resets the internal context of a resource so that iteration starts from the first element.
+ *
+ * @param resourceBundle: a resource
+ * @draft
+ */
+U_CAPI void U_EXPORT2 ures_resetIterator(UResourceBundle *resourceBundle);
+
+/**
+ * Checks whether the given resource has another element to iterate over.
+ *
+ * @param resourceBundle a resource
+ * @return TRUE if there are more elements, FALSE if there is no more elements
+ * @draft
+ */
+U_CAPI bool_t U_EXPORT2 ures_hasNext(UResourceBundle *resourceBundle);
+
+/**
+ * Returns the next resource in a given resource or NULL if there are no more resources 
+ * to iterate over. Features a fill-in parameter. 
+ *
+ * @param resourceBundle    a resource
+ * @param fillIn            if NULL a new UResourceBundle struct is allocated and must be deleted by the caller.
+ *                          Alternatively, you can supply a struct to be filled by this function.
+ * @param status            fills in the outgoing error code
+ * @return                  a pointer to a UResourceBundle struct. If fill in param was NULL, caller must delete it
+ * @draft
+ */
+U_CAPI UResourceBundle* U_EXPORT2 ures_getNextResource(UResourceBundle *resourceBundle, UResourceBundle *fillIn, UErrorCode *status);
+
+/**
+ * Returns the next string in a given resource or NULL if there are no more resources 
+ * to iterate over. 
+ *
+ * @param resourceBundle    a resource
+ * @param len               fill in length of the string
+ * @param key               fill in for key associated with this string
+ * @param status            fills in the outgoing error code
+ * @return a pointer to a zero-terminated UChar array which lives in a memory mapped/DLL file.
+ * @draft
+ */
+U_CAPI const UChar* U_EXPORT2 ures_getNextString(UResourceBundle *resourceBundle, int32_t* len, const char ** key, UErrorCode *status);
+
+/**
+ * Returns the resource in a given resource at the specified index. Features a fill-in parameter. 
+ *
+ * @param resourceBundle    a resource
+ * @param indexR            an index to the wanted resource.
+ * @param fillIn            if NULL a new UResourceBundle struct is allocated and must be deleted by the caller.
+ *                          Alternatively, you can supply a struct to be filled by this function.
+ * @param status            fills in the outgoing error code
+ * @return                  a pointer to a UResourceBundle struct. If fill in param was NULL, caller must delete it
+ * @draft
+ */
+U_CAPI UResourceBundle* U_EXPORT2 ures_getByIndex(const UResourceBundle *resourceBundle, int32_t indexR, UResourceBundle *fillIn, UErrorCode *status);
+
+/**
+ * Returns the string in a given resource at the specified index.
+ *
+ * @param resourceBundle    a resource
+ * @param indexS            an index to the wanted string.
+ * @param len               fill in length of the string
+ * @param status            fills in the outgoing error code
+ * @return                  a pointer to a zero-terminated UChar array which lives in a memory mapped/DLL file.
+ * @draft
+ */
+U_CAPI const UChar* U_EXPORT2 ures_getStringByIndex(const UResourceBundle *resB, int32_t indexS, int32_t* len, UErrorCode *status);
+
+/**
+ * Returns a resource in a given resource that has a given key. This procedure works only with table
+ * resources. Features a fill-in parameter. 
+ *
+ * @param resourceBundle    a resource
+ * @param key               a key associated with the wanted resource
+ * @param fillIn            if NULL a new UResourceBundle struct is allocated and must be deleted by the caller.
+ *                          Alternatively, you can supply a struct to be filled by this function.
+ * @param status            fills in the outgoing error code.
+ * @return                  a pointer to a UResourceBundle struct. If fill in param was NULL, caller must delete it
+ * @draft
+ */
+U_CAPI UResourceBundle* U_EXPORT2 ures_getByKey(const UResourceBundle *resourceBundle, const char* key, UResourceBundle *fillIn, UErrorCode *status);
+
+/**
+ * Returns a string in a given resource that has a given key. This procedure works only with table
+ * resources. 
+ *
+ * @param resourceBundle    a resource
+ * @param key               a key associated with the wanted string
+ * @param len               fill in length of the string
+ * @param status            fills in the outgoing error code
+ * @return                  a pointer to a zero-terminated UChar array which lives in a memory mapped/DLL file.
+ * @draft
+ */
+U_CAPI const UChar* U_EXPORT2 ures_getStringByKey(const UResourceBundle *resB, const char* key, int32_t* len, UErrorCode *status);
+
+
+
 #endif /*_URES*/
 /*eof*/

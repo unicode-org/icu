@@ -44,26 +44,17 @@ typedef uint32_t Resource;
  *
  * 0  Unicode String:   int32_t length, UChar[length], (UChar)0, (padding)
  *                  or  (empty string ("") if offset==0)
- *
- * 1  Integer Vector:   int32_t length, int32_t[length]
- * 2  Binary:           int32_t length, uint8_t[length], (padding)
+ * 1  Binary:           int32_t length, uint8_t[length], (padding)
  *                      - this value should be 16-aligned -
+ * 2  Table:            uint16_t count, uint16_t keyStringOffsets[count], (uint16_t padding), Resource[count]
  *
  * 7  Integer:          (28-bit offset is integer value)
+ * 8  Array:            int32_t count, Resource[count]
  *
- * 14 Array:            int32_t count, Resource[count]
- * 15 Table:            uint16_t count, uint16_t keyStringOffsets[count], (uint16_t padding), Resource[count]
+ * 14 Integer Vector:   int32_t length, int32_t[length]
+ * 15 Reserved:         This value denotes special purpose resources and is for internal use.
+ 
  */
-enum {
-    RES_STRING,
-    RES_INT_VECTOR,
-    RES_BINARY,
-
-    RES_INT=7,
-
-    RES_ARRAY=14,
-    RES_TABLE
-};
 
 /*
  * Structure for a single, memory-mapped ResourceBundle.
@@ -95,14 +86,25 @@ res_unload(ResourceData *pResData);
  * Returns NULL if not found.
  */
 U_CFUNC const UChar *
-res_getString(ResourceData *pResData, const char *key, int32_t *pLength);
+res_getString(const ResourceData *pResData, const Resource res, int32_t *pLength);
 
 /*
  * Get a Resource handle for an array of strings, and get the number of strings.
  * Returns RES_BOGUS if not found.
  */
 U_CFUNC Resource
-res_getStringArray(ResourceData *pResData, const char *key, int32_t *pCount);
+res_getStringArray(const ResourceData *pResData, const char *key, int32_t *pCount);
+
+U_CFUNC Resource
+res_get2DStringArray(const ResourceData *pResData, const char *key, 
+                     int32_t *pRows, int32_t *pCols);
+
+U_CFUNC Resource
+res_getTable(const ResourceData *pResData, const char *key);
+
+
+U_CFUNC Resource
+res_getResource(const ResourceData *pResData, const char *key);
 
 /*
  * Get a string from a string array.
@@ -110,7 +112,34 @@ res_getStringArray(ResourceData *pResData, const char *key, int32_t *pCount);
  * by res_getStringArray(), and that index is within bounds.
  */
 U_CFUNC const UChar *
-res_getStringArrayItem(ResourceData *pResData,
-                       Resource arrayRes, int32_t index, int32_t *pLength);
+res_getStringArrayItem(const ResourceData *pResData,
+                       Resource arrayRes, int32_t indexS, int32_t *pLength);
+
+U_CFUNC const UChar *
+res_get2DStringArrayItem(const ResourceData *pResData,
+                       Resource arrayRes, int32_t row, int32_t col, int32_t *pLength);
+
+U_CFUNC const UChar *
+res_getStringTableItem(const ResourceData *pResData, Resource table, 
+                       const char *key, int32_t *len);
+U_CFUNC const char *
+res_getVersion(const ResourceData *pResData);
+
+U_CFUNC int32_t
+res_countArrayItems(const ResourceData *pResData, const Resource res);
+
+U_CFUNC int32_t
+res_count2dArrayCols(const ResourceData *pResData, const Resource res);
+
+U_CFUNC void
+res_getNextStringTableItem(const ResourceData *pResData, Resource table, 
+                           const UChar **value, const char **key, int32_t *len, 
+                           int16_t *indexS);
+
+U_CFUNC int32_t res_getTableSize(const ResourceData *pResData, Resource table);
+
+U_CFUNC Resource res_getArrayItem(const ResourceData *pResData, const Resource array, const int32_t indexS);
+U_CFUNC Resource res_getTableItemByIndex(const ResourceData *pResData, const Resource table, int32_t indexS, const char ** key);
+U_CFUNC Resource res_getTableItemByKey(const ResourceData *pResData, const Resource table, int32_t *indexS, const char* * key);
 
 #endif

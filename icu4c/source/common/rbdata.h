@@ -33,6 +33,7 @@ class ResourceBundleData
 public:
   virtual ~ResourceBundleData() {}
   virtual UClassID getDynamicClassID(void) const = 0;
+  UErrorCode fCreationStatus; 
 };
 
 /** Concrete data class representing a list of strings.  */

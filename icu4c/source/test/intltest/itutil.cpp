@@ -17,6 +17,7 @@
 #include "ustrtest.h"
 #include "ucdtest.h"
 #include "restest.h"
+#include "restsnew.h"
 #include "tsmutex.h"
 #include "tsmthred.h"
 #include "tsputil.h"
@@ -83,8 +84,16 @@ void IntlTestUtilities::runIndexedTest( int32_t index, bool_t exec, char* &name,
                 callTest( test, par );
             }
             break;
+	   case 6:
+            name = "NewResourceBundleTest"; 
+            if (exec) {
+                logln("NewResourceBundleTest---"); logln("");
+                NewResourceBundleTest test;
+                callTest( test, par );
+            }
+            break;
 
-        case 6:
+        case 7:
             name = "MutexTest"; 
             if (exec) {
                 logln("MutexTest---"); logln("");
@@ -93,7 +102,7 @@ void IntlTestUtilities::runIndexedTest( int32_t index, bool_t exec, char* &name,
             }
             break;
 
-        case 7:
+        case 8:
             name = "MultithreadTest"; 
             if (exec) {
                 logln("MultithreadTest---"); logln("");
@@ -102,7 +111,7 @@ void IntlTestUtilities::runIndexedTest( int32_t index, bool_t exec, char* &name,
             }
             break;
 
-        case 8:
+        case 9:
             name = "PUtilTest"; 
             if (exec) {
                 logln("PUtilTest---"); logln("");

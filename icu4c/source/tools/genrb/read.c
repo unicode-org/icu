@@ -18,6 +18,7 @@
 #include "read.h"
 #include "error.h"
 #include "unicode/ustdio.h"
+#include "unicode/ustring.h"
 
 #define OPENBRACE    0x007B
 #define CLOSEBRACE   0x007D
@@ -27,7 +28,17 @@
 #define SLASH        0x002F
 #define ASTERISK     0x002A
 #define SPACE        0x0020
+#define COLON        0x003A
 
+U_STRING_DECL(k_start_string, "string", 6);
+U_STRING_DECL(k_start_binary, "binary", 6);
+U_STRING_DECL(k_start_table, "table", 5);
+U_STRING_DECL(k_start_int, "int", 3);
+U_STRING_DECL(k_start_array, "array", 5);
+U_STRING_DECL(k_start_intvector, "intvector", 9);
+U_STRING_DECL(k_start_reserved, "reserved", 8);
+
+static bool_t didInit=FALSE;
 
 /* Protos */
 static enum ETokenType getStringToken(UFILE *f, UChar initialChar, 
@@ -53,21 +64,54 @@ enum ETokenType getNextToken(UFILE *f,
 			     struct UString *token,
 			     UErrorCode *status)
 {
-  UChar c;
-  
-  if(U_FAILURE(*status)) return tok_error;
+    UChar c;
 
-  /* Skip whitespace */
-  c = getNextChar(f, TRUE, status);
-  if(U_FAILURE(*status)) return tok_error;
-  
-  switch(c) {
-  case OPENBRACE:    return tok_open_brace;
-  case CLOSEBRACE:   return tok_close_brace;
-  case COMMA:        return tok_comma;
-  case U_EOF:        return tok_EOF;
-  default:           return getStringToken(f, c, token, status);
-  }
+    enum ETokenType tokenType;
+
+    if(U_FAILURE(*status)) return tok_error;
+
+    /* Skip whitespace */
+    c = getNextChar(f, TRUE, status);
+    if(U_FAILURE(*status)) return tok_error;
+
+    switch(c) {
+    case OPENBRACE:    return tok_open_brace;
+    case CLOSEBRACE:   return tok_close_brace;
+    case COMMA:        return tok_comma;
+    case U_EOF:        return tok_EOF;
+    case COLON:        
+      c = getNextChar(f, TRUE, status);
+      tokenType = getStringToken(f, c, token, status);
+      break;              
+    default:           return getStringToken(f, c, token, status);
+    }
+    if(!didInit) {
+        U_STRING_INIT(k_start_string, "string", 6);
+        U_STRING_INIT(k_start_binary, "binary", 6);
+        U_STRING_INIT(k_start_table, "table", 5);
+        U_STRING_INIT(k_start_int, "int", 3);
+        U_STRING_INIT(k_start_array, "array", 5);
+        U_STRING_INIT(k_start_intvector, "intvector", 9);
+        U_STRING_INIT(k_start_reserved, "reserved", 8);
+        didInit=TRUE;
+    }
+    if(u_strcmp(token->fChars, k_start_string) == 0) {
+        return(tok_start_string);
+    } else if(u_strcmp(token->fChars, k_start_binary) == 0) {
+        return(tok_start_binary);
+    } else if(u_strcmp(token->fChars, k_start_table) == 0) {
+        return(tok_start_table);
+    } else if(u_strcmp(token->fChars, k_start_int) == 0) {
+        return(tok_start_int);
+    } else if(u_strcmp(token->fChars, k_start_array) == 0) {
+        return(tok_start_array);
+    } else if(u_strcmp(token->fChars, k_start_intvector) == 0) {
+        return(tok_start_intvector);
+    } else if(u_strcmp(token->fChars, k_start_reserved) == 0) {
+        return(tok_start_reserved);
+    } else {
+        return tok_error;
+    }
 }
 
 /* Copy a string token into the given UnicodeString.  Upon entry, we
@@ -148,7 +192,8 @@ static enum ETokenType getStringToken(UFILE *f,
 	if(c == QUOTE
 	   || c == OPENBRACE
 	   || c == CLOSEBRACE
-	   || c == COMMA)
+	   || c == COMMA
+       || c == COLON)
 	  {
 	    u_fungetc(c, f);
 	    /*u_fungetc(c, f, status);*/
@@ -170,7 +215,7 @@ static enum ETokenType getStringToken(UFILE *f,
     if(U_FAILURE(*status)) 
       return tok_string;
     
-    if(c == OPENBRACE || c == CLOSEBRACE || c == COMMA) {
+    if(c == OPENBRACE || c == CLOSEBRACE || c == COMMA || c == COLON) {
        u_fungetc(c, f);
 	   /*u_fungetc(c, f, status);*/
       return tok_string;

@@ -232,6 +232,7 @@ enum UErrorCode {
     U_INVALID_TABLE_FILE      = 14,       /* Conversion table file not found*/
     U_BUFFER_OVERFLOW_ERROR   = 15,       /* A result would not fit in the supplied buffer */
     U_UNSUPPORTED_ERROR       = 16,       /* Requested operation not supported in current context */
+    U_RESOURCE_TYPE_MISMATCH  = 17,       /* an operation is requested over a resource that does not support it*/
     U_ERROR_LIMIT
 };
 

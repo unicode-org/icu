@@ -260,11 +260,15 @@ void SimpleDateFormat::construct(EStyle timeStyle,
 
     // load up the DateTimePatters resource from the appropriate locale (throw
     // an error if for some weird reason the resource is malformed)
-    ResourceBundle resources(u_getDataDirectory(), locale, status);
-    int32_t dtCount;
-    const UnicodeString *dateTimePatterns = resources.getStringArray(fgDateTimePatternsTag, dtCount, status);
+    /*ResourceBundle resources(Locale::getDataDirectory(), locale, status);*/
+    ResourceBundle resources(NULL, locale, status);
+    /*resources.open("", locale, status);*/
+    //int32_t dtCount;
+    //const UnicodeString *dateTimePatterns = resources.getStringArray(fgDateTimePatternsTag, dtCount, status);
+    ResourceBundle dateTimePatterns = resources.get(fgDateTimePatternsTag, status);
     if (U_FAILURE(status)) return;
-    if (dtCount <= kDateTime)
+    //if (dtCount <= kDateTime)
+    if (dateTimePatterns.getSize() <= kDateTime)
     {
         status = U_INVALID_FORMAT_ERROR;
         return;
@@ -291,17 +295,22 @@ void SimpleDateFormat::construct(EStyle timeStyle,
         //  pattern = MessageFormat.format(dateTimePatterns[8], dateTimeArgs);
 
         Formattable *timeDateArray = new Formattable[2];
-        timeDateArray[0].setString(dateTimePatterns[timeStyle]);
-        timeDateArray[1].setString(dateTimePatterns[dateStyle]);
+        //timeDateArray[0].setString(UnicodeString(dateTimePatterns[timeStyle]));
+        //timeDateArray[1].setString(UnicodeString(dateTimePatterns[dateStyle]));
+        timeDateArray[0].setString(dateTimePatterns.getStringEx(timeStyle, status));
+        timeDateArray[1].setString(dateTimePatterns.getStringEx(dateStyle, status));
 
-        MessageFormat::format(dateTimePatterns[kDateTime], timeDateArray, 2, fPattern, status);
+        //MessageFormat::format(UnicodeString(dateTimePatterns[kDateTime]), timeDateArray, 2, fPattern, status);
+        MessageFormat::format(dateTimePatterns.getStringEx(kDateTime, status), timeDateArray, 2, fPattern, status);
         delete [] timeDateArray;
     }
     
     // if the pattern includes just time data or just date date, load the appropriate
     // pattern string from the resources
-    else if (timeStyle != kNone) fPattern = dateTimePatterns[timeStyle];
-    else if (dateStyle != kNone) fPattern = dateTimePatterns[dateStyle];
+    //else if (timeStyle != kNone) fPattern = UnicodeString(dateTimePatterns[timeStyle]);
+    //else if (dateStyle != kNone) fPattern = UnicodeString(dateTimePatterns[dateStyle]);
+    else if (timeStyle != kNone) fPattern = dateTimePatterns.getStringEx(timeStyle, status);
+    else if (dateStyle != kNone) fPattern = dateTimePatterns.getStringEx(dateStyle, status);
     
     // and if it includes _neither_, that's an error
     else status = U_INVALID_FORMAT_ERROR;
@@ -1294,10 +1303,11 @@ int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UC
                 // {sfb} kludge for case-insensitive compare
                 UnicodeString s1(text);
                 s1.toLower();
-                
+                UnicodeString s2;
+
                 for (; j <= 4; ++j)
                 {
-                    UnicodeString s2(fSymbols->fZoneStrings[i][j]);
+                    s2 = fSymbols->fZoneStrings[i][j];
                     s2.toLower();
                 
                     if ((s1.compare(start, s2.length(), s2, 0, s2.length())) == 0)
