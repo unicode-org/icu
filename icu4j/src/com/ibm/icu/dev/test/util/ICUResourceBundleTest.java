@@ -648,7 +648,39 @@ public final class ICUResourceBundleTest extends TestFmwk {
             logln("'standard' was found as a collation keyword.");
         }
     }
+    public void TestCountryInfo(){
+        ULocale[] locales = ULocale.getAvailableLocales();
+        for (int i = 0; i < locales.length; ++i) {
+            if (!hasLocalizedCountryFor(ULocale.ENGLISH, locales[i])){
+                 errln("Could not get localized country for "+ locales[i]);
+            } 
+            if(!hasLocalizedLanguageFor(ULocale.ENGLISH, locales[i])){
+                errln("Could not get localized language for "+ locales[i]);
+            } 
+            if(!hasLocalizedCountryFor(locales[i], locales[i])){
+                errln("Could not get localized country for "+ locales[i]);
+                hasLocalizedCountryFor(locales[i], locales[i]);
+            } 
+            if(!hasLocalizedLanguageFor(locales[i], locales[i])){
+                errln("Could not get localized language for "+ locales[i]);
+            } 
+
+            logln(locales[i] + "\t" + locales[i].getDisplayName(ULocale.ENGLISH) + "\t" + locales[i].getDisplayName(locales[i]));
+        }
+    }
+
+    private static boolean hasLocalizedLanguageFor(ULocale locale, ULocale otherLocale) {
+        String lang = otherLocale.getLanguage();
+        String localizedVersion = otherLocale.getDisplayLanguage(locale);
+        return !lang.equals(localizedVersion);
+    }
     
+    private static boolean hasLocalizedCountryFor(ULocale locale, ULocale otherLocale) {
+        String country = otherLocale.getCountry();
+        if (country.equals("")) return true;
+        String localizedVersion = otherLocale.getDisplayCountry(locale);
+        return !country.equals(localizedVersion);
+    }
     
     public void TestFunctionalEquivalent(){ 
        String[] testCases = {
