@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/lang/UCharacter.java,v $ 
-* $Date: 2001/11/02 23:11:36 $ 
-* $Revision: 1.15 $
+* $Date: 2001/11/06 00:02:14 $ 
+* $Revision: 1.16 $
 *
 *******************************************************************************
 */
@@ -883,13 +883,13 @@ public final class UCharacter
     * @param ch code point whose combining is to be retrieved
     * @return the combining class of the codepoint
     */
-    public static byte getCombiningClass(int ch)
+    public static int getCombiningClass(int ch)
     {
         int props = getProps(ch);
         if(!UCharacterPropertyDB.isExceptionIndicator(props)) {
         if (UCharacterPropertyDB.getPropType(props) == 
                                         UCharacterCategory.NON_SPACING_MARK) {
-            return (byte)(PROPERTY_DB_.getUnsignedValue(props));
+            return PROPERTY_DB_.getUnsignedValue(props);
         }
         else {
             return 0;
@@ -897,10 +897,10 @@ public final class UCharacter
         }
         else {
         // the combining class is in bits 23..16 of the first exception value
-        return (byte)(
-             (PROPERTY_DB_.getException(PROPERTY_DB_.getExceptionIndex(props), 
+        return (PROPERTY_DB_.getException(
+                                    PROPERTY_DB_.getExceptionIndex(props), 
                                     UCharacterPropertyDB.EXC_COMBINING_CLASS_)
-                                    >> SHIFT_16_) & LAST_BYTE_MASK_);
+                                    >> SHIFT_16_) & LAST_BYTE_MASK_;
         }
     }
       
@@ -1104,7 +1104,6 @@ public final class UCharacter
         while (offset < size)
         {
             int ch = UTF16.charAt(str, offset);
-            offset += UTF16.getCharCount(ch);
             int props = PROPERTY_DB_.getProperty(ch);
             if (!UCharacterPropertyDB.isExceptionIndicator(props)) 
             {
@@ -1130,6 +1129,7 @@ public final class UCharacter
                     }
                 }
             }
+            offset += UTF16.getCharCount(ch);
         }
         return result.toString();
     }
@@ -1149,7 +1149,6 @@ public final class UCharacter
         StringBuffer result = new StringBuffer(length);
         while (offset < length) {
             int ch = UTF16.charAt(str, offset);
-            offset += UTF16.getCharCount(ch);
             int props = PROPERTY_DB_.getProperty(ch);
             if (!UCharacterPropertyDB.isExceptionIndicator(props)) {
                 int type = UCharacterPropertyDB.getPropType(props);
@@ -1174,6 +1173,7 @@ public final class UCharacter
                     }
                 }
             }
+            offset += UTF16.getCharCount(ch);
         }
         return result.toString();
     }
@@ -1793,6 +1793,7 @@ public final class UCharacter
     private static boolean isCFINAL(String str, int offset) 
     {
         int length = str.length();
+        offset += UTF16.getCharCount(UTF16.charAt(str, offset));
         while (offset < length) {
             int ch = UTF16.charAt(str, offset);
             int cat = getType(ch);
@@ -1821,7 +1822,7 @@ public final class UCharacter
     private static boolean isNotCINITIAL(String str, int offset) 
     {
         offset --;
-        while (offset > 0) {
+        while (offset >= 0) {
             int ch = UTF16.charAt(str, offset);
             int cat = getType(ch);
             if (cat == UCharacterCategory.LOWERCASE_LETTER || 
@@ -1851,7 +1852,7 @@ public final class UCharacter
     private static boolean isAFTER_i(String str, int offset) 
     {
         offset --;
-        while (offset > 0) {
+        while (offset >= 0) {
             int ch = UTF16.charAt(str, offset);
             if (ch == LATIN_SMALL_LETTER_I_ || ch == LATIN_SMALL_LETTER_J_ || 
                 ch == LATIN_SMALL_LETTER_I_WITH_OGONEK_ ||
@@ -1884,7 +1885,7 @@ public final class UCharacter
     private static boolean isAFTER_I(String str, int offset) 
     {
         offset --;
-        while (offset > 0) {
+        while (offset >= 0) {
             int ch = UTF16.charAt(str, offset);
             if (ch == LATIN_CAPITAL_LETTER_I_) {
                 return true; // preceded by I
@@ -1914,6 +1915,7 @@ public final class UCharacter
     private static boolean isFollowedByMOREABOVE(String str, int offset) 
     {
         int length = str.length();
+        offset += UTF16.getCharCount(UTF16.charAt(str, 0));
         while (offset < length) {
             int ch = UTF16.charAt(str, offset);
             int cc = getCombiningClass(ch);
@@ -1941,6 +1943,7 @@ public final class UCharacter
     private static boolean isFollowedByDotAbove(String str, int offset) 
     {
         int length = str.length();
+        offset += UTF16.getCharCount(UTF16.charAt(str, 0));
         while (offset < length) {
             int ch = UTF16.charAt(str, offset);
             if (ch == COMBINING_DOT_ABOVE_) {
@@ -1976,13 +1979,14 @@ public final class UCharacter
         if (exception < 0) {
             String language = locale.getLanguage();
             // use hardcoded conditions and mappings
-            if (language.equals(TURKISH_) && ch == LATIN_SMALL_LETTER_I_) {
+            if ((language.equals(TURKISH_) || language.equals(AZERBAIJANI_))
+                && ch == LATIN_SMALL_LETTER_I_) {
                 // turkish: i maps to dotted I
                 buffer.append(LATIN_CAPITAL_LETTER_I_WITH_DOT_ABOVE_);
             } 
             else {
                 if (language.equals(LITHUANIAN_) && ch == COMBINING_DOT_ABOVE_ 
-                    && isAFTER_i(str, offset - 1)) {
+                    && isAFTER_i(str, offset)) {
                     // lithuanian: remove DOT ABOVE after U+0069 "i" with 
                     // upper or titlecase
                     return; // remove the dot (continue without output)
@@ -2087,7 +2091,7 @@ public final class UCharacter
                 } 
                 else {
                     if (ch == COMBINING_DOT_ABOVE_ && 
-                        isAFTER_I(str, offset - 1) && 
+                        isAFTER_I(str, offset) && 
                         !isFollowedByMOREABOVE(str, offset)) {
                         // decomposed I+dot above becomes i (see handling of 
                         // U+0049 for turkish) and removes the dot above
@@ -2096,7 +2100,7 @@ public final class UCharacter
                     else {
                         if (ch == GREEK_CAPITAL_LETTER_SIGMA_ &&
                             isCFINAL(str, offset) &&
-                            isNotCINITIAL(str, offset - 1)) {
+                            isNotCINITIAL(str, offset)) {
                             // greek capital sigma maps depending on 
                             // surrounding cased letters
                             buffer.append(GREEK_SMALL_LETTER_RHO_);
