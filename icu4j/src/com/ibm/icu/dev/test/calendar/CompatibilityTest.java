@@ -1,9 +1,15 @@
 /**
- * @test 1.13 99/11/14
- * @bug 4064654
- * @summary test for Calendar
+ *******************************************************************************
+ * Copyright (C) 2001-2002, International Business Machines Corporation and    *
+ * others. All Rights Reserved.                                                *
+ *******************************************************************************
+ *
+ * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/calendar/CompatibilityTest.java,v $
+ * $Date: 2002/08/13 21:53:38 $
+ * $Revision: 1.8 $
+ *
+ *******************************************************************************
  */
-
 package com.ibm.icu.dev.test.calendar;
 import com.ibm.icu.util.*;
 import java.util.Date;

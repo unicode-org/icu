@@ -1,3 +1,15 @@
+/**
+ *******************************************************************************
+ * Copyright (C) 2001-2002, International Business Machines Corporation and    *
+ * others. All Rights Reserved.                                                *
+ *******************************************************************************
+ *
+ * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/calendar/CalendarRegression.java,v $
+ * $Date: 2002/08/13 21:53:38 $
+ * $Revision: 1.12 $
+ *
+ *******************************************************************************
+ */
 package com.ibm.icu.dev.test.calendar;
 import com.ibm.icu.util.*;
 import java.util.Date;

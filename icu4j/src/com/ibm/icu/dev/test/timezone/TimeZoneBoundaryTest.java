@@ -1,8 +1,15 @@
-/*
-    @test 1.9 99/06/15
-    @summary test Time Zone Boundary
-*/
-
+/**
+ *******************************************************************************
+ * Copyright (C) 2001-2002, International Business Machines Corporation and    *
+ * others. All Rights Reserved.                                                *
+ *******************************************************************************
+ *
+ * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/timezone/TimeZoneBoundaryTest.java,v $
+ * $Date: 2002/08/13 22:04:39 $
+ * $Revision: 1.6 $
+ *
+ *******************************************************************************
+ */
 package com.ibm.icu.dev.test.timezone;
 import com.ibm.icu.lang.*;
 import com.ibm.icu.text.*;

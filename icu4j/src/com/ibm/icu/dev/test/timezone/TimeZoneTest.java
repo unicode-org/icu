@@ -1,4 +1,17 @@
 /**
+ *******************************************************************************
+ * Copyright (C) 2001-2002, International Business Machines Corporation and    *
+ * others. All Rights Reserved.                                                *
+ *******************************************************************************
+ *
+ * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/timezone/TimeZoneTest.java,v $
+ * $Date: 2002/08/13 22:04:39 $
+ * $Revision: 1.10 $
+ *
+ *******************************************************************************
+ */
+
+/**
  * @test 1.22 99/09/21
  * @bug 4028006 4044013 4096694 4107276 4107570 4112869 4130885
  * @summary test TimeZone

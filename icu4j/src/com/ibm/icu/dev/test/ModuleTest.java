@@ -1,3 +1,15 @@
+/**
+ *******************************************************************************
+ * Copyright (C) 2001-2002, International Business Machines Corporation and    *
+ * others. All Rights Reserved.                                                *
+ *******************************************************************************
+ *
+ * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/ModuleTest.java,v $
+ * $Date: 2002/08/13 21:59:54 $
+ * $Revision: 1.2 $
+ *
+ *******************************************************************************
+ */
 package com.ibm.icu.dev.test;
 
 import com.ibm.icu.dev.test.TestDataModule.TestData;
