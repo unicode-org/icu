@@ -1149,16 +1149,14 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                     str = null;
                     try {
                         // fpc: <loc or '-'> <curr.amt> <exp. string> <exp. curr.amt>
-                        if (cmd == 8) {
-                            String currAmt = tokens.next();
-                            str = tokens.next();
-                            CurrencyAmount n = parseCurrencyAmount(currAmt, ref, '/');
-                            assertEquals(where + "getCurrencyFormat(" + mloc + ").format(" + currAmt + ")",
-                                         str, mfmt.format(n));
-                            n = parseCurrencyAmount(tokens.next(), ref, '/');
-                            assertEquals(where + "getCurrencyFormat(" + mloc + ").parse(\"" + str + "\")",
-                                         n, (CurrencyAmount) mfmt.parseObject(str));
-                        }
+                        String currAmt = tokens.next();
+                        str = tokens.next();
+                        CurrencyAmount n = parseCurrencyAmount(currAmt, ref, '/');
+                        assertEquals(where + "getCurrencyFormat(" + mloc + ").format(" + currAmt + ")",
+                                     str, mfmt.format(n));
+                        n = parseCurrencyAmount(tokens.next(), ref, '/');
+                        assertEquals(where + "getCurrencyFormat(" + mloc + ").parse(\"" + str + "\")",
+                                     n, (CurrencyAmount) mfmt.parseObject(str));
                     } catch (ParseException e) {
                         errln(where + '"' + pat + "\".parse(\"" + str +
                               "\") threw an exception");
