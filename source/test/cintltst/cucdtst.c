@@ -733,7 +733,8 @@ static const struct {
     { 0x2002,                                         ISPR|ISSP|ISBL      },    /* en space */
     { 0x2007,                                         ISPR|ISSP|ISBL      },    /* figure space */
     { 0x2009,                                         ISPR|ISSP|ISBL      },    /* thin space */
-    { 0x200b,                                         ISPR|ISSP           },    /* ZWSP */
+    { 0x200b,                                                        ISCN },    /* ZWSP */
+  /*{ 0x200b,                                         ISPR|ISSP           },*/    /* ZWSP */ /* ZWSP became a control char in 4.0.1*/
     { 0x200e,                                                        ISCN },    /* LRM */
     { 0x2028,                                         ISPR|ISSP|     ISCN },    /* LS */
     { 0x2029,                                         ISPR|ISSP|     ISCN },    /* PS */
