@@ -726,7 +726,7 @@ u_strFromWCS(UChar   *dest,
  *                      which must not indicate a failure before the function call.
  * @retrun The pointer to destination buffer.
  */
-U_CAPI uint8_t* U_EXPORT2 
+U_CAPI char* U_EXPORT2 
 u_strToUTF8(uint8_t *dest,           
             int32_t destCapacity,
             int32_t *pDestLength,
@@ -756,7 +756,7 @@ U_CAPI UChar* U_EXPORT2
 u_strFromUTF8(UChar *dest,             
               int32_t destCapacity,
               int32_t *pDestLength,
-              const uint8_t *src, 
+              const char *src, 
               int32_t srcLength,
               UErrorCode *pErrorCode);
 
