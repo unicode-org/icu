@@ -540,6 +540,32 @@ locale_getKeywordsStart(const char *localeID) {
     return NULL;
 }
 
+/**
+ * @param buf buffer of size [ULOC_KEYWORD_BUFFER_LEN]
+ * @param keywordName incoming name to be canonicalized
+ * @param status return status (keyword too long)
+ * @return length of the keyword name
+ */
+static const char locale_canonKeywordName(char *buf, const char *keywordName, UErrorCode *status)
+{
+  int32_t i;
+  int32_t keywordNameLen = uprv_strlen(keywordName);
+  
+  if(keywordNameLen >= ULOC_KEYWORD_BUFFER_LEN) {
+    /* keyword name too long for internal buffer */
+    *status = U_INTERNAL_PROGRAM_ERROR;
+          return 0;
+  }
+  
+  /* normalize the keyword name */
+  for(i = 0; i < keywordNameLen; i++) {
+    buf[i] = uprv_tolower(keywordName[i]);
+  }
+  buf[i] = 0;
+    
+  return keywordNameLen;
+}
+
 typedef struct {
     char keyword[ULOC_KEYWORD_BUFFER_LEN];
     int32_t keywordLen;
@@ -746,7 +772,7 @@ uloc_getKeywordValue(const char* localeID,
                      UErrorCode* status)
 { 
     const char* nextSeparator = NULL;
-    int32_t keywordNameLen = uprv_strlen(keywordName);
+    int32_t keywordNameLen;
     char keywordNameBuffer[ULOC_KEYWORD_BUFFER_LEN];
     char localeKeywordNameBuffer[ULOC_KEYWORD_BUFFER_LEN];
     int32_t i = 0;
@@ -754,23 +780,16 @@ uloc_getKeywordValue(const char* localeID,
 
     if(status && U_SUCCESS(*status) && localeID) {
     
-      const char* startSearchHere = uprv_strchr(localeID, '@');
+      const char* startSearchHere = uprv_strchr(localeID, '@'); /* TODO: REVISIT: shouldn't this be locale_getKeywordsStart ? */
       if(startSearchHere == NULL) {
           /* no keywords, return at once */
           return 0;
       }
-    
-      if(keywordNameLen >= ULOC_KEYWORD_BUFFER_LEN) {
-          /* keyword name too long for internal buffer */
-          *status = U_INTERNAL_PROGRAM_ERROR;
-          return 0;
+
+      keywordNameLen = locale_canonKeywordName(keywordNameBuffer, keywordName, status);
+      if(U_FAILURE(*status)) {
+        return 0;
       }
-    
-      /* normalize the keyword name */
-      for(i = 0; i < keywordNameLen; i++) {
-          keywordNameBuffer[i] = uprv_tolower(keywordName[i]);
-      }
-      keywordNameBuffer[i] = 0;
     
       /* find the first keyword */
       while(startSearchHere) {
@@ -833,6 +852,157 @@ uloc_getKeywordValue(const char* localeID,
       }
     }
     return 0;
+}
+
+U_CAPI int32_t U_EXPORT2
+uloc_setKeywordValue(const char* keywordName,
+                     const char* keywordValue,
+                     char* buffer, int32_t bufferCapacity,
+                     UErrorCode* status)
+{
+  /* TODO: sorting. removal. */
+  int32_t keywordNameLen;
+  int32_t keywordValueLen;
+  int32_t bufLen;
+  int32_t needLen = 0;
+  int32_t foundValueLen;
+  char keywordNameBuffer[ULOC_KEYWORD_BUFFER_LEN];
+  char localeKeywordNameBuffer[ULOC_KEYWORD_BUFFER_LEN];
+  int32_t i = 0;
+  char* nextSeparator = NULL;
+  char* startSearchHere = NULL;
+  if(U_FAILURE(*status)) { 
+    return -1; 
+  }
+  if(!*keywordValue) { 
+    keywordValue = NULL;
+  }
+  if(keywordValue) {
+    keywordValueLen = uprv_strlen(keywordValue);
+  } else { 
+    keywordValueLen = 0;
+  }
+  keywordNameLen = locale_canonKeywordName(keywordNameBuffer, keywordName, status);
+  if(U_FAILURE(*status)) {
+    return 0;
+  }
+  startSearchHere = (char*)locale_getKeywordsStart(buffer);
+  if(bufferCapacity>1) {
+    bufLen = uprv_strlen(buffer);
+  } else {
+    *status = U_ILLEGAL_ARGUMENT_ERROR;
+    return 0;
+  }
+  if(startSearchHere == NULL || (startSearchHere[1]==NULL)) {
+    if(!keywordValue) { /* no keywords = nothing to remove */
+      return bufLen; 
+    }
+    needLen = bufLen+1+keywordNameLen+1+keywordValueLen;
+    if(startSearchHere) { /* had a single @ */ 
+      needLen--; /* already had the @ */
+      /* startSearchHere points at the @ */
+    } else {
+      startSearchHere=buffer+bufLen;
+    }
+    if(needLen >= bufferCapacity) {
+      *status = U_BUFFER_OVERFLOW_ERROR;
+      return needLen; /* no change */
+    }
+    *startSearchHere = '@';
+    startSearchHere++;
+    uprv_strcpy(startSearchHere, keywordNameBuffer);
+    startSearchHere += keywordNameLen;
+    *startSearchHere = '=';
+    startSearchHere++;
+    uprv_strcpy(startSearchHere, keywordValue);
+    startSearchHere+=keywordValueLen;
+    return needLen;
+  } /* end shortcut - no @ */
+  
+  /* search for keyword */
+  while(startSearchHere) {
+    startSearchHere++;
+    /* skip leading spaces (allowed?) */
+    while(*startSearchHere == ' ') {
+      startSearchHere++;
+    }
+    nextSeparator = uprv_strchr(startSearchHere, '=');
+    /* need to normalize both keyword and keyword name */
+    if(!nextSeparator) {
+      break;
+    }
+    if(nextSeparator - startSearchHere >= ULOC_KEYWORD_BUFFER_LEN) {
+      /* keyword name too long for internal buffer */
+      *status = U_INTERNAL_PROGRAM_ERROR;
+      return 0;
+    }
+    for(i = 0; i < nextSeparator - startSearchHere; i++) {
+      localeKeywordNameBuffer[i] = uprv_tolower(startSearchHere[i]);
+    }
+    /* trim trailing spaces */
+    while(startSearchHere[i-1] == ' ') {
+      i--;
+    }
+    localeKeywordNameBuffer[i] = 0;
+    
+    startSearchHere = uprv_strchr(nextSeparator, ';');
+    
+    if(uprv_strcmp(keywordNameBuffer, localeKeywordNameBuffer) == 0) {
+      nextSeparator++;
+      while(*nextSeparator == ' ') {
+        nextSeparator++;
+      }
+      /* we actually found the keyword. Change the value */
+      if (startSearchHere) {
+        foundValueLen = startSearchHere - nextSeparator;
+      } else {
+        foundValueLen = uprv_strlen(nextSeparator);
+      }
+      if(foundValueLen == keywordValueLen) {
+        uprv_strncpy(nextSeparator, keywordValue, keywordValueLen);
+        return bufLen; /* no change in size */
+      } else if(foundValueLen > keywordValueLen) {
+        int32_t delta = foundValueLen - keywordValueLen;
+        if(startSearchHere) { /* RH side */
+          uprv_memmove(startSearchHere - delta, startSearchHere, bufLen-(startSearchHere-buffer));
+        }
+        uprv_strncpy(nextSeparator, keywordValue, keywordValueLen);
+        bufLen -= delta;
+        buffer[bufLen]=0;
+        return bufLen;
+      } else { /* FVL < KVL */
+        int32_t delta = keywordValueLen - foundValueLen;
+        if((bufLen+delta) >= bufferCapacity) {
+          *status = U_BUFFER_OVERFLOW_ERROR;
+          return bufLen+delta;
+        }
+        if(startSearchHere) { /* RH side */
+          uprv_memmove(startSearchHere+delta,startSearchHere, bufLen-(startSearchHere-buffer));
+        }
+        uprv_strncpy(nextSeparator, keywordValue, keywordValueLen);
+        bufLen += delta;
+        buffer[bufLen]=0;
+        return bufLen;
+      }
+    }
+  }
+
+  /* we know there is at least one keyword. */
+  needLen = bufLen+1+keywordNameLen+1+keywordValueLen;
+  if(needLen >= bufferCapacity) {
+    *status = U_BUFFER_OVERFLOW_ERROR;
+    return needLen; /* no change */
+  }
+  startSearchHere=buffer+bufLen;
+  *startSearchHere = ';';
+  startSearchHere++;
+  uprv_strcpy(startSearchHere, keywordNameBuffer);
+  startSearchHere += keywordNameLen;
+  *startSearchHere = '=';
+  startSearchHere++;
+  uprv_strcpy(startSearchHere, keywordValue); /* terminates. */
+  startSearchHere+=keywordValueLen;
+  return needLen;
 }
 
 /* ### ID parsing implementation **************************************************/
