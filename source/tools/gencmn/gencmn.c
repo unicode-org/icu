@@ -126,7 +126,7 @@ main(int argc, char* argv[]) {
          */
         fprintf(where,
                 "%csage: %s [ -h, -?, --help ] [ -v, --verbose ] [ -c, --copyright ] [ -C, --comment comment ] [ -d, --destdir dir ] [ -n, --name filename ] [ -t, --type filetype ] [ -C, --source tocfile ] [ -e, --entrypoint name ] [ maxsize ] [ [ -f ] filename ]\n", argc < 0 ? 'u' : 'U', *argv);
-        if (argc >= 0) {
+        if (options[0].doesOccur || options[1].doesOccur) {
             fprintf(where, "\n"
             "Read the list file (default: standard input) and create a common data\n"
                     "file from specified files; omit any larger than maxsize.\n");
@@ -138,12 +138,13 @@ main(int argc, char* argv[]) {
             "         -d, --destdir dir           destination directory\n");
         fprintf(where,
             "         -n --name filename          output filename, without .type extension\n"
-            "                                     defaults to " COMMON_DATA_NAME "\n"
+            "                                     (default: " COMMON_DATA_NAME ")\n"
             "         -t, --type filetype         type of the destination file\n"
-            "                                     defaults to \"" DATA_TYPE "\"\n"
-            "         -S, --source tocfile        write a .c source file with the table of contents\n"
+            "                                     (default: \"" DATA_TYPE "\")\n"
+            "         -S, --source tocfile        write a .c source file with the table of\n"
+            "                                     contents\n"
             "         -e, --entrypoint name       override the c entrypoint name\n"
-            "                                     defaults to \"<name>_<type>\" \n"
+            "                                     (default: \"<name>_<type>\")\n"
             "         -r, --revision x.x          Set a version (example: 20.1)\n");
         }
         return argc<0 ? U_ILLEGAL_ARGUMENT_ERROR : U_ZERO_ERROR;
