@@ -166,10 +166,10 @@ writeCCode(const char *filename, const char *destdir) {
         exit(U_FILE_ACCESS_ERROR);
     }
 
-    /* turn dashes in the entry name into underscores */
+    /* turn dashes or dots in the entry name into underscores */
     length=uprv_strlen(entry);
     for(i=0; i<length; ++i) {
-        if(entry[i]=='-') {
+        if(entry[i]=='-' || entry[i]=='.') {
             entry[i]='_';
         }
     }
