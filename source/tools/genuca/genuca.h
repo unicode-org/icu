@@ -5,19 +5,22 @@
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
-*   file name:  genuca.h
+*   file name:  genuca.cpp
 *   encoding:   US-ASCII
 *   tab size:   8 (not used)
 *   indentation:4
-*
-*   created at the end of XX century
-*   created by: Vladimir Weinstein
 *
 *   This program reads the Franctional UCA table and generates
 *   internal format for UCA table as well as inverse UCA table.
 *   It then writes binary files containing the data: ucadata.dat 
 *   & invuca.dat
+*
+*   Change history:
+*
+*   02/08/2001  Vladimir Weinstein      Created this program
+*   02/23/2001  grhoten                 Made it into a tool
 */
+
 
 #ifndef UCADATA_H
 #define UCADATA_H
@@ -73,9 +76,9 @@ typedef struct {
     int32_t noOfCEs;        /* Number of collation elements                       */
     uint32_t CEs[128];      /* These are collation elements - there could be more than one - in case of expansion */
     uint32_t mapCE;         /* This is the value element maps in original table   */
-    int32_t sizePrim[128];
-    int32_t sizeSec[128];
-    int32_t sizeTer[128];
+    uint32_t sizePrim[128];
+    uint32_t sizeSec[128];
+    uint32_t sizeTer[128];
     UBool variableTop;
     UBool caseBit;
     UBool isThai;
@@ -86,8 +89,6 @@ typedef struct {
     int32_t position;
     int32_t size;
 } ExpansionTable;
-
-struct ContractionTable;
 
 struct ContractionTable {
     UChar *codePoints;
