@@ -229,7 +229,7 @@ import java.text.*;
  * *Unsupported by Java (and hence unsupported by UnicodeSet).
  *
  * @author Alan Liu
- * @version $RCSfile: UnicodeSet.java,v $ $Revision: 1.12 $ $Date: 2000/02/29 01:19:02 $
+ * @version $RCSfile: UnicodeSet.java,v $ $Revision: 1.13 $ $Date: 2000/03/08 21:56:41 $
  */
 public class UnicodeSet implements UnicodeFilter {
     /**
@@ -635,7 +635,7 @@ public class UnicodeSet implements UnicodeFilter {
      */
     public boolean equals(Object o) {
         return o instanceof UnicodeSet &&
-            pairs.equals(((UnicodeSet)o).pairs);
+            pairs.toString().equals(((UnicodeSet)o).pairs.toString());
     }
 
     /**
@@ -899,6 +899,11 @@ public class UnicodeSet implements UnicodeFilter {
                 }
                 lastChar = c;
             }
+        }
+
+        if (mode == 0) {
+            throw new IllegalArgumentException("Missing '[' in \"" +
+                                               pattern.substring(start) + '"');
         }
 
         // Handle unprocessed stuff preceding the closing ']'
