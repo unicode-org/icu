@@ -601,7 +601,26 @@ write_uca_table(const char *filename,
     myD->version[1] = UCOL_FRACTIONAL_UCA_VERSION;
     myD->jamoSpecial = FALSE;
 
-    tempUCATable *t = uprv_uca_initTempTable(myD, opts, NULL, status);
+    tempUCATable *t = uprv_uca_initTempTable(myD, opts, NULL, IMPLICIT_TAG, status);
+
+#if 0
+    IMPLICIT_TAG = 9,
+/*
+ *****************************************************************************************
+ * NON_CHARACTER FDD0 - FDEF, FFFE, FFFF, 1FFFE, 1FFFF, 2FFFE, 2FFFF,...e.g. **FFFE, **FFFF
+ ******************************************************************************************
+ */
+#endif
+
+// * set to zero
+    uprv_uca_setRange(t, 0xAC00, 0xD7AF, UCOL_SPECIAL_FLAG | (HANGUL_SYLLABLE_TAG << 24), status);  // HANGUL_SYLLABLE_TAG,/* AC00-D7AF*/
+    uprv_uca_setRange(t, 0xD800, 0xDBFF, UCOL_SPECIAL_FLAG | (LEAD_SURROGATE_TAG << 24), status);  // LEAD_SURROGATE_TAG,  /* D800-DBFF*/
+    uprv_uca_setRange(t, 0xDC00, 0xDFFF, UCOL_SPECIAL_FLAG | (TRAIL_SURROGATE_TAG << 24), status);  // TRAIL_SURROGATE DC00-DFFF
+    uprv_uca_setRange(t, 0x3400, 0x4DB5, UCOL_SPECIAL_FLAG | (CJK_IMPLICIT_TAG << 24), status);  // CJK_IMPLICIT_TAG,   /* 0x3400-0x4DB5*/
+    uprv_uca_setRange(t, 0x4E00, 0x9FA5, UCOL_SPECIAL_FLAG | (CJK_IMPLICIT_TAG << 24), status);  // CJK_IMPLICIT_TAG,   /* 0x4E00-0x9FA5*/
+    uprv_uca_setRange(t, 0xF900, 0xFA2D, UCOL_SPECIAL_FLAG | (CJK_IMPLICIT_TAG << 24), status);  // CJK_IMPLICIT_TAG,   /* 0xF900-0xFA2D*/
+
+
 
 
     while(!feof(data)) {

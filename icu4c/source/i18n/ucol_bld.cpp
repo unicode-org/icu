@@ -888,7 +888,7 @@ UCATableHeader *ucol_assembleTailoringTable(UColTokenParser *src, UErrorCode *st
   }
 
 
-  tempUCATable *t = uprv_uca_initTempTable(image, src->opts, src->UCA, status);
+  tempUCATable *t = uprv_uca_initTempTable(image, src->opts, src->UCA, NOT_FOUND_TAG, status);
 
 
   /* After this, we have assigned CE values to all regular CEs      */

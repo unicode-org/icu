@@ -116,7 +116,7 @@ int32_t uprv_uca_addExpansion(ExpansionTable *expansions, uint32_t value, UError
     return(expansions->position++);
 }
 
-tempUCATable * uprv_uca_initTempTable(UCATableHeader *image, UColOptionSet *opts, const UCollator *UCA, UErrorCode *status) {
+tempUCATable * uprv_uca_initTempTable(UCATableHeader *image, UColOptionSet *opts, const UCollator *UCA, UColCETags initTag, UErrorCode *status) {
   tempUCATable *t = (tempUCATable *)uprv_malloc(sizeof(tempUCATable));
   MaxExpansionTable *maxet  = (MaxExpansionTable *)uprv_malloc(
                                                    sizeof(MaxExpansionTable));
@@ -128,7 +128,7 @@ tempUCATable * uprv_uca_initTempTable(UCATableHeader *image, UColOptionSet *opts
   t->UCA = UCA;
   t->expansions = (ExpansionTable *)uprv_malloc(sizeof(ExpansionTable));
   uprv_memset(t->expansions, 0, sizeof(ExpansionTable));
-  t->mapping = ucmpe32_open(UCOL_NOT_FOUND, UCOL_SPECIAL_FLAG | (SURROGATE_TAG<<24), status);
+  t->mapping = ucmpe32_open(UCOL_SPECIAL_FLAG | (initTag<<24), UCOL_SPECIAL_FLAG | (SURROGATE_TAG<<24), status);
   t->contractions = uprv_cnttab_open(t->mapping, status);
 
   /* copy UCA's maxexpansion and merge as we go along */
@@ -667,6 +667,22 @@ uint32_t uprv_uca_processContraction(CntTable *contractions, UCAElements *elemen
     return existingCE;
 }
 
+/* Set a range of elements to a value */
+uint32_t uprv_uca_setRange(tempUCATable *t, UChar32 rangeStart, UChar32 rangeEnd, int32_t value, UErrorCode *status) {
+  if(U_FAILURE(*status) || (rangeEnd < rangeStart)) {
+    return 0;
+  }
+
+  UChar32 counter = rangeStart;
+  uint32_t i = 0;
+
+  for(counter = rangeStart; counter <= rangeEnd; counter++) {
+    ucmpe32_set32(t->mapping, counter, value);
+    i++;
+  }
+
+  return i; 
+}
 /* This adds a read element, while testing for existence */
 uint32_t uprv_uca_addAnElement(tempUCATable *t, UCAElements *element, UErrorCode *status) {
   CompactEIntArray *mapping = t->mapping;

@@ -994,17 +994,22 @@ inline uint32_t ucol_IGetNextCE(const UCollator *coll, collIterate *collationSou
           /*    because all of the UCA data is replicated in the latinOneMapping array  */
           order = coll->latinOneMapping[ch];
           if (order > UCOL_NOT_FOUND) {
-              order = getSpecialCE(coll, order, collationSource, status);
+              order = getSpecialCE(coll, ch, order, collationSource, status);
           }
       }
       else
       {
           order = ucmpe32_get(coll->mapping, ch);                             /* we'll go for slightly slower trie */
           if(order > UCOL_NOT_FOUND) {                                       /* if a CE is special                */
-              order = getSpecialCE(coll, order, collationSource, status);    /* and try to get the special CE     */
+              order = getSpecialCE(coll, ch, order, collationSource, status);    /* and try to get the special CE     */
           }
           if(order == UCOL_NOT_FOUND) {   /* We couldn't find a good CE in the tailoring */
-              order = ucol_getNextUCA(ch, collationSource, status);
+            /* if we got here, the codepoint MUST be over 0xFF - so we look directly in the trie */
+            order = ucmpe32_get(UCA->mapping, ch);
+
+            if(order > UCOL_NOT_FOUND) { /* UCA also gives us a special CE */
+              order = getSpecialCE(UCA, ch, order, collationSource, status);
+            }
           }
       }
     return order; /* return the CE */
@@ -1277,13 +1282,13 @@ inline uint32_t ucol_IGetPrevCE(const UCollator *coll, collIterate *data,
         contraction
         */
         if (ucol_contractionEndCP(ch, coll) && !isAtStartPrevIterate(data)) {
-            result = getSpecialPrevCE(coll, UCOL_CONTRACTION, data, status);
+            result = getSpecialPrevCE(coll, ch, UCOL_CONTRACTION, data, status);
         }
         else {
             if (ch <= 0xFF) {
               result = coll->latinOneMapping[ch];
               if (result > UCOL_NOT_FOUND) {
-                    result = getSpecialPrevCE(coll, result, data, status);
+                    result = getSpecialPrevCE(coll, ch, result, data, status);
               }
             }
             else {
@@ -1297,10 +1302,20 @@ inline uint32_t ucol_IGetPrevCE(const UCollator *coll, collIterate *data,
                     result = ucmpe32_get(coll->mapping, ch);
                 }
                 if (result > UCOL_NOT_FOUND) {
-                    result = getSpecialPrevCE(coll, result, data, status);
+                    result = getSpecialPrevCE(coll, ch, result, data, status);
                 }
                 if (result == UCOL_NOT_FOUND) {
-                    result = ucol_getPrevUCA(ch, data, status);
+                  if (!isAtStartPrevIterate(data) &&
+                      ucol_contractionEndCP(ch, data->coll)) {
+                      result = UCOL_CONTRACTION;
+                  }
+                  else {
+                        result = ucmpe32_get(UCA->mapping, ch);
+                  }
+
+                  if (result > UCOL_NOT_FOUND) {
+                    result = getSpecialPrevCE(UCA, ch, result, data, status);
+                  }
                 }
             }
         }
@@ -1324,322 +1339,6 @@ uint32_t ucol_getFirstCE(const UCollator *coll, UChar u, UErrorCode *status) {
   order = ucol_IGetNextCE(coll, &colIt, status);
   /*UCOL_GETNEXTCE(order, coll, colIt, status);*/
   return order;
-}
-
-/* This function tries to get a CE from UCA, which should be always around  */
-/* UChar is passed in in order to speed things up                           */
-/* here is also the generation of implicit CEs                              */
-uint32_t ucol_getNextUCA(UChar ch, collIterate *collationSource, UErrorCode *status) {
-    uint32_t order;
-
-    /* if we got here, the codepoint MUST be over 0xFF - so we look directly in the trie */
-    order = ucmpe32_get(UCA->mapping, ch);
-
-    if(order > UCOL_NOT_FOUND) { /* UCA also gives us a special CE */
-      order = getSpecialCE(UCA, order, collationSource, status);
-    }
-
-    if(order == UCOL_NOT_FOUND) { /* This is where we have to resort to algorithmical generation */
-      /* We have to check if ch is possibly a first surrogate - then we need to take the next code unit */
-      /* and make a bigger CE */
-      UChar nextChar;
-      const uint32_t
-      SBase = 0xAC00, LBase = 0x1100, VBase = 0x1161, TBase = 0x11A7,
-      LCount = 19, VCount = 21, TCount = 28,
-      NCount = VCount * TCount,   // 588
-      SCount = LCount * NCount;   // 11172
-
-      // once we have failed to find a match for codepoint cp, and are in the implicit code.
-
-      uint32_t L = ch - SBase;
-      //if (ch < SLimit) { // since it is unsigned, catchs zero case too
-      if (L < SCount) { // since it is unsigned, catchs zero case too
-
-        // divide into pieces
-
-        uint32_t T = L % TCount; // we do it in this order since some compilers can do % and / in one operation
-        L /= TCount;
-        uint32_t V = L % VCount;
-        L /= VCount;
-
-        // offset them
-
-        L += LBase;
-        V += VBase;
-        T += TBase;
-
-        // return the first CE, but first put the rest into the expansion buffer
-        if (!collationSource->coll->image->jamoSpecial) { // FAST PATH
-
-          *(collationSource->CEpos++) = ucmpe32_get(UCA->mapping, V);
-          if (T != TBase) {
-              *(collationSource->CEpos++) = ucmpe32_get(UCA->mapping, T);
-          }
-
-          return ucmpe32_get(UCA->mapping, L); // return first one
-
-        } else { // Jamo is Special
-          collIterate jamos;
-          UChar jamoString[3];
-          uint32_t CE = UCOL_NOT_FOUND;
-          const UCollator *collator = collationSource->coll;
-          jamoString[0] = (UChar)L;
-          jamoString[1] = (UChar)V;
-          if (T != TBase) {
-            jamoString[2] = (UChar)T;
-            IInit_collIterate(collator, jamoString, 3, &jamos);
-          } else {
-            IInit_collIterate(collator, jamoString, 2, &jamos);
-          }
-
-          CE = ucol_IGetNextCE(collator, &jamos, status);
-
-          while(CE != UCOL_NO_MORE_CES) {
-            *(collationSource->CEpos++) = CE;
-            CE = ucol_IGetNextCE(collator, &jamos, status);
-          }
-          return *(collationSource->toReturn++);
-        }
-      }
-
-      uint32_t cp = 0;
-
-      if(UTF_IS_FIRST_SURROGATE(ch)) {
-        if( (((collationSource->flags & UCOL_ITER_HASLEN) == 0 ) || (collationSource->pos<collationSource->endp)) &&
-          UTF_IS_SECOND_SURROGATE((nextChar=*collationSource->pos))) {
-          cp = ((((uint32_t)ch)<<10UL)+(nextChar)-(((uint32_t)0xd800<<10UL)+0xdc00-0x10000));
-          collationSource->pos++;
-          if ((cp & 0xFFFE) == 0xFFFE || (0xD800 <= cp && cp <= 0xDC00)) {
-              return 0;  /* illegal code value, use completely ignoreable! */
-          }
-          /* This is a code point minus 0x10000, that's what algorithm requires */
-          //order = 0xE0010303 | (cp & 0xFFE00) << 8;
-          //*(collationSource->CEpos++) = 0x80200080 | (cp & 0x001FF) << 22;
-        } else {
-          return 0; /* completely ignorable */
-        }
-      } else {
-        /* otherwise */
-        if(UTF_IS_SECOND_SURROGATE((ch)) || (ch & 0xFFFE) == 0xFFFE) {
-          return 0; /* completely ignorable */
-        }
-        cp = ch;
-        /* Make up an artifical CE from code point as per UCA */
-        //order = 0xD0800303 | (ch & 0xF000) << 12 | (ch & 0x0FE0) << 11;
-        //*(collationSource->CEpos++) = 0x04000080 | (ch & 0x001F) << 27;
-      }
-
-      /*
-      we must skip all 00, 01, 02 bytes, so most bytes have 253 values
-      we must leave a gap of 01 between all values of the last byte, so the last byte has 126 values (3 byte case)
-      we shift so that HAN all has the same first primary, for compression.
-      for the 4 byte case, we make the gap as large as we can fit.
-      Three byte forms are EC xx xx, ED xx xx, EE xx xx (with a gap of 1)
-      Four byte forms (most supplementaries) are EF xx xx xx (with a gap of LAST2_MULTIPLIER == 14)
-      */
-      int32_t last0 = cp - IMPLICIT_BOUNDARY_;
-      uint32_t r = 0;
-      uint32_t hanFixup = 0;
-
-      if ((0x3400 <= cp && cp <= 0x4DB5) || (0x4E00 <= cp && cp <= 0x9FA5) || (0xF900 <= cp && cp <= 0xFA2D)) {
-        hanFixup = 0x04000000;
-      }
-      if (last0 < 0) {
-          cp += IMPLICIT_HAN_SHIFT_; // shift so HAN shares single block
-          int32_t last1 = cp / IMPLICIT_LAST_COUNT_;
-          last0 = cp % IMPLICIT_LAST_COUNT_;
-          int32_t last2 = last1 / IMPLICIT_OTHER_COUNT_;
-          last1 %= IMPLICIT_OTHER_COUNT_;
-          r = 0xEC030300 - hanFixup + (last2 << 24) + (last1 << 16) + (last0 << 9);
-      } else {
-          int32_t last1 = last0 / IMPLICIT_LAST_COUNT2_;
-          last0 %= IMPLICIT_LAST_COUNT2_;
-          int32_t last2 = last1 / IMPLICIT_OTHER_COUNT_;
-          last1 %= IMPLICIT_OTHER_COUNT_;
-          r = 0xEF030303 - hanFixup + (last2 << 16) + (last1 << 8) + (last0 * IMPLICIT_LAST2_MULTIPLIER_);
-      }
-      order = (r & UCOL_PRIMARYMASK) | 0x00000505;
-      *(collationSource->CEpos++) = ((r & 0x0000FFFF)<<16) | 0x000000C0;
-
-    }
-    return order; /* return the CE */
-}
-
-/*
-* This function tries to get a CE from UCA, which should be always around
-* UChar is passed in in order to speed things up here is also the generation
-* of implicit CEs
-*/
-uint32_t ucol_getPrevUCA(UChar ch, collIterate *collationSource,
-                         UErrorCode *status)
-{
-  uint32_t order;
-  if (!isAtStartPrevIterate(collationSource) &&
-      ucol_contractionEndCP(ch, collationSource->coll)) {
-      order = UCOL_CONTRACTION;
-  }
-  else {
-      /* if (ch <= 0xFF) {
-        order = UCA->latinOneMapping[ch];
-      }
-      else {
-      */
-        order = ucmpe32_get(UCA->mapping, ch);
-      //}
-  }
-
-  if (order > UCOL_NOT_FOUND) {
-    order = getSpecialPrevCE(UCA, order, collationSource, status);
-  }
-
-  if (order == UCOL_NOT_FOUND)
-  {
-    uint32_t cp = 0;
-    /*
-    This is where we have to resort to algorithmical generation.
-    We have to check if ch is possibly a first surrogate - then we need to
-    take the next code unit and make a bigger CE
-    */
-    uint32_t
-      SBase = 0xAC00, LBase = 0x1100, VBase = 0x1161, TBase = 0x11A7,
-      LCount = 19, VCount = 21, TCount = 28,
-      NCount = VCount * TCount,   /* 588 */
-      SCount = LCount * NCount;   /* 11172 */
-
-    /*
-    once we have failed to find a match for codepoint cp, and are in the
-    implicit code.
-    */
-    uint32_t L = ch - SBase;
-    if (L < SCount)
-    { /* since it is unsigned, catchs zero case too */
-
-      /*
-      divide into pieces.
-      we do it in this order since some compilers can do % and / in one
-      operation
-      */
-      uint32_t T = L % TCount;
-      L /= TCount;
-      uint32_t V = L % VCount;
-      L /= VCount;
-
-      /* offset them */
-      L += LBase;
-      V += VBase;
-      T += TBase;
-
-      /*
-      return the first CE, but first put the rest into the expansion buffer
-      */
-      if (!collationSource->coll->image->jamoSpecial)
-      {
-        *(collationSource->CEpos ++) = ucmpe32_get(UCA->mapping, L);
-        *(collationSource->CEpos ++) = ucmpe32_get(UCA->mapping, V);
-        if (T != TBase)
-          *(collationSource->CEpos ++) = ucmpe32_get(UCA->mapping, T);
-
-        collationSource->toReturn = collationSource->CEpos - 1;
-        return *(collationSource->toReturn);
-      } else {
-        collIterate jamos;
-        UChar jamoString[3];
-        uint32_t CE = UCOL_NOT_FOUND;
-        const UCollator *collator = collationSource->coll;
-        jamoString[0] = (UChar)L;
-        jamoString[1] = (UChar)V;
-        if (T != TBase) {
-          jamoString[2] = (UChar)T;
-          IInit_collIterate(collator, jamoString, 3, &jamos);
-        } else {
-          IInit_collIterate(collator, jamoString, 2, &jamos);
-        }
-
-        CE = ucol_IGetNextCE(collator, &jamos, status);
-
-        while(CE != UCOL_NO_MORE_CES) {
-          *(collationSource->CEpos++) = CE;
-          CE = ucol_IGetNextCE(collator, &jamos, status);
-        }
-        collationSource->toReturn = collationSource->CEpos - 1;
-        return *(collationSource->toReturn);
-        }
-    }
-
-    if (UTF_IS_SECOND_SURROGATE(ch))
-    {
-        UChar  prevChar;
-        UChar *prev;
-        if (isAtStartPrevIterate(collationSource)) {
-            /* we are at the start of the string, wrong place to be at */
-            return 0;
-        }
-        if (collationSource->pos != collationSource->writableBuffer) {
-            prev     = collationSource->pos - 1;
-        }
-        else {
-            prev     = collationSource->fcdPosition;
-        }
-        prevChar = *prev;
-
-        /* Handles Han and Supplementary characters here.*/
-        if (UTF_IS_FIRST_SURROGATE(prevChar))
-      {
-            //cp = ((prevChar << 10UL) + ch - ((0xd800 << 10UL) + 0xdc00));
-            cp = ((((uint32_t)prevChar)<<10UL)+(ch)-(((uint32_t)0xd800<<10UL)+0xdc00-0x10000));
-            collationSource->pos = prev;
-        if ((cp & 0xFFFE) == 0xFFFE || (0xD800 <= cp && cp <= 0xDC00)) {
-          return 0;  /* illegal code value, use completely ignoreable! */
-        }
-      }
-      else {
-        return 0; /* completely ignorable */
-      }
-    }
-    else
-    {
-      /* otherwise */
-      if (UTF_IS_FIRST_SURROGATE(ch) || (ch & 0xFFFE) == 0xFFFE) {
-        return 0; /* completely ignorable */
-      }
-      cp = ch;
-    }
-
-      /* we must skip all 00, 01, 02 bytes, so most bytes have 253 values
-       we must leave a gap of 01 between all values of the last byte, so the last byte has 126 values (3 byte case)
-       we shift so that HAN all has the same first primary, for compression.
-       for the 4 byte case, we make the gap as large as we can fit.
-       Three byte forms are EC xx xx, ED xx xx, EE xx xx (with a gap of 1)
-       Four byte forms (most supplementaries) are EF xx xx xx (with a gap of LAST2_MULTIPLIER == 14)
-      */
-      int32_t last0 = cp - IMPLICIT_BOUNDARY_;
-      uint32_t r = 0;
-      uint32_t hanFixup = 0;
-
-      if ((0x3400 <= cp && cp <= 0x4DB5) || (0x4E00 <= cp && cp <= 0x9FA5) || (0xF900 <= cp && cp <= 0xFA2D)) {
-        hanFixup = 0x04000000;
-      }
-
-      if (last0 < 0) {
-          cp += IMPLICIT_HAN_SHIFT_; // shift so HAN shares single block
-          int32_t last1 = cp / IMPLICIT_LAST_COUNT_;
-          last0 = cp % IMPLICIT_LAST_COUNT_;
-          int32_t last2 = last1 / IMPLICIT_OTHER_COUNT_;
-          last1 %= IMPLICIT_OTHER_COUNT_;
-          r = 0xEC030300 - hanFixup + (last2 << 24) + (last1 << 16) + (last0 << 9);
-      } else {
-          int32_t last1 = last0 / IMPLICIT_LAST_COUNT2_;
-          last0 %= IMPLICIT_LAST_COUNT2_;
-          int32_t last2 = last1 / IMPLICIT_OTHER_COUNT_;
-          last1 %= IMPLICIT_OTHER_COUNT_;
-          r = 0xEF030303 - hanFixup + (last2 << 16) + (last1 << 8) +
-              (last0 * IMPLICIT_LAST2_MULTIPLIER_);
-      }
-      *(collationSource->CEpos++) = (r & UCOL_PRIMARYMASK) | 0x00000505;
-      collationSource->toReturn = collationSource->CEpos;
-      order = ((r & 0x0000FFFF)<<16) | 0x000000C0;
-  }
-  return order; /* return the CE */
 }
 
 /**
@@ -2023,9 +1722,38 @@ uint32_t getDiscontiguous(const UCollator *coll, collIterate *source,
     return *(coll->contractionCEs + (constart - coll->contractionIndex));
 }
 
+inline uint32_t getImplicit(UChar32 cp, collIterate *collationSource, uint32_t hanFixup) {
+  /*
+  we must skip all 00, 01, 02 bytes, so most bytes have 253 values
+  we must leave a gap of 01 between all values of the last byte, so the last byte has 126 values (3 byte case)
+  we shift so that HAN all has the same first primary, for compression.
+  for the 4 byte case, we make the gap as large as we can fit.
+  Three byte forms are EC xx xx, ED xx xx, EE xx xx (with a gap of 1)
+  Four byte forms (most supplementaries) are EF xx xx xx (with a gap of LAST2_MULTIPLIER == 14)
+  */
+  int32_t last0 = cp - IMPLICIT_BOUNDARY_;
+  uint32_t r = 0;
+  if (last0 < 0) {
+      cp += IMPLICIT_HAN_SHIFT_; // shift so HAN shares single block
+      int32_t last1 = cp / IMPLICIT_LAST_COUNT_;
+      last0 = cp % IMPLICIT_LAST_COUNT_;
+      int32_t last2 = last1 / IMPLICIT_OTHER_COUNT_;
+      last1 %= IMPLICIT_OTHER_COUNT_;
+      r = 0xEC030300 - hanFixup + (last2 << 24) + (last1 << 16) + (last0 << 9);
+  } else {
+      int32_t last1 = last0 / IMPLICIT_LAST_COUNT2_;
+      last0 %= IMPLICIT_LAST_COUNT2_;
+      int32_t last2 = last1 / IMPLICIT_OTHER_COUNT_;
+      last1 %= IMPLICIT_OTHER_COUNT_;
+      r = 0xEF030303 - hanFixup + (last2 << 16) + (last1 << 8) + (last0 * IMPLICIT_LAST2_MULTIPLIER_);
+  } 
+  *(collationSource->CEpos++) = ((r & 0x0000FFFF)<<16) | 0x000000C0;
+  return (r & UCOL_PRIMARYMASK) | 0x00000505; // This was 'order'
+}
+
 /* This function handles the special CEs like contractions, expansions, surrogates, Thai */
-/* It is called by both getNextCE and getNextUCA                                         */
-uint32_t getSpecialCE(const UCollator *coll, uint32_t CE, collIterate *source, UErrorCode *status) {
+/* It is called by getNextCE */
+uint32_t getSpecialCE(const UCollator *coll, UChar ch, uint32_t CE, collIterate *source, UErrorCode *status) {
   for (;;) {
     // This loop will repeat only in the case of contractions, and only when a contraction
     //   is found and the first CE resulting from that contraction is itself a special
@@ -2217,7 +1945,86 @@ uint32_t getSpecialCE(const UCollator *coll, uint32_t CE, collIterate *source, U
       }
       return CE;
       }
+    /* TODO: */
+    /* various implicits optimization */
+    /* need to fill out the collation table for them to work */
+    case CJK_IMPLICIT_TAG:    /* 0x3400-0x4DB5, 0x4E00-0x9FA5, 0xF900-0xFA2D*/
+      return getImplicit(ch, source, 0x04000000);
+    case IMPLICIT_TAG:        /* everything that is not defined otherwise */
+      /* UCA is filled with these. Tailorings are NOT_FOUND */
+      return getImplicit(ch, source, 0);
+    case TRAIL_SURROGATE_TAG: /* DC00-DFFF*/
+      return 0; /* broken surrogate sequence */
+    case LEAD_SURROGATE_TAG:  /* D800-DBFF*/
+      UChar nextChar;
+      if( (((source->flags & UCOL_ITER_HASLEN) == 0 ) || (source->pos<source->endp)) &&
+        UTF_IS_SECOND_SURROGATE((nextChar=*source->pos))) {
+        uint32_t cp = ((((uint32_t)ch)<<10UL)+(nextChar)-(((uint32_t)0xd800<<10UL)+0xdc00-0x10000));
+        source->pos++;
+        if ((cp & 0xFFFE) == 0xFFFE || (0xD800 <= cp && cp <= 0xDC00)) {
+            return 0;  /* illegal code value, use completely ignoreable! */
+        }
+        return getImplicit(cp, source, 0);
+      } else {
+        return 0; /* completely ignorable */
+      }
+    case HANGUL_SYLLABLE_TAG: /* AC00-D7AF*/
+      {
+        const uint32_t
+        SBase = 0xAC00, LBase = 0x1100, VBase = 0x1161, TBase = 0x11A7,
+        LCount = 19, VCount = 21, TCount = 28,
+        NCount = VCount * TCount,   // 588
+        SCount = LCount * NCount;   // 11172
+        uint32_t L = ch - SBase;
+
+        // divide into pieces
+
+        uint32_t T = L % TCount; // we do it in this order since some compilers can do % and / in one operation
+        L /= TCount;
+        uint32_t V = L % VCount;
+        L /= VCount;
+
+        // offset them
+
+        L += LBase;
+        V += VBase;
+        T += TBase;
+
+        // return the first CE, but first put the rest into the expansion buffer
+        if (!source->coll->image->jamoSpecial) { // FAST PATH
+
+          *(source->CEpos++) = ucmpe32_get(UCA->mapping, V);
+          if (T != TBase) {
+              *(source->CEpos++) = ucmpe32_get(UCA->mapping, T);
+          }
+
+          return ucmpe32_get(UCA->mapping, L); // return first one
+
+        } else { // Jamo is Special
+          collIterate jamos;
+          UChar jamoString[3];
+          uint32_t CE = UCOL_NOT_FOUND;
+          const UCollator *collator = source->coll;
+          jamoString[0] = (UChar)L;
+          jamoString[1] = (UChar)V;
+          if (T != TBase) {
+            jamoString[2] = (UChar)T;
+            IInit_collIterate(collator, jamoString, 3, &jamos);
+          } else {
+            IInit_collIterate(collator, jamoString, 2, &jamos);
+          }
+
+          CE = ucol_IGetNextCE(collator, &jamos, status);
+
+          while(CE != UCOL_NO_MORE_CES) {
+            *(source->CEpos++) = CE;
+            CE = ucol_IGetNextCE(collator, &jamos, status);
+          }
+          return *(source->toReturn++);
+        }
+      }
     case CHARSET_TAG:
+    /* not yet implemented */
       /* probably after 1.8 */
       return UCOL_NOT_FOUND;
     default:
@@ -2433,12 +2240,43 @@ inline UChar getPrevNormalizedChar(collIterate *data)
     return ch;
 }
 
+inline uint32_t getPrevImplicit(UChar32 cp, collIterate *collationSource, uint32_t hanFixup) {
+      /* we must skip all 00, 01, 02 bytes, so most bytes have 253 values
+       we must leave a gap of 01 between all values of the last byte, so the last byte has 126 values (3 byte case)
+       we shift so that HAN all has the same first primary, for compression.
+       for the 4 byte case, we make the gap as large as we can fit.
+       Three byte forms are EC xx xx, ED xx xx, EE xx xx (with a gap of 1)
+       Four byte forms (most supplementaries) are EF xx xx xx (with a gap of LAST2_MULTIPLIER == 14)
+      */
+      int32_t last0 = cp - IMPLICIT_BOUNDARY_;
+      uint32_t r = 0;
+
+      if (last0 < 0) {
+          cp += IMPLICIT_HAN_SHIFT_; // shift so HAN shares single block
+          int32_t last1 = cp / IMPLICIT_LAST_COUNT_;
+          last0 = cp % IMPLICIT_LAST_COUNT_;
+          int32_t last2 = last1 / IMPLICIT_OTHER_COUNT_;
+          last1 %= IMPLICIT_OTHER_COUNT_;
+          r = 0xEC030300 - hanFixup + (last2 << 24) + (last1 << 16) + (last0 << 9);
+      } else {
+          int32_t last1 = last0 / IMPLICIT_LAST_COUNT2_;
+          last0 %= IMPLICIT_LAST_COUNT2_;
+          int32_t last2 = last1 / IMPLICIT_OTHER_COUNT_;
+          last1 %= IMPLICIT_OTHER_COUNT_;
+          r = 0xEF030303 - hanFixup + (last2 << 16) + (last1 << 8) +
+              (last0 * IMPLICIT_LAST2_MULTIPLIER_);
+      }
+      *(collationSource->CEpos++) = (r & UCOL_PRIMARYMASK) | 0x00000505;
+      collationSource->toReturn = collationSource->CEpos;
+      return ((r & 0x0000FFFF)<<16) | 0x000000C0;
+}
+
 /**
 * This function handles the special CEs like contractions, expansions,
 * surrogates, Thai.
-* It is called by both getPrevCE and getPrevUCA
+* It is called by both getPrevCE
 */
-uint32_t getSpecialPrevCE(const UCollator *coll, uint32_t CE,
+uint32_t getSpecialPrevCE(const UCollator *coll, UChar ch, uint32_t CE,
                           collIterate *source,
                           UErrorCode *status)
 {
@@ -2516,7 +2354,7 @@ uint32_t getSpecialPrevCE(const UCollator *coll, uint32_t CE,
         constart = (UChar *)coll->image + getContractOffset(CE);
         if (isAtStartPrevIterate(source)
             /* commented away contraction end checks after adding the checks
-            in getPrevCE and getPrevUCA */) {
+            in getPrevCE  */) {
             /* start of string or this is not the end of any contraction */
             CE = *(coll->contractionCEs +
                      (constart - coll->contractionIndex));
@@ -2605,6 +2443,105 @@ uint32_t getSpecialPrevCE(const UCollator *coll, uint32_t CE,
       }
       source->toReturn = source->CEpos - 1;
       return *(source->toReturn);
+    /* TODO: */
+    /* various implicits optimization */
+    /* need to fill out the collation table for them to work */
+    case HANGUL_SYLLABLE_TAG: /* AC00-D7AF*/
+      {
+        uint32_t
+        SBase = 0xAC00, LBase = 0x1100, VBase = 0x1161, TBase = 0x11A7,
+        LCount = 19, VCount = 21, TCount = 28,
+        NCount = VCount * TCount,   /* 588 */
+        SCount = LCount * NCount;   /* 11172 */
+
+        uint32_t L = ch - SBase;
+        /*
+        divide into pieces.
+        we do it in this order since some compilers can do % and / in one
+        operation
+        */
+        uint32_t T = L % TCount;
+        L /= TCount;
+        uint32_t V = L % VCount;
+        L /= VCount;
+
+        /* offset them */
+        L += LBase;
+        V += VBase;
+        T += TBase;
+
+        /*
+        return the first CE, but first put the rest into the expansion buffer
+        */
+        if (!source->coll->image->jamoSpecial)
+        {
+          *(source->CEpos ++) = ucmpe32_get(UCA->mapping, L);
+          *(source->CEpos ++) = ucmpe32_get(UCA->mapping, V);
+          if (T != TBase)
+            *(source->CEpos ++) = ucmpe32_get(UCA->mapping, T);
+
+          source->toReturn = source->CEpos - 1;
+          return *(source->toReturn);
+        } else {
+          collIterate jamos;
+          UChar jamoString[3];
+          uint32_t CE = UCOL_NOT_FOUND;
+          const UCollator *collator = source->coll;
+          jamoString[0] = (UChar)L;
+          jamoString[1] = (UChar)V;
+          if (T != TBase) {
+            jamoString[2] = (UChar)T;
+            IInit_collIterate(collator, jamoString, 3, &jamos);
+          } else {
+            IInit_collIterate(collator, jamoString, 2, &jamos);
+          }
+
+          CE = ucol_IGetNextCE(collator, &jamos, status);
+
+          while(CE != UCOL_NO_MORE_CES) {
+            *(source->CEpos++) = CE;
+            CE = ucol_IGetNextCE(collator, &jamos, status);
+          }
+          source->toReturn = source->CEpos - 1;
+          return *(source->toReturn);
+        }
+      }
+    case LEAD_SURROGATE_TAG:  /* D800-DBFF*/
+      return 0; /* broken surrogate sequence */
+    case TRAIL_SURROGATE_TAG: /* DC00-DFFF*/
+    {
+      UChar32 cp = 0;
+      UChar  prevChar;
+      UChar *prev;
+      if (isAtStartPrevIterate(source)) {
+          /* we are at the start of the string, wrong place to be at */
+          return 0;
+      }
+      if (source->pos != source->writableBuffer) {
+          prev     = source->pos - 1;
+      } else {
+          prev     = source->fcdPosition;
+      }
+      prevChar = *prev;
+
+      /* Handles Han and Supplementary characters here.*/
+      if (UTF_IS_FIRST_SURROGATE(prevChar)) {
+        cp = ((((uint32_t)prevChar)<<10UL)+(ch)-(((uint32_t)0xd800<<10UL)+0xdc00-0x10000));
+        source->pos = prev;
+        if ((cp & 0xFFFE) == 0xFFFE || (0xD800 <= cp && cp <= 0xDC00)) {
+          return 0;  /* illegal code value, use completely ignoreable! */
+        }
+      } else {
+        return 0; /* completely ignorable */
+      }
+      return getPrevImplicit(cp, source, 0);
+    }
+    case CJK_IMPLICIT_TAG:    /* 0x3400-0x4DB5, 0x4E00-0x9FA5, 0xF900-0xFA2D*/
+      return getPrevImplicit(ch, source, 0x04000000);
+    case IMPLICIT_TAG:        /* everything that is not defined otherwise */
+      return getPrevImplicit(ch, source, 0);
+      /* UCA is filled with these. Tailorings are NOT_FOUND */
+    /* not yet implemented */
     case CHARSET_TAG:  /* this tag always returns */
       /* probably after 1.8 */
       return UCOL_NOT_FOUND;
