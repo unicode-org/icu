@@ -215,7 +215,7 @@ ucol_getNormalization(const UCollator* coll)
     return UCOL_DECOMP_CAN_COMP_COMPAT;
 
   case Normalizer::DECOMP:
-    return UCOL_DECOMP_COMPAT;
+    return UCOL_DECOMP_CAN;
 
   case Normalizer::DECOMP_COMPAT:
     return UCOL_DECOMP_COMPAT;
@@ -324,14 +324,12 @@ void init_collIterate(const UChar *string, int32_t len, collIterate *s) {
 }
 
 int32_t ucol_getNextCE(const UCollator *coll, collIterate *source, UErrorCode *status) {
-    //printf("/Entry/ %x, %x, %x, %x, %x, %x\n", source->string, source->len, source->pos, source->CEs, source->CEpos, source->toReturn);
 
   if (U_FAILURE(*status) || (source->pos>=source->len && source->CEpos <= source->toReturn)) {
     return CollationElementIterator::NULLORDER;
   }
   
   if (source->CEpos > source->toReturn) {
-    //printf("/Expanded stuff/ %x, %x, %x, %x, %x, %x\n", source->string, source->len, source->pos, source->CEs, source->CEpos, source->toReturn);
       return(*(source->toReturn++));
   }
  
@@ -344,8 +342,6 @@ int32_t ucol_getNextCE(const UCollator *coll, collIterate *source, UErrorCode *s
   if(*(source->CEpos) < UCOL_EXPANDCHARINDEX) {
       
     source->pos++;
-
-    //printf("/Normal Exit/ %x, %x, %x, %x, %x, %x\n", source->string, source->len, source->pos, source->CEs, source->CEpos, source->toReturn);
     return (*(source->CEpos));
   }
 
@@ -358,69 +354,48 @@ int32_t ucol_getNextCE(const UCollator *coll, collIterate *source, UErrorCode *s
     } else {
         // Contraction sequence start...
         if (*(source->CEpos) >= UCOL_CONTRACTCHARINDEX) {
-	      // in place of: value = nextContractChar(cursor, ch, status);
             VectorOfPToContractElement* list = ((RuleBasedCollator *)coll)->data->contractTable->at(*(source->CEpos)-UCOL_CONTRACTCHARINDEX);
             // The upper line obtained a list of contracting sequences.
-            EntryPair *pair = (EntryPair *)list->at(0); // Taking out the first one.
-            int32_t order = pair->value; // This got us mapping for just the first element - the one that signalled a contraction.
+            if (list != NULL) {
+				EntryPair *pair = (EntryPair *)list->at(0); // Taking out the first one.
+				int32_t order = pair->value; // This got us mapping for just the first element - the one that signalled a contraction.
 
-            UChar key[1024];
-            uint32_t posKey = 0;
+				UChar key[1024];
+				uint32_t posKey = 0;
 
-            key[posKey++] = *(source->pos++);
-            int32_t getEntryValue = RuleBasedCollator::UNMAPPED;
+				key[posKey++] = *(source->pos);
+				// This tries to find the longes common match for the data in contraction table...
+				// and needs to be rewritten, especially the test down there!
+				int32_t i;
+				UBool foundSmaller = TRUE;
 
-            while(source->pos<source->len) {
+				while(source->pos<source->len && foundSmaller) {
 
-                key[posKey++] = *(source->pos);
+					key[posKey++] = *(++source->pos);
 
-                // in place of: int32_t n = getEntry(list, key, TRUE);
-                {
-                    int32_t i;
-                    if (list != NULL)
-                    {
-                        for (i = 0; i < list->size(); i++)
-                        {
-                            EntryPair *pair = list->at(i);
-
-                            if ((pair != NULL) && (pair->fwd == TRUE /*fwd*/) && (pair->entryName == UnicodeString(key, posKey)))
-                            {
-                                getEntryValue  = i;
-                                goto done;
-                                // break or something
-                            }
-                        }
-                    }
-                    getEntryValue = RuleBasedCollator::UNMAPPED;
-                }
-    done:
-                // end of getEntry
-
-                if (getEntryValue  == RuleBasedCollator::UNMAPPED)
-                {
-                    break;
-                }
-
-                source->pos++;
-                pair = (EntryPair *)list->at(getEntryValue);
-                order = pair->value;
-        }
-        *(source->CEpos++) = order;
-        //printf("/Contraction Exit/ %x, %x, %x, %x, %x, %x\n", source->string, source->len, source->pos, source->CEs, source->CEpos, source->toReturn);
-
-        return (*(source->toReturn++));
+					foundSmaller = FALSE;
+					i = 0;
+					while(i<list->size() && !foundSmaller) {
+						pair = list->at(i);
+						if ((pair != NULL) && (pair->fwd == TRUE /*fwd*/) && (pair->entryName == UnicodeString(key, posKey))) {
+							order = pair->value;
+							foundSmaller = TRUE;
+						}
+						i++;
+					}
+				}
+				source->pos--; /* spit back the last char - it wasn't part of the sequence */
+				*(source->CEpos) = order;
+			}
     }
 	// Expansion sequence start...
-        if (*(source->CEs) >= UCOL_EXPANDCHARINDEX) {
+        if (*(source->CEpos) >= UCOL_EXPANDCHARINDEX) {
             VectorOfInt *v = ((RuleBasedCollator *)coll)->data->expandTable->at(*(source->CEpos)-UCOL_EXPANDCHARINDEX);
             if(v != NULL) {
                 int32_t expandindex=0;
                 while(expandindex < v->size()) {
                     *(source->CEpos++) = v->at(expandindex++);
                 }
-                source->pos++;
-    //printf("/Expansion start Exit/ %x, %x, %x, %x, %x, %x\n", source->string, source->len, source->pos, source->CEs, source->CEpos, source->toReturn);
-                return (*(source->toReturn++));
             }
         }
 
@@ -428,22 +403,17 @@ int32_t ucol_getNextCE(const UCollator *coll, collIterate *source, UErrorCode *s
         if (CollationElementIterator::isThaiPreVowel(*(source->pos))) {
             UChar consonant = *(source->pos+1);
             if (CollationElementIterator::isThaiBaseConsonant(consonant)) {
-	      source->pos++;
 	      // find the element for consonant
 	      // and reorder them
             }
         }
     }
-
-    source->CEpos++;
     source->pos++;
-
-    //printf("/Goofy Exit/ %x, %x, %x, %x, %x, %x\n", source->string, source->len, source->pos, source->CEs, source->CEpos, source->toReturn);
     return (*(source->toReturn++));
 }
 
 U_CAPI UCollationResult
-ucol_strcoll(    const    UCollator    *coll,
+ucol_strcollEx(    const    UCollator    *coll,
         const    UChar        *source,
         int32_t            sourceLength,
         const    UChar        *target,
@@ -452,11 +422,11 @@ ucol_strcoll(    const    UCollator    *coll,
     if (coll == NULL) return UCOL_EQUAL;
     if (sourceLength == -1) sourceLength = u_strlen(source);
     if (targetLength == -1) targetLength = u_strlen(target);
-        return (UCollationResult) ((Collator*)coll)->compare(source,sourceLength,target,targetLength);
+        return (UCollationResult) ((RuleBasedCollator*)coll)->compareEx(source,sourceLength,target,targetLength);
 }
 
 U_CAPI UCollationResult
-ucol_strcollEx(    const    UCollator    *coll,
+ucol_strcoll(    const    UCollator    *coll,
         const    UChar        *source,
         int32_t            sourceLength,
         const    UChar        *target,
@@ -812,7 +782,7 @@ ucol_strcollEx(    const    UCollator    *coll,
 }
 
 U_CAPI int32_t
-ucol_getSortKey(const    UCollator    *coll,
+ucol_getSortKeyEx(const    UCollator    *coll,
         const    UChar        *source,
         int32_t        sourceLength,
         uint8_t        *result,
@@ -827,7 +797,7 @@ ucol_getSortKey(const    UCollator    *coll,
   //  UnicodeString     string((UChar*)source, len, len);
   UErrorCode         status = U_ZERO_ERROR;
 
-  ((Collator*)coll)->getCollationKey(source, len, key, status);
+  ((RuleBasedCollator*)coll)->getCollationKeyEx(source, len, key, status);
   if(U_FAILURE(status)) 
     return 0;
 
@@ -844,7 +814,7 @@ ucol_getSortKey(const    UCollator    *coll,
 }
 
 U_CAPI int32_t
-ucol_getSortKeyEx(const    UCollator    *coll,
+ucol_getSortKey(const    UCollator    *coll,
         const    UChar        *source,
         int32_t        sourceLength,
         uint8_t        *result,
@@ -1110,13 +1080,11 @@ ucol_cloneRuleData(UCollator *coll, int32_t *length, UErrorCode *status)
 }
 
 U_CAPI void ucol_setAttribute(UCollator *coll, UColAttribute attr, UColAttributeValue value, UErrorCode *status) {
-	*status = U_UNSUPPORTED_ERROR;
-	return;
+	((RuleBasedCollator *)coll)->setAttribute(attr, value, *status);
 }
 
 U_CAPI UColAttributeValue ucol_getAttribute(const UCollator *coll, UColAttribute attr, UErrorCode *status) {
-	*status = U_UNSUPPORTED_ERROR;
-	return UCOL_ATTR_DEFAULT;
+	return (((RuleBasedCollator *)coll)->getAttribute(attr, *status));
 }
 
 U_CAPI UCollator *ucol_safeClone(const UCollator *coll, void *stackBuffer, uint32_t bufferSize, UErrorCode *status) {
