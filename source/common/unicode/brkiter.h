@@ -590,12 +590,7 @@ public:
     const char *getLocaleID(ULocDataLocaleType type, UErrorCode& status) const;
 
  private:
-    static BreakIterator* makeCharacterInstance(const Locale& loc, UErrorCode& status);
-    static BreakIterator* makeWordInstance(const Locale& loc, UErrorCode& status);
-    static BreakIterator* makeLineInstance(const Locale& loc, UErrorCode& status);
-    static BreakIterator* makeSentenceInstance(const Locale& loc, UErrorCode& status);
-    static BreakIterator* makeTitleInstance(const Locale& loc, UErrorCode& status);
-
+    static BreakIterator* buildInstance(const Locale& loc, const char *type, UBool dict, UErrorCode& status);
     static BreakIterator* createInstance(const Locale& loc, UBreakIteratorType kind, UErrorCode& status);
     static BreakIterator* makeInstance(const Locale& loc, int32_t kind, UErrorCode& status);
 

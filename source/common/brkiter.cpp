@@ -31,6 +31,7 @@
 #include "mutex.h"
 #include "iculserv.h"
 #include "locbased.h"
+#include "uresimp.h"
 
 // *****************************************************************************
 // class BreakIterator
@@ -45,55 +46,110 @@ const int32_t BreakIterator::DONE = (int32_t)-1;
 
 // -------------------------------------
 
+BreakIterator*
+BreakIterator::buildInstance(const Locale& loc, const char *type, UBool dict, UErrorCode &status)
+{
+    char fnbuff[256];
+    char actualLocale[ULOC_FULLNAME_CAPACITY];
+    int32_t size;
+    const UChar* brkfname = NULL;
+    UResourceBundle brkrules, brkname;
+    BreakIterator *result = NULL;
+    
+    if (U_FAILURE(status))
+        return NULL;
+
+    // Get the locale
+    UResourceBundle *b = ures_open(NULL, loc.getName(), &status);
+
+    // Get the "boundaries" array.
+    if (U_SUCCESS(status)) {
+        ures_initStackObject(&brkrules);
+        (void) ures_getByKeyWithFallback(b, "boundaries", &brkrules, &status);
+    }
+
+    // Get the string object naming the rules file
+    if (U_SUCCESS(status)) {
+        ures_initStackObject(&brkname);
+        (void) ures_getByKeyWithFallback(&brkrules, type, &brkname, &status);
+    }
+
+    // Get the actual string
+    if (U_SUCCESS(status)) {
+        brkfname = ures_getString(&brkname, &size, &status);
+        uprv_strncpy(actualLocale, ures_getLocale(&brkname, &status), sizeof(actualLocale)/sizeof(actualLocale[0]));
+    }
+    
+    // Use the string if we found it
+    if (U_SUCCESS(status)) {
+        u_UCharsToChars(brkfname, fnbuff, size);
+        fnbuff[size] = '\0';
+    }
+    
+    ures_close(&brkrules);
+    ures_close(&brkname);
+    
+    UDataMemory* file = udata_open(NULL, "brk", fnbuff, &status);
+    if (U_FAILURE(status)) {
+        ures_close(b);
+        return NULL;
+    }
+
+    // We found the break rules; now see if a dictionary is needed
+    if (dict)
+    {
+        UErrorCode localStatus = U_ZERO_ERROR;
+        ures_initStackObject(&brkname);
+        (void) ures_getByKeyWithFallback(b, "BreakDictionaryData", &brkname, &localStatus);
+#if 0
+        if (U_SUCCESS(localStatus)) {
+            brkfname = ures_getString(&brkname, &size, &localStatus);
+        }
+#endif
+        if (U_SUCCESS(localStatus)) {
+#if 0
+            u_UCharsToChars(brkfname, fnbuff, size);
+            fnbuff[size] = '\0';
+#endif
+            result = new DictionaryBasedBreakIterator(file, "thaidict.brk", status);
+        }
+        ures_close(&brkname);
+    }
+    
+    // If there is still no result but we haven't had an error, no dictionary,
+    // so make a non-dictionary break iterator
+    if (U_SUCCESS(status) && result == NULL) {
+        result = new RuleBasedBreakIterator(file, status);
+    }
+
+    // If there is a result, set the valid locale and actual locale
+    if (U_SUCCESS(status) && result != NULL) {
+        U_LOCALE_BASED(locBased, *result);
+        locBased.setLocaleIDs(ures_getLocaleByType(b, ULOC_VALID_LOCALE, &status), actualLocale);
+    }
+
+    ures_close(b);
+    
+    if (U_FAILURE(status) && result != NULL) {  // Sometimes redundant check, but simple
+        delete result;
+        return NULL;
+    }
+
+    if (result == NULL) {
+        udata_close(file);
+        if (U_SUCCESS(status)) {
+            status = U_MEMORY_ALLOCATION_ERROR;
+        }
+    }
+
+    return result;
+}
+
 // Creates a break iterator for word breaks.
 BreakIterator* U_EXPORT2
 BreakIterator::createWordInstance(const Locale& key, UErrorCode& status)
 {
     return createInstance(key, UBRK_WORD, status);
-}
-
-BreakIterator*
-BreakIterator::makeWordInstance(const Locale& key, UErrorCode& status)
-{
-    // WARNING: This routine is currently written specifically to handle only the
-    // default rules files and the alternate rules files for Thai.  This function
-    // will have to be made fully general at some time in the future!
-    BreakIterator* result = NULL;
-    const char* filename = "word";
-
-    if (U_FAILURE(status))
-        return NULL;
-
-    if (!uprv_strcmp(key.getLanguage(), "th"))
-    {
-        filename = "word_th";
-    }
-
-    UDataMemory* file = udata_open(NULL, "brk", filename, &status);
-    if (U_FAILURE(status)) {
-        return NULL;
-    }
-    // The UDataMemory is adopted by the break iterator.
-
-    if(!uprv_strcmp(filename, "word_th")) {
-        filename = "thaidict.brk";
-        result = new DictionaryBasedBreakIterator(file, filename, status);
-    }
-    else {
-        result = new RuleBasedBreakIterator(file, status);
-    }
-    if (U_FAILURE(status)) {   // Sometimes redundant check, but simple.
-        if (result != NULL) {
-            delete result;
-        }
-        return NULL;
-    }
-    if (result == NULL) {
-        udata_close(file);
-        status = U_MEMORY_ALLOCATION_ERROR;
-    }
-    
-    return result;
 }
 
 // -------------------------------------
@@ -105,49 +161,6 @@ BreakIterator::createLineInstance(const Locale& key, UErrorCode& status)
     return createInstance(key, UBRK_LINE, status);
 }
 
-BreakIterator*
-BreakIterator::makeLineInstance(const Locale& key, UErrorCode& status)
-{
-    // WARNING: This routine is currently written specifically to handle only the
-    // default rules files and the alternate rules files for Thai.  This function
-    // will have to be made fully general at some time in the future!
-    BreakIterator* result = NULL;
-    const char* filename = "line";
-
-    if (U_FAILURE(status))
-        return NULL;
-
-    if (!uprv_strcmp(key.getLanguage(), "th"))
-    {
-        filename = "line_th";
-    }
-
-    UDataMemory* file = udata_open(NULL, "brk", filename, &status);
-    if (U_FAILURE(status)) {
-        return NULL;
-    }
-    // The UDataMemory is adopted by the break iterator.
-
-    if (!uprv_strcmp(key.getLanguage(), "th")) {
-        filename = "thaidict.brk";
-        result = new DictionaryBasedBreakIterator(file, filename, status);
-    }
-    else {
-        result = new RuleBasedBreakIterator(file, status);
-    }
-    if (U_FAILURE(status)) {   // Sometimes redundant check, but simple.
-        if (result != NULL) {
-            delete result;
-        }
-        return NULL;
-    }
-    if (result == NULL) {
-        udata_close(file);
-        status = U_MEMORY_ALLOCATION_ERROR;
-    }
-    return result;
-}
-
 // -------------------------------------
 
 // Creates a break iterator  for character breaks.
@@ -155,38 +168,6 @@ BreakIterator* U_EXPORT2
 BreakIterator::createCharacterInstance(const Locale& key, UErrorCode& status)
 {
     return createInstance(key, UBRK_CHARACTER, status);
-}
-
-BreakIterator*
-BreakIterator::makeCharacterInstance(const Locale& /* key */, UErrorCode& status)
-{
-    // WARNING: This routine is currently written specifically to handle only the
-    // default rules files and the alternate rules files for Thai.  This function
-    // will have to be made fully general at some time in the future!
-    BreakIterator* result = NULL;
-    static const char filename[] = "char";
-
-    if (U_FAILURE(status))
-        return NULL;
-    UDataMemory* file = udata_open(NULL, "brk", filename, &status);
-    if (U_FAILURE(status)) {
-        return NULL;
-    }
-    // The UDataMemory is adopted by the break iterator.
-
-    result = new RuleBasedBreakIterator(file, status);
-    
-    if (U_FAILURE(status)) {   // Sometimes redundant check, but simple.
-        if (result != NULL) {
-            delete result;
-        }
-        return NULL;
-    }
-    if (result == NULL) {
-        udata_close(file);
-        status = U_MEMORY_ALLOCATION_ERROR;
-    }
-    return result;
 }
 
 // -------------------------------------
@@ -198,38 +179,6 @@ BreakIterator::createSentenceInstance(const Locale& key, UErrorCode& status)
     return createInstance(key, UBRK_SENTENCE, status);
 }
 
-BreakIterator*
-BreakIterator::makeSentenceInstance(const Locale& /*key */, UErrorCode& status)
-{
-    // WARNING: This routine is currently written specifically to handle only the
-    // default rules files and the alternate rules files for Thai.  This function
-    // will have to be made fully general at some time in the future!
-    BreakIterator* result = NULL;
-    static const char filename[] = "sent";
-
-    if (U_FAILURE(status))
-        return NULL;
-    UDataMemory* file = udata_open(NULL, "brk", filename, &status);
-    if (U_FAILURE(status)) {
-        return NULL;
-    }
-    // The UDataMemory is adopted by the break iterator.
-
-    result = new RuleBasedBreakIterator(file, status);
-    if (U_FAILURE(status)) {   // Sometimes redundant check, but simple.
-        if (result != NULL) {
-            delete result;
-        }
-        return NULL;
-    }
-    if (result == NULL) {
-        udata_close(file);
-        status = U_MEMORY_ALLOCATION_ERROR;
-    }
-
-    return result;
-}
-
 // -------------------------------------
 
 // Creates a break iterator for title casing breaks.
@@ -237,38 +186,6 @@ BreakIterator* U_EXPORT2
 BreakIterator::createTitleInstance(const Locale& key, UErrorCode& status)
 {
     return createInstance(key, UBRK_TITLE, status);
-}
-
-BreakIterator*
-BreakIterator::makeTitleInstance(const Locale& /* key */, UErrorCode& status)
-{
-    // WARNING: This routine is currently written specifically to handle only the
-    // default rules files.  This function will have to be made fully general
-    // at some time in the future!
-    BreakIterator* result = NULL;
-    static const char filename[] = "title";
-
-    if (U_FAILURE(status))
-        return NULL;
-    UDataMemory* file = udata_open(NULL, "brk", filename, &status);
-    if (U_FAILURE(status)) {
-        return NULL;
-    }
-    // The UDataMemory is adopted by the break iterator.
-
-    result = new RuleBasedBreakIterator(file, status);
-    if (U_FAILURE(status)) {   // Sometimes redundant check, but simple.
-        if (result != NULL) {
-            delete result;
-        }
-        return NULL;
-    }
-    if (result == NULL) {
-        udata_close(file);
-        status = U_MEMORY_ALLOCATION_ERROR;
-    }
-
-    return result;
 }
 
 // -------------------------------------
@@ -495,19 +412,19 @@ BreakIterator::makeInstance(const Locale& loc, int32_t kind, UErrorCode& status)
     BreakIterator *result = NULL;
     switch (kind) {
     case UBRK_CHARACTER: 
-        result = BreakIterator::makeCharacterInstance(loc, status);
+        result = BreakIterator::buildInstance(loc, "grapheme", FALSE, status);
         break;
     case UBRK_WORD:
-        result = BreakIterator::makeWordInstance(loc, status);
+        result = BreakIterator::buildInstance(loc, "word", TRUE, status);
         break;
     case UBRK_LINE:
-        result = BreakIterator::makeLineInstance(loc, status);
+        result = BreakIterator::buildInstance(loc, "line", TRUE, status);
         break;
     case UBRK_SENTENCE:
-        result = BreakIterator::makeSentenceInstance(loc, status);
+        result = BreakIterator::buildInstance(loc, "sentence", FALSE, status);
         break;
     case UBRK_TITLE:
-        result = BreakIterator::makeTitleInstance(loc, status);
+        result = BreakIterator::buildInstance(loc, "title", FALSE, status);
         break;
     default:
         status = U_ILLEGAL_ARGUMENT_ERROR;
@@ -517,14 +434,6 @@ BreakIterator::makeInstance(const Locale& loc, int32_t kind, UErrorCode& status)
 		return NULL;
 	}
 
-    // this is more of a placeholder. All the break iterators have the same actual locale: root
-    // except the Thai one
-    UResourceBundle *res = ures_open(NULL, loc.getName(), &status);
-    U_LOCALE_BASED(locBased, *result);
-    locBased.setLocaleIDs(ures_getLocaleByType(res, ULOC_VALID_LOCALE, &status),
-                          (uprv_strcmp(loc.getLanguage(), "th") == 0) ?
-                          "th" : "root");
-    ures_close(res);
     return result;
 }
 

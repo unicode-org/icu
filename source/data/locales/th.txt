@@ -11,6 +11,10 @@
  */
 th{
     BreakDictionaryData:import { "../brkitr/thaidict.brk" }
+    boundaries {
+        word { "word_th" }
+        line { "line_th" }
+    }
     Countries{
         AD{"อันดอร์รา"}
         AE{"สหรัฐอาหรับเอมิเรตส์"}

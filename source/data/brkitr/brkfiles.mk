@@ -28,4 +28,4 @@
 # char.txt, title.txt and word.txt are not included so that more tests pass by default,
 # and so that the makefile rules are simplier.
 BRK_SOURCE = \
-line.txt sent.txt line_th.txt word_th.txt
+line.txt sent.txt line_th.txt word_th.txt word_ja.txt word_POSIX.txt
