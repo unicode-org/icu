@@ -91,8 +91,7 @@ UBool CollationElementIterator::operator==(
     }
 
     // option comparison
-    result = this->m_data_->normalization_ == that.m_data_->normalization_ 
-             && this->m_data_->reset_ == that.m_data_->reset_ &&  
+    result = this->m_data_->reset_ == that.m_data_->reset_ &&  
              this->m_data_->iteratordata_.coll == 
              that.m_data_->iteratordata_.coll;
 
@@ -339,8 +338,6 @@ const CollationElementIterator& CollationElementIterator::operator=(
           }
       }
                                     
-
-      ucolelem->normalization_ = otherucolelem->normalization_;
       ucolelem->reset_         = otherucolelem->reset_;
       ucolelem->isWritable     = TRUE;
     
