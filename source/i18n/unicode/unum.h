@@ -493,7 +493,9 @@ enum UNumberFormatTextAttribute{
   /** Negative suffix */
   UNUM_NEGATIVE_SUFFIX,
   /** The character used to pad to the format width. */
-  UNUM_PADDING_CHARACTER
+  UNUM_PADDING_CHARACTER,
+  /** The ISO currency code */
+  UNUM_CURRENCY_CODE
 };
 typedef enum UNumberFormatTextAttribute UNumberFormatTextAttribute;
 

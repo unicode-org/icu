@@ -540,6 +540,10 @@ unum_getTextAttribute(const UNumberFormat*  fmt,
     *result = ((DecimalFormat*)fmt)->getPadCharacter();
     return 1;
 
+  case UNUM_CURRENCY_CODE:
+    res = UnicodeString(((DecimalFormat*)fmt)->getCurrency(), "");
+    break;
+
   default:
     *status = U_UNSUPPORTED_ERROR;
     return -1;
@@ -581,6 +585,13 @@ unum_setTextAttribute(    UNumberFormat*                    fmt,
   case UNUM_PADDING_CHARACTER:
     ((DecimalFormat*)fmt)->setPadCharacter(*newValue);
     break;
+
+  case UNUM_CURRENCY_CODE: {
+      char currency[4];
+      val.extract(0, 3, currency, "");
+      currency[3] = 0;
+      ((DecimalFormat*)fmt)->setCurrency(currency); }
+      break;
 
   default:
     *status = U_UNSUPPORTED_ERROR;
