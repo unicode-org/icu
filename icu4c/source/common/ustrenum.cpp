@@ -15,7 +15,11 @@
 #include "cstring.h"
 #include "cmemory.h"
 
-#define THIS(en) ((StringEnumeration*)(en->context))
+// StringEnumeration implementation ---------------------------------------- ***
+
+StringEnumeration::StringEnumeration()
+    : chars(charsBuffer), charsCapacity(sizeof(charsBuffer)) {
+}
 
 StringEnumeration::~StringEnumeration() {}
 
@@ -24,6 +28,86 @@ StringEnumeration *
 StringEnumeration::clone() const {
   return NULL;
 }
+
+const char *
+StringEnumeration::next(int32_t *resultLength, UErrorCode &status) {
+    const UnicodeString *s=snext(status);
+    if(s!=NULL) {
+        unistr=*s;
+        ensureCharsCapacity(unistr.length()+1, status);
+        if(U_SUCCESS(status)) {
+            if(resultLength!=NULL) {
+                *resultLength=unistr.length();
+            }
+            unistr.extract(0, INT32_MAX, chars, charsCapacity, "");
+            return chars;
+        }
+    }
+
+    return NULL;
+}
+
+const UChar *
+StringEnumeration::unext(int32_t *resultLength, UErrorCode &status) {
+    const UnicodeString *s=snext(status);
+    if(s!=NULL) {
+        unistr=*s;
+        if(U_SUCCESS(status)) {
+            if(resultLength!=NULL) {
+                *resultLength=unistr.length();
+            }
+            return unistr.getTerminatedBuffer();
+        }
+    }
+
+    return NULL;
+}
+
+void
+StringEnumeration::ensureCharsCapacity(int32_t capacity, UErrorCode &status) {
+    if(U_SUCCESS(status) && capacity>charsCapacity) {
+        if(capacity<(charsCapacity+charsCapacity/2)) {
+            // avoid allocation thrashing
+            capacity=charsCapacity+charsCapacity/2;
+        }
+        if(chars!=charsBuffer) {
+            uprv_free(chars);
+        }
+        chars=(char *)uprv_malloc(capacity);
+        if(chars==NULL) {
+            chars=charsBuffer;
+            charsCapacity=sizeof(charsBuffer);
+            status=U_MEMORY_ALLOCATION_ERROR;
+        } else {
+            charsCapacity=capacity;
+        }
+    }
+}
+
+UnicodeString *
+StringEnumeration::setChars(const char *s, int32_t length, UErrorCode &status) {
+    if(U_SUCCESS(status) && s!=NULL) {
+        if(length<0) {
+            length=uprv_strlen(s);
+        }
+
+        UChar *buffer=unistr.getBuffer(length+1);
+        if(buffer!=NULL) {
+            u_charsToUChars(s, buffer, length);
+            buffer[length]=0;
+            unistr.releaseBuffer(length);
+            return &unistr;
+        } else {
+            status=U_MEMORY_ALLOCATION_ERROR;
+        }
+    }
+
+    return NULL;
+}
+
+// C wrapper --------------------------------------------------------------- ***
+
+#define THIS(en) ((StringEnumeration*)(en->context))
 
 U_CDECL_BEGIN
 
