@@ -176,6 +176,7 @@ void UnicodeTest::TestAdditionalProperties() {
     int32_t rangeCount, range;
     uint32_t i;
     UChar32 start, end;
+    int32_t noErrors = 0;
 
     // test all TRUE properties
     for(i=0; i<LENGTHOF(derivedCorePropsNames); ++i) {
@@ -186,11 +187,16 @@ void UnicodeTest::TestAdditionalProperties() {
             for(; start<=end; ++start) {
                 if(!u_hasBinaryProperty(start, derivedCorePropsIndex[i])) {
                     errln("UnicodeTest error: u_hasBinaryProperty(U+%04lx, %s)==FALSE is wrong\n", start, derivedCorePropsNames[i]);
+                    if(noErrors++ > 100) {
+                      errln("Too many errors, moving to the next test");
+                      break;
+                    }
                 }
             }
         }
     }
 
+    noErrors = 0;
     // invert all properties
     for(i=0; i<LENGTHOF(derivedCorePropsNames); ++i) {
         derivedCoreProps[i].complement();
@@ -205,6 +211,10 @@ void UnicodeTest::TestAdditionalProperties() {
             for(; start<=end; ++start) {
                 if(u_hasBinaryProperty(start, derivedCorePropsIndex[i])) {
                     errln("UnicodeTest error: u_hasBinaryProperty(U+%04lx, %s)==TRUE is wrong\n", start, derivedCorePropsNames[i]);
+                    if(noErrors++ > 100) {
+                      errln("Too many errors, moving to the next test");
+                      break;
+                    }
                 }
             }
         }
