@@ -4202,7 +4202,7 @@ ac_given_INSTALL="$INSTALL"
 
 trap 'rm -fr `echo "icudefs.mk \
 		Makefile \
-		data/icupkg.inc test/testdata/icupkg.inc \
+		data/icupkg.inc test/testdata/pkgdata.inc \
 		config/Makefile.inc \
 		data/Makefile \
 		stubdata/Makefile \
@@ -4404,7 +4404,7 @@ cat >> $CONFIG_STATUS <<EOF
 
 CONFIG_FILES=\${CONFIG_FILES-"icudefs.mk \
 		Makefile \
-		data/icupkg.inc test/testdata/icupkg.inc \
+		data/icupkg.inc test/testdata/pkgdata.inc \
 		config/Makefile.inc \
 		data/Makefile \
 		stubdata/Makefile \
