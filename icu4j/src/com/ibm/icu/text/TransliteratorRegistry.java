@@ -100,15 +100,9 @@ class TransliteratorRegistry {
             spec = null;
             scriptName = null;
             try{
-                Locale toploc = LocaleUtility.getLocaleFromName(top);
-                res  = (ICUResourceBundle)UResourceBundle.getBundleInstance(UResourceBundle.ICU_BASE_NAME,toploc);
-                // Make sure we got the bundle we wanted; otherwise, don't use it
-                if (res!=null && LocaleUtility.isFallbackOf(res.getULocale().toString(), top)) {
-                    isSpecLocale = true;
-                } else {
-                    isSpecLocale = false;
-                    res = null;
-                }
+                // Canonicalize script name.  If top is a script name then
+                // script != UScript.INVALID_CODE.
+                int script = UScript.getCodeFromName(top);
 
                 // Canonicalize script name -or- do locale->script mapping
                 int[] s = UScript.getCode(top);
@@ -117,6 +111,18 @@ class TransliteratorRegistry {
                     // If the script name is the same as top then it's redundant
                     if (scriptName.equalsIgnoreCase(top)) {
                         scriptName = null;
+                    }
+                }
+
+                isSpecLocale = false;
+                res = null;
+                // If 'top' is not a script name, try a locale lookup
+                if (script == UScript.INVALID_CODE) {
+                    Locale toploc = LocaleUtility.getLocaleFromName(top);
+                    res  = (ICUResourceBundle)UResourceBundle.getBundleInstance(UResourceBundle.ICU_BASE_NAME,toploc);
+                    // Make sure we got the bundle we wanted; otherwise, don't use it
+                    if (res!=null && LocaleUtility.isFallbackOf(res.getULocale().toString(), top)) {
+                        isSpecLocale = true;
                     }
                 }
             }catch(MissingResourceException e){
