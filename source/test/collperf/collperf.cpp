@@ -111,6 +111,7 @@ UBool  opt_upper      = FALSE;
 UBool  opt_case       = FALSE;
 int    opt_level      = 0;
 UBool  opt_keyhist    = FALSE;
+UBool  opt_itertest   = FALSE;
 
 
 
@@ -129,6 +130,7 @@ OptSpec opts[] = {
     {"-langid",      OptSpec::NUM,    &opt_langid},
     {"-qsort",       OptSpec::FLAG,   &opt_qsort},
     {"-binsearch",   OptSpec::FLAG,   &opt_binsearch},
+    {"-iter",        OptSpec::FLAG,   &opt_itertest},
     {"-win",         OptSpec::FLAG,   &opt_win},
     {"-unix",        OptSpec::FLAG,   &opt_unix},
     {"-uselen",      OptSpec::FLAG,   &opt_uselen},
@@ -711,6 +713,14 @@ void doKeyHist() {
 
 
 
+//---------------------------------------------------------------------------------------
+//
+//    doIterTest()       Iteration test
+//
+//---------------------------------------------------------------------------------------
+void doIterTest() {
+    printf("Faster than you can possibly imagine.\n");
+}
 
 
 //----------------------------------------------------------------------------------------
@@ -794,6 +804,7 @@ int main(int argc, const char** argv) {
             "-binsearch                 Binary Search timing test\n"
             "-keygen                    Sort Key Generation timing test\n"
             "-qsort                     Quicksort timing test\n"
+            "-iter                      Iteration Performance Test\n"
             );
         exit (1);
     }
@@ -1070,6 +1081,7 @@ int main(int argc, const char** argv) {
     if (opt_binsearch) doBinarySearch();
     if (opt_keygen)    doKeyGen();
     if (opt_keyhist)   doKeyHist();
+    if (opt_itertest)  doIterTest();
 
     return 0;
 
