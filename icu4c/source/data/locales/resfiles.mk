@@ -61,6 +61,7 @@ he.txt he_IL.txt\
 hi.txt hi_IN.txt hi__DIRECT.txt\
 hr.txt hr_HR.txt\
 hu.txt hu_HU.txt\
+hy.txt hy_AM.txt hy_AM_REVISED.txt\
 id.txt id_ID.txt\
 is.txt is_IS.txt\
 it.txt it_CH.txt it_IT.txt it_IT_EURO.txt\
