@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/MyPropertyLister.java,v $
-* $Date: 2002/03/20 00:21:42 $
-* $Revision: 1.8 $
+* $Date: 2003/03/19 17:30:56 $
+* $Revision: 1.9 $
 *
 *******************************************************************************
 */
@@ -22,7 +22,9 @@ final class MyPropertyLister extends PropertyLister {
 
     private int propMask;
     
-    UnicodeProperty up;
+    private boolean isDefaultValue = false;
+    
+    private UnicodeProperty up;
 
     public MyPropertyLister(UCD ucd, int propMask, PrintWriter output) {
         this.propMask = propMask;
@@ -30,6 +32,7 @@ final class MyPropertyLister extends PropertyLister {
         this.ucdData = ucd;
         up = UnifiedBinaryProperty.make(propMask, ucd);
         if (propMask < COMBINING_CLASS) usePropertyComment = false; // skip gen cat
+        isDefaultValue = up.isDefaultValue();
     }
 
     public String headerString() {
@@ -55,6 +58,10 @@ final class MyPropertyLister extends PropertyLister {
     public String valueName(int cp) {
         if (up.getValueType() == BINARY) return up.getName();
         return up.getValue(cp);
+    }
+
+    public String missingValueName() {
+        return up.getValue(NORMAL);
     }
 
     public String optionalComment(int cp) {
@@ -83,15 +90,17 @@ final class MyPropertyLister extends PropertyLister {
         //    System.out.println(Utility.hex(firstRealCp));
         //}
 
-        if (cat == Cn
+        if (isDefaultValue 
+            && cat == Cn
             && propMask != (BINARY_PROPERTIES | Noncharacter_Code_Point)
             && propMask != (BINARY_PROPERTIES | Other_Default_Ignorable_Code_Point)
             && propMask != (CATEGORY | Cn)) {
             if (BRIDGE) return CONTINUE;
             else return EXCLUDE;
         }
-
+        
         boolean inSet = up.hasValue(cp);
+        
         /*
         if (cp >= 0x1D400 && cp <= 0x1D7C9 && cat != Cn) {
             if (propMask == (SCRIPT | LATIN_SCRIPT)) inSet = cp <= 0x1D6A3;

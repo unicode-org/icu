@@ -156,6 +156,7 @@ public class DirectoryIterator {
                 if (line1 == null) {
                     if (line2 == null) return true;
                     if (show) {
+                        Utility.fixDot();
                         System.out.println("Found difference in : " + file1 + ", " + file2);
                         System.out.println(" Line1: " + line1);
                         System.out.println(" Line2: " + line2);
@@ -167,6 +168,7 @@ public class DirectoryIterator {
                     if (line1.startsWith("# Date") && line2.startsWith("# Date")) continue;
                     if (lineCount == 0 && line1.startsWith("#") && line2.startsWith("#")) continue;
                     if (show) {
+                        Utility.fixDot();
                         System.out.println("Found difference in : " + file1 + ", " + file2);
                         System.out.println(" Line1: " + line1);
                         System.out.println(" Line2: " + line2);

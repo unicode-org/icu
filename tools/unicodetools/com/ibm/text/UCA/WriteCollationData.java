@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCA/WriteCollationData.java,v $ 
-* $Date: 2002/10/05 02:16:17 $ 
-* $Revision: 1.28 $
+* $Date: 2003/03/19 17:30:55 $ 
+* $Revision: 1.29 $
 *
 *******************************************************************************
 */
@@ -1234,7 +1234,7 @@ U+01D5 LATIN CAPITAL LETTER U WITH DIAERESIS AND MACRON
                     "UTF8"),
                 32*1024));
                 */
-        PrintWriter diLog = Utility.openPrintWriter("DisjointIgnorables.js", Utility.LATIN1_WINDOWS);
+        PrintWriter diLog = Utility.openPrintWriter("DisjointIgnorables.js", Utility.UTF8_WINDOWS);
                 
         diLog.write('\uFEFF');
 
@@ -1413,7 +1413,7 @@ U+01D5 LATIN CAPITAL LETTER U WITH DIAERESIS AND MACRON
                     "UTF8"),
                 32*1024));
                 */
-        PrintWriter diLog = Utility.openPrintWriter("DisjointIgnorables2.js", Utility.LATIN1_WINDOWS);
+        PrintWriter diLog = Utility.openPrintWriter("DisjointIgnorables2.js", Utility.UTF8_WINDOWS);
                 
         diLog.write('\uFEFF');
 
@@ -1660,7 +1660,7 @@ U+01D5 LATIN CAPITAL LETTER U WITH DIAERESIS AND MACRON
         int[] lenArray = new int[1];
         
         Set alreadyDone = new HashSet();
-        PrintWriter log2 = Utility.openPrintWriter("UCARules-log.txt", Utility.LATIN1_WINDOWS);
+        PrintWriter log2 = Utility.openPrintWriter("UCARules-log.txt", Utility.UTF8_WINDOWS);
 
         while (true) {
             String s = cc.next(ces, lenArray);
@@ -1784,7 +1784,7 @@ F900..FAFF; CJK Compatibility Ideographs
         if (shortPrint) filename += "_SHORT";
         if (option == IN_XML) filename += ".xml"; else filename += ".txt";
         
-        log = Utility.openPrintWriter(filename, Utility.LATIN1_WINDOWS);
+        log = Utility.openPrintWriter(filename, Utility.UTF8_WINDOWS);
         
         String[] commentText = {
         	"UCA Rules",
@@ -3102,8 +3102,8 @@ F900..FAFF; CJK Compatibility Ideographs
         log.println("[first variable " + firstVariable.formatFCE() + "]");
         log.println("[last variable " + lastVariable.formatFCE() + "]");
         
-        log.println("[first non-ignorable " + firstNonIgnorable.formatFCE() + "]");
-        log.println("[last non-ignorable " + lastNonIgnorable.formatFCE() + "]");
+        log.println("[first regular " + firstNonIgnorable.formatFCE() + "]");
+        log.println("[last regular " + lastNonIgnorable.formatFCE() + "]");
         
         
         log.println("[first implicit " + (new FCE(false,firstImplicit, COMMON<<24, COMMON<<24)).formatFCE() + "]");

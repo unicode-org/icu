@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/PropertyLister.java,v $
-* $Date: 2003/02/25 23:38:22 $
-* $Revision: 1.10 $
+* $Date: 2003/03/19 17:30:56 $
+* $Revision: 1.11 $
 *
 *******************************************************************************
 */
@@ -49,6 +49,10 @@ abstract public class PropertyLister implements UCD_Types {
     }
 
     public String valueName(int cp) {
+        return "";
+    }
+
+    public String missingValueName() {
         return "";
     }
 
@@ -226,7 +230,10 @@ abstract public class PropertyLister implements UCD_Types {
             format(firstRealCp, lastRealCp, realRangeCount);
         }
 
-        if (count == 0) System.out.println("WARNING -- ZERO COUNT FOR " + header);
+        if (count == 0) {
+            output.println("# No values for " + missingValueName());
+            System.out.println("ZERO COUNT for " + missingValueName());
+        }
         NumberFormat nf = NumberFormat.getInstance();
         nf.setMaximumFractionDigits(0);
         nf.setGroupingUsed(false);

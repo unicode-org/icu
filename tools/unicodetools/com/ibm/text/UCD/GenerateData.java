@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/GenerateData.java,v $
-* $Date: 2003/03/15 02:36:48 $
-* $Revision: 1.26 $
+* $Date: 2003/03/19 17:30:58 $
+* $Revision: 1.27 $
 *
 *******************************************************************************
 */
@@ -123,8 +123,8 @@ public class GenerateData implements UCD_Types {
             output.println("# Generated algorithmically from the Unicode Character Database");
         }
         output.println("# For documentation, see UCD.html");
-        output.println("# Note: Unassigned and Noncharacter codepoints are omitted,");
-        output.println("#       except when listing Noncharacter or Cn.");
+        output.println("# Note: Unassigned and Noncharacter codepoints may be omitted");
+        output.println("#       if they have default property values.");
         output.println(HORIZONTAL_LINE);
         output.println();
     }
@@ -916,7 +916,7 @@ public class GenerateData implements UCD_Types {
         for (int i = startEnum; i < endEnum; ++i) {
             UnicodeProperty up = UnifiedBinaryProperty.make(i, Default.ucd);
             if (up == null) continue;
-            if (up.isDefaultValue()) continue;
+            if (up.skipInDerivedListing()) continue;
             
             /*
             if (i == DECOMPOSITION_TYPE || i == NUMERIC_TYPE

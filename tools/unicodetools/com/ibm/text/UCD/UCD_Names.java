@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/UCD_Names.java,v $
-* $Date: 2003/03/15 02:36:48 $
-* $Revision: 1.18 $
+* $Date: 2003/03/19 17:30:56 $
+* $Revision: 1.19 $
 *
 *******************************************************************************
 */
@@ -39,23 +39,44 @@ final class UCD_Names implements UCD_Types {
     };
 
     static final String[] UNIFIED_PROPERTY_HEADERS = {
-        "General Category (listing UnicodeData.txt, field 2: see UnicodeData.html)",
-        "Combining Class (listing UnicodeData.txt, field 3: see UnicodeData.html)",
-        "Bidi Class (listing UnicodeData.txt, field 4: see UnicodeData.html)",
-        "Decomposition Type (from UnicodeData.txt, field 5: see UnicodeData.html)",
-        "Numeric Type (from UnicodeData.txt, field 6/7/8: see UnicodeData.html)",
-        "East Asian Width (listing EastAsianWidth.txt, field 1)",
-        "Line Break (listing LineBreak.txt, field 1)",
+        "General Category (listing UnicodeData.txt, field 2: see UCD.html)\r\n"
+            + "#\tAll code points not explicitly listed in this file have the property\r\n"
+            + "#\tvalue:   Cn.",
+        "Combining Class (listing UnicodeData.txt, field 3: see UCD.html)\r\n"
+            + "#\tAll code points not explicitly listed in this file have the property\r\n"
+            + "#\tvalue:   0.",
+        "Bidi Class (listing UnicodeData.txt, field 4: see UCD.html)\r\n"
+            + "#\tAll code points not explicitly listed in this file have the property\r\n"
+            + "#\tvalue:   L.",
+        "Decomposition Type (from UnicodeData.txt, field 5: see UCD.html)\r\n"
+            + "#\tAll code points not explicitly listed in this file have the property\r\n"
+            + "#\tvalue:   None.",
+        "Numeric Type (from UnicodeData.txt, field 6/7/8 plus Unihan.txt: see UCD.html)\r\n"
+            + "#\tAll code points not explicitly listed in this file have the property\r\n"
+            + "#\tvalue:   None.",
+        "East Asian Width (listing EastAsianWidth.txt, field 1)\r\n"
+            + "#\tAll code points not explicitly listed in this file have the property\r\n"
+            + "#\tvalue:   N.",
+        "Line Break (listing LineBreak.txt, field 1)\r\n"
+            + "#\tAll code points not explicitly listed in this file have the property\r\n"
+            + "#\tvalue:   XX.",
         "Joining Type (listing ArabicShaping.txt, field 1).\r\n"
             + "#\tType T is derived, as described in ArabicShaping.txt\r\n"
-            + "#\tAll code points not listed here have the type U",
-        "Joining Group (listing ArabicShaping.txt, field 2)",
-        "BidiMirrored (listing UnicodeData.txt, field 9: see UnicodeData.html)",
+            + "#\tAll code points not explicitly listed in this file have the property\r\n"
+            + "#\tvalue:   U.",
+        "Joining Group (listing ArabicShaping.txt, field 2)\r\n"
+            + "#\tAll code points not explicitly listed in this file have the property\r\n"
+            + "#\tvalue:   NO_JOINING_GROUP.",
+        "BidiMirrored (listing UnicodeData.txt, field 9: see UCD.html)\r\n"
+            + "#\tAll code points not explicitly listed in this file have the property\r\n"
+            + "#\tvalue:   N.",
         "Script\r\n"
-            + "#\tThe value for all code points not explicitly listed in this file is COMMON."
-        ,
+            + "#\tAll code points not explicitly listed in this file have the property\r\n"
+            + "#\tvalue:   COMMON.",
         "Age (from a comparison of UCD versions 1.1 [minus Hangul], 2.0, 2.1, 3.0, 3.1)",
-        "Hangul Syllable Type\r\n# All codepoints not explicitly listed here have the value NA",
+        "Hangul Syllable Type\r\n"
+            + "#\tAll code points not explicitly listed in this file have the property\r\n"
+            + "#\tvalue:   NA.",
         "Derived"
     };
 
