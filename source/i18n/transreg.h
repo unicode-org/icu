@@ -194,7 +194,7 @@ class TransliteratorRegistry : public UMemory {
      * with the system.
      * @internal
      */
-    StringEnumeration* getAvailableIDs();
+    StringEnumeration* getAvailableIDs() const;
 
     /**
      * == OBSOLETE - remove in ICU 3.4 ==
@@ -204,7 +204,7 @@ class TransliteratorRegistry : public UMemory {
      * @return the number of IDs currently registered with the system.
      * @internal
      */
-    int32_t countAvailableIDs(void);
+    int32_t countAvailableIDs(void) const;
 
     /**
      * == OBSOLETE - remove in ICU 3.4 ==
@@ -217,13 +217,13 @@ class TransliteratorRegistry : public UMemory {
      *         range, the result of getAvailableID(0) is returned.
      * @internal
      */
-    const UnicodeString& getAvailableID(int32_t index);
+    const UnicodeString& getAvailableID(int32_t index) const;
 
     /**
      * Return the number of registered source specifiers.
      * @return the number of registered source specifiers.
      */
-    int32_t countAvailableSources(void);
+    int32_t countAvailableSources(void) const;
     
     /**
      * Return a registered source specifier.
@@ -234,7 +234,7 @@ class TransliteratorRegistry : public UMemory {
      * @return reference to result
      */
     UnicodeString& getAvailableSource(int32_t index,
-                                      UnicodeString& result);
+                                      UnicodeString& result) const;
     
     /**
      * Return the number of registered target specifiers for a given
@@ -243,7 +243,7 @@ class TransliteratorRegistry : public UMemory {
      * @return the number of registered target specifiers for a given
      *         source specifier.
      */
-    int32_t countAvailableTargets(const UnicodeString& source);
+    int32_t countAvailableTargets(const UnicodeString& source) const;
     
     /**
      * Return a registered target specifier for a given source.
@@ -257,7 +257,7 @@ class TransliteratorRegistry : public UMemory {
      */
     UnicodeString& getAvailableTarget(int32_t index,
                                       const UnicodeString& source,
-                                      UnicodeString& result);
+                                      UnicodeString& result) const;
     
     /**
      * Return the number of registered variant specifiers for a given
@@ -271,7 +271,7 @@ class TransliteratorRegistry : public UMemory {
      *         source-target pair.
      */
     int32_t countAvailableVariants(const UnicodeString& source,
-                                   const UnicodeString& target);
+                                   const UnicodeString& target) const;
     
     /**
      * Return a registered variant specifier for a given source-target
@@ -289,7 +289,7 @@ class TransliteratorRegistry : public UMemory {
     UnicodeString& getAvailableVariant(int32_t index,
                                        const UnicodeString& source,
                                        const UnicodeString& target,
-                                       UnicodeString& result);
+                                       UnicodeString& result) const;
 
  private:
 
@@ -305,7 +305,7 @@ class TransliteratorRegistry : public UMemory {
 
     Entry* findInDynamicStore(const Spec& src,
                               const Spec& trg,
-                              const UnicodeString& variant);
+                              const UnicodeString& variant) const;
 
     Entry* findInStaticStore(const Spec& src,
                              const Spec& trg,
@@ -352,7 +352,7 @@ class TransliteratorRegistry : public UMemory {
      */
     class Enumeration : public StringEnumeration {
     public:
-        Enumeration(TransliteratorRegistry& reg);
+        Enumeration(const TransliteratorRegistry& reg);
         virtual ~Enumeration();
         virtual int32_t count(UErrorCode& status) const;
         virtual const UnicodeString* snext(UErrorCode& status);
@@ -361,7 +361,7 @@ class TransliteratorRegistry : public UMemory {
         virtual UClassID getDynamicClassID() const;
     private:
         int32_t index;
-        TransliteratorRegistry& reg;
+        const TransliteratorRegistry& reg;
     };
     friend class Enumeration;
 
