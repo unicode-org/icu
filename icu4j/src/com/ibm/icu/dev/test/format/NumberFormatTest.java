@@ -867,6 +867,15 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         expect2(fmt, -1.0, "-Re. 1.00");
         expect2(fmt, -10.0, "-Rs. 10.00");
     }
+
+    public void TestCurrencyKeyword() {
+	ULocale locale = new ULocale("th_TH@currency=QQQ");
+	NumberFormat format = NumberFormat.getCurrencyInstance(locale);
+	String result = format.format(12.34f);
+	if (!"QQQ12.34".equals(result)) {
+	    errln("got unexpected currency: " + result);
+	}
+    }
     
     public void TestThreadedFormat() {
 
