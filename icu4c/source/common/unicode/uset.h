@@ -380,7 +380,7 @@ uset_removeString(USet* set, const UChar* str, int32_t strLen);
  * @draft ICU 3.2
  */
 U_DRAFT void U_EXPORT2
-uset_removeAll(USet* set, const USet* remove);
+uset_removeAll(USet* set, const USet* removeSet);
 
 /**
  * Retain only the elements in this set that are contained in the
