@@ -138,10 +138,19 @@
             }
 
             int dlclose (void *handle) {
+#  ifndef HPUX
 #               ifdef UDATA_DEBUG
     	            fprintf(stderr, "shl_unload: %08X\n", handle);
 #               endif
 	            return shl_unload((shl_t)handle);
+#  else
+		    /* "shl_unload .. always unloads the library.. no refcount is kept on PA32"  
+		       -- HPUX man pages [v. 11] 
+
+		       Fine, we'll leak! [for now.. Jitterbug 414 has been filed ]
+		    */
+		    return 0;
+#  endif /* HPUX */
             }
 #       endif /* HPUX shl_load */
 #   else /* not ICU_USE_SHL_LOAD */
