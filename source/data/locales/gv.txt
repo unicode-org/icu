@@ -78,9 +78,4 @@ gv {
     // ShortLanguage { }
     // localPatternChars{}
     //
-
-    // Currency display names
-    Currencies {
-        GBP { "\u00A3", "GBP" }
-    }
 }
