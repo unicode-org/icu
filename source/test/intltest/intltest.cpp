@@ -487,8 +487,10 @@ IntlTest::IntlTest()
     path = NULL;
     LL_linestart = TRUE;
     errorCount = 0;
+	dataErrorCount = 0;
     verbose = FALSE;
     no_err_msg = FALSE;
+	warn_on_missing_data = FALSE;
     quick = FALSE;
     leaks = FALSE;
     testoutfp = stdout;
@@ -526,6 +528,13 @@ UBool IntlTest::setVerbose( UBool verboseVal )
     return rval;
 }
 
+UBool IntlTest::setWarnOnMissingData( UBool warn_on_missing_dataVal )
+{
+    UBool rval = this->warn_on_missing_data;
+    this->warn_on_missing_data = warn_on_missing_dataVal;
+    return rval;
+}
+
 UBool IntlTest::setNoErrMsg( UBool no_err_msgVal )
 {
     UBool rval = this->no_err_msg;
@@ -550,6 +559,11 @@ UBool IntlTest::setLeaks( UBool leaksVal )
 int32_t IntlTest::getErrors( void )
 {
     return errorCount;
+}
+
+int32_t IntlTest::getDataErrors( void )
+{
+	return dataErrorCount;
 }
 
 UBool IntlTest::runTest( char* name, char* par )
@@ -712,7 +726,15 @@ int32_t IntlTest::IncErrorCount( void )
     return errorCount;
 }
 
-void IntlTest::err() {
+int32_t IntlTest::IncDataErrorCount( void )
+{
+	dataErrorCount++;
+	if (caller) caller->IncDataErrorCount();
+	return dataErrorCount;
+}
+
+void IntlTest::err()
+{
     IncErrorCount();
 }
 
@@ -725,6 +747,28 @@ void IntlTest::err( const UnicodeString &message )
 void IntlTest::errln( const UnicodeString &message )
 {
     IncErrorCount();
+    if (!no_err_msg) LL_message( message, TRUE );
+}
+
+void IntlTest::dataerr( const UnicodeString &message )
+{
+    IncDataErrorCount();
+
+	if (!warn_on_missing_data) {
+		IncErrorCount();
+	}
+
+    if (!no_err_msg) LL_message( message, FALSE );
+}
+
+void IntlTest::dataerrln( const UnicodeString &message )
+{
+    IncDataErrorCount();
+
+	if (!warn_on_missing_data) {
+		IncErrorCount();
+	}
+
     if (!no_err_msg) LL_message( message, TRUE );
 }
 
@@ -802,6 +846,17 @@ void IntlTest::errln(const char *fmt, ...)
     vsprintf(buffer, fmt, ap);
     va_end(ap);
     errln(UnicodeString(buffer, ""));
+}
+
+void IntlTest::dataerrln(const char *fmt, ...)
+{
+    char buffer[4000];
+    va_list ap;
+
+    va_start(ap, fmt);
+    vsprintf(buffer, fmt, ap);
+    va_end(ap);
+    dataerrln(UnicodeString(buffer, ""));
 }
 
 void IntlTest::printErrors()
@@ -981,16 +1036,18 @@ main(int argc, char* argv[])
     major.setNoErrMsg( no_err_msg );
     major.setQuick( quick );
     major.setLeaks( leaks );
+	major.setWarnOnMissingData( warnOnMissingData );
     fprintf(stdout, "-----------------------------------------------\n");
     fprintf(stdout, " IntlTest (C++) Test Suite for                 \n");
     fprintf(stdout, "   International Components for Unicode %s\n", U_ICU_VERSION);
     fprintf(stdout, "-----------------------------------------------\n");
     fprintf(stdout, " Options:                                       \n");
-    fprintf(stdout, "   all (a)               : %s\n", (all?        "On" : "Off"));
-    fprintf(stdout, "   Verbose (v)           : %s\n", (verbose?    "On" : "Off"));
-    fprintf(stdout, "   No error messages (n) : %s\n", (no_err_msg? "On" : "Off"));
-    fprintf(stdout, "   Exhaustive (e)        : %s\n", (!quick?     "On" : "Off"));
-    fprintf(stdout, "   Leaks (l)             : %s\n", (leaks?      "On" : "Off"));
+    fprintf(stdout, "   all (a)                  : %s\n", (all?               "On" : "Off"));
+    fprintf(stdout, "   Verbose (v)              : %s\n", (verbose?           "On" : "Off"));
+    fprintf(stdout, "   No error messages (n)    : %s\n", (no_err_msg?        "On" : "Off"));
+    fprintf(stdout, "   Exhaustive (e)           : %s\n", (!quick?            "On" : "Off"));
+    fprintf(stdout, "   Leaks (l)                : %s\n", (leaks?             "On" : "Off"));
+	fprintf(stdout, "   Warn on missing data (w) : %s\n", (warnOnMissingData? "On" : "Off"));
     fprintf(stdout, "-----------------------------------------------\n");
 
     /* Check whether ICU will initialize without forcing the build data directory into
@@ -1129,9 +1186,20 @@ main(int argc, char* argv[])
         u_cleanup();
 
         fprintf(stdout, "OK: All tests passed without error.\n");
+
+		if (major.getDataErrors() != 0) {
+			fprintf(stdout, "\t*WARNING* some data-loading errors were ignored by the -w option.\n");
+		}
     }else{
         fprintf(stdout, "Errors in total: %ld.\n", (long)major.getErrors());
         major.printErrors();
+
+
+		if (major.getDataErrors() != 0) {
+			fprintf(stdout, "\t*Note* some errors are data-loading related. If the data used is not the \n"
+					"\tstock ICU data (i.e some have been added or removed), consider using\n"
+					"\tthe '-w' option to turn these errors into warnings.\n");
+		}
 
         /* Call afterwards to display errors. */
         u_cleanup();
