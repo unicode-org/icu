@@ -231,7 +231,7 @@ _ISCIIOpen(UConverter *cnv, const char *name,const char *locale,uint32_t options
 }
 static void 
 _ISCIIClose(UConverter *cnv){
-    if(cnv->extraInfo){
+    if(cnv->extraInfo && !cnv->isCopyLocal){
         uprv_free(cnv->extraInfo);
     }
 }
