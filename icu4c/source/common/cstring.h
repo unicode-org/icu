@@ -27,8 +27,12 @@
 
 #include <string.h>
 #include <ctype.h>
-
 #include "unicode/utypes.h"
+
+/* Do this after utypes.h so that we have U_HAVE_WCHAR_H . */
+#if U_HAVE_WCHAR_H
+#   include <wchar.h>
+#endif
 
 #define uprv_strcpy(dst, src) strcpy(dst, src)
 #define uprv_strcpyWithSize(dst, src, size) strncpy(dst, src, size)
@@ -56,7 +60,7 @@
 /* Wide-character functions                                                  */
 /*===========================================================================*/
 
-/* The following are not available on all systemts, defined in wchar.h or string.h . */
+/* The following are not available on all systems, defined in wchar.h or string.h . */
 #if U_HAVE_WCHAR_H
 #   define uprv_wcscat(dst, src) wcscat(dst, src)
 #   define uprv_wcscpy(dst, src) wcscpy(dst, src)
