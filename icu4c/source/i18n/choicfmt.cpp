@@ -57,8 +57,8 @@ inline double _getDouble(const Formattable& f) {
 
 const UChar ChoiceFormat::fgPositiveInfinity[] = {INFINITY, 0};
 const UChar ChoiceFormat::fgNegativeInfinity[] = {MINUS, INFINITY, 0};
-#define POSITIVE_STRLEN 1
-#define NEGATIVE_STRLEN 2
+#define POSITIVE_INF_STRLEN 1
+#define NEGATIVE_INF_STRLEN 2
 
 // -------------------------------------
 // Creates a ChoiceFormat instance based on the pattern.
@@ -336,9 +336,9 @@ ChoiceFormat::applyPattern(const UnicodeString& pattern,
 
             double limit;
             buf.trim();
-            if (!buf.compare(fgPositiveInfinity, POSITIVE_STRLEN)) {
+            if (!buf.compare(fgPositiveInfinity, POSITIVE_INF_STRLEN)) {
                 limit = uprv_getInfinity();
-            } else if (!buf.compare(fgNegativeInfinity, NEGATIVE_STRLEN)) {
+            } else if (!buf.compare(fgNegativeInfinity, NEGATIVE_INF_STRLEN)) {
                 limit = -uprv_getInfinity();
             } else {
                 limit = stod(buf, status);
