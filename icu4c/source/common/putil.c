@@ -1434,7 +1434,7 @@ mac_lc_rec mac_lc_recs[] = {
 
 #endif
 
-#if U_POSIX_LOCALE || defined(OS400)
+#if U_POSIX_LOCALE
 /* Return just the POSIX id, whatever happens to be in it */
 static const char *uprv_getPOSIXID()
 {
@@ -1569,19 +1569,23 @@ uprv_getDefaultLocaleID()
     if (!locID || !*locID)
         locID = getenv("LANG");
     if (!locID || !*locID) {
-        locID = "C";
+        locID = "en_US";
     }
     if (!stricmp(locID, "c") || !stricmp(locID, "posix") ||
         !stricmp(locID, "univ"))
-        locID = "en_US";
+        locID = "en_US_POSIX";
     return locID;
 
 #elif defined(OS400)
     /* locales are process scoped and are by definition thread safe */
     static char correctedLocale[64];
-    const  char *localeID = uprv_getPOSIXID();
+    const  char *localeID = getenv("LC_ALL");
            char *p;
 
+    if (localeID == NULL)
+        localeID = getenv("LANG");
+    if (localeID == NULL)
+        localeID = setlocale(LC_ALL, NULL);
     /* Make sure we have something... */
     if (localeID == NULL)
         return "en_US_POSIX";
