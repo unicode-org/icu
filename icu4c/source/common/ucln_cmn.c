@@ -23,6 +23,10 @@
 #include "ucln.h"
 #include "cmemory.h"
 
+static UBool gICUInitialized = FALSE;
+static UMTX  gICUInitMutex;
+
+
 static cleanupFunc *gCleanupFunctions[UCLN_COMMON] = {
     NULL,
     NULL,
@@ -55,6 +59,7 @@ u_cleanup(void)
         if (gCleanupFunctions[libType])
         {
             gCleanupFunctions[libType]();
+            gCleanupFunctions[libType] = NULL;
         }
 
     }
@@ -81,16 +86,11 @@ u_cleanup(void)
     ucnv_io_cleanup();
     udata_cleanup();
     putil_cleanup();
-    /*
-     * WARNING! Destroying the global mutex can cause synchronization
-     * problems.  ICU must be reinitialized from a single thread
-     * before the library is used again.  You never want two
-     * threads trying to initialize the global mutex at the same
-     * time. The global mutex is being destroyed so that heap and
-     * resource checkers don't complain. [grhoten]
-     */
+
+    umtx_destroy(&gICUInitMutex);
     umtx_cleanup();
     cmemory_cleanup();       /* undo any heap functions set by u_setMemoryFunctions(). */
+    gICUInitialized = FALSE;
 }
 
 
@@ -105,7 +105,15 @@ u_cleanup(void)
 U_CAPI void U_EXPORT2
 u_init(UErrorCode *status) {
     /* Make sure the global mutexes are initialized. */
-     u_ICUStaticInitFunc();
+    umtx_init(NULL);
+    umtx_lock(&gICUInitMutex);
+    if (gICUInitialized || U_FAILURE(*status)) {
+        umtx_unlock(&gICUInitMutex);
+        return;
+    }
+
+    ucnv_init(status);
+    ures_init(status);
 
     /* Do any required init for services that don't have open operations
      * and use "only" the double-check initialization method for performance
@@ -120,53 +128,11 @@ u_init(UErrorCode *status) {
     /*  Normalization  */
     unorm_haveData(status);
 #endif
+    gICUInitialized = TRUE;    /* TODO:  don't set if U_FAILURE? */
+    umtx_unlock(&gICUInitMutex);
 }
 
 
-/*
- *  ICU Static Initialization Function
- *
- *     Does that portion of ICU's initialization that wants to happen at C++
- *     static initialization time.  Can also be called directly if the same
- *     initialization is needed later.
- *
- *     The effect is to initialize mutexes that are required during the
- *     lazy initialization of other parts of ICU.
- */
-U_CFUNC UBool u_ICUStaticInitFunc()
-{
-    UErrorCode status = U_ZERO_ERROR;
-
-    UBool heapInUse = cmemory_inUse();
-    umtx_init(NULL);
-    ucnv_init(&status);
-    ures_init(&status);
-    if (heapInUse == FALSE) {
-        /* If there was no use of ICU prior to calling this static init function,
-         *  pretend that there is still no use, even though the various inits may
-         *  have done some heap allocation. */
-        cmemory_clearInUse();
-    }
-    return TRUE;
+U_CFUNC UBool u_isUInit() {
+    return gICUInitialized;
 }
-
-
-/*
- *  Static Uninitialization Function
- *
- *     Reverse the effects of ICU static initialization.
- *     This is needed by u_setMutexFunctions(), which must get rid of any mutexes,
- *     and associated memory, before swapping in the user's mutex funcs.
- *
- *     Do NOT call cmemory_cleanup().  We don't want to cancel the effect of
- *     any u_setHeapFunctions().
- *
- *     Similarly, do not call umtx_cleanup(); we need to keep any user-set
- *     mutex callback functions.
- */
-U_CFUNC void u_ICUStaticUnInitFunc() {
-    ucnv_cleanup();
-    ures_cleanup();
-    umtx_destroy(NULL);
-}
-
