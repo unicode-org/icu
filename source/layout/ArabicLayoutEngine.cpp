@@ -66,8 +66,8 @@ le_int32 ArabicOpenTypeLayoutEngine::characterProcessing(const LEUnicode chars[]
         return 0;
     }
 
-	glyphStorage.adoptGlyphCount(count);
-	glyphStorage.allocateAuxData(success);
+    glyphStorage.adoptGlyphCount(count);
+    glyphStorage.allocateAuxData(success);
 
     if (LE_FAILURE(success)) {
         success = LE_MEMORY_ALLOCATION_ERROR;
@@ -111,7 +111,7 @@ void ArabicOpenTypeLayoutEngine::adjustGlyphPositions(const LEUnicode chars[], l
         GlyphDefinitionTableHeader *gdefTable = (GlyphDefinitionTableHeader *) ArabicShaping::glyphDefinitionTable;
         GDEFMarkFilter filter(gdefTable);
 
-		adjustMarkGlyphs(&chars[offset], count, reverse, glyphStorage, &filter, success);
+        adjustMarkGlyphs(&chars[offset], count, reverse, glyphStorage, &filter, success);
     }
 }
 
@@ -149,7 +149,7 @@ le_int32 UnicodeArabicOpenTypeLayoutEngine::glyphPostProcessing(LEGlyphStorage &
     // FIXME: we could avoid the memory allocation and copy if we
     // made a clone of mapCharsToGlyphs which took the fake glyphs
     // directly.
-	le_int32 tempGlyphCount = tempGlyphStorage.getGlyphCount();
+    le_int32 tempGlyphCount = tempGlyphStorage.getGlyphCount();
     LEUnicode *tempChars = LE_NEW_ARRAY(LEUnicode, tempGlyphCount);
 
     if (tempChars == NULL) {
@@ -158,10 +158,10 @@ le_int32 UnicodeArabicOpenTypeLayoutEngine::glyphPostProcessing(LEGlyphStorage &
     }
 
     for (le_int32 i = 0; i < tempGlyphCount; i += 1) {
-		tempChars[i] = (LEUnicode) LE_GET_GLYPH(tempGlyphStorage[i]);
+        tempChars[i] = (LEUnicode) LE_GET_GLYPH(tempGlyphStorage[i]);
     }
 
-	glyphStorage.adoptCharIndicesArray(tempGlyphStorage);
+    glyphStorage.adoptCharIndicesArray(tempGlyphStorage);
 
     ArabicOpenTypeLayoutEngine::mapCharsToGlyphs(tempChars, 0, tempGlyphCount, FALSE, TRUE, glyphStorage, success);
 
@@ -188,10 +188,10 @@ void UnicodeArabicOpenTypeLayoutEngine::mapCharsToGlyphs(const LEUnicode chars[]
         dir = -1;
     }
 
-	glyphStorage.allocateGlyphArray(count, reverse, success);
+    glyphStorage.allocateGlyphArray(count, reverse, success);
 
-	for (i = 0; i < count; i += 1, out += dir) {
-		glyphStorage[out] = (LEGlyphID) chars[offset + i];
+    for (i = 0; i < count; i += 1, out += dir) {
+        glyphStorage[out] = (LEGlyphID) chars[offset + i];
     }
 }
 

@@ -1,7 +1,6 @@
 /*
- * %W% %E%
  *
- * (C) Copyright IBM Corp. 1998-2003 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998-2004 - All Rights Reserved
  *
  */
 
@@ -63,20 +62,20 @@ le_uint32 MultipleSubstitutionSubtable::process(GlyphIterator *glyphIterator, co
                 }
             }
 
-			LEGlyphID *newGlyphs = glyphIterator->insertGlyphs(glyphCount);
-			le_int32 insert = 0, direction = 1;
+            LEGlyphID *newGlyphs = glyphIterator->insertGlyphs(glyphCount);
+            le_int32 insert = 0, direction = 1;
 
-			if (glyphIterator->isRightToLeft()) {
-				insert = glyphCount - 1;
-				direction = -1;
-			}
+            if (glyphIterator->isRightToLeft()) {
+                insert = glyphCount - 1;
+                direction = -1;
+            }
 
-			for (le_int32 i = 0; i < glyphCount; i += 1) {
-				TTGlyphID substitute = SWAPW(sequenceTable->substituteArray[i]);
+            for (le_int32 i = 0; i < glyphCount; i += 1) {
+                TTGlyphID substitute = SWAPW(sequenceTable->substituteArray[i]);
 
-				newGlyphs[insert] = LE_SET_GLYPH(glyph, substitute);
-				insert += direction;
-			}
+                newGlyphs[insert] = LE_SET_GLYPH(glyph, substitute);
+                insert += direction;
+            }
 
             return 1;
         }

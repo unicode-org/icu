@@ -1,7 +1,6 @@
 /*
- * @(#)Features.h	1.4 00/03/15
  *
- * (C) Copyright IBM Corp. 1998-2003 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998-2004 - All Rights Reserved
  *
  */
 
@@ -36,7 +35,7 @@ struct FeatureListTable
     le_uint16           featureCount;
     FeatureRecord       featureRecordArray[ANY_NUMBER];
 
-    const FeatureTable	*getFeatureTable(le_uint16 featureIndex, LETag *featureTag) const;
+    const FeatureTable  *getFeatureTable(le_uint16 featureIndex, LETag *featureTag) const;
 
     const FeatureTable *getFeatureTable(LETag featureTag) const;
 };

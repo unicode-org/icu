@@ -1,7 +1,6 @@
 /*
- * @(#)loengine.h	1.0 00/12/11
  *
- * (C) Copyright IBM Corp. 1998-2003 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998-2004 - All Rights Reserved
  *
  */
 

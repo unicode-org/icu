@@ -1,7 +1,6 @@
 /*
- * @(#)MarkToBasePosnSubtables.cpp	1.5 00/03/15
  *
- * (C) Copyright IBM Corp. 1998-2003 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998-2004 - All Rights Reserved
  *
  */
 
@@ -67,11 +66,11 @@ le_int32 MarkToBasePositioningSubtable::process(GlyphIterator *glyphIterator, co
     const AnchorTable *anchorTable = (const AnchorTable *) ((char *) baseArray + anchorTableOffset);
     LEPoint baseAnchor, markAdvance, pixels;
 
-	if (anchorTableOffset == 0) {
-		// this means the table is mal-formed...
-		glyphIterator->setCurrGlyphBaseOffset(baseIterator.getCurrStreamPosition());
-		return 0;
-	}
+    if (anchorTableOffset == 0) {
+        // this means the table is mal-formed...
+        glyphIterator->setCurrGlyphBaseOffset(baseIterator.getCurrStreamPosition());
+        return 0;
+    }
 
     anchorTable->getAnchor(baseGlyph, fontInstance, baseAnchor);
 

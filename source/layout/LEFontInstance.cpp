@@ -58,11 +58,11 @@ void LEFontInstance::mapCharsToGlyphs(const LEUnicode chars[], le_int32 offset, 
             }
         }
 
-		glyphStorage[out] = mapCharToGlyph(code, mapper);
+        glyphStorage[out] = mapCharToGlyph(code, mapper);
 
         if (code >= 0x10000) {
             i += 1;
-			glyphStorage[out += dir] = 0xFFFF;
+            glyphStorage[out += dir] = 0xFFFF;
         }
     }
 }

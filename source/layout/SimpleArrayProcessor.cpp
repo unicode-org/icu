@@ -35,15 +35,15 @@ SimpleArrayProcessor::~SimpleArrayProcessor()
 
 void SimpleArrayProcessor::process(LEGlyphStorage &glyphStorage)
 {
-	le_int32 glyphCount = glyphStorage.getGlyphCount();
+    le_int32 glyphCount = glyphStorage.getGlyphCount();
     le_int32 glyph;
 
     for (glyph = 0; glyph < glyphCount; glyph += 1) {
-		LEGlyphID thisGlyph = glyphStorage[glyph];
+        LEGlyphID thisGlyph = glyphStorage[glyph];
         if (LE_GET_GLYPH(thisGlyph) < 0xFFFF) {
             TTGlyphID newGlyph = SWAPW(simpleArrayLookupTable->valueArray[LE_GET_GLYPH(thisGlyph)]);
 
-			glyphStorage[glyph] = LE_SET_GLYPH(thisGlyph, newGlyph);
+            glyphStorage[glyph] = LE_SET_GLYPH(thisGlyph, newGlyph);
         }
     }
 }
