@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/lang/UCharacter.java,v $ 
-* $Date: 2002/12/11 19:48:32 $ 
-* $Revision: 1.58 $
+* $Date: 2002/12/11 23:30:25 $ 
+* $Revision: 1.59 $
 *
 *******************************************************************************
 */
@@ -3678,7 +3678,7 @@ public final class UCharacter
     
     /**
      * <p>Gets the property value for an Unicode property type of a code point. 
-     * Also returns binary property values.</p>
+     * Also returns binary and mask property values.</p>
      * <p>Unicode, especially in version 3.2, defines many more properties than 
      * the original set in UnicodeData.txt.</p>
      * <p>The properties APIs are intended to reflect Unicode properties as 
@@ -3694,17 +3694,18 @@ public final class UCharacter
      * boolean b = (ideo == 1) ? true : false; 
      * </pre>
      * @param ch code point to test.
-     * @param which UProperty selector constant, identifies which binary 
+     * @param type UProperty selector constant, identifies which binary 
      *        property to check. Must be 
-     *        UProperty.BINARY_START &lt;= which &lt; UProperty.BINARY_LIMIT or 
-     *        UProperty.INT_START &lt;= which &lt; UProperty.INT_LIMIT or 
-     *        UProperty.MASK_START &lt;= which &lt; UProperty.MASK_LIMIT.
+     *        UProperty.BINARY_START &lt;= type &lt; UProperty.BINARY_LIMIT or 
+     *        UProperty.INT_START &lt;= type &lt; UProperty.INT_LIMIT or 
+     *        UProperty.MASK_START &lt;= type &lt; UProperty.MASK_LIMIT.
      * @return numeric value that is directly the property value or,
      *         for enumerated properties, corresponds to the numeric value of 
      *         the enumerated constant of the respective property value 
      *         enumeration type (cast to enum type if necessary).
      *         Returns 0 or 1 (for false / true) for binary Unicode properties.
-     *         Returns 0 if which is out of bounds or if the Unicode version
+     *         Returns a bit-mask for mask properties.
+     *         Returns 0 if 'type' is out of bounds or if the Unicode version
      *         does not have data for the property at all, or not for this code 
      *         point.
      * @see UProperty
@@ -3798,13 +3799,13 @@ public final class UCharacter
      * Get the minimum value for an integer/binary Unicode property type.
      * Can be used together with UCharacter.getIntPropertyMaxValue(int)
      * to allocate arrays of com.ibm.icu.text.UnicodeSet or similar.
-     * @param which UProperty selector constant, identifies which binary 
+     * @param type UProperty selector constant, identifies which binary 
      *        property to check. Must be 
-     *        UProperty.BINARY_START &lt;= which &lt; UProperty.BINARY_LIMIT or 
-     *        UProperty.INT_START &lt;= which &lt; UProperty.INT_LIMIT.
+     *        UProperty.BINARY_START &lt;= type &lt; UProperty.BINARY_LIMIT or 
+     *        UProperty.INT_START &lt;= type &lt; UProperty.INT_LIMIT.
      * @return Minimum value returned by UCharacter.getIntPropertyValue(int) 
      *         for a Unicode property. 0 if the property 
-     *         selector is out of range.
+     *         selector 'type' is out of range.
      * @see UProperty
      * @see #hasBinaryProperty
      * @see #getUnicodeVersion
@@ -3834,12 +3835,12 @@ public final class UCharacter
      * <li> UProperty.IDEOGRAPHIC:   0/1  (false/true)
      * </ul>
      * For undefined UProperty constant values, min/max values will be 0/-1.
-     * @param which UProperty selector constant, identifies which binary 
+     * @param type UProperty selector constant, identifies which binary 
      *        property to check. Must be 
-     *        UProperty.BINARY_START &lt;= which &lt; UProperty.BINARY_LIMIT or 
-     *        UProperty.INT_START &lt;= which &lt; UProperty.INT_LIMIT.
+     *        UProperty.BINARY_START &lt;= type &lt; UProperty.BINARY_LIMIT or 
+     *        UProperty.INT_START &lt;= type &lt; UProperty.INT_LIMIT.
      * @return Maximum value returned by u_getIntPropertyValue for a Unicode 
-     *         property. &lt;= 0 if the property selector is out of range.
+     *         property. &lt;= 0 if the property selector 'type' is out of range.
      * @see UProperty
      * @see #hasBinaryProperty
      * @see #getUnicodeVersion
