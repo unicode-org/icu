@@ -35,7 +35,7 @@
     /* this assumes a Western European Windows */
 #   define DEFAULT_CODEPAGE "IBM-1252"
 #elif defined(OS390)
-#   define DEFAULT_CODEPAGE "ibm-37-s390"
+#   define DEFAULT_CODEPAGE "ibm-1047-s390"
 #elif defined(OS400)
 #   define DEFAULT_CODEPAGE "ibm-37"
 #else
