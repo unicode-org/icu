@@ -934,7 +934,7 @@ static void OpenMessageFormatTest(void)
 
     /* Test umsg_applyPattern           */
     status = U_ZERO_ERROR;
-    umsg_applyPattern(f1,pattern,strlen(PAT),NULL,&status);
+    umsg_applyPattern(f1,pattern,(int32_t)strlen(PAT),NULL,&status);
     if(U_FAILURE(status))
     {
         log_err("umsg_applyPattern failed. Error %s \n",u_errorName(status));
