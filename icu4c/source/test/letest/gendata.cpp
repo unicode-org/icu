@@ -13,13 +13,13 @@
 
 #include <stdio.h>
 
-#include "unicode/utypes.h"
-#include "unicode/uscript.h"
-#include "unicode/uchar.h"
-#include "unicode/locid.h"
-#include "unicode/loengine.h"
+#include "LETypes.h"
+#include "LEScripts.h"
+#include "LayoutEngine.h"
 
 #include "PortableFontInstance.h"
+
+#include "unicode/uscript.h"
 
 U_NAMESPACE_USE
 
@@ -27,11 +27,11 @@ U_NAMESPACE_USE
 
 struct TestInput
 {
-    char *fontName;
-    UChar *text;
-    int32_t textLength;
-    UScriptCode scriptCode;
-    UBool rightToLeft;
+    char      *fontName;
+    LEUnicode *text;
+    le_int32   textLength;
+    le_int32   scriptCode;
+    le_bool    rightToLeft;
 };
 
 /* 
@@ -41,7 +41,7 @@ char *header =
     "/*\n"
     " *******************************************************************************\n"
     " *\n"
-    " *   Copyright (C) 1999-2002, International Business Machines\n"
+    " *   Copyright (C) 1999-2003, International Business Machines\n"
     " *   Corporation and others.  All Rights Reserved.\n"
     " *\n"
     " *   WARNING: THIS FILE IS MACHINE GENERATED. DO NOT HAND EDIT IT\n"
@@ -54,11 +54,12 @@ char *header =
     " *   created by: gendata.cpp\n"
     " */\n"
     "\n"
-    "#include \"unicode/utypes.h\"\n"
-    "#include \"unicode/uscript.h\"\n"
+    "#include \"LETypes.h\"\n"
+    "#include \"LEScripts.h\"\n"
     "#include \"letest.h\"\n"
     "\n";
 
+#if 0
 char *scriptNames[] =
 {
       "USCRIPT_COMMON",      /* Zyyy */
@@ -108,8 +109,9 @@ char *scriptNames[] =
       "USCRIPT_BUHID",       /* Buhd */
       "USCRIPT_TAGBANWA"     /* Tagb */
 };
+#endif
 
-UChar devaText[] =
+LEUnicode devaText[] =
 {
     0x0936, 0x094d, 0x0930, 0x0940, 0x092e, 0x0926, 0x094d, 0x0020,
     0x092d, 0x0917, 0x0935, 0x0926, 0x094d, 0x0917, 0x0940, 0x0924,
@@ -130,9 +132,9 @@ UChar devaText[] =
     0x094d, 0x0935, 0x0924, 0x0020, 0x0938, 0x0902, 0x091c, 0x0935
 };
 
-int32_t devaTextLength = ARRAY_LENGTH(devaText);
+le_int32 devaTextLength = ARRAY_LENGTH(devaText);
 
-UChar arabText[] =
+LEUnicode arabText[] =
 {
     0x0623, 0x0633, 0x0627, 0x0633, 0x064B, 0x0627, 0x060C, 0x0020, 
     0x062A, 0x062A, 0x0639, 0x0627, 0x0645, 0x0644, 0x0020, 
@@ -204,10 +206,10 @@ UChar arabText[] =
     0x0639, 0x0629, 0x0020, 0x0627, 0x0644, 0x0627, 0x0633, 0x062A, 
     0x0639, 0x0645, 0x0627, 0x0644, 0x002E */
 };
-int32_t arabTextLength = ARRAY_LENGTH(arabText);
+le_int32 arabTextLength = ARRAY_LENGTH(arabText);
 
 
-UChar thaiSample[] =
+LEUnicode thaiSample[] =
 {
     0x0E1A, 0x0E17, 0x0E17, 0x0E35, 0x0E48, 0x0E51, 0x0E1E, 0x0E32,
     0x0E22, 0x0E38, 0x0E44, 0x0E0B, 0x0E42, 0x0E04, 0x0E25, 0x0E19,
@@ -249,22 +251,22 @@ UChar thaiSample[] =
     */
 };
 
-int32_t thaiSampleLength = ARRAY_LENGTH(thaiSample);
+le_int32 thaiSampleLength = ARRAY_LENGTH(thaiSample);
 
 TestInput testInputs[] = {
-    {"raghu.ttf",             devaText,   devaTextLength,   USCRIPT_DEVANAGARI, false},
-    {"Times.TTF",             arabText,   arabTextLength,   USCRIPT_ARABIC,     true},
-    {"LucidaSansRegular.ttf", arabText,   arabTextLength,   USCRIPT_ARABIC,     true},
-    {"Thonburi.ttf",          thaiSample, thaiSampleLength, USCRIPT_THAI,       false}
+    {"raghu.ttf",             devaText,   devaTextLength,   devaScriptCode, false},
+    {"Times.TTF",             arabText,   arabTextLength,   arabScriptCode, true},
+    {"LucidaSansRegular.ttf", arabText,   arabTextLength,   arabScriptCode, true},
+    {"Thonburi.ttf",          thaiSample, thaiSampleLength, thaiScriptCode, false}
 };
 
 #define TEST_COUNT ARRAY_LENGTH(testInputs)
 
-int32_t testCount = TEST_COUNT;
+le_int32 testCount = TEST_COUNT;
 
-void dumpShorts(FILE *file, char *label, int32_t id, uint16_t *shorts, int32_t count) {
+void dumpShorts(FILE *file, char *label, le_int32 id, le_uint16 *shorts, le_int32 count) {
     char lineBuffer[8 * 8 + 2];
-    int32_t bufp = 0;
+    le_int32 bufp = 0;
 
     fprintf(file, label, id);
 
@@ -285,9 +287,9 @@ void dumpShorts(FILE *file, char *label, int32_t id, uint16_t *shorts, int32_t c
     fprintf(file, "};\n\n");
 }
 
-void dumpLongs(FILE *file, char *label, int32_t id, int32_t *longs, int32_t count) {
+void dumpLongs(FILE *file, char *label, le_int32 id, le_int32 *longs, le_int32 count) {
     char lineBuffer[8 * 12 + 2];
-    int32_t bufp = 0;
+    le_int32 bufp = 0;
 
     fprintf(file, label, id);
 
@@ -308,9 +310,9 @@ void dumpLongs(FILE *file, char *label, int32_t id, int32_t *longs, int32_t coun
     fprintf(file, "};\n\n");
 }
 
-void dumpFloats(FILE *file, char *label, int32_t id, float *floats, int32_t count) {
+void dumpFloats(FILE *file, char *label, le_int32 id, float *floats, le_int32 count) {
     char lineBuffer[8 * 16 + 2];
-    int32_t bufp = 0;
+    le_int32 bufp = 0;
 
     fprintf(file, label, id);
 
@@ -331,10 +333,23 @@ void dumpFloats(FILE *file, char *label, int32_t id, float *floats, int32_t coun
     fprintf(file, "};\n\n");
 }
 
+const char *getShortName(le_int32 scriptCode)
+{
+    static char shortName[5];
+    const char *name = uscript_getShortName((UScriptCode) scriptCode);
+
+    shortName[0] = tolower(name[0]);
+    shortName[1] = tolower(name[1]);
+    shortName[2] = tolower(name[2]);
+    shortName[3] = tolower(name[3]);
+    shortName[4] = '\0';
+
+    return shortName;
+}
+
 int main(int argc, char *argv[])
 {
-    Locale dummyLocale;
-    int32_t test;
+    le_int32 test;
     FILE *outputFile = fopen(argv[1], "w");
 
     fprintf(outputFile, header);
@@ -348,22 +363,22 @@ int main(int argc, char *argv[])
             continue;
         }
 
-        UErrorCode success = U_ZERO_ERROR;
-        ICULayoutEngine *engine = ICULayoutEngine::createInstance(&fontInstance, testInputs[test].scriptCode, dummyLocale, success);
-        uint32_t glyphCount;
-        uint16_t *glyphs;
-        int32_t *indices;
-        float *positions;
+        LEErrorCode success = LE_NO_ERROR;
+        LayoutEngine *engine = LayoutEngine::layoutEngineFactory(&fontInstance, testInputs[test].scriptCode, -1, success);
+        le_uint32  glyphCount;
+        LEGlyphID *glyphs;
+        le_int32  *indices;
+        float     *positions;
 
         if (LE_FAILURE(success)) {
-            printf("ERROR: test case %d, could not create a LayoutEngine for script %s.\n", test, scriptNames[testInputs[test].scriptCode]);
+            printf("ERROR: test case %d, could not create a LayoutEngine for script %s.\n", test, uscript_getName((UScriptCode) testInputs[test].scriptCode));
             continue;
         }
 
         glyphCount = engine->layoutChars(testInputs[test].text, 0, testInputs[test].textLength, testInputs[test].textLength, testInputs[test].rightToLeft, 0, 0, success);
 
-        glyphs = new uint16_t[glyphCount];
-        indices = new int32_t[glyphCount];
+        glyphs    = new LEGlyphID[glyphCount];
+        indices   = new le_int32[glyphCount];
         positions = new float[glyphCount * 2 + 2];
 
         engine->getGlyphs(glyphs, success);
@@ -371,12 +386,12 @@ int main(int argc, char *argv[])
         engine->getGlyphPositions(positions, success);
 
         //fprintf(outputFile, "font: %s\n", testInputs[test].fontName);
-        dumpShorts(outputFile, "UChar inputText%d[] =\n{\n", test, testInputs[test].text, testInputs[test].textLength);
+        dumpShorts(outputFile, "LEUnicode inputText%d[] =\n{\n", test, testInputs[test].text, testInputs[test].textLength);
 
-        dumpShorts(outputFile, "uint16_t resultGlyphs%d[] =\n{\n", test, glyphs, glyphCount);
-        fprintf(outputFile, "int32_t resultGlyphCount%d = %d;\n\n", test, glyphCount);
+        dumpLongs(outputFile, "LEGlyphID resultGlyphs%d[] =\n{\n", test, (le_int32 *) glyphs, glyphCount);
+        fprintf(outputFile, "le_int32 resultGlyphCount%d = %d;\n\n", test, glyphCount);
 
-        dumpLongs(outputFile, "int32_t resultIndices%d[] =\n{\n", test, indices, glyphCount);
+        dumpLongs(outputFile, "le_int32 resultIndices%d[] =\n{\n", test, indices, glyphCount);
 
         dumpFloats(outputFile, "float resultPositions%d[] =\n{\n", test, positions, glyphCount * 2 + 2);
 
@@ -385,18 +400,18 @@ int main(int argc, char *argv[])
         delete[] positions;
         delete[] indices;
         delete[] glyphs;
-        delete engine;
+        delete   engine;
     }
 
     fprintf(outputFile, "TestInput testInputs[] = \n{\n");
 
     for (test = 0; test < testCount; test += 1) {
-        fprintf(outputFile, "    {\"%s\", inputText%d, %d, %s, %s},\n",
-            testInputs[test].fontName, test, testInputs[test].textLength, scriptNames[testInputs[test].scriptCode],
+        fprintf(outputFile, "    {\"%s\", inputText%d, %d, %sScriptCode, %s},\n",
+            testInputs[test].fontName, test, testInputs[test].textLength, getShortName(testInputs[test].scriptCode),
             testInputs[test].rightToLeft? "true" : "false");
     }
 
-    fprintf(outputFile, "};\n\nint32_t testCount = ARRAY_LENGTH(testInputs);\n\n");
+    fprintf(outputFile, "};\n\nle_int32 testCount = ARRAY_LENGTH(testInputs);\n\n");
 
     fprintf(outputFile, "TestResult testResults[] = \n{\n");
 

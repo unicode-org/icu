@@ -334,6 +334,8 @@ LEGlyphID PortableFontInstance::mapCharToGlyph(LEUnicode32 ch, const LECharMappe
 
 void PortableFontInstance::getGlyphAdvance(LEGlyphID glyph, LEPoint &advance) const
 {
+    TTGlyphID ttGlyph = (TTGlyphID) LE_GET_GLYPH(glyph);
+
     if (fHMTXTable == NULL) {
         LETag maxpTag = 0x6D617870; // 'maxp'
         LETag hheaTag = 0x68686561; // 'hhea'
@@ -358,14 +360,14 @@ void PortableFontInstance::getGlyphAdvance(LEGlyphID glyph, LEPoint &advance) co
         realThis->fHMTXTable = (const HMTXTable *) readTable(hmtxTag, &length);
     }
 
-    le_uint16 index = glyph;
+    le_uint16 index = ttGlyph;
 
-    if (glyph >= fNumGlyphs || fHMTXTable == NULL) {
+    if (ttGlyph >= fNumGlyphs || fHMTXTable == NULL) {
         advance.fX = advance.fY = 0;
         return;
     }
 
-    if (glyph >= fNumLongHorMetrics) {
+    if (ttGlyph >= fNumLongHorMetrics) {
         index = fNumLongHorMetrics - 1;
     }
 
