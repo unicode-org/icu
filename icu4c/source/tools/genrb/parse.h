@@ -23,6 +23,6 @@
 #include "rblist.h"
 
 /* Parse a ResourceBundle text file */
-struct SRBRoot* parse(FileStream *f, const char *cp, UErrorCode *status);
+struct SRBRoot* parse(FileStream *f, const char *cp, const char* inputDir, UErrorCode *status);
 
 #endif
