@@ -51,6 +51,18 @@ class BreakIterator;        // unicode/brkiter.h
 /* The <iostream> include has been moved to unicode/ustream.h */
 
 /**
+ * Constant to be used in the UnicodeString(char *, int32_t, EInvariant) constructor
+ * which constructs a Unicode string from an invariant-character char * string.
+ * About invariant characters see utypes.h.
+ * This constructor has no runtime dependency on conversion code and is
+ * therefore recommended over ones taking a charset name string
+ * (where the empty string "" indicates invariant-character conversion).
+ *
+ * @draft ICU 3.2
+ */
+#define US_INV UnicodeString::EInvariant::kInvariant
+
+/**
  * Unicode String literals in C++.
  * Dependent on the platform properties, different UnicodeString
  * constructors should be used to create a UnicodeString object from
@@ -72,7 +84,7 @@ class BreakIterator;        // unicode/brkiter.h
 #elif U_SIZEOF_UCHAR==1 && U_CHARSET_FAMILY==U_ASCII_FAMILY
 #   define UNICODE_STRING(cs, _length) UnicodeString(TRUE, (const UChar *)cs, _length)
 #else
-#   define UNICODE_STRING(cs, _length) UnicodeString(cs, _length, "")
+#   define UNICODE_STRING(cs, _length) UnicodeString(cs, _length, US_INV)
 #endif
 
 /**
@@ -93,7 +105,7 @@ class BreakIterator;        // unicode/brkiter.h
 #elif U_SIZEOF_UCHAR==1 && U_CHARSET_FAMILY==U_ASCII_FAMILY
 #   define UNICODE_STRING_SIMPLE(cs) UnicodeString(TRUE, (const UChar *)cs, -1)
 #else
-#   define UNICODE_STRING_SIMPLE(cs) UnicodeString(cs, "")
+#   define UNICODE_STRING_SIMPLE(cs) UnicodeString(cs, -1, US_INV)
 #endif
 
 /**
@@ -169,6 +181,22 @@ class BreakIterator;        // unicode/brkiter.h
 class U_COMMON_API UnicodeString : public Replaceable
 {
 public:
+
+  /**
+   * Constant to be used in the UnicodeString(char *, int32_t, EInvariant) constructor
+   * which constructs a Unicode string from an invariant-character char * string.
+   * Use the macro US_INV instead of the full qualification for this value.
+   *
+   * @see US_INV
+   * @draft ICU 3.2
+   */
+  enum EInvariant {
+    /**
+     * @see EInvariant
+     * @draft ICU 3.2
+     */
+    kInvariant
+  };
 
   //========================================
   // Read-only operations
@@ -1388,10 +1416,44 @@ public:
               UnicodeString& target) const;
 
   /**
+   * Copy the characters in the range 
+   * [<tt>start</TT>, <tt>start + length</TT>) into an array of characters.
+   * All characters must be invariant (see utypes.h).
+   * Use US_INV as the last, signature-distinguishing parameter.
+   *
+   * This function does not write any more than <code>targetLength</code>
+   * characters but returns the length of the entire output string
+   * so that one can allocate a larger buffer and call the function again
+   * if necessary.
+   * The output string is NUL-terminated if possible.
+   *
+   * @param start offset of first character which will be copied
+   * @param startLength the number of characters to extract
+   * @param target the target buffer for extraction, can be NULL
+   *               if targetLength is 0
+   * @param targetLength the length of the target buffer
+   * @param inv Signature-distinguishing paramater, use US_INV.
+   * @return the output string length, not including the terminating NUL
+   * @draft ICU 3.2
+   */
+  int32_t extract(int32_t start,
+           int32_t length,
+           char *target,
+           int32_t targetCapacity,
+           enum EInvariant inv) const;
+
+#if !UCONFIG_NO_CONVERSION
+
+  /**
    * Copy the characters in the range
    * [<tt>start</TT>, <tt>start + length</TT>) into an array of characters
    * in a specified codepage.
    * The output string is NUL-terminated.
+   *
+   * Recommendation: For invariant-character strings use
+   * extract(int32_t start, int32_t length, char *target, int32_t targetCapacity, enum EInvariant inv) const
+   * because it avoids object code dependencies of UnicodeString on
+   * the conversion code.
    *
    * @param start offset of first character which will be copied
    * @param startLength the number of characters to extract
@@ -1421,6 +1483,11 @@ public:
    * so that one can allocate a larger buffer and call the function again
    * if necessary.
    * The output string is NUL-terminated if possible.
+   *
+   * Recommendation: For invariant-character strings use
+   * extract(int32_t start, int32_t length, char *target, int32_t targetCapacity, enum EInvariant inv) const
+   * because it avoids object code dependencies of UnicodeString on
+   * the conversion code.
    *
    * @param start offset of first character which will be copied
    * @param startLength the number of characters to extract
@@ -1462,6 +1529,8 @@ public:
   int32_t extract(char *dest, int32_t destCapacity,
                   UConverter *cnv,
                   UErrorCode &errorCode) const;
+
+#endif
 
   /* Length operations */
 
@@ -2651,15 +2720,23 @@ public:
    */
   UnicodeString(UChar *buffer, int32_t buffLength, int32_t buffCapacity);
 
+#if !UCONFIG_NO_CONVERSION
+
   /**
    * char* constructor.
    * @param codepageData an array of bytes, null-terminated
    * @param codepage the encoding of <TT>codepageData</TT>.  The special
    * value 0 for <TT>codepage</TT> indicates that the text is in the
    * platform's default codepage.
+   *
    * If <code>codepage</code> is an empty string (<code>""</code>),
    * then a simple conversion is performed on the codepage-invariant
    * subset ("invariant characters") of the platform encoding. See utypes.h.
+   * Recommendation: For invariant-character strings use the constructor
+   * UnicodeString(const char *src, int32_t length, enum EInvariant inv)
+   * because it avoids object code dependencies of UnicodeString on
+   * the conversion code.
+   *
    * @stable ICU 2.0
    */
   UnicodeString(const char *codepageData,
@@ -2675,6 +2752,11 @@ public:
    * If <code>codepage</code> is an empty string (<code>""</code>),
    * then a simple conversion is performed on the codepage-invariant
    * subset ("invariant characters") of the platform encoding. See utypes.h.
+   * Recommendation: For invariant-character strings use the constructor
+   * UnicodeString(const char *src, int32_t length, enum EInvariant inv)
+   * because it avoids object code dependencies of UnicodeString on
+   * the conversion code.
+   *
    * @stable ICU 2.0
    */
   UnicodeString(const char *codepageData,
@@ -2706,6 +2788,34 @@ public:
         const char *src, int32_t srcLength,
         UConverter *cnv,
         UErrorCode &errorCode);
+
+#endif
+
+  /**
+   * Constructs a Unicode string from an invariant-character char * string.
+   * About invariant characters see utypes.h.
+   * This constructor has no runtime dependency on conversion code and is
+   * therefore recommended over ones taking a charset name string
+   * (where the empty string "" indicates invariant-character conversion).
+   *
+   * Use the macro US_INV as the third, signature-distinguishing parameter.
+   *
+   * For example:
+   * \code
+   * void fn(const char *s) {
+   *   UnicodeString ustr(s, -1, US_INV);
+   *   // use ustr ...
+   * }
+   * \endcode
+   *
+   * @param src String using only invariant characters.
+   * @param length Length of src, or -1 if NUL-terminated.
+   * @param inv Signature-distinguishing paramater, use US_INV.
+   *
+   * @see US_INV
+   * @draft ICU 3.2
+   */
+  UnicodeString(const char *src, int32_t length, enum EInvariant inv);
 
 
   /**
@@ -2967,6 +3077,8 @@ private:
   inline void pinIndices(int32_t& start,
                          int32_t& length) const;
 
+#if !UCONFIG_NO_CONVERSION
+
   /* Internal extract() using UConverter. */
   int32_t doExtract(int32_t start, int32_t length,
                     char *dest, int32_t destCapacity,
@@ -2996,6 +3108,9 @@ private:
                    int32_t dataLength,
                    UConverter *converter,
                    UErrorCode &status);
+
+#endif
+
   /*
    * This function is called when write access to the array
    * is necessary.
@@ -3733,6 +3848,8 @@ UnicodeString::extract(int32_t start,
                UnicodeString& target) const
 { doExtract(start, _length, target); }
 
+#if !UCONFIG_NO_CONVERSION
+
 inline int32_t
 UnicodeString::extract(int32_t start,
                int32_t _length,
@@ -3743,6 +3860,8 @@ UnicodeString::extract(int32_t start,
   // This dstSize value will be checked explicitly
   return extract(start, _length, dst, dst!=0 ? 0xffffffff : 0, codepage);
 }
+
+#endif
 
 inline void
 UnicodeString::extractBetween(int32_t start,
