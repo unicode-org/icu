@@ -80,7 +80,8 @@ static void TestUDataOpen(){
     UDataMemory *result;
     UErrorCode status=U_ZERO_ERROR;
     const char* memMap[][2]={
-        {"tz", "icu"},
+        {"root", "res"},
+        {"unorm", "icu"},
         {"cnvalias", "icu"},
         {"unames",   "icu"},
         {"ibm-37_P100-1995",   "cnv"}
@@ -126,11 +127,11 @@ static void TestUDataOpen(){
         int i;
         log_verbose("Testing udata_open() on %s\n", icuDataFilePath);
         for(i=0; i<sizeof(memMap)/sizeof(memMap[0]); i++){
-    /* lots_of_mallocs(); */
+            /* lots_of_mallocs(); */
             status=U_ZERO_ERROR;
             result=udata_open(path, memMap[i][1], memMap[i][0], &status);
             if(U_FAILURE(status)) {
-                log_err("FAIL: udata_open() failed for path = %s, name=%s, type=%s, \n errorcode=%s\n", path, memMap[i][0], memMap[i][1], myErrorName(status));
+                log_data_err("FAIL: udata_open() failed for path = %s, name=%s, type=%s, \n errorcode=%s\n", path, memMap[i][0], memMap[i][1], myErrorName(status));
             } else {
                 log_verbose("PASS: udata_open worked for path = %s, name=%s, type=%s\n",  path, memMap[i][0], memMap[i][1]);
                 udata_close(result);
@@ -162,10 +163,10 @@ static void TestUDataOpen(){
     strcat(icuDataFilePath, dirSepString);
     strcat(icuDataFilePath, U_ICUDATA_NAME);
     strcat(icuDataFilePath, "_");
-    strcat(icuDataFilePath, "tz.icu");
+    strcat(icuDataFilePath, "unorm.icu");
 
     /* lots_of_mallocs(); */
-    if (stat(icuDataFilePath, &stat_buf) == 0)
+/*    if (stat(icuDataFilePath, &stat_buf) == 0)*/
     {
         int i;
         log_verbose("%s exists, so..\n", icuDataFilePath);
@@ -178,18 +179,18 @@ static void TestUDataOpen(){
             status=U_ZERO_ERROR;
             result=udata_open(icuDataFilePath, memMap[i][1], memMap[i][0], &status);
             if(U_FAILURE(status)) {
-                log_err("FAIL: udata_open() failed for path = %s, name=%s, type=%s, \n errorcode=%s\n", icuDataFilePath, memMap[i][0], memMap[i][1], myErrorName(status));
+                log_data_err("FAIL: udata_open() failed for path = %s, name=%s, type=%s, \n errorcode=%s\n", icuDataFilePath, memMap[i][0], memMap[i][1], myErrorName(status));
             } else {
                 log_verbose("PASS: udata_open worked for path = %s, name=%s, type=%s\n",  icuDataFilePath, memMap[i][0], memMap[i][1]);
                 udata_close(result);
             }
         }
     }
-    else
+/*    else
     {
          log_verbose("Skipping tests of udata_open() on %s.  File not present in this configuration.\n",
              icuDataFilePath);
-    }
+    }*/
 
     free(icuDataFilePath);
     icuDataFilePath = NULL;
