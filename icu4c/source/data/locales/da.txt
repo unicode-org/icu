@@ -298,7 +298,6 @@ da {
         "e.Kr.",
     }
     Languages {
-        Fallback{ "en"}
         am { "Amharisk" }
         ar { "Arabisk" }
         az { "Aserbajdsjan" }

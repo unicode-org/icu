@@ -294,7 +294,6 @@ tr {
         "Cumartesi",
     }
     Languages { 
-        Fallback{ "en"}
         ar { "Arap\u00E7a" }
         bg { "Bulgarca" }
         cs { "\u00C7ek\u00E7e" }

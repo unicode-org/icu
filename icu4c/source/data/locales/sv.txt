@@ -304,7 +304,6 @@ sv {
     }
 
     Languages {
-        Fallback{ "en"}
         aa   {"afar"}
         ab   {"abkhaziska"}
         ace  {"achinese"}

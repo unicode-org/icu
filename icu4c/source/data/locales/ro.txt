@@ -290,7 +290,6 @@ ro {
         "\u00EE.d.C.",
     }
     Languages { 
-        Fallback{ "en"}
         ar { "Arab\u0103" }
         bg { "Bulgar\u0103" }
         cs { "Ceh\u0103" }

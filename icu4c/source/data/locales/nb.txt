@@ -298,7 +298,6 @@ nb {
         "e.Kr.",
     }
     Languages {
-        Fallback{ "en"}
         af { "afrikaans" }
         am { "amharisk" }
         ar { "arabisk" }

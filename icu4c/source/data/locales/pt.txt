@@ -469,8 +469,6 @@ pt {
         "Latn",  // ISO 15924 Name 
     }
     Languages { 
-        Fallback{ "en" }
-
         af { "afric\u00E2ner" }
         am { "am\u00E1rico" }
         ar { "ar\u00E1bico" }

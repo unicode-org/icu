@@ -242,7 +242,6 @@ sh {
         "n. e.",
     }
     Languages { 
-        Fallback{ "en"}
         af { "Afrikanerski" }
         sq { "Albanski" }
         ar { "Arapski" }
