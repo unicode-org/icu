@@ -46,7 +46,7 @@ static double floorDivide(double numerator, double denominator,
 static int32_t floorDivide(double numerator, int32_t denominator,
                            int32_t& remainder) {
     double quotient, rem;
-    quotient = floorDivide(numerator, denominator, rem);
+    quotient = floorDivide(numerator, (double)denominator, rem);
     remainder = (int32_t) rem;
     return (int32_t) quotient;
 }
