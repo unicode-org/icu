@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/TestFmwk.java,v $ 
- * $Date: 2001/06/21 23:18:08 $ 
- * $Revision: 1.15 $
+ * $Date: 2001/10/02 17:43:53 $ 
+ * $Revision: 1.16 $
  *
  *****************************************************************************************
  */
@@ -263,12 +263,75 @@ public class TestFmwk implements TestLog {
         return hex(s.toString());
     }
 
+    private static class ASCIIWriter extends PrintWriter {
+        private Writer w;
+        private final char[] buffer = "\\u0000".toCharArray();
+        static final char[] digits = "0123456789abcdef".toCharArray();
+
+        public ASCIIWriter(Writer w, boolean autoFlush) {
+            super(w, autoFlush);
+        }
+
+        public ASCIIWriter(OutputStream os, boolean autoFlush) {
+            super(os, autoFlush);
+        }
+
+        private static final boolean isPrintable(int c) {
+            return c >= '\u0020' && c <= '\u007e';
+        }
+
+        private final void writePrintable(int c) {
+            buffer[2] = digits[(c >> 12) & 0x0f];
+            buffer[3] = digits[(c >>  8) & 0x0f];
+            buffer[4] = digits[(c >>  4) & 0x0f];
+            buffer[5] = digits[ c        & 0x0f];
+            super.write(buffer, 0, buffer.length);
+        }
+
+        public void write(int c) {
+            synchronized(lock) {
+                if (isPrintable(c)) {
+                    super.write(c);
+                } else {
+                    writePrintable(c);
+                }
+            }
+        }
+        
+        public void write(char[] buf, int off, int len) {
+            synchronized (lock) {
+                int i = off;
+                int s = -1;
+                for (int e = off + len; i < e; ++i) {
+                    if (!isPrintable(buf[i])) {
+                        if (s != -1) {
+                            super.write(buf, s, i-s);
+                            s = -1;
+                        }
+                        writePrintable(buf[i]);
+                    } else {
+                        if (s == -1) {
+                            s = i;
+                        }
+                    }
+                }
+                if (s != -1) {
+                    super.write(buf, s, i-s);
+                }
+            }
+        }
+    
+        public void write(String s, int off, int len) {
+            write(s.substring(off, off + len).toCharArray(), 0, len);
+        }
+    }
+
 	private static class TestParams {
     	public boolean   prompt = false;
     	public boolean   nothrow = false;
     	public boolean   verbose = false;
 
-    	public PrintWriter log = new PrintWriter(System.out,true);
+    	public PrintWriter log = new ASCIIWriter(System.out, true);
     	public int         indentLevel = 0;
     	public boolean     needLineFeed = false;
     	public int         errorCount = 0;
