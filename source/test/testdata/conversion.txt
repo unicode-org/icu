@@ -177,6 +177,24 @@ conversion {
     fromUnicode {
       Headers { "charset", "unicode", "bytes", "offsets", "flush", "fallbacks", "errorCode", "callback", "invalidUChars" }
       Cases {
+        // verify that if a conversion table does not have any mapping for U+0000,
+        // then there will not even be a phantom fallback to 00
+        {
+          "ibm-971",
+          "\x00",
+          :bin{ affe },
+          :intvector{ 0, 0 },
+          :int{1}, :int{1}, "", "?", ""
+        }
+
+        {
+          "*test4",
+          "\x00",
+          :bin{ ff },
+          :intvector{ 0 },
+          :int{1}, :int{1}, "", "?", ""
+        }
+
         // extension in testdata
         {
           "*test4x",
