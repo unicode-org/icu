@@ -2089,7 +2089,7 @@ DecimalFormat::toPattern(UnicodeString& result, UBool localized) const
                     (part==0 ? fPosPrefixPattern : fNegPrefixPattern),
                     (part==0 ? fPositivePrefix : fNegativePrefix),
                     localized);
-        if (padPos == kPadAfterPrefix && ! padSpec.empty()) {
+        if (padPos == kPadAfterPrefix && ! padSpec.isEmpty()) {
             result.append(padSpec);
         }
         int32_t sub0Start = result.length();
@@ -2105,7 +2105,7 @@ DecimalFormat::toPattern(UnicodeString& result, UBool localized) const
                 isGroupingPosition(i)) {
                 result.append(group);
             }
-            if (! roundingDigits.empty()) {
+            if (! roundingDigits.isEmpty()) {
                 int32_t pos = roundingDecimalPos - i;
                 if (pos >= 0 && pos < roundingDigits.length()) {
                     result.append((UChar) (roundingDigits.char32At(pos) - kPatternZeroDigit + zero));
@@ -2129,7 +2129,7 @@ DecimalFormat::toPattern(UnicodeString& result, UBool localized) const
         }
         int32_t pos = roundingDecimalPos;
         for (i = 0; i < getMaximumFractionDigits(); ++i) {
-            if (! roundingDigits.empty() && pos < roundingDigits.length()) {
+            if (! roundingDigits.isEmpty() && pos < roundingDigits.length()) {
                 if (pos < 0) {
                     result.append(zero);
                 }
@@ -2165,7 +2165,7 @@ DecimalFormat::toPattern(UnicodeString& result, UBool localized) const
                 result.append(zero);
             }
         }
-        if (! padSpec.empty() && !fUseExponentialNotation) {
+        if (! padSpec.isEmpty() && !fUseExponentialNotation) {
             int32_t add = fFormatWidth - result.length() + sub0Start
                 - ((part == 0)
                    ? fPositivePrefix.length() + fPositiveSuffix.length()
@@ -2183,12 +2183,12 @@ DecimalFormat::toPattern(UnicodeString& result, UBool localized) const
                 }
             }
         }
-        if (fPadPosition == kPadBeforeSuffix && ! padSpec.empty()) {
+        if (fPadPosition == kPadBeforeSuffix && ! padSpec.isEmpty()) {
             result.append(padSpec);
         }
         if (part == 0) {
             appendAffix(result, fPosSuffixPattern, fPositiveSuffix, localized);
-            if (fPadPosition == kPadAfterSuffix && ! padSpec.empty()) {
+            if (fPadPosition == kPadAfterSuffix && ! padSpec.isEmpty()) {
                 result.append(padSpec);
             }
             UBool isDefault = FALSE;
@@ -2226,7 +2226,7 @@ DecimalFormat::toPattern(UnicodeString& result, UBool localized) const
             }
         } else {
             appendAffix(result, fNegSuffixPattern, fNegativeSuffix, localized);
-            if (fPadPosition == kPadAfterSuffix && ! padSpec.empty()) {
+            if (fPadPosition == kPadAfterSuffix && ! padSpec.isEmpty()) {
                 result.append(padSpec);
             }
         }
