@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/util/Attic/CompactCharArray.java,v $ 
- * $Date: 2000/03/10 04:17:57 $ 
- * $Revision: 1.5 $
+ * $Date: 2000/07/12 16:42:44 $ 
+ * $Revision: 1.6 $
  *
  *****************************************************************************************
  */
@@ -32,7 +32,7 @@ import com.ibm.util.Utility;
  * A compact array is composed of a index array and value array.  The index
  * array contains the indicies of Unicode characters to the value array.
  * @see                CompactByteArray
- * @version            $Revision: 1.5 $
+ * @version            $Revision: 1.6 $
  * @author             Helena Shih
  */
 public final class CompactCharArray implements Cloneable {
@@ -362,7 +362,7 @@ public final class CompactCharArray implements Cloneable {
         }
     }
 
-    static  final int BLOCKSHIFT = 5;
+    public static  final int BLOCKSHIFT = 5; // NormalizerBuilder needs - liu
     static  final int BLOCKCOUNT =(1<<BLOCKSHIFT);
     static  final int INDEXSHIFT =(16-BLOCKSHIFT);
     static  final int INDEXCOUNT =(1<<INDEXSHIFT);
