@@ -6,8 +6,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/build.xml,v $
-* $Date: 2002/07/30 02:41:11 $
-* $Revision: 1.53 $
+* $Date: 2002/08/03 07:43:18 $
+* $Revision: 1.54 $
 *
 *******************************************************************************
 * This is the ant build file for ICU4J.  See readme.html for more information.
@@ -46,26 +46,23 @@
     <target name="init">
         <tstamp/>
         <property name="src.dir" value="src"/>
-        <property name="doc.dir" value="doc"/>
         <property name="build.dir" value="classes"/>
-        <property name="obsolete.dir" value="build"/>
+        <property name="doc.dir" value="doc"/>
         <property name="jar.file" value="icu4j.jar"/>
         <property name="icu4j.manifest" value="${src.dir}/com/ibm/icu/manifest.stub"/>
-        <property name="zipbin.file" value="../icu4jbin${DSTAMP}.zip"/>
         <property name="zip.file" value="../icu4j${DSTAMP}.zip"/>
+        <property name="zipSrc.file" value="../icu4jSrc${DSTAMP}.zip"/>
 
 	<path id="build.classpath">
 	    <pathelement path="${build.dir}"/>
 	    <path refid="clover.classpath"/>
 	</path>
 
-        <property name="richedit.dist.dir" value="richeditDist"/>
-        <property name="richedit.cont.dir" value="richedit"/>
-        <property name="richedit.archive.dir" value="${richedit.dist.dir}/${richedit.cont.dir}"/>
-        <property name="richedit.jar.file" value="${richedit.archive.dir}/richedit.jar"/>
-        <property name="richedit.doc.dir" value="${richedit.archive.dir}/doc"/>
-        <property name="richedit.zip.file" value="${richedit.dist.dir}/richedit.zip"/>
-        <property name="richedit.manifest" value="${richedit.dist.dir}/manifest.stub"/>
+        <property name="richedit.dir" value="richedit"/>
+        <property name="richedit.doc.dir" value="${richedit.dir}/doc"/>
+        <property name="richedit.jar.file" value="${richedit.dir}/richedit.jar"/>
+        <property name="richedit.zip.file" value="${richedit.dir}/richedit.zip"/>
+        <property name="richedit.manifest" value="${src.dir}/com/ibm/richtext/manifest.stub"/>
 
         <mkdir dir="${build.dir}"/>
 	<uptodate property="icu4j.resources" targetfile="${src.dir}/com/ibm/icu/impl/data/ICULocaleData.jar">
@@ -79,7 +76,8 @@
 	</condition>
     </target>
 
-    <target name="all" depends="core,tests,tools,richtext,demos,jar,docs"/>
+    <!-- build everything but dist-related stuff -->
+    <target name="all" depends="core,tests,tools,richedit,demos,jar,docs"/>
 
 	<target name="resources" depends="init">
     	<!-- use this target to force resources to be rebuilt -->
@@ -93,6 +91,7 @@
  		<touch file="${build.dir}/com/ibm/icu/impl/data/LocaleElements_index.class"/>
 	</target>
 
+	<!-- core does not build richedit or tests -->
     <target name="core" depends="init,coreData,_resources">
         <copy file="${src.dir}/com/ibm/icu/impl/data/thai_dict"
             todir="${build.dir}/com/ibm/icu/impl/data/"/><!-- only needed if you are using html reporter -->
@@ -106,15 +105,6 @@
 
     <target name="tests" depends="core,testData">
         <javac includes="com/ibm/icu/dev/test/**/*.java"
-            excludes="**/CVS/**/*"
-    	    srcdir="${src.dir}"
-    	    destdir="${build.dir}"
-    	    classpathref="build.classpath"
-            debug="on" deprecation="off"/>
-    </target>
-
-    <target name="richtext" depends="core,testData,tests">
-        <javac includes="com/ibm/richtext/**/*.java,com/ibm/richtext/textlayout/**/*.java"
             excludes="**/CVS/**/*"
     	    srcdir="${src.dir}"
     	    destdir="${build.dir}"
@@ -150,7 +140,7 @@
 	    doctitle="icu4j"
 	    encoding="iso-8859-1"
 	    docencoding="iso-8859-1"
-	    bottom="&lt;font size=-1>Copyright (c) 2001 IBM Corporation and others.&lt;/font>"
+	    bottom="&lt;font size=-1>Copyright (c) 2002 IBM Corporation and others.&lt;/font>"
 	    additionalparam="${doc.params}"
         />
     </target>
@@ -173,18 +163,31 @@
             debug="on" deprecation="off"/>
     </target>
 
+    <!-- builds richedit and richedit tests -->
+    <target name="richedit" depends="init">
+        <javac includes="com/ibm/richtext/**/*.java"
+            excludes="**/CVS/**/*"
+    	    srcdir="${src.dir}"
+    	    destdir="${build.dir}"
+    	    classpathref="build.classpath"
+            debug="on" deprecation="off"/>
+    </target>
+
     <target name="jar" depends="core">
         <jar jarfile="${jar.file}"
             compress="false"
-            includes="com/ibm/icu/util/**/*,com/ibm/icu/text/**/*,com/ibm/icu/math/**/*,com/ibm/icu/richtext/**/*,com/ibm/icu/textlayout/**/*,com/ibm/icu/impl/**/*,com/ibm/icu/lang/**/*"
+            includes="com/ibm/icu/util/**/*,com/ibm/icu/text/**/*,com/ibm/icu/math/**/*,com/ibm/icu/impl/**/*,com/ibm/icu/lang/**/*"
             basedir="${build.dir}"
             manifest="${icu4j.manifest}"/>
     </target>
 
-    <target name="richeditJar" depends="core">
+    <!-- jars up richedit but without tests -->
+    <target name="richeditJar" depends="richedit">
+        <mkdir dir="${richedit.dir}"/>
         <jar jarfile="${richedit.jar.file}"
             compress="false"
-            includes="com/ibm/richtext/**/*,com/ibm/richtext/textlayout/**/*"
+            includes="com/ibm/richtext/**/*"
+	    excludes="com/ibm/richtext/test/**/*"
             basedir="${build.dir}"
             manifest="${richedit.manifest}"/>
     </target>
@@ -195,9 +198,10 @@
         on the build machine at a known location.
     -->
 
+    <!-- the 'public' docs for richedit -->
     <target name="richeditDocs" depends="init">
         <mkdir dir="${richedit.doc.dir}"/>
-        <javadoc  packagenames="com.ibm.richtext.awtui,com.ibm.richtext.swingui,com.ibm.richtext.textpanel,com.ibm.richtext.styledtext,com.ibm.textlayout.attributes,com.ibm.richtext.print"
+        <javadoc  packagenames="com.ibm.richtext.awtui,com.ibm.richtext.swingui,com.ibm.richtext.textpanel,com.ibm.richtext.styledtext,com.ibm.richtext.textlayout.attributes,com.ibm.richtext.print"
             sourcepath="${src.dir}"
             destdir="${richedit.doc.dir}"
             nodeprecatedlist="true"
@@ -205,45 +209,48 @@
 	        doctitle="RichEdit Control"
 	        encoding="iso-8859-1"
 	        docencoding="iso-8859-1"
-	        bottom="&lt;font size=-1>Copyright (c) 1998-2001 IBM Corporation and others.&lt;/font>"
+	        bottom="&lt;font size=-1>Copyright (c) 1998-2002 IBM Corporation and others.&lt;/font>"
     		    />
     </target>
 
+    <!-- richedit alphaworks distribution - jar and docs, but no source -->
     <target name="richeditZip" depends="richeditJar,richeditDocs">
         <!--Create a zip archive of the richedit jar and readme -->
+	<copy file="license.html" todir="${richedit.dir}"/>
         <zip zipfile="${richedit.zip.file}"
-            basedir="${richedit.dist.dir}"
-            includes="${richedit.cont.dir}/**/*"/>
+            basedir="${richedit.dir}"
+            includes="doc/**/*,richedit.jar,license.html"/>
     </target>
 
-    <target name="zipbin" depends="docs,jar">
+    <target name="zip" depends="docs,jar">
         <!--Create a zip archive of the source, docs, and jar file for
         distribution.  The zip file will be created in the directory above
         the root ICU4J directory. The exclude pattern ${src.dir}/com/ibm/icu/dev/data/unicode/UnicodeData-*.txt
         and ${src.dir}/data/unicode/SpecialCasing-*.txt
         eliminates old archive copies like SpecialCasing-2.txt and
         UnicodeData-2.1.8.txt etc -->
-        <zip zipfile="${zipbin.file}"
+        <zip zipfile="${zip.file}"
             basedir="."
-            excludes="${richedit.dist.dir},test_*,${src.dir}/com/ibm/icu/dev/data/unicode/UnicodeData-*.txt,${src.dir}/com/ibm/icu/dev/data/unicode/SpecialCasing-*.txt,${src.dir}/com/ibm/icu/dev/data/unicode/CompositionExclusions-*.txt,${obsolete.dir}/**,**/*~,${src.dir}/**/*.class,${build.dir}/**,**/CVS/**/*"/>
+            excludes="${richedit.dir}/**/*,test_*,${src.dir}/com/ibm/icu/dev/data/unicode/UnicodeData-*.txt,${src.dir}/com/ibm/icu/dev/data/unicode/SpecialCasing-*.txt,${src.dir}/com/ibm/icu/dev/data/unicode/CompositionExclusions-*.txt,${obsolete.dir}/**,**/*~,${src.dir}/**/*.class,${build.dir}/**,**/CVS/**/*"/>
     </target>
 
-    <target name="zip" depends="init">
+    <target name="zipSrc" depends="init">
         <!--Create a zip archive of just the source for distribution.  The
         zip file will be created in the directory above the root ICU4J
         directory. The exclude pattern ${src.dir}/com/ibm/icu/dev/data/unicode/UnicodeData-*.txt
         and ${src.dir}/com/ibm/icu/dev/data/unicode/SpecialCasing-*.txt
         eliminates old archive copies like SpecialCasing-2.txt and
         UnicodeData-2.1.8.txt -->
-        <zip zipfile="${zip.file}"
+        <zip zipfile="${zipSrc.file}"
             basedir="."
-            excludes="${richedit.dist.dir},test_*,${src.dir}/com/ibm/icu/dev/data/unicode//UnicodeData-*.txt,${src.dir}/com/ibm/icu/dev/data/unicode/SpecialCasing-*.txt,${src.dir}/com/ibm/icu/dev/data/unicode/CompositionExclusions-*.txt,${obsolete.dir}/**,**/*~,${src.dir}/**/*.class,${build.dir}/**,**/CVS/**/*,${doc.dir}/**,${jar.file}"/>
+            excludes="${richedit.dir}/**/*,test_*,${src.dir}/com/ibm/icu/dev/data/unicode//UnicodeData-*.txt,${src.dir}/com/ibm/icu/dev/data/unicode/SpecialCasing-*.txt,${src.dir}/com/ibm/icu/dev/data/unicode/CompositionExclusions-*.txt,${obsolete.dir}/**,**/*~,${src.dir}/**/*.class,${build.dir}/**,**/CVS/**/*,${doc.dir}/**,${jar.file}"/>
     </target>
 
     <target name="clean" depends="init">
         <delete dir="${build.dir}"/>
         <delete dir="${doc.dir}"/>
-        <delete  file="${jar.file}"/>
+        <delete file="${jar.file}"/>
+	<delete dir="${richedit.dir}"/>
     </target>
 
 </project>
