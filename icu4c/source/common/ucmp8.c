@@ -138,18 +138,17 @@ CompactByteArray* ucmp8_openAlias(uint16_t *indexArray,
  
 void ucmp8_close(CompactByteArray* this_obj) 
 {
-  if(this_obj->fAlias == FALSE)
-  {
-      icu_free(this_obj->fArray);
-      icu_free(this_obj->fIndex);
+  if(this_obj != NULL) {
+    if(!this_obj->fAlias) {
+      if(this_obj->fArray != NULL) {
+        icu_free(this_obj->fArray);
+      }
+      if(this_obj->fIndex != NULL) {
+        icu_free(this_obj->fIndex);
+      }
+    }
+    icu_free(this_obj);
   }
-
-  this_obj->fArray = NULL;
-  this_obj->fIndex = NULL;
-  this_obj->fCount = 0;
-  this_obj->fCompact = FALSE;
-  this_obj->fAlias = TRUE;
-  icu_free(this_obj);
 }
 
 
@@ -239,7 +238,7 @@ findOverlappingPosition(CompactByteArray* this_obj,
 bool_t
 ucmp8_isBogus(const CompactByteArray* this_obj)
 {
-  return this_obj->fBogus;
+  return this_obj == NULL || this_obj->fBogus;
 }
 
 const int8_t*
