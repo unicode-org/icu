@@ -420,7 +420,11 @@ enum {
 }; 
 
 #define UCOL_RESET_TOP_VALUE 0x9F000303
-#define UCOL_NEXT_TOP_VALUE  0xEC960303
+#define UCOL_NEXT_TOP_VALUE  0xE4960303
+/*#define UCOL_NEXT_TOP_VALUE  0xE8960303*/
+#define PRIMARY_IMPLICIT_MIN 0xE4000000
+/*#define PRIMARY_IMPLICIT_MIN 0xE8000000*/
+#define PRIMARY_IMPLICIT_MAX 0xF0000000
 
 /* These constants can be changed - sortkey size is affected by them */
 #define UCOL_PROPORTION2 0.5
@@ -434,9 +438,14 @@ enum {
 #define UCOL_FLAG_BIT_MASK_CASE_SW_OFF 0x80
 #define UCOL_FLAG_BIT_MASK_CASE_SW_ON 0x40
 #define UCOL_COMMON_TOP3_CASE_SW_OFF 0x86
-#define UCOL_COMMON_TOP3_CASE_SW_ON 0x86
+#define UCOL_COMMON_TOP3_CASE_SW_LOWER 0x46
+#define UCOL_COMMON_TOP3_CASE_SW_UPPER 0xC6
+
 /* These values come from the UCA */
 #define UCOL_COMMON_BOT3 0x05
+
+#define UCOL_COMMON_BOTTOM3_CASE_SW_UPPER 0x86;
+#define UCOL_COMMON_BOTTOM3_CASE_SW_LOWER UCOL_COMMON_BOT3;
 
 #define UCOL_TOP_COUNT2  (UCOL_PROPORTION2*UCOL_TOTAL2)
 #define UCOL_BOT_COUNT2  (UCOL_TOTAL2-UCOL_TOP_COUNT2)
@@ -591,6 +600,7 @@ struct UCollator {
     uint8_t tertiaryMask;
     int32_t tertiaryAddition; /* when switching case, we need to add or subtract different values */
     uint8_t tertiaryTop; /* Upper range when compressing */
+    uint8_t tertiaryBottom; /* Upper range when compressing */
     uint8_t tertiaryTopCount;
     uint8_t tertiaryBottomCount;
 

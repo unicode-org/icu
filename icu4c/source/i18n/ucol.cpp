@@ -1435,20 +1435,25 @@ uint32_t ucol_getNextUCA(UChar ch, collIterate *collationSource, UErrorCode *sta
       */
       int32_t last0 = cp - IMPLICIT_BOUNDARY_;
       uint32_t r = 0;
+      uint32_t hanFixup = 0;
 
+      if ((0x3400 <= cp && cp <= 0x4DB5) || (0x4E00 <= cp && cp <= 0x9FA5) || (0xF900 <= cp && cp <= 0xFA2D)) {
+        hanFixup = 0x08000000;
+        /*hanFixup = 0x04000000;*/
+      }
       if (last0 < 0) {
           cp += IMPLICIT_HAN_SHIFT_; // shift so HAN shares single block
           int32_t last1 = cp / IMPLICIT_LAST_COUNT_;
           last0 = cp % IMPLICIT_LAST_COUNT_;
           int32_t last2 = last1 / IMPLICIT_OTHER_COUNT_;
           last1 %= IMPLICIT_OTHER_COUNT_;
-          r = 0xEC030300 + (last2 << 24) + (last1 << 16) + (last0 << 9);
+          r = 0xEC030300 - hanFixup + (last2 << 24) + (last1 << 16) + (last0 << 9);
       } else {
           int32_t last1 = last0 / IMPLICIT_LAST_COUNT2_;
           last0 %= IMPLICIT_LAST_COUNT2_;
           int32_t last2 = last1 / IMPLICIT_OTHER_COUNT_;
           last1 %= IMPLICIT_OTHER_COUNT_;
-          r = 0xEF030303 + (last2 << 16) + (last1 << 8) + (last0 * IMPLICIT_LAST2_MULTIPLIER_);
+          r = 0xEF030303 - hanFixup + (last2 << 16) + (last1 << 8) + (last0 * IMPLICIT_LAST2_MULTIPLIER_);
       }
       order = (r & 0xFFFF0000) | 0x00000505;
       *(collationSource->CEpos++) = ((r & 0x0000FFFF)<<16) | 0x000000C0;
@@ -1607,6 +1612,12 @@ uint32_t ucol_getPrevUCA(UChar ch, collIterate *collationSource,
       */
       int32_t last0 = cp - IMPLICIT_BOUNDARY_;
       uint32_t r = 0;
+      uint32_t hanFixup = 0;
+
+      if ((0x3400 <= cp && cp <= 0x4DB5) || (0x4E00 <= cp && cp <= 0x9FA5) || (0xF900 <= cp && cp <= 0xFA2D)) {
+        hanFixup = 0x08000000;
+        /*hanFixup = 0x04000000;*/
+      }
 
       if (last0 < 0) {
           cp += IMPLICIT_HAN_SHIFT_; // shift so HAN shares single block
@@ -1614,13 +1625,13 @@ uint32_t ucol_getPrevUCA(UChar ch, collIterate *collationSource,
           last0 = cp % IMPLICIT_LAST_COUNT_;
           int32_t last2 = last1 / IMPLICIT_OTHER_COUNT_;
           last1 %= IMPLICIT_OTHER_COUNT_;
-          r = 0xEC030300 + (last2 << 24) + (last1 << 16) + (last0 << 9);
+          r = 0xEC030300 - hanFixup + (last2 << 24) + (last1 << 16) + (last0 << 9);
       } else {
           int32_t last1 = last0 / IMPLICIT_LAST_COUNT2_;
           last0 %= IMPLICIT_LAST_COUNT2_;
           int32_t last2 = last1 / IMPLICIT_OTHER_COUNT_;
           last1 %= IMPLICIT_OTHER_COUNT_;
-          r = 0xEF030303 + (last2 << 16) + (last1 << 8) +
+          r = 0xEF030303 - hanFixup + (last2 << 16) + (last1 << 8) +
               (last0 * IMPLICIT_LAST2_MULTIPLIER_);
       }
       /*
@@ -3106,6 +3117,7 @@ ucol_calcSortKey(const    UCollator    *coll,
     uint8_t tertiaryMask = coll->tertiaryMask;
     int32_t tertiaryAddition = coll->tertiaryAddition;
     uint8_t tertiaryTop = coll->tertiaryTop;
+    uint8_t tertiaryBottom = coll->tertiaryBottom;
     uint8_t tertiaryCommon = coll->tertiaryCommon;
     uint8_t caseBits = 0;
 
@@ -3329,7 +3341,7 @@ ucol_calcSortKey(const    UCollator    *coll,
                     tertiary += tertiaryAddition;
                   }
                   if (count3 > 0) {
-                    if (tertiary > tertiaryCommon) {
+                    if ((tertiary > tertiaryCommon)) {
                       while (count3 >= coll->tertiaryTopCount) {
                         *tertiaries++ = (uint8_t)(tertiaryTop - coll->tertiaryTopCount);
                         count3 -= (uint32_t)coll->tertiaryTopCount;
@@ -3337,10 +3349,10 @@ ucol_calcSortKey(const    UCollator    *coll,
                       *tertiaries++ = (uint8_t)(tertiaryTop - count3);
                     } else {
                       while (count3 >= coll->tertiaryBottomCount) {
-                        *tertiaries++ = (uint8_t)(UCOL_COMMON_BOT3 + coll->tertiaryBottomCount);
+                        *tertiaries++ = (uint8_t)(tertiaryBottom + coll->tertiaryBottomCount);
                         count3 -= (uint32_t)coll->tertiaryBottomCount;
                       }
-                      *tertiaries++ = (uint8_t)(UCOL_COMMON_BOT3 + count3);
+                      *tertiaries++ = (uint8_t)(tertiaryBottom + count3);
                     }
                     count3 = 0;
                   }
@@ -3461,10 +3473,10 @@ ucol_calcSortKey(const    UCollator    *coll,
             *tertiaries++ = (uint8_t)(tertiaryTop - count3);
           } else {
             while (count3 >= coll->tertiaryBottomCount) {
-              *tertiaries++ = (uint8_t)(UCOL_COMMON_BOT3 + coll->tertiaryBottomCount);
+              *tertiaries++ = (uint8_t)(tertiaryBottom + coll->tertiaryBottomCount);
               count3 -= (uint32_t)coll->tertiaryBottomCount;
             }
-            *tertiaries++ = (uint8_t)(UCOL_COMMON_BOT3 + count3);
+            *tertiaries++ = (uint8_t)(tertiaryBottom + count3);
           }
         }
         uint32_t tersize = tertiaries - terStart;
@@ -3659,6 +3671,7 @@ ucol_calcSortKeySimpleTertiary(const    UCollator    *coll,
     uint8_t tertiaryMask = coll->tertiaryMask;
     int8_t tertiaryAddition = coll->tertiaryAddition;
     uint8_t tertiaryTop = coll->tertiaryTop;
+    uint8_t tertiaryBottom = coll->tertiaryBottom;
     uint8_t tertiaryCommon = coll->tertiaryCommon;
 
     uint32_t prevBuffSize = 0;
@@ -3776,12 +3789,13 @@ ucol_calcSortKeySimpleTertiary(const    UCollator    *coll,
               if (tertiary == tertiaryCommon && notIsContinuation) {
                 ++count3;
               } else {
-                if((tertiary > tertiaryCommon && tertiaryCommon == UCOL_COMMON3_NORMAL)
-                  || (tertiary <= tertiaryCommon && tertiaryCommon == UCOL_COMMON3_UPPERFIRST)) {
+                if(tertiary > tertiaryCommon && tertiaryCommon == UCOL_COMMON3_NORMAL) {
                   tertiary += tertiaryAddition;
+                } else if (tertiary <= tertiaryCommon && tertiaryCommon == UCOL_COMMON3_UPPERFIRST) {
+                  tertiary -= tertiaryAddition;
                 }
                 if (count3 > 0) {
-                  if (tertiary > tertiaryCommon) {
+                  if ((tertiary > tertiaryCommon)) {
                     while (count3 >= coll->tertiaryTopCount) {
                       *tertiaries++ = (uint8_t)(tertiaryTop - coll->tertiaryTopCount);
                       count3 -= (uint32_t)coll->tertiaryTopCount;
@@ -3789,10 +3803,10 @@ ucol_calcSortKeySimpleTertiary(const    UCollator    *coll,
                     *tertiaries++ = (uint8_t)(tertiaryTop - count3);
                   } else {
                     while (count3 >= coll->tertiaryBottomCount) {
-                      *tertiaries++ = (uint8_t)(UCOL_COMMON_BOT3 + coll->tertiaryBottomCount);
+                      *tertiaries++ = (uint8_t)(tertiaryBottom + coll->tertiaryBottomCount);
                       count3 -= (uint32_t)coll->tertiaryBottomCount;
                     }
-                    *tertiaries++ = (uint8_t)(UCOL_COMMON_BOT3 + count3);
+                    *tertiaries++ = (uint8_t)(tertiaryBottom + count3);
                   }
                   count3 = 0;
                 }
@@ -3852,7 +3866,7 @@ ucol_calcSortKeySimpleTertiary(const    UCollator    *coll,
       }
 
       if (count3 > 0) {
-        if (coll->tertiaryCommon != UCOL_COMMON_BOT3) {
+        if (coll->tertiaryCommon != UCOL_COMMON3_NORMAL) {
           while (count3 >= coll->tertiaryTopCount) {
             *tertiaries++ = (uint8_t)(tertiaryTop - coll->tertiaryTopCount);
             count3 -= (uint32_t)coll->tertiaryTopCount;
@@ -3860,10 +3874,10 @@ ucol_calcSortKeySimpleTertiary(const    UCollator    *coll,
           *tertiaries++ = (uint8_t)(tertiaryTop - count3);
         } else {
           while (count3 >= coll->tertiaryBottomCount) {
-            *tertiaries++ = (uint8_t)(UCOL_COMMON_BOT3 + coll->tertiaryBottomCount);
+            *tertiaries++ = (uint8_t)(tertiaryBottom + coll->tertiaryBottomCount);
             count3 -= (uint32_t)coll->tertiaryBottomCount;
           }
-          *tertiaries++ = (uint8_t)(UCOL_COMMON_BOT3 + count3);
+          *tertiaries++ = (uint8_t)(tertiaryBottom + count3);
         }
       }
       *(primaries++) = UCOL_LEVELTERMINATOR;
@@ -3994,16 +4008,18 @@ void ucol_updateInternalState(UCollator *coll) {
         coll->tertiaryCommon = UCOL_COMMON3_NORMAL;
         coll->tertiaryAddition = UCOL_FLAG_BIT_MASK_CASE_SW_OFF;
         coll->tertiaryTop = UCOL_COMMON_TOP3_CASE_SW_OFF;
+        coll->tertiaryBottom = UCOL_COMMON_BOT3;
       } else {
         coll->tertiaryMask = UCOL_KEEP_CASE;
+        coll->tertiaryAddition = UCOL_FLAG_BIT_MASK_CASE_SW_ON;
         if(coll->caseFirst == UCOL_UPPER_FIRST) {
           coll->tertiaryCommon = UCOL_COMMON3_UPPERFIRST;
-          coll->tertiaryAddition = -UCOL_FLAG_BIT_MASK_CASE_SW_ON;
-          coll->tertiaryTop = UCOL_COMMON_TOP3_CASE_SW_ON;
+          coll->tertiaryTop = UCOL_COMMON_TOP3_CASE_SW_UPPER;
+          coll->tertiaryBottom = UCOL_COMMON_BOTTOM3_CASE_SW_UPPER;
         } else {
           coll->tertiaryCommon = UCOL_COMMON3_NORMAL;
-          coll->tertiaryAddition = UCOL_FLAG_BIT_MASK_CASE_SW_ON;
-          coll->tertiaryTop = UCOL_COMMON_TOP3_CASE_SW_ON;
+          coll->tertiaryTop = UCOL_COMMON_TOP3_CASE_SW_LOWER;
+          coll->tertiaryBottom = UCOL_COMMON_BOTTOM3_CASE_SW_LOWER;
         }
       }
 
