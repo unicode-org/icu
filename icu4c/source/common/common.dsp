@@ -341,7 +341,19 @@ SOURCE=.\ucnv_lmb.c
 # End Source File
 # Begin Source File
 
-SOURCE=.\ucnv_utf.c
+SOURCE=.\ucnv_u16.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\ucnv_u32.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\ucnv_u7.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\ucnv_u8.c
 # End Source File
 # Begin Source File
 
