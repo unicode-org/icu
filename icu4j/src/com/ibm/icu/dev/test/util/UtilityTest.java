@@ -34,4 +34,32 @@ public class UtilityTest extends TestFmwk {
             errln("FAIL: Utility.unescape() returned " + result + ", exp. " + expect);
         }
     }
+    
+    public void TestCompareUnsigned()
+    {
+        int data[] = {0, 1, 0x8fffffff, -1, Integer.MAX_VALUE, 
+                      Integer.MIN_VALUE, 2342423, -2342423};
+        for (int i = 0; i < data.length; i ++) {
+            for (int j = 0; j < data.length; j ++) {
+                if (Utility.compareUnsigned(data[i], data[j]) 
+                    != compareLongUnsigned(data[i], data[j])) {
+                    errln("Fail: Unsigned comparison failed with " + data[i] 
+                          + " " + data[i + 1]);
+                }
+            }
+        }
+    }
+    
+    private int compareLongUnsigned(int x, int y)
+    {
+        long x1 = x & 0xFFFFFFFFl;
+        long y1 = y & 0xFFFFFFFFl;
+        if (x1 < y1) {
+            return -1;
+        }
+        else if (x1 > y1) {
+            return 1;
+        }
+        return 0;
+    }
 }
