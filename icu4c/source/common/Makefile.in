@@ -58,7 +58,7 @@ DEFS += -DU_COMMON_IMPLEMENTATION
 # $(LIBICUDT) is either stub data or the real DLL common data.
 LIBS = $(LIBICUDT) $(DEFAULT_LIBS)
 
-OBJECTS = putil.o uobject.o cmemory.o umutex.o ucln_cmn.o uinit.o \
+OBJECTS = putil.o utypes.o uobject.o cmemory.o umutex.o ucln_cmn.o uinit.o \
 udata.o ucmndata.o udatamem.o udataswp.o umapfile.o ucol_swp.o \
 uresbund.o ures_cnv.o uresdata.o resbund.o resbund_cnv.o \
 ucat.o locmap.o uloc.o locid.o \
