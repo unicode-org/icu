@@ -33,14 +33,16 @@
 
 /* This is the size of the stack allocated buffer for sortkey generation and similar operations */
 /* if it is too small, heap allocation will occur.*/
-/* You can expect stack usage in following multiples */
-/* getSortkey 6*UCOL_MAX_BUFFER */
-/* strcoll 26 - 32 */
-/* strcollInc 14 - 46 */
 /* you can change this value if you need memory - it will affect the performance, though, since we're going to malloc */
-#define UCOL_MAX_BUFFER 256
+#define UCOL_MAX_BUFFER 64
+#define UCOL_PRIMARY_MAX_BUFFER 2*UCOL_MAX_BUFFER
+#define UCOL_SECONDARY_MAX_BUFFER UCOL_MAX_BUFFER
+#define UCOL_TERTIARY_MAX_BUFFER UCOL_MAX_BUFFER
+#define UCOL_CASE_MAX_BUFFER UCOL_MAX_BUFFER
+#define UCOL_QUAD_MAX_BUFFER 2*UCOL_MAX_BUFFER
 
 #define UCOL_NORMALIZATION_GROWTH 2
+#define UCOL_NORMALIZATION_MAX_BUFFER UCOL_MAX_BUFFER*UCOL_NORMALIZATION_GROWTH
 
 /* This writable buffer is used if we encounter Thai and need to reorder the string on the fly */
 /* Sometimes we already have a writable buffer (like in case of normalized strings). */
@@ -138,8 +140,12 @@ struct incrementalContext {
 /* primary order shift */
 #define UCOL_PRIMARYORDERSHIFT 16             
 /* secondary order shift */
-#define UCOL_SECONDARYORDERSHIFT 8            
+#define UCOL_SECONDARYORDERSHIFT 8    
 
+#define UCOL_BYTE_SIZE_MASK 0xFF        
+
+#define UCOL_CASE_BYTE_START 0x80
+#define UCOL_CASE_SHIFT_START 7
 
 #define UCOL_IGNORABLE 0
 #define UCOL_IMPLICIT_SURROGATE_LAST_CE_MASK     0x80200080
@@ -519,6 +525,7 @@ struct UCollator {
     UBool freeRulesOnClose;
     UChar zero;
     UDataInfo dataInfo;               /* Data info of UCA table */
+    UErrorCode errorCode;             /* internal error code */
 
     const uint32_t *endExpansionCE;    /* array of last ces in an expansion ce.
                                           corresponds to expansionCESize */

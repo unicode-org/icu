@@ -499,6 +499,7 @@ UCollator* ucol_initCollator(const UCATableHeader *image, UCollator *fillIn, UEr
                                  result->image->endExpansionCECount - 1;
     result->expansionCESize = (uint8_t*)result->image + 
                                                result->image->expansionCESize;
+    result->errorCode = *status;
 
     ucol_updateInternalState(result);
     return result;
@@ -1205,25 +1206,26 @@ uint32_t getSpecialPrevCE(const UCollator *coll, uint32_t CE,
 /* This should really be a macro        */
 /* However, it is used only when stack buffers are not sufficiently big, and then we're messed up performance wise */
 /* anyway */
-uint8_t *reallocateBuffer(uint8_t **secondaries, uint8_t *secStart, uint8_t *second, uint32_t *secSize, UErrorCode *status) {
+uint8_t *reallocateBuffer(uint8_t **secondaries, uint8_t *secStart, uint8_t *second, uint32_t *secSize, uint32_t newSize, UErrorCode *status) {
+  fprintf(stderr, ".");
   uint8_t *newStart = NULL;
 
   if(secStart==second) {
-    newStart=(uint8_t*)uprv_malloc(*secSize*2);
+    newStart=(uint8_t*)uprv_malloc(newSize);
     if(newStart==NULL) {
       *status = U_MEMORY_ALLOCATION_ERROR;
       return NULL;
     }
     uprv_memcpy(newStart, secStart, *secondaries-secStart);
   } else {
-    newStart=(uint8_t*)uprv_realloc(secStart, *secSize*2);
+    newStart=(uint8_t*)uprv_realloc(secStart, newSize);
     if(newStart==NULL) {
       *status = U_MEMORY_ALLOCATION_ERROR;
       return NULL;
     }
   }
   *secondaries=newStart+(*secondaries-secStart);
-  *secSize*=2;
+  *secSize=newSize;
   return newStart;
 }
 
@@ -1256,10 +1258,6 @@ while((start)<(end)) { \
 /*                                                                          */
 /****************************************************************************/
 
-#define MIN_VALUE 0x02
-#define UCOL_VARIABLE_MAX 0x20
-#define UCOL_NEW_IGNORABLE 0
-
 /* sortkey API */
 U_CAPI int32_t
 ucol_getSortKey(const    UCollator    *coll,
@@ -1269,9 +1267,14 @@ ucol_getSortKey(const    UCollator    *coll,
         int32_t        resultLength)
 {
   UErrorCode status = U_ZERO_ERROR;
-  return coll->sortKeyGen(coll, source, sourceLength, &result, resultLength, FALSE, &status);
-    /*return ucol_calcSortKey(coll, source, sourceLength, &result, resultLength, FALSE, &status);*/
-    /*return ucol_calcSortKeySimpleTertiary(coll, source, sourceLength, &result, resultLength, FALSE, &status);*/
+  /* this uses the function pointer that is set in updateinternalstate */
+  /* currently, there are two funcs: */
+  /*ucol_calcSortKey(...);*/
+  /*ucol_calcSortKeySimpleTertiary(...);*/
+
+  int32_t keySize = coll->sortKeyGen(coll, source, sourceLength, &result, resultLength, FALSE, &status);
+  ((UCollator *)coll)->errorCode = status; /*semantically const */
+  return keySize;
 }
 
 /* this function is called by the C++ API for sortkey generation */
@@ -1360,9 +1363,9 @@ int32_t ucol_getSortKeySize(const UCollator *coll, collIterate *s, int32_t curre
             /* Note: This code assumes that the table is well built i.e. not having 0 bytes where they are not supposed to be. */
             /* Usually, we'll have non-zero primary1 & primary2, except in cases of LatinOne and friends, when primary2 will   */
             /* be zero with non zero primary1. primary3 is different than 0 only for long primaries - see above.               */
-            if(primary1 != UCOL_NEW_IGNORABLE) {
+            if(primary1 != UCOL_IGNORABLE) {
               currentSize++;
-              if(primary2 != UCOL_NEW_IGNORABLE) {
+              if(primary2 != UCOL_IGNORABLE) {
                 currentSize++;
               }
             }               
@@ -1465,7 +1468,7 @@ ucol_calcSortKey(const    UCollator    *coll,
     uint32_t i = 0; /* general purpose counter */
 
     /* Stack allocated buffers for buffers we use */
-    uint8_t second[UCOL_MAX_BUFFER], tert[UCOL_MAX_BUFFER], caseB[UCOL_MAX_BUFFER], quad[UCOL_MAX_BUFFER];
+    uint8_t prim[UCOL_PRIMARY_MAX_BUFFER], second[UCOL_SECONDARY_MAX_BUFFER], tert[UCOL_TERTIARY_MAX_BUFFER], caseB[UCOL_CASE_MAX_BUFFER], quad[UCOL_QUAD_MAX_BUFFER];
 
     uint8_t *primaries = *result, *secondaries = second, *tertiaries = tert, *cases = caseB, *quads = quad;
 
@@ -1474,19 +1477,19 @@ ucol_calcSortKey(const    UCollator    *coll,
     }
 
     if(primaries == NULL && allocatePrimary == TRUE) {
-        primaries = *result = (uint8_t *)uprv_malloc(2*UCOL_MAX_BUFFER);
-        resultLength = 2*UCOL_MAX_BUFFER;
+        primaries = *result = prim;
+        resultLength = UCOL_PRIMARY_MAX_BUFFER;
     }
     uint8_t *primarySafeEnd = primaries + resultLength - 2;
 
-    uint32_t secSize = UCOL_MAX_BUFFER, terSize = UCOL_MAX_BUFFER, 
-      caseSize = UCOL_MAX_BUFFER, quadSize = UCOL_MAX_BUFFER;
+    uint32_t secSize = UCOL_SECONDARY_MAX_BUFFER, terSize = UCOL_TERTIARY_MAX_BUFFER, 
+      caseSize = UCOL_CASE_MAX_BUFFER, quadSize = UCOL_QUAD_MAX_BUFFER;
 
     uint32_t sortKeySize = 1; /* it is always \0 terminated */
 
-    UChar normBuffer[UCOL_NORMALIZATION_GROWTH*UCOL_MAX_BUFFER];
+    UChar normBuffer[UCOL_NORMALIZATION_MAX_BUFFER];
     UChar *normSource = normBuffer;
-    int32_t normSourceLen = UCOL_NORMALIZATION_GROWTH*UCOL_MAX_BUFFER;
+    int32_t normSourceLen = UCOL_NORMALIZATION_MAX_BUFFER;
 
     int32_t len = (sourceLength == -1 ? u_strlen(source) : sourceLength);
 
@@ -1585,8 +1588,8 @@ ucol_calcSortKey(const    UCollator    *coll,
     for(;;) {
         for(i=prevBuffSize; i<minBufferSize; ++i) {
 
-            order = ucol_getNextCE(coll, &s, status);
-            /*UCOL_GETNEXTCE(order, coll, s, status);*/
+            /*order = ucol_getNextCE(coll, &s, status);*/
+            UCOL_GETNEXTCE(order, coll, s, status);
 
             if(isCEIgnorable(order)) {
               continue;
@@ -1605,8 +1608,8 @@ ucol_calcSortKey(const    UCollator    *coll,
             order ^= caseSwitch;
             caseBit = (order & UCOL_CASE_BIT_MASK);
             tertiary = (uint8_t)((order & tertiaryMask)); 
-            secondary = (uint8_t)((order >>= 8) & 0xFF);
-            primary2 = (uint8_t)((order >>= 8) & 0xFF);
+            secondary = (uint8_t)((order >>= 8) & UCOL_BYTE_SIZE_MASK);
+            primary2 = (uint8_t)((order >>= 8) & UCOL_BYTE_SIZE_MASK);
             primary1 = (uint8_t)(order >>= 8);
 
             if(notIsContinuation) {
@@ -1646,9 +1649,9 @@ ucol_calcSortKey(const    UCollator    *coll,
               /* Note: This code assumes that the table is well built i.e. not having 0 bytes where they are not supposed to be. */
               /* Usually, we'll have non-zero primary1 & primary2, except in cases of LatinOne and friends, when primary2 will   */
               /* be zero with non zero primary1. primary3 is different than 0 only for long primaries - see above.               */
-              if(primary1 != UCOL_NEW_IGNORABLE) {
+              if(primary1 != UCOL_IGNORABLE) {
                 *primaries++ = primary1; /* scriptOrder[primary1]; */ /* This is the script ordering thingie */
-                if(primary2 != UCOL_NEW_IGNORABLE) {
+                if(primary2 != UCOL_IGNORABLE) {
                   *primaries++ = primary2; /* second part */
                 }
               }               
@@ -1697,8 +1700,8 @@ ucol_calcSortKey(const    UCollator    *coll,
 
               if(doCase) {
                 if (caseShift  == 0) {
-                  *cases++ = 0x80;
-                  caseShift = 7;
+                  *cases++ = UCOL_CASE_BYTE_START;
+                  caseShift = UCOL_CASE_SHIFT_START;
                 }
                 if(tertiary != 0) {
                   *(cases-1) |= (caseBit!=0) << (caseShift--);
@@ -1750,16 +1753,8 @@ ucol_calcSortKey(const    UCollator    *coll,
                 finished = TRUE;
                 break;
               } else { /* It's much nicer if we can actually reallocate */
-                uint8_t *newStart;
-                newStart = (uint8_t *)uprv_realloc(primStart, 2*sks);
-                if(primStart == NULL) {
-                  *status = U_MEMORY_ALLOCATION_ERROR;
-                  finished = TRUE;
-                  break;
-                }
-                primaries=newStart+(primaries-primStart);
-                resultLength = 2*sks;
-                primStart = *result = newStart;
+                primStart = reallocateBuffer(&primaries, *result, prim, &resultLength, 2*sks, status);
+                *result = primStart;
                 primarySafeEnd = primStart + resultLength - 2;
               }
             }
@@ -1768,13 +1763,16 @@ ucol_calcSortKey(const    UCollator    *coll,
             break;
         } else {
           prevBuffSize = minBufferSize;
-          secStart = reallocateBuffer(&secondaries, secStart, second, &secSize, status);
-          terStart = reallocateBuffer(&tertiaries, terStart, tert, &terSize, status);
-          caseStart = reallocateBuffer(&cases, caseStart, cases, &caseSize, status);
-          quadStart = reallocateBuffer(&quads, quadStart, quads, &quadSize, status);
+          secStart = reallocateBuffer(&secondaries, secStart, second, &secSize, 2*secSize, status);
+          terStart = reallocateBuffer(&tertiaries, terStart, tert, &terSize, 2*terSize, status);
+          caseStart = reallocateBuffer(&cases, caseStart, caseB, &caseSize, 2*caseSize, status);
+          quadStart = reallocateBuffer(&quads, quadStart, quad, &quadSize, 2*quadSize, status);
           minBufferSize *= 2;
         }
     }
+
+    /* Here, we are generally done with processing */
+    /* bailing out would not be too productive */
 
 
     if(U_SUCCESS(*status)) {
@@ -1788,33 +1786,60 @@ ucol_calcSortKey(const    UCollator    *coll,
           }
           *secondaries++ = (uint8_t)(UCOL_COMMON_BOT2 + count2);
         }
+        *(primaries++) = UCOL_LEVELTERMINATOR;
         uint32_t secsize = secondaries-secStart;
         sortKeySize += secsize;
-        *(primaries++) = UCOL_LEVELTERMINATOR;
-        if(isFrenchSec) { /* do the reverse copy */
-          /* If there are any unresolved continuation secondaries, reverse them here so that we can reverse the whole secondary thing */
-          if(frenchStartPtr != NULL) { 
-            uprv_ucol_reverse_buffer(uint8_t, frenchStartPtr, frenchEndPtr);
-          }           
-          /* Need overflow test here */
-          for(i = 0; i<secsize; i++) {
-              *(primaries++) = *(secondaries-i-1);
+        if(sortKeySize <= resultLength) {
+          if(isFrenchSec) { /* do the reverse copy */
+            /* If there are any unresolved continuation secondaries, reverse them here so that we can reverse the whole secondary thing */
+            if(frenchStartPtr != NULL) { 
+              uprv_ucol_reverse_buffer(uint8_t, frenchStartPtr, frenchEndPtr);
+            }           
+            for(i = 0; i<secsize; i++) {
+                *(primaries++) = *(secondaries-i-1);
+            }
+          } else { 
+            uprv_memcpy(primaries, secStart, secsize); 
+            primaries += secsize;
           }
-        } else { 
-          /* Need overflow test here */
-          uprv_memcpy(primaries, secStart, secsize); 
-          primaries += secsize;
+        } else {
+          if(allocatePrimary == TRUE) { /* need to save our butts if we cannot reallocate */
+            primStart = reallocateBuffer(&primaries, *result, prim, &resultLength, 2*sortKeySize, status);
+            *result = primStart;
+            if(isFrenchSec) { /* do the reverse copy */
+              /* If there are any unresolved continuation secondaries, reverse them here so that we can reverse the whole secondary thing */
+              if(frenchStartPtr != NULL) { 
+                uprv_ucol_reverse_buffer(uint8_t, frenchStartPtr, frenchEndPtr);
+              }           
+              for(i = 0; i<secsize; i++) {
+                  *(primaries++) = *(secondaries-i-1);
+              }
+            } else { 
+              uprv_memcpy(primaries, secStart, secsize); 
+              primaries += secsize;
+            }
+          } else {
+            *status = U_MEMORY_ALLOCATION_ERROR;
+          }
         }
-
       }
 
       if(doCase) {
-        *(primaries++) = UCOL_LEVELTERMINATOR;
         uint32_t casesize = cases - caseStart;
         sortKeySize += casesize;
-        /* Need overflow test here */
-        uprv_memcpy(primaries, caseStart, casesize);
-        primaries += casesize;
+        *(primaries++) = UCOL_LEVELTERMINATOR;
+        if(sortKeySize <= resultLength) {
+          uprv_memcpy(primaries, caseStart, casesize);
+          primaries += casesize;
+        } else {
+          if(allocatePrimary == TRUE) { 
+            primStart = reallocateBuffer(&primaries, *result, prim, &resultLength, 2*sortKeySize, status);
+            *result = primStart;
+            uprv_memcpy(primaries, caseStart, casesize);
+          } else {
+            *status = U_MEMORY_ALLOCATION_ERROR;
+          }
+        }
       }
 
       if(compareTer == 0) {
@@ -1825,31 +1850,48 @@ ucol_calcSortKey(const    UCollator    *coll,
           }
           *tertiaries++ = (uint8_t)(UCOL_COMMON_BOT3 + count3);
         }
-        *(primaries++) = UCOL_LEVELTERMINATOR;
         uint32_t tersize = tertiaries - terStart;
         sortKeySize += tersize;
-        /* Need overflow test here */
-        uprv_memcpy(primaries, terStart, tersize);
-        primaries += tersize;
-        if(compareQuad == 0) {
-            if(count4 > 0) {
-              while (count4 >= UCOL_BOT_COUNT4) {
-                *quads++ = (uint8_t)(UCOL_COMMON_BOT4 + UCOL_BOT_COUNT4);
-                count4 -= UCOL_BOT_COUNT4;
+        *(primaries++) = UCOL_LEVELTERMINATOR;
+        if(sortKeySize <= resultLength) {
+          uprv_memcpy(primaries, terStart, tersize);
+          primaries += tersize;
+          if(compareQuad == 0) {
+              if(count4 > 0) {
+                while (count4 >= UCOL_BOT_COUNT4) {
+                  *quads++ = (uint8_t)(UCOL_COMMON_BOT4 + UCOL_BOT_COUNT4);
+                  count4 -= UCOL_BOT_COUNT4;
+                }
+                *quads++ = (uint8_t)(UCOL_COMMON_BOT4 + count4);
               }
-              *quads++ = (uint8_t)(UCOL_COMMON_BOT4 + count4);
-            }
-            *(primaries++) = UCOL_LEVELTERMINATOR;
-            uint32_t quadsize = quads - quadStart;
-            sortKeySize += quadsize;
-            /* Need overflow test here */
-            uprv_memcpy(primaries, quadStart, quadsize);
-            primaries += quadsize;
+              *(primaries++) = UCOL_LEVELTERMINATOR;
+              uint32_t quadsize = quads - quadStart;
+              sortKeySize += quadsize;
+              if(sortKeySize <= resultLength) {
+                uprv_memcpy(primaries, quadStart, quadsize);
+                primaries += quadsize;
+              } else {
+                if(allocatePrimary == TRUE) { 
+                  primStart = reallocateBuffer(&primaries, *result, prim, &resultLength, 2*sortKeySize, status);
+                  *result = primStart;
+                  uprv_memcpy(primaries, quadStart, quadsize);
+                } else {
+                  *status = U_MEMORY_ALLOCATION_ERROR;
+                }
+              }
+          }
+        } else {
+          if(allocatePrimary == TRUE) { 
+            primStart = reallocateBuffer(&primaries, *result, prim, &resultLength, 2*sortKeySize, status);
+            *result = primStart;
+            uprv_memcpy(primaries, terStart, tersize);
+          } else {
+            *status = U_MEMORY_ALLOCATION_ERROR;
+          }
         }
 
         if(compareIdent) {
             UChar *ident = s.string;
-/*          const UChar *ident = source;*/
             uint8_t idByte = 0;
             sortKeySize += len * sizeof(UChar);
             *(primaries++) = UCOL_LEVELTERMINATOR;
@@ -1865,7 +1907,7 @@ ucol_calcSortKey(const    UCollator    *coll,
                     } else {
                         *(primaries++) = idByte;
                     }
-                    idByte = (uint8_t)((*(ident) & 0xFF));
+                    idByte = (uint8_t)((*(ident) & UCOL_BYTE_SIZE_MASK));
                     if(idByte < 0x02) {
                         if(sortKeySize < resultLength) {
                             *(primaries++) = 0x01;
@@ -1879,25 +1921,47 @@ ucol_calcSortKey(const    UCollator    *coll,
                   ident++;
               }
             } else {
-                while(ident < s.len) {
+                if(allocatePrimary == TRUE) { 
+                  primStart = reallocateBuffer(&primaries, *result, prim, &resultLength, 2*sortKeySize, status);
+                  *result = primStart;
+                  while(ident < s.len) {
                     idByte = (uint8_t)((*(ident) >> 8) + utf16fixup[*(ident) >> 11]);
                     if(idByte < 0x02) {
-                        sortKeySize++;
+                      *(primaries++) = 0x01;
+                      sortKeySize++;
+                      *(primaries++) = (uint8_t)(idByte + 1);
+                    } else {
+                      *(primaries++) = idByte;
                     }
-                    idByte = (uint8_t)((*(ident) & 0xFF));
+                    idByte = (uint8_t)((*(ident) & UCOL_BYTE_SIZE_MASK));
                     if(idByte < 0x02) {
-                        sortKeySize++;
+                      *(primaries++) = 0x01;
+                      sortKeySize++;
+                      *(primaries++) = (uint8_t)(idByte + 1);
+                    } else {
+                      *(primaries++) = idByte;
                     }
-                  ident++;
+                    ident++;
+                  }
+                } else {
+                  while(ident < s.len) {
+                      idByte = (uint8_t)((*(ident) >> 8) + utf16fixup[*(ident) >> 11]);
+                      if(idByte < 0x02) {
+                          sortKeySize++;
+                      }
+                      idByte = (uint8_t)((*(ident) & UCOL_BYTE_SIZE_MASK));
+                      if(idByte < 0x02) {
+                          sortKeySize++;
+                      }
+                    ident++;
+                  }
+                  *status = U_MEMORY_ALLOCATION_ERROR;
                 }
             }
           }
       }
 
       *(primaries++) = '\0';
-    } else {
-      /* This is wrong - we should return a key size - not set it to zero */
-      sortKeySize = 0;
     }
 
     if(terStart != tert) {
@@ -1909,6 +1973,14 @@ ucol_calcSortKey(const    UCollator    *coll,
 
     if(normSource != normBuffer) {
         uprv_free(normSource);
+    }
+
+    if(allocatePrimary == TRUE) {
+      *result = (uint8_t*)uprv_malloc(sortKeySize);
+      uprv_memcpy(*result, primStart, sortKeySize);
+      if(primStart != prim) {
+        uprv_free(primStart);
+      }
     }
 
     return sortKeySize;
@@ -1926,7 +1998,7 @@ ucol_calcSortKeySimpleTertiary(const    UCollator    *coll,
     uint32_t i = 0; /* general purpose counter */
 
     /* Stack allocated buffers for buffers we use */
-    uint8_t second[UCOL_MAX_BUFFER], tert[UCOL_MAX_BUFFER];
+    uint8_t prim[UCOL_PRIMARY_MAX_BUFFER], second[UCOL_SECONDARY_MAX_BUFFER], tert[UCOL_TERTIARY_MAX_BUFFER];
 
     uint8_t *primaries = *result, *secondaries = second, *tertiaries = tert;
 
@@ -1935,18 +2007,18 @@ ucol_calcSortKeySimpleTertiary(const    UCollator    *coll,
     }
 
     if(primaries == NULL && allocatePrimary == TRUE) {
-        primaries = *result = (uint8_t *)uprv_malloc(2*UCOL_MAX_BUFFER);
-        resultLength = 2*UCOL_MAX_BUFFER;
+        primaries = *result = prim;
+        resultLength = UCOL_PRIMARY_MAX_BUFFER;
     }
     uint8_t *primarySafeEnd = primaries + resultLength - 2;
 
-    uint32_t secSize = UCOL_MAX_BUFFER, terSize = UCOL_MAX_BUFFER;
+    uint32_t secSize = UCOL_SECONDARY_MAX_BUFFER, terSize = UCOL_TERTIARY_MAX_BUFFER;
 
     int32_t sortKeySize = 3; /* it is always \0 terminated plus separators for secondary and tertiary */
 
-    UChar normBuffer[UCOL_NORMALIZATION_GROWTH*UCOL_MAX_BUFFER];
+    UChar normBuffer[UCOL_NORMALIZATION_MAX_BUFFER];
     UChar *normSource = normBuffer;
-    int32_t normSourceLen = UCOL_NORMALIZATION_GROWTH*UCOL_MAX_BUFFER;
+    int32_t normSourceLen = UCOL_NORMALIZATION_MAX_BUFFER;
 
     int32_t len = (sourceLength == -1 ? u_strlen(source) : sourceLength);
 
@@ -2027,8 +2099,8 @@ ucol_calcSortKeySimpleTertiary(const    UCollator    *coll,
 
             order ^= caseSwitch;
             tertiary = (uint8_t)((order & tertiaryMask)); /* TODO need case bit here this is temporary - removing case bit */         
-            secondary = (uint8_t)((order >>= 8) & 0xFF);
-            primary2 = (uint8_t)((order >>= 8) & 0xFF);
+            secondary = (uint8_t)((order >>= 8) & UCOL_BYTE_SIZE_MASK);
+            primary2 = (uint8_t)((order >>= 8) & UCOL_BYTE_SIZE_MASK);
             primary1 = (uint8_t)(order >>= 8);
 
             /* In the code below, every increase in any of buffers is followed by the increase to  */
@@ -2039,9 +2111,9 @@ ucol_calcSortKeySimpleTertiary(const    UCollator    *coll,
             /* Note: This code assumes that the table is well built i.e. not having 0 bytes where they are not supposed to be. */
             /* Usually, we'll have non-zero primary1 & primary2, except in cases of LatinOne and friends, when primary2 will   */
             /* be zero with non zero primary1. primary3 is different than 0 only for long primaries - see above.               */
-            if(primary1 != UCOL_NEW_IGNORABLE) {
+            if(primary1 != UCOL_IGNORABLE) {
               *primaries++ = primary1; /* scriptOrder[primary1]; */ /* This is the script ordering thingie */
-              if(primary2 != UCOL_NEW_IGNORABLE) {
+              if(primary2 != UCOL_IGNORABLE) {
                 *primaries++ = primary2; /* second part */
               }
             }               
@@ -2110,16 +2182,8 @@ ucol_calcSortKeySimpleTertiary(const    UCollator    *coll,
                 finished = TRUE;
                 break;
               } else { /* It's much nicer if we can actually reallocate */
-                uint8_t *newStart;
-                newStart = (uint8_t *)uprv_realloc(primStart, 2*sks);
-                if(primStart == NULL) {
-                  *status = U_MEMORY_ALLOCATION_ERROR;
-                  finished = TRUE;
-                  break;
-                }
-                primaries=newStart+(primaries-primStart);
-                resultLength = 2*sks;
-                primStart = *result = newStart;
+                primStart = reallocateBuffer(&primaries, *result, prim, &resultLength, 2*sks, status);
+                *result = primStart;
                 primarySafeEnd = primStart + resultLength - 2;
               }
             }
@@ -2128,8 +2192,8 @@ ucol_calcSortKeySimpleTertiary(const    UCollator    *coll,
             break;
         } else {
           prevBuffSize = minBufferSize;
-          secStart = reallocateBuffer(&secondaries, secStart, second, &secSize, status);
-          terStart = reallocateBuffer(&tertiaries, terStart, tert, &terSize, status);
+          secStart = reallocateBuffer(&secondaries, secStart, second, &secSize, 2*secSize, status);
+          terStart = reallocateBuffer(&tertiaries, terStart, tert, &terSize, 2*terSize, status);
           minBufferSize *= 2;
         }
     }
@@ -2146,10 +2210,19 @@ ucol_calcSortKeySimpleTertiary(const    UCollator    *coll,
       }
       uint32_t secsize = secondaries-secStart;
       sortKeySize += secsize;
-      *(primaries++) = UCOL_LEVELTERMINATOR;
-      /* Need overflow test here */
-      uprv_memcpy(primaries, secStart, secsize); 
-      primaries += secsize;
+      if(sortKeySize <= resultLength) {
+        *(primaries++) = UCOL_LEVELTERMINATOR;
+        uprv_memcpy(primaries, secStart, secsize); 
+        primaries += secsize;
+      } else {
+        if(allocatePrimary == TRUE) { 
+          primStart = reallocateBuffer(&primaries, *result, prim, &resultLength, 2*sortKeySize, status);
+          *result = primStart;
+          uprv_memcpy(primaries, secStart, secsize); 
+        } else {
+          *status = U_MEMORY_ALLOCATION_ERROR;
+        }
+      }
 
       if (count3 > 0) {
         while (count3 >= UCOL_BOT_COUNT3) {
@@ -2161,14 +2234,20 @@ ucol_calcSortKeySimpleTertiary(const    UCollator    *coll,
       *(primaries++) = UCOL_LEVELTERMINATOR;
       uint32_t tersize = tertiaries - terStart;
       sortKeySize += tersize;
-      /* Need overflow test here */
-      uprv_memcpy(primaries, terStart, tersize);
-      primaries += tersize;
+      if(sortKeySize <= resultLength) {
+        uprv_memcpy(primaries, terStart, tersize);
+        primaries += tersize;
+      } else {
+        if(allocatePrimary == TRUE) { 
+          primStart = reallocateBuffer(&primaries, *result, prim, &resultLength, 2*sortKeySize, status);
+          *result = primStart;
+          uprv_memcpy(primaries, terStart, tersize);
+        } else {
+          *status = U_MEMORY_ALLOCATION_ERROR;
+        }
+      }
 
       *(primaries++) = '\0';
-    } else {
-      /* This is wrong - we should return a key size - not set it to zero */
-      sortKeySize = 0;
     }
 
     if(terStart != tert) {
@@ -2178,6 +2257,14 @@ ucol_calcSortKeySimpleTertiary(const    UCollator    *coll,
 
     if(normSource != normBuffer) {
         uprv_free(normSource);
+    }
+
+    if(allocatePrimary == TRUE) {
+      *result = (uint8_t*)uprv_malloc(sortKeySize);
+      uprv_memcpy(*result, primStart, sortKeySize);
+      if(primStart != prim) {
+        uprv_free(primStart);
+      }
     }
 
     return sortKeySize;
