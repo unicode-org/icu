@@ -20,6 +20,9 @@ public:
     // IntlTest override
     void runIndexedTest( int32_t index, UBool exec, const char* &name, char* par );
 public:
+
+	void TestCoverage(void);
+
     /**
      * This test confirms the correct behavior of add when incrementing
      * through subsequent days.

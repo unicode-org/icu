@@ -19,6 +19,7 @@
 #include "unicode/ustring.h"
 #include "unicode/measfmt.h"
 #include "unicode/curramt.h"
+#include "unicode/choicfmt.h"
 #include "digitlst.h"
 #include "textfile.h"
 #include "tokiter.h"
@@ -76,6 +77,7 @@ void NumberFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &n
         CASE(27,TestCases);
 
         CASE(28,TestCurrencyNames);
+		CASE(29,TestCoverage);
 
         default: name = ""; break;
     }
@@ -112,6 +114,51 @@ NumberFormatTest::TestAPI(void)
 
     delete test;  
   }
+}
+
+void 
+NumberFormatTest::TestCoverage(void)
+{
+	double limits[] = {1,2,3,4,5,6,7};
+	UnicodeString monthNames[] = {"Sun","Mon","Tue","Wed","Thur","Fri","Sat"};
+	ChoiceFormat cf(limits, monthNames,7);
+
+	int64_t number = 0;
+	UnicodeString r;
+	UErrorCode status = U_ZERO_ERROR;
+	cf.format(number, r, status);
+
+	NumberFormat & nf = cf;
+	UnicodeString text("Wed");
+	Formattable result;
+	ParsePosition pos;
+
+	//NumberFormat::parseCurrency()
+	//NumberFormat::getEffectiveCurrency()
+	nf.parseCurrency(text, result, pos);
+
+	//stuff coverage tests for other format classes
+	status = U_ZERO_ERROR;
+	UnicodeString pattern(UChar(0xa4));
+	DecimalFormat df(pattern, status);	//DecimalFormat::setCurrencyForLocale()
+	df.setCurrency(NULL);
+
+	UChar cc[] = {'C', 'N', 'Y'};
+	status = U_ZERO_ERROR;
+	CurrencyAmount ca(0,cc,status);
+	CurrencyAmount ca2(ca);
+	ca2 = ca;
+	delete ca.clone();
+
+	status = U_ZERO_ERROR;
+	CurrencyUnit cu(cc, status);
+	CurrencyUnit cu2(cu);
+	cu2 = cu;
+	delete cu.clone();
+
+	status = U_ZERO_ERROR;
+	delete MeasureFormat::createCurrencyFormat(status);
+	
 }
 
 // Test various patterns
@@ -415,7 +462,15 @@ NumberFormatTest::TestInt64() {
 		expect(fmt, (Formattable)(int64_t)U_INT64_MAX, "9.223372036854775807E18");
 		expect(fmt, (Formattable)(int64_t)U_INT64_MIN, "-9.223372036854775808E18");
 	}
-
+	
+	{ // for coverage
+	NumberFormat & numFmt= fmt;
+	int64_t t = (int64_t) 0;
+	UnicodeString r;
+	numFmt.format(t,r);
+	//FieldPosition f;
+	//numFmt.format(t,r,f);
+	}
 	// also test digitlist
 	int64_t int64max = U_INT64_MAX;
 	int64_t int64min = U_INT64_MIN;

@@ -756,6 +756,7 @@ void LocaleTest::doTestDisplayNames(Locale& displayLocale, int32_t compareIndex)
         UnicodeString  testName;
 
         testLocale.getDisplayLanguage(displayLocale, testLang);
+        testLocale.getDisplayScript(testScript);    // for coverage
         testLocale.getDisplayScript(displayLocale, testScript);
         testLocale.getDisplayCountry(displayLocale, testCtry);
         testLocale.getDisplayVariant(displayLocale, testVar);
