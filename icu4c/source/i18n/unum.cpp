@@ -226,7 +226,13 @@ unum_format(    const    UNumberFormat*    fmt,
  
   if(U_FAILURE(*status)) return -1;
 
-  UnicodeString res(result, 0, resultLength);
+  UnicodeString res;
+  if(!(result==NULL && resultLength==0)) {
+    // NULL destination for pure preflighting: empty dummy string
+    // otherwise, alias the destination buffer
+    res.setTo(result, 0, resultLength);
+  }
+
   FieldPosition fp;
   
   if(pos != 0)
@@ -253,7 +259,13 @@ unum_formatDouble(    const    UNumberFormat*  fmt,
  
   if(U_FAILURE(*status)) return -1;
 
-  UnicodeString res(result, 0, resultLength);
+  UnicodeString res;
+  if(!(result==NULL && resultLength==0)) {
+    // NULL destination for pure preflighting: empty dummy string
+    // otherwise, alias the destination buffer
+    res.setTo(result, 0, resultLength);
+  }
+
   FieldPosition fp;
   
   if(pos != 0)
@@ -521,7 +533,12 @@ unum_getTextAttribute(const UNumberFormat*  fmt,
   if(U_FAILURE(*status))
       return -1;
 
-  UnicodeString res(result, 0, resultLength);
+  UnicodeString res;
+  if(!(result==NULL && resultLength==0)) {
+    // NULL destination for pure preflighting: empty dummy string
+    // otherwise, alias the destination buffer
+    res.setTo(result, 0, resultLength);
+  }
 
   switch(tag) {
   case UNUM_POSITIVE_PREFIX:
@@ -610,7 +627,12 @@ unum_toPattern(    const    UNumberFormat*          fmt,
  
   if(U_FAILURE(*status)) return -1;
 
-  UnicodeString pat(result, 0, resultLength);
+  UnicodeString pat;
+  if(!(result==NULL && resultLength==0)) {
+    // NULL destination for pure preflighting: empty dummy string
+    // otherwise, alias the destination buffer
+    pat.setTo(result, 0, resultLength);
+  }
 
   if(isPatternLocalized)
     ((DecimalFormat*)fmt)->toLocalizedPattern(pat);

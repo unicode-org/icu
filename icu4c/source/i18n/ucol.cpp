@@ -5430,7 +5430,12 @@ ucol_getDisplayName(    const    char        *objLoc,
 {
 
   if(U_FAILURE(*status)) return -1;
-  UnicodeString dst(result, resultLength, resultLength);
+  UnicodeString dst;
+  if(!(result==NULL && resultLength==0)) {
+    // NULL destination for pure preflighting: empty dummy string
+    // otherwise, alias the destination buffer
+    dst.setTo(result, 0, resultLength);
+  }
   Collator::getDisplayName(Locale(objLoc), Locale(dispLoc), dst);
   return dst.extract(result, resultLength, *status);
 }

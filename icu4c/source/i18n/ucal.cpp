@@ -152,7 +152,12 @@ ucal_getTimeZoneDisplayName(const     UCalendar*                 cal,
   if(U_FAILURE(*status)) return -1;
 
   const TimeZone& tz = ((Calendar*)cal)->getTimeZone();
-  UnicodeString id(result, 0, resultLength);
+  UnicodeString id;
+  if(!(result==NULL && resultLength==0)) {
+    // NULL destination for pure preflighting: empty dummy string
+    // otherwise, alias the destination buffer
+    id.setTo(result, 0, resultLength);
+  }
 
   switch(type) {
   case UCAL_STANDARD:
