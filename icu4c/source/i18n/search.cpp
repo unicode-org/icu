@@ -121,7 +121,7 @@ void SearchIterator::setText(const UnicodeString &text, UErrorCode &status)
         }
         else {
             m_text_        = text;
-            m_search_->text = m_text_.fArray;
+            m_search_->text = m_text_.getBuffer();
         }
     }
 }
@@ -316,7 +316,7 @@ SearchIterator::SearchIterator(const UnicodeString &text,
     m_search_->reset              = TRUE;
     m_search_->matchedIndex       = USEARCH_DONE;
     m_search_->matchedLength      = 0;
-    m_search_->text               = m_text_.fArray;
+    m_search_->text               = m_text_.getBuffer();
     m_search_->textLength         = text.length();
 }
 
@@ -333,7 +333,7 @@ SearchIterator::SearchIterator(CharacterIterator &text,
     m_search_->matchedIndex       = USEARCH_DONE;
     m_search_->matchedLength      = 0;
     text.getText(m_text_);
-    m_search_->text               = m_text_.fArray;
+    m_search_->text               = m_text_.getBuffer();
     m_search_->textLength         = m_text_.length();
     m_breakiterator_             = breakiter;
 }

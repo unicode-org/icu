@@ -29,8 +29,8 @@ StringSearch::StringSearch(const UnicodeString &pattern,
         return;
     }
 
-    m_strsrch_ = usearch_open(m_pattern_.fArray, m_pattern_.fLength, 
-                              m_text_.fArray, m_text_.fLength, 
+    m_strsrch_ = usearch_open(m_pattern_.getBuffer(), m_pattern_.length(), 
+                              m_text_.getBuffer(), m_text_.length(), 
                               locale.getName(), NULL, &status);
     uprv_free(m_search_);
     m_search_ = NULL;
@@ -64,9 +64,9 @@ StringSearch::StringSearch(const UnicodeString     &pattern,
         m_strsrch_ = NULL;
         return;
     }
-    m_strsrch_ = usearch_openFromCollator(m_pattern_.fArray, 
-                                          m_pattern_.fLength, m_text_.fArray, 
-                                          m_text_.fLength, coll->ucollator, 
+    m_strsrch_ = usearch_openFromCollator(m_pattern_.getBuffer(), 
+                                          m_pattern_.length(), m_text_.getBuffer(), 
+                                          m_text_.length(), coll->ucollator, 
                                           NULL, &status);
     uprv_free(m_search_);
     m_search_ = NULL;
@@ -95,8 +95,8 @@ StringSearch::StringSearch(const UnicodeString     &pattern,
         m_strsrch_ = NULL;
         return;
     }
-    m_strsrch_ = usearch_open(m_pattern_.fArray, m_pattern_.fLength, 
-                              m_text_.fArray, m_text_.fLength, 
+    m_strsrch_ = usearch_open(m_pattern_.getBuffer(), m_pattern_.length(), 
+                              m_text_.getBuffer(), m_text_.length(), 
                               locale.getName(), NULL, &status);
     uprv_free(m_search_);
     m_search_ = NULL;
@@ -130,9 +130,9 @@ StringSearch::StringSearch(const UnicodeString     &pattern,
         m_strsrch_ = NULL;
         return;
     }
-    m_strsrch_ = usearch_openFromCollator(m_pattern_.fArray, 
-                                          m_pattern_.fLength, m_text_.fArray, 
-                                          m_text_.fLength, coll->ucollator, 
+    m_strsrch_ = usearch_openFromCollator(m_pattern_.getBuffer(), 
+                                          m_pattern_.length(), m_text_.getBuffer(), 
+                                          m_text_.length(), coll->ucollator, 
                                           NULL, &status);
     uprv_free(m_search_);
     m_search_ = NULL;
@@ -159,9 +159,9 @@ StringSearch::StringSearch(const StringSearch &that) :
         status     = U_ILLEGAL_ARGUMENT_ERROR;
     }
     else {
-        m_strsrch_ = usearch_openFromCollator(m_pattern_.fArray, 
-                                              m_pattern_.fLength, 
-                                              m_text_.fArray, m_text_.fLength, 
+        m_strsrch_ = usearch_openFromCollator(m_pattern_.getBuffer(), 
+                                              m_pattern_.length(), 
+                                              m_text_.getBuffer(), m_text_.length(), 
                                               that.m_strsrch_->collator, 
                                               NULL, &status);
     }
@@ -198,10 +198,10 @@ StringSearch & StringSearch::operator=(const StringSearch &that)
         m_pattern_       = that.m_pattern_;
         // all m_search_ in the parent class is linked up with m_strsrch_
         usearch_close(m_strsrch_);
-        m_strsrch_ = usearch_openFromCollator(m_pattern_.fArray, 
-                                              m_pattern_.fLength, 
-                                              m_text_.fArray, 
-                                              m_text_.fLength, 
+        m_strsrch_ = usearch_openFromCollator(m_pattern_.getBuffer(), 
+                                              m_pattern_.length(), 
+                                              m_text_.getBuffer(), 
+                                              m_text_.length(), 
                                               that.m_strsrch_->collator, 
                                               NULL, &status);
               int32_t  length;
@@ -244,7 +244,7 @@ void StringSearch::setText(const UnicodeString &text, UErrorCode &status)
 {
     if (U_SUCCESS(status)) {
         m_text_ = text;
-        usearch_setText(m_strsrch_, text.fArray, text.fLength, &status);
+        usearch_setText(m_strsrch_, text.getBuffer(), text.length(), &status);
     }
 }
     
@@ -252,7 +252,7 @@ void StringSearch::setText(CharacterIterator &text, UErrorCode &status)
 {
     if (U_SUCCESS(status)) {
         text.getText(m_text_);
-        usearch_setText(m_strsrch_, m_text_.fArray, m_text_.fLength, &status);
+        usearch_setText(m_strsrch_, m_text_.getBuffer(), m_text_.length(), &status);
     }
 }
 
@@ -276,7 +276,7 @@ void StringSearch::setPattern(const UnicodeString &pattern,
 {
     if (U_SUCCESS(status)) {
         m_pattern_ = pattern;
-        usearch_setPattern(m_strsrch_, m_pattern_.fArray, m_pattern_.fLength,
+        usearch_setPattern(m_strsrch_, m_pattern_.getBuffer(), m_pattern_.length(),
                            &status);
     }
 }
