@@ -1,3 +1,15 @@
+/**
+ *******************************************************************************
+ * Copyright (C) 2001-2002, International Business Machines Corporation and    *
+ * others. All Rights Reserved.                                                *
+ *******************************************************************************
+ *
+ * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/data/TestDataElements_testcircularalias.java,v $
+ * $Date: 2002/08/13 21:43:38 $
+ * $Revision: 1.2 $
+ *
+ *******************************************************************************
+ */
 package com.ibm.icu.dev.data;
 
 import java.util.ListResourceBundle;
