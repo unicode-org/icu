@@ -18,6 +18,11 @@
 ******************************************************************************
 */
 
+/* define for fileno.  */
+#ifndef _XOPEN_SOURCE
+#define _XOPEN_SOURCE 4
+#endif
+
 #include "locmap.h"
 #include "unicode/ustdio.h"
 #include "ufile.h"
