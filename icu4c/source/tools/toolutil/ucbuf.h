@@ -103,7 +103,7 @@ ucbuf_getcx32(UCHARBUF* buf,UErrorCode* err);
  *        indicates a failure on entry, the function will immediately return.
  *        On exit the value will indicate the success of the operation.
  *        Error: U_TRUNCATED_CHAR_FOUND
- * @return Pointer to the internal buffer
+ * @return Pointer to the internal buffer, NULL if EOF
  */
 U_CAPI const UChar* U_EXPORT2
 ucbuf_readline(UCHARBUF* buf,int32_t* len, UErrorCode* err);

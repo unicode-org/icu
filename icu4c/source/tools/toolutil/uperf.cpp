@@ -157,7 +157,7 @@ ULine* UPerfTest::getLines(UErrorCode& status){
     int32_t len =0;
     for (;;) {
             line = ucbuf_readline(ucharBuf,&len,&status);
-            if(status == U_EOF||U_FAILURE(status)){
+            if(line == NULL || U_FAILURE(status)){
                 break;
             }
             lines[numLines].name  = new UChar[len];
@@ -180,9 +180,6 @@ ULine* UPerfTest::getLines(UErrorCode& status){
                 delete lines;
                 lines = newLines;
             }
-    }
-    if(status==U_EOF){
-        status =U_ZERO_ERROR;
     }
     return lines;
 }
