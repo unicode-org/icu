@@ -1365,7 +1365,7 @@ GregorianCalendar::aggregateStamp(int32_t stamp_a, int32_t stamp_b)
 // -------------------------------------
 void 
 GregorianCalendar::add(EDateFields field, int32_t amount, UErrorCode& status) {
-	add((UCalendarDateFields) field, amount, status);
+        add((UCalendarDateFields) field, amount, status);
 }
 
 void
@@ -1482,19 +1482,35 @@ GregorianCalendar::add(UCalendarDateFields field, int32_t amount, UErrorCode& st
             return;
         }
 
-        // Save the current DST state.
+        // In order to keep the hour invariant (for fields where this is
+        // appropriate), record the DST_OFFSET before and after the add()
+        // operation.  If it has changed, then adjust the millis to
+        // compensate.
         int32_t dst = 0;
-        if (adjustDST) 
-            dst = internalGet(UCAL_DST_OFFSET);
+        int32_t hour = 0;
+        if (adjustDST) {
+            dst = get(UCAL_DST_OFFSET, status);
+            hour = internalGet(UCAL_HOUR_OF_DAY);
+        }
 
-        setTimeInMillis(internalGetTime() + delta, status); // Automatically computes fields if necessary
+        setTimeInMillis(internalGetTime() + delta, status);
 
         if (adjustDST) {
-            // Now do the DST adjustment alluded to above.
-            // Only call setTimeInMillis if necessary, because it's an expensive call.
-            dst -= internalGet(UCAL_DST_OFFSET);
-            if(dst!= 0) 
-                setTimeInMillis(internalGetTime() + dst, status);
+            dst -= get(UCAL_DST_OFFSET, status);
+            if (dst != 0) {
+                // We have done an hour-invariant adjustment but the
+                // DST offset has altered.  We adjust millis to keep
+                // the hour constant.  In cases such as midnight after
+                // a DST change which occurs at midnight, there is the
+                // danger of adjusting into a different day.  To avoid
+                // this we make the adjustment only if it actually
+                // maintains the hour.
+                UDate t = internalGetTime();
+                setTimeInMillis(t + dst, status);
+                if (get(UCAL_HOUR_OF_DAY, status) != hour) {
+                    setTimeInMillis(t, status);
+                }
+            }
         }
     }
 }
@@ -1508,7 +1524,7 @@ GregorianCalendar::add(UCalendarDateFields field, int32_t amount, UErrorCode& st
  
 void 
 GregorianCalendar::roll(EDateFields field, int32_t amount, UErrorCode& status) {
-	roll((UCalendarDateFields) field, amount, status); 
+        roll((UCalendarDateFields) field, amount, status); 
 }
 
 void
@@ -1856,7 +1872,7 @@ GregorianCalendar::roll(UCalendarDateFields field, int32_t amount, UErrorCode& s
 // -------------------------------------
 int32_t 
 GregorianCalendar::getMinimum(EDateFields field) const {
-	return getMinimum((UCalendarDateFields) field);
+        return getMinimum((UCalendarDateFields) field);
 }
 
 int32_t
@@ -2048,3 +2064,4 @@ U_NAMESPACE_END
 #endif /* #if !UCONFIG_NO_FORMATTING */
 
 //eof
+
