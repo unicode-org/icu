@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/lang/UCharacter.java,v $ 
-* $Date: 2003/09/29 15:22:15 $ 
-* $Revision: 1.81 $
+* $Date: 2003/11/13 22:14:18 $ 
+* $Revision: 1.82 $
 *
 *******************************************************************************
 */
@@ -3225,7 +3225,24 @@ public final class UCharacter
      */
     public static String getPropertyValueName(int property,
                                               int value,
-                                              int nameChoice) {
+                                              int nameChoice) 
+    {
+        if (property == UProperty.CANONICAL_COMBINING_CLASS 
+            && value >= UCharacter.getIntPropertyMinValue(
+                                            UProperty.CANONICAL_COMBINING_CLASS)
+            && value <= UCharacter.getIntPropertyMaxValue(
+                                        UProperty.CANONICAL_COMBINING_CLASS)
+            && nameChoice >= 0 && nameChoice < UProperty.NameChoice.COUNT) {
+            // this is hard coded for the valid cc
+            // because PropertyValueAliases.txt does not contain all of them
+            try {
+                return PNAMES_.getPropertyValueName(property, value, 
+                                                    nameChoice);
+            }
+            catch (IllegalArgumentException e) {
+                return null;
+            }
+        }
         return PNAMES_.getPropertyValueName(property, value, nameChoice);
     }
 

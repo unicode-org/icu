@@ -27,7 +27,6 @@ public class UPropertyAliasesTest extends TestFmwk {
      */
     public void TestPropertyNames() throws IOException {
         int p, v, choice, rev;
-        
         for (p=0; ; ++p) {
             boolean sawProp = false;
             for (choice=0; ; ++choice) {
@@ -108,6 +107,22 @@ public class UPropertyAliasesTest extends TestFmwk {
                     p = UProperty.INT_START - 1;
                 }
             }
+        }
+        
+        int i = UCharacter.getIntPropertyMinValue(
+                                        UProperty.CANONICAL_COMBINING_CLASS);
+        try {
+            for (; i <= UCharacter.getIntPropertyMaxValue(
+                                          UProperty.CANONICAL_COMBINING_CLASS);
+                 i ++) {   
+                 UCharacter.getPropertyValueName(
+                                           UProperty.CANONICAL_COMBINING_CLASS,
+                                           i, UProperty.NameChoice.LONG);
+            }
+        }      
+        catch (IllegalArgumentException e) {
+            errln("0x" + Integer.toHexString(i) 
+                  + " should have a null property value name");
         }
     }
 }
