@@ -59,8 +59,13 @@ uprv_ebcdictolower(char c);
 #   error U_CHARSET_FAMILY is not valid
 #endif
 
+/**
+ * always parses using '.' as decimal separator regardless of platform
+ * behavior.
+ */
+U_CAPI double U_EXPORT2
+uprv_strtod(const char *source, char **end);
 
-#define uprv_strtod(source, end) U_STANDARD_CPP_NAMESPACE strtod(source, end)
 #define uprv_strtoul(str, end, base) U_STANDARD_CPP_NAMESPACE strtoul(str, end, base)
 #define uprv_strtol(str, end, base) U_STANDARD_CPP_NAMESPACE strtol(str, end, base)
 #ifdef WIN32
