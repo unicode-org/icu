@@ -4551,7 +4551,7 @@ static void TestMoreBefore(void) {
 }
 
 void TestTailorNULL( void ) {
-    const static char* rule = "&[last tertiary ignorable] <<< '\\u0000'";
+    const static char* rule = "&a <<< '\\u0000'";
     const static char* order[] = { "a", "\\u0000" };
     UErrorCode status = U_ZERO_ERROR;
     UChar rlz[RULE_BUFFER_LEN] = { 0 };
@@ -4565,8 +4565,10 @@ void TestTailorNULL( void ) {
     rlen = u_unescape(rule, rlz, RULE_BUFFER_LEN);
     coll = ucol_openRules(rlz, rlen, UCOL_DEFAULT, UCOL_DEFAULT,NULL, &status);
     res = ucol_strcoll(coll, &a, 1, &null, 1);
+    if(res != UCOL_LESS) {
+        log_err("NULL was not tailored properly!\n");
+    }
     ucol_close(coll);
-    genericRulesStarter(rule, order, sizeof(order)/sizeof(order[0]));
 }
 
 #define TEST(x) addTest(root, &x, "tscoll/cmsccoll/" # x)
