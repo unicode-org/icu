@@ -14,27 +14,10 @@
 #include "unicode/uniset.h"
 #include "unicode/unicode.h"
 #include "cmemory.h"
+#include "strmatch.h"
 
 static const UChar APOSTROPHE = 0x0027; // '\''
 static const UChar BACKSLASH  = 0x005C; // '\' 
-
-// To process segments we need to allocate arrays of integers.  We use
-// stack storage as long as the segment count is <= MAX_STATIC_SEGS.
-// Otherwise, we allocate heap space.
-#define MAX_STATIC_SEGS 20
-
-// Macros for accessing the array of integers encoding the position of
-// SEGMENTS_COUNT number of segments, n (half the number of parens)
-// SEGMENTS_LEN   length of the segments array (number of elements)
-// SEGMENTS_POS   position in 'pattern' of parenthesis i, where i=0..2n-1
-// SEGMENTS_NUM   index into segments to access POS of $1.open,
-//                $1.close, $2.open, $2.close,.., $n.open, $n.close
-//                Relative to FIRST_SEG_POS_INDEX.  Ranges from 0..2n-1.
-#define FIRST_SEG_POS_INDEX 2
-#define SEGMENTS_COUNT(x) x[0]
-#define SEGMENTS_LEN(x) (SEGMENTS_COUNT(x)*4+4)
-#define SEGMENTS_POS(x,i) x[FIRST_SEG_POS_INDEX+i]
-#define SEGMENTS_NUM(x,i) (x[x[1]+i]-FIRST_SEG_POS_INDEX)
 
 U_NAMESPACE_BEGIN
 
@@ -56,11 +39,10 @@ const UChar TransliterationRule::ETHER = 0xFFFF;
  * <code>output</code>; that is, -1 is equivalent to
  * <code>output.length()</code>.  If greater than
  * <code>output.length()</code> then an exception is thrown.
- * @param adoptedSegs array of 2n integers.  Each of n pairs consists of offset,
- * limit for a segment of the input string.  Characters in the output string
- * refer to these segments if they are in a special range determined by the
- * associated RuleBasedTransliterator.Data object.  May be null if there are
- * no segments.
+ * @param segs array of UnicodeMatcher corresponding to input pattern
+ * segments, or null if there are none.  The array itself is adopted,
+ * but the pointers within it are not.
+ * @param segsCount number of elements in segs[]
  * @param anchorStart TRUE if the the rule is anchored on the left to
  * the context start
  * @param anchorEnd TRUE if the rule is anchored on the right to the
@@ -70,7 +52,8 @@ TransliterationRule::TransliterationRule(const UnicodeString& input,
                                          int32_t anteContextPos, int32_t postContextPos,
                                          const UnicodeString& outputStr,
                                          int32_t cursorPosition, int32_t cursorOffset,
-                                         int32_t* adoptedSegs,
+                                         UnicodeMatcher** segs,
+                                         int32_t segsCount,
                                          UBool anchorStart, UBool anchorEnd,
                                          const TransliterationRuleData* theData,
                                          UErrorCode& status) :
@@ -113,23 +96,11 @@ TransliterationRule::TransliterationRule(const UnicodeString& input,
     this->cursorPos = cursorPosition + cursorOffset;
     this->output = outputStr;
     // We don't validate the segments array.  The caller must
-    // guarantee that the segments are well-formed.
-    this->segments = adoptedSegs;
-    // Find the position of the first segment index that is after the
-    // anteContext (in the key).  Note that this may be a start or a
-    // limit index.  If all segments are in the ante context,
-    // firstKeySeg should point past the last segment -- that is, it
-    // should point at the end marker, which is -1.  This allows the
-    // code to back up by one to obtain the last ante context segment.
-    firstKeySeg = -1;
-    if (segments != 0) {
-        firstKeySeg = FIRST_SEG_POS_INDEX;
-        while (segments[firstKeySeg] >= 0 &&
-               segments[firstKeySeg] < anteContextLength) {
-            ++firstKeySeg;
-        }
-        firstKeySeg -= FIRST_SEG_POS_INDEX; // make relative to FSPI
-    }
+    // guarantee that the segments are well-formed (that is, that
+    // all $n references in the output refer to indices of this
+    // array, and that no array elements are null).
+    this->segments = segs;
+    this->segmentsCount = segsCount;
 
     pattern = input;
     flags = 0;
@@ -149,18 +120,17 @@ TransliterationRule::TransliterationRule(const UnicodeString& input,
 TransliterationRule::TransliterationRule(TransliterationRule& other) :
     pattern(other.pattern),
     output(other.output),
-    firstKeySeg(other.firstKeySeg),
     anteContextLength(other.anteContextLength),
     keyLength(other.keyLength),
     cursorPos(other.cursorPos),
     flags(other.flags),
     data(other.data) {
 
-    segments = 0;
-    if (other.segments != 0) {
-        int32_t len = SEGMENTS_LEN(other.segments);
-        segments = new int32_t[len];
-        uprv_memcpy(segments, other.segments, len*sizeof(segments[0]));
+    segments = NULL;
+    segmentsCount = 0;
+    if (other.segmentsCount > 0) {
+        segments = new UnicodeMatcher*[other.segmentsCount];
+        uprv_memcpy(segments, other.segments, other.segmentsCount*sizeof(segments[0]));
     }
 }
 
@@ -341,26 +311,12 @@ UMatchDegree TransliterationRule::matchAndReplace(Replaceable& text,
 
     // ============================ MATCH ===========================
 
-    // Record the actual positions, in the text, of the segments.
-	// These are recorded in the order that they occur in the pattern.
-
-    // segPos[] is an array of 2*SEGMENTS_COUNT elements.  It
-    // records the position in 'text' of each segment boundary, in
-    // the order that they occur in 'pattern'.
-    int32_t _segPos[2*MAX_STATIC_SEGS];
-    int32_t *segPos = _segPos;
-    if (segments != 0 && SEGMENTS_COUNT(segments) > MAX_STATIC_SEGS) {
-        segPos = new int32_t[2*SEGMENTS_COUNT(segments)];
+    // Reset segment match data
+    if (segments != NULL) {
+        for (int32_t i=0; i<segmentsCount; ++i) {
+            ((StringMatcher*) segments[i])->resetMatch();
+        }
     }
-    // iSeg is an index into segments[] that accesses the first
-    // array.  As such it ranges from 0 to SEGMENTS_COUNT*2 - 1.
-    // When indexing into segments[] FIRST_SEG_POS_INDEX must be
-    // added to it: segments[FIRST_SEG_POS_INDEX + iSeg].
-    int32_t iSeg = firstKeySeg - 1;
-    // nextSegPos is an offset in 'pattern'.  When the cursor is
-    // equal to nextSegPos, we are at a segment boundary, and we
-    // record the position in the real text in segPos[].
-    int32_t nextSegPos = (iSeg >= 0) ? segments[FIRST_SEG_POS_INDEX+iSeg] : -1;
 
     UMatchDegree m;
     int32_t lenDelta, keyLimit;
@@ -386,25 +342,14 @@ UMatchDegree TransliterationRule::matchAndReplace(Replaceable& text,
                 keyChar == text.charAt(oText)) {
                 --oText;
             } else {
-                m = U_MISMATCH;
-                goto exit;
+                return U_MISMATCH;
             }
         } else {
             // Subtract 1 from contextStart to make it a reverse limit
             if (matcher->matches(text, oText, pos.contextStart-1, FALSE)
                 != U_MATCH) {
-                m = U_MISMATCH;
-                goto exit;
+                return U_MISMATCH;
             }
-        }
-        while (nextSegPos == oPattern) {
-            segPos[iSeg] = oText;
-            if (oText >= 0) {
-                segPos[iSeg] += UTF_CHAR_LENGTH(text.char32At(oText));
-            } else {
-                ++segPos[iSeg];
-            }
-            nextSegPos = (--iSeg >= FIRST_SEG_POS_INDEX) ? segments[FIRST_SEG_POS_INDEX+iSeg] : -1;
         }
     }
 
@@ -413,14 +358,10 @@ UMatchDegree TransliterationRule::matchAndReplace(Replaceable& text,
     // ------------------------ Start Anchor ------------------------
 
     if ((flags & ANCHOR_START) && oText != posBefore(text, pos.contextStart)) {
-        m = U_MISMATCH;
-        goto exit;
+        return U_MISMATCH;
     }
 
     // -------------------- Key and Post Context --------------------
-
-    iSeg = firstKeySeg;
-    nextSegPos = (iSeg >= 0) ? (segments[FIRST_SEG_POS_INDEX+iSeg] - anteContextLength) : -1;
 
     oPattern = 0;
     oText = pos.start;
@@ -429,8 +370,7 @@ UMatchDegree TransliterationRule::matchAndReplace(Replaceable& text,
         if (incremental && oText == pos.limit) {
             // We've reached the limit without a mismatch and
             // without completing our match.
-            m = U_PARTIAL_MATCH;
-            goto exit;
+            return U_PARTIAL_MATCH;
         }
 
         // It might seem that we could do a check like this here:
@@ -445,10 +385,6 @@ UMatchDegree TransliterationRule::matchAndReplace(Replaceable& text,
         // depending on whether we're in the key or in the post
         // context.
 
-        while (oPattern == nextSegPos) {
-            segPos[iSeg] = oText;
-            nextSegPos = segments[FIRST_SEG_POS_INDEX+(++iSeg)] - anteContextLength;
-        }
         if (oPattern == keyLength) {
             keyLimit = oText;
         }
@@ -467,13 +403,12 @@ UMatchDegree TransliterationRule::matchAndReplace(Replaceable& text,
                 keyChar == text.charAt(oText)) {
                 ++oText;
             } else {
-                m = U_MISMATCH;
-                goto exit;
+                return U_MISMATCH;
             }
         } else {
             m = matcher->matches(text, oText, matchLimit, incremental);
             if (m != U_MATCH) {
-                goto exit;
+                return m;
             }
         }
 
@@ -486,10 +421,6 @@ UMatchDegree TransliterationRule::matchAndReplace(Replaceable& text,
         //!    // at the end of the key.
         //!    return UnicodeMatcher.U_MISMATCH;
         //!}
-    }
-    while (oPattern == nextSegPos) {
-        segPos[iSeg] = oText;
-        nextSegPos = segments[FIRST_SEG_POS_INDEX+(++iSeg)] - anteContextLength;
     }
 	if (oPattern == keyLength) {
 		keyLimit = oText;
@@ -509,8 +440,7 @@ UMatchDegree TransliterationRule::matchAndReplace(Replaceable& text,
     // =========================== REPLACE ==========================
 
     // We have a full match.  The key is between pos.start and
-    // keyLimit.  Segment indices have been recorded in segPos[].
-    // Perform a replacement.
+    // keyLimit.
 
     if (segments == NULL) {
         text.handleReplaceBetween(pos.start, keyLimit, output);
@@ -561,12 +491,23 @@ UMatchDegree TransliterationRule::matchAndReplace(Replaceable& text,
                     dest += buf.length();
                     buf.remove();
                 }
-                // Copy segment with out-of-band data
-                b *= 2;
-                int32_t start = segPos[SEGMENTS_NUM(segments,b)];
-                int32_t limit = segPos[SEGMENTS_NUM(segments,b+1)];
-                text.copy(start, limit, dest);
-                dest += limit - start;
+                // Copy segment with out-of-band data 
+                StringMatcher* m = (StringMatcher*) segments[b];
+                int32_t start = m->getMatchStart();
+                int32_t limit = m->getMatchLimit();
+                // If there was no match, that means that a quantifier
+                // matched zero-length.  E.g., x (a)* y matched "xy".
+                if (start >= 0) {
+                    // Adjust indices for segments in post context
+                    // for any inserted text between the key and
+                    // the post context.
+                    if (start >= keyLimit) {
+                        start += dest - keyLimit;
+                        limit += dest - keyLimit;
+                    }
+                    text.copy(start, limit, dest);
+                    dest += limit - start;
+                }
             }
             oOutput += UTF_CHAR_LENGTH(c);
         }
@@ -600,13 +541,7 @@ UMatchDegree TransliterationRule::matchAndReplace(Replaceable& text,
     pos.contextLimit += lenDelta;
     // Restrict new value of start to [minOText, min(oText, pos.limit)].
     pos.start = uprv_max(minOText, uprv_min(uprv_min(oText, pos.limit), newStart));
-    m = U_MATCH;
-    
-  exit:
-    if (segPos != _segPos) {
-        delete[] segPos;
-    }
-    return m;
+    return U_MATCH;
 }
 
 /**
@@ -727,23 +662,6 @@ UnicodeString& TransliterationRule::toRule(UnicodeString& rule,
                                            UBool escapeUnprintable) const {
     int32_t i;
 
-    // iseg indexes into segments[] directly (not offset from FSPI)
-    int32_t iseg = FIRST_SEG_POS_INDEX-1;
-    int32_t nextSeg = -1;
-    // Build an array of booleans specifying open vs. close paren
-    UBool _isOpen[2*MAX_STATIC_SEGS];
-    UBool *isOpen = _isOpen;
-    if (segments != 0) {
-        if (SEGMENTS_COUNT(segments) > MAX_STATIC_SEGS) {
-            isOpen = new UBool[2*SEGMENTS_COUNT(segments)];
-        }
-        for (i=0; i<2*SEGMENTS_COUNT(segments); i+=2) {
-            isOpen[SEGMENTS_NUM(segments,i)  ] = TRUE;
-            isOpen[SEGMENTS_NUM(segments,i+1)] = FALSE;
-        }
-        nextSeg = segments[++iseg];
-    }
-
     // Accumulate special characters (and non-specials following them)
     // into quoteBuf.  Append quoteBuf, within single quotes, when
     // a non-quoted element must be inserted.
@@ -765,14 +683,6 @@ UnicodeString& TransliterationRule::toRule(UnicodeString& rule,
             appendToRule(rule, (UChar) 0x007B /*{*/, TRUE, escapeUnprintable, quoteBuf);
         }
 
-        // Append either '(' or ')' if we are at a segment index
-        if (i == nextSeg) {
-            appendToRule(rule, isOpen[iseg-FIRST_SEG_POS_INDEX] ?
-                             (UChar)0x0028 : (UChar)0x0029,
-                             TRUE, escapeUnprintable, quoteBuf);
-            nextSeg = segments[++iseg];
-        }
-
         if (emitBraces && i == (anteContextLength + keyLength)) {
             appendToRule(rule, (UChar) 0x007D /*}*/, TRUE, escapeUnprintable, quoteBuf);
         }
@@ -785,11 +695,6 @@ UnicodeString& TransliterationRule::toRule(UnicodeString& rule,
             appendToRule(rule, matcher->toPattern(str, escapeUnprintable),
                           TRUE, escapeUnprintable, quoteBuf);
         }
-    }
-
-    if (i == nextSeg) {
-        // assert(!isOpen[iSeg-FIRST_SEG_POS_INDEX]);
-        appendToRule(rule, (UChar)0x0029 /*)*/, TRUE, escapeUnprintable, quoteBuf);
     }
 
     if (emitBraces && i == (anteContextLength + keyLength)) {
@@ -854,9 +759,6 @@ UnicodeString& TransliterationRule::toRule(UnicodeString& rule,
 
     appendToRule(rule, (UChar) 0x003B /*;*/, TRUE, escapeUnprintable, quoteBuf);
 
-    if (isOpen != _isOpen) {
-        delete[] isOpen;
-    }
     return rule;
 }
 

@@ -63,6 +63,10 @@ static const UChar gOPERATORS[] = {
     0x3D, 0x3E, 0x3C, 0     // "=><"
 };
 
+static const UChar HALF_ENDERS[] = {
+    0x3D, 0x3E, 0x3C, 59, 0 // "=><;"
+};
+
 // These are also used in Transliterator::toRules()
 static const int32_t ID_TOKEN_LEN = 2;
 static const UChar   ID_TOKEN[]   = { 0x3A, 0x3A }; // ':', ':'
@@ -148,256 +152,6 @@ UnicodeString ParseData::parseReference(const UnicodeString& text,
 }
 
 //----------------------------------------------------------------------
-// Segments
-//----------------------------------------------------------------------
-
-/**
- * Segments are parentheses-enclosed regions of the input string.
- * These are referenced in the output string using the notation $1,
- * $2, etc.  Numbering is in order of appearance of the left
- * parenthesis.  Number is one-based.  Segments are defined as start,
- * limit pairs.  Segments may nest.
- *
- * During parsing, segment data is encoded in an object of class
- * Segments.  At runtime, the same data is encoded in compact form as
- * an array of integers in a TransliterationRule.  The runtime encoding
- * must satisfy three goals:
- *
- * 1. Iterate over the offsets in a pattern, from left to right,
- *    and indicate all segment boundaries, in order.  This is done
- *    during matching.
- *
- * 2. Given a reference $n, produce the start and limit offsets
- *    for that segment.  This is done during replacement.
- *
- * 3. Similar to goal 1, but in addition, indicate whether each
- *    segment boundary is a start or a limit, in other words, whether
- *    each is an open paren or a close paren.  This is required by
- *    the toRule() method.
- *
- * Goal 1 must be satisfied at high speed since this is done during
- * matching.  Goal 2 is next most important.  Goal 3 is not performance
- * critical since it is only needed by toRule().
- *
- * The array of integers is actually two arrays concatenated.  The
- * first gives the index values of the open and close parentheses in
- * the order they appear.  The second maps segment numbers to the
- * indices of the first array.  The two arrays have the same length.
- * Iterating over the first array satisfies goal 1.  Indexing into the
- * second array satisfies goal 2.  Goal 3 is satisfied by iterating
- * over the second array and constructing the required data when
- * needed.  This is what toRule() does.
- *
- * Example:  (a b(c d)e f)
- *            0 1 2 3 4 5 6
- *
- * First array: Indices are 0, 2, 4, and 6.
- 
- * Second array: $1 is at 0 and 6, and $2 is at 2 and 4, so the
- * second array is 0, 3, 1 2 -- these give the indices in the
- * first array at which $1:open, $1:close, $2:open, and $2:close
- * occur.
- *
- * The final array is: 2, 7, 0, 2, 4, 6, -1, 2, 5, 3, 4, -1
- *
- * Each subarray is terminated with a -1, and two leading entries
- * give the number of segments and the offset to the first entry
- * of the second array.  In addition, the second array value are
- * all offset by 2 so they index directly into the final array.
- * The total array size is 4*segments[0] + 4.  The second index is
- * 2*segments[0] + 3.
- *
- * In the output string, a segment reference is indicated by a
- * character in a special range, as defined by
- * RuleBasedTransliterator.Data.
- *
- * Most rules have no segments, in which case segments is null, and the
- * output string need not be checked for segment reference characters.
- *
- * See also rbt_rule.h/cpp.
- */
-class Segments {
-    UVector offsets;
-    UVector isOpenParen;
-public:
-    Segments(UErrorCode &status);
-    ~Segments();
-    void addParenthesisAt(int32_t offset, UBool isOpenParen, UErrorCode &status);
-    int32_t getLastParenOffset(UBool& isOpenParen) const;
-    UBool extractLastParenSubstring(int32_t& start, int32_t& limit);
-    int32_t* createArray(UErrorCode &status) const;
-    UBool validate() const;
-    int32_t count() const; // number of segments
-private:
-    int32_t offset(int32_t i) const;
-    UBool isOpen(int32_t i) const;
-    int32_t size() const; // size of the UVectors
-};
-
-int32_t Segments::offset(int32_t i) const {
-    return offsets.elementAti(i);
-}
-
-UBool Segments::isOpen(int32_t i) const {
-    return isOpenParen.elementAti(i) != 0;
-}
-
-int32_t Segments::size() const {
-    // assert(offset.size() == isOpenParen.size());
-    return offsets.size();
-}
-
-Segments::Segments(UErrorCode &status)
- : offsets(status),
-   isOpenParen(status)
-{}
-Segments::~Segments() {}
-
-void Segments::addParenthesisAt(int32_t offset, UBool isOpen, UErrorCode &status) {
-    offsets.addElement(offset, status);
-    isOpenParen.addElement(isOpen ? 1 : 0, status);
-}
-
-int32_t Segments::getLastParenOffset(UBool& isOpenParenReturn) const {
-    if (size() == 0) {
-        return -1;
-    }
-    isOpenParenReturn = isOpen(size()-1);
-    return offset(size()-1);
-}
-
-// Remove the last (rightmost) segment.  Store its offsets in start
-// and limit, and then convert all offsets at or after start to be
-// equal to start.  Upon failure, return FALSE.  Assume that the
-// caller has already called getLastParenOffset() and validated that
-// there is at least one parenthesis and that the last one is a close
-// paren.
-UBool Segments::extractLastParenSubstring(int32_t& start, int32_t& limit) {
-    // assert(offsets.size() > 0);
-    // assert(isOpenParen.elementAt(isOpenParen.size()-1) == 0);
-    int32_t i = size() - 1;
-    int32_t n = 1; // count of close parens we need to match
-    // Record position of the last close paren
-    limit = offset(i);
-    --i; // back up to the one before the last one
-    while (i >= 0 && n != 0) {
-        n += isOpen(i) ? -1 : 1;
-    }
-    if (n != 0) {
-        return FALSE;
-    }
-    // assert(i>=0);
-    start = offset(i);
-    // Reset all segment pairs from i to size() - 1 to [start, start+1).
-    while (i<size()) {
-        int32_t o = isOpen(i) ? start : (start+1);
-        offsets.setElementAt(o, i);
-        ++i;
-    }
-    return TRUE;
-}
-
-// Assume caller has already gotten a TRUE validate().
-int32_t* Segments::createArray(UErrorCode &status) const {
-    int32_t c = count(); // number of segments
-    int32_t arrayLen = 4*c + 4;
-    int32_t *array = new int32_t[arrayLen];
-    int32_t a2offset = 2*c + 3; // offset to array 2
-
-    if (array == NULL) {
-        status = U_MEMORY_ALLOCATION_ERROR;
-        return NULL;
-    }
-    array[0] = c;
-    array[1] = a2offset;
-    int32_t i;
-    for (i=0; i<2*c; ++i) {
-        array[2+i] = offset(i);
-    }
-    array[a2offset-1] = -1;
-    array[arrayLen-1] = -1;
-    // Now walk through and match up segment numbers with parentheses.
-    // Number segments from 0.  We're going to offset all entries by 2
-    // to skip the first two elements, array[0] and array[1].
-    UStack stack(status);
-    int32_t nextOpen = 0; // seg # of next open, 0-based
-    if (U_FAILURE(status)) {
-        return NULL;
-    }
-    for (i=0; i<2*c; ++i) {
-        UBool open = isOpen(i);
-        // Let seg be the zero-based segment number.
-        // Open parens are at 2*seg in array 2.
-        // Close parens are at 2*seg+1 in array 2.
-        if (open) {
-            array[a2offset + 2*nextOpen] = 2+i;
-            stack.push(nextOpen, status);
-            ++nextOpen;
-        } else {
-            int32_t nextClose = stack.popi();
-            array[a2offset + 2*nextClose+1] = 2+i;
-        }
-    }
-    // assert(stack.empty());
-
-    // Perform a series of checks on the array.  DO NOT COMPILE INTO
-    // PRODUCTION CODE.  Use to debug array building problems.
-    //
-    //::if (!stack.empty()) {
-    //::    __asm int 03;
-    //::}
-    //::// check the array
-    //::if (array[0] < 1) {
-    //::    __asm int 03;
-    //::}
-    //::if (array[1] < 5) {
-    //::    __asm int 03;
-    //::}
-    //::for (i=2; i<2+array[0]*2; ++i) {
-    //::    if (array[i] < 0) { // array[i] is an offset into the rule
-    //::        __asm int 03;
-    //::    }
-    //::}
-    //::if (array[2+array[0]*2] != -1) {
-    //::    __asm int 03;
-    //::}
-    //::for (i=array[1]; i<array[1]+array[0]*2; ++i) {
-    //::    if (array[i] < 2 || array[i] >= (2+2*array[0])) {
-    //::        __asm int 03;
-    //::    }
-    //::}
-    //::if (array[array[1]+array[0]*2] != -1) {
-    //::    __asm int 03;
-    //::}
-
-    return array;
-}
-
-UBool Segments::validate() const {
-    // want number of parens >= 2
-    // want number of parens to be even
-    // want first paren '('
-    // want parens to match up in the end
-    if ((size() < 2) || (size() % 2 != 0) || !isOpen(0)) {
-        return FALSE;
-    }
-    int32_t n = 0;
-    for (int32_t i=0; i<size(); ++i) {
-        n += isOpen(i) ? 1 : -1;
-        if (n < 0) {
-            return FALSE;
-        }
-    }
-    return n == 0;
-}
-
-// Assume caller has already gotten a TRUE validate().
-int32_t Segments::count() const {
-    // assert(validate());
-    return size() / 2;
-}
-
-//----------------------------------------------------------------------
 // BEGIN RuleHalf
 //----------------------------------------------------------------------
 
@@ -416,11 +170,7 @@ public:
     int32_t ante;   // position of ante context marker '{' in text
     int32_t post;   // position of post context marker '}' in text
 
-    // Record the position of the segment substrings and references.  A
-    // given side should have segments or segment references, but not
-    // both.
-    Segments* segments;
-    int32_t maxRef;       // index of largest ref ($n) on the right
+    int32_t maxRef; // n where maximum segment ref is $n; 1-based
 
     // Record the offset to the cursor either to the left or to the
     // right of the key.  This is indicated by characters on the output
@@ -432,8 +182,25 @@ public:
     // output text.
     int32_t cursorOffset; // only nonzero on output side
 
+    // Position of first CURSOR_OFFSET on _right_.  This will be -1
+    // for |@, -2 for |@@, etc., and 1 for @|, 2 for @@|, etc.
+    int32_t cursorOffsetPos;
+
     UBool anchorStart;
     UBool anchorEnd;
+    
+    UErrorCode ec;
+
+    /**
+     * UnicodeMatcher objects corresponding to each segment.
+     */
+    UVector segments;
+        
+    /**
+     * The segment number from 0..n-1 of the next '(' we see
+     * during parsing; 0-based.
+     */
+    int32_t nextSegmentNumber;
 
     TransliteratorParser& parser;
 
@@ -443,12 +210,11 @@ public:
     RuleHalf(TransliteratorParser& parser);
     ~RuleHalf();
 
-    /**
-     * Parse one side of a rule, stopping at either the limit,
-     * the END_OF_RULE character, or an operator.  Return
-     * the pos of the terminating character (or limit).
-     */
     int32_t parse(const UnicodeString& rule, int32_t pos, int32_t limit);
+
+    int32_t parseSection(const UnicodeString& rule, int32_t pos, int32_t limit,
+                         UnicodeString& buf,
+                         UBool isSegment);
 
     /**
      * Remove context.
@@ -456,9 +222,10 @@ public:
     void removeContext();
 
     /**
-     * Create and return an int[] array of segments.
+     * Create and return a UnicodeMatcher*[] array of segments,
+     * or NULL if there are no segments.
      */
-    int32_t* createSegments(UErrorCode& status) const;
+    UnicodeMatcher** createSegments(UErrorCode& status) const;
 
     int syntaxError(UErrorCode code,
                     const UnicodeString& rule,
@@ -472,30 +239,69 @@ private:
     RuleHalf& operator=(const RuleHalf&);
 };
 
-RuleHalf::RuleHalf(TransliteratorParser& p) : parser(p) {
+RuleHalf::RuleHalf(TransliteratorParser& p) :
+    ec(U_ZERO_ERROR),
+    segments(ec),
+    parser(p)
+{
     cursor = -1;
     ante = -1;
     post = -1;
-    segments = NULL;
     maxRef = -1;
     cursorOffset = 0;
+    cursorOffsetPos = 0;
     anchorStart = anchorEnd = FALSE;
+    segments.removeAllElements();
+    nextSegmentNumber = 0;
 }
 
 RuleHalf::~RuleHalf() {
-    delete segments;
 }
 
 /**
  * Parse one side of a rule, stopping at either the limit,
- * the END_OF_RULE character, or an operator.  Return
- * the pos of the terminating character (or limit).
+ * the END_OF_RULE character, or an operator.
+ * @return the index after the terminating character, or
+ * if limit was reached, limit
  */
 int32_t RuleHalf::parse(const UnicodeString& rule, int32_t pos, int32_t limit) {
     int32_t start = pos;
-    UnicodeString& buf = text;
+    text.truncate(0);
+    pos = parseSection(rule, pos, limit, text, FALSE);
+
+    if (cursorOffset > 0 && cursor != cursorOffsetPos) {
+        return syntaxError(U_MISPLACED_CURSOR_OFFSET, rule, start);
+    }
+    
+    return pos;
+}
+ 
+/**
+ * Parse a section of one side of a rule, stopping at either
+ * the limit, the END_OF_RULE character, an operator, or a
+ * segment close character.  This method parses both a
+ * top-level rule half and a segment within such a rule half.
+ * It calls itself recursively to parse segments and nested
+ * segments.
+ * @param buf buffer into which to accumulate the rule pattern
+ * characters, either literal characters from the rule or
+ * standins for UnicodeMatcher objects including segments.
+ * @param isSegment if true, then we've already seen a '(' and
+ * pos on entry points right after it.  Accumulate everything
+ * up to the closing ')', put it in a segment matcher object,
+ * generate a standin for it, and add the standin to buf.  As
+ * a side effect, update the segments vector with a reference
+ * to the segment matcher.  This works recursively for nested
+ * segments.  If isSegment is false, just accumulate
+ * characters into buf.
+ * @return the index after the terminating character, or
+ * if limit was reached, limit
+ */
+int32_t RuleHalf::parseSection(const UnicodeString& rule, int32_t pos, int32_t limit,
+                               UnicodeString& buf,
+                               UBool isSegment) {
+    int32_t start = pos;
     ParsePosition pp;
-    int32_t cursorOffsetPos = 0; // Position of first CURSOR_OFFSET on _right_
     UnicodeString scratch;
     UBool done = FALSE;
     int32_t quoteStart = -1; // Most recent 'single quoted string'
@@ -503,6 +309,15 @@ int32_t RuleHalf::parse(const UnicodeString& rule, int32_t pos, int32_t limit) {
     int32_t varStart = -1; // Most recent $variableReference
     int32_t varLimit = -1;
 
+    // If isSegment, then bufSegStart is the offset in buf to
+    // the first character of the segment we are parsing.
+    int32_t bufSegStart = 0;
+    int32_t segmentNumber = 0;
+    if (isSegment) {
+        bufSegStart = buf.length();
+        segmentNumber = nextSegmentNumber++;
+    }
+    
     while (pos < limit && !done) {
         UChar c = rule.charAt(pos++);
         if (u_isWhitespace(c)) {
@@ -511,8 +326,11 @@ int32_t RuleHalf::parse(const UnicodeString& rule, int32_t pos, int32_t limit) {
             // whitespace likely to be seen in code.
             continue;
         }
-        if (u_strchr(gOPERATORS, c) != NULL) {
-            --pos; // Backup to point to operator
+        if (u_strchr(HALF_ENDERS, c) != NULL) {
+            if (isSegment) {
+                // Unclosed segment
+                return syntaxError(U_UNCLOSED_SEGMENT, rule, start);
+            }
             break;
         }
         if (anchorEnd) {
@@ -575,6 +393,10 @@ int32_t RuleHalf::parse(const UnicodeString& rule, int32_t pos, int32_t limit) {
             continue;
         }
         switch (c) {
+                    
+        //------------------------------------------------------
+        // Elements allowed within and out of segments
+        //------------------------------------------------------
         case ANCHOR_START:
             if (buf.length() == 0 && !anchorStart) {
                 anchorStart = TRUE;
@@ -584,17 +406,7 @@ int32_t RuleHalf::parse(const UnicodeString& rule, int32_t pos, int32_t limit) {
             }
           break;
         case SEGMENT_OPEN:
-        case SEGMENT_CLOSE:
-            // Handle segment definitions "(" and ")"
-            // Parse "(", ")"
-            if (segments == NULL) {
-                segments = new Segments(parser.status);
-            }
-            segments->addParenthesisAt(buf.length(), c == SEGMENT_OPEN, parser.status);
-            break;
-        case END_OF_RULE:
-            --pos; // Backup to point to END_OF_RULE
-            done = TRUE;
+            pos = parseSection(rule, pos, limit, buf, TRUE);
             break;
         case SymbolTable::SYMBOL_REF:
             // Handle variable references and segment references "$1" .. "$9"
@@ -655,25 +467,128 @@ int32_t RuleHalf::parse(const UnicodeString& rule, int32_t pos, int32_t limit) {
                 }
             }
             break;
+        case DOT:
+            buf.append(parser.getDotStandIn());
+            break;
+        case KLEENE_STAR:
+        case ONE_OR_MORE:
+        case ZERO_OR_ONE:
+            // Quantifiers.  We handle single characters, quoted strings,
+            // variable references, and segments.
+            //  a+      matches  aaa
+            //  'foo'+  matches  foofoofoo
+            //  $v+     matches  xyxyxy if $v == xy
+            //  (seg)+  matches  segsegseg
+            {
+                if (isSegment && buf.length() == bufSegStart) {
+                    // The */+ immediately follows '('
+                    return syntaxError(U_MISPLACED_QUANTIFIER, rule, start);
+                }
+
+                int32_t qstart, qlimit;
+                // The */+ follows an isolated character or quote
+                // or variable reference
+                if (buf.length() == quoteLimit) {
+                    // The */+ follows a 'quoted string'
+                    qstart = quoteStart;
+                    qlimit = quoteLimit;
+                } else if (buf.length() == varLimit) {
+                    // The */+ follows a $variableReference
+                    qstart = varStart;
+                    qlimit = varLimit;
+                } else {
+                    // The */+ follows a single character, possibly
+                    // a segment standin
+                    qstart = buf.length() - 1;
+                    qlimit = qstart + 1;
+                }
+
+                UnicodeMatcher *m =
+                    new StringMatcher(buf, qstart, qlimit, FALSE, *parser.data);
+                int32_t min = 0;
+                int32_t max = Quantifier::MAX;
+                switch (c) {
+                case ONE_OR_MORE:
+                    min = 1;
+                    break;
+                case ZERO_OR_ONE:
+                    min = 0;
+                    max = 1;
+                    break;
+                // case KLEENE_STAR:
+                //    do nothing -- min, max already set
+                }
+                m = new Quantifier(m, min, max);
+                buf.truncate(qstart);
+                buf.append(parser.generateStandInFor(m));
+            }
+            break;
+
+        //------------------------------------------------------
+        // Elements allowed ONLY WITHIN segments
+        //------------------------------------------------------
+        case SEGMENT_CLOSE:
+            if (isSegment) {
+                // We're done parsing a segment.  The relevant
+                // characters are in buf, starting at offset
+                // bufSegStart.  Extract them into a string
+                // matcher, and replace them with a standin
+                // for that matcher.
+                StringMatcher *m =
+                    new StringMatcher(buf, bufSegStart, buf.length(),
+                                      TRUE, *parser.data);
+                // Since we call parseSection() recursively,
+                // nested segments will result in segment i+1
+                // getting parsed and stored before segment i;
+                // be careful with the vector handling here.
+                if ((segmentNumber+1) > segments.size()) {
+                    segments.setSize(segmentNumber+1);
+                }
+                segments.setElementAt(m, segmentNumber);
+                buf.truncate(bufSegStart);
+                buf.append(parser.generateStandInFor(m));
+                done = TRUE;
+                break;
+            }
+
+            // If we aren't in a segment, then a segment close
+            // character is a syntax error.
+            return syntaxError(U_UNQUOTED_SPECIAL, rule, start);
+
+        //------------------------------------------------------
+        // Elements allowed ONLY OUTSIDE segments
+        //------------------------------------------------------
         case CONTEXT_ANTE:
+            if (isSegment) {
+                return syntaxError(U_ILLEGAL_CHAR_IN_SEGMENT, rule, start);
+            }
             if (ante >= 0) {
                 return syntaxError(U_MULTIPLE_ANTE_CONTEXTS, rule, start);
             }
             ante = buf.length();
             break;
         case CONTEXT_POST:
+            if (isSegment) {
+                return syntaxError(U_ILLEGAL_CHAR_IN_SEGMENT, rule, start);
+            }
             if (post >= 0) {
                 return syntaxError(U_MULTIPLE_POST_CONTEXTS, rule, start);
             }
             post = buf.length();
             break;
         case CURSOR_POS:
+            if (isSegment) {
+                return syntaxError(U_ILLEGAL_CHAR_IN_SEGMENT, rule, start);
+            }
             if (cursor >= 0) {
                 return syntaxError(U_MULTIPLE_CURSORS, rule, start);
             }
             cursor = buf.length();
             break;
         case CURSOR_OFFSET:
+            if (isSegment) {
+                return syntaxError(U_ILLEGAL_CHAR_IN_SEGMENT, rule, start);
+            }
             if (cursorOffset < 0) {
                 if (buf.length() > 0) {
                     return syntaxError(U_MISPLACED_CURSOR_OFFSET, rule, start);
@@ -695,69 +610,11 @@ int32_t RuleHalf::parse(const UnicodeString& rule, int32_t pos, int32_t limit) {
                 }
             }
             break;
-        case DOT:
-            buf.append(parser.getDotStandIn());
-            break;
-        case KLEENE_STAR:
-        case ONE_OR_MORE:
-        case ZERO_OR_ONE:
-            // Quantifiers.  We handle single characters, quoted strings,
-            // variable references, and segments.
-            //  a+      matches  aaa
-            //  'foo'+  matches  foofoofoo
-            //  $v+     matches  xyxyxy if $v == xy
-            //  (seg)+  matches  segsegseg
-            {
-                int32_t start, limit;
-                UBool isOpenParen;
-                UBool isSegment = FALSE;
-                if (segments != 0 &&
-                    segments->getLastParenOffset(isOpenParen) == buf.length()) {
-                    // The */+ immediately follows a segment
-                    if (isOpenParen) {
-                        return syntaxError(U_MISPLACED_QUANTIFIER, rule, start);
-                    }
-                    if (!segments->extractLastParenSubstring(start, limit)) {
-                        return syntaxError(U_MISMATCHED_SEGMENT_DELIMITERS, rule, start);
-                    }
-                    isSegment = TRUE;
-                } else {
-                    // The */+ follows an isolated character or quote
-                    // or variable reference
-                    if (buf.length() == quoteLimit) {
-                        // The */+ follows a 'quoted string'
-                        start = quoteStart;
-                        limit = quoteLimit;
-                    } else if (buf.length() == varLimit) {
-                        // The */+ follows a $variableReference
-                        start = varStart;
-                        limit = varLimit;
-                    } else {
-                        // The */+ follows a single character
-                        start = buf.length() - 1;
-                        limit = start + 1;
-                    }
-                }
-                UnicodeMatcher *m =
-                    new StringMatcher(buf, start, limit, isSegment, *parser.data);
-                int32_t min = 0;
-                int32_t max = Quantifier::MAX;
-                switch (c) {
-                case ONE_OR_MORE:
-                    min = 1;
-                    break;
-                case ZERO_OR_ONE:
-                    min = 0;
-                    max = 1;
-                    break;
-                // case KLEENE_STAR:
-                //    do nothing -- min, max already set
-                }
-                m = new Quantifier(m, min, max);
-                buf.truncate(start);
-                buf.append(parser.generateStandInFor(m));
-            }
-            break;
+
+
+        //------------------------------------------------------
+        // Non-special characters
+        //------------------------------------------------------
         default:
             // Disallow unquoted characters other than [0-9A-Za-z]
             // in the printable ASCII range.  These characters are
@@ -773,10 +630,6 @@ int32_t RuleHalf::parse(const UnicodeString& rule, int32_t pos, int32_t limit) {
         }
     }
 
-    if (cursorOffset > 0 && cursor != cursorOffsetPos) {
-        return syntaxError(U_MISPLACED_CURSOR_OFFSET, rule, start);
-    }
-    // text = buf.toString();
     return pos;
 }
 
@@ -797,10 +650,15 @@ void RuleHalf::removeContext() {
 }
 
 /**
- * Create and return an int32_t[] array of segments.
+ * Create and return a UnicodeMatcher*[] array of segments,
+ * or NULL if there are no segments.
  */
-int32_t* RuleHalf::createSegments(UErrorCode& status) const {
-    return (segments == 0) ? 0 : segments->createArray(status);
+UnicodeMatcher** RuleHalf::createSegments(UErrorCode& status) const {
+    if (segments.size() == 0) {
+        return NULL;
+    }
+    UnicodeMatcher** result = new UnicodeMatcher*[segments.size()];
+    return (UnicodeMatcher**) segments.toArray((void**) result);
 }
 
 //----------------------------------------------------------------------
@@ -1172,9 +1030,10 @@ int32_t TransliteratorParser::parseRule(const UnicodeString& rule, int32_t pos, 
         return start;
     }
 
-    if (pos == limit || u_strchr(gOPERATORS, (op = rule.charAt(pos++))) == NULL) {
+    if (pos == limit || u_strchr(gOPERATORS, (op = rule.charAt(--pos))) == NULL) {
         return syntaxError(U_MISSING_OPERATOR, rule, start);
     }
+    ++pos;
 
     // Found an operator char.  Check for forward-reverse operator.
     if (op == REVERSE_RULE_OP &&
@@ -1189,7 +1048,7 @@ int32_t TransliteratorParser::parseRule(const UnicodeString& rule, int32_t pos, 
     }
 
     if (pos < limit) {
-        if (rule.charAt(pos) == END_OF_RULE) {
+        if (rule.charAt(--pos) == END_OF_RULE) {
             ++pos;
         } else {
             // RuleHalf parser must have terminated at an operator
@@ -1251,8 +1110,7 @@ int32_t TransliteratorParser::parseRule(const UnicodeString& rule, int32_t pos, 
     // apply.
     if (op == FWDREV_RULE_OP) {
         right->removeContext();
-        delete right->segments;
-        right->segments = NULL;
+        right->segments.removeAllElements();
         left->cursor = left->maxRef = -1;
         left->cursorOffset = 0;
     }
@@ -1272,7 +1130,7 @@ int32_t TransliteratorParser::parseRule(const UnicodeString& rule, int32_t pos, 
     // cannot place the cursor outside the limits of the context.
     // Anchors are only allowed on the input side.
     if (right->ante >= 0 || right->post >= 0 || left->cursor >= 0 ||
-        right->segments != NULL || left->maxRef >= 0 ||
+        right->segments.size() > 0 || left->maxRef >= 0 ||
         (right->cursorOffset != 0 && right->cursor < 0) ||
         // - The following two checks were used to ensure that the
         // - the cursor offset stayed within the ante- or postcontext.
@@ -1288,20 +1146,15 @@ int32_t TransliteratorParser::parseRule(const UnicodeString& rule, int32_t pos, 
     // Check integrity of segments and segment references.  Each
     // segment's start must have a corresponding limit, and the
     // references must not refer to segments that do not exist.
-    if (left->segments != NULL) {
-        if (!left->segments->validate()) {
-            return syntaxError(U_MISSING_SEGMENT_CLOSE, rule, start);
-        }
-        int32_t n = left->segments->count();
-        if (right->maxRef > n) {
-            return syntaxError(U_UNDEFINED_SEGMENT_REFERENCE, rule, start);
-        }
+    if (right->maxRef > left->segments.size()) {
+        return syntaxError(U_UNDEFINED_SEGMENT_REFERENCE, rule, start);
     }
 
     data->ruleSet.addRule(new TransliterationRule(
                                  left->text, left->ante, left->post,
                                  right->text, right->cursor, right->cursorOffset,
                                  left->createSegments(status),
+                                 left->segments.size(),
                                  left->anchorStart, left->anchorEnd,
                                  data,
                                  status), status);
@@ -1366,7 +1219,7 @@ UChar TransliteratorParser::generateStandInFor(UnicodeMatcher* adopted) {
     if (variableNext >= variableLimit) {
         // throw new RuntimeException("Private use variables exhausted");
         delete adopted;
-        status = U_ILLEGAL_ARGUMENT_ERROR;
+        status = U_VARIABLE_RANGE_EXHAUSTED;
         return 0;
     }
     variablesVector->addElement(adopted, status);

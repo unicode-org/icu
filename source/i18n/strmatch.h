@@ -59,6 +59,26 @@ class StringMatcher : public UnicodeMatcher {
      */
     virtual UBool matchesIndexValue(uint8_t v) const;
 
+    /**
+     * Remove any match data.  This must be called before performing a
+     * set of matches with this segment.
+     */
+    void resetMatch();
+
+    /**
+     * Return the start offset, in the match text, of the <em>rightmost</em>
+     * match.  This method may get moved up into the UnicodeMatcher if
+     * it turns out to be useful to generalize this.
+     */
+    int32_t getMatchStart() const;
+
+    /**
+     * Return the limit offset, in the match text, of the <em>rightmost</em>
+     * match.  This method may get moved up into the UnicodeMatcher if
+     * it turns out to be useful to generalize this.
+     */
+    int32_t getMatchLimit() const;
+
  private:
 
     UnicodeString pattern;
@@ -66,6 +86,10 @@ class StringMatcher : public UnicodeMatcher {
     const TransliterationRuleData& data;
 
     UBool isSegment;
+
+    int32_t matchStart;
+
+    int32_t matchLimit;
 };
 
 U_NAMESPACE_END
