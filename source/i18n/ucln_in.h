@@ -20,7 +20,7 @@
 #include "unicode/utypes.h"
 
 /* Main library cleanup function. */
-U_CFUNC void i18n_registerCleanup(void);
+U_CFUNC void ucln_i18n_registerCleanup(void);
 
 U_CFUNC UBool ucol_cleanup(void);
 

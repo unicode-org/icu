@@ -780,6 +780,10 @@ InputPath=.\unicode\uclean.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\ucln.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\ucln_cmn.h
 # End Source File
 # Begin Source File
