@@ -20,6 +20,7 @@
 #include "unicode/utypes.h"
 #include "unicode/uchar.h"
 #include "unicode/uscript.h"
+#include "cstring.h"
 #include "unormimp.h"
 #include "uprops.h"
 
@@ -60,6 +61,54 @@
 #define _Pf     FLAG(U_FINAL_PUNCTUATION)
 
 #define CGJ     0x34f
+
+/**
+ * Unicode property names and property value names are compared
+ * "loosely". Property[Value]Aliases.txt say:
+ *   "With loose matching of property names, the case distinctions, whitespace,
+ *    and '_' are ignored."
+ *
+ * This function does just that, for ASCII (char *) name strings.
+ * It is almost identical to ucnv_compareNames() but also ignores
+ * ASCII White_Space characters (U+0009..U+000d).
+ *
+ * @internal
+ */
+U_CAPI int32_t U_EXPORT2
+uprv_comparePropertyNames(const char *name1, const char *name2) {
+    int32_t rc;
+    unsigned char c1, c2;
+
+    for(;;) {
+        /* Ignore delimiters '-', '_', and ASCII White_Space */
+        while((c1=(unsigned char)*name1)=='-' || c1=='_' ||
+              c1==' ' || c1=='\t' || c1=='\n' || c1=='\v' || c1=='\f' || c1=='\r'
+        ) {
+            ++name1;
+        }
+        while((c2=(unsigned char)*name2)=='-' || c2=='_' ||
+              c2==' ' || c2=='\t' || c2=='\n' || c2=='\v' || c2=='\f' || c2=='\r'
+        ) {
+            ++name2;
+        }
+
+        /* If we reach the ends of both strings then they match */
+        if((c1|c2)==0) {
+            return 0;
+        }
+        
+        /* Case-insensitive comparison */
+        if(c1!=c2) {
+            rc=(int32_t)(unsigned char)uprv_tolower(c1)-(int32_t)(unsigned char)uprv_tolower(c2);
+            if(rc!=0) {
+                return rc;
+            }
+        }
+
+        ++name1;
+        ++name2;
+    }
+}
 
 /* API functions ------------------------------------------------------------ */
 
