@@ -31,8 +31,8 @@
 #include "unicode/uchar.h"
 
 /**
- * The Unicode class allows you to query the properties associated with individual 
- * Unicode character values.  
+ * The Unicode class allows you to query the properties associated with
+ * individual Unicode character values.  
  * <p>
  * The Unicode character information, provided implicitly by the 
  * <a href="http://www.unicode.org/">Unicode Standard</a>,
@@ -1257,22 +1257,21 @@ inline int8_t
 Unicode::digit(UChar32 ch, int8_t radix) {
     // ### TODO this should probably move to a C u_charDigitValueEx(ch, radix) and be called here
     int8_t value;
-    if((uint8_t)(radix-MIN_RADIX)<=(MAX_RADIX-MIN_RADIX)) {
+    if ((uint8_t)(radix-MIN_RADIX) <= (MAX_RADIX-MIN_RADIX)) {
         value=(int8_t)u_charDigitValue(ch);
-        if(value<0) {
+        if (value < 0) {
             // ch is not a decimal digit, try latin letters
-            if ((uint32_t)(ch-0x41)<26) {
-                value=(int8_t)(ch-(0x41-10)); // A-Z, subtract A
-            } else if ((uint32_t)(ch-0x61)<26) {
-                value=(int8_t)(ch-(0x61-10)); // a-z, subtract a
-            } else {
-                return -1; // ch is not a digit character
+            if (ch >= 0x61 && ch <= 0x7A) {
+                value = ch - 0x57;  // ch - 'a' + 10
+            }
+            else if (ch >= 0x41 && ch <= 0x5A) {
+                value = ch - 0x37;  // ch - 'A' + 10
             }
         }
     } else {
-        return -1; // invalid radix
+        value = -1; // invalid radix
     }
-    return (uint8_t)((value<radix) ? value : (uint8_t)(-1));
+    return (int8_t)((value < radix) ? value : -1);
 }
 
 inline UChar32
