@@ -23,7 +23,7 @@ CPPFLAGS += -I$(top_builddir)/common -I$(top_srcdir)/common -I$(top_srcdir)/i18n
 -I$(top_srcdir)/tools/ctestfw -I$(top_srcdir)/extra/ustdio
 LIBS = $(LIBCTESTFW) $(LIBICUI18N) $(LIBICUUC) $(LIBICUIO) $(DEFAULT_LIBS) $(LIB_M)
 
-OBJECTS = iotest.o
+OBJECTS = iotest.o strtst.o filetst.o
 
 DEPS = $(OBJECTS:.o=.d)
 
