@@ -30,6 +30,8 @@
  */
 #ifndef INCLUDE_CALLCOLL_C
 
+#include <string.h>
+#include <stdlib.h>
 #include "unicode/utypes.h"
 #include "unicode/ucol.h"
 #include "unicode/uloc.h"
@@ -37,7 +39,6 @@
 #include "ccolltst.h"
 #include "callcoll.h"
 #include "unicode/ustring.h"
-#include <string.h>
 
 static UCollator *myCollation;
 

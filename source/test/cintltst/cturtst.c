@@ -18,6 +18,7 @@
  * collation rules as its sorting sequence.
  */
 
+#include <stdlib.h>
 #include "unicode/utypes.h"
 #include "unicode/ucol.h"
 #include "unicode/uloc.h"

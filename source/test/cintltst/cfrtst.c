@@ -18,6 +18,7 @@
  * collation rules as its sorting sequence.
  */
 
+#include <stdlib.h>
 #include "unicode/utypes.h"
 #include "unicode/ucol.h"
 #include "unicode/uloc.h"
@@ -152,10 +153,10 @@ void doTest(UCollator* myCollation, const UChar source[], const UChar target[], 
 
     sortKey1=(uint8_t*)malloc(sizeof(uint8_t) * (sortklenmax+1));
     ucol_getSortKey(myCollation, source, u_strlen(source), sortKey1, sortklen1+1);
-    
+
     sortKey2=(uint8_t*)malloc(sizeof(uint8_t) * (sortklenmax+1));
     ucol_getSortKey(myCollation, target, u_strlen(target), sortKey2, sortklen2+1);
-    
+
 
     temp= memcmp(sortKey1, sortKey2, sortklenmin);
     if(temp < 0) keyResult=UCOL_LESS;
@@ -168,7 +169,7 @@ void doTest(UCollator* myCollation, const UChar source[], const UChar target[], 
 
 void TestTertiary( )
 {
-    
+
     int32_t i;
     UErrorCode status = U_ZERO_ERROR;
     myCollation = ucol_open("fr_FR", &status);

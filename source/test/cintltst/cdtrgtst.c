@@ -15,6 +15,9 @@
 */
 /* REGRESSION TEST FOR DATE FORMAT */
 
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
 #include "unicode/uloc.h"
 #include "unicode/utypes.h"
 #include "unicode/udat.h"
@@ -23,8 +26,6 @@
 #include "unicode/ustring.h"
 #include "cintltst.h"
 #include "cdtrgtst.h"
-#include<stdio.h>
-#include<string.h>
 
 
 void addDateForRgrTest(TestNode** root)

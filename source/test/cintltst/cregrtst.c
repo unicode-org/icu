@@ -15,6 +15,7 @@
 
 /* C FUNCTIONALITY AND REGRESSION TEST FOR BREAKITERATOR */
 
+#include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 #include "unicode/uloc.h"

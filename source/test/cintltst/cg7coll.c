@@ -34,6 +34,9 @@
  * co-p  
  * cop 
  */
+#include <stdlib.h>
+#include <string.h>
+#include <stdio.h>
 #include "unicode/utypes.h"
 #include "unicode/ucol.h"
 #include "unicode/uloc.h"
@@ -41,8 +44,6 @@
 #include "cg7coll.h"
 #include "ccolltst.h"
 #include "unicode/ustring.h"
-#include <string.h>
-#include <stdio.h>
 
 
 const char* locales[8] = {
@@ -162,9 +163,9 @@ void doTest(UCollator *myCollation, const UChar source[], const UChar target[], 
     int32_t temp;
     UCollationResult compareResult, keyResult;
     uint8_t *sortKey1, *sortKey2;
-    
+
     compareResult = ucol_strcoll(myCollation, source, u_strlen(source), target, u_strlen(target));
-    
+
     sortklen1=ucol_getSortKey(myCollation, source, u_strlen(source),  NULL, 0);
     sortklen2=ucol_getSortKey(myCollation, target, u_strlen(target),  NULL, 0);
 
@@ -173,10 +174,10 @@ void doTest(UCollator *myCollation, const UChar source[], const UChar target[], 
 
     sortKey1=(uint8_t*)malloc(sizeof(uint8_t) * (sortklenmax+1));
     ucol_getSortKey(myCollation, source, u_strlen(source), sortKey1, sortklen1+1);
-    
+
     sortKey2=(uint8_t*)malloc(sizeof(uint8_t) * (sortklenmax+1));
     ucol_getSortKey(myCollation, target, u_strlen(target), sortKey2, sortklen2+1);
-    
+
 
     temp= memcmp(sortKey1, sortKey2, sortklenmin);
     if(temp < 0) keyResult=UCOL_LESS;
