@@ -1,0 +1,23 @@
+// *******************************************************************************
+// *
+// *   Copyright (C) 1997-2000, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// *******************************************************************************
+
+pl_PL {
+    Versopm { "1.0" }
+    CurrencyElements { 
+            "z\u0142",
+            "PLN",
+            ",",
+    }
+    LocaleString { "pl_PL" }
+    NumberPatterns { 
+            "#,##0.###;-#,##0.###",
+            "#,##0.00 \u00A4;-#,##0.00 \u00A4",
+            "#,##0%",
+    }
+    ShortCountry { "POL" }
+    LocaleID { "0415" }
+}

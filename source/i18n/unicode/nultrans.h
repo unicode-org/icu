@@ -1,0 +1,55 @@
+/*
+**********************************************************************
+*   Copyright (c) 2000, International Business Machines
+*   Corporation and others.  All Rights Reserved.
+**********************************************************************
+*   Date        Name        Description
+*   01/11/2000  aliu        Creation.
+**********************************************************************
+*/
+#ifndef NULTRANS_H
+#define NULTRANS_H
+
+#include "unicode/translit.h"
+
+/**
+ * A transliterator that leaves text unchanged.
+ * @author Alan Liu
+ */
+class U_I18N_API NullTransliterator : public Transliterator {
+    static const char* _ID;
+
+public:
+
+    /**
+     * ID for this transliterator.
+     */
+    static const UnicodeString ID; // public for Transliterator
+
+    /**
+     * Constructs a transliterator.
+     */
+    NullTransliterator();
+
+    /**
+     * Destructor.
+     */
+    virtual ~NullTransliterator();
+
+    /**
+     * Transliterator API.
+     */
+    Transliterator* clone(void) const;
+
+    /**
+     * Implements {@link Transliterator#handleTransliterate}.
+     */
+    virtual void handleTransliterate(Replaceable& text, UTransPosition& offset,
+                                     UBool isIncremental) const;
+};
+
+inline NullTransliterator::NullTransliterator() : Transliterator(ID, 0) {}
+
+inline NullTransliterator::~NullTransliterator() {}
+
+#endif

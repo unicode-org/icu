@@ -1,0 +1,90 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+
+<HEAD>
+	<META HTTP-EQUIV="Content-Type" CONTENT="text/html;CHARSET=iso-8859-1">
+	<META NAME="GENERATOR" Content="Visual Page 1.1a for Windows">
+	<TITLE>untitled</TITLE>
+</HEAD>
+
+<BODY BGCOLOR="#FFFFFF">
+
+<H2>collperf</H2>
+<P>collperf is a test program for comparing collation performance and key lengths of ICU, Windows native collation
+and Unix/POSIX collation.  It operates on a file of lines (names, for example), and performs one of three tests:</P>
+
+<OL>
+	<LI>Sort Key generation.  Report on  key lengths and key generation times.
+	<LI>Binary search.  Report the average time required to look up each of the names (file lines) from the file in
+	a sorted list of all of the names.
+	<LI>Quick Sort.  Report the time required to sort the file in memory, using the C library qsort function.  The
+	file order is randomized prior to the sort.
+</OL>
+
+<P></P>
+
+<P><B>Usage Summary</B></P>
+
+
+<BLOCKQUOTE>
+	<P>
+	<TABLE BORDER="0" WIDTH="100%" BGCOLOR="#FFFBF0">
+	<TR>
+		<TD WIDTH="100%">
+			<P><TT>collperf -help</TT>
+
+
+			<BLOCKQUOTE>
+			<P><TT>Usage:  strperf options...<BR>
+			-help                      Display this message.<BR>
+			-file file_name            utf-16 format file of names<BR>
+			-locale name               ICU locale to use.  Default is en_US<BR>
+			-langid 0x1234             Windows Language ID number.  Default 0x409 (en_US)<BR>
+			                              see http://msdn.microsoft.com/library/psdk/winbase/nls_8xo3.htm<BR>
+			-win                       Run test using Windows native services.  (ICU is default)<BR>
+			-unix                      Run test using Unix strxfrm, strcoll services.<BR>
+			-uselen                    Use API with string lengths.  Default is null-terminated strings<BR>
+			-usekeys                   Run tests using sortkeys rather than strcoll<BR>
+			-loop nnnn                 Loopcount for test.  Adjust for reasonable total running time.<BR>
+			-terse                     Terse numbers-only output.  Intended for use by scripts.<BR>
+			-french                    French accent ordering<BR>
+			-norm                      Normalizing mode on<BR>
+			-shifted                   Shifted mode<BR>
+			-lower                     Lower case first<BR>
+			-upper                     Upper case first<BR>
+			-case                      Enable separate case level<BR>
+			-level n                   Sort level, 1 to 5, for Primary, Secndary, Tertiary, Quaternary, Identical<BR>
+			-binsearch                 Binary Search timing test<BR>
+			-keygen                    Sort Key Generation timing test<BR>
+			-qsort                     Quicksort timing test</TT>
+			</BLOCKQUOTE>
+		</TD>
+	</TR>
+	</TABLE>
+</P>
+
+</BLOCKQUOTE>
+
+<P><B>Example</B></P>
+
+
+<BLOCKQUOTE>
+	<P>
+	<TABLE BORDER="0" WIDTH="100%" BGCOLOR="#FFFBF0">
+	<TR>
+		<TD WIDTH="100%"><TT>C:\&gt;collperf -loop 200 -file latin.txt -keygen -shifted -level 4<BR>
+			file &quot;latin.txt&quot;, 7604 lines.<BR>
+			Sort Key Generation:  total # of keys = 197704<BR>
+			Sort Key Generation:  time per key = 4253 ns<BR>
+			Key Length / character = 1.730054</TT></TD>
+	</TR>
+	</TABLE>
+
+
+</BLOCKQUOTE>
+
+<P>
+
+</BODY>
+
+</HTML>

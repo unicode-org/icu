@@ -1,0 +1,114 @@
+// *******************************************************************************
+// *
+// *   Copyright (C) 1997-2000, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// *******************************************************************************
+
+it {
+    Countries { 
+        IT { "Italia" }
+        CH { "Svizzera" }
+    }
+    DateTimeElements { 
+            "2",
+            "4",
+    }
+    DateTimePatterns { 
+            "HH:mm:ss z",
+            "HH:mm:ss z",
+            "HH:mm:ss",
+            "HH:mm",
+            "EEEE d MMMM yyyy",
+            "dd MMMM yyyy",
+            "dd/MMM/yy",
+            "dd/MM/yy",
+            "{1} {0}",
+    }
+    
+    AmPmMarkers { 
+            "m.",
+            "p.",
+    }
+    
+    DayAbbreviations { 
+            "dom",
+            "lun",
+            "mar",
+            "mer",
+            "gio",
+            "ven",
+            "sab",
+    }
+    DayNames { 
+            "domenica",
+            "luned\u00EC",
+            "marted\u00EC",
+            "mercoled\u00EC",
+            "gioved\u00EC",
+            "venerd\u00EC",
+            "sabato",
+    }
+    Eras { 
+            "aC",
+            "dC",
+    }
+    Languages { 
+        it { "italiano" }
+    }
+    LocaleID { "10" }
+    LocaleString { "it" }
+    MonthAbbreviations { 
+            "gen",
+            "feb",
+            "mar",
+            "apr",
+            "mag",
+            "giu",
+            "lug",
+            "ago",
+            "set",
+            "ott",
+            "nov",
+            "dic",
+            "",
+    }
+    MonthNames { 
+            "gennaio",
+            "febbraio",
+            "marzo",
+            "aprile",
+            "maggio",
+            "giugno",
+            "luglio",
+            "agosto",
+            "settembre",
+            "ottobre",
+            "novembre",
+            "dicembre",
+            "",
+    }
+    NumberElements { 
+            ",",
+            ".",
+            ";",
+            "%",
+            "0",
+            "#",
+            "-",
+            "E",
+            "\u2030",
+            "\u221E",
+            "\uFFFD",
+    }
+    ShortLanguage { "ita" }
+    zoneStrings { 
+        {
+                "Europe/Rome",
+                "CET",
+                "CET",
+                "CET",
+                "CET",
+        }
+    }
+}

@@ -1,0 +1,125 @@
+﻿ // -*- Coding: utf-8; -*-
+//--------------------------------------------------------------------
+// Copyright (c) 1999-2001, International Business Machines
+// Corporation and others.  All Rights Reserved.
+//--------------------------------------------------------------------
+// THIS IS A MACHINE-GENERATED FILE
+// Tool: dumpICUrules.bat
+// Source: \icu4j\src\com\ibm\text\resources/Transliterator_InterIndic_Tamil.utf8.txt
+// Date: Thu Mar  1 20:03:55 2001
+//--------------------------------------------------------------------
+
+// InterIndic_Tamil
+
+InterIndic_Tamil {
+  Rule {
+//--------------------------------------------------------------------
+// Copyright (c) 1999-2001, International Business Machines
+// Corporation and others.  All Rights Reserved.
+//--------------------------------------------------------------------
+// Date: Tue Jan 23 12:42:01 2001
+//--------------------------------------------------------------------
+
+// InterIndic-Tamil
+
+// \uE001>; // UNMAPPED InterIndic-Tamil: SIGN CANDRABINDU
+"\uE002>ஂ;" // SIGN ANUSVARA
+"\uE003>ஃ;" // SIGN VISARGA
+"\uE005>அ;" // LETTER A
+"\uE006>ஆ;" // LETTER AA
+"\uE007>இ;" // LETTER I
+"\uE008>ஈ;" // LETTER II
+"\uE009>உ;" // LETTER U
+"\uE00A>ஊ;" // LETTER UU
+"\uE00B>ரி;" // REMAP (indicExceptions.txt): ஋>ரி = LETTER VOCALIC R>LETTER RA.VOWEL SIGN I
+"\uE00C>இ;" // REMAP (indicExceptions.txt): ஌>இ = LETTER VOCALIC L>LETTER I
+"\uE00F>ஏ;" // LETTER EE
+"\uE010>ஐ;" // LETTER AI
+"\uE013>ஓ;" // LETTER OO
+"\uE014>ஔ;" // LETTER AU
+"\uE015>க;" // LETTER KA
+"\uE016>க;" // REMAP (indicExceptions.txt): ஖>க = LETTER KHA>LETTER KA
+"\uE017>க;" // REMAP (indicExceptions.txt): ஗>க = LETTER GA>LETTER KA
+"\uE018>க;" // REMAP (indicExceptions.txt): ஘>க = LETTER GHA>LETTER KA
+"\uE019>ங;" // LETTER NGA
+"\uE01A>ச;" // LETTER CA
+"\uE01B>ச;" // REMAP (indicExceptions.txt): ஛>ச = LETTER CHA>LETTER CA
+"\uE01C>ஜ;" // LETTER JA
+"\uE01D>ச;" // REMAP (indicExceptions.txt): ஝>ச = LETTER JHA>LETTER CA
+"\uE01E>ஞ;" // LETTER NYA
+"\uE01F>ட;" // LETTER TTA
+"\uE020>ட;" // REMAP (indicExceptions.txt): ஠>ட = LETTER TTHA>LETTER TTA
+"\uE021>ட;" // REMAP (indicExceptions.txt): ஡>ட = LETTER DDA>LETTER TTA
+"\uE022>ட;" // REMAP (indicExceptions.txt): ஢>ட = LETTER DDHA>LETTER TTA
+"\uE023>ண;" // LETTER NNA
+"\uE024>த;" // LETTER TA
+"\uE025>த;" // REMAP (indicExceptions.txt): ஥>த = LETTER THA>LETTER TA
+"\uE026>த;" // REMAP (indicExceptions.txt): ஦>த = LETTER DA>LETTER TA
+"\uE027>த;" // REMAP (indicExceptions.txt): ஧>த = LETTER DHA>LETTER TA
+"\uE028>ந;" // LETTER NA
+"\uE029>ன;" // LETTER NNNA
+"\uE02A>ப;" // LETTER PA
+"\uE02B>ப;" // REMAP (indicExceptions.txt): ஫>ப = LETTER PHA>LETTER PA
+"\uE02C>ப;" // REMAP (indicExceptions.txt): ஬>ப = LETTER BA>LETTER PA
+"\uE02D>ப;" // REMAP (indicExceptions.txt): ஭>ப = LETTER BHA>LETTER PA
+"\uE02E>ம;" // LETTER MA
+"\uE02F>ய;" // LETTER YA
+"\uE030>ர;" // LETTER RA
+"\uE032>ல;" // LETTER LA
+"\uE033>ள;" // LETTER LLA
+"\uE034>ழ;" // LETTER LLLA
+"\uE035>வ;" // LETTER VA
+"\uE036>ஷ;" // REMAP (indicExceptions.txt): ஶ>ஷ = LETTER SHA>LETTER SSA
+"\uE037>ஷ;" // LETTER SSA
+"\uE038>ஸ;" // LETTER SA
+"\uE039>ஹ;" // LETTER HA
+// \uE03C>; // UNMAPPED InterIndic-Tamil: SIGN NUKTA
+// \uE03D>; // UNMAPPED InterIndic-Tamil: SIGN AVAGRAHA
+"\uE03E>ா;" // VOWEL SIGN AA
+"\uE03F>ி;" // VOWEL SIGN I
+"\uE040>ீ;" // VOWEL SIGN II
+"\uE041>ு;" // VOWEL SIGN U
+"\uE042>ூ;" // VOWEL SIGN UU
+"\uE043>்ரி;" // REMAP (indicExceptions.txt): ௃>்ரி = VOWEL SIGN VOCALIC R>SIGN VIRAMA.LETTER RA.VOWEL SIGN I
+"\uE044>்ரி;" // REMAP (indicExceptions.txt): ௄>்ரி = VOWEL SIGN VOCALIC RR>SIGN VIRAMA.LETTER RA.VOWEL SIGN I
+"\uE045>ா;" // REMAP (indicExceptions.txt): ௅>ா = VOWEL SIGN CANDRA E>VOWEL SIGN AA
+"\uE047>ே;" // VOWEL SIGN EE
+"\uE048>ை;" // VOWEL SIGN AI
+"\uE049>ா;" // REMAP (indicExceptions.txt): ௉>ா = VOWEL SIGN CANDRA O>VOWEL SIGN AA
+"\uE04B>ோ;" // VOWEL SIGN OO
+"\uE04C>ௌ;" // VOWEL SIGN AU
+"\uE04D>்;" // SIGN VIRAMA
+"\uE050>ஓம்;" // REMAP (indicExceptions.txt): ௐ>ஓம் = OM>LETTER OO.LETTER MA.SIGN VIRAMA
+// \uE055>; // UNMAPPED InterIndic-Tamil: LENGTH MARK
+"\uE056>ை;" // REMAP (indicExceptions.txt): ௖>ை = AI LENGTH MARK>VOWEL SIGN AI
+"\uE057>ௗ;" // AU LENGTH MARK
+"\uE059>க;" // REMAP (indicExceptions.txt): ௙>க = LETTER KHHA>LETTER KA
+"\uE05A>க;" // REMAP (indicExceptions.txt): ௚>க = LETTER GHHA>LETTER KA
+"\uE05B>ஜ;" // REMAP (indicExceptions.txt): ௛>ஜ = LETTER ZA>LETTER JA
+"\uE05D>ட;" // REMAP (indicExceptions.txt): ௝>ட = LETTER RHA>LETTER TTA
+"\uE05E>ப;" // REMAP (indicExceptions.txt): ௞>ப = LETTER FA>LETTER PA
+"\uE05F>ய;" // REMAP (indicExceptions.txt): ௟>ய = LETTER YYA>LETTER YA
+"\uE060>ரி;" // REMAP (indicExceptions.txt): ௠>ரி = LETTER VOCALIC RR>LETTER RA.VOWEL SIGN I
+"\uE061>ஈ;" // REMAP (indicExceptions.txt): ௡>ஈ = LETTER VOCALIC LL>LETTER II
+// \uE062>; // UNMAPPED InterIndic-Tamil: VOWEL SIGN VOCALIC L
+// \uE063>; // UNMAPPED InterIndic-Tamil: VOWEL SIGN VOCALIC LL
+// \uE066>; // UNMAPPED InterIndic-Tamil: DIGIT ZERO
+"\uE067>௧;" // DIGIT ONE
+"\uE068>௨;" // DIGIT TWO
+"\uE069>௩;" // DIGIT THREE
+"\uE06A>௪;" // DIGIT FOUR
+"\uE06B>௫;" // DIGIT FIVE
+"\uE06C>௬;" // DIGIT SIX
+"\uE06D>௭;" // DIGIT SEVEN
+"\uE06E>௮;" // DIGIT EIGHT
+"\uE06F>௯;" // DIGIT NINE
+// \uE080>; // UNMAPPED InterIndic-Tamil: ISSHAR
+"\uE081>எ;" // LETTER E
+"\uE082>ஒ;" // LETTER O
+"\uE083>ற;" // LETTER RRA
+"\uE084>ெ;" // VOWEL SIGN E
+"\uE085>ொ;" // VOWEL SIGN O
+
+// eof
+  }
+}
