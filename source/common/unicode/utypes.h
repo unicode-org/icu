@@ -406,7 +406,7 @@ typedef void* UClassID;
 inline void *
 operator new(size_t size) {
     char *q=NULL;
-    *q=5; // break it
+    *q=5; /* break it */
     return q;
 }
 
@@ -418,7 +418,7 @@ operator new(size_t size) {
 inline void *
 operator new[](size_t size) {
     char *q=NULL;
-    *q=5; // break it
+    *q=5; /* break it */
     return q;
 }
 
@@ -430,7 +430,7 @@ operator new[](size_t size) {
 inline void
 operator delete(void *p) {
     char *q=NULL;
-    *q=5; // break it
+    *q=5; /* break it */
 }
 
 /**
@@ -441,7 +441,7 @@ operator delete(void *p) {
 inline void
 operator delete[](void *p) {
     char *q=NULL;
-    *q=5; // break it
+    *q=5; /* break it */
 }
 
 #endif
