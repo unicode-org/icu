@@ -1009,7 +1009,7 @@ _MBCSLoad(UConverterSharedData *sharedData,
                 for(i=0; i<256; ++i) {
                     state[i]=MBCS_ENTRY_FINAL(0, MBCS_STATE_ILLEGAL, 0);
                 }
-                mbcsTable->stateTable=newStateTable;
+                mbcsTable->stateTable=(const int32_t (*)[256])newStateTable;
                 mbcsTable->countStates=(uint8_t)(count+1);
                 mbcsTable->stateTableOwned=TRUE;
 
@@ -3296,6 +3296,7 @@ getTrail:
                 if(value<=0xff) {
                     if(value==0 && MBCS_FROM_U_IS_ROUNDTRIP(stage2Entry, c)==0) {
                         /* no mapping, leave value==0 */
+                        length=0;
                     } else if(prevLength<=1) {
                         length=1;
                     } else {

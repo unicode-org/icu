@@ -1123,6 +1123,9 @@ ucnv_swap(const UDataSwapper *ds,
         /* calculate the length of the MBCS data */
         if(extOffset==0) {
             size=(int32_t)(mbcsHeader.offsetFromUBytes+mbcsHeader.fromUBytesLength);
+
+            /* avoid compiler warnings - not otherwise necessary, and the value does not matter */
+            inExtIndexes=NULL;
         } else {
             /* there is extension data after the base data, see ucnv_ext.h */
             if(length>=0 && length<(extOffset+UCNV_EXT_INDEXES_MIN_LENGTH*4)) {

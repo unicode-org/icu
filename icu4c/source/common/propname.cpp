@@ -234,7 +234,7 @@ EnumToOffset::swap(const UDataSwapper *ds,
 
     if(length>=0) {
         if(length<(pos+size)) {
-            if(length<sizeof(PropertyAliases)) {
+            if(length<(int32_t)sizeof(PropertyAliases)) {
                 udata_printError(ds, "upname_swap(EnumToOffset): too few bytes (%d after header)\n"
                                      "    for pnames.icu EnumToOffset{%d..%d} at %d\n",
                                  length, tempMap->enumStart, tempMap->enumLimit, pos);
@@ -278,7 +278,7 @@ NonContiguousEnumToOffset::swap(const UDataSwapper *ds,
 
     if(length>=0) {
         if(length<(pos+size)) {
-            if(length<sizeof(PropertyAliases)) {
+            if(length<(int32_t)sizeof(PropertyAliases)) {
                 udata_printError(ds, "upname_swap(NonContiguousEnumToOffset): too few bytes (%d after header)\n"
                                      "    for pnames.icu NonContiguousEnumToOffset[%d] at %d\n",
                                  length, tempMap->count, pos);
@@ -355,7 +355,7 @@ NameToEnum::swap(const UDataSwapper *ds,
 
     if(length>=0) {
         if(length<(pos+size)) {
-            if(length<sizeof(PropertyAliases)) {
+            if(length<(int32_t)sizeof(PropertyAliases)) {
                 udata_printError(ds, "upname_swap(NameToEnum): too few bytes (%d after header)\n"
                                      "    for pnames.icu NameToEnum[%d] at %d\n",
                                  length, tempMap->count, pos);
@@ -484,7 +484,7 @@ PropertyAliases::swap(const UDataSwapper *ds,
     outAliases=(PropertyAliases *)outBytes;
 
     /* read the input PropertyAliases - all 16-bit values */
-    for(i=0; i<sizeof(PropertyAliases)/2; ++i) {
+    for(i=0; i<(int32_t)sizeof(PropertyAliases)/2; ++i) {
         ((uint16_t *)&aliases)[i]=ds->readUInt16(((const uint16_t *)inBytes)[i]);
     }
 
@@ -622,7 +622,7 @@ upname_swap(const UDataSwapper *ds,
 
     if(length>=0) {
         length-=headerSize;
-        if(length<sizeof(PropertyAliases)) {
+        if(length<(int32_t)sizeof(PropertyAliases)) {
             udata_printError(ds, "upname_swap(): too few bytes (%d after header) for pnames.icu\n",
                              length);
             *pErrorCode=U_INDEX_OUTOFBOUNDS_ERROR;
