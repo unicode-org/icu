@@ -103,10 +103,7 @@ void Paragraph::draw(RenderingSurface *surface, le_int32 firstLine, le_int32 las
         le_int32 run;
 
 		if (fParagraphLayout->getParagraphLevel() == UBIDI_RTL) {
-			const ParagraphLayout::VisualRun *lastRun = line->getVisualRun(runCount - 1);
-			le_int32 glyphCount = lastRun->getGlyphCount();
-			const float *positions = lastRun->getPositions();
-			le_int32 lastX = (le_int32) positions[glyphCount * 2];
+			le_int32 lastX = line->getWidth();
 
 			x = (fWidth - lastX - MARGIN);
 		}
