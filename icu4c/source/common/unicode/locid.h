@@ -341,6 +341,9 @@ public:
      *  instead be an ICU style C locale (e.g. "en_US"), but the other
      *  parameters must not be used.  This parameter can be null, if so
      *  the locale is initialized to match the current default locale.
+     *  Please note: The Java Locale class does NOT accept the form 
+     *  'new Locale("en_US")' but only 'new Locale("en","US")'
+     * 
      * @param country  Uppercase two-letter ISO-3166 code. (optional)
      * @param variant  Uppercase vendor and browser specific code. See class
      *                 description. (optional)
