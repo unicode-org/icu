@@ -682,10 +682,10 @@ void TestRegexCAPI(void) {
         TEST_ASSERT_SUCCESS(status);
         bufPtr = buf;
         bufCap = sizeof(buf) / 2;
-        u_uastrncpy(repl, "abc\\u0041 \\U00000042 \\\\ \\abc", sizeof(repl)/2);
+        u_uastrncpy(repl, "abc\\u0041\\U00000042 \\\\ $ \\abc", sizeof(repl)/2);
         uregex_appendReplacement(re, repl, -1, &bufPtr, &bufCap, &status);
         TEST_ASSERT_SUCCESS(status);
-        /* TEST_ASSERT_STRING("abcAB \\ abc", buf, TRUE);  TODO:  */
+        TEST_ASSERT_STRING("abcAB \\ $ abc", buf, TRUE); 
 
 
     }
