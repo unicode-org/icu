@@ -6,19 +6,17 @@
 // *******************************************************************************
 
 sh {
-    Version { "1.1" }
+    Version { "1.1.1" }
     CollationElements { 
 	    Version { "2.0" }
-		Override { "FALSE" }
-		Sequence { 	"& C < \u010D, \u010C < \u0107, \u0106"
-				"& D < \u0111, \u0110 < d\u017E, D\u017E, D\u017D"
-				"& L < lj, Lj, LJ"
-				"& N < nj, Nj, NJ "
-				"& S < \u0161, \u0160"
-				"& Z < \u017E, \u017D"
+		Sequence { 	
+                "& C < \u010D <<< \u010C < \u0107 <<< \u0106"
+				"&\u0110 < d\u017E <<< D\u017E <<< D\u017D"
+				"& L < lj, Lj <<< LJ"
+				"& N < nj, Nj <<< NJ "
+				"& S < \u0161 <<< \u0160"
+				"& Z < \u017E <<< \u017D"
 			}
-//"& D < dz, Dz, dZ, DZ < \u0111, \u0110& L < lj, Lj, lJ, "
-//        "LJ < \u0142, \u0141& N < nj, Nj, nJ, NJ& Z < \u017C, \u017B" }
 	}
     Countries { 
         AF { "Avganistan" }

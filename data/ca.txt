@@ -9,7 +9,9 @@ ca {
     CollationElements { 
 	    Version { "1.0" }
 		Override { "FALSE" }
-		Sequence { "@" }
+		Sequence { "[backwards 2]"
+        "&C < ch <<< Ch <<< CH"
+        "&L < ll <<< l\u00b7l <<< Ll <<< L\u00b7l <<< LL <<< L\u00b7L" }
 	}
     Countries { 
         ES { "Espanya" }
