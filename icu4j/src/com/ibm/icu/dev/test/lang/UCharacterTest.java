@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/lang/UCharacterTest.java,v $
-* $Date: 2003/04/04 01:41:06 $
-* $Revision: 1.53 $
+* $Date: 2003/04/04 19:37:00 $
+* $Revision: 1.54 $
 *
 *******************************************************************************
 */
@@ -2054,11 +2054,11 @@ public final class UCharacterTest extends TestFmwk
        set1=new UnicodeSet(lowerPattern); 
 
        for(i=0;; ++i) { 
-       		try{
-           		//length=set1.getItem(set1, i, &start, &end, NULL, 0, &errorCode); 
-       		}catch(Exception e){
-       			break;
-       		} 
+//       		try{
+//           		length=set1.getItem(set1, i, &start, &end, NULL, 0, &errorCode); 
+//       		}catch(Exception e){
+//       			break;
+//       		} 
  		   start = set1.getRangeStart(i);
  		   end = set1.getRangeEnd(i);
  		   length = i<set1.getRangeCount() ? set1.getRangeCount() : 0;
