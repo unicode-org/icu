@@ -43,6 +43,8 @@ static void TestNumberFormatPadding(void);
  **/
 static void TestInt64Format(void);
 
+static void TestNonExistentCurrency(void);
+
 /**
  * Test RBNF access through unumfmt APIs.
  **/
