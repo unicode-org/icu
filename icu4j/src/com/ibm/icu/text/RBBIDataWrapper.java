@@ -53,6 +53,26 @@ public class RBBIDataWrapper {
     final static int      RESERVED   = 3;
     final static int      NEXTSTATES = 4;
     
+    // Index offsets to header fields of a state table
+    //     struct RBBIStateTable {...   in the C version.
+    //
+    final static int      NUMSTATES  = 0;
+    final static int      ROWLEN     = 2;
+    final static int      FLAGS      = 4;
+    final static int      RESERVED_2 = 6;
+    final static int      ROW_DATA   = 8;
+    
+    //  Bit selectors for the "FLAGS" field of the state table header
+    //     enum RBBIStateTableFlags in the C version.
+    //
+    final static int      RBBI_LOOKAHEAD_HARD_BREAK = 1;
+    
+    //  Getters for fields from the state table header
+    //
+    final static int   getNumStates(int  table[]) {
+        return table[NUMSTATES]<<16 + (table[NUMSTATES+1]&0xffff);
+    }
+    
     /**
      * Data Header.  A struct-like class with the fields from the RBBI data file header.
      */
@@ -94,7 +114,7 @@ public class RBBIDataWrapper {
      * 
      */
     int getRowIndex(int state){
-        return state * (fHeader.fCatCount + 4);
+        return ROW_DATA + state * (fHeader.fCatCount + 4);
     }
     
     static class TrieFoldingFunc implements  Trie.DataManipulate {

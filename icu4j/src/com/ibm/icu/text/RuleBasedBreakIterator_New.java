@@ -919,8 +919,131 @@ public int getRuleStatusVec(int[] fillInArray) {
     
     
     private int handlePrevious(short stateTable[]) {
-        // TODO:
-        return 0;
+        if (fText == null || stateTable == null) {
+            return 0;
+        }
+        // break tag is no longer valid after icu switched to exact backwards
+        // positioning.
+        fLastStatusIndexValid = false;
+        if (stateTable == null) {
+            return fText.getBeginIndex();
+        }
+
+        int            state              = START_STATE;
+        int            category;
+        int            lastCategory       = 0;
+        boolean        hasPassedStartText = !CIHasPrevious(fText);
+        int            c                  = CIPrevious32(fText);
+        // previous character
+        int            result             = fText.getIndex();
+        int            lookaheadStatus    = 0;
+        int            lookaheadResult    = 0;
+        int            lookaheadTagIdx    = 0;
+        boolean        lookAheadHardBreak = 
+            (stateTable[RBBIDataWrapper.FLAGS+1] & RBBIDataWrapper.RBBI_LOOKAHEAD_HARD_BREAK) != 0;
+  
+        int            row = fData.getRowIndex(state);
+
+        category = (short)fData.fTrie.getCodePointValue(c);
+        category &= ~0x4000;            // Mask off dictionary bit.
+
+        if (fTrace) {
+            System.out.println("Handle Prev   pos   char  state category ");
+        }
+
+        // loop until we reach the beginning of the text or transition to state 0
+        for (;;) {
+            if (hasPassedStartText) {
+                // if we have already considered the start of the text
+                if (stateTable[row + RBBIDataWrapper.LOOKAHEAD] != 0 &&
+                        lookaheadResult == 0) {
+                    result = 0;
+                }
+                break;
+            }
+
+            // save the last character's category and look up the current
+            // character's category
+            lastCategory = category;
+            category = (short)fData.fTrie.getCodePointValue(c);
+
+            category &= ~0x4000;    // Clear the dictionary bit flag
+                                    //   (Should be unused; holdover from old RBBI)
+
+            if (fTrace) {
+                System.out.print("             " + fText.getIndex()+ "   ");
+                if (0x20<=c && c<0x7f) {
+                    System.out.print("  " +  c + "  ");
+                } else {
+                    System.out.print(" " + Integer.toHexString(c) + " ");
+                }
+                System.out.println(" " + state + "  " + category + " ");
+            }
+
+            // look up a state transition in the backwards state table
+            state = stateTable[row + RBBIDataWrapper.NEXTSTATES + category];
+            row = fData.getRowIndex(state);
+
+            if (stateTable[row + RBBIDataWrapper.ACCEPTING] == -1) {
+                // Match found, common case, could have lookahead so we move on to check it
+                result = fText.getIndex();
+                fLastRuleStatusIndex   = stateTable[row + RBBIDataWrapper.TAGIDX];
+            }
+
+            if (stateTable[row + RBBIDataWrapper.LOOKAHEAD] != 0) {
+                if (lookaheadStatus != 0
+                    && stateTable[row + RBBIDataWrapper.ACCEPTING] == lookaheadStatus) {
+                    // Lookahead match is completed.  Set the result accordingly, but only
+                    // if no other rule has matched further in the mean time.
+                    result               = lookaheadResult;
+                    fLastRuleStatusIndex = lookaheadTagIdx;
+                    lookaheadStatus      = 0;
+                    /// i think we have to back up to read the lookahead character again
+                    /// fText->setIndex(lookaheadResult);
+                    /// TODO: this is a simple hack since reverse rules only have simple
+                    /// lookahead rules that we can definitely break out from.
+                    /// we need to make the lookahead rules not chain eventually.
+                    /// return result;
+                    /// this is going to be the longest match again
+
+                    /// syn wee todo hard coded for line breaks stuff
+                    /// needs to provide a tag in rules to ensure a stop.
+                    
+                    if (lookAheadHardBreak) {
+                        break;
+                    }
+                    category = lastCategory;
+                    fText.setIndex(result);
+                } else {
+                    // Hit a possible look-ahead match.  We are at the
+                    // position of the '/'.  Remember this position.
+                    lookaheadResult      = fText.getIndex();
+                    lookaheadStatus      = stateTable[row + RBBIDataWrapper.LOOKAHEAD];
+                    fLastRuleStatusIndex = stateTable[row + RBBIDataWrapper.TAGIDX];
+                }
+            } else {               
+                // not lookahead...                
+                if (stateTable[row + RBBIDataWrapper.ACCEPTING] != 0) {
+                    // Normal style Accepting state.
+                    lookaheadStatus = 0;     //  Clear out any pending look-ahead matches.
+                }
+            }
+            
+            if (state == STOP_STATE) {
+                break;
+            }
+
+            // then move iterator position backwards one character
+            hasPassedStartText = !CIHasPrevious(fText);
+            c = CIPrevious32(fText);
+        }
+
+        // Note:  the result postion isn't what is returned to the user by previous(),
+        //        but where the implementation of previous() turns around and
+        //        starts iterating forward again.
+        fText.setIndex(result);
+
+        return result;
     }
 
 }
