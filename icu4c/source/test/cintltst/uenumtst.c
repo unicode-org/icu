@@ -71,7 +71,7 @@ chArrayUNext(UEnumeration *en, int32_t *resultLength, UErrorCode *status) {
     }
     
     cont->currChar = (cont->array)[cont->currIndex];
-    *resultLength = uprv_strlen(cont->currChar);
+    *resultLength = (int32_t)strlen(cont->currChar);
     u_charsToUChars(cont->currChar, cont->currUChar, *resultLength);
     cont->currIndex++;
     return cont->currUChar;
@@ -84,7 +84,7 @@ chArrayNext(UEnumeration *en, int32_t *resultLength, UErrorCode *status) {
     }
     
     cont->currChar = (cont->array)[cont->currIndex];
-    *resultLength = uprv_strlen(cont->currChar);
+    *resultLength = (int32_t)strlen(cont->currChar);
     cont->currIndex++;
     return cont->currChar;
 }

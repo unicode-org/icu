@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 2001-2003, International Business Machines Corporation and
+ * Copyright (c) 2001-2004, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /********************************************************************************
@@ -677,7 +677,7 @@ static void Test_widestrs()
             log_err("u_strToWCS: ustr = %s, ul = %d, ws = %S, wl = %d!\n", u_austrcpy(astr, ustr), ul, ws, wl);
         }
         err = U_ZERO_ERROR;
-        wl = uprv_wcslen(wcs);
+        wl = (int32_t)uprv_wcslen(wcs);
         cp = u_strFromWCS(rts, rtcap, &rtl, wcs, wl, &err);
         if (U_FAILURE(err)) {
                 errname = u_errorName(err);
