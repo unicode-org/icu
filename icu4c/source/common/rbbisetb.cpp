@@ -469,7 +469,7 @@ RangeDescriptor::RangeDescriptor(const RangeDescriptor &other, UErrorCode &statu
     this->fNum          = other.fNum;
     this->fNext         = NULL;
     this->fIncludesSets = new UVector(status);
-    //test for NULL
+    /* test for NULL */
     if (this->fIncludesSets == 0) {
         status = U_MEMORY_ALLOCATION_ERROR;
         return;
@@ -492,7 +492,7 @@ RangeDescriptor::RangeDescriptor(UErrorCode &status) {
     this->fNum          = 0;
     this->fNext         = NULL;
     this->fIncludesSets = new UVector(status);
-    //test for NULL
+    /* test for NULL */
     if(this->fIncludesSets == 0) {
         status = U_MEMORY_ALLOCATION_ERROR;
         return;
@@ -519,7 +519,7 @@ RangeDescriptor::~RangeDescriptor() {
 void RangeDescriptor::split(UChar32 where, UErrorCode &status) {
     assert(where>fStartChar && where<=fEndChar);
     RangeDescriptor *nr = new RangeDescriptor(*this, status);
-    //test for NULL
+    /* test for NULL */
     if(nr == 0) {
         status = U_MEMORY_ALLOCATION_ERROR;
         return;

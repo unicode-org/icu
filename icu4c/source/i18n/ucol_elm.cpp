@@ -93,7 +93,7 @@ static int32_t uprv_uca_addExpansion(ExpansionTable *expansions, uint32_t value,
     }
     if(expansions->CEs == NULL) {
         expansions->CEs = (uint32_t *)uprv_malloc(INIT_EXP_TABLE_SIZE*sizeof(uint32_t));
-        //Test for NULL
+        /* test for NULL */
         if (expansions->CEs == NULL) {
             *status = U_MEMORY_ALLOCATION_ERROR;
             return 0;
@@ -127,14 +127,14 @@ uhash_freeBlockWrapper(void *obj) {
 U_CAPI tempUCATable*  U_EXPORT2
 uprv_uca_initTempTable(UCATableHeader *image, UColOptionSet *opts, const UCollator *UCA, UColCETags initTag, UErrorCode *status) {
   tempUCATable *t = (tempUCATable *)uprv_malloc(sizeof(tempUCATable));
-  //Test for NULL
+  /* test for NULL */
   if (t == NULL) {
       *status = U_MEMORY_ALLOCATION_ERROR;
       return NULL;
   }
   MaxExpansionTable *maxet  = (MaxExpansionTable *)uprv_malloc(
                                                    sizeof(MaxExpansionTable));
-  //Test for NULL
+  /* test for NULL */
   if (maxet == NULL) {
       *status = U_MEMORY_ALLOCATION_ERROR;
       delete t;
@@ -142,7 +142,7 @@ uprv_uca_initTempTable(UCATableHeader *image, UColOptionSet *opts, const UCollat
   }
   MaxJamoExpansionTable *maxjet = (MaxJamoExpansionTable *)uprv_malloc(
                                                sizeof(MaxJamoExpansionTable));
-  //Test for NULL
+  /* test for NULL */
   if (maxjet == NULL) {
       *status = U_MEMORY_ALLOCATION_ERROR;
       delete t;
@@ -154,7 +154,7 @@ uprv_uca_initTempTable(UCATableHeader *image, UColOptionSet *opts, const UCollat
 
   t->UCA = UCA;
   t->expansions = (ExpansionTable *)uprv_malloc(sizeof(ExpansionTable));
-  //Test for NULL
+  /* test for NULL */
   if (t->expansions == NULL) {
       *status = U_MEMORY_ALLOCATION_ERROR;
       delete t;
@@ -179,14 +179,14 @@ uprv_uca_initTempTable(UCATableHeader *image, UColOptionSet *opts, const UCollat
     maxet->position        = maxet->size - 1;
     maxet->endExpansionCE  = 
                       (uint32_t *)uprv_malloc(sizeof(uint32_t) * maxet->size);
-    //Test for NULL
+    /* test for NULL */
     if (maxet->endExpansionCE == NULL) {
         *status = U_MEMORY_ALLOCATION_ERROR;
         return NULL;
     }
     maxet->expansionCESize =
                         (uint8_t *)uprv_malloc(sizeof(uint8_t) * maxet->size);
-    //Test for NULL
+    /* test for NULL */
     if (maxet->expansionCESize == NULL) {
         *status = U_MEMORY_ALLOCATION_ERROR;
         delete maxet->endExpansionCE;
@@ -213,13 +213,13 @@ uprv_uca_initTempTable(UCATableHeader *image, UColOptionSet *opts, const UCollat
   maxjet->maxTSize = 1;
 
   t->unsafeCP = (uint8_t *)uprv_malloc(UCOL_UNSAFECP_TABLE_SIZE);
-  //Test for NULL
+  /* test for NULL */
   if (t->unsafeCP == NULL) {
       *status = U_MEMORY_ALLOCATION_ERROR;
       return NULL;
   }
   t->contrEndCP = (uint8_t *)uprv_malloc(UCOL_UNSAFECP_TABLE_SIZE);
-  //Test for NULL
+  /* test for NULL */
   if (t->contrEndCP == NULL) {
       *status = U_MEMORY_ALLOCATION_ERROR;
       delete t->unsafeCP;
@@ -237,7 +237,7 @@ uprv_uca_cloneTempTable(tempUCATable *t, UErrorCode *status) {
   }
 
   tempUCATable *r = (tempUCATable *)uprv_malloc(sizeof(tempUCATable));
-  //Test for NULL
+  /* test for NULL */
   if (r == NULL) {
     *status = U_MEMORY_ALLOCATION_ERROR;
     return NULL;
@@ -257,7 +257,7 @@ uprv_uca_cloneTempTable(tempUCATable *t, UErrorCode *status) {
   /* expansions */
   if(t->expansions != NULL) {
     r->expansions = (ExpansionTable *)uprv_malloc(sizeof(ExpansionTable));
-    //Test for NULL
+    /* test for NULL */
     if (r->expansions == NULL) {
         *status = U_MEMORY_ALLOCATION_ERROR;
         return NULL;
@@ -266,7 +266,7 @@ uprv_uca_cloneTempTable(tempUCATable *t, UErrorCode *status) {
     r->expansions->size = t->expansions->size;
     if(t->expansions->CEs != NULL) {
       r->expansions->CEs = (uint32_t *)uprv_malloc(sizeof(uint32_t)*t->expansions->size);
-      //Test for NULL
+      /* test for NULL */
       if (r->expansions->CEs == NULL) {
           *status = U_MEMORY_ALLOCATION_ERROR;
           return NULL;
@@ -284,7 +284,7 @@ uprv_uca_cloneTempTable(tempUCATable *t, UErrorCode *status) {
 
   if(t->maxExpansions != NULL) {
     r->maxExpansions = (MaxExpansionTable *)uprv_malloc(sizeof(MaxExpansionTable));
-    //Test for NULL
+    /* test for NULL */
     if (r->maxExpansions == NULL) {
         *status = U_MEMORY_ALLOCATION_ERROR;
         return NULL;
@@ -293,7 +293,7 @@ uprv_uca_cloneTempTable(tempUCATable *t, UErrorCode *status) {
     r->maxExpansions->position = t->maxExpansions->position;
     if(t->maxExpansions->endExpansionCE != NULL) {
       r->maxExpansions->endExpansionCE = (uint32_t *)uprv_malloc(sizeof(uint32_t)*t->maxExpansions->size);
-      //Test for NULL
+      /* test for NULL */
       if (r->maxExpansions->endExpansionCE == NULL) {
           *status = U_MEMORY_ALLOCATION_ERROR;
           return NULL;
@@ -304,7 +304,7 @@ uprv_uca_cloneTempTable(tempUCATable *t, UErrorCode *status) {
     }
     if(t->maxExpansions->expansionCESize != NULL) {
       r->maxExpansions->expansionCESize = (uint8_t *)uprv_malloc(sizeof(uint8_t)*t->maxExpansions->size);
-      //Test for NULL
+      /* test for NULL */
       if (r->maxExpansions->expansionCESize == NULL) {
           *status = U_MEMORY_ALLOCATION_ERROR;
           return NULL;
@@ -317,7 +317,7 @@ uprv_uca_cloneTempTable(tempUCATable *t, UErrorCode *status) {
 
   if(t->maxJamoExpansions != NULL) {
     r->maxJamoExpansions = (MaxJamoExpansionTable *)uprv_malloc(sizeof(MaxJamoExpansionTable));
-    //test for NULL
+    /* test for NULL */
     if (r->maxJamoExpansions == NULL) {
         *status = U_MEMORY_ALLOCATION_ERROR;
         return NULL;
@@ -329,14 +329,14 @@ uprv_uca_cloneTempTable(tempUCATable *t, UErrorCode *status) {
     r->maxJamoExpansions->maxTSize = t->maxJamoExpansions->maxTSize;
     if(t->maxJamoExpansions->size != 0) {
       r->maxJamoExpansions->endExpansionCE = (uint32_t *)uprv_malloc(sizeof(uint32_t)*t->maxJamoExpansions->size);
-      //test for NULL
+      /* test for NULL */
       if (r->maxJamoExpansions->endExpansionCE == NULL) {
           *status = U_MEMORY_ALLOCATION_ERROR;
           return NULL;
       }
       uprv_memcpy(r->maxJamoExpansions->endExpansionCE, t->maxJamoExpansions->endExpansionCE, t->maxJamoExpansions->size*sizeof(uint32_t));
       r->maxJamoExpansions->isV = (UBool *)uprv_malloc(sizeof(UBool)*t->maxJamoExpansions->size);
-      //Test for NULL
+      /* test for NULL */
       if (r->maxJamoExpansions->isV == NULL) {
           *status = U_MEMORY_ALLOCATION_ERROR;
           return NULL;
@@ -350,7 +350,7 @@ uprv_uca_cloneTempTable(tempUCATable *t, UErrorCode *status) {
 
   if(t->unsafeCP != NULL) {
     r->unsafeCP = (uint8_t *)uprv_malloc(UCOL_UNSAFECP_TABLE_SIZE);
-    //test for NULL
+    /* test for NULL */
     if (r->unsafeCP == NULL) {
         *status = U_MEMORY_ALLOCATION_ERROR;
         return NULL;
@@ -360,7 +360,7 @@ uprv_uca_cloneTempTable(tempUCATable *t, UErrorCode *status) {
 
   if(t->contrEndCP != NULL) {
     r->contrEndCP = (uint8_t *)uprv_malloc(UCOL_UNSAFECP_TABLE_SIZE);
-    //test for NULL
+    /* test for NULL */
     if (r->contrEndCP == NULL) {
         *status = U_MEMORY_ALLOCATION_ERROR;
         return NULL;
@@ -425,7 +425,7 @@ int uprv_uca_setMaxExpansion(uint32_t           endexpansion,
     /* we'll always make the first element 0, for easier manipulation */
     maxexpansion->endExpansionCE = 
                (uint32_t *)uprv_malloc(INIT_EXP_TABLE_SIZE * sizeof(int32_t));
-    //Test for NULL
+    /* test for NULL */
     if (maxexpansion->endExpansionCE == NULL) {
         *status = U_MEMORY_ALLOCATION_ERROR;
         return 0;
@@ -433,7 +433,7 @@ int uprv_uca_setMaxExpansion(uint32_t           endexpansion,
     *(maxexpansion->endExpansionCE) = 0;
     maxexpansion->expansionCESize =
                (uint8_t *)uprv_malloc(INIT_EXP_TABLE_SIZE * sizeof(uint8_t));
-    //test for NULL;
+    /* test for NULL */;
     if (maxexpansion->expansionCESize == NULL) {
         *status = U_MEMORY_ALLOCATION_ERROR;
         return 0;
@@ -593,7 +593,7 @@ int uprv_uca_setMaxJamoExpansion(UChar                  ch,
     /* we'll always make the first element 0, for easier manipulation */
     maxexpansion->endExpansionCE = 
                (uint32_t *)uprv_malloc(INIT_EXP_TABLE_SIZE * sizeof(uint32_t));
-    //test for NULL;
+    /* test for NULL */;
     if (maxexpansion->endExpansionCE == NULL) {
         *status = U_MEMORY_ALLOCATION_ERROR;
         return 0;
@@ -601,7 +601,7 @@ int uprv_uca_setMaxJamoExpansion(UChar                  ch,
     *(maxexpansion->endExpansionCE) = 0;
     maxexpansion->isV = 
                  (UBool *)uprv_malloc(INIT_EXP_TABLE_SIZE * sizeof(UBool));
-    //test for NULL;
+    /* test for NULL */;
     if (maxexpansion->isV == NULL) {
         *status = U_MEMORY_ALLOCATION_ERROR;
         return 0;
@@ -1101,7 +1101,7 @@ uprv_uca_addAnElement(tempUCATable *t, UCAElements *element, UErrorCode *status)
     // for canonical closure.
 
     UCAElements *composed = (UCAElements *)uprv_malloc(sizeof(UCAElements));
-    //Test for NULL
+    /* test for NULL */
     if (composed == NULL) {
         *status = U_MEMORY_ALLOCATION_ERROR;
         return 0;
@@ -1120,7 +1120,7 @@ uprv_uca_addAnElement(tempUCATable *t, UCAElements *element, UErrorCode *status)
       } else { // no code points, so this spot is clean
         element->mapCE = uprv_uca_addPrefix(t, UCOL_NOT_FOUND, element, status);
         uCE = (UCAElements *)uprv_malloc(sizeof(UCAElements));
-        //Test for NULL
+        /* test for NULL */
         if (uCE == NULL) {
             *status = U_MEMORY_ALLOCATION_ERROR;
             return 0;
@@ -1341,7 +1341,7 @@ uprv_uca_assembleTable(tempUCATable *t, UErrorCode *status) {
 
 
     dataStart = (uint8_t *)uprv_malloc(toAllocate);
-    //test for NULL
+    /* test for NULL */
     if (dataStart == NULL) {
         *status = U_MEMORY_ALLOCATION_ERROR;
         return NULL;

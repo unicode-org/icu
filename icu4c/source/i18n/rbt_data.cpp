@@ -24,7 +24,7 @@ TransliterationRuleData::TransliterationRuleData(UErrorCode& status)
         return;
     }
     variableNames = new Hashtable(status);
-    //test for NULL
+    /* test for NULL */
     if (variableNames == 0) {
         status = U_MEMORY_ALLOCATION_ERROR;
         return;
@@ -57,7 +57,7 @@ TransliterationRuleData::TransliterationRuleData(const TransliterationRuleData& 
     variables = 0;
     if (other.variables != 0) {
         variables = new UnicodeFunctor*[variablesLength];
-        //test for NULL
+        /* test for NULL */
         if (variables == 0) {
             status = U_MEMORY_ALLOCATION_ERROR;
             return;

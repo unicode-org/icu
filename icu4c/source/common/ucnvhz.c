@@ -74,7 +74,9 @@ _HZOpen(UConverter *cnv, const char *name,const char *locale,uint32_t options, U
         ((UConverterDataHZ*)cnv->extraInfo)->targetIndex = 0;
         ((UConverterDataHZ*)cnv->extraInfo)->sourceIndex = 0;
         ((UConverterDataHZ*)cnv->extraInfo)->isTargetUCharDBCS = FALSE;
-    } else { /* test for NULL */
+    }
+    /* test for NULL */
+    else {
         *errorCode = U_MEMORY_ALLOCATION_ERROR;
         return;
     }

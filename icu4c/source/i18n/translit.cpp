@@ -912,7 +912,7 @@ Transliterator* Transliterator::createInstance(const UnicodeString& ID,
         break;
     default:
         t = new CompoundTransliterator(list, parseError, status);
-        //test for NULL
+        /* test for NULL */
         if (t == 0) {
             status = U_MEMORY_ALLOCATION_ERROR;
             return 0;
@@ -1008,7 +1008,7 @@ Transliterator* Transliterator::createFromRules(const UnicodeString& ID,
             // ordinary RBT_DATA.
             t = new RuleBasedTransliterator(ID, parser.orphanData(), TRUE); // TRUE == adopt data object
         }
-        //test for NULL
+        /* test for NULL */
         if (t == 0) {
             status = U_MEMORY_ALLOCATION_ERROR;
             return 0;
@@ -1028,14 +1028,14 @@ Transliterator* Transliterator::createFromRules(const UnicodeString& ID,
             // RBT
             UnicodeString id("_", "");
             t = new RuleBasedTransliterator(id, parser.orphanData(), TRUE); // TRUE == adopt data object
-            //test for NULL
+            /* test for NULL */
             if (t == 0) {
                 status = U_MEMORY_ALLOCATION_ERROR;
                 return 0;
             }
             t = new CompoundTransliterator(ID, parser.idBlock, parser.idSplitPoint,
                                            t, status);
-            //test for NULL
+            /* test for NULL */
             if (t == 0) {
                 status = U_MEMORY_ALLOCATION_ERROR;
                 return 0;

@@ -305,7 +305,7 @@ clean:
     loc = ures_getLocale(result->rb, status);
   }
   result->requestedLocale = (char *)uprv_malloc((uprv_strlen(loc)+1)*sizeof(char));
-  //Test for NULL
+  /* test for NULL */
   if (result->requestedLocale == NULL) {
 	*status = U_MEMORY_ALLOCATION_ERROR;
 	return NULL;
@@ -457,7 +457,7 @@ ucol_openRules( const UChar        *rules,
     result = ucol_initCollator(UCA->image,0,status);
     // And set only the options
     UColOptionSet *opts = (UColOptionSet *)uprv_malloc(sizeof(UColOptionSet));
-    //Test for NULL
+    /* test for NULL */
     if (opts == NULL) {
         *status = U_MEMORY_ALLOCATION_ERROR;
         return NULL;
@@ -472,7 +472,7 @@ ucol_openRules( const UChar        *rules,
     UChar *newRules;
     result->dataInfo.dataVersion[0] = UCOL_BUILDER_VERSION;
     newRules = (UChar *)uprv_malloc((rulesLength+1)*U_SIZEOF_UCHAR);
-    //Test for NULL
+    /* test for NULL */
     if (newRules == NULL) {
         *status = U_MEMORY_ALLOCATION_ERROR;
         return NULL;
@@ -516,7 +516,7 @@ ucol_cloneRuleData(const UCollator *coll, int32_t *length, UErrorCode *status)
   if(coll->hasRealData == TRUE) {
     *length = coll->image->size;
     result = (uint8_t *)uprv_malloc(*length);
-    //Test for NULL
+    /* test for NULL */
     if (result == NULL) {
         *status = U_MEMORY_ALLOCATION_ERROR;
         return NULL;
@@ -525,7 +525,7 @@ ucol_cloneRuleData(const UCollator *coll, int32_t *length, UErrorCode *status)
   } else {
     *length = (int32_t)(paddedsize(sizeof(UCATableHeader))+paddedsize(sizeof(UColOptionSet)));
     result = (uint8_t *)uprv_malloc(*length);
-    //Test for NULL
+    /* test for NULL */
     if (result == NULL) {
         *status = U_MEMORY_ALLOCATION_ERROR;
         return NULL;
@@ -2927,7 +2927,7 @@ uint32_t ucol_prv_getSpecialPrevCE(const UCollator *coll, UChar ch, uint32_t CE,
                 int32_t newsize = source->pos - source->string + 1;
                 strbuffer = (UChar *)uprv_malloc(sizeof(UChar) *
                                              (newsize + UCOL_MAX_BUFFER));
-				//test for NULL
+				/* test for NULL */
 				if (strbuffer == NULL) {
 					*status = U_MEMORY_ALLOCATION_ERROR;
 					return UCOL_NO_MORE_CES;
@@ -4202,7 +4202,7 @@ ucol_calcSortKey(const    UCollator    *coll,
 
     if(allocateSKBuffer == TRUE) {
       *result = (uint8_t*)uprv_malloc(sortKeySize);
-	  //test for NULL
+	  /* test for NULL */
 	  if (*result == NULL) {
 		*status = U_MEMORY_ALLOCATION_ERROR;
 		return 0;
@@ -4539,7 +4539,7 @@ ucol_calcSortKeySimpleTertiary(const    UCollator    *coll,
 
     if(allocateSKBuffer == TRUE) {
       *result = (uint8_t*)uprv_malloc(sortKeySize);
-	  //test for NULL
+	  /* test for NULL */
 	  if (*result == NULL) {
 		*status = U_MEMORY_ALLOCATION_ERROR;
 		return 0;

@@ -37,8 +37,8 @@ uset_openPattern(const UChar* pattern, int32_t patternLength,
                  UErrorCode* ec) {
     UnicodeString pat(patternLength==-1, pattern, patternLength);
     UnicodeSet* set = new UnicodeSet(pat, *ec);
-    //test for NULL
-    if(set == NULL) {
+    /* test for NULL */
+    if(set == 0) {
         *ec = U_MEMORY_ALLOCATION_ERROR;
         return 0;
     }
@@ -126,7 +126,7 @@ U_NAMESPACE_BEGIN
  */
 class USetAccess /* not : public UObject because all methods are static */ {
 public:
-    // Try to have the compiler inline these
+    /* Try to have the compiler inline these*/
     inline static int32_t getStringCount(const UnicodeSet& set) {
         return set.getStringCount();
     }
@@ -135,7 +135,7 @@ public:
         return set.getString(i);
     }
 private:
-    // do not instantiate
+    /* do not instantiate*/
     USetAccess();
 };
 U_NAMESPACE_END

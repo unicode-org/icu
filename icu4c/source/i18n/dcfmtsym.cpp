@@ -125,7 +125,7 @@ DecimalFormatSymbols::initialize(const Locale& loc, UErrorCode& status,
     ResourceBundle numberElementsRes = resource.get(fgNumberElements, status);
     int32_t numberElementsLength = numberElementsRes.getSize();
     UnicodeString* numberElements = new UnicodeString[numberElementsLength];
-    //test for NULL
+    /* test for NULL */
     if (numberElements == 0) {
         status = U_MEMORY_ALLOCATION_ERROR;
         return;
@@ -138,7 +138,7 @@ DecimalFormatSymbols::initialize(const Locale& loc, UErrorCode& status,
     ResourceBundle currencyElementsRes = resource.get(fgCurrencyElements, status);
     int32_t currencyElementsLength = currencyElementsRes.getSize();
     UnicodeString* currencyElements = new UnicodeString[currencyElementsLength];
-    //test for NULL
+    /* test for NULL */
     if (currencyElements == 0) {
         status = U_MEMORY_ALLOCATION_ERROR;
         delete[] numberElements;

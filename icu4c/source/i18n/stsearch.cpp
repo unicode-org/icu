@@ -310,7 +310,7 @@ SearchIterator * StringSearch::safeClone(void) const
                                             (RuleBasedCollator *)&m_collator_, 
                                             m_breakiterator_,
                                             status);
-    //test for NULL
+    /* test for NULL */
     if (result == 0) {
         status = U_MEMORY_ALLOCATION_ERROR;
         return 0;

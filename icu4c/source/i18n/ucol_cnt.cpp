@@ -237,7 +237,7 @@ ContractionTable *uprv_cnttab_cloneContraction(ContractionTable *t, UErrorCode *
   r->codePoints = (UChar *)uprv_malloc(sizeof(UChar)*t->size);
   r->CEs = (uint32_t *)uprv_malloc(sizeof(uint32_t)*t->size);
   
-  //Test for NULL
+  /* test for NULL */
   if((r->codePoints == NULL) || (r->CEs == NULL)) {
     *status = U_MEMORY_ALLOCATION_ERROR;
     return NULL;
@@ -256,7 +256,7 @@ uprv_cnttab_clone(CntTable *t, UErrorCode *status) {
   }
   int32_t i = 0;
   CntTable *r = (CntTable *)uprv_malloc(sizeof(CntTable));
-  //Test for NULL
+  /* test for NULL */
   if (r == NULL) {
     *status = U_MEMORY_ALLOCATION_ERROR;
     return NULL;
@@ -268,7 +268,7 @@ uprv_cnttab_clone(CntTable *t, UErrorCode *status) {
   r->mapping = t->mapping;
 
   r->elements = (ContractionTable **)uprv_malloc(t->capacity*sizeof(ContractionTable *));
-  //Test for NULL
+  /* test for NULL */
   if (r->elements == NULL) {
     *status = U_MEMORY_ALLOCATION_ERROR;
     return NULL;
@@ -281,7 +281,7 @@ uprv_cnttab_clone(CntTable *t, UErrorCode *status) {
 
   if(t->CEs != NULL) {
     r->CEs = (uint32_t *)uprv_malloc(t->position*sizeof(uint32_t));
-    //Test for NULL
+    /* test for NULL */
     if (r->CEs == NULL) {
         *status = U_MEMORY_ALLOCATION_ERROR;
         return NULL;
@@ -293,7 +293,7 @@ uprv_cnttab_clone(CntTable *t, UErrorCode *status) {
 
   if(t->codePoints != NULL) {
     r->codePoints = (UChar *)uprv_malloc(t->position*sizeof(UChar));
-    //Test for NULL
+    /* test for NULL */
     if (r->codePoints == NULL) {
         *status = U_MEMORY_ALLOCATION_ERROR;
         return NULL;
@@ -305,7 +305,7 @@ uprv_cnttab_clone(CntTable *t, UErrorCode *status) {
 
   if(t->offsets != NULL) {
     r->offsets = (int32_t *)uprv_malloc(t->size*sizeof(int32_t));
-    //Test for NULL
+    /* test for NULL */
     if (r->offsets == NULL) {
         *status = U_MEMORY_ALLOCATION_ERROR;
         return NULL;

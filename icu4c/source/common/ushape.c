@@ -501,12 +501,11 @@ removeLamAlefSpaces(UChar *dest, int32_t sourceLength,
     switch(options&U_SHAPE_LENGTH_MASK) {
     case U_SHAPE_LENGTH_GROW_SHRINK :
         tempbuffer = (UChar *)uprv_malloc((sourceLength+1)*U_SIZEOF_UCHAR);
-
-        /* Test for NULL */
-        if(tempbuffer == NULL) {
-            *pErrorCode = U_MEMORY_ALLOCATION_ERROR;
-            return 0;
-        }
+		/* Test for NULL */
+		if(tempbuffer == NULL) {
+			*pErrorCode = U_MEMORY_ALLOCATION_ERROR;
+			return 0;
+		}
 
         uprv_memset(tempbuffer, 0, (sourceLength+1)*U_SIZEOF_UCHAR);
 
@@ -546,11 +545,11 @@ removeLamAlefSpaces(UChar *dest, int32_t sourceLength,
     case U_SHAPE_LENGTH_FIXED_SPACES_AT_BEGINNING :
         tempbuffer = (UChar *)uprv_malloc((sourceLength+1)*U_SIZEOF_UCHAR);
 		
-	/* Test for NULL */
-	if(tempbuffer == NULL) {
-            *pErrorCode = U_MEMORY_ALLOCATION_ERROR;
-            return 0;
-	}
+		/* Test for NULL */
+		if(tempbuffer == NULL) {
+			*pErrorCode = U_MEMORY_ALLOCATION_ERROR;
+			return 0;
+		}
 
         uprv_memset(tempbuffer, 0, (sourceLength+1)*U_SIZEOF_UCHAR);
 
@@ -575,11 +574,11 @@ removeLamAlefSpaces(UChar *dest, int32_t sourceLength,
     case U_SHAPE_LENGTH_FIXED_SPACES_AT_END :
         tempbuffer = (UChar *)uprv_malloc((sourceLength+1)*U_SIZEOF_UCHAR);
 
-	/* Test for NULL */
-	if(tempbuffer == NULL) {
-            *pErrorCode = U_MEMORY_ALLOCATION_ERROR;
-            return 0;
-	}
+		/* Test for NULL */
+		if(tempbuffer == NULL) {
+			*pErrorCode = U_MEMORY_ALLOCATION_ERROR;
+			return 0;
+		}
 
         uprv_memset(tempbuffer, 0, (sourceLength+1)*U_SIZEOF_UCHAR);
 
@@ -644,11 +643,11 @@ expandLamAlef(UChar *dest, int32_t sourceLength,
         destSize = calculateSize(dest,sourceLength,destSize,options);
         tempbuffer = (UChar *)uprv_malloc((destSize+1)*U_SIZEOF_UCHAR);
 
-	/* Test for NULL */
-	if(tempbuffer == NULL) {
-            *pErrorCode = U_MEMORY_ALLOCATION_ERROR;
-            return 0;
-	}
+		/* Test for NULL */
+		if(tempbuffer == NULL) {
+			*pErrorCode = U_MEMORY_ALLOCATION_ERROR;
+			return 0;
+		}
 
         uprv_memset(tempbuffer, 0, (destSize+1)*U_SIZEOF_UCHAR);
 
@@ -686,11 +685,11 @@ expandLamAlef(UChar *dest, int32_t sourceLength,
     case U_SHAPE_LENGTH_FIXED_SPACES_AT_BEGINNING :
         tempbuffer = (UChar *)uprv_malloc((sourceLength+1)*U_SIZEOF_UCHAR);
 
-	/* Test for NULL */
-	if(tempbuffer == NULL) {
-            *pErrorCode = U_MEMORY_ALLOCATION_ERROR;
-            return 0;
-	}
+		/* Test for NULL */
+		if(tempbuffer == NULL) {
+			*pErrorCode = U_MEMORY_ALLOCATION_ERROR;
+			return 0;
+		}
 
         uprv_memset(tempbuffer, 0, (sourceLength+1)*U_SIZEOF_UCHAR);
 
@@ -727,11 +726,11 @@ expandLamAlef(UChar *dest, int32_t sourceLength,
              */
             tempbuffer = (UChar *)uprv_malloc((sourceLength+1)*U_SIZEOF_UCHAR);
 
-	    /* Test for NULL */
-	    if(tempbuffer == NULL) {
-                *pErrorCode = U_MEMORY_ALLOCATION_ERROR;
-                return 0;
-	    }
+			/* Test for NULL */
+			if(tempbuffer == NULL) {
+				*pErrorCode = U_MEMORY_ALLOCATION_ERROR;
+				return 0;
+			}
 
             uprv_memset(tempbuffer, 0, (sourceLength+1)*U_SIZEOF_UCHAR);
 
@@ -1026,11 +1025,11 @@ u_shapeArabic(const UChar *source, int32_t sourceLength,
         } else {
             tempbuffer = (UChar *)uprv_malloc(outputSize*U_SIZEOF_UCHAR);
 
-            /* Test for NULL */
-            if(tempbuffer == NULL) {
-                *pErrorCode = U_MEMORY_ALLOCATION_ERROR;
-                return 0;
-            }
+			/*Test for NULL*/
+			if(tempbuffer == NULL) {
+				*pErrorCode = U_MEMORY_ALLOCATION_ERROR;
+				return 0;
+			}
         }
         uprv_memcpy(tempbuffer, source, sourceLength*U_SIZEOF_UCHAR);
         if(sourceLength<outputSize) {
