@@ -173,7 +173,7 @@ static int16_t getTagNumber(const char *tagname) {
             if (!charsetNameCmp(name, tags)) {
                 return tag;
             }
-            tags += strlen(tags);
+            tags += strlen(tags) + 1;
         }
     }
 
