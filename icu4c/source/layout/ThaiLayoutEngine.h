@@ -2,7 +2,7 @@
 /*
  * @(#)ThaiLayoutEngine.h	1.3 00/03/15
  *
- * (C) Copyright IBM Corp. 1998, 1999, 2000 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998, 1999, 2000, 2001, 2002 - All Rights Reserved
  *
  */
 
@@ -24,6 +24,8 @@ U_NAMESPACE_BEGIN
  * All existing Thai fonts use an encoding which assigns character codes to all
  * the variant forms needed to display accents and tone marks correctly in context.
  * This class can deal with fonts using the Microsoft, Macintosh, and WorldType encodings.
+ *
+ * @internal
  */
 class ThaiLayoutEngine : public LayoutEngine
 {
@@ -39,11 +41,15 @@ public:
      *
      * @see LEFontInstance
      * @see ScriptAndLanguageTags.h for script and language codes
+     *
+     * @internal
      */
     ThaiLayoutEngine(const LEFontInstance *fontInstance, le_int32 scriptCode, le_int32 languageCode);
 
     /**
      * The destructor, virtual for correct polymorphic invocation.
+     *
+     * @internal
      */
     virtual ~ThaiLayoutEngine();
 
@@ -67,6 +73,8 @@ protected:
      * the font uses.
      *
      * @see ThaiShaping
+     *
+     * @internal
      */
     le_uint8 fGlyphSet;
 
@@ -77,6 +85,8 @@ protected:
      * display it.
      *
      * @see ThaiShaping
+     *
+     * @internal
      */
     LEUnicode fErrorChar;
 
@@ -100,6 +110,8 @@ protected:
      * @return the number of glyphs in the glyph index array
      *
      * @see ThaiShaping
+     *
+     * @internal
      */
     virtual le_int32 computeGlyphs(const LEUnicode chars[], le_int32 offset, le_int32 count, le_int32 max, le_bool rightToLeft,
         LEGlyphID *&glyphs, le_int32 *&charIndices, LEErrorCode &success);

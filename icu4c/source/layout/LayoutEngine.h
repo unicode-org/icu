@@ -2,7 +2,7 @@
 /*
  * %W% %W%
  *
- * (C) Copyright IBM Corp. 1998, 1999, 2000, 2001 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998, 1999, 2000, 2001, 2002 - All Rights Reserved
  *
  */
 
@@ -60,22 +60,30 @@ class LEGlyphFilter;
  *
  * @see LEFontInstance
  * @see ScriptAndLanguageTags.h
+ *
+ * @draft ICU 2.2
  */
 class U_LAYOUT_API LayoutEngine : public UObject {
 protected:
     /**
      * The number of glyphs in the output
+     *
+     * @internal
      */
     le_int32 fGlyphCount;
 
     /**
      * The output glyph array
+     *
+     * @internal
      */
     LEGlyphID *fGlyphs;
 
     /**
      * The character index array. One entry for each output glyph, giving the index
      * in the input character array of the character which corresponds to this glyph.
+     *
+     * @internal
      */
     le_int32 *fCharIndices;
 
@@ -84,6 +92,8 @@ protected:
      * X and Y positions of the glyph. Thus, for glyph i, the X position is at index
      * 2i, and the Y position is at index 2i + 1. There are also two entries for the
      * X and Y position of the advance of the last glyph.
+     *
+     * @internal
      */
     float *fPositions;
 
@@ -91,6 +101,8 @@ protected:
      * The font instance for the text font.
      *
      * @see LEFontInstance
+     *
+     * @internal
      */
     const LEFontInstance *fFontInstance;
 
@@ -98,6 +110,8 @@ protected:
      * The script code for the text
      *
      * @see ScriptAndLanguageTags.h for script codes.
+     *
+     * @internal
      */
     le_int32 fScriptCode;
 
@@ -105,6 +119,8 @@ protected:
      * The langauge code for the text
      *
      * @see ScriptAndLanguageTags.h for language codes.
+     *
+     * @internal
      */
     le_int32 fLanguageCode;
 
@@ -118,6 +134,8 @@ protected:
      *
      * @see LEFontInstance
      * @see ScriptAndLanguageTags.h
+     *
+     * @internal
      */
     LayoutEngine(const LEFontInstance *fontInstance, le_int32 scriptCode, le_int32 languageCode);
 
@@ -125,6 +143,8 @@ protected:
      * This overrides the default no argument constructor to make it
      * difficult for clients to call it. Clients are expected to call
      * layoutEngineFactory.
+     *
+     * @internal
      */
     LayoutEngine();
 
@@ -151,6 +171,8 @@ protected:
      * @param success - set to an error code if the operation fails
      *
      * @return the number of glyphs in the glyph index array
+     *
+     * @internal
      */
     virtual le_int32 computeGlyphs(const LEUnicode chars[], le_int32 offset, le_int32 count, le_int32 max, le_bool rightToLeft, LEGlyphID *&glyphs, le_int32 *&charIndices, LEErrorCode &success);
 
@@ -167,6 +189,8 @@ protected:
      *
      * Output parameters:
      * @param positions - the output X and Y positions (two entries per glyph)
+     *
+     * @internal
      */
     virtual void positionGlyphs(const LEGlyphID glyphs[], le_int32 glyphCount, float x, float y, float *&positions, LEErrorCode &success);
 
@@ -191,6 +215,8 @@ protected:
      *
      * Note: the positions are passed as a plain array because this method should
      * not need to reallocate them.
+     *
+     * @internal
      */
     virtual void adjustGlyphPositions(const LEUnicode chars[], le_int32 offset, le_int32 count, le_bool reverse, LEGlyphID glyphs[], le_int32 glyphCount, float positions[], LEErrorCode &success)
     {
@@ -216,6 +242,8 @@ protected:
      * @param tableTag - the four byte table tag.
      *
      * @return the address of the table.
+     *
+     * @internal
      */
     virtual const void *getFontTable(LETag tableTag) const;
 
@@ -243,6 +271,8 @@ protected:
      * @param success - set to an error code if the operation fails
      *
      * @see LEFontInstance
+     *
+     * @internal
      */
     virtual void mapCharsToGlyphs(const LEUnicode chars[], le_int32 offset, le_int32 count, le_bool reverse, le_bool mirror, LEGlyphID *&glyphs, le_int32 *&charIndices, LEErrorCode &success);
 
@@ -258,6 +288,8 @@ protected:
      * @param success - output parameter set to an error code if the operation fails
      *
      * @see LEGlyphFilter
+     *
+     * @internal
      */
     static void adjustMarkGlyphs(const LEGlyphID glyphs[], le_int32 glyphCount, le_bool reverse, LEGlyphFilter *markFilter, float positions[], LEErrorCode &success);
 
@@ -267,6 +299,8 @@ public:
      * glyph, character index and position arrays by calling the reset
      * method. It is declared virtual so that it will be invoked by the
      * subclass destructors.
+     *
+     * @draft ICU 2.2
      */
     virtual ~LayoutEngine();
 
@@ -288,6 +322,8 @@ public:
      *
      * Note; the glyph, character index and position array can be accessed
      * using the getter method below.
+     *
+     * @draft ICU 2.2
      */
     virtual le_int32 layoutChars(const LEUnicode chars[], le_int32 offset, le_int32 count, le_int32 max, le_bool rightToLeft, float x, float y, LEErrorCode &success);
 
@@ -297,6 +333,8 @@ public:
      * of characters used to create the LayoutEngine.
      *
      * @return the number of glyphs in the glyph array
+     *
+     * @draft ICU 2.2
      */
     le_int32 getGlyphCount() const
     {
@@ -310,6 +348,8 @@ public:
      *
      * @param glyphs - the destiniation glyph array
      * @param success - set to an error code if the operation fails
+     *
+     * @draft ICU 2.2
      */
     void getGlyphs(LEGlyphID glyphs[], LEErrorCode &success) const
     {
@@ -338,6 +378,8 @@ public:
      * @param glyphs - the destination (32 bit) glyph array
      * @param extraBits - this value will be ORed with each glyph index
      * @param success - set to an error code if the operation fails
+     *
+     * @draft ICU 2.2
      */
     virtual void getGlyphs(le_uint32 glyphs[], le_uint32 extraBits, LEErrorCode &success) const;
 
@@ -348,6 +390,8 @@ public:
      *
      * @param charIndices - the destiniation character index array
      * @param success - set to an error code if the operation fails
+     *
+     * @draft ICU 2.2
      */
     void getCharIndices(le_int32 charIndices[], LEErrorCode &success) const
     {
@@ -376,6 +420,8 @@ public:
      * @param charIndices - the destiniation character index array
      * @param indexBase - an offset which will be added to each index
      * @param success - set to an error code if the operation fails
+     *
+     * @draft ICU 2.2
      */
     void getCharIndices(le_int32 charIndices[], le_int32 indexBase, LEErrorCode &success) const;
 
@@ -387,6 +433,8 @@ public:
      *
      * @param glyphs - the destiniation position array
      * @param success - set to an error code if the operation fails
+     *
+     * @draft ICU 2.2
      */
     void getGlyphPositions(float positions[], LEErrorCode &success) const
     {
@@ -419,6 +467,7 @@ public:
      * @param y - the glyph's Y position
      * @param success - set to an error code if the operation fails
      *
+     * @draft ICU 2.2
      */
     void getGlyphPosition(le_int32 glyphIndex, float &x, float &y, LEErrorCode &success) const
     {
@@ -444,6 +493,8 @@ public:
      * This method frees the glyph, character index and position arrays
      * so that the LayoutEngine can be reused to layout a different
      * characer array. (This method is also called by the destructor)
+     *
+     * @draft ICU 2.2
      */
     virtual void reset();
 
@@ -460,6 +511,8 @@ public:
      * @return a LayoutEngine which can layout text in the given font.
      *
      * @see LEFontInstance
+     *
+     * @draft ICU 2.2
      */
     static LayoutEngine *layoutEngineFactory(const LEFontInstance *fontInstance, le_int32 scriptCode, le_int32 languageCode, LEErrorCode &success);
 

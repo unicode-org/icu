@@ -44,6 +44,8 @@ U_NAMESPACE_BEGIN
  * such as kerning and accent positioning.
  *
  * @see LayoutEngine
+ *
+ * @internal
  */
 class OpenTypeLayoutEngine : public LayoutEngine
 {
@@ -61,6 +63,8 @@ public:
      *
      * @see LayoutEngine::layoutEngineFactory
      * @see ScriptAndLangaugeTags.h for script and language codes
+     *
+     * @internal
      */
     OpenTypeLayoutEngine(const LEFontInstance *fontInstance, le_int32 scriptCode, le_int32 languageCode,
                             const GlyphSubstitutionTableHeader *gsubTable);
@@ -72,11 +76,15 @@ public:
      * @param fontInstance - the font
      * @param scriptCode - the script
      * @param langaugeCode - the language
+     *
+     * @internal
      */
     OpenTypeLayoutEngine(const LEFontInstance *fontInstance, le_int32 scriptCode, le_int32 languageCode);
 
     /**
      * The destructor, virtual for correct polymorphic invocation.
+     *
+     * @internal
      */
     virtual ~OpenTypeLayoutEngine();
 
@@ -87,6 +95,8 @@ public:
      * @param scriptCode - the script code
      *
      * @return the four byte script tag
+     *
+     * @internal
      */
     static LETag getScriptTag(le_int32 scriptCode);
 
@@ -97,6 +107,8 @@ public:
      * @param languageCode - the language code
      *
      * @return the four byte language tag
+     *
+     * @internal
      */
     static LETag getLangSysTag(le_int32 languageCode);
 
@@ -138,28 +150,38 @@ protected:
      * An array of pointers to four byte feature tags.
      * Each pointer points to a list of tags, terminated
      * by a special empty tag.
+     *
+     * @internal
      */
     const LETag **fFeatureTags;
 
-        /**
-         * A list of tags in the order in which the features in
-         * the font should be applied, as opposed to using the
-         * order of the lookups in the font.
-         */
+    /**
+     * A list of tags in the order in which the features in
+     * the font should be applied, as opposed to using the
+     * order of the lookups in the font.
+     *
+     * @internal
+     */
     const LETag *fFeatureOrder;
 
     /**
      * The address of the GSUB table.
+     *
+     * @internal
      */
     const GlyphSubstitutionTableHeader *fGSUBTable;
 
     /**
      * The address of the GDEF table.
+     *
+     * @internal
      */
     const GlyphDefinitionTableHeader   *fGDEFTable;
 
     /**
      * The address of the GPOS table.
+     *
+     * @internal
      */
     const GlyphPositioningTableHeader  *fGPOSTable;
 
@@ -168,16 +190,22 @@ protected:
      * preformed by the GSUB table. This is used for some
      * "canned" GSUB tables to restrict substitutions to
      * glyphs that are in the font.
+     *
+     * @internal
      */
     LEGlyphFilter *fSubstitutionFilter;
 
     /**
      * The four byte script tag.
+     *
+     * @internal
      */
     LETag fScriptTag;
 
     /**
      * The four byte language tag
+     *
+     * @internal
      */
     LETag fLangSysTag;
 
@@ -203,6 +231,8 @@ protected:
      * @param success - set to an error code if the operation fails
      *
      * @return the output character count (input character count if no change)
+     *
+     * @internal
      */
     virtual le_int32 characterProcessing(const LEUnicode chars[], le_int32 offset, le_int32 count, le_int32 max, le_bool rightToLeft,
             LEUnicode *&outChars, le_int32 *&charIndices, const LETag **&featureTags, LEErrorCode &success) /*= 0;*/
@@ -245,6 +275,8 @@ protected:
      *
      * Note: if the character index array was already set by the characterProcessing
      * method, this method won't change it.
+     *
+     * @internal
      */
     virtual le_int32 glyphProcessing(const LEUnicode chars[], le_int32 offset, le_int32 count, le_int32 max, le_bool rightToLeft,
             const LETag **featureTags, LEGlyphID *&glyphs, le_int32 *&charIndices, LEErrorCode &success);
@@ -271,6 +303,8 @@ protected:
      * @param success - set to an error code if the operation fails
      *
      * @return the number of glyph indices in the output glyph index array
+     *
+     * @internal
      */
     virtual le_int32 glyphPostProcessing(LEGlyphID tempGlyphs[], le_int32 tempCharIndices[], le_int32 tempGlyphCount,
                     LEGlyphID *&glyphs, le_int32 *&charIndices, LEErrorCode &success)
@@ -304,6 +338,8 @@ protected:
      * @return the number of glyphs in the glyph index array
      *
      * @see LayoutEngine::computeGlyphs
+     *
+     * @internal
      */
     virtual le_int32 computeGlyphs(const LEUnicode chars[], le_int32 offset, le_int32 count, le_int32 max, le_bool rightToLeft, LEGlyphID *&glyphs, le_int32 *&charIndices, LEErrorCode &success);
 
@@ -319,6 +355,8 @@ protected:
      * Output parameters:
      * @param positions - the output X and Y positions (two entries per glyph)
      * @param success - set to an error code if the operation fails
+     *
+     * @internal
      */
     virtual void adjustGlyphPositions(const LEUnicode chars[], le_int32 offset, le_int32 count, le_bool reverse, LEGlyphID glyphs[], le_int32 glyphCount, float positions[], LEErrorCode &success);
 
@@ -326,6 +364,8 @@ protected:
      * This method frees the feature tag array so that the
      * OpenTypeLayoutEngine can be reused for different text.
      * It is also called from our destructor.
+     *
+     * @internal
      */
     virtual void reset();
 };
