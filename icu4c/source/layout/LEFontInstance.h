@@ -16,13 +16,14 @@ U_NAMESPACE_BEGIN
 /**
  * Instances of this class are used by LEFontInstance::mapCharsToGlyphs and
  * LEFontInstance::mapCharToGlyph to adjust character codes before the character
- * to glyph mapping process. Examples of this are filtering out control charcters
+ * to glyph mapping process. Examples of this are filtering out control characters
  * and character mirroring - replacing a character which has both a left and a right
  * hand form with the opposite form.
  *
  * @draft ICU 2.2
  */
-class LECharMapper /* not : public UObject because this is an interface/mixin class */ {
+class LECharMapper /* not : public UObject because this is an interface/mixin class */
+{
 public:
     /**
      * Destructor.
@@ -33,7 +34,7 @@ public:
     /**
      * This method does the adjustments.
      *
-     * @param ch - the input charcter
+     * @param ch - the input character
      *
      * @return the adjusted character
      *
@@ -43,18 +44,31 @@ public:
 };
 
 /**
- * This is a pure virtual base class that servers as the interface between a LayoutEngine
+ * This is a virtual base class that servers as the interface between a LayoutEngine
  * and the platform font environment. It allows a LayoutEngine to access font tables, do
  * character to glyph mapping, and obtain metrics information without knowing any platform
  * specific details. There are also a few utility methods for converting between points,
  * pixels and funits. (font design units)
  *
- * Each instance of an LEFontInstance represents a renerable instance of a font. (i.e. a
- * single font at a particular point size, with a particular transform)
+ * An instance of an <code>LEFontInstance</code> represents a font at a particular point
+ * size. Each instance can represent either a single physical font, or a composite font.
+ * A composite font is a collection of physical fonts, each of which contains a subset of
+ * the characters contained in the composite font.
  *
- * @draft ICU 2.2
+ * Note: with the exception of <code>getSubFont</code>, the methods in this class only
+ * make sense for a physical font. If you have an <code>LEFontInstance</code> which
+ * represents a composite font you should only call the methods below which have
+ * an <code>LEGlyphID</code>, an <code>LEUnicode</code> or an <code>LEUnicode32</code>
+ * as one of the arguments because these can be used to select a particular subfont.
+ *
+ * Subclasses which implement composite fonts should supply an impelmentation of these
+ * methods with some default behavior such as returning constant values, or using the
+ * values from the first subfont.
+ *
+ * @draft ICU 2.6
  */
-class U_LAYOUT_API LEFontInstance /* not : public UObject because this is an interface/mixin class */ {
+class U_LAYOUT_API LEFontInstance : public UObject
+{
 public:
 
     /**
@@ -66,44 +80,65 @@ public:
     virtual inline ~LEFontInstance() {};
 
     /**
-     * This method is provided so that clients can tell if
-     * a given LEFontInstance is an instance of a composite
-     * font.
-     * 
-     * @return <code>true</code> if the instance represents a composite font, <code>false</code> otherwise.
+     * Get a physical font which can render the given text. For composite fonts,
+	 * if there is no single physical font which can render all of the text,
+	 * return a physical font which can render an initial substring of the text,
+	 * along with the limit offset of that substring.
+	 *
+	 * Internally, the LayoutEngine works with runs of text all in the same
+	 * font and script, so it is best to call this method with text which is
+	 * in a single script, passing the script code in as a hint. If you don't
+	 * know the script of the text, you can pass <code>zyyyScriptCode</code>,
+	 * which is the script code for characters used in more than one script.
+	 *
+	 * The default implementation of this method is intended for instances of
+	 * <code>LEFontInstance</code> which represent a physical font. It returns
+	 * <code>this</code> and indicates that the entire string can be rendered.
+	 *
+	 * Sublcasses which implement composite fonts must override this method.
+	 * Where it makes sense, they should use the script code as a hint to render
+	 * characters from the COMMON script in the font which is used for the given
+	 * script. For example, if the input text is a series of Arabic words separated
+	 * by spaces, and the script code passed in is <code>arabScriptCode</code> you
+	 * should return the font used for Arabic characters for all of the text.
      *
+     * @param chars   - the array of Unicode characters.
+     * @param start   - a pointer to the starting offset in the text. On exit this
+	 *                  will be set the the limit offset of the text which can be
+	 *                  rendered using the returned font.
+     * @param limit   - the limit offset for the input text.
+     * @param script  - the script hint.
+     * @param success - set to an error code if the arguments are illegal, or no font
+     *                  can be returned for some reason. May also be set to
+     *                  <code>LE_NO_SUBFONT_WARNING</code> if there is no subfont which
+     *                  can render the text.
+     *
+     * @return an <code>LEFontInstance</code> for the sub font which can render the characters, or
+     *         <code>NULL</code> if there is an error.
+     *
+	 * @see LEScripts.h
+	 *
      * @draft ICU 2.6
      */
-    virtual le_bool isComposite() const;
-
-    /**
-     * Get a sub-font for a run of text from a composite font. This method examines the
-     * given text, finding a run of text which can all be rendered
-     * using the same sub-font. Subclassers should try to keep all the text in a single
-     * sub-font if they can.
-     *
-     * @param chars  - the array of unicode characters
-     * @param offset - a pointer to the starting offset in the text. This will be
-     *                 set to the limit offset of the run on exit.
-     * @param count  - the number of characters in the array. Can be used as a hint for selecting a sub-font.
-     * @param script - the script of the characters.
-     *
-     * @return an <code>LEFontInstance</code> for the sub font which can render the characters.
-     *
-     * @draft ICU 2.6
-     */
-    virtual const LEFontInstance *getSubFont(const LEUnicode chars[], le_int32 *offset, le_int32 count, le_int32 script) const;
+    virtual const LEFontInstance *getSubFont(const LEUnicode chars[], le_int32 *start, le_int32 limit, le_int32 script, LEErrorCode &success) const;
 
     //
     // Font file access
     //
 
     /**
-     * This method reads a table from the font.
+     * This method reads a table from the font. Note that in general,
+     * it only makes sense to call this method on an <code>LEFontInstance</code>
+     * which represents a physical font - i.e. one which has been returned by
+     * <code>getSubFont()</code>. This is because each subfont in a composite font
+     * will have different tables, and there's no way to know which subfont to access.
      *
-     * @param tableTag - the four byte table tag
+     * Sublcasses which represent composite fonts should always return <code>NULL</code>.
      *
-     * @return the address of the table in memory
+     * @param tableTag - the four byte table tag. (e.g. 'cmap') 
+     *
+     * @return the address of the table in memory, or <code>NULL</code>
+     *         if the table doesn't exist.
      *
      * @draft ICU 2.2
      */
@@ -138,8 +173,8 @@ public:
      * indices, using the font's character to glyph map.
      *
      * @param chars - the character array
-     * @param offset - the index of the first charcter
-     * @param count - the number of charcters
+     * @param offset - the index of the first character
+     * @param count - the number of characters
      * @param reverse - if true, store the glyph indices in reverse order.
      * @param mapper - the character mapper.
      * @param glyphs - the output glyph array
@@ -152,7 +187,7 @@ public:
 
     /**
      * This method maps a single character to a glyph index, using the
-     * font's charcter to glyph map. The default implementation of this
+     * font's character to glyph map. The default implementation of this
      * method calls the mapper, and then calls <code>mapCharToGlyph(mappedCh)</code>.
      *
      * @param ch - the character
@@ -160,19 +195,21 @@ public:
      *
      * @return the glyph index
      *
+     * @see LECharMapper
+     *
      * @draft ICU 2.6
      */
     virtual LEGlyphID mapCharToGlyph(LEUnicode32 ch, const LECharMapper *mapper) const;
 
     /**
      * This method maps a single character to a glyph index, using the
-     * font's charcter to glyph map.
+     * font's character to glyph map. There is no default implementation
+     * of this method because it requires information about the platform
+     * font implementation.
      *
      * @param ch - the character
      *
      * @return the glyph index
-     *
-     * @see LECharMapper
      *
      * @draft ICU 2.6
      */
@@ -377,7 +414,7 @@ public:
 
     //
     // These methods won't ever be called by the LayoutEngine,
-    // but are useful for cleints of <code>LEFontInstance</code> who
+    // but are useful for clients of <code>LEFontInstance</code> who
     // need to render text.
     //
 
@@ -418,18 +455,29 @@ public:
      * @draft ICU 2.6
      */
     virtual le_int32 getLineHeight() const;
+
+    /**
+     * ICU "poor man's RTTI", returns a UClassID for the actual class.
+     *
+     * @draft ICU 2.2
+     */
+    virtual inline UClassID getDynamicClassID() const { return getStaticClassID(); }
+
+    /**
+     * ICU "poor man's RTTI", returns a UClassID for this class.
+     *
+     * @draft ICU 2.2
+     */
+    static inline UClassID getStaticClassID() { return (UClassID)&fgClassID; }
+
+private:
+
+    /**
+     * The address of this static class variable serves as this class's ID
+     * for ICU "poor man's RTTI".
+     */
+    static const char fgClassID;
 };
-
-inline le_bool LEFontInstance::isComposite() const
-{
-    return false;
-}
-
-inline const LEFontInstance *LEFontInstance::getSubFont(const LEUnicode /*chars*/[], le_int32 *offset, le_int32 count, le_int32 /*script*/) const
-{
-    *offset += count;
-    return this;
-}
 
 inline le_bool LEFontInstance::canDisplay(LEUnicode32 ch) const
 {

@@ -19,6 +19,8 @@
 
 #include "ScriptCompositeFontInstance.h"
 
+const char ScriptCompositeFontInstance::fgClassID=0;
+
 ScriptCompositeFontInstance::ScriptCompositeFontInstance(FontMap *fontMap)
     : fFontMap(fontMap)
 {
@@ -58,16 +60,24 @@ le_bool ScriptCompositeFontInstance::getGlyphPoint(LEGlyphID glyph, le_int32 poi
     return false;
 }
 
-const LEFontInstance *ScriptCompositeFontInstance::getSubFont(const LEUnicode chars[], le_int32 *offset, le_int32 count, le_int32 script) const
+const LEFontInstance *ScriptCompositeFontInstance::getSubFont(const LEUnicode chars[], le_int32 *start, le_int32 limit, le_int32 script, LEErrorCode &success) const
 {
-    LEErrorCode status = LE_NO_ERROR;
-    const LEFontInstance *result = fFontMap->getScriptFont(script, status);
-
-    if (LE_FAILURE(status)) {
-        result = NULL;
+    if (LE_FAILURE(success)) {
+        return NULL;
     }
 
-    *offset += count;
+    if (chars == NULL || *start < 0 || limit < 0 || *start >= limit || script < 0 || script >= scriptCodeCount) {
+        success = LE_ILLEGAL_ARGUMENT_ERROR;
+        return NULL;
+    }
+
+    const LEFontInstance *result = fFontMap->getScriptFont(script, success);
+
+    if (LE_FAILURE(success)) {
+        return NULL;
+    }
+
+    *start = limit;
     return result;
 }
 

@@ -112,7 +112,7 @@ typedef le_uint16 TTGlyphID;
  * the glyph ID within the font. The next 8 bits are
  * the sub-font ID within a compound font. The high-
  * order 8 bits are client defined. The LayoutEngine
- * will never change or look at these bits.
+ * will never change or look at the client defined bits.
  *
  * @draft ICU 2.6
  */
@@ -325,7 +325,7 @@ typedef struct LEPoint LEPoint;
  */
 enum LEErrorCode {
     /* informational */
-    // none right now...
+    LE_NO_SUBFONT_WARNING          = U_USING_DEFAULT_WARNING,
 
     /* success */
     LE_NO_ERROR                     = U_ZERO_ERROR,
