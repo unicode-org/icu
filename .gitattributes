@@ -134,6 +134,7 @@ icu4c/source/samples/XMLConverter/samples/weekly.xml svneol=native#text/xml
 icu4c/source/samples/XMLConverter/samples/x.xml svneol=native#text/xml
 icu4c/source/test/testdata/en_US.uni -text
 icu4c/source/test/testdata/uni-text.txt -text
+icu4j/build.xml svneol=native#text/xml
 icu4j/license.html svneol=native#text/html
 icu4j/src/com/ibm/demo/rbbi/english.dict -text
 icu4j/src/com/ibm/demo/translit/demo.html svneol=native#text/html
