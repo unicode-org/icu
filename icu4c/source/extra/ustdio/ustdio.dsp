@@ -154,10 +154,6 @@ SOURCE=.\locbund.c
 # End Source File
 # Begin Source File
 
-SOURCE=.\loccache.c
-# End Source File
-# Begin Source File
-
 SOURCE=.\sprintf.c
 # End Source File
 # Begin Source File
@@ -208,10 +204,6 @@ SOURCE=.\ustream.cpp
 # Begin Source File
 
 SOURCE=.\locbund.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\loccache.h
 # End Source File
 # Begin Source File
 
