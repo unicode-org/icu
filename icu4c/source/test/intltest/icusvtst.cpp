@@ -157,6 +157,7 @@ UnicodeString append(UnicodeString& result, const UObject* obj)
             result.append(buffer);
         } else {
             sprintf(buffer, "%x", obj);
+            result.append(buffer);
         }
     }
     return result;
@@ -785,6 +786,11 @@ class CalifornioLanguageFactory : public ICUResourceBundleFactory
     static const char* geek; // = californio ## "_GEEK";
     static const Hashtable* supportedIDs; // = NULL;
 
+    static void cleanup(void) {
+      delete supportedIDs;
+      supportedIDs = NULL;
+    }
+
     const Hashtable* getSupportedIDs(UErrorCode& status) const 
     {
         if (supportedIDs == NULL) {
@@ -900,6 +906,7 @@ ICUServiceTest::testRBF()
             }
         }
     }
+    CalifornioLanguageFactory::cleanup();
 }
 
 class SimpleListener : public ServiceListener {
@@ -1164,13 +1171,6 @@ void ICUServiceTest::testLocale() {
             errln("could not create available locales");
         }
     }
-    delete one;
-    delete two;
-    delete root;
-    delete german;
-    delete germany;
-    delete japanese;
-    delete japan;
 }
 
 class WrapFactory : public ICUServiceFactory {
@@ -1181,6 +1181,11 @@ class WrapFactory : public ICUServiceFactory {
       }
       return *greetingID;
     }
+
+  static void cleanup() {
+    delete greetingID;
+    greetingID = NULL;
+  }
 
     UObject* create(const ICUServiceKey& key, const ICUService* service, UErrorCode& status) const {
         if (U_SUCCESS(status)) {
@@ -1255,6 +1260,8 @@ ICUServiceTest::testWrapFactory()
         confirmEqual("wrap test: ", result, &target);
         delete result;
     }
+
+    WrapFactory::cleanup();
 }
 
   // misc coverage tests
