@@ -949,8 +949,14 @@ EOF
     Power*:Rhapsody:*:*)
 	echo powerpc-apple-rhapsody${UNAME_RELEASE}
 	exit 0 ;;
+    Power*:Darwin:*:*)
+	echo powerpc-apple-darwin${UNAME_RELEASE}
+	exit 0 ;;
     *:Rhapsody:*:*)
 	echo ${UNAME_MACHINE}-apple-rhapsody${UNAME_RELEASE}
+	exit 0 ;;
+    *:Darwin:*:*)
+	echo ${UNAME_MACHINE}-apple-darwin${UNAME_RELEASE}
 	exit 0 ;;
     *:OS/390:*:*)
 	echo ${UNAME_MACHINE}-ibm-os390${UNAME_RELEASE}
