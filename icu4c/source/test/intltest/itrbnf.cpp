@@ -60,6 +60,7 @@ void IntlTestRBNF::runIndexedTest(int32_t index, UBool exec, const char* &name, 
         TESTCASE(12, TestBelgianFrenchSpellout);
         TESTCASE(13, TestSmallValues);
         TESTCASE(14, TestLocalizations);
+        TESTCASE(15, TestAllLocales);
 #else
         TESTCASE(0, TestRBNFDisabled);
 #endif
@@ -1605,6 +1606,51 @@ IntlTestRBNF::TestLocalizations(void)
             }
         }
     }
+}
+
+void
+IntlTestRBNF::TestAllLocales()
+{
+  const char* names[] = {
+    " (spellout) ",
+    " (ordinal)  ",
+    " (duration) "
+  };
+  UnicodeString err;
+  int32_t count = 0;
+  const Locale* locales = Locale::getAvailableLocales(count);
+  for (int i = 0; i < count; ++i) {
+    const Locale* loc = &locales[i];
+    for (int j = 0; j < 3; ++j) {
+      UErrorCode status = U_ZERO_ERROR;
+      RuleBasedNumberFormat* f = new RuleBasedNumberFormat((URBNFRuleSetTag)j, *loc, status);
+      if (U_SUCCESS(status)) {
+        double n = 45.678;
+        UnicodeString str;
+        f->format(n, str);
+        delete f;
+
+        UnicodeString msg;
+        msg.append(loc->getName());
+        msg.append(names[j]);
+        msg.append("success: 45.678 -> ");
+        msg.append(str);
+        logln(msg);
+      } else {
+        UnicodeString msg;
+        msg.append(loc->getName());
+        msg.append(names[j]);
+        msg.append("ERROR could not instantiate");
+        logln(msg);
+          
+        err.append("\n");
+        err.append(msg);
+      }
+    }
+  }
+  if (err.length()) {
+    errln(err);
+  }
 }
 
 void 
