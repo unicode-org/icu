@@ -2034,7 +2034,7 @@ void Calendar::validateField(UCalendarDateFields field, int32_t min, int32_t max
 
 // -------------------------
 
-const Calendar::UFieldResolutionTable* Calendar::getFieldResolutionTable() const {
+const UFieldResolutionTable* Calendar::getFieldResolutionTable() const {
   return kDatePrecedence;
 }
 
@@ -2077,7 +2077,7 @@ UCalendarDateFields Calendar::resolveFields(const UFieldResolutionTable* precede
 
 const int32_t Calendar::kResolveRemap = 32;
 
-const Calendar::UFieldResolutionTable Calendar::kDatePrecedence[] =
+const UFieldResolutionTable Calendar::kDatePrecedence[] =
   { 
     {
       { UCAL_DAY_OF_MONTH, -1 },
@@ -2104,7 +2104,7 @@ const Calendar::UFieldResolutionTable Calendar::kDatePrecedence[] =
   };
 
 
-const Calendar::UFieldResolutionTable Calendar::kDOWPrecedence[] = 
+const UFieldResolutionTable Calendar::kDOWPrecedence[] = 
 {
   {
     { UCAL_DAY_OF_WEEK,-1, -1 },
@@ -2115,7 +2115,7 @@ const Calendar::UFieldResolutionTable Calendar::kDOWPrecedence[] =
 };
 
 // precedence for calculating a year
-const Calendar::UFieldResolutionTable Calendar::kYearPrecedence[] = 
+const UFieldResolutionTable Calendar::kYearPrecedence[] = 
 {
   {
     { UCAL_YEAR, -1 },
