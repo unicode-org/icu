@@ -3,13 +3,13 @@
 # Corporation and others. All Rights Reserved.
 #--------------------------------------------------------------------
 # $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/data/Attic/Transliterator_Greek_Latin.txt,v $
-# $Date: 2001/11/14 21:39:34 $
-# $Revision: 1.11 $
+# $Date: 2001/11/20 01:13:28 $
+# $Revision: 1.12 $
 #--------------------------------------------------------------------
 
 # Rules are predicated on running NFD first, and NFC afterwards
-:: [\u0000-\u007F \00B7 [:Greek:] [:Mark:]] ;
-:: NFD (NFC) ; 
+:: [\u0000-\u007F \u00B7 [:Greek:] [:nonspacing mark:]] ;
+:: NFKD (NFC) ; 
 
 # TEST CASES
 
@@ -318,5 +318,5 @@ $rough <> h ;
  < [Ππ] { \' } [Ss] ;
  < [Νν] { \' } $egammaLike ;
 
-::NFC (NFD) ;
-:: ([\u0000-\u007F [:Latin:] [:Mark:]]) ;
+::NFC (NFKD) ;
+:: ([\u0000-\u007F [:Latin:] [:nonspacing mark:]]) ;
