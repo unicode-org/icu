@@ -12,6 +12,7 @@
 #include "unicode/calendar.h"
 #include "math.h"
 #include <float.h>
+#include "unicode/putil.h"
 
 #ifdef U_DEBUG_ASTRO
 # include <stdio.h>
@@ -50,6 +51,9 @@ static const char * debug_astro_date(UDate d) {
 #define U_DEBUG_ASTRO_MSG(x)
 #endif
 
+static inline UBool isINVALID(double d) {
+  return(uprv_isNaN(d));
+}
 
 /**
      * The number of standard hours in one sidereal day.
@@ -300,7 +304,7 @@ UDate CalendarAstronomer::getTime() {
  * @deprecated ICU 2.4. This class may be removed or modified.
  */
 double CalendarAstronomer::getJulianDay() {
-  if (julianDay == INVALID) {
+  if (isINVALID(julianDay)) {
     julianDay = (fTime - (double)JULIAN_EPOCH_MS) / (double)DAY_MS;
   }
   return julianDay;
@@ -315,7 +319,7 @@ double CalendarAstronomer::getJulianDay() {
      * @deprecated ICU 2.4. This class may be removed or modified.
      */
 double CalendarAstronomer::getJulianCentury() {
-  if (julianCentury == INVALID) {
+  if (isINVALID(julianCentury)) {
     julianCentury = (getJulianDay() - 2415020.0) / 36525;
   }
   return julianCentury;
@@ -327,7 +331,7 @@ double CalendarAstronomer::getJulianCentury() {
      * @deprecated ICU 2.4. This class may be removed or modified.
      */
 double CalendarAstronomer::getGreenwichSidereal() {
-  if (siderealTime == INVALID) {
+  if (isINVALID(siderealTime)) {
     // See page 86 of "Practial Astronomy with your Calculator",
     // by Peter Duffet-Smith, for details on the algorithm.
                 
@@ -339,7 +343,7 @@ double CalendarAstronomer::getGreenwichSidereal() {
 }
     
 double CalendarAstronomer::getSiderealOffset() {
-  if (siderealT0 == INVALID) {
+  if (isINVALID(siderealT0)) {
     double JD  = uprv_floor(getJulianDay() - 0.5) + 0.5;
     double S   = JD - 2451545.0;
     double T   = S / 36525.0;
@@ -544,7 +548,7 @@ double CalendarAstronomer::getSunLongitude()
   // See page 86 of "Practial Astronomy with your Calculator",
   // by Peter Duffet-Smith, for details on the algorithm.
         
-  if (sunLongitude == INVALID) {
+  if (isINVALID(sunLongitude)) {
     getSunLongitude(getJulianDay(), sunLongitude, meanAnomalySun);
   }
   return sunLongitude;
@@ -1340,7 +1344,7 @@ double CalendarAstronomer::trueAnomaly(double meanAnomaly, double eccentricity)
      *          measured in radians.
      */
 double CalendarAstronomer::eclipticObliquity() {
-  if (eclipObliquity == INVALID) {
+  if (isINVALID(eclipObliquity)) {
     const double epoch = 2451545.0;     // 2000 AD, January 1.5
 
     double T = (getJulianDay() - epoch) / 36525;
@@ -1359,9 +1363,9 @@ double CalendarAstronomer::eclipticObliquity() {
 //-------------------------------------------------------------------------
 // Private data
 //-------------------------------------------------------------------------
-const double CalendarAstronomer::INVALID = DBL_MIN; // revisit
-
 void CalendarAstronomer::clearCache() {
+  const double INVALID = uprv_getNaN();
+
   julianDay       = INVALID;
   julianCentury   = INVALID;
   sunLongitude    = INVALID;
