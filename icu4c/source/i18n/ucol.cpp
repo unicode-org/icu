@@ -2093,11 +2093,11 @@ ucol_strcoll(    const    UCollator    *coll,
       sCEs = sCEsArray;
       tCEs = tCEsArray;
       for(;;) {
-        while(secS & 0x3F == 0 || secS & 0x3F != 0x01) {
+        while((secS & 0x3F) == 0 || (secS & 0x3F) != 0x01) {
           secS = *(sCEs++) & 0xFF;
         }
 
-        while(secT & 0x3F == 0 || secT & 0x3F != 0x01) {
+        while((secT & 0x3F) == 0 || (secT & 0x3F) != 0x01) {
           secT = *(tCEs++) & 0xFF;
         }
 
