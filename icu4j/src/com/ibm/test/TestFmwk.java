@@ -1,5 +1,5 @@
 /*
- * $RCSfile: TestFmwk.java,v $ $Revision: 1.4 $ $Date: 2000/02/25 18:57:12 $
+ * $RCSfile: TestFmwk.java,v $ $Revision: 1.5 $ $Date: 2000/02/25 23:57:10 $
  *
  * (C) Copyright Taligent, Inc. 1996, 1997 - All Rights Reserved
  * (C) Copyright IBM Corp. 1996 - 1998 - All Rights Reserved
@@ -70,7 +70,7 @@ public class TestFmwk {
     // to add a new test by simply adding a function to an existing class
     //------------------------------------------------------------------------
 
-    protected TestFmwk() {
+	protected TestFmwk() {
         // Create a hashtable containing all the test methods.
         testMethods = new Hashtable();
         Method[] methods = getClass().getDeclaredMethods();
@@ -81,54 +81,52 @@ public class TestFmwk {
             }
         }
     }
+    
+    public void setParent(TestFmwk parent) {
+    	params = parent.params;
+    }
 
-    protected void run(String[] args) throws Exception
-    {
-        System.out.println(getClass().getName() + " {");
-        indentLevel++;
-
-        // Set up the log and reference streams.  We use PrintWriters in order to
-        // take advantage of character conversion.  The JavaEsc converter will
-        // convert Unicode outside the ASCII range to Java's \\uxxxx notation.
-        log = new PrintWriter(System.out,true);
-
+    public void run(String[] args) throws Exception {
+    	if (params == null) params = new TestParams();
         // Parse the test arguments.  They can be either the flag
         // "-verbose" or names of test methods. Create a list of
         // tests to be run.
-        Vector testsToRun = new Vector( args.length );
-        for( int i=0; i<args.length; i++ ) {
-            if( args[i].equals("-verbose") ) {
-                verbose = true;
+        testsToRun = new Vector(args.length);
+        for (int i = 0; i < args.length; i++) {
+            if (args[i].equals("-verbose")) {
+                params.verbose = true;
             }
-            else if( args[i].equals("-prompt") ) {
-                prompt = true;
+            else if (args[i].equals("-prompt")) {
+                params.prompt = true;
             } else if (args[i].equals("-nothrow")) {
-                nothrow = true;
+                params.nothrow = true;
             } else {
-                Object m = testMethods.get( args[i] );
-                if( m != null ) {
-                    testsToRun.addElement( m );
-                }
-                else {
+                Object m = testMethods.get(args[i]);
+                if (m != null) {
+                    testsToRun.addElement(m);
+                } else {
                     usage();
                     return;
                 }
             }
         }
 
-        // If no test method names were given explicitly, run them all.
-        if( testsToRun.size() == 0 ) {
-            Enumeration methodNames = testMethods.elements();
-            while( methodNames.hasMoreElements() ) {
-                testsToRun.addElement( methodNames.nextElement() );
-            }
-        }
+    	if (params == null) params = new TestParams();
+        System.out.println(getClass().getName() + " {");
+        params.indentLevel++;
+		Enumeration methodsToRun;
+		
+		if (testsToRun.size() < 1) {
+			methodsToRun = testMethods.elements();
+		} else {
+			methodsToRun = testsToRun.elements();
+		}
 
         // Run the list of tests given in the test arguments
-        for( int i=0; i<testsToRun.size(); i++ ) {
-            int oldCount = errorCount;
+        while (methodsToRun.hasMoreElements()) {
+            int oldCount = params.errorCount;
 
-            Method testMethod = (Method)testsToRun.elementAt(i);
+           	Method testMethod = (Method)methodsToRun.nextElement();
             writeTestName(testMethod.getName());
 
             try {
@@ -137,16 +135,16 @@ public class TestFmwk {
             catch( IllegalAccessException e ) {
                 errln("Can't acces test method " + testMethod.getName());
             } catch( InvocationTargetException e ) {
-                errln("Uncaught exception thrown in test method "
+                errln("Uncaught exception \""+e+"\"thrown in test method "
                         + testMethod.getName());
-                e.getTargetException().printStackTrace(this.log);
+                e.getTargetException().printStackTrace(this.params.log);
             }
-            writeTestResult(errorCount - oldCount);
+            writeTestResult(params.errorCount - oldCount);
         }
-        indentLevel--;
-        writeTestResult(errorCount);
+        params.indentLevel--;
+        writeTestResult(params.errorCount);
 
-        if (prompt) {
+        if (params.prompt) {
             System.out.println("Hit RETURN to exit...");
             try {
                 System.in.read();
@@ -154,8 +152,8 @@ public class TestFmwk {
                 System.out.println("Exception: " + e.toString() + e.getMessage());
             }
         }
-        if (nothrow) {
-            System.exit(errorCount);
+        if (params.nothrow) {
+            System.exit(params.errorCount);
         }
     }
 
@@ -163,10 +161,10 @@ public class TestFmwk {
      * Adds given string to the log if we are in verbose mode.
      */
     protected void log( String message ) {
-        if( verbose ) {
-            indent(indentLevel + 1);
-            log.print( message );
-            log.flush();
+        if( params.verbose ) {
+            indent(params.indentLevel + 1);
+            params.log.print( message );
+            params.log.flush();
         }
     }
 
@@ -178,12 +176,12 @@ public class TestFmwk {
      * Report an error
      */
     protected void err( String message ) {
-        errorCount++;
-        indent(indentLevel + 1);
-        log.print( message );
-        log.flush();
+        params.errorCount++;
+        indent(params.indentLevel + 1);
+        params.log.print( message );
+        params.log.flush();
 
-        if (!nothrow) {
+        if (!params.nothrow) {
             throw new RuntimeException(message);
         }
     }
@@ -192,38 +190,37 @@ public class TestFmwk {
         err(message + System.getProperty("line.separator"));
     }
 
-
     protected int getErrorCount() {
-        return errorCount;
+        return params.errorCount;
     }
 
     protected void writeTestName(String testName) {
-        indent(indentLevel);
-        log.print(testName);
-        log.flush();
-        needLineFeed = true;
+        indent(params.indentLevel);
+        params.log.print(testName);
+        params.log.flush();
+        params.needLineFeed = true;
     }
 
     protected void writeTestResult(int count) {
-        if (!needLineFeed) {
-            indent(indentLevel);
-            log.print("}");
+        if (!params.needLineFeed) {
+            indent(params.indentLevel);
+            params.log.print("}");
         }
-        needLineFeed = false;
+        params.needLineFeed = false;
 
         if (count != 0) {
-            log.println(" FAILED");
+            params.log.println(" FAILED");
         } else {
-            log.println(" Passed");
+            params.log.println(" Passed");
         }
     }
 
     private final void indent(int distance) {
-        if (needLineFeed) {
-            log.println(" {");
-            needLineFeed = false;
+        if (params.needLineFeed) {
+            params.log.println(" {");
+            params.needLineFeed = false;
         }
-        log.print(spaces.substring(0, distance * 2));
+        params.log.print(spaces.substring(0, distance * 2));
     }
 
     /**
@@ -262,16 +259,20 @@ public class TestFmwk {
         return hex(s.toString());
     }
 
-    protected boolean   prompt = false;
-    protected boolean   nothrow = false;
-    protected boolean   verbose = false;
+	private static class TestParams {
+    	public boolean   prompt = false;
+    	public boolean   nothrow = false;
+    	public boolean   verbose = false;
 
-    private PrintWriter log;
-    private int         indentLevel = 0;
-    private boolean     needLineFeed = false;
-    private int         errorCount = 0;
+    	public PrintWriter log = new PrintWriter(System.out,true);
+    	public int         indentLevel = 0;
+    	public boolean     needLineFeed = false;
+    	public int         errorCount = 0;
+    }
 
+	private TestParams params = null;
     private Hashtable testMethods;
+	private Vector testsToRun;
     private final String spaces = "                                          ";
 }
 
