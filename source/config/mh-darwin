@@ -4,7 +4,7 @@
 ## Copyright (c) 1999-2002, International Business Machines Corporation and
 ## others. All Rights Reserved.
 ##
-## $Id: mh-darwin,v 1.22 2002/01/31 17:03:18 yves-oss Exp $
+## $Id: mh-darwin,v 1.23 2002/05/29 16:45:06 grhoten-oss Exp $
 
 ## Flags for position independent code
 SHAREDLIBCFLAGS = -dynamic
@@ -20,8 +20,8 @@ COMPILE.c=	$(CC) $(DEFS) $(CPPFLAGS) $(CFLAGS) -fno-common -c
 COMPILE.cc=	$(CXX) $(DEFS) $(CPPFLAGS) $(CXXFLAGS) -fno-common -c
 
 ## Commands to make a shared library
-SHLIB.c=	$(CC) -dynamiclib -dynamic $(DEFS) $(CPPFLAGS) $(CFLAGS) $(LDFLAGS) -install_name $(DESTDIR)$(libdir)/$(MIDDLE_SO_TARGET)
-SHLIB.cc=	$(CXX) -dynamiclib -dynamic $(DEFS) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS) -install_name $(DESTDIR)$(libdir)/$(MIDDLE_SO_TARGET)
+SHLIB.c=	$(CC) -dynamiclib -dynamic $(CFLAGS) $(LDFLAGS) -install_name $(DESTDIR)$(libdir)/$(MIDDLE_SO_TARGET)
+SHLIB.cc=	$(CXX) -dynamiclib -dynamic $(CXXFLAGS) $(LDFLAGS) -install_name $(DESTDIR)$(libdir)/$(MIDDLE_SO_TARGET)
 
 ## Compiler switch to embed a runtime search path
 LD_RPATH=
