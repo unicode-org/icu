@@ -3098,7 +3098,7 @@ void RBBITest::TestWordBreaks(void)
     // BreakIterator  *bi = BreakIterator::createCharacterInstance(locale, status);
     BreakIterator *bi = BreakIterator::createWordInstance(locale, status);
     UChar         str[300]; 
-    char          *strlist[] = 
+    static const char *strlist[] = 
     {
     "\\U000e0032\\u0097\\u0f94\\uc2d8\\u05f4\\U000e0031\\u060d",
     "\\U000e0037\\u4666\\u1202\\u003a\\U000e0031\\u064d\\u0bea\\u591c\\U000e0040\\u003b",
@@ -3169,7 +3169,7 @@ void RBBITest::TestWordBoundary(void)
     // BreakIterator  *bi = BreakIterator::createCharacterInstance(locale, status);
     BreakIterator *bi = BreakIterator::createWordInstance(locale, status);
     UChar         str[50]; 
-    char          *strlist[] = 
+    static const char *strlist[] = 
     {
     "\\u200e\\U000e0072\\u0a4b\\U000e003f\\ufd2b\\u2027\\u002e\\u002e",
     "\\U000e0042\\u002e\\u0fb8\\u09ef\\u0ed1\\u2044",
@@ -3242,7 +3242,7 @@ void RBBITest::TestLineBreaks(void)
     UErrorCode    status = U_ZERO_ERROR;
     BreakIterator *bi = BreakIterator::createLineInstance(locale, status);
     UChar         str[50]; 
-    char          *strlist[] = 
+    static const char *strlist[] = 
     {
      "\\ufeff\\ufffc\\u3289\\u0085\\u2772\\u0020\\U000e010a\\u0020\\u2025\\u000a\\U000e0123",
      "\\ufe3c\\u201c\\u000d\\u2025\\u2007\\u201c\\u002d\\u20a0\\u002d\\u30a7\\u17a4",
@@ -3307,7 +3307,7 @@ void RBBITest::TestSentBreaks(void)
     UErrorCode    status = U_ZERO_ERROR;
     BreakIterator *bi = BreakIterator::createSentenceInstance(locale, status);
     UChar         str[100]; 
-    char          *strlist[] = 
+    static const char *strlist[] = 
     {
      "Now\ris\nthe\r\ntime\n\rfor\r\r",
      "This\n",
@@ -3413,7 +3413,7 @@ void RBBITest::TestMonkey(char *params) {
 //       seed    - Seed for starting random number generator (parameter from user)
 //       numIterations
 //
-void RBBITest::RunMonkey(BreakIterator *bi, RBBIMonkeyKind &mk, char *name, uint32_t  seed, int32_t numIterations) {
+void RBBITest::RunMonkey(BreakIterator *bi, RBBIMonkeyKind &mk, const char *name, uint32_t  seed, int32_t numIterations) {
 
 #if !UCONFIG_NO_REGULAR_EXPRESSIONS
 
