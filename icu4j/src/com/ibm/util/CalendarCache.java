@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/util/Attic/CalendarCache.java,v $ 
- * $Date: 2000/03/10 04:17:57 $ 
- * $Revision: 1.2 $
+ * $Date: 2000/11/18 00:31:43 $ 
+ * $Revision: 1.3 $
  *
  *****************************************************************************************
  */
@@ -90,7 +90,11 @@ public class CalendarCache
      */
     private final int hash(long key)
     {
-        return (int)((key * 15821 + 1) % arraySize);
+        int h = (int)((key * 15821 + 1) % arraySize);
+        if (h < 0) {
+            h += arraySize;
+        }
+        return h;
     }
     
     private final int hash2(long key) {
