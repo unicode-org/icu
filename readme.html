@@ -1054,9 +1054,9 @@ ures_open("mydata", NULL, &amp;status);
     "<i>&lt;ICU&gt;</i>\source\allinone\allinone.dsw" workspace to build ICU.
     The instructions for building with Visual Studio 6 are similar to the
     instructions for Visual Studio .NET. If you have Microsoft Visual Studio
-    .NET 2002, it is recommended that you use build on the command line with
-    Cygwin, and those instructions are described in the <a href=
-    "#HowToBuildCygwin">How To Build And Install On Windows with Cygwin</a>
+    .NET 2002, it is recommended that you build from the command line with
+    Cygwin. The Cygwin building instructions are in <a
+    href="#HowToBuildCygwin">How To Build And Install On Windows with Cygwin</a>
     section of this document.</p>
 
     <h3><a name="HowToBuildWindowsXP64" href="#HowToBuildWindowsXP64" id=
@@ -1097,6 +1097,10 @@ ures_open("mydata", NULL, &amp;status);
       <li>Run "cd source\test\intltest\Release"</li>
 
       <li>Run the C++ test suite, "intltest". There should be no errors.</li>
+
+      <li>Run "cd ..\..\iotest\Release"</li>
+
+      <li>Run the I/O test suite, "iotest". There should be no errors.</li>
 
       <li>Run "cd ..\..\cintltst\Release"</li>
 
