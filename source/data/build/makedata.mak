@@ -155,6 +155,7 @@ ALL : GODATA  testdata "$(ICUDBLD)\$(U_ICUDATA_NAME).dll" $(TESTDATAOUT)\test1.c
 #
 testdata: ucadata.dat $(RB_FILES) {"$(ICUTOOLS)\genrb\$(CFG)"}genrb.exe
 	@cd "$(TESTDATA)"
+	@echo building testdata...
 	nmake /nologo /f $(TESTDATA)\testdata.mk TESTDATA=$(TESTDATA) ICUTOOLS=$(ICUTOOLS) PKGOPT=$(PKGOPT) CFG=$(CFG) TESTDATAOUT=$(TESTDATAOUT) ICUDATA=$(ICUDATA)
 	@cd "$(ICUDBLD)"
 
@@ -272,7 +273,7 @@ unames.dat: {"$(ICUDATA)"}\unidata\UnicodeData.txt "$(ICUTOOLS)\gennames\$(CFG)\
 	@"$(ICUTOOLS)\gennames\$(CFG)\gennames" -1 -u $(UNICODE_VERSION) $(ICUDATA)\unidata\UnicodeData.txt
 
 # Targets for uprops.dat
-uprops.dat: "$(ICUDATA)\unidata\UnicodeData.txt" "$(ICUTOOLS)\genprops\$(CFG)\genprops.exe" "$(DLL_OUTPUT)\$(U_ICUDATA_NAME).dll"
+uprops.dat: "$(ICUDATA)\unidata\UnicodeData.txt" "$(ICUTOOLS)\genprops\$(CFG)\genprops.exe"
 	@echo Creating data file for Unicode Character Properties
 	@set ICU_DATA=$(ICUDBLD)
 	@"$(ICUTOOLS)\genprops\$(CFG)\genprops" -u $(UNICODE_VERSION) -s "$(ICUDATA)\unidata"
