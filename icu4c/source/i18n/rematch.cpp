@@ -280,9 +280,9 @@ UnicodeString RegexMatcher::group(UErrorCode &status) const {
 
 
 
-UnicodeString RegexMatcher::group(int32_t group, UErrorCode &status) const {
-    int32_t  s = start(group, status);
-    int32_t  e = end(group, status);
+UnicodeString RegexMatcher::group(int32_t groupNum, UErrorCode &status) const {
+    int32_t  s = start(groupNum, status);
+    int32_t  e = end(groupNum, status);
 
     // Note:  calling start() and end() above will do all necessary checking that
     //        the group number is OK and that a match exists.  status will be set.
@@ -539,6 +539,28 @@ void RegexMatcher::MatchAt(int32_t startIdx, UErrorCode &status) {
     int32_t     opType;                //    the opcode
     int32_t     opValue;               //    and the operand value.
 
+    #ifdef REGEX_RUN_DEBUG
+    {
+        printf("MatchAt(startIdx=%d)\n", startIdx);
+        printf("Original Pattern: ");
+        int i;
+        for (i=0; i<fPattern->fPattern.length(); i++) {
+            printf("%c", fPattern->fPattern.charAt(i));
+        }
+        printf("\n");
+        printf("Input String: ");
+        for (i=0; i<fInput->length(); i++) {
+            UChar c = fInput->charAt(i);
+            if (c<32 || c>256) {
+                c = '.';
+            }
+            printf("%c", c);
+        }
+        printf("\n");
+        printf("\n");
+        printf("PatLoc  inputIdx  char\n");
+    }
+    #endif
 
     if (U_FAILURE(status)) {
         return;
@@ -569,13 +591,24 @@ void RegexMatcher::MatchAt(int32_t startIdx, UErrorCode &status) {
         op      = pat->elementAti(patIdx);
         opType  = URX_TYPE(op);
         opValue = URX_VAL(op);
-        // printf("%d   %d  \"%c\"\n", patIdx, inputIdx, fInput->char32At(inputIdx));
+        #ifdef REGEX_RUN_DEBUG
+            printf("inputIdx=%d   inputChar=%c    ", inputIdx, fInput->char32At(inputIdx));
+            fPattern->dumpOp(patIdx);
+        #endif
         patIdx++;
 
         switch (opType) {
 
 
         case URX_NOP:
+            break;
+
+
+        case URX_BACKTRACK:
+            // Force a backtrack.  In some circumstances, the pattern compiler
+            //   will notice that the pattern can't possibly match anything, and will
+            //   emit one of these at that point.
+            backTrack(inputIdx, patIdx);
             break;
 
 
@@ -909,7 +942,12 @@ breakFromLoop:
         fLastMatchEnd = fMatchEnd;
         fMatchStart   = startIdx;
         fMatchEnd     = inputIdx;
+        REGEX_RUN_DEBUG_PRINTF("Match.  start=%d   end=%d\n\n", fMatchStart, fMatchEnd);
         }
+    else
+    {
+        REGEX_RUN_DEBUG_PRINTF("No match\n\n");
+    }
     return;
 }
 

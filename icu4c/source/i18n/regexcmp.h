@@ -28,8 +28,6 @@
 U_NAMESPACE_BEGIN
 
 
-static const UBool REGEX_DEBUG = TRUE;
-
 //--------------------------------------------------------------------------------
 //
 //  class RegexCompile    Contains the regular expression compiler.
