@@ -148,6 +148,10 @@ void RBBIAPITest::TestBoilerPlate()
     UErrorCode status = U_ZERO_ERROR;
     BreakIterator* a = BreakIterator::createLineInstance(Locale("hi"), status);
     BreakIterator* b = BreakIterator::createLineInstance(Locale("hi_IN"),status);
+    if (U_FAILURE(status)) {
+        errln("Creation of break iterator failed %s", u_errorName(status));
+        return;
+    }
     if(*a!=*b){
         errln("Failed: boilerplate method operator!= does not return correct results");
     }

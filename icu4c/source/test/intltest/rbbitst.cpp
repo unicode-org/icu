@@ -3176,6 +3176,10 @@ void RBBITest::TestWordBreaks(void)
     "\\uc30d\\u002e\\U000e002c\\u0c48\\u003a\\ub5a1\\u0661\\u002c",
     };
     int loop;
+    if (U_FAILURE(status)) {
+        errln("Creation of break iterator failed %s", u_errorName(status));
+        return;
+    }
     for (loop = 0; loop < (int)(sizeof(strlist) / sizeof(char *)); loop ++) {
         // printf("looping %d\n", loop);
         u_unescape(strlist[loop], str, 25);
@@ -3239,6 +3243,10 @@ void RBBITest::TestWordBoundary(void)
     "\\u003b\\u0027\\u00b7\\u47a3",
     };
     int loop;
+    if (U_FAILURE(status)) {
+        errln("Creation of break iterator failed %s", u_errorName(status));
+        return;
+    }
     for (loop = 0; loop < (int)(sizeof(strlist) / sizeof(char *)); loop ++) {
         // printf("looping %d\n", loop);
         u_unescape(strlist[loop], str, 20);
@@ -3322,6 +3330,10 @@ void RBBITest::TestLineBreaks(void)
      "\\u2116\\u0ed2\\uff64\\u02cd\\u2001\\u2060",
     };
     int loop;
+    if (U_FAILURE(status)) {
+        errln("Creation of break iterator failed %s", u_errorName(status));
+        return;
+    }
     for (loop = 0; loop < (int)(sizeof(strlist) / sizeof(char *)); loop ++) {
         // printf("looping %d\n", loop);
         u_unescape(strlist[loop], str, 20);
@@ -3364,7 +3376,11 @@ void RBBITest::TestSentBreaks(void)
     };
     int loop;
     int forward[100];
-	for (loop = 0; loop < (int)(sizeof(strlist) / sizeof(char *)); loop ++) {
+    if (U_FAILURE(status)) {
+        errln("Creation of break iterator failed %s", u_errorName(status));
+        return;
+    }
+    for (loop = 0; loop < (int)(sizeof(strlist) / sizeof(char *)); loop ++) {
         u_unescape(strlist[loop], str, 100);
         UnicodeString ustr(str);
 
@@ -3420,7 +3436,12 @@ void RBBITest::TestMonkey(char *params) {
     if (breakType == "char" || breakType == "all") {
         RBBICharMonkey  m;
         BreakIterator  *bi = BreakIterator::createCharacterInstance(locale, status);
-        RunMonkey(bi, m, "char", seed, loopCount);
+        if (U_SUCCESS(status)) {
+            RunMonkey(bi, m, "char", seed, loopCount);
+        }
+        else {
+            errln("Creation of character break iterator failed %s", u_errorName(status));
+        }
         delete bi;
     }
 
@@ -3428,7 +3449,12 @@ void RBBITest::TestMonkey(char *params) {
         logln("Word Break Monkey Test");
         RBBIWordMonkey  m;
         BreakIterator  *bi = BreakIterator::createWordInstance(locale, status);
-        RunMonkey(bi, m, "word", seed, loopCount);
+        if (U_SUCCESS(status)) {
+            RunMonkey(bi, m, "word", seed, loopCount);
+        }
+        else {
+            errln("Creation of word break iterator failed %s", u_errorName(status));
+        }
         delete bi;
     }
 
@@ -3439,7 +3465,12 @@ void RBBITest::TestMonkey(char *params) {
         if (params == NULL) {
             loopCount = 50;
         }
-        RunMonkey(bi, m, "line", seed, loopCount);
+        if (U_SUCCESS(status)) {
+            RunMonkey(bi, m, "line", seed, loopCount);
+        }
+        else {
+            errln("Creation of line break iterator failed %s", u_errorName(status));
+        }
         delete bi;
     }
 
