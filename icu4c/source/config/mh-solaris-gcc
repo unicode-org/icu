@@ -1,9 +1,9 @@
 ## -*-makefile-*-
 ## Solaris-specific setup using gcc
-## Copyright (c) 1999-2000, International Business Machines Corporation and
+## Copyright (c) 1999-2003, International Business Machines Corporation and
 ## others. All Rights Reserved.
 ##
-## $Id: mh-solaris-gcc,v 1.30 2003/08/08 23:53:43 grhoten-oss Exp $
+## $Id: mh-solaris-gcc,v 1.31 2003/12/18 23:14:13 emader-oss Exp $
 
 ## Flags for position independent code
 SHAREDLIBCFLAGS = -fPIC

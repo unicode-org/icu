@@ -1,9 +1,9 @@
 ## -*-makefile-*-
 ## Alpha-Linux-specific setup
-## Copyright (c) 1999-2000, International Business Machines Corporation and
+## Copyright (c) 1999-2003, International Business Machines Corporation and
 ## others. All Rights Reserved.
 ##
-## $Id: mh-alpha-osf,v 1.4 2003/08/08 23:53:43 grhoten-oss Exp $
+## $Id: mh-alpha-osf,v 1.5 2003/12/18 23:14:12 emader-oss Exp $
 
 ## Commands to generate dependency files
 #GEN_DEPS.c=	$(CC) $(DEFS) $(CPPFLAGS) -MD -c -msg_quiet
