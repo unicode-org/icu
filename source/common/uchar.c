@@ -827,6 +827,15 @@ u_getUnicodeProperties(UChar32 c, int32_t column) {
     }
 }
 
+U_CFUNC int32_t
+uprv_getMaxValues() {
+    if(HAVE_DATA) {
+        return indexes[UPROPS_MAX_VALUES_INDEX];
+    } else {
+        return 0;
+    }
+}
+
 /* string casing ------------------------------------------------------------ */
 
 /*
