@@ -1353,8 +1353,21 @@ TestSwapData() {
     udata_printError(ds, "This %s a %s", "is", "test");
     udata_closeSwapper(ds);
     if (strcmp(name, "This is a test") != 0) {
-        log_err("udata_printError can't properly print error messages. Got = \n", name);
+        log_err("udata_printError can't properly print error messages. Got = %s\n", name);
     }
+    errorCode = U_USELESS_COLLATOR_ERROR;
+    if (udata_openSwapperForInputData(NULL, 0,
+                         !U_IS_BIG_ENDIAN, U_ASCII_FAMILY,
+                         &errorCode) != NULL) {
+        log_err("udata_openSwapperForInputData should have returned NULL with bad argument\n", name);
+    }
+    ds=udata_openSwapperForInputData(NULL, 0,
+                         !U_IS_BIG_ENDIAN, U_ASCII_FAMILY,
+                         &errorCode);
+    if (ds != NULL || errorCode != U_USELESS_COLLATOR_ERROR) {
+        log_err("udata_openSwapperForInputData should have returned NULL with bad argument\n", name);
+    }
+    errorCode=U_ZERO_ERROR;
 
     for(i=0; i<LENGTHOF(swapCases); ++i) {
         /* build the name for logging */
