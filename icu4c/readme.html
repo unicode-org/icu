@@ -1074,12 +1074,21 @@
 
       <li>Optionally, type "make check" to verify the test suite.</li>
 
-      <li>Type "Make install" to install.</li>
+      <li>Type "make install" to install.</li>
     </ol>
 
     <p>Regarding the test suite, please read the directions in <a href=
     "docs/intltest.html">docs/intltest.html</a> and <a href=
     "docs/cintltst.html">docs/cintltst.html</a>.</p>
+
+    <p>Some platforms use package management tools to control the
+    installation and uninstallation of files on the system, as well as
+    the integrity of the system configuration. You may want to check if
+    ICU can be packaged for your package management tools by looking
+    into the "packaging" directory. (Please note that if you are using
+    a snapshot of ICU from CVS, it is probable that the packaging scripts
+    or related files are not up to date with the contents of ICU at this
+    time, so use them with caution.)</p>
 
     <p>It is also possible to build each library individually, using the
     Makefiles in each respective directory. They have to be built in the
