@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
  *
- *   Copyright (C) 2001-2004, International Business Machines
+ *   Copyright (C) 2001-2005, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *
  *******************************************************************************
@@ -81,7 +81,7 @@ void closeCollator_legacy(void) {
 }
 
 
-void test_legacy(UChar data[][5], uint32_t size, uint32_t maxlen, uint8_t keys[4][32]) {
+extern "C" void test_legacy(UChar data[][5], uint32_t size, uint32_t maxlen, uint8_t keys[4][32]) {
   uint32_t i = 0;
   int32_t keySize = 0;
 
