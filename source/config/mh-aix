@@ -1,0 +1,114 @@
+## -*-makefile-*-
+## Aix-specific setup (for xlC)
+## Copyright (c) 1999-2000, International Business Machines Corporation and
+## others. All Rights Reserved.
+##
+## $Id: mh-aix,v 1.19 2001/04/25 01:29:13 rviswanadha Exp $
+
+## Commands to generate dependency files
+GEN_DEPS.c=	$(CC) -E -M $(DEFS) $(CPPFLAGS)
+GEN_DEPS.cc=	$(CXX) -E -M $(DEFS) $(CPPFLAGS)
+
+## Commands to compile
+COMPILE.c=	$(CC) $(DEFS) $(CPPFLAGS) $(CFLAGS) -c
+COMPILE.cc=	$(CXX) $(DEFS) $(CPPFLAGS) $(CXXFLAGS) -c
+
+## Commands to link
+## We need to use the C++ linker, even when linking C programs, since
+##  our libraries contain C++ code (C++ static init not called)
+#LINK.c=		$(CC) $(DEFS) $(CPPFLAGS) $(CFLAGS) $(LDFLAGS) 
+LINK.c=		$(CXX) -brtl $(DEFS) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS) 
+LINK.cc=	$(CXX) -brtl $(DEFS) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS)
+
+## Commands to make a shared library
+SHLIB.c=	makeC++SharedLib_r -p 5000 -brtl
+SHLIB.cc=	makeC++SharedLib_r -p 5000 -brtl
+
+## Compiler switch to embed a runtime search path
+LD_RPATH=	-I
+LD_RPATH_PRE=	
+
+## Environment variable to set a runtime search path
+LDLIBRARYPATH_ENVVAR = LIBPATH
+
+## Compiler switch to embed a library name
+#LD_SONAME = -Wl, 
+
+## Versioned target for a shared library.
+FINAL_SO_TARGET = $(SO_TARGET).$(SO_TARGET_VERSION_MAJOR)
+MIDDLE_SO_TARGET = $(SO_TARGET).$(SO_TARGET_VERSION_MAJOR)
+
+###  How ICU libraries are named...  ex. $(LIBICU)uc$(SO)
+## Prefix for the ICU library names
+ICUPREFIX = icu
+LIBICU = lib$(ICUPREFIX)
+## Shared object suffix
+#AIX does not have versioning support
+#so we tag the major and minor versions to so
+SO=		so
+
+## Non-shared intermediate object suffix
+STATIC_O = o
+
+RMV = rm -rf
+## Platform commands to remove or move executable and library targets
+INSTALL-S = $(INSTALL_PROGRAM)
+INSTALL-L = $(INSTALL_DATA)
+
+## Link commands to link to ICU libs
+LIBICUUC=       -brtl -L$(top_builddir)/common -l$(ICUPREFIX)uc
+LIBICUI18N= 	-brtl -L$(top_builddir)/i18n -l$(ICUPREFIX)i18n
+LIBCTESTFW= 	-brtl -L$(top_builddir)/tools/ctestfw -lctestfw
+LIBICUTOOLUTIL= -brtl -L$(top_builddir)/tools/toolutil -l$(ICUPREFIX)toolutil
+LIBUSTDIO=      -brtl -L$(top_builddir)/extra/ustdio -lustdio
+
+## Special AIX rules
+
+## Build archive from shared object
+%.a : %.so
+	$(AR) $(ARFLAGS) $@ $<
+
+## Build import list from export list
+%.e : %.exp
+	@echo "Building an import list for $<"
+	@$(SHELL) -ec "echo '#! $*.a($*.so)' | cat - $< > $@"
+
+## Compilation rules
+%.$(STATIC_O): $(srcdir)/%.c
+	$(COMPILE.c) $(STATICCPPFLAGS) $(STATICCFLAGS) -o $@ $<
+%.o: $(srcdir)/%.c
+	$(COMPILE.c) $(DYNAMICCPPFLAGS) $(DYNAMICCFLAGS) -o $@ $<
+
+%.$(STATIC_O): $(srcdir)/%.cpp
+	$(COMPILE.cc) $(STATICCPPFLAGS) $(STATICCXXFLAGS) -o $@ $<
+%.o: $(srcdir)/%.cpp
+	$(COMPILE.cc) $(DYNAMICCPPFLAGS) $(DYNAMICCXXFLAGS) -o $@ $<
+
+../data/%.o: ../data/%.c
+	$(COMPILE.c) $(DYNAMICCPPFLAGS) $(DYNAMICCFLAGS) -o $@ $<
+
+## Dependency rules
+%.d : %.u
+	@$(SHELL) -ec 'cat $<  \
+		| sed '\''s/\($*\)\.o[ :]*/\1.o $@ : /g'\'' > $@; \
+		[ -s $@ ] || rm -f $@ ; rm -f $<'
+
+%.u : $(srcdir)/%.c
+	@echo "Generating dependency information for $<"
+	@$(SHELL) -ec '$(GEN_DEPS.c) $< > /dev/null 2>&1'
+
+%.u : $(srcdir)/%.cpp
+	@echo "Generating dependency information for $<"
+	@$(SHELL) -ec '$(GEN_DEPS.cc) $< > /dev/null 2>&1'
+
+## Versioned libraries rules
+%.$(SO): 
+	@echo "Generating symbolic link for $@ : $<"
+	@$(SHELL) -ec  'rm -f $@; ln -fs $(FINAL_SO_TARGET) $@'
+
+## BIR  - bind with internal references [so app data and icu data doesn't collide]
+BIR_LDFLAGS= -E$(NAME).map -bnoexpall
+BIR_CPPFLAGS= -DU_HAVE_BIND_INTERNAL_REFERENCES
+BIR_DEPS= $(NAME).map
+
+## End Aix-specific setup

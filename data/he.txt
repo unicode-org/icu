@@ -1,0 +1,101 @@
+// *******************************************************************************
+// *
+// *   Copyright (C) 1997-2001, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// *******************************************************************************
+
+he {
+    Version{"1.0"}
+    CollationElements { 
+	    Version { "2.0" }
+		Override { "FALSE" }
+		Sequence { "[normalization on]& Z < \u05D0 < \u05D1 < \u05D2 < \u05D3 < \u05D4 < \u05D5 < "
+        "\u05F0 < \u05F1 < \u05D6 < \u05D7 < \u05D8 < \u05D9 < \u05F2 < \u05DA , \u05DB "
+        "< \u05DC < \u05DD , \u05DE < \u05DF , \u05E0 < \u05E1 < \u05E2 < \u05E3 , \u05E4"
+        " < \u05E5 , \u05E6 < \u05E7 < \u05E8 < \u05E9 < \u05EA " }
+	}
+    Countries { 
+        IL { "\u05D9\u05E9\u05E8\u05D0\u05DC" }
+    }
+    DateTimePatterns { 
+            "HH:mm:ss z",
+            "HH:mm:ss z",
+            "HH:mm:ss",
+            "HH:mm",
+            "EEEE d MMMM yyyy",
+            "d MMMM yyyy",
+            "dd/MM/yyyy",
+            "dd/MM/yy",
+            "{0} {1}",
+    }
+    DayAbbreviations { 
+            "\u05D0",
+            "\u05D1",
+            "\u05D2",
+            "\u05D3",
+            "\u05D4",
+            "\u05D5",
+            "\u05E9",
+    }
+    DayNames { 
+            "\u05D9\u05D5\u05DD \u05E8\u05D0\u05E9\u05D5\u05DF",
+            "\u05D9\u05D5\u05DD \u05E9\u05E0\u05D9",
+            "\u05D9\u05D5\u05DD \u05E9\u05DC\u05D9\u05E9\u05D9",
+            "\u05D9\u05D5\u05DD \u05E8\u05D1\u05D9\u05E2\u05D9",
+            "\u05D9\u05D5\u05DD \u05D7\u05DE\u05D9\u05E9\u05D9",
+            "\u05D9\u05D5\u05DD \u05E9\u05D9\u05E9\u05D9",
+            "\u05E9\u05D1\u05EA",
+    }
+    Eras { 
+            "\u05DC\u05E1\u05D4\u0022\u05E0",
+            "\u05DC\u05E4\u05E1\u05D4\u0022\u05E0",
+    }
+    Languages { 
+        he { "\u05E2\u05D1\u05E8\u05D9\u05EA" }
+        iw { "\u05E2\u05D1\u05E8\u05D9\u05EA" }
+    }
+    LocaleID { "0d" }
+    LocaleString { "he" }
+    MonthAbbreviations { 
+            "\u05D9\u05E0\u05D5",
+            "\u05E4\u05D1\u05E8",
+            "\u05DE\u05E8\u05E5",
+            "\u05D0\u05E4\u05E8",
+            "\u05DE\u05D0\u05D9",
+            "\u05D9\u05D5\u05E0",
+            "\u05D9\u05D5\u05DC",
+            "\u05D0\u05D5\u05D2",
+            "\u05E1\u05E4\u05D8",
+            "\u05D0\u05D5\u05E7",
+            "\u05E0\u05D5\u05D1",
+            "\u05D3\u05E6\u05DE",
+            "",
+    }
+    MonthNames { 
+            "\u05D9\u05E0\u05D5\u05D0\u05E8",
+            "\u05E4\u05D1\u05E8\u05D5\u05D0\u05E8",
+            "\u05DE\u05E8\u05E5",
+            "\u05D0\u05E4\u05E8\u05D9\u05DC",
+            "\u05DE\u05D0\u05D9",
+            "\u05D9\u05D5\u05E0\u05D9",
+            "\u05D9\u05D5\u05DC\u05D9",
+            "\u05D0\u05D5\u05D2\u05D5\u05E1\u05D8",
+            "\u05E1\u05E4\u05D8\u05DE\u05D1\u05E8",
+            "\u05D0\u05D5\u05E7\u05D8\u05D5\u05D1\u05E8",
+            "\u05E0\u05D5\u05D1\u05DE\u05D1\u05E8",
+            "\u05D3\u05E6\u05DE\u05D1\u05E8",
+            "",
+    }
+    ShortLanguage { "heb" }
+    localPatternChars { "GanjkHmsSEDFwWxhKzAe" }
+    zoneStrings { 
+        {
+                "Africa/Casablanca",
+                "GMT",
+                "GMT",
+                "GMT",
+                "GMT",
+        }
+    }
+}

@@ -1,0 +1,22 @@
+// *******************************************************************************
+// *
+// *   Copyright (C) 1997-2000, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// *******************************************************************************
+
+ca_ES {
+    CurrencyElements { 
+            "Pts",
+            "ESP",
+            ",",
+    }
+    LocaleString { "ca_ES" }
+    NumberPatterns { 
+            "#,##0.###;#,##0.###",
+            "\u00A4 #,##0;-\u00A4 #,##0",
+            "#,##0%",
+    }
+    ShortCountry { "ESP" }
+    LocaleID { "0403" }
+}
