@@ -134,7 +134,7 @@ void addTest ( TestNode** root,
 }
 
 /* non recursive insert function */
-TestNode *addTestNode ( TestNode *root, const char *name )
+static TestNode *addTestNode ( TestNode *root, const char *name )
 {
   const char* nextName;
   TestNode *nextNode, *curNode;
