@@ -13,7 +13,7 @@
 #include "unicode/uniset.h"
 
 TransliterationRuleData::TransliterationRuleData(UErrorCode& status) :
-    variableNames(0), setVariables(0) {
+    variableNames(0), variables(0) {
     if (U_FAILURE(status)) {
         return;
     }
@@ -21,14 +21,14 @@ TransliterationRuleData::TransliterationRuleData(UErrorCode& status) :
     if (U_SUCCESS(status)) {
         variableNames->setValueDeleter(uhash_deleteUnicodeString);
     }
-    setVariables = 0;
-    setVariablesLength = 0;
+    variables = 0;
+    variablesLength = 0;
 }
 
 TransliterationRuleData::TransliterationRuleData(const TransliterationRuleData& other) :
     ruleSet(other.ruleSet),
-    setVariablesBase(other.setVariablesBase),
-    setVariablesLength(other.setVariablesLength),
+    variablesBase(other.variablesBase),
+    variablesLength(other.variablesLength),
     segmentBase(other.segmentBase) {
 
     UErrorCode status = U_ZERO_ERROR;
@@ -44,29 +44,29 @@ TransliterationRuleData::TransliterationRuleData(const TransliterationRuleData& 
         }
     }
 
-    setVariables = 0;
-    if (other.setVariables != 0) {
-        setVariables = new UnicodeSet*[setVariablesLength];
-        for (int32_t i=0; i<setVariablesLength; ++i) {
-            setVariables[i] = new UnicodeSet(*other.setVariables[i]);
+    variables = 0;
+    if (other.variables != 0) {
+        variables = new UnicodeMatcher*[variablesLength];
+        for (int32_t i=0; i<variablesLength; ++i) {
+            variables[i] = other.variables[i]->clone();
         }
     }    
 }
 
 TransliterationRuleData::~TransliterationRuleData() {
     delete variableNames;
-    if (setVariables != 0) {
-        for (int32_t i=0; i<setVariablesLength; ++i) {
-            delete setVariables[i];
+    if (variables != 0) {
+        for (int32_t i=0; i<variablesLength; ++i) {
+            delete variables[i];
         }
-        delete[] setVariables;
+        delete[] variables;
     }
 }
 
-const UnicodeSet*
-TransliterationRuleData::lookupSet(UChar32 standIn) const {
-    int32_t i = standIn - setVariablesBase;
-    return (i >= 0 && i < setVariablesLength) ? setVariables[i] : 0;
+const UnicodeMatcher*
+TransliterationRuleData::lookup(UChar32 standIn) const {
+    int32_t i = standIn - variablesBase;
+    return (i >= 0 && i < variablesLength) ? variables[i] : 0;
 }
 
 int32_t

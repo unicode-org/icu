@@ -68,6 +68,7 @@ TransliteratorTest::runIndexedTest(int32_t index, UBool exec,
         TESTCASE(32,TestToRules);
         TESTCASE(33,TestContext);
         TESTCASE(34,TestSupplemental);
+        TESTCASE(35,TestQuantifier);
         default: name = ""; break;
     }
 }
@@ -477,7 +478,7 @@ void TransliteratorTest::TestCompoundHex(void) {
  * Used by TestFiltering().
  */
 class TestFilter : public UnicodeFilter {
-    virtual UnicodeFilter* clone() const {
+    virtual UnicodeMatcher* clone() const {
         return new TestFilter(*this);
     }
     virtual UBool contains(UChar32 c) const {
@@ -1499,6 +1500,36 @@ void TransliteratorTest::TestSupplemental() {
                                 "{$a} [^\\u0000-\\uFFFF] > y;"),
            CharsToUnicodeString("kax\\U00010300xm"),
            CharsToUnicodeString("ky\\U00010400y\\U00010400m"));
+}
+
+void TransliteratorTest::TestQuantifier() { 
+
+    expect("(ab)+ {x} > '(' $1 ')';",
+           "x abx ababxy",
+           "x ab(ab) abab(abab)y");
+
+    expect("b+ > x;",
+           "ac abc abbc abbbc",
+           "ac axc axc axc");
+
+    expect("[abc]+ > x;",
+           "qac abrc abbcs abtbbc",
+           "qx xrx xs xtx");
+
+    expect("q{(ab)+} > x;",
+           "qa qab qaba qababc qaba",
+           "qa qx qxa qxc qxa");
+
+    expect("q(ab)* > x;",
+           "qa qab qaba qababc",
+           "xa x xa xc");
+
+    // Oddity -- "(foo)* > $1" causes $1 to match the run of "foo"s
+    // In perl, it only matches the first occurrence, so the output
+    // is "()a (ab) (ab)a (ab)c".
+    expect("q(ab)* > '(' $1 ')';",
+           "qa qab qaba qababc",
+           "()a (ab) (ab)a (abab)c");
 }
 
 //======================================================================

@@ -11,7 +11,7 @@
 #include "rbt_set.h"
 
 class UnicodeString;
-class UnicodeSet;
+class UnicodeMatcher;
 class Hashtable;
 
 /**
@@ -46,35 +46,35 @@ public:
      * Map variable name (String) to variable (UnicodeString).  A variable name
      * corresponds to zero or more characters, stored in a UnicodeString in
      * this hash.  One or more of these chars may also correspond to a
-     * UnicodeSet, in which case the character in the UnicodeString in this hash is
+     * UnicodeMatcher, in which case the character in the UnicodeString in this hash is
      * a stand-in: it is an index for a secondary lookup in
-     * data.setVariables.  The stand-in also represents the UnicodeSet in
+     * data.variables.  The stand-in also represents the UnicodeMatcher in
      * the stored rules.
      */
     Hashtable* variableNames;
 
     /**
-     * Map category variable (UChar) to set (UnicodeSet).
+     * Map category variable (UChar) to set (UnicodeMatcher).
      * Variables that correspond to a set of characters are mapped
      * from variable name to a stand-in character in data.variableNames.
      * The stand-in then serves as a key in this hash to lookup the
-     * actual UnicodeSet object.  In addition, the stand-in is
+     * actual UnicodeMatcher object.  In addition, the stand-in is
      * stored in the rule text to represent the set of characters.
-     * setVariables[i] represents character (setVariablesBase + i).
+     * variables[i] represents character (variablesBase + i).
      */
-    UnicodeSet** setVariables;
+    UnicodeMatcher** variables;
 
     /**
-     * The character that represents setVariables[0].  Characters
-     * setVariablesBase through setVariablesBase +
-     * setVariables.length - 1 represent UnicodeSet objects.
+     * The character that represents variables[0].  Characters
+     * variablesBase through variablesBase +
+     * variablesLength - 1 represent UnicodeMatcher objects.
      */
-    UChar setVariablesBase;
+    UChar variablesBase;
 
     /**
-     * The length of setVariables.
+     * The length of variables.
      */
-    int32_t setVariablesLength;
+    int32_t variablesLength;
 
     /**
      * The character that represents segment 1.  Characters segmentBase
@@ -90,7 +90,11 @@ public:
 
     ~TransliterationRuleData();
 
-    const UnicodeSet* lookupSet(UChar32 standIn) const;
+    /**
+     * Given a stand-in character, return the UnicodeMatcher that it
+     * represents, or NULL.
+     */
+    const UnicodeMatcher* lookup(UChar32 standIn) const;
 
     /**
      * Return the zero-based index of the segment represented by the given

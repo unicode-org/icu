@@ -198,6 +198,10 @@ SOURCE=.\numfmt.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\quant.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\rbbi.cpp
 # End Source File
 # Begin Source File
@@ -239,6 +243,10 @@ SOURCE=.\smpdtfmt.cpp
 # Begin Source File
 
 SOURCE=.\sortkey.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\strmatch.cpp
 # End Source File
 # Begin Source File
 
@@ -1029,6 +1037,10 @@ InputPath=.\unicode\parsepos.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\quant.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\unicode\rbbi.h
 
 !IF  "$(CFG)" == "i18n - Win32 Release"
@@ -1185,6 +1197,10 @@ InputPath=.\unicode\sortkey.h
 
 !ENDIF 
 
+# End Source File
+# Begin Source File
+
+SOURCE=.\strmatch.h
 # End Source File
 # Begin Source File
 

@@ -38,12 +38,15 @@ public:
     virtual UBool contains(UChar32 c) const = 0;
 
     /**
-     * Returns a copy of this object.  All UnicodeFilter objects have
-     * to support cloning in order to allow classes using
-     * UnicodeFilters, such as Transliterator, to implement cloning.
-     * @draft
+     * UnicodeMatcher API.  This class stubs this out.
      */
-    virtual UnicodeFilter* clone() const = 0;
+    UnicodeString& toPattern(UnicodeString& result,
+                             UBool escapeUnprintable) const;
+
+    /**
+     * UnicodeMatcher API.  This class stubs this out.
+     */
+    UBool matchesIndexValue(uint8_t v) const;
 
     /**
      * Implement UnicodeMatcher API.

@@ -72,7 +72,7 @@ unifltlg.o unirange.o uniset.o unitohex.o unum.o \
 dbbi.o dbbi_tbl.o rbbi.o rbbi_tbl.o brkdict.o nultrans.o jamohang.o hangjamo.o \
 remtrans.o utrans.o \
 titletrn.o tolowtrn.o toupptrn.o xformtrn.o name2uni.o uni2name.o nortrans.o \
-unifilt.o
+unifilt.o quant.o strmatch.o
 
 STATIC_OBJECTS = $(OBJECTS:.o=.$(STATIC_O))
 
