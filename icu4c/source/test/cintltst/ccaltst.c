@@ -15,8 +15,6 @@
 /* C API AND FUNCTIONALITY TEST FOR CALENDAR (ucol.h)*/
 
 #include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
 #include "unicode/uloc.h"
 #include "unicode/utypes.h"
 #include "unicode/ucal.h"
@@ -39,6 +37,9 @@ void addCalTest(TestNode** root)
     addTest(root, &TestGMTvsLocal, "tsformat/ccaltst/TestGMTvsLocal");
 
 }
+
+/* "GMT" */
+static const UChar fgGMTID [] = { 0x0047, 0x004d, 0x0054, 0x0000 };
 
 static void TestCalendar()
 {
@@ -93,7 +94,7 @@ static void TestCalendar()
     if(U_FAILURE(status)){
         log_err("FAIL: error in ucal_open caldef : %s\n", myErrorName(status));
     }
-    u_uastrcpy(tzID, "GMT");
+    u_strcpy(tzID, fgGMTID);
     calfr=ucal_open(tzID, u_strlen(tzID), "fr_FR", UCAL_TRADITIONAL, &status);
     if(U_FAILURE(status)){
         log_err("FAIL: error in ucal_open calfr : %s\n", myErrorName(status));
@@ -163,7 +164,7 @@ static void TestCalendar()
 
 #define expectPDT "Pacific Daylight Time"
 
-    tzdname=(UChar*)malloc(sizeof(UChar) * (strlen(expectPDT)+1));
+    tzdname=(UChar*)malloc(sizeof(UChar) * (sizeof(expectPDT)+1));
     u_uastrcpy(tzdname, expectPDT);
     if(u_strcmp(tzdname, result)==0){
         log_verbose("PASS: got the correct time zone display name %s\n", austrdup(result) );
@@ -264,15 +265,13 @@ static void TestCalendar()
 /*------------------------------------------------------*/
 /*Testing the getMillis, setMillis, setDate and setDateTime functions extensively*/
 
-/* "GMT" */
-static const UChar fgGMTID [] = { 0x0047, 0x004d, 0x0054, 0x0000 };
-
 static void TestGetSetDateAPI()
 {
     UCalendar *caldef = 0, *caldef2 = 0;
     UChar *tzID =0;
     UDate d1;
     int32_t hour;
+    int32_t zoneOffset;
     UDateFormat *datdef = 0;
     UErrorCode status=U_ZERO_ERROR;
     UDate d2= 837039928046.0;
@@ -280,7 +279,7 @@ static void TestGetSetDateAPI()
 
     log_verbose("\nOpening the calendars()\n");
     tzID=(UChar*)malloc(sizeof(UChar) * 4);
-    u_uastrcpy(tzID, "GMT");
+    u_strcpy(tzID, fgGMTID);
     /*open the calendars used */
     caldef=ucal_open(tzID, u_strlen(tzID), "en_US", UCAL_TRADITIONAL, &status);
     caldef2=ucal_open(tzID, u_strlen(tzID), "en_US", UCAL_TRADITIONAL, &status);
@@ -342,7 +341,7 @@ static void TestGetSetDateAPI()
         
     /*testing setTimeZone roundtrip */
     log_verbose("\nTesting setTimeZone() roundtrip\n");
-    u_uastrcpy(tzID, "GMT");
+    u_strcpy(tzID, fgGMTID);
     ucal_setTimeZone(caldef2, tzID, 3, &status);
     if(U_FAILURE(status)){
         log_err("Error in setting the time zone using ucal_setTimeZone(): %s\n", myErrorName(status));
@@ -351,6 +350,31 @@ static void TestGetSetDateAPI()
         log_verbose("PASS: setTimeZone roundtrip test passed\n");
     else
         log_err("FAIL: setTimeZone roundtrip test failed\n");
+
+    zoneOffset = ucal_get(caldef2, UCAL_ZONE_OFFSET, &status);
+    if(U_FAILURE(status)){
+        log_err("Error in getting the time zone using ucal_get() after using ucal_setTimeZone(): %s\n", myErrorName(status));
+    }
+    else if (zoneOffset != 0) {
+        log_err("Error in getting the time zone using ucal_get() after using ucal_setTimeZone() offset=%d\n", zoneOffset);
+    }
+
+    ucal_setTimeZone(caldef2, NULL, -1, &status);
+    if(U_FAILURE(status)){
+        log_err("Error in setting the time zone using ucal_setTimeZone(): %s\n", myErrorName(status));
+    }
+    if(ucal_getMillis(caldef2, &status))
+        log_verbose("PASS: setTimeZone roundtrip test passed\n");
+    else
+        log_err("FAIL: setTimeZone roundtrip test failed\n");
+
+    zoneOffset = ucal_get(caldef2, UCAL_ZONE_OFFSET, &status);
+    if(U_FAILURE(status)){
+        log_err("Error in getting the time zone using ucal_get() after using ucal_setTimeZone(): %s\n", myErrorName(status));
+    }
+    else if (zoneOffset != -28800000) {
+        log_err("Error in getting the time zone using ucal_get() after using ucal_setTimeZone() offset=%d\n", zoneOffset);
+    }
 /*----------------------------*     */
     
     
@@ -440,7 +464,7 @@ static void TestFieldGetSet()
     UErrorCode status=U_ZERO_ERROR;
     log_verbose("\nFetching pointer to UCalendar using the ucal_open()\n");
     tzID=(UChar*)malloc(sizeof(UChar) * 4);
-    u_uastrcpy(tzID, "GMT");
+    u_strcpy(tzID, fgGMTID);
     /*open the calendar used */
     cal=ucal_open(tzID, u_strlen(tzID), "en_US", UCAL_TRADITIONAL, &status);
     if (U_FAILURE(status)) {
@@ -847,7 +871,7 @@ static void TestDOWProgression()
     UErrorCode status = U_ZERO_ERROR;
     UChar* tzID = 0;
     tzID=(UChar*)malloc(sizeof(UChar) * 4);
-    u_uastrcpy(tzID, "GMT");
+    u_strcpy(tzID, fgGMTID);
     /*open the calendar used */
     cal=ucal_open(tzID, u_strlen(tzID), "en_US", UCAL_TRADITIONAL, &status);;
     if (U_FAILURE(status)) {
@@ -922,7 +946,7 @@ static void testZones(int32_t yr, int32_t mo, int32_t dt, int32_t hr, int32_t mn
     UErrorCode status = U_ZERO_ERROR;
     UChar* tzID = 0;
     tzID=(UChar*)malloc(sizeof(UChar) * 4);
-    u_uastrcpy(tzID, "GMT");
+    u_strcpy(tzID, fgGMTID);
     gmtcal=ucal_open(tzID, 3, "en_US", UCAL_TRADITIONAL, &status);;
     if (U_FAILURE(status)) {
         log_err("ucal_open failed: %s\n", myErrorName(status)); 
@@ -970,7 +994,7 @@ static void testZones(int32_t yr, int32_t mo, int32_t dt, int32_t hr, int32_t mn
     expected = ((hr * 60 + mn) * 60 + sc) * 1000;
     if (utc != expected) {
         temp=(double)(utc - expected)/ 1000 / 60 / 60.0;
-        printf("FAIL: Discrepancy of %d  millis = %fhr\n", utc-expected, temp );
+        log_err("FAIL: Discrepancy of %d  millis = %fhr\n", utc-expected, temp );
     }
     else
         log_verbose("PASS: the offset between local and GMT is correct\n");
@@ -1090,7 +1114,6 @@ static void verify2(const char* msg, UCalendar* c, UDateFormat* dat, int32_t yea
                                                                      int32_t hour, int32_t min, int32_t sec, int32_t am_pm)
 {
     UDate d1;
-    char str[3];
     UErrorCode status = U_ZERO_ERROR;
     if (ucal_get(c, UCAL_YEAR, &status) == year &&
         ucal_get(c, UCAL_MONTH, &status) == month &&
@@ -1118,12 +1141,8 @@ static void verify2(const char* msg, UCalendar* c, UDateFormat* dat, int32_t yea
             log_err("ucal_getMillis failed: %s\n", myErrorName(status)); 
             return;
         }
-        if(am_pm==0)
-        strcpy(str,"AM");
-        else
-        strcpy(str,"PM");
         log_err("Got %s Expected %d/%d/%d/ %d:%d:%d  %s\n", austrdup(myDateFormat(dat, d1)), 
-            year, month + 1, day, hour, min, sec,  str);
+            year, month + 1, day, hour, min, sec, (am_pm==0) ? "AM": "PM");
         
         return;
     }
