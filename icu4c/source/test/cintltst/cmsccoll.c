@@ -1818,7 +1818,8 @@ static void TestRedundantRules(void) {
   int32_t i;
 
   const static char *rules[] = {
-    "& a <<< b <<< c << d <<< e& [before 1] e <<< x",
+    /*"& a <<< b <<< c << d <<< e& [before 1] e <<< x",*/ /* this test conflicts with positioning of CODAN placeholder */
+    "& b <<< c <<< d << e <<< f& [before 1] f <<< x",
     "& a < b <<< c << d <<< e& [before 1] e <<< x",
     "& a < b < c < d& [before 1] c < m",
     "& a < b <<< c << d <<< e& [before 3] e <<< x",
@@ -1835,8 +1836,8 @@ static void TestRedundantRules(void) {
   };
 
   const static char *expectedRules[] = {
-    /*"&\\u3029<<<x",*/
-    "&\\u2089<<<x",
+    /*"&\\u2089<<<x",*/
+    "&\\u0252<<<x",
     "& a <<< x < b <<< c << d <<< e",
     "& a < b < m < c < d",
     "& a < b <<< c << d <<< x <<< e",
@@ -1853,8 +1854,8 @@ static void TestRedundantRules(void) {
   };
 
   const static char *testdata[][8] = {
-    /*{"\\u3029", "x"},*/
-    {"\\u2089", "x"},
+    /*{"\\u2089", "x"},*/
+    {"\\u0252", "x"},
     {"a", "x", "b", "c", "d", "e"},
     {"a", "b", "m", "c", "d"},
     {"a", "b", "c", "d", "x", "e"},
