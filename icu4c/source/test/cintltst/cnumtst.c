@@ -189,7 +189,7 @@ free(result);
 
     /* Testing unum_parse() and unum_parseDouble() */
     log_verbose("\nTesting unum_parseDouble()\n");
-//    for (i = 0; i < 100000; i++)
+/*    for (i = 0; i < 100000; i++)*/
     {
         parsepos=0;
         d1=unum_parseDouble(cur_def, result, u_strlen(result), &parsepos, &status);
@@ -207,7 +207,7 @@ free(result);
 /* performance testing */
     u_uastrcpy(temp1, "$462.12345");
     resultlength=u_strlen(temp1);
-//    for (i = 0; i < 100000; i++)
+/*    for (i = 0; i < 100000; i++) */
     {
         parsepos=0;
         d1=unum_parseDouble(cur_def, temp1, resultlength, &parsepos, &status);
@@ -252,7 +252,7 @@ free(result);
     
     
     log_verbose("\nTesting unum_parse()\n");
-//    for (i = 0; i < 100000; i++)
+/*    for (i = 0; i < 100000; i++) */
     {
         parsepos=0;
         l1=unum_parse(per_fr, result, u_strlen(result), &parsepos, &status);
