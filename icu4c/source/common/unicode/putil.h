@@ -200,7 +200,9 @@ U_CAPI const char* U_EXPORT2 u_getDataDirectory(void);
 U_CAPI void U_EXPORT2 u_setDataDirectory(const char *directory);
 
 /**
- * Return the default codepage for this platform and locale 
+ * Return the default codepage for this platform and locale.
+ * This function can call setlocale() on Unix platforms. Please read the
+ * platform documentation on setlocale() before calling this function.
  * @return the default codepage for this platform 
  * @stable
  */
@@ -209,6 +211,8 @@ U_CAPI const char*  U_EXPORT2 uprv_getDefaultCodepage(void);
 /**
  * Return the default locale ID string by querying ths system, or
  *     zero if one cannot be found. 
+ * This function can call setlocale() on Unix platforms. Please read the
+ * platform documentation on setlocale() before calling this function.
  * @return the default locale ID string
  * @stable
  */
