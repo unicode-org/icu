@@ -5,7 +5,7 @@
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
-*   file name:  uenum.cpp
+*   file name:  uenum.c
 *   encoding:   US-ASCII
 *   tab size:   8 (not used)
 *   indentation:2
@@ -26,18 +26,20 @@ static const UEnumeration nullEnumeration = {
     NULL  /* reset */
 };
 
-void uenum_close(UEnumeration* en)
+U_CAPI void U_EXPORT2
+uenum_close(UEnumeration* en)
 {
     if (en) {
         if (en->close != NULL) {
             en->close(en);
-        } else { // this seems dangerous, but better kill the object
+        } else { /* this seems dangerous, but we better kill the object */
             uprv_free(en);
         }
     }
 }
 
-int32_t uenum_count(UEnumeration* en, UErrorCode* status)
+U_CAPI int32_t U_EXPORT2
+uenum_count(UEnumeration* en, UErrorCode* status)
 {
     if (!en || U_FAILURE(*status)) {
         return -1;
@@ -50,9 +52,10 @@ int32_t uenum_count(UEnumeration* en, UErrorCode* status)
     }
 }
 
-const UChar* uenum_unext(UEnumeration* en,
-                        int32_t* resultLength,
-                        UErrorCode* status)
+U_CAPI const UChar* U_EXPORT2
+uenum_unext(UEnumeration* en,
+            int32_t* resultLength,
+            UErrorCode* status)
 {
     if (!en || U_FAILURE(*status)) {
         return NULL;
@@ -65,9 +68,10 @@ const UChar* uenum_unext(UEnumeration* en,
     }
 }
 
-const char* uenum_next(UEnumeration* en,
-                      int32_t* resultLength,
-                      UErrorCode* status)
+U_CAPI const char* U_EXPORT2
+uenum_next(UEnumeration* en,
+          int32_t* resultLength,
+          UErrorCode* status)
 {
     if (!en || U_FAILURE(*status)) {
         return NULL;
@@ -80,7 +84,8 @@ const char* uenum_next(UEnumeration* en,
     }
 }
 
-void uenum_reset(UEnumeration* en, UErrorCode* status)
+U_CAPI void U_EXPORT2
+uenum_reset(UEnumeration* en, UErrorCode* status)
 {
     if (!en || U_FAILURE(*status)) {
         return;

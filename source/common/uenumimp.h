@@ -19,6 +19,8 @@
 
 #include "unicode/uenum.h"
 
+U_CDECL_BEGIN
+
 /** 
  * following are the type declarations for 
  * implementations of APIs. If any of these
@@ -118,6 +120,8 @@ struct UEnumeration {
   /* called from uenum_reset */
   UEnumReset *reset;
 };
+
+U_CDECL_END
 
 
 #endif
