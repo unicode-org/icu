@@ -14,6 +14,8 @@
 #include "cintltst.h"
 
 void addDataDrivenTest(TestNode** root);
+void closeDataDrivenCollatorTest(void);
+
 
 
 #if 0

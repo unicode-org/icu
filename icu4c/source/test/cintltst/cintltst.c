@@ -29,6 +29,7 @@
 #include "unicode/ucnv.h"
 #include "unicode/ures.h"
 #include "unicode/uclean.h"
+#include "dadrcoll.h"
 
 #ifdef XP_MAC_CONSOLE
 #   include <console.h>
@@ -145,6 +146,8 @@ int main(int argc, const char* const argv[])
             printf("Repeating tests %d more time(s)\n", REPEAT_TESTS);
         }
         cleanUpTestTree(root);
+        /* ugly, but otherwise, we would either leak (bad) or open/close on individual tests (slow) */
+        closeDataDrivenCollatorTest();
 #ifdef CTST_LEAK_CHECK
         ctst_freeAll();
 

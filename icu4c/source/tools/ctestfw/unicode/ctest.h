@@ -173,6 +173,9 @@ T_CTEST_API int processArgs(const TestNode* root,
                              const char* const argv[]);
 
 
+T_CTEST_API 
+const char* getTestName(void);
+
 
 
 #endif

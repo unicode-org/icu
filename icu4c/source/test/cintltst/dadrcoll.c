@@ -63,7 +63,7 @@ getTestBundle(const char* bundleName)
 
 
 static void 
-OpenDataDrivenCollatorTest(void) 
+openDataDrivenCollatorTest(void) 
 {
   UErrorCode status = U_ZERO_ERROR;
   parsing = NULL;
@@ -87,14 +87,19 @@ OpenDataDrivenCollatorTest(void)
   }
 }
 
-static void 
-CloseDataDrivenCollatorTest(void) 
+void 
+closeDataDrivenCollatorTest(void) 
 {
   ures_close(parsing);
+  parsing = NULL;
   ures_close(purpose);
+  purpose = NULL;
   ures_close(currentTest);
+  currentTest = NULL;
   ures_close(testData);
+  testData = NULL;
   ures_close(testBundle);
+  testBundle = NULL;
 }
 
 /* Reads the options string and sets appropriate attributes in collator */
@@ -233,6 +238,9 @@ processReadyCollator(UResourceBundle *test, UCollator *col, UErrorCode *status) 
   if(*status == U_ZERO_ERROR) {
     while(ures_hasNext(testData)) {
       sequence = ures_getNextString(testData, &len, &key, status);
+      if(VERBOSITY) {
+        log_verbose("Testing sequence: %s\n", aescstrdup(sequence, len));
+      }
       processSequence(col, sequence, len, status);
     }
     ures_close(testData);
@@ -256,6 +264,9 @@ processCollatorTests(UResourceBundle *test, UCollator *col, UErrorCode *status) 
       options = ures_getNextString(optionsRes, &len, &key, status);
       processArguments(col, options, len, status);
       if(U_SUCCESS(*status)) {
+        if(VERBOSITY) {
+          log_verbose("Arguments: %s\n", aescstrdup(options, len));
+        }
         processReadyCollator(test, col, status);      
       } else {
         log_err("Error processing arguments!");
@@ -302,11 +313,15 @@ processTest(UResourceBundle *test, UErrorCode *status) {
       colString = ures_getNextString(type, &len, &key, status);
       col = ucol_openRules(colString, len, UCOL_DEFAULT, UCOL_DEFAULT, &parseError, status);
       if(U_SUCCESS(*status)) {
-        log_verbose("Testing collator for rules "); /*+UnicodeString(colString));*/
+        if(VERBOSITY) {
+          log_verbose("Testing collator for rules %s\n", aescstrdup(colString, len)); /*+UnicodeString(colString));*/
+        }
         processCollatorTests(test, col, status);
         ucol_close(col);
       } else {
-        log_err("Unable to instantiate collator for rules "); /*+UnicodeString(colString));*/
+        if(VERBOSITY) {
+          log_err("Unable to instantiate collator for rules %s\n", aescstrdup(colString, len)); /*+UnicodeString(colString));*/
+        }
       }
     }
   }
@@ -314,130 +329,52 @@ processTest(UResourceBundle *test, UErrorCode *status) {
   ures_close(type);
 }
 
+/* executed a named test from resource bundle */
+/* argument check is done on upper level */
 static void 
 DataDrivenTest(void) 
 {
   UErrorCode status = U_ZERO_ERROR;
-  UResourceBundle *test = NULL;
   const char* testName = NULL;
-  OpenDataDrivenCollatorTest();
-  ures_resetIterator(testData);
-  while(ures_hasNext(testData)) {
-    test = ures_getNextResource(testData, test, &status);
-    testName = ures_getKey(test);
-    log_verbose("%s\n", testName);
-    processTest(test, &status);
-  }
-  ures_close(test);
-  CloseDataDrivenCollatorTest();
+  const char* requestedTest = getTestName();
+  currentTest = ures_getByKey(testData, requestedTest, currentTest, &status);
+  processTest(currentTest, &status);
 }
 
-
-
-#if 0
-/* scraps */
-static const char* 
-loadTestData(UErrorCode *err){
-    const char*      directory=NULL;
-    UResourceBundle* test =NULL;
-    char* tdpath=NULL;
-    const char* tdrelativepath = ".."U_FILE_SEP_STRING"test"U_FILE_SEP_STRING"testdata"U_FILE_SEP_STRING"out"U_FILE_SEP_STRING;
-    if( _testDataPath == NULL){
-        directory= u_getDataDirectory();
-    
-        tdpath = new char[(( strlen(directory) * strlen(tdrelativepath)) + 10)]; /* (char*) ctst_malloc(sizeof(char) *(( strlen(directory) * strlen(tdrelativepath)) + 10)); */
-
-
-        /* u_getDataDirectory shoul return \source\data ... set the
-         * directory to ..\source\data\..\test\testdata\out\testdata
-         *
-         * Fallback: When Memory mapped file is built
-         * ..\source\data\out\..\..\test\testdata\out\testdata
-         */
-        strcpy(tdpath, directory);
-        strcat(tdpath, tdrelativepath);
-        strcat(tdpath,"testdata");
-
-    
-        test=ures_open(tdpath, "testtypes", &err);
-    
-        /* we could not find the data in tdpath 
-         * try tdpathFallback
-         */
-        if(U_FAILURE(err))
-        {
-            strcpy(tdpath,directory);
-            strcat(tdpath,".."U_FILE_SEP_STRING);
-            strcat(tdpath, tdrelativepath);
-            strcat(tdpath,"testdata");
-            err =U_ZERO_ERROR;
-            test=ures_open(tdpath, "ja_data", &err);
-            /* Fall back did not succeed either so return */
-            if(U_FAILURE(err)){
-                err = U_FILE_ACCESS_ERROR;
-                log_err("construction of NULL did not succeed  :  %s \n", u_errorName(err));
-                return "";
-            }
-            ures_close(test);
-            _testDataPath = tdpath;
-            return _testDataPath;
-        }
-        ures_close(test);
-        _testDataPath = tdpath;
-        return _testDataPath;
-    }
-    return _testDataPath;
-}
-
-void DataDrivenCollatorTest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* par )
+/* not used, enumerates and executes all the tests in resource bundle */
+static void
+DoAllDataDrivenTests(void)
 {
-  if (exec)
-  {
-      logln("TestSuite Collator: ");
-  }
-
-  if(!dataTestValid) {
-    errln("Test data is invalid!");
-    numberOfTests = 0;
-  }
-
-  if(index >= numberOfTests) {
-    name = "";
-  } else {
-    UErrorCode status = U_ZERO_ERROR;
-    currentTest = ures_getByIndex(testData, index, currentTest, &status);
-    if(U_SUCCESS(status)) {
-      name = ures_getKey(currentTest);
-      if(exec) {
-        log(name);
-        logln("---");
-        logln("");
-        processTest(currentTest, status);
-      }
-    }
-  }
-}
-
-void
-DataDrivenCollatorTest::DataDrivenTest(char *par) {
   UErrorCode status = U_ZERO_ERROR;
-  ures_resetIterator(testData);
-  UResourceBundle *test = NULL;
   const char* testName = NULL;
+  const char* requestedTest = getTestName();
+  openDataDrivenCollatorTest();
+  ures_resetIterator(testData);
   while(ures_hasNext(testData)) {
-    test = ures_getNextResource(testData, test, &status);
-    testName = ures_getKey(test);
-    logln(testName);
-    processTest(test, status);
+    currentTest = ures_getNextResource(testData, currentTest, &status);
+    testName = ures_getKey(currentTest);
+    log_verbose("%s\n", testName);
+    processTest(currentTest, &status);
   }
-  ures_close(test);
+  closeDataDrivenCollatorTest();
 }
-#endif
 
-
+/* enumerates over tests and adds them to the test list */
 void addDataDrivenTest(TestNode** root)
 {
-    
-    addTest(root, &DataDrivenTest, "tscoll/DataDrivenTest");
+  UErrorCode status = U_ZERO_ERROR;
+  const char* testName = NULL;
+  char testToAdd[256];
+  openDataDrivenCollatorTest();
+  ures_resetIterator(testData);
+  while(ures_hasNext(testData)) {
+    currentTest = ures_getNextResource(testData, currentTest, &status);
+    testName = ures_getKey(currentTest);
+    strcpy(testToAdd, "tscoll/DataDrivenTest/");
+    strcat(testToAdd, testName);
+    addTest(root, &DataDrivenTest, testToAdd);
+  }
 }
+
+
 
