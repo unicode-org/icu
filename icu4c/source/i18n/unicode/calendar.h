@@ -1,6 +1,6 @@
 /*
 ********************************************************************************
-*   Copyright (C) 1997-1999, International Business Machines
+*   Copyright (C) 1997-2002, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 ********************************************************************************
 *
@@ -17,6 +17,7 @@
 *   07/27/98    stephen     Sync up with JDK 1.2
 *   11/15/99    weiv        added YEAR_WOY and DOW_LOCAL
 *                           to EDateFields
+*    8/19/2002  srl         Removed Javaisms
 ********************************************************************************
 */
 
@@ -48,13 +49,13 @@ U_NAMESPACE_BEGIN
  *
  * <p>
  * Like other locale-sensitive classes, <code>Calendar</code> provides a
- * class method, <code>getInstance</code>, for getting a generally useful
- * object of this type. <code>Calendar</code>'s <code>getInstance</code> method
+ * static method, <code>createInstance</code>, for getting a generally useful
+ * object of this type. <code>Calendar</code>'s <code>createInstance</code> method currently
  * returns a <code>GregorianCalendar</code> object whose
  * time fields have been initialized with the current date and time:
  * <blockquote>
  * <pre>
- * Calendar rightNow = Calendar.getInstance();
+ * Calendar *rightNow = Calendar::createInstance(errCode);
  * </pre>
  * </blockquote>
  *
@@ -507,7 +508,7 @@ public:
      * time, the returned value will be negative.  The
      * <code>field</code> parameter specifies the units of the return
      * value.  For example, if <code>fieldDifference(when,
-     * Calendar.MONTH)</code> returns 3, then this calendar is set to
+     * Calendar::MONTH)</code> returns 3, then this calendar is set to
      * 3 months before <code>when</code>, and possibly some addition
      * time less than one month.
      *
@@ -521,9 +522,9 @@ public:
      * example:
      *
      * <pre>
-     * int y = cal.fieldDifference(when, Calendar.YEAR);
-     * int m = cal.fieldDifference(when, Calendar.MONTH);
-     * int d = cal.fieldDifference(when, Calendar.DATE);</pre>
+     * int y = cal->fieldDifference(when, Calendar::YEAR, err);
+     * int m = cal->fieldDifference(when, Calendar::MONTH, err);
+     * int d = cal->fieldDifference(when, Calendar::DATE, err);</pre>
      *
      * computes the difference between <code>cal</code> and
      * <code>when</code> in years, months, and days.
@@ -532,12 +533,12 @@ public:
      * <em>asymmetrical</em>.  That is, in the following code:
      *
      * <pre>
-     * cal.setTime(date1);
-     * int m1 = cal.fieldDifference(date2, Calendar.MONTH);
-     * int d1 = cal.fieldDifference(date2, Calendar.DATE);
-     * cal.setTime(date2);
-     * int m2 = cal.fieldDifference(date1, Calendar.MONTH);
-     * int d2 = cal.fieldDifference(date1, Calendar.DATE);</pre>
+     * cal->setTime(date1, err);
+     * int m1 = cal->fieldDifference(date2, Calendar::MONTH, err);
+     * int d1 = cal->fieldDifference(date2, Calendar::DATE, err);
+     * cal->setTime(date2, err);
+     * int m2 = cal->fieldDifference(date1, Calendar::MONTH, err);
+     * int d2 = cal->fieldDifference(date1, Calendar::DATE, err);</pre>
      *
      * one might expect that <code>m1 == -m2 && d1 == -d2</code>.
      * However, this is not generally the case, because of
