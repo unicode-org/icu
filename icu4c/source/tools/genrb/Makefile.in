@@ -32,7 +32,7 @@ DERB = $(BINDIR)/$(DERB_STUB_NAME)$(EXEEXT)
 CPPFLAGS += -I$(top_builddir)/common -I$(top_srcdir)/common -I$(top_srcdir)/i18n -I$(srcdir)/../toolutil
 LIBS = $(LIBICUI18N) $(LIBICUTOOLUTIL) $(LIBICUUC) $(DEFAULT_LIBS) $(LIB_M)
 
-OBJECTS = errmsg.o genrb.o parse.o read.o reslist.o ustr.o util.o \
+OBJECTS = errmsg.o genrb.o parse.o read.o reslist.o ustr.o rbutil.o \
 wrtjava.o rle.o wrtxml.o prscmnts.o
 DERB_OBJ = derb.o
 
