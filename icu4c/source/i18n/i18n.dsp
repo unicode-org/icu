@@ -69,7 +69,7 @@ LINK32=link.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MTd /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "I18N_EXPORTS" /YX /FD /GZ /c
-# ADD CPP /nologo /MDd /Ze /W3 /Gm /GX /ZI /Od /I "..\..\include" /I "..\..\source\common" /D "_WINDOWS" /D "_USRDLL" /D "I18N_EXPORTS" /D "U_I18N_IMPLEMENTATION" /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "UDATA_MAP" /FR /YX /FD /GZ /c
+# ADD CPP /nologo /MDd /W3 /Gm /GX /ZI /Od /I "..\..\include" /I "..\..\source\common" /D "_WINDOWS" /D "_USRDLL" /D "I18N_EXPORTS" /D "U_I18N_IMPLEMENTATION" /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "UDATA_MAP" /FR /YX /FD /GZ /c
 # ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /win32
 # ADD MTL /nologo /D "_DEBUG" /mktyplib203 /win32
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
@@ -1920,6 +1920,14 @@ InputPath=.\unicode\unum.h
 SOURCE=.\unicode\utrans.h
 
 !IF  "$(CFG)" == "i18n - Win32 Release"
+
+# Begin Custom Build
+InputPath=.\unicode\utrans.h
+
+"..\..\include\unicode\utrans.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy    unicode\utrans.h    ..\..\include\unicode
+
+# End Custom Build
 
 !ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
 
