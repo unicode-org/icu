@@ -110,7 +110,7 @@ static UErrorCode dataErrorCode=U_ZERO_ERROR;
 static int8_t haveNormData=0;
 
 static int32_t indexes[_NORM_INDEX_TOP]={ 0 };
-static UTrie normTrie={ 0 }, fcdTrie={ 0 };
+static UTrie normTrie={ 0,0,0,0,0,0,0 }, fcdTrie={ 0,0,0,0,0,0,0 };
 
 /*
  * pointers into the memory-mapped unorm.dat
@@ -164,7 +164,7 @@ static int8_t
 loadNormData(UErrorCode &errorCode) {
     /* load Unicode normalization data from file */
     if(haveNormData==0) {
-        UTrie _normTrie={ 0 }, _fcdTrie={ 0 };
+        UTrie _normTrie={ 0,0,0,0,0,0,0 }, _fcdTrie={ 0,0,0,0,0,0,0 };
         UDataMemory *data;
         const int32_t *p=NULL;
 
