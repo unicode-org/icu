@@ -90,6 +90,11 @@ static int printConverters(const char *pname, int defonly, int canon)
     const char **stds;
 
     if (defonly) {
+
+        /* Find the name of the default converter, and either print it,
+           or find its real name (in case the function returns an alias)
+           and save it for later to recognize the real entry. */
+
         lookfor = ucnv_getDefaultName();
         if (!canon) {
             printf("%s\n", lookfor);
@@ -103,7 +108,6 @@ static int printConverters(const char *pname, int defonly, int canon)
             }
         }
     }
-
 
     num = ucnv_countAvailable();
     num_stds = ucnv_countStandards();
