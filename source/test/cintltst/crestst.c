@@ -66,12 +66,12 @@ static struct
   /* "IN" means inherits */
   /* "NE" or "ne" means "does not exist" */
 
-  { "root",                U_ZERO_ERROR,             e_Root,      { TRUE, FALSE, FALSE }, { TRUE, FALSE, FALSE } },
-  { "te",                  U_ZERO_ERROR,             e_te,           { FALSE, TRUE, FALSE }, { TRUE, TRUE, FALSE } },
-  { "te_IN",               U_ZERO_ERROR,             e_te_IN,        { FALSE, FALSE, TRUE }, { TRUE, TRUE, TRUE } },
-  { "te_NE",               U_USING_FALLBACK_ERROR,   e_te,           { FALSE, TRUE, FALSE }, { TRUE, TRUE, FALSE } },
-  { "te_IN_NE",            U_USING_FALLBACK_ERROR,   e_te_IN,        { FALSE, FALSE, TRUE }, { TRUE, TRUE, TRUE } },
-  { "ne",                  U_USING_DEFAULT_ERROR,    e_Root,      { TRUE, FALSE, FALSE }, { TRUE, FALSE, FALSE } }
+  { "root",         U_ZERO_ERROR,             e_Root,    { TRUE, FALSE, FALSE }, { TRUE, FALSE, FALSE } },
+  { "te",           U_ZERO_ERROR,             e_te,      { FALSE, TRUE, FALSE }, { TRUE, TRUE, FALSE } },
+  { "te_IN",        U_ZERO_ERROR,             e_te_IN,   { FALSE, FALSE, TRUE }, { TRUE, TRUE, TRUE } },
+  { "te_NE",        U_USING_FALLBACK_WARNING, e_te,      { FALSE, TRUE, FALSE }, { TRUE, TRUE, FALSE } },
+  { "te_IN_NE",     U_USING_FALLBACK_WARNING, e_te_IN,   { FALSE, FALSE, TRUE }, { TRUE, TRUE, TRUE } },
+  { "ne",           U_USING_DEFAULT_WARNING,  e_Root,    { TRUE, FALSE, FALSE }, { TRUE, FALSE, FALSE } }
 };
 
 static int32_t bundles_count = sizeof(param) / sizeof(param[0]);
@@ -87,11 +87,14 @@ void addResourceBundleTest(TestNode** root);
 void addResourceBundleTest(TestNode** root)
 {
     addTest(root, &TestConstruction1, "tsutil/crestst/TestConstruction1");
-    addTest(root, &TestConstruction2, "tsutil/crestst/TestConstruction2");
     addTest(root, &TestOpenDirect, "tsutil/crestst/TestOpenDirect");
     addTest(root, &TestResourceBundles, "tsutil/crestst/TestResourceBundle");
     addTest(root, &TestFallback, "tsutil/crestst/TestFallback");
     addTest(root, &TestAliasConflict, "tsutil/crestst/TestAliasConflict");
+
+#ifdef ICU_URES_USE_DEPRECATES
+    addTest(root, &TestConstruction2, "tsutil/crestst/TestConstruction2");
+#endif
 }
 
 
@@ -136,6 +139,7 @@ void TestConstruction1()
     UResourceBundle *test1 = 0, *test2 = 0;
     const UChar *result1, *result2;
     int32_t resultLen;
+    UChar temp[7];
 
     UErrorCode   err = U_ZERO_ERROR;
     const char* testdatapath ;
@@ -174,6 +178,31 @@ void TestConstruction1()
         return;
     }
     
+    u_uastrcpy(temp, "TE_IN");
+
+    if(u_strcmp(result2, temp)!=0)
+    {
+        int n;
+
+        log_err("Construction test failed for ures_open();\n");
+        if(!VERBOSITY)
+            log_info("(run verbose for more information)\n");
+        
+        log_verbose("\nGot->");
+        for(n=0;result2[n];n++)
+        {
+            log_verbose("%04X ",result2[n]);
+        }
+        log_verbose("<\n");
+        
+        log_verbose("\nWant>");
+        for(n=0;temp[n];n++)
+        {
+            log_verbose("%04X ",temp[n]);
+        }
+        log_verbose("<\n");
+        
+    }
     
     log_verbose("for string_in_Root_te_te_IN, default.txt had  %s\n", austrdup(result1));
     log_verbose("for string_in_Root_te_te_IN, te_IN.txt had %s\n", austrdup(result2));
@@ -186,6 +215,7 @@ void TestConstruction1()
     ures_close(test2);
 }
 
+#ifdef ICU_URES_USE_DEPRECATES
 void TestConstruction2()
 {
   int n;
@@ -244,6 +274,7 @@ void TestConstruction2()
 
   ures_close(test4);
 }
+#endif
 
 /*****************************************************************************/
 /*****************************************************************************/
@@ -325,9 +356,9 @@ UBool testTag(const char* frag,
                 if(j == actual_bundle) /* it's in the same bundle OR it's a nonexistent=default bundle (5) */
                     expected_resource_status = U_ZERO_ERROR;
                 else if(j == 0)
-                    expected_resource_status = U_USING_DEFAULT_ERROR;
+                    expected_resource_status = U_USING_DEFAULT_WARNING;
                 else
-                    expected_resource_status = U_USING_FALLBACK_ERROR;
+                    expected_resource_status = U_USING_FALLBACK_WARNING;
 
                 log_verbose("%s[%d]::%s: in<%d:%s> inherits<%d:%s>.  actual_bundle=%s\n",
                             param[i].name, 
@@ -458,7 +489,7 @@ static void TestFallback()
     
     /* OK first one. This should be a Default value. */
     junk = ures_getStringByKey(fr_FR, "%%PREEURO", &resultLen, &status);
-    if(status != U_USING_DEFAULT_ERROR)
+    if(status != U_USING_DEFAULT_WARNING)
     {
         log_err("Expected U_USING_DEFAULT_ERROR when trying to get %%PREEURO from fr_FR, got %s\n", 
             u_errorName(status));
@@ -468,7 +499,7 @@ static void TestFallback()
     
     /* and this is a Fallback, to fr */
     junk = ures_getStringByKey(fr_FR, "DayNames", &resultLen, &status);
-    if(status != U_USING_FALLBACK_ERROR)
+    if(status != U_USING_FALLBACK_WARNING)
     {
         log_err("Expected U_USING_FALLBACK_ERROR when trying to get DayNames from fr_FR, got %s\n", 
             u_errorName(status));
@@ -523,7 +554,7 @@ TestOpenDirect(void) {
     /* now make sure that "translit_index" will not work with ures_open() */
     errorCode=U_ZERO_ERROR;
     translit_index=ures_open(NULL, "translit_index", &errorCode);
-    if(U_FAILURE(errorCode) || errorCode==U_USING_DEFAULT_ERROR || errorCode==U_USING_FALLBACK_ERROR) {
+    if(U_FAILURE(errorCode) || errorCode==U_USING_DEFAULT_WARNING || errorCode==U_USING_FALLBACK_WARNING) {
         /* falling back to default or root is ok */
         errorCode=U_ZERO_ERROR;
     } else if(0!=uprv_strcmp("translit_INDEX", ures_getLocale(translit_index, &errorCode))) {

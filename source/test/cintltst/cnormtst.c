@@ -136,13 +136,13 @@ void TestDecomp()
     for(x=0; x < ARRAY_LENGTH(canonTests); x++)
     {
         source=CharsToUChars(canonTests[x][0]);
-        neededLen= unorm_normalize(source, u_strlen(source), UNORM_NFD, UCOL_IGNORE_HANGUL, NULL, 0, &status); 
+        neededLen= unorm_normalize(source, u_strlen(source), UNORM_NFD, 0, NULL, 0, &status); 
         if(status==U_BUFFER_OVERFLOW_ERROR)
         {
             status=U_ZERO_ERROR;
             resLen=neededLen+1;
             result=(UChar*)malloc(sizeof(UChar*) * resLen);
-            unorm_normalize(source, u_strlen(source), UNORM_NFD, UCOL_IGNORE_HANGUL, result, resLen, &status); 
+            unorm_normalize(source, u_strlen(source), UNORM_NFD, 0, result, resLen, &status); 
         }
         if(U_FAILURE(status)){
             log_err("ERROR in unorm_normalize at %s:  %s\n", austrdup(source), myErrorName(status) );
@@ -170,13 +170,13 @@ void TestCompatDecomp()
     for(x=0; x < ARRAY_LENGTH(compatTests); x++)
     {
         source=CharsToUChars(compatTests[x][0]);
-        neededLen= unorm_normalize(source, u_strlen(source), UNORM_NFKD, UCOL_IGNORE_HANGUL, NULL, 0, &status); 
+        neededLen= unorm_normalize(source, u_strlen(source), UNORM_NFKD, 0, NULL, 0, &status); 
         if(status==U_BUFFER_OVERFLOW_ERROR)
         {
             status=U_ZERO_ERROR;
             resLen=neededLen+1;
             result=(UChar*)malloc(sizeof(UChar*) * resLen);
-            unorm_normalize(source, u_strlen(source), UNORM_NFKD,UCOL_IGNORE_HANGUL, result, resLen, &status); 
+            unorm_normalize(source, u_strlen(source), UNORM_NFKD, 0, result, resLen, &status); 
         }
         if(U_FAILURE(status)){
             log_err("ERROR in unorm_normalize at %s:  %s\n", austrdup(source), myErrorName(status) );
@@ -204,13 +204,13 @@ void TestCanonDecompCompose()
     for(x=0; x < ARRAY_LENGTH(canonTests); x++)
     {
         source=CharsToUChars(canonTests[x][0]);
-        neededLen= unorm_normalize(source, u_strlen(source), UNORM_NFC, UCOL_IGNORE_HANGUL, NULL, 0, &status); 
+        neededLen= unorm_normalize(source, u_strlen(source), UNORM_NFC, 0, NULL, 0, &status); 
         if(status==U_BUFFER_OVERFLOW_ERROR)
         {
             status=U_ZERO_ERROR;
             resLen=neededLen+1;
             result=(UChar*)malloc(sizeof(UChar*) * resLen);
-            unorm_normalize(source, u_strlen(source), UNORM_NFC, UCOL_IGNORE_HANGUL, result, resLen, &status); 
+            unorm_normalize(source, u_strlen(source), UNORM_NFC, 0, result, resLen, &status); 
         }
         if(U_FAILURE(status)){
             log_err("ERROR in unorm_normalize at %s:  %s\n", austrdup(source),myErrorName(status) );
@@ -238,13 +238,13 @@ void TestCompatDecompCompose()
     for(x=0; x < ARRAY_LENGTH(compatTests); x++)
     {
         source=CharsToUChars(compatTests[x][0]);
-        neededLen= unorm_normalize(source, u_strlen(source), UNORM_NFKC, UCOL_IGNORE_HANGUL, NULL, 0, &status); 
+        neededLen= unorm_normalize(source, u_strlen(source), UNORM_NFKC, 0, NULL, 0, &status); 
         if(status==U_BUFFER_OVERFLOW_ERROR)
         {
             status=U_ZERO_ERROR;
             resLen=neededLen+1;
             result=(UChar*)malloc(sizeof(UChar*) * resLen);
-            unorm_normalize(source, u_strlen(source), UNORM_NFKC, UCOL_IGNORE_HANGUL, result, resLen, &status); 
+            unorm_normalize(source, u_strlen(source), UNORM_NFKC, 0, result, resLen, &status); 
         }
         if(U_FAILURE(status)){
             log_err("ERROR in unorm_normalize at %s:  %s\n", austrdup(source), myErrorName(status) );
@@ -709,7 +709,7 @@ void TestCheckFCD()
     while (size != 19) {
       data[size] = datachar[(rand() * 50) / RAND_MAX];
       log_verbose("0x%x", data[size]);
-      normsize += unorm_normalize(data + size, 1, UNORM_NFD, UCOL_IGNORE_HANGUL, 
+      normsize += unorm_normalize(data + size, 1, UNORM_NFD, 0, 
                                   norm + normsize, 100 - normsize, &status);       
       if (U_FAILURE(status)) {
         log_err("unorm_quickCheck(FCD) failed: exception occured at data generation\n");
@@ -719,7 +719,7 @@ void TestCheckFCD()
     }
     log_verbose("\n");
 
-    nfdsize = unorm_normalize(data, size, UNORM_NFD, UCOL_IGNORE_HANGUL, 
+    nfdsize = unorm_normalize(data, size, UNORM_NFD, 0, 
                               nfd, 100, &status);       
     if (U_FAILURE(status)) {
       log_err("unorm_quickCheck(FCD) failed: exception occured at normalized data generation\n");

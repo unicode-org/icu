@@ -1546,7 +1546,7 @@ static void TestConvertSafeClone()
         ucnv_close(cnv);
     /* size one byte too small - should allocate & let us know */
     --bufferSize;
-    if (0 == (cnv = ucnv_safeClone(someConverters[0], 0, &bufferSize, &err)) || err != U_SAFECLONE_ALLOCATED_ERROR)
+    if (0 == (cnv = ucnv_safeClone(someConverters[0], 0, &bufferSize, &err)) || err != U_SAFECLONE_ALLOCATED_WARNING)
     {
         log_err("FAIL: Cloned converter failed to deal correctly with too-small buffer size\n");
     }
@@ -1556,7 +1556,7 @@ static void TestConvertSafeClone()
     bufferSize = U_CNV_SAFECLONE_BUFFERSIZE;
 
     /* Null buffer pointer - return converter & set error to U_SAFECLONE_ALLOCATED_ERROR */
-    if (0 == (cnv = ucnv_safeClone(someConverters[0], 0, &bufferSize, &err)) || err != U_SAFECLONE_ALLOCATED_ERROR)
+    if (0 == (cnv = ucnv_safeClone(someConverters[0], 0, &bufferSize, &err)) || err != U_SAFECLONE_ALLOCATED_WARNING)
     {
         log_err("FAIL: Cloned converter failed to deal correctly with null buffer pointer\n");
     }

@@ -24,7 +24,7 @@ CollationKanaTest::CollationKanaTest()
         return;
     }
 
-    myCollation->setDecomposition(Normalizer::DECOMP);
+    myCollation->setAttribute(UCOL_NORMALIZATION_MODE, UCOL_ON, status);
 }
 
 CollationKanaTest::~CollationKanaTest()

@@ -13,6 +13,10 @@
 * 
 ************************************************************************/
 
+/* These APIs are becoming private */
+#define ICU_RULEBASEDTRANSLITERATOR_USE_DEPRECATES 1
+#define ICU_UNICODETOHEXTRANSLITERATOR_USE_DEPRECATES 1
+
 #include "ittrans.h"
 #include "trnserr.h"
 #include "unicode/utypes.h"

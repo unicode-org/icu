@@ -12,13 +12,16 @@
 #define _INTLTESTCONVERT
 
 
+#include "cppcnvt.h"
 #include "intltest.h"
 
 
+#ifdef ICU_UNICODECONVERTER_USE_DEPRECATES
 class IntlTestConvert: public IntlTest {
 public:
 virtual   void runIndexedTest( int32_t index, UBool exec, const char* &name, char* par = NULL );
 };
+#endif /* ICU_UNICODECONVERTER_USE_DEPRECATES */
 
 
 #endif

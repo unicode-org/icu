@@ -11,6 +11,9 @@
 #ifndef UNITOHEXTRTST_H
 #define UNITOHEXTRTST_H
 
+#define ICU_UNICODETOHEXTRANSLITERATOR_USE_DEPRECATES 1
+
+
 #include "unicode/translit.h"
 #include "unicode/unitohex.h"
 #include "intltest.h"

@@ -739,7 +739,8 @@ BasicNormalizerTest::TestNormalizerAPI() {
     }
 
     // test setIndex()
-    if(norm.setIndex(3)!=0x4e3d) {
+    norm.setIndexOnly(3);
+    if(norm.current()!=0x4e3d) {
         errln("error in Normalizer(CharacterIterator).setIndex(3)");
     }
 

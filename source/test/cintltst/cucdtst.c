@@ -40,6 +40,9 @@ static void TestMisc(void);
 static void TestControlPrint(void);
 static void TestIdentifier(void);
 static void TestUnicodeData(void);
+static void TestCodeUnit(void);
+static void TestCodePoint(void);
+static void TestCharLength(void);
 static void TestStringCopy(void);
 static void TestStringFunctions(void);
 static void TestStringSearching(void);
@@ -126,6 +129,9 @@ void addUnicodeTest(TestNode** root);
 void addUnicodeTest(TestNode** root)
 {
     addTest(root, &TestUnicodeData, "tsutil/cucdtst/TestUnicodeData");
+    addTest(root, &TestCodeUnit, "tsutil/cucdtst/TestCodeUnit");
+    addTest(root, &TestCodePoint, "tsutil/cucdtst/TestCodePoint");
+    addTest(root, &TestCharLength, "tsutil/cucdtst/TestCharLength");
     addTest(root, &TestAdditionalProperties, "tsutil/cucdtst/TestAdditionalProperties");
     addTest(root, &TestNumericProperties, "tsutil/cucdtst/TestNumericProperties");
     addTest(root, &TestUpperLower, "tsutil/cucdtst/TestUpperLower");
@@ -162,6 +168,20 @@ static void TestUpperLower()
     U_STRING_INIT(upperTest, "abcdefg123hij.?:klmno", 21);
     U_STRING_INIT(lowerTest, "ABCDEFG123HIJ.?:KLMNO", 21);
 
+/*
+Checks LetterLike Symbols which were previously a source of confusion
+[Bertrand A. D. 02/04/98]
+*/
+    for (i=0x2100;i<0x2138;i++)
+    {
+        if(i!=0x2126 && i!=0x212a && i!=0x212b)
+        {
+            if (i != (int)u_tolower(i)) /* itself */
+                log_err("Failed case conversion with itself: \\u%4X\n", i);
+            if (i != (int)u_toupper(i))
+                log_err("Failed case conversion with itself: \\u%4X\n", i);
+        }
+    }
 
     for(i=0; i < u_strlen(upper); i++){
         if(u_tolower(upper[i]) != lower[i]){
@@ -350,9 +370,9 @@ static void TestMisc()
 #if defined(ICU_VERSION)
     /* test only happens where we have configure.in with VERSION - sanity check. */
     if(strcmp(U_ICU_VERSION, ICU_VERSION))
-      {
+    {
         log_err("ICU version mismatch: Header says %s, build environment says %s.\n",  U_ICU_VERSION, ICU_VERSION);
-      }
+    }
 #endif
 
     /* test U_GC_... */
@@ -816,7 +836,7 @@ static void TestUnicodeData()
 
     errorCode=U_ZERO_ERROR;
     u_parseDelimitedFile(newPath, ';', fields, 15, unicodeDataLineFn, NULL, &errorCode);
-   if(errorCode==U_FILE_ACCESS_ERROR) {
+    if(errorCode==U_FILE_ACCESS_ERROR) {
         errorCode=U_ZERO_ERROR;
         u_parseDelimitedFile(backupPath, ';', fields, 15, unicodeDataLineFn, NULL, &errorCode);
     }
@@ -857,6 +877,155 @@ static void TestUnicodeData()
     u_enumCharTypes(enumTypeRange, "a1");
 }
 
+static void TestCodeUnit(){
+    const UChar codeunit[]={0x0000,0xe065,0x20ac,0xd7ff,0xd800,0xd841,0xd905,0xdbff,0xdc00,0xdc02,0xddee,0xdfff,0};
+
+    int32_t i;
+
+    for(i=0; i<(int32_t)(sizeof(codeunit)/sizeof(codeunit[0])); i++){
+        UChar c=codeunit[i];
+        log_verbose("Testing code unit value of \\u%4X\n", c);
+        if(i<4){
+            if(!(UTF_IS_SINGLE(c)) || (UTF_IS_LEAD(c)) || (UTF_IS_TRAIL(c)) ||(UTF_IS_SURROGATE(c))){
+                log_err("ERROR: \\u%4X is a single", c);
+            }
+
+        }
+        if(i >= 4 && i< 8){
+            if(!(UTF_IS_LEAD(c)) || UTF_IS_SINGLE(c) || UTF_IS_TRAIL(c) || !(UTF_IS_SURROGATE(c))){
+                log_err("ERROR: \\u%4X is a first surrogate", c);
+            }
+        }
+        if(i >= 8 && i< 12){
+            if(!(UTF_IS_TRAIL(c)) || UTF_IS_SINGLE(c) || UTF_IS_LEAD(c) || !(UTF_IS_SURROGATE(c))){
+                log_err("ERROR: \\u%4X is a second surrogate", c);
+            }
+        }
+    }
+
+}
+
+static void TestCodePoint(){
+    const UChar32 codePoint[]={
+        /*surrogate, notvalid(codepoint), not a UnicodeChar, not Error */
+        0xd800,
+        0xdbff,
+        0xdc00,
+        0xdfff,
+        0xdc04,
+        0xd821,
+        /*not a surrogate, valid, isUnicodeChar , not Error*/
+        0x20ac,
+        0xd7ff,
+        0xe000,
+        0xe123,
+        0x0061,
+        0xe065, 
+        0x20402,
+        0x24506,
+        0x23456,
+        0x20402,
+        0x10402,
+        0x23456,
+        /*not a surrogate, not valid, isUnicodeChar, isError */
+        0x0015,
+        0x009f,
+        /*not a surrogate, not valid, not isUnicodeChar, isError */
+        0xffff,
+        0xfffe,
+    };
+    int32_t i;
+    for(i=0; i<(int32_t)(sizeof(codePoint)/sizeof(codePoint[0])); i++){
+        UChar32 c=codePoint[i];
+        log_verbose("Testing code unit value of \\u%4X\n", c);
+        if(i<6){
+            if(!UTF_IS_SURROGATE(c)){
+                log_err("ERROR: isSurrogate() failed for \\u%4X\n", c);
+            }
+            if(UTF_IS_VALID(c)){
+                log_err("ERROR: isValid() failed for \\u%4X\n", c);
+            }
+            if(UTF_IS_UNICODE_CHAR(c)){
+                log_err("ERROR: isUnicodeChar() failed for \\u%4X\n", c);
+            }
+            if(UTF_IS_ERROR(c)){
+                log_err("ERROR: isError() failed for \\u%4X\n", c);
+            }
+        }else if(i >=6 && i<18){
+            if(UTF_IS_SURROGATE(c)){
+                log_err("ERROR: isSurrogate() failed for \\u%4X\n", c);
+            }
+            if(!UTF_IS_VALID(c)){
+                log_err("ERROR: isValid() failed for \\u%4X\n", c);
+            }
+            if(!UTF_IS_UNICODE_CHAR(c)){
+                log_err("ERROR: isUnicodeChar() failed for \\u%4X\n", c);
+            }
+            if(UTF_IS_ERROR(c)){
+                log_err("ERROR: isError() failed for \\u%4X\n", c);
+            }
+        }else if(i >=18 && i<20){
+            if(UTF_IS_SURROGATE(c)){
+                log_err("ERROR: isSurrogate() failed for \\u%4X\n", c);
+            }
+            if(UTF_IS_VALID(c)){
+                log_err("ERROR: isValid() failed for \\u%4X\n", c);
+            }
+            if(!UTF_IS_UNICODE_CHAR(c)){
+                log_err("ERROR: isUnicodeChar() failed for \\u%4X\n", c);
+            }
+            if(!UTF_IS_ERROR(c)){
+                log_err("ERROR: isError() failed for \\u%4X\n", c);
+            }
+        }
+        else if(i >=18 && i<(int32_t)(sizeof(codePoint)/sizeof(codePoint[0]))){
+            if(UTF_IS_SURROGATE(c)){
+                log_err("ERROR: isSurrogate() failed for \\u%4X\n", c);
+            }
+            if(UTF_IS_VALID(c)){
+                log_err("ERROR: isValid() failed for \\u%4X\n", c);
+            }
+            if(UTF_IS_UNICODE_CHAR(c)){
+                log_err("ERROR: isUnicodeChar() failed for \\u%4X\n", c);
+            }
+            if(!UTF_IS_ERROR(c)){
+                log_err("ERROR: isError() failed for \\u%4X\n", c);
+            }
+        }
+    }
+
+}
+
+static void TestCharLength()
+{
+    const int32_t codepoint[]={
+        1, 0x0061,
+        1, 0xe065,
+        1, 0x20ac,
+        2, 0x20402,
+        2, 0x23456,
+        2, 0x24506,
+        2, 0x20402,
+        2, 0x10402,
+        1, 0xd7ff,
+        1, 0xe000
+    };
+
+    int32_t i;
+    UBool multiple;
+    for(i=0; i<(int32_t)(sizeof(codepoint)/sizeof(codepoint[0])); i=(int16_t)(i+2)){
+        UChar32 c=codepoint[i+1];
+        if(UTF_CHAR_LENGTH(c) != codepoint[i]){
+            log_err("The no: of code units for \\u%4X:- Expected: %d Got: %d", c, codepoint[i], UTF_CHAR_LENGTH(c));
+        }else{
+            log_verbose("The no: of code units for \\u%4X is %d", c, UTF_CHAR_LENGTH(c));
+        }
+        multiple=(UBool)(codepoint[i] == 1 ? FALSE : TRUE);
+        if(UTF_NEED_MULTIPLE_UCHAR(c) != multiple){
+            log_err("ERROR: Unicode::needMultipleUChar() failed for \\u%4X\n", c);
+        }
+    }
+}
 
 /*internal functions ----*/
 static int32_t MakeProp(char* str) 

@@ -28,7 +28,7 @@ LotusCollationKoreanTest::LotusCollationKoreanTest()
 {
     UErrorCode status = U_ZERO_ERROR;
     myCollation = Collator::createInstance("ko_kr", status);
-    myCollation->setDecomposition(Normalizer::DECOMP);
+    myCollation->setAttribute(UCOL_NORMALIZATION_MODE, UCOL_ON, status);
 }
 
 LotusCollationKoreanTest::~LotusCollationKoreanTest()

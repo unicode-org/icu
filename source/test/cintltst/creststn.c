@@ -146,12 +146,12 @@ param[] =
   /* "IN" means inherits */
   /* "NE" or "ne" means "does not exist" */
 
-  { "root",                U_ZERO_ERROR,             e_Root,      { TRUE, FALSE, FALSE }, { TRUE, FALSE, FALSE } },
-  { "te",                  U_ZERO_ERROR,             e_te,        { FALSE, TRUE, FALSE }, { TRUE, TRUE, FALSE  } },
-  { "te_IN",               U_ZERO_ERROR,             e_te_IN,     { FALSE, FALSE, TRUE }, { TRUE, TRUE, TRUE   } },
-  { "te_NE",               U_USING_FALLBACK_ERROR,   e_te,        { FALSE, TRUE, FALSE }, { TRUE, TRUE, FALSE  } },
-  { "te_IN_NE",            U_USING_FALLBACK_ERROR,   e_te_IN,     { FALSE, FALSE, TRUE }, { TRUE, TRUE, TRUE   } },
-  { "ne",                  U_USING_DEFAULT_ERROR,    e_Root,      { TRUE, FALSE, FALSE }, { TRUE, FALSE, FALSE } }
+  { "root",         U_ZERO_ERROR,             e_Root,    { TRUE, FALSE, FALSE }, { TRUE, FALSE, FALSE } },
+  { "te",           U_ZERO_ERROR,             e_te,      { FALSE, TRUE, FALSE }, { TRUE, TRUE, FALSE  } },
+  { "te_IN",        U_ZERO_ERROR,             e_te_IN,   { FALSE, FALSE, TRUE }, { TRUE, TRUE, TRUE   } },
+  { "te_NE",        U_USING_FALLBACK_WARNING, e_te,      { FALSE, TRUE, FALSE }, { TRUE, TRUE, FALSE  } },
+  { "te_IN_NE",     U_USING_FALLBACK_WARNING, e_te_IN,   { FALSE, FALSE, TRUE }, { TRUE, TRUE, TRUE   } },
+  { "ne",           U_USING_DEFAULT_WARNING,  e_Root,    { TRUE, FALSE, FALSE }, { TRUE, FALSE, FALSE } }
 };
 
 static int32_t bundles_count = sizeof(param) / sizeof(param[0]);
@@ -168,7 +168,6 @@ void addNEWResourceBundleTest(TestNode** root)
 {
     addTest(root, &TestEmptyBundle,           "tsutil/creststn/TestEmptyBundle");
     addTest(root, &TestConstruction1,         "tsutil/creststn/TestConstruction1");
-    addTest(root, &TestConstruction2,         "tsutil/creststn/TestConstruction2");
     addTest(root, &TestResourceBundles,       "tsutil/creststn/TestResourceBundle");
     addTest(root, &TestFallback,              "tsutil/creststn/TestFallback");
     addTest(root, &TestGetVersion,            "tsutil/creststn/TestGetVersion");
@@ -181,6 +180,10 @@ void addNEWResourceBundleTest(TestNode** root)
     addTest(root, &TestDecodedBundle,         "tsutil/creststn/TestDecodedBundle");
     addTest(root, &TestResourceLevelAliasing, "tsutil/creststn/TestResourceLevelAliasing");
     addTest(root, &TestDirectAccess,          "tsutil/creststn/TestDirectAccess"); 
+
+#ifdef ICU_URES_USE_DEPRECATES
+    addTest(root, &TestConstruction2,         "tsutil/creststn/TestConstruction2");
+#endif
 }
 
 
@@ -1134,6 +1137,7 @@ static void TestConstruction1()
 
 }
 
+#ifdef ICU_URES_USE_DEPRECATES
 static void TestConstruction2()
 {
 
@@ -1184,6 +1188,7 @@ static void TestConstruction2()
 
     ures_close(test4);
 }
+#endif
 
 /*****************************************************************************/
 /*****************************************************************************/
@@ -1266,9 +1271,9 @@ static UBool testTag(const char* frag,
                 if(j == actual_bundle) /* it's in the same bundle OR it's a nonexistent=default bundle (5) */
                     expected_resource_status = U_ZERO_ERROR;
                 else if(j == 0)
-                    expected_resource_status = U_USING_DEFAULT_ERROR;
+                    expected_resource_status = U_USING_DEFAULT_WARNING;
                 else
-                    expected_resource_status = U_USING_FALLBACK_ERROR;
+                    expected_resource_status = U_USING_FALLBACK_WARNING;
 
                 log_verbose("%s[%d]::%s: in<%d:%s> inherits<%d:%s>.  actual_bundle=%s\n",
                             param[i].name, 
@@ -1653,7 +1658,7 @@ static void TestFallback()
 
     /* OK first one. This should be a Default value. */
     junk = ures_getStringByKey(fr_FR, "%%PREEURO", &resultLen, &status);
-    if(status != U_USING_DEFAULT_ERROR)
+    if(status != U_USING_DEFAULT_WARNING)
     {
         log_err("Expected U_USING_DEFAULT_ERROR when trying to get %%PREEURO from fr_FR, got %s\n", 
             u_errorName(status));
@@ -1663,7 +1668,7 @@ static void TestFallback()
 
     /* and this is a Fallback, to fr */
     junk = ures_getStringByKey(fr_FR, "DayNames", &resultLen, &status);
-    if(status != U_USING_FALLBACK_ERROR)
+    if(status != U_USING_FALLBACK_WARNING)
     {
         log_err("Expected U_USING_FALLBACK_ERROR when trying to get DayNames from fr_FR, got %d\n", 
             status);
@@ -1687,7 +1692,7 @@ static void TestFallback()
             log_err("Expected LocaleID=814, but got 0x%X\n", ures_getInt(resLocID, &err));
         }
         tResB = ures_getByKey(myResB, "DayNames", NULL, &err);
-        if(err != U_USING_FALLBACK_ERROR){
+        if(err != U_USING_FALLBACK_WARNING){
             log_err("Expected U_USING_FALLBACK_ERROR when trying to test no_NO_NY aliased with nn_NO_NY for DayNames err=%s\n",u_errorName(err));
         }
         ures_close(resLocID);

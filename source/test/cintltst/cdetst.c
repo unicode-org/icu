@@ -104,7 +104,7 @@ static void TestTertiary( )
         return;
     }
     log_verbose("Testing German Collation with Tertiary strength\n");
-    ucol_setNormalization(myCollation, UNORM_NFC);
+    ucol_setAttribute(myCollation, UCOL_NORMALIZATION_MODE, UCOL_ON, &status);
     ucol_setStrength(myCollation, UCOL_TERTIARY);
     for (i = 0; i < 12 ; i++)
     {

@@ -20,10 +20,6 @@
  *********************************************************************************
  */
 
-#ifndef U_USE_DEPRECATED_FORMAT_API
-#define U_USE_DEPRECATED_FORMAT_API 1
-#endif
-
 #include "unicode/unum.h"
 #include "unicode/ucol.h"
 #include "unicode/udat.h"
@@ -72,13 +68,18 @@ void addTestDeprecatedAPI(TestNode** root);
 void 
 addTestDeprecatedAPI(TestNode** root)
 {
-   addTest(root, &TestDeprecatedCollationAPI, "ctstdep/TestDeprecatedCollationAPI");
-   addTest(root, &TestDeprecatedNumFmtAPI, "ctstdep/TestDeprecatedNumFmtAPI");
-   addTest(root, &TestDeprecatedDateFmtAPI,  "ctstdep/TestDeprecatedDateFmtAPI");
-   addTest(root, &TestDeprecatedDateFmtAPI,  "ctstdep/TestDeprecatedUErrorCode");
-   addTest(root, &TestDeprecatedDateFmtAPI,  "ctstdep/TestDeprecatedUCharScript");
+#ifdef U_USE_DEPRECATED_UCOL_API
+    addTest(root, &TestDeprecatedCollationAPI, "ctstdep/TestDeprecatedCollationAPI");
+#endif
+#ifdef U_USE_DEPRECATED_FORMAT_API
+    addTest(root, &TestDeprecatedNumFmtAPI,   "ctstdep/TestDeprecatedNumFmtAPI");
+    addTest(root, &TestDeprecatedDateFmtAPI,  "ctstdep/TestDeprecatedDateFmtAPI");
+    addTest(root, &TestDeprecatedUErrorCode,  "ctstdep/TestDeprecatedUErrorCode");
+    addTest(root, &TestDeprecatedUCharScript, "ctstdep/TestDeprecatedUCharScript");
+#endif
 }
 
+#ifdef U_USE_DEPRECATED_UCOL_API
 /*
  *TODO: The ucol_openRules method which does not take UParseError as one of its params
  * has been deprecated in 2.0 release.Please remove this API by 10/1/2002
@@ -141,7 +142,9 @@ TestDeprecatedCollationAPI(void)
 
   ucol_close(coll);
 }
+#endif
 
+#ifdef U_USE_DEPRECATED_FORMAT_API
 /*
  *TODO: The unum_open,unum_applyPattern, which does not take UParseError as one of their params
  *and unum_openPattern methods have been deprecated in 2.0 release.Please remove this API by 10/1/2002
@@ -513,3 +516,4 @@ TestDeprecatedUErrorCode(void){
         log_err("U_USING_FALLBACK_WARNING != U_USING_FALLBACK_ERROR");
     }
 }
+#endif
