@@ -169,43 +169,43 @@ syntaxError( const UChar* rules,
 }
 
 
-    /* sorted array for binary search*/
-    static const char* special_prefixes[]={
-        "ANONYMOUS",    
-        "AUTHENTICATED",
-        "BATCH", 
-        "DIALUP", 
-        "EVERYONE", 
-        "GROUP",
-        "INTERACTIVE",  
-        "NETWORK", 
-        "OWNER",
-    };
+/* sorted array for binary search*/
+static const char* special_prefixes[]={
+    "\x0041\x004e\x004f\x004e\x0059\x004d\x004f\x0055\x0053",    
+    "\x0041\x0055\x0054\x0048\x0045\x004e\x0054\x0049\x0043\x0041\x0054\x0045\x0044",
+    "\x0042\x0041\x0054\x0043\x0048", 
+    "\x0044\x0049\x0041\x004c\x0055\x0050", 
+    "\x0045\x0056\x0045\x0052\x0059\x004f\x004e\x0045", 
+    "\x0047\x0052\x004f\x0055\x0050",
+    "\x0049\x004e\x0054\x0045\x0052\x0041\x0043\x0054\x0049\x0056\x0045",  
+    "\x004e\x0045\x0054\x0057\x004f\x0052\x004b", 
+    "\x004f\x0057\x004e\x0045\x0052",
+};
 
 
-    /* binary search the sorted array */
-    static int 
-    findStringIndex(const char* const *sortedArr, int32_t sortedArrLen, const char* target, int32_t targetLen){
+/* binary search the sorted array */
+static int 
+findStringIndex(const char* const *sortedArr, int32_t sortedArrLen, const char* target, int32_t targetLen){
 
-        int left, middle, right,rc;
+    int left, middle, right,rc;
 
-        left =0;
-        right= sortedArrLen-1;
+    left =0;
+    right= sortedArrLen-1;
 
-        while(left <= right){
-            middle = (left+right)/2;
-            rc=strncmp(sortedArr[middle],target, targetLen);
-        
-            if(rc<0){
-                left = middle+1;
-            }else if(rc >0){
-                right = middle -1;
-            }else{
-                return middle;
-            }
+    while(left <= right){
+        middle = (left+right)/2;
+        rc=strncmp(sortedArr[middle],target, targetLen);
+    
+        if(rc<0){
+            left = middle+1;
+        }else if(rc >0){
+            right = middle -1;
+        }else{
+            return middle;
         }
-        return -1;
     }
+    return -1;
+}
 
 static void 
 getPrefixSuffix(const char *src, int32_t srcLength, 
@@ -238,7 +238,7 @@ getPrefixSuffix(const char *src, int32_t srcLength,
     }
             
 }
-#define AT_SIGN  0x0040
+
 int32_t
 nfs4_mixed_prepare( const char* src, int32_t srcLength,
                     char* dest, int32_t destCapacity,
@@ -297,7 +297,7 @@ nfs4_mixed_prepare( const char* src, int32_t srcLength,
         memmove(dest, p, pLen);
         /* add the suffix */
         if(suffix!=NULL){
-            dest[pLen++] = AT_SIGN;
+            dest[pLen++] = PREFIX_SUFFIX_SEPARATOR;
             memmove(dest+pLen, s, sLen);
         }
     }

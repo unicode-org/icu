@@ -25,6 +25,7 @@
 #include <string.h>
 
 
+/* this enum must be kept in syn with NFS4DataFileNames array in nfsprep.c */
 enum NFS4ProfileState{
     NFS4_CS_PREP_CS,
     NFS4_CS_PREP_CI,
