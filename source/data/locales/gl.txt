@@ -85,6 +85,6 @@ gl {
 
     // Currency display names
     Currencies {
-        ESP { "Pta", "ESP" }
+        ESP { "\u20A7", "ESP" } // Spanish Peseta
     }
 }
