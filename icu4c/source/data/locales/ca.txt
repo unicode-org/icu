@@ -65,7 +65,6 @@ ca {
         DJ { "Djibouti" }
         DM { "Dominica" }
         DO { "Rep\u00FAblica Dominicana" }
-        TP { "Timor Oriental" }
         EC { "Equador" }
         EG { "Egipte" }
         SV { "El Salvador" }
@@ -207,9 +206,10 @@ ca {
         VG { "Illes Verges Brit\u00E0niques" }
         VI { "Illes Verges dels USA" }
         EH { "S\u00E0hara Occidental" }
+        TL { "Timor" }
         YE { "Iemen" }
         YU { "Iugosl\u00E0via" }
-        ZR { "Zaire" }
+        //ZR { "Zaire" }
         ZM { "Z\u00E0mbia" }
         ZW { "Zimbabwe" }
     }
@@ -264,7 +264,7 @@ ca {
         hu { "hongar\u00E8s" }
         is { "island\u00E8s" }
         id { "indonesi" }
-        in { "indonesi" }
+        //in { "indonesi" }
         ia { "interlingua" }
         ie { "interlingue" }
         iu { "inuktitut" }
@@ -272,7 +272,7 @@ ca {
         ga { "irland\u00E8s" }
         it { "itali\u00E0" }
         ja { "japon\u00E8s" }
-        jw { "javan\u00E8s" }
+        jv { "javan\u00E8s" }
         kn { "kannada" }
         ks { "caixmiri" }
         kk { "kazakh" }
@@ -283,7 +283,7 @@ ca {
         ku { "kurd" }
         lo { "laosi\u00E0" }
         la { "llat\u00ED" }
-        lv { "let\u00F3)" }
+        lv { "let\u00F3" }
         ln { "lingala" }
         lt { "litu\u00E0" }
         mk { "macedoni" }
@@ -351,7 +351,7 @@ ca {
         cy { "gal\u00B7l\u00E8s" }
         wo { "w\u00F2lof" }
         xh { "xosa" }
-        ji { "jiddish" }
+        //ji { "jiddish" }
         yi { "jiddish" }
         yo { "ioruba" }
         za { "zhuang" }

@@ -23,7 +23,10 @@ root {
         AL      { "AL" }
         POSIX   { "POSIX" }
     }
-
+    Keys{
+    	Collation { "Collation" }
+	Calendar  { "Calendar" }
+    }
     Types{
         // keys for collation (traditional may also be used for traditional chinese)
         Fallback{ "" }
