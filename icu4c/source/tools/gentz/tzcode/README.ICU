@@ -27,18 +27,13 @@ ICU4C vs. ICU4J
 
 As of release 2.8, the ICU time zone implementations in C and Java
 have diverged for various reasons.  The C implementation is a full
-implementation, whereas the Java implementation consists of a "present
-day snapshot."
+implementation, whereas ICU4J (as of 2.8) uses the underlying JDK
+1.3 or 1.4 time zone implementation.
 
 The "present day snapshot" only reflects current time zone behavior,
 without historical variation.  Furthermore, it lacks the full set of
 Olson compatibility IDs.  The "present day snapshot" is implemented in
-ICU4C <= 2.6 and all releases of ICU4J.
-
-There are two sets of ICU tools, located in icu/source/tools/gentz.
-The first set is in gentz itself, and it used to form the "present day
-snapshot."  The second set of tools (described by this file) is
-located in gentz/tzcode, and is used only for ICU4C >= 2.8.
+ICU (C and Java) <= 2.6.
 
 ----------------------------------------------------------------------
 BACKGROUND
