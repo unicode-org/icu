@@ -55,11 +55,11 @@ unum_open(    UNumberFormatStyle    style,
     break;
 
   case UNUM_SPELLOUT:
-    // TBD: Add spellout support
+    // Todo: TBD: Add spellout support
     //retVal = (UNumberFormat*)new NumberSpelloutFormat();
+    //break;
     *status = U_UNSUPPORTED_ERROR;
     return 0;
-    break;
   }
 
   if(retVal == 0) {
@@ -452,7 +452,6 @@ unum_getTextAttribute(    const    UNumberFormat*                    fmt,
   default:
     *status = U_UNSUPPORTED_ERROR;
     return -1;
-    break;
   }
 
   if (actSize != 1)
