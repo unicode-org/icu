@@ -22,12 +22,16 @@
 /* Main library cleanup function. */
 U_CFUNC void ucln_i18n_registerCleanup(void);
 
-U_CFUNC UBool ucol_cleanup(void);
+/* See common/ucln.h for details on adding a cleanup function. */
 
-U_CFUNC UBool ucol_bld_cleanup(void);
+U_CFUNC UBool transliterator_cleanup(void);
+
+U_CFUNC UBool unicodeset_cleanup(void);
 
 U_CFUNC UBool timeZone_cleanup(void);
 
-U_CFUNC UBool transliterator_cleanup(void);
+U_CFUNC UBool ucol_cleanup(void);
+
+U_CFUNC UBool ucol_bld_cleanup(void);
 
 #endif

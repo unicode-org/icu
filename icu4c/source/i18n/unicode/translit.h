@@ -925,9 +925,6 @@ protected:
 
 private:
     static void initializeRegistry(void);
-
-    friend UBool transliterator_cleanup();
-    static void cleanupRegistry(void);
 };
 
 inline int32_t Transliterator::getMaximumContextLength(void) const {
