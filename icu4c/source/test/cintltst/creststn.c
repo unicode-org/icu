@@ -2066,7 +2066,6 @@ static void TestResourceLevelAliasing(void) {
       if((uk == NULL) || U_FAILURE(status)) {
         log_err("Couldn't findResource('ja/LocaleScript/2') err %s\n", u_errorName(status));
         goto cleanup;
-        return;
       } 
       
       sequence = ures_getString(uk, &seqLen, &status);
