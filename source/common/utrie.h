@@ -22,7 +22,7 @@
 U_CDECL_BEGIN
 
 /**
- * /file
+ * \file
  *
  * This is a common implementation of a "folded" trie.
  * It is a kind of compressed, serializable table of 16- or 32-bit values associated with
