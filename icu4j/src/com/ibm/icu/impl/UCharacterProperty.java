@@ -6,8 +6,8 @@
 *
 * $Source: 
 *         /usr/cvs/icu4j/icu4j/src/com/ibm/icu/text/UCharacterPropertyDB.java $ 
-* $Date: 2003/02/21 01:21:33 $ 
-* $Revision: 1.24 $
+* $Date: 2003/04/03 22:52:00 $ 
+* $Revision: 1.25 $
 *
 *******************************************************************************
 */
@@ -472,6 +472,58 @@ public final class UCharacterProperty implements Trie.DataManipulate
                            (version >> FIRST_NIBBLE_SHIFT_) & LAST_NIBBLE_MASK_,
                            version & LAST_NIBBLE_MASK_, 0, 0);
     }
+    private static final long UNSIGNED_INT_MASK = 0xffffffffL;
+    private static final class BinaryProperties{ 
+       int column; 
+       long mask; 
+       public BinaryProperties(int column,long mask){
+       		this.column = column;
+       		this.mask  = mask;
+       }
+   } 
+   BinaryProperties[] binProps={ 
+       /* 
+        * column and mask values for binary properties from u_getUnicodeProperties(). 
+        * Must be in order of corresponding UProperty, 
+        * and there must be exacly one entry per binary UProperty. 
+        */ 
+       new BinaryProperties(  1, (  1 << ALPHABETIC_PROPERTY_) ), 
+       new BinaryProperties(  1, (  1 << ASCII_HEX_DIGIT_PROPERTY_) ), 
+       new BinaryProperties(  1, (  1 << BIDI_CONTROL_PROPERTY_) ), 
+       new BinaryProperties( -1, (  1 << MIRROR_SHIFT_) ), 
+       new BinaryProperties(  1, (  1 << DASH_PROPERTY_) ), 
+       new BinaryProperties(  1, (  1 << DEFAULT_IGNORABLE_CODE_POINT_PROPERTY_) ), 
+       new BinaryProperties(  1, (  1 << DEPRECATED_PROPERTY_) ), 
+       new BinaryProperties(  1, (  1 << DIACRITIC_PROPERTY_) ), 
+       new BinaryProperties(  1, (  1 << EXTENDER_PROPERTY_) ), 
+       new BinaryProperties(  0, 0 ),                                  /* UCHAR_FULL_COMPOSITION_EXCLUSION */ 
+       new BinaryProperties(  1, (  1 << GRAPHEME_BASE_PROPERTY_) ), 
+       new BinaryProperties(  1, (  1 << GRAPHEME_EXTEND_PROPERTY_) ), 
+       new BinaryProperties(  1, (  1 << GRAPHEME_LINK_PROPERTY_) ), 
+       new BinaryProperties(  1, (  1 << HEX_DIGIT_PROPERTY_) ), 
+       new BinaryProperties(  1, (  1 << HYPHEN_PROPERTY_) ), 
+       new BinaryProperties(  1, (  1 << ID_CONTINUE_PROPERTY_) ), 
+       new BinaryProperties(  1, (  1 << ID_START_PROPERTY_) ), 
+       new BinaryProperties(  1, (  1 << IDEOGRAPHIC_PROPERTY_) ), 
+       new BinaryProperties(  1, (  1 << IDS_BINARY_OPERATOR_PROPERTY_) ), 
+       new BinaryProperties(  1, (  1 << IDS_TRINARY_OPERATOR_PROPERTY_) ), 
+       new BinaryProperties(  1, (  1 << JOIN_CONTROL_PROPERTY_) ), 
+       new BinaryProperties(  1, (  1 << LOGICAL_ORDER_EXCEPTION_PROPERTY_) ), 
+       new BinaryProperties(  1, (  1 << LOWERCASE_PROPERTY_) ), 
+       new BinaryProperties(  1, (  1 << MATH_PROPERTY_) ), 
+       new BinaryProperties(  1, (  1 << NONCHARACTER_CODE_POINT_PROPERTY_) ), 
+       new BinaryProperties(  1, (  1 << QUOTATION_MARK_PROPERTY_) ), 
+       new BinaryProperties(  1, (  1 << RADICAL_PROPERTY_) ), 
+       new BinaryProperties(  1, (  1 << SOFT_DOTTED_PROPERTY_) ), 
+       new BinaryProperties(  1, (  1 << TERMINAL_PUNCTUATION_PROPERTY_) ), 
+       new BinaryProperties(  1, (  1 << UNIFIED_IDEOGRAPH_PROPERTY_) ), 
+       new BinaryProperties(  1, (  1 << UPPERCASE_PROPERTY_) ), 
+       new BinaryProperties(  1, (  1 << WHITE_SPACE_PROPERTY_) ), 
+       new BinaryProperties(  1, (  1 << XID_CONTINUE_PROPERTY_) ), 
+       new BinaryProperties(  1, (  1 << XID_START_PROPERTY_) ), 
+       new BinaryProperties( -1, (  1 << CASE_SENSITIVE_SHIFT_) ) 
+   }; 
+
 
 	/**
 	 * <p>Check a binary Unicode property for a code point.</p> 
@@ -498,256 +550,18 @@ public final class UCharacterProperty implements Trie.DataManipulate
 	 * @see com.ibm.icu.lang.UProperty
 	 * @draft ICU 2.1
 	 */
+
 	public boolean hasBinaryProperty(int codepoint, int property) 
 	{
-		switch(property) {
-    		case UProperty.ALPHABETIC: {
-        		// Lu+Ll+Lt+Lm+Lo+Nl+Other_Alphabetic
-        		int generaltype = getProperty(codepoint) & TYPE_MASK;
-        		boolean generalmatch = 
-        		        generaltype == UCharacterCategory.UPPERCASE_LETTER 
-                        || generaltype == UCharacterCategory.LOWERCASE_LETTER 
-                        || generaltype == UCharacterCategory.TITLECASE_LETTER 
-                        || generaltype == UCharacterCategory.MODIFIER_LETTER 
-                        || generaltype == UCharacterCategory.LETTER_NUMBER
-                        || generaltype == UCharacterCategory.OTHER_LETTER;
-        		return generalmatch ||
-                       compareAdditionalType(getAdditional(codepoint, 1), 
-                                             OTHER_ALPHABETIC_PROPERTY_);
-    		}
-    		case UProperty.ASCII_HEX_DIGIT: {
-        		return compareAdditionalType(getAdditional(codepoint, 1),
-											 ASCII_HEX_DIGIT_PROPERTY_);
-    		}
-    		case UProperty.BIDI_CONTROL: {
-        		return compareAdditionalType(getAdditional(codepoint, 1),
-        		                             BIDI_CONTROL_PROPERTY_);
-    		}
-    		case UProperty.BIDI_MIRRORED: {
-        		return (getProperty(codepoint) & MIRROR_MASK) != 0;
-    		}
-    		case UProperty.DASH: {
-        		return compareAdditionalType(getAdditional(codepoint, 1),
-        		                             DASH_PROPERTY_);
-    		}
-    		case UProperty.DEFAULT_IGNORABLE_CODE_POINT: {
-        		// <2060..206F, FFF0..FFFB, E0000..E0FFF>
-                // +Other_Default_Ignorable_Code_Point+(Cf+Cc+Cs-White_Space) 
-                if ((0x2060 <= codepoint && codepoint <= 0x206f) 
-                    || (0xfff0 <= codepoint && codepoint <= 0xfffb) 
-                    || (0xe0000 <= codepoint && codepoint <= 0xe0fff)) {
-                    return true;
-                }
-        		
-        		int additionalproperty = getAdditional(codepoint, 1);
-                if (compareAdditionalType(additionalproperty, 
-       		                   OTHER_DEFAULT_IGNORABLE_CODE_POINT_PROPERTY_)) {
-                    return true;
-                }
-                if (!compareAdditionalType(additionalproperty, 
-		                                              WHITE_SPACE_PROPERTY_)) {
-                    int generaltype = getProperty(codepoint) & TYPE_MASK;
-                    if (generaltype == UCharacterCategory.FORMAT 
-                        || generaltype == UCharacterCategory.CONTROL 
-                        || generaltype == UCharacterCategory.SURROGATE) {
-                        return true;
-                    }
-                }
-                return false;
-    		}
-    		case UProperty.DEPRECATED: {
-        		return compareAdditionalType(getAdditional(codepoint, 1),
-        		                             DEPRECATED_PROPERTY_);
-    		}
-    		case UProperty.DIACRITIC: {
-        		return compareAdditionalType(getAdditional(codepoint, 1),
-        		                             DIACRITIC_PROPERTY_);
-    		}
-    		case UProperty.EXTENDER: {
-        		return compareAdditionalType(getAdditional(codepoint, 1),
-        		                         EXTENDER_PROPERTY_);
-    		}
-    		case UProperty.FULL_COMPOSITION_EXCLUSION: {
-        		return NormalizerImpl.isFullCompositionExclusion(codepoint);
-    		}
-    		case UProperty.GRAPHEME_BASE: {
-    			// [0..10FFFF]-Cc-Cf-Cs-Co-Cn-Zl-Zp-Grapheme_Link-Grapheme_Extend-CGJ ==
-                // [0..10FFFF]-Cc-Cf-Cs-Co-Cn-Zl-Zp-Grapheme_Link-(Me+Mn+Mc+Other_Grapheme_Extend)-CGJ ==
-                // [0..10FFFF]-Cc-Cf-Cs-Co-Cn-Zl-Zp-Me-Mn-Mc-Grapheme_Link-Other_Grapheme_Extend-CGJ
-                if (codepoint != 0x34f) { // CGJ
-                    int generaltype = getProperty(codepoint) & TYPE_MASK;
-             		if (generaltype != UCharacterCategory.CONTROL 
-                        && generaltype != UCharacterCategory.FORMAT 
-                        && generaltype != UCharacterCategory.SURROGATE
-                        && generaltype != UCharacterCategory.PRIVATE_USE
-                        && generaltype != UCharacterCategory.GENERAL_OTHER_TYPES
-                        && generaltype != UCharacterCategory.LINE_SEPARATOR
-                        && generaltype != UCharacterCategory.PARAGRAPH_SEPARATOR
-             		    && generaltype != UCharacterCategory.ENCLOSING_MARK
-             		    && generaltype != UCharacterCategory.NON_SPACING_MARK 
-             		    && generaltype 
-                                != UCharacterCategory.COMBINING_SPACING_MARK) {
-             		    int additionalproperty = getAdditional(codepoint, 1);
-                        return !compareAdditionalType(additionalproperty,
-                                                      GRAPHEME_LINK_PROPERTY_) 
-                               && !compareAdditionalType(additionalproperty,
-                                              OTHER_GRAPHEME_EXTEND_PROPERTY_);
-             		}
-                }
-                return false;
-    		}
-    		case UProperty.GRAPHEME_EXTEND: {
-                // Me+Mn+Mc+Other_Grapheme_Extend-Grapheme_Link-CGJ
-                if (codepoint == 0x34f) { // CGJ
-                    return false; // fastest check first
-                }
-        
-                int additionalproperty = getAdditional(codepoint, 1);
-                if (!compareAdditionalType(additionalproperty, 
-                                           GRAPHEME_LINK_PROPERTY_)) {
-                    if (compareAdditionalType(additionalproperty, 
-                                             OTHER_GRAPHEME_EXTEND_PROPERTY_)) {
-                        return true;
-                    }
-                    int generaltype = getProperty(codepoint) & TYPE_MASK;
-                    if (generaltype == UCharacterCategory.ENCLOSING_MARK ||
-                        generaltype == UCharacterCategory.NON_SPACING_MARK ||
-                        generaltype 
-                               == UCharacterCategory.COMBINING_SPACING_MARK) {
-                        return true;
-                    }
-                }
-                                             
-                return false;
-    		}
-    		case UProperty.GRAPHEME_LINK: {
-        		return compareAdditionalType(getAdditional(codepoint, 1),
-        		                             GRAPHEME_LINK_PROPERTY_);
-    		}
-    		case UProperty.HEX_DIGIT: {
-        		return compareAdditionalType(getAdditional(codepoint, 1),
-        		                             HEX_DIGIT_PROPERTY_);
-    		}
-    		case UProperty.HYPHEN: {
-        		return compareAdditionalType(getAdditional(codepoint, 1),
-        		                             HYPHEN_PROPERTY_);
-    		}
-    		case UProperty.ID_CONTINUE: {
-        		// ID_Start+Mn+Mc+Nd+Pc == Lu+Ll+Lt+Lm+Lo+Nl+Mn+Mc+Nd+Pc
-        		int generaltype = getProperty(codepoint) & TYPE_MASK;
-        		return generaltype == UCharacterCategory.UPPERCASE_LETTER ||
-        		       generaltype == UCharacterCategory.LOWERCASE_LETTER || 
-        		       generaltype == UCharacterCategory.TITLECASE_LETTER ||
-        		       generaltype == UCharacterCategory.MODIFIER_LETTER ||
-        		       generaltype == UCharacterCategory.OTHER_LETTER ||
-        		       generaltype == UCharacterCategory.LETTER_NUMBER ||
-        		       generaltype == UCharacterCategory.NON_SPACING_MARK ||
-        		       generaltype == 
-        		                  UCharacterCategory.COMBINING_SPACING_MARK ||
-        		       generaltype == UCharacterCategory.DECIMAL_DIGIT_NUMBER
-        		       || generaltype == 
-        		                     UCharacterCategory.CONNECTOR_PUNCTUATION;
-    		}
-    		case UProperty.ID_START: {
-        		// Lu+Ll+Lt+Lm+Lo+Nl
-        		int generaltype = getProperty(codepoint) & TYPE_MASK;
-        		return generaltype == UCharacterCategory.UPPERCASE_LETTER ||
-        		       generaltype == UCharacterCategory.LOWERCASE_LETTER || 
-        		       generaltype == UCharacterCategory.TITLECASE_LETTER ||
-        		       generaltype == UCharacterCategory.MODIFIER_LETTER ||
-        		       generaltype == UCharacterCategory.OTHER_LETTER ||
-        		       generaltype == UCharacterCategory.LETTER_NUMBER;
-    		}
-    		case UProperty.IDEOGRAPHIC: {
-        		return compareAdditionalType(getAdditional(codepoint, 1),
-        		                             IDEOGRAPHIC_PROPERTY_);
-    		}
-    		case UProperty.IDS_BINARY_OPERATOR: {
-        		return compareAdditionalType(getAdditional(codepoint, 1),
-        		                             IDS_BINARY_OPERATOR_PROPERTY_);
-    		}
-    		case UProperty.IDS_TRINARY_OPERATOR: {
-        		return compareAdditionalType(getAdditional(codepoint, 1),
-        		                             IDS_TRINARY_OPERATOR_PROPERTY_);
-			}
-    		case UProperty.JOIN_CONTROL: {
-        		return compareAdditionalType(getAdditional(codepoint, 1),
-        		                             JOIN_CONTROL_PROPERTY_);
-    		}
-    		case UProperty.LOGICAL_ORDER_EXCEPTION: {
-        		return compareAdditionalType(getAdditional(codepoint, 1),
-      		                             LOGICAL_ORDER_EXCEPTION_PROPERTY_);
-    		}
-    		case UProperty.LOWERCASE: {
-        		// Ll+Other_Lowercase
-        		int generaltype = getProperty(codepoint) & TYPE_MASK;
-        		if (generaltype == UCharacterCategory.LOWERCASE_LETTER) {
-        			return true;
-        		}
-        		return compareAdditionalType(getAdditional(codepoint, 1),
-        		                             OTHER_LOWERCASE_PROPERTY_);
-    		}
-    		case UProperty.MATH: {
-        		// Sm+Other_Math 
-        		int generaltype = getProperty(codepoint) & TYPE_MASK;
-        		if (generaltype == UCharacterCategory.MATH_SYMBOL) {
-        			return true;
-        		}
-        		return compareAdditionalType(getAdditional(codepoint, 1),
-        		                             OTHER_MATH_PROPERTY_);
-    		}
-    		case UProperty.NONCHARACTER_CODE_POINT: {
-        		return compareAdditionalType(getAdditional(codepoint, 1),
-        		                          NONCHARACTER_CODE_POINT_PROPERTY_);
-    		}
-    		case UProperty.QUOTATION_MARK: {
-        		return compareAdditionalType(getAdditional(codepoint, 1),
-        		                             QUOTATION_MARK_PROPERTY_);
-    		}
-    		case UProperty.RADICAL: {
-        		return compareAdditionalType(getAdditional(codepoint, 1),
-        		                             RADICAL_PROPERTY_);
-    		}
-    		case UProperty.SOFT_DOTTED: {
-        		return compareAdditionalType(getAdditional(codepoint, 1),
-        		                             SOFT_DOTTED_PROPERTY_);
-    		}
-    		case UProperty.TERMINAL_PUNCTUATION: {
-        		return compareAdditionalType(getAdditional(codepoint, 1),
-        		                             TERMINAL_PUNCTUATION_PROPERTY_);
-    		}
-		    case UProperty.UNIFIED_IDEOGRAPH: {
-        		return compareAdditionalType(getAdditional(codepoint, 1),
-        		                             UNIFIED_IDEOGRAPH_PROPERTY_);
-		    }
-    		case UProperty.UPPERCASE: {
-        		// Lu+Other_Uppercase 
-        		int generaltype = getProperty(codepoint) & TYPE_MASK;
-        		if (generaltype == UCharacterCategory.UPPERCASE_LETTER) {
-        			return true;
-        		}
-        		return compareAdditionalType(getAdditional(codepoint, 1),
-                     	                     OTHER_UPPERCASE_PROPERTY_);
-    		}
-    		case UProperty.WHITE_SPACE: {
-        		return compareAdditionalType(getAdditional(codepoint, 1),
-        		                             WHITE_SPACE_PROPERTY_);
-    		}
-    		case UProperty.XID_CONTINUE: {
-        		return compareAdditionalType(getAdditional(codepoint, 1),
-        		                             XID_CONTINUE_PROPERTY_);
-    		}
-    		case UProperty.XID_START: {
-        		return compareAdditionalType(getAdditional(codepoint, 1),
-        		                             XID_START_PROPERTY_);
-    		}
-    		case UProperty.CASE_SENSITIVE: {
-        		return isCaseSensitive(codepoint);
-    		}
-    		default:
-        		// not a known binary property
-        		return false;
-    	}
+		 if(property <UProperty.BINARY_START || UProperty.BINARY_LIMIT<=property) {
+	        // not a known binary property 
+	        return false;
+	    } else if(property == UProperty.FULL_COMPOSITION_EXCLUSION) {
+	        return NormalizerImpl.isFullCompositionExclusion(codepoint);
+	    } else {
+	        // systematic, directly stored properties 
+	        return ((UNSIGNED_INT_MASK & getAdditional(codepoint, binProps[property].column)) & binProps[property].mask)!=0;
+	    }
 	}
 	
 	/**
@@ -1384,9 +1198,18 @@ public final class UCharacterProperty implements Trie.DataManipulate
      * Get the the maximum values for some enum/int properties.
      * @return maximum values for the integer properties.
      */
-    public int getMaxBlockScriptValues() 
+    public int getMaxBlockScriptValues(int column) 
     {
-        return m_maxBlockScriptValue_;
+       // return m_maxBlockScriptValue_;
+        
+        switch(column) {
+        case 0:
+            return m_maxBlockScriptValue_;
+        case 2:
+            return m_maxJTGValue_;
+        default:
+            return 0;
+        }
     }
     
     /**
@@ -1424,11 +1247,15 @@ public final class UCharacterProperty implements Trie.DataManipulate
      */
     int m_additionalColumnsCount_;
     /**
-     * Maximum values for block and script codes, bits used as in vector word
+     * Maximum values for block, bits used as in vector word
      * 0
      */
     int m_maxBlockScriptValue_;
-    
+    /**
+     * Maximum values for script, bits used as in vector word
+     * 0
+     */
+ 	int m_maxJTGValue_;   
     // private variables -------------------------------------------------
     
   	/**
@@ -1503,6 +1330,23 @@ public final class UCharacterProperty implements Trie.DataManipulate
 	 */
 	private static final int RESERVED_SHIFT_ = 15;
 	
+	/**
+	 * 
+	 */
+	private static final int BIDI_SHIFT_ = 6;
+	/**
+	 * 
+	 */
+	private static final int MIRROR_SHIFT_ = BIDI_SHIFT_ + 5;
+	
+	/**
+	 * 
+	 */
+	private static final int NUMERIC_TYPE_SHIFT = 11;
+	/**
+	 * 
+	 */
+	private static final int CASE_SENSITIVE_SHIFT_= NUMERIC_TYPE_SHIFT+3;
 	/**
 	 * Bit indicating exception
 	 */
@@ -1658,6 +1502,17 @@ public final class UCharacterProperty implements Trie.DataManipulate
    	/**
    	 * Additional properties used in internal trie data
    	 */
+   	/*
+	 * Properties in vector word 1
+	 * Each bit encodes one binary property.
+	 * The following constants represent the bit number, use 1<<UPROPS_XYZ.
+	 * UPROPS_BINARY_1_TOP<=32!
+	 *
+	 * Keep this list of property enums in sync with
+	 * propListNames[] in icu/source/tools/genprops/props2.c!
+	 *
+	 * ICU 2.6/uprops format version 3.2 stores full properties instead of "Other_".
+	 */
     private static final int WHITE_SPACE_PROPERTY_ = 0;
     private static final int BIDI_CONTROL_PROPERTY_ = 1;
     private static final int JOIN_CONTROL_PROPERTY_ = 2;
@@ -1665,29 +1520,32 @@ public final class UCharacterProperty implements Trie.DataManipulate
     private static final int HYPHEN_PROPERTY_ = 4;
     private static final int QUOTATION_MARK_PROPERTY_ = 5;
     private static final int TERMINAL_PUNCTUATION_PROPERTY_ = 6;
-    private static final int OTHER_MATH_PROPERTY_ = 7;
+    private static final int MATH_PROPERTY_ = 7;
     private static final int HEX_DIGIT_PROPERTY_ = 8;
     private static final int ASCII_HEX_DIGIT_PROPERTY_ = 9;
-    private static final int OTHER_ALPHABETIC_PROPERTY_ = 10;
+    private static final int ALPHABETIC_PROPERTY_ = 10;
     private static final int IDEOGRAPHIC_PROPERTY_ = 11;
     private static final int DIACRITIC_PROPERTY_ = 12;
     private static final int EXTENDER_PROPERTY_ = 13;
-    private static final int OTHER_LOWERCASE_PROPERTY_ = 14;
-    private static final int OTHER_UPPERCASE_PROPERTY_ = 15;
+    private static final int LOWERCASE_PROPERTY_ = 14;
+    private static final int UPPERCASE_PROPERTY_ = 15;
     private static final int NONCHARACTER_CODE_POINT_PROPERTY_ = 16;
-    private static final int OTHER_GRAPHEME_EXTEND_PROPERTY_ = 17;
+    private static final int GRAPHEME_EXTEND_PROPERTY_ = 17;
     private static final int GRAPHEME_LINK_PROPERTY_ = 18;
     private static final int IDS_BINARY_OPERATOR_PROPERTY_ = 19;
     private static final int IDS_TRINARY_OPERATOR_PROPERTY_ = 20;
     private static final int RADICAL_PROPERTY_ = 21;
     private static final int UNIFIED_IDEOGRAPH_PROPERTY_ = 22;
-    private static final int OTHER_DEFAULT_IGNORABLE_CODE_POINT_PROPERTY_ = 23;
+    private static final int DEFAULT_IGNORABLE_CODE_POINT_PROPERTY_ = 23;
     private static final int DEPRECATED_PROPERTY_ = 24;
     private static final int SOFT_DOTTED_PROPERTY_ = 25;
     private static final int LOGICAL_ORDER_EXCEPTION_PROPERTY_ = 26;
     private static final int XID_START_PROPERTY_ = 27;
     private static final int XID_CONTINUE_PROPERTY_ = 28;
-    private static final int BINARY_1_TOP_PROPERTY_ = 29;
+    private static final int ID_START_PROPERTY_	= 29;
+    private static final int ID_CONTINUE_PROPERTY_ = 30;
+    private static final int GRAPHEME_BASE_PROPERTY_ = 31;
+    private static final int BINARY_1_TOP_PROPERTY_ = 32;
     
     /**
      * First nibble shift
@@ -2049,8 +1907,8 @@ public final class UCharacterProperty implements Trie.DataManipulate
             return result;
         } 
         int prop = getAdditional(ch, 1);
-        return compareAdditionalType(prop, OTHER_UPPERCASE_PROPERTY_) 
-               || compareAdditionalType(prop, OTHER_LOWERCASE_PROPERTY_);
+        return compareAdditionalType(prop, UPPERCASE_PROPERTY_) 
+               || compareAdditionalType(prop, LOWERCASE_PROPERTY_);
     }
     
     /** 

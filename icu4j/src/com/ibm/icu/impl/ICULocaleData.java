@@ -299,15 +299,16 @@ public class ICULocaleData {
 
     private static Set createLocaleNameSet(String bundleName) {
     try {
-        ResourceBundle index = getResourceBundle(bundleName, "index");
-        String[] localeNames = index.getStringArray("InstalledLocales");
+        	ResourceBundle index = getResourceBundle(bundleName, "index");
+        	Object[][] localeStrings = (Object[][]) index.getObject("InstalledLocales");
+        	String[] localeNames = new String[localeStrings.length];
 
             // barf gag choke spit hack...
             // since java's Locale 'fixes' the locale string for some locales,
             // we have to fix our names to match, otherwise the Locale[] list
             // won't match the locale name set.  What were they thinking?!?
             for (int i = 0; i < localeNames.length; ++i) {
-                localeNames[i] = LocaleUtility.getLocaleFromName(localeNames[i]).toString();
+                localeNames[i] = LocaleUtility.getLocaleFromName((String)localeStrings[i][0]).toString();
             }
 
             HashSet set = new HashSet();
@@ -324,10 +325,10 @@ public class ICULocaleData {
     private static Locale[] createLocaleList(String bundleName) {
     try {
         ResourceBundle index = getResourceBundle(bundleName, "index");
-        String[] localeNames = index.getStringArray("InstalledLocales");
-        Locale[] locales = new Locale[localeNames.length];
-        for (int i = 0; i < localeNames.length; ++i) {
-        locales[i] = LocaleUtility.getLocaleFromName(localeNames[i]);
+       	Object[][] localeStrings = (Object[][]) index.getObject("InstalledLocales");
+        Locale[] locales = new Locale[localeStrings.length];
+        for (int i = 0; i < localeStrings.length; ++i) {
+        locales[i] = LocaleUtility.getLocaleFromName((String)localeStrings[i][0]);
         }
         return locales;
     }

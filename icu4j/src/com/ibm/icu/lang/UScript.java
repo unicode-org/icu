@@ -270,10 +270,59 @@ public final class UScript {
      */
     public static final int TAGBANWA     = 45;  /* Tagb */
     /**
+     * Braille
+     * New script in Unicode 4 
+     * @draft ICU 2.6 
+     * */ 
+   	public static final int BRAILLE 	 = 46;  /* Brai */
+   	/**
+     * Cypriot
+     * New script in Unicode 4 
+     * @draft ICU 2.6 
+     * */  
+   	public static final int CYPRIOT		 = 47;  /* Cprt */ 
+    /**
+     * Limbu
+     * New script in Unicode 4 
+     * @draft ICU 2.6 
+     * */    	
+   	public static final int LIMBU		 = 48;  /* Limb */ 
+    /**
+     * Linear B
+     * New script in Unicode 4 
+     * @draft ICU 2.6 
+     * */ 
+   	public static final int LINEAR_B	 = 49;  /* Linb */ 
+    /**
+     * Osmanya
+     * New script in Unicode 4 
+     * @draft ICU 2.6 
+     * */ 
+   	public static final int OSMANYA		 = 50;  /* Osma */ 
+    /**
+     * Shavian
+     * New script in Unicode 4 
+     * @draft ICU 2.6 
+     * */ 
+   	public static final int SHAVIAN		 = 51;  /* Shaw */ 
+    /**
+     * Tai Le
+     * New script in Unicode 4 
+     * @draft ICU 2.6 
+     * */ 
+   	public static final int TAI_LE		 = 52;  /* Tale */ 
+    /**
+     * Ugaritic
+     * New script in Unicode 4 
+     * @draft ICU 2.6 
+     * */ 
+   	public static final int UGARITIC	 = 53;  /* Ugar */ 
+
+    /**
      * Limit
      * @stable ICU 2.4
      */
-    public static final int CODE_LIMIT   = 46;
+    public static final int CODE_LIMIT   = 54;
 
     private static final int SCRIPT_MASK   = 0x0000007f;
     private static final UCharacterProperty prop= UCharacterProperty.getInstance();

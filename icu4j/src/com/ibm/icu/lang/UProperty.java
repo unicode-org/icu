@@ -6,8 +6,8 @@
 *
 * $Source: 
 *      /usr/cvs/icu4j/icu4j/src/com/ibm/icu/text/UCharacterCategory.java $ 
-* $Date: 2003/02/21 01:21:33 $ 
-* $Revision: 1.11 $
+* $Date: 2003/04/03 22:52:40 $ 
+* $Revision: 1.12 $
 *
 *******************************************************************************
 */
@@ -362,12 +362,19 @@ public interface UProperty
      * @draft ICU 2.4 
      */
     public static final int SCRIPT = 0x100A;
+    
+    /** 
+     * Enumerated property Hangul_Syllable_Type, new in Unicode 4.
+     * Returns HangulSyllableType values. 
+     * @draft ICU 2.6 
+     * */
+    public static final int HANGUL_SYLLABLE_TYPE = 0x100B;
     /** 
      * One more than the last constant for enumerated/integer Unicode 
      * properties. 
      * @draft ICU 2.4 
      */
-    public static final int INT_LIMIT = 0x100B;
+    public static final int INT_LIMIT = 0x100C;
 
     /** 
      * Bitmask property General_Category_Mask.

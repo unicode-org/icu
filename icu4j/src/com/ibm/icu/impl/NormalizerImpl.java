@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/NormalizerImpl.java,v $
- * $Date: 2003/02/15 01:20:22 $
- * $Revision: 1.15 $
+ * $Date: 2003/04/03 22:52:00 $
+ * $Revision: 1.16 $
  *******************************************************************************
  */
  
@@ -340,16 +340,16 @@ public final class NormalizerImpl {
 	
 	/* Korean Hangul and Jamo constants */
 	
-	private static final int JAMO_L_BASE=0x1100;     /* "lead" jamo */
-	private static final int JAMO_V_BASE=0x1161;     /* "vowel" jamo */
-	private static final int JAMO_T_BASE=0x11a7;     /* "trail" jamo */
+	public static final int JAMO_L_BASE=0x1100;     /* "lead" jamo */
+	public static final int JAMO_V_BASE=0x1161;     /* "vowel" jamo */
+	public static final int JAMO_T_BASE=0x11a7;     /* "trail" jamo */
 	
-	private static final int HANGUL_BASE=0xac00;
+	public static final int HANGUL_BASE=0xac00;
 	
-	private static final int JAMO_L_COUNT=19;
-	private static final int JAMO_V_COUNT=21;
-	private static final int JAMO_T_COUNT=28;
-	private static final int HANGUL_COUNT=JAMO_L_COUNT*JAMO_V_COUNT*JAMO_T_COUNT;
+	public static final int JAMO_L_COUNT=19;
+	public static final int JAMO_V_COUNT=21;
+	public static final int JAMO_T_COUNT=28;
+	public  static final int HANGUL_COUNT=JAMO_L_COUNT*JAMO_V_COUNT*JAMO_T_COUNT;
 	
 	private static boolean isHangulWithoutJamoT(char c) {
 	    c-=HANGUL_BASE;
@@ -3390,8 +3390,6 @@ public final class NormalizerImpl {
                                   
 	    char[] fcd1  = new char[300];
         char[] fcd2  = new char[300];
-	    char[] fold1 = new char[300];
-        char[] fold2 = new char[300];
         
         int result;
 	
@@ -3403,7 +3401,21 @@ public final class NormalizerImpl {
 	    }
 
 	    options|=COMPARE_EQUIV;
-	
+	    /*
+         * UAX #21 Case Mappings, as fixed for Unicode version 4
+         * (see Jitterbug 2021), defines a canonical caseless match as
+         *
+         * A string X is a canonical caseless match
+         * for a string Y if and only if
+         * NFD(toCasefold(NFD(X))) = NFD(toCasefold(NFD(Y)))
+         *
+         * For better performance, we check for FCD (or let the caller tell us that
+         * both strings are in FCD) for the inner normalization.
+         * BasicNormalizerTest::FindFoldFCDExceptions() makes sure that
+         * case-folding preserves the FCD-ness of a string.
+         * The outer normalization is then only performed by unorm_cmpEquivFold()
+         * when there is a difference.
+         */
 	    if((options& Normalizer.INPUT_IS_FCD)==0) {
 	        char[] dest;
 	        int fcdLen1, fcdLen2;
@@ -3413,49 +3425,6 @@ public final class NormalizerImpl {
 	        // check if s1 and/or s2 fulfill the FCD conditions
 	        isFCD1=checkFCD(s1, s1Start, s1Limit);
 	        isFCD2=checkFCD(s2, s2Start, s2Limit);
-	        
-	        if((options&Normalizer.COMPARE_IGNORE_CASE)!=0 && 
-                !(isFCD1 && isFCD2)) {
-	            
-                // case-fold first to keep the order of operations as in UAX 21 2.5
-	            foldLen1=foldCase(s1,s1Start,s1Limit,fold1,0,fold1.length,
-                                  ((options&Normalizer.FOLD_CASE_EXCLUDE_SPECIAL_I)==0));
-                                  
-	            if(foldLen1 > fold1.length){
-	                dest = new char[foldLen1];
-	                foldLen1=foldCase(s1,s1Start,s1Limit,dest,0,foldLen1,
-                                      ((options&Normalizer.FOLD_CASE_EXCLUDE_SPECIAL_I)==0));
-                    	
-	                s1=dest;
-	            }else{
-                    s1=fold1;
-                }
-	            
-                s1Start = 0;
-                s1Limit = foldLen1;
-	
-	            foldLen2=foldCase(s2,s2Start,s2Limit,fold2,0,fold2.length,
-                                  ((options&Normalizer.FOLD_CASE_EXCLUDE_SPECIAL_I)==0));
-                                  
-                if(foldLen2 > fold2.length){
-                    dest = new char[foldLen2];
-                    foldLen2=foldCase(s2,s2Start,s2Limit,dest,0,foldLen2,
-                                      ((options&Normalizer.FOLD_CASE_EXCLUDE_SPECIAL_I)==0));
-                    
-                    s2=dest;
-                }else{
-                    s2=fold2;
-                }
-	            
-	            s2Start = 0;
-                s2Limit = foldLen2;
-	
-	            // turn off U_COMPARE_IGNORE_CASE and re-check FCD
-	            options&=~ Normalizer.COMPARE_IGNORE_CASE;
-	            isFCD1=checkFCD(s1, s1Start, s1Limit);
-	            isFCD2=checkFCD(s2, s2Start, s2Limit);
-	        }
-
 
 	        if(!isFCD1 && !isFCD2) {
 	            // if both strings need normalization then make them NFD right 
