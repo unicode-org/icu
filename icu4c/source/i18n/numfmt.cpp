@@ -406,8 +406,7 @@ NumberFormat::createInstance(const Locale& desiredLocale,
         return NULL;
     }
 
-    /*ResourceBundle resource(Locale::getDataDirectory(), desiredLocale, status);*/
-    ResourceBundle resource(NULL, desiredLocale, status);
+    ResourceBundle resource((char *)0, desiredLocale, status);
 
     if (U_FAILURE(status))
     {

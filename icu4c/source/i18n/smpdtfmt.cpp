@@ -260,14 +260,12 @@ void SimpleDateFormat::construct(EStyle timeStyle,
 
     // load up the DateTimePatters resource from the appropriate locale (throw
     // an error if for some weird reason the resource is malformed)
-    /*ResourceBundle resources(Locale::getDataDirectory(), locale, status);*/
-    ResourceBundle resources(NULL, locale, status);
-    /*resources.open("", locale, status);*/
-    //int32_t dtCount;
-    //const UnicodeString *dateTimePatterns = resources.getStringArray(fgDateTimePatternsTag, dtCount, status);
+
+    ResourceBundle resources((char *)0, locale, status);
+
     ResourceBundle dateTimePatterns = resources.get(fgDateTimePatternsTag, status);
     if (U_FAILURE(status)) return;
-    //if (dtCount <= kDateTime)
+
     if (dateTimePatterns.getSize() <= kDateTime)
     {
         status = U_INVALID_FORMAT_ERROR;

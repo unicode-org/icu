@@ -198,12 +198,8 @@ DecimalFormat::construct(UErrorCode&             status,
     // one specified.
     if (pattern == NULL)
     {
-        /*ResourceBundle resource(Locale::getDataDirectory(), Locale::getDefault(), status);*/
-        ResourceBundle resource(NULL, Locale::getDefault(), status);
-        /*resource.open("", Locale::getDefault(), status);*/
+        ResourceBundle resource((char *)0, Locale::getDefault(), status);
 
-        /*resource.getArrayItem(fgNumberPatterns, 0, str, status);*/
-        /*str = resource.getArrayStringItem(fgNumberPatterns, 0, status);*/
         str = resource.get(fgNumberPatterns, status).getStringEx((int32_t)0, status);
         pattern = &str;
     }
