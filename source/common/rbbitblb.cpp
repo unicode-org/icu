@@ -476,16 +476,20 @@ void     RBBITableBuilder::flagTaggedStates() {
     int32_t     n;
 
     fTree->findNodes(&tagNodes, RBBINode::tag, *fStatus);
-    for (i=0; i<tagNodes.size(); i++) {
+    for (i=0; i<tagNodes.size(); i++) {                   // For each tag node t (all of 'em)
         tagNode = (RBBINode *)tagNodes.elementAt(i);
 
-        for (n=0; n<fDStates->size(); n++) {
+        for (n=0; n<fDStates->size(); n++) {              //    For each state  s (row in the state table)
             RBBIStateDescriptor *sd = (RBBIStateDescriptor *)fDStates->elementAt(n);
-            if (sd->fPositions->indexOf(tagNode) >= 0) {
+            if (sd->fPositions->indexOf(tagNode) >= 0) {  //       if  s include the tag node t   
+                if (sd->fTagVal < tagNode->fVal) {
+                    // If more than one rule tag applies to this state, the larger
+                    //   tag takes precedence. 
                 sd->fTagVal = tagNode->fVal;
             }
         }
     }
+}
 }
 
 
