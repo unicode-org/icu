@@ -1742,8 +1742,9 @@ void LocaleTest::_checklocs(const char* label,
         logln("%s; req=%s, valid=%s, actual=%s",
               label, req, valid, actual);
     } else {
-        errln("FAIL: %s; req=%s, valid=%s, actual=%s",
-              label, req, valid, actual);
+        errln("FAIL: %s; req=%s, valid=%s, actual=%s.  Require (R %s V) and (V %s A)",
+              label, req, valid, actual,
+              expReqValid, expValidActual);
     }
 }
 
