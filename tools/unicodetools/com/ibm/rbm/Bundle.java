@@ -12,6 +12,8 @@ import java.io.PrintStream;
 import java.io.Writer;
 import java.util.*;
 
+import com.ibm.rbm.gui.RBManagerGUI;
+
 /**
  * A class representing the entire Bundle of Resources for a particular language, country, variant.
  * 
@@ -265,7 +267,7 @@ public class Bundle {
      * untranslated items.
      */
 		
-    protected void addUntranslatedItem(BundleItem item) {
+    public void addUntranslatedItem(BundleItem item) {
         if (item.getParentGroup().getParentBundle() != this) return;
         // First check to see if it is all ready there
         boolean found = false;

@@ -131,7 +131,7 @@ public class RBTMXExporter extends RBExporter {
         tu.appendChild(tuv);
     }
 	
-    protected void export(RBManager rbm) throws IOException {
+    public void export(RBManager rbm) throws IOException {
         if (rbm == null) return;
         // Open the Save Dialog
         int ret_val = chooser.showSaveDialog(null);

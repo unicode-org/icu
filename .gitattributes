@@ -124,15 +124,15 @@ tools/unicodetools/com/ibm/rbm/docs/images/template_line.gif -text
 tools/unicodetools/com/ibm/rbm/docs/images/template_ll.gif -text
 tools/unicodetools/com/ibm/rbm/docs/images/template_u.gif -text
 tools/unicodetools/com/ibm/rbm/docs/images/template_ul.gif -text
-tools/unicodetools/com/ibm/rbm/images/TitleLogo_transparent.gif -text
-tools/unicodetools/com/ibm/rbm/images/tree_icon_bundle.gif -text
-tools/unicodetools/com/ibm/rbm/images/tree_icon_country.gif -text
-tools/unicodetools/com/ibm/rbm/images/tree_icon_file.gif -text
-tools/unicodetools/com/ibm/rbm/images/tree_icon_group.gif -text
-tools/unicodetools/com/ibm/rbm/images/tree_icon_item.gif -text
-tools/unicodetools/com/ibm/rbm/images/tree_icon_language.gif -text
-tools/unicodetools/com/ibm/rbm/images/tree_icon_project.gif -text
-tools/unicodetools/com/ibm/rbm/images/tree_icon_variant.gif -text
+tools/unicodetools/com/ibm/rbm/gui/images/TitleLogo_transparent.gif -text
+tools/unicodetools/com/ibm/rbm/gui/images/tree_icon_bundle.gif -text
+tools/unicodetools/com/ibm/rbm/gui/images/tree_icon_country.gif -text
+tools/unicodetools/com/ibm/rbm/gui/images/tree_icon_file.gif -text
+tools/unicodetools/com/ibm/rbm/gui/images/tree_icon_group.gif -text
+tools/unicodetools/com/ibm/rbm/gui/images/tree_icon_item.gif -text
+tools/unicodetools/com/ibm/rbm/gui/images/tree_icon_language.gif -text
+tools/unicodetools/com/ibm/rbm/gui/images/tree_icon_project.gif -text
+tools/unicodetools/com/ibm/rbm/gui/images/tree_icon_variant.gif -text
 
 # The following file types are stored in Git-LFS.
 *.jar filter=lfs diff=lfs merge=lfs -text

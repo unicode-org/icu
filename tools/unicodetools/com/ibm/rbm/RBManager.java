@@ -11,6 +11,8 @@ import java.io.*;
 import javax.swing.UIManager;
 import javax.swing.JOptionPane;
 
+import com.ibm.rbm.gui.RBManagerGUI;
+
 /**
  * A utility class to aid in the process of updating the Natural Language Support of Tempus Fugit.
  * This class scans the directory containing NLS files and checks the various languages found there
@@ -25,7 +27,7 @@ public class RBManager {
 	
     // *** DATA ***
     private Vector allBundleKeys;                               // A Vector of Strings with all defined NLS properties
-    protected Vector bundles;                                   // A Vector of NLSbundles, one for each language
+    private Vector bundles;                                   // A Vector of NLSbundles, one for each language
     private String currentUser;                                 // The name of the person currently using the editor
     private String baseClass;                                   // The name of the base class of the active resource bundle
     private File   currentDirectory;
@@ -845,7 +847,7 @@ public class RBManager {
         return baseClass;
     }
 	
-    protected Vector getBundles() {
+    public Vector getBundles() {
         return bundles;
     }
     
@@ -938,100 +940,3 @@ public class RBManager {
     }	
 }	// ListAllInstances
 
-
-/*
- * $History: RBManager.java $
- * 
- * *****************  Version 18  *****************
- * User: Jjared       Date: 5/09/02    Time: 10:40a
- * Updated in $/RBManager/Source/com/ibm/rbm
- * Update from work on my laptop
- * 
- * *****************  Version 17  *****************
- * User: Jjared       Date: 12/19/01   Time: 12:49p
- * Updated in $/RBManager/Source/com/ibm/rbm
- * Updated for version 0.5a. Includes new 'Project Tree View'
- * 
- * *****************  Version 16  *****************
- * User: Jjared       Date: 11/20/01   Time: 9:36a
- * Updated in $/RBManager/Source/com/ibm/rbm
- * Updates for version 0.5a
- * 
- * *****************  Version 15  *****************
- * User: Jjared       Date: 6/29/01    Time: 11:02a
- * Updated in $/RBManager/Source/com/ibm/rbm
- * This is the version with the time bomb set to go off on Decmber 15,
- * 2001
- * 
- * *****************  Version 14  *****************
- * User: Jjared       Date: 6/27/01    Time: 5:49p
- * Updated in $/RBManager/Source/com/ibm/rbm
- * This is an update prior to adding new code to place a 'time bomb' into
- * the code in preparation for version 0.4a
- * 
- * *****************  Version 13  *****************
- * User: Jjared       Date: 3/20/01    Time: 11:23a
- * Updated in $/RBManager/Source/com/ibm/rbm
- * 
- * *****************  Version 12  *****************
- * User: Jjared       Date: 2/13/01    Time: 9:59a
- * Updated in $/RBManager/Source/com/ibm/rbm
- * Almost there ... 0.3a
- * 
- * *****************  Version 11  *****************
- * User: Jjared       Date: 2/07/01    Time: 2:12p
- * Updated in $/RBManager/Source/com/ibm/rbm
- * Almost version 0.3a - Will do a final check to make sure everything
- * works
- * 
- * *****************  Version 10  *****************
- * User: Jjared       Date: 2/06/01    Time: 1:34p
- * Updated in $/RBManager/Source/com/ibm/rbm
- * 
- * *****************  Version 9  *****************
- * User: Jjared       Date: 2/05/01    Time: 1:41p
- * Updated in $/RBManager/Source/com/ibm/rbm
- * 
- * *****************  Version 8  *****************
- * User: Jjared       Date: 1/26/01    Time: 11:38a
- * Updated in $/RBManager/Source/com/ibm/rbm
- * Visual components for import defined
- * 
- * *****************  Version 7  *****************
- * User: Jjared       Date: 11/21/00   Time: 1:38p
- * Updated in $/RBManager/Source/com/ibm/rbm
- * checkin for time
- * 
- * *****************  Version 6  *****************
- * User: Jjared       Date: 11/10/00   Time: 1:09p
- * Updated in $/RBManager/Source/com/ibm/rbm
- * 
- * *****************  Version 5  *****************
- * User: Jjared       Date: 11/08/00   Time: 9:02a
- * Updated in $/RBManager/Source/com/ibm/rbm
- * Preferences and about panel now functional
- * 
- * *****************  Version 4  *****************
- * User: Jjared       Date: 10/26/00   Time: 4:20p
- * Updated in $/RBManager/Source/com/ibm/rbm
- * 
- * *****************  Version 3  *****************
- * User: Jjared       Date: 10/25/00   Time: 4:04p
- * Updated in $/RBManager/Source/com/ibm/rbm
- * Moved public data members to public method calls
- * 
- * *****************  Version 1  *****************
- * User: Jjared       Date: 10/23/00   Time: 8:54a
- * Created in $/Tempus Fugit/Development/Java/com/ibm/almaden/RBManager
- * Initial inclussion in com.ibm.almaden
- * 
- * *****************  Version 2  *****************
- * User: Jjared       Date: 10/10/00   Time: 4:14p
- * Updated in $/Tempus Fugit/Development/Java/com/ibm/almaden/TempusFugit/Tools
- * 
- * *****************  Version 1  *****************
- * User: Jjared       Date: 9/29/00    Time: 10:05a
- * Created in $/Tempus Fugit/Development/Java/com/ibm/almaden/TempusFugit/Tools
- * Initial version
- * 
- */

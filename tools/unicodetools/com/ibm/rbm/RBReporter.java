@@ -16,6 +16,8 @@ import org.apache.xerces.dom.*;
 import org.apache.xml.serialize.*;
 import org.w3c.dom.*;
 
+import com.ibm.rbm.gui.RBManagerGUI;
+
 /**
  * RBReporter is a fully functional application that runs separate from RBManager.
  * The report produces statistically based reports on specified resource bundles,

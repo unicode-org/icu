@@ -8,6 +8,9 @@ package com.ibm.rbm;
 
 import java.io.*;
 import javax.swing.*;
+
+import com.ibm.rbm.gui.RBManagerGUI;
+
 import java.util.*;
 import java.awt.*;
 import java.awt.event.*;
