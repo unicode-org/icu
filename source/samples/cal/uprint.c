@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (C) 1998-2000, International Business Machines Corporation 
+* Copyright (C) 1998-2001, International Business Machines Corporation
 * and others.  All Rights Reserved.
 **********************************************************************
 *
@@ -8,8 +8,8 @@
 *
 * Modification History:
 *
-*   Date        Name        Description
-*   06/14/99    stephen     Creation.
+*	Date		Name		Description
+*	06/14/99	stephen 	Creation.
 *******************************************************************************
 */
 
@@ -22,8 +22,8 @@
 /* Print a ustring to the specified FILE* in the default codepage */
 void
 uprint(const UChar *s,
-       FILE *f,
-       UErrorCode *status)
+	   FILE *f,
+	   UErrorCode *status)
 {
   /* converter */
   UConverter *converter;
@@ -38,9 +38,9 @@ uprint(const UChar *s,
 
   /* set up the conversion parameters */
   sourceLen    = u_strlen(s);
-  mySource     = s;
+  mySource	   = s;
   mySourceEnd  = mySource + sourceLen;
-  myTarget     = buf;
+  myTarget	   = buf;
   arraySize    = BUF_SIZE;
 
   /* open a default converter */
@@ -51,20 +51,20 @@ uprint(const UChar *s,
   
   /* perform the conversion */
   do {
-    /* reset the error code */
-    *status = U_ZERO_ERROR;
+	/* reset the error code */
+	*status = U_ZERO_ERROR;
 
-    /* perform the conversion */
-    ucnv_fromUnicode(converter, &myTarget,  myTarget + arraySize,
-		     &mySource, mySourceEnd, NULL,
-		     TRUE, status);
+	/* perform the conversion */
+	ucnv_fromUnicode(converter, &myTarget,	myTarget + arraySize,
+			 &mySource, mySourceEnd, NULL,
+			 TRUE, status);
 
-    /* Write the converted data to the FILE* */
-    fwrite(buf, sizeof(char), myTarget - buf, f);
+	/* Write the converted data to the FILE* */
+	fwrite(buf, sizeof(char), myTarget - buf, f);
 
-    /* update the conversion parameters*/
-    myTarget     = buf;
-    arraySize    = BUF_SIZE;
+	/* update the conversion parameters*/
+	myTarget	 = buf;
+	arraySize	 = BUF_SIZE;
   }
   while(*status == U_BUFFER_OVERFLOW_ERROR); 
 
