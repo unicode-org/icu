@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/test/translit/Attic/WriteCharts.java,v $
- * $Date: 2001/11/14 01:34:50 $
- * $Revision: 1.9 $
+ * $Date: 2001/11/14 01:55:04 $
+ * $Revision: 1.10 $
  *
  *****************************************************************************************
  */
@@ -55,19 +55,18 @@ public class WriteCharts {
         while(sources.hasMoreElements()) {
             String source = (String) sources.nextElement();
             scripts = UScript.getCode(source);
-            int sourceScript = scripts[0];
-            if (sourceScript == UScript.INVALID_CODE) {
+            if (scripts == null) {
                 System.out.println("[Skipping " + source + "]");
                 continue;
             }
+            int sourceScript = scripts[0];
             System.out.println("Source: " + source + ";\tScripts: " + showScripts(scripts));
             Enumeration targets = Transliterator.getAvailableTargets(source);
             while(targets.hasMoreElements()) {
                 String target = (String) targets.nextElement();
                 scripts = UScript.getCode(target);
-                int targetScript = scripts[0];
-                if (targetScript == UScript.INVALID_CODE
-                        || priority(targetScript) < priority(sourceScript)) {
+                if (scripts == null
+                        || priority(scripts[0]) < priority(sourceScript)) {
                     // skip doing both directions
                     System.out.println("[Skipping '" + source + "-" + target + "']");
                     continue;
@@ -123,7 +122,7 @@ public class WriteCharts {
         // check that the source is a script
         if (testSet.equals("")) {
             int[] scripts = UScript.getCode(source);
-            if (scripts.length != 1) {
+            if (scripts == null) {
                 System.out.println("FAILED: " 
                     + Transliterator.getDisplayName(id)
                     + " does not have a script as the source");
@@ -140,7 +139,7 @@ public class WriteCharts {
 
         // check that the target is a script
         int[] scripts = UScript.getCode(target);
-        if (scripts.length != 1) {
+        if (scripts == null) {
             target = "[:Latin:]";
         } else {
             target = "[:" + target + ":]";
