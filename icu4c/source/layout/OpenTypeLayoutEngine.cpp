@@ -65,7 +65,7 @@ OpenTypeLayoutEngine::~OpenTypeLayoutEngine()
 LETag OpenTypeLayoutEngine::getScriptTag(le_int32 scriptCode)
 {
     if (scriptCode == -1) {
-        return -1;
+        return 0xFFFFFFFF;
     }
 
     return scriptTags[scriptCode];
@@ -74,7 +74,7 @@ LETag OpenTypeLayoutEngine::getScriptTag(le_int32 scriptCode)
 LETag OpenTypeLayoutEngine::getLangSysTag(le_int32 languageCode)
 {
     // FIXME: do this for real some day (soon?)
-    return -1;
+    return 0xFFFFFFFF;
 }
 
 void OpenTypeLayoutEngine::setScriptAndLanguageTags()

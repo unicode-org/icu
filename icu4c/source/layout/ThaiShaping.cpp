@@ -266,7 +266,7 @@ le_int32 ThaiShaping::compose(const LEUnicode *input, le_int32 offset, le_int32 
     le_uint8 state = 0;
     le_int32 inputIndex;
     le_int32 outputIndex = 0;
-    le_uint8 conState = -1;
+    le_uint8 conState = 0xFF;
     le_int32 conInput = -1;
     le_int32 conOutput = -1;
     
