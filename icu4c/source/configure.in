@@ -4,7 +4,7 @@ dnl Copyright (c) 1999-2000, International Business Machines Corporation and
 dnl others. All Rights Reserved.
 dnl Stephen F. Booth, heavily modified by Yves and others
 
-dnl $Id: configure.in,v 1.116 2001/08/17 01:53:38 grhoten-oss Exp $
+dnl $Id: configure.in,v 1.117 2001/09/19 23:43:43 yves-oss Exp $
 
 dnl Process this file with autoconf to produce a configure script
 AC_INIT(common/unicode/utypes.h)
@@ -567,10 +567,19 @@ AC_ARG_ENABLE(extras,
 		esac], 
 	extras=true)
 ICU_CONDITIONAL(EXTRAS, test "$extras" = true)
+AC_ARG_ENABLE(extras,
+	[  --enable-ustdio         build ICU's ustdio library [default=yes]],
+	[case "${enableval}" in
+		yes) ustdio=true ;;
+		no)  ustdio=false ;;
+		*) AC_MSG_ERROR(bad value ${enableval} for --enable-ustdio) ;;
+		esac], 
+	ustdio=true)
+ICU_CONDITIONAL(USTDIO, test "$ustdio" = true)
 
 dnl Enable/disable layout
 AC_ARG_ENABLE(layout,
-	[  --enable-layout         build ICU layout [default=no]],
+	[  --enable-layout         build ICU's layout library [default=no]],
 	[case "${enableval}" in
 		yes) layout=true ;;
 		no)  layout=false ;;
@@ -762,7 +771,7 @@ AC_OUTPUT([README icudefs.mk \
 		data/Makefile data/build/Makefile \
 		common/Makefile config/Makefile.inc i18n/Makefile \
 		layout/Makefile \
-		extra/Makefile extra/ustdio/Makefile \
+		extra/Makefile extra/ustdio/Makefile extra/uconv/Makefile \
 		stubdata/Makefile \
 		tools/Makefile tools/ctestfw/Makefile tools/makeconv/Makefile \
 		tools/genrb/Makefile  \
