@@ -10,11 +10,13 @@
 
 # This is the debhelper compatability version to use.
 export DH_COMPAT=2
-firstdir := $(shell sed -n 's/Package: \(.*\)/\1/p' debian/control | head -1)
+#firstdir := $(shell sed -n 's/Package: \(.*\)/\1/p' debian/control | head -1)
 
 # Where the source for ICU is, where to build
 srcdir = source
-builddir = build
+builddir = debian/build
+# How to get to $(srcdir) from $(builddir)
+builddir_relative_srcdir = ../../$(srcdir)
 
 # ICU installation directories, w/o the initial slash
 pkgdatadir = usr/share/icu
@@ -54,7 +56,7 @@ $(builddir)/configure-stamp:
 	dh_testdir
 	# Add here commands to configure the package.
 	test -d $(builddir) || mkdir $(builddir)
-	cd build; CFLAGS='$(CFLAGS)' CXXFLAGS='$(CFLAGS)' INSTALL_PROGRAM='$(INSTALL_PROGRAM)' ../$(srcdir)/configure --srcdir=../$(srcdir) --prefix=/usr --mandir=/usr/share/man --sysconfdir=/etc --with-data-packaging=files --disable-rpath --enable-shared --enable-static --disable-samples
+	cd $(builddir); CFLAGS='$(CFLAGS)' CXXFLAGS='$(CFLAGS)' INSTALL_PROGRAM='$(INSTALL_PROGRAM)' $(builddir_relative_srcdir)/configure --srcdir=$(builddir_relative_srcdir) --prefix=/usr --mandir=/usr/share/man --sysconfdir=/etc --with-data-packaging=files --disable-rpath --enable-shared --enable-static --disable-samples
 	touch $@
 
 build: $(builddir)/configure-stamp $(builddir)/build-stamp
@@ -87,8 +89,8 @@ install: build
 	dh_clean -k
 	dh_installdirs
 
-	# Add here commands to install the package into debian/$(firstdir).
-	$(MAKE) -C $(builddir) install DESTDIR=`pwd`/debian/$(firstdir)
+	# Add here commands to install the package into debian/tmp
+	$(MAKE) -C $(builddir) install DESTDIR=`pwd`/debian/tmp
 
 
 # Build architecture-independent files here.
@@ -107,11 +109,11 @@ binary-arch: build install $(addprefix debian/,$(DEBIAN_FILES))
 #	dh_testversion
 	dh_testdir
 	dh_testroot
-	rm debian/$(firstdir)/usr/sbin/gentest
+	rm debian/tmp/usr/sbin/gentest
 	#
 	# build libicu${major} package by moving files from icu-dev
 	#
-	dh_movefiles --sourcedir=debian/$(firstdir) -plibicu$(major) \
+	dh_movefiles -plibicu$(major) \
 	    usr/lib/libicuuc.so.* \
 	    usr/lib/libicui18n.so.* \
 	    usr/lib/libicutoolutil.so.* \
@@ -119,7 +121,7 @@ binary-arch: build install $(addprefix debian/,$(DEBIAN_FILES))
 	#
 	# build icu package by moving files from icu-dev
 	#
-	dh_movefiles --sourcedir=debian/$(firstdir) -picu \
+	dh_movefiles -picu \
 	    etc \
 	    usr/sbin \
 	    $(icudatadir)/README \
@@ -127,12 +129,12 @@ binary-arch: build install $(addprefix debian/,$(DEBIAN_FILES))
 	    $(iculibdir)/u*.dat \
 	    $(iculibdir)/tz.dat \
 	    usr/share/man
-	rm debian/$(firstdir)/$(pkglibdir)/current
-	rm debian/$(firstdir)/$(iculibdir)/cnvalias.dat
+	rm debian/tmp/$(pkglibdir)/current
+	rm debian/tmp/$(iculibdir)/cnvalias.dat
 	#
 	# build icu-locales package by moving files from icu-dev
 	#
-	dh_movefiles --sourcedir=debian/$(firstdir) -picu-locales \
+	dh_movefiles -picu-locales \
 	    $(iculibdir)/*.res \
 	    $(iculibdir)/*.brk
 	#
@@ -159,10 +161,15 @@ binary-arch: build install $(addprefix debian/,$(DEBIAN_FILES))
 	cd debian/icu-i18ndata/$(datasrcdir) && \
 	    $(RM) convrtrs.txt UnicodeData*.txt ucname.txt
 	#
+	# move the rest of the development files
+	# in their package
+	#
+	dh_movefiles usr
+	#
 	# do a bit of cleanup
 	#
-	rm -rf debian/$(firstdir)/etc debian/$(firstdir)/usr/sbin \
-	    debian/$(firstdir)/usr/share/man
+	rm -rf debian/tmp/etc debian/tmp/usr/sbin \
+	    debian/tmp/usr/share/man
 	#
 	# continue to prepare packages
 	#
@@ -183,8 +190,6 @@ binary-arch: build install $(addprefix debian/,$(DEBIAN_FILES))
 	dh_strip
 	dh_compress
 	dh_fixperms
-	# CVS fixup
-	if test -d CVS; then find debian/$(firstdir) -name CVS -print | xargs rm -r; fi
 	# You may want to make some executables suid here.
 	dh_suidregister
 	dh_makeshlibs
