@@ -11,16 +11,11 @@ top_builddir = ..
 
 include $(top_builddir)/icudefs.mk
 
-include $(srcdir)/layoutobj.inc
-
 ## Platform-specific setup
 include @platform_make_fragment@
 
 ## Build directory information
 subdir = layout
-
-
-SUBDIRS = aat opentype
 
 ## Extra files to remove for 'make clean'
 CLEANFILES = *~ $(DEPS)
@@ -61,14 +56,69 @@ LDFLAGS = @LDFLAGS@ $(RPATHLDFLAGS)
 LIBS= @LIBS@
 
 
-OBJECTS =  $(LAYOUT_OBJS) $(AAT_OBJS:%.o=aat/%.o) $(OPENTYPE_OBJS:%.o=opentype/%.o) 
+OBJECTS =  OpenTypeLayoutEngine.o \
+ThaiLayoutEngine.o \
+ThaiShaping.o \
+ThaiStateTables.o \
+ArabicLayoutEngine.o \
+GXLayoutEngine.o \
+IndicLayoutEngine.o \
+LayoutEngine.o \
+ContextualGlyphSubstitutionProcessor.o \
+IndicRearrangementProcessor.o \
+LigatureSubstitutionProcessor.o \
+LookupTables.o \
+MorphTables.o \
+NonContextualGlyphSubstitutionProcessor.o \
+SegmentArrayProcessor.o \
+SegmentSingleProcessor.o \
+SimpleArrayProcessor.o \
+SingleTableProcessor.o \
+StateTableProcessor.o \
+SubtableProcessor.o \
+TrimmedArrayProcessor.o \
+AlternateSubstitutionSubtables.o \
+AnchorTables.o \
+ArabicLigatureData.o \
+ArabicShaping.o \
+ClassDefinitionTables.o \
+ContextualSubstitutionSubtables.o \
+CoverageTables.o \
+DeviceTables.o \
+Features.o \
+GDEFMarkFilter.o \
+GlyphDefinitionTables.o \
+GlyphIterator.o \
+GlyphPositioningLookupProcessor.o \
+GlyphPositioningTables.o \
+GlyphSubstitutionLookupProcessor.o \
+GlyphSubstitutionTables.o \
+HebrewLigatureData.o \
+HebrewShaping.o \
+IndicClassTables.o \
+IndicReordering.o \
+LigatureSubstitutionSubtables.o \
+LookupProcessor.o \
+Lookups.o \
+MarkArrays.o \
+MarkToBasePositioningSubtables.o \
+MarkToLigaturePositioningSubtables.o \
+MarkToMarkPositioningSubtables.o \
+MultipleSubstitutionSubtables.o \
+OpenTypeUtilities.o \
+PairPositioningSubtables.o \
+ScriptAndLanguage.o \
+SinglePositioningSubtables.o \
+SingleSubstitutionSubtables.o \
+SubstitutionLookups.o \
+ValueRecords.o 
 
 STATIC_OBJECTS = $(OBJECTS:.o=.$(STATIC_O))
 
 DEPS = $(LAYOUT_OBJS:.o=.d)
 
 ## Header files to install
-HEADERS= $(srcdir)/*.h
+HEADERS= $(srcdir)/LayoutEngine.h $(srcdir)/LE*.h
 
 ## List of phony targets
 .PHONY : all all-local install install-local clean clean-local	\
@@ -79,32 +129,12 @@ dist-local check check-local
 .SUFFIXES :
 
 ## List of standard targets
-all: all-recursive all-local
+all: all-local
 install: install-local
-clean: clean-recursive clean-local
-distclean : distclean-recursive distclean-local
-dist: dist-recursive dist-local
+clean: clean-local
+distclean : distclean-local
+dist: dist-local
 check: all check-local
-
-## Recursive targets
-all-recursive install-recursive clean-recursive distclean-recursive dist-recursive check-recursive:
-	@dot_seen=no; \
-	target=`echo $@ | sed s/-recursive//`; \
-	list='$(SUBDIRS)'; for subdir in $$list; do \
-	  echo "Making $$target in $$subdir"; \
-	  if test "$$subdir" = "."; then \
-	    dot_seen=yes; \
-	    local_target="$$target-local"; \
-	  else \
-	    local_target="$$target"; \
-	  fi; \
-	  (cd $$subdir && $(MAKE) $$local_target) || exit; \
-	done; \
-	if test "$$dot_seen" = "no"; then \
-	  $(MAKE) "$$target-local" || exit; \
-	fi
-
-# end recursion
 
 all-local: $(ALL_TARGETS)
 
