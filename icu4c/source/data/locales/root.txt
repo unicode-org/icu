@@ -580,7 +580,7 @@ root {
         iro { "Iroquoian languages" }
         is  { "Icelandic" }
         it  { "Italian" }
-        iu  { "Inukitut" }
+        iu  { "Inuktitut" }
         iw  { "Hebrew" }  // Use he instead
         ja  { "Japanese" }
         //ji  { "Yiddish" } // Use yi instead
