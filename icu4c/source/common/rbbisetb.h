@@ -89,6 +89,7 @@ public:
     void     printSets();
     void     printRanges();
     void     printRangeGroups();
+    UChar32  getFirstChar(int32_t  val);
 
 private:
     void           numberSets();
