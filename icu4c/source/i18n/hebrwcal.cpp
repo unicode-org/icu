@@ -23,7 +23,6 @@
 #include "uhash.h"
 #include "ucln_in.h"
 
-U_NAMESPACE_BEGIN
 // Hebrew Calendar implementation
 
 /**
@@ -130,12 +129,17 @@ static const int32_t  LEAP_MONTH_START[][3] = {
   {  383,        384,        385  },          // Elul
 };
 
-//-------------------------------------------------------------------------
-// Data Members...
-//-------------------------------------------------------------------------
-
 static CalendarCache *gCache =  NULL;
 
+U_CDECL_BEGIN
+static UBool calendar_hebrew_cleanup(void) {
+  delete gCache;
+  gCache = NULL;
+  return TRUE;
+}
+U_CDECL_END
+
+U_NAMESPACE_BEGIN
 //-------------------------------------------------------------------------
 // Constructors...
 //-------------------------------------------------------------------------
@@ -372,6 +376,7 @@ static const int32_t BAHARAD = 11*HOUR_PARTS + 204;
  */
 int32_t HebrewCalendar::startOfYear(int32_t year, UErrorCode &status)
 {
+  ucln_i18n_registerCleanup(UCLN_I18N_HEBREW_CALENDAR, calendar_hebrew_cleanup);
   int32_t day = CalendarCache::get(&gCache, year, status);
   
   if (day == 0) {
@@ -718,15 +723,7 @@ HebrewCalendar::initializeSystemDefaultCentury()
 
 UOBJECT_DEFINE_RTTI_IMPLEMENTATION(HebrewCalendar);
 
-
 U_NAMESPACE_END
-
-U_CFUNC UBool calendar_hebrew_cleanup(void) {
-  delete gCache;
-  gCache = NULL;
-  return TRUE;
-}
-
 
 #endif // UCONFIG_NO_FORMATTING
 

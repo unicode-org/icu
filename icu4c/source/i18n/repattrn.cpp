@@ -603,17 +603,5 @@ RegexPatternDump(const RegexPattern *This) {
 
 UOBJECT_DEFINE_RTTI_IMPLEMENTATION(RegexPattern)
 
-//----------------------------------------------------------------------------------
-//
-//   regex_cleanup      Memory cleanup function, free/delete all
-//                      cached memory.  Called by ICU's u_cleanup() function.
-//
-//----------------------------------------------------------------------------------
-U_CFUNC UBool 
-regex_cleanup(void) {
-    RegexCompile::cleanup();
-    return TRUE;
-};
-
 U_NAMESPACE_END
 #endif  // !UCONFIG_NO_REGULAR_EXPRESSIONS

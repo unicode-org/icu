@@ -1522,7 +1522,7 @@ UBool Transliterator::initializeRegistry() {
     _registerSpecialInverse("Upper", "Lower", TRUE);
     _registerSpecialInverse("Title", "Lower", FALSE);
 
-    ucln_i18n_registerCleanup();
+    ucln_i18n_registerCleanup(UCLN_I18N_TRANSLITERATOR, transliterator_cleanup);
 
     return TRUE;
 }

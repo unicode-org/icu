@@ -189,6 +189,9 @@ idForLocale(const char* locale, char* countryAndVariant, int capacity, UErrorCod
 // don't use ICUService since we don't need fallback
 
 #if !UCONFIG_NO_SERVICE
+U_CDECL_BEGIN
+static UBool U_CALLCONV currency_cleanup(void);
+U_CDECL_END
 struct CReg;
 
 /* Remember to call umtx_init(&gCRegLock) before using it! */
@@ -222,7 +225,7 @@ struct CReg : public UMemory {
                 Mutex mutex(&gCRegLock);
                 if (!gCRegHead) {
                     /* register for the first time */
-                    ucln_i18n_registerCleanup();
+                    ucln_i18n_registerCleanup(UCLN_I18N_CURRENCY, currency_cleanup);
                 }
                 n->next = gCRegHead;
                 gCRegHead = n;
@@ -260,7 +263,8 @@ struct CReg : public UMemory {
         Mutex mutex(&gCRegLock);
         CReg* p = gCRegHead;
 
-        ucln_i18n_registerCleanup(); /* register cleanup of the mutex */
+        /* register cleanup of the mutex */
+        ucln_i18n_registerCleanup(UCLN_I18N_CURRENCY, currency_cleanup);
         while (p) {
             if (uprv_strcmp(id, p->id) == 0) {
                 return p->iso;
@@ -280,6 +284,18 @@ struct CReg : public UMemory {
         umtx_destroy(&gCRegLock);
     }
 };
+
+/**
+ * Release all static memory held by currency.
+ */
+U_CDECL_BEGIN
+static UBool U_CALLCONV currency_cleanup(void) {
+#if !UCONFIG_NO_SERVICE
+    CReg::cleanup();
+#endif
+    return TRUE;
+}
+U_CDECL_END
 
 // -------------------------------------
 
@@ -692,16 +708,6 @@ ucurr_getRoundingIncrement(const UChar* currency, UErrorCode* ec) {
     // Return data[1] / 10^(data[0]).  The only actual rounding data,
     // as of this writing, is CHF { 2, 5 }.
     return double(data[1]) / POW10[data[0]];
-}
-
-/**
- * Release all static memory held by currency.
- */
-U_CFUNC UBool currency_cleanup(void) {
-#if !UCONFIG_NO_SERVICE
-    CReg::cleanup();
-#endif
-    return TRUE;
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */

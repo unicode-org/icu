@@ -36,6 +36,7 @@ public:
     RegexStaticSets(UErrorCode *status);         
     ~RegexStaticSets();
     static void    initGlobals(UErrorCode *status);
+    static UBool   cleanup();
 
     UnicodeSet    *fPropSets[URX_LAST_SET];     // The sets for common regex items, e.g. \s
     Regex8BitSet   fPropSets8[URX_LAST_SET];    // Fast bitmap sets for latin-1 range for above.

@@ -51,8 +51,23 @@
 #include "ucln_in.h"
 
 U_NAMESPACE_BEGIN
-
 #if !UCONFIG_NO_SERVICE
+U_NAMESPACE_END
+
+static ICULocaleService* gService = NULL;
+/**
+ * Release all static memory held by collator.
+ */
+static UBool collator_cleanup(void) {
+    if (gService) {
+        delete gService;
+        gService = NULL;
+    }
+    return TRUE;
+}
+
+U_NAMESPACE_BEGIN
+
 // ------------------------------------------
 //
 // Registration
@@ -163,8 +178,6 @@ public:
 
 class ICUCollatorService;
 
-static ICULocaleService* gService = NULL;
-
 static ICULocaleService* 
 getService(void)
 {
@@ -184,8 +197,11 @@ getService(void)
         }
         if(newservice) {
             delete newservice;
-        } else {
-            ucln_i18n_registerCleanup();
+        }
+        else {
+#if !UCONFIG_NO_SERVICE
+            ucln_i18n_registerCleanup(UCLN_I18N_COLLATOR, collator_cleanup);
+#endif
         }
     }
     return gService;
@@ -651,21 +667,6 @@ Collator::getFunctionalEquivalent(const char* keyword, const Locale& locale,
 // -------------------------------------
 
 U_NAMESPACE_END
-
-// defined in ucln_cmn.h
-
-/**
- * Release all static memory held by collator.
- */
-U_CFUNC UBool collator_cleanup(void) {
-#if !UCONFIG_NO_SERVICE
-    if (gService) {
-        delete gService;
-        gService = NULL;
-    }
-#endif
-    return TRUE;
-}
 
 #endif /* #if !UCONFIG_NO_COLLATION */
 
