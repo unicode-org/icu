@@ -131,7 +131,7 @@ static UOption options[]={
 /*8*/ UOPTION_DEF( "source", 'S', UOPT_NO_ARG),
 /*9*/ UOPTION_DEF( "entrypoint", 'e', UOPT_REQUIRES_ARG),
 /*10*/UOPTION_SOURCEDIR,
-/*11*/    UOPTION_DEF( "embed", 'E', UOPT_NO_ARG)
+/*11*/UOPTION_DEF( "embed", 'E', UOPT_NO_ARG)
 };
 
 static char *symPrefix = NULL;
@@ -177,11 +177,11 @@ main(int argc, char* argv[]) {
          * required supported string length is 509 bytes.
          */
         fprintf(where,
-                "%csage: %s [ -h, -?, --help ] [ -v, --verbose ] [ -c, --copyright ] [ -C, --comment comment ] [ -d, --destdir dir ] [ -n, --name filename ] [ -t, --type filetype ] [ -S, --source tocfile ] [ -e, --entrypoint name ] [ maxsize ] [ [ -f ] filename ]\n", argc < 0 ? 'u' : 'U', *argv);
+                "%csage: %s [ -h, -?, --help ] [ -v, --verbose ] [ -c, --copyright ] [ -C, --comment comment ] [ -d, --destdir dir ] [ -n, --name filename ] [ -t, --type filetype ] [ -S, --source tocfile ] [ -e, --entrypoint name ] maxsize listfile\n", argc < 0 ? 'u' : 'U', *argv);
         if (options[0].doesOccur || options[1].doesOccur) {
             fprintf(where, "\n"
-            "Read the list file (default: standard input) and create a common data\n"
-                    "file from specified files; omit any larger than maxsize.\n");
+                "Read the list file (default: standard input) and create a common data\n"
+                "file from specified files. Omit any files larger than maxsize, if maxsize > 0.\n");
             fprintf(where, "\n"
             "Options:\n"
             "\t-h, -?, --help              this usage text\n"
