@@ -18,6 +18,7 @@
 #include "unicode/translit.h"
 #include "unicode/uniset.h"
 #include "unicode/uscript.h"
+#include "charstr.h"
 
 // UChar constants
 static const UChar LOCALE_SEP  = 95; // '_'
@@ -34,35 +35,6 @@ static const UChar ANY[] = { 65, 110, 121, 0 }; // Any
 static const char RB_RULE[] = "Rule";
 
 U_NAMESPACE_BEGIN
-
-//----------------------------------------------------------------------
-// class CharString
-//----------------------------------------------------------------------
-
-class CharString {
- public:
-    CharString(const UnicodeString& str);
-    ~CharString();
-    operator const char*() { return ptr; }
- private:
-    char buf[128];
-    char* ptr;
-};
-
-CharString::CharString(const UnicodeString& str) {
-    if (str.length() >= (int32_t)sizeof(buf)) {
-        ptr = new char[str.length() + 8];
-    } else {
-        ptr = buf;
-    }
-    str.extract(0, 0x7FFFFFFF, ptr, "");
-}
-
-CharString::~CharString() {
-    if (ptr != buf) {
-        delete[] ptr;
-    }
-}
 
 //------------------------------------------------------------------
 // Alias

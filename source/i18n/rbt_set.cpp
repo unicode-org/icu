@@ -26,6 +26,8 @@ U_CDECL_END
 
 #ifdef DEBUG_RBT
 #include <stdio.h>
+#include "charstr.h"
+
 /**
  * @param appendTo result is appended to this param.
  * @param input the string being transliterated
@@ -60,31 +62,6 @@ static UnicodeString& _formatInput(UnicodeString &appendTo,
         //                input);
     }
     return appendTo;
-}
-
-class CharString {
- public:
-    CharString(const UnicodeString& str);
-    ~CharString();
-    operator char*() { return ptr; }
- private:
-    char buf[128];
-    char* ptr;
-};
-
-CharString::CharString(const UnicodeString& str) {
-    if (str.length() >= (int32_t)sizeof(buf)) {
-        ptr = new char[str.length() + 8];
-    } else {
-        ptr = buf;
-    }
-    str.extract(0, 0x7FFFFFFF, ptr, "");
-}
-
-CharString::~CharString() {
-    if (ptr != buf) {
-        delete[] ptr;
-    }
 }
 
 // Append a hex string to the target
