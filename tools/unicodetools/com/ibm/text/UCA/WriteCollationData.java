@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCA/WriteCollationData.java,v $ 
-* $Date: 2002/06/22 01:21:08 $ 
-* $Revision: 1.21 $
+* $Date: 2002/06/22 21:02:16 $ 
+* $Revision: 1.22 $
 *
 *******************************************************************************
 */
@@ -292,6 +292,7 @@ public class WriteCollationData implements UCD_Types, UCA_Types {
     
     
     static void writeConformance(String filename, byte option, boolean shortPrint)  throws IOException {
+        Default.setUCD();
         //UCD ucd30 = UCD.make("3.0.0");
         
 /*
@@ -405,12 +406,16 @@ U+01D5 LATIN CAPITAL LETTER U WITH DIAERESIS AND MACRON
             //log.println(source);
             char extra = source.charAt(source.length()-1);
             String clipped = source.substring(0, source.length()-1);
+            if (clipped.charAt(0) == LOW_ACCENT && extra != LOW_ACCENT) {
+                extra = LOW_ACCENT;
+                clipped = source.substring(1);
+            }
             if (!shortPrint) {
                 log.print(Utility.hex(source));
                 log.print(
                     ";\t# " + (extra != LOW_ACCENT ? extra : '.') + " " + ucd.getName(clipped, SHORT) + "\t" + UCA.toString(key));
             } else {
-                log.print(source + "\t" + Utility.hex(clipped));
+                log.print(Utility.hex(source) + "\t" + Utility.hex(clipped));
             }
             log.println();
         }
@@ -424,16 +429,40 @@ U+01D5 LATIN CAPITAL LETTER U WITH DIAERESIS AND MACRON
         addStringX(UTF32.valueOf32(x), option);
     }
     
-    static final char LOW_ACCENT = '\u0325';
+    static final char LOW_ACCENT = '\u0334';
+    static int addCounter = 0;
    
     static void addStringX(String s, byte option) {
+        int firstChar = UTF16.charAt(s,0);
+        // add characters with different strengths, to verify the order
         addStringY(s + 'a', option);
-        addStringY(s + 'A', option);
-        addStringY(s + 'á', option);
         addStringY(s + 'b', option);
-        addStringY(s + LOW_ACCENT, option);
+        addStringY(s + 'á', option);
+        addStringY(s + 'A', option);
         addStringY(s + '!', option);
+        if (option == SHIFTED && collator.isVariable(firstChar)) addStringY(s + LOW_ACCENT, option);
+        
+        // NOW, if the character decomposes, or is a combining mark (non-zero), try combinations
+        
+        if (Default.ucd.getCombiningClass(firstChar) > 0 
+            || !Default.nfd.isNormalized(s) && !Default.ucd.isHangulSyllable(firstChar)) {
+        // if it ends with a non-starter, try the decompositions.
+            String decomp = Default.nfd.normalize(s);
+            if (Default.ucd.getCombiningClass(UTF16.charAt(decomp, decomp.length()-1)) > 0) {
+                if (canIt == null) canIt = new CanonicalIterator(".");
+                canIt.setSource(s + LOW_ACCENT);
+                int limit = 4;
+                for (String can = canIt.next(); can != null; can = canIt.next()) {
+                    if (s.equals(can)) continue;
+                    if (--limit < 0) continue; // just include a sampling
+                    addStringY(can, option);
+                    // System.out.println(addCounter++ + " Adding " + Default.ucd.getCodeAndName(can));
+                }
+            }
+        }
     }
+    
+    static CanonicalIterator canIt = null;
     
     static char counter;
     
@@ -2162,7 +2191,7 @@ F900..FAFF; CJK Compatibility Ideographs
         
         Set additionalSet = new HashSet();
         System.out.println("Loading canonical iterator");
-        CanonicalIterator canIt = new CanonicalIterator(".");
+        if (canIt == null) canIt = new CanonicalIterator(".");
         Iterator it2 = contentsForCanonicalIteration.iterator();
         System.out.println("Adding any FCD equivalents that have different sort keys");
         while (it2.hasNext()) {

@@ -1,5 +1,5 @@
 # Fractional UCA Table, generated from standard UCA
-# M. Davis, Fri Jun 21 16:56:12 PDT 2002
+# M. Davis, Sat Jun 22 13:56:57 PDT 2002
 # VERSION: UCA=3.1.1d1, UCD=3.2.0
 
 # Generated processed version, as described in ICU design document.
