@@ -44,10 +44,10 @@ static void dotestname(const char *name, const char *standard, const char *expec
 
 void TestStandardNames()
 {
+#if  0
     int i, count;
     UErrorCode err;
 
-#if  0
     /* Iterate over all standards. */
  
     for (i = 0, count = ucnv_countStandards(); i < count; ++i) {

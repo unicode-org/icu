@@ -88,14 +88,14 @@ void TestCharLength()
     
     int16_t i;
     UBool multiple;
-    for(i=0; i<sizeof(codepoint)/sizeof(codepoint[0]); i=i+2){
+    for(i=0; i<sizeof(codepoint)/sizeof(codepoint[0]); i=(int16_t)(i+2)){
         UChar32 c=codepoint[i+1];
         if(UTF16_CHAR_LENGTH(c) != (uint16_t)codepoint[i]){
               log_err("The no: of code units for %lx:- Expected: %d Got: %d\n", c, codepoint[i], UTF16_CHAR_LENGTH(c));
         }else{
               log_verbose("The no: of code units for %lx is %d\n",c, UTF16_CHAR_LENGTH(c) ); 
         }
-        multiple=codepoint[i] == 1 ? FALSE : TRUE;
+        multiple=(UBool)(codepoint[i] == 1 ? FALSE : TRUE);
         if(UTF16_NEED_MULTIPLE_UCHAR(c) != multiple){
               log_err("ERROR: UTF16_NEED_MULTIPLE_UCHAR failed for %lx\n", c);
         }
@@ -147,15 +147,15 @@ void TestGetChar()
                 log_err("ERROR: UTF16_GET_CHAR_UNSAFE failed for offset=%ld. Expected:%lx Got:%lx\n", offset, result[i], c);
             }
         }
-         UTF16_GET_CHAR_SAFE(input, 0, offset, sizeof(input)/U_SIZEOF_UCHAR, c, FALSE);
-         if(c != result[i+1]){
-             log_err("ERROR: UTF16_GET_CHAR_SAFE failed for offset=%ld. Expected:%lx Got:%lx\n", offset, result[i+1], c);
-         }
-         UTF16_GET_CHAR_SAFE(input, 0, offset, sizeof(input)/U_SIZEOF_UCHAR, c, TRUE);
-         if(c != result[i+2]){
-             log_err("ERROR: UTF16_GET_CHAR_SAFE(strict) failed for offset=%ld. Expected:%lx Got:%lx\n", offset, result[i+2], c);
-         }
-         i=i+3;
+        UTF16_GET_CHAR_SAFE(input, 0, offset, sizeof(input)/U_SIZEOF_UCHAR, c, FALSE);
+        if(c != result[i+1]){
+            log_err("ERROR: UTF16_GET_CHAR_SAFE failed for offset=%ld. Expected:%lx Got:%lx\n", offset, result[i+1], c);
+        }
+        UTF16_GET_CHAR_SAFE(input, 0, offset, sizeof(input)/U_SIZEOF_UCHAR, c, TRUE);
+        if(c != result[i+2]){
+            log_err("ERROR: UTF16_GET_CHAR_SAFE(strict) failed for offset=%ld. Expected:%lx Got:%lx\n", offset, result[i+2], c);
+        }
+        i=(uint16_t)(i+3);
     }
 
 }
@@ -225,7 +225,7 @@ void TestNextPrevChar(){
          if(c != result[i+2]){
              log_err("ERROR: UTF16_NEXT_CHAR_SAFE(strict) failed for input=%ld. Expected:%lx Got:%lx\n", offset, result[i+2], c);
          }
-         i=i+6;
+         i=(uint16_t)(i+6);
     }
     i=0;
     for(offset=(uint16_t)sizeof(input)/U_SIZEOF_UCHAR; offset > 0; --offset){
@@ -256,7 +256,7 @@ void TestNextPrevChar(){
          if(c != result[i+5]){
              log_err("ERROR: UTF16_PREV_CHAR_SAFE(strict) failed for input=%ld. Expected:%lx Got:%lx\n", offset, result[i+5], c);
          }
-         i=i+6;
+         i=(uint16_t)(i+6);
     }
 
 }
@@ -431,7 +431,7 @@ void TestAppendChar(){
     uint16_t i, count=0;
     UChar *str=malloc(sizeof(UChar) * (u_strlen(s)+1));
     uint16_t offset;
-    for(i=0; i<sizeof(test)/sizeof(test[0]); i=i+2){
+    for(i=0; i<sizeof(test)/sizeof(test[0]); i=(uint16_t)(i+2)){
         if(count<5){
             u_strcpy(str, s);
             offset=(uint16_t)test[i];

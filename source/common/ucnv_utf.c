@@ -909,7 +909,7 @@ U_CFUNC UChar32 T_UConverter_getNextUChar_UTF16_BE(UConverterToUnicodeArgs* args
     }
 
     /*Gets the corresponding codepoint*/
-    first = ((uint16_t)(*(args->source)) << 8) |((uint8_t)*((args->source)+1));
+    first = (uint16_t)(((uint16_t)(*(args->source)) << 8) |((uint8_t)*((args->source)+1)));
     myUChar = first;
     args->source += 2;
 
@@ -922,7 +922,7 @@ U_CFUNC UChar32 T_UConverter_getNextUChar_UTF16_BE(UConverterToUnicodeArgs* args
         }
 
         /* get the second surrogate and assemble the code point */
-        second = ((uint16_t)(*(args->source)) << 8) |((uint8_t)*(args->source+1));
+        second = (uint16_t)(((uint16_t)(*(args->source)) << 8) |((uint8_t)*(args->source+1)));
 
         /* ignore unmatched surrogates and just deliver the first one in such a case */
         if(UTF_IS_SECOND_SURROGATE(second)) {
@@ -1093,7 +1093,7 @@ U_CFUNC UChar32 T_UConverter_getNextUChar_UTF16_LE(UConverterToUnicodeArgs* args
     }
 
     /*Gets the corresponding codepoint*/
-    first =  ((uint16_t)*((args->source)+1) << 8) | ((uint8_t)(*(args->source)));
+    first = (uint16_t)(((uint16_t)*((args->source)+1) << 8) | ((uint8_t)(*(args->source))));
     myUChar=first;
     /*updates the source*/
     args->source += 2;  
@@ -1109,7 +1109,7 @@ U_CFUNC UChar32 T_UConverter_getNextUChar_UTF16_LE(UConverterToUnicodeArgs* args
         }
 
         /* get the second surrogate and assemble the code point */
-        second = ((uint16_t)*(args->source+1) << 8) |((uint8_t)(*(args->source)));
+        second = (uint16_t)(((uint16_t)*(args->source+1) << 8) |((uint8_t)(*(args->source))));
 
         /* ignore unmatched surrogates and just deliver the first one in such a case */
         if(UTF_IS_SECOND_SURROGATE(second))
