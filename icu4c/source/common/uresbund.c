@@ -72,16 +72,6 @@ void entryIncrease(UResourceDataEntry *entry) {
         umtx_unlock(&resbMutex);
 }
 
-void entryDecrease(UResourceDataEntry *entry) {
-        umtx_lock(&resbMutex);
-        entry->fCountExisting++;
-        while(entry->fParent != NULL) {
-          entry = entry->fParent;
-          entry->fCountExisting++;
-        }
-        umtx_unlock(&resbMutex);
-}
-
 /**
  *  Internal function. Tries to find a resource in given Resource 
  *  Bundle, as well as in its parents
@@ -473,19 +463,6 @@ UResourceBundle *copyResb(UResourceBundle *r, const UResourceBundle *original, U
         return r;
     }
 }
-
-void copyResbFillIn(UResourceBundle *r, const UResourceBundle *original) {
-    if(r == NULL || original == NULL) {
-        return;
-    }
-    uprv_memcpy(r, original, sizeof(UResourceBundle));
-    ures_setIsStackObject(r, TRUE);
-    if(original->fData != NULL) {
-      entryIncrease(r->fData);
-    }
-}
-
-
 
 /**
  * Functions to retrieve data from resource bundles.

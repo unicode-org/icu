@@ -66,34 +66,16 @@ struct UResourceBundle {
     Resource fRes;
 };
 
-/*U_CFUNC UResourceBundle* ures_openNoFallback(UResourceBundle *r, const char* path, const char* localeID, UErrorCode* status);*/
 U_CFUNC UResourceBundle* ures_openNoFallback(const char* path, const char* localeID, UErrorCode* status);
 U_CFUNC const char* ures_getRealLocale(const UResourceBundle* resourceBundle, UErrorCode* status);
 U_CAPI void ures_setIsStackObject( UResourceBundle* resB, UBool state);
 U_CAPI UBool ures_isStackObject( UResourceBundle* resB, UErrorCode *status);
 
-/*U_CFUNC UChar** ures_listInstalledLocales(const char *path, int32_t* count);*/
 U_CFUNC const ResourceData *getFallbackData(const UResourceBundle* resBundle, const char* * resTag, UResourceDataEntry* *realData, Resource *res, UErrorCode *status);
 U_CFUNC int32_t hashBundle(const void *parm);
 U_CFUNC UBool compareBundles(const void *p1, const void *p2);
 
 /* Candidates for export */
 U_CFUNC UResourceBundle *copyResb(UResourceBundle *r, const UResourceBundle *original, UErrorCode *status);
-U_CFUNC void copyResbFillIn(UResourceBundle *dest, const UResourceBundle *original);
-U_CFUNC const char* ures_getName(const UResourceBundle* resB);
-U_CFUNC const char* ures_getPath(const UResourceBundle* resB);
-U_CFUNC const char* ures_getTag(const UResourceBundle* resB);
 U_CFUNC const ResourceData * ures_getResData(const UResourceBundle* resB);
-/*
-U_CAPI int32_t U_EXPORT2 ures_getStringArray(const UResourceBundle* resourceBundle, const char* resourceTag, const UChar** array, 
-                                             int32_t maxLen, UErrorCode* err);
-
-U_CAPI int32_t U_EXPORT2 ures_get2dStringArray(const UResourceBundle* resourceBundle, const char* resourceTag, const UChar*** matrix, 
-                              int32_t maxRows, int32_t cols, UErrorCode* err);
-
-U_CAPI int32_t U_EXPORT2 ures_getTaggedStringArray(const UResourceBundle* resourceBundle, const char* resourceTag, const char** itemTags, 
-                                                   const UChar** items, int32_t maxItems, 
-                                                   UErrorCode* err);
-
-*/
 #endif /*URESIMP_H*/
