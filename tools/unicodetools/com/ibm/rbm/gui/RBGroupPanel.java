@@ -346,8 +346,7 @@ class RBGroupPanel extends JPanel {
 	public void updateComponents() {
 		// Initialize components
 		if (bundle != null) {
-			initComponents();
-			/*jLabelGroupTitle.setText(bundle.name);
+			jLabelGroupTitle.setText(bundle.name);
 			
 			((GroupItemsTableModel)jTableGroupTable.getModel()).setGroup((BundleGroup)jComboBoxGroup.getSelectedItem());
 			jLabelGroupComment.setText(((BundleGroup)jComboBoxGroup.getSelectedItem()).getComment());
@@ -356,7 +355,7 @@ class RBGroupPanel extends JPanel {
 			
 			// Update the group comment
 			jLabelGroupComment.setText(((BundleGroup)jComboBoxGroup.getSelectedItem()).getComment());
-			*/
+			((GroupComboBoxModel)jComboBoxGroup.getModel()).update();
 		} else if (rbm != null) {
 			
 			// Update the list of groups
