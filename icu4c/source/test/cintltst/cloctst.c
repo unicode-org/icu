@@ -1529,10 +1529,13 @@ TestKeyInRootRecursive(UResourceBundle *root, UResourceBundle *currentBundle, co
         else if (ures_getType(subBundle) == RES_BINARY || ures_getType(subBundle) == RES_INT) {
             /* Can't do anything to check it */
             /* We'll assume it's all correct */
-            log_verbose("Skipping key \"%s\" in \"%s\" for locale \"%s\"\n",
-                    subBundleKey,
-                    ures_getKey(currentBundle),
-                    locale);
+            if (strcmp(subBundleKey, "LocaleID") != 0) {
+                log_verbose("Skipping key \"%s\" in \"%s\" for locale \"%s\"\n",
+                        subBundleKey,
+                        ures_getKey(currentBundle),
+                        locale);
+            }
+            /* Testing for LocaleID is done in testLCID */
         }
         else {
             log_err("Type %d for key \"%s\" in \"%s\" is unknown for locale \"%s\"\n",
