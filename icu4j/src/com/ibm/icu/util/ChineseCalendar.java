@@ -3,8 +3,8 @@
  * others. All Rights Reserved.
  *********************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/util/ChineseCalendar.java,v $
- * $Date: 2000/11/28 16:41:23 $
- * $Revision: 1.7 $
+ * $Date: 2000/11/28 22:17:49 $
+ * $Revision: 1.8 $
  */
 package com.ibm.util;
 import com.ibm.text.*;
@@ -97,13 +97,13 @@ public class ChineseCalendar extends Calendar {
 
     /**
      * Cache that maps Gregorian year to local days of winter solstice.
-     * @see winterSolstice
+     * @see #winterSolstice
      */
     private transient CalendarCache winterSolsticeCache = new CalendarCache();
 
     /**
      * Cache that maps Gregorian year to local days of Chinese new year.
-     * @see newYear
+     * @see #newYear
      */
     private transient CalendarCache newYearCache = new CalendarCache();
 
@@ -278,7 +278,7 @@ public class ChineseCalendar extends Calendar {
             { WEEK_OF_MONTH, DOW_LOCAL },
             { DAY_OF_WEEK_IN_MONTH, DOW_LOCAL },
             { DAY_OF_YEAR },
-            { RESOLVE_REMAP | DAY_OF_MONTH, ChineseCalendar.IS_LEAP_MONTH },
+            { RESOLVE_REMAP | DAY_OF_MONTH, IS_LEAP_MONTH },
         },
         {
             { WEEK_OF_YEAR },
@@ -295,6 +295,51 @@ public class ChineseCalendar extends Calendar {
      */
     protected int[][][] getFieldResolutionTable() {
         return CHINESE_DATE_PRECEDENCE;
+    }
+
+    /**
+     * Override Calendar to handle leap months properly.
+     */
+    public void add(int field, int amount) {
+        switch (field) {
+        case MONTH:
+            if (amount != 0) {
+                int dom = get(DAY_OF_MONTH);
+                int day = get(JULIAN_DAY) - EPOCH_JULIAN_DAY; // Get local day
+                int m = day - dom + 1; // New moon 
+                
+                // Move m as close as possible to the middle of the month
+                // before our target month.
+                m += (int) (CalendarAstronomer.SYNODIC_MONTH * (amount - 0.5));
+
+                // Search forward to the actual new moon
+                m = newMoonNear(m, true);
+
+                // Find the target dom
+                int jd = m + EPOCH_JULIAN_DAY - 1 + dom;
+
+                // Pin the dom.  In this calendar all months are 29 or 30 days
+                // so pinning just means handling dom 30.
+                DateFormat fmt = DateFormat.getInstance(this);
+                if (dom > 29) {
+                    set(JULIAN_DAY, jd-1);
+                    // TODO Fix this.  We really shouldn't ever have to
+                    // explicitly call complete().  This is either a bug in
+                    // this method, in ChineseCalendar, or in
+                    // Calendar.getActualMaximum().  I suspect the last.
+                    complete();
+                    if (getActualMaximum(DAY_OF_MONTH) >= dom) {
+                        set(JULIAN_DAY, jd);
+                    }
+                } else {
+                    set(JULIAN_DAY, jd);
+                }
+            }
+            break;
+        default:
+            super.add(field, amount);
+            break;
+        }
     }
 
     //------------------------------------------------------------------
@@ -616,6 +661,14 @@ public class ChineseCalendar extends Calendar {
      */
     protected int handleComputeMonthStart(int eyear, int month, boolean useMonth) {
 
+        // If the month is out of range, adjust it into range, and
+        // modify the extended year value accordingly.
+        if (month < 0 || month > 11) {
+            int[] rem = new int[1];
+            eyear += floorDivide(month, 12, rem);
+            month = rem[0];
+        }
+
         int gyear = eyear + CHINESE_EPOCH_YEAR - 1; // Gregorian year
         int newYear = newYear(gyear);
         int newMoon = newMoonNear(newYear + month * 29, true);
@@ -626,6 +679,7 @@ public class ChineseCalendar extends Calendar {
         int saveMonth = internalGet(MONTH);
         int saveIsLeapMonth = internalGet(IS_LEAP_MONTH);
 
+        // Ignore IS_LEAP_MONTH field if useMonth is false
         int isLeapMonth = useMonth ? saveIsLeapMonth : 0;
 
         computeGregorianFields(julianDay);
