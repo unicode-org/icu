@@ -137,15 +137,15 @@
  * @deprecated ICU 2.4. Use the macros in utf.h, utf16.h, utf8.h instead.
  */
 
+#ifndef __UTF_OLD_H__
+#define __UTF_OLD_H__
+
 #ifndef U_HIDE_DEPRECATED_API
 
 /* utf.h must be included first. */
 #ifndef __UTF_H__
 #   include "unicode/utf.h"
 #endif
-
-#ifndef __UTF_OLD_H__
-#define __UTF_OLD_H__
 
 /* Formerly utf.h, part 1 --------------------------------------------------- */
 
