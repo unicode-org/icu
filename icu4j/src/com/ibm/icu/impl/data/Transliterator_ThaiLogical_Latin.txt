@@ -1,4 +1,13 @@
-﻿# Thai-Latin
+﻿#--------------------------------------------------------------------
+# Copyright (c) 1999-2001, International Business Machines
+# Corporation and others. All Rights Reserved.
+#--------------------------------------------------------------------
+# $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/data/Attic/Transliterator_ThaiLogical_Latin.txt,v $
+# $Date: 2002/07/13 03:36:59 $
+# $Revision: 1.2 $
+#--------------------------------------------------------------------
+
+# Thai-Latin
 # This set of rules follows ISO 11940
 #	see http://homepage.mac.com/sirbinks/pdf/Thai.r2.pdf
 # except that that does not mention an implicit vowel, so we use ọ
