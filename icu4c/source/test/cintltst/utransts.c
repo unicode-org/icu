@@ -505,7 +505,7 @@ static void TestFilter() {
 
     for (i=0; i<DATA_length; i+=3) {
         /*u_uastrcpy(filt, DATA[i]);*/
-        u_charsToUChars(DATA[i], filt, strlen(DATA[i])+1);
+        u_charsToUChars(DATA[i], filt, (int32_t)strlen(DATA[i])+1);
         utrans_setFilter(hex, filt, -1, &status);
 
         if (U_FAILURE(status)) {
@@ -515,7 +515,7 @@ static void TestFilter() {
         }
         
         /*u_uastrcpy(buf, DATA[i+1]);*/
-        u_charsToUChars(DATA[i+1], buf, strlen(DATA[i+1])+1);
+        u_charsToUChars(DATA[i+1], buf, (int32_t)strlen(DATA[i+1])+1);
         limit = 5;
         utrans_transUChars(hex, buf, NULL, 128, 0, &limit, &status);
         
@@ -526,7 +526,7 @@ static void TestFilter() {
         }
         
         cbuf=aescstrdup(buf, -1);
-        u_charsToUChars(DATA[i+2], exp, strlen(DATA[i+2])+1);
+        u_charsToUChars(DATA[i+2], exp, (int32_t)strlen(DATA[i+2])+1);
         if (0 == u_strcmp(buf, exp)) {
             log_verbose("Ok: %s | %s -> %s\n", DATA[i+1], DATA[i], cbuf);
         } else {
