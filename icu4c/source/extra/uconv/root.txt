@@ -1,0 +1,81 @@
+// -*- Coding: utf-8; -*-  [all uconv resource files]
+// Copyright (c) 2000 IBM, Inc. and Others.
+// $Revision: 1.1 $
+//
+// Root translation file for uconv messages.
+// So you want to translate this file??? Great!
+// 1. copy it to a new name [ex: se.txt]
+//
+// 2. You might wish to comment out ALL lines, and then uncomment them
+//    as you add translations. That way, you don't inadvertently mark
+//    an untranslated English (or whatever) string as already
+//    translated. The base translation might change!
+// 
+// 3. These files are in UTF-8 format (even though root uses only
+//    ASCII)
+//
+// 4. Make note of the location of {0}, {1}, etc.. they are taken from
+//    arguments to u_wmsg() in order..
+//
+// 5. Add se.txt to RESSRC= in resfiles.mk and to the project file on 
+//    the Windows side.
+//
+// 6. Send it in to srl@jtcsv.com or ask on the ICU mailing list! thanks!
+        
+
+
+root
+{
+// uconv errors
+
+  usage { "Usage: uconv [flag] [file]\n"
+           "-f [codeset]  Convert file from this codeset\n"
+           "-t [codeset]  Convert file to this code set\n"
+           "-h            Show this help text\n"
+           "-l            List all available codepages\n" }
+
+
+  cantGetNames   { "Can''t get available converter names. {0}\n" } // 0: err
+   
+  noFromCodeset  { "No conversion from codeset given (use -f)\n" }
+  noToCodeset    {  "No conversion to codeset given (use -t)\n"  }
+
+  cantOpenFromCodeset { "Couldn''t open the from codeset {0}: {1}\n" }  // 0:set, 1: err
+  cantOpenToCodeset { "Couldn''t open the to codeset {0}: {1}\n" } // 0: set, 1: err
+
+  cantOpenInputF  { "Couldn''t open the input file \"{0}\", {1}.\n" } // 0: file, 1: strerror [OS error string]
+
+  cantWrite       { "The converted text couldn't be written: {0} \n" } // 0: OS error string
+  cantRead        { "Error reading from input file {0} \n" } // 0: OS error string
+
+  premEnd         { "Premature end of Unicode conversion to codepage\n" }
+  premEndInput    { "Premature end of input, when converting from codepage to Unicode\n" }
+
+  problemCvtToU   { "Conversion to Unicode from codepage failed - {0} \n" } // 0: err
+  problemCvtFromU { "Problem converting from Unicode to codepage - {0} \n"} // 0: err
+
+// ICU errors - used by u_wmsg_errorName()
+
+  U_USING_FALLBACK_ERROR       { "Using fallback data." }
+  U_USING_DEFAULT_ERROR        { "Using default data." }
+  U_ZERO_ERROR                 { "No error has occured!" }
+  U_ILLEGAL_ARGUMENT_ERROR     { "Illegal argument!" }
+  U_MISSING_RESOURCE_ERROR     { "A resource was missing" }
+  U_INVALID_FORMAT_ERROR       { "Invalid format." }
+  U_FILE_ACCESS_ERROR          { "Problem accessing that file/object." }
+  U_INTERNAL_PROGRAM_ERROR     { "Internal program error!!" }
+  U_MESSAGE_PARSE_ERROR        { "Parse error on message format" }
+  U_MEMORY_ALLOCATION_ERROR    { "Out of memory!" }
+  U_INDEX_OUTOFBOUNDS_ERROR    { "An index was out-of-bounds" }
+  U_PARSE_ERROR                { "Parse error" }
+  U_INVALID_CHAR_FOUND         { "Invalid character found" }
+  U_TRUNCATED_CHAR_FOUND       { "Truncated character found" }
+  U_ILLEGAL_CHAR_FOUND         { "Illegal character found" }
+  U_INVALID_TABLE_FORMAT       { "Invalid table data format" }
+  U_INVALID_TABLE_FILE         { "Invalid table data file" }
+  U_BUFFER_OVERFLOW_ERROR      { "Buffer overflow" }
+  U_UNSUPPORTED_ERROR          { "A feature was unsupported" }
+  U_RESOURCE_TYPE_MISMATCH     { "Resource type mismatch" }
+  U_ILLEGAL_ESCAPE_SEQUENCE    { "Illegal escape sequence found" }
+  U_UNSUPPORTED_ESCAPE_SEQUENCE {"Unsupported escape sequence found" }
+}

@@ -90,6 +90,12 @@ icu4c/source/data/build/sent.brk
 icu4c/source/data/build/word.brk
 icu4c/source/data/build/word_th.brk
 icu4c/source/extra/Makefile
+icu4c/source/extra/uconv/*.d
+icu4c/source/extra/uconv/Debug
+icu4c/source/extra/uconv/Makefile
+icu4c/source/extra/uconv/Release
+icu4c/source/extra/uconv/uconv
+icu4c/source/extra/uconv/uconvmsg
 icu4c/source/extra/ustdio/*.d
 icu4c/source/extra/ustdio/Debug
 icu4c/source/extra/ustdio/Makefile
