@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE localeData SYSTEM "./LocaleElements.dtd" >
+
+<!-- 
+	Copyright (C) 2000-2003, International Business Machines 
+	Corporation and others.  All Rights Reserved.
+ -->
+
+<localeData>
+	<versioning  >
+ 		<version number="1.0" date="Tue Jun 11 15:06:26 2002">Various notes and changes in version 1.0</version>
+	</versioning  >
+ 	<identity  >
+		<correspondsTo vendor="0026">Windows</correspondsTo>
+	</identity  >
+
+	<displayNames >
+		<languages >
+			<language id="lv" >Latviešu</language>
+		</languages >
+		<countries  >
+			<country id="LV">Latvija</country>
+		</countries  >
+
+	</displayNames >
+	<timeZoneNames>
+		<zone id="Africa/Casablanca" default="true">
+			<long>
+				<generic>GMT</generic>
+				<standard>GMT</standard>
+			</long>
+			<short>
+				<generic>Africa/Casablanca</generic>
+				<standard>GMT</standard>
+				<daylight>GMT</daylight>
+			</short>
+		</zone>
+	</timeZoneNames>
+	<calendars>
+		<calendar class="gregorian" default="true">
+			<monthNames>
+				<month id="1">janvāris</month>
+				<month id="2">februāris</month>
+				<month id="3">marts</month>
+				<month id="4">aprīlis</month>
+				<month id="5">maijs</month>
+				<month id="6">jūnijs</month>
+				<month id="7">jūlijs</month>
+				<month id="8">augusts</month>
+				<month id="9">septembris</month>
+				<month id="10">oktobris</month>
+				<month id="11">novembris</month>
+				<month id="12">decembris</month>
+			</monthNames>
+			<monthAbbr>
+				<month id="1">Jan</month>
+				<month id="2">Feb</month>
+				<month id="3">Mar</month>
+				<month id="4">Apr</month>
+				<month id="5">Maijs</month>
+				<month id="6">Jūn</month>
+				<month id="7">Jūl</month>
+				<month id="8">Aug</month>
+				<month id="9">Sep</month>
+				<month id="10">Okt</month>
+				<month id="11">Nov</month>
+				<month id="12">Dec</month>
+			</monthAbbr>
+			<dayNames>
+				<day id="1">svētdiena </day>
+				<day id="2">pirmdiena </day>
+				<day id="3">otrdiena </day>
+				<day id="4">trešdiena </day>
+				<day id="5">ceturtdiena </day>
+				<day id="6">piektdiena </day>
+				<day id="7">sestdiena </day>
+			</dayNames>
+			<dayAbbr>
+				<day id="1">Sv </day>
+				<day id="2">P </day>
+				<day id="3">O </day>
+				<day id="4">T </day>
+				<day id="5">C </day>
+				<day id="6">Pk </day>
+				<day id="7">S </day>
+			</dayAbbr>
+			<eras>
+				<era id="0">pmē</era>
+				<era id="1">mē</era>
+			</eras>
+			<am>AM</am><pm>PM</pm>
+			<patterns> 
+				<chars>GanjkHmsSEDFwWxhKzAe</chars>
+				<time>
+					<full>HH:mm:ss z</full>
+					<long>HH:mm:ss z</long>
+					<medium>HH:mm:ss</medium>
+					<short>HH:mm</short>
+				</time>
+				<date>
+					<full>EEEE, yyyy, d MMMM</full>
+					<long>EEEE, yyyy, d MMMM</long>
+					<medium>yyyy.d.M</medium>
+					<short>yy.d.M</short>
+				</date>
+ 				<dateTime>{1} {0} </dateTime>
+			</patterns>
+		</calendar>
+	</calendars>
+	<collation version="1.0" accentOrder="FORWARD" override="FALSE">
+		<collationElements>
+		<caseFirst>UPPER</caseFirst>
+		<after>C</after>
+		<gt1>č</gt1>
+		<gt3>Č</gt3>
+		<after>G</after>
+		<gt1>ģ</gt1>
+		<gt3>Ģ</gt3>
+		<after>I</after>
+		<gt1>y</gt1>
+		<gt3>Y</gt3>
+		<after>K</after>
+		<gt1>ķ</gt1>
+		<gt3>Ķ</gt3>
+		<after>L</after>
+		<gt1>ļ</gt1>
+		<gt3>Ļ</gt3>
+		<after>N</after>
+		<gt1>ņ</gt1>
+		<gt3>Ņ</gt3>
+		<after>S</after>
+		<gt1>š</gt1>
+		<gt3>Š</gt3>
+		<after>Z</after>
+		<gt1>ž</gt1>
+		<gt3>Ž</gt3>
+		</collationElements>
+	</collation>
+
+</localeData>

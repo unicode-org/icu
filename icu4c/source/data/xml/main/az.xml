@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE localeData SYSTEM "./LocaleElements.dtd" >
+
+<!-- 
+	Copyright (C) 2000-2003, International Business Machines 
+	Corporation and others.  All Rights Reserved.
+ -->
+
+<localeData>
+	<versioning  >
+ 		<version number="1.0" date="Tue Jun 11 15:06:06 2002">Various notes and changes in version 1.0</version>
+	</versioning  >
+ 	<identity  >
+		<correspondsTo vendor="002C">Windows</correspondsTo>
+	</identity  >
+	<calendars>
+		<calendar class="gregorian" default="true">
+			<monthNames>
+				<month id="1">Јанвар</month>
+				<month id="2">Феврал</month>
+				<month id="3">Март</month>
+				<month id="4">Апрел</month>
+				<month id="5">Мај</month>
+				<month id="6">Ијун</month>
+				<month id="7">Ијул</month>
+				<month id="8">Август</month>
+				<month id="9">Сентјабр</month>
+				<month id="10">Октјабр</month>
+				<month id="11">Нојабр</month>
+				<month id="12">Декабр</month>
+			</monthNames>
+			<monthAbbr>
+				<month id="1">Јан</month>
+				<month id="2">Фев</month>
+				<month id="3">Мар</month>
+				<month id="4">Апр</month>
+				<month id="5">Мај</month>
+				<month id="6">Ијун</month>
+				<month id="7">Ијул</month>
+				<month id="8">Авг</month>
+				<month id="9">Сен</month>
+				<month id="10">Окт</month>
+				<month id="11">Ноя</month>
+				<month id="12">Дек</month>
+			</monthAbbr>
+			<dayNames>
+				<day id="1">Базар </day>
+				<day id="2">Базар ертәси </day>
+				<day id="3">Чәршәнбә ахшамы </day>
+				<day id="4">Чәршәнбә </day>
+				<day id="5">Ҹүмә ахшамы </day>
+				<day id="6">Ҹүмә </day>
+				<day id="7">Шәнбә </day>
+			</dayNames>
+			<dayAbbr>
+				<day id="1">Б </day>
+				<day id="2">Бе </day>
+				<day id="3">Ча </day>
+				<day id="4">Ч </day>
+				<day id="5">Ҹа </day>
+				<day id="6">Ҹ </day>
+				<day id="7">Ш </day>
+			</dayAbbr>
+			<eras>
+				<era id="0">BC</era>
+				<era id="1">AD</era>
+			</eras>
+			<am>AM</am><pm>PM</pm>
+		</calendar>
+	</calendars>
+	<collation version="1.0" accentOrder="FORWARD" override="FALSE">
+		<collationElements>
+		<normalization>OFF</normalization>
+		</collationElements>
+	</collation>
+
+</localeData>

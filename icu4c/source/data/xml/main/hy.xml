@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE localeData SYSTEM "./LocaleElements.dtd" >
+
+<!-- 
+	Copyright (C) 2000-2003, International Business Machines 
+	Corporation and others.  All Rights Reserved.
+ -->
+
+<localeData>
+	<versioning  >
+ 		<version number="1.0" date="Tue Jun 11 15:06:20 2002">Various notes and changes in version 1.0</version>
+	</versioning  >
+ 	<identity  >
+		<correspondsTo vendor="002B">Windows</correspondsTo>
+	</identity  >
+
+	<displayNames >
+		<languages >
+			<language id="hy" >Հայերէն</language>
+		</languages >
+		<countries  >
+			<country id="AM">Հայաստանի Հանրապետութիւն</country>
+		</countries  >
+
+	</displayNames >
+	<calendars>
+		<calendar class="gregorian" default="true">
+			<monthNames>
+				<month id="1">Յունուար</month>
+				<month id="2">Փետրուար</month>
+				<month id="3">Մարտ</month>
+				<month id="4">Ապրիլ</month>
+				<month id="5">Մայիս</month>
+				<month id="6">Յունիս</month>
+				<month id="7">Յուլիս</month>
+				<month id="8">Օգոստոս</month>
+				<month id="9">Սեպտեմբեր</month>
+				<month id="10">Հոկտեմբեր</month>
+				<month id="11">Նոյեմբեր</month>
+				<month id="12">Դեկտեմբեր</month>
+			</monthNames>
+			<monthAbbr>
+				<month id="1">Յնր</month>
+				<month id="2">Փտր</month>
+				<month id="3">Մրտ</month>
+				<month id="4">Ապր</month>
+				<month id="5">Մյս</month>
+				<month id="6">Յնս</month>
+				<month id="7">Յլս</month>
+				<month id="8">Օգս</month>
+				<month id="9">Սեպ</month>
+				<month id="10">Հոկ</month>
+				<month id="11">Նոյ</month>
+				<month id="12">Դեկ</month>
+			</monthAbbr>
+			<dayNames>
+				<day id="1">Կիրակի </day>
+				<day id="2">Երկուշաբթի </day>
+				<day id="3">Երեքշաբթի </day>
+				<day id="4">Չորեքշաբթի </day>
+				<day id="5">Հինգշաբթի </day>
+				<day id="6">Ուրբաթ </day>
+				<day id="7">Շաբաթ </day>
+			</dayNames>
+			<dayAbbr>
+				<day id="1">Կիր </day>
+				<day id="2">Երկ </day>
+				<day id="3">Երք </day>
+				<day id="4">Չոր </day>
+				<day id="5">Հնգ </day>
+				<day id="6">Ուր </day>
+				<day id="7">Շաբ </day>
+			</dayAbbr>
+			<eras>
+				<era id="0">Յ․Տ․</era>
+				<era id="1">Ն․Ք․</era>
+			</eras>
+			<am>Առ․</am><pm>Եր․</pm>
+			<patterns> 
+				<time>
+					<full>HH:mm:ss z</full>
+					<long>HH:mm:ss z</long>
+					<medium>HH:mm:ss</medium>
+					<short>HH:mm</short>
+				</time>
+				<date>
+					<full>EEEE,MMMM d, yyyy</full>
+					<long>MMMM dd, yyyy</long>
+					<medium>MMM d, yyyy</medium>
+					<short>MM/dd/yy</short>
+				</date>
+ 				<dateTime>{1} {0} </dateTime>
+			</patterns>
+		</calendar>
+	</calendars>
+	<numberFormat class="decimal" default="true"> 
+		<patterns> 
+			<decimal>#0.###;-#0.###</decimal>
+			<percent>#0%</percent>
+			<scientific>#E0</scientific>
+		</patterns>
+	</numberFormat> 
+
+</localeData>

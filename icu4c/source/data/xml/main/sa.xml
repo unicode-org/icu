@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE localeData SYSTEM "./LocaleElements.dtd" >
+
+<!-- 
+	Copyright (C) 2000-2003, International Business Machines 
+	Corporation and others.  All Rights Reserved.
+ -->
+
+<localeData>
+	<versioning  >
+ 		<version number="1.0" date="Tue Jun 11 15:06:31 2002">Various notes and changes in version 1.0</version>
+	</versioning  >
+ 	<identity  >
+		<correspondsTo vendor="004F">Windows</correspondsTo>
+	</identity  >
+	<calendars>
+		<calendar class="gregorian" default="true">
+			<monthNames>
+				<month id="1">जनवरी</month>
+				<month id="2">फरवरी</month>
+				<month id="3">मार्च</month>
+				<month id="4">अप्रैल</month>
+				<month id="5">मई</month>
+				<month id="6">जून</month>
+				<month id="7">जुलाई</month>
+				<month id="8">अगस्त</month>
+				<month id="9">सितम्बर</month>
+				<month id="10">अक्तूबर</month>
+				<month id="11">नवम्बर</month>
+				<month id="12">दिसम्बर</month>
+			</monthNames>
+			<monthAbbr>
+				<month id="1">जनवरी</month>
+				<month id="2">फरवरी</month>
+				<month id="3">मार्च</month>
+				<month id="4">अप्रैल</month>
+				<month id="5">मई</month>
+				<month id="6">जून</month>
+				<month id="7">जुलाई</month>
+				<month id="8">अगस्त</month>
+				<month id="9">सितम्बर</month>
+				<month id="10">अक्तूबर</month>
+				<month id="11">नवम्बर</month>
+				<month id="12">दिसम्बर</month>
+			</monthAbbr>
+			<dayNames>
+				<day id="1">रविवासरः </day>
+				<day id="2">सोमवासरः </day>
+				<day id="3">मङ्गलवासरः </day>
+				<day id="4">बुधवासरः </day>
+				<day id="5">गुरुवासरः </day>
+				<day id="6">शुक्रवासरः </day>
+				<day id="7">शनिवासरः </day>
+			</dayNames>
+			<dayAbbr>
+				<day id="1">रविवासरः </day>
+				<day id="2">सोमवासरः </day>
+				<day id="3">मङ्गलवासरः </day>
+				<day id="4">बुधवासरः </day>
+				<day id="5">गुरुवासरः </day>
+				<day id="6">शुक्रवासरः </day>
+				<day id="7">शनिवासरः </day>
+			</dayAbbr>
+			<eras>
+				<era id="0">BC</era>
+				<era id="1">AD</era>
+			</eras>
+			<am>पूर्वाह्न</am><pm>अपराह्न</pm>
+		</calendar>
+	</calendars>
+	<numberFormat class="decimal" default="true"> 
+		<patterns> 
+			<decimal>##,##,##0.###;-##,##,##0.###</decimal>
+			<percent>##,##,##0%</percent>
+			<scientific>#E0</scientific>
+		</patterns>
+	</numberFormat> 
+	<collation version="1.0" accentOrder="FORWARD" override="FALSE">
+		<collationElements>
+		<normalization>OFF</normalization>
+		</collationElements>
+	</collation>
+
+</localeData>

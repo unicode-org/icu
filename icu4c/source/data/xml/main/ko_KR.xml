@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE localeData SYSTEM "./LocaleElements.dtd" >
+
+<!-- 
+	Copyright (C) 2000-2003, International Business Machines 
+	Corporation and others.  All Rights Reserved.
+ -->
+
+<localeData>
+	<versioning  >
+ 		<version number="1.0" date="Tue Jun 11 15:06:25 2002">Various notes and changes in version 1.0</version>
+	</versioning  >
+ 	<identity  >
+		<country id="KR" />
+		<correspondsTo vendor="0412">Windows</correspondsTo>
+	</identity  >
+	<calendars>
+		<calendar class="gregorian" default="true">
+			<patterns> 
+				<time>
+					<full>a h'시' mm'분' ss'초' z</full>
+					<long>a h'시' mm'분' ss'초'</long>
+					<medium>a h:mm:ss</medium>
+					<short>a h'시' mm'분'</short>
+				</time>
+				<date>
+					<full>yyyy'년' M'월' d'일' EEEE</full>
+					<long>yyyy'년' M'월' d'일' EE</long>
+					<medium>yyyy.MM.dd</medium>
+					<short>yy.MM.dd</short>
+				</date>
+ 				<dateTime>{1} {0} </dateTime>
+			</patterns>
+		</calendar>
+	</calendars>
+	<numberFormat class="decimal" default="true"> 
+		<patterns> 
+			<decimal>#,##0.###;-#,##0.###</decimal>
+			<percent>#,##0%</percent>
+			<scientific>#E0</scientific>
+		</patterns>
+	</numberFormat> 
+	<currencies>
+		<currency id="KRW" default="true">
+			<symbol>₩</symbol>
+			<name>KRW</name>
+			<decimal>.</decimal>
+			<pattern>¤#,##0.00;-¤#,##0.00</pattern>
+		</currency>
+	</currencies>
+
+</localeData>

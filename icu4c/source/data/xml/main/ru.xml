@@ -1,0 +1,297 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE localeData SYSTEM "./LocaleElements.dtd" >
+
+<!-- 
+	Copyright (C) 2000-2003, International Business Machines 
+	Corporation and others.  All Rights Reserved.
+ -->
+
+<localeData>
+	<versioning  >
+ 		<version number="1.0" date="Tue Jun 11 15:06:31 2002">Various notes and changes in version 1.0</version>
+	</versioning  >
+ 	<identity  >
+		<correspondsTo vendor="0019">Windows</correspondsTo>
+	</identity  >
+
+	<displayNames >
+		<languages >
+			<language id="aa" >Афар</language>
+			<language id="ab" >Абхазский</language>
+			<language id="af" >Африкаанс</language>
+			<language id="am" >Амхарский</language>
+			<language id="ar" >Арабский</language>
+			<language id="as" >Ассамский</language>
+			<language id="ay" >Аямара</language>
+			<language id="az" >Азербайджанский</language>
+			<language id="ba" >Башкирский</language>
+			<language id="be" >Белорусский</language>
+			<language id="bg" >Болгарский</language>
+			<language id="bh" >Бихарский</language>
+			<language id="bi" >Бислама</language>
+			<language id="bn" >Бенгальский</language>
+			<language id="bo" >Тибетский</language>
+			<language id="br" >Бретонский</language>
+			<language id="ca" >Каталанский</language>
+			<language id="co" >Корсиканский</language>
+			<language id="cs" >Чешский</language>
+			<language id="cy" >Валлийский</language>
+			<language id="da" >Датский</language>
+			<language id="de" >Немецкий</language>
+			<language id="dz" >Бутанский</language>
+			<language id="el" >Греческий</language>
+			<language id="en" >Английский</language>
+			<language id="eo" >Эсперанто</language>
+			<language id="es" >Испанский</language>
+			<language id="et" >Эстонский</language>
+			<language id="eu" >Баскский</language>
+			<language id="fa" >Персидский</language>
+			<language id="fi" >Финский</language>
+			<language id="fj" >Фиджи</language>
+			<language id="fo" >Фарерский</language>
+			<language id="fr" >Французский</language>
+			<language id="fy" >Фризский</language>
+			<language id="ga" >Ирландский</language>
+			<language id="gd" >Гаэльский</language>
+			<language id="gl" >Галицийский</language>
+			<language id="gn" >Гуарани</language>
+			<language id="gu" >Гуярати</language>
+			<language id="ha" >Хоса</language>
+			<language id="he" >Иврит</language>
+			<language id="hi" >Хинди</language>
+			<language id="hr" >Хорватский</language>
+			<language id="hu" >Венгерский</language>
+			<language id="hy" >Армянский</language>
+			<language id="ia" >Смешанный язык</language>
+			<language id="id" >Индонезийский</language>
+			<language id="ie" >Смешанный язык</language>
+			<language id="ik" >Инапиак</language>
+			<language id="is" >Исландский</language>
+			<language id="it" >Итальянский</language>
+			<language id="iu" >Инактитут</language>
+			<language id="ja" >Японский</language>
+			<language id="jw" >Яванский</language>
+			<language id="ka" >Грузинский</language>
+			<language id="kk" >Казахский</language>
+			<language id="kl" >Гренландский</language>
+			<language id="km" >Камбоджийский</language>
+			<language id="kn" >Канада</language>
+			<language id="ko" >Корейский</language>
+			<language id="ks" >Кашмирский</language>
+			<language id="ku" >Курдиш</language>
+			<language id="ky" >Киргизский</language>
+			<language id="la" >Латинский</language>
+			<language id="ln" >Лингала</language>
+			<language id="lo" >Лаосский</language>
+			<language id="lt" >Литовский</language>
+			<language id="lv" >Латвийский</language>
+			<language id="mg" >Малагасийский</language>
+			<language id="mi" >Маори</language>
+			<language id="mk" >Македонский</language>
+			<language id="ml" >Малаялам</language>
+			<language id="mn" >Монгольский</language>
+			<language id="mo" >Молдавский</language>
+			<language id="mr" >Маратийский</language>
+			<language id="ms" >Малайский</language>
+			<language id="mt" >Мальтийский</language>
+			<language id="my" >Бирманский</language>
+			<language id="na" >Науру</language>
+			<language id="ne" >Непальский</language>
+			<language id="nl" >Голландский</language>
+			<language id="no" >Норвежский</language>
+			<language id="oc" >Окитан</language>
+			<language id="om" >Оромо (Афан)</language>
+			<language id="or" >Ория</language>
+			<language id="pa" >Панджабский</language>
+			<language id="pl" >Польский</language>
+			<language id="ps" >Пашто (Пушто)</language>
+			<language id="pt" >Португальский</language>
+			<language id="qu" >Кечуа</language>
+			<language id="rm" >Раето-романский</language>
+			<language id="rn" >Кирундийский</language>
+			<language id="ro" >Румынский</language>
+			<language id="ru" >русский</language>
+			<language id="rw" >Кинярванда</language>
+			<language id="sa" >Санскрит</language>
+			<language id="sd" >Синди</language>
+			<language id="sg" >Санго</language>
+			<language id="sh" >Сербско-хорватский</language>
+			<language id="si" >Сингальский</language>
+			<language id="sk" >Словацкий</language>
+			<language id="sl" >Словенский</language>
+			<language id="sm" >Самоа</language>
+			<language id="sn" >Шона</language>
+			<language id="so" >Сомали</language>
+			<language id="sq" >Албанский</language>
+			<language id="sr" >Сербский</language>
+			<language id="ss" >Сисвати</language>
+			<language id="st" >Сесото</language>
+			<language id="su" >Санданизский</language>
+			<language id="sv" >Шведский</language>
+			<language id="sw" >Суахили</language>
+			<language id="ta" >Тамильский</language>
+			<language id="te" >Телугу</language>
+			<language id="tg" >Таджикский</language>
+			<language id="th" >Тайский</language>
+			<language id="ti" >Тигриниа</language>
+			<language id="tk" >Туркменский</language>
+			<language id="tl" >Тагалог</language>
+			<language id="tn" >Сетсвана</language>
+			<language id="to" >Тонга</language>
+			<language id="tr" >Турецкий</language>
+			<language id="ts" >Тсонга</language>
+			<language id="tt" >Татарский</language>
+			<language id="tw" >Тви</language>
+			<language id="ug" >Уйгурский</language>
+			<language id="uk" >Украинский</language>
+			<language id="ur" >Урду</language>
+			<language id="uz" >Узбекский</language>
+			<language id="vi" >Вьетнамский</language>
+			<language id="vo" >Волапак</language>
+			<language id="wo" >Волоф</language>
+			<language id="xh" >Хоза</language>
+			<language id="yi" >Идиш</language>
+			<language id="yo" >Йоруба</language>
+			<language id="za" >Зуанг</language>
+			<language id="zh" >Китайский</language>
+			<language id="zu" >Зулусский</language>
+		</languages >
+		<countries  >
+			<country id="AL">Албания</country>
+			<country id="AS">Азия</country>
+			<country id="AT">Австрия</country>
+			<country id="AU">Австралия</country>
+			<country id="BA">Босния</country>
+			<country id="BE">Бельгия</country>
+			<country id="BG">Болгария</country>
+			<country id="BR">Бразилия</country>
+			<country id="CA">Канада</country>
+			<country id="CH">Швейцария</country>
+			<country id="CN">Китай (КНР)</country>
+			<country id="CZ">Чехия</country>
+			<country id="DE">Германия</country>
+			<country id="DK">Дания</country>
+			<country id="EE">Эстония</country>
+			<country id="ES">Испания</country>
+			<country id="FI">Финляндия</country>
+			<country id="FR">Франция</country>
+			<country id="GB">Великобритания</country>
+			<country id="GR">Греция</country>
+			<country id="HR">Хорватия</country>
+			<country id="HU">Венгрия</country>
+			<country id="IE">Ирландия</country>
+			<country id="IL">╚тЁшЄ</country>
+			<country id="IS">Исландия</country>
+			<country id="IT">Италия</country>
+			<country id="JP">Япония</country>
+			<country id="KR">Корея</country>
+			<country id="LA">Латинская Америка</country>
+			<country id="LT">Литва</country>
+			<country id="LV">Латвия</country>
+			<country id="MK">Македония</country>
+			<country id="NL">Нидерланды</country>
+			<country id="NO">Норвегия</country>
+			<country id="NZ">Новая Зеландия</country>
+			<country id="PL">Польша</country>
+			<country id="PT">Португалия</country>
+			<country id="RO">Румыния</country>
+			<country id="RU">Россия</country>
+			<country id="SE">Швеция</country>
+			<country id="SI">Словения</country>
+			<country id="SK">Словакия</country>
+			<country id="SP">Сербия</country>
+			<country id="TH">Таиланд</country>
+			<country id="TR">Турция</country>
+			<country id="TW">Тайвань</country>
+			<country id="US">США</country>
+			<country id="ZA">ЮАР</country>
+		</countries  >
+
+	</displayNames >
+	<timeZoneNames>
+		<zone id="Africa/Casablanca" default="true">
+			<long>
+				<generic>GMT</generic>
+				<standard>GMT</standard>
+			</long>
+			<short>
+				<generic>Africa/Casablanca</generic>
+				<standard>GMT</standard>
+				<daylight>GMT</daylight>
+			</short>
+		</zone>
+	</timeZoneNames>
+	<calendars>
+		<calendar class="gregorian" default="true">
+			<monthNames>
+				<month id="1">Январь</month>
+				<month id="2">Февраль</month>
+				<month id="3">Март</month>
+				<month id="4">Апрель</month>
+				<month id="5">Май</month>
+				<month id="6">Июнь</month>
+				<month id="7">Июль</month>
+				<month id="8">Август</month>
+				<month id="9">Сентябрь</month>
+				<month id="10">Октябрь</month>
+				<month id="11">Ноябрь</month>
+				<month id="12">Декабрь</month>
+			</monthNames>
+			<monthAbbr>
+				<month id="1">янв</month>
+				<month id="2">фев</month>
+				<month id="3">мар</month>
+				<month id="4">апр</month>
+				<month id="5">май</month>
+				<month id="6">июн</month>
+				<month id="7">июл</month>
+				<month id="8">авг</month>
+				<month id="9">сен</month>
+				<month id="10">окт</month>
+				<month id="11">ноя</month>
+				<month id="12">дек</month>
+			</monthAbbr>
+			<dayNames>
+				<day id="1">воскресенье </day>
+				<day id="2">понедельник </day>
+				<day id="3">вторник </day>
+				<day id="4">среда </day>
+				<day id="5">четверг </day>
+				<day id="6">пятница </day>
+				<day id="7">суббота </day>
+			</dayNames>
+			<dayAbbr>
+				<day id="1">Вс </day>
+				<day id="2">Пн </day>
+				<day id="3">Вт </day>
+				<day id="4">Ср </day>
+				<day id="5">Чт </day>
+				<day id="6">Пт </day>
+				<day id="7">Сб </day>
+			</dayAbbr>
+			<eras>
+				<era id="0">до н.э.</era>
+				<era id="1">н.э.</era>
+			</eras>
+			<am>AM</am><pm>PM</pm>
+			<patterns> 
+				<chars>GanjkHmsSEDFwWxhKzAe</chars>
+				<time>
+					<full>H:mm:ss z</full>
+					<long>H:mm:ss z</long>
+					<medium>H:mm:ss</medium>
+					<short>H:mm</short>
+				</time>
+				<date>
+					<full>d MMMM yyyy 'г.'</full>
+					<long>d MMMM yyyy 'г.'</long>
+					<medium>dd.MM.yyyy</medium>
+					<short>dd.MM.yy</short>
+				</date>
+ 				<dateTime>{1} {0} </dateTime>
+			</patterns>
+		</calendar>
+	</calendars>
+
+</localeData>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE localeData SYSTEM "./LocaleElements.dtd" >
+
+<!-- 
+	Copyright (C) 2000-2003, International Business Machines 
+	Corporation and others.  All Rights Reserved.
+ -->
+
+<localeData>
+	<versioning  >
+ 		<version number="1.0" date="Tue Jun 11 15:06:07 2002">Various notes and changes in version 1.0</version>
+	</versioning  >
+ 	<identity  >
+		<country id="CZ" />
+		<correspondsTo vendor="0405">Windows</correspondsTo>
+	</identity  >
+	<numberFormat class="decimal" default="true"> 
+		<patterns> 
+			<decimal>#,##0.##;-#,##0.##</decimal>
+			<percent>#,##0%</percent>
+			<scientific>#E0</scientific>
+		</patterns>
+	</numberFormat> 
+	<currencies>
+		<currency id="CZK" default="true">
+			<symbol>Kč</symbol>
+			<name>CZK</name>
+			<decimal>,</decimal>
+		</currency>
+	</currencies>
+
+</localeData>

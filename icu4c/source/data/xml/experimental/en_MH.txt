@@ -1,0 +1,24 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 1997-2002, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+
+en_MH {
+    Version{ "x0.1" }
+    CurrencyElements { 
+        "$",
+        "USD",
+        ".",
+    }
+//    LocaleString { "en_MH" }
+    NumberPatterns { 
+        "#,##0.###;-#,##0.###",
+        "\u00A4#,##0.00;(\u00A4#,##0.00)",
+        "#,##0%",
+        "#E0",
+    }
+//    ShortCountry { "MHL" }
+    LocaleID:int { 0x0409 }
+}

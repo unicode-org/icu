@@ -1,0 +1,350 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE localeData SYSTEM "./LocaleElements.dtd" >
+
+<!-- 
+	Copyright (C) 2000-2003, International Business Machines 
+	Corporation and others.  All Rights Reserved.
+ -->
+
+<localeData>
+	<versioning  >
+ 		<version number="1.0" date="Tue Jun 11 15:06:31 2002">Various notes and changes in version 1.0</version>
+	</versioning  >
+ 	<identity  >
+		<correspondsTo vendor="081A">Windows</correspondsTo>
+	</identity  >
+
+	<displayNames >
+		<languages >
+			<language id="af" >Afrikanerski</language>
+			<language id="ar" >Arapski</language>
+			<language id="be" >Beloruski</language>
+			<language id="bg" >Bugarski</language>
+			<language id="br" >Bretonski</language>
+			<language id="ca" >Katalonski</language>
+			<language id="co" >Korzikanski</language>
+			<language id="cs" >Češki</language>
+			<language id="da" >Danski</language>
+			<language id="de" >Nemački</language>
+			<language id="el" >Grčki</language>
+			<language id="en" >Engleski</language>
+			<language id="es" >Španski</language>
+			<language id="et" >Estonski</language>
+			<language id="eu" >Baskijski</language>
+			<language id="fa" >Persijski</language>
+			<language id="fi" >Finski</language>
+			<language id="fr" >Francuski</language>
+			<language id="ga" >Irski</language>
+			<language id="he" >Hebrejski</language>
+			<language id="hr" >Hrvatski</language>
+			<language id="hu" >Mađarski</language>
+			<language id="hy" >Armenski</language>
+			<language id="id" >Indonezijski</language>
+			<language id="is" >Islandski</language>
+			<language id="it" >Italijanski</language>
+			<language id="ja" >Japanski</language>
+			<language id="ka" >Gruzijski</language>
+			<language id="km" >Kambodžanski</language>
+			<language id="ko" >Korejski</language>
+			<language id="ku" >Kurdski</language>
+			<language id="ky" >Kirgiski</language>
+			<language id="la" >Latinski</language>
+			<language id="lt" >Litvanski</language>
+			<language id="lv" >Letonski</language>
+			<language id="mk" >Makedonski</language>
+			<language id="mn" >Mongolski</language>
+			<language id="mo" >Moldavski</language>
+			<language id="my" >Burmanski</language>
+			<language id="nl" >Holandski</language>
+			<language id="no" >Norveški</language>
+			<language id="pl" >Poljski</language>
+			<language id="pt" >Portugalski</language>
+			<language id="rm" >Reto-Romanski</language>
+			<language id="ro" >Rumunski</language>
+			<language id="ru" >Ruski</language>
+			<language id="sh" >Srpsko-Hrvatski</language>
+			<language id="sk" >Slovački</language>
+			<language id="sl" >Slovenački</language>
+			<language id="sq" >Albanski</language>
+			<language id="sr" >Srpski</language>
+			<language id="sv" >Švedski</language>
+			<language id="sw" >Svahili</language>
+			<language id="tr" >Turski</language>
+			<language id="uk" >Ukrajnski</language>
+			<language id="vi" >Vijetnamski</language>
+			<language id="yi" >Jidiš</language>
+			<language id="zh" >Kineski</language>
+		</languages >
+		<countries  >
+			<country id="AD">Andora</country>
+			<country id="AE">Ujedinjeni Arapski Emirati</country>
+			<country id="AF">Avganistan</country>
+			<country id="AL">Albanija</country>
+			<country id="AM">Armenija</country>
+			<country id="AN">Holandski Antili</country>
+			<country id="AT">Austrija</country>
+			<country id="AU">Australija</country>
+			<country id="AZ">Azerbejdžan</country>
+			<country id="BA">Bosna i Hercegovina</country>
+			<country id="BD">Bangladeš</country>
+			<country id="BE">Belgija</country>
+			<country id="BG">Bugarska</country>
+			<country id="BH">Bahrein</country>
+			<country id="BN">Brunej</country>
+			<country id="BO">Bolivija</country>
+			<country id="BS">Bahami</country>
+			<country id="BT">Butan</country>
+			<country id="BW">Bocvana</country>
+			<country id="BY">Belorusija</country>
+			<country id="BZ">Belise</country>
+			<country id="CA">Kanada</country>
+			<country id="CF">Centralno Afrička Republika</country>
+			<country id="CG">Kongo</country>
+			<country id="CH">Švajcarska</country>
+			<country id="CI">Obala Slonovače</country>
+			<country id="CL">Čile</country>
+			<country id="CM">Kamerun</country>
+			<country id="CN">Kina</country>
+			<country id="CO">Kolumbija</country>
+			<country id="CR">Kostarika</country>
+			<country id="CU">Kuba</country>
+			<country id="CY">Kipar</country>
+			<country id="CZ">Češka</country>
+			<country id="DE">Nemačka</country>
+			<country id="DJ">Džibuti</country>
+			<country id="DK">Danska</country>
+			<country id="DM">Dominika</country>
+			<country id="DO">Dominikanska Republika</country>
+			<country id="DZ">Alžir</country>
+			<country id="EC">Ekvador</country>
+			<country id="EE">Estonija</country>
+			<country id="EG">Egipat</country>
+			<country id="EH">Zapadna Sahara</country>
+			<country id="ER">Eritreja</country>
+			<country id="ES">Španija</country>
+			<country id="ET">Etiopija</country>
+			<country id="FI">Finska</country>
+			<country id="FJ">Fidži</country>
+			<country id="FM">Mikronezija</country>
+			<country id="FR">Francuska</country>
+			<country id="GB">Velika Britanija</country>
+			<country id="GE">Gruzija</country>
+			<country id="GF">Francuska Gvajana</country>
+			<country id="GH">Gana</country>
+			<country id="GM">Gambija</country>
+			<country id="GN">Gvineja</country>
+			<country id="GP">Gvadelupe</country>
+			<country id="GQ">Ekvatorijalna Gvineja</country>
+			<country id="GR">Grčka</country>
+			<country id="GT">Gvatemala</country>
+			<country id="GW">Gvineja-Bisao</country>
+			<country id="GY">Gvajana</country>
+			<country id="HR">Hrvatska</country>
+			<country id="HU">Mađarska</country>
+			<country id="ID">Indonezija</country>
+			<country id="IE">Irska</country>
+			<country id="IL">Izrael</country>
+			<country id="IN">Indija</country>
+			<country id="IQ">Irak</country>
+			<country id="IS">Island</country>
+			<country id="IT">Italija</country>
+			<country id="JM">Jamajka</country>
+			<country id="KE">Kenija</country>
+			<country id="KG">Kirgistan</country>
+			<country id="KH">Kambodža</country>
+			<country id="KP">Severna Koreja</country>
+			<country id="KR">Južna Koreja</country>
+			<country id="KW">Kuvajt</country>
+			<country id="KZ">Kazahstan</country>
+			<country id="LB">Liban</country>
+			<country id="LI">Lihenštajn</country>
+			<country id="LK">Šrilanka</country>
+			<country id="LR">Liberija</country>
+			<country id="LS">Lesoto</country>
+			<country id="LT">Litvanija</country>
+			<country id="LU">Luksemburg</country>
+			<country id="LV">Letonija</country>
+			<country id="LY">Libija</country>
+			<country id="MA">Maroko</country>
+			<country id="MC">Monako</country>
+			<country id="MD">Moldavija</country>
+			<country id="MG">Madagaskar</country>
+			<country id="MK">Makedonija</country>
+			<country id="MM">Mijnamar</country>
+			<country id="MN">Mongolija</country>
+			<country id="MQ">Martinik</country>
+			<country id="MR">Mauritanija</country>
+			<country id="MU">Mauricius</country>
+			<country id="MX">Meksiko</country>
+			<country id="MY">Malezija</country>
+			<country id="MZ">Mozambik</country>
+			<country id="NA">Namibija</country>
+			<country id="NC">Nova Kaledonija</country>
+			<country id="NG">Nigerija</country>
+			<country id="NI">Nikaragva</country>
+			<country id="NL">Holandija</country>
+			<country id="NO">Norveška</country>
+			<country id="NZ">Novi Zeland</country>
+			<country id="PF">Francuska Polinezija</country>
+			<country id="PG">Papua Nova Gvineja</country>
+			<country id="PH">Filipini</country>
+			<country id="PL">Poljska</country>
+			<country id="PR">Porto Riko</country>
+			<country id="PY">Paragvaj</country>
+			<country id="QA">Katar</country>
+			<country id="RO">Rumunija</country>
+			<country id="RU">Rusija</country>
+			<country id="RW">Ruanda</country>
+			<country id="SA">Saudijska Arabija</country>
+			<country id="SC">Sejšeli</country>
+			<country id="SE">Švedska</country>
+			<country id="SG">Singapur</country>
+			<country id="SI">Slovenija</country>
+			<country id="SK">Slovačka</country>
+			<country id="SL">Sijera Leone</country>
+			<country id="SO">Somalija</country>
+			<country id="SP">Srbija</country>
+			<country id="SR">Surinam</country>
+			<country id="SV">Salvador</country>
+			<country id="SY">Sirija</country>
+			<country id="SZ">Svazilend</country>
+			<country id="TD">Čad</country>
+			<country id="TF">Francuske Južne Teritorije</country>
+			<country id="TH">Tajland</country>
+			<country id="TJ">Tadžikistan</country>
+			<country id="TN">Tunis</country>
+			<country id="TR">Turska</country>
+			<country id="TT">Trinidad i Tobago</country>
+			<country id="TW">Tajvan</country>
+			<country id="TZ">Tanzanija</country>
+			<country id="UA">Ukrajina</country>
+			<country id="US">Sjedinjene Američke Države</country>
+			<country id="UY">Urugvaj</country>
+			<country id="VA">Vatikan</country>
+			<country id="VE">Venecuela</country>
+			<country id="VG">Britanska Devičanska Ostrva</country>
+			<country id="VI">S.A.D. Devičanska Ostrva</country>
+			<country id="VN">Vijetnam</country>
+			<country id="YE">Jemen</country>
+			<country id="YU">Jugoslavija</country>
+			<country id="ZA">Južna Afrika</country>
+			<country id="ZM">Zambija</country>
+			<country id="ZR">Zair</country>
+			<country id="ZW">Zimbabve</country>
+		</countries  >
+
+	</displayNames >
+	<timeZoneNames>
+		<zone id="Europe/Belgrade" default="true">
+			<long>
+				<generic>Centralno Evropsko Vreme</generic>
+				<standard>Centralno Evropsko Letnje Vreme</standard>
+			</long>
+			<short>
+				<generic>Europe/Belgrade</generic>
+				<standard>CET</standard>
+				<daylight>CET</daylight>
+			</short>
+		</zone>
+	</timeZoneNames>
+	<calendars>
+		<calendar class="gregorian" default="true">
+			<monthNames>
+				<month id="1">januar</month>
+				<month id="2">februar</month>
+				<month id="3">mart</month>
+				<month id="4">april</month>
+				<month id="5">maj</month>
+				<month id="6">juni</month>
+				<month id="7">juli</month>
+				<month id="8">avgust</month>
+				<month id="9">septembar</month>
+				<month id="10">oktobar</month>
+				<month id="11">novembar</month>
+				<month id="12">decembar</month>
+			</monthNames>
+			<monthAbbr>
+				<month id="1">jan</month>
+				<month id="2">feb</month>
+				<month id="3">mar</month>
+				<month id="4">apr</month>
+				<month id="5">maj</month>
+				<month id="6">jun</month>
+				<month id="7">jul</month>
+				<month id="8">avg</month>
+				<month id="9">sep</month>
+				<month id="10">okt</month>
+				<month id="11">nov</month>
+				<month id="12">dec</month>
+			</monthAbbr>
+			<dayNames>
+				<day id="1">nedelja </day>
+				<day id="2">ponedeljak </day>
+				<day id="3">utorak </day>
+				<day id="4">sreda </day>
+				<day id="5">četvrtak </day>
+				<day id="6">petak </day>
+				<day id="7">subota </day>
+			</dayNames>
+			<dayAbbr>
+				<day id="1">ned </day>
+				<day id="2">pon </day>
+				<day id="3">uto </day>
+				<day id="4">sre </day>
+				<day id="5">čet </day>
+				<day id="6">pet </day>
+				<day id="7">sub </day>
+			</dayAbbr>
+			<eras>
+				<era id="0">p. n. e.</era>
+				<era id="1">n. e.</era>
+			</eras>
+			<am>AM</am><pm>PM</pm>
+			<patterns> 
+				<chars>GanjkHmsSEDFwWxhKzAe</chars>
+				<time>
+					<full>HH.mm.ss z</full>
+					<long>HH.mm.ss z</long>
+					<medium>HH.mm.ss</medium>
+					<short>HH.mm</short>
+				</time>
+				<date>
+					<full>EEEE, dd. MMMM yyyy.</full>
+					<long>EEEE, d.MM.yyyy.</long>
+					<medium>dd.MM.yyyy.</medium>
+					<short>d.M.yy.</short>
+				</date>
+ 				<dateTime>{1} {0} </dateTime>
+			</patterns>
+		</calendar>
+	</calendars>
+	<collation version="2.0" accentOrder="FORWARD" override="FALSE">
+		<collationElements>
+		<after>C</after>
+		<gt1>č</gt1>
+		<gt3>Č</gt3>
+		<gt1>ć</gt1>
+		<gt3>Ć</gt3>
+		<after>Đ</after>
+		<gt1>dž</gt1>
+		<gt3>Dž</gt3>
+		<gt3>DŽ</gt3>
+		<after>L</after>
+		<gt1>lj</gt1>
+		<gt3>Lj</gt3>
+		<gt3>LJ</gt3>
+		<after>N</after>
+		<gt1>nj</gt1>
+		<gt3>Nj</gt3>
+		<gt3>NJ</gt3>
+		<after>S</after>
+		<gt1>š</gt1>
+		<gt3>Š</gt3>
+		<after>Z</after>
+		<gt1>ž</gt1>
+		<gt3>Ž</gt3>
+		</collationElements>
+	</collation>
+
+</localeData>

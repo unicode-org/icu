@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE localeData SYSTEM "./LocaleElements.dtd" >
+
+<!-- 
+	Copyright (C) 2000-2003, International Business Machines 
+	Corporation and others.  All Rights Reserved.
+ -->
+
+<localeData>
+	<versioning  >
+ 		<version number="1.0" date="Tue Jun 11 15:06:07 2002">Various notes and changes in version 1.0</version>
+	</versioning  >
+ 	<identity  >
+		<correspondsTo vendor="0005">Windows</correspondsTo>
+	</identity  >
+
+	<displayNames >
+		<languages >
+			<language id="cs" >čeština</language>
+		</languages >
+		<countries  >
+			<country id="CZ">Česká republika</country>
+		</countries  >
+
+	</displayNames >
+	<timeZoneNames>
+		<zone id="Africa/Casablanca" default="true">
+			<long>
+				<generic>GMT</generic>
+				<standard>GMT</standard>
+			</long>
+			<short>
+				<generic>Africa/Casablanca</generic>
+				<standard>GMT</standard>
+				<daylight>GMT</daylight>
+			</short>
+		</zone>
+	</timeZoneNames>
+	<calendars>
+		<calendar class="gregorian" default="true">
+			<monthNames>
+				<month id="1">leden</month>
+				<month id="2">únor</month>
+				<month id="3">březen</month>
+				<month id="4">duben</month>
+				<month id="5">květen</month>
+				<month id="6">červen</month>
+				<month id="7">červenec</month>
+				<month id="8">srpen</month>
+				<month id="9">září</month>
+				<month id="10">říjen</month>
+				<month id="11">listopad</month>
+				<month id="12">prosinec</month>
+			</monthNames>
+			<monthAbbr>
+				<month id="1">I</month>
+				<month id="2">II</month>
+				<month id="3">III</month>
+				<month id="4">IV</month>
+				<month id="5">V</month>
+				<month id="6">VI</month>
+				<month id="7">VII</month>
+				<month id="8">VIII</month>
+				<month id="9">IX</month>
+				<month id="10">X</month>
+				<month id="11">XI</month>
+				<month id="12">XII</month>
+			</monthAbbr>
+			<dayNames>
+				<day id="1">neděle </day>
+				<day id="2">pondělí </day>
+				<day id="3">úterý </day>
+				<day id="4">středa </day>
+				<day id="5">čtvrtek </day>
+				<day id="6">pátek </day>
+				<day id="7">sobota </day>
+			</dayNames>
+			<dayAbbr>
+				<day id="1">ne </day>
+				<day id="2">po </day>
+				<day id="3">út </day>
+				<day id="4">st </day>
+				<day id="5">čt </day>
+				<day id="6">pá </day>
+				<day id="7">so </day>
+			</dayAbbr>
+			<eras>
+				<era id="0">př.Kr.</era>
+				<era id="1">po Kr.</era>
+			</eras>
+			<am>dop.</am><pm>odp.</pm>
+			<patterns> 
+				<chars>GuMtkHmsSEDFwWahKzUe</chars>
+				<time>
+					<full>H:mm:ss z</full>
+					<long>H:mm:ss z</long>
+					<medium>H:mm:ss</medium>
+					<short>H:mm</short>
+				</time>
+				<date>
+					<full>EEEE, d. MMMM yyyy</full>
+					<long>d. MMMM yyyy</long>
+					<medium>d.M.yyyy</medium>
+					<short>d.M.yy</short>
+				</date>
+ 				<dateTime>{1} {0} </dateTime>
+			</patterns>
+		</calendar>
+	</calendars>
+	<collation version="1.0" accentOrder="FORWARD" override="FALSE">
+		<collationElements>
+		<after>C</after>
+		<gt1>č</gt1>
+		<gt3>Č</gt3>
+		<after>H</after>
+		<gt1>ch</gt1>
+		<gt3>cH</gt3>
+		<gt3>Ch</gt3>
+		<gt3>CH</gt3>
+		<after>R</after>
+		<gt1>ř</gt1>
+		<gt3>Ř</gt3>
+		<after>S</after>
+		<gt1>š</gt1>
+		<gt3>Š</gt3>
+		<after>Z</after>
+		<gt1>ž</gt1>
+		<gt3>Ž</gt3>
+		</collationElements>
+	</collation>
+
+</localeData>

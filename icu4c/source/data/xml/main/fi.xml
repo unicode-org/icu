@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE localeData SYSTEM "./LocaleElements.dtd" >
+
+<!-- 
+	Copyright (C) 2000-2003, International Business Machines 
+	Corporation and others.  All Rights Reserved.
+ -->
+
+<localeData>
+	<versioning  >
+ 		<version number="1.0" date="Tue Jun 11 15:06:16 2002">Various notes and changes in version 1.0</version>
+	</versioning  >
+ 	<identity  >
+		<correspondsTo vendor="000B">Windows</correspondsTo>
+	</identity  >
+
+	<displayNames >
+		<languages >
+			<language id="ar" >arabia</language>
+			<language id="az" >azerbaizani</language>
+			<language id="ba" >baski</language>
+			<language id="be" >valkovenäjä</language>
+			<language id="bg" >bulgaria</language>
+			<language id="bh" >bihari</language>
+			<language id="bn" >bengali</language>
+			<language id="ca" >katalaani</language>
+			<language id="cs" >tsekki</language>
+			<language id="da" >tanska</language>
+			<language id="de" >saksa</language>
+			<language id="el" >kreikka</language>
+			<language id="en" >englanti</language>
+			<language id="es" >espanja</language>
+			<language id="et" >viro</language>
+			<language id="fa" >farsi</language>
+			<language id="fi" >suomi</language>
+			<language id="fr" >ranska</language>
+			<language id="he" >heprea</language>
+			<language id="hi" >hindi</language>
+			<language id="hr" >kroatia</language>
+			<language id="hu" >unkari</language>
+			<language id="id" >indonesia</language>
+			<language id="it" >italia</language>
+			<language id="ja" >japani</language>
+			<language id="ka" >georgia</language>
+			<language id="kk" >kazakki</language>
+			<language id="km" >khmer</language>
+			<language id="kn" >kannada</language>
+			<language id="ko" >korea</language>
+			<language id="ku" >kurdi</language>
+			<language id="la" >latinalainen</language>
+			<language id="lt" >liettua</language>
+			<language id="lv" >latvia</language>
+			<language id="mk" >makedonia</language>
+			<language id="mr" >marathi</language>
+			<language id="my" >burma</language>
+			<language id="nl" >hollanti</language>
+			<language id="no" >norja</language>
+			<language id="pl" >puola</language>
+			<language id="pt" >portugali</language>
+			<language id="ro" >romania</language>
+			<language id="ru" >venäjä</language>
+			<language id="sk" >slovakia</language>
+			<language id="sl" >slovenia</language>
+			<language id="sq" >albania</language>
+			<language id="sr" >serbia</language>
+			<language id="sv" >ruotsi</language>
+			<language id="sw" >swahili</language>
+			<language id="te" >telugu</language>
+			<language id="th" >thai</language>
+			<language id="tk" >tagalog</language>
+			<language id="tr" >turkki</language>
+			<language id="uk" >ukraina</language>
+			<language id="ur" >urdu</language>
+			<language id="uz" >uzbekki</language>
+			<language id="zh" >kiina</language>
+		</languages >
+		<countries  >
+			<country id="AE">Yhdistyneet Arabiemiraatit</country>
+			<country id="AT">Itävalta</country>
+			<country id="BA">Bosnia</country>
+			<country id="BE">Belgia</country>
+			<country id="BR">Brasilia</country>
+			<country id="BY">Valko-Venäjä</country>
+			<country id="CA">Kanada</country>
+			<country id="CH">Sveitsi</country>
+			<country id="CN">Kiina</country>
+			<country id="CO">Kolumbia</country>
+			<country id="CZ">Tsekin tasavalta</country>
+			<country id="DE">Saksa</country>
+			<country id="DK">Tanska</country>
+			<country id="DO">Dominikaaninen tasavalta</country>
+			<country id="EC">Equador</country>
+			<country id="EE">Viro</country>
+			<country id="EG">Egypti</country>
+			<country id="ES">Espanja</country>
+			<country id="FI">Suomi</country>
+			<country id="FR">Ranska</country>
+			<country id="GB">Iso-Britannia</country>
+			<country id="GR">Kreikka</country>
+			<country id="HK">Hongknog, erit.hall.alue</country>
+			<country id="HR">Kroatia</country>
+			<country id="HU">Unkari</country>
+			<country id="IE">Irlanti</country>
+			<country id="IN">Intia</country>
+			<country id="IS">Islanti</country>
+			<country id="IT">Italia</country>
+			<country id="JO">Jordania</country>
+			<country id="JP">Japani</country>
+			<country id="KR">Korea</country>
+			<country id="LA">Latinalainen Amerikka</country>
+			<country id="LB">Libanon</country>
+			<country id="LT">Liettua</country>
+			<country id="LU">Luxemburg</country>
+			<country id="MA">Marokko</country>
+			<country id="MK">Makedonia (FYR)</country>
+			<country id="MO">Macao, erit.hall.alue</country>
+			<country id="MX">Meksiko</country>
+			<country id="NL">Alankomaat</country>
+			<country id="NO">Norja</country>
+			<country id="NZ">Uusi Seelanti</country>
+			<country id="PL">Puola</country>
+			<country id="PT">Portugali</country>
+			<country id="RU">Venäjä</country>
+			<country id="SA">Saudi-Arabia</country>
+			<country id="SE">Ruotsi</country>
+			<country id="SY">Syyria</country>
+			<country id="TH">Thaimaa</country>
+			<country id="TR">Turkki</country>
+			<country id="UA">Ukraina</country>
+			<country id="US">Yhdysvallat</country>
+			<country id="YE">Jemen</country>
+			<country id="ZA">Etelä-Afrikka</country>
+		</countries  >
+
+	</displayNames >
+	<timeZoneNames>
+		<zone id="Africa/Casablanca" default="true">
+			<long>
+				<generic>GMT</generic>
+				<standard>GMT</standard>
+			</long>
+			<short>
+				<generic>Africa/Casablanca</generic>
+				<standard>GMT</standard>
+				<daylight>GMT</daylight>
+			</short>
+		</zone>
+	</timeZoneNames>
+	<calendars>
+		<calendar class="gregorian" default="true">
+			<monthNames>
+				<month id="1">tammikuu</month>
+				<month id="2">helmikuu</month>
+				<month id="3">maaliskuu</month>
+				<month id="4">huhtikuu</month>
+				<month id="5">toukokuu</month>
+				<month id="6">kesäkuu</month>
+				<month id="7">heinäkuu</month>
+				<month id="8">elokuu</month>
+				<month id="9">syyskuu</month>
+				<month id="10">lokakuu</month>
+				<month id="11">marraskuu</month>
+				<month id="12">joulukuu</month>
+			</monthNames>
+			<monthAbbr>
+				<month id="1">tammi</month>
+				<month id="2">helmi</month>
+				<month id="3">maalis</month>
+				<month id="4">huhti</month>
+				<month id="5">touko</month>
+				<month id="6">kesä</month>
+				<month id="7">heinä</month>
+				<month id="8">elo</month>
+				<month id="9">syys</month>
+				<month id="10">loka</month>
+				<month id="11">marras</month>
+				<month id="12">joulu</month>
+			</monthAbbr>
+			<dayNames>
+				<day id="1">sunnuntai </day>
+				<day id="2">maanantai </day>
+				<day id="3">tiistai </day>
+				<day id="4">keskiviikko </day>
+				<day id="5">torstai </day>
+				<day id="6">perjantai </day>
+				<day id="7">lauantai </day>
+			</dayNames>
+			<dayAbbr>
+				<day id="1">su </day>
+				<day id="2">ma </day>
+				<day id="3">ti </day>
+				<day id="4">ke </day>
+				<day id="5">to </day>
+				<day id="6">pe </day>
+				<day id="7">la </day>
+			</dayAbbr>
+			<eras>
+				<era id="0">BC</era>
+				<era id="1">AD</era>
+			</eras>
+			<am>AM</am><pm>PM</pm>
+			<patterns> 
+				<chars>GanjkHmsSEDFwWxhKzAe</chars>
+				<time>
+					<full>HH:mm:ss z</full>
+					<long>HH:mm:ss z</long>
+					<medium>HH:mm:ss</medium>
+					<short>HH:mm</short>
+				</time>
+				<date>
+					<full>d. MMMM'ta 'yyyy</full>
+					<long>d. MMMM'ta 'yyyy</long>
+					<medium>d.M.yyyy</medium>
+					<short>d.M.yyyy</short>
+				</date>
+ 				<dateTime>{1} {0} </dateTime>
+			</patterns>
+		</calendar>
+	</calendars>
+	<collation version="1.0" accentOrder="FORWARD" override="FALSE">
+		<collationElements>
+		<after>V</after>
+		<gt2>w</gt2>
+		<gt3>W</gt3>
+		<after>Z</after>
+		<gt1>å</gt1>
+		<gt3>Å</gt3>
+		<gt1>ä</gt1>
+		<gt3>Ä</gt3>
+		<gt1>ö</gt1>
+		<gt3>Ö</gt3>
+		<gt1>ő</gt1>
+		<gt3>Ő</gt3>
+		<gt2>ø</gt2>
+		<gt3>Ø</gt3>
+		<after>Y</after>
+		<gt2>ű</gt2>
+		<gt3>Ű</gt3>
+		<gt2>ü</gt2>
+		<gt3>Ü</gt3>
+		</collationElements>
+	</collation>
+
+</localeData>

@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE localeData SYSTEM "./LocaleElements.dtd" >
+
+<!-- 
+	Copyright (C) 2000-2003, International Business Machines 
+	Corporation and others.  All Rights Reserved.
+ -->
+
+<localeData>
+	<versioning  >
+ 		<version number="1.0" date="Tue Jun 11 15:06:20 2002">Various notes and changes in version 1.0</version>
+	</versioning  >
+ 	<identity  >
+		<correspondsTo vendor="001A">Windows</correspondsTo>
+	</identity  >
+
+	<displayNames >
+		<languages >
+			<language id="hr" >hrvatski</language>
+		</languages >
+		<countries  >
+			<country id="HR">Hrvatska</country>
+		</countries  >
+
+	</displayNames >
+	<timeZoneNames>
+		<zone id="Africa/Casablanca" default="true">
+			<long>
+				<generic>GMT</generic>
+				<standard>GMT</standard>
+			</long>
+			<short>
+				<generic>Africa/Casablanca</generic>
+				<standard>GMT</standard>
+				<daylight>GMT</daylight>
+			</short>
+		</zone>
+	</timeZoneNames>
+	<calendars>
+		<calendar class="gregorian" default="true">
+			<monthNames>
+				<month id="1">siječanj</month>
+				<month id="2">veljača</month>
+				<month id="3">ožujak</month>
+				<month id="4">travanj</month>
+				<month id="5">svibanj</month>
+				<month id="6">lipanj</month>
+				<month id="7">srpanj</month>
+				<month id="8">kolovoz</month>
+				<month id="9">rujan</month>
+				<month id="10">listopad</month>
+				<month id="11">studeni</month>
+				<month id="12">prosinac</month>
+			</monthNames>
+			<monthAbbr>
+				<month id="1">sij</month>
+				<month id="2">vel</month>
+				<month id="3">ožu</month>
+				<month id="4">tra</month>
+				<month id="5">svi</month>
+				<month id="6">lip</month>
+				<month id="7">srp</month>
+				<month id="8">kol</month>
+				<month id="9">ruj</month>
+				<month id="10">lis</month>
+				<month id="11">stu</month>
+				<month id="12">pro</month>
+			</monthAbbr>
+			<dayNames>
+				<day id="1">nedjelja </day>
+				<day id="2">ponedjeljak </day>
+				<day id="3">utorak </day>
+				<day id="4">srijeda </day>
+				<day id="5">četvrtak </day>
+				<day id="6">petak </day>
+				<day id="7">subota </day>
+			</dayNames>
+			<dayAbbr>
+				<day id="1">ned </day>
+				<day id="2">pon </day>
+				<day id="3">uto </day>
+				<day id="4">sri </day>
+				<day id="5">čet </day>
+				<day id="6">pet </day>
+				<day id="7">sub </day>
+			</dayAbbr>
+			<eras>
+				<era id="0">BC</era>
+				<era id="1">AD</era>
+			</eras>
+			<am>AM</am><pm>PM</pm>
+			<patterns> 
+				<chars>GanjkHmsSEDFwWxhKzAe</chars>
+				<time>
+					<full>HH:mm:ss z</full>
+					<long>HH:mm:ss z</long>
+					<medium>HH:mm:ss</medium>
+					<short>HH:mm</short>
+				</time>
+				<date>
+					<full>yyyy. MMMM dd</full>
+					<long>yyyy. MMMM dd</long>
+					<medium>yyyy.MM.dd</medium>
+					<short>yyyy.MM.dd</short>
+				</date>
+ 				<dateTime>{1} {0} </dateTime>
+			</patterns>
+		</calendar>
+	</calendars>
+	<collation version="2.0" accentOrder="FORWARD" override="FALSE">
+		<collationElements>
+		<after>C</after>
+		<gt1>č</gt1>
+		<gt3>Č</gt3>
+		<gt1>ć</gt1>
+		<gt3>Ć</gt3>
+		<after>Đ</after>
+		<gt1>dž</gt1>
+		<gt3>Dž</gt3>
+		<gt3>DŽ</gt3>
+		<after>L</after>
+		<gt1>lj</gt1>
+		<gt3>Lj</gt3>
+		<gt3>LJ</gt3>
+		<after>N</after>
+		<gt1>nj</gt1>
+		<gt3>Nj</gt3>
+		<gt3>NJ</gt3>
+		<after>S</after>
+		<gt1>š</gt1>
+		<gt3>Š</gt3>
+		<after>Z</after>
+		<gt1>ž</gt1>
+		<gt3>Ž</gt3>
+		</collationElements>
+	</collation>
+
+</localeData>

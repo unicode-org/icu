@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE localeData SYSTEM "./LocaleElements.dtd" >
+
+<!-- 
+	Copyright (C) 2000-2003, International Business Machines 
+	Corporation and others.  All Rights Reserved.
+ -->
+
+<localeData>
+	<versioning  >
+ 		<version number="1.0" date="Tue Jun 11 15:06:21 2002">Various notes and changes in version 1.0</version>
+	</versioning  >
+ 	<identity  >
+		<country id="AM" />
+		<variant id="REVISED" />
+		<correspondsTo vendor="042B">Windows</correspondsTo>
+	</identity  >
+	<calendars>
+		<calendar class="gregorian" default="true">
+			<monthNames>
+				<month id="1">Հունվար</month>
+				<month id="2">Փետրվար</month>
+				<month id="3">Մարտ</month>
+				<month id="4">Ապրիլ</month>
+				<month id="5">Մայիս</month>
+				<month id="6">Հունիս</month>
+				<month id="7">Հուլիս</month>
+				<month id="8">Օգոստոս</month>
+				<month id="9">Սեպտեմբեր</month>
+				<month id="10">Հոկտեմբեր</month>
+				<month id="11">Նոյեմբեր</month>
+				<month id="12">Դեկտեմբեր</month>
+			</monthNames>
+			<monthAbbr>
+				<month id="1">Հնվ</month>
+				<month id="2">Փտվ</month>
+				<month id="3">Մրտ</month>
+				<month id="4">Ապր</month>
+				<month id="5">Մյս</month>
+				<month id="6">Հնս</month>
+				<month id="7">Հլս</month>
+				<month id="8">Օգս</month>
+				<month id="9">Սեպ</month>
+				<month id="10">Հոկ</month>
+				<month id="11">Նոյ</month>
+				<month id="12">Դեկ</month>
+			</monthAbbr>
+			<eras>
+				<era id="0">Մ․Թ․Ա․</era>
+				<era id="1">Մ․Թ․</era>
+			</eras>
+			<am>Առ․</am><pm>Կե․</pm>
+			<patterns> 
+				<time>
+					<full>HH:mm:ss z</full>
+					<long>H:mm:ss z</long>
+					<medium>h:mm:ss</medium>
+					<short>h:mm</short>
+				</time>
+				<date>
+					<full>EEEE,d MMMM, yyyy</full>
+					<long>d MMMM yyyy</long>
+					<medium>d MMM yyyy</medium>
+					<short>dd-MM-yy</short>
+				</date>
+ 				<dateTime>{1} {0} </dateTime>
+			</patterns>
+		</calendar>
+	</calendars>
+	<numberFormat class="decimal" default="true"> 
+		<patterns> 
+			<decimal>#0.###;-#0.###</decimal>
+			<percent>#0%</percent>
+			<scientific>#E0</scientific>
+		</patterns>
+	</numberFormat> 
+
+</localeData>

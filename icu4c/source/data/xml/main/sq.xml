@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE localeData SYSTEM "./LocaleElements.dtd" >
+
+<!-- 
+	Copyright (C) 2000-2003, International Business Machines 
+	Corporation and others.  All Rights Reserved.
+ -->
+
+<localeData>
+	<versioning  >
+ 		<version number="1.0" date="Tue Jun 11 15:06:32 2002">Various notes and changes in version 1.0</version>
+	</versioning  >
+ 	<identity  >
+		<correspondsTo vendor="001C">Windows</correspondsTo>
+	</identity  >
+
+	<displayNames >
+		<languages >
+			<language id="sq" >shqipe</language>
+		</languages >
+		<countries  >
+			<country id="AL">Shqipëria</country>
+		</countries  >
+
+	</displayNames >
+	<timeZoneNames>
+		<zone id="Africa/Casablanca" default="true">
+			<long>
+				<generic>GMT</generic>
+				<standard>GMT</standard>
+			</long>
+			<short>
+				<generic>Africa/Casablanca</generic>
+				<standard>GMT</standard>
+				<daylight>GMT</daylight>
+			</short>
+		</zone>
+	</timeZoneNames>
+	<calendars>
+		<calendar class="gregorian" default="true">
+			<monthNames>
+				<month id="1">janar</month>
+				<month id="2">shkurt</month>
+				<month id="3">mars</month>
+				<month id="4">prill</month>
+				<month id="5">maj</month>
+				<month id="6">qershor</month>
+				<month id="7">korrik</month>
+				<month id="8">gusht</month>
+				<month id="9">shtator</month>
+				<month id="10">tetor</month>
+				<month id="11">nëntor</month>
+				<month id="12">dhjetor</month>
+			</monthNames>
+			<monthAbbr>
+				<month id="1">Jan</month>
+				<month id="2">Shk</month>
+				<month id="3">Mar</month>
+				<month id="4">Pri</month>
+				<month id="5">Maj</month>
+				<month id="6">Qer</month>
+				<month id="7">Kor</month>
+				<month id="8">Gsh</month>
+				<month id="9">Sht</month>
+				<month id="10">Tet</month>
+				<month id="11">Nën</month>
+				<month id="12">Dhj</month>
+			</monthAbbr>
+			<dayNames>
+				<day id="1">e diel </day>
+				<day id="2">e hënë </day>
+				<day id="3">e martë </day>
+				<day id="4">e mërkurë </day>
+				<day id="5">e enjte </day>
+				<day id="6">e premte </day>
+				<day id="7">e shtunë </day>
+			</dayNames>
+			<dayAbbr>
+				<day id="1">Die </day>
+				<day id="2">Hën </day>
+				<day id="3">Mar </day>
+				<day id="4">Mër </day>
+				<day id="5">Enj </day>
+				<day id="6">Pre </day>
+				<day id="7">Sht </day>
+			</dayAbbr>
+			<eras>
+				<era id="0">p.e.r.</era>
+				<era id="1">n.e.r.</era>
+			</eras>
+			<am>PD</am><pm>MD</pm>
+			<patterns> 
+				<chars>GanjkHmsSEDFwWxhKzAe</chars>
+				<time>
+					<full>h.mm.ss.a z</full>
+					<long>h.mm.ss.a z</long>
+					<medium>h:mm:ss.a</medium>
+					<short>h.mm.a</short>
+				</time>
+				<date>
+					<full>EEEE, dd MMMM yyyy</full>
+					<long>dd MMMM yyyy</long>
+					<medium>yyyy-MM-dd</medium>
+					<short>yy-MM-dd</short>
+				</date>
+ 				<dateTime>{1} {0} </dateTime>
+			</patterns>
+		</calendar>
+	</calendars>
+	<collation version="1.0" accentOrder="FORWARD" override="FALSE">
+		<collationElements>
+		</collationElements>
+	</collation>
+
+</localeData>

@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE localeData SYSTEM "./LocaleElements.dtd" >
+
+<!-- 
+	Copyright (C) 2000-2003, International Business Machines 
+	Corporation and others.  All Rights Reserved.
+ -->
+
+<localeData>
+	<versioning  >
+ 		<version number="1.0" date="Tue Jun 11 15:06:09 2002">Various notes and changes in version 1.0</version>
+	</versioning  >
+ 	<identity  >
+		<correspondsTo vendor="0065">Windows</correspondsTo>
+	</identity  >
+	<calendars>
+		<calendar class="gregorian" default="true">
+			<monthNames>
+				<month id="1">ޖެނުއަރީ</month>
+				<month id="2">ފެބުރުއަރީ</month>
+				<month id="3">މާޗް</month>
+				<month id="4">އެޕްރިލް</month>
+				<month id="5">މޭއި</month>
+				<month id="6">ޖޫން</month>
+				<month id="7">ޖޫލާއި</month>
+				<month id="8">އޯގަސްޓް</month>
+				<month id="9">ސެޕްޓެމްބަރު</month>
+				<month id="10">އޮކްޓޯބަރު</month>
+				<month id="11">ނޮވެމްބަރު</month>
+				<month id="12">ޑިސެމްބަރު</month>
+			</monthNames>
+			<monthAbbr>
+				<month id="1">ޖެނުއަރީ</month>
+				<month id="2">ފެބުރުއަރީ</month>
+				<month id="3">މާޗް</month>
+				<month id="4">އެޕްރިލް</month>
+				<month id="5">މޭއި</month>
+				<month id="6">ޖޫން</month>
+				<month id="7">ޖޫލާއި</month>
+				<month id="8">އޯގަސްޓް</month>
+				<month id="9">ސެޕްޓެމްބަރު</month>
+				<month id="10">އޮކްޓޯބަރު</month>
+				<month id="11">ނޮވެމްބަރު</month>
+				<month id="12">ޑިސެމްބަރު</month>
+			</monthAbbr>
+			<dayNames>
+				<day id="1">އާދީއްތަދުވަސް </day>
+				<day id="2">ހޯމަދުވަސް </day>
+				<day id="3">އަންގާރަދުވަސް </day>
+				<day id="4">ބުދަދުވަސް </day>
+				<day id="5">ބުރާސްފަތިދުވަސް </day>
+				<day id="6">ހުކުރުދުވަސް </day>
+				<day id="7">ހޮނިހިރުދުވަސް </day>
+			</dayNames>
+			<dayAbbr>
+				<day id="1">އާދީއްތަ </day>
+				<day id="2">ހޯމަ </day>
+				<day id="3">އަންގާރަ </day>
+				<day id="4">ބުދަ </day>
+				<day id="5">ބުރާސްފަތި </day>
+				<day id="6">ހުކުރު </day>
+				<day id="7">ހޮނިހިރު </day>
+			</dayAbbr>
+			<eras>
+				<era id="0">BC</era>
+				<era id="1">AD</era>
+			</eras>
+			<am>މކ</am><pm>މފ</pm>
+		</calendar>
+	</calendars>
+	<numberFormat class="decimal" default="true"> 
+		<patterns> 
+			<decimal>#,##,##0.###;-#,##,##0.###</decimal>
+			<percent>#,##,##0%</percent>
+			<scientific>#E0</scientific>
+		</patterns>
+	</numberFormat> 
+	<collation version="1.0" accentOrder="FORWARD" override="FALSE">
+		<collationElements>
+		<normalization>OFF</normalization>
+		</collationElements>
+	</collation>
+
+</localeData>
