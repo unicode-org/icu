@@ -507,10 +507,10 @@ UnicodeString& Transliterator::getDisplayName(const UnicodeString& ID,
     // Suspend checking status until later...
 
     // build the char* key
-    char key[100];
+    char key[200];
     uprv_strcpy(key, RB_DISPLAY_NAME_PREFIX);
     int32_t length=(int32_t)uprv_strlen(RB_DISPLAY_NAME_PREFIX);
-    key[length + ID.extract(0, (int32_t)(sizeof(key)-length-1), key+length, "")]=0;
+    ID.extract(0, (int32_t)(sizeof(key)-length), key+length, "");
 
     // Try to retrieve a UnicodeString from the bundle.
     UnicodeString resString = bundle.getStringEx(key, status);
@@ -557,7 +557,7 @@ UnicodeString& Transliterator::getDisplayName(const UnicodeString& ID,
             status = U_ZERO_ERROR;
             uprv_strcpy(key, RB_SCRIPT_DISPLAY_NAME_PREFIX);
             args[j].getString(s);
-            key[length + s.extract(0, sizeof(key)-length-1, key+length, "")]=0;
+            s.extract(0, sizeof(key)-length-1, key+length, "");
 
             resString = bundle.getStringEx(key, status);
 
