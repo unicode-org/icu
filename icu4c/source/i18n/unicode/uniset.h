@@ -365,12 +365,12 @@ public:
     UBool operator!=(const UnicodeSet& o) const;
 
     /**
-     * Returns a copy of this object.  All UnicodeFilter objects have
+     * Returns a copy of this object.  All UnicodeMatcher objects have
      * to support cloning in order to allow classes using
-     * UnicodeFilters, such as Transliterator, to implement cloning.
+     * UnicodeMatchers, such as Transliterator, to implement cloning.
      * @draft
      */
-    virtual UnicodeFilter* clone() const;
+    virtual UnicodeMatcher* clone() const;
 
     /**
      * Returns the hash code value for this set.
@@ -691,7 +691,7 @@ private:
      * is the given value.  This is used by <tt>RuleBasedTransliterator</tt> for
      * indexing.
      */
-    UBool containsIndexValue(uint8_t v) const;
+    virtual UBool matchesIndexValue(uint8_t v) const;
 
 private:
 

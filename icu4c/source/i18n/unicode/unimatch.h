@@ -11,6 +11,7 @@
 #include "unicode/utypes.h"
 
 class Replaceable;
+class UnicodeString;
 
 /**
  * Constants returned by <code>UnicodeMatcher::matches()</code>
@@ -60,6 +61,13 @@ public:
     virtual ~UnicodeMatcher();
 
     /**
+     * Returns a copy of this object.  All UnicodeMatcher objects have
+     * to support cloning in order to allow classes using
+     * UnicodeMatchers to implement cloning.
+     */
+    virtual UnicodeMatcher* clone() const = 0;
+
+    /**
      * Return a UMatchDegree value indicating the degree of match for
      * the given text at the given offset.  Zero, one, or more
      * characters may be matched.
@@ -105,6 +113,28 @@ public:
                                  int32_t& offset,
                                  int32_t limit,
                                  UBool incremental) const = 0;
+
+    /**
+     * Returns a string representation of this matcher.  If the result of
+     * calling this function is passed to the appropriate parser, it
+     * will produce another matcher that is equal to this one.
+     * @param result the string to receive the pattern.  Previous
+     * contents will be deleted.
+     * @param escapeUnprintable if TRUE then convert unprintable
+     * character to their hex escape representations, \uxxxx or
+     * \Uxxxxxxxx.  Unprintable characters are those other than
+     * U+000A, U+0020..U+007E.
+     */
+    virtual UnicodeString& toPattern(UnicodeString& result,
+                                     UBool escapeUnprintable = FALSE) const = 0;
+
+    /**
+     * Returns TRUE if this matcher will match a character c, where c
+     * & 0xFF == v, at offset, in the forward direction (with limit >
+     * offset).  This is used by <tt>RuleBasedTransliterator</tt> for
+     * indexing.
+     */
+    virtual UBool matchesIndexValue(uint8_t v) const = 0;
 
 protected:
 

@@ -22,7 +22,7 @@ public:
     NullFilter(const NullFilter& f) : UnicodeFilter(f) { result = f.result; }
     virtual ~NullFilter() {}
     virtual UBool contains(UChar32 /*c*/) const { return result; }
-    virtual UnicodeFilter* clone() const { return new NullFilter(*this); }
+    virtual UnicodeMatcher* clone() const { return new NullFilter(*this); }
 };
 
 class UnicodeNotFilter : public UnicodeFilter {
@@ -32,15 +32,15 @@ public:
     UnicodeNotFilter(const UnicodeNotFilter&);
     virtual ~UnicodeNotFilter();
     virtual UBool contains(UChar32 c) const;
-    virtual UnicodeFilter* clone() const;
+    virtual UnicodeMatcher* clone() const;
 };
 
 UnicodeNotFilter::UnicodeNotFilter(UnicodeFilter* adopted) : filt(adopted) {}
 UnicodeNotFilter::UnicodeNotFilter(const UnicodeNotFilter& f)
- : UnicodeFilter(f), filt(f.filt->clone()) {}
+ : UnicodeFilter(f), filt((UnicodeFilter*) f.filt->clone()) {}
 UnicodeNotFilter::~UnicodeNotFilter() { delete filt; }
 UBool UnicodeNotFilter::contains(UChar32 c) const { return !filt->contains(c); }
-UnicodeFilter* UnicodeNotFilter::clone() const { return new UnicodeNotFilter(*this); }
+UnicodeMatcher* UnicodeNotFilter::clone() const { return new UnicodeNotFilter(*this); }
 
 /**
  * Returns a <tt>UnicodeFilter</tt> that implements the inverse of
@@ -50,7 +50,7 @@ UnicodeFilter* UnicodeFilterLogic::createNot(const UnicodeFilter* f) {
     if (f == 0) {
         return new NullFilter(FALSE);
     } else {
-        return new UnicodeNotFilter(f->clone());
+        return new UnicodeNotFilter((UnicodeFilter*)f->clone());
     }
 }
 
@@ -62,15 +62,15 @@ public:
     UnicodeAndFilter(const UnicodeAndFilter&);
     virtual ~UnicodeAndFilter();
     virtual UBool contains(UChar32 c) const;
-    virtual UnicodeFilter* clone() const;
+    virtual UnicodeMatcher* clone() const;
 };
 
 UnicodeAndFilter::UnicodeAndFilter(UnicodeFilter* f1, UnicodeFilter* f2) : filt1(f1), filt2(f2) {}
 UnicodeAndFilter::UnicodeAndFilter(const UnicodeAndFilter& f)
- : UnicodeFilter(f), filt1(f.filt1->clone()), filt2(f.filt2->clone()) {}
+ : UnicodeFilter(f), filt1((UnicodeFilter*)f.filt1->clone()), filt2((UnicodeFilter*)f.filt2->clone()) {}
 UnicodeAndFilter::~UnicodeAndFilter() { delete filt1; delete filt2; }
 UBool UnicodeAndFilter::contains(UChar32 c) const { return filt1->contains(c) && filt2->contains(c); }
-UnicodeFilter* UnicodeAndFilter::clone() const { return new UnicodeAndFilter(*this); }
+UnicodeMatcher* UnicodeAndFilter::clone() const { return new UnicodeAndFilter(*this); }
 
 /**
  * Returns a <tt>UnicodeFilter</tt> that implements a short
@@ -84,12 +84,12 @@ UnicodeFilter* UnicodeFilterLogic::createAnd(const UnicodeFilter* f,
         if (g == 0) {
             return NULL;
         }
-        return g->clone();
+        return (UnicodeFilter*)g->clone();
     }
     if (g == 0) {
-        return f->clone();
+        return (UnicodeFilter*)f->clone();
     }
-    return new UnicodeAndFilter(f->clone(), g->clone());
+    return new UnicodeAndFilter((UnicodeFilter*)f->clone(), (UnicodeFilter*)g->clone());
 }
 
 class UnicodeOrFilter : public UnicodeFilter {
@@ -100,15 +100,15 @@ public:
     UnicodeOrFilter(const UnicodeOrFilter&);
     virtual ~UnicodeOrFilter();
     virtual UBool contains(UChar32 c) const;
-    virtual UnicodeFilter* clone() const;
+    virtual UnicodeMatcher* clone() const;
 };
 
 UnicodeOrFilter::UnicodeOrFilter(UnicodeFilter* f1, UnicodeFilter* f2) : filt1(f1), filt2(f2) {}
 UnicodeOrFilter::UnicodeOrFilter(const UnicodeOrFilter& f)
- : UnicodeFilter(f), filt1(f.filt1->clone()), filt2(f.filt2->clone()) {}
+ : UnicodeFilter(f), filt1((UnicodeFilter*)f.filt1->clone()), filt2((UnicodeFilter*)f.filt2->clone()) {}
 UnicodeOrFilter::~UnicodeOrFilter() { delete filt1; delete filt2; }
 UBool UnicodeOrFilter::contains(UChar32 c) const { return filt1->contains(c) || filt2->contains(c); }
-UnicodeFilter* UnicodeOrFilter::clone() const { return new UnicodeOrFilter(*this); }
+UnicodeMatcher* UnicodeOrFilter::clone() const { return new UnicodeOrFilter(*this); }
 
 /**
  * Returns a <tt>UnicodeFilter</tt> that implements a short
@@ -122,10 +122,10 @@ UnicodeFilter* UnicodeFilterLogic::createOr(const UnicodeFilter* f,
         if (g == 0) {
             return NULL;
         }
-        return g->clone();
+        return (UnicodeFilter*)g->clone();
     }
     if (g == 0) {
-        return f->clone();
+        return (UnicodeFilter*)f->clone();
     }
-    return new UnicodeOrFilter(f->clone(), g->clone());
+    return new UnicodeOrFilter((UnicodeFilter*)f->clone(), (UnicodeFilter*)g->clone());
 }

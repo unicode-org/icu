@@ -228,11 +228,11 @@ UBool UnicodeSet::operator==(const UnicodeSet& o) const {
 }
 
 /**
- * Returns a copy of this object.  All UnicodeFilter objects have
+ * Returns a copy of this object.  All UnicodeMatcher objects have
  * to support cloning in order to allow classes using
- * UnicodeFilters, such as Transliterator, to implement cloning.
+ * UnicodeMatchers, such as Transliterator, to implement cloning.
  */
-UnicodeFilter* UnicodeSet::clone() const {
+UnicodeMatcher* UnicodeSet::clone() const {
     return new UnicodeSet(*this);
 }
 
@@ -547,7 +547,7 @@ UBool UnicodeSet::contains(UChar32 c) const {
  * is the given value.  This is used by <tt>RuleBasedTransliterator</tt> for
  * indexing.
  */
-UBool UnicodeSet::containsIndexValue(uint8_t v) const {
+UBool UnicodeSet::matchesIndexValue(uint8_t v) const {
     /* The index value v, in the range [0,255], is contained in this set if
      * it is contained in any pair of this set.  Pairs either have the high
      * bytes equal, or unequal.  If the high bytes are equal, then we have

@@ -149,7 +149,7 @@ Transliterator::Transliterator(const Transliterator& other) :
     maximumContextLength(other.maximumContextLength) {
     if (other.filter != 0) {
         // We own the filter, so we must have our own copy
-        filter = other.filter->clone();
+        filter = (UnicodeFilter*) other.filter->clone();
     }
 }
 
@@ -160,7 +160,7 @@ Transliterator& Transliterator::operator=(const Transliterator& other) {
     ID = other.ID;
     maximumContextLength = other.maximumContextLength;
     // MUST go through adoptFilter in case latter is overridden
-    adoptFilter((other.filter == 0) ? 0 : other.filter->clone());
+    adoptFilter((other.filter == 0) ? 0 : (UnicodeFilter*) other.filter->clone());
     return *this;
 }
 
@@ -361,6 +361,25 @@ void Transliterator::_transliterate(Replaceable& text,
 
     filteredTransliterate(text, index, TRUE);
 
+#if 0
+    // I CAN'T DO what I'm attempting below now that the Kleene star
+    // operator is supported.  For example, in the rule
+
+    //   ([:Lu:]+) { x } > $1;
+
+    // what is the maximum context length?  getMaximumContextLength()
+    // will return 1, but this is just the length of the ante context
+    // part of the pattern string -- 1 character, which is a standin
+    // for a Quantifier, which contains a StringMatcher, which
+    // contains a UnicodeSet.
+
+    // There is a complicated way to make this work again, and that's
+    // to add a "maximum left context" protocol into the
+    // UnicodeMatcher hierarchy.  At present I'm not convinced this is
+    // worth it.
+
+    // ---
+
     // The purpose of the code below is to keep the context small
     // while doing incremental transliteration.  When part of the left
     // context (between contextStart and start) is no longer needed,
@@ -373,6 +392,7 @@ void Transliterator::_transliterate(Replaceable& text,
         newCS -= UTF_CHAR_LENGTH(text.char32At(newCS)) - 1;
     }
     index.contextStart = uprv_max(newCS, originalStart);
+#endif
 }
 
 /**
