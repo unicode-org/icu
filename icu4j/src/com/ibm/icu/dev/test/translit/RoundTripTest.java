@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/translit/RoundTripTest.java,v $
- * $Date: 2003/05/05 22:41:49 $
- * $Revision: 1.52 $
+ * $Date: 2003/05/12 22:06:40 $
+ * $Revision: 1.53 $
  *
  *******************************************************************************
  */
@@ -296,8 +296,15 @@ public class RoundTripTest extends TestFmwk {
 
     public void TestDevanagariLatin() throws IOException, ParseException {
         long start = System.currentTimeMillis();
-        new Test("Latin-DEVANAGARI", 50)
-          .test(latinForIndic, "[[:Devanagari:][\u094d][\u0964\u0965]]", "[\u0965]", this, new LegalIndic());
+        if(isICU26()){
+            new Test("Latin-DEVANAGARI", 50)
+              .test(latinForIndic, "[[:Devanagari:][\u094d][\u0964\u0965] & [:Age=3.2:]]", "[\u0965]", this, new LegalIndic());
+
+        }else{
+            new Test("Latin-DEVANAGARI", 50)
+              .test(latinForIndic, "[[:Devanagari:][\u094d][\u0964\u0965]]", "[\u0965]", this, new LegalIndic());
+
+        }
         showElapsed(start, "TestDevanagariLatin");
     }
 
@@ -663,10 +670,20 @@ public class RoundTripTest extends TestFmwk {
         }
         for(int i=0; i<num;i++){
            logln("Testing " + array[i][0] + " at index " + i   );
-           new Test(array[i][0], 50)
-                .test(array[i][1], array[i][2],
-                array[i][3],
-                this, new LegalIndic());
+           if(isICU26()){
+               new Test(array[i][0], 50)
+                    .test("[" + array[i][1]+" & [:Age=3.2:]]",
+                          "[" + array[i][2]+" & [:Age=3.2:]]",
+                          array[i][3],
+                          this, new LegalIndic());
+           }else{
+               new Test(array[i][0], 50)
+                    .test(array[i][1],
+                          array[i][2],
+                          array[i][3],
+                          this, new LegalIndic());
+           }
+
         }
         showElapsed(start, "TestInterIndic");
     }
@@ -813,7 +830,7 @@ public class RoundTripTest extends TestFmwk {
                 boolean noLetterYet = true;
                 int breathingCount = 0;
                 int letterCount = 0;
-                int breathingPosition = -1;
+                //int breathingPosition = -1;
 
                 for (int i = 0; i < decomp.length(); ++i) {
                     char c = decomp.charAt(i);
@@ -829,7 +846,7 @@ public class RoundTripTest extends TestFmwk {
                     }
                     if (c == IOTA_SUBSCRIPT && firstIsVowel && breathingCount == 0) return false;
                     if (breathing.contains(c)) {
-                        breathingPosition = i;
+                       // breathingPosition = i;
                         ++breathingCount;
                     }
                 }
@@ -1203,7 +1220,7 @@ public class RoundTripTest extends TestFmwk {
             while (usi.next()) {
                 String cs;
                 int c;
-                if(usi.codepoint == usi.IS_STRING){
+                if(usi.codepoint == UnicodeSetIterator.IS_STRING){
                     cs = usi.string;
                     c = UTF16.charAt(cs,0);
                 }else{
@@ -1219,7 +1236,7 @@ public class RoundTripTest extends TestFmwk {
                     String targD = Normalizer.normalize(targ, Normalizer.NFD);
                     if (!toSource.containsAll(targD)
                             || badCharacters.containsSome(targD)) {
-								UnicodeSet temp = new UnicodeSet().addAll(targD);
+								/*UnicodeSet temp = */new UnicodeSet().addAll(targD);
                         logWrongScript("Target-Source", cs, targ, toSource, badCharacters);
                         failTargSource.add(cs);
                         continue;
