@@ -243,7 +243,7 @@ struct incrementalContext {
       (order) = UCOL_NO_MORE_CES;                                            \
     }                                                                        \
     else {                                                                   \
-      UChar ch = *(data.pos);                                                \
+      UChar ch;                                                              \
       if (data.pos != data.writableBuffer) {                                 \
         data.pos --;                                                         \
       }                                                                      \
@@ -253,6 +253,7 @@ struct incrementalContext {
         data.len = data.string + length;                                     \
         data.isThai = TRUE;                                                  \
       }                                                                      \
+      ch = *(data.pos);                                                      \
       if (ch <= 0xFF) {                                                      \
         (order) = (coll)->latinOneMapping[ch];                               \
       }                                                                      \
@@ -263,7 +264,7 @@ struct incrementalContext {
         (order) = getSpecialPrevCE((coll), (order), &(data), (length),       \
                                                              (status));      \
         if ((order) == UCOL_NOT_FOUND) {                                     \
-          (order) = ucol_getPrevUCA(ch, &(data), (length), (status));                  \
+          (order) = ucol_getPrevUCA(ch, &(data), (length), (status));        \
         }                                                                    \
       }                                                                      \
     }                                                                        \
@@ -340,8 +341,10 @@ ucol_cloneRuleData(UCollator *coll, int32_t *length, UErrorCode *status);
 /* Bit mask for tertiary collation strength. */
 #define UCOL_TERTIARYMASK   0x000000FF
 
-/** This indicates the last element in a UCollationElements has been consumed. 
- *
+/** 
+ * This indicates the last element in a UCollationElements has been consumed. 
+ * Compare with the older UCOL_NULLORDER, UCOL_NULLORDER is returned if error
+ * occurs.
  */
 #define UCOL_NO_MORE_CES        0x00010101
 
