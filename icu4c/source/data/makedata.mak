@@ -8,7 +8,7 @@
 #
 #	12/10/1999	weiv	Created
 
-U_ICUDATA_NAME=icudt19
+U_ICUDATA_NAME=icudt20
 U_ICUDATA_ENDIAN_SUFFIX=l
 
 #  ICUDBLD
