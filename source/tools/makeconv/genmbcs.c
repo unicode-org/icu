@@ -123,6 +123,7 @@ MBCSInit(MBCSData *mbcsData, uint8_t maxCharLength) {
     mbcsData->newConverter.write=MBCSWrite;
 
     mbcsData->header.version[0]=4;
+    mbcsData->header.version[1]=1;
     mbcsData->stateFlags[0]=MBCS_STATE_FLAG_DIRECT;
     mbcsData->stage2Top=MBCS_STAGE_2_FIRST_ASSIGNED; /* after stage 1 and one all-unassigned stage 2 block */
     mbcsData->stage3Top=16*maxCharLength; /* after one all-unassigned stage 3 block */
@@ -1715,6 +1716,7 @@ MBCSWrite(NewConverter *cnvData, const UConverterStaticData *staticData, UNewDat
         mbcsData->header.offsetFromUTable+
         stage1Top*2+
         mbcsData->stage2Top;
+    mbcsData->header.fromUBytesLength=mbcsData->stage3Top;
 
     /* write the MBCS data */
     udata_writeBlock(pData, &mbcsData->header, sizeof(_MBCSHeader));
@@ -1730,5 +1732,5 @@ MBCSWrite(NewConverter *cnvData, const UConverterStaticData *staticData, UNewDat
     udata_writeBlock(pData, mbcsData->fromUBytes, mbcsData->stage3Top);
 
     /* return the number of bytes that should have been written */
-    return mbcsData->header.offsetFromUBytes+mbcsData->stage3Top;
+    return mbcsData->header.offsetFromUBytes+mbcsData->header.fromUBytesLength;
 }
