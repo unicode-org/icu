@@ -31,7 +31,7 @@
     <h1>International Components for Unicode<br>
      ICU 2.2 ReadMe</h1>
 
-    <p>Version: 2002-Aug-07<br>
+    <p>Version: 2002-Aug-08<br>
      Copyright &copy; 1997-2002 International Business Machines Corporation and
     others. All Rights Reserved.</p>
     <!-- Remember that there is a copyright at the end too -->
@@ -908,10 +908,12 @@
     <strong>PST8PDT</strong>. Also, the environment variable
     <strong>ICU_DATA</strong> can be set to the full pathname of the data
     directory to indicate where the locale data files and conversion mapping
-    tables are. The trailing "/" is required after the directory name (e.g.
-    "$Root/source/data/" will work, but the value "$Root/source/data" is not
-    acceptable). You do not need to set <strong>ICU_DATA</strong> if the
-    complete data library is in your library path.</p>
+    tables are when you are not using the shared library (e.g. by using the
+    .dat archive or the individual data files). The trailing "/" is required
+    after the directory name (e.g. "$Root/source/data/" will work, but the
+    value "$Root/source/data" is not acceptable). You do not need to set
+    <strong>ICU_DATA</strong> if the complete data library is in your library
+    path.</p>
 
     <p><a name="HowToInstallICU"><strong>Installing ICU NOTE:</strong></a> If
     you are using the "gmake install" command, using the "--prefix" option on
@@ -1063,10 +1065,12 @@ Data set name type  : PDS</samp>
     <h3><a name="HowToBuildOS400" href="#HowToBuildOS400">OS/400 (iSeries)
     Platform</a></h3>
 
-    <p>ICU Reference Release 1.8.1 contains partial support for the 400
-    platform, but additional work by the user is currently needed to get it to
-    build properly. A future release of ICU should work out-of-the-box under
-    OS/400.</p>
+    <p>ICU Reference Release 2.2 contains partial support for the iSeries
+    platform. After building ICU and running the tests, you will notice that
+    some of the threading and formatting tests fail. This is due to an unusual
+    implementation of threading and IEEE754 support. These failures can be
+    ignored. A future release of ICU should work without displaying these
+    failures.</p>
 
     <ul>
       <li>
@@ -1107,8 +1111,7 @@ Data set name type  : PDS</samp>
             Set up the following environment variables in your build process
             (use the <i>libraryname</i> from the previous step) 
 <pre>
-<samp>ADDENVVAR ENVVAR(ICU_DATA) VALUE('/icu/source/data')
-ADDENVVAR ENVVAR(CC) VALUE('/usr/bin/icc')
+<samp>ADDENVVAR ENVVAR(CC) VALUE('/usr/bin/icc')
 ADDENVVAR ENVVAR(CXX) VALUE('/usr/bin/icc')
 ADDENVVAR ENVVAR(MAKE) VALUE('/usr/bin/gmake')
 ADDENVVAR ENVVAR(OUTPUTDIR) VALUE('<i>libraryname</i>')</samp>
@@ -1118,7 +1121,7 @@ ADDENVVAR ENVVAR(OUTPUTDIR) VALUE('<i>libraryname</i>')</samp>
             <br>
           </li>
           <!--li>Add QCXXN, to your build process library list. This results in
-                                                                                                                                                                                                                                                                                                                                                                        the resolution of CRTCPPMOD used by the icc compiler</li-->
+                                                                                                                                                                                                                                                                                                                                                                                  the resolution of CRTCPPMOD used by the icc compiler</li-->
 
           <li>
             In order to get the tests to run correctly, the QUTCOFFSET needs to
