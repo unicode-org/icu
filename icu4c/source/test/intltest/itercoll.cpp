@@ -99,7 +99,7 @@ void CollationIteratorTest::TestPrevious(/* char* par */)
     UnicodeString source;
     RuleBasedCollator *c1 = NULL;
     c1 = new RuleBasedCollator(
-        (UnicodeString)"< a,A < b,B < c,C, d,D < z,Z < ch,cH,Ch,CH", status);
+        (UnicodeString)"&a,A < b,B < c,C, d,D < z,Z < ch,cH,Ch,CH", status);
 
     if (c1 == NULL || U_FAILURE(status))
     {
@@ -116,7 +116,7 @@ void CollationIteratorTest::TestPrevious(/* char* par */)
 
     // Test with an expanding character sequence
     RuleBasedCollator *c2 = NULL;
-    c2 = new RuleBasedCollator((UnicodeString)"< a < b < c/abd < d", status);
+    c2 = new RuleBasedCollator((UnicodeString)"&a < b < c/abd < d", status);
 
     if (c2 == NULL || U_FAILURE(status))
     {
@@ -133,7 +133,7 @@ void CollationIteratorTest::TestPrevious(/* char* par */)
 
     // Now try both
     RuleBasedCollator *c3 = NULL;
-    c3 = new RuleBasedCollator((UnicodeString)"< a < b < c/aba < d < z < ch", status);
+    c3 = new RuleBasedCollator((UnicodeString)"&a < b < c/aba < d < z < ch", status);
 
     if (c3 == NULL || U_FAILURE(status))
     {
@@ -149,9 +149,9 @@ void CollationIteratorTest::TestPrevious(/* char* par */)
     delete c3;
 
     status=U_ZERO_ERROR;
-    source= CharsToUnicodeString("\\u0e41\\u0e02\\u0e27abc");
+    source= CharsToUnicodeString("\\u0e41\\u0e02\\u0e41\\u0e02\\u0e27abc");
     
-    Collator *c4=Collator::createInstance(Locale("th", "TH", ""), status);
+    Collator *c4 = Collator::createInstance(Locale("th", "TH", ""), status);
     if(U_FAILURE(status)){
         errln("Couldn't create a collator");
     }
@@ -160,17 +160,16 @@ void CollationIteratorTest::TestPrevious(/* char* par */)
     delete iter;
     delete c4;
    
-    status=U_ZERO_ERROR;
-    Collator *c5=Collator::createInstance(status);
-    if(U_FAILURE(status)){
-        errln("Couldn't create a collator");
-    }
+    source= CharsToUnicodeString("\\u0061\\u30CF\\u3099\\u30FC");
+    Collator *c5 = Collator::createInstance(Locale("ja", "JP", ""), status);
+
     iter = ((RuleBasedCollator*)c5)->createCollationElementIterator(source);
+    if(U_FAILURE(status)){
+        errln("Couldn't create Japanese collator\n");
+    }
     backAndForth(*iter);
     delete iter;
     delete c5;
-
-
 }
 
 /**
@@ -274,32 +273,40 @@ void CollationIteratorTest::TestSetText(/* char* par */)
  */
 void CollationIteratorTest::TestMaxExpansion(/* char* par */)
 {
-    // Try a simple one first:
-    // The only expansion ends with 'e' and has length 2
-    UnicodeString rule1("< a & ae = ");
-    rule1 += (UChar)0x00e4;
-    rule1 += " < b < e";
-    ExpansionRecord test1[] =
-    {
-        {0x61, 1},
-        {0x62, 1},
-        {0x65, 2}
-    };
-    verifyExpansion(rule1, test1, ARRAY_LENGTH(test1));
-    
-    // Now a more complicated one:
-    //   "a1" --> "ae"
-    //   "z" --> "aeef"
-    //
-    UnicodeString rule2("< a & ae = a1 & aeef = z < b < e < f");
-    ExpansionRecord test2[] =
-    {
-        {0x61, 1},
-        {0x62, 1},
-        {0x65, 2},
-        {0x66, 4}
-    };
-    verifyExpansion(rule2, test2, ARRAY_LENGTH(test2));
+  UErrorCode          status = U_ZERO_ERROR; 
+
+  UnicodeString rule("&a < ab < c/aba < d < z < ch");
+  RuleBasedCollator  *coll   = new RuleBasedCollator(rule, status);
+  UChar               ch     = 0;
+  UnicodeString       str(ch);
+
+  CollationElementIterator *iter   = coll->createCollationElementIterator(str);
+  int                       count  = 1;
+
+  while (ch < 0xFFFF && U_SUCCESS(status)) {
+    int      count = 1;
+    uint32_t order = 0;
+    ch ++;
+    UnicodeString str(ch);
+    iter->setText(str, status);
+    order = iter->previous(status);
+
+    /* thai management */
+    if (order == 0)
+      order = iter->previous(status);
+
+    while (U_SUCCESS(status) && iter->previous(status) != UCOL_NULLORDER) {
+      count ++; 
+    }
+
+    if (U_FAILURE(status) && iter->getMaxExpansion(order) < count) {
+      errln("Failure at codepoint %d, maximum expansion count < %d\n",
+                                                               ch, count);
+    }
+  }
+
+  delete iter;
+  delete coll;
 }
 
 /*
@@ -309,7 +316,7 @@ void CollationIteratorTest::TestClearBuffers(/* char* par */)
 {
     UErrorCode status = U_ZERO_ERROR;
     RuleBasedCollator *c = NULL;
-    c = new RuleBasedCollator((UnicodeString)"< a < b < c & ab = d", status);
+    c = new RuleBasedCollator((UnicodeString)"&a < b < c & ab = d", status);
 
     if (c == NULL || U_FAILURE(status))
     {
@@ -422,6 +429,11 @@ void CollationIteratorTest::backAndForth(CollationElementIterator &iter)
         }
     }
 
+    while (index != 0 && orders[index - 1] == 0)
+    {
+      index --;
+    }
+
     if (index != 0)
     {
         UnicodeString msg("Didn't get back to beginning - index is ");
@@ -452,86 +464,6 @@ void CollationIteratorTest::backAndForth(CollationElementIterator &iter)
     }
 
     delete[] orders;
-}
-
-/**
- * Verify that getMaxExpansion works on a given set of collation rules
- *
- * The first row of the "tests" array contains the collation rules
- * at index 0, and the string at index 1 is ignored.
- *
- * Subsequent rows of the array contain a character and a number, both
- * represented as strings.  The character's collation order is determined,
- * and getMaxExpansion is called for that character.  If its value is
- * not equal to the specified number, an error results.
- */
-void CollationIteratorTest::verifyExpansion(UnicodeString rules, ExpansionRecord tests[], int32_t testCount)
-{
-    UErrorCode status = U_ZERO_ERROR;
-    RuleBasedCollator *coll = NULL;
-    coll = new RuleBasedCollator(rules, status);
-
-    if (coll == NULL || U_FAILURE(status))
-    {
-        errln("Couldn't create a RuleBasedCollator.");
-        delete coll;
-        return;
-    }
-
-    UnicodeString source("");
-    CollationElementIterator *iter = coll->createCollationElementIterator(source);
-
-    int32_t i;
-    for (i = 1; i < testCount; i += 1)
-    {
-        // First get the collation key that the test string expands to
-        UnicodeString test(&tests[i].character, 1);
-        iter->setText(test, status);
-
-        if (U_FAILURE(status))
-        {
-            errln("call to iter->setText() failed.");
-            return;
-        }
-        
-        int32_t order = iter->next(status);
-
-        if (U_FAILURE(status))
-        {
-            errln("call to iter->next() failed.");
-            return;
-        }
-        
-        if (order == CollationElementIterator::NULLORDER || 
-            iter->next(status) != CollationElementIterator::NULLORDER)
-        {
-            UnicodeString msg("verifyExpansion: '");
-            
-            msg += test;
-            msg += "' has multiple orders:";
-            orderString(*iter, msg);
-
-            iter->reset();
-            errln(msg);
-        }
-        
-        int32_t expansion = iter->getMaxExpansion(order);
-        int32_t expect = tests[i].count;
-        
-        if (expansion != expect)
-        {
-            UnicodeString msg1("expansion for '");
-            
-            msg1 += test;
-            msg1 += "' is wrong: expected ";
-
-            UnicodeString msg2(", got ");
-
-            errln(msg1 + expect + msg2 + expansion);
-        }
-    }
-    delete iter;
-    delete coll;
 }
 
 /**
