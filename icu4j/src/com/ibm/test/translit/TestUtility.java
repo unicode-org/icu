@@ -1,9 +1,8 @@
 package com.ibm.test.translit;
-import com.ibm.text.UInfo;
+import com.ibm.text.UCharacter;
+import com.ibm.text.UCharacterCategory;
 
 public final class TestUtility {
-  
-    private static UInfo uinfo;
 
     public static byte getScript(char c) {
       return getScript(getBlock(c));
@@ -37,25 +36,18 @@ public final class TestUtility {
     }
     
     // Supplements to Character methods; these methods go through
-    // UInfo if possible.  If not, they fall back to Character.
-
-    public static UInfo getUInfo() {
-        if (uinfo == null) {
-            uinfo = new UInfo();
-        }
-        return uinfo;
-    }
+    // UCharacter if possible.  If not, they fall back to Character.
 
     public static boolean isUnassigned(char c) {
         try {
-            return getUInfo().getCategory(c) == UInfo.UNASSIGNED;
+            return UCharacter.getType(c) == UCharacterCategory.UNASSIGNED;
         } catch (NullPointerException e) {}
         return Character.getType(c) == Character.UNASSIGNED;
     }
 
     public static boolean isLetter(char c) {
         try {
-            return getUInfo().isLetter(c);
+            return UCharacter.isLetter(c);
         } catch (NullPointerException e) {}
         return Character.isLetter(c);
     }
