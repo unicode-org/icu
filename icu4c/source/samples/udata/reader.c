@@ -80,7 +80,7 @@ main(int argc, const char *argv[]) {
     uint16_t *intPointer = NULL;
 
     const void *dataMemory = NULL;
-
+    char curPathBuffer[1024];
  
 #ifdef WIN32
     char *currdir = _getcwd(NULL, 0);
@@ -88,14 +88,19 @@ main(int argc, const char *argv[]) {
     char *currdir = getcwd(NULL, 0);
 #endif
 
-    result=udata_openChoice(currdir, DATA_TYPE, DATA_NAME, isAcceptable, NULL, &status);
+    /* need to put  "current/dir/pkgname" as path */
+    strcpy(curPathBuffer, currdir);
+    strcat(curPathBuffer, U_FILE_SEP_STRING);
+    strcat(curPathBuffer, "mypkg"); /* package name */
+
+    result=udata_openChoice(curPathBuffer, DATA_TYPE, DATA_NAME, isAcceptable, NULL, &status);
 
     if(currdir != NULL) {
         free(currdir);
     }
 
     if(U_FAILURE(status)){
-        printf("Failed to open data file with error number %d\n", status);
+        printf("Failed to open data file example.dat in %s with error number %d\n", curPathBuffer, status);
         return -1;
     }
 

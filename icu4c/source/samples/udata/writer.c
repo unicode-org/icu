@@ -33,7 +33,7 @@
 /* this is private - available only through toolutil */
 #include "unewdata.h"
 
-#define DATA_NAME "example"
+#define DATA_NAME "mypkg_example"
 #define DATA_TYPE "dat"
 
 /* UDataInfo cf. udata.h */
