@@ -130,6 +130,7 @@ static uint32_t inverseTable[0xFFFF][3];
 static uint32_t inversePos = 0;
 static UChar stringContinue[0xFFFF];
 static uint32_t sContPos = 0;
+static UVersionInfo UCAVersion;
 
 static void addNewInverse(UCAElements *element, UErrorCode *status) {
   if(U_FAILURE(*status)) {
@@ -322,7 +323,11 @@ static void writeOutInverseData(InverseTableHeader *data,
     
     long dataLength;
 
-    pData=udata_create(outputDir, INVC_DATA_TYPE, U_ICUDATA_NAME "_" INVC_DATA_NAME, &invUcaDataInfo,
+    UDataInfo invUcaInfo;
+    uprv_memcpy(&invUcaInfo, &invUcaDataInfo, sizeof(UDataInfo));
+    u_getUnicodeVersion(invUcaInfo.dataVersion);
+
+    pData=udata_create(outputDir, INVC_DATA_TYPE, U_ICUDATA_NAME "_" INVC_DATA_NAME, &invUcaInfo,
                        copyright, status);
 
     if(U_FAILURE(*status)) {
@@ -397,7 +402,8 @@ UCAElements *readAnElement(FILE *data, tempUCATable *t, UCAConstants *consts, UE
 
     enum ActionType {
       READCE,
-      READHEX
+      READHEX,
+      READUCAVERSION
     };
 
     // Directives.
@@ -429,7 +435,8 @@ UCAElements *readAnElement(FILE *data, tempUCATable *t, UCAConstants *consts, UE
                   {"[fixed last trail byte",           &consts->UCA_PRIMARY_TRAILING_MAX,      READHEX},
                   {"[fixed first special byte",        &consts->UCA_PRIMARY_SPECIAL_MIN,       READHEX},
                   {"[fixed last special byte",         &consts->UCA_PRIMARY_SPECIAL_MAX,       READHEX},
-                  {"[variable top = ",                &t->options->variableTopValue,          READHEX}, 
+                  {"[variable top = ",                &t->options->variableTopValue,          READHEX},
+                  {"[UCA version = ",                 NULL,                          READUCAVERSION}
       };
       for (cnt = 0; cnt<sizeof(vt)/sizeof(vt[0]); cnt++) {
         uint32_t vtLen = (uint32_t)uprv_strlen(vt[cnt].name);
@@ -446,7 +453,7 @@ UCAElements *readAnElement(FILE *data, tempUCATable *t, UCAConstants *consts, UE
                 //uint32_t nextTop = ucol_prv_calculateImplicitPrimary(0x4E00); // CJK base
                 //consts->UCA_NEXT_TOP_VALUE = theValue<<24 | 0x030303;
               //}
-            } else { /* vt[cnt].what_to_do == READCE */
+            } else if (vt[cnt].what_to_do == READCE) { /* vt[cnt].what_to_do == READCE */
               pointer = strchr(buffer+vtLen, '[');
               if(pointer) {
                 pointer++;
@@ -487,6 +494,11 @@ UCAElements *readAnElement(FILE *data, tempUCATable *t, UCAConstants *consts, UE
                 }
               } else {
                 fprintf(stderr, "Failed to read a CE from line %s\n", buffer);
+              }
+            } else { //vt[cnt].what_to_do == READUCAVERSION
+              u_versionFromString(UCAVersion, buffer+vtLen);
+              if(VERBOSE) {
+                fprintf(stdout, "UCA version [%hu.%hu.%hu.%hu]\n", UCAVersion[0], UCAVersion[1], UCAVersion[2], UCAVersion[3]);
               }
             }
             //element->cPoints[0] = (UChar)theValue;
@@ -654,8 +666,11 @@ void writeOutData(UCATableHeader *data,
     UNewDataMemory *pData;
     
     long dataLength;
+    UDataInfo ucaInfo;
+    uprv_memcpy(&ucaInfo, &ucaDataInfo, sizeof(UDataInfo));
+    u_getUnicodeVersion(ucaInfo.dataVersion);
 
-    pData=udata_create(outputDir, UCA_DATA_TYPE, U_ICUDATA_NAME "_" UCA_DATA_NAME, &ucaDataInfo,
+    pData=udata_create(outputDir, UCA_DATA_TYPE, U_ICUDATA_NAME "_" UCA_DATA_NAME, &ucaInfo,
                        copyright, status);
 
     if(U_FAILURE(*status)) {
@@ -764,10 +779,6 @@ write_uca_table(const char *filename,
     opts->caseLevel = UCOL_OFF;         /* do we have an extra case level */
     opts->normalizationMode = UCOL_OFF; /* attribute for normalization */
     opts->hiraganaQ = UCOL_OFF; /* attribute for JIS X 4061, used only in Japanese */
-    /* populate the version info struct with version info*/
-    myD->version[0] = UCOL_BUILDER_VERSION;
-    /*TODO:The fractional rules version should be taken from FractionalUCA.txt*/
-    myD->version[1] = UCOL_FRACTIONAL_UCA_VERSION;
     myD->jamoSpecial = FALSE;
 
     tempUCATable *t = uprv_uca_initTempTable(myD, opts, NULL, IMPLICIT_TAG, status);
@@ -898,6 +909,18 @@ struct {
         fprintf(stdout, "Contraction image size: %i\n", t->image->contractionSize);
         fprintf(stdout, "Expansions size: %i\n", t->expansions->position);
     }
+
+    /* populate the version info struct with version info*/
+    myData->version[0] = UCOL_BUILDER_VERSION;
+    myData->version[1] = UCAVersion[0];
+    myData->version[2] = UCAVersion[1];
+    myData->version[3] = UCAVersion[2];
+    /*TODO:The fractional rules version should be taken from FractionalUCA.txt*/
+    // Removed this macro. Instead, we use the fields below
+    //myD->version[1] = UCOL_FRACTIONAL_UCA_VERSION;
+    //myD->UCAVersion = UCAVersion; // out of FractionalUCA.txt
+    uprv_memcpy(myData->UCAVersion, UCAVersion, sizeof(UVersionInfo));
+    u_getUnicodeVersion(myData->UCDVersion);
 
     writeOutData(myData, &consts, contractionCEs, noOfContractions, outputDir, copyright, status);
 
