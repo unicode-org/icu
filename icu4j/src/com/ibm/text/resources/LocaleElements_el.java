@@ -3,8 +3,8 @@
  * others. All Rights Reserved.
  **************************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/resources/Attic/LocaleElements_el.java,v $ 
- * $Date: 2001/11/03 02:00:04 $ 
- * $Revision: 1.2 $
+ * $Date: 2001/11/14 01:34:01 $ 
+ * $Revision: 1.3 $
  **************************************************************************
  */
 
@@ -225,6 +225,7 @@ public class LocaleElements_el extends ListResourceBundle {
 "\u03f3 > j ;"+
 "\u03f4 > | \u0398 ;"+
 "\u03f5 > | \u03b5 ;"+
+"\u00B5 > | \u03BC ; " +
 
 "# delete any trailing ' marks used for roundtripping\n"+
 
