@@ -23,6 +23,7 @@
 /**  
  * This indicates an error has occured during processing or if no more CEs is 
  * to be returned.
+ * @stable ICU 2.0
  */
 #define UCOL_NULLORDER        0xFFFFFFFF
 
@@ -31,6 +32,7 @@
 /** 
  * The UCollationElements struct.
  * For usage in C programs.
+ * @stable ICU 2.0
  */
 typedef struct UCollationElements UCollationElements;
 
