@@ -18,6 +18,7 @@
 #include "unicode/ucurr.h"
 #include "unicode/ustring.h"
 #include "unicode/measfmt.h"
+#include "unicode/curramt.h"
 #include "digitlst.h"
 #include "textfile.h"
 #include "tokiter.h"
@@ -1569,8 +1570,9 @@ static void parseCurrencyAmount(const UnicodeString& str,
     int32_t i = str.indexOf(delim);
     str.extractBetween(0, i, num);
     str.extractBetween(i+1, INT32_MAX, cur);
-    fmt.parse(num, result, ec);
-    result.setCurrency(cur.getTerminatedBuffer());
+    Formattable n;
+    fmt.parse(num, n, ec);
+    result.adoptObject(new CurrencyAmount(n, cur.getTerminatedBuffer(), ec));
 }
 
 void NumberFormatTest::TestCases() {

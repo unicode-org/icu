@@ -99,30 +99,6 @@ public:
     Formattable(int64_t ll);
 
     /**
-     * Creates a Formattable for a currency amount.
-     * @param n the numeric value
-     * @param currency the currency code
-     * @draft ICU 3.0
-     */
-    Formattable(double n, const UChar* currency);
-
-    /**
-     * Creates a Formattable for a currency amount.
-     * @param n the numeric value
-     * @param currency the currency code
-     * @draft ICU 3.0
-     */
-    Formattable(int32_t n, const UChar* currency);
-
-    /**
-     * Creates a Formattable for a currency amount.
-     * @param n the numeric value
-     * @param currency the currency code
-     * @draft ICU 3.0
-     */
-    Formattable(int64_t n, const UChar* currency);
-
-    /**
      * Creates a Formattable object with a char string pointer.
      * Assumes that the char string is null terminated.
      * @param strToCopy the char string.
@@ -151,6 +127,13 @@ public:
      * @stable ICU 2.0
      */
     Formattable(const Formattable* arrayToCopy, int32_t count);
+
+    /**
+     * Creates a Formattable object that adopts the given UObject.
+     * @param objectToAdopt the UObject to set this object to
+     * @draft ICU 3.0
+     */
+    Formattable(UObject* objectToAdopt);
 
     /**
      * Copy constructor.
@@ -202,22 +185,60 @@ public:
     Formattable *clone() const;
 
     /** 
-     * The list of possible data types of this Formattable object.
+     * Selector for flavor of data type contained within a
+     * Formattable object.  Formattable is a union of several
+     * different types, and at any time contains exactly one type.
      * @stable ICU 2.4
      */
     enum Type {
-                /** @stable ICU 2.4 */
-        kDate,      // Date
-                /** @stable ICU 2.4 */
-        kDouble,    // double
-                /** @stable ICU 2.4 */
-        kLong,      // long
-                /** @stable ICU 2.4 */
-        kString,    // UnicodeString
-                /** @stable ICU 2.4 */
-        kArray,     // Formattable[]
-                /** @draft ICU 2.8 */
-        kInt64      // int64
+        /**
+         * Selector indicating a UDate value.  Use getDate to retrieve
+         * the value.
+         * @stable ICU 2.4
+         */
+        kDate,
+
+        /**
+         * Selector indicating a double value.  Use getDouble to
+         * retrieve the value.
+         * @stable ICU 2.4
+         */
+        kDouble,
+
+        /**
+         * Selector indicating a 32-bit integer value.  Use getLong to
+         * retrieve the value.
+         * @stable ICU 2.4
+         */
+        kLong,
+
+        /**
+         * Selector indicating a UnicodeString value.  Use getString
+         * to retrieve the value.
+         * @stable ICU 2.4
+         */
+        kString,
+
+        /**
+         * Selector indicating an array of Formattables.  Use getArray
+         * to retrieve the value.
+         * @stable ICU 2.4
+         */
+        kArray,
+
+        /**
+         * Selector indicating a 64-bit integer value.  Use getInt64
+         * to retrieve the value.
+         * @draft ICU 2.8
+         */
+        kInt64,
+
+        /**
+         * Selector indicating a UObject value.  Use getObject to
+         * retrieve the value.
+         * @draft ICU 3.0
+         */
+        kObject
    };
 
     /**
@@ -226,6 +247,14 @@ public:
      * @stable ICU 2.0
      */
     Type            getType(void) const;
+    
+    /**
+     * Returns TRUE if the data type of this Formattable object
+     * is kDouble, kLong, or kInt64.
+     * @return TRUE if this is a pure numeric object
+     * @draft ICU 3.0
+     */
+    UBool           isNumeric() const;
     
     /**
      * Gets the double value of this object. If this object is not of type
@@ -238,8 +267,11 @@ public:
     /**
      * Gets the double value of this object. If this object is of type
      * long or int64 then a casting conversion is peformed, with
-     * possible loss of precision.  If the type is not a numeric type,
-     * 0 is returned and the status is set to U_INVALID_FORMAT_ERROR.
+     * possible loss of precision.  If the type is kObject and the
+     * object is a Measure, then the result of
+     * getNumber().getDouble(status) is returned.  If this object is
+     * neither a numeric type nor a Measure, then 0 is returned and
+     * the status is set to U_INVALID_FORMAT_ERROR.
      * @param status the error code
      * @return the double value of this object.
      * @draft ICU 3.0
@@ -261,9 +293,11 @@ public:
      * U_INVALID_FORMAT_ERROR.  If this object is of type kInt64 and
      * it fits within a long, then no precision is lost.  If it is of
      * type kDouble, then a casting conversion is peformed, with
-     * truncation of any fractional part.  If the type is not a
-     * numeric type, 0 is returned and the status is set to
-     * U_INVALID_FORMAT_ERROR.
+     * truncation of any fractional part.  If the type is kObject and
+     * the object is a Measure, then the result of
+     * getNumber().getLong(status) is returned.  If this object is
+     * neither a numeric type nor a Measure, then 0 is returned and
+     * the status is set to U_INVALID_FORMAT_ERROR.
      * @param status the error code
      * @return    the long value of this object.
      * @draft ICU 3.0
@@ -285,8 +319,10 @@ public:
      * and the status is set to U_INVALID_FORMAT_ERROR.  If the
      * magnitude fits in an int64, then a casting conversion is
      * peformed, with truncation of any fractional part.  If the type
-     * is not a numeric type, 0 is returned and the status is set to
-     * U_INVALID_FORMAT_ERROR.
+     * is kObject and the object is a Measure, then the result of
+     * getNumber().getDouble(status) is returned.  If this object is
+     * neither a numeric type nor a Measure, then 0 is returned and
+     * the status is set to U_INVALID_FORMAT_ERROR.
      * @param status the error code
      * @return    the int64 value of this object.
      * @draft ICU 3.0
@@ -401,13 +437,12 @@ public:
     Formattable&    operator[](int32_t index) { return fValue.fArrayAndCount.fArray[index]; }
        
     /**
-     * Returns the currency of this object, or NULL if this object has
-     * no associated currency.  Any type may have a currency, although
-     * this is intended for use with numeric types.
-     * @return a null-terminated 3-letter ISO 4217 code, or NULL
+     * Returns a pointer to the UObject contained within this
+     * formattable, or NULL if this object does not contain a UObject.
+     * @return a UObject pointer, or NULL
      * @draft ICU 3.0
      */
-    const UChar*    getCurrency() const;
+    const UObject*  getObject() const;
 
     /**
      * Sets the double value of this object and changes the type to
@@ -474,15 +509,13 @@ public:
     void            adoptArray(Formattable* array, int32_t count);
        
     /**
-     * Sets the currency of this object.  Only numeric types may have
-     * a currency.  If isoCode is NULL then the currency is removed
-     * from this object.  Any type may have a currency, although
-     * this is intended for use with numeric types.
-     * @param currency a null-terminated 3-letter ISO 4217 code, or NULL.
-     * If longer than 3 characters, the extra characters are ignored.
+     * Sets and adopts the UObject value of this object and changes
+     * the type to kObject.  After this call, the caller must not
+     * delete the given object.
+     * @param objectToAdopt the UObject value to be adopted
      * @draft ICU 3.0
      */
-    void            setCurrency(const UChar* currency);
+    void            adoptObject(UObject* objectToAdopt);
 
     /**
      * ICU "poor man's RTTI", returns a UClassID for the actual class.
@@ -525,19 +558,18 @@ private:
     UnicodeString* getBogus() const;
 
     union {
+        UObject*        fObject;
         UnicodeString*  fString;
         double          fDouble;
         int64_t         fInt64;
         UDate           fDate;
-        struct
-        {
-            Formattable*  fArray;
-            int32_t       fCount;
+        struct {
+          Formattable*  fArray;
+          int32_t       fCount;
         }               fArrayAndCount;
-    }                   fValue;
+    } fValue;
 
     Type                fType;
-    UChar               fCurrency[4];
     UnicodeString       fBogus; // Bogus string when it's needed.
 };
 

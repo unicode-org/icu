@@ -19,6 +19,8 @@
 
 #include "unicode/fmtable.h"
 #include "unicode/ustring.h"
+#include "unicode/measure.h"
+#include "unicode/curramt.h"
 #include "cmemory.h"
 
 // *****************************************************************************
@@ -28,6 +30,38 @@
 U_NAMESPACE_BEGIN
 
 UOBJECT_DEFINE_RTTI_IMPLEMENTATION(Formattable)
+
+//-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.
+
+// NOTE: As of 3.0, there are limitations to the UObject API.  It does
+// not (yet) support cloning, operator=, nor operator==.  RTTI is also
+// restricted in that subtype testing is not (yet) implemented.  To
+// work around this, I implement some simple inlines here.  Later
+// these can be modified or removed.  [alan]
+
+// NOTE: These inlines assume that all fObjects are in fact instances
+// of the Measure class, which is true as of 3.0.  [alan]
+
+// Return TRUE if *a == *b.
+inline UBool objectEquals(const UObject* a, const UObject* b) {
+    // LATER: return *a == *b;
+    return *((const Measure*) a) == *((const Measure*) b);
+}
+
+// Return a clone of *a.
+inline UObject* objectClone(const UObject* a) {
+    // LATER: return a->clone();
+    return ((const Measure*) a)->clone();
+}
+
+// Return TRUE if *a is an instance of Measure.
+inline UBool instanceOfMeasure(const UObject* a) {
+    // LATER: return a->instanceof(Measure::getStaticClassID());
+    return a->getDynamicClassID() ==
+        CurrencyAmount::getStaticClassID();
+}
+
+//-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.
 
 /**
  * Set 'ec' to 'err' only if 'ec' is not already set to a failing UErrorCode.
@@ -47,7 +81,6 @@ Formattable::Formattable()
 {
     fBogus.setToBogus();
     fValue.fInt64 = 0;
-    fCurrency[0] = 0;
 }
 
 // -------------------------------------
@@ -58,7 +91,6 @@ Formattable::Formattable(UDate date, ISDATE /*isDate*/)
 {
     fBogus.setToBogus();
     fValue.fDate = date;
-    fCurrency[0] = 0;
 }
 
 // -------------------------------------
@@ -69,7 +101,6 @@ Formattable::Formattable(double value)
 {
     fBogus.setToBogus();
     fValue.fDouble = value;
-    fCurrency[0] = 0;
 }
 
 // -------------------------------------
@@ -80,7 +111,6 @@ Formattable::Formattable(int32_t value)
 {
     fBogus.setToBogus();
     fValue.fInt64 = value;
-    fCurrency[0] = 0;
 }
 
 // -------------------------------------
@@ -91,25 +121,6 @@ Formattable::Formattable(int64_t value)
 {
     fBogus.setToBogus();
     fValue.fInt64 = value;
-    fCurrency[0] = 0;
-}
-
-Formattable::Formattable(double n, const UChar* currency) : UObject(), fType(kDouble) {
-    fBogus.setToBogus();
-    fValue.fDouble = n;
-    setCurrency(currency);
-}
-
-Formattable::Formattable(int32_t n, const UChar* currency) : UObject(), fType(kLong) {
-    fBogus.setToBogus();
-    fValue.fInt64 = n;
-    setCurrency(currency);
-}
-
-Formattable::Formattable(int64_t n, const UChar* currency) : UObject(), fType(kInt64) {
-    fBogus.setToBogus();
-    fValue.fInt64 = n;
-    setCurrency(currency);
 }
 
 // -------------------------------------
@@ -120,7 +131,6 @@ Formattable::Formattable(const char* stringToCopy)
 {
     fBogus.setToBogus();
     fValue.fString = new UnicodeString(stringToCopy);
-    fCurrency[0] = 0;
 }
 
 // -------------------------------------
@@ -131,7 +141,6 @@ Formattable::Formattable(const UnicodeString& stringToCopy)
 {
     fBogus.setToBogus();
     fValue.fString = new UnicodeString(stringToCopy);
-    fCurrency[0] = 0;
 }
 
 // -------------------------------------
@@ -143,7 +152,13 @@ Formattable::Formattable(UnicodeString* stringToAdopt)
 {
     fBogus.setToBogus();
     fValue.fString = stringToAdopt;
-    fCurrency[0] = 0;
+}
+
+Formattable::Formattable(UObject* objectToAdopt)
+    :   UObject(), fType(kObject)
+{
+    fBogus.setToBogus();
+    fValue.fObject = objectToAdopt;
 }
 
 // -------------------------------------
@@ -154,7 +169,6 @@ Formattable::Formattable(const Formattable* arrayToCopy, int32_t count)
     fBogus.setToBogus();
     fValue.fArrayAndCount.fArray = createArrayCopy(arrayToCopy, count);
     fValue.fArrayAndCount.fCount = count;
-    fCurrency[0] = 0;
 }
 
 // -------------------------------------
@@ -205,9 +219,10 @@ Formattable::operator=(const Formattable& source)
             // Sets the Date value.
             fValue.fDate = source.fValue.fDate;
             break;
+        case kObject:
+            fValue.fObject = objectClone(source.fValue.fObject);
+            break;
         }
-
-        u_strcpy(fCurrency, source.fCurrency);
     }
     return *this;
 }
@@ -251,10 +266,9 @@ Formattable::operator==(const Formattable& that) const
             }
         }
         break;
-    }
-
-    if (equal) {
-        equal = (u_strcmp(fCurrency, that.fCurrency) == 0);
+    case kObject:
+        equal = objectEquals(fValue.fObject, that.fValue.fObject);
+        break;
     }
 
     return equal;
@@ -279,6 +293,9 @@ void Formattable::dispose()
     case kArray:
         delete[] fValue.fArrayAndCount.fArray;
         break;
+    case kObject:
+        delete fValue.fObject;
+        break;
     default:
         break;
     }
@@ -295,6 +312,18 @@ Formattable::Type
 Formattable::getType() const
 {
     return fType;
+}
+
+UBool
+Formattable::isNumeric() const {
+    switch (fType) {
+    case kDouble:
+    case kLong:
+    case kInt64:
+        return TRUE;
+    default:
+        return FALSE;
+    }
 }
 
 // -------------------------------------
@@ -329,6 +358,12 @@ Formattable::getLong(UErrorCode& status) const
         } else {
             return (int32_t)fValue.fDouble; // loses fraction
         }
+    case Formattable::kObject:
+        // TODO Later replace this with instanceof call
+        if (instanceOfMeasure(fValue.fObject)) {
+            return ((const Measure*) fValue.fObject)->
+                getNumber().getLong(status);
+        }
     default: 
         status = U_INVALID_FORMAT_ERROR;
         return 0;
@@ -357,6 +392,12 @@ Formattable::getInt64(UErrorCode& status) const
         } else {
             return (int64_t)fValue.fDouble;
         }
+    case Formattable::kObject:
+        // TODO Later replace this with instanceof call
+        if (instanceOfMeasure(fValue.fObject)) {
+            return ((const Measure*) fValue.fObject)->
+                getNumber().getInt64(status);
+        }
     default: 
         status = U_INVALID_FORMAT_ERROR;
         return 0;
@@ -377,15 +418,21 @@ Formattable::getDouble(UErrorCode& status) const
         return (double)fValue.fInt64;
     case Formattable::kDouble:
         return fValue.fDouble;
+    case Formattable::kObject:
+        // TODO Later replace this with instanceof call
+        if (instanceOfMeasure(fValue.fObject)) {
+            return ((const Measure*) fValue.fObject)->
+                getNumber().getDouble(status);
+        }
     default: 
         status = U_INVALID_FORMAT_ERROR;
         return 0;
     }
 }
 
-const UChar*
-Formattable::getCurrency() const {
-    return (fCurrency[0] != 0) ? fCurrency : NULL;
+const UObject*
+Formattable::getObject() const {
+    return (fType == kObject) ? fValue.fObject : NULL;
 }
 
 // -------------------------------------
@@ -479,12 +526,10 @@ Formattable::adoptArray(Formattable* array, int32_t count)
 }
 
 void
-Formattable::setCurrency(const UChar* currency) {
-    fCurrency[0] = 0;
-    if (currency != NULL) {
-        uprv_memcpy(&fCurrency[0], currency, 3*sizeof(fCurrency[0]));
-        fCurrency[3] = 0;
-    }
+Formattable::adoptObject(UObject* objectToAdopt) {
+    dispose();
+    fType = kObject;
+    fValue.fObject = objectToAdopt;
 }
 
 // -------------------------------------

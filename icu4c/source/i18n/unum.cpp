@@ -23,6 +23,7 @@
 #include "unicode/ustring.h"
 #include "unicode/fmtable.h"
 #include "unicode/dcfmtsym.h"
+#include "unicode/curramt.h"
 #include "uassert.h"
 #include "cpputils.h"
 
@@ -270,8 +271,8 @@ unum_formatDoubleCurrency(const UNumberFormat* fmt,
     if (pos != 0) {
         fp.setField(pos->field);
     }
-  
-    Formattable n(number, currency);
+
+    Formattable n(new CurrencyAmount(number, currency, *status));
     ((const NumberFormat*)fmt)->format(n, res, fp, *status);
     
     if (pos != 0) {
@@ -363,8 +364,10 @@ unum_parseDoubleCurrency(const UNumberFormat* fmt,
     Formattable res;
     parseRes(res, fmt, text, textLength, parsePos, TRUE, status);
     currency[0] = 0;
-    if (res.getCurrency() != 0) {
-        u_strcpy(currency, res.getCurrency());
+    if (res.getType() == Formattable::kObject &&
+        res.getObject()->getDynamicClassID() == CurrencyAmount::getStaticClassID()) {
+        const CurrencyAmount* c = (const CurrencyAmount*) res.getObject();
+        u_strcpy(currency, c->getISOCurrency());
     }
     return res.getDouble(*status);
 }

@@ -48,6 +48,7 @@
 #include "unicode/dcfmtsym.h"
 #include "unicode/resbund.h"
 #include "unicode/uchar.h"
+#include "unicode/curramt.h"
 #include "ucurrimp.h"
 #include "uprops.h"
 #include "digitlst.h"
@@ -1253,59 +1254,58 @@ void DecimalFormat::parse(const UnicodeString& text,
         return;
     }
 
-    if (parseCurrency) {
-        result.setCurrency(curbuf);
-    }
-
     // Handle infinity
     if (status[fgStatusInfinite]) {
         double inf = uprv_getInfinity();
         result.setDouble(digits.fIsPositive ? inf : -inf);
-        return;
     }
 
-    // Do as much of the multiplier conversion as possible without
-    // losing accuracy.
-    int32_t mult = fMultiplier; // Don't modify this.multiplier
-    while (mult % 10 == 0) {
-        mult /= 10;
-        --digits.fDecimalAt;
-    }
-
-    // Handle integral values.  We want to return the most
-    // parsimonious type that will accommodate all of the result's
-    // precision.  We therefore only return a long if the result fits
-    // entirely within a long (taking into account the multiplier) --
-    // otherwise we fall through and return a double.  When more
-    // numeric types are supported by Formattable (e.g., 64-bit
-    // integers, bignums) we will extend this logic to include them.
-    if (digits.fitsIntoLong(isParseIntegerOnly())) {
-        int32_t n = digits.getLong();
-        if (n % mult == 0) {
-            result.setLong(n / mult);
-            return;
-        }
-        else {  // else handle the remainder
-            result.setDouble(((double)n) / mult);
-            return;
-        }
-    }
-    else if (digits.fitsIntoInt64(isParseIntegerOnly())) {
-        int64_t n = digits.getInt64();
-        if (n % mult == 0) {
-            result.setInt64(n / mult);
-            return;
-        }
-        else {  // else handle the remainder
-            result.setDouble(((double)n) / mult);
-            return;
-        }
-    }
     else {
-        // Handle non-integral or very large values
-        // Dividing by one is okay and not that costly.
-        result.setDouble(digits.getDouble() / mult);
-        return;
+        // Do as much of the multiplier conversion as possible without
+        // losing accuracy.
+        int32_t mult = fMultiplier; // Don't modify this.multiplier
+        while (mult % 10 == 0) {
+            mult /= 10;
+            --digits.fDecimalAt;
+        }
+
+        // Handle integral values.  We want to return the most
+        // parsimonious type that will accommodate all of the result's
+        // precision.  We therefore only return a long if the result fits
+        // entirely within a long (taking into account the multiplier) --
+        // otherwise we fall through and return a double.  When more
+        // numeric types are supported by Formattable (e.g., 64-bit
+        // integers, bignums) we will extend this logic to include them.
+        if (digits.fitsIntoLong(isParseIntegerOnly())) {
+            int32_t n = digits.getLong();
+            if (n % mult == 0) {
+                result.setLong(n / mult);
+            }
+            else {  // else handle the remainder
+                result.setDouble(((double)n) / mult);
+            }
+        }
+        else if (digits.fitsIntoInt64(isParseIntegerOnly())) {
+            int64_t n = digits.getInt64();
+            if (n % mult == 0) {
+                result.setInt64(n / mult);
+            }
+            else {  // else handle the remainder
+                result.setDouble(((double)n) / mult);
+            }
+        }
+        else {
+            // Handle non-integral or very large values
+            // Dividing by one is okay and not that costly.
+            result.setDouble(digits.getDouble() / mult);
+        }
+    }
+
+    if (parseCurrency) {
+        UErrorCode ec = U_ZERO_ERROR;
+        Formattable n(result);
+        result.adoptObject(new CurrencyAmount(n, curbuf, ec));
+        U_ASSERT(U_SUCCESS(ec)); // should always succeed
     }
 }
 
