@@ -302,15 +302,12 @@ void LocaleTest::TestBasicGetters() {
         errln("assignment to bogus Locale does not unbogus it or sets bad data");
     }
 
-    errln("%s:%d: clone test commented out..\n", __FILE__, __LINE__);
-#if 0
     Locale a("eo_DE@currency=DEM");
     Locale *pb=a.clone();
     if(pb==&a || *pb!=a) {
         errln("Locale.clone() failed");
     }
     delete pb;
-#endif
 }
 
 void LocaleTest::TestParallelAPIValues() {
