@@ -20,7 +20,7 @@ The main root for C API tests
 #define _CINTLTST
 
 #include "unicode/utypes.h"
-#include "ctest.h"
+#include "unicode/ctest.h"
 
 U_CFUNC void addAllTests(TestNode** root);
 

@@ -5,7 +5,7 @@
  ********************************************************************/
 #include "unicode/utypes.h"
 #include "unicode/ustring.h"
-#include "ctest.h"
+#include "unicode/ctest.h"
 #include "unicode/ucnv.h"
 #include <stdio.h>
 
