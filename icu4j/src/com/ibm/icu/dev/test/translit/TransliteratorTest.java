@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/translit/TransliteratorTest.java,v $
- * $Date: 2002/02/16 03:05:21 $
- * $Revision: 1.96 $
+ * $Date: 2002/02/25 22:43:57 $
+ * $Revision: 1.97 $
  *
  *****************************************************************************************
  */
@@ -14,7 +14,7 @@ package com.ibm.icu.dev.test.translit;
 import com.ibm.icu.lang.*;
 import com.ibm.icu.text.*;
 import com.ibm.icu.dev.test.*;
-import com.ibm.icu.util.Utility;
+import com.ibm.icu.impl.Utility;
 import java.text.*;
 import java.util.*;
 

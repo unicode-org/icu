@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/lang/UCharacter.java,v $ 
-* $Date: 2002/02/19 19:07:32 $ 
-* $Revision: 1.24 $
+* $Date: 2002/02/25 22:43:59 $ 
+* $Revision: 1.25 $
 *
 *******************************************************************************
 */
@@ -17,7 +17,7 @@ package com.ibm.icu.lang;
 import java.util.Locale;
 import com.ibm.icu.impl.Trie;
 import com.ibm.icu.util.RangeValueIterator;
-import com.ibm.icu.util.Utility;
+import com.ibm.icu.impl.Utility;
 import com.ibm.icu.text.BreakIterator;
 import com.ibm.icu.text.RuleBasedBreakIterator;
 import com.ibm.icu.text.UTF16;

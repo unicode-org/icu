@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/lang/UCharacterTest.java,v $ 
-* $Date: 2002/02/22 17:40:06 $ 
-* $Revision: 1.27 $
+* $Date: 2002/02/25 22:43:57 $ 
+* $Revision: 1.28 $
 *
 *******************************************************************************
 */
@@ -25,7 +25,7 @@ import com.ibm.icu.lang.UCharacterCategory;
 import com.ibm.icu.lang.UCharacterDirection;
 import com.ibm.icu.util.RangeValueIterator;
 import com.ibm.icu.text.UTF16;
-import com.ibm.icu.util.Utility;
+import com.ibm.icu.impl.Utility;
 
 /**
 * Testing class for UCharacter

@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/tool/normalizer/Attic/CPPWriter.java,v $ 
- * $Date: 2002/02/16 03:05:33 $ 
- * $Revision: 1.7 $
+ * $Date: 2002/02/25 22:43:59 $ 
+ * $Revision: 1.8 $
  *
  *****************************************************************************************
  */
@@ -17,7 +17,7 @@ import com.ibm.icu.text.*;
 import com.ibm.icu.util.*;
 import com.ibm.icu.util.CompactByteArray;
 import com.ibm.icu.util.CompactCharArray;
-import com.ibm.icu.util.Utility;
+import com.ibm.icu.impl.Utility;
 import java.io.*;
 
 /**

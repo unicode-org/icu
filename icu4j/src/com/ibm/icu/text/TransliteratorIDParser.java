@@ -11,7 +11,7 @@
 package com.ibm.icu.text;
 
 import com.ibm.icu.util.CaseInsensitiveString;
-import com.ibm.icu.util.Utility;
+import com.ibm.icu.impl.Utility;
 import java.text.ParsePosition;
 import java.util.Hashtable;
 import java.util.Vector;

@@ -12,6 +12,7 @@
 
 package com.ibm.icu.text;
 import com.ibm.icu.util.*;
+import com.ibm.icu.impl.Utility;
 
 class ComposeData {
     static final short BASE_COUNT = 748;

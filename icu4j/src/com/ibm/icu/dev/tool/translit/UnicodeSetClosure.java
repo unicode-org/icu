@@ -5,15 +5,15 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/tool/translit/UnicodeSetClosure.java,v $
- * $Date: 2002/02/16 03:05:35 $
- * $Revision: 1.5 $
+ * $Date: 2002/02/25 22:43:59 $
+ * $Revision: 1.6 $
  *
  *****************************************************************************************
  */
 package com.ibm.icu.dev.tool.translit;
 import com.ibm.icu.lang.*;
 import com.ibm.icu.text.*;
-import com.ibm.icu.util.Utility;
+import com.ibm.icu.impl.Utility;
 //import java.text.*;
 import java.io.*;
 import java.util.Locale;

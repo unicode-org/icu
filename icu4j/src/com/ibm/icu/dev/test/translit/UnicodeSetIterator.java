@@ -2,7 +2,7 @@ package com.ibm.icu.dev.test.translit;
 import com.ibm.icu.lang.*;
 import com.ibm.icu.text.*;
 import com.ibm.icu.dev.test.*;
-import com.ibm.icu.util.Utility;
+import com.ibm.icu.impl.Utility;
 //import java.text.*;
 import java.util.*;
 import java.io.*;

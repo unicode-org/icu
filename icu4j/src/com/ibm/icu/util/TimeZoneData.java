@@ -3,11 +3,12 @@
  * others. All Rights Reserved.
  *********************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/util/Attic/TimeZoneData.java,v $
- * $Date: 2002/02/16 03:06:31 $
- * $Revision: 1.5 $
+ * $Date: 2002/02/25 22:43:59 $
+ * $Revision: 1.6 $
  */
 package com.ibm.icu.util;
 import java.util.Hashtable;
+import com.ibm.icu.impl.Utility;
 
 /**
  * Internal class that encapsulates data about the system time zones.
@@ -717,7 +718,7 @@ class TimeZoneData {
 
     /**
      * RLE encoded form of DATA.
-     * @see com.ibm.icu.util.Utility.RLEStringToIntArray
+     * @see com.ibm.icu.impl.Utility.RLEStringToIntArray
      * >> GENERATED DATA: DO NOT EDIT <<
      */
     static final String DATA_RLE =
@@ -927,7 +928,7 @@ class TimeZoneData {
 
     /**
      * RLE encoded form of INDEX_BY_NAME_ARRAY.
-     * @see com.ibm.icu.util.Utility.RLEStringToIntArray
+     * @see com.ibm.icu.impl.Utility.RLEStringToIntArray
      * >> GENERATED DATA: DO NOT EDIT <<
      */
     static final String INDEX_BY_NAME_ARRAY_RLE =
@@ -994,7 +995,7 @@ class TimeZoneData {
 
     /**
      * RLE encoded form of INDEX_BY_OFFSET.
-     * @see com.ibm.icu.util.Utility.RLEStringToIntArray
+     * @see com.ibm.icu.impl.Utility.RLEStringToIntArray
      * >> GENERATED DATA: DO NOT EDIT <<
      */
     static final String INDEX_BY_OFFSET_RLE =
@@ -1071,7 +1072,7 @@ class TimeZoneData {
 
     /**
      * RLE encoded form of INDEX_BY_COUNTRY.
-     * @see com.ibm.icu.util.Utility.RLEStringToIntArray
+     * @see com.ibm.icu.impl.Utility.RLEStringToIntArray
      * >> GENERATED DATA: DO NOT EDIT <<
      */
     static final String INDEX_BY_COUNTRY_RLE =

@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/RuleBasedBreakIterator.java,v $
- * $Date: 2002/02/16 03:06:12 $
- * $Revision: 1.16 $
+ * $Date: 2002/02/25 22:43:58 $
+ * $Revision: 1.17 $
  *
  *****************************************************************************************
  */
@@ -32,7 +32,7 @@
 package com.ibm.icu.text;
 
 import com.ibm.icu.util.CompactByteArray;
-import com.ibm.icu.util.Utility;
+import com.ibm.icu.impl.Utility;
 import java.util.Vector;
 import java.util.Stack;
 import java.util.Hashtable;
@@ -241,7 +241,7 @@ import java.io.*;
  * &nbsp; For examples, see the resource data (which is annotated).</p>
  *
  * @author Richard Gillam
- * $RCSfile: RuleBasedBreakIterator.java,v $ $Revision: 1.16 $ $Date: 2002/02/16 03:06:12 $
+ * $RCSfile: RuleBasedBreakIterator.java,v $ $Revision: 1.17 $ $Date: 2002/02/25 22:43:58 $
  */
 public class RuleBasedBreakIterator extends BreakIterator {
 

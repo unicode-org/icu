@@ -14,7 +14,7 @@ import com.ibm.icu.lang.*;
 
 /**
  * @author Alan Liu
- * @version $RCSfile: NormalizationTransliterator.java,v $ $Revision: 1.16 $ $Date: 2002/02/16 03:06:10 $
+ * @version $RCSfile: NormalizationTransliterator.java,v $ $Revision: 1.17 $ $Date: 2002/02/25 22:43:58 $
  */
 final class NormalizationTransliterator extends Transliterator {
     
@@ -177,7 +177,7 @@ final class NormalizationTransliterator extends Transliterator {
      * @return return the delta in length (new - old), or Integer.MIN_VALUE if the verify aborted.
      */
     int convert(Replaceable text, int lastSafe, int limit, UnicodeSet verify) {        
-        //System.out.println("t: " + com.ibm.icu.util.Utility.hex(text.toString()) + ", s: " + lastSafe + ", l: " + limit);
+        //System.out.println("t: " + com.ibm.icu.impl.Utility.hex(text.toString()) + ", s: " + lastSafe + ", l: " + limit);
 
         int len = limit - lastSafe;
         if (buffer.length < len) {
@@ -192,8 +192,8 @@ final class NormalizationTransliterator extends Transliterator {
             boolean skip = !SKIPPABLE.containsAll(output);
             if (DEBUG) {
                 System.out.println((skip ? "  SKIP: " : "NOSKIP: ") 
-                    + com.ibm.icu.util.Utility.escape(input) 
-                    + " => " + com.ibm.icu.util.Utility.escape(output));
+                    + com.ibm.icu.impl.Utility.escape(input) 
+                    + " => " + com.ibm.icu.impl.Utility.escape(output));
             }
             if (skip) return Integer.MIN_VALUE;
         }

@@ -4,14 +4,14 @@
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/TransliteratorParser.java,v $
-* $Date: 2002/02/16 03:06:18 $
-* $Revision: 1.18 $
+* $Date: 2002/02/25 22:43:58 $
+* $Revision: 1.19 $
 **********************************************************************
 */
 package com.ibm.icu.text;
 
 import com.ibm.icu.impl.data.ResourceReader;
-import com.ibm.icu.util.Utility;
+import com.ibm.icu.impl.Utility;
 import java.util.Stack;
 import java.util.Vector;
 import java.text.ParsePosition;

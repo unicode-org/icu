@@ -9,7 +9,7 @@
 */
 
 package com.ibm.icu.text;
-import com.ibm.icu.util.Utility;
+import com.ibm.icu.impl.Utility;
 
 /**
  * A replacer that produces static text as its output.  The text may

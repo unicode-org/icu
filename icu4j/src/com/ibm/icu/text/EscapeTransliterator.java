@@ -8,7 +8,7 @@
 **********************************************************************
 */
 package com.ibm.icu.text;
-import com.ibm.icu.util.Utility;
+import com.ibm.icu.impl.Utility;
 
 /**
  * A transliterator that converts Unicode characters to an escape
@@ -32,7 +32,7 @@ import com.ibm.icu.util.Utility;
  * variants with the system which are then accessed via their IDs.
  *
  * @author Alan Liu
- * @version $RCSfile: EscapeTransliterator.java,v $ $Revision: 1.4 $ $Date: 2002/02/16 03:06:08 $
+ * @version $RCSfile: EscapeTransliterator.java,v $ $Revision: 1.5 $ $Date: 2002/02/25 22:43:58 $
  */
 class EscapeTransliterator extends Transliterator {
 
