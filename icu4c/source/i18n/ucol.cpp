@@ -695,6 +695,7 @@ void ucol_setOptionsFromHeader(UCollator* result, UColOptionSet * opts, UErrorCo
     result->variableTopValue = opts->variableTopValue;
     result->alternateHandling = (UColAttributeValue)opts->alternateHandling;
     result->hiraganaQ = (UColAttributeValue)opts->hiraganaQ;
+    result->numericCollation = (UColAttributeValue)opts->numericCollation;
 
     result->caseFirstisDefault = TRUE;
     result->caseLevelisDefault = TRUE;
@@ -703,6 +704,7 @@ void ucol_setOptionsFromHeader(UCollator* result, UColOptionSet * opts, UErrorCo
     result->strengthisDefault = TRUE;
     result->variableTopValueisDefault = TRUE;
     result->hiraganaQisDefault = TRUE;
+    result->numericCollationisDefault = TRUE;
 
     ucol_updateInternalState(result, status);
 
@@ -723,6 +725,7 @@ void ucol_putOptionsToHeader(UCollator* result, UColOptionSet * opts, UErrorCode
     opts->variableTopValue = result->variableTopValue;
     opts->alternateHandling = result->alternateHandling;
     opts->hiraganaQ = opts->hiraganaQ;
+    opts->numericCollation = opts->numericCollation;
 }
 #endif
 
@@ -834,6 +837,7 @@ UCollator* ucol_initCollator(const UCATableHeader *image, UCollator *fillIn, UEr
     result->variableTopValue = result->options->variableTopValue;
     result->alternateHandling = (UColAttributeValue)result->options->alternateHandling;
     result->hiraganaQ = (UColAttributeValue)result->options->hiraganaQ;
+    result->numericCollation = (UColAttributeValue)result->options->numericCollation;
 
     result->caseFirstisDefault = TRUE;
     result->caseLevelisDefault = TRUE;
@@ -843,6 +847,7 @@ UCollator* ucol_initCollator(const UCATableHeader *image, UCollator *fillIn, UEr
     result->variableTopValueisDefault = TRUE;
     result->alternateHandlingisDefault = TRUE;
     result->hiraganaQisDefault = TRUE;
+    result->numericCollationisDefault = TRUE;
 
     result->scriptOrder = NULL;
 
