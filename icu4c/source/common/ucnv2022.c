@@ -351,8 +351,10 @@ _ISO2022Close(UConverter *converter) {
     UConverter **array = ((UConverterDataISO2022 *) (converter->extraInfo))->myConverterArray;
     if (converter->extraInfo != NULL) {
         ucnv_close (((UConverterDataISO2022 *) (converter->extraInfo))->currentConverter);
+        if(((UConverterDataISO2022 *) (converter->extraInfo))->previousConverter){
+            ucnv_close (((UConverterDataISO2022 *) (converter->extraInfo))->previousConverter);
+        }
         /*close the array of converter pointers and free the memory*/
-        
         while(*array!=NULL){
             ucnv_close(*array++);
         }
@@ -562,7 +564,7 @@ static const char* escSeqChars[8] ={
     "\x1B\x24\x42",
     "\x1B\x24\x28\x44",
     "\x1B\x24\x41", 
-    "\x1B\x24\x29\x43", 
+    "\x1B\x24\x28\x43", 
 
 };
 
@@ -1310,7 +1312,10 @@ U_CFUNC void T_UConverter_toUnicode_ISO_2022(UConverterToUnicodeArgs *args,
 
             saveThis = args->converter;
             args->offsets = NULL;
-
+            /* While in ISO-2022-JP2 we reached the end of the buffer after finding 
+             * ASCII escape sequence. We need to find if the the escape sequence is
+             * for next char or not.
+             */
             if(((UConverterDataISO2022*)(args->converter->extraInfo))->previousConverter && *(args->source)<=0x0020){
             
                 args->converter = ((UConverterDataISO2022*)(args->converter->extraInfo))->previousConverter;
@@ -2099,5 +2104,4 @@ U_CFUNC void UConverter_toUnicode_ISO_2022_KR(UConverterToUnicodeArgs* args, UEr
 }
 
 /*************************** END ISO2022-KR *********************************/
-
 
