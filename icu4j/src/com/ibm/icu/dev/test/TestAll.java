@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/TestAll.java,v $ 
- * $Date: 2000/05/18 19:09:38 $ 
- * $Revision: 1.1 $
+ * $Date: 2000/07/21 21:20:51 $ 
+ * $Revision: 1.2 $
  *
  *****************************************************************************************
  */
@@ -39,7 +39,8 @@ public class TestAll extends TestFmwk {
 	public void TestNormalizer() throws Exception{
 		run(new TestFmwk[] {
             new com.ibm.test.normalizer.BasicTest(),
-            new com.ibm.test.normalizer.ExhaustiveTest()
+            new com.ibm.test.normalizer.ExhaustiveTest(),
+            new com.ibm.test.normalizer.ConformanceTest(),
             });
 	}
 
