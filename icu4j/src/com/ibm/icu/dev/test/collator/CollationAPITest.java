@@ -353,7 +353,8 @@ public class CollationAPITest extends TestFmwk {
         CharacterIterator chariter=new StringCharacterIterator(testString1);
         // copy ctor
         CollationElementIterator iterator2 = ((RuleBasedCollator)col).getCollationElementIterator(chariter);
-        CollationElementIterator iterator3 = ((RuleBasedCollator)col).getCollationElementIterator(testString2);
+        UCharacterIterator uchariter=UCharacterIterator.getInstance(testString2);
+        CollationElementIterator iterator3 = ((RuleBasedCollator)col).getCollationElementIterator(uchariter);
     
         int offset = 0;
         offset = iterator1.getOffset();

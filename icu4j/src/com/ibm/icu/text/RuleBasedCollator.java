@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/RuleBasedCollator.java,v $
-* $Date: 2003/09/22 06:24:20 $
-* $Revision: 1.47 $
+* $Date: 2003/10/08 21:51:44 $
+* $Revision: 1.48 $
 *
 *******************************************************************************
 */
@@ -19,7 +19,6 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.Arrays;
 import java.text.CharacterIterator;
-import java.text.StringCharacterIterator;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.util.VersionInfo;
 import com.ibm.icu.impl.IntTrie;
@@ -28,6 +27,7 @@ import com.ibm.icu.impl.ICULocaleData;
 import com.ibm.icu.impl.BOCU;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.impl.ICUDebug;
+import com.ibm.icu.impl.StringUCharacterIterator;
 
 /**
  * <p>RuleBasedCollator is a concrete subclass of Collator. It allows
@@ -254,6 +254,19 @@ public final class RuleBasedCollator extends Collator
     {
         CharacterIterator newsource = (CharacterIterator)source.clone();
         return new CollationElementIterator(newsource, this);
+    }
+    
+    /**
+     * Return a CollationElementIterator for the given UCharacterIterator.
+     * The source iterator's integrity will be preserved since a new copy
+     * will be created for use.
+     * @see CollationElementIterator
+     * @draft ICU 2.8
+     */
+    public CollationElementIterator getCollationElementIterator(
+                                                UCharacterIterator source)
+    {
+        return new CollationElementIterator(source, this);
     }
 
     // public setters --------------------------------------------------------
@@ -1731,9 +1744,10 @@ public final class RuleBasedCollator extends Collator
         if (ch < m_minUnsafe_) {
             return false;
         }
-
+        
         if (ch >= (HEURISTIC_SIZE_ << HEURISTIC_SHIFT_)) {
-            if (UTF16.isLeadSurrogate(ch) || UTF16.isTrailSurrogate(ch)) {
+            if (UTF16.isLeadSurrogate(ch) 
+                || UTF16.isTrailSurrogate(ch)) {
                 //  Trail surrogate are always considered unsafe.
                 return true;
             }
@@ -1966,9 +1980,9 @@ public final class RuleBasedCollator extends Collator
     /**
      * Bunch of utility iterators
      */
-    private StringCharacterIterator m_srcUtilIter_;
+    private StringUCharacterIterator m_srcUtilIter_;
     private CollationElementIterator m_srcUtilColEIter_;
-    private StringCharacterIterator m_tgtUtilIter_;
+    private StringUCharacterIterator m_tgtUtilIter_;
     private CollationElementIterator m_tgtUtilColEIter_;
     /**
      * Utility comparison flags
@@ -3787,9 +3801,9 @@ public final class RuleBasedCollator extends Collator
      *  Initializes utility iterators and byte buffer used by compare
      */
     private final void initUtility() {
-       m_srcUtilIter_ = new StringCharacterIterator(new String(""));
+       m_srcUtilIter_ = new StringUCharacterIterator();
        m_srcUtilColEIter_ = new CollationElementIterator(m_srcUtilIter_, this);
-       m_tgtUtilIter_ = new StringCharacterIterator(new String(""));
+       m_tgtUtilIter_ = new StringUCharacterIterator();
        m_tgtUtilColEIter_ = new CollationElementIterator(m_tgtUtilIter_, this);
        m_utilBytes0_ = new byte[SORT_BUFFER_INIT_SIZE_CASE_]; // case
        m_utilBytes1_ = new byte[SORT_BUFFER_INIT_SIZE_1_]; // primary
