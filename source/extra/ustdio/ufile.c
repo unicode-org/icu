@@ -21,10 +21,11 @@
 *******************************************************************************
 */
 
+#include "uhash.h"
 #include "ustdio.h"
-#include "loccache.h"
 #include "ufile.h"
 #include "uloc.h"
+#include "loccache.h"
 
 #include <string.h>
 #include <stdlib.h>
@@ -295,4 +296,10 @@ u_fsetcodepage(    const char    *codepage,
   if(FAILURE(status))
     return -1;
   return 0;
+}
+
+
+UConverter * u_fgetConverter(UFILE *file)
+{
+  return file->fConverter;
 }
