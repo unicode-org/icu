@@ -8,7 +8,9 @@
 */
 package com.ibm.icu.dev.tool.cldr;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.io.Writer;
@@ -78,7 +80,9 @@ public class GenerateCldrTests {
         LOGDIR = 3,
         SOURCEDIR =4,
         MATCH = 5,
-        FULLY_RESOLVED = 6;
+        FULLY_RESOLVED = 6,
+		LANGUAGES = 7,
+		TZADIR = 8;
 
     private static final UOption[] options = {
             UOption.HELP_H(),
@@ -88,17 +92,38 @@ public class GenerateCldrTests {
             UOption.SOURCEDIR().setDefault("C:\\ICU4C\\locale\\common\\"),
             UOption.create("match", 'm', UOption.REQUIRES_ARG).setDefault(".*"),
             UOption.create("fullyresolved", 'f', UOption.NO_ARG),
+            UOption.create("languages", 'g', UOption.NO_ARG),
+            UOption.create("tzadir", 't', UOption.REQUIRES_ARG).setDefault("C:\\ICU4J\\icu4j\\src\\com\\ibm\\icu\\dev\\tool\\cldr\\"),
     };
 
     CldrCollations cldrCollations;
     static String logDir = null, destDir = null;
+    
+    public static boolean hasLocalizedLanguageFor(ULocale locale, ULocale otherLocale) {
+    	String lang = otherLocale.getLanguage();
+    	String localizedVersion = otherLocale.getDisplayLanguage(locale);
+    	return !lang.equals(localizedVersion);
+    }
+  
+    public static boolean hasLocalizedCountryFor(ULocale locale, ULocale otherLocale) {
+    	String country = otherLocale.getCountry();
+    	if (country.equals("")) return true;
+    	String localizedVersion = otherLocale.getDisplayCountry(locale);
+    	return !country.equals(localizedVersion);
+    }
 
-    public static void main(String[] args) throws Exception {
+	public static void main(String[] args) throws Exception {
         UOption.parseArgs(args, options);
         log = BagFormatter.openUTF8Writer(options[LOGDIR].value, "log.txt");
         try {
+        	if (options[LANGUAGES].doesOccur) {
+        		generateSize(true);
+        		return;
+        	}
+        	//generateSize();
+        	//if (true) return;
+			//compareAvailable();
 
-            //compareAvailable();
             //if (true) return;
             //System.out.println(createCaseClosure(new UnicodeSet("[a{bc}{def}{oss}]")));
             //System.out.println(createCaseClosure(new UnicodeSet("[a-z\u00c3\u0178{aa}]")));
@@ -118,9 +143,271 @@ public class GenerateCldrTests {
     }
 
     /**
-     *
-     */
-    /*
+     * @throws IOException
+	 * 
+	 */
+	private static void generateSize(boolean transliterate) throws IOException {
+		PrintWriter logHtml = BagFormatter.openUTF8Writer(options[LOGDIR].value, "log.html");
+		String dir = options[SOURCEDIR].value + "main" + File.separator;
+		DraftChecker dc = new DraftChecker(dir);
+		Set filenames = getMatchingXMLFiles(dir, ".*");
+		Collator col = Collator.getInstance(ULocale.ENGLISH);
+		Set languages = new TreeSet(col), countries = new TreeSet(col), 
+			draftLanguages = new TreeSet(col), draftCountries = new TreeSet(col);
+		Map nativeLanguages = new TreeMap(col), nativeCountries = new TreeMap(col),
+			draftNativeLanguages = new TreeMap(col), draftNativeCountries = new TreeMap(col);
+		int localeCount = 0;
+		int draftLocaleCount = 0;
+		for (Iterator it = filenames.iterator(); it.hasNext();) {
+			String localeName = (String) it.next();
+			if (localeName.equals("root")) continue; // skip root
+			boolean draft = dc.isDraft(localeName);
+			if (draft) {
+				draftLocaleCount++;
+				addCounts(localeName, true, draftLanguages, draftCountries, draftNativeLanguages, draftNativeCountries, col);
+			} else {
+				localeCount++;
+				addCounts(localeName, false, languages, countries, nativeLanguages, nativeCountries, col);
+			}
+			if (false) log.println(draft + ", " + localeCount + ", " + languages.size() + ", " + countries.size() + ", " 
+					+ draftLocaleCount + ", " + draftLanguages.size() + ", " + draftCountries.size());
+		}
+		draftLanguages.removeAll(languages);
+		for (Iterator it = nativeLanguages.keySet().iterator(); it.hasNext();) {
+			draftNativeLanguages.remove(it.next());
+		}
+		logHtml.println("<html><head>");
+		logHtml.println("<meta http-equiv='Content-Type' content='text/html; charset=utf-8'>");
+		logHtml.println("</head><body>");
+		logHtml.println("<p><b>Locales:</b> " + localeCount);
+		logHtml.println("<p><b>Languages:</b> " + languages.size());
+		logHtml.println(showSet(nativeLanguages, transliterate, true));
+		logHtml.println("<p><b>Countries:</b> " + countries.size());
+		logHtml.println(showSet(nativeCountries, transliterate, false));
+		logHtml.println("<p><b>Draft locales:</b> " + draftLocaleCount);
+		logHtml.println("<p><b>Draft languages:</b> " + draftLanguages.size());
+		logHtml.println(showSet(draftNativeLanguages, transliterate, true));
+		logHtml.println("<p><b>Draft countries:</b> " + draftCountries.size());
+		logHtml.println(showSet(draftNativeCountries, transliterate, false));
+		logHtml.println("</body></html>");
+		logHtml.close();
+	}
+	
+	static final UnicodeSet NON_LATIN = new UnicodeSet("[^[:latin:][:common:][:inherited:]]");
+	
+	/**
+	 * @param uloc
+	 * @param isDraft TODO
+	 * @param draftLanguages
+	 * @param draftCountries
+	 * @param draftNativeLanguages
+	 * @param draftNativeCountries
+	 * @param lang
+	 * @param country
+	 */
+	private static void addCounts(String localeName, boolean isDraft, Set draftLanguages, Set draftCountries,
+			Map draftNativeLanguages, Map draftNativeCountries, Comparator col) {
+		ULocale uloc = new ULocale(localeName);
+		String lang = localeName, country = "";
+		if (localeName.length() > 3 && localeName.charAt(localeName.length() - 3) == '_') {
+			lang = localeName.substring(0, localeName.length() - 3);
+			country = localeName.substring(localeName.length() - 2);
+		}
+		
+		String nativeName, englishName;
+		draftLanguages.add(lang);
+		nativeName = uloc.getDisplayLanguage(uloc);
+		englishName = uloc.getDisplayLanguage(ULocale.ENGLISH);
+		if (!lang.equals("en") && nativeName.equals(englishName)) {
+			log.println((isDraft ? "D" : "") +"\tWarning: in " + localeName + ", display name for " + lang + " equals English: "  + nativeName);
+		}
+		draftNativeLanguages.put(fixedTitleCase(uloc, nativeName), localeName);
+		if (!country.equals("")) {
+			draftCountries.add(country);
+			nativeName = getFixedDisplayCountry(uloc, uloc);
+			englishName = getFixedDisplayCountry(uloc, ULocale.ENGLISH);
+			if (!lang.equals("en") && nativeName.equals(englishName)) {
+				log.println((isDraft ? "D" : "") + "\tWarning: in " + localeName + ", display name for " + country + " equals English: "  + nativeName);
+			}
+			draftNativeCountries.put(fixedTitleCase(uloc, nativeName), localeName);
+		}
+	}
+	
+	static String fixedTitleCase(ULocale uloc, String in) {
+		String result = UCharacter.toTitleCase(uloc, in, null);
+		result = replace(result, "U.s.", "U.S.");
+		result = replace(result, "S.a.r.", "S.A.R.");
+		return result;
+	}
+	/*
+	static void addMapSet(Map m, Object key, Object value, Comparator com) {
+		Set valueSet = (Set) m.get(key);
+		if (valueSet == null) {
+			valueSet = new TreeSet(com);
+			m.put(key, valueSet);
+		}
+		valueSet.add(value);
+	}
+	*/
+	/**
+	 * @param uloc
+	 * @return
+	 */
+	private static String getFixedDisplayCountry(ULocale uloc, ULocale forLanguage) {
+		String name = uloc.getDisplayCountry(forLanguage);
+		Object trial = fixCountryNames.get(name);
+		if (trial != null) {
+			return (String)trial;
+		}
+		return name;
+	}
+	
+	static Map fixCountryNames = new HashMap(); 
+	static {
+		fixCountryNames.put("\u0408\u0443\u0433\u043E\u0441\u043B\u0430\u0432\u0438\u0458\u0430", "\u0421\u0440\u0431\u0438\u0458\u0430 \u0438 \u0426\u0440\u043D\u0430 \u0413\u043E\u0440\u0430");
+		fixCountryNames.put("Jugoslavija", "Srbija i Crna Gora");
+		fixCountryNames.put("Yugoslavia", "Serbia and Montenegro");
+	}
+	static {
+		// HACK around lack of Armenian, Ethiopic				
+		registerTransliteratorFromFile(options[TZADIR].value, "Latin-Armenian");
+		registerTransliteratorFromFile(options[TZADIR].value, "Latin-Ethiopic");
+		registerTransliteratorFromFile(options[TZADIR].value, "Cyrillic-Latin");
+		registerTransliteratorFromFile(options[TZADIR].value, "Arabic-Latin");		
+	}
+	public static final Transliterator toLatin = Transliterator.getInstance("any-latin");
+	
+	static void registerTransliteratorFromFile(String dir, String id) {
+		try {
+			String filename = id.replace('-', '_');
+			BufferedReader br = BagFormatter.openUTF8Reader(dir, filename + ".txt");
+			StringBuffer buffer = new StringBuffer();
+			while (true) {
+				String line = br.readLine();
+				if (line == null) break;
+				if (line.length() > 0 && line.charAt(0) == '\uFEFF') line = line.substring(1);
+				buffer.append(line).append("\r\n");
+			}
+			br.close();
+			String rules = buffer.toString();
+			Transliterator t;
+			int pos = id.indexOf('-');
+			String rid;
+			if (pos < 0) {
+				rid = id + "-Any";
+				id = "Any-" + id;
+			} else {
+				rid = id.substring(pos+1) + "-" + id.substring(0, pos);
+			}
+			Transliterator.unregister(id);
+			t = Transliterator.createFromRules(id, rules, Transliterator.FORWARD);
+			Transliterator.registerInstance(t);
+
+			/*String test = "\u049A\u0430\u0437\u0430\u049B";
+			System.out.println(t.transliterate(test));
+			t = Transliterator.getInstance(id);
+			System.out.println(t.transliterate(test));
+			*/
+
+			Transliterator.unregister(rid);
+			t = Transliterator.createFromRules(rid, rules, Transliterator.REVERSE);
+			Transliterator.registerInstance(t);
+			System.out.println("Registered new Transliterator: " + id + ", " + rid);
+		} catch (IOException e) {
+			e.printStackTrace();
+			throw new IllegalArgumentException("Can't open " + dir + ", " + id);
+		}
+	}
+
+	/**
+	 * @param nativeCountries
+	 * @param transliterate TODO
+	 * @param isLanguage TODO
+	 */
+	private static String showSet(Map nativeCountries, boolean transliterate, boolean isLanguage) {
+		UnicodeSet BIDI_R = new UnicodeSet("[[:Bidi_Class=R:][:Bidi_Class=AL:]]");
+		StringBuffer result = new StringBuffer();
+		for (Iterator it = nativeCountries.keySet().iterator(); it.hasNext();) {
+			String name = (String) it.next();
+			String locale = (String) nativeCountries.get(name);
+			String lang = locale, country = "";
+			if (locale.length() > 3 && locale.charAt(locale.length() - 3) == '_') {
+				lang = locale.substring(0, locale.length() - 3);
+				country = locale.substring(locale.length() - 2);
+			}
+
+			if (result.length() != 0) {
+				result.append(", ");
+			}
+			String title = "";
+			if (isLanguage) {
+				title = lang + ", " + new ULocale(locale).getDisplayLanguage(ULocale.ENGLISH);
+			} else {
+				title = country + ", " + getFixedDisplayCountry(new ULocale(locale), ULocale.ENGLISH);
+			}
+			if (transliterate && NON_LATIN.containsSome(name) && !lang.equals("ja")) {
+				String transName = fixedTitleCase(ULocale.ENGLISH, toLatin.transliterate(name));
+				if (NON_LATIN.containsSome(transName)) {
+					log.println("Can't transliterate " + name + ": " + transName);
+				} else {
+					title += ", " + transName;
+				}
+			}
+			String before = "", after = "";
+			if (title.length() != 0) {
+				before = "<span title=\'" + BagFormatter.toHTML.transliterate(title) + "'>";
+				after = "</span>";
+			}
+			boolean isBIDI = BIDI_R.containsSome(name);
+			if (isBIDI) result.append('\u200E');
+			result.append(before).append(BagFormatter.toHTML.transliterate(name)).append(after);
+			if (isBIDI) result.append('\u200E');			
+		}
+		return result.toString();
+	}
+
+	public static class DraftChecker {
+		String dir;
+		Map cache = new HashMap();
+		Object TRUE = new Object();
+		Object FALSE = new Object();
+		public DraftChecker(String dir) {
+			this.dir = dir;
+		}
+		
+		public boolean isDraft(String localeName) {
+			Object check = cache.get(localeName);
+			if (check != null) {
+				return check == TRUE;
+			}
+			BufferedReader pw = null;
+			boolean result = true;
+			try {
+				pw = BagFormatter.openUTF8Reader(dir, localeName + ".xml");
+				while (true) {
+					String line = pw.readLine();
+					assert (line != null); // should never get here
+					if (line.indexOf("<ldml") >= 0) {
+						if (line.indexOf("draft") >= 0) {
+							check = TRUE;
+						} else {
+							check = FALSE;
+						}
+						break;
+					}
+				}
+				pw.close();
+			} catch (IOException e) {				
+				e.printStackTrace();
+				throw new IllegalArgumentException("Failure on " + localeName + ": " + dir + localeName + ".xml");
+			}
+			cache.put(localeName, check);
+			return check == TRUE;
+		}
+	}
+
+
+	/*
     private static void compareAvailable() {
         ULocale[] cols = Collator.getAvailableULocales();
         Locale[] alocs = NumberFormat.getAvailableLocales();
@@ -137,11 +424,29 @@ public class GenerateCldrTests {
     }
     */
 
-    /**
-     * @param sLocs
-     */
-    private static void showLocales(Set sLocs) {
-        for (Iterator it = sLocs.iterator(); it.hasNext();) {
+	/**
+	 * 
+	 */
+	private static void checkLocaleNames() {
+		ULocale[] locales = ULocale.getAvailableLocales();
+		for (int i = 0; i < locales.length; ++i) {
+			if (!hasLocalizedCountryFor(ULocale.ENGLISH, locales[i])
+					|| !hasLocalizedLanguageFor(ULocale.ENGLISH, locales[i])
+					|| !hasLocalizedCountryFor(locales[i], locales[i])
+					|| !hasLocalizedLanguageFor(locales[i], locales[i])) {
+				log.print("FAILURE\t");
+			} else {
+				log.print("       \t");
+			}
+			log.println(locales[i] + "\t" + locales[i].getDisplayName(ULocale.ENGLISH) + "\t" + locales[i].getDisplayName(locales[i]));
+		}
+	}
+
+	/**
+	 * @param sLocs
+	 */
+	private static void showLocales(Set sLocs) {
+		for (Iterator it = sLocs.iterator(); it.hasNext();) {
             String s = (String) it.next();
             log.println(s + "\t" + ULocale.getDisplayLanguage(s,"en"));
         }
@@ -235,13 +540,18 @@ public class GenerateCldrTests {
     }
 
     CldrOthers cldrOthers;
-
+    
     void generate(String pat) throws Exception {
         cldrOthers = new CldrOthers(options[SOURCEDIR].value + "main" + File.separator, pat);
         cldrOthers.show();
+
         //if (true) return;
         cldrCollations = new CldrCollations(options[SOURCEDIR].value + "collation" + File.separator, pat);
         cldrCollations.show();
+
+        cldrOthers = new CldrOthers(options[SOURCEDIR].value + "main" + File.separator, pat);
+        cldrOthers.show();
+
         getLocaleList();
 
         Matcher m = Pattern.compile(pat).matcher("");
@@ -600,8 +910,57 @@ public class GenerateCldrTests {
             return cldrCollations.getInstance(loc1).equals(cldrCollations.getInstance(loc2)); // Collator.getInstance(loc1).equals(Collator.getInstance(loc2));
         }
     };
+    static ULocale zhHack = new ULocale("zh"); // FIXME hack for zh
 
     DataShower CollationShower = new DataShower() {
+		public void show(ULocale locale, Collection others) {
+			if (locale.equals(zhHack)) return;
+			
+			showLocales("collation", others);
+
+			Collator col = cldrCollations.getInstance(locale); // Collator.getInstance(locale);
+
+			UnicodeSet tailored = col.getTailoredSet();
+			if (locale.getLanguage().equals("zh")) {
+				tailored.addAll(new UnicodeSet("[[a-z]-[v]]"));
+				log.println("HACK for Pinyin");
+			}
+			tailored = createCaseClosure(tailored);
+			tailored = nfc(tailored);
+			//System.out.println(tailored.toPattern(true));
+
+			UnicodeSet exemplars = getExemplarSet(locale, UnicodeSet.CASE);
+			// add all the exemplars
+			if (false)
+				for (Iterator it = others.iterator(); it.hasNext();) {
+					exemplars.addAll(getExemplarSet((ULocale) it.next(),
+							UnicodeSet.CASE));
+				}
+
+			exemplars = createCaseClosure(exemplars);
+			exemplars = nfc(exemplars);
+			//System.out.println(exemplars.toPattern(true));
+			tailored.addAll(exemplars);
+			//UnicodeSet tailoredMinusHan = new
+			// UnicodeSet(tailored).removeAll(SKIP_COLLATION_SET);
+			if (!exemplars.containsAll(tailored)) {
+				//BagFormatter bf = new BagFormatter();
+				log.println("In Tailored, but not Exemplar; Locale: " + locale
+						+ "\t" + locale.getDisplayName());
+				log.println(new UnicodeSet(tailored).removeAll(exemplars)
+						.toPattern(false));
+				//bf.(log,"tailored", tailored, "exemplars", exemplars);
+				log.flush();
+			}
+			tailored.addAll(new UnicodeSet("[\\ .02{12}]"));
+			tailored.removeAll(SKIP_COLLATION_SET);
+
+			SortedBag bag = new SortedBag(col);
+			doCollationResult(col, tailored, bag);
+			out.println("  </collation>");
+		}
+	};
+/*
         public void show(ULocale locale, Collection others) {
         showLocales("collation", others);
 
@@ -641,6 +1000,7 @@ public class GenerateCldrTests {
         doCollationResult(col, tailored, bag);
         out.println("  </collation>");
     }};
+*/
     static final UnicodeSet SKIP_COLLATION_SET = new UnicodeSet(
             "[[:script=han:][:script=hangul:]-[\u4e00-\u4eff \u9f00-\u9fff \uac00-\uacff \ud700-\ud7ff]]");
 
@@ -803,7 +1163,14 @@ public class GenerateCldrTests {
         if (!locale.equals("root")) return "root";
         return null;
     }
-
+    
+    public static String replace(String source, String pattern, String replacement) {
+        // dumb code for now
+        for (int pos = source.indexOf(pattern, 0); pos >= 0; pos = source.indexOf(pattern, pos + 1)) {
+        	source = source.substring(0, pos) + replacement + source.substring(pos+pattern.length());
+        }
+        return source;
+    }
 
     static class CldrCollations {
         Set validLocales = new TreeSet();
@@ -867,13 +1234,6 @@ public class GenerateCldrTests {
             }
         }
 
-        public static String replace(String source, String pattern, String replacement) {
-            // dumb code for now
-            for (int pos = source.indexOf(pattern, 0); pos >= 0; pos = source.indexOf(pattern, pos + 1)) {
-                source = source.substring(0, pos) + replacement + source.substring(pos+pattern.length());
-            }
-            return source;
-        }
         static Transliterator fromHex = Transliterator.getInstance("hex-any");
 
         private void getCollationRules(String locale) throws Exception {
@@ -886,7 +1246,10 @@ public class GenerateCldrTests {
             Map types_rules = new TreeMap();
             locale_types_rules.put(locale, types_rules);
             for (Resource current = resource.first; current != null; current = current.next) {
-                //System.out.println(current.name);
+                if (current.name == null) {
+                	log.println("Collation: null name found in " + locale);
+                	continue;
+                }
                 if (current instanceof ICUResourceWriter.ResourceTable) {
                     ICUResourceWriter.ResourceTable table = (ICUResourceWriter.ResourceTable) current;
                     for (Resource current2 = table.first; current2 != null; current2 = current2.next) {
@@ -905,7 +1268,7 @@ public class GenerateCldrTests {
                                 String rules = fromHex.transliterate(foo.val);
                                 RuleBasedCollator fixed = generateCollator(locale, current.name, foo.name, rules);
                                 if (fixed != null) {
-                                    log.println("Rules for: " + locale + "," + current.name);
+                                    log.println("Rules for: " + locale + ", " + current.name);
                                     log.println(rules);
                                     if (!rules.equals(foo.val)) {
                                         log.println("Original Rules from Ram: ");

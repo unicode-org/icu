@@ -110,6 +110,10 @@ public abstract class UnicodeProperty extends UnicodeLabel {
         return _getValue(codepoint);
     }
 
+    //public String getValue(int codepoint, boolean isShort) {
+    //	return getValue(codepoint);
+    //}
+    
     public List getNameAliases(List result) {
         if (result == null) result = new ArrayList(1);
         return _getNameAliases(result);
@@ -118,6 +122,7 @@ public abstract class UnicodeProperty extends UnicodeLabel {
         if (result == null) result = new ArrayList(1);
         result = _getValueAliases(valueAlias, result);
         if (!result.contains(valueAlias) && type < NUMERIC) {
+        	result = _getValueAliases(valueAlias, result); // for debugging
             throw new IllegalArgumentException(
                 "Internal error: " + getName() + " doesn't contain " + valueAlias
                 + ": " + new BagFormatter().join(result));
@@ -145,7 +150,373 @@ public abstract class UnicodeProperty extends UnicodeLabel {
     public final List getAvailableValues() {
         return getAvailableValues(null);
     }
+    
+    public final String getValue(int codepoint, boolean getShortest) {
+        String result = getValue(codepoint);
+        if (type >= MISC || result == null || !getShortest) return result;
+        return getFirstValueAlias(result);
+    }
 
+    public final String getFirstNameAlias() {
+        if (firstNameAlias == null) {
+            firstNameAlias = (String) getNameAliases().get(0);
+        }
+        return firstNameAlias;
+    }
+
+    public final String getFirstValueAlias(String value) {
+        if (valueToFirstValueAlias == null) _getFirstValueAliasCache();
+        return (String)valueToFirstValueAlias.get(value);
+    }
+
+    private void _getFirstValueAliasCache() {
+        maxValueWidth = 0;
+        maxFirstValueAliasWidth = 0;
+        valueToFirstValueAlias = new HashMap(1);
+        Iterator it = getAvailableValues().iterator();
+        while (it.hasNext()) {
+            String value = (String)it.next();
+            String first = (String) getValueAliases(value).get(0);
+            if (first == null) { // internal error
+                throw new IllegalArgumentException("Value not in value aliases: " + value);
+            }
+            if (DEBUG && CHECK_NAME.equals(getName())) {
+                System.out.println("First Alias: " + getName() + ": " + value + " => "
+                 + first + new BagFormatter().join(getValueAliases(value)));
+            }
+            valueToFirstValueAlias.put(value,first);
+            if (value.length() > maxValueWidth) {
+                maxValueWidth = value.length();
+            }
+            if (first.length() > maxFirstValueAliasWidth) {
+                maxFirstValueAliasWidth = first.length();
+            }
+        }
+    }
+
+    private int maxValueWidth = -1;
+    private int maxFirstValueAliasWidth = -1;
+
+    public int getMaxWidth(boolean getShortest) {
+        if (maxValueWidth < 0) _getFirstValueAliasCache();
+        if (getShortest) return maxFirstValueAliasWidth;
+        return maxValueWidth;
+    }
+
+    public final UnicodeSet getSet(String propertyValue) {
+        return getSet(propertyValue,null);
+    }
+    public final UnicodeSet getSet(Matcher matcher) {
+        return getSet(matcher,null);
+    }
+
+    public final UnicodeSet getSet(String propertyValue, UnicodeSet result) {
+        return getSet(new SimpleMatcher(propertyValue,
+            isType(STRING_OR_MISC_MASK) ? null : PROPERTY_COMPARATOR),
+          result);
+    }
+
+    private UnicodeMap unicodeMap = null;
+
+    public static final String UNUSED = "??";
+
+    public final UnicodeSet getSet(Matcher matcher, UnicodeSet result) {
+        if (result == null) result = new UnicodeSet();
+        if (isType(STRING_OR_MISC_MASK)) {
+            for (int i = 0; i <= 0x10FFFF; ++i) {
+                String value = getValue(i);
+                if (value != null && matcher.matches(value)) {
+                    result.add(i);
+                }
+            }
+            return result;
+        }
+        List temp = new ArrayList(1); // to avoid reallocating...
+        UnicodeMap um = getUnicodeMap();
+        Iterator it = um.getAvailableValues(null).iterator();
+        main:
+        while (it.hasNext()) {
+            String value = (String)it.next();
+            temp.clear();
+            Iterator it2 = getValueAliases(value,temp).iterator();
+            while (it2.hasNext()) {
+                String value2 = (String)it2.next();
+                //System.out.println("Values:" + value2);
+                if (matcher.matches(value2)
+                  || matcher.matches(toSkeleton(value2))) {
+                    um.getSet(value, result);
+                    continue main;
+                }
+            }
+        }
+        return result;
+    }
+
+    /*
+    public UnicodeSet getMatchSet(UnicodeSet result) {
+        if (result == null) result = new UnicodeSet();
+        addAll(matchIterator, result);
+        return result;
+    }
+
+    public void setMatchSet(UnicodeSet set) {
+        matchIterator = new UnicodeSetIterator(set);
+    }
+    */
+
+    /**
+     * Utility for debugging
+     */
+    public static String getStack() {
+        Exception e = new Exception();
+        StringWriter sw = new StringWriter();
+        PrintWriter pw = new PrintWriter(sw);
+        e.printStackTrace(pw);
+        pw.flush();
+        return "Showing Stack with fake " + sw.getBuffer().toString();
+    }
+
+    // TODO use this instead of plain strings
+    public static class Name implements Comparable {
+        private static Map skeletonCache;
+        private String skeleton;
+        private String pretty;
+        public final int RAW = 0, TITLE = 1, NORMAL = 2;
+        public Name(String name, int style) {
+            if (name == null) name = "";
+            if (style == RAW) {
+                skeleton = pretty = name;
+            } else {
+                pretty = regularize(name, style == TITLE);
+                skeleton = toSkeleton(pretty);
+            }
+        }
+        public int compareTo(Object o) {
+            return skeleton.compareTo(((Name)o).skeleton);
+        }
+        public boolean equals(Object o) {
+            return skeleton.equals(((Name)o).skeleton);
+        }
+        public int hashCode() {
+            return skeleton.hashCode();
+        }
+        public String toString() {
+            return pretty;
+        }
+    }
+
+    /**
+     * @return the unicode map
+     */
+    protected UnicodeMap getUnicodeMap() {
+        if (unicodeMap == null) unicodeMap = _getUnicodeMap();
+        return unicodeMap;
+    }
+
+    protected UnicodeMap _getUnicodeMap() {
+        UnicodeMap result = new UnicodeMap();
+        for (int i = 0; i <= 0x10FFFF; ++i) {
+            //if (DEBUG && i == 0x41) System.out.println(i + "\t" + getValue(i));
+            result.put(i, getValue(i));
+        }
+        if (DEBUG && CHECK_NAME.equals(getName())) {
+            System.out.println(getName() + ":\t" + getClass().getName()
+                 + "\t" + getVersion());
+            System.out.println(getStack());
+            System.out.println(result);
+        }
+        return result;
+    }
+    
+    /**
+     * Really ought to create a Collection UniqueList, that forces uniqueness. But for now...
+     */
+    public static Collection addUnique(Object obj, Collection result) {
+        if (obj != null && !result.contains(obj)) result.add(obj);
+        return result;
+    }
+
+    /**
+     * Utility for managing property & non-string value aliases
+     */
+    public static final Comparator PROPERTY_COMPARATOR = new Comparator() {
+        public int compare(Object o1, Object o2) {
+            return compareNames((String)o1, (String)o2);
+        }
+    };
+
+    /**
+     * Utility for managing property & non-string value aliases
+     *
+     */
+    // TODO optimize
+    public static boolean equalNames(String a, String b) {
+        if (a == b) return true;
+        if (a == null) return false;
+         return toSkeleton(a).equals(toSkeleton(b));
+    }
+
+    /**
+     * Utility for managing property & non-string value aliases
+     */
+    // TODO optimize
+    public static int compareNames(String a, String b) {
+        if (a == b) return 0;
+        if (a == null) return -1;
+        if (b == null) return 1;
+        return toSkeleton(a).compareTo(toSkeleton(b));
+    }
+
+    /**
+     * Utility for managing property & non-string value aliases
+     */
+    // TODO account for special names, tibetan, hangul
+    public static String toSkeleton(String source) {
+        if (source == null) return null;
+        StringBuffer skeletonBuffer = new StringBuffer();
+        boolean gotOne = false;
+        // remove spaces, '_', '-'
+        // we can do this with char, since no surrogates are involved
+        for (int i = 0; i < source.length(); ++i) {
+            char ch = source.charAt(i);
+            if (i > 0 && (ch == '_' || ch == ' ' || ch == '-')) {
+                gotOne = true;
+            } else {
+                char ch2 = Character.toLowerCase(ch);
+                if (ch2 != ch) {
+                    gotOne = true;
+                    skeletonBuffer.append(ch2);
+                } else {
+                    skeletonBuffer.append(ch);
+                }
+            }
+        }
+        if (!gotOne) return source; // avoid string creation
+        return skeletonBuffer.toString();
+    }
+
+    // get the name skeleton
+    public static String toNameSkeleton(String source) {
+        if (source == null) return null;
+        StringBuffer result = new StringBuffer();
+        // remove spaces, medial '-'
+        // we can do this with char, since no surrogates are involved
+        for (int i = 0; i < source.length(); ++i) {
+            char ch = source.charAt(i);
+            if (('0' <= ch && ch <= '9') || ('A' <= ch && ch <= 'Z') || ch == '<' || ch == '>') {
+                result.append(ch);
+            } else if (ch == ' ') {
+                // don't copy ever
+            } else if (ch == '-') {
+                // only copy non-medials AND trailing O-E
+                if (0 == i
+                    || i == source.length() - 1
+                    || source.charAt(i-1) == ' '
+                    || source.charAt(i+1) == ' '
+                    || (i == source.length() - 2
+                        && source.charAt(i-1) == 'O'
+                        && source.charAt(i+1) == 'E')) {
+                    System.out.println("****** EXCEPTION " + source);
+                    result.append(ch);
+                }
+                // otherwise don't copy
+            } else {
+                throw new IllegalArgumentException("Illegal Name Char: U+" + Utility.hex(ch) + ", " + ch);
+            }
+        }
+        return result.toString();
+    }
+
+    /**
+     * These routines use the Java functions, because they only need to act on ASCII
+     * Changes space, - into _, inserts _ between lower and UPPER.
+     */
+    public static String regularize(String source, boolean titlecaseStart) {
+        if (source == null) return source;
+        /*if (source.equals("noBreak")) { // HACK
+            if (titlecaseStart) return "NoBreak";
+            return source;
+        }
+        */
+        StringBuffer result = new StringBuffer();
+        int lastCat = -1;
+        boolean haveFirstCased = true;
+        for (int i = 0; i < source.length(); ++i) {
+            char c = source.charAt(i);
+            if (c == ' ' || c == '-' || c == '_') {
+                c = '_';
+                haveFirstCased = true;
+            }
+            if (c == '=') haveFirstCased = true;
+            int cat = Character.getType(c);
+            if (lastCat == Character.LOWERCASE_LETTER && cat == Character.UPPERCASE_LETTER) {
+                result.append('_');
+            }
+            if (haveFirstCased && (cat == Character.LOWERCASE_LETTER
+                    || cat == Character.TITLECASE_LETTER || cat == Character.UPPERCASE_LETTER)) {
+                if (titlecaseStart) {
+                    c = Character.toUpperCase(c);
+                }
+                haveFirstCased = false;
+            }
+            result.append(c);
+            lastCat = cat;
+        }
+        return result.toString();
+    }
+
+    /**
+     * Utility function for comparing codepoint to string without
+     * generating new string.
+     * @param codepoint
+     * @param other
+     * @return true if the codepoint equals the string
+     */
+    public static final boolean equals(int codepoint, String other) {
+        if (other.length() == 1) {
+            return codepoint == other.charAt(0);
+        }
+        if (other.length() == 2) {
+            return other.equals(UTF16.valueOf(codepoint));
+        }
+        return false;
+    }
+
+    /**
+     * Utility that should be on UnicodeSet
+     * @param source
+     * @param result
+     */
+    static public void addAll(UnicodeSetIterator source, UnicodeSet result) {
+        while (source.nextRange()) {
+            if (source.codepoint == UnicodeSetIterator.IS_STRING) {
+                result.add(source.string);
+            } else {
+                result.add(source.codepoint, source.codepointEnd);
+            }
+        }
+    }
+
+    /**
+     * Really ought to create a Collection UniqueList, that forces uniqueness. But for now...
+     */
+    public static Collection addAllUnique(Collection source, Collection result) {
+        for (Iterator it = source.iterator(); it.hasNext();) {
+            addUnique(it.next(), result);
+        }
+        return result;
+    }
+
+    /**
+     * Really ought to create a Collection UniqueList, that forces uniqueness. But for now...
+     */
+    public static Collection addAllUnique(Object[] source, Collection result) {
+        for (int i = 0; i < source.length; ++i) {
+            addUnique(source[i], result);
+        }
+        return result;
+    }
+    
     static public class Factory {
         static boolean DEBUG = false;
 
@@ -502,22 +873,32 @@ public abstract class UnicodeProperty extends UnicodeLabel {
             return matcher.matches();
         }
     }
+    
+    public static abstract class BaseProperty extends UnicodeProperty {
+        protected List propertyAliases = new ArrayList(1);
+        String version;
+        public BaseProperty setMain(String alias, String shortAlias, int propertyType,
+                String version) {
+                  setName(alias);
+                  setType(propertyType);
+                  propertyAliases.add(shortAlias);
+                  propertyAliases.add(alias);
+                  this.version = version;
+                  return this;
+        }    	
+        public String _getVersion() {
+            return version;
+        }
+        public List _getNameAliases(List result) {
+            addAllUnique(propertyAliases, result);
+            return result;
+        }
 
-    public static abstract class SimpleProperty extends UnicodeProperty {
-        private List propertyAliases = new ArrayList(1);
+    }
+    
+    public static abstract class SimpleProperty extends BaseProperty {
         List values;
         Map toValueAliases = new HashMap(1);
-        String version;
-
-        public SimpleProperty setMain(String alias, String shortAlias, int propertyType,
-          String version) {
-            setName(alias);
-            setType(propertyType);
-            propertyAliases.add(shortAlias);
-            propertyAliases.add(alias);
-            this.version = version;
-            return this;
-        }
 
         public SimpleProperty addName(String alias) {
             propertyAliases.add(alias);
@@ -544,11 +925,6 @@ public abstract class UnicodeProperty extends UnicodeLabel {
                 _addToValues(it.next(), null);
             }
             return this;
-        }
-
-        public List _getNameAliases(List result) {
-            addAllUnique(propertyAliases, result);
-            return result;
         }
 
         public List _getValueAliases(String valueAlias, List result) {
@@ -582,384 +958,27 @@ public abstract class UnicodeProperty extends UnicodeLabel {
             addUnique(alias, aliases);
             addUnique(item, aliases);
         }
-
         public String _getVersion() {
             return version;
         }
     }
-
-    public static class UnicodeMapProperty extends SimpleProperty {
-        private UnicodeMap unicodeMap;
+    
+    public static class UnicodeMapProperty extends BaseProperty {
+        protected UnicodeMap unicodeMap;
         protected String _getValue(int codepoint) {
             return (String) unicodeMap.getValue(codepoint);
         }
+		protected List _getValueAliases(String valueAlias, List result) {
+			if (!unicodeMap.getAvailableValues().contains(valueAlias)) return result;
+			result.add(valueAlias);
+			return result; // no other aliases
+		}
+		protected List _getAvailableValues(List result) {
+			return (List) unicodeMap.getAvailableValues(result);
+		}
     }
 
 
-    public final String getValue(int codepoint, boolean getShortest) {
-        String result = getValue(codepoint);
-        if (type >= MISC || result == null || !getShortest) return result;
-        return getFirstValueAlias(result);
-    }
 
-    public final String getFirstNameAlias() {
-        if (firstNameAlias == null) {
-            firstNameAlias = (String) getNameAliases().get(0);
-        }
-        return firstNameAlias;
-    }
-
-    public final String getFirstValueAlias(String value) {
-        if (valueToFirstValueAlias == null) _getFirstValueAliasCache();
-        return (String)valueToFirstValueAlias.get(value);
-    }
-
-    private void _getFirstValueAliasCache() {
-        maxValueWidth = 0;
-        maxFirstValueAliasWidth = 0;
-        valueToFirstValueAlias = new HashMap(1);
-        Iterator it = getAvailableValues().iterator();
-        while (it.hasNext()) {
-            String value = (String)it.next();
-            String first = (String) getValueAliases(value).get(0);
-            if (first == null) { // internal error
-                throw new IllegalArgumentException("Value not in value aliases: " + value);
-            }
-            if (DEBUG && CHECK_NAME.equals(getName())) {
-                System.out.println("First Alias: " + getName() + ": " + value + " => "
-                 + first + new BagFormatter().join(getValueAliases(value)));
-            }
-            valueToFirstValueAlias.put(value,first);
-            if (value.length() > maxValueWidth) {
-                maxValueWidth = value.length();
-            }
-            if (first.length() > maxFirstValueAliasWidth) {
-                maxFirstValueAliasWidth = first.length();
-            }
-        }
-    }
-
-    private int maxValueWidth = -1;
-    private int maxFirstValueAliasWidth = -1;
-
-    public int getMaxWidth(boolean getShortest) {
-        if (maxValueWidth < 0) _getFirstValueAliasCache();
-        if (getShortest) return maxFirstValueAliasWidth;
-        return maxValueWidth;
-    }
-
-    public final UnicodeSet getSet(String propertyValue) {
-        return getSet(propertyValue,null);
-    }
-    public final UnicodeSet getSet(Matcher matcher) {
-        return getSet(matcher,null);
-    }
-
-    public final UnicodeSet getSet(String propertyValue, UnicodeSet result) {
-        return getSet(new SimpleMatcher(propertyValue,
-            isType(STRING_OR_MISC_MASK) ? null : PROPERTY_COMPARATOR),
-          result);
-    }
-
-    private UnicodeMap unicodeMap = null;
-
-    public static final String UNUSED = "??";
-
-    public final UnicodeSet getSet(Matcher matcher, UnicodeSet result) {
-        if (result == null) result = new UnicodeSet();
-        if (isType(STRING_OR_MISC_MASK)) {
-            for (int i = 0; i <= 0x10FFFF; ++i) {
-                String value = getValue(i);
-                if (value != null && matcher.matches(value)) {
-                    result.add(i);
-                }
-            }
-            return result;
-        }
-        List temp = new ArrayList(1); // to avoid reallocating...
-        UnicodeMap um = getUnicodeMap();
-        Iterator it = um.getAvailableValues(null).iterator();
-        main:
-        while (it.hasNext()) {
-            String value = (String)it.next();
-            temp.clear();
-            Iterator it2 = getValueAliases(value,temp).iterator();
-            while (it2.hasNext()) {
-                String value2 = (String)it2.next();
-                //System.out.println("Values:" + value2);
-                if (matcher.matches(value2)
-                  || matcher.matches(toSkeleton(value2))) {
-                    um.getSet(value, result);
-                    continue main;
-                }
-            }
-        }
-        return result;
-    }
-
-    /*
-    public UnicodeSet getMatchSet(UnicodeSet result) {
-        if (result == null) result = new UnicodeSet();
-        addAll(matchIterator, result);
-        return result;
-    }
-
-    public void setMatchSet(UnicodeSet set) {
-        matchIterator = new UnicodeSetIterator(set);
-    }
-    */
-
-    /**
-     * Utility for debugging
-     */
-    public static String getStack() {
-        Exception e = new Exception();
-        StringWriter sw = new StringWriter();
-        PrintWriter pw = new PrintWriter(sw);
-        e.printStackTrace(pw);
-        pw.flush();
-        return "Showing Stack with fake " + sw.getBuffer().toString();
-    }
-
-    // TODO use this instead of plain strings
-    public static class Name implements Comparable {
-        private static Map skeletonCache;
-        private String skeleton;
-        private String pretty;
-        public final int RAW = 0, TITLE = 1, NORMAL = 2;
-        public Name(String name, int style) {
-            if (name == null) name = "";
-            if (style == RAW) {
-                skeleton = pretty = name;
-            } else {
-                pretty = regularize(name, style == TITLE);
-                skeleton = toSkeleton(pretty);
-            }
-        }
-        public int compareTo(Object o) {
-            return skeleton.compareTo(((Name)o).skeleton);
-        }
-        public boolean equals(Object o) {
-            return skeleton.equals(((Name)o).skeleton);
-        }
-        public int hashCode() {
-            return skeleton.hashCode();
-        }
-        public String toString() {
-            return pretty;
-        }
-    }
-    /**
-     * Utility for managing property & non-string value aliases
-     */
-    public static final Comparator PROPERTY_COMPARATOR = new Comparator() {
-        public int compare(Object o1, Object o2) {
-            return compareNames((String)o1, (String)o2);
-        }
-    };
-
-    /**
-     * Utility for managing property & non-string value aliases
-     *
-     */
-    // TODO optimize
-    public static boolean equalNames(String a, String b) {
-        if (a == b) return true;
-        if (a == null) return false;
-         return toSkeleton(a).equals(toSkeleton(b));
-    }
-
-    /**
-     * Utility for managing property & non-string value aliases
-     */
-    // TODO optimize
-    public static int compareNames(String a, String b) {
-        if (a == b) return 0;
-        if (a == null) return -1;
-        if (b == null) return 1;
-        return toSkeleton(a).compareTo(toSkeleton(b));
-    }
-
-    /**
-     * Utility for managing property & non-string value aliases
-     */
-    // TODO account for special names, tibetan, hangul
-    public static String toSkeleton(String source) {
-        if (source == null) return null;
-        StringBuffer skeletonBuffer = new StringBuffer();
-        boolean gotOne = false;
-        // remove spaces, '_', '-'
-        // we can do this with char, since no surrogates are involved
-        for (int i = 0; i < source.length(); ++i) {
-            char ch = source.charAt(i);
-            if (i > 0 && (ch == '_' || ch == ' ' || ch == '-')) {
-                gotOne = true;
-            } else {
-                char ch2 = Character.toLowerCase(ch);
-                if (ch2 != ch) {
-                    gotOne = true;
-                    skeletonBuffer.append(ch2);
-                } else {
-                    skeletonBuffer.append(ch);
-                }
-            }
-        }
-        if (!gotOne) return source; // avoid string creation
-        return skeletonBuffer.toString();
-    }
-
-    // get the name skeleton
-    public static String toNameSkeleton(String source) {
-        if (source == null) return null;
-        StringBuffer result = new StringBuffer();
-        // remove spaces, medial '-'
-        // we can do this with char, since no surrogates are involved
-        for (int i = 0; i < source.length(); ++i) {
-            char ch = source.charAt(i);
-            if (('0' <= ch && ch <= '9') || ('A' <= ch && ch <= 'Z') || ch == '<' || ch == '>') {
-                result.append(ch);
-            } else if (ch == ' ') {
-                // don't copy ever
-            } else if (ch == '-') {
-                // only copy non-medials AND trailing O-E
-                if (0 == i
-                    || i == source.length() - 1
-                    || source.charAt(i-1) == ' '
-                    || source.charAt(i+1) == ' '
-                    || (i == source.length() - 2
-                        && source.charAt(i-1) == 'O'
-                        && source.charAt(i+1) == 'E')) {
-                    System.out.println("****** EXCEPTION " + source);
-                    result.append(ch);
-                }
-                // otherwise don't copy
-            } else {
-                throw new IllegalArgumentException("Illegal Name Char: U+" + Utility.hex(ch) + ", " + ch);
-            }
-        }
-        return result.toString();
-    }
-
-    /**
-     * These routines use the Java functions, because they only need to act on ASCII
-     * Changes space, - into _, inserts _ between lower and UPPER.
-     */
-    public static String regularize(String source, boolean titlecaseStart) {
-        if (source == null) return source;
-        /*if (source.equals("noBreak")) { // HACK
-            if (titlecaseStart) return "NoBreak";
-            return source;
-        }
-        */
-        StringBuffer result = new StringBuffer();
-        int lastCat = -1;
-        boolean haveFirstCased = true;
-        for (int i = 0; i < source.length(); ++i) {
-            char c = source.charAt(i);
-            if (c == ' ' || c == '-' || c == '_') {
-                c = '_';
-                haveFirstCased = true;
-            }
-            if (c == '=') haveFirstCased = true;
-            int cat = Character.getType(c);
-            if (lastCat == Character.LOWERCASE_LETTER && cat == Character.UPPERCASE_LETTER) {
-                result.append('_');
-            }
-            if (haveFirstCased && (cat == Character.LOWERCASE_LETTER
-                    || cat == Character.TITLECASE_LETTER || cat == Character.UPPERCASE_LETTER)) {
-                if (titlecaseStart) {
-                    c = Character.toUpperCase(c);
-                }
-                haveFirstCased = false;
-            }
-            result.append(c);
-            lastCat = cat;
-        }
-        return result.toString();
-    }
-
-    /**
-     * Utility function for comparing codepoint to string without
-     * generating new string.
-     * @param codepoint
-     * @param other
-     * @return true if the codepoint equals the string
-     */
-    public static final boolean equals(int codepoint, String other) {
-        if (other.length() == 1) {
-            return codepoint == other.charAt(0);
-        }
-        if (other.length() == 2) {
-            return other.equals(UTF16.valueOf(codepoint));
-        }
-        return false;
-    }
-
-    /**
-     * Utility that should be on UnicodeSet
-     * @param source
-     * @param result
-     */
-    static public void addAll(UnicodeSetIterator source, UnicodeSet result) {
-        while (source.nextRange()) {
-            if (source.codepoint == UnicodeSetIterator.IS_STRING) {
-                result.add(source.string);
-            } else {
-                result.add(source.codepoint, source.codepointEnd);
-            }
-        }
-    }
-
-    /**
-     * Really ought to create a Collection UniqueList, that forces uniqueness. But for now...
-     */
-    public static Collection addUnique(Object obj, Collection result) {
-        if (obj != null && !result.contains(obj)) result.add(obj);
-        return result;
-    }
-
-    /**
-     * Really ought to create a Collection UniqueList, that forces uniqueness. But for now...
-     */
-    public static Collection addAllUnique(Collection source, Collection result) {
-        for (Iterator it = source.iterator(); it.hasNext();) {
-            addUnique(it.next(), result);
-        }
-        return result;
-    }
-
-    /**
-     * Really ought to create a Collection UniqueList, that forces uniqueness. But for now...
-     */
-    public static Collection addAllUnique(Object[] source, Collection result) {
-        for (int i = 0; i < source.length; ++i) {
-            addUnique(source[i], result);
-        }
-        return result;
-    }
-
-
-    /**
-     * @return the unicode map
-     */
-    protected UnicodeMap getUnicodeMap() {
-        if (unicodeMap == null) unicodeMap = _getUnicodeMap();
-        return unicodeMap;
-    }
-
-    protected UnicodeMap _getUnicodeMap() {
-        UnicodeMap result = new UnicodeMap();
-        for (int i = 0; i <= 0x10FFFF; ++i) {
-            //if (DEBUG && i == 0x41) System.out.println(i + "\t" + getValue(i));
-            result.put(i, getValue(i));
-        }
-        if (DEBUG && CHECK_NAME.equals(getName())) {
-            System.out.println(getName() + ":\t" + getClass().getName()
-                 + "\t" + getVersion());
-            System.out.println(getStack());
-            System.out.println(result);
-        }
-        return result;
-    }
 }
 

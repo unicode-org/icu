@@ -12,6 +12,7 @@ import java.util.TreeSet;
 import com.ibm.icu.dev.test.util.UnicodeMap;
 import com.ibm.icu.dev.test.util.UnicodeProperty;
 import com.ibm.icu.lang.UCharacter;
+import com.ibm.icu.text.UnicodeSet;
 import com.ibm.text.utility.Utility;
 
 public class ToolUnicodePropertySource extends UnicodeProperty.Factory {
@@ -49,8 +50,8 @@ public class ToolUnicodePropertySource extends UnicodeProperty.Factory {
                 if ((ODD_BALLS & ucd.getCategoryMask(codepoint)) != 0) return null;
                 return ucd.getName(codepoint);
             }
-        }.setMain("Name", "na", UnicodeProperty.MISC, version)
-        .setValues("<string>"));
+        }.setValues("<string>")
+		.setMain("Name", "na", UnicodeProperty.MISC, version));
         
         add(new UnicodeProperty.SimpleProperty() {
             public String _getValue(int codepoint) {
@@ -63,24 +64,24 @@ public class ToolUnicodePropertySource extends UnicodeProperty.Factory {
             protected UnicodeMap _getUnicodeMap() {
                 return ucd.blockData;
             }
-        }.setMain("Block", "blk", UnicodeProperty.CATALOG, version)
-        .setValues(ucd.getBlockNames(null)));
+        }.setValues(ucd.getBlockNames(null))
+		.setMain("Block", "blk", UnicodeProperty.CATALOG, version));
         
         add(new UnicodeProperty.SimpleProperty() {
             public String _getValue(int codepoint) {
                 //if ((ODD_BALLS & ucd.getCategoryMask(codepoint)) != 0) return null;
                 return ucd.getBidiMirror(codepoint);
             }
-        }.setMain("Bidi_Mirroring_Glyph", "bmg", UnicodeProperty.STRING, version)
-        .setValues("<string>"));
+        }.setValues("<string>")
+		.setMain("Bidi_Mirroring_Glyph", "bmg", UnicodeProperty.STRING, version));
         
         add(new UnicodeProperty.SimpleProperty() {
             public String _getValue(int codepoint) {
                 //if ((ODD_BALLS & ucd.getCategoryMask(codepoint)) != 0) return null;
                 return ucd.getCase(codepoint,UCD_Types.FULL,UCD_Types.FOLD);
             }
-        }.setMain("Case_Folding", "cf", UnicodeProperty.STRING, version)
-        .setValues("<string>"));
+        }.setValues("<string>")
+		.setMain("Case_Folding", "cf", UnicodeProperty.STRING, version));
         
         add(new UnicodeProperty.SimpleProperty() {
             NumberFormat nf = NumberFormat.getInstance();
@@ -121,8 +122,8 @@ public class ToolUnicodePropertySource extends UnicodeProperty.Factory {
             public int getMaxWidth(boolean isShort) {
                 return 15;
             }
-        }.setMain("NFD_Quick_Check", "NFD_QC", UnicodeProperty.ENUMERATED, version)
-        .setValues(LONG_YES_NO, YES_NO));
+        }.setValues(LONG_YES_NO, YES_NO)
+		.setMain("NFD_Quick_Check", "NFD_QC", UnicodeProperty.ENUMERATED, version));
         
         add(new UnicodeProperty.SimpleProperty() {
             public String _getValue(int codepoint) {
@@ -133,8 +134,8 @@ public class ToolUnicodePropertySource extends UnicodeProperty.Factory {
             public int getMaxWidth(boolean isShort) {
                 return 15;
             }
-        }.setMain("NFC_Quick_Check", "NFC_QC", UnicodeProperty.ENUMERATED, version)
-        .setValues(LONG_YES_NO_MAYBE, YES_NO_MAYBE));
+        }.setValues(LONG_YES_NO_MAYBE, YES_NO_MAYBE)
+		.setMain("NFC_Quick_Check", "NFC_QC", UnicodeProperty.ENUMERATED, version));
         
         add(new UnicodeProperty.SimpleProperty() {
             public String _getValue(int codepoint) {
@@ -145,8 +146,8 @@ public class ToolUnicodePropertySource extends UnicodeProperty.Factory {
             public int getMaxWidth(boolean isShort) {
                 return 15;
             }
-        }.setMain("NFKD_Quick_Check", "NFKD_QC", UnicodeProperty.ENUMERATED, version)
-        .setValues(LONG_YES_NO, YES_NO));
+        }.setValues(LONG_YES_NO, YES_NO)
+		.setMain("NFKD_Quick_Check", "NFKD_QC", UnicodeProperty.ENUMERATED, version));
         
         add(new UnicodeProperty.SimpleProperty() {
             public String _getValue(int codepoint) {
@@ -157,8 +158,11 @@ public class ToolUnicodePropertySource extends UnicodeProperty.Factory {
             public int getMaxWidth(boolean isShort) {
                 return 15;
             }
-        }.setMain("NFKC_Quick_Check", "NFKC_QC", UnicodeProperty.ENUMERATED, version)
-        .setValues(LONG_YES_NO_MAYBE, YES_NO_MAYBE));
+        }.setValues(LONG_YES_NO_MAYBE, YES_NO_MAYBE)
+		.setMain("NFKC_Quick_Check", "NFKC_QC", UnicodeProperty.ENUMERATED, version));
+
+
+
         
         /*
         add(new UnicodeProperty.SimpleProperty() {
@@ -206,7 +210,103 @@ public class ToolUnicodePropertySource extends UnicodeProperty.Factory {
             if (DEBUG) System.out.println("Iterated Names: " + name);
             add(new ToolUnicodeProperty(name));
         }
-        
+
+		add(new UnicodeProperty.UnicodeMapProperty() {
+        	{
+        		unicodeMap = new UnicodeMap();
+        		unicodeMap.setErrorOnReset(true);
+        		unicodeMap.put(0xD, "CR");
+        		unicodeMap.put(0xA, "LF");
+        		UnicodeProperty cat = getProperty("General_Category");
+        		UnicodeSet temp = cat.getSet("Line_Separator")
+				.addAll(cat.getSet("Paragraph_Separator"))
+				.addAll(cat.getSet("Control"))
+				.addAll(cat.getSet("Format"))
+				.remove(0xD).remove(0xA).remove(0x200C).remove(0x200D);
+        		unicodeMap.putAll(temp, "Control");
+        		UnicodeSet graphemeExtend = getProperty("Grapheme_Extend").getSet("true");
+        		unicodeMap.putAll(graphemeExtend,"Extend");
+        		UnicodeProperty hangul = getProperty("Hangul_Syllable_Type");
+        		unicodeMap.putAll(hangul.getSet("L"),"L");
+        		unicodeMap.putAll(hangul.getSet("V"),"V");
+        		unicodeMap.putAll(hangul.getSet("T"),"T");
+        		unicodeMap.putAll(hangul.getSet("LV"),"LV");
+        		unicodeMap.putAll(hangul.getSet("LVT"),"LVT");
+        		unicodeMap.setMissing("Other");
+        	}
+        }.setMain("Grapheme_Cluster_Break", "GCB", UnicodeProperty.ENUMERATED, version));
+
+        add(new UnicodeProperty.UnicodeMapProperty() {
+        	{
+        		unicodeMap = new UnicodeMap();
+        		unicodeMap.setErrorOnReset(true);
+        		UnicodeProperty cat = getProperty("General_Category");
+        		unicodeMap.putAll(cat.getSet("Format").remove(0x200C).remove(0x200D), "Format");
+        		UnicodeProperty script = getProperty("Script");
+        		unicodeMap.putAll(script.getSet("Katakana")
+        				.addAll(new UnicodeSet("[\u3031\u3032\u3033\u3034\u3035\u309B\u309C\u30A0\u30FC\uFF70\uFF9E\uFF9F]"))
+						, "Katakana");
+        		Object foo = unicodeMap.getSet("Katakana");
+        		UnicodeSet graphemeExtend = getProperty("Grapheme_Extend").getSet("true");
+        		unicodeMap.putAll(getProperty("Alphabetic").getSet("true")
+        				.add(0xA0).add(0x05F3)
+						.removeAll(getProperty("Ideographic").getSet("true"))
+						.removeAll(unicodeMap.getSet("Katakana"))
+						.removeAll(script.getSet("Thai"))
+						.removeAll(script.getSet("Lao"))
+						.removeAll(script.getSet("Hiragana"))
+						.removeAll(graphemeExtend),
+						"ALetter");
+        		unicodeMap.putAll(new UnicodeSet("[\\u0027\\u00B7\\u05F4\\u2019\\u2027\\u003A]")
+								,"MidLetter");
+        		UnicodeProperty lineBreak = getProperty("Line_Break");
+        		unicodeMap.putAll(lineBreak.getSet("Infix_Numeric")
+        				.remove(0x003A), "MidNum");
+        		unicodeMap.putAll(lineBreak.getSet("Numeric"), "Numeric");
+        		unicodeMap.putAll(cat.getSet("Connector_Punctuation").remove(0x30FB).remove(0xFF65), "Numeric");
+        		unicodeMap.putAll(graphemeExtend, "Other"); // to verify that none of the above touch it.
+        		unicodeMap.setMissing("Other");
+        	}
+        }.setMain("Word_Break", "WB", UnicodeProperty.ENUMERATED, version));
+
+        add(new UnicodeProperty.UnicodeMapProperty() {
+        	{
+        		unicodeMap = new UnicodeMap();
+        		unicodeMap.setErrorOnReset(true);
+        		unicodeMap.putAll(new UnicodeSet("[\\u000A\\u000D\\u0085\\u2028\\u2029]"), "Sep");
+        		UnicodeProperty cat = getProperty("General_Category");
+        		unicodeMap.putAll(cat.getSet("Format").remove(0x200C).remove(0x200D), "Format");
+        		unicodeMap.putAll(getProperty("Whitespace").getSet("true")
+        				.removeAll(unicodeMap.getSet("Sep"))
+						.remove(0xA0), "Sp");
+        		UnicodeSet graphemeExtend = getProperty("Grapheme_Extend").getSet("true");
+        		unicodeMap.putAll(getProperty("Lowercase").getSet("true")
+        				.removeAll(graphemeExtend), "Lower");
+        		unicodeMap.putAll(getProperty("Uppercase").getSet("true")
+        				.addAll(cat.getSet("Titlecase_Letter"))
+						, "Upper");
+        		UnicodeSet temp = getProperty("Alphabetic").getSet("true")
+				.add(0xA0).add(0x5F3)
+				.removeAll(unicodeMap.getSet("Lower"))
+		        .removeAll(unicodeMap.getSet("Upper"))
+				.removeAll(graphemeExtend);
+        		unicodeMap.putAll(temp, "OLetter");
+        		UnicodeProperty lineBreak = getProperty("Line_Break");
+        		unicodeMap.putAll(lineBreak.getSet("Numeric"), "Numeric");
+        		unicodeMap.put(0x002E, "ATerm");
+        		unicodeMap.putAll(getProperty("STerm").getSet("true")
+        				.removeAll(unicodeMap.getSet("ATerm")), "STerm");
+        		unicodeMap.putAll(cat.getSet("Open_Punctuation")
+        				.addAll(cat.getSet("Close_Punctuation"))
+        				.addAll(lineBreak.getSet("Quotation"))
+						.remove(0x05F3)
+						.removeAll(unicodeMap.getSet("ATerm"))
+						.removeAll(unicodeMap.getSet("STerm"))
+						, "Close");
+        		unicodeMap.putAll(graphemeExtend, "Other"); // to verify that none of the above touch it.
+        		unicodeMap.setMissing("Other");
+        	}
+        }.setMain("Sentence_Break", "SB", UnicodeProperty.ENUMERATED, version));
     }
     
     static String[] YES_NO_MAYBE = {"N", "M", "Y"};

@@ -1,5 +1,17 @@
-Generate:
+Generate: 
 DeltaVersion: 7
+
+File: GraphemeClusterBreakProperty
+Property: Grapheme_Cluster_Break
+Format:	skipValue=Other
+
+File: WordBreakProperty
+Property: Word_Break
+Format:	skipValue=Other
+
+File: SentenceBreakProperty
+Property: Sentence_Break
+Format:	skipValue=Other
 
 File:	Blocks
 Property: Block
@@ -40,6 +52,9 @@ Value:	3.2
 
 Value:	4.0
 # Newly assigned in Unicode 4.0.0 (April, 2003)
+
+Value:	4.1
+# Newly assigned in Unicode 4.1.0 (XXX, 2005)
 
 File:	extracted/DerivedBidiClass
 Property:	Bidi_Class
@@ -86,7 +101,7 @@ Property:	ID_Start
 Property:	ID_Continue
 # Derived Property: ID_Continue
 #  Characters that can continue an identifier.
-#  Generated from: ID_Start + Mn+Mc+Nd+Pc
+#  Generated from: ID_Start + Mn+Mc+Nd+Pc + Other_ID_Continue
 #  NOTE: Cf characters should be filtered out.
 
 
@@ -109,7 +124,8 @@ Property:	XID_Continue
 
 Property:	Default_Ignorable_Code_Point
 # Derived Property: Default_Ignorable_Code_Point
-#  Generated from Other_Default_Ignorable_Code_Point + Cf + Cc + Cs + Noncharacters - White_Space - Annotation_characters
+#  Generated from Other_Default_Ignorable_Code_Point + Cf + Cc + Cs + Noncharacters
+#  - White_Space - FFF9..FFFB (Annotation Characters)
 
 Property:	Grapheme_Extend
 # Derived Property: Grapheme_Extend
@@ -307,6 +323,9 @@ Property:	Other_ID_Continue
 Property:	STerm
 
 Property:	Variation_Selector
+Property:	Pattern_White_Space
+Property:	Pattern_Syntax
+
 
 File:	PropertyAliases
 Property: SPECIAL
@@ -315,7 +334,6 @@ File:	PropertyValueAliases
 Property: SPECIAL
 
 File:	Scripts
-
 Property:	Script
 Format:	nameStyle=none skipUnassigned=Common
 
