@@ -49,6 +49,12 @@ extern void
 addProps(Props *p);
 
 extern void
+repeatProps();
+
+extern void
+compactStage2();
+
+extern void
 compactStage3();
 
 extern void

@@ -119,8 +119,10 @@ main(int argc, char *argv[]) {
 
     init();
     parseDB(in);
-    compactStage3();
+    repeatProps();
     compactProps();
+    compactStage3();
+    compactStage2();
     generateData();
 
     if(in!=T_FileStream_stdin()) {
@@ -325,23 +327,27 @@ parseDB(FileStream *in) {
             }
         }
 
-        /* ### debug output */
-        printf(
-            "0x%06lx "
-            "%s(%2d) "
-            "comb=%3d "
-            "bidi=%3s(%2d) "
-            "num=%7d/%7d "
-            "mirr=%d "
-            "u%06lx l%06lx t%06lx"
-            "\n",
-            p.code,
-            genCategoryNames[p.generalCategory], p.generalCategory,
-            p.canonicalCombining,
-            bidiNames[p.bidi], p.bidi,
-            p.numericValue, p.denominator,
-            p.isMirrored,
-            p.upperCase, p.lowerCase, p.titleCase);
+#if 0
+        /* debug output */
+        if(beVerbose) {
+            printf(
+                "0x%06lx "
+                "%s(%2d) "
+                "comb=%3d "
+                "bidi=%3s(%2d) "
+                "num=%7d/%7d "
+                "mirr=%d "
+                "u%06lx l%06lx t%06lx"
+                "\n",
+                p.code,
+                genCategoryNames[p.generalCategory], p.generalCategory,
+                p.canonicalCombining,
+                bidiNames[p.bidi], p.bidi,
+                p.numericValue, p.denominator,
+                p.isMirrored,
+                p.upperCase, p.lowerCase, p.titleCase);
+        }
+#endif
 
         addProps(&p);
     }
