@@ -118,7 +118,7 @@ void pkg_mode_windows(UPKGOptions *o, FileStream *makefile, UErrorCode *status) 
 
         sprintf(tmp2,
             "LINK32 = link.exe\n"
-            "LINK32_FLAGS = /nologo /out:\"$(TARGETDIR)\\$(DLLTARGET)\" /DLL /NOENTRY /base:\"0x4ad00000\" /implib:\"$(TARGETDIR)\\$(LIBNAME).lib\" %s%s%s\n",
+            "LINK32_FLAGS = /nologo /out:\"$(TARGETDIR)\\$(DLLTARGET)\" /DLL /NOENTRY $(LDFLAGS) /implib:\"$(TARGETDIR)\\$(LIBNAME).lib\" %s%s%s\n",
             (o->comment ? "/comment:\"" : ""),
             (o->comment ? o->comment : ""),
             (o->comment ? "\"" : ""),
