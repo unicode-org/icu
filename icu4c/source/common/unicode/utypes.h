@@ -100,7 +100,7 @@ updates come out.  */
 
 /* Define NULL (the wrong way, cast to void *) if it does not exist. */
 #ifndef NULL
-#if defined(XP_CPLUSPLUS) || defined(__cplusplus)
+#ifdef XP_CPLUSPLUS
 #define NULL    0
 #else
 #define NULL    ((void *)0)
@@ -208,8 +208,8 @@ enum UErrorCode {
     U_USING_DEFAULT_ERROR     = -127,
     U_ERROR_INFO_LIMIT,
 
-	/** success */
-    U_ZERO_ERROR              =  0,       	
+    /** success */
+    U_ZERO_ERROR              =  0,       
 
     U_ILLEGAL_ARGUMENT_ERROR  =  1,       /* Start of codes indicating failure */
     U_MISSING_RESOURCE_ERROR  =  2,
