@@ -1,10 +1,10 @@
 ﻿#	UCA Rules
 #	This file contains the UCA tables for the given version, but transformed into rule syntax.
-#	Generated:   2002-06-27,15:51:27 GMT [MD]
+#	Generated:   2002-06-27,18:40:43 GMT [MD]
 #	NOTE: Since UCA handles canonical equivalents, no composites are necessary
 #	(except in extensions).
 #	For syntax description, see: http://oss.software.ibm.com/icu/userguide/Collate_Intro.html
-# VERSION: UCA=3.1.1d3, UCD=3.2.0
+# VERSION: UCA=3.1.1d5, UCD=3.2.0
 & [last tertiary ignorable]
 
     =	 '\u0001'
