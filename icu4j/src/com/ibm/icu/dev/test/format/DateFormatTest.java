@@ -4,8 +4,8 @@
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/format/DateFormatTest.java,v $ 
- * $Date: 2003/12/13 00:30:57 $ 
- * $Revision: 1.22 $
+ * $Date: 2004/02/25 01:38:03 $ 
+ * $Revision: 1.23 $
  *
  *****************************************************************************************
  */
@@ -939,7 +939,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
 		
 		{
 			SimpleDateFormat fmt = new SimpleDateFormat("dd/MM/yy"); // opposite of text
-			fmt.set2DigitYearStart(new Date(2003, Calendar.DECEMBER, 25));
+			fmt.set2DigitYearStart(getDate(2003, Calendar.DECEMBER, 25));
 			String text = "12/25/03";
 			Calendar xcal = new GregorianCalendar();
 			xcal.setLenient(false);
