@@ -1044,118 +1044,114 @@ static void TestVariantParsing()
 
 static void TestObsoleteNames(void)
 {
-  int32_t i;
-  UErrorCode status = U_ZERO_ERROR;
-  char buff[256];
-  const char *r1_addr;
-  int line = 9;
-
-  struct
-  {
-    char locale[9];
-    char lang3[6];
-    char lang[6];
-    char ctry3[6];
-    char ctry[6];
-  } tests[] = 
-  {
-    { "eng_USA", "eng", "en", "USA", "US" },
-    { "kok",  "kok", "kok", "", "" },
-    { "in",  "ind", "in", "", "" },
-    { "id",  "ind", "id", "", "" }, /* NO aliasing */
-    { "sh",  "srp", "sh", "", "" },
-    { "zz_FX",  "", "zz", "FXX", "FX" },
-    { "zz_ZR",  "", "zz", "ZAR", "ZR" },
-    { "zz_FXX",  "", "zz", "FXX", "FX" }, /* no aliasing. Doesn't go to PS(PSE). */
-    { "zz_ZAR",  "", "zz", "ZAR", "ZR" },
-    { "mlt_PSE", "mlt", "mt", "PSE", "PS" },
-    { "iw", "heb", "iw", "", "" },
-    { "ji", "yid", "ji", "", "" },
-    { "jw", "jaw", "jw", "", "" },
-    { "sh", "srp", "sh", "", "" },
-    { "",0,0,0,0,0 }
-  };
-
-  for(i=0;tests[i].locale[0];i++)
-  {
-    const char *locale;
-
-    locale = tests[i].locale;
-    log_verbose("** %s:\n", locale);
+    int32_t i;
+    UErrorCode status = U_ZERO_ERROR;
+    char buff[256];
     
-    status = U_ZERO_ERROR;
-    if(strcmp(tests[i].lang3,uloc_getISO3Language(locale)))
+    struct
     {
-      log_err("FAIL: uloc_getISO3Language(%s)==\t\"%s\",\t expected \"%s\"\n",
-	      locale,  uloc_getISO3Language(locale), tests[i].lang3);
-    }
-    else
+        char locale[9];
+        char lang3[6];
+        char lang[6];
+        char ctry3[6];
+        char ctry[6];
+    } tests[] = 
     {
-      log_verbose("   uloc_getISO3Language()==\t\"%s\"\n",
-		  uloc_getISO3Language(locale) );
-    }
-
-    status = U_ZERO_ERROR;
-    uloc_getLanguage(locale, buff, 256, &status);
-    if(U_FAILURE(status))
+        { "eng_USA", "eng", "en", "USA", "US" },
+        { "kok",  "kok", "kok", "", "" },
+        { "in",  "ind", "in", "", "" },
+        { "id",  "ind", "id", "", "" }, /* NO aliasing */
+        { "sh",  "srp", "sh", "", "" },
+        { "zz_FX",  "", "zz", "FXX", "FX" },
+        { "zz_ZR",  "", "zz", "ZAR", "ZR" },
+        { "zz_FXX",  "", "zz", "FXX", "FX" }, /* no aliasing. Doesn't go to PS(PSE). */
+        { "zz_ZAR",  "", "zz", "ZAR", "ZR" },
+        { "mlt_PSE", "mlt", "mt", "PSE", "PS" },
+        { "iw", "heb", "iw", "", "" },
+        { "ji", "yid", "ji", "", "" },
+        { "jw", "jaw", "jw", "", "" },
+        { "sh", "srp", "sh", "", "" },
+        { "",0,0,0,0,0 }
+    };
+    
+    for(i=0;tests[i].locale[0];i++)
     {
-      log_err("FAIL: error getting language from %s\n", locale);
+        const char *locale;
+        
+        locale = tests[i].locale;
+        log_verbose("** %s:\n", locale);
+        
+        status = U_ZERO_ERROR;
+        if(strcmp(tests[i].lang3,uloc_getISO3Language(locale)))
+        {
+            log_err("FAIL: uloc_getISO3Language(%s)==\t\"%s\",\t expected \"%s\"\n",
+                locale,  uloc_getISO3Language(locale), tests[i].lang3);
+        }
+        else
+        {
+            log_verbose("   uloc_getISO3Language()==\t\"%s\"\n",
+                uloc_getISO3Language(locale) );
+        }
+        
+        status = U_ZERO_ERROR;
+        uloc_getLanguage(locale, buff, 256, &status);
+        if(U_FAILURE(status))
+        {
+            log_err("FAIL: error getting language from %s\n", locale);
+        }
+        else
+        {
+            if(strcmp(buff,tests[i].lang))
+            {
+                log_err("FAIL: uloc_getLanguage(%s)==\t\"%s\"\t expected \"%s\"\n",
+                    locale, buff, tests[i].lang);
+            }
+            else
+            {
+                log_verbose("  uloc_getLanguage(%s)==\t%s\n", locale, buff);
+            }
+        }
+        if(strcmp(tests[i].lang3,uloc_getISO3Language(locale)))
+        {
+            log_err("FAIL: uloc_getISO3Language(%s)==\t\"%s\",\t expected \"%s\"\n",
+                locale,  uloc_getISO3Language(locale), tests[i].lang3);
+        }
+        else
+        {
+            log_verbose("   uloc_getISO3Language()==\t\"%s\"\n",
+                uloc_getISO3Language(locale) );
+        }
+        
+        if(strcmp(tests[i].ctry3,uloc_getISO3Country(locale)))
+        {
+            log_err("FAIL: uloc_getISO3Country(%s)==\t\"%s\",\t expected \"%s\"\n",
+                locale,  uloc_getISO3Country(locale), tests[i].ctry3);
+        }
+        else
+        {
+            log_verbose("   uloc_getISO3Country()==\t\"%s\"\n",
+                uloc_getISO3Country(locale) );
+        }
+        
+        status = U_ZERO_ERROR;
+        uloc_getCountry(locale, buff, 256, &status);
+        if(U_FAILURE(status))
+        {
+            log_err("FAIL: error getting country from %s\n", locale);
+        }
+        else
+        {
+            if(strcmp(buff,tests[i].ctry))
+            {
+                log_err("FAIL: uloc_getCountry(%s)==\t\"%s\"\t expected \"%s\"\n",
+                    locale, buff, tests[i].ctry);
+            }
+            else
+            {
+                log_verbose("  uloc_getCountry(%s)==\t%s\n", locale, buff);
+            }
+        }
     }
-    else
-    {
-      if(strcmp(buff,tests[i].lang))
-      {
-	log_err("FAIL: uloc_getLanguage(%s)==\t\"%s\"\t expected \"%s\"\n",
-		locale, buff, tests[i].lang);
-      }
-      else
-      {
-	log_verbose("  uloc_getLanguage(%s)==\t%s\n", locale, buff);
-      }
-    }
-    if(strcmp(tests[i].lang3,uloc_getISO3Language(locale)))
-    {
-      log_err("FAIL: uloc_getISO3Language(%s)==\t\"%s\",\t expected \"%s\"\n",
-	      locale,  uloc_getISO3Language(locale), tests[i].lang3);
-    }
-    else
-    {
-      log_verbose("   uloc_getISO3Language()==\t\"%s\"\n",
-		  uloc_getISO3Language(locale) );
-    }
-
-    if(strcmp(tests[i].ctry3,uloc_getISO3Country(locale)))
-    {
-      log_err("FAIL: uloc_getISO3Country(%s)==\t\"%s\",\t expected \"%s\"\n",
-	      locale,  uloc_getISO3Country(locale), tests[i].ctry3);
-    }
-    else
-    {
-      log_verbose("   uloc_getISO3Country()==\t\"%s\"\n",
-		  uloc_getISO3Country(locale) );
-    }
-
-    status = U_ZERO_ERROR;
-    uloc_getCountry(locale, buff, 256, &status);
-    if(U_FAILURE(status))
-    {
-      log_err("FAIL: error getting country from %s\n", locale);
-    }
-    else
-    {
-      if(strcmp(buff,tests[i].ctry))
-      {
-	log_err("FAIL: uloc_getCountry(%s)==\t\"%s\"\t expected \"%s\"\n",
-		locale, buff, tests[i].ctry);
-      }
-      else
-      {
-	log_verbose("  uloc_getCountry(%s)==\t%s\n", locale, buff);
-      }
-    }
-
-
-  }
 
 #if 0
 
