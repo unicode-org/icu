@@ -21,117 +21,55 @@
  * The C API for Collator performs locale-sensitive
  * string comparison. You use this class to build
  * searching and sorting routines for natural language text.
- * <em>Important: </em>The ICU collation implementation is being reworked.
- * This means that collation results and especially sort keys will change
- * from ICU 1.6 to 1.7 and again to 1.8.
- * For details, see the <a href="http://oss.software.ibm.com/icu/develop/ICU_collation_design.htm">collation design document</a>.
- *  
+ * <em>Important: </em>The ICU collation service has been reimplemented 
+ * in order to achieve better performance and UCA compliance. 
+ * For details, see the 
+ * <a href="http://oss.software.ibm.com/cvs/icu/~checkout~/icuhtml/design/collation/ICU_collation_design.htm">
+ * collation design document</a>.
  * <p>
- * Like other locale-sensitive classes, you can use the function
- * <code>ucol_open()</code>, to obtain the appropriate pointer to 
- * <code>UCollator</code> object for a given locale. If you need
- * to understand the details of a particular collation strategy or
- * if you need to modify that strategy.
- *
+ * For more information about the collation service see 
+ * <a href="http://oss.software.ibm.com/icu/userguide/Collate_Intro.html">the users guide</a>.
  * <p>
- * The following example shows how to compare two strings using
- * the <code>UCollator</code> for the default locale.
- * <blockquote>
- * <pre>
- * \code
- * // Compare two strings in the default locale
- * UErrorCode success = U_ZERO_ERROR;
- * UCollator* myCollator = ucol_open(NULL, &success);
- * UChar source[4], target[4];
- * u_uastrcpy(source, "abc");
- * u_uastrcpy(target, "ABC");
- * if( u_strcoll(myCollator, source, u_strlen(source), target, u_strlen(target)) == UCOL_LESS) {
- *     printf("abc is less than ABC\n");
- * }else{
- *     printf("abc is greater than or equal to ABC\n");
- * }
- * \endcode
- * </pre>
- * </blockquote>
- *
+ * Collation service provides correct sorting orders for most locales supported in ICU. 
+ * If specific data for a locale is not available, the orders eventually falls back
+ * to the <a href="http://www.unicode.org/unicode/reports/tr10/">UCA sort order</a>. 
  * <p>
- * You can set a <code>Collator</code>'s <em>strength</em> property
- * to determine the level of difference considered significant in
- * comparisons. Four strengths are provided: <code>UCOL_PRIMARY</code>,
- * <code>UCOL_SECONDARY</code>, <code>UCOL_TERTIARY</code>, and 
- * <code>UCOL_IDENTICAL</code>. The exact assignment of strengths to 
- * language features is locale dependant.  For example, in Czech, 
- * "e" and "f" are considered primary differences, while "e" and "\u00EA"
- * are secondary differences, "e" and "E" are tertiary differences and 
- * "e" and "e" are identical.
- * The following shows how both case and accents could be ignored for
- * US English.
- * <blockquote>
- * <pre>
- * \code
- * //Get the Collator for US English and set its strength to UCOL_PRIMARY
- * UErrorCode success = U_ZERO_ERROR;
- * UCollator* usCollator = ucol_open("en_US", &success);
- * ucol_setStrength(usCollator, UCOL_PRIMARY);
- * UChar source[4], target[4];
- * u_uastrcpy(source, "abc");
- * u_uastrcpy(target, "ABC");
- * if( u_strcoll(myCollator, source, u_strlen(source), target, u_strlen(target)) == UCOL_EQUAL) {
- *     printf("'abc' and 'ABC' strings are equivalent with strength UCOL_PRIMARY\n");
- * }
- * \endcode
- * </pre>
- * </blockquote>
- * <p>
- * For comparing strings exactly once, the <code>u_strcoll</code>
- * method provides the best performance. When sorting a list of
- * strings however, it is generally necessary to compare each
- * string multiple times. In this case, sort keys
- * provide better performance. The <code>ucol_getSortKey</code> method converts
- * a string to a series of bytes that can be compared bitwise
- * against other sort keys using <code>strcmp()</code>.
- * Sort keys are written as zero-terminated byte strings.
- * They consist of several substrings, one for each collation strength level,
- * that are delimited by 0x01 bytes.
- * If the string code points are appended for UCOL_IDENTICAL, then they are processed
- * for correct code point order comparison and may contain 0x01 bytes
- * but not zero bytes.</p>
- * <p>
- * <strong>Note:</strong> <code>UCollator</code>s with different Locale,
- * Collation Strength and Decomposition Mode settings will return different
- * sort orders for the same set of strings. Locales have specific 
- * collation rules, and the way in which secondary and tertiary differences 
- * are taken into account, for example, will result in a different sorting order
- * for same strings.
+ * Sort ordering may be customized by providing your own set of rules. For more on
+ * this subject see the 
+ * <a href="http://oss.software.ibm.com/icu/userguide/Collate_Customization.html">
+ * Collation customization</a> section of the users guide.
  * <p>
  * @see         UCollationResult
  * @see         UNormalizationMode
  * @see            UCollationStrength
  * @see         UCollationElements
  */
-struct collIterate;
-typedef struct collIterate collIterate;
 
-struct incrementalContext;
-typedef struct incrementalContext incrementalContext;
+/** A collation element iterator.
+*  For usage in C programs.
+*/
+struct collIterate;
+/** structure representing collation element iterator instance */
+typedef struct collIterate collIterate;
 
 /** A collator.
 *  For usage in C programs.
 */
 struct UCollator;
+/** structure representing a collator object instance */
 typedef struct UCollator UCollator;
 
 
-    /**
-     * UCOL_LESS is returned if source string is compared to be less than target
-     * string in the u_strcoll() method.
-     * UCOL_EQUAL is returned if source string is compared to be equal to target
-     * string in the u_strcoll() method.
-     * UCOL_GREATER is returned if source string is compared to be greater than
-     * target string in the u_strcoll() method.
-     * @see u_strcoll()
-     **/
-/** Possible values for a comparison result */
+/**
+ * UCOL_LESS is returned if source string is compared to be less than target
+ * string in the u_strcoll() method.
+ * UCOL_EQUAL is returned if source string is compared to be equal to target
+ * string in the u_strcoll() method.
+ * UCOL_GREATER is returned if source string is compared to be greater than
+ * target string in the u_strcoll() method.
+ * @see u_strcoll()
+ * <p>
+ * Possible values for a comparison result */
 typedef enum {
   /** string a == string b */
   UCOL_EQUAL    = 0,
@@ -142,11 +80,14 @@ typedef enum {
 } UCollationResult ;
 
 
+/** Enum containing attribute values for controling collation behavior. */
+/* Here are all the allowable values. Not every attribute can take every value. The only */
+/* universal value is UCOL_DEFAULT, which resets the attribute value to the predefined  */
+/* value for that locale */
 typedef enum {
-  /* accepted by most attributes */
+  /** accepted by most attributes */
   UCOL_DEFAULT = -1,
 
-  /* for UCOL_STRENGTH */
   /** Primary collation strength */
   UCOL_PRIMARY = 0,
   /** Secondary collation strength */
@@ -162,22 +103,31 @@ typedef enum {
   UCOL_IDENTICAL=15,
   UCOL_STRENGTH_LIMIT,
 
-  /* for UCOL_FRENCH_COLLATION, UCOL_CASE_LEVEL & UCOL_DECOMPOSITION_MODE*/
+  /** Turn the feature off - works for UCOL_FRENCH_COLLATION, 
+      UCOL_CASE_LEVEL, UCOL_HIRAGANA_QUATERNARY_MODE
+      & UCOL_DECOMPOSITION_MODE*/
   UCOL_OFF = 16,
+  /** Turn the feature on - works for UCOL_FRENCH_COLLATION, 
+      UCOL_CASE_LEVEL, UCOL_HIRAGANA_QUATERNARY_MODE
+      & UCOL_DECOMPOSITION_MODE*/
   UCOL_ON = 17,
   
-  /* for UCOL_ALTERNATE_HANDLING */
+  /** Valid for UCOL_ALTERNATE_HANDLING. Alternate handling will be shifted */
   UCOL_SHIFTED = 20,
+  /** Valid for UCOL_ALTERNATE_HANDLING. Alternate handling will be non ignorable */
   UCOL_NON_IGNORABLE = 21,
 
-  /* for UCOL_CASE_FIRST */
+  /** Valid for UCOL_CASE_FIRST - 
+      lower case sorts before upper case */
   UCOL_LOWER_FIRST = 24,
+  /** upper case sorts before lower case */
   UCOL_UPPER_FIRST = 25,
 
-  /* for UCOL_NORMALIZATION_MODE */
+  /** Valid for UCOL_NORMALIZATION_MODE 
+      UCOL_ON & UCOL_OFF are also allowed 
+      for this attribute */
   UCOL_ON_WITHOUT_HANGUL = 28,
 
-  /** No more attribute values after this*/
   UCOL_ATTRIBUTE_VALUE_COUNT
 
 } UColAttributeValue;
@@ -205,62 +155,119 @@ typedef enum {
      *
      * UCollationStrength is also used to determine the strength of sort keys 
      * generated from UCollator objects
+     * These values can be now found in the UColAttributeValue enum.
      **/
-/** Possible collation strengths  - all under UColAttributeValue*/
 typedef UColAttributeValue UCollationStrength;
 
+/** Attributes that collation service understands. All the attributes can take UCOL_DEFAULT
+ * value, as well as the values specific to each one. */
 typedef enum {
-     UCOL_FRENCH_COLLATION, /* attribute for direction of secondary weights*/
-     UCOL_ALTERNATE_HANDLING, /* attribute for handling variable elements*/
-     UCOL_CASE_FIRST, /* who goes first, lower case or uppercase */
-     UCOL_CASE_LEVEL, /* do we have an extra case level */
-     UCOL_NORMALIZATION_MODE, /* attribute for normalization */
+     /** Attribute for direction of secondary weights - used in French.\ 
+      * Acceptable values are UCOL_ON, which results in secondary weights
+      * being considered backwards and UCOL_OFF which treats secondary
+      * weights in the order they appear.*/
+     UCOL_FRENCH_COLLATION, 
+     /** Attribute for handling variable elements.\ 
+      * Acceptable values are UCOL_NON_IGNORABLE (default)
+      * which treats all the codepoints with non-ignorable 
+      * primary weights in the same way,
+      * and UCOL_SHIFTED which causes codepoints with primary 
+      * weights that are equal or below the variable top value
+      * to be ignored on primary level and moved to the quaternary 
+      * level.*/
+     UCOL_ALTERNATE_HANDLING, 
+     /** Controls the ordering of upper and lower case letters.\ 
+      * Acceptable values are UCOL_OFF (default), which orders
+      * upper and lower case letters in accordance to their tertiary
+      * weights, UCOL_UPPER_FIRST which forces upper case letters to 
+      * sort before lower case letters, and UCOL_LOWER_FIRST which does 
+      * the opposite. */
+     UCOL_CASE_FIRST, 
+     /** Controls whether an extra case level (positioned before the third
+      * level) is generated or not.\ Acceptable values are UCOL_OFF (default), 
+      * when case level is not generated, and UCOL_ON which causes the case
+      * level to be generated.\ Contents of the case level are affected by
+      * the value of UCOL_CASE_FIRST attribute.\ A simple way to ignore 
+      * accent differences in a string is to set the strength to UCOL_PRIMARY
+      * and enable case level. */
+     UCOL_CASE_LEVEL,
+     /** Controls whether the normalization check and necessary normalizations
+      * are performed.\ When set to UCOL_OFF (default) no normalization check
+      * is performed.\ The correctness of the result is guaranteed only if the 
+      * input data is in so-called FCD form (see users manual for more info).\ 
+      * When set to UCOL_ON, an incremental check is performed to see whether the input data
+      * is in the FCD form.\ If the data is not in the FCD form, incremental 
+      * NFD normalization is performed. */
+     UCOL_NORMALIZATION_MODE, 
+     /** An alias for UCOL_NORMALIZATION_MODE attribute */
      UCOL_DECOMPOSITION_MODE = UCOL_NORMALIZATION_MODE,
-     UCOL_STRENGTH,         /* attribute for strength */
-     UCOL_HIRAGANA_QUATERNARY_MODE, /* when turned on, this attribute */
-                                    /* positions Hiragana before all  */
-                                    /* non-ignorables on quaternary level */
-                                    /* This is a sneaky way to produce JIS */
-                                    /* sort order */
+     /** The strength attribute.\ Can be either UCOL_PRIMARY, UCOL_SECONDARY,
+      * UCOL_TERTIARY, UCOL_QUATERNARY or UCOL_IDENTICAL.\ The usual strength
+      * for most locales (except Japanese) is tertiary.\ Quaternary strength 
+      * is useful when combined with shifted setting for alternate handling
+      * attribute and for JIS x 4061 collation, when it is used to distinguish
+      * between Katakana  and Hiragana (this is achieved by setting the 
+      * UCOL_HIRAGANA_QUATERNARY mode to on.\ Otherwise, quaternary level
+      * is affected only by the number of non ignorable code points in
+      * the string.\ Identical strength is rarely useful, as it amounts 
+      * to codepoints of the NFD form of the string. */
+     UCOL_STRENGTH,  
+     /** when turned on, this attribute 
+      * positions Hiragana before all  
+      * non-ignorables on quaternary level
+      * This is a sneaky way to produce JIS
+      * sort order */     
+     UCOL_HIRAGANA_QUATERNARY_MODE, 
      UCOL_ATTRIBUTE_COUNT
 } UColAttribute;
 
+/** Options for retrieving the rule string */
 typedef enum {
-	UCOL_TAILORING_ONLY,
-	UCOL_FULL_RULES
+  UCOL_TAILORING_ONLY, /** Retrieve tailoring only */
+  UCOL_FULL_RULES /** Retrieve UCA rules and tailoring */
 }  UColRuleOption ;
 
 /**
  * Open a UCollator for comparing strings.
- * The UCollator may be used in calls to \Ref{ucol_strcoll}.
- * @param loc The locale containing the comparison conventions.
+ * The UCollator pointer is used in all the calls to the Collation 
+ * service. After finished, collator must be disposed of by calling
+ * \Ref{ucol_close}.
+ * @param loc The locale containing the required collation rules. 
+ *            if NULL is passed for the locale, UCA rules will be 
+ *            used.
  * @param status A pointer to an UErrorCode to receive any errors
  * @return A pointer to a UCollator, or 0 if an error occurred.
  * @see ucol_openRules
+ * @see ucol_safeClone
+ * @see ucol_close
  * @stable
  */
-
 U_CAPI UCollator*
-ucol_open(    const    char         *loc,
-        UErrorCode      *status);
+ucol_open(const char *loc, UErrorCode *status);
 
 /**
- * Open a UCollator for comparing strings.
- * The UCollator may be used in calls to \Ref{ucol_strcoll}.
- * @param rules A string describing the collation rules.
+ * Produce an UCollator instance according to the rules supplied.
+ * The rules are used to change the default ordering, defined in the
+ * UCA in a process called tailoring. The resulting UCollator pointer
+ * can be used in the same way as the one obtained by \Ref{ucol_strcoll}.
+ * @param rules A string describing the collation rules. For the syntax
+ *              of the rules please see users guide.
  * @param rulesLength The length of rules, or -1 if null-terminated.
  * @param normalizationMode The normalization mode: One of
  *             UCOL_OFF     (expect the text to not need normalization),
  *             UCOL_ON      (normalize), or
  *             UCOL_DEFAULT (set the mode according to the rules)
- * @param strength The collation strength; one of UCOL_PRIMARY, UCOL_SECONDARY,
- * UCOL_TERTIARY, UCOL_IDENTICAL,UCOL_DEFAULT_STRENGTH
- * @param status A pointer to an UErrorCode to receive any errors
+ * @param strength The default collation strength; one of UCOL_PRIMARY, UCOL_SECONDARY,
+ * UCOL_TERTIARY, UCOL_IDENTICAL,UCOL_DEFAULT_STRENGTH - can be also set in the rules.
  * @param parseError  A pointer to UParseError to recieve information about errors
  *                    occurred during parsing. This argument can currently be set
  *                    to NULL, but at users own risk. Please provide a real structure.
- * @return A pointer to a UCollator, or 0 if an error occurred.
+ * @param status A pointer to an UErrorCode to receive any errors
+ * @return A pointer to a UCollator.\ It is not guaranteed that NULL be returned in case
+ *         of error - please use status argument to check for errors.
  * @see ucol_open
+ * @see ucol_safeClone
+ * @see ucol_close
  * @stable
  */
 U_CAPI UCollator*
@@ -273,8 +280,12 @@ ucol_openRules( const UChar        *rules,
 
 /** 
  * Close a UCollator.
- * Once closed, a UCollator should not be used.
+ * Once closed, a UCollator should not be used.\ Every open collator should
+ * be closed.\ Otherwise, a memory leak will result.
  * @param coll The UCollator to close.
+ * @see ucol_open
+ * @see ucol_openRules
+ * @see ucol_safeClone
  * @stable
  */
 U_CAPI void
@@ -282,8 +293,7 @@ ucol_close(UCollator *coll);
 
 /**
  * Compare two strings.
- * The strings will be compared using the normalization mode and options
- * specified in \Ref{ucol_open} or \Ref{ucol_openRules}
+ * The strings will be compared using the options already specified.
  * @param coll The UCollator containing the comparison rules.
  * @param source The source string.
  * @param sourceLength The length of source, or -1 if null-terminated.
@@ -296,7 +306,6 @@ ucol_close(UCollator *coll);
  * @see ucol_equal
  * @stable
  */
-
 U_CAPI UCollationResult
 ucol_strcoll(    const    UCollator    *coll,
         const    UChar        *source,
@@ -319,11 +328,9 @@ ucol_strcoll(    const    UCollator    *coll,
  * @stable
  */
 U_CAPI UBool
-ucol_greater(    const    UCollator    *coll,
-        const    UChar        *source,
-        int32_t            sourceLength,
-        const    UChar        *target,
-        int32_t            targetLength);
+ucol_greater(const UCollator *coll,
+             const UChar     *source, int32_t sourceLength,
+             const UChar     *target, int32_t targetLength);
 
 /**
  * Determine if one string is greater than or equal to another.
@@ -340,11 +347,9 @@ ucol_greater(    const    UCollator    *coll,
  * @stable
  */
 U_CAPI UBool
-ucol_greaterOrEqual(    const    UCollator    *coll,
-            const    UChar        *source,
-            int32_t            sourceLength,
-            const    UChar        *target,
-            int32_t            targetLength);
+ucol_greaterOrEqual(const UCollator *coll,
+                    const UChar     *source, int32_t sourceLength,
+                    const UChar     *target, int32_t targetLength);
 
 /**
  * Compare two strings for equality.
@@ -361,18 +366,16 @@ ucol_greaterOrEqual(    const    UCollator    *coll,
  * @stable
  */
 U_CAPI UBool
-ucol_equal(    const    UCollator    *coll,
-        const    UChar        *source,
-        int32_t            sourceLength,
-        const    UChar        *target,
-        int32_t            targetLength);
+ucol_equal(const UCollator *coll,
+           const UChar     *source, int32_t sourceLength,
+           const UChar     *target, int32_t targetLength);
 
 /**
  * Get the collation strength used in a UCollator.
  * The strength influences how strings are compared.
  * @param coll The UCollator to query.
  * @return The collation strength; one of UCOL_PRIMARY, UCOL_SECONDARY,
- * UCOL_TERTIARY, UCOL_IDENTICAL, UCOL_DEFAULT_STRENGTH
+ * UCOL_TERTIARY, UCOL_QUATERNARY, UCOL_IDENTICAL
  * @see ucol_setStrength
  * @stable
  */
@@ -382,29 +385,15 @@ ucol_getStrength(const UCollator *coll);
 /**
  * Set the collation strength used in a UCollator.
  * The strength influences how strings are compared.
- * <p>Example of use:
- * <pre>
- * .       UCollationResult result;
- * .       UChar *source, *target;
- * .       UErrorCode status = U_ZERO_ERROR;
- * .       UCollator *myCollation = ucol_open("en_US", status);
- * .       if (U_FAILURE(&status)) return;
- * .       ucol_setStrength(myCollation, UCOL_PRIMARY);
- * .       u_uastrcpy(source, "abc");
- * .       u_uastrcpy(target, "ABC");
- * .       // result will be "abc" == "ABC"
- * .       // tertiary differences will be ignored
- * .       result = ucol_strcoll(myCollation, source, u_strlen(source), target, u_strlen(target));
- * </pre>
  * @param coll The UCollator to set.
  * @param strength The desired collation strength; one of UCOL_PRIMARY, 
- * UCOL_SECONDARY, UCOL_TERTIARY, UCOL_IDENTICAL, UCOL_DEFAULT_STRENGTH
+ * UCOL_SECONDARY, UCOL_TERTIARY, UCOL_QUATERNARY, UCOL_IDENTICAL, UCOL_DEFAULT
  * @see ucol_getStrength
  * @stable
  */
 U_CAPI void
-ucol_setStrength(    UCollator            *coll,
-            UCollationStrength        strength);
+ucol_setStrength(UCollator *coll,
+                 UCollationStrength strength);
 
 /**
  * Get the display name for a UCollator.
@@ -522,6 +511,9 @@ ucol_mergeSortkeys(const uint8_t *src1, int32_t src1Length,
  * @param attr attribute type 
  * @param value attribute value
  * @param status to indicate whether the operation went on smoothly or there were errors
+ * @see UColAttribute
+ * @see UColAttributeValue
+ * @see ucol_getAttribute
  * @draft ICU 1.8
  */
 U_CAPI void ucol_setAttribute(UCollator *coll, UColAttribute attr, UColAttributeValue value, UErrorCode *status);
@@ -532,57 +524,81 @@ U_CAPI void ucol_setAttribute(UCollator *coll, UColAttribute attr, UColAttribute
  * @param attr attribute type
  * @return attribute value
  * @param status to indicate whether the operation went on smoothly or there were errors
+ * @see UColAttribute
+ * @see UColAttributeValue
+ * @see ucol_setAttribute
  * @draft ICU 1.8
  */
 U_CAPI UColAttributeValue ucol_getAttribute(const UCollator *coll, UColAttribute attr, UErrorCode *status);
 
-/** 
+/** Variable top
+ * is a two byte primary value which causes all the codepoints with primary values that
+ * are less or equal than the variable top to be shifted when alternate handling is set
+ * to UCOL_SHIFTED.
  * Sets the variable top to a collation element value of a string supplied. 
  * @param coll collator which variable top needs to be changed
  * @param varTop one or more (if contraction) UChars to which the variable top should be set
  * @param len length of variable top string. If -1 it is considered to be zero terminated.
- * @param status error code. If error code is set, the return value is undefined. Errors set by this function are: <br>
- *    U_CE_NOT_FOUND_ERROR if more than one character was passed and there is no such a contraction<br>
+ * @param status error code. If error code is set, the return value is undefined. 
+ *               Errors set by this function are: <br>
+ *    U_CE_NOT_FOUND_ERROR if more than one character was passed and there is no such 
+ *    a contraction<br>
  *    U_PRIMARY_TOO_LONG_ERROR if the primary for the variable top has more than two bytes
- * @return a 32 bit value containing the value of the variable top in upper 16 bits. Lower 16 bits are undefined
+ * @return a 32 bit value containing the value of the variable top in upper 16 bits. 
+ *         Lower 16 bits are undefined
+ * @see ucol_getVariableTop
+ * @see ucol_restoreVariableTop
  * @draft ICU 2.0
  */
-U_CAPI uint32_t ucol_setVariableTop(UCollator *coll, const UChar *varTop, int32_t len, UErrorCode *status);
+U_CAPI uint32_t ucol_setVariableTop(UCollator *coll, 
+                                    const UChar *varTop, int32_t len, 
+                                    UErrorCode *status);
 
 /** 
  * Gets the variable top value of a Collator. 
  * Lower 16 bits are undefined and should be ignored.
  * @param coll collator which variable top needs to be retrieved
- * @param status error code (not changed by function). If error code is set, the return value is undefined.
+ * @param status error code (not changed by function). If error code is set, 
+ *               the return value is undefined.
+ * @see ucol_setVariableTop
+ * @see ucol_restoreVariableTop
  * @draft ICU 2.0
  */
 U_CAPI uint32_t ucol_getVariableTop(const UCollator *coll, UErrorCode *status);
 
 /** 
- * Sets the variable top to a collation element value supplied. Variable top is set to the upper 16 bits. 
+ * Sets the variable top to a collation element value supplied. Variable top is 
+ * set to the upper 16 bits. 
  * Lower 16 bits are ignored.
  * @param coll collator which variable top needs to be changed
  * @param varTop CE value, as returned by ucol_setVariableTop or ucol)getVariableTop
  * @param status error code (not changed by function)
+ * @see ucol_getVariableTop
+ * @see ucol_setVariableTop
  * @draft ICU 2.0
  */
 U_CAPI void ucol_restoreVariableTop(UCollator *coll, const uint32_t varTop, UErrorCode *status);
 
 /**
- * Thread safe cloning operation
+ * Thread safe cloning operation. The result is a clone of a given collator.
  * @param coll collator to be cloned
- * @param stackBuffer user allocated space for the new clone. If NULL new memory will be allocated. 
-	If buffer is not lareg enough, new memory will be allocated.
-	Clients can use the U_COL_SAFECLONE_BUFFERSIZE. 
-	This will probably be enough to avoid memory allocations.
+ * @param stackBuffer user allocated space for the new clone. 
+ * If NULL new memory will be allocated. 
+ *	If buffer is not large enough, new memory will be allocated.
+ *	Clients can use the U_COL_SAFECLONE_BUFFERSIZE. 
+ *	This will probably be enough to avoid memory allocations.
  * @param pBufferSize pointer to size of allocated space. 
-	If *pBufferSize == 0, a sufficient size for use in cloning will 
-	be returned ('pre-flighting')
-	If *pBufferSize is not enough for a stack-based safe clone, 
-	new memory will be allocated.
+ *	If *pBufferSize == 0, a sufficient size for use in cloning will 
+ *	be returned ('pre-flighting')
+ *	If *pBufferSize is not enough for a stack-based safe clone, 
+ *	new memory will be allocated.
  * @param status to indicate whether the operation went on smoothly or there were errors
-    An informational status value, U_SAFECLONE_ALLOCATED_ERROR, is used if any allocations were necessary.
+ *    An informational status value, U_SAFECLONE_ALLOCATED_ERROR, is used if any
+ * allocations were necessary.
  * @return pointer to the new clone
+ * @see ucol_open
+ * @see ucol_openRules
+ * @see ucol_close
  * @draft ICU 1.8
  */
 U_CAPI UCollator * ucol_safeClone(
@@ -591,6 +607,7 @@ U_CAPI UCollator * ucol_safeClone(
           int32_t        *pBufferSize,
           UErrorCode          *status);
 
+/** default memory size for the new clone */
 #define U_COL_SAFECLONE_BUFFERSIZE 384
 
 /**
