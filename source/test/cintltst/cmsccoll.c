@@ -4153,7 +4153,7 @@ static void TestTibetanConformance(void)
         u_unescape(test[1], target, 100);
         doTest(coll, source, target, UCOL_EQUAL);
         result = ucol_strcoll(coll, source, -1,   target, -1);
-        printf("result %d\n", result);
+        log_verbose("result %d\n", result);
         if (UCOL_EQUAL != result) {
             log_err("Tibetan comparison error\n"); 
         }
