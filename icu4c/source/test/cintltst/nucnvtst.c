@@ -532,9 +532,9 @@ void TestNewConvertWithBufferSizes(int32_t outsize, int32_t insize )
      { 0x0000, 0x0001, 0x0002, 0x0003, 0x0004, 0x0006, 0x0008, 0x000a};
     
     /* 1 2 3 0 h1 h2 h3 . DBCS*/
-    const char expectedIBM955[] = 
-     {  (char)0x74, (char)0x7e, (char)0x74, (char)0x7e, (char)0x74, (char)0x7e, (char)0x74, (char)0x7E, (char)0x30, (char)0x6c, (char)0x46, (char)0x73, (char)0x3b, (char)0x30, (char)0x74, (char)0x7e};
-    int32_t  toIBM955Offs    [] = 
+    const char expectedIBM835[] = 
+     {  (char)0xfe, (char)0xfe, (char)0xfe, (char)0xfe, (char)0xfe, (char)0xfe, (char)0xfe, (char)0xfe, (char)0x4c, (char)0x41, (char)0x4c, (char)0x48, (char)0x4c, (char)0x55, (char)0xfe, (char)0xfe};
+    int32_t  toIBM835Offs    [] = 
      {  (char)0x00, (char)0x00, (char)0x01, (char)0x01, (char)0x02, (char)0x02, (char)0x03, (char)0x03, (char)0x04, (char)0x04, (char)0x05, (char)0x05, (char)0x06, (char)0x06, (char)0x07, (char)0x07};
    
      /* 1 2 3 0 <?> <?> <?> . SBCS*/
@@ -625,8 +625,8 @@ void TestNewConvertWithBufferSizes(int32_t outsize, int32_t insize )
         log_err("u-> ibm-943 [UCNV_MBCS] not match.\n");
     /*DBCS*/
     if(!testConvertFromU(sampleText, sizeof(sampleText)/sizeof(sampleText[0]),
-            expectedIBM955, sizeof(expectedIBM955), "ibm-955", toIBM955Offs ))
-        log_err("u-> ibm-955 [UCNV_DBCS] not match.\n");
+            expectedIBM835, sizeof(expectedIBM835), "ibm-835", toIBM835Offs ))
+        log_err("u-> ibm-835 [UCNV_DBCS] not match.\n");
     /*SBCS*/
     if(!testConvertFromU(sampleText, sizeof(sampleText)/sizeof(sampleText[0]),
             expectedIBM920, sizeof(expectedIBM920), "ibm-920", toIBM920Offs ))
@@ -973,9 +973,9 @@ TestLATIN1() {
         1, 0x61,
         1, 0x31,
         1, 0x32,
-        1, 0xffc0,
-        1, 0xfff0,
-        1, 0xfff4,
+        1, 0xc0,
+        1, 0xf0,
+        1, 0xf4,
     };
 
     const char *source=(const char *)in;
