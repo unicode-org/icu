@@ -159,6 +159,26 @@ Normalizer::normalize(const UnicodeString& source,
     return;
   }
 
+    /* ### TODO: begin new implementation */
+    if(unorm_usesNewImplementation()) {
+        if(source.isBogus()) {
+            result.setToBogus();
+        } else {
+            /* make sure that we do not operate on the same buffer in source and result */
+            result.cloneArrayIfNeeded(-1, source.length()+20, FALSE);
+            result.fLength=unorm_internalNormalize(result.fArray, result.fCapacity,
+                                                   source.fArray, source.fLength,
+                                                   getUNormalizationMode(mode, status), (options&IGNORE_HANGUL)!=0,
+                                                   UnicodeString::growBuffer, &result,
+                                                   &status);
+            if(U_FAILURE(status)) {
+                result.setToBogus();
+            }
+        }
+        return;
+    }
+    /* ### end new implementation */
+
   switch (mode) {
   case NO_OP:
     result = source;
@@ -182,8 +202,7 @@ Normalizer::quickCheck(const UnicodeString& source,
   if (U_FAILURE(status))
     return UNORM_MAYBE;
 
-  const UChar *ps = source.getUChars();
-  return unorm_quickCheck(ps, source.length(), 
+  return unorm_quickCheck(source.fArray, source.length(), 
                           getUNormalizationMode(mode, status), &status);
 }
 
@@ -218,10 +237,29 @@ inline UBool isSetBitmask64(uint32_t* mask, int32_t bit) {
 void
 Normalizer::compose(const UnicodeString& source, 
                     UBool compat,
-                    int32_t,
+                    int32_t options,
                     UnicodeString& result, 
                     UErrorCode &status)
 {
+    /* ### TODO: begin new implementation */
+    if(unorm_usesNewImplementation()) {
+        if(source.isBogus()) {
+            result.setToBogus();
+        } else {
+            /* make sure that we do not operate on the same buffer in source and result */
+            result.cloneArrayIfNeeded(-1, source.length()+20, FALSE);
+            result.fLength=unorm_compose(result.fArray, result.fCapacity,
+                                         source.fArray, source.fLength,
+                                         compat, (options&IGNORE_HANGUL)!=0,
+                                         UnicodeString::growBuffer, &result,
+                                         &status);
+            if(U_FAILURE(status)) {
+                result.setToBogus();
+            }
+        }
+        return;
+    }
+    /* ### end new implementation */
     if (U_FAILURE(status)) {
         return;
     }

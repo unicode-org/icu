@@ -57,8 +57,26 @@ enum {
 
     JAMO_L_COUNT=19,
     JAMO_V_COUNT=21,
-    JAMO_T_COUNT=28
+    JAMO_T_COUNT=28,
+
+    HANGUL_COUNT=JAMO_L_COUNT*JAMO_V_COUNT*JAMO_T_COUNT
 };
+
+inline UBool
+isJamo1(UChar c) {
+    return (uint16_t)(c-JAMO_L_BASE)<JAMO_L_COUNT;
+}
+
+inline UBool
+isJamo3(UChar c) {
+    return (uint16_t)(c-JAMO_T_BASE)<JAMO_T_COUNT;
+}
+
+inline UBool
+isHangulWithoutJamo3(UChar c) {
+    c-=HANGUL_BASE;
+    return c<HANGUL_COUNT && c%JAMO_T_COUNT==0;
+}
 
 /* load unorm.dat ----------------------------------------------------------- */
 
@@ -233,6 +251,54 @@ _getExtraData(uint32_t norm32) {
     return extraData+(norm32>>_NORM_EXTRA_SHIFT);
 }
 
+/* get the canonical or compatibility decomposition for one character */
+inline const UChar *
+_decompose(uint32_t norm32, uint32_t qcMask, int32_t &length,
+           uint8_t &cc, uint8_t &trailCC) {
+    const UChar *p=(const UChar *)_getExtraData(norm32);
+    length=*p++;
+
+    if((norm32&qcMask&_NORM_QC_NFKD)!=0 && length>=0x100) {
+        /* use compatibility decomposition, skip canonical data */
+        p+=((length>>7)&1)+(length&0x7f);
+        length>>=8;
+    }
+
+    if(length&0x80) {
+        /* get the lead and trail cc's */
+        UChar bothCCs=*p++;
+        cc=(uint8_t)(bothCCs>>8);
+        trailCC=(uint8_t)bothCCs;
+    } else {
+        /* lead and trail cc's are both 0 */
+        cc=trailCC=0;
+    }
+
+    length&=0x7f;
+    return p;
+}
+
+/* get the canonical decomposition for one character */
+inline const UChar *
+_decompose(uint32_t norm32, int32_t &length,
+           uint8_t &cc, uint8_t &trailCC) {
+    const UChar *p=(const UChar *)_getExtraData(norm32);
+    length=*p++;
+
+    if(length&0x80) {
+        /* get the lead and trail cc's */
+        UChar bothCCs=*p++;
+        cc=(uint8_t)(bothCCs>>8);
+        trailCC=(uint8_t)bothCCs;
+    } else {
+        /* lead and trail cc's are both 0 */
+        cc=trailCC=0;
+    }
+
+    length&=0x7f;
+    return p;
+}
+
 /*
  * get the combining class of (c, c2)=*p++
  * before: p<limit  after: p<=limit
@@ -252,7 +318,7 @@ _getNextCC(const UChar *&p, const UChar *limit, UChar &c, UChar &c2) {
             c2=0;
         } else {
             /* c is a lead surrogate, get the real norm32 */
-            if(p!=limit && (c2=*p, UTF_IS_SECOND_SURROGATE(c2))) {
+            if(p!=limit && UTF_IS_SECOND_SURROGATE(c2=*p)) {
                 ++p;
                 norm32=_getNorm32FromSurrogatePair(norm32, c2);
             } else {
@@ -282,7 +348,7 @@ _getPrevCC(const UChar *start, const UChar *&p) {
     } else if(UTF_IS_SURROGATE_FIRST(c)) {
         /* unpaired first surrogate */
         return 0;
-    } else if(p!=start && (c2=*(p-1), UTF_IS_FIRST_SURROGATE(c2))) {
+    } else if(p!=start && UTF_IS_FIRST_SURROGATE(c2=*(p-1))) {
         --p;
         norm32=_getNorm32(c2);
         if((norm32&_NORM_CC_MASK)==0) {
@@ -307,6 +373,7 @@ _getPrevCC(const UChar *start, const UChar *&p) {
  * before: [start..p[ is already ordered, and
  *         [p..limit[ is ordered in itself, but
  *                    not in relation to [start..p[
+ *                    - exception: not ordered if !isOrdered
  * after: [start..limit[ is ordered
  *
  * the algorithm is a simple bubble-sort that takes the characters from *p++
@@ -316,13 +383,13 @@ _getPrevCC(const UChar *start, const UChar *&p) {
  * returns the trailing combining class
  */
 static uint8_t
-_mergeOrdered(const UChar *start, const UChar *p, const UChar *limit) {
+_mergeOrdered(const UChar *start, const UChar *p, const UChar *limit, UBool isOrdered=TRUE) {
     const UChar *pBack, *pPreBack;
     UChar *pSplit, *q;
     UChar c, c2;
     uint8_t cc, prevCC, trailCC=0;
 
-    if(start==p) {
+    if(start==p && isOrdered) {
         /* nothing to do */
         if(start!=limit) {
             return _getPrevCC(start, limit);
@@ -337,7 +404,11 @@ _mergeOrdered(const UChar *start, const UChar *p, const UChar *limit) {
         if(cc==0) {
             /* does not bubble back */
             trailCC=0;
-            break;
+            if(isOrdered) {
+                break;
+            } else {
+                start=p;
+            }
         } else {
             /* search for the insertion point where cc>=prevCC */
             pPreBack=pBack=pSplit;
@@ -345,7 +416,9 @@ _mergeOrdered(const UChar *start, const UChar *p, const UChar *limit) {
             if(cc>=prevCC) {
                 /* does not bubble back */
                 trailCC=cc;
-                break;
+                if(isOrdered) {
+                    break;
+                }
             } else {
                 /* this will be the last code point, so keep its cc */
                 trailCC=prevCC;
@@ -379,8 +452,10 @@ _mergeOrdered(const UChar *start, const UChar *p, const UChar *limit) {
                     *(pSplit+1)=c2;
                 }
 
-                /* we know that the new part is ordered in itself, so we can move start up */
-                start=q; /* set it to after where (c, c2) were inserted */
+                if(isOrdered) {
+                    /* we know that the new part is ordered in itself, so we can move start up */
+                    start=q; /* set it to after where (c, c2) were inserted */
+                }
             }
         }
     }
@@ -504,7 +579,7 @@ unorm_checkFCD(const UChar *src,
         /* check one above-minimum, relevant code unit */
         if(UTF_IS_FIRST_SURROGATE(c)) {
             /* c is a lead surrogate, get the real fcd16 */
-            if((limit==NULL || src!=limit) && (c2=*src, UTF_IS_SECOND_SURROGATE(c2))) {
+            if((limit==NULL || src!=limit) && UTF_IS_SECOND_SURROGATE(c2=*src)) {
                 ++src;
                 fcd16=_getFCD16FromSurrogatePair(fcd16, c2);
             } else {
@@ -629,7 +704,7 @@ _unorm_quickCheck(const UChar *src,
         /* check one above-minimum, relevant code unit */
         if(_NORM_MIN_SPECIAL<=norm32 && norm32<_NORM_SURROGATES_TOP) {
             /* c is a lead surrogate, get the real norm32 */
-            if((limit==NULL || src!=limit) && (c2=*src, UTF_IS_SECOND_SURROGATE(c2))) {
+            if((limit==NULL || src!=limit) && UTF_IS_SECOND_SURROGATE(c2=*src)) {
                 ++src;
                 norm32=_getNorm32FromSurrogatePair(norm32, c2);
             } else {
@@ -727,7 +802,7 @@ unorm_decompose(UChar *dest, int32_t destCapacity,
                                                 limit==NULL ?
                                                     2*destCapacity+length+20 :
                                                     destCapacity+length+2*(limit-src)+20,
-                                                destIndex)))
+                                                destIndex))!=FALSE)
             ) {
                 do {
                     dest[destIndex++]=*prevSrc++;
@@ -784,7 +859,7 @@ unorm_decompose(UChar *dest, int32_t destCapacity,
                 length=1;
             } else {
                 /* c is a lead surrogate, get the real norm32 */
-                if((limit==NULL || src!=limit) && (c2=*src, UTF_IS_SECOND_SURROGATE(c2))) {
+                if((limit==NULL || src!=limit) && UTF_IS_SECOND_SURROGATE(c2=*src)) {
                     ++src;
                     length=2;
                     norm32=_getNorm32FromSurrogatePair(norm32, c2);
@@ -802,26 +877,7 @@ unorm_decompose(UChar *dest, int32_t destCapacity,
                 p=NULL;
             } else {
                 /* c decomposes, get everything from the variable-length extra data */
-                p=(const UChar *)_getExtraData(norm32);
-                length=*p++;
-
-                if((norm32&qcMask&_NORM_QC_NFKD)!=0 && length>=0x100) {
-                    /* use compatibility decomposition, skip canonical data */
-                    p+=((length>>7)&1)+(length&0x7f);
-                    length>>=8;
-                }
-
-                if(length&0x80) {
-                    /* get the lead and trail cc's */
-                    UChar bothCCs=*p++;
-                    cc=(uint8_t)(bothCCs>>8);
-                    trailCC=(uint8_t)bothCCs;
-                } else {
-                    /* lead and trail cc's are both 0 */
-                    cc=trailCC=0;
-                }
-
-                length&=0x7f;
+                p=_decompose(norm32, qcMask, length, cc, trailCC);
                 if(length==1) {
                     /* fastpath a single code unit from decomposition */
                     c=*p;
@@ -838,7 +894,7 @@ unorm_decompose(UChar *dest, int32_t destCapacity,
                                             limit==NULL ?
                                                 2*destCapacity+length+20 :
                                                 destCapacity+length+2*(limit-src)+20,
-                                            destIndex)))
+                                            destIndex))!=FALSE)
         ) {
             UChar *reorderSplit=dest+destIndex;
             if(p==NULL) {
@@ -972,10 +1028,10 @@ _findSafeFCD(const UChar *src, const UChar *limit, uint16_t fcd16) {
 }
 
 static uint8_t
-_decompFCD(const UChar *src, const UChar *decompLimit, const UChar *limit,
-           UChar *dest, int32_t &destIndex, int32_t &destCapacity,
-           UBool canGrow, GrowBuffer *growBuffer, void *context,
-           UErrorCode *pErrorCode) {
+_decomposeFCD(const UChar *src, const UChar *decompLimit, const UChar *limit,
+              UChar *dest, int32_t &destIndex, int32_t &destCapacity,
+              UBool canGrow, GrowBuffer *growBuffer, void *context,
+              UErrorCode *pErrorCode) {
     UChar *reorderStart;
     const UChar *p;
     uint32_t norm32;
@@ -1010,7 +1066,7 @@ _decompFCD(const UChar *src, const UChar *decompLimit, const UChar *limit,
              * therefore the only specials are lead surrogates
              */
             /* c is a lead surrogate, get the real norm32 */
-            if(src!=decompLimit && (c2=*src, UTF_IS_SECOND_SURROGATE(c2))) {
+            if(src!=decompLimit && UTF_IS_SECOND_SURROGATE(c2=*src)) {
                 ++src;
                 length=2;
                 norm32=_getNorm32FromSurrogatePair(norm32, c2);
@@ -1028,20 +1084,7 @@ _decompFCD(const UChar *src, const UChar *decompLimit, const UChar *limit,
             p=NULL;
         } else {
             /* c decomposes, get everything from the variable-length extra data */
-            p=(const UChar *)_getExtraData(norm32);
-            length=*p++;
-
-            if(length&0x80) {
-                /* get the lead and trail cc's */
-                UChar bothCCs=*p++;
-                cc=(uint8_t)(bothCCs>>8);
-                trailCC=(uint8_t)bothCCs;
-            } else {
-                /* lead and trail cc's are both 0 */
-                cc=trailCC=0;
-            }
-
-            length&=0x7f;
+            p=_decompose(norm32, length, cc, trailCC);
             if(length==1) {
                 /* fastpath a single code unit from decomposition */
                 c=*p;
@@ -1057,7 +1100,7 @@ _decompFCD(const UChar *src, const UChar *decompLimit, const UChar *limit,
                                             limit==NULL ?
                                                 2*destCapacity+length+20 :
                                                 destCapacity+length+2*(limit-src)+20,
-                                            destIndex)))
+                                            destIndex))!=FALSE)
         ) {
             UChar *reorderSplit=dest+destIndex;
             if(p==NULL) {
@@ -1181,7 +1224,7 @@ unorm_makeFCD(UChar *dest, int32_t destCapacity,
                                                 limit==NULL ?
                                                     2*destCapacity+length+20 :
                                                     destCapacity+length+2*(limit-src)+20,
-                                                destIndex)))
+                                                destIndex))!=FALSE)
             ) {
                 do {
                     dest[destIndex++]=*prevSrc++;
@@ -1224,7 +1267,7 @@ unorm_makeFCD(UChar *dest, int32_t destCapacity,
         /* check one above-minimum, relevant code unit */
         if(UTF_IS_FIRST_SURROGATE(c)) {
             /* c is a lead surrogate, get the real fcd16 */
-            if((limit==NULL || src!=limit) && (c2=*src, UTF_IS_SECOND_SURROGATE(c2))) {
+            if((limit==NULL || src!=limit) && UTF_IS_SECOND_SURROGATE(c2=*src)) {
                 ++src;
                 fcd16=_getFCD16FromSurrogatePair(fcd16, c2);
             } else {
@@ -1257,10 +1300,10 @@ unorm_makeFCD(UChar *dest, int32_t destCapacity,
              * the source text does not fulfill the conditions for FCD;
              * decompose and reorder a limited piece of the text
              */
-            prevCC=_decompFCD(decompStart, src, limit,
-                              dest, destIndex, destCapacity,
-                              canGrow, growBuffer, context,
-                              pErrorCode);
+            prevCC=_decomposeFCD(decompStart, src, limit,
+                                 dest, destIndex, destCapacity,
+                                 canGrow, growBuffer, context,
+                                 pErrorCode);
             decompStart=src;
         }
     }
@@ -1299,30 +1342,956 @@ unorm_makeFCD(UChar *dest, int32_t destCapacity,
 
 /* make NFC & NFKC ---------------------------------------------------------- */
 
+enum {
+    _STACK_BUFFER_CAPACITY=100
+};
+
+/* get the composition properties of the next character */
+inline uint32_t
+_getNextCombining(const UChar *&p, const UChar *limit,
+                  UChar &c, UChar &c2,
+                  uint16_t &combiningIndex, uint8_t &cc) {
+    uint32_t norm32, combineFlags;
+
+    c=*p++;
+    norm32=_getNorm32(c);
+    if((norm32&(_NORM_CC_MASK|_NORM_COMBINES_ANY))==0) {
+        c2=0;
+        combiningIndex=0;
+        cc=0;
+        return 0;
+    } else {
+        if(norm32<_NORM_MIN_SPECIAL) {
+            c2=0;
+        } else if(norm32>=_NORM_MIN_HANGUL) {
+            /* a compatibility decomposition contained Jamos */
+            c2=0;
+            combiningIndex=(uint16_t)(0xfff0|(norm32>>_NORM_EXTRA_SHIFT));
+            cc=0;
+            return norm32&_NORM_COMBINES_ANY;
+        } else {
+            /* c is a lead surrogate, get the real norm32 */
+            if(p!=limit && UTF_IS_SECOND_SURROGATE(c2=*p)) {
+                ++p;
+                norm32=_getNorm32FromSurrogatePair(norm32, c2);
+            } else {
+                c2=0;
+                combiningIndex=0;
+                cc=0;
+                return 0;
+            }
+        }
+
+        combineFlags=norm32&_NORM_COMBINES_ANY;
+        if(combineFlags!=0) {
+            combiningIndex=*(_getExtraData(norm32)-1);
+        }
+
+        cc=(uint8_t)(norm32>>_NORM_CC_SHIFT);
+        return combineFlags;
+    }
+}
+
+/*
+ * given a composition-result starter (c, c2) - which means its cc==0,
+ * it combines forward, it has extra data, its norm32!=0,
+ * it is not a Hangul or Jamo,
+ * get just its combineFwdIndex
+ *
+ * norm32(c) is special if and only if c2!=0
+ */
+inline uint16_t
+_getCombiningIndexFromStarter(UChar c, UChar c2) {
+    uint32_t norm32;
+
+    norm32=_getNorm32(c);
+    if(c2!=0) {
+        norm32=_getNorm32FromSurrogatePair(norm32, c2);
+    }
+    return *(_getExtraData(norm32)-1);
+}
+
+/*
+ * recompose the characters in [p..limit[ (which is canonically ordered),
+ * adjust limit, and return the trailing cc
+ *
+ * since for NFKC we may get Jamos in decompositions, we need to
+ * recompose those too
+ *
+ * note that recomposition never lengthens the text:
+ * any character consists of either one or two code units;
+ * a composition may contain at most one more code unit than the original starter,
+ * while the combining mark that is removed has at least one code unit
+ */
+static uint8_t
+_recompose(UChar *p, UChar *&limit) {
+    UChar *starter, *pRemove, *q, *r;
+    const uint16_t *table;
+    uint32_t combineFlags;
+    UChar c, c2;
+    uint16_t combineFwdIndex, combineBackIndex;
+    uint8_t cc, prevCC;
+    UBool starterIsSupplementary;
+
+    starter=NULL;                   /* no starter */
+    combineFwdIndex=0;              /* will not be used until starter!=NULL - avoid compiler warnings */
+    starterIsSupplementary=FALSE;   /* will not be used until starter!=NULL - avoid compiler warnings */
+    prevCC=0;
+
+    for(;;) {
+        combineFlags=_getNextCombining(p, limit, c, c2, combineBackIndex, cc);
+        if((combineFlags&_NORM_COMBINES_BACK) && starter!=NULL) {
+            if(combineBackIndex&0x8000) {
+                /* c is a Jamo 2 or 3, see if we can compose it with the previous character */
+                /* ignore Jamo 3 because we compose it when we handle Jamo 2 - and the input does not contain Hanguls */
+                if(combineBackIndex==0xfff2) {
+                    /* Jamo 2, compose with previous Jamo 1 and following Jamo 3 */
+                    c2=(UChar)(*(p-2)-JAMO_L_BASE);
+                    if(c2<JAMO_L_COUNT) {
+                        pRemove=p-1;
+                        c=(UChar)(HANGUL_BASE+(c2*JAMO_V_COUNT+(c-JAMO_V_BASE))*JAMO_T_COUNT);
+                        if(p!=limit && (c2=(UChar)(*p-JAMO_T_BASE))<JAMO_T_COUNT) {
+                            ++p;
+                            c+=c2;
+                        }
+                        *(pRemove-1)=c;
+
+                        /* remove the Jamo(s) */
+                        q=pRemove;
+                        r=p;
+                        while(r<limit) {
+                            *q++=*r++;
+                        }
+                        p=pRemove;
+                        limit=q;
+                    }
+                    c2=0;
+                }
+            } else if(!(combineFwdIndex&0x8000) && (prevCC<cc || prevCC==0)) {
+                /* try to combine the starter with (c, c2) */
+                uint16_t key, value, value2;
+
+                /* search in the starter's composition table */
+                table=combiningTable+combineFwdIndex;
+                for(;;) {
+                    key=*table++;
+                    if(key>=combineBackIndex) {
+                        break;
+                    }
+                    table+= *table&0x8000 ? 2 : 1;
+                }
+
+                if((key&0x7fff)==combineBackIndex) {
+                    /* found! combine! */
+                    value=*table;
+
+                    /* is the composition a starter that combines forward? */
+                    key=value&0x2000;
+
+                    /* get the composition result code point from the variable-length result value */
+                    if(value&0x8000) {
+                        if(value&0x4000) {
+                            /* surrogate pair composition result */
+                            value=(value&0x3ff)|0xd800;
+                            value2=*(table+1);
+                        } else {
+                            /* BMP composition result U+2000..U+ffff */
+                            value=*(table+1);
+                            value2=0;
+                        }
+                    } else {
+                        /* BMP composition result U+0000..U+1fff */
+                        value&=0x1fff;
+                        value2=0;
+                    }
+
+                    /* replace the starter with the composition, remove the combining mark */
+                    *starter=(UChar)value;
+                    pRemove= c2==0 ? p-1 : p-2;
+
+                    if(starterIsSupplementary) {
+                        if(value2!=0) {
+                            *(starter+1)=(UChar)value2;
+                        } else {
+                            /* the composition is shorter than the starter, move the intermediate characters forward one */
+                            starterIsSupplementary=FALSE;
+                            q=starter+1;
+                            r=q+1;
+                            while(r<pRemove) {
+                                *q++=*r++;
+                            }
+                            --pRemove;
+                        }
+                    } else if(value2!=0) {
+                        /* the composition is longer than the starter, move the intermediate characters back one */
+                        starterIsSupplementary=TRUE;
+                        ++starter; /* temporarily increment for the loop boundary */
+                        q=pRemove;
+                        r=++pRemove;
+                        while(starter<q) {
+                            *--r=*--q;
+                        }
+                        *starter=(UChar)value2;
+                        --starter; /* undo the temporary increment */
+                    }
+
+                    /* remove the combining mark */
+                    if(pRemove<p) {
+                        q=pRemove;
+                        r=p;
+                        while(r<limit) {
+                            *q++=*r++;
+                        }
+                        p=pRemove;
+                        limit=q;
+                    }
+
+                    /* keep prevCC because we removed the combining mark */
+                    if(p==limit) {
+                        return prevCC;
+                    }
+
+                    /* is the composition a starter that combines forward? */
+                    if(key!=0) {
+                        combineFwdIndex=_getCombiningIndexFromStarter((UChar)value, (UChar)value2);
+                    } else {
+                        starter=NULL;
+                    }
+
+                    /* we combined and set prevCC, continue with looking for compositions */
+                    continue;
+                }
+            }
+        }
+
+        /* no combination this time */
+        prevCC=cc;
+        if(p==limit) {
+            return prevCC;
+        }
+
+        /* if (c, c2) did not combine, then check if it is a starter */
+        if(cc==0) {
+            /* found a new starter */
+            if(combineFlags&_NORM_COMBINES_FWD) {
+                /* it may combine with something, prepare for it */
+                if(c2==0) {
+                    starterIsSupplementary=FALSE;
+                    starter=p-1;
+                } else {
+                    starterIsSupplementary=TRUE;
+                    starter=p-2;
+                }
+                combineFwdIndex=combineBackIndex;
+            } else {
+                /* it will not combine with anything */
+                starter=NULL;
+            }
+        }
+    }
+}
+
+/*
+ * get a norm32 from text with complete code points
+ * (like from decompositions)
+ */
+inline uint32_t
+_getNorm32(const UChar *p, uint32_t mask) {
+    uint32_t norm32=_getNorm32(*p);
+    if((norm32&mask) && _NORM_MIN_SPECIAL<=norm32 && norm32<_NORM_SURROGATES_TOP) {
+        /* *p is a lead surrogate, get the real norm32 */
+        norm32=_getNorm32FromSurrogatePair(norm32, *(p+1));
+    }
+    return norm32;
+}
+
+/*
+ * read and decompose the following character
+ * return NULL if it is (or its decomposition starts with) a starter (cc==0)
+ * that has NF*C "yes"
+ * otherwise, return its decomposition (and set length, cc, and trailCC)
+ */
+static const UChar *
+_decomposeBeforeNextStarter(const UChar *&src, const UChar *limit,
+                            uint32_t qcMask, uint32_t decompQCMask, UChar minNoMaybe,
+                            uint8_t &cc, uint8_t &trailCC,
+                            int32_t &length) {
+    const UChar *p;
+    uint32_t norm32;
+    UChar c, c2;
+
+    /* end of string? get c */
+    if(limit==NULL) {
+        c=*src;
+        if(c==0) {
+            return NULL;
+        }
+    } else {
+        if(src==limit) {
+            return NULL;
+        }
+        c=*src;
+    }
+
+    /* anything to be done? */
+    if(c<minNoMaybe) {
+        return NULL;
+    }
+    norm32=_getNorm32(c);
+    if((norm32&(_NORM_CC_MASK|qcMask|decompQCMask))==0) {
+        return NULL;
+    }
+
+    if(norm32>=_NORM_MIN_HANGUL) {
+        if(norm32<_NORM_MIN_JAMO2) {
+            /* Hangul decomposes but is all starters, Jamo 1 are starters */
+            return NULL;
+        }
+
+        /* Jamo 2/3 are not starters but cc==0 */
+        cc=trailCC=0;
+        length=1;
+        return src++;
+    }
+
+    if(norm32<_NORM_MIN_SPECIAL) {
+        c2=0;
+        length=1;
+    } else {
+        /* c is a lead surrogate, get the real norm32 */
+        if((limit==NULL || (src+1)!=limit) && UTF_IS_SECOND_SURROGATE(c2=*(src+1))) {
+            length=2;
+            norm32=_getNorm32FromSurrogatePair(norm32, c2);
+        } else {
+            return NULL;
+        }
+    }
+
+    /* get the decomposition and the lead and trail cc's */
+    if((norm32&decompQCMask)==0) {
+        /* c does not decompose */
+        cc=trailCC=(uint8_t)(norm32>>_NORM_CC_SHIFT);
+        p=src;
+    } else {
+        /* c decomposes, get everything from the variable-length extra data */
+        p=_decompose(norm32, decompQCMask, length, cc, trailCC);
+        if(cc==0) {
+            /* get the first character's norm32 to check if it is a starter with qc "no" or "maybe" */
+            norm32=_getNorm32(p, qcMask);
+        }
+    }
+
+    if(cc==0 && !(norm32&qcMask)) {
+        return NULL;
+    } else {
+        src+= c2==0 ? 1 : 2;
+        return p;
+    }
+}
+
+/*
+ * decompose the previous code point (needs start<src)
+ * set starterIndex>=0 to the last starter in the decomposition
+ * that has NF*C "yes"
+ * starterIndex==-1 if there is no starter
+ */
+static const UChar *
+_decomposeBackFindStarter(const UChar *start, const UChar *&src,
+                          uint32_t qcMask, uint32_t decompQCMask, UChar minNoMaybe,
+                          int32_t &starterIndex,
+                          int32_t &length) {
+    const UChar *p;
+    uint32_t norm32;
+    UChar c, c2;
+    uint8_t cc, trailCC;
+
+    c=*--src;
+    length=1;
+    starterIndex=0; /* many characters are themselves starters */
+
+    /* check for a surrogate before getting norm32 to see if we need to predecrement further */
+    if(c<minNoMaybe) {
+        return src;
+    } else if(!UTF_IS_SURROGATE(c)) {
+        norm32=_getNorm32(c);
+        if(norm32>=_NORM_MIN_HANGUL) {
+            /* Hangul decomposes but is all starters, Jamo 1 are starters */
+#if 0
+            /* we should never get Jamo 2/3 here because we go back through quick check "yes" text */
+            if(norm32>=_NORM_MIN_JAMO2) {
+                /* Jamo 2/3 are not starters */
+                starterIndex=-1;
+            }
+#endif
+            return src;
+        }
+    } else if(UTF_IS_SURROGATE_FIRST(c)) {
+        /* unpaired first surrogate */
+        return src;
+    } else if(src!=start && UTF_IS_FIRST_SURROGATE(c2=*(src-1))) {
+        --src;
+        length=2;
+        norm32=_getNorm32(c2);
+
+        if((norm32&(_NORM_CC_MASK|decompQCMask))==0) {
+            /* all surrogate pairs with this lead surrogate have cc==0 and no decomposition */
+            return src;
+        } else {
+            /* norm32 must be a surrogate special */
+            norm32=_getNorm32FromSurrogatePair(norm32, c);
+        }
+    } else {
+        /* unpaired second surrogate */
+        return src;
+    }
+
+    /* get the decomposition and the lead and trail cc's */
+    if((norm32&decompQCMask)==0) {
+        /* c does not decompose */
+        if((norm32&(_NORM_CC_MASK|qcMask))!=0) {
+            starterIndex=-1;
+        }
+        p=src;
+    } else {
+        /* c decomposes, get everything from the variable-length extra data */
+        p=_decompose(norm32, decompQCMask, length, cc, trailCC);
+
+        /* find the starterIndex (the decomposition is canonically ordered!) */
+        /* assume that the decomposition contains complete code points */
+        if(UTF_IS_SECOND_SURROGATE(p[length-1])) {
+            starterIndex=length-2;
+        } else {
+            starterIndex=length-1;
+        }
+        if(trailCC!=0 || (_getNorm32(p+starterIndex, qcMask)&qcMask)) {
+            /* search backwards */
+            for(;;) {
+                if(starterIndex==0) {
+                    starterIndex=-1;
+                    break;
+                }
+                c=p[--starterIndex];
+                if(UTF_IS_SECOND_SURROGATE(c)) {
+                    c2=p[--starterIndex];
+                    norm32=_getNorm32(c2);
+                    if((norm32&(_NORM_CC_MASK|qcMask))==0) {
+                        /* all surrogate pairs with this lead surrogate have cc==0 */
+                        break;
+                    } else {
+                        /* norm32 must be a surrogate special */
+                        norm32=_getNorm32FromSurrogatePair(norm32, c);
+                    }
+                } else {
+                    norm32=_getNorm32(c);
+                }
+                if((norm32&(_NORM_CC_MASK|qcMask))==0) {
+                    break;
+                }
+            }
+        }
+    }
+
+    return p;
+}
+
+/*
+ * recompose around the current character:
+ * this function is called when unorm_decompose() finds a quick check "no" or "maybe"
+ * after some text (with quick check "yes") has been copied already
+ *
+ * decompose this character as well as parts of the source surrounding it,
+ * find the previous and the next starter,
+ * and then recompose between these two starters
+ */
+static const UChar *
+_composePart(UChar *stackBuffer, UChar *&buffer, int32_t &bufferCapacity, int32_t &length,
+             const UChar *&prevStarter, const UChar *prevSrc, const UChar *src, const UChar *limit,
+             uint32_t norm32,
+             uint32_t qcMask, uint8_t &prevCC,
+             int32_t &destIndex,
+             UErrorCode *pErrorCode) {
+    const UChar *p, *starter;
+    UChar *reorderSplit, *recomposeLimit;
+    uint32_t decompQCMask;
+    int32_t startIndex, limitIndex, firstStarterIndex, starterIndex;
+    UChar minNoMaybe;
+    uint8_t cc, trailCC;
+
+    decompQCMask=(qcMask<<2)&0xf; /* decomposition quick check mask */
+
+    if(!(decompQCMask&_NORM_QC_NFKD)) {
+        minNoMaybe=(UChar)indexes[_NORM_INDEX_MIN_NFD_NO_MAYBE];
+    } else {
+        minNoMaybe=(UChar)indexes[_NORM_INDEX_MIN_NFKD_NO_MAYBE];
+    }
+
+    /* get the decomposition and the lead and trail cc's */
+    if((norm32&decompQCMask)==0) {
+        /* c does not decompose */
+        cc=trailCC=(uint8_t)(norm32>>_NORM_CC_SHIFT);
+        p=prevSrc;
+    } else {
+        /* c decomposes, get everything from the variable-length extra data */
+        p=_decompose(norm32, decompQCMask, length, cc, trailCC);
+        if(cc==0) {
+            /* get the first character's norm32 to check if it is a starter with qc "no" or "maybe" */
+            norm32=_getNorm32(p, qcMask);
+        }
+    }
+
+    /* copy the decomposition into the buffer, assume that it fits */
+    startIndex=limitIndex=bufferCapacity/2;
+    do {
+        buffer[limitIndex++]=*p++;
+    } while(--length>0);
+
+    /* find the last starter in [prevStarter..src[ including this new decomposition */
+    if((cc==0 && !(norm32&qcMask)) || prevStarter==prevSrc) {
+        prevCC=trailCC;
+        starter=prevSrc;
+        firstStarterIndex=startIndex;
+    } else {
+        /* decompose backwards and look for a starter */
+        firstStarterIndex=0;
+        starter=prevSrc;
+        for(;;) {
+            p=_decomposeBackFindStarter(prevStarter, starter,
+                                        qcMask, decompQCMask, minNoMaybe,
+                                        starterIndex, length);
+
+            /* make sure there is enough space in the buffer */
+            if(startIndex<length) {
+                int32_t bufferLength;
+
+                if(!u_growBufferFromStatic(stackBuffer, &buffer, &bufferCapacity, 2*bufferCapacity, limitIndex)) {
+                    *pErrorCode=U_MEMORY_ALLOCATION_ERROR;
+                    return NULL;
+                }
+
+                /* move the current buffer contents up */
+                bufferLength=limitIndex-startIndex;
+                limitIndex=bufferCapacity-_STACK_BUFFER_CAPACITY/2;
+                uprv_memmove(buffer+(limitIndex-bufferLength), buffer+startIndex, bufferLength*U_SIZEOF_UCHAR);
+                startIndex=limitIndex-bufferLength;
+            }
+
+            /* prepend the decomposition */
+            p+=length;
+            do {
+                buffer[--startIndex]=*--p;
+            } while(--length>0);
+
+            /* stop if we found a starter */
+            if(starterIndex>=0) {
+                firstStarterIndex=startIndex+starterIndex;
+                break;
+            }
+
+            /* stop if we are at the beginning of the text */
+            if(prevStarter>=starter) {
+                firstStarterIndex=startIndex;
+                break;
+            }
+        }
+
+        /* reorder the backwards decomposition, set prevCC */
+        prevCC=_mergeOrdered(buffer+firstStarterIndex, buffer+firstStarterIndex, buffer+limitIndex, FALSE);
+
+        /* adjust destIndex: back out what had been copied with qc "yes" */
+        destIndex-=(int32_t)(prevSrc-starter);
+    }
+
+    /* find the next starter in [src..limit[ */
+    for(;;) {
+        p=_decomposeBeforeNextStarter(src, limit, qcMask, decompQCMask, minNoMaybe, cc, trailCC, length);
+        if(p==NULL) {
+            break; /* reached a starter */
+        }
+
+        /* make sure there is enough space in the buffer */
+        if((limitIndex+length)>bufferCapacity) {
+            if(startIndex>=length) {
+                /* it fits if we move the buffer contents up */
+                uprv_memmove(buffer, buffer+startIndex, (limitIndex-startIndex)*U_SIZEOF_UCHAR);
+                firstStarterIndex-=startIndex;
+                limitIndex-=startIndex;
+                startIndex=0;
+            } else if(!u_growBufferFromStatic(stackBuffer, &buffer, &bufferCapacity, 2*bufferCapacity, limitIndex)) {
+                *pErrorCode=U_MEMORY_ALLOCATION_ERROR;
+                return NULL;
+            }
+        }
+
+        /* append the decomposition */
+        /* ### TODO: worth trying to use _insertOrdered() ? */
+        reorderSplit=buffer+limitIndex;
+        do {
+            buffer[limitIndex++]=*p++;
+        } while(--length>0);
+
+        /* cc!=0 because otherwise we would have gotten p==NULL */
+        if(cc<prevCC) {
+            /* the decomposition is out of order with respect to the preceding text */
+            prevCC=_mergeOrdered(buffer+firstStarterIndex, reorderSplit, buffer+limitIndex);
+        } else {
+            prevCC=trailCC;
+        }
+    }
+
+    /* recompose between the two starters */
+    recomposeLimit=buffer+limitIndex;
+    prevCC=_recompose(buffer+firstStarterIndex, recomposeLimit);
+
+    /* set output parameters and return with a pointer to the recomposition */
+    prevStarter=src;
+    p=buffer+startIndex;
+    length=recomposeLimit-p;
+    return p;
+}
+
 U_CFUNC int32_t
 unorm_compose(UChar *dest, int32_t destCapacity,
               const UChar *src, int32_t srcLength,
               UBool compat, UBool ignoreHangul,
               GrowBuffer *growBuffer, void *context,
               UErrorCode *pErrorCode) {
-    /* ### TODO: for now, this is just basically the same as the old unorm_normalize() */
-  if(U_FAILURE(*pErrorCode)) return -1;
+    UChar stackBuffer[_STACK_BUFFER_CAPACITY];
+    UChar *buffer;
+    int32_t bufferCapacity;
 
-  /* synwee : removed hard coded conversion */
-  Normalizer::EMode normMode = compat ? Normalizer::COMPOSE_COMPAT : Normalizer::COMPOSE;
-  if (U_FAILURE(*pErrorCode)) {
-    return -1;
-  }
+    const UChar *limit, *prevSrc, *reorderStart, *prevStarter;
+    uint32_t norm32, ccOrQCMask, qcMask;
+    int32_t destIndex, length;
+    UChar c, c2, minNoMaybe;
+    uint8_t cc, prevCC;
+    UBool canGrow;
 
-  int32_t len = (srcLength == -1 ? u_strlen(src) : srcLength);
-  const UnicodeString source(srcLength == -1, src, len);
-  UnicodeString dst(dest, 0, destCapacity);
-  /* synwee : note quickcheck is added in C ++ normalize method */
-  Normalizer::normalize(source, normMode, ignoreHangul ? Normalizer::IGNORE_HANGUL : 0, dst, *pErrorCode);
-  return uprv_fillOutputString(dst, dest, destCapacity, pErrorCode);
+    if(!_haveData(*pErrorCode)) {
+        return 0;
+    }
+
+    if(!compat) {
+        minNoMaybe=(UChar)indexes[_NORM_INDEX_MIN_NFC_NO_MAYBE];
+        qcMask=_NORM_QC_NFC;
+    } else {
+        minNoMaybe=(UChar)indexes[_NORM_INDEX_MIN_NFKC_NO_MAYBE];
+        qcMask=_NORM_QC_NFKC;
+    }
+
+    /* initialize */
+    buffer=stackBuffer;
+    bufferCapacity=_STACK_BUFFER_CAPACITY;
+
+    prevStarter=src;
+    reorderStart=dest;
+    ccOrQCMask=_NORM_CC_MASK|qcMask;
+    destIndex=0;
+    prevCC=0;
+
+    /* do not attempt to grow if there is no growBuffer function or if it has failed before */
+    canGrow=(UBool)(growBuffer!=NULL);
+
+    if(srcLength>=0) {
+        /* string with length */
+        limit=src+srcLength;
+    } else /* srcLength==-1 */ {
+        /* zero-terminated string */
+        limit=NULL;
+    }
+
+    U_ALIGN_CODE(16);
+
+    for(;;) {
+        /* count code units below the minimum or with irrelevant data for the quick check */
+        prevSrc=src;
+        if(limit==NULL) {
+            while((c=*src)<minNoMaybe ? c!=0 : ((norm32=_getNorm32(c))&ccOrQCMask)==0) {
+                prevCC=0;
+                ++src;
+            }
+        } else {
+            while(src!=limit && ((c=*src)<minNoMaybe || ((norm32=_getNorm32(c))&ccOrQCMask)==0)) {
+                prevCC=0;
+                ++src;
+            }
+        }
+
+        /* copy these code units all at once */
+        if(src!=prevSrc) {
+            length=(int32_t)(src-prevSrc);
+            if( (destIndex+length)<=destCapacity ||
+                /* attempt to grow the buffer */
+                (canGrow && (canGrow=growBuffer(context, &dest, &destCapacity,
+                                                limit==NULL ?
+                                                    2*destCapacity+length+20 :
+                                                    destCapacity+length+2*(limit-src)+20,
+                                                destIndex))!=FALSE)
+            ) {
+                do {
+                    dest[destIndex++]=*prevSrc++;
+                } while(src!=prevSrc);
+                reorderStart=dest+destIndex;
+            } else {
+                /* buffer overflow */
+                /* keep incrementing the destIndex for preflighting */
+                destIndex+=length;
+                prevSrc=src;
+            }
+        }
+        /* now prevSrc==src - used later to separate the current character from the previous text */
+
+        /* end of source reached? */
+        if(limit==NULL ? c==0 : src==limit) {
+            break;
+        }
+
+        /* c already contains *src and norm32 is set for it, increment src */
+        ++src;
+
+        /* check one above-minimum, relevant code unit */
+        /*
+         * norm32 is for c=*(src-1), and the quick check flag is "no" or "maybe", and/or cc!=0
+         * check for Jamo 2/3, then for surrogates and regular characters
+         * c is not a Hangul syllable because they are not marked with no/maybe for NFC & NFKC (and their cc==0)
+         */
+        if(norm32>=_NORM_MIN_HANGUL) {
+            /*
+             * Jamo 2 or 3:
+             * try to compose with the previous character, Jamo 2 also with a following Jamo 3,
+             * and set values here right now in case we just continue with the main loop
+             */
+            length=1;
+            prevCC=cc=0;
+            prevStarter=prevSrc;
+            reorderStart=dest+destIndex;
+
+            if(/* ### TODO: do we need to do this? !ignoreHangul && ### */ destIndex>0) {
+                /* c is a Jamo 2 or 3, see if we can compose it with the previous character */
+                if(norm32<_NORM_JAMO2_TOP) {
+                    /* Jamo 2, compose with previous Jamo 1 and following Jamo 3 */
+                    c2=(UChar)(*(prevSrc-1)-JAMO_L_BASE);
+                    if(c2<JAMO_L_COUNT) {
+                        c=(UChar)(HANGUL_BASE+(c2*JAMO_V_COUNT+(c-JAMO_V_BASE))*JAMO_T_COUNT);
+                        if((limit==NULL || src!=limit) && (c2=(UChar)(*src-JAMO_T_BASE))<JAMO_T_COUNT) {
+                            ++src;
+                            c+=c2;
+                        }
+                        if(destIndex<=destCapacity) {
+                            dest[destIndex-1]=c;
+                        }
+                        continue;
+                    }
+                } else {
+                    /* Jamo 3, compose with previous Hangul that does not have a Jamo 3 */
+                    c2=*(prevSrc-1);
+                    if(isHangulWithoutJamo3(c2)) {
+                        if(destIndex<=destCapacity) {
+                            dest[destIndex-1]=(UChar)(c2+(c-JAMO_T_BASE));
+                        }
+                        continue;
+                    }
+                }
+            }
+            c2=0;
+        } else {
+            if(norm32<_NORM_MIN_SPECIAL) {
+                c2=0;
+                length=1;
+            } else {
+                /* c is a lead surrogate, get the real norm32 */
+                if((limit==NULL || src!=limit) && UTF_IS_SECOND_SURROGATE(c2=*src)) {
+                    ++src;
+                    length=2;
+                    norm32=_getNorm32FromSurrogatePair(norm32, c2);
+                } else {
+                    /* c is an unpaired lead surrogate, nothing to do */
+                    c2=0;
+                    length=1;
+                    norm32=0;
+                }
+            }
+
+            /* we are looking at the character (c, c2) at [prevSrc..src[ */
+            if((norm32&qcMask)==0) {
+                cc=(uint8_t)(norm32>>_NORM_CC_SHIFT);
+            } else {
+                const UChar *p;
+
+                p=_composePart(stackBuffer, buffer, bufferCapacity, length,
+                               prevStarter, prevSrc, src, limit,
+                               norm32,
+                               qcMask,
+                               prevCC,          /* output */
+                               destIndex,       /* will be adjusted */
+                               pErrorCode);
+
+                if(p==NULL) {
+                    return 0;   /* an error occurred (out of memory) */
+                }
+
+                /* append the recomposed buffer contents to the destination buffer */
+                if( (destIndex+length)<=destCapacity ||
+                    /* attempt to grow the buffer */
+                    (canGrow && (canGrow=growBuffer(context, &dest, &destCapacity,
+                                                    limit==NULL ?
+                                                        2*destCapacity+length+20 :
+                                                        destCapacity+length+2*(limit-src)+20,
+                                                    destIndex))!=FALSE)
+                ) {
+                    while(length>0) {
+                        dest[destIndex++]=*p++;
+                        --length;
+                    }
+                } else {
+                    /* buffer overflow */
+                    /* keep incrementing the destIndex for preflighting */
+                    destIndex+=length;
+                }
+
+                src=prevStarter;
+                continue;
+            }
+        }
+
+        /* append the single code point (c, c2) to the destination buffer */
+        if( (destIndex+length)<=destCapacity ||
+            /* attempt to grow the buffer */
+            (canGrow && (canGrow=growBuffer(context, &dest, &destCapacity,
+                                            limit==NULL ?
+                                                2*destCapacity+length+20 :
+                                                destCapacity+length+2*(limit-src)+20,
+                                            destIndex))!=FALSE)
+        ) {
+            if(cc!=0 && cc<prevCC) {
+                /* (c, c2) is out of order with respect to the preceding text */
+                UChar *reorderSplit=dest+destIndex;
+                destIndex+=length;
+                prevCC=_insertOrdered(reorderStart, reorderSplit, dest+destIndex, c, c2, cc);
+            } else {
+                /* just append (c, c2) */
+                dest[destIndex++]=c;
+                if(c2!=0) {
+                    dest[destIndex++]=c2;
+                }
+                prevCC=cc;
+            }
+        } else {
+            /* buffer overflow */
+            /* keep incrementing the destIndex for preflighting */
+            destIndex+=length;
+            prevCC=cc;
+        }
+
+        if(prevCC==0) {
+            prevStarter=prevSrc;
+            reorderStart=dest+destIndex;
+        }
+    }
+
+#if 1
+    /* ### TODO: this passes the tests but seems weird */
+    /* we may NUL-terminate if it fits as a convenience */
+    if(destIndex<destCapacity) {
+        dest[destIndex]=0;
+    } else if(destIndex>destCapacity) {
+        *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
+    }
+#else
+    /* ### TODO: this looks slightly to much more reasonable but fails some tests, esp. /tscoll/cmsccoll/TestIncrementalNormalize */
+    if(limit==NULL) {
+        /* assume that we must NUL-terminate */
+        if(destIndex<destCapacity) {
+            /* ### TODO: this one would make sense -- dest[destIndex++]=0; -- but the following is more compatible */
+            dest[destIndex]=0;
+        } else {
+            /* ### TODO: same as above -- ++destIndex; */
+            *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
+        }
+    } else {
+        /* we may NUL-terminate if it fits as a convenience */
+        if(destIndex<destCapacity) {
+            dest[destIndex]=0;
+        } else if(destIndex>destCapacity) {
+            *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
+        }
+    }
+#endif
+
+    if(buffer!=stackBuffer) {
+        uprv_free(buffer);
+    }
+
+    return destIndex;
 }
 
+/* normalize() API ---------------------------------------------------------- */
 
+/**
+ * Internal API for normalizing.
+ * Does not check for bad input and uses growBuffer.
+ * @internal
+ */
+U_CFUNC int32_t
+unorm_internalNormalize(UChar *dest, int32_t destCapacity,
+                        const UChar *src, int32_t srcLength,
+                        UNormalizationMode mode, UBool ignoreHangul,
+                        GrowBuffer *growBuffer, void *context,
+                        UErrorCode *pErrorCode) {
+    switch(mode) {
+    case UNORM_NFD:
+        return unorm_decompose(dest, destCapacity,
+                               src, srcLength,
+                               FALSE, ignoreHangul,
+                               growBuffer, context,
+                               pErrorCode);
+    case UNORM_NFKD:
+        return unorm_decompose(dest, destCapacity,
+                               src, srcLength,
+                               TRUE, ignoreHangul,
+                               growBuffer, context,
+                               pErrorCode);
+    case UNORM_NFC:
+        return unorm_compose(dest, destCapacity,
+                             src, srcLength,
+                             FALSE, ignoreHangul,
+                             growBuffer, context,
+                             pErrorCode);
+    case UNORM_NFKC:
+        return unorm_compose(dest, destCapacity,
+                             src, srcLength,
+                             TRUE, ignoreHangul,
+                             growBuffer, context,
+                             pErrorCode);
+    case UNORM_FCD:
+        return unorm_makeFCD(dest, destCapacity,
+                             src, srcLength,
+                             growBuffer, context,
+                             pErrorCode);
+    case UNORM_NONE:
+        /* just copy the string */
+        if(srcLength==-1) {
+            srcLength=u_strlen(src);
+        }
+        if( srcLength<=destCapacity ||
+            /* attempt to grow the buffer */
+            (growBuffer!=NULL && growBuffer(context, &dest, &destCapacity, srcLength+1, 0))
+        ) {
+            uprv_memcpy(dest, src, srcLength*U_SIZEOF_UCHAR);
+            /* ### TODO: revise NUL-termination parallel to rest of API */
+            /* we may NUL-terminate if it fits as a convenience */
+            if(srcLength<destCapacity) {
+                dest[srcLength]=0;
+            } else if(srcLength>destCapacity) {
+                *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
+            }
+        }
+        /* ### TODO: revise NUL-termination parallel to rest of API */
+        return srcLength;
+    default:
+        *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
+        return 0;
+    }
+}
 
 
 
@@ -1456,8 +2425,6 @@ unorm_normalize(const UChar*            src,
         UErrorCode*             pErrorCode)
 {
     if(useNewImplementation) {
-        UBool ignoreHangul;
-
         /* check argument values */
         if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
             return 0;
@@ -1479,42 +2446,11 @@ unorm_normalize(const UChar*            src,
             return 0;
         }
 
-        ignoreHangul= (option&UNORM_IGNORE_HANGUL)!=0;
-
-        switch(mode) {
-        case UNORM_NFD:
-            return unorm_decompose(dest, destCapacity,
-                                   src, srcLength,
-                                   FALSE, ignoreHangul,
-                                   NULL, NULL,
-                                   pErrorCode);
-        case UNORM_NFKD:
-            return unorm_decompose(dest, destCapacity,
-                                   src, srcLength,
-                                   TRUE, ignoreHangul,
-                                   NULL, NULL,
-                                   pErrorCode);
-        case UNORM_NFC:
-            return unorm_compose(dest, destCapacity,
-                                 src, srcLength,
-                                 FALSE, ignoreHangul,
-                                 NULL, NULL,
-                                 pErrorCode);
-        case UNORM_NFKC:
-            return unorm_compose(dest, destCapacity,
-                                 src, srcLength,
-                                 TRUE, ignoreHangul,
-                                 NULL, NULL,
-                                 pErrorCode);
-        case UNORM_FCD:
-            return unorm_makeFCD(dest, destCapacity,
-                                 src, srcLength,
-                                 NULL, NULL,
-                                 pErrorCode);
-        default:
-            *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
-            return 0;
-        }
+        return unorm_internalNormalize(dest, destCapacity,
+                                       src, srcLength,
+                                       mode, (UBool)((option&UNORM_IGNORE_HANGUL)!=0),
+                                       NULL, NULL,
+                                       pErrorCode);
     }
 
   if(U_FAILURE(*pErrorCode)) return -1;

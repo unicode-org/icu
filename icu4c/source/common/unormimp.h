@@ -18,6 +18,7 @@
 #define __UNORMIMP_H__
 
 #include "unicode/utypes.h"
+#include "unicode/unorm.h"
 #include "ustr_imp.h"
 
 /* trie constants */
@@ -137,6 +138,18 @@ U_CAPI UBool U_EXPORT2
 unorm_haveData(UErrorCode *pErrorCode);
 
 /**
+ * Internal API for normalizing.
+ * Does not check for bad input and uses growBuffer.
+ * @internal
+ */
+U_CFUNC int32_t
+unorm_internalNormalize(UChar *dest, int32_t destCapacity,
+                        const UChar *src, int32_t srcLength,
+                        UNormalizationMode mode, UBool ignoreHangul,
+                        GrowBuffer *growBuffer, void *context,
+                        UErrorCode *pErrorCode);
+
+/**
  * internal API, used by normlzr.cpp
  * @internal
  */
@@ -146,6 +159,17 @@ unorm_decompose(UChar *dest, int32_t destCapacity,
                 UBool compat, UBool ignoreHangul,
                 GrowBuffer *growBuffer, void *context,
                 UErrorCode *pErrorCode);
+
+/**
+ * internal API, used by normlzr.cpp
+ * @internal
+ */
+U_CFUNC int32_t
+unorm_compose(UChar *dest, int32_t destCapacity,
+              const UChar *src, int32_t srcLength,
+              UBool compat, UBool ignoreHangul,
+              GrowBuffer *growBuffer, void *context,
+              UErrorCode *pErrorCode);
 
 /**
  * internal API, but used by tests
