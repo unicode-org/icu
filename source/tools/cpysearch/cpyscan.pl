@@ -7,7 +7,7 @@
 use strict;
 
 my $icuSource = $ARGV[0];
-my $ignore = "data/out/build|CVS|\\~|\\#|Debug|Release|\\.dsp|\\.dsw|\\.opt|\\.ncb|\\.vcproj|\\.sln|\\.suo|\\.cvsignore|\\.cnv|\\.res|\\.icu|\\.exe|\\.obj|\\.exp|\\.lib|\\.out|\\.plg|positions|unidata|\\.jar|\\.spp|\\.stub|\\.policy";
+my $ignore = "data/out/build|CVS|\\~|\\#|Debug|Release|\\.dll|\\.ilk|\\.pdb|\\.dsp|\\.dsw|\\.opt|\\.ncb|\\.vcproj|\\.sln|\\.suo|\\.cvsignore|\\.cnv|\\.res|\\.icu|\\.exe|\\.obj|\\.bin|\\.exp|\\.lib|\\.out|\\.plg|positions|unidata|\\.jar|\\.spp|\\.stub|\\.policy";
 
 my $command = "find $icuSource -type f";
 my @files = `$command`;
