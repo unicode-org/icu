@@ -23,7 +23,7 @@ CurrencyFormat::CurrencyFormat(const Locale& locale, UErrorCode& ec) :
 }
 
 CurrencyFormat::CurrencyFormat(const CurrencyFormat& other) :
-    fmt(NULL) {
+    MeasureFormat(other), fmt(NULL) {
     fmt = (NumberFormat*) other.fmt->clone();
 }
 

@@ -29,7 +29,7 @@ Measure::Measure(const Formattable& _number, MeasureUnit* adoptedUnit,
 }
 
 Measure::Measure(const Measure& other) :
-    unit(0) {
+    UObject(other), unit(0) {
     *this = other;
 }
 
