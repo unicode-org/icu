@@ -65,8 +65,8 @@ public:
     /*
      * create a test for the given script transliterator.
      */
-    RTTest(const UnicodeString& transliteratorID, 
-           int8_t sourceScript, int8_t targetScript);
+    RTTest(const UnicodeString& transliteratorIDStr, 
+           int8_t sourceScriptVal, int8_t targetScriptVal);
 
     virtual ~RTTest();
 
@@ -128,11 +128,11 @@ protected:
 /*
  * create a test for the given script transliterator.
  */
-RTTest::RTTest(const UnicodeString& transliteratorID, 
-               int8_t sourceScript, int8_t targetScript) {
-    this->transliteratorID = transliteratorID;
-    this->sourceScript = sourceScript;
-    this->targetScript = targetScript;
+RTTest::RTTest(const UnicodeString& transliteratorIDStr, 
+               int8_t sourceScriptVal, int8_t targetScriptVal) {
+    this->transliteratorID = transliteratorIDStr;
+    this->sourceScript = sourceScriptVal;
+    this->targetScript = targetScriptVal;
     errorLimit = 0x7FFFFFFFL;
     errorCount = 0;
     pairLimit  = 0x10000;
@@ -149,15 +149,18 @@ void RTTest::setPairLimit(int32_t limit) {
     pairLimit = limit;
 }
 
-void RTTest::test(const UnicodeString& sourceRange,
-                  const UnicodeString& targetRange, IntlTest* log) {
+void RTTest::test(const UnicodeString& sourceRangeVal,
+                  const UnicodeString& targetRangeVal, IntlTest* logVal) {
 
     UErrorCode status = U_ZERO_ERROR;
-    if (sourceRange.length() > 0) {
-        this->sourceRange.applyPattern(sourceRange, status);
+
+    this->log = logVal;
+
+    if (sourceRangeVal.length() > 0) {
+        this->sourceRange.applyPattern(sourceRangeVal, status);
         if (U_FAILURE(status)) {
             log->errln("FAIL: UnicodeSet::applyPattern(" +
-                       sourceRange + ")");
+                       sourceRangeVal + ")");
             return;
         }
     } else {
@@ -168,16 +171,14 @@ void RTTest::test(const UnicodeString& sourceRange,
         }
     }
     this->targetRange.clear();
-    if (targetRange.length() > 0) {
-        this->targetRange.applyPattern(targetRange, status);
+    if (targetRangeVal.length() > 0) {
+        this->targetRange.applyPattern(targetRangeVal, status);
         if (U_FAILURE(status)) {
             log->errln("FAIL: UnicodeSet::applyPattern(" +
-                       targetRange + ")");
+                       targetRangeVal + ")");
             return;
         }
     }
-
-    this->log = log;
 
 //|     // make a UTF-8 output file we can read with a browser
 //|
@@ -235,14 +236,15 @@ void RTTest::test2() {
     log->logln("Checking that all source characters convert to target - Singles");
 
     for (c = 0; c < 0xFFFF; ++c) {
-        if (Unicode::getType(c) == Unicode::UNASSIGNED ||
-            !isSource(c)) continue;
+        if (Unicode::getType(c) == Unicode::UNASSIGNED || !isSource(c))
+            continue;
         cs.remove(); cs.append(c);
         targ = cs;
         sourceToTarget->transliterate(targ);
         if (!isReceivingTarget(targ)) {
             logWrongScript("Source-Target", cs, targ);
-            if (errorCount >= errorLimit) return;
+            if (errorCount >= errorLimit)
+                return;
         }
     }
 
@@ -252,14 +254,15 @@ void RTTest::test2() {
         if (Unicode::getType(c) == Unicode::UNASSIGNED ||
             !isSource(c)) continue;
         for (UChar d = 0; d < 0xFFFF; ++d) {
-            if (Unicode::getType(d) == Unicode::UNASSIGNED ||
-                !isSource(d)) continue;
+            if (Unicode::getType(d) == Unicode::UNASSIGNED || !isSource(d))
+                continue;
             cs.remove(); cs.append(c).append(d);
             targ = cs;
             sourceToTarget->transliterate(targ);
             if (!isReceivingTarget(targ)) {
                 logWrongScript("Source-Target", cs, targ);
-                if (errorCount >= errorLimit) return;
+                if (errorCount >= errorLimit)
+                    return;
             }
         }
     }
@@ -276,10 +279,12 @@ void RTTest::test2() {
         sourceToTarget->transliterate(reverse);
         if (!isReceivingSource(targ)) {
             logWrongScript("Target-Source", cs, targ);
-            if (errorCount >= errorLimit) return;
+            if (errorCount >= errorLimit)
+                return;
         } else if (cs != reverse) {
             logRoundTripFailure(cs, targ, reverse);
-            if (errorCount >= errorLimit) return;
+            if (errorCount >= errorLimit)
+                return;
         }
     }
 
@@ -308,10 +313,12 @@ void RTTest::test2() {
             sourceToTarget->transliterate(reverse);
             if (!isReceivingSource(targ)) {
                 logWrongScript("Target-Source", cs, targ);
-                if (errorCount >= errorLimit) return;
+                if (errorCount >= errorLimit)
+                    return;
             } else if (cs != reverse) {
                 logRoundTripFailure(cs, targ, reverse);
-                if (errorCount >= errorLimit) return;
+                if (errorCount >= errorLimit)
+                    return;
             }
         }
     }
@@ -363,10 +370,8 @@ void RTTest::logRoundTripFailure(const UnicodeString& from,
  */
 UBool RTTest::isSource(UChar c) {
     int8_t script = TestUtility::getScript(c);
-    if (script != sourceScript) return FALSE;
-    if (!Unicode::isLetter(c)) return FALSE;
-    if (!sourceRange.contains(c)) return FALSE;
-    return TRUE;
+    return (script == sourceScript && Unicode::isLetter(c)
+        && sourceRange.contains(c));
 }
 
 /*
@@ -384,10 +389,8 @@ UBool RTTest::isReceivingSource(UChar c) {
  */
 UBool RTTest::isTarget(UChar c) {
     int8_t script = TestUtility::getScript(c);
-    if (script != targetScript) return FALSE;
-    if (!Unicode::isLetter(c)) return FALSE;
-    if (!targetRange.isEmpty() && !targetRange.contains(c)) return FALSE;
-    return TRUE;
+    return (script == targetScript && Unicode::isLetter(c)
+        && (targetRange.isEmpty() || targetRange.contains(c)));
 }
 
 /*
@@ -401,28 +404,32 @@ UBool RTTest::isReceivingTarget(UChar c) {
 
 UBool RTTest::isSource(const UnicodeString& s) {
     for (int32_t i = 0; i < s.length(); ++i) {
-        if (!isSource(s.charAt(i))) return FALSE;
+        if (!isSource(s.charAt(i)))
+            return FALSE;
     }
     return TRUE;
 }
 
 UBool RTTest::isTarget(const UnicodeString& s) {
     for (int32_t i = 0; i < s.length(); ++i) {
-        if (!isTarget(s.charAt(i))) return FALSE;
+        if (!isTarget(s.charAt(i)))
+            return FALSE;
     }
     return TRUE;
 }
 
 UBool RTTest::isReceivingSource(const UnicodeString& s) {
     for (int32_t i = 0; i < s.length(); ++i) {
-        if (!isReceivingSource(s.charAt(i))) return FALSE;
+        if (!isReceivingSource(s.charAt(i)))
+            return FALSE;
     }
     return TRUE;
 }
 
 UBool RTTest::isReceivingTarget(const UnicodeString& s) {
     for (int32_t i = 0; i < s.length(); ++i) {
-        if (!isReceivingTarget(s.charAt(i))) return FALSE;
+        if (!isReceivingTarget(s.charAt(i)))
+            return FALSE;
     }
     return TRUE;
 }
