@@ -36,8 +36,7 @@
 				CompileAs="0"/>
 			<Tool
 				Name="VCCustomBuildTool"
-				CommandLine="copy $(TargetPath) ..\..\..\bin
-"
+				CommandLine="copy $(TargetPath) ..\..\..\bin"
 				Outputs="$(ProjectDir)..\..\..\bin\$(InputName).exe"/>
 			<Tool
 				Name="VCLinkerTool"
@@ -92,7 +91,9 @@
 				DebugInformationFormat="4"
 				CompileAs="0"/>
 			<Tool
-				Name="VCCustomBuildTool"/>
+				Name="VCCustomBuildTool"
+				CommandLine="copy $(TargetPath) ..\..\..\bin"
+				Outputs="$(ProjectDir)..\..\..\bin\$(InputName).exe"/>
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions="/MACHINE:I386"
@@ -160,16 +161,14 @@
 					Name="Release|Win32">
 					<Tool
 						Name="VCCustomBuildTool"
-						CommandLine="nmake /nologo /f $(InputName).mak icup=$(ProjectDir)..\..\.. CFG=Release
-"
+						CommandLine="nmake /nologo /f $(InputName).mak icup=$(ProjectDir)..\..\.. CFG=Release"
 						Outputs="Release/uconvmsg.lib"/>
 				</FileConfiguration>
 				<FileConfiguration
 					Name="Debug|Win32">
 					<Tool
 						Name="VCCustomBuildTool"
-						CommandLine="nmake /nologo /f $(InputName).mak icup=$(ProjectDir)..\..\.. CFG=Debug
-"
+						CommandLine="nmake /nologo /f $(InputName).mak icup=$(ProjectDir)..\..\.. CFG=Debug"
 						Outputs="Debug/uconvmsg.lib"/>
 				</FileConfiguration>
 			</File>
