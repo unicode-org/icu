@@ -13,14 +13,14 @@
 
 #include "unicode/translit.h"
 #include "intltest.h"
-
+#include "transtst.h"
 class Transliterator;
 
 /**
  * @test
  * @summary General test of Transliterator
  */
-class IndicLatinTest : public IntlTest {
+class IndicLatinTest :public TransliteratorTest {
 public:
     void runIndexedTest(int32_t index, UBool exec, const char* &name, char* par=NULL);
 
@@ -32,8 +32,12 @@ public:
     
     void TestSanskritLatinRT(void);
 
+    void TestCompoundLatinRT(void);
+    
     /*Internal functions used*/
     void doTest(const UnicodeString& , const UnicodeString& , const UnicodeString& );
+
+
 };
 
 
