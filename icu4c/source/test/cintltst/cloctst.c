@@ -19,6 +19,7 @@
 #include "unicode/putil.h"
 #include "cloctst.h"
 #include "unicode/uloc.h"
+#include "unicode/locid.h"
 #include "unicode/uchar.h"
 #include "unicode/ustring.h"
 #include "cintltst.h"

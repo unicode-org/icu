@@ -1376,17 +1376,20 @@ static void TestStringCopy()
 
 static const struct {
     uint32_t code;
-    const char *name, *oldName;
+    const char *name, *oldName, *extName;
 } names[]={
-    {0x0061, "LATIN SMALL LETTER A", ""},
-    {0x0284, "LATIN SMALL LETTER DOTLESS J WITH STROKE AND HOOK", "LATIN SMALL LETTER DOTLESS J BAR HOOK"},
-    {0x3401, "CJK UNIFIED IDEOGRAPH-3401", ""},
-    {0x7fed, "CJK UNIFIED IDEOGRAPH-7FED", ""},
-    {0xac00, "HANGUL SYLLABLE GA", ""},
-    {0xd7a3, "HANGUL SYLLABLE HIH", ""},
-    {0xff08, "FULLWIDTH LEFT PARENTHESIS", "FULLWIDTH OPENING PARENTHESIS"},
-    {0xffe5, "FULLWIDTH YEN SIGN", ""},
-    {0x23456, "CJK UNIFIED IDEOGRAPH-23456", ""}
+    {0x0061, "LATIN SMALL LETTER A", "", "LATIN SMALL LETTER A"},
+    {0x0284, "LATIN SMALL LETTER DOTLESS J WITH STROKE AND HOOK", "LATIN SMALL LETTER DOTLESS J BAR HOOK", "LATIN SMALL LETTER DOTLESS J WITH STROKE AND HOOK" },
+    {0x3401, "CJK UNIFIED IDEOGRAPH-3401", "", "CJK UNIFIED IDEOGRAPH-3401" },
+    {0x7fed, "CJK UNIFIED IDEOGRAPH-7FED", "", "CJK UNIFIED IDEOGRAPH-7FED" },
+    {0xac00, "HANGUL SYLLABLE GA", "", "HANGUL SYLLABLE GA" },
+    {0xd7a3, "HANGUL SYLLABLE HIH", "", "HANGUL SYLLABLE HIH" },
+    {0xd800, "", "", "<lead surrogate-D800>" },
+    {0xdc00, "", "", "<trail surrogate-D800>" },
+    {0xff08, "FULLWIDTH LEFT PARENTHESIS", "FULLWIDTH OPENING PARENTHESIS", "FULLWIDTH LEFT PARENTHESIS" },
+    {0xffe5, "FULLWIDTH YEN SIGN", "", "FULLWIDTH YEN SIGN" },
+    {0xffff, "", "", "<noncharacter-FFFF>" },
+    {0x23456, "CJK UNIFIED IDEOGRAPH-23456", "", "CJK UNIFIED IDEOGRAPH-23456" }
 };
 
 static UBool
@@ -1405,14 +1408,22 @@ enumCharNamesFn(void *context,
     ++*pCount;
     for(i=0; i<sizeof(names)/sizeof(names[0]); ++i) {
         if(code==names[i].code) {
-            if(nameChoice==U_UNICODE_CHAR_NAME) {
-                if(0!=uprv_strcmp(name, names[i].name)) {
-                    log_err("u_enumCharName(0x%lx)=%s instead of %s\n", code, name, names[i].name);
-                }
-            } else {
-                if(names[i].oldName[0]==0 || 0!=uprv_strcmp(name, names[i].oldName)) {
-                    log_err("u_enumCharName(0x%lx - 1.0)=%s instead of %s\n", code, name, names[i].oldName);
-                }
+            switch (nameChoice) {
+                case U_EXTENDED_CHAR_NAME:
+                    if(0!=uprv_strcmp(name, names[i].extName)) {
+                        log_err("u_enumCharName(0x%lx - Extended)=%s instead of %s\n", code, name, names[i].extName);
+                    }
+                    break;
+                case U_UNICODE_CHAR_NAME:
+                    if(0!=uprv_strcmp(name, names[i].name)) {
+                        log_err("u_enumCharName(0x%lx)=%s instead of %s\n", code, name, names[i].name);
+                    }
+                    break;
+                case U_UNICODE_10_CHAR_NAME:
+                    if(names[i].oldName[0]==0 || 0!=uprv_strcmp(name, names[i].oldName)) {
+                        log_err("u_enumCharName(0x%lx - 1.0)=%s instead of %s\n", code, name, names[i].oldName);
+                    }
+                    break;
             }
             break;
         }
@@ -1479,6 +1490,13 @@ TestCharNames() {
     u_enumCharNames(0, 0x110000, enumCharNamesFn, &length, U_UNICODE_CHAR_NAME, &errorCode);
     if(U_FAILURE(errorCode) || length<49194) {
         log_err("u_enumCharNames(0..0x1100000) error %s names count=%ld\n", u_errorName(errorCode), length);
+    }
+
+    length=0;
+    errorCode=U_ZERO_ERROR;
+    u_enumCharNames(0, 0x110000, enumCharNamesFn, &length, U_EXTENDED_CHAR_NAME, &errorCode);
+    if(U_FAILURE(errorCode) || length<0x1100000) {
+        log_err("u_enumCharNames(0..0x1100000 - Extended) error %s names count=%ld\n", u_errorName(errorCode), length);
     }
 
     /* test that u_charFromName() uppercases the input name, i.e., works with mixed-case names (new in 2.0) */
