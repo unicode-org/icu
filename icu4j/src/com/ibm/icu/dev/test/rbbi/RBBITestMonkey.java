@@ -7,13 +7,9 @@ package com.ibm.icu.dev.test.rbbi;
 
 // Monkey testing of RuleBasedBreakIterator
 import com.ibm.icu.dev.test.*;
-import com.ibm.icu.text.RuleBasedBreakIterator_New;
 import com.ibm.icu.text.BreakIterator;
-import com.ibm.icu.text.UCharacterIterator;
 import com.ibm.icu.text.UTF16;
-import com.ibm.icu.impl.StringUCharacterIterator;
 import com.ibm.icu.text.UnicodeSet;
-import java.text.CharacterIterator;
 import java.util.List;
 import java.util.Arrays;
 import java.util.ArrayList;
@@ -49,7 +45,7 @@ public class RBBITestMonkey extends TestFmwk {
         abstract  List  charClasses();
 
         // Set the test text on which subsequent calls to next() will operate
-        abstract  void   setText(String text);
+        abstract  void   setText(StringBuffer text);
 
         // Find the next break postion, starting from the specified position.
         // Return -1 after reaching end of string.
@@ -69,7 +65,7 @@ public class RBBITestMonkey extends TestFmwk {
         UnicodeSet                fHangulSet;
         UnicodeSet                fAnySet;
 
-        String                    fText;
+        StringBuffer              fText;
 
 
     RBBICharMonkey() {
@@ -91,7 +87,7 @@ public class RBBITestMonkey extends TestFmwk {
      };
 
 
-    void setText(String s) {
+    void setText(StringBuffer s) {
         fText = s;        
     }
     
@@ -105,18 +101,206 @@ public class RBBITestMonkey extends TestFmwk {
     }
 
 
+    /**
+     * 
+     * Word Monkey Test Class
+     *
+     * 
+     * 
+     */
     static class RBBIWordMonkey extends RBBIMonkeyKind {
+        List                      fSets;
+        StringBuffer              fText;
+
+        UnicodeSet                fKatakanaSet;
+        UnicodeSet                fALetterSet;
+        UnicodeSet                fMidLetterSet;
+        UnicodeSet                fMidNumLetSet;
+        UnicodeSet                fMidNumSet;
+        UnicodeSet                fNumericSet;
+        UnicodeSet                fFormatSet;
+        UnicodeSet                fExtendSet;
+        UnicodeSet                fOtherSet;
+
+    	
+    	RBBIWordMonkey() {
+            fSets          = new ArrayList();
+
+    	    fKatakanaSet   = new UnicodeSet("[\\p{script=KATAKANA}\\u30fc\\uff70\\uff9e\\uff9f]");
+
+    	    String ALetterStr = "[[\\p{Alphabetic}\\u05f3]-[\\p{Ideographic}]-[\\p{Script=Thai}]" +
+    	                                    "-[\\p{Script=Lao}]-[\\p{Script=Hiragana}]-" +
+    	                                    "[\\p{script=KATAKANA}\\u30fc\\uff70\\uff9e\\uff9f]]";
+
+    	    fALetterSet    = new UnicodeSet(ALetterStr);
+    	    fMidLetterSet  = new UnicodeSet("[\\u0027\\u00b7\\u05f4\\u2019\\u2027]");
+    	    fMidNumLetSet  = new UnicodeSet("[\\u002e\\u003a]");
+    	    fMidNumSet     = new UnicodeSet("[\\p{Line_Break=Infix_Numeric}]");
+    	    fNumericSet    = new UnicodeSet("[\\p{Line_Break=Numeric}]");
+    	    fFormatSet     = new UnicodeSet("[\\p{Format}-\\p{Grapheme_Extend}]");
+    	    fExtendSet     = new UnicodeSet("[\\p{Grapheme_Extend}]");
+    	    fOtherSet      = new UnicodeSet();
+
+    	    fOtherSet.complement();
+    	    fOtherSet.removeAll(fKatakanaSet);
+    	    fOtherSet.removeAll(fALetterSet);
+    	    fOtherSet.removeAll(fMidLetterSet);
+    	    fOtherSet.removeAll(fMidNumLetSet);
+    	    fOtherSet.removeAll(fMidNumSet);
+    	    fOtherSet.removeAll(fNumericSet);
+
+    	    fSets.add(fALetterSet);
+    	    fSets.add(fMidLetterSet);
+    	    fSets.add(fMidNumLetSet);
+    	    fSets.add(fMidNumSet);
+    	    fSets.add(fNumericSet);
+    	    fSets.add(fFormatSet);
+    	    fSets.add(fOtherSet);
+    	}
+    	
+    	
         List  charClasses() {
-         return null;   // TODO:   
+         return fSets;  
         }
         
-        void   setText(String text) {  // TODO:
+        void   setText(StringBuffer s) { 
+            fText = s;        
         }   
 
-        int   next(int i) {      // TODO:  
-            return 0;
+        int   next(int prevPos) {  
+            int    p0, p1, p2, p3;    	// Indices of the significant code points around the 
+            							//   break position being tested.  The candidate break
+            							//   location is before p2.
+            int     breakPos = -1;
+            
+            int c0, c1, c2, c3;   // The code points at p0, p1, p2 & p3.
+            
+            // Prev break at end of string.  return DONE.
+            if (prevPos >= fText.length()) {
+            	return -1;
+            }
+            p0 = p1 = p2 = p3 = prevPos;
+            c3 = UTF16.charAt(fText, prevPos);
+            c0 = c1 = c2 = 0;
+            
+            
+            // Format char after prev break?  Special case, see last Note for Word Boundaries TR.
+            // break immdiately after the format char.
+            if (breakPos >= 0 && fFormatSet.contains(c3) && breakPos < (fText.length() -1)) {
+            	breakPos = UTF16.moveCodePointOffset(fText, breakPos, 1);
+            	return breakPos;
+}
+
+
+            // Loop runs once per "significant" character position in the input text.
+            for (;;) {
+            	// Move all of the positions forward in the input string.
+            	p0 = p1;  c0 = c1;
+            	p1 = p2;  c1 = c2;
+            	p2 = p3;  c2 = c3;
+                
+            	// Advancd p3 by    (GC Format*)   Rules 3, 4
+            	p3 = nextGC(fText, p3);
+            	if (p3 == -1 || p3 >= fText.length()) {
+            		p3 = fText.length();
+            		c3 = 0;
+            	} else {
+            		c3 = UTF16.charAt(fText, p3);
+                    while (fFormatSet.contains(c3)) {
+                        p3 = moveIndex32(fText, p3, 1);
+                        c3 = 0;
+                        if (p3 < fText.length()) {
+                            c3 = UTF16.charAt(fText, p3);   
+                        }
+                    }
+            	}
+
+            	if (p1 == p2) {
+            		// Still warming up the loop.  (won't work with zero length strings, but we don't care)
+            		continue;
+            	}
+            	if (p2 == fText.length()) {
+            		// Reached end of string.  Always a break position.
+            		break;
+            	}
+
+            	// Rule (5).   ALetter x ALetter
+            	if (fALetterSet.contains(c1) &&
+            			fALetterSet.contains(c2))  {
+            		continue;
+            	}
+            	
+            	// Rule (6)  ALetter  x  (MidLetter | MidNumLet) ALetter
+            	//
+            	//    Also incorporates rule 7 by skipping pos ahead to position of the
+            	//    terminating ALetter.
+            	if ( fALetterSet.contains(c1) &&
+            			(fMidLetterSet.contains(c2) || fMidNumLetSet.contains(c2)) &&
+						fALetterSet.contains(c3)) {
+            		continue;
+            	}
+            	
+            	
+            	// Rule (7)  ALetter (MidLetter | MidNumLet)  x  ALetter
+            	if (fALetterSet.contains(c0) &&
+            			(fMidLetterSet.contains(c1) || fMidNumLetSet.contains(c1) ) &&
+						fALetterSet.contains(c2)) {
+            		continue;
+            	}
+            	
+            	//  Rule (8)    Numeric x Numeric
+            	if (fNumericSet.contains(c1) &&
+            			fNumericSet.contains(c2))  {
+            		continue;
+            	}
+            	
+            	// Rule (9)    ALetter x Numeric
+            	if (fALetterSet.contains(c1) &&
+            			fNumericSet.contains(c2))  {
+            		continue;
+            	}
+
+            	// Rule (10)    Numeric x ALetter
+            	if (fNumericSet.contains(c1) &&
+            			fALetterSet.contains(c2))  {
+            		continue;
+            	}
+            	
+            	// Rule (11)   Numeric (MidNum | MidNumLet)  x  Numeric
+            	if ( fNumericSet.contains(c0) &&
+            			(fMidNumSet.contains(c1) || fMidNumLetSet.contains(c1)) && 
+						fNumericSet.contains(c2)) {
+            		continue;
+            	}
+            	
+            	// Rule (12)  Numeric x (MidNum | MidNumLet) Numeric
+            	if (fNumericSet.contains(c1) &&
+            			(fMidNumSet.contains(c2) || fMidNumLetSet.contains(c2)) &&
+						fNumericSet.contains(c3)) {
+            		continue;
+            	}
+            	
+            	// Rule (13)  Katakana x Katakana
+            	if (fKatakanaSet.contains(c1) &&
+            			fKatakanaSet.contains(c2))  {
+            		continue;
+            	}
+            	
+            	// Rule 14.  Break found here.
+            	break;
+            }
+            
+            
+            //  Rule 4 fixup,  back up before any trailing
+            //         format characters at the end of the word.
+            breakPos = p2;
+            int  t = nextGC(fText, p1);
+            if (t > p1) {
+            	breakPos = t;
+            }
+            return breakPos;
         }
-    
+        
     }
 
  
@@ -125,7 +309,7 @@ public class RBBITestMonkey extends TestFmwk {
          return null;   // TODO:   
         }
         
-        void   setText(String text) {  // TODO:
+        void   setText(StringBuffer text) {  // TODO:
         }   
 
         int   next(int i) {      // TODO:    
@@ -134,13 +318,33 @@ public class RBBITestMonkey extends TestFmwk {
     
     }
 
+    
+    /**
+     * Move an index into a string by n code points.
+     *   Similar to UTF16.moveCodePointOffset, but without the exceptions, which were
+     *   complicating usage.
+     * @param s   a Text string
+     * @param i   The starting code unit index into the text string
+     * @param amt  The amount to adjust the string by.
+     * @return    The adjusted code unit index, pinned to the string's length, or
+     *            unchanged if input index was outside of the string.
+     */
+    static int moveIndex32(StringBuffer s, int i, int amt) {
+    	if (i < 0 || i >= s.length()) {
+    		return i; 
+    	}
+        int retVal = UTF16.moveCodePointOffset(s, i, amt);
+        return retVal;
+    }
+    
+    
     /**
      * return the index of the next code point in the input text.
      * @param i the preceding index
      * @return
      * @internal
      */
-    static int  nextCP(String s, int i) {
+    static int  nextCP(StringBuffer s, int i) {
         if (i == -1) {
             // End of Input indication.  Continue to return end value.
             return -1;
@@ -188,7 +392,7 @@ public class RBBITestMonkey extends TestFmwk {
      * @return   The index of the first code point following the grapheme cluster
      * @internal
      */
-    private static int nextGC(String s, int i) {
+    private static int nextGC(StringBuffer s, int i) {
         if (i >= s.length() || i == -1 ) {
             return -1;
         }
@@ -368,7 +572,7 @@ void RunMonkey(BreakIterator  bi, RBBIMonkeyKind mk, String name, int  seed, int
     //  Debugging settings.  Comment out everything in the following block for normal operation
     //
     //--------------------------------------------------------------------------------------------
-    // numIterations = -1;  
+    // numIterations = 20;  
     //RuleBasedBreakIterator_New.fTrace = true;
     //m_seed = -1324359431;
     // TESTSTRINGLEN = 50;
@@ -426,7 +630,7 @@ void RunMonkey(BreakIterator  bi, RBBIMonkeyKind mk, String name, int  seed, int
         Arrays.fill(isBoundaryBreaks, false);
  
         // Calculate the expected results for this test string.
-        mk.setText(testText.toString());
+        mk.setText(testText);
         expectedCount = 0;
         expectedBreaks[0] = true;
         expected[expectedCount ++] = 0;
@@ -527,8 +731,7 @@ void RunMonkey(BreakIterator  bi, RBBIMonkeyKind mk, String name, int  seed, int
                 String hexChars = "0123456789abcdef";
                 int      c;    // Char from test data
                 int      bn;
-                String   testData = testText.toString();
-                for (ci = startContext;  ci <= endContext && ci != -1;  ci = nextCP(testData, ci)) {
+                for (ci = startContext;  ci <= endContext && ci != -1;  ci = nextCP(testText, ci)) {
                     if (ci == i) {
                         // This is the location of the error.
                         errorText.append("<?>");
@@ -536,8 +739,8 @@ void RunMonkey(BreakIterator  bi, RBBIMonkeyKind mk, String name, int  seed, int
                         // This a non-error expected break position.
                         errorText.append("<>");
                     }
-                    if (ci < testData.length()) {
-                    	c = UTF16.charAt(testData, ci);
+                    if (ci < testText.length()) {
+                    	c = UTF16.charAt(testText, ci);
                     	if (c < 0x10000) {
                     		errorText.append("\\u");
                     		for (bn=12; bn>=0; bn-=4) {
@@ -551,7 +754,7 @@ void RunMonkey(BreakIterator  bi, RBBIMonkeyKind mk, String name, int  seed, int
                     	}
                     }
                 }
-                if (ci == testData.length() && ci != -1) {
+                if (ci == testText.length() && ci != -1) {
                 	errorText.append("<>");
                 }
                 errorText.append("</data>\n");
@@ -573,7 +776,6 @@ public void TestCharMonkey() {
     
     int        loopCount = 500;
     int        seed      = 1;
-    String     breakType = "all";
     
     if (params.inclusion >= 9) {
         loopCount = 10000;
@@ -588,7 +790,6 @@ public void TestWordMonkey() {
     
     int        loopCount = 500;
     int        seed      = 1;
-    String     breakType = "all";
     
     if (params.inclusion >= 9) {
         loopCount = 10000;
@@ -597,7 +798,7 @@ public void TestWordMonkey() {
     logln("Word Break Monkey Test");
     RBBIWordMonkey  m = new RBBIWordMonkey();
     BreakIterator   bi = BreakIterator.getWordInstance(Locale.US);
-    //RunMonkey(bi, m, "word", seed, loopCount);
+    RunMonkey(bi, m, "word", seed, loopCount);
 }
 
 public void TestLineMonkey() {
