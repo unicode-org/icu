@@ -1929,7 +1929,7 @@ _getStringOrCopyKey(const char *path, const char *locale,
                     const char *substitute,
                     UChar *dest, int32_t destCapacity,
                     UErrorCode *pErrorCode) {
-    const UChar *s;
+    const UChar *s = NULL;
     int32_t length;
 
     if(itemKey==NULL) {
@@ -1953,7 +1953,7 @@ _getStringOrCopyKey(const char *path, const char *locale,
     }
     if(U_SUCCESS(*pErrorCode)) {
         int32_t copyLength=uprv_min(length, destCapacity);
-        if(copyLength>0) {
+        if(copyLength>0 && s != NULL) {
             u_memcpy(dest, s, copyLength);
         }
     } else {
