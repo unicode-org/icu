@@ -285,6 +285,7 @@ static void Test_nfs4_cis_prep(void){
         if(U_SUCCESS(status) && (strcmp(expectedDest,dest) !=0)){
               log_err("Did not get the expected output for nfs4_cis_prep at index %i.\n", i);
         }
+        free(dest);
     }
 }
 
