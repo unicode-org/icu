@@ -37,6 +37,9 @@ vi {
 //                "&u<\u01B0<<<\u01AF"
 //            }
     }
+    // Note many of the country names have dashes in the name. This seems to be correct.
+    // Translations that are done poorly seem to remove them. This doesn't mean that all the dashes are correct,
+    // but care should be taken before removing them.
     Countries {
         AE { "C\u00e1c Ti\u1ec3u V\u01b0\u01a1ng qu\u1ed1c A-r\u1eadp Th\u1ed1ng nh\u1ea5t" }
         AF { "\u00c1p-ga-ni-xtan" }
@@ -124,7 +127,7 @@ vi {
         IQ { "I-r\u1eafc" }
         IR { "I-ran" }
         IS { "Ai-x\u01a1-len" }
-        IT { "I-ta-li-a" }
+        IT { "\u00DD" } // The less frequent form of this country is "I-ta-li-a"
 
         JM { "Ha-mai-ca" }
         JO { "Gi\u00f3c-\u0111a-ni" }
@@ -209,6 +212,7 @@ vi {
         SM { "Xan Ma-ri-n\u00f4" }
         SN { "X\u00ea-n\u00ea-gan" }
         SO { "X\u00f4-ma-li" }
+        SP { "S\u00e9cbia" }
         SR { "Xu-ri-nam" }
         ST { "Xao T\u00f4-m\u00ea v\u00e0 Prin-xi-p\u00ea" }
         SV { "En-san-va-\u0111o" }
@@ -230,7 +234,7 @@ vi {
 
         UA { "U-crai-na" }
         UG { "U-gan-\u0111a" }
-        US { "H\u1ee3p ch\u00fang qu\u1ed1c Hoa k\u1ef3" } // M\u1ef9, Hoa K\u1ef3 = US; H\u1ee3p ch\u00fang qu\u1ed1c Hoa k\u1ef3 = USA 
+        US { "H\u1ee3p ch\u00fang qu\u1ed1c Hoa k\u1ef3" } // M\u1ef9 = slang abbreviated form of US; Hoa K\u1ef3 = US; H\u1ee3p ch\u00fang qu\u1ed1c Hoa k\u1ef3 = USA 
         UY { "U-ru-goay" }
         UZ { "U-d\u01a1-b\u00ea-ki-xtan" }
 
@@ -284,8 +288,32 @@ vi {
         "Th\u1EE9 b\u1EA3y",
         "Ch\u1EE7 nh\u1EADt",
     }
+    // The case of the letters may be wrong for languages because Ti\u1EBFng is used.
+    // Ti\u1EBFng is used in order to clarify some of the names, and ti\u1EBFng means "language".
+    // Ti\u1EBFng is used to differentiate similar words like English from England and German from Germany,
+    //   which are frequently the same in Vietnamese.
+    // It is difficult to decide whether Ti\u1EBFng should precede the translation, but it doesn't hurt to keep it there.
     Languages {
+        ca { "Ti\u1EBFng Catalan" }
+        da { "Ti\u1EBFng \u0110an M\u1EA1ch" }
+        de { "Ti\u1EBFng \u0110\u1EE9c" }
+        en { "Ti\u1EBFng Anh" }
+        eo { "Ti\u1EBFng Esp\u00E9ranto" }
+        es { "Ti\u1EBFng T\u00E2y Ban Nha" }
+        fr { "Ti\u1EBFng Ph\u00E1p" }
+        hr { "Ti\u1EBFng Cr\u00f4atia" }
+        hu { "Ti\u1EBFng Hung-ga-ri" }
+        it { "Ti\u1EBFng \u00DD" } // Just \u00DD seems okay because Ti\u1EBFng is used. \u00DD is sometimes used to mean Italy too.
+        ja { "Ti\u1EBFng Nh\u1EADt" }
+        ko { "Ti\u1EBFng H\u00E0n Qu\u1ED1c" }
+        nl { "Ti\u1EBFng H\u00E0 Lan" }
+        pt { "Ti\u1EBFng B\u1ED3 \u0110\u00E0o Nha" }
+        ro { "Ti\u1EBFng La M\u00E3" }
+        ru { "Ti\u1EBFng Nga" }
+        sv { "Ti\u1EBFng Thu\u1EF5 \u0110i\u1EC3n" }
+        tr { "Ti\u1EBFng Th\u1ED5 Nh\u0129 K\u1EF3" }
         vi { "Ti\u1EBFng Vi\u1EC7t" }
+        zh { "Ti\u1EBFng Trung Qu\u1ED1c" }
     }
     LocaleScript{ 
         "Latn",  // ISO 15924 Name 
