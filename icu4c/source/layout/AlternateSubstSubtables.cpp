@@ -1,5 +1,5 @@
 /*
- * @(#)AlternateSubstitutionSubtables.cpp	1.7 00/03/15
+ * @(#)AlternateSubstSubtables.cpp	1.7 00/03/15
  *
  * (C) Copyright IBM Corp. 1998, 1999, 2000 - All Rights Reserved
  *
@@ -9,7 +9,7 @@
 #include "LEGlyphFilter.h"
 #include "OpenTypeTables.h"
 #include "GlyphSubstitutionTables.h"
-#include "AlternateSubstitutionSubtables.h"
+#include "AlternateSubstSubtables.h"
 #include "GlyphIterator.h"
 #include "LESwaps.h"
 
