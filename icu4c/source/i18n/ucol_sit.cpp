@@ -16,6 +16,8 @@
 #include "utracimp.h"
 #include "ucol_imp.h"
 #include "unormimp.h"
+#include "cmemory.h"
+#include "cstring.h"
 
 
 /*
@@ -27,40 +29,190 @@ struct FromShortString {
 };
 */
 
-enum ActionType {
-    UCOL_SIT_GET_ATTRIBUTE_VALUE = 0,
-    UCOL_SIT_GET_VARIABLE_TOP,
-    UCOL_SIT_GET_UCA_VERSION,
-    UCOL_SIT_GET_LOCALE_ELEMENT,
-    UCOL_SIT_GET_RFC3166BIS_LOCALE
+static inline 
+void syntaxError(const UChar* rules, 
+                 int32_t pos,
+                 int32_t rulesLen,
+                 UParseError* parseError) {
+#if 0
+    parseError->offset = pos;
+    parseError->line = 0 ; /* we are not using line numbers */
+    
+    // for pre-context
+    int32_t start = (pos <=U_PARSE_CONTEXT_LEN)? 0 : (pos - (U_PARSE_CONTEXT_LEN-1));
+    int32_t stop  = pos;
+    
+    u_memcpy(parseError->preContext,rules+start,stop-start);
+    //null terminate the buffer
+    parseError->preContext[stop-start] = 0;
+    
+    //for post-context
+    start = pos+1;
+    stop  = ((pos+U_PARSE_CONTEXT_LEN)<= rulesLen )? (pos+(U_PARSE_CONTEXT_LEN-1)) : 
+                                                            rulesLen;
+
+    if(start < stop) {
+      u_memcpy(parseError->postContext,rules+start,stop-start);
+      //null terminate the buffer
+      parseError->postContext[stop-start]= 0;
+    } else {
+      parseError->postContext[0] = 0;
+    }
+#endif
+}
+
+
+enum OptionsList {
+    UCOL_SIT_LANGUAGE = 0,
+    UCOL_SIT_SCRIPT,
+    UCOL_SIT_REGION,
+    UCOL_SIT_VARIANT,
+    UCOL_SIT_KEYWORD,
+    UCOL_SIT_RFC3166BIS,
+    UCOL_SIT_STRENGTH,
+    UCOL_SIT_CASE_LEVEL,
+    UCOL_SIT_CASE_FIRST,
+    UCOL_SIT_NUMERIC_COLLATION,
+    UCOL_SIT_ALTERNATE_HANDLING,
+    UCOL_SIT_NORMALIZATION_MODE,
+    UCOL_SIT_FRENCH_COLLATION,
+    UCOL_SIT_HIRAGANA_QUATERNARY,
+    UCOL_SIT_VARIABLE_TOP,
+    UCOL_SIT_ITEMS_COUNT
+};
+
+const int32_t locElementCount = 5;
+const int32_t locElementLen = 32;
+
+struct CollatorSpec {
+    char locElements[locElementCount][locElementLen];
+    char locale[512];
+    UColAttributeValue options[UCOL_ATTRIBUTE_COUNT];
+};
+
+
+typedef const char* U_CALLCONV
+ActionFunction(CollatorSpec *spec, uint32_t value1, const char* string, 
+               UErrorCode *status);
+
+struct AttributeConversion {
+    char letter;
+    UColAttributeValue value;
+};
+
+static AttributeConversion conversions[12] = {
+    { '1', UCOL_PRIMARY },
+    { '2', UCOL_SECONDARY },
+    { '3', UCOL_TERTIARY },
+    { '4', UCOL_QUATERNARY },
+    { 'D', UCOL_DEFAULT },
+    { 'I', UCOL_IDENTICAL },
+    { 'L', UCOL_LOWER_FIRST },
+    { 'N', UCOL_NON_IGNORABLE },
+    { 'O', UCOL_ON },
+    { 'S', UCOL_SHIFTED },
+    { 'U', UCOL_UPPER_FIRST },
+    { 'X', UCOL_OFF }
 };
 
 struct ShortStringOptions {
     char optionStart;
-    ActionType action;
-    int32_t attr;
-    char chars[7];
+    ActionFunction *action;
+    uint32_t attr;
 };
 
-static ShortStringOptions options[] = {
-    { 'L', UCOL_SIT_GET_LOCALE_ELEMENT, 0, "" }, // language
-    { 'Z', UCOL_SIT_GET_LOCALE_ELEMENT, 0, "" }, // script
-    { 'R', UCOL_SIT_GET_LOCALE_ELEMENT, 0, "" }, // region
-    { 'V', UCOL_SIT_GET_LOCALE_ELEMENT, 0, "" }, // variant
-    { 'K', UCOL_SIT_GET_LOCALE_ELEMENT, 0, "" }, // keyword
-    { 'X', UCOL_SIT_GET_RFC3166BIS_LOCALE, 0, "" }, // rfc3166bis locale name
-    { 'S', UCOL_SIT_GET_ATTRIBUTE_VALUE, UCOL_STRENGTH,  "1234ID" }, // strength   1, 2, 3, 4, I, D
-    { 'E', UCOL_SIT_GET_ATTRIBUTE_VALUE, UCOL_CASE_LEVEL,  "OXD"  }, // case level O, X, D
-    { 'C', UCOL_SIT_GET_ATTRIBUTE_VALUE, UCOL_CASE_FIRST,  "LUXD" }, // case first L, U, X, D
-    { 'D', UCOL_SIT_GET_ATTRIBUTE_VALUE, UCOL_NUMERIC_COLLATION,  "OXD" }, // codan      O, X, D
-    { 'A', UCOL_SIT_GET_ATTRIBUTE_VALUE, UCOL_ALTERNATE_HANDLING,  "NSD" }, // alternate  N, S, D 
-    { 'N', UCOL_SIT_GET_ATTRIBUTE_VALUE, UCOL_NORMALIZATION_MODE,  "OXD" }, // norm       O, X, D
-    { 'F', UCOL_SIT_GET_ATTRIBUTE_VALUE, UCOL_FRENCH_COLLATION,  "OXD" }, // french     O, X, D
-    { 'H', UCOL_SIT_GET_ATTRIBUTE_VALUE, UCOL_HIRAGANA_QUATERNARY_MODE,  "OXD" }, // hiragana   O, X, D
-    { 'T', UCOL_SIT_GET_VARIABLE_TOP, 0, "" },
-    { 'U', UCOL_SIT_GET_UCA_VERSION, 0, "" }
+
+U_CDECL_BEGIN
+static const char* U_CALLCONV
+_processLocaleElement(CollatorSpec *spec, uint32_t value, const char* string, 
+                      UErrorCode *status) {
+    int32_t len = 0;
+    do {
+        spec->locElements[value][len++] = *string;
+    } while(*(++string) != '_' && *string && len < locElementLen);
+    if(len >= locElementLen) {
+        *status = U_BUFFER_OVERFLOW_ERROR;
+        return string;
+    }
+    // skip the underscore at the end
+    return ++string;                          
+}
+
+static const char* U_CALLCONV
+_processRFC3166Locale(CollatorSpec *spec, uint32_t value1, const char* string, 
+                      UErrorCode *status) {
+    return NULL;                          
+}
+
+static const char* U_CALLCONV
+_processCollatorOption(CollatorSpec *spec, uint32_t option, const char* string, 
+                       UErrorCode *status) {
+    int32_t i = 0;
+    for(i = 0; i < sizeof(conversions)/sizeof(conversions[0]); i++) {
+        if(*string == conversions[i].letter) {
+            spec->options[option] = conversions[i].value;
+            if(*(++string) != '_' && *string) {
+                *status = U_ILLEGAL_ARGUMENT_ERROR;
+                return string;
+            }
+            return ++string;
+        }
+    }
+    *status = U_ILLEGAL_ARGUMENT_ERROR;
+    return string;
+}
+
+
+static const char* U_CALLCONV
+_processVariableTop(CollatorSpec *spec, uint32_t value1, const char* string, UErrorCode *status) {
+}
+U_CDECL_END
+
+static ShortStringOptions options[UCOL_SIT_ITEMS_COUNT] = 
+{
+/* 00 UCOL_SIT_LANGUAGE */              { 'L', _processLocaleElement, 0 }, // language
+/* 01 UCOL_SIT_SCRIPT */                { 'Z', _processLocaleElement, 1 }, // script
+/* 02 UCOL_SIT_REGION */                { 'R', _processLocaleElement, 2 }, // region
+/* 03 UCOL_SIT_VARIANT */               { 'V', _processLocaleElement, 3 }, // variant
+/* 04 UCOL_SIT_KEYWORD */               { 'K', _processLocaleElement, 4 }, // keyword
+/* 05 UCOL_SIT_RFC3166BIS */            { 'X', _processRFC3166Locale, 0 }, // rfc3166bis locale name
+/* 06 UCOL_SIT_STRENGTH */              { 'S', _processCollatorOption, UCOL_STRENGTH }, // strength   1, 2, 3, 4, I, D
+/* 07 UCOL_SIT_CASE_LEVEL */            { 'E', _processCollatorOption, UCOL_CASE_LEVEL }, // case level O, X, D
+/* 08 UCOL_SIT_CASE_FIRST */            { 'C', _processCollatorOption, UCOL_CASE_FIRST }, // case first L, U, X, D
+/* 09 UCOL_SIT_NUMERIC_COLLATION */     { 'D', _processCollatorOption, UCOL_NUMERIC_COLLATION }, // codan      O, X, D
+/* 10 UCOL_SIT_ALTERNATE_HANDLING */    { 'A', _processCollatorOption, UCOL_ALTERNATE_HANDLING }, // alternate  N, S, D 
+/* 11 UCOL_SIT_NORMALIZATION_MODE */    { 'N', _processCollatorOption, UCOL_NORMALIZATION_MODE }, // norm       O, X, D
+/* 12 UCOL_SIT_FRENCH_COLLATION */      { 'F', _processCollatorOption, UCOL_FRENCH_COLLATION }, // french     O, X, D
+/* 13 UCOL_SIT_HIRAGANA_QUATERNARY] */  { 'H', _processCollatorOption, UCOL_HIRAGANA_QUATERNARY_MODE }, // hiragana   O, X, D
+/* 14 UCOL_SIT_VARIABLE_TOP */          { 'T', _processCollatorOption, 0 }
 };
 
+
+static
+const char* ucol_sit_readOption(const char *start, CollatorSpec *spec, 
+                            UErrorCode *status) {
+  int32_t i = 0, j = 0, k = 0;
+  uint32_t value = 0;
+
+  for(i = 0; i < UCOL_SIT_ITEMS_COUNT; i++) {
+      if(*start == options[i].optionStart) {
+          return options[i].action(spec, options[i].attr, start+1, status);
+      }
+  }
+  *status = U_ILLEGAL_ARGUMENT_ERROR;
+  return start;
+}
+
+static
+void ucol_sit_initCollatorSpecs(CollatorSpec *spec) {
+    // reset everything
+    uprv_memset(spec, 0, sizeof(CollatorSpec));
+    // set collation options to default
+    int32_t i = 0;
+    for(i = 0; i < UCOL_ATTRIBUTE_COUNT; i++) {
+        spec->options[i] = UCOL_DEFAULT;
+    }
+}
 
 /** 
  * Open a collator defined by a short form string.
@@ -96,17 +248,72 @@ ucol_openFromShortString( const char *definition,
 
     if(U_FAILURE(*status)) return 0;
 
-    char loc[256];
-    
     // first we want to pick stuff out of short string.
     // we'll end up with an UCA version, locale and a bunch of
     // settings
 
     // analyse the string in order to get everything we need.
+    int32_t definitionLen = uprv_strlen(definition);
+    const char *definitionEnd = definition+definitionLen;
+    const char *string = definition;
+    CollatorSpec s;
+    ucol_sit_initCollatorSpecs(&s);
+    while(U_SUCCESS(*status) && string < definitionEnd) {
+        string = ucol_sit_readOption(string, &s, status);
+    }
+    
+    if(U_FAILURE(*status)) {
+        parseError->line = 0;
+        parseError->offset = string - definition;
+        // perhaps just stuff chars in UChar[]?
+        parseError->preContext[0] = 0;
+        parseError->postContext[0] = 0;
+    }
+    
+    // put the locale together, unless we have a done
+    // locale
+    int32_t i = 0;
+    if(s.locale[0] == 0) {
+        // first the language
+        uprv_strcat(s.locale, s.locElements[0]);
+        // then the script, if present
+        if(*(s.locElements[1])) {
+            uprv_strcat(s.locale, "_");
+            uprv_strcat(s.locale, s.locElements[1]);
+        }
+        // then the region, if present
+        if(*(s.locElements[2])) {
+            uprv_strcat(s.locale, "_");
+            uprv_strcat(s.locale, s.locElements[2]);
+        } else if(*(s.locElements[3])) { // if there is a variant, we need an underscore
+            uprv_strcat(s.locale, "_");
+        } 
+        // add variant, if there
+        if(*(s.locElements[3])) { 
+            uprv_strcat(s.locale, "_");
+            uprv_strcat(s.locale, s.locElements[3]);
+        }
+
+        // if there is a collation keyword, add that too
+        if(*(s.locElements[4])) {
+            uprv_strcat(s.locale, "@collation=");
+            uprv_strcat(s.locale, s.locElements[4]);
+        }
+    }
 
     const UCollator* UCA = ucol_initUCA(status);
 
-    UCollator *result = ucol_open(loc, status);
+    UCollator *result = ucol_open(s.locale, status);
+
+    for(i = 0; i < UCOL_ATTRIBUTE_COUNT; i++) {
+        if(s.options[i] != UCOL_DEFAULT) {
+            ucol_setAttribute(result, (UColAttribute)i, s.options[i], status);
+        }
+    }
+    if(U_FAILURE(*status)) { // here it can only be a bogus value
+        ucol_close(result);
+        result = NULL;
+    }
     
     UTRACE_EXIT_PTR_STATUS(result, *status);
     return result;
