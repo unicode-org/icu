@@ -555,12 +555,16 @@ printComments(struct UString *src, const char *resName, UBool printTranslate, UE
             if(U_SUCCESS(*status)){
                 T_FileStream_write(out,translateAttr, uprv_strlen(translateAttr));
                 T_FileStream_write(out,buf, bufLen);
-                T_FileStream_write(out,"\"", 1);
-                T_FileStream_write(out,">\n", 2);
+                T_FileStream_write(out,"\">\n", 3);
             }
         }else if(getShowWarning() == TRUE){
             fprintf(stderr, "Warning: Tranlate attribute for resource %s cannot be set. XLIFF prohibits it.\n", resName);
+            /* no translate attribute .. just close the tag */
+            T_FileStream_write(out,">\n", 2);
         }
+    }else{
+        /* no translate attribute .. just close the tag */
+        T_FileStream_write(out,">\n", 2);
     }
     if(descLen > 0){
         write_tabs(out);
@@ -591,7 +595,7 @@ string_write_xml(struct SResource *res, const char* id, const char* language, UE
         return;
     }
 
-    if(res->fKey==0xFFFF || uprv_strcmp(srBundle->fKeys+res->fKey ,"")==0){
+    if(res->fKey<0 || uprv_strcmp(srBundle->fKeys+res->fKey ,"")==0){
         write_tabs(out);
         T_FileStream_write(out,strStart, uprv_strlen(strStart));
         sid = getID(id, NULL, sid);
@@ -684,7 +688,7 @@ alias_write_xml(struct SResource *res, const char* id, const char* language, UEr
     char* buf = NULL;
     int32_t bufLen=0;
     write_tabs(out);
-    if(res->fKey==0xFFFF || uprv_strcmp(srBundle->fKeys+res->fKey ,"")==0){
+    if(res->fKey<0 || uprv_strcmp(srBundle->fKeys+res->fKey ,"")==0){
         T_FileStream_write(out, start, (int32_t)uprv_strlen(start));
         
         sid = getID(id, NULL, sid);
@@ -743,7 +747,7 @@ array_write_xml( struct SResource *res, const char* id, const char* language, UE
     const char* start = "<group restype = \"array\" xml:space = \"preserve\" id = \"";
     const char* end   = "</group>\n";
     const char* startKey= "resname=\"";
-    const char* endKey  = "\">\n";
+
     char* sid = NULL;
     int index = 0;
     
@@ -752,7 +756,7 @@ array_write_xml( struct SResource *res, const char* id, const char* language, UE
     
     write_tabs(out);
     tabCount++;
-    if(res->fKey==0xFFFF ||uprv_strcmp(srBundle->fKeys+res->fKey ,"")==0){
+    if(res->fKey<0 ||uprv_strcmp(srBundle->fKeys+res->fKey ,"")==0){
         T_FileStream_write(out, start, (int32_t)uprv_strlen(start));
         sid = getID(id, NULL, sid);
         T_FileStream_write(out, sid, (int32_t)uprv_strlen(sid));
@@ -770,7 +774,7 @@ array_write_xml( struct SResource *res, const char* id, const char* language, UE
         T_FileStream_write(out, "\" ", 2);
         T_FileStream_write(out, startKey, (int32_t)uprv_strlen(startKey));
         T_FileStream_write(out, srBundle->fKeys+res->fKey, (int32_t) uprv_strlen(srBundle->fKeys+res->fKey));
-        T_FileStream_write(out, endKey, uprv_strlen(endKey));
+        T_FileStream_write(out, "\"", 1);
         if(res->fComment!=NULL && res->fComment->fChars != NULL){
             printComments(res->fComment, sid, FALSE, status);
             printNoteElements(res->fComment, status);
@@ -823,7 +827,7 @@ intvector_write_xml( struct SResource *res, const char* id, const char* language
     write_tabs(out);
     tabCount++;
 
-    if(res->fKey==0xFFFF || uprv_strcmp(srBundle->fKeys+res->fKey ,"")==0){
+    if(res->fKey<0 || uprv_strcmp(srBundle->fKeys+res->fKey ,"")==0){
         T_FileStream_write(out, start, (int32_t)uprv_strlen(start));
         sid = getID(id, NULL, sid);
         T_FileStream_write(out,sid, uprv_strlen(sid));
@@ -900,7 +904,7 @@ int_write_xml(struct SResource *res, const char* id, const char* language, UErro
     
     tabCount++;
     
-    if(res->fKey==0xFFFF || uprv_strcmp(srBundle->fKeys+res->fKey ,"")==0){
+    if(res->fKey<0 || uprv_strcmp(srBundle->fKeys+res->fKey ,"")==0){
         T_FileStream_write(out, intStart, (int32_t)uprv_strlen(intStart));
         sid = getID(id, NULL, sid);
         T_FileStream_write(out, sid, uprv_strlen(sid));
@@ -992,7 +996,7 @@ bin_write_xml( struct SResource *res, const char* id, const char* language, UErr
 
         write_tabs(out);
         T_FileStream_write(out, importStart, (int32_t)uprv_strlen(importStart));
-        if(res->fKey==0xFFFF || uprv_strcmp(srBundle->fKeys+res->fKey ,"")==0){
+        if(res->fKey<0 || uprv_strcmp(srBundle->fKeys+res->fKey ,"")==0){
             sid = getID(id, NULL, sid);
             T_FileStream_write(out, sid, (int32_t)uprv_strlen(sid));
         } else {
@@ -1002,7 +1006,7 @@ bin_write_xml( struct SResource *res, const char* id, const char* language, UErr
         T_FileStream_write(out, "\" ", 2);
         T_FileStream_write(out, mime, (int32_t)uprv_strlen(mime));
         T_FileStream_write(out, m_type, (int32_t)uprv_strlen(m_type));
-        if(!(res->fKey==0xFFFF || uprv_strcmp(srBundle->fKeys+res->fKey ,"")==0)){
+        if(!(res->fKey<0 || uprv_strcmp(srBundle->fKeys+res->fKey ,"")==0)){
             T_FileStream_write(out, key, (int32_t)uprv_strlen(key));
             T_FileStream_write(out, sid, (int32_t) uprv_strlen(srBundle->fKeys+res->fKey));
         } 
@@ -1038,7 +1042,7 @@ bin_write_xml( struct SResource *res, const char* id, const char* language, UErr
 
         write_tabs(out);
         T_FileStream_write(out, start, (int32_t)uprv_strlen(start));
-        if(res->fKey==0xFFFF || uprv_strcmp(srBundle->fKeys+res->fKey ,"")==0){
+        if(res->fKey<0 || uprv_strcmp(srBundle->fKeys+res->fKey ,"")==0){
             sid = getID(id, NULL, sid);
             T_FileStream_write(out, sid, (int32_t)uprv_strlen(sid));
         } else {
@@ -1049,7 +1053,7 @@ bin_write_xml( struct SResource *res, const char* id, const char* language, UErr
         T_FileStream_write(out, "\" ", 2);
         T_FileStream_write(out, mime, (int32_t)uprv_strlen(mime));
         T_FileStream_write(out, m_type, (int32_t)uprv_strlen(m_type));
-        if(!(res->fKey==0xFFFF || uprv_strcmp(srBundle->fKeys+res->fKey ,"")==0)){
+        if(!(res->fKey<0 || uprv_strcmp(srBundle->fKeys+res->fKey ,"")==0)){
             T_FileStream_write(out, key, (int32_t)uprv_strlen(key));
             T_FileStream_write(out, srBundle->fKeys+res->fKey, (int32_t) uprv_strlen(srBundle->fKeys+res->fKey));
         }
@@ -1115,7 +1119,6 @@ table_write_xml(struct SResource *res, const char* id, const char* language, UEr
     const char* idstr   = " id = \"";
     const char* end   = "</group>\n";
     const char* startKey= "resname=\"";
-    const char* endKey  = ">\n";
     const char* noteStart = "<note>";
     const char* noteEnd   ="</note>";
 
@@ -1127,7 +1130,7 @@ table_write_xml(struct SResource *res, const char* id, const char* language, UEr
         write_tabs(out);
         tabCount++;
         
-        if(res->fKey==0xFFFF || uprv_strcmp(srBundle->fKeys+res->fKey ,"")==0){
+        if(res->fKey<0 || uprv_strcmp(srBundle->fKeys+res->fKey ,"")==0){
             T_FileStream_write(out, start, (int32_t)uprv_strlen(start));
             
             sid = getID(id, NULL, sid);
@@ -1138,7 +1141,6 @@ table_write_xml(struct SResource *res, const char* id, const char* language, UEr
                 T_FileStream_write(out, "\" ", 2);
 
             }
-            T_FileStream_write(out, endKey, (int32_t)uprv_strlen(endKey));
             
             if(res->fComment!=NULL && res->fComment->fChars != NULL){
                 printComments(res->fComment, sid, FALSE, status);
@@ -1160,7 +1162,6 @@ table_write_xml(struct SResource *res, const char* id, const char* language, UEr
             T_FileStream_write(out, startKey, (int32_t)uprv_strlen(startKey));
             T_FileStream_write(out, srBundle->fKeys+res->fKey, (int32_t) uprv_strlen(srBundle->fKeys+res->fKey));
             T_FileStream_write(out, "\" ", 2);
-            T_FileStream_write(out, endKey, uprv_strlen(endKey));
             
             if(res->fComment!=NULL && res->fComment->fChars != NULL){
                 printComments(res->fComment, sid, FALSE, status);
@@ -1186,12 +1187,10 @@ table_write_xml(struct SResource *res, const char* id, const char* language, UEr
         T_FileStream_write(out,end,uprv_strlen(end));
     } else {
         write_tabs(out);
-        if(res->fKey==0xFFFF || uprv_strcmp(srBundle->fKeys+res->fKey ,"")==0){
+        if(res->fKey<0 || uprv_strcmp(srBundle->fKeys+res->fKey ,"")==0){
             T_FileStream_write(out, start, (int32_t)uprv_strlen(start));
             sid = getID(id, NULL, sid);
             T_FileStream_write(out, sid, (int32_t)uprv_strlen(sid));
-            T_FileStream_write(out, endKey, (int32_t)uprv_strlen(endKey));
-            
             if(res->fComment!=NULL && res->fComment->fChars != NULL){
                 printComments(res->fComment, sid, FALSE, status);
                 printNoteElements(res->fComment, status);
@@ -1205,7 +1204,6 @@ table_write_xml(struct SResource *res, const char* id, const char* language, UEr
             T_FileStream_write(out, "\" ", 2);
             T_FileStream_write(out, startKey, (int32_t)uprv_strlen(startKey));
             T_FileStream_write(out, srBundle->fKeys+res->fKey, (int32_t) uprv_strlen(srBundle->fKeys+res->fKey));
-            T_FileStream_write(out, endKey, uprv_strlen(endKey));
 
             if(res->fComment!=NULL && res->fComment->fChars != NULL){
                 printComments(res->fComment, sid, FALSE, status);
