@@ -19,22 +19,27 @@
 #ifndef __UDATAMEM_H__
 #define __UDATAMEM_H__
 
+#include "unicode/udata.h"
 #include "ucmndata.h"
 
-typedef struct UDataMemory {
-    void             *map;         /* Handle, or whatever.  OS dependent.             */
-                                   /* Only set if a close operation should unmap the  */
-                                   /*  associated data.                               */
-    const void       *mapAddr;     /* For mapped or allocated memory, the start addr. */
-                                   /*   Needed to allow unmapping.                    */
-
-
+struct UDataMemory {
     commonDataFuncs  *vFuncs;      /* Function Pointers for accessing TOC             */
-    const void       *toc;         /* For common memory, to find pieces within.       */
-    const DataHeader *pHeader;     /* Header.  For common data, header is at top of file */
-    UBool             heapAllocated;  /* True if this UDataMemObject is on the heap   */
-                                      /*  and thus needs to be deleted when closed.   */
-} UDataMemory;
+
+    const DataHeader *pHeader;     /* Header of the memory being described by this    */
+								   /*   UDataMemory object.                           */
+    const void       *toc;         /* For common memory, table of contents for        */
+								   /*   the pieces within.                            */
+    UBool             heapAllocated;  /* True if this UDataMemory Object is on the    */
+                                   /*  heap and thus needs to be deleted when closed. */
+
+    void             *mapAddr;     /* For mapped or allocated memory, the start addr. */
+                                   /* Only non-null if a close operation should unmap */
+                                   /*  the associated data.                           */
+    void             *map;         /* Handle, or other data, OS dependent.            */
+                                   /* Only non-null if a close operation should unmap */
+                                   /*  the associated data, and additional info       */
+								   /*   beyond the mapAddr is needed to do that.      */
+};
 
 UDataMemory     *UDataMemory_createNewInstance(UErrorCode *pErr);
 void             UDatamemory_assign  (UDataMemory *dest, UDataMemory *source);
@@ -45,3 +50,4 @@ void             UDataMemory_setData (UDataMemory *This, const void *dataAddr);
 
 const DataHeader *normalizeDataPointer(const void *p);
 #endif
+
