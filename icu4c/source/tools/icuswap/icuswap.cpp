@@ -40,6 +40,7 @@
 #include "ucnv_io.h"
 #include "uprops.h"
 #include "ucase.h"
+#include "ubidi_props.h"
 #include "ucol_swp.h"
 #include "ucnv_bld.h"
 #include "unormimp.h"
@@ -314,6 +315,9 @@ static const struct {
 
     { { UCASE_FMT_0, UCASE_FMT_1, UCASE_FMT_2, UCASE_FMT_3 },
                                   ucase_swap },         /* dataFormat="cAsE" */
+
+    { { UBIDI_FMT_0, UBIDI_FMT_1, UBIDI_FMT_2, UBIDI_FMT_3 },
+                                  ubidi_swap },         /* dataFormat="BiDi" */
 
 #if !UCONFIG_NO_NORMALIZATION
     { { 0x4e, 0x6f, 0x72, 0x6d }, unorm_swap },         /* dataFormat="Norm" */

@@ -14,7 +14,7 @@ include $(top_builddir)/icudefs.mk
 subdir = tools
 
 SUBDIRS = ctestfw toolutil makeconv genrb genuca genbrk \
-genprops gencase gennames genpname gennorm gencmn gencnval gensprep genccode pkgdata \
+genprops gencase genbidi gennames genpname gennorm gencmn gencnval gensprep genccode pkgdata \
 gentest  icuswap
 
 ## List of phony targets

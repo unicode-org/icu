@@ -4075,6 +4075,7 @@ case "${host}" in
 			  tools/gennames/gennames tools/gentest/gentest \
 			  tools/pkgdata/pkgdata tools/genprops/genprops \
                           tools/gencase/gencase \
+                          tools/genbidi/genbidi \
 			  tools/gensprep/gensprep
 			do
 			  if test -f $file.c; then
@@ -4236,6 +4237,7 @@ trap 'rm -fr `echo "icudefs.mk \
 		tools/gennorm/Makefile \
 		tools/genprops/Makefile \
 		tools/gencase/Makefile \
+		tools/genbidi/Makefile \
 		tools/genpname/Makefile \
 		tools/genbrk/Makefile \
 		tools/gensprep/Makefile \
@@ -4440,6 +4442,7 @@ CONFIG_FILES=\${CONFIG_FILES-"icudefs.mk \
 		tools/gennorm/Makefile \
 		tools/genprops/Makefile \
 		tools/gencase/Makefile \
+		tools/genbidi/Makefile \
 		tools/genpname/Makefile \
 		tools/genbrk/Makefile \
 		tools/gensprep/Makefile \

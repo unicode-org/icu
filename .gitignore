@@ -240,6 +240,15 @@ icu4c/source/tools/dumpce/*.html
 icu4c/source/tools/dumpce/*.o
 icu4c/source/tools/dumpce/Makefile
 icu4c/source/tools/dumpce/dumpce
+icu4c/source/tools/genbidi/*.d
+icu4c/source/tools/genbidi/*.o
+icu4c/source/tools/genbidi/*.pdb
+icu4c/source/tools/genbidi/*.plg
+icu4c/source/tools/genbidi/Debug
+icu4c/source/tools/genbidi/Makefile
+icu4c/source/tools/genbidi/Release
+icu4c/source/tools/genbidi/genbidi
+icu4c/source/tools/genbidi/genbidi.[0-9]
 icu4c/source/tools/genbrk/*.d
 icu4c/source/tools/genbrk/*.o
 icu4c/source/tools/genbrk/*.pdb

@@ -163,7 +163,7 @@ package390: $(OUTTMPDIR)/icudata390.lst $(OUTTMPDIR)/icudata.lst ./icupkg.inc pa
 # X_FILES = full paths (for dependency)
 
 ## DAT files - Misc. data files.
-DAT_FILES_SHORT=uprops.icu ucase.icu pnames.icu unames.icu unorm.icu cnvalias.icu ucadata.icu invuca.icu uidna.spp 
+DAT_FILES_SHORT=uprops.icu ucase.icu ubidi.icu pnames.icu unames.icu unorm.icu cnvalias.icu ucadata.icu invuca.icu uidna.spp 
 DAT_FILES=$(DAT_FILES_SHORT:%=$(BUILDDIR)/%)
 
 ## BRK files
@@ -284,6 +284,10 @@ $(BUILD_DIRS):
 # uprops.icu
 $(BUILDDIR)/uprops.icu: $(UNICODEDATADIR)/UnicodeData.txt $(UNICODEDATADIR)/BidiMirroring.txt $(BINDIR)/genprops$(EXEEXT) $(BUILDDIR)/$(ICUDT)pnames.icu
 	$(INVOKE) $(BINDIR)/genprops -s $(UNICODEDATADIR) -i $(BUILDDIR) -d $(BUILDDIR) -u $(UNICODE_VERSION)
+
+# ubidi.icu
+$(BUILDDIR)/ubidi.icu: $(UNICODEDATADIR)/UnicodeData.txt $(BINDIR)/genbidi$(EXEEXT)
+	$(INVOKE) $(BINDIR)/genbidi -s $(UNICODEDATADIR) -i $(BUILDDIR) -d $(BUILDDIR) -u $(UNICODE_VERSION)
 
 # ucase.icu
 $(BUILDDIR)/ucase.icu: $(UNICODEDATADIR)/UnicodeData.txt $(BINDIR)/gencase$(EXEEXT)
@@ -412,7 +416,7 @@ icupkg.inc: $(srcdir)/icupkg.inc.in  $(top_builddir)/config.status
 ###########
 ########### 390 (z/OS) support
 UCMFILES390=ebcdic-xml-us.ucm ibm-37_P100-1995.ucm ibm-1047_P100-1995.ucm ibm-4909_P100-1999.ucm
-ALLFILES390=uprops.icu ucase.icu pnames.icu unorm.icu cnvalias.icu $(UCMFILES390:.ucm=.cnv)
+ALLFILES390=uprops.icu ucase.icu ubidi.icu pnames.icu unorm.icu cnvalias.icu $(UCMFILES390:.ucm=.cnv)
 
 $(OUTTMPDIR)/icudata390.lst: $(SRCLISTDEPS)
 	@echo "generating $@ (list of 390 data files)"
