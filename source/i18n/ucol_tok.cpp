@@ -1096,6 +1096,9 @@ static UColToken *ucol_tok_initAReset(UColTokenParser *src, UChar *expand, uint3
   sourceToken->debugSource = *(src->source + src->parsedToken.charsOffset);
   sourceToken->debugExpansion = *(src->source + src->parsedToken.extensionOffset);
 
+  // keep the flags around so that we know about before
+  sourceToken->flags = src->parsedToken.flags;
+
   if(src->parsedToken.prefixOffset != 0) {
     // this is a syntax error 
     *status = U_INVALID_FORMAT_ERROR;
@@ -1215,7 +1218,40 @@ inline UColToken *getVirginBefore(UColTokenParser *src, UColToken *sourceToken, 
   } else {
       invPos = ucol_inv_getPrevCE(src, baseCE, baseContCE, &CE, &SecondCE, strength);
 
-      uint32_t *CETable = (uint32_t *)((uint8_t *)src->invUCA+src->invUCA->table);
+      // we got the previous CE. Now we need to see if the difference between
+      // the two CEs is really of the requested strength.
+      // if it's a bigger difference (we asked for secondary and got primary), we 
+      // need to modify the CE.
+      if(ucol_getCEStrengthDifference(baseCE, baseContCE, CE, SecondCE) < strength) {
+          // adjust the strength
+          // now we are in the situation where our baseCE should actually be modified in 
+          // order to get the CE in the right position.
+          if(strength == UCOL_SECONDARY) {
+              CE = baseCE - 0x0200;
+          } else { // strength == UCOL_TERTIARY
+              CE = baseCE - 0x02;
+          }
+          if(baseContCE) {
+            if(strength == UCOL_SECONDARY) {
+                SecondCE = baseContCE - 0x0200;
+            } else { // strength == UCOL_TERTIARY
+                SecondCE = baseContCE - 0x02;
+            }
+          }
+      }
+
+#if 0
+      // the code below relies on getting a code point from the inverse table, in order to be
+      // able to merge the situations like &x < 9 &[before 1]a < d. This won't work:
+      // 1. There are many code points that have the same CE
+      // 2. The CE to codepoint table (things pointed to by CETable[3*invPos+2] are broken.
+      // Also, in case when there is no equivalent strength before an element, we have to actually
+      // construct one. For example, &[before 2]a << x won't result in x << a, because the element 
+      // before a is a primary difference. 
+
+      //uint32_t *CETable = (uint32_t *)((uint8_t *)src->invUCA+src->invUCA->table);
+
+
       ch = CETable[3*invPos+2];
 
       if((ch &  UCOL_INV_SIZEMASK) != 0) {
@@ -1240,16 +1276,28 @@ inline UColToken *getVirginBefore(UColTokenParser *src, UColToken *sourceToken, 
 
       //sourceToken = (UColToken *)uhash_iget(src->tailored, (int32_t)key);
       sourceToken = (UColToken *)uhash_get(src->tailored, &key);
-  
+#endif
+
+      // here is how it should be. The situation such as &[before 1]a < x, should be 
+      // resolved exactly as if we wrote &a > x. 
+      // therefore, I don't really care if the UCA value before a has been changed.
+      // However, I do care if the strength between my element and the previous element
+      // is bigger then I wanted. So, if CE < baseCE and I wanted &[before 2], then i'll 
+      // have to construct the base CE.
+
+
+
       // if we found a tailored thing, we have to use the UCA value and construct 
       // a new reset token with constructed name
-      if(sourceToken != NULL && sourceToken->strength != UCOL_TOK_RESET) {
+      //if(sourceToken != NULL && sourceToken->strength != UCOL_TOK_RESET) {
         // character to which we want to anchor is already tailored. 
         // We need to construct a new token which will be the anchor
         // point
-        *(src->extraCurrent-1) = 0xFFFE;
-        *src->extraCurrent++ = (UChar)ch;
-        src->parsedToken.charsLen++;
+        //*(src->extraCurrent-1) = 0xFFFE;
+        //*src->extraCurrent++ = (UChar)ch;
+        // grab before
+        src->parsedToken.charsOffset -= 10;
+        src->parsedToken.charsLen += 10;
         src->lh[src->resultLen].baseCE = CE & 0xFFFFFF3F;
         if(isContinuation(SecondCE)) {
           src->lh[src->resultLen].baseContCE = SecondCE;
@@ -1264,7 +1312,7 @@ inline UColToken *getVirginBefore(UColTokenParser *src, UColToken *sourceToken, 
         src->lh[src->resultLen].indirect = FALSE;
 
         sourceToken = ucol_tok_initAReset(src, 0, &expandNext, parseError, status);   
-      }
+      //}
   }
 
   return sourceToken;
@@ -1347,6 +1395,8 @@ uint32_t ucol_tok_assembleTokenList(UColTokenParser *src, UParseError *parseErro
           sourceToken->previous = NULL;
           sourceToken->noOfCEs = 0;
           sourceToken->noOfExpCEs = 0;
+          // keep the flags around so that we know about before
+          sourceToken->flags = src->parsedToken.flags;
           uhash_put(src->tailored, sourceToken, sourceToken, status);
         } else {
           /* we could have fished out a reset here */
@@ -1478,6 +1528,19 @@ uint32_t ucol_tok_assembleTokenList(UColTokenParser *src, UParseError *parseErro
           sourceToken->debugExpansion = *(src->source + src->parsedToken.extensionOffset);
         } else {
           sourceToken->debugExpansion = 0;
+        }
+        // if the previous token was a reset before, the strength of this
+        // token must match the strength of before. Otherwise we have an
+        // undefined situation.
+        // In other words, we currently have a cludge which we use to 
+        // represent &a >> x. This is written as &[before 2]a << x.
+        if((lastToken->flags & UCOL_TOK_BEFORE) != 0) {
+            uint8_t beforeStrength = (lastToken->flags & UCOL_TOK_BEFORE) - 1;
+            if(beforeStrength != sourceToken->strength) {
+                *status = U_INVALID_FORMAT_ERROR;
+                syntaxError(src->source,0,(int32_t)(src->end-src->source),parseError);
+                return 0;
+            }
         }
       } else {
         if(lastToken != NULL && lastStrength == UCOL_TOK_RESET) {
