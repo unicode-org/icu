@@ -825,7 +825,7 @@ unorm_quickCheck(const UChar *src,
         }
     }
 
-    return result;
+/*    return result; */
 }
 
 /* make NFD & NFKD ---------------------------------------------------------- */
