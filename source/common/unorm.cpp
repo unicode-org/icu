@@ -824,8 +824,6 @@ unorm_quickCheck(const UChar *src,
             result=UNORM_MAYBE;
         }
     }
-
-/*    return result; */
 }
 
 /* make NFD & NFKD ---------------------------------------------------------- */
@@ -1840,10 +1838,6 @@ _compose(UChar *dest, int32_t destCapacity,
     UChar c, c2, minNoMaybe;
     uint8_t cc, prevCC;
 
-    if(!_haveData(*pErrorCode)) {
-        return 0;
-    }
-
     if(!compat) {
         minNoMaybe=(UChar)indexes[_NORM_INDEX_MIN_NFC_NO_MAYBE];
         qcMask=_NORM_QC_NFC;
@@ -2335,7 +2329,7 @@ _findPreviousIterationBoundary(UCharIterator &src,
     return bufferCapacity-startIndex;
 }
 
-U_CFUNC int32_t
+U_CAPI int32_t U_EXPORT2
 unorm_previousNormalize(UChar *dest, int32_t destCapacity,
                         UCharIterator *src,
                         UNormalizationMode mode, UBool ignoreHangul,
@@ -2346,6 +2340,10 @@ unorm_previousNormalize(UChar *dest, int32_t destCapacity,
     uint32_t mask;
     int32_t startIndex, bufferLength, bufferCapacity, destLength;
     UChar minC;
+
+    if(!_haveData(*pErrorCode)) {
+        return 0;
+    }
 
     switch(mode) {
     case UNORM_NFD:
@@ -2545,7 +2543,7 @@ _findNextIterationBoundary(UCharIterator &src,
     return bufferIndex;
 }
 
-U_CFUNC int32_t
+U_CAPI int32_t U_EXPORT2
 unorm_nextNormalize(UChar *dest, int32_t destCapacity,
                     UCharIterator *src,
                     UNormalizationMode mode, UBool ignoreHangul,
@@ -2556,6 +2554,10 @@ unorm_nextNormalize(UChar *dest, int32_t destCapacity,
     uint32_t mask;
     int32_t bufferLength, bufferCapacity, destLength;
     UChar minC;
+
+    if(!_haveData(*pErrorCode)) {
+        return 0;
+    }
 
     switch(mode) {
     case UNORM_NFD:
