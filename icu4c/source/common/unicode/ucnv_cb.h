@@ -67,16 +67,16 @@ U_CAPI void U_EXPORT2 ucnv_cbFromUWriteSub (UConverterFromUnicodeArgs *args,
  * character(s) to the target UChar buffer.
  *
  * @param args : callback fromUnicode arguments
- * @param target : output target buffer of the callback result.
- * @param length : the length of target buffer
+ * @param source : pointer to pointer to first UChar to write [on exit: 1 after last UChar processed]
+ * @param sourceLimit : pointer after last UChar to write
  * @param offsetIndex : the relative offset index from callback.
  * @param err error status <TT>U_BUFFER_OVERFLOW</TT>
  * @see ucnv_cbToUWriteSub
  * @draft
  */
 U_CAPI void U_EXPORT2 ucnv_cbFromUWriteUChars(UConverterFromUnicodeArgs *args,
-                             const UChar* source,
-                             int32_t length,
+                             const UChar** source,
+                             const UChar*  sourceLimit,
                              int32_t offsetIndex,
                              UErrorCode * err);
 
