@@ -145,6 +145,49 @@ int32_t ICU_Utility::skipWhitespace(const UnicodeString& str, int32_t& pos,
 }
 
 /**
+ * Skip over whitespace in a Replaceable.  Whitespace is defined by
+ * uprv_isRuleWhiteSpace().  Skipping may be done in the forward or
+ * reverse direction.  In either case, the leftmost index will be
+ * inclusive, and the rightmost index will be exclusive.  That is,
+ * given a range defined as [start, limit), the call
+ * skipWhitespace(text, start, limit) will advance start past leading
+ * whitespace, whereas the call skipWhitespace(text, limit, start),
+ * will back up limit past trailing whitespace.
+ * @param text the text to be analyzed
+ * @param pos either the start or limit of a range of 'text', to skip
+ * leading or trailing whitespace, respectively
+ * @param stop either the limit or start of a range of 'text', to skip
+ * leading or trailing whitespace, respectively
+ * @return the new start or limit, depending on what was passed in to
+ * 'pos'
+ */
+//?FOR FUTURE USE.  DISABLE FOR NOW for coverage reasons.
+//?int32_t ICU_Utility::skipWhitespace(const Replaceable& text,
+//?                                    int32_t pos, int32_t stop) {
+//?    UChar32 c;
+//?    UBool isForward = (stop >= pos);
+//?
+//?    if (!isForward) {
+//?        --pos; // pos is a limit, so back up by one
+//?    }
+//?    
+//?    while (pos != stop &&
+//?           uprv_isRuleWhiteSpace(c = text.char32At(pos))) {
+//?        if (isForward) {
+//?            pos += UTF_CHAR_LENGTH(c);
+//?        } else {
+//?            pos -= UTF_CHAR_LENGTH(c);
+//?        }
+//?    }
+//?
+//?    if (!isForward) {
+//?        ++pos; // make pos back into a limit
+//?    }
+//?
+//?    return pos;
+//?}
+
+/**
  * Parse a single non-whitespace character 'ch', optionally
  * preceded by whitespace.
  * @param id the string to be parsed
@@ -229,6 +272,72 @@ int32_t ICU_Utility::parsePattern(const UnicodeString& rule, int32_t pos, int32_
         }
     }
     return pos;
+}
+
+/**
+ * Parse a pattern string within the given Replaceable and a parsing
+ * pattern.  Characters are matched literally and case-sensitively
+ * except for the following special characters:
+ *
+ * ~  zero or more uprv_isRuleWhiteSpace chars
+ *
+ * If end of pattern is reached with all matches along the way,
+ * pos is advanced to the first unparsed index and returned.
+ * Otherwise -1 is returned.
+ * @param pat pattern that controls parsing
+ * @param text text to be parsed, starting at index
+ * @param index offset to first character to parse
+ * @param limit offset after last character to parse
+ * @return index after last parsed character, or -1 on parse failure.
+ */
+int32_t ICU_Utility::parsePattern(const UnicodeString& pat,
+                                  const Replaceable& text,
+                                  int32_t index,
+                                  int32_t limit) {
+    int32_t ipat = 0;
+
+    // empty pattern matches immediately
+    if (ipat == pat.length()) {
+        return index;
+    }
+
+    UChar32 cpat = pat.char32At(ipat);
+
+    while (index < limit) {
+        UChar32 c = text.char32At(index);
+
+        // parse \s*
+        if (cpat == 126 /*~*/) {
+            if (uprv_isRuleWhiteSpace(c)) {
+                index += UTF_CHAR_LENGTH(c);
+                continue;
+            } else {
+                if (++ipat == pat.length()) {
+                    return index; // success; c unparsed
+                }
+                // fall thru; process c again with next cpat
+            }
+        }
+
+        // parse literal
+        else if (c == cpat) {
+            index += UTF_CHAR_LENGTH(c);
+            ipat += UTF_CHAR_LENGTH(cpat);
+            if (ipat == pat.length()) {
+                return index; // success; c parsed
+            }
+            // fall thru; get next cpat
+        }
+
+        // match failure of literal
+        else {
+            return -1;
+        }
+
+        cpat = pat.char32At(ipat);
+    }
+
+    return -1; // text ended before end of pat
 }
 
 static const UChar ZERO_X[] = {48, 120, 0}; // "0x"
