@@ -9,8 +9,6 @@
  * paragraphLayout doesn't make much sense without
  * BreakIterator...
  */
-#if ! UCONFIG_NO_BREAK_ITERATION
-
 #include "layout/LETypes.h"
 #include "layout/LELanguages.h"
 #include "layout/LayoutEngine.h"
@@ -20,6 +18,7 @@
 #include "unicode/uchriter.h"
 #include "unicode/brkiter.h"
 
+#if ! UCONFIG_NO_BREAK_ITERATION
 #include "LXUtilities.h"
 #include "usc_impl.h" /* this is currently private! */
 #include "cstring.h"  /* this too! */

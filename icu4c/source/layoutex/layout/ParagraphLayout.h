@@ -13,9 +13,8 @@
  * ParagraphLayout doesn't make much sense without
  * BreakIterator...
  */
-#if ! UCONFIG_NO_BREAK_ITERATION
-
 #include "unicode/uscript.h"
+#if ! UCONFIG_NO_BREAK_ITERATION
 
 #include "layout/LETypes.h"
 #include "layout/LEFontInstance.h"
