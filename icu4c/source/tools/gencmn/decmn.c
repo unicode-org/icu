@@ -39,6 +39,7 @@ static UOption options[]={
 /*2*/ UOPTION_DESTDIR,
 /*3*/ UOPTION_DEF(0, 'n', UOPT_NO_ARG),
 /*4*/ UOPTION_DEF("comment", 'C', UOPT_NO_ARG),
+/*5*/ UOPTION_DEF("pkgdata", 0, UOPT_NO_ARG),
 };
 
 static int
@@ -145,7 +146,7 @@ main(int argc, char *argv[]) {
     uint8_t *base;
     int32_t *p;
     int32_t i, length, count, baseOffset;
-    int result, ishelp = 0;
+    int result, ishelp = 0, usePkgdataFormat = 0;
 
     U_MAIN_INIT_ARGS(argc, argv);
 
@@ -169,14 +170,18 @@ main(int argc, char *argv[]) {
         fprintf(stderr,
                 "%csage: %s [ -h, -?, --help ] [ -n ] [ -C, --comment ] [ -d, --destdir destination ] archive\n", ishelp ? 'U' : 'u', pname);
         if (ishelp) {
-            fprintf(stderr, "\nOptions: -h, -?, --help    print this message and exit\n"
-                    "         -n                do not create files\n"
-                    "         -C, --comment     print the comment embedded in the file and exit\n"
-                    "         -d, --destdir destination    create files in destination\n");
+            fprintf(stderr, "\nOptions:\n"
+                    "    -h, -?, --help   print this message and exit\n"
+                    "    -n               do not create files\n"
+                    "    -C, --comment    print the comment embedded in the file and exit\n"
+                    "        --pkgdata    Display the files in the package in a format for pkgdata\n"
+                    "    -d, --destdir destination    create files in destination\n");
         }
 
         return ishelp ? 0 : 1;
     }
+
+    usePkgdataFormat = options[5].doesOccur;
 
     in=fopen(argv[1], "rb");
     if(in==NULL) {
@@ -240,7 +245,12 @@ main(int argc, char *argv[]) {
     count=*p++;
     /* printf("files[%ld]\n", (long)count); */
     for(i=0; i<count; ++i) {
-        printf("%s%c%s\n", options[2].value, U_FILE_SEP_CHAR, base+*p);
+        if (usePkgdataFormat) {
+            printf("%s\n", uprv_strchr(base+*p, U_TREE_ENTRY_SEP_CHAR)+1);
+        }
+        else {
+            printf("%s%c%s\n", options[2].value, U_FILE_SEP_CHAR, base+*p);
+        }
         p+=2;
     }
     /* puts("endfiles"); */
