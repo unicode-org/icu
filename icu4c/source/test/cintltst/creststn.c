@@ -1141,7 +1141,6 @@ static void TestConstruction2()
     UResourceBundle *test4 = 0;
     const UChar*   result4;
     UErrorCode   err = U_ZERO_ERROR;
-    const char*     directory;
     const char*    locale="te_IN";
     wchar_t widedirectory[256];
     const char *testdatapath;
