@@ -8,6 +8,7 @@
 #include "unicode/smpdtfmt.h"
 #include "tzregts.h"
 #include "calregts.h"
+#include "cmemory.h"
 
 // *****************************************************************************
 // class TimeZoneRegressionTest
@@ -471,7 +472,8 @@ void TimeZoneRegressionTest:: Test4151406() {
                 max = count;
             logln(hname + ' ' + count +
                   ((count > 0) ? (" e.g. " + *ids[0]) : UnicodeString("")));
-            delete [] ids;
+            // delete [] ids;
+            uprv_free(ids);
         /*} catch (Exception e) {
             errln(hname + ' ' + "Fail: " + e);
         }*/

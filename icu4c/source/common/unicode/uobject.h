@@ -65,6 +65,8 @@ public:
     // (uprv_malloc(), uprv_free(), uprv_realloc());
     // they or something else could be used here to implement C++ new/delete
     // for ICU4C C++ classes
+
+#define U_CPP_MEMORY_TEST
 #ifdef U_CPP_MEMORY_TEST
     void *operator new(size_t size);
     void *operator new[](size_t size);

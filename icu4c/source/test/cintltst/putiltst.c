@@ -215,7 +215,7 @@ static void TestPUtilAPI(void){
         /*dataDirectory=u_getDataDirectory();*/
 
         dataDirectory="directory1";  /*no backslashes*/
-        udataDir=(UChar*)uprv_malloc(sizeof(UChar) * (strlen(dataDirectory) + 1));
+        udataDir=(UChar*)malloc(sizeof(UChar) * (strlen(dataDirectory) + 1));
         u_charsToUChars(dataDirectory, udataDir, (strlen(dataDirectory)+1));
         u_uastrcpy(temp, dataDirectory);
        
@@ -223,14 +223,14 @@ static void TestPUtilAPI(void){
             log_err("ERROR: u_charsToUChars failed. Expected %s, Got %s\n", austrdup(temp), austrdup(udataDir));
         }
         log_verbose("Testing UChars to chars\n");
-        charvalue=(char*)uprv_malloc(sizeof(char) * (u_strlen(udataDir) + 1));
+        charvalue=(char*)malloc(sizeof(char) * (u_strlen(udataDir) + 1));
 
         u_UCharsToChars(udataDir, charvalue, (u_strlen(udataDir)+1));
         if(strcmp(charvalue, dataDirectory) != 0){
             log_err("ERROR: u_UCharsToChars failed. Expected %s, Got %s\n", charvalue, dataDirectory);
         }
-        uprv_free(charvalue);
-        uprv_free(udataDir);
+        free(charvalue);
+        free(udataDir);
     }
    
     log_verbose("Testing uprv_timezone()....\n");

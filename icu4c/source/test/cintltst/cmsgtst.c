@@ -139,7 +139,7 @@ static void MessageFormatTest( void )
             {
                 status=U_ZERO_ERROR;
                 resultlength=resultLengthOut+1;
-                result=(UChar*)uprv_malloc(sizeof(UChar) * resultlength);
+                result=(UChar*)malloc(sizeof(UChar) * resultlength);
                 u_formatMessage( "en_US",testCasePatterns[i], patternlength, result, resultlength, 
                     &status, 1, 3456.00, d1);
             }
@@ -154,7 +154,7 @@ static void MessageFormatTest( void )
                 log_err("FAIL: Error in MessageFormat on testcase : %d\n GOT %s EXPECTED %s\n", i, 
                     austrdup(result), austrdup(testResultStrings[i]) );
             }
-            uprv_free(result);
+            free(result);
             result=NULL;
         }
     }
@@ -187,11 +187,11 @@ static void MessageFormatTest( void )
             resultLength = umsg_format(formatter,result,resultLength,&ec,1,3456.00,d1);
             if(ec==U_BUFFER_OVERFLOW_ERROR){
                 ec=U_ZERO_ERROR;
-                result = (UChar*) uprv_malloc(U_SIZEOF_UCHAR*resultLength+2);
+                result = (UChar*) malloc(U_SIZEOF_UCHAR*resultLength+2);
                 resultLength =  umsg_format(formatter,result,resultLength+2,&ec,1,3456.00,d1);
                 if(U_FAILURE(ec)){
                       log_err("ERROR: failure in message format on testcase %d:  %s\n", i, u_errorName(status) );
-                      uprv_free(result);
+                      free(result);
                       return;
                 }
             
@@ -221,7 +221,7 @@ static void MessageFormatTest( void )
                 if(U_FAILURE(ec)){
                     log_err("umsg_parse could not parse the pattern. Error: %s.\n",u_errorName(ec));
                 }
-                uprv_free(result);
+                free(result);
             }else{
                 log_err("FAIL: Expected U_BUFFER_OVERFLOW error while preflighting got: %s for testCasePatterns[%d]",u_errorName(ec),i);
             }

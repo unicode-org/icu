@@ -324,7 +324,10 @@ CollationAPITest::TestRuleBasedColl()
         return;
     }
 
-    free(clonedrule4);
+ //   free(clonedrule4);     BAD API!!!!
+    uprv_free(clonedrule4);
+
+
     delete col1;
     delete col2;
     delete col3;

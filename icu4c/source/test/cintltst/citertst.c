@@ -1195,9 +1195,9 @@ getSingleCEValue(char *primary, char *secondary, char *tertiary,
             *terend = '\0';
         }
 
-        primvalue = (*primary!='\0')?strtoul(primary, &primend, 16):0;
-        secvalue  = (*secondary!='\0')?strtoul(secondary, &secend, 16):0;
-        tervalue  = (*tertiary!='\0')?strtoul(tertiary, &terend, 16):0;
+        primvalue = (*primary!='\0')?uprv_strtoul(primary, &primend, 16):0;
+        secvalue  = (*secondary!='\0')?uprv_strtoul(secondary, &secend, 16):0;
+        tervalue  = (*tertiary!='\0')?uprv_strtoul(tertiary, &terend, 16):0;
         if(primvalue <= 0xFF) {
           primvalue <<= 8;
         }
@@ -1767,7 +1767,7 @@ static void TestCEValidity()
         rules = ucol_getRules(coll, &ruleLen);
 
         if (ruleLen > 0) {
-            rulesCopy = (UChar *)uprv_malloc((ruleLen +
+            rulesCopy = (UChar *)malloc((ruleLen +
                 UCOL_TOK_EXTRA_RULE_SPACE_SIZE) * sizeof(UChar));
             uprv_memcpy(rulesCopy, rules, ruleLen * sizeof(UChar));
             src.source = src.current = rulesCopy;
@@ -1791,7 +1791,7 @@ static void TestCEValidity()
                 codepoints[chLen] = 0;
                 checkCEValidity(coll, codepoints, chLen, 4, 85);
             }
-            uprv_free(rulesCopy);
+            free(rulesCopy);
         }
 
         ucol_close(coll);
@@ -1947,7 +1947,7 @@ static void TestSortKeyValidity(void)
         rules = ucol_getRules(coll, &ruleLen);
 
         if (ruleLen > 0) {
-            rulesCopy = (UChar *)uprv_malloc((ruleLen +
+            rulesCopy = (UChar *)malloc((ruleLen +
                 UCOL_TOK_EXTRA_RULE_SPACE_SIZE) * sizeof(UChar));
             uprv_memcpy(rulesCopy, rules, ruleLen * sizeof(UChar));
             src.source = src.current = rulesCopy;
@@ -1971,7 +1971,7 @@ static void TestSortKeyValidity(void)
                 codepoints[chLen] = 0;
                 checkSortKeyValidity(coll, codepoints, chLen);
             }
-            uprv_free(rulesCopy);
+            free(rulesCopy);
         }
 
         ucol_close(coll);

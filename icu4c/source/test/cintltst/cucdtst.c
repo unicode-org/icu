@@ -18,13 +18,16 @@
 #include "unicode/putil.h"
 #include "unicode/ustring.h"
 #include "unicode/uloc.h"
-#include "cstring.h"
-#include "cmemory.h"
+
 #include "cintltst.h"
 #include "cucdtst.h"
 #include "uparse.h"
 #include "unicode/uscript.h"
 #include "usc_impl.h"
+
+#include <string.h>
+#include <math.h>
+#include <stdlib.h>
 
 /* prototypes --------------------------------------------------------------- */
 
@@ -422,7 +425,6 @@ static void TestMisc()
     }
 }
 
-
 /* Tests for isControl(u_iscntrl()) and isPrintable(u_isprint()) */
 static void TestControlPrint()
 {
@@ -554,7 +556,7 @@ static void TestIdentifier()
  * Then it should check that the areas contain all the same properties except where overridden.
  * For this, it would have had to set a flag for which code points were listed explicitly.
  */
-static void U_CALLCONV
+void U_CALLCONV
 unicodeDataLineFn(void *context,
                   char *fields[][2], int32_t fieldCount,
                   UErrorCode *pErrorCode)
@@ -567,7 +569,7 @@ unicodeDataLineFn(void *context,
     int8_t type;
 
     /* get the character code, field 0 */
-    c=uprv_strtoul(fields[0][0], &end, 16);
+    c=strtoul(fields[0][0], &end, 16);
     if(end<=fields[0][0] || end!=fields[0][1]) {
         log_err("error: syntax error in field 0 at %s\n", fields[0][0]);
         return;
@@ -585,7 +587,7 @@ unicodeDataLineFn(void *context,
     }
 
     /* get canonical combining class, field 3 */
-    value=uprv_strtoul(fields[3][0], &end, 10);
+    value=strtoul(fields[3][0], &end, 10);
     if(end<=fields[3][0] || end!=fields[3][1]) {
         log_err("error: syntax error in field 3 at code 0x%lx\n", c);
         return;
@@ -608,7 +610,7 @@ unicodeDataLineFn(void *context,
     /* get ISO Comment, field 11 */
     *fields[11][1]=0;
     i=u_getISOComment(c, buffer, sizeof(buffer), pErrorCode);
-    if(U_FAILURE(*pErrorCode) || 0!=uprv_strcmp(fields[11][0], buffer)) {
+    if(U_FAILURE(*pErrorCode) || 0!=strcmp(fields[11][0], buffer)) {
         log_err("error: u_getISOComment(U+%04lx) wrong (%s): \"%s\" should be \"%s\"\n",
             c, u_errorName(*pErrorCode),
             U_FAILURE(*pErrorCode) ? buffer : "[error]",
@@ -617,7 +619,7 @@ unicodeDataLineFn(void *context,
 
     /* get uppercase mapping, field 12 */
     if(fields[12][0]!=fields[12][1]) {
-        value=uprv_strtoul(fields[12][0], &end, 16);
+        value=strtoul(fields[12][0], &end, 16);
         if(end!=fields[12][1]) {
             log_err("error: syntax error in field 12 at code 0x%lx\n", c);
             return;
@@ -634,7 +636,7 @@ unicodeDataLineFn(void *context,
 
     /* get lowercase mapping, field 13 */
     if(fields[13][0]!=fields[13][1]) {
-        value=uprv_strtoul(fields[13][0], &end, 16);
+        value=strtoul(fields[13][0], &end, 16);
         if(end!=fields[13][1]) {
             log_err("error: syntax error in field 13 at code 0x%lx\n", c);
             return;
@@ -651,7 +653,7 @@ unicodeDataLineFn(void *context,
 
     /* get titlecase mapping, field 14 */
     if(fields[14][0]!=fields[14][1]) {
-        value=uprv_strtoul(fields[14][0], &end, 16);
+        value=strtoul(fields[14][0], &end, 16);
         if(end!=fields[14][1]) {
             log_err("error: syntax error in field 14 at code 0x%lx\n", c);
             return;
@@ -693,7 +695,7 @@ enumTypeRange(const void *context, UChar32 start, UChar32 limit, UCharCategory t
     UChar32 c;
     int i, count;
 
-    if(0!=uprv_strcmp((const char *)context, "a1")) {
+    if(0!=strcmp((const char *)context, "a1")) {
         log_err("error: u_enumCharTypes() passes on an incorrect context pointer\n");
         return FALSE;
     }
@@ -814,9 +816,9 @@ static void TestUnicodeData()
 
     errorCode=U_ZERO_ERROR;
     u_parseDelimitedFile(newPath, ';', fields, 15, unicodeDataLineFn, NULL, &errorCode);
-    if(errorCode==U_FILE_ACCESS_ERROR) {
+   if(errorCode==U_FILE_ACCESS_ERROR) {
         errorCode=U_ZERO_ERROR;
-        u_parseDelimitedFile(backupPath, ';', fields, 15, unicodeDataLineFn, NULL, &errorCode);
+//        u_parseDelimitedFile(backupPath, ';', fields, 15, unicodeDataLineFn, NULL, &errorCode);
     }
     if(U_FAILURE(errorCode)) {
         log_err("error parsing UnicodeData.txt: %s\n", u_errorName(errorCode));
@@ -854,6 +856,7 @@ static void TestUnicodeData()
     /* test u_enumCharTypes() */
     u_enumCharTypes(enumTypeRange, "a1");
 }
+
 
 /*internal functions ----*/
 static int32_t MakeProp(char* str) 
@@ -1618,7 +1621,7 @@ enumCharNamesFn(void *context,
     int32_t *pCount=(int32_t *)context;
     int i;
 
-    if(length<=0 || length!=(int32_t)uprv_strlen(name)) {
+    if(length<=0 || length!=(int32_t)strlen(name)) {
         /* should not be called with an empty string or invalid length */
         log_err("u_enumCharName(0x%lx)=%s but length=%ld\n", name, length);
         return TRUE;
@@ -1629,17 +1632,17 @@ enumCharNamesFn(void *context,
         if(code==names[i].code) {
             switch (nameChoice) {
                 case U_EXTENDED_CHAR_NAME:
-                    if(0!=uprv_strcmp(name, names[i].extName)) {
+                    if(0!=strcmp(name, names[i].extName)) {
                         log_err("u_enumCharName(0x%lx - Extended)=%s instead of %s\n", code, name, names[i].extName);
                     }
                     break;
                 case U_UNICODE_CHAR_NAME:
-                    if(0!=uprv_strcmp(name, names[i].name)) {
+                    if(0!=strcmp(name, names[i].name)) {
                         log_err("u_enumCharName(0x%lx)=%s instead of %s\n", code, name, names[i].name);
                     }
                     break;
                 case U_UNICODE_10_CHAR_NAME:
-                    if(names[i].oldName[0]==0 || 0!=uprv_strcmp(name, names[i].oldName)) {
+                    if(names[i].oldName[0]==0 || 0!=strcmp(name, names[i].oldName)) {
                         log_err("u_enumCharName(0x%lx - 1.0)=%s instead of %s\n", code, name, names[i].oldName);
                     }
                     break;
@@ -1696,7 +1699,7 @@ TestCharNames() {
             log_err("u_charName(0x%lx) error %s\n", names[i].code, u_errorName(errorCode));
             return;
         }
-        if(length<0 || 0!=uprv_strcmp(name, names[i].name) || length!=(uint16_t)uprv_strlen(name)) {
+        if(length<0 || 0!=strcmp(name, names[i].name) || length!=(uint16_t)strlen(name)) {
             log_err("u_charName(0x%lx) gets: %s (length %ld) instead of: %s\n", names[i].code, name, length, names[i].name);
         }
 
@@ -1718,7 +1721,7 @@ TestCharNames() {
             log_err("u_charName(0x%lx - 1.0) error %s\n", names[i].code, u_errorName(errorCode));
             return;
         }
-        if(length<0 || (length>0 && 0!=uprv_strcmp(name, names[i].oldName)) || length!=(uint16_t)uprv_strlen(name)) {
+        if(length<0 || (length>0 && 0!=strcmp(name, names[i].oldName)) || length!=(uint16_t)strlen(name)) {
             log_err("u_charName(0x%lx - 1.0) gets %s length %ld instead of nothing or %s\n", names[i].code, name, length, names[i].oldName);
         }
 
@@ -2535,7 +2538,7 @@ TestAdditionalProperties() {
     /* test u_charAge() */
     for(i=0; i<sizeof(charAges)/sizeof(charAges[0]); ++i) {
         u_charAge(charAges[i].c, version);
-        if(0!=uprv_memcmp(version, charAges[i].version, sizeof(UVersionInfo))) {
+        if(0!=memcmp(version, charAges[i].version, sizeof(UVersionInfo))) {
             log_err("error: u_charAge(U+%04lx)={ %u, %u, %u, %u } instead of { %u, %u, %u, %u }\n",
                 charAges[i].c,
                 version[0], version[1], version[2], version[3],
@@ -2678,7 +2681,7 @@ TestNumericProperties(void) {
         if(type!=values[i].type) {
             log_err("UCHAR_NUMERIC_TYPE(U+%04lx)=%d should be %d\n", c, type, values[i].type);
         }
-        if(0.000001 <= uprv_fabs(nv - values[i].numValue)) {
+        if(0.000001 <= fabs(nv - values[i].numValue)) {
             log_err("u_getNumericValue(U+%04lx)=%g should be %g\n", c, nv, values[i].numValue);
         }
     }

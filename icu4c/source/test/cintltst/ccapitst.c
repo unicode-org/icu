@@ -218,7 +218,7 @@ static void TestConvert()
             if(U_SUCCESS(err)) {
                 /* try to fill an array with all aliases */
                 const char **aliases;
-                aliases=(const char **)uprv_malloc(count * sizeof(const char *));
+                aliases=(const char **)malloc(count * sizeof(const char *));
                 if(aliases != 0) {
                     ucnv_getAliases("utf-8", aliases, &err);
                     if(U_FAILURE(err)) {
@@ -234,7 +234,7 @@ static void TestConvert()
                             }
                         }
                     }
-                    uprv_free((char **)aliases);
+                    free((char **)aliases);
                 }
             }
         }

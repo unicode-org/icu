@@ -21,6 +21,8 @@
 
 #include "unicode/utypes.h"
 
+
+
 /*
  * For Windows, a path/filename may be the short (8.3) version
  * of the "real", long one. In this case, the short one
@@ -36,7 +38,7 @@
  * This function is especially useful in tools that are called
  * by a batch file for loop, which yields short pathnames on Win9x.
  */
-U_CFUNC const char *
+U_CAPI const char * U_EXPORT2
 getLongPathname(const char *pathname);
 
 /*
@@ -46,7 +48,7 @@ getLongPathname(const char *pathname);
  * If the pathname only contains a basename and no file separator,
  * then the pathname pointer itself is returned.
  */
-U_CFUNC const char *
+U_CAPI const char * U_EXPORT2
 findBasename(const char *filename);
 
 #endif
