@@ -69,7 +69,7 @@ TransliterationRuleData::~TransliterationRuleData() {
     }
 }
 
-const UnicodeMatcher*
+UnicodeMatcher*
 TransliterationRuleData::lookup(UChar32 standIn) const {
     int32_t i = standIn - variablesBase;
     return (i >= 0 && i < variablesLength) ? variables[i] : 0;

@@ -99,7 +99,7 @@ public:
      * Given a stand-in character, return the UnicodeMatcher that it
      * represents, or NULL.
      */
-    const UnicodeMatcher* lookup(UChar32 standIn) const;
+    UnicodeMatcher* lookup(UChar32 standIn) const;
 
     /**
      * Return the zero-based index of the segment represented by the given

@@ -36,7 +36,7 @@ class Quantifier : public UnicodeMatcher {
     virtual UMatchDegree matches(const Replaceable& text,
                                  int32_t& offset,
                                  int32_t limit,
-                                 UBool incremental) const;
+                                 UBool incremental);
 
     /**
      * Implement UnicodeMatcher

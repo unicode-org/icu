@@ -91,6 +91,9 @@ public:
      * reverse direction, this will be the index of the last matched
      * character minus one.
      *
+     * <p>Note:  This method is not const because some classes may
+     * modify their state as the result of a match.
+     *
      * @param text the text to be matched
      * @param offset on input, the index into text at which to begin
      * matching.  On output, the limit of the matched text.  The
@@ -114,7 +117,7 @@ public:
     virtual UMatchDegree matches(const Replaceable& text,
                                  int32_t& offset,
                                  int32_t limit,
-                                 UBool incremental) const = 0;
+                                 UBool incremental) = 0;
 
     /**
      * Returns a string representation of this matcher.  If the result of

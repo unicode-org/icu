@@ -432,7 +432,7 @@ public:
     UMatchDegree matches(const Replaceable& text,
                          int32_t& offset,
                          int32_t limit,
-                         UBool incremental) const;
+                         UBool incremental);
     
     /**
      * Adds the specified range to this set if it is not already
