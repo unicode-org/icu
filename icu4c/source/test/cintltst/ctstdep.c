@@ -150,97 +150,96 @@ TestDeprecatedCollationAPI(void)
 static void 
 TestDeprecatedNumFmtAPI(void)
 {
+    int32_t pat_length, i, lneed;
+    UNumberFormat *fmt;
+    UChar upat[5];
+    UChar unewpat[5];
+    UChar unum[5];
+    UChar *unewp=NULL;
+    UChar *str=NULL;
+    UErrorCode status = U_ZERO_ERROR;
+    const char* pat[]    = { "#.#", "#.", ".#", "#" };
+    const char* newpat[] = { "#0.#", "#0.", "#.0", "#" };
+    const char* num[]    = { "0",   "0.", ".0", "0" };
 
-  int32_t pat_length, i, lneed;
-  UNumberFormat *fmt;
-  UChar upat[5];
-  UChar unewpat[5];
-  UChar unum[5];
-  UChar *unewp=NULL;
-  UChar *str=NULL;
-  UErrorCode status = U_ZERO_ERROR;
-  const char* pat[]    = { "#.#", "#.", ".#", "#" };
-  const char* newpat[] = { "#0.#", "#0.", "#.0", "#" };
-  const char* num[]    = { "0",   "0.", ".0", "0" };
-
-  log_verbose("\nTesting different format patterns\n");
-  pat_length = sizeof(pat) / sizeof(pat[0]);
-  for (i=0; i < pat_length; ++i)
+    log_verbose("\nTesting different format patterns\n");
+    pat_length = sizeof(pat) / sizeof(pat[0]);
+    for (i=0; i < pat_length; ++i)
     {
-      status = U_ZERO_ERROR;
-      u_uastrcpy(upat, pat[i]);
-      fmt= unum_openPattern(upat, u_strlen(upat), "en_US", &status);
-      if (U_FAILURE(status)) {
-        log_err("FAIL: Number format constructor failed for pattern %s\n", pat[i]);
-        continue; 
-      }
-      lneed=0;
-      lneed=unum_toPattern(fmt, FALSE, NULL, lneed, &status);
-      if(status==U_BUFFER_OVERFLOW_ERROR){
-        status= U_ZERO_ERROR;
-        unewp=(UChar*)malloc(sizeof(UChar) * (lneed+1) );
-        unum_toPattern(fmt, FALSE, unewp, lneed+1, &status);
-      }
-      if(U_FAILURE(status)){
-        log_err("FAIL: Number format extracting the pattern failed for %s\n", pat[i]);
-      }
-      u_uastrcpy(unewpat, newpat[i]);
-      if(u_strcmp(unewp, unewpat) != 0)
-        log_err("FAIL: Pattern  %s should be transmute to %s; %s seen instead\n", pat[i], newpat[i],  austrdup(unewp) );
-
-      lneed=0;
-      lneed=unum_format(fmt, 0, NULL, lneed, NULL, &status);
-      if(status==U_BUFFER_OVERFLOW_ERROR){
-        status=U_ZERO_ERROR;
-        str=(UChar*)malloc(sizeof(UChar) * (lneed+1) );
-        unum_format(fmt, 0, str, lneed+1,  NULL, &status);
-      }
-      if(U_FAILURE(status)) {
-        log_err("Error in formatting using unum_format(.....): %s\n", myErrorName(status) );
-      }
-      u_uastrcpy(unum, num[i]);
-      if (u_strcmp(str, unum) != 0)
-        {
-          log_err("FAIL: Pattern %s should format zero as %s; %s Seen instead\n", pat[i], num[i], austrdup(str) );
-
+        status = U_ZERO_ERROR;
+        u_uastrcpy(upat, pat[i]);
+        fmt= unum_openPattern(upat, u_strlen(upat), "en_US", &status);
+        if (U_FAILURE(status)) {
+            log_err("FAIL: Number format constructor failed for pattern %s\n", pat[i]);
+            continue; 
         }
-      free(unewp);
-      free(str);
-      unum_close(fmt);
+        lneed=0;
+        lneed=unum_toPattern(fmt, FALSE, NULL, lneed, &status);
+        if(status==U_BUFFER_OVERFLOW_ERROR){
+            status= U_ZERO_ERROR;
+            unewp=(UChar*)malloc(sizeof(UChar) * (lneed+1) );
+            unum_toPattern(fmt, FALSE, unewp, lneed+1, &status);
+        }
+        if(U_FAILURE(status)){
+            log_err("FAIL: Number format extracting the pattern failed for %s\n", pat[i]);
+        }
+        u_uastrcpy(unewpat, newpat[i]);
+        if(u_strcmp(unewp, unewpat) != 0)
+            log_err("FAIL: Pattern  %s should be transmute to %s; %s seen instead\n", pat[i], newpat[i],  austrdup(unewp) );
+
+        lneed=0;
+        lneed=unum_format(fmt, 0, NULL, lneed, NULL, &status);
+        if(status==U_BUFFER_OVERFLOW_ERROR){
+            status=U_ZERO_ERROR;
+            str=(UChar*)malloc(sizeof(UChar) * (lneed+1) );
+            unum_format(fmt, 0, str, lneed+1,  NULL, &status);
+        }
+        if(U_FAILURE(status)) {
+            log_err("Error in formatting using unum_format(.....): %s\n", myErrorName(status) );
+        }
+        u_uastrcpy(unum, num[i]);
+        if (u_strcmp(str, unum) != 0)
+        {
+            log_err("FAIL: Pattern %s should format zero as %s; %s Seen instead\n", pat[i], num[i], austrdup(str) );
+        }
+        free(unewp);
+        free(str);
+        unum_close(fmt);
     }
 
     {
-      const char* locale[]={"fr_CA", "de_DE_PREEURO", "fr_FR_PREEURO"};
-      const char* result[]={"1,50 $", "1,50 DM", "1,50 F"};
-      UNumberFormat *currencyFmt;
-      UChar *res=NULL;
-      UFieldPosition pos;
-      status = U_ZERO_ERROR;
-      log_verbose("\nTesting the number format with different currency patterns\n");
-      for(i=0; i < 3; i++)
+        const char* locale[]={"fr_CA", "de_DE_PREEURO", "fr_FR_PREEURO"};
+        const char* result[]={"1,50 $", "1,50 DM", "1,50 F"};
+        UNumberFormat *currencyFmt;
+        UChar *res=NULL;
+        UFieldPosition pos;
+        status = U_ZERO_ERROR;
+        log_verbose("\nTesting the number format with different currency patterns\n");
+        for(i=0; i < 3; i++)
         {
-          currencyFmt = unum_open(UNUM_CURRENCY, locale[i], &status);
-          if(U_FAILURE(status)){
-              log_err("Error in the construction of number format with style currency:\n%s\n",
-                      myErrorName(status));
-          }
-          lneed=0;
-          lneed= unum_formatDouble(currencyFmt, 1.50, NULL, lneed, NULL, &status);
-          if(status==U_BUFFER_OVERFLOW_ERROR){
-            status=U_ZERO_ERROR;
-            str=(UChar*)malloc(sizeof(UChar) * (lneed+1) );
-            pos.field = 0;
-            unum_formatDouble(currencyFmt, 1.50, str, lneed+1, &pos, &status);
-          }
-          if(U_FAILURE(status)) {
-            log_err("Error in formatting using unum_formatDouble(.....): %s\n", myErrorName(status) );
-          }
-          res=(UChar*)malloc(sizeof(UChar) * (strlen(result[i])+1) );
-          u_uastrcpy(res, result[i]);
-          if (u_strcmp(str, res) != 0) log_err("FAIL: Expected %s\n", result[i]);
-          unum_close(currencyFmt);
-          free(str);
-          free(res);
+            currencyFmt = unum_open(UNUM_CURRENCY, locale[i], &status);
+            if(U_FAILURE(status)){
+                log_err("Error in the construction of number format with style currency:\n%s\n",
+                    myErrorName(status));
+            }
+            lneed=0;
+            lneed= unum_formatDouble(currencyFmt, 1.50, NULL, lneed, NULL, &status);
+            if(status==U_BUFFER_OVERFLOW_ERROR){
+                status=U_ZERO_ERROR;
+                str=(UChar*)malloc(sizeof(UChar) * (lneed+1) );
+                pos.field = 0;
+                unum_formatDouble(currencyFmt, 1.50, str, lneed+1, &pos, &status);
+            }
+            if(U_FAILURE(status)) {
+                log_err("Error in formatting using unum_formatDouble(.....): %s\n", myErrorName(status) );
+            }
+            res=(UChar*)malloc(sizeof(UChar) * (strlen(result[i])+1) );
+            u_uastrcpy(res, result[i]);
+            if (u_strcmp(str, res) != 0)
+                log_err("FAIL: Expected %s\n", result[i]);
+            unum_close(currencyFmt);
+            free(str);
+            free(res);
         }
     }
 }
@@ -285,6 +284,7 @@ TestDeprecatedDateFmtAPI(void)
     else
         log_verbose("PASS: creating dateformat using udat_openPattern() succesful\n");
 
+    udat_close(fr);
     udat_close(def);
     udat_close(fr_pat);
 }
