@@ -41,7 +41,7 @@ CFG=makedata - Win32 Debug
 # PROP Use_Debug_Libraries 0
 # PROP Output_Dir "Release"
 # PROP Intermediate_Dir "Release"
-# PROP Cmd_Line "NMAKE /f makedata.mak icudbld=$(MAKEDIR)  cfg=release"
+# PROP Cmd_Line "NMAKE /f makedata.mak icumake=$(MAKEDIR)  cfg=release"
 # PROP Rebuild_Opt "clean all"
 # PROP Target_File "makedata.exe"
 # PROP Bsc_Name ""
