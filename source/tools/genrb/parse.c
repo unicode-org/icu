@@ -324,15 +324,11 @@ parse(FileStream *f, const char *cp,
 			uprv_memcpy(rules + defaultRulesArrayLength, token.fChars, token.fLength*sizeof(token.fChars[0]));
 			
 			coll = ucol_openRules(rules, defaultRulesArrayLength + token.fLength, 0, 0, status);
-			tstColl = ucol_open("da", status);
+			/*tstColl = ucol_open("da", status);*/
 			rules1 = ucol_getRules(coll, &len1);
-			rules2 = ucol_getRules(tstColl, &len2);
+			/*rules2 = ucol_getRules(tstColl, &len2);*/
 
 			if(U_SUCCESS(*status) && coll !=NULL) {
-                /* This is just for testing & should be removed
-				temp1 = bin_open(bundle, "%%Collation", sizeof(defaultRulesArray[0])*(defaultRulesArrayLength + token.fLength), (uint8_t *) rules, status);
-				table_add(rootTable, temp1, status);
-                */
 				data = ucol_cloneRuleData(coll, &len, status);
 				if(U_SUCCESS(*status) && data != NULL) {
 					temp1 = bin_open(bundle, "%%Collation", len, data, status);
@@ -480,13 +476,13 @@ parse(FileStream *f, const char *cp,
 			uprv_memcpy(rules, defaultRulesArray, defaultRulesArrayLength*sizeof(defaultRulesArray[0]));
 			
 			coll = ucol_openRules(rules, defaultRulesArrayLength, 0, 0, status);
-			tstColl = ucol_open("root", status);
+			/*tstColl = ucol_open("root", status);*/
 			rules1 = ucol_getRules(coll, &len1);
-			rules2 = ucol_getRules(tstColl, &len2);
+			/*rules2 = ucol_getRules(tstColl, &len2);*/
 
 			if(U_SUCCESS(*status) && coll !=NULL) {
 				data = ucol_cloneRuleData(coll, &len, status);
-				data2 = ucol_cloneRuleData(tstColl, &len2, status);
+				/*data2 = ucol_cloneRuleData(tstColl, &len2, status);*/
 				if(U_SUCCESS(*status) && data != NULL) {
 					temp1 = bin_open(bundle, "%%Collation", len, data, status);
 					table_add(rootTable, temp1, status);
