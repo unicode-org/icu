@@ -210,6 +210,17 @@ UnicodeStringTest::TestCompare()
                     || test1.compareBetween(10, 14, test4, 22, 26) != 0)
         errln("compareBetween failed");
 
+    // test compare() etc. with strings that share a buffer but are not equal
+    test2=test1; // share the buffer, length() too large for the stackBuffer
+    test2.truncate(1); // change only the length, not the buffer
+    if( test1==test2 || test1<=test2 ||
+        test1.compare(test2)<=0 ||
+        test1.compareCodePointOrder(test2)<=0 ||
+        test1.caseCompare(test2, U_FOLD_CASE_DEFAULT)<=0
+    ) {
+        errln("UnicodeStrings that share a buffer but have different lengths compare as equal");
+    }
+
     /* test compareCodePointOrder() */
     {
         /* these strings are in ascending order */

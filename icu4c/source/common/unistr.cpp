@@ -513,12 +513,8 @@ UnicodeString::doCompare( UTextOffset start,
   // get the correct pointer
   const UChar *chars = getArrayStart();
 
-  // are we comparing the same buffer contents?
   chars += start;
   srcChars += srcStart;
-  if(chars == srcChars) {
-    return 0;
-  }
 
   UTextOffset minLength;
   int8_t lengthResult;
@@ -545,7 +541,7 @@ UnicodeString::doCompare( UTextOffset start,
    * does not become 0 itself
    */
 
-  if(minLength > 0) {
+  if(minLength > 0 && chars != srcChars) {
     int32_t result;
 
 #   if U_IS_BIG_ENDIAN 
@@ -592,12 +588,8 @@ UnicodeString::doCompareCodePointOrder(UTextOffset start,
   // get the correct pointer
   const UChar *chars = getArrayStart();
 
-  // are we comparing the same buffer contents?
   chars += start;
   srcChars += srcStart;
-  if(chars == srcChars) {
-    return 0;
-  }
 
   UTextOffset minLength;
   int8_t lengthResult;
@@ -616,11 +608,12 @@ UnicodeString::doCompareCodePointOrder(UTextOffset start,
     lengthResult = 0;
   }
 
-  int32_t diff = u_memcmpCodePointOrder(chars, srcChars, minLength);
-  if(diff!=0) {
-    return (int8_t)(diff >> 15 | 1);
+  if(minLength > 0 && chars != srcChars) {
+    int32_t diff = u_memcmpCodePointOrder(chars, srcChars, minLength);
+    if(diff!=0) {
+      return (int8_t)(diff >> 15 | 1);
+    }
   }
-
   return lengthResult;
 }
 
@@ -649,19 +642,18 @@ UnicodeString::doCaseCompare(UTextOffset start,
   // get the correct pointer
   const UChar *chars = getArrayStart();
 
-  // are we comparing the same buffer contents?
   chars += start;
   srcChars += srcStart;
-  if(chars == srcChars) {
-    return 0;
-  }
 
-  int32_t result=u_internalStrcasecmp(chars, length, srcChars, srcLength, options);
-  if(result!=0) {
-    return (int8_t)(result >> 24 | 1);
-  } else {
-    return 0;
+  if(chars != srcChars) {
+    int32_t result=u_internalStrcasecmp(chars, length, srcChars, srcLength, options);
+    if(result!=0) {
+      return (int8_t)(result >> 24 | 1);
+    }
+  } else if(length != srcLength) {
+    return (int8_t)((length - srcLength) >> 24 | 1);
   }
+  return 0;
 }
 
 int32_t
