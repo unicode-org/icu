@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/util/ICUServiceTest.java,v $
- * $Date: 2002/10/09 18:56:57 $
- * $Revision: 1.9 $
+ * $Date: 2002/12/12 18:02:09 $
+ * $Revision: 1.10 $
  *
  *******************************************************************************
  */
@@ -29,6 +29,7 @@ import com.ibm.icu.impl.ICULocaleService.ICUResourceBundleFactory;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.EventListener;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -39,6 +40,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.ResourceBundle;
 import java.util.Set;
+import java.util.SortedMap;
 import java.util.TreeSet;
 
 public class ICUServiceTest extends TestFmwk
@@ -70,6 +72,10 @@ public class ICUServiceTest extends TestFmwk
 
     // use locale keys
     static final class TestService extends ICUService {
+        public TestService() {
+            super("Test Service");
+        }
+
 	public Key createKey(String id) {
 	    return LocaleKey.createWithCanonicalFallback(id, null); // no fallback locale
 	}
@@ -78,6 +84,8 @@ public class ICUServiceTest extends TestFmwk
     public void testAPI() {
 	// create a service using locale keys,
 	ICUService service = new TestService();
+
+        logln("service name:" + service.getName());
 
 	// register an object with one locale, 
 	// search for an object with a more specific locale
@@ -194,6 +202,7 @@ public class ICUServiceTest extends TestFmwk
 	    service.registerObject(singleton3, "en_US_BAR");
 	    result = service.get("en_US_BAR");
 	    confirmIdentical("23) override super", result, singleton3);
+
 	}
 
 	// empty service should not recognize anything 
@@ -370,6 +379,28 @@ public class ICUServiceTest extends TestFmwk
 	    logln(buf.toString());
             */
 	}
+
+        // list only the resources for es, default locale
+        // since we're using the default Key, only "es" is matched
+        {
+            logln("visible ids for es locale: " + service.getVisibleIDs("es"));
+        }
+
+        // list only the spanish display names for es, spanish collation order
+        // since we're using the default Key, only "es" is matched
+        {
+            logln("display names: " + service.getDisplayNames(LocaleUtility.getLocaleFromName("es"), "es"));
+        }
+
+        // list the display names in reverse order
+        { 
+            logln("display names in reverse order: " +
+                  service.getDisplayNames(Locale.US, new Comparator() {
+                          public int compare(Object lhs, Object rhs) {
+                              return -String.CASE_INSENSITIVE_ORDER.compare(lhs, rhs);
+                          }
+                      }));
+        }
 
 	// get all the display names of these resources
 	// this should be fast since the display names were cached.
@@ -703,6 +734,21 @@ public class ICUServiceTest extends TestFmwk
             while (iter.hasNext()) {
                 logln("[" + n++ + "] " + iter.next());
             }
+        }
+
+        // list only the english display names for es, in reverse order
+        // since we're using locale keys, we should get all and only the es locales
+        // hmmm, the default toString function doesn't print in sorted order for TreeMap
+        {
+            SortedMap map = service.getDisplayNames(Locale.US, 
+                                              new Comparator() {
+                                                  public int compare(Object lhs, Object rhs) {
+                                                    return -String.CASE_INSENSITIVE_ORDER.compare(lhs, rhs);
+                                                  }
+                                                },
+                                              "es");
+
+            logln("es display names in reverse order " + map);
         }
     }
 
