@@ -26,15 +26,16 @@ struct SubstitutionLookupRecord
 struct ContextualSubstitutionBase : GlyphSubstitutionSubtable
 {
     static le_bool matchGlyphIDs(
-        const LEGlyphID *glyphArray, le_uint16 glyphCount, GlyphIterator *glyphIterator);
+        const LEGlyphID *glyphArray, le_uint16 glyphCount, GlyphIterator *glyphIterator,
+        le_bool backtrack = false);
 
     static le_bool matchGlyphClasses(
         const le_uint16 *classArray, le_uint16 glyphCount, GlyphIterator *glyphIterator,
-        const ClassDefinitionTable *classDefinitionTable);
+        const ClassDefinitionTable *classDefinitionTable, le_bool backtrack = false);
 
     static le_bool matchGlyphCoverages(
         const Offset *coverageTableOffsetArray, le_uint16 glyphCount,
-        GlyphIterator *glyphIterator, const char *offsetBase);
+        GlyphIterator *glyphIterator, const char *offsetBase, le_bool backtrack = false);
 
     static void applySubstitutionLookups(
         const LookupProcessor *lookupProcessor, 
