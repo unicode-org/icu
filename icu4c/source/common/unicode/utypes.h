@@ -373,6 +373,7 @@ enum UErrorCode {
     U_STATE_OLD_WARNING       = -125,   /**< ICU has to use compatibility layer to construct the service. Expect performance/memory usage degradation. Consider upgrading */
 
     U_STRING_NOT_TERMINATED_WARNING = -124,/**< An output string could not be NUL-terminated because output length==destCapacity. */
+    U_SORT_KEY_TOO_SHORT_WARNING = -123,
 
     U_ERROR_WARNING_LIMIT,                 /**< This must always be the last warning value to indicate the limit for UErrorCode warnings (last warning code +1) */
     

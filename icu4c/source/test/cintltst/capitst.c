@@ -998,13 +998,13 @@ void TestBounds() {
 
   int32_t i = 0, j = 0, buffSize = 0, skSize = 0, lowerSize = 0, upperSize = 0;
 
-  UColAttributeValue strength = UCOL_SECONDARY;
+  UColAttributeValue strength = 1;
 
   for(i = 0; i<sizeof(test)/sizeof(test[0]); i++) {
     buffSize = u_unescape(test[i], buffer, 512);
     skSize = ucol_getSortKey(coll, buffer, buffSize, sortkey, 512);
-    lowerSize = ucol_getLowerBoundSortKey(coll, sortkey, skSize, strength, lower, 512, &status);
-    upperSize = ucol_getUpperBoundSortKey(coll, sortkey, skSize, strength, upper, 512, &status);
+    lowerSize = ucol_getBound(sortkey, skSize, UCOL_BOUND_LOWER, strength, lower, 512, &status);
+    upperSize = ucol_getBound(sortkey, skSize, UCOL_BOUND_UPPER, strength, upper, 512, &status);
     for(j = i+1; j<sizeof(test)/sizeof(test[0]); j++) {
       buffSize = u_unescape(test[j], buffer, 512);
       skSize = ucol_getSortKey(coll, buffer, buffSize, sortkey, 512);
