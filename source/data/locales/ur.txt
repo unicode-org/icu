@@ -74,7 +74,9 @@ ur{
 //        "\ufffd",
 //    }
     LocaleScript:array { "Arab" }
-    CollationElements {     
+
+    ExemplarCharacters { "[:Arab:]" }
+    CollationElements {	    
         Version { "1.0" }
         Sequence { 
             "[normalization on]"

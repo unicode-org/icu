@@ -217,6 +217,7 @@ fi {
             "GMT",
         }
     }
+    ExemplarCharacters { "[a-z \u00e4 \u00f6]" }
 //    LocaleScript{ 
 //        "Latn",  // ISO 15924 Name 
 //    }

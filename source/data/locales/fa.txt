@@ -72,6 +72,7 @@ fa {
     LocaleScript:array { 
         "Arab"   // ISO 15924 Name 
     }
+    ExemplarCharacters{"[\u06F0\u06F9 \u0621-\u063A \u0640-\u0648 \u064A-\u0652 \u067E \u0686 \u0698 \u06A9 \u06AF \u06CC]"}
     // /**************** Info Below is needed ****************/
     // Countries{}
     // Eras{}

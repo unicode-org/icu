@@ -246,6 +246,7 @@ mr {
     LocaleScript:array { 
         "Deva"        // ISO 15924 Name 
     }
+    ExemplarCharacters{"[[:Deva:]-[\u0958-\u095f]]"}
 }
 
 

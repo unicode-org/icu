@@ -79,8 +79,8 @@ kk{
         "\u221E",
         "\uFFFD",
     }
-    LocaleScript:array{ "Cyrl" }
-
+    LocaleScript{ "Cyrl" }
+    ExemplarCharacters { "[\u0430-\u0448 \u044b \u044d \u0451]" }
     CollationElements {	    
     	Version { "1.0" }
     	Sequence { 

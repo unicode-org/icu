@@ -74,7 +74,8 @@ ky{
         "\u221e",
         "\ufffd",
     }
-    LocaleScript:array{ "Goer" }
+    LocaleScript:array{ "Cyrl" }
+    ExemplarCharacters { "[\u0430-\u0448 \u0456 \u0454 \u0457 \u0491]" }
     CollationElements {	    
         Version { "1.0" }
         Sequence { 

@@ -579,7 +579,7 @@ th {
     LocaleScript{ 
         "Thai", // Script Name  
     }
-
+    ExemplarCharacters { "[:Thai:]" }
     //------------------------------------------------------------
     // Rule Based Number Format Support
     //------------------------------------------------------------

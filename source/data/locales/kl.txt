@@ -67,6 +67,8 @@ kl{
         "\u221e",
         "\ufffd",
     }
+    ExemplarCharacters { "[a-z \u00e1 \u00e9 \u00ed \u00fa \u00e2 \u00ea \u00ee \u00f4 \u00fb \u00e6 \u00e5 \u00f8 \u00e3 \u0129 \u0169 \u0138]" }
+
 //    LocaleScript{ 
 //        "Latn",  // ISO 15924 Name 
 //    }

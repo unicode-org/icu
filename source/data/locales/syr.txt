@@ -76,6 +76,7 @@ syr{
 //        "\ufffd",
 //    }
     LocaleScript:array { "Syrc" }
+    ExemplarCharacters{ "[:Syrc:]"}
     CollationElements {     
         Version { "1.0" }
         Sequence { 

@@ -333,5 +333,6 @@ hi {
     LocaleScript:array {
         "Deva"        // ISO 15924 Name 
     }
+    ExemplarCharacters{"[:Deva:]"}
 }
 

@@ -75,6 +75,7 @@ ka{
         "\ufffd",
     }
     LocaleScript:array { "Geor" }
+    ExemplarCharacters { "[:Geor:]" }
     CollationElements {	    
         Version { "1.0" }
         Sequence { 

@@ -84,8 +84,10 @@ sa {
         "##,##,##0%",
         "#E0",
     }
+
     LocaleScript:array{ "Deva" }
-    CollationElements {     
+    ExemplarCharacters { "[[[:Deva:][\u0951-\u0954]]-[\u0958-\u095f]]" }
+    CollationElements {	    
         Version { "1.0" }
         Sequence { 
             "[normalization on]"

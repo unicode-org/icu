@@ -82,4 +82,5 @@ az{
         }
     }
     LocaleScript:array{ "CYRL" }
+    ExemplarCharacters { "[\u0430-\u0438 \u043a-\u0445 \u0447 \u0448 \u044b \u0458 \u0493 \u049d \u04af \u04b9 \u04bb \u04d9 \u04e9]" }
 }

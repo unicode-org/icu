@@ -2243,4 +2243,15 @@ ko {
         }
     }
     LocaleScript{ "Hang", "Hani" }
+    ExemplarCharacters{
+            "[\u3041-\u3093 \u30A1-\u30F6 \u3131-\u318E " 
+	    "\uC5C4-\uC5CA \uC5FC-\uC601 \uC751-\uC758 "
+            "\u4ED4-\u4ED9 \u4F59-\u4F5E \u5143-\u5149 \u5167-\u516E "
+            "\u5236-\u523B \u540C-\u5411 \u5B95-\u5B9C \u5BC2-\u5BC7 \u5BE4-\u5BE9 "
+            "\u6664-\u6669 \u67CF-\u67D4 \u6B61-\u6B66 \u701A-\u701F \u795A-\u7960 "
+            "\u8105-\u810A \u8CA7-\u8CAC \u8CBF-\u8CC4 \u8FAD-\u8FB2 \u901D-\u9023 "
+            "\u907F-\u9084 \u9149-\u914E \u91CB-\u91D1 \uAC10-\uAC17 \uBCCF-\uBCD5]"
+            
+ 
+     }
 }
