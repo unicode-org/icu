@@ -427,10 +427,10 @@ _copyCount(char *dest, int32_t destCapacity, const char *src) {
     anchor=src;
     for(;;) {
         if((c=*src)==0) {
-            return src-anchor;
+            return (int32_t)(src-anchor);
         }
         if(destCapacity<=0) {
-            return (src-anchor)+uprv_strlen(src);
+            return (int32_t)((src-anchor)+uprv_strlen(src));
         }
         ++src;
         *dest++=c;
@@ -1030,7 +1030,7 @@ _getStringOrCopyKey(const char *path, const char *locale,
 
     /* no string from a resource bundle: convert the substitute */
     if(length==-1) {
-        length=uprv_strlen(substitute);
+        length=(int32_t)uprv_strlen(substitute);
         u_charsToUChars(substitute, dest, uprv_min(length, destCapacity));
         *pErrorCode=U_ZERO_ERROR;
     }

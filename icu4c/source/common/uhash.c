@@ -445,7 +445,7 @@ uhash_tokp(void* p) {
     int32_t hash = 0;                         \
     const TYPE *p = (const TYPE*) STR;        \
     if (p != NULL) {                          \
-        int32_t len = STRLEN;                 \
+        int32_t len = (int32_t)(STRLEN);                 \
         int32_t inc = ((len - 32) / 32) + 1;  \
         const TYPE *limit = p + len;          \
         while (p<limit) {                     \
