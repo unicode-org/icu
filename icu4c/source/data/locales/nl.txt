@@ -92,7 +92,7 @@ nl {
             "\uFFFD",
     }
     ShortLanguage { "nld" }
-    localPatternChars { "GyMdkHmsSEDFwWahKz" }
+    localPatternChars { "GyMdkHmsSEDFwWahKzYe" }
     zoneStrings { 
         {
                 "Africa/Casablanca",

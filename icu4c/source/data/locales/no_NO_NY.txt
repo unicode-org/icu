@@ -27,7 +27,7 @@ no_NO_NY {
     /* Discarding duplicate data for tag: Languages */
     LocaleID { "0814" }
     LocaleString { "no_NO_NY" }
-    localPatternChars { "GyMdkHmsSEDFwWahKz" }
+    localPatternChars { "GyMdkHmsSEDFwWahKzYe" }
     zoneStrings { 
         {
                 "Africa/Casablanca",

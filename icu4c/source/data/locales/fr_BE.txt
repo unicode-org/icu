@@ -38,7 +38,7 @@ fr_BE {
             "\uFFFD",
     }
     ShortCountry { "BEL" }
-    localPatternChars { "GanjkHmsSEDFwWxhKz" }
+    localPatternChars { "GanjkHmsSEDFwWxhKzAe" }
     zoneStrings { 
         {
                 "Africa/Casablanca",

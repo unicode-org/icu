@@ -359,7 +359,7 @@ Languages {
             "\uFFFD",
     }
     ShortLanguage { "srp" }
-    localPatternChars { "GanjkHmsSEDFwWxhKz" }
+    localPatternChars { "GanjkHmsSEDFwWxhKzAe" }
     zoneStrings { 
         {
                 "Europe/Belgrade",

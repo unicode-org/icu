@@ -94,7 +94,7 @@ lv {
             "\uFFFD",
     }
     ShortLanguage { "lav" }
-    localPatternChars { "GanjkHmsSEDFwWxhKz" }
+    localPatternChars { "GanjkHmsSEDFwWxhKzAe" }
     zoneStrings { 
         {
                 "Africa/Casablanca",

@@ -225,7 +225,7 @@ th {
             "",
     }
     ShortLanguage { "tha" }
-    localPatternChars { "GanjkHmsSEDFwWxhKz" }
+    localPatternChars { "GanjkHmsSEDFwWxhKzAe" }
     zoneStrings { 
         {
                 "THA",

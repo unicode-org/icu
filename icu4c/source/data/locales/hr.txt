@@ -91,7 +91,7 @@ hr {
             "\uFFFD",
     }
     ShortLanguage { "hrv" }
-    localPatternChars { "GanjkHmsSEDFwWxhKz" }
+    localPatternChars { "GanjkHmsSEDFwWxhKzAe" }
     zoneStrings { 
         {
                 "Africa/Casablanca",

@@ -128,7 +128,7 @@ ar {
             "#,##0%",
     }
     ShortLanguage { "ara" }
-    localPatternChars { "GanjkHmsSEDFwWxhKz" }
+    localPatternChars { "GanjkHmsSEDFwWxhKzAe" }
     zoneStrings { 
         {
                 "Africa/Casablanca",

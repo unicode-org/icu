@@ -96,7 +96,7 @@ sq {
             "\uFFFD",
     }
     ShortLanguage { "sqi" }
-    localPatternChars { "GanjkHmsSEDFwWxhKz" }
+    localPatternChars { "GanjkHmsSEDFwWxhKzAe" }
     zoneStrings { 
         {
                 "Africa/Casablanca",

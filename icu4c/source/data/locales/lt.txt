@@ -94,7 +94,7 @@ lt {
             "\uFFFD",
     }
     ShortLanguage { "lit" }
-    localPatternChars { "GanjkHmsSEDFwWxhKz" }
+    localPatternChars { "GanjkHmsSEDFwWxhKzAe" }
     zoneStrings { 
         {
                 "Africa/Casablanca",

@@ -115,7 +115,7 @@ es {
             "#,##0%",
     }
     ShortLanguage { "spa" }
-    localPatternChars { "GuMtkHmsSEDFwWahKz" }
+    localPatternChars { "GuMtkHmsSEDFwWahKzUe" }
     zoneStrings { 
         {
                 "Africa/Casablanca",

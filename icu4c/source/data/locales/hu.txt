@@ -99,7 +99,7 @@ hu {
             "\uFFFD",
     }
     ShortLanguage { "hun" }
-    localPatternChars { "GanjkHmsSEDFwWxhKz" }
+    localPatternChars { "GanjkHmsSEDFwWxhKzAe" }
     zoneStrings { 
         {
                 "Africa/Casablanca",
