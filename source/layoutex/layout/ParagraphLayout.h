@@ -330,7 +330,7 @@ public:
 
         inline VisualRun();
         inline VisualRun(const VisualRun &other);
-        inline VisualRun &operator=(const VisualRun &other) { return *this; };
+        inline VisualRun &operator=(const VisualRun &/*other*/) { return *this; };
 
         inline VisualRun(const LEFontInstance *font, UBiDiDirection direction, le_int32 glyphCount,
                   const LEGlyphID glyphs[], const float positions[], const le_int32 glyphToCharMap[]);
@@ -703,7 +703,7 @@ inline ParagraphLayout::VisualRun::VisualRun()
     // nothing
 }
 
-inline ParagraphLayout::VisualRun::VisualRun(const VisualRun &other)
+inline ParagraphLayout::VisualRun::VisualRun(const VisualRun &/*other*/)
     : UObject(), fFont(NULL), fDirection(UBIDI_LTR), fGlyphCount(0), fGlyphs(NULL), fPositions(NULL), fGlyphToCharMap(NULL)
 {
     // nothing
