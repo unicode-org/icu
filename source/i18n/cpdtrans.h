@@ -18,7 +18,7 @@
 
 U_NAMESPACE_BEGIN
 
-class U_I18N_API UVector;
+class U_COMMON_API UVector;
 class TransliteratorRegistry;
 
 /**
