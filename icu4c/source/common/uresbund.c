@@ -2105,13 +2105,37 @@ ures_getFunctionalEquivalent(char *result, int32_t resultCapacity,
 #endif
                 if(subStatus == U_ZERO_ERROR) {
 #if defined(URES_TREE_DEBUG)
-                    fprintf(stderr, "%s;%s -> full %s=%s,  %s\n", 
+                    fprintf(stderr, "%s;%s -> full0 %s=%s,  %s\n", 
                         path?path:"ICUDATA", parent, keyword, kwVal, u_errorName(subStatus));
 #endif
                     uprv_strcpy(full, parent);
                     if(*full == 0) {
                         uprv_strcpy(full, "root");
                     }
+                        /* now, recalculate default kw if need be */
+                        if(uprv_strlen(defLoc) > uprv_strlen(full)) {
+                          const UChar *defUstr;
+                          int32_t defLen;
+                          /* look for default item */
+#if defined(URES_TREE_DEBUG)
+                            fprintf(stderr, "%s;%s -> recalculating Default0\n", 
+                                    path?path:"ICUDATA", full);
+#endif
+                          defUstr = ures_getStringByKey(&bund1, DEFAULT_TAG, &defLen, &subStatus);
+                          if(U_SUCCESS(subStatus) && defLen) {
+                            u_UCharsToChars(defUstr, defVal, u_strlen(defUstr));
+#if defined(URES_TREE_DEBUG)
+                            fprintf(stderr, "%s;%s -> default0 %s=%s,  %s\n", 
+                                    path?path:"ICUDATA", full, keyword, defVal, u_errorName(subStatus));
+#endif
+                            uprv_strcpy(defLoc, full);
+                          }
+                        } /* end of recalculate default KW */
+#if defined(URES_TREE_DEBUG)
+                        else {
+                          fprintf(stderr, "No trim0,  %s <= %s\n", defLoc, full);
+                        }
+#endif
                 } else {
 #if defined(URES_TREE_DEBUG)
                     fprintf(stderr, "err=%s in %s looking for %s\n", 
@@ -2156,13 +2180,38 @@ ures_getFunctionalEquivalent(char *result, int32_t resultCapacity,
                     ures_getByKey(&bund1, kwVal, &bund2, &subStatus);
                     if(subStatus == U_ZERO_ERROR) {
 #if defined(URES_TREE_DEBUG)
-                        fprintf(stderr, "%s;%s -> full %s=%s,  %s\n", path?path:"ICUDATA",
+                        fprintf(stderr, "%s;%s -> full1 %s=%s,  %s\n", path?path:"ICUDATA",
                             parent, keyword, kwVal, u_errorName(subStatus));
 #endif
                         uprv_strcpy(full, parent);
                         if(*full == 0) {
                             uprv_strcpy(full, "root");
                         }
+                        
+                        /* now, recalculate default kw if need be */
+                        if(uprv_strlen(defLoc) > uprv_strlen(full)) {
+                          const UChar *defUstr;
+                          int32_t defLen;
+                          /* look for default item */
+#if defined(URES_TREE_DEBUG)
+                            fprintf(stderr, "%s;%s -> recalculating Default1\n", 
+                                    path?path:"ICUDATA", full);
+#endif
+                          defUstr = ures_getStringByKey(&bund1, DEFAULT_TAG, &defLen, &subStatus);
+                          if(U_SUCCESS(subStatus) && defLen) {
+                            u_UCharsToChars(defUstr, defVal, u_strlen(defUstr));
+#if defined(URES_TREE_DEBUG)
+                            fprintf(stderr, "%s;%s -> default %s=%s,  %s\n", 
+                                    path?path:"ICUDATA", full, keyword, defVal, u_errorName(subStatus));
+#endif
+                            uprv_strcpy(defLoc, full);
+                          }
+                        } /* end of recalculate default KW */
+#if defined(URES_TREE_DEBUG)
+                        else {
+                          fprintf(stderr, "No trim1,  %s <= %s\n", defLoc, full);
+                        }
+#endif
                     }
                 }
             }
@@ -2180,14 +2229,20 @@ ures_getFunctionalEquivalent(char *result, int32_t resultCapacity,
           fprintf(stderr, "Still could not load keyword %s=%s\n", keyword, kwVal);
 #endif
           *status = U_MISSING_RESOURCE_ERROR;
-        } else if(omitDefault &&
-          (!uprv_strcmp(kwVal, defVal)) && /* if the requested kw is default, */
-            uprv_strlen(defLoc) <= uprv_strlen(full)) {
-          /* and the default is in or in an ancestor of the current locale */
+        } else if(omitDefault) {
 #if defined(URES_TREE_DEBUG)
-          fprintf(stderr, "Removing unneeded var %s=%s\n", keyword, kwVal);
+          fprintf(stderr,"Trim? full=%s, defLoc=%s, found=%s\n", full, defLoc, found);
+#endif        
+          if(uprv_strlen(defLoc) <= uprv_strlen(full)) {
+            /* found the keyword in a *child* of where the default tag was present. */
+            if(!uprv_strcmp(kwVal, defVal)) { /* if the requested kw is default, */
+              /* and the default is in or in an ancestor of the current locale */
+#if defined(URES_TREE_DEBUG)
+              fprintf(stderr, "Removing unneeded var %s=%s\n", keyword, kwVal);
 #endif
-          kwVal[0]=0;
+              kwVal[0]=0;
+            }
+          }
         }
         uprv_strcpy(found, full);
         if(kwVal[0]) {
