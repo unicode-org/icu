@@ -304,6 +304,9 @@ UBool NormalizerConformanceTest::hexsplit(const UnicodeString& s, UChar delimite
                 return FALSE;
             } else {
                 UChar hex = parseInt(s, pos);
+                if (hex == 0xFFFF) {
+                    errln((UnicodeString)"Bad field " + i + " in " + s);
+                }
                 buf.append(hex);
                 pos += 4;
             }
