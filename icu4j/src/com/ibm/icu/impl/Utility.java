@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/Utility.java,v $
- * $Date: 2002/07/17 23:48:06 $
- * $Revision: 1.26 $
+ * $Date: 2002/07/24 01:17:21 $
+ * $Revision: 1.27 $
  *
  *****************************************************************************************
  */
@@ -1540,10 +1540,15 @@ public final class Utility {
         if (source == target) {
             return 0;
         }
-        if ((long)(source & 0xFFFFFFFFL) >
-            (long)(target & 0xFFFFFFFFL)) {
-            return 1;
+        if (source >= 0) {
+            if (source < target || target < 0) {
+                return -1;
+            } 
+            else if (source < target && target < 0) {
+                // source < 0, so
+                return -1;
+            }
         }
-        return -1;
+        return 1;
     }
 }
