@@ -3,6 +3,7 @@
 	ProjectType="Visual C++"
 	Version="7.00"
 	Name="common"
+	ProjectGUID="{F0C3266C-B49D-4097-BDBD-EEB592017672}"
 	SccProjectName=""
 	SccLocalPath="">
 	<Platforms>
@@ -21,8 +22,8 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				InlineFunctionExpansion="2"
-				EnableIntrinsicFunctions="TRUE"
 				ImproveFloatingPointConsistency="TRUE"
+				OptimizeForProcessor="2"
 				PreprocessorDefinitions="NDEBUG;WIN32;_WINDOWS;_USRDLL;COMMON_EXPORTS;U_COMMON_IMPLEMENTATION;UDATA_STATIC_LIB"
 				StringPooling="TRUE"
 				RuntimeLibrary="2"
@@ -1682,25 +1683,10 @@
 			Name="idna"
 			Filter="*.c,*.h">
 			<File
-				RelativePath=".\nameprep.cpp">
-			</File>
-			<File
-				RelativePath=".\nameprep.h">
-			</File>
-			<File
 				RelativePath=".\punycode.c">
 			</File>
 			<File
 				RelativePath=".\punycode.h">
-			</File>
-			<File
-				RelativePath=".\sprpimpl.h">
-			</File>
-			<File
-				RelativePath=".\strprep.cpp">
-			</File>
-			<File
-				RelativePath=".\strprep.h">
 			</File>
 			<File
 				RelativePath=".\uidna.cpp">
@@ -1714,6 +1700,27 @@
 						CommandLine="copy    $(InputPath)    ..\..\include\unicode
 "
 						Outputs="..\..\include\unicode\uidna.h"/>
+				</FileConfiguration>
+			</File>
+		</Filter>
+		<Filter
+			Name="sprep"
+			Filter="">
+			<File
+				RelativePath=".\sprpimpl.h">
+			</File>
+			<File
+				RelativePath=".\usprep.cpp">
+			</File>
+			<File
+				RelativePath=".\unicode\usprep.h">
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy    $(InputPath)    ..\..\include\unicode
+"
+						Outputs="..\..\include\unicode\usprep.h"/>
 				</FileConfiguration>
 			</File>
 		</Filter>
