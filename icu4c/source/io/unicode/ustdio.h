@@ -175,9 +175,8 @@ typedef enum {
  * and parse output. If this parameter is NULL, the default locale will 
  * be used.
  * @param codepage The codepage in which data will be written to and
- * read from the file. If this paramter is NULL, data will be written and
- * read using the default codepage for <TT>locale</TT>, unless <TT>locale</TT>
- * is NULL, in which case the system default codepage will be used.
+ * read from the file. If this paramter is NULL the system default codepage
+ * will be used.
  * @return A new UFILE, or NULL if an error occurred.
  * @draft 3.0
  */
