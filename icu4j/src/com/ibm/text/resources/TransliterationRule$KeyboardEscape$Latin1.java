@@ -8,9 +8,6 @@ public class TransliterationRule$KeyboardEscape$Latin1 extends ListResourceBundl
      */
     public Object[][] getContents() {
         return new Object[][] {
-            { "Description",
-                "Keyboard transliterator for Latin-1 block" },
-
             { "Rule",
                 "esc='';"
                 + "grave=`;"
@@ -125,7 +122,7 @@ public class TransliterationRule$KeyboardEscape$Latin1 extends ListResourceBundl
                 + "y{acute}{esc}>\u00FD;"
                 + "y{esc}>\u00A5;" // yen sign
                 + "th{esc}>\u00FE;"
-                // + "ss{esc}>\u00FF;" // masked
+              //masked: + "ss{esc}>\u00FF;"
             }
         };
     }
