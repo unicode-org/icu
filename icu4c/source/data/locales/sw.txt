@@ -9,25 +9,25 @@
 
 
 sw {
-    Version { "x0.1" }
+    Version { "x0.2" }
 
-    Countries { 
-        KE { "Kenya" }
-        TZ { "Tanzania" }
-    }
+//    Countries { 	// This does not need to be overridden
+//        KE { "Kenya" }
+//        TZ { "Tanzania" }
+//    }
     DateTimeElements { 
-            "7",
+            "2",
             "1",
     }
-//    DayAbbreviations { // The DayNames are correct, but DayAbbreviations are only guesses.
-//            "Jli",
-//            "Jtu",
-//            "Jne",
-//            "Jno",
-//            "Alh",
-//            "Iju",
-//            "Jsi",
-//    }
+    DayAbbreviations {	// The DayNames are correct, but DayAbbreviations are only guesses.
+            "Jpi",
+            "Jtt",
+            "Jnn",
+            "Jtn",
+            "Alh",
+            "Iju",
+            "Jmo",
+    }
     DayNames { 
             "Jumapili",
             "Jumatatu",
@@ -79,16 +79,16 @@ sw {
     ShortLanguage { "swa" }
     zoneStrings { 
         {
-                "Africa/Casablanca",
-                "GMT",
-                "GMT",
-                "GMT",
-                "GMT",
+                "Africa/Nairobi",
+                "Saa za Africa Mashariki",	// East African Time
+                "EAT",
+                "Saa za Africa Mashariki",
+                "EAT",
+                "Nairobi",
         }
     }
 
 // /**************** Info Below is needed ****************/
-// DayAbbreviations {}
 // NumberElements{}
 // AmPmMarkers{}
 // localPatternChars{}
