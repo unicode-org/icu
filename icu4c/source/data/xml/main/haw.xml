@@ -1,14 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE ldml SYSTEM " 	http://oss.software.ibm.com/cvs/icu/~checkout~/locale/ldml.dtd" 
-[
-      <!ENTITY % icu SYSTEM " http://oss.software.ibm.com/cvs/icu/~checkout~/locale/ldmlICU.dtd"> 
-%icu;
-]
->
-<ldml>
+<!DOCTYPE ldml SYSTEM "http://www.unicode.org/cldr/dtd/1.1/ldml.dtd">
+<ldml draft="true">
 	<identity>
-		<version number="x0.2"/>
-		<generation date="2004-05-14" />
+		<version number="1.1"/>
+		<generation date="2004-05-27" />
 		<language type="haw" /> 
 	</identity>
 	<localeDisplayNames>
@@ -40,11 +35,6 @@
 	</localeDisplayNames>
 	<characters>
 		<exemplarCharacters>[āēīōūaeiouhklmnpwʻ]</exemplarCharacters>
-		<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
-			<icu:scripts>
-				<icu:script type="1">Latn</icu:script>
-			</icu:scripts>
-		</special>
 	</characters>
 	<dates>
 		<calendars>
@@ -106,37 +96,4 @@
 			</calendar>
 		</calendars>
 	</dates>
-	<collations>
-		<collation type="standard" >
-			<rules>
-				<reset>a</reset>
-				<pc>eiouhklmnpwʻ</pc>
-				<reset>a</reset>
-				<t>A</t>
-				<reset>e</reset>
-				<t>E</t>
-				<reset>i</reset>
-				<t>I</t>
-				<reset>o</reset>
-				<t>O</t>
-				<reset>u</reset>
-				<t>U</t>
-				<reset>h</reset>
-				<t>H</t>
-				<reset>k</reset>
-				<t>K</t>
-				<reset>l</reset>
-				<t>L</t>
-				<reset>m</reset>
-				<t>M</t>
-				<reset>n</reset>
-				<t>N</t>
-				<reset>p</reset>
-				<t>P</t>
-				<reset>w</reset>
-				<t>W</t>
-			</rules>
-			<special xmlns:icu="http://oss.software.ibm.com/icu/" icu:version="1.1" />
-		</collation  >
-	</collations>
 </ldml>

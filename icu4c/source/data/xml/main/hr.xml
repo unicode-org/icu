@@ -1,14 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE ldml SYSTEM " 	http://oss.software.ibm.com/cvs/icu/~checkout~/locale/ldml.dtd" 
-[
-      <!ENTITY % icu SYSTEM " http://oss.software.ibm.com/cvs/icu/~checkout~/locale/ldmlICU.dtd"> 
-%icu;
-]
->
+<!DOCTYPE ldml SYSTEM "http://www.unicode.org/cldr/dtd/1.1/ldml.dtd">
 <ldml>
 	<identity>
-		<version number="2.0"/>
-		<generation date="2004-05-14" />
+		<version number="1.1"/>
+		<generation date="2004-05-27" />
 		<language type="hr" /> 
 	</identity>
 	<localeDisplayNames>
@@ -290,11 +285,6 @@
 	</localeDisplayNames>
 	<characters>
 		<exemplarCharacters>[a-p r-v z đ ć č ž š {lj} {nj} {dž}]</exemplarCharacters>
-		<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
-			<icu:scripts>
-				<icu:script type="1">Latn</icu:script>
-			</icu:scripts>
-		</special>
 	</characters>
 	<dates>
 		<localizedPatternChars>GanjkHmsSEDFwWxhKzAeugXZ</localizedPatternChars>
@@ -315,6 +305,64 @@
 							<month type="10">lis</month>
 							<month type="11">stu</month>
 							<month type="12">pro</month>
+						</monthWidth>
+						<monthWidth type="narrow">
+							<month type="1">s</month>
+							<month type="2">v</month>
+							<month type="3">o</month>
+							<month type="4">t</month>
+							<month type="5">s</month>
+							<month type="6">l</month>
+							<month type="7">s</month>
+							<month type="8">k</month>
+							<month type="9">r</month>
+							<month type="10">l</month>
+							<month type="11">s</month>
+							<month type="12">p</month>
+						</monthWidth>
+						<monthWidth type="wide">
+							<month type="1">siječnja</month>
+							<month type="2">veljače</month>
+							<month type="3">ožujka</month>
+							<month type="4">travnja</month>
+							<month type="5">svibnja</month>
+							<month type="6">lipnja</month>
+							<month type="7">srpnja</month>
+							<month type="8">kolovoza</month>
+							<month type="9">rujna</month>
+							<month type="10">listopada</month>
+							<month type="11">studenoga</month>
+							<month type="12">prosinca</month>
+						</monthWidth>
+					</monthContext>
+					<monthContext type="stand-alone">
+						<monthWidth type="abbreviated">
+							<month type="1">sij</month>
+							<month type="2">vel</month>
+							<month type="3">ožu</month>
+							<month type="4">tra</month>
+							<month type="5">svi</month>
+							<month type="6">lip</month>
+							<month type="7">srp</month>
+							<month type="8">kol</month>
+							<month type="9">ruj</month>
+							<month type="10">lis</month>
+							<month type="11">stu</month>
+							<month type="12">pro</month>
+						</monthWidth>
+						<monthWidth type="narrow">
+							<month type="1">s</month>
+							<month type="2">v</month>
+							<month type="3">o</month>
+							<month type="4">t</month>
+							<month type="5">s</month>
+							<month type="6">l</month>
+							<month type="7">s</month>
+							<month type="8">k</month>
+							<month type="9">r</month>
+							<month type="10">l</month>
+							<month type="11">s</month>
+							<month type="12">p</month>
 						</monthWidth>
 						<monthWidth type="wide">
 							<month type="1">siječanj</month>

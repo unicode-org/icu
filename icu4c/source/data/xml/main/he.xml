@@ -1,21 +1,16 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE ldml SYSTEM " 	http://oss.software.ibm.com/cvs/icu/~checkout~/locale/ldml.dtd" 
-[
-      <!ENTITY % icu SYSTEM " http://oss.software.ibm.com/cvs/icu/~checkout~/locale/ldmlICU.dtd"> 
-%icu;
-]
->
+<!DOCTYPE ldml SYSTEM "http://www.unicode.org/cldr/dtd/1.1/ldml.dtd">
 <ldml>
 	<identity>
-		<version number="2.0"/>
-		<generation date="2004-05-14" />
+		<version number="1.1"/>
+		<generation date="2004-05-27" />
 		<language type="he" /> 
 	</identity>
 	<localeDisplayNames>
 		<languages>
 			<language type="ar">ערבית</language>
 			<language type="bg">בולגרית</language>
-			<language type="cs">צ'כית</language>
+			<language type="cs">צ׳כית</language>
 			<language type="da">דנית</language>
 			<language type="de">גרמנית</language>
 			<language type="el">יוונית</language>
@@ -60,7 +55,7 @@
 			<territory type="AT">אוסטריה</territory>
 			<territory type="AU">אוסטרליה</territory>
 			<territory type="AW">ארובה</territory>
-			<territory type="AZ">אזרבייג'ן</territory>
+			<territory type="AZ">אזרבייג׳ן</territory>
 			<territory type="BA">בוסניה הרצגובינה</territory>
 			<territory type="BB">ברבדוס</territory>
 			<territory type="BD">בנגלדש</territory>
@@ -88,7 +83,7 @@
 			<territory type="CH">שווייץ</territory>
 			<territory type="CI">חוף השנהב</territory>
 			<territory type="CK">איי קוק</territory>
-			<territory type="CL">צ'ילה</territory>
+			<territory type="CL">צ׳ילה</territory>
 			<territory type="CM">קמרון</territory>
 			<territory type="CN">סין</territory>
 			<territory type="CO">קולומביה</territory>
@@ -97,13 +92,13 @@
 			<territory type="CV">קייפ ורדה</territory>
 			<territory type="CX">איי כריסטמס</territory>
 			<territory type="CY">קפריסין</territory>
-			<territory type="CZ">הרפובליקה הצ'כית</territory>
+			<territory type="CZ">הרפובליקה הצ׳כית</territory>
 			<territory type="DE">גרמניה</territory>
-			<territory type="DJ">ג'יבוטי</territory>
+			<territory type="DJ">ג׳יבוטי</territory>
 			<territory type="DK">דנמרק</territory>
 			<territory type="DM">דומיניקה</territory>
 			<territory type="DO">הרפובליקה הדומיניקנית</territory>
-			<territory type="DZ">אלג'יריה</territory>
+			<territory type="DZ">אלג׳יריה</territory>
 			<territory type="EC">אקוואדור</territory>
 			<territory type="EE">אסטוניה</territory>
 			<territory type="EG">מצרים</territory>
@@ -112,7 +107,7 @@
 			<territory type="ES">ספרד</territory>
 			<territory type="ET">אתיופיה</territory>
 			<territory type="FI">פינלנד</territory>
-			<territory type="FJ">פיג'י</territory>
+			<territory type="FJ">פיג׳י</territory>
 			<territory type="FK">איי פוקלנד</territory>
 			<territory type="FM">מאוריציוס, המדינות המאוגדות של</territory>
 			<territory type="FO">איי פארו</territory>
@@ -130,7 +125,7 @@
 			<territory type="GP">גוואדלופ</territory>
 			<territory type="GQ">גיניאה המשוונית</territory>
 			<territory type="GR">יוון</territory>
-			<territory type="GS">האי ג'ורג'יה הדרומית ואיי סנדוויץ' הדרומיים</territory>
+			<territory type="GS">האי ג׳ורג׳יה הדרומית ואיי סנדוויץ׳ הדרומיים</territory>
 			<territory type="GT">גווטמאלה</territory>
 			<territory type="GU">גואם</territory>
 			<territory type="GW">גיניאה-ביסאו</territory>
@@ -150,7 +145,7 @@
 			<territory type="IR">איראן, הרפובליקה האיסלמית</territory>
 			<territory type="IS">איסלנד</territory>
 			<territory type="IT">איטליה</territory>
-			<territory type="JM">ג'מייקה</territory>
+			<territory type="JM">ג׳מייקה</territory>
 			<territory type="JO">ירדן</territory>
 			<territory type="JP">יפן</territory>
 			<territory type="KE">קניה</territory>
@@ -198,7 +193,7 @@
 			<territory type="MZ">מוזמביק</territory>
 			<territory type="NA">נמיביה</territory>
 			<territory type="NC">קלדוניה החדשה</territory>
-			<territory type="NE">ניז'ר</territory>
+			<territory type="NE">ניז׳ר</territory>
 			<territory type="NF">איי נורפק</territory>
 			<territory type="NG">ניגריה</territory>
 			<territory type="NI">ניקראגווה</territory>
@@ -236,7 +231,7 @@
 			<territory type="SG">סינגפור</territory>
 			<territory type="SH">סיינט הלנה</territory>
 			<territory type="SI">סלובניה</territory>
-			<territory type="SJ">סוולבארד וז'אן מאיין</territory>
+			<territory type="SJ">סוולבארד וז׳אן מאיין</territory>
 			<territory type="SK">סלובקיה</territory>
 			<territory type="SL">סיירה לאונה</territory>
 			<territory type="SM">סן מרינו</territory>
@@ -248,11 +243,11 @@
 			<territory type="SY">הרפובליקה הערבית הסורית</territory>
 			<territory type="SZ">סווזילנד</territory>
 			<territory type="TC">איי טורקס וקאיקוס</territory>
-			<territory type="TD">צ'אד</territory>
+			<territory type="TD">צ׳אד</territory>
 			<territory type="TF">טריטוריות דרומיות של צרפת</territory>
 			<territory type="TG">טוגו</territory>
 			<territory type="TH">תאילנד</territory>
-			<territory type="TJ">טג'יקיסטן</territory>
+			<territory type="TJ">טג׳יקיסטן</territory>
 			<territory type="TK">טוקלאו</territory>
 			<territory type="TL">מזרח טימור</territory>
 			<territory type="TM">טורקמניסטן</territory>
@@ -291,93 +286,10 @@
 	</layout>
 	<characters>
 		<exemplarCharacters>[[:Hebr:]‏‎]</exemplarCharacters>
-		<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
-			<icu:scripts>
-				<icu:script type="1">Hebr</icu:script>
-			</icu:scripts>
-		</special>
 	</characters>
 	<dates>
 		<localizedPatternChars>GanjkHmsSEDFwWxhKzAeugXZ</localizedPatternChars>
 		<calendars>
-			<calendar type="arabic">
-				<months>
-					<monthContext type="format">
-						<monthWidth type="abbreviated">
-							<month type="1">מוחרם</month>
-							<month type="2">ספר</month>
-							<month type="3">רביע אל-אוואל</month>
-							<month type="4">רביע אל-תני</month>
-							<month type="5">ג'ומדה אל-אוואל</month>
-							<month type="6">ג'ומדה אל-תני</month>
-							<month type="7">רג'אב</month>
-							<month type="8">שעבאן</month>
-							<month type="9">ראמדן</month>
-							<month type="10">שוואל</month>
-							<month type="11">זו אל-QI'DAH</month>
-							<month type="12">זו אל-חיג'ה</month>
-						</monthWidth>
-						<monthWidth type="wide">
-							<month type="1">מוחרם</month>
-							<month type="2">ספר</month>
-							<month type="3">רביע אל-אוואל</month>
-							<month type="4">רביע אל-תני</month>
-							<month type="5">ג'ומדה אל-אוואל</month>
-							<month type="6">ג'ומדה אל-תני</month>
-							<month type="7">רג'אב</month>
-							<month type="8">שעבאן</month>
-							<month type="9">ראמדן</month>
-							<month type="10">שוואל</month>
-							<month type="11">זו אל-QI'DAH</month>
-							<month type="12">זו אל-חיג'ה</month>
-						</monthWidth>
-					</monthContext>
-				</months>
-				<eras>
-					<eraAbbr>
-						<era type="1">שנת היג'רה</era>
-					</eraAbbr>
-				</eras>
-			</calendar>
-			<calendar type="arabic-civil">
-				<months>
-					<monthContext type="format">
-						<monthWidth type="abbreviated">
-							<month type="1">מוחרם</month>
-							<month type="2">ספר</month>
-							<month type="3">רביע אל-אוואל</month>
-							<month type="4">רביע אל-תני</month>
-							<month type="5">ג'ומדה אל-אוואל</month>
-							<month type="6">ג'ומדה אל-תני</month>
-							<month type="7">רג'אב</month>
-							<month type="8">שעבאן</month>
-							<month type="9">ראמדן</month>
-							<month type="10">שוואל</month>
-							<month type="11">זו אל-QI'DAH</month>
-							<month type="12">זו אל-חיג'ה</month>
-						</monthWidth>
-						<monthWidth type="wide">
-							<month type="1">מוחרם</month>
-							<month type="2">ספר</month>
-							<month type="3">רביע אל-אוואל</month>
-							<month type="4">רביע אל-תני</month>
-							<month type="5">ג'ומדה אל-אוואל</month>
-							<month type="6">ג'ומדה אל-תני</month>
-							<month type="7">רג'אב</month>
-							<month type="8">שעבאן</month>
-							<month type="9">ראמדן</month>
-							<month type="10">שוואל</month>
-							<month type="11">זו אל-QI'DAH</month>
-							<month type="12">זו אל-חיג'ה</month>
-						</monthWidth>
-					</monthContext>
-				</months>
-				<eras>
-					<eraAbbr>
-						<era type="1">שנת היג'רה</era>
-					</eraAbbr>
-				</eras>
-			</calendar>
 			<calendar type="gregorian">
 				<months>
 					<monthContext type="format">
@@ -435,8 +347,8 @@
 				</days>
 				<eras>
 					<eraAbbr>
-						<era type="1">לפנה"ס</era>
-						<era type="2">לסה"נ</era>
+						<era type="1">לפנה״ס</era>
+						<era type="2">לסה״נ</era>
 					</eraAbbr>
 				</eras>
 				<dateFormats>
@@ -534,6 +446,84 @@
 					</eraAbbr>
 				</eras>
 			</calendar>
+			<calendar type="islamic">
+				<months>
+					<monthContext type="format">
+						<monthWidth type="abbreviated">
+							<month type="1">מוחרם</month>
+							<month type="2">ספר</month>
+							<month type="3">רביע אל-אוואל</month>
+							<month type="4">רביע אל-תני</month>
+							<month type="5">ג׳ומדה אל-אוואל</month>
+							<month type="6">ג׳ומדה אל-תני</month>
+							<month type="7">רג׳אב</month>
+							<month type="8">שעבאן</month>
+							<month type="9">ראמדן</month>
+							<month type="10">שוואל</month>
+							<month type="11">זו אל-QI'DAH</month>
+							<month type="12">זו אל-חיג׳ה</month>
+						</monthWidth>
+						<monthWidth type="wide">
+							<month type="1">מוחרם</month>
+							<month type="2">ספר</month>
+							<month type="3">רביע אל-אוואל</month>
+							<month type="4">רביע אל-תני</month>
+							<month type="5">ג׳ומדה אל-אוואל</month>
+							<month type="6">ג׳ומדה אל-תני</month>
+							<month type="7">רג׳אב</month>
+							<month type="8">שעבאן</month>
+							<month type="9">ראמדן</month>
+							<month type="10">שוואל</month>
+							<month type="11">זו אל-QI'DAH</month>
+							<month type="12">זו אל-חיג׳ה</month>
+						</monthWidth>
+					</monthContext>
+				</months>
+				<eras>
+					<eraAbbr>
+						<era type="1">שנת היג׳רה</era>
+					</eraAbbr>
+				</eras>
+			</calendar>
+			<calendar type="islamic-civil">
+				<months>
+					<monthContext type="format">
+						<monthWidth type="abbreviated">
+							<month type="1">מוחרם</month>
+							<month type="2">ספר</month>
+							<month type="3">רביע אל-אוואל</month>
+							<month type="4">רביע אל-תני</month>
+							<month type="5">ג׳ומדה אל-אוואל</month>
+							<month type="6">ג׳ומדה אל-תני</month>
+							<month type="7">רג׳אב</month>
+							<month type="8">שעבאן</month>
+							<month type="9">ראמדן</month>
+							<month type="10">שוואל</month>
+							<month type="11">זו אל-QI'DAH</month>
+							<month type="12">זו אל-חיג׳ה</month>
+						</monthWidth>
+						<monthWidth type="wide">
+							<month type="1">מוחרם</month>
+							<month type="2">ספר</month>
+							<month type="3">רביע אל-אוואל</month>
+							<month type="4">רביע אל-תני</month>
+							<month type="5">ג׳ומדה אל-אוואל</month>
+							<month type="6">ג׳ומדה אל-תני</month>
+							<month type="7">רג׳אב</month>
+							<month type="8">שעבאן</month>
+							<month type="9">ראמדן</month>
+							<month type="10">שוואל</month>
+							<month type="11">זו אל-QI'DAH</month>
+							<month type="12">זו אל-חיג׳ה</month>
+						</monthWidth>
+					</monthContext>
+				</months>
+				<eras>
+					<eraAbbr>
+						<era type="1">שנת היג׳רה</era>
+					</eraAbbr>
+				</eras>
+			</calendar>
 		</calendars>
 	</dates>
 	<numbers>
@@ -544,27 +534,4 @@
 			</currency>
 		</currencies>
 	</numbers>
-	<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
-		<icu:ruleBasedNumberFormats>
-			<icu:ruleBasedNumberFormat type="spellout">
-zero (incomplete data); אהד; שגיים; שלושה;
-4: אדבצה; חגוישה; ששה;
-7: שבצה; שמוגה; תשצה;
-10: צשדה[ &gt;&gt;];
-20: צשדים[ &gt;&gt;];
-30: שלושים[ &gt;&gt;];
-40: אדבצים[ &gt;&gt;];
-50: חמישים[ &gt;&gt;];
-60: ששים[ &gt;&gt;];
-70: שבצים[ &gt;&gt;];
-80: שמוגים[ &gt;&gt;];
-90: תשצים[ &gt;&gt;];
-100: מאה[ &gt;&gt;];
-200: &lt;&lt; מאה[ &gt;&gt;];
-1000: אלף[ &gt;&gt;];
-2000: &lt;&lt; אלף[ &gt;&gt;];
-1,000,000: =#,##0= (incomplete data);
-			</icu:ruleBasedNumberFormat>
-		</icu:ruleBasedNumberFormats>
-	</special>
 </ldml>

@@ -1,14 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE ldml SYSTEM " 	http://oss.software.ibm.com/cvs/icu/~checkout~/locale/ldml.dtd" 
-[
-      <!ENTITY % icu SYSTEM " http://oss.software.ibm.com/cvs/icu/~checkout~/locale/ldmlICU.dtd"> 
-%icu;
-]
->
-<ldml>
+<!DOCTYPE ldml SYSTEM "http://www.unicode.org/cldr/dtd/1.1/ldml.dtd">
+<ldml draft="true">
 	<identity>
-		<version number="x0.4"/>
-		<generation date="2004-05-14" />
+		<version number="1.1"/>
+		<generation date="2004-05-27" />
 		<language type="ur" /> 
 	</identity>
 	<localeDisplayNames>
@@ -21,11 +16,6 @@
 	</localeDisplayNames>
 	<characters>
 		<exemplarCharacters>[[:Arab:]‌‍‏‎]</exemplarCharacters>
-		<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
-			<icu:scripts>
-				<icu:script type="1">Arab</icu:script>
-			</icu:scripts>
-		</special>
 	</characters>
 	<numbers>
 		<currencies>
@@ -35,10 +25,4 @@
 			</currency>
 		</currencies>
 	</numbers>
-	<collations>
-		<collation type="standard" >
-			<settings normalization="on"  />
-			<special xmlns:icu="http://oss.software.ibm.com/icu/" icu:version="1.0" />
-		</collation  >
-	</collations>
 </ldml>

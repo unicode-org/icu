@@ -1,14 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE ldml SYSTEM " 	http://oss.software.ibm.com/cvs/icu/~checkout~/locale/ldml.dtd" 
-[
-      <!ENTITY % icu SYSTEM " http://oss.software.ibm.com/cvs/icu/~checkout~/locale/ldmlICU.dtd"> 
-%icu;
-]
->
+<!DOCTYPE ldml SYSTEM "http://www.unicode.org/cldr/dtd/1.1/ldml.dtd">
 <ldml>
 	<identity>
-		<version number="2.0"/>
-		<generation date="2004-05-14" />
+		<version number="1.1"/>
+		<generation date="2004-05-27" />
 		<language type="ko" /> 
 	</identity>
 	<localeDisplayNames>
@@ -37,6 +32,7 @@
 			<language type="byn">브린어</language>
 			<language type="ca">카탈로니아어</language>
 			<language type="ch">차모로어</language>
+			<language type="chr">체로키어</language>
 			<language type="co">코르시카어</language>
 			<language type="cr">크리어</language>
 			<language type="cs">체코어</language>
@@ -98,6 +94,7 @@
 			<language type="km">캄보디아어</language>
 			<language type="kn">카나다어</language>
 			<language type="ko">한국어</language>
+			<language type="kok">코카니어</language>
 			<language type="kr">칸누리어</language>
 			<language type="ks">카슈미르어</language>
 			<language type="ku">크르드어</language>
@@ -431,7 +428,7 @@
 			<territory type="PH">필리핀</territory>
 			<territory type="PK">파키스탄</territory>
 			<territory type="PL">폴란드</territory>
-			<territory type="PM">세인트피에르-미�롱</territory>
+			<territory type="PM">세인트피에르-미케롱</territory>
 			<territory type="PN">핏케언섬</territory>
 			<territory type="PR">푸에르토리코</territory>
 			<territory type="PS">팔레스타인 지구</territory>
@@ -526,12 +523,6 @@
 	</localeDisplayNames>
 	<characters>
 		<exemplarCharacters>[가-힣]</exemplarCharacters>
-		<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
-			<icu:scripts>
-				<icu:script type="1">Hang</icu:script>
-				<icu:script type="2">Hani</icu:script>
-			</icu:scripts>
-		</special>
 	</characters>
 	<dates>
 		<localizedPatternChars>GanjkHmsSEDFwWxhKzAeugXZ</localizedPatternChars>
@@ -678,6 +669,292 @@
 			</calendar>
 		</calendars>
 		<timeZoneNames>
+			<zone type="PST">
+				<long>
+				<standard>태평양 표준시</standard>
+				<daylight>태평양 기준시</daylight>
+				</long>
+				<short>
+					<standard>PST</standard>
+					<daylight>PDT</daylight>
+				</short>
+				<exemplarCity>로스앤젤레스</exemplarCity>
+			</zone>
+			<zone type="America/Los_Angeles">
+				<long>
+				<standard>태평양 표준시</standard>
+				<daylight>태평양 기준시</daylight>
+				</long>
+				<short>
+					<standard>PST</standard>
+					<daylight>PDT</daylight>
+				</short>
+				<exemplarCity>로스앤젤레스</exemplarCity>
+			</zone>
+			<zone type="MST">
+				<long>
+				<standard>산악 표준시</standard>
+				<daylight>산악 기준시</daylight>
+				</long>
+				<short>
+					<standard>MST</standard>
+					<daylight>MDT</daylight>
+				</short>
+				<exemplarCity>덴버</exemplarCity>
+			</zone>
+			<zone type="America/Denver">
+				<long>
+				<standard>산악 표준시</standard>
+				<daylight>산악 기준시</daylight>
+				</long>
+				<short>
+					<standard>MST</standard>
+					<daylight>MDT</daylight>
+				</short>
+				<exemplarCity>덴버</exemplarCity>
+			</zone>
+			<zone type="PNT">
+				<long>
+				<standard>산악 표준시</standard>
+				<daylight>산악 표준시</daylight>
+				</long>
+				<short>
+					<standard>MST</standard>
+					<daylight>MST</daylight>
+				</short>
+				<exemplarCity>피닉스</exemplarCity>
+			</zone>
+			<zone type="America/Phoenix">
+				<long>
+				<standard>산악 표준시</standard>
+				<daylight>산악 표준시</daylight>
+				</long>
+				<short>
+					<standard>MST</standard>
+					<daylight>MST</daylight>
+				</short>
+				<exemplarCity>피닉스</exemplarCity>
+			</zone>
+			<zone type="CST">
+				<long>
+				<standard>중부 표준시</standard>
+				<daylight>중부 기준시</daylight>
+				</long>
+				<short>
+					<standard>CST</standard>
+					<daylight>CDT</daylight>
+				</short>
+				<exemplarCity>시카고</exemplarCity>
+			</zone>
+			<zone type="America/Chicago">
+				<long>
+				<standard>중부 표준시</standard>
+				<daylight>중부 기준시</daylight>
+				</long>
+				<short>
+					<standard>CST</standard>
+					<daylight>CDT</daylight>
+				</short>
+				<exemplarCity>시카고</exemplarCity>
+			</zone>
+			<zone type="EST">
+				<long>
+				<standard>동부 표준시</standard>
+				<daylight>동부 기준시</daylight>
+				</long>
+				<short>
+					<standard>EST</standard>
+					<daylight>EDT</daylight>
+				</short>
+				<exemplarCity>뉴욕</exemplarCity>
+			</zone>
+			<zone type="America/New_York">
+				<long>
+				<standard>동부 표준시</standard>
+				<daylight>동부 기준시</daylight>
+				</long>
+				<short>
+					<standard>EST</standard>
+					<daylight>EDT</daylight>
+				</short>
+				<exemplarCity>뉴욕</exemplarCity>
+			</zone>
+			<zone type="IET">
+				<long>
+				<standard>동부 표준시</standard>
+				<daylight>동부 표준시</daylight>
+				</long>
+				<short>
+					<standard>EST</standard>
+					<daylight>EST</daylight>
+				</short>
+				<exemplarCity>인디애나폴리스</exemplarCity>
+			</zone>
+			<zone type="America/Indianapolis">
+				<long>
+				<standard>동부 표준시</standard>
+				<daylight>동부 표준시</daylight>
+				</long>
+				<short>
+					<standard>EST</standard>
+					<daylight>EST</daylight>
+				</short>
+				<exemplarCity>인디애나폴리스</exemplarCity>
+			</zone>
+			<zone type="HST">
+				<long>
+				<standard>하와이 표준시</standard>
+				<daylight>하와이 표준시</daylight>
+				</long>
+				<short>
+					<standard>HST</standard>
+					<daylight>HST</daylight>
+				</short>
+				<exemplarCity>호놀룰루</exemplarCity>
+			</zone>
+			<zone type="Pacific/Honolulu">
+				<long>
+				<standard>하와이 표준시</standard>
+				<daylight>하와이 표준시</daylight>
+				</long>
+				<short>
+					<standard>HST</standard>
+					<daylight>HST</daylight>
+				</short>
+				<exemplarCity>호놀룰루</exemplarCity>
+			</zone>
+			<zone type="AST">
+				<long>
+				<standard>알래스카 표준시</standard>
+				<daylight>알래스카 기준시</daylight>
+				</long>
+				<short>
+					<standard>AST</standard>
+					<daylight>ADT</daylight>
+				</short>
+				<exemplarCity>앵커리지</exemplarCity>
+			</zone>
+			<zone type="America/Anchorage">
+				<long>
+				<standard>알래스카 표준시</standard>
+				<daylight>알래스카 기준시</daylight>
+				</long>
+				<short>
+					<standard>AST</standard>
+					<daylight>ADT</daylight>
+				</short>
+				<exemplarCity>앵커리지</exemplarCity>
+			</zone>
+			<zone type="America/Halifax">
+				<long>
+				<standard>대서양 표준시</standard>
+				<daylight>대서양 기준시</daylight>
+				</long>
+				<short>
+					<standard>AST</standard>
+					<daylight>ADT</daylight>
+				</short>
+				<exemplarCity>핼리팩스</exemplarCity>
+			</zone>
+			<zone type="CNT">
+				<long>
+				<standard>뉴펀들랜드 표준시</standard>
+				<daylight>뉴펀들랜드 기준시</daylight>
+				</long>
+				<short>
+					<standard>CNT</standard>
+					<daylight>CDT</daylight>
+				</short>
+				<exemplarCity>St. Johns</exemplarCity>
+			</zone>
+			<zone type="America/St_Johns">
+				<long>
+				<standard>뉴펀들랜드 표준시</standard>
+				<daylight>뉴펀들랜드 기준시</daylight>
+				</long>
+				<short>
+					<standard>CNT</standard>
+					<daylight>CDT</daylight>
+				</short>
+				<exemplarCity>St. Johns</exemplarCity>
+			</zone>
+			<zone type="ECT">
+				<long>
+				<standard>중부유럽 표준시</standard>
+				<daylight>중부유럽 기준시</daylight>
+				</long>
+				<short>
+					<standard>CET</standard>
+					<daylight>CEST</daylight>
+				</short>
+				<exemplarCity>파리</exemplarCity>
+			</zone>
+			<zone type="Europe/Paris">
+				<long>
+				<standard>중부유럽 표준시</standard>
+				<daylight>중부유럽 기준시</daylight>
+				</long>
+				<short>
+					<standard>CET</standard>
+					<daylight>CEST</daylight>
+				</short>
+				<exemplarCity>파리</exemplarCity>
+			</zone>
+			<zone type="GMT">
+				<long>
+				<standard>그리니치 표준시</standard>
+				<daylight>그리니치 표준시</daylight>
+				</long>
+				<short>
+					<standard>GMT</standard>
+					<daylight>GMT</daylight>
+				</short>
+				<exemplarCity>런던</exemplarCity>
+			</zone>
+			<zone type="Africa/Casablanca">
+				<long>
+				<standard>그리니치 표준시</standard>
+				<daylight>그리니치 표준시</daylight>
+				</long>
+				<short>
+					<standard>GMT</standard>
+					<daylight>GMT</daylight>
+				</short>
+				<exemplarCity>카사블랑카</exemplarCity>
+			</zone>
+			<zone type="Asia/Jerusalem">
+				<long>
+				<standard>이스라엘 표준시</standard>
+				<daylight>이스라엘 기준시</daylight>
+				</long>
+				<short>
+					<standard>IST</standard>
+					<daylight>IDT</daylight>
+				</short>
+				<exemplarCity>예루살렘</exemplarCity>
+			</zone>
+			<zone type="JST">
+				<long>
+				<standard>일본 표준시</standard>
+				<daylight>일본 표준시</daylight>
+				</long>
+				<short>
+					<standard>JST</standard>
+					<daylight>JST</daylight>
+				</short>
+				<exemplarCity>도쿄</exemplarCity>
+			</zone>
+			<zone type="Asia/Tokyo">
+				<long>
+				<standard>일본 표준시</standard>
+				<daylight>일본 표준시</daylight>
+				</long>
+				<short>
+					<standard>JST</standard>
+					<daylight>JST</daylight>
+				</short>
+				<exemplarCity>도쿄</exemplarCity>
+			</zone>
 			<zone type="Asia/Seoul">
 				<long>
 				<standard>한국표준시</standard>
@@ -687,6 +964,39 @@
 					<standard>KST</standard>
 					<daylight>KST</daylight>
 				</short>
+			</zone>
+			<zone type="Europe/Bucharest">
+				<long>
+				<standard>동부유럽 표준시</standard>
+				<daylight>동부유럽 기준시</daylight>
+				</long>
+				<short>
+					<standard>EET</standard>
+					<daylight>EEST</daylight>
+				</short>
+				<exemplarCity>부쿠레슈티</exemplarCity>
+			</zone>
+			<zone type="CTT">
+				<long>
+				<standard>중국 표준시</standard>
+				<daylight>중국 표준시</daylight>
+				</long>
+				<short>
+					<standard>CTT</standard>
+					<daylight>CDT</daylight>
+				</short>
+				<exemplarCity>상하이</exemplarCity>
+			</zone>
+			<zone type="Asia/Shanghai">
+				<long>
+				<standard>중국 표준시</standard>
+				<daylight>중국 표준시</daylight>
+				</long>
+				<short>
+					<standard>CTT</standard>
+					<daylight>CDT</daylight>
+				</short>
+				<exemplarCity>상하이</exemplarCity>
 			</zone>
 		</timeZoneNames>
 	</dates>
@@ -710,7 +1020,7 @@
 			</currency>
 			<currency type="AFN">
 				<displayName>아프가니</displayName>
-				<symbol>Af</symbol>
+				<symbol>AFN</symbol>
 			</currency>
 			<currency type="AIF">
 				<displayName>아파르와 이사스의 프랑</displayName>
@@ -722,7 +1032,7 @@
 			</currency>
 			<currency type="ALL">
 				<displayName>알바니아 레크</displayName>
-				<symbol>lek</symbol>
+				<symbol>ALL</symbol>
 			</currency>
 			<currency type="ALV">
 				<displayName>알바니아 레크 발루트</displayName>
@@ -734,11 +1044,11 @@
 			</currency>
 			<currency type="AMD">
 				<displayName>아르메니아 드람</displayName>
-				<symbol>dram</symbol>
+				<symbol>AMD</symbol>
 			</currency>
 			<currency type="ANG">
 				<displayName>네델란드 안틸레스 굴덴</displayName>
-				<symbol>NA f.</symbol>
+				<symbol>ANG</symbol>
 			</currency>
 			<currency type="AOA">
 				<displayName>앙골라 콴자</displayName>
@@ -774,7 +1084,7 @@
 			</currency>
 			<currency type="ARS">
 				<displayName>아르헨티나 페소</displayName>
-				<symbol>Arg$</symbol>
+				<symbol>ARS</symbol>
 			</currency>
 			<currency type="ATS">
 				<displayName>호주 실링</displayName>
@@ -782,7 +1092,7 @@
 			</currency>
 			<currency type="AUD">
 				<displayName>호주 달러</displayName>
-				<symbol>$A</symbol>
+				<symbol>AUD</symbol>
 			</currency>
 			<currency type="AUP">
 				<displayName>호주 파운드</displayName>
@@ -802,7 +1112,7 @@
 			</currency>
 			<currency type="BAM">
 				<displayName>보스니아-헤르체고비나 태환 마르크</displayName>
-				<symbol>KM</symbol>
+				<symbol>BAM</symbol>
 			</currency>
 			<currency type="BAN">
 				<displayName>보스니아-헤르체고비나 신 디나르</displayName>
@@ -810,11 +1120,11 @@
 			</currency>
 			<currency type="BBD">
 				<displayName>바베이도스 달러</displayName>
-				<symbol>BDS$</symbol>
+				<symbol>BBD</symbol>
 			</currency>
 			<currency type="BDT">
 				<displayName>방글라데시 타카</displayName>
-				<symbol>Tk</symbol>
+				<symbol>BDT</symbol>
 			</currency>
 			<currency type="BEC">
 				<displayName>벨기에 프랑 (태환)</displayName>
@@ -822,7 +1132,7 @@
 			</currency>
 			<currency type="BEF">
 				<displayName>벨기에 프랑</displayName>
-				<symbol>BF</symbol>
+				<symbol>BEF</symbol>
 			</currency>
 			<currency type="BEL">
 				<displayName>벨기에 프랑 (금융)</displayName>
@@ -830,7 +1140,7 @@
 			</currency>
 			<currency type="BGL">
 				<displayName>불가리아 동전 렛</displayName>
-				<symbol>lev</symbol>
+				<symbol>BGL</symbol>
 			</currency>
 			<currency type="BGM">
 				<displayName>불가리아 사회주의 렛</displayName>
@@ -850,15 +1160,15 @@
 			</currency>
 			<currency type="BHD">
 				<displayName>바레인 디나르</displayName>
-				<symbol>BD</symbol>
+				<symbol>BHD</symbol>
 			</currency>
 			<currency type="BIF">
 				<displayName>부룬디 프랑</displayName>
-				<symbol>Fbu</symbol>
+				<symbol>BIF</symbol>
 			</currency>
 			<currency type="BMD">
 				<displayName>버뮤다 달러</displayName>
-				<symbol>Ber$</symbol>
+				<symbol>BMD</symbol>
 			</currency>
 			<currency type="BMP">
 				<displayName>버뮤다 파운드</displayName>
@@ -870,7 +1180,7 @@
 			</currency>
 			<currency type="BOB">
 				<displayName>볼리비아노</displayName>
-				<symbol>Bs</symbol>
+				<symbol>BOB</symbol>
 			</currency>
 			<currency type="BOL">
 				<displayName>볼리비아노 (1863-1962)</displayName>
@@ -894,7 +1204,7 @@
 			</currency>
 			<currency type="BRL">
 				<displayName>브라질 레알</displayName>
-				<symbol>R$</symbol>
+				<symbol>BRL</symbol>
 			</currency>
 			<currency type="BRN">
 				<displayName>브라질 크루자두 노보</displayName>
@@ -918,7 +1228,7 @@
 			</currency>
 			<currency type="BTN">
 				<displayName>부탄 눌투눔</displayName>
-				<symbol>Nu</symbol>
+				<symbol>BTN</symbol>
 			</currency>
 			<currency type="BTR">
 				<displayName>부탄 루피</displayName>
@@ -946,11 +1256,11 @@
 			</currency>
 			<currency type="BYR">
 				<displayName>벨라루스 루블</displayName>
-				<symbol>Rbl</symbol>
+				<symbol>BYR</symbol>
 			</currency>
 			<currency type="BZD">
 				<displayName>벨리즈 달러</displayName>
-				<symbol>BZ$</symbol>
+				<symbol>BZD</symbol>
 			</currency>
 			<currency type="BZH">
 				<displayName>영국령 혼두라스 달러</displayName>
@@ -958,7 +1268,7 @@
 			</currency>
 			<currency type="CAD">
 				<displayName>캐나다 달러</displayName>
-				<symbol>Can$</symbol>
+				<symbol>CAD</symbol>
 			</currency>
 			<currency type="CDF">
 				<displayName>콩고 프랑 콩골라스</displayName>
@@ -974,7 +1284,7 @@
 			</currency>
 			<currency type="CHF">
 				<displayName>스위스 프랑달러</displayName>
-				<symbol>SwF</symbol>
+				<symbol>CHF</symbol>
 			</currency>
 			<currency type="CKD">
 				<displayName>쿡 제도 달러</displayName>
@@ -990,11 +1300,11 @@
 			</currency>
 			<currency type="CLP">
 				<displayName>칠레 페소</displayName>
-				<symbol>Ch$</symbol>
+				<symbol>CLP</symbol>
 			</currency>
 			<currency type="CNY">
 				<displayName>중국 위안 인민폐</displayName>
-				<symbol>Y</symbol>
+				<symbol>CNY</symbol>
 			</currency>
 			<currency type="COB">
 				<displayName>콜롬비아 지폐 페소</displayName>
@@ -1006,11 +1316,11 @@
 			</currency>
 			<currency type="COP">
 				<displayName>콜롬비아 페소</displayName>
-				<symbol>Col$</symbol>
+				<symbol>COP</symbol>
 			</currency>
 			<currency type="CRC">
 				<displayName>코스타리카 콜론</displayName>
-				<symbol>C</symbol>
+				<symbol>CRC</symbol>
 			</currency>
 			<currency type="CSC">
 				<displayName>체코슬로바키아 코루나</displayName>
@@ -1030,7 +1340,7 @@
 			</currency>
 			<currency type="CVE">
 				<displayName>카보베르데 에스쿠도</displayName>
-				<symbol>CVEsc</symbol>
+				<symbol>CVE</symbol>
 			</currency>
 			<currency type="CWG">
 				<displayName>쿠라카오 길더</displayName>
@@ -1038,7 +1348,7 @@
 			</currency>
 			<currency type="CYP">
 				<displayName>싸이프러스 파운드</displayName>
-				<symbol>£C</symbol>
+				<symbol>CYP</symbol>
 			</currency>
 			<currency type="CZK">
 				<displayName>체코 공화국 코루나</displayName>
@@ -1058,19 +1368,19 @@
 			</currency>
 			<currency type="DJF">
 				<displayName>지부티 프랑</displayName>
-				<symbol>DF</symbol>
+				<symbol>DJF</symbol>
 			</currency>
 			<currency type="DKK">
 				<displayName>덴마크 크로네</displayName>
-				<symbol>DKr</symbol>
+				<symbol>DKK</symbol>
 			</currency>
 			<currency type="DOP">
 				<displayName>도미니카 페소</displayName>
-				<symbol>RD$</symbol>
+				<symbol>DOP</symbol>
 			</currency>
 			<currency type="DZD">
 				<displayName>알제리 디나르</displayName>
-				<symbol>DA</symbol>
+				<symbol>DZD</symbol>
 			</currency>
 			<currency type="DZF">
 				<displayName>알제리 신권 프랑</displayName>
@@ -1102,7 +1412,7 @@
 			</currency>
 			<currency type="ETB">
 				<displayName>이디오피아 비르</displayName>
-				<symbol>Br</symbol>
+				<symbol>ETB</symbol>
 			</currency>
 			<currency type="ETD">
 				<displayName>이디오피아 달러</displayName>
@@ -1122,7 +1432,7 @@
 			</currency>
 			<currency type="FJD">
 				<displayName>피지 달러</displayName>
-				<symbol>F$</symbol>
+				<symbol>FJD</symbol>
 			</currency>
 			<currency type="FJP">
 				<displayName>피지 파운드</displayName>
@@ -1158,7 +1468,7 @@
 			</currency>
 			<currency type="GEL">
 				<displayName>그루지야 라리</displayName>
-				<symbol>lari</symbol>
+				<symbol>GEL</symbol>
 			</currency>
 			<currency type="GHC">
 				<displayName>가나 시디</displayName>
@@ -1194,7 +1504,7 @@
 			</currency>
 			<currency type="GNF">
 				<displayName>기니 프랑</displayName>
-				<symbol>GF</symbol>
+				<symbol>GNF</symbol>
 			</currency>
 			<currency type="GNI">
 				<displayName>기니 프랑 (1960-1972)</displayName>
@@ -1226,7 +1536,7 @@
 			</currency>
 			<currency type="GTQ">
 				<displayName>과테말라 케트살</displayName>
-				<symbol>Q</symbol>
+				<symbol>GTQ</symbol>
 			</currency>
 			<currency type="GUF">
 				<displayName>프랑스령 가이아나 프랑 기아나</displayName>
@@ -1246,15 +1556,15 @@
 			</currency>
 			<currency type="GYD">
 				<displayName>가이아나 달러</displayName>
-				<symbol>G$</symbol>
+				<symbol>GYD</symbol>
 			</currency>
 			<currency type="HKD">
 				<displayName>홍콩 달러</displayName>
-				<symbol>HK$</symbol>
+				<symbol>HKD</symbol>
 			</currency>
 			<currency type="HNL">
 				<displayName>온두라스 렘피라</displayName>
-				<symbol>L</symbol>
+				<symbol>HNL</symbol>
 			</currency>
 			<currency type="HRD">
 				<displayName>크로아티아 디나르</displayName>
@@ -1270,7 +1580,7 @@
 			</currency>
 			<currency type="HUF">
 				<displayName>헝가리 포린트</displayName>
-				<symbol>Ft</symbol>
+				<symbol>HUF</symbol>
 			</currency>
 			<currency type="IBP">
 				<displayName>북부 아일랜드 파운드</displayName>
@@ -1290,7 +1600,7 @@
 			</currency>
 			<currency type="IDR">
 				<displayName>인도네시아 루피아</displayName>
-				<symbol>Rp</symbol>
+				<symbol>IDR</symbol>
 			</currency>
 			<currency type="IEP">
 				<displayName>아일랜드 파운드</displayName>
@@ -1318,11 +1628,11 @@
 			</currency>
 			<currency type="IQD">
 				<displayName>이라크 디나르</displayName>
-				<symbol>ID</symbol>
+				<symbol>IQD</symbol>
 			</currency>
 			<currency type="IRR">
 				<displayName>이란 리얄</displayName>
-				<symbol>RI</symbol>
+				<symbol>IRR</symbol>
 			</currency>
 			<currency type="ISK">
 				<displayName>아이슬란드 크로나</displayName>
@@ -1330,7 +1640,7 @@
 			</currency>
 			<currency type="ITL">
 				<displayName>이탈리아 리라</displayName>
-				<symbol>₤</symbol>
+				<symbol>ITL</symbol>
 			</currency>
 			<currency type="JEP">
 				<displayName>저지 파운드 스털링</displayName>
@@ -1338,7 +1648,7 @@
 			</currency>
 			<currency type="JMD">
 				<displayName>자메이카 달러</displayName>
-				<symbol>J$</symbol>
+				<symbol>JMD</symbol>
 			</currency>
 			<currency type="JMP">
 				<displayName>자메이카 파운드</displayName>
@@ -1346,7 +1656,7 @@
 			</currency>
 			<currency type="JOD">
 				<displayName>요르단 디나르</displayName>
-				<symbol>JD</symbol>
+				<symbol>JOD</symbol>
 			</currency>
 			<currency type="JPY">
 				<displayName>일본 엔화</displayName>
@@ -1354,11 +1664,11 @@
 			</currency>
 			<currency type="KES">
 				<displayName>케냐 실링</displayName>
-				<symbol>K Sh</symbol>
+				<symbol>KES</symbol>
 			</currency>
 			<currency type="KGS">
 				<displayName>키르기스스탄 솜</displayName>
-				<symbol>som</symbol>
+				<symbol>KGS</symbol>
 			</currency>
 			<currency type="KHO">
 				<displayName>캄보디아 구권 리얄</displayName>
@@ -1366,7 +1676,7 @@
 			</currency>
 			<currency type="KHR">
 				<displayName>캄보디아 리얄</displayName>
-				<symbol>CR</symbol>
+				<symbol>KHR</symbol>
 			</currency>
 			<currency type="KID">
 				<displayName>키리바시 달러</displayName>
@@ -1374,7 +1684,7 @@
 			</currency>
 			<currency type="KMF">
 				<displayName>코모르 프랑</displayName>
-				<symbol>CF</symbol>
+				<symbol>KMF</symbol>
 			</currency>
 			<currency type="KPP">
 				<displayName>조선 민주주의 인민 공화국 원</displayName>
@@ -1398,7 +1708,7 @@
 			</currency>
 			<currency type="KWD">
 				<displayName>쿠웨이트 디나르</displayName>
-				<symbol>KD</symbol>
+				<symbol>KWD</symbol>
 			</currency>
 			<currency type="KYD">
 				<displayName>케이맨 제도 달러</displayName>
@@ -1410,7 +1720,7 @@
 			</currency>
 			<currency type="KZT">
 				<displayName>카자흐스탄 텐게</displayName>
-				<symbol>T</symbol>
+				<symbol>KZT</symbol>
 			</currency>
 			<currency type="LAK">
 				<displayName>라오스 키프</displayName>
@@ -1418,7 +1728,7 @@
 			</currency>
 			<currency type="LBP">
 				<displayName>레바논 파운드</displayName>
-				<symbol>LL</symbol>
+				<symbol>LBP</symbol>
 			</currency>
 			<currency type="LIF">
 				<displayName>리히텐슈타인 프랑</displayName>
@@ -1426,7 +1736,7 @@
 			</currency>
 			<currency type="LKR">
 				<displayName>스리랑카 루피</displayName>
-				<symbol>SL Re</symbol>
+				<symbol>LKR</symbol>
 			</currency>
 			<currency type="LNR">
 				<displayName>실론 루피</displayName>
@@ -1438,7 +1748,7 @@
 			</currency>
 			<currency type="LSL">
 				<displayName>레소토 로티</displayName>
-				<symbol>M</symbol>
+				<symbol>LSL</symbol>
 			</currency>
 			<currency type="LTL">
 				<displayName>리투아니아 리타</displayName>
@@ -1466,7 +1776,7 @@
 			</currency>
 			<currency type="LYD">
 				<displayName>리비아 디나르</displayName>
-				<symbol>LD</symbol>
+				<symbol>LYD</symbol>
 			</currency>
 			<currency type="LYP">
 				<displayName>리비아 파운드</displayName>
@@ -1514,7 +1824,7 @@
 			</currency>
 			<currency type="MKD">
 				<displayName>마케도니아 디나르</displayName>
-				<symbol>MDen</symbol>
+				<symbol>MKD</symbol>
 			</currency>
 			<currency type="MKN">
 				<displayName>마케도니아 디나르 (1992-1993)</displayName>
@@ -1534,7 +1844,7 @@
 			</currency>
 			<currency type="MNT">
 				<displayName>몽골 투그릭</displayName>
-				<symbol>Tug</symbol>
+				<symbol>MNT</symbol>
 			</currency>
 			<currency type="MOP">
 				<displayName>마카오 파타카</displayName>
@@ -1550,7 +1860,7 @@
 			</currency>
 			<currency type="MTL">
 				<displayName>몰타 리라</displayName>
-				<symbol>Lm</symbol>
+				<symbol>MTL</symbol>
 			</currency>
 			<currency type="MTP">
 				<displayName>몰타 파운드</displayName>
@@ -1570,7 +1880,7 @@
 			</currency>
 			<currency type="MWK">
 				<displayName>말라위 콰쳐</displayName>
-				<symbol>MK</symbol>
+				<symbol>MWK</symbol>
 			</currency>
 			<currency type="MWP">
 				<displayName>말라위 파운드</displayName>
@@ -1578,7 +1888,7 @@
 			</currency>
 			<currency type="MXN">
 				<displayName>멕시코 페소</displayName>
-				<symbol>MEX$</symbol>
+				<symbol>MXN</symbol>
 			</currency>
 			<currency type="MXP">
 				<displayName>멕시코 실버 페소 (1861-1992)</displayName>
@@ -1586,7 +1896,7 @@
 			</currency>
 			<currency type="MYR">
 				<displayName>말레이지아 링기트</displayName>
-				<symbol>RM</symbol>
+				<symbol>MYR</symbol>
 			</currency>
 			<currency type="MZE">
 				<displayName>모잠비크 에스쿠도</displayName>
@@ -1594,11 +1904,11 @@
 			</currency>
 			<currency type="MZM">
 				<displayName>모잠비크 메티칼</displayName>
-				<symbol>Mt</symbol>
+				<symbol>MZM</symbol>
 			</currency>
 			<currency type="NAD">
 				<displayName>나미비아 달러</displayName>
-				<symbol>N$</symbol>
+				<symbol>NAD</symbol>
 			</currency>
 			<currency type="NCF">
 				<displayName>뉴 칼레도니아 프랑 제르미날</displayName>
@@ -1626,15 +1936,15 @@
 			</currency>
 			<currency type="NOK">
 				<displayName>노르웨이 크로네</displayName>
-				<symbol>NKr</symbol>
+				<symbol>NOK</symbol>
 			</currency>
 			<currency type="NPR">
 				<displayName>네팔 루피</displayName>
-				<symbol>Nrs</symbol>
+				<symbol>NPR</symbol>
 			</currency>
 			<currency type="NZD">
 				<displayName>뉴질랜드 달러</displayName>
-				<symbol>$NZ</symbol>
+				<symbol>NZD</symbol>
 			</currency>
 			<currency type="NZP">
 				<displayName>뉴질랜드 파운드</displayName>
@@ -1642,7 +1952,7 @@
 			</currency>
 			<currency type="OMR">
 				<displayName>오만 리얄</displayName>
-				<symbol>RO</symbol>
+				<symbol>OMR</symbol>
 			</currency>
 			<currency type="OMS">
 				<displayName>오만 리얄 사이디</displayName>
@@ -1674,11 +1984,11 @@
 			</currency>
 			<currency type="PKR">
 				<displayName>파키스탄 루피</displayName>
-				<symbol>Pra</symbol>
+				<symbol>PKR</symbol>
 			</currency>
 			<currency type="PLN">
 				<displayName>폴란드 즐로티</displayName>
-				<symbol>Zl</symbol>
+				<symbol>PLN</symbol>
 			</currency>
 			<currency type="PLZ">
 				<displayName>폴란드 즐로티 (1950-1995)</displayName>
@@ -1702,7 +2012,7 @@
 			</currency>
 			<currency type="QAR">
 				<displayName>카타르 리얄</displayName>
-				<symbol>QR</symbol>
+				<symbol>QAR</symbol>
 			</currency>
 			<currency type="REF">
 				<displayName>리유니온 프랑</displayName>
@@ -1710,7 +2020,7 @@
 			</currency>
 			<currency type="ROL">
 				<displayName>루마니아 레이</displayName>
-				<symbol>leu</symbol>
+				<symbol>ROL</symbol>
 			</currency>
 			<currency type="RON">
 				<displayName>루마니아 신권 레이</displayName>
@@ -1730,7 +2040,7 @@
 			</currency>
 			<currency type="SAR">
 				<displayName>사우디아라비아 리얄</displayName>
-				<symbol>SRl</symbol>
+				<symbol>SAR</symbol>
 			</currency>
 			<currency type="SAS">
 				<displayName>사우디아라비아 자치령 리얄</displayName>
@@ -1738,11 +2048,11 @@
 			</currency>
 			<currency type="SBD">
 				<displayName>솔로몬 제도 달러</displayName>
-				<symbol>SI$</symbol>
+				<symbol>SBD</symbol>
 			</currency>
 			<currency type="SCR">
 				<displayName>세이쉴 루피</displayName>
-				<symbol>SR</symbol>
+				<symbol>SCR</symbol>
 			</currency>
 			<currency type="SDD">
 				<displayName>수단 디나르</displayName>
@@ -1754,11 +2064,11 @@
 			</currency>
 			<currency type="SEK">
 				<displayName>스웨덴 크로나</displayName>
-				<symbol>SKr</symbol>
+				<symbol>SEK</symbol>
 			</currency>
 			<currency type="SGD">
 				<displayName>싱가폴 달러</displayName>
-				<symbol>S$</symbol>
+				<symbol>SGD</symbol>
 			</currency>
 			<currency type="SHP">
 				<displayName>세인트헬레나 파운드</displayName>
@@ -1774,7 +2084,7 @@
 			</currency>
 			<currency type="SKK">
 				<displayName>슬로바키아 코루나</displayName>
-				<symbol>Sk</symbol>
+				<symbol>SKK</symbol>
 			</currency>
 			<currency type="SLL">
 				<displayName>시에라리온 리온</displayName>
@@ -1786,7 +2096,7 @@
 			</currency>
 			<currency type="SOS">
 				<displayName>소말리아 실링</displayName>
-				<symbol>So. Sh.</symbol>
+				<symbol>SOS</symbol>
 			</currency>
 			<currency type="SQS">
 				<displayName>소말리랜드 실링</displayName>
@@ -1794,7 +2104,7 @@
 			</currency>
 			<currency type="SRG">
 				<displayName>수리남 길더</displayName>
-				<symbol>Sf</symbol>
+				<symbol>SRG</symbol>
 			</currency>
 			<currency type="SSP">
 				<displayName>스코틀랜드 파운드</displayName>
@@ -1802,7 +2112,7 @@
 			</currency>
 			<currency type="STD">
 				<displayName>상투메 프린시페 도브라</displayName>
-				<symbol>Db</symbol>
+				<symbol>STD</symbol>
 			</currency>
 			<currency type="STE">
 				<displayName>상투메 프린시페 에스쿠도</displayName>
@@ -1822,11 +2132,11 @@
 			</currency>
 			<currency type="SYP">
 				<displayName>시리아 파운드</displayName>
-				<symbol>LS</symbol>
+				<symbol>SYP</symbol>
 			</currency>
 			<currency type="SZL">
 				<displayName>스와질란드 릴랑게니</displayName>
-				<symbol>E</symbol>
+				<symbol>SZL</symbol>
 			</currency>
 			<currency type="TCC">
 				<displayName>터크스케이커스 크라운</displayName>
@@ -1866,11 +2176,11 @@
 			</currency>
 			<currency type="TRL">
 				<displayName>터기 리라</displayName>
-				<symbol>TL</symbol>
+				<symbol>TRL</symbol>
 			</currency>
 			<currency type="TTD">
 				<displayName>트리니다드 토바고 달러</displayName>
-				<symbol>TT$</symbol>
+				<symbol>TTD</symbol>
 			</currency>
 			<currency type="TTO">
 				<displayName>트리니다드 토바고 구권 달러</displayName>
@@ -1882,11 +2192,11 @@
 			</currency>
 			<currency type="TWD">
 				<displayName>대만 신권 달러</displayName>
-				<symbol>NT$</symbol>
+				<symbol>TWD</symbol>
 			</currency>
 			<currency type="TZS">
 				<displayName>탄자니아 실링</displayName>
-				<symbol>T Sh</symbol>
+				<symbol>TZS</symbol>
 			</currency>
 			<currency type="UAH">
 				<displayName>우크라이나 그리브나</displayName>
@@ -1898,7 +2208,11 @@
 			</currency>
 			<currency type="UGX">
 				<displayName>우간다 실링</displayName>
-				<symbol>U Sh</symbol>
+				<symbol>UGX</symbol>
+			</currency>
+			<currency type="USD">
+				<displayName>미국 달러</displayName>
+				<symbol>US$</symbol>
 			</currency>
 			<currency type="UYF">
 				<displayName>우루과이 페소 푸에르떼</displayName>
@@ -1910,7 +2224,7 @@
 			</currency>
 			<currency type="UYU">
 				<displayName>우루과이 페소 우루과요</displayName>
-				<symbol>Ur$</symbol>
+				<symbol>UYU</symbol>
 			</currency>
 			<currency type="UZC">
 				<displayName>우즈베키스탄 숨 쿠폰</displayName>
@@ -1938,7 +2252,7 @@
 			</currency>
 			<currency type="VEB">
 				<displayName>베네주엘라 볼리바르</displayName>
-				<symbol>Be</symbol>
+				<symbol>VEB</symbol>
 			</currency>
 			<currency type="VGD">
 				<displayName>영국령 버진 아일랜드 달러</displayName>
@@ -1962,7 +2276,7 @@
 			</currency>
 			<currency type="VUV">
 				<displayName>바누아투 바투</displayName>
-				<symbol>VT</symbol>
+				<symbol>VUV</symbol>
 			</currency>
 			<currency type="WSP">
 				<displayName>서 사모아 파운드</displayName>
@@ -1986,7 +2300,7 @@
 			</currency>
 			<currency type="XCD">
 				<displayName>동카리브 달러</displayName>
-				<symbol>EC$</symbol>
+				<symbol>XCD</symbol>
 			</currency>
 			<currency type="XDR">
 				<displayName>특별인출권</displayName>
@@ -2012,10 +2326,6 @@
 				<displayName>프랑스 메트로폴리탄 누보 프랑</displayName>
 				<symbol>XMF</symbol>
 			</currency>
-			<currency type="XPS">
-				<displayName>파운드 스털링</displayName>
-				<symbol>XPS</symbol>
-			</currency>
 			<currency type="XSS">
 				<displayName>실링 스털링</displayName>
 				<symbol>XSS</symbol>
@@ -2026,7 +2336,7 @@
 			</currency>
 			<currency type="YER">
 				<displayName>예멘 리알</displayName>
-				<symbol>YRl</symbol>
+				<symbol>YER</symbol>
 			</currency>
 			<currency type="YUD">
 				<displayName>유고슬라비아 동전 디나르</displayName>
@@ -2066,7 +2376,7 @@
 			</currency>
 			<currency type="ZAR">
 				<displayName>남아프리카 랜드</displayName>
-				<symbol>R</symbol>
+				<symbol>ZAR</symbol>
 			</currency>
 			<currency type="ZMK">
 				<displayName>쟘비아 콰쳐</displayName>
@@ -2086,7 +2396,7 @@
 			</currency>
 			<currency type="ZWD">
 				<displayName>짐비브웨 달러</displayName>
-				<symbol>Z$</symbol>
+				<symbol>ZWD</symbol>
 			</currency>
 		</currencies>
 	</numbers>

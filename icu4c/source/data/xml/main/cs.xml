@@ -1,14 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE ldml SYSTEM " 	http://oss.software.ibm.com/cvs/icu/~checkout~/locale/ldml.dtd" 
-[
-      <!ENTITY % icu SYSTEM " http://oss.software.ibm.com/cvs/icu/~checkout~/locale/ldmlICU.dtd"> 
-%icu;
-]
->
+<!DOCTYPE ldml SYSTEM "http://www.unicode.org/cldr/dtd/1.1/ldml.dtd">
 <ldml>
 	<identity>
-		<version number="3.0"/>
-		<generation date="2004-05-14" />
+		<version number="1.1"/>
+		<generation date="2004-05-27" />
 		<language type="cs" /> 
 	</identity>
 	<localeDisplayNames>
@@ -399,11 +394,6 @@
 	</localeDisplayNames>
 	<characters>
 		<exemplarCharacters>[a-z ý á é í ó ú ě ů č ď ň ř š ť ž]</exemplarCharacters>
-		<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
-			<icu:scripts>
-				<icu:script type="1">Latn</icu:script>
-			</icu:scripts>
-		</special>
 	</characters>
 	<dates>
 		<localizedPatternChars>GuMtkHmsSEDFwWahKzUeygAZ</localizedPatternChars>
@@ -412,32 +402,90 @@
 				<months>
 					<monthContext type="format">
 						<monthWidth type="abbreviated">
-							<month type="1">I</month>
-							<month type="2">II</month>
-							<month type="3">III</month>
-							<month type="4">IV</month>
-							<month type="5">V</month>
-							<month type="6">VI</month>
-							<month type="7">VII</month>
-							<month type="8">VIII</month>
-							<month type="9">IX</month>
-							<month type="10">X</month>
-							<month type="11">XI</month>
-							<month type="12">XII</month>
+							<month type="1">1.</month>
+							<month type="2">2.</month>
+							<month type="3">3.</month>
+							<month type="4">4.</month>
+							<month type="5">5.</month>
+							<month type="6">6.</month>
+							<month type="7">7.</month>
+							<month type="8">8.</month>
+							<month type="9">9.</month>
+							<month type="10">10.</month>
+							<month type="11">11.</month>
+							<month type="12">12.</month>
+						</monthWidth>
+						<monthWidth type="narrow">
+							<month type="1">l</month>
+							<month type="2">ú</month>
+							<month type="3">b</month>
+							<month type="4">d</month>
+							<month type="5">k</month>
+							<month type="6">č</month>
+							<month type="7">č</month>
+							<month type="8">s</month>
+							<month type="9">z</month>
+							<month type="10">ř</month>
+							<month type="11">l</month>
+							<month type="12">p</month>
 						</monthWidth>
 						<monthWidth type="wide">
-							<month type="1">leden</month>
-							<month type="2">únor</month>
-							<month type="3">březen</month>
-							<month type="4">duben</month>
-							<month type="5">květen</month>
-							<month type="6">červen</month>
-							<month type="7">červenec</month>
-							<month type="8">srpen</month>
+							<month type="1">ledna</month>
+							<month type="2">února</month>
+							<month type="3">března</month>
+							<month type="4">dubna</month>
+							<month type="5">května</month>
+							<month type="6">června</month>
+							<month type="7">července</month>
+							<month type="8">srpna</month>
 							<month type="9">září</month>
-							<month type="10">říjen</month>
-							<month type="11">listopad</month>
-							<month type="12">prosinec</month>
+							<month type="10">října</month>
+							<month type="11">listopadu</month>
+							<month type="12">prosince</month>
+						</monthWidth>
+					</monthContext>
+					<monthContext type="stand-alone">
+						<monthWidth type="abbreviated">
+							<month type="1">1.</month>
+							<month type="2">2.</month>
+							<month type="3">3.</month>
+							<month type="4">4.</month>
+							<month type="5">5.</month>
+							<month type="6">6.</month>
+							<month type="7">7.</month>
+							<month type="8">8.</month>
+							<month type="9">9.</month>
+							<month type="10">10.</month>
+							<month type="11">11.</month>
+							<month type="12">12.</month>
+						</monthWidth>
+						<monthWidth type="narrow">
+							<month type="1">l</month>
+							<month type="2">ú</month>
+							<month type="3">b</month>
+							<month type="4">d</month>
+							<month type="5">k</month>
+							<month type="6">č</month>
+							<month type="7">č</month>
+							<month type="8">s</month>
+							<month type="9">z</month>
+							<month type="10">ř</month>
+							<month type="11">l</month>
+							<month type="12">p</month>
+						</monthWidth>
+						<monthWidth type="wide">
+							<month type="1">Leden</month>
+							<month type="2">Únor</month>
+							<month type="3">Březen</month>
+							<month type="4">Duben</month>
+							<month type="5">Květen</month>
+							<month type="6">Červen</month>
+							<month type="7">Červenec</month>
+							<month type="8">Srpen</month>
+							<month type="9">Září</month>
+							<month type="10">Říjen</month>
+							<month type="11">Listopad</month>
+							<month type="12">Prosinec</month>
 						</monthWidth>
 					</monthContext>
 				</months>

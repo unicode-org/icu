@@ -1,14 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE ldml SYSTEM " 	http://oss.software.ibm.com/cvs/icu/~checkout~/locale/ldml.dtd" 
-[
-      <!ENTITY % icu SYSTEM " http://oss.software.ibm.com/cvs/icu/~checkout~/locale/ldmlICU.dtd"> 
-%icu;
-]
->
+<!DOCTYPE ldml SYSTEM "http://www.unicode.org/cldr/dtd/1.1/ldml.dtd">
 <ldml>
 	<identity>
-		<version number="3.0"/>
-		<generation date="2004-05-14" />
+		<version number="1.1"/>
+		<generation date="2004-05-27" />
 		<language type="de" /> 
 	</identity>
 	<localeDisplayNames>
@@ -17,39 +12,48 @@
 			<language type="ab">Abchasisch</language>
 			<language type="ae">Avestisch</language>
 			<language type="af">Afrikaans</language>
+			<language type="ak">Akan</language>
 			<language type="am">Amharisch</language>
 			<language type="an">Aragonesisch</language>
 			<language type="ar">Arabisch</language>
 			<language type="as">Assamesisch</language>
 			<language type="av">Awarisch</language>
-			<language type="ay">Aymara</language>
+			<language type="ay">Aymará-Sprache</language>
 			<language type="az">Aserbaidschanisch</language>
 			<language type="ba">Baschkirisch</language>
 			<language type="be">Weißrussisch</language>
 			<language type="bg">Bulgarisch</language>
 			<language type="bh">Biharisch</language>
 			<language type="bi">Bislama</language>
+			<language type="bm">Bambara-Sprache</language>
 			<language type="bn">Bengalisch</language>
 			<language type="bo">Tibetisch</language>
 			<language type="br">Bretonisch</language>
 			<language type="bs">Bosnisch</language>
 			<language type="ca">Katalanisch</language>
 			<language type="ce">Tschetschenisch</language>
+			<language type="ch">Chamorro-Sprache</language>
+			<language type="chr">Cherokee</language>
 			<language type="co">Korsisch</language>
+			<language type="cr">Cree</language>
 			<language type="cs">Tschechisch</language>
 			<language type="cu">Kirchenslawisch</language>
 			<language type="cv">Tschuwaschisch</language>
-			<language type="cy">Walisisch</language>
+			<language type="cy">Kymrisch</language>
 			<language type="da">Dänisch</language>
 			<language type="de">Deutsch</language>
+			<language type="dv">Maledivisch</language>
 			<language type="dz">Bhutanisch</language>
+			<language type="ee">Ewe-Sprache</language>
 			<language type="el">Griechisch</language>
 			<language type="en">Englisch</language>
+			<language type="enm">Mittelenglisch</language>
 			<language type="eo">Esperanto</language>
 			<language type="es">Spanisch</language>
 			<language type="et">Estnisch</language>
 			<language type="eu">Baskisch</language>
 			<language type="fa">Persisch</language>
+			<language type="ff">Ful</language>
 			<language type="fi">Finnisch</language>
 			<language type="fj">Fidschianisch</language>
 			<language type="fo">Färöisch</language>
@@ -57,6 +61,7 @@
 			<language type="fy">Friesisch</language>
 			<language type="ga">Irisch</language>
 			<language type="gd">Schottisch-Gälisch</language>
+			<language type="gez">Altäthiopisch</language>
 			<language type="gl">Galizisch</language>
 			<language type="gn">Guarani</language>
 			<language type="gu">Gujarati</language>
@@ -65,13 +70,16 @@
 			<language type="haw">Hawaiianisch</language>
 			<language type="he">Hebräisch</language>
 			<language type="hi">Hindi</language>
+			<language type="ho">Hiri-Motu</language>
 			<language type="hr">Kroatisch</language>
 			<language type="ht">Kreolisch</language>
 			<language type="hu">Ungarisch</language>
 			<language type="hy">Armenisch</language>
+			<language type="hz">Herero-Sprache</language>
 			<language type="ia">Interlingua</language>
 			<language type="id">Indonesisch</language>
 			<language type="ie">Interlingue</language>
+			<language type="ig">Igbo-Sprache</language>
 			<language type="ik">Inupiak</language>
 			<language type="is">Isländisch</language>
 			<language type="it">Italienisch</language>
@@ -79,22 +87,29 @@
 			<language type="ja">Japanisch</language>
 			<language type="jv">Javanisch</language>
 			<language type="ka">Georgisch</language>
+			<language type="kg">Kongo</language>
+			<language type="ki">Kikuyu-Sprache</language>
 			<language type="kj">Kwanyama</language>
 			<language type="kk">Kasachisch</language>
 			<language type="kl">Grönländisch</language>
 			<language type="km">Kambodschanisch</language>
 			<language type="kn">Kannada</language>
 			<language type="ko">Koreanisch</language>
+			<language type="kok">Konkani</language>
+			<language type="kr">Kanuri-Sprache</language>
 			<language type="ks">Kaschmirisch</language>
 			<language type="ku">Kurdisch</language>
+			<language type="kv">Komi-Sprache</language>
 			<language type="kw">Kornisch</language>
 			<language type="ky">Kirgisisch</language>
 			<language type="la">Latein</language>
 			<language type="lb">Luxemburgisch</language>
+			<language type="lg">Ganda-Sprache</language>
 			<language type="li">Limburgisch</language>
 			<language type="ln">Lingala</language>
 			<language type="lo">Laotisch</language>
 			<language type="lt">Litauisch</language>
+			<language type="lu">Luba</language>
 			<language type="lv">Lettisch</language>
 			<language type="mg">Madagassisch</language>
 			<language type="mh">Marschallesisch</language>
@@ -106,29 +121,34 @@
 			<language type="mr">Marathi</language>
 			<language type="ms">Malaiisch</language>
 			<language type="mt">Maltesisch</language>
-			<language type="my">Burmesisch</language>
+			<language type="my">Birmanisch</language>
 			<language type="na">Nauruisch</language>
 			<language type="nb">Norwegisch Bokmål</language>
 			<language type="nd">Ndebele-Sprache (Nord)</language>
 			<language type="ne">Nepalesisch</language>
+			<language type="ng">Ndonga</language>
 			<language type="nl">Niederländisch</language>
 			<language type="nn">Norwegisch Nynorsk</language>
 			<language type="no">Norwegisch</language>
 			<language type="nr">Ndebele-Sprache (Süd)</language>
+			<language type="nv">Navajo-Sprache</language>
+			<language type="ny">Chewa-Sprache</language>
 			<language type="oc">Okzitanisch</language>
+			<language type="oj">Ojibwa-Sprache</language>
 			<language type="om">Oromo</language>
 			<language type="or">Orija</language>
 			<language type="os">Ossetisch</language>
 			<language type="pa">Pandschabisch</language>
+			<language type="pi">Pali</language>
 			<language type="pl">Polnisch</language>
 			<language type="ps">Afghanisch (Paschtu)</language>
 			<language type="pt">Portugiesisch</language>
 			<language type="qu">Quechua</language>
 			<language type="rm">Rätoromanisch</language>
-			<language type="rn">Kirundi</language>
+			<language type="rn">Rundi-Sprache</language>
 			<language type="ro">Rumänisch</language>
 			<language type="ru">Russisch</language>
-			<language type="rw">Ruandisch</language>
+			<language type="rw">Rwanda-Sprache</language>
 			<language type="sa">Sanskrit</language>
 			<language type="sc">Sardisch</language>
 			<language type="sd">Sindhi</language>
@@ -136,6 +156,7 @@
 			<language type="sg">Sango</language>
 			<language type="sh">Serbo-Kroatisch</language>
 			<language type="si">Singhalesisch</language>
+			<language type="sid">Sidamo</language>
 			<language type="sk">Slowakisch</language>
 			<language type="sl">Slowenisch</language>
 			<language type="sm">Samoanisch</language>
@@ -144,7 +165,7 @@
 			<language type="sq">Albanisch</language>
 			<language type="sr">Serbisch</language>
 			<language type="ss">Swazi</language>
-			<language type="st">Sotho</language>
+			<language type="st">Süd-Sotho-Sprache</language>
 			<language type="su">Sudanesisch</language>
 			<language type="sv">Schwedisch</language>
 			<language type="sw">Suaheli</language>
@@ -154,19 +175,21 @@
 			<language type="tg">Tadschikisch</language>
 			<language type="th">Thai</language>
 			<language type="ti">Tigrinja</language>
+			<language type="tig">Tigre</language>
 			<language type="tk">Turkmenisch</language>
 			<language type="tl">Tagalog</language>
-			<language type="tn">Setswana</language>
+			<language type="tn">Tswana-Sprache</language>
 			<language type="to">Tongaisch</language>
 			<language type="tr">Türkisch</language>
 			<language type="ts">Tsonga</language>
 			<language type="tt">Tatarisch</language>
 			<language type="tw">Twi</language>
 			<language type="ty">Tahitisch</language>
-			<language type="ug">Uigur</language>
+			<language type="ug">Uigurisch</language>
 			<language type="uk">Ukrainisch</language>
 			<language type="ur">Urdu</language>
 			<language type="uz">Usbekisch</language>
+			<language type="ve">Venda-Sprache</language>
 			<language type="vi">Vietnamesisch</language>
 			<language type="vo">Volapük</language>
 			<language type="wa">Wallonisch</language>
@@ -270,7 +293,7 @@
 			<territory type="CF">Zentralafrikanische Republik</territory>
 			<territory type="CG">Kongo</territory>
 			<territory type="CH">Schweiz</territory>
-			<territory type="CI">Côte d'Ivoire</territory>
+			<territory type="CI">Côte d’Ivoire</territory>
 			<territory type="CK">Cookinseln</territory>
 			<territory type="CL">Chile</territory>
 			<territory type="CM">Kamerun</territory>
@@ -281,7 +304,7 @@
 			<territory type="CV">Kap Verde</territory>
 			<territory type="CX">Weihnachtsinsel</territory>
 			<territory type="CY">Zypern</territory>
-			<territory type="CZ">Tschechien</territory>
+			<territory type="CZ">Tschechische Republik</territory>
 			<territory type="DE">Deutschland</territory>
 			<territory type="DJ">Dschibuti</territory>
 			<territory type="DK">Dänemark</territory>
@@ -362,14 +385,14 @@
 			<territory type="LY">Libyen</territory>
 			<territory type="MA">Marokko</territory>
 			<territory type="MC">Monaco</territory>
-			<territory type="MD">Moldawien</territory>
+			<territory type="MD">Republik Moldau</territory>
 			<territory type="MG">Madagaskar</territory>
 			<territory type="MH">Marshallinseln</territory>
 			<territory type="MK">Mazedonien</territory>
 			<territory type="ML">Mali</territory>
 			<territory type="MM">Myanmar</territory>
 			<territory type="MN">Mongolei</territory>
-			<territory type="MO">Macau S.A.R.,China</territory>
+			<territory type="MO">Macau S.A.R., China</territory>
 			<territory type="MP">Nördliche Marianen</territory>
 			<territory type="MQ">Martinique</territory>
 			<territory type="MR">Mauretanien</territory>
@@ -404,14 +427,14 @@
 			<territory type="PM">St. Pierre und Miquelon</territory>
 			<territory type="PN">Pitcairn</territory>
 			<territory type="PR">Puerto Rico</territory>
-			<territory type="PS">Palästina</territory>
+			<territory type="PS">Palästinensische Gebiete</territory>
 			<territory type="PT">Portugal</territory>
 			<territory type="PW">Palau</territory>
 			<territory type="PY">Paraguay</territory>
 			<territory type="QA">Katar</territory>
 			<territory type="RE">Réunion</territory>
 			<territory type="RO">Rumänien</territory>
-			<territory type="RU">Russland</territory>
+			<territory type="RU">Russische Föderation</territory>
 			<territory type="RW">Ruanda</territory>
 			<territory type="SA">Saudi-Arabien</territory>
 			<territory type="SB">Salomonen</territory>
@@ -482,12 +505,12 @@
 			<key type="currency">Währung</key>
 		</keys>
 		<types>
-			<type type="arabic" key="calendar">Islamischer Kalender</type>
-			<type type="arabic-civil" key="calendar">Bürgerlicher islamischer Kalender</type>
 			<type type="buddhist" key="calendar">Buddhistischer Kalender</type>
 			<type type="chinese" key="calendar">Chinesischer Kalender</type>
 			<type type="gregorian" key="calendar">Gregorianischer Kalender</type>
 			<type type="hebrew" key="calendar">Hebräischer Kalender</type>
+			<type type="islamic" key="calendar">Islamischer Kalender</type>
+			<type type="islamic-civil" key="calendar">Bürgerlicher islamischer Kalender</type>
 			<type type="japanese" key="calendar">Japanischer Kalender</type>
 			<type type="direct" key="collation">Direkte Sortierregeln</type>
 			<type type="phonebook" key="collation">Telefonbuch-Sortierregeln</type>
@@ -498,11 +521,6 @@
 	</localeDisplayNames>
 	<characters>
 		<exemplarCharacters>[a-z ä ö ü ß]</exemplarCharacters>
-		<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
-			<icu:scripts>
-				<icu:script type="1">Latn</icu:script>
-			</icu:scripts>
-		</special>
 	</characters>
 	<dates>
 		<localizedPatternChars>GjMtkHmsSEDFwWahKzJeugAZ</localizedPatternChars>
@@ -566,7 +584,13 @@
 							<day type="sat">Sa</day>
 						</dayWidth>
 						<dayWidth type="narrow">
-							<day type="sun">SMDMDFS</day>
+							<day type="sun">S</day>
+							<day type="mon">M</day>
+							<day type="tue">D</day>
+							<day type="wed">M</day>
+							<day type="thu">D</day>
+							<day type="fri">F</day>
+							<day type="sat">S</day>
 						</dayWidth>
 						<dayWidth type="wide">
 							<day type="sun">Sonntag</day>
@@ -692,6 +716,10 @@
 				<displayName>Afghani</displayName>
 				<symbol>AFA</symbol>
 			</currency>
+			<currency type="AFN">
+				<displayName>Afghani</displayName>
+				<symbol>Af</symbol>
+			</currency>
 			<currency type="AIF">
 				<displayName>Afar und Issa Franc</displayName>
 				<symbol>AIF</symbol>
@@ -792,8 +820,12 @@
 				<displayName>Taka</displayName>
 				<symbol>BDT</symbol>
 			</currency>
+			<currency type="BEC">
+				<displayName>Belgischer Franc (konvertibel)</displayName>
+				<symbol>BEC</symbol>
+			</currency>
 			<currency type="BEF">
-				<displayName>Belgischer Franken</displayName>
+				<displayName>Belgischer Franc</displayName>
 				<symbol>BEF</symbol>
 			</currency>
 			<currency type="BGL">
@@ -801,8 +833,12 @@
 				<symbol>BGL</symbol>
 			</currency>
 			<currency type="BGN">
-				<displayName>Bulgarian Lev</displayName>
+				<displayName>Lew</displayName>
 				<symbol>BGN</symbol>
+			</currency>
+			<currency type="BGO">
+				<displayName>Lew (1879-1952)</displayName>
+				<symbol>BGO</symbol>
 			</currency>
 			<currency type="BHD">
 				<displayName>Bahrain-Dinar</displayName>
@@ -827,6 +863,10 @@
 			<currency type="BOB">
 				<displayName>Boliviano</displayName>
 				<symbol>BOB</symbol>
+			</currency>
+			<currency type="BOL">
+				<displayName>Boliviano (1863-1962)</displayName>
+				<symbol>BOL</symbol>
 			</currency>
 			<currency type="BOP">
 				<displayName>Bolivianischer Peso</displayName>
@@ -975,6 +1015,10 @@
 			<currency type="CRC">
 				<displayName>Costa Rica Colon</displayName>
 				<symbol>CRC</symbol>
+			</currency>
+			<currency type="CSC">
+				<displayName>Tschechoslowakische Krone</displayName>
+				<symbol>CSC</symbol>
 			</currency>
 			<currency type="CUP">
 				<displayName>Kubanischer Peso</displayName>
@@ -1227,6 +1271,14 @@
 			<currency type="IEP">
 				<displayName>Irisches Pfund</displayName>
 				<symbol>IEP</symbol>
+			</currency>
+			<currency type="ILL">
+				<displayName>Schekel</displayName>
+				<symbol>ILL</symbol>
+			</currency>
+			<currency type="ILP">
+				<displayName>Israelisches Pfund</displayName>
+				<symbol>ILP</symbol>
 			</currency>
 			<currency type="ILS">
 				<displayName>Schekel</displayName>
@@ -1572,6 +1624,10 @@
 				<displayName>Neuer Sol</displayName>
 				<symbol>PEN</symbol>
 			</currency>
+			<currency type="PES">
+				<displayName>Sol</displayName>
+				<symbol>PES</symbol>
+			</currency>
 			<currency type="PGK">
 				<displayName>Kina</displayName>
 				<symbol>PGK</symbol>
@@ -1615,6 +1671,10 @@
 			<currency type="ROL">
 				<displayName>Leu</displayName>
 				<symbol>ROL</symbol>
+			</currency>
+			<currency type="RON">
+				<displayName>Neuer Leu</displayName>
+				<symbol>RON</symbol>
 			</currency>
 			<currency type="RUB">
 				<displayName>Russischer Rubel (neu)</displayName>
@@ -1660,6 +1720,10 @@
 				<displayName>St. Helena Pfund</displayName>
 				<symbol>SHP</symbol>
 			</currency>
+			<currency type="SIB">
+				<displayName>Tolar Bons</displayName>
+				<symbol>SIB</symbol>
+			</currency>
 			<currency type="SIT">
 				<displayName>Tolar</displayName>
 				<symbol>SIT</symbol>
@@ -1679,6 +1743,10 @@
 			<currency type="SOS">
 				<displayName>Somalia Schilling</displayName>
 				<symbol>SOS</symbol>
+			</currency>
+			<currency type="SQS">
+				<displayName>Somaliland Schilling</displayName>
+				<symbol>SQS</symbol>
 			</currency>
 			<currency type="SRG">
 				<displayName>Suriname Gulden</displayName>
@@ -1745,7 +1813,7 @@
 				<symbol>TND</symbol>
 			</currency>
 			<currency type="TOP">
-				<displayName>Pa'anga</displayName>
+				<displayName>Paʻanga</displayName>
 				<symbol>TOP</symbol>
 			</currency>
 			<currency type="TOS">
@@ -1755,6 +1823,10 @@
 			<currency type="TPE">
 				<displayName>Timor Escudo</displayName>
 				<symbol>TPE</symbol>
+			</currency>
+			<currency type="TPP">
+				<displayName>Timor Pataca</displayName>
+				<symbol>TPP</symbol>
 			</currency>
 			<currency type="TRL">
 				<displayName>Türkische Lira</displayName>
@@ -1767,6 +1839,10 @@
 			<currency type="TTO">
 				<displayName>Trinidad und Tobago Dollar (alt)</displayName>
 				<symbol>TTO</symbol>
+			</currency>
+			<currency type="TVD">
+				<displayName>Tuvalu Dollar</displayName>
+				<symbol>TVD</symbol>
 			</currency>
 			<currency type="TWD">
 				<displayName>Neuer Taiwan Dollar</displayName>
@@ -1868,6 +1944,10 @@
 				<displayName>CFA Franc (Äquatorial)</displayName>
 				<symbol>XAF</symbol>
 			</currency>
+			<currency type="XAU">
+				<displayName>Gold</displayName>
+				<symbol>XAU</symbol>
+			</currency>
 			<currency type="XBA">
 				<displayName>Europäische Rechnungseinheit</displayName>
 				<symbol>XBA</symbol>
@@ -1911,10 +1991,6 @@
 			<currency type="XPF">
 				<displayName>CFP Franc</displayName>
 				<symbol>XPF</symbol>
-			</currency>
-			<currency type="XPS">
-				<displayName>Pfund Sterling</displayName>
-				<symbol>XPS</symbol>
 			</currency>
 			<currency type="XTR">
 				<displayName>COMECON Transferabler Rubel</displayName>
@@ -1976,47 +2052,18 @@
 				<displayName>Sambisches Pfund</displayName>
 				<symbol>ZMP</symbol>
 			</currency>
+			<currency type="ZRN">
+				<displayName>Neuer Zaire</displayName>
+				<symbol>ZRN</symbol>
+			</currency>
+			<currency type="ZRZ">
+				<displayName>Zaire</displayName>
+				<symbol>ZRZ</symbol>
+			</currency>
 			<currency type="ZWD">
 				<displayName>Simbabwe Dollar</displayName>
 				<symbol>ZWD</symbol>
 			</currency>
 		</currencies>
 	</numbers>
-	<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
-		<icu:ruleBasedNumberFormats>
-			<icu:ruleBasedNumberFormat type="spellout">
-%alt-ones:
--x: minus &gt;&gt;;
-x.x: &lt;&lt; komma &gt;&gt;;
-null; eins; =%%main=;
-%%main:
-null; ein; zwei; drei; vier; fünf; sechs; sieben; acht; neun;
-zehn; elf; zwölf; &gt;&gt;zehn;
-20: [&gt;&gt;und]zwanzig;
-30: [&gt;&gt;und]dreißig;
-40: [&gt;&gt;und]vierzig;
-50: [&gt;&gt;und]fünfzig;
-60: [&gt;&gt;und]sechzig;
-70: [&gt;&gt;und]siebzig;
-80: [&gt;&gt;und]achtzig;
-90: [&gt;&gt;und]neunzig;
-100: hundert[&gt;%alt-ones&gt;];
-200: &lt;&lt;hundert[&gt;%alt-ones&gt;];
-1000: tausend[&gt;%alt-ones&gt;];
-2000: &lt;&lt;tausend[&gt;%alt-ones&gt;];
-1,000,000: eine Million[ &gt;%alt-ones&gt;];
-2,000,000: &lt;&lt; Millionen[ &gt;%alt-ones&gt;];
-1,000,000,000: eine Milliarde[ &gt;%alt-ones&gt;];
-2,000,000,000: &lt;&lt; Milliarden[ &gt;%alt-ones&gt;];
-1,000,000,000,000: eine Billion[ &gt;%alt-ones&gt;];
-2,000,000,000,000: &lt;&lt; Billionen[ &gt;%alt-ones&gt;];
-1,000,000,000,000,000: =#,##0=;%%lenient-parse:
-&amp;<cp hex="0000" /> &lt;&lt; ' ' &lt;&lt; '-'
-&amp; ae , ä &amp; ae , Ä
-&amp; oe , ö &amp; oe , Ö
-&amp; ue , ü &amp; ue , Ü
-
-			</icu:ruleBasedNumberFormat>
-		</icu:ruleBasedNumberFormats>
-	</special>
 </ldml>

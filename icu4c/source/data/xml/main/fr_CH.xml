@@ -1,14 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE ldml SYSTEM " 	http://oss.software.ibm.com/cvs/icu/~checkout~/locale/ldml.dtd" 
-[
-      <!ENTITY % icu SYSTEM " http://oss.software.ibm.com/cvs/icu/~checkout~/locale/ldmlICU.dtd"> 
-%icu;
-]
->
+<!DOCTYPE ldml SYSTEM "http://www.unicode.org/cldr/dtd/1.1/ldml.dtd">
 <ldml>
 	<identity>
-		<version number="2.0"/>
-		<generation date="2004-05-14" />
+		<version number="1.1"/>
+		<generation date="2004-05-27" />
 		<language type="fr" /> 
 		<territory type="CH" /> 
 	</identity>
@@ -119,36 +114,4 @@
 			</currencyFormatLength >
 		</currencyFormats>
 	</numbers>
-	<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
-		<icu:ruleBasedNumberFormats>
-			<icu:ruleBasedNumberFormat type="spellout">
-%main:
--x: moins &gt;&gt;;
-x.x: &lt;&lt; virgule &gt;&gt;;
-zéro; un; deux; trois; quatre; cinq; six; sept; huit; neuf;
-dix; onze; douze; treize; quatorze; quinze; seize;
-    dix-sept; dix-huit; dix-neuf;
-20: vingt[-&gt;%%alt-ones&gt;];
-30: trente[-&gt;%%alt-ones&gt;];
-40: quarante[-&gt;%%alt-ones&gt;];
-50: cinquante[-&gt;%%alt-ones&gt;];
-60: soixante[-&gt;%%alt-ones&gt;];
-70: septante[-&gt;%%alt-ones&gt;];
-80: huitante[-&gt;%%alt-ones&gt;];
-90: nonante[-&gt;%%alt-ones&gt;];
-100: cent[ &gt;&gt;];
-200: &lt;&lt; cents[ &gt;&gt;];
-1000: mille[ &gt;&gt;];
-1100&gt;: onze cents[ &gt;&gt;];
-1200: mille &gt;&gt;;
-2000: &lt;&lt; mille[ &gt;&gt;];
-1,000,000: &lt;&lt; million[ &gt;&gt;];
-1,000,000,000: &lt;&lt; milliarde[ &gt;&gt;];
-1,000,000,000,000: &lt;&lt; billion[ &gt;&gt;];
-1,000,000,000,000,000: =#,##0=;
-%%alt-ones:
-; et-un; =%main=;
-			</icu:ruleBasedNumberFormat>
-		</icu:ruleBasedNumberFormats>
-	</special>
 </ldml>
