@@ -28,7 +28,7 @@
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="TRUE"
 				DisableLanguageExtensions="TRUE"
-				PrecompiledHeaderFile=".\Release/ctestfw.pch"
+				PrecompiledHeaderFile=".\Release/icutest.pch"
 				AssemblerListingLocation=".\Release/"
 				ObjectFile=".\Release/"
 				ProgramDataBaseFileName=".\Release/"
@@ -40,18 +40,18 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions="/MACHINE:I386"
-				OutputFile="..\..\..\bin\ctestfw.dll"
+				OutputFile="..\..\..\bin\icutest.dll"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
-				ProgramDatabaseFile=".\..\..\..\lib/ctestfw.pdb"
-				ImportLibrary=".\..\..\..\lib/ctestfw.lib"/>
+				ProgramDatabaseFile=".\..\..\..\lib/icutest.pdb"
+				ImportLibrary=".\..\..\..\lib/icutest.lib"/>
 			<Tool
 				Name="VCMIDLTool"
 				PreprocessorDefinitions="NDEBUG"
 				MkTypLibCompatible="TRUE"
 				SuppressStartupBanner="TRUE"
 				TargetEnvironment="1"
-				TypeLibraryName=".\..\..\..\lib/ctestfw.tlb"/>
+				TypeLibraryName=".\..\..\..\lib/icutest.tlb"/>
 			<Tool
 				Name="VCPostBuildEventTool"/>
 			<Tool
@@ -91,7 +91,7 @@
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
 				DisableLanguageExtensions="TRUE"
-				PrecompiledHeaderFile=".\Debug/ctestfw.pch"
+				PrecompiledHeaderFile=".\Debug/icutest.pch"
 				AssemblerListingLocation=".\Debug/"
 				ObjectFile=".\Debug/"
 				ProgramDataBaseFileName=".\Debug/"
@@ -105,19 +105,19 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions="/MACHINE:I386"
-				OutputFile="..\..\..\bin\ctestfwd.dll"
+				OutputFile="..\..\..\bin\icutestd.dll"
 				LinkIncremental="2"
 				SuppressStartupBanner="TRUE"
 				GenerateDebugInformation="TRUE"
-				ProgramDatabaseFile=".\..\..\..\lib/ctestfwd.pdb"
-				ImportLibrary=".\..\..\..\lib/ctestfwd.lib"/>
+				ProgramDatabaseFile=".\..\..\..\lib/icutestd.pdb"
+				ImportLibrary=".\..\..\..\lib/icutestd.lib"/>
 			<Tool
 				Name="VCMIDLTool"
 				PreprocessorDefinitions="_DEBUG"
 				MkTypLibCompatible="TRUE"
 				SuppressStartupBanner="TRUE"
 				TargetEnvironment="1"
-				TypeLibraryName=".\..\..\..\lib/ctestfw.tlb"/>
+				TypeLibraryName=".\..\..\..\lib/icutest.tlb"/>
 			<Tool
 				Name="VCPostBuildEventTool"/>
 			<Tool

@@ -38,10 +38,10 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile="..\..\bin\iculx28.dll"
+				OutputFile="..\..\bin\iculx30.dll"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
-				ProgramDatabaseFile=".\..\..\lib/iculx28.pdb"
+				ProgramDatabaseFile=".\..\..\lib/iculx30.pdb"
 				ImportLibrary="..\..\lib\iculx.lib"/>
 			<Tool
 				Name="VCMIDLTool"
@@ -99,11 +99,11 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile="..\..\bin\iculx28d.dll"
+				OutputFile="..\..\bin\iculx30d.dll"
 				LinkIncremental="2"
 				SuppressStartupBanner="TRUE"
 				GenerateDebugInformation="TRUE"
-				ProgramDatabaseFile=".\..\..\lib/iculx28d.pdb"
+				ProgramDatabaseFile=".\..\..\lib/iculx30d.pdb"
 				ImportLibrary="..\..\lib\iculxd.lib"/>
 			<Tool
 				Name="VCMIDLTool"
