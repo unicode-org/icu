@@ -982,7 +982,7 @@ main(int argc, char* argv[])
                 "#### %s: u_init() failed, error is \"%s\".\n"
 				"#### Most commonly indicates that the ICU data is not accesible.\n"
                 "#### Check setting of ICU_DATA, or check that ICU data library is available\n"
-				"#### Aborting %s\n", argv[0], u_errorName(errorCode));
+				"#### ICU_DATA is currently set to \"%s\"\n", argv[0], u_errorName(errorCode), u_getDataDirectory());
 		u_cleanup();
 	    return 1;
     }
