@@ -742,12 +742,15 @@ private:
   */
   void setUCollator(UCollator *collator, UnicodeString *rules);
 
+public:
   /**
-  * Get UCollator data struct. Used only by StringSearch.
+  * Get UCollator data struct. Used only by StringSearch & intltest.
   * @return UCollator data struct
+  * @internal
   */
   const UCollator * getUCollator();
 
+private:
   /**
   * Converts C's UCollationResult to EComparisonResult
   * @param result member of the enum UComparisonResult
