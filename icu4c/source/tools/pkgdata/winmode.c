@@ -136,10 +136,11 @@ void pkg_mode_windows(UPKGOptions *o, FileStream *makefile, UErrorCode *status) 
         }
         T_FileStream_writeLine(makefile, tmp2);
 
+        /* If you modify this, remember to modify makedata.mak too. */
         T_FileStream_writeLine(makefile, "\n"
             "# Windows specific DLL version information.\n"
-            "!IF EXISTS(\".\\$(NAME)_icudata.res\")\n"
-            "DATA_VER_INFO=\".\\$(NAME)_icudata.res\"\n"
+            "!IF EXISTS(\".\\icudata.res\")\n"
+            "DATA_VER_INFO=\".\\icudata.res\"\n"
             "!ELSE\n"
             "DATA_VER_INFO=\n"
             "!ENDIF\n\n");
@@ -193,15 +194,6 @@ void pkg_mode_windows(UPKGOptions *o, FileStream *makefile, UErrorCode *status) 
                 "GENCCODE = $(ICUROOT)%sbin\\genccode.exe\n", separator);
         }
         T_FileStream_writeLine(makefile, tmp2);
-
-        T_FileStream_writeLine(makefile, "\n"
-            "# Windows specific LIB version information.\n"
-            "!IF EXISTS(\".\\$(NAME)_icudata.res\")\n"
-            "DATA_VER_INFO=\".\\$(NAME)_icudata.res\"\n"
-            "!ELSE\n"
-            "DATA_VER_INFO=\n"
-            "!ENDIF\n\n");
-
 
         uprv_strcpy(tmp, UDATA_CMN_PREFIX "$(NAME)" UDATA_CMN_INTERMEDIATE_SUFFIX OBJ_SUFFIX);
 

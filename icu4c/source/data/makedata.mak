@@ -441,6 +441,7 @@ res_index {
 	@"$(ICUTOOLS)\genrb\$(CFG)\genrb" -k -d"$(ICUBLD)" $<
 
 # DLL version information
+# If you modify this, modify winmode.c in pkgdata.
 "$(ICUBLD)\icudata.res": "$(ICUMISC)\icudata.rc"
 	@echo Creating data DLL version information from $**
 	@rc.exe /i "..\..\..\..\..\include" /r /fo $@ $**
