@@ -628,20 +628,8 @@ public:
 
     const UChar* unext(UErrorCode& status) {
         const UnicodeString* us = snext(status);
-        if (us) {
-            int newlen;
-            for (newlen = us->extract((UChar*)_bufp, _buflen / sizeof(UChar), status);
-                 status == U_STRING_NOT_TERMINATED_WARNING || status == U_BUFFER_OVERFLOW_ERROR;
-                 ) {
-                resizeBuffer((newlen + BUFFER_GROW) * sizeof(UChar));
-                status = U_ZERO_ERROR;
-            }
-            if (U_SUCCESS(status)) {
-                ((UChar*)_bufp)[newlen] = 0;
-                return (const UChar*)_bufp;
-            }
-        }
-        return NULL;
+	// TimeZone terminates the ID strings when it builds them
+	return (us == NULL) ? NULL : us->getBuffer();
     }
 
     const UnicodeString* snext(UErrorCode& status) {
