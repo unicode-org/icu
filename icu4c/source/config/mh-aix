@@ -1,5 +1,7 @@
 ## -*-makefile-*-
 ## Aix-specific setup (for xlC)
+## Copyright (c) 1999-2000, International Business Machines Corporation and
+## others. All Rights Reserved.
 
 ## Commands to generate dependency files
 GEN_DEPS.c=	$(CC) -E -M $(DEFS) $(CPPFLAGS)

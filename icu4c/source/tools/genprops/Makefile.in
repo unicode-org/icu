@@ -1,4 +1,6 @@
 ## Makefile.in for ICU - tools/genprops
+## Copyright (c) 1999, International Business Machines Corporation and
+## others. All Rights Reserved.
 ## Steven R. Loomis
 
 ## Shell to use

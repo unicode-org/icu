@@ -1,3 +1,5 @@
+/* Copyright (c) 1999-2000, International Business Machines Corporation and
+   others. All Rights Reserved. */
 /* Define to signed char if not in <sys/types.h> */
 #undef int8_t
 

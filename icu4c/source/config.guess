@@ -36,6 +36,9 @@
 # Only a few systems have been added to this list; please add others
 # (but try to keep the structure clean).
 #
+#
+## Copyright (c) 1999-2000, International Business Machines Corporation and
+## others. All Rights Reserved.
 
 # Use $HOST_CC if defined. $CC may point to a cross-compiler
 if test x"$CC_FOR_BUILD" = x; then

@@ -1,5 +1,7 @@
 ## -*-makefile-*-
 ## IRIX-specific setup (for CC)
+## Copyright (c) 1999-2000, International Business Machines Corporation and
+## others. All Rights Reserved.
 
 
 ## Commands to generate dependency files
