@@ -158,21 +158,33 @@ static int32_t randi(int32_t n)
 
 //***************************************************************************************
 
+/*
+ Don't use more than one of these at a time because of the Locale names
+*/
 NewResourceBundleTest::NewResourceBundleTest()
 : pass(0),
   fail(0),
   OUT(it_out)
 {
-    param[0].locale = new Locale("root");
-    param[1].locale = new Locale("te");
-    param[2].locale = new Locale("te", "IN");
-    param[3].locale = new Locale("te", "NE");
-    param[4].locale = new Locale("te", "IN", "NE");
-    param[5].locale = new Locale("ne");
+    if (param[5].locale == NULL) {
+        param[0].locale = new Locale("root");
+        param[1].locale = new Locale("te");
+        param[2].locale = new Locale("te", "IN");
+        param[3].locale = new Locale("te", "NE");
+        param[4].locale = new Locale("te", "IN", "NE");
+        param[5].locale = new Locale("ne");
+    }
 }
 
 NewResourceBundleTest::~NewResourceBundleTest()
 {
+    if (param[5].locale) {
+        int idx;
+        for (idx = 0; idx < (int)(sizeof(param)/sizeof(param[0])); idx++) {
+            delete param[idx].locale;
+            param[idx].locale = NULL;
+        }
+    }
 }
 
 void NewResourceBundleTest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* /*par*/ )
