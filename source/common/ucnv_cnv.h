@@ -95,14 +95,14 @@ typedef UConverter * (*UConverterSafeClone) (const UConverter   *cnv,
 
 UBool CONVERSION_U_SUCCESS (UErrorCode err);
 
-void flushInternalUnicodeBuffer (UConverter * _this,
+void ucnv_flushInternalUnicodeBuffer (UConverter * _this,
                                  UChar * myTarget,
                                  int32_t * myTargetIndex,
                                  int32_t targetLength,
                                  int32_t** offsets,
                                  UErrorCode * err);
 
-void flushInternalCharBuffer (UConverter * _this,
+void ucnv_flushInternalCharBuffer (UConverter * _this,
                               char *myTarget,
                               int32_t * myTargetIndex,
                               int32_t targetLength,

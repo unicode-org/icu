@@ -112,7 +112,7 @@ static const UConverterSharedData *getAlgorithmicTypeFromName (const char *realN
 U_CAPI  UConverterSharedData* U_EXPORT2 ucnv_data_unFlattenClone(UDataMemory *pData, UErrorCode *status);
 
 /*initializes some global variables */
-UHashtable *SHARED_DATA_HASHTABLE = NULL;
+static UHashtable *SHARED_DATA_HASHTABLE = NULL;
 
 /* The calling function uses the global mutex, so there is no need to use it here too */
 UBool ucnv_cleanup(void) {
@@ -170,7 +170,7 @@ static UConverterSharedData *createConverterFromFile (const char *fileName, UErr
 }
 
 void 
-copyPlatformString(char *platformString, UConverterPlatform pltfrm)
+ucnv_copyPlatformString(char *platformString, UConverterPlatform pltfrm)
 {
     switch (pltfrm)
     {
@@ -245,7 +245,8 @@ umtx_lock (NULL);
 umtx_unlock (NULL);
 }
 
-UConverterSharedData *getSharedConverterData(const char *name)
+UConverterSharedData *
+getSharedConverterData(const char *name)
 {
     /*special case when no Table has yet been created we return NULL */
     if (SHARED_DATA_HASHTABLE == NULL)
@@ -267,7 +268,8 @@ umtx_unlock(NULL);
 /*frees the string of memory blocks associates with a sharedConverter
  *if and only if the referenceCounter == 0
  */
-UBool   deleteSharedConverterData(UConverterSharedData * deadSharedData)
+UBool
+deleteSharedConverterData(UConverterSharedData * deadSharedData)
 {
     if (deadSharedData->referenceCounter > 0)
         return FALSE;
@@ -363,7 +365,7 @@ parseConverterOptions(const char *inName,
  * -Call AlgorithmicConverter initializer (Data=FALSE, Cached=TRUE)
  */
 UConverter *
-createConverter (const char *converterName, UErrorCode * err)
+ucnv_createConverter (const char *converterName, UErrorCode * err)
 {
     char cnvName[100], locale[20];
     const char *realName;
@@ -470,7 +472,8 @@ createConverter (const char *converterName, UErrorCode * err)
     return myUConverter;
 }
 
-UConverterSharedData* ucnv_data_unFlattenClone(UDataMemory *pData, UErrorCode *status)
+UConverterSharedData*
+ucnv_data_unFlattenClone(UDataMemory *pData, UErrorCode *status)
 {
     /* UDataInfo info; -- necessary only if some converters have different formatVersion */
     const uint8_t *raw = (const uint8_t *)udata_getMemory(pData);
@@ -533,3 +536,43 @@ UConverterSharedData* ucnv_data_unFlattenClone(UDataMemory *pData, UErrorCode *s
     }
     return data;
 }
+
+/*Frees all shared immutable objects that aren't referred to (reference count = 0)
+ */
+int32_t
+ucnv_flushCache ()
+{
+    UConverterSharedData *mySharedData = NULL;
+    int32_t pos = -1;
+    int32_t tableDeletedNum = 0;
+    const UHashElement *e;
+
+    /*if shared data hasn't even been lazy evaluated yet
+    * return 0
+    */
+    if (SHARED_DATA_HASHTABLE == NULL)
+        return 0;
+
+    /*creates an enumeration to iterate through every element in the
+    *table
+    */
+    umtx_lock (NULL);
+    while ((e = uhash_nextElement (SHARED_DATA_HASHTABLE, &pos)) != NULL)
+    {
+        mySharedData = (UConverterSharedData *) e->value;
+        /*deletes only if reference counter == 0 */
+        if (mySharedData->referenceCounter == 0)
+        {
+            tableDeletedNum++;
+            
+            UCNV_DEBUG_LOG("del",mySharedData->staticData->name,mySharedData);
+            
+            uhash_removeElement(SHARED_DATA_HASHTABLE, e);
+            deleteSharedConverterData (mySharedData);
+        }
+    }
+    umtx_unlock (NULL);
+
+    return tableDeletedNum;
+}
+
