@@ -1024,6 +1024,33 @@ void RegexTest::API_Pattern() {
     REGEX_ASSERT(fields[3]==",");
     REGEX_ASSERT(fields[4]=="20");
     delete pat1;
+
+
+    //
+    // RegexPattern::pattern()
+    //
+    pat1 = new RegexPattern();
+    REGEX_ASSERT(pat1->pattern() == "");
+    delete pat1;
+
+    pat1 = RegexPattern::compile("(Hello, world)*",  pe, status);
+    REGEX_CHECK_STATUS;
+    REGEX_ASSERT(pat1->pattern() == "(Hello, world)*");
+    delete pat1;
+
+
+    //
+    // classID functions
+    //
+    pat1 = RegexPattern::compile("(Hello, world)*",  pe, status);
+    REGEX_CHECK_STATUS;
+    REGEX_ASSERT(pat1->getDynamicClassID() == RegexPattern::getStaticClassID());
+    REGEX_ASSERT(pat1->getDynamicClassID() != NULL);
+    RegexMatcher *m = pat1->matcher("Hello, World", status);
+    REGEX_ASSERT(pat1->getDynamicClassID() != m->getDynamicClassID());
+    REGEX_ASSERT(m->getDynamicClassID() == RegexMatcher::getStaticClassID());
+    REGEX_ASSERT(m->getDynamicClassID() != NULL);
+
 }
 
 

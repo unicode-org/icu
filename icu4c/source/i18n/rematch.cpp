@@ -47,10 +47,6 @@ RegexMatcher::RegexMatcher(const RegexPattern *pat)  {
 }
 
 
-RegexMatcher::RegexMatcher(const RegexMatcher &other) {
-    U_ASSERT(FALSE);
-}
-
 
 RegexMatcher::~RegexMatcher() {
     delete fBackTrackStack;
