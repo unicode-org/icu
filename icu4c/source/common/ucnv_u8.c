@@ -757,7 +757,8 @@ static const UConverterImpl _UTF8Impl={
 static const UConverterStaticData _UTF8StaticData={
     sizeof(UConverterStaticData),
     "UTF-8",
-    1208, UCNV_IBM, UCNV_UTF8, 1, 4,
+    1208, UCNV_IBM, UCNV_UTF8,
+    1, 3, /* max 3 bytes per UChar from UTF-8 (4 bytes from surrogate _pair_) */
     { 0xef, 0xbf, 0xbd, 0 },3,FALSE,FALSE,
     0,
     0,

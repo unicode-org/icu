@@ -64,7 +64,7 @@ typedef struct UConverterStaticData {   /* +offset: size */
     int8_t conversionType;          /* +69: 1 conversion type */
 
     int8_t minBytesPerChar;         /* +70: 1 Minimum # bytes per char in this codepage */
-    int8_t maxBytesPerChar;         /* +71: 1 Maximum # bytes per char in this codepage */
+    int8_t maxBytesPerChar;         /* +71: 1 Maximum # bytes output per UChar in this codepage */
 
     uint8_t subChar[UCNV_MAX_SUBCHAR_LEN]; /* +72: 4  [note:  4 and 8 byte boundary] */
     int8_t subCharLen;              /* +76: 1 */
@@ -160,6 +160,14 @@ struct UConverter {
      *   for this code point
      */
     UChar32 fromUChar32;
+
+    /*
+     * value for ucnv_getMaxCharSize()
+     *
+     * usually simply copied from the static data, but ucnvmbcs.c modifies
+     * the value depending on the converter type and options
+     */
+    int8_t maxBytesPerUChar;
 
     int8_t subCharLen;                  /* length of the codepage specific character sequence */
     int8_t invalidCharLength;

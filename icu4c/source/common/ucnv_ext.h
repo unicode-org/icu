@@ -124,7 +124,19 @@
  *   [15] index of fromUStage3b[] (array of uint32_t like fromUTableValues[])
  *   [16] length of fromUStage3b[]
  *
- *   [17]..[30] reserved
+ *   [17] Bit field containing numbers of bytes:
+ *        31..24 reserved, 0
+ *        23..16 maximum input bytes
+ *        15.. 8 maximum output bytes
+ *         7.. 0 maximum bytes per UChar
+ *
+ *   [18] Bit field containing numbers of UChars:
+ *        31..24 reserved, 0
+ *        23..16 maximum input UChars
+ *        15.. 8 maximum output UChars
+ *         7.. 0 maximum UChars per byte
+ *
+ *   [19]..[30] reserved, 0
  *   [31] number of bytes for the entire extension structure
  *   [>31] reserved; there are indexes[0] indexes
  *
@@ -303,7 +315,10 @@ enum {
     UCNV_EXT_FROM_U_STAGE_3B_INDEX,
     UCNV_EXT_FROM_U_STAGE_3B_LENGTH,
 
-    UCNV_EXT_RESERVED_INDEX,            /* 17, moves with additional indexes */
+    UCNV_EXT_COUNT_BYTES,               /* 17 */
+    UCNV_EXT_COUNT_UCHARS,
+
+    UCNV_EXT_RESERVED_INDEX,            /* 19, moves with additional indexes */
 
     UCNV_EXT_SIZE=31,
     UCNV_EXT_INDEXES_MIN_LENGTH=32
@@ -312,6 +327,9 @@ enum {
 /* get the pointer to an extension array from indexes[index] */
 #define UCNV_EXT_ARRAY(indexes, index, itemType) \
     ((const itemType *)((const char *)(indexes)+(indexes)[index]))
+
+#define UCNV_GET_MAX_BYTES_PER_UCHAR(indexes) \
+    ((indexes)[UCNV_EXT_COUNT_BYTES]&0xff)
 
 /* internal API ------------------------------------------------------------- */
 
