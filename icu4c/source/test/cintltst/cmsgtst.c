@@ -587,6 +587,8 @@ static void TestJ904(void) {
     }
 }
 
+void addMsgForTest(TestNode** root);
+
 void addMsgForTest(TestNode** root)
 {
     addTest(root, &MessageFormatTest, "tsformat/cmsgtst/MessageFormatTest");
