@@ -77,10 +77,11 @@ void uprv_syntaxError(const UChar* rules,
 
     stop  = ((pos+U_PARSE_CONTEXT_LEN)<= rulesLen )? (pos+(U_PARSE_CONTEXT_LEN)) : 
                                                             rulesLen;
-
-    u_memcpy(parseError->postContext,rules+start,stop-start);
-    //null terminate the buffer
-    parseError->postContext[stop-start]= 0;
+    if(start < stop){
+        u_memcpy(parseError->postContext,rules+start,stop-start);
+        //null terminate the buffer
+        parseError->postContext[stop-start]= 0;
+    }
     
 }
 #endif
