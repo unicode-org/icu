@@ -65,10 +65,12 @@ icu4c/source/data/*.res
 icu4c/source/data/.links
 icu4c/source/data/Makefile
 icu4c/source/data/build/*.a
+icu4c/source/data/build/*.c
 icu4c/source/data/build/*.cnv
 icu4c/source/data/build/*.dat
 icu4c/source/data/build/*.lst
 icu4c/source/data/build/*.ncb
+icu4c/source/data/build/*.o
 icu4c/source/data/build/*.opt
 icu4c/source/data/build/*.plg
 icu4c/source/data/build/*.res
