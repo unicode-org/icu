@@ -28,7 +28,7 @@ public class Implicit implements UCD_Types {
     static final long bottomByte = 0xFFL;
     static final long fourBytes = 0xFFFFFFFFL;
     
-    static final int MAX_INPUT = 0x220000; // 2 * Unicode range + 1
+    static final int MAX_INPUT = 0x220001; // 2 * Unicode range + 2
     
     /**
      * Testing function
@@ -43,6 +43,7 @@ public class Implicit implements UCD_Types {
             foo.getFromRawImplicit(0xE20303E7);
 
             int gap4 = foo.getGap4();
+            System.out.println("Gap4: " + gap4); 
             int gap3 = foo.getGap3();
             int minTrail = foo.getMinTrail();
             int maxTrail = foo.getMaxTrail();
@@ -157,12 +158,10 @@ public class Implicit implements UCD_Types {
     }
     
     // old comment
-    // we must skip all 00, 01, 02 bytes, so most bytes have 253 values
+    // we must skip all 00, 01, 02, FF bytes, so most bytes have 252 values
     // we must leave a gap of 01 between all values of the last byte, so the last byte has 126 values (3 byte case)
     // we shift so that HAN all has the same first primary, for compression.
     // for the 4 byte case, we make the gap as large as we can fit.
-    // Three byte forms are EC xx xx, ED xx xx, EE xx xx (with a gap of 1)
-    // Four byte forms (most supplementaries) are EF xx xx xx (with a gap of LAST2_MULTIPLIER == 14)
 
     /**
      * Supply parameters for generating implicit CEs
@@ -179,13 +178,13 @@ public class Implicit implements UCD_Types {
      * @param minTrail final byte
      * @param maxTrail final byte
      * @param gap3 the gap we leave for tailoring for 3-byte forms
-     * @param gap4 the gap we leave for tailoring for 4-byte forms
+     * @param primaries3count number of 3-byte primarys we can use (normally 1)
      */
     public Implicit(int minPrimary, int maxPrimary, int minTrail, int maxTrail, int gap3, int primaries3count) {
         // some simple parameter checks
         if (minPrimary < 0 || minPrimary >= maxPrimary || maxPrimary > 0xFF) throw new IllegalArgumentException("bad lead bytes");
         if (minTrail < 0 || minTrail >= maxTrail || maxTrail > 0xFF) throw new IllegalArgumentException("bad trail bytes");
-        if (primaries3count < 1) throw new IllegalArgumentException("bad gap");
+        if (primaries3count < 1) throw new IllegalArgumentException("bad three-byte primaries");
         
         this.minTrail = minTrail;
         this.maxTrail = maxTrail;
@@ -209,9 +208,7 @@ public class Implicit implements UCD_Types {
         // now determine where the 3/4 boundary is.
         // we use 3 bytes below the boundary, and 4 above
         int primariesAvailable = maxPrimary - minPrimary + 1;
-        int primaries4count = primariesAvailable - primaries3count;
-        //int min3BytesNeeded = primariesAvailable - min4BytesNeeded;
-        
+        int primaries4count = primariesAvailable - primaries3count;        
         
         int min3ByteCoverage = primaries3count * threeByteCount;
         min4Primary = minPrimary + primaries3count;
@@ -221,17 +218,24 @@ public class Implicit implements UCD_Types {
         int totalNeeded = MAX_INPUT - min4Boundary;
         int neededPerPrimaryByte = divideAndRoundUp(totalNeeded, primaries4count);
         if (DEBUG) System.out.println("neededPerPrimaryByte: " + neededPerPrimaryByte);
+        
         int neededPerFinalByte = divideAndRoundUp(neededPerPrimaryByte, medialCount * medialCount);
         if (DEBUG) System.out.println("neededPerFinalByte: " + neededPerFinalByte);
+        
         int gap4 = (maxTrail - minTrail - 1) / neededPerFinalByte;
         if (DEBUG) System.out.println("expandedGap: " + gap4);
         if (gap4 < 1) throw new IllegalArgumentException("must have larger gap4s");
+        
         final4Multiplier = gap4 + 1;
         final4Count = neededPerFinalByte;
         max4Trail = minTrail + (final4Count - 1) * final4Multiplier;
+        
+        if (primaries4count * medialCount * medialCount * final4Count < MAX_INPUT) {
+            throw new IllegalArgumentException("internal error");
+        } 
         if (DEBUG) {
             System.out.println("final4Count: " + final4Count);
-            for (int counter = 0; counter <= final4Count; ++counter) {
+            for (int counter = 0; counter < final4Count; ++counter) {
                 int value = minTrail + (1 + counter)*final4Multiplier;
                 System.out.println(counter + "\t" + value + "\t" + Utility.hex(value));
             }
@@ -338,9 +342,10 @@ public class Implicit implements UCD_Types {
     
     public int getSwappedImplicit(int cp) {
         if (DEBUG) System.out.println("Incoming: " + Utility.hex(cp));
-            
-        cp = Implicit.swapCJK(cp);
-        // we now have a range of numbers from 0 to 21FFFF.
+        
+        // note, we add 1 so that the first value is always empty.
+        cp = Implicit.swapCJK(cp) + 1;
+        // we now have a range of numbers from 0 to 220000.
             
         if (DEBUG) System.out.println("CJK swapped: " + Utility.hex(cp));
             
