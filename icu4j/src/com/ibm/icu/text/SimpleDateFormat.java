@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/SimpleDateFormat.java,v $ 
- * $Date: 2000/11/21 06:54:53 $ 
- * $Revision: 1.7 $
+ * $Date: 2001/10/19 12:24:23 $ 
+ * $Revision: 1.8 $
  *
  *****************************************************************************************
  */
@@ -106,7 +106,7 @@ import java.lang.StringIndexOutOfBoundsException;
  * <pre>
  * Format Pattern                         Result
  * --------------                         -------
- * "yyyy.MM.dd G 'at' hh:mm:ss z"    ->>  1996.07.10 AD at 15:08:56 PDT
+ * "yyyy.MM.dd G 'at' HH:mm:ss z"    ->>  1996.07.10 AD at 15:08:56 PDT
  * "EEE, MMM d, ''yy"                ->>  Wed, July 10, '96
  * "h:mm a"                          ->>  12:08 PM
  * "hh 'o''clock' a, zzzz"           ->>  12 o'clock PM, Pacific Daylight Time
@@ -118,8 +118,8 @@ import java.lang.StringIndexOutOfBoundsException;
  * <blockquote>
  * <pre>
  * SimpleTimeZone pdt = new SimpleTimeZone(-8 * 60 * 60 * 1000, "PST");
- * pdt.setStartRule(DateFields.APRIL, 1, DateFields.SUNDAY, 2*60*60*1000);
- * pdt.setEndRule(DateFields.OCTOBER, -1, DateFields.SUNDAY, 2*60*60*1000);
+ * pdt.setStartRule(Calendar.APRIL, 1, Calendar.SUNDAY, 2*60*60*1000);
+ * pdt.setEndRule(Calendar.OCTOBER, -1, Calendar.SUNDAY, 2*60*60*1000);
  * <br>
  * // Format the current time.
  * SimpleDateFormat formatter
@@ -168,6 +168,12 @@ import java.lang.StringIndexOutOfBoundsException;
  * of the year, whether hours are zero based or not (0 vs 12 or 24), and the
  * time zone. There is one common decimal format to handle all the numbers;
  * the digit count is handled programmatically according to the pattern.
+ *
+ * <h4>Synchronization</h4>
+ *
+ * Date formats are not synchronized. It is recommended to create separate 
+ * format instances for each thread. If multiple threads access a format 
+ * concurrently, it must be synchronized externally. 
  *
  * @see          com.ibm.util.Calendar
  * @see          com.ibm.util.GregorianCalendar

@@ -78,7 +78,7 @@ import java.text.resources.*;
  * <p>To format a number for a different Locale, specify it in the
  * call to getDateInstance().
  * <pre>
- *  DateFormat df = DateFormat.getDateInstance(Locale.FRANCE);
+ *  DateFormat df = DateFormat.getDateInstance(DateFormat.LONG, Locale.FRANCE);
  * </pre>
  * <p>You can use a DateFormat to parse also.
  * <pre>
@@ -113,6 +113,12 @@ import java.text.resources.*;
  * <li>align any particular field, or find out where it is for selection
  * on the screen.
  * </ul>
+ *
+ * <h4>Synchronization</h4>
+ *
+ * Date formats are not synchronized. It is recommended to create separate 
+ * format instances for each thread. If multiple threads access a format 
+ * concurrently, it must be synchronized externally. 
  *
  * @see          Format
  * @see          NumberFormat
@@ -545,6 +551,10 @@ public abstract class DateFormat extends Format {
     public void setNumberFormat(NumberFormat newNumberFormat)
     {
         this.numberFormat = newNumberFormat;
+        /*In order to parse String like "11.10.2001" to DateTime correctly 
+          in Locale("fr","CH") [Richard/GCL]
+        */
+        this.numberFormat.setParseIntegerOnly(true);
     }
 
     /**
