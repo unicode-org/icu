@@ -2885,10 +2885,10 @@ private:
           int32_t toWhichCase);
 
   // ref counting
-  inline int32_t addRef(void);
-  inline int32_t removeRef(void);
-  inline int32_t refCount(void) const;
-  inline int32_t setRefCount(int32_t count);
+  void addRef(void);
+  int32_t removeRef(void);
+  int32_t refCount(void) const;
+  int32_t setRefCount(int32_t count);
 
   // constants
   enum {
@@ -3812,22 +3812,6 @@ UnicodeString::getArrayStart() const
 inline int32_t 
 UnicodeString::getCapacity() const
 { return fCapacity; }
-
-inline int32_t
-UnicodeString::addRef()
-{ return ++*((int32_t *)fArray - 1); }
-
-inline int32_t
-UnicodeString::removeRef()
-{ return --*((int32_t *)fArray - 1); }
-
-inline int32_t
-UnicodeString::refCount() const
-{ return *((int32_t *)fArray - 1); }
-
-inline int32_t
-UnicodeString::setRefCount(int32_t count)
-{ return (*((int32_t *)fArray - 1) = count); }
 
 U_NAMESPACE_END
 

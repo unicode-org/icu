@@ -75,6 +75,19 @@ U_CAPI void U_EXPORT2 umtx_init   ( UMTX* mutex );
    umtx_destroy( &aMutex ); */
 U_CAPI void U_EXPORT2 umtx_destroy( UMTX *mutex );
 
+/*
+ * Atomic Increment and Decrement of an int32_t value.
+ *
+ * Return Values:
+ *   If the result of the operation is zero, the return zero.
+ *   If the result of the operation is not zero, the sign of returned value
+ *      is the same as the sign of the result, but the returned value itself may
+ *      be different from the result of the operation.
+ */
+U_CAPI int32_t U_EXPORT2 umtx_atomic_inc(int32_t *);
+U_CAPI int32_t U_EXPORT2 umtx_atomic_dec(int32_t *);
+
+
 #endif /*_CMUTEX*/
 /*eof*/
 
