@@ -90,7 +90,6 @@ icu4j/src/com/ibm/text/resources/Transliterator_Han_Pinyin.utf8.txt -text
 icu4j/src/com/ibm/text/resources/Transliterator_Hiragana_Katakana.utf8.txt -text
 icu4j/src/com/ibm/text/resources/Transliterator_Kanji_English.utf8.txt -text
 icu4j/src/com/ibm/text/resources/Transliterator_Kanji_OnRomaji.utf8.txt -text
-icu4j/src/com/ibm/text/resources/Transliterator_KeyboardEscape_Latin1.utf8.txt -text
 icu4j/src/com/ibm/text/resources/Transliterator_Latin_Jamo.utf8.txt -text
 icu4j/src/com/ibm/text/resources/thai_dict -text
 icu4j/src/com/ibm/text/unames.dat -text
