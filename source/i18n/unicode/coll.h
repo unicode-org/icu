@@ -64,7 +64,7 @@ class StringEnumeration;
 typedef const void* URegistryKey;
 
 /**
- * @draft ICU2.6
+ * @draft ICU 2.6
  */
 class CollatorFactory;
 
@@ -924,15 +924,17 @@ public:
      * Return true if this factory is visible.  Default is true.
      * If not visible, the locales supported by this factory will not
      * be listed by getAvailableLocales.
-	 * @return true if the factory is visible.
+     * @return true if the factory is visible.
+     @draft ICU 2.6
      */
     virtual UBool visible(void) const;
 
     /**
      * Return a collator for the provided locale.  If the locale
      * is not supported, return NULL.
-	 * @param loc the locale identifying the collator to be created.
-	 * @return a new collator if the locale is supported, otherwise NULL.
+     * @param loc the locale identifying the collator to be created.
+     * @return a new collator if the locale is supported, otherwise NULL.
+     * @draft ICU 2.6
      */
     virtual Collator* createCollator(const Locale& loc) = 0;
 
@@ -952,11 +954,12 @@ public:
     
     /**
      * Return an array of all the locale names directly supported by this factory.  
-	 * The number of names is returned in count.  This array is owned by the factory.  
-	 * Its contents must never change.
-	 * @param count output parameter for the number of locales supported by the factory
-	 * @param status the in/out error code
-	 * @return a pointer to an array of count UnicodeStrings.
+     * The number of names is returned in count.  This array is owned by the factory.  
+     * Its contents must never change.
+     * @param count output parameter for the number of locales supported by the factory
+     * @param status the in/out error code
+     * @return a pointer to an array of count UnicodeStrings.
+     * @draft ICU 2.6
      */
     virtual const UnicodeString * getSupportedIDs(int32_t &count, UErrorCode& status) = 0;
 };
