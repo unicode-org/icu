@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/CollationParsedRuleBuilder.java,v $ 
-* $Date: 2002/12/13 23:14:50 $ 
-* $Revision: 1.13 $
+* $Date: 2003/03/21 22:46:58 $ 
+* $Revision: 1.14 $
 *
 *******************************************************************************
 */
@@ -3079,6 +3079,15 @@ final class CollationParsedRuleBuilder
         // We are now going to calculate up to 7 ranges.
         // Some of them will typically overlap, so we will then have to merge 
         // and eliminate ranges.
+        
+        // We have to clean cruft from previous invocations
+        // before doing anything. C++ already does that
+        for(int length = 0; length < 5; length++) {
+            m_utilLowerWeightRange_[length].clear();
+            m_utilUpperWeightRange_[length].clear();
+        }
+        m_utilWeightRange_.clear();
+        
         int weight = lowerLimit;
         for (int length = lowerLength; length >= 2; -- length) {
             m_utilLowerWeightRange_[length].clear();
@@ -3093,7 +3102,6 @@ final class CollationParsedRuleBuilder
             }
             weight = truncateWeight(weight, length - 1);
         }
-        m_utilWeightRange_.clear();
         m_utilWeightRange_.m_start_ = incWeightTrail(weight, 1);
     
         weight = upperLimit;
