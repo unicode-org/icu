@@ -74,7 +74,7 @@ const uint32_t tblcoll_STACK_BUFFER_LENGTH_ = 1024;
 
 /* forward declarations ----------------------------------------------------- */
 
-UChar forwardCharIteratorGlue(void *iterator);
+U_CAPI UChar forwardCharIteratorGlue(void *iterator);
 
 /* RuleBasedCollator declaration ----------------------------------------- */
 
@@ -759,7 +759,7 @@ char  RuleBasedCollator::fgClassID = 0;
 
 /* other methods not belonging to any classes ------------------------------- */
 
-UChar forwardCharIteratorGlue(void *iterator) 
+U_CAPI UChar forwardCharIteratorGlue(void *iterator) 
 {
   ForwardCharacterIterator *iter = ((ForwardCharacterIterator *)iterator);
   UChar result = iter->nextPostInc();
