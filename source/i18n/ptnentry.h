@@ -87,7 +87,7 @@ class PatternEntry
   class Parser
     {
     public:
-      Parser(const UnicodeString &pattern, Normalizer::EMode decompMode);
+      Parser(const UnicodeString &patternStr, Normalizer::EMode decompMode);
       
       Parser(const Parser &that);
       
