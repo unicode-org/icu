@@ -1457,6 +1457,11 @@ TestSignatureDetection(){
                 "\xEF\xBB\xBF\x41",     /* UTF-8    */
                 "\x0E\xFE\xFF\x41",     /* SCSU     */
 
+                "\x2B\x2F\x76\x38\x2D", /* UTF-7    */
+                "\x2B\x2F\x76\x38\x41", /* UTF-7    */
+                "\x2B\x2F\x76\x39\x41", /* UTF-7    */
+                "\x2B\x2F\x76\x2B\x41", /* UTF-7    */
+                "\x2B\x2F\x76\x2F\x41"  /* UTF-7    */
         };
         static const char* expected[] = {
                 "UTF-16BE",
@@ -1474,6 +1479,11 @@ TestSignatureDetection(){
                 "UTF-8",
                 "SCSU",
 
+                "UTF-7",
+                "UTF-7",
+                "UTF-7",
+                "UTF-7",
+                "UTF-7"
         };
         static const int32_t expectedLength[] ={
             2,
@@ -1491,6 +1501,11 @@ TestSignatureDetection(){
             3,
             3,
 
+            5,
+            4,
+            4,
+            4,
+            4
         };
         int i=0;
         UErrorCode err;

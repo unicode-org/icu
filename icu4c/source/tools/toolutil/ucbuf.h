@@ -146,31 +146,38 @@ ucbuf_ungetc(int32_t ungetChar,UCHARBUF* buf);
 
 
 /**
- * Autodetects the encoding of the file stream. Only UTF encodings are autodectected. 
- * Some UTF encodings are stateful and need byte identifiers to be converted also to bring
+ * Autodetects the encoding of the file stream. Only Unicode charsets are autodectected. 
+ * Some Unicode charsets are stateful and need byte identifiers to be converted also to bring
  * the converter to correct state for converting the rest of the stream. So the UConverter parameter
  * is necessary.
+ * If the charset was autodetected, the caller must close both the input FileStream
+ * and the converter.
+ *
  * @param fileName The file name to be opened and encoding autodected
- * @param conv  Output param to receive the opened converter
+ * @param conv  Output param to receive the opened converter if autodetected; NULL otherwise.
  * @param cp Output param to receive the detected encoding
  * @param err is a pointer to a valid <code>UErrorCode</code> value. If this value
  *        indicates a failure on entry, the function will immediately return.
  *        On exit the value will indicate the success of the operation.
+ * @return The input FileStream if its charset was autodetected; NULL otherwise.
  */
-U_CAPI UBool U_EXPORT2
+U_CAPI FileStream * U_EXPORT2
 ucbuf_autodetect(const char* fileName, const char** cp,UConverter** conv, int32_t* signatureLength,UErrorCode* error);
 
 /**
- * Autodetects the encoding of the file stream. Only UTF encodings are autodectected. 
- * Some UTF encodings are stateful and need byte identifiers to be converted also to bring
+ * Autodetects the encoding of the file stream. Only Unicode charsets are autodectected. 
+ * Some Unicode charsets are stateful and need byte identifiers to be converted also to bring
  * the converter to correct state for converting the rest of the stream. So the UConverter parameter
  * is necessary.
+ * If the charset was autodetected, the caller must close the converter.
+ *
  * @param fileStream The file stream whose encoding is to be detected
- * @param conv  Output param to receive the opened converter
+ * @param conv  Output param to receive the opened converter if autodetected; NULL otherwise.
  * @param cp Output param to receive the detected encoding
  * @param err is a pointer to a valid <code>UErrorCode</code> value. If this value
  *        indicates a failure on entry, the function will immediately return.
  *        On exit the value will indicate the success of the operation.
+ * @return Boolean whether the Unicode charset was autodetected.
  */
 
 U_CAPI UBool U_EXPORT2
