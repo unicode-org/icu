@@ -6,8 +6,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/build.xml,v $ 
-* $Date: 2000/12/27 00:34:15 $ 
-* $Revision: 1.23 $
+* $Date: 2001/01/10 22:12:35 $ 
+* $Revision: 1.24 $
 *
 *******************************************************************************
 * This is the ant build file for ICU4J.  See readme.html for more information.
@@ -39,10 +39,10 @@
 
   <target name="all" depends="core,tests,tools,demos,jar,ucharacterjar,docs"/>
   
-  <target name="core">
+  <target name="core" depends="init">
     <mkdir dir="${build.dir}"/>
-    <copyfile src="${src.dir}/com/ibm/text/resources/thai_dict"
-    	   dest="${build.dir}/com/ibm/text/resources/thai_dict"/>
+    <copy file="${src.dir}/com/ibm/text/resources/thai_dict"
+           todir="${build.dir}/com/ibm/text/resources/"/>
     <javac includes="com/ibm/util/**/*.java,com/ibm/text/**/*.java,com/ibm/math/**/*.java,com/ibm/richtext/**/*.java"
            excludes="**/CVS/**/*"
            srcdir="${src.dir}"
@@ -92,9 +92,9 @@
     		  />    		  
   </target>
 
-  <target name ="miscData">
-    <copyfile src="${src.dir}/com/ibm/data/misc/english.dict"
-    	   dest="${build.dir}/com/ibm/data/misc/english.dict"/>
+  <target name ="miscData" depends="init">
+    <copy file="${src.dir}/com/ibm/data/misc/english.dict"
+    	   todir="${build.dir}/com/ibm/data/misc/"/>
   </target>
 
   
@@ -104,14 +104,14 @@
          basedir="${build.dir}"/>
   </target>
 
-  <target name ="ucharacterPropertyData">
-    <copyfile src="${src.dir}/com/ibm/icu/text/uprops.dat"
-    	   dest="${build.dir}/com/ibm/icu/text/uprops.dat"/>
+  <target name ="ucharacterPropertyData" depends="init">
+    <copy file="${src.dir}/com/ibm/icu/text/uprops.dat"
+    	   todir="${build.dir}/com/ibm/icu/text/"/>
   </target>
 
-  <target name ="ucharacterNameData">
-    <copyfile src="${src.dir}/com/ibm/icu/text/unames.dat"
-    	   dest="${build.dir}/com/ibm/icu/text/unames.dat"/>
+  <target name ="ucharacterNameData" depends="init">
+    <copy file="${src.dir}/com/ibm/icu/text/unames.dat"
+    	   todir="${build.dir}/com/ibm/icu/text/"/>
   </target>
 
   <target name="ucharacterjar" depends="core,ucharacterPropertyData,ucharacterNameData">
@@ -161,7 +161,7 @@
          excludes="${richedit.dist.dir},test_*,${src.dir}/data/unicode/*-*.txt,${obsolete.dir}/**,**/*~,${src.dir}/**/*.class,${build.dir}/**,**/CVS/**/*"/>
   </target>
 
-  <target name="zip">
+  <target name="zip" depends="init">
     <!--Create a zip archive of just the source for distribution.  The
     zip file will be created in the directory above the root ICU4J
     directory. The exclude pattern ${src.dir}/data/unicode/*-*.txt
@@ -172,9 +172,9 @@
          excludes="${richedit.dist.dir},test_*,${src.dir}/data/unicode/*-*.txt,${obsolete.dir}/**,**/*~,${src.dir}/**/*.class,${build.dir}/**,**/CVS/**/*,${doc.dir}/**,${jar.file}"/>
   </target>
 
-  <target name="clean">
-    <deltree dir="${build.dir}"/>
-    <deltree dir="${doc.dir}"/>
+  <target name="clean" depends="init">
+    <delete dir="${build.dir}"/>
+    <delete dir="${doc.dir}"/>
     <delete  file="${jar.file}"/>
   </target>
 
