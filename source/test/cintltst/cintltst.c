@@ -106,7 +106,7 @@ ctest_pathnameInContext( char* fullname, int32_t maxsize, const char* relPath )
         mainDir = getenv("ICU_DATA");
         if(mainDir!=NULL) {
             strcpy(mainDirBuffer, mainDir);
-            strcat(mainDirBuffer, "..\\..\\..");
+            strcat(mainDirBuffer, "..\\..");
         } else {
             mainDirBuffer[0]='\0';
         }
