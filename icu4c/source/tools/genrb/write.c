@@ -29,11 +29,11 @@
 static void write_ustring(FileStream *rb, const UChar *data);
 static void write_string(FileStream *rb, const char *data);
 static void write_strlist(FileStream *rb, const char *name,
-			  const struct SStringList *list);
+              const struct SStringList *list);
 static void write_strlist2d(FileStream *rb, const char *name,
-			    const struct SStringList2d *list);
+                const struct SStringList2d *list);
 static void write_taglist(FileStream *rb, const char *name,
-			  const struct STaggedList *list);
+              const struct STaggedList *list);
 
 /* Special values */
 static const int32_t sBOM = 0x021C;
@@ -53,7 +53,7 @@ static const UChar gCollationElementsTag [] = {
 /* Write a null-terminated UChar array */
 static void
 write_ustring(FileStream *rb,
-	      const UChar *data)
+              const UChar *data)
 {
   int32_t len;
 
@@ -80,8 +80,8 @@ write_string(FileStream *rb,
 /* Write a string list */
 static void
 write_strlist(FileStream *rb,
-	      const char *name,
-	      const struct SStringList *list)
+              const char *name,
+              const struct SStringList *list)
 {
   int32_t i;
 
@@ -103,8 +103,8 @@ write_strlist(FileStream *rb,
 /* Write a 2-d string list */
 static void
 write_strlist2d(FileStream *rb,
-		const char *name,
-		const struct SStringList2d *list)
+                const char *name,
+                const struct SStringList2d *list)
 {
   int32_t i, j;
   int32_t itemcount;
@@ -136,8 +136,8 @@ write_strlist2d(FileStream *rb,
 /* Write a tagged list */
 static void
 write_taglist(FileStream *rb,
-	      const char *name,
-	      const struct STaggedList *list)
+              const char *name,
+              const struct STaggedList *list)
 {
 /*  int32_t i;   */
   struct SStringPair *current;
@@ -169,8 +169,8 @@ write_taglist(FileStream *rb,
 /* Write a parsed SRBItemList to a file */
 void
 rb_write(FileStream *f,
-	 struct SRBItemList *data,
-	 UErrorCode *status)
+         struct SRBItemList *data,
+         UErrorCode *status)
 {
 /*  int32_t i; */
   struct SRBItem *item;
@@ -194,7 +194,7 @@ rb_write(FileStream *f,
     switch(item->fData->fType) {
     case eStringList:
       /*if(u_strcmp(item->fTag, gCollationElementsTag) == 0)
-	puts("got CollationElements");*/
+      puts("got CollationElements");*/
       write_strlist(f, item->fTag, &item->fData->u.fStringList);
       break;
 

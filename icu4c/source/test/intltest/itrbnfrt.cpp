@@ -39,7 +39,7 @@ void RbnfRoundTripTest::runIndexedTest(int32_t index, UBool exec, const char* &n
       TESTCASE(10, TestRussianSpelloutRT);
       TESTCASE(11, TestGreekSpelloutRT);
 #else
-	  TESTCASE(0, TestRBNFDisabled);
+      TESTCASE(0, TestRBNFDisabled);
 #endif
     default:
       name = "";
@@ -350,7 +350,7 @@ RbnfRoundTripTest::doTest(const RuleBasedNumberFormat* formatter,
 
 void
 RbnfRoundTripTest::TestRBNFDisabled() {
-	errln("*** RBNF currently disabled on this platform ***\n");
+    errln("*** RBNF currently disabled on this platform ***\n");
 }
 
 /* U_HAVE_RBNF */

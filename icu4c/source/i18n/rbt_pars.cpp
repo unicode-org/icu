@@ -183,7 +183,7 @@ UBool ParseData::isMatcher(UChar32 ch) {
     int32_t i = ch - data->variablesBase;
     if (i >= 0 && i < variablesVector->size()) {
         UnicodeFunctor *f = (UnicodeFunctor*) variablesVector->elementAt(i);
-		return f != NULL && f->toMatcher() != NULL;
+        return f != NULL && f->toMatcher() != NULL;
     }
     return TRUE;
 }
@@ -198,7 +198,7 @@ UBool ParseData::isReplacer(UChar32 ch) {
     int i = ch - data->variablesBase;
     if (i >= 0 && i < variablesVector->size()) {
         UnicodeFunctor *f = (UnicodeFunctor*) variablesVector->elementAt(i);
-		return f != NULL && f->toReplacer() != NULL;
+        return f != NULL && f->toReplacer() != NULL;
     }
     return TRUE;
 }

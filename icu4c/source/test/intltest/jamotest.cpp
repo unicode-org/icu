@@ -355,11 +355,11 @@ JamoTest::TestRealText() {
     Transliterator* hangulJamo = jamoHangul->createInverse(status);
     if (jamoLatin == 0 || hangulJamo == 0) {
         errln("FAIL: createInverse returned NULL");
-		delete latinJamo;
-	    delete jamoLatin;
-		delete jamoHangul;
-	    delete hangulJamo;
-		return;
+        delete latinJamo;
+        delete jamoLatin;
+        delete jamoHangul;
+        delete hangulJamo;
+        return;
     }
 
     Transliterator* tarray[4] =

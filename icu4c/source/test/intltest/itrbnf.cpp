@@ -51,7 +51,7 @@ void IntlTestRBNF::runIndexedTest(int32_t index, UBool exec, const char* &name, 
       TESTCASE(10, TestFractionalRuleSet);
       // TESTCASE(11, TestLLong);
 #else
-	  TESTCASE(0, TestRBNFDisabled);
+      TESTCASE(0, TestRBNFDisabled);
 #endif
     default:
       name = "";
@@ -1406,7 +1406,7 @@ IntlTestRBNF::doLenientParseTest(RuleBasedNumberFormat* formatter, const char* t
 
 void
 IntlTestRBNF::TestRBNFDisabled() {
-	errln("*** RBNF currently disabled on this platform ***\n");
+    errln("*** RBNF currently disabled on this platform ***\n");
 }
 
 /* U_HAVE_RBNF */

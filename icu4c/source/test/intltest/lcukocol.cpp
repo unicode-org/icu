@@ -37,12 +37,12 @@ LotusCollationKoreanTest::~LotusCollationKoreanTest()
 }
 
 const UChar LotusCollationKoreanTest::testSourceCases[][LotusCollationKoreanTest::MAX_TOKEN_LEN] = {
-	{0xac00, 0}
+    {0xac00, 0}
     
 };
 
 const UChar LotusCollationKoreanTest::testTargetCases[][LotusCollationKoreanTest::MAX_TOKEN_LEN] = {
-	{0xac01, 0}
+    {0xac01, 0}
 };
 
 const Collator::EComparisonResult LotusCollationKoreanTest::results[] = {
@@ -67,12 +67,11 @@ void LotusCollationKoreanTest::doTest( UnicodeString source, UnicodeString targe
 void LotusCollationKoreanTest::TestTertiary(/* char* par */)
 {
     int32_t i = 0;
-	myCollation->setStrength(Collator::TERTIARY);
-	
+    myCollation->setStrength(Collator::TERTIARY);
+
     for (i = 0; i < 1; i++) {
         doTest(testSourceCases[i], testTargetCases[i], results[i]);
     }
-	
 }
 
 void LotusCollationKoreanTest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* /*par*/ )

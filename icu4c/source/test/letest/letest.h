@@ -18,11 +18,11 @@
 
 struct TestInput
 {
-	char *fontName;
-	UChar *text;
-	int32_t textLength;
-	UScriptCode scriptCode;
-	UBool rightToLeft;
+    char *fontName;
+    UChar *text;
+    int32_t textLength;
+    UScriptCode scriptCode;
+    UBool rightToLeft;
 };
 
 extern int32_t testCount;
@@ -31,10 +31,10 @@ extern TestInput testInputs[];
 
 struct TestResult
 {
-	int32_t glyphCount;
-	uint16_t *glyphs;
-	int32_t *indices;
-	float *positions;
+    int32_t glyphCount;
+    uint16_t *glyphs;
+    int32_t *indices;
+    float *positions;
 };
 
 extern TestResult testResults[];

@@ -66,41 +66,41 @@ le_int8 PortableFontInstance::highBit(le_int32 value)
 PortableFontInstance::PortableFontInstance(char *fileName, float pointSize, PFIErrorCode &status)
     : fFile(NULL), fUnitsPerEM(0), fPointSize(pointSize), fDirectory(NULL),
       fTableCache(NULL), fTableCacheCurr(0), fTableCacheSize(0), fCMAPMapper(NULL),
-	  fHMTXTable(NULL), fNumGlyphs(0), fNumLongHorMetrics(0)
+      fHMTXTable(NULL), fNumGlyphs(0), fNumLongHorMetrics(0)
 {
-	le_uint32 length;
+    le_uint32 length;
 
     if (LE_FAILURE(status)) {
         return;
     }
 
-	// open the font file
-	fFile = fopen(fileName, "rb");
+    // open the font file
+    fFile = fopen(fileName, "rb");
 
-	if (fFile == NULL) {
+    if (fFile == NULL) {
         status = PFI_FONT_FILE_NOT_FOUND_ERROR;
-		return;
-	}
+        return;
+    }
 
-	// read in the directory
-	SFNTDirectory tempDir;
+    // read in the directory
+    SFNTDirectory tempDir;
 
-	fread(&tempDir, sizeof tempDir, 1, fFile);
+    fread(&tempDir, sizeof tempDir, 1, fFile);
 
-	le_int32 dirSize = sizeof tempDir + ((SWAPW(tempDir.numTables) - ANY_NUMBER) * sizeof(DirectoryEntry));
-	const LETag headTag = 0x68656164; // 'head'
-	const HEADTable *headTable = NULL;
+    le_int32 dirSize = sizeof tempDir + ((SWAPW(tempDir.numTables) - ANY_NUMBER) * sizeof(DirectoryEntry));
+    const LETag headTag = 0x68656164; // 'head'
+    const HEADTable *headTable = NULL;
     le_uint16 numTables = 0;
 
-	fDirectory = (const SFNTDirectory *) new char[dirSize];
+    fDirectory = (const SFNTDirectory *) new char[dirSize];
 
     if (fDirectory == NULL) {
         status = PFI_OUT_OF_MEMORY_ERROR;
         goto error_exit;
     }
 
-	fseek(fFile, 0L, SEEK_SET);
-	fread((void *) fDirectory, sizeof(char), dirSize, fFile);
+    fseek(fFile, 0L, SEEK_SET);
+    fread((void *) fDirectory, sizeof(char), dirSize, fFile);
 
     //
     // We calculate these numbers 'cause some fonts
@@ -110,18 +110,18 @@ PortableFontInstance::PortableFontInstance(char *fileName, float pointSize, PFIE
     fDirPower = 1 << highBit(numTables);
     fDirExtra = numTables - fDirPower;
 
-	// read unitsPerEm from 'head' table
-	headTable = (const HEADTable *) readTable(headTag, &length);
+    // read unitsPerEm from 'head' table
+    headTable = (const HEADTable *) readTable(headTag, &length);
 
     if (headTable == NULL) {
         status = PFI_MISSING_FONT_TABLE_ERROR;
         goto error_exit;
     }
 
-	fUnitsPerEM = (float) SWAPW(headTable->unitsPerEm);
-	deleteTable(headTable);
+    fUnitsPerEM = (float) SWAPW(headTable->unitsPerEm);
+    deleteTable(headTable);
 
-	fCMAPMapper = findUnicodeMapper();
+    fCMAPMapper = findUnicodeMapper();
 
     if (fCMAPMapper == NULL) {
         status = PFI_MISSING_FONT_TABLE_ERROR;
@@ -141,12 +141,12 @@ error_exit:
 PortableFontInstance::~PortableFontInstance()
 {
     if (fFile != NULL) {
-	    fclose(fFile);
+        fclose(fFile);
 
-	    deleteTable(fHMTXTable);
+        deleteTable(fHMTXTable);
 
         flushFontTableCache();
-	    delete fCMAPMapper;
+        delete fCMAPMapper;
 
         delete[] (void *) fDirectory;
     }
@@ -154,33 +154,33 @@ PortableFontInstance::~PortableFontInstance()
 
 void PortableFontInstance::deleteTable(const void *table) const
 {
-	delete[] (char *) table;
+    delete[] (char *) table;
 }
 
 const DirectoryEntry *PortableFontInstance::findTable(LETag tag) const
 {
     if (fDirectory != NULL) {
-	    le_uint16 table = 0;
-	    le_uint16 probe = fDirPower;
+        le_uint16 table = 0;
+        le_uint16 probe = fDirPower;
 
-	    if (SWAPL(fDirectory->tableDirectory[fDirExtra].tag) <= tag) {
-		    table = fDirExtra;
-	    }
+        if (SWAPL(fDirectory->tableDirectory[fDirExtra].tag) <= tag) {
+            table = fDirExtra;
+        }
 
-	    while (probe > (1 << 0)) {
-		    probe >>= 1;
+        while (probe > (1 << 0)) {
+            probe >>= 1;
 
-		    if (SWAPL(fDirectory->tableDirectory[table + probe].tag) <= tag) {
-			    table += probe;
-		    }
-	    }
+            if (SWAPL(fDirectory->tableDirectory[table + probe].tag) <= tag) {
+                table += probe;
+            }
+        }
 
-	    if (SWAPL(fDirectory->tableDirectory[table].tag) == tag) {
-		    return &fDirectory->tableDirectory[table];
-	    }
+        if (SWAPL(fDirectory->tableDirectory[table].tag) == tag) {
+            return &fDirectory->tableDirectory[table];
+        }
     }
 
-	return NULL;
+    return NULL;
 }
 
 PFIErrorCode PortableFontInstance::initFontTableCache()
@@ -211,23 +211,23 @@ void PortableFontInstance::flushFontTableCache()
 
 const void *PortableFontInstance::readTable(LETag tag, le_uint32 *length) const
 {
-	const DirectoryEntry *entry = findTable(tag);
+    const DirectoryEntry *entry = findTable(tag);
 
-	if (entry == NULL) {
-		*length = 0;
-		return NULL;
-	}
-
-	*length = SWAPL(entry->length);
-
-	void *table = new char[*length];
-
-    if (table != NULL) {
-	    fseek(fFile, SWAPL(entry->offset), SEEK_SET);
-	    fread(table, sizeof(char), *length, fFile);
+    if (entry == NULL) {
+        *length = 0;
+        return NULL;
     }
 
-	return table;
+    *length = SWAPL(entry->length);
+
+    void *table = new char[*length];
+
+    if (table != NULL) {
+        fseek(fFile, SWAPL(entry->offset), SEEK_SET);
+        fread(table, sizeof(char), *length, fFile);
+    }
+
+    return table;
 }
 
 const void *PortableFontInstance::getFontTable(LETag tableTag) const
@@ -271,15 +271,15 @@ const void *PortableFontInstance::getFontTable(LETag tableTag) const
 
 CMAPMapper *PortableFontInstance::findUnicodeMapper()
 {
-	le_uint32 length;
-	LETag cmapTag = 0x636D6170; // 'cmap'
-	const CMAPTable *cmap = (CMAPTable *) readTable(cmapTag, &length);
+    le_uint32 length;
+    LETag cmapTag = 0x636D6170; // 'cmap'
+    const CMAPTable *cmap = (CMAPTable *) readTable(cmapTag, &length);
 
-	if (cmap == NULL) {
-		return NULL;
-	}
+    if (cmap == NULL) {
+        return NULL;
+    }
 
-	return CMAPMapper::createUnicodeMapper(cmap);
+    return CMAPMapper::createUnicodeMapper(cmap);
 }
 
 
@@ -293,23 +293,23 @@ void PortableFontInstance::mapCharsToGlyphs(const LEUnicode chars[], le_int32 of
     }
 
     for (i = offset; i < offset + count; i += 1, out += dir) {
-		LEUnicode16 high = chars[i];
-		LEUnicode32 code = high;
+        LEUnicode16 high = chars[i];
+        LEUnicode32 code = high;
 
-		if (i < offset + count - 1 && high >= 0xD800 && high <= 0xDBFF) {
-			LEUnicode16 low = chars[i + 1];
+        if (i < offset + count - 1 && high >= 0xD800 && high <= 0xDBFF) {
+            LEUnicode16 low = chars[i + 1];
 
-			if (low >= 0xDC00 && low <= 0xDFFF) {
-				code = (high - 0xD800) * 0x400 + low - 0xDC00 + 0x10000;
-			}
-		}
+            if (low >= 0xDC00 && low <= 0xDFFF) {
+                code = (high - 0xD800) * 0x400 + low - 0xDC00 + 0x10000;
+            }
+        }
 
         glyphs[out] = mapCharToGlyph(code, mapper);
 
-		if (code >= 0x10000) {
-			i += 1;
-			glyphs[out += dir] = 0xFFFF;
-		}
+        if (code >= 0x10000) {
+            i += 1;
+            glyphs[out += dir] = 0xFFFF;
+        }
     }
 }
 
@@ -334,40 +334,40 @@ LEGlyphID PortableFontInstance::mapCharToGlyph(LEUnicode32 ch, const LECharMappe
 
 void PortableFontInstance::getGlyphAdvance(LEGlyphID glyph, LEPoint &advance) const
 {
-	if (fHMTXTable == NULL) {
-		LETag maxpTag = 0x6D617870; // 'maxp'
-		LETag hheaTag = 0x68686561; // 'hhea'
-		LETag hmtxTag = 0x686D7478; // 'hmtx'
-		le_uint32 length;
-		const HHEATable *hheaTable;
-		const MAXPTable *maxpTable = (MAXPTable *) readTable(maxpTag, &length);
-		PortableFontInstance *realThis = (PortableFontInstance *) this;
+    if (fHMTXTable == NULL) {
+        LETag maxpTag = 0x6D617870; // 'maxp'
+        LETag hheaTag = 0x68686561; // 'hhea'
+        LETag hmtxTag = 0x686D7478; // 'hmtx'
+        le_uint32 length;
+        const HHEATable *hheaTable;
+        const MAXPTable *maxpTable = (MAXPTable *) readTable(maxpTag, &length);
+        PortableFontInstance *realThis = (PortableFontInstance *) this;
 
         if (maxpTable != NULL) {
-		    realThis->fNumGlyphs = SWAPW(maxpTable->numGlyphs);
-		    deleteTable(maxpTable);
+            realThis->fNumGlyphs = SWAPW(maxpTable->numGlyphs);
+            deleteTable(maxpTable);
         }
 
-		hheaTable = (HHEATable *) readTable(hheaTag, &length);
+        hheaTable = (HHEATable *) readTable(hheaTag, &length);
 
         if (hheaTable != NULL) {
-		    realThis->fNumLongHorMetrics = SWAPW(hheaTable->numOfLongHorMetrics);
-		    deleteTable((void *) hheaTable);
+            realThis->fNumLongHorMetrics = SWAPW(hheaTable->numOfLongHorMetrics);
+            deleteTable((void *) hheaTable);
         }
 
-		realThis->fHMTXTable = (const HMTXTable *) readTable(hmtxTag, &length);
-	}
+        realThis->fHMTXTable = (const HMTXTable *) readTable(hmtxTag, &length);
+    }
 
-	le_uint16 index = glyph;
+    le_uint16 index = glyph;
 
-	if (glyph >= fNumGlyphs || fHMTXTable == NULL) {
-		advance.fX = advance.fY = 0;
-		return;
-	}
+    if (glyph >= fNumGlyphs || fHMTXTable == NULL) {
+        advance.fX = advance.fY = 0;
+        return;
+    }
 
-	if (glyph >= fNumLongHorMetrics) {
-		index = fNumLongHorMetrics - 1;
-	}
+    if (glyph >= fNumLongHorMetrics) {
+        index = fNumLongHorMetrics - 1;
+    }
 
     advance.fX = xUnitsToPoints(SWAPW(fHMTXTable->hMetrics[index].advanceWidth));
     advance.fY = 0;
@@ -388,7 +388,7 @@ le_bool PortableFontInstance::getGlyphPoint(LEGlyphID glyph, le_int32 pointNumbe
 
     return result;
 #else
-	return false;
+    return false;
 #endif
 }
 

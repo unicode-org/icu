@@ -166,7 +166,7 @@ DateFormat::parse(const UnicodeString& text,
             // was illegal so we set the error index to the start.
             pos.setIndex(start);
             pos.setErrorIndex(start);
-		}
+        }
     }
     return 0; // Error return UDate is 0 (the epoch)
 }

@@ -1941,18 +1941,18 @@ static void TestUScriptCodeAPI(){
            log_err("uscript_getScript failed.\n");
         }      
     }
-    { 	
+    {
         UScriptCode code= USCRIPT_INVALID_CODE;
-	    UErrorCode  status = U_ZERO_ERROR;
+        UErrorCode  status = U_ZERO_ERROR;
         code = uscript_getScript(0x001D169,&status);
-	    if(code != USCRIPT_INHERITED){
-		    log_err("\\U001D169 is not contained in USCRIPT_INHERITED");
-	    }
+        if(code != USCRIPT_INHERITED){
+            log_err("\\U001D169 is not contained in USCRIPT_INHERITED");
+        }
     }
     {
         uint32_t i = 0;
         UScriptCode code= USCRIPT_INVALID_CODE;
-	    UErrorCode  status = U_ZERO_ERROR;
+        UErrorCode  status = U_ZERO_ERROR;
         int32_t err = 0;
         for(;i<=0x10ffff;i++){
             code =  uscript_getScript(i,&status);

@@ -73,7 +73,7 @@ static void TestUDataOpen(){
     };
     const char* name           = "test";
     const char* type           = "dat";
-	const char  dirSepString[] = {U_FILE_SEP_CHAR, 0};
+    const char  dirSepString[] = {U_FILE_SEP_CHAR, 0};
 
     char* path=(char*)malloc(sizeof(char) * (strlen(u_getDataDirectory())
                                            + strlen(U_ICUDATA_NAME)
@@ -142,15 +142,15 @@ static void TestUDataOpen(){
     icuDataFilePath = (char *)malloc(strlen(u_getDataDirectory()) + 50);
     strcpy(icuDataFilePath, u_getDataDirectory());
     strcat(icuDataFilePath, "build");
-	strcat(icuDataFilePath, dirSepString);
-	strcat(icuDataFilePath, "tz.dat");
+    strcat(icuDataFilePath, dirSepString);
+    strcat(icuDataFilePath, "tz.dat");
     if (stat(icuDataFilePath, &stat_buf) == 0)
     {
         int i;
         strcpy(icuDataFilePath, u_getDataDirectory());
         strcat(icuDataFilePath, "build");
-		strcat(icuDataFilePath, dirSepString);
-		strcat(icuDataFilePath, "dummyLibraryName");
+        strcat(icuDataFilePath, dirSepString);
+        strcat(icuDataFilePath, "dummyLibraryName");
         log_verbose("Testing udata_open() on %s\n", icuDataFilePath);
         for(i=0; i<sizeof(memMap)/sizeof(memMap[0]); i++){
             status=U_ZERO_ERROR;

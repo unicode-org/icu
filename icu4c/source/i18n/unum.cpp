@@ -140,7 +140,7 @@ unum_open(  UNumberFormatStyle    style,
 #if U_HAVE_RBNF
         return (UNumberFormat*)new RuleBasedNumberFormat(URBNF_SPELLOUT, Locale(locale), *status);
 #else
-		// fall through
+        // fall through
 #endif
       default:
         *status = U_UNSUPPORTED_ERROR;

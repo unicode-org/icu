@@ -613,8 +613,8 @@ ucol_getAttribute(const UCollator *coll, UColAttribute attr, UErrorCode *status)
  */
 U_CAPI uint32_t U_EXPORT2 
 ucol_setVariableTop(UCollator *coll, 
-		    const UChar *varTop, int32_t len, 
-		    UErrorCode *status);
+                    const UChar *varTop, int32_t len, 
+                    UErrorCode *status);
 
 /** 
  * Gets the variable top value of a Collator. 
@@ -647,14 +647,14 @@ ucol_restoreVariableTop(UCollator *coll, const uint32_t varTop, UErrorCode *stat
  * @param coll collator to be cloned
  * @param stackBuffer user allocated space for the new clone. 
  * If NULL new memory will be allocated. 
- *	If buffer is not large enough, new memory will be allocated.
- *	Clients can use the U_COL_SAFECLONE_BUFFERSIZE. 
- *	This will probably be enough to avoid memory allocations.
+ *  If buffer is not large enough, new memory will be allocated.
+ *  Clients can use the U_COL_SAFECLONE_BUFFERSIZE. 
+ *  This will probably be enough to avoid memory allocations.
  * @param pBufferSize pointer to size of allocated space. 
- *	If *pBufferSize == 0, a sufficient size for use in cloning will 
- *	be returned ('pre-flighting')
- *	If *pBufferSize is not enough for a stack-based safe clone, 
- *	new memory will be allocated.
+ *  If *pBufferSize == 0, a sufficient size for use in cloning will 
+ *  be returned ('pre-flighting')
+ *  If *pBufferSize is not enough for a stack-based safe clone, 
+ *  new memory will be allocated.
  * @param status to indicate whether the operation went on smoothly or there were errors
  *    An informational status value, U_SAFECLONE_ALLOCATED_ERROR, is used if any
  * allocations were necessary.
@@ -666,9 +666,9 @@ ucol_restoreVariableTop(UCollator *coll, const uint32_t varTop, UErrorCode *stat
  */
 U_CAPI UCollator* U_EXPORT2 
 ucol_safeClone(const UCollator *coll,
-	       void            *stackBuffer,
-	       int32_t         *pBufferSize,
-	       UErrorCode      *status);
+               void            *stackBuffer,
+               int32_t         *pBufferSize,
+               UErrorCode      *status);
 
 /** default memory size for the new clone */
 #define U_COL_SAFECLONE_BUFFERSIZE 384
@@ -678,7 +678,7 @@ ucol_safeClone(const UCollator *coll,
  * Returns number of UChars needed to store rules. If buffer is NULL or bufferLen is not enough 
  * to store rules, will store up to available space.
  * @param coll collator to get the rules from
- * @param delta one of 	UCOL_TAILORING_ONLY, UCOL_FULL_RULES. 
+ * @param delta one of UCOL_TAILORING_ONLY, UCOL_FULL_RULES. 
  * @param buffer buffer to store the result in. If NULL, you'll get no rules.
  * @param bufferLen lenght of buffer to store rules in. If less then needed you'll get only the part that fits in.
  * @draft ICU 1.8

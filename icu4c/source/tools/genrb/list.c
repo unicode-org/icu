@@ -54,7 +54,7 @@ strlist_open(UErrorCode *status)
 
 void
 strlist_close(struct SList *list,
-	      UErrorCode *status)
+              UErrorCode *status)
 {
   int32_t i;
 
@@ -77,8 +77,8 @@ strlist_close(struct SList *list,
 
 void
 strlist_add(struct SList *list,
-	    const UChar *s,
-	    UErrorCode *status)
+            const UChar *s,
+            UErrorCode *status)
 {
   int32_t index;
 
@@ -107,7 +107,7 @@ strlist_add(struct SList *list,
 
 static void
 strlist_grow(struct SList *list,
-	     UErrorCode *status)
+             UErrorCode *status)
 {
   int32_t i, j;
   int32_t newCapacity;
@@ -136,7 +136,7 @@ strlist_grow(struct SList *list,
     if(newData[i] == 0) {
       *status = U_MEMORY_ALLOCATION_ERROR;
       for(j = 0; j < i; ++j)
-	uprv_free(newData[j]);
+        uprv_free(newData[j]);
       uprv_free(newData);
       return;
     }
@@ -186,7 +186,7 @@ strlist2d_open(UErrorCode *status)
 
 void
 strlist2d_close(struct SList *list,
-		UErrorCode *status)
+                UErrorCode *status)
 {
   int32_t i;
 
@@ -211,7 +211,7 @@ strlist2d_close(struct SList *list,
 
 void
 strlist2d_newRow(struct SList *list,
-		 UErrorCode *status)
+                 UErrorCode *status)
 {
   if(U_FAILURE(*status)) return;
 
@@ -228,8 +228,8 @@ strlist2d_newRow(struct SList *list,
 }
 
 void strlist2d_add(struct SList *list,
-		 const UChar *s,
-		 UErrorCode *status)
+                 const UChar *s,
+                 UErrorCode *status)
 {
   int32_t index;
 
@@ -258,7 +258,7 @@ void strlist2d_add(struct SList *list,
 
 static void
 strlist2d_grow(struct SList *list,
-	       UErrorCode *status)
+               UErrorCode *status)
 {
   int32_t i, j;
   int32_t newCapacity;
@@ -287,7 +287,7 @@ strlist2d_grow(struct SList *list,
     if(newData[i] == 0) {
       *status = U_MEMORY_ALLOCATION_ERROR;
       for(j = 0; j < i; ++j)
-	uprv_free(newData[j]);
+        uprv_free(newData[j]);
       uprv_free(newData);
       return;
     }
@@ -301,7 +301,7 @@ strlist2d_grow(struct SList *list,
 
 static void
 strlist2d_growRows(struct SList *list,
-		   UErrorCode *status)
+                   UErrorCode *status)
 {
   int32_t i;
   int32_t newCapacity;
@@ -361,7 +361,7 @@ taglist_open(UErrorCode *status)
 
 void
 taglist_close(struct SList *list,
-	      UErrorCode *status)
+              UErrorCode *status)
 {
     struct SStringPair *current;
     struct SStringPair *prev;
@@ -390,9 +390,9 @@ taglist_close(struct SList *list,
 
 void
 taglist_add(struct SList *list,
-	    const UChar *tag,
-	    const UChar *data,
-	    UErrorCode *status)
+            const UChar *tag,
+            const UChar *data,
+            UErrorCode *status)
 {
   /*int32_t index;*/
   struct SStringPair *pair = NULL;
@@ -472,8 +472,8 @@ taglist_add(struct SList *list,
 
 const UChar*
 taglist_get(const struct SList *list,
-	    const char *tag,
-	    UErrorCode *status)
+            const char *tag,
+            UErrorCode *status)
 {
   /*int32_t i;*/
   struct SStringPair *current;

@@ -146,13 +146,13 @@ static void TestTertiary( )
     myCollation = ucol_open("fr_FR", &status);
     if(U_FAILURE(status) || !myCollation){
         log_err("ERROR: in creation of rule based collator: %s\n", myErrorName(status));
-	return;
+        return;
     }
 
     ucol_setAttribute(myCollation, UCOL_ALTERNATE_HANDLING, UCOL_SHIFTED, &status);
     if(U_FAILURE(status)){
         log_err("ERROR: in creation of rule based collator: %s\n", myErrorName(status));
-	return;
+        return;
     }
     log_verbose("Testing French Collation with Tertiary strength\n");
     ucol_setStrength(myCollation, UCOL_QUATERNARY);
@@ -171,12 +171,12 @@ static void TestSecondary()
     myCollation = ucol_open("fr_FR", &status);
     if(U_FAILURE(status)){
         log_err("ERROR: in creation of rule based collator: %s\n", myErrorName(status));
-	return;
+        return;
     }
     ucol_setAttribute(myCollation, UCOL_STRENGTH, UCOL_SECONDARY, &status);
     if(U_FAILURE(status)){
         log_err("ERROR: in creation of rule based collator: %s\n", myErrorName(status));
-	return;
+        return;
     }
     log_verbose("Testing French Collation with Secondary strength\n");
     /*test acute and grave ordering (compare to french collation)*/
@@ -201,7 +201,7 @@ static void TestExtra()
     myCollation = ucol_open("fr_FR", &status);
     if(U_FAILURE(status)){
         log_err("ERROR: in creation of rule based collator: %s\n", myErrorName(status));
-	return;
+        return;
     }
     log_verbose("Testing French Collation extra with secondary strength\n");
     ucol_setStrength(myCollation, UCOL_TERTIARY);

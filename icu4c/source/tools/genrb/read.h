@@ -12,7 +12,7 @@
 *
 *   Date        Name        Description
 *   05/26/99    stephen     Creation.
-*   5/10/01     Ram			removed ustdio dependency
+*   5/10/01     Ram         removed ustdio dependency
 *******************************************************************************
 */
 
@@ -43,8 +43,8 @@ UChar32 unescape(UCHARBUF *buf, UErrorCode *status);
 void resetLineNumber(void);
 
 enum ETokenType getNextToken(UCHARBUF *buf,
-			     struct UString *token,
-			     uint32_t *linenumber, /* out: linenumber of token */
-			     UErrorCode *status);
+                 struct UString *token,
+                 uint32_t *linenumber, /* out: linenumber of token */
+                 UErrorCode *status);
 
 #endif

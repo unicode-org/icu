@@ -554,7 +554,7 @@ public:
      *
      * @param c set to be checked for containment in this set.
      * @return <tt>true</tt> if this set contains all of the elements of the
-     * 	       specified set.
+     *         specified set.
      * @stable
      */
     virtual UBool containsAll(const UnicodeSet& c) const;
@@ -798,7 +798,7 @@ private:
 };
 
 inline UBool UnicodeSet::operator!=(const UnicodeSet& o) const {
-	return !operator==(o);
+    return !operator==(o);
 }
 
 U_NAMESPACE_END

@@ -64,117 +64,117 @@ le_int8 highBit(le_uint32 value)
 
 CMAPMapper *CMAPMapper::createUnicodeMapper(const CMAPTable *cmap)
 {
-	le_uint16 i;
-	le_uint16 nSubtables = SWAPW(cmap->numberSubtables);
-	const CMAPEncodingSubtable *subtable = NULL;
-	le_uint32 offset1 = 0, offset10 = 0;
+    le_uint16 i;
+    le_uint16 nSubtables = SWAPW(cmap->numberSubtables);
+    const CMAPEncodingSubtable *subtable = NULL;
+    le_uint32 offset1 = 0, offset10 = 0;
 
-	for (i = 0; i < nSubtables; i += 1) {
-		const CMAPEncodingSubtableHeader *esh = &cmap->encodingSubtableHeaders[i];
+    for (i = 0; i < nSubtables; i += 1) {
+        const CMAPEncodingSubtableHeader *esh = &cmap->encodingSubtableHeaders[i];
 
-		if (SWAPW(esh->platformID) == 3) {
-			switch (SWAPW(esh->platformSpecificID)) {
-			case 1:
-				offset1 = SWAPL(esh->encodingOffset);
-				break;
+        if (SWAPW(esh->platformID) == 3) {
+            switch (SWAPW(esh->platformSpecificID)) {
+            case 1:
+                offset1 = SWAPL(esh->encodingOffset);
+                break;
 
-			case 10:
-				offset10 = SWAPL(esh->encodingOffset);
-				break;
-			}
-		}
-	}
+            case 10:
+                offset10 = SWAPL(esh->encodingOffset);
+                break;
+            }
+        }
+    }
 
 
-	if (offset10 != 0)
-	{
-		subtable = (const CMAPEncodingSubtable *) ((const char *) cmap + offset10);
-	} else if (offset1 != 0) {
-		subtable = (const CMAPEncodingSubtable *) ((const char *) cmap + offset1);
-	} else {
-		return NULL;
-	}
+    if (offset10 != 0)
+    {
+        subtable = (const CMAPEncodingSubtable *) ((const char *) cmap + offset10);
+    } else if (offset1 != 0) {
+        subtable = (const CMAPEncodingSubtable *) ((const char *) cmap + offset1);
+    } else {
+        return NULL;
+    }
 
-	switch (SWAPW(subtable->format)) {
-	case 4:
-		return new CMAPFormat4Mapper(cmap, (const CMAPFormat4Encoding *) subtable);
+    switch (SWAPW(subtable->format)) {
+    case 4:
+        return new CMAPFormat4Mapper(cmap, (const CMAPFormat4Encoding *) subtable);
 
-	case 12:
-	{
-		const CMAPFormat12Encoding *encoding = (const CMAPFormat12Encoding *) subtable;
+    case 12:
+    {
+        const CMAPFormat12Encoding *encoding = (const CMAPFormat12Encoding *) subtable;
 
-		return new CMAPGroupMapper(cmap, encoding->groups, SWAPL(encoding->nGroups));
-	}
+        return new CMAPGroupMapper(cmap, encoding->groups, SWAPL(encoding->nGroups));
+    }
 
-	default:
-		break;
-	}
+    default:
+        break;
+    }
 
-	return NULL;
+    return NULL;
 }
 
 CMAPFormat4Mapper::CMAPFormat4Mapper(const CMAPTable *cmap, const CMAPFormat4Encoding *header)
-	: CMAPMapper(cmap)
+    : CMAPMapper(cmap)
 {
-	le_uint16 segCount = SWAPW(header->segCountX2) / 2;
+    le_uint16 segCount = SWAPW(header->segCountX2) / 2;
 
-	fEntrySelector = SWAPW(header->entrySelector);
-	fRangeShift = SWAPW(header->rangeShift) / 2;
-	fEndCodes = &header->endCodes[0];
-	fStartCodes = &header->endCodes[segCount + 1]; // + 1 for reservedPad...
-	fIdDelta = &fStartCodes[segCount];
-	fIdRangeOffset = &fIdDelta[segCount];
+    fEntrySelector = SWAPW(header->entrySelector);
+    fRangeShift = SWAPW(header->rangeShift) / 2;
+    fEndCodes = &header->endCodes[0];
+    fStartCodes = &header->endCodes[segCount + 1]; // + 1 for reservedPad...
+    fIdDelta = &fStartCodes[segCount];
+    fIdRangeOffset = &fIdDelta[segCount];
 }
 
 LEGlyphID CMAPFormat4Mapper::unicodeToGlyph(LEUnicode32 unicode32) const
 {
-	if (unicode32 >= 0x10000) {
-		return 0;
-	}
+    if (unicode32 >= 0x10000) {
+        return 0;
+    }
 
-	LEUnicode16 unicode = (LEUnicode16) unicode32;
-	le_uint16 index = 0;
-	le_uint16 probe = 1 << fEntrySelector;
-	LEGlyphID result = 0;
+    LEUnicode16 unicode = (LEUnicode16) unicode32;
+    le_uint16 index = 0;
+    le_uint16 probe = 1 << fEntrySelector;
+    LEGlyphID result = 0;
 
-	if (SWAPW(fStartCodes[fRangeShift]) <= unicode) {
-		index = fRangeShift;
-	}
+    if (SWAPW(fStartCodes[fRangeShift]) <= unicode) {
+        index = fRangeShift;
+    }
 
-	while (probe > (1 << 0)) {
-		probe >>= 1;
+    while (probe > (1 << 0)) {
+        probe >>= 1;
 
-		if (SWAPW(fStartCodes[index + probe]) <= unicode) {
-			index += probe;
-		}
-	}
+        if (SWAPW(fStartCodes[index + probe]) <= unicode) {
+            index += probe;
+        }
+    }
 
-	if (unicode >= SWAPW(fStartCodes[index]) && unicode <= SWAPW(fEndCodes[index])) {
-		if (fIdRangeOffset[index] == 0) {
-			result = (LEGlyphID) unicode;
-		} else {
-			le_uint16 offset = unicode - SWAPW(fStartCodes[index]);
-			le_uint16 rangeOffset = SWAPW(fIdRangeOffset[index]);
-			le_uint16 *glyphIndexTable = (le_uint16 *) ((char *) &fIdRangeOffset[index] + rangeOffset);
+    if (unicode >= SWAPW(fStartCodes[index]) && unicode <= SWAPW(fEndCodes[index])) {
+        if (fIdRangeOffset[index] == 0) {
+            result = (LEGlyphID) unicode;
+        } else {
+            le_uint16 offset = unicode - SWAPW(fStartCodes[index]);
+            le_uint16 rangeOffset = SWAPW(fIdRangeOffset[index]);
+            le_uint16 *glyphIndexTable = (le_uint16 *) ((char *) &fIdRangeOffset[index] + rangeOffset);
 
-			result = SWAPW(glyphIndexTable[offset]);
-		}
+            result = SWAPW(glyphIndexTable[offset]);
+        }
 
-		result += SWAPW(fIdDelta[index]);
-	} else {
-		result = 0;
-	}
+        result += SWAPW(fIdDelta[index]);
+    } else {
+        result = 0;
+    }
 
-	return result;
+    return result;
 }
 
 CMAPFormat4Mapper::~CMAPFormat4Mapper()
 {
-	// parent destructor does it all
+    // parent destructor does it all
 }
 
 CMAPGroupMapper::CMAPGroupMapper(const CMAPTable *cmap, const CMAPGroup *groups, le_uint32 nGroups)
-	: CMAPMapper(cmap), fGroups(groups)
+    : CMAPMapper(cmap), fGroups(groups)
 {
     le_uint8 bit = highBit(nGroups);
     fPower = 1 << bit;
@@ -207,6 +207,6 @@ LEGlyphID CMAPGroupMapper::unicodeToGlyph(LEUnicode32 unicode32) const
 
 CMAPGroupMapper::~CMAPGroupMapper()
 {
-	// parent destructor does it all
+    // parent destructor does it all
 }
 

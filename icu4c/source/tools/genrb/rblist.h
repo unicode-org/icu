@@ -42,13 +42,13 @@ struct SRBItemList {
 struct SRBItemList* rblist_open(UErrorCode *status);
 
 struct SRBItem* make_rbitem(const UChar *tag, const struct SList *data,
-			    UErrorCode *status);
+                            UErrorCode *status);
 
 void rblist_close(struct SRBItemList *list, UErrorCode *status);
 
 void rblist_setlocale(struct SRBItemList *list, const UChar *locale,
-		      UErrorCode *status);
+                      UErrorCode *status);
 void rblist_add(struct SRBItemList *list, struct SRBItem *s,
-		UErrorCode *status);
+                UErrorCode *status);
 
 #endif

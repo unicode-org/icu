@@ -4705,7 +4705,7 @@ static void TestJitterbug981(){
       ucnv_reset(utf8cnv);
       status = U_ZERO_ERROR;
       bytes_needed = ucnv_fromUChars(utf8cnv, buff, target_cap,
-				     rules, rules_length, &status);
+                                     rules, rules_length, &status);
       target_cap = (bytes_needed > target_cap) ? bytes_needed : target_cap +1;
       if(numNeeded!=0 && numNeeded!= bytes_needed){
           log_err("ucnv_fromUChars returns different values for required capacity in pre-flight and conversion modes");

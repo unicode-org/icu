@@ -723,7 +723,7 @@ struct {
     uprv_free(inverse);
     fclose(data);
 
-	return 0;
+    return 0;
 }
 
 static UOption options[]={

@@ -19,9 +19,9 @@ CollationDanishTest::CollationDanishTest()
     myCollation = Collator::createInstance(Locale("da", "DK", ""),status);
     if(!myCollation || U_FAILURE(status)) {
       errln(__FILE__ "failed to create! err " + UnicodeString(u_errorName(status)));
-	/* if it wasn't already: */
-	delete myCollation;
-	myCollation = NULL;
+    /* if it wasn't already: */
+    delete myCollation;
+    myCollation = NULL;
     }
 
 }
@@ -204,7 +204,7 @@ void CollationDanishTest::TestTertiary(/* char* par */)
     /* problem in strcollinc for unfinshed contractions */
     if(U_FAILURE(status)){
       errln("ERROR: in setting normalization mode of the Danish collator\n");
-	    return;
+      return;
     }
     for (i = 0; i < 5 ; i++) {
         doTest(testSourceCases[i], testTargetCases[i], results[i]);

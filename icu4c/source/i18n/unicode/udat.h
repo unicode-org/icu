@@ -177,8 +177,8 @@ U_CAPI UDateFormat* U_EXPORT2
 udat_open(UDateFormatStyle  timeStyle,
           UDateFormatStyle  dateStyle,
           const char        *locale,
-	      const UChar       *tzID,
-	      int32_t           tzIDLength,
+          const UChar       *tzID,
+          int32_t           tzIDLength,
           const UChar       *pattern,
           int32_t           patternLength,
           UErrorCode        *status);
