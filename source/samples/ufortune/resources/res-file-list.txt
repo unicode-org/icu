@@ -1,2 +1,2 @@
-root.res
-es.res
+ufortune_resources_root.res
+ufortune_resources_es.res
