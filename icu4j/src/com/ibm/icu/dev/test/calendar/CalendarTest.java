@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/calendar/CalendarTest.java,v $ 
- * $Date: 2000/11/28 22:14:51 $ 
- * $Revision: 1.10 $
+ * $Date: 2000/11/30 21:54:34 $ 
+ * $Revision: 1.11 $
  *
  *****************************************************************************************
  */
@@ -90,7 +90,7 @@ public class CalendarTest extends TestFmwk {
         gregFormat.setTimeZone(UTC);
 
         GregorianCalendar pureGreg = new GregorianCalendar(UTC);
-        pureGreg.setGregorianChange(Calendar.MIN_DATE);
+        pureGreg.setGregorianChange(new Date(Long.MIN_VALUE));
         DateFormat pureGregFmt = new SimpleDateFormat("E M/d/yyyy G");
         pureGregFmt.setCalendar(pureGreg);
         
