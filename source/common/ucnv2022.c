@@ -955,17 +955,13 @@ T_UConverter_toUnicode_ISO_2022(UConverterToUnicodeArgs *args,
     char const* sourceStart;
     UConverter *saveThis;
     int plane =0; /*dummy variable*/
-    UConverterDataISO2022* myData= ((UConverterDataISO2022*)(args->converter->extraInfo));
-    /*Arguments Check*/
-    if (U_FAILURE(*err)){
-        return;
-    }
+    UConverterDataISO2022* myData;
 
     if ((args->converter == NULL) || (args->targetLimit < args->target) || (args->sourceLimit < args->source)){
         *err = U_ILLEGAL_ARGUMENT_ERROR;
         return;
     }
-
+    myData= ((UConverterDataISO2022*)(args->converter->extraInfo));
     do{
 
         /*Find the end of the buffer e.g : Next Escape Seq | end of Buffer*/
@@ -1050,17 +1046,15 @@ T_UConverter_toUnicode_ISO_2022_OFFSETS_LOGIC(UConverterToUnicodeArgs* args,
     char const* sourceStart;
     UConverter* saveThis;
     int plane =0;/*dummy variable*/
-    UConverterDataISO2022* myData=((UConverterDataISO2022*)(args->converter->extraInfo));
-    
-    /*Arguments Check*/
-    if (U_FAILURE(*err)){
-        return;
-    }
+    UConverterDataISO2022* myData;
+
     if ((args->converter == NULL) || (args->targetLimit < args->target) || (args->sourceLimit < args->source)){
         *err = U_ILLEGAL_ARGUMENT_ERROR;
         return;
     }
 
+    myData=((UConverterDataISO2022*)(args->converter->extraInfo));
+    
     do{
         mySourceLimit = getEndOfBuffer_2022(&(args->source), args->sourceLimit, args->flush);
         /*Find the end of the buffer e.g : Next Escape Seq | end of Buffer*/
@@ -1470,7 +1464,7 @@ static  const int32_t escSeqCharsLen[MAX_VALID_CP_JP] ={
 U_CFUNC void 
 UConverter_fromUnicode_ISO_2022_JP_OFFSETS_LOGIC(UConverterFromUnicodeArgs* args, UErrorCode* err){
 
-    UConverterDataISO2022 *converterData = (UConverterDataISO2022*)args->converter->extraInfo;
+    UConverterDataISO2022 *converterData;
     unsigned char* target = (unsigned char*) args->target;
     const unsigned char* targetLimit = (const unsigned char*) args->targetLimit;
     const UChar* source = args->source;
@@ -1483,14 +1477,14 @@ UConverter_fromUnicode_ISO_2022_JP_OFFSETS_LOGIC(UConverterFromUnicodeArgs* args
     int len =0; /*length of escSeq chars*/
     UConverterCallbackReason reason;
     UConverterSharedData* sharedData=NULL;
-    UBool useFallback = args->converter->useFallback;
+    UBool useFallback; 
 
     /* state variables*/
-    StateEnum* currentState       = &converterData->fromUnicodeCurrentState;
-    StateEnum initIterState       = ASCII;
-    UConverter** currentConverter = &converterData->fromUnicodeConverter;
-    Cnv2022Type* currentType      = &converterData->currentType;
-    UConverter** convArray        = converterData->myConverterArray;
+    StateEnum* currentState;       
+    StateEnum initIterState;       
+    UConverter** currentConverter; 
+    Cnv2022Type* currentType;      
+    UConverter** convArray;        
     
     /* arguments check*/
     if ((args->converter == NULL) || (targetLimit < target) || (sourceLimit < source)){
@@ -1498,12 +1492,16 @@ UConverter_fromUnicode_ISO_2022_JP_OFFSETS_LOGIC(UConverterFromUnicodeArgs* args
         return;
     }
 
-    if(U_FAILURE(*err)){
-        return;
-    }
-
-    initIterState = *currentState;
-
+    /* Initialize  */
+    converterData       = (UConverterDataISO2022*)args->converter->extraInfo;
+    useFallback         = args->converter->useFallback;
+    currentState        = &converterData->fromUnicodeCurrentState;
+    initIterState       = ASCII;
+    currentConverter    = &converterData->fromUnicodeConverter;
+    convArray           = converterData->myConverterArray;
+    initIterState       = *currentState;
+    currentType         = &converterData->currentType;
+    
     /* check if the last codepoint of previous buffer was a lead surrogate*/
     if(args->converter->fromUSurrogateLead!=0 && target< targetLimit) {
         goto getTrail;
@@ -1670,6 +1668,7 @@ getTrail:
                                 sourceChar=UTF16_GET_PAIR_VALUE(args->converter->fromUSurrogateLead, trail);
                                 args->converter->fromUSurrogateLead=0x00;
                                 reason =UCNV_UNASSIGNED;
+                                *err = U_INVALID_CHAR_FOUND;
                                 /* convert this surrogate code point */
                                 /* exit this condition tree */
                             } else {
@@ -1806,21 +1805,18 @@ UConverter_toUnicode_ISO_2022_JP_OFFSETS_LOGIC(UConverterToUnicodeArgs *args,
     const char *mySourceLimit = args->sourceLimit;
     uint32_t targetUniChar = 0x0000;
     uint32_t mySourceChar = 0x0000;
-    UConverterDataISO2022* myData=(UConverterDataISO2022*)(args->converter->extraInfo);
-    StateEnum* currentState =  &myData->toUnicodeCurrentState;
-    uint32_t* toUnicodeStatus = &args->converter->toUnicodeStatus;
+    UConverterDataISO2022* myData;
+    StateEnum* currentState;
+    uint32_t* toUnicodeStatus;
     int plane = 0; /*dummy variable*/
-
-    /*Arguments Check*/
-    if (U_FAILURE(*err)){ 
-        return;
-    }
 
     if ((args->converter == NULL) || (myTarget < args->target) || (mySource < args->source)){
         *err = U_ILLEGAL_ARGUMENT_ERROR;
         return;
     }
-
+    myData=(UConverterDataISO2022*)(args->converter->extraInfo);
+    currentState =  &myData->toUnicodeCurrentState;
+    toUnicodeStatus = &args->converter->toUnicodeStatus;
     while(mySource< args->sourceLimit){
 
         targetUniChar = missingCharMarker;
@@ -2020,23 +2016,24 @@ UConverter_fromUnicode_ISO_2022_KR_OFFSETS_LOGIC(UConverterFromUnicodeArgs* args
     int32_t* offsets = args->offsets;
     uint32_t targetByteUnit = 0x0000;
     UChar32 sourceChar = 0x0000;
-    UBool isTargetByteDBCS = (UBool)args->converter->fromUnicodeStatus;
-    UBool oldIsTargetByteDBCS = isTargetByteDBCS;
-    UConverterDataISO2022 *converterData=(UConverterDataISO2022*)args->converter->extraInfo;
+    UBool isTargetByteDBCS;
+    UBool oldIsTargetByteDBCS;
+    UConverterDataISO2022 *converterData;
     UConverterCallbackReason reason;
-    UConverterSharedData* sharedData = converterData->fromUnicodeConverter->sharedData;
-    UBool useFallback = args->converter->useFallback;
+    UConverterSharedData* sharedData;
+    UBool useFallback;
     int32_t length =0;
-
-    /*Arguments Check*/
-    if (U_FAILURE(*err)){ 
-        return;
-    }
 
     if ((args->converter == NULL) || (args->targetLimit < args->target) || (args->sourceLimit < args->source)){
         *err = U_ILLEGAL_ARGUMENT_ERROR;
         return;
     }
+    /* initialize data */
+    converterData=(UConverterDataISO2022*)args->converter->extraInfo;
+    sharedData = converterData->fromUnicodeConverter->sharedData;
+    useFallback = args->converter->useFallback;
+    isTargetByteDBCS=(UBool)args->converter->fromUnicodeStatus;
+    oldIsTargetByteDBCS = isTargetByteDBCS;
     /* if the version is 1 then the user is requesting 
      * conversion with ibm-25546 pass the arguments to 
      * MBCS converter and return
@@ -2133,6 +2130,7 @@ getTrail:
                                 source++;
                                 sourceChar=UTF16_GET_PAIR_VALUE(args->converter->fromUSurrogateLead, trail);
                                 args->converter->fromUSurrogateLead=0x00;
+                                *err = U_INVALID_CHAR_FOUND;
                                 reason =UCNV_UNASSIGNED;
                                 /* convert this surrogate code point */
                                 /* exit this condition tree */
@@ -2250,20 +2248,21 @@ UConverter_toUnicode_ISO_2022_KR_OFFSETS_LOGIC(UConverterToUnicodeArgs *args,
     const char *mySourceLimit = args->sourceLimit;
     UChar32 targetUniChar = 0x0000;
     UChar mySourceChar = 0x0000;
-    UConverterDataISO2022* myData=(UConverterDataISO2022*)(args->converter->extraInfo);
+    UConverterDataISO2022* myData;
     int plane =0; /*dummy variable */
-    UConverterSharedData* sharedData = myData->fromUnicodeConverter->sharedData;
-    UBool useFallback = args->converter->useFallback;
+    UConverterSharedData* sharedData ;
+    UBool useFallback;
 
-    /*Arguments Check*/
-    if (U_FAILURE(*err)){ 
-        return;
-    }
 
     if ((args->converter == NULL) || (args->targetLimit < args->target) || (args->sourceLimit < args->source)){
         *err = U_ILLEGAL_ARGUMENT_ERROR;
         return;
     }
+    /* initialize state */
+    myData=(UConverterDataISO2022*)(args->converter->extraInfo);
+    sharedData = myData->fromUnicodeConverter->sharedData;
+    useFallback = args->converter->useFallback;
+    
     if(myData->version==1){
       UConverter_toUnicode_ISO_2022_KR_OFFSETS_LOGIC_IBM(args,err);
       return;
@@ -2506,15 +2505,11 @@ static Cnv2022Type myConverterTypeCN[4]={
         MBCS
 };
 
-/*
- * TODO:  CNS_11643 Mapping table need to be changed for compliance with Unicode 3.1 
- *
- */
 
 U_CFUNC void 
 UConverter_fromUnicode_ISO_2022_CN_OFFSETS_LOGIC(UConverterFromUnicodeArgs* args, UErrorCode* err){
 
-    UConverterDataISO2022 *converterData = (UConverterDataISO2022*)args->converter->extraInfo;
+    UConverterDataISO2022 *converterData;
     unsigned char* target = (unsigned char*) args->target;
     const unsigned char* targetLimit = (const unsigned char*) args->targetLimit;
     const UChar* source = args->source;
@@ -2528,16 +2523,16 @@ UConverter_fromUnicode_ISO_2022_CN_OFFSETS_LOGIC(UConverterFromUnicodeArgs* args
     uint8_t planeVal=0;
     UConverterCallbackReason reason;
     UConverterSharedData* sharedData=NULL;
-    UBool useFallback = args->converter->useFallback;
+    UBool useFallback;
 
     /* state variables*/
-    StateEnumCN* currentState     = (StateEnumCN*)&converterData->fromUnicodeCurrentState;
-    StateEnumCN initIterState     = ASCII_1;
-    UConverter** currentConverter = &converterData->fromUnicodeConverter;
-    UBool* isShiftAppended        = &converterData->isShiftAppended;
-    UBool* isEscapeAppended       = &converterData->isEscapeAppended;
-    int*  plane                   = &converterData->plane;
-    int   lPlane                  = 0;
+    StateEnumCN* currentState;     
+    StateEnumCN initIterState;     
+    UConverter** currentConverter; 
+    UBool* isShiftAppended;        
+    UBool* isEscapeAppended;       
+    int*  plane;                   
+    int   lPlane=0;                  
 
     /* arguments check*/
     if ((args->converter == NULL) || (targetLimit < target) || (sourceLimit < source)){
@@ -2545,18 +2540,25 @@ UConverter_fromUnicode_ISO_2022_CN_OFFSETS_LOGIC(UConverterFromUnicodeArgs* args
         return;
     }
 
-    if(U_FAILURE(*err)){
-        return;
-    }
-    /* set up the state */    
-    initIterState = *currentState;
-    *currentConverter =converterData->myConverterArray[(*currentConverter==NULL) ? 0 : (int)*currentState];
-    sharedData=(*currentConverter)->sharedData;
+    /* set up the state */
+    converterData     = (UConverterDataISO2022*)args->converter->extraInfo;
+    useFallback       = args->converter->useFallback;
+    currentState      = (StateEnumCN*)&converterData->fromUnicodeCurrentState;
+    initIterState     = ASCII_1;
+    currentConverter  = &converterData->fromUnicodeConverter;
+    isShiftAppended   = &converterData->isShiftAppended;
+    isEscapeAppended  = &converterData->isEscapeAppended;
+    plane             = &converterData->plane;
+    initIterState     = *currentState;
+    *currentConverter = converterData->myConverterArray[(*currentConverter==NULL) ? 0 : (int)*currentState];
+    sharedData        = (*currentConverter)->sharedData;
 
     /* check if the last codepoint of previous buffer was a lead surrogate*/
     if(args->converter->fromUSurrogateLead!=0 && target< targetLimit) {
         goto getTrail;
     }
+
+
     while( source < sourceLimit){
 
         targetByteUnit =missingCharMarker;
@@ -3007,18 +3009,15 @@ UConverter_toUnicode_ISO_2022_CN_OFFSETS_LOGIC(UConverterToUnicodeArgs *args,
     const char *mySourceLimit = args->sourceLimit;
     uint32_t targetUniChar = 0x0000;
     uint32_t mySourceChar = 0x0000;
-    UConverterDataISO2022* myData=(UConverterDataISO2022*)(args->converter->extraInfo);
-
-     plane=myData->plane;
-    /*Arguments Check*/
-    if (U_FAILURE(*err)) 
-        return;
+    UConverterDataISO2022* myData;
 
     if ((args->converter == NULL) || (args->targetLimit < myTarget) || (args->sourceLimit < mySource)){
         *err = U_ILLEGAL_ARGUMENT_ERROR;
         return;
     }
-
+   
+   myData=(UConverterDataISO2022*)(args->converter->extraInfo);
+   plane=myData->plane;
    while(mySource< args->sourceLimit){
 
         targetUniChar =missingCharMarker;
@@ -3244,10 +3243,10 @@ _ISO_2022_SafeClone(
     }
 
     localClone = (struct cloneStruct *)stackBuffer;
-    memcpy(&localClone->cnv, cnv, sizeof(UConverter));
+    uprv_memcpy(&localClone->cnv, cnv, sizeof(UConverter));
     localClone->cnv.isCopyLocal = TRUE;
 
-    memcpy(&localClone->mydata, cnv->extraInfo, sizeof(UConverterDataISO2022));
+    uprv_memcpy(&localClone->mydata, cnv->extraInfo, sizeof(UConverterDataISO2022));
     localClone->cnv.extraInfo = &localClone->mydata;
 
     return &localClone->cnv;
