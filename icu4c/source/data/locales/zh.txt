@@ -14,7 +14,8 @@ zh {
     CollationElements { 
        Version { "1.0" }
        Override { "FALSE" }
-Sequence{"&[top]"
+Sequence{"&\u0304<<\u0301<<\u030C<<\u0300<<\u0308"
+        "&[top]"
         "<\u554A<\u963F<\u57C3<\u6328<\u54CE<\u5509<\u54C0<\u7691<\u764C"
         "<\u853C<\u77EE<\u827E<\u788D<\u7231<\u9698<\u978D<\u6C28<\u5B89"
         "<\u4FFA<\u6309<\u6697<\u5CB8<\u80FA<\u6848<\u80AE<\u6602<\u76CE"
