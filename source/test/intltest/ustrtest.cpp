@@ -837,21 +837,27 @@ UnicodeStringTest::TestPrefixAndSuffix()
         errln("endsWith() failed: \"" + test2 + "\" shouldn't be a suffix of \"" + test1 + "\".");
     }
 
-    if (!test1.endsWith(test3) ||
-        !test1.endsWith(test3, 0, INT32_MAX) ||
-        !test1.endsWith(test3.getBuffer(), test3.length()) ||
-        !test1.endsWith(test3.getTerminatedBuffer(), 0, -1)
-    ) {
-        errln("endsWith() failed: \"" + test3 + "\" should be a suffix of \"" + test1 + "\".");
-    }
+   if (!test1.endsWith(test3)) { 
+     errln("endsWith(test3) failed: \"" + test3 + "\" should be a suffix of \"" + test1 + "\".");
+   }
+   if (!test1.endsWith(test3, 0, INT32_MAX)) {
+     errln("endsWith(test3, 0, INT32_MAX) failed: \"" + test3 + "\" should be a suffix of \"" + test1 + "\".");
+   }
 
-    if (!test3.startsWith(test4)) {
-        errln("startsWith() failed: \"" + test4 + "\" should be a prefix of \"" + test3 + "\".");
-    }
-
-    if (test4.startsWith(test3)) {
-        errln("startsWith() failed: \"" + test3 + "\" shouldn't be a prefix of \"" + test4 + "\".");
-    }
+   if(!test1.endsWith(test3.getBuffer(), test3.length())) {
+     errln("endsWith(test3.getBuffer(), test3.length()) failed: \"" + test3 + "\" should be a suffix of \"" + test1 + "\".");
+   }
+   if(!test1.endsWith(test3.getTerminatedBuffer(), 0, -1)) {
+     errln("endsWith(test3.getTerminatedBuffer(), 0, -1) failed: \"" + test3 + "\" should be a suffix of \"" + test1 + "\".");
+   }
+   
+   if (!test3.startsWith(test4)) {
+     errln("endsWith(test4) failed: \"" + test4 + "\" should be a prefix of \"" + test3 + "\".");
+   }
+   
+   if (test4.startsWith(test3)) {
+     errln("startsWith(test3) failed: \"" + test3 + "\" shouldn't be a prefix of \"" + test4 + "\".");
+   }
 }
 
 void
