@@ -23,7 +23,7 @@ pkglibdir = $(libdir)/@PACKAGE@
 pkgincludedir = $(includedir)/@PACKAGE@
 
 ## Install program information
-mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
+MKINSTALLDIRS = $(SHELL) $(top_srcdir)/mkinstalldirs
 
 INSTALL = @INSTALL@
 INSTALL_PROGRAM = @INSTALL_PROGRAM@
@@ -115,7 +115,7 @@ check: all check-local
 all-local: $(TARGET) $(MAN_FILES) $(RES_FILES) $(TRANSLIT_RES) $(TEST_FILES)
 
 install-local: all-local install-man
-	$(mkinstalldirs) $(DESTDIR)$(sbindir)
+	$(MKINSTALLDIRS) $(DESTDIR)$(sbindir)
 	$(INSTALL) $(TARGET) $(DESTDIR)$(sbindir)/$(TARGET)
 
 <dist-local:
@@ -152,7 +152,7 @@ $(top_builddir)/data/%.res : $(top_srcdir)/../data/%.txt
 
 # man page
 install-man: $(MAN_FILES)
-	$(mkinstalldirs) $(DESTDIR)$(mandir)/man$(SECTION)
+	$(MKINSTALLDIRS) $(DESTDIR)$(mandir)/man$(SECTION)
 	$(INSTALL_DATA) $< $(DESTDIR)$(mandir)/man$(SECTION)
 
 $(TARGET).$(SECTION): $(srcdir)/$(TARGET).$(SECTION).in

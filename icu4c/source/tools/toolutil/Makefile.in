@@ -21,7 +21,7 @@ pkglibdir = $(libdir)/@PACKAGE@
 pkgincludedir = $(includedir)/@PACKAGE@
 
 ## Install program information
-mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
+MKINSTALLDIRS = $(SHELL) $(top_srcdir)/mkinstalldirs
 
 INSTALL = @INSTALL@
 INSTALL_PROGRAM = @INSTALL_PROGRAM@
@@ -104,7 +104,7 @@ all-local: $(ALL_TARGETS)
 install-local: install-library
 
 install-library: all-local
-	$(mkinstalldirs) $(DESTDIR)$(libdir)
+	$(MKINSTALLDIRS) $(DESTDIR)$(libdir)
 ifneq ($(ENABLE_STATIC),)
 	$(INSTALL-L) $(TARGET) $(DESTDIR)$(libdir)/$(TARGET)
 endif
