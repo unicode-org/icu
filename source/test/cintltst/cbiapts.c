@@ -81,7 +81,7 @@ static UChar* toUChar(const char *src, void **freeHook) {
         return NULL;
     };
 
-	cnv = ucnv_open(NULL, &status);
+    cnv = ucnv_open(NULL, &status);
     if(U_FAILURE(status) || cnv == NULL) {
         return NULL;
     }

@@ -934,8 +934,8 @@ void RBBIAPITest::TestRegistration() {
 void RBBIAPITest::RoundtripRule(const char *dataFile) {
     UErrorCode status = U_ZERO_ERROR;
     UParseError parseError;
-	parseError.line = 0;
-	parseError.offset = 0;
+    parseError.line = 0;
+    parseError.offset = 0;
     UDataMemory *data = udata_open(NULL, "brk", dataFile, &status);
     uint32_t length;
     const UChar *builtSource;

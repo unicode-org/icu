@@ -31,10 +31,10 @@ class UObjectTest : public IntlTest {
      * @return Returns obj, suitable for deletion
      */
     UObject *testClass(UObject *obj,
-		       const char *className, const char *factory, 
-		       UClassID staticID);
-		   
-		   
+               const char *className, const char *factory, 
+               UClassID staticID);
+           
+           
 };
  
 #endif

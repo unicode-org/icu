@@ -43,8 +43,8 @@ const char *ids_class[MAX_CLASS_ID];
 uint32_t    ids_count = 0;
 
 UObject *UObjectTest::testClass(UObject *obj,
-				const char *className, const char *factory, 
-				UClassID staticID)
+                const char *className, const char *factory, 
+                UClassID staticID)
 {
   uint32_t i;
   UnicodeString what = UnicodeString(className) + " * x= " + UnicodeString(factory?factory:" ABSTRACT ") + "; ";
@@ -94,11 +94,11 @@ UObject *UObjectTest::testClass(UObject *obj,
   for(i=0;i<ids_count;i++) {
     if(staticID == ids[i]) {
       if(!strcmp(ids_class[i], className)) {
-	logln("OK: ID found is the same as " + UnicodeString(ids_class[i]) + UnicodeString(" *y= ") + ids_factory[i] + what);
-	return obj; 
+    logln("OK: ID found is the same as " + UnicodeString(ids_class[i]) + UnicodeString(" *y= ") + ids_factory[i] + what);
+    return obj; 
       } else {
-	errln("FAIL: ID is the same as " + UnicodeString(ids_class[i]) + UnicodeString(" *y= ") + ids_factory[i] + what);
-	return obj;
+    errln("FAIL: ID is the same as " + UnicodeString(ids_class[i]) + UnicodeString(" *y= ") + ids_factory[i] + what);
+    return obj;
       }
     }
   }

@@ -32,7 +32,7 @@ public:
 
     void TestOtherAPI(void);
 
-	void TestNewTypes(void);
+    void TestNewTypes(void);
 
 private:
     /**

@@ -255,25 +255,25 @@ int64_t DigitList::getInt64() /*const*/
         // be able to return a 64-bit number [grhoten]
         *fDecimalDigits = fIsPositive ? '+' : '-';
 
-		if (fCount < LONG_MIN_REP_LENGTH) {
-			return (int64_t)atol(fDecimalDigits);
-		}
+        if (fCount < LONG_MIN_REP_LENGTH) {
+            return (int64_t)atol(fDecimalDigits);
+        }
 
-		// too big for atol, hand-roll atoi64
-		value = 0;
-		for (int i = 0; i < fCount; ++i) {
-			int v = fDigits[i] - kZero;
-			value = value * (uint64_t)10 + (uint64_t)v;
-		}
-		if (!fIsPositive) {
-			value = ~value;
-			value += 1;
-		}
-		int64_t svalue = (int64_t)value;
+        // too big for atol, hand-roll atoi64
+        value = 0;
+        for (int i = 0; i < fCount; ++i) {
+            int v = fDigits[i] - kZero;
+            value = value * (uint64_t)10 + (uint64_t)v;
+        }
+        if (!fIsPositive) {
+            value = ~value;
+            value += 1;
+        }
+        int64_t svalue = (int64_t)value;
         return svalue;
     }
     else {
-		// todo: figure out best approach
+        // todo: figure out best approach
 
         // This is 100% accurate in c++ because if we are representing
         // an integral value, we suffer nothing in the conversion to
@@ -399,7 +399,7 @@ DigitList::fitsIntoInt64(UBool ignoreNegativeZero) /*const*/
 void
 DigitList::set(int32_t source, int32_t maximumDigits)
 {
-	set((int64_t)source, maximumDigits);
+    set((int64_t)source, maximumDigits);
 }
 
 // -------------------------------------

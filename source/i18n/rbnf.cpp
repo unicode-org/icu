@@ -677,8 +677,8 @@ RuleBasedNumberFormat::RuleBasedNumberFormat(const UnicodeString& description,
 }
 
 RuleBasedNumberFormat::RuleBasedNumberFormat(const UnicodeString& description, 
-					     UParseError& perror, 
-					     UErrorCode& status) 
+                         UParseError& perror, 
+                         UErrorCode& status) 
   : ruleSets(NULL)
   , defaultRuleSet(NULL)
   , locale(Locale::getDefault())
@@ -692,9 +692,9 @@ RuleBasedNumberFormat::RuleBasedNumberFormat(const UnicodeString& description,
 }
 
 RuleBasedNumberFormat::RuleBasedNumberFormat(const UnicodeString& description, 
-					     const Locale& aLocale,
-					     UParseError& perror, 
-					     UErrorCode& status) 
+                         const Locale& aLocale,
+                         UParseError& perror, 
+                         UErrorCode& status) 
   : ruleSets(NULL)
   , defaultRuleSet(NULL)
   , locale(aLocale)

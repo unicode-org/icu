@@ -303,8 +303,8 @@ public:
 
     /**
      * Format an int64 number. (Not abstract to retain compatibility
-	 * with earlier releases, however subclasses should override this
-	 * method as it just delegates to format(int32_t number...);
+     * with earlier releases, however subclasses should override this
+     * method as it just delegates to format(int32_t number...);
      *
      * @param number    The value to be formatted.
      * @param appendTo  Output parameter to receive result.

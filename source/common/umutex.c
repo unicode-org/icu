@@ -153,13 +153,13 @@ static pthread_mutex_t   gMutexes[MAX_MUTEXES] = {
  *
  *-------------------------------------------------------------*/
 static void *gMutexes[MAX_MUTEXES] = {
-	NULL, NULL, NULL,
-	NULL, NULL, NULL,
-	NULL, NULL, NULL,
-	NULL, NULL, NULL,
-	NULL, NULL, NULL,
-	NULL, NULL, NULL,
-	NULL, NULL };
+    NULL, NULL, NULL,
+    NULL, NULL, NULL,
+    NULL, NULL, NULL,
+    NULL, NULL, NULL,
+    NULL, NULL, NULL,
+    NULL, NULL, NULL,
+    NULL, NULL };
 
 /* Unknown platform.  OK so long as ICU_USE_THREAD is not set.  
                       Note that user can still set mutex functions at run time,

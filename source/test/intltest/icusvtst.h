@@ -50,7 +50,7 @@ class ICUServiceTest : public IntlTest
 
   void msgstr(const UnicodeString& message, UObject* obj, UBool err = TRUE);
   void logstr(const UnicodeString& message, UObject* obj) {
-		msgstr(message, obj, FALSE);
+        msgstr(message, obj, FALSE);
   }
 };
 

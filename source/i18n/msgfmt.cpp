@@ -1175,9 +1175,9 @@ static Format* makeRBNF(URBNFRuleSetTag tag, const Locale& locale, const Unicode
     RuleBasedNumberFormat* fmt = new RuleBasedNumberFormat(tag, locale, ec);
     if (U_SUCCESS(ec) && defaultRuleSet.length() > 0) {
         fmt->setDefaultRuleSet(defaultRuleSet, ec);
-	if (U_FAILURE(ec)) { // ignore unrecognized default rule set
-	    ec = U_ZERO_ERROR;
-	}
+    if (U_FAILURE(ec)) { // ignore unrecognized default rule set
+        ec = U_ZERO_ERROR;
+    }
     }
     return fmt;
 }

@@ -258,7 +258,7 @@ U_STABLE void U_EXPORT2 usearch_close(UStringSearch *searchiter);
 * header comments
 * @param strsrch search iterator data struct
 * @param position position to start next search from. If position is less
-* 			than or greater than the text range for searching, 
+*          than or greater than the text range for searching, 
 *          an U_INDEX_OUTOFBOUNDS_ERROR will be returned
 * @param status error status if any.
 * @stable ICU 2.4

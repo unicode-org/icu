@@ -499,9 +499,9 @@ LocaleKeyFactory::getDisplayName(const UnicodeString& id, const Locale& locale, 
 
 UObject*
 LocaleKeyFactory::handleCreate(const Locale& /* loc */, 
-			       int32_t /* kind */, 
-			       const ICUService* /* service */, 
-			       UErrorCode& /* status */) const {
+                   int32_t /* kind */, 
+                   const ICUService* /* service */, 
+                   UErrorCode& /* status */) const {
     return NULL;
 }
 
@@ -561,7 +561,7 @@ SimpleLocaleKeyFactory::SimpleLocaleKeyFactory(UObject* objToAdopt,
   , _id()
   , _kind(kind)
 {
-	LocaleUtility::initNameFromLocale(locale, _id);
+    LocaleUtility::initNameFromLocale(locale, _id);
 }
 
 SimpleLocaleKeyFactory::~SimpleLocaleKeyFactory()
@@ -763,12 +763,12 @@ ICULocaleService::get(const Locale& locale, int32_t kind, Locale* actualReturn, 
 
 URegistryKey
 ICULocaleService::registerInstance(UObject* objToAdopt, const UnicodeString& locale, 
-	UBool visible, UErrorCode& status)
+    UBool visible, UErrorCode& status)
 {
-	Locale loc;
-	LocaleUtility::initLocaleFromName(locale, loc);
+    Locale loc;
+    LocaleUtility::initLocaleFromName(locale, loc);
     return registerInstance(objToAdopt, loc, LocaleKey::KIND_ANY, 
-		visible ? LocaleKeyFactory::VISIBLE : LocaleKeyFactory::INVISIBLE, status);
+        visible ? LocaleKeyFactory::VISIBLE : LocaleKeyFactory::INVISIBLE, status);
 }
 
 URegistryKey

@@ -173,7 +173,7 @@ static UOption options[]={
     UOPTION_DESTDIR,             /* 4 */
     UOPTION_VERBOSE,             /* 5 */
     UOPTION_PACKAGE_NAME,        /* 6 */
-	UOPTION_DEF( "touchfile", 't', UOPT_NO_ARG) /* 7 */
+    UOPTION_DEF( "touchfile", 't', UOPT_NO_ARG) /* 7 */
 };
 
 int main(int argc, char* argv[])

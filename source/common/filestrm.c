@@ -220,7 +220,7 @@ T_FileStream_stderr(void)
 
 U_CAPI UBool U_EXPORT2
 T_FileStream_remove(const char* fileName){
-	return (remove(fileName) == 0);
+    return (remove(fileName) == 0);
 }
 
 

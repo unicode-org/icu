@@ -156,9 +156,9 @@ typedef enum UProperty {
         and "String property Age" are read by genpname. */
 
     /*  Note: Place UCHAR_ALPHABETIC before UCHAR_BINARY_START so that
-	debuggers display UCHAR_ALPHABETIC as the symbolic name for 0,
-	rather than UCHAR_BINARY_START.  Likewise for other *_START
-	identifiers. */
+    debuggers display UCHAR_ALPHABETIC as the symbolic name for 0,
+    rather than UCHAR_BINARY_START.  Likewise for other *_START
+    identifiers. */
 
     /** Binary property Alphabetic. Same as u_isUAlphabetic, different from u_isalpha.
         Lu+Ll+Lt+Lm+Lo+Nl+Other_Alphabetic @stable ICU 2.1 */

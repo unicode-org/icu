@@ -96,7 +96,7 @@ uset_applyPattern(USet *set,
 
 U_CAPI void U_EXPORT2
 uset_applyIntPropertyValue(USet* set,
-			   UProperty prop, int32_t value, UErrorCode* ec) {
+               UProperty prop, int32_t value, UErrorCode* ec) {
     ((UnicodeSet*) set)->applyIntPropertyValue(prop, value, *ec);
 }
 
@@ -104,7 +104,7 @@ U_CAPI void U_EXPORT2
 uset_applyPropertyAlias(USet* set,
                         const UChar *prop, int32_t propLength,
                         const UChar *value, int32_t valueLength,
-			UErrorCode* ec) {
+            UErrorCode* ec) {
 
     UnicodeString p(prop, propLength);
     UnicodeString v(value, valueLength);

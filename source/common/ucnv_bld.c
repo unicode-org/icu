@@ -1,6 +1,6 @@
 /*
  ********************************************************************
- * COPYRIGHT: 
+ * COPYRIGHT:
  * Copyright (c) 1996-2004, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************
@@ -12,9 +12,9 @@
  *  uses uconv_io.h routines to access disk information
  *  is used by ucnv.h to implement public API create/delete/flushCache routines
  * Modification History:
- * 
+ *
  *   Date        Name        Description
- * 
+ *
  *   06/20/2000  helena      OS/400 port changes; mostly typecast.
  *   06/29/2000  helena      Major rewrite of the callback interface.
 */
@@ -246,7 +246,7 @@ ucnv_data_unFlattenClone(UConverterLoadArgs *pArgs, UDataMemory *pData, UErrorCo
 #endif
 
     data->staticData = source;
-    
+
     data->sharedDataCached = FALSE;
 
     /* fill in fields from the loaded data */
@@ -307,7 +307,7 @@ static UConverterSharedData *createConverterFromFile(UConverterLoadArgs *pArgs, 
     return sharedData;
 }
 
-int32_t 
+int32_t
 ucnv_copyPlatformString(char *platformString, UConverterPlatform pltfrm)
 {
     switch (pltfrm)
@@ -330,7 +330,7 @@ static const UConverterSharedData *
 getAlgorithmicTypeFromName(const char *realName)
 {
     uint32_t mid, start, limit;
-	uint32_t lastMid;
+    uint32_t lastMid;
     int result;
     char strippedName[UCNV_MAX_CONVERTER_NAME_LENGTH];
 
@@ -341,14 +341,14 @@ getAlgorithmicTypeFromName(const char *realName)
     start = 0;
     limit = sizeof(cnvNameType)/sizeof(cnvNameType[0]);
     mid = limit;
-	lastMid = UINT32_MAX;
+    lastMid = UINT32_MAX;
 
     for (;;) {
         mid = (uint32_t)((start + limit) / 2);
-		if (lastMid == mid) {	/* Have we moved? */
-			break;	/* We haven't moved, and it wasn't found. */
-		}
-		lastMid = mid;
+        if (lastMid == mid) {   /* Have we moved? */
+            break;  /* We haven't moved, and it wasn't found. */
+        }
+        lastMid = mid;
         result = uprv_strcmp(strippedName, cnvNameType[mid].name);
 
         if (result < 0) {
@@ -383,7 +383,7 @@ ucnv_shareConverterData(UConverterSharedData * data)
                             &err);
         ucln_common_registerCleanup(UCLN_COMMON_UCNV, ucnv_cleanup);
 
-        if (U_FAILURE(err)) 
+        if (U_FAILURE(err))
             return;
     }
 
@@ -397,7 +397,7 @@ ucnv_shareConverterData(UConverterSharedData * data)
     }
     UCNV_DEBUG_LOG("put:chk",data->staticData->name,sanity);
     */
-    
+
     /* Mark it shared */
     data->sharedDataCached = TRUE;
 
@@ -459,7 +459,7 @@ ucnv_deleteSharedConverterData(UConverterSharedData * deadSharedData)
     if (deadSharedData->impl->unload != NULL) {
         deadSharedData->impl->unload(deadSharedData);
     }
-    
+
     if(deadSharedData->dataMemory != NULL)
     {
         UDataMemory *data = (UDataMemory*)deadSharedData->dataMemory;
@@ -544,7 +544,7 @@ ucnv_unload(UConverterSharedData *sharedData) {
         if (sharedData->referenceCounter > 0) {
             sharedData->referenceCounter--;
         }
-    
+
         if((sharedData->referenceCounter <= 0)&&(sharedData->sharedDataCached == FALSE)) {
             ucnv_deleteSharedConverterData(sharedData);
         }
@@ -706,7 +706,7 @@ ucnv_loadSharedData(const char *converterName, UConverterLookupData *lookup, UEr
         parseConverterOptions(lookup->realName, lookup->cnvName, lookup->locale, &lookup->options, err);
         lookup->realName = lookup->cnvName;
     }
-    
+
     /* get the shared data for an algorithmic converter, if it is one */
     mySharedConverterData = (UConverterSharedData *)getAlgorithmicTypeFromName(lookup->realName);
     if (mySharedConverterData == NULL)
@@ -818,7 +818,7 @@ ucnv_createConverterFromPackage(const char *packageName, const char *converterNa
 
     if(U_FAILURE(*err)) {
         UTRACE_EXIT_STATUS(*err);
-        return NULL; 
+        return NULL;
     }
 
     UTRACE_DATA2(UTRACE_OPEN_CLOSE, "open converter %s from package %s", converterName, packageName);
@@ -835,24 +835,24 @@ ucnv_createConverterFromPackage(const char *packageName, const char *converterNa
         return NULL;
     }
     args.name=cnvName;
-    
+
     /* open the data, unflatten the shared structure */
     mySharedConverterData = createConverterFromFile(&args, err);
-    
+
     if (U_FAILURE(*err)) {
         UTRACE_EXIT_STATUS(*err);
-        return NULL; 
+        return NULL;
     }
 
     /* create the actual converter */
     myUConverter = ucnv_createConverterFromSharedData(NULL, mySharedConverterData, cnvName, locale, args.options, err);
-    
+
     if (U_FAILURE(*err)) {
         ucnv_close(myUConverter);
         UTRACE_EXIT_STATUS(*err);
-        return NULL; 
+        return NULL;
     }
-    
+
     UTRACE_EXIT_PTR_STATUS(myUConverter, *err);
     return myUConverter;
 }
@@ -959,9 +959,9 @@ ucnv_flushCache ()
             if (mySharedData->referenceCounter == 0)
             {
                 tableDeletedNum++;
-            
+
                 UCNV_DEBUG_LOG("del",mySharedData->staticData->name,mySharedData);
-            
+
                 uhash_removeElement(SHARED_DATA_HASHTABLE, e);
                 mySharedData->sharedDataCached = FALSE;
                 ucnv_deleteSharedConverterData (mySharedData);

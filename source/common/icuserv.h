@@ -639,9 +639,9 @@ class U_COMMON_API ICUService : public ICUNotifier {
      * the key, until either a factory returns a service object, or the key
      * has no fallback.  If no object is found, the result of handleDefault
      * is returned.</p>
-	 *
-	 * <p>Subclasses can override this method to further customize the 
-	 * result before returning it.
+     *
+     * <p>Subclasses can override this method to further customize the 
+     * result before returning it.
      *
      * @param key the key.
      * @param actualReturn a pointer to a UnicodeString to hold the matched descriptor, or NULL.
@@ -654,7 +654,7 @@ class U_COMMON_API ICUService : public ICUNotifier {
      * <p>This version of getKey is only called by ICUServiceFactories within the scope
      * of a previous getKey call, to determine what previously-registered factories would
      * have returned.  For details, see getKey(ICUServiceKey&, UErrorCode&).  Subclasses
-	 * should not call it directly, but call through one of the other get functions.</p>
+     * should not call it directly, but call through one of the other get functions.</p>
      * 
      * @param key the key.
      * @param actualReturn a pointer to a UnicodeString to hold the matched descriptor, or NULL.

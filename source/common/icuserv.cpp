@@ -442,7 +442,7 @@ ICUService::getKey(ICUServiceKey& key, UnicodeString* actualReturn, const ICUSer
     // The cache has to stay in synch with the factory list.
     // ICU doesn't have monitors so we can't use rw locks, so 
     // we single-thread everything using this service, for now.
-	
+    
     // if factory is not null, we're calling from within the mutex,
     // and since some unix machines don't have reentrant mutexes we
     // need to make sure not to try to lock it again.
@@ -573,14 +573,14 @@ ICUService::getKey(ICUServiceKey& key, UnicodeString* actualReturn, const ICUSer
 
         if (actualReturn->isBogus()) {
           status = U_MEMORY_ALLOCATION_ERROR;
-	  delete result;
+      delete result;
           return NULL;
         }
       }
 
       UObject* service = cloneInstance(result->service);
       if (putInCache && !cacheResult) {
-	delete result;
+    delete result;
       }
       return service;
     }
@@ -695,7 +695,7 @@ ICUService::getDisplayName(const UnicodeString& id, UnicodeString& result, const
       ICUServiceFactory* f = (ICUServiceFactory*)map->get(id);
       if (f != NULL) {
         f->getDisplayName(id, locale, result);
-		return result;
+        return result;
       }
 
       // fallback

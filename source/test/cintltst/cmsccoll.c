@@ -585,7 +585,7 @@ static void testCollator(UCollator *coll, UErrorCode *status) {
 
         if(lastReset == TRUE && prefixLen != 0) {
           u_strncpy(first+prefixLen, first, firstLen);
-          u_strncpy(first, rulesCopy+prefixOffset, prefixLen); 
+          u_strncpy(first, rulesCopy+prefixOffset, prefixLen);
           first[firstLen+prefixLen] = 0;
           firstLen = firstLen+prefixLen;
         }
@@ -634,7 +634,7 @@ static void testCollator(UCollator *coll, UErrorCode *status) {
       }
 
       if(before == TRUE && strength != UCOL_TOK_RESET) { /* first and second were swapped */
-        before = FALSE; 
+        before = FALSE;
       } else {
         firstLen = chLen;
         firstEx = exLen;
@@ -989,8 +989,8 @@ static void testAgainstUCA(UCollator *coll, UCollator *UCA, const char *refName,
   }
 }
 
-/* 
- * Takes two CEs (lead and continuation) and 
+/*
+ * Takes two CEs (lead and continuation) and
  * compares them as CEs should be compared:
  * primary vs. primary, secondary vs. secondary
  * tertiary vs. tertiary
@@ -1001,8 +1001,8 @@ static int32_t compareCEs(uint32_t s1, uint32_t s2,
   if(s1 == t1 && s2 == t2) {
     return 0;
   }
-  s = (s1 & 0xFFFF0000)|((s2 & 0xFFFF0000)>>16); 
-  t = (t1 & 0xFFFF0000)|((t2 & 0xFFFF0000)>>16); 
+  s = (s1 & 0xFFFF0000)|((s2 & 0xFFFF0000)>>16);
+  t = (t1 & 0xFFFF0000)|((t2 & 0xFFFF0000)>>16);
   if(s < t) {
     return -1;
   } else if(s > t) {
@@ -1049,8 +1049,8 @@ typedef struct {
 /* primary ignorable). */
 static indirectBoundaries ucolIndirectBoundaries[15];
 static UBool indirectBoundariesSet = FALSE;
-static void setIndirectBoundaries(uint32_t indexR, uint32_t *start, uint32_t *end) { 
-  
+static void setIndirectBoundaries(uint32_t indexR, uint32_t *start, uint32_t *end) {
+
   /* Set values for the top - TODO: once we have values for all the indirects, we are going */
   /* to initalize here. */
   ucolIndirectBoundaries[indexR].startCE = start[0];
@@ -1096,7 +1096,7 @@ static void testCEs(UCollator *coll, UErrorCode *status) {
   UCAConstants *consts = (UCAConstants *)((uint8_t *)UCA->image + UCA->image->UCAConsts);
   uint32_t UCOL_RESET_TOP_VALUE = consts->UCA_LAST_NON_VARIABLE[0], /*UCOL_RESET_TOP_CONT = consts->UCA_LAST_NON_VARIABLE[1], */
            UCOL_NEXT_TOP_VALUE = consts->UCA_FIRST_IMPLICIT[0], UCOL_NEXT_TOP_CONT = consts->UCA_FIRST_IMPLICIT[1];
-  
+
   baseCE=baseContCE=nextCE=nextContCE=currCE=currContCE=lastCE=lastContCE = UCOL_NOT_FOUND;
 
   src.opts = &opts;
@@ -1107,7 +1107,7 @@ static void testCEs(UCollator *coll, UErrorCode *status) {
 
   if(indirectBoundariesSet == FALSE) {
     /* UCOL_RESET_TOP_VALUE */
-    setIndirectBoundaries(0, consts->UCA_LAST_NON_VARIABLE, consts->UCA_FIRST_IMPLICIT); 
+    setIndirectBoundaries(0, consts->UCA_LAST_NON_VARIABLE, consts->UCA_FIRST_IMPLICIT);
     /* UCOL_FIRST_PRIMARY_IGNORABLE */
     setIndirectBoundaries(1, consts->UCA_FIRST_PRIMARY_IGNORABLE, 0);
     /* UCOL_LAST_PRIMARY_IGNORABLE */
@@ -1182,7 +1182,7 @@ static void testCEs(UCollator *coll, UErrorCode *status) {
         before = (UBool)((specs & UCOL_TOK_BEFORE) != 0);
         if(top_ == TRUE) {
           int32_t index = src.parsedToken.indirectIndex;
-          
+
           nextCE = baseCE = currCE = ucolIndirectBoundaries[index].startCE;
           nextContCE = baseContCE = currContCE = ucolIndirectBoundaries[index].startContCE;
         } else {
@@ -1479,7 +1479,7 @@ static void TestImplicitTailoring(void) {
     const char *rules;
     const char *data[50];
     const uint32_t len;
-  } tests[] = {  
+  } tests[] = {
       { "&[before 1]\\u4e00 < b < c &[before 1]\\u4e00 < d < e", { "d", "e", "b", "c", "\\u4e00"}, 5 },
       { "&\\u4e00 < a <<< A < b <<< B",   { "\\u4e00", "a", "A", "b", "B", "\\u4e01"}, 6 },
       { "&[before 1]\\u4e00 < \\u4e01 < \\u4e02", { "\\u4e01", "\\u4e02", "\\u4e00"}, 3},
@@ -1591,7 +1591,7 @@ static void TestComposeDecompose(void) {
         nfcSize = unorm_normalize(comp, len, UNORM_NFC, 0, t[noCases]->NFC, NORM_BUFFER_TEST_LEN, &status);
         nfdSize = unorm_normalize(comp, len, UNORM_NFD, 0, t[noCases]->NFD, NORM_BUFFER_TEST_LEN, &status);
 
-        if(nfcSize != nfdSize || (uprv_memcmp(t[noCases]->NFC, t[noCases]->NFD, nfcSize * sizeof(UChar)) != 0) 
+        if(nfcSize != nfdSize || (uprv_memcmp(t[noCases]->NFC, t[noCases]->NFD, nfcSize * sizeof(UChar)) != 0)
           || (len != nfdSize || (uprv_memcmp(comp, t[noCases]->NFD, nfdSize * sizeof(UChar)) != 0))) {
             t[noCases]->u = u;
             if(len != nfdSize || (uprv_memcmp(comp, t[noCases]->NFD, nfdSize * sizeof(UChar)) != 0)) {
@@ -1601,7 +1601,7 @@ static void TestComposeDecompose(void) {
             noCases++;
             t[noCases] = (tester *)malloc(sizeof(tester));
             uprv_memset(t[noCases], 0, sizeof(tester));
-        } 
+        }
     }
 
     for(u=0; u<(UChar32)noCases; u++) {
@@ -1831,8 +1831,8 @@ static void TestRedundantRules(void) {
       uint32_t testdatalen;
   } tests[] = {
     /* this test conflicts with positioning of CODAN placeholder */
-       /*{ 
-        "& a <<< b <<< c << d <<< e& [before 1] e <<< x", 
+       /*{
+        "& a <<< b <<< c << d <<< e& [before 1] e <<< x",
         "&\\u2089<<<x",
         {"\\u2089", "x"}, 2
        }, */
@@ -2072,7 +2072,7 @@ static void TestCase(void)
     }
     log_verbose("Testing different case settings with custom rules\n");
     ucol_setStrength(myCollation, UCOL_TERTIARY);
-    
+
     for(k = 0; k<4; k++) {
       ucol_setAttribute(myCollation, UCOL_CASE_FIRST, caseTestAttributes[k][0], &status);
       ucol_setAttribute(myCollation, UCOL_CASE_LEVEL, caseTestAttributes[k][1], &status);
@@ -2221,8 +2221,8 @@ static void TestIncrementalNormalize(void) {
     /*  Test 3:  Non-normal sequence is terminated by a surrogate pair.*/
 
     {
-      /* New UCA  3.1.1. 
-       * test below used a code point from Desseret, which sorts differently 
+      /* New UCA  3.1.1.
+       * test below used a code point from Desseret, which sorts differently
        * than d800 dc00
        */
         /*UChar strA[] = {0x41, 0x41, 0x300, 0x316, 0xD801, 0xDC00, 0};*/
@@ -2545,7 +2545,7 @@ static void TestCyrillicTailoring(void) {
   };
 
     /* Russian overrides contractions, so this test is not valid anymore */
-    /*genericLocaleStarter("ru", test, 3);*/ 
+    /*genericLocaleStarter("ru", test, 3);*/
 
     genericLocaleStarter("root", test, 3);
     genericRulesStarter("&\\u0410 = \\u0410", test, 3);
@@ -2561,14 +2561,14 @@ static void TestSuppressContractions(void) {
   static const char *testNoCont2[] = {
       "\\u0410\\u0302a",
       "\\u0410\\u0306b",
-      "\\u0410c"            
+      "\\u0410c"
   };
   static const char *testNoCont[] = {
-      "a\\u0410",            
+      "a\\u0410",
       "A\\u0410\\u0306",
       "\\uFF21\\u0410\\u0302"
   };
-    
+
   genericRulesStarter("[suppressContractions [\\u0400-\\u047f]]", testNoCont, 3);
   genericRulesStarter("[suppressContractions [\\u0400-\\u047f]]", testNoCont2, 3);
 }
@@ -2904,7 +2904,7 @@ static void TestVariableTopSetting(void) {
 
   /* this test will fail when normalization is turned on */
   /* therefore we always turn off exhaustive mode for it */
-  if(1) { /* QUICK > 0*/ 
+  if(1) { /* QUICK > 0*/
     log_verbose("Slide variable top over UCARules\n");
     rulesLen = ucol_getRulesEx(coll, UCOL_FULL_RULES, rulesCopy, 0);
     rulesCopy = (UChar *)malloc((rulesLen+UCOL_TOK_EXTRA_RULE_SPACE_SIZE)*sizeof(UChar));
@@ -2915,7 +2915,7 @@ static void TestVariableTopSetting(void) {
       src.current = src.source = rulesCopy;
       src.end = rulesCopy+rulesLen;
       src.extraCurrent = src.end;
-      src.extraEnd = src.end+UCOL_TOK_EXTRA_RULE_SPACE_SIZE; 
+      src.extraEnd = src.end+UCOL_TOK_EXTRA_RULE_SPACE_SIZE;
 
       while ((current = ucol_tok_parseNextToken(&src, startOfRules, &parseError,&status)) != NULL) {
         strength = src.parsedToken.strength;
@@ -2955,10 +2955,10 @@ static void TestVariableTopSetting(void) {
               log_verbose("= Expected failure for %s =", buffer);
             } else {
               if(s.pos == s.endp) {
-                log_err("Unexpected failure setting variable top at offset %d. Error %s. Codepoints: %s\n", 
+                log_err("Unexpected failure setting variable top at offset %d. Error %s. Codepoints: %s\n",
                   oldChOffset, u_errorName(status), buffer);
               } else {
-                log_verbose("There is a goofy contraction in UCA rules that does not appear in the fractional UCA. Codepoints: %s\n", 
+                log_verbose("There is a goofy contraction in UCA rules that does not appear in the fractional UCA. Codepoints: %s\n",
                   buffer);
               }
             }
@@ -3193,15 +3193,15 @@ static void TestPrefix(void) {
     const char *rules;
     const char *data[50];
     const uint32_t len;
-  } tests[] = {  
-    { "&z <<< z|a", 
+  } tests[] = {
+    { "&z <<< z|a",
       {"zz", "za"}, 2 },
 
-    { "&z <<< z|   a", 
+    { "&z <<< z|   a",
       {"zz", "za"}, 2 },
     { "[strength I]"
       "&a=\\ud900\\udc25"
-      "&z<<<\\ud900\\udc25|a", 
+      "&z<<<\\ud900\\udc25|a",
       {"aa", "az", "\\ud900\\udc25z", "\\ud900\\udc25a", "zz"}, 4 },
   };
 
@@ -3227,7 +3227,7 @@ static void TestNewJapanese(void) {
       "\\u30c6\\u30fc\\u30bf",
       "\\u30c6\\u30a7\\u30bf",
       "\\u3066\\u3048\\u305f",
-      "\\u3067\\u30fc\\u305f", 
+      "\\u3067\\u30fc\\u305f",
       "\\u30c7\\u30fc\\u30bf",
       "\\u30c7\\u30a7\\u30bf",
       "\\u3067\\u3048\\u305f",
@@ -3251,7 +3251,7 @@ static void TestNewJapanese(void) {
       "\\u30d2\\u30e5\\u30a6",
       "\\u30d2\\u30e6\\u30a6",
       "\\u30d4\\u30e5\\u30a6\\u30a2",
-      "\\u3073\\u3085\\u30fc\\u3042\\u30fc", 
+      "\\u3073\\u3085\\u30fc\\u3042\\u30fc",
       "\\u30d3\\u30e5\\u30fc\\u30a2\\u30fc",
       "\\u30d3\\u30e5\\u30a6\\u30a2\\u30fc",
       "\\u3072\\u3085\\u3093",
@@ -3388,7 +3388,7 @@ static void TestContractionClosure(void) {
     const char *rules;
     const char *data[50];
     const uint32_t len;
-  } tests[] = {  
+  } tests[] = {
     {   "&b=\\u00e4\\u00e4",
       { "b", "\\u00e4\\u00e4", "a\\u0308a\\u0308", "\\u00e4a\\u0308", "a\\u0308\\u00e4" }, 5},
     {   "&b=\\u00C5",
@@ -3408,13 +3408,13 @@ static void TestBeforePrefixFailure(void) {
     const char *rules;
     const char *data[50];
     const uint32_t len;
-  } tests[] = {  
+  } tests[] = {
     { "&g <<< a"
       "&[before 3]\\uff41 <<< x",
       {"x", "\\uff41"}, 2 },
     {   "&\\u30A7=\\u30A7=\\u3047=\\uff6a"
         "&\\u30A8=\\u30A8=\\u3048=\\uff74"
-        "&[before 3]\\u30a7<<<\\u30a9", 
+        "&[before 3]\\u30a7<<<\\u30a9",
       {"\\u30a9", "\\u30a7"}, 2 },
     {   "&[before 3]\\u30a7<<<\\u30a9"
         "&\\u30A7=\\u30A7=\\u3047=\\uff6a"
@@ -3429,16 +3429,16 @@ static void TestBeforePrefixFailure(void) {
   }
 
 #if 0
-  const char* rule1 = 
+  const char* rule1 =
         "&\\u30A7=\\u30A7=\\u3047=\\uff6a"
         "&\\u30A8=\\u30A8=\\u3048=\\uff74"
         "&[before 3]\\u30a7<<<\\u30c6|\\u30fc";
-  const char* rule2 = 
+  const char* rule2 =
         "&[before 3]\\u30a7<<<\\u30c6|\\u30fc"
         "&\\u30A7=\\u30A7=\\u3047=\\uff6a"
         "&\\u30A8=\\u30A8=\\u3048=\\uff74";
   const char* test[] = {
-      "\\u30c6\\u30fc\\u30bf", 
+      "\\u30c6\\u30fc\\u30bf",
       "\\u30c6\\u30a7\\u30bf",
   };
   genericRulesStarter(rule1, test, sizeof(test)/sizeof(test[0]));
@@ -3446,7 +3446,7 @@ static void TestBeforePrefixFailure(void) {
 /* this piece of code should be in some sort of verbose mode     */
 /* it gets the collation elements for elements and prints them   */
 /* This is useful when trying to see whether the problem is      */
-  { 
+  {
     UErrorCode status = U_ZERO_ERROR;
     uint32_t i = 0;
     UCollationElements *it = NULL;
@@ -3481,15 +3481,15 @@ static void TestBeforePrefixFailure(void) {
 }
 
 static void TestPrefixCompose(void) {
-  const char* rule1 = 
+  const char* rule1 =
         "&\\u30a7<<<\\u30ab|\\u30fc=\\u30ac|\\u30fc";
   /*
   const char* test[] = {
-      "\\u30c6\\u30fc\\u30bf", 
+      "\\u30c6\\u30fc\\u30bf",
       "\\u30c6\\u30a7\\u30bf",
   };
   */
-  { 
+  {
     UErrorCode status = U_ZERO_ERROR;
     /*uint32_t i = 0;*/
     /*UCollationElements *it = NULL;*/
@@ -3508,60 +3508,60 @@ static void TestPrefixCompose(void) {
 }
 
 /*
-[last variable] last variable value 
-[last primary ignorable] largest CE for primary ignorable 
-[last secondary ignorable] largest CE for secondary ignorable 
-[last tertiary ignorable] largest CE for tertiary ignorable 
-[top] guaranteed to be above all implicit CEs, for now and in the future (in 1.8) 
+[last variable] last variable value
+[last primary ignorable] largest CE for primary ignorable
+[last secondary ignorable] largest CE for secondary ignorable
+[last tertiary ignorable] largest CE for tertiary ignorable
+[top] guaranteed to be above all implicit CEs, for now and in the future (in 1.8)
 */
 
 static void TestRuleOptions(void) {
-  /* values here are hardcoded and are correct for the current UCA 
-   * when the UCA changes, one might be forced to change these 
+  /* values here are hardcoded and are correct for the current UCA
+   * when the UCA changes, one might be forced to change these
    * values. (\\u02d0, \\U00010FFFC etc...)
    */
   static struct {
     const char *rules;
     const char *data[50];
     const uint32_t len;
-  } tests[] = {  
+  } tests[] = {
     /* - all befores here amount to zero */
-    { "&[before 3][first tertiary ignorable]<<<a", 
+    { "&[before 3][first tertiary ignorable]<<<a",
         { "\\u0000", "a"}, 2
     }, /* you cannot go before first tertiary ignorable */
 
-    { "&[before 3][last tertiary ignorable]<<<a", 
+    { "&[before 3][last tertiary ignorable]<<<a",
         { "\\u0000", "a"}, 2
     }, /* you cannot go before last tertiary ignorable */
 
-    { "&[before 3][first secondary ignorable]<<<a", 
+    { "&[before 3][first secondary ignorable]<<<a",
         { "\\u0000", "a"}, 2
     }, /* you cannot go before first secondary ignorable */
 
-    { "&[before 3][last secondary ignorable]<<<a", 
+    { "&[before 3][last secondary ignorable]<<<a",
         { "\\u0000", "a"}, 2
     }, /* you cannot go before first secondary ignorable */
 
     /* 'normal' befores */
 
-    { "&[before 3][first primary ignorable]<<<c<<<b &[first primary ignorable]<a", 
+    { "&[before 3][first primary ignorable]<<<c<<<b &[first primary ignorable]<a",
         {  "c", "b", "\\u0332", "a" }, 4
     },
 
-    /* we don't have a code point that corresponds to  
+    /* we don't have a code point that corresponds to
      * the last primary ignorable
      */
-    { "&[before 3][last primary ignorable]<<<c<<<b &[last primary ignorable]<a", 
+    { "&[before 3][last primary ignorable]<<<c<<<b &[last primary ignorable]<a",
         {  "\\u0332", "\\u20e3", "c", "b", "a" }, 5
-    }, 
+    },
 
-    { "&[before 3][first variable]<<<c<<<b &[first variable]<a", 
+    { "&[before 3][first variable]<<<c<<<b &[first variable]<a",
         {  "c", "b", "\\u0009", "a", "\\u000a" }, 5
-    }, 
+    },
 
-    { "&[last variable]<a &[before 3][last variable]<<<c<<<b ", 
+    { "&[last variable]<a &[before 3][last variable]<<<c<<<b ",
         {  "c", "b", "\\uD800\\uDD33", "a", "\\u02d0" }, 5
-    }, 
+    },
 
     { "&[first regular]<a"
       "&[before 1][first regular]<b",
@@ -3571,7 +3571,7 @@ static void TestRuleOptions(void) {
     { "&[before 1][last regular]<b"
       "&[last regular]<a",
         { "b", "\\uD800\\uDF9D", "a", "\\u4e00" }, 4
-    },     
+    },
 
     { "&[before 1][first implicit]<b"
       "&[first implicit]<a",
@@ -3581,14 +3581,14 @@ static void TestRuleOptions(void) {
     { "&[before 1][last implicit]<b"
       "&[last implicit]<a",
         { "b", "\\U0010FFFD", "a" }, 3
-    },     
+    },
 
     { "&[last variable]<z"
       "&[last primary ignorable]<x"
       "&[last secondary ignorable]<<y"
       "&[last tertiary ignorable]<<<w"
       "&[top]<u",
-      {"\\ufffb",  "w", "y", "\\u20e3", "x", "\\u137c", "z", "u"}, 7 
+      {"\\ufffb",  "w", "y", "\\u20e3", "x", "\\u137c", "z", "u"}, 7
     }
 
   };
@@ -3602,19 +3602,19 @@ static void TestRuleOptions(void) {
 
 
 static void TestOptimize(void) {
-  /* this is not really a test - just trying out 
-   * whether copying of UCA contents will fail 
-   * Cannot really test, since the functionality 
+  /* this is not really a test - just trying out
+   * whether copying of UCA contents will fail
+   * Cannot really test, since the functionality
    * remains the same.
    */
   static struct {
     const char *rules;
     const char *data[50];
     const uint32_t len;
-  } tests[] = {  
+  } tests[] = {
     /* - all befores here amount to zero */
-    { "[optimize [\\uAC00-\\uD7FF]]", 
-    { "a", "b"}, 2} 
+    { "[optimize [\\uAC00-\\uD7FF]]",
+    { "a", "b"}, 2}
   };
   uint32_t i;
 
@@ -3624,38 +3624,38 @@ static void TestOptimize(void) {
 }
 
 /*
-cycheng@ca.ibm.c...	we got inconsistent results when using the UTF-16BE iterator and the UTF-8 iterator.
-weiv	ucol_strcollIter?
-cycheng@ca.ibm.c...	e.g. s1 = 0xfffc0062, and s2 = d8000021
-weiv	these are the input strings?
-cycheng@ca.ibm.c...	yes, using the utf-16 iterator and UCA with normalization on, we have s1 > s2
-weiv	will check - could be a problem with utf-8 iterator
-cycheng@ca.ibm.c...	but if we use the utf-8 iterator, i.e. s1 = efbfbc62 and s2 = eda08021, we have s1 < s2
-weiv	hmmm
-cycheng@ca.ibm.c...	note that we have a standalone high surrogate
-weiv	that doesn't sound right
-cycheng@ca.ibm.c...	we got the same inconsistent results on AIX and Win2000
-weiv	so you have two strings, you convert them to utf-8 and to utf-16BE
-cycheng@ca.ibm.c...	yes
-weiv	and then do the comparison
-cycheng@ca.ibm.c...	in one case, the input strings are in utf8, and in the other case the input strings are in utf-16be
-weiv	utf-16 strings look like a little endian ones in the example you sent me
-weiv	It could be a bug - let me try to test it out
-cycheng@ca.ibm.c...	ok
-cycheng@ca.ibm.c...	we can wait till the conf. call
-cycheng@ca.ibm.c...	next weke
-weiv	that would be great
-weiv	hmmm
-weiv	I might be wrong
-weiv	let me play with it some more
-cycheng@ca.ibm.c...	ok
-cycheng@ca.ibm.c...	also please check s3 = 0x0e3a0062  and s4 = 0x0e400021. both are in utf-16be
-cycheng@ca.ibm.c...	seems with icu 2.2 we have s3 > s4, but not in icu 2.4 that's built for db2
-cycheng@ca.ibm.c...	also s1 & s2 that I sent you earlier are also in utf-16be
-weiv	ok
-cycheng@ca.ibm.c...	i ask sherman to send you more inconsistent data 
-weiv	thanks
-cycheng@ca.ibm.c...	the 4 strings we sent are just samples
+cycheng@ca.ibm.c... we got inconsistent results when using the UTF-16BE iterator and the UTF-8 iterator.
+weiv    ucol_strcollIter?
+cycheng@ca.ibm.c... e.g. s1 = 0xfffc0062, and s2 = d8000021
+weiv    these are the input strings?
+cycheng@ca.ibm.c... yes, using the utf-16 iterator and UCA with normalization on, we have s1 > s2
+weiv    will check - could be a problem with utf-8 iterator
+cycheng@ca.ibm.c... but if we use the utf-8 iterator, i.e. s1 = efbfbc62 and s2 = eda08021, we have s1 < s2
+weiv    hmmm
+cycheng@ca.ibm.c... note that we have a standalone high surrogate
+weiv    that doesn't sound right
+cycheng@ca.ibm.c... we got the same inconsistent results on AIX and Win2000
+weiv    so you have two strings, you convert them to utf-8 and to utf-16BE
+cycheng@ca.ibm.c... yes
+weiv    and then do the comparison
+cycheng@ca.ibm.c... in one case, the input strings are in utf8, and in the other case the input strings are in utf-16be
+weiv    utf-16 strings look like a little endian ones in the example you sent me
+weiv    It could be a bug - let me try to test it out
+cycheng@ca.ibm.c... ok
+cycheng@ca.ibm.c... we can wait till the conf. call
+cycheng@ca.ibm.c... next weke
+weiv    that would be great
+weiv    hmmm
+weiv    I might be wrong
+weiv    let me play with it some more
+cycheng@ca.ibm.c... ok
+cycheng@ca.ibm.c... also please check s3 = 0x0e3a0062  and s4 = 0x0e400021. both are in utf-16be
+cycheng@ca.ibm.c... seems with icu 2.2 we have s3 > s4, but not in icu 2.4 that's built for db2
+cycheng@ca.ibm.c... also s1 & s2 that I sent you earlier are also in utf-16be
+weiv    ok
+cycheng@ca.ibm.c... i ask sherman to send you more inconsistent data
+weiv    thanks
+cycheng@ca.ibm.c... the 4 strings we sent are just samples
 */
 #if 0
 static void Alexis(void) {
@@ -3703,7 +3703,7 @@ static void Alexis2(void) {
   UErrorCode status = U_ZERO_ERROR;
   UChar U16Source[CMSCOLL_ALEXIS2_BUFFER_SIZE], U16Target[CMSCOLL_ALEXIS2_BUFFER_SIZE];
   char U16BESource[CMSCOLL_ALEXIS2_BUFFER_SIZE], U16BETarget[CMSCOLL_ALEXIS2_BUFFER_SIZE];
-  char U8Source[CMSCOLL_ALEXIS2_BUFFER_SIZE], U8Target[CMSCOLL_ALEXIS2_BUFFER_SIZE]; 
+  char U8Source[CMSCOLL_ALEXIS2_BUFFER_SIZE], U8Target[CMSCOLL_ALEXIS2_BUFFER_SIZE];
   int32_t U16LenS = 0, U16LenT = 0, U16BELenS = 0, U16BELenT = 0, U8LenS = 0, U8LenT = 0;
 
   UConverter *conv = NULL;
@@ -3822,7 +3822,7 @@ static void TestHebrewUCA(void) {
 static void TestPartialSortKeyTermination(void) {
   const char* cases[] = {
     "\\u1234\\u1234\\udc00",
-    "\\udc00\\ud800\\ud800" 
+    "\\udc00\\ud800\\ud800"
   };
 
   int32_t i = sizeof(UCollator);
@@ -4069,36 +4069,36 @@ static void TestNumericCollation(void)
 {
     UErrorCode status = U_ZERO_ERROR;
 
-	const static char *basicTestStrings[]={
-	"hello1",
-	"hello2",
-	"hello2002",
-	"hello2003",
-	"hello123456",
-	"hello1234567",
-	"hello10000000",
-	"hello100000000",
-	"hello1000000000",
-	"hello10000000000",
-	};
-	
-	const static char *preZeroTestStrings[]={
-	"avery10000",
-	"avery010000",
-	"avery0010000",
-	"avery00010000",
-	"avery000010000",
-	"avery0000010000",
-	"avery00000010000",
-	"avery000000010000",
-	};
-	
-	const static char *thirtyTwoBitNumericStrings[]={
-	"avery42949672960",
-	"avery42949672961",
-	"avery42949672962",
-	"avery429496729610"
-	};
+    const static char *basicTestStrings[]={
+    "hello1",
+    "hello2",
+    "hello2002",
+    "hello2003",
+    "hello123456",
+    "hello1234567",
+    "hello10000000",
+    "hello100000000",
+    "hello1000000000",
+    "hello10000000000",
+    };
+
+    const static char *preZeroTestStrings[]={
+    "avery10000",
+    "avery010000",
+    "avery0010000",
+    "avery00010000",
+    "avery000010000",
+    "avery0000010000",
+    "avery00000010000",
+    "avery000000010000",
+    };
+
+    const static char *thirtyTwoBitNumericStrings[]={
+    "avery42949672960",
+    "avery42949672961",
+    "avery42949672962",
+    "avery429496729610"
+    };
 
     const static char *supplementaryDigits[] = {
       "\\uD835\\uDFCE", /* 0 */
@@ -4138,7 +4138,7 @@ static void TestNumericCollation(void)
     UColAttribute att = UCOL_NUMERIC_COLLATION;
     UColAttributeValue val = UCOL_ON;
 
-	/* Open our collator. */
+    /* Open our collator. */
     UCollator* coll = ucol_open("root", &status);
     if (U_FAILURE(status)){
         log_err("ERROR: in using ucol_open()\n %s\n",
@@ -4148,33 +4148,33 @@ static void TestNumericCollation(void)
     genericLocaleStarterWithOptions("root", basicTestStrings, sizeof(basicTestStrings)/sizeof(basicTestStrings[0]), &att, &val, 1);
     genericLocaleStarterWithOptions("root", thirtyTwoBitNumericStrings, sizeof(thirtyTwoBitNumericStrings)/sizeof(thirtyTwoBitNumericStrings[0]), &att, &val, 1);
     genericLocaleStarterWithOptions("en_US", foreignDigits, sizeof(foreignDigits)/sizeof(foreignDigits[0]), &att, &val, 1);
-    genericLocaleStarterWithOptions("root", supplementaryDigits, sizeof(supplementaryDigits)/sizeof(supplementaryDigits[0]), &att, &val, 1);	
-    genericLocaleStarterWithOptions("root", evenZeroes, sizeof(evenZeroes)/sizeof(evenZeroes[0]), &att, &val, 1);	
+    genericLocaleStarterWithOptions("root", supplementaryDigits, sizeof(supplementaryDigits)/sizeof(supplementaryDigits[0]), &att, &val, 1);
+    genericLocaleStarterWithOptions("root", evenZeroes, sizeof(evenZeroes)/sizeof(evenZeroes[0]), &att, &val, 1);
 
-	/* Setting up our collator to do digits. */
-	ucol_setAttribute(coll, UCOL_NUMERIC_COLLATION, UCOL_ON, &status);
+    /* Setting up our collator to do digits. */
+    ucol_setAttribute(coll, UCOL_NUMERIC_COLLATION, UCOL_ON, &status);
     if (U_FAILURE(status)){
         log_err("ERROR: in setting UCOL_NUMERIC_COLLATION as an attribute\n %s\n",
               myErrorName(status));
         return;
     }
 
-    /* 
-       Testing that prepended zeroes still yield the correct collation behavior. 
+    /*
+       Testing that prepended zeroes still yield the correct collation behavior.
        We expect that every element in our strings array will be equal.
     */
     genericOrderingTestWithResult(coll, preZeroTestStrings, sizeof(preZeroTestStrings)/sizeof(preZeroTestStrings[0]), UCOL_EQUAL);
-   
+
     ucol_close(coll);
 }
 
-static void TestTibetanConformance(void) 
-{  
-    const char* test[] = { 
-        "\\u0FB2\\u0591\\u0F71\\u0061",  
+static void TestTibetanConformance(void)
+{
+    const char* test[] = {
+        "\\u0FB2\\u0591\\u0F71\\u0061",
         "\\u0FB2\\u0F71\\u0061"
     };
-    
+
     UErrorCode status = U_ZERO_ERROR;
     UCollator *coll = ucol_open("", &status);
     UChar source[100];
@@ -4188,7 +4188,7 @@ static void TestTibetanConformance(void)
         result = ucol_strcoll(coll, source, -1,   target, -1);
         log_verbose("result %d\n", result);
         if (UCOL_EQUAL != result) {
-            log_err("Tibetan comparison error\n"); 
+            log_err("Tibetan comparison error\n");
         }
     }
     ucol_close(coll);
@@ -4210,7 +4210,7 @@ static void TestPinyinProblem(void) {
 static void showImplicit(UChar32 i) {
     if (i >= 0 && i <= TST_UCOL_MAX_INPUT) {
         log_verbose("%08X\t%08X\n", i, uprv_uca_getImplicitFromRaw(i));
-    } 
+    }
 }
 
 static void TestImplicitGeneration(void) {
@@ -4229,16 +4229,16 @@ static void TestImplicitGeneration(void) {
         log_err("Couldn't open UCA\n");
         return;
     }
-    
+
     uprv_uca_getRawFromImplicit(0xE20303E7);
 
     for (i = 0; i <= TST_UCOL_MAX_INPUT; ++i) {
         current = uprv_uca_getImplicitFromRaw(i) & fourBytes;
-    
+
         /* check that it round-trips AND that all intervening ones are illegal*/
         roundtrip = uprv_uca_getRawFromImplicit(current);
         if (roundtrip != i) {
-            log_err("No roundtrip %08X\n", i); 
+            log_err("No roundtrip %08X\n", i);
         }
         if (last != 0) {
             for (j = last + 1; j < current; ++j) {
@@ -4272,7 +4272,7 @@ static void TestImplicitGeneration(void) {
     }
     showImplicit(TST_UCOL_MAX_INPUT-2);
     showImplicit(TST_UCOL_MAX_INPUT-1);
-    showImplicit(TST_UCOL_MAX_INPUT);    
+    showImplicit(TST_UCOL_MAX_INPUT);
     ucol_close(coll);
 }
 
@@ -4382,7 +4382,7 @@ ucol_getFunctionalEquivalent(char* result, int32_t resultCapacity,
     assertEquals("getFunctionalEquivalent(fr)", "fr", loc);
     assertTrue("getFunctionalEquivalent(fr).isAvailable==TRUE",
                isAvailable == TRUE);
-    
+
     n = ucol_getFunctionalEquivalent(loc, sizeof(loc), "collation", "fr_FR",
                                      &isAvailable, &ec);
     assertSuccess("getFunctionalEquivalent", &ec);
@@ -4393,7 +4393,7 @@ ucol_getFunctionalEquivalent(char* result, int32_t resultCapacity,
 
 /* supercedes TestJ784 */
 static void TestBeforePinyin(void) {
-    const static char rules[] = { 
+    const static char rules[] = {
         "&[before 2]A<<\\u0101<<<\\u0100<<\\u00E1<<<\\u00C1<<\\u01CE<<<\\u01CD<<\\u00E0<<<\\u00C0"
         "&[before 2]e<<\\u0113<<<\\u0112<<\\u00E9<<<\\u00C9<<\\u011B<<<\\u011A<<\\u00E8<<<\\u00C8"
         "&[before 2]i<<\\u012B<<<\\u012A<<\\u00ED<<<\\u00CD<<\\u01D0<<<\\u01CF<<\\u00EC<<<\\u00CC"
@@ -4575,9 +4575,9 @@ static void TestMoreBefore(void) {
         { "m","M","x","X","q","Q","a","z","n" }, 9},
         { "&m << a &[before 3] a <<< x <<< X << q <<< Q < z",
         { "m","M","x","X","a","q","Q","z","n" }, 9},
-        { "&m <<< a &[before 1] a < x <<< X << q <<< Q < z", 
+        { "&m <<< a &[before 1] a < x <<< X << q <<< Q < z",
         { "x","X","q","Q","z","n","m","a","M" }, 9},
-        { "&m <<< a &[before 2] a << x <<< X << q <<< Q < z", 
+        { "&m <<< a &[before 2] a << x <<< X << q <<< Q < z",
         { "x","X","q","Q","m","a","M","z","n" }, 9},
         { "&m <<< a &[before 3] a <<< x <<< X << q <<< Q < z",
         { "m","x","X","a","M","q","Q","z","n" }, 9},
@@ -4585,7 +4585,7 @@ static void TestMoreBefore(void) {
         { "r","R","x","X","q","Q","z","s","n" }, 9},
         { "&[before 2] s << x <<< X << q <<< Q < z",
         { "r","R","x","X","q","Q","s","z","n" }, 9},
-        { "&[before 3] s <<< x <<< X << q <<< Q < z", 
+        { "&[before 3] s <<< x <<< X << q <<< Q < z",
         { "r","R","x","X","s","q","Q","z","n" }, 9},
         { "&[before 1] \\u24DC < x <<< X << q <<< Q < z",
         { "x","X","q","Q","z","n","m","\\u24DC","M" }, 9},
@@ -4633,7 +4633,7 @@ void addMiscCollTest(TestNode** root)
     TEST(TestPrefixCompose);
     TEST(TestStrCollIdenticalPrefix);
     TEST(TestPrefix);
-    TEST(TestNewJapanese); 
+    TEST(TestNewJapanese);
     /*TEST(TestLimitations);*/
     TEST(TestNonChars);
     TEST(TestExtremeCompression);

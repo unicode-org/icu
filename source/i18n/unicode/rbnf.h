@@ -704,7 +704,7 @@ public:
      * @draft ICU 3.2
      */
   virtual UnicodeString getRuleSetDisplayName(int32_t index, 
-					      const Locale& locale = Locale::getDefault());
+                          const Locale& locale = Locale::getDefault());
 
     /**
      * Return the rule set display name for the provided rule set and locale.  
@@ -715,7 +715,7 @@ public:
      * @see #getRuleSetDisplayNames
      */
   virtual UnicodeString getRuleSetDisplayName(const UnicodeString& ruleSetName, 
-					      const Locale& locale = Locale::getDefault());
+                          const Locale& locale = Locale::getDefault());
 
   /**
    * Formats the specified 32-bit number using the default ruleset.
@@ -963,7 +963,7 @@ private:
     // this will ref the localizations if they are not NULL
     // caller must deref to get adoption 
     RuleBasedNumberFormat(const UnicodeString& description, LocalizationInfo* localizations, 
-			  const Locale& locale, UParseError& perror, UErrorCode& status);
+              const Locale& locale, UParseError& perror, UErrorCode& status);
 
     void init(const UnicodeString& rules, LocalizationInfo* localizations, UParseError& perror, UErrorCode& status);
     void dispose();

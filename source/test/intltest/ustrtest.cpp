@@ -157,21 +157,21 @@ UnicodeStringTest::TestBasicManipulation()
         }
     }
 
-	{
-		// test new 2.2 constructors and setTo function that parallel Java's substring function.
-		UnicodeString src("Hello folks how are you?");
-		UnicodeString target1("how are you?");
-		if (target1 != UnicodeString(src, 12)) {
-			errln("UnicodeString(const UnicodeString&, int32_t) failed");
-		}
-		UnicodeString target2("folks");
-		if (target2 != UnicodeString(src, 6, 5)) {
-			errln("UnicodeString(const UnicodeString&, int32_t, int32_t) failed");
-		}
-		if (target1 != target2.setTo(src, 12)) {
-			errln("UnicodeString::setTo(const UnicodeString&, int32_t) failed");
-		}
-	}
+    {
+        // test new 2.2 constructors and setTo function that parallel Java's substring function.
+        UnicodeString src("Hello folks how are you?");
+        UnicodeString target1("how are you?");
+        if (target1 != UnicodeString(src, 12)) {
+            errln("UnicodeString(const UnicodeString&, int32_t) failed");
+        }
+        UnicodeString target2("folks");
+        if (target2 != UnicodeString(src, 6, 5)) {
+            errln("UnicodeString(const UnicodeString&, int32_t, int32_t) failed");
+        }
+        if (target1 != target2.setTo(src, 12)) {
+            errln("UnicodeString::setTo(const UnicodeString&, int32_t) failed");
+        }
+    }
 
     {
         // op+ is new in ICU 2.8

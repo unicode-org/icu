@@ -809,7 +809,7 @@ public:
                                   UnicodeString& appendTo,
                                   FieldPosition& pos) const;
 
-	/**
+    /**
      * Format a Formattable using base-10 representation.
      *
      * @param obj       The value to be formatted.
@@ -1649,7 +1649,7 @@ public:
 private:
     DecimalFormat(); // default constructor not implemented
 
-	int32_t precision(UBool isIntegral) const;
+    int32_t precision(UBool isIntegral) const;
 
     /**
      * Do real work of constructing a new DecimalFormat.
@@ -1861,7 +1861,7 @@ protected:
      * end up with lots of zeroes.
      * @draft ICU 2.8
      */
-	static const int32_t  kMaxScientificIntegerDigits;
+    static const int32_t  kMaxScientificIntegerDigits;
 };
 
 inline UnicodeString&

@@ -127,7 +127,7 @@ static inline int32_t convertUCharsToASCII(const UChar* src,char* dest, int32_t 
 }
 // wrapper around the reference Punycode implementation 
 static int32_t convertToPuny(const UChar* src, int32_t srcLength, 
-							 UChar* dest, int32_t destCapacity,
+                             UChar* dest, int32_t destCapacity,
                              UErrorCode& status){
     uint32_t b1Stack[MAX_LABEL_BUFFER_SIZE];
     int32_t b1Len = 0, b1Capacity = MAX_LABEL_BUFFER_SIZE;
@@ -197,7 +197,7 @@ CLEANUP:
 }
 
 static int32_t convertFromPuny(  const UChar* src, int32_t srcLength,
-								 UChar* dest, int32_t destCapacity,
+                                 UChar* dest, int32_t destCapacity,
                                  UErrorCode& status){
     char b1Stack[MAX_LABEL_BUFFER_SIZE];
     char* b1 = b1Stack;
@@ -243,9 +243,9 @@ CLEANUP:
 
 U_CFUNC int32_t U_EXPORT2
 idnaref_toASCII(const UChar* src, int32_t srcLength, 
-			  UChar* dest, int32_t destCapacity,
+              UChar* dest, int32_t destCapacity,
               int32_t options,
-			  UParseError* parseError,
+              UParseError* parseError,
               UErrorCode* status){
     
     if(status == NULL || U_FAILURE(*status)){
@@ -263,7 +263,7 @@ idnaref_toASCII(const UChar* src, int32_t srcLength,
             b2Capacity = MAX_LABEL_BUFFER_SIZE ,
             reqLength=0;
 
-	//get the options
+    //get the options
     UBool allowUnassigned   = (UBool)((options & IDNAREF_ALLOW_UNASSIGNED) != 0);
     UBool useSTD3ASCIIRules = (UBool)((options & IDNAREF_USE_STD3_RULES) != 0);
 
@@ -324,7 +324,7 @@ idnaref_toASCII(const UChar* src, int32_t srcLength,
             uprv_memmove(dest, b1, b1Len * U_SIZEOF_UCHAR);
             reqLength = b1Len;
         }else{
-			reqLength = b1Len;
+            reqLength = b1Len;
             goto CLEANUP;
         }
     }else{
@@ -393,9 +393,9 @@ CLEANUP:
 
 U_CFUNC int32_t U_EXPORT2
 idnaref_toUnicode(const UChar* src, int32_t srcLength,
-				UChar* dest, int32_t destCapacity,
+                UChar* dest, int32_t destCapacity,
                 int32_t options,
-				UParseError* parseError,
+                UParseError* parseError,
                 UErrorCode* status){
 
     if(status == NULL || U_FAILURE(*status)){
@@ -423,7 +423,7 @@ idnaref_toUnicode(const UChar* src, int32_t srcLength,
     b1Len = 0;
     UBool* caseFlags = NULL;
 
-	//get the options
+    //get the options
     UBool allowUnassigned   = (UBool)((options & IDNAREF_ALLOW_UNASSIGNED) != 0);
     UBool useSTD3ASCIIRules = (UBool)((options & IDNAREF_USE_STD3_RULES) != 0);
 
@@ -642,9 +642,9 @@ getNextSeparator(UChar *src,int32_t srcLength,NamePrepTransform* prep,
 
 U_CFUNC int32_t U_EXPORT2
 idnaref_IDNToASCII(  const UChar* src, int32_t srcLength,
-				   UChar* dest, int32_t destCapacity,
-				   int32_t options,
-				   UParseError* parseError,
+                   UChar* dest, int32_t destCapacity,
+                   int32_t options,
+                   UParseError* parseError,
                    UErrorCode* status){
 
     if(status == NULL || U_FAILURE(*status)){
@@ -669,7 +669,7 @@ idnaref_IDNToASCII(  const UChar* src, int32_t srcLength,
     int32_t remainingLen = srcLength;
     int32_t b1Capacity = MAX_LABEL_BUFFER_SIZE;
     
-	//get the options
+    //get the options
 //    UBool allowUnassigned   = (UBool)((options & IDNAREF_ALLOW_UNASSIGNED) != 0);
 //    UBool useSTD3ASCIIRules = (UBool)((options & IDNAREF_USE_STD3_RULES) != 0);
     UBool done = FALSE;
@@ -794,9 +794,9 @@ CLEANUP:
 
 U_CFUNC int32_t U_EXPORT2
 idnaref_IDNToUnicode(  const UChar* src, int32_t srcLength,
-				     UChar* dest, int32_t destCapacity,
-					 int32_t options,
-					 UParseError* parseError,
+                     UChar* dest, int32_t destCapacity,
+                     int32_t options,
+                     UParseError* parseError,
                      UErrorCode* status){
     
     if(status == NULL || U_FAILURE(*status)){
@@ -822,11 +822,11 @@ idnaref_IDNToUnicode(  const UChar* src, int32_t srcLength,
     int32_t remainingLen = srcLength;
     int32_t b1Capacity = MAX_LABEL_BUFFER_SIZE;
     
-	//get the options
+    //get the options
 //    UBool allowUnassigned   = (UBool)((options & IDNAREF_ALLOW_UNASSIGNED) != 0);
 //    UBool useSTD3ASCIIRules = (UBool)((options & IDNAREF_USE_STD3_RULES) != 0);
     
-	if(U_FAILURE(*status)){
+    if(U_FAILURE(*status)){
         goto CLEANUP;
     }
     
@@ -944,7 +944,7 @@ CLEANUP:
 U_CFUNC int32_t U_EXPORT2
 idnaref_compare(  const UChar *s1, int32_t length1,
                 const UChar *s2, int32_t length2,
-				int32_t options,
+                int32_t options,
                 UErrorCode* status){
 
     if(status == NULL || U_FAILURE(*status)){
@@ -956,7 +956,7 @@ idnaref_compare(  const UChar *s1, int32_t length1,
     int32_t b1Len, b2Len, b1Capacity = MAX_IDN_BUFFER_SIZE, b2Capacity = MAX_IDN_BUFFER_SIZE;
     int32_t result = -1;
     
-	UParseError parseError;
+    UParseError parseError;
 
     b1Len = idnaref_IDNToASCII(s1, length1, b1, b1Capacity, options, &parseError, status);
     if(*status == U_BUFFER_OVERFLOW_ERROR){

@@ -626,7 +626,7 @@ DecimalFormat::format(int32_t number,
                       UnicodeString& appendTo,
                       FieldPosition& fieldPosition) const
 {
-	return format((int64_t)number, appendTo, fieldPosition);
+    return format((int64_t)number, appendTo, fieldPosition);
 }
 
 //------------------------------------------------------------------------------
@@ -983,14 +983,14 @@ DecimalFormat::subformat(UnicodeString& appendTo,
 
         DigitList expDigits;
         expDigits.set(exponent);
-		{
+        {
             int expDig = fMinExponentDigits;
             if (fUseExponentialNotation && expDig < 1) {
                 expDig = 1;
             }
             for (i=expDigits.fDecimalAt; i<expDig; ++i)
                 appendTo += (zero);
-		}
+        }
         for (i=0; i<expDigits.fDecimalAt; ++i)
         {
             UChar32 c = (UChar32)((i < expDigits.fCount) ?

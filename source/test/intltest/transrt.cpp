@@ -984,7 +984,7 @@ void TransliteratorRoundTripTest::TestKana() {
     strcat(temp, HALFWIDTH_KATAKANA);
     strcat(temp, LENGTH);
     strcat(temp, "]");
-	test.test(KATAKANA, UnicodeString("[") + HIRAGANA + LENGTH + UnicodeString("]"), 
+    test.test(KATAKANA, UnicodeString("[") + HIRAGANA + LENGTH + UnicodeString("]"), 
               temp, 
               this, quick, legal);
     delete legal;

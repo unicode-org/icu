@@ -375,9 +375,9 @@ setInitialStateToUnicodeKR(UConverter* converter, UConverterDataISO2022 *myConve
     if(myConverterData->version == 1) {
         UConverter *cnv = myConverterData->currentConverter;
 
-		cnv->toUnicodeStatus=0;     /* offset */
-		cnv->mode=0;                /* state */
-		cnv->toULength=0;           /* byteIndex */
+        cnv->toUnicodeStatus=0;     /* offset */
+        cnv->mode=0;                /* state */
+        cnv->toULength=0;           /* byteIndex */
     }
 }
 
@@ -397,8 +397,8 @@ setInitialStateFromUnicodeKR(UConverter* converter,UConverterDataISO2022 *myConv
     if(myConverterData->version == 1) {
         UConverter *cnv = myConverterData->currentConverter;
 
-		cnv->fromUChar32=0;
-		cnv->fromUnicodeStatus=1;   /* prevLength */
+        cnv->fromUChar32=0;
+        cnv->fromUnicodeStatus=1;   /* prevLength */
     }
 }
 
@@ -462,21 +462,21 @@ _ISO2022Open(UConverter *cnv, const char *name, const char *locale,uint32_t opti
                     myConverterData->currentConverter=
                         ucnv_open("icu-internal-25546",errorCode);
 
-					if (U_FAILURE(*errorCode)) {
-						_ISO2022Close(cnv);
-						return;
-					}
+                    if (U_FAILURE(*errorCode)) {
+                        _ISO2022Close(cnv);
+                        return;
+                    }
 
                     uprv_strcpy(myConverterData->name,"ISO_2022,locale=ko,version=1");
-					uprv_memcpy(cnv->subChar, myConverterData->currentConverter->subChar, 4);
-					cnv->subCharLen = myConverterData->currentConverter->subCharLen;
+                    uprv_memcpy(cnv->subChar, myConverterData->currentConverter->subChar, 4);
+                    cnv->subCharLen = myConverterData->currentConverter->subCharLen;
             }else{
                     myConverterData->currentConverter=ucnv_open("ibm-949",errorCode);
 
-					if (U_FAILURE(*errorCode)) {
-						_ISO2022Close(cnv);
-						return;
-					}
+                    if (U_FAILURE(*errorCode)) {
+                        _ISO2022Close(cnv);
+                        return;
+                    }
 
                     myConverterData->version = 0;
                     uprv_strcpy(myConverterData->name,"ISO_2022,locale=ko,version=0");
