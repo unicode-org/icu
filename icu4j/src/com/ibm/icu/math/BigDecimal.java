@@ -603,7 +603,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
   
   /* Handle and step past sign */
   ind=ispos; // assume positive
-  if (inchars[0]==('-')) 
+  if (inchars[offset]==('-')) 
    {
     length--;
     if (length==0) 
@@ -612,7 +612,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
     offset++;
    }
   else 
-   if (inchars[0]==('+')) 
+   if (inchars[offset]==('+')) 
     {
      length--;
      if (length==0) 
