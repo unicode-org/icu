@@ -250,7 +250,7 @@ static UBool testConvertFromUnicode(const UChar *source, int sourceLen,  const u
     {
         log_err("Expected %d chars out, got %d %s\n", expectLen, targ-junkout, gNuConvTestName);
         log_verbose("Expected %d chars out, got %d %s\n", expectLen, targ-junkout, gNuConvTestName);
-        printSeqErr((const unsigned char*)junkout, targ-junkout);
+        printSeqErr((const unsigned char*)junkout, (int32_t)(targ-junkout));
         printSeqErr((const unsigned char*)expect, expectLen);
         return FALSE;
     }
@@ -261,7 +261,7 @@ static UBool testConvertFromUnicode(const UChar *source, int sourceLen,  const u
         if(uprv_memcmp(junokout,expectOffsets,(targ-junkout) * sizeof(int32_t) )){
             log_err("\ndid not get the expected offsets while %s \n", gNuConvTestName);
             log_err("Got  : ");
-            printSeqErr((const unsigned char*)junkout, targ-junkout);
+            printSeqErr((const unsigned char*)junkout, (int32_t)(targ-junkout));
             for(p=junkout;p<targ;p++)
                 log_err("%d, ", junokout[p-junkout]); 
             log_err("\nExpected: ");

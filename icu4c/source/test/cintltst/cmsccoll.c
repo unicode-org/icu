@@ -760,8 +760,8 @@ static void logFailure (const char *platform, const char *test,
   uint32_t i = 0;
 
   char sEsc[256], s[256], tEsc[256], t[256], b[256], output[512], relation[256];
-  static int maxOutputLength = 0;
-  int outputLength;
+  static int32_t maxOutputLength = 0;
+  int32_t outputLength;
 
   *sEsc = *tEsc = *s = *t = 0;
   if(error == TRUE) {
@@ -830,7 +830,7 @@ static void logFailure (const char *platform, const char *test,
   strcat(output, getRelationSymbol(realRes, realStrength, relation));
   strcat(output, tEsc);
 
-  outputLength = strlen(output);
+  outputLength = (int32_t)strlen(output);
   if(outputLength > maxOutputLength) {
     maxOutputLength = outputLength;
     U_ASSERT(outputLength < sizeof(output));

@@ -2684,7 +2684,7 @@ UBool testConvertFromUnicode(const UChar *source, int sourceLen,  const uint8_t 
     {
         log_err("Expected %d chars out, got %d %s\n", expectLen, targ-junkout, gNuConvTestName);
         log_verbose("Expected %d chars out, got %d %s\n", expectLen, targ-junkout, gNuConvTestName);
-        printSeqErr(junkout, targ-junkout);
+        printSeqErr(junkout, (int32_t)(targ-junkout));
         printSeqErr(expect, expectLen);
         return FALSE;
     }
@@ -2695,7 +2695,7 @@ UBool testConvertFromUnicode(const UChar *source, int sourceLen,  const uint8_t 
         if(memcmp(junokout,expectOffsets,(targ-junkout) * sizeof(int32_t) )){
             log_err("did not get the expected offsets while %s \n", gNuConvTestName);
             log_err("Got Output : ");
-            printSeqErr(junkout, targ-junkout);
+            printSeqErr(junkout, (int32_t)(targ-junkout));
             log_err("Got Offsets:      ");
             for(p=junkout;p<targ;p++)
                 log_err("%d,", junokout[p-junkout]); 
@@ -3061,7 +3061,7 @@ UBool testConvertFromUnicodeWithContext(const UChar *source, int sourceLen,  con
     {
         log_err("Expected %d chars out, got %d %s\n", expectLen, targ-junkout, gNuConvTestName);
         log_verbose("Expected %d chars out, got %d %s\n", expectLen, targ-junkout, gNuConvTestName);
-        printSeqErr(junkout, targ-junkout);
+        printSeqErr(junkout, (int32_t)(targ-junkout));
         printSeqErr(expect, expectLen);
         return FALSE;
     }
@@ -3072,7 +3072,7 @@ UBool testConvertFromUnicodeWithContext(const UChar *source, int sourceLen,  con
         if(memcmp(junokout,expectOffsets,(targ-junkout) * sizeof(int32_t) )){
             log_err("did not get the expected offsets while %s \n", gNuConvTestName);
             log_err("Got Output : ");
-            printSeqErr(junkout, targ-junkout);
+            printSeqErr(junkout, (int32_t)(targ-junkout));
             log_err("Got Offsets:      ");
             for(p=junkout;p<targ;p++)
                 log_err("%d,", junokout[p-junkout]); 

@@ -403,7 +403,7 @@ static ETestConvertResult testConvertFromU( const UChar *source, int sourceLen, 
       log_err("Expected %d chars out, got %d %s\n", expectLen, targ-junkout, gNuConvTestName);
       log_verbose("Expected %d chars out, got %d %s\n", expectLen, targ-junkout, gNuConvTestName);
       printf("\nGot:");
-      printSeqErr((const unsigned char*)junkout, targ-junkout);
+      printSeqErr((const unsigned char*)junkout, (int32_t)(targ-junkout));
       printf("\nExpected:");
       printSeqErr((const unsigned char*)expect, expectLen);
       return TC_MISMATCH;
@@ -413,7 +413,7 @@ static ETestConvertResult testConvertFromU( const UChar *source, int sourceLen, 
       log_verbose("comparing %d offsets..\n", targ-junkout);
       if(memcmp(junokout,expectOffsets,(targ-junkout) * sizeof(int32_t) )){
         log_err("did not get the expected offsets. %s\n", gNuConvTestName);
-        printSeqErr((const unsigned char*)junkout, targ-junkout);
+        printSeqErr((const unsigned char*)junkout, (int32_t)(targ-junkout));
         log_err("\n");
         log_err("Got  :     ");
         for(p=junkout;p<targ;p++) {
@@ -1405,7 +1405,7 @@ static void TestAmbiguous()
         return;
     }
     /* convert target from SJIS to Unicode */
-    sjisLength = ucnv_toUChars(sjis_cnv, sjisResult, sizeof(sjisResult)/U_SIZEOF_UCHAR, target, strlen(target), &status);
+    sjisLength = ucnv_toUChars(sjis_cnv, sjisResult, sizeof(sjisResult)/U_SIZEOF_UCHAR, target, (int32_t)strlen(target), &status);
     if (U_FAILURE(status))
     {
         log_err("Failed to convert the SJIS string.\n");
@@ -1414,7 +1414,7 @@ static void TestAmbiguous()
         return;
     }
     /* convert target from Latin-1 to Unicode */
-    asciiLength = ucnv_toUChars(ascii_cnv, asciiResult, sizeof(asciiResult)/U_SIZEOF_UCHAR, target, strlen(target), &status);
+    asciiLength = ucnv_toUChars(ascii_cnv, asciiResult, sizeof(asciiResult)/U_SIZEOF_UCHAR, target, (int32_t)strlen(target), &status);
     if (U_FAILURE(status))
     {
         log_err("Failed to convert the Latin-1 string.\n");
@@ -2668,14 +2668,14 @@ static void TestToAndFromUChars(const uint16_t* source, const UChar* sourceLimit
     uTarget = uBuf;
     uTargetLimit = uBuf+ uBufSize*5;
     ucnv_reset(cnv);
-    numCharsInTarget=ucnv_fromUChars( cnv , cTarget, (cTargetLimit-cTarget),uSource,(uSourceLimit-uSource), &errorCode);
+    numCharsInTarget=ucnv_fromUChars(cnv, cTarget, (int32_t)(cTargetLimit-cTarget), uSource, (int32_t)(uSourceLimit-uSource), &errorCode);
     if(U_FAILURE(errorCode)){
         log_err("ucnv_fromUnicode conversion failed reason %s\n", u_errorName(errorCode));
         return;
     }
     cSource = cBuf;
     test =uBuf;
-    ucnv_toUChars(cnv,uTarget,(uTargetLimit-uTarget),cSource,numCharsInTarget,&errorCode);
+    ucnv_toUChars(cnv,uTarget,(int32_t)(uTargetLimit-uTarget),cSource,numCharsInTarget,&errorCode);
     if(U_FAILURE(errorCode)){
         log_err("ucnv_toUChars conversion failed, reason %s\n", u_errorName(errorCode));
         return;
@@ -3275,7 +3275,7 @@ unescape(UChar* dst, int32_t dstLen,const char* src,int32_t srcLen,UErrorCode *s
         return 0;
     }
     if(srcLen==-1){
-        srcLen = uprv_strlen(src);
+        srcLen = (int32_t)uprv_strlen(src);
     }
 
     for (; srcIndex<srcLen; ) {
@@ -3555,7 +3555,7 @@ TestSCSU() {
         int32_t cSrcLen,srcLen;
         UChar* src;
         /* UConverter* cnv = ucnv_open("SCSU",&status); */
-        cSrcLen= srcLen =  uprv_strlen(fTestCases[i]);
+        cSrcLen = srcLen = (int32_t)uprv_strlen(fTestCases[i]);
         src = (UChar*) malloc((sizeof(UChar) * srcLen) + sizeof(UChar));
         srcLen=unescape(src,srcLen,cSrc,cSrcLen,&status);
         log_verbose("Testing roundtrip for src: %s at index :%d\n",cSrc,i);
