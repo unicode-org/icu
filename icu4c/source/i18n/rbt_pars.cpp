@@ -313,7 +313,6 @@ int32_t* Segments::createArray(UErrorCode &status) const {
     // to skip the first two elements, array[0] and array[1].
     UStack stack(status);
     int32_t nextOpen = 0; // seg # of next open, 0-based
-//    int32_t j = a2offset; // index of start of array 2
     if (U_FAILURE(status)) {
         return NULL;
     }
@@ -332,6 +331,37 @@ int32_t* Segments::createArray(UErrorCode &status) const {
         }
     }
     // assert(stack.empty());
+
+    // Perform a series of checks on the array.  DO NOT COMPILE INTO
+    // PRODUCTION CODE.  Use to debug array building problems.
+    //
+    //::if (!stack.empty()) {
+    //::    __asm int 03;
+    //::}
+    //::// check the array
+    //::if (array[0] < 1) {
+    //::    __asm int 03;
+    //::}
+    //::if (array[1] < 5) {
+    //::    __asm int 03;
+    //::}
+    //::for (i=2; i<2+array[0]*2; ++i) {
+    //::    if (array[i] < 0) { // array[i] is an offset into the rule
+    //::        __asm int 03;
+    //::    }
+    //::}
+    //::if (array[2+array[0]*2] != -1) {
+    //::    __asm int 03;
+    //::}
+    //::for (i=array[1]; i<array[1]+array[0]*2; ++i) {
+    //::    if (array[i] < 2 || array[i] >= (2+2*array[0])) {
+    //::        __asm int 03;
+    //::    }
+    //::}
+    //::if (array[array[1]+array[0]*2] != -1) {
+    //::    __asm int 03;
+    //::}
+
     return array;
 }
 
@@ -778,7 +808,7 @@ TransliteratorParser::parse(const UnicodeString& rules,
     if (U_FAILURE(parser.status) || idBlock.length() != 0) {
         delete parser.data;
         parser.data = 0;
-        ec = parser.status;
+        ec = U_FAILURE(parser.status) ? parser.status : U_ILLEGAL_ARGUMENT_ERROR;
     }
     return parser.data;
 }
