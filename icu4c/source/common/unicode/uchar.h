@@ -284,7 +284,7 @@ typedef enum UProperty {
     UCHAR_XID_START,
     /** Binary property Case_Sensitive. Either the source of a case
         mapping or _in_ the target of a case mapping. Not the same as
-        the general category Cased_Letter. @draft ICU 2.6 */
+        the general category Cased_Letter. @stable ICU 2.6 */
     UCHAR_CASE_SENSITIVE,
     /** Binary property STerm (new in Unicode 4.0.1).
         Sentence Terminal. Used in UAX #29: Text Boundaries
@@ -398,7 +398,7 @@ typedef enum UProperty {
         Same as uscript_getScript, returns UScriptCode values. @stable ICU 2.2 */
     UCHAR_SCRIPT,
     /** Enumerated property Hangul_Syllable_Type, new in Unicode 4.
-        Returns UHangulSyllableType values. @draft ICU 2.6 */
+        Returns UHangulSyllableType values. @stable ICU 2.6 */
     UCHAR_HANGUL_SYLLABLE_TYPE,
     /** Enumerated property NFD_Quick_Check.
         Returns UNormalizationCheckResult values. @draft ICU 3.0 */
@@ -741,7 +741,7 @@ typedef enum UCharDirection {
  */
 enum UBlockCode {
 
-    /** New No_Block value in Unicode 4. @draft ICU 2.6 */
+    /** New No_Block value in Unicode 4. @stable ICU 2.6 */
     UBLOCK_NO_BLOCK = 0, /*[none]*/ /* Special range indicating No_Block */
 
     /** @stable ICU 2.0 */
@@ -1088,35 +1088,35 @@ enum UBlockCode {
 
     /* New blocks in Unicode 4 */
 
-    /** @draft ICU 2.6 */
+    /** @stable ICU 2.6 */
     UBLOCK_LIMBU = 111, /*[1900]*/
-    /** @draft ICU 2.6 */
+    /** @stable ICU 2.6 */
     UBLOCK_TAI_LE = 112, /*[1950]*/
-    /** @draft ICU 2.6 */
+    /** @stable ICU 2.6 */
     UBLOCK_KHMER_SYMBOLS = 113, /*[19E0]*/
-    /** @draft ICU 2.6 */
+    /** @stable ICU 2.6 */
     UBLOCK_PHONETIC_EXTENSIONS = 114, /*[1D00]*/
-    /** @draft ICU 2.6 */
+    /** @stable ICU 2.6 */
     UBLOCK_MISCELLANEOUS_SYMBOLS_AND_ARROWS = 115, /*[2B00]*/
-    /** @draft ICU 2.6 */
+    /** @stable ICU 2.6 */
     UBLOCK_YIJING_HEXAGRAM_SYMBOLS = 116, /*[4DC0]*/
-    /** @draft ICU 2.6 */
+    /** @stable ICU 2.6 */
     UBLOCK_LINEAR_B_SYLLABARY = 117, /*[10000]*/
-    /** @draft ICU 2.6 */
+    /** @stable ICU 2.6 */
     UBLOCK_LINEAR_B_IDEOGRAMS = 118, /*[10080]*/
-    /** @draft ICU 2.6 */
+    /** @stable ICU 2.6 */
     UBLOCK_AEGEAN_NUMBERS = 119, /*[10100]*/
-    /** @draft ICU 2.6 */
+    /** @stable ICU 2.6 */
     UBLOCK_UGARITIC = 120, /*[10380]*/
-    /** @draft ICU 2.6 */
+    /** @stable ICU 2.6 */
     UBLOCK_SHAVIAN = 121, /*[10450]*/
-    /** @draft ICU 2.6 */
+    /** @stable ICU 2.6 */
     UBLOCK_OSMANYA = 122, /*[10480]*/
-    /** @draft ICU 2.6 */
+    /** @stable ICU 2.6 */
     UBLOCK_CYPRIOT_SYLLABARY = 123, /*[10800]*/
-    /** @draft ICU 2.6 */
+    /** @stable ICU 2.6 */
     UBLOCK_TAI_XUAN_JING_SYMBOLS = 124, /*[1D300]*/
-    /** @draft ICU 2.6 */
+    /** @stable ICU 2.6 */
     UBLOCK_VARIATION_SELECTORS_SUPPLEMENT = 125, /*[E0100]*/
 
     /** @stable ICU 2.0 */
@@ -1289,9 +1289,9 @@ typedef enum UJoiningGroup {
     U_JG_YUDH,
     U_JG_YUDH_HE,
     U_JG_ZAIN,
-    U_JG_FE,        /**< @draft ICU 2.6 */
-    U_JG_KHAPH,     /**< @draft ICU 2.6 */
-    U_JG_ZHAIN,     /**< @draft ICU 2.6 */
+    U_JG_FE,        /**< @stable ICU 2.6 */
+    U_JG_KHAPH,     /**< @stable ICU 2.6 */
+    U_JG_ZHAIN,     /**< @stable ICU 2.6 */
     U_JG_COUNT
 } UJoiningGroup;
 
@@ -1356,7 +1356,7 @@ typedef enum UNumericType {
  * Hangul Syllable Type constants.
  *
  * @see UCHAR_HANGUL_SYLLABLE_TYPE
- * @draft ICU 2.6
+ * @stable ICU 2.6
  */
 typedef enum UHangulSyllableType {
     U_HST_NOT_APPLICABLE,   /*[NA]*/ /*See note !!*/
@@ -1737,9 +1737,9 @@ u_isalnum(UChar32 c);
  * @param c the code point to be tested
  * @return TRUE if the code point is a hexadecimal digit
  *
- * @draft ICU 2.6
+ * @stable ICU 2.6
  */
-U_DRAFT UBool U_EXPORT2
+U_STABLE UBool U_EXPORT2
 u_isxdigit(UChar32 c);
 
 /**
@@ -1753,9 +1753,9 @@ u_isxdigit(UChar32 c);
  * @param c the code point to be tested
  * @return TRUE if the code point is a punctuation character
  *
- * @draft ICU 2.6
+ * @stable ICU 2.6
  */
-U_DRAFT UBool U_EXPORT2
+U_STABLE UBool U_EXPORT2
 u_ispunct(UChar32 c);
 
 /**
@@ -1772,9 +1772,9 @@ u_ispunct(UChar32 c);
  * @param c the code point to be tested
  * @return TRUE if the code point is a "graphic" character
  *
- * @draft ICU 2.6
+ * @stable ICU 2.6
  */
-U_DRAFT UBool U_EXPORT2
+U_STABLE UBool U_EXPORT2
 u_isgraph(UChar32 c);
 
 /**
@@ -1801,9 +1801,9 @@ u_isgraph(UChar32 c);
  * @param c the code point to be tested
  * @return TRUE if the code point is a "blank"
  *
- * @draft ICU 2.6
+ * @stable ICU 2.6
  */
-U_DRAFT UBool U_EXPORT2
+U_STABLE UBool U_EXPORT2
 u_isblank(UChar32 c);
 
 /**
@@ -1868,9 +1868,9 @@ u_isspace(UChar32 c);
  * @see u_isspace
  * @see u_isWhitespace
  * @see u_isUWhiteSpace
- * @draft ICU 2.6
+ * @stable ICU 2.6
  */
-U_DRAFT UBool U_EXPORT2
+U_STABLE UBool U_EXPORT2
 u_isJavaSpaceChar(UChar32 c);
 
 /**
@@ -1941,9 +1941,9 @@ u_iscntrl(UChar32 c);
  * @return TRUE if the code point is an ISO control code
  *
  * @see u_iscntrl
- * @draft ICU 2.6
+ * @stable ICU 2.6
  */
-U_DRAFT UBool U_EXPORT2
+U_STABLE UBool U_EXPORT2
 u_isISOControl(UChar32 c);
 
 /**

@@ -322,9 +322,9 @@ uset_add(USet* set, UChar32 c);
  *
  * @param set the object to which to add the set
  * @param additionalSet the source set whose elements are to be added to this set.
- * @draft ICU 2.6
+ * @stable ICU 2.6
  */
-U_DRAFT void U_EXPORT2
+U_STABLE void U_EXPORT2
 uset_addAll(USet* set, const USet *additionalSet);
 
 /**

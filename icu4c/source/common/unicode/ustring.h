@@ -479,9 +479,9 @@ u_strCompare(const UChar *s1, int32_t length1,
  *
  * @see u_strCompare
  *
- * @draft ICU 2.6
+ * @stable ICU 2.6
  */
-U_DRAFT int32_t U_EXPORT2
+U_STABLE int32_t U_EXPORT2
 u_strCompareIter(UCharIterator *iter1, UCharIterator *iter2, UBool codePointOrder);
 
 #ifndef U_COMPARE_CODE_POINT_ORDER

@@ -50,9 +50,7 @@ typedef enum UCharIteratorOrigin {
     UITER_START, UITER_CURRENT, UITER_LIMIT, UITER_ZERO, UITER_LENGTH
 } UCharIteratorOrigin;
 
-#ifndef U_HIDE_DRAFT_API
-
-/** Constants for UCharIterator. @draft ICU 2.6 */
+/** Constants for UCharIterator. @stable ICU 2.6 */
 enum {
     /**
      * Constant value that may be returned by UCharIteratorMove
@@ -66,7 +64,7 @@ enum {
      * The actual index can be determined with getIndex(UITER_CURRENT)
      * which will count the UChars if necessary.
      *
-     * @draft ICU 2.6
+     * @stable ICU 2.6
      */
     UITER_UNKNOWN_INDEX=-2
 };
@@ -81,11 +79,9 @@ enum {
  * a valid state for each position. This will be clearly documented
  * for each such iterator (none of the public ones here).
  *
- * @draft ICU 2.6
+ * @stable ICU 2.6
  */
 #define UITER_NO_STATE ((uint32_t)0xffffffff)
-
-#endif /*U_HIDE_DRAFT_API*/
 
 /**
  * Function type declaration for UCharIterator.getIndex().
@@ -277,7 +273,7 @@ UCharIteratorReserved(UCharIterator *iter, int32_t something);
  * @see UCharIterator
  * @see UCharIteratorSetState
  * @see UITER_NO_STATE
- * @draft ICU 2.6
+ * @stable ICU 2.6
  */
 typedef uint32_t U_CALLCONV
 UCharIteratorGetState(const UCharIterator *iter);
@@ -305,7 +301,7 @@ UCharIteratorGetState(const UCharIterator *iter);
  *
  * @see UCharIterator
  * @see UCharIteratorGetState
- * @draft ICU 2.6
+ * @stable ICU 2.6
  */
 typedef void U_CALLCONV
 UCharIteratorSetState(UCharIterator *iter, uint32_t state, UErrorCode *pErrorCode);
@@ -461,7 +457,7 @@ struct UCharIterator {
      * This function pointer is NULL if the iterator does not implement it.
      *
      * @see UCharIteratorGet
-     * @draft ICU 2.6
+     * @stable ICU 2.6
      */
     UCharIteratorGetState *getState;
 
@@ -471,7 +467,7 @@ struct UCharIterator {
      * This function pointer is NULL if the iterator does not implement it.
      *
      * @see UCharIteratorSet
-     * @draft ICU 2.6
+     * @stable ICU 2.6
      */
     UCharIteratorSetState *setState;
 };
@@ -547,9 +543,9 @@ uiter_previous32(UCharIterator *iter);
  * @see UCharIterator
  * @see UCharIteratorGetState
  * @see UITER_NO_STATE
- * @draft ICU 2.6
+ * @stable ICU 2.6
  */
-U_DRAFT uint32_t U_EXPORT2
+U_STABLE uint32_t U_EXPORT2
 uiter_getState(const UCharIterator *iter);
 
 /**
@@ -565,9 +561,9 @@ uiter_getState(const UCharIterator *iter);
  *
  * @see UCharIterator
  * @see UCharIteratorSetState
- * @draft ICU 2.6
+ * @stable ICU 2.6
  */
-U_DRAFT void U_EXPORT2
+U_STABLE void U_EXPORT2
 uiter_setState(UCharIterator *iter, uint32_t state, UErrorCode *pErrorCode);
 
 /**
@@ -613,9 +609,9 @@ uiter_setString(UCharIterator *iter, const UChar *s, int32_t length);
  *
  * @see UCharIterator
  * @see uiter_setString
- * @draft ICU 2.6
+ * @stable ICU 2.6
  */
-U_DRAFT void U_EXPORT2
+U_STABLE void U_EXPORT2
 uiter_setUTF16BE(UCharIterator *iter, const char *s, int32_t length);
 
 /**
@@ -649,9 +645,9 @@ uiter_setUTF16BE(UCharIterator *iter, const char *s, int32_t length);
  * @param length Length of s in bytes, or -1 if NUL-terminated
  *
  * @see UCharIterator
- * @draft ICU 2.6
+ * @stable ICU 2.6
  */
-U_DRAFT void U_EXPORT2
+U_STABLE void U_EXPORT2
 uiter_setUTF8(UCharIterator *iter, const char *s, int32_t length);
 
 #ifdef XP_CPLUSPLUS

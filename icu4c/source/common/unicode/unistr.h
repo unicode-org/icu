@@ -2856,7 +2856,7 @@ public:
    *
    * @see Replaceable::clone
    * @see getDynamicClassID
-   * @draft ICU 2.6
+   * @stable ICU 2.6
    */
   virtual Replaceable *clone() const;
 
