@@ -94,6 +94,11 @@ utf8_back1SafeBody(const uint8_t *s, UTextOffset i);
         )
 #endif
 
+#define UTF8_MAX_CHAR_LENGTH 4
+
+/* average number of code units compared to UTF-16 */
+#define UTF8_ARRAY_SIZE(size) ((5*(size))/2)
+
 #define UTF8_GET_CHAR_UNSAFE(s, i, c) { \
     UTextOffset I=(UTextOffset)(i); \
     UTF8_SET_CHAR_START_UNSAFE(s, I); \

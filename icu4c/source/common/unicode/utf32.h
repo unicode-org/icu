@@ -45,6 +45,10 @@
 /* number of code units per code point */
 #define UTF32_NEED_MULTIPLE_UCHAR(c) 0
 #define UTF32_CHAR_LENGTH(c) 1
+#define UTF32_MAX_CHAR_LENGTH 1
+
+/* average number of code units compared to UTF-16 */
+#define UTF32_ARRAY_SIZE(size) (size)
 
 #define UTF32_GET_CHAR_UNSAFE(s, i, c) { \
     (c)=(s)[i]; \
