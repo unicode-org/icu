@@ -325,6 +325,10 @@ SOURCE=.\srchtest.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\strcase.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\strtest.cpp
 # End Source File
 # Begin Source File
