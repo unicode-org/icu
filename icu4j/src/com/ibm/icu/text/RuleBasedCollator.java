@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/RuleBasedCollator.java,v $
-* $Date: 2003/02/19 01:16:40 $
-* $Revision: 1.32 $
+* $Date: 2003/02/27 00:52:07 $
+* $Revision: 1.33 $
 *
 *******************************************************************************
 */
@@ -212,18 +212,6 @@ public final class RuleBasedCollator extends Collator
                                             "Collation rules can not be null");
         }
         init(rules);
-    }
-    private void init(String rules) throws Exception
-    {
-
-        setWithUCAData();
-        CollationParsedRuleBuilder builder
-                                       = new CollationParsedRuleBuilder(rules);
-
-        builder.setRules(this);
-        m_rules_ = rules;
-        init();
-        initUtility();
     }
 
     // public methods --------------------------------------------------------
@@ -1931,6 +1919,18 @@ public final class RuleBasedCollator extends Collator
 
     // private methods -------------------------------------------------------
 
+    private void init(String rules) throws Exception
+    {
+        setWithUCAData();
+        CollationParsedRuleBuilder builder
+                                       = new CollationParsedRuleBuilder(rules);
+
+        builder.setRules(this);
+        m_rules_ = rules;
+        init();
+        initUtility();
+    }
+    
     private final int compareRegular(String source, String target, int offset) {
         int strength = getStrength();
         // setting up the collator parameters
