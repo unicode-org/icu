@@ -826,7 +826,8 @@ umsg_vformat(   UMessageFormat *fmt,
         *status = U_BUFFER_OVERFLOW_ERROR;
     }else{
         /* copy the resultStr to target buffer */
-        u_strcpy(result, resultStr.getUChars());
+        //u_strcpy(result, resultStr.getUChars());
+        resultStr.extract(0,resultStr.length(),result,0);
     }
     return resultStr.length();
 }
@@ -897,7 +898,8 @@ umsg_vparse(UMessageFormat *fmt,
         case Formattable::kString:
             aString = va_arg(ap, UChar*);
             args[i].getString(temp);
-            u_strcpy(aString, temp.getUChars());
+            //u_strcpy(aString, temp.getUChars());
+            temp.extract(0,temp.length(),aString);
             break;
 
         // better not happen!
