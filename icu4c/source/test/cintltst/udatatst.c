@@ -257,7 +257,7 @@ static void TestUDataOpen(){
 
 
 static void TestUDataSetAppData(){
-    UDataMemory      *dataItem;
+/*    UDataMemory      *dataItem;*/
 
     UErrorCode        status=U_ZERO_ERROR;
     int               fileHandle = 0;              /* We are going to read the testdata.dat file */
@@ -519,9 +519,6 @@ static void TestUDataOpenChoiceDemo2() {
 
     const char* name="test";
     const char* type="dat";
-
-    int n;
-
     const char* path = loadTestData(&status);
 
     result=udata_openChoice(path, type, name, isAcceptable, &p, &status);
