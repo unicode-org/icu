@@ -20,10 +20,11 @@
 #include "intltest.h"
 #include "unicode/brkiter.h"
 
-class Vector;
-class Enumeration;
-class BITestData;
+class  Vector;
+class  Enumeration;
+class  BITestData;
 struct TestParams;
+class  RBBIMonkeyKind;
 
 /**
  * Test the RuleBasedBreakIterator class giving different rules
@@ -63,6 +64,7 @@ public:
     void TestMixedThaiLineBreak(); 
     void TestMaiyamok(); 
     void TestThaiWordBreak();
+    void TestMonkey(char *params);
 
     void TestExtended();
     UChar *ReadAndConvertFile(const char *fileName, int &ulen, UErrorCode &status);
@@ -114,6 +116,8 @@ private:
 
     void doBreakInvariantTest(BreakIterator& tb, UnicodeString& testChars);
     void doOtherInvariantTest(BreakIterator& tb, UnicodeString& testChars);
+
+    void RunMonkey(BreakIterator *bi, RBBIMonkeyKind &mk, uint32_t  seed, int32_t loopCount);
 
 };
 
