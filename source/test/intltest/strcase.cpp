@@ -356,6 +356,14 @@ StringCaseTest::TestTitleCasing() {
   }
   delete driver;
 
+    // more tests for API coverage
+    status=U_ZERO_ERROR;
+    input=UNICODE_STRING_SIMPLE("sTrA\\u00dfE").unescape();
+    (result=input).toTitle(NULL);
+    if(result!=UNICODE_STRING_SIMPLE("Stra\\u00dfe").unescape()) {
+        errln("UnicodeString::toTitle(BreakIterator *) failed");
+    }
+
 #if 0
     char cLocaleID[100];
     UnicodeString in, expect, result, localeID;

@@ -118,10 +118,6 @@ int32_t
 UnicodeString::refCount() const 
 { return *((int32_t *)fArray - 1); }
 
-int32_t
-UnicodeString::setRefCount(int32_t count)
-{ return (*((int32_t *)fArray - 1) = count); }
-
 void
 UnicodeString::releaseArray() {
   if((fFlags & kRefCounted) && removeRef() == 0) {
