@@ -795,9 +795,57 @@ ucol_cloneRuleData(UCollator *coll, int32_t *length, UErrorCode *status);
 
 /* Following are the new APIs for 1.7. They are all draft and most are not even implemented */
 
-typedef enum UColAttribute UColAttribute;
+enum UColAttribute {
+     UCOL_FRENCH_COLLATION, /* attribute for direction of secondary weights*/
+     UCOL_ALTERNATE_HANDLING, /* attribute for handling variable elements*/
+     UCOL_CASE_FIRST, /* who goes first, lower case or uppercase */
+     UCOL_CASE_LEVEL, /* do we have an extra case level */
+     UCOL_NORMALIZATION_MODE, /* attribute for normalization */
+     UCOL_STRENGTH,         /* attribute for strength */
+     UCOL_ATTRIBUTE_COUNT
+};
 
-typedef enum UColAttributeValue UColAttributeValue;
+enum UColAttributeValue {
+     /* accepted by most attributes */
+          UCOL_ATTR_DEFAULT,
+     /* for UCOL_FRENCH_COLLATION & UCOL_CASE_LEVEL*/
+          UCOL_ATTR_ON,
+          UCOL_ATTR_OFF,
+     /* for UCOL_ALTERNATE_HANDLING */
+          UCOL_ATTR_SHIFTED,
+          UCOL_ATTR_NON_IGNORABLE,
+     /* for UCOL_CASE_FIRST */
+          UCOL_ATTR_LOWER_FIRST,
+          UCOL_ATTR_UPPER_FIRST,
+     /* for UCOL_NORMALIZATION_MODE */
+          /** No decomposition/composition */
+          UCOL_ATTR_NO_NORMALIZATION,
+          /** Canonical decomposition */
+          UCOL_ATTR_DECOMP_CAN,
+          /** Compatibility decomposition */
+          UCOL_ATTR_DECOMP_COMPAT,
+          /** Default normalization */
+          UCOL_ATTR_DEFAULT_NORMALIZATION = UCOL_ATTR_DECOMP_COMPAT, 
+          /** Canonical decomposition followed by canonical composition */
+          UCOL_ATTR_DECOMP_CAN_COMP_COMPAT,
+          /** Compatibility decomposition followed by canonical composition */
+          UCOL_ATTR_DECOMP_COMPAT_COMP_CAN,
+     /* for UCOL_STRENGTH */
+            /** Primary collation strength */
+            UCOL_ATTR_PRIMARY,
+            /** Secondary collation strength */
+            UCOL_ATTR_SECONDARY,
+            /** Tertiary collation strength */
+            UCOL_ATTR_TERTIARY,
+            UCOL_ATTR_DEFAULT_STRENGTH = UCOL_ATTR_TERTIARY,
+            /** Quaternary collation strength */
+            UCOL_ATTR_QUATERNARY,
+            /** Identical collation strength */
+            UCOL_ATTR_IDENTICAL,
+            /** Default collation strength */
+	    UCOL_ATTRIBUTE_VALUE_COUNT
+};
+
 
 /**
  * Universal attribute setter
@@ -849,7 +897,11 @@ U_CAPI UCollationResult ucol_strcollinc(const UCollator *coll,
 								 UCharForwardIterator *source, void *sourceContext,
 								 UCharForwardIterator *target, void *targetContext);
 
-typedef enum UColRuleOption UColRuleOption ;
+enum UColRuleOption {
+	UCOL_TAILORING_ONLY,
+	UCOL_FULL_RULES
+};
+
 
 /**
  * Returns current rules. Delta defines whether full rules are returned or just the tailoring. 
