@@ -377,7 +377,7 @@ ucnv_openPackage   (const char *packageName, const char *converterName, UErrorCo
  * @param status to indicate whether the operation went on smoothly or there were errors
  *  An informational status value, U_SAFECLONE_ALLOCATED_ERROR, is used if any allocations were necessary.
  * @return pointer to the new clone
- * @draft ICU 1.8
+ * @stable
  */
 U_CAPI UConverter * U_EXPORT2 
 ucnv_safeClone(const UConverter *cnv, 
@@ -385,7 +385,7 @@ ucnv_safeClone(const UConverter *cnv,
                int32_t          *pBufferSize, 
                UErrorCode       *status);
 
-/** @draft ICU 1.8 */
+/** @stable */
 #define U_CNV_SAFECLONE_BUFFERSIZE  3072
 
 /**
