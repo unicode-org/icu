@@ -59,8 +59,10 @@ typedef struct _FileStream FileStream;
 class Locale;
 class RuleBasedCollator;
 class ResourceBundle;
-struct UHashtable;
 
+#ifdef ICU_RESBUND_USE_DEPRECATES
+struct UHashtable;
+#endif
 
 /**
  * A class representing a collection of resource information pertaining to a given
@@ -191,150 +193,168 @@ public:
      * fall back locales could be found.
      * @draft
      */
-                        ResourceBundle( const UnicodeString&    path,
-                                        const Locale&           locale,
-                                        UErrorCode&              err);
-                        ResourceBundle( const UnicodeString&    path,
-                                        UErrorCode&              err);
-                        ResourceBundle(UErrorCode &err);
-                        ResourceBundle( const wchar_t* path,
-                                        const Locale& locale,
-                                        UErrorCode& err);
-                        ResourceBundle( const char* path,
-                                        const Locale& locale,
-                                        UErrorCode& err);
-                        ResourceBundle(const ResourceBundle &original);
-                        ResourceBundle(UResourceBundle *res, UErrorCode &status);
+    ResourceBundle( const UnicodeString&    path,
+                    const Locale&           locale,
+                    UErrorCode&              err);
+    ResourceBundle( const UnicodeString&    path,
+                    UErrorCode&              err);
+    ResourceBundle(UErrorCode &err);
+    ResourceBundle( const wchar_t* path,
+                    const Locale& locale,
+                    UErrorCode& err);
+    ResourceBundle( const char* path,
+                    const Locale& locale,
+                    UErrorCode& err);
+    ResourceBundle(const ResourceBundle &original);
+    ResourceBundle(UResourceBundle *res, UErrorCode &status);
 
-                        ResourceBundle& operator=(const ResourceBundle& other);
-                        ~ResourceBundle();
+    ResourceBundle& operator=(const ResourceBundle& other);
+    ~ResourceBundle();
 
-/**
- * Returns the size of a resource. Size for scalar types is always 1, and for vector/table types is
- * the number of child resources.
- *
- * @return number of resources in a given resource.
- * @draft
- */
+    /**
+     * Returns the size of a resource. Size for scalar types is always 1, and for vector/table types is
+     * the number of child resources.
+     *
+     * @return number of resources in a given resource.
+     * @stable
+     */
     int32_t getSize(void) const;
-/**
- * returns a string from a string resource type
- *
- * @param status: fills in the outgoing error code
- *                could be <TT>U_MISSING_RESOURCE_ERROR</T> if the key is not found
- *                could be a non-failing error 
- *                e.g.: <TT>U_USING_FALLBACK_ERROR</TT>,<TT>U_USING_DEFAULT_ERROR </TT>
- * @return a pointer to a zero-terminated UChar array which lives in a memory mapped/DLL file.
- * @draft
- */
+
+    /**
+     * returns a string from a string resource type
+     *
+     * @param status: fills in the outgoing error code
+     *                could be <TT>U_MISSING_RESOURCE_ERROR</T> if the key is not found
+     *                could be a non-failing error 
+     *                e.g.: <TT>U_USING_FALLBACK_ERROR</TT>,<TT>U_USING_DEFAULT_ERROR </TT>
+     * @return a pointer to a zero-terminated UChar array which lives in a memory mapped/DLL file.
+     * @stable
+     */
     UnicodeString getString(UErrorCode& status) const;
+
+    /**
+     * returns a binary data from a resource. Can be used at most primitive resource types (binaries,
+     * strings, ints)
+     *
+     * @param resourceBundle: a string resource
+     * @param len:    fills in the length of resulting byte chunk
+     * @param status: fills in the outgoing error code
+     *                could be <TT>U_MISSING_RESOURCE_ERROR</T> if the key is not found
+     *                could be a non-failing error 
+     *                e.g.: <TT>U_USING_FALLBACK_ERROR</TT>,<TT>U_USING_DEFAULT_ERROR </TT>
+     * @return a pointer to a chuck of unsigned bytes which live in a memory mapped/DLL file.
+     * @stable
+     */
     const uint8_t *getBinary(int32_t& len, UErrorCode& status) const;
 
-/**
- * Checks whether the resource has another element to iterate over.
- *
- * @return TRUE if there are more elements, FALSE if there is no more elements
- * @draft
- */
+    /**
+     * Checks whether the resource has another element to iterate over.
+     *
+     * @return TRUE if there are more elements, FALSE if there is no more elements
+     * @draft
+     */
     UBool hasNext(void) const;
-/**
- * Resets the internal context of a resource so that iteration starts from the first element.
- *
- * @draft
- */
+
+    /**
+     * Resets the internal context of a resource so that iteration starts from the first element.
+     *
+     * @draft
+     */
     void resetIterator(void);
 
-/**
- * Returns the key associated with this resource. Not all the resources have a key - only 
- * those that are members of a table.
- *
- * @return a key associated to this resource, or NULL if it doesn't have a key
- * @draft
- */
+    /**
+     * Returns the key associated with this resource. Not all the resources have a key - only 
+     * those that are members of a table.
+     *
+     * @return a key associated to this resource, or NULL if it doesn't have a key
+     * @draft
+     */
     const char *getKey(void);
 
     const char *getName(void);
 
 
-/**
- * Returns the type of a resource. Available types are defined in enum UResType
- *
- * @return type of the given resource.
- * @draft
- */
+    /**
+     * Returns the type of a resource. Available types are defined in enum UResType
+     *
+     * @return type of the given resource.
+     * @stable
+     */
     UResType getType(void);
 
-/**
- * Returns the next resource in a given resource or NULL if there are no more resources 
- *
- * @param status            fills in the outgoing error code
- * @return                  ResourceBundle object.
- * @draft
- */
+    /**
+     * Returns the next resource in a given resource or NULL if there are no more resources 
+     *
+     * @param status            fills in the outgoing error code
+     * @return                  ResourceBundle object.
+     * @draft
+     */
     ResourceBundle getNext(UErrorCode& status);
 
-/**
- * Returns the next string in a resource or NULL if there are no more resources 
- * to iterate over. 
- *
- * @param status            fills in the outgoing error code
- * @return an UnicodeString object.
- * @draft
- */
+    /**
+     * Returns the next string in a resource or NULL if there are no more resources 
+     * to iterate over. 
+     *
+     * @param status            fills in the outgoing error code
+     * @return an UnicodeString object.
+     * @draft
+     */
     UnicodeString getNextString(UErrorCode& status);
-/**
- * Returns the next string in a resource or NULL if there are no more resources 
- * to iterate over. 
- *
- * @param key               fill in for key associated with this string
- * @param status            fills in the outgoing error code
- * @return an UnicodeString object.
- * @draft
- */
+
+    /**
+     * Returns the next string in a resource or NULL if there are no more resources 
+     * to iterate over. 
+     *
+     * @param key               fill in for key associated with this string
+     * @param status            fills in the outgoing error code
+     * @return an UnicodeString object.
+     * @draft
+     */
     UnicodeString getNextString(const char ** key, UErrorCode& status);
 
-/**
- * Returns the resource in a resource at the specified index. 
- *
- * @param index             an index to the wanted resource.
- * @param status            fills in the outgoing error code
- * @return                  ResourceBundle object. If there is an error, resource is invalid.
- * @draft
- */
+    /**
+     * Returns the resource in a resource at the specified index. 
+     *
+     * @param index             an index to the wanted resource.
+     * @param status            fills in the outgoing error code
+     * @return                  ResourceBundle object. If there is an error, resource is invalid.
+     * @stable
+     */
     ResourceBundle get(int32_t index, UErrorCode& status) const;
 
-/**
- * Returns the string in a given resource at the specified index.
- *
- * @param index             an index to the wanted string.
- * @param status            fills in the outgoing error code
- * @return                  an UnicodeString object. If there is an error, string is bogus
- * @draft
- */
+    /**
+     * Returns the string in a given resource at the specified index.
+     *
+     * @param index             an index to the wanted string.
+     * @param status            fills in the outgoing error code
+     * @return                  an UnicodeString object. If there is an error, string is bogus
+     * @stable
+     */
     UnicodeString getStringEx(int32_t index, UErrorCode& status) const;
 
-/**
- * Returns a resource in a resource that has a given key. This procedure works only with table
- * resources. 
- *
- * @param key               a key associated with the wanted resource
- * @param status            fills in the outgoing error code.
- * @return                  ResourceBundle object. If there is an error, resource is invalid.
- * @draft
- */
+    /**
+     * Returns a resource in a resource that has a given key. This procedure works only with table
+     * resources. 
+     *
+     * @param key               a key associated with the wanted resource
+     * @param status            fills in the outgoing error code.
+     * @return                  ResourceBundle object. If there is an error, resource is invalid.
+     * @stable
+     */
     ResourceBundle get(const char* key, UErrorCode& status) const;
 
-/**
- * Returns a string in a resource that has a given key. This procedure works only with table
- * resources. 
- *
- * @param key               a key associated with the wanted string
- * @param status            fills in the outgoing error code
- * @return                  an UnicodeString object. If there is an error, string is bogus
- * @draft
- */
+    /**
+     * Returns a string in a resource that has a given key. This procedure works only with table
+     * resources. 
+     *
+     * @param key               a key associated with the wanted string
+     * @param status            fills in the outgoing error code
+     * @return                  an UnicodeString object. If there is an error, string is bogus
+     * @stable
+     */
     UnicodeString getStringEx(const char* key, UErrorCode& status) const;
 
+#ifdef ICU_RESBUND_USE_DEPRECATES
     /**
      * Returns the contents of a string resource. Resource data is undifferentiated
      * Unicode text. The resource file may contain quoted strings or escape sequences;
@@ -410,7 +430,7 @@ public:
      * @return             The resource requested, as a UnicodeStrings**. The caller
      *                     does not own the storage and must not delete it. (its lifetime 
      *                      is that of the resource bundle.)
-     * @deprecated to be removed in first release in 2001. Use ures_getBinary instead.
+     * @deprecated to be removed in first release in 2001. Use getStringEx() instead.
      */
     const UnicodeString**   get2dArray(const char          *resourceTag,
                                        int32_t&             rowCount,
@@ -434,7 +454,7 @@ public:
      *                      the wrong format, or if either index is out of bounds.
      * @return A pointer to the text of the array item, or NULL is there was an error.
      *                      (its lifetime is that of the resource bundle.)
-     * @deprecated to be removed in first release in 2001. Use ures_getBinary instead.
+     * @deprecated to be removed in first release in 2001. Use getStringEx() instead.
      */
     const UnicodeString*    get2dArrayItem( const char                *resourceTag,
                                             int32_t                    rowIndex,
@@ -490,6 +510,7 @@ public:
                                         UnicodeString*&         items,
                                         int32_t&                numItems,
                                         UErrorCode&              err) const;
+#endif
     
     /**
      * Return the version number associated with this ResourceBundle. This version
@@ -526,7 +547,9 @@ private:
     UResourceBundle *resource;
     void constructForLocale(const UnicodeString& path, const Locale& locale, UErrorCode& error);
     void constructForLocale(const wchar_t* path, const Locale& locale, UErrorCode& error);
+#ifdef ICU_RESBUND_USE_DEPRECATES
     void initItemCache(UErrorCode& error);
+#endif
 
     friend class RuleBasedCollator;
 
@@ -535,15 +558,18 @@ private:
      * file, without trying other files. This is used by the Collation caching
      * mechanism.
      */
-                            ResourceBundle( const UnicodeString&    path,
-                                            const char *localeName,
-                                            UErrorCode&              status);
+    ResourceBundle( const UnicodeString&    path,
+                    const char *localeName,
+                    UErrorCode&              status);
 
 private:
     static void U_CALLCONV deleteValue(void* value);
     Locale                      fRealLocale;
 
+#ifdef ICU_RESBUND_USE_DEPRECATES
     UHashtable*                 fItemCache;
+#endif
+
     static const char*          kDefaultSuffix;
     static const int32_t        kDefaultSuffixLen;
     static const char*          kDefaultFilename;

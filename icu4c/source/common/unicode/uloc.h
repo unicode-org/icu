@@ -494,6 +494,7 @@ uloc_getISOLanguages(void);
 U_CAPI const char* const* U_EXPORT2
 uloc_getISOCountries(void);
 
+#ifdef ICU_ULOC_USE_DEPRECATES
 /**
  * Deprecated 1999dec14 - Gets the directory containing the locale data files.
  *
@@ -509,6 +510,7 @@ uloc_getISOCountries(void);
  * @deprecated 1999dec14 - Remove after 2000dec14
  */
 #define uloc_setDataDirectory u_setDataDirectory
+#endif
 
 /*Internal function */
 int32_t U_EXPORT2

@@ -441,7 +441,7 @@ Locale::getVariant() const
   return variant;
 }
 
-#ifndef ICU_LOCID_NO_DEPRECATES
+#ifdef ICU_LOCID_USE_DEPRECATES
 UnicodeString& 
 Locale::getLanguage(UnicodeString& lang) const
 {
@@ -490,7 +490,7 @@ Locale::getISO3Country() const
   return uloc_getISO3Country(fullName);
 }
 
-#ifndef ICU_LOCID_NO_DEPRECATES
+#ifdef ICU_LOCID_USE_DEPRECATES
 UnicodeString& 
 Locale::getISO3Language(UnicodeString& lang, UErrorCode& status) const
 {
@@ -751,7 +751,7 @@ const char* const* Locale::getISOLanguages()
 }
 
 
-#ifndef ICU_LOCID_NO_DEPRECATES
+#ifdef ICU_LOCID_USE_DEPRECATES
 /**
  * Returns a list of all 2-letter country codes defined in ISO 3166.
  * Can be used to create Locales.
@@ -901,7 +901,7 @@ void Locale::setFromPOSIXID(const char *posixID)
   init(posixID);  
 }
 
-#ifndef ICU_LOCID_NO_DEPRECATES
+#ifdef ICU_LOCID_USE_DEPRECATES
 // Deprecated APIs
 Locale::Locale( const   UnicodeString&  newLanguage)
 {
