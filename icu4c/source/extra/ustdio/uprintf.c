@@ -22,7 +22,7 @@
 
 #include "uprintf.h"
 #include "uprntf_p.h"
-#include "ustdio.h"
+#include "unicode/ustdio.h"
 #include "ufile.h"
 #include "unicode/ustring.h"
 #include "locbund.h"

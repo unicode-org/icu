@@ -23,7 +23,7 @@
 #define UPRINTF_H
 
 #include "unicode/utypes.h"
-#include "ustdio.h"
+#include "unicode/ustdio.h"
 #include "ufmt_cmn.h"
 
 /**
