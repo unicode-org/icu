@@ -105,18 +105,17 @@ check-local:
 PKGDATA_INVOKE:=$(subst :$(top_builddir)/data/out,,$(INVOKE)) $(PKGDATA_INVOKE_OPTS)
 
 packagedata: icupkg.inc $(BUILDDIR)/icudata.lst 
-	$(PKGDATA_INVOKE) $(PKGDATA) -e $(ICUDATA_ENTRY_POINT) -T $(BUILDDIR) -p $(ICUDATA_NAME) -m $(PKGDATA_MODE) $(PKGDATA_VERSIONING) $(BUILDDIR)/icudata.lst
 ifneq ($(ENABLE_STATIC),)
 # TODO: Prevent complete rebuilding between builds. Requires checking for existence of renamed file.
 #	mv -f $(OUTDIR)/$(LIB_STATIC_ICUDATA_NAME).$(A) $(OUTDIR)/$(LIB_ICUDATA_NAME).$(A)
 	$(PKGDATA_INVOKE) $(PKGDATA) -e $(ICUDATA_ENTRY_POINT) -T $(BUILDDIR) -p $(ICUDATA_NAME) -m static $(BUILDDIR)/icudata.lst
 	mv -f $(OUTDIR)/$(LIB_ICUDATA_NAME).$(A) $(OUTDIR)/$(LIB_STATIC_ICUDATA_NAME).$(A)
 endif
+	$(PKGDATA_INVOKE) $(PKGDATA) -e $(ICUDATA_ENTRY_POINT) -T $(BUILDDIR) -p $(ICUDATA_NAME) -m $(PKGDATA_MODE) $(PKGDATA_VERSIONING) $(BUILDDIR)/icudata.lst
 
 ## Install ICU data.
 install-local: $(BUILDDIR)/icudata.lst ./icupkg.inc $(OS390INSTALL)
 	$(MKINSTALLDIRS) $(TMPDATADIR) $(DESTDIR)$(ICUPKGDATA_DIR)
-	$(PKGDATA_INVOKE) $(PKGDATA) -m $(PKGDATA_MODE) $(PKGDATA_VERSIONING) -e $(ICUDATA_ENTRY_POINT) -T $(BUILDDIR) -s $(BUILDDIR) -p $(ICUDATA_NAME) $(BUILDDIR)/icudata.lst -I $(DESTDIR)$(ICUPKGDATA_DIR)
 ifneq ($(ENABLE_STATIC),)
 # TODO: Prevent complete rebuilding between builds. Requires checking for existence of renamed file.
 #	mv -f $(OUTDIR)/$(LIB_STATIC_ICUDATA_NAME).$(A) $(OUTDIR)/$(LIB_ICUDATA_NAME).$(A)
@@ -124,6 +123,7 @@ ifneq ($(ENABLE_STATIC),)
 	mv -f $(OUTDIR)/$(LIB_ICUDATA_NAME).$(A) $(OUTDIR)/$(LIB_STATIC_ICUDATA_NAME).$(A)
 	$(INSTALL-L) $(OUTDIR)/$(LIB_STATIC_ICUDATA_NAME).$(A) $(DESTDIR)$(ICUPKGDATA_DIR)/$(LIB_STATIC_ICUDATA_NAME).$(A)
 endif
+	$(PKGDATA_INVOKE) $(PKGDATA) -m $(PKGDATA_MODE) $(PKGDATA_VERSIONING) -e $(ICUDATA_ENTRY_POINT) -T $(BUILDDIR) -s $(BUILDDIR) -p $(ICUDATA_NAME) $(BUILDDIR)/icudata.lst -I $(DESTDIR)$(ICUPKGDATA_DIR)
 
 ####
 ####
