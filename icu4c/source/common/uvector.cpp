@@ -176,7 +176,7 @@ UBool UVector::ensureCapacity(int32_t minimumCapacity, UErrorCode &status) {
             return FALSE;
         }
         uprv_memcpy(newElems, elements, sizeof(elements[0]) * count);
-        delete[] elements;
+        uprv_free(elements);
         elements = newElems;
         capacity = newCap;
         return TRUE;
