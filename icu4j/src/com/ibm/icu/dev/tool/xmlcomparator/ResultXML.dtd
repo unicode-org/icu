@@ -1,3 +1,17 @@
+<!-- 
+/**
+ *******************************************************************************
+ * Copyright (C) 2002-2002, International Business Machines Corporation and    *
+ * others. All Rights Reserved.                                                *
+ *******************************************************************************
+ *
+ * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/tool/xmlcomparator/Attic/ResultXML.dtd,v $
+ * $Date: 2002/12/18 03:56:41 $
+ * $Revision: 1.2 $
+ *
+ *******************************************************************************
+ */
+-->
 <!ELEMENT difference_xml (difference_element)* >
 
 <!ELEMENT difference_element ( icu | ibm_toronto | windows | sun_jdk | ibm_jdk | solaris | apple | hp_ux | other)* >
