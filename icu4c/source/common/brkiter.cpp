@@ -372,7 +372,7 @@ BreakIterator::createInstance(const Locale& loc, UBreakIteratorType kind, UError
     u_init(&status);
 #if !UCONFIG_NO_SERVICE
     if (hasService()) {
-        Locale actualLoc;
+        Locale actualLoc("");
         BreakIterator *result = (BreakIterator*)gService->get(loc, kind, &actualLoc, status);
         // TODO: The way the service code works in ICU 2.8 is that if
         // there is a real registered break iterator, the actualLoc
