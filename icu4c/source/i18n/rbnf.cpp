@@ -352,6 +352,9 @@ RuleBasedNumberFormat::parse(const UnicodeString& text,
         }
     }
     
+	if (high_pp.getIndex() > parsePosition.getIndex()) {
+		high_pp.setErrorIndex(-1);
+	}
     parsePosition = high_pp;
     result = high_result;
     if (result.getType() == Formattable::kDouble) {
