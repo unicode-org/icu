@@ -32,6 +32,7 @@ To Run on Windows
             cd c:\icu\source\samples\ufortune\debug
     4.  Run it
             ufortune
+     
 
 To Build on Unixes
     1.  Build ICU.  Specify an ICU install directory when running configure,
@@ -40,10 +41,13 @@ To Build on Unixes
            cd <icu directory>/source
            runConfigureICU <platform-name> --prefix <icu install directory> [other options]
            gmake all
+           
     2.  Install ICU, 
            gmake install
+           
     3.  Build the sample
            cd <icu directory>/source/samples/ufortune
+           export ICU_PREFIX= <icu install directory>
            gmake
            
  To Run on Unixes
@@ -51,12 +55,11 @@ To Build on Unixes
            
            gmake check
               or
-           export LD_LIBRARY_PATH=<icu install directory>/lib:$LD_LIBRARY_PATH
+           export LD_LIBRARY_PATH=<icu install directory>/lib:.:$LD_LIBRARY_PATH
            ufortune
            
            
  Note:  The name of the LD_LIBRARY_PATH variable is different on some systems.
         If in doubt, run the sample using "gmake check", and note the name of
-        the variable that is used there.
-        
-        
+        the variable that is used there.  LD_LIBRARY_PATH is the correct name
+        for Linux and Solaris.
