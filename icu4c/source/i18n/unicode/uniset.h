@@ -265,33 +265,12 @@ class U_I18N_API UnicodeSet : public UnicodeFilter {
      */
     UnicodeString pat;
 
-    static const int32_t START_EXTRA; // initial storage. Must be >= 0
-    static const int32_t GROW_EXTRA; // extra amount for growth. Must be >= 0
-
-    static const UChar CATEGORY_NAMES[];
-
     /**
      * A cache mapping character category integers, as returned by
      * Unicode::getType(), to pairs strings.  Entries are initially
      * zero length and are filled in on demand.
      */
     static UnicodeSet* CATEGORY_CACHE;
-
-    /**
-     * Delimiter string used in patterns to close a category reference:
-     * ":]".  Example: "[:Lu:]".
-     */
-    static const UChar CATEGORY_CLOSE[];
-
-    // More special characters...
-    static const UChar SET_OPEN;
-    static const UChar SET_CLOSE;
-    static const UChar HYPHEN;
-    static const UChar COMPLEMENT;
-    static const UChar COLON;
-    static const UChar BACKSLASH;
-    static const UChar INTERSECTION;
-    static const UChar UPPER_U;
 
 public:
 
@@ -793,8 +772,6 @@ private:
     void ensureBufferCapacity(int32_t newLen);
 
     void swapBuffers(void);
-
-    static const UChar HEX[16];
 
     void _applyPattern(const UnicodeString& pattern,
                        ParsePosition& pos,
