@@ -100,7 +100,7 @@ SBCSOpen() {
     return &sbcsData->newConverter;
 }
 
-void
+static void
 SBCSClose(NewConverter *cnvData) {
     SBCSData *sbcsData=(SBCSData *)cnvData;
     if(sbcsData!=NULL) {
@@ -116,7 +116,7 @@ SBCSClose(NewConverter *cnvData) {
     }
 }
 
-UBool
+static UBool
 SBCSAddToUnicode(NewConverter *cnvData,
                  const uint8_t *bytes, int32_t length,
                  UChar32 c, uint32_t b,
@@ -155,7 +155,7 @@ SBCSAddToUnicode(NewConverter *cnvData,
     return TRUE;
 }
 
-UBool
+static UBool
 SBCSAddFromUnicode(NewConverter *cnvData,
                    const uint8_t *bytes, int32_t length,
                    UChar32 c, uint32_t b,
@@ -194,7 +194,7 @@ SBCSAddFromUnicode(NewConverter *cnvData,
     return TRUE;
 }
 
-void
+static void
 SBCSFinishMappings(NewConverter *cnvData, const UConverterStaticData *staticData) {
     SBCSData *sbcsData=(SBCSData *)cnvData;
     if(staticData->hasFromUnicodeFallback) {
@@ -203,7 +203,7 @@ SBCSFinishMappings(NewConverter *cnvData, const UConverterStaticData *staticData
     ucmp8_compact(&sbcsData->table.fromUnicode, 1);
 }
 
-uint32_t
+static uint32_t
 SBCSWrite(NewConverter *cnvData, const UConverterStaticData *staticData, UNewDataMemory *pData) {
     SBCSData *sbcsData=(SBCSData *)cnvData;
     uint32_t size=0;
@@ -298,7 +298,7 @@ EBCDICStatefulOpen() {
     return &dbcsData->newConverter;
 }
 
-void
+static void
 DBCSClose(NewConverter *cnvData) {
     DBCSData *dbcsData=(DBCSData *)cnvData;
     if(dbcsData!=NULL) {
@@ -310,7 +310,7 @@ DBCSClose(NewConverter *cnvData) {
     }
 }
 
-UBool
+static UBool
 DBCSAddToUnicode(NewConverter *cnvData,
                  const uint8_t *bytes, int32_t length,
                  UChar32 c, uint32_t b,
@@ -356,7 +356,7 @@ DBCSAddToUnicode(NewConverter *cnvData,
     return TRUE;
 }
 
-UBool
+static UBool
 DBCSAddFromUnicode(NewConverter *cnvData,
                    const uint8_t *bytes, int32_t length,
                    UChar32 c, uint32_t b,
@@ -402,7 +402,7 @@ DBCSAddFromUnicode(NewConverter *cnvData,
     return TRUE;
 }
 
-void
+static void
 DBCSFinishMappings(NewConverter *cnvData, const UConverterStaticData *staticData) {
     DBCSData *dbcsData=(DBCSData *)cnvData;
     ucmp16_compact(&dbcsData->table.fromUnicode);
@@ -415,7 +415,7 @@ DBCSFinishMappings(NewConverter *cnvData, const UConverterStaticData *staticData
     }
 }
 
-uint32_t
+static uint32_t
 DBCSWrite(NewConverter *cnvData, const UConverterStaticData *staticData, UNewDataMemory *pData) {
     DBCSData *dbcsData=(DBCSData *)cnvData;
     uint32_t size=0;
