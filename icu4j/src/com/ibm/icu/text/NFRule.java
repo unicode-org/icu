@@ -444,7 +444,7 @@ final class NFRule {
      * Sets the rule's base value, and causes the radix and exponent
      * to be recalculated.  This is used during construction when we
      * don't know the rule's base value until after it's been
-     * constructed.  It should be used at any other time.
+     * constructed.  It should not be used at any other time.
      * @param The new base value for the rule.
      */
     public final void setBaseValue(long newBaseValue) {

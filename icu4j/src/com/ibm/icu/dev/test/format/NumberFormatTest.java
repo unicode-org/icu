@@ -951,11 +951,13 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             String pat=DATA[i];
             boolean valid = pat.charAt(0) == '+';
             pat = pat.substring(2);
-            IllegalArgumentException e = null;
+            Exception e = null;
             try {
                 // locale doesn't matter here
                 new DecimalFormat(pat);
             } catch (IllegalArgumentException e1) {
+                e = e1;
+            } catch (IndexOutOfBoundsException e1) {
                 e = e1;
             }
             String msg = (e==null) ? "success" : e.getMessage();

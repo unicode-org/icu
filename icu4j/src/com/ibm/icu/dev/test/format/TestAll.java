@@ -33,6 +33,7 @@ public class TestAll extends TestGroup {
             super(new String[] {
                 "RbnfTest",
                 "RbnfRoundTripTest",
+		"RBNFParseTest",
             });
         }
     }
