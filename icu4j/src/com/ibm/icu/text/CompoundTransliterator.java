@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/CompoundTransliterator.java,v $ 
- * $Date: 2001/11/19 19:52:51 $ 
- * $Revision: 1.20 $
+ * $Date: 2001/11/21 00:00:54 $ 
+ * $Revision: 1.21 $
  *
  *****************************************************************************************
  */
@@ -30,7 +30,7 @@ import java.util.Vector;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: CompoundTransliterator.java,v $ $Revision: 1.20 $ $Date: 2001/11/19 19:52:51 $
+ * @version $RCSfile: CompoundTransliterator.java,v $ $Revision: 1.21 $ $Date: 2001/11/21 00:00:54 $
  */
 public class CompoundTransliterator extends Transliterator {
 
@@ -383,26 +383,29 @@ public class CompoundTransliterator extends Transliterator {
         // operation.
         int compoundStart = index.start;
 
-        // Rollback may be required.  Consider a compound
-        // transliterator with two or more transliterators in it.  For
-        // discussion purposes, assume that the first transliterator
-        // processes the '^' character in conjunction with other
-        // characters, and when it sees an isolated '^' it deletes it.
-        // Suppose the second transliterator generated '^' characters
-        // and backs up before them as part of its processing.  During
-        // incremental transliteration, if there is a partial match in
-        // the second transliterator, it may exit leaving an
-        // intermediate '^'.  The next call into the compound
-        // transliterator's handleTransliterate() method will pass
-        // this partially processed text to the first transliterator,
-        // which will see the isolated '^' and delete it.
-        boolean performRollback = incremental && trans.length >= 2;
+        boolean performRollback = false;
         boolean doRollback = false;
         int rollbackCopy = 0;
-        if (performRollback) {
-            // Make a rollback copy at the end of the string
-            rollbackCopy = text.length();
-            text.copy(compoundStart, compoundLimit, rollbackCopy);
+        if (ROLLBACK) {
+            // Rollback may be required.  Consider a compound
+            // transliterator with two or more transliterators in it.  For
+            // discussion purposes, assume that the first transliterator
+            // processes the '^' character in conjunction with other
+            // characters, and when it sees an isolated '^' it deletes it.
+            // Suppose the second transliterator generated '^' characters
+            // and backs up before them as part of its processing.  During
+            // incremental transliteration, if there is a partial match in
+            // the second transliterator, it may exit leaving an
+            // intermediate '^'.  The next call into the compound
+            // transliterator's handleTransliterate() method will pass
+            // this partially processed text to the first transliterator,
+            // which will see the isolated '^' and delete it.
+            performRollback = incremental && trans.length >= 2;
+            if (performRollback) {
+                // Make a rollback copy at the end of the string
+                rollbackCopy = text.length();
+                text.copy(compoundStart, compoundLimit, rollbackCopy);
+            }
         }
 
         int delta = 0; // delta in length
@@ -419,13 +422,15 @@ public class CompoundTransliterator extends Transliterator {
             delta += index.limit - limit;
 
             if (incremental) {
-                // If one component transliterator does not complete,
-                // then roll everything back and return.  It's okay if
-                // component zero doesn't complete since it gets
-                // called again first.
-                if (index.start < index.limit && i > 0) {
-                    doRollback = true;
-                    break;
+                if (ROLLBACK) {
+                    // If one component transliterator does not complete,
+                    // then roll everything back and return.  It's okay if
+                    // component zero doesn't complete since it gets
+                    // called again first.
+                    if (index.start < index.limit && i > 0) {
+                        doRollback = true;
+                        break;
+                    }
                 }
 
                 // In the incremental case, only allow subsequent
@@ -438,33 +443,37 @@ public class CompoundTransliterator extends Transliterator {
         }
 
         compoundLimit += delta;
-        rollbackCopy += delta;
+        if (ROLLBACK) {
+            rollbackCopy += delta;
+        }
 
-        if (doRollback) {
-            // Replace [rollbackStart, limit) -- this is the
-            // original filtered segment -- with
-            // [rollbackCopy, text.length()), the rollback
-            // copy, then delete the rollback copy.
-            int rollbackLen = text.length() - rollbackCopy;
+        if (ROLLBACK) {
+            if (doRollback) {
+                // Replace [rollbackStart, limit) -- this is the
+                // original filtered segment -- with
+                // [rollbackCopy, text.length()), the rollback
+                // copy, then delete the rollback copy.
+                int rollbackLen = text.length() - rollbackCopy;
 
-            // Delete the partially transliterated segment
-            text.replace(compoundStart, compoundLimit, "");
-            rollbackCopy -= compoundLimit - compoundStart;
+                // Delete the partially transliterated segment
+                text.replace(compoundStart, compoundLimit, "");
+                rollbackCopy -= compoundLimit - compoundStart;
 
-            // Copy the rollback copy back
-            text.copy(rollbackCopy, text.length(), compoundStart);
+                // Copy the rollback copy back
+                text.copy(rollbackCopy, text.length(), compoundStart);
 
-            // Delete the rollback copy
-            rollbackCopy += rollbackLen;
-            text.replace(rollbackCopy, text.length(), "");
+                // Delete the rollback copy
+                rollbackCopy += rollbackLen;
+                text.replace(rollbackCopy, text.length(), "");
 
-            // Restore indices
-            index.start = compoundStart;
-            compoundLimit -= delta;
-            index.contextLimit -= delta;
-        } else if (performRollback) {
-            // Delete the rollback copy
-            text.replace(rollbackCopy, text.length(), "");
+                // Restore indices
+                index.start = compoundStart;
+                compoundLimit -= delta;
+                index.contextLimit -= delta;
+            } else if (performRollback) {
+                // Delete the rollback copy
+                text.replace(rollbackCopy, text.length(), "");
+            }
         }
 
         // Start is good where it is -- where the last transliterator left
