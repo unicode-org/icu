@@ -211,7 +211,6 @@ typedef void* UClassID;
  * The ICU is separated into two libraries.
  */
 
-
 #ifdef U_COMMON_IMPLEMENTATION
 #define U_COMMON_API  U_EXPORT
 #define U_I18N_API    U_IMPORT
@@ -229,6 +228,16 @@ typedef void* UClassID;
 #define U_I18N_API    U_IMPORT
 #define U_LAYOUT_API  U_IMPORT
 #endif
+
+/**
+ * Control of C++ Namespace
+ */
+#ifdef __cplusplus
+#define U_STANDARD_CPP_NAMESPACE        ::
+#else
+#define U_STANDARD_CPP_NAMESPACE
+#endif
+
 /*===========================================================================*/
 /* UErrorCode */
 /*===========================================================================*/
