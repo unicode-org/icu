@@ -1,3 +1,11 @@
+/*
+ *******************************************************************************
+ * Copyright (C) 2004, International Business Machines Corporation and         *
+ * others. All Rights Reserved.                                                *
+ *******************************************************************************
+ *
+ */
+
 package com.ibm.icu.dev.tool.docs;
 
 import java.io.*;

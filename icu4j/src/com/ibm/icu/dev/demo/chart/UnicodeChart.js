@@ -1,3 +1,8 @@
+//**************************************************************************
+// Copyright (C) 1997-2004, International Business Machines Corporation and
+// others. All Rights Reserved.
+//**************************************************************************
+
 var columnBits = 8;	// 8
 
 var columnCount = Math.pow(2,columnBits);

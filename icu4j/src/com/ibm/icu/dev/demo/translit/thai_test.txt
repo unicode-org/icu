@@ -1,4 +1,8 @@
-﻿@UPPERFILTER@
+﻿#--------------------------------------------------------------------
+# Copyright (c) 1999-2004, International Business Machines
+# Corporation and others. All Rights Reserved.
+#--------------------------------------------------------------------
+@UPPERFILTER@
 Unicode คืออะไร?
 Unicode กำหนดหมายเลขเฉพาะสำหรับทุกอักขระ
 โดยไม่สนใจว่าเป็นแพล็ตฟอร์มใด
