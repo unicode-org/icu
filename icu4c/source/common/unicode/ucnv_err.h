@@ -167,7 +167,7 @@ typedef struct {
  * @stable ICU 2.0
  */
 typedef struct {
-    uint16_t size;              /**< The size of this struct    */
+    uint16_t size;              /**< The size of this struct   @stable ICU 2.0 */
     UBool flush;                /**< The internal state of converter will be reset and data flushed if set to TRUE. @stable ICU 2.0   */
     UConverter *converter;      /**< Pointer to the converter that is opened and to which this struct is passed as an argument. @stable ICU 2.0 */
     const char *source;         /**< Pointer to the source source buffer. @stable ICU 2.0    */
