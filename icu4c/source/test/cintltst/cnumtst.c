@@ -34,13 +34,15 @@
 
 void addNumForTest(TestNode** root);
 
+#define TESTCASE(x) addTest(root, &x, "tsformat/cnumtst/" #x)
+
 void addNumForTest(TestNode** root)
 {
-    addTest(root, &TestNumberFormat, "tsformat/cnumtst/TestNumberFormat");
-    addTest(root, &TestSignificantDigits, "tsformat/cnumtst/TestSignificantDigits");
-    addTest(root, &TestNumberFormatPadding, "tsformat/cnumtst/TestNumberFormatPadding");
-    addTest(root, &TestInt64Format, "tsformat/cnumtst/TestInt64Format");
-    addTest(root, &TestRBNFFormat, "tsformat/cnumtst/TestRBNFFormat");
+    TESTCASE(TestNumberFormat);
+    TESTCASE(TestSignificantDigits);
+    TESTCASE(TestNumberFormatPadding);
+    TESTCASE(TestInt64Format);
+    TESTCASE(TestRBNFFormat);
 }
 
 /** copy src to dst with unicode-escapes for values < 0x20 and > 0x7e, null terminate if possible */
@@ -1241,6 +1243,5 @@ static void TestRBNFFormat() {
         unum_close(formats[i]);
     }
 }
-
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
