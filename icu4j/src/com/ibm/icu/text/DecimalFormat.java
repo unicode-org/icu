@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/DecimalFormat.java,v $ 
- * $Date: 2003/06/06 21:09:43 $ 
- * $Revision: 1.35 $
+ * $Date: 2003/09/12 10:31:16 $ 
+ * $Revision: 1.36 $
  *
  *****************************************************************************************
  */
@@ -3332,7 +3332,7 @@ public class DecimalFormat extends NumberFormat {
             (negPrefixPattern.equals(posPrefixPattern)
              && negSuffixPattern.equals(posSuffixPattern))) {
             negSuffixPattern = posSuffixPattern;
-            negPrefixPattern = symbols.getMinusSign() + posPrefixPattern;
+            negPrefixPattern = PATTERN_MINUS + posPrefixPattern;
         }
         /*Bug 4212072
           Update the affix strings accroding to symbols in order to keep
