@@ -1,6 +1,7 @@
 package com.ibm.test.translit;
 import com.ibm.text.UCharacter;
 import com.ibm.text.UCharacterCategory;
+import com.ibm.text.*;
 
 public final class TestUtility {
 
@@ -37,6 +38,20 @@ public final class TestUtility {
 	            i += len - 1; // minus one, since we will increment
 	        } else {
 	            results.append(source.charAt(i));
+	        }
+	    }
+	    return results.toString();
+	}
+	
+	public static String replaceAll(String source, UnicodeSet set, String replacement) {
+	    StringBuffer results = new StringBuffer();
+	    int cp;
+	    for (int i = 0; i < source.length(); i += UTF16.getCharCount(cp)) {
+	        cp = UTF16.charAt(source,i);
+	        if (set.contains(cp)) {
+	            results.append(replacement);
+	        } else {
+	            UTF16.append(results, cp);
 	        }
 	    }
 	    return results.toString();
