@@ -154,14 +154,10 @@ getFoldingNormOffset(uint32_t norm32) {
     }
 }
 
-/* auxTrie: if bit 31 is set, then the folding offset is in bits 29..20 of the 32-bit trie result */
+/* auxTrie: the folding offset is in bits 9..0 of the 16-bit trie result */
 static int32_t U_CALLCONV
 getFoldingAuxOffset(uint32_t data) {
-    if((int32_t)data<0) {
-        return (int32_t)(data&_NORM_AUX_FNC_MASK)>>(_NORM_AUX_FNC_SHIFT-UTRIE_SURROGATE_BLOCK_BITS);
-    } else {
-        return 0;
-    }
+    return (int32_t)(data&_NORM_AUX_FNC_MASK)<<UTRIE_SURROGATE_BLOCK_BITS;
 }
 
 static UBool U_CALLCONV
@@ -543,10 +539,10 @@ U_CAPI UBool U_EXPORT2
 unorm_internalIsFullCompositionExclusion(UChar32 c) {
     UErrorCode errorCode=U_ZERO_ERROR;
     if(_haveData(errorCode) && formatVersion_2_1) {
-        uint32_t aux32;
+        uint16_t aux;
 
-        UTRIE_GET32(&auxTrie, c, aux32);
-        return (UBool)((aux32&_NORM_AUX_COMP_EX_MASK)!=0);
+        UTRIE_GET16(&auxTrie, c, aux);
+        return (UBool)((aux&_NORM_AUX_COMP_EX_MASK)!=0);
     } else {
         return FALSE;
     }
@@ -556,10 +552,10 @@ U_CAPI UBool U_EXPORT2
 unorm_isCanonSafeStart(UChar32 c) {
     UErrorCode errorCode=U_ZERO_ERROR;
     if(_haveData(errorCode) && formatVersion_2_1) {
-        uint32_t aux32;
+        uint16_t aux;
 
-        UTRIE_GET32(&auxTrie, c, aux32);
-        return (UBool)((aux32&_NORM_AUX_UNSAFE_MASK)==0);
+        UTRIE_GET16(&auxTrie, c, aux);
+        return (UBool)((aux&_NORM_AUX_UNSAFE_MASK)==0);
     } else {
         return FALSE;
     }
@@ -568,18 +564,94 @@ unorm_isCanonSafeStart(UChar32 c) {
 U_CAPI UBool U_EXPORT2
 unorm_getCanonStartSet(UChar32 c, USerializedSet *fillSet) {
     UErrorCode errorCode=U_ZERO_ERROR;
-    if(fillSet!=NULL && _haveData(errorCode) && canonStartSets!=NULL) {
-        uint32_t aux32;
+    if( fillSet!=NULL && (uint32_t)c<=0x10ffff &&
+        _haveData(errorCode) && canonStartSets!=NULL
+    ) {
+        const uint16_t *table;
+        int32_t i, start, limit;
 
-        UTRIE_GET32(&auxTrie, c, aux32);
-        aux32&=_NORM_AUX_CANON_SET_MASK;
-        return aux32!=0 &&
-            uset_getSerializedSet(fillSet,
-                                canonStartSets+aux32,
-                                indexes[_NORM_INDEX_CANON_SET_COUNT]-aux32);
-    } else {
-        return FALSE;
+        /*
+         * binary search for c
+         *
+         * There are two search tables,
+         * one for BMP code points and one for supplementary ones.
+         * See unormimp.h for details.
+         */
+        if(c<=0xffff) {
+            table=canonStartSets+canonStartSets[_NORM_SET_INDEX_CANON_SETS_LENGTH];
+            start=0;
+            limit=canonStartSets[_NORM_SET_INDEX_CANON_BMP_TABLE_LENGTH];
+
+            /* each entry is a pair { c, result } */
+            while(start<limit-2) {
+                i=(uint16_t)(((start+limit)/4)*2); /* (start+limit)/2 and address pairs */
+                if(c<table[i]) {
+                    limit=i;
+                } else {
+                    start=i;
+                }
+            }
+
+            /* found? */
+            if(c==table[start]) {
+                i=table[start+1];
+                if((i&_NORM_CANON_SET_BMP_MASK)==_NORM_CANON_SET_BMP_IS_INDEX) {
+                    /* result 01xxxxxx xxxxxx contains index x to a USerializedSet */
+                    i&=(_NORM_MAX_CANON_SETS-1);
+                    return uset_getSerializedSet(fillSet,
+                                            canonStartSets+i,
+                                            canonStartSets[_NORM_SET_INDEX_CANON_SETS_LENGTH]-i);
+                } else {
+                    /* other result values are BMP code points for single-code point sets */
+                    uset_setSerializedToOne(fillSet, (UChar32)i);
+                    return TRUE;
+                }
+            }
+        } else {
+            uint16_t high, low, h;
+
+            table=canonStartSets+canonStartSets[_NORM_SET_INDEX_CANON_SETS_LENGTH]+
+                                 canonStartSets[_NORM_SET_INDEX_CANON_BMP_TABLE_LENGTH];
+            start=0;
+            limit=canonStartSets[_NORM_SET_INDEX_CANON_SUPP_TABLE_LENGTH];
+
+            high=(uint16_t)(c>>16);
+            low=(uint16_t)c;
+
+            /* each entry is a triplet { high(c), low(c), result } */
+            while(start<limit-3) {
+                i=(uint16_t)(((start+limit)/6)*3); /* (start+limit)/2 and address triplets */
+                h=table[i]&0x1f; /* high word */
+                if(high<h || (high==h && low<table[i+1])) {
+                    limit=i;
+                } else {
+                    start=i;
+                }
+            }
+
+            /* found? */
+            h=table[start];
+            if(high==(h&0x1f) && low==table[start+1]) {
+                i=table[start+2];
+                if((h&0x8000)==0) {
+                    /* the result is an index to a USerializedSet */
+                    return uset_getSerializedSet(fillSet,
+                                            canonStartSets+i,
+                                            canonStartSets[_NORM_SET_INDEX_CANON_SETS_LENGTH]-i);
+                } else {
+                    /*
+                     * single-code point set {x} in
+                     * triplet { 100xxxxx 000hhhhh  llllllll llllllll  xxxxxxxx xxxxxxxx }
+                     */
+                    i|=((int32_t)h&0x1f00)<<8; /* add high bits from high(c) */
+                    uset_setSerializedToOne(fillSet, (UChar32)i);
+                    return TRUE;
+                }
+            }
+        }
     }
+
+    return FALSE; /* not found */
 }
 
 /* reorder UTF-16 in-place -------------------------------------------------- */

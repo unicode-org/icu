@@ -74,20 +74,33 @@ enum {
 
 /* value constants for auxTrie */
 enum {
-    _NORM_AUX_UNSAFE_SHIFT=14,
-    _NORM_AUX_FNC_SHIFT=20,
-    _NORM_AUX_COMP_EX_SHIFT=30,
-    _NORM_AUX_IS_LEAD_SHIFT=31
+    _NORM_AUX_COMP_EX_SHIFT=10,
+    _NORM_AUX_UNSAFE_SHIFT=11
 };
 
-#define _NORM_AUX_MAX_CANON_SET     ((uint32_t)1<<_NORM_AUX_UNSAFE_SHIFT)
-#define _NORM_AUX_MAX_FNC           ((int32_t)1<<(_NORM_AUX_COMP_EX_SHIFT-_NORM_AUX_FNC_SHIFT))
+#define _NORM_AUX_MAX_FNC           ((int32_t)1<<_NORM_AUX_COMP_EX_SHIFT)
 
-#define _NORM_AUX_CANON_SET_MASK    (_NORM_AUX_MAX_CANON_SET-1)
-#define _NORM_AUX_UNSAFE_MASK       ((uint32_t)1<<_NORM_AUX_UNSAFE_SHIFT)
-#define _NORM_AUX_FNC_MASK          ((uint32_t)(_NORM_AUX_MAX_FNC-1)<<_NORM_AUX_FNC_SHIFT)
+#define _NORM_AUX_FNC_MASK          (uint32_t)(_NORM_AUX_MAX_FNC-1)
 #define _NORM_AUX_COMP_EX_MASK      ((uint32_t)1<<_NORM_AUX_COMP_EX_SHIFT)
-#define _NORM_AUX_IS_LEAD_MASK      ((uint32_t)1<<_NORM_AUX_IS_LEAD_SHIFT)
+#define _NORM_AUX_UNSAFE_MASK       ((uint32_t)1<<_NORM_AUX_UNSAFE_SHIFT)
+
+/* canonStartSets[0..31] contains indexes for what is in the array */
+enum {
+    _NORM_SET_INDEX_CANON_SETS_LENGTH,  /* number of uint16_t in canonical starter sets */
+    _NORM_SET_INDEX_CANON_BMP_TABLE_LENGTH, /* number of uint16_t in the BMP search table (contains pairs) */
+    _NORM_SET_INDEX_CANON_SUPP_TABLE_LENGTH,/* number of uint16_t in the supplementary search table (contains triplets) */
+
+    _NORM_SET_INDEX_TOP=32              /* changing this requires a new formatVersion */
+};
+
+/* more constants for canonical starter sets */
+
+/* 14 bit indexes to canonical USerializedSets */
+#define _NORM_MAX_CANON_SETS            0x4000
+
+/* single-code point BMP sets are encoded directly in the search table except if result=0x4000..0x7fff */
+#define _NORM_CANON_SET_BMP_MASK        0xc000
+#define _NORM_CANON_SET_BMP_IS_INDEX    0x4000
 
 /* indexes[] value names */
 enum {
@@ -298,7 +311,7 @@ unorm_getCanonStartSet(UChar32 c, USerializedSet *fillSet);
  * UTrie auxTrie;                               -- size in bytes=indexes[_NORM_INDEX_AUX_TRIE_SIZE]
  *
  * uint16_t canonStartSets[canonStartSetsTop]   -- canonStartSetsTop=indexes[_NORM_INDEX_CANON_SET_COUNT]
- *                                                 serialized USets, see uset.c
+ *                                                 serialized USets and binary search tables, see below
  *
  *
  * The indexes array contains lengths and sizes of the following arrays and structures
@@ -470,19 +483,14 @@ unorm_getCanonStartSet(UChar32 c, USerializedSet *fillSet);
  *
  * - Auxiliary trie and data
  *
- * The auxiliary 32-bit trie contains data for additional properties.
+ * The auxiliary 16-bit trie contains data for additional properties.
  * Bits
- *     31   set if lead surrogate offset
- *     30   composition exclusion
- * 29..20   index into extraData[] to FC_NFKC_Closure string (bit 31==0),
- *          or lead surrogate offset (bit 31==1)
- * 19..16   skippable flags
- *     15   reserved
- *     14   flag: not a safe starter for canonical closure
- * 13.. 0   index to serialized USet for canonical closure
- *            the set lists the code points whose decompositions start with
- *            the one that this data is for
- *          for how USets are serialized see uset.c
+ * 15..12   reserved (for skippable flags, see NormalizerTransliterator)
+ *     11   flag: not a safe starter for canonical closure
+ *     10   composition exclusion
+ *  9.. 0   index into extraData[] to FC_NFKC_Closure string
+ *          (not for lead surrogate),
+ *          or lead surrogate offset (for lead surrogate, if 9..0 not zero)
  *
  * - FC_NFKC_Closure strings in extraData[]
  *
@@ -497,6 +505,42 @@ unorm_getCanonStartSet(UChar32 c, USerializedSet *fillSet);
  *     length=*s&0xff;
  *     ++s;
  *   }
+ *
+ *
+ * - structure inside canonStartSets[]
+ *
+ * This array maps from code points c to sets of code points (USerializedSet).
+ * The result sets are the code points whose canonical decompositions start
+ * with c.
+ *
+ * canonStartSets[] contains the following sub-arrays:
+ *
+ * indexes[_NORM_SET_INDEX_TOP]
+ *   - contains lengths of sub-arrays etc.
+ *
+ * startSets[indexes[_NORM_SET_INDEX_CANON_SETS_LENGTH]-_NORM_SET_INDEX_TOP]
+ *   - contains serialized sets (USerializedSet) of canonical starters for
+ *     enumerating canonically equivalent strings
+ *     indexes[_NORM_SET_INDEX_CANON_SETS_LENGTH] includes _NORM_SET_INDEX_TOP
+ *     for details about the structure see uset.c
+ *
+ * bmpTable[indexes[_NORM_SET_INDEX_CANON_BMP_TABLE_LENGTH]]
+ *   - a sorted search table for BMP code points whose results are
+ *     either indexes to USerializedSets or single code points for
+ *     single-code point sets;
+ *     each entry is a pair of { code point, result } with result=(binary) yy xxxxxx xxxxxxxx
+ *     if yy==01 then there is a USerializedSet at canonStartSets+x
+ *     else build a USerializedSet with result as the single code point
+ *
+ * suppTable[indexes[_NORM_SET_INDEX_CANON_SUPP_TABLE_LENGTH]]
+ *   - a sorted search table for supplementary code points whose results are
+ *     either indexes to USerializedSets or single code points for
+ *     single-code point sets;
+ *     each entry is a triplet of { high16(cp), low16(cp), result }
+ *     each code point's high-word may contain extra data in bits 15..5:
+ *     if the high word has bit 15 set, then build a set with a single code point
+ *     which is (((high16(cp)&0x1f00)<<8)|result;
+ *     else there is a USerializedSet at canonStartSets+result
  */
 
 #endif
