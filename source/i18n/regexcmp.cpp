@@ -153,8 +153,6 @@ RegexCompile::RegexCompile(UErrorCode &status) : fParenStack(status)
     fCharNum        = 0;
     fQuoteMode      = FALSE;
     fFreeForm       = FALSE;
-    fMatcherDataEnd = 0;
-    fBackRefMax     = 0;
 
     fMatchOpenParen  = -1;
     fMatchCloseParen = -1;
@@ -738,27 +736,55 @@ UBool RegexCompile::doParseActions(EParseAction action)
     case doStar:
         // Normal (greedy) * quantifier.
         // Compiles to
-        //       1.   STATE_SAVE   3
+        //       1.   STATE_SAVE   4
         //       2.      body of stuff being iterated over
         //       3.   JMP  1
         //       4.   ...
         //
+        // Or, if the body can match a zero-length string, to inhibit infinite loops,
+        //       1.   STATE_SAVE   6
+        //       2.   POS_SAVE     data-loc
+        //       3.      body of stuff
+        //       4.   JMPX    1
+        //       5            data-loc   (extra operand of JMPX)
+        //       6.   ...
         {
             // location of item #1, the STATE_SAVE
             int32_t   saveStateLoc = blockTopLoc(TRUE);
+            int32_t   dataLoc = -1;
 
+            if (possibleNullMatch(saveStateLoc, fRXPat->fCompiledPat->size()-1)) {
+                insertOp(saveStateLoc);
+                dataLoc =  fRXPat->fFrameSize;
+                fRXPat->fFrameSize++;
+
+                int32_t op = URX_BUILD(URX_STO_INP_LOC, dataLoc);
+                fRXPat->fCompiledPat->setElementAt(op, saveStateLoc+1);
+            }
+                
             // Locate the position in the compiled pattern where the match will continue
             //   after completing the *.   (4 in the comment above)
             int32_t continueLoc = fRXPat->fCompiledPat->size()+1;
+            if (dataLoc != -1) {
+                continueLoc++;
+            }
 
             // Put together the save state op store it into the compiled code.
             int32_t saveStateOp = URX_BUILD(URX_STATE_SAVE, continueLoc);
             fRXPat->fCompiledPat->setElementAt(saveStateOp, saveStateLoc);
 
-            // Append the URX_JMP operation to the compiled pattern.  Its target
+            // Append the URX_JMP or URX_JMPX operation to the compiled pattern.  Its target
             // is the locaton of the state-save, above.
-            int32_t jmpOp = URX_BUILD(URX_JMP, saveStateLoc);
-            fRXPat->fCompiledPat->addElement(jmpOp, *fStatus);
+            if (dataLoc == -1) {
+                int32_t jmpOp = URX_BUILD(URX_JMP, saveStateLoc);
+                fRXPat->fCompiledPat->addElement(jmpOp, *fStatus);
+            } else {
+                int32_t op = URX_BUILD(URX_JMPX, saveStateLoc);
+                fRXPat->fCompiledPat->addElement(op, *fStatus);
+                op = URX_BUILD(URX_RESERVED_OP, dataLoc);
+                fRXPat->fCompiledPat->addElement(op, *fStatus);
+            }
+
         }
         break;
 
@@ -963,11 +989,12 @@ UBool RegexCompile::doParseActions(EParseAction action)
 
             for (;;) {
                 // Loop once per digit, for max allowed number of digits in a back reference.
-                groupNum = groupNum * 10 + u_charDigitValue(c);
+                int32_t digit = u_charDigitValue(c);
+                groupNum = groupNum * 10 + digit;
                 if (groupNum >= numCaptureGroups) {
                     break;
                 }
-                UChar32 c = peekCharLL();
+                c = peekCharLL();
                 if (gRuleDigits->contains(c) == FALSE) {
                     break;
                 }
@@ -1284,8 +1311,11 @@ void   RegexCompile::insertOp(int32_t where) {
         int32_t opType = URX_TYPE(op);
         int32_t opValue = URX_VAL(op);
         if ((opType == URX_JMP         ||
+            opType == URX_JMPX         ||
             opType == URX_STATE_SAVE   ||
             opType == URX_CTR_LOOP     ||
+            opType == URX_CTR_LOOP_NG  ||
+            opType == URX_CTR_LOOP_P   ||
             opType == URX_RELOC_OPRND)    && opValue > where) {
             // Target location for this opcode is after the insertion point and
             //   needs to be incremented to adjust for the insertion.
@@ -1541,6 +1571,20 @@ void        RegexCompile::compileInterval(int32_t InitOp,  int32_t LoopOp)
 
 }
 
+//----------------------------------------------------------------------------------------
+//
+//  possibleNullMatch    Test a range of compiled pattern for the possibility that it
+//                       might match an empty string.  Used to control the generation
+//                       of extra checking code to prevent infinite loops in the match
+//                       engine on repeated empty matches, such as might happen with
+//                            (x?)*
+//                       when the input string is not at an x.
+//
+//----------------------------------------------------------------------------------------
+UBool  RegexCompile::possibleNullMatch(int32_t start, int32_t end) {
+    // for now, just return true.  TODO:  make a real implementation
+    return TRUE;
+}
 
 
 //----------------------------------------------------------------------------------------
