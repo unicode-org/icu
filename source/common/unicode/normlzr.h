@@ -6,12 +6,26 @@
  ********************************************************************
  */
 
+/*
+* Modification history
+* 
+* Date      Name      Description
+* 02/02/01  synwee    Added converters from EMode to UNormalizationMode, 
+*                     getUNormalizationMode and getNormalizerEMode,
+*                     useful in tbcoll and unorm.
+*                     Added quickcheck method and incorporated it into 
+*                     normalize()
+*                     Removed hard coded on EMode to UNormalizationMode 
+*                     conversion
+*/
+
 #ifndef NORMLZR_H
 #define NORMLZR_H
 
 #include "unicode/utypes.h"
 #include "unicode/unistr.h"
 #include "unicode/chariter.h"
+#include "unicode/unorm.h"
 
 /* forward declaration */
 class ComposedCharIter;
@@ -445,6 +459,65 @@ class U_COMMON_API Normalizer
             UnicodeString& result, 
             UErrorCode &status);
 
+  /**
+  * Converts C's Normalizer::EMode to UNormalizationMode
+  * @param mode member of the enum Normalizer::EMode
+  * @param status error codes status
+  * @return UNormalizationMode equivalent of Normalizer::EMode
+  */
+  inline static UNormalizationMode getUNormalizationMode(EMode mode, 
+                                                  UErrorCode& status);
+
+  /**
+  * Converts C++'s UNormalizationMode to Normalizer::EMode
+  * @param mode member of the enum UNormalizationMode
+  * @param status error codes status
+  * @return Normalizer::EMode equivalent of UNormalizationMode
+  */
+  inline static EMode getNormalizerEMode(UNormalizationMode mode, 
+                                         UErrorCode& status);
+
+  /**
+  * Performing quick check on a string, to quickly determine if the string is 
+  * in a particular normalization format.
+  * Three types of result can be returned UQUICK_CHECK_YES, UQUICK_CHECK_NO or
+  * UQUICK_CHECK_MAYBE. Result UQUICK_CHECK_YES indicates that the argument
+  * string is in the desired normalized format, UQUICK_CHECK_NO determines that
+  * argument string is not in the desired normalized format. A 
+  * UQUICK_CHECK_MAYBE result indicates that a more thorough check is required, 
+  * the user may have to put the string in its normalized form and compare the 
+  * results.
+  * @param source       string for determining if it is in a normalized format
+  * @paran mode         normalization format
+  * @param status A pointer to an UErrorCode to receive any errors
+  * @return UQUICK_CHECK_YES, UQUICK_CHECK_NO or UQUICK_CHECK_MAYBE
+  */
+  static UQUICK_CHECK_VALUES
+  quickCheck(const UnicodeString& source,
+             EMode                mode, 
+             UErrorCode&          status);
+
+  /**
+  * Performing quick check on a string, to quickly determine if the string is 
+  * in a particular normalization format.
+  * Three types of result can be returned UQUICK_CHECK_YES, UQUICK_CHECK_NO or
+  * UQUICK_CHECK_MAYBE. Result UQUICK_CHECK_YES indicates that the argument
+  * string is in the desired normalized format, UQUICK_CHECK_NO determines that
+  * argument string is not in the desired normalized format. A 
+  * UQUICK_CHECK_MAYBE result indicates that a more thorough check is required, 
+  * the user may have to put the string in its normalized form and compare the 
+  * results.
+  * @param source string for determining if it is in a normalized format
+  * @paran mode normalization format
+  * @param options the optional features to be enabled.
+  * @param status A pointer to an UErrorCode to receive any errors
+  * @return UQUICK_CHECK_YES, UQUICK_CHECK_NO or UQUICK_CHECK_MAYBE
+  */
+  static UQUICK_CHECK_VALUES
+  quickCheckWithOption(const UnicodeString& source,
+                       EMode                mode, 
+                       int32_t              options,
+                       UErrorCode&          status);
 
   //-------------------------------------------------------------------------
   // CharacterIterator overrides
@@ -784,5 +857,53 @@ private:
 inline UBool
 Normalizer::operator!= (const Normalizer& other) const
 { return ! operator==(other); }
+
+inline UNormalizationMode Normalizer::getUNormalizationMode(
+                                   Normalizer::EMode  mode, UErrorCode &status)
+{
+  if (U_SUCCESS(status))
+  { 
+    switch (mode)
+    {
+    case Normalizer::NO_OP : 
+      return UCOL_NO_NORMALIZATION;
+    case Normalizer::COMPOSE :
+      return UCOL_DECOMP_CAN_COMP_COMPAT;
+    case Normalizer::COMPOSE_COMPAT :
+      return UCOL_DECOMP_COMPAT_COMP_CAN;
+    case Normalizer::DECOMP :
+      return UCOL_DECOMP_CAN;
+    case Normalizer::DECOMP_COMPAT :
+      return UCOL_DECOMP_COMPAT;
+    default : 
+      status = U_ILLEGAL_ARGUMENT_ERROR; 
+    }
+  }
+  return UCOL_DEFAULT_NORMALIZATION;
+}
+
+inline Normalizer::EMode Normalizer::getNormalizerEMode(
+                                  UNormalizationMode mode, UErrorCode &status)
+{
+  if (U_SUCCESS(status))
+  {
+    switch (mode)
+    {
+    case UCOL_NO_NORMALIZATION :
+      return Normalizer::NO_OP;
+    case UCOL_DECOMP_CAN :
+      return Normalizer::DECOMP;
+    case UCOL_DECOMP_COMPAT :
+      return Normalizer::DECOMP_COMPAT;
+    case UCOL_DECOMP_CAN_COMP_COMPAT :
+      return Normalizer::COMPOSE;
+    case UCOL_DECOMP_COMPAT_COMP_CAN :
+      return Normalizer::COMPOSE_COMPAT;
+    default : 
+      status = U_ILLEGAL_ARGUMENT_ERROR; 
+    }
+  }
+  return Normalizer::DECOMP_COMPAT;
+}
 
 #endif // _NORMLZR

@@ -6,6 +6,17 @@
  ********************************************************************
  */
 
+/*
+* Modification history
+* 
+* Date      Name      Description
+* 02/02/01  synwee    Added converters from EMode to UNormalizationMode, 
+*                     getUNormalizationMode and getNormalizerEMode,
+*                     useful in tbcoll and unorm.
+*                     Added quickcheck method and incorporated it into 
+*                     normalize()
+*/
+
 #include "ucmp16.h"
 #include "dcmpdata.h"
 #include "compdata.h"
@@ -20,6 +31,11 @@
 
 
 #define ARRAY_LENGTH(array) (sizeof (array) / sizeof (*array))
+/**
+* Maximum initial buffer size.
+* Used in quickCheck to declare initial array.
+*/
+const uint32_t StackBufferLen = 1024;
 
 inline static void insert(UnicodeString& dest, 
                           UTextOffset pos, 
@@ -132,19 +148,62 @@ Normalizer::normalize(const UnicodeString& source,
                       UnicodeString& result, 
                       UErrorCode &status)
 {
-    switch (mode) {
-    case NO_OP:
-        result = source;
-        break;
-    case COMPOSE:
-    case COMPOSE_COMPAT:
-        compose(source, (mode & COMPAT_BIT) != 0, options, result, status);
-        break;
-    case DECOMP:
-    case DECOMP_COMPAT:
-        decompose(source, (mode & COMPAT_BIT) != 0, options, result, status);
-        break;
-    }
+  if (quickCheckWithOption(source, mode, options, status) == UQUICK_CHECK_YES)
+  {
+    result = source;
+    return;
+  }
+
+  switch (mode) {
+  case NO_OP:
+    result = source;
+    break;
+  case COMPOSE:
+  case COMPOSE_COMPAT:
+    compose(source, (mode & COMPAT_BIT) != 0, options, result, status);
+    break;
+  case DECOMP:
+  case DECOMP_COMPAT:
+    decompose(source, (mode & COMPAT_BIT) != 0, options, result, status);
+    break;
+  }
+}
+
+UQUICK_CHECK_VALUES
+Normalizer::quickCheck(const UnicodeString& source, Normalizer::EMode mode, 
+                       UErrorCode &status)
+{
+  return quickCheckWithOption(source, mode, 0, status);
+}
+
+UQUICK_CHECK_VALUES
+Normalizer::quickCheckWithOption(const UnicodeString& source,
+                                  Normalizer::EMode    mode, 
+                                  int32_t              options,
+                                  UErrorCode&          status)
+{
+  if (U_FAILURE(status))
+    return UQUICK_CHECK_MAYBE;
+
+  int length = source.length();
+  UChar s[StackBufferLen];
+	UChar *ps = s;
+	
+  if (length >= StackBufferLen)
+		ps = new UChar[length + 1];
+	
+	source.extract(0, length, ps);
+  ps[length] = 0;
+  UQUICK_CHECK_VALUES result;
+  if ((options & IGNORE_HANGUL) != 0)
+    result = u_quickCheckWithOption(ps, length, getUNormalizationMode(mode, 
+                                    status), UCOL_IGNORE_HANGUL, &status);
+  else
+    result = u_quickCheck(ps, length, getUNormalizationMode(mode, status),
+                          &status);
+  if (ps != s)
+    delete[] ps;
+  return result;
 }
 
 //-------------------------------------------------------------------------
