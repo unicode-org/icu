@@ -343,9 +343,15 @@ u_strToUTF8(char *dest,
             }
 
             /*need not check for NUL because NUL fails UTF_IS_TRAIL() anyway*/
-            if(UTF_IS_LEAD(ch) && UTF_IS_TRAIL(ch2=*pSrc)) { 
-                ++pSrc;
-                ch=UTF16_GET_PAIR_VALUE(ch, ch2);
+            if(UTF_IS_SURROGATE(ch)) {
+                if(UTF_IS_SURROGATE_FIRST(ch) && UTF_IS_TRAIL(ch2=*pSrc)) { 
+                    ++pSrc;
+                    ch=UTF16_GET_PAIR_VALUE(ch, ch2);
+                } else {
+                    /* Unicode 3.2 forbids surrogate code points in UTF-8 */
+                    *pErrorCode = U_INVALID_CHAR_FOUND;
+                    return NULL;
+                }
             }
             reqLength += UTF8_CHAR_LENGTH(ch);
             /* do we have enough room in destination? */
@@ -356,11 +362,19 @@ u_strToUTF8(char *dest,
             pDest=_appendUTF8(pDest, ch);
         }
         while((ch=*pSrc++)!=0) {
-            if(UTF_IS_LEAD(ch) && UTF_IS_TRAIL(ch2=*pSrc)) {
+            if(ch<=0x7f) {
+                ++reqLength;
+            } else if(ch<=0x7ff) {
+                reqLength+=2;
+            } else if(!UTF_IS_SURROGATE(ch)) {
+                reqLength+=3;
+            } else if(UTF_IS_SURROGATE_FIRST(ch) && UTF_IS_TRAIL(ch2=*pSrc)) {
                 ++pSrc;
                 reqLength+=4;
             } else {
-                reqLength+=UTF8_CHAR_LENGTH(ch);
+                /* Unicode 3.2 forbids surrogate code points in UTF-8 */
+                *pErrorCode = U_INVALID_CHAR_FOUND;
+                return NULL;
             }
         }
     } else {
@@ -373,9 +387,15 @@ u_strToUTF8(char *dest,
                 continue;
             }
 
-            if(UTF_IS_LEAD(ch) && pSrc<pSrcLimit && UTF_IS_TRAIL(ch2=*pSrc)) { 
-                ++pSrc;
-                ch=UTF16_GET_PAIR_VALUE(ch, ch2);
+            if(UTF_IS_SURROGATE(ch)) {
+                if(UTF_IS_SURROGATE_FIRST(ch) && pSrc<pSrcLimit && UTF_IS_TRAIL(ch2=*pSrc)) { 
+                    ++pSrc;
+                    ch=UTF16_GET_PAIR_VALUE(ch, ch2);
+                } else {
+                    /* Unicode 3.2 forbids surrogate code points in UTF-8 */
+                    *pErrorCode = U_INVALID_CHAR_FOUND;
+                    return NULL;
+                }
             }
             reqLength += UTF8_CHAR_LENGTH(ch);
             /* do we have enough room in destination? */
@@ -387,11 +407,19 @@ u_strToUTF8(char *dest,
         }
         while(pSrc<pSrcLimit) {
             ch=*pSrc++;
-            if(UTF_IS_LEAD(ch) && pSrc<pSrcLimit && UTF_IS_TRAIL(ch2=*pSrc)) {
+            if(ch<=0x7f) {
+                ++reqLength;
+            } else if(ch<=0x7ff) {
+                reqLength+=2;
+            } else if(!UTF_IS_SURROGATE(ch)) {
+                reqLength+=3;
+            } else if(UTF_IS_SURROGATE_FIRST(ch) && pSrc<pSrcLimit && UTF_IS_TRAIL(ch2=*pSrc)) {
                 ++pSrc;
                 reqLength+=4;
             } else {
-                reqLength+=UTF8_CHAR_LENGTH(ch);
+                /* Unicode 3.2 forbids surrogate code points in UTF-8 */
+                *pErrorCode = U_INVALID_CHAR_FOUND;
+                return NULL;
             }
         }
     }
