@@ -139,7 +139,7 @@ write_taglist(FileStream *rb,
 	      const char *name,
 	      const struct STaggedList *list)
 {
-//  int32_t i;
+/*  int32_t i;   */
   struct SStringPair *current;
 
   /* Write out the value indicating this is a tagged list */
@@ -160,10 +160,10 @@ write_taglist(FileStream *rb,
   }
 
 
-//  for(i = 0; i < list->fCount; ++i) {
+/*  for(i = 0; i < list->fCount; ++i) {
 //    write_ustring(rb, list->fData[i].fKey);
 //    write_ustring(rb, list->fData[i].fValue);
-//  }
+//  } */
 }
 
 /* Write a parsed SRBItemList to a file */
@@ -172,7 +172,7 @@ rb_write(FileStream *f,
 	 struct SRBItemList *data,
 	 UErrorCode *status)
 {
-//  int32_t i;
+/*  int32_t i; */
   struct SRBItem *item;
 
   if(U_FAILURE(*status)) return;
@@ -186,10 +186,10 @@ rb_write(FileStream *f,
   item = data->fFirst;
 
   /* Successively write each list item */
-//  for(i = 0; i < data->fCount; ++i) {
+/*  for(i = 0; i < data->fCount; ++i) {  */
   while(item != NULL) {
 
-//    item = data->fData[i];
+/*    item = data->fData[i];  */
 
     switch(item->fData->fType) {
     case eStringList:
