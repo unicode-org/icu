@@ -37,7 +37,7 @@ int main ( int argc, char **argv )
     UErrorCode errorCode = U_ZERO_ERROR;
     UConverter *cnv = ucnv_open(NULL, &errorCode);
     if(cnv != NULL) {
-        // ok
+        /* ok */
         ucnv_close(cnv);
     } else {
         fprintf(stderr,
