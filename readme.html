@@ -20,7 +20,7 @@
       H5 {text-decoration: underline}
       HR {height: 2; width: "100%"; text-align: center}
       PRE {margin-left: .5in; margin-bottom: .5in}
-   
+
 </style>
   </head>
 
@@ -63,7 +63,7 @@
 
     <ul>
       <li><a href="#win32LibNames">Library names are changed and moved on Win32</a></li>
-    
+
       <li><a href="#sharedLibNote">Using Shared Data Libraries</a></li>
 
       <li><a href="#ErrcodeChanges">Important Change Of Error Codes From
@@ -181,7 +181,7 @@
             install a CVS client on your own machine so that you can do batch
             operations without going through the WebCVS interface. On
             Windows, we suggest the WinCVS client. The following is the
-            example instruction on how to download ICU via WinCVS: 
+            example instruction on how to download ICU via WinCVS:
 
             <ol>
               <li>Install the WinCVS client, which you can download from the
@@ -289,7 +289,7 @@
           This directory contains the source data in text format, which is
           compiled into binary form during the ICU build process. The output
           from these files is stored in $Root/source/data/build while
-          awaiting further packaging. 
+          awaiting further packaging.
 
           <ul>
             <li><b>unidata/</b> This directory contains the Unicode data
@@ -420,7 +420,7 @@
         <u>putil.c:</u> platform-dependent implementations of various
         functions that are platform dependent: (declared in putil.h)<br>
         <br>
-         
+
 
         <ul type="circle">
           <li>icu_isNaN, icu_isInfinite(double), icu_getNaN();
@@ -493,8 +493,8 @@
 
     <hr>
     <h3><a name="win32LibNames">BREAKING NEWS: Library names are changed and libraries are moved on Win32</a></h3>
-    
-    <p>As it was previously mentioned and proposed on <a href="http://oss.software.ibm.com/icu/archives/icu/icu.0009/msg00138.html">ICU list</a>, 
+
+    <p>As it was previously mentioned and proposed on <a href="http://oss.software.ibm.com/icu/archives/icu/icu.0009/msg00138.html">ICU list</a>,
     ICU libraries on Win32 are now renamed and relocated. The following changes took place in ICU 1.7:</p>
 
     <ol>
@@ -650,7 +650,7 @@
         DLL directories and the LIBPATH setting: Building and testing ICU
         needs the ICU libraries on the LIBPATH. In other words, the LIBPATH
         should contain (each path prepended with the root directory that
-        contains the icu directory): 
+        contains the icu directory):
 
         <ul>
           <li>icu/source/common</li>
@@ -721,9 +721,9 @@ IXMICUTE --&gt; libtestdata.dll
 </pre>
     <p>Example PDS attributes are as follows:</p>
 <pre>
-Data Set Name . . . : <i>USER</i>.ICU.LOAD 
+Data Set Name . . . : <i>USER</i>.ICU.LOAD
 General Data
-Management class. . : **None**    
+Management class. . : **None**
 Storage class . . . : BASE
 Volume serial . . . : TSO007
 Device type . . . . : 3390
@@ -736,13 +736,13 @@ Block size  . . . . : 32760
 Secondary cylinders : 59
 Data set name type  : PDS
 
-Data Set Name . . . : <i>USER</i>.ICU.EXP 
+Data Set Name . . . : <i>USER</i>.ICU.EXP
 General Data
 Management class. . : **None**
 Storage class . . . : BASE
 Volume serial . . . : TSO007
 Device type . . . . : 3390
-Data class. . . . . : **None** 
+Data class. . . . . : **None**
 Organization  . . . : PO
 Record format . . . : FB
 Record length . . . : 80
@@ -761,7 +761,7 @@ Data set name type  : PDS
 
     <ul>
       <li>
-        Requirements: 
+        Requirements:
 
         <ul>
           <li>QSHELL interpreter installed (install base option 30, operating
@@ -778,7 +778,7 @@ Data set name type  : PDS
       </li>
 
       <li>
-        Build environment setup: 
+        Build environment setup:
 
         <ol>
           <li>Create AS400 target library. This library will be the target
@@ -790,7 +790,7 @@ Data set name type  : PDS
 
           <li>
             Set up the following environment variables in your build process
-            (use the <i>libraryname</i> from the previous step) 
+            (use the <i>libraryname</i> from the previous step)
 
             <div style="margin-left: 2em">
               ADDENVVAR ENVVAR(ICU_DATA) VALUE('/icu/source/data')<br>
@@ -831,7 +831,7 @@ Data set name type  : PDS
           <li>
             Configure the Makefiles (see configure below)
             <strong>Note:</strong> Verify that the mh-os400 configure file is
-            used. 
+            used.
 
             <ul>
               <li>Run 'configure --host=as400-os400'</li>
@@ -1000,7 +1000,7 @@ Data set name type  : PDS
 
       <li>If it is not already set, please set the executable flag for the
       following files (by executing 'chmod +x' command): runConfigureICU,
-      configure, install.sh and config.*,</li>
+      configure, install-sh and config.*,</li>
 
       <li>You also need to set other environment variables for different
       build systems. See the <a href=
@@ -1083,7 +1083,7 @@ scsu_compress()    - scsu_decompress()
     more consistent with their names and with their use in other icu
     APIs.<br>
      <br>
-     
+
 
     <p>You need to test for this new error code if your code uses ICU for
     conversion and used the old error code. ucnv.h and scsu.h are updated
