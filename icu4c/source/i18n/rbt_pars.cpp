@@ -254,6 +254,10 @@ int32_t RuleHalf::parse(const UnicodeString& rule, int32_t pos, int32_t limit) {
     int32_t cursorOffsetPos = 0; // Position of first CURSOR_OFFSET on _right_
     UnicodeString scratch;
     bool_t done = FALSE;
+    int32_t quoteStart = -1; // Most recent 'single quoted string'
+    int32_t quoteLimit = -1;
+    int32_t varStart = -1; // Most recent $variableReference
+    int32_t varLimit = -1;
 
     while (pos < limit && !done) {
         UChar c = rule.charAt(pos++);
@@ -296,6 +300,7 @@ int32_t RuleHalf::parse(const UnicodeString& rule, int32_t pos, int32_t limit) {
                  * looping, each time adding on a new segment.  When it
                  * reaches the final quote it breaks.
                  */
+                quoteStart = buf.length();
                 for (;;) {
                     if (iq < 0) {
                         return syntaxError(RuleBasedTransliterator::UNTERMINATED_QUOTE, rule, start);
@@ -312,6 +317,7 @@ int32_t RuleHalf::parse(const UnicodeString& rule, int32_t pos, int32_t limit) {
                         break;
                     }
                 }
+                quoteLimit = buf.length();
             }
             continue;
         }
@@ -382,8 +388,9 @@ int32_t RuleHalf::parse(const UnicodeString& rule, int32_t pos, int32_t limit) {
                     // then the LHS variable will be undefined.  In
                     // that case appendVariableDef() will append the
                     // special placeholder char variableLimit-1.
-
+                    varStart = buf.length();
                     parser.appendVariableDef(name, buf);
+                    varLimit = buf.length();
                 }
             }
             break;
@@ -437,30 +444,39 @@ int32_t RuleHalf::parse(const UnicodeString& rule, int32_t pos, int32_t limit) {
             break;
         case KLEENE_STAR:
         case ONE_OR_MORE:
-            // Very limited initial implementation.  Note that this
-            // works strangely for quotes and variables --
-            //  'foo'* => fo o*
-            //  $a = foo; $a * => fo o*
-            // We will fix this later so that
-            //  'foo'* => (foo) *
-            //  $a = foo; $a * => (foo) *
-            // Implement with hidden segments, perhaps at # 10+.
+            // Quantifiers.  We handle single characters, quoted strings,
+            // variable references, and segments.
+            //  a+      matches  aaa
+            //  'foo'+  matches  foofoofoo
+            //  $v+     matches  xyxyxy if $v == xy
+            //  (seg)+  matches  segsegseg
             {
                 int32_t start, limit;
                 if (segments != 0 &&
                     segments->size() >= 2 &&
                     segments->size() % 2 == 0 &&
                     _voidPtr_to_int32(segments->elementAt(segments->size()-1)) == buf.length()) {
-                    // The * immediately follows a segment
+                    // The */+ immediately follows a segment
                     int32_t len = segments->size();
                     start = _voidPtr_to_int32(segments->elementAt(len - 2));
                     limit = _voidPtr_to_int32(segments->elementAt(len - 1));
                     segments->setElementAt(_int32_to_voidPtr(start+1), len-1);
                 } else {
-                    // The * follows an isolated character
-                    // (or quote, or variable reference)
-                    start = buf.length() - 1;
-                    limit = start + 1;
+                    // The */+ follows an isolated character or quote
+                    // or variable reference
+                    if (buf.length() == quoteLimit) {
+                        // The */+ follows a 'quoted string'
+                        start = quoteStart;
+                        limit = quoteLimit;
+                    } else if (buf.length() == varLimit) {
+                        // The */+ follows a $variableReference
+                        start = varStart;
+                        limit = varLimit;
+                    } else {
+                        // The */+ follows a single character
+                        start = buf.length() - 1;
+                        limit = start + 1;
+                    }
                 }
                 UnicodeMatcher *m =
                     new StringMatcher(buf, start, limit, *parser.data);
