@@ -80,9 +80,14 @@ static const int8_t bytesFromUTF8[256] = {
   3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4, 4, 4, 4, 5, 5, 5, 5, 6, 6, 0, 0
 };
 
-/* static const unsigned char firstByteMark[7] = {0x00, 0x00, 0xC0, 0xE0, 0xF0, 0xF8, 0xFC};*/
-
-#define INVALID_UTF8_TAIL(utf8) (((utf8) & 0xC0) != 0x80)
+/*
+ * Starting with Unicode 3.0.1:
+ * UTF-8 byte sequences of length N _must_ encode code points of or above utf8_minChar32[N];
+ * byte sequences with more than 4 bytes are illegal in UTF-8,
+ * which is tested with impossible values for them
+ */
+static const uint32_t
+utf8_minChar32[7]={ 0, 0, 0x80, 0x800, 0x10000, 0xffffffff, 0xffffffff };
 
 /**
  * Calls invalid char callback when an invalid character sequence is encountered.
@@ -92,13 +97,18 @@ static const int8_t bytesFromUTF8[256] = {
  */
 static UBool
 T_UConverter_toUnicode_InvalidChar_Callback(UConverterToUnicodeArgs * args,
-                                                  UErrorCode *err)
+                                            UConverterCallbackReason reason,
+                                            UErrorCode *err)
 {
     UConverter *converter = args->converter;
 
     if (U_SUCCESS(*err))
     {
-        *err = U_ILLEGAL_CHAR_FOUND;
+        if (reason == UCNV_ILLEGAL) {
+            *err = U_ILLEGAL_CHAR_FOUND;
+        } else {
+            *err = U_INVALID_CHAR_FOUND;
+        }
     }
 
     /* copy the toUBytes to the invalidCharBuffer */
@@ -111,7 +121,7 @@ T_UConverter_toUnicode_InvalidChar_Callback(UConverterToUnicodeArgs * args,
                                             args,
                                             converter->invalidCharBuffer,
                                             converter->invalidCharLength,
-                                            UCNV_ILLEGAL,
+                                            reason,
                                             err);
 
     return (UBool)U_FAILURE(*err);
@@ -119,13 +129,14 @@ T_UConverter_toUnicode_InvalidChar_Callback(UConverterToUnicodeArgs * args,
 
 static UBool
 T_UConverter_toUnicode_InvalidChar_OffsetCallback(UConverterToUnicodeArgs * args,
-                                                        int32_t currentOffset,
-                                                        UErrorCode *err)
+                                                  int32_t currentOffset,
+                                                  UConverterCallbackReason reason,
+                                                  UErrorCode *err)
 {
     int32_t *saveOffsets = args->offsets;
     UBool result;
     
-    result = T_UConverter_toUnicode_InvalidChar_Callback(args, err);
+    result = T_UConverter_toUnicode_InvalidChar_Callback(args, reason, err);
 
     while (saveOffsets < args->offsets)
     {
@@ -178,7 +189,7 @@ morebytes:
                 if (mySource < sourceLimit)
                 {
                     toUBytes[i] = (char) (ch2 = *(mySource++));
-                    if (INVALID_UTF8_TAIL(ch2))
+                    if (!UTF8_IS_TRAIL(ch2))
                     {
                         *err = U_TRUNCATED_CHAR_FOUND;
                         invalidTailChar = TRUE;
@@ -206,10 +217,19 @@ morebytes:
                 }
             }
 
-            /* Remove the acummulated high bits */
+            /* Remove the accumulated high bits */
             ch -= offsetsFromUTF8[inBytes];
 
-            if (i == inBytes && ch <= MAXIMUM_UTF)
+            /*
+             * Legal UTF-8 byte sequences in Unicode 3.0.1 and up:
+             * - use only trail bytes after a lead byte (checked above)
+             * - use the right number of trail bytes for a given lead byte
+             * - encode a code point <= U+10ffff
+             * - use the fewest possible number of bytes for their code points
+             * - use at most 4 bytes (for i>=4 it is 0x10ffff<utf8_minChar32[])
+             * - single surrogate code points are legal but irregular (also cause a callback)
+             */
+            if (i == inBytes && ch <= MAXIMUM_UTF && ch >= utf8_minChar32[i] && !UTF_IS_SURROGATE(ch))
             {
                 /* Normal valid byte when the loop has not prematurely terminated (i < inBytes) */
                 if (ch <= MAXIMUM_UCS2) 
@@ -239,10 +259,12 @@ morebytes:
             }
             else
             {
+                UConverterCallbackReason reason =
+                    i == inBytes && i == 3 && UTF_IS_SURROGATE(ch) ? UCNV_IRREGULAR : UCNV_ILLEGAL;
                 args->source = (const char *) mySource;
                 args->target = myTarget;
                 args->converter->invalidCharLength = (int8_t)i;
-                if (T_UConverter_toUnicode_InvalidChar_Callback(args, err))
+                if (T_UConverter_toUnicode_InvalidChar_Callback(args, reason, err))
                 {
                     /* Stop if the error wasn't handled */
                     break;
@@ -327,7 +349,7 @@ morebytes:
                 if (mySource < sourceLimit)
                 {
                     toUBytes[i] = (char) (ch2 = *(mySource++));
-                    if (INVALID_UTF8_TAIL(ch2))
+                    if (!UTF8_IS_TRAIL(ch2))
                     {
                         *err = U_TRUNCATED_CHAR_FOUND;
                         invalidTailChar = TRUE;
@@ -356,10 +378,19 @@ morebytes:
                 }
             }
 
-            /* Remove the acummulated high bits */
+            /* Remove the accumulated high bits */
             ch -= offsetsFromUTF8[inBytes];
 
-            if (i == inBytes && ch <= MAXIMUM_UTF)
+            /*
+             * Legal UTF-8 byte sequences in Unicode 3.0.1 and up:
+             * - use only trail bytes after a lead byte (checked above)
+             * - use the right number of trail bytes for a given lead byte
+             * - encode a code point <= U+10ffff
+             * - use the fewest possible number of bytes for their code points
+             * - use at most 4 bytes (for i>=4 it is 0x10ffff<utf8_minChar32[])
+             * - single surrogate code points are legal but irregular (also cause a callback)
+             */
+            if (i == inBytes && ch <= MAXIMUM_UTF && ch >= utf8_minChar32[i] && !UTF_IS_SURROGATE(ch))
             {
                 /* Normal valid byte when the loop has not prematurely terminated (i < inBytes) */
                 if (ch <= MAXIMUM_UCS2) 
@@ -391,6 +422,8 @@ morebytes:
             }
             else
             {
+                UConverterCallbackReason reason =
+                    i == inBytes && i == 3 && UTF_IS_SURROGATE(ch) ? UCNV_IRREGULAR : UCNV_ILLEGAL;
                 UBool useOffset;
 
                 args->source = (const char *) mySource;
@@ -398,7 +431,7 @@ morebytes:
                 args->offsets = myOffsets;
                 args->converter->invalidCharLength = (int8_t)i;
                 if (T_UConverter_toUnicode_InvalidChar_OffsetCallback(args,
-                 offsetNum, err))
+                 offsetNum, reason, err))
                 {
                     /* Stop if the error wasn't handled */
                     break;
@@ -664,6 +697,7 @@ U_CFUNC UChar32 T_UConverter_getNextUChar_UTF8(UConverterToUnicodeArgs *args,
     UChar buffer[2];
     char const *sourceInitial;
     UChar* myUCharPtr;
+    UConverterCallbackReason reason;
     uint16_t extraBytesToWrite;
     uint8_t myByte;
     UChar32 ch;
@@ -699,7 +733,7 @@ U_CFUNC UChar32 T_UConverter_getNextUChar_UTF8(UConverterToUnicodeArgs *args,
             case 6:
                 ch += (myByte = (uint8_t)*(args->source++));
                 ch <<= 6;
-                if ((myByte & 0xC0) != 0x80) 
+                if (!UTF8_IS_TRAIL(myByte))
                 {
                     isLegalSequence = 0;
                     break;
@@ -707,7 +741,7 @@ U_CFUNC UChar32 T_UConverter_getNextUChar_UTF8(UConverterToUnicodeArgs *args,
             case 5:
                 ch += (myByte = *(args->source++));
                 ch <<= 6;
-                if ((myByte & 0xC0) != 0x80) 
+                if (!UTF8_IS_TRAIL(myByte))
                 {
                     isLegalSequence = 0;
                     break;
@@ -715,7 +749,7 @@ U_CFUNC UChar32 T_UConverter_getNextUChar_UTF8(UConverterToUnicodeArgs *args,
             case 4:
                 ch += (myByte = *(args->source++));
                 ch <<= 6;
-                if ((myByte & 0xC0) != 0x80) 
+                if (!UTF8_IS_TRAIL(myByte))
                 {
                     isLegalSequence = 0;
                     break;
@@ -723,14 +757,14 @@ U_CFUNC UChar32 T_UConverter_getNextUChar_UTF8(UConverterToUnicodeArgs *args,
             case 3:
                 ch += (myByte = *(args->source++));
                 ch <<= 6;
-                if ((myByte & 0xC0) != 0x80) 
+                if (!UTF8_IS_TRAIL(myByte))
                 {
                     isLegalSequence = 0;
                     break;
                 }
             case 2:
                 ch += (myByte = *(args->source++));
-                if ((myByte & 0xC0) != 0x80) 
+                if (!UTF8_IS_TRAIL(myByte))
                 {
                     isLegalSequence = 0;
                 }
@@ -738,7 +772,16 @@ U_CFUNC UChar32 T_UConverter_getNextUChar_UTF8(UConverterToUnicodeArgs *args,
         }
         ch -= offsetsFromUTF8[extraBytesToWrite];
 
-        if (isLegalSequence && extraBytesToWrite <= 4 && ch <= 0x10ffff) {
+        /*
+         * Legal UTF-8 byte sequences in Unicode 3.0.1 and up:
+         * - use only trail bytes after a lead byte (checked above)
+         * - use the right number of trail bytes for a given lead byte
+         * - encode a code point <= U+10ffff
+         * - use the fewest possible number of bytes for their code points
+         * - use at most 4 bytes (for i>=4 it is 0x10ffff<utf8_minChar32[])
+         * - single surrogate code points are legal but irregular (also cause a callback)
+         */
+        if (isLegalSequence && (uint32_t)ch <= MAXIMUM_UTF && (uint32_t)ch >= utf8_minChar32[extraBytesToWrite] && !UTF_IS_SURROGATE(ch)) {
             return ch; /* return the code point */
         }
 
@@ -748,14 +791,20 @@ CALL_ERROR_FUNCTION:
         uprv_memcpy(args->converter->invalidCharBuffer, sourceInitial, extraBytesToWrite);
 
         myUCharPtr = buffer;
-        *err = U_ILLEGAL_CHAR_FOUND;
+        if (isLegalSequence && extraBytesToWrite == 3 && UTF_IS_SURROGATE(ch)) {
+            reason = UCNV_IRREGULAR;
+            *err = U_INVALID_CHAR_FOUND;
+        } else {
+            reason = UCNV_ILLEGAL;
+            *err = U_ILLEGAL_CHAR_FOUND;
+        }
         args->target = myUCharPtr;
         args->targetLimit = buffer + 2;
         args->converter->fromCharErrorBehaviour(args->converter->toUContext,
                                         args,
                                         sourceInitial,
                                         extraBytesToWrite,
-                                        UCNV_ILLEGAL,
+                                        reason,
                                         err);
 
         if(U_SUCCESS(*err)) {
@@ -1436,7 +1485,7 @@ morebytes:
             args->source = (const char *) mySource;
             args->target = myTarget;
             args->converter->invalidCharLength = (int8_t)i;
-            if (T_UConverter_toUnicode_InvalidChar_Callback(args, err))
+            if (T_UConverter_toUnicode_InvalidChar_Callback(args, UCNV_ILLEGAL, err))
             {
                 /* Stop if the error wasn't handled */
                 break;
@@ -1549,7 +1598,7 @@ morebytes:
             args->target = myTarget;
             args->converter->invalidCharLength = (int8_t)i;
             args->offsets = myOffsets;
-            if (T_UConverter_toUnicode_InvalidChar_OffsetCallback(args, offsetNum, err))
+            if (T_UConverter_toUnicode_InvalidChar_OffsetCallback(args, offsetNum, UCNV_ILLEGAL, err))
             {
                 /* Stop if the error wasn't handled */
                 break;
@@ -1915,7 +1964,7 @@ morebytes:
             args->source = (const char *) mySource;
             args->target = myTarget;
             args->converter->invalidCharLength = (int8_t)i;
-            if (T_UConverter_toUnicode_InvalidChar_Callback(args, err))
+            if (T_UConverter_toUnicode_InvalidChar_Callback(args, UCNV_ILLEGAL, err))
             {
                 /* Stop if the error wasn't handled */
                 break;
@@ -2029,7 +2078,7 @@ morebytes:
             args->target = myTarget;
             args->converter->invalidCharLength = (int8_t)i;
             args->offsets = myOffsets;
-            if (T_UConverter_toUnicode_InvalidChar_OffsetCallback(args, offsetNum, err))
+            if (T_UConverter_toUnicode_InvalidChar_OffsetCallback(args, offsetNum, UCNV_ILLEGAL, err))
             {
                 /* Stop if the error wasn't handled */
                 break;
