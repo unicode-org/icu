@@ -4,7 +4,7 @@
 * and others.  All Rights Reserved.
 *****************************************************************
 * $Source: /xsrl/Nsvn/icu/icu/source/i18n/anytrans.cpp,v $ 
-* $Revision: 1.9 $
+* $Revision: 1.10 $
 *****************************************************************
 * Date        Name        Description
 * 06/06/2002  aliu        Creation.
@@ -129,11 +129,12 @@ private:
 const char ScriptRunIterator::fgClassID=0;
 
 ScriptRunIterator::ScriptRunIterator(const Replaceable& theText,
-                                     int32_t start, int32_t limit) :
-    text(theText) {
-    this->textStart = start;
-    this->textLimit = limit;
-    this->limit = start;
+                                     int32_t myStart, int32_t myLimit) :
+    text(theText)
+{
+    textStart = myStart;
+    textLimit = myLimit;
+    limit = myStart;
 }
 
 UBool ScriptRunIterator::next() {
