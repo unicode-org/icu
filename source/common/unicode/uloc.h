@@ -225,13 +225,38 @@
 #define ULOC_UK             "en_GB"
 #define ULOC_US             "en_US"
 
-/*
+/**
  * Useful constants for the size of locale IDs.
  * @draft
  */
 #define ULOC_LANG_CAPACITY 12
 #define ULOC_COUNTRY_CAPACITY 4
 #define ULOC_FULLNAME_CAPACITY 50
+
+
+/**
+ * Constants for *_getLocale()
+ * Allow user to select whether she wants information on 
+ * requested, valid or actual locale.
+ * For example, a collator for "en_US_CALIFORNIA" was
+ * requested. In the current state of ICU (2.0), 
+ * the requested locale is "en_US_CALIFORNIA",
+ * the valid locale is "en_US" (most specific locale supported by ICU)
+ * and the actual locale is "root" (the collation data comes unmodified 
+ * from the UCA)
+ * The locale is considered supported by ICU if there is a core ICU bundle 
+ * for that locale (although it may be empty).
+ * @draft ICU 2.1
+ */
+typedef enum {
+  /** This is locale the data actually comes from */
+  ULOC_ACTUAL_LOCALE    = 0,
+  /** This is the most specific locale supported by ICU */
+  ULOC_VALID_LOCALE    = 1,
+  /** This is the requested locale */
+  ULOC_REQUESTED_LOCALE = 2,
+  ULOC_DATA_LOCALE_TYPE_LIMIT
+} ULocDataLocaleType ;
 
 
 /**
