@@ -1461,7 +1461,7 @@ static const StateEnum nextStateArray[5][MAX_VALID_CP_JP]= {
     {JISX201,INVALID_STATE,INVALID_STATE,JISX208,JISX212,HWKANA_7BIT,INVALID_STATE,INVALID_STATE,ASCII},
     {JISX201,INVALID_STATE,INVALID_STATE,JISX208,JISX212,ASCII,INVALID_STATE,INVALID_STATE,INVALID_STATE},
 };
-static  const char* escSeqChars[MAX_VALID_CP_JP] ={
+static const char escSeqChars[MAX_VALID_CP_JP][6] ={
     "\x1B\x28\x42",         /* <ESC>(B  ASCII       */
     "\x1B\x2E\x41",         /* <ESC>.A  ISO-8859-1  */
     "\x1B\x2E\x46",         /* <ESC>.F  ISO-8859-7  */
