@@ -138,12 +138,12 @@ th {
         // Tonal marks are primary ignorables but are treated as secondary
         // differences
         "&\u0301"                    // acute accent
-        ";\u0E47"                    //  MAITAIKHU
-        ";\u0E48"                    //  MAI EK
-        ";\u0E49"                    //  MAI THO
-        ";\u0E4A"                    //  MAI TRI
-        ";\u0E4B"                    //  MAI CHATTAWA
-        ";\u0E4C"                    //  THANTHAKHAT
+        "<<\u0E47"                    //  MAITAIKHU
+        "<<\u0E48"                    //  MAI EK
+        "<<\u0E49"                    //  MAI THO
+        "<<\u0E4A"                    //  MAI TRI
+        "<<\u0E4B"                    //  MAI CHATTAWA
+        "<<\u0E4C"                    //  THANTHAKHAT
 
 
         // These are supposed to be ignored, so I'm treating them as controls

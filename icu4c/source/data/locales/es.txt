@@ -9,7 +9,7 @@ es {
     Version { "1.1" }
     CollationElements { 
         Version { "1.0" }
-        Sequence { "& N < n\u0303, N\u0303" }
+        Sequence { "& N < n\u0303<<< N\u0303" }
     }
     /* Duplicates from root commented out. */
     Countries { 
