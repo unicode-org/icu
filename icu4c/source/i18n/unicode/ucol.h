@@ -119,15 +119,31 @@ typedef enum UCollationResult UCollationResult;
 typedef enum {
   /* accepted by most attributes */
   UCOL_DEFAULT = -1,
+  /* for UCOL_STRENGTH */
+  /** Primary collation strength */
+  UCOL_PRIMARY = 0,
+  /** Secondary collation strength */
+  UCOL_SECONDARY = 1,
+  /** Tertiary collation strength */
+  UCOL_TERTIARY = 2,
+  UCOL_DEFAULT_STRENGTH = UCOL_TERTIARY,
+  /** Quaternary collation strength */
+  UCOL_QUATERNARY=3,
+  /** Identical collation strength */
+  UCOL_IDENTICAL=15,
+
   /* for UCOL_FRENCH_COLLATION & UCOL_CASE_LEVEL*/
-  UCOL_OFF = 0,
-  UCOL_ON = 1,
+  UCOL_OFF = 16,
+  UCOL_ON = 17,
+  
   /* for UCOL_ALTERNATE_HANDLING */
   UCOL_SHIFTED = 0,
   UCOL_NON_IGNORABLE = 1,
+
   /* for UCOL_CASE_FIRST */
   UCOL_LOWER_FIRST = 0,
   UCOL_UPPER_FIRST = 1,
+
   /* for UCOL_NORMALIZATION_MODE */
   /** No decomposition/composition */
   UCOL_NO_NORMALIZATION = 1,
@@ -141,20 +157,9 @@ typedef enum {
   UCOL_DECOMP_CAN_COMP_COMPAT = 4,
   /** Compatibility decomposition followed by canonical composition */
   UCOL_DECOMP_COMPAT_COMP_CAN =5,
-  /* for UCOL_STRENGTH */
-  /** Primary collation strength */
-  UCOL_PRIMARY = 0,
-  /** Secondary collation strength */
-  UCOL_SECONDARY = 1,
-  /** Tertiary collation strength */
-  UCOL_TERTIARY = 2,
-  UCOL_DEFAULT_STRENGTH = UCOL_TERTIARY,
-  /** Quaternary collation strength */
-  UCOL_QUATERNARY=3,
-  /** Identical collation strength */
-  UCOL_IDENTICAL=7,
   /** Default collation strength */
   UCOL_ATTRIBUTE_VALUE_COUNT
+
 } UColAttributeValue;
 
   /**
