@@ -156,7 +156,7 @@ SOURCE=.\locid.cpp
 # Begin Source File
 
 SOURCE=.\locmap.cpp
-# ADD CPP /Ze
+# ADD CPP /Za
 # End Source File
 # Begin Source File
 
