@@ -40,13 +40,13 @@ CntTable *uprv_cnttab_open(CompactIntArray *mapping, UErrorCode *status) {
     if(U_FAILURE(*status)) {
         return 0;
     }
-    CntTable *tbl = (CntTable *)malloc(sizeof(CntTable));
+    CntTable *tbl = (CntTable *)uprv_malloc(sizeof(CntTable));
     tbl->mapping = mapping;
     //tbl->elements = uhash_open(uhash_hashLong, uhash_compareLong, status);
     //uhash_setValueDeleter(tbl->elements, deleteCntElement);
-    tbl->elements = (ContractionTable **)malloc(INIT_EXP_TABLE_SIZE*sizeof(ContractionTable *));
+    tbl->elements = (ContractionTable **)uprv_malloc(INIT_EXP_TABLE_SIZE*sizeof(ContractionTable *));
     tbl->capacity = INIT_EXP_TABLE_SIZE;
-    memset(tbl->elements, 0, INIT_EXP_TABLE_SIZE*sizeof(ContractionTable *));
+    uprv_memset(tbl->elements, 0, INIT_EXP_TABLE_SIZE*sizeof(ContractionTable *));
     tbl->size = 0;
     tbl->position = 0;
     tbl->CEs = NULL;
@@ -56,23 +56,23 @@ CntTable *uprv_cnttab_open(CompactIntArray *mapping, UErrorCode *status) {
 }
 
 ContractionTable *addATableElement(CntTable *table, uint32_t *key, UErrorCode *status) {
-    ContractionTable *el = (ContractionTable *)malloc(sizeof(ContractionTable));
-    el->CEs = (uint32_t *)malloc(INIT_EXP_TABLE_SIZE*sizeof(uint32_t));
-    el->codePoints = (UChar *)malloc(INIT_EXP_TABLE_SIZE*sizeof(UChar));
+    ContractionTable *el = (ContractionTable *)uprv_malloc(sizeof(ContractionTable));
+    el->CEs = (uint32_t *)uprv_malloc(INIT_EXP_TABLE_SIZE*sizeof(uint32_t));
+    el->codePoints = (UChar *)uprv_malloc(INIT_EXP_TABLE_SIZE*sizeof(UChar));
     el->position = 0;
     el->size = INIT_EXP_TABLE_SIZE;
     el->forward = TRUE;
-    memset(el->CEs, 'F', INIT_EXP_TABLE_SIZE*sizeof(uint32_t));
-    memset(el->codePoints, 'F', INIT_EXP_TABLE_SIZE*sizeof(UChar));
+    uprv_memset(el->CEs, 'F', INIT_EXP_TABLE_SIZE*sizeof(uint32_t));
+    uprv_memset(el->codePoints, 'F', INIT_EXP_TABLE_SIZE*sizeof(UChar));
 
-    el->reversed = (ContractionTable *)malloc(sizeof(ContractionTable));
-    el->reversed->CEs = (uint32_t *)malloc(INIT_EXP_TABLE_SIZE*sizeof(uint32_t));
-    el->reversed->codePoints = (UChar *)malloc(INIT_EXP_TABLE_SIZE*sizeof(UChar));
+    el->reversed = (ContractionTable *)uprv_malloc(sizeof(ContractionTable));
+    el->reversed->CEs = (uint32_t *)uprv_malloc(INIT_EXP_TABLE_SIZE*sizeof(uint32_t));
+    el->reversed->codePoints = (UChar *)uprv_malloc(INIT_EXP_TABLE_SIZE*sizeof(UChar));
     el->reversed->position = 0;
     el->reversed->size = INIT_EXP_TABLE_SIZE;
     el->reversed->forward = FALSE;
-    memset(el->reversed->CEs, 'R', INIT_EXP_TABLE_SIZE*sizeof(uint32_t));
-    memset(el->reversed->codePoints, 'R', INIT_EXP_TABLE_SIZE*sizeof(UChar));
+    uprv_memset(el->reversed->CEs, 'R', INIT_EXP_TABLE_SIZE*sizeof(uint32_t));
+    uprv_memset(el->reversed->codePoints, 'R', INIT_EXP_TABLE_SIZE*sizeof(UChar));
 
     table->elements[table->size] = el;
 
@@ -83,7 +83,7 @@ ContractionTable *addATableElement(CntTable *table, uint32_t *key, UErrorCode *s
     if(table->size == table->capacity) {
         // do realloc
         table->elements = (ContractionTable **)realloc(table->elements, table->capacity*2*sizeof(ContractionTable *));
-        memset(table->elements+table->capacity, 0, table->capacity*sizeof(ContractionTable *));
+        uprv_memset(table->elements+table->capacity, 0, table->capacity*sizeof(ContractionTable *));
         if(table->elements == NULL) {
           fprintf(stderr, "out of memory for contraction parts\n");
           *status = U_MEMORY_ALLOCATION_ERROR;
@@ -123,7 +123,7 @@ int32_t uprv_cnttab_constructTable(CntTable *table, uint32_t mainOffset, UErrorC
     if(table->offsets != NULL) {
         free(table->offsets);
     }
-    table->offsets = (int32_t *)malloc(table->size*sizeof(int32_t));
+    table->offsets = (int32_t *)uprv_malloc(table->size*sizeof(int32_t));
 
 
     /* See how much memory we need */
@@ -140,13 +140,13 @@ int32_t uprv_cnttab_constructTable(CntTable *table, uint32_t mainOffset, UErrorC
     if(table->CEs != NULL) {
         free(table->CEs);
     }
-    table->CEs = (uint32_t *)malloc(table->position*sizeof(uint32_t));
-    memset(table->CEs, '?', table->position*sizeof(uint32_t));
+    table->CEs = (uint32_t *)uprv_malloc(table->position*sizeof(uint32_t));
+    uprv_memset(table->CEs, '?', table->position*sizeof(uint32_t));
     if(table->codePoints != NULL) {
         free(table->codePoints);
     }
-    table->codePoints = (UChar *)malloc(table->position*sizeof(UChar));
-    memset(table->codePoints, '?', table->position*sizeof(UChar));
+    table->codePoints = (UChar *)uprv_malloc(table->position*sizeof(UChar));
+    uprv_memset(table->codePoints, '?', table->position*sizeof(UChar));
 
     /* Now stuff the things in*/
 
@@ -154,8 +154,8 @@ int32_t uprv_cnttab_constructTable(CntTable *table, uint32_t mainOffset, UErrorC
     uint32_t *CEPointer = table->CEs;
     for(i = 0; i<table->size; i++) {
         int32_t size = table->elements[i]->position;
-        memcpy(cpPointer, table->elements[i]->codePoints, size*sizeof(UChar));
-        memcpy(CEPointer, table->elements[i]->CEs, size*sizeof(uint32_t));
+        uprv_memcpy(cpPointer, table->elements[i]->codePoints, size*sizeof(UChar));
+        uprv_memcpy(CEPointer, table->elements[i]->CEs, size*sizeof(uint32_t));
         for(j = 0; j<size; j++) {
             if(isContraction(*(CEPointer+j))) {
                 *(CEPointer+j) = constructContractCE(table->offsets[getContractOffset(*(CEPointer+j))]);
@@ -165,8 +165,8 @@ int32_t uprv_cnttab_constructTable(CntTable *table, uint32_t mainOffset, UErrorC
         CEPointer += size;
         if(table->elements[i]->reversed->position > 0) {
             int32_t size2 = table->elements[i]->reversed->position;
-            memcpy(cpPointer, (table->elements[i]->reversed->codePoints), size2*sizeof(UChar));
-            memcpy(CEPointer, (table->elements[i]->reversed->CEs), size2*sizeof(uint32_t));
+            uprv_memcpy(cpPointer, (table->elements[i]->reversed->codePoints), size2*sizeof(UChar));
+            uprv_memcpy(CEPointer, (table->elements[i]->reversed->CEs), size2*sizeof(uint32_t));
             for(j = 0; j<size2; j++) {
                 if(isContraction(*(CEPointer+j))) {
                     *(CEPointer+j) = constructContractCE(table->offsets[getContractOffset(*(CEPointer+j))]);
@@ -189,6 +189,65 @@ int32_t uprv_cnttab_constructTable(CntTable *table, uint32_t mainOffset, UErrorC
 
 
     return table->position;
+}
+
+ContractionTable *uprv_cnttab_cloneContraction(ContractionTable *t) {
+  ContractionTable *r = (ContractionTable *)uprv_malloc(sizeof(ContractionTable));
+
+  r->position = t->position;
+  r->size = t->size;
+  r->backSize = t->backSize;
+  r->forward = t->forward;
+  r->reversed = t->reversed;
+
+  r->codePoints = (UChar *)uprv_malloc(sizeof(UChar)*t->size);
+  r->CEs = (uint32_t *)uprv_malloc(sizeof(uint32_t)*t->size);
+
+  uprv_memcpy(r->codePoints, t->codePoints, sizeof(UChar)*t->size);
+  uprv_memcpy(r->CEs, t->CEs, sizeof(uint32_t)*t->size);
+
+  return r;
+
+}
+
+CntTable *uprv_cnttab_clone(CntTable *t) {
+  int32_t i = 0;
+  CntTable *r = (CntTable *)uprv_malloc(sizeof(CntTable));
+  r->position = t->position;
+  r->size = t->size;
+  r->capacity = t->capacity;
+
+  r->mapping = t->mapping;
+
+  r->elements = (ContractionTable **)uprv_malloc(t->capacity*sizeof(ContractionTable *));
+
+  for(i = 0; i<t->size; i++) {
+    r->elements[i] = uprv_cnttab_cloneContraction(t->elements[i]);
+    r->elements[i]->reversed = uprv_cnttab_cloneContraction(t->elements[i]);
+  }
+
+  if(t->CEs != NULL) {
+    r->CEs = (uint32_t *)uprv_malloc(t->position*sizeof(uint32_t));
+    uprv_memcpy(r->CEs, t->CEs, t->position*sizeof(uint32_t));
+  } else {
+    r->CEs = NULL;
+  }
+
+  if(t->codePoints != NULL) {
+    r->codePoints = (UChar *)uprv_malloc(t->position*sizeof(UChar));
+    uprv_memcpy(r->codePoints, t->codePoints, t->position*sizeof(UChar));
+  } else {
+    r->codePoints = NULL;
+  }
+
+  if(t->offsets != NULL) {
+    r->offsets = (int32_t *)uprv_malloc(t->size*sizeof(int32_t));
+    uprv_memcpy(r->offsets, t->offsets, t->size*sizeof(int32_t));
+  } else {
+    r->offsets = NULL;
+  }
+
+  return r;
 }
 
 void uprv_cnttab_close(CntTable *table) {
