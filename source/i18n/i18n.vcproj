@@ -843,8 +843,8 @@
 						Outputs="..\..\include\unicode\$(InputFileName)"/>
 				</FileConfiguration>
 			</File>
-            <File
-				RelativePath=".\ulocdata.cpp">
+			<File
+				RelativePath=".\ulocdata.c">
 			</File>
 			<File
 				RelativePath=".\unicode\ulocdata.h">
@@ -852,15 +852,15 @@
 					Name="Release|Win32">
 					<Tool
 						Name="VCCustomBuildTool"
-						CommandLine="copy    $(InputPath)    ..\..\include\unicode"
-						Outputs="..\..\include\unicode\ulocdata.h"/>
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode"
+						Outputs="..\..\include\unicode\$(InputFileName)"/>
 				</FileConfiguration>
 				<FileConfiguration
 					Name="Debug|Win32">
 					<Tool
 						Name="VCCustomBuildTool"
-						CommandLine="copy    $(InputPath)    ..\..\include\unicode"
-						Outputs="..\..\include\unicode\ulocdata.h"/>
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode"
+						Outputs="..\..\include\unicode\$(InputFileName)"/>
 				</FileConfiguration>
 			</File>
 		</Filter>
