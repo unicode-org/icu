@@ -1380,6 +1380,13 @@ u_vsnprintf_u(UChar    *buffer,
         alias += patCount;
     }
   
+    // Release the cloned bundle, if we cloned it.
+    if(outStr.fOwnBundle) {
+        u_locbund_delete(outStr.fBundle);
+        outStr.fBundle = NULL;
+        outStr.fOwnBundle = FALSE;
+    }
+
     /* return # of UChars written */
     return written;
 }

@@ -27,4 +27,7 @@ extern struct UHashtable *gLocaleCache;
 ULocaleBundle*
 u_loccache_get(const char *loc);
 
+/* Main library cleanup function. */
+U_CFUNC void ucln_ustdio_registerCleanup(void);
+
 #endif
