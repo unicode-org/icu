@@ -152,7 +152,13 @@ MIDDLE_SO_TARGET = $(SO_TARGET).$(SO_TARGET_VERSION_MAJOR)
 # Prefix for the ICU library names
 ICUPREFIX = icu
 LIBPREFIX = lib
+
+## If we can't use the shared libraries, use the static libraries
+ifneq ($(ENABLE_SHARED),YES)
+LIBICU = $(LIBSICU)
+else
 LIBICU = $(LIBPREFIX)$(ICUPREFIX)
+endif
 
 # Static library prefix and file extension
 STATIC_PREFIX = s
