@@ -559,9 +559,9 @@ ucnv_setToUCallBack (UConverter * converter,
 {
     if (U_FAILURE (*err))
         return;
-    *oldAction = converter->fromCharErrorBehaviour;
+    if (oldAction) *oldAction = converter->fromCharErrorBehaviour;
     converter->fromCharErrorBehaviour = newAction;
-    *oldContext = converter->toUContext;
+    if (oldContext) *oldContext = converter->toUContext;
     converter->toUContext = newContext;
 }
 
@@ -575,9 +575,9 @@ ucnv_setFromUCallBack (UConverter * converter,
 {
     if (U_FAILURE (*err))
         return;
-    *oldAction = converter->fromUCharErrorBehaviour;
+    if (oldAction) *oldAction = converter->fromUCharErrorBehaviour;
     converter->fromUCharErrorBehaviour = newAction;
-    *oldContext = converter->fromUContext;
+    if (oldContext) *oldContext = converter->fromUContext;
     converter->fromUContext = newContext;
 }
 
