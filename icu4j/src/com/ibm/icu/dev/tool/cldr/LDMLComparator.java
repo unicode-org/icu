@@ -25,6 +25,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.NodeList;
 
+import com.ibm.icu.text.DecimalFormat;
 import com.ibm.icu.text.Normalizer;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.lang.UCharacter;
@@ -628,6 +629,12 @@ public class LDMLComparator {
                     }else if(value.equals("")){
                         color = "#FFFFFF";
                         break;
+                    }else if(element.parentNode.indexOf("decimal")>-1 || element.parentNode.indexOf("currency")>-1 ){
+                        if(comparePatterns(compareTo, value)){
+                            color = (String)colorHash.get(PLATFORM_PRINT_ORDER[j]);
+                            isEqual = true;
+                            break;
+                        }
                     }else if(Normalizer.compare(compareTo,value,0)==0){
                         color = (String)colorHash.get(PLATFORM_PRINT_ORDER[j]);
                         isEqual = true;
@@ -790,24 +797,27 @@ public class LDMLComparator {
      private boolean comparePatterns(String pat1,String pat2){
         //TODO: just return for now .. this is useful only 
         //when comparing data from toronto
-        /*
-        double args1  = 10000000000.00;
-        double args2  = -10000000000.00;
-    
-        DecimalFormat fmt = new DecimalFormat(); 
+        try{
+            double args1  = 10000000000.00;
+            double args2  = -10000000000.00;
         
-        fmt.applyPattern(pat1);
-        String s1 = fmt.format(args1);
-        String s3 = fmt.format(args2);
-        fmt.applyPattern(pat2);
-        String s2 = fmt.format(args1);
-        String s4 = fmt.format(args2);
-        if(s1.equals(s2) && s3.equals(s4)){
-            return true;
+            DecimalFormat fmt = new DecimalFormat(); 
+            
+            fmt.applyPattern(pat1);
+            String s1 = fmt.format(args1);
+            String s3 = fmt.format(args2);
+            fmt.applyPattern(pat2);
+            String s2 = fmt.format(args1);
+            String s4 = fmt.format(args2);
+            if(s1.equals(s2) && s3.equals(s4)){
+                return true;
+            }
+        }catch(Exception e){
+            //throw away the exception
         }
         return false;
-        */
-        return true;
+        
+        //return true;
     }
     private String trim(String source){
         char[] src = source.toCharArray();

@@ -68,11 +68,11 @@ public class LDMLUtilities {
             }
            /*
             * Debugging
-            */
+            *
             Node[] list = getNodeArray(full, LDMLConstants.ALIAS);
             if(list.length>0){
                 System.err.println("Aliases not resolved!. list.getLength() returned "+ list.length);
-            }
+            }*/
             
         }catch(RuntimeException ex){
         	if(!ignoreRoot){
@@ -624,7 +624,7 @@ public class LDMLUtilities {
         }
         return false;
     }
-    public boolean isDraft(Node fullyResolved, StringBuffer xpath){
+    public static boolean isDraft(Node fullyResolved, StringBuffer xpath){
         Node current = getNode(fullyResolved, xpath.toString());
         String draft = null;
         while(current!=null){
