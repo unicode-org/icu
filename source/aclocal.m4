@@ -27,7 +27,12 @@ alpha*-*-linux-gnu)
 	fi ;;
 *-dec-osf*) icu_cv_host_frag=mh-alpha-osf ;;
 *-*-linux*) icu_cv_host_frag=mh-linux ;;
-*-*-cygwin)	icu_cv_host_frag=mh-cygwin ;;
+*-*-cygwin)
+	if test "$ac_cv_prog_gcc" = yes; then
+	  	icu_cv_host_frag=mh-cygwin
+	else
+	  	icu_cv_host_frag=mh-cygwin-msvc
+	fi ;;
 *-*-*bsd*) 	icu_cv_host_frag=mh-bsd-gcc ;;
 *-*-aix*)
 	if test -n "`$CXX --help 2>&1 | grep 'IBM C and C++ Compilers$'`"; then
@@ -167,7 +172,6 @@ AC_DEFUN(AC_CHECK_64BIT_LIBS,
     fi
     dnl Individual tests that fail should reset their own flags.
     AC_MSG_RESULT($ENABLE_64BIT_LIBS)
-    undefine([ENABLE_64BIT_LIBS])
 ])
 
 dnl Strict compilation options.

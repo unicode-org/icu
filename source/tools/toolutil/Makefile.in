@@ -98,7 +98,7 @@ endif
 
 ifneq ($(ENABLE_SHARED),)
 $(FINAL_SO_TARGET): $(OBJECTS)
-	$(SHLIB.cc) $(LD_SONAME) -o $@ $^ $(LIBS)
+	$(SHLIB.cc) $(LD_SONAME) $(OUTOPT)$@ $^ $(LIBS)
 endif
 
 ifeq (,$(MAKECMDGOALS))

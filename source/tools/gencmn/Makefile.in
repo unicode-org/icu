@@ -18,7 +18,7 @@ subdir = tools/gencmn
 
 SECTION = 8
 
-MANX_FILES = $(TARGET).$(SECTION) $(DECMN).$(SECTION)
+MANX_FILES = $(TARGET:$(EXEEXT)=).$(SECTION) $(DECMN:$(EXEEXT)=).$(SECTION)
 
 ALL_MAN_FILES = $(MANX_FILES)
 
@@ -26,8 +26,8 @@ ALL_MAN_FILES = $(MANX_FILES)
 CLEANFILES = *~ mkmap.tmp $(DEPS) $(RES_FILES) $(TEST_FILES) $(DECMN_DEP) $(ALL_MAN_FILES)
 
 ## Target information
-TARGET = gencmn
-DECMN = decmn
+TARGET = gencmn$(EXEEXT)
+DECMN = decmn$(EXEEXT)
 
 CPPFLAGS += -I$(top_builddir)/common -I$(top_srcdir)/common -I$(srcdir)/../toolutil $(BIR_CPPFLAGS)
 LIBS = $(LIBICUTOOLUTIL) $(LIBICUUC) $(DEFAULT_LIBS) $(LIB_M)
@@ -77,10 +77,10 @@ Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
 	 && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
 
 $(TARGET) : $(OBJECTS)
-	$(LINK.cc) -o $@ $^ $(LIBS) 
+	$(LINK.cc) $(OUTOPT)$@ $^ $(LIBS) 
 
 $(DECMN) : $(DECMN_OBJ)
-	$(LINK.cc) -o $@ $^ $(LIBS) 
+	$(LINK.cc) $(OUTOPT)$@ $^ $(LIBS) 
 
 # man page
 install-man: install-manx

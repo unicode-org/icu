@@ -104,6 +104,8 @@ CPPFLAGS = @CPPFLAGS@
 DEFAULT_LIBS = @LIBS@
 # LIB_M is for linking against the math library
 LIB_M = @LIB_M@
+# OUTOPT is for creating a specific output name
+OUTOPT = -o 
 
 ENABLE_RPATH = @ENABLE_RPATH@
 ifeq ($(ENABLE_RPATH),YES)

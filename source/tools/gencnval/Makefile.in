@@ -18,7 +18,7 @@ subdir = tools/gencnval
 
 SECTION = 1
 
-MANX_FILES = $(TARGET).$(SECTION)
+MANX_FILES = $(TARGET:$(EXEEXT)=).$(SECTION)
 MAN5_FILES = convrtrs.txt.5 $(srcdir)/cnvalias.dat.5
 
 GENERATED_MAN_FILES = $(TARGET).$(SECTION) convrtrs.txt.5
@@ -32,7 +32,7 @@ CONVRTRSFILE=$(top_srcdir)/../data/convrtrs.txt
 CLEANFILES = *~ $(GENERATED_MAN_FILES) $(DEPS) $(RES_FILES) $(TEST_FILES)
 
 ## Target information
-TARGET = gencnval
+TARGET = gencnval$(EXEEXT)
 
 CPPFLAGS += -I$(top_builddir)/common -I$(top_srcdir)/common -I$(srcdir)/../toolutil
 LIBS = $(LIBICUTOOLUTIL) $(LIBICUUC) $(DEFAULT_LIBS) $(LIB_M)
@@ -81,7 +81,7 @@ Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
 	 && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
 
 $(TARGET) : $(OBJECTS)
-	$(LINK.cc) -o $@ $^ $(LIBS) 
+	$(LINK.cc) $(OUTOPT)$@ $^ $(LIBS) 
 
 # man page
 install-man: install-man5 install-manx
@@ -100,11 +100,11 @@ install-manx: $(MANX_FILES)
 	 && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
 
 # only on linux probably ?
-$(TARGET).ps: $(TARGET).$(SECTION)
-	groff -man < $< > $@
+#$(TARGET).ps: $(TARGET).$(SECTION)
+#	groff -man < $< > $@
 
-$(TARGET).pdf: $(TARGET).ps
-	ps2pdf $< $@
+#$(TARGET).pdf: $(TARGET).ps
+#	ps2pdf $< $@
 
 ifeq (,$(MAKECMDGOALS))
 -include $(DEPS)
