@@ -40,8 +40,7 @@ DYNAMICCXXFLAGS = $(SHAREDLIBCXXFLAGS)
 
 CPPFLAGS += -I$(srcdir) -I$(top_builddir)/common -I$(srcdir)/unicode -I$(srcdir)/.. -I$(top_builddir)/common -I$(top_srcdir)/common $(LIBCPPFLAGS)
 DEFS += -DU_LAYOUT_IMPLEMENTATION
-LIBS = $(DEFAULT_LIBS)
-
+LIBS = $(LIBICUUC) $(DEFAULT_LIBS)
 
 OBJECTS =  loengine.o \
 OpenTypeLayoutEngine.o \
