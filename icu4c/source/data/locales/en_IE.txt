@@ -11,10 +11,10 @@ en_IE {
         "a.m.",
         "p.m.",
     }
-//    DateTimeElements:intvector { 
-//        2,
-//        1,
-//    }
+    DateTimeElements:intvector { 
+        2,
+        1,
+    }
     DateTimePatterns { 
         "HH:mm:ss z",
         "HH:mm:ss z",
@@ -34,12 +34,12 @@ en_IE {
     }
     zoneStrings { 
         {
-            "Europe/London",
-            "Greenwich Mean Time",
-            "GMT",
-            "Ireland Summer Time",
+            "Europe/Dublin",
+            "Greenwich Mean Time",   // This doesn't look correct
+            "GMT",                   // This doesn't look correct
+            "Irish Summer Time",
             "IST",
+            "Dublin",
         }
     }
-
 }
