@@ -4,8 +4,8 @@
  * others. All Rights Reserved.
  *******************************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/calendar/IBMCalendarTest.java,v $ 
- * $Date: 2002/03/29 19:42:43 $ 
- * $Revision: 1.8 $
+ * $Date: 2002/04/08 19:54:50 $ 
+ * $Revision: 1.9 $
  *******************************************************************************
  */
 package com.ibm.icu.dev.test.calendar;
@@ -217,7 +217,8 @@ public class IBMCalendarTest extends CalendarTest {
     }
     
     /**
-     * Test behavior of fieldDifference around leap years.
+     * Test behavior of fieldDifference around leap years.  Also test a large
+     * field difference to check binary search.
      */
     public void TestLeapFieldDifference() {
         Calendar cal = Calendar.getInstance();
@@ -239,6 +240,20 @@ public class IBMCalendarTest extends CalendarTest {
             logln("Ok: 2000/Feb/29 - 2004/Feb/29 = " + y + " years, " + d + " days");
         } else {
             errln("FAIL: 2000/Feb/29 - 2004/Feb/29 = " + y + " years, " + d + " days");
-        }        
+        }
+        // Test large difference
+        cal.set(2001, Calendar.APRIL, 5); // 2452005
+        Date ayl = cal.getTime();
+        cal.set(1964, Calendar.SEPTEMBER, 7); // 2438646
+        Date asl = cal.getTime();
+        d = cal.fieldDifference(ayl, Calendar.DAY_OF_MONTH);
+        cal.setTime(ayl);
+        int d2 = cal.fieldDifference(asl, Calendar.DAY_OF_MONTH);
+        if (d == -d2 && d == 13359) {
+            logln("Ok: large field difference symmetrical " + d);
+        } else {
+            logln("FAIL: large field difference incorrect " + d + ", " + d2 +
+                  ", expect +/- 13359");
+        }
     }
 }

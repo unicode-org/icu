@@ -644,7 +644,7 @@ import java.util.ResourceBundle;
  * @see          GregorianCalendar
  * @see          TimeZone
  * @see          DateFormat
- * @version      $Revision: 1.26 $ $Date: 2002/03/29 19:34:20 $
+ * @version      $Revision: 1.27 $ $Date: 2002/04/08 19:54:02 $
  * @author Mark Davis, David Goldsmith, Chen-Lieh Huang, Alan Liu, Laura Werner
  * @since JDK1.1
  */
@@ -2798,42 +2798,93 @@ public abstract class Calendar implements Serializable, Cloneable {
      * <code>field</code>.
      */
     public int fieldDifference(Date when, int field) {
-        int result = 0;
+        int min = 0;
+        long startMs = getTimeInMillis();
         long targetMs = when.getTime();
-        long ms = getTimeInMillis();
-        long start = ms;
         // Always add from the start millis.  This accomodates
         // operations like adding years from February 29, 2000 up to
         // February 29, 2004.  If 1, 1, 1, 1 is added to the year
         // field, the DOM gets pinned to 28 and stays there, giving an
         // incorrect DOM difference of 1.  We have to add 1, reset, 2,
         // reset, 3, reset, 4.
-        if (ms < targetMs) {
+        if (startMs < targetMs) {
+            int max = 1;
+            // Find a value that is too large
             for (;;) {
-                setTimeInMillis(start);
-                add(field, result+1);
-                long newMs = getTimeInMillis();
-                if (newMs > targetMs) {
-                    setTimeInMillis(ms);
+                setTimeInMillis(startMs);
+                add(field, max);
+                long ms = getTimeInMillis();
+                if (ms == targetMs) {
+                    return max;
+                } else if (ms > targetMs) {
                     break;
+                } else {
+                    max <<= 1;
+                    if (max < 0) {
+                        // Field difference too large to fit into int
+                        throw new RuntimeException();
+                    }
                 }
-                ms = newMs;
-                ++result;
             }
-        } else if (ms > targetMs) {
-            for (;;) {
-                setTimeInMillis(start);
-                add(field, result-1);
-                long newMs = getTimeInMillis();
-                if (newMs < targetMs) {
-                    setTimeInMillis(ms);
-                    break;
+            // Do a binary search
+            while ((max - min) > 1) {
+                int t = (min + max) / 2;
+                setTimeInMillis(startMs);
+                add(field, t);
+                long ms = getTimeInMillis();
+                if (ms == targetMs) {
+                    return t;
+                } else if (ms > targetMs) {
+                    max = t;
+                } else {
+                    min = t;
                 }
-                ms = newMs;
-                --result;
+            }
+        } else if (startMs > targetMs) {
+            if (false) {
+                // This works, and makes the code smaller, but costs
+                // an extra object creation and an extra couple cycles
+                // of calendar computation.
+                setTimeInMillis(targetMs);
+                min = -fieldDifference(new Date(startMs), field);
+            }
+            int max = -1;
+            // Find a value that is too small
+            for (;;) {
+                setTimeInMillis(startMs);
+                add(field, max);
+                long ms = getTimeInMillis();
+                if (ms == targetMs) {
+                    return max;
+                } else if (ms < targetMs) {
+                    break;
+                } else {
+                    max <<= 1;
+                    if (max == 0) {
+                        // Field difference too large to fit into int
+                        throw new RuntimeException();
+                    }
+                }
+            }
+            // Do a binary search
+            while ((min - max) > 1) {
+                int t = (min + max) / 2;
+                setTimeInMillis(startMs);
+                add(field, t);
+                long ms = getTimeInMillis();
+                if (ms == targetMs) {
+                    return t;
+                } else if (ms < targetMs) {
+                    max = t;
+                } else {
+                    min = t;
+                }
             }
         }
-        return result;
+        // Set calendar to end point
+        setTimeInMillis(startMs);
+        add(field, min);
+        return min;
     }
 
     /**
