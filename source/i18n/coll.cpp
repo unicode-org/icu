@@ -38,8 +38,8 @@
 // 11/23/9      srl         Inlining of some critical functions
 //=============================================================================
 
+#include "unicode/utypes.h"
 #include "colcache.h"
-
 #include "unicode/coll.h"
 
 #include "unicode/tblcoll.h"
@@ -49,6 +49,7 @@
 #include "unicode/normlzr.h"
 
 //-----------------------------------------------------------------------------
+const UVersionInfo Collator::fVersion = {1, 0, 0, 0};
 
 Collator::Collator()
   : strength(Collator::TERTIARY), decmp(Normalizer::DECOMP)

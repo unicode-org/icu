@@ -38,6 +38,7 @@
 //                          UnicodeString construction and special case for NO_OP.
 // 11/23/99     srl         More performance enhancements. Inlining of
 //                          critical accessors.
+// 05/15/00     helena      Added version information API. 
 //=============================================================================
 
 #ifndef COLL_H
@@ -48,6 +49,7 @@
 #include "unicode/utypes.h"
 #include "unicode/unistr.h"
 #include "unicode/normlzr.h"
+#include "cmemory.h"
 
 class CollationKey;
 
@@ -524,6 +526,13 @@ public:
   static  const   Locale*     getAvailableLocales(int32_t& count);
 
   /**
+   * Gets the version information for a Collator. 
+   * @param info the version # information, the result will be filled in
+   * @stable
+   */
+  void getVersion(UVersionInfo info) const;
+
+  /**
    * Returns a unique class ID POLYMORPHICALLY.  Pure virtual method.
    * This method is to implement a simple version of RTTI, since not all
    * C++ compilers support genuine RTTI.  Polymorphic operator==() and
@@ -561,6 +570,7 @@ private:
             
   ECollationStrength  strength;
   Normalizer::EMode  decmp;
+  static const UVersionInfo fVersion;
 };
 
 inline bool_t
@@ -592,5 +602,12 @@ Collator::getDecomposition() const
   return decmp;
 }
 
+inline void 
+Collator::getVersion(UVersionInfo versionInfo) const 
+{
+    if(versionInfo!=NULL) {
+        uprv_memcpy(versionInfo, fVersion, U_MAX_VERSION_LENGTH);
+    }
+}
 
 #endif
