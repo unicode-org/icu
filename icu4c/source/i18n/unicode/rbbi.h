@@ -187,18 +187,18 @@ public:
     /**
      * A token used as a character-category value to identify ignore characters
      */
-    static int8_t IGNORE;
+    static const int8_t IGNORE;
 
 private:
     /**
      * The state number of the starting state
      */
-    static int16_t START_STATE;
+    static const int16_t START_STATE;
 
     /**
      * The state-transition value indicating "stop"
      */
-    static int16_t STOP_STATE;
+    static const int16_t STOP_STATE;
 
 protected:
     /**
@@ -215,7 +215,7 @@ private:
     /**
      * Class ID
      */
-    static char fgClassID;
+    static const char fgClassID;
 /*
  * HSYS: To be revisited, once the ctor are made public.
  */

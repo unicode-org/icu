@@ -522,7 +522,7 @@ public:
     }
 
 private:
-    static char fgClassID;
+    static const char fgClassID;
     //static NumberFormat* fgNumberFormat;
 
     /* stores types of formattable objects in the pattern

@@ -584,7 +584,7 @@ private:
      */
     int32_t fGregorianCutoverYear;// = 1582;
 
-    static char fgClassID;
+    static const char fgClassID;
 
     /**
      * Converts time as milliseconds to Julian date. The Julian date used here is not a

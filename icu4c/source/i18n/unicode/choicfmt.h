@@ -600,7 +600,7 @@ private:
 
     //static UMTX fgMutex;
     //static NumberFormat* fgNumberFormat;
-    static char fgClassID;
+    static const char fgClassID;
 
     static const UChar fgPositiveInfinity[];
     static const UChar fgNegativeInfinity[];

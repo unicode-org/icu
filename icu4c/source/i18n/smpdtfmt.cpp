@@ -60,9 +60,9 @@ const UChar SimpleDateFormat::fgDefaultPattern[] =
  * These are the tags we expect to see in normal resource bundle files associated
  * with a locale.
  */
-const char *SimpleDateFormat::fgDateTimePatternsTag="DateTimePatterns";
+const char SimpleDateFormat::fgDateTimePatternsTag[]="DateTimePatterns";
 
-char            SimpleDateFormat::fgClassID = 0; // Value is irrelevant
+const char      SimpleDateFormat::fgClassID = 0; // Value is irrelevant
 
 /**
  * This value of defaultCenturyStart indicates that the system default is to be

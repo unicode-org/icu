@@ -25,6 +25,9 @@
 // class DecimalFormatSymbols
 // *****************************************************************************
  
+const char DecimalFormatSymbols::fgNumberElements[] = "NumberElements";
+const char DecimalFormatSymbols::fgCurrencyElements[] = "CurrencyElements";
+
 // -------------------------------------
 // Initializes this with the decimal format symbols in the default locale.
  
@@ -113,7 +116,7 @@ DecimalFormatSymbols::initialize(const Locale& locale, UErrorCode& status,
 
     // Gets the number element array.
     int32_t i = 0;
-    ResourceBundle numberElementsRes = resource.get("NumberElements", status);
+    ResourceBundle numberElementsRes = resource.get(fgNumberElements, status);
     int32_t numberElementsLength = numberElementsRes.getSize();
     UnicodeString* numberElements = new UnicodeString[numberElementsLength];
     for(i = 0; i<numberElementsLength; i++) {
@@ -121,7 +124,7 @@ DecimalFormatSymbols::initialize(const Locale& locale, UErrorCode& status,
     }
 
     // Gets the currency element array.
-    ResourceBundle currencyElementsRes = resource.get("CurrencyElements", status);
+    ResourceBundle currencyElementsRes = resource.get(fgCurrencyElements, status);
     int32_t currencyElementsLength = currencyElementsRes.getSize();
     UnicodeString* currencyElements = new UnicodeString[currencyElementsLength];
     for(i = 0; i<currencyElementsLength; i++) {
