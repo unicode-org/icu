@@ -7,8 +7,8 @@
 ## Makefile.in for ICU - uconv
 ## Steven  R. Loomis
 
-## Set the following to 'YES' to statically link uconv's data.
-UCONVMSG_STATIC=YES
+## Set the following to dll or static or common..
+UCONVMSG_MODE=static
 ##############################################################
 
 srcdir=@srcdir@
@@ -46,14 +46,26 @@ TARGET = uconv
 CPPFLAGS += -I$(top_builddir)/common -I$(top_srcdir)/common -I$(top_srcdir)/i18n -I$(srcdir)/../toolutil
 LIBS = $(LIBICUI18N) $(LIBICUUC) $(DEFAULT_LIBS) $(LIB_M)
 
-ifeq ($(UCONVMSG_STATIC),YES)
-DEFS += -DUCONVMSG_STATIC=$(MSGNAME)
+## generic settings for data - common.
+PKGMODE=common
+INSTALLTO=$(DESTDIR)$(ICUDATA_DIR)
+UCONVMSG_LIB=dummy
+
+## Static mode
+ifeq ($(UCONVMSG_MODE),static)
+DEFS += -DUCONVMSG_LINK=$(MSGNAME)
 UCONVMSG_LIB = $(RESDIR)/lib$(MSGNAME).a
 LIBS += $(UCONVMSG_LIB)
+PKGMODE=static
+INSTALLTO=$(libdir)
+endif
 
-PKGMODE = static
-else
-PKGMODE = dll
+## DLL mode
+ifeq ($(UCONVMSG_MODE),dll)
+DEFS += -DUCONVMSG_LINK=$(MSGNAME)
+LIBS += -L$(RESDIR) -l$(MSGNAME)
+PKGMODE=dll
+INSTALLTO=$(libdir)
 endif
 
 OBJECTS = uconv.o uwmsg.o
@@ -69,9 +81,6 @@ distclean resclean distclean-local dist dist-local check check-local resfiles pa
 
 ## List of standard targets
 all: all-local
-
-spam:
-	echo ucml = $(UCONVMSG_LIB)
 
 install: install-local
 clean: clean-local
@@ -110,11 +119,10 @@ pkgdata.inc: $(srcdir)/pkgdata.inc.in  $(top_builddir)/config.status
 	cd $(top_builddir) \
 	 && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
 
-$(TARGET) : $(OBJECTS) $(UCONVMSG_LIB) $(UCONVMSG_LIB)  $(UCONVMSG_LIB)
-	$(LINK.cc) -o $@ $^ $(LIBS) $(LDFLAGS)
+$(TARGET) : $(OBJECTS)  $(UCONVMSG_LIB)
+	$(LINK.cc) -o $@ $(OBJECTS) $(LIBS) $(LDFLAGS)
 
 resfiles: $(RESFILES) package-resfiles
-
 
 ifeq ($(UCONVMSG_STATIC),YES)
 $(UCONVMSG_LIB): resfiles
@@ -131,11 +139,15 @@ $(RESDIR)/$(RESDIR).lst: Makefile pkgdata.inc $(srcdir)/resfiles.mk
 	  echo `pwd`/$$file >> $@; \
 	done;
 
-ifneq ($(UCONVMSG_STATIC),YES)
+# no install for static mode
+ifneq ($(UCONVMSG_MODE),static)
 install-resfiles: $(RESFILES)
 	$(MKINSTALLDIRS) $(DESTDIR)$(ICUDATA_DIR)
-	$(INVOKE) $(top_builddir)/tools/pkgdata/pkgdata -p $(RESDIR) -O pkgdata.inc -m $(PKGMODE) -d $(RESDIR) -I $(DESTDIR)$(ICUDATA_DIR) -T $(RESDIR) $(RESDIR)/$(RESDIR).lst
+	$(INVOKE) $(top_builddir)/tools/pkgdata/pkgdata -p $(RESDIR) -O pkgdata.inc -m $(PKGMODE) -d $(RESDIR) -I $(INSTALLTO) -T $(RESDIR) $(RESDIR)/$(RESDIR).lst
 endif
+
+##
+$(UCONVMSG_LIB): resfiles
 
 $(RESDIR)/%.res: $(srcdir)/%.txt
 	$(MKINSTALLDIRS) $(@D)
