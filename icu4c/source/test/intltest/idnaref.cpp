@@ -268,7 +268,7 @@ idnaref_toASCII(const UChar* src, int32_t srcLength,
     if(status == NULL || U_FAILURE(*status)){
         return 0;
     }
-    if((srcLength < -1) || (destCapacity<0) || (!dest && destCapacity > 0)){
+    if((src == NULL) || (srcLength < -1) || (destCapacity<0) || (!dest && destCapacity > 0)){
         *status = U_ILLEGAL_ARGUMENT_ERROR;
         return 0;
     }
@@ -415,7 +415,7 @@ idnaref_toUnicode(const UChar* src, int32_t srcLength,
     if(status == NULL || U_FAILURE(*status)){
         return 0;
     }
-    if((srcLength < -1) || (destCapacity<0) || (!dest && destCapacity > 0)){
+    if((src == NULL) || (srcLength < -1) || (destCapacity<0) || (!dest && destCapacity > 0)){
         *status = U_ILLEGAL_ARGUMENT_ERROR;
         return 0;
     }
@@ -666,7 +666,7 @@ idnaref_IDNToASCII(  const UChar* src, int32_t srcLength,
     if(status == NULL || U_FAILURE(*status)){
         return 0;
     }
-    if((srcLength < -1) || (destCapacity<0) || (!dest && destCapacity > 0)){
+    if((src == NULL) || (srcLength < -1) || (destCapacity<0) || (!dest && destCapacity > 0)){
         *status = U_ILLEGAL_ARGUMENT_ERROR;
         return 0;
     }
@@ -820,7 +820,7 @@ idnaref_IDNToUnicode(  const UChar* src, int32_t srcLength,
     if(status == NULL || U_FAILURE(*status)){
         return 0;
     }
-    if((srcLength < -1) || (destCapacity<0) || (!dest && destCapacity > 0)){
+    if((src == NULL) || (srcLength < -1) || (destCapacity<0) || (!dest && destCapacity > 0)){
         *status = U_ILLEGAL_ARGUMENT_ERROR;
         return 0;
     }
