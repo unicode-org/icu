@@ -877,6 +877,8 @@ int main(int argc, char* argv[])
         return 1;
     }
 
+    fprintf(stdout, "Default charset for this run is %s\n", ucnv_getDefaultName());
+
     addAllTests(&root);
     nerrors = processArgs(root, argc, argv);
 
