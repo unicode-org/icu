@@ -109,7 +109,7 @@ const char* Transliterator::RB_RULE = "Rule";
  * Default constructor.
  * @param theID the string identifier for this transliterator
  * @param theFilter the filter.  Any character for which
- * <tt>filter.contains()</tt> returns <tt>false</tt> will not be
+ * <tt>filter.contains()</tt> returns <tt>FALSE</tt> will not be
  * altered by this transliterator.  If <tt>filter</tt> is
  * <tt>null</tt> then no filtering is applied.
  */
@@ -300,7 +300,7 @@ void Transliterator::transliterate(Replaceable& text,
  */
 void Transliterator::finishTransliteration(Replaceable& text,
                                            UTransPosition& index) const {
-    handleTransliterate(text, index, false);
+    handleTransliterate(text, index, FALSE);
 }
 
 /**
