@@ -1,3 +1,18 @@
+/******************************************************************************
+*                                                                             *
+* COPYRIGHT:                                                                  *
+*   (C) Copyright International Business Machines Corporation,  2001          *
+*   Licensed Material - Program-Property of IBM - All Rights Reserved.        *
+*   US Government Users Restricted Rights - Use, duplication, or disclosure   *
+*   restricted by GSA ADP Schedule Contract with IBM Corp.                    *
+*                                                                             *
+*******************************************************************************
+************************************************************************
+*   Date        Name        Description
+*   02/28/2001  aliu        Creation
+*   03/01/2001  George      port to HP/UX
+************************************************************************/
+
 #ifndef JAMOTEST_H
 #define JAMOTEST_H
 
