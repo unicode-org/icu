@@ -22,6 +22,18 @@
 #ifndef UVERSION_H
 #define UVERSION_H
 
+/** IMPORTANT: When updating version, the following things need to be done:   */
+/** source/common/unicode/uversion.h - this file: update major, minor,        */
+/**                   patchlevel, suffix, version and short version constants */
+/** source/common/common.dsp - update 'Output file name' on the link tab so   */
+/**                   that it contains the new major/minor combination        */
+/** source/i18n/i18n.dsp - same as for the common.dsp                         */
+/** source/data/build/makedata.mak - change U_ICUDATA_NAME so that it contains*/
+/**                   the new major/minor combination                         */
+/** source/tools/genren/genren.pl - use this script according to the README   */
+/**                    in that folder                                         */
+
+
 /** The current ICU major version as an integer. */
 #define U_ICU_VERSION_MAJOR_NUM 1
 
@@ -29,7 +41,7 @@
 #define U_ICU_VERSION_MINOR_NUM 9
 
 /** The current ICU patchlevel version as an integer. */
-#define U_ICU_VERSION_PATCHLEVEL_NUM 1
+#define U_ICU_VERSION_PATCHLEVEL_NUM 0
 
 /** Glued version suffix for renamers */
 #define U_ICU_VERSION_SUFFIX _1_9
