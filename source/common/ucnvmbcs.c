@@ -1315,6 +1315,13 @@ unrolled:
                 /* not mappable or buffer overflow */
                 break;
             }
+
+            /* recalculate the targetCapacity after an extension mapping */
+            targetCapacity=pArgs->targetLimit-target;
+            length=sourceLimit-source;
+            if(length<targetCapacity) {
+                targetCapacity=length;
+            }
         }
 
 #if MBCS_UNROLL_SINGLE_TO_BMP
@@ -2196,7 +2203,7 @@ _MBCSDoubleFromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
 
     uint32_t stage2Entry;
     uint32_t value;
-    int32_t length, prevLength;
+    int32_t length;
     uint8_t unicodeMask;
 
     /* use optimized function if possible */
@@ -2219,7 +2226,6 @@ _MBCSDoubleFromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
 
     /* get the converter state from UConverter */
     c=cnv->fromUChar32;
-    prevLength=cnv->fromUnicodeStatus;
 
     /* sourceIndex=-1 if the current character began in the previous buffer */
     sourceIndex= c==0 ? 0 : -1;
@@ -2327,6 +2333,9 @@ unassigned:
                 } else {
                     /* a mapping was written to the target, continue */
 
+                    /* recalculate the targetCapacity after an extension mapping */
+                    targetCapacity=pArgs->targetLimit-(char *)target;
+
                     /* normal end of conversion: prepare for a new character */
                     sourceIndex=nextSourceIndex;
                     continue;
@@ -2379,7 +2388,6 @@ unassigned:
 
     /* set the converter state back into UConverter */
     cnv->fromUChar32=c;
-    cnv->fromUnicodeStatus=prevLength;
 
     /* write back the updated pointers */
     pArgs->source=source;
@@ -2529,6 +2537,9 @@ unassigned:
                     break;
                 } else {
                     /* a mapping was written to the target, continue */
+
+                    /* recalculate the targetCapacity after an extension mapping */
+                    targetCapacity=pArgs->targetLimit-(char *)target;
 
                     /* normal end of conversion: prepare for a new character */
                     sourceIndex=nextSourceIndex;
@@ -2757,6 +2768,13 @@ getTrail:
             break;
         } else {
             /* a mapping was written to the target, continue */
+
+            /* recalculate the targetCapacity after an extension mapping */
+            targetCapacity=pArgs->targetLimit-(char *)target;
+            length=sourceLimit-source;
+            if(length<targetCapacity) {
+                targetCapacity=length;
+            }
         }
 
 #if MBCS_UNROLL_SINGLE_FROM_BMP
@@ -2856,7 +2874,17 @@ _MBCSFromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
 
     /* get the converter state from UConverter */
     c=cnv->fromUChar32;
-    prevLength=cnv->fromUnicodeStatus;
+
+    if(outputType==MBCS_OUTPUT_2_SISO) {
+        prevLength=cnv->fromUnicodeStatus;
+        if(prevLength==0) {
+            /* set the real value */
+            prevLength=1;
+        }
+    } else {
+        /* prevent fromUnicodeStatus from being set to something non-0 */
+        prevLength=0;
+    }
 
     /* sourceIndex=-1 if the current character began in the previous buffer */
     prevSourceIndex=-1;
@@ -3115,6 +3143,9 @@ unassigned:
                     break;
                 } else {
                     /* a mapping was written to the target, continue */
+
+                    /* recalculate the targetCapacity after an extension mapping */
+                    targetCapacity=pArgs->targetLimit-(char *)target;
 
                     /* normal end of conversion: prepare for a new character */
                     if(offsets!=NULL) {
