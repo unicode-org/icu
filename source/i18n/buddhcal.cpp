@@ -90,9 +90,10 @@ BuddhistCalendar::monthLength(int32_t month, int32_t year) const
 int32_t
 BuddhistCalendar::monthLength(int32_t month) const
 {
+    UErrorCode status = U_ZERO_ERROR;
     int32_t year = internalGet(UCAL_YEAR);
     // ignore era
-    return monthLength(month, year);
+    return GregorianCalendar::monthLength(month, getGregorianYear(status));
 }
 
 int32_t BuddhistCalendar::internalGetEra() const
