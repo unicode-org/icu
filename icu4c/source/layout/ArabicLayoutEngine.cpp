@@ -34,14 +34,15 @@ le_bool CharSubstitutionFilter::accept(LEGlyphID glyph) const
 UOBJECT_DEFINE_RTTI_IMPLEMENTATION(ArabicOpenTypeLayoutEngine)
 
 ArabicOpenTypeLayoutEngine::ArabicOpenTypeLayoutEngine(const LEFontInstance *fontInstance, le_int32 scriptCode, le_int32 languageCode,
-                        const GlyphSubstitutionTableHeader *gsubTable)
-    : OpenTypeLayoutEngine(fontInstance, scriptCode, languageCode, gsubTable)
+                        le_int32 typoFlags, const GlyphSubstitutionTableHeader *gsubTable)
+    : OpenTypeLayoutEngine(fontInstance, scriptCode, languageCode, typoFlags, gsubTable)
 {
     /**/ fFeatureOrder = ArabicShaping::getFeatureOrder();
 }
 
-ArabicOpenTypeLayoutEngine::ArabicOpenTypeLayoutEngine(const LEFontInstance *fontInstance, le_int32 scriptCode, le_int32 languageCode)
-    : OpenTypeLayoutEngine(fontInstance, scriptCode, languageCode)
+ArabicOpenTypeLayoutEngine::ArabicOpenTypeLayoutEngine(const LEFontInstance *fontInstance, le_int32 scriptCode, le_int32 languageCode,
+						       le_int32 typoFlags)
+    : OpenTypeLayoutEngine(fontInstance, scriptCode, languageCode, typoFlags)
 {
     // fFeatureOrder = ArabicShaping::getFeatureOrder();
 }
@@ -105,8 +106,8 @@ void ArabicOpenTypeLayoutEngine::adjustGlyphPositions(const LEUnicode chars[], l
     }
 }
 
-UnicodeArabicOpenTypeLayoutEngine::UnicodeArabicOpenTypeLayoutEngine(const LEFontInstance *fontInstance, le_int32 scriptCode, le_int32 languageCode)
-    : ArabicOpenTypeLayoutEngine(fontInstance, scriptCode, languageCode)
+UnicodeArabicOpenTypeLayoutEngine::UnicodeArabicOpenTypeLayoutEngine(const LEFontInstance *fontInstance, le_int32 scriptCode, le_int32 languageCode, le_int32 typoFlags)
+    : ArabicOpenTypeLayoutEngine(fontInstance, scriptCode, languageCode, typoFlags)
 {
     fGSUBTable = (const GlyphSubstitutionTableHeader *) CanonShaping::glyphSubstitutionTable;
     fGDEFTable = (const GlyphDefinitionTableHeader *) CanonShaping::glyphDefinitionTable;

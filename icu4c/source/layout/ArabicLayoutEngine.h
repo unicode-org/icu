@@ -44,12 +44,12 @@ public:
      *
      * @see LayoutEngine::layoutEngineFactory
      * @see OpenTypeLayoutEngine
-     * @see ScriptAndLangaugeTags.h for script and language codes
+     * @see ScriptAndLanguageTags.h for script and language codes
      *
      * @internal
      */
     ArabicOpenTypeLayoutEngine(const LEFontInstance *fontInstance, le_int32 scriptCode, le_int32 languageCode,
-                            const GlyphSubstitutionTableHeader *gsubTable);
+                            le_int32 typoFlags, const GlyphSubstitutionTableHeader *gsubTable);
 
     /**
      * This constructor is used when the font requires a "canned" GSUB table which can't be known
@@ -60,11 +60,12 @@ public:
      * @param langaugeCode - the language
      *
      * @see OpenTypeLayoutEngine
-     * @see ScriptAndLangaugeTags.h for script and language codes
+     * @see ScriptAndLanguageTags.h for script and language codes
      *
      * @internal
      */
-    ArabicOpenTypeLayoutEngine(const LEFontInstance *fontInstance, le_int32 scriptCode, le_int32 languageCode);
+    ArabicOpenTypeLayoutEngine(const LEFontInstance *fontInstance, le_int32 scriptCode, le_int32 languageCode,
+			       le_int32 typoFlags);
 
     /**
      * The destructor, virtual for correct polymorphic invocation.
@@ -164,7 +165,8 @@ public:
      *
      * @internal
      */
-    UnicodeArabicOpenTypeLayoutEngine(const LEFontInstance *fontInstance, le_int32 scriptCode, le_int32 languageCode);
+    UnicodeArabicOpenTypeLayoutEngine(const LEFontInstance *fontInstance, le_int32 scriptCode, le_int32 languageCode,
+		le_int32 typoFlags);
 
     /**
      * The destructor, virtual for correct polymorphic invocation.
