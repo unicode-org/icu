@@ -263,7 +263,7 @@ public:
     * @return Returns an enum value. UCOL_GREATER if source is greater
     * than target; UCOL_EQUAL if source is equal to target; UCOL_LESS if source is less
     * than target
-    * @draft ICU 2.6
+    * @stable ICU 2.6
     **/
     virtual UCollationResult compare(const UnicodeString& source,
                                       const UnicodeString& target,
@@ -297,7 +297,7 @@ public:
     *         length) is greater than target; UCOL_EQUAL if source (up to specified 
     *         length) is equal to target; UCOL_LESS if source (up to the specified 
     *         length) is less  than target.
-    * @draft ICU 2.6
+    * @stable ICU 2.6
     */
     virtual UCollationResult compare(const UnicodeString& source,
                                       const UnicodeString& target,
@@ -355,7 +355,7 @@ public:
     * @return Returns an enum value. UCOL_GREATER if source is greater
     * than target; UCOL_EQUAL if source is equal to target; UCOL_LESS if source is less
     * than target
-    * @draft ICU 2.6
+    * @stable ICU 2.6
     */
     virtual UCollationResult compare(const UChar* source, int32_t sourceLength,
                                       const UChar* target, int32_t targetLength,

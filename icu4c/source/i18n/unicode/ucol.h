@@ -462,9 +462,9 @@ ucol_equal(const UCollator *coll,
  * UCOL_GREATER, UCOL_LESS
  * @param status A pointer to an UErrorCode to receive any errors
  * @see ucol_strcoll
- * @draft ICU 2.6
+ * @stable ICU 2.6
  */
-U_DRAFT UCollationResult U_EXPORT2 
+U_STABLE UCollationResult U_EXPORT2 
 ucol_strcollIter(  const    UCollator    *coll,
                   UCharIterator *sIter,
                   UCharIterator *tIter,
@@ -716,9 +716,9 @@ ucol_getSortKey(const    UCollator    *coll,
  *  @return the actual number of bytes of a sortkey. It can be
  *          smaller than count if we have reached the end of 
  *          the sort key.
- *  @draft ICU 2.6
+ *  @stable ICU 2.6
  */
-U_DRAFT int32_t U_EXPORT2 
+U_STABLE int32_t U_EXPORT2 
 ucol_nextSortKeyPart(const UCollator *coll,
                      UCharIterator *iter,
                      uint32_t state[2],

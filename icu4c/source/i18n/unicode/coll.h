@@ -60,12 +60,12 @@ class StringEnumeration;
 
 #if !UCONFIG_NO_SERVICE
 /**
- * @draft ICU 2.6
+ * @stable ICU 2.6
  */
 typedef const void* URegistryKey;
 
 /**
- * @draft ICU 2.6
+ * @stable ICU 2.6
  */
 class CollatorFactory;
 #endif
@@ -357,7 +357,7 @@ public:
      * @return Returns an enum value. UCOL_GREATER if source is greater
      * than target; UCOL_EQUAL if source is equal to target; UCOL_LESS if source is less
      * than target
-     * @draft ICU 2.6
+     * @stable ICU 2.6
      */
     virtual UCollationResult compare(const UnicodeString& source,
                                       const UnicodeString& target,
@@ -390,7 +390,7 @@ public:
      *         length) is greater than target; UCOL_EQUAL if source (up to specified
      *         length) is equal to target; UCOL_LESS if source (up to the specified
      *         length) is less  than target.
-     * @draft ICU 2.6
+     * @stable ICU 2.6
      */
     virtual UCollationResult compare(const UnicodeString& source,
                                       const UnicodeString& target,
@@ -430,7 +430,7 @@ public:
      * @return Returns an enum value. UCOL_GREATER if source is greater
      * than target; UCOL_EQUAL if source is equal to target; UCOL_LESS if source is less
      * than target
-     * @draft ICU 2.6
+     * @stable ICU 2.6
      */
     virtual UCollationResult compare(const UChar* source, int32_t sourceLength,
                                       const UChar* target, int32_t targetLength,
@@ -606,7 +606,7 @@ public:
      * condition) this will return null. If there is no locale data, an empty enumeration
      * will be returned.
      * @return a StringEnumeration over the locales available at the time of the call
-     * @draft ICU 2.6
+     * @stable ICU 2.6
      */
     static StringEnumeration* U_EXPORT2 getAvailableLocales(void);
 #endif
@@ -672,7 +672,7 @@ public:
      * @param locale the locale with which the collator will be associated
      * @param status the in/out status code, no special meanings are assigned
      * @return a registry key that can be used to unregister this collator
-     * @draft ICU 2.6
+     * @stable ICU 2.6
      */
     static URegistryKey U_EXPORT2 registerInstance(Collator* toAdopt, const Locale& locale, UErrorCode& status);
 
@@ -681,7 +681,7 @@ public:
      * @param toAdopt the CollatorFactory instance to be adopted
      * @param status the in/out status code, no special meanings are assigned
      * @return a registry key that can be used to unregister this collator
-     * @draft ICU 2.6
+     * @stable ICU 2.6
      */
     static URegistryKey U_EXPORT2 registerFactory(CollatorFactory* toAdopt, UErrorCode& status);
 
@@ -693,7 +693,7 @@ public:
      * @param key the registry key returned by a previous call to registerInstance
      * @param status the in/out status code, no special meanings are assigned
      * @return TRUE if the collator for the key was successfully unregistered
-     * @draft ICU 2.6
+     * @stable ICU 2.6
      */
     static UBool U_EXPORT2 unregister(URegistryKey key, UErrorCode& status);
 #endif /* UCONFIG_NO_SERVICE */
@@ -971,7 +971,7 @@ private:
  * Note: if the collators are to be used from C APIs, they must be instances
  * of RuleBasedCollator.</p>
  *
- * @draft ICU 2.6
+ * @stable ICU 2.6
  */
 class U_I18N_API CollatorFactory : public UObject {
 public:
@@ -987,7 +987,7 @@ public:
      * If not visible, the locales supported by this factory will not
      * be listed by getAvailableLocales.
      * @return true if the factory is visible.
-     * @draft ICU 2.6
+     * @stable ICU 2.6
      */
     virtual UBool visible(void) const;
 
@@ -996,7 +996,7 @@ public:
      * is not supported, return NULL.
      * @param loc the locale identifying the collator to be created.
      * @return a new collator if the locale is supported, otherwise NULL.
-     * @draft ICU 2.6
+     * @stable ICU 2.6
      */
     virtual Collator* createCollator(const Locale& loc) = 0;
 
@@ -1008,7 +1008,7 @@ public:
      * @param displayLocale the locale for which the display name of the collator should be localized
      * @param result an output parameter for the display name, set to bogus if not supported.
      * @return the display name
-     * @draft ICU 2.6
+     * @stable ICU 2.6
      */
     virtual  UnicodeString& getDisplayName(const Locale& objectLocale,
                                            const Locale& displayLocale,
@@ -1021,7 +1021,7 @@ public:
      * @param count output parameter for the number of locales supported by the factory
      * @param status the in/out error code
      * @return a pointer to an array of count UnicodeStrings.
-     * @draft ICU 2.6
+     * @stable ICU 2.6
      */
     virtual const UnicodeString * getSupportedIDs(int32_t &count, UErrorCode& status) = 0;
 };
