@@ -566,7 +566,7 @@ udat_setSymbols(    UDateFormat             *format,
 #   error "ICU version has changed. Please redefine the macros under U_USE_DEPRECATED_FORMAT_API pre-processor definition"
 #else 
     static UDateFormat*
-    udat_openPattern(UChar* pattern,int32_t patternLength,const char* locale,UErrorCode *status)
+    udat_openPattern(const UChar* pattern,int32_t patternLength,const char* locale,UErrorCode *status)
     {
         return udat_open(UDAT_IGNORE,UDAT_IGNORE,locale,NULL,0,pattern,patternLength,status);
     }

@@ -148,6 +148,7 @@ enum UNumberFormatPadPosition {
 };
 typedef enum UNumberFormatPadPosition UNumberFormatPadPosition;
 
+#if 0
 /**
 * Open a new UNumberFormat for formatting and parsing numbers.
 * A UNumberFormat may be used to format numbers in calls to \Ref{unum_format},
@@ -161,11 +162,11 @@ typedef enum UNumberFormatPadPosition UNumberFormatPadPosition;
 * @see unum_openPattern
 * @stable
 * @deprecated
+*/
 U_CAPI UNumberFormat*
 unum_open(UNumberFormatStyle    style,
       const   char*        locale,
       UErrorCode*        status);
-*/
 
 /**
 * Open a new UNumberFormat for formatting and parsing numbers.
@@ -179,13 +180,14 @@ unum_open(UNumberFormatStyle    style,
 * an error occurred.
 * @see unum_open
 * @deprecated
+*/
 U_CAPI UNumberFormat*
 unum_openPattern(    const    UChar*        pattern,
             int32_t            patternLength,
             const    char*        locale,
             UErrorCode*        status);
-*/
 
+#endif
 /**
 * Open a new UNumberFormat for formatting and parsing numbers.
 * A UNumberFormat may be used to format numbers in calls to \Ref{unum_format},
@@ -755,7 +757,7 @@ unum_setSymbol(UNumberFormat *fmt,
 #   error "ICU version has changed. Please redefine the macros under U_USE_DEPRECATED_FORMAT_API pre-processor definition"
 #else 
     static UNumberFormat* 
-    unum_openPattern(UChar* pattern, int32_t patternLength,char* locale,UErrorCode* status) 
+    unum_openPattern(const UChar* pattern, int32_t patternLength,const char* locale,UErrorCode* status) 
     {
         return unum_open(0,pattern,patternLength,locale,NULL,status);
     }
