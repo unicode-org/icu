@@ -795,7 +795,7 @@ GregorianCalendar::aggregateStamp(int32_t stamp_a, int32_t stamp_b)
 {
     return (((stamp_a != kUnset && stamp_b != kUnset) 
         ? uprv_max(stamp_a, stamp_b)
-        : kUnset));
+        : (int32_t)kUnset));
 }
 
 // -------------------------------------
@@ -1233,7 +1233,7 @@ GregorianCalendar::inDaylightTime(UErrorCode& status) const
  */
 int32_t
 GregorianCalendar::internalGetEra() const {
-    return isSet(UCAL_ERA) ? internalGet(UCAL_ERA) : AD;
+    return isSet(UCAL_ERA) ? internalGet(UCAL_ERA) : (int32_t)AD;
 }
 
 const char *
