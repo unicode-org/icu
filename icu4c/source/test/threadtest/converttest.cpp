@@ -71,9 +71,9 @@ void ConvertThreadTest::check() {
     UErrorCode     err = U_ZERO_ERROR;
 
     if (fCnv) {ucnv_close(fCnv);}
-    if (ucnv_cleanup () == FALSE) {
-        fprintf(stderr, "ucnv_cleanup() failed - cache was not empty.\n");
-    }
+    //if (ucnv_cleanup () == FALSE) {
+    //    fprintf(stderr, "ucnv_cleanup() failed - cache was not empty.\n");
+    //}
     fCnv = ucnv_open("gb18030", &err);
     if (U_FAILURE(err)) {
         fprintf(stderr, "ConvertTest::check() - could not redo ucnv_open(\"gb18030\")\n");

@@ -176,7 +176,7 @@ struct RunInfo
 struct ThreadInfo
 {
     bool    fHeartBeat;            // Set true by the thread each time it finishes
-                                   //   parsing a file.
+                                   //   a test.
     unsigned int     fCycles;      // Number of cycles completed.
     int              fThreadNum;   // Identifying number for this thread.
     ThreadInfo() {
@@ -195,7 +195,9 @@ struct ThreadInfo
 //------------------------------------------------------------------------------
 RunInfo         gRunInfo;
 ThreadInfo      *gThreadInfo;
-UMTX            gMutex;
+UMTX            gStopMutex;        // Lets main thread suspend test threads.
+UMTX            gInfoMutex;        // Synchronize access to data passed between
+                                   //  worker threads and the main thread
 
 
 //----------------------------------------------------------------------
@@ -325,17 +327,21 @@ void threadMain (void *param)
             printf("Thread #%d: starting loop\n", thInfo->fThreadNum);
 
         //
-        //  If the main thread is asking us to wait, do so by locking gMutex
+        //  If the main thread is asking us to wait, do so by locking gStopMutex
         //     which will block us, since the main thread will be holding it already.
         // 
-        if (gRunInfo.stopFlag) {
+        umtx_lock(&gInfoMutex);
+        UBool stop = gRunInfo.stopFlag;  // Need mutex for processors with flakey memory models.
+        umtx_unlock(&gInfoMutex);
+
+        if (stop) {
             if (gRunInfo.verbose) {
                 fprintf(stderr, "Thread #%d: suspending\n", thInfo->fThreadNum);
             }
             umtx_atomic_dec(&gRunInfo.runningThreads);
             while (gRunInfo.stopFlag) {
-                umtx_lock(&gMutex);
-                umtx_unlock(&gMutex);
+                umtx_lock(&gStopMutex);
+                umtx_unlock(&gStopMutex);
             }
             umtx_atomic_inc(&gRunInfo.runningThreads);
             if (gRunInfo.verbose) {
@@ -348,13 +354,16 @@ void threadMain (void *param)
         //
         gRunInfo.fTest->runOnce();
 
+        umtx_lock(&gInfoMutex);
         thInfo->fHeartBeat = true;
         thInfo->fCycles++;
+        UBool exitNow = gRunInfo.exitFlag;
+        umtx_unlock(&gInfoMutex);
 
         //
         // If main thread says it's time to exit, break out of the loop.
         //
-        if (gRunInfo.exitFlag) {
+        if (exitNow) {
             break;
         }
     }
@@ -393,7 +402,7 @@ int main (int argc, char **argv)
 
     gRunInfo.exitFlag = FALSE;
     gRunInfo.stopFlag = TRUE;      // Will cause the new threads to block 
-    umtx_lock(&gMutex);
+    umtx_lock(&gStopMutex);
 
     gThreadInfo = new ThreadInfo[gRunInfo.numThreads];
     int threadNum;
@@ -412,7 +421,7 @@ int main (int argc, char **argv)
     // Unblock the threads.
     //
     gRunInfo.stopFlag = FALSE;       // Unblocks the worker threads.
-    umtx_unlock(&gMutex);      
+    umtx_unlock(&gStopMutex);      
 
     //
     //  Loop, watching the heartbeat of the worker threads.
@@ -431,6 +440,7 @@ int main (int argc, char **argv)
         {
             char c = '+';
             int threadNum;
+            umtx_lock(&gInfoMutex);
             for (threadNum=0; threadNum < gRunInfo.numThreads; threadNum++)
             {
                 if (gThreadInfo[threadNum].fHeartBeat == false)
@@ -439,6 +449,7 @@ int main (int argc, char **argv)
                     break;
                 };
             }
+            umtx_unlock(&gInfoMutex);
             fputc(c, stdout);
             fflush(stdout);
             if (c == '+')
@@ -460,9 +471,17 @@ int main (int argc, char **argv)
             if (gRunInfo.verbose) {
                 fprintf(stderr, "Main: suspending all threads\n");
             }
-            umtx_lock(&gMutex);               // Block the worker threads at the top of their loop
+            umtx_lock(&gStopMutex);               // Block the worker threads at the top of their loop
             gRunInfo.stopFlag = TRUE;
-            while (gRunInfo.runningThreads > 0) { ThreadFuncs::yield(); }
+            for (;;) {
+                umtx_lock(&gInfoMutex);
+                UBool done = gRunInfo.runningThreads == 0;
+                umtx_unlock(&gInfoMutex);
+                if (done) { break;}
+                ThreadFuncs::yield();
+            }
+
+
             
             gRunInfo.fTest->check();
             if (gRunInfo.quiet == false && gRunInfo.verbose == false) {
@@ -473,7 +492,7 @@ int main (int argc, char **argv)
                 fprintf(stderr, "Main: starting all threads.\n");
             }
             gRunInfo.stopFlag = FALSE;       // Unblock the worker threads.
-            umtx_unlock(&gMutex);      
+            umtx_unlock(&gStopMutex);      
             timeSinceCheck = 0;
         }
     };
@@ -483,7 +502,13 @@ int main (int argc, char **argv)
     //  Tell the threads to exit.
     //
     gRunInfo.exitFlag = true;
-    while (gRunInfo.runningThreads > 0) { ThreadFuncs::yield(); }
+    for (;;) {
+        umtx_lock(&gInfoMutex);
+        UBool done = gRunInfo.runningThreads == 0;
+        umtx_unlock(&gInfoMutex);
+        if (done) { break;}
+        ThreadFuncs::yield();
+    }
 
     //
     //  Tally up the total number of cycles completed by each of the threads.
@@ -501,7 +526,8 @@ int main (int argc, char **argv)
     //
     delete gRunInfo.fTest;
     delete [] gThreadInfo;
-    umtx_destroy(&gMutex);
+    umtx_destroy(&gInfoMutex);
+    umtx_destroy(&gStopMutex);
     u_cleanup();
 
     return 0;
