@@ -1131,12 +1131,6 @@ UBool RegexCompile::doParseActions(EParseAction action)
         fRXPat->fCompiledPat->addElement(URX_BUILD(URX_BACKSLASH_X, 0), *fStatus);
         break;
 
-    case doBackslashx:              // \x{abcd}   alternate hex format
-        //  TODO:  this is waiting for a decision on adding \x to unescape.
-        error(U_REGEX_UNIMPLEMENTED);
-        break;
-
-
 
     case doBackslashZ:
         fRXPat->fCompiledPat->addElement(URX_BUILD(URX_DOLLAR, 0), *fStatus);
