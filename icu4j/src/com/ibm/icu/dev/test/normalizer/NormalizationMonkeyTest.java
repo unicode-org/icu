@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/normalizer/NormalizationMonkeyTest.java,v $
- * $Date: 2003/06/03 18:49:30 $
- * $Revision: 1.4 $
+ * $Date: 2003/12/15 21:33:03 $
+ * $Revision: 1.5 $
  *
  *****************************************************************************************
  */
@@ -96,7 +96,7 @@ public class NormalizationMonkeyTest extends TestFmwk {
             while (UCharacter.getType(codepoint) == UCharacterCategory.UNASSIGNED) {
                 codepoint = random.nextInt(maxCodePoint);
             }
-            source = source + UTF16.toString(codepoint);
+            source = source + UTF16.valueOf(codepoint);
             i++;
         }
         return source;
