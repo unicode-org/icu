@@ -8,7 +8,6 @@
 fr {
     CollationElements { 
 	    Version { "1.0" }
-		Override { "FALSE" }
 		Sequence { "@" }
 	}
     Countries { 

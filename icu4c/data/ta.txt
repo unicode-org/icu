@@ -246,7 +246,7 @@ ta {
 
 	CollationElements {
 	    Version { "1.0" }
-		Sequence { "[normalizaton on]" }
+		Sequence { "[normalization on]" }
 	}
 
 }
