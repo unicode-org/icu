@@ -20,6 +20,7 @@
 #include "cmemory.h"
 #include "cstring.h"
 #include "locmap.h"
+#include "uassert.h"
 #include "unicode/putil.h"
 #include "unicode/ubrk.h"
 #include "unicode/uchar.h"
@@ -2427,121 +2428,147 @@ static void TestKeywordVariantParsing(void)
     }
 }
 
+static int32_t _canonicalize(int32_t selector, /* 0==getName, 1==canonicalize */
+                             const char* localeID,
+                             char* result,
+                             int32_t resultCapacity,
+                             UErrorCode* ec) {
+    /* YOU can change this to use function pointers if you like */
+    switch (selector) {
+    case 0:
+        return uloc_getName(localeID, result, resultCapacity, ec);
+    case 1:
+        return uloc_canonicalize(localeID, result, resultCapacity, ec);
+    default:
+        U_ASSERT(FALSE);
+        return -1;
+    }
+}
+
 static void TestCanonicalization(void)
 {
-    struct {
-        const char *localeID;
-        const char *expectedValue;
+    static struct {
+        const char *localeID;    /* input */
+        const char *getNameID;   /* expected getName() result */
+        const char *canonicalID; /* expected canonicalize() result */
     } testCases[] = {
         /* { "ca_ES_PREEURO-with-extra-stuff-that really doesn't make any sense-unless-you're trying to increase code coverage",
            "ca_ES_PREEURO_WITH_EXTRA_STUFF_THAT REALLY DOESN'T MAKE ANY SENSE_UNLESS_YOU'RE TRYING TO INCREASE CODE COVERAGE"}, */
-        { "ca_ES_PREEURO", "ca_ES@currency=ESP" },
-        { "de_AT_PREEURO", "de_AT@currency=ATS" },
-        { "de_DE_PREEURO", "de_DE@currency=DEM" },
-        { "de_LU_PREEURO", "de_LU@currency=EUR" },
-        { "el_GR_PREEURO", "el_GR@currency=GRD" },
-        { "en_BE_PREEURO", "en_BE@currency=BEF" },
-        { "en_IE_PREEURO", "en_IE@currency=IEP" },
-        { "es_ES_PREEURO", "es_ES@currency=ESP" },
-        { "eu_ES_PREEURO", "eu_ES@currency=ESP" },
-        { "fi_FI_PREEURO", "fi_FI@currency=FIM" },
-        { "fr_BE_PREEURO", "fr_BE@currency=BEF" },
-        { "fr_FR_PREEURO", "fr_FR@currency=FRF" },
-        { "fr_LU_PREEURO", "fr_LU@currency=LUF" },
-        { "ga_IE_PREEURO", "ga_IE@currency=IEP" },
-        { "gl_ES_PREEURO", "gl_ES@currency=ESP" },
-        { "it_IT_PREEURO", "it_IT@currency=ITL" },
-        { "nl_BE_PREEURO", "nl_BE@currency=BEF" },
-        { "nl_NL_PREEURO", "nl_NL@currency=NLG" },
-        { "pt_PT_PREEURO", "pt_PT@currency=PTE" },
-        { "de__PHONEBOOK", "de@collation=phonebook" },
-        { "en_GB_EURO",    "en_GB@currency=EUR" },
-        { "en_GB@EURO",    "en_GB@currency=EUR" }, /* POSIX ID */
-        { "es__TRADITIONAL", "es@collation=traditional" },
-        { "hi__DIRECT", "hi@collation=direct" },
-        { "ja_JP_TRADITIONAL", "ja_JP@calendar=japanese" },
-        { "th_TH_TRADITIONAL", "th_TH@calendar=buddhist" },
-        { "zh_TW_STROKE", "zh_TW@collation=stroke" },
-        { "zh__PINYIN", "zh@collation=pinyin" },
-        { "zh@collation=pinyin", "zh@collation=pinyin" },
-        { "zh_CN@collation=pinyin", "zh_CN@collation=pinyin" },
-        { "zh_CN_CA@collation=pinyin", "zh_CN_CA@collation=pinyin" },
-        { "en_US_POSIX", "en_US_POSIX" }, 
-        { "hy_AM_REVISED", "hy_AM_REVISED" }, 
-        { "no_NO_NY",   "no_NO_NY" /* not: "nn_NO" [alan ICU3.0] */ },
-        { "no@ny",      "no__NY" /* not: "nn" [alan ICU3.0] */ }, /* POSIX ID */
-        { "no-no.utf32@B", "no_NO_B" /* not: "nb_NO_B" [alan ICU3.0] */ }, /* POSIX ID */
-        { "qz-qz@Euro", "qz_QZ@currency=EUR" }, /* qz-qz uses private use iso codes */
-        { "en-BOONT",   "en__BOONT" }, /* registered name */
-        { "de-1901",    "de__1901" }, /* registered name */
-        { "de-1906",    "de__1906" }, /* registered name */
-        { "sr-SP-Cyrl",     "sr_Cyrl_SP" }, /* .NET name */
-        { "sr-SP-Latn",     "sr_Latn_SP" }, /* .NET name */
-        { "uz-UZ-Cyrl",     "uz_Cyrl_UZ" }, /* .NET name */
-        { "uz-UZ-Latn",     "uz_Latn_UZ" }, /* .NET name */
-        { "zh-CHS",         "zh_Hans" }, /* .NET name */
-        { "zh-CHT",         "zh_TW" }, /* .NET name This may change back to zh_Hant */
+        { "ca_ES_PREEURO", "ca_ES_PREEURO", "ca_ES@currency=ESP" },
+        { "de_AT_PREEURO", "de_AT_PREEURO", "de_AT@currency=ATS" },
+        { "de_DE_PREEURO", "de_DE_PREEURO", "de_DE@currency=DEM" },
+        { "de_LU_PREEURO", "de_LU_PREEURO", "de_LU@currency=EUR" },
+        { "el_GR_PREEURO", "el_GR_PREEURO", "el_GR@currency=GRD" },
+        { "en_BE_PREEURO", "en_BE_PREEURO", "en_BE@currency=BEF" },
+        { "en_IE_PREEURO", "en_IE_PREEURO", "en_IE@currency=IEP" },
+        { "es_ES_PREEURO", "es_ES_PREEURO", "es_ES@currency=ESP" },
+        { "eu_ES_PREEURO", "eu_ES_PREEURO", "eu_ES@currency=ESP" },
+        { "fi_FI_PREEURO", "fi_FI_PREEURO", "fi_FI@currency=FIM" },
+        { "fr_BE_PREEURO", "fr_BE_PREEURO", "fr_BE@currency=BEF" },
+        { "fr_FR_PREEURO", "fr_FR_PREEURO", "fr_FR@currency=FRF" },
+        { "fr_LU_PREEURO", "fr_LU_PREEURO", "fr_LU@currency=LUF" },
+        { "ga_IE_PREEURO", "ga_IE_PREEURO", "ga_IE@currency=IEP" },
+        { "gl_ES_PREEURO", "gl_ES_PREEURO", "gl_ES@currency=ESP" },
+        { "it_IT_PREEURO", "it_IT_PREEURO", "it_IT@currency=ITL" },
+        { "nl_BE_PREEURO", "nl_BE_PREEURO", "nl_BE@currency=BEF" },
+        { "nl_NL_PREEURO", "nl_NL_PREEURO", "nl_NL@currency=NLG" },
+        { "pt_PT_PREEURO", "pt_PT_PREEURO", "pt_PT@currency=PTE" },
+        { "de__PHONEBOOK", "de__PHONEBOOK", "de@collation=phonebook" },
+        { "en_GB_EURO", "en_GB_EURO", "en_GB@currency=EUR" },
+        { "en_GB@EURO", "en_GB@EURO", "en_GB@currency=EUR" }, /* POSIX ID */
+        { "es__TRADITIONAL", "es__TRADITIONAL", "es@collation=traditional" },
+        { "hi__DIRECT", "hi__DIRECT", "hi@collation=direct" },
+        { "ja_JP_TRADITIONAL", "ja_JP_TRADITIONAL", "ja_JP@calendar=japanese" },
+        { "th_TH_TRADITIONAL", "th_TH_TRADITIONAL", "th_TH@calendar=buddhist" },
+        { "zh_TW_STROKE", "zh_TW_STROKE", "zh_TW@collation=stroke" },
+        { "zh__PINYIN", "zh__PINYIN", "zh@collation=pinyin" },
+        { "zh@collation=pinyin", "zh@collation=pinyin", "zh@collation=pinyin" },
+        { "zh_CN@collation=pinyin", "zh_CN@collation=pinyin", "zh_CN@collation=pinyin" },
+        { "zh_CN_CA@collation=pinyin", "zh_CN_CA@collation=pinyin", "zh_CN_CA@collation=pinyin" },
+        { "en_US_POSIX", "en_US_POSIX", "en_US_POSIX" }, 
+        { "hy_AM_REVISED", "hy_AM_REVISED", "hy_AM_REVISED" }, 
+        { "no_NO_NY", "no_NO_NY", "no_NO_NY" /* not: "nn_NO" [alan ICU3.0] */ },
+        { "no@ny", "no@ny", "no__NY" /* not: "nn" [alan ICU3.0] */ }, /* POSIX ID */
+        { "no-no.utf32@B", "no_NO.utf32@B", "no_NO_B" /* not: "nb_NO_B" [alan ICU3.0] */ }, /* POSIX ID */
+        { "qz-qz@Euro", "qz_QZ@Euro", "qz_QZ@currency=EUR" }, /* qz-qz uses private use iso codes */
+        { "en-BOONT", "en_BOONT", "en__BOONT" }, /* registered name */
+        { "de-1901", "de_1901", "de__1901" }, /* registered name */
+        { "de-1906", "de_1906", "de__1906" }, /* registered name */
+        { "sr-SP-Cyrl", "sr_SP_CYRL", "sr_Cyrl_SP" }, /* .NET name */
+        { "sr-SP-Latn", "sr_SP_LATN", "sr_Latn_SP" }, /* .NET name */
+        { "uz-UZ-Cyrl", "uz_UZ_CYRL", "uz_Cyrl_UZ" }, /* .NET name */
+        { "uz-UZ-Latn", "uz_UZ_LATN", "uz_Latn_UZ" }, /* .NET name */
+        { "zh-CHS", "zh_CHS", "zh_Hans" }, /* .NET name */
+        { "zh-CHT", "zh_CHT", "zh_TW" }, /* .NET name This may change back to zh_Hant */
 
         /* posix behavior that used to be performed by getName */
-        { "mr.utf8", "mr" },
-        { "de-tv.koi8r", "de_TV" },
-        { "x-piglatin_ML.MBE", "x-piglatin_ML" },
-        { "i-cherokee_US.utf7", "i-cherokee_US" },
-        { "x-filfli_MT_FILFLA.gb-18030", "x-filfli_MT_FILFLA" },
-        { "no-no-ny.utf8@B", "no_NO_NY_B" /* not: "nn_NO" [alan ICU3.0] */ }, /* @ ignored unless variant is empty */
+        { "mr.utf8", "mr.utf8", "mr" },
+        { "de-tv.koi8r", "de_TV.koi8r", "de_TV" },
+        { "x-piglatin_ML.MBE", "x-piglatin_ML.MBE", "x-piglatin_ML" },
+        { "i-cherokee_US.utf7", "i-cherokee_US.utf7", "i-cherokee_US" },
+        { "x-filfli_MT_FILFLA.gb-18030", "x-filfli_MT_FILFLA.gb-18030", "x-filfli_MT_FILFLA" },
+        { "no-no-ny.utf8@B", "no_NO_NY.utf8@B", "no_NO_NY_B" /* not: "nn_NO" [alan ICU3.0] */ }, /* @ ignored unless variant is empty */
 
         /* fleshing out canonicalization */
         /* trim space and sort keywords, ';' is separator so not present at end in canonical form */
-        { "en_Hant_IL_VALLEY_GIRL@ currency = EUR; calendar = Japanese ;", "en_Hant_IL_VALLEY_GIRL@calendar=Japanese;currency=EUR" },
+        { "en_Hant_IL_VALLEY_GIRL@ currency = EUR; calendar = Japanese ;", "en_Hant_IL_VALLEY_GIRL@calendar=Japanese;currency=EUR", "en_Hant_IL_VALLEY_GIRL@calendar=Japanese;currency=EUR" },
         /* already-canonical ids are not changed */
-        { "en_Hant_IL_VALLEY_GIRL@calendar=Japanese;currency=EUR", "en_Hant_IL_VALLEY_GIRL@calendar=Japanese;currency=EUR" },
+        { "en_Hant_IL_VALLEY_GIRL@calendar=Japanese;currency=EUR", "en_Hant_IL_VALLEY_GIRL@calendar=Japanese;currency=EUR", "en_Hant_IL_VALLEY_GIRL@calendar=Japanese;currency=EUR" },
         /* PRE_EURO and EURO conversions don't affect other keywords */
-        { "es_ES_PREEURO@CALendar=Japanese", "es_ES@calendar=Japanese;currency=ESP" },
-        { "es_ES_EURO@SHOUT=zipeedeedoodah", "es_ES@currency=EUR;shout=zipeedeedoodah" },
+        { "es_ES_PREEURO@CALendar=Japanese", "es_ES_PREEURO@calendar=Japanese", "es_ES@calendar=Japanese;currency=ESP" },
+        { "es_ES_EURO@SHOUT=zipeedeedoodah", "es_ES_EURO@shout=zipeedeedoodah", "es_ES@currency=EUR;shout=zipeedeedoodah" },
         /* currency keyword overrides PRE_EURO and EURO currency */
-        { "es_ES_PREEURO@currency=EUR", "es_ES@currency=EUR" },
-        { "es_ES_EURO@currency=ESP", "es_ES@currency=ESP" },
+        { "es_ES_PREEURO@currency=EUR", "es_ES_PREEURO@currency=EUR", "es_ES@currency=EUR" },
+        { "es_ES_EURO@currency=ESP", "es_ES_EURO@currency=ESP", "es_ES@currency=ESP" },
         /* norwegian is just too weird, if we handle things in their full generality */
-        { "no-Hant-GB_NY@currency=$$$", "no_Hant_GB_NY@currency=$$$" /* not: "nn_Hant_GB@currency=$$$" [alan ICU3.0] */ },
+        { "no-Hant-GB_NY@currency=$$$", "no_Hant_GB_NY@currency=$$$", "no_Hant_GB_NY@currency=$$$" /* not: "nn_Hant_GB@currency=$$$" [alan ICU3.0] */ },
+
+        /* test cases reflecting internal resource bundle usage */
+        { "root@kw=foo", "root@kw=foo", "root@kw=foo" },
+        { "@calendar=gregorian", "@calendar=gregorian", "en_US_POSIX@calendar=gregorian" }
     };
     
+    static const char* label[] = { "getName", "canonicalize" };
+
     UErrorCode status = U_ZERO_ERROR;
-    
-    int32_t i = 0;
-    int32_t resultLen = 0;
-    int32_t origResultLen;
+    int32_t i, j, resultLen = 0, origResultLen;
     char buffer[256];
     
-    for(i = 0; i < sizeof(testCases)/sizeof(testCases[0]); i++) {
-        *buffer = 0;
-        status = U_ZERO_ERROR;
-        log_verbose("testing %s -> %s\n", testCases[i], testCases[i].expectedValue);
-        origResultLen = uloc_canonicalize(testCases[i].localeID, NULL, 0, &status);
-        if (status != U_BUFFER_OVERFLOW_ERROR) {
-            log_err("%s status == %s instead of U_BUFFER_OVERFLOW_ERROR\n", testCases[i].localeID, u_errorName(status));
+    for (i=0; i < sizeof(testCases)/sizeof(testCases[0]); i++) {
+        for (j=0; j<2; ++j) {
+            const char* expected = (j==0) ? testCases[i].getNameID : testCases[i].canonicalID;
+            *buffer = 0;
+            status = U_ZERO_ERROR;
+            //log_verbose("testing %s -> %s\n", testCases[i], testCases[i].canonicalID);
+            origResultLen = _canonicalize(j, testCases[i].localeID, NULL, 0, &status);
+            if (status != U_BUFFER_OVERFLOW_ERROR) {
+                log_err("FAIL: uloc_%s(%s) => %s, expected U_BUFFER_OVERFLOW_ERROR\n",
+                        label[j], testCases[i].localeID, u_errorName(status));
+                continue;
+            }
+            status = U_ZERO_ERROR;
+            resultLen = _canonicalize(j, testCases[i].localeID, buffer, sizeof(buffer), &status);
+            if (U_FAILURE(status)) {
+                log_err("FAIL: uloc_%s(%s) => %s, expected U_ZERO_ERROR\n",
+                        label[j], testCases[i].localeID, u_errorName(status));
+                continue;
+            }
+            if(uprv_strcmp(expected, buffer) != 0) {
+                log_err("FAIL: uloc_%s(%s) => \"%s\", expected \"%s\"\n",
+                        label[j], testCases[i].localeID, buffer, expected);
+            } else {
+                log_verbose("Ok: uloc_%s(%s) => \"%s\"\n",
+                            label[j], testCases[i].localeID, buffer);
+            }
+            if (resultLen != (int32_t)strlen(buffer)) {
+                log_err("FAIL: uloc_%s(%s) => len %d, expected len %d\n",
+                        label[j], testCases[i].localeID, resultLen, strlen(buffer));
+            }
+            if (origResultLen != resultLen) {
+                log_err("FAIL: uloc_%s(%s) => preflight len %d != actual len %d\n",
+                        label[j], testCases[i].localeID, origResultLen, resultLen);
+            }
         }
-        status = U_ZERO_ERROR;
-        resultLen = uloc_canonicalize(testCases[i].localeID, buffer, sizeof(buffer), &status);
-        if (U_FAILURE(status)) {
-            log_err("status = %s\n", u_errorName(status));
-        }
-        if(uprv_strcmp(testCases[i].expectedValue, buffer) != 0) {
-            log_err("Expected to get \"%s\" from \"%s\". Got \"%s\" instead\n",
-                testCases[i].expectedValue, testCases[i].localeID, buffer);
-        }
-        if (resultLen != (int32_t)strlen(buffer)) {
-            log_err("\"%s\" returned len=%d instead of len=%d\n",
-                testCases[i].localeID, resultLen, strlen(buffer));
-        }
-        if (origResultLen != resultLen) {
-            log_err("\"%s\" returned origResultLen=%d differs from resultLen=%d\n",
-                testCases[i].localeID, origResultLen, resultLen);
-        }
-/*        resultLen = uloc_getNameNoKeywords(testCases[i].localeID, buffer, 256, &status);
-        if(uprv_strcmp(testCases[i].expectedValueNoKeywords, buffer) != 0) {
-            log_err("Expected to get \"%s\" from \"%s\". Got \"%s\" instead\n",
-                testCases[i].expectedValueNoKeywords, testCases[i].localeID, buffer);
-        }*/
     }
 }
 
