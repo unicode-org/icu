@@ -889,9 +889,9 @@ InputPath=.\unicode\pwin32.h
 !ELSEIF  "$(CFG)" == "common - Win64 Release"
 
 # Begin Custom Build
-InputPath=.\unicode\pwin64.h
+InputPath=.\unicode\pwin32.h
 
-"..\..\include\unicode\pwin64.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+"..\..\include\unicode\pwin32.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
 	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
@@ -899,9 +899,9 @@ InputPath=.\unicode\pwin64.h
 !ELSEIF  "$(CFG)" == "common - Win64 Debug"
 
 # Begin Custom Build
-InputPath=.\unicode\pwin64.h
+InputPath=.\unicode\pwin32.h
 
-"..\..\include\unicode\pwin64.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+"..\..\include\unicode\pwin32.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
 	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
