@@ -20,6 +20,7 @@
 #include "ucol_bld.h" 
 #include "ucln_in.h" 
 
+
 static const InverseTableHeader* invUCA = NULL;
 static UDataMemory* invUCA_DATA_MEM = NULL;
 
@@ -48,6 +49,7 @@ isAcceptableInvUCA(void * /*context*/,
 }
 U_CDECL_END
 
+static
 int32_t ucol_inv_findCE(uint32_t CE, uint32_t SecondCE) {
   uint32_t bottom = 0, top = invUCA->tableSize;
   uint32_t i = 0;
@@ -577,6 +579,7 @@ U_CFUNC void ucol_initBuffers(/*UColTokenParser *src,*/ UColTokListHeader *lh, U
   }
 }
 
+static
 uint32_t u_toLargeKana(const UChar *source, const uint32_t sourceLen, UChar *resBuf, const uint32_t resLen, UErrorCode *status) {
   uint32_t i = 0; 
   UChar c;
@@ -611,6 +614,7 @@ uint32_t u_toLargeKana(const UChar *source, const uint32_t sourceLen, UChar *res
   return sourceLen;
 }
 
+static
 uint32_t u_toSmallKana(const UChar *source, const uint32_t sourceLen, UChar *resBuf, const uint32_t resLen, UErrorCode *status) {
   uint32_t i = 0; 
   UChar c;
@@ -645,6 +649,7 @@ uint32_t u_toSmallKana(const UChar *source, const uint32_t sourceLen, UChar *res
   return sourceLen;
 }
 
+static
 uint8_t ucol_uprv_getCaseBits(const UCollator *UCA, const UChar *src, uint32_t len, UErrorCode *status) {
   uint32_t i = 0;
   UChar n[128];

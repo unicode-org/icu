@@ -26,6 +26,8 @@
 #include "ucol_elm.h"
 #include "ucol_imp.h"
 
+U_NAMESPACE_BEGIN
+
 #define UPRV_CNTTAB_NEWELEMENT 0xFFFFFF
 
 #define isCntTableElement(CE) (isSpecial((CE)) && \
@@ -72,5 +74,7 @@ uint32_t uprv_cnttab_getCE(CntTable *table, uint32_t element, uint32_t position,
 uint32_t uprv_cnttab_changeContraction(CntTable *table, uint32_t element, UChar codePoint, uint32_t newCE, UErrorCode *status);
 uint32_t uprv_cnttab_findCE(CntTable *table, uint32_t element, UChar codePoint, UErrorCode *status);
 UBool uprv_cnttab_isTailored(CntTable *table, uint32_t element, UChar *ztString, UErrorCode *status);
+
+U_NAMESPACE_END
 
 #endif

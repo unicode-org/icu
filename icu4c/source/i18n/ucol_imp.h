@@ -247,8 +247,11 @@ struct UCollationElements
             }                                                                \
 }
 
-uint32_t getSpecialCE(const UCollator *coll, UChar ch, uint32_t CE, collIterate *source, UErrorCode *status);
-uint32_t getSpecialPrevCE(const UCollator *coll, UChar ch, uint32_t CE,
+U_CFUNC
+uint32_t ucol_prv_getSpecialCE(const UCollator *coll, UChar ch, uint32_t CE, collIterate *source, UErrorCode *status);
+
+U_CFUNC
+uint32_t ucol_prv_getSpecialPrevCE(const UCollator *coll, UChar ch, uint32_t CE,
                           collIterate *source, UErrorCode *status);
 U_CAPI uint32_t U_EXPORT2 ucol_getNextCE(const UCollator *coll, collIterate *collationSource, UErrorCode *status);
 U_CAPI uint32_t U_EXPORT2 ucol_getPrevCE(const UCollator *coll,
@@ -265,6 +268,7 @@ ucol_getSortKeyWithAllocation(const UCollator *coll,
 void *ucol_getABuffer(const UCollator *coll, uint32_t size);
 
 /* worker function for generating sortkeys */
+U_CFUNC
 int32_t
 ucol_calcSortKey(const    UCollator    *coll,
         const    UChar        *source,
@@ -274,6 +278,7 @@ ucol_calcSortKey(const    UCollator    *coll,
         UBool allocatePrimary,
         UErrorCode *status);
 
+U_CFUNC
 int32_t
 ucol_calcSortKeySimpleTertiary(const    UCollator    *coll,
         const    UChar        *source,
@@ -283,6 +288,11 @@ ucol_calcSortKeySimpleTertiary(const    UCollator    *coll,
         UBool allocatePrimary,
         UErrorCode *status);
 
+U_CFUNC
+int32_t 
+ucol_getSortKeySize(const UCollator *coll, collIterate *s, 
+                    int32_t currentSize, UColAttributeValue strength, 
+                    int32_t len);
 /**
  * Makes a copy of the Collator's rule data. The format is
  * that of .col files.
@@ -640,13 +650,20 @@ struct UCollator {
 };
 
 /* various internal functions */
-int32_t ucol_getIncrementalCE(const UCollator *coll, incrementalContext *ctx, UErrorCode *status);
+
+U_CFUNC
 void ucol_initUCA(UErrorCode *status);
 
+U_CFUNC
 UCollator* ucol_initCollator(const UCATableHeader *image, UCollator *fillIn, UErrorCode *status);
+
+U_CFUNC
 void ucol_setOptionsFromHeader(UCollator* result, UColOptionSet * opts, UErrorCode *status);
+
+U_CFUNC
 void ucol_putOptionsToHeader(UCollator* result, UColOptionSet * opts, UErrorCode *status);
 
+U_CFUNC
 void ucol_updateInternalState(UCollator *coll);
 
 U_CAPI uint32_t U_EXPORT2 ucol_getFirstCE(const UCollator *coll, UChar u, UErrorCode *status);
@@ -660,6 +677,11 @@ U_CAPI int32_t U_EXPORT2 ucol_inv_getNextCE(uint32_t CE, uint32_t contCE,
 U_CAPI int32_t U_EXPORT2 ucol_inv_getPrevCE(uint32_t CE, uint32_t contCE,
                                             uint32_t *prevCE, uint32_t *prevContCE,
                                             uint32_t strength);
+U_CFUNC
+int32_t
+ucol_mergeSortkeys(const uint8_t *src1, int32_t src1Length,
+                   const uint8_t *src2, int32_t src2Length,
+                   uint8_t *dest, int32_t destCapacity);
 
 
 
