@@ -287,7 +287,16 @@ class U_I18N_API UnicodeSet : public UnicodeFilter {
      * "}".  Example: "{var}".
      */
     static const UChar VARIABLE_REF_CLOSE;
-
+    
+    // More special characters...
+    static const UChar SET_OPEN;
+    static const UChar SET_CLOSE;
+    static const UChar HYPHEN;
+    static const UChar COMPLEMENT;
+    static const UChar COLON;
+    static const UChar BACKSLASH;
+    static const UChar INTERSECTION;
+    
     //----------------------------------------------------------------
     // Debugging and testing
     //----------------------------------------------------------------

@@ -34,13 +34,22 @@ const UnicodeString UnicodeSet::CATEGORY_CLOSE = UNICODE_STRING(":]", 2);
  * Delimiter char beginning a variable reference:
  * "{".  Example: "{var}".
  */
-const UChar UnicodeSet::VARIABLE_REF_OPEN = '{';
+const UChar UnicodeSet::VARIABLE_REF_OPEN = 0x007B /*{*/;
 
 /**
  * Delimiter char ending a variable reference:
  * "}".  Example: "{var}".
  */
-const UChar UnicodeSet::VARIABLE_REF_CLOSE = '}';
+const UChar UnicodeSet::VARIABLE_REF_CLOSE = 0x007D /*}*/;
+
+// Define UChar constants using hex for EBCDIC compatibility
+const UChar UnicodeSet::SET_OPEN     = 0x005B; /*[*/
+const UChar UnicodeSet::SET_CLOSE    = 0x005D; /*]*/
+const UChar UnicodeSet::HYPHEN       = 0x002D; /*-*/
+const UChar UnicodeSet::COMPLEMENT   = 0x005E; /*^*/
+const UChar UnicodeSet::COLON        = 0x003A; /*:*/
+const UChar UnicodeSet::BACKSLASH    = 0x005C; /*\*/
+const UChar UnicodeSet::INTERSECTION = 0x0026; /*&*/
 
 //----------------------------------------------------------------
 // Debugging and testing
@@ -197,7 +206,7 @@ void UnicodeSet::applyPattern(const UnicodeString& pattern,
  * will produce another set that is equal to this one.
  */
 UnicodeString& UnicodeSet::toPattern(UnicodeString& result) const {
-    result.remove().append((UChar)'[');
+    result.remove().append(SET_OPEN);
     
     // iterate through the ranges in the UnicodeSet
     for (int32_t i=0; i<pairs.length(); i+=2) {
@@ -206,11 +215,11 @@ UnicodeString& UnicodeSet::toPattern(UnicodeString& result) const {
         // end points of the range separated by a dash
         result.append(pairs.charAt(i));
         if (pairs.charAt(i) != pairs.charAt(i+1)) {
-            result.append((UChar)'-').append(pairs.charAt(i+1));
+            result.append(HYPHEN).append(pairs.charAt(i+1));
         }
     }
     
-    return result.append((UChar)']');
+    return result.append(SET_CLOSE);
 }
 
 /**
@@ -512,7 +521,7 @@ UnicodeString& UnicodeSet::parse(UnicodeString& pairsBuf /*result*/,
         // Parse the opening '[' and optional following '^'
         switch (mode) {
         case 0:
-            if (c == '[') {
+            if (c == SET_OPEN) {
                 mode = 1; // Next look for '^'
                 openPos = i;
                 continue;
@@ -524,19 +533,19 @@ UnicodeString& UnicodeSet::parse(UnicodeString& pairsBuf /*result*/,
         case 1:
             mode = 2;
             switch (c) {
-            case '^':
+            case COMPLEMENT:
                 invert = TRUE;
                 continue; // Back to top to fetch next character
-            case ':':
+            case COLON:
                 if (i == openPos+1) {
                     // '[:' cannot have whitespace in it
                     --i;
-                    c = '[';
+                    c = SET_OPEN;
                     mode = 3;
                     // Fall through and parse category normally
                 }
                 break; // Fall through
-            case '-':
+            case HYPHEN:
                 isLiteral = TRUE; // Treat leading '-' as a literal
                 break; // Fall through
             }
@@ -552,12 +561,12 @@ UnicodeString& UnicodeSet::parse(UnicodeString& pairsBuf /*result*/,
          * characters and characters with no special meaning.  We also
          * interpret '\\uxxxx' Unicode escapes here (as literals).
          */
-        if (c == '\\') {
+        if (c == BACKSLASH) {
             ++i;
             if (i < pattern.length()) {
                 c = pattern.charAt(i);
                 isLiteral = TRUE;
-                if (c == 'u') {
+                if (c == 0x0075 /*u*/) {
                     if ((i+4) >= pattern.length()) {
 						status = U_ILLEGAL_ARGUMENT_ERROR;
 						return pairsBuf;
@@ -613,10 +622,10 @@ UnicodeString& UnicodeSet::parse(UnicodeString& pairsBuf /*result*/,
          * subpattern, either a normal pattern or a category pattern.  We
          * recognize these here and set nestedPairs accordingly.
          */
-        else if (!isLiteral && c == '[') {
+        else if (!isLiteral && c == SET_OPEN) {
             // Handle "[:...:]", representing a character category
             UChar d = charAfter(pattern, i);
-            if (d == ':') {
+            if (d == COLON) {
                 i += 2;
                 int32_t j = pattern.indexOf(CATEGORY_CLOSE, i);
                 if (j < 0) {
@@ -666,10 +675,10 @@ UnicodeString& UnicodeSet::parse(UnicodeString& pairsBuf /*result*/,
                 lastChar = -1;
             }
             switch (lastOp) {
-            case '-':
+            case HYPHEN:
                 doDifference(pairsBuf, *nestedPairs);
                 break;
-            case '&':
+            case INTERSECTION:
                 doIntersection(pairsBuf, *nestedPairs);
                 break;
             case 0:
@@ -677,13 +686,13 @@ UnicodeString& UnicodeSet::parse(UnicodeString& pairsBuf /*result*/,
                 break;
             }
             lastOp = 0;
-        } else if (!isLiteral && c == ']') {
+        } else if (!isLiteral && c == SET_CLOSE) {
             // Final closing delimiter.  This is the only way we leave this
             // loop if the pattern is well-formed.
             break;
-        } else if (lastOp == 0 && !isLiteral && (c == '-' || c == '&')) {
+        } else if (lastOp == 0 && !isLiteral && (c == HYPHEN || c == INTERSECTION)) {
             lastOp = c;
-        } else if (lastOp == '-') {
+        } else if (lastOp == HYPHEN) {
             addPair(pairsBuf, (UChar)lastChar, c);
             lastOp = 0;
             lastChar = -1;
@@ -702,10 +711,10 @@ UnicodeString& UnicodeSet::parse(UnicodeString& pairsBuf /*result*/,
     }
 
     // Handle unprocessed stuff preceding the closing ']'
-    if (lastOp == '-') {
+    if (lastOp == HYPHEN) {
         // Trailing '-' is treated as literal
         addPair(pairsBuf, lastOp, lastOp);
-    } else if (lastOp == '&') {
+    } else if (lastOp == INTERSECTION) {
         // throw new IllegalArgumentException("Unquoted trailing " + lastOp);
         status = U_ILLEGAL_ARGUMENT_ERROR;
         return pairsBuf;
@@ -1072,7 +1081,7 @@ UnicodeString& UnicodeSet::getCategoryPairs(UnicodeString& result,
 	// TO DO: Allocate cat on the heap only if needed.
 	UnicodeString cat(catName);
     bool_t invert = (catName.length() > 1 &&
-                     catName.charAt(0) == '^');
+                     catName.charAt(0) == COMPLEMENT);
     if (invert) {
         cat.remove(0, 1);
     }
