@@ -57,7 +57,7 @@ typedef enum {
     UCNV_ILLEGAL = 1,
     UCNV_IRREGULAR = 2,
     UCNV_RESET = 3,
-    UCNV_CLOSE = 4,   
+    UCNV_CLOSE = 4
 } UConverterCallbackReason;
 
 
