@@ -188,7 +188,7 @@ static uint8_t formatVersion[4]={ 0, 0, 0, 0 };
 static UBool formatVersion_2_1=FALSE, formatVersion_2_2=FALSE;
 
 /* the Unicode version of the normalization data */
-static UVersionInfo dataVersion={ 3, 1, 0, 0 };
+static UVersionInfo dataVersion={ 0, 0, 0, 0 };
 
 /* cache UnicodeSets for each combination of exclusion flags */
 static UnicodeSet *nxCache[_NORM_OPTIONS_SETS_MASK+1]={ NULL };
