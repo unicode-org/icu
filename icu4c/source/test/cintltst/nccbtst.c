@@ -319,9 +319,8 @@ void TestSubWithValue(int32_t inputsize, int32_t outputsize)
         (char)0x25, (char)0x55, (char)0x36, (char)0x44, (char)0x36, (char)0x35, (char)0x89, (char)0x59 };
 	
     const char expsubwvalIBM_930[] = {
-        (char)0x0e, (char)0x5d, (char)0x5f, (char)0x5d, (char)0x63, (char)0x0f, (char)0x6c, (char)0xe4, (char)0xf6, (char)0xc4, (char)0xf6, (char)0xf5, (char)0x46, (char)0x6b };
+        (char)0x0e, (char)0x5d, (char)0x5f, (char)0x5d, (char)0x63, (char)0x0f, (char)0x6c, (char)0xe4, (char)0xf6, (char)0xc4, (char)0xf6, (char)0xf5, (char)0x0e, (char)0x46, (char)0x6b };
 
-    
 	int32_t toIBM949Offs [] ={ 0, 1, 1, 2, 2, 3, 3, 3, 3, 3, 3, 4, 4};
 	int32_t toIBM943Offs [] = { 0, 0, 1, 1, 2, 2, 2, 2, 2, 2, 3, 3};
 	int32_t toIBM930Offs [] = { 0, 0, 0, 1, 1, 2, 2, 2, 2, 2, 2, 2, 3, 3};
@@ -343,7 +342,7 @@ void TestSubWithValue(int32_t inputsize, int32_t outputsize)
 	if(!testConvertFromUnicode(sampleText2, sizeof(sampleText2)/sizeof(sampleText2[0]),
 			expsubwvalIBM_930, sizeof(expsubwvalIBM_930), "ibm-930", 
 			(UConverterFromUCallback)UCNV_FROM_U_CALLBACK_ESCAPE, toIBM930Offs ))
-		log_err("u-> ibm-930 with subst with value did not match.\n");
+		log_err("u-> ibm-930 with subst with value did not match.\n(needs fix for j344 and general callback cleanup.)\n");
   
 	/*to Unicode*/
 	if(!testConvertToUnicode(sampleTxtToU, sizeof(sampleTxtToU),
