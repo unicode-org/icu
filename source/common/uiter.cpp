@@ -186,6 +186,118 @@ uiter_setString(UCharIterator *iter, const UChar *s, int32_t length) {
     }
 }
 
+/* UCharIterator implementation for UTF-16BE strings ------------------------ */
+
+/*
+ * This is an implementation of a code unit (UChar) iterator
+ * for UTF-16BE strings, i.e., strings in byte-vectors where
+ * each UChar is stored as a big-endian pair of bytes.
+ *
+ * The UCharIterator.context field holds a pointer to the string.
+ * Everything works just like with a normal UChar iterator (uiter_setString),
+ * except that UChars are assembled from byte pairs.
+ */
+
+static UChar32 U_CALLCONV
+utf16BEIteratorCurrent(UCharIterator *iter) {
+    int32_t index;
+
+    if((index=iter->index)<iter->limit) {
+        const uint8_t *p=(const uint8_t *)iter->context;
+        return ((UChar)p[2*index]<<8)|(UChar)p[2*index+1];
+    } else {
+        return U_SENTINEL;
+    }
+}
+
+static UChar32 U_CALLCONV
+utf16BEIteratorNext(UCharIterator *iter) {
+    int32_t index;
+
+    if((index=iter->index)<iter->limit) {
+        const uint8_t *p=(const uint8_t *)iter->context;
+        iter->index=index+1;
+        return ((UChar)p[2*index]<<8)|(UChar)p[2*index+1];
+    } else {
+        return U_SENTINEL;
+    }
+}
+
+static UChar32 U_CALLCONV
+utf16BEIteratorPrevious(UCharIterator *iter) {
+    int32_t index;
+
+    if((index=iter->index)>iter->start) {
+        const uint8_t *p=(const uint8_t *)iter->context;
+        iter->index=--index;
+        return ((UChar)p[2*index]<<8)|(UChar)p[2*index+1];
+    } else {
+        return U_SENTINEL;
+    }
+}
+
+static const UCharIterator utf16BEIterator={
+    0, 0, 0, 0, 0, 0,
+    stringIteratorGetIndex,
+    stringIteratorMove,
+    stringIteratorHasNext,
+    stringIteratorHasPrevious,
+    utf16BEIteratorCurrent,
+    utf16BEIteratorNext,
+    utf16BEIteratorPrevious,
+    0
+};
+
+/*
+ * Count the number of UChars in a UTF-16BE string before a terminating UChar NUL,
+ * i.e., before a pair of 0 bytes where the first 0 byte is at an even
+ * offset from s.
+ */
+static int32_t
+utf16BE_strlen(const char *s) {
+    if(((int32_t)s&1)==0) {
+        /*
+         * even-aligned, call u_strlen(s)
+         * we are probably on a little-endian machine, but searching for UChar NUL
+         * does not care about endianness
+         */
+        return u_strlen((const UChar *)s);
+    } else {
+        /* odd-aligned, search for pair of 0 bytes */
+        const char *p=s;
+
+        while(!(*p==0 && p[1]==0)) {
+            p+=2;
+        }
+        return (int32_t)((p-s)/2);
+    }
+}
+
+U_CAPI void U_EXPORT2
+uiter_setUTF16BE(UCharIterator *iter, const char *s, int32_t length) {
+    if(iter!=0) {
+        /* allow only even-length strings (the input length counts bytes) */
+        if(s!=0 && length==-1 || (length>=0 && (length&1)==0)) {
+            if(U_IS_BIG_ENDIAN && ((int32_t)s&1)==0) {
+                /* big-endian machine and 2-aligned UTF-16BE string: use normal UChar iterator */
+                uiter_setString(iter, (const UChar *)s, length/2);
+                return;
+            }
+
+            *iter=utf16BEIterator;
+            iter->context=s;
+            if(length>=0) {
+                iter->length=length/2;
+            } else {
+                iter->length=utf16BE_strlen(s);
+            }
+            iter->limit=iter->length;
+        } else {
+            *iter=noopIterator;
+        }
+    }
+}
+
 /* UCharIterator wrapper around CharacterIterator --------------------------- */
 
 /*
@@ -475,11 +587,20 @@ utf8IteratorMove(UCharIterator *iter, int32_t delta, UCharIteratorOrigin origin)
         return iter->index;
     }
 
+    /* minimize the number of U8_NEXT/PREV operations */
     if(pos<iter->index/2) {
         /* go forward from the start instead of backward from the current index */
         iter->index=iter->start=iter->reservedField=0;
+    } else if(iter->length>=0 && (iter->length-pos)<(pos-iter->index)) {
+        /*
+         * if we have the UTF-16 length and the new position is
+         * closer to the end than the current index,
+         * then go backward from the end instead of forward from the current index
+         */
+        iter->index=iter->length;
+        iter->start=iter->limit;
+        iter->reservedField=0;
     }
-    /* ### TODO: consider going backward from the end in some cases! */
 
     delta=pos-iter->index;
     if(delta==0) {
