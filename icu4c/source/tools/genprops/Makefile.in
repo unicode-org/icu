@@ -1,5 +1,5 @@
 ## Makefile.in for ICU - tools/genprops
-## Copyright (c) 1999-2000, International Business Machines Corporation and
+## Copyright (c) 1999-2002, International Business Machines Corporation and
 ## others. All Rights Reserved.
 ## Steven R. Loomis
 
@@ -43,7 +43,7 @@ endif
 LDFLAGS = @LDFLAGS@ $(RPATHLDFLAGS)
 LIBS = $(LIBICUTOOLUTIL) $(LIBICUUC) @LIBS@ @LIB_M@
 
-OBJECTS = genprops.o store.o
+OBJECTS = genprops.o props2.o propsvec.o store.o
 
 DEPS = $(OBJECTS:.o=.d)
 
