@@ -363,21 +363,124 @@ public class ICUResourceBundle extends UResourceBundle{
      * @return the locale
      * @internal ICU 3.0
      */
-    public static final ULocale  getFunctionalEquivalent(String baseName, String resName, String keyword, String locID, boolean fillinIsAvailable[]){
-        return null;
-    }
-    /**
-     * 
-     * @param baseName
-     * @param resName
-     * @param keyword
-     * @param locale
-     * @param fillinIsAvailable
-     * @return
-     * @internal ICU 3.0
-     */
-    public static final ULocale getFunctionalEquivalent(String baseName, String resName, String keyword, ULocale locale, boolean fillinIsAvailable[]) {
-        return getFunctionalEquivalent(baseName, resName, keyword, locale.toString(), fillinIsAvailable);
+    public static final ULocale  getFunctionalEquivalent(String baseName, String resName, String keyword, ULocale locID, boolean fillinIsAvailable[]){
+        String kwVal = locID.getKeywordValue(keyword);
+        String baseLoc = locID.getBaseName();
+        String defStr = null;
+        ULocale parent = new ULocale(baseLoc);
+        ULocale found = locID;
+        ULocale defLoc = null; // locale where default (found) resource is
+        boolean lookForDefault = false; // true if kwVal needs to be set 
+        ULocale fullBase = null; // base locale of found (target) resource
+        int defDepth = 0; // depth of 'default' marker
+        int resDepth = 0; // depth of found resource;
+        if(fillinIsAvailable != null) {
+            fillinIsAvailable[0] = true;
+        }
+        
+        if((kwVal == null) || (kwVal.length()==0) || kwVal.equals(DEFAULT_TAG)) {
+            kwVal = "";  // default tag is treated as no keyword
+            lookForDefault = true;
+        }
+
+        // Check top level locale first
+        //System.out.println("base starting " + parent.toString());
+        ICUResourceBundle  r = null;
+        
+        r = (ICUResourceBundle)UResourceBundle.getBundleInstance(baseName,parent);
+        found = r.getULocale();
+        if(fillinIsAvailable != null) {
+            if (!found.equals(parent)) {
+                fillinIsAvailable[0] = false;
+            }
+        }
+        // determine in which locale (if any) the currently relevant 'default' is       
+        do {
+        //    System.out.println("trying,.." + r.getULocale().toString() + " - " +r.toString());
+            try {
+                    ICUResourceBundle irb = r.get(resName);
+                    defStr = irb.getString(DEFAULT_TAG); 
+              //      System.out.println("default = " + defStr);
+                    if(lookForDefault == true) {
+                        kwVal = defStr;
+                        lookForDefault = false;
+            //            System.out.println("kwVal = " + kwVal);
+                    }
+                    defLoc = r.getULocale();            
+          //          System.out.println("defloc = " + defLoc.toString());
+            } catch (Throwable t) {
+        //        System.err.println("err at " + parent.toString() + " - " + t.toString());
+            }
+            r = (ICUResourceBundle)r.getParent();
+            defDepth ++;
+        } while ((r != null) && (defLoc == null));
+        
+        
+        //System.out.println("");
+        // TODO: fail if no defaul tin root?
+        //System.out.println("Looking for " + kwVal);
+        // Now, search for the named resource
+        parent = new ULocale(baseLoc);
+        r = (ICUResourceBundle)UResourceBundle.getBundleInstance(baseName,parent);
+        // determine in which locale (if any) the named resource is located        
+        do {
+            //System.out.println("trying,.." + r.getULocale().toString() + " - " +r.toString());
+            try {
+                    ICUResourceBundle irb = r.get(resName);
+                    UResourceBundle urb = irb.get(kwVal); 
+                    // if we didn't fail before this..
+                    fullBase = r.getULocale();
+            } catch (Throwable t) {
+                //System.err.println("err at " + r.getULocale().toString() + " - " + t.toString());
+            }
+            r = (ICUResourceBundle)r.getParent();
+            resDepth ++;
+        } while ((r != null) && (fullBase == null));
+        
+        if(fullBase == null) {
+            // couldn't find requested resource. Fall back to default.
+            if(defStr.equals(kwVal)) {
+                // TODO: error here? - couldn't find default
+              //  System.err.println("couldn't find " + kwVal);
+                return null;
+            } else {
+                kwVal = defStr;
+            }
+            //System.out.println("Now Looking for default " + kwVal);
+            parent = new ULocale(baseLoc);
+            r = (ICUResourceBundle)UResourceBundle.getBundleInstance(baseName,parent);
+            resDepth = 0;
+            // determine in which locale (if any) the named resource is located        
+            do {
+                //System.out.println("trying,.." + r.getULocale().toString() + " - " +r.toString());
+                try {
+                        ICUResourceBundle irb = r.get(resName);
+                        UResourceBundle urb = irb.get(kwVal); 
+                        // if we didn't fail before this..
+                        fullBase = r.getULocale();
+                } catch (Throwable t) {
+                    //System.err.println("err at " + r.getULocale().toString() + " - " + t.toString());
+                }
+                r = (ICUResourceBundle)r.getParent();
+                resDepth ++;
+            } while ((r != null) && (fullBase == null));
+        }
+
+        if(fullBase == null ) {
+            //System.err.println("couldn't find fullbase - fail.");
+            return new ULocale("bogus_not_found"); // TODO: very bogus.
+        } else {
+            //System.out.println("fullBase = " + fullBase.toString());
+        }
+        
+        //System.out.println("defLoc = " + defLoc.toString());
+        if(defStr.equals(kwVal) && // if default was requested and
+               (resDepth <= defDepth)){  // default was set in same locale or child 
+            // it's default - return w/o keyword
+            return fullBase;
+        } else {
+            return new ULocale(fullBase.toString() + "@" + keyword + "=" + kwVal);
+        }
     }
 
     /**
