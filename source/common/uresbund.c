@@ -61,13 +61,33 @@ UBool chopLocale(char *name) {
     return FALSE;
 }
 
+void entryIncrease(UResourceDataEntry *entry) {
+        umtx_lock(&resbMutex);
+	entry->fCountExisting++;
+	while(entry->fParent != NULL) {
+	  entry = entry->fParent;
+	  entry->fCountExisting++;
+	}
+        umtx_unlock(&resbMutex);
+}
+
+void entryDecrease(UResourceDataEntry *entry) {
+        umtx_lock(&resbMutex);
+	entry->fCountExisting++;
+	while(entry->fParent != NULL) {
+	  entry = entry->fParent;
+	  entry->fCountExisting++;
+	}
+        umtx_unlock(&resbMutex);
+}
+
 /**
  *  Internal function. Tries to find a resource in given Resource 
  *  Bundle, as well as in its parents
  */
-const ResourceData *getFallbackData(const UResourceBundle* resBundle, const char* * resTag, Resource *res, UErrorCode *status) {
+const ResourceData *getFallbackData(const UResourceBundle* resBundle, const char* * resTag, UResourceDataEntry* *realData, Resource *res, UErrorCode *status) {
     const ResourceData *result = NULL;
-    const UResourceDataEntry *resB = resBundle->fData;
+    UResourceDataEntry *resB = resBundle->fData;
     int32_t i = 0;
     *res = RES_BOGUS;
     if(resB != NULL) {
@@ -93,6 +113,7 @@ const ResourceData *getFallbackData(const UResourceBundle* resBundle, const char
                     *status = U_USING_FALLBACK_ERROR;
                 }
             }
+	    *realData = resB;
             return (&(resB->fData));
         } else { /* If resource is not found, we need to give an error */
             *status = U_MISSING_RESOURCE_ERROR;
@@ -390,26 +411,19 @@ U_CFUNC UResourceBundle* ures_openNoFallback(const char* path, const char* local
     return r;
 }
 
-UResourceBundle *init_resb_result(const ResourceData *rdata, const Resource r, const char *key, UResourceBundle *resB) {
+UResourceBundle *init_resb_result(const ResourceData *rdata, const Resource r, const char *key, UResourceDataEntry *realData, UResourceBundle *resB) {
     if(resB == NULL) {
         resB = uprv_malloc(sizeof(UResourceBundle));
         resB->fIsStackObject = FALSE;
     } else {
         resB->fIsStackObject = TRUE;
     }
-    resB->fData = NULL;
+    resB->fData = realData;
+    entryIncrease(resB->fData);
     resB->fHasFallback = FALSE;
     resB->fIsTopLevel = FALSE;
     resB->fIndex = -1;
     resB->fKey = key;
-    /*
-    if(key != NULL) {
-      resB->fKey = uprv_malloc(uprv_strlen(key)+1);
-        uprv_strcpy(resB->fKey, key);
-    } else {
-        resB->fKey = NULL;
-    }
-    */
     resB->fVersion = NULL;
     resB->fRes = r;
     resB->fResData.data = rdata->data;
@@ -434,7 +448,7 @@ UResourceBundle *copyResb(UResourceBundle *r, const UResourceBundle *original) {
         uprv_memcpy(r, original, sizeof(UResourceBundle));
         r->fIsStackObject = isStackObject;
         if(r->fData != NULL) {
-            r->fData->fCountExisting++;
+	  entryIncrease(r->fData);
         }
         return r;
     } else {
@@ -449,7 +463,7 @@ void copyResbFillIn(UResourceBundle *r, const UResourceBundle *original) {
     uprv_memcpy(r, original, sizeof(UResourceBundle));
     r->fIsStackObject = TRUE;
     if(original->fData != NULL) {
-        r->fData->fCountExisting++;
+      entryIncrease(r->fData);
     }
 }
 
@@ -667,14 +681,14 @@ U_CAPI UResourceBundle* U_EXPORT2 ures_getNextResource(UResourceBundle *resB, UR
             if(r == RES_BOGUS && resB->fHasFallback) {
                 /* TODO: do the fallback */
             }
-            return init_resb_result(&(resB->fResData), r, key, fillIn);
+            return init_resb_result(&(resB->fResData), r, key, resB->fData, fillIn);
             break;
         case RES_ARRAY:
             r = res_getArrayItem(&(resB->fResData), resB->fRes, resB->fIndex);
             if(r == RES_BOGUS && resB->fHasFallback) {
                 /* TODO: do the fallback */
             }
-            return init_resb_result(&(resB->fResData), r, key, fillIn);
+            return init_resb_result(&(resB->fResData), r, key, resB->fData, fillIn);
             break;
         case RES_INT_VECTOR:
         default:
@@ -708,14 +722,14 @@ U_CAPI UResourceBundle* U_EXPORT2 ures_getByIndex(const UResourceBundle *resB, i
             if(r == RES_BOGUS && resB->fHasFallback) {
                 /* TODO: do the fallback */
             }
-            return init_resb_result(&(resB->fResData), r, key, fillIn);
+            return init_resb_result(&(resB->fResData), r, key, resB->fData, fillIn);
             break;
         case RES_ARRAY:
             r = res_getArrayItem(&(resB->fResData), resB->fRes, indexR);
             if(r == RES_BOGUS && resB->fHasFallback) {
                 /* TODO: do the fallback */
             }
-            return init_resb_result(&(resB->fResData), r, key, fillIn);
+            return init_resb_result(&(resB->fResData), r, key, resB->fData, fillIn);
             break;
         case RES_INT_VECTOR:
         default:
@@ -774,6 +788,7 @@ U_CAPI const UChar* U_EXPORT2 ures_getStringByIndex(const UResourceBundle *resB,
 
 U_CAPI UResourceBundle* U_EXPORT2 ures_getByKey(const UResourceBundle *resB, const char* inKey, UResourceBundle *fillIn, UErrorCode *status) {
     Resource res = RES_BOGUS;
+    UResourceDataEntry *realData = NULL;
     const char *key = inKey;
 
 	if (status==NULL || U_FAILURE(*status)) {
@@ -790,26 +805,26 @@ U_CAPI UResourceBundle* U_EXPORT2 ures_getByKey(const UResourceBundle *resB, con
         if(res == RES_BOGUS) {
 	  key = inKey;
                 if(resB->fHasFallback == TRUE) {
-                    const ResourceData *rd = getFallbackData(resB, &key, &res, status);
+                    const ResourceData *rd = getFallbackData(resB, &key, &realData, &res, status);
                     if(U_FAILURE(*status)) {
                         return NULL;
                     } else {
-                        return init_resb_result(rd, res, key, fillIn);
+                        return init_resb_result(rd, res, key, realData, fillIn);
                     }
                 } else {
                     *status = U_MISSING_RESOURCE_ERROR;
                     return NULL;
                 }
         } else {
-            return init_resb_result(&(resB->fResData), res, key, fillIn);
+            return init_resb_result(&(resB->fResData), res, key, resB->fData, fillIn);
         }
     } else if(RES_GET_TYPE(resB->fRes) == RES_ARRAY && resB->fHasFallback == TRUE) {
         /* here should go a first attempt to locate the key using index table */
-        const ResourceData *rd = getFallbackData(resB, &key, &res, status);
+        const ResourceData *rd = getFallbackData(resB, &key, &realData, &res, status);
         if(U_FAILURE(*status)) {
             return NULL;
         } else {
-            return init_resb_result(rd, res, key, fillIn);
+            return init_resb_result(rd, res, key, realData, fillIn);
         }
     } else {
         *status = U_RESOURCE_TYPE_MISMATCH;
@@ -819,6 +834,7 @@ U_CAPI UResourceBundle* U_EXPORT2 ures_getByKey(const UResourceBundle *resB, con
 
 U_CAPI const UChar* U_EXPORT2 ures_getStringByKey(const UResourceBundle *resB, const char* inKey, int32_t* len, UErrorCode *status) {
     Resource res = RES_BOGUS;
+    UResourceDataEntry *realData = NULL;
     const char* key = inKey;
 
 	if (status==NULL || U_FAILURE(*status)) {
@@ -835,7 +851,7 @@ U_CAPI const UChar* U_EXPORT2 ures_getStringByKey(const UResourceBundle *resB, c
         if(res == RES_BOGUS) {
 	  key = inKey;
                 if(resB->fHasFallback == TRUE) {
-                    const ResourceData *rd = getFallbackData(resB, &key, &res, status);
+                    const ResourceData *rd = getFallbackData(resB, &key, &realData, &res, status);
                     if(U_FAILURE(*status)) {
                         *status = U_MISSING_RESOURCE_ERROR;
                         return NULL;
@@ -851,7 +867,7 @@ U_CAPI const UChar* U_EXPORT2 ures_getStringByKey(const UResourceBundle *resB, c
         }
     } else if(RES_GET_TYPE(resB->fRes) == RES_ARRAY && resB->fHasFallback == TRUE) {
         /* here should go a first attempt to locate the key using index table */
-        const ResourceData *rd = getFallbackData(resB, &key, &res, status);
+        const ResourceData *rd = getFallbackData(resB, &key, &realData, &res, status);
         if(U_FAILURE(*status)) {
             *status = U_MISSING_RESOURCE_ERROR;
             return NULL;
