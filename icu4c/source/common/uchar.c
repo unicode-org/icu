@@ -673,6 +673,21 @@ u_charMirror(UChar32 c) {
     }
 }
 
+U_CAPI uint8_t U_EXPORT2
+u_getCombiningClass(UChar32 c) {
+    uint32_t props=GET_PROPS(c);
+    if(!PROPS_VALUE_IS_EXCEPTION(props)) {
+        if(GET_CATEGORY(props)==U_NON_SPACING_MARK) {
+            return (uint8_t)GET_UNSIGNED_VALUE(props);
+        } else {
+            return 0;
+        }
+    } else {
+        /* the combining class is in bits 23..16 of the first exception value */
+        return (uint8_t)(*GET_EXCEPTIONS(props)>>16);
+    }
+}
+
 /* static data tables ------------------------------------------------------- */
 
 struct BlockScriptMap {

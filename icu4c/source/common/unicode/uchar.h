@@ -415,7 +415,7 @@ typedef enum UCharNameChoice UCharNameChoice;
 
 /**
  * Determines whether the specified UChar is a lowercase character
- * according to Unicode 2.1.2.
+ * according to UnicodeData.txt.
  *
  * @param ch    the character to be tested
  * @return  true if the character is lowercase; false otherwise.
@@ -430,7 +430,7 @@ u_islower(UChar32 c);
 
 /**
  * Determines whether the specified character is an uppercase character
- * according to Unicode 2.1.2.
+ * according to UnicodeData.txt.
  *
  * @param ch    the character to be tested
  * @return  true if the character is uppercase; false otherwise.
@@ -444,7 +444,7 @@ u_isupper(UChar32 c);
 
 /**
  * Determines whether the specified character is a titlecase character
- * according to Unicode 2.1.2.
+ * according to UnicodeData.txt.
  *
  * @param ch    the character to be tested
  * @return  true if the character is titlecase; false otherwise.
@@ -457,8 +457,8 @@ U_CAPI UBool U_EXPORT2
 u_istitle(UChar32 c);
 
 /**
- * Determines whether the specified character is a digit according to Unicode
- * 2.1.2.
+ * Determines whether the specified character is a digit according to UnicodeData.txt.
+ *
  *
  * @param ch    the character to be tested
  * @return  true if the character is a digit; false otherwise.
@@ -469,7 +469,7 @@ u_isdigit(UChar32 c);
 
 /**
  * Determines whether the specified character is an alphanumeric character
- * (letter or digit)according to Unicode 2.1.2.
+ * (letter or digit)according to UnicodeData.txt.
  *
  * @param ch    the character to be tested
  * @return  true if the character is a letter or a digit; false otherwise.
@@ -480,7 +480,7 @@ u_isalnum(UChar32 c);
 
 /**
  * Determines whether the specified numeric value is actually a defined character
- * according to Unicode 2.1.2.
+ * according to UnicodeData.txt.
  *
  * @param ch    the character to be tested
  * @return  true if the character has a defined Unicode meaning; false otherwise.
@@ -498,7 +498,7 @@ u_isdefined(UChar32 c);
 
 /**
  * Determines whether the specified character is a letter
- * according to Unicode 2.1.2.
+ * according to UnicodeData.txt.
  *
  * @param ch    the character to be tested
  * @return  true if the character is a letter; false otherwise.
@@ -566,7 +566,7 @@ u_iscntrl(UChar32 c);
 
 /**
  * Determines whether the specified character is a printable character according 
- * to Unicode 2.1.2.
+ * to UnicodeData.txt.
  *
  * @param ch    the character to be tested
  * @return  true if the Unicode character is a printable character; false otherwise.
@@ -579,7 +579,7 @@ u_isprint(UChar32 c);
 
 /**
  * Determines whether the specified character is of the base form according 
- * to Unicode 2.1.2.
+ * to UnicodeData.txt.
  *
  * @param ch    the character to be tested
  * @return  true if the Unicode character is of the base form; false otherwise.
@@ -688,8 +688,8 @@ U_CAPI uint16_t U_EXPORT2
 u_charCellWidth(UChar32 c);
 
 /**
- * Returns a value indicating a character category according to Unicode
- * 2.1.2.
+ * Returns a value indicating a character category according to UnicodeData.txt.
+ *
  * @param c            the character to be tested
  * @return a value of type int, the character category.
  * @see UCharCategory
@@ -697,6 +697,16 @@ u_charCellWidth(UChar32 c);
  */
 U_CAPI int8_t U_EXPORT2
 u_charType(UChar32 c);
+
+/**
+ * Returns the combining class of the code point as specified in UnicodeData.txt.
+ *
+ * @param c the code point of the character
+ * @return the combining class of the character
+ * @draft
+ */
+U_CAPI uint8_t U_EXPORT2
+u_getCombiningClass(UChar32 c);
 
 /**
  * Retrives the decimal numeric value of a digit character.
@@ -959,11 +969,11 @@ u_isJavaIDPart(UChar32 c);
 
 /**
  * The given character is mapped to its lowercase equivalent according to
- * Unicode 2.1.2; if the character has no lowercase equivalent, the character 
+ * UnicodeData.txt; if the character has no lowercase equivalent, the character 
  * itself is returned.
  * <P>
  * A character has a lowercase equivalent if and only if a lowercase mapping
- * is specified for the character in the Unicode 2.1.2 attribute table.
+ * is specified for the character in the UnicodeData.txt attribute table.
  * <P>
  * u_tolower() only deals with the general letter case conversion.
  * For language specific case conversion behavior, use ustrToUpper().
@@ -979,8 +989,8 @@ U_CAPI UChar32 U_EXPORT2
 u_tolower(UChar32 c);
 
 /**
- * The given character is mapped to its uppercase equivalent according to Unicode
- * 2.1.2; if the character has no uppercase equivalent, the character itself is 
+ * The given character is mapped to its uppercase equivalent according to UnicodeData.txt;
+ * if the character has no uppercase equivalent, the character itself is 
  * returned.
  * <P>
  * u_toupper() only deals with the general letter case conversion.
@@ -996,13 +1006,13 @@ u_tolower(UChar32 c);
 U_CAPI UChar32 U_EXPORT2
 u_toupper(UChar32 c);
 /**
- * The given character is mapped to its titlecase equivalent according to Unicode
- * 2.1.2.  There are only four Unicode characters that are truly titlecase forms
+ * The given character is mapped to its titlecase equivalent according to UnicodeData.txt.
+ * There are only four Unicode characters that are truly titlecase forms
  * that are distinct from uppercase forms.  As a rule, if a character has no
  * true titlecase equivalent, its uppercase equivalent is returned.
  * <P>
  * A character has a titlecase equivalent if and only if a titlecase mapping
- * is specified for the character in the Unicode 2.1.2 data.
+ * is specified for the character in the UnicodeData.txt data.
  *
  * @param ch    the character to be converted
  * @return  the titlecase equivalent of the character, if any;
