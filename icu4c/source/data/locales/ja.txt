@@ -1,6 +1,6 @@
 // ***************************************************************************
 // *
-// *   Copyright (C) 1997-2003, International Business Machines
+// *   Copyright (C) 1997-2004, International Business Machines
 // *   Corporation and others.  All Rights Reserved.
 // *
 // ***************************************************************************
@@ -388,236 +388,236 @@ ja {
              "<<< \u30F3|\u30FD = \uFF9D|\u30FD = \u3093|\u309D"
 
             // Equaling Katakana, Hiragana and compatibility
-            "&\u30A1 = \u30A1 = \u3041 = \uFF67" // KATAKANA LETTER SMALL A
-            "&\u30A2 = \u30A2 = \u3042 = \uFF71" // KATAKANA LETTER A
-            "&\u30A3 = \u30A3 = \u3043 = \uFF68" // KATAKANA LETTER SMALL I
-            "&\u30A4 = \u30A4 = \u3044 = \uFF72" // KATAKANA LETTER I
-            "&\u30A5 = \u30A5 = \u3045 = \uFF69" // KATAKANA LETTER SMALL U
-            "&\u30A6 = \u30A6 = \u3046 = \uFF73" // KATAKANA LETTER U
-            "&\u30A7 = \u30A7 = \u3047 = \uFF6A" // KATAKANA LETTER SMALL E
-            "&\u30A8 = \u30A8 = \u3048 = \uFF74" // KATAKANA LETTER E
-            "&\u30A9 = \u30A9 = \u3049 = \uFF6B" // KATAKANA LETTER SMALL O
-            "&\u30AA = \u30AA = \u304A = \uFF75" // KATAKANA LETTER O
-            "&\u30AB = \u30AB = \u304B = \uFF76" // KATAKANA LETTER KA
-            "&\u30AD = \u30AD = \u304D = \uFF77" // KATAKANA LETTER KI
-            "&\u30AF = \u30AF = \u304F = \uFF78" // KATAKANA LETTER KU
-            "&\u30B1 = \u30B1 = \u3051 = \uFF79" // KATAKANA LETTER KE
-            "&\u30B3 = \u30B3 = \u3053 = \uFF7A" // KATAKANA LETTER KO
-            "&\u30B5 = \u30B5 = \u3055 = \uFF7B" // KATAKANA LETTER SA
-            "&\u30B7 = \u30B7 = \u3057 = \uFF7C" // KATAKANA LETTER SI
-            "&\u30B9 = \u30B9 = \u3059 = \uFF7D" // KATAKANA LETTER SU
-            "&\u30BB = \u30BB = \u305B = \uFF7E" // KATAKANA LETTER SE
-            "&\u30BD = \u30BD = \u305D = \uFF7F" // KATAKANA LETTER SO
-            "&\u30BF = \u30BF = \u305F = \uFF80" // KATAKANA LETTER TA
-            "&\u30C1 = \u30C1 = \u3061 = \uFF81" // KATAKANA LETTER TI
-            "&\u30C3 = \u30C3 = \u3063 = \uFF6F" // KATAKANA LETTER SMALL TU
-            "&\u30C4 = \u30C4 = \u3064 = \uFF82" // KATAKANA LETTER TU
-            "&\u30C6 = \u30C6 = \u3066 = \uFF83" // KATAKANA LETTER TE
-            "&\u30C8 = \u30C8 = \u3068 = \uFF84" // KATAKANA LETTER TO
-            "&\u30CA = \u30CA = \u306A = \uFF85" // KATAKANA LETTER NA
-            "&\u30CB = \u30CB = \u306B = \uFF86" // KATAKANA LETTER NI
-            "&\u30CC = \u30CC = \u306C = \uFF87" // KATAKANA LETTER NU
-            "&\u30CD = \u30CD = \u306D = \uFF88" // KATAKANA LETTER NE
-            "&\u30CE = \u30CE = \u306E = \uFF89" // KATAKANA LETTER NO
-            "&\u30CF = \u30CF = \u306F = \uFF8A" // KATAKANA LETTER HA
-            "&\u30D2 = \u30D2 = \u3072 = \uFF8B" // KATAKANA LETTER HI
-            "&\u30D5 = \u30D5 = \u3075 = \uFF8C" // KATAKANA LETTER HU
-            "&\u30D8 = \u30D8 = \u3078 = \uFF8D" // KATAKANA LETTER HE
-            "&\u30DB = \u30DB = \u307B = \uFF8E" // KATAKANA LETTER HO
-            "&\u30DE = \u30DE = \u307E = \uFF8F" // KATAKANA LETTER MA
-            "&\u30DF = \u30DF = \u307F = \uFF90" // KATAKANA LETTER MI
-            "&\u30E0 = \u30E0 = \u3080 = \uFF91" // KATAKANA LETTER MU
-            "&\u30E1 = \u30E1 = \u3081 = \uFF92" // KATAKANA LETTER ME
-            "&\u30E2 = \u30E2 = \u3082 = \uFF93" // KATAKANA LETTER MO
-            "&\u30E3 = \u30E3 = \u3083 = \uFF6C" // KATAKANA LETTER SMALL YA
-            "&\u30E4 = \u30E4 = \u3084 = \uFF94" // KATAKANA LETTER YA
-            "&\u30E5 = \u30E5 = \u3085 = \uFF6D" // KATAKANA LETTER SMALL YU
-            "&\u30E6 = \u30E6 = \u3086 = \uFF95" // KATAKANA LETTER YU
-            "&\u30E7 = \u30E7 = \u3087 = \uFF6E" // KATAKANA LETTER SMALL YO
-            "&\u30E8 = \u30E8 = \u3088 = \uFF96" // KATAKANA LETTER YO
-            "&\u30E9 = \u30E9 = \u3089 = \uFF97" // KATAKANA LETTER RA
-            "&\u30EA = \u30EA = \u308A = \uFF98" // KATAKANA LETTER RI
-            "&\u30EB = \u30EB = \u308B = \uFF99" // KATAKANA LETTER RU
-            "&\u30EC = \u30EC = \u308C = \uFF9A" // KATAKANA LETTER RE
-            "&\u30ED = \u30ED = \u308D = \uFF9B" // KATAKANA LETTER RO
-            "&\u30EE = \u30EE = \u308E" // KATAKANA LETTER SMALL WA
-            "&\u30EF = \u30EF = \u308F = \uFF9C" // KATAKANA LETTER WA
-            "&\u30F0 = \u30F0 = \u3090" // KATAKANA LETTER WI
-            "&\u30F1 = \u30F1 = \u3091" // KATAKANA LETTER WE
-            "&\u30F2 = \u30F2 = \u3092 = \uFF66" // KATAKANA LETTER WO
-            "&\u30F3 = \u30F3 = \u3093 = \uFF9D" // KATAKANA LETTER N
-            "&\u30F5 = \u30F5" // KATAKANA LETTER SMALL KA
-            "&\u30F6 = \u30F6" // KATAKANA LETTER SMALL KE
-            "&\u30FC = \u30FC" // KATAKANA - HIRAGANA LENGTH MARK
-            "&\u3099 = \u3099"
-            "&\u309A = \u309A"
+            "&\u30A1=\u30A1=\u3041=\uFF67" // KATAKANA LETTER SMALL A
+            "&\u30A2=\u30A2=\u3042=\uFF71" // KATAKANA LETTER A
+            "&\u30A3=\u30A3=\u3043=\uFF68" // KATAKANA LETTER SMALL I
+            "&\u30A4=\u30A4=\u3044=\uFF72" // KATAKANA LETTER I
+            "&\u30A5=\u30A5=\u3045=\uFF69" // KATAKANA LETTER SMALL U
+            "&\u30A6=\u30A6=\u3046=\uFF73" // KATAKANA LETTER U
+            "&\u30A7=\u30A7=\u3047=\uFF6A" // KATAKANA LETTER SMALL E
+            "&\u30A8=\u30A8=\u3048=\uFF74" // KATAKANA LETTER E
+            "&\u30A9=\u30A9=\u3049=\uFF6B" // KATAKANA LETTER SMALL O
+            "&\u30AA=\u30AA=\u304A=\uFF75" // KATAKANA LETTER O
+            "&\u30AB=\u30AB=\u304B=\uFF76" // KATAKANA LETTER KA
+            "&\u30AD=\u30AD=\u304D=\uFF77" // KATAKANA LETTER KI
+            "&\u30AF=\u30AF=\u304F=\uFF78" // KATAKANA LETTER KU
+            "&\u30B1=\u30B1=\u3051=\uFF79" // KATAKANA LETTER KE
+            "&\u30B3=\u30B3=\u3053=\uFF7A" // KATAKANA LETTER KO
+            "&\u30B5=\u30B5=\u3055=\uFF7B" // KATAKANA LETTER SA
+            "&\u30B7=\u30B7=\u3057=\uFF7C" // KATAKANA LETTER SI
+            "&\u30B9=\u30B9=\u3059=\uFF7D" // KATAKANA LETTER SU
+            "&\u30BB=\u30BB=\u305B=\uFF7E" // KATAKANA LETTER SE
+            "&\u30BD=\u30BD=\u305D=\uFF7F" // KATAKANA LETTER SO
+            "&\u30BF=\u30BF=\u305F=\uFF80" // KATAKANA LETTER TA
+            "&\u30C1=\u30C1=\u3061=\uFF81" // KATAKANA LETTER TI
+            "&\u30C3=\u30C3=\u3063=\uFF6F" // KATAKANA LETTER SMALL TU
+            "&\u30C4=\u30C4=\u3064=\uFF82" // KATAKANA LETTER TU
+            "&\u30C6=\u30C6=\u3066=\uFF83" // KATAKANA LETTER TE
+            "&\u30C8=\u30C8=\u3068=\uFF84" // KATAKANA LETTER TO
+            "&\u30CA=\u30CA=\u306A=\uFF85" // KATAKANA LETTER NA
+            "&\u30CB=\u30CB=\u306B=\uFF86" // KATAKANA LETTER NI
+            "&\u30CC=\u30CC=\u306C=\uFF87" // KATAKANA LETTER NU
+            "&\u30CD=\u30CD=\u306D=\uFF88" // KATAKANA LETTER NE
+            "&\u30CE=\u30CE=\u306E=\uFF89" // KATAKANA LETTER NO
+            "&\u30CF=\u30CF=\u306F=\uFF8A" // KATAKANA LETTER HA
+            "&\u30D2=\u30D2=\u3072=\uFF8B" // KATAKANA LETTER HI
+            "&\u30D5=\u30D5=\u3075=\uFF8C" // KATAKANA LETTER HU
+            "&\u30D8=\u30D8=\u3078=\uFF8D" // KATAKANA LETTER HE
+            "&\u30DB=\u30DB=\u307B=\uFF8E" // KATAKANA LETTER HO
+            "&\u30DE=\u30DE=\u307E=\uFF8F" // KATAKANA LETTER MA
+            "&\u30DF=\u30DF=\u307F=\uFF90" // KATAKANA LETTER MI
+            "&\u30E0=\u30E0=\u3080=\uFF91" // KATAKANA LETTER MU
+            "&\u30E1=\u30E1=\u3081=\uFF92" // KATAKANA LETTER ME
+            "&\u30E2=\u30E2=\u3082=\uFF93" // KATAKANA LETTER MO
+            "&\u30E3=\u30E3=\u3083=\uFF6C" // KATAKANA LETTER SMALL YA
+            "&\u30E4=\u30E4=\u3084=\uFF94" // KATAKANA LETTER YA
+            "&\u30E5=\u30E5=\u3085=\uFF6D" // KATAKANA LETTER SMALL YU
+            "&\u30E6=\u30E6=\u3086=\uFF95" // KATAKANA LETTER YU
+            "&\u30E7=\u30E7=\u3087=\uFF6E" // KATAKANA LETTER SMALL YO
+            "&\u30E8=\u30E8=\u3088=\uFF96" // KATAKANA LETTER YO
+            "&\u30E9=\u30E9=\u3089=\uFF97" // KATAKANA LETTER RA
+            "&\u30EA=\u30EA=\u308A=\uFF98" // KATAKANA LETTER RI
+            "&\u30EB=\u30EB=\u308B=\uFF99" // KATAKANA LETTER RU
+            "&\u30EC=\u30EC=\u308C=\uFF9A" // KATAKANA LETTER RE
+            "&\u30ED=\u30ED=\u308D=\uFF9B" // KATAKANA LETTER RO
+            "&\u30EE=\u30EE=\u308E" // KATAKANA LETTER SMALL WA
+            "&\u30EF=\u30EF=\u308F=\uFF9C" // KATAKANA LETTER WA
+            "&\u30F0=\u30F0=\u3090" // KATAKANA LETTER WI
+            "&\u30F1=\u30F1=\u3091" // KATAKANA LETTER WE
+            "&\u30F2=\u30F2=\u3092=\uFF66" // KATAKANA LETTER WO
+            "&\u30F3=\u30F3=\u3093=\uFF9D" // KATAKANA LETTER N
+            "&\u30F5=\u30F5" // KATAKANA LETTER SMALL KA
+            "&\u30F6=\u30F6" // KATAKANA LETTER SMALL KE
+            "&\u30FC=\u30FC" // KATAKANA - HIRAGANA LENGTH MARK
+            "&\u3099=\u3099"
+            "&\u309A=\u309A"
 
             // Equaling normal and halfwidth/fullwidth characters
-            "&' '='\u3000'" // IDEOGRAPHIC SPACE
-            "&'\u0020' = '\uFFE3'" // SPACE
-            "&'\u0021' = '\uFF01'" // EXCLAMATION MARK
-            "&'\u0022' = '\uFF02'" // QUOTATION MARK
-            "&'\u0023' = '\uFF03'" // NUMBER SIGN
-            "&'\u0024' = '\uFF04'" // DOLLAR SIGN
-            "&'\u0025' = '\uFF05'" // PERCENT SIGN
-            "&'\u0026' = '\uFF06'" // AMPERSAND
-            "&'' = '\uFF07'" // APOSTROPHE
-            "&'\u0028' = '\uFF08'" // LEFT PARENTHESIS
-            "&'\u0029' = '\uFF09'" // RIGHT PARENTHESIS
-            "&'\u002A' = '\uFF0A'" // ASTERISK
-            "&'\u002B' = '\uFF0B'" // PLUS SIGN
-            "&'\u002C' = '\uFF0C'" // COMMA
-            "&'\u002D' = '\uFF0D'" // HYPHEN-MINUS
-            "&'\u002E' = '\uFF0E'" // FULL STOP
-            "&'\u002F' = '\uFF0F'" // SOLIDUS
-            "&'\u0030' = '\uFF10'" // DIGIT ZERO
-            "&'\u0031' = '\uFF11'" // DIGIT ONE
-            "&'\u0032' = '\uFF12'" // DIGIT TWO
-            "&'\u0033' = '\uFF13'" // DIGIT THREE
-            "&'\u0034' = '\uFF14'" // DIGIT FOUR
-            "&'\u0035' = '\uFF15'" // DIGIT FIVE
-            "&'\u0036' = '\uFF16'" // DIGIT SIX
-            "&'\u0037' = '\uFF17'" // DIGIT SEVEN
-            "&'\u0038' = '\uFF18'" // DIGIT EIGHT
-            "&'\u0039' = '\uFF19'" // DIGIT NINE
-            "&'\u003A' = '\uFF1A'" // COLON
-            "&'\u003B' = '\uFF1B'" // SEMICOLON
-            "&'\u003C' = '\uFF1C'" // LESS-THAN SIGN
-            "&'\u003D' = '\uFF1D'" // EQUALS SIGN
-            "&'\u003E' = '\uFF1E'" // GREATER-THAN SIGN
-            "&'\u003F' = '\uFF1F'" // QUESTION MARK
-            "&'\u0040' = '\uFF20'" // COMMERCIAL AT
-            "&'\u0041' = '\uFF21'" // LATIN CAPITAL LETTER A
-            "&'\u0042' = '\uFF22'" // LATIN CAPITAL LETTER B
-            "&'\u0043' = '\uFF23'" // LATIN CAPITAL LETTER C
-            "&'\u0044' = '\uFF24'" // LATIN CAPITAL LETTER D
-            "&'\u0045' = '\uFF25'" // LATIN CAPITAL LETTER E
-            "&'\u0046' = '\uFF26'" // LATIN CAPITAL LETTER F
-            "&'\u0047' = '\uFF27'" // LATIN CAPITAL LETTER G
-            "&'\u0048' = '\uFF28'" // LATIN CAPITAL LETTER H
-            "&'\u0049' = '\uFF29'" // LATIN CAPITAL LETTER I
-            "&'\u004A' = '\uFF2A'" // LATIN CAPITAL LETTER J
-            "&'\u004B' = '\uFF2B'" // LATIN CAPITAL LETTER K
-            "&'\u004C' = '\uFF2C'" // LATIN CAPITAL LETTER L
-            "&'\u004D' = '\uFF2D'" // LATIN CAPITAL LETTER M
-            "&'\u004E' = '\uFF2E'" // LATIN CAPITAL LETTER N
-            "&'\u004F' = '\uFF2F'" // LATIN CAPITAL LETTER O
-            "&'\u0050' = '\uFF30'" // LATIN CAPITAL LETTER P
-            "&'\u0051' = '\uFF31'" // LATIN CAPITAL LETTER Q
-            "&'\u0052' = '\uFF32'" // LATIN CAPITAL LETTER R
-            "&'\u0053' = '\uFF33'" // LATIN CAPITAL LETTER S
-            "&'\u0054' = '\uFF34'" // LATIN CAPITAL LETTER T
-            "&'\u0055' = '\uFF35'" // LATIN CAPITAL LETTER U
-            "&'\u0056' = '\uFF36'" // LATIN CAPITAL LETTER V
-            "&'\u0057' = '\uFF37'" // LATIN CAPITAL LETTER W
-            "&'\u0058' = '\uFF38'" // LATIN CAPITAL LETTER X
-            "&'\u0059' = '\uFF39'" // LATIN CAPITAL LETTER Y
-            "&'\u005A' = '\uFF3A'" // LATIN CAPITAL LETTER Z
-            "&'\u005B' = '\uFF3B'" // LEFT SQUARE BRACKET
-            "&'\u005C' = '\uFF3C'" // REVERSE SOLIDUS
-            "&'\u005D' = '\uFF3D'" // RIGHT SQUARE BRACKET
-            "&'\u005E' = '\uFF3E'" // CIRCUMFLEX ACCENT
-            "&'\u005F' = '\uFF3F'" // LOW LINE
-            "&'\u0060' = '\uFF40'" // GRAVE ACCENT
-            "&'\u0061' = '\uFF41'" // LATIN SMALL LETTER A
-            "&'\u0062' = '\uFF42'" // LATIN SMALL LETTER B
-            "&'\u0063' = '\uFF43'" // LATIN SMALL LETTER C
-            "&'\u0064' = '\uFF44'" // LATIN SMALL LETTER D
-            "&'\u0065' = '\uFF45'" // LATIN SMALL LETTER E
-            "&'\u0066' = '\uFF46'" // LATIN SMALL LETTER F
-            "&'\u0067' = '\uFF47'" // LATIN SMALL LETTER G
-            "&'\u0068' = '\uFF48'" // LATIN SMALL LETTER H
-            "&'\u0069' = '\uFF49'" // LATIN SMALL LETTER I
-            "&'\u006A' = '\uFF4A'" // LATIN SMALL LETTER J
-            "&'\u006B' = '\uFF4B'" // LATIN SMALL LETTER K
-            "&'\u006C' = '\uFF4C'" // LATIN SMALL LETTER L
-            "&'\u006D' = '\uFF4D'" // LATIN SMALL LETTER M
-            "&'\u006E' = '\uFF4E'" // LATIN SMALL LETTER N
-            "&'\u006F' = '\uFF4F'" // LATIN SMALL LETTER O
-            "&'\u0070' = '\uFF50'" // LATIN SMALL LETTER P
-            "&'\u0071' = '\uFF51'" // LATIN SMALL LETTER Q
-            "&'\u0072' = '\uFF52'" // LATIN SMALL LETTER R
-            "&'\u0073' = '\uFF53'" // LATIN SMALL LETTER S
-            "&'\u0074' = '\uFF54'" // LATIN SMALL LETTER T
-            "&'\u0075' = '\uFF55'" // LATIN SMALL LETTER U
-            "&'\u0076' = '\uFF56'" // LATIN SMALL LETTER V
-            "&'\u0077' = '\uFF57'" // LATIN SMALL LETTER W
-            "&'\u0078' = '\uFF58'" // LATIN SMALL LETTER X
-            "&'\u0079' = '\uFF59'" // LATIN SMALL LETTER Y
-            "&'\u007A' = '\uFF5A'" // LATIN SMALL LETTER Z
-            "&'\u007B' = '\uFF5B'" // LEFT CURLY BRACKET
-            "&'\u007C' = '\uFF5C'" // VERTICAL LINE
-            "&'\u007D' = '\uFF5D'" // RIGHT CURLY BRACKET
-            "&'\u007E' = '\uFF5E'" // TILDE
-            "&'\u00A2' = '\uFFE0'" // CENT SIGN
-            "&'\u00A3' = '\uFFE1'" // POUND SIGN
-            "&'\u00A5' = '\uFFE5'" // YEN SIGN
-            "&'\u00A6' = '\uFFE4'" // BROKEN BAR
-            "&'\u00AC' = '\uFFE2'" // NOT SIGN
-            "&'\u1100' = '\uFFA1'" // HANGUL CHOSEONG KIYEOK
-            "&'\u1101' = '\uFFA2'" // HANGUL CHOSEONG SSANGKIYEOK
-            "&'\u1102' = '\uFFA4'" // HANGUL CHOSEONG NIEUN
-            "&'\u1103' = '\uFFA7'" // HANGUL CHOSEONG TIKEUT
-            "&'\u1104' = '\uFFA8'" // HANGUL CHOSEONG SSANGTIKEUT
-            "&'\u1105' = '\uFFA9'" // HANGUL CHOSEONG RIEUL
-            "&'\u1106' = '\uFFB1'" // HANGUL CHOSEONG MIEUM
-            "&'\u1107' = '\uFFB2'" // HANGUL CHOSEONG PIEUP
-            "&'\u1108' = '\uFFB3'" // HANGUL CHOSEONG SSANGPIEUP
-            "&'\u1109' = '\uFFB5'" // HANGUL CHOSEONG SIOS
-            "&'\u110A' = '\uFFB6'" // HANGUL CHOSEONG SSANGSIOS
-            "&'\u110B' = '\uFFB7'" // HANGUL CHOSEONG IEUNG
-            "&'\u110C' = '\uFFB8'" // HANGUL CHOSEONG CIEUC
-            "&'\u110D' = '\uFFB9'" // HANGUL CHOSEONG SSANGCIEUC
-            "&'\u110E' = '\uFFBA'" // HANGUL CHOSEONG CHIEUCH
-            "&'\u110F' = '\uFFBB'" // HANGUL CHOSEONG KHIEUKH
-            "&'\u1110' = '\uFFBC'" // HANGUL CHOSEONG THIEUTH
-            "&'\u1111' = '\uFFBD'" // HANGUL CHOSEONG PHIEUPH
-            "&'\u1112' = '\uFFBE'" // HANGUL CHOSEONG HIEUH
-            "&'\u111A' = '\uFFB0'" // HANGUL CHOSEONG RIEUL-HIEUH
-            "&'\u1121' = '\uFFB4'" // HANGUL CHOSEONG PIEUP-SIOS
-            "&'\u1160' = '\uFFA0'" // HANGUL JUNGSEONG FILLER
-            "&'\u1161' = '\uFFC2'" // HANGUL JUNGSEONG A
-            "&'\u1162' = '\uFFC3'" // HANGUL JUNGSEONG AE
-            "&'\u1163' = '\uFFC4'" // HANGUL JUNGSEONG YA
-            "&'\u1164' = '\uFFC5'" // HANGUL JUNGSEONG YAE
-            "&'\u1165' = '\uFFC6'" // HANGUL JUNGSEONG EO
-            "&'\u1166' = '\uFFC7'" // HANGUL JUNGSEONG E
-            "&'\u1167' = '\uFFCA'" // HANGUL JUNGSEONG YEO
-            "&'\u1168' = '\uFFCB'" // HANGUL JUNGSEONG YE
-            "&'\u1169' = '\uFFCC'" // HANGUL JUNGSEONG O
-            "&'\u116A' = '\uFFCD'" // HANGUL JUNGSEONG WA
-            "&'\u116B' = '\uFFCE'" // HANGUL JUNGSEONG WAE
-            "&'\u116C' = '\uFFCF'" // HANGUL JUNGSEONG OE
-            "&'\u116D' = '\uFFD2'" // HANGUL JUNGSEONG YO
-            "&'\u116E' = '\uFFD3'" // HANGUL JUNGSEONG U
-            "&'\u116F' = '\uFFD4'" // HANGUL JUNGSEONG WEO
-            "&'\u1170' = '\uFFD5'" // HANGUL JUNGSEONG WE
-            "&'\u1171' = '\uFFD6'" // HANGUL JUNGSEONG WI
-            "&'\u1172' = '\uFFD7'" // HANGUL JUNGSEONG YU
-            "&'\u1173' = '\uFFDA'" // HANGUL JUNGSEONG EU
-            "&'\u1174' = '\uFFDB'" // HANGUL JUNGSEONG YI
-            "&'\u1175' = '\uFFDC'" // HANGUL JUNGSEONG I
-            "&'\u11AA' = '\uFFA3'" // HANGUL JONGSEONG KIYEOK-SIOS
-            "&'\u11AC' = '\uFFA5'" // HANGUL JONGSEONG NIEUN-CIEUC
-            "&'\u11AD' = '\uFFA6'" // HANGUL JONGSEONG NIEUN-HIEUH
-            "&'\u11B0' = '\uFFAA'" // HANGUL JONGSEONG RIEUL-KIYEOK
-            "&'\u11B1' = '\uFFAB'" // HANGUL JONGSEONG RIEUL-MIEUM
-            "&'\u11B2' = '\uFFAC'" // HANGUL JONGSEONG RIEUL-PIEUP
-            "&'\u11B3' = '\uFFAD'" // HANGUL JONGSEONG RIEUL-SIOS
-            "&'\u11B4' = '\uFFAE'" // HANGUL JONGSEONG RIEUL-THIEUTH
-            "&'\u11B5' = '\uFFAF'" // HANGUL JONGSEONG RIEUL-PHIEUPH
-            "&'\u20A9' = '\uFFE6'" // WON SIGN
-            "&'\u2190' = '\uFFE9'" // LEFTWARDS ARROW
-            "&'\u2191' = '\uFFEA'" // UPWARDS ARROW
-            "&'\u2192' = '\uFFEB'" // RIGHTWARDS ARROW
-            "&'\u2193' = '\uFFEC'" // DOWNWARDS ARROW
-            "&'\u2502' = '\uFFE8'" // BOX DRAWINGS LIGHT VERTICAL
-            "&'\u25A0' = '\uFFED'" // BLACK SQUARE
-            "&'\u25CB' = '\uFFEE'" // WHITE CIRCLE
-            "&'\u3001' = '\uFF64'" // IDEOGRAPHIC COMMA
-            "&'\u3002' = '\uFF61'" // IDEOGRAPHIC FULL STOP
-            "&'\u300C' = '\uFF62'" // LEFT CORNER BRACKET
-            "&'\u300D' = '\uFF63'" // RIGHT CORNER BRACKET
+
+            "&'\u0020'='\u3000'='\uFFE3'" // SPACE
+            "&'\u0021'='\uFF01'" // EXCLAMATION MARK
+            "&'\u0022'='\uFF02'" // QUOTATION MARK
+            "&'\u0023'='\uFF03'" // NUMBER SIGN
+            "&'\u0024'='\uFF04'" // DOLLAR SIGN
+            "&'\u0025'='\uFF05'" // PERCENT SIGN
+            "&'\u0026'='\uFF06'" // AMPERSAND
+            "&''='\uFF07'" // APOSTROPHE
+            "&'\u0028'='\uFF08'" // LEFT PARENTHESIS
+            "&'\u0029'='\uFF09'" // RIGHT PARENTHESIS
+            "&'\u002A'='\uFF0A'" // ASTERISK
+            "&'\u002B'='\uFF0B'" // PLUS SIGN
+            "&'\u002C'='\uFF0C'" // COMMA
+            "&'\u002D'='\uFF0D'" // HYPHEN-MINUS
+            "&'\u002E'='\uFF0E'" // FULL STOP
+            "&'\u002F'='\uFF0F'" // SOLIDUS
+            "&'\u0030'='\uFF10'" // DIGIT ZERO
+            "&'\u0031'='\uFF11'" // DIGIT ONE
+            "&'\u0032'='\uFF12'" // DIGIT TWO
+            "&'\u0033'='\uFF13'" // DIGIT THREE
+            "&'\u0034'='\uFF14'" // DIGIT FOUR
+            "&'\u0035'='\uFF15'" // DIGIT FIVE
+            "&'\u0036'='\uFF16'" // DIGIT SIX
+            "&'\u0037'='\uFF17'" // DIGIT SEVEN
+            "&'\u0038'='\uFF18'" // DIGIT EIGHT
+            "&'\u0039'='\uFF19'" // DIGIT NINE
+            "&'\u003A'='\uFF1A'" // COLON
+            "&'\u003B'='\uFF1B'" // SEMICOLON
+            "&'\u003C'='\uFF1C'" // LESS-THAN SIGN
+            "&'\u003D'='\uFF1D'" // EQUALS SIGN
+            "&'\u003E'='\uFF1E'" // GREATER-THAN SIGN
+            "&'\u003F'='\uFF1F'" // QUESTION MARK
+            "&'\u0040'='\uFF20'" // COMMERCIAL AT
+            "&'\u0041'='\uFF21'" // LATIN CAPITAL LETTER A
+            "&'\u0042'='\uFF22'" // LATIN CAPITAL LETTER B
+            "&'\u0043'='\uFF23'" // LATIN CAPITAL LETTER C
+            "&'\u0044'='\uFF24'" // LATIN CAPITAL LETTER D
+            "&'\u0045'='\uFF25'" // LATIN CAPITAL LETTER E
+            "&'\u0046'='\uFF26'" // LATIN CAPITAL LETTER F
+            "&'\u0047'='\uFF27'" // LATIN CAPITAL LETTER G
+            "&'\u0048'='\uFF28'" // LATIN CAPITAL LETTER H
+            "&'\u0049'='\uFF29'" // LATIN CAPITAL LETTER I
+            "&'\u004A'='\uFF2A'" // LATIN CAPITAL LETTER J
+            "&'\u004B'='\uFF2B'" // LATIN CAPITAL LETTER K
+            "&'\u004C'='\uFF2C'" // LATIN CAPITAL LETTER L
+            "&'\u004D'='\uFF2D'" // LATIN CAPITAL LETTER M
+            "&'\u004E'='\uFF2E'" // LATIN CAPITAL LETTER N
+            "&'\u004F'='\uFF2F'" // LATIN CAPITAL LETTER O
+            "&'\u0050'='\uFF30'" // LATIN CAPITAL LETTER P
+            "&'\u0051'='\uFF31'" // LATIN CAPITAL LETTER Q
+            "&'\u0052'='\uFF32'" // LATIN CAPITAL LETTER R
+            "&'\u0053'='\uFF33'" // LATIN CAPITAL LETTER S
+            "&'\u0054'='\uFF34'" // LATIN CAPITAL LETTER T
+            "&'\u0055'='\uFF35'" // LATIN CAPITAL LETTER U
+            "&'\u0056'='\uFF36'" // LATIN CAPITAL LETTER V
+            "&'\u0057'='\uFF37'" // LATIN CAPITAL LETTER W
+            "&'\u0058'='\uFF38'" // LATIN CAPITAL LETTER X
+            "&'\u0059'='\uFF39'" // LATIN CAPITAL LETTER Y
+            "&'\u005A'='\uFF3A'" // LATIN CAPITAL LETTER Z
+            "&'\u005B'='\uFF3B'" // LEFT SQUARE BRACKET
+            "&'\u005C'='\uFF3C'" // REVERSE SOLIDUS
+            "&'\u005D'='\uFF3D'" // RIGHT SQUARE BRACKET
+            "&'\u005E'='\uFF3E'" // CIRCUMFLEX ACCENT
+            "&'\u005F'='\uFF3F'" // LOW LINE
+            "&'\u0060'='\uFF40'" // GRAVE ACCENT
+            "&'\u0061'='\uFF41'" // LATIN SMALL LETTER A
+            "&'\u0062'='\uFF42'" // LATIN SMALL LETTER B
+            "&'\u0063'='\uFF43'" // LATIN SMALL LETTER C
+            "&'\u0064'='\uFF44'" // LATIN SMALL LETTER D
+            "&'\u0065'='\uFF45'" // LATIN SMALL LETTER E
+            "&'\u0066'='\uFF46'" // LATIN SMALL LETTER F
+            "&'\u0067'='\uFF47'" // LATIN SMALL LETTER G
+            "&'\u0068'='\uFF48'" // LATIN SMALL LETTER H
+            "&'\u0069'='\uFF49'" // LATIN SMALL LETTER I
+            "&'\u006A'='\uFF4A'" // LATIN SMALL LETTER J
+            "&'\u006B'='\uFF4B'" // LATIN SMALL LETTER K
+            "&'\u006C'='\uFF4C'" // LATIN SMALL LETTER L
+            "&'\u006D'='\uFF4D'" // LATIN SMALL LETTER M
+            "&'\u006E'='\uFF4E'" // LATIN SMALL LETTER N
+            "&'\u006F'='\uFF4F'" // LATIN SMALL LETTER O
+            "&'\u0070'='\uFF50'" // LATIN SMALL LETTER P
+            "&'\u0071'='\uFF51'" // LATIN SMALL LETTER Q
+            "&'\u0072'='\uFF52'" // LATIN SMALL LETTER R
+            "&'\u0073'='\uFF53'" // LATIN SMALL LETTER S
+            "&'\u0074'='\uFF54'" // LATIN SMALL LETTER T
+            "&'\u0075'='\uFF55'" // LATIN SMALL LETTER U
+            "&'\u0076'='\uFF56'" // LATIN SMALL LETTER V
+            "&'\u0077'='\uFF57'" // LATIN SMALL LETTER W
+            "&'\u0078'='\uFF58'" // LATIN SMALL LETTER X
+            "&'\u0079'='\uFF59'" // LATIN SMALL LETTER Y
+            "&'\u007A'='\uFF5A'" // LATIN SMALL LETTER Z
+            "&'\u007B'='\uFF5B'" // LEFT CURLY BRACKET
+            "&'\u007C'='\uFF5C'" // VERTICAL LINE
+            "&'\u007D'='\uFF5D'" // RIGHT CURLY BRACKET
+            "&'\u007E'='\uFF5E'" // TILDE
+            "&'\u00A2'='\uFFE0'" // CENT SIGN
+            "&'\u00A3'='\uFFE1'" // POUND SIGN
+            "&'\u00A5'='\uFFE5'" // YEN SIGN
+            "&'\u00A6'='\uFFE4'" // BROKEN BAR
+            "&'\u00AC'='\uFFE2'" // NOT SIGN
+            "&'\u1100'='\uFFA1'" // HANGUL CHOSEONG KIYEOK
+            "&'\u1101'='\uFFA2'" // HANGUL CHOSEONG SSANGKIYEOK
+            "&'\u1102'='\uFFA4'" // HANGUL CHOSEONG NIEUN
+            "&'\u1103'='\uFFA7'" // HANGUL CHOSEONG TIKEUT
+            "&'\u1104'='\uFFA8'" // HANGUL CHOSEONG SSANGTIKEUT
+            "&'\u1105'='\uFFA9'" // HANGUL CHOSEONG RIEUL
+            "&'\u1106'='\uFFB1'" // HANGUL CHOSEONG MIEUM
+            "&'\u1107'='\uFFB2'" // HANGUL CHOSEONG PIEUP
+            "&'\u1108'='\uFFB3'" // HANGUL CHOSEONG SSANGPIEUP
+            "&'\u1109'='\uFFB5'" // HANGUL CHOSEONG SIOS
+            "&'\u110A'='\uFFB6'" // HANGUL CHOSEONG SSANGSIOS
+            "&'\u110B'='\uFFB7'" // HANGUL CHOSEONG IEUNG
+            "&'\u110C'='\uFFB8'" // HANGUL CHOSEONG CIEUC
+            "&'\u110D'='\uFFB9'" // HANGUL CHOSEONG SSANGCIEUC
+            "&'\u110E'='\uFFBA'" // HANGUL CHOSEONG CHIEUCH
+            "&'\u110F'='\uFFBB'" // HANGUL CHOSEONG KHIEUKH
+            "&'\u1110'='\uFFBC'" // HANGUL CHOSEONG THIEUTH
+            "&'\u1111'='\uFFBD'" // HANGUL CHOSEONG PHIEUPH
+            "&'\u1112'='\uFFBE'" // HANGUL CHOSEONG HIEUH
+            "&'\u111A'='\uFFB0'" // HANGUL CHOSEONG RIEUL-HIEUH
+            "&'\u1121'='\uFFB4'" // HANGUL CHOSEONG PIEUP-SIOS
+            "&'\u1160'='\uFFA0'" // HANGUL JUNGSEONG FILLER
+            "&'\u1161'='\uFFC2'" // HANGUL JUNGSEONG A
+            "&'\u1162'='\uFFC3'" // HANGUL JUNGSEONG AE
+            "&'\u1163'='\uFFC4'" // HANGUL JUNGSEONG YA
+            "&'\u1164'='\uFFC5'" // HANGUL JUNGSEONG YAE
+            "&'\u1165'='\uFFC6'" // HANGUL JUNGSEONG EO
+            "&'\u1166'='\uFFC7'" // HANGUL JUNGSEONG E
+            "&'\u1167'='\uFFCA'" // HANGUL JUNGSEONG YEO
+            "&'\u1168'='\uFFCB'" // HANGUL JUNGSEONG YE
+            "&'\u1169'='\uFFCC'" // HANGUL JUNGSEONG O
+            "&'\u116A'='\uFFCD'" // HANGUL JUNGSEONG WA
+            "&'\u116B'='\uFFCE'" // HANGUL JUNGSEONG WAE
+            "&'\u116C'='\uFFCF'" // HANGUL JUNGSEONG OE
+            "&'\u116D'='\uFFD2'" // HANGUL JUNGSEONG YO
+            "&'\u116E'='\uFFD3'" // HANGUL JUNGSEONG U
+            "&'\u116F'='\uFFD4'" // HANGUL JUNGSEONG WEO
+            "&'\u1170'='\uFFD5'" // HANGUL JUNGSEONG WE
+            "&'\u1171'='\uFFD6'" // HANGUL JUNGSEONG WI
+            "&'\u1172'='\uFFD7'" // HANGUL JUNGSEONG YU
+            "&'\u1173'='\uFFDA'" // HANGUL JUNGSEONG EU
+            "&'\u1174'='\uFFDB'" // HANGUL JUNGSEONG YI
+            "&'\u1175'='\uFFDC'" // HANGUL JUNGSEONG I
+            "&'\u11AA'='\uFFA3'" // HANGUL JONGSEONG KIYEOK-SIOS
+            "&'\u11AC'='\uFFA5'" // HANGUL JONGSEONG NIEUN-CIEUC
+            "&'\u11AD'='\uFFA6'" // HANGUL JONGSEONG NIEUN-HIEUH
+            "&'\u11B0'='\uFFAA'" // HANGUL JONGSEONG RIEUL-KIYEOK
+            "&'\u11B1'='\uFFAB'" // HANGUL JONGSEONG RIEUL-MIEUM
+            "&'\u11B2'='\uFFAC'" // HANGUL JONGSEONG RIEUL-PIEUP
+            "&'\u11B3'='\uFFAD'" // HANGUL JONGSEONG RIEUL-SIOS
+            "&'\u11B4'='\uFFAE'" // HANGUL JONGSEONG RIEUL-THIEUTH
+            "&'\u11B5'='\uFFAF'" // HANGUL JONGSEONG RIEUL-PHIEUPH
+            "&'\u20A9'='\uFFE6'" // WON SIGN
+            "&'\u2190'='\uFFE9'" // LEFTWARDS ARROW
+            "&'\u2191'='\uFFEA'" // UPWARDS ARROW
+            "&'\u2192'='\uFFEB'" // RIGHTWARDS ARROW
+            "&'\u2193'='\uFFEC'" // DOWNWARDS ARROW
+            "&'\u2502'='\uFFE8'" // BOX DRAWINGS LIGHT VERTICAL
+            "&'\u25A0'='\uFFED'" // BLACK SQUARE
+            "&'\u25CB'='\uFFEE'" // WHITE CIRCLE
+            "&'\u3001'='\uFF64'" // IDEOGRAPHIC COMMA
+            "&'\u3002'='\uFF61'" // IDEOGRAPHIC FULL STOP
+            "&'\u300C'='\uFF62'" // LEFT CORNER BRACKET
+            "&'\u300D'='\uFF63'" // RIGHT CORNER BRACKET
 
             // Kanji, positioned over the top
             "& [top] "
