@@ -10,15 +10,21 @@
 package com.ibm.text;
 import java.util.*;
 import com.ibm.tools.translit.UnicodeSetClosure;
+import java.io.*;
 
 /**
  * This is a small class that resides in the com.ibm.text package in
  * order to access some package-private API.  It is used for
  * development purposes and should be ignored by end clients.
+ * To run, use:
+ * java -classpath classes com.ibm.text.TransliteratorUtility Latin-Katakana NFD lower
+ * Output is produced in the command console, and a file with more detail is also written.
+ * To see if it works, use:
+ * java -classpath classescom.ibm.test.translit.TransliteratorTest -v -nothrow TestIncrementalProgress
  */
 public class TransliteratorUtility {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         if (args.length == 0) {
             // Compute and display the source sets for all system
             // transliterators.
@@ -53,14 +59,38 @@ public class TransliteratorUtility {
         }
     }
 
-    static void showSourceSet(String ID, Normalizer.Mode m, boolean lowerFirst) {
+    static void showSourceSet(String ID, Normalizer.Mode m, boolean lowerFirst) throws IOException {
+        File f = new File("UnicodeSetClosure.txt");
+        String filename = f.getCanonicalFile().toString();
+        out = new PrintWriter(
+            new OutputStreamWriter(
+                new FileOutputStream(filename), "UTF-8"));
+        System.out.println();
+        System.out.println("Writing " + filename);
         Transliterator t = Transliterator.getInstance(ID);
+        showSourceSetAux(t, m, lowerFirst, true);
+        showSourceSetAux(t.getInverse(), m, lowerFirst, false);
+        out.close();
+    }
+    
+    static PrintWriter out;
+    
+    static void showSourceSetAux(Transliterator t, Normalizer.Mode m, boolean lowerFirst, boolean forward) throws IOException {
         UnicodeSet sourceSet = t.getSourceSet();
         if (m != Normalizer.NO_OP || lowerFirst) {
             UnicodeSetClosure.close(sourceSet, m, lowerFirst);
         }
         System.out.println(t.getID() + ": " +
                            sourceSet.toPattern(true));
+        out.print('\uFEFF'); // BOM
+        out.println("# MINIMAL FILTER GENERATED FOR: " + t.getID() + (forward ? "" : " BACKWARD"));
+        out.println(":: " 
+            + (forward ? "" : "( ") 
+            + sourceSet.toPattern(true) 
+            + (forward ? "" : " )")
+            + " ;");
+        out.println("# Unicode: " + sourceSet.toPattern(false));
+        out.println();
     }
 
     static void usage() {
