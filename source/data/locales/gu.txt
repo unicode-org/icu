@@ -11,14 +11,6 @@ gu {
         "\u0AAA\u0AC2\u0AB0\u0ACD\u0AB5\u00A0\u0AAE\u0AA7\u0ACD\u0AAF\u0ABE\u0AB9\u0ACD\u0AA8",
         "\u0A89\u0AA4\u0ACD\u0AA4\u0AB0\u00A0\u0AAE\u0AA7\u0ACD\u0AAF\u0ABE\u0AB9\u0ACD\u0AA8"
     }
-    collations {
-        standard { 
-            Version { "1.0" }
-            Sequence { 
-                "[normalization on]"
-            }
-        }
-    }
     Countries {
         CN { "\u0a9a\u0ac0\u0aa8" }
         DE { "\u0a9c\u0aae\u0abf\u0aa8\u0ac0" }

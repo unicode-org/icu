@@ -1,0 +1,16 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 1997-2004, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+
+en {
+    Version { "3.0" }
+    collations {
+        standard { 
+            Version { "1.0" }
+            Sequence { "&A<<\u00c6/E &a<<\u00e6/e" }
+        }
+    }
+}

@@ -1,0 +1,36 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 1997-2004, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+
+vi {
+    Version { "2.1" }
+    collations {
+        standard { 
+            Version { "3.1" }
+            Sequence { "[normalization on]"
+                // accented letters are actually ordered like this:
+                // grave, hook above, tilde, acute, dot below.
+                "&\u0300<<\u0309<<\u0303<<\u0301<<\u0323"
+                // primary differences
+                "&a<\u0103<<<\u0102<\u00E2<<<\u00C2"
+                "&d<\u0111<<<\u0110"
+                "&e<\u00EA<<<\u00CA"
+                "&o<\u00F4<<<\u00D4<\u01A1<<<\u01A0"
+                "&u<\u01B0<<<\u01AF"
+
+                // These are the older rules, and they are not in modern vietnamese.
+                //"&c<ch<<<Ch<<<CH"
+                //"&g<gi<<<Gi<<<GI"
+                //"&k<kh<<<Kh<<<KH"
+                //"&n<ng<<<Ng<<<NG<nh<<<Nh<<<NH"
+                //"&p<ph<<<Ph<<<PH"
+                //"&t<th<<<Th<<<TH<tr<<<Tr<<<TR"
+            }
+        }
+    }
+}
+
+

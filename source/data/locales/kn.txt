@@ -11,14 +11,6 @@ kn {
         "\u0CAA\u0CC2\u0CB0\u0CCD\u0CB5\u0CBE\u0CB9\u0CCD\u0CA8",
         "\u0C85\u0CAA\u0CB0\u0CBE\u0CB9\u0CCD\u0CA8"
     }
-    collations {
-        standard { 
-            Version { "1.0" }
-            Sequence { 
-                "[normalization on]"
-            }
-        }
-    }
     Countries {
         AU { "\u0c86\u0cb8\u0ccd\u0c9f\u0ccd\u0cb0\u0cc6\u0cb2\u0cbf\u0caf" }
         CN { "\u0c9a\u0cc0\u0ca8" }

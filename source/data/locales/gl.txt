@@ -84,7 +84,6 @@ gl {
     }
     
     // /**************** Info Below is needed ****************/
-    // collations{}
     // Countries{}
     // Eras{}
     // Languages{}

@@ -7,14 +7,6 @@
 
 kk {
     Version{ "1.0" }
-    collations {
-        standard {
-            Version { "1.0" }
-            Sequence { 
-                "[normalization on]"
-            }
-        }
-    }
     Countries {
         KZ { "\u049A\u0430\u0437\u0430\u049B\u0441\u0442\u0430\u043D" }
     }

@@ -45,14 +45,14 @@ bn.txt bn_IN.txt\
 ca.txt ca_ES.txt ca_ES_PREEURO.txt\
 cs.txt cs_CZ.txt\
 da.txt da_DK.txt\
-de.txt de__PHONEBOOK.txt de_AT.txt de_AT_PREEURO.txt de_BE.txt de_CH.txt\
+de.txt de_AT.txt de_AT_PREEURO.txt de_BE.txt de_CH.txt\
 de_DE.txt de_DE_PREEURO.txt de_LU.txt de_LU_PREEURO.txt\
 el.txt el_GR.txt el_GR_PREEURO.txt\
 en.txt en_AU.txt en_BE.txt en_BE_PREEURO.txt en_BW.txt en_CA.txt en_GB.txt en_GB_EURO.txt\
 en_HK.txt en_IE.txt en_IE_PREEURO.txt en_IN.txt en_NZ.txt en_PH.txt en_SG.txt en_MT.txt\
 en_US.txt en_US_POSIX.txt en_VI.txt en_ZA.txt en_ZW.txt\
 eo.txt\
-es.txt es__TRADITIONAL.txt es_AR.txt es_BO.txt es_CL.txt es_CO.txt\
+es.txt es_AR.txt es_BO.txt es_CL.txt es_CO.txt\
 es_CR.txt es_DO.txt es_EC.txt es_ES.txt es_ES_PREEURO.txt\
 es_GT.txt es_HN.txt es_MX.txt es_NI.txt es_PA.txt\
 es_PE.txt es_PR.txt es_PY.txt es_SV.txt es_US.txt\
@@ -69,7 +69,7 @@ gl.txt gl_ES.txt gl_ES_PREEURO.txt\
 gv.txt gv_GB.txt\
 gu.txt gu_IN.txt\
 he.txt he_IL.txt\
-hi.txt hi_IN.txt hi__DIRECT.txt\
+hi.txt hi_IN.txt\
 hr.txt hr_HR.txt\
 hu.txt hu_HU.txt\
 hy.txt hy_AM.txt hy_AM_REVISED.txt\
@@ -114,6 +114,6 @@ ti.txt ti_ET.txt ti_ER.txt\
 tr.txt tr_TR.txt\
 uk.txt uk_UA.txt\
 vi.txt vi_VN.txt\
-zh.txt zh__PINYIN.txt zh_CN.txt zh_HK.txt zh_MO.txt zh_SG.txt zh_TW.txt zh_TW_STROKE.txt
+zh.txt zh_CN.txt zh_HK.txt zh_MO.txt zh_SG.txt zh_TW.txt 
 
 

@@ -86,7 +86,6 @@ kw {
 //    }
 
     // /**************** Info Below is needed ****************/
-    // collations{}
     // Countries{}
     // Languages{}
     // localPatternChars{}

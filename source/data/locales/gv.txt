@@ -84,7 +84,6 @@ gv {
 //        "\ufffd",
 //    }
     // /**************** Info Below is needed ****************/
-    // collations{}
     // Countries{}
     // Languages{}
     // localPatternChars{}

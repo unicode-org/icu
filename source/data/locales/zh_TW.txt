@@ -7,9 +7,6 @@
 
 zh_TW {
     Version{ "2.0" }
-    collations { 
-        default { "traditional" }
-    }
     Countries { 
         AD { "\u5B89\u9053\u723E" }
         AE { "\u963F\u62C9\u4F2F\u806F\u5408\u5927\u516C\u570B" }

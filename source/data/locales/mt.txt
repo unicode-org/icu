@@ -761,29 +761,7 @@ mt {
         //       Monday is first day of workweek. [MSA 200:2003 4.5.5]
     }
 
-//   Note, that 'c' doesn't exist in Maltese. But I put it here following ċ 
-//   for compatibility with foreign words.
-
-// Joseph Felici Pace and "ir-Regolament" say: 
-// a b ċ [c] d e f ġ g għ h ħ i ie j k l m n o p q r s t u v w x [y] ż z
-
-// According to DMS MSA:200-2003, 'ie' is sorted as one letter.
-// Therefore, 'IE' is NOT present in this collation table.
  
-   collations
-   {
-      standard {
-        Version { "1.2" }
-        Sequence { "[casefirst upper]"  // [MSA 200:2003 4.1] requires Uppercase first. TODO: verify this rule syntax
-                   "& [before 1] d < \u010A <<< \u010B" // ċ  Ċ
-                   "& [before 1] g < Ġ <<< ġ "              // ġ  Ġ
-                   "& [before 1] h < GĦ <<< Għ <<< gĦ <<< għ "
-                   "& [before 1] i < Ħ <<< ħ  "
-                   "& [before 1] z < Ż <<< ż"               // ż Ż
-        }
-     }
-                   
-   }
 
 //    Variants{
 //        PREEURO { "Qabel il-Euro" }
