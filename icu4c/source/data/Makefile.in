@@ -313,7 +313,7 @@ $(TESTBUILDDIR)/testdata.lst: $(SRCLISTDEPS)
 	done;
 
 
-build-testdata:  $(ALL_TEST_FILES) $(TESTBUILDDIR)/testdata.lst $(TESTBUILDDIR)/$(TESTDT)ja_data.res
+build-testdata:  $(ALL_TEST_FILES) $(TESTBUILDDIR)/testdata.lst $(TESTBUILDDIR)/$(TESTDT)iscii.res
 
 # test.icu
 $(TESTBUILDDIR)/$(TESTDT)test.icu: $(TOOLDIR)/gentest/gentest$(EXEEXT)
@@ -326,8 +326,8 @@ $(TESTBUILDDIR)/$(TESTDT)%.res: $(TESTSRCDATADIR)/%.txt $(TOOLDIR)/genrb/genrb$(
 	ICU_DATA=$(BUILDDIR) $(INVOKE) $(TOOLDIR)/genrb/genrb $(GENRBOPTS) -p $(TESTDATA) -q -s $(TESTSRCDATADIR) -d $(TESTBUILDDIR) $(<F)
 
 
-$(TESTBUILDDIR)/$(TESTDT)ja_data.res:  $(TESTSRCDATADIR)/ja_data.bin $(TOOLDIR)/genrb/genrb$(EXEEXT)
-	ICU_DATA=$(BUILDDIR) $(INVOKE) $(TOOLDIR)/genrb/genrb $(GENRBOPTS) -q -s $(TESTSRCDATADIR) -p $(TESTDATA) -eISO_2022_JP -d $(TESTBUILDDIR) $(<F) >/dev/null  
+$(TESTBUILDDIR)/$(TESTDT)iscii.res:  $(TESTSRCDATADIR)/iscii.bin $(TOOLDIR)/genrb/genrb$(EXEEXT)
+	ICU_DATA=$(BUILDDIR) $(INVOKE) $(TOOLDIR)/genrb/genrb $(GENRBOPTS) -q -s $(TESTSRCDATADIR) -p $(TESTDATA) -eISCII,version=0 -d $(TESTBUILDDIR) $(<F) >/dev/null  
 
 ################################################################### TYP
 # TYP FILES

@@ -42,8 +42,8 @@ testdata_test4.cnv
 	@"$(ICUTOOLS)\genrb\$(CFG)\genrb" -t -p"$(TESTPKG)" -q -s"$(TESTDATA)" -d"$(TESTDATABLD)" $<
 
 "$(TESTDATABLD)\iscii.res":
-	@echo Making Test Resource Bundle file with encoding x-iscii-de
-	@"$(ICUTOOLS)\genrb\$(CFG)\genrb" -t -p"$(TESTPKG)" -q -s"$(TESTDATA)" -ex-iscii-de -d"$(TESTDATABLD)" iscii.bin 
+	@echo Making Test Resource Bundle file with encoding ISCII,version=0 
+	@"$(ICUTOOLS)\genrb\$(CFG)\genrb" -t -p"$(TESTPKG)" -q -s"$(TESTDATA)" -eISCII,version=0 -d"$(TESTDATABLD)" iscii.bin 
 
 $(TESTDATABLD)\testdata_test.icu : {"$(ICUTOOLS)\gentest\$(CFG)"}gentest.exe
 	"$(ICUTOOLS)\gentest\$(CFG)\gentest" -d"$(TESTDATABLD)"
