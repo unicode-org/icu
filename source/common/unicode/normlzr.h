@@ -256,7 +256,7 @@ public:
    * the user may have to put the string in its normalized form and compare the 
    * results.
    * @param source       string for determining if it is in a normalized format
-   * @paran mode         normalization format
+   * @param mode         normalization format
    * @param status A reference to a UErrorCode to receive any errors
    * @return UNORM_YES, UNORM_NO or UNORM_MAYBE
    *
@@ -271,7 +271,7 @@ public:
    * but takes an extra options parameter like most normalization functions.
    *
    * @param source       string for determining if it is in a normalized format
-   * @paran mode         normalization format
+   * @param mode         normalization format
    * @param options      the optional features to be enabled (0 for no options)
    * @param status A reference to a UErrorCode to receive any errors
    * @return UNORM_YES, UNORM_NO or UNORM_MAYBE
@@ -293,7 +293,7 @@ public:
    * perform further tests to arrive at a TRUE/FALSE result.
    *
    * @param src        String that is to be tested if it is in a normalization format.
-   * @paran mode       Which normalization form to test for.
+   * @param mode       Which normalization form to test for.
    * @param errorCode  ICU error code in/out parameter.
    *                   Must fulfill U_SUCCESS before the function call.
    * @return Boolean value indicating whether the source string is in the
@@ -310,7 +310,7 @@ public:
    * but takes an extra options parameter like most normalization functions.
    *
    * @param src        String that is to be tested if it is in a normalization format.
-   * @paran mode       Which normalization form to test for.
+   * @param mode       Which normalization form to test for.
    * @param options      the optional features to be enabled (0 for no options)
    * @param errorCode  ICU error code in/out parameter.
    *                   Must fulfill U_SUCCESS before the function call.
@@ -341,7 +341,7 @@ public:
    * @param result The output string.
    * @param mode The normalization mode.
    * @param options A bit set of normalization options.
-   * @param pErrorCode ICU error code in/out parameter.
+   * @param errorCode ICU error code in/out parameter.
    *                   Must fulfill U_SUCCESS before the function call.
    * @return result
    *
