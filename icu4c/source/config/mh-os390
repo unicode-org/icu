@@ -3,7 +3,7 @@
 ## Copyright (c) 1999-2001, International Business Machines Corporation and
 ## others. All Rights Reserved.
 ##
-## $Id: mh-os390,v 1.27 2001/11/06 22:19:08 grhoten-oss Exp $
+## $Id: mh-os390,v 1.28 2001/11/07 22:53:22 grhoten-oss Exp $
 
 ###################################################################
 #                    IMPORTANT NOTE                               #
@@ -61,7 +61,7 @@ LD_RPATH=	-I
 
 ## Versioned target for a shared library.
 FINAL_SO_TARGET = $(basename $(SO_TARGET)).$(SO_TARGET_VERSION).$(SO)
-MIDDLE_SO_TARGET = 
+MIDDLE_SO_TARGET = $(basename $(SO_TARGET).$(SO))
 
 ## Shared object suffix (switch to dll for shared library build)
 SO = dll
@@ -70,9 +70,12 @@ STATIC_O = o
 
 ## Suffix of the subset data library for batch mode
 BATCH_STUB_SUFFIX=_390
+
+ifeq ($(OS390BATCH),1)
 BATCH_STUB_TARGET=	"//'${LOADMOD}(IXMICUD1)'"
 BATCH_LIBICUUC=		"//'${LOADEXP}(IXMICUUC)'"
 BATCH_LIBICUDT=		"//'${LOADEXP}(IXMICUD1)'"
+endif
 
 ## Link commands to link to ICU libs
 #LIBICUDT=	$(top_builddir)/data/libicudata.$(SO_TARGET_VERSION).x
