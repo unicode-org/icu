@@ -38,6 +38,8 @@
 #define MAX_TOKEN_LEN 16
 #define RULE_BUFFER_LEN 8192
 
+void genericLocaleStarter(const char *locale, const char *s[], uint32_t size); /* keep gcc happy */
+
 typedef int tst_strcoll(void *collator, const int object,
                         const UChar *source, const int sLen,
                         const UChar *target, const int tLen);
@@ -3881,8 +3883,8 @@ static void TestSettings(void) {
 static int32_t TestEqualsForCollator(const char* locName, UCollator *source, UCollator *target) {
   UErrorCode status = U_ZERO_ERROR;
   int32_t errorNo = 0;
-  const UChar *sourceRules = NULL;
-  int32_t sourceRulesLen = 0;
+  /*const UChar *sourceRules = NULL;*/
+  /*int32_t sourceRulesLen = 0;*/
   UColAttributeValue french = UCOL_OFF;
   int32_t cloneSize = 0;
 
@@ -3952,8 +3954,7 @@ static void TestEquals(void) {
   int32_t noOfLoc = uloc_countAvailable();
   const char *locName = NULL;
   UCollator *source = NULL, *target = NULL;
-  int32_t i = 0, j = 0;
-  int32_t cloneSize = 0;
+  int32_t i = 0;
 
   const char* rules[] = {
     "&l < lj <<< Lj <<< LJ",
@@ -3961,13 +3962,14 @@ static void TestEquals(void) {
       "&ae <<< \\u00e4",
       "&AE <<< \\u00c4"
   };
-
+  /*
   const char* badRules[] = {
     "&l <<< Lj",
       "&n < nj <<< nJ <<< NJ",
       "&a <<< \\u00e4",
       "&AE <<< \\u00c4 <<< x"
   };
+  */
 
   UChar sourceRules[1024], targetRules[1024];
   int32_t sourceRulesSize = 0, targetRulesSize = 0;
