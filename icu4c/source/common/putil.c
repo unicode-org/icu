@@ -1379,18 +1379,6 @@ u_getDataDirectory(void) {
     return gDataDirectory;
 }
 
-/* Set run-time batch boolean if OS390BATCH envar is set -------------------- */
-#ifdef OS390
-U_CAPI UBool
-uprv_isOS390BatchMode() {
-    static UBool isBatchMode=-1;
-    if(isBatchMode<0) {
-        isBatchMode=getenv("OS390BATCH")!=NULL;
-    }
-    return isBatchMode;
-}
-#endif
-
 /* Macintosh-specific locale information ------------------------------------ */
 #ifdef XP_MAC
 
