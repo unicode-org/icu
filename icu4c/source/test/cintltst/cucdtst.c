@@ -1978,79 +1978,197 @@ static void TestUScriptCodeAPI(){
 
  }
 
-static void
-TestUScriptRunAPI()
+struct RunTestData
 {
-    struct RunResult
-    {
-        int32_t start;
-        int32_t limit;
-        UScriptCode code;
-    };
-
-    UChar testChars[] = {
-        0x0020, 0x0946, 0x0939, 0x093F, 0x0928, 0x094D, 0x0926, 0x0940, 0x0020,
-        0x0627, 0x0644, 0x0639, 0x0631, 0x0628, 0x064A, 0x0629, 0x0020,
-        0x0420, 0x0443, 0x0441, 0x0441, 0x043A, 0x0438, 0x0439, 0x0020,
-        'E', 'n', 'g', 'l', 'i', 's', 'h',  ' ', '(',
-        0x0E44, 0x0E17, 0x0E22,
-        ')',
-        0x6F22, 0x5B75, 0x3068, 0x3072, 0x3089, 0x304C, 0x306A, 0x3068, 
-        0x30AB, 0x30BF, 0x30AB, 0x30CA,
-        0xD801, 0xDC00, 0xD801, 0xDC01, 0xD801, 0xDC02, 0xD801, 0xDC03
-    };
-
-    int32_t testLength = sizeof testChars / sizeof testChars[0];
-
-    struct RunResult expected[] = {
-        { 0,  9, USCRIPT_DEVANAGARI},
-        { 9, 17, USCRIPT_ARABIC},
-        {17, 25, USCRIPT_CYRILLIC},
-        {25, 34, USCRIPT_LATIN},
-        {34, 37, USCRIPT_THAI},
-        {37, 38, USCRIPT_LATIN},
-        {38, 40, USCRIPT_HAN},
-        {40, 46, USCRIPT_HIRAGANA},
-        {46, 50, USCRIPT_KATAKANA},
-        {50, 58, USCRIPT_DESERET}
-    };
-
-    int32_t resultLength = sizeof expected / sizeof expected[0];
-
-    int32_t run = 0, runStart, runLimit;
+    char *runText;
     UScriptCode runCode;
-    UErrorCode err = U_ZERO_ERROR;
+};
 
-    UScriptRun *scriptRun = uscript_openRun(testChars, testLength, &err);
+typedef struct RunTestData RunTestData;
 
+static void
+CheckScriptRuns(UScriptRun *scriptRun, int32_t *runStarts, const RunTestData *testData, int32_t nRuns,
+                const char *prefix)
+{
+    int32_t run, runStart, runLimit;
+    UScriptCode runCode;
+
+    /* iterate over all the runs */
+    run = 0;
     while (uscript_nextRun(scriptRun, &runStart, &runLimit, &runCode)) {
-        if (runStart != expected[run].start) {
-            log_err("Incorrect start offset for run %d: expected %d, got %d\n",
-                run, expected[run].start, runStart);
+        if (runStart != runStarts[run]) {
+            log_err("%s: incorrect start offset for run %d: expected %d, got %d\n",
+                prefix, run, runStarts[run], runStart);
         }
 
-        if (runLimit != expected[run].limit) {
-            log_err("Incorrect limit offset for run %d: expected %d, got %d\n",
-                run, expected[run].limit, runLimit);
+        if (runLimit != runStarts[run + 1]) {
+            log_err("%s: incorrect limit offset for run %d: expected %d, got %d\n",
+                prefix, run, runStarts[run + 1], runLimit);
         }
 
-        if (runCode != expected[run].code) {
-            log_err("Incorrect script for run %d: expected \"%s\", got \"%s\"\n",
-                run, uscript_getName(expected[run].code), uscript_getName(runCode));
+        if (runCode != testData[run].runCode) {
+            log_err("%s: incorrect script for run %d: expected \"%s\", got \"%s\"\n",
+                prefix, run, uscript_getName(testData[run].runCode), uscript_getName(runCode));
         }
-
+        
         run += 1;
 
-        if (run >= resultLength) {
+        /* stop when we've seen all the runs we expect to see */
+        if (run >= nRuns) {
             break;
         }
     }
 
+    /* Complain if we didn't see then number of runs we expected */
+    if (run != nRuns) {
+        log_err("%s: incorrect number of runs: expected %d, got %d\n", prefix, run, nRuns);
+    }
+}
+
+static void
+TestUScriptRunAPI()
+{
+    const RunTestData testData[] = {
+        {"\\u0020\\u0946\\u0939\\u093F\\u0928\\u094D\\u0926\\u0940\\u0020", USCRIPT_DEVANAGARI},
+        {"\\u0627\\u0644\\u0639\\u0631\\u0628\\u064A\\u0629\\u0020", USCRIPT_ARABIC},
+        {"\\u0420\\u0443\\u0441\\u0441\\u043A\\u0438\\u0439\\u0020", USCRIPT_CYRILLIC},
+        {"English (", USCRIPT_LATIN},
+        {"\\u0E44\\u0E17\\u0E22", USCRIPT_THAI},
+        {") ", USCRIPT_LATIN},
+        {"\\u6F22\\u5B75", USCRIPT_HAN},
+        {"\\u3068\\u3072\\u3089\\u304C\\u306A\\u3068", USCRIPT_HIRAGANA},
+        {"\\u30AB\\u30BF\\u30AB\\u30CA", USCRIPT_KATAKANA},
+        {"\\U00010400\\U00010401\\U00010402\\U00010403", USCRIPT_DESERET}
+    };
+
+    int32_t nTestRuns = sizeof testData / sizeof testData[0];
+
+    UChar testString[1024];
+    int32_t runStarts[256];
+
+    int32_t run, stringLimit;
+    UScriptRun *scriptRun = NULL;
+    UErrorCode err;
+
+    /*
+     * Fill in the test string and the runStarts array.
+     */
+    stringLimit = 0;
+    for (run = 0; run < nTestRuns; run += 1) {
+        runStarts[run] = stringLimit;
+        stringLimit += u_unescape(testData[run].runText, &testString[stringLimit], 1024 - stringLimit);
+        stringLimit -= 1;
+    }
+
+    /* The limit of the last run */ 
+    runStarts[nTestRuns] = stringLimit;
+
+    /*
+     * Make sure that calling uscript_OpenRun with a NULL text pointer
+     * and a non-zero text length returns the correct error.
+     */
+    err = U_ZERO_ERROR;
+    scriptRun = uscript_openRun(NULL, stringLimit, &err);
+
+    if (err != U_ILLEGAL_ARGUMENT_ERROR) {
+        log_err("uscript_openRun(NULL, stringLimit, &err) returned %s instead of U_ILLEGAL_ARGUMENT_ERROR.\n", u_errorName(err));
+    }
+
+    if (scriptRun != NULL) {
+        log_err("uscript_openRun(NULL, stringLimit, &err) returned a non-NULL result.\n");
+        uscript_closeRun(scriptRun);
+    }
+
+    /*
+     * Make sure that calling uscript_OpenRun with a non-NULL text pointer
+     * and a zero text length returns the correct error.
+     */
+    err = U_ZERO_ERROR;
+    scriptRun = uscript_openRun(testString, 0, &err);
+
+    if (err != U_ILLEGAL_ARGUMENT_ERROR) {
+        log_err("uscript_openRun(testString, 0, &err) returned %s instead of U_ILLEGAL_ARGUMENT_ERROR.\n", u_errorName(err));
+    }
+
+    if (scriptRun != NULL) {
+        log_err("uscript_openRun(testString, 0, &err) returned a non-NULL result.\n");
+        uscript_closeRun(scriptRun);
+    }
+
+    /*
+     * Make sure that calling uscript_openRun with a NULL text pointer
+     * and a zero text length doesn't return an error.
+     */
+    err = U_ZERO_ERROR;
+    scriptRun = uscript_openRun(NULL, 0, &err);
+
+    if (U_FAILURE(err)) {
+        log_err("Got error %s from uscript_openRun(NULL, 0, &err)\n", u_errorName(err));
+    }
+
+    /* Make sure that the empty iterator doesn't find any runs */
+    if (uscript_nextRun(scriptRun, NULL, NULL, NULL)) {
+        log_err("uscript_nextRun(...) returned TRUE for an empty iterator.\n");
+    }
+
+    /*
+     * Make sure that calling uscript_setRunText with a NULL text pointer
+     * and a non-zero text length returns the correct error.
+     */
+    err = U_ZERO_ERROR;
+    uscript_setRunText(scriptRun, NULL, stringLimit, &err);
+
+    if (err != U_ILLEGAL_ARGUMENT_ERROR) {
+        log_err("uscript_setRunText(scriptRun, NULL, stringLimit, &err) returned %s instead of U_ILLEGAL_ARGUMENT_ERROR.\n", u_errorName(err));
+    }
+
+    /*
+     * Make sure that calling uscript_OpenRun with a non-NULL text pointer
+     * and a zero text length returns the correct error.
+     */
+    err = U_ZERO_ERROR;
+    uscript_setRunText(scriptRun, testString, 0, &err);
+
+    if (err != U_ILLEGAL_ARGUMENT_ERROR) {
+        log_err("uscript_setRunText(scriptRun, testString, 0, &err) returned %s instead of U_ILLEGAL_ARGUMENT_ERROR.\n", u_errorName(err));
+    }
+
+    /*
+     * Now call uscript_setRunText on the empty iterator
+     * and make sure that it works.
+     */
+    err = U_ZERO_ERROR;
+    uscript_setRunText(scriptRun, testString, stringLimit, &err);
+
+    if (U_FAILURE(err)) {
+        log_err("Got error %s from uscript_setRunText(...)\n", u_errorName(err));
+    } else {
+        CheckScriptRuns(scriptRun, runStarts, testData, nTestRuns, "uscript_setRunText");
+    }
+
     uscript_closeRun(scriptRun);
 
-    if (run != resultLength) {
-        log_err("Incorrect number of runs: expected %d, got %d\n", run, resultLength);
+    /* 
+     * Now open an interator over the testString
+     * using uscript_openRun and make sure that it works
+     */
+    scriptRun = uscript_openRun(testString, stringLimit, &err);
+
+    if (U_FAILURE(err)) {
+        log_err("Got error %s from uscript_openRun(...)\n", u_errorName(err));
+    } else {
+        CheckScriptRuns(scriptRun, runStarts, testData, nTestRuns, "uscript_openRun");
     }
+
+    /* Now reset the iterator, and make sure
+     * that it still works.
+     */
+    uscript_resetRun(scriptRun);
+
+    CheckScriptRuns(scriptRun, runStarts, testData, nTestRuns, "uscript_resetRun");
+
+    /* Close the iterator */
+    uscript_closeRun(scriptRun);
 }
 
 /* test additional, non-core properties */
