@@ -517,7 +517,7 @@ private:
     /**
      * Internal construction method.
      */
-    void construct(int32_t rawOffsetGMT, const UnicodeString& ID,
+    void construct(int32_t rawOffsetGMT,
                    int8_t startMonth, int8_t startDay, int8_t startDayOfWeek,
                    int32_t startTime, TimeMode startTimeMode,
                    int8_t endMonth, int8_t endDay, int8_t endDayOfWeek,
