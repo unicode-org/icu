@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/NFRule.java,v $ 
- * $Date: 2000/03/10 04:07:21 $ 
- * $Revision: 1.2 $
+ * $Date: 2001/10/24 20:00:08 $ 
+ * $Revision: 1.3 $
  *
  *****************************************************************************************
  */
@@ -18,7 +18,7 @@ import java.text.*;
  * A class represnting a single rule in a RuleBasedNumberFormat.  A rule
  * inserts its text into the result string and then passes control to its
  * substitutions, which do the same thing.
- * $RCSfile: NFRule.java,v $ $Revision: 1.2 $ $Date: 2000/03/10 04:07:21 $
+ * $RCSfile: NFRule.java,v $ $Revision: 1.3 $ $Date: 2001/10/24 20:00:08 $
  */
 final class NFRule {
     //-----------------------------------------------------------------------
@@ -1062,6 +1062,12 @@ final class NFRule {
             // isn't a RuleBasedCollator, because RuleBasedCollator defines
             // the CollationElementIteratoer protocol.  Hopefully, this
             // will change someday.)
+            //
+            // Previous code was matching "fifty-" against " fifty" and leaving
+            // the number " fifty-7" to parse as 43 (50 - 7).
+            // Also it seems that if we consume the entire prefix, that's ok even
+            // if we've consumed the entire string, so I switched the logic to
+            // reflect this.
             RuleBasedCollator collator = (RuleBasedCollator)formatter.getCollator();
             CollationElementIterator strIter = collator.getCollationElementIterator(str);
             CollationElementIterator prefixIter = collator.getCollationElementIterator(prefix);
@@ -1077,10 +1083,16 @@ final class NFRule {
                     oStr = strIter.next();
                 }
 
-                // akip over ignorable characters in the prefix
+                // skip over ignorable characters in the prefix
                 while (CollationElementIterator.primaryOrder(oPrefix) == 0 && oPrefix !=
                                 CollationElementIterator.NULLORDER) {
                     oPrefix = prefixIter.next();
+                }
+
+                // if skipping over ignorables brought to the end of
+                // the prefix, we DID match: drop out of the loop
+                if (oPrefix == CollationElementIterator.NULLORDER) {
+                    break;
                 }
 
                 // if skipping over ignorables brought us to the end
@@ -1089,28 +1101,29 @@ final class NFRule {
                     return 0;
                 }
 
-                // if skipping over ignorables brought to the end of
-                // the prefix, we DID match: drop out of the loop
-                else if (oPrefix == CollationElementIterator.NULLORDER) {
-                    break;
-                }
-
                 // match collation elements from the two strings
                 // (considering only primary differences).  If we
                 // get a mismatch, dump out and return 0
                 if (CollationElementIterator.primaryOrder(oStr) != CollationElementIterator.
                                 primaryOrder(oPrefix)) {
                     return 0;
-
+                }
                 // otherwise, advance to the next character in each string
                 // and loop (we drop out of the loop when we exhaust
                 // collation elements in the prefix)
-                } else {
-                    oStr = strIter.next();
-                    oPrefix = prefixIter.next();
-                }
+
+                oStr = strIter.next();
+                oPrefix = prefixIter.next();
             }
 
+            // we are not compatible with jdk 1.1 any longer
+            int result = strIter.getOffset();
+            if (oStr != CollationElementIterator.NULLORDER) {
+                --result;
+            }
+            return result;
+
+            /*
             //----------------------------------------------------------------
             // JDK 1.2-specific API call
             // return strIter.getOffset();
@@ -1148,6 +1161,7 @@ final class NFRule {
             // SHOULKD NEVER GET HERE!!!
             return 0;
             //----------------------------------------------------------------
+            */
 
         // If lenient parsing is turned off, forget all that crap above.
         // Just use String.startsWith() and be done with it.

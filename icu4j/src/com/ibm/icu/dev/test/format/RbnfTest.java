@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/format/RbnfTest.java,v $ 
- * $Date: 2001/10/02 17:43:34 $ 
- * $Revision: 1.4 $
+ * $Date: 2001/10/24 19:57:38 $ 
+ * $Revision: 1.5 $
  *
  *****************************************************************************************
  */
@@ -73,7 +73,12 @@ public class RbnfTest extends TestFmwk {
         formatter.setLenientParseMode(true);
         String[][] lpTestData = {
             { "FOurhundred     thiRTY six", "436" },
-            { "2 thousand six HUNDRED fifty-7", "2,657" },
+            // test spaces before fifty-7 causing lenient parse match of "fifty-" to " fifty"
+            // leaving "-7" for remaining parse, resulting in 2643 as the parse result.
+            { "fifty-7", "57" },
+            { " fifty-7", "57" },
+            { "  fifty-7", "57" },
+            { "2 thousand six HUNDRED   fifty-7", "2,657" },
             { "fifteen hundred and zero", "1,500" }
         };
         doLenientParseTest(formatter, lpTestData);
