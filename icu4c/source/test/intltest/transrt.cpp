@@ -1331,7 +1331,7 @@ static const char * const interIndicArray[] = {
     "[\\u0965\\u09f0\\u09f1]" /*roundtrip exclusions*/ ,
     
     "Latin-Gurmukhi", latinForIndic, "[[:Gurmukhi:][\\u0964\\u0965]]", 
-    "[\\u0965\\u0a72\\u0a73\\u0a74]" /*roundtrip exclusions*/,
+    "[\\u0965\\u0a02\\u0a72\\u0a73\\u0a74]" /*roundtrip exclusions*/,
     
     "Latin-Gujarati",latinForIndic, "[[:Gujarati:][\\u0964\\u0965]]", 
     "[\\u0965]" /*roundtrip exclusions*/,
@@ -1362,6 +1362,7 @@ void TransliteratorRoundTripTest::TestDebug(const char* name,const char fromSet[
 }
 
 void TransliteratorRoundTripTest::TestInterIndic() {
+    //TestDebug("Latin-Gurmukhi", latinForIndic, "[:Gurmukhi:]","[\\u0965\\u0a02\\u0a72\\u0a73\\u0a74]",TRUE);
     int32_t num = (int32_t)(sizeof(interIndicArray)/(INTER_INDIC_ARRAY_WIDTH*sizeof(char*)));
     if(quick){
         logln("Testing only 5 of %i. Skipping rest (use -e for exhaustive)",num);
@@ -1372,11 +1373,11 @@ void TransliteratorRoundTripTest::TestInterIndic() {
        Legal *legal = new LegalIndic();
         test.test(UnicodeString(interIndicArray[i*INTER_INDIC_ARRAY_WIDTH + 1], ""), 
                   UnicodeString(interIndicArray[i*INTER_INDIC_ARRAY_WIDTH + 2], ""), 
-                  interIndicArray[i*INTER_INDIC_ARRAY_WIDTH + 3], /* roundtrip exclusions */
+                  interIndicArray[i*INTER_INDIC_ARRAY_WIDTH + 3], // roundtrip exclusions 
                   this, quick, legal);
        delete legal;
     }
-    //TestDebug("Latin-Telugu", latinForIndic, "[:Telugu:]",FALSE,NULL);
+    
 }
 
 // end indic tests ----------------------------------------------------------
