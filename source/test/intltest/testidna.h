@@ -23,6 +23,7 @@
 
 #include "intltest.h"
 #include "unicode/parseerr.h"
+#include "unicode/uidna.h"
 
 U_CDECL_BEGIN
 typedef int32_t  
@@ -79,7 +80,7 @@ private:
     // main testing functions
     void testAPI(const UChar *src, const UChar *expected, const char *testName, 
              UBool useSTD3ASCIIRules, UErrorCode expectedStatus,
-             UBool doCompare, UBool testUnassigned, TestFunc func);
+             UBool doCompare, UBool testUnassigned, TestFunc func, UBool testSTD3ASCIIRules=TRUE);
 
     void testCompare(const UChar* s1, int32_t s1Len,
                         const UChar* s2, int32_t s2Len,
@@ -98,6 +99,11 @@ private:
                             const char* IDNToUnicodeName, TestFunc IDNToUnicode);
 
     void testCompareReferenceImpl(const UChar* src, int32_t srcLen);
+    
+    UnicodeString testCompareReferenceImpl(UnicodeString& src, 
+                                TestFunc refIDNA, const char* refIDNAName,
+                                TestFunc uIDNA, const char* uIDNAName,
+                                int32_t options);
 
     void testConformance(const char* toASCIIName, TestFunc toASCII,
                          const char* IDNToASCIIName, TestFunc IDNToASCII,
