@@ -1,5 +1,5 @@
 /*
- * @(#)$RCSfile: TestTextPanel.java,v $ $Revision: 1.5 $ $Date: 2000/04/24 20:28:24 $
+ * @(#)$RCSfile: TestTextPanel.java,v $ $Revision: 1.6 $ $Date: 2000/04/24 20:34:46 $
  *
  * (C) Copyright IBM Corp. 1998-1999.  All Rights Reserved.
  *
@@ -218,11 +218,6 @@ public class TestTextPanel /*extends TestFmwk*/ {
         incRandSeed();
     }
 
-    /**
-     * Note:  TestTextPanel uses the following two methods in place
-     * of errln and logln in TestFmwk.  To make a TestFmwk version,
-     * just override these two methods to call errln and logln.
-     */    
     protected void reportError(String message) {
     
         System.err.println(message);
