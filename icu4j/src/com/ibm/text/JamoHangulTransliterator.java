@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/JamoHangulTransliterator.java,v $ 
- * $Date: 2000/03/10 04:07:20 $ 
- * $Revision: 1.5 $
+ * $Date: 2000/06/28 20:31:43 $ 
+ * $Revision: 1.6 $
  *
  *****************************************************************************************
  */
@@ -45,8 +45,8 @@ public class JamoHangulTransliterator extends Transliterator {
         /**
          * Performs transliteration changing Jamo to Hangul 
          */
-        int cursor = offsets.cursor;
-        int limit = offsets.limit;
+        int cursor = offsets.__start;
+        int limit = offsets.__contextLimit;
         if (cursor >= limit) return;
         
         int count[] = new int[1];
@@ -68,8 +68,8 @@ public class JamoHangulTransliterator extends Transliterator {
             }
         }
         
-        offsets.limit = limit + 1;
-        offsets.cursor = cursor;
+        offsets.__contextLimit = limit + 1;
+        offsets.__start = cursor;
     }
     
 

@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/Transliterator.java,v $ 
- * $Date: 2000/05/23 16:49:04 $ 
- * $Revision: 1.16 $
+ * $Date: 2000/06/28 20:31:43 $ 
+ * $Revision: 1.17 $
  *
  *****************************************************************************************
  */
@@ -210,7 +210,7 @@ import java.text.MessageFormat;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: Transliterator.java,v $ $Revision: 1.16 $ $Date: 2000/05/23 16:49:04 $
+ * @version $RCSfile: Transliterator.java,v $ $Revision: 1.17 $ $Date: 2000/06/28 20:31:43 $
  */
 public abstract class Transliterator {
     /**
@@ -234,48 +234,69 @@ public abstract class Transliterator {
     public static final int REVERSE = 1;    
 
     /**
-     * start <= tstart <= cursor <= tlimit <= limit
+     * Position structure for incremental transliteration.  This data
+     * structure defines two substrings of the text being
+     * transliterated.  The first region, [contextStart,
+     * contextLimit), defines what characters the transliterator will
+     * read as context.  The second region, [start, limit), defines
+     * what characters will actually be transliterated.  The second
+     * region should be a subset of the first.
+     *
+     * <p>After a transliteration operation, some of the indices in this
+     * structure will be modified.  See the field descriptions for
+     * details.
+     *
+     * <p>contextStart <= start <= limit <= contextLimit
      */
     public static class Position {
-        /**
-         * The beginning index, inclusive
-         */
-        public int start;
 
         /**
-         * The ending index, exclusive
+         * Beginning index, inclusive, of the context to be considered for
+         * a transliteration operation.  The transliterator will ignore
+         * anything before this index.  INPUT parameter: This parameter is
+         * not changed by a transliteration operation.
          */
-        public int limit;
+        public int __contextStart;
 
         /**
-         * The next character to be considered for transliteration.
+         * Ending index, exclusive, of the context to be considered for a
+         * transliteration operation.  The transliterator will ignore
+         * anything at or after this index.  INPUT/OUTPUT parameter: This
+         * parameter is updated to reflect changes in the length of the
+         * text, but points to the same logical position in the text.
          */
-        public int cursor;
+        public int __contextLimit;
 
         /**
-         * The beginning index to be transliterated, inclusive
+         * Beginning index, inclusive, of the text to be transliteratd.
+         * INPUT/OUTPUT parameter: This parameter is advanced past
+         * characters that have already been transliterated by a
+         * transliteration operation.
          */
-        public int tstart;
+        public int __start;
 
         /**
-         * The ending index to be transliterated, exclusive
+         * Ending index, exclusive, of the text to be transliteratd.
+         * INPUT/OUTPUT parameter: This parameter is updated to reflect
+         * changes in the length of the text, but points to the same
+         * logical position in the text.
          */
-        public int tlimit;
+        public int __limit;
 
         public Position() {
-            this(0, 0, 0, 0, 0);
+            this(0, 0, 0, 0);
         }
 
-        public Position(int start, int limit, int cursor) {
-            this(start, limit, cursor, start, limit);
+        public Position(int contextStart, int contextLimit, int start) {
+            this(contextStart, contextLimit, start, contextLimit);
         }
 
-        public Position(int start, int limit, int cursor, int tstart, int tlimit) {
-            this.start = start;
-            this.limit = limit;
-            this.cursor = cursor;
-            this.tstart = tstart;
-            this.tlimit = tlimit;
+        public Position(int contextStart, int contextLimit,
+                        int start, int limit) {
+            this.__contextStart = contextStart;
+            this.__contextLimit = contextLimit;
+            this.__start = start;
+            this.__limit = limit;
         }
     }
 
@@ -434,7 +455,7 @@ public abstract class Transliterator {
     public final int transliterate(Replaceable text, int start, int limit) {
         Position pos = new Position(start, limit, start);
         handleTransliterate(text, pos, false);
-        return pos.limit;
+        return pos.__contextLimit;
     }
 
     /**
@@ -462,24 +483,24 @@ public abstract class Transliterator {
      * transliterated unambiguosly after new text has been inserted,
      * typically as a result of a keyboard event.  The new text in
      * <code>insertion</code> will be inserted into <code>text</code>
-     * at <code>index.limit</code>, advancing
-     * <code>index.limit</code> by <code>insertion.length()</code>.
+     * at <code>index.__contextLimit</code>, advancing
+     * <code>index.__contextLimit</code> by <code>insertion.length()</code>.
      * Then the transliterator will try to transliterate characters of
-     * <code>text</code> between <code>index.cursor</code> and
-     * <code>index.limit</code>.  Characters before
-     * <code>index.cursor</code> will not be changed.
+     * <code>text</code> between <code>index.__start</code> and
+     * <code>index.__contextLimit</code>.  Characters before
+     * <code>index.__start</code> will not be changed.
      *
      * <p>Upon return, values in <code>index</code> will be updated.
-     * <code>index.start</code> will be advanced to the first
+     * <code>index.__contextStart</code> will be advanced to the first
      * character that future calls to this method will read.
-     * <code>index.cursor</code> and <code>index.limit</code> will
+     * <code>index.__start</code> and <code>index.__contextLimit</code> will
      * be adjusted to delimit the range of text that future calls to
      * this method may change.
      *
      * <p>Typical usage of this method begins with an initial call
-     * with <code>index.start</code> and <code>index.limit</code>
+     * with <code>index.__contextStart</code> and <code>index.__contextLimit</code>
      * set to indicate the portion of <code>text</code> to be
-     * transliterated, and <code>index.cursor == index.start</code>.
+     * transliterated, and <code>index.__start == index.__contextStart</code>.
      * Thereafter, <code>index</code> can be used without
      * modification in future calls, provided that all changes to
      * <code>text</code> are made via this method.
@@ -498,7 +519,7 @@ public abstract class Transliterator {
      * of the cursor, and the start and limit of transliteration.
      * @param insertion text to be inserted and possibly
      * transliterated into the translation buffer at
-     * <code>index.limit</code>.  If <code>null</code> then no text
+     * <code>index.__contextLimit</code>.  If <code>null</code> then no text
      * is inserted.
      * @see #handleTransliterate
      * @exception IllegalArgumentException if <code>index</code>
@@ -506,22 +527,22 @@ public abstract class Transliterator {
      */
     public final void transliterate(Replaceable text, Position index,
                                     String insertion) {
-        if (index.start < 0 ||
-            index.limit > text.length() ||
-            index.cursor < index.start ||
-            index.cursor > index.limit) {
+        if (index.__contextStart < 0 ||
+            index.__contextLimit > text.length() ||
+            index.__start < index.__contextStart ||
+            index.__start > index.__contextLimit) {
             throw new IllegalArgumentException("Invalid index");
         }
 
-        int originalStart = index.start;
+        int originalStart = index.__contextStart;
         if (insertion != null) {
-            text.replace(index.limit, index.limit, insertion);
-            index.limit += insertion.length();
+            text.replace(index.__contextLimit, index.__contextLimit, insertion);
+            index.__contextLimit += insertion.length();
         }
 
         handleTransliterate(text, index, true);
 
-        index.start = Math.max(index.cursor - getMaximumContextLength(),
+        index.__contextStart = Math.max(index.__start - getMaximumContextLength(),
                                originalStart);
     }
 
@@ -537,7 +558,7 @@ public abstract class Transliterator {
      * of the cursor, and the start and limit of transliteration.
      * @param insertion text to be inserted and possibly
      * transliterated into the translation buffer at
-     * <code>index.limit</code>.
+     * <code>index.__contextLimit</code>.
      * @see #transliterate(Replaceable, Transliterator.Position, String)
      */
     public final void transliterate(Replaceable text, Position index,
@@ -572,36 +593,36 @@ public abstract class Transliterator {
      */
     public final void finishTransliteration(Replaceable text,
                                             Position index) {
-        if (index.start < 0 ||
-            index.limit > text.length() ||
-            index.cursor < index.start ||
-            index.cursor > index.limit) {
+        if (index.__contextStart < 0 ||
+            index.__contextLimit > text.length() ||
+            index.__start < index.__contextStart ||
+            index.__start > index.__contextLimit) {
             throw new IllegalArgumentException("Invalid index");
         }
 
-        int originalStart = index.start;
+        int originalStart = index.__contextStart;
 
         handleTransliterate(text, index, false);
 
-        index.start = Math.max(index.cursor - getMaximumContextLength(),
+        index.__contextStart = Math.max(index.__start - getMaximumContextLength(),
                                originalStart);
     }
 
     /**
      * Abstract method that concrete subclasses define to implement
      * keyboard transliteration.  This method should transliterate all
-     * characters between <code>index.cursor</code> and
-     * <code>index.limit</code> that can be unambiguously
+     * characters between <code>index.__start</code> and
+     * <code>index.__contextLimit</code> that can be unambiguously
      * transliterated, regardless of future insertions of text at
-     * <code>index.limit</code>.  <code>index.cursor</code> should
+     * <code>index.__contextLimit</code>.  <code>index.__start</code> should
      * be advanced past committed characters (those that will not
      * change in future calls to this method).
-     * <code>index.limit</code> should be updated to reflect text
+     * <code>index.__contextLimit</code> should be updated to reflect text
      * replacements that shorten or lengthen the text between
-     * <code>index.cursor</code> and <code>index.limit</code>.  Upon
-     * return, neither <code>index.cursor</code> nor
-     * <code>index.limit</code> should be less than the initial value
-     * of <code>index.cursor</code>.  <code>index.start</code>
+     * <code>index.__start</code> and <code>index.__contextLimit</code>.  Upon
+     * return, neither <code>index.__start</code> nor
+     * <code>index.__contextLimit</code> should be less than the initial value
+     * of <code>index.__start</code>.  <code>index.__contextStart</code>
      * should <em>not</em> be changed.
      *
      * @param text the buffer holding transliterated and
@@ -609,7 +630,7 @@ public abstract class Transliterator {
      * @param pos the start and limit of the text, the position
      * of the cursor, and the start and limit of transliteration.
      * @param incremental if true, assume more text may be coming after
-     * pos.limit.  Otherwise, assume the text is complete.
+     * pos.__contextLimit.  Otherwise, assume the text is complete.
      * @see #transliterate
      */
     protected abstract void handleTransliterate(Replaceable text,

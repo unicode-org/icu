@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/components/Attic/TransliteratingTextComponent.java,v $ 
- * $Date: 2000/04/25 17:18:54 $ 
- * $Revision: 1.4 $
+ * $Date: 2000/06/28 20:31:14 $ 
+ * $Revision: 1.5 $
  *
  *****************************************************************************************
  */
@@ -25,7 +25,7 @@ import com.ibm.text.*;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: TransliteratingTextComponent.java,v $ $Revision: 1.4 $ $Date: 2000/04/25 17:18:54 $
+ * @version $RCSfile: TransliteratingTextComponent.java,v $ $Revision: 1.5 $ $Date: 2000/06/28 20:31:14 $
  */
 public class TransliteratingTextComponent extends DumbTextComponent {
 
@@ -113,7 +113,7 @@ public class TransliteratingTextComponent extends DumbTextComponent {
             log = new StringBuffer();
             log.append("start " + start + ", cursor " + cursor);
             log.append(", sel " + getSelectionStart());
-            log.append(", {" + index.start + ", " + index.limit + ", " + index.cursor + "}, ");
+            log.append(", {" + index.__contextStart + ", " + index.__contextLimit + ", " + index.__start + "}, ");
             log.append('"' + buf.toString() + "\" + '" + ch + "' -> \"");
         }
 
@@ -127,20 +127,20 @@ public class TransliteratingTextComponent extends DumbTextComponent {
         // it was zero.  We can therefore just add it to our original
         // getText()-based index value of start (in saveStart) to get
         // the new getText()-based start.
-        start = saveStart + index.start;
+        start = saveStart + index.__contextStart;
 
         // Make the cursor getText()-based.  The CURSOR index is zero-based.
-        cursor = start + index.cursor - index.start;
+        cursor = start + index.__start - index.__contextStart;
 
         if (DEBUG) {
             String out = buf.toString();
-            log.append(out.substring(0, index.start)).
+            log.append(out.substring(0, index.__contextStart)).
                 append('{').
-                append(out.substring(index.start, index.cursor)).
+                append(out.substring(index.__contextStart, index.__start)).
                 append('|').
-                append(out.substring(index.cursor)).
+                append(out.substring(index.__start)).
                 append('"');
-            log.append(", {" + index.start + ", " + index.limit + ", " + index.cursor + "}, ");
+            log.append(", {" + index.__contextStart + ", " + index.__contextLimit + ", " + index.__start + "}, ");
             log.append("start " + start + ", cursor " + cursor);
             log.append(", sel " + getSelectionStart());
             System.out.println(escape(log.toString()));

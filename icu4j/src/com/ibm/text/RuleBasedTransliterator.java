@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/RuleBasedTransliterator.java,v $ 
- * $Date: 2000/05/24 22:21:00 $ 
- * $Revision: 1.32 $
+ * $Date: 2000/06/28 20:31:43 $ 
+ * $Revision: 1.33 $
  *
  *****************************************************************************************
  */
@@ -252,7 +252,7 @@ import com.ibm.util.Utility;
  * <p>Copyright (c) IBM Corporation 1999-2000. All rights reserved.</p>
  * 
  * @author Alan Liu
- * @version $RCSfile: RuleBasedTransliterator.java,v $ $Revision: 1.32 $ $Date: 2000/05/24 22:21:00 $
+ * @version $RCSfile: RuleBasedTransliterator.java,v $ $Revision: 1.33 $ $Date: 2000/06/28 20:31:43 $
  */
 public class RuleBasedTransliterator extends Transliterator {
 
@@ -324,9 +324,9 @@ public class RuleBasedTransliterator extends Transliterator {
          * exz|d    no match, advance cursor
          * exzd|    done
          */
-        int start = index.start;
-        int limit = index.limit;
-        int cursor = index.cursor;
+        int start = index.__contextStart;
+        int limit = index.__contextLimit;
+        int cursor = index.__start;
 
         if (DEBUG) {
             System.out.print("\"" +
@@ -391,8 +391,8 @@ public class RuleBasedTransliterator extends Transliterator {
                 Utility.escape(rsubstring(text, cursor, limit)) + "\"");
         }
 
-        index.limit = limit;
-        index.cursor = cursor;
+        index.__contextLimit = limit;
+        index.__start = cursor;
     }
 
 
@@ -1328,6 +1328,9 @@ public class RuleBasedTransliterator extends Transliterator {
 
 /**
  * $Log: RuleBasedTransliterator.java,v $
+ * Revision 1.33  2000/06/28 20:31:43  alan4j
+ * Clean up Transliterator::Position and rename fields (related to jitterbug 450)
+ *
  * Revision 1.32  2000/05/24 22:21:00  alan4j
  * Compact UnicodeSets
  *
