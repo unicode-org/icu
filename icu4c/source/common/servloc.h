@@ -33,6 +33,7 @@ U_NAMESPACE_END
 #include "uvector.h"
 
 #include "serv.h"
+#include "locutil.h"
 
 U_NAMESPACE_BEGIN
 
@@ -537,18 +538,6 @@ class U_COMMON_API ICULocaleService : public ICUService
   virtual ICUServiceKey* createKey(const UnicodeString* id, int32_t kind, UErrorCode& status) const;
 
   friend class ServiceEnumeration;
-};
-
-// temporary utility functions, till I know where to find them
-// in header so tests can also access them
-
-class U_COMMON_API LocaleUtility {
-public:
-  static UnicodeString& canonicalLocaleString(const UnicodeString* id, UnicodeString& result);
-  static Locale& initLocaleFromName(const UnicodeString& id, Locale& result);
-  static UnicodeString& initNameFromLocale(const Locale& locale, UnicodeString& result);
-  static const Hashtable* getAvailableLocaleNames(const UnicodeString& bundleID);
-  static UBool isFallbackOf(const UnicodeString& root, const UnicodeString& child);
 };
 
 U_NAMESPACE_END

@@ -1175,6 +1175,12 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath=".\locutil.cpp">
+			</File>
+			<File
+				RelativePath=".\locutil.h">
+			</File>
+			<File
 				RelativePath=".\resbund.cpp">
 			</File>
 			<File
@@ -1621,9 +1627,6 @@
 			</File>
 			<File
 				RelativePath=".\servls.cpp">
-			</File>
-			<File
-				RelativePath=".\servlu.cpp">
 			</File>
 			<File
 				RelativePath=".\servnotf.cpp">

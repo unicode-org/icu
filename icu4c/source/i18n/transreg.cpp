@@ -28,7 +28,7 @@
 #include "tridpars.h"
 #include "charstr.h"
 #include "uassert.h"
-#include "servloc.h"
+#include "locutil.h"
 
 // Enable the following symbol to add debugging code that tracks the
 // allocation, deletion, and use of Entry objects.  BoundsChecker has
