@@ -1615,7 +1615,7 @@ u_isdefined(UChar32 c);
  *       general categories "Z" (separators) + whitespace ISO controls
  *       (including no-break spaces)
  * - u_isWhitespace: Java isWhitespace; Z + whitespace ISO controls but excluding no-break spaces
- * - u_isJavaSpaceChar: Java isSpace; just Z (including no-break spaces)
+ * - u_isJavaSpaceChar: Java isSpaceChar; just Z (including no-break spaces)
  * - u_isspace: Z + whitespace ISO controls (including no-break spaces)
  *
  * @param c    the character to be tested
@@ -1641,7 +1641,7 @@ u_isspace(UChar32 c);
  *       general categories "Z" (separators) + whitespace ISO controls
  *       (including no-break spaces)
  * - u_isWhitespace: Java isWhitespace; Z + whitespace ISO controls but excluding no-break spaces
- * - u_isJavaSpaceChar: Java isSpace; just Z (including no-break spaces)
+ * - u_isJavaSpaceChar: Java isSpaceChar; just Z (including no-break spaces)
  * - u_isspace: Z + whitespace ISO controls (including no-break spaces)
  *
  * @param c the code point to be tested
@@ -1680,7 +1680,7 @@ u_isJavaSpaceChar(UChar32 c);
  *       general categories "Z" (separators) + whitespace ISO controls
  *       (including no-break spaces)
  * - u_isWhitespace: Java isWhitespace; Z + whitespace ISO controls but excluding no-break spaces
- * - u_isJavaSpaceChar: Java isSpace; just Z (including no-break spaces)
+ * - u_isJavaSpaceChar: Java isSpaceChar; just Z (including no-break spaces)
  * - u_isspace: Z + whitespace ISO controls (including no-break spaces)
  *
  * @param c the code point to be tested
