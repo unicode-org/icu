@@ -4,8 +4,8 @@
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/format/NumberFormatTest.java,v $ 
- * $Date: 2002/05/08 23:58:25 $ 
- * $Revision: 1.5 $
+ * $Date: 2002/07/31 19:37:06 $ 
+ * $Revision: 1.6 $
  *
  *****************************************************************************************
  */
@@ -292,6 +292,40 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         } else {
             errln("FAIL: " + value + " x " + curr + " => " + s +
                   ", expected " + string);
+        }
+    }
+
+    public void TestCurrencyPatterns() {
+        int i;
+        Locale[] locs = NumberFormat.getAvailableLocales();
+        for (i=0; i<locs.length; ++i) {
+            NumberFormat nf = NumberFormat.getCurrencyInstance(locs[i]);
+            // Make sure currency formats do not have a variable number
+            // of fraction digits
+            int min = nf.getMinimumFractionDigits();
+            int max = nf.getMaximumFractionDigits();
+            if (min != max) {
+                String a = nf.format(1.0);
+                String b = nf.format(1.125);
+                errln("FAIL: " + locs[i] +
+                      " min fraction digits != max fraction digits; "+
+                      "x 1.0 => " + a +
+                      "; x 1.125 => " + b);
+            }
+                
+            // Make sure EURO currency formats have exactly 2 fraction digits
+            if (nf instanceof DecimalFormat) {
+                DecimalFormat df = (DecimalFormat) nf;
+                if ("EUR".equals(df.getCurrency().getCurrencyCode())) {
+                    if (min != 2 || max != 2) {
+                        String a = nf.format(1.0);
+                        errln("FAIL: " + locs[i] +
+                              " is a EURO format but it does not have 2 fraction digits; "+
+                              "x 1.0 => " +
+                              a);
+                    }
+                }
+            }
         }
     }
 
