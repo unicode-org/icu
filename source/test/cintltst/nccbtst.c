@@ -171,10 +171,36 @@ void TestSkip(int32_t inputsize, int32_t outputsize)
         const char toIBM943[]= { (char)0x61, (char)0x61 };
         int32_t offset[]= {0, 4};
 
+         /* EUC_JP*/
+        UChar euc_jp_inputText[]={ 0x0061, 0x4edd, 0x5bec, 0xd801, 0xdc01, 0xd801, 0x0061, 0x00a2 };
+        const char to_euc_jp[]={ (char)0x61, (char)0xa1, (char)0xb8, (char)0x8f, (char)0xf4, (char)0xae,
+            (char)0x61, (char)0x8e, (char)0xe0,
+        };
+        int32_t fromEUC_JPOffs [] ={ 0, 1, 1, 2, 2, 2, 6, 7, 7};
+
+        /*EUC_TW*/
+        UChar euc_tw_inputText[]={ 0x0061, 0x2295, 0x5BF2, 0xd801, 0xdc01, 0xd801, 0x0061, 0x8706, 0x8a, };
+        const char to_euc_tw[]={ 
+            (char)0x61, (char)0xa2, (char)0xd3, (char)0x8e, (char)0xa2, (char)0xdc, (char)0xe5,
+            (char)0x61, (char)0xe6, (char)0xca, (char)0x8a,
+        };
+        int32_t from_euc_twOffs [] ={ 0, 1, 1, 2, 2, 2, 2, 6, 7, 7, 8,};
+
         if(!testConvertFromUnicode(inputTest, sizeof(inputTest)/sizeof(inputTest[0]),
 			    toIBM943, sizeof(toIBM943), "ibm-943",
 	            (UConverterFromUCallback)UCNV_FROM_U_CALLBACK_SKIP, offset ))
 		    log_err("u-> ibm-943 with skip did not match.\n");
+
+        if(!testConvertFromUnicode(euc_jp_inputText, sizeof(euc_jp_inputText)/sizeof(euc_jp_inputText[0]),
+			    to_euc_jp, sizeof(to_euc_jp), "euc-jp",
+	            (UConverterFromUCallback)UCNV_FROM_U_CALLBACK_SKIP, fromEUC_JPOffs ))
+		    log_err("u-> euc-jp with skip did not match.\n");
+
+        if(!testConvertFromUnicode(euc_tw_inputText, sizeof(euc_tw_inputText)/sizeof(euc_tw_inputText[0]),
+			    to_euc_tw, sizeof(to_euc_tw), "euc-tw",
+	            (UConverterFromUCallback)UCNV_FROM_U_CALLBACK_SKIP, from_euc_twOffs ))
+		    log_err("u-> euc-tw with skip did not match.\n");  
+      
     }
 
 	/*to Unicode*/
@@ -203,7 +229,7 @@ void TestSkip(int32_t inputsize, int32_t outputsize)
         int32_t from_EBCIDIC_STATEFULOffsets []={ 1, 5};
        
 
-         /*ibm-954 or euc-jp*/
+         /* euc-jp*/
         const char sampleTxt_euc_jp[]={ (char)0x61, (char)0xa1, (char)0xb8, (char)0x8f, (char)0xf4, (char)0xae,
             (char)0x8f, (char)0xda, (char)0xa1,  /*unassigned*/
            (char)0x8e, (char)0xe0,
@@ -211,13 +237,13 @@ void TestSkip(int32_t inputsize, int32_t outputsize)
         UChar euc_jptoUnicode[]={ 0x0061, 0x4edd, 0x5bec, 0x00a2};
         int32_t from_euc_jpOffs [] ={ 0, 1, 3, 9};
 
-         /*ibm-964  EUC_TW*/
-        const char sampleTxt_euc_tw[]={ (char)0x61, (char)0xa1, (char)0xb3, (char)0x8e, (char)0xa2, (char)0xdc, (char)0xe5,
-            (char)0x8f, (char)0xda, (char)0xa1,  /*unassigned*/
+         /*EUC_TW*/
+        const char sampleTxt_euc_tw[]={ (char)0x61, (char)0xa2, (char)0xd3, (char)0x8e, (char)0xa2, (char)0xdc, (char)0xe5,
+            (char)0x8e, (char)0xaa, (char)0xbb, (char)0xcc,/*unassigned*/
            (char)0xe6, (char)0xca, (char)0x8a,
         };
         UChar euc_twtoUnicode[]={ 0x0061, 0x2295, 0x5BF2, 0x8706, 0x8a, };
-        int32_t from_euc_twOffs [] ={ 0, 1, 7, 9, 11};
+        int32_t from_euc_twOffs [] ={ 0, 1, 3, 11, 13};
 
         /*LMBCS*/
         const char sampleTxtLMBCS[]={ (char)0x12, (char)0xc9, (char)0x50, 
@@ -239,12 +265,12 @@ void TestSkip(int32_t inputsize, int32_t outputsize)
 	            (UConverterToUCallback)UCNV_TO_U_CALLBACK_SKIP, from_euc_jpOffs ))
 		    log_err("euc-jp->u with skip did not match.\n");
 
-        /*commented untill data is available*/
+        
 
-      /*  if(!testConvertToUnicode(sampleTxt_euc_tw, sizeof(sampleTxt_euc_tw),
+        if(!testConvertToUnicode(sampleTxt_euc_tw, sizeof(sampleTxt_euc_tw),
 			     euc_twtoUnicode, sizeof(euc_twtoUnicode)/sizeof(euc_twtoUnicode[0]),"euc-tw",
-	            (UConverterToUCallback)UCNV_TO_U_CALLBACK_SKIP, from_euc_jpOffs ))
-		    log_err("euc-tw->u with skip did not match.\n");*/
+	            (UConverterToUCallback)UCNV_TO_U_CALLBACK_SKIP, from_euc_twOffs ))
+		    log_err("euc-tw->u with skip did not match.\n");
 
         if(!testConvertToUnicode(sampleTxtLMBCS, sizeof(sampleTxtLMBCS),
 			    LMBCSToUnicode, sizeof(LMBCSToUnicode)/sizeof(LMBCSToUnicode[0]),"LMBCS-1",
@@ -296,6 +322,40 @@ void TestStop(int32_t inputsize, int32_t outputsize)
 			expstopIBM_930, sizeof(expstopIBM_930), "ibm-930",
 	        (UConverterFromUCallback)UCNV_FROM_U_CALLBACK_STOP, toIBM930Offsstop ))
 		log_err("u-> ibm-930 with stop did not match.\n");
+    
+    log_verbose("Testing fromUnicode with UCNV_FROM_U_CALLBACK_STOP  \n");
+    {
+        UChar inputTest[] = { 0x0061, 0xd801, 0xdc01, 0xd801, 0x0061 };
+        const char toIBM943[]= { (char)0x61,};
+        int32_t offset[]= {0,} ;
+
+         /*EUC_JP*/
+        UChar euc_jp_inputText[]={ 0x0061, 0x4edd, 0x5bec, 0xd801, 0xdc01, 0xd801, 0x0061, 0x00a2 };
+        const char to_euc_jp[]={ (char)0x61, (char)0xa1, (char)0xb8, (char)0x8f, (char)0xf4, (char)0xae,};
+        int32_t fromEUC_JPOffs [] ={ 0, 1, 1, 2, 2, 2,};
+
+        /*EUC_TW*/
+        UChar euc_tw_inputText[]={ 0x0061, 0x2295, 0x5BF2, 0xd801, 0xdc01, 0xd801, 0x0061, 0x8706, 0x8a, };
+        const char to_euc_tw[]={ 
+            (char)0x61, (char)0xa2, (char)0xd3, (char)0x8e, (char)0xa2, (char)0xdc, (char)0xe5,};
+        int32_t from_euc_twOffs [] ={ 0, 1, 1, 2, 2, 2, 2,};
+
+        if(!testConvertFromUnicode(inputTest, sizeof(inputTest)/sizeof(inputTest[0]),
+			    toIBM943, sizeof(toIBM943), "ibm-943",
+	            (UConverterFromUCallback)UCNV_FROM_U_CALLBACK_STOP, offset ))
+		    log_err("u-> ibm-943 with stop did not match.\n");
+
+        if(!testConvertFromUnicode(euc_jp_inputText, sizeof(euc_jp_inputText)/sizeof(euc_jp_inputText[0]),
+			    to_euc_jp, sizeof(to_euc_jp), "euc-jp",
+	            (UConverterFromUCallback)UCNV_FROM_U_CALLBACK_STOP, fromEUC_JPOffs ))
+		    log_err("u-> euc-jp with stop did not match.\n");
+
+        if(!testConvertFromUnicode(euc_tw_inputText, sizeof(euc_tw_inputText)/sizeof(euc_tw_inputText[0]),
+			    to_euc_tw, sizeof(to_euc_tw), "euc-tw",
+	            (UConverterFromUCallback)UCNV_FROM_U_CALLBACK_STOP, from_euc_twOffs ))
+		    log_err("u-> euc-tw with stop did not match.\n");  
+      
+    }
 
 	/*to Unicode*/
 	if(!testConvertToUnicode(expstopIBM_949, sizeof(expstopIBM_949),
@@ -321,7 +381,7 @@ void TestStop(int32_t inputsize, int32_t outputsize)
         int32_t from_EBCIDIC_STATEFULOffsets []={ 1};
 
 
-         /*ibm-954*/
+         /*EUC-JP*/
         const char sampleTxt_euc_jp[]={ (char)0x61, (char)0xa1, (char)0xb8, (char)0x8f, (char)0xf4, (char)0xae,
             (char)0x8f, (char)0xda, (char)0xa1,  /*unassigned*/
            (char)0x8e, (char)0xe0,
@@ -329,16 +389,30 @@ void TestStop(int32_t inputsize, int32_t outputsize)
         UChar euc_jptoUnicode[]={ 0x0061, 0x4edd, 0x5bec};
         int32_t from_euc_jpOffs [] ={ 0, 1, 3};
 
+          /*EUC_TW*/
+        const char sampleTxt_euc_tw[]={ (char)0x61, (char)0xa2, (char)0xd3, (char)0x8e, (char)0xa2, (char)0xdc, (char)0xe5,
+            (char)0x8e, (char)0xaa, (char)0xbb, (char)0xcc,/*unassigned*/
+           (char)0xe6, (char)0xca, (char)0x8a,
+        };
+        UChar euc_twtoUnicode[]={ 0x0061, 0x2295, 0x5BF2};
+        int32_t from_euc_twOffs [] ={ 0, 1, 3};
+
+
 
          if(!testConvertToUnicode(sampleTxtEBCIDIC_STATEFUL, sizeof(sampleTxtEBCIDIC_STATEFUL),
 			 EBCIDIC_STATEFUL_toUnicode, sizeof(EBCIDIC_STATEFUL_toUnicode)/sizeof(EBCIDIC_STATEFUL_toUnicode[0]),"ibm-930",
 	        (UConverterToUCallback)UCNV_TO_U_CALLBACK_STOP, from_EBCIDIC_STATEFULOffsets ))
-		log_err("EBCIDIC_STATEFUL->u with skip did not match.\n");
+		log_err("EBCIDIC_STATEFUL->u with stop did not match.\n");
 
         if(!testConvertToUnicode(sampleTxt_euc_jp, sizeof(sampleTxt_euc_jp),
 			 euc_jptoUnicode, sizeof(euc_jptoUnicode)/sizeof(euc_jptoUnicode[0]),"euc-jp",
 	        (UConverterToUCallback)UCNV_TO_U_CALLBACK_STOP, from_euc_jpOffs ))
 		log_err("euc-jp->u with stop did not match.\n");
+
+        if(!testConvertToUnicode(sampleTxt_euc_tw, sizeof(sampleTxt_euc_tw),
+			     euc_twtoUnicode, sizeof(euc_twtoUnicode)/sizeof(euc_twtoUnicode[0]),"euc-tw",
+	            (UConverterToUCallback)UCNV_TO_U_CALLBACK_STOP, from_euc_jpOffs ))
+		    log_err("euc-tw->u with stop did not match.\n");
     }
 
 }
@@ -391,10 +465,39 @@ void TestSub(int32_t inputsize, int32_t outputsize)
         const char toIBM943[]= { (char)0x61, (char)0xfc, (char)0xfc, (char)0xfc, (char)0xfc, (char)0x61 };
         int32_t offset[]= {0, 1, 1, 3, 3, 4};
 
+
+        /* EUC_JP*/
+        UChar euc_jp_inputText[]={ 0x0061, 0x4edd, 0x5bec, 0xd801, 0xdc01, 0xd801, 0x0061, 0x00a2 };
+        const char to_euc_jp[]={ (char)0x61, (char)0xa1, (char)0xb8, (char)0x8f, (char)0xf4, (char)0xae,
+            (char)0xf4, (char)0xfe, (char)0xf4, (char)0xfe, 
+            (char)0x61, (char)0x8e, (char)0xe0,
+        };
+        int32_t fromEUC_JPOffs [] ={ 0, 1, 1, 2, 2, 2, 3, 3, 5, 5, 6, 7, 7};
+
+        /*EUC_TW*/
+        UChar euc_tw_inputText[]={ 0x0061, 0x2295, 0x5BF2, 0xd801, 0xdc01, 0xd801, 0x0061, 0x8706, 0x8a, };
+        const char to_euc_tw[]={ 
+            (char)0x61, (char)0xa2, (char)0xd3, (char)0x8e, (char)0xa2, (char)0xdc, (char)0xe5,
+            (char)0xfd, (char)0xfe, (char)0xfd, (char)0xfe,
+            (char)0x61, (char)0xe6, (char)0xca, (char)0x8a,
+        };
+        int32_t from_euc_twOffs [] ={ 0, 1, 1, 2, 2, 2, 2, 3, 3, 5, 5, 6, 7, 7, 8,};
+
         if(!testConvertFromUnicode(inputTest, sizeof(inputTest)/sizeof(inputTest[0]),
 			    toIBM943, sizeof(toIBM943), "ibm-943",
 	            (UConverterFromUCallback)UCNV_FROM_U_CALLBACK_SUBSTITUTE, offset ))
 		    log_err("u-> ibm-943 with substitute did not match.\n");
+        
+        if(!testConvertFromUnicode(euc_jp_inputText, sizeof(euc_jp_inputText)/sizeof(euc_jp_inputText[0]),
+			    to_euc_jp, sizeof(to_euc_jp), "euc-jp",
+	            (UConverterFromUCallback)UCNV_FROM_U_CALLBACK_SUBSTITUTE, fromEUC_JPOffs ))
+		    log_err("u-> euc-jp with substitute did not match.\n");
+
+        if(!testConvertFromUnicode(euc_tw_inputText, sizeof(euc_tw_inputText)/sizeof(euc_tw_inputText[0]),
+			    to_euc_tw, sizeof(to_euc_tw), "euc-tw",
+	            (UConverterFromUCallback)UCNV_FROM_U_CALLBACK_SUBSTITUTE, from_euc_twOffs ))
+		    log_err("u-> euc-tw with substitute did not match.\n");  
+      
     }
 
     
@@ -423,7 +526,7 @@ void TestSub(int32_t inputsize, int32_t outputsize)
         int32_t from_EBCIDIC_STATEFULOffsets []={ 1, 3, 5};
 
 
-        /*ibm-954 EUC_JP*/
+        /* EUC_JP*/
         const char sampleTxt_euc_jp[]={ (char)0x61, (char)0xa1, (char)0xb8, (char)0x8f, (char)0xf4, (char)0xae,
             (char)0x8f, (char)0xda, (char)0xa1,  /*unassigned*/
            (char)0x8e, (char)0xe0, (char)0x8a
@@ -431,19 +534,20 @@ void TestSub(int32_t inputsize, int32_t outputsize)
         UChar euc_jptoUnicode[]={ 0x0061, 0x4edd, 0x5bec, 0xfffd, 0x00a2, 0x008a };
         int32_t from_euc_jpOffs [] ={ 0, 1, 3, 6,  9, 11 };
 
-        /*ibm-964  EUC_TW*/
-        const char sampleTxt_euc_tw[]={ (char)0x61, (char)0xa1, (char)0xb3, (char)0x8e, (char)0xa2, (char)0xdc, (char)0xe5,
-            (char)0x8f, (char)0xda, (char)0xa1,  /*unassigned*/
-           (char)0xe6, (char)0xca, (char)0x8a,
+        /*EUC_TW*/
+        const char sampleTxt_euc_tw[]={ 
+            (char)0x61, (char)0xa2, (char)0xd3, (char)0x8e, (char)0xa2, (char)0xdc, (char)0xe5,
+            (char)0x8e, (char)0xaa, (char)0xbb, (char)0xcc,/*unassigned*/
+            (char)0xe6, (char)0xca, (char)0x8a,
         };
         UChar euc_twtoUnicode[]={ 0x0061, 0x2295, 0x5BF2, 0xfffd, 0x8706, 0x8a, };
-        int32_t from_euc_twOffs [] ={ 0, 1, 3, 7,  9,};
+        int32_t from_euc_twOffs [] ={ 0, 1, 3, 7, 11, 13};
 
        
         if(!testConvertToUnicode(sampleTxtEBCIDIC_STATEFUL, sizeof(sampleTxtEBCIDIC_STATEFUL),
 			 EBCIDIC_STATEFUL_toUnicode, sizeof(EBCIDIC_STATEFUL_toUnicode)/sizeof(EBCIDIC_STATEFUL_toUnicode[0]),"ibm-930",
 	        (UConverterToUCallback)UCNV_TO_U_CALLBACK_SUBSTITUTE, from_EBCIDIC_STATEFULOffsets ))
-		log_err("EBCIDIC_STATEFUL->u with skip did not match.\n");
+		log_err("EBCIDIC_STATEFUL->u with substitute did not match.\n");
 
 
         if(!testConvertToUnicode(sampleTxt_euc_jp, sizeof(sampleTxt_euc_jp),
@@ -451,12 +555,12 @@ void TestSub(int32_t inputsize, int32_t outputsize)
 	        (UConverterToUCallback)UCNV_TO_U_CALLBACK_SUBSTITUTE, from_euc_jpOffs ))
 		log_err("euc-jp->u with substitute did not match.\n");
 
-        /*
+        
         if(!testConvertToUnicode(sampleTxt_euc_tw, sizeof(sampleTxt_euc_tw),
 			 euc_twtoUnicode, sizeof(euc_twtoUnicode)/sizeof(euc_twtoUnicode[0]),"euc-tw",
 	        (UConverterToUCallback)UCNV_TO_U_CALLBACK_SUBSTITUTE, from_euc_twOffs ))
 		log_err("euc-tw->u with substitute  did not match.\n");
-        */
+        
 
     }
 
@@ -513,10 +617,53 @@ void TestSubWithValue(int32_t inputsize, int32_t outputsize)
             (char)0x61 };
         int32_t offset[]= {0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 3, 3, 3, 3, 3, 4};
 
+
+         /* EUC_JP*/
+        UChar euc_jp_inputText[]={ 0x0061, 0x4edd, 0x5bec, 0xd801, 0xdc01, 0xd801, 0x0061, 0x00a2, };
+        const char to_euc_jp[]={ (char)0x61, (char)0xa1, (char)0xb8, (char)0x8f, (char)0xf4, (char)0xae,
+            (char)0x25, (char)0x55, (char)0x44, (char)0x38, (char)0x30, (char)0x31,
+            (char)0x25, (char)0x55, (char)0x44, (char)0x43, (char)0x30, (char)0x31,
+            (char)0x25, (char)0x55, (char)0x44, (char)0x38, (char)0x30, (char)0x31,
+            (char)0x61, (char)0x8e, (char)0xe0,
+        };
+        int32_t fromEUC_JPOffs [] ={ 0, 1, 1, 2, 2, 2, 
+            3, 3, 3, 3, 3, 3, 
+            3, 3, 3, 3, 3, 3,
+            5, 5, 5, 5, 5, 5,
+            6, 7, 7,
+        };
+
+        /*EUC_TW*/
+        UChar euc_tw_inputText[]={ 0x0061, 0x2295, 0x5BF2, 0xd801, 0xdc01, 0xd801, 0x0061, 0x8706, 0x8a, };
+        const char to_euc_tw[]={ 
+            (char)0x61, (char)0xa2, (char)0xd3, (char)0x8e, (char)0xa2, (char)0xdc, (char)0xe5,
+            (char)0x25, (char)0x55, (char)0x44, (char)0x38, (char)0x30, (char)0x31,
+            (char)0x25, (char)0x55, (char)0x44, (char)0x43, (char)0x30, (char)0x31,
+            (char)0x25, (char)0x55, (char)0x44, (char)0x38, (char)0x30, (char)0x31,
+            (char)0x61, (char)0xe6, (char)0xca, (char)0x8a,
+        };
+        int32_t from_euc_twOffs [] ={ 0, 1, 1, 2, 2, 2, 2, 
+             3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 5, 5, 5, 5, 5, 5,
+             6, 7, 7, 8,
+        };
+
         if(!testConvertFromUnicode(inputTest, sizeof(inputTest)/sizeof(inputTest[0]),
 			    toIBM943, sizeof(toIBM943), "ibm-943",
 	            (UConverterFromUCallback)UCNV_FROM_U_CALLBACK_ESCAPE, offset ))
 		    log_err("u-> ibm-943 with subst with value did not match.\n");
+
+        if(!testConvertFromUnicode(euc_jp_inputText, sizeof(euc_jp_inputText)/sizeof(euc_jp_inputText[0]),
+			    to_euc_jp, sizeof(to_euc_jp), "euc-jp",
+	            (UConverterFromUCallback)UCNV_FROM_U_CALLBACK_ESCAPE, fromEUC_JPOffs ))
+		    log_err("u-> euc-jp with subst with value did not match.\n");
+
+        if(!testConvertFromUnicode(euc_tw_inputText, sizeof(euc_tw_inputText)/sizeof(euc_tw_inputText[0]),
+			    to_euc_tw, sizeof(to_euc_tw), "euc-tw",
+	            (UConverterFromUCallback)UCNV_FROM_U_CALLBACK_ESCAPE, from_euc_twOffs ))
+		    log_err("u-> euc-tw with subst with value did not match.\n");  
+      
+
+
     }
     
     
@@ -531,7 +678,7 @@ void TestSubWithValue(int32_t inputsize, int32_t outputsize)
             0x7B87};
         int32_t  fromIBM943Offs [] = 	{ 0, 1, 3, 3, 3, 3, 3, 3, 3, 3, 5};
 
-        /*ibm-954 EUC_JP*/
+        /* EUC_JP*/
         const char sampleTxt_EUC_JP[]={ (char)0x61, (char)0xa1, (char)0xb8, (char)0x8f, (char)0xf4, (char)0xae,
             (char)0x8f, (char)0xda, (char)0xa1,  /*unassigned*/
            (char)0x8e, (char)0xe0,
@@ -544,17 +691,18 @@ void TestSubWithValue(int32_t inputsize, int32_t outputsize)
             9,
         };
 
-        /*ibm-964  EUC_TW*/
-        const char sampleTxt_euc_tw[]={ (char)0x61, (char)0xa1, (char)0xb3, (char)0x8e, (char)0xa2, (char)0xdc, (char)0xe5,
-            (char)0x8f, (char)0xda, (char)0xa1,  /*unassigned*/
-           (char)0xe6, (char)0xca, (char)0x8a,
+        /*EUC_TW*/
+        const char sampleTxt_euc_tw[]={ 
+            (char)0x61, (char)0xa2, (char)0xd3, (char)0x8e, (char)0xa2, (char)0xdc, (char)0xe5,
+            (char)0x8e, (char)0xaa, (char)0xbb, (char)0xcc,/*unassigned*/
+            (char)0xe6, (char)0xca, (char)0x8a,
         };
         UChar euc_twtoUnicode[]={ 0x0061, 0x2295, 0x5BF2, 
-             0x25, 0x58, 0x38, 0x46, 0x25, 0x58, 0x44, 0x41, 0x25, 0x58, 0x41, 0x31, 
+             0x25, 0x58, 0x38, 0x45, 0x25, 0x58, 0x41, 0x41, 0x25, 0x58, 0x42, 0x42, 0x25, 0x58, 0x43, 0x43, 
              0x8706, 0x8a, };
         int32_t from_euc_twOffs [] ={ 0, 1, 3, 
-             7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7,
-             9, 11};
+             7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7,
+             11, 13};
        
         /*LMBCS*/
         const char sampleTxtLMBCS[]={ (char)0x12, (char)0xc9, (char)0x50, 
@@ -579,11 +727,11 @@ void TestSubWithValue(int32_t inputsize, int32_t outputsize)
 	            (UConverterToUCallback)UCNV_TO_U_CALLBACK_ESCAPE, fromEUC_JPOffs))
 		    log_err("euc-jp->u with substitute with value did not match.\n");
 
-        /* if(!testConvertToUnicode(sampleTxt_euc_tw, sizeof(sampleTxt_euc_tw),
+        if(!testConvertToUnicode(sampleTxt_euc_tw, sizeof(sampleTxt_euc_tw),
 		         euc_twtoUnicode, sizeof(euc_twtoUnicode)/sizeof(euc_twtoUnicode[0]),"euc-tw",
 	            (UConverterToUCallback)UCNV_TO_U_CALLBACK_ESCAPE, from_euc_twOffs))
 		    log_err("euc-tw->u with substitute with value did not match.\n");
-            */
+            
 
         /*got to confirm this*/
         if(!testConvertToUnicode(sampleTxtLMBCS, sizeof(sampleTxtLMBCS),
@@ -763,7 +911,9 @@ UBool testConvertFromUnicode(const UChar *source, int sourceLen,  const char *ex
 		{	
 		log_err("String does not match. %s\n", gNuConvTestName);
 		log_verbose("String does not match. %s\n", gNuConvTestName);
+        printf("\nGot:");
 		printSeq(junkout, expectLen);
+        printf("\nExpected:");
 		printSeq(expect, expectLen);
     	ucnv_close(conv);
 		return FALSE;
@@ -838,8 +988,11 @@ UBool testConvertFromUnicode(const UChar *source, int sourceLen,  const char *ex
 	{	
 		log_err("String does not match. %s\n", gNuConvTestName);
 		log_verbose("String does not match. %s\n", gNuConvTestName);
+        printf("\nsource: ");
         printUSeqErr(source, sourceLen);
+        printf("\nGot: ");
 		printSeqErr(junkout, expectLen);
+        printf("\nExpected: ");
 		printSeqErr(expect, expectLen);
 		return FALSE;
 	}
@@ -955,7 +1108,9 @@ UBool testConvertToUnicode( const char *source, int sourcelen, const UChar *expe
 		{	
 		log_err("String does not match. %s\n", gNuConvTestName);
 		log_verbose("String does not match. %s\n", gNuConvTestName);
+        printf("\nGot: ");
 		printUSeqErr(junkout, expectlen);
+        printf("\nExpected: ");
 		printUSeqErr(expect, expectlen);
     	ucnv_close(conv);
 		return FALSE;
@@ -1028,7 +1183,9 @@ UBool testConvertToUnicode( const char *source, int sourcelen, const UChar *expe
 	{	
 		log_err("String does not match. %s\n", gNuConvTestName);
 		log_verbose("String does not match. %s\n", gNuConvTestName);
+        printf("\nGot: ");
 		printUSeqErr(junkout, expectlen);
+        printf("\nExpected: ");
 		printUSeqErr(expect, expectlen);
 		return FALSE;
 	}
