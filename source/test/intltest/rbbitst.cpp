@@ -1390,14 +1390,14 @@ void RBBITest::TestExtended() {
 
     EParseState savedState = PARSE_TAG;
 
-    const UChar CH_LF        = 0x0a;
-    const UChar CH_CR        = 0x0d;
-    const UChar CH_HASH      = 0x23;
-    const UChar CH_PERIOD    = 0x2e;
-    const UChar CH_LT        = 0x3c;
-    const UChar CH_GT        = 0x3e;
-    const UChar CH_BACKSLASH = 0x5c;
-    const UChar CH_BULLET    = 0x2022;
+    static const UChar CH_LF        = 0x0a;
+    static const UChar CH_CR        = 0x0d;
+    static const UChar CH_HASH      = 0x23;
+    /*static const UChar CH_PERIOD    = 0x2e;*/
+    static const UChar CH_LT        = 0x3c;
+    static const UChar CH_GT        = 0x3e;
+    static const UChar CH_BACKSLASH = 0x5c;
+    static const UChar CH_BULLET    = 0x2022;
 
     int32_t    lineNum  = 1;
     int32_t    colStart = 0;
@@ -2745,7 +2745,7 @@ int32_t RBBILineMonkey::next(int32_t startPos) {
         }
 
         // LB 6, LB 7
-        int32_t oldpos = pos;
+        /*int32_t oldpos = pos;*/
         rule67Adjust(prevPos, &prevChar, &pos,     &thisChar);
         
         nextCPPos = fText->moveIndex32(pos, 1);
@@ -3008,7 +3008,9 @@ static int32_t  getIntParam(UnicodeString name, UnicodeString &params, int32_t d
         // The param exists.  Convert the string to an int.
         char valString[100];
         int32_t paramLength = m.end(1, status) - m.start(1, status);
-        if (paramLength >= sizeof(valString)-1) {paramLength = sizeof(valString)-2;};
+        if (paramLength >= (int32_t)(sizeof(valString)-1)) {
+            paramLength = (int32_t)(sizeof(valString)-2);
+        }
         params.extract(m.start(1, status), paramLength, valString, sizeof(valString));
         val = strtol(valString,  NULL, 10);
 
@@ -3140,7 +3142,7 @@ void RBBITest::TestWordBreaks(void)
     "\\uc30d\\u002e\\U000e002c\\u0c48\\u003a\\ub5a1\\u0661\\u002c",
     };
     int loop;
-    for (loop = 0; loop < (sizeof(strlist) / sizeof(char *)); loop ++) {
+    for (loop = 0; loop < (int)(sizeof(strlist) / sizeof(char *)); loop ++) {
         // printf("looping %d\n", loop);
         u_unescape(strlist[loop], str, 25);
         UnicodeString ustr(str);
@@ -3202,7 +3204,7 @@ void RBBITest::TestWordBoundary(void)
     "\\u003b\\u0027\\u00b7\\u47a3",
     };
     int loop;
-    for (loop = 0; loop < (sizeof(strlist) / sizeof(char *)); loop ++) {
+    for (loop = 0; loop < (int)(sizeof(strlist) / sizeof(char *)); loop ++) {
         // printf("looping %d\n", loop);
         u_unescape(strlist[loop], str, 20);
         UnicodeString ustr(str);
@@ -3283,7 +3285,7 @@ void RBBITest::TestLineBreaks(void)
      "\\u2116\\u0ed2\\uff64\\u02cd\\u2001\\u2060",
     };
     int loop;
-    for (loop = 0; loop < (sizeof(strlist) / sizeof(char *)); loop ++) {
+    for (loop = 0; loop < (int)(sizeof(strlist) / sizeof(char *)); loop ++) {
         // printf("looping %d\n", loop);
         u_unescape(strlist[loop], str, 20);
         UnicodeString ustr(str);
@@ -3324,7 +3326,7 @@ void RBBITest::TestSentBreaks(void)
     };
     int loop;
     int forward[100];
-    for (loop = 0; loop < (sizeof(strlist) / sizeof(char *)); loop ++) {
+    for (loop = 0; loop < (int)(sizeof(strlist) / sizeof(char *)); loop ++) {
         u_unescape(strlist[loop], str, 100);
         UnicodeString ustr(str);
 
