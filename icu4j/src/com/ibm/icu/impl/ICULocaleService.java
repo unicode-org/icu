@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 2001-2003, International Business Machines Corporation and    *
+ * Copyright (C) 2001-2004, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -57,6 +57,38 @@ public class ICULocaleService extends ICUService {
         return get(locale, LocaleKey.KIND_ANY, actualReturn);
     }
                    
+    /**
+     * Convenience override for callers using locales. This calls
+     * get(ULocale, int, ULocale[]) with KIND_ANY.
+     */
+    public Object get(ULocale locale, ULocale[] actualReturn) {
+        return get(locale, LocaleKey.KIND_ANY, actualReturn);
+    }
+                   
+    /**
+     * Convenience override for callers using locales.  This uses
+     * createKey(ULocale.toString(), kind) to create a key, calls getKey, and then
+     * if actualReturn is not null, returns the actualResult from
+     * getKey (stripping any prefix) into a ULocale.  
+     */
+    public Object get(ULocale locale, int kind, ULocale[] actualReturn) {
+        Key key = createKey(locale.toString(), kind);
+        if (actualReturn == null) {
+            return getKey(key);
+        }
+
+        String[] temp = new String[1];
+        Object result = getKey(key, temp);
+        if (result != null) {
+            int n = temp[0].indexOf("/");
+            if (n >= 0) {
+                temp[0] = temp[0].substring(n+1);
+            }
+            actualReturn[0] = new ULocale(temp[0]);
+        }
+        return result;
+    }
+
     /**
      * Convenience override for callers using locales.  This uses
      * createKey(Locale.toString(), kind) to create a key, calls getKey, and then
