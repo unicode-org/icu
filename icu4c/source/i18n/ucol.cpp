@@ -484,7 +484,9 @@ static const uint16_t *FCD_STAGE_3_;
 
 inline UBool ucol_unsafeCP(UChar c, const UCollator *coll) {
 
-    if (c < coll->minUnsafeCP) return FALSE;
+    if (c < coll->minUnsafeCP) {
+        return FALSE;
+    }
 
     int32_t  hash = c;
     uint8_t  htbyte;
@@ -513,7 +515,30 @@ inline UBool ucol_unsafeCP(UChar c, const UCollator *coll) {
 }
 
 inline UBool ucol_contractionEndCP(UChar c, const UCollator *coll) {
-    return TRUE;
+    return true;
+    if (c < coll->minContrEndCP) {
+        return FALSE;
+    }
+
+    int32_t  hash = c;
+    uint8_t  htbyte;
+
+    if (hash >= UCOL_UNSAFECP_TABLE_SIZE*8) {
+        hash = (hash & UCOL_UNSAFECP_TABLE_MASK) + 256;
+    }
+    htbyte = coll->contrEndCP[hash>>3];
+    if (((htbyte >> (hash & 7)) & 1) == 1) {
+        return TRUE;
+    }
+
+    /*  TODO:  main UCA table data needs to be merged into tailoring tables,   */
+    /*         and this second level of test removed from here.                */
+    if (coll == UCA || UCA == NULL) {
+        return FALSE;
+    }
+
+    htbyte = UCA->contrEndCP[hash>>3];
+    return ((htbyte >> (hash & 7)) & 1) == 1;
 }
 
 
@@ -587,6 +612,13 @@ UCollator* ucol_initCollator(const UCATableHeader *image, UCollator *fillIn, UEr
         if (ucol_unsafeCP(c, result)) break;
     }
     result->minUnsafeCP = c;
+
+    result->contrEndCP = (uint8_t *)result->image + result->image->contrEndCP;
+    result->minContrEndCP = 0;
+    for (c=0; c<0x300; c++) {  // Find the Contraction-ending char.
+        if (ucol_contractionEndCP(c, result)) break;
+    }
+    result->minContrEndCP = c;
 
     /* max expansion tables */
     result->endExpansionCE = (uint32_t*)((uint8_t*)result->image +
@@ -2737,15 +2769,22 @@ int32_t ucol_getSortKeySize(const UCollator *coll, collIterate *s, int32_t curre
       int32_t i = 0;
       int32_t c, prev=0x50;
       int32_t diff;
-      while(i<len) {
-        UTF_NEXT_CHAR(ident, i, len, c);
-        diff = c-prev;
-        if(diff>=SLOPE_REACH_NEG_1) {
-          currentSize += (diff<=SLOPE_REACH_POS_1)?1:((diff<=SLOPE_REACH_POS_2)?2:3);
-        } else {
-          currentSize += (diff>=SLOPE_REACH_NEG_2)?2:3;
-        }
-        prev=c;
+      // while(i<len) {
+      for (;;) {
+          if (len >=0 && i>=len) {
+              break;
+          }
+          UTF_NEXT_CHAR(ident, i, len, c);
+          if (c==0) {
+              break;
+          }
+          diff = c-prev;
+          if(diff>=SLOPE_REACH_NEG_1) {
+              currentSize += (diff<=SLOPE_REACH_POS_1)?1:((diff<=SLOPE_REACH_POS_2)?2:3);
+          } else {
+              currentSize += (diff>=SLOPE_REACH_NEG_2)?2:3;
+          }
+          prev=c;
       }
     }
     return currentSize;
@@ -3378,6 +3417,7 @@ ucol_calcSortKey(const    UCollator    *coll,
     return sortKeySize;
 }
 
+
 int32_t
 ucol_calcSortKeySimpleTertiary(const    UCollator    *coll,
         const    UChar        *source,
@@ -3387,6 +3427,7 @@ ucol_calcSortKeySimpleTertiary(const    UCollator    *coll,
         UBool allocatePrimary,
         UErrorCode *status)
 {
+    U_ALIGN_CODE(16);
     uint32_t i = 0; /* general purpose counter */
 
     /* Stack allocated buffers for buffers we use */
@@ -3411,7 +3452,7 @@ ucol_calcSortKeySimpleTertiary(const    UCollator    *coll,
     UChar *normSource = normBuffer;
     int32_t normSourceLen = UCOL_NORMALIZATION_MAX_BUFFER;
 
-    int32_t len = (sourceLength == -1 ? u_strlen(source) : sourceLength);
+    int32_t len =  sourceLength;
 
 
     collIterate s;
@@ -3419,25 +3460,22 @@ ucol_calcSortKeySimpleTertiary(const    UCollator    *coll,
 
     /* If we need to normalize, we'll do it all at once at the beggining! */
     UColAttributeValue normMode = coll->normalizationMode;
-    if((normMode != UCOL_OFF)
-      /* && (unorm_quickCheck(source, len, UNORM_NFD, status) != UNORM_YES)
-      && (unorm_quickCheck(source, len, UNORM_NFC, status) != UNORM_YES)) */
-      /* changed by synwee */
-      && !checkFCD(source, len, status))
-    {
-
-        normSourceLen = unorm_normalize(source, sourceLength, UNORM_NFD, 0, normSource, normSourceLen, status);
-        if(U_FAILURE(*status)) {
-            *status=U_ZERO_ERROR;
-            normSource = (UChar *) uprv_malloc((normSourceLen+1)*sizeof(UChar));
-            normSourceLen = unorm_normalize(source, sourceLength, UNORM_NFD, 0, normSource, (normSourceLen+1), status);
+    if(normMode != UCOL_OFF) {
+        if (!checkFCD(source, len, status))
+        {
+            normSourceLen = unorm_normalize(source, sourceLength, UNORM_NFD, 0, normSource, normSourceLen, status);
+            if(U_FAILURE(*status)) {
+                *status=U_ZERO_ERROR;
+                normSource = (UChar *) uprv_malloc((normSourceLen+1)*sizeof(UChar));
+                normSourceLen = unorm_normalize(source, sourceLength, UNORM_NFD, 0, normSource, (normSourceLen+1), status);
+            }
+            normSource[normSourceLen] = 0;
+            IInit_collIterate(coll, normSource, -1, &s);
+            s.flags &= ~(UCOL_ITER_NORM);
+            len = normSourceLen;
         }
-        normSource[normSourceLen] = 0;
-        IInit_collIterate(coll, normSource, -1, &s);
-        s.flags &= ~(UCOL_ITER_NORM);
-        len = normSourceLen;
     }
-
+        
 
     if(resultLength == 0 || primaries == NULL) {
         return ucol_getSortKeySize(coll, &s, sortKeySize, coll->strength, len);
@@ -3542,7 +3580,7 @@ ucol_calcSortKeySimpleTertiary(const    UCollator    *coll,
             }
 #endif
 
-            if(secondary > 0) { /* I think that != 0 test should be != IGNORABLE */
+              if(secondary > 0) { /* I think that != 0 test should be != IGNORABLE */
               /* This is compression code. */
               if (secondary == UCOL_COMMON2 && notIsContinuation) {
                 ++count2;
@@ -3568,7 +3606,7 @@ ucol_calcSortKeySimpleTertiary(const    UCollator    *coll,
             }
 
 
-            if(tertiary > 0) {
+              if(tertiary > 0) {
               /* This is compression code. */
               /* sequence size check is included in the if clause */
               if (tertiary == UCOL_COMMON3 && notIsContinuation) {
@@ -4287,11 +4325,7 @@ ucol_strcoll( const UCollator    *coll,
               const UChar        *target,
               int32_t            targetLength)
 {
-#ifdef _MSC_VER
-        /* TODO:  this really does speed thing up significantly on MSVC builds on P6 processors.  */
-        /*        What's the best way to ifdef it in?                                             */
-//       __asm         align 16
-#endif
+    U_ALIGN_CODE(16);
 
     /* Scan the strings.  Find:                                                             */
     /*    The length of any leading portion that is equal                                   */

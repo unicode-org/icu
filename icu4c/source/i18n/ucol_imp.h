@@ -532,7 +532,9 @@ typedef struct {
                                        collation elements with last element
                                        in endExpansionCE*/
       int32_t  endExpansionCECount; /* size of endExpansionCE */
-      uint32_t unsafeCP;
+      uint32_t unsafeCP;            /* hash table of unsafe code points */
+      uint32_t contrEndCP;          /* hash table of final code points  */
+                                    /*   in contractions.               */
 
       int32_t CEcount;
       UBool jamoSpecial;                    /* is jamoSpecial */
@@ -611,7 +613,9 @@ struct UCollator {
                                          corresponding to endExpansionCE,
                                          terminated with a null */
     const uint8_t *unsafeCP;           /* unsafe code points hashtable */
+    const uint8_t *contrEndCP;         /* Contraction ending chars hash table */
     UChar          minUnsafeCP;        /* Smallest unsafe Code Point. */
+    UChar          minContrEndCP;      /* Smallest code point at end of a contraction */
 };
 
 /* various internal functions */

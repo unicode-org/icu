@@ -64,6 +64,7 @@ typedef struct {
   UColOptionSet     *options;
   MaxExpansionTable *maxExpansions;
   uint8_t           *unsafeCP;
+  uint8_t           *contrEndCP;
   const UCollator         *UCA;
 } tempUCATable; 
 
