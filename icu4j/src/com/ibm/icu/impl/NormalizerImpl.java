@@ -5,9 +5,9 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/NormalizerImpl.java,v $
- * $Date: 2002/03/12 19:39:41 $
- * $Revision: 1.2 $
- *  ****************************************************************************
+ * $Date: 2002/03/13 05:56:31 $
+ * $Revision: 1.3 $
+ *******************************************************************************
  */
  
 package com.ibm.icu.impl;
@@ -178,16 +178,16 @@ public final class NormalizerImpl {
 	/****************************************************/
 	
 	
-	static FCDTrieImpl fcdTrieImpl = new FCDTrieImpl();
-	static NormTrieImpl normTrieImpl = new NormTrieImpl();
-	static AuxTrieImpl auxTrieImpl = new AuxTrieImpl();
+	static FCDTrieImpl fcdTrieImpl;
+	static NormTrieImpl normTrieImpl;
+	static AuxTrieImpl auxTrieImpl;
 	static int[] indexes;
 	static char[] combiningTable;
 	static char[] extraData;
 	static char[] canonStartSets;
 	
 	static boolean isDataLoaded;
-	
+	static boolean isFormatVersion_2_1;
 	/**
     * Default buffer size of datafile
     */
@@ -280,6 +280,9 @@ public final class NormalizerImpl {
     		indexes = null;
     		combiningTable=null;
     		extraData=null;
+    		fcdTrieImpl = new FCDTrieImpl();
+			normTrieImpl = new NormTrieImpl();
+			auxTrieImpl = new AuxTrieImpl();
 	        // jar access
 	        InputStream i = getClass().getResourceAsStream(DATA_FILE_NAME_);
 	        BufferedInputStream b = new BufferedInputStream(i, 
@@ -436,6 +439,36 @@ public final class NormalizerImpl {
         return (char)((norm32>>CC_SHIFT)&0xFF);
 	}
 	
+	public static boolean isFullCompositionExclusion(int c) {
+	    if(isFormatVersion_2_1) {
+	        int aux32=auxTrieImpl.auxTrie.getCodePointValue(c);
+	        return (boolean)((aux32&AUX_COMP_EX_MASK)!=0);
+	    } else {
+	        return false;
+	    }
+	}
+	
+	public static boolean isCanonSafeStart(int c) {
+	    if(isFormatVersion_2_1) {
+	        int aux32 = auxTrieImpl.auxTrie.getValue(c);
+	        return (boolean)((aux32&AUX_UNSAFE_MASK)==0);
+	    } else {
+	        return false;
+	    }
+	}
+	
+	public static boolean getCanonStartSet(int c, USerializedSet fillSet) {
+
+	    if(fillSet!=null && canonStartSets!=null) {
+	        int aux32=auxTrieImpl.auxTrie.getValue(c);
+	        aux32&=AUX_CANON_SET_MASK;
+	        
+	        return aux32!=0 &&
+	            fillSet.getSet(canonStartSets,indexes[INDEX_CANON_SET_COUNT]-aux32);
+	    } else {
+	        return false;
+	    }
+	}
 	/**
 	 * Internal API, used by collation code.
 	 * Get access to the internal FCD trie table to be able to perform
