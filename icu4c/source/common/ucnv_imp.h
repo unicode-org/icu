@@ -84,13 +84,6 @@ ucnv_unloadSharedDataIfReady(UConverterSharedData *sharedData);
 void
 ucnv_incrementRefCount(UConverterSharedData *sharedData);
 
-
-/* returns true if "name" is in algorithmicConverterNames
- * @param name The converter name.
- * @return TRUE  if "name" is in algorithmicConverterNames.
- */
-UBool ucnv_isDataBasedConverter (const char *name);
-
 /* Copy the string that is represented by the UConverterPlatform enum
  * @param platformString An output buffer
  * @param platform An enum representing a platform

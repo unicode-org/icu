@@ -88,7 +88,6 @@ U_CFUNC const char* ures_getPath(const UResourceBundle* resB);
 U_CFUNC void ures_appendResPath(UResourceBundle *resB, const char* toAdd, int32_t lenToAdd);
 /*U_CFUNC void ures_setResPath(UResourceBundle *resB, const char* toAdd);*/
 U_CFUNC void ures_freeResPath(UResourceBundle *resB);
-U_CFUNC void ures_freeRequestedLocale(UResourceBundle *resB);
 
 /* Candidates for export */
 U_CFUNC UResourceBundle *ures_copyResb(UResourceBundle *r, const UResourceBundle *original, UErrorCode *status);
