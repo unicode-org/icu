@@ -254,6 +254,10 @@ SOURCE=.\ures.cpp
 
 SOURCE=.\ustring.c
 # End Source File
+# Begin Source File
+
+SOURCE=.\uvector.cpp
+# End Source File
 # End Group
 # Begin Group "Header Files"
 
@@ -974,6 +978,10 @@ InputPath=.\utypes.h
 
 !ENDIF 
 
+# End Source File
+# Begin Source File
+
+SOURCE=.\uvector.h
 # End Source File
 # End Group
 # Begin Group "Resource Files"
