@@ -2005,7 +2005,7 @@ static void TestUScriptCodeAPI(){
 
         for( ; testNames[i]!='\0'; i++){
             UScriptCode script[10]={USCRIPT_INVALID_CODE};
-            int32_t num = uscript_getCode(testNames[i],script,capacity, &err);
+            uscript_getCode(testNames[i],script,capacity, &err);
             if( script[0] != expected[i]){
                    log_verbose("Error getting script code Got: %i  Expected: %i for name %s\n",
                        script[0],expected[i],testNames[i]);
@@ -2157,11 +2157,11 @@ static void TestUScriptCodeAPI(){
                 USCRIPT_INHERITED ,
                 USCRIPT_INHERITED ,
         };
-        int32_t i =0;
         UScriptCode code = USCRIPT_INVALID_CODE;
         UErrorCode status = U_ZERO_ERROR;
         UBool passed = TRUE;
 
+        i =0;
         while(i< MAX_ARRAY_SIZE){
             code = uscript_getScript(codepoints[i],&status);
             if(U_SUCCESS(status)){
