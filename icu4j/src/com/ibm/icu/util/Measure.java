@@ -24,7 +24,7 @@ import java.lang.Number;
  * <p>Measure objects are immutable.
  *
  * @see java.lang.Number
- * @see com.ibm.icu.util.Unit
+ * @see com.ibm.icu.util.MeasureUnit
  * @see com.ibm.icu.text.MeasureFormat
  * @author Alan Liu
  * @draft ICU 3.0
