@@ -259,9 +259,9 @@ CLEAN :
 	@"$(ICUTOOLS)\makeconv\$(CFG)\makeconv" $**
 
 # Batch inference rule for creating converters
-{$(ICUDATA_RELATIVE_PATH)}.ucm.cnv:
+{$(ICUDATA_RELATIVE_PATH)}.ucm.cnv::
 	@echo Generating converters
-	@"$(ICUTOOLS)\makeconv\$(CFG)\makeconv" -d"$(@D)" $**
+	@"$(ICUTOOLS)\makeconv\$(CFG)\makeconv" $<
 
 # Inference rule for creating converters
 {$(ICUDATA_RELATIVE_PATH)}.txt.res:
@@ -271,7 +271,7 @@ CLEAN :
 # DLL version information
 icudata.res: "$(ICUDATA)\icudata.rc"
 	@echo Creating data DLL version information from $**
-	rc.exe /i ..\..\..\include\ /r /fo "$@" $**
+	@rc.exe /i ..\..\..\include\ /r /fo "$@" $**
 
 # Targets for unames.dat
 unames.dat: "$(ICUDATA)\unidata\UnicodeData.txt" "$(ICUTOOLS)\gennames\$(CFG)\gennames.exe"
