@@ -423,6 +423,9 @@ U_CAPI uint8_t *
 ucol_cloneRuleData(UCollator *coll, int32_t *length, UErrorCode *status)
 {
   uint8_t *result = NULL;
+  if(U_FAILURE(*status)) {
+    return NULL;
+  }
   if(coll->hasRealData == TRUE) {
     *length = coll->image->size;
     result = (uint8_t *)uprv_malloc(*length);
@@ -430,7 +433,6 @@ ucol_cloneRuleData(UCollator *coll, int32_t *length, UErrorCode *status)
   } else {
     *length = paddedsize(sizeof(UCATableHeader))+paddedsize(sizeof(UColOptionSet));
     result = (uint8_t *)uprv_malloc(*length);
-    UCATableHeader *head = (UCATableHeader *)result;
     uprv_memcpy(result, UCA->image, sizeof(UCATableHeader));
     uprv_memcpy(result+paddedsize(sizeof(UCATableHeader)), coll->options, sizeof(UColOptionSet));
   }
@@ -3903,7 +3905,7 @@ void ucol_updateInternalState(UCollator *coll) {
 
       /* Set the compression values */
       uint8_t tertiaryTotal = coll->tertiaryTop - UCOL_COMMON_BOT3-1;
-      coll->tertiaryTopCount = UCOL_PROPORTION3*tertiaryTotal;
+      coll->tertiaryTopCount = (uint8_t)(UCOL_PROPORTION3*tertiaryTotal); /* we multilply double with int, but need only int */
       coll->tertiaryBottomCount = tertiaryTotal - coll->tertiaryTopCount;
 
       if(coll->caseLevel == UCOL_OFF && coll->strength == UCOL_TERTIARY
@@ -4305,10 +4307,10 @@ u_strncmpCodePointOrder(const UChar *s1, const UChar *s2, int32_t     n) {
 UCollationResult    ucol_checkIdent(collIterate *sColl, collIterate *tColl, UBool normalize)
 {
     int32_t            comparison;
-    uint32_t          sLen        = (sColl->flags & UCOL_ITER_HASLEN) ? sColl->endp - sColl->string : -1;
+    int32_t          sLen        = (sColl->flags & UCOL_ITER_HASLEN) ? sColl->endp - sColl->string : -1;
     UChar            *sBuf        = sColl->string;
 
-    uint32_t          tLen        = (tColl->flags & UCOL_ITER_HASLEN) ? tColl->endp - tColl->string : -1;
+    int32_t          tLen        = (tColl->flags & UCOL_ITER_HASLEN) ? tColl->endp - tColl->string : -1;
     UChar            *tBuf        = tColl->string;
 //    uint32_t          compLen     = 0;
     uint32_t          normLength;
