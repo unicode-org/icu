@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/test/bnf/Attic/BigNumberFormatTest.java,v $ 
- * $Date: 2000/10/26 18:56:14 $ 
- * $Revision: 1.7 $
+ * $Date: 2000/12/04 19:53:07 $ 
+ * $Revision: 1.8 $
  *
  *****************************************************************************************
  */
@@ -268,6 +268,13 @@ public class BigNumberFormatTest extends TestFmwk {
                               new Double(1.0/3), "0.33333__ g-m/s^2",
                             }
                );
+        expect(new DecimalFormat("*x#,###,###,##0.00;*x(#,###,###,##0.00)", US),
+               new Object[] {
+                   new Long(-100),        "xxxxxxxx(100.00)",
+                   new Long(-1000),       "xxxxxx(1,000.00)",
+                   new Long(-1000000),    "xx(1,000,000.00)",
+                   new Long(-1000000000), "(1,000,000,000.00)",
+               });
     }
     
     private void expect(NumberFormat fmt, Object[] data) {
