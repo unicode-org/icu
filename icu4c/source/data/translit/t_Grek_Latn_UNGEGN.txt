@@ -1,12 +1,12 @@
 ﻿ // -*- Coding: utf-8; -*-
 //--------------------------------------------------------------------
-// Copyright (c) 1999-2002, International Business Machines
+// Copyright (c) 1999-2004, International Business Machines
 // Corporation and others.  All Rights Reserved.
 //--------------------------------------------------------------------
 // THIS IS A MACHINE-GENERATED FILE
-// Tool: dumpicurules.bat
+// Tool: dumpICUrules.bat
 // Source: ../../../impl/data/Transliterator_Greek_Latin_UNGEGN.txt
-// Date: Sat Jul 27 10:31:01 2002
+// Date: Fri Apr 16 10:06:58 2004
 //--------------------------------------------------------------------
 
 // Greek_Latin_UNGEGN
@@ -21,7 +21,7 @@ t_Grek_Latn_UNGEGN {
 // Rules are predicated on running NFD first, and NFC afterwards
 // MINIMAL FILTER GENERATED FOR: Greek-Latin/UNGEGN
 // WARNING: need to add accents to both filters ###
-// :: [́̄̆̈;µ·ÀÂÈÊÌÎÒÔÙÛàâèêìîòôùûĈ-ĉĜ-ĝĤ-ĥĴ-ĵŜ-ŝŴ-ŷǛ-ǜǸ-ǹ̀̂̓-̔̀͂-̓ͅͺ;Ά-ΊΌΎ-ΡΣ-ώϐ-ϖϰ-ϵЀЍѐѝḔ-ḕṐ-ṑẀ-ẁẐ-ẑẤ-ậẰ-ằẾ-ệỐ-ộỜ-ờỪ-ừỲ-ỳἀ-ἕἘ-Ἕἠ-ὅὈ-Ὅὐ-ὗὙὛὝὟ-ώᾀ-ᾴᾶ-ᾼι῁-ῄῆ-῍῏-ΐῖ-Ί῝῟-῭ῲ-ῴῶ-ῼΩ] ;
+// :: [́̄̆̈;µ·ÀÂÈÊÌÎÒÔÙÛàâèêìîòôùûĈ-ĉĜ-ĝĤ-ĥĴ-ĵŜ-ŝŴ-ŷǛ-ǜǸ-ǹ̀̂̓-̔̀͂-̓ͅͺ;Ά-ΊΌΎ-ΡΣ-ώϐ-ϖϰ-ϵЀЍѐѝḔ-ḕṐ-ṑẀ-ẁẐ-ẑẤ-ậẰ-ằẾ-ệỐ-ộỜ-ờỪ-ừỲ-ỳἀ-ἕἘ-Ἕἠ-ὅὈ-Ὅὐ-ὗὙὛὝὟ-ώᾀ-ᾴᾶ-ᾼι῁-ῄῆ-῍῏-ΐῖ-Ί῝῟-῭ῲ-ῴῶ-ῼΩ\u03F7-\u07FB\u03F9] ;
 
 ":: [[[:Greek:][:Mn:][:Me:]] [\\\:-;?\u00B7\u037E\u0387]] ;"
 "::NFD (NFC) ;"
@@ -179,8 +179,15 @@ t_Grek_Latn_UNGEGN {
 "ρ <> r ;"
 "Ρ <> R ;"
 
-"[Pp] { } ς > \\\' ;"
-"[Pp] { } σ > \\\' ;"
+// insert separator before things that turn into s
+"[Pp] { } [ςσΣϷϸϺϻ] > \\\' ;" 
+
+// special S variants
+
+"Ϸ <> Š ;" // Ϸ GREEK CAPITAL LETTER SHO Uppercase_Letter Grek - L 
+"ϸ <> š ;" //ϸ GREEK SMALL LETTER SHO Lowercase_Letter Grek - L 
+"Ϻ <> Ŝ ;" // Ϻ GREEK CAPITAL LETTER SAN Uppercase_Letter Grek - L 
+"ϻ <> ŝ ;" // ϻ GREEK SMALL LETTER SAN Lowercase_Letter Grek - L 
 
 // Caron means exception
 
@@ -196,7 +203,7 @@ t_Grek_Latn_UNGEGN {
 "ς <> s $under;"
 "σ <> s ;"
 
-"[Pp] { Σ <> \\\'S ;"
+// [Pp] { Σ <> \\\'S ;
 "Σ <> S ;"
 
 "τ <> t ;"
@@ -242,6 +249,7 @@ t_Grek_Latn_UNGEGN {
 "ϰ > | κ ;"
 "ϱ > | ρ ;"
 "ϲ > | σ ;"
+"Ϲ > | Σ;" //U+03F9 GREEK CAPITAL LUNATE SIGMA SYMBOL
 "ϳ > j ;"
 "ϴ > | Θ ;"
 "ϵ > | ε ;"
