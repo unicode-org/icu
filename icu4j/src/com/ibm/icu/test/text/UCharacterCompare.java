@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/test/text/Attic/UCharacterCompare.java,v $ 
-* $Date: 2000/12/26 20:01:08 $ 
-* $Revision: 1.1 $
+* $Date: 2001/02/26 23:51:59 $ 
+* $Revision: 1.2 $
 *
 *******************************************************************************
 */
@@ -14,7 +14,7 @@
 package com.ibm.icu.test.text;
 
 import com.ibm.icu.text.UCharacter;
-import com.ibm.icu.text.UCharacterCategoryEnum;
+import com.ibm.icu.text.UCharacterCategory;
 import java.io.FileWriter;
 import java.io.PrintWriter;
 import java.util.Hashtable;
@@ -154,97 +154,97 @@ public final class UCharacterCompare
   */
   private static boolean compareType(int uchartype, int jchartype)
   {
-    if (uchartype == UCharacterCategoryEnum.UNASSIGNED && 
+    if (uchartype == UCharacterCategory.UNASSIGNED && 
         jchartype == Character.UNASSIGNED)
       return true;
-    if (uchartype == UCharacterCategoryEnum.UPPERCASE_LETTER && 
+    if (uchartype == UCharacterCategory.UPPERCASE_LETTER && 
         jchartype == Character.UPPERCASE_LETTER)
       return true;                                                   
-    if (uchartype == UCharacterCategoryEnum.LOWERCASE_LETTER && 
+    if (uchartype == UCharacterCategory.LOWERCASE_LETTER && 
         jchartype == Character.LOWERCASE_LETTER)
       return true;                                                   
-    if (uchartype == UCharacterCategoryEnum.TITLECASE_LETTER && 
+    if (uchartype == UCharacterCategory.TITLECASE_LETTER && 
         jchartype == Character.TITLECASE_LETTER)
       return true;
-    if (uchartype == UCharacterCategoryEnum.MODIFIER_LETTER && 
+    if (uchartype == UCharacterCategory.MODIFIER_LETTER && 
         jchartype == Character.MODIFIER_LETTER)
       return true;
-    if (uchartype == UCharacterCategoryEnum.OTHER_LETTER && 
+    if (uchartype == UCharacterCategory.OTHER_LETTER && 
         jchartype == Character.OTHER_LETTER)
       return true;
-    if (uchartype == UCharacterCategoryEnum.NON_SPACING_MARK && 
+    if (uchartype == UCharacterCategory.NON_SPACING_MARK && 
         jchartype == Character.NON_SPACING_MARK)
       return true;
-    if (uchartype == UCharacterCategoryEnum.ENCLOSING_MARK && 
+    if (uchartype == UCharacterCategory.ENCLOSING_MARK && 
         jchartype == Character.ENCLOSING_MARK)
       return true;
-    if (uchartype == UCharacterCategoryEnum.COMBINING_SPACING_MARK && 
+    if (uchartype == UCharacterCategory.COMBINING_SPACING_MARK && 
         jchartype == Character.COMBINING_SPACING_MARK)
       return true;
-	  if (uchartype == UCharacterCategoryEnum.DECIMAL_DIGIT_NUMBER && 
+	  if (uchartype == UCharacterCategory.DECIMAL_DIGIT_NUMBER && 
         jchartype == Character.DECIMAL_DIGIT_NUMBER)
       return true;
-	  if (uchartype == UCharacterCategoryEnum.LETTER_NUMBER && 
+	  if (uchartype == UCharacterCategory.LETTER_NUMBER && 
         jchartype == Character.LETTER_NUMBER)
       return true;
-	  if (uchartype == UCharacterCategoryEnum.OTHER_NUMBER && 
+	  if (uchartype == UCharacterCategory.OTHER_NUMBER && 
         jchartype == Character.OTHER_NUMBER)
       return true;
-	  if (uchartype == UCharacterCategoryEnum.SPACE_SEPARATOR && 
+	  if (uchartype == UCharacterCategory.SPACE_SEPARATOR && 
         jchartype == Character.SPACE_SEPARATOR)
       return true;
-	  if (uchartype == UCharacterCategoryEnum.LINE_SEPARATOR && 
+	  if (uchartype == UCharacterCategory.LINE_SEPARATOR && 
         jchartype == Character.LINE_SEPARATOR)
       return true;
-	  if (uchartype == UCharacterCategoryEnum.PARAGRAPH_SEPARATOR && 
+	  if (uchartype == UCharacterCategory.PARAGRAPH_SEPARATOR && 
         jchartype == Character.PARAGRAPH_SEPARATOR)
       return true;
-	  if (uchartype == UCharacterCategoryEnum.CONTROL && 
+	  if (uchartype == UCharacterCategory.CONTROL && 
         jchartype == Character.CONTROL)
       return true;
-    if (uchartype == UCharacterCategoryEnum.FORMAT && 
+    if (uchartype == UCharacterCategory.FORMAT && 
         jchartype == Character.FORMAT)
       return true;
-	  if (uchartype == UCharacterCategoryEnum.PRIVATE_USE && 
+	  if (uchartype == UCharacterCategory.PRIVATE_USE && 
         jchartype == Character.PRIVATE_USE)
       return true;
-    if (uchartype == UCharacterCategoryEnum.SURROGATE && 
+    if (uchartype == UCharacterCategory.SURROGATE && 
         jchartype == Character.SURROGATE)
       return true;
-    if (uchartype == UCharacterCategoryEnum.DASH_PUNCTUATION && 
+    if (uchartype == UCharacterCategory.DASH_PUNCTUATION && 
         jchartype == Character.DASH_PUNCTUATION)
       return true;
-	  if (uchartype == UCharacterCategoryEnum.START_PUNCTUATION && 
+	  if (uchartype == UCharacterCategory.START_PUNCTUATION && 
         jchartype == Character.START_PUNCTUATION)
       return true;
-	  if (uchartype == UCharacterCategoryEnum.END_PUNCTUATION && 
+	  if (uchartype == UCharacterCategory.END_PUNCTUATION && 
         jchartype == Character.END_PUNCTUATION)
       return true;
-    if (uchartype == UCharacterCategoryEnum.CONNECTOR_PUNCTUATION && 
+    if (uchartype == UCharacterCategory.CONNECTOR_PUNCTUATION && 
         jchartype == Character.CONNECTOR_PUNCTUATION)
       return true;
-    if (uchartype == UCharacterCategoryEnum.OTHER_PUNCTUATION && 
+    if (uchartype == UCharacterCategory.OTHER_PUNCTUATION && 
         jchartype == Character.OTHER_PUNCTUATION)
       return true;
-	  if (uchartype == UCharacterCategoryEnum.MATH_SYMBOL && 
+	  if (uchartype == UCharacterCategory.MATH_SYMBOL && 
         jchartype == Character.MATH_SYMBOL)
       return true;
-	  if (uchartype == UCharacterCategoryEnum.CURRENCY_SYMBOL && 
+	  if (uchartype == UCharacterCategory.CURRENCY_SYMBOL && 
         jchartype == Character.CURRENCY_SYMBOL)
       return true;
-	  if (uchartype == UCharacterCategoryEnum.MODIFIER_SYMBOL && 
+	  if (uchartype == UCharacterCategory.MODIFIER_SYMBOL && 
         jchartype == Character.MODIFIER_SYMBOL)
       return true;
-	  if (uchartype == UCharacterCategoryEnum.OTHER_SYMBOL && 
+	  if (uchartype == UCharacterCategory.OTHER_SYMBOL && 
         jchartype == Character.OTHER_SYMBOL)
       return true;
-	  if (uchartype == UCharacterCategoryEnum.INITIAL_PUNCTUATION && 
+	  if (uchartype == UCharacterCategory.INITIAL_PUNCTUATION && 
         jchartype == Character.START_PUNCTUATION)
       return true;
-    if (uchartype == UCharacterCategoryEnum.FINAL_PUNCTUATION && 
+    if (uchartype == UCharacterCategory.FINAL_PUNCTUATION && 
         jchartype == Character.END_PUNCTUATION)
       return true;
-	  /*if (uchartype == UCharacterCategoryEnum.GENERAL_OTHER_TYPES && 
+	  /*if (uchartype == UCharacterCategory.GENERAL_OTHER_TYPES && 
         jchartype == Character.GENERAL_OTHER_TYPES)
       return true;*/
     return false;

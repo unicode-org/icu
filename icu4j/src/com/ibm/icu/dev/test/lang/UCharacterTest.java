@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/lang/UCharacterTest.java,v $ 
-* $Date: 2001/01/18 21:58:05 $ 
-* $Revision: 1.3 $
+* $Date: 2001/02/26 23:51:59 $ 
+* $Revision: 1.4 $
 *
 *******************************************************************************
 */
@@ -16,10 +16,11 @@ package com.ibm.icu.test.text;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.FileNotFoundException;
+import java.util.Locale;
 import com.ibm.test.TestFmwk;
 import com.ibm.icu.text.UCharacter;
-import com.ibm.icu.text.UCharacterCategoryEnum;
-import com.ibm.icu.text.UCharacterDirectionEnum;
+import com.ibm.icu.text.UCharacterCategory;
+import com.ibm.icu.text.UCharacterDirection;
 import com.ibm.icu.text.UTF16;
 
 /**
@@ -410,7 +411,7 @@ public final class UCharacterTest extends TestFmwk
   * set a system property to change the path.<br>
   * e.g. java -DUnicodeData="anyfile.dat" com.ibm.icu.test.text.UCharacterTest
   */
-  public void TestCatDir()
+  public void TestUnicodeData()
   {
     // this is the 2 char category types used in the UnicodeData file
     final String TYPE = 
@@ -450,20 +451,23 @@ public final class UCharacterTest extends TestFmwk
         ch = Integer.parseInt(s.substring(0, 4), 16);
         index = s.indexOf(';', 5);
         String t = s.substring(index + 1, index + 3);
-        index = s.indexOf(';', index + 4);
+        index += 4;
+        byte cc = (byte)(Integer.parseInt(s.substring(index, 
+                                                      s.indexOf(';', index))));
+        index = s.indexOf(';', index);
         String d = s.substring(index + 1, s.indexOf(';', index + 1));
         
         // testing the category
         // we override the general category of some control characters
         if (ch == 9 || ch == 0xb || ch == 0x1f)
-          type = UCharacterCategoryEnum.SPACE_SEPARATOR;
+          type = UCharacterCategory.SPACE_SEPARATOR;
         else
           if (ch == 0xc)
-            type = UCharacterCategoryEnum.LINE_SEPARATOR;
+            type = UCharacterCategory.LINE_SEPARATOR;
           else
             if (ch == 0xa || ch == 0xd || ch == 0x1c || ch == 0x1d || 
                 ch == 0x1e || ch == 0x85)
-               type = UCharacterCategoryEnum.PARAGRAPH_SEPARATOR;
+               type = UCharacterCategory.PARAGRAPH_SEPARATOR;
             else
             {
               type = TYPE.indexOf(t);
@@ -477,6 +481,14 @@ public final class UCharacterTest extends TestFmwk
         {
           errln("FAIL 0x" + Integer.toHexString(ch) + " expected type " + 
                 type);
+          break;
+        }
+        
+        // testing combining class
+        if (UCharacter.getCombiningClass(ch) != cc)
+        {
+          errln("FAIL 0x" + Integer.toHexString(ch) + " expected combining " +
+                "class " + cc);
           break;
         }
         
@@ -507,9 +519,9 @@ public final class UCharacterTest extends TestFmwk
     }
     
     if (UCharacter.getDirection(0x10001) != 
-                                         UCharacterDirectionEnum.LEFT_TO_RIGHT) 
+                                         UCharacterDirection.LEFT_TO_RIGHT) 
       errln("FAIL 0x10001 expected direction " + 
-      UCharacterDirectionEnum.toString(UCharacterDirectionEnum.LEFT_TO_RIGHT));
+      UCharacterDirection.toString(UCharacterDirection.LEFT_TO_RIGHT));
   }
   
   /**
@@ -584,85 +596,45 @@ public final class UCharacterTest extends TestFmwk
   }
   
   /**
-  * Testing UTF16 class methods append, getCharCount and bounds
+  * Testing the strings case mapping methods
   */
-  public void TestUTF16AppendBoundCount()
+  public void TestCaseMapping() 
   {
-    StringBuffer str = new StringBuffer("this is a string ");
-    int length;
-    
-    for (int i = UCharacter.MIN_VALUE; i < UCharacter.MAX_VALUE; i ++)
-    {
-      length = str.length();
-      UTF16.append(str, i);
-      if (!UCharacter.isSupplementary(i))
-      {
-        if (UTF16.getCharCount(i) != 1)
-        {
-          errln("FAIL Counting BMP character size error" );
-          break;
-        }  
-        if (str.length() != length + 1)
-        {
-          errln("FAIL Adding a BMP character error" );
-          break;
-        }
-        if (!UTF16.isSurrogate((char)i) && 
-            UTF16.bounds(str.toString(), str.length() - 1) != 
-                                                    UTF16.SINGLE_CHAR_BOUNDARY) 
-        {
-          errln("FAIL Finding BMP character bounds error" );
-          break;
-        }
-      }
-      else 
-      {
-        if (UTF16.getCharCount(i) != 2)
-        {
-          errln("FAIL Counting Supplementary character size error" );
-          break;
-        }
-        if (str.length() != length + 2)
-        {
-          errln("FAIL Adding a Supplementary character error" );
-          break;
-        }
-        length = str.length();
-        if (UTF16.bounds(str.toString(), str.length() - 2) != 
-            UTF16.LEAD_SURROGATE_BOUNDARY || 
-            UTF16.bounds(str.toString(), str.length() - 1) != 
-            UTF16.TRAIL_SURROGATE_BOUNDARY)
-        {
-          errln("FAIL Finding Supplementary character bounds error" );
-          break;
-        }
-      }
-    } 
-  }
-  
-  /**
-  * Testing UTF16 class methods findCPOffset, findOffsetFromCP and charAt
-  */
-  public void TestUTF16OffsetCharAt()
-  {
-    StringBuffer str = new StringBuffer("12345");
-    UTF16.append(str, 0x10001);
-    str.append("67890");
-    UTF16.append(str, 0x10002);
-    String s = str.toString();
-    if (UTF16.charAt(s, 0) != '1' || UTF16.charAt(s, 2) != '3' || 
-        UTF16.charAt(s, 5) != 0x10001 || UTF16.charAt(s, 6) != 0x10001 || 
-        UTF16.charAt(s, 12) != 0x10002 || UTF16.charAt(s, 13) != 0x10002)
-      errln("FAIL Getting character from string error" );
+    String beforeLower =  "\u0061\u0042\u0049\u03a3\u00df\u03a3\u002f\ud93f\udfff",
+           lowerRoot =    "\u0061\u0062\u0069\u03c3\u00df\u03c2\u002f\ud93f\udfff",
+           lowerTurkish = "\u0061\u0062\u0131\u03c3\u00df\u03c2\u002f\ud93f\udfff",
+           beforeUpper =  "\u0061\u0042\u0069\u03c2\u00df\u03c3\u002f\ufb03\ud93f\udfff",
+           upperRoot =    "\u0041\u0042\u0049\u03a3\u0053\u0053\u03a3\u002f\u0046\u0046\u0049\ud93f\udfff",
+           upperTurkish = "\u0041\u0042\u0130\u03a3\u0053\u0053\u03a3\u002f\u0046\u0046\u0049\ud93f\udfff";
 
-    if (UTF16.findCPOffset(s, 3) != 3 || UTF16.findCPOffset(s, 5) != 5 || 
-        UTF16.findCPOffset(s, 6) != 6)
-      errln("FAIL Getting codepoint offset from string error" );
-    if (UTF16.findOffsetFromCP(s, 3) != 3 || 
-        UTF16.findOffsetFromCP(s, 5) != 5 || 
-        UTF16.findOffsetFromCP(s, 6) != 7)
-      errln("FAIL Getting UTF16 offset from codepoint in string error" );
+    String result = UCharacter.toLowerCase(beforeLower);
+    if (!lowerRoot.equals(result)) 
+      errln("Fail " + beforeLower + " after lowercase should be " + lowerRoot);
+   
+    // lowercase with turkish locale
+    result = UCharacter.toLowerCase(new Locale("tr", "TR"), beforeLower);
+    if (!lowerTurkish.equals(result)) 
+      errln("Fail " + beforeLower + " after turkish-sensitive lowercase " +
+            "should be " + lowerRoot);
+            
+    // uppercase with root locale and in the same buffer
+    result = UCharacter.toUpperCase(beforeUpper);
+    if (!upperRoot.equals(result)) 
+      errln("Fail " + beforeUpper + " after uppercase should be " + upperRoot);
+      
+    // uppercase with turkish locale and separate buffers
+    result = UCharacter.toUpperCase(new Locale("tr", "TR"), beforeUpper);
+    if (!upperTurkish.equals(result)) 
+      errln("Fail " + beforeUpper + " after turkish-sensitive uppercase " +
+            "should be " + upperTurkish);
+            
+    // test preflighting
+    result = UCharacter.toLowerCase(beforeLower);
+    if (!lowerRoot.equals(result)) 
+      errln("Fail " + beforeLower + " after lower case should be " + 
+            lowerRoot);
   }
+
  
   public static void main(String[] arg)
   {
