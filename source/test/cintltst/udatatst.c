@@ -67,6 +67,7 @@ static void TestErrorConditions(void);
 static void TestAppData(void);
 static void TestICUDataName(void);
 static void TestSwapData(void);
+static void PointerTableOfContents(void);
 
 void addUDataTest(TestNode** root);
 
@@ -83,6 +84,7 @@ addUDataTest(TestNode** root)
     addTest(root, &TestAppData, "udatatst/TestAppData" );
     addTest(root, &TestICUDataName, "udatatst/TestICUDataName" );
     addTest(root, &TestSwapData, "udatatst/TestSwapData" );
+    addTest(root, &PointerTableOfContents, "udatatst/PointerTableOfContents" );
 }
 
 #if 0
@@ -1329,4 +1331,114 @@ TestSwapData() {
     }
 
     uprv_free(buffer);
+}
+
+
+#ifdef OS400
+/* See comments in genccode.c on when this special implementation can be removed. */
+static const struct {
+    double bogus;
+    const char *bytes;
+} gOffsetTOCAppDataItem1={ 0.0,
+    "\x00\x14"
+    "\xda"
+    "\x27"
+    "\x00\x14"
+    "\x00\x00"
+    "\x01"
+    "\x0"U_CHARSET_FAMILY
+    "\x02"
+    "\x00"
+    "\x31\x31\x31\x31"
+    "\x00\x00\x00\x00"
+    "\x00\x00\x00\x00"
+};
+#else
+static const struct {
+    double bogus;
+    MappedData bytes1;
+    UDataInfo bytes2;
+    uint8_t bytes3;
+} gOffsetTOCAppDataItem1={
+    0.0,                            /* alignment bytes */
+    { sizeof(UDataInfo), 0xda, 0x27 },  /* MappedData */
+
+    {sizeof(UDataInfo),
+    0,
+
+    U_IS_BIG_ENDIAN,
+    U_CHARSET_FAMILY,
+    sizeof(UChar),
+    0,
+
+    {0x31, 0x31, 0x31, 0x31},     /* dataFormat="1111" */
+    {0, 0, 0, 0},                 /* formatVersion */
+    {0, 0, 0, 0}}                 /* dataVersion */
+};
+#endif
+
+/* Original source: icu/source/tools/genccode */
+static const struct {
+    uint16_t headerSize;
+    uint8_t magic1, magic2;
+    UDataInfo info;
+    char padding[8];
+    uint32_t count, reserved;
+    const struct {
+        const char *const name; 
+        const void *const data;
+    } toc[1];
+} gOffsetTOCAppData_dat = {
+    32,          /* headerSize */
+    0xda,        /* magic1,  (see struct MappedData in udata.c)  */
+    0x27,        /* magic2     */
+    {            /*UDataInfo   */
+        sizeof(UDataInfo),      /* size        */
+        0,                      /* reserved    */
+        U_IS_BIG_ENDIAN,
+        U_CHARSET_FAMILY,
+        sizeof(UChar),   
+        0,               /* reserved      */
+        {                /* data format identifier */
+           0x54, 0x6f, 0x43, 0x50}, /* "ToCP" */
+           {1, 0, 0, 0},   /* format version major, minor, milli, micro */
+           {0, 0, 0, 0}    /* dataVersion   */
+    },
+    {0,0,0,0,0,0,0,0},  /* Padding[8]   */ 
+    1,                  /* count        */
+    0,                  /* Reserved     */
+    {                   /*  TOC structure */
+        { "OffsetTOCAppData/gOffsetTOCAppDataItem1", &gOffsetTOCAppDataItem1 }
+    }
+};
+
+
+static void PointerTableOfContents() {
+    UDataMemory      *dataItem;
+    UErrorCode        status=U_ZERO_ERROR;
+       
+    /*
+     * Got testdata.dat into memory, now we try setAppData using the memory image.
+     */
+
+    status=U_ZERO_ERROR;
+    udata_setAppData("OffsetTOCAppData", &gOffsetTOCAppData_dat, &status); 
+    if (status != U_ZERO_ERROR) {
+        log_err("FAIL: TestUDataSetAppData(): udata_setAppData(\"appData1\", fileBuf, status) \n"
+                " returned status of %s\n", u_errorName(status));
+        return;
+    }
+
+    dataItem = udata_open("OffsetTOCAppData", "", "gOffsetTOCAppDataItem1", &status);
+    if (U_FAILURE(status)) {
+        log_err("FAIL: OffsetTOCAppData could not be opened. status = %s\n", u_errorName(status));
+    }
+    if (udata_getMemory(dataItem) != NULL) {
+        log_verbose("FAIL: udata_getMemory(dataItem) passed\n");
+    }
+    else {
+        log_err("FAIL: udata_getMemory returned NULL\n", u_errorName(status));
+    }
+    udata_close(dataItem);
+
 }
