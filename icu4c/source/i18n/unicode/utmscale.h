@@ -30,10 +30,7 @@
  * and the epoch (origin). We'll refer to these as time scales. For example:
  *
  * <table border="1" cellspacing="0" cellpadding="4">
- *  <caption>
- *    <h3>Table 1: Binary Time Scales</h3>
- *
- *  </caption>
+ *  <caption>Table 1: Binary Time Scales</caption>
  *  <tr>
  *    <th align="left">Source</th>
  *    <th align="left">Datatype</th>

@@ -173,7 +173,7 @@
 #   define UCONFIG_NO_REGULAR_EXPRESSIONS 0
 #endif
 
-/*
+/**
  * \def UCONFIG_NO_SERVICE
  * This switch turns off service registration.
  *

@@ -487,12 +487,12 @@ class Collator;
  * public rule set names, in the same order as they were listed in the first arrray.</p>
  * <p>In the syntax, angle brackets '<', '>' are used to delimit the arrays, and comma ',' is used
  * to separate elements of an array.  Whitespace is ignored, unless quoted.</p>
- * <p>For example:<blockquote>
+ * <p>For example:<pre>
  * < < %foo, %bar, %baz >, 
  *   < en, Foo, Bar, Baz >, 
  *   < fr, 'le Foo', 'le Bar', 'le Baz' > 
- *   < zh, \u7532, \u4e59, \u4e19 > >
- * </blockquote></p>
+ *   < zh, \\u7532, \\u4e59, \\u4e19 > >
+ * </pre></p>
  * @author Richard Gillam
  * @see NumberFormat
  * @see DecimalFormat
