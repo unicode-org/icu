@@ -45,7 +45,7 @@ void addCollIterTest(TestNode** root)
 
 /* The locales we support */
 
-static char * LOCALES[] = {"en_AU", "en_BE", "en_CA"};
+static const char * LOCALES[] = {"en_AU", "en_BE", "en_CA"};
 
 static void TestBug672() {
     UErrorCode  status = U_ZERO_ERROR;
