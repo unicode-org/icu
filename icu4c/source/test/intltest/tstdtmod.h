@@ -39,11 +39,11 @@ class TestLog : public IntlTest{
  *  a factory method getTestDataModule 
  */
 class TestDataModule {
-  const char* name;
+  const char* testName;
 
 protected:
   DataMap *fInfo;
-  TestLog& log;
+  TestLog& fLog;
 
 public:
   /** Factory method. 
@@ -107,11 +107,11 @@ private:
 private:
   UResourceBundle *fModuleBundle;
   UResourceBundle *fTestData;
-  UResourceBundle *info;
+  UResourceBundle *fInfoRB;
   UBool fDataTestValid;
   char *tdpath;
 
-  const char* fTestName;
+/* const char* fTestName;*/ /* See name */
   int32_t fNumberOfTests;
 
 };
