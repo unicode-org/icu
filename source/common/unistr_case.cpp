@@ -144,6 +144,14 @@ UnicodeString::caseMap(BreakIterator *titleIter,
     return *this;
   }
 
+  UErrorCode errorCode;
+
+  UCaseProps *csp=ucase_getSingleton(&errorCode);
+  if(U_FAILURE(errorCode)) {
+    setToBogus();
+    return *this;
+  }
+
   // We need to allocate a new buffer for the internal string case mapping function.
   // This is very similar to how doReplace() below keeps the old array pointer
   // and deletes the old array itself after it is done.
@@ -166,8 +174,6 @@ UnicodeString::caseMap(BreakIterator *titleIter,
   if(!cloneArrayIfNeeded(capacity, capacity, FALSE, &bufferToDelete, TRUE)) {
     return *this;
   }
-
-  UErrorCode errorCode;
 
 #if !UCONFIG_NO_BREAK_ITERATION
   // set up the titlecasing break iterator
@@ -195,28 +201,26 @@ UnicodeString::caseMap(BreakIterator *titleIter,
   do {
     errorCode = U_ZERO_ERROR;
     if(toWhichCase==TO_LOWER) {
-      fLength = u_internalStrToLower(fArray, fCapacity,
-                                     oldArray, oldLength,
-                                     0, oldLength,
-                                     locale.getName(),
-                                     &errorCode);
+      fLength = ustr_toLower(csp, fArray, fCapacity,
+                             oldArray, oldLength,
+                             locale.getName(), &errorCode);
     } else if(toWhichCase==TO_UPPER) {
-      fLength = u_internalStrToUpper(fArray, fCapacity,
-                                     oldArray, oldLength,
-                                     locale.getName(),
-                                     &errorCode);
-#if !UCONFIG_NO_BREAK_ITERATION
+      fLength = ustr_toUpper(csp, fArray, fCapacity,
+                             oldArray, oldLength,
+                             locale.getName(), &errorCode);
     } else if(toWhichCase==TO_TITLE) {
-      fLength = u_internalStrToTitle(fArray, fCapacity,
-                                     oldArray, oldLength,
-                                     cTitleIter, locale.getName(),
-                                     &errorCode);
+#if UCONFIG_NO_BREAK_ITERATION
+        errorCode=U_UNSUPPORTED_ERROR;
+#else
+      fLength = ustr_toTitle(csp, fArray, fCapacity,
+                             oldArray, oldLength,
+                             cTitleIter, locale.getName(), &errorCode);
 #endif
     } else {
-      fLength = u_internalStrFoldCase(fArray, fCapacity,
-                                      oldArray, oldLength,
-                                      options,
-                                      &errorCode);
+      fLength = ustr_foldCase(csp, fArray, fCapacity,
+                              oldArray, oldLength,
+                              options,
+                              &errorCode);
     }
   } while(errorCode==U_BUFFER_OVERFLOW_ERROR && cloneArrayIfNeeded(fLength, fLength, FALSE));
 

@@ -22,6 +22,7 @@
 #include "unicode/uscript.h"
 #include "cstring.h"
 #include "unormimp.h"
+#include "ucase.h"
 #include "uprops.h"
 
 #define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
@@ -183,6 +184,9 @@ static const struct {
      * column and mask values for binary properties from u_getUnicodeProperties().
      * Must be in order of corresponding UProperty,
      * and there must be exacly one entry per binary UProperty.
+     *
+     * Properties with mask 0 are handled in code.
+     * Pseudo-column -2 indicates case mapping properties.
      */
     {  1, U_MASK(UPROPS_ALPHABETIC) },
     {  1, U_MASK(UPROPS_ASCII_HEX_DIGIT) },
@@ -206,19 +210,19 @@ static const struct {
     {  1, U_MASK(UPROPS_IDS_TRINARY_OPERATOR) },
     {  1, U_MASK(UPROPS_JOIN_CONTROL) },
     {  1, U_MASK(UPROPS_LOGICAL_ORDER_EXCEPTION) },
-    {  1, U_MASK(UPROPS_LOWERCASE) },
+    { -2, 0 },                                  /* UCHAR_LOWERCASE */
     {  1, U_MASK(UPROPS_MATH) },
     {  1, U_MASK(UPROPS_NONCHARACTER_CODE_POINT) },
     {  1, U_MASK(UPROPS_QUOTATION_MARK) },
     {  1, U_MASK(UPROPS_RADICAL) },
-    {  1, U_MASK(UPROPS_SOFT_DOTTED) },
+    { -2, 0 },                                  /* UCHAR_SOFT_DOTTED */
     {  1, U_MASK(UPROPS_TERMINAL_PUNCTUATION) },
     {  1, U_MASK(UPROPS_UNIFIED_IDEOGRAPH) },
-    {  1, U_MASK(UPROPS_UPPERCASE) },
+    { -2, 0 },                                  /* UCHAR_UPPERCASE */
     {  1, U_MASK(UPROPS_WHITE_SPACE) },
     {  1, U_MASK(UPROPS_XID_CONTINUE) },
     {  1, U_MASK(UPROPS_XID_START) },
-    { -1, U_MASK(UPROPS_CASE_SENSITIVE_SHIFT) },
+    { -2, 0 },                                  /* UCHAR_CASE_SENSITIVE */
     {  2, U_MASK(UPROPS_V2_S_TERM) },
     {  2, U_MASK(UPROPS_V2_VARIATION_SELECTOR) },
     {  0, 0 },                                  /* UCHAR_NFD_INERT */
@@ -238,6 +242,25 @@ u_hasBinaryProperty(UChar32 c, UProperty which) {
         if(mask!=0) {
             /* systematic, directly stored properties */
             return (u_getUnicodeProperties(c, binProps[which].column)&mask)!=0;
+        } else if(binProps[which].column==-2) {
+            /* case mapping properties */
+            UErrorCode errorCode=U_ZERO_ERROR;
+            UCaseProps *csp=uchar_getCaseProps(&errorCode);
+            if(U_FAILURE(errorCode)) {
+                return FALSE;
+            }
+            switch(which) {
+            case UCHAR_LOWERCASE:
+                return (UBool)(UCASE_LOWER==ucase_getType(csp, c));
+            case UCHAR_UPPERCASE:
+                return (UBool)(UCASE_UPPER==ucase_getType(csp, c));
+            case UCHAR_SOFT_DOTTED:
+                return ucase_isSoftDotted(csp, c);
+            case UCHAR_CASE_SENSITIVE:
+                return ucase_isCaseSensitive(csp, c);
+            default:
+                break;
+            }
         } else {
 #if !UCONFIG_NO_NORMALIZATION
             /* normalization properties from unorm.icu */
@@ -572,6 +595,7 @@ uprv_getInclusions(USet* set, UErrorCode *pErrorCode) {
     unorm_addPropertyStarts(set, pErrorCode);
 #endif
     uchar_addPropertyStarts(set, pErrorCode);
+    ucase_addPropertyStarts(uchar_getCaseProps(pErrorCode), set, pErrorCode);
 
 #ifdef DEBUG
     {

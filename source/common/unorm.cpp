@@ -27,7 +27,7 @@
 // moved up to make unorm_cmpEquivFold work without normalization
 #include "unicode/ustring.h"
 #include "unormimp.h"
-#include "ustr_imp.h"
+#include "ucase.h"
 
 #if !UCONFIG_NO_NORMALIZATION
 
@@ -4109,6 +4109,8 @@ unorm_cmpEquivFold(const UChar *s1, int32_t length1,
                    const UChar *s2, int32_t length2,
                    uint32_t options,
                    UErrorCode *pErrorCode) {
+    UCaseProps *csp;
+
     // current-level start/limit - s1/s2 as current
     const UChar *start1, *start2, *limit1, *limit2;
 
@@ -4123,7 +4125,7 @@ unorm_cmpEquivFold(const UChar *s1, int32_t length1,
     UChar decomp1[4], decomp2[4];
 
     // case folding buffers, only use current-level start/limit
-    UChar fold1[32], fold2[32];
+    UChar fold1[UCASE_MAX_STRING_LENGTH+1], fold2[UCASE_MAX_STRING_LENGTH+1];
 
     // track which is the current level per string
     int32_t level1, level2;
@@ -4139,10 +4141,17 @@ unorm_cmpEquivFold(const UChar *s1, int32_t length1,
 
     // normalization/properties data loaded?
     if( ((options&_COMPARE_EQUIV)!=0 && !_haveData(*pErrorCode)) ||
-        ((options&U_COMPARE_IGNORE_CASE)!=0 && !uprv_haveProperties(pErrorCode)) ||
         U_FAILURE(*pErrorCode)
     ) {
         return 0;
+    }
+    if((options&U_COMPARE_IGNORE_CASE)!=0) {
+        csp=ucase_getSingleton(pErrorCode);
+        if(U_FAILURE(*pErrorCode)) {
+            return 0;
+        }
+    } else {
+        csp=NULL;
     }
 
     // initialize
@@ -4266,9 +4275,9 @@ unorm_cmpEquivFold(const UChar *s1, int32_t length1,
         // continue with the main loop as soon as there is a real change
 
         if( level1==0 && (options&U_COMPARE_IGNORE_CASE) &&
-            (length=u_internalFoldCase((UChar32)cp1, fold1, 32, options))>=0
+            (length=ucase_toFullFolding(csp, (UChar32)cp1, &p, options))>=0
         ) {
-            // cp1 case-folds to fold1[length]
+            // cp1 case-folds to the code point "length" or to p[length]
             if(UTF_IS_SURROGATE(c1)) {
                 if(UTF_IS_SURROGATE_FIRST(c1)) {
                     // advance beyond source surrogate pair if it case-folds
@@ -4290,6 +4299,15 @@ unorm_cmpEquivFold(const UChar *s1, int32_t length1,
             stack1[0].limit=limit1;
             ++level1;
 
+            // copy the folding result to fold1[]
+            if(length<=UCASE_MAX_STRING_LENGTH) {
+                u_memcpy(fold1, p, length);
+            } else {
+                int32_t i=0;
+                U16_APPEND_UNSAFE(fold1, i, length);
+                length=i;
+            }
+
             // set next level pointers to case folding
             start1=s1=fold1;
             limit1=fold1+length;
@@ -4300,9 +4318,9 @@ unorm_cmpEquivFold(const UChar *s1, int32_t length1,
         }
 
         if( level2==0 && (options&U_COMPARE_IGNORE_CASE) &&
-            (length=u_internalFoldCase((UChar32)cp2, fold2, 32, options))>=0
+            (length=ucase_toFullFolding(csp, (UChar32)cp2, &p, options))>=0
         ) {
-            // cp2 case-folds to fold2[length]
+            // cp2 case-folds to the code point "length" or to p[length]
             if(UTF_IS_SURROGATE(c2)) {
                 if(UTF_IS_SURROGATE_FIRST(c2)) {
                     // advance beyond source surrogate pair if it case-folds
@@ -4323,6 +4341,15 @@ unorm_cmpEquivFold(const UChar *s1, int32_t length1,
             stack2[0].s=s2;
             stack2[0].limit=limit2;
             ++level2;
+
+            // copy the folding result to fold2[]
+            if(length<=UCASE_MAX_STRING_LENGTH) {
+                u_memcpy(fold2, p, length);
+            } else {
+                int32_t i=0;
+                U16_APPEND_UNSAFE(fold2, i, length);
+                length=i;
+            }
 
             // set next level pointers to case folding
             start2=s2=fold2;

@@ -16,6 +16,8 @@
 
 #include "unicode/translit.h"
 #include "unicode/locid.h"
+#include "ucase.h"
+#include "casetrn.h"
 
 U_NAMESPACE_BEGIN
 
@@ -26,7 +28,7 @@ U_NAMESPACE_BEGIN
  * case using <code>u_totitle()</code>.
  * @author Alan Liu
  */
-class U_I18N_API TitlecaseTransliterator : public Transliterator {
+class U_I18N_API TitlecaseTransliterator : public CaseMapTransliterator {
  public:
 
     /**
@@ -83,17 +85,6 @@ class U_I18N_API TitlecaseTransliterator : public Transliterator {
      */
     virtual void handleTransliterate(Replaceable& text, UTransPosition& offset,
                              UBool isIncremental) const;
-
- public:
-
-    /**
-     * Static memory cleanup function.  FOR INTERNAL USE ONLY; DO NOT
-     * CALL.
-     */
-    static void cleanup();
-private:
-    Locale loc;
-    UChar* buffer;
 };
 
 U_NAMESPACE_END

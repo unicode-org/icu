@@ -1093,6 +1093,12 @@
 				RelativePath=".\anytrans.h">
 			</File>
 			<File
+				RelativePath=".\casetrn.cpp">
+			</File>
+			<File
+				RelativePath=".\casetrn.h">
+			</File>
+			<File
 				RelativePath=".\cpdtrans.cpp">
 			</File>
 			<File
