@@ -606,6 +606,71 @@ private:
 };
 
 void
+BasicNormalizerTest::TestPreviousNext(const UChar *src, int32_t srcLength,
+                                      const UChar32 *expect, int32_t expectLength,
+                                      const int32_t *expectIndex, // its length=expectLength+1
+                                      int32_t srcMiddle, int32_t expectMiddle,
+                                      const char *moves,
+                                      UNormalizationMode mode,
+                                      const char *name) {
+    // iterators
+    Normalizer iter(src, srcLength, mode);
+
+    // test getStaticClassID and getDynamicClassID
+    if(iter.getDynamicClassID() != Normalizer::getStaticClassID()) {
+        errln("getStaticClassID != getDynamicClassID for Normalizer.");
+    }
+
+    UChar32Iterator iter32(expect, expectLength, expectMiddle);
+
+    UChar32 c1, c2;
+    char m;
+
+    // initially set the indexes into the middle of the strings
+    iter.setIndexOnly(srcMiddle);
+
+    // move around and compare the iteration code points with
+    // the expected ones
+    const char *move=moves;
+    while((m=*move++)!=0) {
+        if(m=='-') {
+            c1=iter.previous();
+            c2=iter32.previous();
+        } else if(m=='0') {
+            c1=iter.current();
+            c2=iter32.current();
+        } else /* m=='+' */ {
+            c1=iter.next();
+            c2=iter32.next();
+        }
+
+        // compare results
+        if(c1!=c2) {
+            // copy the moves until the current (m) move, and terminate
+            char history[64];
+            uprv_strcpy(history, moves);
+            history[move-moves]=0;
+            errln("error: mismatch in Normalizer iteration (%s) at %s: "
+                  "got c1=U+%04lx != expected c2=U+%04lx\n",
+                  name, history, c1, c2);
+            break;
+        }
+
+        // compare indexes
+        if(iter.getIndex()!=expectIndex[iter32.getIndex()]) {
+            // copy the moves until the current (m) move, and terminate
+            char history[64];
+            uprv_strcpy(history, moves);
+            history[move-moves]=0;
+            errln("error: index mismatch in Normalizer iteration (%s) at %s: "
+                  "Normalizer index %ld expected %ld\n",
+                  name, history, iter.getIndex(), expectIndex[iter32.getIndex()]);
+            break;
+        }
+    }
+}
+
+void
 BasicNormalizerTest::TestPreviousNext() {
     // src and expect strings
     static const UChar src[]={
@@ -630,73 +695,68 @@ BasicNormalizerTest::TestPreviousNext() {
         6 // behind last character
     };
 
+    // src and expect strings for regression test for j2911
+    static const UChar src_j2911[]={
+        UTF16_LEAD(0x2f999), UTF16_TRAIL(0x2f999),
+        0xdd00, 0xd900, // unpaired surrogates - regression test for j2911
+        0xc4,
+        0x4f, 0x302, 0x301
+    };
+    static const UChar32 expect_j2911[]={
+        0x831d,
+        0xdd00, 0xd900, // unpaired surrogates - regression test for j2911
+        0xc4,
+        0x1ed0
+    };
+
+    // expected src indexes corresponding to expect indexes
+    static const int32_t expectIndex_j2911[]={
+        0,
+        2, 3,
+        4,
+        5,
+        8 // behind last character
+    };
+
     // initial indexes into the src and expect strings
+    // for both sets of test data
     enum {
         SRC_MIDDLE=4,
-        EXPECT_MIDDLE=3
+        EXPECT_MIDDLE=3,
+        SRC_MIDDLE_2=2,
+        EXPECT_MIDDLE_2=1
     };
 
     // movement vector
     // - for previous(), 0 for current(), + for next()
-    // not const so that we can terminate it below for the error message
-    static const char *moves="0+0+0--0-0-+++0--+++++++0--------";
+    // for both sets of test data
+    static const char *const moves="0+0+0--0-0-+++0--+++++++0--------";
 
-    // iterators
-    Normalizer iter(src, sizeof(src)/U_SIZEOF_UCHAR, UNORM_NFD);
-    // test getStaticClassID and getDynamicClassID
-    if(iter.getDynamicClassID() != Normalizer::getStaticClassID()){
-        errln("getStaticClassID != getDynamicClassID for Normalizer.");
-    }
-    UChar32Iterator iter32(expect, sizeof(expect)/4, EXPECT_MIDDLE);
+    TestPreviousNext(src, LENGTHOF(src),
+                     expect, LENGTHOF(expect),
+                     expectIndex,
+                     SRC_MIDDLE, EXPECT_MIDDLE,
+                     moves, UNORM_NFD, "basic");
 
-    UChar32 c1, c2;
-    char m;
+    TestPreviousNext(src_j2911, LENGTHOF(src_j2911),
+                     expect_j2911, LENGTHOF(expect_j2911),
+                     expectIndex_j2911,
+                     SRC_MIDDLE, EXPECT_MIDDLE,
+                     moves, UNORM_NFKC, "j2911");
 
-    // initially set the indexes into the middle of the strings
-    iter.setIndexOnly(SRC_MIDDLE);
+    // try again from different "middle" indexes
+    TestPreviousNext(src, LENGTHOF(src),
+                     expect, LENGTHOF(expect),
+                     expectIndex,
+                     SRC_MIDDLE_2, EXPECT_MIDDLE_2,
+                     moves, UNORM_NFD, "basic_2");
 
-    // move around and compare the iteration code points with
-    // the expected ones
-    const char *move=moves;
-    while((m=*move++)!=0) {
-        if(m=='-') {
-            c1=iter.previous();
-            c2=iter32.previous();
-        } else if(m=='0') {
-            c1=iter.current();
-            c2=iter32.current();
-        } else /* m=='+' */ {
-            c1=iter.next();
-            c2=iter32.next();
-        }
-
-        // compare results
-        if(c1!=c2) {
-            // copy the moves until the current (m) move, and terminate
-            char history[64];
-            uprv_strcpy(history, moves);
-            history[move-moves]=0;
-            errln("error: mismatch in Normalizer iteration at %s: "
-                  "got c1=U+%04lx != expected c2=U+%04lx\n",
-                  history, c1, c2);
-            break;
-        }
-
-        // compare indexes
-        if(iter.getIndex()!=expectIndex[iter32.getIndex()]) {
-            // copy the moves until the current (m) move, and terminate
-            char history[64];
-            uprv_strcpy(history, moves);
-            history[move-moves]=0;
-            errln("error: index mismatch in Normalizer iteration at %s: "
-                  "Normalizer index %ld expected %ld\n",
-                  history, iter.getIndex(), expectIndex[iter32.getIndex()]);
-            break;
-        }
-    }
+    TestPreviousNext(src_j2911, LENGTHOF(src_j2911),
+                     expect_j2911, LENGTHOF(expect_j2911),
+                     expectIndex_j2911,
+                     SRC_MIDDLE_2, EXPECT_MIDDLE_2,
+                     moves, UNORM_NFKC, "j2911_2");
 }
-
-
 
 void BasicNormalizerTest::TestConcatenate() {
     static const char *const
