@@ -56,7 +56,8 @@
 # http://www.isi.edu/in-notes/iana/assignments/character-sets
 
 # Name matching is case-insensitive. Also, dashes '-', underscores '_'
-# and spaces ' ' can be used interchangeably in names.
+# and spaces ' ' are ignored in names (thus cs-iso-latin-1 and csisolatin1
+# are the same).
 # However, the names in the left column are directly file names
 # or names of algorithmic converters, and their case must not
 # be changed - or else code and/or file names must also be changed.
