@@ -691,19 +691,42 @@ private:
     int32_t _timestamp;
     UVector _ids;
     int32_t _pos;
-    void* _bufp;
+    char   *_bufp;
     int32_t _buflen;
+    char    _buf[32];
 
 private:
-    ServiceEnumeration(const ICULocaleService* service, UErrorCode status)
+    ServiceEnumeration(const ICULocaleService* service, UErrorCode &status)
         : _service(service)
         , _timestamp(service->getTimestamp())
         , _ids(uhash_deleteUnicodeString, NULL, status)
         , _pos(0)
-        , _bufp(NULL)
-        , _buflen(0)
+        , _bufp(_buf)
+        , _buflen(sizeof(_buf))
     {
         _service->getVisibleIDs(_ids, status);
+    }
+
+    ServiceEnumeration(const ServiceEnumeration &other, UErrorCode &status)
+        : _service(other._service)
+        , _timestamp(other._timestamp)
+        , _ids(uhash_deleteUnicodeString, NULL, status)
+        , _pos(0)
+        , _bufp(_buf)
+        , _buflen(sizeof(_buf))
+    {
+        if(U_SUCCESS(status)) {
+            int32_t i, length;
+
+            length = other._ids.size();
+            for(i = 0; i < length; ++i) {
+                _ids.addElement(((UnicodeString *)other._ids.elementAt(i))->clone(), status);
+            }
+
+            if(U_SUCCESS(status)) {
+                _pos = other._pos;
+            }
+        }
     }
 
 public:
@@ -718,7 +741,19 @@ public:
     }
 
     virtual ~ServiceEnumeration() {
-        uprv_free(_bufp);
+        if(_bufp != _buf) {
+            uprv_free(_bufp);
+        }
+    }
+
+    virtual StringEnumeration *clone() const {
+        UErrorCode status = U_ZERO_ERROR;
+        ServiceEnumeration *cl = new ServiceEnumeration(*this, status);
+        if(U_FAILURE(status)) {
+            delete cl;
+            cl = NULL;
+        }
+        return cl;
     }
 
     virtual int32_t count(UErrorCode& status) const {
@@ -728,42 +763,25 @@ public:
     const char* next(int32_t* resultLength, UErrorCode& status) {
         const UnicodeString* us = snext(status);
         if (us) {
-            while (TRUE) {
-                int32_t newlen = us->extract((char*)_bufp, _buflen / sizeof(char), NULL, status);
-                if (status == U_STRING_NOT_TERMINATED_WARNING || status == U_BUFFER_OVERFLOW_ERROR) {
-                    resizeBuffer((newlen + 1) * sizeof(char));
-                    status = U_ZERO_ERROR;
-                } else if (U_SUCCESS(status)) {
-                    ((char*)_bufp)[newlen] = 0;
-                    if (resultLength) {
-                        resultLength[0] = newlen;
-                    }
-                    return (const char*)_bufp;
-                } else {
-                    break;
-                }
+            int32_t newlen = us->length();
+            if (newlen >= _buflen) {
+                resizeBuffer(newlen + 1);
             }
+            us->extract(0, INT32_MAX, _bufp, _buflen, "");
+            if (resultLength) {
+                *resultLength = newlen;
+            }
+            return _bufp;
         }
         return NULL;
     }
 
     const UChar* unext(int32_t* resultLength, UErrorCode& status) {
         const UnicodeString* us = snext(status);
-        if (us) {
-            while (TRUE) {
-                int32_t newlen = us->extract((UChar*)_bufp, _buflen / sizeof(UChar), status);
-                if (status == U_STRING_NOT_TERMINATED_WARNING || status == U_BUFFER_OVERFLOW_ERROR) {
-                    resizeBuffer((newlen + 1) * sizeof(UChar));
-                } else if (U_SUCCESS(status)) {
-                    ((UChar*)_bufp)[newlen] = 0;
-                    if (resultLength) {
-                        resultLength[0] = newlen;
-                    }
-                    return (const UChar*)_bufp;
-                } else {
-                    break;
-                }
-            }
+        if (U_SUCCESS(status)) {
+            // the cast to a writable UnicodeString is safe because
+            // ICUService::getVisibleIDs() clones each string
+            return ((UnicodeString *)us)->getTerminatedBuffer();
         }
         return NULL;
     }
@@ -776,10 +794,10 @@ public:
     }
 
     void resizeBuffer(int32_t newlen) {
-        if (_bufp) {
-            _bufp = uprv_realloc(_bufp, newlen);
+        if (_bufp != _buf) {
+            _bufp = (char *)uprv_realloc(_bufp, newlen);
         } else {
-            _bufp = uprv_malloc(newlen);
+            _bufp = (char *)uprv_malloc(newlen);
         }
         _buflen = newlen;
     }

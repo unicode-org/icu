@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2002, International Business Machines
+*   Copyright (C) 2002-2003, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -52,6 +52,23 @@ public:
      * @draft ICU 2.4
      */
     virtual ~StringEnumeration();
+
+    /**
+     * Clone this object, an instance of a subclass of StringEnumeration.
+     * Clones can be used concurrently in multiple threads.
+     * If a subclass does not implement clone(), or if an error occurs,
+     * then NULL is returned.
+     * The clone functions in all subclasses return a base class pointer
+     * because some compilers do not support covariant (same-as-this)
+     * return types; cast to the appropriate subclass if necessary.
+     * The caller must delete the clone.
+     *
+     * @return a clone of this object
+     *
+     * @see getDynamicClassID
+     * @draft ICU 2.8
+     */
+    virtual StringEnumeration *clone() const;
 
     /**
      * <p>Return the number of elements that the iterator traverses.  If

@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (c) 2002, International Business Machines
+* Copyright (c) 2002-2003, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * Author: Alan Liu
@@ -18,6 +18,12 @@
 #define THIS(en) ((StringEnumeration*)(en->context))
 
 StringEnumeration::~StringEnumeration() {}
+
+// StringEnumeration base class clone() default implementation, does not clone
+StringEnumeration *
+StringEnumeration::clone() const {
+  return NULL;
+}
 
 U_CDECL_BEGIN
 
