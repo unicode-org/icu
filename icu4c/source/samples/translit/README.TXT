@@ -23,7 +23,7 @@ INSTRUCTIONS
 
 This exercise was developed and tested on ICU release 1.6.0, Win32,
 Microsoft Visual C++ 6.0.  It should work on other ICU releases and
-other platforms as well, but the user will have to develop makefiles.
+other platforms as well.
 
 To install:  Create a folder "translit" at:
 
