@@ -4,4 +4,4 @@ Release
 Makefile
 *.d
 *.pdb
-icupkg.in
+icupkg.inc
