@@ -44,28 +44,31 @@
 #include "cstring.h"
 
 // static initialization
-char                TimeZone::fgClassID = 0; // Value is irrelevant
+char                       TimeZone::fgClassID = 0; // Value is irrelevant
 
-TimeZone*           TimeZone::fgDefaultZone = NULL;
+TimeZone*                  TimeZone::fgDefaultZone = NULL;
 
-const UChar         TimeZone::GMT_ID[] = {0x47, 0x4D, 0x54, 0x00}; /* "GMT" */
-const int32_t       TimeZone::GMT_ID_LENGTH = 3;
-const UChar         TimeZone::CUSTOM_ID[] = 
+static const UChar         GMT_ID[] = {0x47, 0x4D, 0x54, 0x00}; /* "GMT" */
+static const int32_t       GMT_ID_LENGTH = 3;
+static const UChar         CUSTOM_ID[] = 
 {
     0x43, 0x75, 0x73, 0x74, 0x6F, 0x6D, 0x00 /* "Custom" */
 };
 
-const TimeZone*     TimeZone::GMT = getGMT();
+const TimeZone*            TimeZone::GMT = getGMT();
 
 // See header file for documentation of the following
-const TZHeader *    TimeZone::DATA = 0;
-const uint32_t*     TimeZone::INDEX_BY_ID = 0;
-const OffsetIndex*  TimeZone::INDEX_BY_OFFSET = 0;
-const CountryIndex* TimeZone::INDEX_BY_COUNTRY = 0;
-UnicodeString*      TimeZone::ZONE_IDS = 0;
-UBool               TimeZone::DATA_LOADED = FALSE;
-UDataMemory*        TimeZone::UDATA_POINTER = 0;
-UMTX                TimeZone::LOCK;
+static const TZHeader *    DATA = 0;
+static const uint32_t*     INDEX_BY_ID = 0;
+static const OffsetIndex*  INDEX_BY_OFFSET = 0;
+static const CountryIndex* INDEX_BY_COUNTRY = 0;
+static UnicodeString*      ZONE_IDS = 0;
+static UBool               DATA_LOADED = FALSE;
+static UDataMemory*        UDATA_POINTER = 0;
+static UMTX                LOCK;
+
+static void                 loadZoneData(void);
+static const TZEquivalencyGroup* lookupEquivalencyGroup(const UnicodeString& id);
 
 // -------------------------------------
 
@@ -80,7 +83,7 @@ TimeZone::getGMT(void)
  * udata callback to verify the zone data.
  */
 U_CDECL_BEGIN
-static UBool
+static UBool U_CALLCONV
 isTimeZoneDataAcceptable(void * /*context*/,
                            const char * /*type*/, const char * /*name*/,
                            const UDataInfo *pInfo) {
@@ -109,7 +112,7 @@ U_CDECL_END
  * we are guaranteed that all associated data structures are
  * initialized.
  */
-void TimeZone::loadZoneData() {
+static void loadZoneData() {
     if (!DATA_LOADED) {
         Mutex lock(&LOCK);
         if (!DATA_LOADED) {
@@ -245,8 +248,8 @@ TimeZone::createSystemTimeZone(const UnicodeString& name) {
  * Return a pointer to the equivalency group, or NULL if not found.
  * DATA MUST BE INITIALIZED AND NON-NULL.
  */
-const TZEquivalencyGroup*
-TimeZone::lookupEquivalencyGroup(const UnicodeString& id) {
+static const TZEquivalencyGroup*
+lookupEquivalencyGroup(const UnicodeString& id) {
     // Perform a binary search.  Possible optimization: Unroll the
     // search.  Not worth it given the small number of zones (416 in
     // 1999j).
