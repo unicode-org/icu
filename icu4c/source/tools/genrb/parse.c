@@ -551,7 +551,7 @@ parseCollationElements(char *tag, uint32_t startline, UErrorCode *status)
     UVersionInfo       version;
     UBool              override = FALSE;
     uint32_t           line;
-
+    
     result = table_open(bundle, tag, status);
 
     if (result == NULL || U_FAILURE(*status))
@@ -595,9 +595,8 @@ parseCollationElements(char *tag, uint32_t startline, UErrorCode *status)
             table_close(result, status);
             return NULL;
         }
-
-        expect(TOK_OPEN_BRACE, NULL,          NULL,  status);
-        expect(TOK_STRING,      &tokenValue, &line, status);
+    
+        member = parseResource(subtag, status);
 
         if (U_FAILURE(*status))
         {
@@ -608,24 +607,34 @@ parseCollationElements(char *tag, uint32_t startline, UErrorCode *status)
         if (uprv_strcmp(subtag, "Version") == 0)
         {
             char     ver[40];
-            int32_t length = u_strlen(tokenValue->fChars);
+            int32_t length = member->u.fString.fLength;
 
             if (length >= (int32_t) sizeof(ver))
             {
                 length = (int32_t) sizeof(ver) - 1;
             }
 
-            u_UCharsToChars(tokenValue->fChars, ver, length + 1); /* +1 for copying NULL */
+            u_UCharsToChars(member->u.fString.fChars, ver, length + 1); /* +1 for copying NULL */
             u_versionFromString(version, ver);
+
+            table_add(result, member, line, status);
+
         }
         else if (uprv_strcmp(subtag, "Override") == 0)
         {
             override = FALSE;
 
-            if (u_strncmp(tokenValue->fChars, trueValue, u_strlen(trueValue)) == 0)
+            if (u_strncmp(member->u.fString.fChars, trueValue, u_strlen(trueValue)) == 0)
             {
                 override = TRUE;
             }
+            table_add(result, member, line, status);
+
+        }
+        else if(uprv_strcmp(subtag, "%%CollationBin")==0)
+        {
+            /* discard duplicate %%CollationBin if any*/
+            
         }
         else if (uprv_strcmp(subtag, "Sequence") == 0)
         {
@@ -639,7 +648,10 @@ parseCollationElements(char *tag, uint32_t startline, UErrorCode *status)
             uint8_t   *data  = NULL;
             UCollator *coll  = NULL;
             UParseError parseError;
-            coll = ucol_openRules(tokenValue->fChars, tokenValue->fLength,
+            /* add sequence */
+            table_add(result, member, line, status);
+            
+            coll = ucol_openRules(member->u.fString.fChars, member->u.fString.fLength,
                 UCOL_OFF, UCOL_DEFAULT_STRENGTH,&parseError, &intStatus);
 
             if (U_SUCCESS(intStatus) && coll != NULL)
@@ -675,13 +687,14 @@ parseCollationElements(char *tag, uint32_t startline, UErrorCode *status)
                         return NULL;
                 }
             }
+            
+
 #endif
         }
 
-        member = string_open(bundle, subtag, tokenValue->fChars, tokenValue->fLength, status);
-        table_add(result, member, line, status);
+        /*member = string_open(bundle, subtag, tokenValue->fChars, tokenValue->fLength, status);*/
 
-        expect(TOK_CLOSE_BRACE, NULL, NULL, status);
+        /*expect(TOK_CLOSE_BRACE, NULL, NULL, status);*/
 
         if (U_FAILURE(*status))
         {
