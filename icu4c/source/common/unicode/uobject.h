@@ -67,14 +67,14 @@ public:
      * for ICU4C C++ classes
      * @draft ICU 2.4
      */
-    void *operator new(size_t size);
+    static void *operator new(size_t size);
 
     /**
      * Override for ICU4C C++ memory management.
      * See new().
      * @draft ICU 2.4
      */
-    void *operator new[](size_t size);
+    static void *operator new[](size_t size);
 
     /**
      * Override for ICU4C C++ memory management.
@@ -84,14 +84,28 @@ public:
      * for ICU4C C++ classes
      * @draft ICU 2.4
      */
-    void operator delete(void *p);
+    static void operator delete(void *p);
 
     /**
      * Override for ICU4C C++ memory management.
      * See delete().
      * @draft ICU 2.4
      */
-    void operator delete[](void *p);
+    static void operator delete[](void *p);
+
+    /**
+     * Override for ICU4C C++ memory management for STL.
+     * See new().
+     * @draft ICU 2.6
+     */
+    static inline void * operator new(size_t, void *_P) { return (_P); }
+
+    /**
+     * Override for ICU4C C++ memory management for STL.
+     * See delete().
+     * @draft ICU 2.6
+     */
+    static inline void operator delete(void *, void *) {}
 #endif
 };
 
