@@ -665,6 +665,11 @@ uint32_t ucol_uprv_tok_assembleTokenList(UColTokenParser *src, UErrorCode *statu
     if(U_SUCCESS(*status) && parseEnd != NULL) {
       UColToken *sourceToken = NULL;
       UColToken key;
+      uint32_t lastStrength = UCOL_TOK_UNSET;
+      
+      if(lastToken != NULL ) {
+        lastStrength = lastToken->strength;
+      }
 
       key.source = newCharsLen << 24 | charsOffset;
       key.expansion = newExtensionsLen << 24 | extensionOffset;
@@ -703,6 +708,9 @@ uint32_t ucol_uprv_tok_assembleTokenList(UColTokenParser *src, UErrorCode *statu
           if(sourceToken->strength != UCOL_TOK_RESET) {
             /* otherwise remove sourceToken from where it was. */
             if(sourceToken->next != NULL) {
+              if(sourceToken->next->strength > sourceToken->strength) {
+                sourceToken->next->strength = sourceToken->strength;
+              }
               sourceToken->next->previous = sourceToken->previous;
             } else {
               sourceToken->listHeader->last[sourceToken->polarity] = sourceToken->previous;
@@ -716,6 +724,8 @@ uint32_t ucol_uprv_tok_assembleTokenList(UColTokenParser *src, UErrorCode *statu
           }
         }
 
+        sourceToken->next = NULL;
+        sourceToken->previous = NULL;
         sourceToken->strength = newStrength;
         sourceToken->listHeader = lastToken->listHeader;
 
@@ -730,18 +740,39 @@ uint32_t ucol_uprv_tok_assembleTokenList(UColTokenParser *src, UErrorCode *statu
         accordingly in the headers. 
         */
 
-        if(lastToken->strength == UCOL_TOK_RESET) {
+        if(lastStrength == UCOL_TOK_RESET) {
         /* If LAST is a reset 
-              insert sourceToken at the head of either the positive list or the negative 
-              list, depending on the polarity of relation. 
-              set the polarity of sourceToken to be the same as the list you put it in. */
+              insert sourceToken in the list. */
+
           if(sourceToken->listHeader->first[sourceToken->polarity] == 0) {
             sourceToken->listHeader->first[sourceToken->polarity] = sourceToken;
             sourceToken->listHeader->last[sourceToken->polarity] = sourceToken;
-          } else {
+          } else { /* we need to find a place for us */
+            /* and we'll get in front of the same strength */
+            if(sourceToken->listHeader->first[sourceToken->polarity]->strength <= sourceToken->strength) {
+              sourceToken->next = sourceToken->listHeader->first[sourceToken->polarity];
+              sourceToken->next->previous = sourceToken;
+              sourceToken->listHeader->first[sourceToken->polarity] = sourceToken;
+              sourceToken->previous = NULL;
+            } else {
+              lastToken = sourceToken->listHeader->first[sourceToken->polarity];
+              while(lastToken->next != NULL && lastToken->next->strength > sourceToken->strength) {
+                lastToken = lastToken->next;
+              }
+              if(lastToken->next != NULL) {
+                lastToken->next->previous = sourceToken;
+              } else {
+                sourceToken->listHeader->last[sourceToken->polarity] = sourceToken;
+              }
+              sourceToken->previous = lastToken;
+              sourceToken->next = lastToken->next;
+              lastToken->next = sourceToken;
+            }
+            /*
             sourceToken->listHeader->first[sourceToken->polarity]->previous = sourceToken;
             sourceToken->next = sourceToken->listHeader->first[sourceToken->polarity];
             sourceToken->listHeader->first[sourceToken->polarity] = sourceToken;
+            */
           }
 
           /*
@@ -759,67 +790,88 @@ uint32_t ucol_uprv_tok_assembleTokenList(UColTokenParser *src, UErrorCode *statu
               otherwise insert before. 
               when inserting after or before, search to the next position with the same 
               strength in that direction. (This is called postpone insertion).         */
-          if(lastToken->polarity == sourceToken->polarity) {
-            while(lastToken->next != NULL && lastToken->next->strength > sourceToken->strength) {
-              lastToken = lastToken->next;
-            }
-            sourceToken->previous = lastToken;
-            if(lastToken->next != NULL) {
-              lastToken->next->previous = sourceToken;
-            } else {
-              sourceToken->listHeader->last[sourceToken->polarity] = sourceToken;
-            }
+          if(sourceToken != lastToken) { 
+            if(lastToken->polarity == sourceToken->polarity) {
+              while(lastToken->next != NULL && lastToken->next->strength > sourceToken->strength) {
+                lastToken = lastToken->next;
+              }
+              sourceToken->previous = lastToken;
+              if(lastToken->next != NULL) {
+                lastToken->next->previous = sourceToken;
+              } else {
+                sourceToken->listHeader->last[sourceToken->polarity] = sourceToken;
+              }
 
-            sourceToken->next = lastToken->next;
-            lastToken->next = sourceToken;
-          } else {
-            while(lastToken->previous != NULL && lastToken->previous->strength > sourceToken->strength) {
-              lastToken = lastToken->previous;
-            }
-            sourceToken->next = lastToken;
-            if(lastToken->previous != NULL) {
-              lastToken->previous->next = sourceToken;
+              sourceToken->next = lastToken->next;
+              lastToken->next = sourceToken;
             } else {
-              sourceToken->listHeader->first[sourceToken->polarity] = sourceToken;
+              while(lastToken->previous != NULL && lastToken->previous->strength > sourceToken->strength) {
+                lastToken = lastToken->previous;
+              }
+              sourceToken->next = lastToken;
+              if(lastToken->previous != NULL) {
+                lastToken->previous->next = sourceToken;
+              } else {
+                sourceToken->listHeader->first[sourceToken->polarity] = sourceToken;
+              }
+              sourceToken->previous = lastToken->previous;
+              lastToken->previous = sourceToken;
             }
-            sourceToken->previous = lastToken->previous;
-            lastToken->previous = sourceToken;
+          } else { /* repeated one thing twice in rules, stay with the stronger strength */
+            if(lastStrength < sourceToken->strength) {
+              sourceToken->strength = lastStrength;
+            }
           }
         }
       } else {
         uint32_t CE = UCOL_NOT_FOUND, SecondCE = UCOL_NOT_FOUND;
         collIterate s;
 
-        if((specs & UCOL_TOK_BEFORE) != 0) {
-          uint32_t baseCE = UCOL_NOT_FOUND, baseContCE = UCOL_NOT_FOUND;
-          uint32_t invPos;
+        if((specs & UCOL_TOK_BEFORE) != 0) { /* we're doing before */
           uint8_t strength = (specs & UCOL_TOK_BEFORE) - 1;
+          if(sourceToken != NULL && sourceToken->strength != UCOL_TOK_RESET) { 
+            /* this is a before that is already ordered in the UCA - so we need to get the previous with good strength */
+            if(sourceToken->previous != NULL) {
+              sourceToken = sourceToken->previous;
+              while(sourceToken->previous != NULL && sourceToken->previous->strength > strength) {
+                sourceToken = sourceToken->previous;
+              }
+              if(sourceToken->previous == NULL && sourceToken->strength > strength) {
+                sourceToken = sourceToken->listHeader->reset;
+              }
+            } else {
+              sourceToken = sourceToken->listHeader->reset;
+            }
+          } else { 
+            /* this is a virgin before - we need to fish the anchor from the UCA */
+            uint32_t baseCE = UCOL_NOT_FOUND, baseContCE = UCOL_NOT_FOUND;
+            uint32_t invPos;
+            init_collIterate(src->UCA, src->source+charsOffset, 1, &s); 
 
-          init_collIterate(src->UCA, src->source+charsOffset, 1, &s); 
+            baseCE = ucol_getNextCE(src->UCA, &s, status) & 0xFFFFFF3F;
+            baseContCE = ucol_getNextCE(src->UCA, &s, status);
+            if(baseContCE == UCOL_NO_MORE_CES) {
+              baseContCE = 0;
+            }
 
-          baseCE = ucol_getNextCE(src->UCA, &s, status) & 0xFFFFFF3F;
-          baseContCE = ucol_getNextCE(src->UCA, &s, status);
-          if(baseContCE == UCOL_NO_MORE_CES) {
-            baseContCE = 0;
+            invPos = ucol_inv_getPrevCE(baseCE, baseContCE, &CE, &SecondCE, strength);
+
+            uint32_t *CETable = (uint32_t *)((uint8_t *)src->invUCA+src->invUCA->table);
+            uint32_t ch = CETable[3*invPos+2];
+
+            if((ch &  UCOL_INV_SIZEMASK) != 0) {
+              uint32_t *conts = (uint32_t *)((uint8_t *)src->invUCA+src->invUCA->conts);
+              uint32_t offset = (ch & UCOL_INV_OFFSETMASK);
+              ch = conts[offset];
+            }      
+            *src->extraCurrent++ = (UChar)ch;        
+            charsOffset = src->extraCurrent - src->source - 1;
+            newCharsLen = 1;
           }
-
-          invPos = ucol_inv_getPrevCE(baseCE, baseContCE, &CE, &SecondCE, strength);
-
-          uint32_t *CETable = (uint32_t *)((uint8_t *)src->invUCA+src->invUCA->table);
-          uint32_t ch = CETable[3*invPos+2];
-
-          if((ch &  UCOL_INV_SIZEMASK) != 0) {
-            uint32_t *conts = (uint32_t *)((uint8_t *)src->invUCA+src->invUCA->conts);
-            uint32_t offset = (ch & UCOL_INV_OFFSETMASK);
-            ch = conts[offset];
-          }      
-          *src->extraCurrent++ = (UChar)ch;        
-          charsOffset = src->extraCurrent - src->source - 1;
-          newCharsLen = 1;
         }
 
 
-        if(lastToken != NULL && lastToken->strength == UCOL_TOK_RESET) {
+        if(lastToken != NULL && lastStrength == UCOL_TOK_RESET) {
           /* if the previous token was also a reset, */
           /*this means that we have two consecutive resets */
           /* and we want to remove the previous one if empty*/
