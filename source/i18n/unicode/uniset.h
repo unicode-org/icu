@@ -199,53 +199,20 @@ class TransliteratorParser;
  *
  * <p><b>Character categories.</b>
  *
- * Character categories are specified using the POSIX-like syntax
- * '[:Lu:]'.  The complement of a category is specified by inserting
- * '^' after the opening '[:'.  The following category names are
- * recognized.  Actual determination of category data uses
- * <code>Unicode::getType()</code>, so it reflects the underlying
- * data used by <code>Unicode</code>.
+ * <p>Character properties are specified using the POSIX-like syntax
+ * "[:Lu:]" or the Perl-like syntax "\p{Lu}".  The complement of a
+ * category is specified as "[:^Lu:]" or "\P{Lu}".  Actual
+ * determination of category data is accomplished by UCharacter using
+ * the underlying Unicode database.
  *
- * <pre>
- * Normative
- *     Mn = Mark, Non-Spacing
- *     Mc = Mark, Spacing Combining
- *     Me = Mark, Enclosing
+ * <p>For details of the property syntax please see this
+ * <a href="http://oss.software.ibm.com/cvs/icu/~checkout~/icuhtml/design/unicodeset_properties.html">
+ * draft document</a>.
  *
- *     Nd = Number, Decimal Digit
- *     Nl = Number, Letter
- *     No = Number, Other
- *
- *     Zs = Separator, Space
- *     Zl = Separator, Line
- *     Zp = Separator, Paragraph
- *
- *     Cc = Other, Control
- *     Cf = Other, Format
- *     Cs = Other, Surrogate
- *     Co = Other, Private Use
- *     Cn = Other, Not Assigned
- *
- * Informative
- *     Lu = Letter, Uppercase
- *     Ll = Letter, Lowercase
- *     Lt = Letter, Titlecase
- *     Lm = Letter, Modifier
- *     Lo = Letter, Other
- *
- *     Pc = Punctuation, Connector
- *     Pd = Punctuation, Dash
- *     Ps = Punctuation, Open
- *     Pe = Punctuation, Close
- *     Pi = Punctuation, Initial quote
- *     Pf = Punctuation, Final quote
- *     Po = Punctuation, Other
- *
- *     Sm = Symbol, Math
- *     Sc = Symbol, Currency
- *     Sk = Symbol, Modifier
- *     So = Symbol, Other
- * </pre>
+ * <p><em>Note:</em> Not all properties are currently supported.
+ * Currently, only the general category, script, and numeric value
+ * properties are supported.  Support for other properties will be
+ * added in the future.
  *
  * @author Alan Liu
  * @draft
@@ -314,12 +281,10 @@ public:
                UErrorCode& status);
 
     /**
-     * Constructs a set from the given Unicode character category.
+     * DEPRECATED Constructs a set from the given Unicode character category.
      * @param category an integer indicating the character category as
-     * returned by <code>Character.getType()</code>.
-     * @exception <code>IllegalArgumentException</code> if the given
-     * category is invalid.
-     * @draft
+     * defined in uchar.h.
+     * @deprecated To be removed after 2002-DEC-31
      */
     UnicodeSet(int8_t category, UErrorCode& status);
 
@@ -391,6 +356,13 @@ public:
      * @rparam end last character in the set, inclusive
      */
     void set(UChar32 start, UChar32 end);
+
+    /**
+     * Return true if the given position, in the given pattern, appears
+     * to be the start of a UnicodeSet pattern.
+     */
+    static UBool resemblesPattern(const UnicodeString& pattern,
+                                  int32_t pos);
 
     /**
      * Modifies this set to represent the set specified by the given
@@ -724,34 +696,6 @@ private:
                       ParsePosition& pos,
                       const SymbolTable* symbols,
                       UErrorCode& status);
-
-    //----------------------------------------------------------------
-    // Implementation: Generation of pairs for Unicode categories
-    //----------------------------------------------------------------
-
-    /**
-     * Sets this object to the given category, given its name.
-     * The category name must be either a two-letter name, such as
-     * "Lu", or a one letter name, such as "L".  One-letter names
-     * indicate the logical union of all two-letter names that start
-     * with that letter.  Case is significant.  If the name starts
-     * with the character '^' then the complement of the given
-     * character set is returned.
-     *
-     * Although individual categories such as "Lu" are cached, we do
-     * not currently cache single-letter categories such as "L" or
-     * complements such as "^Lu" or "^L".  It would be easy to cache
-     * these as well in a hashtable should the need arise.
-     */
-    void applyCategory(const UnicodeString& catName,
-                       UErrorCode& status);
-
-    /**
-     * Returns a pairs string for the given category.  This string is
-     * cached and returned again if this method is called again with
-     * the same parameter.
-     */
-    static const UnicodeSet& getCategorySet(int8_t cat);
 
     //----------------------------------------------------------------
     // Implementation: Utility methods
