@@ -41,15 +41,6 @@ U_CFUNC const char* ctest_dataOutDir(void);
  */
 U_CFUNC const char* ctest_dataSrcDir(void);
 
-/**
- *complete a relative path to a full pathname, and convert to platform-specific syntax. 
- * The character seperating directories for the relative path is '|'.
- * @fullname the full path name
- * @maxsize the maximum size of the string
- * @relPath the relative path name
- */
-U_CFUNC void ctest_pathnameInContext(char* fullname, int32_t maxsize, const char* relPath ) ;
-
 U_CFUNC UChar* CharsToUChars(const char* chars);
 
 /**
