@@ -537,7 +537,7 @@ uidna_IDNToASCII(  const UChar* src, int32_t srcLength,
 
     for(;;){
 
-        labelLen = getNextSeparator(labelStart, -1, prep, &delimiter,&done, status);
+        labelLen = getNextSeparator(labelStart,remainingLen, prep, &delimiter,&done, status);
         
         b1Len = uidna_toASCII(labelStart, labelLen, b1, b1Capacity, 
                               options, parseError, status);
@@ -571,7 +571,9 @@ uidna_IDNToASCII(  const UChar* src, int32_t srcLength,
         }
 
         labelStart = delimiter;
-                
+        if(remainingLen >0 ){
+            remainingLen = srcLength - (delimiter - src);
+        }
         if(done == TRUE){
             break;
         }
@@ -624,7 +626,7 @@ uidna_IDNToUnicode(  const UChar* src, int32_t srcLength,
 
     for(;;){
         
-        labelLen = getNextSeparator(labelStart, -1, prep, &delimiter, &done, status);
+        labelLen = getNextSeparator(labelStart, remainingLen, prep, &delimiter, &done, status);
         
 
         b1Len = uidna_toUnicode( labelStart,labelLen, b1, b1Capacity, 
@@ -655,8 +657,10 @@ uidna_IDNToUnicode(  const UChar* src, int32_t srcLength,
             reqLength++;
         }
 
-        labelStart = delimiter;
-        
+        labelStart = delimiter;        
+        if(remainingLen >0 ){
+            remainingLen = srcLength - (delimiter - src);
+        }
         if(done==TRUE){
             break;
         }
