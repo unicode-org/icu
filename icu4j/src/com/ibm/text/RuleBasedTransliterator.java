@@ -5,186 +5,203 @@ import java.util.Vector;
 import java.text.ParsePosition;
 
 /**
- * A transliterator that reads a set of rules in order to determine how to
- * perform translations.  Rules are stored in resource bundles indexed by name.
- * Rules are separated by semicolons (';').  To include a literal
- * semicolon, prefix it with a backslash ('\\;').  Whitespace is significant.  If
- * the first character on a line is '#', the entire line is ignored as a
- * comment.
- *
- * <p>Each set of rules consists of two groups, one forward, and one reverse.
- * This is a convention that is not enforced; rules for one direction may be
- * omitted, with the result that translations in that direction will not modify
- * the source text.
- *
- * <p><b>Rule syntax</b>
- *
- * <p>Rule statements take one of the following forms:
+ * A transliterator that reads a set of rules in order to determine how to perform
+ * translations. Rules are stored in resource bundles indexed by name. Rules are separated by
+ * semicolons (';'). To include a literal semicolon, prefix it with a backslash ('\;').
+ * Whitespace, as defined by <code>Character.isWhitespace()</code>, is ignored. If the first
+ * non-blank character on a line is '#', the entire line is ignored as a comment. </p>
+ * 
+ * <p>Each set of rules consists of two groups, one forward, and one reverse. This is a
+ * convention that is not enforced; rules for one direction may be omitted, with the result
+ * that translations in that direction will not modify the source text. </p>
+ * 
+ * <p><b>Rule syntax</b> </p>
+ * 
+ * <p>Rule statements take one of the following forms: 
+ * 
  * <dl>
- *   <dt><code>alefmadda=&#092;u0622</code></dt>
- *
- *   <dd><strong>Variable definition.</strong> The name on the left is
- *   assigned the character or expression on the right. Names may not
- *   contain any special characters (see list below). Duplicate names
- *   (including duplicates of simple variables or category names)
- *   cause an exception to be thrown.  If the right hand side consists
- *   of one character, then the variable stands for that character.
- *   In this example, after this statement, instances of the left hand
- *   name surrounded by braces, &quot;<code>{alefmadda}</code>&quot,
- *   will be replaced by the Unicode character U+0622.</dd> If the
- *   right hand side is longer than one character, then it is
- *   interpreted as a character category expression; see below for
- *   details.
- *
+ *   <dt><code>alefmadda=\u0622</code></dt>
+ *   <dd><strong>Variable definition.</strong> The name on the left is assigned the character or
+ *     expression on the right. Names may not contain any special characters (see list below).
+ *     Duplicate names (including duplicates of simple variables or category names) cause an
+ *     exception to be thrown. If the right hand side consists of one character, then the
+ *     variable stands for that character. In this example, after this statement, instances of
+ *     the left hand name surrounded by braces, &quot;<code>{alefmadda}</code>&quot;, will be
+ *     replaced by the Unicode character U+0622. If the right hand side is longer than one
+ *     character, then it is interpreted as a character category expression; see below for
+ *     details.</dd>
+ *   <dt>&nbsp;</dt>
  *   <dt><code>softvowel=[eiyEIY]</code></dt>
- *
- *   <dd><strong>Category definition.</strong> The name on the left is assigned
- *   to stand for a set of characters.  The same rules for names of simple
- *   variables apply. After this statement, the left hand variable will be
- *   interpreted as indicating a set of characters in appropriate contexts. The
- *   pattern syntax defining sets of characters is defined by {@link UnicodeSet}.
- *   Examples of valid patterns are:<table>
- *
- *       <tr valign=top>
+ *   <dd><strong>Category definition.</strong> The name on the left is assigned to stand for a
+ *     set of characters. The same rules for names of simple variables apply. After this
+ *     statement, the left hand variable will be interpreted as indicating a set of characters in
+ *     appropriate contexts. The pattern syntax defining sets of characters is defined by {@link
+ *     UnicodeSet}. Examples of valid patterns are:<table>
+ *       <tr valign="top">
  *         <td nowrap><code>[abc]</code></td>
  *         <td>The set containing the characters 'a', 'b', and 'c'.</td>
  *       </tr>
- *       <tr valign=top>
+ *       <tr valign="top">
  *         <td nowrap><code>[^abc]</code></td>
  *         <td>The set of all characters <em>except</em> 'a', 'b', and 'c'.</td>
  *       </tr>
- *       <tr valign=top>
+ *       <tr valign="top">
  *         <td nowrap><code>[A-Z]</code></td>
  *         <td>The set of all characters from 'A' to 'Z' in Unicode order.</td>
  *       </tr>
- *       <tr valign=top>
+ *       <tr valign="top">
  *         <td nowrap><code>[:Lu:]</code></td>
- *         <td>The set of Unicode uppercase letters. See
- *         <a href="http://www.unicode.org">www.unicode.org</a>
+ *         <td>The set of Unicode uppercase letters. See <a href="http://www.unicode.org">www.unicode.org</a>
  *         for a complete list of categories and their two-letter codes.</td>
  *       </tr>
- *       <tr valign=top>
+ *       <tr valign="top">
  *         <td nowrap><code>[^a-z[:Lu:][:Ll:]]</code></td>
- *         <td>The set of all characters <em>except</em> 'a' through 'z' and
- *         uppercase or lowercase letters.</td>
+ *         <td>The set of all characters <em>except</em> 'a' through 'z' and uppercase or lowercase
+ *         letters.</td>
  *       </tr>
  *     </table>
- *
- *   See {@link UnicodeSet} for more documentation and examples.
+ *     <p>See {@link UnicodeSet} for more documentation and examples. </p>
  *   </dd>
- *
  *   <dt><code>ai&gt;{alefmadda}</code></dt>
- *
- *   <dd><strong>Forward translation rule.</strong> This rule states that the
- *   string on the left will be changed to the string on the right when
- *   performing forward transliteration.</dd>
- *
+ *   <dd><strong>Forward translation rule.</strong> This rule states that the string on the left
+ *     will be changed to the string on the right when performing forward transliteration.</dd>
+ *   <dt>&nbsp;</dt>
  *   <dt><code>ai&lt;{alefmadda}</code></dt>
- *
- *   <dd><strong>Reverse translation rule.</strong> This rule states that the
- *   string on the right will be changed to the string on the left when
- *   performing reverse transliteration.</dd>
- *
+ *   <dd><strong>Reverse translation rule.</strong> This rule states that the string on the right
+ *     will be changed to the string on the left when performing reverse transliteration.</dd>
  * </dl>
- *
- * <p>Forward and reverse translation rules consist of a <em>match
- * pattern</em> and an <em>output string</em>.  The match pattern consists
- * of literal characters, optionally preceded by context, and optionally
- * followed by context.  Context characters, like literal pattern characters,
- * must be matched in the text being transliterated.  However, unlike literal
- * pattern characters, they are not replaced by the output text.  For example,
- * the pattern "<code>[abc]def</code>" indicates the characters
- * "<code>def</code>" must be preceded by "<code>abc</code>" for a successful
- * match.  If there is a successful match, "<code>def</code>" will be replaced,
- * but not "<code>abc</code>".  The initial '<code>[</code>' is optional, so
- * "<code>abc]def</code>" is equivalent to "<code>[abc]def</code>".  Another
- * example is "<code>123[456]</code>" (or "<code>123[456</code>") in which the
- * literal pattern "<code>123</code>" must be followed by "<code>456</code>".
- *
- * <p>The output string of a forward or reverse rule consists of characters to
- * replace the literal pattern characters.  If the output string contains the
- * character '<code>|</code>', this is taken to indicate the location of the
- * <em>cursor</em> after replacement.  The cursor is the point in the text
- * at which the next replacement, if any, will be applied.
- *
- * <p><b>Example</b>
- *
- * <p>The following example rules illustrate many of the features of the rule
- * language.
+ * 
+ * <dl>
+ *   <dt><code>ai&lt;&gt;{alefmadda}</code></dt>
+ *   <dd><strong>Bidirectional translation rule.</strong> This rule states that the string on the
+ *     right will be changed to the string on the left when performing forward transliteration,
+ *     and vice versa when performing reverse transliteration.</dd>
+ * </dl>
+ * 
+ * <p>Forward and reverse translation rules consist of a <em>match pattern</em> and an <em>output
+ * string</em>. The match pattern consists of literal characters, optionally preceded by
+ * context, and optionally followed by context. Context characters, like literal pattern
+ * characters, must be matched in the text being transliterated. However, unlike literal
+ * pattern characters, they are not replaced by the output text. For example, the pattern
+ * &quot;<code>(abc)def</code>&quot; indicates the characters &quot;<code>def</code>&quot;
+ * must be preceded by &quot;<code>abc</code>&quot; for a successful match. If there is a
+ * successful match, &quot;<code>def</code>&quot; will be replaced, but not &quot;<code>abc</code>&quot;.
+ * The initial '<code>(</code>' is optional, so &quot;<code>abc)def</code>&quot; is
+ * equivalent to &quot;<code>(abc)def</code>&quot;. Another example is &quot;<code>123(456)</code>&quot;
+ * (or &quot;<code>123(456</code>&quot;) in which the literal pattern &quot;<code>123</code>&quot;
+ * must be followed by &quot;<code>456</code>&quot;. </p>
+ * 
+ * <p>The output string of a forward or reverse rule consists of characters to replace the
+ * literal pattern characters. If the output string contains the character '<code>|</code>',
+ * this is taken to indicate the location of the <em>cursor</em> after replacement. The
+ * cursor is the point in the text at which the next replacement, if any, will be applied. </p>
+ * 
+ * <p>In addition to being defined in variables, <code>UnicodeSet</code> patterns may be
+ * embedded directly into rule strings. Thus, the following two rules are equivalent:</p>
+ * 
+ * <blockquote>
+ *   <p><code>vowel=[aeiou]; {vowel}&gt;*; # One way to do this<br>
+ *   [aeiou]&gt;*;
+ *   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; #
+ *   Another way</code></p>
+ * </blockquote>
+ * 
+ * <p><b>Example</b> </p>
+ * 
+ * <p>The following example rules illustrate many of the features of the rule language. </p>
+ * 
  * <table cellpadding="4">
- * <tr valign=top><td>Rule 1.</td>
- *     <td nowrap><code>abc]def&gt;x|y</code></td></tr>
- * <tr valign=top><td>Rule 2.</td>
- *     <td nowrap><code>xyz&gt;r</code></td></tr>
- * <tr valign=top><td>Rule 3.</td>
- *     <td nowrap><code>yz&gt;q</code></td></tr>
+ *   <tr valign="top">
+ *     <td>Rule 1.</td>
+ *     <td nowrap><code>(abc)def&gt;x|y</code></td>
+ *   </tr>
+ *   <tr valign="top">
+ *     <td>Rule 2.</td>
+ *     <td nowrap><code>xyz&gt;r</code></td>
+ *   </tr>
+ *   <tr valign="top">
+ *     <td>Rule 3.</td>
+ *     <td nowrap><code>yz&gt;q</code></td>
+ *   </tr>
  * </table>
- *
- * <p>Applying these rules to the string "<code>adefabcdefz</code>" yields the
- * following results:
- *
+ * 
+ * <p>Applying these rules to the string &quot;<code>adefabcdefz</code>&quot; yields the
+ * following results: </p>
+ * 
  * <table cellpadding="4">
- * <tr valign=top><td nowrap><code>|adefabcdefz</code></td>
- *     <td>Initial state, no rules match.  Advance cursor.</td></tr>
- * <tr valign=top><td nowrap><code>a|defabcdefz</code></td>
- *     <td>Still no match.  Rule 1 does not match because the preceding
- *     context is not present.</td></tr>
- * <tr valign=top><td nowrap><code>ad|efabcdefz</code></td>
- *     <td>Still no match.  Keep advancing until there is a match...</td></tr>
- * <tr valign=top><td nowrap><code>ade|fabcdefz</code></td>
- *     <td>...</td></tr>
- * <tr valign=top><td nowrap><code>adef|abcdefz</code></td>
- *     <td>...</td></tr>
- * <tr valign=top><td nowrap><code>adefa|bcdefz</code></td>
- *     <td>...</td></tr>
- * <tr valign=top><td nowrap><code>adefab|cdefz</code></td>
- *     <td>...</td></tr>
- * <tr valign=top><td nowrap><code>adefabc|defz</code></td>
- *     <td>Rule 1 matches; replace "<code>def</code>" with "<code>xy</code>"
- *     and back up the cursor to before the '<code>y</code>'.</td></tr>
- * <tr valign=top><td nowrap><code>adefabcx|yz</code></td>
- *     <td>Although "<code>xyz</code>" is present, rule 2 does not match
- *     because the cursor is before the '<code>y</code>', not before the
- *     '<code>x</code>'.  Rule 3 does match.  Replace "<code>yz</code>" with
- *     "<code>q</code>".</td></tr>
- * <tr valign=top><td nowrap><code>adefabcxq|</code></td>
- *     <td>The cursor is at the end; transliteration is complete.</td></tr>
+ *   <tr valign="top">
+ *     <td nowrap><code>|adefabcdefz</code></td>
+ *     <td>Initial state, no rules match. Advance cursor.</td>
+ *   </tr>
+ *   <tr valign="top">
+ *     <td nowrap><code>a|defabcdefz</code></td>
+ *     <td>Still no match. Rule 1 does not match because the preceding context is not present.</td>
+ *   </tr>
+ *   <tr valign="top">
+ *     <td nowrap><code>ad|efabcdefz</code></td>
+ *     <td>Still no match. Keep advancing until there is a match...</td>
+ *   </tr>
+ *   <tr valign="top">
+ *     <td nowrap><code>ade|fabcdefz</code></td>
+ *     <td>...</td>
+ *   </tr>
+ *   <tr valign="top">
+ *     <td nowrap><code>adef|abcdefz</code></td>
+ *     <td>...</td>
+ *   </tr>
+ *   <tr valign="top">
+ *     <td nowrap><code>adefa|bcdefz</code></td>
+ *     <td>...</td>
+ *   </tr>
+ *   <tr valign="top">
+ *     <td nowrap><code>adefab|cdefz</code></td>
+ *     <td>...</td>
+ *   </tr>
+ *   <tr valign="top">
+ *     <td nowrap><code>adefabc|defz</code></td>
+ *     <td>Rule 1 matches; replace &quot;<code>def</code>&quot; with &quot;<code>xy</code>&quot;
+ *     and back up the cursor to before the '<code>y</code>'.</td>
+ *   </tr>
+ *   <tr valign="top">
+ *     <td nowrap><code>adefabcx|yz</code></td>
+ *     <td>Although &quot;<code>xyz</code>&quot; is present, rule 2 does not match because the
+ *     cursor is before the '<code>y</code>', not before the '<code>x</code>'. Rule 3 does match.
+ *     Replace &quot;<code>yz</code>&quot; with &quot;<code>q</code>&quot;.</td>
+ *   </tr>
+ *   <tr valign="top">
+ *     <td nowrap><code>adefabcxq|</code></td>
+ *     <td>The cursor is at the end; transliteration is complete.</td>
+ *   </tr>
  * </table>
- *
- * <p>The order of rules is significant.  If multiple rules may match at some
- * point, the first matching rule is applied.
- *
- * <p>Forward and reverse rules may have an empty output string.  Otherwise, an
- * empty left or right hand side of any statement is a syntax error.
- *
- * <p>Single quotes are used to quote the special characters
- * <code>=&gt;&lt;{}[]|</code>.  To specify a single quote itself, inside or
- * outside of quotes, use two single quotes in a row.  For example, the rule
- * "<code>'&gt;'&gt;o''clock</code>" changes the string "<code>&gt;</code>" to
- * the string "<code>o'clock</code>".
- *
- * <p><b>Notes</b>
- *
- * <p>While a RuleBasedTransliterator is being built, it checks that the rules
- * are added in proper order.  For example, if the rule "a>x" is followed by the
- * rule "ab>y", then the second rule will throw an exception.  The reason is
- * that the second rule can never be triggered, since the first rule always
- * matches anything it matches.  In other words, the first rule <em>masks</em>
- * the second rule.  There is a cost of O(n^2) to make this check; in real-world
- * tests it appears to approximately double build time.
- *
- * <p>One optimization that can be made is to add a pragma to the rule language,
- * "#pragma order", that turns off ordering checking.  This pragma can then be
- * added to all of our resource-based rules (after we build these once and
- * determine that there are no ordering errors).  I haven't made this change yet
- * in the interests of keeping the code from getting too byzantine.
- *
- * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
+ * 
+ * <p>The order of rules is significant. If multiple rules may match at some point, the first
+ * matching rule is applied. </p>
+ * 
+ * <p>Forward and reverse rules may have an empty output string. Otherwise, an empty left or
+ * right hand side of any statement is a syntax error. </p>
+ * 
+ * <p>Single quotes are used to quote the special characters <code>=&gt;&lt;{}[]()|</code>.
+ * To specify a single quote itself, inside or outside of quotes, use two single quotes in a
+ * row. For example, the rule &quot;<code>'&gt;'&gt;o''clock</code>&quot; changes the string
+ * &quot;<code>&gt;</code>&quot; to the string &quot;<code>o'clock</code>&quot;. </p>
+ * 
+ * <p><b>Notes</b> </p>
+ * 
+ * <p>While a RuleBasedTransliterator is being built, it checks that the rules are added in
+ * proper order. For example, if the rule &quot;a&gt;x&quot; is followed by the rule
+ * &quot;ab&gt;y&quot;, then the second rule will throw an exception. The reason is that the
+ * second rule can never be triggered, since the first rule always matches anything it
+ * matches. In other words, the first rule <em>masks</em> the second rule. </p>
+ * 
+ * <p>Copyright (c) IBM Corporation 1999-2000. All rights reserved.</p>
  *
  * @author Alan Liu
- * @version $RCSfile: RuleBasedTransliterator.java,v $ $Revision: 1.8 $ $Date: 2000/01/11 02:25:03 $
+ * @version $RCSfile: RuleBasedTransliterator.java,v $ $Revision: 1.9 $ $Date: 2000/01/11 04:12:06 $
  *
  * $Log: RuleBasedTransliterator.java,v $
+ * Revision 1.9  2000/01/11 04:12:06  Alan
+ * Cleanup, embellish comments
+ *
  * Revision 1.8  2000/01/11 02:25:03  Alan
  * Rewrite UnicodeSet and RBT parsers for better performance and new syntax
  *
@@ -581,17 +598,6 @@ public class RuleBasedTransliterator extends Transliterator {
         private static final char CURSOR_POS          = '|';
 
         /**
-         * Specials must be quoted in rules to be used as literals.
-         * Specials may not occur in variable names.
-         */
-//!        private static final String SPECIALS = "{}[]|" + OPERATORS;
-
-        /**
-         * Specials that must be quoted in variable definitions.
-         */
-//!        private static final String DEF_SPECIALS = "{}";
-
-        /**
          * @param rules list of rules, separated by semicolon characters
          * @exception IllegalArgumentException if there is a syntax error in the
          * rules
@@ -607,9 +613,11 @@ public class RuleBasedTransliterator extends Transliterator {
         }
 
         /**
-         * Parse the given string as a sequence of rules, separated by semicolon
-         * characters (';'), and cause this object to implement those rules.  Any
-         * previous rules are discarded.  Typically this method is called exactly
+         * Parse an array of zero or more rules.  The strings in the array are
+         * treated as if they were concatenated together, with rule terminators
+         * inserted between array elements if not present already.
+         *
+         * Any previous rules are discarded.  Typically this method is called exactly
          * once, during construction.
          * @exception IllegalArgumentException if there is a syntax error in the
          * rules
@@ -618,10 +626,36 @@ public class RuleBasedTransliterator extends Transliterator {
             determineVariableRange(ruleArray);
 
             StringBuffer errors = null;
+
             try {
-                parseRuleArray(ruleArray);
+                for (int i=0; i<ruleArray.length; ++i) {
+                    String rule = ruleArray[i];
+                    int pos = 0;
+                    int limit = rule.length();
+                    while (pos < limit) {
+                        char c = rule.charAt(pos++);
+                        if (Character.isWhitespace(c)) {
+                            // Ignore leading whitespace.  Note that this is not
+                            // Unicode spaces, but Java spaces -- a subset,
+                            // representing whitespace likely to be seen in code.
+                            continue;
+                        }
+                        // Skip lines starting with the comment character
+                        if (c == RULE_COMMENT_CHAR) {
+                            pos = rule.indexOf("\n", pos) + 1;
+                            if (pos == 0) {
+                                break; // No "\n" found; rest of rule is a commnet
+                            }
+                            continue; // Either fall out or restart with next line
+                        }
+                        // We've found the start of a rule.  c is its first
+                        // character, and pos points past c.  Lexically parse the
+                        // rule into component pieces.
+                        pos = parseRule(rule, --pos, limit);                    
+                    }
+                }
             } catch (IllegalArgumentException e) {
-                errors = new StringBuffer(e.getMessage());
+                // errors = new StringBuffer(e.getMessage());
             }
             
             // Index the rules
@@ -640,56 +674,20 @@ public class RuleBasedTransliterator extends Transliterator {
             }
         }
 
-
-
-
-
-
-
-
-        private void parseRuleArray(String[] ruleArray) {
-            String[] leftRight = new String[2];
-            char[] op = new char[1];
-            for (int i=0; i<ruleArray.length; ++i) {
-                String rule = ruleArray[i];
-                int pos = 0;
-                int limit = rule.length();
-                while (pos < limit) {
-                    char c = rule.charAt(pos++);
-                    if (Character.isWhitespace(c)) {
-                        // Ignore leading whitespace.  Note that this is not
-                        // Unicode spaces, but Java spaces -- a subset,
-                        // representing whitespace likely to be seen in code.
-                        continue;
-                    }
-                    // Skip lines starting with the comment character
-                    if (c == RULE_COMMENT_CHAR) {
-                        pos = rule.indexOf("\n", pos) + 1;
-                        if (pos == 0) {
-                            break; // No "\n" found; rest of rule is a commnet
-                        }
-                        continue; // Either fall out or restart with next line
-                    }
-                    // We've found the start of a rule.  c is its first
-                    // character, and pos points past c.  Lexically parse the
-                    // rule into component pieces.
-                    pos = parseRule(rule, --pos, limit);                    
-                }
-            }
-        }
-
         /**
-         * Do a lexical parse of the next rule in the given rule string,
-         * starting at pos.  Return the index after the last character parsed.
-         * Do not parse characters at or after limit.
+         * MAIN PARSER.  Parse the next rule in the given rule string, starting
+         * at pos.  Return the index after the last character parsed.  Do not
+         * parse characters at or after limit.
          *
-         * The character at pos must be a non-whitespace character
+         * Important:  The character at pos must be a non-whitespace character
          * that is not the comment character.
          *
          * This method handles quoting, escaping, and whitespace removal.  It
-         * parses the end-of-rule character.
+         * parses the end-of-rule character.  It recognizes context and cursor
+         * indicators.  Once it does a lexical breakdown of the rule at pos, it
+         * creates a rule object and adds it to our rule list.
          */
-        int parseRule(String rule, int pos, int limit) {
+        private int parseRule(String rule, int pos, int limit) {
             // Locate the left side, operator, and right side
             int start = pos;
             char operator = 0;
@@ -907,8 +905,15 @@ public class RuleBasedTransliterator extends Transliterator {
             return pos;
         }
 
-
-
+        /**
+         * Throw an exception indicating a syntax error.  Search the rule string
+         * for the probably end of the rule.  Of course, if the error is that
+         * the end of rule marker is missing, then the rule end will not be found.
+         * In any case the rule start will be correctly reported.
+         * @param msg error description
+         * @param rule pattern string
+         * @param start position of first character of current rule
+         */
         private static final void syntaxError(String msg, String rule, int start) {
             int end = quotedIndexOf(rule, start, rule.length(), ";");
             if (end < 0) {
@@ -917,123 +922,12 @@ public class RuleBasedTransliterator extends Transliterator {
             throw new IllegalArgumentException(msg + " in " +
                                                rule.substring(start, end));
         }
-
-
-
-//|        /**
-//|         * Parse the given substring as a rule, and append it to the rules currently
-//|         * represented in this object.
-//|         * @param start the beginning index, inclusive; <code>0 <= start
-//|         * <= limit</code>.
-//|         * @param limit the ending index, exclusive; <code>start <= limit
-//|         * <= rules.length()</code>.
-//|         * @exception IllegalArgumentException if there is a syntax error in the
-//|         * rules
-//|         */
-//|        private void applyRule(int start, int limit) {
-//|            /* General description of parsing: Initially, rules contain two types of
-//|             * quoted characters.  First, there are variable references, such as
-//|             * "{alpha}".  Second, there are quotes, such as "'<'" or "''".  One of
-//|             * the first steps in parsing a rule is to resolve such quoted matter.
-//|             * Quotes are removed early, leaving unquoted literal matter.  Variable
-//|             * references are resolved and replaced by single characters.  In some
-//|             * instances these characters represent themselves; in others, they
-//|             * stand for categories of characters.  Character categories are either
-//|             * predefined (e.g., "{Lu}"), or are defined by the user using a
-//|             * statement (e.g., "vowels:aeiouAEIOU").
-//|             *
-//|             * Another early step in parsing is to split each rule into component
-//|             * pieces.  These pieces are, for every rule, a left-hand side, a right-
-//|             * hand side, and an operator.  The left- and right-hand sides may not
-//|             * be empty, except for the output patterns of forward and reverse
-//|             * rules.  In addition to this partitioning, the match patterns of
-//|             * forward and reverse rules must be partitioned into antecontext,
-//|             * postcontext, and literal pattern, where the context portions may or
-//|             * may not be present.  Finally, output patterns must have the cursor
-//|             * indicator '|' detected and removed, with its position recorded.
-//|             *
-//|             * Quote removal, variable resolution, and sub-pattern splitting must
-//|             * all happen at once.  This is due chiefly to the quoting mechanism,
-//|             * which allows special characters to appear at arbitrary positions in
-//|             * the final unquoted text.  (For this reason, alteration of the rule
-//|             * language is somewhat clumsy; it entails reassessment and revision of
-//|             * the parsing methods as a whole.)
-//|             *
-//|             * After this processing of rules is complete, the final end products
-//|             * are unquoted pieces of text of various types, and an integer cursor
-//|             * position, if one is specified.  These processed raw materials are now
-//|             * easy to deal with; other classes such as UnicodeSet and
-//|             * TransliterationRule need know nothing of quoting or variables.
-//|             */
-//|            StringBuffer left = new StringBuffer();
-//|            StringBuffer right = new StringBuffer();
-//|            StringBuffer anteContext = new StringBuffer();
-//|            StringBuffer postContext = new StringBuffer();
-//|            int cursorPos[] = new int[1];
-//|
-//|            char operator = parseRule(start, limit, left, right,
-//|                                      anteContext, postContext, cursorPos);
-//|
-//|            switch (operator) {
-//|            case VARIABLE_DEF_OP:
-//|                applyVariableDef(left.toString(), right.toString());
-//|                break;
-//|            case FORWARD_RULE_OP:
-//|                if (direction == FORWARD) {
-//|                    data.ruleSet.addRule(new TransliterationRule(
-//|                                             left.toString(), right.toString(),
-//|                                             anteContext.toString(), postContext.toString(),
-//|                                             cursorPos[0]));
-//|                } // otherwise ignore the rule; it's not the direction we want
-//|                break;
-//|            case REVERSE_RULE_OP:
-//|                if (direction == REVERSE) {
-//|                    data.ruleSet.addRule(new TransliterationRule(
-//|                                             right.toString(), left.toString(),
-//|                                             anteContext.toString(), postContext.toString(),
-//|                                             cursorPos[0]));
-//|                } // otherwise ignore the rule; it's not the direction we want
-//|                break;
-//|            case FWDREV_RULE_OP:
-//|                data.ruleSet.addRule(new TransliterationRule(
-//|                                         direction == FORWARD ? left.toString() : right.toString(),
-//|                                         direction == FORWARD ? right.toString() : left.toString(),
-//|                                         // Context & cursor disallowed
-//|                                         "", "", -1));
-//|                break;
-//|            }
-//|        }
-
-//|        /**
-//|         * Add a variable definition.
-//|         * @param name the name of the variable.  It must not already be defined.
-//|         * @param pattern the value of the variable.  It may be a single character
-//|         * or a pattern describing a character set.
-//|         * @exception IllegalArgumentException if there is a syntax error
-//|         */
-//|        private final void applyVariableDef(String name, String pattern) {
-//|            validateVariableName(name);
-//|            if (data.variableNames.get(name) != null) {
-//|                throw new IllegalArgumentException("Duplicate variable definition: "
-//|                                                   + name + '=' + pattern);
-//|            }
-//|            if (pattern.length() < 1) {
-//|                throw new IllegalArgumentException("Variable definition missing: "
-//|                                                   + name);
-//|            }
-//|            if (pattern.length() == 1) {
-//|                // Got a single character variable definition
-//|                data.variableNames.put(name, new Character(pattern.charAt(0)));
-//|            } else {
-//|                // Got more than one character; parse it as a category
-//|                UnicodeSet set = new UnicodeSet(pattern);
-//|                data.variableNames.put(name, registerSet(set));
-//|            }
-//|        }
-
-
-
-
+        
+        /**
+         * Allocate a private-use substitution character for the given set,
+         * register it in the setVariables hash, and return the substitution
+         * character.
+         */
         private final Character registerSet(UnicodeSet set) {
             if (variableNext >= variableLimit) {
                 throw new RuntimeException("Private use variables exhausted");
@@ -1042,274 +936,6 @@ public class RuleBasedTransliterator extends Transliterator {
             data.setVariables.put(c, set);
             return c;
         }
-
-
-
-
-//|        /**
-//|         * Given a rule, parses it into three pieces: The left side, the right side,
-//|         * and the operator.  Returns the operator.  Quotes and variable references
-//|         * are resolved; the otuput text in all <code>StringBuffer</code> parameters
-//|         * is literal text.  This method delegates to other parsing methods to
-//|         * handle the match pattern, output pattern, and other sub-patterns in the
-//|         * rule.
-//|         * @param start the beginning index, inclusive; <code>0 <= start
-//|         * <= limit</code>.
-//|         * @param limit the ending index, exclusive; <code>start <= limit
-//|         * <= rules.length()</code>.
-//|         * @param left left side of rule is appended to this buffer
-//|         * with the quotes removed and variables resolved
-//|         * @param right right side of rule is appended to this buffer
-//|         * with the quotes removed and variables resolved
-//|         * @param anteContext the preceding context of the match pattern,
-//|         * if there is one, is appended to this buffer
-//|         * @param postContext the following context of the match pattern,
-//|         * if there is one, is appended to this buffer
-//|         * @param cursorPos if there is a cursor in the output pattern, its
-//|         * offset is stored in <code>cursorPos[0]</code>
-//|         * @return The operator character, one of the characters in OPERATORS.
-//|         */
-//|        private char parseRule(int start, int limit,
-//|                               StringBuffer left, StringBuffer right,
-//|                               StringBuffer anteContext,
-//|                               StringBuffer postContext,
-//|                               int[] cursorPos) {
-//|            if (false) {
-//|                System.err.println("Parsing " + rules.substring(start, limit));
-//|            }
-//|            /* Parse the rule into three pieces -- left, operator, and right,
-//|             * parsing out quotes.  The result is that left and right will have
-//|             * unquoted text.  E.g., "gt<'>'" will have right = ">".  Unquoted
-//|             * operators throw an exception.  Two quotes inside or outside
-//|             * quotes indicates a quote literal.  E.g., "o''clock" -> "o'clock".
-//|             */
-//|            int i = quotedIndexOf(rules, start, limit, OPERATORS);
-//|            if (i < 0) {
-//|                throw new IllegalArgumentException(
-//|                              "Syntax error: "
-//|                              + rules.substring(start, limit));
-//|            }
-//|            char c = rules.charAt(i);
-//|            
-//|            // Look for "<>" double rules.
-//|            if ((i+1) < limit && rules.substring(i, i+2).equals(FWDREV_OP_STRING)) {
-//|                if (i == start) {
-//|                    throw new IllegalArgumentException(
-//|                                  "Empty left side: "
-//|                                  + rules.substring(start, limit));
-//|                }
-//|                if (i+2 == limit) {
-//|                    throw new IllegalArgumentException(
-//|                                  "Empty right side: "
-//|                                  + rules.substring(start, limit));
-//|                }
-//|                parseSubPattern(start, i, left, null, SPECIALS);
-//|                parseSubPattern(i+2, limit, right, null, SPECIALS);
-//|                return FWDREV_RULE_OP;
-//|            }
-//|
-//|            switch (c) {
-//|            case FORWARD_RULE_OP:
-//|                if (i == start) {
-//|                    throw new IllegalArgumentException(
-//|                                  "Empty left side: "
-//|                                  + rules.substring(start, limit));
-//|                }
-//|                parseMatchPattern(start, i, left, anteContext, postContext);
-//|                if (i != (limit-1)) {
-//|                    parseOutputPattern(i+1, limit, right, cursorPos);
-//|                }
-//|                break;
-//|            case REVERSE_RULE_OP:
-//|                if (i == (limit-1)) {
-//|                    throw new IllegalArgumentException(
-//|                                  "Empty right side: "
-//|                                  + rules.substring(start, limit));
-//|                }
-//|                if (i != start) {
-//|                    parseOutputPattern(start, i, left, cursorPos);
-//|                }
-//|                parseMatchPattern(i+1, limit, right, anteContext, postContext);
-//|                break;
-//|            case VARIABLE_DEF_OP:
-//|                if (i == start || i == (limit-1)) {
-//|                    throw new IllegalArgumentException(
-//|                                  "Empty left or right side: "
-//|                                  + rules.substring(start, limit));
-//|                }
-//|                parseSubPattern(start, i, left);
-//|                parseDefPattern(i+1, limit, right);
-//|                break;
-//|            default:
-//|                throw new RuntimeException();
-//|            }
-//|            return c;
-//|        }
-//|
-//|        /**
-//|         * Parses the match pattern of a forward or reverse rule.  Given the raw
-//|         * match pattern, return the match text and the context on both sides, if
-//|         * any.  Resolves all quotes and variables.
-//|         * @param start the beginning index, inclusive; <code>0 <= start
-//|         * <= limit</code>.
-//|         * @param limit the ending index, exclusive; <code>start <= limit
-//|         * <= rules.length()</code>.
-//|         * @param text the key to be matched will be appended to this buffer
-//|         * @param anteContext the preceding context, if any, will be appended
-//|         * to this buffer.
-//|         * @param postContext the following context, if any, will be appended
-//|         * to this buffer.
-//|         */
-//|        private void parseMatchPattern(int start, int limit,
-//|                                       StringBuffer text,
-//|                                       StringBuffer anteContext,
-//|                                       StringBuffer postContext) {
-//|            if (start >= limit) {
-//|                throw new IllegalArgumentException(
-//|                              "Empty expression in rule: "
-//|                              + rules.substring(start, limit));
-//|            }
-//|            if (anteContext != null) {
-//|                // Ignore optional opening and closing context characters
-//|                if (rules.charAt(start) == CONTEXT_OPEN) {
-//|                    ++start;
-//|                }
-//|                if (rules.charAt(limit-1) == CONTEXT_CLOSE) {
-//|                    --limit;
-//|                }
-//|                // The four possibilities are:
-//|                //             key
-//|                // anteContext]key
-//|                // anteContext]key[postContext
-//|                //             key[postContext
-//|                int ante = quotedIndexOf(rules, start, limit, String.valueOf(CONTEXT_CLOSE));
-//|                int post = quotedIndexOf(rules, start, limit, String.valueOf(CONTEXT_OPEN));
-//|                if (ante >= 0 && post >= 0 && ante > post) {
-//|                    throw new IllegalArgumentException(
-//|                                  "Syntax error in context specifier: "
-//|                                  + rules.substring(start, limit));
-//|                }
-//|                if (ante >= 0) {
-//|                    parseSubPattern(start, ante, anteContext);
-//|                    start = ante+1;
-//|                }
-//|                if (post >= 0) {
-//|                    parseSubPattern(post+1, limit, postContext);
-//|                    limit = post;
-//|                }
-//|            }
-//|            parseSubPattern(start, limit, text);
-//|        }
-//|
-//|        private final void parseSubPattern(int start, int limit,
-//|                                           StringBuffer text) {
-//|            parseSubPattern(start, limit, text, null, SPECIALS);
-//|        }
-//|
-//|        /**
-//|         * Parse a variable definition sub pattern.  This kind of sub
-//|         * pattern differs in the set of characters that are considered
-//|         * special.  In particular, the '[' and ']' characters are not
-//|         * special, since these are used in UnicodeSet patterns.
-//|         */
-//|        private final void parseDefPattern(int start, int limit,
-//|                                           StringBuffer text) {
-//|            parseSubPattern(start, limit, text, null, DEF_SPECIALS);
-//|        }
-//|
-//|        /**
-//|         * Parses the output pattern of a forward or reverse rule.  Given the
-//|         * output pattern, return the output text and the position of the cursor,
-//|         * if any.  Resolves all quotes and variables.
-//|         * @param rules the string to be parsed
-//|         * @param start the beginning index, inclusive; <code>0 <= start
-//|         * <= limit</code>.
-//|         * @param limit the ending index, exclusive; <code>start <= limit
-//|         * <= rules.length()</code>.
-//|         * @param text the output text will be appended to this buffer
-//|         * @param cursorPos if this parameter is not null, then cursorPos[0]
-//|         * will be set to the cursor position, or -1 if there is none.  If this
-//|         * parameter is null, then cursors will be disallowed.
-//|         */
-//|        private final void parseOutputPattern(int start, int limit,
-//|                                              StringBuffer text,
-//|                                              int[] cursorPos) {
-//|            parseSubPattern(start, limit, text, cursorPos, SPECIALS);
-//|        }
-//|
-//|        /**
-//|         * Parses a sub-pattern of a rule.  Return the text and the position of the cursor,
-//|         * if any.  Resolves all quotes and variables.
-//|         * @param rules the string to be parsed
-//|         * @param start the beginning index, inclusive; <code>0 <= start
-//|         * <= limit</code>.
-//|         * @param limit the ending index, exclusive; <code>start <= limit
-//|         * <= rules.length()</code>.
-//|         * @param text the output text will be appended to this buffer
-//|         * @param cursorPos if this parameter is not null, then cursorPos[0]
-//|         * will be set to the cursor position, or -1 if there is none.  If this
-//|         * parameter is null, then cursors will be disallowed.
-//|         * @param specials characters that must be quoted; typically either
-//|         * SPECIALS or DEF_SPECIALS.
-//|         */
-//|        private void parseSubPattern(int start, int limit,
-//|                                     StringBuffer text,
-//|                                     int[] cursorPos,
-//|                                     String specials) {
-//|            boolean inQuote = false;
-//|
-//|            if (start >= limit) {
-//|                throw new IllegalArgumentException("Empty expression in rule");
-//|            }
-//|            if (cursorPos != null) {
-//|                cursorPos[0] = -1;
-//|            }
-//|            for (int i=start; i<limit; ++i) {
-//|                char c = rules.charAt(i);
-//|                if (c == QUOTE) {
-//|                    // Check for double quote
-//|                    if ((i+1) < limit
-//|                        && rules.charAt(i+1) == QUOTE) {
-//|                        text.append(QUOTE);
-//|                        ++i; // Skip over both quotes
-//|                    } else {
-//|                        inQuote = !inQuote;
-//|                    }
-//|                } else if (inQuote) {
-//|                    text.append(c);
-//|                } else if (c == VARIABLE_REF_OPEN) {
-//|                    ++i;
-//|                    int j = rules.indexOf(VARIABLE_REF_CLOSE, i);
-//|                    if (i == j || j < 0) { // empty or unterminated
-//|                        throw new IllegalArgumentException("Illegal variable reference: "
-//|                                                           + rules.substring(start, limit));
-//|                    }
-//|                    String name = rules.substring(i, j);
-//|                    validateVariableName(name);
-//|                    text.append(getVariableDef(name).charValue());
-//|                    i = j;
-//|                } else if (c == CURSOR_POS && cursorPos != null) {
-//|                    if (cursorPos[0] >= 0) {
-//|                        throw new IllegalArgumentException("Multiple cursors: "
-//|                                                           + rules.substring(start, limit));
-//|                    }
-//|                    cursorPos[0] = text.length();
-//|                } else if (specials.indexOf(c) >= 0) {
-//|                    throw new IllegalArgumentException("Unquoted special character: "
-//|                                                       + rules.substring(start, limit));
-//|                } else {
-//|                    text.append(c);
-//|                }
-//|            }
-//|        }
-//|
-//|        private static void validateVariableName(String name) {
-//|            if (indexOf(name, SPECIALS) >= 0) {
-//|                throw new IllegalArgumentException(
-//|                              "Special character in variable name: "
-//|                              + name);
-//|            }
-//|        }
 
         /**
          * Returns the single character value of the given variable name.  Defined
@@ -1385,44 +1011,6 @@ public class RuleBasedTransliterator extends Transliterator {
                 }
             }
             return -1;
-        }
-
-        /**
-         * Returns the index of the first character in a set.  Unlike
-         * String.indexOf(), this method searches not for a single character, but
-         * for any character of the string <code>setOfChars</code>.
-         * @param text text to be searched
-         * @param start the beginning index, inclusive; <code>0 <= start
-         * <= limit</code>.
-         * @param limit the ending index, exclusive; <code>start <= limit
-         * <= text.length()</code>.
-         * @param setOfChars string with one or more distinct characters
-         * @return Offset of the first character in <code>setOfChars</code>
-         * found, or -1 if not found.
-         * @see #quotedIndexOf
-         */
-        private static int indexOf(String text, int start, int limit,
-                                   String setOfChars) {
-            for (int i=start; i<limit; ++i) {
-                if (setOfChars.indexOf(text.charAt(i)) >= 0) {
-                    return i;
-                }
-            }
-            return -1;
-        }
-
-        /**
-         * Returns the index of the first character in a set.  Unlike
-         * String.indexOf(), this method searches not for a single character, but
-         * for any character of the string <code>setOfChars</code>.
-         * @param text text to be searched
-         * @param setOfChars string with one or more distinct characters
-         * @return Offset of the first character in <code>setOfChars</code>
-         * found, or -1 if not found.
-         * @see #quotedIndexOf
-         */
-        private static int indexOf(String text, String setOfChars) {
-            return indexOf(text, 0, text.length(), setOfChars);
         }
 
 
