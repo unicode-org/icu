@@ -108,10 +108,16 @@ enum {
      URX_LA_START      = 37,   // Starting a LookAround expression.
                                //   Save InputPos and SP in static data.
                                //   Operand:  Static data offset for the save
-     URX_LA_END        = 38    // Ending a Lookaround expression.
+     URX_LA_END        = 38,   // Ending a Lookaround expression.
                                //   Restore InputPos and Stack to saved values.
                                //   Operand:  Static data offset for saved data.
-};
+     URX_ONECHAR_I     = 39,   // Test for case-insensitive match of a literal character.
+                               //   Operand:  the literal char.
+     URX_STRING_I      = 40    // Case insensitive string compare.
+                               //   First Operand:  Index of start of string in string literals
+                               //   Second Operand (next word in compiled code):
+                               //     the length of the string.
+};           
 
 // Keep this list of opcode names in sync with the above enum
 //   Used for debug printing only.
@@ -154,7 +160,9 @@ enum {
         "STO_INP_LOC",         \
         "JMPX",                \
         "LA_START",            \
-        "LA_END"
+        "LA_END",              \
+        "ONECHAR_I",           \
+        "STRING_I"
 
 //
 //  Convenience macros for assembling and disassembling a compiled operation.

@@ -145,6 +145,7 @@
 "(?:ABC)+"                     "<0>ABCABCABC</0>D"
 "(?:ABC)DEF+"                  "<0>ABCDEFFF</0>D"
 "AB\.C\eD\u0666E"              "<0>AB.C\u001BD\u0666E</0>F"
+"ab\Bde"                        "<0>abde</0>"
 
 
 # {min,max} iteration qualifier

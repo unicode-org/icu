@@ -100,6 +100,8 @@ private:
     void        fixLiterals(UBool split=FALSE);      // Fix literal strings.
     void        insertOp(int32_t where);             // Open up a slot for a new op in the
                                                      //   generated code at the specified location.
+    void        emitONE_CHAR(UChar32 c);             // EMit a ONE_CHAR op into the compiled code,
+                                                     //   taking case mode into account.
     UBool       possibleNullMatch(int32_t start,     // Test a range of compiled pattern for
                                   int32_t end);      //   for possibly matching an empty string.
 
@@ -127,16 +129,24 @@ private:
     RegexPatternChar              fC;                // Current char for parse state machine
                                                      //   processing.
 
-    int32_t                       fStringOpStart;    // While a literal string is being scanned
-                                                     //   holds the start index within RegexPattern.
-                                                     //   fLiteralText where the string is being stored.
-
+    //
+    //   Data for the state machine that parses the regular expression.
+    //
     RegexTableEl                  **fStateTable;     // State Transition Table for regex Rule
                                                      //   parsing.  index by p[state][char-class]
 
     uint16_t                      fStack[kStackSize];  // State stack, holds state pushes
     int                           fStackPtr;           //  and pops as specified in the state
                                                        //  transition rules.
+
+    //
+    //  Data associated with the generation of the pcode for the match engine
+    //
+    UBool                         fCaseI;            // Case Insensitive Match Mode is on.
+
+    int32_t                       fStringOpStart;    // While a literal string is being scanned
+                                                     //   holds the start index within RegexPattern.
+                                                     //   fLiteralText where the string is being stored.
 
     int32_t                       fPatternLength;    // Length of the input pattern string.
 
