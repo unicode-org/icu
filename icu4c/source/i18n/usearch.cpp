@@ -431,7 +431,7 @@ inline UBool isBreakUnit(const UStringSearch *strsrch, int32_t start,
                     return FALSE;
                 }
             }
-            if (ucol_next(coleiter, &status) != UCOL_NULLORDER) {
+            if (ucol_next(coleiter, &status) != (int32_t)UCOL_NULLORDER) {
                 // extra collation elements at the end of the match
                 return FALSE;
             }
