@@ -171,7 +171,7 @@
 #if defined(OS390) && (__COMPILER_VER__ < 0x41020000) && defined(XP_CPLUSPLUS)
 #    define U_CALLCONV __cdecl
 #else
-#    define U_CALLCONV 
+#    define U_CALLCONV U_EXPORT2
 #endif
 
 /**
