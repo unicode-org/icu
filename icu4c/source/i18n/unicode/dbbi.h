@@ -91,9 +91,9 @@ public:
      * U_FILE_ACCESS_ERROR will be returned if the file does not exist.
      * The caller owns the returned object and is responsible for deleting it.
      ======================================================================= */
-
+ private:
     DictionaryBasedBreakIterator(const void* tablesImage, char* dictionaryFilename, UErrorCode& status);
-
+ public:
     //=======================================================================
     // boilerplate
     //=======================================================================
@@ -200,7 +200,12 @@ private:
      */
     void bumpDictionaryCharCount(void);
 
+    /*
+     * HSYS : Please revisit with Rich, the ctors of the DBBI class is currently
+     * marked as private.
+     */
     friend class DictionaryBasedBreakIteratorTables;
+    friend class BreakIterator;
 };
 
 inline UClassID DictionaryBasedBreakIterator::getDynamicClassID(void) const {

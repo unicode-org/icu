@@ -215,8 +215,10 @@ private:
      * Class ID
      */
     static char fgClassID;
-
-public:
+/*
+ * HSYS: To be revisited, once the ctor are made public.
+ */
+ protected:
     //=======================================================================
     // constructors
     //=======================================================================
@@ -226,6 +228,7 @@ public:
 // beginning of that file.
 RuleBasedBreakIterator(const void* image);
 
+ public:
     /**
      * Copy constructor.  Will produce a collator with the same behavior,
      * and which iterates over the same text, as the one passed in.
