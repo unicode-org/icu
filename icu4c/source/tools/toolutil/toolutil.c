@@ -77,12 +77,12 @@ findBasename(const char *filename) {
 
 /* tool memory helper ------------------------------------------------------- */
 
-typedef struct UToolMemory {
+struct UToolMemory {
     char name[64];
     int32_t capacity, maxCapacity, size, index;
     void *array;
     UAlignedMemory staticArray[1];
-} UToolMemory;
+};
 
 U_CAPI UToolMemory * U_EXPORT2
 utm_open(const char *name, int32_t initialCapacity, int32_t maxCapacity, int32_t size) {
