@@ -35,6 +35,7 @@ import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.XMLReaderFactory;
 import org.xml.sax.ContentHandler;
+import org.xml.sax.ext.DeclHandler;
 import org.xml.sax.ext.LexicalHandler;
 import org.xml.sax.XMLReader;
 
@@ -62,7 +63,15 @@ import com.ibm.icu.util.UResourceBundle;
  * by_type/X.html, where X is a type. X may be the concatenation of more than more than
  * one element, where the file would otherwise be too large.
  * @author medavis
- */public class GenerateSidewaysView {
+ */
+/* 
+Notes:
+http://xml.apache.org/xerces2-j/faq-grammars.html#faq-3
+http://developers.sun.com/dev/coolstuff/xml/readme.html
+http://lists.xml.org/archives/xml-dev/200007/msg00284.html
+http://java.sun.com/j2se/1.4.2/docs/api/org/xml/sax/DTDHandler.html
+ */
+public class GenerateSidewaysView {
     // debug flags
     static final boolean DEBUG = false;
     static final boolean DEBUG2 = false;
@@ -80,7 +89,8 @@ import com.ibm.icu.util.UResourceBundle;
         MATCH = 4,
         SKIP = 5,
         TZADIR = 6,
-        NONVALIDATING = 7;
+        NONVALIDATING = 7,
+        SHOW_DTD = 8;
         
     private static final String NEWLINE = "\n";
 
@@ -93,6 +103,7 @@ import com.ibm.icu.util.UResourceBundle;
             UOption.create("skip", 'z', UOption.REQUIRES_ARG).setDefault("zh_(C|S|HK|M).*"),
             UOption.create("tzadir", 't', UOption.REQUIRES_ARG).setDefault("C:\\ICU4J\\icu4j\\src\\com\\ibm\\icu\\dev\\tool\\cldr\\"),
             UOption.create("nonvalidating", 'n', UOption.NO_ARG),
+            UOption.create("dtd", 'w', UOption.NO_ARG),
     };
     private static String timeZoneAliasDir = null;
     
@@ -120,7 +131,7 @@ import com.ibm.icu.util.UResourceBundle;
                 GenerateSidewaysView temp = getCLDR(baseName, !options[NONVALIDATING].doesOccur);
                 // if (baseName.equals("zh_TW")) baseName = "zh_Hant_TW";
                 // if (baseName.equals("root")) temp.addMissing();
-
+                if (options[SHOW_DTD].doesOccur) temp.writeDTDCheck();
                 temp.writeTo(options[DESTDIR].value, baseName);
                 generateBat(options[SOURCEDIR].value, baseName + ".xml", options[DESTDIR].value, baseName + ".xml");
                 sidewaysView.putData(temp.data, baseName);
@@ -129,10 +140,18 @@ import com.ibm.icu.util.UResourceBundle;
             sidewaysView.showCacheData();
         } finally {
             log.close();
+            System.out.println("Done");
        }
     }
     
-    static Collator DEFAULT_COLLATION = null;
+    /**
+	 * 
+	 */
+	private void writeDTDCheck() {
+		DEFAULT_DECLHANDLER.checkData();
+	}
+
+	static Collator DEFAULT_COLLATION = null;
     
     static final Set IGNOREABLE =  new HashSet(Arrays.asList(new String[] {
             "draft", 
@@ -195,6 +214,7 @@ import com.ibm.icu.util.UResourceBundle;
         
     OrderedMap data = new OrderedMap();
     MyContentHandler DEFAULT_HANDLER = new MyContentHandler();
+    MyDeclHandler DEFAULT_DECLHANDLER = new MyDeclHandler();
     XMLReader xmlReader;
 
     /*SAXParser SAX;
@@ -280,6 +300,7 @@ import com.ibm.icu.util.UResourceBundle;
 
         xmlReader.setContentHandler(DEFAULT_HANDLER);
         xmlReader.setProperty("http://xml.org/sax/properties/lexical-handler",DEFAULT_HANDLER);
+        if (options[SHOW_DTD].doesOccur) xmlReader.setProperty("http://xml.org/sax/properties/declaration-handler", DEFAULT_DECLHANDLER);
 
         readFrom(options[SOURCEDIR].value, filename);
         // walk through the map removing anything that is inherited from a parent.
@@ -523,7 +544,7 @@ import com.ibm.icu.util.UResourceBundle;
             if (path) {
             	return "[@" + name + "='" + BagFormatter.toHTML.transliterate(value) + "']";
             } else {
-                return " " + name + "=\"" + BagFormatter.toHTML.transliterate(value) + "\"";                
+                return " " + name + "=\"" + BagFormatter.toXML.transliterate(value) + "\"";                
             }
         }
         public int compareTo(Object o) {
@@ -1669,6 +1690,147 @@ import com.ibm.icu.util.UResourceBundle;
             out.println("<a href='http://www.jtcsv.com/cgibin/cldrwiki.pl?ByType'>About this chart</a> <br/>");
             writeFooterAndClose(out);
         }
+    }
+    
+    class MyDeclHandler implements DeclHandler {
+        Map element_childComparator = new TreeMap();
+        boolean showReason = false;
+        Set SKIP_LIST = new HashSet(Arrays.asList(new String[] {
+        		"collation", "base", "settings", "suppress_contractions", "optimize", "rules", "reset",
+                "context", "p", "pc", "s", "sc", "t", "tc", "q", "qc", "i", "ic", "extend", "x"
+        }));
+        Object DONE = new Object(); // marker
+        
+        public void checkData() {
+        	// verify that the ordering is the consistent for all child elements
+            // do this by building an ordering from the lists.
+            // The first item has no greater item in any set. So find an item that is only first
+            showReason = false;
+            List orderingList = new ArrayList();
+            while (true) {
+                Object first = getFirst(orderingList);
+                if (first == DONE) {
+                    log.println("Successful Ordering");
+                    int count = 0;
+                    for (Iterator it = orderingList.iterator(); it.hasNext();) log.println(++count + it.next().toString()); 
+                    break;
+                }
+                if (first != null) { 
+                    orderingList.add(first);
+                } else {
+                    showReason = true;
+                    getFirst(orderingList);
+                    log.println();
+                    log.println("Failed ordering. So far:");
+                    for (Iterator it = orderingList.iterator(); it.hasNext();) log.print("\t" + it.next());
+                    log.println();
+                    log.println("Items:");
+                    for (Iterator it =  element_childComparator.keySet().iterator(); it.hasNext();) showRow(it.next(), true);
+                    log.println();
+                	break;
+                }
+            }
+        }
+        
+        /**
+		 * @param parent
+         * @param skipEmpty TODO
+		 */
+		private void showRow(Object parent, boolean skipEmpty) {
+			List items = (List) element_childComparator.get(parent);
+            if (skipEmpty && items.size() == 0) return;
+            log.print(parent);
+			for (Iterator it2 = items.iterator(); it2.hasNext();) log.print("\t" + it2.next());
+			log.println();
+		}
+
+		/**
+		 * @param orderingList
+		 */
+		private Object getFirst(List orderingList) {
+			Set keys = element_childComparator.keySet();
+            Set failures = new HashSet();
+            boolean allZero = true;
+            for (Iterator it = keys.iterator(); it.hasNext();) {
+                List list = (List) element_childComparator.get(it.next());
+                if (list.size() != 0) {
+                    allZero = false;
+                	Object possibleFirst = list.get(0);
+                    if (!failures.contains(possibleFirst) && isAlwaysFirst(possibleFirst)) {
+                        // we survived the guantlet. add to ordering list, remove from the mappings              
+                        removeEverywhere(possibleFirst);
+                        return possibleFirst;
+                    } else {
+                    	failures.add(possibleFirst);
+                    }
+                }
+            }
+            if (allZero) return DONE;
+            return null;
+		}
+        /**
+		 * @param keys
+		 * @param it
+		 * @param possibleFirst
+		 */
+		private void removeEverywhere(Object possibleFirst) {
+			// and remove from all the lists
+			for (Iterator it2 = element_childComparator.keySet().iterator(); it2.hasNext();) {
+			    List list2 = (List) element_childComparator.get(it2.next());
+			    list2.remove(possibleFirst);
+			}
+		}
+
+		private boolean isAlwaysFirst(Object possibleFirst) {
+            if (showReason) log.println("Trying: " + possibleFirst);
+            for (Iterator it2 = element_childComparator.keySet().iterator(); it2.hasNext();) {
+                Object key = it2.next();
+                List list2 = (List) element_childComparator.get(key);
+                int pos = list2.indexOf(possibleFirst);
+                if (pos > 0) {
+                    if (showReason) {
+                        log.print("Failed at:\t");
+                        showRow(key, false);
+                    }
+                    return false;
+                }
+            }
+            return true;
+        }
+
+		// refine later; right now, doesn't handle multiple elements well.
+		public void elementDecl(String name, String model) throws SAXException {
+            if (SKIP_LIST.contains(name)) return;
+			//log.println("Element\t" + name + "\t" + model);
+            String[] list = model.split("[^A-Z0-9a-z]");
+            List mc = new ArrayList();
+            if (name.equals("currency")) {
+                mc.add("alias");
+                mc.add("symbol");
+                mc.add("pattern");
+            }
+            for (int i = 0; i < list.length; ++i) {
+                if (list[i].length() == 0) continue;
+            	//log.print("\t" + list[i]);
+                if (mc.contains(list[i])) {
+                    log.println("Duplicate attribute " + name + ", " + list[i]);
+                } else {
+                    mc.add(list[i]);
+                }
+            }
+            element_childComparator.put(name, mc);
+            //log.println();
+		}
+		public void attributeDecl(String eName, String aName, String type, String mode, String value) throws SAXException {
+            //log.println("Attribute\t" + eName + "\t" + aName + "\t" + type + "\t" + mode + "\t" + value);         
+		}
+		public void internalEntityDecl(String name, String value) throws SAXException {
+            //log.println("Internal Entity\t" + name + "\t" + value);   
+		}
+		public void externalEntityDecl(String name, String publicId, String systemId) throws SAXException {
+            //log.println("Internal Entity\t" + name + "\t" + publicId + "\t" + systemId);   
+		}
+   
     }
     
     class MyContentHandler implements ContentHandler, LexicalHandler {

@@ -45,6 +45,7 @@ import com.ibm.icu.text.Normalizer;
 import com.ibm.icu.text.NumberFormat;
 import com.ibm.icu.text.RuleBasedCollator;
 import com.ibm.icu.text.SimpleDateFormat;
+import com.ibm.icu.text.Transliterator;
 import com.ibm.icu.text.UTF16;
 import com.ibm.icu.text.UnicodeSet;
 import com.ibm.icu.text.UnicodeSetIterator;
@@ -65,6 +66,7 @@ import com.ibm.icu.dev.tool.cldr.ICUResourceWriter.ResourceTable;
  * TODO Get the data directly from the CLDR tree.
  * @author medavis
  */
+
 public class GenerateCldrTests {
     
     static private PrintWriter log;
@@ -75,7 +77,8 @@ public class GenerateCldrTests {
         DESTDIR = 2,
         LOGDIR = 3,
         SOURCEDIR =4,
-        MATCH = 5;
+        MATCH = 5,
+        FULLY_RESOLVED = 6;
 
     private static final UOption[] options = {
             UOption.HELP_H(),
@@ -84,6 +87,7 @@ public class GenerateCldrTests {
             UOption.create("log", 'l', UOption.REQUIRES_ARG).setDefault("C:\\DATA\\GEN\\cldr\\test\\"),
             UOption.SOURCEDIR().setDefault("C:\\ICU4C\\locale\\common\\"),
             UOption.create("match", 'm', UOption.REQUIRES_ARG).setDefault(".*"),
+            UOption.create("fullyresolved", 'f', UOption.NO_ARG),
     };
     
     CldrCollations cldrCollations;   
@@ -254,7 +258,7 @@ public class GenerateCldrTests {
         out.println("<!DOCTYPE ldml SYSTEM 'http://www.unicode.org/cldr/dtd/1.2/beta/cldrTest.dtd'>");
         out.println("<!-- For information, see readme.html -->");
         out.println(" <cldrTest version='1.2' base='" + locale + "'>");
-        out.println(" <!-- " + BagFormatter.toHTML.transliterate(
+        out.println(" <!-- " + BagFormatter.toXML.transliterate(
                 locale.getDisplayName(ULocale.ENGLISH) + " ["
                 + locale.getDisplayName(locale))
                 + "] -->");
@@ -263,6 +267,7 @@ public class GenerateCldrTests {
         generateItems(locale, collationLocales, CollationEquator, CollationShower);
         out.println(" </cldrTest>");
         out.close();
+        GenerateSidewaysView.generateBat(options[SOURCEDIR].value + "test" + File.separator, locale + ".xml", options[DESTDIR].value, locale + ".xml");
     }
 
     /*
@@ -609,7 +614,7 @@ public class GenerateCldrTests {
         }
         tailored = createCaseClosure(tailored);
         tailored = nfc(tailored);
-        System.out.println(tailored.toPattern(true));
+        //System.out.println(tailored.toPattern(true));
         
 		UnicodeSet exemplars = getExemplarSet(locale, UnicodeSet.CASE);
         // add all the exemplars
@@ -619,7 +624,7 @@ public class GenerateCldrTests {
         
         exemplars = createCaseClosure(exemplars);
         exemplars = nfc(exemplars);
-        System.out.println(exemplars.toPattern(true));
+        //System.out.println(exemplars.toPattern(true));
 		tailored.addAll(exemplars);
         //UnicodeSet tailoredMinusHan = new UnicodeSet(tailored).removeAll(SKIP_COLLATION_SET);
         if (!exemplars.containsAll(tailored)) {
@@ -684,6 +689,7 @@ public class GenerateCldrTests {
         for (int i = 0; i < files.length; ++i) {
             String name = files[i].getName();
             if (!name.endsWith(".xml")) continue;
+            if (name.startsWith("supplementalData")) continue;
             String locale = name.substring(0,name.length()-4); // drop .xml
             if (!locale.equals("root") && !m.reset(locale).matches()) continue;
             s.add(locale);
@@ -734,10 +740,15 @@ public class GenerateCldrTests {
             
         }
         void getInfo(String locale) {
-            //System.out.println(locale);     
+            System.out.println("Getting info for: " + locale);     
             locales.add(new ULocale(locale));
-            // Document doc = LDMLUtilities.getFullyResolvedLDML(sourceDir, locale, false, false, false);
-            Document doc = LDMLUtilities.parse(sourceDir + locale + ".xml", false);
+            Document doc;
+            if (options[FULLY_RESOLVED].doesOccur) {
+				doc = LDMLUtilities.getFullyResolvedLDML(sourceDir, locale,
+						false, false, false);
+			} else {
+				doc = LDMLUtilities.parse(sourceDir + locale + ".xml", false);
+			}
             Node node = LDMLUtilities.getNode(doc, "//ldml/characters/exemplarCharacters");
             if (node == null) return;
             if (isDraft(node)) System.out.println("Skipping draft: " + locale + ", " + getXPath(node));
@@ -863,6 +874,7 @@ public class GenerateCldrTests {
             }
             return source;
         }
+        static Transliterator fromHex = Transliterator.getInstance("hex-any");
         
         private void getCollationRules(String locale) throws Exception {
             System.out.println(locale);
@@ -889,9 +901,18 @@ public class GenerateCldrTests {
                             } else 
                             */
                             if (foo.name.equals("Sequence")) {
-                                String rules = foo.val;
-                                RuleBasedCollator fixed = generateCollator(locale, current.name, foo.name, foo.val);
-                                if (fixed != null) types_rules.put(current.name, fixed);
+                                // remove the \ u's, because they blow up
+                                String rules = fromHex.transliterate(foo.val);
+                                RuleBasedCollator fixed = generateCollator(locale, current.name, foo.name, rules);
+                                if (fixed != null) {
+                                    log.println("Rules for: " + locale + "," + current.name);
+                                    log.println(rules);
+                                    if (!rules.equals(foo.val)) {
+                                        log.println("Original Rules from Ram: ");
+                                        log.println(foo.val);
+                                    }
+                                    types_rules.put(current.name, fixed);
+                                }
                             }
                         }
                     }
