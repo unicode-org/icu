@@ -7,6 +7,7 @@ import java.io.PrintWriter;
 
 import com.ibm.text.UCD.Default;
 import com.ibm.text.UCD.GenerateData;
+import com.ibm.text.UCD.MakeUnicodeFiles;
 import com.ibm.text.UCD.UCD_Types;
 
 public class UnicodeDataFile {
@@ -26,16 +27,23 @@ public class UnicodeDataFile {
         
         result.out.println("# " + filename + UnicodeDataFile.getFileSuffix(false));
         result.out.println(generateDateLine());
-        result.out.println("#");
+        result.out.println("#");        
+        result.out.println("# Unicode Character Database");        
+        result.out.println("# Copyright (c) 1991-2004 Unicode, Inc.");
+        result.out.println(
+            "# For terms of use, see http://www.unicode.org/terms_of_use.html");
+        result.out.println("# For documentation, see UCD.html");
         try {
             Utility.appendFile(filename + "Header.txt", Utility.LATIN1, result.out);
         } catch (FileNotFoundException e) {
+            /*
             result.out.println("# Unicode Character Database: Derived Property Data");
             result.out.println("# Generated algorithmically from the Unicode Character Database");
             result.out.println("# For documentation, see UCD.html");
             result.out.println("# Note: Unassigned and Noncharacter codepoints may be omitted");
             result.out.println("#       if they have default property values.");
             result.out.println("# ================================================");
+            */
         }
         
         return result;
@@ -51,14 +59,20 @@ public class UnicodeDataFile {
     }
 
     public static String getHTMLFileSuffix(boolean withDVersion) {
-        return "-" + Default.ucd().getVersion() 
-            + ((withDVersion && UCD_Types.dVersion >= 0) ? ("d" + UCD_Types.dVersion) : "") 
+        return "-"
+            + Default.ucd().getVersion()
+            + ((withDVersion && MakeUnicodeFiles.dVersion >= 0)
+                ? ("d" + MakeUnicodeFiles.dVersion)
+                : "")
             + ".html";
     }
 
     public static String getFileSuffix(boolean withDVersion) {
-        return "-" + Default.ucd().getVersion() 
-            + ((withDVersion && UCD_Types.dVersion >= 0) ? ("d" + UCD_Types.dVersion) : "") 
+        return "-"
+            + Default.ucd().getVersion()
+            + ((withDVersion && MakeUnicodeFiles.dVersion >= 0)
+                ? ("d" + MakeUnicodeFiles.dVersion)
+                : "")
             + ".txt";
     }
 

@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/MyFloatLister.java,v $
-* $Date: 2003/03/12 16:01:26 $
-* $Revision: 1.5 $
+* $Date: 2004/03/11 19:03:17 $
+* $Revision: 1.6 $
 *
 *******************************************************************************
 */
@@ -40,7 +40,7 @@ class MyFloatLister extends PropertyLister {
     public byte status(int cp) {
         //if ((cp & 0xFFF) == 0) System.out.println("# " + Utility.hex(cp));
         if (false && !ucdData.isRepresented(cp)) {
-            if (ucdData.mapToRepresentative(cp, false) != cp) return PropertyLister.CONTINUE;
+            if (ucdData.mapToRepresentative(cp, ucdData.getCompositeVersion()) != cp) return PropertyLister.CONTINUE;
             return PropertyLister.CONTINUE;
         }
         if (ucdData.getCategory(cp) == Cn) return PropertyLister.CONTINUE;

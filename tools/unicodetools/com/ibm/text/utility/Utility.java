@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/utility/Utility.java,v $
-* $Date: 2004/02/18 03:09:02 $
-* $Revision: 1.40 $
+* $Date: 2004/03/11 19:03:16 $
+* $Revision: 1.41 $
 *
 *******************************************************************************
 */
@@ -725,8 +725,7 @@ public final class Utility implements UCD_Types {    // COMMON UTILITIES
     public static PrintWriter openPrintWriter(String directory, String filename, Encoding options) throws IOException {
         File file = new File(directory + filename);
         Utility.fixDot();
-        System.out.print("Creating File: " + file);
-        System.out.println("\t" + file.getCanonicalPath());
+        System.out.println("Creating File: " + file.getCanonicalPath());
         File parent = new File(file.getParent());
         //System.out.println("Creating File: "+ parent);
         parent.mkdirs();

@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/UCD_Types.java,v $
-* $Date: 2004/02/18 03:09:01 $
-* $Revision: 1.27 $
+* $Date: 2004/03/11 19:03:16 $
+* $Revision: 1.28 $
 *
 *******************************************************************************
 */
@@ -15,9 +15,7 @@ package com.ibm.text.UCD;
 
 public interface UCD_Types {
     
-    public static final int dVersion = 6; // change to fix the generated file D version. If less than zero, no "d"
-    static final byte BINARY_FORMAT = 14; // bumped if binary format of UCD changes. Forces rebuild
-    
+    static final byte BINARY_FORMAT = 15; // bumped if binary format of UCD changes. Forces rebuild   
     
     public static final String BASE_DIR = "C:\\DATA\\";
     public static final String UCD_DIR = BASE_DIR + "UCD\\";
@@ -213,9 +211,10 @@ public interface UCD_Types {
         Soft_Dotted = 29,
         Logical_Order_Exception = 30,
         Other_ID_Start = 31,
-    Sentence_Terminal = 32,
-    Variation_Selector = 33,
-	    LIMIT_BINARY_PROPERTIES = 34;
+        Sentence_Terminal = 32,
+        Variation_Selector = 33,
+        Other_ID_Continue = 34,
+	    LIMIT_BINARY_PROPERTIES = 35;
 
 	/*
     static final int
@@ -383,7 +382,8 @@ public interface UCD_Types {
         OSMANYA = 51,
         CYPRIOT = 52,
         BRAILLE = 53,
-        LIMIT_SCRIPT = 54;
+        KATAKANA_OR_HIRAGANA = 54,
+        LIMIT_SCRIPT = 55;
 
   static final int
     UNKNOWN = 0,

@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/GenerateData.java,v $
-* $Date: 2004/02/18 03:08:59 $
-* $Revision: 1.34 $
+* $Date: 2004/03/11 19:03:17 $
+* $Revision: 1.35 $
 *
 *******************************************************************************
 */
@@ -110,8 +110,8 @@ public class GenerateData implements UCD_Types {
             output.println("# Generated algorithmically from the Unicode Character Database");
         }
         output.println("# For documentation, see UCD.html");
-        output.println("# Note: Unassigned and Noncharacter codepoints may be omitted");
-        output.println("#       if they have default property values.");
+        //output.println("# Note: Unassigned and Noncharacter codepoints may be omitted");
+        //output.println("#       if they have default property values.");
         output.println(HORIZONTAL_LINE);
         output.println();
     }

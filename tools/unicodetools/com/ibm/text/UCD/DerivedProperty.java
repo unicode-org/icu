@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/DerivedProperty.java,v $
-* $Date: 2004/02/18 03:08:59 $
-* $Revision: 1.25 $
+* $Date: 2004/03/11 19:03:17 $
+* $Revision: 1.26 $
 *
 *******************************************************************************
 */
@@ -378,7 +378,7 @@ public final class DerivedProperty implements UCD_Types {
                 shortName = "IDC";
                 header = "# Derived Property: " + name
                     + "\r\n#  Characters that can continue an identifier."
-                    + "\r\n#  Generated from: ID_Start + Mn+Mc+Nd+Pc"
+                    + "\r\n#  Generated from: ID_Start + Mn+Mc+Nd+Pc + Other_ID_Continue"
                     + "\r\n#  NOTE: Cf characters should be filtered out.";
             }
             public boolean hasValue(int cp) {

@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/UCD_Names.java,v $
-* $Date: 2004/02/18 03:09:01 $
-* $Revision: 1.26 $
+* $Date: 2004/03/11 19:03:16 $
+* $Revision: 1.27 $
 *
 *******************************************************************************
 */
@@ -152,7 +152,8 @@ final class UCD_Names implements UCD_Types {
         "Logical_Order_Exception",
         "Other_ID_Start",
         "STerm",
-        "Variation_Selector"
+        "Variation_Selector",
+        "Other_ID_Continue",
     };
 
     static final String[] SHORT_BP = {
@@ -189,7 +190,8 @@ final class UCD_Names implements UCD_Types {
         "LOE",
         "OIDS",
         "STerm",
-        "VS"
+        "VS",
+        "OIDC"
     };
 
     /*
@@ -262,7 +264,7 @@ final class UCD_Names implements UCD_Types {
         "Unknown", "OpenPunctuation", "ClosePunctuation", "Quotation",
         "Glue", "Nonstarter", "Exclamation", "BreakSymbols",
         "InfixNumeric", "PrefixNumeric", "PostfixNumeric",
-        "Numeric", "Alphabetic", "Ideographic", "Inseperable", "Hyphen",
+        "Numeric", "Alphabetic", "Ideographic", "Inseparable", "Hyphen",
         "CombiningMark", "BreakBefore", "BreakAfter", "Space",
         "MandatoryBreak", "CarriageReturn", "LineFeed", "ContingentBreak",
         "ComplexContext", "Ambiguous", "BreakBoth", "Surrogate", "ZWSpace",
@@ -327,7 +329,8 @@ final class UCD_Names implements UCD_Types {
     "SHAVIAN",
     "OSMANYA",
     "CYPRIOT", 
-    "BRAILLE", 
+    "BRAILLE",
+    "KATAKANA_OR_HIRAGANA",
     
   };
 
@@ -395,6 +398,7 @@ final class UCD_Names implements UCD_Types {
     "Osma",
     "Cprt",
     "Brai",
+    "Hrkt",
 
   };
 
@@ -643,11 +647,13 @@ final class UCD_Names implements UCD_Types {
                 case 9: s = style < LONG ? "VR" :  "Virama"; break;
                 case 200: s = style < LONG ? "ATBL" :  "AttachedBelowLeft"; break;
                 case 202: s = style < LONG ? "ATB" :  "AttachedBelow"; break;
+                /*
                 case 204: s = style < LONG ? "ATBR" :  "AttachedBelowRight"; break;
                 case 208: s = style < LONG ? "ATL" :  "AttachedLeft"; break;
                 case 210: s = style < LONG ? "ATR" :  "AttachedRight"; break;
                 case 212: s = style < LONG ? "ATAL" :  "AttachedAboveLeft"; break;
-                case 214: s = style < LONG ? "ATA" :  "AttachedAbove"; break;
+                case 214: s = style < LONG ? "ATA" :  "AttachedAbove"; break;                
+                */
                 case 216: s = style < LONG ? "ATAR" :   "AttachedAboveRight"; break;
                 case 218: s = style < LONG ? "BL" :   "BelowLeft"; break;
                 case 220: s = style < LONG ? "B" :   "Below"; break;

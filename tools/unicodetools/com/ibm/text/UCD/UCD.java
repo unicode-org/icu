@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/UCD.java,v $
-* $Date: 2004/02/18 03:09:01 $
-* $Revision: 1.32 $
+* $Date: 2004/03/11 19:03:16 $
+* $Revision: 1.33 $
 *
 *******************************************************************************
 */
@@ -86,7 +86,6 @@ public final class UCD implements UCD_Types {
      */
     public boolean isAllocated(int codePoint) {
         if (getCategory(codePoint) != Cn) return true;
-        if (compositeVersion >= 0x20000 && codePoint >= 0xF0000 && codePoint <= 0x10FFFD) return true;
         if (isNoncharacter(codePoint)) return true;
         return false;
     }
@@ -94,11 +93,9 @@ public final class UCD implements UCD_Types {
     public boolean isNoncharacter(int codePoint) {
         if ((codePoint & 0xFFFE) == 0xFFFE) {
             if (compositeVersion < 0x20000 && codePoint > 0xFFFF) return false;
-            // major < 2
             return true;
         }
         if (codePoint >= 0xFDD0 && codePoint <= 0xFDEF && compositeVersion >= 0x30100) return true;
-        // major >= 3 && minor >= 1
         return false;
     }
 
@@ -113,8 +110,9 @@ public final class UCD implements UCD_Types {
      * Is the code point a PUA character (fast check)
      */
     public boolean isPUA(int codePoint) {
-        return (codePoint >= 0xE000 && codePoint < 0xF900
-             || codePoint >= 0xF0000 && codePoint < 0xFFFFE
+        if (codePoint >= 0xE000 && codePoint < 0xF900) return true;
+        if (compositeVersion < 0x20000) return false;
+        return (codePoint >= 0xF0000 && codePoint < 0xFFFFE
              || codePoint >= 0x100000 && codePoint < 0x10FFFE);
     }
 
@@ -353,7 +351,7 @@ public final class UCD implements UCD_Types {
         return combiningClassSet.get(0xFF & value);
     }
 
-    static UnicodeSet BIDI_R_SET, BIDI_AL_SET;
+    static UnicodeSet BIDI_R_SET, BIDI_AL_SET, BIDI_BN_SET;
     
     /**
      * Get the bidi class
@@ -424,10 +422,17 @@ public final class UCD implements UCD_Types {
             BIDI_R_SET.removeAll(noncharacters);
             BIDI_AL_SET.removeAll(noncharacters);
             
-            
+            BIDI_BN_SET = new UnicodeSet();
+            if (compositeVersion >= 0x40001) {
+                BIDI_BN_SET.addAll(noncharacters);
+                UnicodeSet DefaultIg = DerivedProperty.make(DefaultIgnorable, this).getSet();
+                System.out.println("DefaultIg: " + DefaultIg);
+                BIDI_BN_SET.addAll(DefaultIg);
+            }                       
             
             System.out.println("BIDI_R_SET: " + BIDI_R_SET);
             System.out.println("BIDI_AL_SET: " + BIDI_AL_SET);
+            System.out.println("BIDI_BN_SET: " + BIDI_BN_SET);
             
             if (BIDI_R_SET.containsSome(BIDI_AL_SET)) {
                 throw new ChainException("BIDI values for Cf characters overlap!!", null);
@@ -435,6 +440,9 @@ public final class UCD implements UCD_Types {
             
         }
 
+        if (BIDI_BN_SET.contains(codePoint)) {
+            return BIDI_BN;
+        }
         if (BIDI_R_SET.contains(codePoint)) {
             return BIDI_R;
         }
@@ -1012,7 +1020,7 @@ public final class UCD implements UCD_Types {
     }
 
     public static String getScriptID_fromIndex(byte prop, byte length) {
-        return prop < 0 || prop >= UCD_Names.JOINING_GROUP.length ? null
+        return prop < 0 || prop >= UCD_Names.SCRIPT.length ? null
         : (length == SHORT) ? UCD_Names.SCRIPT[prop] : UCD_Names.LONG_SCRIPT[prop];
     }
 
@@ -1043,7 +1051,7 @@ public final class UCD implements UCD_Types {
         : style == SHORT ? UCD_Names.SHORT_BP[bit] : UCD_Names.BP[bit];
     }
 
-    public static int mapToRepresentative(int ch, boolean lessThan20105) {
+    public static int mapToRepresentative(int ch, int rCompositeVersion) {
         if (ch <= 0xFFFD) {
             //if (ch <= 0x2800) return ch;
             //if (ch <= 0x28FF) return 0x2800;    // braille
@@ -1061,7 +1069,7 @@ public final class UCD implements UCD_Types {
             if (ch <= 0xDFFF) return 0xDC00;
             if (ch <= 0xE000) return ch;         // Private Use
             if (ch <= 0xF8FF) return 0xE000;
-            if (lessThan20105) {
+            if (rCompositeVersion < 0x20105) {
                 if (ch <= 0xF900) return ch;         // CJK Compatibility Ideograp
                 if (ch <= 0xFA2D) return 0xF900;
             }
@@ -1069,14 +1077,20 @@ public final class UCD implements UCD_Types {
             if (ch <= 0xFDEF) return 0xFFFF;
         } else {
             if ((ch & 0xFFFE) == 0xFFFE) return 0xFFFF;         // Noncharacter
+            
             if (ch <= 0x20000) return ch;         // Extension B
             if (ch <= 0x2A6D6) return 0x20000;
             //if (ch <= 0x2F800) return ch;
             //if (ch <= 0x2FA1D) return 0x2F800;      // compat ideographs
-            if (ch <= 0xF0000) return ch;       // Plane 15 Private Use
+            if (ch < 0xF0000) return ch;       // Plane 15 Private Use
+            if (rCompositeVersion >= 0x20000) {
+                return 0xE000;
+            }
+            /*
             if (ch <= 0xFFFFD) return 0xF0000;       // Plane 16 Private Use
             if (ch <= 0x100000) return ch;       // Plane 15 Private Use
             if (ch <= 0x10FFFD) return 0x100000;       // Plane 16 Private Use
+            */
         }
         return ch;
     }
@@ -1106,6 +1120,7 @@ public final class UCD implements UCD_Types {
         byte cat = getCategory(cp);
         if (cat == Mn || cat == Mc || cat == Nd || cat == Pc) return true;
         if (getBinaryProperty(cp, Other_ID_Start)) return true;
+        if (getBinaryProperty(cp, Other_ID_Continue)) return true;
         return false;
     }
 
@@ -1189,7 +1204,7 @@ to guarantee identifier closure.
         if (codePoint >= 0x2800 && codePoint <= 0x28FF) return true; 
         if (codePoint >= 0x2F800 && codePoint <= 0x2FA1D) return true;
         
-        int rangeStart = mapToRepresentative(codePoint, compositeVersion < 0x020105);
+        int rangeStart = mapToRepresentative(codePoint, compositeVersion);
         switch (rangeStart) {
           default:
             return getRaw(codePoint) == null;
@@ -1247,7 +1262,7 @@ to guarantee identifier closure.
 
         // do range stuff
         String constructedName = null;
-        int rangeStart = mapToRepresentative(codePoint, compositeVersion < 0x020105);
+        int rangeStart = mapToRepresentative(codePoint, compositeVersion);
         boolean isHangul = false;
         boolean isRemapped = false;
         switch (rangeStart) {
@@ -1297,7 +1312,7 @@ to guarantee identifier closure.
           case   0xE000: // Private Use
           case  0xF0000: // Private Use
           case 0x100000: // Private Use
-            if (fixStrings) constructedName = "<private use area-" + Utility.hex(codePoint, 4) + ">";
+            if (fixStrings) constructedName = "<private-use-" + Utility.hex(codePoint, 4) + ">";
             isRemapped = true;
             break;
           case 0xD800: // Surrogate

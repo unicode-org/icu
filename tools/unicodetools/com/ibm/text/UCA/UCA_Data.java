@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCA/UCA_Data.java,v $ 
-* $Date: 2002/07/14 22:07:00 $ 
-* $Revision: 1.1 $
+* $Date: 2004/03/11 19:03:19 $ 
+* $Revision: 1.2 $
 *
 *******************************************************************************
 */
@@ -27,7 +27,7 @@ import com.ibm.icu.text.UTF16;
 import com.ibm.icu.text.UnicodeSet;
 
 public class UCA_Data implements UCA_Types {
-    static final boolean DEBUG = true;
+    static final boolean DEBUG = false;
     static final boolean DEBUG_SHOW_ADD = false;
     
     private Normalizer toD;
