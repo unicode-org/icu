@@ -264,7 +264,7 @@ u_sprintf_u(UChar     *buffer,
   return written;
 }
 
-int32_t 
+U_CAPI int32_t  U_EXPORT2 /* U_CAPI ... U_EXPORT2 added by Peter Kirk 17 Nov 2001 */
 u_vsprintf(UChar       *buffer,
         const char     *locale,
         const char     *patternSpecification,
@@ -307,7 +307,7 @@ u_snprintf_u(UChar     *buffer,
   return written;
 }
 
-int32_t 
+U_CAPI int32_t  U_EXPORT2 /* U_CAPI ... U_EXPORT2 added by Peter Kirk 17 Nov 2001 */
 u_vsnprintf(UChar       *buffer,
         int32_t         count,
         const char     *locale,
@@ -1171,7 +1171,7 @@ u_sprintf_spellout_handler(u_localized_string *output,
 
 #define UP_PERCENT 0x0025
 
-int32_t 
+U_CAPI int32_t  U_EXPORT2 /* U_CAPI ... U_EXPORT2 added by Peter Kirk 17 Nov 2001 */
 u_vsnprintf_u(UChar    *buffer,
         int32_t        count,
         const char     *locale,
