@@ -57,6 +57,12 @@ static void Testj2269() {
 static const UChar PAT[] = {91,97,45,99,123,97,98,125,93,0}; /* "[a-c{ab}]" */
 static const int32_t PAT_LEN = (sizeof(PAT) / sizeof(PAT[0])) - 1;
 
+static const UChar PAT_lb[] = {0x6C, 0x62, 0}; /* "lb" */
+static const int32_t PAT_lb_LEN = (sizeof(PAT_lb) / sizeof(PAT_lb[0])) - 1;
+
+static const UChar VAL_SP[] = {0x53, 0x50, 0}; /* "SP" */
+static const int32_t VAL_SP_LEN = (sizeof(VAL_SP) / sizeof(VAL_SP[0])) - 1;
+
 static const UChar STR_bc[] = {98,99,0}; /* "bc" */
 static const int32_t STR_bc_LEN = (sizeof(STR_bc) / sizeof(STR_bc[0])) - 1;
 
@@ -68,6 +74,7 @@ static const int32_t STR_ab_LEN = (sizeof(STR_ab) / sizeof(STR_ab[0])) - 1;
  */
 static void TestAPI() {
     USet* set;
+    USet* set2;
     UErrorCode ec;
     
     /* [] */
@@ -87,6 +94,9 @@ static void TestAPI() {
     if(U_FAILURE(ec)) {
         log_data_err("uset_openPattern([a-c{ab}]) failed - %s\n", u_errorName(ec));
         return;
+    }
+    if(!uset_resemblesPattern(PAT, PAT_LEN, 0)) {
+        log_data_err("uset_resemblesPattern of PAT failed\n");
     }
     expect(set, "abc{ab}", "def{bc}", &ec);
 
@@ -116,7 +126,64 @@ static void TestAPI() {
     uset_removeRange(set, 0x0050, 0x0063);
     expect(set, "de{bc}", "bcfg{ab}", NULL);
 
+    /* [g-l] */
+    uset_set(set, 0x0067, 0x006C);
+    expect(set, "ghijkl", "de{bc}", NULL);
+
+    if (uset_indexOf(set, 0x0067) != 0) {
+        log_data_err("uset_indexOf failed finding correct index of 'g'\n");
+    }
+
+    if (uset_charAt(set, 0) != 0x0067) {
+        log_data_err("uset_charAt failed finding correct char 'g' at index 0\n");
+    }
+
+    /* How to test this one...? */
+    uset_compact(set);
+
+    /* [g-i] */
+    uset_retain(set, 0x0067, 0x0069);
+    expect(set, "ghi", "dejkl{bc}", NULL);
+
+    /* UCHAR_ASCII_HEX_DIGIT */
+    uset_applyIntPropertyValue(set, UCHAR_ASCII_HEX_DIGIT, 1, &ec);
+    if(U_FAILURE(ec)) {
+        log_data_err("uset_applyIntPropertyValue([UCHAR_ASCII_HEX_DIGIT]) failed - %s\n", u_errorName(ec));
+        return;
+    }
+    expect(set, "0123456789ABCDEFabcdef", "GHIjkl{bc}", NULL);
+
+    /* [] */
+    set2 = uset_open(1, 1);
+    uset_clear(set2);
+
+    /* space */
+    uset_applyPropertyAlias(set2, PAT_lb, PAT_lb_LEN, VAL_SP, VAL_SP_LEN, &ec);
+    expect(set2, " ", "abcdefghi{bc}", NULL);
+
+    /* [a-c] */
+    uset_set(set2, 0x0061, 0x0063);
+    /* [g-i] */
+    uset_set(set, 0x0067, 0x0069);
+
+    /* [a-c g-i] */
+    uset_complementAll(set, set2);
+    expect(set, "abcghi", "def{bc}", NULL);
+
+    /* [g-i] */
+    uset_removeAll(set, set2);
+    expect(set, "ghi", "abcdef{bc}", NULL);
+
+    /* [a-c g-i] */
+    uset_addAll(set2, set);
+    expect(set2, "abcghi", "def{bc}", NULL);
+
+    /* [g-i] */
+    uset_retainAll(set2, set);
+    expect(set2, "ghi", "abcdef{bc}", NULL);
+
     uset_close(set);
+    uset_close(set2);
 }
 
 /*------------------------------------------------------------------
@@ -159,7 +226,7 @@ static void expectContainment(const USet* set,
                               const char* list,
                               UBool isIn) {
     const char* p = list;
-    UChar ustr[128];
+    UChar ustr[4096];
     char *pat;
     UErrorCode ec;
     int32_t rangeStart = -1, rangeEnd = -1, length;
@@ -259,8 +326,8 @@ static char oneUCharToChar(UChar32 c) {
 static void expectItems(const USet* set,
                         const char* items) {
     const char* p = items;
-    UChar ustr[128], itemStr[128];
-    char buf[128];
+    UChar ustr[4096], itemStr[4096];
+    char buf[4096];
     char *pat;
     UErrorCode ec;
     int32_t expectedSize = 0;
