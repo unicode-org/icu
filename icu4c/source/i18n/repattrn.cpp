@@ -2,10 +2,10 @@
 //  file:  repattrn.cpp    
 //
 /*
-**********************************************************************
-*   Copyright (C) 2002 International Business Machines Corporation   *
-*   and others. All rights reserved.                                 *
-**********************************************************************
+***************************************************************************
+*   Copyright (C) 2002-2003 International Business Machines Corporation   *
+*   and others. All rights reserved.                                      *
+***************************************************************************
 */
 
 #include "unicode/utypes.h"
@@ -65,7 +65,7 @@ RegexPattern &RegexPattern::operator = (const RegexPattern &other) {
     fPattern          = other.fPattern;
     fFlags            = other.fFlags;
     fLiteralText      = other.fLiteralText;
-    fBadState         = other.fBadState;
+    fDeferredStatus   = other.fDeferredStatus;
     fMinMatchLen      = other.fMinMatchLen;
     fMaxMatchLen      = other.fMaxMatchLen;
     fMaxCaptureDigits = other.fMaxCaptureDigits;
@@ -76,18 +76,14 @@ RegexPattern &RegexPattern::operator = (const RegexPattern &other) {
     fInitialStringLen = other.fInitialStringLen;
     fInitialChars     = new UnicodeSet(*other.fInitialChars);
     fInitialChar      = other.fInitialChar;
-    if (fBadState) {
-        return *this;
-    }
 
     //  Copy the pattern.  It's just values, nothing deep to copy.
-    //  TODO:  something with status
-    UErrorCode status = U_ZERO_ERROR;
-    fCompiledPat->assign(*other.fCompiledPat, status);
-    fGroupMap->assign(*other.fGroupMap, status);
+    fCompiledPat->assign(*other.fCompiledPat, fDeferredStatus);
+    fGroupMap->assign(*other.fGroupMap, fDeferredStatus);
 
     // Note:  do not copy fMatcher.  It'll be created on first use if the
     //        destination needs one. 
+    //    TODO:  thread safety
 
     //  Copy the Unicode Sets.  
     //    Could be made more efficient if the sets were reference counted and shared,
@@ -95,16 +91,16 @@ RegexPattern &RegexPattern::operator = (const RegexPattern &other) {
     //    Note:  init() already added an empty element zero to fSets
     int32_t i;
     for (i=1; i<other.fSets->size(); i++) {
+        if (U_FAILURE(fDeferredStatus)) {
+            return *this;
+        }
         UnicodeSet *sourceSet = (UnicodeSet *)other.fSets->elementAt(i);
         UnicodeSet *newSet    = new UnicodeSet(*sourceSet);
         if (newSet == NULL) {
-            fBadState = TRUE;
+            fDeferredStatus = U_MEMORY_ALLOCATION_ERROR;
             break;
         }
-        fSets->addElement(newSet, status);
-    }
-    if (U_FAILURE(status)) {
-        fBadState = TRUE;
+        fSets->addElement(newSet, fDeferredStatus);
     }
     return *this;
 }
@@ -118,7 +114,7 @@ RegexPattern &RegexPattern::operator = (const RegexPattern &other) {
 //--------------------------------------------------------------------------
 void RegexPattern::init() {
     fFlags            = 0;
-    fBadState         = FALSE;
+    fDeferredStatus   = U_ZERO_ERROR;
     fMinMatchLen      = 0;
     fMaxMatchLen      = -1;
     fMaxCaptureDigits = 1;  
@@ -132,19 +128,20 @@ void RegexPattern::init() {
     fInitialChars     = NULL;
     fInitialChar      = 0;
     
-    UErrorCode status=U_ZERO_ERROR;
-    // Init of a completely new RegexPattern.
-    fCompiledPat  = new UVector32(status);
-    fGroupMap     = new UVector32(status);
-    fSets         = new UVector(status);
-    fInitialChars = new UnicodeSet;
-    if (U_FAILURE(status) || fCompiledPat == NULL || fSets == NULL || fInitialChars == NULL) {
-        fBadState = TRUE;
+    fCompiledPat      = new UVector32(fDeferredStatus);
+    fGroupMap         = new UVector32(fDeferredStatus);
+    fSets             = new UVector(fDeferredStatus);
+    fInitialChars     = new UnicodeSet;
+    if (U_FAILURE(fDeferredStatus)) {
+        return;
+    }
+    if (fCompiledPat == NULL || fGroupMap == NULL || fSets == NULL || fInitialChars == NULL) {
+        fDeferredStatus = U_MEMORY_ALLOCATION_ERROR;
         return;
     }
 
     // Slot zero of the vector of sets is reserved.  Fill it here.
-    fSets->addElement((int32_t)0, status);
+    fSets->addElement((int32_t)0, fDeferredStatus);
 }
 
 
@@ -205,8 +202,7 @@ RegexPattern  *RegexPattern::clone() const {
 UBool   RegexPattern::operator ==(const RegexPattern &other) const {
     UBool r = this->fFlags    == other.fFlags &&
               this->fPattern  == other.fPattern &&
-              this->fBadState == FALSE &&
-              other.fBadState == FALSE;
+              this->fDeferredStatus == other.fDeferredStatus;
     return r;
 }
 
@@ -243,8 +239,8 @@ RegexPattern  *RegexPattern::compile(
         status = U_MEMORY_ALLOCATION_ERROR;
         return NULL;
     }
-    if (This->fBadState) {
-        status = U_REGEX_INVALID_STATE;
+    if (U_FAILURE(This->fDeferredStatus)) {
+        status = This->fDeferredStatus;
         return NULL;
     }
     This->fFlags = flags;
@@ -283,20 +279,20 @@ uint32_t RegexPattern::flags() const {
 //
 //---------------------------------------------------------------------
 RegexMatcher *RegexPattern::matcher(const UnicodeString &input,
-                                    UErrorCode          &err)  const {
+                                    UErrorCode          &status)  const {
     RegexMatcher    *retMatcher = NULL;
 
-    if (U_FAILURE(err)) {
+    if (U_FAILURE(status)) {
         return NULL;
     }
-    if (fBadState) {
-        U_FAILURE(U_REGEX_INVALID_STATE);
+    if (U_FAILURE(fDeferredStatus)) {
+        status = fDeferredStatus;
         return NULL;
     }
 
     retMatcher = new RegexMatcher(this); 
     if (retMatcher == NULL) {
-        err = U_MEMORY_ALLOCATION_ERROR;
+        status = U_MEMORY_ALLOCATION_ERROR;
         return NULL;
     }
     retMatcher->reset(input);
@@ -571,7 +567,7 @@ void   RegexPattern::dumpOp(int32_t index) const {
 
 
 
-
+// TODO:  get rid of max match length
 
 
 void   RegexPattern::dump() const {
@@ -583,7 +579,6 @@ void   RegexPattern::dump() const {
         REGEX_DUMP_DEBUG_PRINTF("%c", fPattern.charAt(i));
     }
     REGEX_DUMP_DEBUG_PRINTF("\n");
-    REGEX_DUMP_DEBUG_PRINTF("Pattern Valid?:     %s\n"  , fBadState? "no" : "yes");
     REGEX_DUMP_DEBUG_PRINTF("   Min Match Length:  %d\n", fMinMatchLen);
     REGEX_DUMP_DEBUG_PRINTF("   Max Match Length:  %d\n", fMaxMatchLen);
     REGEX_DUMP_DEBUG_PRINTF("   Match Start Type:  %s\n", START_OF_MATCH_STR(fStartType));   
