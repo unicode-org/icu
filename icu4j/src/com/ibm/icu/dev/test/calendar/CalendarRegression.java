@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/calendar/CalendarRegression.java,v $
- * $Date: 2003/06/03 18:49:28 $
- * $Revision: 1.16 $
+ * $Date: 2003/09/04 00:57:10 $
+ * $Revision: 1.17 $
  *
  *******************************************************************************
  */
@@ -15,6 +15,9 @@ import com.ibm.icu.util.*;
 
 import java.util.Date;
 import java.util.Locale;
+import java.util.SimpleTimeZone;
+import java.util.TimeZone;
+
 import com.ibm.icu.text.*;
 
 /**

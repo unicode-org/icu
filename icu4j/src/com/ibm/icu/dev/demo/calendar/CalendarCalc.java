@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/demo/calendar/CalendarCalc.java,v $ 
- * $Date: 2003/06/03 18:49:27 $ 
- * $Revision: 1.14 $
+ * $Date: 2003/09/04 00:55:18 $ 
+ * $Revision: 1.15 $
  *
  *****************************************************************************************
  */
@@ -25,8 +25,7 @@ import java.text.ParsePosition;
 import com.ibm.icu.util.Calendar;
 //import java.util.GregorianCalendar;
 import com.ibm.icu.util.GregorianCalendar;
-//import java.util.TimeZone;
-import com.ibm.icu.util.TimeZone;
+import java.util.TimeZone;
 import java.util.Locale;
 
 import com.ibm.icu.util.*;

@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/demo/calendar/CalendarPanel.java,v $ 
- * $Date: 2003/06/03 18:49:27 $ 
- * $Revision: 1.11 $
+ * $Date: 2003/09/04 00:55:20 $ 
+ * $Revision: 1.12 $
  *
  *****************************************************************************************
  */
@@ -15,9 +15,7 @@ package com.ibm.icu.dev.demo.calendar;
 
 import java.awt.*;
 
-//import java.util.SimpleTimeZone;
-import com.ibm.icu.util.SimpleTimeZone;
-//import java.util.*;
+import java.util.SimpleTimeZone;
 import java.util.Date;
 import java.util.Locale;
 
@@ -182,11 +180,11 @@ class CalendarPanel extends Canvas {
         pos.x = cell % daysInWeek;
         pos.y = cell / daysInWeek;
     }
-    private Point dateToCell(int date) {
-        Point p = new Point(0,0);
-        dateToCell(date, p);
-        return p;
-    }
+    //private Point dateToCell(int date) {
+    //    Point p = new Point(0,0);
+    //    dateToCell(date, p);
+    //    return p;
+    //}
 
     public void paint(Graphics g) {
 

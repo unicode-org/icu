@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/demo/holiday/HolidayCalendarDemo.java,v $ 
- * $Date: 2003/06/03 18:49:27 $ 
- * $Revision: 1.11 $
+ * $Date: 2003/09/04 00:55:20 $ 
+ * $Revision: 1.12 $
  *
  *****************************************************************************************
  */
@@ -18,8 +18,8 @@ import java.awt.event.*;
 
 import com.ibm.icu.text.SimpleDateFormat;
 import java.text.DateFormatSymbols;
-import com.ibm.icu.util.SimpleTimeZone;
 import java.util.Locale;
+import java.util.SimpleTimeZone;
 import java.util.Vector;
 import java.util.Date;
 
@@ -53,11 +53,11 @@ public class HolidayCalendarDemo extends DemoApplet
 	private static class CalendarFrame extends Frame implements ActionListener,
                                                                 ItemListener
 	{
-    	private static final String creditString = "";
+    	//private static final String creditString = ""; // unused
 
     	private static final boolean DEBUG = false;
 
-    	private Locale curLocale = Locale.US;
+    	//private Locale curLocale = Locale.US; // unused
 
     	private DemoApplet applet;
 

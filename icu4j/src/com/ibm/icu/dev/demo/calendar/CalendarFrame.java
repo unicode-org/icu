@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/demo/calendar/CalendarFrame.java,v $ 
- * $Date: 2003/06/03 18:49:27 $ 
- * $Revision: 1.12 $
+ * $Date: 2003/09/04 00:55:19 $ 
+ * $Revision: 1.13 $
  *
  *****************************************************************************************
  */
@@ -18,11 +18,12 @@ import com.ibm.icu.util.HebrewCalendar;
 import com.ibm.icu.util.BuddhistCalendar;
 import com.ibm.icu.util.JapaneseCalendar;
 import com.ibm.icu.util.IslamicCalendar;
-import com.ibm.icu.util.SimpleTimeZone;
 import java.awt.*;
 import java.awt.event.*;
 import com.ibm.icu.text.DateFormat;
 import java.util.Date;
+import java.util.SimpleTimeZone;
+
 import com.ibm.icu.util.GregorianCalendar;
 import java.util.Locale;
 import com.ibm.icu.dev.demo.impl.*;
@@ -238,11 +239,6 @@ class CalendarFrame extends Frame
                             com.ibm.icu.text.SimpleDateFormat f1 = (com.ibm.icu.text.SimpleDateFormat) f;
                             f1.applyPattern("MMMM, yyyy G");
                             f1.setTimeZone(new SimpleTimeZone(0, "UTC"));
-//hey {al} -
-//                        } else if (f instanceof java.text.SimpleDateFormat) {
-//                            java.text.SimpleDateFormat f1 = (java.text.SimpleDateFormat) f;
-//                            f1.applyPattern("MMMM, yyyy G");
-//                            f1.setTimeZone(new SimpleTimeZone(0, "UTC"));
                         }
                         monthFormat[i] = f;
                     }

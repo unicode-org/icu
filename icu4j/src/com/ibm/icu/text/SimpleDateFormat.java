@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/SimpleDateFormat.java,v $ 
- * $Date: 2003/06/03 18:49:35 $ 
- * $Revision: 1.22 $
+ * $Date: 2003/09/04 00:59:36 $ 
+ * $Revision: 1.23 $
  *
  *****************************************************************************************
  */
@@ -15,8 +15,6 @@ package com.ibm.icu.text;
 
 import com.ibm.icu.impl.ICULocaleData;
 import com.ibm.icu.util.Calendar;
-import com.ibm.icu.util.SimpleTimeZone;
-import com.ibm.icu.util.TimeZone;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.impl.UCharacterProperty;
 
@@ -29,6 +27,8 @@ import java.util.Date;
 import java.util.Hashtable;
 import java.util.Locale;
 import java.util.ResourceBundle;
+import java.util.TimeZone;
+import java.lang.reflect.Method;
 
 /**
  * <code>SimpleDateFormat</code> is a concrete class for formatting and
@@ -987,10 +987,24 @@ public class SimpleDateFormat extends DateFormat {
     }
     if (tz != null) { // Matched any ?
         cal.set(Calendar.ZONE_OFFSET, tz.getRawOffset());
-        // The code below time zone is assumed to be instance of
-        // SimpleTimeZone.
-        cal.set(Calendar.DST_OFFSET, 
-             j >= 3 ? ((SimpleTimeZone)tz).getDSTSavings() : 0);
+        int savings = 0;
+        if (j >= 3) {
+            // TODO: When JDK 1.3 support is dropped, change the following
+            // try/catch block to "savings = tz.getDSTSavings();".
+
+            // As of ICU 2.8 we support both 1.4 and 1.3.  When 1.3
+            // support is dropped, we can call
+            // TimeZone.getDSTSavings() directly.  Until then, we use
+            // reflection to call getDSTSavings() on either TimeZone
+            // or SimpleTimeZone. - Alan
+            try {
+                // The following works if getDSTSavings is declared in
+                // TimeZone (JDK 1.4) or SimpleTimeZone (JDK 1.3).
+                Method m = tz.getClass().getMethod("getDSTSavings", new Class[0]);
+                savings = ((Integer) m.invoke(tz, new Object[0])).intValue();
+            } catch (Exception e1) {}
+        }
+        cal.set(Calendar.DST_OFFSET, savings);
         return (start + formatData.zoneStrings[i][j].length());
     }
     return 0;

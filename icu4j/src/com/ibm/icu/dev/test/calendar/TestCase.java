@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/calendar/TestCase.java,v $ 
- * $Date: 2003/06/03 18:49:28 $ 
- * $Revision: 1.9 $
+ * $Date: 2003/09/04 00:57:14 $ 
+ * $Revision: 1.10 $
  *
  *****************************************************************************************
  */
@@ -16,8 +16,8 @@ import com.ibm.icu.dev.test.*;
 import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.GregorianCalendar;
 import java.util.Date;
-import com.ibm.icu.util.SimpleTimeZone;
 import java.util.Locale;
+import java.util.SimpleTimeZone;
 
 /**
  * A pseudo <code>Calendar</code> that is useful for testing

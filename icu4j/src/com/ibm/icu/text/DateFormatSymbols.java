@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/DateFormatSymbols.java,v $
- * $Date: 2003/06/03 18:49:34 $
- * $Revision: 1.18 $
+ * $Date: 2003/09/04 00:59:35 $
+ * $Revision: 1.19 $
  *
  *****************************************************************************************
  */
@@ -17,7 +17,6 @@ import com.ibm.icu.impl.ICULocaleData;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.GregorianCalendar;
-import com.ibm.icu.util.TimeZone;
 
 import java.io.Serializable;
 import java.util.Locale;
@@ -458,7 +457,9 @@ public class DateFormatSymbols implements Serializable, Cloneable {
         if (result >= 0) {
             return result;
         }
-        
+        /*
+    TODO: Revisit if we implement equivalency code again - Alan
+    NOTE: Disabled as of ICU 2.8 because we are using the underlying JDK TimeZones now - Alan
         // Do a search through the equivalency group for the given ID
         int n = TimeZone.countEquivalentIDs(ID);
         if (n > 1) {
@@ -472,7 +473,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
                 }
             }
         }
-        
+        */
         return -1;
     }
     

@@ -28,6 +28,7 @@ import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 import java.util.Set;
+import java.util.TimeZone;
 
 /**
  * <code>Calendar</code> is an abstract base class for converting between
@@ -3787,14 +3788,13 @@ public abstract class Calendar implements Serializable, Cloneable {
         if (millisInDay < 0) millisInDay += ONE_DAY;
 
         // Call getOffset() to get the TimeZone offset.  The millisInDay value
-        // must be _standard_ local zone millis.
-        int dstOffset = getTimeZone().getOffset(
+        // must be _standard_ local zone millis.      
+        // TODO: Consider calling the getOffset(millis) API when we drop JDK 1.3 support - Alan
+        int dstOffset = getTimeZone().getOffset(GregorianCalendar.AD,
                 gregorianYear, gregorianMonth,
                 gregorianDayOfMonth,
                 fields[DAY_OF_WEEK],
-                millisInDay,
-                gregorianMonthLength(gregorianYear, gregorianMonth),
-                gregorianPreviousMonthLength(gregorianYear, gregorianMonth))
+                millisInDay)
             - rawOffset;
 
         // Adjust our millisInDay for DST.  dstOffset will be zero if DST
@@ -4307,13 +4307,11 @@ public abstract class Calendar implements Serializable, Cloneable {
         int julianDay = millisToJulianDay(days * ONE_DAY);
 
         computeGregorianAndDOWFields(julianDay);
-
-        return zone.getOffset(
+	     
+        // TODO: Consider calling the getOffset(millis) API when we drop JDK 1.3 support - Alan
+        return zone.getOffset(GregorianCalendar.AD,
                       gregorianYear, gregorianMonth, gregorianDayOfMonth,
-                      fields[DAY_OF_WEEK], normalizedMillisInDay[0],
-                      gregorianMonthLength(gregorianYear, gregorianMonth),
-                      gregorianPreviousMonthLength(gregorianYear,
-                                                   gregorianMonth));
+                      fields[DAY_OF_WEEK], normalizedMillisInDay[0]);
 
         // Note: Because we pass in wall millisInDay, rather than
         // standard millisInDay, we interpret "1:00 am" on the day

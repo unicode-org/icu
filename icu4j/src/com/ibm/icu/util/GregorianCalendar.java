@@ -5,6 +5,7 @@
 package com.ibm.icu.util;
 import java.util.Date;
 import java.util.Locale;
+import java.util.TimeZone;
 
 /**
  * <code>GregorianCalendar</code> is a concrete subclass of
@@ -821,15 +822,11 @@ public class GregorianCalendar extends Calendar {
         // using the disambiguation algorithm above. [LIU]
         int year = internalGet(EXTENDED_YEAR);
         int month = internalGet(MONTH);
-        int previousMonthLength = (month == 0) ?
-            31 : handleGetMonthLength(year, month-1);
-
-        return getTimeZone().getOffset(year, month,
+	    // TODO: consider calling the getOffset(millis) API when we drop JDK 1.3 support - Alan
+        return getTimeZone().getOffset(AD, year, month,
                               internalGet(DATE),
                               julianDayToDayOfWeek(julianDay),
-                              normalizedMillisInDay[0],
-                              handleGetMonthLength(year, month),
-                              previousMonthLength);
+                              normalizedMillisInDay[0]);
 
         // Note: Because we pass in wall millisInDay, rather than
         // standard millisInDay, we interpret "1:00 am" on the day
