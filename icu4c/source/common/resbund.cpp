@@ -269,7 +269,7 @@ ResourceBundle::constructForLocale(const UnicodeString& path,
 {
     char name[300];
 
-    if(!path.empty()) {
+    if(!path.isEmpty()) {
         path.extract(name, sizeof(name), 0, error);
         resource = ures_open(name, locale.getName(), &error);
     } else {
