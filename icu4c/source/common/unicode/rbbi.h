@@ -63,10 +63,10 @@ protected:
      */
     RBBIDataWrapper    *fData;
 
-    /** Rule {tag} value for the most recent match. 
+    /** Index of the Rule {tag} values for the most recent match. 
      *  @internal
     */
-    int32_t             fLastBreakTag;
+    int32_t             fLastRuleStatusIndex;
 
     /**
      * Rule tag value valid flag.
@@ -74,7 +74,7 @@ protected:
      * This flag lets us lazily compute the value if we are ever asked for it.
      * @internal
      */
-    UBool               fLastBreakTagValid;
+    UBool               fLastStatusIndexValid;
 
     /**
      * Counter for the number of characters encountered with the "dictionary"
@@ -349,6 +349,24 @@ public:
      */
     virtual int32_t getRuleStatus() const;
 
+   /**
+    * Get the statuses from the break rules that determined the most recently
+    * returned break position.  The values appear in the rule source
+    * within brackets, {123}, for example.  The default status value for rules
+    * that do not explicitly provide one is zero.
+    * <p>
+    * For word break iterators, the possible values are defined in enum UWordBreak.
+    * @param fillInVec an array to be filled in with the status values.  
+    * @param capacity  the length of the supplied vector.  A length of zero causes
+    *                  the function to return the number of status values, in the
+    *                  normal way, without attemtping to store any values.
+    * @param status    receives error codes.  
+    * @return          The number of rule status values from rules that determined 
+    *                  the most recent boundary returned by the break iterator.
+    * @draft ICU 3.0
+    */
+    virtual int32_t getRuleStatusVec(int32_t *fillInVec, int32_t capacity, UErrorCode &status);
+
     /**
      * Returns a unique class ID POLYMORPHICALLY.  Pure virtual override.
      * This method is to implement a simple version of RTTI, since not all
@@ -496,6 +514,12 @@ private:
      * @internal
      */
     int32_t handleNext(const RBBIStateTable *statetable);
+
+    /**
+     *  @internal
+     */
+    void makeRuleStatusValid();
+
 };
 
 //------------------------------------------------------------------------------

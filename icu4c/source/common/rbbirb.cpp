@@ -64,22 +64,27 @@ RBBIRuleBuilder::RBBIRuleBuilder(const UnicodeString   &rules,
     fReverseTables      = NULL;
     fSafeFwdTables      = NULL;
     fSafeRevTables      = NULL;
+    fRuleStatusVals     = NULL;
     fChainRules         = FALSE;
     fLBCMNoChain        = FALSE;
     fLookAheadHardBreak = FALSE;
+    fUSetNodes          = NULL;
+    fRuleStatusVals     = NULL;
+    fScanner            = NULL;
+    fSetBuilder         = NULL;
 
-    UErrorCode oldstatus = status;   
-
-    fUSetNodes          = new UVector(status); // bcos status gets overwritten here
-    fScanner            = new RBBIRuleScanner(this);
-    fSetBuilder         = new RBBISetBuilder(this);
-    if (U_FAILURE(oldstatus)) {
-        status = oldstatus;
-    }
     if (U_FAILURE(status)) {
         return;
     }
-    if(fSetBuilder == 0 || fScanner == 0 || fUSetNodes == 0) {
+
+    fUSetNodes          = new UVector(status); // bcos status gets overwritten here
+    fRuleStatusVals     = new UVector(status);
+    fScanner            = new RBBIRuleScanner(this);
+    fSetBuilder         = new RBBISetBuilder(this);
+    if (U_FAILURE(status)) {
+        return;
+    }
+    if(fSetBuilder == 0 || fScanner == 0 || fUSetNodes == 0 || fRuleStatusVals == 0) {
         status = U_MEMORY_ALLOCATION_ERROR;
     }
 }
@@ -114,6 +119,7 @@ RBBIRuleBuilder::~RBBIRuleBuilder() {
     delete fSafeFwdTree;
     delete fSafeRevTree;
     delete fScanner;
+    delete fRuleStatusVals;
 }
 
 
@@ -130,6 +136,8 @@ RBBIRuleBuilder::~RBBIRuleBuilder() {
 static int32_t align8(int32_t i) {return (i+7) & 0xfffffff8;}
 
 RBBIDataHeader *RBBIRuleBuilder::flattenData() {
+    int32_t    i;
+
     if (U_FAILURE(*fStatus)) {
         return NULL;
     }
@@ -148,10 +156,13 @@ RBBIDataHeader *RBBIRuleBuilder::flattenData() {
     int32_t safeFwdTableSize  = align8(fSafeFwdTables->getTableSize());
     int32_t safeRevTableSize  = align8(fSafeRevTables->getTableSize());
     int32_t trieSize          = align8(fSetBuilder->getTrieSize());
+    int32_t statusTableSize   = align8(fRuleStatusVals->size() * sizeof(int32_t));
     int32_t rulesSize         = align8((strippedRules.length()+1) * sizeof(UChar));
 
     int32_t         totalSize = headerSize + forwardTableSize + reverseTableSize
-                                + safeFwdTableSize + safeRevTableSize + trieSize + rulesSize;
+                                + safeFwdTableSize + safeRevTableSize 
+                                + statusTableSize + trieSize + rulesSize;
+
     RBBIDataHeader  *data     = (RBBIDataHeader *)uprv_malloc(totalSize);
     if (data == NULL) {
         *fStatus = U_MEMORY_ALLOCATION_ERROR;
@@ -176,7 +187,9 @@ RBBIDataHeader *RBBIRuleBuilder::flattenData() {
 
     data->fTrie          = data->fSRTable + safeRevTableSize;
     data->fTrieLen       = fSetBuilder->getTrieSize();
-    data->fRuleSource    = data->fTrie    + trieSize;
+    data->fStatusTable   = data->fTrie    + trieSize;
+    data->fStatusTableLen= statusTableSize;
+    data->fRuleSource    = data->fStatusTable + statusTableSize;
     data->fRuleSourceLen = strippedRules.length() * sizeof(UChar);
 
     uprv_memset(data->fReserved, 0, sizeof(data->fReserved));
@@ -186,6 +199,12 @@ RBBIDataHeader *RBBIRuleBuilder::flattenData() {
     fSafeFwdTables->exportTable((uint8_t *)data + data->fSFTable);
     fSafeRevTables->exportTable((uint8_t *)data + data->fSRTable);
     fSetBuilder->serializeTrie ((uint8_t *)data + data->fTrie);
+
+    int32_t *ruleStatusTable = (int32_t *)((uint8_t *)data + data->fStatusTable);
+    for (i=0; i<fRuleStatusVals->size(); i++) {
+        ruleStatusTable[i] = fRuleStatusVals->elementAti(i);
+    }
+
     strippedRules.extract((UChar *)((uint8_t *)data+data->fRuleSource), rulesSize/2+1, *fStatus);
 
     return data;
@@ -249,6 +268,10 @@ RBBIRuleBuilder::createRuleBasedBreakIterator( const UnicodeString    &rules,
     builder.fSafeRevTables->build();
     if (U_FAILURE(status)) {
         return NULL;
+    }
+
+    if (builder.fDebugEnv && uprv_strstr(builder.fDebugEnv, "states")) {
+        builder.fForwardTables->printRuleStatusTable();
     }
 
     //

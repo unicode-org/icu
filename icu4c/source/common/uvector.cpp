@@ -66,6 +66,9 @@ UVector::UVector(UObjectDeleter *d, UKeyComparator *c, int32_t initialCapacity, 
 }
 
 void UVector::_init(int32_t initialCapacity, UErrorCode &status) {
+    if (U_FAILURE(status)) {
+        return;
+    }
     // Fix bogus initialCapacity values; avoid malloc(0)
     if (initialCapacity < 1) {
         initialCapacity = DEFUALT_CAPACITY;

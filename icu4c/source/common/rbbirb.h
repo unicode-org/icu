@@ -153,6 +153,9 @@ public:
     RBBITableBuilder              *fSafeFwdTables;
     RBBITableBuilder              *fSafeRevTables;
 
+    UVector                       *fRuleStatusVals;  // The values that can be returned
+                                                     //   from getRuleStatus().
+
     RBBIDataHeader                *flattenData();    // Create the flattened (runtime format)
                                                      // data tables..
 private:
