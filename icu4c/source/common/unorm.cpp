@@ -1843,6 +1843,8 @@ _recompose(UChar *p, UChar *&limit) {
 
     starter=NULL;                   /* no starter */
     combineFwdIndex=0;              /* will not be used until starter!=NULL - avoid compiler warnings */
+    combineBackIndex=0;             /* will always be set if combineFlags!=0 - avoid compiler warnings */
+    value=value2=0;                 /* always set by _combine() before used - avoid compiler warnings */
     starterIsSupplementary=FALSE;   /* will not be used until starter!=NULL - avoid compiler warnings */
     prevCC=0;
 
@@ -3410,9 +3412,8 @@ unorm_cmpEquivFold(const UChar *s1, int32_t length1,
         // c1!=c2 && c1>=0 && c2>=0
 
         // get complete code points for c1, c2 for lookups if either is a surrogate
-        if(!UTF_IS_SURROGATE(c1)) {
-            cp1=c1;
-        } else {
+        cp1=c1;
+        if(UTF_IS_SURROGATE(c1)) {
             UChar c;
 
             if(UTF_IS_SURROGATE_FIRST(c1)) {
@@ -3427,9 +3428,8 @@ unorm_cmpEquivFold(const UChar *s1, int32_t length1,
             }
         }
 
-        if(!UTF_IS_SURROGATE(c2)) {
-            cp2=c2;
-        } else {
+        cp2=c2;
+        if(UTF_IS_SURROGATE(c2)) {
             UChar c;
 
             if(UTF_IS_SURROGATE_FIRST(c2)) {
