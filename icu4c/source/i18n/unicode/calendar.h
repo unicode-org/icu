@@ -35,6 +35,13 @@
 
 U_NAMESPACE_BEGIN
 
+class ICUServiceFactory;
+
+/**
+ * @draft ICU 2.6
+ */
+typedef const void* URegistryKey;
+
 /**
  * <code>Calendar</code> is an abstract base class for converting between
  * a <code>UDate</code> object and a set of integer fields such as
@@ -245,7 +252,8 @@ public:
      *
      * @param success  Indicates the success/failure of Calendar creation. Filled in
      *                 with U_ZERO_ERROR if created successfully, set to a failure result
-     *                 otherwise.
+     *                 otherwise. U_MISSING_RESOURCE_ERROR will be returned if the resource data
+     *                 requests a calendar type which has not been installed.
      * @return         A Calendar if created successfully. NULL otherwise.
      * @stable ICU 2.0
      */
@@ -325,7 +333,7 @@ public:
      * @param count  Number of locales returned.
      * @return       An array of Locale objects representing the set of locales for which
      *               Calendars are installed.  The system retains ownership of this list;
-     *               the caller must NOT delete it.
+     *               the caller must NOT delete it. Does not include user-registered Calendars.
      * @stable ICU 2.0
      */
     static const Locale* getAvailableLocales(int32_t& count);
@@ -1403,6 +1411,60 @@ private:
      * The resource tag for the resource where the week-count data is stored.
      */
     static const char kDateTimeElements[];
+
+    /**
+     * The resource tag where the default calendar is stored.
+     */
+    static const char kDefaultCalendar[];
+
+    /** 
+     * INTERNAL FOR 2.6 --  Registration.
+     */
+ public:
+    /**
+     * Returns the resource key string used for this calendar type.
+     * For example, prepending "Eras_" to this string could return "Eras_japanese"
+     * or "Eras_gregorian".
+     *
+     * @returns static string, for example, "gregorian" or "japanese"
+     * @internal
+     */
+    virtual const char * getType() const = 0;
+    
+
+    /**
+     * Return a StringEnumeration over the locales available at the time of the call, 
+     * including registered locales.
+     * @return a StringEnumeration over the locales available at the time of the call
+     * @internal
+     */
+    static StringEnumeration* getAvailableLocales(void);
+
+    /**
+     * Register a new Calendar factory.  The factory will be adopted.
+     * INTERNAL in 2.6
+     * @param toAdopt the factory instance to be adopted
+     * @param status the in/out status code, no special meanings are assigned
+     * @return a registry key that can be used to unregister this factory
+     * @internal
+     */
+    static URegistryKey registerFactory(ICUServiceFactory* toAdopt, UErrorCode& status);
+
+    /**
+     * Unregister a previously-registered CalendarFactory using the key returned from the
+     * register call.  Key becomes invalid after a successful call and should not be used again.
+     * The CalendarFactory corresponding to the key will be deleted.
+     * INTERNAL in 2.6
+     * @param key the registry key returned by a previous call to registerFactory
+     * @param status the in/out status code, no special meanings are assigned
+     * @return TRUE if the factory for the key was successfully unregistered
+     * @internal
+     */
+    static UBool unregister(URegistryKey key, UErrorCode& status);
+    
+    friend class CalendarFactory;
+    friend class CalendarService;
+    friend class DefaultCalendarFactory;
 };
 
 // -------------------------------------

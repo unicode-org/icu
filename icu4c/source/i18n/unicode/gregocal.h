@@ -546,7 +546,21 @@ public:
      */
     static inline UClassID getStaticClassID(void);
 
+    /**
+     * return the calendar type, "gregorian".
+     *
+     * @return calendar type
+     * @internal
+     */
+    virtual const char * getType() const;
+
 protected:
+
+    /***
+     * Called by computeFields. Converts calendar's year into Gregorian Extended Year (where negative = BC)
+     * @internal
+     */
+    //virtual int32_t getGregorianYear(UErrorCode &status);
 
     /**
      * (Overrides Calendar) Converts GMT as milliseconds to time field values.
@@ -569,19 +583,20 @@ protected:
 private:
     GregorianCalendar(); // default constructor not implemented
 
+ protected:
     /**
      * Return the ERA.  We need a special method for this because the
      * default ERA is AD, but a zero (unset) ERA is BC.
      * @return    the ERA.
      */
-    int32_t internalGetEra() const;
+    virtual int32_t internalGetEra() const;
 
     /**
      * return the length of the given month.
      * @param month    the given month.
      * @return    the length of the given month.
      */
-    int32_t monthLength(int32_t month) const;
+    virtual int32_t monthLength(int32_t month) const;
 
     /**
      * return the length of the month according to the given year.
@@ -589,7 +604,7 @@ private:
      * @param year     the given year.
      * @return         the length of the month
      */
-    int32_t monthLength(int32_t month, int32_t year) const;
+    virtual int32_t monthLength(int32_t month, int32_t year) const;
     
     /**
      * return the length of the given year.
@@ -618,8 +633,8 @@ private:
      * @param status Fill-in parameter which receives the status of this operation.
      * @return       the day number with respect to the epoch.  
      */
-    UDate getEpochDay(UErrorCode& status);
-
+    virtual UDate getEpochDay(UErrorCode& status);
+ private:
     /**
      * Compute the julian day number of the given year.
      * @param isGregorian    if true, using Gregorian calendar, otherwise using Julian calendar
