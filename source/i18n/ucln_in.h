@@ -30,6 +30,8 @@ U_CFUNC UBool timeZone_cleanup(void);
 
 U_CFUNC UBool numfmt_cleanup(void);
 
+U_CFUNC UBool calendar_cleanup(void);
+
 U_CFUNC UBool currency_cleanup(void);
 
 U_CFUNC UBool collator_cleanup(void);
