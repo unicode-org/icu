@@ -283,24 +283,15 @@ UBool TransliterationRuleSet::transliterate(Replaceable& text,
 UnicodeString& TransliterationRuleSet::toRules(UnicodeString& ruleSource,
                                                UBool escapeUnprintable) const {
     int32_t i;
-    int32_t count = index[256];
+    int32_t count = ruleVector->size();
     ruleSource.truncate(0);
-    UBool first = TRUE;
     for (i=0; i<count; ++i) {
-        UBool seen = FALSE;
-        for (int32_t j=i-1; j>=0; --j) {
-            if (rules[i] == rules[j]) { // [sic] pointer comparison
-                seen = TRUE;
-                break;
-            }
+        if (i != 0) {
+            ruleSource.append((UChar) 0x000A /*\n*/);
         }
-        if (!seen) {
-            if (!first) {
-                ruleSource.append((UChar) 0x000A /*\n*/);
-            }
-            first = FALSE;
-            rules[i]->toRule(ruleSource, escapeUnprintable);
-        }
+        TransliterationRule *r =
+            (TransliterationRule*) ruleVector->elementAt(i);
+        r->toRule(ruleSource, escapeUnprintable);
     }
     return ruleSource;
 }
