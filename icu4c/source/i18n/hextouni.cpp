@@ -301,7 +301,7 @@ void HexToUnicodeTransliterator::handleTransliterate(Replaceable& text, UTransPo
                         }
                         break;
                     }
-                    int8_t digit = Unicode::digit(text.charAt(curs), 16);
+                    int8_t digit = u_digit(text.charAt(curs), 16);
                     if (digit < 0) {
                         break;
                     }
