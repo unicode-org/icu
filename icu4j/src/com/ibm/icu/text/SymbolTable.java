@@ -1,12 +1,12 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2000, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2003, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/SymbolTable.java,v $ 
- * $Date: 2003/09/24 19:11:00 $ 
- * $Revision: 1.11 $
+ * $Date: 2003/09/24 23:38:49 $ 
+ * $Revision: 1.12 $
  *
  *****************************************************************************************
  */
