@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 2002-2004, International Business Machines Corporation and
+ * Copyright (c) 2002-2005, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************
  *
@@ -72,7 +72,7 @@ void CanonicalIteratorTest::TestExhaustive() {
     UErrorCode status = U_ZERO_ERROR;
     CanonicalIterator it("", status);
     UChar32 i = 0;
-    UnicodeString s, decomp, comp;
+    UnicodeString s;
     // Test static and dynamic class IDs
     if(it.getDynamicClassID() != CanonicalIterator::getStaticClassID()){
         errln("CanonicalIterator::getStaticClassId ! = CanonicalIterator.getDynamicClassID");
@@ -90,33 +90,10 @@ void CanonicalIteratorTest::TestExhaustive() {
             || type == U_SURROGATE) continue;
         
         s = i;
+		characterTest(s, i, it);
+
         s += (UChar32)0x0345; //"\\u0345";
-        
-        Normalizer::decompose(s, FALSE, 0, decomp, status);
-        Normalizer::compose(s, FALSE, 0, comp, status);
-        
-        // skip characters that don't have either decomp.
-        // need quick test for this!
-        if (s == decomp && s == comp) {
-            continue;
-        }
-        
-        it.setSource(s, status);
-        UBool gotDecomp = FALSE;
-        UBool gotComp = FALSE;
-        UBool gotSource = FALSE;
-        
-        while (TRUE) {
-            UnicodeString item = it.next();
-            if (item.isBogus()) break;
-            if (item == s) gotSource = TRUE;
-            if (item == decomp) gotDecomp = TRUE;
-            if (item == comp) gotComp = TRUE;
-        }
-        
-        if (!gotSource || !gotDecomp || !gotComp) {
-            errln("FAIL CanonicalIterator: " + s + (int)i);
-        }
+		characterTest(s, i, it);
     }
 }
 
@@ -189,6 +166,38 @@ void CanonicalIteratorTest::TestBasic() {
       errln("Couldn't instantiate canonical iterator. Error: %s", u_errorName(status));
     }
     delete set;
+}
+
+void CanonicalIteratorTest::characterTest(UnicodeString &s, UChar32 ch, CanonicalIterator &it)
+{
+    UErrorCode status = U_ZERO_ERROR;
+    UnicodeString decomp, comp;
+    UBool gotDecomp = FALSE;
+    UBool gotComp = FALSE;
+    UBool gotSource = FALSE;
+
+	Normalizer::decompose(s, FALSE, 0, decomp, status);
+    Normalizer::compose(s, FALSE, 0, comp, status);
+    
+    // skip characters that don't have either decomp.
+    // need quick test for this!
+    if (s == decomp && s == comp) {
+        return;
+    }
+    
+    it.setSource(s, status);
+    
+    while (TRUE) {
+        UnicodeString item = it.next();
+        if (item.isBogus()) break;
+        if (item == s) gotSource = TRUE;
+        if (item == decomp) gotDecomp = TRUE;
+        if (item == comp) gotComp = TRUE;
+    }
+    
+    if (!gotSource || !gotDecomp || !gotComp) {
+        errln("FAIL CanonicalIterator: " + s + (int)ch);
+    }
 }
 
 void CanonicalIteratorTest::expectEqual(const UnicodeString &message, const UnicodeString &item, const UnicodeString &a, const UnicodeString &b) {

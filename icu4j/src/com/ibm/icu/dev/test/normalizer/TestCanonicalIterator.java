@@ -62,69 +62,10 @@ public class TestCanonicalIterator extends TestFmwk {
                 
             if ((++counter % 5000) == 0) logln("Testing " + Utility.hex(i,0));
             
-            String s = UTF16.valueOf(i) + "\u0345";
-            String decomp = Normalizer.decompose(s, false);
-            String comp = Normalizer.compose(s, false);
-            // skip characters that don't have either decomp.
-            // need quick test for this!
-            if (s.equals(decomp) && s.equals(comp)) continue;
+            String s = UTF16.valueOf(i);
             
-            it.setSource(s);
-            boolean gotDecomp = false;
-            boolean gotComp = false;
-            boolean gotSource = false;
-            while (true) {
-                String item = it.next();
-                if (item == null) break;
-                if (item.equals(s)) gotSource = true;
-                if (item.equals(decomp)) gotDecomp = true;
-                if (item.equals(comp)) gotComp = true;
-                if ((mixedCounter & 0x7F) == 0 && (i < 0xAD00 || i > 0xAC00 + 11172)) {
-                    if (lastMixedCounter != mixedCounter) {
-                        logln("");
-                        lastMixedCounter = mixedCounter;
-                    }
-                    logln("\t" + mixedCounter + "\t" + hex(item)
-                    + (item.equals(s) ? "\t(*original*)" : "")
-                    + (item.equals(decomp) ? "\t(*decomp*)" : "")
-                    + (item.equals(comp) ? "\t(*comp*)" : "")
-                    );
-                }
-
-            }
-            
-            // check that zeros optimization doesn't mess up.
-            /*
-            if (true) {
-                it.reset();
-                itSet.clear();
-                while (true) {
-                    String item = it.next();
-                    if (item == null) break;
-                    itSet.add(item);
-                }
-                slowIt.setSource(s);
-                slowItSet.clear();
-                while (true) {
-                    String item = slowIt.next();
-                    if (item == null) break;
-                    slowItSet.add(item);
-                }
-                if (!itSet.equals(slowItSet)) {
-                    errln("Zero optimization failure with " + getReadable(s));
-                }
-            }
-            */
-            
-            mixedCounter++;
-            if (!gotSource || !gotDecomp || !gotComp) {
-                errln("FAIL CanonicalIterator: " + s + " decomp: " +decomp+" comp: "+comp);
-                it.reset();
-                for(String item=it.next();item!=null;item=it.next()){
-                    err(item + "    ");
-                }
-                errln("");   
-            }
+            characterTest(s, i, it);
+            characterTest(s + "\u0345", i, it);
         }
     }
     
@@ -247,6 +188,77 @@ public class TestCanonicalIterator extends TestFmwk {
         //if (name == null) name = Transliterator.getInstance("[^\\ -\\u007F] name");
         //if (hex == null) hex = Transliterator.getInstance("[^\\ -\\u007F] hex");
         return "[" + (SHOW_NAMES ? hex(s) + "; " : "") + hex(s) + "]";
+    }
+    
+    public void characterTest(String s, int ch, CanonicalIterator it)
+    {
+        int counter = 0;
+        int mixedCounter = 0;
+        int lastMixedCounter = -1;
+        boolean gotDecomp = false;
+        boolean gotComp = false;
+        boolean gotSource = false;
+        String decomp = Normalizer.decompose(s, false);
+        String comp = Normalizer.compose(s, false);
+        
+        // skip characters that don't have either decomp.
+        // need quick test for this!
+        if (s.equals(decomp) && s.equals(comp)) return;
+        
+        it.setSource(s);
+
+        while (true) {
+            String item = it.next();
+            if (item == null) break;
+            if (item.equals(s)) gotSource = true;
+            if (item.equals(decomp)) gotDecomp = true;
+            if (item.equals(comp)) gotComp = true;
+            if ((mixedCounter & 0x7F) == 0 && (ch < 0xAD00 || ch > 0xAC00 + 11172)) {
+                if (lastMixedCounter != mixedCounter) {
+                    logln("");
+                    lastMixedCounter = mixedCounter;
+                }
+                logln("\t" + mixedCounter + "\t" + hex(item)
+                + (item.equals(s) ? "\t(*original*)" : "")
+                + (item.equals(decomp) ? "\t(*decomp*)" : "")
+                + (item.equals(comp) ? "\t(*comp*)" : "")
+                );
+            }
+
+        }
+        
+        // check that zeros optimization doesn't mess up.
+        /*
+        if (true) {
+            it.reset();
+            itSet.clear();
+            while (true) {
+                String item = it.next();
+                if (item == null) break;
+                itSet.add(item);
+            }
+            slowIt.setSource(s);
+            slowItSet.clear();
+            while (true) {
+                String item = slowIt.next();
+                if (item == null) break;
+                slowItSet.add(item);
+            }
+            if (!itSet.equals(slowItSet)) {
+                errln("Zero optimization failure with " + getReadable(s));
+            }
+        }
+        */
+        
+        mixedCounter++;
+        if (!gotSource || !gotDecomp || !gotComp) {
+            errln("FAIL CanonicalIterator: " + s + " decomp: " +decomp+" comp: "+comp);
+            it.reset();
+            for(String item=it.next();item!=null;item=it.next()){
+                err(item + "    ");
+            }
+            errln("");   
+        }
     }
     
     static String collectionToString(Collection col) {
