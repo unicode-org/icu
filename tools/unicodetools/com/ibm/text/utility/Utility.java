@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/utility/Utility.java,v $
-* $Date: 2003/04/01 02:52:00 $
-* $Revision: 1.31 $
+* $Date: 2003/04/23 20:18:41 $
+* $Revision: 1.32 $
 *
 *******************************************************************************
 */
@@ -1069,15 +1069,36 @@ public final class Utility implements UCD_Types {    // COMMON UTILITIES
         return "Showing Stack with fake " + sw.getBuffer().toString();
     }
     
+    public static String getUnicodeImage(int cp) {
+        String code = hex(cp, 4);
+        return "<img alt='U+" + code + "' src='http://www.unicode.org/cgi-bin/refglyph?24-" + code + "' style='vertical-align:middle'>";
+    }
+    
     static PrintWriter showSetNamesPw;
     
     public static void showSetDifferences(String name1, UnicodeSet set1, String name2, UnicodeSet set2, boolean separateLines, UCD ucd) {
+        if (showSetNamesPw == null) showSetNamesPw = new PrintWriter(System.out);
+        showSetDifferences(showSetNamesPw, name1, set1, name2, set2, separateLines, false, null, ucd);
+    }
+    
+    public static void showSetDifferences(PrintWriter pw, String name1, UnicodeSet set1, String name2, UnicodeSet set2, 
+      boolean separateLines, boolean withChar, UnicodeMap names, UCD ucd) {
+        
         UnicodeSet temp = new UnicodeSet(set1).removeAll(set2);
-        showSetNames("In " + name1 + ", but not " + name2,  temp,  separateLines,  false,  false, ucd);
+        pw.println();
+        pw.println("In " + name1 + ", but not in " + name2 + ": ");
+        showSetNames(pw, "\t",  temp,  separateLines,  false,  withChar, names, ucd);
+        
         temp = new UnicodeSet(set2).removeAll(set1);
-        showSetNames("In " + name2 + ", but not " + name1,  temp,  separateLines,  false,  false, ucd);
+        pw.println();
+        pw.println("Not in " + name1 + ", but in " + name2 + ": ");
+        showSetNames(pw, "\t",  temp,  separateLines,  false,  withChar, names, ucd);
+        
         temp = new UnicodeSet(set2).retainAll(set1);
-        showSetNames("In " + name1 + " and " + name2,  temp,  separateLines,  false,  false, ucd);
+        pw.println();
+        pw.println("In both " + name1 + " and " + name2 + ": ");
+        pw.println(temp.size() == 0 ? "<none>" : ""+ temp);
+        // showSetNames(pw, "\t",  temp,  false,  false,  withChar, names, ucd);
     }
     
     public static void showSetNames(String prefix, UnicodeSet set, boolean separateLines, UCD ucd) {
@@ -1089,17 +1110,24 @@ public final class Utility implements UCD_Types {    // COMMON UTILITIES
     }
     
     public static void showSetNames(PrintWriter pw, String prefix, UnicodeSet set, boolean separateLines, boolean IDN, UCD ucd) {
-        showSetNames( pw,  prefix,  set,  separateLines,  IDN,  false, ucd);
+        showSetNames( pw,  prefix,  set,  separateLines,  IDN,  false, null, ucd);
     }
     
     public static void showSetNames(String prefix, UnicodeSet set, boolean separateLines, boolean IDN, boolean withChar, UCD ucd) {
         if (showSetNamesPw == null) showSetNamesPw = new PrintWriter(System.out);
-        showSetNames(showSetNamesPw, prefix, set, separateLines, IDN, withChar, ucd);
-        showSetNamesPw.flush();
+        showSetNames(showSetNamesPw, prefix, set, separateLines, IDN, withChar, null, ucd);
     }
     
+    static java.text.NumberFormat nf = java.text.NumberFormat.getInstance();
+    
     public static void showSetNames(PrintWriter pw, String prefix, UnicodeSet set, boolean separateLines, boolean IDN, 
-            boolean withChar, UCD ucd) {
+            boolean withChar, UnicodeMap names, UCD ucd) {
+        if (set.size() == 0) {
+            pw.println(prefix + "<none>");
+            pw.flush();
+            return;
+        }
+        boolean useHTML = false;
         int count = set.getRangeCount();
         for (int i = 0; i < count; ++i) {
             int start = set.getRangeStart(i);
@@ -1108,8 +1136,11 @@ public final class Utility implements UCD_Types {    // COMMON UTILITIES
                 for (int cp = start; cp <= end; ++cp) {
                     if (!IDN) pw.println(prefix + ucd.getCode(cp)
                         + "\t# " 
-                        + (withChar ? " (" + UTF16.valueOf(cp) + ") " : "")
-                        + ucd.getName(cp));
+                        + (useHTML ? "(" + getUnicodeImage(cp) + ") " : "")
+                        + (withChar && (cp >= 0x20) ? "(" + UTF16.valueOf(cp) + ") " : "")
+                        + (names != null ? names.getLabel(cp) + " " : "")
+                        + ucd.getName(cp)
+                        + (useHTML ? "<br>" : ""));
                     else {
                         pw.println(prefix + Utility.hex(cp,4) + "; " + ucd.getName(cp));
                     }
@@ -1119,7 +1150,7 @@ public final class Utility implements UCD_Types {    // COMMON UTILITIES
                     pw.println(prefix + ucd.getCode(start)
                         + ((start != end) ? (".." + ucd.getCode(end)) : "")
                         + "\t# "
-                        + (withChar ? " (" + UTF16.valueOf(start)
+                        + (withChar && (start >= 0x20) ? " (" + UTF16.valueOf(start)
                             + ((start != end) ? (".." + UTF16.valueOf(end)) : "") + ") " : "")
                         + ucd.getName(start) + ((start != end) ? (".." + ucd.getName(end)) : "")
                     );
@@ -1136,6 +1167,8 @@ public final class Utility implements UCD_Types {    // COMMON UTILITIES
                 }
             }
         }
+        pw.println("Total: " + nf.format(set.size()));
+        pw.flush();
     }
     
     private static boolean isSeparateLineIDN(int cp, UCD ucd) {

@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/Main.java,v $
-* $Date: 2003/03/20 21:47:28 $
-* $Revision: 1.30 $
+* $Date: 2003/04/23 20:18:42 $
+* $Revision: 1.31 $
 *
 *******************************************************************************
 */
@@ -164,6 +164,9 @@ public final class Main implements UCD_Types {
             else if (arg.equalsIgnoreCase("checkIdentical")) GenerateData.handleIdentical();
             else if (arg.equalsIgnoreCase("testnameuniqueness")) TestNameUniqueness.test();
             else if (arg.equalsIgnoreCase("checkDifferences")) GenerateData.checkDifferences("3.2.0");
+            
+            else if (arg.equalsIgnoreCase("Compare14652")) Compare14652.main(null);
+            
             
             //else if (arg.equalsIgnoreCase("NormalizationCharts")) ChartGenerator.writeNormalizationCharts();
             

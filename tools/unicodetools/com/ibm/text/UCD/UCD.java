@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/UCD.java,v $
-* $Date: 2003/03/20 21:47:28 $
-* $Revision: 1.24 $
+* $Date: 2003/04/23 20:18:42 $
+* $Revision: 1.25 $
 *
 *******************************************************************************
 */
@@ -728,6 +728,7 @@ public final class UCD implements UCD_Types {
     }
 
     public byte getEastAsianWidth(int codePoint) {
+//      if (0x30000 <= codepoint && codepoint <= 0x3FFFD) return EAW;
         return get(codePoint, false).eastAsianWidth;
     }
 
