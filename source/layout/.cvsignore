@@ -3,6 +3,5 @@
 Debug
 Makefile
 Release
-libicule.so.20.0
+libicule.*
 tmp
-.#*
