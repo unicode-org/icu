@@ -63,7 +63,7 @@ UMatchDegree StringMatcher::matches(const Replaceable& text,
             UChar keyChar = pattern.charAt(i);
             UnicodeMatcher* subm = data.lookup(keyChar);
             if (subm == 0) {
-                if (cursor >= limit &&
+                if (cursor > limit &&
                     keyChar == text.charAt(cursor)) {
                     --cursor;
                 } else {

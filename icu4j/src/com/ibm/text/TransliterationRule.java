@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/TransliterationRule.java,v $
- * $Date: 2001/12/03 21:33:58 $
- * $Revision: 1.39 $
+ * $Date: 2001/12/11 17:43:57 $
+ * $Revision: 1.40 $
  *
  *****************************************************************************************
  */
@@ -46,9 +46,24 @@ import com.ibm.util.Utility;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: TransliterationRule.java,v $ $Revision: 1.39 $ $Date: 2001/12/03 21:33:58 $
+ * @version $RCSfile: TransliterationRule.java,v $ $Revision: 1.40 $ $Date: 2001/12/11 17:43:57 $
  */
 class TransliterationRule {
+
+    /**
+     * The match that must occur before the key, or null if there is no
+     * antecedent constraint.
+     */
+    private StringMatcher anteContext;
+
+    /**
+     * The 
+     */
+    private StringMatcher key;
+
+    private StringMatcher postContext;
+
+
 
     /**
      * The string that must be matched, consisting of the anteContext, key,
@@ -182,8 +197,7 @@ class TransliterationRule {
         }
         if (cursorPos < 0) {
             cursorPos = output.length();
-        }
-        if (cursorPos > output.length()) {
+        } else if (cursorPos > output.length()) {
             throw new IllegalArgumentException("Invalid cursor position");
         }
         this.cursorPos = cursorPos + cursorOffset;
@@ -201,6 +215,25 @@ class TransliterationRule {
         }
         if (anchorEnd) {
             flags |= ANCHOR_END;
+        }
+
+        anteContext = null;
+        if (anteContextLength > 0) {
+            anteContext = new StringMatcher(pattern.substring(0, anteContextLength),
+                                            false, data);
+        }
+
+        key = null;
+        if (keyLength > 0) {
+            key = new StringMatcher(pattern.substring(anteContextLength, anteContextLength + keyLength),
+                                    false, data);
+        }
+
+        int postContextLength = pattern.length() - keyLength - anteContextLength;
+        postContext = null;
+        if (postContextLength > 0) {
+            postContext = new StringMatcher(pattern.substring(anteContextLength + keyLength),
+                                            false, data);
         }
     }
 
@@ -227,7 +260,7 @@ class TransliterationRule {
      * unless the first character of the key is a set.  If it's a
      * set, or otherwise can match multiple keys, the index value is -1.
      */
-   final int getIndexValue() {
+    final int getIndexValue() {
         if (anteContextLength == pattern.length()) {
             // A pattern with just ante context {such as foo)>bar} can
             // match any key.
@@ -248,15 +281,10 @@ class TransliterationRule {
      * then it will match any key.
      */
     final boolean matchesIndexValue(int v) {
-        if (anteContextLength == pattern.length()) {
-            // A pattern with just ante context {such as foo)>bar} can
-            // match any key.
-            return true;
-        }
-        int c = UTF16.charAt(pattern, anteContextLength);
-        UnicodeMatcher matcher = data.lookup(c);
-        return matcher == null ? (c & 0xFF) == v :
-            matcher.matchesIndexValue(v);
+        // Delegate to the key, or if there is none, to the postContext.
+        // If there is neither then we match any key; return true.
+        UnicodeMatcher m = (key != null) ? key : postContext;
+        return (m != null) ? m.matchesIndexValue(v) : true;
     }
 
     /**
@@ -391,111 +419,65 @@ class TransliterationRule {
         int oText; // offset into 'text'
         int newStart = 0;
         int minOText;
-        int oPattern; // offset into 'pattern'
-
-        // Backup oText by one
-        oText = posBefore(text, pos.start);
 
         // Note (1): We process text in 16-bit code units, rather than
         // 32-bit code points.  This works because stand-ins are
         // always in the BMP and because we are doing a literal match
         // operation, which can be done 16-bits at a time.
 
-        for (oPattern=anteContextLength-1; oPattern>=0; --oPattern) {
-            char keyChar = pattern.charAt(oPattern); // See note (1)
-            UnicodeMatcher matcher = data.lookup(keyChar);
-            if (matcher == null) {
-                if (oText >= pos.contextStart &&
-                    keyChar == text.charAt(oText)) { // See note (1)
-                    --oText;
-                } else {
-                    return UnicodeMatcher.U_MISMATCH;
-                }
-            } else {
-                // Subtract 1 from contextStart to make it a reverse limit
-                intRef[0] = oText;
-                if (matcher.matches(text, intRef, pos.contextStart-1, false)
-                    != UnicodeMatcher.U_MATCH) {
-                    return UnicodeMatcher.U_MISMATCH;
-                }
-                oText = intRef[0];
+        int anteLimit = posBefore(text, pos.contextStart);
+
+        int match;
+
+        // Start reverse match at char before pos.start
+        intRef[0] = posBefore(text, pos.start);
+
+        if (anteContext != null) {
+            match = anteContext.matches(text, intRef, anteLimit, false);
+            if (match != UnicodeMatcher.U_MATCH) {
+                return UnicodeMatcher.U_MISMATCH;
             }
         }
 
+        oText = intRef[0];
+        
         minOText = posAfter(text, oText);
 
         // ------------------------ Start Anchor ------------------------
 
-        if (((flags & ANCHOR_START) != 0) && oText != posBefore(text, pos.contextStart)) {
+        if (((flags & ANCHOR_START) != 0) && oText != anteLimit) {
             return UnicodeMatcher.U_MISMATCH;
         }
 
         // -------------------- Key and Post Context --------------------
 
-        oPattern = 0;
-        oText = pos.start;
-        keyLimit = 0;
-        while (oPattern < (pattern.length() - anteContextLength)) {
-            if (incremental && oText == pos.limit) {
-                // We've reached the limit without a mismatch and
-                // without completing our match.
+        intRef[0] = pos.start;
+
+        if (key != null) {
+            match = key.matches(text, intRef, pos.limit, incremental);
+            if (match != UnicodeMatcher.U_MATCH) {
+                return match;
+            }
+        }
+
+        keyLimit = intRef[0];
+
+        if (postContext != null) {
+            if (incremental && keyLimit == pos.limit) {
+                // The key matches just before pos.limit, and there is
+                // a postContext.  Since we are in incremental mode,
+                // we must assume more characters may be inserted at
+                // pos.limit -- this is a partial match.
                 return UnicodeMatcher.U_PARTIAL_MATCH;
             }
 
-            // It might seem that we could do a check like this here:
-            //!if (oText == pos.limit && oPattern < keyLength) {
-            //!    // We're still in the pattern key but we're entering the
-            //!    // post context.
-            // but this won't work if the end of the key is a
-            // zero-length matcher, followed by post context: {a b?} c
-            // Instead, what we do is proceed with matching as usual
-            // so zero-length matchers can work, but restrict the
-            // limit to either pos.limit or pos.contextLimit,
-            // depending on whether we're in the key or in the post
-            // context.
-
-            if (oPattern == keyLength) {
-                keyLimit = oText;
+            match = postContext.matches(text, intRef, pos.contextLimit, incremental);
+            if (match != UnicodeMatcher.U_MATCH) {
+                return match;
             }
-
-            // Restrict the key to match up to pos.limit; the post-context
-            // can match up to pos.contextLimit.
-            int matchLimit = (oPattern < keyLength) ? pos.limit : pos.contextLimit;
-
-            char keyChar = pattern.charAt(anteContextLength + oPattern++); // See note (1)
-            UnicodeMatcher matcher = data.lookup(keyChar);
-            if (matcher == null) {
-                // Don't need the oText < pos.contextLimit check if
-                // incremental is TRUE (because it's done above); do need
-                // it otherwise.
-                if (oText < matchLimit &&
-                    keyChar == text.charAt(oText)) { // See note (1)
-                    ++oText;
-                } else {
-                    return UnicodeMatcher.U_MISMATCH;
-                }
-            } else {
-                intRef[0] = oText;
-                int m = matcher.matches(text, intRef, matchLimit, incremental);                
-                if (m != UnicodeMatcher.U_MATCH) {
-                    return m;
-                }
-                oText = intRef[0];
-            }
-            
-            // This check rendered superfluous by above use of
-            // matchLimit, but kept around for documentation.
-            //!if (oText > pos.limit && oPattern < keyLength) {
-            //!    // We're still in the pattern key but we've entering the
-            //!    // post context.  We must do this check _after_ doing the
-            //!    // match in case we have zero-length matchers like /a?/
-            //!    // at the end of the key.
-            //!    return UnicodeMatcher.U_MISMATCH;
-            //!}
         }
-        if (oPattern == keyLength) {
-            keyLimit = oText;
-        }
+
+        oText = intRef[0];
 
         // ------------------------- Stop Anchor ------------------------
 
@@ -711,8 +693,6 @@ class TransliterationRule {
         else {
             UTF16.append(rule, c);
         }
-
-        //System.out.println("rule=" + rule.toString() + " qb=" + quoteBuf.toString());
     }
 
     static final void appendToRule(StringBuffer rule,
@@ -726,8 +706,19 @@ class TransliterationRule {
         }
     }
 
-    static private int[] POW10 = {1, 10, 100, 1000, 10000, 100000, 1000000,
-                                  10000000, 100000000, 1000000000};
+    /**
+     * Given a matcher reference, which may be null, append its
+     * pattern as a literal to the given rule.
+     */
+    static final void appendToRule(StringBuffer rule,
+                                   UnicodeMatcher matcher,
+                                   boolean escapeUnprintable,
+                                   StringBuffer quoteBuf) {
+        if (matcher != null) {
+            appendToRule(rule, matcher.toPattern(escapeUnprintable),
+                         true, escapeUnprintable, quoteBuf);
+        }
+    }
 
     /**
      * Create a source string that represents this rule.  Append it to the
@@ -746,7 +737,7 @@ class TransliterationRule {
         // Do not emit the braces '{' '}' around the pattern if there
         // is neither anteContext nor postContext.
         boolean emitBraces =
-            (anteContextLength != 0) || (keyLength != pattern.length());
+            (anteContext != null) || (postContext != null);
 
         // Emit start anchor
         if ((flags & ANCHOR_START) != 0) {
@@ -754,28 +745,19 @@ class TransliterationRule {
         }
 
         // Emit the input pattern
-        for (i=0; i<pattern.length(); ++i) {
-            if (emitBraces && i == anteContextLength) {
-                appendToRule(rule, '{', true, escapeUnprintable, quoteBuf);
-            }
+        appendToRule(rule, anteContext, escapeUnprintable, quoteBuf);
 
-            if (emitBraces && i == (anteContextLength + keyLength)) {
-                appendToRule(rule, '}', true, escapeUnprintable, quoteBuf);
-            }
-
-            char c = pattern.charAt(i); // Ok to use 16-bits here
-            UnicodeMatcher matcher = data.lookup(c);
-            if (matcher == null) {
-                appendToRule(rule, c, false, escapeUnprintable, quoteBuf);
-            } else {
-                appendToRule(rule, matcher.toPattern(escapeUnprintable),
-                              true, escapeUnprintable, quoteBuf);
-            }
+        if (emitBraces) {
+            appendToRule(rule, '{', true, escapeUnprintable, quoteBuf);
         }
 
-        if (emitBraces && i == (anteContextLength + keyLength)) {
+        appendToRule(rule, key, escapeUnprintable, quoteBuf);
+
+        if (emitBraces) {
             appendToRule(rule, '}', true, escapeUnprintable, quoteBuf);
         }
+
+        appendToRule(rule, postContext, escapeUnprintable, quoteBuf);
 
         // Emit end anchor
         if ((flags & ANCHOR_END) != 0) {
@@ -807,17 +789,7 @@ class TransliterationRule {
                 ++seg; // make 1-based
                 appendToRule(rule, 0x20, true, escapeUnprintable, quoteBuf);
                 rule.append('$');
-                boolean show = false; // true if we should display digits
-                for (int p=9; p>=0; --p) {
-                    int d = seg / POW10[p];
-                    seg -= d * POW10[p];
-                    if (d != 0 || p == 0) {
-                        show = true;
-                    }
-                    if (show) {
-                        rule.append((char)(48+d));
-                    }
-                }
+                Utility.appendNumber(rule, seg, 10, 1);
                 rule.append(' ');
             }
         }
@@ -878,6 +850,9 @@ class TransliterationRule {
 
 /**
  * $Log: TransliterationRule.java,v $
+ * Revision 1.40  2001/12/11 17:43:57  alan
+ * jitterbug 1591: clean up TransliterationRule
+ *
  * Revision 1.39  2001/12/03 21:33:58  alan
  * jitterbug 1373: more fixes to support supplementals
  *
