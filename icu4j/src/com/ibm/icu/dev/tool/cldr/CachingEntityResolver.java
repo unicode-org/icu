@@ -43,18 +43,49 @@ import org.w3c.dom.Text;
 
 public class CachingEntityResolver implements EntityResolver {
     static final String CLDR_DTD_CACHE = "CLDR_DTD_CACHE";
+    private static String gCacheDir = null;
+    private static boolean gCheckedEnv = false;
+    
+    // TODO: synch
+    public static void setCacheDir(String s) {
+        gCacheDir = s;
+        if((gCacheDir==null)||(gCacheDir.length()<=0)) {
+            gCacheDir = null;
+        }
+    }
+    public static String getCacheDir() {
+//        boolean aDebug = false;
+//        if((System.getProperty("CLDR_DTD_CACHE_DEBUG")!=null) || "y".equals(System.getProperty("CLDR_DTD_CACHE_ADEBUG"))) {
+//            aDebug = true;
+//        }
+
+        if((gCacheDir == null) && (!gCheckedEnv)) {
+            gCacheDir = System.getProperty(CLDR_DTD_CACHE);
+
+//            if(aDebug) {
+//                System.out.println("CRE:  " + CLDR_DTD_CACHE + " = " + gCacheDir);
+//            }
+            
+            if((gCacheDir==null)||(gCacheDir.length()<=0)) {
+                gCacheDir = null;
+            }
+            gCheckedEnv=true;
+        }
+        return gCacheDir;
+    }
     public InputSource resolveEntity (String publicId, String systemId) {
         boolean aDebug = false;
         if((System.getProperty("CLDR_DTD_CACHE_DEBUG")!=null) || "y".equals(System.getProperty("CLDR_DTD_CACHE_ADEBUG"))) {
             aDebug = true;
         }
         
+        String theCache = getCacheDir();
+
         if(aDebug) {
-            System.out.println("CRE:  " + publicId + " | " + systemId);
+            System.out.println("CRE:  " + publicId + " | " + systemId + ", cache=" + theCache);
         }
         
-        String theCache = System.getProperty(CLDR_DTD_CACHE);
-        if((theCache!=null) && (theCache.length()>0)) {
+        if(theCache!=null) {
             int i;
 
             StringBuffer systemNew = new StringBuffer(systemId);
