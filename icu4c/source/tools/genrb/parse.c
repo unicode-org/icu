@@ -178,12 +178,36 @@ static UBool compareUString(const void* ustr1, const void* ustr2) {
                                ((struct UString*)ustr2)->fChars);
 }
 
+char *getModificationData(struct UFILE *file, UErrorCode *status) {
+  enum ETokenType modType;
+  struct UString modToken;
+  char *retValue = NULL;
+  ustr_init(&modToken);
+  modType = getNextToken(file, &modToken, status);
+  if(U_SUCCESS(*status) && modType == tok_open_brace) {
+    modType = getNextToken(file, &modToken, status);
+    if(U_SUCCESS(*status) && modType == tok_string) {
+      retValue = uprv_malloc(u_strlen(modToken.fChars)+1);
+      u_UCharsToChars(modToken.fChars, retValue, u_strlen(modToken.fChars)+1);
+      modType = getNextToken(file, &modToken, status);
+      if(U_SUCCESS(*status) && modType == tok_close_brace) {
+	return retValue;
+      } else {
+	uprv_free(retValue);
+      }
+    }
+  } 
+  setErrorText("Invalid modificator directive");
+  *status = U_INVALID_FORMAT_ERROR;
+  return NULL;
+}
+
 /*********************************************************************
  * parse
  ********************************************************************/
 
 struct SRBRoot*
-parse(FileStream *f, const char *cp,
+parse(FileStream *f, const char *cp, const char *inputDir,
       UErrorCode *status)
 {
   struct UFILE *file;
@@ -201,7 +225,7 @@ parse(FileStream *f, const char *cp,
     struct SResource *temp = NULL;
     struct SResource *temp1 = NULL;
     struct SResource *temp2 = NULL;
-	UBool colEl = FALSE;
+    UBool colEl = FALSE;
 
     /* Hashtable for keeping track of seen tag names */
     struct UHashtable *data;
@@ -290,21 +314,159 @@ parse(FileStream *f, const char *cp,
         if(U_FAILURE(*status)) {
             goto finish;
         }
-		if(uprv_strchr(cTag, ':')) {
-			/* type modificator - do the type modification*/
-		} else if(uprv_strcmp(cTag, "CollationElements") == 0) {
-			colEl = TRUE;
-		}
-        /*if(uhash_get(data, uhash_hashUString(tag.fChars)) != 0) {*/
         if(get(data, &tag)) {
-	        char *s;
-	        *status = U_INVALID_FORMAT_ERROR;
-            s = uprv_malloc(1024);
-            strcpy(s, "Duplicate tag name detected: ");
-            u_austrcpy(s+strlen(s), tag.fChars);
-            setErrorText(s);
-	        goto finish;
+	  char *s;
+	  *status = U_INVALID_FORMAT_ERROR;
+	  s = uprv_malloc(1024);
+	  strcpy(s, "Duplicate tag name detected: ");
+	  u_austrcpy(s+strlen(s), tag.fChars);
+	  setErrorText(s);
+	  goto finish;
         }
+	{
+	  char *modificator = NULL;
+	  if((modificator = uprv_strchr(cTag, ':'))!=NULL) {
+	    /* type modificator - do the type modification*/
+	    *modificator = '\0';
+	    ustr_deinit(&tag);
+	    ustr_setlen(&tag, uprv_strlen(cTag), status);
+	    u_charsToUChars(cTag, tag.fChars, uprv_strlen(cTag));
+	    /* we need to test whether we have the same name, different type here */
+	    if(get(data, &tag)) {
+	      char *s;
+	      *status = U_INVALID_FORMAT_ERROR;
+	      s = uprv_malloc(1024);
+	      strcpy(s, "Duplicate tag name detected: ");
+	      u_austrcpy(s+strlen(s), tag.fChars);
+	      setErrorText(s);
+	      goto finish;
+	    }
+	    modificator++;
+	    /* including streams of binary data */
+	    if(uprv_strcmp(modificator, "bin") == 0) {
+	      char *binaryValue;
+	      char toConv[3];
+	      int32_t i = 0, bytesConverted = 0;
+	      uint8_t val = 0;
+	      uint8_t *newValue;
+	      fprintf(stderr, "bin\n");
+	      binaryValue = getModificationData(file, status);
+	      if(U_SUCCESS(*status) && binaryValue != NULL) {
+		/* do the parsing & outputing of the data */
+		fprintf(stderr, "Will parse binary value  %s and store it in tag: %s\n", binaryValue, cTag);
+		newValue = uprv_malloc(sizeof(uint8_t)*uprv_strlen(binaryValue));
+		for(i = 0; i<uprv_strlen(binaryValue); i+=2) {
+		  toConv[0] = *(binaryValue+i);
+		  toConv[1] = *(binaryValue+i+1);
+		  toConv[2] = '\0';
+		  val = strtoul(toConv, NULL, 16);
+		  newValue[bytesConverted] = val;
+		  bytesConverted++;
+		}
+		temp1 = bin_open(bundle, cTag, bytesConverted, newValue, status);
+		table_add(rootTable, temp1, status);
+		  
+		uprv_free(newValue);
+		uprv_free(binaryValue);
+		node = eIdle;
+	      } else {
+		if(binaryValue != NULL) {
+		  uprv_free(binaryValue);
+		}
+		node = eError;
+	      }
+	    }
+	    /* including integers */
+	    else if(uprv_strcmp(modificator, "int") == 0) {
+	      char *intValue;
+	      int32_t val;
+	      fprintf(stderr, "int\n");
+	      intValue = getModificationData(file, status);
+	      if(U_SUCCESS(*status) && intValue != NULL) {
+		/* do the parsing & outputing of the data */
+		fprintf(stderr, "Will parse integer value  %s and store it in tag: %s\n", intValue, cTag);
+		val = atoi(intValue);
+		uprv_free(intValue);
+		temp1 = int_open(bundle, cTag, val, status);
+		fprintf(stderr, "Added integer %s, value %d -> %s\n", cTag, val,
+			  u_errorName(*status) );
+		table_add(rootTable, temp1, status);
+		
+		put(data, &tag, status);
+		node = eIdle;
+	      } else {
+		if(intValue != NULL) {
+		  uprv_free(intValue);
+		}
+		node = eError;
+	      }
+	    } 
+	    /* importing a file and storing it in a binary object */
+	    else if(uprv_strcmp(modificator, "import") == 0) {
+	      FileStream *importFile;
+	      int32_t len; 
+	      uint8_t *binData;
+	      char *fileName;
+	      fprintf(stderr, "import\n");
+	      fileName = getModificationData(file, status);
+	      if(U_SUCCESS(*status) && fileName != NULL) {
+		/* do the reading & outputing of the file */
+		fprintf(stderr, "Will read %s and store it in tag:  %s\n", fileName, cTag);
+		  /* Open the input file for reading */
+		if(inputDir == NULL) {
+		  importFile = T_FileStream_open(fileName, "rb");
+		} else {
+		  char *openFileName = NULL;
+		  int32_t dirlen = uprv_strlen(inputDir);
+		  int32_t filelen = uprv_strlen(fileName);
+		  if(inputDir[dirlen-1] != U_FILE_SEP_CHAR) {
+		    openFileName = (char *) uprv_malloc(dirlen+filelen+2);
+		    uprv_strcpy(openFileName, inputDir);
+		    openFileName[dirlen] = U_FILE_SEP_CHAR;
+		    openFileName[dirlen+1] = '\0';
+		    uprv_strcat(openFileName, fileName);
+		  } else {
+		    openFileName = (char *) uprv_malloc(dirlen+filelen+1);
+		    uprv_strcpy(openFileName, inputDir);
+		    uprv_strcat(openFileName, fileName);
+		  }
+		  importFile = T_FileStream_open(openFileName, "rb");
+		  uprv_free(openFileName);
+		}
+		len = T_FileStream_size(importFile);
+		binData = uprv_malloc(len);
+		T_FileStream_read(importFile,binData,len);
+		T_FileStream_close(importFile);
+ 
+		temp1 = bin_open(bundle, cTag, len, binData, status);
+		fprintf(stderr, "Added %s, len %d -> %s\n", cTag, len,
+			  u_errorName(*status) );
+		table_add(rootTable, temp1, status);
+		uprv_free(binData);
+		uprv_free(fileName);
+		put(data, &tag, status);
+		node = eIdle;
+	      } else {
+		if(fileName != NULL) {
+		  uprv_free(fileName);
+		}
+		node = eError;
+	      }
+	    } 
+	    /* array of integers, still unimplemented */
+	    else if(uprv_strcmp(modificator, "intarray") == 0) {
+		  fprintf(stderr, "intarray\n");
+	    } 
+	    /* unknown tupe - an error */
+	    else {
+		  fprintf(stderr, "Unknown\n");
+	    }
+
+	  } else if(uprv_strcmp(cTag, "CollationElements") == 0) {
+	    colEl = TRUE;
+	  } 
+	}
+
 
         break;
 
@@ -346,7 +508,9 @@ parse(FileStream *f, const char *cp,
             }
 			uprv_free(rules);
 			colEl = FALSE;
-		}
+		} 
+ 
+
         /*uhash_put(data, tag.fChars, status);*/
         put(data, &tag, status);
         if(U_FAILURE(*status)) {

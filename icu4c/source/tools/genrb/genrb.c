@@ -231,7 +231,7 @@ processFile(const char *filename, const char *cp, const char *inputDir, const ch
 
 
   /* Parse the data into an SRBRoot */
-  data = parse(in, cp, status);
+  data = parse(in, cp, inputDir, status);
 
   /* Determine the target rb filename */
   rbname = make_res_filename(filename, outputDir,  status);

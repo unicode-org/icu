@@ -19,7 +19,7 @@
 #define RESLIST_H
 
 #define KEY_SPACE_SIZE 65532
-#define MAX_INT_VECTOR 2048
+#define RESLIST_MAX_INT_VECTOR 2048
 
 #include "unicode/utypes.h"
 #include "unicode/ures.h"
