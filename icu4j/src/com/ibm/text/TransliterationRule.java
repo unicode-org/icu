@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/TransliterationRule.java,v $
- * $Date: 2001/11/30 22:27:29 $
- * $Revision: 1.38 $
+ * $Date: 2001/12/03 21:33:58 $
+ * $Revision: 1.39 $
  *
  *****************************************************************************************
  */
@@ -46,7 +46,7 @@ import com.ibm.util.Utility;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: TransliterationRule.java,v $ $Revision: 1.38 $ $Date: 2001/11/30 22:27:29 $
+ * @version $RCSfile: TransliterationRule.java,v $ $Revision: 1.39 $ $Date: 2001/12/03 21:33:58 $
  */
 class TransliterationRule {
 
@@ -396,12 +396,17 @@ class TransliterationRule {
         // Backup oText by one
         oText = posBefore(text, pos.start);
 
+        // Note (1): We process text in 16-bit code units, rather than
+        // 32-bit code points.  This works because stand-ins are
+        // always in the BMP and because we are doing a literal match
+        // operation, which can be done 16-bits at a time.
+
         for (oPattern=anteContextLength-1; oPattern>=0; --oPattern) {
-            char keyChar = pattern.charAt(oPattern);
+            char keyChar = pattern.charAt(oPattern); // See note (1)
             UnicodeMatcher matcher = data.lookup(keyChar);
             if (matcher == null) {
                 if (oText >= pos.contextStart &&
-                    keyChar == text.charAt(oText)) {
+                    keyChar == text.charAt(oText)) { // See note (1)
                     --oText;
                 } else {
                     return UnicodeMatcher.U_MISMATCH;
@@ -457,14 +462,14 @@ class TransliterationRule {
             // can match up to pos.contextLimit.
             int matchLimit = (oPattern < keyLength) ? pos.limit : pos.contextLimit;
 
-            char keyChar = pattern.charAt(anteContextLength + oPattern++);
+            char keyChar = pattern.charAt(anteContextLength + oPattern++); // See note (1)
             UnicodeMatcher matcher = data.lookup(keyChar);
             if (matcher == null) {
                 // Don't need the oText < pos.contextLimit check if
                 // incremental is TRUE (because it's done above); do need
                 // it otherwise.
                 if (oText < matchLimit &&
-                    keyChar == text.charAt(oText)) {
+                    keyChar == text.charAt(oText)) { // See note (1)
                     ++oText;
                 } else {
                     return UnicodeMatcher.U_MISMATCH;
@@ -716,6 +721,7 @@ class TransliterationRule {
                                    boolean escapeUnprintable,
                                    StringBuffer quoteBuf) {
         for (int i=0; i<text.length(); ++i) {
+            // Okay to process in 16-bit code units here
             appendToRule(rule, text.charAt(i), isLiteral, escapeUnprintable, quoteBuf);
         }
     }
@@ -757,7 +763,7 @@ class TransliterationRule {
                 appendToRule(rule, '}', true, escapeUnprintable, quoteBuf);
             }
 
-            char c = pattern.charAt(i);
+            char c = pattern.charAt(i); // Ok to use 16-bits here
             UnicodeMatcher matcher = data.lookup(c);
             if (matcher == null) {
                 appendToRule(rule, c, false, escapeUnprintable, quoteBuf);
@@ -793,7 +799,7 @@ class TransliterationRule {
             if (i == cursor) {
                 appendToRule(rule, '|', true, escapeUnprintable, quoteBuf);
             }
-            char c = output.charAt(i);
+            char c = output.charAt(i); // Ok to use 16-bits here
             int seg = data.lookupSegmentReference(c);
             if (seg < 0) {
                 appendToRule(rule, c, false, escapeUnprintable, quoteBuf);
@@ -872,6 +878,9 @@ class TransliterationRule {
 
 /**
  * $Log: TransliterationRule.java,v $
+ * Revision 1.39  2001/12/03 21:33:58  alan
+ * jitterbug 1373: more fixes to support supplementals
+ *
  * Revision 1.38  2001/11/30 22:27:29  alan
  * jitterbug 1560: fix double increment bug in getSourceSet
  *
