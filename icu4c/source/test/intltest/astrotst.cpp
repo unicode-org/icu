@@ -188,10 +188,10 @@ void AstroTest::TestCoverage(void) {
     logln((UnicodeString)"   moon phase: " + astro->getMoonPhase());
     logln((UnicodeString)"   moonrise: " + (astro->getMoonRiseSet(TRUE)));
     logln((UnicodeString)"   moonset: " + (astro->getMoonRiseSet(FALSE)));
-    logln((UnicodeString)"   prev summer solstice: " + (astro->getSunTime(CalendarAstronomer::SUMMER_SOLSTICE, FALSE)));
-    logln((UnicodeString)"   next summer solstice: " + (astro->getSunTime(CalendarAstronomer::SUMMER_SOLSTICE, TRUE)));
-    logln((UnicodeString)"   prev full moon: " + (astro->getMoonTime(CalendarAstronomer::FULL_MOON, FALSE)));
-    logln((UnicodeString)"   next full moon: " + (astro->getMoonTime(CalendarAstronomer::FULL_MOON, TRUE)));
+    logln((UnicodeString)"   prev summer solstice: " + (astro->getSunTime(CalendarAstronomer::SUMMER_SOLSTICE(), FALSE)));
+    logln((UnicodeString)"   next summer solstice: " + (astro->getSunTime(CalendarAstronomer::SUMMER_SOLSTICE(), TRUE)));
+    logln((UnicodeString)"   prev full moon: " + (astro->getMoonTime(CalendarAstronomer::FULL_MOON(), FALSE)));
+    logln((UnicodeString)"   next full moon: " + (astro->getMoonTime(CalendarAstronomer::FULL_MOON(), TRUE)));
   }
 
   delete myastro2;
