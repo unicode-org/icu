@@ -406,7 +406,7 @@ uprv_uca_closeTempTable(tempUCATable *t) {
 * @param status error status
 * @returns size of the maxexpansion and maxsize used.
 */
-int uprv_uca_setMaxExpansion(uint32_t           endexpansion,
+static int uprv_uca_setMaxExpansion(uint32_t           endexpansion,
                              uint8_t            expansionsize,
                              MaxExpansionTable *maxexpansion,
                              UErrorCode        *status)
@@ -548,7 +548,7 @@ int uprv_uca_setMaxExpansion(uint32_t           endexpansion,
 * @param status error status
 * @returns size of the maxexpansion and maxsize used.
 */
-int uprv_uca_setMaxJamoExpansion(UChar                  ch,
+static int uprv_uca_setMaxJamoExpansion(UChar                  ch,
                                  uint32_t               endexpansion,
                                  uint8_t                expansionsize,
                                  MaxJamoExpansionTable *maxexpansion,
@@ -705,7 +705,7 @@ static void uprv_uca_unsafeCPAddCCNZ(tempUCATable *t, UErrorCode *status) {
     }
 }
 
-uint32_t uprv_uca_addPrefix(tempUCATable *t, uint32_t CE, 
+static uint32_t uprv_uca_addPrefix(tempUCATable *t, uint32_t CE, 
                                  UCAElements *element, UErrorCode *status) {
   // currently the longest prefix we're supporting in Japanese is two characters
   // long. Although this table could quite easily mimic complete contraction stuff
@@ -825,7 +825,7 @@ uint32_t uprv_uca_addPrefix(tempUCATable *t, uint32_t CE,
 // in the contraction, it is going to be handled as a pair of code units,
 // as it doesn't affect the performance AND handling surrogates specially
 // would complicate code way too much.
-uint32_t uprv_uca_addContraction(tempUCATable *t, uint32_t CE, 
+static uint32_t uprv_uca_addContraction(tempUCATable *t, uint32_t CE, 
                                  UCAElements *element, UErrorCode *status) {
     CntTable *contractions = t->contractions;
     UChar32 cp;
@@ -1176,7 +1176,7 @@ uprv_uca_addAnElement(tempUCATable *t, UCAElements *element, UErrorCode *status)
 
 
 /*void uprv_uca_getMaxExpansionJamo(CompactEIntArray       *mapping, */
-void uprv_uca_getMaxExpansionJamo(UNewTrie       *mapping, 
+static void uprv_uca_getMaxExpansionJamo(UNewTrie       *mapping, 
                                   MaxExpansionTable     *maxexpansion,
                                   MaxJamoExpansionTable *maxjamoexpansion,
                                   UBool                  jamospecial,
@@ -1522,7 +1522,7 @@ _enumCategoryRangeClosureCategory(const void *context, UChar32 start, UChar32 li
             el.prefixSize = 0;
             el.noOfCEs = 0;
             ucol_setText(colEl, decomp, noOfDec, status);
-            while((el.CEs[el.noOfCEs] = ucol_next(colEl, status)) != UCOL_NULLORDER) {
+            while((el.CEs[el.noOfCEs] = ucol_next(colEl, status)) != (uint32_t)UCOL_NULLORDER) {
               el.noOfCEs++;
             }
           } else {
