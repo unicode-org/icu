@@ -40,11 +40,18 @@
 * Array of mask for determining normalization quick check values.
 * Indexes follows the values in UNormalizationMode
 */
-static uint8_t UQUICK_CHECK_MASK_[] = {0, 0, 0x11, 0x22, 0x44, 0x88};
+static const uint8_t UQUICK_CHECK_MASK_[] = {0, 0, 0x11, 0x22, 0x44, 0x88};
+/* 
+* Array of minimum codepoints that has UNORM_MAYBE or UNORM_NO quick check
+* values. Indexes follows the values in UNormalizationMode.
+* Generated values! Edit at your own risk.
+*/
+static const UChar32 UQUICK_CHECK_MIN_VALUES_[] = {0, 0, 0xc0, 0xa0, 0x300, 
+                                                   0xa0};
 /**
 * Minimum value to determine if quickcheck value contains a MAYBE
 */
-static uint8_t MIN_UNORM_MAYBE_ = 0x10;
+static const uint8_t MIN_UNORM_MAYBE_ = 0x10;
 
 
 U_CAPI int32_t
@@ -88,7 +95,7 @@ unorm_normalize(const UChar*            source,
 * Generated data!! Change at your own risk.
 * Situated here temporary.
 */
-const uint32_t QUICKCHECK_STAGE_1_[] = 
+static const uint32_t QUICKCHECK_STAGE_1_[] = 
 {
 0x0, 0x40, 0x6e, 0xac, 0xea, 0x107, 0x107, 0x127, 0x167, 0x1a1, 
 0x107, 0x1b8, 0x1f8, 0x107, 0x107, 0x107, 0x107, 0x107, 0x107, 0x107, 
@@ -201,7 +208,7 @@ const uint32_t QUICKCHECK_STAGE_1_[] =
 0x107, 0x107, 0x107, 0x107, 0x107, 0x107, 0x107, 0x33c
 };
 
-const uint32_t QUICKCHECK_STAGE_2_[] = 
+static const uint32_t QUICKCHECK_STAGE_2_[] = 
 {
 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 
 0x10, 0x1d, 0x2d, 0x3d, 0x2d, 0x4c, 0x5b, 0x6b, 0x65, 0x7a, 
@@ -295,7 +302,7 @@ const uint32_t QUICKCHECK_STAGE_2_[] =
 0x0, 0x6a8
 };
 
-const uint8_t QUICKCHECK_STAGE_3_[] = 
+static const uint8_t QUICKCHECK_STAGE_3_[] = 
 {
 0xf, 0xf, 0xf, 0xf, 0xf, 0xf, 0xf, 0xf, 0xf, 0xf, 
 0xf, 0xf, 0xf, 0xf, 0xf, 0xf, 0x5, 0xf, 0xf, 0xf, 
@@ -488,60 +495,132 @@ const uint8_t QUICKCHECK_STAGE_3_[] =
  * @return UNORM_YES, UNORM_NO or UNORM_MAYBE
  */
 U_CAPI UNormalizationCheckResult
-unorm_quickCheck(const UChar*       source,
-             int32_t            sourcelength, 
-             UNormalizationMode mode, 
-             UErrorCode*        status)
+unorm_quickCheck(const UChar             *source,
+                       int32_t            sourcelength, 
+                       UNormalizationMode mode, 
+                       UErrorCode*        status)
 {
-  int count = 0;
-  uint8_t oldcombiningclass = 0;
-  uint8_t combiningclass;
-  uint8_t quickcheckvalue;
-  uint8_t mask = UQUICK_CHECK_MASK_[mode];
-  UChar32 codepoint;
-  UNormalizationCheckResult result = UNORM_YES;
+  uint8_t                    oldcombiningclass = 0;
+  uint8_t                    combiningclass;
+  uint8_t                    quickcheckvalue;
+  uint8_t                    mask              = UQUICK_CHECK_MASK_[mode];
+  UChar32                    min             = UQUICK_CHECK_MIN_VALUES_[mode];
+  UChar32                    codepoint;
+  UNormalizationCheckResult  result            = UNORM_YES;
+  const UChar                *psource;
+  const UChar                *pend;
 
-  if (U_FAILURE(*status))
+  if (U_FAILURE(*status)) {
     return UNORM_MAYBE;
+  }
   
   /* checking argument*/
-  if (mode >= UNORM_MODE_COUNT || mode < UNORM_NONE)
-  {
+  if (mode >= UNORM_MODE_COUNT || mode < UNORM_NONE) {
     *status = U_ILLEGAL_ARGUMENT_ERROR;
     return UNORM_MAYBE;
   }
 
-  if (sourcelength == -1)
-    sourcelength = u_strlen(source);
+  if (sourcelength >= 0) {
+    psource = source;
+    pend    = source + sourcelength;
+    while (true) {
+      if (psource >= pend) {
+        return UNORM_YES;
+      }
+      /* fast route : since codepoints < min has combining class 0 and YES
+         looking at the minimum values, surrogates are not a problem */
+      if (*psource >= min) {
+        break;
+      }
+      psource ++;
+    }
+  }
+  else {
+    psource = source;
+    while (true) {
+      if (*psource == 0) {
+        return UNORM_YES;
+      }
+      /* fast route : since codepoints < min has combining class 0 and YES 
+         looking at the minimum values, surrogates are not a problem */
+      if (*psource >= min) {
+        break;
+      }
+      psource ++;
+    }
+  }
 
-  /* fast route : since codepoints < 0x300 has combining class 0 and is NFC */
-  /* no problems with supplementary characters as they are >= 0xD800 */
-  if (mode == UNORM_NFC)
-    while ((source[count] < NFC_ZERO_CC_BLOCK_LIMIT_) && 
-           count != sourcelength)
-      count ++;
+  if (sourcelength >= 0) {
+    while (true) {
+      int count = 0;
 
-  while (count != sourcelength)
-  {
-    /*UTF16_NEXT_CHAR_SAFE(source, count, sourcelength, codepoint, TRUE);*/
-    UTF_NEXT_CHAR(source, count, sourcelength, codepoint);
+      if (psource >= pend) {
+        break;
+      }
+      UTF_NEXT_CHAR(psource, count, pend - psource, codepoint);      
+      combiningclass = u_getCombiningClass(codepoint);
+      /* not in canonical order */
 
-    combiningclass = u_getCombiningClass(codepoint);
+      if (oldcombiningclass > combiningclass && combiningclass != 0) {
+        return UNORM_NO;
+      }
 
-    /* not in canonical order */
-    if (oldcombiningclass > combiningclass && combiningclass != 0)
-      return UNORM_NO;
-    oldcombiningclass = combiningclass;
+      oldcombiningclass = combiningclass;
 
-    /* trie access */
-    quickcheckvalue = QUICKCHECK_STAGE_3_[
-        QUICKCHECK_STAGE_2_[QUICKCHECK_STAGE_1_[codepoint >> STAGE_1_SHIFT_] + 
-        ((codepoint >> STAGE_2_SHIFT_) & STAGE_2_MASK_AFTER_SHIFT_)] +
-        (codepoint & STAGE_3_MASK_)] & mask;
-    if (quickcheckvalue == 0)
-      return UNORM_NO;
-    if (quickcheckvalue >= MIN_UNORM_MAYBE_)
-      result = UNORM_MAYBE;
+      /* trie access */
+      quickcheckvalue = QUICKCHECK_STAGE_3_[
+          QUICKCHECK_STAGE_2_[QUICKCHECK_STAGE_1_[codepoint >> STAGE_1_SHIFT_] + 
+          ((codepoint >> STAGE_2_SHIFT_) & STAGE_2_MASK_AFTER_SHIFT_)] +
+          (codepoint & STAGE_3_MASK_)] & mask;
+      /* value is a byte containing 2 sets of 4 bits information.
+         bits 1 2 3 4                        5678<br>
+         NFKC NFC NFKD NFD MAYBES       NFKC NFC NFKD NFD YES<br>
+         ie if quick[0xABCD] = 10000001, this means that 0xABCD is in NFD form 
+         and maybe in NFKC form. */
+      if (quickcheckvalue == 0) {
+        return UNORM_NO;
+      }
+      if (quickcheckvalue >= MIN_UNORM_MAYBE_) {
+        result = UNORM_MAYBE;
+      }
+      psource += count;
+    }
+  }
+  else {
+    while (true) {
+      int count = 0;
+      UTF_NEXT_CHAR(psource, count, pend - psource, codepoint);      
+      if (codepoint == 0) {
+        break;
+      }
+      
+      combiningclass = u_getCombiningClass(codepoint);
+      /* not in canonical order */
+
+      if (oldcombiningclass > combiningclass && combiningclass != 0) {
+        return UNORM_NO;
+      }
+
+      oldcombiningclass = combiningclass;
+
+      /* trie access */
+      quickcheckvalue = QUICKCHECK_STAGE_3_[
+          QUICKCHECK_STAGE_2_[QUICKCHECK_STAGE_1_[codepoint >> STAGE_1_SHIFT_] + 
+          ((codepoint >> STAGE_2_SHIFT_) & STAGE_2_MASK_AFTER_SHIFT_)] +
+          (codepoint & STAGE_3_MASK_)] & mask;
+      /* value is a byte containing 2 sets of 4 bits information.
+         bits 1 2 3 4                        5678<br>
+         NFKC NFC NFKD NFD MAYBES       NFKC NFC NFKD NFD YES<br>
+         ie if quick[0xABCD] = 10000001, this means that 0xABCD is in NFD form 
+         and maybe in NFKC form. */
+      if (quickcheckvalue == 0) {
+        return UNORM_NO;
+      }
+      if (quickcheckvalue >= MIN_UNORM_MAYBE_) {
+        result = UNORM_MAYBE;
+      }
+      psource += count;
+    }
   }
   
   return result;
@@ -556,7 +635,7 @@ unorm_quickCheck(const UChar*       source,
 * Generated data!! Change at your own risk.
 * Situated here temporary.
 */
-const uint32_t FCD_STAGE_1_[] = 
+static const uint32_t FCD_STAGE_1_[] = 
 {
   0x0, 0x40, 0x75, 0xb2, 0xef, 0xf3, 0x131, 0x151, 0x191, 0x1c0, 
   0x1c0, 0x1c0, 0x1fe, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 
@@ -669,7 +748,7 @@ const uint32_t FCD_STAGE_1_[] =
   0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0
 };
 
-const uint32_t FCD_STAGE_2_[] = 
+static const uint32_t FCD_STAGE_2_[] = 
 {
   0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 
   0x0, 0x0, 0x10, 0x20, 0x10, 0x2f, 0x3e, 0x4e, 0x5c, 0x6c, 
@@ -737,7 +816,7 @@ const uint32_t FCD_STAGE_2_[] =
   0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 
   0x0, 0x0, 0x0
 };
-const uint8_t FCD_STAGE_3_[] =
+static const uint8_t FCD_STAGE_3_[] =
 {
   0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 
   0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0xe6, 0xe6, 0xe6, 0xe6, 
@@ -923,37 +1002,89 @@ const uint8_t FCD_STAGE_3_[] =
 U_CAPI UBool 
 checkFCD(const UChar* source, int32_t sourcelength, UErrorCode* status)
 {
-  int32_t count = 0;
-  UChar32 codepoint;
-  uint8_t oldfcd = 0;
-  uint8_t fcd = 0;
+        UChar32  codepoint;
+  const UChar   *psource;
+  const UChar   *pend;
+        uint8_t  oldfcd = 0;
+        uint8_t  fcd = 0;
   
   if (U_FAILURE(*status))
     return FALSE;
 
-  if (sourcelength == -1)
-    sourcelength = u_strlen(source);
+  if (sourcelength >= 0) {
+    psource = source;
+    pend    = source + sourcelength;
+    while (true) {
+      if (psource >= pend) {
+        return TRUE;
+      }
+      /* fast route : since codepoints < NFC_ZER_CC_BLOCK_LIMIT_ has 
+         combining class 0.
+         looking at the minimum values, surrogates are not a problem */
+      if (*psource >= NFC_ZERO_CC_BLOCK_LIMIT_) {
+        break;
+      }
+      psource ++;
+    }
+  }
+  else {
+    psource = source;
+    while (true) {
+      if (*psource == 0) {
+        return TRUE;
+      }
+      /* fast route : since codepoints < min has combining class 0 and YES 
+         looking at the minimum values, surrogates are not a problem */
+      if (*psource >= NFC_ZERO_CC_BLOCK_LIMIT_) {
+        break;
+      }
+      psource ++;
+    }
+  }
 
-  /* fast route : since codepoints < 0x300 has combining class 0 */
-  /* no problems with supplementary characters as they are >= 0xD800 */
-  while (source[count] < NFC_ZERO_CC_BLOCK_LIMIT_ && count != sourcelength)
-    count ++;
+  if (sourcelength >= 0) {
+    while (true) {
+      int count = 0;
 
-  while (count != sourcelength)
-  {
-    UTF16_NEXT_CHAR_SAFE(source, count, sourcelength, codepoint, TRUE);
+      if (psource >= pend) {
+        return TRUE;
+      }
+      
+      UTF_NEXT_CHAR(psource, count, pend - psource, codepoint);
 
-    /* trie access */
-    fcd = FCD_STAGE_3_[
+      /* trie access */
+      fcd = FCD_STAGE_3_[
             FCD_STAGE_2_[FCD_STAGE_1_[codepoint >> STAGE_1_SHIFT_] + 
               ((codepoint >> STAGE_2_SHIFT_) & STAGE_2_MASK_AFTER_SHIFT_)] +
             (codepoint & STAGE_3_MASK_)];
     
-    if (fcd != 0 && oldfcd > fcd)
-      return FALSE;
+      if (fcd != 0 && oldfcd > fcd) {
+        return FALSE;
+      }
     
-    oldfcd = fcd;
+      oldfcd = fcd;
+      psource += count;
+    }
   }
-  
-  return TRUE; 
+  else {
+    while (true) {
+      int count = 0;
+      UTF_NEXT_CHAR(psource, count, pend - psource, codepoint);
+      if (codepoint == 0) {
+        return TRUE;
+      }
+      /* trie access */
+      fcd = FCD_STAGE_3_[
+            FCD_STAGE_2_[FCD_STAGE_1_[codepoint >> STAGE_1_SHIFT_] + 
+              ((codepoint >> STAGE_2_SHIFT_) & STAGE_2_MASK_AFTER_SHIFT_)] +
+            (codepoint & STAGE_3_MASK_)];
+    
+      if (fcd != 0 && oldfcd > fcd) {
+        return FALSE;
+      }
+    
+      oldfcd = fcd;
+      psource += count;
+    }
+  }
 }
