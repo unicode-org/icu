@@ -687,19 +687,12 @@ void UnicodeSetTest::TestStringPatterns() {
  * Test the [:Latin:] syntax.
  */
 void UnicodeSetTest::TestScriptSet() {
-    UErrorCode status = U_ZERO_ERROR;
-    UnicodeSet set("[:Latin:]", status);
-    if (U_FAILURE(status)) { errln("FAIL"); return; }
-    expectContainment(set, "[:Latin:]", "aA", CharsToUnicodeString("\\u0391\\u03B1"));
+    expectContainment("[:Latin:]", "aA", CharsToUnicodeString("\\u0391\\u03B1"));
 
-    UnicodeSet set2("[:Greek:]", status);
-    if (U_FAILURE(status)) { errln("FAIL"); return; }
-    expectContainment(set2, "[:Greek:]", CharsToUnicodeString("\\u0391\\u03B1"), "aA");
+    expectContainment("[:Greek:]", CharsToUnicodeString("\\u0391\\u03B1"), "aA");
     
     /* Jitterbug 1423 */
-    UnicodeSet set3("[[:Common:][:Inherited:]]",status);
-    if (U_FAILURE(status)) { errln("FAIL"); return; }
-    expectContainment(set3, "[[:Common:][:Inherited:]]", CharsToUnicodeString("\\U00003099\\U0001D169\\u0000"), "aA");
+    expectContainment("[[:Common:][:Inherited:]]", CharsToUnicodeString("\\U00003099\\U0001D169\\u0000"), "aA");
 
 }
 
@@ -780,15 +773,8 @@ void UnicodeSetTest::TestPropertySet() {
 
     static const int32_t DATA_LEN = sizeof(DATA)/sizeof(DATA[0]);
 
-    for (int32_t i=0; i<DATA_LEN; i+=3) {
-        UErrorCode ec = U_ZERO_ERROR;
-        UnicodeSet set(DATA[i], ec);
-        if (U_FAILURE(ec)) {
-            errln((UnicodeString)"FAIL: pattern \"" +
-                  DATA[i] + "\" => " + u_errorName(ec));
-            continue;
-        }
-        expectContainment(set, CharsToUnicodeString(DATA[i+1]),
+    for (int32_t i=0; i<DATA_LEN; i+=3) {  
+        expectContainment(DATA[i], CharsToUnicodeString(DATA[i+1]),
                           CharsToUnicodeString(DATA[i+2]));
     }
 }
@@ -834,7 +820,9 @@ void UnicodeSetTest::TestIndexOf() {
  * Test closure API.
  */
 void UnicodeSetTest::TestCloseOver() {
-    const char* CASE = "1";
+    UErrorCode ec = U_ZERO_ERROR;
+
+    char CASE[] = {(char)USET_CASE};
     const char* DATA[] = {
         // selector, input, output
         CASE,
@@ -870,8 +858,7 @@ void UnicodeSetTest::TestCloseOver() {
     UnicodeSet s;
     UnicodeSet t;
     for (int32_t i=0; DATA[i]!=NULL; i+=3) {
-        UErrorCode ec = U_ZERO_ERROR;
-        int32_t selector = DATA[i][0] - '0'; // UPDATE this as needed
+        int32_t selector = DATA[i][0];
         UnicodeString pat(DATA[i+1]);
         UnicodeString exp(DATA[i+2]);
         s.applyPattern(pat, ec);
@@ -888,6 +875,20 @@ void UnicodeSetTest::TestCloseOver() {
             errln((UnicodeString)"FAIL: " + pat + ".closeOver(" + selector + ") => " +
                   s.toPattern(buf, TRUE) + ", expected " + exp);
         }
+    }
+
+    // Test the pattern API
+    s.applyPattern("[abc]", USET_CASE_INSENSITIVE, ec);
+    if (U_FAILURE(ec)) {
+        errln("FAIL: applyPattern failed");
+    } else {
+        expectContainment(s, "abcABC", "defDEF");
+    }
+    UnicodeSet v("[^abc]", USET_CASE_INSENSITIVE, ec);
+    if (U_FAILURE(ec)) {
+        errln("FAIL: constructor failed");
+    } else {
+        expectContainment(v, "defDEF", "abcABC");
     }
 }
 
@@ -1135,6 +1136,20 @@ UBool UnicodeSetTest::checkEqual(const UnicodeSet& s, const UnicodeSet& t, const
               );
     }
     return TRUE;
+}
+
+void
+UnicodeSetTest::expectContainment(const UnicodeString& pat,
+                                  const UnicodeString& charsIn,
+                                  const UnicodeString& charsOut) {
+    UErrorCode ec = U_ZERO_ERROR;
+    UnicodeSet set(pat, ec);
+    if (U_FAILURE(ec)) {
+        errln((UnicodeString)"FAIL: pattern \"" +
+              pat + "\" => " + u_errorName(ec));
+        return;
+    }
+    expectContainment(set, pat, charsIn, charsOut);
 }
 
 void
