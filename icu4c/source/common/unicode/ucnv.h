@@ -329,7 +329,6 @@ ucnv_openCCSID (int32_t codepage,
  * @return pointer to the new clone
  * @draft API 1.8 freeze
  */
-
 U_CAPI UConverter *
 ucnv_safeClone(const UConverter *cnv, 
                void             *stackBuffer,
@@ -448,9 +447,7 @@ ucnv_reset (UConverter * converter);
  * Unicode to a known default state. It will also empty the internal
  * output buffers used for the conversion to Unicode codepoints.
  * @param converter the Unicode converter
- * @draft
  */
-
 U_CAPI void
 ucnv_resetToUnicode(UConverter *converter);
 
@@ -460,7 +457,6 @@ ucnv_resetToUnicode(UConverter *converter);
  * Unicode to a known default state. It will also empty the internal output
  * buffers used for the conversion from Unicode codepoints.
  * @param converter the Unicode converter
- * @draft
  */
 U_CAPI void
 ucnv_resetFromUnicode(UConverter *converter);
@@ -722,9 +718,7 @@ ucnv_setFromUCallBack (UConverter * converter,
  * @see ucnv_convert
  * @see ucnv_getMinCharSize
  * @see ucnv_setToUCallBack
- * @draft backslash versus Yen sign in shift-JIS
  */
-
 U_CAPI void U_EXPORT2 
 ucnv_fromUnicode (UConverter * converter,
                   char **target,
@@ -787,10 +781,8 @@ ucnv_fromUnicode (UConverter * converter,
  * @see ucnv_getMinCharSize
  * @see ucnv_setFromUCallBack
  * @see ucnv_getNextUChar
- * @draft backslash versus Yen sign in shift-JIS
  * @stable
  */
-
 U_CAPI void U_EXPORT2 
 ucnv_toUnicode (UConverter * converter,
                 UChar ** target,
@@ -867,7 +859,7 @@ ucnv_toUChars(UConverter *cnv,
               const char *src, int32_t srcLength,
               UErrorCode *pErrorCode);
 
-/********************************
+/**
  * Will convert a codepage buffer into unicode one character at a time.
  * <p>This function was written to be efficient when transcoding small
  * amounts of data at a time.
@@ -916,28 +908,27 @@ ucnv_getNextUChar (UConverter * converter,
                    UErrorCode * err);
 
 
-/**************************
-* Will convert a sequence of bytes from one codepage to another.
-* This is <STRONG>NOT AN EFFICIENT</STRONG> way to transcode.
-* use \Ref{ucnv_toUnicode} and \Ref{ucnv_fromUnicode} for efficiency.
-* @param toConverterName The name of the converter that will be used
-*  in conversion from unicode into the output buffer
-* @param fromConverterName: The name of the converter that will be used
-*  in conversion from the source buffer into intermediate unicode.
-* @param target Pointer to the output buffer
-* @param targetCapacity capacity of the target, in bytes
-* @param source Pointer to the input buffer
-* @param sourceLength capacity of the source, in bytes
-* @param err error status. 
-* <code>U_BUFFER_OVERFLOW_ERROR</code> will be set if the target is full and there is still input left in the source.
-* @return  will be filled in with the number of bytes needed in target
-* @see ucnv_fromUnicode
-* @see ucnv_toUnicode
-* @see ucnv_fromUChars
-* @see ucnv_toUChars
-* @see ucnv_getNextUChar
-* @draft backslash versus Yen sign in shift-JIS
-*/
+/**
+ * Will convert a sequence of bytes from one codepage to another.
+ * This is <STRONG>NOT AN EFFICIENT</STRONG> way to transcode.
+ * use \Ref{ucnv_toUnicode} and \Ref{ucnv_fromUnicode} for efficiency.
+ * @param toConverterName The name of the converter that will be used
+ *  in conversion from unicode into the output buffer
+ * @param fromConverterName: The name of the converter that will be used
+ *  in conversion from the source buffer into intermediate unicode.
+ * @param target Pointer to the output buffer
+ * @param targetCapacity capacity of the target, in bytes
+ * @param source Pointer to the input buffer
+ * @param sourceLength capacity of the source, in bytes
+ * @param err error status. 
+ * <code>U_BUFFER_OVERFLOW_ERROR</code> will be set if the target is full and there is still input left in the source.
+ * @return  will be filled in with the number of bytes needed in target
+ * @see ucnv_fromUnicode
+ * @see ucnv_toUnicode
+ * @see ucnv_fromUChars
+ * @see ucnv_toUChars
+ * @see ucnv_getNextUChar
+ */
 U_CAPI int32_t U_EXPORT2
 ucnv_convert (const char *toConverterName,
               const char *fromConverterName,
@@ -954,7 +945,6 @@ ucnv_convert (const char *toConverterName,
  * @return the number of cached converters successfully deleted
  * @see ucnv_close
  * @stable
- * @system SYSTEM API
  */
 U_CAPI int32_t U_EXPORT2
 ucnv_flushCache (void);
@@ -1085,7 +1075,9 @@ ucnv_setDefaultName (const char *name);
  * buffer and replace all the yen sign characters with backslash.  This is necessary
  * when the user tries to open a file with the input buffer on Windows.
  * This function will test the converter to see whether such mapping is
- * required.
+ * required.  You can sometimes avoid using this function by using the correct version
+ * of Shift-JIS.
+ *
  * @param cnv The converter representing the target codepage.
  * @param source the input buffer to be fixed
  * @param sourceLength the length of the input buffer
@@ -1100,7 +1092,6 @@ ucnv_fixFileSeparator(const UConverter *cnv, UChar* source, int32_t sourceLen);
  * character or not.
  * @return TRUE if the converter contains ambiguous mapping of the same 
  * character, FALSE otherwise.
- * @draft
  */
 U_CAPI UBool U_EXPORT2
 ucnv_isAmbiguous(const UConverter *cnv);
@@ -1110,18 +1101,15 @@ ucnv_isAmbiguous(const UConverter *cnv);
  * @param cnv The converter to set the fallback mapping usage on.
  * @param usesFallback TRUE if the user wants the converter to take advantage of the fallback 
  * mapping, FALSE otherwise.
- * @draft
  */
 U_CAPI void U_EXPORT2 ucnv_setFallback(UConverter *cnv, UBool usesFallback);
 
 /**
  * Determines if the converter uses fallback mappings or not.
  * @return TRUE if the converter uses fallback, FALSE otherwise.
- * @draft
  */
 U_CAPI UBool U_EXPORT2 ucnv_usesFallback(const UConverter *cnv);
 
 #endif
 /*_UCNV*/
-
 

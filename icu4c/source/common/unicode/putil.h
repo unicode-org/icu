@@ -43,7 +43,6 @@
  */
 
 /* Floating point utilities 
- * @draft
  */
 U_CAPI UBool   U_EXPORT2 uprv_isNaN(double);
 U_CAPI UBool   U_EXPORT2 uprv_isInfinite(double);
@@ -86,7 +85,6 @@ U_CAPI double  U_EXPORT2 uprv_maxMantissa(void);
  *
  * @param d the double value to apply the common log function for.
  * @return the log of value d.
- * @draft
  */
 U_CAPI int16_t  U_EXPORT2 uprv_log10(double d);
 
@@ -99,7 +97,6 @@ U_CAPI double  U_EXPORT2 uprv_round(double x);
  * Returns the number of digits after the decimal point in a double number x.
  *
  * @param x the double number
- * @draft
  */
 U_CAPI int32_t  U_EXPORT2 uprv_digitsAfterDecimal(double x);
 
@@ -110,7 +107,7 @@ U_CAPI int32_t  U_EXPORT2 uprv_digitsAfterDecimal(double x);
  * The t_tzset() function (similar to tzset) uses the current setting 
  * of the environment variable TZ to assign values to three global 
  * variables: daylight, timezone, and tzname. These variables have the 
- * following meanings, and are declared in &lt;time.h>.
+ * following meanings, and are declared in &lt;time.h&gt;.
  *
  *   daylight   Nonzero if daylight-saving-time zone (DST) is specified
  *              in TZ; otherwise, 0. Default value is 1.
@@ -133,15 +130,28 @@ U_CAPI int32_t  U_EXPORT2 uprv_digitsAfterDecimal(double x);
  * information specified by the operating system. Under Windows NT
  * and Windows 95, this information is specified in the Control Panel’s
  * Date/Time application.
- * @draft
+ * @stable
  */
 U_CAPI void     U_EXPORT2 uprv_tzset(void);
+
+/**
+ * Difference in seconds between coordinated universal
+ * time and local time. E.g., -28,800 for PST (GMT-8hrs)
+ */
 U_CAPI int32_t  U_EXPORT2 uprv_timezone(void);
+
+/**
+ *   tzname(0)  Three-letter time-zone name derived from TZ environment
+ *              variable. E.g., "PST".
+ *   tzname(1)  Three-letter DST zone name derived from TZ environment
+ *              variable.  E.g., "PDT". If DST zone is omitted from TZ,
+ *              tzname(1) is an empty string.
+ */
 U_CAPI char*    U_EXPORT2 uprv_tzname(int n);
 
 /**
  * Get UTC (GMT) time measured in seconds since 0:00 on 1/1/70. 
- * @draft
+ * @stable
  */
 U_CAPI int32_t  U_EXPORT2 uprv_getUTCtime(void);
 
@@ -161,10 +171,10 @@ U_CAPI int32_t  U_EXPORT2 uprv_getUTCtime(void);
  *    If a data directory was specifed at ICU build time, use that
  *    otherwise no data directory is available.
  *
- *@return the data directory, or an empty string ("") if no data directory has
+ * @return the data directory, or an empty string ("") if no data directory has
  *         been specified.
  *   
- * @draft
+ * @stable
  */
 U_CAPI const char* U_EXPORT2 u_getDataDirectory(void);
 
@@ -179,21 +189,20 @@ U_CAPI const char* U_EXPORT2 u_getDataDirectory(void);
  * This function should be called at most once in a process, before the
  * first ICU operation that will require the loading of an ICU data file.
  *
-
- * @draft
+ * @stable
  */
 U_CAPI void U_EXPORT2 u_setDataDirectory(const char *directory);
 
 /**
  * Return the default codepage for this platform and locale 
- * @draft
+ * @stable
  */
 U_CAPI const char*  U_EXPORT2 uprv_getDefaultCodepage(void);
 
 /**
  * Return the default locale ID string by querying ths system, or
  *     zero if one cannot be found. 
- * @draft
+ * @stable
  */
 U_CAPI const char*  U_EXPORT2 uprv_getDefaultLocaleID(void);
 
@@ -211,7 +220,7 @@ U_CAPI double       U_EXPORT2 uprv_nextDouble(double d, UBool positive);
 /**
  * Filesystem file and path separator characters.
  * Example: '/' and ':' on Unix, '\\' and ';' on Windows.
- * @draft
+ * @stable
  */
 #ifdef XP_MAC
 #   define U_FILE_SEP_CHAR ':'
