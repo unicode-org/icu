@@ -414,8 +414,7 @@ void TestRegression(){
     UChar *extractedTarget=0;
     UChar *target=0;
     UChar *limit=0;
-    int32_t count=0;
-   
+  
     int32_t offset=0;
     int32_t sourceLength=0, i=0;
     UErrorCode status=U_ZERO_ERROR;
@@ -434,7 +433,6 @@ void TestRegression(){
     }
     for(c=0x0000; c <= UNICODE_LIMIT; c++){
         UTF_APPEND_CHAR_SAFE(source, offset, u_strlen(source), c);
-        count++;
     }
       
     src=source;
@@ -484,7 +482,7 @@ void TestRegression(){
 
     }
     if((extractedTarget-extractedTargetBuffer) != (sourceLimit-source)){
-        log_err("The conversion didn't go through the whole range: Expected= %d, Got=%d\n", count, (extractedTarget-extractedTargetBuffer));
+        log_err("The conversion didn't go through the whole range: Expected= %d, Got=%d\n", (sourceLimit-source), (extractedTarget-extractedTargetBuffer));
 
     }
     ucnv_close(conv);
