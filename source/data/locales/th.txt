@@ -55,8 +55,10 @@ th {
         "< \u0E22 "                   //  YO YAK
         "< \u0E23 "                   //  RO RUA
         "< \u0E24 "                   //  RU
+        "< \u0E24\u0E45 "             //  See the comment below on LAKKHANGYAO
         "< \u0E25 "                   //  LO LING
         "< \u0E26 "                   //  LU
+        "< \u0E26\u0E45 "             //  See the comment below on LAKKHANGYAO
         "< \u0E27 "                   //  WO WAEN
         "< \u0E28 "                   //  SO SALA
         "< \u0E29 "                   //  SO RUSI
@@ -134,9 +136,8 @@ th {
         // This rare symbol also comes after all characters.  But when it is
         // used in combination with RU and LU, the combination is treated as
         // a separate letter, ala "CH" sorting after "C" in traditional Spanish.
+		// see above.
         "< \u0E45 "                   //  LAKKHANGYAO
-        "& \u0E24 < \u0E24\u0E45 "
-        "& \u0E26 < \u0E26\u0E45 "
 
         // Tonal marks are primary ignorables but are treated as secondary
         // differences
