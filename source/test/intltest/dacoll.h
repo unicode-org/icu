@@ -26,9 +26,6 @@ public:
     virtual ~CollationDanishTest();
     void runIndexedTest( int32_t index, UBool exec, const char* &name, char* par = NULL );
 
-    // main test routine, Tests rules specific to danish collation
-    void doTest( UnicodeString source, UnicodeString target, Collator::EComparisonResult result);
-
     // perform tests with strength PRIMARY
     void TestPrimary(/* char* par */);
 
