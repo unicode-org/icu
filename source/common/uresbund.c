@@ -88,11 +88,12 @@ void entryDecrease(UResourceDataEntry *entry) {
 const ResourceData *getFallbackData(const UResourceBundle* resBundle, const char* * resTag, UResourceDataEntry* *realData, Resource *res, UErrorCode *status) {
     const ResourceData *result = NULL;
     UResourceDataEntry *resB = resBundle->fData;
+    int32_t indexR = -1;
     int32_t i = 0;
     *res = RES_BOGUS;
     if(resB != NULL) {
         if(resB->fBogus == U_ZERO_ERROR) { /* if this resource is real, */
-            *res = res_getResource(&(resB->fData), *resTag); /* try to get data from there */
+            *res = res_getTableItemByKey(&(resB->fData), resB->fData.rootRes, &indexR, resTag); /* try to get data from there */
             i++;
         }
         if(resBundle->fHasFallback == TRUE) {
@@ -100,7 +101,7 @@ const ResourceData *getFallbackData(const UResourceBundle* resBundle, const char
                 resB = resB->fParent;
                 if(resB->fBogus == U_ZERO_ERROR) {
                     i++;
-                    *res = res_getResource(&(resB->fData), *resTag);
+                    *res = res_getTableItemByKey(&(resB->fData), resB->fData.rootRes, &indexR, resTag);
                 }
             }
         }
