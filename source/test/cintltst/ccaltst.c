@@ -147,13 +147,14 @@ void TestCalendar()
         log_err("FAIL: Error in getting the timezone display name : %s\n", myErrorName(status));
     }
     else{    
-        log_verbose("PASS: getting the time zone display name successful : \n");
+        log_verbose("PASS: getting the time zone display name successful : %s, %d needed \n",
+		    u_errorName(status), resultlengthneeded);
     }
     
 
 #define expectPDT "Pacific Daylight Time"
 
-    tzdname=(UChar*)malloc(sizeof(UChar) * (resultlengthneeded+1));
+    tzdname=(UChar*)malloc(sizeof(UChar) * (strlen(expectPDT)+1));
     u_uastrcpy(tzdname, expectPDT);
     if(u_strcmp(tzdname, result)==0){
         log_verbose("PASS: got the correct time zone display name %s\n", austrdup(result) );
