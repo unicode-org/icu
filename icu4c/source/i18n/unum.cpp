@@ -544,7 +544,7 @@ unum_setTextAttribute(    UNumberFormat*                    fmt,
         break;
         
     case UNUM_CURRENCY_CODE:
-        ((DecimalFormat*)fmt)->setCurrency(newValue);
+        ((DecimalFormat*)fmt)->setCurrency(newValue, *status);
         break;
         
     default:
