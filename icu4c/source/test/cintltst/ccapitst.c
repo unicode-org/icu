@@ -534,7 +534,6 @@ static void TestConvert()
     for (codepage_index=0; codepage_index <  NUM_CODEPAGE; ++codepage_index)
     {
         int32_t i = 0;  
-        char* index = NULL;
 
         err = U_ZERO_ERROR;
 #ifdef U_TOPSRCDIR
@@ -547,10 +546,12 @@ static void TestConvert()
             return;
         }
 
-        index=strrchr(ucs_file_name,(char)U_FILE_SEP_CHAR);
+        {
+            char* index = strrchr(ucs_file_name,(char)U_FILE_SEP_CHAR);
 
-        if((unsigned int)(index-ucs_file_name) != (strlen(ucs_file_name)-1)){
-                *(index+1)=0;
+            if((unsigned int)(index-ucs_file_name) != (strlen(ucs_file_name)-1)){
+                    *(index+1)=0;
+            }
         }
         
         strcat(ucs_file_name,".."U_FILE_SEP_STRING);
