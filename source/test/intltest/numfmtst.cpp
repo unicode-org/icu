@@ -74,6 +74,8 @@ void NumberFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &n
         CASE(26,TestIllegalPatterns);
         CASE(27,TestCases);
 
+        CASE(28,TestCurrencyNames);
+
         default: name = ""; break;
     }
 }
@@ -1407,6 +1409,30 @@ void NumberFormatTest::TestRegCurrency(void) {
         errln("FAIL: didn't return EUR for en_US_EURO after unregister of en_US_EURO");
     }
     status = U_ZERO_ERROR; // reset
+}
+
+void NumberFormatTest::TestCurrencyNames(void) {
+    // Do a basic check of getName()
+    // USD { "US$", "US Dollar"            } // 04/04/1792-
+    UErrorCode ec = U_ZERO_ERROR;
+    static const UChar USD[] = {85, 83, 68, 0}; /*USD*/
+    UBool isChoiceFormat;
+    int32_t len;
+    // Warning: HARD-CODED LOCALE DATA in this test.  If it fails, CHECK
+    // THE LOCALE DATA before diving into the code.
+    assertEquals("USD.getName(SYMBOL_NAME)",
+                 UnicodeString("US$"),
+                 UnicodeString(ucurr_getName(USD, "en",
+                                             UCURR_SYMBOL_NAME,
+                                             &isChoiceFormat, &len, &ec)));
+    assertEquals("USD.getName(LONG_NAME)",
+                 UnicodeString("US Dollar"),
+                 UnicodeString(ucurr_getName(USD, "en",
+                                             UCURR_LONG_NAME,
+                                             &isChoiceFormat, &len, &ec)));
+    assertSuccess("ucurr_getName", ec);
+    
+    // TODO add more tests later
 }
 
 void NumberFormatTest::TestSymbolsWithBadLocale(void) {
