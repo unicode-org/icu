@@ -73,6 +73,8 @@
 
 #include "tsmthred.h"
 
+#define TSMTHREAD_FAIL(msg) errln("%s at file %s, line %d", msg, __FILE__, __LINE__)
+#define TSMTHREAD_ASSERT(expr) {if (!(expr)) {TSMTHREAD_FAIL("Fail");}}
 
 MultithreadTest::MultithreadTest()
 {
@@ -564,7 +566,7 @@ void MultithreadTest::TestThreads()
         if (threads[i]->start() != 0) {
             errln("Error starting thread %d", i);
         }
-        SimpleThread::sleep(200);
+        SimpleThread::sleep(100);
         logln(" Subthread started.");
     }
 
@@ -607,96 +609,119 @@ void MultithreadTest::TestThreads()
 }
 
 
-class TestMutexThread1 : public SimpleThread
+//-----------------------------------------------------------------------
+//
+//  TestMutex  - a simple (non-stress) test to verify that ICU mutexes
+//               are actually mutexing.  Does not test the use of
+//               mutexes within ICU services, but rather that the
+//               platform's mutex support is at least superficially there.
+//
+//----------------------------------------------------------------------
+static UMTX    gTestMutexA = NULL;
+static UMTX    gTestMutexB = NULL;
+
+static int     gThreadsStarted = 0; 
+static int     gThreadsInMiddle = 0;
+static int     gThreadsDone = 0;
+
+static const int TESTMUTEX_THREAD_COUNT = 4;
+
+static int safeIncr(int &var, int amt) {
+    // Thread safe (using global mutex) increment of a variable.
+    // Return the updated value.
+    // Can also be used as a safe load of a variable by incrementing it by 0.
+    Mutex m;
+    var += amt;
+    return var;
+}
+
+class TestMutexThread : public SimpleThread
 {
 public:
-    TestMutexThread1() : fDone(FALSE) {}
     virtual void run()
     {
-        Mutex m;                        // grab the lock first thing
-        SimpleThread::sleep(900);      // then wait
-        fDone = TRUE;                   // finally, set our flag
+        // This is the code that each of the spawned threads runs.
+        // All of the spawned threads bunch up together at each of the two mutexes
+        // because the main holds the mutexes until they do.
+        //
+        safeIncr(gThreadsStarted, 1);
+        umtx_lock(&gTestMutexA);
+        umtx_unlock(&gTestMutexA);
+        safeIncr(gThreadsInMiddle, 1);
+        umtx_lock(&gTestMutexB);
+        umtx_unlock(&gTestMutexB);
+        safeIncr(gThreadsDone, 1);
     }
-public:
-    UBool fDone;
-};
-
-class TestMutexThread2 : public SimpleThread
-{
-public:
-    TestMutexThread2(TestMutexThread1& r) : fOtherThread(r), fDone(FALSE), fErr(FALSE) {}
-    virtual void run()
-    {
-        SimpleThread::sleep(500);          // wait, make sure they aquire the lock
-        fElapsed = uprv_getUTCtime();
-        {
-            Mutex m;                        // wait here
-
-            fElapsed = uprv_getUTCtime() - fElapsed;
-
-            if(fOtherThread.fDone == FALSE) 
-                fErr = TRUE;                // they didnt get to it yet
-
-            fDone = TRUE;               // we're done.
-        }
-    }
-public:
-    TestMutexThread1 & fOtherThread;
-    UBool fDone, fErr;
-    UDate fElapsed;
-private:
-    /**
-     * The assignment operator has no real implementation.
-     * It is provided to make the compiler happy. Do not call.
-     */
-    TestMutexThread2& operator=(const TestMutexThread2&) { return *this; }
 };
 
 void MultithreadTest::TestMutex()
 {
-    /* this test uses printf so that we don't hang by calling UnicodeString inside of a mutex. */
-    //logln("Bye.");
-    //  printf("Warning: MultiThreadTest::Testmutex() disabled.\n");
-    //  return; 
-
-    if(verbose)
-        printf("Before mutex.\n");
-    {
-        Mutex m;
-        if(verbose)
-            printf(" Exited 2nd mutex\n");
-    }
-    if(verbose)
-        printf("exited 1st mutex. Now testing with threads:");
-
-    TestMutexThread1  thread1;
-    TestMutexThread2  thread2(thread1);
-    if (thread2.start() != 0  || 
-        thread1.start() != 0 ) {
-        errln("Error starting threads.");
+    // Start up the test threads.  They should all pile up waiting on
+    // gTestMutexA, which we (the main thread) hold until the test threads
+    //   all get there.
+    gThreadsStarted = 0;
+    gThreadsInMiddle = 0;
+    gThreadsDone = 0;
+    umtx_lock(&gTestMutexA);
+    TestMutexThread  *threads[TESTMUTEX_THREAD_COUNT];
+    int i;
+    for (i=0; i<TESTMUTEX_THREAD_COUNT; i++) {
+        threads[i] = new TestMutexThread;
+        threads[i]->start();
     }
 
-    for(int32_t patience = 12; patience > 0;patience--)
-    {
-        // TODO:  Possible memory coherence issue in looking at fDone values
-        //        that are set in another thread without the mutex here.
-        if(thread1.fDone && verbose)
-            printf("Thread1 done\n");
-
-        if(thread1.fDone && thread2.fDone)
-        {
-            if(thread2.fErr)
-                errln("Thread 2 says: thread1 didn't run before I aquired the mutex.");
-            logln("took %lu seconds for thread2 to aquire the mutex.", (int)(thread2.fElapsed/U_MILLIS_PER_DAY));
+    int patience = 0;
+    while (safeIncr(gThreadsStarted, 0) != TESTMUTEX_THREAD_COUNT) {
+        if (patience++ > 24) {
+            TSMTHREAD_FAIL("Patience Exceeded");
             return;
         }
-        SimpleThread::sleep(1000);
+        SimpleThread::sleep(500);
     }
-    if(verbose)
-        printf("patience exceeded. [WARNING mutex may still be acquired.] ");
+    // None of the test threads should have advanced past the first mutex.
+    TSMTHREAD_ASSERT(gThreadsInMiddle==0);
+    TSMTHREAD_ASSERT(gThreadsDone==0);
+
+    //  All of the test threads have made it to the first mutex.
+    //  We (the main thread) now let them advance to the second mutex,
+    //   where they should all pile up again.
+    umtx_lock(&gTestMutexB);
+    umtx_unlock(&gTestMutexA);
+
+    patience = 0;
+    while (safeIncr(gThreadsInMiddle, 0) != TESTMUTEX_THREAD_COUNT) {
+        if (patience++ > 24) {
+            TSMTHREAD_FAIL("Patience Exceeded");
+            return;
+        }
+        SimpleThread::sleep(500);
+    }
+    TSMTHREAD_ASSERT(gThreadsDone==0);
+
+    //  All test threads made it to the second mutex.
+    //   Now let them proceed from there.  They will all terminate.
+    umtx_unlock(&gTestMutexB);    
+    patience = 0;
+    while (safeIncr(gThreadsDone, 0) != TESTMUTEX_THREAD_COUNT) {
+        if (patience++ > 24) {
+            TSMTHREAD_FAIL("Patience Exceeded");
+            return;
+        }
+        SimpleThread::sleep(500);
+    }
+
+    // All threads made it by both mutexes.
+    // Destroy the test mutexes.
+    umtx_destroy(&gTestMutexA);
+    umtx_destroy(&gTestMutexB);
+    gTestMutexA=NULL;
+    gTestMutexB=NULL;
+
+    for (i=0; i<TESTMUTEX_THREAD_COUNT; i++) {
+        delete threads[i];
+    }
+
 }
-
-
 
 
 //-------------------------------------------------------------------------------------------
