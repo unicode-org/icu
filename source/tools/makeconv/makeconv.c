@@ -695,6 +695,10 @@ readFile(ConvData *data, const char* converterName,
         /* read only the extension table */
         dataIsBase=FALSE;
         readTable(data, convFile, FALSE, NULL, pErrorCode);
+
+        /* ### TODO enable extension-only tables, Jitterbug 3346 */
+        fprintf(stderr, "error: delta/extension-only conversion tables are not yet supported\n");
+        *pErrorCode=U_INVALID_TABLE_FORMAT;
     }
 
     T_FileStream_close(convFile);
