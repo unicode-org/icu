@@ -405,12 +405,10 @@ public:
     inline const char * getName() const;
 
     /**
-     * Returns the programmatic name of the entire locale, with the language,
-     * country and variant separated by underbars and without keywords. 
-     * If a field is missing, up
-     * to two leading underbars will occur. Example: "en", "de_DE", "en_US_WIN",
-     * "de__POSIX", "fr__MAC", "__MAC", "_MT", "_FR_EURO"
+     * Returns the programmatic name of the entire locale as getName would return,
+     * but without keywords.
      * @return      A pointer to "name".
+     * @see getName
      * @draft ICU 2.8
      */
     const char * getBaseName() const;
