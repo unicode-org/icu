@@ -16,7 +16,7 @@ U_CFUNC int c_main(UFILE *out);
 
 void printUnicodeString(UFILE *out, const UnicodeString &s) {
     UnicodeString other = s;
-    u_fprintf(out, "\"%U\"", other.getTerminatedBuffer());
+    u_fprintf(out, "\"%S\"", other.getTerminatedBuffer());
 }
 
 
@@ -58,7 +58,7 @@ int main( void )
     u_fprintf(out, "\ntoLower(): ");
     printUnicodeString(out, string);
 
-    u_fprintf(out, "\n\nlowercase=%U, uppercase=%U\n", lowercase, uppercase);
+    u_fprintf(out, "\n\nlowercase=%S, uppercase=%S\n", lowercase, uppercase);
 
 
     string = upper; 
