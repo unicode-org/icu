@@ -1400,8 +1400,7 @@ public final class CollationElementIterator
                              if (RuleBasedCollator.getTag(isZeroCE) 
                                  == RuleBasedCollator.CE_SURROGATE_TAG_) { 
                                  int finalCE = collator.m_trie_.getTrailValue(
-                                                           isZeroCE & 0xFFFFFF, 
-                                                           previous); 
+                                                           isZeroCE, previous); 
                                  if (finalCE == 0) { 
                                      // this is a real, assigned completely 
                                      // ignorable code point
@@ -1411,6 +1410,7 @@ public final class CollationElementIterator
                          } 
                          else { 
                              // lone surrogate, completely ignorable 
+                             nextChar();
                              continue; 
                          } 
                          nextChar(); // shift back to original position
@@ -1637,8 +1637,7 @@ public final class CollationElementIterator
                             if (RuleBasedCollator.getTag(isZeroCE) 
                                 == RuleBasedCollator.CE_SURROGATE_TAG_) { 
                                 int finalCE = collator.m_trie_.getTrailValue(
-                                                           isZeroCE & 0xFFFFFF, 
-                                                           trail); 
+                                                           isZeroCE, trail); 
                                 if (finalCE == 0) { 
                                     continue; 
                                 } 
