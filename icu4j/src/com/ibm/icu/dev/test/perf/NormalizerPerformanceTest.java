@@ -33,15 +33,15 @@ public class NormalizerPerformanceTest extends PerfTest {
         boolean bulkMode = false;
         boolean lineMode = false;
         for (int i = 0; i < args.length; i++) {
-            if (args[i].equalsIgnoreCase("-f")||  args[i].equalsIgnoreCase("--fileName")) {
-                if (((i + 1) >= args.length) || (args[i].indexOf(0) == '-')) {
+            if (args[i].equalsIgnoreCase("-f") || args[i].equalsIgnoreCase("--fileName")) {
+                if (((i + 1) >= args.length) || (args[i+1].charAt(0) == '-')) {
                     printUsage();
                 } else {
                     fileName = args[i+1];
                 }
             }
-            if (args[i].equalsIgnoreCase("-s")||  args[i].equalsIgnoreCase("--sourceDir") ) {
-                if (((i + 1) >= args.length) || (args[i].indexOf(0) == '-')) {
+            if (args[i].equalsIgnoreCase("-s") || args[i].equalsIgnoreCase("--sourceDir") ) {
+                if (((i + 1) >= args.length) || (args[i+1].charAt(0) == '-')) {
                     printUsage();
                 } else {
                     path = args[i+1];
@@ -52,7 +52,7 @@ public class NormalizerPerformanceTest extends PerfTest {
                 }
             }
             if (args[i].equalsIgnoreCase("-e") || args[i].equalsIgnoreCase("--encoding")) {
-                if (((i + 1) >= args.length) || (args[i].indexOf(0) == '-')) {
+                if (((i + 1) >= args.length) || (args[i+1].charAt(0) == '-')) {
                     printUsage();
                 } else {
                     encoding = args[i+1];
@@ -68,6 +68,9 @@ public class NormalizerPerformanceTest extends PerfTest {
             }
         }
         if(lineMode == bulkMode){
+            printUsage();
+        }
+        if (fileName.equalsIgnoreCase("")){
             printUsage();
         }
         fileLines = readLines(path + fileName, encoding, bulkMode);
@@ -202,7 +205,7 @@ public class NormalizerPerformanceTest extends PerfTest {
             }
         };
     }
-    
+/** I really wish there was conditional compilation in Java    
     PerfTest.Function TestJDK_NFC_NFC_Text() {
         return new PerfTest.Function() {
             public void call() {
@@ -311,7 +314,7 @@ public class NormalizerPerformanceTest extends PerfTest {
             }
         };
     }
-    
+**/    
     PerfTest.Function TestICU_FCD_NFC_Text() {
         return new PerfTest.Function() {
             public void call() {
