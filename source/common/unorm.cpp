@@ -38,11 +38,11 @@ static uint8_t UQUICK_CHECK_MASK_[] = {0, 0, 0x11, 0x22, 0x44, 0x88};
 /**
 * Minimum value to determine if quickcheck value contains a MAYBE
 */
-static uint8_t MIN_UQUICK_CHECK_MAYBE_ = 0x10;
+static uint8_t MIN_UNORM_MAYBE_ = 0x10;
 
 
 U_CAPI int32_t
-u_normalize(const UChar*            source,
+unorm_normalize(const UChar*            source,
         int32_t                 sourceLength, 
         UNormalizationMode      mode, 
         int32_t                 option,
@@ -73,7 +73,7 @@ u_normalize(const UChar*            source,
 * Array of normalization form corresponding to the index code point.
 * Hence codepoint 0xABCD will have normalization form QUICK_CHECK_DATA[0xABCD].
 * UQUICK_CHECK_DATA[0xABCD] is a byte containing 2 sets of 4 bits information
-* representing UQUICK_CHECK_MAYBE and UQUICK_CHECK_YES.<br>
+* representing UNORM_MAYBE and UNORM_YES.<br>
 * bits 1 2 3 4                        5678<br>
 *      NFKC NFC NFKD NFD MAYBES       NFKC NFC NFKD NFD YES<br>
 * ie if UQUICK_CHECK_DATA[0xABCD] = 10000001, this means that 0xABCD is in 
@@ -598,21 +598,21 @@ const uint8_t QUICKCHECK_STAGE_3_[] =
 /**
  * Performing quick check on a string, to quickly determine if the string is 
  * in a particular normalization format.
- * Three types of result can be returned UQUICK_CHECK_YES, UQUICK_CHECK_NO or
- * UQUICK_CHECK_MAYBE. Result UQUICK_CHECK_YES indicates that the argument
- * string is in the desired normalized format, UQUICK_CHECK_NO determines that
+ * Three types of result can be returned UNORM_YES, UNORM_NO or
+ * UNORM_MAYBE. Result UNORM_YES indicates that the argument
+ * string is in the desired normalized format, UNORM_NO determines that
  * argument string is not in the desired normalized format. A 
- * UQUICK_CHECK_MAYBE result indicates that a more thorough check is required, 
+ * UNORM_MAYBE result indicates that a more thorough check is required, 
  * the user may have to put the string in its normalized form and compare the 
  * results.
  * @param source       string for determining if it is in a normalized format
  * @param sourcelength length of source to test
  * @param mode         normalization format from the enum UNormalizationMode
  * @param status A pointer to an UErrorCode to receive any errors
- * @return UQUICK_CHECK_YES, UQUICK_CHECK_NO or UQUICK_CHECK_MAYBE
+ * @return UNORM_YES, UNORM_NO or UNORM_MAYBE
  */
-U_CAPI UQUICK_CHECK_VALUES
-u_quickCheck(const UChar*       source,
+U_CAPI UNormalizationCheckResult
+unorm_quickCheck(const UChar*       source,
              int32_t            sourcelength, 
              UNormalizationMode mode, 
              UErrorCode*        status)
@@ -623,21 +623,21 @@ u_quickCheck(const UChar*       source,
   uint8_t quickcheckvalue;
   uint8_t mask = UQUICK_CHECK_MASK_[mode];
   UChar32 codepoint;
-  UQUICK_CHECK_VALUES result = UQUICK_CHECK_YES;
+  UNormalizationCheckResult result = UNORM_YES;
   UBool nullterminated = (sourcelength == -1);
 
   if (U_FAILURE(*status))
-    return UQUICK_CHECK_MAYBE;
+    return UNORM_MAYBE;
   
   /* checking argument*/
   if (mode >= UNORM_MODE_COUNT || mode < UNORM_NONE)
   {
     *status = U_ILLEGAL_ARGUMENT_ERROR;
-    return UQUICK_CHECK_MAYBE;
+    return UNORM_MAYBE;
   }
 
   if(u_getCombiningClass(0x300) == 0) {
-    return UQUICK_CHECK_NO;
+    return UNORM_NO;
   }
 
   while (nullterminated || (count != sourcelength))
@@ -652,7 +652,7 @@ u_quickCheck(const UChar*       source,
 
     /* not in canonical order */
     if (oldcombiningclass > combiningclass && combiningclass != 0)
-      return UQUICK_CHECK_NO;
+      return UNORM_NO;
     oldcombiningclass = combiningclass;
 
     /* trie access */
@@ -661,88 +661,9 @@ u_quickCheck(const UChar*       source,
         ((codepoint >> STAGE_2_SHIFT_) & STAGE_2_MASK_AFTER_SHIFT_)] +
         (codepoint & STAGE_3_MASK_)] & mask;
     if (quickcheckvalue == 0)
-      return UQUICK_CHECK_NO;
-    if (quickcheckvalue >= MIN_UQUICK_CHECK_MAYBE_)
-      result = UQUICK_CHECK_MAYBE;
-  }
-  
-  return result;
-}
-
-/**
- * Performing quick check on a string, to quickly determine if the string is 
- * in a particular normalization format.
- * Three types of result can be returned UQUICK_CHECK_YES, UQUICK_CHECK_NO or
- * UQUICK_CHECK_MAYBE. Result UQUICK_CHECK_YES indicates that the argument
- * string is in the desired normalized format, UQUICK_CHECK_NO determines that
- * argument string is not in the desired normalized format. A 
- * UQUICK_CHECK_MAYBE result indicates that a more thorough check is required, 
- * the user may have to put the string in its normalized form and compare the 
- * results.
- * @param source       string for determining if it is in a normalized format
- * @param sourcelength length of source to test
- * @paran mode         normalization format from the enum UNormalizationMode
- * @param options The normalization options, ORed together; possible values
- *        are UNORM_IGNORE_HANGUL
- * @param status A pointer to an UErrorCode to receive any errors
- * @return UQUICK_CHECK_YES, UQUICK_CHECK_NO or UQUICK_CHECK_MAYBE
- */
-U_CAPI UQUICK_CHECK_VALUES
-u_quickCheckWithOption(const UChar*       source,
-             int32_t            sourcelength, 
-             UNormalizationMode mode, 
-             int32_t            options,
-             UErrorCode*        status)
-{
-  int32_t count = 0;
-  uint8_t oldcombiningclass = 0;
-  uint8_t combiningclass;
-  uint8_t quickcheckvalue;
-  uint8_t mask = UQUICK_CHECK_MASK_[mode];
-  UChar32 codepoint;
-  UQUICK_CHECK_VALUES result = UQUICK_CHECK_YES;
-  UBool ignorehangul = ((options & UNORM_IGNORE_HANGUL) != 0) && 
-                       (mode == UNORM_NFD || mode == UNORM_NFKD);
-  UBool nullterminated = (sourcelength == -1);
-
-  if (U_FAILURE(*status))
-    return UQUICK_CHECK_MAYBE;
-
-  /* checking argument */
-  if (mode >= UNORM_MODE_COUNT || mode < UNORM_NONE)
-  {
-    *status = U_ILLEGAL_ARGUMENT_ERROR;
-    return UQUICK_CHECK_MAYBE;
-  }
-
-  while (nullterminated || count != sourcelength)
-  {
-    UTF16_NEXT_CHAR_SAFE(source, count, sourcelength, codepoint, TRUE);
-
-    if (nullterminated && (codepoint == 0))
-      break;
-
-    combiningclass = u_getCombiningClass(codepoint);
-
-    /* not in canonical order */
-    if (oldcombiningclass > combiningclass && combiningclass != 0)
-      return UQUICK_CHECK_NO;
-    oldcombiningclass = combiningclass;
-
-    if (ignorehangul && u_charScript(codepoint) == U_HANGUL_SYLLABLES)
-      result = UQUICK_CHECK_MAYBE;
-    else
-    {
-      /* trie access */
-      quickcheckvalue = QUICKCHECK_STAGE_3_[
-          QUICKCHECK_STAGE_2_[QUICKCHECK_STAGE_1_[codepoint >> STAGE_1_SHIFT_] + 
-          ((codepoint >> STAGE_2_SHIFT_) & STAGE_2_MASK_AFTER_SHIFT_)] +
-          (codepoint & STAGE_3_MASK_)] & mask;
-      if (quickcheckvalue == 0)
-        return UQUICK_CHECK_NO;
-      if (quickcheckvalue >= MIN_UQUICK_CHECK_MAYBE_)
-        result = UQUICK_CHECK_MAYBE;
-    }
+      return UNORM_NO;
+    if (quickcheckvalue >= MIN_UNORM_MAYBE_)
+      result = UNORM_MAYBE;
   }
   
   return result;
@@ -1154,4 +1075,3 @@ checkFCD(const UChar* source, int32_t sourcelength, UErrorCode* status)
   
   return TRUE; 
 }
-

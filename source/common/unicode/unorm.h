@@ -22,9 +22,9 @@
  *
  * <h2>  Unicode normalization API </h2>
  *
- * <tt>u_normalize</tt> transforms Unicode text into an equivalent composed or
+ * <tt>unorm_normalize</tt> transforms Unicode text into an equivalent composed or
  * decomposed form, allowing for easier sorting and searching of text.
- * <tt>u_normalize</tt> supports the standard normalization forms described in
+ * <tt>unorm_normalize</tt> supports the standard normalization forms described in
  * <a href="http://www.unicode.org/unicode/reports/tr15/" target="unicode">
  * Unicode Technical Report #15</a>.
  * <p>
@@ -73,15 +73,15 @@
  * into the corresponding semantic characters.  When sorting and searching, you
  * will often want to use these mappings.
  * <p>
- * <tt>u_normalize</tt> helps solve these problems by transforming text into the
+ * <tt>unorm_normalize</tt> helps solve these problems by transforming text into the
  * canonical composed and decomposed forms as shown in the first example above.  
  * In addition, you can have it perform compatibility decompositions so that 
  * you can treat compatibility characters the same as their equivalents.
- * Finally, <tt>u_normalize</tt> rearranges accents into the proper canonical
+ * Finally, <tt>unorm_normalize</tt> rearranges accents into the proper canonical
  * order, so that you do not have to worry about accent rearrangement on your
  * own.
  * <p>
- * <tt>u_normalize</tt> adds one optional behavior, {@link #UCOL_IGNORE_HANGUL},
+ * <tt>unorm_normalize</tt> adds one optional behavior, {@link #UCOL_IGNORE_HANGUL},
  * that differs from
  * the standard Unicode Normalization Forms. 
  **/
@@ -125,8 +125,15 @@ typedef enum {
 
   UNORM_MODE_COUNT,
 
-  /** Do not normalize Hangul */
+  /**
+   * Do not normalize Hangul.
+   * @deprecated To be removed without replacement after 2002-mar-31.
+   */
   UCOL_IGNORE_HANGUL    = 16,
+  /**
+   * Do not normalize Hangul.
+   * @deprecated To be removed without replacement after 2002-mar-31.
+   */
   UNORM_IGNORE_HANGUL    = 16
 } UNormalizationMode;
 
@@ -151,7 +158,7 @@ typedef UNormalizationMode UNormalizationOption;
  * @stable
  */
 U_CAPI int32_t
-u_normalize(const UChar*           source,
+unorm_normalize(const UChar*           source,
         int32_t                 sourceLength, 
         UNormalizationMode      mode, 
         int32_t            options,
@@ -159,67 +166,49 @@ u_normalize(const UChar*           source,
         int32_t                 resultLength,
         UErrorCode*             status);    
 
-typedef enum {
+/**
+ * The function u_normalize() has been renamed to unorm_normalize()
+ * for consistency. The old name is deprecated.
+ * @deprecated To be removed after 2002-mar-31.
+ */
+#define u_normalize unorm_normalize
+
+typedef enum UNormalizationCheckResult {
   /** 
   * Indicates that string is not in the normalized format
   */
-  UQUICK_CHECK_NO, 
+  UNORM_NO,
   /** 
   * Indicates that string is in the normalized format
   */
-  UQUICK_CHECK_YES,
+  UNORM_YES,
   /** 
   * Indicates that string cannot be determined if it is in the normalized 
   * format without further thorough checks.
   */
-  UQUICK_CHECK_MAYBE
-} UQUICK_CHECK_VALUES;
+  UNORM_MAYBE
+} UNormalizationCheckResult;
 
 /**
  * Performing quick check on a string, to quickly determine if the string is 
  * in a particular normalization format.
- * Three types of result can be returned UQUICK_CHECK_YES, UQUICK_CHECK_NO or
- * UQUICK_CHECK_MAYBE. Result UQUICK_CHECK_YES indicates that the argument
- * string is in the desired normalized format, UQUICK_CHECK_NO determines that
+ * Three types of result can be returned UNORM_YES, UNORM_NO or
+ * UNORM_MAYBE. Result UNORM_YES indicates that the argument
+ * string is in the desired normalized format, UNORM_NO determines that
  * argument string is not in the desired normalized format. A 
- * UQUICK_CHECK_MAYBE result indicates that a more thorough check is required, 
+ * UNORM_MAYBE result indicates that a more thorough check is required, 
  * the user may have to put the string in its normalized form and compare the 
  * results.
  * @param source       string for determining if it is in a normalized format
  * @param sourcelength length of source to test
  * @paran mode         normalization format from the enum UNormalizationMode
  * @param status A pointer to an UErrorCode to receive any errors
- * @return UQUICK_CHECK_YES, UQUICK_CHECK_NO or UQUICK_CHECK_MAYBE
+ * @return UNORM_YES, UNORM_NO or UNORM_MAYBE
  */
-U_CAPI UQUICK_CHECK_VALUES
-u_quickCheck(const UChar*       source,
+U_CAPI UNormalizationCheckResult U_EXPORT2
+unorm_quickCheck(const UChar*       source,
              int32_t            sourcelength, 
              UNormalizationMode mode, 
              UErrorCode*        status);
-
-/**
- * Performing quick check on a string, to quickly determine if the string is 
- * in a particular normalization format.
- * Three types of result can be returned UQUICK_CHECK_YES, UQUICK_CHECK_NO or
- * UQUICK_CHECK_MAYBE. Result UQUICK_CHECK_YES indicates that the argument
- * string is in the desired normalized format, UQUICK_CHECK_NO determines that
- * argument string is not in the desired normalized format. A 
- * UQUICK_CHECK_MAYBE result indicates that a more thorough check is required, 
- * the user may have to put the string in its normalized form and compare the 
- * results.
- * @param source       string for determining if it is in a normalized format
- * @param sourcelength length of source to test
- * @paran mode         normalization format from the enum UNormalizationEnum
- * @param options The normalization options, ORed together; possible values
- *        are UCOL_IGNORE_HANGUL
- * @param status A pointer to an UErrorCode to receive any errors
- * @return UQUICK_CHECK_YES, UQUICK_CHECK_NO or UQUICK_CHECK_MAYBE
- */
-U_CAPI UQUICK_CHECK_VALUES
-u_quickCheckWithOption(const UChar*       source,
-                       int32_t            sourcelength, 
-                       UNormalizationMode mode, 
-                       int32_t            options,
-                       UErrorCode*        status);
 
 #endif

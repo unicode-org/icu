@@ -109,20 +109,20 @@ void TestDecomp()
         log_err("ERROR: in creation of rule based collator: %s\n", myErrorName(status));
     }
     resLen=0;
-    log_verbose("Testing u_normalize with  Decomp canonical\n");
+    log_verbose("Testing unorm_normalize with  Decomp canonical\n");
     for(x=0; x < ARRAY_LENGTH(canonTests); x++)
     {
         source=CharsToUChars(canonTests[x][0]);
-        neededLen= u_normalize(source, u_strlen(source), UCOL_DECOMP_CAN, UCOL_IGNORE_HANGUL, NULL, 0, &status); 
+        neededLen= unorm_normalize(source, u_strlen(source), UCOL_DECOMP_CAN, UCOL_IGNORE_HANGUL, NULL, 0, &status); 
         if(status==U_BUFFER_OVERFLOW_ERROR)
         {
             status=U_ZERO_ERROR;
             resLen=neededLen+1;
             result=(UChar*)malloc(sizeof(UChar*) * resLen);
-            u_normalize(source, u_strlen(source), UCOL_DECOMP_CAN, UCOL_IGNORE_HANGUL, result, resLen, &status); 
+            unorm_normalize(source, u_strlen(source), UCOL_DECOMP_CAN, UCOL_IGNORE_HANGUL, result, resLen, &status); 
         }
         if(U_FAILURE(status)){
-            log_err("ERROR in u_normalize at %s:  %s\n", austrdup(source), myErrorName(status) );
+            log_err("ERROR in unorm_normalize at %s:  %s\n", austrdup(source), myErrorName(status) );
         }
         assertEqual(result, canonTests[x][1], x);
         free(result);
@@ -142,20 +142,20 @@ void TestCompatDecomp()
         log_err("ERROR: in creation of rule based collator: %s\n", myErrorName(status));
     }
     resLen=0;
-    log_verbose("Testing u_normalize with  Decomp compat\n");
+    log_verbose("Testing unorm_normalize with  Decomp compat\n");
     for(x=0; x < ARRAY_LENGTH(compatTests); x++)
     {
         source=CharsToUChars(compatTests[x][0]);
-        neededLen= u_normalize(source, u_strlen(source), UCOL_DECOMP_COMPAT, UCOL_IGNORE_HANGUL, NULL, 0, &status); 
+        neededLen= unorm_normalize(source, u_strlen(source), UCOL_DECOMP_COMPAT, UCOL_IGNORE_HANGUL, NULL, 0, &status); 
         if(status==U_BUFFER_OVERFLOW_ERROR)
         {
             status=U_ZERO_ERROR;
             resLen=neededLen+1;
             result=(UChar*)malloc(sizeof(UChar*) * resLen);
-            u_normalize(source, u_strlen(source), UCOL_DECOMP_COMPAT,UCOL_IGNORE_HANGUL, result, resLen, &status); 
+            unorm_normalize(source, u_strlen(source), UCOL_DECOMP_COMPAT,UCOL_IGNORE_HANGUL, result, resLen, &status); 
         }
         if(U_FAILURE(status)){
-            log_err("ERROR in u_normalize at %s:  %s\n", austrdup(source), myErrorName(status) );
+            log_err("ERROR in unorm_normalize at %s:  %s\n", austrdup(source), myErrorName(status) );
         }
         assertEqual(result, compatTests[x][1], x);
         free(result);
@@ -175,20 +175,20 @@ void TestCanonDecompCompose()
         log_err("ERROR: in creation of rule based collator: %s\n", myErrorName(status));
     }
     resLen=0;
-    log_verbose("Testing u_normalize with Decomp can compose compat\n");
+    log_verbose("Testing unorm_normalize with Decomp can compose compat\n");
     for(x=0; x < ARRAY_LENGTH(canonTests); x++)
     {
         source=CharsToUChars(canonTests[x][0]);
-        neededLen= u_normalize(source, u_strlen(source), UCOL_DECOMP_CAN_COMP_COMPAT, UCOL_IGNORE_HANGUL, NULL, 0, &status); 
+        neededLen= unorm_normalize(source, u_strlen(source), UCOL_DECOMP_CAN_COMP_COMPAT, UCOL_IGNORE_HANGUL, NULL, 0, &status); 
         if(status==U_BUFFER_OVERFLOW_ERROR)
         {
             status=U_ZERO_ERROR;
             resLen=neededLen+1;
             result=(UChar*)malloc(sizeof(UChar*) * resLen);
-            u_normalize(source, u_strlen(source), UCOL_DECOMP_CAN_COMP_COMPAT, UCOL_IGNORE_HANGUL, result, resLen, &status); 
+            unorm_normalize(source, u_strlen(source), UCOL_DECOMP_CAN_COMP_COMPAT, UCOL_IGNORE_HANGUL, result, resLen, &status); 
         }
         if(U_FAILURE(status)){
-            log_err("ERROR in u_normalize at %s:  %s\n", austrdup(source),myErrorName(status) );
+            log_err("ERROR in unorm_normalize at %s:  %s\n", austrdup(source),myErrorName(status) );
         }
         assertEqual(result, canonTests[x][2], x);
         free(result);
@@ -208,20 +208,20 @@ void TestCompatDecompCompose()
         log_err("ERROR: in creation of rule based collator: %s\n", myErrorName(status));
     }
     resLen=0;
-    log_verbose("Testing u_normalize with compat decomp compose can\n");
+    log_verbose("Testing unorm_normalize with compat decomp compose can\n");
     for(x=0; x < ARRAY_LENGTH(compatTests); x++)
     {
         source=CharsToUChars(compatTests[x][0]);
-        neededLen= u_normalize(source, u_strlen(source), UCOL_DECOMP_COMPAT_COMP_CAN, UCOL_IGNORE_HANGUL, NULL, 0, &status); 
+        neededLen= unorm_normalize(source, u_strlen(source), UCOL_DECOMP_COMPAT_COMP_CAN, UCOL_IGNORE_HANGUL, NULL, 0, &status); 
         if(status==U_BUFFER_OVERFLOW_ERROR)
         {
             status=U_ZERO_ERROR;
             resLen=neededLen+1;
             result=(UChar*)malloc(sizeof(UChar*) * resLen);
-            u_normalize(source, u_strlen(source), UCOL_DECOMP_COMPAT_COMP_CAN, UCOL_IGNORE_HANGUL, result, resLen, &status); 
+            unorm_normalize(source, u_strlen(source), UCOL_DECOMP_COMPAT_COMP_CAN, UCOL_IGNORE_HANGUL, result, resLen, &status); 
         }
         if(U_FAILURE(status)){
-            log_err("ERROR in u_normalize at %s:  %s\n", austrdup(source), myErrorName(status) );
+            log_err("ERROR in unorm_normalize at %s:  %s\n", austrdup(source), myErrorName(status) );
         }
         assertEqual(result, compatTests[x][2], x);
         free(result);
@@ -269,18 +269,18 @@ static void TestNull_check(UChar *src, int32_t srcLen,
         result[i] = 0xFFFD;
       }
 
-    len = u_normalize(src, srcLen, mode, 0, result, 50, &status); 
+    len = unorm_normalize(src, srcLen, mode, 0, result, 50, &status); 
 
     if(U_FAILURE(status)) {
-      log_err("u_normalize(%s) with 0x0000 failed: %s\n", name, u_errorName(status));
+      log_err("unorm_normalize(%s) with 0x0000 failed: %s\n", name, u_errorName(status));
     } else if (len != expLen) {
-      log_err("u_normalize(%s) with 0x0000 failed: Expected len %d, got %d\n", name, expLen, len);
+      log_err("unorm_normalize(%s) with 0x0000 failed: Expected len %d, got %d\n", name, expLen, len);
     } 
 
     {
       for(i=0;i<len;i++){
         if(exp[i] != result[i]) {
-          log_err("u_normalize(%s): @%d, expected \\u%04X got \\u%04X\n",
+          log_err("unorm_normalize(%s): @%d, expected \\u%04X got \\u%04X\n",
                   name,
                   i,
                   exp[i],
@@ -291,7 +291,7 @@ static void TestNull_check(UChar *src, int32_t srcLen,
       }
     }
     
-    log_verbose("u_normalize(%s) with 0x0000: OK\n", name);
+    log_verbose("unorm_normalize(%s) with 0x0000: OK\n", name);
 }
 
 void TestNull() 
@@ -350,26 +350,26 @@ void TestQuickCheckResultNO()
 
   for (; count < SIZE; count ++)
   {
-    if (u_quickCheck(&(CPNFD[count]), 1, UCOL_DECOMP_CAN, &error) != 
-                                                              UQUICK_CHECK_NO)
+    if (unorm_quickCheck(&(CPNFD[count]), 1, UCOL_DECOMP_CAN, &error) != 
+                                                              UNORM_NO)
     {
       log_err("ERROR in NFD quick check at code point %d", CPNFD[count]);
       return;
     }
-    if (u_quickCheck(&(CPNFC[count]), 1, UCOL_DECOMP_CAN_COMP_COMPAT, &error) != 
-                                                              UQUICK_CHECK_NO)
+    if (unorm_quickCheck(&(CPNFC[count]), 1, UCOL_DECOMP_CAN_COMP_COMPAT, &error) != 
+                                                              UNORM_NO)
     {
       log_err("ERROR in NFC quick check at code point %d", CPNFC[count]);
       return;
     }
-    if (u_quickCheck(&(CPNFKD[count]), 1, UCOL_DECOMP_COMPAT, &error) != 
-                                                              UQUICK_CHECK_NO)
+    if (unorm_quickCheck(&(CPNFKD[count]), 1, UCOL_DECOMP_COMPAT, &error) != 
+                                                              UNORM_NO)
     {
       log_err("ERROR in NFKD quick check at code point %d", CPNFKD[count]);
       return;
     }
-    if (u_quickCheck(&(CPNFKC[count]), 1, UCOL_DECOMP_COMPAT_COMP_CAN, &error) != 
-                                                              UQUICK_CHECK_NO)
+    if (unorm_quickCheck(&(CPNFKC[count]), 1, UCOL_DECOMP_COMPAT_COMP_CAN, &error) != 
+                                                              UNORM_NO)
     {
       log_err("ERROR in NFKC quick check at code point %d", CPNFKC[count]);
       return;
@@ -396,24 +396,24 @@ void TestQuickCheckResultYES()
   UChar cp = 0;
   while (cp < 0xA0)
   {
-    if (u_quickCheck(&cp, 1, UCOL_DECOMP_CAN, &error) != UQUICK_CHECK_YES)
+    if (unorm_quickCheck(&cp, 1, UCOL_DECOMP_CAN, &error) != UNORM_YES)
     {
       log_err("ERROR in NFD quick check at code point %d", cp);
       return;
     }
-    if (u_quickCheck(&cp, 1, UCOL_DECOMP_CAN_COMP_COMPAT, &error) != 
-                                                             UQUICK_CHECK_YES)
+    if (unorm_quickCheck(&cp, 1, UCOL_DECOMP_CAN_COMP_COMPAT, &error) != 
+                                                             UNORM_YES)
     {
       log_err("ERROR in NFC quick check at code point %d", cp);
       return;
     }
-    if (u_quickCheck(&cp, 1, UCOL_DECOMP_COMPAT, &error) != UQUICK_CHECK_YES)
+    if (unorm_quickCheck(&cp, 1, UCOL_DECOMP_COMPAT, &error) != UNORM_YES)
     {
       log_err("ERROR in NFKD quick check at code point %d", cp);
       return;
     }
-    if (u_quickCheck(&cp, 1, UCOL_DECOMP_COMPAT_COMP_CAN, &error) != 
-                                                             UQUICK_CHECK_YES)
+    if (unorm_quickCheck(&cp, 1, UCOL_DECOMP_COMPAT_COMP_CAN, &error) != 
+                                                             UNORM_YES)
     {
       log_err("ERROR in NFKC quick check at code point %d", cp);
       return;
@@ -423,26 +423,26 @@ void TestQuickCheckResultYES()
 
   for (; count < SIZE; count ++)
   {
-    if (u_quickCheck(&(CPNFD[count]), 1, UCOL_DECOMP_CAN, &error) != 
-                                                             UQUICK_CHECK_YES)
+    if (unorm_quickCheck(&(CPNFD[count]), 1, UCOL_DECOMP_CAN, &error) != 
+                                                             UNORM_YES)
     {
       log_err("ERROR in NFD quick check at code point %d", CPNFD[count]);
       return;
     }
-    if (u_quickCheck(&(CPNFC[count]), 1, UCOL_DECOMP_CAN_COMP_COMPAT, &error) 
-                                                          != UQUICK_CHECK_YES)
+    if (unorm_quickCheck(&(CPNFC[count]), 1, UCOL_DECOMP_CAN_COMP_COMPAT, &error) 
+                                                          != UNORM_YES)
     {
       log_err("ERROR in NFC quick check at code point %d", CPNFC[count]);
       return;
     }
-    if (u_quickCheck(&(CPNFKD[count]), 1, UCOL_DECOMP_COMPAT, &error) != 
-                                                             UQUICK_CHECK_YES)
+    if (unorm_quickCheck(&(CPNFKD[count]), 1, UCOL_DECOMP_COMPAT, &error) != 
+                                                             UNORM_YES)
     {
       log_err("ERROR in NFKD quick check at code point %d", CPNFKD[count]);
       return;
     }
-    if (u_quickCheck(&(CPNFKC[count]), 1, UCOL_DECOMP_COMPAT_COMP_CAN, &error) != 
-                                                             UQUICK_CHECK_YES)
+    if (unorm_quickCheck(&(CPNFKC[count]), 1, UCOL_DECOMP_COMPAT_COMP_CAN, &error) != 
+                                                             UNORM_YES)
     {
       log_err("ERROR in NFKC quick check at code point %d", CPNFKC[count]);
       return;
@@ -469,26 +469,26 @@ void TestQuickCheckResultMAYBE()
 
   for (; count < SIZE; count ++)
   {
-    if (u_quickCheck(&(CPNFD[count]), 1, UCOL_DECOMP_CAN, &error) != 
-                                                           UQUICK_CHECK_MAYBE)
+    if (unorm_quickCheck(&(CPNFD[count]), 1, UCOL_DECOMP_CAN, &error) != 
+                                                           UNORM_MAYBE)
     {
       log_err("ERROR in NFD quick check at code point %d", CPNFD[count]);
       return;
     }
-    if (u_quickCheck(&(CPNFC[count]), 1, UCOL_DECOMP_CAN_COMP_COMPAT, &error) != 
-                                                           UQUICK_CHECK_MAYBE)
+    if (unorm_quickCheck(&(CPNFC[count]), 1, UCOL_DECOMP_CAN_COMP_COMPAT, &error) != 
+                                                           UNORM_MAYBE)
     {
       log_err("ERROR in NFC quick check at code point %d", CPNFC[count]);
       return;
     }
-    if (u_quickCheck(&(CPNFKD[count]), 1, UCOL_DECOMP_COMPAT, &error) != 
-                                                           UQUICK_CHECK_MAYBE)
+    if (unorm_quickCheck(&(CPNFKD[count]), 1, UCOL_DECOMP_COMPAT, &error) != 
+                                                           UNORM_MAYBE)
     {
       log_err("ERROR in NFKD quick check at code point %d", CPNFKD[count]);
       return;
     }
-    if (u_quickCheck(&(CPNFKC[count]), 1, UCOL_DECOMP_COMPAT_COMP_CAN, &error) != 
-                                                           UQUICK_CHECK_MAYBE)
+    if (unorm_quickCheck(&(CPNFKC[count]), 1, UCOL_DECOMP_COMPAT_COMP_CAN, &error) != 
+                                                           UNORM_MAYBE)
     {
       log_err("ERROR in NFKC quick check at code point %d", CPNFKC[count]);
       return;
@@ -507,15 +507,15 @@ void TestQuickCheckStringResult()
   {
     d = CharsToUChars(canonTests[count][1]);
     c = CharsToUChars(canonTests[count][2]);
-    if (u_quickCheck(d, u_strlen(d), UCOL_DECOMP_CAN, &error) != 
-                                                            UQUICK_CHECK_YES)
+    if (unorm_quickCheck(d, u_strlen(d), UCOL_DECOMP_CAN, &error) != 
+                                                            UNORM_YES)
     {
       log_err("ERROR in NFD quick check for string at count %d", count);
       return;
     }
 
-    if (u_quickCheck(c, u_strlen(c), UCOL_DECOMP_CAN_COMP_COMPAT, &error) == 
-                                                            UQUICK_CHECK_NO)
+    if (unorm_quickCheck(c, u_strlen(c), UCOL_DECOMP_CAN_COMP_COMPAT, &error) == 
+                                                            UNORM_NO)
     {
       log_err("ERROR in NFC quick check for string at count %d", count);
       return;
@@ -529,15 +529,15 @@ void TestQuickCheckStringResult()
   {
     d = CharsToUChars(compatTests[count][1]);
     c = CharsToUChars(compatTests[count][2]);
-    if (u_quickCheck(d, u_strlen(d), UCOL_DECOMP_COMPAT, &error) != 
-                                                            UQUICK_CHECK_YES)
+    if (unorm_quickCheck(d, u_strlen(d), UCOL_DECOMP_COMPAT, &error) != 
+                                                            UNORM_YES)
     {
       log_err("ERROR in NFKD quick check for string at count %d", count);
       return;
     }
 
-    if (u_quickCheck(c, u_strlen(c), UCOL_DECOMP_COMPAT_COMP_CAN, &error) != 
-                                                            UQUICK_CHECK_YES)
+    if (unorm_quickCheck(c, u_strlen(c), UCOL_DECOMP_COMPAT_COMP_CAN, &error) != 
+                                                            UNORM_YES)
     {
       log_err("ERROR in NFKC quick check for string at count %d", count);
       return;
