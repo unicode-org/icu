@@ -76,7 +76,7 @@ void pkg_mode_files(UPKGOptions *o, FileStream *makefile, UErrorCode *status)
   {
     baseName = findBasename(infiles->str);
 
-    uprv_strcpy(tmp, o->tmpDir);
+    uprv_strcpy(tmp, o->targetDir);
     uprv_strcat(tmp, U_FILE_SEP_STRING);
     uprv_strcat(tmp, baseName);
 
@@ -89,7 +89,7 @@ void pkg_mode_files(UPKGOptions *o, FileStream *makefile, UErrorCode *status)
       continue;
     }
 
-    uprv_strcpy(tmp2, o->tmpDir);
+    uprv_strcpy(tmp2, o->targetDir);
     uprv_strcat(tmp2, U_FILE_SEP_STRING);
     uprv_strcat(tmp2, U_FILE_SEP_STRING);
     uprv_strcat(tmp2, baseName);
@@ -104,7 +104,7 @@ void pkg_mode_files(UPKGOptions *o, FileStream *makefile, UErrorCode *status)
     /* left hand side: target path, target name */
     copyFilesLeft = pkg_appendToList(copyFilesLeft, &copyFilesLeftTail, uprv_strdup(tmp));
 
-    fprintf(stderr, "##### COPY %s\n", tmp2);
+    /* fprintf(stderr, "##### COPY %s from %s\n", tmp, infiles->str); */
     /* rhs:  source path */
     copyFilesRight = pkg_appendToList(copyFilesRight, &copyFilesRightTail, uprv_strdup(infiles->str));
 
@@ -130,10 +130,9 @@ void pkg_mode_files(UPKGOptions *o, FileStream *makefile, UErrorCode *status)
   T_FileStream_writeLine(makefile, "\n");
 
 
-  T_FileStream_writeLine(makefile, "all: $(TARGETDIR)/$(NAME)\n\n");
-  T_FileStream_writeLine(makefile, "$(TARGETDIR)/$(NAME):\n");
-  T_FileStream_writeLine(makefile, "\t@-$(RMV) $(TARGETDIR)/$(NAME)\n");
-  T_FileStream_writeLine(makefile, "\tln -s $(shell pwd) $(TARGETDIR)/$(NAME)\n\n");
+  T_FileStream_writeLine(makefile, "\n.PHONY: $(NAME)\n");
+  T_FileStream_writeLine(makefile, "all: $(NAME)\n\n");
+
   /* commands for the make rule */
   tail = NULL;
   copyCommands =  pkg_appendToList(copyCommands, &tail, uprv_strdup("$(INSTALL_DATA) $? $(TARGETDIR)"));
@@ -141,7 +140,7 @@ void pkg_mode_files(UPKGOptions *o, FileStream *makefile, UErrorCode *status)
   if(copyFilesRight != NULL)
   {
 
-    pkg_mak_writeStanza(makefile, o, "$(COPIEDDEST)", copyFilesRight,
+    pkg_mak_writeStanza(makefile, o, "$(NAME)", copyFilesRight,
                         copyCommands);
 
     T_FileStream_writeLine(makefile, "clean:\n\t-$(RMV) $(COPIEDDEST) $(MAKEFILE)");
@@ -158,5 +157,3 @@ void pkg_mode_files(UPKGOptions *o, FileStream *makefile, UErrorCode *status)
 
   T_FileStream_writeLine(makefile, tmp);
 }
-
-
