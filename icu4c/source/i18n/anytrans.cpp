@@ -3,9 +3,6 @@
 * Copyright (c) 2002, International Business Machines Corporation
 * and others.  All Rights Reserved.
 *****************************************************************
-* $Source: /xsrl/Nsvn/icu/icu/source/i18n/anytrans.cpp,v $ 
-* $Revision: 1.10 $
-*****************************************************************
 * Date        Name        Description
 * 06/06/2002  aliu        Creation.
 *****************************************************************
