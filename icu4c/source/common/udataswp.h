@@ -209,6 +209,15 @@ uprv_ebcdicFromAscii(const UDataSwapper *ds,
                      UErrorCode *pErrorCode);
 
 /**
+ * Copy invariant ASCII char * strings and verify they are invariant.
+ * @internal
+ */
+U_CFUNC int32_t
+uprv_copyAscii(const UDataSwapper *ds,
+               const void *inData, int32_t length, void *outData,
+               UErrorCode *pErrorCode);
+
+/**
  * Swap invariant char * strings EBCDIC->ASCII.
  * @internal
  */
@@ -216,6 +225,15 @@ U_CFUNC int32_t
 uprv_asciiFromEbcdic(const UDataSwapper *ds,
                      const void *inData, int32_t length, void *outData,
                      UErrorCode *pErrorCode);
+
+/**
+ * Copy invariant EBCDIC char * strings and verify they are invariant.
+ * @internal
+ */
+U_CFUNC int32_t
+uprv_copyEbcdic(const UDataSwapper *ds,
+                const void *inData, int32_t length, void *outData,
+                UErrorCode *pErrorCode);
 
 /**
  * Compare ASCII invariant char * with Unicode invariant UChar *
