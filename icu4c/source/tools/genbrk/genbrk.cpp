@@ -51,7 +51,8 @@ static UOption options[]={
     UOPTION_VERBOSE,            /* 2 */
     { "rules", NULL, NULL, NULL, 'r', UOPT_REQUIRES_ARG, 0 },   /* 3 */
     { "out",   NULL, NULL, NULL, 'o', UOPT_REQUIRES_ARG, 0 },   /* 4 */
-    UOPTION_ICUDATADIR          /* 5 */
+    UOPTION_ICUDATADIR,         /* 5 */
+    UOPTION_DESTDIR             /* 6 */
 };
 
 void usageAndDie(int retCode) {
@@ -111,6 +112,9 @@ int  main(int argc, char **argv) {
     UErrorCode  status = U_ZERO_ERROR;
     const char *ruleFileName;
     const char *outFileName;
+    const char *outDir = NULL;
+    char *outFullFileName;
+    int32_t outFullFileNameLen;
 
     //
     // Pick up and check the command line arguments,
@@ -136,10 +140,24 @@ int  main(int argc, char **argv) {
     }
     ruleFileName = options[3].value;
     outFileName  = options[4].value;
+    outFullFileNameLen = strlen(outFileName);
 
     if (options[5].doesOccur) {
         u_setDataDirectory(options[5].value);
     }
+
+    /* Combine the directory with the file name */
+    if(options[6].doesOccur) {
+        outDir = options[6].value;
+        outFullFileNameLen += strlen(outDir);
+    }
+    outFullFileName = (char*)malloc(outFullFileNameLen + 2);
+    outFullFileName[0] = 0;
+    if (outDir) {
+        strcpy(outFullFileName, outDir);
+        strcat(outFullFileName, U_FILE_SEP_STRING);
+    }
+    strcat(outFullFileName, outFileName);
 
 #if UCONFIG_NO_BREAK_ITERATION
 
@@ -292,9 +310,9 @@ int  main(int argc, char **argv) {
     //  Create the output file
     //
     size_t bytesWritten;
-    file = fopen(outFileName, "wb");
+    file = fopen(outFullFileName, "wb");
     if (file == 0) {
-        fprintf(stderr, "Could not open output file \"%s\"\n", outFileName);
+        fprintf(stderr, "Could not open output file \"%s\"\n", outFullFileName);
         exit(-1);
     }
 
@@ -305,7 +323,7 @@ int  main(int argc, char **argv) {
     //
     bytesWritten = fwrite(outData, 1, outDataSize, file);
     if (bytesWritten != outDataSize) {
-        fprintf(stderr, "Error writing to output file \"%s\"\n", outFileName);
+        fprintf(stderr, "Error writing to output file \"%s\"\n", outFullFileName);
         exit(-1);
     }
 
@@ -313,6 +331,7 @@ int  main(int argc, char **argv) {
     delete bi;
     delete[] ruleSourceU;
     delete[] ruleBufferC;
+    free(outFullFileName);
     u_cleanup();
 
 
