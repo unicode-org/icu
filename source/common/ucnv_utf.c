@@ -29,26 +29,26 @@
 /* UTF-8 Conversion DATA
  *   for more information see Unicode Strandard 2.0 , Transformation Formats Appendix A-9
  */
-const uint32_t kReplacementCharacter = 0x0000FFFD;
-const uint32_t kMaximumUCS2 = 0x0000FFFF;
-const uint32_t kMaximumUTF16 = 0x0010FFFF;
-const uint32_t kMaximumUCS4 = 0x7FFFFFFF;
-const int8_t halfShift = 10;
-const uint32_t halfBase = 0x0010000;
-const uint32_t halfMask = 0x3FF;
-const uint32_t kSurrogateHighStart = 0xD800;
-const uint32_t kSurrogateHighEnd = 0xDBFF;
-const uint32_t kSurrogateLowStart = 0xDC00;
-const uint32_t kSurrogateLowEnd = 0xDFFF;
+static const uint32_t kReplacementCharacter = 0x0000FFFD;
+static const uint32_t kMaximumUCS2 = 0x0000FFFF;
+static const uint32_t kMaximumUTF16 = 0x0010FFFF;
+static const uint32_t kMaximumUCS4 = 0x7FFFFFFF;
+static const int8_t halfShift = 10;
+static const uint32_t halfBase = 0x0010000;
+static const uint32_t halfMask = 0x3FF;
+static const uint32_t kSurrogateHighStart = 0xD800;
+static const uint32_t kSurrogateHighEnd = 0xDBFF;
+static const uint32_t kSurrogateLowStart = 0xDC00;
+static const uint32_t kSurrogateLowEnd = 0xDFFF;
 
-const uint32_t offsetsFromUTF8[7] = {0,
+static const uint32_t offsetsFromUTF8[7] = {0,
   (uint32_t) 0x00000000, (uint32_t) 0x00003080, (uint32_t) 0x000E2080,
   (uint32_t) 0x03C82080, (uint32_t) 0xFA082080, (uint32_t) 0x82082080
 };
 
 /* END OF UTF-8 Conversion DATA */
 
-const int8_t bytesFromUTF8[256] = {
+static const int8_t bytesFromUTF8[256] = {
   1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
   1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
   1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
@@ -59,7 +59,7 @@ const int8_t bytesFromUTF8[256] = {
   3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4, 4, 4, 4, 5, 5, 5, 5, 6, 6, 0, 0
 };
 
-const unsigned char firstByteMark[7] = {0x00, 0x00, 0xC0, 0xE0, 0xF0, 0xF8, 0xFC};
+static const unsigned char firstByteMark[7] = {0x00, 0x00, 0xC0, 0xE0, 0xF0, 0xF8, 0xFC};
 
 U_CFUNC void T_UConverter_toUnicode_UTF8 (UConverterToUnicodeArgs * args,
                                   UErrorCode * err)
