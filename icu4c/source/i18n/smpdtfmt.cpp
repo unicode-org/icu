@@ -1397,7 +1397,7 @@ int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UC
             // a little more permissive than RFC 822.  It will try to do
             // its best with numbers that aren't strictly 4 digits long.
             UErrorCode status = U_ZERO_ERROR;
-            DecimalFormat fmt("+####;-####", status);
+            DecimalFormat fmt(UNICODE_STRING_SIMPLE("+####;-####"), status);
             if(U_FAILURE(status))
                 return -start;
             fmt.setParseIntegerOnly(TRUE);

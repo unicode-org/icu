@@ -90,6 +90,8 @@ static char gStrBuf[256];
 // Static data and constants
 
 static const UChar         GMT_ID[] = {0x47, 0x4D, 0x54, 0x00}; /* "GMT" */
+static const UChar         Z_STR[] = {0x7A, 0x00}; /* "z" */
+static const UChar         ZZZZ_STR[] = {0x7A, 0x7A, 0x7A, 0x7A, 0x00}; /* "zzzz" */
 static const int32_t       GMT_ID_LENGTH = 3;
 static const UChar         CUSTOM_ID[] = 
 {
@@ -252,7 +254,7 @@ static UResourceBundle* getZoneByName(const UResourceBundle* top, const UnicodeS
 
 UResourceBundle* TimeZone::loadRule(const UResourceBundle* top, const UnicodeString& ruleid, UResourceBundle* oldbundle, UErrorCode& status) {
     char key[64];
-    ruleid.extract(0, sizeof(key)-1, key, sizeof(key)-1, "");
+    ruleid.extract(0, sizeof(key)-1, key, sizeof(key)-1, US_INV);
     U_DEBUG_TZ_MSG(("loadRule(%s)\n", key));
     UResourceBundle *r = ures_getByKey(top, kRULES, oldbundle, &status);
     U_DEBUG_TZ_MSG(("loadRule(%s) -> kRULES [%s]\n", key, u_errorName(status)));
@@ -1080,7 +1082,7 @@ TimeZone::getDisplayName(UBool daylight, EDisplayType style, const Locale& local
     char buf[128];
     fID.extract(0, sizeof(buf)-1, buf, sizeof(buf), "");
 #endif
-    SimpleDateFormat format(style == LONG ? "zzzz" : "z",locale,status);
+    SimpleDateFormat format(style == LONG ? ZZZZ_STR : Z_STR,locale,status);
     U_DEBUG_TZ_MSG(("getDisplayName(%s)\n", buf));
     if(!U_SUCCESS(status))
     {
@@ -1105,7 +1107,7 @@ TimeZone::getDisplayName(UBool daylight, EDisplayType style, const Locale& local
                            UCAL_DECEMBER , 31, 0, U_MILLIS_PER_DAY, status) :
         new SimpleTimeZone(getRawOffset(), getID(tempID));
 
-    format.applyPattern(style == LONG ? "zzzz" : "z");
+    format.applyPattern(style == LONG ? ZZZZ_STR : Z_STR);
     Calendar *myCalendar = (Calendar*)format.getCalendar();
     myCalendar->setTimeZone(*tz); // copy
     
