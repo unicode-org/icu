@@ -113,8 +113,39 @@ UConverter*  ucnv_openCCSID (int32_t codepage,
 
 void ucnv_close (UConverter * converter)
 {
+  /* first, notify the callback functions that the converter is closed */
+  UConverterToUnicodeArgs toUArgs = {
+    sizeof(UConverterToUnicodeArgs),
+    TRUE,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL
+  };
+  UConverterFromUnicodeArgs fromUArgs = {
+    sizeof(UConverterFromUnicodeArgs),
+    TRUE,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL
+  };
+  UErrorCode errorCode;
+
   if (converter == NULL)
+  {
     return;
+  }
+
+  toUArgs.converter = fromUArgs.converter = converter;
+  errorCode = U_ZERO_ERROR;
+  converter->fromCharErrorBehaviour(converter->toUContext, &toUArgs, NULL, 0, UCNV_CLOSE, &errorCode);
+  errorCode = U_ZERO_ERROR;
+  converter->fromUCharErrorBehaviour(converter->fromUContext, &fromUArgs, NULL, 0, 0, UCNV_CLOSE, &errorCode);
 
   if (converter->sharedData->impl->close != NULL) {
     converter->sharedData->impl->close(converter);
@@ -341,11 +372,42 @@ int32_t  ucnv_getDisplayName (const UConverter * converter,
  */
 void  ucnv_reset (UConverter * converter)
 {
+  /* first, notify the callback functions that the converter is reset */
+  UConverterToUnicodeArgs toUArgs = {
+    sizeof(UConverterToUnicodeArgs),
+    TRUE,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL
+  };
+  UConverterFromUnicodeArgs fromUArgs = {
+    sizeof(UConverterFromUnicodeArgs),
+    TRUE,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL
+  };
+  UErrorCode errorCode;
+
+  toUArgs.converter = fromUArgs.converter = converter;
+  errorCode = U_ZERO_ERROR;
+  converter->fromCharErrorBehaviour(converter->toUContext, &toUArgs, NULL, 0, UCNV_RESET, &errorCode);
+  errorCode = U_ZERO_ERROR;
+  converter->fromUCharErrorBehaviour(converter->fromUContext, &fromUArgs, NULL, 0, 0, UCNV_RESET, &errorCode);
+
+  /* now reset the converter itself */
   converter->toUnicodeStatus = converter->sharedData->toUnicodeStatus;
   converter->fromUnicodeStatus = 0;
   converter->UCharErrorBufferLength = 0;
   converter->charErrorBufferLength = 0;
   if (converter->sharedData->impl->reset != NULL) {
+    /* call the custom reset function */
     converter->sharedData->impl->reset(converter);
   } else {
     converter->mode = UCNV_SI;
