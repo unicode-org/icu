@@ -148,6 +148,13 @@ public:
      */
     static inline UClassID getStaticClassID() { return (UClassID)&fgClassID; }
 
+    /**
+     * Return the set of all characters that may be modified
+     * (getTarget=false) or emitted (getTarget=true) by this set.
+     */
+    UnicodeSet& getSourceTargetSet(UnicodeSet& result,
+				   UBool getTarget) const;
+
 private:
 
     /**
@@ -155,13 +162,6 @@ private:
      * for ICU "poor man's RTTI".
      */
     static const char fgClassID;
-
-    /**
-     * Return the set of all characters that may be modified
-     * (getTarget=false) or emitted (getTarget=true) by this set.
-     */
-    UnicodeSet& getSourceTargetSet(UnicodeSet& result,
-				   UBool getTarget) const;
 };
 
 U_NAMESPACE_END
