@@ -1163,56 +1163,57 @@ void NumberFormatTest::TestCurrencyPatterns(void) {
 }
 
 void NumberFormatTest::TestRegCurrency(void) {
-  UErrorCode status = U_ZERO_ERROR;
-  const UChar* USD = ucurr_forLocale("en_US", &status);
-  const UChar* YEN = ucurr_forLocale("ja_JP", &status);
-  if(U_FAILURE(status)) {
-    errln("Unable to get currency for locale, error %s", u_errorName(status));
-    return;
-  }
-
-  UCurrRegistryKey enkey = ucurr_register(YEN, "en_US", &status);
-  UCurrRegistryKey enUSEUROkey = ucurr_register(EUR, "en_US_EURO", &status);
-
-  if (u_strcmp(YEN, ucurr_forLocale("en_US", &status)) != 0) {
-    errln("FAIL: didn't return YEN registered for en_US");
-  }
-
-  if (u_strcmp(EUR, ucurr_forLocale("en_US_EURO", &status)) != 0) {
-    errln("FAIL: didn't return EUR for en_US_EURO");
-  }
-
-  if (ucurr_forLocale("en_XX_BAR", &status) != NULL) {
-    errln("FAIL: tried to fallback en_XX_BAR");
-  }
-  status = U_ZERO_ERROR; // reset
-  
-  if (!ucurr_unregister(enkey, &status)) {
-    errln("FAIL: couldn't unregister enkey");
-  }
-
-  if (u_strcmp(USD, ucurr_forLocale("en_US", &status)) != 0) {
-    errln("FAIL: didn't return USD for en_US after unregister of en_US");
-  }
-  status = U_ZERO_ERROR; // reset
-
-  if (u_strcmp(EUR, ucurr_forLocale("en_US_EURO", &status)) != 0) {
-    errln("FAIL: didn't return EUR for en_US_EURO after unregister of en_US");
-  }
-
-  if (u_strcmp(USD, ucurr_forLocale("en_US_BLAH", &status)) != 0) {
-    errln("FAIL: could not find USD for en_US_BLAH after unregister of en");
-  }
-  status = U_ZERO_ERROR; // reset
-
-  if (!ucurr_unregister(enUSEUROkey, &status)) {
-    errln("FAIL: couldn't unregister enUSEUROkey");
-  }
-
-  if (ucurr_forLocale("en_US_EURO", &status) != NULL) {
-    errln("FAIL: didn't return NULL for en_US_EURO after unregister of en_US_EURO");
-  }
-  status = U_ZERO_ERROR; // reset
+    UErrorCode status = U_ZERO_ERROR;
+    const UChar* USD = ucurr_forLocale("en_US", &status);
+    const UChar* YEN = ucurr_forLocale("ja_JP", &status);
+    static const UChar QQQ[] = {0x51, 0x51, 0x51, 0};
+    if(U_FAILURE(status)) {
+        errln("Unable to get currency for locale, error %s", u_errorName(status));
+        return;
+    }
+    
+    UCurrRegistryKey enkey = ucurr_register(YEN, "en_US", &status);
+    UCurrRegistryKey enUSEUROkey = ucurr_register(QQQ, "en_US_EURO", &status);
+    
+    if (u_strcmp(YEN, ucurr_forLocale("en_US", &status)) != 0) {
+        errln("FAIL: didn't return YEN registered for en_US");
+    }
+    
+    if (u_strcmp(QQQ, ucurr_forLocale("en_US_EURO", &status)) != 0) {
+        errln("FAIL: didn't return QQQ for en_US_EURO");
+    }
+    
+    if (ucurr_forLocale("en_XX_BAR", &status) != NULL) {
+        errln("FAIL: tried to fallback en_XX_BAR");
+    }
+    status = U_ZERO_ERROR; // reset
+    
+    if (!ucurr_unregister(enkey, &status)) {
+        errln("FAIL: couldn't unregister enkey");
+    }
+    
+    if (u_strcmp(USD, ucurr_forLocale("en_US", &status)) != 0) {
+        errln("FAIL: didn't return USD for en_US after unregister of en_US");
+    }
+    status = U_ZERO_ERROR; // reset
+    
+    if (u_strcmp(QQQ, ucurr_forLocale("en_US_EURO", &status)) != 0) {
+        errln("FAIL: didn't return QQQ for en_US_EURO after unregister of en_US");
+    }
+    
+    if (u_strcmp(USD, ucurr_forLocale("en_US_BLAH", &status)) != 0) {
+        errln("FAIL: could not find USD for en_US_BLAH after unregister of en");
+    }
+    status = U_ZERO_ERROR; // reset
+    
+    if (!ucurr_unregister(enUSEUROkey, &status)) {
+        errln("FAIL: couldn't unregister enUSEUROkey");
+    }
+    
+    if (u_strcmp(EUR, ucurr_forLocale("en_US_EURO", &status)) != 0) {
+        errln("FAIL: didn't return EUR for en_US_EURO after unregister of en_US_EURO");
+    }
+    status = U_ZERO_ERROR; // reset
 }
 
 void NumberFormatTest::TestSymbolsWithBadLocale(void) {
