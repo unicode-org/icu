@@ -181,17 +181,17 @@ typedef void FuntionToBeTimed(void* param);
     struct UTimer{
         struct timeval start;
         struct timezone placeHolder;
-    }
+    };
     
     U_INLINE int32_t uprv_initFrequency(UTimer* timer)
     {
         return 0;
     }
-	U_INLINE void uprv_start(UTimer* timer)
-	{
-		gettimeofday(timer->start, 0);
-	}
-    U_INLINE void uprv_delta(UTimer* timer1, UTimer* timer2){
+    U_INLINE void uprv_start(UTimer* timer)
+    {
+	gettimeofday(&timer->start, 0);
+    }
+    U_INLINE double uprv_delta(UTimer* timer1, UTimer* timer2){
         double t1, t2;
 
 		t1 =  (double)timer1->start.tv_sec + (double)timer1->start.tv_usec/(1000*1000);
@@ -271,3 +271,4 @@ utimer_loopUntilDone(double thresholdTimeVal,
 }
 
 #endif
+
