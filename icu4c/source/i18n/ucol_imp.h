@@ -135,6 +135,9 @@
  * Header is followed by the table and continuation table.
 */
 
+/* let us know whether reserved fields are reset to zero or junked */
+#define UCOL_HEADER_MAGIC 0x20030618
+
 /* UDataInfo for UCA mapping table */
 static const UDataInfo ucaDataInfo={
     sizeof(UDataInfo),
@@ -151,7 +154,8 @@ static const UDataInfo ucaDataInfo={
     /*            to int32_t in UColOptionSet */
     /* 05/13/2003 This one also updated since we added UCA and UCD versions */
     /*            to header */
-    {2, 2, 0, 0},                 /* formatVersion                */
+    /* 09/11/2003 Adding information required by data swapper */
+    {2, 3, 0, 0},                 /* formatVersion                */
     {3, 0, 0, 0}                  /* dataVersion = Unicode Version*/
 };
 
@@ -706,7 +710,7 @@ typedef struct {
       uint32_t options; /* these are the default options for the collator */
       uint32_t UCAConsts; /* structure which holds values for indirect positioning and implicit ranges */
       uint32_t contractionUCACombos;        /* this one is needed only for UCA, to copy the appropriate contractions */
-      uint32_t unusedReserved1;         /* reserved for future use */
+      uint32_t magic;            /* magic number - lets us know whether reserved data is reset or junked */
       uint32_t mappingPosition;  /* const uint8_t *mappingPosition; */
       uint32_t expansion;        /* uint32_t *expansion;            */
       uint32_t contractionIndex; /* UChar *contractionIndex;        */
@@ -725,14 +729,17 @@ typedef struct {
       uint32_t contrEndCP;          /* hash table of final code points  */
                                     /*   in contractions.               */
 
-      int32_t CEcount;
+      int32_t contractionUCACombosSize;     /* number of UCA contraction items. */
+                                            /*Length is contractionUCACombosSize*contractionUCACombosWidth*sizeof(UChar) */
       UBool jamoSpecial;                    /* is jamoSpecial */
-      uint8_t padding[3];                   /* for guaranteed alignment */
+      UBool isBigEndian;                    /* is this data big endian? from the UDataInfo header*/
+      uint8_t charSetFamily;                /* what is the charset family of this data from the UDataInfo header*/
+      uint8_t contractionUCACombosWidth;    /* width of UCA combos field */
       UVersionInfo version;
       UVersionInfo UCAVersion;              /* version of the UCA, read from file */
       UVersionInfo UCDVersion;              /* UCD version, obtained by u_getUnicodeVersion */
-      char charsetName[32];                 /* for charset CEs */
-      uint8_t reserved[56];                 /* for future use */
+      UVersionInfo formatVersion;           /* format version from the UDataInfo header */
+      uint8_t reserved[84];                 /* for future use */
 } UCATableHeader;
 
 #define U_UNKNOWN_STATE 0
