@@ -119,7 +119,7 @@ package390: $(BUILDDIR)/icudata390.lst $(BUILDDIR)/icudata.lst ./icupkg.inc
 ##### Define all the data files. the build rule that depends on them is below.
 
 ## DAT files - Misc. data files.
-DAT_FILES_SHORT=uprops.dat unames.dat unorm.dat cnvalias.icu tz.dat ucadata.dat invuca.dat 
+DAT_FILES_SHORT=uprops.icu unames.icu unorm.icu cnvalias.icu tz.icu ucadata.icu invuca.icu 
 DAT_FILES=$(DAT_FILES_SHORT:%=$(BUILDDIR)/$(ICUDT)%)
 
 ## BRK files
@@ -186,29 +186,29 @@ build-dir:
 ####################################################    DAT
 # DAT FILES
 
-# uprops.dat
-$(BUILDDIR)/$(ICUDT)uprops.dat: $(UNICODEDATADIR)/UnicodeData.txt $(UNICODEDATADIR)/BidiMirroring.txt $(TOOLDIR)/genprops/genprops$(EXEEXT)
+# uprops.icu
+$(BUILDDIR)/$(ICUDT)uprops.icu: $(UNICODEDATADIR)/UnicodeData.txt $(UNICODEDATADIR)/BidiMirroring.txt $(TOOLDIR)/genprops/genprops$(EXEEXT)
 	ICU_DATA=$(BUILDDIR) $(INVOKE) $(TOOLDIR)/genprops/genprops -s $(UNICODEDATADIR) -d $(BUILDDIR) -u $(UNICODE_VERSION)
 
-# unorm.dat
-$(BUILDDIR)/$(ICUDT)unorm.dat: $(UNICODEDATADIR)/UnicodeData.txt $(UNICODEDATADIR)/DerivedNormalizationProps.txt $(UNICODEDATADIR)/BidiMirroring.txt $(TOOLDIR)/gennorm/gennorm$(EXEEXT)
+# unorm.icu
+$(BUILDDIR)/$(ICUDT)unorm.icu: $(UNICODEDATADIR)/UnicodeData.txt $(UNICODEDATADIR)/DerivedNormalizationProps.txt $(UNICODEDATADIR)/BidiMirroring.txt $(TOOLDIR)/gennorm/gennorm$(EXEEXT)
 	ICU_DATA=$(BUILDDIR) $(INVOKE) $(TOOLDIR)/gennorm/gennorm -s $(UNICODEDATADIR) -d $(BUILDDIR) -u $(UNICODE_VERSION)
 
-# ucadata.dat
-$(BUILDDIR)/$(ICUDT)ucadata.dat: $(UNICODEDATADIR)/FractionalUCA.txt $(TOOLDIR)/genuca/genuca$(EXEEXT) $(BUILDDIR)/$(ICUDT)unorm.dat
-	ls -l $(BUILDDIR)/$(ICUDT)unorm.dat
+# ucadata.icu
+$(BUILDDIR)/$(ICUDT)ucadata.icu: $(UNICODEDATADIR)/FractionalUCA.txt $(TOOLDIR)/genuca/genuca$(EXEEXT) $(BUILDDIR)/$(ICUDT)unorm.icu
+	ls -l $(BUILDDIR)/$(ICUDT)unorm.icu
 	$(INVOKE) $(TOOLDIR)/genuca/genuca -s $(UNICODEDATADIR) -d $(BUILDDIR) -i $(BUILDDIR) 
 
-# unames.dat
-$(BUILDDIR)/$(ICUDT)unames.dat: $(UNICODEDATADIR)/UnicodeData.txt $(TOOLDIR)/gennames/gennames$(EXEEXT)
+# unames.icu
+$(BUILDDIR)/$(ICUDT)unames.icu: $(UNICODEDATADIR)/UnicodeData.txt $(TOOLDIR)/gennames/gennames$(EXEEXT)
 	ICU_DATA=$(BUILDDIR) $(INVOKE) $(TOOLDIR)/gennames/gennames -1 -d $(BUILDDIR) $(UNICODEDATADIR)/UnicodeData.txt -u $(UNICODE_VERSION)
 
 # cnvalias.icu
 $(BUILDDIR)/$(ICUDT)cnvalias.icu: $(UCMSRCDIR)/convrtrs.txt $(TOOLDIR)/gencnval/gencnval$(EXEEXT)
 	ICU_DATA=$(BUILDDIR) $(INVOKE) $(TOOLDIR)/gencnval/gencnval -d $(BUILDDIR) $(UCMSRCDIR)/convrtrs.txt
 
-# tz.dat
-$(BUILDDIR)/$(ICUDT)tz.dat: $(MISCSRCDIR)/timezone.txt $(TOOLDIR)/gentz/gentz$(EXEEXT)
+# tz.icu
+$(BUILDDIR)/$(ICUDT)tz.icu: $(MISCSRCDIR)/timezone.txt $(TOOLDIR)/gentz/gentz$(EXEEXT)
 	ICU_DATA=$(BUILDDIR) $(INVOKE) $(TOOLDIR)/gentz/gentz -d $(BUILDDIR) $(MISCSRCDIR)/timezone.txt
 
 ####################################################    BRK
@@ -230,7 +230,7 @@ $(BUILDDIR)/$(ICUDT)%.cnv: $(UCMSRCDIR)/%.ucm $(TOOLDIR)/makeconv/makeconv$(EXEE
 
 all-RES:  $(RES_FILES)
 
-$(BUILDDIR)/$(ICUDT)%.res: $(LOCSRCDIR)/%.txt $(TOOLDIR)/genrb/genrb$(EXEEXT) $(BUILDDIR)/$(ICUDT)ucadata.dat $(BUILDDIR)/$(ICUDT)uprops.dat $(BUILDDIR)/$(ICUDT)unorm.dat
+$(BUILDDIR)/$(ICUDT)%.res: $(LOCSRCDIR)/%.txt $(TOOLDIR)/genrb/genrb$(EXEEXT) $(BUILDDIR)/$(ICUDT)ucadata.icu $(BUILDDIR)/$(ICUDT)uprops.icu $(BUILDDIR)/$(ICUDT)unorm.icu
 	ICU_DATA=$(BUILDDIR) $(INVOKE) $(TOOLDIR)/genrb/genrb $(GENRBOPTS) -p $(ICUDATA_PLATFORM_NAME) -q -s $(LOCSRCDIR) -d $(BUILDDIR) $(<F)
 
 $(BUILDDIR)/$(ICUDT)%.res: $(TRNSSRCDIR)/%.txt $(TOOLDIR)/genrb/genrb$(EXEEXT) 
@@ -263,7 +263,7 @@ icupkg.inc: $(srcdir)/icupkg.inc.in  $(top_builddir)/config.status
 ###########
 ########### 390 (z/OS) support
 UCMFILES390=ebcdic-xml-us.ucm ibm-37-s390.ucm ibm-1047-s390.ucm ibm-4909.ucm
-ALLFILES390=uprops.dat unorm.dat cnvalias.icu $(UCMFILES390:.ucm=.cnv)
+ALLFILES390=uprops.icu unorm.icu cnvalias.icu $(UCMFILES390:.ucm=.cnv)
 
 $(BUILDDIR)/icudata390.lst:  $(SRCLISTDEPS)
 	@echo "generating $@ (list of 390 data files)"
@@ -290,7 +290,7 @@ TESTDATA=testdata
 TESTDT=$(TESTDATA)_
 
 # File definitions 
-TEST_DAT_FILES=$(TESTBUILDDIR)/$(TESTDT)test.dat
+TEST_DAT_FILES=$(TESTBUILDDIR)/$(TESTDT)test.icu
 
 TEST_UCM_SOURCE= test1.ucm test3.ucm test4.ucm
 TEST_UCM_FILES=$(TEST_UCM_SOURCE:%=$(TESTSRCDATADIR)/data/%)
@@ -313,8 +313,8 @@ $(TESTBUILDDIR)/testdata.lst: $(SRCLISTDEPS)
 
 build-testdata:  $(ALL_TEST_FILES) $(TESTBUILDDIR)/testdata.lst $(TESTBUILDDIR)/$(TESTDT)ja_data.res
 
-# test.dat
-$(TESTBUILDDIR)/$(TESTDT)test.dat: $(TOOLDIR)/gentest/gentest$(EXEEXT)
+# test.icu
+$(TESTBUILDDIR)/$(TESTDT)test.icu: $(TOOLDIR)/gentest/gentest$(EXEEXT)
 	ICU_DATA=$(BUILDDIR) $(INVOKE) $(TOOLDIR)/gentest/gentest -d $(TESTBUILDDIR) 
 
 $(TESTBUILDDIR)/$(TESTDT)%.cnv: $(TESTSRCDATADIR)/%.ucm $(TOOLDIR)/makeconv/makeconv$(EXEEXT)
