@@ -1038,6 +1038,11 @@ int32_t GregorianCalendar::getActualMinimum(EDateFields field) const
     return getMinimum((UCalendarDateFields)field);
 }
 
+int32_t GregorianCalendar::getActualMinimum(EDateFields field, UErrorCode& /* status */) const
+{
+    return getMinimum((UCalendarDateFields)field);
+}
+
 /**
  * Return the minimum value that this field could have, given the current date.
  * For the Gregorian calendar, this is the same as getMinimum() and getGreatestMinimum().
@@ -1045,7 +1050,7 @@ int32_t GregorianCalendar::getActualMinimum(EDateFields field) const
  * @return         the minimum value that this field could have, given the current date.
  * @draft ICU 2.6.
  */
-int32_t GregorianCalendar::getActualMinimum(UCalendarDateFields field) const
+int32_t GregorianCalendar::getActualMinimum(UCalendarDateFields field, UErrorCode& /* status */) const
 {
     return getMinimum(field);
 }
