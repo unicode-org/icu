@@ -160,6 +160,8 @@ NumberFormatRoundTripTest::test(NumberFormat *fmt)
 // PowerPC doesn't support denormalized doubles, so the low-end range
 // doesn't match NT
         test(fmt, randomDouble(1e-290));
+#elif defined __alpha__
+	test(fmt, randomDouble(1e-290));
 #elif defined(OS390)
 #   if IEEE_754
         test(fmt, randomDouble(1e-78));  /*OS390*/
