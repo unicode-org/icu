@@ -2313,5 +2313,36 @@ InputPath=.\unicode\utrans.h
 
 # End Source File
 # End Group
+# Begin Group "locale"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=.\ulocdata.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\unicode\ulocdata.h
+
+!IF  "$(CFG)" == "i18n - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
+
+# Begin Custom Build
+InputPath=.\unicode\ulocdata.h
+
+"..\..\include\unicode\ulocdata.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy    $(InputPath)    ..\..\include\unicode
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Debug"
+
+!ENDIF 
+
+# End Source File
+# End Group
 # End Target
 # End Project
