@@ -268,14 +268,15 @@ static void TestPUtilAPI(){
     expn1=uprv_nextDouble(uprv_getNaN(), TRUE);
     doAssert(expn1, uprv_getNaN(), "uprv_nextDouble(uprv_getNaN(), TRUE) failed.");
 
-#if IEEE_754
+#if defined(OS400)
+    /* This is oddly enough the same value as DBL_MIN on Windows. */
+    /* This number is used because really small IEEE 754 numbers get an underflow exception on this platform */
+    y1=2.2250738585072014e-308;
+#elif IEEE_754
     /* OS390 may define IEEE_754, so check it first */
     y1=4.9406564584125e-324;
 #elif defined(OS390) || defined(XP_MAC)
     y1=4.9406564584125e-78;
-#elif defined(OS400)
-    /* This is oddly enough the same value as DBL_MIN on Windows. */
-    y1=2.2250738585072014e-308;
 #else
     /* This is the default IEEE754 value. The test should fail if it's not correct. */
     y1=4.9406564584125e-324;
