@@ -10,7 +10,23 @@ static const char delim = '/';
 static int32_t execCount = 0;
 UPerfTest* UPerfTest::gTest = NULL;
 static const int MAXLINES = 40000;
-//static const char *currDir = ".";
+const char UPerfTest::gUsageString[] =
+    "Usage: %s [OPTIONS] [FILES]\n"
+    "\tReads the input file and prints out time taken in seconds\n"
+    "Options:\n"
+    "\t-h or -? or --help   this usage text\n"
+    "\t-v or --verbose      print extra information when processing files\n"
+    "\t-s or --sourcedir    source directory for files followed by path\n"
+    "\t                     followed by path\n"
+    "\t-e or --encoding     encoding of source files\n"
+    "\t-u or --uselen       perform timing analysis on non-null terminated buffer using length\n"
+    "\t-f or --file-name    file to be used as input data\n"
+    "\t-p or --passes       Number of passes to be performed. Requires Numeric argument. Cannot be used with --time\n"
+    "\t-i or --iterations   Number of iterations to be performed. Requires Numeric argument\n"
+    "\t-t or --time         Threshold time for looping until in seconds. Requires Numeric argument.Cannot be used with --iterations\n"
+    "\t-l or --line-mode    The data file should be processed in line mode\n"
+    "\t-b or --bulk-mode    The data file should be processed in file based. Cannot be used with --line-mode\n"
+    "\t-L or --locale       Locale for the test\n";
 
 enum
 {
