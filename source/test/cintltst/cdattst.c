@@ -60,6 +60,9 @@ static void TestDateFormat()
     /*const char* str="yyyy.MM.dd G 'at' hh:mm:ss z";
     const char t[]="2/3/76 2:50 AM";*/
     /*Testing udat_open() to open a dateformat */
+
+    ctest_setTimeZone(NULL, &status);
+
     log_verbose("\nTesting udat_open() with various parameters\n");
     fr = udat_open(UDAT_FULL, UDAT_DEFAULT, "fr_FR", NULL,0, NULL, 0,&status);
     if(U_FAILURE(status))
@@ -325,6 +328,7 @@ static void TestDateFormat()
     udat_close(fr_pat);
     udat_close(copy);
     
+    ctest_resetTimeZone();
 }
 
 /*Testing udat_getSymbols() and udat_setSymbols() and udat_countSymbols()*/
@@ -558,6 +562,8 @@ static void TestDateFormatCalendar() {
     UDate when;
     UErrorCode ec = U_ZERO_ERROR;
 
+    ctest_setTimeZone(NULL, &ec);
+
     /* Create a formatter for date fields. */
     date = udat_open(UDAT_NONE, UDAT_SHORT, "en_US", NULL, 0, NULL, 0, &ec);
     if (U_FAILURE(ec)) {
@@ -627,7 +633,7 @@ static void TestDateFormatCalendar() {
     if (when == 986517900000.0) {
         log_verbose("Ok: Parsed result: %s\n", cbuf);
     } else {
-        log_err("FAIL: Parsed result: %s, exp 4/5/2001 5:45 PM", cbuf);
+        log_err("FAIL: Parsed result: %s, exp 4/5/2001 5:45 PM\n", cbuf);
     }
 
  FAIL:    
@@ -635,6 +641,8 @@ static void TestDateFormatCalendar() {
     udat_close(time);
     udat_close(full);
     ucal_close(cal);
+
+    ctest_resetTimeZone();
 }
 
 /*INTERNAL FUNCTIONS USED*/

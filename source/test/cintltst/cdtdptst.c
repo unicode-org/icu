@@ -53,6 +53,8 @@ void TestTwoDigitYearDSTParse()
     UChar *s;
     int32_t pos;
 
+    ctest_setTimeZone(NULL, &status);
+
     pattern=(UChar*)malloc(sizeof(UChar) * (strlen("EEE MMM dd HH:mm:ss.SSS zzz yyyy G")+1 ));
     u_uastrcpy(pattern, "EEE MMM dd HH:mm:ss.SSS zzz yyyy G");
     fullFmt= udat_open(UDAT_IGNORE, UDAT_IGNORE,"en_US",NULL,0,pattern, u_strlen(pattern),&status);
@@ -94,6 +96,8 @@ void TestTwoDigitYearDSTParse()
     udat_close(fmt);
     free(pattern);
     free(s);
+
+    ctest_resetTimeZone();
 }
 
 
@@ -292,6 +296,9 @@ void TestQuotePattern161()
     UChar *dateString;
     UErrorCode status = U_ZERO_ERROR;
     const char* expStr = "04/13/1999 at 10:42:28 AM ";
+
+    ctest_setTimeZone(NULL, &status);
+
     pattern=(UChar*)malloc(sizeof(UChar) * (strlen("MM/dd/yyyy 'at' hh:mm:ss a zzz")+1) );
     u_uastrcpy(pattern, "MM/dd/yyyy 'at' hh:mm:ss a zzz");
     
@@ -328,6 +335,7 @@ void TestQuotePattern161()
     free(tzID);
     free(pattern);
     
+    ctest_resetTimeZone();
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
