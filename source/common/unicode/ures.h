@@ -134,32 +134,6 @@ ures_openDirect(const char* path,
                 const char* locale, 
                 UErrorCode* status);
 
-#ifdef ICU_URES_USE_DEPRECATES
-/**
-*Opens a UResourceBundle, from which users can extract strings by using
-*their corresponding keys. This version of open requires the path 
-*string to be of type <TT>const wchar_t*</TT>.
-*Note that the caller is responsible of calling <TT>ures_close</TT> on each succesfully
-*opened resource bundle.
-*@param path: string containing the full path pointing to the directory
-*             where the resources reside (should end with a directory
-*             separator.
-*                e.g. "/usr/resource/my_app/resources/" on a Unix system
-*             if NULL will use the system's current data directory
-*@param locale: specifies the locale for which we want to open the resource
-*                if NULL will use the default locale
-*                
-*@param status: fills in the outgoing error code.
-*@see ures_close
-*@return : a newly allocated resource bundle.
-* @obsolete ICU 2.4. Use const char * pathnames instead since this API will be removed in that release.
-*/
-U_CAPI UResourceBundle* U_EXPORT2 
-ures_openW(const wchar_t* path, 
-           const char* locale, 
-           UErrorCode* status);
-#endif /* ICU_URES_USE_DEPRECATES */
-
 /**
  * Same as ures_open() but takes a const UChar *path.
  * This path will be converted to char * using the default converter,

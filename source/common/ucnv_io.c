@@ -933,18 +933,6 @@ ucnv_openAllNames(UErrorCode *pErrorCode) {
     return myEnum;
 }
 
-#ifdef ICU_UNICODECONVERTER_USE_DEPRECATES
-U_CFUNC void
-ucnv_io_fillAvailableConverters(const char **aliases, UErrorCode *pErrorCode) {
-    if (haveAvailableConverterList(pErrorCode)) {
-        uint16_t count = 0;
-        while (count < gAvailableConverterCount) {
-            *aliases++=gAvailableConverters[count++];
-        }
-    }
-}
-#endif
-
 U_CFUNC uint16_t
 ucnv_io_countAvailableAliases(UErrorCode *pErrorCode) {
     if (haveAliasData(pErrorCode)) {
