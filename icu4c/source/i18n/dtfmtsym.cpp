@@ -23,6 +23,7 @@
 #include "unicode/smpdtfmt.h"
 #include "ucln_in.h"
 #include "mutex.h"
+#include "cmemory.h"
  
 // *****************************************************************************
 // class DateFormatSymbols
@@ -177,7 +178,7 @@ DateFormatSymbols::assignArray(UnicodeString*& dstArray,
 void
 DateFormatSymbols::createZoneStrings(const UnicodeString *const * otherStrings)
 {
-    fZoneStrings = new UnicodeString*[fZoneStringsRowCount];
+    fZoneStrings = (UnicodeString **)uprv_malloc(fZoneStringsRowCount * sizeof(UnicodeString *));
     for (int32_t row=0; row<fZoneStringsRowCount; ++row)
     {
         fZoneStrings[row] = new UnicodeString[fZoneStringsColCount];
@@ -240,7 +241,7 @@ void DateFormatSymbols::disposeZoneStrings()
     if (fZoneStrings) {
         for (int32_t row=0; row<fZoneStringsRowCount; ++row)
             delete[] fZoneStrings[row];
-        delete[] fZoneStrings;
+        uprv_free(fZoneStrings);
     }
 }
 
@@ -544,7 +545,7 @@ DateFormatSymbols::initializeData(const Locale& locale, UErrorCode& status, UBoo
             initField(&fShortWeekdays, fShortWeekdaysCount, (const UChar *)gLastResortDayNames, kDayNum, kDayLen, status);
             initField(&fAmPms, fAmPmsCount, (const UChar *)gLastResortAmPmMarkers, kAmPmNum, kAmPmLen, status);
 
-            fZoneStrings = new UnicodeString*[1];
+            fZoneStrings = (UnicodeString **)uprv_malloc(sizeof(UnicodeString *));
             /* test for NULL */
             if (fZoneStrings == 0) {
                 status = U_MEMORY_ALLOCATION_ERROR;
@@ -580,7 +581,7 @@ DateFormatSymbols::initializeData(const Locale& locale, UErrorCode& status, UBoo
     ResourceBundle zoneRow = zoneArray.get((int32_t)0, status);
     /* TODO: Fix the case where the zoneStrings is not a perfect square array of information. */
     fZoneStringsColCount = zoneRow.getSize();
-    fZoneStrings = new UnicodeString * [fZoneStringsRowCount];
+    fZoneStrings = (UnicodeString **)uprv_malloc(fZoneStringsRowCount * sizeof(UnicodeString *));
     /* test for NULL */
     if (fZoneStrings == 0) {
         status = U_MEMORY_ALLOCATION_ERROR;

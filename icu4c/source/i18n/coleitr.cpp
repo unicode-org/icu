@@ -426,7 +426,7 @@ const CollationElementIterator& CollationElementIterator::operator=(
           }
           else {
               if (coliter->writableBuffer != coliter->stackWritableBuffer) {
-                  delete coliter->writableBuffer;
+                  uprv_free(coliter->writableBuffer);
               }
               coliter->writableBuffer = (UChar *)uprv_malloc(
                                          wlength * U_SIZEOF_UCHAR);

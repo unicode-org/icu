@@ -195,7 +195,7 @@ TransliterationRuleSet::TransliterationRuleSet(const TransliterationRuleSet& oth
  */
 TransliterationRuleSet::~TransliterationRuleSet() {
     delete ruleVector; // This deletes the contained rules
-    delete[] rules;
+    uprv_free(rules);
 }
 
 void TransliterationRuleSet::setData(const TransliterationRuleData* d) {
@@ -239,7 +239,7 @@ void TransliterationRuleSet::addRule(TransliterationRule* adoptedRule,
         maxContextLength = len;
     }
 
-    delete rules;
+    uprv_free(rules);
     rules = 0;
 }
 
@@ -316,8 +316,8 @@ void TransliterationRuleSet::freeze(UParseError& parseError,UErrorCode& status) 
 
     /* Freeze things into an array.
      */
-    delete[] rules; // Contains alias pointers
-    rules = new TransliterationRule*[v.size()];
+    uprv_free(rules); // Contains alias pointers
+    rules = (TransliterationRule **)uprv_malloc(v.size() * sizeof(TransliterationRule *));
     /* test for NULL */
     if (rules == 0) {
         status = U_MEMORY_ALLOCATION_ERROR;
