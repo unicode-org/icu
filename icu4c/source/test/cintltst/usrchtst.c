@@ -91,6 +91,7 @@ static void TestEnd()
 {
     TOCLOSE_ = TRUE;
     close();
+    TOCLOSE_ = TRUE;
 }
 
 /**

@@ -57,10 +57,13 @@ static void iterateTestsWithLevel( const TestNode *root, int len,
 static void help ( const char *argv0 );
 
 static int ERRONEOUS_FUNCTION_COUNT = 0;
- int ERROR_COUNT = 0;
+static int ERROR_COUNT = 0; /* Count of errors from all tests. */
 static int INDENT_LEVEL = 0;
- int VERBOSITY = 0; /* be No-verbose by default */
- int ERR_MSG =1; /*error messages will be displayed by default*/
+int REPEAT_TESTS_INIT = 0; /* Was REPEAT_TESTS initialized? */
+int REPEAT_TESTS = 1; /* Number of times to run the test */
+int VERBOSITY = 0; /* be No-verbose by default */
+int ERR_MSG =1; /* error messages will be displayed by default*/
+int QUICK = 1;  /* Skip some of the slower tests? */
 /*-------------------------------------------*/
 
 /* strncmp that also makes sure there's a \0 at s2[0] */
@@ -420,7 +423,6 @@ int processArgs(const TestNode* root,
     const TestNode*    toRun;
     int                i;
     int                doList = FALSE;
-    int                runAll = FALSE;
     int                subtreeOptionSeen = FALSE;
 
     int                errorCount = 0;
@@ -448,8 +450,6 @@ int processArgs(const TestNode* root,
 
             if( doList == TRUE)
                 showTests(toRun);
-            else if( runAll == TRUE)
-                runTests(toRun);
             else
                 runTests(toRun);
 
@@ -457,11 +457,7 @@ int processArgs(const TestNode* root,
 
             subtreeOptionSeen = TRUE;
         }
-        else if (strcmp( argv[i], "-v" )==0 )
-        {
-            VERBOSITY = TRUE;
-        }
-        else if (strcmp( argv[i], "-verbose")==0 )
+        else if (strcmp( argv[i], "-v" )==0 || strcmp( argv[i], "-verbose")==0)
         {
             VERBOSITY = TRUE;
         }
@@ -469,21 +465,19 @@ int processArgs(const TestNode* root,
         {
             doList = TRUE;
         }
-        else if (strcmp( argv[i], "-all") ==0)
+        else if (strcmp( argv[i], "-e") ==0)
         {
-            runAll = TRUE;
+            QUICK = TRUE;
         }
-        else if(strcmp( argv[i], "-a") == 0)
-        {
-            runAll = TRUE;
-        }
-        else if(strcmp( argv[i], "-n") == 0)
+        else if(strcmp( argv[i], "-n") == 0 || strcmp( argv[i], "-no_err_msg") == 0)
         {
             ERR_MSG = FALSE;
         }
-        else if (strcmp( argv[i], "-no_err_msg") == 0)
+        else if (strcmp( argv[i], "-r") == 0)
         {
-            ERR_MSG = FALSE;
+            if (!REPEAT_TESTS_INIT) {
+                REPEAT_TESTS++;
+            }
         }
         else if (strcmp( argv[1], "-h" )==0 )
         {
@@ -502,8 +496,6 @@ int processArgs(const TestNode* root,
     {
         if( doList == TRUE)
             showTests(toRun);
-        else if( runAll == TRUE)
-            runTests(toRun);
         else
             runTests(toRun);
 
@@ -514,6 +506,8 @@ int processArgs(const TestNode* root,
         if( ( doList == FALSE ) && ( errorCount > 0 ) )
             printf(" Total errors: %d\n", errorCount );
     }
+
+    REPEAT_TESTS_INIT = 1;
 
     return errorCount; /* total error count */
 }
@@ -527,13 +521,13 @@ static void help ( const char *argv0 )
     printf("Usage: %s [ -l ] [ -v ] [ -verbose] [-a] [ -all] [-n] \n [ -no_err_msg] [ -h ] [ /path/to/test ]\n",
             argv0);
     printf("    -l To get a list of test names\n");
-    printf("    -all To run all the test\n");
-    printf("    -a To run all the test(same a -all)\n");
+    printf("    -e to do exhaustive testing\n");
     printf("    -verbose To turn ON verbosity\n");
     printf("    -v To turn ON verbosity(same as -verbose)\n");
     printf("    -h To print this message\n");
     printf("    -n To turn OFF printing error messages\n");
     printf("    -no_err_msg (same as -n) \n");
+    printf("    -r repeat tests after calling u_cleanup \n");
     printf("    -[/subtest] To run a subtest \n");
     printf("    eg: to run just the utility tests type: cintltest /tsutil) \n");
 }
