@@ -181,7 +181,7 @@ int32_t Transliterator::transliterate(Replaceable& text,
     offsets.contextLimit = limit;
     offsets.start = start;
     offsets.limit = limit;
-    handleTransliterate(text, offsets, FALSE);
+    filteredTransliterate(text, offsets, FALSE);
     return offsets.limit;
 }
 
@@ -316,7 +316,7 @@ void Transliterator::transliterate(Replaceable& text,
  */
 void Transliterator::finishTransliteration(Replaceable& text,
                                            UTransPosition& index) const {
-    handleTransliterate(text, index, FALSE);
+    filteredTransliterate(text, index, FALSE);
 }
 
 /**
@@ -349,10 +349,93 @@ void Transliterator::_transliterate(Replaceable& text,
         index.contextLimit += insertion->length();
     }
 
-    handleTransliterate(text, index, TRUE);
+    filteredTransliterate(text, index, TRUE);
 
     index.contextStart = uprv_max(index.start - getMaximumContextLength(),
                            originalStart);
+}
+
+/**
+ * This method breaks up the input text into runs of unfiltered
+ * characters.  It passes each such run to
+ * <subclass>.handleTransliterate().  Subclasses that can handle the
+ * filter logic more efficiently themselves may override this method.
+ *
+ * All transliteration calls in this class go through this method.
+ */
+void Transliterator::filteredTransliterate(Replaceable& text,
+                                           UTransPosition& index,
+                                           UBool incremental) const {
+    if (filter == 0) {
+        // Short circuit path for transliterators with no filter
+        handleTransliterate(text, index, incremental);
+        return;
+    }
+
+    // globalLimit is the limit value for the entire operation.  We
+    // set index.limit to the end of each unfiltered run before
+    // calling handleTransliterate(), so we need to maintain the real
+    // value of index.limit here.  After each transliteration, we
+    // update globalLimit for insertions or deletions that have
+    // happened.
+    int32_t globalLimit = index.limit;
+
+    // Break the input text up.  Say the input text has the form:
+    //   xxxabcxxdefxx
+    // where 'x' represents a filtered character.  Then we break this
+    // up into:
+    //   xxxabc xxdef xx
+    // Each pass through the loop consumes a run of filtered
+    // characters (which are ignored) and a subsequent run of
+    // unfiltered characters (which are transliterated).  If, at any
+    // point, we fail to consume our entire segment, we stop.
+    do {
+        // Narrow the range to be transliterated to the first segment
+        // of unfiltered characters at or after index.start.
+
+        // Advance compoundStart past filtered chars
+        while (index.start < globalLimit &&
+               !filter->contains(text.charAt(index.start))) {
+            ++index.start;
+        }
+
+        // Find the end of this run of unfiltered chars
+        index.limit = index.start;
+        while (index.limit < globalLimit &&
+               filter->contains(text.charAt(index.limit))) {
+            ++index.limit;
+        }
+
+        // Check to see if the unfiltered run is empty.  This only
+        // happens at the end of the string when all the remaining
+        // characters are filtered.
+        if (index.limit == index.start) {
+            // assert(index.start == globalLimit);
+            break;
+        }
+
+        int32_t limit = index.limit;
+
+        // Delegate to subclass for actual transliteration.  If there
+        // is additional filtered text (if limit < globalLimit) then
+        // we pass in an incremental value of FALSE to force the subclass
+        // to complete the transliteration for this segment.
+        handleTransliterate(text, index,
+                            limit < globalLimit ? FALSE : incremental);
+        
+        // Adjust overall limit for insertions/deletions.  Don't need
+        // to worry about contextLimit because handleTransliterate()
+        // maintains that.
+        globalLimit += index.limit - limit;
+
+        // If we failed to complete transliterate this segment, then
+        // we are done.  If we did completely transliterate this
+        // segment, then repeat with the next unfiltered segment.
+    } while (index.start == index.limit);
+
+    // Start is valid where it is.  Limit needs to be put back where
+    // it was, modulo adjustments for deletions/insertions.
+    index.limit = globalLimit;    
 }
 
 /**
