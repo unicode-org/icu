@@ -412,7 +412,7 @@ ucbuf_getcx32(UCHARBUF* buf,UErrorCode* error) {
     if(c32==0xFFFFFFFF){
         *error= U_ILLEGAL_ESCAPE_SEQUENCE;
         return c1;
-    }else if(c32!=c2){
+    }else if(c32!=c2 || (c32==0x0075 && c2==0x0075 && c1==0x005C) /* for \u0075 c2=0x0075 and c32==0x0075*/){
         /* Update the current buffer position */
         buf->currentPos += offset;
     }else{
@@ -731,6 +731,7 @@ ucbuf_readline(UCHARBUF* buf,int32_t* len,UErrorCode* err){
                 return savePos;
             }
             /* else */
+
             if (temp>=buf->bufLimit|| ucbuf_isCharNewLine(c)){  /* Unipad inserts 2028 line separators! */
                 *len = temp - buf->currentPos;
                 savePos = buf->currentPos;
