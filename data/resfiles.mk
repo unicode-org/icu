@@ -45,7 +45,7 @@ es_GT.txt es_HN.txt es_MX.txt es_NI.txt es_PA.txt\
 es_PE.txt es_PR.txt es_PY.txt es_SV.txt es_US.txt\
 es_UY.txt es_VE.txt\
 et.txt et_EE.txt\
-eu.txt eu_ES.txt\
+eu.txt eu_ES.txt eu_ES_EURO.txt\
 fa.txt fa_IR.txt\
 fi.txt fi_FI.txt fi_FI_EURO.txt\
 fo.txt fo_FO.txt\
