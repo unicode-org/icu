@@ -13,6 +13,7 @@
 #define UVECTOR_H
 
 #include "unicode/utypes.h"
+#include "unicode/uobject.h"
 #include "uhash.h"
 
 U_NAMESPACE_BEGIN
@@ -86,7 +87,7 @@ typedef void (U_EXPORT2 * U_CALLCONV UTokenAssigner)(UHashTok dst,
  *
  * @author Alan Liu
  */
-class U_COMMON_API UVector {
+class U_COMMON_API UVector : public UObject {
     // NOTE: UVector uses the UHashKey (union of void* and int32_t) as
     // its basic storage type.  It uses UKeyComparator as its
     // comparison function.  It uses UObjectDeleter as its deleter

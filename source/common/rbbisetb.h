@@ -10,6 +10,8 @@
 #ifndef RBBISETB_H
 #define RBBISETB_H
 
+#include "unicode/utypes.h"
+#include "unicode/uobject.h"
 #include "rbbirb.h"
 #include "uvector.h"
 #include "uhash.h"
@@ -65,7 +67,7 @@ struct RangeDescriptor {
 //
 
 
-class RBBISetBuilder {
+class RBBISetBuilder : public UObject {
 public:
     RBBISetBuilder(RBBIRuleBuilder *rb);
     ~RBBISetBuilder();

@@ -8,6 +8,8 @@
 #ifndef RBT_RULE_H
 #define RBT_RULE_H
 
+#include "unicode/utypes.h"
+#include "unicode/uobject.h"
 #include "unicode/unistr.h"
 #include "unicode/utrans.h"
 #include "unicode/unimatch.h"
@@ -47,7 +49,7 @@ class UnicodeFunctor;
  *
  * @author Alan Liu
  */
-class TransliterationRule {
+class TransliterationRule : public UObject {
 
 private:
 

@@ -148,7 +148,6 @@ uprv_defaultCodePageForLocale(const char *locale)
  * The LCID values come from winnt.h
  */
 
-#include "unicode/locid.h"
 #include "unicode/uloc.h"
 
 

@@ -12,7 +12,8 @@
 #ifndef CONVERT_H
 #define CONVERT_H
 
-
+#include "unicode/utypes.h"
+#include "unicode/uobject.h"
 #include "unicode/unistr.h"
 #include "unicode/ucnv.h"
 
@@ -36,8 +37,7 @@ U_NAMESPACE_BEGIN
  * @see UConverter
  * @deprecated To be removed after 2002-sep-30; use the C API with UConverter and ucnv_... functions.
  */
-class U_COMMON_API UnicodeConverter
-{
+class U_COMMON_API UnicodeConverter : public UObject {
  private:
   /*Internal Data representation of the Converter*/
   UConverter* myUnicodeConverter;

@@ -125,8 +125,7 @@ struct IndicClassTable
     static const IndicClassTable *getScriptClassTable(le_int32 scriptCode);
 };
 
-class IndicReordering
-{
+class IndicReordering : public UObject {
 public:
     static le_int32 getWorstCaseExpansion(le_int32 scriptCode);
 

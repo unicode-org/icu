@@ -24,6 +24,7 @@
 
 
 #include "unicode/utypes.h"
+#include "unicode/uobject.h"
 #include "unicode/unistr.h"
 #include "unicode/coll.h"
 
@@ -84,7 +85,7 @@ class RuleBasedCollator;
  * @version      1.3 12/18/96
  * @author       Helena Shih
  */
-class U_I18N_API CollationKey {
+class U_I18N_API CollationKey : public UObject {
 public:
     /**
     * This creates an empty collation key based on the null string.  An empty

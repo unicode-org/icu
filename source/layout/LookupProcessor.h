@@ -19,8 +19,7 @@
 
 U_NAMESPACE_BEGIN
 
-class LookupProcessor
-{
+class LookupProcessor : public UObject {
 public:
     static const LETag notSelected;
     static const LETag defaultFeature;

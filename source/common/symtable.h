@@ -10,6 +10,9 @@
 #ifndef SYMTABLE_H
 #define SYMTABLE_H
 
+#include "unicode/utypes.h"
+#include "unicode/uobject.h"
+
 U_NAMESPACE_BEGIN
 
 class ParsePosition;
@@ -28,7 +31,7 @@ class UnicodeString;
  * <p>Currently, RuleBasedTransliterator and UnicodeSet use this
  * interface to share variable definitions.
  */
-class SymbolTable {
+class SymbolTable : public UObject {
 public:
 
     /**

@@ -4,12 +4,14 @@
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * $Source: /xsrl/Nsvn/icu/icu/source/common/unicode/usetiter.h,v $ 
-* $Revision: 1.1 $
+* $Revision: 1.2 $
 **********************************************************************
 */
 #ifndef USETITER_H
 #define USETITER_H
 
+#include "unicode/utypes.h"
+#include "unicode/uobject.h"
 #include "unicode/unistr.h"
 
 U_NAMESPACE_BEGIN
@@ -49,7 +51,7 @@ class UnicodeString;
  * @author M. Davis
  * @draft
  */
-class U_COMMON_API UnicodeSetIterator {
+class U_COMMON_API UnicodeSetIterator : public UObject {
 
  protected:
 	

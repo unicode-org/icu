@@ -17,6 +17,7 @@
 
 
 #include "unicode/utypes.h"
+#include "unicode/uobject.h"
 #include "unicode/unistr.h"
 
 U_NAMESPACE_BEGIN
@@ -37,7 +38,7 @@ U_NAMESPACE_BEGIN
  * currently must explicitly check for type, but that seems like overkill at
  * this point.
  */
-class U_I18N_API Formattable {
+class U_I18N_API Formattable : public UObject {
 public:
     /**
      * This enum is only used to let callers distinguish between

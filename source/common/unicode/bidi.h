@@ -18,6 +18,7 @@
 #define BIDI_H
 
 #include "unicode/utypes.h"
+#include "unicode/uobject.h"
 #include "unicode/ubidi.h"
 
 #ifndef XP_CPLUSPLUS
@@ -40,7 +41,7 @@ U_NAMESPACE_BEGIN
  * @see UBiDi
  * @deprecated To be removed after 2002-sep-30; use the C API with UBiDi and ubidi_... functions.
  */
-class U_COMMON_API BiDi {
+class U_COMMON_API BiDi : public UObject {
 public:
     /** @memo Default constructor, calls ubidi_open(). 
      * @deprecated

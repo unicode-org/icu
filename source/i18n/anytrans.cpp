@@ -4,18 +4,21 @@
 * and others.  All Rights Reserved.
 *****************************************************************
 * $Source: /xsrl/Nsvn/icu/icu/source/i18n/anytrans.cpp,v $ 
-* $Revision: 1.5 $
+* $Revision: 1.6 $
 *****************************************************************
 * Date        Name        Description
 * 06/06/2002  aliu        Creation.
 *****************************************************************
 */
+
+#include "unicode/utypes.h"
+#include "unicode/uobject.h"
+#include "unicode/nultrans.h"
+#include "unicode/uscript.h"
 #include "anytrans.h"
 #include "uvector.h"
 #include "tridpars.h"
 #include "hash.h"
-#include "unicode/nultrans.h"
-#include "unicode/uscript.h"
 
 //------------------------------------------------------------
 // Constants
@@ -57,7 +60,7 @@ U_NAMESPACE_BEGIN
  * transliterator can consider common characters both before and after
  * the scripts.
  */
-class ScriptRunIterator {
+class ScriptRunIterator : public UObject {
 private:
     const Replaceable& text;
     int32_t textStart;

@@ -13,8 +13,7 @@
 
 U_NAMESPACE_BEGIN
 
-class SubtableProcessor
-{
+class SubtableProcessor : public UObject {
 public:
     virtual void process(LEGlyphID *glyphs, le_int32 *charIndices, le_int32 glyph) = 0;
     virtual ~SubtableProcessor();

@@ -61,8 +61,7 @@ class LEGlyphFilter;
  * @see LEFontInstance
  * @see ScriptAndLanguageTags.h
  */
-class U_LAYOUT_API LayoutEngine
-{
+class U_LAYOUT_API LayoutEngine : public UObject {
 protected:
     /**
      * The number of glyphs in the output

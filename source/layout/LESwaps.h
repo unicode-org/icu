@@ -29,8 +29,7 @@ U_NAMESPACE_BEGIN
  * All methods are static and inline in an attempt to induce the compiler
  * to do most of the calculations at compile time.
  */
-class LESwaps
-{
+class LESwaps /* not : public UObject because all methods are static */ {
 public:
 
     /**
@@ -74,6 +73,9 @@ public:
     {
         return swapWord((le_uint16) (value >> 16)) | (swapWord((le_uint16) value) << 16);
     };
+
+private:
+    LESwaps() {} // private - forbid instantiation
 };
 
 U_NAMESPACE_END

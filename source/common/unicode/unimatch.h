@@ -53,7 +53,7 @@ enum UMatchDegree {
  * <code>UnicodeMatcher</code> defines a protocol for objects that can
  * match a range of characters in a Replaceable string.
  */
-class U_COMMON_API UnicodeMatcher {
+class U_COMMON_API UnicodeMatcher /* not : public UObject because this is an interface/mixin class */ {
 
 public:
 

@@ -8,6 +8,7 @@
 #define _UPROPSET_H_
 
 #include "unicode/utypes.h"
+#include "unicode/uobject.h"
 #include "unicode/uscript.h"
 
 U_NAMESPACE_BEGIN
@@ -58,7 +59,7 @@ class Hashtable;
  * @author Alan Liu
  * @internal
  */
-class UnicodePropertySet {
+class UnicodePropertySet : public UObject {
 
  public:
 

@@ -27,6 +27,8 @@
 #ifndef COLEITR_H
 #define COLEITR_H
 
+#include "unicode/utypes.h"
+#include "unicode/uobject.h"
 #include "unicode/tblcoll.h"
 #include "unicode/ucoleitr.h"
 
@@ -108,8 +110,7 @@ U_NAMESPACE_BEGIN
 * @see     RuleBasedCollator
 * @version 1.8 Jan 16 2001
 */
-class U_I18N_API CollationElementIterator
-{
+class U_I18N_API CollationElementIterator : public UObject {
 public: 
 
   // CollationElementIterator public data member ------------------------------

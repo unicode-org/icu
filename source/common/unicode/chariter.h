@@ -11,6 +11,7 @@
 #define CHARITER_H
 
 #include "unicode/utypes.h"
+#include "unicode/uobject.h"
 #include "unicode/unistr.h"
 
 U_NAMESPACE_BEGIN
@@ -81,7 +82,7 @@ U_NAMESPACE_BEGIN
  *
  * @stable
  */
-class U_COMMON_API ForwardCharacterIterator {
+class U_COMMON_API ForwardCharacterIterator : public UObject {
 public:
   /**
    * Value returned by most of ForwardCharacterIterator's functions

@@ -7,6 +7,16 @@
 *   11/17/99    aliu        Creation.
 **********************************************************************
 */
+
+#include "unicode/utypes.h"
+#include "unicode/uobject.h"
+#include "unicode/parseerr.h"
+#include "unicode/parsepos.h"
+#include "unicode/putil.h"
+#include "unicode/rbt.h"
+#include "unicode/uchar.h"
+#include "unicode/ustring.h"
+#include "unicode/uniset.h"
 #include "cstring.h"
 #include "funcrepl.h"
 #include "hash.h"
@@ -19,13 +29,6 @@
 #include "symtable.h"
 #include "tridpars.h"
 #include "uvector.h"
-#include "unicode/parseerr.h"
-#include "unicode/parsepos.h"
-#include "unicode/putil.h"
-#include "unicode/rbt.h"
-#include "unicode/uchar.h"
-#include "unicode/ustring.h"
-#include "unicode/uniset.h"
 #include "util.h"
 
 // Operators
@@ -212,7 +215,7 @@ UBool ParseData::isReplacer(UChar32 ch) {
  * parse half of a rule.  It is tightly coupled to the method
  * RuleBasedTransliterator.Parser.parseRule().
  */
-class RuleHalf {
+class RuleHalf : public UObject {
 
 public:
 

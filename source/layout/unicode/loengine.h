@@ -9,6 +9,7 @@
 #define __LOENGINE_H
 
 #include "unicode/utypes.h"
+#include "unicode/uobject.h"
 #include "unicode/uscript.h"
 #include "unicode/unistr.h"
 
@@ -45,8 +46,7 @@ U_NAMESPACE_BEGIN
  * @see LayoutEngine.h
  * @see LEFontInstance.h
  */
-class U_LAYOUT_API ICULayoutEngine
-{
+class U_LAYOUT_API ICULayoutEngine : public UObject {
 private:
     /**
      * This holds the instance of LayoutEngine that does all

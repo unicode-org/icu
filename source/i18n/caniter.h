@@ -8,6 +8,8 @@
 #ifndef CANITER_H
 #define CANITER_H
 
+#include "unicode/utypes.h"
+#include "unicode/uobject.h"
 #include "unicode/unistr.h"
 #include "unicode/uniset.h"
 #include "unicode/normlzr.h"
@@ -52,7 +54,7 @@ Results for: {LATIN CAPITAL LETTER A WITH RING ABOVE}{LATIN SMALL LETTER D}{COMB
  *@author M. Davis
  *@draft
  */
-class U_I18N_API CanonicalIterator {
+class U_I18N_API CanonicalIterator : public UObject {
 public:
     /**
      *@param source string to get results for

@@ -19,8 +19,9 @@
 //----------------------------------------------------------------------------
 #ifndef MUTEX_H
 #define MUTEX_H
-#include "unicode/utypes.h"
 
+#include "unicode/utypes.h"
+#include "unicode/uobject.h"
 #include "umutex.h"
 
 U_NAMESPACE_BEGIN
@@ -55,8 +56,7 @@ U_NAMESPACE_BEGIN
 //        compiler!!
 //
 
-class U_COMMON_API Mutex
-{
+class U_COMMON_API Mutex : public UObject {
 public:
   inline Mutex(UMTX *mutex = NULL);
   inline ~Mutex();

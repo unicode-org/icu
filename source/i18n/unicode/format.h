@@ -22,6 +22,7 @@
 
 
 #include "unicode/utypes.h"
+#include "unicode/uobject.h"
 #include "unicode/unistr.h"
 #include "unicode/fmtable.h"
 #include "unicode/fieldpos.h"
@@ -83,7 +84,7 @@ U_NAMESPACE_BEGIN
  * \endcode
  * </pre>
  */
-class U_I18N_API Format {
+class U_I18N_API Format : public UObject {
 public:
 
     virtual ~Format();

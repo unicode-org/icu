@@ -11,6 +11,8 @@
 #ifndef RBBISCAN_H
 #define RBBISCAN_H
 
+#include "unicode/utypes.h"
+#include "unicode/uobject.h"
 #include "unicode/rbbi.h"
 #include "unicode/uniset.h"
 #include "unicode/parseerr.h"
@@ -48,7 +50,7 @@ enum EParseAction {dummy01, dummy02};               // Placeholder enum for the 
                                                     //   actions that are specified in the
                                                     //   rule parsing state table.
 
-class RBBIRuleScanner {
+class RBBIRuleScanner : public UObject {
 public:
 
     struct RBBIRuleChar {

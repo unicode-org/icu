@@ -10,6 +10,7 @@
 #define UNIFLTLG_H
 
 #include "unicode/utypes.h"
+#include "unicode/uobject.h"
 
 U_NAMESPACE_BEGIN
 
@@ -29,7 +30,7 @@ class UnicodeFilter;
  * Unicode characters.  Likewise, createAnd(g, NULL) returns g->clone(),
  * and createAnd(NULL, NULL) returns NULL.
  */
-class U_I18N_API UnicodeFilterLogic {
+class U_I18N_API UnicodeFilterLogic : public UObject {
 
 public:
 

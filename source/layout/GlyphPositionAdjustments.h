@@ -13,8 +13,7 @@
 
 U_NAMESPACE_BEGIN
 
-class GlyphPositionAdjustment
-{
+class GlyphPositionAdjustment : public UObject {
 public:
 
     GlyphPositionAdjustment();

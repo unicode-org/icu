@@ -23,6 +23,8 @@
 #ifndef CALENDAR_H
 #define CALENDAR_H
 
+#include "unicode/utypes.h"
+#include "unicode/uobject.h"
 #include "unicode/locid.h"
 #include "unicode/timezone.h"
 
@@ -139,7 +141,7 @@ U_NAMESPACE_BEGIN
  *
  * @stable
  */
-class U_I18N_API Calendar {
+class U_I18N_API Calendar : public UObject {
 public:
 
     /**
