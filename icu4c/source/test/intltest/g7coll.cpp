@@ -128,7 +128,7 @@ void G7CollationTest::TestG7Locales(/* char* par */)
         RuleBasedCollator* tblColl1 = 0;
 
         myCollation = Collator::createInstance(locales[i], status);
-        myCollation->setStrength(Collator::ECollationStrength::QUATERNARY);
+        myCollation->setStrength(Collator::QUATERNARY);
         myCollation->setAttribute(UCOL_ALTERNATE_HANDLING, UCOL_SHIFTED, status);
         if (U_FAILURE(status))
         {
