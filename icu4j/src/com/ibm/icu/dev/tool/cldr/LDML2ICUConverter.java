@@ -211,7 +211,7 @@ public class LDML2ICUConverter {
                  *      //throw the exceptionaway .. this is for debugging 
                  * }
                  */ 
-                printInfo("Resolving: " + sourceDir+File.separator+ args[i]);
+                printInfo("Resolving: " + sourceDir+"/"+ args[i]);
                 fullyResolvedDoc =  LDMLUtilities.getFullyResolvedLDML(sourceDir, args[i], false, false, false);
                 locName = args[i];
                 int index = locName.indexOf(".xml");
@@ -269,9 +269,9 @@ public class LDML2ICUConverter {
                 }
             }
             if (destDir != null && fName != null) {
-                str = destDir + File.separator + fName.trim();                   
+                str = destDir + "/" + fName.trim();                   
             } else {
-                str = System.getProperty("user.dir") + File.separator + fName.trim();
+                str = System.getProperty("user.dir") + "/" + fName.trim();
             }
         } else {
             if(lastIndex2 == -1){
@@ -282,11 +282,11 @@ public class LDML2ICUConverter {
                 }
             }
             if(sourceDir != null && fName != null) {
-                str = sourceDir + File.separator + fName;
+                str = sourceDir + "/" + fName;
             } else if (lastIndex1 > 0) {
                 str = fName;
             } else {
-                str = System.getProperty("user.dir") + File.separator + fName;
+                str = System.getProperty("user.dir") + "/" + fName;
             }
         }
         return str;
@@ -379,7 +379,7 @@ public class LDML2ICUConverter {
         StringBuffer xpath = new StringBuffer();
         xpath.append("//");
         xpath.append(LDMLConstants.SUPPLEMENTAL_DATA);
-        String file = sourceDir+File.separator+locName+".xml";
+        String file = sourceDir+"/"+locName+".xml";
         int savedLength = xpath.length();
         for(Node node=root.getFirstChild(); node!=null; node=node.getNextSibling()){
             if(node.getNodeType()!=Node.ELEMENT_NODE){
@@ -626,7 +626,7 @@ public class LDML2ICUConverter {
     		String name = ldml.getNodeName();
             if(name.equals(LDMLConstants.LDML) ){
                 if(LDMLUtilities.isNodeDraft(ldml) && writeDraft==false){
-                    System.err.println("WARNING: The LDML file "+sourceDir+File.separator+locName+".xml is marked draft! Not producing ICU file. ");
+                    System.err.println("WARNING: The LDML file "+sourceDir+"/"+locName+".xml is marked draft! Not producing ICU file. ");
                     System.exit(-1);
                 }
                 break;
@@ -708,13 +708,13 @@ public class LDML2ICUConverter {
         // now fetch the specials and append to the real bundle
         if(specialsDir!=null && ULocale.getCountry(locName).equals("")){
             if(specialsDoc == null) {
-               printWarning(specialsDir + File.separator + locName + ".xml","Writing ICU res bundle without specials, missing ");
+               printWarning(specialsDir + "/" + locName + ".xml","Writing ICU res bundle without specials, missing ");
             } else {
                 if(table.comment == null) {
                     table.comment = "";
                 }
                 ICUResourceWriter.Resource res = parseSpecialsDocucment(specialsDoc);
-                table.comment = table.comment + " ICU <specials> source: " + specialsDir + File.separator + locName + ".xml";
+                table.comment = table.comment + " ICU <specials> source: " + specialsDir + "/"+ locName + ".xml";
                 if(res!=null){
                     if(current == null){
                         table.first = res;
@@ -3355,7 +3355,7 @@ public class LDML2ICUConverter {
             String name = ldml.getNodeName();
             if(name.equals(LDMLConstants.LDML) ){
                 if(LDMLUtilities.isNodeDraft(ldml) && writeDraft==false){
-                    System.err.println("WARNING: The LDML file "+sourceDir+File.separator+locName+".xml is marked draft! Not producing ICU file. ");
+                    System.err.println("WARNING: The LDML file "+sourceDir+"/"+locName+".xml is marked draft! Not producing ICU file. ");
                     System.exit(-1);
                 }
                 break;
@@ -3411,7 +3411,7 @@ public class LDML2ICUConverter {
     private void writeResource(ICUResourceWriter.Resource set, String sourceFileName){
         try {
             String outputFileName = null;
-            outputFileName = destDir+File.separator+set.name+".txt";
+            outputFileName = destDir+"/"+set.name+".txt";
             
             FileOutputStream file = new FileOutputStream(outputFileName);
             BufferedOutputStream writer = new BufferedOutputStream(file);
@@ -3488,7 +3488,7 @@ public class LDML2ICUConverter {
     
     private void writeDeprecated(){
         // TODO: separate out reading this file to another item.. need to force -f option.
-        File f = new File(specialsDir + File.separator + "..", DEPRECATED_LIST);
+        File f = new File(specialsDir + "/" + "..", DEPRECATED_LIST);
         String myTreeName = null;
         File depF = null;
         if(writeDeprecated==true) {
@@ -3753,7 +3753,7 @@ public class LDML2ICUConverter {
             
         } else { // no xpath - simple locale-level alias.
             
-            String outputFileName = destDir + File.separator + fileName;
+            String outputFileName = destDir + "/" + fileName;
             ICUResourceWriter.Resource set = null;
             try {
                 ICUResourceWriter.ResourceTable table = new ICUResourceWriter.ResourceTable();
@@ -3817,7 +3817,7 @@ public class LDML2ICUConverter {
             System.exit(-1);
         }
         
-        String resfiles_mk_name = destDir + File.separator +  shortstub+"files.mk";
+        String resfiles_mk_name = destDir + "/" +  shortstub+"files.mk";
         try {
             printInfo("Writing ICU build file: " + resfiles_mk_name);
             PrintStream resfiles_mk = new PrintStream(new  FileOutputStream(resfiles_mk_name) ); 
