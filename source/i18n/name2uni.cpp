@@ -54,7 +54,6 @@ NameUnicodeTransliterator::NameUnicodeTransliterator(UnicodeFilter* adoptedFilte
     Transliterator(UNICODE_STRING("Name-Any", 8), adoptedFilter) {
 
     // Get the legal character set
-    UnicodeSet legal;
     USetAdder sa = {
         (USet *)&legal, // USet* == UnicodeSet*
         _set_add,
@@ -62,7 +61,6 @@ NameUnicodeTransliterator::NameUnicodeTransliterator(UnicodeFilter* adoptedFilte
         _set_addString
     };
     uprv_getCharNameCharacters(&sa);
-    
 }
 
 /**
