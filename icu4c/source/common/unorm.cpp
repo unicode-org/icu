@@ -1101,12 +1101,10 @@ unorm_isNFSkippable(UChar32 c, UNormalizationMode mode) {
 }
 
 U_CAPI void U_EXPORT2
-unorm_addPropertyStarts(USet *set) {
-    UErrorCode errorCode;
+unorm_addPropertyStarts(USet *set, UErrorCode *pErrorCode) {
     UChar c;
 
-    errorCode=U_ZERO_ERROR;
-    if(!_haveData(errorCode)) {
+    if(!_haveData(*pErrorCode)) {
         return;
     }
 

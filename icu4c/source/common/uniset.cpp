@@ -2603,9 +2603,8 @@ void UnicodeSet::applyFilter(UnicodeSet::Filter filter,
     // those properties.  Scanning code points is slow.
     if (U_FAILURE(status)) return;
 
-    const UnicodeSet* inclusions = getInclusions();
-    if (inclusions == NULL) {
-        status = U_INTERNAL_PROGRAM_ERROR;
+    const UnicodeSet* inclusions = getInclusions(status);
+    if (U_FAILURE(status)) {
         return;
     }
 
@@ -2926,10 +2925,18 @@ UnicodeSet& UnicodeSet::applyPropertyPattern(const UnicodeString& pattern,
 // Inclusions list
 //----------------------------------------------------------------
 
-const UnicodeSet* UnicodeSet::getInclusions() {
+const UnicodeSet* UnicodeSet::getInclusions(UErrorCode &errorCode) {
     if (INCLUSIONS == NULL) {
         UnicodeSet *incl = new UnicodeSet();
-        uprv_getInclusions((USet *)incl);
+        if(incl == NULL) {
+            errorCode = U_MEMORY_ALLOCATION_ERROR;
+            return NULL;
+        }
+        uprv_getInclusions((USet *)incl, &errorCode);
+        if(U_FAILURE(errorCode)) {
+            delete incl;
+            return NULL;
+        }
         umtx_lock(NULL);
         if (INCLUSIONS == NULL) {
             INCLUSIONS = incl;
