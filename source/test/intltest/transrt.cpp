@@ -1021,6 +1021,8 @@ void TransliteratorRoundTripTest::TestHangul() {
 }
 
 void TransliteratorRoundTripTest::TestGreek() {
+    // weiv removed the test and the fiter
+    /*
     if (isICUVersionAtLeast(ICU_30)) {
         // We temporarily filter against Unicode 3.2, but we only do this
         // before version 3.0.
@@ -1029,17 +1031,21 @@ void TransliteratorRoundTripTest::TestGreek() {
     } else {
         logln("Warning: TestGreek needs to be updated to remove Unicode 3.2 filter");
     }
+    */
     RTTest test("Latin-Greek");
     LegalGreek *legal = new LegalGreek(TRUE);
 
     test.test(UnicodeString("[a-zA-Z]", ""), 
-        // weiv removed code points from test in order to quiet it. 
-        // alan should verify and give the proper resolution
-              UnicodeString("[[\\u003B\\u00B7[:Greek:]-[\\u0374\\u0385\\u1fcd\\u1fce\\u1fdd\\u1fde\\u1fed-\\u1fef\\u1ffd\\u03D7-\\u03EF]]&[:Age=3.2:]]", 
-              //UnicodeString("[[\\u003B\\u00B7[:Greek:]-[\\u03D7-\\u03EF]]&[:Age=3.2:]]", 
+        UnicodeString("[\\u003B\\u00B7[[:Greek:]&[:Letter:]]-["
+            "\\u1D26-\\u1D2A" // L&   [5] GREEK LETTER SMALL CAPITAL GAMMA..GREEK LETTER SMALL CAPITAL PSI
+            "\\u1D5D-\\u1D61" // Lm   [5] MODIFIER LETTER SMALL BETA..MODIFIER LETTER SMALL CHI
+            "\\u1D66-\\u1D6A" // L&   [5] GREEK SUBSCRIPT SMALL LETTER BETA..GREEK SUBSCRIPT SMALL LETTER CHI
+            "\\u03D7-\\u03EF" // \N{GREEK KAI SYMBOL}..\N{COPTIC SMALL LETTER DEI}
+            "]]",
+
+              //UnicodeString("[[\\u003B\\u00B7[:Greek:]-[\\u0374\\u0385\\u1fcd\\u1fce\\u1fdd\\u1fde\\u1fed-\\u1fef\\u1ffd\\u03D7-\\u03EF]]&[:Age=3.2:]]", 
                             ""),
-              "[\\u00B5\\u037A\\u03D0-\\u03F5\\u1fcf\\u1fdf]", /* exclusions */
-              //"[\\u00B5\\u037A\\u03D0-\\u03F5]", /* exclusions */
+              "[\\u00B5\\u037A\\u03D0-\\u03F5\\u03f9]", /* exclusions */
               this, quick, legal, 50);
 
 
@@ -1048,9 +1054,8 @@ void TransliteratorRoundTripTest::TestGreek() {
 
 
 void TransliteratorRoundTripTest::TestGreekUNGEGN() {
-    // TODO: couldn't fix this test the same way I fixed TestGreek.
-    // needs Alan/Mark
-    return;
+    // weiv removed the test and the fiter
+    /*
     if (isICUVersionAtLeast(ICU_30)) {
         // We temporarily filter against Unicode 3.2, but we only do this
         // before version 3.0.
@@ -1059,14 +1064,18 @@ void TransliteratorRoundTripTest::TestGreekUNGEGN() {
     } else {
         logln("Warning: TestGreekUNGEGN needs to be updated to remove Unicode 3.2 filter");
     }
+    */
     RTTest test("Latin-Greek/UNGEGN");
     LegalGreek *legal = new LegalGreek(FALSE);
 
     test.test(UnicodeString("[a-zA-Z]", ""), 
-        // weiv removed code points from test in order to quiet it. 
-        // alan should verify and give the proper resolution
-              UnicodeString("[[\\u003B\\u00B7[:Greek:]-[\\u0374\\u0385\\u1fce\\u1fde\\u03D7-\\u03EF]]&[:Age=3.2:]]", 
-              //UnicodeString("[[\\u003B\\u00B7[:Greek:]-[\\u03D7-\\u03EF]]&[:Age=3.2:]]", 
+        UnicodeString("[\\u003B\\u00B7[[:Greek:]&[:Letter:]]-["
+            "\\u1D26-\\u1D2A" // L&   [5] GREEK LETTER SMALL CAPITAL GAMMA..GREEK LETTER SMALL CAPITAL PSI
+            "\\u1D5D-\\u1D61" // Lm   [5] MODIFIER LETTER SMALL BETA..MODIFIER LETTER SMALL CHI
+            "\\u1D66-\\u1D6A" // L&   [5] GREEK SUBSCRIPT SMALL LETTER BETA..GREEK SUBSCRIPT SMALL LETTER CHI
+            "\\u03D7-\\u03EF" // \N{GREEK KAI SYMBOL}..\N{COPTIC SMALL LETTER DEI}
+            "]]",
+              //UnicodeString("[[\\u003B\\u00B7[:Greek:]-[\\u0374\\u0385\\u1fce\\u1fde\\u03D7-\\u03EF]]&[:Age=3.2:]]", 
                             ""), 
               "[\\u0385\\u00B5\\u037A\\u03D0-\\uFFFF {\\u039C\\u03C0}]", /* roundtrip exclusions */
               this, quick, legal);
@@ -1075,9 +1084,8 @@ void TransliteratorRoundTripTest::TestGreekUNGEGN() {
 }
 
 void TransliteratorRoundTripTest::Testel() {
-    // TODO: couldn't fix this test the same way I fixed TestGreek.
-    // needs Alan/Mark
-    return;
+    // weiv removed the test and the fiter
+    /*
     if (isICUVersionAtLeast(ICU_30)) {
         // We temporarily filter against Unicode 3.2, but we only do this
         // before version 3.0.
@@ -1086,11 +1094,18 @@ void TransliteratorRoundTripTest::Testel() {
     } else {
         logln("Warning: Testel needs to be updated to remove Unicode 3.2 filter");
     }
+    */
     RTTest test("Latin-el");
     LegalGreek *legal = new LegalGreek(FALSE);
 
     test.test(UnicodeString("[a-zA-Z]", ""), 
-              UnicodeString("[[\\u003B\\u00B7[:Greek:]-[\\u0374\\u0385\\u1fce\\u1fde\\u03D7-\\u03EF]]&[:Age=3.2:]]", 
+        UnicodeString("[\\u003B\\u00B7[[:Greek:]&[:Letter:]]-["
+            "\\u1D26-\\u1D2A" // L&   [5] GREEK LETTER SMALL CAPITAL GAMMA..GREEK LETTER SMALL CAPITAL PSI
+            "\\u1D5D-\\u1D61" // Lm   [5] MODIFIER LETTER SMALL BETA..MODIFIER LETTER SMALL CHI
+            "\\u1D66-\\u1D6A" // L&   [5] GREEK SUBSCRIPT SMALL LETTER BETA..GREEK SUBSCRIPT SMALL LETTER CHI
+            "\\u03D7-\\u03EF" // \N{GREEK KAI SYMBOL}..\N{COPTIC SMALL LETTER DEI}
+            "]]",
+              //UnicodeString("[[\\u003B\\u00B7[:Greek:]-[\\u0374\\u0385\\u1fce\\u1fde\\u03D7-\\u03EF]]&[:Age=3.2:]]", 
                             ""), 
               "[\\u00B5\\u037A\\u03D0-\\uFFFF {\\u039C\\u03C0}]", /* exclusions */
               this, quick, legal);
