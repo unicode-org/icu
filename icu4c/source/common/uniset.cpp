@@ -69,10 +69,30 @@ static const char NAME_PROP[] = "na"; // Unicode name property alias
 // TODO: Remove the following special-case code when
 // these four C99-compatibility properties are implemented
 // as enums/names.
-static const char BLANK[] = "blank";
-static const char GRAPH[] = "graph";
-static const char PUNCT[] = "punct";
-static const char XDIGIT[] = "xdigit";
+extern "C" typedef UBool (*_C99_Property_Function)(UChar32);
+struct _C99_Map {
+    const char* name;
+    _C99_Property_Function func;
+} _C99_DISPATCH[] = {
+    // These three entries omitted; they clash with PropertyAliases
+    // names for Unicode properties, so UnicodeSet already maps them
+    // to those properties.
+    //{ "alpha", u_isalpha },
+    //{ "lower", u_islower },
+    //{ "upper", u_isupper },
+
+    // MUST be in SORTED order
+    { "blank", u_isblank },
+    { "cntrl", u_iscntrl },
+    { "digit", u_isdigit },
+    { "graph", u_isgraph },
+    { "print", u_isprint },
+    { "punct", u_ispunct },
+    { "space", u_isspace },
+    { "title", u_istitle },
+    { "xdigit", u_isxdigit }
+};
+#define _C99_COUNT (9)
 
 // TEMPORARY: Remove when deprecated category code constructor is removed.
 static const UChar CATEGORY_NAMES[] = {
@@ -2671,17 +2691,9 @@ static UBool mungeCharName(char* dst, const char* src, int32_t dstCapacity) {
 // TODO: Remove the following special-case code when
 // these four C99-compatibility properties are implemented
 // as enums/names.
-static UBool blankFilter(UChar32 ch, void* context) {
-    return u_isblank(ch);
-}
-static UBool graphFilter(UChar32 ch, void* context) {
-    return u_isgraph(ch);
-}
-static UBool punctFilter(UChar32 ch, void* context) {
-    return u_ispunct(ch);
-}
-static UBool xdigitFilter(UChar32 ch, void* context) {
-    return u_isxdigit(ch);
+static UBool c99Filter(UChar32 ch, void* context) {
+    struct _C99_Map* m = (struct _C99_Map*) context;
+    return m->func(ch);
 }
 
 UnicodeSet&
@@ -2812,24 +2824,22 @@ UnicodeSet::applyPropertyAlias(const UnicodeString& prop,
                 } else if (0 == uprv_comparePropertyNames(ASCII, pname)) {
                     set(0, 0x7F);
                     return *this;
-
-                // TODO: Remove the following special-case code when
-                // these four C99-compatibility properties are implemented
-                // as enums/names.
-                } else if (0 == uprv_comparePropertyNames(BLANK, pname)) {
-                    applyFilter(blankFilter, NULL, ec);
-                    return *this;
-                } else if (0 == uprv_comparePropertyNames(GRAPH, pname)) {
-                    applyFilter(graphFilter, NULL, ec);
-                    return *this;
-                } else if (0 == uprv_comparePropertyNames(PUNCT, pname)) {
-                    applyFilter(punctFilter, NULL, ec);
-                    return *this;
-                } else if (0 == uprv_comparePropertyNames(XDIGIT, pname)) {
-                    applyFilter(xdigitFilter, NULL, ec);
-                    return *this;
-
                 } else {
+
+                    // TODO: Remove the following special-case code when
+                    // these four C99-compatibility properties are implemented
+                    // as enums/names.
+                    for (int32_t i=0; i<_C99_COUNT; ++i) {
+                        int32_t c = uprv_comparePropertyNames(pname, _C99_DISPATCH[i].name);
+                        if (c == 0) {
+                            applyFilter(c99Filter, (void*) &_C99_DISPATCH[i], ec);
+                            return *this;
+                        } else if (c < 0) {
+                            // Further entries will not match; bail out
+                            break;
+                        }
+                    }
+
                     FAIL(ec);
                 }
             }
