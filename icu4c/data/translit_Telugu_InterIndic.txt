@@ -6,7 +6,7 @@
 // THIS IS A MACHINE-GENERATED FILE
 // Tool: dumpICUrules.bat
 // Source: ../../text/resources/Transliterator_Telugu_InterIndic.txt
-// Date: Sat Nov 10 17:25:42 2001
+// Date: Tue Nov 13 00:51:08 2001
 //--------------------------------------------------------------------
 
 // Telugu_InterIndic
@@ -31,86 +31,86 @@ translit_Telugu_InterIndic {
 //--------------------------------------------------------------------
 // Telugu-InterIndic
 //:: NFD (NFC) ;
-"\u0c01>\ue001;" // SIGN CANDRABINDU
-"\u0c02>\ue002;" // SIGN ANUSVARA
-"\u0c03>\ue003;" // SIGN VISARGA
-"\u0c05>\ue005;" // LETTER A
-"\u0c06>\ue006;" // LETTER AA
-"\u0c07>\ue007;" // LETTER I
-"\u0c08>\ue008;" // LETTER II
-"\u0c09>\ue009;" // LETTER U
-"\u0c0a>\ue00a;" // LETTER UU
-"\u0c0b>\ue00b;" // LETTER VOCALIC R
-"\u0c0c>\ue00c;" // LETTER VOCALIC L
-"\u0c0e>\ue00e;" // LETTER E
-"\u0c0f>\ue00f;" // LETTER EE
-"\u0c10>\ue010;" // LETTER AI
-"\u0c12>\ue012;" // LETTER O
-"\u0c13>\ue013;" // LETTER OO
-"\u0c14>\ue014;" // LETTER AU
-"\u0c15>\ue015;" // LETTER KA
-"\u0c16>\ue016;" // LETTER KHA
-"\u0c17>\ue017;" // LETTER GA
-"\u0c18>\ue018;" // LETTER GHA
-"\u0c19>\ue019;" // LETTER NGA
-"\u0c1a>\ue01a;" // LETTER CA
-"\u0c1b>\ue01b;" // LETTER CHA
-"\u0c1c>\ue01c;" // LETTER JA
-"\u0c1d>\ue01d;" // LETTER JHA
-"\u0c1e>\ue01e;" // LETTER NYA
-"\u0c1f>\ue01f;" // LETTER TTA
-"\u0c20>\ue020;" // LETTER TTHA
-"\u0c21>\ue021;" // LETTER DDA
-"\u0c22>\ue022;" // LETTER DDHA
-"\u0c23>\ue023;" // LETTER NNA
-"\u0c24>\ue024;" // LETTER TA
-"\u0c25>\ue025;" // LETTER THA
-"\u0c26>\ue026;" // LETTER DA
-"\u0c27>\ue027;" // LETTER DHA
-"\u0c28>\ue028;" // LETTER NA
-"\u0c2a>\ue02a;" // LETTER PA
-"\u0c2b>\ue02b;" // LETTER PHA
-"\u0c2c>\ue02c;" // LETTER BA
-"\u0c2d>\ue02d;" // LETTER BHA
-"\u0c2e>\ue02e;" // LETTER MA
-"\u0c2f>\ue02f;" // LETTER YA
-"\u0c30>\ue030;" // LETTER RA
-"\u0c31>\ue031;" // LETTER RRA
-"\u0c32>\ue032;" // LETTER LA
-"\u0c33>\ue033;" // LETTER LLA
-"\u0c35>\ue035;" // LETTER VA
-"\u0c36>\ue036;" // LETTER SHA
-"\u0c37>\ue037;" // LETTER SSA
-"\u0c38>\ue038;" // LETTER SA
-"\u0c39>\ue039;" // LETTER HA
-"\u0c3e>\ue03e;" // VOWEL SIGN AA
-"\u0c3f>\ue03f;" // VOWEL SIGN I
-"\u0c40>\ue040;" // VOWEL SIGN II
-"\u0c41>\ue041;" // VOWEL SIGN U
-"\u0c42>\ue042;" // VOWEL SIGN UU
-"\u0c43>\ue043;" // VOWEL SIGN VOCALIC R
-"\u0c44>\ue044;" // VOWEL SIGN VOCALIC RR
-"\u0c46>\ue046;" // VOWEL SIGN E
-"\u0c47>\ue047;" // VOWEL SIGN EE
-"\u0c48>\ue048;" // VOWEL SIGN AI
-"\u0c4a>\ue04a;" // VOWEL SIGN O
-"\u0c4b>\ue04b;" // VOWEL SIGN OO
-"\u0c4c>\ue04c;" // VOWEL SIGN AU
-"\u0c4d>\ue04d;" // SIGN VIRAMA
-"\u0c55>\ue055;" // LENGTH MARK
-"\u0c56>\ue056;" // AI LENGTH MARK
-"\u0c60>\ue060;" // LETTER VOCALIC RR
-"\u0c61>\ue061;" // LETTER VOCALIC LL
-"\u0c66>\ue066;" // DIGIT ZERO
-"\u0c67>\ue067;" // DIGIT ONE
-"\u0c68>\ue068;" // DIGIT TWO
-"\u0c69>\ue069;" // DIGIT THREE
-"\u0c6a>\ue06a;" // DIGIT FOUR
-"\u0c6b>\ue06b;" // DIGIT FIVE
-"\u0c6c>\ue06c;" // DIGIT SIX
-"\u0c6d>\ue06d;" // DIGIT SEVEN
-"\u0c6e>\ue06e;" // DIGIT EIGHT
-"\u0c6f>\ue06f;" // DIGIT NINE
+"\u0C46\u0C56>\uE048;"// VOWEL SIGN AI
+"\u0C01>\uE001;"      // SIGN CANDRABINDU
+"\u0C02>\uE002;"      // SIGN ANUSVARA
+"\u0C03>\uE003;"      // SIGN VISARGA
+"\u0C05>\uE005;"      // LETTER A
+"\u0C06>\uE006;"      // LETTER AA
+"\u0C07>\uE007;"      // LETTER I
+"\u0C08>\uE008;"      // LETTER II
+"\u0C09>\uE009;"      // LETTER U
+"\u0C0A>\uE00A;"      // LETTER UU
+"\u0C0B>\uE00B;"      // LETTER VOCALIC R
+"\u0C0C>\uE00C;"      // LETTER VOCALIC L
+"\u0C0E>\uE00E;"      // LETTER E
+"\u0C0F>\uE00F;"      // LETTER EE
+"\u0C10>\uE010;"      // LETTER AI
+"\u0C12>\uE012;"      // LETTER O
+"\u0C13>\uE013;"      // LETTER OO
+"\u0C14>\uE014;"      // LETTER AU
+"\u0C15>\uE015;"      // LETTER KA
+"\u0C16>\uE016;"      // LETTER KHA
+"\u0C17>\uE017;"      // LETTER GA
+"\u0C18>\uE018;"      // LETTER GHA
+"\u0C19>\uE019;"      // LETTER NGA
+"\u0C1A>\uE01A;"      // LETTER CA
+"\u0C1B>\uE01B;"      // LETTER CHA
+"\u0C1C>\uE01C;"      // LETTER JA
+"\u0C1D>\uE01D;"      // LETTER JHA
+"\u0C1E>\uE01E;"      // LETTER NYA
+"\u0C1F>\uE01F;"      // LETTER TTA
+"\u0C20>\uE020;"      // LETTER TTHA
+"\u0C21>\uE021;"      // LETTER DDA
+"\u0C22>\uE022;"      // LETTER DDHA
+"\u0C23>\uE023;"      // LETTER NNA
+"\u0C24>\uE024;"      // LETTER TA
+"\u0C25>\uE025;"      // LETTER THA
+"\u0C26>\uE026;"      // LETTER DA
+"\u0C27>\uE027;"      // LETTER DHA
+"\u0C28>\uE028;"      // LETTER NA
+"\u0C2A>\uE02A;"      // LETTER PA
+"\u0C2B>\uE02B;"      // LETTER PHA
+"\u0C2C>\uE02C;"      // LETTER BA
+"\u0C2D>\uE02D;"      // LETTER BHA
+"\u0C2E>\uE02E;"      // LETTER MA
+"\u0C2F>\uE02F;"      // LETTER YA
+"\u0C30>\uE030;"      // LETTER RA
+"\u0C31>\uE031;"      // LETTER RRA
+"\u0C32>\uE032;"      // LETTER LA
+"\u0C33>\uE033;"      // LETTER LLA
+"\u0C35>\uE035;"      // LETTER VA
+"\u0C36>\uE036;"      // LETTER SHA
+"\u0C37>\uE037;"      // LETTER SSA
+"\u0C38>\uE038;"      // LETTER SA
+"\u0C39>\uE039;"      // LETTER HA
+"\u0C3E>\uE03E;"      // VOWEL SIGN AA
+"\u0C3F>\uE03F;"      // VOWEL SIGN I
+"\u0C40>\uE040;"      // VOWEL SIGN II
+"\u0C41>\uE041;"      // VOWEL SIGN U
+"\u0C42>\uE042;"      // VOWEL SIGN UU
+"\u0C43>\uE043;"      // VOWEL SIGN VOCALIC R
+"\u0C44>\uE044;"      // VOWEL SIGN VOCALIC RR
+"\u0C46>\uE046;"      // VOWEL SIGN E
+"\u0C47>\uE047;"      // VOWEL SIGN EE
+"\u0C4A>\uE04A;"      // VOWEL SIGN O
+"\u0C4B>\uE04B;"      // VOWEL SIGN OO
+"\u0C4C>\uE04C;"      // VOWEL SIGN AU
+"\u0C4D>\uE04D;"      // SIGN VIRAMA
+"\u0C55>\uE055;"      // LENGTH MARK
+"\u0C56>\uE056;"      // AI LENGTH MARK
+"\u0C60>\uE060;"      // LETTER VOCALIC RR
+"\u0C61>\uE061;"      // LETTER VOCALIC LL
+"\u0C66>\uE066;"      // DIGIT ZERO
+"\u0C67>\uE067;"      // DIGIT ONE
+"\u0C68>\uE068;"      // DIGIT TWO
+"\u0C69>\uE069;"      // DIGIT THREE
+"\u0C6A>\uE06A;"      // DIGIT FOUR
+"\u0C6B>\uE06B;"      // DIGIT FIVE
+"\u0C6C>\uE06C;"      // DIGIT SIX
+"\u0C6D>\uE06D;"      // DIGIT SEVEN
+"\u0C6E>\uE06E;"      // DIGIT EIGHT
+"\u0C6F>\uE06F;"      // DIGIT NINE
 //    :: NFC (NFD) ;
 // eof
   }

@@ -6,7 +6,7 @@
 // THIS IS A MACHINE-GENERATED FILE
 // Tool: dumpICUrules.bat
 // Source: ../../text/resources/Transliterator_InterIndic_Telugu.txt
-// Date: Sat Nov 10 17:25:41 2001
+// Date: Tue Nov 13 00:51:08 2001
 //--------------------------------------------------------------------
 
 // InterIndic_Telugu
@@ -135,6 +135,13 @@ translit_InterIndic_Telugu {
 "\ue031>\u0c31;" // LETTER RRA
 "\ue046>\u0c46;" // VOWEL SIGN E
 "\ue04a>\u0c4a;" // VOWEL SIGN O
+"\ue072>;"
+"\ue073>;"
+"\ue074>;"
+"0 > \u0966;"       // FALLBACK FOR TAMIL
+"1 > \u0967;"
+"\ue0f0 >  \u0c30;"  // FALLBACK RA 
+"\ue0f1 >  \u0c30;"  // FALLBACK RA
 //    :: NFC (NFD) ;
 // eof
   }

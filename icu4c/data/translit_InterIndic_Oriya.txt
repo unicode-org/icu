@@ -6,7 +6,7 @@
 // THIS IS A MACHINE-GENERATED FILE
 // Tool: dumpICUrules.bat
 // Source: ../../text/resources/Transliterator_InterIndic_Oriya.txt
-// Date: Sat Nov 10 17:25:41 2001
+// Date: Tue Nov 13 00:51:08 2001
 //--------------------------------------------------------------------
 
 // InterIndic_Oriya
@@ -132,8 +132,13 @@ translit_InterIndic_Oriya {
 "\ue06e>\u0b6e;" // DIGIT EIGHT
 "\ue06f>\u0b6f;" // DIGIT NINE
 "\ue070>\u0b70;" // ISSHAR
-
-
+"\ue072>;"
+"\ue073>;"
+"\ue074>;"
+"0 > \u0b66;"       // FALLBACK FOR TAMIL
+"1 > \u0b67;"
+"\ue0f0 >  \u0b30;"  // FALLBACK RA 
+"\ue0f1 >  \u0b30;"  // FALLBACK RA
 //    :: NFC (NFD) ;
 // eof
   }

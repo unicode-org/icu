@@ -6,7 +6,7 @@
 // THIS IS A MACHINE-GENERATED FILE
 // Tool: dumpICUrules.bat
 // Source: ../../text/resources/Transliterator_InterIndic_Tamil.txt
-// Date: Sat Nov 10 17:25:41 2001
+// Date: Tue Nov 13 00:51:08 2001
 //--------------------------------------------------------------------
 
 // InterIndic_Tamil
@@ -109,7 +109,7 @@ translit_InterIndic_Tamil {
 "\ue04d>\u0bcd;" // SIGN VIRAMA
 "\ue050>\u0b93\u0bae\u0bcd;" // REMAP (indicExceptions.txt): \u0bd0>\u0b93\u0bae\u0bcd = OM>LETTER OO.LETTER MA.SIGN VIRAMA
 
-// \ue055>; # UNMAPPED InterIndic-Tamil: LENGTH MARK
+"\ue055>;" // UNMAPPED InterIndic-Tamil: LENGTH MARK
 "\ue056>\u0bc8;" // REMAP (indicExceptions.txt): \u0bd6>\u0bc8 = AI LENGTH MARK>VOWEL SIGN AI
 "\ue057>\u0bd7;" // AU LENGTH MARK
 "\ue058>\u0b95;" // FALLBACK
@@ -125,6 +125,11 @@ translit_InterIndic_Tamil {
 "\ue062>\u0bbf;"// FALLBACK VOWEL SIGN VOCALIC L
 "\ue063>\u0bc0;"// FALLBACK VOWEL SIGN VOCALIC LL
 "\ue066>\u0030;" // FALLBACK DIGIT ZERO
+
+"\ue067\ue066\ue066\ue066>\u0bF2;"
+"\ue067\ue066\ue066>\u0bf1;"
+"\ue067\ue066>\u0bF0;"
+
 "\ue067>\u0be7;" // DIGIT ONE
 "\ue068>\u0be8;" // DIGIT TWO
 "\ue069>\u0be9;" // DIGIT THREE
@@ -134,7 +139,20 @@ translit_InterIndic_Tamil {
 "\ue06d>\u0bed;" // DIGIT SEVEN
 "\ue06e>\u0bee;" // DIGIT EIGHT
 "\ue06f>\u0bef;" // DIGIT NINE
-// \ue080>; # UNMAPPED InterIndic-Tamil: ISSHAR
+
+"1000  >\u0BF2;"         // UNMAPPED Tamil-InterIndic: NUMBER ONE THOUSAND
+"100   >\u0BF1;"         // UNMAPPED Tamil-InterIndic: NUMBER ONE HUNDRED
+"10    >\u0BF0;"         // UNMAPPED Tamil-InterIndic: NUMBER TEN
+
+
+
+"\ue080>;" // UNMAPPED InterIndic-Tamil: ISSHAR
+"\ue072>;"
+"\ue073>;"
+"\ue074>;"
+
+"\ue0f0 >  \u0bb0;"  // FALLBACK RA 
+"\ue0f1 >  \u0bb0;"  // FALLBACK RA
 //    :: NFC (NFD) ;
 // eof
   }
