@@ -160,7 +160,7 @@ int32_t Transliterator::transliterate(Replaceable& text,
 
     UTransPosition offsets = { start, limit, start, limit };
     handleTransliterate(text, offsets, FALSE);
-    return offsets.limit;
+    return offsets.contextLimit;
 }
 
 /**
@@ -176,24 +176,24 @@ void Transliterator::transliterate(Replaceable& text) const {
  * transliterated unambiguosly after new text has been inserted,
  * typically as a result of a keyboard event.  The new text in
  * <code>insertion</code> will be inserted into <code>text</code>
- * at <code>index.limit</code>, advancing
- * <code>index.limit</code> by <code>insertion.length()</code>.
+ * at <code>index.contextLimit</code>, advancing
+ * <code>index.contextLimit</code> by <code>insertion.length()</code>.
  * Then the transliterator will try to transliterate characters of
- * <code>text</code> between <code>index.cursor</code> and
- * <code>index.limit</code>.  Characters before
- * <code>index.cursor</code> will not be changed.
+ * <code>text</code> between <code>index.start</code> and
+ * <code>index.contextLimit</code>.  Characters before
+ * <code>index.start</code> will not be changed.
  *
  * <p>Upon return, values in <code>index</code> will be updated.
- * <code>index.start</code> will be advanced to the first
+ * <code>index.contextStart</code> will be advanced to the first
  * character that future calls to this method will read.
- * <code>index.cursor</code> and <code>index.limit</code> will
+ * <code>index.start</code> and <code>index.contextLimit</code> will
  * be adjusted to delimit the range of text that future calls to
  * this method may change.
  *
  * <p>Typical usage of this method begins with an initial call
- * with <code>index.start</code> and <code>index.limit</code>
+ * with <code>index.contextStart</code> and <code>index.contextLimit</code>
  * set to indicate the portion of <code>text</code> to be
- * transliterated, and <code>index.cursor == index.start</code>.
+ * transliterated, and <code>index.start == index.contextStart</code>.
  * Thereafter, <code>index</code> can be used without
  * modification in future calls, provided that all changes to
  * <code>text</code> are made via this method.
@@ -210,23 +210,23 @@ void Transliterator::transliterate(Replaceable& text) const {
  * @param text the buffer holding transliterated and untransliterated text
  * @param index an array of three integers.
  *
- * <ul><li><code>index.start</code>: the beginning index,
- * inclusive; <code>0 <= index.start <= index.limit</code>.
+ * <ul><li><code>index.contextStart</code>: the beginning index,
+ * inclusive; <code>0 <= index.contextStart <= index.contextLimit</code>.
  *
- * <li><code>index.limit</code>: the ending index, exclusive;
- * <code>index.start <= index.limit <= text.length()</code>.
+ * <li><code>index.contextLimit</code>: the ending index, exclusive;
+ * <code>index.contextStart <= index.contextLimit <= text.length()</code>.
  * <code>insertion</code> is inserted at
- * <code>index.limit</code>.
+ * <code>index.contextLimit</code>.
  *
- * <li><code>index.cursor</code>: the next character to be
- * considered for transliteration; <code>index.start <=
- * index.cursor <= index.limit</code>.  Characters before
- * <code>index.cursor</code> will not be changed by future calls
+ * <li><code>index.start</code>: the next character to be
+ * considered for transliteration; <code>index.contextStart <=
+ * index.start <= index.contextLimit</code>.  Characters before
+ * <code>index.start</code> will not be changed by future calls
  * to this method.</ul>
  *
  * @param insertion text to be inserted and possibly
  * transliterated into the translation buffer at
- * <code>index.limit</code>.  If <code>null</code> then no text
+ * <code>index.contextLimit</code>.  If <code>null</code> then no text
  * is inserted.
  * @see #START
  * @see #LIMIT
@@ -254,7 +254,7 @@ void Transliterator::transliterate(Replaceable& text,
  * #transliterate(Replaceable, int[], String)}.
  * @param insertion text to be inserted and possibly
  * transliterated into the translation buffer at
- * <code>index.limit</code>.
+ * <code>index.contextLimit</code>.
  * @see #transliterate(Replaceable, int[], String)
  */
 void Transliterator::transliterate(Replaceable& text,
@@ -294,7 +294,9 @@ void Transliterator::transliterate(Replaceable& text,
  */
 void Transliterator::finishTransliteration(Replaceable& text,
                                            UTransPosition& index) const {
-    transliterate(text, index.start, index.limit);
+    int32_t limit = transliterate(text, index.start, index.limit);
+    index.contextLimit += limit - index.limit;
+    index.start = index.limit = limit;
 }
 
 /**
@@ -312,23 +314,24 @@ void Transliterator::_transliterate(Replaceable& text,
         return;
     }
 
-    if (index.start < 0 ||
-        index.limit > text.length() ||
-        index.cursor < index.start ||
-        index.cursor > index.limit) {
+    if (index.contextStart < 0 ||
+        index.contextLimit > text.length() ||
+        index.start < index.contextStart ||
+        index.start > index.contextLimit) {
         status = U_ILLEGAL_ARGUMENT_ERROR;
         return;
     }
 
-    int32_t originalStart = index.start;
+    int32_t originalStart = index.contextStart;
     if (insertion != 0) {
         text.handleReplaceBetween(index.limit, index.limit, *insertion);
         index.limit += insertion->length();
+        index.contextLimit += insertion->length();
     }
 
     handleTransliterate(text, index, TRUE);
 
-    index.start = uprv_max(index.cursor - getMaximumContextLength(),
+    index.contextStart = uprv_max(index.start - getMaximumContextLength(),
                            originalStart);
 }
 
