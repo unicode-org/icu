@@ -204,14 +204,47 @@ struct ZoneInfo {
     int finalOffset;
     int finalYear; // -1 if none
 
-    ZoneInfo() : finalYear(-1) {}
+    // If this is an alias, then all other fields are meaningless, and
+    // this field will point to the "real" zone 0..n-1.
+    int aliasTo; // -1 if this is a "real" zone
+
+    // If there are aliases TO this zone, then the following set will
+    // contain their index numbers (each index >= 0).
+    set<int> aliases;
+
+    ZoneInfo() : finalYear(-1), aliasTo(-1) {}
 
     void mergeFinalData(const FinalZone& fz);
 
     void optimizeTypeList();
 
-    void print(ostream& os) const;
+    // Set this zone to be an alias TO another zone.
+    void setAliasTo(int index);
+
+    // Clear the list of aliases OF this zone.
+    void clearAliases();
+
+    // Add an alias to the list of aliases OF this zone.
+    void addAlias(int index);
+
+    void print(ostream& os, const string& id) const;
 };
+
+void ZoneInfo::clearAliases() {
+    assert(aliasTo < 0);
+    aliases.clear();
+}
+
+void ZoneInfo::addAlias(int index) {
+    assert(aliasTo < 0 && index >= 0 && aliases.find(index) == aliases.end());
+    aliases.insert(index);
+}
+
+void ZoneInfo::setAliasTo(int index) {
+    assert(index >= 0);
+    assert(aliases.size() == 0);
+    aliasTo = index;
+}
 
 typedef map<string, ZoneInfo> ZoneMap;
 
@@ -739,6 +772,8 @@ map<string,FinalZone> finalZones;
 map<string,FinalRule> finalRules;
 
 map<string, set<string> > links;
+map<string, string> reverseLinks;
+map<string, string> linkSource; // id => "Olson link" or "ICU alias"
 
 /**
  * Predicate used to find FinalRule objects that do not have both
@@ -801,18 +836,24 @@ void readFinalZonesAndRules(istream& in) {
             int p = fr.part[0].isset ? 1 : 0;
             fr.part[p].set(mode, month, dom, dow, time, isstd, isgmt, offset);
         } else if (token == "link") {
-            string fromid, toid;
+            string fromid, toid; // fromid == "real" zone, toid == alias
             in >> fromid >> toid;
             // DO NOT consumeLine(in);
             if (finalZones.find(toid) != finalZones.end()) {
-                throw invalid_argument("Bad link: `to' id known");
+                throw invalid_argument("Bad link: `to' id is a \"real\" zone");
             }
-            // Not all links refer to final zones; need to check
-            if (finalZones.find(fromid) != finalZones.end()) {
-                finalZones[fromid].addLink(toid);
-                //cout << fromid << ": alias is " << toid << endl;
-            }
+// TODO remove
+//            // Not all links refer to final zones; need to check
+//            if (finalZones.find(fromid) != finalZones.end()) {
+//                finalZones[fromid].addLink(toid);
+//                //cout << fromid << ": alias is " << toid << endl;
+//            }
+
             links[fromid].insert(toid);
+            reverseLinks[toid] = fromid;
+
+            linkSource[fromid] = "Olson link";
+            linkSource[toid] = "Olson link";
         } else if (token.length() > 0 && token[0] == '#') {
             consumeLine(in);
         } else {
@@ -888,8 +929,18 @@ void readFinalZonesAndRules(istream& in) {
 // TODO update format docs
 */
 
-void ZoneInfo::print(ostream& os) const {
+void ZoneInfo::print(ostream& os, const string& id) const {
     // Implement compressed format #2:
+
+    os << "  " << id;
+
+    if (aliasTo >= 0) {
+        assert(aliases.size() == 0);
+        os << ":int { " << aliasTo << " }" << endl;
+        return;
+    }
+
+    os << ":array {" << endl;
 
     vector<Transition>::const_iterator trn;
     vector<ZoneType>::const_iterator typ;
@@ -924,12 +975,20 @@ void ZoneInfo::print(ostream& os) const {
         os << "    :intvector { " << finalOffset << ", "
            << finalYear << " }" << endl;
     }
-}
 
-inline ostream&
-operator<<(ostream& os, const ZoneInfo& info) {
-    info.print(os);
-    return os;
+    // Alias list, if any
+    if (aliases.size() != 0) {
+        first = true;
+        os << "    :intvector { ";
+        for (set<int>::const_iterator i=aliases.begin(); i!=aliases.end(); ++i) {
+            if (!first) os << ", ";
+            first = false;
+            os << *i;
+        }
+        os << " }" << endl;
+    }
+
+    os << "  }" << endl;
 }
 
 inline ostream&
@@ -937,9 +996,7 @@ operator<<(ostream& os, const ZoneMap& zoneinfo) {
     for (ZoneMapIter it = zoneinfo.begin();
          it != zoneinfo.end();
          ++it) {
-        os << "  " << it->first << ":array {" << endl;
-        os << it->second;
-        os << "  }" << endl;
+        it->second.print(os, it->first);
     }
     return os;
 }
@@ -947,33 +1004,6 @@ operator<<(ostream& os, const ZoneMap& zoneinfo) {
 //--------------------------------------------------------------------
 // main
 //--------------------------------------------------------------------
-
-class Stats {
-public:
-    int n;                // number of zones
-    int Nsum, Nmin, Nmax; // transitions count
-    int Msum, Mmin, Mmax; // types count
-    int idsum;            // total ID chars
-    Stats() : n(0),
-              Nsum(0), Nmin(numeric_limits<int>::max()),
-                       Nmax(numeric_limits<int>::min()),
-              Msum(0), Mmin(numeric_limits<int>::max()),
-                       Mmax(numeric_limits<int>::min()),
-              idsum(0)
-    {}
-    void operator() (const ZoneMap::value_type& p) {
-        ++n;
-        int N=p.second.transitions.size(), M=p.second.types.size();
-        Nsum += N; if(N<Nmin)Nmin=N; if(N>Nmax)Nmax=N;
-        Msum += M; if(M<Mmin)Mmin=M; if(M>Mmax)Mmax=M;
-        idsum += p.first.size() + 1;
-    }
-};
-
-set<string> zoneIDset;
-void insertZoneID(const pair<string,FinalZone>& p) {
-    zoneIDset.insert(p.first);
-}
 
 // Unary predicate for finding transitions after a given time
 bool isAfter(const Transition t, long thresh) {
@@ -1021,6 +1051,8 @@ void ZoneInfo::optimizeTypeList() {
     // list, since there may be unused types in the `types' list
     // corresponding to transitions that have been trimmed (during
     // merging of final data).
+
+    if (aliasTo >= 0) return; // Nothing to do for aliases
 
     // If there are zero transitions and one type, then leave that as-is.
     if (transitions.size() == 0) {
@@ -1101,9 +1133,10 @@ void mergeFinalZone(const pair<string,FinalZone>& p) {
 
     mergeOne(id, fz);
 
-    for (set<string>::const_iterator i=fz.aliases.begin(); i!=fz.aliases.end(); ++i) {
-        mergeOne(*i, fz);
-    }
+    // TODO remoev
+//    for (set<string>::const_iterator i=fz.aliases.begin(); i!=fz.aliases.end(); ++i) {
+//        mergeOne(*i, fz);
+//    }
 }
 
 /**
@@ -1159,6 +1192,64 @@ int main(int argc, char *argv[]) {
         return 1;
     }
 
+    // Read the legacy alias list and process it.  Treat the legacy mappings
+    // like links, but also record them in the "legacy" hash.
+    try {
+        ifstream aliases(ICU_TZ_ALIAS);
+        if (!aliases) {
+            cerr << "Error: Unable to open " ICU_TZ_ALIAS << endl;
+            return 1;
+        }
+        int n = 0;
+        string line;
+        while (getline(aliases, line)) {
+            string::size_type lb = line.find('#');
+            if (lb != string::npos) {
+                line.resize(lb); // trim comments
+            }
+            vector<string> a;
+            istringstream is(line);
+            copy(istream_iterator<string>(is),istream_iterator<string>(),
+                 back_inserter(a));
+            if (a.size() == 0) continue; // blank line
+            if (a.size() != 2) {
+                cerr << "Error: Can't parse \"" << line << "\" in "
+                    ICU_TZ_ALIAS << endl;
+                exit(1);
+            }
+            ++n;
+            
+            string alias(a[0]), olson(a[1]);
+            if (links.find(alias) != links.end()) {
+                cerr << "Error: Alias \"" << alias
+                     << "\" is an Olson zone in "
+                     ICU_TZ_ALIAS << endl;
+                return 1;
+            }
+            if (reverseLinks.find(alias) != reverseLinks.end()) {
+                cerr << "Error: Alias \"" << alias
+                     << "\" is an Olson link to \"" << reverseLinks[olson]
+                     << "\" in " << ICU_TZ_ALIAS << endl;
+                return 1;
+            }
+
+            // Record source for error reporting
+            if (linkSource.find(olson) == linkSource.end()) {
+                linkSource[olson] = "ICU alias";
+            }
+            assert(linkSource.find(alias) == linkSource.end());
+            linkSource[alias] = "ICU alias";
+            
+            links[olson].insert(alias);
+            reverseLinks[alias] = olson;
+        }
+        cout << "Finished reading " << n
+             << " aliases from " ICU_TZ_ALIAS << endl;
+    } catch (const exception& error) {
+        cerr << "Error: While reading " ICU_TZ_ALIAS ": " << error.what() << endl;
+        return 1;
+    }
+
     try {
         // Recursively scan all files below the given path, accumulating
         // their data into ZONEINFO.  All files must be TZif files.  Any
@@ -1173,27 +1264,86 @@ int main(int argc, char *argv[]) {
          << (ZONEINFO.begin())->first << ".."
          << (--ZONEINFO.end())->first << "]" << endl;
 
-#if 0
-    // Output some stats
-    Stats s = for_each (ZONEINFO.begin(), ZONEINFO.end(), Stats());
-
-    cout << "Transitions per zone: " << s.Nmin << ".." << s.Nmax
-         << ", sum " << s.Nsum
-         << ", mean " << ((double)s.Nsum / s.n) << endl;
-    cout << "Types per zone: " << s.Mmin << ".." << s.Mmax
-         << ", sum " << s.Msum
-         << ", mean " << ((double)s.Msum / s.n) << endl;
-    cout << "ID characters: " << s.idsum << endl;
-    cout << "Raw size = ~" << (s.Nsum * 5 + (int)(s.Msum * 4.5) +
-                              s.idsum * 2) << endl;
-                              /* allocate 2 bytes/char for IDs */
-#endif
-
     try {
         for_each(finalZones.begin(), finalZones.end(), mergeFinalZone);
     } catch (const exception& error) {
         cerr << "Error: While merging final zone data: " << error.what() << endl;
         return 1;
+    }
+
+    // Process links (including ICU aliases).  For each link set we have
+    // a canonical ID (e.g., America/Los_Angeles) and a set of one or more
+    // aliases (e.g., PST, PST8PDT, ...).
+    
+    // 1. Add all aliases as zone objects in ZONEINFO
+    for (map<string,set<string> >::const_iterator i = links.begin();
+         i!=links.end(); ++i) {
+        const string& olson = i->first;
+        const set<string>& aliases = i->second;
+        if (ZONEINFO.find(olson) == ZONEINFO.end()) {
+            cerr << "Error: Invalid " << linkSource[olson] << " to non-existent \""
+                 << olson << "\"" << endl;
+            return 1;
+        }
+        for (set<string>::const_iterator j=aliases.begin();
+             j!=aliases.end(); ++j) {
+            ZONEINFO[*j] = ZoneInfo();
+        }
+    }
+ 
+    // 2. Create a mapping from zones to index numbers 0..n-1.
+    map<string,int> zoneIDs;
+    vector<string> zoneIDlist;
+    int z=0;
+    for (ZoneMap::iterator i=ZONEINFO.begin(); i!=ZONEINFO.end(); ++i) {
+        zoneIDs[i->first] = z++;
+        zoneIDlist.push_back(i->first);
+    }
+    assert(z == (int) ZONEINFO.size());
+
+    // 3. Merge aliases.  Sometimes aliases link to other aliases; we
+    // resolve these into simplest possible sets.
+    map<string,set<string> > links2;
+    map<string,string> reverse2;
+    for (map<string,set<string> >::const_iterator i = links.begin();
+         i!=links.end(); ++i) {
+        string olson = i->first;
+        while (reverseLinks.find(olson) != reverseLinks.end()) {
+            olson = reverseLinks[olson];
+        }
+        for (set<string>::const_iterator j=i->second.begin(); j!=i->second.end(); ++j) {
+            links2[olson].insert(*j);
+            reverse2[*j] = olson;
+        }
+    }
+    links = links2;
+    reverseLinks = reverse2;
+
+    if (false) { // Debugging: Emit link map
+        for (map<string,set<string> >::const_iterator i = links.begin();
+             i!=links.end(); ++i) {
+            cout << i->first << ": ";
+            for (set<string>::const_iterator j=i->second.begin(); j!=i->second.end(); ++j) {
+                cout << *j << ", ";
+            }
+            cout << endl;
+        }
+    }
+
+    // 4. Update aliases
+    for (map<string,set<string> >::const_iterator i = links.begin();
+         i!=links.end(); ++i) {
+        const string& olson = i->first;
+        const set<string>& aliases = i->second;
+        ZONEINFO[olson].clearAliases();
+        for (set<string>::const_iterator j=aliases.begin();
+             j!=aliases.end(); ++j) {
+            assert(zoneIDs.find(olson) != zoneIDs.end());
+            assert(zoneIDs.find(*j) != zoneIDs.end());
+            assert(ZONEINFO.find(*j) != ZONEINFO.end());
+            ZONEINFO[*j].setAliasTo(zoneIDs[olson]);
+            ZONEINFO[olson].addAlias(zoneIDs[*j]);
+        }
     }
 
     // Once merging of final data is complete, we can optimize the type list
@@ -1257,62 +1407,6 @@ int main(int argc, char *argv[]) {
         }
     }
 
-    // Read the legacy alias list and process it.
-    try {
-        ifstream aliases(ICU_TZ_ALIAS);
-        if (!aliases) {
-            cerr << "Error: Unable to open " ICU_TZ_ALIAS << endl;
-            return 1;
-        }
-        int n = 0;
-        string line;
-        while (getline(aliases, line)) {
-            string::size_type lb = line.find('#');
-            if (lb != string::npos) {
-                line.resize(lb); // trim comments
-            }
-            vector<string> a;
-            istringstream is(line);
-            copy(istream_iterator<string>(is),istream_iterator<string>(),
-                 back_inserter(a));
-            if (a.size() == 0) continue; // blank line
-            if (a.size() != 2) {
-                cerr << "Error: Can't parse \"" << line << "\" in "
-                    ICU_TZ_ALIAS << endl;
-                exit(1);
-            }
-            ++n;
-            
-            string alias(a[0]), olson(a[1]);
-            if (ZONEINFO.find(olson) == ZONEINFO.end()) {
-                cerr << "Error: Alias to invalid zone " << olson
-                     << " in " ICU_TZ_ALIAS << endl;
-                return 1;
-            }
-            if (ZONEINFO.find(alias) != ZONEINFO.end()) {
-                cerr << "Error: Alias \"" << alias
-                     << "\" is an Olson zone in "
-                     ICU_TZ_ALIAS << endl;
-                return 1;
-            }
-
-            // Currently we just copy the data for the alias.
-            // In the future, use a link.  TODO Use rb alias facility.
-            ZONEINFO[alias] = ZONEINFO[olson]; // make alias
-
-            // Add alias to country map
-            if (reverseCountryMap.find(olson) != reverseCountryMap.end()) {
-                countryMap[reverseCountryMap[olson]].insert(alias);
-                reverseCountryMap[alias] = reverseCountryMap[olson];
-            }
-        }
-        cout << "Finished reading " << n
-             << " aliases from " ICU_TZ_ALIAS << endl;
-    } catch (const exception& error) {
-        cerr << "Error: While reading " ICU_TZ_ALIAS ": " << error.what() << endl;
-        return 1;
-    }
-
     // Create a pseudo-country containing all zones belonging to no country
     set<string> nocountry;
     for (ZoneMap::iterator i=ZONEINFO.begin(); i!=ZONEINFO.end(); ++i) {
@@ -1348,14 +1442,6 @@ int main(int argc, char *argv[]) {
     // real rules.
     ruleStart++;
     ruleCount--;
-
-    // Create a mapping from zones to index numbers 0..n-1.
-    map<string,int> zoneIDs;
-    int z=0;
-    for (ZoneMap::iterator i=ZONEINFO.begin(); i!=ZONEINFO.end(); ++i) {
-        zoneIDs[i->first] = z++;
-    }
-    assert(z == zoneCount);
 
     // Get local time & year for below
     time_t sec;

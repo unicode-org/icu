@@ -166,10 +166,14 @@ OlsonTimeZone::OlsonTimeZone(const UResourceBundle* top,
         // TODO remove nonconst casts below when ures_* API is fixed
         setID(ures_getKey((UResourceBundle*) res)); // cast away const
 
-        // Size 3 is a purely historical zone (no final rules);
-        // size 5 is a hybrid zone, with historical and final elements.
+        // Size 1 is an alias TO another zone (int)
+        // HOWEVER, the caller should dereference this and never pass it in to us
+        // Size 3 is a purely historical zone (no final rules)
+        // Size 4 is like size 3, but with an alias list at the end
+        // Size 5 is a hybrid zone, with historical and final elements
+        // Size 6 is like size 5, but with an alias list at the end
         int32_t size = ures_getSize((UResourceBundle*) res); // cast away const
-        if (size != 3 && size != 5) {
+        if (size < 3 || size > 6) {
             ec = U_INVALID_FORMAT_ERROR;
         }
 
@@ -202,7 +206,7 @@ OlsonTimeZone::OlsonTimeZone(const UResourceBundle* top,
         }
 
         // Process final rule and data, if any
-        if (size == 5) {
+        if (size >= 5) {
             UnicodeString ruleid = ures_getUnicodeStringByIndex(res, 3, &ec);
             r = ures_getByIndex(res, 4, NULL, &ec);
             const int32_t* data = ures_getIntVector(r, &len, &ec);
