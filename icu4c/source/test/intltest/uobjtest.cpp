@@ -43,8 +43,8 @@ const char *ids_class[MAX_CLASS_ID];
 uint32_t    ids_count = 0;
 
 UObject *UObjectTest::testClass(UObject *obj,
-				const char *className, const char *factory, 
-				UClassID staticID)
+                const char *className, const char *factory, 
+                UClassID staticID)
 {
   uint32_t i;
   UnicodeString what = UnicodeString(className) + " * x= " + UnicodeString(factory?factory:" ABSTRACT ") + "; ";
@@ -94,11 +94,11 @@ UObject *UObjectTest::testClass(UObject *obj,
   for(i=0;i<ids_count;i++) {
     if(staticID == ids[i]) {
       if(!strcmp(ids_class[i], className)) {
-	logln("OK: ID found is the same as " + UnicodeString(ids_class[i]) + UnicodeString(" *y= ") + ids_factory[i] + what);
-	return obj; 
+    logln("OK: ID found is the same as " + UnicodeString(ids_class[i]) + UnicodeString(" *y= ") + ids_factory[i] + what);
+    return obj; 
       } else {
-	errln("FAIL: ID is the same as " + UnicodeString(ids_class[i]) + UnicodeString(" *y= ") + ids_factory[i] + what);
-	return obj;
+    errln("FAIL: ID is the same as " + UnicodeString(ids_class[i]) + UnicodeString(" *y= ") + ids_factory[i] + what);
+    return obj;
       }
     }
   }
@@ -151,6 +151,10 @@ UObject *UObjectTest::testClass(UObject *obj,
 #include "uni2name.h"
 #include "uvector.h"
 #include "islamcal.h"
+#include "gregoimp.h"
+#include "currfmt.h"
+#include "iculserv.h"
+#include "transreg.h"
 
 // External Things
 #include "unicode/brkiter.h"
@@ -339,6 +343,66 @@ void UObjectTest::testIDs()
         logln(UnicodeString(junk));
     }
 #endif
+
+    // Coverage Tests
+    //
+
+    //ServiceEnumeration
+    StringEnumeration* localeEnum = Collator::getAvailableLocales();
+    localeEnum->getDynamicClassID();
+    delete localeEnum;
+
+    //UStringEnumeration
+    status = U_ZERO_ERROR;
+    StringEnumeration *iter = Collator::getKeywords(status);
+    iter->getDynamicClassID();
+    delete iter;
+
+    //SimpleLocaleKeyFactory
+    SimpleLocaleKeyFactory temp_slkf (NULL, UnicodeString("bar"), 8, 12);
+    temp_slkf.getDynamicClassID();
+
+    //StringMatcher
+    //StringMatcher temp_sm (UnicodeString("test string"), 0,0,0,TransliterationRuleData(status));
+    //temp_sm.getDynamicClassID();
+    
+    //StringReplacer
+    //status = U_ZERO_ERROR;
+    //StringReplacer temp_sr(UnicodeString(),new TransliterationRuleData(status));
+
+    //CalendarData
+    status = U_ZERO_ERROR;
+    CalendarData temp_cd(Locale::getEnglish(),NULL,status);
+    temp_cd.getDynamicClassID();
+
+    //CurrencyFormat
+    status = U_ZERO_ERROR;
+    CurrencyFormat temp_cf(Locale::getEnglish(),status);
+    temp_cf.getDynamicClassID();
+
+    //FunctionReplacer
+    FunctionReplacer temp_fr(NULL, NULL);
+    temp_fr.getDynamicClassID();
+
+    ICUResourceBundleFactory temp_irbf;
+    temp_irbf.getDynamicClassID();
+
+    //LocaleKeyFactory temp_lkf(0);
+    //temp_lkf.getDynamicClassID();
+    
+    //status = U_ZERO_ERROR;
+    //NFSubstitution* temp_nfs = NFSubstitution::makeSubstitution(0, NULL, NULL, NULL, NULL, NULL, status);
+    //temp_nfs->getDynamicClassID();
+    //delete temp_nfs;
+
+    //status = U_ZERO_ERROR;
+    //NumeratorSubstitution temp_ns(0, 0, NULL, NULL, NULL,status);
+    //temp_ns.getDynamicClassID();
+
+    //Quantifier temp_q(NULL, 0, 0);
+    //temp_q.getDynamicClassID();
+
+    //TransliteratorRegistry::Enumeration temp_tre(NULL);
 }
 
 void UObjectTest::testUMemory() {

@@ -12,6 +12,11 @@
 #include "unicode/gregocal.h"
 #include "unicode/smpdtfmt.h"
 #include "unicode/simpletz.h"
+#include "buddhcal.h"
+#include "islamcal.h"
+#include "japancal.h"
+#include "hebrwcal.h"
+#include "gregoimp.h"
 
 // *****************************************************************************
 // class CalendarTest
@@ -194,10 +199,97 @@ void CalendarTest::runIndexedTest( int32_t index, UBool exec, const char* &name,
             TestJD();
           }
           break;
+        case 21:
+          name = "TestCoverage";
+          if(exec) {
+            logln("TestCoverage---"); logln("");
+            TestCoverage();
+          }
+          break;
            
         default: name = ""; break;
     }
 }
+
+void CalendarTest::TestCoverage(void){
+  UErrorCode status = U_ZERO_ERROR;
+
+  //Calendar::Calendar(UErrorCode& success)
+  Calendar * cal = Calendar::createInstance(status);
+
+  URegistryKey rkey = Calendar::registerFactory(NULL, status);
+  Calendar::unregister(rkey, status);
+
+  //Calendar::roll(EDateFields field, int32_t amount, UErrorCode& status);
+  IslamicCalendar ic(Locale::getEnglish(), status);
+  ic.roll(Calendar::SECOND, 1, status);
+
+  //IslamicCalendar
+  ic.isCivil();
+  ic.setCivil(IslamicCalendar::CIVIL,status);
+
+  ////GregorianCalendar
+  //GregorianCalendar gc(Locale::getEnglish(), status);
+  //gc.getActualMaximum(Calendar::SECOND);
+
+  Grego::previousMonthLength(0,0);
+  Grego::millisToJulianDay(0);
+
+  //BuddhistCalendar& operator=(const BuddhistCalendar& right);
+  BuddhistCalendar bc(Locale::getSimplifiedChinese(), status);
+  BuddhistCalendar bc2(Locale::getSimplifiedChinese(), status);
+  bc2 = bc;
+
+  //JapaneseCalendar& operator=(const JapaneseCalendar& right);
+  JapaneseCalendar jc(Locale::getEnglish(), status);
+  JapaneseCalendar jc2(Locale::getEnglish(), status);
+  jc2 = jc;
+  jc.defaultCenturyStart();
+  jc.defaultCenturyStartYear();
+
+  HebrewCalendar hc(Locale::getEnglish(), status);
+  hc.roll(Calendar::SECOND, 1, status);
+  hc.roll(UCAL_MONTH,1,status);
+  hc.add(Calendar::SECOND, 1, status);
+  
+  //cal->getActualMaximum(UCAL_DATE, status);
+  //cal->getActualMaximum(UCAL_DAY_OF_YEAR, status);
+
+  //BuddhistCalendar bc(Locale::getSimplifiedChinese(), status);
+  //cal->setTime(0,status);
+  //cal->set(UCAL_HOUR,0);
+
+ // class Calendar_stub : public Calendar{
+ // public:
+    //  Calendar_stub::Calendar_stub(UErrorCode& success): Calendar(success){}
+ // public:
+    //virtual Calendar* clone(void) {return NULL};
+ //   virtual UBool inDaylightTime(UErrorCode& status) const {return FALSE};
+ //   virtual UClassID getDynamicClassID(void) const {return NULL};
+ //   virtual const char * getType() const {return NULL};
+
+ //   virtual UBool haveDefaultCentury() const {return FALSE};
+ //   virtual UDate defaultCenturyStart() const {return 0};
+    //virtual int32_t defaultCenturyStartYear() const {return 0};
+
+ // protected:
+ //   virtual int32_t handleGetExtendedYear() {return 0};
+ //   virtual int32_t handleGetLimit(UCalendarDateFields field, ELimitType limitType) const {return 0};
+ //   virtual int32_t handleComputeMonthStart(int32_t eyear, int32_t month,
+ //                                                  UBool useMonth) const  {return 0};
+ // };
+
+ // status = U_ZERO_ERROR;
+ // Calendar_stub temp(status);
+  //cal->setTime(0,status);
+  //cal->set(UCAL_HOUR,0);
+//  cal->clear(UCAL_HOUR);
+  delete cal;
+
+
+
+}
+
 
 // ---------------------------------------------------------------------------------
 
@@ -1840,6 +1932,9 @@ void CalendarTest::TestYWOY()
 void CalendarTest::TestJD()
 {
   int32_t jd;
+  
+  #undef kEpochStartAsJulianDay  // because we included "gregoimp.h"
+
   static const int32_t kEpochStartAsJulianDay = 2440588;
   UErrorCode status = U_ZERO_ERROR;
   GregorianCalendar cal(status);
