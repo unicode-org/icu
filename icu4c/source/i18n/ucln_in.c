@@ -22,6 +22,7 @@ static UBool i18n_cleanup(void)
     ucol_bld_cleanup();
     ucol_cleanup();
     timeZone_cleanup();
+    transliterator_cleanup();
     return TRUE;
 }
 
