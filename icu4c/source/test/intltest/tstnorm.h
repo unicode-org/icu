@@ -48,6 +48,15 @@ private:
     UnicodeString compatTests[11][3];
     UnicodeString hangulCanon[2][3];
 
+    void
+    TestPreviousNext(const UChar *src, int32_t srcLength,
+                     const UChar32 *expext, int32_t expectLength,
+                     const int32_t *expectIndex, // its length=expectLength+1
+                     int32_t srcMiddle, int32_t expectMiddle,
+                     const char *moves,
+                     UNormalizationMode mode,
+                     const char *name);
+
     int32_t countFoldFCDExceptions(uint32_t foldingOptions);
 
     //------------------------------------------------------------------------
