@@ -1679,20 +1679,20 @@ static void TestSubWithValue(int32_t inputsize, int32_t outputsize)
         {
             const uint8_t to_iso_2022_jp2_v2[]={  
                     0x1b,   0x24,   0x42,   0x21,   0x21,   
-                    0x1b,   0x28,   0x42,   0x26,   0x23,   0x31,  0x34,   0x34,   0x34,   0x37, 0x30,   
+                    0x1b,   0x28,   0x42,   0x26,   0x23,   0x31,  0x34,   0x34,   0x34,   0x37, 0x30, 0x3b,   
                       
                     0x1b,   0x24,   0x42,   0x21,   0x22,
-                    0x1b,   0x28,   0x42,   0x26,   0x23,  0x31,  0x34,   0x34,   0x34,   0x37, 0x30,  
+                    0x1b,   0x28,   0x42,   0x26,   0x23,  0x31,  0x34,   0x34,   0x34,   0x37, 0x30, 0x3b, 
                     
                     0x42,
                     };
 
             int32_t from_iso_2022_jpOffs2_v2 [] ={ 
                 0,0,0,0,0,
-                1,1,1,1,1,1,1,1,1,1,1,
+                1,1,1,1,1,1,1,1,1,1,1,1,
 
                 3,3,3,3,3,
-                4,4,4,4,4,4,4,4,4,4,4,
+                4,4,4,4,4,4,4,4,4,4,4,4,
 
                 6,
             };
@@ -1705,20 +1705,20 @@ static void TestSubWithValue(int32_t inputsize, int32_t outputsize)
         {
              const uint8_t to_iso_2022_jp2_v3[]={  
                     0x1b,   0x24,   0x42,   0x21,   0x21,   
-                    0x1b,   0x28,   0x42,   0x26,   0x23,   0x78,  0x32,   0x33,   0x34,   0x35, 0x36,   
+                    0x1b,   0x28,   0x42,   0x26,   0x23,   0x78,  0x32,   0x33,   0x34,   0x35, 0x36, 0x3b ,  
                       
                     0x1b,   0x24,   0x42,   0x21,   0x22,
-                    0x1b,   0x28,   0x42,   0x26,   0x23,   0x78,  0x32,   0x33,   0x34,   0x35, 0x36,  
+                    0x1b,   0x28,   0x42,   0x26,   0x23,   0x78,  0x32,   0x33,   0x34,   0x35, 0x36, 0x3b ,
                     
                     0x42,
                     };
 
             int32_t from_iso_2022_jpOffs2_v3 [] ={ 
                 0,0,0,0,0,
-                1,1,1,1,1,1,1,1,1,1,1,
+                1,1,1,1,1,1,1,1,1,1,1,1,
 
                 3,3,3,3,3,
-                4,4,4,4,4,4,4,4,4,4,4,
+                4,4,4,4,4,4,4,4,4,4,4,4,
 
                 6,
             };
@@ -1757,9 +1757,9 @@ static void TestSubWithValue(int32_t inputsize, int32_t outputsize)
         {
             const uint8_t to_iso_2022_cn4_v3[]={  
                             0x1b,   0x24,   0x29,   0x41,   0x0e,   0x21,   0x21,   
-                            0x0f,   0x5c,   0x75,   0x30,   0x30,   0x30,   0x32,   0x33,   0x34,   0x35,   0x36,   
+                            0x0f,   0x5c,   0x55,   0x30,   0x30,   0x30,   0x32,   0x33,   0x34,   0x35,   0x36,   
                             0x1b,   0x24,   0x29,   0x41,   0x0e,   0x21,   0x22,
-                            0x0f,   0x5c,   0x75,   0x30,   0x30,   0x30,   0x32,   0x33,   0x34,   0x35,   0x36, 
+                            0x0f,   0x5c,   0x55,   0x30,   0x30,   0x30,   0x32,   0x33,   0x34,   0x35,   0x36, 
                             0x42 
                              };
 
@@ -1977,6 +1977,41 @@ static void TestSubWithValue(int32_t inputsize, int32_t outputsize)
                 UCNV_TO_U_CALLBACK_ESCAPE, from_iso_2022_jpOffs, NULL, 0))
             log_err("iso-2022-jp->u with substitute with value did not match.\n");
         
+        {/* test UCNV_TO_U_CALLBACK_ESCAPE with options */
+            {
+                UChar iso_2022_jptoUnicodeDec[]={ 0x0041,   
+                                                  0x0026,   0x0023,   0x0034,   0x0032,   0x003b,   
+                                                  0x0026,   0x0023,   0x0036,   0x0038,   0x003b,   
+                                                  0x0042 };
+                int32_t from_iso_2022_jpOffsDec [] ={ 3,7,7,7,7,7,7,7,7,7,7,12,  };
+                if(!testConvertToUnicodeWithContext(sampleTxt_iso_2022_jp, sizeof(sampleTxt_iso_2022_jp),
+                     iso_2022_jptoUnicodeDec, sizeof(iso_2022_jptoUnicodeDec)/sizeof(iso_2022_jptoUnicode[0]),"iso-2022-jp",
+                    UCNV_TO_U_CALLBACK_ESCAPE, from_iso_2022_jpOffsDec, NULL, 0,UCNV_ESCAPE_XML_DEC,U_ZERO_ERROR ))
+                log_err("iso-2022-jp->u with substitute with value and UCNV_ESCAPE_XML_DEC did not match.\n");
+            }
+            {
+                UChar iso_2022_jptoUnicodeHex[]={ 0x0041, 
+                                                  0x0026, 0x0023, 0x0078, 0x0030, 0x0030, 0x0032, 0x0041, 0x003b, 
+                                                  0x0026, 0x0023, 0x0078, 0x0030, 0x0030, 0x0034, 0x0034, 0x003b, 
+                                                  0x0042 };
+                int32_t from_iso_2022_jpOffsHex [] ={  3,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,12   };
+                if(!testConvertToUnicodeWithContext(sampleTxt_iso_2022_jp, sizeof(sampleTxt_iso_2022_jp),
+                     iso_2022_jptoUnicodeHex, sizeof(iso_2022_jptoUnicodeHex)/sizeof(iso_2022_jptoUnicode[0]),"iso-2022-jp",
+                    UCNV_TO_U_CALLBACK_ESCAPE, from_iso_2022_jpOffsHex, NULL, 0,UCNV_ESCAPE_XML_HEX,U_ZERO_ERROR ))
+                log_err("iso-2022-jp->u with substitute with value and UCNV_ESCAPE_XML_HEX did not match.\n");
+            }
+            {
+                UChar iso_2022_jptoUnicodeC[]={ 0x0041, 
+                                                0x005C, 0x0078, 0x0030, 0x0030, 0x0032, 0x0041,
+                                                0x005C, 0x0078, 0x0030, 0x0030, 0x0034, 0x0034, 
+                                                0x0042 };
+                int32_t from_iso_2022_jpOffsC [] ={  3,7,7,7,7,7,7,7,7,7,7,7,7,12   };
+                if(!testConvertToUnicodeWithContext(sampleTxt_iso_2022_jp, sizeof(sampleTxt_iso_2022_jp),
+                     iso_2022_jptoUnicodeC, sizeof(iso_2022_jptoUnicodeC)/sizeof(iso_2022_jptoUnicode[0]),"iso-2022-jp",
+                    UCNV_TO_U_CALLBACK_ESCAPE, from_iso_2022_jpOffsC, NULL, 0,UCNV_ESCAPE_C,U_ZERO_ERROR ))
+                log_err("iso-2022-jp->u with substitute with value and UCNV_ESCAPE_C did not match.\n");
+            }
+        }
         if(!testConvertToUnicode(sampleTxt_iso_2022_cn, sizeof(sampleTxt_iso_2022_cn),
                  iso_2022_cntoUnicode, sizeof(iso_2022_cntoUnicode)/sizeof(iso_2022_cntoUnicode[0]),"iso-2022-cn",
                 UCNV_TO_U_CALLBACK_ESCAPE, from_iso_2022_cnOffs, NULL, 0))
