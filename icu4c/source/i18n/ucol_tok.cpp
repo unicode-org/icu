@@ -1646,7 +1646,7 @@ void ucol_tok_initTokenList(UColTokenParser *src, const UChar *rules, const uint
   src->current = src->source;
   src->end = src->source+nSize;
   src->sourceCurrent = src->source;
-  src->extraCurrent = src->end;
+  src->extraCurrent = src->end+1; // Preserve terminating zero in the rule string so that option scanning works correctly
   src->extraEnd = src->source+estimatedSize; //src->end+UCOL_TOK_EXTRA_RULE_SPACE_SIZE;
   src->varTop = NULL;
   src->UCA = UCA;
