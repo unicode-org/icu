@@ -278,7 +278,8 @@ mirrorLineFn(void *context,
     /* check that the code points (mirrorMappings[mirrorCount][0]) are in ascending order */
     if(mirrorMappings[mirrorCount][0]<=prevCode && mirrorMappings[mirrorCount][0]>0) {
         fprintf(stderr, "genprops: error - BidiMirroring entries out of order, U+%04lx after U+%04lx\n",
-                mirrorMappings[mirrorCount][0], prevCode);
+                (unsigned long)mirrorMappings[mirrorCount][0],
+                (unsigned long)prevCode);
         *pErrorCode=U_PARSE_ERROR;
         exit(U_PARSE_ERROR);
     }
@@ -474,7 +475,8 @@ caseFoldingLineFn(void *context,
     /* check that the code points (caseFoldings[caseFoldingCount].code) are in ascending order */
     if(caseFoldings[caseFoldingCount].code<=prevCode && caseFoldings[caseFoldingCount].code>0) {
         fprintf(stderr, "genprops: error - CaseFolding entries out of order, U+%04lx after U+%04lx\n",
-                caseFoldings[caseFoldingCount].code, prevCode);
+                (unsigned long)caseFoldings[caseFoldingCount].code,
+                (unsigned long)prevCode);
         *pErrorCode=U_PARSE_ERROR;
         exit(U_PARSE_ERROR);
     }
@@ -794,7 +796,7 @@ unicodeDataLineFn(void *context,
     /* check for non-character code points */
     if((p.code&0xfffe)==0xfffe || (uint32_t)(p.code-0xfdd0)<0x20) {
         fprintf(stderr, "genprops: error - properties for non-character code point U+%04lx\n",
-                p.code);
+                (unsigned long)p.code);
         *pErrorCode=U_PARSE_ERROR;
         exit(U_PARSE_ERROR);
     }
@@ -802,7 +804,7 @@ unicodeDataLineFn(void *context,
     /* check that the code points (p.code) are in ascending order */
     if(p.code<=prevCode && p.code>0) {
         fprintf(stderr, "genprops: error - UnicodeData entries out of order, U+%04lx after U+%04lx\n",
-                p.code, prevCode);
+                (unsigned long)p.code, (unsigned long)prevCode);
         *pErrorCode=U_PARSE_ERROR;
         exit(U_PARSE_ERROR);
     }
