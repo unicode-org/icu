@@ -85,9 +85,10 @@ static void TestUDataOpen(){
         {"unames",   "icu"},
         {"ibm-37_P100-1995",   "cnv"}
     };
-    const char* name           = "test";
-    const char* type           = "icu";
-    const char  dirSepString[] = {U_FILE_SEP_CHAR, 0};
+    const char* name            = "test";
+    const char* type            = "icu";
+    const char  dirSepString[]  = {U_FILE_SEP_CHAR, 0};
+    const char  pathSepString[] = {U_PATH_SEP_CHAR, 0};
 
     char* path=(char*)malloc(sizeof(char) * (strlen(ctest_dataOutDir())
                                            + strlen(U_ICUDATA_NAME)
@@ -251,6 +252,50 @@ static void TestUDataOpen(){
     } else {
         log_verbose("calling udat_open with non-existing file returned null as expected\n");
     }
+
+    /*
+     *  Try opening data with absurdly long path and name, to trigger buffer size 
+     *   overflow handling code.
+     */
+    {
+        char longTestPath[1024];    /* Implementation goes to heap at length of 128.  */
+        char longName[1024];
+
+        /* long test path starts with a long, nonexistent directory, then
+         * has a second entry that is the normal test path */
+        log_verbose("Testing udata_open() with really long names\n");
+        strcpy(longTestPath, "bogus_directory_name");
+        while (strlen(longTestPath) < 500) {
+            strcat(longTestPath, dirSepString);
+            strcat(longTestPath, "bogus_directory_name");
+        }
+        strcat(longTestPath, pathSepString);
+        strcat(longTestPath, testPath);
+
+        /* Make up an item name to open that includes a long, bogus path.
+         * udata_open will try with the path first, then strip it off and try with
+         * the paths from the path parameter.
+         */
+        strcpy(longName, "bogusItemPath");
+        while (strlen(longName) < 500) {
+            strcat(longName, dirSepString);
+            strcat(longName, "bogusItemPath");
+        }
+        strcat(longName, dirSepString);
+        strcat(longName, name);
+
+
+        result=udata_open(longTestPath, type, longName, &status);
+        if(U_FAILURE(status)){
+            log_err("FAIL: udata_open() failed for path = %s, name=%s, type=%s, \n errorcode=%s\n",
+                longTestPath, longName, type, myErrorName(status));
+        } else {
+            log_verbose("PASS: udata_open worked\n");
+            udata_close(result);
+        }
+    }
+
+
 
     free(path);
 }
