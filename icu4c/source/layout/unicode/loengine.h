@@ -239,7 +239,7 @@ public:
      * @draft ICU 2.2
      */
     static ICULayoutEngine *createInstance(const LEFontInstance *fontInstance,
-                                           UScriptCode script, Locale &locale,
+                                           UScriptCode scriptCode, Locale &locale,
                                            UErrorCode &success);
 
     /**
@@ -350,11 +350,11 @@ inline void ICULayoutEngine::getGlyphPosition(int32_t glyphIndex, float &x, floa
 }
 
 inline ICULayoutEngine *ICULayoutEngine::createInstance(const LEFontInstance *fontInstance,
-                                                        UScriptCode script,
+                                                        UScriptCode scriptCode,
                                                         Locale &locale, UErrorCode &success)
 {
     LayoutEngine *engine = LayoutEngine::layoutEngineFactory(fontInstance,
-                                                             (le_int32) script,
+                                                             (le_int32) scriptCode,
                                                              0,
                                                              (LEErrorCode &) success);
 
