@@ -42,6 +42,7 @@
 #if !UCONFIG_NO_FORMATTING
 
 #include "unicode/decimfmt.h"
+#include "unicode/choicfmt.h"
 #include "unicode/ucurr.h"
 #include "unicode/ustring.h"
 #include "unicode/dcfmtsym.h"
@@ -51,6 +52,8 @@
 #include "digitlst.h"
 #include "cmemory.h"
 #include "cstring.h"
+#include "umutex.h"
+#include "uassert.h"
 
 U_NAMESPACE_BEGIN
 
@@ -101,6 +104,8 @@ const int32_t DecimalFormat::kDoubleFractionDigits = 340;
  */
 const char DecimalFormat::fgNumberPatterns[]="NumberPatterns";
 
+static const UChar kDefaultPad = 0x0020; /* */
+
 //------------------------------------------------------------------------------
 // Constructs a DecimalFormat instance in the default locale.
  
@@ -110,6 +115,7 @@ DecimalFormat::DecimalFormat(UErrorCode& status)
   fPosSuffixPattern(0), 
   fNegPrefixPattern(0), 
   fNegSuffixPattern(0),
+  fCurrencyChoice(0),
   fSymbols(0)
 {
     UParseError parseError;
@@ -127,6 +133,7 @@ DecimalFormat::DecimalFormat(const UnicodeString& pattern,
   fPosSuffixPattern(0), 
   fNegPrefixPattern(0), 
   fNegSuffixPattern(0),
+  fCurrencyChoice(0),
   fSymbols(0)
 {
     UParseError parseError;
@@ -146,6 +153,7 @@ DecimalFormat::DecimalFormat(const UnicodeString& pattern,
   fPosSuffixPattern(0), 
   fNegPrefixPattern(0), 
   fNegSuffixPattern(0),
+  fCurrencyChoice(0),
   fSymbols(0)
 {
     UParseError parseError;
@@ -163,6 +171,7 @@ DecimalFormat::DecimalFormat(  const UnicodeString& pattern,
   fPosSuffixPattern(0), 
   fNegPrefixPattern(0), 
   fNegSuffixPattern(0),
+  fCurrencyChoice(0),
   fSymbols(0)
 {
     if (symbolsToAdopt == NULL)
@@ -182,6 +191,7 @@ DecimalFormat::DecimalFormat(const UnicodeString& pattern,
   fPosSuffixPattern(0), 
   fNegPrefixPattern(0), 
   fNegSuffixPattern(0),
+  fCurrencyChoice(0),
   fSymbols(0)
 {
     UParseError parseError;
@@ -282,6 +292,7 @@ DecimalFormat::~DecimalFormat()
     delete fPosSuffixPattern;
     delete fNegPrefixPattern;
     delete fNegSuffixPattern;
+    delete fCurrencyChoice;
     delete fSymbols;
     delete fRoundingIncrement;
 }
@@ -296,6 +307,7 @@ DecimalFormat::DecimalFormat(const DecimalFormat &source)
     fPosSuffixPattern(NULL),
     fNegPrefixPattern(NULL),
     fNegSuffixPattern(NULL),
+    fCurrencyChoice(NULL),
     fSymbols(NULL),
     fRoundingIncrement(NULL)
 {
@@ -331,6 +343,12 @@ DecimalFormat::operator=(const DecimalFormat& rhs)
     _copy_us_ptr(&fPosSuffixPattern, rhs.fPosSuffixPattern);
     _copy_us_ptr(&fNegPrefixPattern, rhs.fNegPrefixPattern);
     _copy_us_ptr(&fNegSuffixPattern, rhs.fNegSuffixPattern);
+    if (rhs.fCurrencyChoice == 0) {
+        delete fCurrencyChoice;
+        fCurrencyChoice = 0;
+    } else {
+        fCurrencyChoice = (ChoiceFormat*) rhs.fCurrencyChoice->clone();
+    }
     if(rhs.fRoundingIncrement == NULL) {
       delete fRoundingIncrement;
       fRoundingIncrement = NULL;
@@ -589,7 +607,7 @@ DecimalFormat::format(  double number,
         if (fieldPosition.getField() == NumberFormat::kIntegerField)
             fieldPosition.setEndIndex(appendTo.length());
 
-        addPadding(appendTo, fieldPosition, FALSE, FALSE /*ignored*/);
+        addPadding(appendTo, fieldPosition, 0, 0);
         return appendTo;
     }
 
@@ -625,7 +643,7 @@ DecimalFormat::format(  double number,
     // Special case for INFINITE,
     if (uprv_isInfinite(number))
     {
-        appendTo += (isNegative ? fNegativePrefix : fPositivePrefix);
+        int32_t prefixLen = appendAffix(appendTo, number, isNegative, TRUE);
 
         if (fieldPosition.getField() == NumberFormat::kIntegerField)
             fieldPosition.setBeginIndex(appendTo.length());
@@ -635,9 +653,9 @@ DecimalFormat::format(  double number,
         if (fieldPosition.getField() == NumberFormat::kIntegerField)
             fieldPosition.setEndIndex(appendTo.length());
 
-        appendTo += (isNegative ? fNegativeSuffix : fPositiveSuffix);
+        int32_t suffixLen = appendAffix(appendTo, number, isNegative, FALSE);
 
-        addPadding(appendTo, fieldPosition, TRUE, isNegative);
+        addPadding(appendTo, fieldPosition, prefixLen, suffixLen);
         return appendTo;
     }
 
@@ -755,7 +773,8 @@ DecimalFormat::subformat(UnicodeString& appendTo,
     }
 
     // Appends the prefix.
-    appendTo += (digits.fIsPositive ? fPositivePrefix : fNegativePrefix);
+    double doubleValue = digits.getDouble();
+    int32_t prefixLen = appendAffix(appendTo, doubleValue, !digits.fIsPositive, TRUE);
 
     if (fUseExponentialNotation)
     {
@@ -984,26 +1003,20 @@ DecimalFormat::subformat(UnicodeString& appendTo,
             fieldPosition.setEndIndex(appendTo.length());
     }
 
-    appendTo += (digits.fIsPositive ? fPositiveSuffix : fNegativeSuffix);
+    int32_t suffixLen = appendAffix(appendTo, doubleValue, !digits.fIsPositive, FALSE);
 
-    addPadding(appendTo, fieldPosition, TRUE, !digits.fIsPositive);
+    addPadding(appendTo, fieldPosition, prefixLen, suffixLen);
     return appendTo;
 }
 
 /**
  * Inserts the character fPad as needed to expand result to fFormatWidth.
  * @param result the string to be padded
- * @param hasAffixes if true, padding is positioned appropriately before or
- * after affixes.  If false, then isNegative is ignored, and there are only
- * two effective pad positions: kPadBeforePrefix/kPadAfterPrefix and
- * kPadBeforeSuffix/kPadAfterSuffix.
- * @param isNegative must be true if result contains a formatted negative
- * number, and false otherwise.  Ignored if hasAffixes is false.
  */
 void DecimalFormat::addPadding(UnicodeString& appendTo,
                                FieldPosition& fieldPosition,
-                               UBool hasAffixes,
-                               UBool isNegative) const
+                               int32_t prefixLen,
+                               int32_t suffixLen) const
 {
     if (fFormatWidth > 0) {
         int32_t len = fFormatWidth - appendTo.length();
@@ -1014,29 +1027,23 @@ void DecimalFormat::addPadding(UnicodeString& appendTo,
             }
             switch (fPadPosition) {
             case kPadAfterPrefix:
-                if (hasAffixes) {
-                    appendTo.insert(isNegative ? fNegativePrefix.length()
-                                             : fPositivePrefix.length(),
-                                  padding);
-                    break;
-                } // else fall through to next case
+                appendTo.insert(prefixLen, padding);
+                break;
             case kPadBeforePrefix:
                 appendTo.insert(0, padding);
                 break;
             case kPadBeforeSuffix:
-                if (hasAffixes) {
-                    appendTo.insert(appendTo.length() -
-                                  (isNegative ? fNegativeSuffix.length()
-                                              : fPositiveSuffix.length()),
-                                  padding);
-                    break;
-                } // else fall through to next case
+                appendTo.insert(appendTo.length() - suffixLen, padding);
+                break;
             case kPadAfterSuffix:
                 appendTo += padding;
                 break;
             }
-            fieldPosition.setBeginIndex(len + fieldPosition.getBeginIndex());
-            fieldPosition.setEndIndex(len + fieldPosition.getEndIndex());
+            if (fPadPosition == kPadBeforePrefix ||
+                fPadPosition == kPadAfterPrefix) {
+                fieldPosition.setBeginIndex(len + fieldPosition.getBeginIndex());
+                fieldPosition.setEndIndex(len + fieldPosition.getEndIndex());
+            }
         }
     }
 }
@@ -1164,8 +1171,8 @@ UBool DecimalFormat::subparse(const UnicodeString& text, ParsePosition& parsePos
     }
 
     // Match positive and negative prefixes; prefer longest match.
-    int32_t posMatch = compareAffix(fPositivePrefix, text, position);
-    int32_t negMatch = compareAffix(fNegativePrefix, text, position);
+    int32_t posMatch = compareAffix(text, position, FALSE, TRUE);
+    int32_t negMatch = compareAffix(text, position, TRUE, TRUE);
     if (posMatch >= 0 && negMatch >= 0) {
         if (posMatch > negMatch) {
             negMatch = -1;
@@ -1381,10 +1388,10 @@ UBool DecimalFormat::subparse(const UnicodeString& text, ParsePosition& parsePos
 
     // Match positive and negative suffixes; prefer longest match.
     if (posMatch >= 0) {
-        posMatch = compareAffix(fPositiveSuffix, text, position);
+        posMatch = compareAffix(text, position, FALSE, FALSE);
     }
     if (negMatch >= 0) {
-        negMatch = compareAffix(fNegativeSuffix, text, position);
+        negMatch = compareAffix(text, position, TRUE, FALSE);
     }
     if (posMatch >= 0 && negMatch >= 0) {
         if (posMatch > negMatch) {
@@ -1425,12 +1432,46 @@ UBool DecimalFormat::subparse(const UnicodeString& text, ParsePosition& parsePos
  * character.  Result is >= position.
  */
 int32_t DecimalFormat::skipPadding(const UnicodeString& text, int32_t position) const {
-    int32_t padLen = fPad.length();
+    int32_t padLen = U16_LENGTH(fPad);
     while (position < text.length() &&
-           text.compare(position, padLen, fPad) == 0) {
+           text.char32At(position) == fPad) {
         position += padLen;
     }
     return position;
+}
+
+/**
+ * Return the length matched by the given affix, or -1 if none.
+ * Runs of white space in the affix, match runs of white space in
+ * the input.  Pattern white space and input white space are
+ * determined differently; see code.
+ * @param text input text
+ * @param pos offset into input at which to begin matching
+ * @param isNegative
+ * @param isPrefix
+ * @return length of input that matches, or -1 if match failure
+ */
+int32_t DecimalFormat::compareAffix(const UnicodeString& text,
+                                    int32_t pos,
+                                    UBool isNegative,
+                                    UBool isPrefix) const {
+    if (fCurrencyChoice != NULL) {
+        if (isPrefix) {
+            return compareComplexAffix(isNegative ? *fNegPrefixPattern : *fPosPrefixPattern,
+                                       text, pos);
+        } else {
+            return compareComplexAffix(isNegative ? *fNegSuffixPattern : *fPosSuffixPattern,
+                                       text, pos);
+        }
+    }
+    
+    if (isPrefix) {
+        return compareSimpleAffix(isNegative ? fNegativePrefix : fPositivePrefix,
+                                  text, pos);
+    } else {
+        return compareSimpleAffix(isNegative ? fNegativeSuffix : fPositiveSuffix,
+                                  text, pos);
+    }
 }
 
 /**
@@ -1443,9 +1484,9 @@ int32_t DecimalFormat::skipPadding(const UnicodeString& text, int32_t position) 
  * @param pos offset into input at which to begin matching
  * @return length of input that matches, or -1 if match failure
  */
-int32_t DecimalFormat::compareAffix(const UnicodeString& affix,
-                                    const UnicodeString& input,
-                                    int32_t pos) {
+int32_t DecimalFormat::compareSimpleAffix(const UnicodeString& affix,
+                                          const UnicodeString& input,
+                                          int32_t pos) {
     int32_t start = pos;
     for (int32_t i=0; i<affix.length(); ) {
         UChar32 c = affix.char32At(i);
@@ -1453,25 +1494,12 @@ int32_t DecimalFormat::compareAffix(const UnicodeString& affix,
         i += len;
         if (uprv_isRuleWhiteSpace(c)) {
             // Advance over run in pattern
-            while (i < affix.length()) {
-                c = affix.char32At(i);
-                if (!uprv_isRuleWhiteSpace(c)) {
-                    break;
-                }
-                i += U16_LENGTH(c);
-            }
+            i = skipRuleWhiteSpace(affix, i);
 
             // Advance over run in input text
-            int32_t s = pos;
-            while (pos < input.length()) {
-                c = input.char32At(pos);
-                if (!u_isUWhiteSpace(c)) {
-                    break;
-                }
-                pos += U16_LENGTH(c);
-            }
-
             // Must see at least one white space char in input
+            int32_t s = pos;
+            pos = skipUWhiteSpace(input, pos);
             if (pos == s) {
                 return -1;
             }
@@ -1485,6 +1513,143 @@ int32_t DecimalFormat::compareAffix(const UnicodeString& affix,
         }
     }
     return pos - start;
+}
+
+/**
+ * Skip over a run of zero or more isRuleWhiteSpace() characters at
+ * pos in text.
+ */
+int32_t DecimalFormat::skipRuleWhiteSpace(const UnicodeString& text, int32_t pos) {
+    while (pos < text.length()) {
+        UChar32 c = text.char32At(pos);
+        if (!uprv_isRuleWhiteSpace(c)) {
+            break;
+        }
+        pos += U16_LENGTH(c);
+    }
+    return pos;
+}
+
+/**
+ * Skip over a run of zero or more isUWhiteSpace() characters at pos
+ * in text.
+ */
+int32_t DecimalFormat::skipUWhiteSpace(const UnicodeString& text, int32_t pos) {
+    while (pos < text.length()) {
+        UChar32 c = text.char32At(pos);
+        if (!u_isUWhiteSpace(c)) {
+            break;
+        }
+        pos += U16_LENGTH(c);
+    }
+    return pos;
+}
+
+/**
+ * Return the length matched by the given affix, or -1 if none.
+ * @param affixPat pattern string
+ * @param input input text
+ * @param pos offset into input at which to begin matching
+ * @return length of input that matches, or -1 if match failure
+ */
+int32_t DecimalFormat::compareComplexAffix(const UnicodeString& affixPat,
+                                           const UnicodeString& text,
+                                           int32_t pos) const {
+    U_ASSERT(fCurrencyChoice != NULL);
+    U_ASSERT(currency[0] != 0);
+
+    for (int32_t i=0; i<affixPat.length() && pos >= 0; ) {
+        UChar32 c = affixPat.char32At(i);
+        i += U16_LENGTH(c);
+
+        if (c == kQuote) {
+            U_ASSERT(i <= affixPat.length());
+            c = affixPat.char32At(i);
+            i += U16_LENGTH(c);
+
+            const UnicodeString* affix = NULL;
+
+            switch (c) {
+            case kCurrencySign: {
+                UBool intl = i<affixPat.length() &&
+                    affixPat.char32At(i) == kCurrencySign;
+                if (intl) {
+                    ++i;
+                    pos = match(text, pos, currency);
+                } else {
+                    ParsePosition ppos(pos);
+                    Formattable result;
+                    fCurrencyChoice->parse(text, result, ppos);
+                    pos = (ppos.getIndex() == pos) ? -1 : ppos.getIndex();
+                }
+                continue;
+            }
+            case kPatternPercent:
+                affix = &getConstSymbol(DecimalFormatSymbols::kPercentSymbol);
+                break;
+            case kPatternPerMill:
+                affix = &getConstSymbol(DecimalFormatSymbols::kPerMillSymbol);
+                break;
+            case kPatternPlus:
+                affix = &getConstSymbol(DecimalFormatSymbols::kPlusSignSymbol);
+                break;
+            case kPatternMinus:
+                affix = &getConstSymbol(DecimalFormatSymbols::kMinusSignSymbol);
+                break;
+            default:
+                // fall through to affix!=0 test, which will fail
+                break;
+            }
+
+            if (affix != NULL) {
+                pos = match(text, pos, *affix);
+                continue;
+            }
+        }
+
+        pos = match(text, pos, c);
+        if (uprv_isRuleWhiteSpace(c)) {
+            i = skipRuleWhiteSpace(affixPat, i);
+        }
+    }
+    return pos;
+}
+
+/**
+ * Match a single character at text[pos] and return the index of the
+ * next character upon success.  Return -1 on failure.  If
+ * isRuleWhiteSpace(ch) then match a run of white space in text.
+ */
+int32_t DecimalFormat::match(const UnicodeString& text, int32_t pos, UChar32 ch) {
+    if (uprv_isRuleWhiteSpace(ch)) {
+        // Advance over run of white space in input text
+        // Must see at least one white space char in input
+        int32_t s = pos;
+        pos = skipUWhiteSpace(text, pos);
+        if (pos == s) {
+            return -1;
+        }
+        return pos;
+    }
+    return (pos >= 0 && text.char32At(pos) == ch) ?
+        (pos + U16_LENGTH(ch)) : -1;
+}
+
+/**
+ * Match a string at text[pos] and return the index of the next
+ * character upon success.  Return -1 on failure.  Match a run of
+ * white space in str with a run of white space in text.
+ */
+int32_t DecimalFormat::match(const UnicodeString& text, int32_t pos, const UnicodeString& str) {
+    for (int32_t i=0; i<str.length() && pos >= 0; ) {
+        UChar32 ch = str.char32At(i);
+        i += U16_LENGTH(ch);
+        if (uprv_isRuleWhiteSpace(ch)) {
+            i = skipRuleWhiteSpace(str, i);
+        }
+        pos = match(text, pos, ch);
+    }
+    return pos;
 }
 
 //------------------------------------------------------------------------------
@@ -1768,10 +1933,10 @@ UnicodeString DecimalFormat::getPadCharacterString() {
  */
 void DecimalFormat::setPadCharacter(const UnicodeString &padChar) {
     if (padChar.length() > 0) {
-        fPad = padChar;
+        fPad = padChar.char32At(0);
     }
     else {
-        fPad = kPatternPadEscape;
+        fPad = kDefaultPad;
     }
 }
 
@@ -1986,18 +2151,18 @@ DecimalFormat::toLocalizedPattern(UnicodeString& result) const
  * called any time the symbols or the affix patterns change in order to keep
  * the expanded affix strings up to date.
  */
-void DecimalFormat::expandAffixes(void) {
+void DecimalFormat::expandAffixes() {
     if (fPosPrefixPattern != 0) {
-        expandAffix(*fPosPrefixPattern, fPositivePrefix);
+        expandAffix(*fPosPrefixPattern, fPositivePrefix, 0, FALSE);
     }
     if (fPosSuffixPattern != 0) {
-        expandAffix(*fPosSuffixPattern, fPositiveSuffix);
+        expandAffix(*fPosSuffixPattern, fPositiveSuffix, 0, FALSE);
     }
     if (fNegPrefixPattern != 0) {
-        expandAffix(*fNegPrefixPattern, fNegativePrefix);
+        expandAffix(*fNegPrefixPattern, fNegativePrefix, 0, FALSE);
     }
     if (fNegSuffixPattern != 0) {
-        expandAffix(*fNegSuffixPattern, fNegativeSuffix);
+        expandAffix(*fNegSuffixPattern, fNegativeSuffix, 0, FALSE);
     }
 #ifdef FMT_DEBUG
     UnicodeString s;
@@ -2022,17 +2187,38 @@ void DecimalFormat::expandAffixes(void) {
  * kQuote must be followed by another character; kQuote may not occur by
  * itself at the end of the pattern.
  *
+ * This method is used in two distinct ways.  First, it is used to expand
+ * the stored affix patterns into actual affixes.  For this usage, doFormat
+ * must be false.  Second, it is used to expand the stored affix patterns
+ * given a specific number (doFormat == true), for those rare cases in
+ * which a currency format references a ChoiceFormat (e.g., en_IN display
+ * name for INR).  The number itself is taken from digitList.
+ *
+ * When used in the first way, this method has a side effect: It sets
+ * currencyChoice to a ChoiceFormat object, if the currency's display name
+ * in this locale is a ChoiceFormat pattern (very rare).  It only does this
+ * if currencyChoice is null to start with.
+ *
  * @param pattern the non-null, fPossibly empty pattern
  * @param affix string to receive the expanded equivalent of pattern.
  * Previous contents are deleted.
+ * @param doFormat if false, then the pattern will be expanded, and if a
+ * currency symbol is encountered that expands to a ChoiceFormat, the
+ * currencyChoice member variable will be initialized if it is null.  If
+ * doFormat is true, then it is assumed that the currencyChoice has been
+ * created, and it will be used to format the value in digitList.
  */
 void DecimalFormat::expandAffix(const UnicodeString& pattern,
-                                UnicodeString& affix) const {
+                                UnicodeString& affix,
+                                double number,
+                                UBool doFormat) const {
     affix.remove();
     for (int i=0; i<pattern.length(); ) {
-        UChar32 c = pattern.char32At(i++);
+        UChar32 c = pattern.char32At(i);
+        i += U16_LENGTH(c);
         if (c == kQuote) {
-            c = pattern.char32At(i++);
+            c = pattern.char32At(i);
+            i += U16_LENGTH(c);
             switch (c) {
             case kCurrencySign: {
                 // As of ICU 2.2 we use the currency object, and
@@ -2055,9 +2241,51 @@ void DecimalFormat::expandAffix(const UnicodeString& pattern,
                         const UChar* s = ucurr_getName(currency, fSymbols->getLocale().getName(),
                                                        UCURR_SYMBOL_NAME, &isChoiceFormat, &len, &ec);
                         if (isChoiceFormat) {
-                            // TODO add support for ChoiceFormat
-                            len = u_strlen(currency); // Should == 3, but maybe not...?
-                            s = currency;
+                            // Two modes here: If doFormat is false, we set up
+                            // currencyChoice.  If doFormat is true, we use the
+                            // previously created currencyChoice to format the
+                            // value in digitList.
+                            if (!doFormat) {
+                                // If the currency is handled by a ChoiceFormat,
+                                // then we're not going to use the expanded
+                                // patterns.  Instantiate the ChoiceFormat and
+                                // return.
+                                if (fCurrencyChoice == NULL) {
+                                    // TODO Replace double-check with proper thread-safe code
+                                    ChoiceFormat* fmt = new ChoiceFormat(s, ec);
+                                    if (U_SUCCESS(ec)) {
+                                        umtx_lock(NULL);
+                                        if (fCurrencyChoice == NULL) {
+                                            // Cast away const
+                                            ((DecimalFormat*)this)->fCurrencyChoice = fmt;
+                                            fmt = NULL;
+                                        }
+                                        umtx_unlock(NULL);
+                                        delete fmt;
+                                    }
+                                }
+                                // We could almost return null or "" here, since the
+                                // expanded affixes are almost not used at all
+                                // in this situation.  However, one method --
+                                // toPattern() -- still does use the expanded
+                                // affixes, in order to set up a padding
+                                // pattern.  We use the CURRENCY_SIGN as a
+                                // placeholder.
+                                affix.append(kCurrencySign);
+                            } else {
+                                if (fCurrencyChoice != NULL) {
+                                    FieldPosition pos(0); // ignored
+                                    if (number < 0) {
+                                        number = -number;
+                                    }
+                                    fCurrencyChoice->format(number, affix, pos);
+                                } else {
+                                    // We only arrive here if the currency choice
+                                    // format in the locale data is INVALID.
+                                    affix += currency;
+                                }
+                            }
+                            continue;
                         }
                         affix += UnicodeString(s, len);
                     }
@@ -2094,6 +2322,37 @@ void DecimalFormat::expandAffix(const UnicodeString& pattern,
 }
 
 /**
+ * Append an affix to the given StringBuffer.
+ * @param buf buffer to append to
+ * @param isNegative
+ * @param isPrefix
+ */
+int32_t DecimalFormat::appendAffix(UnicodeString& buf, double number,
+                                   UBool isNegative, UBool isPrefix) const {
+    if (fCurrencyChoice != 0) {
+        const UnicodeString* affixPat = 0;
+        if (isPrefix) {
+            affixPat = isNegative ? fNegPrefixPattern : fPosPrefixPattern;
+        } else {
+            affixPat = isNegative ? fNegSuffixPattern : fPosSuffixPattern;
+        }
+        UnicodeString affixBuf;
+        expandAffix(*affixPat, affixBuf, number, TRUE);
+        buf.append(affixBuf);
+        return affixBuf.length();
+    }
+    
+    const UnicodeString* affix = NULL;
+    if (isPrefix) {
+        affix = isNegative ? &fNegativePrefix : &fPositivePrefix;
+    } else {
+        affix = isNegative ? &fNegativeSuffix : &fPositiveSuffix;
+    }
+    buf.append(*affix);
+    return affix->length();
+}
+
+/**
  * Appends an affix pattern to the given StringBuffer, quoting special
  * characters as needed.  Uses the internal affix pattern, if that exists,
  * or the literal affix, if the internal affix pattern is null.  The
@@ -2108,12 +2367,12 @@ void DecimalFormat::expandAffix(const UnicodeString& pattern,
  * @param localized true if the appended pattern should contain localized
  * pattern characters; otherwise, non-localized pattern chars are appended
  */
-void DecimalFormat::appendAffix(UnicodeString& appendTo,
-                                const UnicodeString* affixPattern,
-                                const UnicodeString& expAffix,
-                                UBool localized) const {
+void DecimalFormat::appendAffixPattern(UnicodeString& appendTo,
+                                       const UnicodeString* affixPattern,
+                                       const UnicodeString& expAffix,
+                                       UBool localized) const {
     if (affixPattern == 0) {
-        appendAffix(appendTo, expAffix, localized);
+        appendAffixPattern(appendTo, expAffix, localized);
     } else {
         int i;
         for (int pos=0; pos<affixPattern->length(); pos=i) {
@@ -2121,13 +2380,13 @@ void DecimalFormat::appendAffix(UnicodeString& appendTo,
             if (i < 0) {
                 UnicodeString s;
                 affixPattern->extractBetween(pos, affixPattern->length(), s);
-                appendAffix(appendTo, s, localized);
+                appendAffixPattern(appendTo, s, localized);
                 break;
             }
             if (i > pos) {
                 UnicodeString s;
                 affixPattern->extractBetween(pos, i, s);
-                appendAffix(appendTo, s, localized);
+                appendAffixPattern(appendTo, s, localized);
             }
             UChar32 c = affixPattern->char32At(++i);
             ++i;
@@ -2169,9 +2428,9 @@ void DecimalFormat::appendAffix(UnicodeString& appendTo,
  * escaped in either case.
  */
 void
-DecimalFormat::appendAffix(    UnicodeString& appendTo,
-                            const UnicodeString& affix,
-                            UBool localized) const {
+DecimalFormat::appendAffixPattern(UnicodeString& appendTo,
+                                  const UnicodeString& affix,
+                                  UBool localized) const {
     UBool needQuote;
     if(localized) {
         needQuote = affix.indexOf(getConstSymbol(DecimalFormatSymbols::kZeroDigitSymbol)) >= 0
@@ -2203,12 +2462,12 @@ DecimalFormat::appendAffix(    UnicodeString& appendTo,
     if (affix.indexOf((UChar)0x0027 /*'\''*/) < 0)
         appendTo += affix;
     else {
-        for (int32_t j = 0; j < affix.length(); ++j) {
+        for (int32_t j = 0; j < affix.length(); ) {
             UChar32 c = affix.char32At(j);
+            j += U16_LENGTH(c);
             appendTo += c;
             if (c == 0x0027 /*'\''*/)
                 appendTo += c;
-            j = j + UTF_NEED_MULTIPLE_UCHAR(c);
         }
     }
     if (needQuote)
@@ -2265,7 +2524,7 @@ DecimalFormat::toPattern(UnicodeString& result, UBool localized) const
         if (padPos == kPadBeforePrefix) {
             result.append(padSpec);
         }
-        appendAffix(result,
+        appendAffixPattern(result,
                     (part==0 ? fPosPrefixPattern : fNegPrefixPattern),
                     (part==0 ? fPositivePrefix : fNegativePrefix),
                     localized);
@@ -2367,7 +2626,7 @@ DecimalFormat::toPattern(UnicodeString& result, UBool localized) const
             result.append(padSpec);
         }
         if (part == 0) {
-            appendAffix(result, fPosSuffixPattern, fPositiveSuffix, localized);
+            appendAffixPattern(result, fPosSuffixPattern, fPositiveSuffix, localized);
             if (fPadPosition == kPadAfterSuffix && ! padSpec.isEmpty()) {
                 result.append(padSpec);
             }
@@ -2405,7 +2664,7 @@ DecimalFormat::toPattern(UnicodeString& result, UBool localized) const
                 }
             }
         } else {
-            appendAffix(result, fNegSuffixPattern, fNegativeSuffix, localized);
+            appendAffixPattern(result, fNegSuffixPattern, fNegativeSuffix, localized);
             if (fPadPosition == kPadAfterSuffix && ! padSpec.isEmpty()) {
                 result.append(padSpec);
             }
@@ -2525,7 +2784,7 @@ DecimalFormat::applyPattern(const UnicodeString& pattern,
         int8_t groupingCount = -1;
         int8_t groupingCount2 = -1;
         int32_t padPos = -1;
-        UnicodeString padChar;
+        UChar32 padChar;
         int32_t roundingPos = -1;
         DigitList roundingInc;
         int8_t expDigits = -1;
@@ -2776,9 +3035,9 @@ DecimalFormat::applyPattern(const UnicodeString& pattern,
                         return;
                     }
                     padPos = pos;
-                    padChar = pattern.char32At(++pos);
-                    pos += 1 + UTF_NEED_MULTIPLE_UCHAR(pattern.char32At(pos));
-//                    pos += padEscape.length();
+                    pos += padEscape.length();
+                    padChar = pattern.char32At(pos);
+                    pos += U16_LENGTH(padChar);
                     continue;
                 } else if (pattern.compare(pos, minus.length(), minus) == 0) {
                     affix->append(kQuote); // Encode minus
