@@ -220,8 +220,9 @@ void TestProperty()
       All the collations have the same version in an ICU
       version.
       ICU 2.0 currVersionArray = {0x18, 0xC0, 0x02, 0x02};
+      ICU 2.1 currVersionArray = {0x19, 0x00, 0x03, 0x03};
     */
-    UVersionInfo currVersionArray = {0x18, 0xC0, 0x02, 0x02};
+    UVersionInfo currVersionArray = {0x19, 0x00, 0x03, 0x03};
     UVersionInfo versionArray;
     
     log_verbose("The property tests begin : \n");

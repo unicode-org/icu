@@ -142,12 +142,12 @@ u_getVersion(UVersionInfo versionArray);
 /** in assigning different collation elements to code points                  */
 /** version 2 was in ICU 1.8.1. added support for prefixes, tweaked canonical */
 /** closure. However, the tailorings should probably get same CEs assigned    */
-#define UCOL_BUILDER_VERSION 3
+#define UCOL_BUILDER_VERSION 4
 
 /* This is the version of FractionalUCA.txt tailoring rules*/
 /* Version 1 was in ICU 1.8.1. Version two contains canonical closure for */
 /* supplementary code points */
-#define UCOL_FRACTIONAL_UCA_VERSION 2
+#define UCOL_FRACTIONAL_UCA_VERSION 3
 
 /** This is the version of the tailorings */
 #define UCOL_TAILORINGS_VERSION 1
