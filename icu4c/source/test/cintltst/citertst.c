@@ -578,6 +578,19 @@ static void TestOffset()
         ucol_close(en_us);
         return;
     }
+
+    /* testing boundaries */
+    ucol_setOffset(iter, 0, &status);
+    if (U_FAILURE(status) || ucol_previous(iter, &status) != UCOL_NULLORDER) {
+        log_err("Error: After setting offset to 0, we should be at the end "
+                "of the backwards iteration");
+    }
+    ucol_setOffset(iter, u_strlen(test1), &status);
+    if (U_FAILURE(status) || ucol_next(iter, &status) != UCOL_NULLORDER) {
+        log_err("Error: After setting offset to end of the string, we should "
+                "be at the end of the backwards iteration");
+    }
+
     /* Run all the way through the iterator, then get the offset */
 
     orders = getOrders(iter, &orderLength);

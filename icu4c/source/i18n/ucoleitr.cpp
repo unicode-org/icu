@@ -243,6 +243,7 @@ ucol_setOffset(UCollationElements    *elems,
       ci->flags |= UCOL_ITER_HASLEN;
   }
   ci->fcdPosition = NULL;
+  elems->reset_ = FALSE;
 }
 
 U_CAPI int32_t U_EXPORT2
