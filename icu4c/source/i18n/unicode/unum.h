@@ -494,6 +494,9 @@ typedef enum UNumberFormatAttribute {
   UNUM_PADDING_POSITION,
   /** Secondary grouping size */
   UNUM_SECONDARY_GROUPING_SIZE,
+  /** Use significant digits
+   * @draft ICU 3.0 */
+  UNUM_SIGNIFICANT_DIGITS_USED,
   /** Minimum significant digits
    * @draft ICU 3.0 */
   UNUM_MIN_SIGNIFICANT_DIGITS,

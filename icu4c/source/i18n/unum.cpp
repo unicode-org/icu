@@ -363,6 +363,9 @@ unum_getAttribute(const UNumberFormat*          fmt,
         // TBD: what should this return?
         return df->getMinimumFractionDigits();
         
+    case UNUM_SIGNIFICANT_DIGITS_USED:
+        return df->areSignificantDigitsUsed();
+        
     case UNUM_MAX_SIGNIFICANT_DIGITS:
         return df->getMaximumSignificantDigits();
         
@@ -407,15 +410,15 @@ unum_setAttribute(    UNumberFormat*          fmt,
     DecimalFormat* df = (DecimalFormat*) fmt;
     switch(attr) {
     case UNUM_PARSE_INT_ONLY:
-        df->setParseIntegerOnly((UBool)newValue);
+        df->setParseIntegerOnly(newValue!=0);
         break;
         
     case UNUM_GROUPING_USED:
-        df->setGroupingUsed((UBool)newValue);
+        df->setGroupingUsed(newValue!=0);
         break;
         
     case UNUM_DECIMAL_ALWAYS_SHOWN:
-        df->setDecimalSeparatorAlwaysShown((UBool)newValue);
+        df->setDecimalSeparatorAlwaysShown(newValue!=0);
         break;
         
     case UNUM_MAX_INTEGER_DIGITS:
@@ -444,6 +447,10 @@ unum_setAttribute(    UNumberFormat*          fmt,
         df->setMaximumFractionDigits(newValue);
         break;
         
+    case UNUM_SIGNIFICANT_DIGITS_USED:
+        df->setSignificantDigitsUsed(newValue!=0);
+        break;
+
     case UNUM_MAX_SIGNIFICANT_DIGITS:
         df->setMaximumSignificantDigits(newValue);
         break;
