@@ -54,6 +54,7 @@ class StringSearch;
  * <code>NUL</code>, must be specified as a constant.
  * The U_STRING_DECL macro should be invoked exactly once for one
  * such string variable before it is used.
+ * @stable
  */
 #if U_SIZEOF_WCHAR_T==U_SIZEOF_UCHAR && U_CHARSET_FAMILY==U_ASCII_FAMILY
 #   define UNICODE_STRING(cs, length) UnicodeString(TRUE, (UChar *)L ## cs, length)
@@ -120,6 +121,7 @@ class StringSearch;
  * </ol></p>
  *
  * @see Unicode
+ * @stable
  */
 class U_COMMON_API UnicodeString : public Replaceable
 {
@@ -333,7 +335,7 @@ public:
    * @return a negative/zero/positive integer corresponding to whether
    * this string is less than/equal to/greater than the second one
    * in code point order
-   * @draft
+   * @draft ICU 1.8
    */
   inline int8_t compareCodePointOrder(const UnicodeString& text) const;
 
@@ -354,7 +356,7 @@ public:
    * @return a negative/zero/positive integer corresponding to whether
    * this string is less than/equal to/greater than the second one
    * in code point order
-   * @draft
+   * @draft ICU 1.8
    */
   inline int8_t compareCodePointOrder(UTextOffset start,
                                       int32_t length,
@@ -379,7 +381,7 @@ public:
    * @return a negative/zero/positive integer corresponding to whether
    * this string is less than/equal to/greater than the second one
    * in code point order
-   * @draft
+   * @draft ICU 1.8
    */
    inline int8_t compareCodePointOrder(UTextOffset start,
                                        int32_t length,
@@ -403,7 +405,7 @@ public:
    * @return a negative/zero/positive integer corresponding to whether
    * this string is less than/equal to/greater than the second one
    * in code point order
-   * @draft
+   * @draft ICU 1.8
    */
   inline int8_t compareCodePointOrder(const UChar *srcChars,
                                       int32_t srcLength) const;
@@ -425,7 +427,7 @@ public:
    * @return a negative/zero/positive integer corresponding to whether
    * this string is less than/equal to/greater than the second one
    * in code point order
-   * @draft
+   * @draft ICU 1.8
    */
   inline int8_t compareCodePointOrder(UTextOffset start,
                                       int32_t length,
@@ -450,7 +452,7 @@ public:
    * @return a negative/zero/positive integer corresponding to whether
    * this string is less than/equal to/greater than the second one
    * in code point order
-   * @draft
+   * @draft ICU 1.8
    */
   inline int8_t compareCodePointOrder(UTextOffset start,
                                       int32_t length,
@@ -477,7 +479,7 @@ public:
    * @return a negative/zero/positive integer corresponding to whether
    * this string is less than/equal to/greater than the second one
    * in code point order
-   * @draft
+   * @draft ICU 1.8
    */
   inline int8_t compareCodePointOrderBetween(UTextOffset start,
                                              UTextOffset limit,
@@ -492,7 +494,7 @@ public:
    * @param text Another string to compare this one to.
    * @param options Either U_FOLD_CASE_DEFAULT or U_FOLD_CASE_EXCLUDE_SPECIAL_I
    * @return A negative, zero, or positive integer indicating the comparison result.
-   * @draft
+   * @draft ICU 1.8
    */
   inline int8_t caseCompare(const UnicodeString& text, uint32_t options) const;
 
@@ -505,7 +507,7 @@ public:
    * @param srcText Another string to compare this one to.
    * @param options Either U_FOLD_CASE_DEFAULT or U_FOLD_CASE_EXCLUDE_SPECIAL_I
    * @return A negative, zero, or positive integer indicating the comparison result.
-   * @draft
+   * @draft ICU 1.8
    */
   inline int8_t caseCompare(UTextOffset start,
          int32_t length,
@@ -523,7 +525,7 @@ public:
    * @param srcLength The number of code units from that string to compare.
    * @param options Either U_FOLD_CASE_DEFAULT or U_FOLD_CASE_EXCLUDE_SPECIAL_I
    * @return A negative, zero, or positive integer indicating the comparison result.
-   * @draft
+   * @draft ICU 1.8
    */
   inline int8_t caseCompare(UTextOffset start,
          int32_t length,
@@ -540,7 +542,7 @@ public:
    * @param srcLength The number of code units from that string to compare.
    * @param options Either U_FOLD_CASE_DEFAULT or U_FOLD_CASE_EXCLUDE_SPECIAL_I
    * @return A negative, zero, or positive integer indicating the comparison result.
-   * @draft
+   * @draft ICU 1.8
    */
   inline int8_t caseCompare(const UChar *srcChars,
          int32_t srcLength,
@@ -555,7 +557,7 @@ public:
    * @param srcChars A pointer to another string to compare this one to.
    * @param options Either U_FOLD_CASE_DEFAULT or U_FOLD_CASE_EXCLUDE_SPECIAL_I
    * @return A negative, zero, or positive integer indicating the comparison result.
-   * @draft
+   * @draft ICU 1.8
    */
   inline int8_t caseCompare(UTextOffset start,
          int32_t length,
@@ -573,7 +575,7 @@ public:
    * @param srcLength The number of code units from that string to compare.
    * @param options Either U_FOLD_CASE_DEFAULT or U_FOLD_CASE_EXCLUDE_SPECIAL_I
    * @return A negative, zero, or positive integer indicating the comparison result.
-   * @draft
+   * @draft ICU 1.8
    */
   inline int8_t caseCompare(UTextOffset start,
          int32_t length,
@@ -593,7 +595,7 @@ public:
    * @param srcLimit The offset after the last code unit from that string to compare.
    * @param options Either U_FOLD_CASE_DEFAULT or U_FOLD_CASE_EXCLUDE_SPECIAL_I
    * @return A negative, zero, or positive integer indicating the comparison result.
-   * @draft
+   * @draft ICU 1.8
    */
   inline int8_t caseCompareBetween(UTextOffset start,
             UTextOffset limit,
@@ -642,10 +644,9 @@ public:
    * @param srcChars The characters to match.
    * @param srcStart the offset into <TT>srcText</TT> to start matching
    * @param srcLength the number of characters in <TT>srcChars</TT> to match
-   * @return TRUE if this ends with the characters in <TT>srcChars</TT>, 
-   FALSE otherwise
+   * @return TRUE if this ends with the characters in <TT>srcChars</TT>, FALSE otherwise
    * @stable
-  */
+   */
   inline UBool startsWith(const UChar *srcChars,
             UTextOffset srcStart,
             int32_t srcLength) const;
@@ -819,7 +820,7 @@ public:
    * using bitwise comparison.
    * @param c The code unit to search for.
    * @return The offset into this of <TT>c</TT>, or -1 if not found.
-   * @draft
+   * @stable
    */
   inline UTextOffset indexOf(UChar c) const;
 
@@ -828,7 +829,7 @@ public:
    * using bitwise comparison.
    * @param c The code point to search for.
    * @return The offset into this of <TT>c</TT>, or -1 if not found.
-   * @draft
+   * @stable
    */
   inline UTextOffset indexOf(UChar32 c) const;
 
@@ -838,7 +839,7 @@ public:
    * @param c The code unit to search for.
    * @param start The offset at which searching will start.
    * @return The offset into this of <TT>c</TT>, or -1 if not found.
-   * @draft
+   * @stable
    */
   inline UTextOffset indexOf(UChar c,
               UTextOffset start) const;
@@ -849,7 +850,7 @@ public:
    * @param c The code point to search for.
    * @param start The offset at which searching will start.
    * @return The offset into this of <TT>c</TT>, or -1 if not found.
-   * @draft
+   * @stable
    */
   inline UTextOffset indexOf(UChar32 c,
               UTextOffset start) const;
@@ -862,7 +863,7 @@ public:
    * @param start the offset into this at which to start matching
    * @param length the number of characters in this to search
    * @return The offset into this of <TT>c</TT>, or -1 if not found.
-   * @draft
+   * @stable
    */
   inline UTextOffset indexOf(UChar c,
               UTextOffset start,
@@ -876,7 +877,7 @@ public:
    * @param start the offset into this at which to start matching
    * @param length the number of characters in this to search
    * @return The offset into this of <TT>c</TT>, or -1 if not found.
-   * @draft
+   * @stable
    */
   inline UTextOffset indexOf(UChar32 c,
               UTextOffset start,
@@ -999,7 +1000,7 @@ public:
    * using bitwise comparison.
    * @param c The code unit to search for.
    * @return The offset into this of <TT>c</TT>, or -1 if not found.
-   * @draft
+   * @stable
    */
   inline UTextOffset lastIndexOf(UChar c) const;
 
@@ -1008,7 +1009,7 @@ public:
    * using bitwise comparison.
    * @param c The code point to search for.
    * @return The offset into this of <TT>c</TT>, or -1 if not found.
-   * @draft
+   * @stable
    */
   inline UTextOffset lastIndexOf(UChar32 c) const;
 
@@ -1018,7 +1019,7 @@ public:
    * @param c The code unit to search for.
    * @param start The offset at which searching will start.
    * @return The offset into this of <TT>c</TT>, or -1 if not found.
-   * @draft
+   * @stable
    */
   inline UTextOffset lastIndexOf(UChar c,
               UTextOffset start) const;
@@ -1029,7 +1030,7 @@ public:
    * @param c The code point to search for.
    * @param start The offset at which searching will start.
    * @return The offset into this of <TT>c</TT>, or -1 if not found.
-   * @draft
+   * @stable
    */
   inline UTextOffset lastIndexOf(UChar32 c,
               UTextOffset start) const;
@@ -1042,7 +1043,7 @@ public:
    * @param start the offset into this at which to start matching
    * @param length the number of characters in this to search
    * @return The offset into this of <TT>c</TT>, or -1 if not found.
-   * @draft
+   * @stable
    */
   inline UTextOffset lastIndexOf(UChar c,
               UTextOffset start,
@@ -1056,7 +1057,7 @@ public:
    * @param start the offset into this at which to start matching
    * @param length the number of characters in this to search
    * @return The offset into this of <TT>c</TT>, or -1 if not found.
-   * @draft
+   * @stable
    */
   inline UTextOffset lastIndexOf(UChar32 c,
               UTextOffset start,
@@ -1069,7 +1070,7 @@ public:
    * Return the code unit at offset <tt>offset</tt>.
    * @param offset a valid offset into the text
    * @returns the code unit at offset <tt>offset</tt>
-   * @draft
+   * @stable
    */
   inline UChar charAt(UTextOffset offset) const;
 
@@ -1077,7 +1078,7 @@ public:
    * Return the code unit at offset <tt>offset</tt>.
    * @param offset a valid offset into the text
    * @returns the code unit at offset <tt>offset</tt>
-   * @draft
+   * @stable
    */
   inline UChar operator [] (UTextOffset offset) const;
 
@@ -1088,7 +1089,7 @@ public:
    * that indicates the text offset of any of the code units
    * that will be assembled into a code point (21-bit value) and returned
    * @returns the code point of text at <tt>offset</tt>
-   * @draft
+   * @stable
    */
   inline UChar32 char32At(UTextOffset offset) const;
 
@@ -1209,7 +1210,7 @@ public:
    * @param delta (signed) code point count to move the index forward or backward
    *        in the string
    * @return the resulting code unit index
-   * @draft
+   * @draft ICU 2.0
    */
   UTextOffset moveIndex32(UTextOffset index, int32_t delta) const;
 
@@ -1254,7 +1255,7 @@ public:
    * @param destCapacity Number of UChars available at dest.
    * @param errorCode ICU error code.
    * @return length()
-   * @draft
+   * @draft ICU 2.0
    */
   int32_t
   extract(UChar *dest, int32_t destCapacity,
@@ -1373,7 +1374,7 @@ public:
    * @return the length of the output string, not counting the terminating NUL;
    *         if the length is greater than destCapacity, then the string will not fit
    *         and a buffer of the indicated length would need to be passed in
-   * @draft
+   * @draft ICU 2.0
    */
   int32_t extract(char *dest, int32_t destCapacity,
                   UConverter *cnv,
@@ -1429,7 +1430,7 @@ public:
    *
    * @return the number of UChars available in the internal buffer
    * @see getBuffer
-   * @draft ICU 2.0 was private before
+   * @draft ICU 2.0 (was private before)
    */
   inline int32_t getCapacity(void) const;
 
@@ -1446,7 +1447,7 @@ public:
    * Determine if this string is still valid.
    * @return TRUE if the string is valid, FALSE otherwise
    * @see setToBogus()
-   * @draft
+   * @draft ICU 2.0 (was private before)
    */
   inline UBool isBogus(void) const;
 
@@ -1471,7 +1472,7 @@ public:
    * with the code unit <TT>ch</TT>.
    * @param ch the code unit to replace
    * @return a reference to this
-   * @draft
+   * @stable
    */
   inline UnicodeString& operator= (UChar ch);
 
@@ -1480,7 +1481,7 @@ public:
    * with the code point <TT>ch</TT>.
    * @param ch the code point to replace
    * @return a reference to this
-   * @draft
+   * @stable
    */
   inline UnicodeString& operator= (UChar32 ch);
 
@@ -1528,7 +1529,7 @@ public:
    * @param srcChar the code unit which becomes the UnicodeString's character 
    * content
    * @return a reference to this
-   * @draft
+   * @stable
    */
   UnicodeString& setTo(UChar srcChar);
 
@@ -1538,7 +1539,7 @@ public:
    * @param srcChar the code point which becomes the UnicodeString's character 
    * content
    * @return a reference to this
-   * @draft
+   * @stable
    */
   UnicodeString& setTo(UChar32 srcChar);
 
@@ -1559,7 +1560,7 @@ public:
    * @param textLength The number of Unicode characters in <code>text</code> to alias.
    *                   If -1, then this constructor will determine the length
    *                   by calling <code>u_strlen()</code>.
-   * @draft
+   * @stable
    */
   UnicodeString &setTo(UBool isTerminated,
                        const UChar *text,
@@ -1581,7 +1582,7 @@ public:
    * @param buffer The characters to alias for the UnicodeString.
    * @param buffLength The number of Unicode characters in <code>buffer</code> to alias.
    * @param buffCapacity The size of <code>buffer</code> in UChars.
-   * @draft
+   * @stable
    */
   UnicodeString &setTo(UChar *buffer,
                        int32_t buffLength,
@@ -1606,7 +1607,7 @@ public:
    * or simply by modifying it (which will work like with an empty string).
    *
    * @see isBogus()
-   * @draft ICU 2.0 was private in earlier releases
+   * @draft ICU 2.0 (was private in earlier releases)
    */
   void setToBogus();
 
@@ -1615,7 +1616,7 @@ public:
    * @param offset A valid offset into the text of the character to set
    * @param ch The new character
    * @return A reference to this
-   * @draft
+   * @stable
    */
   UnicodeString& setCharAt(UTextOffset offset, 
                UChar ch);
@@ -1628,7 +1629,7 @@ public:
    * object.
    * @param ch the code unit to be appended
    * @return a reference to this
-   * @draft
+   * @stable
    */
  inline  UnicodeString& operator+= (UChar ch);
 
@@ -1637,7 +1638,7 @@ public:
    * object.
    * @param ch the code point to be appended
    * @return a reference to this
-   * @draft
+   * @stable
    */
  inline  UnicodeString& operator+= (UChar32 ch);
 
@@ -1710,7 +1711,7 @@ public:
    * Append the code unit <TT>srcChar</TT> to the UnicodeString object.
    * @param srcChar the code unit to append
    * @return a reference to this
-   * @draft
+   * @stable
    */
   inline UnicodeString& append(UChar srcChar);
 
@@ -1718,7 +1719,7 @@ public:
    * Append the code point <TT>srcChar</TT> to the UnicodeString object.
    * @param srcChar the code point to append
    * @return a reference to this
-   * @draft
+   * @stable
    */
   inline UnicodeString& append(UChar32 srcChar);
 
@@ -1791,7 +1792,7 @@ public:
    * @param start the offset at which the insertion occurs
    * @param srcChar the code unit to insert
    * @return a reference to this
-   * @draft
+   * @stable
    */
   inline UnicodeString& insert(UTextOffset start, 
             UChar srcChar);
@@ -1802,7 +1803,7 @@ public:
    * @param start the offset at which the insertion occurs
    * @param srcChar the code point to insert
    * @return a reference to this
-   * @draft
+   * @stable
    */
   inline UnicodeString& insert(UTextOffset start, 
             UChar32 srcChar);
@@ -1898,7 +1899,7 @@ public:
    * <TT>start + length</TT> is not modified.
    * @param srcChar the new code unit
    * @return a reference to this
-   * @draft
+   * @stable
    */
   inline UnicodeString& replace(UTextOffset start, 
              int32_t length, 
@@ -1913,7 +1914,7 @@ public:
    * <TT>start + length</TT> is not modified.
    * @param srcChar the new code point
    * @return a reference to this
-   * @draft
+   * @stable
    */
   inline UnicodeString& replace(UTextOffset start, 
              int32_t length, 
@@ -1979,6 +1980,7 @@ public:
    * <code>start..limit-1</code> will be copied to <code>dest</code>.
    * Implementations of this method may assume that <code>dest <= start ||
    * dest >= limit</code>.
+   * @stable
    */
   virtual void copy(int32_t start, int32_t limit, int32_t dest);
 
@@ -2081,7 +2083,7 @@ public:
    * @param padChar the character to use for padding. Defaults to 
    * space (U+0020)
    * @return TRUE if the text was padded, FALSE otherwise.
-   * @draft
+   * @stable
    */
   UBool padLeading(int32_t targetLength,
                     UChar padChar = 0x0020);
@@ -2095,7 +2097,7 @@ public:
    * @param padChar the character to use for padding. Defaults to 
    * space (U+0020)
    * @return TRUE if the text was padded, FALSE otherwise.
-   * @draft
+   * @stable
    */
   UBool padTrailing(int32_t targetLength,
                      UChar padChar = 0x0020);
@@ -2179,7 +2181,7 @@ public:
    *
    * @param options Either U_FOLD_CASE_DEFAULT or U_FOLD_CASE_EXCLUDE_SPECIAL_I
    * @return A reference to this.
-   * @draft
+   * @draft ICU 1.8
    */
   UnicodeString &foldCase(uint32_t options=U_FOLD_CASE_DEFAULT);
 
@@ -2224,7 +2226,7 @@ public:
    *         or 0 if an error occurs (nested calls, out of memory)
    *
    * @see releaseBuffer
-   * @draft
+   * @draft ICU 2.0
    */
   UChar *getBuffer(int32_t minCapacity);
 
@@ -2246,7 +2248,7 @@ public:
    *        the current capacity of the string
    *
    * @see getBuffer(int32_t minCapacity)
-   * @draft
+   * @draft ICU 2.0
    */
   void releaseBuffer(int32_t newLength=-1);
 
@@ -2276,7 +2278,7 @@ public:
    *         or 0 if the string is empty or bogus
    *
    * @see getBuffer(int32_t minCapacity)
-   * @draft
+   * @draft ICU 2.0
    */
   inline const UChar *getBuffer() const;
 
@@ -2298,21 +2300,21 @@ public:
    * @param c is used to initially fill the string
    * @param count specifies how many code points c are to be written in the
    *              string
-   * @draft
+   * @stable
    */
   UnicodeString(int32_t capacity, UChar32 c, int32_t count);
 
   /**
    * Single UChar (code unit) constructor.
    * @param ch the character to place in the UnicodeString
-   * @draft
+   * @stable
    */
   UnicodeString(UChar ch);
 
   /**
    * Single UChar32 (code point) constructor.
    * @param ch the character to place in the UnicodeString
-   * @draft
+   * @stable
    */
   UnicodeString(UChar32 ch);
 
@@ -2373,7 +2375,7 @@ public:
    * @param buffer The characters to alias for the UnicodeString.
    * @param buffLength The number of Unicode characters in <code>buffer</code> to alias.
    * @param buffCapacity The size of <code>buffer</code> in UChars.
-   * @draft
+   * @stable
    */
   UnicodeString(UChar *buffer, int32_t buffLength, int32_t buffCapacity);
 
@@ -2426,7 +2428,7 @@ public:
    * @param cnv converter object (ucnv_resetToUnicode() will be called),
    *        can be NULL for the default converter
    * @param errorCode normal ICU error code
-   * @draft
+   * @draft ICU 2.0
    */
   UnicodeString(
         const char *src, int32_t srcLength,
@@ -2475,7 +2477,13 @@ public:
               int32_t length = INT32_MAX,
               UBool asian = TRUE) const;
 
-
+  /**
+   * Return a modifiable reference to a code unit of the string.
+   *
+   * @param pos The index of the code unit to refer to.
+   * @return A modifiable UCharReference to that code unit.
+   * @stable
+   */
   UCharReference operator[] (UTextOffset pos);
 
   /**
@@ -2509,6 +2517,7 @@ public:
    * @see UnicodeString#unescapeAt()
    * @see u_unescape()
    * @see u_unescapeAt()
+   * @stable
    */
   UnicodeString unescape() const;
 
@@ -2529,6 +2538,7 @@ public:
    * @see UnicodeString#unescape()
    * @see u_unescape()
    * @see u_unescapeAt()
+   * @stable
    */
   UChar32 unescapeAt(int32_t &offset) const;
 

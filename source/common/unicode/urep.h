@@ -33,6 +33,7 @@ U_CDECL_BEGIN
  * An opaque replaceable text object.  This will be manipulated only
  * through the caller-supplied UReplaceableFunctor struct.  Related
  * to the C++ class Replaceable.
+ * @stable
  */
 typedef void* UReplaceable;
 
@@ -41,12 +42,14 @@ typedef void* UReplaceable;
  * UReplaceable.  The caller should supply the required functions to
  * manipulate their text appropriately.  Related to the C++ class
  * Replaceable.
+ * @stable
  */
 typedef struct _UReplaceableCallbacks {
 
     /**
      * Function pointer that returns the number of UChar code units in
      * this text.
+     * @stable
      */
     int32_t (*length)(const UReplaceable* rep);
 
@@ -55,6 +58,7 @@ typedef struct _UReplaceableCallbacks {
      * offset into this text; 0 <= offset < n, where n is the value
      * returned by (*length)(rep).  See unistr.h for a description of
      * charAt() vs. char32At().
+     * @stable
      */
     UChar   (*charAt)(const UReplaceable* rep,
                       int32_t offset);
@@ -63,6 +67,7 @@ typedef struct _UReplaceableCallbacks {
      * Function pointer that returns a UChar32 code point at the given
      * offset into this text.  See unistr.h for a description of
      * charAt() vs. char32At().
+     * @stable
      */
     UChar32 (*char32At)(const UReplaceable* rep,
                         int32_t offset);
@@ -79,6 +84,7 @@ typedef struct _UReplaceableCallbacks {
      * start..limit-1.
      * @param textLength the number of UChars at text, or -1 if text
      * is null-terminated.
+     * @stable
      */
     void    (*replace)(UReplaceable* rep,
                        int32_t start,
@@ -98,6 +104,7 @@ typedef struct _UReplaceableCallbacks {
      * exclusive.
      * @param dest the index at which the copy of the UChars should be
      * inserted.
+     * @stable
      */
     void    (*copy)(UReplaceable* rep,
                     int32_t start,

@@ -116,22 +116,27 @@
  * For more usage examples, see the Unicode Standard Annex.
  */
 
+/**
+ * Constants for normalization modes.
+ * @draft ICU 1.8
+ */
 typedef enum {
-  /** No decomposition/composition */
+  /** No decomposition/composition. @draft ICU 1.8 */
   UNORM_NONE = 1, 
-  /** Canonical decomposition */
+  /** Canonical decomposition. @draft ICU 1.8 */
   UNORM_NFD = 2,
-  /** Compatibility decomposition */
+  /** Compatibility decomposition. @draft ICU 1.8 */
   UNORM_NFKD = 3,
-  /** Canonical decomposition followed by canonical composition */
+  /** Canonical decomposition followed by canonical composition. @draft ICU 1.8 */
   UNORM_NFC = 4,
-  /** Default normalization */
+  /** Default normalization. @draft ICU 1.8 */
   UNORM_DEFAULT = UNORM_NFC, 
-  /** Compatibility decomposition followed by canonical composition */
+  /** Compatibility decomposition followed by canonical composition. @draft ICU 1.8 */
   UNORM_NFKC =5,
-  /** "Fast C or D" form */
+  /** "Fast C or D" form. @draft ICU 2.0 */
   UNORM_FCD = 6,
 
+  /** One more than the highest normalization mode constant. @draft ICU 1.8 */
   UNORM_MODE_COUNT,
 
   /* *** The rest of this enum is entirely deprecated. *** */
@@ -211,6 +216,11 @@ unorm_normalize(const UChar *source, int32_t sourceLength,
  */
 #define u_normalize unorm_normalize
 
+/**
+ * Result values for unorm_quickCheck().
+ * For details see Unicode Technical Report 15.
+ * @draft ICU 1.8
+ */
 typedef enum UNormalizationCheckResult {
   /** 
    * Indicates that string is not in the normalized format
@@ -243,6 +253,7 @@ typedef enum UNormalizationCheckResult {
  * @paran mode         which normalization form to test for
  * @param status       a pointer to a UErrorCode to receive any errors
  * @return UNORM_YES, UNORM_NO or UNORM_MAYBE
+ * @draft ICU 1.8
  */
 U_CAPI UNormalizationCheckResult U_EXPORT2
 unorm_quickCheck(const UChar *source, int32_t sourcelength,

@@ -40,15 +40,14 @@ class UnicodeString;
  * <code>extractBetween()</code>.
  *
  * @author Alan Liu
- * @draft
+ * @stable
  */
 class U_COMMON_API Replaceable {
 
 public:
-
     /**
      * Destructor.
-     * @draft
+     * @stable
      */
     virtual ~Replaceable();
 
@@ -116,7 +115,7 @@ public:
      * <= length()</code>.
      * @param text the text to replace characters <code>start</code>
      * to <code>limit - 1</code> 
-     * @draft
+     * @stable
      */
     virtual void handleReplaceBetween(UTextOffset start,
                                       UTextOffset limit,
@@ -150,6 +149,7 @@ public:
      * <code>start..limit-1</code> will be copied to <code>dest</code>.
      * Implementations of this method may assume that <code>dest <= start ||
      * dest >= limit</code>.
+     * @stable
      */
     virtual void copy(int32_t start, int32_t limit, int32_t dest) = 0;
 

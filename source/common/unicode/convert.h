@@ -51,7 +51,7 @@ class U_COMMON_API UnicodeConverter
   /**
  * Creates Unicode Conversion Object will default to LATIN1 <-> encoding
  * @return An object Handle if successful or a NULL if the creation failed
- * @stable
+ * @deprecated
  */
  UnicodeConverter();
 
@@ -63,7 +63,7 @@ class U_COMMON_API UnicodeConverter
  * If the internal program does not work correctly, for example, if there's no such codepage,
  * U_INTERNAL_PROGRAM_ERROR will be returned.
  * @return An object Handle if successful or a NULL if the creation failed
- * @stable
+ * @deprecated
  */
  UnicodeConverter(const char*             name,
              UErrorCode&              err);
@@ -77,7 +77,7 @@ class U_COMMON_API UnicodeConverter
   *program does not work correctly, for example, if there's no such codepage, U_INTERNAL_PROGRAM_ERROR will be
   *returned.
   *@return the created Unicode converter object
-  * @stable
+  * @deprecated
   */
  UnicodeConverter(const UnicodeString&    name,
              UErrorCode&              err);
@@ -89,7 +89,7 @@ class U_COMMON_API UnicodeConverter
   * If the internal program does not work correctly, for example, if there's no such codepage,
   * U_INTERNAL_PROGRAM_ERROR will be returned.
   * @return An object Handle if successful or a NULL if failed
-  * @stable
+  * @deprecated
   */
  UnicodeConverter(int32_t                      codepageNumber,
              UConverterPlatform  platform,
@@ -110,7 +110,7 @@ class U_COMMON_API UnicodeConverter
   * @param err the error status code.  U_MEMORY_ALLOCATION_ERROR will be returned if the
   * the internal process buffer cannot be allocated for transcoding.  U_ILLEGAL_ARGUMENT_ERROR
   * is returned if the converter is null or the source or target string is empty.
-  * @draft backslash versus Yen sign in shift-JIS
+  * @deprecated
   */
 void fromUnicodeString(char*                    target,
                int32_t&                 targetSize,
@@ -128,7 +128,7 @@ void fromUnicodeString(char*                    target,
  * @param err the error status code U_MEMORY_ALLOCATION_ERROR will be returned if the
  * the internal process buffer cannot be allocated for transcoding.  U_ILLEGAL_ARGUMENT_ERROR
  * is returned if the converter is null or the source or target string is empty.
- * @stable
+ * @deprecated
  */
 void  toUnicodeString(UnicodeString&    target,
                       const char*       source,
@@ -153,7 +153,7 @@ void  toUnicodeString(UnicodeString&    target,
  * in this call, FALSE otherwise.  (future feature pending)
  * @param UErrorCode the error status.  U_ILLEGAL_ARGUMENT_ERROR will be returned if the
  * converter is null.
- * @draft backslash versus Yen sign in shift-JIS
+ * @deprecated
  */
 void fromUnicode(char*&         target,
                  const char*    targetLimit,
@@ -181,7 +181,7 @@ void fromUnicode(char*&         target,
  * in this call, FALSE otherwise.  (future feature pending)
  * @param err the error code status  U_ILLEGAL_ARGUMENT_ERROR will be returned if the
  * converter is null, targetLimit < target, sourceLimit < source
- * @stable
+ * @deprecated
  */
  void toUnicode(UChar*&        target,
         const UChar*   targetLimit,
@@ -195,7 +195,7 @@ void fromUnicode(char*&         target,
 /**
  * Returns the maximum length of bytes used by a character. This varies between 1 and 4
  * @return the max number of bytes per codepage character  * converter is null, targetLimit < target, sourceLimit < source
- * @stable
+ * @deprecated
  */
 int8_t getMaxBytesPerChar(void) const;
 
@@ -203,7 +203,7 @@ int8_t getMaxBytesPerChar(void) const;
 * Returns the minimum byte length for characters in this codepage. This is either
 * 1 or 2 for all supported codepages.
 * @return the minimum number of byte per codepage character
-* @stable
+* @deprecated
 */
 int8_t getMinBytesPerChar(void) const;
 
@@ -211,7 +211,7 @@ int8_t getMinBytesPerChar(void) const;
  *Gets the type of conversion associated with the converter
  * e.g. SBCS, MBCS, DBCS, UTF8, UTF16_BE, UTF16_LE, ISO_2022, EBCDIC_STATEFUL, LATIN_1
  * @return the type of the converter
- * @stable
+ * @deprecated
  */
 UConverterType getType(void) const;
 
@@ -225,7 +225,7 @@ UConverterType getType(void) const;
  * @param starters: an array of size 256 to be filled in
  * @param err: an array of size 256 to be filled in
  * @see ucnv_getType
- * @stable
+ * @deprecated
  */
  void getStarters(UBool starters[256],
                   UErrorCode& err) const;
@@ -237,7 +237,7 @@ UConverterType getType(void) const;
  * @param  err the error status code.  U_ILLEGAL_ARGUMENT_ERROR will be returned if
  * the converter is null.  If the substitution character array is too small, an
  * U_INDEX_OUTOFBOUNDS_ERROR will be returned.
- * @stable
+ * @deprecated
  */
 void getSubstitutionChars(char*         subChars,
                           int8_t&       len,
@@ -251,7 +251,7 @@ void getSubstitutionChars(char*         subChars,
  * number of bytes copied to that buffer
  * @param err the error status code.  U_ILLEGAL_ARGUMENT_ERROR if the converter is
  * null.   or if the number of bytes provided are not in the codepage's range (e.g length 1 for ucs-2)
- * @stable
+ * @deprecated
  */
 void setSubstitutionChars(const char*   subChars,
                           int8_t        len,
@@ -260,7 +260,7 @@ void setSubstitutionChars(const char*   subChars,
 /**
  * Resets the state of stateful conversion to the default state. This is used
  * in the case of error to restart a conversion from a known default state.
- * @stable
+ * @deprecated
  */
 void resetState(void);
 
@@ -270,7 +270,7 @@ void resetState(void);
  * @param converter the Unicode converter
  * @param err the error status code. U_INDEX_OUTOFBOUNDS_ERROR in the converterNameLen is too
  * small to contain the name.
- * @stable
+ * @deprecated
  */
 const char*  getName( UErrorCode&  err) const;
 
@@ -283,7 +283,7 @@ const char*  getName( UErrorCode&  err) const;
  * @param err the error status code.  U_ILLEGAL_ARGUMENT_ERROR will returned if
  * the converter is null or if converter's data table is null.
  * @return If any error occurrs, null will be returned.
- * @stable
+ * @deprecated
  */
  int32_t  getCodepage(UErrorCode& err) const;
 
@@ -292,7 +292,7 @@ const char*  getName( UErrorCode&  err) const;
   * is missing or a byte sequence is illegal etc.
   * @param action the callback function pointer
   * @param context the callback function state
-  * @stable
+  * @deprecated
   */
  void getMissingCharAction(UConverterToUCallback *action,
                            const void **context) const;
@@ -302,7 +302,7 @@ const char*  getName( UErrorCode&  err) const;
  * or there is an unpaired surrogate etc.
  * @param action the callback function pointer
  * @param context the callback function state
- * @stable
+ * @deprecated
  */
  void getMissingUnicodeAction(UConverterFromUCallback *action,
                               const void **context) const;
@@ -315,7 +315,7 @@ const char*  getName( UErrorCode&  err) const;
   * @param oldAction the original action constant, saved for later restoration.
   * @param oldContext the old toUnicode callback function state
   * @param err the error status code
-  * @stable
+  * @deprecated
   */
  void  setMissingCharAction(UConverterToUCallback     newAction,
                 const void* newContext,
@@ -332,7 +332,7 @@ const char*  getName( UErrorCode&  err) const;
  * @param oldAction the original action constant, saved for later restoration.
  * @param oldContext the old fromUnicode callback function state
  * @param err the error status code
- * @stable
+ * @deprecated
  */
  void  setMissingUnicodeAction(UConverterFromUCallback  newAction,
                    const void* newContext,
@@ -344,7 +344,7 @@ const char*  getName( UErrorCode&  err) const;
  * available, the internal name will be returned instead.
  * @param displayLocale the valid Locale, from which we want to localize
  * @param displayString a UnicodeString that is going to be filled in.
- * @stable
+ * @deprecated
  */
 void getDisplayName(const Locale&   displayLocale,
                     UnicodeString&  displayName) const;
@@ -354,7 +354,7 @@ void getDisplayName(const Locale&   displayLocale,
  * available, the internal name will be returned instead.
  * @param err the error code status
  * @return the codepages platform
- * @stable
+ * @deprecated
  */
 UConverterPlatform  getCodepagePlatform(UErrorCode& err) const;
 
@@ -369,7 +369,7 @@ UConverterPlatform  getCodepagePlatform(UErrorCode& err) const;
  * @param num the number of available converters
  * @param err the error code status
  * @return the name array
- * @stable
+ * @deprecated
  */
 static  const char* const* getAvailableNames(int32_t&   num,
                          UErrorCode&  err);
@@ -377,7 +377,7 @@ static  const char* const* getAvailableNames(int32_t&   num,
 /**
  * Iterates through every cached converter and frees all the unused ones
  * @return the number of cached converters successfully deleted
- * @stable
+ * @deprecated
  */
 static   int32_t flushCache(void);
 /**
@@ -388,7 +388,7 @@ static   int32_t flushCache(void);
  * buffer and replace all the yen sign characters with backslash.  This is necessary
  * when the user tries to open a file with the input buffer on Windows.
  * @param source the input buffer to be fixed
- * @draft
+ * @deprecated
  */
 void fixFileSeparator(UnicodeString& source) const;
 
@@ -397,7 +397,7 @@ void fixFileSeparator(UnicodeString& source) const;
  * character or not.
  * @return TRUE if the converter contains ambiguous mapping of the same 
  * character, FALSE otherwise.
- * @draft
+ * @deprecated
  */
 UBool isAmbiguous(void) const;
 

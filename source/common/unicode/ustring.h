@@ -130,6 +130,7 @@ u_strchr(const UChar     *s,
  * @return A pointer to the first occurrence of <TT>substring</TT> in 
  * <TT>s</TT>, or a null pointer if <TT>substring</TT>
  * is not in <TT>s</TT>.
+ * @stable
  */
 U_CAPI UChar * U_EXPORT2
 u_strstr(const UChar *s, const UChar *substring);
@@ -236,7 +237,7 @@ u_strcmp(const UChar     *s1,
  * @return a negative/zero/positive integer corresponding to whether
  * the first string is less than/equal to/greater than the second one
  * in code point order
- * @draft
+ * @draft ICU 1.8
  */
 U_CAPI int32_t U_EXPORT2
 u_strcmpCodePointOrder(const UChar *s1, const UChar *s2);
@@ -269,7 +270,7 @@ u_strncmp(const UChar     *ucs1,
  * @return a negative/zero/positive integer corresponding to whether
  * the first string is less than/equal to/greater than the second one
  * in code point order
- * @draft
+ * @draft ICU 1.8
  */
 U_CAPI int32_t U_EXPORT2
 u_strncmpCodePointOrder(const UChar *s1, const UChar *s2, int32_t n);
@@ -282,7 +283,7 @@ u_strncmpCodePointOrder(const UChar *s1, const UChar *s2, int32_t n);
  * @param s2 A string to compare.
  * @param options Either U_FOLD_CASE_DEFAULT or U_FOLD_CASE_EXCLUDE_SPECIAL_I
  * @return A negative, zero, or positive integer indicating the comparison result.
- * @draft
+ * @draft ICU 1.8
  */
 U_CAPI int32_t U_EXPORT2
 u_strcasecmp(const UChar *s1, const UChar *s2, uint32_t options);
@@ -297,7 +298,7 @@ u_strcasecmp(const UChar *s1, const UChar *s2, uint32_t options);
  * @param n The maximum number of characters each string to case-fold and then compare.
  * @param options Either U_FOLD_CASE_DEFAULT or U_FOLD_CASE_EXCLUDE_SPECIAL_I
  * @return A negative, zero, or positive integer indicating the comparison result.
- * @draft
+ * @draft ICU 1.8
  */
 U_CAPI int32_t U_EXPORT2
 u_strncasecmp(const UChar *s1, const UChar *s2, int32_t n, uint32_t options);
@@ -312,7 +313,7 @@ u_strncasecmp(const UChar *s1, const UChar *s2, int32_t n, uint32_t options);
  * @param n The number of characters in each string to case-fold and then compare.
  * @param options Either U_FOLD_CASE_DEFAULT or U_FOLD_CASE_EXCLUDE_SPECIAL_I
  * @return A negative, zero, or positive integer indicating the comparison result.
- * @draft
+ * @draft ICU 2.0
  */
 U_CAPI int32_t U_EXPORT2
 u_memcasecmp(const UChar *s1, const UChar *s2, int32_t length, uint32_t options);
@@ -403,7 +404,6 @@ U_CAPI char* U_EXPORT2 u_austrncpy(char *dst,
             const UChar *src,
             int32_t n );
 
-
 /**
  * Synonym for memcpy(), but with UChars only.
  * @stable
@@ -455,7 +455,7 @@ u_memcmp(UChar *buf1, UChar *buf2, int32_t count);
  * @return a negative/zero/positive integer corresponding to whether
  * the first string is less than/equal to/greater than the second one
  * in code point order
- * @draft
+ * @draft ICU 1.8
  */
 U_CAPI int32_t U_EXPORT2
 u_memcmpCodePointOrder(const UChar *s1, const UChar *s2, int32_t count);
@@ -524,6 +524,7 @@ u_memchr32(UChar *src, UChar32 ch, int32_t count);
  * &#32;       return u_strcmp(ustringVar1, ustringVar2);
  * &#32;   }
  * </pre>
+ * @stable
  */
 #if U_SIZEOF_WCHAR_T==U_SIZEOF_UCHAR && U_CHARSET_FAMILY==U_ASCII_FAMILY
 #   define U_STRING_DECL(var, cs, length) static const wchar_t var[(length)+1]={ L ## cs }
@@ -580,6 +581,7 @@ u_memchr32(UChar *src, UChar32 ch, int32_t count);
  * @see u_unescapeAt
  * @see UnicodeString#unescape()
  * @see UnicodeString#unescapeAt()
+ * @stable
  */
 U_CAPI int32_t U_EXPORT2
 u_unescape(const char *src,
@@ -591,6 +593,7 @@ u_unescape(const char *src,
  * pointer will be whatever is passed into u_unescapeAt().
  *
  * @see u_unescapeAt
+ * @stable
  */
 U_CDECL_BEGIN
 typedef UChar (*UNESCAPE_CHAR_AT)(int32_t offset, void *context);
@@ -622,6 +625,7 @@ U_CDECL_END
  * @see u_unescape()
  * @see UnicodeString#unescape()
  * @see UnicodeString#unescapeAt()
+ * @stable
  */
 U_CAPI UChar32 U_EXPORT2
 u_unescapeAt(UNESCAPE_CHAR_AT charAt,
@@ -647,7 +651,7 @@ u_unescapeAt(UNESCAPE_CHAR_AT charAt,
  *                  which must not indicate a failure before the function call.
  * @return The length of the result string. It may be greater than destCapacity. In that case,
  *         only some of the result was written to the destination buffer.
- * @draft
+ * @draft ICU 1.8
  */
 U_CAPI int32_t U_EXPORT2
 u_strToUpper(UChar *dest, int32_t destCapacity,
@@ -673,7 +677,7 @@ u_strToUpper(UChar *dest, int32_t destCapacity,
  *                  which must not indicate a failure before the function call.
  * @return The length of the result string. It may be greater than destCapacity. In that case,
  *         only some of the result was written to the destination buffer.
- * @draft
+ * @draft ICU 1.8
  */
 U_CAPI int32_t U_EXPORT2
 u_strToLower(UChar *dest, int32_t destCapacity,
@@ -701,7 +705,7 @@ u_strToLower(UChar *dest, int32_t destCapacity,
  *                  which must not indicate a failure before the function call.
  * @return The length of the result string. It may be greater than destCapacity. In that case,
  *         only some of the result was written to the destination buffer.
- * @draft
+ * @draft ICU 1.8
  */
 U_CAPI int32_t U_EXPORT2
 u_strFoldCase(UChar *dest, int32_t destCapacity,
@@ -726,9 +730,8 @@ u_strFoldCase(UChar *dest, int32_t destCapacity,
  * @param pErrorCode    Must be a valid pointer to an error code value,
  *                      which must not indicate a failure before the function call.
  * @return The pointer to destination buffer.
- * @draft
+ * @draft ICU 2.0
  */
-
 U_CAPI wchar_t* U_EXPORT2
 u_strToWCS(wchar_t *dest, 
            int32_t destCapacity,
@@ -753,7 +756,7 @@ u_strToWCS(wchar_t *dest,
  * @param pErrorCode    Must be a valid pointer to an error code value,
  *                      which must not indicate a failure before the function call.
  * @return The pointer to destination buffer.
- * @draft
+ * @draft ICU 2.0
  */
 U_CAPI UChar* U_EXPORT2
 u_strFromWCS(UChar   *dest,
@@ -779,7 +782,7 @@ u_strFromWCS(UChar   *dest,
  * @param pErrorCode    Must be a valid pointer to an error code value,
  *                      which must not indicate a failure before the function call.
  * @return The pointer to destination buffer.
- * @draft
+ * @draft ICU 2.0
  */
 U_CAPI char* U_EXPORT2 
 u_strToUTF8(char *dest,           
@@ -806,7 +809,7 @@ u_strToUTF8(char *dest,
  * @param pErrorCode    Must be a valid pointer to an error code value,
  *                      which must not indicate a failure before the function call.
  * @return The pointer to destination buffer.
- * @draft
+ * @draft ICU 2.0
  */
 U_CAPI UChar* U_EXPORT2
 u_strFromUTF8(UChar *dest,             
@@ -833,7 +836,7 @@ u_strFromUTF8(UChar *dest,
  * @param pErrorCode    Must be a valid pointer to an error code value,
  *                      which must not indicate a failure before the function call.
  * @return The pointer to destination buffer.
- * @draft
+ * @draft ICU 2.0
  */
 U_CAPI UChar32* U_EXPORT2 
 u_strToUTF32(UChar32 *dest, 
@@ -860,7 +863,7 @@ u_strToUTF32(UChar32 *dest,
  * @param pErrorCode    Must be a valid pointer to an error code value,
  *                      which must not indicate a failure before the function call.
  * @return The pointer to destination buffer.
- * @draft
+ * @draft ICU 2.0
  */
 U_CAPI UChar* U_EXPORT2 
 u_strFromUTF32(UChar   *dest,

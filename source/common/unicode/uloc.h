@@ -195,8 +195,8 @@
  */
 
 /*
- *
  * Useful constants for language.
+ * @stable
  */
 #define ULOC_CHINESE            "zh"
 #define ULOC_ENGLISH            "en"
@@ -209,8 +209,8 @@
 #define ULOC_TRADITIONAL_CHINESE "zh_TW"
 
 /*
- *
- * Useful constants for country.
+ * Useful constants for country/region.
+ * @stable
  */
 #define ULOC_CANADA         "en_CA"
 #define ULOC_CANADA_FRENCH  "fr_CA"
@@ -225,9 +225,6 @@
 #define ULOC_UK             "en_GB"
 #define ULOC_US             "en_US"
 
-
-
-
 /**
  * Gets ICU's default locale.  This pointer and/or the contents of the pointer may
  * become invalid if the uloc_setDefault() is called, so copy the contents of the
@@ -237,7 +234,6 @@
  * @system
  * @stable
  */
-
 U_CAPI const char* U_EXPORT2
 uloc_getDefault(void);
 
@@ -266,7 +262,6 @@ uloc_setDefault(const char* localeID,
  * than languageCapacity, the returned language code will be truncated.  
  * @stable
  */
-
 U_CAPI int32_t U_EXPORT2
 uloc_getLanguage(const char*    localeID,
          char* language,
@@ -285,7 +280,6 @@ uloc_getLanguage(const char*    localeID,
  * than countryCapacity, the returned country code will be truncated.  
  * @stable
  */
-
 U_CAPI int32_t U_EXPORT2
 uloc_getCountry(const char*    localeID,
         char* country,
@@ -304,7 +298,6 @@ uloc_getCountry(const char*    localeID,
  * than variantCapacity, the returned variant code will be truncated.  
  * @stable
  */
-
 U_CAPI int32_t U_EXPORT2
 uloc_getVariant(const char*    localeID,
         char* variant,
@@ -327,7 +320,6 @@ uloc_getVariant(const char*    localeID,
  * than nameCapacity, the returned full name will be truncated.  
  * @stable
  */
-
 U_CAPI int32_t U_EXPORT2
 uloc_getName(const char*    localeID,
          char* name,
@@ -352,7 +344,6 @@ uloc_getISO3Language(const char* localeID);
  * @return country the ISO country code for localeID
  * @stable
  */
-
 U_CAPI const char* U_EXPORT2
 uloc_getISO3Country(const char* localeID);
 
@@ -363,7 +354,6 @@ uloc_getISO3Country(const char* localeID);
  * @return country the Win32 LCID for localeID
  * @stable
  */
-
 U_CAPI uint32_t U_EXPORT2
 uloc_getLCID(const char* localeID);
 
@@ -398,7 +388,6 @@ uloc_getDisplayLanguage(const char* locale,
  * than countryCapacity, the returned displayable country code will be truncated.  
  * @stable
  */
-
 U_CAPI int32_t U_EXPORT2
 uloc_getDisplayCountry(const char* locale,
             const char* inLocale,
@@ -419,7 +408,6 @@ uloc_getDisplayCountry(const char* locale,
  * than variantCapacity, the returned displayable variant code will be truncated.  
  * @stable
  */
- 
 U_CAPI int32_t U_EXPORT2
 uloc_getDisplayVariant(const char* locale,
             const char* inLocale,
@@ -439,7 +427,6 @@ uloc_getDisplayVariant(const char* locale,
  * than variantCapacity, the returned displayable name will be truncated.  
  * @stable
  */
-
 U_CAPI int32_t U_EXPORT2
 uloc_getDisplayName(const char* localeID,
             const char* inLocaleID, /* NULL may be used to specify the default */
@@ -449,7 +436,6 @@ uloc_getDisplayName(const char* localeID,
 
 
 /**
- *
  * Gets the specified locale from a list of all available locales.  
  * The return value is a pointer to an item of 
  * a locale name array.  Both this array and the pointers
@@ -494,25 +480,19 @@ uloc_getISOLanguages(void);
 U_CAPI const char* const* U_EXPORT2
 uloc_getISOCountries(void);
 
-#ifdef ICU_ULOC_USE_DEPRECATES
 /**
- * Deprecated 1999dec14 - Gets the directory containing the locale data files.
+ * Truncate the locale ID string to get the parent locale ID.
+ * Copies the part of the string before the last underscore.
+ * The parent locale ID will be an empty string if there is no
+ * underscore, or if there is only one underscore at localeID[0].
  *
- * @return the locale data file directory
- * @deprecated 1999dec14 - Remove after 2000dec14
+ * @param localeID Input locale ID string.
+ * @param parent   Output string buffer for the parent locale ID.
+ * @param parentCapacity Size of the output buffer.
+ * @param err A UErrorCode value.
+ * @return The length of the parent locale ID.
+ * @stable
  */
-#define uloc_getDataDirectory u_getDataDirectory
-
-/**
- * Deprecated 1999dec14 - Sets the directory containing the locale data files.
- *
- * @return the new directory to fetch locale data from
- * @deprecated 1999dec14 - Remove after 2000dec14
- */
-#define uloc_setDataDirectory u_setDataDirectory
-#endif
-
-/*Internal function */
 int32_t U_EXPORT2
 uloc_getParent(const char*    localeID,
                  char* parent,

@@ -94,6 +94,7 @@
  *         If an error occured, then no output was written, or it may be
  *         incomplete. If <code>U_BUFFER_OVERFLOW_ERROR</code> is set, then
  *         the return value indicates the necessary destination buffer size.
+ * @stable
  */
 U_CAPI int32_t U_EXPORT2
 u_shapeArabic(const UChar *source, int32_t sourceLength,
@@ -103,51 +104,57 @@ u_shapeArabic(const UChar *source, int32_t sourceLength,
 
 /**
  * Memory option: allow the result to have a different length than the source.
+ * @stable
  */
 #define U_SHAPE_LENGTH_GROW_SHRINK              0
 
 /**
  * Memory option: the result must have the same length as the source.
  * If more room is necessary, then try to consume spaces next to modified characters.
+ * @stable
  */
 #define U_SHAPE_LENGTH_FIXED_SPACES_NEAR        1
 
 /**
  * Memory option: the result must have the same length as the source.
  * If more room is necessary, then try to consume spaces at the end of the text.
+ * @stable
  */
 #define U_SHAPE_LENGTH_FIXED_SPACES_AT_END      2
 
 /**
  * Memory option: the result must have the same length as the source.
  * If more room is necessary, then try to consume spaces at the beginning of the text.
+ * @stable
  */
 #define U_SHAPE_LENGTH_FIXED_SPACES_AT_BEGINNING 3
 
-/** Bit mask for memory options. */
+/** Bit mask for memory options. @stable */
 #define U_SHAPE_LENGTH_MASK                     3
 
 
-/** Direction indicator: the source is in logical (keyboard) order. */
+/** Direction indicator: the source is in logical (keyboard) order. @stable */
 #define U_SHAPE_TEXT_DIRECTION_LOGICAL          0
 
-/** Direction indicator:
+/**
+ * Direction indicator:
  * the source is in visual LTR order,
  * the leftmost displayed character stored first.
+ * @stable
  */
 #define U_SHAPE_TEXT_DIRECTION_VISUAL_LTR       4
 
-/** Bit mask for direction indicators. */
+/** Bit mask for direction indicators. @stable */
 #define U_SHAPE_TEXT_DIRECTION_MASK             4
 
 
-/** Letter shaping option: do not perform letter shaping. */
+/** Letter shaping option: do not perform letter shaping. @stable */
 #define U_SHAPE_LETTERS_NOOP                    0
 
-/** Letter shaping option: replace abstract letter characters by "shaped" ones. */
+/** Letter shaping option: replace abstract letter characters by "shaped" ones. @stable */
 #define U_SHAPE_LETTERS_SHAPE                   8
 
-/** Letter shaping option: replace "shaped" letter characters by abstract ones. */
+/** Letter shaping option: replace "shaped" letter characters by abstract ones. @stable */
 #define U_SHAPE_LETTERS_UNSHAPE                 0x10
 
 /**
@@ -155,25 +162,28 @@ u_shapeArabic(const UChar *source, int32_t sourceLength,
  * The only difference with U_SHAPE_LETTERS_SHAPE is that Tashkeel letters
  * are always "shaped" into the isolated form instead of the medial form
  * (selecting code points from the Arabic Presentation Forms-B block).
+ * @draft ICU 2.0
  */
 #define U_SHAPE_LETTERS_SHAPE_TASHKEEL_ISOLATED 0x18
 
-/** Bit mask for letter shaping options. */
+/** Bit mask for letter shaping options. @stable */
 #define U_SHAPE_LETTERS_MASK                    0x18
 
 
-/** Digit shaping option: do not perform digit shaping. */
+/** Digit shaping option: do not perform digit shaping. @stable */
 #define U_SHAPE_DIGITS_NOOP                     0
 
 /**
  * Digit shaping option:
  * Replace European digits (U+0030...) by Arabic-Indic digits.
+ * @stable
  */
 #define U_SHAPE_DIGITS_EN2AN                    0x20
 
 /**
  * Digit shaping option:
  * Replace Arabic-Indic digits by European digits (U+0030...).
+ * @stable
  */
 #define U_SHAPE_DIGITS_AN2EN                    0x40
 
@@ -186,6 +196,7 @@ u_shapeArabic(const UChar *source, int32_t sourceLength,
  * For the first characters, the preceding strongly directional character
  * (initial state) is assumed to be not an Arabic letter
  * (it is <code>U_LEFT_TO_RIGHT</code> [L] or <code>U_RIGHT_TO_LEFT</code> [R]).
+ * @stable
  */
 #define U_SHAPE_DIGITS_ALEN2AN_INIT_LR          0x60
 
@@ -197,26 +208,27 @@ u_shapeArabic(const UChar *source, int32_t sourceLength,
  * The direction of "preceding" depends on the direction indicator option.
  * For the first characters, the preceding strongly directional character
  * (initial state) is assumed to be an Arabic letter.
+ * @stable
  */
 #define U_SHAPE_DIGITS_ALEN2AN_INIT_AL          0x80
 
-/** Not a valid option value. */
+/** Not a valid option value. May be replaced by a new option. */
 #define U_SHAPE_DIGITS_RESERVED                 0xa0
 
-/** Bit mask for digit shaping options. */
+/** Bit mask for digit shaping options. @stable */
 #define U_SHAPE_DIGITS_MASK                     0xe0
 
 
-/** Digit type option: Use Arabic-Indic digits (U+0660...U+0669). */
+/** Digit type option: Use Arabic-Indic digits (U+0660...U+0669). @stable */
 #define U_SHAPE_DIGIT_TYPE_AN                   0
 
-/** Digit type option: Use Eastern (Extended) Arabic-Indic digits (U+06f0...U+06f9). */
+/** Digit type option: Use Eastern (Extended) Arabic-Indic digits (U+06f0...U+06f9). @stable */
 #define U_SHAPE_DIGIT_TYPE_AN_EXTENDED          0x100
 
-/** Not a valid option value. */
+/** Not a valid option value. May be replaced by a new option. */
 #define U_SHAPE_DIGIT_TYPE_RESERVED             0x200
 
-/** Bit mask for digit type options. */
+/** Bit mask for digit type options. @stable */
 #define U_SHAPE_DIGIT_TYPE_MASK                 0x3f00
 
 #endif

@@ -53,6 +53,7 @@ U_CDECL_BEGIN
  * common place to store the source version of the data;
  * for data from the Unicode character database, this could
  * reflect the Unicode version.</p>
+ * @stable
  */
 typedef struct {
     /** @memo sizeof(UDataInfo) */
@@ -86,6 +87,7 @@ typedef struct {
 
 /**
  * Forward declaration of the data memory type.
+ * @stable
  */
 typedef struct UDataMemory UDataMemory;
 
@@ -253,10 +255,9 @@ udata_getInfo(UDataMemory *pData, UDataInfo *pInfo);
  * return U_UNSUPPORTED_ERROR if mapped data support is not available on
  * the currently compiled ICU.
  *
- * @draft
  * @param data pointer to ICU common data
  * @param err outgoing error status <code>U_USING_DEFAULT_ERROR, U_UNSUPPORTED_ERROR</code>
- *
+ * @stable
  */
 
 U_CAPI void U_EXPORT2
@@ -279,12 +280,11 @@ udata_setCommonData(const void *data, UErrorCode *err);
  *           Any such calls to setAppData will have no effect.
  *
  *
- * @draft
  * @param path pointer to the path name by which the application will refer
  *             to (open) this data.
  * @param data pointer to the data
  * @param err outgoing error status <code>U_USING_DEFAULT_ERROR, U_UNSUPPORTED_ERROR</code>
- *
+ * @draft ICU 2.0
  */
 U_CAPI void U_EXPORT2
 udata_setAppData(const char *path, const void *data, UErrorCode *err);

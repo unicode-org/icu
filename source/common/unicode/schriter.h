@@ -33,6 +33,7 @@ U_NAMESPACE_BEGIN
  * compare equal).
  * @see CharacterIterator
  * @see ForwardCharacterIterator
+ * @stable
  */
 class U_COMMON_API StringCharacterIterator : public UCharCharacterIterator {
 public:
@@ -106,13 +107,13 @@ public:
    * Returns a new StringCharacterIterator referring to the same
    * character in the same range of the same string as this one.  The
    * caller must delete the new iterator.  
-   * @draft
+   * @stable
    */
   virtual CharacterIterator* clone(void) const;
                                 
   /**
    * Sets the iterator to iterate over the provided string.
-   * @draft
+   * @stable
    */
   void setText(const UnicodeString& newText);
 
