@@ -7324,7 +7324,7 @@ static
 inline void UCOL_INIT_CEBUF(ucol_CEBuf *b) {
     (b)->buf = (b)->pos = (b)->localArray;
     (b)->endp = (b)->buf + UCOL_CEBUF_SIZE;
-};
+}
 
 static
 void ucol_CEBuf_Expand(ucol_CEBuf *b, collIterate *ci) {
@@ -7353,7 +7353,7 @@ inline void UCOL_CEBUF_PUT(ucol_CEBuf *b, uint32_t ce, collIterate *ci) {
         ucol_CEBuf_Expand(b, ci);
 }
     *(b)->pos++ = ce;
-};
+}
 
 /* This is a trick string compare function that goes in and uses sortkeys to compare */
 /* It is used when compare gets in trouble and needs to bail out                     */

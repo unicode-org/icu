@@ -849,7 +849,7 @@ void formatErrorMessage(UErrorCode &realStatus, const UnicodeString& pattern, co
     fmt->format(myArgs,4,result,ignore,realStatus);
 
     delete fmt;
-};
+}
 
 
 UBool U_CALLCONV isAcceptable(void *, const char *, const char *, const UDataInfo *) {

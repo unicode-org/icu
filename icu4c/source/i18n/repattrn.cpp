@@ -36,7 +36,7 @@ RegexPattern::RegexPattern() {
 
     // Lazy init of all shared global sets.
     RegexStaticSets::initGlobals(&fDeferredStatus);
-};
+}
 
 
 //--------------------------------------------------------------------------
@@ -200,7 +200,7 @@ void RegexPattern::zap() {
 //--------------------------------------------------------------------------
 RegexPattern::~RegexPattern() {
     zap();
-};
+}
 
 
 //--------------------------------------------------------------------------
@@ -211,7 +211,7 @@ RegexPattern::~RegexPattern() {
 RegexPattern  *RegexPattern::clone() const { 
     RegexPattern  *copy = new RegexPattern(*this);
     return copy;
-};
+}
 
 
 //--------------------------------------------------------------------------
@@ -271,7 +271,7 @@ RegexPattern::compile(const UnicodeString &regex,
     compiler.compile(regex, pe, status);
 
     return This;
-};
+}
     
 //
 //   compile with default flags.
@@ -322,7 +322,7 @@ RegexMatcher *RegexPattern::matcher(const UnicodeString &input,
         retMatcher->reset(input);
     }
     return retMatcher;
-};
+}
 
 RegexMatcher *RegexPattern::matcher(const UChar * /*input*/,
                                     UErrorCode          &status)  const 
@@ -357,7 +357,7 @@ RegexMatcher *RegexPattern::matcher(UErrorCode &status)  const {
         return NULL;
     }
     return retMatcher;
-};
+}
 
 
 

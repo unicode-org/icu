@@ -21,12 +21,12 @@
 //---------------------------------------------------------------------------
 UVectorTest::UVectorTest() 
 {
-};
+}
 
 
 UVectorTest::~UVectorTest()
 {
-};
+}
 
 
 
@@ -115,7 +115,7 @@ void UVectorTest::UVector_API() {
     TEST_ASSERT(a->elementAti(2) == 20);
     TEST_ASSERT(a->elementAti(3) == 30);
     delete a;
-};
+}
 
 void UVectorTest::UStack_API() {
     UErrorCode  status = U_ZERO_ERROR;
