@@ -176,6 +176,19 @@ U_CAPI int32_t U_EXPORT2 ucol_inv_getPrevCE(const UColTokenParser *src,
   return iCE;
 }
 
+U_CAPI uint32_t U_EXPORT2 ucol_getCEStrengthDifference(uint32_t CE, uint32_t contCE, 
+                                            uint32_t prevCE, uint32_t prevContCE) {
+    uint32_t strength = UCOL_TERTIARY;
+    while(((prevCE & strengthMask[strength]) != (CE & strengthMask[strength]) 
+        || (prevContCE & strengthMask[strength]) != (contCE & strengthMask[strength]))
+        && strength) {
+        strength--;
+    }
+    return strength;
+                                            
+}
+
+
 static
 inline int32_t ucol_inv_getPrevious(UColTokenParser *src, UColTokListHeader *lh, uint32_t strength) {
 
@@ -337,9 +350,11 @@ U_CFUNC void ucol_inv_getGapPositions(UColTokenParser *src, UColTokListHeader *l
         lh->gapsHi[3*st+1] = (t1 & UCOL_SECONDARYMASK) << 16 | (t2 & UCOL_SECONDARYMASK) << 8;
         //lh->gapsHi[3*st+2] = (UCOL_TERTIARYORDER(t1)) << 24 | (UCOL_TERTIARYORDER(t2)) << 16;
         lh->gapsHi[3*st+2] = (t1&0x3f) << 24 | (t2&0x3f) << 16;
-        pos--;
-        t1 = *(CETable+3*(pos));
-        t2 = *(CETable+3*(pos)+1);
+        //pos--;
+        //t1 = *(CETable+3*(pos));
+        //t2 = *(CETable+3*(pos)+1);
+        t1 = lh->baseCE;
+        t2 = lh->baseContCE;
         lh->gapsLo[3*st] = (t1 & UCOL_PRIMARYMASK) | (t2 & UCOL_PRIMARYMASK) >> 16;
         lh->gapsLo[3*st+1] = (t1 & UCOL_SECONDARYMASK) << 16 | (t2 & UCOL_SECONDARYMASK) << 8;
         lh->gapsLo[3*st+2] = (t1&0x3f) << 24 | (t2&0x3f) << 16;
@@ -444,9 +459,10 @@ U_CFUNC uint32_t ucol_getCEGenerator(ucolCEGenerator *g, uint32_t* lows, uint32_
     if(high > (UCOL_COMMON_BOT2<<24) && high < (uint32_t)(UCOL_COMMON_TOP2<<24)) {
       high = UCOL_COMMON_TOP2<<24;
     } 
-    if(low < UCOL_COMMON_BOT2<<24) {
-      g->noOfRanges = ucol_allocWeights(UCOL_COMMON_BOT2<<24, high, count, maxByte, g->ranges);
-      g->current = UCOL_COMMON_BOT2<<24;
+    if(low < (UCOL_COMMON_BOT2<<24)) {
+      g->noOfRanges = ucol_allocWeights(UCOL_BYTE_UNSHIFTED_MIN<<24, high, count, maxByte, g->ranges);
+      g->current = ucol_nextWeight(g->ranges, &g->noOfRanges);
+      //g->current = UCOL_COMMON_BOT2<<24;
       return g->current;
     }
   } 

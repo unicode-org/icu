@@ -1819,77 +1819,92 @@ static void TestJ815(void) {
 static void TestRedundantRules(void) {
   int32_t i;
 
-  const static char *rules[] = {
-    /*"& a <<< b <<< c << d <<< e& [before 1] e <<< x",*/ /* this test conflicts with positioning of CODAN placeholder */
-    "& b <<< c <<< d << e <<< f& [before 1] f <<< x",
-    "& a < b <<< c << d <<< e& [before 1] e <<< x",
-    "& a < b < c < d& [before 1] c < m",
-    "& a < b <<< c << d <<< e& [before 3] e <<< x",
-    "& a < b <<< c << d <<< e& [before 2] e <<< x",
-    "& a < b <<< c << d <<< e <<< f < g& [before 1] g < x",
-    "& a <<< b << c < d& a < m",
-    "&a<b<<b\\u0301 &z<b",
-    "&z<m<<<q<<<m",
-    "&z<<<m<q<<<m",
-    "& a < b < c < d& r < c",
-    "& a < b < c < d& r < c",
-    "& a < b < c < d& c < m",
-    "& a < b < c < d& a < m"
+  struct {
+      const char *rules;
+      const char *expectedRules;
+      const char *testdata[8];
+      uint32_t testdatalen;
+  } tests[] = {
+    /* this test conflicts with positioning of CODAN placeholder */
+       /*{ 
+        "& a <<< b <<< c << d <<< e& [before 1] e <<< x", 
+        "&\\u2089<<<x",
+        {"\\u2089", "x"}, 2
+       }, */
+    /* this test conflicts with the [before x] syntax tightening */
+      /*{
+        "& b <<< c <<< d << e <<< f& [before 1] f <<< x",
+        "&\\u0252<<<x",
+        {"\\u0252", "x"}, 2
+      }, */
+    /* this test conflicts with the [before x] syntax tightening */
+      /*{
+         "& a < b <<< c << d <<< e& [before 1] e <<< x",
+         "& a <<< x < b <<< c << d <<< e",
+        {"a", "x", "b", "c", "d", "e"}, 6
+      }, */
+      {
+        "& a < b < c < d& [before 1] c < m",
+        "& a < b < m < c < d",
+        {"a", "b", "m", "c", "d"}, 5
+      },
+      {
+        "& a < b <<< c << d <<< e& [before 3] e <<< x",
+        "& a < b <<< c << d <<< x <<< e",
+        {"a", "b", "c", "d", "x", "e"}, 6
+      },
+    /* this test conflicts with the [before x] syntax tightening */
+      /* {
+        "& a < b <<< c << d <<< e& [before 2] e <<< x",
+        "& a < b <<< c <<< x << d <<< e",
+        {"a", "b", "c", "x", "d", "e"},, 6
+      }, */
+      {
+        "& a < b <<< c << d <<< e <<< f < g& [before 1] g < x",
+        "& a < b <<< c << d <<< e <<< f < x < g",
+        {"a", "b", "c", "d", "e", "f", "x", "g"}, 8
+      },
+      {
+        "& a <<< b << c < d& a < m",
+        "& a <<< b << c < m < d",
+        {"a", "b", "c", "m", "d"}, 5
+      },
+      {
+        "&a<b<<b\\u0301 &z<b",
+        "&a<b\\u0301 &z<b",
+        {"a", "b\\u0301", "z", "b"}, 4
+      },
+      {
+        "&z<m<<<q<<<m",
+        "&z<q<<<m",
+        {"z", "q", "m"},3
+      },
+      {
+        "&z<<<m<q<<<m",
+        "&z<q<<<m",
+        {"z", "q", "m"}, 3
+      },
+      {
+        "& a < b < c < d& r < c",
+        "& a < b < d& r < c",
+        {"a", "b", "d"}, 3
+      },
+      {
+        "& a < b < c < d& r < c",
+        "& a < b < d& r < c",
+        {"r", "c"}, 2
+      },
+      {
+        "& a < b < c < d& c < m",
+        "& a < b < c < m < d",
+        {"a", "b", "c", "m", "d"}, 5
+      },
+      {
+        "& a < b < c < d& a < m",
+        "& a < m < b < c < d",
+        {"a", "m", "b", "c", "d"}, 5
+      }
   };
-
-  const static char *expectedRules[] = {
-    /*"&\\u2089<<<x",*/
-    "&\\u0252<<<x",
-    "& a <<< x < b <<< c << d <<< e",
-    "& a < b < m < c < d",
-    "& a < b <<< c << d <<< x <<< e",
-    "& a < b <<< c <<< x << d <<< e",
-    "& a < b <<< c << d <<< e <<< f < x < g",
-    "& a <<< b << c < m < d",
-    "&a<b\\u0301 &z<b",
-    "&z<q<<<m",
-    "&z<q<<<m",
-    "& a < b < d& r < c",
-    "& a < b < d& r < c",
-    "& a < b < c < m < d",
-    "& a < m < b < c < d"
-  };
-
-  const static char *testdata[][8] = {
-    /*{"\\u2089", "x"},*/
-    {"\\u0252", "x"},
-    {"a", "x", "b", "c", "d", "e"},
-    {"a", "b", "m", "c", "d"},
-    {"a", "b", "c", "d", "x", "e"},
-    {"a", "b", "c", "x", "d", "e"},
-    {"a", "b", "c", "d", "e", "f", "x", "g"},
-    {"a", "b", "c", "m", "d"},
-    {"a", "b\\u0301", "z", "b"},
-    {"z", "q", "m"},
-    {"z", "q", "m"},
-    {"a", "b", "d"},
-    {"r", "c"},
-    {"a", "b", "c", "m", "d"},
-    {"a", "m", "b", "c", "d"}
-  };
-
-  const static uint32_t testdatalen[] = {
-    2,
-      6,
-      5,
-      6,
-      6,
-      8,
-      5,
-      4,
-      3,
-      3,
-      3,
-      2,
-      5,
-      5
-  };
-
 
 
   UCollator *credundant = NULL;
@@ -1898,9 +1913,9 @@ static void TestRedundantRules(void) {
   UChar rlz[2048] = { 0 };
   uint32_t rlen = 0;
 
-  for(i = 0; i<sizeof(rules)/sizeof(rules[0]); i++) {
-    log_verbose("testing rule %s, expected to be %s\n", rules[i], expectedRules[i]);
-    rlen = u_unescape(rules[i], rlz, 2048);
+  for(i = 0; i<sizeof(tests)/sizeof(tests[0]); i++) {
+    log_verbose("testing rule %s, expected to be %s\n", tests[i].rules, tests[i].expectedRules);
+    rlen = u_unescape(tests[i].rules, rlz, 2048);
 
     credundant = ucol_openRules(rlz, rlen, UCOL_DEFAULT, UCOL_DEFAULT, NULL,&status);
     if(status == U_FILE_ACCESS_ERROR) {
@@ -1911,7 +1926,7 @@ static void TestRedundantRules(void) {
       return;
     }
 
-    rlen = u_unescape(expectedRules[i], rlz, 2048);
+    rlen = u_unescape(tests[i].expectedRules, rlz, 2048);
     cresulting = ucol_openRules(rlz, rlen, UCOL_DEFAULT, UCOL_DEFAULT, NULL,&status);
 
     testAgainstUCA(cresulting, credundant, "expected", TRUE, &status);
@@ -1921,7 +1936,7 @@ static void TestRedundantRules(void) {
 
     log_verbose("testing using data\n");
 
-    genericRulesStarter(rules[i], testdata[i], testdatalen[i]);
+    genericRulesStarter(tests[i].rules, tests[i].testdata, tests[i].testdatalen);
   }
 
 }
@@ -3506,40 +3521,40 @@ static void TestRuleOptions(void) {
     const uint32_t len;
   } tests[] = {  
     /* - all befores here amount to zero */
-    { "&[before 1][first tertiary ignorable]<<<a", 
+    { "&[before 3][first tertiary ignorable]<<<a", 
         { "\\u0000", "a"}, 2
     }, /* you cannot go before first tertiary ignorable */
 
-    { "&[before 1][last tertiary ignorable]<<<a", 
+    { "&[before 3][last tertiary ignorable]<<<a", 
         { "\\u0000", "a"}, 2
     }, /* you cannot go before last tertiary ignorable */
 
-    { "&[before 1][first secondary ignorable]<<<a", 
+    { "&[before 3][first secondary ignorable]<<<a", 
         { "\\u0000", "a"}, 2
     }, /* you cannot go before first secondary ignorable */
 
-    { "&[before 1][last secondary ignorable]<<<a", 
+    { "&[before 3][last secondary ignorable]<<<a", 
         { "\\u0000", "a"}, 2
     }, /* you cannot go before first secondary ignorable */
 
     /* 'normal' befores */
 
-    { "&[before 1][first primary ignorable]<<<c<<<b &[first primary ignorable]<a", 
+    { "&[before 3][first primary ignorable]<<<c<<<b &[first primary ignorable]<a", 
         {  "c", "b", "\\u0332", "a" }, 4
     },
 
     /* we don't have a code point that corresponds to  
      * the last primary ignorable
      */
-    { "&[before 2][last primary ignorable]<<<c<<<b &[last primary ignorable]<a", 
+    { "&[before 3][last primary ignorable]<<<c<<<b &[last primary ignorable]<a", 
         {  "\\u0332", "\\u20e3", "c", "b", "a" }, 5
     }, 
 
-    { "&[before 1][first variable]<<<c<<<b &[first variable]<a", 
+    { "&[before 3][first variable]<<<c<<<b &[first variable]<a", 
         {  "c", "b", "\\u0009", "a", "\\u000a" }, 5
     }, 
 
-    { "&[last variable]<a &[before 1][last variable]<<<c<<<b ", 
+    { "&[last variable]<a &[before 3][last variable]<<<c<<<b ", 
         {  "c", "b", "\\uD800\\uDD33", "a", "\\u02d0" }, 5
     }, 
 
@@ -4363,6 +4378,177 @@ ucol_getFunctionalEquivalent(char* result, int32_t resultCapacity,
                isAvailable == FALSE);
 }
 
+static void TestBeforePinyin(void) {
+    char rules[] = { 
+        "&[before 2]A << \\u0101  <<< \\u0100 << \\u00E1 <<< \\u00C1 << \\u01CE <<< \\u01CD << \\u00E0 <<< \\u00C0"
+        "&[before 2]e << \\u0113 <<< \\u0112 << \\u00E9 <<< \\u00C9 << \\u011B <<< \\u011A << \\u00E8 <<< \\u00C8"
+        "&[before 2] i << \\u012B <<< \\u012A << \\u00ED <<< \\u00CD << \\u01D0 <<< \\u01CF << \\u00EC <<< \\u00CC"
+        "&[before 2] o << \\u014D <<< \\u014C << \\u00F3 <<< \\u00D3 << \\u01D2 <<< \\u01D1 << \\u00F2 <<< \\u00D2"
+        "&[before 2]u << \\u016B <<< \\u016A << \\u00FA <<< \\u00DA << \\u01D4 <<< \\u01D3 << \\u00F9 <<< \\u00D9"
+        "&U << \\u01D6 <<< \\u01D5 << \\u01D8 <<< \\u01D7 << \\u01DA <<< \\u01D9 << \\u01DC <<< \\u01DB << \\u00FC"
+    };
+    char *test[] = {
+        "l\\u0101 ",
+        "la ",
+        "l\\u0101n ",
+        "lan ",
+        "l\\u0113 ",
+        "le ",
+        "l\\u0113n ",
+        "len "
+    };
+
+    genericRulesStarter(rules, test, sizeof(test)/sizeof(test[0]));
+}
+
+static void TestBeforeTightening(void) {
+    struct {
+        const char *rules;
+        UErrorCode expectedStatus;
+    } tests[] = {
+        { "&[before 1]a<x", U_ZERO_ERROR },
+        { "&[before 1]a<<x", U_INVALID_FORMAT_ERROR },
+        { "&[before 1]a<<<x", U_INVALID_FORMAT_ERROR },
+        { "&[before 1]a=x", U_INVALID_FORMAT_ERROR },
+        { "&[before 2]a<x",U_INVALID_FORMAT_ERROR },
+        { "&[before 2]a<<x",U_ZERO_ERROR },
+        { "&[before 2]a<<<x",U_INVALID_FORMAT_ERROR },
+        { "&[before 2]a=x",U_INVALID_FORMAT_ERROR },
+        { "&[before 3]a<x",U_INVALID_FORMAT_ERROR  },
+        { "&[before 3]a<<x",U_INVALID_FORMAT_ERROR  },
+        { "&[before 3]a<<<x",U_ZERO_ERROR },
+        { "&[before 3]a=x",U_INVALID_FORMAT_ERROR  },
+        { "&[before I]a = x",U_INVALID_FORMAT_ERROR }
+    };
+
+    int32_t i = 0;
+
+    UErrorCode status = U_ZERO_ERROR;
+    UChar rlz[RULE_BUFFER_LEN] = { 0 };
+    uint32_t rlen = 0;
+
+    UCollator *coll = NULL;
+
+
+    for(i = 0; i < sizeof(tests)/sizeof(tests[0]); i++) {
+        rlen = u_unescape(tests[i].rules, rlz, RULE_BUFFER_LEN);
+        coll = ucol_openRules(rlz, rlen, UCOL_DEFAULT, UCOL_DEFAULT,NULL, &status);
+        if(status != tests[i].expectedStatus) {
+            log_err("Opening a collator with rules %s returned error code %s, expected %s\n",
+                tests[i].rules, u_errorName(status), u_errorName(tests[i].expectedStatus));
+        }
+        ucol_close(coll);
+        status = U_ZERO_ERROR;
+    }
+
+}
+
+#if 0
+&m < a
+&[before 1] a < x <<< X << q <<< Q < z
+assert: m <<< M < x <<< X << q <<< Q < z < a < n
+
+&m < a
+&[before 2] a << x <<< X << q <<< Q < z
+assert: m <<< M < x <<< X << q <<< Q << a < z < n
+
+&m < a
+&[before 3] a <<< x <<< X << q <<< Q < z
+assert: m <<< M < x <<< X <<< a << q <<< Q < z < n
+
+
+&m << a
+&[before 1] a < x <<< X << q <<< Q < z
+assert: x <<< X << q <<< Q < z < m <<< M << a < n
+
+&m << a
+&[before 2] a << x <<< X << q <<< Q < z
+assert: m <<< M << x <<< X << q <<< Q << a < z < n
+
+&m << a
+&[before 3] a <<< x <<< X << q <<< Q < z
+assert: m <<< M << x <<< X <<< a << q <<< Q < z < n
+
+
+&m <<< a
+&[before 1] a < x <<< X << q <<< Q < z
+assert: x <<< X << q <<< Q < z < n < m <<< a <<< M
+
+&m <<< a
+&[before 2] a << x <<< X << q <<< Q < z
+assert:  x <<< X << q <<< Q << m <<< a <<< M < z < n
+
+&m <<< a
+&[before 3] a <<< x <<< X << q <<< Q < z
+assert: m <<< x <<< X <<< a <<< M  << q <<< Q < z < n
+
+
+&[before 1] s < x <<< X << q <<< Q < z
+assert: r <<< R < x <<< X << q <<< Q < z < s < n
+
+&[before 2] s << x <<< X << q <<< Q < z
+assert: r <<< R < x <<< X << q <<< Q << s < z < n
+
+&[before 3] s <<< x <<< X << q <<< Q < z
+assert: r <<< R < x <<< X <<< s << q <<< Q < z < n
+
+
+&[before 1] \u24DC < x <<< X << q <<< Q < z
+assert: x <<< X << q <<< Q < z < n < m <<< \u24DC <<< M
+
+&[before 2] \u24DC << x <<< X << q <<< Q < z
+assert:  x <<< X << q <<< Q << m <<< \u24DC <<< M < z < n
+
+&[before 3] \u24DC <<< x <<< X << q <<< Q < z
+assert: m <<< x <<< X <<< \u24DC <<< M  << q <<< Q < z < n
+#endif
+
+static void TestMoreBefore(void) {
+    struct {
+        const char* rules;
+        const char* order[20];
+        int32_t size;
+    } tests[] = {
+        { "&m < a &[before 1] a < x <<< X << q <<< Q < z",
+        { "m","M","x","X","q","Q","z","a","n" }, 9},
+        { "&m < a &[before 2] a << x <<< X << q <<< Q < z",
+        { "m","M","x","X","q","Q","a","z","n" }, 9},
+        { "&m < a &[before 3] a <<< x <<< X << q <<< Q < z",
+        { "m","M","x","X","a","q","Q","z","n" }, 9},
+        { "&m << a &[before 1] a < x <<< X << q <<< Q < z",
+        { "x","X","q","Q","z","m","M","a","n" }, 9},
+        { "&m << a &[before 2] a << x <<< X << q <<< Q < z",
+        { "m","M","x","X","q","Q","a","z","n" }, 9},
+        { "&m << a &[before 3] a <<< x <<< X << q <<< Q < z",
+        { "m","M","x","X","a","q","Q","z","n" }, 9},
+        { "&m <<< a &[before 1] a < x <<< X << q <<< Q < z", 
+        { "x","X","q","Q","z","n","m","a","M" }, 9},
+        { "&m <<< a &[before 2] a << x <<< X << q <<< Q < z", 
+        { "x","X","q","Q","m","a","M","z","n" }, 9},
+        { "&m <<< a &[before 3] a <<< x <<< X << q <<< Q < z",
+        { "m","x","X","a","M","q","Q","z","n" }, 9},
+        { "&[before 1] s < x <<< X << q <<< Q < z",
+        { "r","R","x","X","q","Q","z","s","n" }, 9},
+        { "&[before 2] s << x <<< X << q <<< Q < z",
+        { "r","R","x","X","q","Q","s","z","n" }, 9},
+        { "&[before 3] s <<< x <<< X << q <<< Q < z", 
+        { "r","R","x","X","s","q","Q","z","n" }, 9},
+        { "&[before 1] \u24DC < x <<< X << q <<< Q < z",
+        { "x","X","q","Q","z","n","m","\u24DC","M" }, 9},
+        { "&[before 2] \u24DC << x <<< X << q <<< Q < z",
+        { "x","X","q","Q","m","\u24DC","M","z","n" }, 9},
+        { "&[before 3] \u24DC <<< x <<< X << q <<< Q < z",
+        { "m","x","X","\u24DC","M","q","Q","z","n" }, 9}
+    };
+
+    int32_t i = 0;
+
+    for(i = 0; i < sizeof(tests)/sizeof(tests[0]); i++) {
+        genericRulesStarter(tests[i].rules, tests[i].order, tests[i].size);
+    }
+}
+
+
 #define TEST(x) addTest(root, &x, "tscoll/cmsccoll/" # x)
 
 void addMiscCollTest(TestNode** root)
@@ -4422,6 +4608,9 @@ void addMiscCollTest(TestNode** root)
     TEST(TestPinyinProblem);
     TEST(TestImplicitGeneration);
     TEST(TestSeparateTrees);
+    TEST(TestBeforePinyin);
+    TEST(TestBeforeTightening);
+    /*TEST(TestMoreBefore);*/
 }
 
 #endif /* #if !UCONFIG_NO_COLLATION */
