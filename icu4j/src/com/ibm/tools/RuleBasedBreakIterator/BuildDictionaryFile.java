@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/tools/RuleBasedBreakIterator/Attic/BuildDictionaryFile.java,v $ 
- * $Date: 2000/03/10 04:17:56 $ 
- * $Revision: 1.2 $
+ * $Date: 2000/05/09 22:38:37 $ 
+ * $Revision: 1.3 $
  *
  *****************************************************************************************
  */
@@ -209,12 +209,12 @@ System.out.println("  Number of rows = " + tempTable.size());
 System.out.println("  Number of columns = " + numCols);
 System.out.println("  Number of cells = " + tempTable.size() * numCols);
         deleteDuplicateRows(tempTable);
-if (tempTable.size() > 32767) throw new IllegalArgumentException("Too many rows in table!");
 System.out.println("After removing duplicate rows:");
 System.out.println("  Number of rows = " + tempTable.size());
 System.out.println("  Number of columns = " + numCols);
 System.out.println("  Number of cells = " + tempTable.size() * numCols);
         stackRows(tempTable);
+if (tempTable.size() > 32767) throw new IllegalArgumentException("Too many rows in table!");
 System.out.println("After doubling up on rows:");
 System.out.println("  Number of rows = " + tempTable.size());
 System.out.println("  Number of columns = " + numCols);
