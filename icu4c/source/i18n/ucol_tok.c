@@ -312,6 +312,254 @@ UBool ucol_uprv_tok_readAndSetOption(UCATableHeader *image, const UChar* start, 
 #define UCOL_TOK_UNSET 0xFFFFFFFF
 #define UCOL_TOK_RESET 0xDEADBEEF
 
+const UChar *ucol_tok_parseNextToken(UColTokenParser *src, 
+                        uint32_t *strength, 
+                        uint32_t *chOffset, uint32_t *chLen, 
+                        uint32_t *exOffset, uint32_t *exLen,
+                        UBool *varT, UBool *top_,
+                        UBool startOfRules,
+                        UErrorCode *status) { 
+/* parsing part */
+
+  UBool variableTop = FALSE;
+  UBool top = FALSE;
+  UBool inChars = TRUE;
+  UBool inQuote = FALSE;
+  UBool wasInQuote = FALSE;
+  UChar *optionEnd = NULL;
+
+  uint32_t newCharsLen = 0, newExtensionLen = 0;
+  uint32_t charsOffset = 0, extensionOffset = 0;
+  uint32_t newStrength = UCOL_TOK_UNSET; 
+
+  while (src->current < src->end) {
+      UChar ch = *(src->current);
+
+    if (inQuote) {
+      if (ch == 0x0027/*'\''*/) {
+          inQuote = FALSE;
+      } else {
+        if ((newCharsLen == 0) || inChars) {
+          if(newCharsLen == 0) {
+            charsOffset = src->extraCurrent - src->source;
+          }
+          newCharsLen++;
+        } else {
+          if(newExtensionLen == 0) {
+            extensionOffset = src->extraCurrent - src->source;
+          }
+          newExtensionLen++;
+        }
+      }
+    } else {
+      /* Sets the strength for this entry */
+      switch (ch) {
+        case 0x003D/*'='*/ : 
+          if (newStrength != UCOL_TOK_UNSET) {
+            goto EndOfLoop;
+          }
+
+          /* if we start with strength, we'll reset to top */
+          if(startOfRules == TRUE) {
+            top = TRUE;
+            newStrength = UCOL_TOK_RESET;
+            goto EndOfLoop;
+          }
+          newStrength = UCOL_IDENTICAL;
+          break;
+
+        case 0x002C/*','*/:  
+          if (newStrength != UCOL_TOK_UNSET) {
+            goto EndOfLoop;
+          }
+
+          /* if we start with strength, we'll reset to top */
+          if(startOfRules == TRUE) {
+            top = TRUE;
+            newStrength = UCOL_TOK_RESET;
+            goto EndOfLoop;
+          }
+          newStrength = UCOL_TERTIARY;
+          break;
+
+        case  0x003B/*';'*/:
+          if (newStrength != UCOL_TOK_UNSET) {
+            goto EndOfLoop;
+          }
+
+          /* if we start with strength, we'll reset to top */
+          if(startOfRules == TRUE) {
+            top = TRUE;
+            newStrength = UCOL_TOK_RESET;
+            goto EndOfLoop;
+          }
+          newStrength = UCOL_SECONDARY;
+          break;
+
+        case 0x003C/*'<'*/:  
+          if (newStrength != UCOL_TOK_UNSET) {
+            goto EndOfLoop;
+          }
+
+          /* if we start with strength, we'll reset to top */
+          if(startOfRules == TRUE) {
+            top = TRUE;
+            newStrength = UCOL_TOK_RESET;
+            goto EndOfLoop;
+          }
+          /* before this, do a scan to verify whether this is */
+          /* another strength */
+          if(*(src->current+1) == 0x003C) {
+            src->current++;
+            if(*(src->current+1) == 0x003C) {
+              src->current++; /* three in a row! */
+              newStrength = UCOL_TERTIARY;
+            } else { /* two in a row */
+              newStrength = UCOL_SECONDARY;
+            }
+          } else { /* just one */
+            newStrength = UCOL_PRIMARY;
+          }
+          break;
+
+        case 0x0026/*'&'*/:  
+          if (newStrength != UCOL_TOK_UNSET) {
+            goto EndOfLoop;
+          }
+
+          newStrength = UCOL_TOK_RESET; /* PatternEntry::RESET = 0 */
+          break;
+
+        case 0x005b/*'['*/:
+          /* options - read an option, analyze it */
+          if((optionEnd = u_strchr(src->current, 0x005d /*']'*/)) != NULL) {
+            ucol_uprv_tok_readAndSetOption(src->image, src->current, optionEnd, &variableTop, &top, status);
+            src->current = optionEnd;
+            if(top == TRUE) {
+              if(newStrength == UCOL_TOK_RESET) { 
+                src->current++;
+                goto EndOfLoop;
+              } else {
+                *status = U_INVALID_FORMAT_ERROR;
+              }
+            }
+            if(U_FAILURE(*status)) {
+              return NULL;
+            }
+          }
+          break;
+
+        /* Ignore the white spaces */
+        case 0x0009/*'\t'*/:
+        case 0x000C/*'\f'*/:
+        case 0x000D/*'\r'*/:
+        case 0x000A/*'\n'*/:
+        case 0x0020/*' '*/:  
+          break; /* skip whitespace TODO use Unicode */
+
+        case 0x002F/*'/'*/:
+                /* This entry has an extension. */
+          inChars = FALSE;
+          break;
+
+        /* found a quote, we're gonna start copying */
+        case 0x0027/*'\''*/:
+          inQuote = TRUE;
+          wasInQuote = TRUE;
+
+          if (newCharsLen == 0) {
+            charsOffset = src->extraCurrent - src->source;
+            newCharsLen++;
+          } else if (inChars) { /* we're reading some chars */
+            charsOffset = src->extraCurrent - src->source;
+            if(newCharsLen != 0) {
+              uprv_memcpy(src->extraCurrent, src->current - newCharsLen, newCharsLen*sizeof(UChar));
+              src->extraCurrent += newCharsLen;
+            }
+            newCharsLen++;
+          } else {
+            if(newExtensionLen != 0) {
+              uprv_memcpy(src->extraCurrent, src->current - newExtensionLen, newExtensionLen*sizeof(UChar));
+              src->extraCurrent += newExtensionLen;
+            }
+            newExtensionLen++;
+          }
+
+          ch = *(++(src->current)); /*pattern[++index]; */
+          break;
+
+        /* '@' is french only if the strength is not currently set */
+        /* if it is, it's just a regular character in collation rules */
+        case 0x0040/*'@'*/:
+          if (newStrength == UCOL_TOK_UNSET) {
+            src->image->frenchCollation = UCOL_ON;
+            break;
+          }
+
+        default:
+          if (newStrength == UCOL_TOK_UNSET) {
+            *status = U_INVALID_FORMAT_ERROR;
+            return NULL;
+          }
+
+          if (ucol_tok_isSpecialChar(ch) && (inQuote == FALSE)) {
+            *status = U_INVALID_FORMAT_ERROR;
+            return NULL;
+          }
+
+
+
+          if (inChars) {
+            if(newCharsLen == 0) {
+              charsOffset = src->current - src->source;
+            }
+            newCharsLen++;
+          } else {
+            if(newExtensionLen == 0) {
+              extensionOffset = src->current - src->source;
+            }
+            newExtensionLen++;
+          }
+
+          break;
+        }
+    }
+
+    if(wasInQuote) {
+      if(ch != 0x27 || newCharsLen == 1) {
+        *src->extraCurrent++ = ch;
+      }
+      if(src->extraCurrent == src->extraEnd) {
+        /* reallocate */
+      }
+    }
+
+      src->current++;
+    }
+
+ EndOfLoop:
+    wasInQuote = FALSE;
+  if (newStrength == UCOL_TOK_UNSET) {
+    return NULL;
+  }
+
+  if (newCharsLen == 0 && top == FALSE) {
+    *status = U_INVALID_FORMAT_ERROR;
+    return NULL;
+  }
+
+  *strength = newStrength; 
+
+  *chOffset = charsOffset;
+  *chLen = newCharsLen;
+  *exOffset = extensionOffset;
+  *exLen = newExtensionLen;
+  *varT = variableTop;
+  *top_ = top;
+
+  return src->current;
+}
+
 /*
 Processing Description
   1 Build a ListList. Each list has a header, which contains two lists (positive 
@@ -323,14 +571,15 @@ Processing Description
 
 uint32_t ucol_uprv_tok_assembleTokenList(UColTokenParser *src, UErrorCode *status) {
   UColToken *lastToken = NULL;
-  uint32_t newCharsLen = 0, newExtensionsLen = 0;
-  uint32_t charsOffset = 0, extensionOffset = 0;
+  const UChar *parseEnd = NULL;
   uint32_t expandNext = 0;
   UBool variableTop = FALSE;
   UBool top = FALSE;
 
   UColTokListHeader *ListList = NULL;
 
+  uint32_t newCharsLen = 0, newExtensionsLen = 0;
+  uint32_t charsOffset = 0, extensionOffset = 0;
   uint32_t newStrength = UCOL_TOK_UNSET; 
 
   ucol_tok_initTokenList(src, status);
@@ -340,235 +589,16 @@ uint32_t ucol_uprv_tok_assembleTokenList(UColTokenParser *src, UErrorCode *statu
   src->image->variableTopValue = 0;
 
   while(src->current < src->end) {
-    { /* parsing part */
+  
+  parseEnd = ucol_tok_parseNextToken(src, 
+                      &newStrength, 
+                      &charsOffset, &newCharsLen, 
+                      &extensionOffset, &newExtensionsLen,
+                      &variableTop, &top,
+                      (UBool)(lastToken == NULL),
+                      status);
 
-      UBool inChars = TRUE;
-      UBool inQuote = FALSE;
-      UBool wasInQuote = FALSE;
-      UChar *optionEnd = NULL;
-
-      newStrength = UCOL_TOK_UNSET; 
-      newCharsLen = 0; newExtensionsLen = 0;
-      charsOffset = 0; extensionOffset = 0;
-
-      while (src->current < src->end) {
-          UChar ch = *(src->current);
-
-        if (inQuote) {
-          if (ch == 0x0027/*'\''*/) {
-              inQuote = FALSE;
-          } else {
-            if ((newCharsLen == 0) || inChars) {
-              if(newCharsLen == 0) {
-                charsOffset = src->extraCurrent - src->source;
-              }
-              newCharsLen++;
-            } else {
-              if(newExtensionsLen == 0) {
-                extensionOffset = src->extraCurrent - src->source;
-              }
-              newExtensionsLen++;
-            }
-          }
-        } else {
-          /* Sets the strength for this entry */
-          switch (ch) {
-            case 0x003D/*'='*/ : 
-              if (newStrength != UCOL_TOK_UNSET) {
-                goto EndOfLoop;
-              }
-
-              /* if we start with strength, we'll reset to top */
-              if(lastToken == NULL) {
-                top = TRUE;
-                newStrength = UCOL_TOK_RESET;
-                goto EndOfLoop;
-              }
-              newStrength = UCOL_IDENTICAL;
-              break;
-
-            case 0x002C/*','*/:  
-              if (newStrength != UCOL_TOK_UNSET) {
-                goto EndOfLoop;
-              }
-
-              /* if we start with strength, we'll reset to top */
-              if(lastToken == NULL) {
-                top = TRUE;
-                newStrength = UCOL_TOK_RESET;
-                goto EndOfLoop;
-              }
-              newStrength = UCOL_TERTIARY;
-              break;
-
-            case  0x003B/*';'*/:
-              if (newStrength != UCOL_TOK_UNSET) {
-                goto EndOfLoop;
-              }
-
-              /* if we start with strength, we'll reset to top */
-              if(lastToken == NULL) {
-                top = TRUE;
-                newStrength = UCOL_TOK_RESET;
-                goto EndOfLoop;
-              }
-              newStrength = UCOL_SECONDARY;
-              break;
-
-            case 0x003C/*'<'*/:  
-              if (newStrength != UCOL_TOK_UNSET) {
-                goto EndOfLoop;
-              }
-
-              /* if we start with strength, we'll reset to top */
-              if(lastToken == NULL) {
-                top = TRUE;
-                newStrength = UCOL_TOK_RESET;
-                goto EndOfLoop;
-              }
-              /* before this, do a scan to verify whether this is */
-              /* another strength */
-              if(*(src->current+1) == 0x003C) {
-                src->current++;
-                if(*(src->current+1) == 0x003C) {
-                  src->current++; /* three in a row! */
-                  newStrength = UCOL_TERTIARY;
-                } else { /* two in a row */
-                  newStrength = UCOL_SECONDARY;
-                }
-              } else { /* just one */
-                newStrength = UCOL_PRIMARY;
-              }
-              break;
-
-            case 0x0026/*'&'*/:  
-              if (newStrength != UCOL_TOK_UNSET) {
-                goto EndOfLoop;
-              }
-
-              newStrength = UCOL_TOK_RESET; /* PatternEntry::RESET = 0 */
-              break;
-
-            case 0x005b/*'['*/:
-              /* options - read an option, analyze it */
-              if((optionEnd = u_strchr(src->current, 0x005d /*']'*/)) != NULL) {
-                ucol_uprv_tok_readAndSetOption(src->image, src->current, optionEnd, &variableTop, &top, status);
-                src->current = optionEnd;
-                if(top == TRUE) {
-                  if(newStrength == UCOL_TOK_RESET) { 
-                    src->current++;
-                    goto EndOfLoop;
-                  } else {
-                    *status = U_INVALID_FORMAT_ERROR;
-                  }
-                }
-                if(U_FAILURE(*status)) {
-                  return 0;
-                }
-              }
-              break;
-
-            /* Ignore the white spaces */
-            case 0x0009/*'\t'*/:
-            case 0x000C/*'\f'*/:
-            case 0x000D/*'\r'*/:
-            case 0x000A/*'\n'*/:
-            case 0x0020/*' '*/:  
-              break; /* skip whitespace TODO use Unicode */
-
-            case 0x002F/*'/'*/:
-                    /* This entry has an extension. */
-              inChars = FALSE;
-              break;
-
-            /* found a quote, we're gonna start copying */
-            case 0x0027/*'\''*/:
-              inQuote = TRUE;
-              wasInQuote = TRUE;
-
-              if (newCharsLen == 0) {
-                charsOffset = src->extraCurrent - src->source;
-                newCharsLen++;
-              } else if (inChars) { /* we're reading some chars */
-                charsOffset = src->extraCurrent - src->source;
-                if(newCharsLen != 0) {
-                  uprv_memcpy(src->extraCurrent, src->current - newCharsLen, newCharsLen*sizeof(UChar));
-                  src->extraCurrent += newCharsLen;
-                }
-                newCharsLen++;
-              } else {
-                if(newExtensionsLen != 0) {
-                  uprv_memcpy(src->extraCurrent, src->current - newExtensionsLen, newExtensionsLen*sizeof(UChar));
-                  src->extraCurrent += newExtensionsLen;
-                }
-                newExtensionsLen++;
-              }
-
-              ch = *(++(src->current)); /*pattern[++index]; */
-              break;
-
-            /* '@' is french only if the strength is not currently set */
-            /* if it is, it's just a regular character in collation rules */
-            case 0x0040/*'@'*/:
-              if (newStrength == UCOL_TOK_UNSET) {
-                src->image->frenchCollation = UCOL_ON;
-                break;
-              }
-
-            default:
-              if (newStrength == UCOL_TOK_UNSET) {
-                *status = U_INVALID_FORMAT_ERROR;
-                return 0;
-              }
-
-              if (ucol_tok_isSpecialChar(ch) && (inQuote == FALSE)) {
-                *status = U_INVALID_FORMAT_ERROR;
-                return 0;
-              }
-
-
-
-              if (inChars) {
-                if(newCharsLen == 0) {
-                  charsOffset = src->current - src->source;
-                }
-                newCharsLen++;
-              } else {
-                if(newExtensionsLen == 0) {
-                  extensionOffset = src->current - src->source;
-                }
-                newExtensionsLen++;
-              }
-
-              break;
-            }
-        }
-
-        if(wasInQuote) {
-          if(ch != 0x27) {
-            *src->extraCurrent++ = ch;
-          }
-          if(src->extraCurrent == src->extraEnd) {
-            /* reallocate */
-          }
-        }
-
-          src->current++;
-        }
-
-     EndOfLoop:
-        wasInQuote = FALSE;
-      if (newStrength == UCOL_TOK_UNSET) {
-        return 0;
-      }
-
-      if (newCharsLen == 0 && top == FALSE) {
-        *status = U_INVALID_FORMAT_ERROR;
-        return 0;
-      }
-    }
-
-    {
+    if(U_SUCCESS(*status) && parseEnd != NULL) {
       UColToken *sourceToken = NULL;
       UColToken key;
 
@@ -789,7 +819,9 @@ uint32_t ucol_uprv_tok_assembleTokenList(UColTokenParser *src, UErrorCode *statu
       }
       /*  7 After all this, set LAST to point to sourceToken, and goto step 3. */  
       lastToken = sourceToken;
-    }  
+    } else {
+      return 0;
+    }
   }
 
   return src->resultLen;
