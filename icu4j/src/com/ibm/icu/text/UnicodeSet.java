@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/UnicodeSet.java,v $
- * $Date: 2001/11/09 00:51:54 $
- * $Revision: 1.44 $
+ * $Date: 2001/11/12 20:54:46 $
+ * $Revision: 1.45 $
  *
  *****************************************************************************************
  */
@@ -220,7 +220,7 @@ import com.ibm.util.Utility;
  * added in the future.
  *
  * @author Alan Liu
- * @version $RCSfile: UnicodeSet.java,v $ $Revision: 1.44 $ $Date: 2001/11/09 00:51:54 $
+ * @version $RCSfile: UnicodeSet.java,v $ $Revision: 1.45 $ $Date: 2001/11/12 20:54:46 $
  */
 public class UnicodeSet extends UnicodeFilter {
 
@@ -380,6 +380,13 @@ public class UnicodeSet extends UnicodeFilter {
         }
         String pat = "[:" + CATEGORY_NAMES.substring(2*category, 2*category+2) + ":]";
         applyPattern(pat, false);
+    }
+
+    /**
+     * Return a new set that is equivalent to this one.
+     */
+    public Object clone() {
+        return new UnicodeSet(this);
     }
 
     /**
