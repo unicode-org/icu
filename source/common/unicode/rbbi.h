@@ -125,7 +125,7 @@ protected:
      */
     RuleBasedBreakIterator(RBBIDataHeader* data, UErrorCode &status);
 
-    friend class RBBIRuleBuilder;
+    friend class RBBIRuleBuilder; /** @internal */
     friend class BreakIterator;
 
 
