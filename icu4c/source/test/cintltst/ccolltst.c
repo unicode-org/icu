@@ -62,6 +62,7 @@ void reportCResult( const UChar source[], const UChar target[],
                          uint8_t *sourceKey, uint8_t *targetKey,
                          UCollationResult compareResult,
                          UCollationResult keyResult,
+                         UCollationResult incResult,
                          UCollationResult expectedResult )
 {
     UChar *sResult, *sExpect;
@@ -79,6 +80,15 @@ void reportCResult( const UChar source[], const UChar target[],
         appendCompareResult(compareResult, sResult);
         appendCompareResult(expectedResult, sExpect);
         log_err("Compare(%s , %s) returned: %s expected: %s\n", austrdup(source), austrdup(target),
+            austrdup(sResult), austrdup(sExpect) );
+    }
+
+    if (incResult != expectedResult)
+    {
+        
+        appendCompareResult(compareResult, sResult);
+        appendCompareResult(expectedResult, sExpect);
+        log_err("incCompare(%s , %s) returned: %s expected: %s\n", austrdup(source), austrdup(target),
             austrdup(sResult), austrdup(sExpect) );
     }
 
@@ -138,4 +148,47 @@ UChar* CharsToUChars(const char* str) {
     UChar *buf = (UChar*) malloc(sizeof(UChar) * len);
     u_unescape(str, buf, len);
     return buf;
+}
+
+
+/* Support for testing incremental strcoll */
+typedef struct {
+    const UChar *start;
+    const UChar *end;
+} testContext;
+
+UChar testInc(void *context) {
+    testContext *s = (testContext *)context;
+    if(s->start == s->end) {
+        return 0xFFFF;
+    } else {
+        return *(s->start++);
+    }
+}
+
+
+/* This is test for incremental */
+UCollationResult
+ctst_strcollTestIncremental(    const    UCollator    *coll,
+        const    UChar        *source,
+        int32_t            sourceLength,
+        const    UChar        *target,
+        int32_t            targetLength)
+{
+   testContext tcSource, tcTarget;
+
+    if(sourceLength == -1) {
+        sourceLength = u_strlen(source);
+    }
+    if(targetLength == -1) {
+        targetLength = u_strlen(target
+            );
+    }
+   tcSource.start = source;
+   tcSource.end = source+sourceLength;
+   tcTarget.start = target;
+   tcTarget.end = target + targetLength;
+
+   return ucol_strcollinc(coll, testInc, &tcSource, testInc, &tcTarget);
+
 }
