@@ -1,17 +1,17 @@
-﻿#--------------------------------------------------------------------
-# Copyright (c) 1999-2001, International Business Machines
+???#--------------------------------------------------------------------
+# Copyright (c) 1999-2004, International Business Machines
 # Corporation and others. All Rights Reserved.
 #--------------------------------------------------------------------
 # $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/data/Attic/Transliterator_Greek_Latin_UNGEGN.txt,v $
-# $Date: 2004/04/16 14:16:47 $
-# $Revision: 1.3 $
+# $Date: 2004/05/21 01:01:50 $
+# $Revision: 1.4 $
 #--------------------------------------------------------------------
 # For modern Greek, based on UNGEGN rules.
 
 # Rules are predicated on running NFD first, and NFC afterwards
 # MINIMAL FILTER GENERATED FOR: Greek-Latin/UNGEGN
 # WARNING: need to add accents to both filters ###
-# :: [́̄̆̈;µ·ÀÂÈÊÌÎÒÔÙÛàâèêìîòôùûĈ-ĉĜ-ĝĤ-ĥĴ-ĵŜ-ŝŴ-ŷǛ-ǜǸ-ǹ̀̂̓-̔̀͂-̓ͅͺ;Ά-ΊΌΎ-ΡΣ-ώϐ-ϖϰ-ϵЀЍѐѝḔ-ḕṐ-ṑẀ-ẁẐ-ẑẤ-ậẰ-ằẾ-ệỐ-ộỜ-ờỪ-ừỲ-ỳἀ-ἕἘ-Ἕἠ-ὅὈ-Ὅὐ-ὗὙὛὝὟ-ώᾀ-ᾴᾶ-ᾼι῁-ῄῆ-῍῏-ΐῖ-Ί῝῟-῭ῲ-ῴῶ-ῼΩ\u03F7-\u07FB\u03F9] ;
+# :: [????????;??????????????????????????????????????????????-????-????-????-????-????-????-????-????????-??????-??????????-??????-????-????-????-?????????????-??????-??????-??????-??????-??????-??????-??????-??????-??????-??????-??????-??????-??????-??????-??????-???????????????-??????-??????-?????????-??????-??????-??????-?????????-??????-??????-??????\u03F7-\u07FB\u03F9] ;
 
 :: [[[:Greek:][:Mn:][:Me:]] [\:-;?\u00B7\u037E\u0387]] ;
 ::NFD (NFC) ;
@@ -22,11 +22,11 @@ $lower = [[:latin:][:greek:] & [:Ll:]] ;
 $upper = [[:latin:][:greek:] & [:Lu:]] ;
 $accent = [[:Mn:][:Me:]] ;
 
-$macron = ̄ ;
-$ddot = ̈ ;
+$macron = ?? ;
+$ddot = ?? ;
 
-$lcgvowel = [αεηιουω] ;
-$ucgvowel = [ΑΕΗΙΟΥΩ] ;
+$lcgvowel = [??????????????] ;
+$ucgvowel = [??????????????] ;
 $gvowel = [$lcgvowel $ucgvowel] ;
 $lcgvowelC = [$lcgvowel $accent] ;
 
@@ -35,17 +35,17 @@ $vowel = [ $evowel $gvowel] ;
 
 $beforeLower = $accent * $lower ;
 
-$gammaLike = [ΓΚΞΧγκξχϰ] ;
+$gammaLike = [??????????????????] ;
 $egammaLike = [GKXCgkxc] ;
-$smooth = ̓ ;
-$rough = ̔ ;
-$iotasub = ͅ ;
+$smooth = ?? ;
+$rough = ?? ;
+$iotasub = ?? ;
 
-$softener = [βΒγΓδΔζΖλΛμΜνΝρΡ$gvowel] ;
+$softener = [????????????????????????????????$gvowel] ;
 
-$under = ̱;
+$under = ??;
 
-$caron = ̌;
+$caron = ??;
 
 $afterLetter = [:L:] [\'$accent]* ;
 $beforeLetter = [\'$accent]* [:L:] ;
@@ -57,154 +57,154 @@ $beforeLetter = [\'$accent]* [:L:] ;
 \? <> \? $under ;
 
 \; <> \? ;
-· <> \: ;
+?? <> \: ;
 
 # Fix any ancient characters that creep in
 
-͂ > ́ ;
-̂ > ́ ;
-̀ > ́ ;
+?? > ?? ;
+?? > ?? ;
+?? > ?? ;
 $smooth > ;
 $rough > ;
 $iotasub > ;
-ͺ > ;
+?? > ;
 
 # need to have these up here so the rules don't mask
 
-η <> i $under ;
-Η <> I $under ;
+?? <> i $under ;
+?? <> I $under ;
 
-Ψ } $beforeLower <> Ps ;
-Ψ <> PS ;
-ψ <> ps ;
+?? } $beforeLower <> Ps ;
+?? <> PS ;
+?? <> ps ;
 
-ω <> o $under ;
-Ω <>  O $under;
+?? <> o $under ;
+?? <>  O $under;
 
 # at begining or end of word, convert mp to b
 
-[^[:L:]$accent] { μπ > b ;
-μπ } [^[:L:]$accent] > b ;
-[^[:L:]$accent] { [Μμ][Ππ] > B ;
-[Μμ][Ππ] } [^[:L:]$accent] > B ;
+[^[:L:]$accent] { ???? > b ;
+???? } [^[:L:]$accent] > b ;
+[^[:L:]$accent] { [????][????] > B ;
+[????][????] } [^[:L:]$accent] > B ;
 
-μπ < b ;
-Μπ < B } $beforeLower ;
-ΜΠ < B ;
+???? < b ;
+???? < B } $beforeLower ;
+???? < B ;
 
 # handle diphthongs ending with upsilon
 
-ου <> ou ;
-ΟΥ <> OU ;
-Ου <> Ou ;
-οΥ <> oU ;
+???? <> ou ;
+???? <> OU ;
+???? <> Ou ;
+???? <> oU ;
 
 $fmaker = [aeiAEI] $under ? ;
 $shiftForwardVowels = [[:Mn:]-[\u0308]]; # note: a diaeresis keeps the items separate
 
-$fmaker { υ ( $shiftForwardVowels )* } $softener > $1 v $under ;
-υ $1 < ( $shiftForwardVowels )* v $under ;
+$fmaker { ?? ( $shiftForwardVowels )* } $softener > $1 v $under ;
+?? $1 < ( $shiftForwardVowels )* v $under ;
 
-$fmaker { υ ( $shiftForwardVowels )* } > $1 f $under;
-υ $1 < ( $shiftForwardVowels )* f $under ;
+$fmaker { ?? ( $shiftForwardVowels )* } > $1 f $under;
+?? $1 < ( $shiftForwardVowels )* f $under ;
 
-$fmaker { Υ } $softener <> V $under ;
-$fmaker { Υ <> U $under ;
+$fmaker { ?? } $softener <> V $under ;
+$fmaker { ?? <> U $under ;
 
-υ <> y ;
-Υ <> Y ;
+?? <> y ;
+?? <> Y ;
 
 # NORMAL
 
-α <> a ;
-Α <> A ;
+?? <> a ;
+?? <> A ;
 
-β <> v ;
-Β <> V ;
+?? <> v ;
+?? <> V ;
 
-γ } $gammaLike <> n } $egammaLike ;
-γ <> g ;
-Γ } $gammaLike <> N } $egammaLike ;
-Γ <> G ;
+?? } $gammaLike <> n } $egammaLike ;
+?? <> g ;
+?? } $gammaLike <> N } $egammaLike ;
+?? <> G ;
 
-δ <> d ;
-Δ <> D ;
+?? <> d ;
+?? <> D ;
 
-ε <> e ;
-Ε <> E ;
+?? <> e ;
+?? <> E ;
 
-ζ <> z ;
-Ζ <> Z ;
+?? <> z ;
+?? <> Z ;
 
-θ <> th ;
-Θ } $beforeLower <> Th ;
-Θ <> TH ;
+?? <> th ;
+?? } $beforeLower <> Th ;
+?? <> TH ;
 
-ι <> i ;
-Ι <> I ;
+?? <> i ;
+?? <> I ;
 
-κ <> k ;
-Κ <> K ;
+?? <> k ;
+?? <> K ;
 
-λ <> l ;
-Λ <> L ;
+?? <> l ;
+?? <> L ;
 
-μ <> m ;
-Μ <> M ;
+?? <> m ;
+?? <> M ;
 
-ν } $gammaLike > n\' ;
-ν <> n ;
-Ν } $gammaLike <> N\' ;
-Ν <> N ;
+?? } $gammaLike > n\' ;
+?? <> n ;
+?? } $gammaLike <> N\' ;
+?? <> N ;
 
-ξ <> x ;
-Ξ <> X ;
+?? <> x ;
+?? <> X ;
 
-ο <> o ;
-Ο <> O ;
+?? <> o ;
+?? <> O ;
 
-π <> p ;
-Π <> P ;
+?? <> p ;
+?? <> P ;
 
-ρ <> r ;
-Ρ <> R ;
+?? <> r ;
+?? <> R ;
 
 # insert separator before things that turn into s
-[Pp] { } [ςσΣϷϸϺϻ] > \' ; 
+[Pp] { } [??????????????] > \' ; 
 
 # special S variants
 
-Ϸ <> Š ; # Ϸ GREEK CAPITAL LETTER SHO Uppercase_Letter Grek - L 
-ϸ <> š ; #ϸ GREEK SMALL LETTER SHO Lowercase_Letter Grek - L 
-Ϻ <> Ŝ ; # Ϻ GREEK CAPITAL LETTER SAN Uppercase_Letter Grek - L 
-ϻ <> ŝ ; # ϻ GREEK SMALL LETTER SAN Lowercase_Letter Grek - L 
+?? <> S?? ; # ?? GREEK CAPITAL LETTER SHO Uppercase_Letter Grek - L 
+?? <> s?? ; #?? GREEK SMALL LETTER SHO Lowercase_Letter Grek - L 
+?? <> S?? ; # ?? GREEK CAPITAL LETTER SAN Uppercase_Letter Grek - L 
+?? <> s?? ; # ?? GREEK SMALL LETTER SAN Lowercase_Letter Grek - L 
 
 # Caron means exception
 
 # before a letter, initial
-ς } $beforeLetter <> s $under } $beforeLetter;
-σ } $beforeLetter <> s } $beforeLetter;
+?? } $beforeLetter <> s $under } $beforeLetter;
+?? } $beforeLetter <> s } $beforeLetter;
 
 # otherwise, after a letter = final
-$afterLetter { σ <> $afterLetter { s $under;
-$afterLetter { ς <> $afterLetter { s ;
+$afterLetter { ?? <> $afterLetter { s $under;
+$afterLetter { ?? <> $afterLetter { s ;
 
 # otherwise (isolated) = initial
-ς <> s $under;
-σ <> s ;
+?? <> s $under;
+?? <> s ;
 
-# [Pp] { Σ <> \'S ;
-Σ <> S ;
+# [Pp] { ?? <> \'S ;
+?? <> S ;
 
-τ <> t ;
-Τ <> T ;
+?? <> t ;
+?? <> T ;
 
-φ <> f ;
-Φ <> F ;
+?? <> f ;
+?? <> F ;
 
-χ <> ch ;
-Χ } $beforeLower <> Ch ;
-Χ <> CH ;
+?? <> ch ;
+?? } $beforeLower <> Ch ;
+?? <> CH ;
 
 # Completeness for ASCII
 
@@ -230,25 +230,25 @@ $afterLetter { ς <> $afterLetter { s ;
 
 # Completeness for Greek
 
-ϐ > | β ;
-ϑ > | θ ;
-ϒ > | Υ ;
-ϕ > | φ ;
-ϖ > | π ;
+?? > | ?? ;
+?? > | ?? ;
+?? > | ?? ;
+?? > | ?? ;
+?? > | ?? ;
 
-ϰ > | κ ;
-ϱ > | ρ ;
-ϲ > | σ ;
-Ϲ > | Σ; #U+03F9 GREEK CAPITAL LUNATE SIGMA SYMBOL
-ϳ > j ;
-ϴ > | Θ ;
-ϵ > | ε ;
-µ > | μ ;
+?? > | ?? ;
+?? > | ?? ;
+?? > | ?? ;
+?? > | ??; #U+03F9 GREEK CAPITAL LUNATE SIGMA SYMBOL
+?? > j ;
+?? > | ?? ;
+?? > | ?? ;
+?? > | ?? ;
 
 # delete any trailing ' marks used for roundtripping
 
- < [Ππ] { \' } [Ss] ;
- < [Νν] { \' } $egammaLike ;
+ < [????] { \' } [Ss] ;
+ < [????] { \' } $egammaLike ;
 
 ::NFC (NFD) ;
 

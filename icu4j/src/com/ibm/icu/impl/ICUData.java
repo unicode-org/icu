@@ -1,5 +1,11 @@
 /*
+ *******************************************************************************
+ * Copyright (C) 2004, International Business Machines Corporation and         *
+ * others. All Rights Reserved.                                                *
+ *******************************************************************************
+ *
  * Created on Feb 4, 2004
+ *
  */
 package com.ibm.icu.impl;
 

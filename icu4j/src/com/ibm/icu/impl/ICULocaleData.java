@@ -1,5 +1,5 @@
 /*
- * (C) Copyright IBM Corp. 2002-2003 - All Rights Reserved
+ * (C) Copyright IBM Corp. 2002-2004 - All Rights Reserved
  */
 
 package com.ibm.icu.impl;

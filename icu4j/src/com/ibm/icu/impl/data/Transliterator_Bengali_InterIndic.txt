@@ -1,10 +1,10 @@
 #--------------------------------------------------------------------
-# Copyright (c) 1999-2001, International Business Machines
+# Copyright (c) 1999-2004, International Business Machines
 # Corporation and others. All Rights Reserved.
 #--------------------------------------------------------------------
 # $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/data/Attic/Transliterator_Bengali_InterIndic.txt,v $
-# $Date: 2004/05/07 02:57:41 $
-# $Revision: 1.12 $
+# $Date: 2004/05/21 01:01:51 $
+# $Revision: 1.13 $
 #--------------------------------------------------------------------
 
 # Bengali-InterIndic
