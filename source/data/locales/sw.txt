@@ -13,7 +13,6 @@ sw {
 
     // Many of these names came from www.geonames.de
     Countries {
-        Fallback{ "en" }
         AE { "Muugano wa Falme za Nchi za Kiarabu" }
         AG { "Antigua na Barbuda" }
         AR { "Ajentina" }
