@@ -1,3 +1,5 @@
+// Use --encoding cp1251 for genrb
+
 sr {
      errorcodes {
                      "Нема грешке",
