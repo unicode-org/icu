@@ -18,7 +18,7 @@
 *                           wchar.h.
 *   07/09/97    helena      Made ParsePosition into a class.
 *   08/06/97    nos         removed overloaded constructor, fixed 'format(array)'
-*    07/22/98    stephen        JDK 1.2 Sync - removed UBool array (doubleFlags)
+*   07/22/98    stephen     JDK 1.2 Sync - removed UBool array (doubleFlags)
 *   02/22/99    stephen     Removed character literals for EBCDIC safety
 ********************************************************************************
 */
@@ -27,19 +27,19 @@
 #include "unicode/choicfmt.h"
 #include "unicode/numfmt.h"
 #include "unicode/locid.h"
-#include "mutex.h" 
+#include "mutex.h"
 
 // *****************************************************************************
 // class ChoiceFormat
 // *****************************************************************************
- 
+
 char        ChoiceFormat::fgClassID = 0; // Value is irrelevant
 
 NumberFormat* ChoiceFormat::fgNumberFormat = 0;
 
 // -------------------------------------
 // Creates a ChoiceFormat instance based on the pattern.
- 
+
 ChoiceFormat::ChoiceFormat(const UnicodeString& newPattern,
                            UErrorCode& status)
 : fChoiceLimits(0),
@@ -48,7 +48,7 @@ ChoiceFormat::ChoiceFormat(const UnicodeString& newPattern,
 {
     applyPattern(newPattern, status);
 }
- 
+
 // -------------------------------------
 // Creates a ChoiceFormat instance with the limit array and 
 // format strings for each limit.
@@ -154,7 +154,7 @@ ChoiceFormat::getNumberFormat(UErrorCode &status)
     return theFormat;
 }
 
-void          
+void 
 ChoiceFormat::releaseNumberFormat(NumberFormat *adopt)
 {
     if(fgNumberFormat == 0) // If the cache is empty we must add it back.
@@ -192,10 +192,14 @@ ChoiceFormat::stod(const UnicodeString& string,
     double value = 0.0;
     if (U_SUCCESS(status))
     {
-        switch(result.getType())
+        Formattable::Type type = result.getType();
+        if (type == Formattable::kLong)
         {
-            case Formattable::kLong: value = result.getLong(); break;
-            case Formattable::kDouble: value = result.getDouble(); break;
+            value = result.getLong();
+        }
+        else if (type == Formattable::kDouble)
+        {
+            value = result.getDouble();
         }
     }
     return value;
@@ -224,7 +228,7 @@ ChoiceFormat::dtos(double value,
 
 // -------------------------------------
 // Applies the pattern to this ChoiceFormat instance.
- 
+
 void
 ChoiceFormat::applyPattern(const UnicodeString& newPattern,
                            UErrorCode& status)
@@ -266,10 +270,10 @@ ChoiceFormat::applyPattern(const UnicodeString& newPattern,
             UChar negInf [] = {0x002D /*'-'*/, posInf };
             if (tempBuffer == UnicodeString(&posInf, 1, 1)) {
                 startValue = uprv_getInfinity();
-            } 
+            }
             else if (tempBuffer == UnicodeString(negInf, 2, 2)) {
                 startValue = - uprv_getInfinity();
-            } 
+            }
             else {
                 //segments[0].trim();
                 startValue = stod(tempBuffer, status);
@@ -313,14 +317,14 @@ ChoiceFormat::applyPattern(const UnicodeString& newPattern,
     fCount = count;
     fChoiceLimits    = new double[fCount];
     fChoiceFormats    = new UnicodeString[fCount];
-    
+
     uprv_arrayCopy(newChoiceLimits, fChoiceLimits, fCount);
     uprv_arrayCopy(newChoiceFormats, fChoiceFormats, fCount);
 }
- 
+
 // -------------------------------------
 // Reconstruct the original input pattern.
- 
+
 UnicodeString&
 ChoiceFormat::toPattern(UnicodeString& result) const
 {
@@ -343,7 +347,7 @@ ChoiceFormat::toPattern(UnicodeString& result) const
             ! (uprv_isNaN(tryLessOrEqual) || uprv_isNaN(tryLess))) {
             result += dtos(fChoiceLimits[i], buf, status);
             result += (UChar)0x0023 /*'#'*/;
-        } 
+        }
         else {
             if (uprv_isPositiveInfinity(fChoiceLimits[i])) {
                 result += (UChar32)0x221E;
@@ -377,13 +381,13 @@ ChoiceFormat::toPattern(UnicodeString& result) const
         if (needQuote) 
             result += (UChar)0x0027 /*'\''*/;
     }
-    
+
     return result;
 }
- 
+
 // -------------------------------------
 // Adopts the limit and format arrays.
- 
+
 void
 ChoiceFormat::adoptChoices(double *limits, 
                            UnicodeString *formats, 
@@ -391,7 +395,7 @@ ChoiceFormat::adoptChoices(double *limits,
 {
     if(limits == 0 || formats == 0)
         return;
-        
+
     delete [] fChoiceLimits;
     fChoiceLimits = 0;
     delete [] fChoiceFormats;
@@ -400,7 +404,7 @@ ChoiceFormat::adoptChoices(double *limits,
     fChoiceFormats = formats;
     fCount = cnt;
 }
- 
+
 // -------------------------------------
 // Sets the limit and format arrays. 
 void
@@ -423,32 +427,32 @@ ChoiceFormat::setChoices(  const double* limits,
     uprv_arrayCopy(limits, fChoiceLimits, fCount);
     uprv_arrayCopy(formats, fChoiceFormats, fCount);
 }
- 
+
 // -------------------------------------
 // Gets the limit array.
- 
+
 const double*
 ChoiceFormat::getLimits(int32_t& cnt) const 
 {
     cnt = fCount;
     return fChoiceLimits;
 }
- 
+
 // -------------------------------------
 // Gets the format array.
- 
+
 const UnicodeString*
 ChoiceFormat::getFormats(int32_t& cnt) const
 {
     cnt = fCount;
     return fChoiceFormats;
 }
- 
+
 // -------------------------------------
 // Formats a long number, it's actually formatted as
 // a double.  The returned format string may differ
 // from the input number because of this.
- 
+
 UnicodeString&
 ChoiceFormat::format(int32_t number, 
                      UnicodeString& toAppendTo, 
@@ -456,10 +460,10 @@ ChoiceFormat::format(int32_t number,
 {
     return format((double) number, toAppendTo, status);
 }
- 
+
 // -------------------------------------
 // Formats a double number.
- 
+
 UnicodeString&
 ChoiceFormat::format(double number, 
                      UnicodeString& toAppendTo, 
@@ -479,7 +483,7 @@ ChoiceFormat::format(double number,
     // return either a formatted number, or a string
     return (toAppendTo += fChoiceFormats[i]);
 }
- 
+
 // -------------------------------------
 // Formats an array of objects. Checks if the data type of the objects
 // to get the right value for formatting.  
@@ -495,7 +499,7 @@ ChoiceFormat::format(const Formattable* objs,
         status = U_ILLEGAL_ARGUMENT_ERROR;
         return toAppendTo;
     }
-    
+
     UnicodeString buffer;
     for (int32_t i = 0; i < cnt; i++) {
         buffer.remove();
@@ -516,10 +520,10 @@ ChoiceFormat::format(const Formattable& obj,
                      FieldPosition& pos,
                      UErrorCode& status) const
 {
-    return NumberFormat::format(obj, toAppendTo, pos, status); 
+    return NumberFormat::format(obj, toAppendTo, pos, status);
 }
 // -------------------------------------
- 
+
 void
 ChoiceFormat::parse(const UnicodeString& text, 
                     Formattable& result,
@@ -552,7 +556,7 @@ ChoiceFormat::parse(const UnicodeString& text,
 
 // -------------------------------------
 // Parses the text and return the Formattable object.  
- 
+
 void
 ChoiceFormat::parse(const UnicodeString& text, 
                     Formattable& result,
@@ -562,7 +566,7 @@ ChoiceFormat::parse(const UnicodeString& text,
 }
 
 // -------------------------------------
- 
+
 Format*
 ChoiceFormat::clone() const
 {
