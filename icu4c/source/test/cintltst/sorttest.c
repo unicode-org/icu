@@ -31,7 +31,7 @@ _int32Top28Comparator(const void *context, const void *left, const void *right) 
 
 void
 SortTest(void) {
-    uint16_t small[]={ 10, 8, 1, 2, 5, 4, 3, 9, 7, 6 };
+    uint16_t small[]={ 8, 1, 2, 5, 4, 3, 7, 6 };
     int32_t medium[]={ 10, 8, 1, 2, 5, 5, 6, 4, 3, 9, 7, 5 };
     uint32_t large[]={ 21, 10, 20, 19, 11, 12, 13, 10, 10, 10, 10,
                        8, 1, 2, 5, 10, 10, 4, 17, 18, 3, 9, 10, 7, 6, 14, 15, 16 };
