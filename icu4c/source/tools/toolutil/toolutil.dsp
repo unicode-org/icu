@@ -213,6 +213,10 @@ SOURCE=.\uparse.h
 
 SOURCE=.\uperf.h
 # End Source File
+# Begin Source File
+
+SOURCE=.\utimer.h
+# End Source File
 # End Group
 # Begin Group "Resource Files"
 
