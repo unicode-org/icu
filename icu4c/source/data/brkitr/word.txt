@@ -173,5 +173,42 @@ $BackKatakanaEx $Format* $BackKatakanaEx;
 
 !!safe_reverse;
 
-$Extend* [^$Extend];
-$BackACMLetterEx / $Format;
+# rule 3
+$Extend+ [^$Extend];
+
+# rule 4
+$Format+ $BackABaseLetterEx;
+$Format+ $BackACMLetterEx / $Format;
+$Format+ $BackNumericEx;
+$Format+ $BackMidLetterEx;
+$Format+ $BackMidNumLetEx;
+$Format+ $BackMidNumEx;
+$Format+ $BackKatakanaEx;
+
+# rule 6
+($MidLetter | $MidNumLet) $Format* $BackABaseLetterEx;
+($MidLetter | $MidNumLet) $Format* $BackACMLetterEx / $Format;
+
+# rule 11
+($MidNum | $MidNumLet) $Format* $BackNumericEx;
+
+## -------------------------------------------------
+
+!!safe_forward;
+
+# rule 3
+$Extend+;
+
+# rule 4
+$Format+ $ALetterEx;
+$Format+ $NumericEx;
+$Format+ $MidLetterEx;
+$Format+ $MidNumLetEx;
+$Format+ $MidNumEx;
+$Format+ $KatakanaEx;
+
+# rule 6
+($MidLetter | $MidNumLet) $Format* $ALetterEx;
+
+# rule 11
+($MidNum | $MidNumLet) $Format* $NumericEx;
