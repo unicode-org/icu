@@ -83,6 +83,8 @@
         <property name="icu4j.tests.manifest" value="${src.dir}/com/ibm/icu/dev/test/manifest.test.stub"/>
         <property name="ime.translit.manifest" value="${src.dir}/com/ibm/icu/dev/tool/ime/translit/manifest.stub"/>
         <property name="ime.translit.jar.file" value="icutransime.jar"/>
+        <property name="ime.indic.manifest" value="${src.dir}/com/ibm/icu/dev/tool/ime/indic/manifest.stub"/>
+        <property name="ime.indic.jar.file" value="icuindicime.jar"/>
         <property name="zip.file" value="../icu4j${DSTAMP}.zip"/>
         <property name="zipSrc.file" value="../icu4jSrc${DSTAMP}.zip"/>
 
@@ -268,7 +270,7 @@
             manifest="${icu4j.manifest}"/>
     </target>
 
-    <target name="translitimeJar" depends="collator, transliterator">
+    <target name="translitIMEJar" depends="collator, transliterator">
         <javac includes="com/ibm/icu/dev/tool/ime/translit/*.java"
             excludes="**/CVS/**/*"
             srcdir="${src.dir}"
@@ -284,6 +286,25 @@
             manifest="${ime.translit.manifest}">
 
 	    <metainf dir="${src.dir}/com/ibm/icu/dev/tool/ime/translit" includes="services/*"/>
+	</jar>
+    </target>
+
+    <target name="indicIMEJar" depends="init">
+        <javac includes="com/ibm/icu/dev/tool/ime/indic/*.java"
+            excludes="**/CVS/**/*"
+            srcdir="${src.dir}"
+            destdir="${build.dir}"
+            classpathref="build.classpath"
+            debug="on" deprecation="off"/>
+        <copy file="${src.dir}/com/ibm/icu/dev/tool/ime/indic/DisplayNames.properties"
+              todir="${build.dir}/com/ibm/icu/dev/tool/ime/indic"/>
+        <jar jarfile="${ime.indic.jar.file}"
+            compress="true"
+	    basedir="${build.dir}"
+            includes="com/ibm/icu/dev/tool/ime/indic/**/*"
+            manifest="${ime.indic.manifest}">
+
+	    <metainf dir="${src.dir}/com/ibm/icu/dev/tool/ime/indic" includes="services/*"/>
 	</jar>
     </target>
 
