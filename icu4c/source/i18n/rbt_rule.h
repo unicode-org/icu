@@ -9,6 +9,7 @@
 #define RBT_RULE_H
 
 #include "unicode/unistr.h"
+#include "unicode/utrans.h"
 
 class Replaceable;
 class TransliterationRuleData;
@@ -256,10 +257,9 @@ public:
      * <tt>null</tt> then no filtering is applied.
      */
     virtual UBool matches(const Replaceable& text,
-                           int32_t start, int32_t limit,
-                           int32_t cursor,
-                           const TransliterationRuleData& data,
-                           const UnicodeFilter* filter) const;
+                          const UTransPosition& pos,
+                          const TransliterationRuleData& data,
+                          const UnicodeFilter* filter) const;
 
     /**
      * Return the degree of match between this rule and the given text.  The
@@ -287,8 +287,7 @@ public:
      * @see #FULL_MATCH
      */
     virtual int32_t getMatchDegree(const Replaceable& text,
-                                   int32_t start, int32_t limit,
-                                   int32_t cursor,
+                                   const UTransPosition& pos,
                                    const TransliterationRuleData& data,
                                    const UnicodeFilter* filter) const;
 
@@ -315,8 +314,8 @@ public:
      * match any characters, otherwise the number of characters of text that
      * match this rule.
      */
-    virtual int32_t getRegionMatchLength(const Replaceable& text, int32_t start,
-                                         int32_t limit, int32_t cursor,
+    virtual int32_t getRegionMatchLength(const Replaceable& text,
+                                         const UTransPosition& pos,
                                          const UnicodeString& templ,
                                          const TransliterationRuleData& data,
                                          const UnicodeFilter* filter) const;
