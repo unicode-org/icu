@@ -60,6 +60,67 @@
  * is a DST zone.
  */
 
+/* tz.icu data file format
+ *
+ * Here is the overall structure of the tz.icu file, expressed as a
+ * pseudo-C-struct.  Refer to actual struct declarations below for
+ * more details on each subelement of tz.icu.  Many of the elements
+ * are of variable size.  Padding is used when necessary to align
+ * words and longs properly; see structure declarations for details.
+ *
+ * struct tz.icu {
+ *
+ *  // The header gives offsets to various tables within tz.icu.
+ *
+ *  struct TZHeader            header;
+ * 
+ *  // The equivalency groups; repeated; one element for each
+ *  // equivalency group.  Each one is of variable size.  Typically,
+ *  // an equivalency group is found given an ID index.  The index is
+ *  // used to find an entry of nameToEquiv[].  That entry is added to
+ *  // the start of the header to obtain a pointer to one of the
+ *  // entries equivTable[i].  The number of equivalency groups (n1)
+ *  // is not stored anywhere; it can be discovered by walking the
+ *  // table.
+ *
+ *  struct TZEquivalencyGroup  equivTable[n1];
+ * 
+ *  // An index which groups timezones having the same raw offset
+ *  // together; repeated; one element for each raw offset struct.
+ *  // Typically the code walks through this table starting at the
+ *  // beginning until the desired index is found or the end of the
+ *  // table is reached.  The number of offset groups (n2) is not
+ *  // stored anywhere; it can be discovered by walking the table.
+ *
+ *  struct OffsetIndex         offsetIndex[n2];
+ * 
+ *  // An index which groups timezones having the same country
+ *  // together; repeated; one element for each country.  Typically
+ *  // the code walks through this table starting at the beginning
+ *  // until the desired country is found or the end of the table is
+ *  // reached.  The number of offset groups (n3) is not stored
+ *  // anywhere; it can be discovered by walking the table.
+ *
+ *  struct CountryIndex        countryIndex[n3];
+ * 
+ *  // An array of offsets, one for each name.  Each offset, when
+ *  // added to the start of the header, gives a pointer to an entry
+ *  // equivTable[i], the equivalency group struct for the given zone.
+ *  // The nubmer of names is given by TZHeader.count.  The order of
+ *  // entries is the same as nameTable[].
+ *
+ *  uint32                     nameToEquiv[header.count];
+ * 
+ *  // All the time zone IDs, in sorted order, with 0 termination.
+ *  // The number of entries is given by TZHeader.count.  The total
+ *  // number of characters in this table (n4) is not stored anywhere;
+ *  // it can be discovered by walking the table.  The order of
+ *  // entries is the same as nameToEquiv[].
+ *
+ *  char                       nameTable[n4];
+ * };
+ */
+
 // Information used to identify and validate the data
 
 #define TZ_DATA_NAME "tz"
