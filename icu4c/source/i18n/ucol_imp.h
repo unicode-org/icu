@@ -106,6 +106,18 @@ struct collIterate {
   uint32_t CEs[UCOL_EXPAND_CE_BUFFER_SIZE]; /* This is where we store CEs */
   UChar stackWritableBuffer[UCOL_WRITABLE_BUFFER_SIZE]; /* A writable buffer. */
 };
+
+/* 
+struct used internally in getSpecial*CE.
+data similar to collIterate.
+*/
+struct collIterateState {
+    UChar   *pos; /* This is position in the string.  Can be to original or writable buf */
+    UChar   *fcdPosition; /* Position in the original string to continue FCD check from. */
+    uint8_t  flags;
+    uint8_t  origFlags;
+};
+
 U_CAPI void init_collIterate(const UCollator *collator, const UChar *sourceString, int32_t sourceLen, collIterate *s);
 
 
