@@ -383,9 +383,17 @@ static int printTransliterators(int canon)
 /* Return the offset of a byte in its source, given the from and to offsets
    vectors and the byte offset itself. */
 
-static inline int32_t dataOffset(const int32_t * fromoffsets,
-    int32_t whereto, const int32_t * tooffsets) {
-    return whereto >= 0 ? fromoffsets[tooffsets[whereto]] : 0;
+static inline int32_t dataOffset(int32_t whereto,
+    const int32_t *fromoffsets, int32_t fromsz,
+    const int32_t *tooffsets, int32_t tosz) {
+    if (whereto >= 0 && whereto < tosz) {
+        whereto = tooffsets[whereto];
+        if (whereto >= 0 && whereto < fromsz) {
+            return fromoffsets[whereto];
+        }
+    }
+
+    return 0;
 }
 
 // Convert a file from one encoding to another
@@ -633,7 +641,7 @@ static UBool convertFile(const char *pname,
                 char pos[32];
 
                 uint32_t erroffset =
-                    dataOffset(fromoffsets, bufp - buf - 1, tooffsets);
+                    dataOffset(bufp - buf - 1, fromoffsets, bufsz, tooffsets, tobufsz);
                 int32_t ferroffset = infoffset - (unibufp - unibufu) + erroffset;
 
                 if ((int32_t) ferroffset < 0) {
