@@ -1,10 +1,10 @@
 /*
 *****************************************************************************************
-*   Copyright (C) 1997-2001, International Business Machines
+*   Copyright (C) 1997-2002, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *****************************************************************************************
 *
-* File BRKITER.H
+* File brkiter.h
 *
 * Modification History:
 *
@@ -65,13 +65,13 @@ U_NAMESPACE_BEGIN
  * <P>
  * Helper function to output text
  * <pre>
- * \code 
+ * \code
  *    void printTextRange( BreakIterator& iterator, int32_t start, int32_t end )
  *    {
  *        UnicodeString textBuffer, temp;
  *        CharacterIterator *strIter = iterator.createText();
  *        strIter->getText(temp);
- *        cout << " " << start << " " << end << " |" 
+ *        cout << " " << start << " " << end << " |"
  *             << temp.extractBetween(start, end, textBuffer)
  *             << "|" << endl;
  *        delete strIter;
@@ -149,7 +149,7 @@ U_NAMESPACE_BEGIN
  *           BreakIterator* boundary;
  *           UnicodeString stringToExamine("Aaa bbb ccc. Ddd eee fff.");
  *           cout << "Examining: " << stringToExamine << endl;
- * 
+ *
  *           //print each sentence in forward and reverse order
  *           boundary = BreakIterator::createSentenceInstance( Locale::US );
  *           boundary->setText(stringToExamine);
@@ -158,7 +158,7 @@ U_NAMESPACE_BEGIN
  *           cout << "----- backward: ----------" << endl;
  *           printEachBackward(*boundary);
  *           delete boundary;
- * 
+ *
  *           //print each word in order
  *           boundary = BreakIterator::createWordInstance();
  *           boundary->setText(stringToExamine);
@@ -173,7 +173,7 @@ U_NAMESPACE_BEGIN
  *           //print word at charpos 10
  *           cout << "----- at pos 10: ---------" << endl;
  *           printAt(*boundary, 10 );
- * 
+ *
  *           delete boundary;
  *       }
  * \endcode
@@ -222,6 +222,8 @@ public:
 
     /**
      * Return a CharacterIterator over the text being analyzed.
+     * Changing the state of the returned iterator can have undefined consequences
+     * on the operation of the break iterator.  If you need to change it, clone it first.
      * @stable
      */
     virtual const CharacterIterator& getText(void) const = 0;
@@ -278,8 +280,7 @@ public:
     virtual int32_t next(void) = 0;
 
     /**
-     * Return character index of the text boundary that was most recently
-     * returned by next(), previous(), first(), or last()
+     * Return character index of the current interator position within the text.
      * @return The boundary most recently returned.
      * @stable
      */
@@ -304,9 +305,11 @@ public:
      * @stable
      */
     virtual int32_t preceding(int32_t offset) = 0;
- 
+
     /**
      * Return true if the specfied position is a boundary position.
+     * As a side effect, the current position of the iterator is set
+     * to the first boundary position at or following the specified offset.
      * @param offset the offset to check.
      * @return True if "offset" is a boundary position.
      * @stable
@@ -328,22 +331,22 @@ public:
      * Create BreakIterator for word-breaks using the given locale.
      * Returns an instance of a BreakIterator implementing word breaks.
      * WordBreak is useful for word selection (ex. double click)
-     * @param where the locale. 
+     * @param where the locale.
      * @param status the error code
-     * @return A BreakIterator for word-breaks.  The UErrorCode& status 
+     * @return A BreakIterator for word-breaks.  The UErrorCode& status
      * parameter is used to return status information to the user.
      * To check whether the construction succeeded or not, you should check
      * the value of U_SUCCESS(err).  If you wish more detailed information, you
      * can check for informational error results which still indicate success.
-     * U_USING_FALLBACK_ERROR indicates that a fall back locale was used.  For
+     * U_USING_FALLBACK_WARNING indicates that a fall back locale was used.  For
      * example, 'de_CH' was requested, but nothing was found there, so 'de' was
-     * used.  U_USING_DEFAULT_ERROR indicates that the default locale data was
+     * used.  U_USING_DEFAULT_WARNING indicates that the default locale data was
      * used; neither the requested locale nor any of its fall back locales
      * could be found.
      * The caller owns the returned object and is responsible for deleting it.
      * @stable
      */
-    static BreakIterator* createWordInstance(const Locale& where, 
+    static BreakIterator* createWordInstance(const Locale& where,
                                                    UErrorCode& status);
 
     /**
@@ -354,84 +357,84 @@ public:
      * LineBreak is useful for word wrapping text.
      * @param where the locale.
      * @param status The error code.
-     * @return A BreakIterator for line-breaks.  The UErrorCode& status 
+     * @return A BreakIterator for line-breaks.  The UErrorCode& status
      * parameter is used to return status information to the user.
      * To check whether the construction succeeded or not, you should check
      * the value of U_SUCCESS(err).  If you wish more detailed information, you
      * can check for informational error results which still indicate success.
-     * U_USING_FALLBACK_ERROR indicates that a fall back locale was used.  For
+     * U_USING_FALLBACK_WARNING indicates that a fall back locale was used.  For
      * example, 'de_CH' was requested, but nothing was found there, so 'de' was
-     * used.  U_USING_DEFAULT_ERROR indicates that the default locale data was
+     * used.  U_USING_DEFAULT_WARNING indicates that the default locale data was
      * used; neither the requested locale nor any of its fall back locales
      * could be found.
      * The caller owns the returned object and is responsible for deleting it.
      * @stable
      */
-    static BreakIterator* createLineInstance(const Locale& where, 
+    static BreakIterator* createLineInstance(const Locale& where,
                                                    UErrorCode& status);
 
     /**
      * Create BreakIterator for character-breaks using specified locale
      * Returns an instance of a BreakIterator implementing character breaks.
      * Character breaks are boundaries of combining character sequences.
-     * @param where the locale. 
+     * @param where the locale.
      * @param status The error code.
-     * @return A BreakIterator for character-breaks.  The UErrorCode& status 
+     * @return A BreakIterator for character-breaks.  The UErrorCode& status
      * parameter is used to return status information to the user.
      * To check whether the construction succeeded or not, you should check
      * the value of U_SUCCESS(err).  If you wish more detailed information, you
      * can check for informational error results which still indicate success.
-     * U_USING_FALLBACK_ERROR indicates that a fall back locale was used.  For
+     * U_USING_FALLBACK_WARNING indicates that a fall back locale was used.  For
      * example, 'de_CH' was requested, but nothing was found there, so 'de' was
-     * used.  U_USING_DEFAULT_ERROR indicates that the default locale data was
+     * used.  U_USING_DEFAULT_WARNING indicates that the default locale data was
      * used; neither the requested locale nor any of its fall back locales
      * could be found.
      * The caller owns the returned object and is responsible for deleting it.
      * @stable
      */
-    static BreakIterator* createCharacterInstance(const Locale& where, 
+    static BreakIterator* createCharacterInstance(const Locale& where,
                                                         UErrorCode& status);
 
     /**
      * Create BreakIterator for sentence-breaks using specified locale
      * Returns an instance of a BreakIterator implementing sentence breaks.
-     * @param where the locale. 
+     * @param where the locale.
      * @param status The error code.
-     * @return A BreakIterator for sentence-breaks.  The UErrorCode& status 
+     * @return A BreakIterator for sentence-breaks.  The UErrorCode& status
      * parameter is used to return status information to the user.
      * To check whether the construction succeeded or not, you should check
      * the value of U_SUCCESS(err).  If you wish more detailed information, you
      * can check for informational error results which still indicate success.
-     * U_USING_FALLBACK_ERROR indicates that a fall back locale was used.  For
+     * U_USING_FALLBACK_WARNING indicates that a fall back locale was used.  For
      * example, 'de_CH' was requested, but nothing was found there, so 'de' was
-     * used.  U_USING_DEFAULT_ERROR indicates that the default locale data was
+     * used.  U_USING_DEFAULT_WARNING indicates that the default locale data was
      * used; neither the requested locale nor any of its fall back locales
      * could be found.
      * The caller owns the returned object and is responsible for deleting it.
      * @stable
      */
-    static BreakIterator* createSentenceInstance(const Locale& where, 
+    static BreakIterator* createSentenceInstance(const Locale& where,
                                                        UErrorCode& status);
 
     /**
      * Create BreakIterator for title-casing breaks using the specified locale
      * Returns an instance of a BreakIterator implementing title breaks.
-     * @param where the locale. 
+     * @param where the locale.
      * @param status The error code.
-     * @return A BreakIterator for title-breaks.  The UErrorCode& status 
+     * @return A BreakIterator for title-breaks.  The UErrorCode& status
      * parameter is used to return status information to the user.
      * To check whether the construction succeeded or not, you should check
      * the value of U_SUCCESS(err).  If you wish more detailed information, you
      * can check for informational error results which still indicate success.
-     * U_USING_FALLBACK_ERROR indicates that a fall back locale was used.  For
+     * U_USING_FALLBACK_WARNING indicates that a fall back locale was used.  For
      * example, 'de_CH' was requested, but nothing was found there, so 'de' was
-     * used.  U_USING_DEFAULT_ERROR indicates that the default locale data was
+     * used.  U_USING_DEFAULT_WARNING indicates that the default locale data was
      * used; neither the requested locale nor any of its fall back locales
      * could be found.
      * The caller owns the returned object and is responsible for deleting it.
-     * @stable
+     * @draft ICU 2.1
      */
-    static BreakIterator* createTitleInstance(const Locale& where, 
+    static BreakIterator* createTitleInstance(const Locale& where,
                                                        UErrorCode& status);
 
     /**
@@ -469,24 +472,30 @@ public:
     /**
      * Thread safe client-buffer-based cloning operation
      *    Do NOT call delete on a safeclone, since 'new' is not used to create it.
-     * @param stackBuffer user allocated space for the new clone. If NULL new memory will be allocated. 
+     * @param stackBuffer user allocated space for the new clone. If NULL new memory will be allocated.
      * If buffer is not large enough, new memory will be allocated.
-     * @param BufferSize reference to size of allocated space. 
-     * If BufferSize == 0, a sufficient size for use in cloning will 
+     * @param BufferSize reference to size of allocated space.
+     * If BufferSize == 0, a sufficient size for use in cloning will
      * be returned ('pre-flighting')
-     * If BufferSize is not enough for a stack-based safe clone, 
+     * If BufferSize is not enough for a stack-based safe clone,
      * new memory will be allocated.
      * @param status to indicate whether the operation went on smoothly or there were errors
-     *  An informational status value, U_SAFECLONE_ALLOCATED_ERROR, is used if any allocations were 
+     *  An informational status value, U_SAFECLONE_ALLOCATED_ERROR, is used if any allocations were
      *  necessary.
      * @return pointer to the new clone
-     *  
-     * @draft ICU 1.8
+     *
+     * @stable
      */
     virtual BreakIterator *  createBufferClone(void *stackBuffer,
                                                int32_t &BufferSize,
                                                UErrorCode &status) = 0;
 
+    /**
+     *   Determine whether the BreakIterator was created in user memory by
+     *   createBufferClone(), and thus should not be deleted.  Such objects
+     *   must be closed by an explicit call to the destructor (not delete).
+     *  @stable
+     */
     inline UBool isBufferClone(void);
 
 

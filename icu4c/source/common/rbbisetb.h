@@ -35,7 +35,8 @@ U_NAMESPACE_BEGIN
 //     All of them are strung together in a linked list, which is kept in order
 //     (by character)
 //
-struct RangeDescriptor : public UObject {
+class RangeDescriptor : public UObject {
+public:
     UChar32            fStartChar;      // Start of range, unicode 32 bit value.
     UChar32            fEndChar;        // End of range, unicode 32 bit value.
     int32_t            fNum;            // runtime-mapped input value for this range.

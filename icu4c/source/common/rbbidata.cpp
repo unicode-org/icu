@@ -1,8 +1,8 @@
 /*
-**********************************************************************
+***************************************************************************
 *   Copyright (C) 1999-2002 International Business Machines Corporation   *
-*   and others. All rights reserved.                                 *
-**********************************************************************
+*   and others. All rights reserved.                                      *
+***************************************************************************
 */
 
 #include "unicode/utypes.h"
@@ -156,7 +156,7 @@ int32_t  RBBIDataWrapper::hashCode() {
 //
 //-----------------------------------------------------------------------------
 void RBBIDataWrapper::removeReference() {
-    if (umtx_atomic_dec(&fRefCount) == 0) {  
+    if (umtx_atomic_dec(&fRefCount) == 0) {
         delete this;
     }
 };
@@ -218,11 +218,6 @@ void  RBBIDataWrapper::printData() {
     }
     RBBIDebugPrintf("\n\n");
 }
-
-
-
-
-
 
 
 
