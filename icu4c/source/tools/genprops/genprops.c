@@ -175,6 +175,34 @@ writeUCDFilename(char *basename, const char *filename, const char *suffix) {
     uprv_strcpy(basename+length, ".txt");
 }
 
+U_CFUNC int32_t
+getTokenIndex(const char *const tokens[], int32_t countTokens, const char *s) {
+    const char *t, *z;
+    int32_t i, j;
+
+    s=u_skipWhitespace(s);
+    for(i=0; i<countTokens; ++i) {
+        t=tokens[i];
+        if(t!=NULL) {
+            for(j=0;; ++j) {
+                if(t[j]!=0) {
+                    if(s[j]!=t[j]) {
+                        break;
+                    }
+                } else {
+                    z=u_skipWhitespace(s+j);
+                    if(*z==';' || *z==0) {
+                        return i;
+                    } else {
+                        break;
+                    }
+                }
+            }
+        }
+    }
+    return -1;
+}
+
 /* parser for BidiMirroring.txt --------------------------------------------- */
 
 #define MAX_MIRROR_COUNT 2000
@@ -468,7 +496,7 @@ unicodeDataLineFn(void *context,
     char *end;
     static uint32_t prevCode=0;
     uint32_t value;
-    int i;
+    int32_t i;
 
     /* reset the properties */
     uprv_memset(&p, 0, sizeof(Props));
@@ -484,18 +512,14 @@ unicodeDataLineFn(void *context,
     }
 
     /* get general category, field 2 */
-    *fields[2][1]=0;
-    for(i=0;;) {
-        if(uprv_strcmp(fields[2][0], genCategoryNames[i])==0) {
-            p.generalCategory=(uint8_t)i;
-            break;
-        }
-        if(++i==U_CHAR_CATEGORY_COUNT) {
-            fprintf(stderr, "genprops: unknown general category \"%s\" at code 0x%lx\n",
-                fields[2][0], (unsigned long)p.code);
-            *pErrorCode=U_PARSE_ERROR;
-            exit(U_PARSE_ERROR);
-        }
+    i=getTokenIndex(genCategoryNames, U_CHAR_CATEGORY_COUNT, fields[2][0]);
+    if(i>=0) {
+        p.generalCategory=(uint8_t)i;
+    } else {
+        fprintf(stderr, "genprops: unknown general category \"%s\" at code 0x%lx\n",
+            fields[2][0], (unsigned long)p.code);
+        *pErrorCode=U_PARSE_ERROR;
+        exit(U_PARSE_ERROR);
     }
 
     /* get canonical combining class, field 3 */
@@ -508,18 +532,14 @@ unicodeDataLineFn(void *context,
     }
 
     /* get BiDi category, field 4 */
-    *fields[4][1]=0;
-    for(i=0;;) {
-        if(uprv_strcmp(fields[4][0], bidiNames[i])==0) {
-            p.bidi=(uint8_t)i;
-            break;
-        }
-        if(++i==U_CHAR_DIRECTION_COUNT) {
-            fprintf(stderr, "genprops: unknown BiDi category \"%s\" at code 0x%lx\n",
-                fields[4][0], (unsigned long)p.code);
-            *pErrorCode=U_PARSE_ERROR;
-            exit(U_PARSE_ERROR);
-        }
+    i=getTokenIndex(bidiNames, U_CHAR_DIRECTION_COUNT, fields[4][0]);
+    if(i>=0) {
+        p.bidi=(uint8_t)i;
+    } else {
+        fprintf(stderr, "genprops: unknown BiDi category \"%s\" at code 0x%lx\n",
+            fields[4][0], (unsigned long)p.code);
+        *pErrorCode=U_PARSE_ERROR;
+        exit(U_PARSE_ERROR);
     }
 
     /* decimal digit value, field 6 */
@@ -532,6 +552,7 @@ unicodeDataLineFn(void *context,
             exit(U_PARSE_ERROR);
         }
         p.decimalDigitValue=(int16_t)value;
+        p.numericType=1;
     }
 
     /* digit value, field 7 */
@@ -544,6 +565,9 @@ unicodeDataLineFn(void *context,
             exit(U_PARSE_ERROR);
         }
         p.digitValue=(int16_t)value;
+        if(p.numericType==0) {
+            p.numericType=2;
+        }
     }
 
     /* numeric value, field 8 */
@@ -582,7 +606,9 @@ unicodeDataLineFn(void *context,
         } else {
             p.numericValue=(int32_t)value;
         }
-        p.hasNumericValue=TRUE;
+        if(p.numericType==0) {
+            p.numericType=3;
+        }
     }
 
     /* get Mirrored flag, field 9 */

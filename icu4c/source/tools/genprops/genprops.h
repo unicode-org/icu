@@ -42,9 +42,9 @@ typedef struct {
 typedef struct {
     uint32_t code, lowerCase, upperCase, titleCase, mirrorMapping;
     int16_t decimalDigitValue, digitValue; /* -1: no value */
-    int32_t numericValue; /* see hasNumericValue */
+    int32_t numericValue; /* see numericType */
     uint32_t denominator; /* 0: no value */
-    uint8_t generalCategory, canonicalCombining, bidi, isMirrored, hasNumericValue;
+    uint8_t generalCategory, canonicalCombining, bidi, isMirrored, numericType;
     SpecialCasing *specialCasing;
     CaseFolding *caseFolding;
 } Props;
@@ -62,6 +62,9 @@ genCategoryNames[];
 /* prototypes */
 U_CFUNC void
 writeUCDFilename(char *basename, const char *filename, const char *suffix);
+
+U_CFUNC int32_t
+getTokenIndex(const char *const tokens[], int32_t countTokens, const char *s);
 
 extern void
 setUnicodeVersion(const char *v);
