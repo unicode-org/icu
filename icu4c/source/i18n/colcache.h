@@ -28,9 +28,9 @@
 #ifndef COLCACHE_H
 #define COLCACHE_H
 
-#include "uhash.h"
 #include "unicode/unistr.h"
 
+class Hashtable;
 class TableCollationData;
 
 // Tell the VC++ compiler not to warn about DLL interface
@@ -74,7 +74,7 @@ public:
     TableCollationData* Find(const UnicodeString& key);
 
 private:
-    UHashtable*   fHashtable;
+    Hashtable*   fHashtable;
 };
 
 #endif

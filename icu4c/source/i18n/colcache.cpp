@@ -26,7 +26,7 @@
 
 #include "colcache.h"
 #include "tcoldata.h"
-#include "uhash.h"
+#include "hash.h"
 
 #ifdef COLLDEBUG
 #include <iostream.h>
@@ -44,25 +44,25 @@ static void U_CALLCONV deleteTCD(void* TCD)
 CollationCache::CollationCache()
 {
   UErrorCode err = U_ZERO_ERROR;
-  fHashtable = uhash_open((UHashFunction) uhash_hashUString, &err);
-  uhash_setValueDeleter(fHashtable, deleteTCD);
+  fHashtable = new Hashtable(err);
+  fHashtable->setValueDeleter(deleteTCD);
 }
 
 
 CollationCache::~CollationCache()
 {
-  uhash_close(fHashtable);
+  delete fHashtable;
 }
 
 void CollationCache::Add(const UnicodeString& key, TableCollationData* value)
 {
   UErrorCode err = U_ZERO_ERROR;
-  TableCollationData* previous = (TableCollationData*)uhash_putKey(fHashtable, key.hashCode() & 0x7FFFFFFF , value, &err);
+  fHashtable->put(key, value, err);
 }
 
 TableCollationData* CollationCache::Find(const UnicodeString& keyString)
 {
-  return (TableCollationData*)uhash_get(fHashtable,keyString.hashCode() & 0x7FFFFFFF);
+  return (TableCollationData*) fHashtable->get(keyString);
 }
 
 //eof

@@ -12,7 +12,7 @@
 
 class UnicodeString;
 class UnicodeSet;
-struct UHashtable;
+class Hashtable;
 
 /**
  * The rule data for a RuleBasedTransliterators.  RBT objects hold
@@ -54,7 +54,7 @@ public:
      *
      * PUBLIC DATA MEMBER for internal use by RBT
      */
-    UHashtable* variableNames;
+    Hashtable* variableNames;
     
     /**
      * Map category variable (Character) to set (UnicodeSet).
