@@ -305,7 +305,7 @@
         <jar jarfile="${testjar.file}" compress="true" manifest="${icu4j.tests.manifest}">
             <fileset dir="${build.dir}" includes="com/ibm/icu/dev/test/**/*"/>
             <fileset dir="${build.dir}" includes="com/ibm/icu/dev/data/TestDataElements*.class"/>
-            <fileset dir="${src.dir}" includes="com/ibm/icu/dev/data/**/*/" excludes="**/*.java"/> <!-- too broad, but easy -->
+            <fileset dir="${build.dir}" includes="com/ibm/icu/dev/data/**/*"/>
         </jar>
     </target>
 
