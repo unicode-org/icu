@@ -189,7 +189,7 @@ binary-arch: build install
 	dh_installcron
 	dh_installmanpages -picu
 	dh_installinfo
-	dh_undocumented -picu gentz.8
+	# dh_undocumented -picu
 	dh_installchangelogs 
 	dh_link
 	dh_strip
