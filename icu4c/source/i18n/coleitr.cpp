@@ -85,8 +85,6 @@ UBool CollationElementIterator::operator!=(
 UBool CollationElementIterator::operator==(
                                     const CollationElementIterator& that) const
 {
-    UBool result = TRUE;
-
     if (this == &that) {
         return TRUE;
     }
@@ -96,37 +94,54 @@ UBool CollationElementIterator::operator==(
     }
 
     // option comparison
-    result = this->m_data_->reset_ == that.m_data_->reset_ &&  
-             this->m_data_->iteratordata_.coll == 
-             that.m_data_->iteratordata_.coll;
+    if (!(m_data_->reset_ == that.m_data_->reset_ 
+          && m_data_->iteratordata_.coll == that.m_data_->iteratordata_.coll))
+    {
+        return FALSE;
+    }
 
-    int thislength = 0;
-    if (this->m_data_->iteratordata_.flags & UCOL_ITER_HASLEN) {
-        thislength = this->m_data_->iteratordata_.endp -
-                     this->m_data_->iteratordata_.string;
-    }
-    else {
-        thislength = u_strlen(this->m_data_->iteratordata_.string);
-    }
-    int thatlength = 0;
-    if (that.m_data_->iteratordata_.endp != NULL) {
-        thatlength = that.m_data_->iteratordata_.endp -
+    // the constructor and setText always sets a length
+    // and we only compare the string not the contents of the normalization
+    // buffer
+    int thislength = m_data_->iteratordata_.endp -
+                     m_data_->iteratordata_.string;
+    int thatlength = that.m_data_->iteratordata_.endp -
                      that.m_data_->iteratordata_.string;
-    }
-    else {
-        thatlength = u_strlen(that.m_data_->iteratordata_.string);
-    }
-
+    
     if (thislength != thatlength) {
         return FALSE;
     }
 
-    result = result && (uprv_memcmp(this->m_data_->iteratordata_.string, 
-                         that.m_data_->iteratordata_.string, 
-                         thislength * U_SIZEOF_UCHAR) == 0);
-    result = result && (this->getOffset() == that.getOffset());
-  
-    return result;
+    if (uprv_memcmp(m_data_->iteratordata_.string, 
+                    that.m_data_->iteratordata_.string, 
+                    thislength * U_SIZEOF_UCHAR) != 0) {
+        return FALSE;
+    }
+    if (getOffset() != that.getOffset()) {
+        return FALSE;
+    }
+
+    // checking normalization buffer
+    if ((m_data_->iteratordata_.flags & UCOL_ITER_HASLEN) == 0) {
+        if ((m_data_->iteratordata_.flags & UCOL_ITER_HASLEN) != 0) {
+            return FALSE;
+        }
+        // both are in the normalization buffer
+        if (m_data_->iteratordata_.pos 
+            - m_data_->iteratordata_.writableBuffer 
+            != that.m_data_->iteratordata_.pos 
+            - that.m_data_->iteratordata_.writableBuffer) {
+            // not in the same position in the normalization buffer
+            return FALSE;
+        }
+    }
+    else if ((m_data_->iteratordata_.flags & UCOL_ITER_HASLEN) == 0) {
+        return FALSE;
+    }
+    // checking ce position
+    return (m_data_->iteratordata_.CEpos - m_data_->iteratordata_.CEs)
+            == (that.m_data_->iteratordata_.CEpos 
+                                        - that.m_data_->iteratordata_.CEs);
 }
 
 /**
@@ -229,8 +244,9 @@ void CollationElementIterator::setText(CharacterIterator& source,
       u_memcpy(buffer, string.getBuffer(), length);
   }
   
-  if (m_data_->isWritable && m_data_->iteratordata_.string != NULL)
-    uprv_free(m_data_->iteratordata_.string);
+  if (m_data_->isWritable && m_data_->iteratordata_.string != NULL) {
+      uprv_free(m_data_->iteratordata_.string);
+  }
   m_data_->isWritable = TRUE;
   uprv_init_collIterate(m_data_->iteratordata_.coll, buffer, length, 
                    &m_data_->iteratordata_);
@@ -241,11 +257,12 @@ int32_t CollationElementIterator::strengthOrder(int32_t order) const
 {
   UCollationStrength s = ucol_getStrength(m_data_->iteratordata_.coll);
   // Mask off the unwanted differences.
-  if (s == UCOL_PRIMARY)
-    order &= RuleBasedCollator::PRIMARYDIFFERENCEONLY;
-  else 
-    if (s == UCOL_SECONDARY)
+  if (s == UCOL_PRIMARY) {
+      order &= RuleBasedCollator::PRIMARYDIFFERENCEONLY;
+  }
+  else if (s == UCOL_SECONDARY) {
       order &= RuleBasedCollator::SECONDARYDIFFERENCEONLY;
+  }
     
   return order;
 }
@@ -262,8 +279,9 @@ CollationElementIterator::CollationElementIterator(
                                                UErrorCode& status)
                                                : isDataOwned_(TRUE)
 {
-  if (U_FAILURE(status))
-    return;
+  if (U_FAILURE(status)) {
+      return;
+  }
  
   int32_t length = sourceText.length();
   UChar *string = NULL;
@@ -382,17 +400,7 @@ const CollationElementIterator& CollationElementIterator::operator=(
       
       // checking only UCOL_ITER_HASLEN is not enough here as we may be in 
       // the normalization buffer
-      if (othercoliter->endp != NULL) {
-          length = othercoliter->endp - othercoliter->string;
-      }
-      else {
-          if (othercoliter->string == NULL) {
-              length = 0;
-          }
-          else {
-            length = u_strlen(othercoliter->string);
-          }
-      }
+      length = othercoliter->endp - othercoliter->string;
                                     
       ucolelem->reset_         = otherucolelem->reset_;
       ucolelem->isWritable     = TRUE;
@@ -439,7 +447,7 @@ const CollationElementIterator& CollationElementIterator::operator=(
               }
           }
       }
-         
+
       /* current position */
       if (othercoliter->pos >= othercoliter->string && 
           othercoliter->pos <= othercoliter->endp) {
@@ -456,12 +464,18 @@ const CollationElementIterator& CollationElementIterator::operator=(
                   UCOL_EXPAND_CE_BUFFER_SIZE * sizeof(uint32_t));
       coliter->toReturn = coliter->CEs + 
                          (othercoliter->toReturn - othercoliter->CEs);
-      coliter->CEpos    = othercoliter->CEs + 
+      coliter->CEpos    = coliter->CEs + 
                          (othercoliter->CEpos - othercoliter->CEs);
     
-      coliter->fcdPosition = coliter->string + 
-                            (othercoliter->fcdPosition - othercoliter->string);
-      coliter->flags       = othercoliter->flags | UCOL_ITER_HASLEN;
+      if (othercoliter->fcdPosition != NULL) {
+          coliter->fcdPosition = coliter->string + 
+                                 (othercoliter->fcdPosition 
+                                                    - othercoliter->string);
+      }
+      else {
+          coliter->fcdPosition = NULL;
+      }
+      coliter->flags       = othercoliter->flags/*| UCOL_ITER_HASLEN*/;
       coliter->origFlags   = othercoliter->origFlags;
       coliter->coll = othercoliter->coll;
       this->isDataOwned_ = TRUE;
