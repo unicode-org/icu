@@ -29,6 +29,9 @@ extern UBool checkFCD(const UChar *, int32_t, UErrorCode *);
 
 static UCollator *myCollation;
 
+static void
+TestAPI();
+
 const static char* canonTests[][3] = {
     /* Input*/                    /*Decomposed*/                /*Composed*/
     { "cat",                    "cat",                        "cat"                    },
@@ -90,7 +93,7 @@ const static char* compatTests[][3] = {
 
 void addNormTest(TestNode** root)
 {
-    
+    addTest(root, &TestAPI, "tscoll/cnormtst/TestAPI");
     addTest(root, &TestDecomp, "tscoll/cnormtst/TestDecomp");
     addTest(root, &TestCompatDecomp, "tscoll/cnormtst/TestCompatDecomp");
     addTest(root, &TestCanonDecompCompose, "tscoll/cnormtst/TestCanonDecompCompose");
@@ -567,3 +570,29 @@ void TestCheckFCD()
     log_err("checkFCD failed: %s\n", u_errorName(status));
 }
 
+static void
+TestAPI() {
+    static const UChar in[]={ 0x68, 0xe4 };
+    UChar out[20]={ 0xffff, 0xffff, 0xffff, 0xffff };
+    UErrorCode errorCode;
+    int32_t length;
+
+    /* try preflighting */
+    errorCode=U_ZERO_ERROR;
+    length=unorm_normalize(in, 2, UNORM_NFD, 0, NULL, 0, &errorCode);
+    if(errorCode!=U_BUFFER_OVERFLOW_ERROR || length!=3) {
+        log_err("unorm_normalize(pure preflighting NFD)=%ld failed with %s\n", length, u_errorName(errorCode));
+        return;
+    }
+
+    errorCode=U_ZERO_ERROR;
+    length=unorm_normalize(in, 2, UNORM_NFD, 0, out, 3, &errorCode);
+    if(U_FAILURE(errorCode)) {
+        log_err("unorm_normalize(NFD)=%ld failed with %s\n", length, u_errorName(errorCode));
+        return;
+    }
+    if(length!=3 || out[2]!=0x308 || out[3]!=0xffff) {
+        log_err("unorm_normalize(NFD ma<umlaut>)=%ld failed with out[]=U+%04x U+%04x U+%04x U+%04x\n", length, out[0], out[1], out[2], out[3]);
+        return;
+    }
+}
