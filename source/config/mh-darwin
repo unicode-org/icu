@@ -4,7 +4,7 @@
 ## Copyright (c) 1999-2000, International Business Machines Corporation and
 ## others. All Rights Reserved.
 ##
-## $Id: mh-darwin,v 1.15 2000/10/16 18:05:34 yves Exp $
+## $Id: mh-darwin,v 1.16 2000/11/02 22:49:10 yves Exp $
 
 ## Flags for position independent code
 SHAREDLIBCFLAGS = -dynamic
@@ -16,8 +16,8 @@ GEN_DEPS.c=	$(CC) -E -MM $(DEFS) $(CPPFLAGS)
 GEN_DEPS.cc=	$(CXX) -E -MM $(DEFS) $(CPPFLAGS)
 
 ## Commands to compile
-COMPILE.c=	$(CC) $(DEFS) $(CPPFLAGS) $(CFLAGS) -c
-COMPILE.cc=	$(CXX) $(DEFS) $(CPPFLAGS) $(CXXFLAGS) -c
+COMPILE.c=	$(CC) $(DEFS) $(CPPFLAGS) $(CFLAGS) -fno-common -c
+COMPILE.cc=	$(CXX) $(DEFS) $(CPPFLAGS) $(CXXFLAGS) -fno-common -c
 
 ## Commands to link
 LINK.c=		$(CC) $(DEFS) $(CPPFLAGS) $(CFLAGS) $(LDFLAGS)
