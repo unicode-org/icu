@@ -479,6 +479,11 @@ public:
                       const   UChar*  target,
                       int32_t targetLength) const ;
 
+  virtual EComparisonResult   compareEx(    const   UChar* source, 
+                      int32_t sourceLength,
+                      const   UChar*  target,
+                      int32_t targetLength) const ;
+
   /** Transforms a specified region of the string into a series of characters
      * that can be compared with CollationKey.compare. Use a CollationKey when
      * you need to do repeated comparisions on the same string. For a single comparison
@@ -506,6 +511,11 @@ public:
      * @draft
      */
   virtual CollationKey&       getCollationKey(const UChar *source,
+					      int32_t sourceLength,
+					      CollationKey&       key,
+					      UErrorCode&      status) const;
+
+  virtual CollationKey&       getCollationKeyEx(const UChar *source,
 					      int32_t sourceLength,
 					      CollationKey&       key,
 					      UErrorCode&      status) const;
