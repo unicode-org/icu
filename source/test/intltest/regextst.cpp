@@ -13,6 +13,7 @@
 #include "intltest.h"
 #if !UCONFIG_NO_REGULAR_EXPRESSIONS
 
+#include "unicode/regex.h"
 #include "unicode/uchar.h"
 #include "unicode/ucnv.h"
 #include "regextst.h"

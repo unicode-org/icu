@@ -14,7 +14,6 @@
 #include "unicode/numfmt.h"
 #include "unicode/fmtable.h"
 #include "intltest.h"
-#include <stdlib.h>
 
 /** 
  * Performs round-trip tests for NumberFormat
@@ -57,19 +56,7 @@ public:
     /*
      * Return a random uint32_t
      **/
-    static uint32_t randLong()
-    {
-        // Assume 8-bit (or larger) rand values.  Also assume
-        // that the system rand() function is very poor, which it always is.
-        uint32_t d;
-        uint32_t i;
-        char* poke = (char*)&d;
-        for (i=0; i < sizeof(uint32_t); ++i)
-        {
-            poke[i] = (char)(rand() & 0xFF);
-        }
-        return d;
-    }
+    static uint32_t randLong();
 
     /**
      * Return a random double 0 <= x < 1.0

@@ -11,6 +11,7 @@
 #include "unicode/decimfmt.h"
 #include "tsnmfmt.h"
 #include <float.h>
+#include <stdlib.h>
 
 IntlTestNumberFormat::~IntlTestNumberFormat() {}
 
