@@ -146,9 +146,10 @@ static void TestDateFormat()
         result=(UChar*)malloc(sizeof(UChar) * resultlength);
         udat_format(def, d, result, resultlength, NULL, &status);
     }
-    if(U_FAILURE(status))
+    if(U_FAILURE(status) || !result)
     {
         log_err("FAIL: Error in formatting using udat_format(.....) %s\n", myErrorName(status) );
+        return;
     }
     else
         log_verbose("PASS: formatting successful\n");

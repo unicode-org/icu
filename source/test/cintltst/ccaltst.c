@@ -202,24 +202,28 @@ static void TestCalendar()
     log_verbose("\nTesting getAvailableLocales and countAvailable()\n");
     count=ucal_countAvailable();
     /* use something sensible w/o hardcoding the count */
-    if(count > 0){
+    if(count > 0) {
         log_verbose("PASS: ucal_countAvailable() works fine\n");
         log_verbose("The no: of locales for which calendars are avilable are %d\n", count);
-    }
-    else
+    } else {
         log_data_err("FAIL: Error in countAvailable()\n");
+    }
 
-    for(i=0;i<count;i++) 
+    for(i=0;i<count;i++) {
        log_verbose("%s\n", ucal_getAvailable(i)); 
+    }
     
 
     /*Testing the equality between calendar's*/
     log_verbose("\nTesting ucal_equivalentTo()\n");
-    if(ucal_equivalentTo(caldef, caldef2) == FALSE || ucal_equivalentTo(caldef, calfr)== TRUE || 
-        ucal_equivalentTo(caldef, calit)== TRUE)
-        log_err("FAIL: Error. equivalentTo test failed\n");
-    else
-        log_verbose("PASS: equivalentTo test passed\n");
+`    if(caldef && caldef2 && calfr && calit) {
+      if(ucal_equivalentTo(caldef, caldef2) == FALSE || ucal_equivalentTo(caldef, calfr)== TRUE || 
+        ucal_equivalentTo(caldef, calit)== TRUE) {
+          log_err("FAIL: Error. equivalentTo test failed\n");
+      } else {
+          log_verbose("PASS: equivalentTo test passed\n");
+      }
+    }
     
 
     /*Testing the current time and date using ucal_getnow()*/
