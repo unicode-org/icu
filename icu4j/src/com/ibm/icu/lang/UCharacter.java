@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/lang/UCharacter.java,v $ 
-* $Date: 2001/10/25 00:42:15 $ 
-* $Revision: 1.14 $
+* $Date: 2001/11/02 23:11:36 $ 
+* $Revision: 1.15 $
 *
 *******************************************************************************
 */
@@ -1787,7 +1787,7 @@ public final class UCharacter
     * an ignorable sequence and then a cased letter {Ll, Lu, Lt}.
     * @param str string to determine
     * @param offset offset in string to check
-    * @return true if any character after index in src is a cased letter
+    * @return false if any character after index in src is a cased letter
     * @see SpecialCasing.txt
     */
     private static boolean isCFINAL(String str, int offset) 
@@ -1799,15 +1799,15 @@ public final class UCharacter
             if (cat == UCharacterCategory.LOWERCASE_LETTER || 
                 cat == UCharacterCategory.UPPERCASE_LETTER ||
                 cat == UCharacterCategory.TITLECASE_LETTER) {
-                return true; // followed by cased letter
+                return false; // followed by cased letter
             }
             if (!isIgnorable(ch, cat)) {
-                return false; // not ignorable
+                return true; // not ignorable
             }
             offset += UTF16.getCharCount(ch);
         }
 
-        return false;
+        return true;
     }
 
     /**
@@ -1818,8 +1818,9 @@ public final class UCharacter
     * @return true if any character before index in src is a cased letter
     * @see SpecialCasing.txt
     */
-    private static boolean isCINITIAL(String str, int offset) 
+    private static boolean isNotCINITIAL(String str, int offset) 
     {
+        offset --;
         while (offset > 0) {
             int ch = UTF16.charAt(str, offset);
             int cat = getType(ch);
@@ -1831,7 +1832,7 @@ public final class UCharacter
             if (!isIgnorable(ch, cat)) {
                 return false; // not ignorable
             }
-            offset += UTF16.getCharCount(ch);
+            offset -= UTF16.getCharCount(ch);
         }
 
         return false; 
@@ -1849,6 +1850,7 @@ public final class UCharacter
     */
     private static boolean isAFTER_i(String str, int offset) 
     {
+        offset --;
         while (offset > 0) {
             int ch = UTF16.charAt(str, offset);
             if (ch == LATIN_SMALL_LETTER_I_ || ch == LATIN_SMALL_LETTER_J_ || 
@@ -1864,7 +1866,7 @@ public final class UCharacter
                 // intervening cc == 230
                 return false; 
             }
-            offset += UTF16.getCharCount(ch);
+            offset -= UTF16.getCharCount(ch);
         }
 
         return false; // not preceded by TYPE_i
@@ -1881,6 +1883,7 @@ public final class UCharacter
     */
     private static boolean isAFTER_I(String str, int offset) 
     {
+        offset --;
         while (offset > 0) {
             int ch = UTF16.charAt(str, offset);
             if (ch == LATIN_CAPITAL_LETTER_I_) {
@@ -1893,7 +1896,7 @@ public final class UCharacter
                 // intervening cc == 230
                 return false; 
             }
-            offset += UTF16.getCharCount(ch);
+            offset -= UTF16.getCharCount(ch);
         }
 
         return false; // not preceded by I
@@ -2092,8 +2095,8 @@ public final class UCharacter
                     } 
                     else {
                         if (ch == GREEK_CAPITAL_LETTER_SIGMA_ &&
-                            !isCFINAL(str, offset) &&
-                            isCINITIAL(str, offset - 1)) {
+                            isCFINAL(str, offset) &&
+                            isNotCINITIAL(str, offset - 1)) {
                             // greek capital sigma maps depending on 
                             // surrounding cased letters
                             buffer.append(GREEK_SMALL_LETTER_RHO_);
