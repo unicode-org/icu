@@ -87,7 +87,7 @@ RegexPattern &RegexPattern::operator = (const RegexPattern &other) {
     //  Copy the Unicode Sets.  
     //    Could be made more efficient if the sets were reference counted and shared,
     //    but I doubt that pattern copying will be particularly common. 
-    fSets->addElement((UnicodeSet *)NULL, status);
+    //    Note:  init() already added an empty element zero to fSets
     for (i=1; i<other.fSets->size(); i++) {
         UnicodeSet *sourceSet = (UnicodeSet *)other.fSets->elementAt(i);
         UnicodeSet *newSet    = new UnicodeSet(*sourceSet);
@@ -143,7 +143,7 @@ void RegexPattern::zap() {
     delete fCompiledPat;
     fCompiledPat = NULL;
     int i;
-    for (i=0; i<fSets->size(); i++) {
+    for (i=1; i<fSets->size(); i++) {
         UnicodeSet *s;
         s = (UnicodeSet *)fSets->elementAt(i);
         if (s != NULL) {
@@ -199,25 +199,29 @@ RegexPattern  *RegexPattern::compile(
                              const UnicodeString &regex,
                              int32_t              flags,
                              UParseError          &pe,
-                             UErrorCode           &err)  {
+                             UErrorCode           &status)  {
 
-    if (U_FAILURE(err)) {
+    if (U_FAILURE(status)) {
         return NULL;
     }
     if (flags != 0) {
-        err = U_REGEX_UNIMPLEMENTED;
+        status = U_REGEX_UNIMPLEMENTED;
         return NULL;
     }
 
     RegexPattern *This = new RegexPattern;
     if (This == NULL) {
-        err = U_MEMORY_ALLOCATION_ERROR;
+        status = U_MEMORY_ALLOCATION_ERROR;
+        return NULL;
+    }
+    if (This->fBadState) {
+        status = U_REGEX_INVALID_STATE;
         return NULL;
     }
     This->fFlags = flags;
 
-    RegexCompile     compiler(err);
-    compiler.compile(*This, regex, pe, err);
+    RegexCompile     compiler(status);
+    compiler.compile(*This, regex, pe, status);
 
     return This;
 };
@@ -253,7 +257,13 @@ RegexMatcher *RegexPattern::matcher(const UnicodeString &input,
                                     UErrorCode          &err)  const {
     RegexMatcher    *retMatcher = NULL;
 
-    if (U_FAILURE(err)) {return NULL;};
+    if (U_FAILURE(err)) {
+        return NULL;
+    }
+    if (fBadState) {
+        U_FAILURE(U_REGEX_INVALID_STATE);
+        return NULL;
+    }
 
     retMatcher = new RegexMatcher(this); 
     if (retMatcher == NULL) {
@@ -277,20 +287,16 @@ UBool RegexPattern::matches(const UnicodeString   &regex,
                     UParseError     &pe,
                     UErrorCode      &status) {
 
-    UBool   retVal        = FALSE;
+    if (U_FAILURE(status)) {return FALSE;}
+
+    UBool         retVal;
     RegexPattern *pat     = NULL;
     RegexMatcher *matcher = NULL;
-    if (U_FAILURE(status)) {goto ret;}
 
-    pat = RegexPattern::compile(regex, 0, pe, status);
-    if (U_FAILURE(status)) {goto ret;}
-
+    pat     = RegexPattern::compile(regex, 0, pe, status);
     matcher = pat->matcher(input, status);
-    if (U_FAILURE(status)) {goto ret;}
+    retVal  = matcher->matches(status);
 
-    retVal = matcher->matches(status);
-
-ret:
     delete matcher;
     delete pat;
     return retVal;
@@ -402,33 +408,7 @@ int32_t  RegexPattern::split(const UnicodeString &input,
 //           Debugging function only.
 //
 //---------------------------------------------------------------------
-static char *opNames[] = {
-        "ZERO",
-        "?1",
-        "END",
-        "ONECHAR",
-        "STRING",
-        "STRING_LEN",
-        "STATE_SAVE",
-        "NOP",
-        "START_CAPTURE",
-        "END_CAPTURE",
-        "URX_STATIC_SETREF",
-        "SETREF",
-        "DOTANY",
-        "JMP",
-        "FAIL",
-        "URX_BACKSLASH_A",
-        "URX_BACKSLASH_B",
-        "URX_BACKSLASH_G",
-        "URX_BACKSLASH_W",
-        "URX_BACKSLASH_X",
-        "URX_BACKSLASH_Z",
-        "URX_DOTANY_ALL",
-        "URX_BACKSLASH_D",
-        "URX_CARET",
-        "URX_DOLLAR"
-};
+static const char *opNames[] = {URX_OPCODE_NAMES};
 
 void   RegexPattern::dump() {
     int      index;

@@ -18,6 +18,7 @@
 //                   of the entries.
 //
 enum {
+     URX_RESERVED_OP   = 0,
      URX_UNUSED1       = 1,
      URX_END           = 2,
      URX_ONECHAR       = 3,    // Value field is the 21 bit unicode char to match
@@ -47,6 +48,34 @@ enum {
      URX_DOLLAR        = 24   // Also for \Z
 };
 
+// Keep this list of opcode names in sync with the above enum
+//   Used for debug printing only.
+#define URX_OPCODE_NAMES       \
+        "URX_RESERVED_OP",     \
+        "URX_UNUSED1",         \
+        "END",                 \
+        "ONECHAR",             \
+        "STRING",              \
+        "STRING_LEN",          \
+        "STATE_SAVE",          \
+        "NOP",                 \
+        "START_CAPTURE",       \
+        "END_CAPTURE",         \
+        "URX_STATIC_SETREF",   \
+        "SETREF",              \
+        "DOTANY",              \
+        "JMP",                 \
+        "FAIL",                \
+        "URX_BACKSLASH_A",     \
+        "URX_BACKSLASH_B",     \
+        "URX_BACKSLASH_G",     \
+        "URX_BACKSLASH_W",     \
+        "URX_BACKSLASH_X",     \
+        "URX_BACKSLASH_Z",     \
+        "URX_DOTANY_ALL",      \
+        "URX_BACKSLASH_D",     \
+        "URX_CARET",           \
+        "URX_DOLLAR"
 
 //
 //  Convenience macros for assembling and disassembling a compiled operation.
