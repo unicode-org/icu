@@ -8,7 +8,6 @@ Abstract: This manual describes the APIs of the
 Section: Libs
 
 Format: HTML
-Index: /usr/share/doc/icu-docs/html/index.html
-Files: /usr/share/doc/icu-docs/html/*.html
+Index: /usr/share/doc/icu-doc/index.html
+Files: /usr/share/doc/icu-doc/*.html
 
-  
