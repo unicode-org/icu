@@ -2371,7 +2371,9 @@ TestISCII(){
         /* telugu range */
         0x0C05, 0x0C02, 0x0C03,0x0c31,
         /* kannada range */
-        0x0C85, 0xC82, 0x0C83
+        0x0C85, 0xC82, 0x0C83,
+        /* test Abbr sign and Anudatta */
+        0x0970, 0x952,
 
 
        
@@ -2411,7 +2413,9 @@ TestISCII(){
         /* telugu range */
         0xEF, 0x45,0xa4, 0xa2, 0xa3,0xd0,
         /* kannada range */
-        0xEF, 0x48,0xa4, 0xa2, 0xa3
+        0xEF, 0x48,0xa4, 0xa2, 0xa3,
+        /* anudatta and abbreviation sign */
+        0xEF, 0x42, 0xF0, 0xBF, 0xF0, 0xB8
     };
       
     TestConv(in,(sizeof(in)/2),"ISCII,version=0","hindi", (char *)byteArr,sizeof(byteArr));
