@@ -18,8 +18,8 @@
 #include "unicode/rbbi.h"
 #include "unicode/schriter.h"
 #include "rbbiapts.h"
-#include "string.h"
-#include "stdio.h"
+#include "rbbidata.h"
+#include "cstring.h"
 
 /**
  * API Test the RuleBasedBreakIterator class
@@ -850,6 +850,52 @@ void RBBIAPITest::TestRegistration() {
   delete root_char;
 }
 
+void RBBIAPITest::RoundtripRule(const char *dataFile) {
+    UErrorCode status = U_ZERO_ERROR;
+    UParseError parseError;
+	parseError.line = 0;
+	parseError.offset = 0;
+    UDataMemory *data = udata_open(NULL, "brk", dataFile, &status);
+    uint32_t length;
+    const UChar *builtSource;
+    const uint8_t *rbbiRules;
+    const uint8_t *builtRules;
+
+    if (U_FAILURE(status)) {
+        errln("Can't open \"%s\"", dataFile);
+        return;
+    }
+
+    builtRules = (const uint8_t *)udata_getMemory(data);
+    builtSource = (const UChar *)(builtRules + ((RBBIDataHeader*)builtRules)->fRuleSource);
+    RuleBasedBreakIterator *brkItr = new RuleBasedBreakIterator(builtSource, parseError, status);
+    if (U_FAILURE(status)) {
+        errln("createRuleBasedBreakIterator: ICU Error \"%s\"  at line %d, column %d\n",
+                u_errorName(status), parseError.line, parseError.offset);
+        return;
+    };
+    rbbiRules = brkItr->getBinaryRules(length);
+    logln("Comparing \"%s\" len=%d", dataFile, length);
+    if (memcmp(builtRules, rbbiRules, (int32_t)length) != 0) {
+        errln("Built rules and rebuilt rules are different %s", dataFile);
+        return;
+    }
+    delete brkItr;
+    udata_close(data);
+}
+
+void RBBIAPITest::TestRoundtripRules() {
+    RoundtripRule("word");
+    RoundtripRule("title");
+    RoundtripRule("sent");
+    RoundtripRule("line");
+    RoundtripRule("char");
+    if (!quick) {
+        RoundtripRule("word_th");
+        RoundtripRule("line_th");
+    }
+}
+
 //---------------------------------------------
 // runIndexedTest
 //---------------------------------------------
@@ -872,6 +918,7 @@ void RBBIAPITest::runIndexedTest( int32_t index, UBool exec, const char* &name, 
         case 10: name = "TestBug2190"; if (exec) TestBug2190(); break;
         case 11: name = "TestRegistration"; if (exec) TestRegistration(); break;
         case 12: name = "TestBoilerPlate"; if (exec) TestBoilerPlate(); break;
+        case 13: name = "TestRoundtripRules"; if (exec) TestRoundtripRules(); break;
 
         default: name = ""; break; /*needed to end loop*/
     }

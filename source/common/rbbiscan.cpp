@@ -701,6 +701,33 @@ static const UChar      chRParen    = 0x29;
 
 //----------------------------------------------------------------------------------------
 //
+//  stripRules    Return a rules string without unnecessary
+//                characters.
+//
+//----------------------------------------------------------------------------------------
+UnicodeString RBBIRuleScanner::stripRules(const UnicodeString &rules) {
+    UnicodeString strippedRules;
+    int rulesLength = rules.length();
+    for (int idx = 0; idx < rulesLength; ) {
+        UChar ch = rules[idx++];
+        if (ch == chPound) {
+            while (idx < rulesLength
+                && ch != chCR && ch != chLF && ch != chNEL)
+            {
+                ch = rules[idx++];
+            }
+        }
+        if (!u_isWhitespace(ch)) {
+            strippedRules.append(ch);
+        }
+    }
+    // strippedRules = strippedRules.unescape();
+    return strippedRules;
+}
+
+
+//----------------------------------------------------------------------------------------
+//
 //  nextCharLL    Low Level Next Char from rule input source.
 //                Get a char from the input character iterator,
 //                keep track of input position for error reporting.
