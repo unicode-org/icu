@@ -38,7 +38,7 @@ RPATHLDFLAGS = $(LD_RPATH)$(LD_RPATH_PRE)$(libdir)
 endif
 LDFLAGS = @LDFLAGS@ $(RPATHLDFLAGS)
 INVOKE = $(LDLIBRARYPATH_ENVVAR)=$(top_builddir)/common:$(top_builddir)/tools/toolutil:$$$(LDLIBRARYPATH_ENVVAR)
-LIBS = $(LIBICUTOOLUTIL) @LIBS@ @LIB_M@
+LIBS = $(LIBICUTOOLUTIL) $(LIBICUUC) @LIBS@ @LIB_M@
 
 OBJECTS = gennorm.o store.o
 
