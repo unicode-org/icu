@@ -136,7 +136,7 @@ private:
     static const char fgClassID;
 };
 
-inline const void *ScriptCompositeFontInstance::getFontTable(LETag tableTag) const
+inline const void *ScriptCompositeFontInstance::getFontTable(LETag /*tableTag*/) const
 {
     return NULL;
 }

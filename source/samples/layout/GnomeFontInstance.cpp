@@ -34,7 +34,7 @@ GnomeSurface::~GnomeSurface()
 }
 
 void GnomeSurface::drawGlyphs(const LEFontInstance *font, const LEGlyphID *glyphs, le_int32 count,
-                              const float *positions, le_int32 x, le_int32 y, le_int32 width, le_int32 height)
+                              const float *positions, le_int32 x, le_int32 y, le_int32 /*width*/, le_int32 /*height*/)
 {
     GnomeFontInstance *gFont = (GnomeFontInstance *) font;
     TT_Instance instance = gFont->getFont();
@@ -42,7 +42,7 @@ void GnomeSurface::drawGlyphs(const LEFontInstance *font, const LEGlyphID *glyph
     le_int32 *dy = LE_NEW_ARRAY(le_int32, count);
     le_int32 xOffset, yOffset;
     TT_Raster_Map *raster;
-    TT_Error error;
+//  TT_Error error;
 
     for (le_int32 g = 0; g < count; g += 1) {
         dx[g] = (le_int32) (positions[g * 2 + 2] - positions[g * 2]);
