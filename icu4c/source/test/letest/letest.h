@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
  *
- *   Copyright (C) 1999-2003, International Business Machines
+ *   Copyright (C) 1999-2005, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *
  *******************************************************************************
@@ -18,6 +18,8 @@
 struct TestInput
 {
     char      *fontName;
+    char      *fontVersionString;
+    le_uint32  fontChecksum;
     LEUnicode *text;
     le_int32   textLength;
     le_int32   scriptCode;

@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
  *
- *   Copyright (C) 1999-2003, International Business Machines
+ *   Copyright (C) 1999-2005, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *
  *******************************************************************************
@@ -63,10 +63,9 @@ le_int8 PortableFontInstance::highBit(le_int32 value)
     return bit;
 }
 
-
 PortableFontInstance::PortableFontInstance(char *fileName, float pointSize, LEErrorCode &status)
-    : fFile(NULL), fUnitsPerEM(0), fPointSize(pointSize), fAscent(0), fDescent(0), fLeading(0),
-      fDirectory(NULL), fCMAPMapper(NULL), fHMTXTable(NULL), fNumGlyphs(0), fNumLongHorMetrics(0)
+    : fFile(NULL), fPointSize(pointSize), fUnitsPerEM(0), fFontChecksum(0), fAscent(0), fDescent(0), fLeading(0),
+      fDirectory(NULL), fNAMETable(NULL), fNameCount(0), fNameStringOffset(0), fCMAPMapper(NULL), fHMTXTable(NULL), fNumGlyphs(0), fNumLongHorMetrics(0)
 {
     if (LE_FAILURE(status)) {
         return;
@@ -90,6 +89,7 @@ PortableFontInstance::PortableFontInstance(char *fileName, float pointSize, LEEr
     const LETag hheaTag = LE_HHEA_TABLE_TAG;
     const HEADTable *headTable = NULL;
     const HHEATable *hheaTable = NULL;
+    const NAMETable *nameTable = NULL;
     le_uint16 numTables = 0;
 
     fDirectory = (const SFNTDirectory *) LE_NEW_ARRAY(char, dirSize);
@@ -118,8 +118,25 @@ PortableFontInstance::PortableFontInstance(char *fileName, float pointSize, LEEr
         goto error_exit;
     }
 
-    fUnitsPerEM = SWAPW(headTable->unitsPerEm);
+    fUnitsPerEM   = SWAPW(headTable->unitsPerEm);
+    fFontChecksum = SWAPL(headTable->checksumAdjustment);
     deleteTable(headTable);
+
+    //nameTable = (NAMETable *) readFontTable(nameTag);
+
+    //if (nameTable == NULL) {
+    //    status = LE_MISSING_FONT_TABLE_ERROR;
+    //    goto error_exit;
+    //}
+
+    //fFontVersionString = findName(nameTable, NAME_VERSION_STRING, PLATFORM_MACINTOSH, MACINTOSH_ROMAN, MACINTOSH_ENGLISH);
+
+    //if (fFontVersionString == NULL) {
+    //    status = LE_MISSING_FONT_TABLE_ERROR;
+    //    goto error_exit;
+    //}
+
+    //deleteTable(nameTable);
 
     hheaTable = (HHEATable *) readFontTable(hheaTag);
 
@@ -157,6 +174,7 @@ PortableFontInstance::~PortableFontInstance()
         fclose(fFile);
 
         deleteTable(fHMTXTable);
+        deleteTable(fNAMETable);
 
         delete fCMAPMapper;
 
@@ -240,6 +258,43 @@ CMAPMapper *PortableFontInstance::findUnicodeMapper()
     return CMAPMapper::createUnicodeMapper(cmap);
 }
 
+const char *PortableFontInstance::getNameString(le_uint16 nameID, le_uint16 platformID, le_uint16 encodingID, le_uint16 languageID) const
+{
+    if (fNAMETable == NULL) {
+        LETag nameTag = LE_NAME_TABLE_TAG;
+        PortableFontInstance *realThis = (PortableFontInstance *) this;
+
+        realThis->fNAMETable = (const NAMETable *) readFontTable(nameTag);
+
+        if (realThis->fNAMETable != NULL) {
+            realThis->fNameCount        = SWAPW(realThis->fNAMETable->count);
+            realThis->fNameStringOffset = SWAPW(realThis->fNAMETable->stringOffset);
+        }
+    }
+
+    for(le_int32 i = 0; i < fNameCount; i += 1) {
+        const NameRecord *nameRecord = &fNAMETable->nameRecords[i];
+        
+        if (SWAPW(nameRecord->platformID) == platformID && SWAPW(nameRecord->encodingID == encodingID) &&
+            SWAPW(nameRecord->languageID) == languageID && SWAPW(nameRecord->nameID) == nameID) {
+            char *name = ((char *) fNAMETable) + fNameStringOffset + SWAPW(nameRecord->offset);
+            le_uint16 length = SWAPW(nameRecord->length);
+            char *result = LE_NEW_ARRAY(char, length + 2);
+
+            LE_ARRAY_COPY(result, name, length);
+            result[length] = result[length + 1] = 0;
+
+            return result;
+        }
+    }
+
+    return NULL;
+}
+
+void PortableFontInstance::deleteNameString(const char *name) const
+{
+    LE_DELETE_ARRAY(name);
+}
 
 void PortableFontInstance::getGlyphAdvance(LEGlyphID glyph, LEPoint &advance) const
 {
