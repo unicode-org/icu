@@ -62,44 +62,6 @@
 #include "unicode/resbund.h"
 #include "cmemory.h"
 
-/* global variable ---------------------------------------------------------- */
-
-/*
-synwee : using another name for this
-const uint32_t tblcoll_STACK_BUFFER_LENGTH_ = 1024;
-*/
-#define STACK_BUFFER_LENGTH_ 1024
-
-
-/* RuleBasedCollator declaration ----------------------------------------- */
-
-/* ---------------------------------------------------------------------------
-The following diagram shows the data structure of the RuleBasedCollator  object.
-Suppose we have the rule, where 'o-umlaut' is the unicode char 0x00F6.
-"a, A < b, B < c, C, ch, cH, Ch, CH < d, D ... < o, O;
-'o-umlaut'/E, 'O-umlaut'/E ...".
-What the rule says is, sorts 'ch'ligatures and 'c' only with tertiary
-difference and sorts 'o-umlaut' as if it's always expanded with 'e'.
-
-mapping table                 contracting list             expanding list
-(contains all unicode
-char entries)               ___    ____________      _________________________
- ________                |=>|_*_|->|'c' |v('c') | |=>|v('o')|v('umlaut')|v('e')|
-|_\u0001_|-> v('\u0001') |  |_:_|  |------------| |  |-------------------------|
-|_\u0002_|-> v('\u0002') |  |_:_|  |'ch'|v('ch')| |  |             :           |
-|____:___|               |  |_:_|  |------------| |  |-------------------------|
-|____:___|               |         |'cH'|v('cH')| |  |             :           |
-|__'a'___|-> v('a')      |         |------------| |  |-------------------------|
-|__'b'___|-> v('b')      |         |'Ch'|v('Ch')| |  |             :           |
-|____:___|               |         |------------| |  |-------------------------|
-|____:___|               |         |'CH'|v('CH')| |  |             :           |
-|___'c'__|----------------          ------------  |  |-------------------------|
-|____:___|                                        |  |             :           |
-|o-umlaut|----------------------------------------   |_________________________|
-|____:___|
-
---------------------------------------------------------------------------- */
-
 /* public RuleBasedCollator constructor ---------------------------------- */
 
 /**
@@ -191,7 +153,8 @@ RuleBasedCollator::construct(const UnicodeString& rules,
     int32_t length;
     const UChar *r = ucol_getRules(ucollator, &length);
     if (length > 0) {
-        urulestring = new UnicodeString(r, length);
+        // alias the rules string
+        urulestring = new UnicodeString(TRUE, r, length);
     }
     else {
         urulestring = new UnicodeString();
@@ -235,8 +198,7 @@ UBool RuleBasedCollator::operator==(const Collator& that) const
   return TRUE;
 }
 
-RuleBasedCollator& RuleBasedCollator::operator=(
-                                              const RuleBasedCollator& that)
+RuleBasedCollator& RuleBasedCollator::operator=(const RuleBasedCollator& that)
 {
   if (this != &that)
   {
@@ -265,8 +227,10 @@ CollationElementIterator* RuleBasedCollator::createCollationElementIterator
   UErrorCode status = U_ZERO_ERROR;
   CollationElementIterator *result = new CollationElementIterator(source, this,
                                                                   status);
-  if (U_FAILURE(status))
+  if (U_FAILURE(status)) {
+    delete result;
     return NULL;
+  }
 
   return result;
 }
@@ -283,8 +247,10 @@ CollationElementIterator* RuleBasedCollator::createCollationElementIterator
   CollationElementIterator *result = new CollationElementIterator(source, this,
                                                                   status);
 
-  if (U_FAILURE(status))
+  if (U_FAILURE(status)) {
+    delete result;
     return NULL;
+  }
 
   return result;
 }
@@ -306,13 +272,7 @@ Collator::EComparisonResult RuleBasedCollator::compare(
                                                const UnicodeString& target,
                                                int32_t length) const
 {
-  UnicodeString source_togo;
-  UnicodeString target_togo;
-  UTextOffset begin=0;
-
-  source.extract(begin, uprv_min(length,source.length()), source_togo);
-  target.extract(begin, uprv_min(length,target.length()), target_togo);
-  return compare(source_togo, target_togo);
+  return compare(source.getBuffer(), uprv_min(length,source.length()), target.getBuffer(), uprv_min(length,target.length()));
 }
 
 Collator::EComparisonResult RuleBasedCollator::compare(const UChar* source,
@@ -332,32 +292,7 @@ Collator::EComparisonResult RuleBasedCollator::compare(
                                              const UnicodeString& source,
                                              const UnicodeString& target) const
 {
-  UChar uSstart[STACK_BUFFER_LENGTH_];
-  UChar uTstart[STACK_BUFFER_LENGTH_];
-  UChar *uSource = uSstart;
-  UChar *uTarget = uTstart;
-  uint32_t sourceLen = source.length();
-  uint32_t targetLen = target.length();
-
-  if(sourceLen >= STACK_BUFFER_LENGTH_)
-    uSource = new UChar[sourceLen+1];
-
-  if(targetLen >= STACK_BUFFER_LENGTH_)
-    uTarget = new UChar[targetLen+1];
-
-  source.extract(0, sourceLen, uSource);
-  uSource[sourceLen] = 0;
-  target.extract(0, targetLen, uTarget);
-  uTarget[targetLen] = 0;
-  EComparisonResult result = compare(uSource, sourceLen, uTarget, targetLen);
-
-  if(uSstart != uSource)
-    delete[] uSource;
-
-  if(uTstart != uTarget)
-    delete[] uTarget;
-
-  return result;
+  return compare(source.getBuffer(), source.length(), target.getBuffer(), target.length());
 }
 
 /**
@@ -398,20 +333,7 @@ CollationKey& RuleBasedCollator::getCollationKey(
                                                   CollationKey& sortkey,
                                                   UErrorCode& status) const
 {
-  UChar sStart[STACK_BUFFER_LENGTH_];
-  UChar *uSource = sStart;
-  uint32_t sourceLen = source.length();
-
-  if(sourceLen >= STACK_BUFFER_LENGTH_)
-    uSource = new UChar[sourceLen+1];
-
-  source.extract(0, sourceLen, uSource);
-  uSource[sourceLen] = 0;
-  CollationKey& result = getCollationKey(uSource, sourceLen, sortkey, status);
-  if(sStart != uSource)
-    delete[] uSource;
-
-  return result;
+  return getCollationKey(source.getBuffer(), source.length(), sortkey, status);
 }
 
 CollationKey& RuleBasedCollator::getCollationKey(const UChar* source,
@@ -421,22 +343,19 @@ CollationKey& RuleBasedCollator::getCollationKey(const UChar* source,
 {
   if (U_FAILURE(status))
   {
-    status = U_ILLEGAL_ARGUMENT_ERROR;
     return sortkey.setToBogus();
   }
 
-  if ((!source) || (sourceLen == 0))
+  if ((!source) || (sourceLen == 0)) {
     return sortkey.reset();
+  }
 
-  /*
-  * have to use malloc, lowest denomination, since adopt can be used by
-  * a c return value.
-  */
-  uint8_t *result = (uint8_t *)uprv_malloc(UCOL_MAX_BUFFER * sizeof(uint8_t));
-  int32_t resLen = ucol_getSortKey(ucollator, source, sourceLen, result,
-                                   UCOL_MAX_BUFFER);
-  sortkey.adopt(result, resLen);
-
+  uint8_t *result;
+  int32_t resultLen = ucol_getSortKeyWithAllocation(ucollator,
+                                                    source, sourceLen,
+                                                    &result,
+                                                    &status);
+  sortkey.adopt(result, resultLen);
   return sortkey;
 }
 
@@ -484,20 +403,7 @@ uint32_t RuleBasedCollator::setVariableTop(const UChar *varTop, int32_t len, UEr
 }
 
 uint32_t RuleBasedCollator::setVariableTop(const UnicodeString varTop, UErrorCode &status) {
-  UChar sStart[STACK_BUFFER_LENGTH_];
-  UChar *uSource = sStart;
-  uint32_t sourceLen = varTop.length();
-
-  if(sourceLen >= STACK_BUFFER_LENGTH_)
-    uSource = new UChar[sourceLen+1];
-
-  varTop.extract(0, sourceLen, uSource);
-  uSource[sourceLen] = 0;
-  uint32_t result = ucol_setVariableTop(ucollator, uSource, sourceLen, &status);
-  if(sStart != uSource)
-    delete[] uSource;
-
-  return result;
+  return ucol_setVariableTop(ucollator, varTop.getBuffer(), varTop.length(), &status);
 }
 
 void RuleBasedCollator::setVariableTop(const uint32_t varTop, UErrorCode &status) {
@@ -514,11 +420,11 @@ Collator* RuleBasedCollator::safeClone(void)
   int32_t buffersize = U_COL_SAFECLONE_BUFFERSIZE;
   UCollator *ucol = ucol_safeClone(ucollator, NULL, &buffersize, 
                                    &intStatus);
-  if (U_FAILURE(intStatus))
+  if (U_FAILURE(intStatus)) {
     return NULL;
-  int32_t length = 0;
-  UnicodeString *r = new UnicodeString(ucol_getRules(ucollator, &length),
-                                       length);
+  }
+
+  UnicodeString *r = new UnicodeString(*urulestring);
   RuleBasedCollator *result = new RuleBasedCollator(ucol, r);
   result->dataIsOwned = TRUE;
   return result;
@@ -529,21 +435,7 @@ int32_t RuleBasedCollator::getSortKey(const UnicodeString& source,
                                          uint8_t *result, int32_t resultLength)
                                          const
 {
-  UChar sStart[STACK_BUFFER_LENGTH_];
-  UChar *uSource = sStart;
-  uint32_t sourceLen = source.length();
-  if(sourceLen >= STACK_BUFFER_LENGTH_)
-    uSource = new UChar[sourceLen+1];
-
-  source.extract(0, sourceLen, uSource);
-  uSource[sourceLen] = 0;
-
-  int32_t resLen = ucol_getSortKey(ucollator, uSource, sourceLen, result,
-                                   resultLength);
-  if(sStart != uSource)
-    delete[] uSource;
-
-  return resLen;
+  return ucol_getSortKey(ucollator, source.getBuffer(), source.length(), result, resultLength);
 }
 
 int32_t RuleBasedCollator::getSortKey(const UChar *source,
@@ -579,8 +471,7 @@ int32_t RuleBasedCollator::hashCode() const
 }
 
 /**
-* Set the decomposition mode of the Collator object. success is equal to
-* U_ILLEGAL_ARGUMENT_ERROR if error occurs.
+* Set the decomposition mode of the Collator object.
 * @param the new decomposition mode
 * @see Collator#getDecomposition
 */
@@ -671,7 +562,8 @@ RuleBasedCollator::RuleBasedCollator(const Locale& desiredLocale,
     int32_t length;
     const UChar *r = ucol_getRules(ucollator, &length);
     if (length > 0) {
-        urulestring = new UnicodeString(r, length);
+        // alias the rules string
+        urulestring = new UnicodeString(TRUE, r, length);
     }
     else {
         urulestring = new UnicodeString();
@@ -683,6 +575,15 @@ RuleBasedCollator::RuleBasedCollator(const Locale& desiredLocale,
 }
 
 /* RuleBasedCollator private data members -------------------------------- */
+
+/*
+ * TODO:
+ * These should probably be enums (<=0xffff) or #defines (>0xffff)
+ * for better performance.
+ * Include ucol_imp.h and use its constants if possible.
+ * Only used in coleitr.h?!
+ * Remove from here!
+ */
 
 /* need look up in .commit() */
 const int32_t RuleBasedCollator::CHARINDEX = 0x70000000;
@@ -731,5 +632,3 @@ const int16_t RuleBasedCollator::FILEID = 0x5443;
 const char* RuleBasedCollator::kFilenameSuffix = ".col";
 /* class id ? Value is irrelevant */
 char  RuleBasedCollator::fgClassID = 0;
-
-/* other methods not belonging to any classes ------------------------------- */
