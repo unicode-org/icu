@@ -969,7 +969,7 @@ idnaref_compare(  const UChar *s1, int32_t length1,
     UChar b1Stack[MAX_IDN_BUFFER_SIZE], b2Stack[MAX_IDN_BUFFER_SIZE];
     UChar *b1 = b1Stack, *b2 = b2Stack;
     int32_t b1Len, b2Len, b1Capacity = MAX_IDN_BUFFER_SIZE, b2Capacity = MAX_IDN_BUFFER_SIZE;
-    int32_t result;
+    int32_t result = -1;
     
 	UParseError parseError;
 
