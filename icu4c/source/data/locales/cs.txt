@@ -3,10 +3,12 @@
 // * Copyright (C) 2004 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Date & Time: 2004/8/19 22:50
-// * Source File: \work\locale\common\main\\cs.xml
+// * Source File: ../../../locale/common/main\cs.xml
 // *
 // ***************************************************************************
+/**
+ *  ICU <specials> source: ../../../locale/icu/main\cs.xml
+ */
 cs{
     Countries{
         AD{"Andorra"}
@@ -250,12 +252,6 @@ cs{
         ZM{"Zambie"}
         ZW{"Zimbabwe"}
     }
-    Currencies{
-        CZK{
-            "Kč",
-            "CZK",
-        }
-    }
     ExemplarCharacters{"[a-z ý á é í ó ú ě ů č ď ň ř š ť ž]"}
     Languages{
         aa{"Afarština"}
@@ -417,7 +413,6 @@ cs{
     }
     Version{"1.2"}
     calendar{
-        
         gregorian{
             AmPmMarkers{
                 "dop.",

@@ -3,10 +3,12 @@
 // * Copyright (C) 2004 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Date & Time: 2004/8/20 0:48
-// * Source File: \work\locale\common\main\\zh_Hant.xml
+// * Source File: ../../../locale/common/main\zh_Hant.xml
 // *
 // ***************************************************************************
+/**
+ *  ICU <specials> source: ../../../locale/icu/main\zh_Hant.xml
+ */
 zh_Hant{
     Countries{
         AD{"安道爾"}
@@ -411,7 +413,7 @@ zh_Hant{
         }
         BRC{
             "BRC",
-            "巴西克魯賽羅",
+            "巴西克魯賽羅 (1986-1989)",
         }
         BRE{
             "BRE",
@@ -2189,12 +2191,6 @@ zh_Hant{
         "Hani",
         "Bopo",
     }
-    NumberPatterns{
-        "#,##0.###;-#,##0.###",
-        "¤#,##0.00;-¤#,##0.00",
-        "#,##0%",
-        "#E0",
-    }
     Scripts{
         Arab{"阿拉伯文"}
         Armn{"亞美尼亞文"}
@@ -2203,6 +2199,7 @@ zh_Hant{
         Brai{"盲人用點字法"}
         Cans{"加拿大原住民通用字符"}
         Cher{"柴羅基文"}
+        Copt{"科普特文"}
         Cprt{"塞浦路斯文"}
         Cyrl{"斯拉夫語系"}
         Dsrt{"德瑟雷特文"}
@@ -2230,7 +2227,6 @@ zh_Hant{
         Ogam{"歐甘文"}
         Orya{"歐利亞文"}
         Osma{"歐斯曼亞文"}
-        Qaac{"科普特文"}
         Runr{"古北歐文字"}
         Shaw{"簫柏納字符"}
         Sinh{"錫蘭文"}
@@ -2268,7 +2264,6 @@ zh_Hant{
     }
     Version{"1.2"}
     calendar{
-        
         gregorian{
             DateTimePatterns{
                 "ahh'時'mm'分'ss'秒' z",

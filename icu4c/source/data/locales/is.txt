@@ -3,10 +3,12 @@
 // * Copyright (C) 2004 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Date & Time: 2004/8/19 23:55
-// * Source File: \work\locale\common\main\\is.xml
+// * Source File: ../../../locale/common/main\is.xml
 // *
 // ***************************************************************************
+/**
+ *  ICU <specials> source: ../../../locale/icu/main\is.xml
+ */
 is{
     Countries{
         AE{"Sameinte arabísku fyrstadæmin"}
@@ -19,7 +21,6 @@ is{
         AT{"Austurríki"}
         AU{"Ástralía"}
         BA{"Bosnía-Hersegovína"}
-        BB{"Belgía"}
         BG{"Búlgaría"}
         BI{"Búrúndí"}
         BO{"Bólivía"}
@@ -160,15 +161,9 @@ is{
         YE{"Jemen"}
         ZA{"Suður-Afríka"}
     }
-    Currencies{
-        ISK{
-            "kr.",
-            "ISK",
-        }
-    }
     ExemplarCharacters{"[a-záéíóúýöæðþ]"}
     Languages{
-        is{"íslenska"}
+        is{"Íslenska"}
     }
     LocaleScript{
         "Latn",
@@ -189,7 +184,6 @@ is{
     }
     Version{"1.2"}
     calendar{
-        
         gregorian{
             DateTimePatterns{
                 "HH:mm:ss z",
@@ -212,6 +206,15 @@ is{
                         "fim",
                         "fös",
                         "lau",
+                    }
+                    narrow{
+                        "s",
+                        "m",
+                        "þ",
+                        "m",
+                        "f",
+                        "f",
+                        "l",
                     }
                     wide{
                         "sunnudagur",

@@ -3,10 +3,12 @@
 // * Copyright (C) 2004 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Date & Time: 2004/8/20 0:7
-// * Source File: \work\locale\common\main\\ko.xml
+// * Source File: ../../../locale/common/main\ko.xml
 // *
 // ***************************************************************************
+/**
+ *  ICU <specials> source: ../../../locale/icu/main\ko.xml
+ */
 ko{
     Countries{
         AD{"안도라"}
@@ -1856,6 +1858,7 @@ ko{
         Buhd{"부히드어"}
         Cans{"통합 캐나다 토착어"}
         Cher{"체로키어"}
+        Copt{"콥트어"}
         Cprt{"키프로스어"}
         Cyrl{"키릴어"}
         Deva{"데바니가리어"}
@@ -1887,7 +1890,6 @@ ko{
         Ogam{"오그함어"}
         Orya{"오리야어"}
         Osma{"오스만야어"}
-        Qaac{"콥트어"}
         Runr{"룬 문자"}
         Shaw{"샤비안어"}
         Sinh{"신할라어"}
@@ -1926,7 +1928,6 @@ ko{
     }
     Version{"1.2"}
     calendar{
-        
         gregorian{
             AmPmMarkers{
                 "오전",
@@ -2244,6 +2245,7 @@ ko{
             "KST",
             "한국표준시",
             "KST",
+            "서울",
         }
         {
             "Europe/Bucharest",

@@ -3,10 +3,12 @@
 // * Copyright (C) 2004 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Date & Time: 2004/8/19 23:37
-// * Source File: \work\locale\common\main\\fa.xml
+// * Source File: ../../../locale/common/main\fa.xml
 // *
 // ***************************************************************************
+/**
+ *  ICU <specials> source: ../../../locale/icu/main\fa.xml
+ */
 fa{
     Countries{
         AD{"آندورا"}
@@ -475,6 +477,7 @@ fa{
         Beng{"بنگالی"}
         Bopo{"بوپوموفو"}
         Cher{"چروکیایی"}
+        Copt{"قبطی"}
         Cyrl{"سیریلی"}
         Deva{"دوناگری"}
         Ethi{"اتیوپیایی"}
@@ -495,7 +498,6 @@ fa{
         Mong{"مغولی"}
         Mymr{"میانمار"}
         Orya{"اوریه‌ای"}
-        Qaac{"قبطی"}
         Qaai{"موروثی"}
         Runr{"رونی"}
         Syrc{"آسوری"}
@@ -508,7 +510,6 @@ fa{
     }
     Version{"1.2"}
     calendar{
-        
         gregorian{
             AmPmMarkers{
                 "ق.ظ.",

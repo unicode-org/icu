@@ -3,14 +3,12 @@
 // * Copyright (C) 2004 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Date & Time: 2004/8/19 23:6
-// * Source File: \work\locale\common\main\\en_GB.xml
+// * Source File: ../../../locale/common/main\en_GB.xml
 // *
 // ***************************************************************************
 en_GB{
     Version{"1.2"}
     calendar{
-        
         gregorian{
             DateTimeElements:intvector{
                 2,

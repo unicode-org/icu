@@ -3,10 +3,12 @@
 // * Copyright (C) 2004 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Date & Time: 2004/8/20 0:2
-// * Source File: \work\locale\common\main\\ja.xml
+// * Source File: ../../../locale/common/main\ja.xml
 // *
 // ***************************************************************************
+/**
+ *  ICU <specials> source: ../../../locale/icu/main\ja.xml
+ */
 ja{
     Countries{
         AD{"アンドラ"}
@@ -2006,6 +2008,7 @@ ja{
         Buhd{"ブヒッド文字"}
         Cans{"統合カナダ先住民記号"}
         Cher{"チェロキー文字"}
+        Copt{"コプト文字"}
         Cprt{"キプロス文字"}
         Cyrl{"キリル文字"}
         Deva{"デーバナーガリー文字"}
@@ -2037,7 +2040,6 @@ ja{
         Ogam{"オガム"}
         Orya{"オリヤー文字"}
         Osma{"オスマニア文字"}
-        Qaac{"コプト文字"}
         Runr{"ルーン文字"}
         Shaw{"ショー文字"}
         Sinh{"シンハラ文字"}
@@ -2076,7 +2078,6 @@ ja{
     }
     Version{"1.2"}
     calendar{
-        
         gregorian{
             AmPmMarkers{
                 "午前",

@@ -3,10 +3,12 @@
 // * Copyright (C) 2004 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Date & Time: 2004/8/20 0:20
-// * Source File: \work\locale\common\main\\ps.xml
+// * Source File: ../../../locale/common/main\ps.xml
 // *
 // ***************************************************************************
+/**
+ *  ICU <specials> source: ../../../locale/icu/main\ps.xml
+ */
 ps{
     Countries{
         AF{"افغانستان"}
@@ -120,7 +122,6 @@ ps{
     }
     Version{"1.2"}
     calendar{
-        
         gregorian{
             AmPmMarkers{
                 "غ.م.",

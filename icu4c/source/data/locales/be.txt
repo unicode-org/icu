@@ -3,10 +3,12 @@
 // * Copyright (C) 2004 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Date & Time: 2004/8/19 22:48
-// * Source File: \work\locale\common\main\\be.xml
+// * Source File: ../../../locale/common/main\be.xml
 // *
 // ***************************************************************************
+/**
+ *  ICU <specials> source: ../../../locale/icu/main\be.xml
+ */
 be{
     Countries{
         BY{"Беларусь"}
@@ -40,7 +42,6 @@ be{
     }
     Version{"1.2"}
     calendar{
-        
         gregorian{
             DateTimeElements:intvector{
                 2,

@@ -3,10 +3,12 @@
 // * Copyright (C) 2004 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Date & Time: 2004/8/20 0:10
-// * Source File: \work\locale\common\main\\mk.xml
+// * Source File: ../../../locale/common/main\mk.xml
 // *
 // ***************************************************************************
+/**
+ *  ICU <specials> source: ../../../locale/icu/main\mk.xml
+ */
 mk{
     Countries{
         MK{"Македонија"}
@@ -40,7 +42,6 @@ mk{
     }
     Version{"1.2"}
     calendar{
-        
         gregorian{
             DateTimeElements:intvector{
                 2,

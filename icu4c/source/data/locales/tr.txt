@@ -3,10 +3,12 @@
 // * Copyright (C) 2004 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Date & Time: 2004/8/20 0:37
-// * Source File: \work\locale\common\main\\tr.xml
+// * Source File: ../../../locale/common/main\tr.xml
 // *
 // ***************************************************************************
+/**
+ *  ICU <specials> source: ../../../locale/icu/main\tr.xml
+ */
 tr{
     Countries{
         AD{"Andora"}
@@ -250,16 +252,6 @@ tr{
         ZM{"Zambiya"}
         ZW{"Zimbabwe"}
     }
-    Currencies{
-        ITL{
-            "ITL",
-            "ITL",
-        }
-        TRL{
-            "TL",
-            "TRL",
-        }
-    }
     ExemplarCharacters{"[a-zâûöüıçşğ]"}
     Languages{
         aa{"Afar"}
@@ -420,7 +412,6 @@ tr{
     }
     Version{"1.2"}
     calendar{
-        
         gregorian{
             DateTimeElements:intvector{
                 2,

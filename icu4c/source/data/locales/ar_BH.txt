@@ -3,21 +3,9 @@
 // * Copyright (C) 2004 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Date & Time: 2004/8/19 22:43
-// * Source File: \work\locale\common\main\\ar_BH.xml
+// * Source File: ../../../locale/common/main\ar_BH.xml
 // *
 // ***************************************************************************
 ar_BH{
     Version{"1.2"}
-    calendar{
-        
-        gregorian{
-            weekend:intvector{
-                5,
-                0,
-                7,
-                0,
-            }
-        }
-    }
 }

@@ -3,10 +3,12 @@
 // * Copyright (C) 2004 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Date & Time: 2004/8/19 23:36
-// * Source File: \work\locale\common\main\\eu.xml
+// * Source File: ../../../locale/common/main\eu.xml
 // *
 // ***************************************************************************
+/**
+ *  ICU <specials> source: ../../../locale/icu/main\eu.xml
+ */
 eu{
     Countries{
         AE{"Arabiar Emirrerri Batuak"}
@@ -153,7 +155,6 @@ eu{
     }
     Version{"1.2"}
     calendar{
-        
         gregorian{
             dayNames{
                 format{

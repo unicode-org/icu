@@ -3,10 +3,9 @@
 // * Copyright (C) 2004 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Date & Time: 2004/8/20 0:30
-// * Source File: \work\locale\common\main\\sr_YU.xml
+// * Source File: ../../../locale/common/main\sr_YU.xml
 // *
 // ***************************************************************************
 sr_YU{
-    Version{"1.2"}
+    "%%ALIAS"{"sr_Cyrl_YU"}
 }

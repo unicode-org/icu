@@ -3,10 +3,12 @@
 // * Copyright (C) 2004 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Date & Time: 2004/8/20 7:3
-// * Source File: \work\locale\common\main\\ar.xml
+// * Source File: ../../../locale/common/main\ar.xml
 // *
 // ***************************************************************************
+/**
+ *  ICU <specials> source: ../../../locale/icu/main\ar.xml
+ */
 ar{
     Countries{
         AD{"اندورا"}
@@ -351,7 +353,6 @@ ar{
                 }
             }
         }
-        
         gregorian{
             AmPmMarkers{
                 "ص",

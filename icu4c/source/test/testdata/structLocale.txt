@@ -2290,6 +2290,7 @@ structLocale{
         Buhd{""}
         Cans{""}
         Cher{""}
+        Copt{""}
         Cprt{""}
         Cyrl{""}
         Deva{""}
@@ -2322,7 +2323,6 @@ structLocale{
         Ogam{""}
         Orya{""}
         Osma{""}
-        Qaac{""}
         Qaai{""}
         Runr{""}
         Shaw{""}

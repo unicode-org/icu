@@ -3,10 +3,12 @@
 // * Copyright (C) 2004 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Date & Time: 2004/8/19 23:41
-// * Source File: \work\locale\common\main\\fo.xml
+// * Source File: ../../../locale/common/main\fo.xml
 // *
 // ***************************************************************************
+/**
+ *  ICU <specials> source: ../../../locale/icu/main\fo.xml
+ */
 fo{
     Countries{
         AE{"Sameindu Emirríkini"}
@@ -161,7 +163,6 @@ fo{
     }
     Version{"1.2"}
     calendar{
-        
         gregorian{
             DateTimePatterns{
                 "HH:mm:ss z",
