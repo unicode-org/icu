@@ -1480,6 +1480,7 @@ IntlTestRBNF::TestSmallValues()
 void 
 IntlTestRBNF::TestLocalizations(void)
 {
+    int i;
     UnicodeString rules("%main:0:no;1:some;100:a lot;1000:tons;\n"
         "%other:0:nada;1:yah, some;100:plenty;1000:more'n you'll ever need");
 
@@ -1526,7 +1527,7 @@ IntlTestRBNF::TestLocalizations(void)
                     // TODO: check against intended result
                 }
 
-                for (int i = 0; i < formatter0.getNumberOfRuleSetDisplayNameLocales(); ++i) {
+                for (i = 0; i < formatter0.getNumberOfRuleSetDisplayNameLocales(); ++i) {
                     Locale locale = formatter0.getRuleSetDisplayNameLocale(i, status);
                     if (U_SUCCESS(status)) {
                         for (int j = 0; j < formatter0.getNumberOfRuleSetNames(); ++j) {
@@ -1583,7 +1584,7 @@ IntlTestRBNF::TestLocalizations(void)
             };
             int32_t badLocsLen = sizeof(badLocs)/sizeof(badLocs[0]);
 
-            for (int i = 0; i < goodLocsLen; ++i) {
+            for (i = 0; i < goodLocsLen; ++i) {
                 logln("[%d] '%s'", i, goodLocs[i]);
                 UErrorCode status = U_ZERO_ERROR;
                 UnicodeString loc(goodLocs[i]);
@@ -1593,7 +1594,7 @@ IntlTestRBNF::TestLocalizations(void)
                 }
             }
 
-            for (int i = 0; i < badLocsLen; ++i) {
+            for (i = 0; i < badLocsLen; ++i) {
                 logln("[%d] '%s'", i, badLocs[i]);
                 UErrorCode status = U_ZERO_ERROR;
                 UnicodeString loc(badLocs[i]);
