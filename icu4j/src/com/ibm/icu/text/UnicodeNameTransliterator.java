@@ -3,8 +3,8 @@
  * others. All Rights Reserved.
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/UnicodeNameTransliterator.java,v $ 
- * $Date: 2002/02/16 03:06:22 $ 
- * $Revision: 1.7 $
+ * $Date: 2002/03/27 19:11:37 $ 
+ * $Revision: 1.8 $
  */
 package com.ibm.icu.text;
 import java.util.*;
@@ -65,7 +65,7 @@ class UnicodeNameTransliterator extends Transliterator {
         
         while (cursor < limit) {
             int c = text.char32At(cursor);
-            if ((name=UCharacter.getName(c)) != null) {
+            if ((name=UCharacter.getExtendedName(c)) != null) {
                 
                 str.setLength(1);
                 str.append(name).append(closeDelimiter);
