@@ -88,7 +88,7 @@ static const char ufile_locale2codepage[][256] = {
   "pl", "ibm-912"  , /* Polish */
   "pt", "latin-1"  ,  /* Portugese */
   
-  "rm", "latin-1"  ,  /* Rhaeto-romanic (??) */
+  "rm", "latin-1"  ,  /* Rhaeto-romanic (?) */
   "ro", "ibm-912"  , /* Romanian */
   "ru", "ibm-878"  , /* Russian */
   
