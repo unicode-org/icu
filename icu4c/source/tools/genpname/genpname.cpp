@@ -767,7 +767,7 @@ void Builder::fixupEnumToNameGroup(EnumToOffset* e2ng) {
 
 void Builder::fixupNCEnumToNameGroup(NonContiguousEnumToOffset* e2ng) {
     int32_t i;
-    EnumValue* e = e2ng->getEnumArray();
+    /*EnumValue* e = e2ng->getEnumArray();*/
     Offset* p = e2ng->getOffsetArray();
     for (i=0; i<e2ng->count; ++i) {
         p[i] = nameGroupPool_offset + sizeof(Offset) * p[i];
@@ -819,7 +819,7 @@ void Builder::fixupMiscellaneousOffsets() {
 
     // 3:
     Offset* p = enumToValue->getOffsetArray();
-    EnumValue* e = enumToValue->getEnumArray();
+    /*EnumValue* e = enumToValue->getEnumArray();*/
     U_ASSERT(valueMap_count == enumToValue->count);
     for (i=0; i<valueMap_count; ++i) {
         p[i] = (Offset)(valueMap_offset + sizeof(ValueMap) * i);
@@ -881,7 +881,10 @@ int8_t* Builder::createData(int32_t& length) const {
     APPEND(nameGroupPool);
     APPEND(stringPool);
 
-    U_ASSERT(p == limit);
+    if (p != limit) {
+        fprintf(stderr, "p != limit; p = %p, limit = %p", p, limit);
+        exit(1);
+    }
     return result;
 }
 
