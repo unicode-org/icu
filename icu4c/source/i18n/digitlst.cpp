@@ -38,8 +38,10 @@
 
 const char DigitList::kZero = '0';
 
-char DigitList::LONG_MIN_REP[LONG_DIGITS];
-int32_t  DigitList::LONG_MIN_REP_LENGTH = 0;
+const char DigitList::LONG_MIN_REP[] = "2147483648"; // ignore negative sign
+
+/* Ignore the NULL at the end */
+int32_t    DigitList::LONG_MIN_REP_LENGTH = sizeof(DigitList::LONG_MIN_REP) - 1;
 
 // -------------------------------------
 // default constructor
@@ -97,29 +99,26 @@ DigitList::clear()
 {
     fDecimalAt = 0;
     fCount = 0;
-    for (int32_t i=0; i<MAX_DIGITS; ++i) fDigits[i] = kZero;
+    for (int32_t i=0; i<MAX_DIGITS; ++i)
+        fDigits[i] = kZero;
 }
 
-// -------------------------------------
-// Appends the digit to the digit list if it's not out of scope.
-// Ignores the digit, otherwise.
 
-void
-DigitList::append(char digit)
-{
-    // Ignore digits which exceed the precision we can represent
-    if (fCount < MAX_DIGITS) fDigits[fCount++] = digit;
-}
 
 // -------------------------------------
 
 /**
  * Currently, getDouble() depends on atof() to do its conversion.
+ *
+ * WARNING!!
+ * This is an extremely costly function. ~2/3 of the conversion time
+ * can be linked to this function.
  */
 double
 DigitList::getDouble() const
 {
-    if (fCount == 0) return 0.0;
+    if (fCount == 0)
+        return 0.0;
 
     // For the string "." + fDigits + "e" + fDecimalAt.
     char buffer[MAX_DIGITS+32];
@@ -131,13 +130,23 @@ DigitList::getDouble() const
 
 // -------------------------------------
 
-int32_t DigitList::getLong() const
+int32_t DigitList::getLong()
 {
-    // This is 100% accurate in c++ because if we are representing
-    // an integral value, we suffer nothing in the conversion to
-    // double.  If we are to support 64-bit longs later, this method
-    // must be rewritten. [LIU]
-    return (int32_t)getDouble();
+    if (fCount == fDecimalAt) {
+        fDigits[fCount] = 0;    // NULL terminate
+
+        /* This conversion is bad on 64-bit platforms when we want to
+           be able to return a 64-bit number [grhoten]
+        */
+        return (int32_t)atol(fDigits);
+    }
+    else {
+        // This is 100% accurate in c++ because if we are representing
+        // an integral value, we suffer nothing in the conversion to
+        // double.  If we are to support 64-bit longs later, getLong()
+        // must be rewritten. [LIU]
+        return (int32_t)getDouble();
+    }
 }
 
 /**
@@ -153,8 +162,10 @@ DigitList::fitsIntoLong(UBool isPositive, UBool ignoreNegativeZero)
     // the value can definitely be represented as a long.  If it is 19
     // then it may be too large.
 
-    // Trim trailing zeros.  This does not change the represented value.
-    while (fCount > 0 && fDigits[fCount - 1] == '0') --fCount;
+    // Trim trailing zeros after the decimal point. This does not change
+    // the represented value.
+    while (fCount > fDecimalAt && fDigits[fCount - 1] == '0')
+        --fCount;
 
     if (fCount == 0) {
         // Positive zero fits into a long, but negative zero can only
@@ -162,28 +173,34 @@ DigitList::fitsIntoLong(UBool isPositive, UBool ignoreNegativeZero)
         return isPositive || ignoreNegativeZero;
     }
     
-    initializeLONG_MIN_REP();
+//    initializeLONG_MIN_REP();
 
     // If the digit list represents a double or this number is too
     // big for a long.
-    if (fDecimalAt < fCount || fDecimalAt > LONG_MIN_REP_LENGTH) return FALSE;
+    if (fDecimalAt < fCount || fDecimalAt > LONG_MIN_REP_LENGTH)
+        return FALSE;
 
     // If number is small enough to fit in a long
-    if (fDecimalAt < LONG_MIN_REP_LENGTH) return TRUE;
+    if (fDecimalAt < LONG_MIN_REP_LENGTH)
+        return TRUE;
 
     // At this point we have fDecimalAt == fCount, and fCount == LONG_MIN_REP_LENGTH.
     // The number will overflow if it is larger than LONG_MAX
     // or smaller than LONG_MIN.
     for (int32_t i=0; i<fCount; ++i)
     {
-        char dig = fDigits[i], max = LONG_MIN_REP[i];
-        if (dig > max) return FALSE;
-        if (dig < max) return TRUE;
+        char dig = fDigits[i],
+             max = LONG_MIN_REP[i];
+        if (dig > max)
+            return FALSE;
+        if (dig < max)
+            return TRUE;
     }
     
     // At this point the first count digits match.  If fDecimalAt is less
     // than count, then the remaining digits are zero, and we return true.
-    if (fCount < fDecimalAt) return TRUE;
+    if (fCount < fDecimalAt)
+        return TRUE;
 
     // Now we have a representation of Long.MIN_VALUE, without the leading
     // negative sign.  If this represents a positive value, then it does
@@ -228,14 +245,14 @@ DigitList::set(int32_t source, int32_t maximumDigits)
     if(maximumDigits > 0) 
         round(maximumDigits);
 
-#if(0)
     // {sfb} old implementation, keep around for now
 
     // Handle the case in which source == LONG_MIN
+/*
     set((source >= 0 ? (double)source : -((double)source)),
         maximumDigits > 0 ? maximumDigits : MAX_DIGITS,
         maximumDigits == 0);
-#endif
+*/
 }
 
 /**
@@ -252,16 +269,18 @@ DigitList::set(int32_t source, int32_t maximumDigits)
 void
 DigitList::set(double source, int32_t maximumDigits, UBool fixedPoint)
 {
-    if(source == 0) source = 0;
+    if (source == 0)
+        source = 0;    /* -0? */
+
     // Generate a representation of the form DDDDD, DDDDD.DDDDD, or
     // DDDDDE+/-DDDDD.
     //String rep = Double.toString(source);
     char rep[MAX_DIGITS + 7]; // Extra space for '.', e+NNN, and '\0' (actually +7 is enough)
     sprintf(rep, "%1.*e", MAX_DIGITS - 1, source);
 
-    fDecimalAt             = -1;
-    fCount                 = 0;
-    int32_t exponent     = 0;
+    fDecimalAt          = -1;
+    fCount              = 0;
+    int32_t exponent    = 0;
     // Number of zeros between decimal point and first non-zero digit after
     // decimal point, for numbers < 1.
     int32_t leadingZerosAfterDecimal = 0;
@@ -274,7 +293,7 @@ DigitList::set(double source, int32_t maximumDigits, UBool fixedPoint)
         else if (c == 'e' || c == 'E') {
             // Parse an exponent of the form /[eE][+-]?[0-9]*/
             //exponent = Integer.valueOf(rep.substring(i+1)).intValue();
-            i += 1;                 // adjust for 'e'
+            i++;                 // adjust for 'e'
             UBool negExp = rep[i] == '-';
             if (negExp || rep[i] == '+') {
                 ++i;
@@ -288,9 +307,9 @@ DigitList::set(double source, int32_t maximumDigits, UBool fixedPoint)
             break;
         }
         else if (fCount < MAX_DIGITS) {
-            if ( ! nonZeroDigitSeen) {
+            if (!nonZeroDigitSeen) {
                 nonZeroDigitSeen = (c != '0');
-                if ( ! nonZeroDigitSeen && fDecimalAt != -1) 
+                if (!nonZeroDigitSeen && fDecimalAt != -1) 
                     ++leadingZerosAfterDecimal;
             }
     
@@ -332,7 +351,7 @@ DigitList::set(double source, int32_t maximumDigits, UBool fixedPoint)
     while (fCount > 1 && fDigits[fCount - 1] == '0')
         --fCount;
 
-    /*if (DEBUG)
+    /*#if (DEBUG)
     {
         System.out.print("Before rounding 0.");
         for (int i=0; i<fCount; ++i) System.out.print((char)digits[i]);
@@ -346,7 +365,7 @@ DigitList::set(double source, int32_t maximumDigits, UBool fixedPoint)
         round(fixedPoint ? (maximumDigits + fDecimalAt) : maximumDigits);
     }
 
-    /*if (DEBUG)
+    /* #if (DEBUG)
     {
         System.out.print("After rounding 0.");
         for (int i=0; i<fCount; ++i) System.out.print((char)digits[i]);
@@ -386,7 +405,8 @@ DigitList::round(int32_t maximumDigits)
                 }
 
                 ++fDigits[maximumDigits];
-                if (fDigits[maximumDigits] <= '9') break;
+                if (fDigits[maximumDigits] <= '9')
+                    break;
                 // fDigits[maximumDigits] = '0'; // Unnecessary since we'll truncate this
             }
             ++maximumDigits; // Increment for use as count
@@ -434,48 +454,51 @@ UBool DigitList::shouldRoundUp(int32_t maximumDigits) {
 // be passed to set(double) as long as they are 32 bits in size.  We currently
 // don't implement 64-bit longs in C++, although the code below would work for
 // that with slight modifications. [LIU]
+/*
+void
+DigitList::set(long source)
+{
+    // handle the special case of zero using a standard exponent of 0.
+    // mathematically, the exponent can be any value.
+    if (source == 0)
+    {
+        fcount = 0;
+        fDecimalAt = 0;
+        return;
+    }
 
-//  void
-//  DigitList::set(long source)
-//  {
-//      // handle the special case of zero using a standard exponent of 0.
-//      // mathematically, the exponent can be any value.
-//      if (source == 0)
-//      {
-//          fcount = 0;
-//          fDecimalAt = 0;
-//          return;
-//      }
+    // we don't accept negative numbers, with the exception of long_min.
+    // long_min is treated specially by being represented as long_max+1,
+    // which is actually an impossible signed long value, so there is no
+    // ambiguity.  we do this for convenience, so digitlist can easily
+    // represent the digits of a long.
+    bool islongmin = (source == long_min);
+    if (islongmin)
+    {
+        source = -(source + 1); // that is, long_max
+        islongmin = true;
+    }
+    sprintf(fdigits, "%d", source);
 
-//      // we don't accept negative numbers, with the exception of long_min.
-//      // long_min is treated specially by being represented as long_max+1,
-//      // which is actually an impossible signed long value, so there is no
-//      // ambiguity.  we do this for convenience, so digitlist can easily
-//      // represent the digits of a long.
-//      bool islongmin = (source == long_min);
-//      if (islongmin)
-//      {
-//          source = -(source + 1); // that is, long_max
-//          islongmin = true;
-//      }
-//      sprintf(fdigits, "%d", source);
+    // now we need to compute the exponent.  it's easy in this case; it's
+    // just the same as the count.  e.g., 0.123 * 10^3 = 123.
+    fcount = strlen(fdigits);
+    fDecimalAt = fcount;
 
-//      // now we need to compute the exponent.  it's easy in this case; it's
-//      // just the same as the count.  e.g., 0.123 * 10^3 = 123.
-//      fcount = strlen(fdigits);
-//      fDecimalAt = fcount;
+    // here's how we represent long_max + 1.  note that we always know
+    // that the last digit of long_max will not be 9, because long_max
+    // is of the form (2^n)-1.
+    if (islongmin)
+        ++fdigits[fcount-1];
 
-//      // here's how we represent long_max + 1.  note that we always know
-//      // that the last digit of long_max will not be 9, because long_max
-//      // is of the form (2^n)-1.
-//      if (islongmin) ++fdigits[fcount-1];
-
-//      // finally, we trim off trailing zeros.  we don't alter fDecimalAt,
-//      // so this has no effect on the represented value.  we know the first
-//      // digit is non-zero (see code above), so we only have to check down
-//      // to fdigits[1].
-//      while (fcount > 1 && fdigits[fcount-1] == kzero) --fcount;
-//  }
+    // finally, we trim off trailing zeros.  we don't alter fDecimalAt,
+    // so this has no effect on the represented value.  we know the first
+    // digit is non-zero (see code above), so we only have to check down
+    // to fdigits[1].
+    while (fcount > 1 && fdigits[fcount-1] == kzero)
+        --fcount;
+}
+*/
 
 /**
  * Return true if this object represents the value zero.  Anything with
@@ -484,7 +507,9 @@ UBool DigitList::shouldRoundUp(int32_t maximumDigits) {
 UBool
 DigitList::isZero() const
 {
-    for (int32_t i=0; i<fCount; ++i) if (fDigits[i] != kZero) return FALSE;
+    for (int32_t i=0; i<fCount; ++i)
+        if (fDigits[i] != kZero)
+            return FALSE;
     return TRUE;
 }
 
@@ -495,13 +520,15 @@ DigitList::isZero() const
 UBool
 DigitList::isLONG_MIN() const
 {
-    initializeLONG_MIN_REP();
+//    initializeLONG_MIN_REP();
 
-    if (fCount != LONG_MIN_REP_LENGTH) return FALSE;
+    if (fCount != LONG_MIN_REP_LENGTH)
+        return FALSE;
 
     for (int32_t i = 0; i < LONG_MIN_REP_LENGTH; ++i)
     {
-        if (fDigits[i] != LONG_MIN_REP[i+1]) return FALSE;
+        if (fDigits[i] != LONG_MIN_REP[i+1])
+            return FALSE;
     }
 
     return TRUE;
@@ -510,7 +537,7 @@ DigitList::isLONG_MIN() const
 // Initialize the LONG_MIN representation buffer.  Note that LONG_MIN
 // is stored as LONG_MAX+1 (LONG_MIN without the negative sign).
 
-void
+/*void
 DigitList::initializeLONG_MIN_REP()
 {
     if (LONG_MIN_REP_LENGTH == 0)
@@ -519,8 +546,9 @@ DigitList::initializeLONG_MIN_REP()
         sprintf(buf, "%d", INT32_MIN);
         LONG_MIN_REP_LENGTH = strlen(buf) - 1;
         // assert(LONG_MIN_REP_LENGTH == LONG_DIGITS);
-        for (int32_t i=1; i<=LONG_MIN_REP_LENGTH; ++i) LONG_MIN_REP[i-1] = buf[i];
+        for (int32_t i=1; i<=LONG_MIN_REP_LENGTH; ++i)
+            LONG_MIN_REP[i-1] = buf[i];
     }
-}
+}*/
 
 //eof
