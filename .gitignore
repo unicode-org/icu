@@ -279,6 +279,7 @@ icu4c/source/tools/gennorm/Debug
 icu4c/source/tools/gennorm/Makefile
 icu4c/source/tools/gennorm/Release
 icu4c/source/tools/gennorm/gennorm
+icu4c/source/tools/gennorm/gennorm.[0-9]
 icu4c/source/tools/gennorm/tmp
 icu4c/source/tools/genprops/*.d
 icu4c/source/tools/genprops/*.pdb
@@ -286,6 +287,7 @@ icu4c/source/tools/genprops/Debug
 icu4c/source/tools/genprops/Makefile
 icu4c/source/tools/genprops/Release
 icu4c/source/tools/genprops/genprops
+icu4c/source/tools/genprops/genprops.[0-9]
 icu4c/source/tools/genprops/tmp
 icu4c/source/tools/genqchk/Debug
 icu4c/source/tools/genqchk/Makefile
@@ -297,6 +299,8 @@ icu4c/source/tools/genrb/*.plg
 icu4c/source/tools/genrb/Debug
 icu4c/source/tools/genrb/Makefile
 icu4c/source/tools/genrb/Release
+icu4c/source/tools/genrb/derb
+icu4c/source/tools/genrb/derb.[0-9]
 icu4c/source/tools/genrb/derb_*
 icu4c/source/tools/genrb/genjp/Debug
 icu4c/source/tools/genrb/genjp/genjp.ncb
@@ -320,6 +324,7 @@ icu4c/source/tools/gentz/Debug
 icu4c/source/tools/gentz/Makefile
 icu4c/source/tools/gentz/Release
 icu4c/source/tools/gentz/gentz
+icu4c/source/tools/gentz/gentz.[0-9]
 icu4c/source/tools/gentz/tmp
 icu4c/source/tools/genuca/*.d
 icu4c/source/tools/genuca/*.pdb
