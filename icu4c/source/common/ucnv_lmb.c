@@ -935,7 +935,7 @@ DEFINE_LMBCS_OPEN(19)
 };\
 const UConverterStaticData _LMBCSStaticData##n={\
   sizeof(UConverterStaticData),\
-"LMBCS_" ## #n,\
+"LMBCS_" #n,\
     0, UCNV_IBM, UCNV_LMBCS_1, 1, 1,\
     1, { 0x3f, 0, 0, 0 } \
 };\
