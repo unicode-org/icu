@@ -487,7 +487,7 @@ public:
     static const UnicodeString* getISOLanguages(int32_t& count);
     
     /**
-     * Get the path to the ResourceBundle locale files. This path will be a
+     * Deprecated 1999dec14 - Get the path to the ResourceBundle locale files. This path will be a
      * platform-specific path name ending in a directory separator, so that file
      * names may be concatenated to it. This path may be changed by calling
      * setDataDirectory(). If setDataDirectory() has not been called yet,
@@ -499,13 +499,14 @@ public:
     static  const   char*       getDataDirectory(void);
 
     /**
-     * Set the path to the ResourceBundle locale files. After making this call,
+     * Deprecated 1999dec14 - Set the path to the ResourceBundle locale files. After making this call,
      * all objects in the Unicode Analytics package will read ResourceBundle
      * data files in the specified directory in order to obtain locale data.
      *
      * @param path The new data path to be set to.
      */
     static  void                setDataDirectory(const char* path);
+
     Locale& init(const char* cLocaleID);
     
 protected: // only protected for testing purposes. DO NOT USE.

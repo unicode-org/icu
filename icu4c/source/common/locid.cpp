@@ -804,7 +804,7 @@ Locale::getLanguagesForCountry(const UnicodeString& country, int32_t& count)
  */
 const   char*       Locale::getDataDirectory()
 {
-  return uloc_getDataDirectory();
+  return u_getDataDirectory();
 }
 
 /**
@@ -812,7 +812,7 @@ const   char*       Locale::getDataDirectory()
  */
 void                Locale::setDataDirectory(const char* path)
 {
-  uloc_setDataDirectory(path);
+  u_setDataDirectory(path);
 }
 
 // ================= privates =====================================

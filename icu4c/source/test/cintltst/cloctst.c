@@ -298,7 +298,7 @@ void TestGetAvailableLocales()
     }
 }
 
-/* test for uloc_getDataDirectory, uloc_setDataDirectory, uloc_getISO3Language */
+/* test for u_getDataDirectory, u_setDataDirectory, uloc_getISO3Language */
 void TestDataDirectory()
 {
 
@@ -308,7 +308,7 @@ void TestDataDirectory()
     const char path[40] ="d:\\icu\\source\\test\\intltest" U_FILE_SEP_STRING; /*give the required path */
 
     log_verbose("Testing getDataDirectory()\n");
-    temp = uloc_getDataDirectory();
+    temp = u_getDataDirectory();
     strcpy(oldDirectory, temp);
         
     testValue1=uloc_getISO3Language("en_US");
@@ -321,16 +321,16 @@ void TestDataDirectory()
 
     /*defining the path for DataDirectory */
     log_verbose("Testing setDataDirectory\n");
-    uloc_setDataDirectory( path );
-    if(strcmp(path, uloc_getDataDirectory())==0)
+    u_setDataDirectory( path );
+    if(strcmp(path, u_getDataDirectory())==0)
         log_verbose("setDataDirectory working fine\n");
     else
-        log_err("Error in setDataDirectory. Directory not set correctly - came back as [%s], expected [%s]\n", uloc_getDataDirectory(), path);
+        log_err("Error in setDataDirectory. Directory not set correctly - came back as [%s], expected [%s]\n", u_getDataDirectory(), path);
         
     testValue2=uloc_getISO3Language("en_US");
     log_verbose("second fetch of language retrieved  %s \n", testValue2);
         
-    uloc_setDataDirectory(oldDirectory);
+    u_setDataDirectory(oldDirectory);
     testValue3=uloc_getISO3Language("en_US");
     log_verbose("third fetch of language retrieved  %s \n", testValue3);
         

@@ -440,21 +440,18 @@ U_CAPI const char* const* U_EXPORT2
 uloc_getISOCountries(void);
 
 /**
- * Gets the directory containing the locale data files.
+ * Deprecated 1999dec14 - Gets the directory containing the locale data files.
  *
  * @return the locale data file directory
  */
-U_CAPI const char* U_EXPORT2
-uloc_getDataDirectory(void);
+#define uloc_getDataDirectory u_getDataDirectory
 
 /**
- * Sets the directory containing the locale data files.
+ * Deprecated 1999dec14 - Sets the directory containing the locale data files.
  *
  * @return the new directory to fetch locale data from
  */
-
-U_CAPI void U_EXPORT2
-uloc_setDataDirectory(const char* newDirectory);
+#define uloc_setDataDirectory u_setDataDirectory
 
 /*Internal function */
 int32_t U_EXPORT2
