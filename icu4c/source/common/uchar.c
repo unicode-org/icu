@@ -19,12 +19,15 @@
 *   06/20/2000  helena      OS/400 port changes; mostly typecast.
 ********************************************************************************************
 */
+
 #include "unicode/utypes.h"
-#include "umutex.h"
 #include "unicode/uchar.h"
 #include "unicode/udata.h"
+#include "unicode/uloc.h"
+#include "umutex.h"
 #include "cmemory.h"
 #include "cstring.h"
+#include "ustr_imp.h"
 
 /* dynamically loaded Unicode character properties -------------------------- */
 
@@ -216,7 +219,10 @@ static uint16_t indexes[8];
 enum {
     INDEX_STAGE_2_BITS,
     INDEX_STAGE_3_BITS,
-    INDEX_EXCEPTIONS
+    INDEX_EXCEPTIONS,
+    INDEX_STAGE_3_INDEX,
+    INDEX_PROPS,
+    INDEX_UCHARS
 };
 
 /* access values calculated from indexes */
@@ -294,8 +300,8 @@ enum {
     EXC_DIGIT_VALUE,
     EXC_NUMERIC_VALUE,
     EXC_DENOMINATOR_VALUE,
-
-    EXC_MIRROR_MAPPING
+    EXC_MIRROR_MAPPING,
+    EXC_SPECIAL_CASING
 };
 
 enum {
@@ -310,16 +316,19 @@ enum {
 /* getting a uint32_t properties word from the data */
 #define HAVE_DATA (havePropsData>0 || (havePropsData==0 && loadPropsData()>0))
 #define VALIDATE(c) (((uint32_t)(c))<=0x10ffff && HAVE_DATA)
+#define GET_PROPS_UNSAFE(c) \
+    props32Table[ \
+        propsTable[ \
+            propsTable[ \
+                propsTable[8+((c)>>stage23Bits)]+ \
+                ((c)>>indexes[INDEX_STAGE_3_BITS]&stage2Mask)]+ \
+            ((c)&stage3Mask) \
+        ] \
+    ]
 #define GET_PROPS(c) \
     (((uint32_t)(c))<=0x10ffff ? \
         HAVE_DATA ? \
-            props32Table[ \
-                propsTable[ \
-                    propsTable[ \
-                        propsTable[8+(c>>stage23Bits)]+ \
-                        (c>>indexes[INDEX_STAGE_3_BITS]&stage2Mask)]+ \
-                    (c&stage3Mask)] \
-            ] \
+            GET_PROPS_UNSAFE(c) \
         : (c)<=0x9f ? \
             staticProps32Table[c] \
         : 0 \
@@ -904,22 +913,364 @@ void u_getUnicodeVersion(UVersionInfo versionArray) {
 
 /* string casing ------------------------------------------------------------ */
 
-U_CAPI int32_t U_EXPORT2
-u_strToUpper(const UChar *src, int32_t srcLength,
-             UChar *dest, int32_t destCapacity,
-             const char *locale,
-             UErrorCode *pErrorCode) {
-    /* ### TODO for ICU 1.8 */
-    *pErrorCode=U_UNSUPPORTED_ERROR;
-    return 0;
+/*
+ * These internal string case mapping functions are here instead of ustring.c
+ * because we need efficient access to the character properties.
+ */
+
+enum {
+    LOC_ROOT,
+    LOC_TURKISH
+};
+
+U_CFUNC int32_t
+u_internalStrToLower(UChar *dest, int32_t destCapacity,
+                     const UChar *src, int32_t srcLength,
+                     const char *locale,
+                     GrowBuffer *growBuffer, void *context,
+                     UErrorCode *pErrorCode) {
+    UChar buffer[UTF_MAX_CHAR_LENGTH];
+    uint32_t *pe;
+    const UChar *uchars, *u;
+    uint32_t props, firstExceptionValue;
+    int32_t srcIndex, destIndex, i, loc;
+    UChar32 c;
+    UBool canGrow;
+
+    /* do not attempt to grow if there is no growBuffer function or if it has failed before */
+    canGrow= growBuffer!=NULL;
+
+    /* test early, once, if there is a data file */
+    if(!HAVE_DATA) {
+        /*
+         * If we do not have real character properties data,
+         * then we only do a fixed-length ASCII case mapping.
+         */
+        if(srcLength<=destCapacity ||
+            /* attempt to grow the buffer */
+            (canGrow && (canGrow=growBuffer(context, &dest, &destCapacity, srcLength, 0)))
+        ) {
+            destIndex=srcLength;
+            *pErrorCode=U_USING_DEFAULT_ERROR;
+        } else {
+            destIndex=destCapacity;
+            *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
+        }
+
+        for(srcIndex=0; srcIndex<destIndex; ++srcIndex) {
+            c=src[srcIndex];
+            if((uint32_t)(c-0x41)<26) {
+                dest[srcIndex]=(UChar)(c+0x20);
+            } else {
+                dest[srcIndex]=(UChar)c;
+            }
+        }
+
+        return srcLength;
+    }
+
+    /* set up local variables */
+    uchars=(const UChar *)(props32Table+indexes[INDEX_UCHARS]);
+    if(locale==NULL) {
+        locale=uloc_getDefault();
+    }
+    if(locale[0]=='t' && locale[1]=='r' && (locale[2]=='_' || locale[2]==0)) {
+        loc=LOC_TURKISH;
+    } else {
+        loc=LOC_ROOT;
+    }
+
+    /* case mapping loop */
+    srcIndex=destIndex=0;
+    while(srcIndex<srcLength) {
+        UTF_NEXT_CHAR(src, srcIndex, srcLength, c);
+        props=GET_PROPS_UNSAFE(c);
+        if(!PROPS_VALUE_IS_EXCEPTION(props)) {
+            if((1UL<<GET_CATEGORY(props))&(1UL<<U_UPPERCASE_LETTER|1UL<<U_TITLECASE_LETTER)) {
+                c+=GET_SIGNED_VALUE(props);
+            }
+        } else {
+            pe=GET_EXCEPTIONS(props);
+            firstExceptionValue=*pe;
+            if(HAVE_EXCEPTION_VALUE(firstExceptionValue, EXC_SPECIAL_CASING)) {
+                i=EXC_SPECIAL_CASING;
+                ++pe;
+                ADD_EXCEPTION_OFFSET(firstExceptionValue, i, pe);
+                props=*pe;
+                /* fill u and i with the case mapping result string */
+                if(props&0x80000000) {
+                    /* use hardcoded conditions and mappings */
+                    u=buffer;
+                    if(c==0x49) {
+                        if(loc==LOC_TURKISH) {
+                            /* turkish: I maps to dotless i */
+                            buffer[0]=0x131;
+                        } else {
+                            /* other languages: I maps to i */
+                            buffer[0]=0x69;
+                        }
+                        i=1;
+                    } else if(c==0x3a3) {
+                        /* greek capital sigma maps depending on whether the following character is a letter (L*) */
+                        /* get the following character and check its general category */
+                        i=srcIndex;
+                        UTF_NEXT_CHAR(src, i, srcLength, c);
+                        if( /* is letter: is L* (Lu, Ll, Lt, Lm, or Lo) */
+                            (1UL<<GET_CATEGORY(GET_PROPS_UNSAFE(c)))&
+                            (1UL<<U_UPPERCASE_LETTER|1UL<<U_LOWERCASE_LETTER|1UL<<U_TITLECASE_LETTER|1UL<<U_MODIFIER_LETTER|1UL<<U_OTHER_LETTER)
+                        ) {
+                            /* NONFINAL: the following is a letter */
+                            buffer[0]=0x3c3; /* greek small sigma */
+                        } else {
+                            /* FINAL: the following is not a letter */
+                            buffer[0]=0x3c2; /* greek small final sigma */
+                        }
+                        i=1;
+                    } else {
+                        /* no known conditional special case mapping, output the code point itself */
+                        i=0;
+                        UTF_APPEND_CHAR_UNSAFE(buffer, i, c);
+                    }
+                } else {
+                    /* get the special case mapping string from the data file */
+                    u=uchars+(props&0xffff);
+                    i=(int32_t)(*u++)&0x1f;
+                }
+
+                /* output this case mapping result string */
+                if( (destIndex+i)<=destCapacity ||
+                    /* attempt to grow the buffer */
+                    (canGrow && (canGrow=growBuffer(context, &dest, &destCapacity, destCapacity+2*(srcLength-srcIndex+i)+20, destIndex)))
+                ) {
+                    /* copy the case mapping to the destination */
+                    while(i>0) {
+                        dest[destIndex++]=*u++;
+                        --i;
+                    }
+                } else {
+                    /* buffer overflow */
+                    /* copy as much as possible */
+                    while(destIndex<destCapacity) {
+                        dest[destIndex++]=*u++;
+                        --i;
+                    }
+                    /* keep incrementing the destIndex for preflighting */
+                    destIndex+=i;
+                }
+
+                /* do not fall through to the output of c */
+                continue;
+            } else if(HAVE_EXCEPTION_VALUE(firstExceptionValue, EXC_LOWERCASE)) {
+                i=EXC_LOWERCASE;
+                ++pe;
+                ADD_EXCEPTION_OFFSET(firstExceptionValue, i, pe);
+                c=(UChar32)*pe;
+            }
+        }
+
+        /* handle 1:1 code point mappings from UnicodeData.txt */
+        if(c<=0xffff) {
+            if( destIndex<destCapacity ||
+                /* attempt to grow the buffer */
+                (canGrow && (canGrow=growBuffer(context, &dest, &destCapacity, destCapacity+2*(srcLength-srcIndex+1)+20, destIndex)))
+            ) {
+                dest[destIndex++]=(UChar)c;
+            } else {
+                /* buffer overflow */
+                /* keep incrementing the destIndex for preflighting */
+                ++destIndex;
+            }
+        } else {
+            if( (destIndex+2)<=destCapacity ||
+                /* attempt to grow the buffer */
+                (canGrow && (canGrow=growBuffer(context, &dest, &destCapacity, destCapacity+2*(srcLength-srcIndex+2)+20, destIndex)))
+            ) {
+                dest[destIndex++]=(UChar)(0xd7c0+(c>>10));
+                dest[destIndex++]=(UChar)(0xdc00|(c&0x3ff));
+            } else {
+                /* buffer overflow */
+                /* write the first surrogate if possible */
+                if(destIndex<destCapacity) {
+                    dest[destIndex]=(UChar)(0xd7c0+(c>>10));
+                }
+                /* keep incrementing the destIndex for preflighting */
+                destIndex+=2;
+            }
+        }
+    }
+
+    if(destIndex>destCapacity) {
+        *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
+    }
+    return destIndex;
 }
 
-U_CAPI int32_t U_EXPORT2
-u_strToLower(const UChar *src, int32_t srcLength,
-             UChar *dest, int32_t destCapacity,
-             const char *locale,
-             UErrorCode *pErrorCode) {
-    /* ### TODO for ICU 1.8 */
-    *pErrorCode=U_UNSUPPORTED_ERROR;
-    return 0;
+U_CFUNC int32_t
+u_internalStrToUpper(UChar *dest, int32_t destCapacity,
+                     const UChar *src, int32_t srcLength,
+                     const char *locale,
+                     GrowBuffer *growBuffer, void *context,
+                     UErrorCode *pErrorCode) {
+    UChar buffer[UTF_MAX_CHAR_LENGTH];
+    uint32_t *pe;
+    const UChar *uchars, *u;
+    uint32_t props, firstExceptionValue;
+    int32_t srcIndex, destIndex, i, loc;
+    UChar32 c;
+    UBool canGrow;
+
+    /* do not attempt to grow if there is no growBuffer function or if it has failed before */
+    canGrow= growBuffer!=NULL;
+
+    /* test early, once, if there is a data file */
+    if(!HAVE_DATA) {
+        /*
+         * If we do not have real character properties data,
+         * then we only do a fixed-length ASCII case mapping.
+         */
+        if(srcLength<=destCapacity ||
+            /* attempt to grow the buffer */
+            (canGrow && (canGrow=growBuffer(context, &dest, &destCapacity, srcLength, 0)))
+        ) {
+            destIndex=srcLength;
+            *pErrorCode=U_USING_DEFAULT_ERROR;
+        } else {
+            destIndex=destCapacity;
+            *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
+        }
+
+        for(srcIndex=0; srcIndex<destIndex; ++srcIndex) {
+            c=src[srcIndex];
+            if((uint32_t)(c-0x61)<26) {
+                dest[srcIndex]=(UChar)(c-0x20);
+            } else {
+                dest[srcIndex]=(UChar)c;
+            }
+        }
+
+        return srcLength;
+    }
+
+    /* set up local variables */
+    uchars=(const UChar *)(props32Table+indexes[INDEX_UCHARS]);
+    if(locale==NULL) {
+        locale=uloc_getDefault();
+    }
+    if(locale[0]=='t' && locale[1]=='r' && (locale[2]=='_' || locale[2]==0)) {
+        loc=LOC_TURKISH;
+    } else {
+        loc=LOC_ROOT;
+    }
+
+    /* case mapping loop */
+    srcIndex=destIndex=0;
+    while(srcIndex<srcLength) {
+        UTF_NEXT_CHAR(src, srcIndex, srcLength, c);
+        props=GET_PROPS_UNSAFE(c);
+        if(!PROPS_VALUE_IS_EXCEPTION(props)) {
+            if(GET_CATEGORY(props)==U_LOWERCASE_LETTER) {
+                c-=GET_SIGNED_VALUE(props);
+            }
+        } else {
+            pe=GET_EXCEPTIONS(props);
+            firstExceptionValue=*pe;
+            if(HAVE_EXCEPTION_VALUE(firstExceptionValue, EXC_SPECIAL_CASING)) {
+                i=EXC_SPECIAL_CASING;
+                ++pe;
+                ADD_EXCEPTION_OFFSET(firstExceptionValue, i, pe);
+                props=*pe;
+                /* fill u and i with the case mapping result string */
+                if(props&0x80000000) {
+                    /* use hardcoded conditions and mappings */
+                    u=buffer;
+                    if(c==0x69) {
+                        if(loc==LOC_TURKISH) {
+                            /* turkish: i maps to dotted I */
+                            buffer[0]=0x130;
+                        } else {
+                            /* other languages: i maps to I */
+                            buffer[0]=0x49;
+                        }
+                        i=1;
+                    } else {
+                        /* no known conditional special case mapping, output the code point itself */
+                        i=0;
+                        UTF_APPEND_CHAR_UNSAFE(buffer, i, c);
+                    }
+                } else {
+                    /* get the special case mapping string from the data file */
+                    u=uchars+(props&0xffff);
+                    i=(int32_t)*u++;
+
+                    /* skip the lowercase result string */
+                    u+=i&0x1f;
+                    i=(i>>5)&0x1f;
+                }
+
+                /* output this case mapping result string */
+                if( (destIndex+i)<=destCapacity ||
+                    /* attempt to grow the buffer */
+                    (canGrow && (canGrow=growBuffer(context, &dest, &destCapacity, destCapacity+2*(srcLength-srcIndex+i)+20, destIndex)))
+                ) {
+                    /* copy the case mapping to the destination */
+                    while(i>0) {
+                        dest[destIndex++]=*u++;
+                        --i;
+                    }
+                } else {
+                    /* buffer overflow */
+                    /* copy as much as possible */
+                    while(destIndex<destCapacity) {
+                        dest[destIndex++]=*u++;
+                        --i;
+                    }
+                    /* keep incrementing the destIndex for preflighting */
+                    destIndex+=i;
+                }
+
+                /* do not fall through to the output of c */
+                continue;
+            } else if(HAVE_EXCEPTION_VALUE(firstExceptionValue, EXC_UPPERCASE)) {
+                i=EXC_UPPERCASE;
+                ++pe;
+                ADD_EXCEPTION_OFFSET(firstExceptionValue, i, pe);
+                c=(UChar32)*pe;
+            }
+        }
+
+        /* handle 1:1 code point mappings from UnicodeData.txt */
+        if(c<=0xffff) {
+            if( destIndex<destCapacity ||
+                /* attempt to grow the buffer */
+                (canGrow && (canGrow=growBuffer(context, &dest, &destCapacity, destCapacity+2*(srcLength-srcIndex+1)+20, destIndex)))
+            ) {
+                dest[destIndex++]=(UChar)c;
+            } else {
+                /* buffer overflow */
+                /* keep incrementing the destIndex for preflighting */
+                ++destIndex;
+            }
+        } else {
+            if( (destIndex+2)<=destCapacity ||
+                /* attempt to grow the buffer */
+                (canGrow && (canGrow=growBuffer(context, &dest, &destCapacity, destCapacity+2*(srcLength-srcIndex+2)+20, destIndex)))
+            ) {
+                dest[destIndex++]=(UChar)(0xd7c0+(c>>10));
+                dest[destIndex++]=(UChar)(0xdc00|(c&0x3ff));
+            } else {
+                /* buffer overflow */
+                /* write the first surrogate if possible */
+                if(destIndex<destCapacity) {
+                    dest[destIndex]=(UChar)(0xd7c0+(c>>10));
+                }
+                /* keep incrementing the destIndex for preflighting */
+                destIndex+=2;
+            }
+        }
+    }
+
+    if(destIndex>destCapacity) {
+        *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
+    }
+    return destIndex;
 }
