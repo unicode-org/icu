@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/lang/UCharacter.java,v $ 
-* $Date: 2003/02/11 01:18:45 $ 
-* $Revision: 1.64 $
+* $Date: 2003/02/12 01:50:45 $ 
+* $Revision: 1.65 $
 *
 *******************************************************************************
 */
@@ -1977,7 +1977,7 @@ public final class UCharacter
         if (europeannumeric >= 0) {
             return europeannumeric;
         }
-        return (getNumericType(props) == NumericType.DECIMAL) ? -2 : -1;
+        return -2;
     }
     
     /**
@@ -2148,11 +2148,11 @@ public final class UCharacter
     {
         return ((1 << getType(ch)) 
                & ((1 << UCharacterCategory.UPPERCASE_LETTER) 
-               | (1 << UCharacterCategory.LOWERCASE_LETTER)
-               | (1 << UCharacterCategory.TITLECASE_LETTER)
-               | (1 << UCharacterCategory.MODIFIER_LETTER)
-               | (1 << UCharacterCategory.OTHER_LETTER))
-               | (1 << UCharacterCategory.DECIMAL_DIGIT_NUMBER)) != 0;
+                  | (1 << UCharacterCategory.LOWERCASE_LETTER)
+                  | (1 << UCharacterCategory.TITLECASE_LETTER)
+                  | (1 << UCharacterCategory.MODIFIER_LETTER)
+                  | (1 << UCharacterCategory.OTHER_LETTER)
+                  | (1 << UCharacterCategory.DECIMAL_DIGIT_NUMBER))) != 0;
     }
         
     /**
