@@ -50,4 +50,12 @@ $BackOneCluster;
 
 !!safe_reverse;
 
-$BackOneCluster; 
+# rule 6, 7, 8
+$V+ $L;
+ 
+## -------------------------------------------------
+
+!!safe_forward;
+
+# rule 6, 7, 8
+$V+ $T;

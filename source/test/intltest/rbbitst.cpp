@@ -589,7 +589,6 @@ void RBBITest::runIndexedTest( int32_t index, UBool exec, const char* &name, cha
              if(exec) TestWordBoundary();                 break;
         case 14: name = "TestLineBreaks";
              if(exec) TestLineBreaks();                   break;
-        /***
         case 15: name = "TestSentBreaks";
              if(exec) TestSentBreaks();                 break;
         case 16: name = "TestExtended";
@@ -603,7 +602,6 @@ void RBBITest::runIndexedTest( int32_t index, UBool exec, const char* &name, cha
 #endif
              }
              break;
-        ***/
         default: name = ""; break; //needed to end loop
     }
 }
@@ -3005,6 +3003,74 @@ static int32_t  getIntParam(UnicodeString name, UnicodeString &params, int32_t d
 }
 #endif
 
+static void testBreakBoundPreceding(RBBITest *test, UnicodeString ustr, 
+                                    BreakIterator *bi,
+                                    int expected[], 
+                                    int expectedcount)
+{
+    int count = 0;
+    int i = 0;
+    int forward[20];
+    bi->setText(ustr);
+    for (i = bi->first(); i != BreakIterator::DONE; i = bi->next()) {
+        forward[count] = i;
+        if (count < expectedcount && expected[count] != i) {
+            test->errln("break forward test failed: expected %d but got %d", 
+                        expected[count], i);
+            break;
+        }
+        count ++;
+    }
+    if (count != expectedcount) {
+        printStringBreaks(ustr, expected, expectedcount);
+        test->errln("break test failed: missed %d match", 
+                    expectedcount - count);
+        return;
+    }
+    // testing boundaries
+    for (i = 1; i < expectedcount; i ++) {
+        int j = expected[i - 1];
+        if (!bi->isBoundary(j)) {
+            printStringBreaks(ustr, expected, expectedcount);
+            test->errln("Expected boundary at position %d", j);
+            return;
+        }
+        for (j = expected[i - 1] + 1; j < expected[i]; j ++) {
+            if (bi->isBoundary(j)) {
+                printStringBreaks(ustr, expected, expectedcount);
+                test->errln("Not expecting boundary at position %d", j);
+                return;
+            }
+        }
+    }
+
+    for (i = bi->last(); i != BreakIterator::DONE; i = bi->previous()) {
+        count --;
+        if (forward[count] != i) {
+            test->errln("happy break test reverse failed: expected %d but got %d", 
+                        forward[count], i);
+            break;
+        }
+    }
+    if (count != 0) {
+        printStringBreaks(ustr, expected, expectedcount);
+        test->errln("happy break test failed: missed a match");
+        return;
+    }
+
+    // testing preceding
+    for (i = 0; i < expectedcount - 1; i ++) {
+        int j = expected[i] + 1;
+        for (; j <= expected[i + 1]; j ++) {
+            if (bi->preceding(j) != expected[i]) {
+                printStringBreaks(ustr, expected, expectedcount);
+                test->errln("Not expecting backwards boundary at position %d", j);
+                return;
+            }
+        }
+    }    
+}
+
 void RBBITest::TestWordBreaks(void)
 {
     // <data><>\u1d4a\u206e<?>\u0603\U0001d7ff<>\u2019<></data>
@@ -3015,6 +3081,7 @@ void RBBITest::TestWordBreaks(void)
     UChar         str[25]; 
     char          *strlist[] = 
     {
+    "\\u200e\\U000e0072\\u0a4b\\U000e003f\\ufd2b\\u2027\\u002e\\u002e",
     "\\u0602\\u2019\\ua191\\U000e0063\\u0a4c\\u003a\\ub4b5\\u003a\\u827f\\u002e",
     "\\u7f1f\\uc634\\u65f8\\u0944\\u04f2\\uacdf\\u1f9c\\u05f4\\u002e",
     "\\U000e0042\\u002e\\u0fb8\\u09ef\\u0ed1\\u2044",
@@ -3051,13 +3118,13 @@ void RBBITest::TestWordBreaks(void)
     };
     int loop;
     for (loop = 0; loop < (sizeof(strlist) / sizeof(char *)); loop ++) {
+        // printf("looping %d\n", loop);
         u_unescape(strlist[loop], str, 25);
         UnicodeString ustr(str);
         // RBBICharMonkey monkey;
         RBBIWordMonkey monkey;
 
         int expected[20];
-        int forward[20];
         int expectedcount = 0;
 
         monkey.setText(ustr);
@@ -3066,33 +3133,7 @@ void RBBITest::TestWordBreaks(void)
             expected[expectedcount ++] = i;
         }
 
-        int count = 0;
-        bi->setText(ustr);
-        for (i = bi->first(); i != BreakIterator::DONE; i = bi->next()) {
-            forward[count] = i;
-            if (count > 20 || expected[count] != i) {
-                 errln("happy break forward test failed: expected %d but got %d", 
-                       expected[count], i);
-            }
-            count ++;
-        }
-        if (count != expectedcount) {
-            printStringBreaks(ustr, expected, expectedcount);
-            errln("happy break test failed: missed a match");
-            break;
-        }
-        for (i = bi->last(); i != BreakIterator::DONE; i = bi->previous()) {
-            count --;
-            if (forward[count] != i) {
-                printStringBreaks(ustr, expected, expectedcount);
-                errln("happy break test reverse failed: expected %d but got %d", 
-                      forward[count], i);
-                break;
-            }
-        }
-        if (count != 0) {
-            errln("happy break test failed: missed a match");
-        }
+        testBreakBoundPreceding(this, ustr, bi, expected, expectedcount);
     }
 }
 
@@ -3105,7 +3146,9 @@ void RBBITest::TestWordBoundary(void)
     BreakIterator *bi = BreakIterator::createWordInstance(locale, status);
     UChar         str[20]; 
     char          *strlist[] = 
-    {"\\U000e0042\\u002e\\u0fb8\\u09ef\\u0ed1\\u2044",
+    {
+    "\\u200e\\U000e0072\\u0a4b\\U000e003f\\ufd2b\\u2027\\u002e\\u002e",
+    "\\U000e0042\\u002e\\u0fb8\\u09ef\\u0ed1\\u2044",
     "\\u003b\\u024a\\u102e\\U000e0071\\u0600",
     "\\u2027\\U000e0067\\u0a47\\u00b7",
     "\\u1fcd\\u002c\\u07aa\\u0027\\u11b0",
@@ -3136,6 +3179,7 @@ void RBBITest::TestWordBoundary(void)
     };
     int loop;
     for (loop = 0; loop < (sizeof(strlist) / sizeof(char *)); loop ++) {
+        // printf("looping %d\n", loop);
         u_unescape(strlist[loop], str, 20);
         UnicodeString ustr(str);
         int forward[20];
@@ -3153,7 +3197,7 @@ void RBBITest::TestWordBoundary(void)
                         printStringBreaks(ustr, forward, count);
                         errln("happy boundary test failed: expected %d not a boundary", 
                                j);
-                        break;
+                        return;
                     }
                 }
             }
@@ -3161,7 +3205,7 @@ void RBBITest::TestWordBoundary(void)
                 printStringBreaks(ustr, forward, count);
                 errln("happy boundary test failed: expected %d a boundary", 
                        i);
-                break;
+                return;
             }
             prev = i;
         }
@@ -3176,6 +3220,9 @@ void RBBITest::TestLineBreaks(void)
     UChar         str[20]; 
     char          *strlist[] = 
     {
+     "\\u169b\\U000e0130\\u002d\\u1041\\u0f3d\\u0abf\\u00b0\\u31fb\\u00a0\\u002d\\u02c8\\u003b",
+     "\\u2762\\u1680\\u002d\\u2028\\u0027\\u01dc\\ufe56\\u003a\\u000a\\uffe6\\u29fd\\u0020\\u30ee\\u007c\\U0001d178\\u0af1\\u0085",
+     "\\u3010\\u200b\\u2029\\ufeff\\ufe6a\\u275b\\U000e013b\\ufe37\\u24d4\\u002d\\u1806\\u256a\\u1806\\u247c\\u0085\\u17ac",
      "\\u99ab\\u0027\\u003b\\u2026\\ueaf0\\u0020\\u0020\\u0313\\u0020\\u3099\\uff09\\u208e\\u2011\\u2007\\u2060\\u000a\\u0020\\u0020\\u300b\\u0bf9",
      "\\u1806\\u060d\\u30f5\\u00b4\\u17e9\\u2544\\u2028\\u2024\\u2011\\u20a3\\u002d\\u09cc\\u1782\\u000d\\uff6f\\u0025",
      "\\u002f\\uf22e\\u1944\\ufe3d\\u0020\\u206f\\u31b3\\u2014\\u002d\\u2025\\u0f0c\\u0085\\u2763",
@@ -3207,7 +3254,6 @@ void RBBITest::TestLineBreaks(void)
         RBBILineMonkey monkey;
 
         int expected[20];
-        int forward[20];
         int expectedcount = 0;
 
         monkey.setText(ustr);
@@ -3216,35 +3262,7 @@ void RBBITest::TestLineBreaks(void)
             expected[expectedcount ++] = i;
         }
 
-        int count = 0;
-        bi->setText(ustr);
-        for (i = bi->first(); i != BreakIterator::DONE; i = bi->next()) {
-            forward[count] = i;
-            if (count < expectedcount && expected[count] != i) {
-                 errln("happy break forward test failed: expected %d but got %d", 
-                       expected[count], i);
-            }
-            count ++;
-        }
-        if (count != expectedcount) {
-            printStringBreaks(ustr, expected, expectedcount);
-            errln("happy break test failed: missed %d match", 
-                  expectedcount - count);
-            break;
-        }
-         for (i = bi->last(); i != BreakIterator::DONE; i = bi->previous()) {
-            count --;
-            if (forward[count] != i) {
-                printStringBreaks(ustr, expected, expectedcount);
-                errln("happy break test reverse failed: expected %d but got %d", 
-                      forward[count], i);
-                break;
-            }
-        }
-        if (count != 0) {
-            errln("happy break test failed: missed a match");
-            break;
-        }
+        testBreakBoundPreceding(this, ustr, bi, expected, expectedcount);
     }
 }
 
@@ -3266,12 +3284,10 @@ void RBBITest::TestSentBreaks(void)
      "Don't rock the boat.\\u2029Because I am the daddy, that is why. Not on my time (el timo.)!",
     };
     int loop;
+    int forward[100];
     for (loop = 0; loop < (sizeof(strlist) / sizeof(char *)); loop ++) {
-        printf("looping %d\n", loop);
         u_unescape(strlist[loop], str, 100);
         UnicodeString ustr(str);
-        
-        int forward[20];
 
         int count = 0;
         bi->setText(ustr);
