@@ -1,7 +1,7 @@
 /*****************************************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/format/NumberRegression.java,v $ 
- * $Date: 2002/09/14 21:36:28 $ 
- * $Revision: 1.12 $
+ * $Date: 2003/04/19 05:51:09 $ 
+ * $Revision: 1.13 $
  *
  *****************************************************************************************
  **/
@@ -1002,7 +1002,9 @@ public class NumberRegression extends com.ibm.icu.dev.test.TestFmwk {
             
             String result2 = fmt2.format(1.111);
             
-            if (!result1.equals(result2)) {
+            // NOTE: en_IN is a special case (ChoiceFormat currency display name)
+            if (!result1.equals(result2) &&
+                !locales[i].toString().equals("en_IN")) {
                 errln("Results for " + locales[i] + " differ: " +
                       result1 + " vs " + result2);
             }
