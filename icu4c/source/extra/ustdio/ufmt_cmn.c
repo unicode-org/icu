@@ -18,6 +18,7 @@
 *******************************************************************************
 */
 
+#include <stdlib.h>
 #include "ufmt_cmn.h"
 #include "unicode/uchar.h"
 #include "unicode/ucnv.h"
