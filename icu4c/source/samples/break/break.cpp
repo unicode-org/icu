@@ -30,9 +30,13 @@ void printTextRange( BreakIterator& iterator,
   UnicodeString  s;
   strIter->getText(s);
 
-  cout << " " << start << " " << end << " |" ;
-  printUnicodeString(s);
-  cout << "|" << '\n';
+  cout << " " << start << " " << end << '\t';
+  printUnicodeString(UnicodeString(s, 0, start));
+  cout << '|';
+  printUnicodeString(UnicodeString(s, start, end-start));
+  cout << '|';
+  printUnicodeString(UnicodeString(s, end));
+  cout << '\n';
   delete strIter;
 }
 
