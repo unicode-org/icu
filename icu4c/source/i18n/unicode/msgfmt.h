@@ -500,24 +500,13 @@ private:
     int32_t             fMaxOffset;
 
     /**
-     * Internal routine used by format.
-     * @param recursionProtection Initially zero. Bits 0..9 are used to indicate
-     * that a parameter has already been seen, to avoid recursion.  Currently
-     * unused.
-     */
-    static const int32_t         fgListLength;
-    static const UnicodeString     fgTypeList[];
-    static const UnicodeString     fgModifierList[];
-    static const UnicodeString     fgDateModifierList[];
-
-    /**
      * Finds the word s, in the keyword list and returns the located index.
      * @param s the keyword to be searched for.
      * @param list the list of keywords to be searched with.
      * @return the index of the list which matches the keyword s.
      */
     static int32_t findKeyword( const UnicodeString& s,
-                            const UnicodeString* list);
+                            const UChar **list);
 
     /**
      * Formats the array of arguments and copies the result into the result buffer,
