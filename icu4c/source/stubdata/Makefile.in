@@ -25,11 +25,11 @@ CLEANFILES = *~ $(DEPS)
 ## Target information
 
 ifneq ($(ENABLE_STATIC),)
-TARGET = lib$(ICUPREFIX)data$(ICULIBSUFFIX).a
+TARGET = $(LIBICU)data$(ICULIBSUFFIX).a
 endif
 
 ifneq ($(ENABLE_SHARED),)
-SO_TARGET = lib$(ICUPREFIX)data$(ICULIBSUFFIX)$(STUB_SUFFIX).$(SO)
+SO_TARGET = $(LIBICU)data$(ICULIBSUFFIX)$(STUB_SUFFIX).$(SO)
 ALL_SO_TARGETS = $(SO_TARGET) $(MIDDLE_SO_TARGET) $(FINAL_SO_TARGET) $(BATCH_STUB_TARGET)
 endif
 
@@ -110,11 +110,11 @@ endif
 
 ifneq ($(ENABLE_SHARED),)
 $(FINAL_SO_TARGET): $(OBJECTS)
-	$(SHLIB.c) $(LD_SONAME) -o $@ $^ $(LIBS)
+	$(SHLIB.c) $(LD_SONAME) $(OUTOPT)$@ $^ $(LIBS)
 
 ifeq ($(OS390BATCH),1)
 $(BATCH_STUB_TARGET): $(OBJECTS)
-	$(SHLIB.c) $(LD_SONAME) -o $@ $^ $(LIBS)
+	$(SHLIB.c) $(LD_SONAME) $(OUTOPT)$@ $^ $(LIBS)
 endif   # OS390BATCH
 endif
 

@@ -15,7 +15,7 @@ include $(top_builddir)/icudefs.mk
 
 SECTION = 8
 
-MAN_FILES = $(TARGET).$(SECTION)
+MAN_FILES = $(TARGET:$(EXEEXT)=).$(SECTION)
 
 ## Build directory information
 subdir = tools/gentz
@@ -29,7 +29,7 @@ TZALIAS=$(srcdir)/tz.alias
 CLEANFILES = *~ $(DEPS) $(RES_FILES) $(TEST_FILES) $(MAN_FILES)
 
 ## Target information
-TARGET = gentz
+TARGET = gentz$(EXEEXT)
 
 CPPFLAGS += -I$(top_builddir)/common -I$(top_srcdir)/common -I$(top_srcdir)/i18n -I$(srcdir)/../toolutil
 LIBS = $(LIBICUTOOLUTIL) $(LIBICUUC) $(DEFAULT_LIBS) $(LIB_M)
@@ -65,16 +65,16 @@ install-man: $(MAN_FILES)
 	$(MKINSTALLDIRS) $(DESTDIR)$(mandir)/man$(SECTION)
 	$(INSTALL_DATA) $< $(DESTDIR)$(mandir)/man$(SECTION)
 
-$(TARGET).$(SECTION): $(srcdir)/$(TARGET).$(SECTION).in
+%.$(SECTION): $(srcdir)/%.$(SECTION).in
 	cd $(top_builddir) \
 	 && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
 
 # build postscript and pdf formats
-$(TARGET).ps: $(TARGET).$(SECTION)
-	groff -man < $< > $@
+#$(TARGET).ps: $(TARGET).$(SECTION)
+#	groff -man < $< > $@
 
-$(TARGET).pdf: $(TARGET).ps
-	ps2pdf $< $@
+#$(TARGET).pdf: $(TARGET).ps
+#	ps2pdf $< $@
 
 dist-local:
 
@@ -92,7 +92,7 @@ Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
 	 && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
 
 $(TARGET) : $(OBJECTS)
-	$(LINK.cc) -o $@ $^ $(LIBS) 
+	$(LINK.cc) $(OUTOPT)$@ $^ $(LIBS) 
 
 ifeq (,$(MAKECMDGOALS))
 -include $(DEPS)
