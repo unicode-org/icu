@@ -23,6 +23,7 @@ static void TestFilter(void);
 static void TestOpenInverse(void);
 static void TestClone(void);
 static void TestRegisterUnregister(void);
+static void TestExtractBetween(void);
 
 static void _expectRules(const char*, const char*, const char*);
 static void _expect(const UTransliterator* trans, const char* cfrom, const char* cto);
@@ -38,6 +39,7 @@ addUTransTest(TestNode** root) {
     TEST(TestOpenInverse);
     TEST(TestClone);
     TEST(TestRegisterUnregister);
+    TEST(TestExtractBetween);
 }
 
 /*------------------------------------------------------------------
@@ -106,11 +108,19 @@ static void Xcopy(UReplaceable* rep, int32_t start, int32_t limit, int32_t dest)
     x->text = newText;
 }
 
+/* UReplaceableCallbacks callback */
+static void Xextract(UReplaceable* rep, int32_t start, int32_t limit, UChar* dst) {
+    XReplaceable* x = (XReplaceable*)rep;
+    int32_t len = limit - start;
+    u_strncpy(dst, x->text, len);
+}
+
 static void InitXReplaceableCallbacks(UReplaceableCallbacks* callbacks) {
     callbacks->length = Xlength;
     callbacks->charAt = XcharAt;
     callbacks->char32At = Xchar32At;
     callbacks->replace = Xreplace;
+    callbacks->extract = Xextract;
     callbacks->copy = Xcopy;
 }
 
@@ -418,6 +428,24 @@ static void TestFilter() {
 
  exit:
     utrans_close(hex);
+}
+
+/**
+ * Test the UReplaceableCallback extractBetween support.  We use a
+ * transliterator known to rely on this call.
+ */
+static void TestExtractBetween() {
+
+    UTransliterator *trans;
+    UErrorCode status = U_ZERO_ERROR;
+    UParseError parseErr;
+
+    trans = utrans_open("Lower", UTRANS_FORWARD, NULL, -1,
+                        &parseErr, &status);
+
+    _expect(trans, "ABC", "abc");
+
+    utrans_close(trans);
 }
 
 static void _expectRules(const char* crules,

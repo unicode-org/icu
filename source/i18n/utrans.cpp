@@ -49,6 +49,10 @@ public:
                                       UTextOffset limit,
                                       const UnicodeString& text);
 
+    virtual void extractBetween(UTextOffset start,
+                                UTextOffset limit,
+                                UnicodeString& target) const;
+
     virtual void copy(int32_t start, int32_t limit, int32_t dest);
 
 protected:
@@ -98,6 +102,13 @@ void ReplaceableGlue::handleReplaceBetween(UTextOffset start,
     }
     text.extract(0, len, buf);
     (*func->replace)(rep, start, limit, buf, len);
+}
+
+void ReplaceableGlue::extractBetween(UTextOffset start,
+                                     UTextOffset limit,
+                                     UnicodeString& target) const {
+    (*func->extract)(rep, start, limit, target.getBuffer(limit-start));
+    target.releaseBuffer(limit-start);
 }
 
 void ReplaceableGlue::copy(int32_t start, int32_t limit, int32_t dest) {
