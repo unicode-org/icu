@@ -16,7 +16,7 @@ import java.util.Set;
 import com.ibm.icu.util.ULocale;
 
 public class ICULocaleService extends ICUService {
-    private Locale fallbackLocale;
+    private ULocale fallbackLocale;
     private String fallbackLocaleName;
 
     /**
@@ -34,37 +34,29 @@ public class ICULocaleService extends ICUService {
 
     /**
      * Convenience override for callers using locales.  This calls
-     * get(Locale, int, Locale[]) with KIND_ANY for kind and null for
+     * get(ULocale, int, ULocale[]) with KIND_ANY for kind and null for
      * actualReturn.
      */
-    public Object get(Locale locale) {
+    public Object get(ULocale locale) {
         return get(locale, LocaleKey.KIND_ANY, null);
     }
 
     /**
      * Convenience override for callers using locales.  This calls
-     * get(Locale, int, Locale[]) with a null actualReturn.
+     * get(ULocale, int, ULocale[]) with a null actualReturn.
      */
-    public Object get(Locale locale, int kind) {
+    public Object get(ULocale locale, int kind) {
         return get(locale, kind, null);
     }
 
     /**
-     * Convenience override for callers using locales. This calls
-     * get(Locale, int, Locale[]) with KIND_ANY.
-     */
-    public Object get(Locale locale, Locale[] actualReturn) {
-        return get(locale, LocaleKey.KIND_ANY, actualReturn);
-    }
-                   
-    /**
-     * Convenience override for callers using locales. This calls
-     * get(ULocale, int, ULocale[]) with KIND_ANY.
+     * Convenience override for callers using locales.  This calls
+     * get(ULocale, int, ULocale[]) with KIND_ANY for kind.
      */
     public Object get(ULocale locale, ULocale[] actualReturn) {
-        return get(locale, LocaleKey.KIND_ANY, actualReturn);
+	return get(locale, LocaleKey.KIND_ANY, actualReturn);
     }
-                   
+
     /**
      * Convenience override for callers using locales.  This uses
      * createKey(ULocale.toString(), kind) to create a key, calls getKey, and then
@@ -72,11 +64,7 @@ public class ICULocaleService extends ICUService {
      * getKey (stripping any prefix) into a ULocale.  
      */
     public Object get(ULocale locale, int kind, ULocale[] actualReturn) {
-        String name = locale.getName();
-        if (name.length() > 0) { // arrgh, canonicalize turns "" into en_US_POSIX
-            name = ULocale.canonicalize(name);
-        }
-        Key key = createKey(name, kind);
+        Key key = createKey(locale.toString(), kind);
         if (actualReturn == null) {
             return getKey(key);
         }
@@ -94,59 +82,8 @@ public class ICULocaleService extends ICUService {
     }
 
     /**
-     * Convenience override for callers using locales.  This uses
-     * createKey(Locale.toString(), kind) to create a key, calls getKey, and then
-     * if actualReturn is not null, returns the actualResult from
-     * getKey (stripping any prefix) into a Locale.  
-     */
-    public Object get(Locale locale, int kind, Locale[] actualReturn) {
-        Key key = createKey(locale.toString(), kind);
-        if (actualReturn == null) {
-            return getKey(key);
-        }
-
-        String[] temp = new String[1];
-        Object result = getKey(key, temp);
-        if (result != null) {
-            int n = temp[0].indexOf("/");
-            if (n >= 0) {
-                temp[0] = temp[0].substring(n+1);
-            }
-            actualReturn[0] = LocaleUtility.getLocaleFromName(temp[0]);
-        }
-        return result;
-    }
-
-    /**
      * Convenience override for callers using locales.  This calls
-     * registerObject(Object, Locale, int kind, int coverage)
-     * passing KIND_ANY for the kind, and VISIBLE for the coverage.
-     */
-    public Factory registerObject(Object obj, Locale locale) {
-        return registerObject(obj, locale, LocaleKey.KIND_ANY, LocaleKeyFactory.VISIBLE);
-    }
-
-    /**
-     * Convenience function for callers using locales.  This calls
-     * registerObject(Object, Locale, int kind, int coverage)
-     * passing VISIBLE for the coverage.
-     */
-    public Factory registerObject(Object obj, Locale locale, int kind) {
-        return registerObject(obj, locale, kind, LocaleKeyFactory.VISIBLE);
-    }
-
-    /**
-     * Convenience function for callers using locales.  This  instantiates
-     * a SimpleLocaleKeyFactory, and registers the factory.
-     */
-    public Factory registerObject(Object obj, Locale locale, int kind, int coverage) {
-        Factory factory = new SimpleLocaleKeyFactory(obj, locale, kind, coverage);
-        return registerFactory(factory);
-    }
-
-    /**
-     * Convenience override for callers using locales.  This calls
-     * registerObject(Object, Locale, int kind, int coverage)
+     * registerObject(Object, ULocale, int kind, int coverage)
      * passing KIND_ANY for the kind, and VISIBLE for the coverage.
      */
     public Factory registerObject(Object obj, ULocale locale) {
@@ -155,7 +92,7 @@ public class ICULocaleService extends ICUService {
 
     /**
      * Convenience function for callers using locales.  This calls
-     * registerObject(Object, Locale, int kind, int coverage)
+     * registerObject(Object, ULocale, int kind, int coverage)
      * passing VISIBLE for the coverage.
      */
     public Factory registerObject(Object obj, ULocale locale, int kind) {
@@ -320,21 +257,14 @@ public class ICULocaleService extends ICUService {
         /**
          * Convenience method to return the locale corresponding to the (canonical) original ID.
          */
-        public Locale canonicalLocale() {
-            return LocaleUtility.getLocaleFromName(primaryID);
-        }
-
-        /**
-         * Convenience method to return the locale corresponding to the (canonical) current ID.
-         */
-        public Locale currentLocale() {
-            return LocaleUtility.getLocaleFromName(currentID);
+        public ULocale canonicalLocale() {
+            return new ULocale(primaryID);
         }
 
         /**
          * Convenience method to return the ulocale corresponding to the (canonical) currentID.
          */
-        public ULocale currentULocale() {
+        public ULocale currentLocale() {
             if (varstart == -1) {
                 return new ULocale(currentID);
             } else {
@@ -460,13 +390,8 @@ public class ICULocaleService extends ICUService {
                 LocaleKey lkey = (LocaleKey)key;
                 int kind = lkey.kind();
                 
-                if (supportsULocale()) {
-                    ULocale uloc = lkey.currentULocale();
-                    return handleCreate(uloc, kind, service);
-                } else {
-                    Locale loc = lkey.currentLocale();
-                    return handleCreate(loc, kind, service);
-                }
+		ULocale uloc = lkey.currentLocale();
+		return handleCreate(uloc, kind, service);
             } else {
                 // System.out.println("factory: " + this + " did not support id: " + key.currentID());
                 // System.out.println("supported ids: " + getSupportedIDs());
@@ -550,55 +475,22 @@ public class ICULocaleService extends ICUService {
         /**
          * Return a localized name for the locale represented by id.
          */
-        public String getDisplayName(String id, Locale locale) {
+        public String getDisplayName(String id, ULocale locale) {
             // assume if the user called this on us, we must have handled some fallback of this id
             //          if (isSupportedID(id)) {
             if (locale == null) {
                 return id;
             }
-            Locale loc = LocaleUtility.getLocaleFromName(id);
+            ULocale loc = new ULocale(id);
             return loc.getDisplayName(locale);
             //              }
             //          return null;
         }
 
-        /**
-         * Return true if this object supports ULocale.  If so, then
-         * handleCreate(ULocale,...) will be called to instantiate objects.
-         * Otherwise handleCreate(Locale,...) will be called.  By default,
-         * subclasses do NOT support ULocale.
-         *
-         * SUBCLASSES should either:
-         *
-         * [1] implement handleCreate(Locale,...)
-         *
-         * or (preferably)
-         *
-         * [2] implement handleCreate(ULocale,...) and override
-         *     supportsULocale() to return true
-         */
-        protected boolean supportsULocale() {
-            return false;   
-        }
-    
         ///CLOVER:OFF
         /**
          * Utility method used by create(Key, ICUService).  Subclasses can
-         * implement this instead of create.  Subclasses should implement
-         * either this method or handleCreate(ULocale,...), but NOT BOTH.
-         */
-        protected Object handleCreate(Locale loc, int kind, ICUService service) {
-            return null;
-        }
-        ///CLOVER:ON
-
-        ///CLOVER:OFF
-        /**
-         * Utility method used by create(Key, ICUService).  Subclasses can
-         * implement this instead of create.  Subclasses should implement
-         * either this method or handleCreate(Locale,...), but NOT BOTH.
-         * If a subclass implements this method, it should also override
-         * supportULocale() to return true.
+         * implement this instead of create.
          */
         protected Object handleCreate(ULocale loc, int kind, ICUService service) {
             return null;
@@ -649,18 +541,9 @@ public class ICULocaleService extends ICUService {
         private final int kind;
 
 	// TODO: remove when we no longer need this
-        public SimpleLocaleKeyFactory(Object obj, Locale locale, int kind, int coverage) {
-            this(obj, ULocale.forLocale(locale), kind, coverage, null);
-        }
-
         public SimpleLocaleKeyFactory(Object obj, ULocale locale, int kind, int coverage) {
             this(obj, locale, kind, coverage, null);
         }
-
-	// TODO: remove when we no longer need this
-        public SimpleLocaleKeyFactory(Object obj, Locale locale, int kind, int coverage, String name) {
-	    this(obj, ULocale.forLocale(locale), kind, coverage, name);
-	}
 
         public SimpleLocaleKeyFactory(Object obj, ULocale locale, int kind, int coverage, String name) {
             super(coverage, name);
@@ -744,7 +627,7 @@ public class ICULocaleService extends ICUService {
          * Create the service.  The default implementation returns the resource bundle
          * for the locale, ignoring kind, and service.
          */
-        protected Object handleCreate(Locale loc, int kind, ICUService service) {
+        protected Object handleCreate(ULocale loc, int kind, ICUService service) {
             return ICUResourceBundle.getBundleInstance(bundleName, loc);
         }
 
@@ -758,12 +641,12 @@ public class ICULocaleService extends ICUService {
      * last accessed, the service cache is cleared.
      */
     public String validateFallbackLocale() {
-        Locale loc = Locale.getDefault();
+        ULocale loc = ULocale.getDefault();
         if (loc != fallbackLocale) {
             synchronized (this) {
                 if (loc != fallbackLocale) {
                     fallbackLocale = loc;
-                    fallbackLocaleName = LocaleUtility.canonicalLocaleString(loc.toString());
+                    fallbackLocaleName = loc.getBaseName();
                     clearServiceCache();
                 }
             }

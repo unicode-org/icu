@@ -7,20 +7,23 @@
 
 package com.ibm.icu.impl;
 
-import java.io.InputStream;
 import java.io.BufferedInputStream;
+import java.io.InputStream;
 import java.io.IOException;
 import java.util.Locale;
 
-import com.ibm.icu.util.RangeValueIterator;
-import com.ibm.icu.util.UResourceBundle;
-import com.ibm.icu.util.VersionInfo;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.lang.UCharacterCategory;
 import com.ibm.icu.lang.UProperty;
-import com.ibm.icu.text.*;
-import com.ibm.icu.text.UTF16;
 import com.ibm.icu.text.BreakIterator;
+import com.ibm.icu.text.Normalizer;
+import com.ibm.icu.text.UCharacterIterator;
+import com.ibm.icu.text.UnicodeSet;
+import com.ibm.icu.text.UTF16;
+import com.ibm.icu.util.RangeValueIterator;
+import com.ibm.icu.util.ULocale;
+import com.ibm.icu.util.UResourceBundle;
+import com.ibm.icu.util.VersionInfo;
 
 /**
 * <p>Internal class used for Unicode character property database.</p>
@@ -646,7 +649,7 @@ public final class UCharacterProperty implements Trie.DataManipulate
     * @param buffer to add lowercase
     * @return size of the lower case character in UTF16 format
     */
-    public int getSpecialLowerCase(Locale locale, int index, int ch, 
+    public int getSpecialLowerCase(ULocale locale, int index, int ch, 
                                    UCharacterIterator uchariter,
                                    StringBuffer buffer)
     {
@@ -817,9 +820,9 @@ public final class UCharacterProperty implements Trie.DataManipulate
      * @param buffer buffer to store result string
      * @return size of the lowercased codepoint in UTF16 format
      */
-    public int toLowerCase(Locale locale, int ch, 
-                                   UCharacterIterator uchariter, 
-                                   StringBuffer buffer)
+    public int toLowerCase(ULocale locale, int ch, 
+			   UCharacterIterator uchariter, 
+			   StringBuffer buffer)
     {
         int props = getProperty(ch);
         if ((props & EXCEPTION_MASK) == 0) {
@@ -852,7 +855,7 @@ public final class UCharacterProperty implements Trie.DataManipulate
      * @param buffer array in which to store the result
      * @return size oflowercased codepoint in UTF16 format
      */
-    public int toLowerCase(Locale locale, int ch, 
+    public int toLowerCase(ULocale locale, int ch, 
                            UCharacterIterator uchariter, char buffer[])
     {
         int props = getProperty(ch);
@@ -894,7 +897,7 @@ public final class UCharacterProperty implements Trie.DataManipulate
      * @param limit one index pass the last character to map
      * @param result string buffer to store lower case string
      */
-    public void toLowerCase(Locale locale, String str, int start, int limit, 
+    public void toLowerCase(ULocale locale, String str, int start, int limit, 
                             StringBuffer result) 
     {
         UCharacterIterator ucharIter = UCharacterIterator.getInstance(str);
@@ -923,7 +926,7 @@ public final class UCharacterProperty implements Trie.DataManipulate
     * @param buffer to add uppercase
     * @return size of uppercased codepoint in UTF16 format
     */
-    public int getSpecialUpperOrTitleCase(Locale locale, int index, int ch, 
+    public int getSpecialUpperOrTitleCase(ULocale locale, int index, int ch, 
                                           UCharacterIterator uchariter, 
                                           boolean upperflag, 
                                           StringBuffer buffer)
@@ -995,7 +998,7 @@ public final class UCharacterProperty implements Trie.DataManipulate
      * @param buffer buffer to store result map
      * @return size of uppercased codepoint in UTF16 format
      */
-    public int toUpperOrTitleCase(Locale locale, int ch, 
+    public int toUpperOrTitleCase(ULocale locale, int ch, 
                                   UCharacterIterator uchariter, 
                                   boolean upperflag, StringBuffer buffer) 
     {
@@ -1037,7 +1040,7 @@ public final class UCharacterProperty implements Trie.DataManipulate
      * @param buffer buffer to store result map
      * @return size of uppercased codepoint in UTF16 format
      */
-    public int toUpperOrTitleCase(Locale locale, int ch, 
+    public int toUpperOrTitleCase(ULocale locale, int ch, 
                                   UCharacterIterator uchariter, 
                                   boolean upperflag, char buffer[]) 
     {
@@ -1086,7 +1089,7 @@ public final class UCharacterProperty implements Trie.DataManipulate
      * @param start start index of the substring to map
      * @param limit one index pass the last character to map
      */
-    public String toUpperCase(Locale locale, String str, int start, int limit) 
+    public String toUpperCase(ULocale locale, String str, int start, int limit) 
     {
         UCharacterIterator ucharIter = UCharacterIterator.getInstance(str);
         int                strIndex  = start;
@@ -1122,7 +1125,7 @@ public final class UCharacterProperty implements Trie.DataManipulate
     *        the character should be title cased.
     * @return lowercase version of the argument string
     */
-     public String toTitleCase(Locale locale, String str, 
+     public String toTitleCase(ULocale locale, String str, 
                                BreakIterator breakiter)
      {
          UCharacterIterator ucharIter = UCharacterIterator.getInstance(str);

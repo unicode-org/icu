@@ -5,8 +5,9 @@
  *******************************************************************************
  */
 package com.ibm.icu.text;
-import java.util.*;
+
 import com.ibm.icu.impl.UCharacterProperty;
+import com.ibm.icu.util.ULocale;
 
 /**
  * A transliterator that performs locale-sensitive toLower()
@@ -27,20 +28,20 @@ class LowercaseTransliterator extends Transliterator{
     static void register() {
         Transliterator.registerFactory(_ID, new Transliterator.Factory() {
             public Transliterator getInstance(String ID) {
-                return new LowercaseTransliterator(Locale.US);
+                return new LowercaseTransliterator(ULocale.US);
             }
         });
 
         Transliterator.registerSpecialInverse("Lower", "Upper", true);
     }
 
-    private Locale loc;
+    private ULocale loc;
 
     /**
      * Constructs a transliterator.
      */
 
-    public LowercaseTransliterator(Locale loc) {
+    public LowercaseTransliterator(ULocale loc) {
         super(_ID, null);
         this.loc = loc;
     }

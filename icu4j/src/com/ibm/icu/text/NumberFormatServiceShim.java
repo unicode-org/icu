@@ -32,6 +32,13 @@ class NumberFormatServiceShim extends NumberFormat.NumberFormatShim {
         return service.getAvailableLocales();
     }
 
+    ULocale[] getAvailableULocales() {
+        if (service.isDefault()) {
+            return ICUResourceBundle.getAvailableULocales(ICUResourceBundle.ICU_BASE_NAME);
+        }
+        return service.getAvailableULocales();
+    }
+
     private static final class NFFactory extends LocaleKeyFactory {
         private NumberFormatFactory delegate;
 
@@ -44,7 +51,7 @@ class NumberFormatServiceShim extends NumberFormat.NumberFormatShim {
         public Object create(Key key, ICUService service) {
             if (handlesKey(key)) {
                 LocaleKey lkey = (LocaleKey)key;
-                Locale loc = lkey.canonicalLocale();
+                ULocale loc = lkey.canonicalLocale();
                 int kind = lkey.kind();
 
                 Object result = delegate.createFormat(loc, kind);
@@ -69,20 +76,19 @@ class NumberFormatServiceShim extends NumberFormat.NumberFormatShim {
         return service.unregisterFactory((Factory)registryKey);
     }
 
-    NumberFormat createInstance(Locale desiredLocale, int choice) {
-	// TODO: convert to ULocale when service changes over
+    NumberFormat createInstance(ULocale desiredLocale, int choice) {
 
     // use service cache
 //          if (service.isDefault()) {
 //              return NumberFormat.createInstance(desiredLocale, choice);
 //          }
 
-        Locale[] actualLoc = new Locale[1];
+        ULocale[] actualLoc = new ULocale[1];
         NumberFormat fmt = (NumberFormat)service.get(desiredLocale, choice,
                                                      actualLoc);
         fmt = (NumberFormat)fmt.clone();
 
-        ULocale uloc = ULocale.forLocale(actualLoc[0]);
+        ULocale uloc = actualLoc[0];
         fmt.setLocale(uloc, uloc); // services make no distinction between actual & valid
         return fmt;
     }
@@ -92,7 +98,7 @@ class NumberFormatServiceShim extends NumberFormat.NumberFormatShim {
             super("NumberFormat");
 
             class RBNumberFormatFactory extends ICUResourceBundleFactory {
-                protected Object handleCreate(Locale loc, int kind, ICUService service) {
+                protected Object handleCreate(ULocale loc, int kind, ICUService service) {
                     return NumberFormat.createInstance(loc, kind);
                 }
             }

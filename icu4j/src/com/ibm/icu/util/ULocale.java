@@ -233,26 +233,26 @@ public final class ULocale implements Serializable {
 
     private static final HashMap CACHE = new HashMap(20);
     static {
-	CACHE.put(Locale.ENGLISH, ENGLISH);
-	CACHE.put(Locale.FRENCH, FRENCH);
-	CACHE.put(Locale.GERMAN, GERMAN);
-	CACHE.put(Locale.ITALIAN, ITALIAN);
-	CACHE.put(Locale.JAPANESE, JAPANESE);
-	CACHE.put(Locale.KOREAN, KOREAN);
-	CACHE.put(Locale.CHINESE, CHINESE);
-	CACHE.put(Locale.SIMPLIFIED_CHINESE, SIMPLIFIED_CHINESE);
-	CACHE.put(Locale.TRADITIONAL_CHINESE, TRADITIONAL_CHINESE);
-	CACHE.put(Locale.FRANCE, FRANCE);
-	CACHE.put(Locale.GERMANY, GERMANY);
-	CACHE.put(Locale.ITALY, ITALY);
-	CACHE.put(Locale.JAPAN, JAPAN);
-	CACHE.put(Locale.KOREA, KOREA);
-	CACHE.put(Locale.CHINA, CHINA);
-	CACHE.put(Locale.TAIWAN, TAIWAN);
-	CACHE.put(Locale.UK, UK);
-	CACHE.put(Locale.US, US);
-	CACHE.put(Locale.CANADA, CANADA);
-	CACHE.put(Locale.CANADA_FRENCH, CANADA_FRENCH);
+        CACHE.put(Locale.ENGLISH, ENGLISH);
+        CACHE.put(Locale.FRENCH, FRENCH);
+        CACHE.put(Locale.GERMAN, GERMAN);
+        CACHE.put(Locale.ITALIAN, ITALIAN);
+        CACHE.put(Locale.JAPANESE, JAPANESE);
+        CACHE.put(Locale.KOREAN, KOREAN);
+        CACHE.put(Locale.CHINESE, CHINESE);
+        CACHE.put(Locale.SIMPLIFIED_CHINESE, SIMPLIFIED_CHINESE);
+        CACHE.put(Locale.TRADITIONAL_CHINESE, TRADITIONAL_CHINESE);
+        CACHE.put(Locale.FRANCE, FRANCE);
+        CACHE.put(Locale.GERMANY, GERMANY);
+        CACHE.put(Locale.ITALY, ITALY);
+        CACHE.put(Locale.JAPAN, JAPAN);
+        CACHE.put(Locale.KOREA, KOREA);
+        CACHE.put(Locale.CHINA, CHINA);
+        CACHE.put(Locale.TAIWAN, TAIWAN);
+        CACHE.put(Locale.UK, UK);
+        CACHE.put(Locale.US, US);
+        CACHE.put(Locale.CANADA, CANADA);
+        CACHE.put(Locale.CANADA_FRENCH, CANADA_FRENCH);
     }
 
     /**
@@ -739,18 +739,22 @@ public final class ULocale implements Serializable {
 
     /**
      * Return a ULocale object for a {@link java.util.Locale}.
+     * The ULocale is canonicalized.
      * @param loc a JDK locale
      * @draft ICU 3.2
      * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static ULocale forLocale(Locale loc) {
-	ULocale result = (ULocale)CACHE.get(loc);
-	if (result == null && defaultULocale != null && loc == defaultULocale.locale) {
-	    result = defaultULocale;
-	} else {
-	    result = new ULocale(loc);
-	}
-	return result;
+        if (loc == null) {
+            return null;
+        }
+        ULocale result = (ULocale)CACHE.get(loc);
+        if (result == null && defaultULocale != null && loc == defaultULocale.locale) {
+            result = defaultULocale;
+        } else {
+            result = new ULocale(canonicalize(loc.toString()), loc);
+        }
+        return result;
     }
 
     /**
@@ -1930,8 +1934,10 @@ public final class ULocale implements Serializable {
         // formerly, we always set to en_US_POSIX if the basename was empty, but
         // now we require that the entire id be empty, so that "@foo=bar"
         // will pass through unchanged.
+        // {dlf} I'd rather keep "" unchanged.
         if (localeID.equals("")) {
-            return "en_US_POSIX";
+            return "";
+//              return "en_US_POSIX";
         }
 
         // we have an ID in the form xx_Yyyy_ZZ_KKKKK

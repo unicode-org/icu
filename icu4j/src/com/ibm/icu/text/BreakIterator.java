@@ -4,14 +4,15 @@
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
+
 package com.ibm.icu.text;
 
 import java.lang.ref.SoftReference;
 import java.text.CharacterIterator;
 import java.text.StringCharacterIterator;
 import java.util.Locale;
-import com.ibm.icu.util.ULocale;
 
+import com.ibm.icu.util.ULocale;
 
 /**
  * A class that locates boundaries in text.  This class defines a protocol for
@@ -431,7 +432,7 @@ public abstract class BreakIterator implements Cloneable
      */
     public static BreakIterator getWordInstance()
     {
-        return getWordInstance(Locale.getDefault());
+        return getWordInstance(ULocale.getDefault());
     }
 
     /**
@@ -442,6 +443,19 @@ public abstract class BreakIterator implements Cloneable
      * @stable ICU 2.0
      */
     public static BreakIterator getWordInstance(Locale where)
+    {
+        return getBreakInstance(ULocale.forLocale(where), KIND_WORD);
+    }
+
+    /**
+     * Returns a new instance of BreakIterator that locates word boundaries.
+     * @param where A locale specifying the language of the text to be
+     * analyzed.
+     * @return An instance of BreakIterator that locates word boundaries.
+     * @draft ICU 3.2
+     * @deprecated This is a draft API and might change in a future release of ICU.
+     */
+    public static BreakIterator getWordInstance(ULocale where)
     {
         return getBreakInstance(where, KIND_WORD);
     }
@@ -456,7 +470,7 @@ public abstract class BreakIterator implements Cloneable
      */
     public static BreakIterator getLineInstance()
     {
-        return getLineInstance(Locale.getDefault());
+        return getLineInstance(ULocale.getDefault());
     }
 
     /**
@@ -468,6 +482,20 @@ public abstract class BreakIterator implements Cloneable
      * @stable ICU 2.0
      */
     public static BreakIterator getLineInstance(Locale where)
+    {
+        return getBreakInstance(ULocale.forLocale(where), KIND_LINE);
+    }
+
+    /**
+     * Returns a new instance of BreakIterator that locates legal line-
+     * wrapping positions.
+     * @param where A Locale specifying the language of the text being broken.
+     * @return A new instance of BreakIterator that locates legal
+     * line-wrapping positions.
+     * @draft ICU 3.2
+     * @deprecated This is a draft API and might change in a future release of ICU.
+     */
+    public static BreakIterator getLineInstance(ULocale where)
     {
         return getBreakInstance(where, KIND_LINE);
     }
@@ -482,7 +510,7 @@ public abstract class BreakIterator implements Cloneable
      */
     public static BreakIterator getCharacterInstance()
     {
-        return getCharacterInstance(Locale.getDefault());
+        return getCharacterInstance(ULocale.getDefault());
     }
 
     /**
@@ -494,6 +522,20 @@ public abstract class BreakIterator implements Cloneable
      * @stable ICU 2.0
      */
     public static BreakIterator getCharacterInstance(Locale where)
+    {
+        return getBreakInstance(ULocale.forLocale(where), KIND_CHARACTER);
+    }
+
+    /**
+     * Returns a new instance of BreakIterator that locates logical-character
+     * boundaries.
+     * @param where A Locale specifying the language of the text being analyzed.
+     * @return A new instance of BreakIterator that locates logical-character
+     * boundaries.
+     * @draft ICU 3.2
+     * @deprecated This is a draft API and might change in a future release of ICU.
+     */
+    public static BreakIterator getCharacterInstance(ULocale where)
     {
         return getBreakInstance(where, KIND_CHARACTER);
     }
@@ -507,7 +549,7 @@ public abstract class BreakIterator implements Cloneable
      */
     public static BreakIterator getSentenceInstance()
     {
-        return getSentenceInstance(Locale.getDefault());
+        return getSentenceInstance(ULocale.getDefault());
     }
 
     /**
@@ -517,6 +559,18 @@ public abstract class BreakIterator implements Cloneable
      * @stable ICU 2.0
      */
     public static BreakIterator getSentenceInstance(Locale where)
+    {
+        return getBreakInstance(ULocale.forLocale(where), KIND_SENTENCE);
+    }
+
+    /**
+     * Returns a new instance of BreakIterator that locates sentence boundaries.
+     * @param where A Locale specifying the language of the text being analyzed.
+     * @return A new instance of BreakIterator that locates sentence boundaries.
+     * @draft ICU 3.2
+     * @deprecated This is a draft API and might change in a future release of ICU.
+     */
+    public static BreakIterator getSentenceInstance(ULocale where)
     {
         return getBreakInstance(where, KIND_SENTENCE);
     }
@@ -532,7 +586,7 @@ public abstract class BreakIterator implements Cloneable
      */
     public static BreakIterator getTitleInstance()
     {
-        return getTitleInstance(Locale.getDefault());
+        return getTitleInstance(ULocale.getDefault());
     }
 
     /**
@@ -545,6 +599,21 @@ public abstract class BreakIterator implements Cloneable
      * @stable ICU 2.0
      */
     public static BreakIterator getTitleInstance(Locale where)
+    {
+        return getBreakInstance(ULocale.forLocale(where), KIND_TITLE);
+    }
+
+    /**
+     * Returns a new instance of BreakIterator that locates title boundaries.
+     * The iterator returned locates title boundaries as described for 
+     * Unicode 3.2 only. For Unicode 4.0 and above title boundary iteration,
+     * please use Word Boundary iterator.{@link #getWordInstance}
+     * @param where A Locale specifying the language of the text being analyzed.
+     * @return A new instance of BreakIterator that locates title boundaries.
+     * @draft ICU 3.2
+     * @deprecated This is a draft API and might change in a future release of ICU.
+     */
+    public static BreakIterator getTitleInstance(ULocale where)
     {
         return getBreakInstance(where, KIND_TITLE);
     }
@@ -561,6 +630,22 @@ public abstract class BreakIterator implements Cloneable
      * @stable ICU 2.4
      */
     public static Object registerInstance(BreakIterator iter, Locale locale, int kind) {
+        return registerInstance(iter, ULocale.forLocale(locale), kind);
+    }
+
+    /**
+     * Register a new break iterator of the indicated kind, to use in the given locale.
+     * Clones of the iterator will be returned
+     * if a request for a break iterator of the given kind matches or falls back to
+     * this locale.
+     * @param iter the BreakIterator instance to adopt.
+     * @param locale the Locale for which this instance is to be registered
+     * @param kind the type of iterator for which this instance is to be registered
+     * @return a registry key that can be used to unregister this instance
+     * @draft ICU 3.2
+     * @deprecated This is a draft API and might change in a future release of ICU.
+     */
+    public static Object registerInstance(BreakIterator iter, ULocale locale, int kind) {
         // If the registered object matches the one in the cache, then
         // flush the cached object.
         if (iterCache[kind] != null) {
@@ -610,7 +695,7 @@ public abstract class BreakIterator implements Cloneable
 
     // end of registration
 
-    private static BreakIterator getBreakInstance(Locale where, int kind) {
+    private static BreakIterator getBreakInstance(ULocale where, int kind) {
 
         if (iterCache[kind] != null) {
             BreakIteratorCache cache = (BreakIteratorCache) iterCache[kind].get();
@@ -643,17 +728,30 @@ public abstract class BreakIterator implements Cloneable
         return getShim().getAvailableLocales();
     }
 
+    /**
+     * Returns a list of locales for which BreakIterators can be used.
+     * @return An array of Locales.  All of the locales in the array can
+     * be used when creating a BreakIterator.
+     * @draft ICU 3.2
+     * @deprecated This is a draft API and might change in a future release of ICU.
+     */
+    public static synchronized ULocale[] getAvailableULocales()
+    {
+        // to avoid linking ICULocaleData
+        return getShim().getAvailableULocales();
+    }
+
     private static final class BreakIteratorCache {
 
         private BreakIterator iter;
-        private Locale where;
+        private ULocale where;
 
-        BreakIteratorCache(Locale where, BreakIterator iter) {
+        BreakIteratorCache(ULocale where, BreakIterator iter) {
             this.where = where;
             this.iter = (BreakIterator) iter.clone();
         }
 
-        Locale getLocale() {
+        ULocale getLocale() {
             return where;
         }
 
@@ -663,10 +761,11 @@ public abstract class BreakIterator implements Cloneable
     }
 
     static abstract class BreakIteratorServiceShim {
-        public abstract Object registerInstance(BreakIterator iter, Locale l, int k);
+        public abstract Object registerInstance(BreakIterator iter, ULocale l, int k);
         public abstract boolean unregister(Object key);
         public abstract Locale[] getAvailableLocales();
-        public abstract BreakIterator createBreakIterator(Locale l, int k);
+        public abstract ULocale[] getAvailableULocales();
+        public abstract BreakIterator createBreakIterator(ULocale l, int k);
     }
 
     private static BreakIteratorServiceShim shim;

@@ -8,6 +8,7 @@ package com.ibm.icu.dev.test.format;
 
 import com.ibm.icu.text.*;
 import com.ibm.icu.text.NumberFormat.*;
+import com.ibm.icu.util.ULocale;
 
 import java.util.Arrays;
 import java.util.Locale;
@@ -19,22 +20,22 @@ public class NumberFormatRegistrationTest extends com.ibm.icu.dev.test.TestFmwk 
     }
 
     public void TestRegistration() {
-        final Locale SRC_LOC = Locale.FRANCE;
-        final Locale SWAP_LOC = Locale.US;
+        final ULocale SRC_LOC = ULocale.FRANCE;
+        final ULocale SWAP_LOC = ULocale.US;
 
         class TestFactory extends SimpleNumberFormatFactory {
             NumberFormat currencyStyle;
 
             TestFactory() {
-        this(SRC_LOC, SWAP_LOC);
+                this(SRC_LOC, SWAP_LOC);
             }
 
-        TestFactory(Locale srcLoc, Locale swapLoc) {
-        super(srcLoc);
-        currencyStyle = NumberFormat.getIntegerInstance(swapLoc);
-        }
+            TestFactory(ULocale srcLoc, ULocale swapLoc) {
+                super(srcLoc);
+                currencyStyle = NumberFormat.getIntegerInstance(swapLoc);
+            }
 
-            public NumberFormat createFormat(Locale loc, int formatType) {
+            public NumberFormat createFormat(ULocale loc, int formatType) {
                 if (formatType == FORMAT_CURRENCY) {
                     return currencyStyle;
                 }
@@ -42,22 +43,22 @@ public class NumberFormatRegistrationTest extends com.ibm.icu.dev.test.TestFmwk 
             }
         }
 
-    {
-        // coverage before registration
+        {
+            // coverage before registration
 
-        try {
-        NumberFormat.unregister(null);
-        errln("did not throw exception on null unregister");
-        }
-        catch (Exception e) {
-        }
+            try {
+                NumberFormat.unregister(null);
+                errln("did not throw exception on null unregister");
+            }
+            catch (Exception e) {
+            }
 
-        try {
-        NumberFormat.registerFactory(null);
-        errln("did not throw exception on null register");
-        }
-        catch (Exception e) {
-        }
+            try {
+                NumberFormat.registerFactory(null);
+                errln("did not throw exception on null register");
+            }
+            catch (Exception e) {
+            }
 
             try {
                 // if no NF has been registered yet, shim is null, so this silently
@@ -67,26 +68,26 @@ public class NumberFormatRegistrationTest extends com.ibm.icu.dev.test.TestFmwk 
                 if (NumberFormat.unregister("")) {
                     errln("unregister of empty string key succeeded");
                 }
-        }
+            }
             catch (Exception e) {
             }
-    }
+        }
 
-    Locale fu_FU = new Locale("fu", "FU");
+        ULocale fu_FU = new ULocale("fu_FU");
         NumberFormat f0 = NumberFormat.getIntegerInstance(SWAP_LOC);
         NumberFormat f1 = NumberFormat.getIntegerInstance(SRC_LOC);
         NumberFormat f2 = NumberFormat.getCurrencyInstance(SRC_LOC);
         Object key = NumberFormat.registerFactory(new TestFactory());
-    Object key2 = NumberFormat.registerFactory(new TestFactory(fu_FU, Locale.GERMANY));
-    if (!Arrays.asList(NumberFormat.getAvailableLocales()).contains(fu_FU)) {
-        errln("did not list fu_FU");
-    }
+        Object key2 = NumberFormat.registerFactory(new TestFactory(fu_FU, ULocale.GERMANY));
+        if (!Arrays.asList(NumberFormat.getAvailableULocales()).contains(fu_FU)) {
+            errln("did not list fu_FU");
+        }
         NumberFormat f3 = NumberFormat.getCurrencyInstance(SRC_LOC);
         NumberFormat f4 = NumberFormat.getIntegerInstance(SRC_LOC);
         NumberFormat.unregister(key); // restore for other tests
         NumberFormat f5 = NumberFormat.getCurrencyInstance(SRC_LOC);
 
-    NumberFormat.unregister(key2);
+        NumberFormat.unregister(key2);
 
         float n = 1234.567f;
         logln("f0 swap int: " + f0.format(n));
@@ -106,7 +107,7 @@ public class NumberFormatRegistrationTest extends com.ibm.icu.dev.test.TestFmwk 
             errln("unregistered service did not match original");
         }
 
-    // coverage
-    NumberFormat f6 = NumberFormat.getNumberInstance(fu_FU);
+        // coverage
+        NumberFormat f6 = NumberFormat.getNumberInstance(fu_FU);
     }
 }

@@ -4,9 +4,10 @@
  ****************************************************************************
  */
 package com.ibm.icu.text;
+
+import com.ibm.icu.impl.CalendarData;
 import com.ibm.icu.util.*;
 import java.util.Locale;
-import com.ibm.icu.impl.CalendarData;
 
 /**
  * A subclass of {@link DateFormatSymbols} for {@link ChineseDateFormat}.
@@ -31,7 +32,7 @@ public class ChineseDateFormatSymbols extends DateFormatSymbols {
      * @stable ICU 2.0
      */
     public ChineseDateFormatSymbols() {
-        this(Locale.getDefault());
+        this(ULocale.getDefault());
     }
 
     /**
@@ -40,6 +41,16 @@ public class ChineseDateFormatSymbols extends DateFormatSymbols {
      * @stable ICU 2.0
      */
     public ChineseDateFormatSymbols(Locale locale) {
+        super(ChineseCalendar.class, ULocale.forLocale(locale));
+    }
+
+    /**
+     * Construct a ChineseDateFormatSymbols for the provided locale.
+     * @param locale the locale
+     * @draft ICU 3.2
+     * @deprecated This is a draft API and might change in a future release of ICU.
+     */
+    public ChineseDateFormatSymbols(ULocale locale) {
         super(ChineseCalendar.class, locale);
     }
 
@@ -51,6 +62,17 @@ public class ChineseDateFormatSymbols extends DateFormatSymbols {
      */
     public ChineseDateFormatSymbols(Calendar cal, Locale locale) {
         super(cal==null?null:cal.getClass(), locale);
+    }
+
+    /**
+     * Construct a ChineseDateFormatSymbols for the provided calendar and locale.
+     * @param cal the Calendar
+     * @param locale the locale
+     * @draft ICU 3.2
+     * @deprecated This is a draft API and might change in a future release of ICU.
+     */
+    public ChineseDateFormatSymbols(Calendar cal, ULocale locale) {
+        super(cal == null ? null : cal.getClass(), locale);
     }
 
     // New API

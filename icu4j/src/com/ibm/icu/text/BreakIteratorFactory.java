@@ -30,7 +30,7 @@ import com.ibm.icu.util.ULocale;
  */
 final class BreakIteratorFactory extends BreakIterator.BreakIteratorServiceShim {
 
-    public Object registerInstance(BreakIterator iter, Locale locale, int kind) {
+    public Object registerInstance(BreakIterator iter, ULocale locale, int kind) {
         iter.setText(new java.text.StringCharacterIterator(""));
         return service.registerObject(iter, locale, kind);
     }
@@ -50,15 +50,22 @@ final class BreakIteratorFactory extends BreakIterator.BreakIteratorServiceShim 
         }
     }
     
-    public BreakIterator createBreakIterator(Locale locale, int kind) {
+    public ULocale[] getAvailableULocales() {
+        if (service == null) {
+            return ICUResourceBundle.getAvailableULocales(ICUResourceBundle.ICU_BASE_NAME);
+        } else {
+            return service.getAvailableULocales();
+        }
+    }
+    
+    public BreakIterator createBreakIterator(ULocale locale, int kind) {
 	// TODO: convert to ULocale when service switches over
         if (service.isDefault()) {
             return createBreakInstance(locale, kind);
         }
-        Locale[] actualLoc = new Locale[1];
+        ULocale[] actualLoc = new ULocale[1];
         BreakIterator iter = (BreakIterator)service.get(locale, kind, actualLoc);
-        ULocale uloc = ULocale.forLocale(actualLoc[0]);
-        iter.setLocale(uloc, uloc); // services make no distinction between actual & valid
+        iter.setLocale(actualLoc[0], actualLoc[0]); // services make no distinction between actual & valid
         return iter;
     }
 
@@ -67,7 +74,7 @@ final class BreakIteratorFactory extends BreakIterator.BreakIteratorServiceShim 
             super("BreakIterator");
 
             class RBBreakIteratorFactory extends ICUResourceBundleFactory {
-                protected Object handleCreate(Locale loc, int kind, ICUService service) {
+                protected Object handleCreate(ULocale loc, int kind, ICUService service) {
                     return createBreakInstance(loc, kind);
                 }
             }
@@ -98,21 +105,20 @@ final class BreakIteratorFactory extends BreakIterator.BreakIteratorServiceShim 
         };
 
     
-    private static BreakIterator createBreakInstance(Locale locale, int kind) {
+    private static BreakIterator createBreakInstance(ULocale locale, int kind) {
         String prefix = KIND_NAMES[kind];
         return createBreakInstance(locale, kind, 
                                    prefix + "BreakRules", 
                                    prefix + "BreakDictionary");
     }
 
-    private static BreakIterator createBreakInstance(Locale where,
-                                             int kind,
-                                             String rulesName,
-                                             String dictionaryName) {
+    private static BreakIterator createBreakInstance(ULocale where,
+						     int kind,
+						     String rulesName,
+						     String dictionaryName) {
 
         BreakIterator iter = null;
-	// TODO: convert API to use ULocale
-        ResourceBundle bundle = ICULocaleData.getResourceBundle("BreakIteratorRules", ULocale.forLocale(where));
+        ResourceBundle bundle = ICULocaleData.getResourceBundle("BreakIteratorRules", where);
         String[] classNames = bundle.getStringArray("BreakIteratorClasses");
         String rules = bundle.getString(rulesName);
         if (classNames[kind].equals("RuleBasedBreakIterator")) {

@@ -787,7 +787,8 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * (just before the class name) and "Symbols" appended to the end.
      * For example, the bundle corresponding to "com.ibm.icu.util.HebrewCalendar"
      * is "com.ibm.icu.impl.data.HebrewCalendarSymbols".
-     * @stable ICU 2.0
+     * @draft ICU 3.2
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     static public ResourceBundle getDateFormatBundle(Class calendarClass, ULocale locale)
         throws MissingResourceException {
@@ -826,7 +827,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      */
     public static ResourceBundle getDateFormatBundle(Calendar cal, Locale locale)
         throws MissingResourceException {
-        return getDateFormatBundle(cal.getClass(), locale);
+        return getDateFormatBundle(cal.getClass(), ULocale.forLocale(locale));
     }
     
     /**

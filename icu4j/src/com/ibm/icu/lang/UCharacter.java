@@ -12,20 +12,20 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
-import com.ibm.icu.impl.UCharacterProperty;
-import com.ibm.icu.util.RangeValueIterator;
-import com.ibm.icu.util.ValueIterator;
-import com.ibm.icu.util.VersionInfo;
-import com.ibm.icu.text.BreakIterator;
-import com.ibm.icu.text.Normalizer;
-import com.ibm.icu.text.UTF16;
 import com.ibm.icu.impl.NormalizerImpl;
 import com.ibm.icu.impl.UCharacterUtility;
 import com.ibm.icu.impl.UCharacterName;
 import com.ibm.icu.impl.UCharacterNameChoice;
 import com.ibm.icu.impl.UPropertyAliases;
-
 import com.ibm.icu.lang.UCharacterEnums.*;
+import com.ibm.icu.text.BreakIterator;
+import com.ibm.icu.text.Normalizer;
+import com.ibm.icu.text.UTF16;
+import com.ibm.icu.impl.UCharacterProperty;
+import com.ibm.icu.util.RangeValueIterator;
+import com.ibm.icu.util.ULocale;
+import com.ibm.icu.util.ValueIterator;
+import com.ibm.icu.util.VersionInfo;
 
 /**
  * <p>
@@ -3484,7 +3484,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      */
     public static String toUpperCase(String str)
     {
-        return toUpperCase(Locale.getDefault(), str);
+        return toUpperCase(ULocale.getDefault(), str);
     }
       
     /**
@@ -3496,7 +3496,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      */
     public static String toLowerCase(String str)
     {
-        return toLowerCase(Locale.getDefault(), str);
+        return toLowerCase(ULocale.getDefault(), str);
     }
     
     /**
@@ -3519,7 +3519,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      */
     public static String toTitleCase(String str, BreakIterator breakiter)
     {
-        return toTitleCase(Locale.getDefault(), str, breakiter);
+        return toTitleCase(ULocale.getDefault(), str, breakiter);
     }
       
     /**
@@ -3532,8 +3532,22 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      */
     public static String toUpperCase(Locale locale, String str)
     {
+	return toUpperCase(ULocale.forLocale(locale), str);
+    }
+
+    /**
+     * Gets uppercase version of the argument string. 
+     * Casing is dependent on the argument locale and context-sensitive.
+     * @param locale which string is to be converted in
+     * @param str source string to be performed on
+     * @return uppercase version of the argument string
+     * @draft ICU 3.2
+     * @deprecated This is a draft API and might change in a future release of ICU.
+     */
+    public static String toUpperCase(ULocale locale, String str)
+    {
         if (locale == null) {
-        locale = Locale.getDefault();
+	    locale = ULocale.getDefault();
         }
         return PROPERTY_.toUpperCase(locale, str, 0, str.length());
     }
@@ -3548,10 +3562,24 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      */
     public static String toLowerCase(Locale locale, String str)
     {
+	return toLowerCase(ULocale.forLocale(locale), str);
+    }
+
+    /**
+     * Gets lowercase version of the argument string. 
+     * Casing is dependent on the argument locale and context-sensitive
+     * @param locale which string is to be converted in
+     * @param str source string to be performed on
+     * @return lowercase version of the argument string
+     * @draft ICU 3.2
+     * @deprecated This is a draft API and might change in a future release of ICU.
+     */
+    public static String toLowerCase(ULocale locale, String str)
+    {
         int length = str.length();
         StringBuffer result = new StringBuffer(length);
         if (locale == null) {
-        locale = Locale.getDefault();
+	    locale = ULocale.getDefault();
         }
         PROPERTY_.toLowerCase(locale, str, 0, length, result);
         return result.toString();
@@ -3579,10 +3607,36 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
     public static String toTitleCase(Locale locale, String str, 
                                      BreakIterator breakiter)
     {
+	return toTitleCase(ULocale.forLocale(locale), str, breakiter);
+    }
+
+    /**
+     * <p>Gets the titlecase version of the argument string.</p>
+     * <p>Position for titlecasing is determined by the argument break 
+     * iterator, hence the user can customized his break iterator for 
+     * a specialized titlecasing. In this case only the forward iteration 
+     * needs to be implemented.
+     * If the break iterator passed in is null, the default Unicode algorithm
+     * will be used to determine the titlecase positions.
+     * </p>
+     * <p>Only positions returned by the break iterator will be title cased,
+     * character in between the positions will all be in lower case.</p>
+     * <p>Casing is dependent on the argument locale and context-sensitive</p>
+     * @param locale which string is to be converted in
+     * @param str source string to be performed on
+     * @param breakiter break iterator to determine the positions in which
+     *        the character should be title cased.
+     * @return lowercase version of the argument string
+     * @draft ICU 3.2
+     * @deprecated This is a draft API and might change in a future release of ICU.
+     */
+    public static String toTitleCase(ULocale locale, String str, 
+                                     BreakIterator breakiter)
+    {
         if (breakiter == null) {
-        if (locale == null) {
-        locale = Locale.getDefault();
-        }
+	    if (locale == null) {
+		locale = ULocale.getDefault();
+	    }
             breakiter = BreakIterator.getWordInstance(locale);
         }
         return PROPERTY_.toTitleCase(locale, str, breakiter);

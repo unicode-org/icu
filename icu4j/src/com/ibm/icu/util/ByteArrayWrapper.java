@@ -51,7 +51,7 @@ public class ByteArrayWrapper implements Comparable
      * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public ByteArrayWrapper() {
-        bytes = new byte[0]; // for consistency
+	// leave bytes null, don't allocate twice
     }
 
     /**
@@ -152,16 +152,6 @@ public class ByteArrayWrapper implements Comparable
         return this;
     }
 
-    /**
-     * Appends the internal byte array from offset size with the 
-     * contents of src from offset start to limit. This increases the size of
-     * the internal byte array to (size + limit - start).
-     * @param src source byte array to copy from
-     * @param start start offset of src to copy from
-     * @param limit end + 1 offset of src to copy from
-     * @draft ICU 2.8
-     * @deprecated This is a draft API and might change in a future release of ICU.
-     */
     public final ByteArrayWrapper append(ByteArrayWrapper other) 
     {
         return append(other.bytes, 0, other.size);

@@ -37,14 +37,14 @@ final class CurrencyServiceShim extends Currency.ServiceShim {
     }
 
     Currency createInstance(ULocale loc) {
-	// TODO: convert to ULocale when service switches over
+        // TODO: convert to ULocale when service switches over
 
         if (service.isDefault()) {
             return Currency.createCurrency(loc);
         }
-        Locale[] actualLoc = new Locale[1];
-        Currency curr = (Currency)service.get(loc.toLocale(), actualLoc);
-        ULocale uloc = ULocale.forLocale(actualLoc[0]);
+        ULocale[] actualLoc = new ULocale[1];
+	Currency curr = (Currency)service.get(loc, actualLoc);
+        ULocale uloc = actualLoc[0];
         curr.setLocale(uloc, uloc); // services make no distinction between actual & valid
         return curr;
     }
@@ -62,9 +62,8 @@ final class CurrencyServiceShim extends Currency.ServiceShim {
             super("Currency");
 
             class CurrencyFactory extends ICUResourceBundleFactory {
-                protected Object handleCreate(Locale loc, int kind, ICUService service) {
-		    // TODO: fix when service switches over
-                    return Currency.createCurrency(ULocale.forLocale(loc));
+                protected Object handleCreate(ULocale loc, int kind, ICUService service) {
+                    return Currency.createCurrency(loc);
                 }
             }
             

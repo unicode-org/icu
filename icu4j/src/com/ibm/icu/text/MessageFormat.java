@@ -23,6 +23,7 @@ import java.util.Locale;
 
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.text.RuleBasedNumberFormat;
+import com.ibm.icu.util.ULocale;
 
 /**
  * <code>MessageFormat</code> provides a means to produce concatenated
@@ -338,7 +339,7 @@ public class MessageFormat extends UFormat {
      * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public MessageFormat(String pattern) {
-        this.locale = Locale.getDefault();
+        this.ulocale = ULocale.getDefault();
         applyPattern(pattern);
     }
 
@@ -357,7 +358,25 @@ public class MessageFormat extends UFormat {
      * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public MessageFormat(String pattern, Locale locale) {
-        this.locale = locale;
+        this(pattern, ULocale.forLocale(locale));
+    }
+
+    /**
+     * Constructs a MessageFormat for the specified locale and
+     * pattern.
+     * The constructor first sets the locale, then parses the pattern and
+     * creates a list of subformats for the format elements contained in it.
+     * Patterns and their interpretation are specified in the
+     * <a href="#patterns">class description</a>.
+     *
+     * @param pattern the pattern for this message format
+     * @param locale the locale for this message format
+     * @exception IllegalArgumentException if the pattern is invalid
+     * @draft ICU 3.2
+     * @deprecated This is a draft API and might change in a future release of ICU.
+     */
+    public MessageFormat(String pattern, ULocale locale) {
+        this.ulocale = locale;
         applyPattern(pattern);
     }
 
@@ -373,11 +392,26 @@ public class MessageFormat extends UFormat {
      * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public void setLocale(Locale locale) {
+        setLocale(ULocale.forLocale(locale));
+    }
+
+    /**
+     * Sets the locale to be used when creating or comparing subformats.
+     * This affects subsequent calls to the {@link #applyPattern applyPattern}
+     * and {@link #toPattern toPattern} methods as well as to the
+     * <code>format</code> and
+     * {@link #formatToCharacterIterator formatToCharacterIterator} methods.
+     *
+     * @param locale the locale to be used when creating or comparing subformats
+     * @draft ICU 3.2
+     * @deprecated This is a draft API and might change in a future release of ICU.
+     */
+    public void setLocale(ULocale locale) {
         /* Save the pattern, and then reapply so that */
         /* we pick up any changes in locale specific */
         /* elements */
         String existingPattern = toPattern();                       /*ibm.3550*/
-        this.locale = locale;
+        this.ulocale = locale;
         applyPattern(existingPattern);                              /*ibm.3550*/
     }
 
@@ -389,9 +423,19 @@ public class MessageFormat extends UFormat {
      * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public Locale getLocale() {
-        return locale;
+        return ulocale.toLocale();
     }
 
+    /**
+     * Gets the locale that's used when creating or comparing subformats.
+     *
+     * @return the locale used when creating or comparing subformats
+     * @draft ICU 3.2
+     * @deprecated This is a draft API and might change in a future release of ICU.
+     */
+    public ULocale getULocale() {
+        return ulocale;
+    }
 
     /**
      * Sets the pattern used by this message format.
@@ -496,58 +540,46 @@ public class MessageFormat extends UFormat {
             if (formats[i] == null) {
                 // do nothing, string format
             } else if (formats[i] instanceof DecimalFormat) {
-                if (formats[i].equals(NumberFormat.getInstance(locale))) {
+                if (formats[i].equals(NumberFormat.getInstance(ulocale))) {
                     result.append(",number");
-                } else if (formats[i].equals(NumberFormat.getCurrencyInstance(locale))) {
+                } else if (formats[i].equals(NumberFormat.getCurrencyInstance(ulocale))) {
                     result.append(",number,currency");
-                } else if (formats[i].equals(NumberFormat.getPercentInstance(locale))) {
+                } else if (formats[i].equals(NumberFormat.getPercentInstance(ulocale))) {
                     result.append(",number,percent");
-                } else if (formats[i].equals(NumberFormat.getIntegerInstance(locale))) {
+                } else if (formats[i].equals(NumberFormat.getIntegerInstance(ulocale))) {
                     result.append(",number,integer");
                 } else {
                     result.append(",number," +
                                   ((DecimalFormat)formats[i]).toPattern());
                 }
             } else if (formats[i] instanceof SimpleDateFormat) {
-                if (formats[i].equals(DateFormat.getDateInstance(
-                                                               DateFormat.DEFAULT,locale))) {
+                if (formats[i].equals(DateFormat.getDateInstance(DateFormat.DEFAULT,ulocale))) {
                     result.append(",date");
-                } else if (formats[i].equals(DateFormat.getDateInstance(
-                                                                      DateFormat.SHORT,locale))) {
+                } else if (formats[i].equals(DateFormat.getDateInstance(DateFormat.SHORT,ulocale))) {
                     result.append(",date,short");
 // This code will never be executed [alan]
-//                } else if (formats[i].equals(DateFormat.getDateInstance(
-//                                                                      DateFormat.DEFAULT,locale))) {
+//                } else if (formats[i].equals(DateFormat.getDateInstance(DateFormat.DEFAULT,ulocale))) {
 //                    result.append(",date,medium");
-                } else if (formats[i].equals(DateFormat.getDateInstance(
-                                                                      DateFormat.LONG,locale))) {
+                } else if (formats[i].equals(DateFormat.getDateInstance(DateFormat.LONG,ulocale))) {
                     result.append(",date,long");
-                } else if (formats[i].equals(DateFormat.getDateInstance(
-                                                                      DateFormat.FULL,locale))) {
+                } else if (formats[i].equals(DateFormat.getDateInstance(DateFormat.FULL,ulocale))) {
                     result.append(",date,full");
-                } else if (formats[i].equals(DateFormat.getTimeInstance(
-                                                                      DateFormat.DEFAULT,locale))) {
+                } else if (formats[i].equals(DateFormat.getTimeInstance(DateFormat.DEFAULT,ulocale))) {
                     result.append(",time");
-                } else if (formats[i].equals(DateFormat.getTimeInstance(
-                                                                      DateFormat.SHORT,locale))) {
+                } else if (formats[i].equals(DateFormat.getTimeInstance(DateFormat.SHORT,ulocale))) {
                     result.append(",time,short");
 // This code will never be executed [alan]
-//                } else if (formats[i].equals(DateFormat.getTimeInstance(
-//                                                                      DateFormat.DEFAULT,locale))) {
+//                } else if (formats[i].equals(DateFormat.getTimeInstance(DateFormat.DEFAULT,ulocale))) {
 //                    result.append(",time,medium");
-                } else if (formats[i].equals(DateFormat.getTimeInstance(
-                                                                      DateFormat.LONG,locale))) {
+                } else if (formats[i].equals(DateFormat.getTimeInstance(DateFormat.LONG,ulocale))) {
                     result.append(",time,long");
-                } else if (formats[i].equals(DateFormat.getTimeInstance(
-                                                                      DateFormat.FULL,locale))) {
+                } else if (formats[i].equals(DateFormat.getTimeInstance(DateFormat.FULL,ulocale))) {
                     result.append(",time,full");
                 } else {
-                    result.append(",date,"
-                                  + ((SimpleDateFormat)formats[i]).toPattern());
+                    result.append(",date," + ((SimpleDateFormat)formats[i]).toPattern());
                 }
             } else if (formats[i] instanceof ChoiceFormat) {
-                result.append(",choice,"
-                              + ((ChoiceFormat)formats[i]).toPattern());
+                result.append(",choice," + ((ChoiceFormat)formats[i]).toPattern());
             } else {
                 //result.append(", unknown");
             }
@@ -1097,10 +1129,10 @@ public class MessageFormat extends UFormat {
         MessageFormat other = (MessageFormat) obj;
         return (maxOffset == other.maxOffset
                 && pattern.equals(other.pattern)
-            && Utility.objectEquals(locale, other.locale)   // does null check
+                && Utility.objectEquals(ulocale, other.ulocale)   // does null check
                 && Utility.arrayEquals(offsets,other.offsets)
-            && Utility.arrayEquals(argumentNumbers,other.argumentNumbers)
-            && Utility.arrayEquals(formats,other.formats));
+                && Utility.arrayEquals(argumentNumbers,other.argumentNumbers)
+                && Utility.arrayEquals(formats,other.formats));
     }
 
     /**
@@ -1164,9 +1196,16 @@ public class MessageFormat extends UFormat {
 
     /**
      * The locale to use for formatting numbers and dates.
+     * This is no longer used, and here only for serialization compatibility.
      * @serial
      */
     private Locale locale;
+
+    /**
+     * The locale to use for formatting numbers and dates.
+     * @serial
+     */
+    private ULocale ulocale;
 
     /**
      * The string that the formatted values are to be plugged into.  In other words, this
@@ -1250,18 +1289,18 @@ public class MessageFormat extends UFormat {
                     if (subFormatter instanceof ChoiceFormat) {
                         arg = formats[i].format(obj);
                         if (arg.indexOf('{') >= 0) {
-                            subFormatter = new MessageFormat(arg, locale);
+                            subFormatter = new MessageFormat(arg, ulocale);
                             obj = arguments;
                             arg = null;
                         }
                     }
                 } else if (obj instanceof Number) {
                     // format number if can
-                    subFormatter = NumberFormat.getInstance(locale);
+                    subFormatter = NumberFormat.getInstance(ulocale);
                 } else if (obj instanceof Date) {
                     // format a Date if can
                     subFormatter = DateFormat.getDateTimeInstance(
-                             DateFormat.SHORT, DateFormat.SHORT, locale);//fix
+                             DateFormat.SHORT, DateFormat.SHORT, ulocale);//fix
                 } else if (obj instanceof String) {
                     arg = (String) obj;
 
@@ -1418,63 +1457,63 @@ public class MessageFormat extends UFormat {
         case TYPE_NUMBER:
             switch (findKeyword(segments[3].toString(), modifierList)) {
             case MODIFIER_EMPTY:
-                newFormat = NumberFormat.getInstance(locale);
+                newFormat = NumberFormat.getInstance(ulocale);
                 break;
             case MODIFIER_CURRENCY:
-                newFormat = NumberFormat.getCurrencyInstance(locale);
+                newFormat = NumberFormat.getCurrencyInstance(ulocale);
                 break;
             case MODIFIER_PERCENT:
-                newFormat = NumberFormat.getPercentInstance(locale);
+                newFormat = NumberFormat.getPercentInstance(ulocale);
                 break;
             case MODIFIER_INTEGER:
-                newFormat = NumberFormat.getIntegerInstance(locale);
+                newFormat = NumberFormat.getIntegerInstance(ulocale);
                 break;
             default: // pattern
-                newFormat = new DecimalFormat(segments[3].toString(), new DecimalFormatSymbols(locale));
+                newFormat = new DecimalFormat(segments[3].toString(), new DecimalFormatSymbols(ulocale));
                 break;
             }
             break;
         case TYPE_DATE:
             switch (findKeyword(segments[3].toString(), dateModifierList)) {
             case DATE_MODIFIER_EMPTY:
-                newFormat = DateFormat.getDateInstance(DateFormat.DEFAULT, locale);
+                newFormat = DateFormat.getDateInstance(DateFormat.DEFAULT, ulocale);
                 break;
             case DATE_MODIFIER_SHORT:
-                newFormat = DateFormat.getDateInstance(DateFormat.SHORT, locale);
+                newFormat = DateFormat.getDateInstance(DateFormat.SHORT, ulocale);
                 break;
             case DATE_MODIFIER_MEDIUM:
-                newFormat = DateFormat.getDateInstance(DateFormat.DEFAULT, locale);
+                newFormat = DateFormat.getDateInstance(DateFormat.DEFAULT, ulocale);
                 break;
             case DATE_MODIFIER_LONG:
-                newFormat = DateFormat.getDateInstance(DateFormat.LONG, locale);
+                newFormat = DateFormat.getDateInstance(DateFormat.LONG, ulocale);
                 break;
             case DATE_MODIFIER_FULL:
-                newFormat = DateFormat.getDateInstance(DateFormat.FULL, locale);
+                newFormat = DateFormat.getDateInstance(DateFormat.FULL, ulocale);
                 break;
             default:
-                newFormat = new SimpleDateFormat(segments[3].toString(), locale);
+                newFormat = new SimpleDateFormat(segments[3].toString(), ulocale);
                 break;
             }
             break;
         case TYPE_TIME:
             switch (findKeyword(segments[3].toString(), dateModifierList)) {
             case DATE_MODIFIER_EMPTY:
-                newFormat = DateFormat.getTimeInstance(DateFormat.DEFAULT, locale);
+                newFormat = DateFormat.getTimeInstance(DateFormat.DEFAULT, ulocale);
                 break;
             case DATE_MODIFIER_SHORT:
-                newFormat = DateFormat.getTimeInstance(DateFormat.SHORT, locale);
+                newFormat = DateFormat.getTimeInstance(DateFormat.SHORT, ulocale);
                 break;
             case DATE_MODIFIER_MEDIUM:
-                newFormat = DateFormat.getTimeInstance(DateFormat.DEFAULT, locale);
+                newFormat = DateFormat.getTimeInstance(DateFormat.DEFAULT, ulocale);
                 break;
             case DATE_MODIFIER_LONG:
-                newFormat = DateFormat.getTimeInstance(DateFormat.LONG, locale);
+                newFormat = DateFormat.getTimeInstance(DateFormat.LONG, ulocale);
                 break;
             case DATE_MODIFIER_FULL:
-                newFormat = DateFormat.getTimeInstance(DateFormat.FULL, locale);
+                newFormat = DateFormat.getTimeInstance(DateFormat.FULL, ulocale);
                 break;
             default:
-                newFormat = new SimpleDateFormat(segments[3].toString(), locale);
+                newFormat = new SimpleDateFormat(segments[3].toString(), ulocale);
                 break;
             }
             break;
@@ -1489,7 +1528,7 @@ public class MessageFormat extends UFormat {
             break;
         case TYPE_SPELLOUT: 
             {
-                RuleBasedNumberFormat rbnf = new RuleBasedNumberFormat(locale, RuleBasedNumberFormat.SPELLOUT);
+                RuleBasedNumberFormat rbnf = new RuleBasedNumberFormat(ulocale, RuleBasedNumberFormat.SPELLOUT);
                 String ruleset = segments[3].toString().trim();
                 if (ruleset.length() != 0) {
                     try {
@@ -1504,7 +1543,7 @@ public class MessageFormat extends UFormat {
             break;
         case TYPE_ORDINAL:
             {
-                RuleBasedNumberFormat rbnf = new RuleBasedNumberFormat(locale, RuleBasedNumberFormat.ORDINAL);
+                RuleBasedNumberFormat rbnf = new RuleBasedNumberFormat(ulocale, RuleBasedNumberFormat.ORDINAL);
                 String ruleset = segments[3].toString().trim();
                 if (ruleset.length() != 0) {
                     try {
@@ -1519,7 +1558,7 @@ public class MessageFormat extends UFormat {
             break;
         case TYPE_DURATION:
             {
-                RuleBasedNumberFormat rbnf = new RuleBasedNumberFormat(locale, RuleBasedNumberFormat.DURATION);
+                RuleBasedNumberFormat rbnf = new RuleBasedNumberFormat(ulocale, RuleBasedNumberFormat.DURATION);
                 String ruleset = segments[3].toString().trim();
                 if (ruleset.length() != 0) {
                     try {
@@ -1598,6 +1637,9 @@ public class MessageFormat extends UFormat {
         }
         if (!isValid) {
             throw new InvalidObjectException("Could not reconstruct MessageFormat from corrupt stream.");
+        }
+        if (ulocale == null) {
+            ulocale = ULocale.forLocale(locale);
         }
     }
 }

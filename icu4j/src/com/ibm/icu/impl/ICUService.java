@@ -25,6 +25,8 @@ import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
+import com.ibm.icu.util.ULocale;
+
 /**
  * <p>A Service provides access to service objects that implement a
  * particular service, e.g. transliterators.  Users provide a String
@@ -251,7 +253,7 @@ public class ICUService extends ICUNotifier {
          * not visible or not defined by the factory, return null.
          * If locale is null, return id unchanged.
          */
-        public String getDisplayName(String id, Locale locale);
+        public String getDisplayName(String id, ULocale locale);
     }
 
     /**
@@ -318,7 +320,7 @@ public class ICUService extends ICUNotifier {
          * otherwise returns null.  (This default implementation has
          * no localized id information.)
          */
-        public String getDisplayName(String id, Locale locale) {
+        public String getDisplayName(String id, ULocale locale) {
             return (visible && this.id.equals(id)) ? id : null;
         }
 
@@ -626,11 +628,11 @@ public class ICUService extends ICUNotifier {
     private SoftReference idref;
 
     /**
-     * Convenience override for getDisplayName(String, Locale) that
+     * Convenience override for getDisplayName(String, ULocale) that
      * uses the current default locale.
      */
     public String getDisplayName(String id) {
-        return getDisplayName(id, Locale.getDefault());
+        return getDisplayName(id, ULocale.getDefault());
     }
 
     /**
@@ -638,7 +640,7 @@ public class ICUService extends ICUNotifier {
      * If there is no directly supported id corresponding to this id, return
      * null.
      */
-    public String getDisplayName(String id, Locale locale) {
+    public String getDisplayName(String id, ULocale locale) {
         Map m = getVisibleIDMap();
         Factory f = (Factory)m.get(id);
         if (f != null) {
@@ -657,36 +659,36 @@ public class ICUService extends ICUNotifier {
     }
 
     /**
-     * Convenience override of getDisplayNames(Locale, Comparator, String) that 
+     * Convenience override of getDisplayNames(ULocale, Comparator, String) that 
      * uses the current default Locale as the locale, null as
      * the comparator, and null for the matchID.
      */
     public SortedMap getDisplayNames() {
-        Locale locale = Locale.getDefault();
+        ULocale locale = ULocale.getDefault();
         return getDisplayNames(locale, null, null);
     }
 
     /**
-     * Convenience override of getDisplayNames(Locale, Comparator, String) that
+     * Convenience override of getDisplayNames(ULocale, Comparator, String) that
      * uses null for the comparator, and null for the matchID.
      */
-    public SortedMap getDisplayNames(Locale locale) {
+    public SortedMap getDisplayNames(ULocale locale) {
         return getDisplayNames(locale, null, null);
     }
 
     /**
-     * Convenience override of getDisplayNames(Locale, Comparator, String) that
+     * Convenience override of getDisplayNames(ULocale, Comparator, String) that
      * uses null for the matchID, thus returning all display names.
      */
-    public SortedMap getDisplayNames(Locale locale, Comparator com) {
+    public SortedMap getDisplayNames(ULocale locale, Comparator com) {
         return getDisplayNames(locale, com, null);
     }
 
     /**
-     * Convenience override of getDisplayNames(Locale, Comparator, String) that
+     * Convenience override of getDisplayNames(ULocale, Comparator, String) that
      * uses null for the comparator.
      */
-    public SortedMap getDisplayNames(Locale locale, String matchID) {
+    public SortedMap getDisplayNames(ULocale locale, String matchID) {
         return getDisplayNames(locale, null, matchID);
     }
 
@@ -700,7 +702,7 @@ public class ICUService extends ICUNotifier {
      * those in the set.  The display names are sorted based on the
      * comparator provided.
      */
-    public SortedMap getDisplayNames(Locale locale, Comparator com, String matchID) {
+    public SortedMap getDisplayNames(ULocale locale, Comparator com, String matchID) {
         SortedMap dncache = null;
         LocaleRef ref = dnref;
 
@@ -750,18 +752,18 @@ public class ICUService extends ICUNotifier {
     // we define a class so we get atomic simultaneous access to the
     // locale, comparator, and corresponding map.
     private static class LocaleRef {
-        private final Locale locale;
+        private final ULocale locale;
         private SoftReference ref;
         private Comparator com;
 
-        LocaleRef(Map dnCache, Locale locale, Comparator com) {
+        LocaleRef(Map dnCache, ULocale locale, Comparator com) {
             this.locale = locale;
             this.com = com;
             this.ref = new SoftReference(dnCache);
         }
 
 
-        SortedMap get(Locale locale, Comparator com) {
+        SortedMap get(ULocale locale, Comparator com) {
             SortedMap m = (SortedMap)ref.get();
             if (m != null &&
                 this.locale.equals(locale) &&

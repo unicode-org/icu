@@ -10,9 +10,11 @@ package com.ibm.icu.text;
 import java.text.CharacterIterator;
 import java.text.StringCharacterIterator;
 import java.util.Locale;
-import com.ibm.icu.lang.UCharacter;
+
 import com.ibm.icu.impl.CharacterIteratorWrapper;
 import com.ibm.icu.impl.NormalizerImpl;
+import com.ibm.icu.lang.UCharacter;
+import com.ibm.icu.util.ULocale;
 
 /**
  * <p>
@@ -222,6 +224,29 @@ public final class StringSearch extends SearchIterator
      * @stable ICU 2.0
      */
     public StringSearch(String pattern, CharacterIterator target, Locale locale)
+    {
+        this(pattern, target, ULocale.forLocale(locale));
+    }
+
+    /**
+     * Initializes the iterator to use the language-specific rules and 
+     * break iterator rules defined in the argument locale to search for 
+     * argument pattern in the argument target text. 
+     * See super class documentation for more details on the use of the target 
+     * text and BreakIterator.
+     * @param pattern text to look for.
+     * @param target target text to search for pattern. 
+     * @param locale ulocale to use for language and break iterator rules
+     * @exception IllegalArgumentException thrown when argument target is null,
+     *            or of length 0. ClassCastException thrown if the collator for 
+     *            the specified locale is not a RuleBasedCollator.
+     * @see BreakIterator
+     * @see RuleBasedCollator
+     * @see SearchIterator
+     * @draft ICU 3.2
+     * @deprecated This is a draft API and might change in a future release of ICU.
+     */
+    public StringSearch(String pattern, CharacterIterator target, ULocale locale)
     {
         this(pattern, target, (RuleBasedCollator)Collator.getInstance(locale),
              BreakIterator.getCharacterInstance(locale));
