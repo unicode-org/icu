@@ -2327,15 +2327,23 @@ UConverter_toUnicode_ISO_2022_KR_OFFSETS_LOGIC(UConverterToUnicodeArgs *args,
                 /*consume the source */
                 continue;
             }else if(mySourceChar==ESC_2022 || myData->key!=0){
-                /* Already doing some conversion and found escape Sequence*/
-                if(args->converter->mode == UCNV_SO){
-                    *err = U_ILLEGAL_ESCAPE_SEQUENCE;
-                }
-                else{
+                
+                /*
+                 * Commented out this part to be lenient and allow for
+                 * more escape sequences in ISO-2022-KR byte stream
+                 *
+                 * Already doing some conversion and found escape Sequence
+                 * if(args->converter->mode == UCNV_SO){
+                 *   *err = U_ILLEGAL_ESCAPE_SEQUENCE;
+                 * }
+                 * else{
+                 *
+                 */
+
                     mySource--;
                     changeState_2022(args->converter,&(mySource), 
                                     args->sourceLimit, args->flush,ISO_2022_KR,&plane, err);
-                }
+                /*}*/
                 if(U_FAILURE(*err)){
                     args->target = myTarget;
                     args->source = mySource;
