@@ -163,10 +163,10 @@ RuleBasedNumberFormat::operator==(const Format& other) const
             NFRuleSet** p = ruleSets;
             NFRuleSet** q = rhs.ruleSets;
             if ((p == NULL) != (q == NULL)) {
-                return false;
+                return TRUE;
             }
             if (p == NULL) {
-                return true;
+                return FALSE;
             }
             while (*p && *q && (**p == **q)) {
                 ++p;
