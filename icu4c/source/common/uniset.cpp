@@ -1895,6 +1895,24 @@ void UnicodeSet::applyPattern(const UnicodeString& pattern,
 }
 
 /**
+ * A small all-inline class to manage a UnicodeSet pointer.  Add
+ * operator->() etc. as needed.
+ */
+class UnicodeSetPointer {
+    UnicodeSet* p;
+public:
+    inline UnicodeSetPointer() : p(0) {}
+    inline ~UnicodeSetPointer() { delete p; }
+    inline UnicodeSet* pointer() { return p; }
+    inline UBool allocate() {
+        if (p == 0) {
+            p = new UnicodeSet();
+        }
+        return p != 0;
+    }
+};
+
+/**
  * Parse the pattern from the given RuleCharacterIterator.  The
  * iterator is advanced over the parsed pattern.
  * @param chars iterator over the pattern characters.  Upon return
@@ -1927,7 +1945,7 @@ void UnicodeSet::applyPattern(RuleCharacterIterator& chars,
 
     UnicodeString pat, buf;
     UBool usePat = FALSE;
-    UnicodeSet scratch;
+    UnicodeSetPointer scratch;
     RuleCharacterIterator::Pos backup;
 
     // mode: 0=before [, 1=between [...], 2=after ]
@@ -1948,7 +1966,7 @@ void UnicodeSet::applyPattern(RuleCharacterIterator& chars,
 
         UChar32 c = 0;
         UBool literal = FALSE;
-        UnicodeSet* nested = 0;
+        UnicodeSet* nested = 0; // alias - do not delete
 
         // -------- Check for property pattern
 
@@ -2038,7 +2056,12 @@ void UnicodeSet::applyPattern(RuleCharacterIterator& chars,
             }
 
             if (nested == 0) {
-                nested = &scratch;
+                // lazy allocation
+                if (!scratch.allocate()) {
+                    ec = U_MEMORY_ALLOCATION_ERROR;
+                    return;
+                }
+                nested = scratch.pointer();
             }
             switch (setMode) {
             case 1:
