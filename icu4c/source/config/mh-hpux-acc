@@ -33,6 +33,7 @@ SO=		sl
 LIBICU-UC= 	-L$(top_builddir)/common -licu-uc
 LIBICU-I18N= 	-L$(top_builddir)/i18n -licu-i18n
 LIBCTESTFW= 	-L$(top_builddir)/tools/ctestfw -lctestfw
+LIBICU-TOOLUTIL=-L$(top_builddir)/tools/toolutil -licu-toolutil
 
 ## Compilation rules
 %.o : $(srcdir)/%.c
