@@ -815,12 +815,12 @@ void IntlTestRBNF::TestLLong()
 	}
 
 	// atoll
-	const char empty[] = { 0 };
-	const char zero[] = { 0x30, 0 };
-	const char neg_one[] = { 0x2d, 0x31, 0 };
-	const char neg_12345[] = { 0x2d, 0x31, 0x32, 0x33, 0x34, 0x35, 0 };
-	const char big1[] = { 0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37, 0x38, 0x39, 0x61, 0x62, 0x63, 0x64, 0x65, 0x66, 0x30, 0 };
-	const char big2[] = { 0x66, 0x46, 0x66, 0x46, 0x66, 0x46, 0x66, 0x46, 0x66, 0x46, 0x66, 0x46, 0x66, 0x46, 0x66, 0x46, 0 };
+	const char empty[] = "";
+	const char zero[] = "0";
+	const char neg_one[] = "-1";
+	const char neg_12345[] = "-12345";
+	const char big1[] = "123456789abcdef0";
+	const char big2[] = "fFfFfFfFfFfFfFfF";
 	LLAssert(llong::atoll(empty) == llong(0, 0));
 	LLAssert(llong::atoll(zero) == llong(0, 0));
 	LLAssert(llong::atoll(neg_one) == llong(0xffffffff, 0xffffffff));
