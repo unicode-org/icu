@@ -22,39 +22,18 @@ import java.util.Set;
  * does not look in the boot or system class path.
  */
 public class ICULocaleData {
-    private static Locale[] localeList;
-    private static final String PACKAGE1 = "com.ibm.icu.impl.data";
-    private static final String[] packageNames = { PACKAGE1 };
-    private static final boolean debug = ICUDebug.enabled("localedata");
 
     /**
-     * Returns a list of the installed locales.
-     *
-     * The following note by Rich is obsolete, see below.  -- dlf 01 Oct. 2002
-     * -----
-     * @param key A resource tag.  Currently, this parameter is ignored.  The obvious
-     * intent, however,  is for getAvailableLocales() to return a list of only those
-     * locales that contain a resource with the specified resource tag.
-     *
-     * <p>Before we implement this function this way, however, some thought should be
-     * given to whether this is really the right thing to do.  Because of the lookup
-     * algorithm, a NumberFormat, for example, is "installed" for all locales.  But if
-     * we're trying to put up a list of NumberFormats to choose from, we may want to see
-     * only a list of those locales that uniquely define a NumberFormat rather than
-     * inheriting one from another locale.  Thus, if fr and fr_CA uniquely define
-     * NumberFormat data, but fr_BE doesn't, the user wouldn't see "French (Belgium)" in
-     * the list and would go for "French (default)" instead.  Of course, this means
-     * "Engish (United States)" would not be in the list, since it is the default locale.
-     * This might be okay, but might be confusing to some users.
-     *
-     * <p>In addition, the other functions that call getAvailableLocales() don't currently
-     * all pass the right thing for "key," meaning that all of these functions should be
-     * looked at before anything is done to this function.
-     *
-     * <p>We recommend that someone take some careful consideration of these issues before
-     * modifying this function to pay attention to the "key" parameter.  --rtg 1/26/98
-     * -----
-     *
+     * The package for ICU locale data.
+     */
+    private static final String ICU_PACKAGE = "com.ibm.icu.impl.data";
+
+    /**
+     * The base name (bundle name) for ICU locale data.
+     */
+    private static final String LOCALE_ELEMENTS = "LocaleElements";
+
+    /**
      * Return a list of the locales supported by a collection of resource bundles.
      * All ICULocaleData-based services that use a particular resource bundle support
      * all the locales from that bundle.  If support for a particular service is spotty,
@@ -87,6 +66,165 @@ public class ICULocaleData {
     public static Set getAvailableLocaleNameSet() {
         return getAvailableLocaleNameSet(LOCALE_ELEMENTS);
     }
+
+    /**
+     * Creates a LocaleElements resource bundle for the given locale
+     * in the default ICU package.
+     * @param locale the locale of the bundle to retrieve, or
+     * null to use the default locale
+     * @return a ResourceBundle for the LocaleElements of the given
+     * locale, or null on failure
+     */
+    public static ResourceBundle getLocaleElements(Locale locale) {
+        if (locale == null) {
+            locale = Locale.getDefault();
+        }
+        return getResourceBundle(ICU_PACKAGE, LOCALE_ELEMENTS, locale.toString());
+    }
+
+    /**
+     * Creates a LocaleElements resource bundle for the given locale
+     * in the default ICU package.
+     * @param localeName the string name of the locale of the bundle
+     * to retrieve, e.g., "en_US".
+     * @return a ResourceBundle for the LocaleElements of the given
+     * locale, or null on failure
+     */
+    public static ResourceBundle getLocaleElements(String localeName) {
+        return getResourceBundle(ICU_PACKAGE, LOCALE_ELEMENTS, localeName);
+    }
+
+
+    /**
+     * Creates a resource bundle for the given base name and locale
+     * in the default ICU package.
+     * @param bundleName the base name of the bundle to retrieve,
+     * e.g. "LocaleElements".
+     * @param localeName the string name of the locale of the bundle
+     * to retrieve, e.g. "en_US".
+     * @return a ResourceBundle with the given base name for the given
+     * locale, or null on failure
+     */
+    public static ResourceBundle getResourceBundle(String bundleName, String localeName) {
+        return getResourceBundle(ICU_PACKAGE, bundleName, localeName);
+    }
+
+    /**
+     * Creates a resource bundle for the given base name and locale
+     * in the default ICU package.
+     * @param bundleName the base name of the bundle to retrieve,
+     * e.g. "LocaleElements".
+     * @param locale the locale of the bundle to retrieve, or
+     * null to use the default locale
+     * @return a ResourceBundle with the given base name for the given
+     * locale, or null on failure
+     */
+    public static ResourceBundle getResourceBundle(String bundleName, Locale locale) {
+        if (locale == null) {
+            locale = Locale.getDefault();
+        }
+        return getResourceBundle(ICU_PACKAGE, bundleName, locale.toString());
+    }
+
+    /**
+     * Creates a resource bundle for the given package, base name, and
+     * locale.
+     * @param package a package name, e.g., "com.ibm.icu.impl.data".
+     * @param bundleName the base name of the bundle to retrieve,
+     * e.g. "LocaleElements".
+     * @param localeName the string name of the locale of the bundle
+     * to retrieve, e.g. "en_US".
+     * @return the first ResourceBundle with the given base name for
+     * the given locale found in each of the packages, or null on
+     * failure
+     */
+    public static ResourceBundle getResourceBundle(String packageName, String bundleName, String localeName) {
+        try {
+            String path = packageName + "." + bundleName;
+            if (DEBUG) System.out.println("calling instantiate: " + path + "_" + localeName);
+            return instantiate(path, localeName);
+        } catch (MissingResourceException e) {
+            if (DEBUG) System.out.println(bundleName + "_" + localeName + " not found in " + packageName);
+            throw e;
+        }
+    }
+
+    /**
+     * Creates a resource bundle for the given base name and locale in
+     * one of the given packages, trying each package in order.
+     * @param packages a list of one or more package names
+     * @param bundleName the base name of the bundle to retrieve,
+     * e.g. "LocaleElements".
+     * @param localeName the string name of the locale of the bundle
+     * to retrieve, e.g. "en_US".
+     * @return the first ResourceBundle with the given base name for
+     * the given locale found in each of the packages, or null on
+     * failure
+     */
+    public static ResourceBundle getResourceBundle(String[] packages, String bundleName, String localeName) {
+        ResourceBundle r=null;
+        for (int i=0; r==null && i<packages.length; ++i) {
+            r = getResourceBundle(packages[i], bundleName, localeName);
+        }
+        return r;
+    }
+
+    /**
+     * Get a resource bundle from the resource bundle path.  Unlike getResourceBundle, this
+     * returns an 'unparented' bundle that exactly matches the bundle name and locale name.
+     */
+    public static ResourceBundle loadResourceBundle(String bundleName, Locale locale) {
+        if (locale == null) {
+            locale = Locale.getDefault();
+        }
+        return loadResourceBundle(bundleName, locale.toString());
+    }
+
+    /**
+     * Get a resource bundle from the resource bundle path.  Unlike getResourceBundle, this
+     * returns an 'unparented' bundle that exactly matches the bundle name and locale name.
+     */
+    public static ResourceBundle loadResourceBundle(String bundleName, String localeName) {
+        if (localeName != null && localeName.length() > 0) {
+            bundleName = bundleName + "_" + localeName;
+        }
+        String name = ICU_PACKAGE + "." + bundleName;
+        try {
+            if (name.indexOf("_zh_") == -1) { // DLF temporary hack
+                Class rbclass = Class.forName(name);
+                ResourceBundle rb = (ResourceBundle)rbclass.newInstance();
+                return rb;
+            }
+        }
+        catch (ClassNotFoundException e) {
+            if (DEBUG) {
+                System.out.println(name + " not found");
+            }
+            // ignore, keep looking
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            if (DEBUG) {
+                System.out.println(e.getMessage());
+            }
+        }
+        if (DEBUG) {
+            System.out.println(bundleName + " not found.");
+        }
+
+        return null;
+    }
+
+    // ========== privates ==========
+
+    // Flag for enabling/disabling debugging code
+    private static final boolean DEBUG = ICUDebug.enabled("localedata");
+
+    // Cache for getAvailableLocales
+    private static SoftReference GET_AVAILABLE_CACHE;
+
+    // Cache for ResourceBundle instantiation
+    private static SoftReference BUNDLE_CACHE;
 
     /**
      * Holds the prefix, and lazily creates the Locale[] list or the locale name Set as needed.
@@ -123,8 +261,8 @@ public class ICULocaleData {
     private static AvailEntry getAvailEntry(String key) {
         AvailEntry ae = null;
         Map lcache = null;
-        if (lcacheref != null) {
-            lcache = (Map)lcacheref.get();
+        if (GET_AVAILABLE_CACHE != null) {
+            lcache = (Map)GET_AVAILABLE_CACHE.get();
             if (lcache != null) {
                 ae = (AvailEntry)lcache.get(key);
             }
@@ -135,7 +273,7 @@ public class ICULocaleData {
             if (lcache == null) {
                 lcache = new HashMap();
                 lcache.put(key, ae);
-                lcacheref = new SoftReference(lcache);
+                GET_AVAILABLE_CACHE = new SoftReference(lcache);
             } else {
                 lcache.put(key, ae);
             }
@@ -143,31 +281,10 @@ public class ICULocaleData {
 
         return ae;
     }
-    private static SoftReference lcacheref;
 
-    /**
-     * The default name for resources containing ICU locale data.
-     */
-    public static final String LOCALE_ELEMENTS = "LocaleElements";
-
-    /**
-     * Gets a LocaleElements resource bundle.
-     */
-    public static ResourceBundle getLocaleElements(Locale locale) {
-        return getResourceBundle(LOCALE_ELEMENTS, locale);
-    }
-
-    /**
-     * Gets a LocaleElements resource bundle.
-     */
-    public static ResourceBundle getLocaleElements(String localeName) {
-        return getResourceBundle(LOCALE_ELEMENTS, localeName);
-    }
-
-    private static SoftReference gBundleCache;
     private static ResourceBundle loadFromCache(String key) {
-        if (gBundleCache != null) {
-            Map m = (Map)gBundleCache.get();
+        if (BUNDLE_CACHE != null) {
+            Map m = (Map)BUNDLE_CACHE.get();
             if (m != null) {
                 return (ResourceBundle)m.get(key);
             }
@@ -177,12 +294,12 @@ public class ICULocaleData {
 
     private static void addToCache(String key, ResourceBundle b) {
         Map m = null;
-        if (gBundleCache != null) {
-            m = (Map)gBundleCache.get();
+        if (BUNDLE_CACHE != null) {
+            m = (Map)BUNDLE_CACHE.get();
         }
         if (m == null) {
             m = new HashMap();
-            gBundleCache = new SoftReference(m);
+            BUNDLE_CACHE = new SoftReference(m);
         }
         m.put(key, b);
     }
@@ -217,10 +334,10 @@ public class ICULocaleData {
                     }
                     bx.icuLocale = locale;
                     b = bx;
-//                      System.out.println("iculistresourcebundle: " + name + " is " + b);
+                    // System.out.println("iculistresourcebundle: " + name + " is " + b);
                 } else {
                     b = ResourceBundle.getBundle(name.substring(0, i), locale);
-//                      System.out.println("resourcebundle: " + name + " is " + b);
+                    // System.out.println("resourcebundle: " + name + " is " + b);
                 }    
                 addToCache(name, b);
             }
@@ -236,7 +353,7 @@ public class ICULocaleData {
                     String defaultName = Locale.getDefault().toString();
                     
                     if(!locName.equals(rootLocale.toString()) &&
-                        defaultName.indexOf(locName)==-1){
+                       defaultName.indexOf(locName)==-1){
                         String bundle =  name.substring(0,j);
                         parent = instantiate(bundle+"_"+defaultName);
                     }
@@ -256,155 +373,18 @@ public class ICULocaleData {
      * to load class resources from new locations that aren't already on the
      * class path?
      */
-    private synchronized static ResourceBundle instantiateBundle(String name, Locale l) {
-        String s = l.toString();
-        if(s.length()!=0){
-            return instantiate(name + "_" + l);
-        }else{
-            return instantiate(name);
+    private synchronized static ResourceBundle instantiate(String name, String localeName) {
+        if (localeName.length() != 0) {
+            name = name + "_" + localeName;
         }
-        //    ResourceBundle rb = ResourceBundle.getBundle(name, l);
-//          try {
-//              Class cls = ICULocaleData.class.getClassLoader().loadClass(name + "_" + l);
-//              System.out.println("Loaded class: " + cls);
-//              return (ResourceBundle)cls.newInstance();
-//          }
-//          catch (Exception e) {
-//              System.out.println("failure");
-//              System.out.println(e);
-//          }
-//          return ResourceBundle.getBundle(name, l);
+        return instantiate(name);
     }
-
-    /**
-     * Get a resource bundle from the lookup chain.
-     */
-    public static ResourceBundle getResourceBundle(String bundleName, String localeName) {
-    Locale locale = LocaleUtility.getLocaleFromName(localeName);
-    return getResourceBundle(bundleName, locale);
-    }
-
-    /**
-     * Get a resource bundle from the lookup chain.
-     */
-    public static ResourceBundle getResourceBundle(String bundleName, Locale locale) {
-    if (locale == null) {
-        locale = Locale.getDefault();
-    }
-    for (int i = 0; i < packageNames.length; ++i) {
-        try {
-        String path = packageNames[i] + "." + bundleName;
-        if (debug) System.out.println("calling instantiateBundle: " + path + "_" + locale);
-        ResourceBundle rb = instantiateBundle(path, locale);
-        return rb;
-        }
-        catch (MissingResourceException e) {
-        if (debug) System.out.println(bundleName + "_" + locale + " not found in " + packageNames[i]);
-        throw e;
-        }
-    }
-
-    return null;
-    }
-
-    /**
-     * Get a resource bundle from the lookup chain.
-     */
-    public static ResourceBundle getResourceBundle(String[] packages, String bundleName, String localeName) {
-        Locale locale = LocaleUtility.getLocaleFromName(localeName);
-        if (locale == null) {
-            locale = Locale.getDefault();
-        }
-        for (int i = 0; i < packages.length; ++i) {
-            try {
-                String path = packages[i] + "." + bundleName;
-                if (debug) System.out.println("calling instantiateBundle: " + path + "_" + locale);
-                ResourceBundle rb = instantiateBundle(path, locale);
-                return rb;
-            }
-            catch (MissingResourceException e) {
-               if (debug) System.out.println(bundleName + "_" + locale + " not found in " + packages[i]);
-               throw e;
-            }
-        }
-        return null;
-    }
-
-    /**
-     * Get a resource bundle from the lookup chain.
-     */
-    public static ResourceBundle getResourceBundle(String packageName, String bundleName, String localeName) {
-        Locale locale = LocaleUtility.getLocaleFromName(localeName);
-        if (locale == null) {
-            locale = Locale.getDefault();
-        }
-
-        try {
-            String path = packageName + "." + bundleName;
-            if (debug) System.out.println("calling instantiateBundle: " + path + "_" + locale);
-            ResourceBundle rb = instantiateBundle(path, locale);
-            return rb;
-        }
-        catch (MissingResourceException e) {
-           if (debug) System.out.println(bundleName + "_" + locale + " not found in " + packageName);
-           throw e;
-        }
-    }
-    /**
-     * Get a resource bundle from the resource bundle path.  Unlike getResourceBundle, this
-     * returns an 'unparented' bundle that exactly matches the bundle name and locale name.
-     */
-    public static ResourceBundle loadResourceBundle(String bundleName, Locale locale) {
-    if (locale == null) {
-        locale = Locale.getDefault();
-    }
-    return loadResourceBundle(bundleName, locale.toString());
-    }
-
-    /**
-     * Get a resource bundle from the resource bundle path.  Unlike getResourceBundle, this
-     * returns an 'unparented' bundle that exactly matches the bundle name and locale name.
-     */
-    public static ResourceBundle loadResourceBundle(String bundleName, String localeName) {
-    if (localeName != null && localeName.length() > 0) {
-        bundleName = bundleName + "_" + localeName;
-    }
-    for (int i = 0; i < packageNames.length; ++i) {
-        String name = packageNames[i] + "." + bundleName;
-        try {
-        if (name.indexOf("_zh_") == -1) { // DLF temporary hack
-            Class rbclass = Class.forName(name);
-            ResourceBundle rb = (ResourceBundle)rbclass.newInstance();
-            return rb;
-        }
-        }
-        catch (ClassNotFoundException e) {
-        if (debug) {
-            System.out.println(bundleName + " not found in " + packageNames[i]);
-        }
-        // ignore, keep looking
-        }
-        catch (Exception e) {
-	    e.printStackTrace();
-        if (debug) {
-            System.out.println(e.getMessage());
-        }
-        }
-    }
-    if (debug) {
-        System.out.println(bundleName + " not found.");
-    }
-
-    return null;
-    }
-
-    // ========== privates ==========
 
     private static Set createLocaleNameSet(String bundleName) {
-    try {
-        	ResourceBundle index = getResourceBundle(bundleName, "index");
-        	Object[][] localeStrings = (Object[][]) index.getObject("InstalledLocales");
-        	String[] localeNames = new String[localeStrings.length];
+        try {
+            ResourceBundle index = getResourceBundle(bundleName, "index");
+            Object[][] localeStrings = (Object[][]) index.getObject("InstalledLocales");
+            String[] localeNames = new String[localeStrings.length];
 
             // barf gag choke spit hack...
             // since java's Locale 'fixes' the locale string for some locales,
@@ -417,28 +397,28 @@ public class ICULocaleData {
             HashSet set = new HashSet();
             set.addAll(Arrays.asList(localeNames));
             return Collections.unmodifiableSet(set);
-    }
-    catch (MissingResourceException e) {
-            if (debug) System.out.println("couldn't find index for bundleName: " + bundleName);
+        }
+        catch (MissingResourceException e) {
+            if (DEBUG) System.out.println("couldn't find index for bundleName: " + bundleName);
             Thread.dumpStack();
-    }
+        }
         return Collections.EMPTY_SET;
     }
 
     private static Locale[] createLocaleList(String bundleName) {
-    try {
-        ResourceBundle index = getResourceBundle(bundleName, "index");
-       	Object[][] localeStrings = (Object[][]) index.getObject("InstalledLocales");
-        Locale[] locales = new Locale[localeStrings.length];
-        for (int i = 0; i < localeStrings.length; ++i) {
-        locales[i] = LocaleUtility.getLocaleFromName((String)localeStrings[i][0]);
+        try {
+            ResourceBundle index = getResourceBundle(bundleName, "index");
+            Object[][] localeStrings = (Object[][]) index.getObject("InstalledLocales");
+            Locale[] locales = new Locale[localeStrings.length];
+            for (int i = 0; i < localeStrings.length; ++i) {
+                locales[i] = LocaleUtility.getLocaleFromName((String)localeStrings[i][0]);
+            }
+            return locales;
         }
-        return locales;
-    }
-    catch (MissingResourceException e) {
-            if (debug) System.out.println("couldn't find index for bundleName: " + bundleName);
+        catch (MissingResourceException e) {
+            if (DEBUG) System.out.println("couldn't find index for bundleName: " + bundleName);
             Thread.dumpStack();
-    }
-    return new Locale[0];
+        }
+        return new Locale[0];
     }
 }
