@@ -259,8 +259,9 @@ void TransliteratorAPITest::TestTransliterate1(){
          "Any-Hex",         "hello",    UnicodeString("\\u0068\\u0065\\u006C\\u006C\\u006F", "") ,
          "Hex-Any",         UnicodeString("\\u0068\\u0065\\u006C\\u006C\\u006F", ""), "hello"  ,
          "Latin-Devanagari","bhaarata", CharsToUnicodeString("\\u092D\\u093E\\u0930\\u0924") ,
+         "Latin-Devanagari",UnicodeString("kra ksha khra gra cra dya dhya",""), CharsToUnicodeString("\\u0915\\u094D\\u0930 \\u0915\\u094D\\u0936 \\u0916\\u094D\\u0930 \\u0917\\u094D\\u0930 \\u091a\\u094D\\u0930 \\u0926\\u094D\\u092F \\u0927\\u094D\\u092F") ,
 
-         "Devanagari-Latin",    CharsToUnicodeString("\\u092D\\u093E\\u0930\\u0924"),        UnicodeString("bhaarata"),
+         "Devanagari-Latin",    CharsToUnicodeString("\\u092D\\u093E\\u0930\\u0924"),        UnicodeString("bh\\u0101rata"),
      //  "Contracted-Expanded", CharsToUnicodeString("\\u00C0\\u00C1\\u0042"),               CharsToUnicodeString("\\u0041\\u0300\\u0041\\u0301\\u0042") ,
      //  "Expanded-Contracted", CharsToUnicodeString("\\u0041\\u0300\\u0041\\u0301\\u0042"), CharsToUnicodeString("\\u00C0\\u00C1\\u0042") ,
          "Latin-Arabic",        "aap",                                 CharsToUnicodeString("\\u0627\\u06A4")     ,
@@ -310,7 +311,7 @@ void TransliteratorAPITest::TestTransliterate2(){
          "Hex-Any",         CharsToUnicodeString("\\u0068\\u0065\\u006C\\u006C\\u006F\\u0021\\u0020"), "0", "5",  "hello", "hello! "  ,
        //  "Contracted-Expanded", CharsToUnicodeString("\\u00C0\\u00C1\\u0042"),        "1", "2",  CharsToUnicodeString("\\u0041\\u0301"), CharsToUnicodeString("\\u00C0\\u0041\\u0301\\u0042") ,
          "Devanagari-Latin",    CharsToUnicodeString("\\u092D\\u093E\\u0930\\u0924"), "0", "1",  "bha", CharsToUnicodeString("bha\\u093E\\u0930\\u0924") ,
-         "Devanagari-Latin",    CharsToUnicodeString("\\u092D\\u093E\\u0930\\u0924"), "1", "2",  "aa", CharsToUnicodeString("\\u092Daa\\u0930\\u0924")  
+         "Devanagari-Latin",    CharsToUnicodeString("\\u092D\\u093E\\u0930\\u0924"), "1", "2",  "\\u0101", CharsToUnicodeString("\\u092D\\u0101\\u0930\\u0924")  
 
     };
     logln("\n   Testing transliterate(String, int, int, StringBuffer)");
@@ -496,12 +497,12 @@ void TransliteratorAPITest::TestKeyboardTransliterator2(){
         "abc",    UnicodeString("Initial String: add-\\u0061\\u0062\\u0063-", ""),                     "19", "20", "20",
         "a",      UnicodeString("In\\u0069\\u0061tial String: add-\\u0061\\u0062\\u0063-", ""),        "2",  "3",  "2" ,
         "b",      UnicodeString("\\u0062In\\u0069\\u0061tial String: add-\\u0061\\u0062\\u0063-", ""), "0",  "0",  "0" ,
-        "",     UnicodeString("\\u0062In\\u0069\\u0061tial String: add-\\u0061\\u0062\\u0063-", ""), "0",  "0",  "0" ,
+        "",       UnicodeString("\\u0062In\\u0069\\u0061tial String: add-\\u0061\\u0062\\u0063-", ""), "0",  "0",  "0" ,
         //data for Latin-Devanagiri
-        "aa",     CharsToUnicodeString("Hindi -\\u0906-"),                    "6",  "7",  "6",
-        "maa",    CharsToUnicodeString("Hindi -\\u0906\\u092E\\u093E-"),        "7",  "8",  "7",
-        "raa",    CharsToUnicodeString("Hi\\u0930\\u093Endi -\\u0906\\u092E\\u093E-"),        "1", "2", "2",
-        "",       CharsToUnicodeString("Hi\\u0930\\u093Endi -\\u0906\\u092E\\u093E-"),        "1", "2", "2"
+        CharsToUnicodeString("aa"),     CharsToUnicodeString("Hindi -\\u0906-"),                            "6", "7", "6",
+        CharsToUnicodeString("maa"),    CharsToUnicodeString("Hindi -\\u0906\\u092E\\u093E-"),              "7", "8", "7",
+        CharsToUnicodeString("raa"),    CharsToUnicodeString("Hi\\u0930\\u093Endi -\\u0906\\u092E\\u093E-"),"1", "2", "2",
+        CharsToUnicodeString(""),       CharsToUnicodeString("Hi\\u0930\\u093Endi -\\u0906\\u092E\\u093E-"),"1", "2", "2"
         //data for contracted-Expanded
      //   CharsToUnicodeString("\\u00C1"), CharsToUnicodeString("Ad\\u0041\\u0301d here:"),             "1",  "2",  "1" ,
      //   CharsToUnicodeString("\\u00C0"), CharsToUnicodeString("Ad\\u0041\\u0301d here:\\u0041\\u0300"), "11", "11", "11",
