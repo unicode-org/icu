@@ -751,14 +751,7 @@ public int getRuleStatusVec(int[] fillInArray) {
         return retVal;
     }
     
-    private static boolean CIHasPrevious(CharacterIterator ci) {
-        if (ci == null) {
-            return false;
-        }
-        return (ci.getIndex() != ci.getBeginIndex());
-    }
-    
-    
+
     /**
      * The State Machine Engine for moving forward is here.
      * @param stateTable
@@ -861,7 +854,7 @@ public int getRuleStatusVec(int[] fillInArray) {
             //    to the correct position for recording matches in the code that
             //    follows.
             c = (int)fText.next(); 
-            if (c >= 0xd800) {
+            if (c >= UTF16.LEAD_SURROGATE_MIN_VALUE) {
                 c = CINextTrail32(fText, c);
             }
 

@@ -253,11 +253,22 @@ final class RBBIDataWrapper {
         //     The seek to the start of the next item following the TRIE will get us
         //     back in sync.
         //
-        dis.skip(This.fHeader.fTrie - pos);
-        pos = This.fHeader.fTrie;
-        dis.mark(This.fHeader.fTrieLen+100);
-        This.fTrie = new CharTrie(dis, fTrieFoldingFunc);
-        dis.reset();
+        dis.skip(This.fHeader.fTrie - pos);     // seek input stream from end of previous section to
+        pos = This.fHeader.fTrie;               //   to the start of the trie
+	
+        dis.mark(This.fHeader.fTrieLen+100);    // Mark position of start of TRIE in the input
+                                                //  and tell Java to keep the mark valid so long
+                                                //  as we don't go more than 100 bytes past the
+                                                //  past the end of the TRIE.
+	
+        This.fTrie = new CharTrie(dis, fTrieFoldingFunc);  // Deserialize the TRIE, leaving input
+                                                //  stream at an unknown position, preceding the
+                                                //  padding between TRIE and following section.
+	
+        dis.reset();                            // Move input stream back to marked position at
+                                                //   the start of the serialized TRIE.  Now our
+                                                //   "pos" variable and the input stream are in
+                                                //   agreement.
         
         //
         // Read the Rule Status Table
