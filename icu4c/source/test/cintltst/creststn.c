@@ -1964,7 +1964,7 @@ static void TestFallback()
     subResource = ures_getByKey(fr_FR, "CurrencyMap", NULL, &status);
     if(status != U_USING_DEFAULT_WARNING)
     {
-        log_data_err("Expected U_USING_DEFAULT_ERROR when trying to get LocaleScript from fr_FR, got %s\n", 
+        log_data_err("Expected U_USING_DEFAULT_ERROR when trying to get CurrencyMap from fr_FR, got %s\n", 
             u_errorName(status));
     }
 

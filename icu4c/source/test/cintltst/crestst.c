@@ -440,7 +440,7 @@ static void TestFallback()
     subResource = ures_getByKey(fr_FR, "CurrencyMap", NULL, &status);
     if(status != U_USING_DEFAULT_WARNING)
     {
-        log_data_err("Expected U_USING_DEFAULT_ERROR when trying to get LocaleScript from fr_FR, got %s\n",
+        log_data_err("Expected U_USING_DEFAULT_ERROR when trying to get CurrencyMap from fr_FR, got %s\n",
             u_errorName(status));
     }
     ures_close(subResource);
@@ -461,7 +461,7 @@ static void TestFallback()
 
 static void
 TestOpenDirect(void) {
-    UResourceBundle *translit_index, *item;
+    UResourceBundle *idna_rules, *item;
     UErrorCode errorCode;
 
     /*
@@ -470,19 +470,19 @@ TestOpenDirect(void) {
      * from root or similar
      */
     errorCode=U_ZERO_ERROR;
-    translit_index=ures_openDirect(NULL, "translit_index", &errorCode);
+    idna_rules=ures_openDirect("testdata", "idna_rules", &errorCode);
     if(U_FAILURE(errorCode)) {
-        log_err("ures_openDirect(\"translit_index\") failed: %s\n", u_errorName(errorCode));
+        log_err("ures_openDirect(\"idna_rules\") failed: %s\n", u_errorName(errorCode));
         return;
     }
 
-    if(0!=uprv_strcmp("translit_index", ures_getLocale(translit_index, &errorCode))) {
-        log_err("ures_openDirect(\"translit_index\").getLocale()!=translit_index\n");
+    if(0!=uprv_strcmp("idna_rules", ures_getLocale(idna_rules, &errorCode))) {
+        log_err("ures_openDirect(\"idna_rules\").getLocale()!=idna_rules\n");
     }
     errorCode=U_ZERO_ERROR;
 
-    /* try an item in translit_index, must work */
-    item=ures_getByKey(translit_index, "RuleBasedTransliteratorIDs", NULL, &errorCode);
+    /* try an item in idna_rules, must work */
+    item=ures_getByKey(idna_rules, "UnassignedSet", NULL, &errorCode);
     if(U_FAILURE(errorCode)) {
         log_err("translit_index.getByKey(local key) failed: %s\n", u_errorName(errorCode));
         errorCode=U_ZERO_ERROR;
@@ -491,44 +491,44 @@ TestOpenDirect(void) {
     }
 
     /* try an item in root, must fail */
-    item=ures_getByKey(translit_index, "Languages", NULL, &errorCode);
+    item=ures_getByKey(idna_rules, "Languages", NULL, &errorCode);
     if(U_FAILURE(errorCode)) {
         errorCode=U_ZERO_ERROR;
     } else {
-        log_err("translit_index.getByKey(root key) succeeded!\n");
+        log_err("idna_rules.getByKey(root key) succeeded!\n");
         ures_close(item);
     }
-    ures_close(translit_index);
+    ures_close(idna_rules);
 
-    /* now make sure that "translit_index" will not work with ures_open() */
+    /* now make sure that "idna_rules" will not work with ures_open() */
     errorCode=U_ZERO_ERROR;
-    translit_index=ures_open(NULL, "translit_index", &errorCode);
+    idna_rules=ures_open("testdata", "idna_rules", &errorCode);
     if(U_FAILURE(errorCode) || errorCode==U_USING_DEFAULT_WARNING || errorCode==U_USING_FALLBACK_WARNING) {
         /* falling back to default or root is ok */
         errorCode=U_ZERO_ERROR;
-    } else if(0!=uprv_strcmp("translit_INDEX", ures_getLocale(translit_index, &errorCode))) {
+    } else if(0!=uprv_strcmp("idna_rules", ures_getLocale(idna_rules, &errorCode))) {
         /* Opening this file will work in "files mode" on Windows and the Mac,
            which have case insensitive file systems */
-        log_err("ures_open(\"translit_index\") succeeded, should fail! Got: %s\n", u_errorName(errorCode));
+        log_err("ures_open(\"idna_rules\") succeeded, should fail! Got: %s\n", u_errorName(errorCode));
     }
-    ures_close(translit_index);
+    ures_close(idna_rules);
 
     /* ures_openDirect("translit_index_WronG") must fail */
-    translit_index=ures_openDirect(NULL, "translit_index_WronG", &errorCode);
+    idna_rules=ures_openDirect(NULL, "idna_rules_WronG", &errorCode);
     if(U_FAILURE(errorCode)) {
         errorCode=U_ZERO_ERROR;
     } else {
-        log_err("ures_openDirect(\"translit_index_WronG\") succeeded, should fail!\n");
+        log_err("ures_openDirect(\"idna_rules_WronG\") succeeded, should fail!\n");
     }
-    ures_close(translit_index);
+    ures_close(idna_rules);
 
     errorCode = U_USING_FALLBACK_WARNING;;
-    translit_index=ures_openDirect(NULL, "translit_index", &errorCode);
+    idna_rules=ures_openDirect("testdata", "idna_rules", &errorCode);
     if(U_FAILURE(errorCode)) {
-        log_err("ures_openDirect(\"translit_index\") failed when U_USING_FALLBACK_WARNING was set prior to call: %s\n", u_errorName(errorCode));
+        log_err("ures_openDirect(\"idna_rules\") failed when U_USING_FALLBACK_WARNING was set prior to call: %s\n", u_errorName(errorCode));
         return;
     }
-    ures_close(translit_index);
+    ures_close(idna_rules);
 }
 
 static int32_t
