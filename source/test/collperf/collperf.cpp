@@ -743,6 +743,10 @@ void doForwardIterTest(UBool haslen) {
         printf("null terminated data -----------\n");
     }
     printf("performance test on strings from file -----------\n");
+
+    UChar dummytext[] = {0, 0};
+    UCollationElements *iter = ucol_openElements(gCol, NULL, 0, &error);
+    ucol_setText(iter, dummytext, 1, &error);
     
     gCount = 0;
     unsigned long startTime = timeGetTime();
@@ -751,14 +755,12 @@ void doForwardIterTest(UBool haslen) {
         while (linecount < gNumFileLines) {
             UChar *str = gFileLines[linecount].name;
             int strlen = haslen?gFileLines[linecount].len:-1;
-            UCollationElements *iter = ucol_openElements(gCol, str, strlen,
-                                                          &error);
+            ucol_setText(iter, str, strlen, &error);
             while (ucol_next(iter, &error) != UCOL_NULLORDER) {
                 gCount++;
             }
 
             linecount ++;
-            ucol_closeElements(iter);
         }
         count ++;
     }
@@ -773,15 +775,15 @@ void doForwardIterTest(UBool haslen) {
         while (linecount < gNumFileLines) {
             UChar *str = gFileLines[linecount].name;
             int strlen = haslen?gFileLines[linecount].len:-1;
-            UCollationElements *iter = ucol_openElements(gCol, str, strlen,
-                                                          &error);
+            ucol_setText(iter, str, strlen, &error);
             linecount ++;
-            ucol_closeElements(iter);
         }
         count ++;
     }
     elapsedTime -= (timeGetTime() - startTime);
     printf("elapsedTime %d\n", elapsedTime);
+
+    ucol_closeElements(iter);
 
     int ns = (int)(float(1000000) * (float)elapsedTime / (float)gCount);
     printf("Total number of strings compared %d in %d loops\n", gNumFileLines,
@@ -820,8 +822,7 @@ void doForwardIterTest(UBool haslen) {
     if (!haslen) {
         strlen = -1;
     }
-    UCollationElements *iter = ucol_openElements(gCol, str, strlen,
-                                                     &error);
+    iter = ucol_openElements(gCol, str, strlen, &error);
     if (!haslen) {
         strlen = u_strlen(str);
     }
@@ -906,6 +907,10 @@ void doBackwardIterTest(UBool haslen) {
     
     printf("performance test on strings from file -----------\n");
 
+    UCollationElements *iter = ucol_openElements(gCol, NULL, 0, &error);
+    UChar dummytext[] = {0, 0};
+    ucol_setText(iter, dummytext, 1, &error);
+
     gCount = 0;
     unsigned long startTime = timeGetTime();
     while (count < opt_loopCount) {
@@ -913,14 +918,12 @@ void doBackwardIterTest(UBool haslen) {
         while (linecount < gNumFileLines) {
             UChar *str = gFileLines[linecount].name;
             int strlen = haslen?gFileLines[linecount].len:-1;
-            UCollationElements *iter = ucol_openElements(gCol, str, strlen,
-                                                          &error);
+            ucol_setText(iter, str, strlen, &error);
             while (ucol_previous(iter, &error) != UCOL_NULLORDER) {
                 gCount ++;
             }
 
             linecount ++;
-            ucol_closeElements(iter);
         }
         count ++;
     }
@@ -936,16 +939,15 @@ void doBackwardIterTest(UBool haslen) {
         while (linecount < gNumFileLines) {
             UChar *str = gFileLines[linecount].name;
             int strlen = haslen?gFileLines[linecount].len:-1;
-            UCollationElements *iter = ucol_openElements(gCol, str, strlen,
-                                                          &error);
+            ucol_setText(iter, str, strlen, &error);
             linecount ++;
-            ucol_closeElements(iter);
         }
         count ++;
     }
     elapsedTime -= (timeGetTime() - startTime);
 
     printf("elapsedTime %d\n", elapsedTime);
+    ucol_closeElements(iter);
 
     int ns = (int)(float(1000000) * (float)elapsedTime / (float)gCount);
     printf("Total number of strings compared %d in %d loops\n", gNumFileLines,
@@ -984,9 +986,8 @@ void doBackwardIterTest(UBool haslen) {
     if (!haslen) {
         strlen = -1;
     }
-    UCollationElements *iter = ucol_openElements(gCol, str, strlen,
-                                                     &error);
 
+    iter = ucol_openElements(gCol, str, strlen, &error);
     if (!haslen) {
         strlen = u_strlen(str);
     }
@@ -1023,7 +1024,7 @@ void doBackwardIterTest(UBool haslen) {
     startTime = timeGetTime();
     while (count < opt_loopCount) {
         int count5 = 5;
-        strindex = 4;
+        strindex = 5;
         ucol_setOffset(iter, strindex, &error);
         while (TRUE) {
              tempgCount ++;
@@ -1054,7 +1055,7 @@ void doBackwardIterTest(UBool haslen) {
 //
 //---------------------------------------------------------------------------------------
 void doIterTest() {
-    // doForwardIterTest(opt_uselen);
+    doForwardIterTest(opt_uselen);
     doBackwardIterTest(opt_uselen);
 }
 
