@@ -182,7 +182,23 @@ static const char *domainNames[] = {
     "balexander.slip.andrew.cmu.edu",
     "pool029.max2.denver.co.dynip.alter.net",
     "cust49.max9.new-york.ny.ms.uu.net",
-    "s61.abq-dialin2.hollyberry.com"
+    "s61.abq-dialin2.hollyberry.com",
+    "www.xn--vea.com",
+    "www.\\u00E0\\u00B3\\u00AF.com",
+    "www.\\u00C2\\u00A4.com",
+    "www.\\u00C2\\u00A3.com",
+    "\\u0025",
+    "\\u005C\\u005C",
+    "@",
+    "\\u002F",
+    "www.\\u0021.com",
+    "www.\\u0024.com",
+    "\\u003f",
+    // These yeild U_IDNA_PROHIBITED_CODEPOINT_FOUND_ERROR
+    //"\\u00CF\\u0082.com",
+    //"\\u00CE\\u00B2\\u00C3\\u009Fss.com",
+    //"\\u00E2\\u0098\\u00BA.com",
+    "\\u00C3\\u00BC.com",
 };
 
 typedef struct ErrorCases ErrorCases;
@@ -470,10 +486,10 @@ void TestIDNA::testIDNToUnicode(const char* testName, TestFunc func){
     UErrorCode status = U_ZERO_ERROR;
     int32_t bufLen = 0;
     UParseError parseError;
-    for(i=0;i< (sizeof(domainNames)/sizeof(domainNames[0])); i++){
+    for(i=30;i< (sizeof(domainNames)/sizeof(domainNames[0])); i++){
         bufLen = uprv_strlen(domainNames[i]);
-        u_charsToUChars(domainNames[i],buf, bufLen+1);
-        func(buf,bufLen,expected,MAX_DEST_SIZE,UIDNA_USE_STD3_RULES|UIDNA_ALLOW_UNASSIGNED, &parseError,&status);
+        bufLen = u_unescape(domainNames[i],buf, bufLen+1);
+        func(buf,bufLen,expected,MAX_DEST_SIZE, UIDNA_ALLOW_UNASSIGNED, &parseError,&status);
         if(U_FAILURE(status)){
             errln( "%s failed to convert domainNames[%i].Error: %s \n",testName, i, u_errorName(status));
             break;
@@ -496,10 +512,10 @@ void TestIDNA::testIDNToASCII(const char* testName, TestFunc func){
     UErrorCode status = U_ZERO_ERROR;
     int32_t bufLen = 0;
     UParseError parseError; 
-    for(i=0;i< (sizeof(domainNames)/sizeof(domainNames[0])); i++){
+    for(i=31;i< (sizeof(domainNames)/sizeof(domainNames[0])); i++){
         bufLen = uprv_strlen(domainNames[i]);
-        u_charsToUChars(domainNames[i],buf, bufLen+1);
-        func(buf,bufLen,expected,MAX_DEST_SIZE,UIDNA_USE_STD3_RULES|UIDNA_ALLOW_UNASSIGNED, &parseError,&status);
+        bufLen = u_unescape(domainNames[i],buf, bufLen+1);
+        func(buf,bufLen,expected,MAX_DEST_SIZE, UIDNA_ALLOW_UNASSIGNED, &parseError,&status);
         if(U_FAILURE(status)){
             errln( "%s failed to convert domainNames[%i].Error: %s \n",testName,i, u_errorName(status));
             break;

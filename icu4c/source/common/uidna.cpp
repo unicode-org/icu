@@ -216,11 +216,11 @@ uidna_toASCII(const UChar* src, int32_t srcLength,
 
             /* populate the parseError struct */
             if(srcIsLDH==FALSE){
-                syntaxError(b1,failPos-1,b1Len,parseError);
+                syntaxError(b1,(failPos>0) ? (failPos-1) : failPos, b1Len,parseError);
             }else if(b1[0] == HYPHEN){
                 syntaxError(b1,0,b1Len,parseError);
             }else{
-                syntaxError(b1,b1Len-1,b1Len,parseError);
+                syntaxError(b1, (b1Len>0) ? b1Len-1 : b1Len, b1Len,parseError);
             }
 
             goto CLEANUP;
