@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/translit/TransliteratorTest.java,v $
- * $Date: 2002/04/17 16:48:28 $
- * $Revision: 1.104 $
+ * $Date: 2002/04/26 21:31:24 $
+ * $Revision: 1.105 $
  *
  *****************************************************************************************
  */
@@ -2491,11 +2491,6 @@ public class TransliteratorTest extends TestFmwk {
         }
     }
 
-    //======================================================================
-    // These tests are not mirrored (yet) in icu4c at
-    // source/test/intltest/transtst.cpp
-    //======================================================================
-
     public void TestMulticharStringSet() {
         // Basic testing
         String rule =
@@ -2596,6 +2591,11 @@ public class TransliteratorTest extends TestFmwk {
             }
         }
     }
+
+    //======================================================================
+    // These tests are not mirrored (yet) in icu4c at
+    // source/test/intltest/transtst.cpp
+    //======================================================================
 
     //======================================================================
     // Support methods
