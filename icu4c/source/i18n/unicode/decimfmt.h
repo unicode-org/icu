@@ -1029,7 +1029,7 @@ public:
      * @see #setRoundingMode
      * @stable ICU 2.0
      */
-    virtual ERoundingMode getRoundingMode(void);
+    virtual ERoundingMode getRoundingMode(void) const;
 
     /**
      * Set the rounding mode.  This has no effect unless the rounding
