@@ -6,25 +6,31 @@
 */
 /* C++ wrappers for the ICUs Codeset Conversion Routines*/
 
-class Locale;
-class UnicodeString;
-class Mutex;
-
 #include "unicode/utypes.h"
 #include "unicode/resbund.h"
 #include "cmemory.h"
 #include "mutex.h"
-extern "C" {
 #include "ucnv_io.h"
 #include "unicode/ucnv_err.h"
 #include "ucnv_bld.h"
 #include "unicode/ucnv.h"
-}
 #include "unicode/convert.h"
+#include "ucln_cmn.h"
 
 /* list of converter and alias names */
-const char **UnicodeConverter::availableConverterNames=NULL;
-int32_t UnicodeConverter::availableConverterNamesCount=0;
+const char **availableConverterNames=NULL;
+int32_t availableConverterNamesCount=0;
+
+UBool UnicodeConverter_cleanup()
+{
+    if (availableConverterNames)
+    {
+        delete []availableConverterNames;
+        availableConverterNames = NULL;
+    }
+    availableConverterNamesCount = 0;
+    return TRUE;
+}
 
 UnicodeConverter::UnicodeConverter()
 {
