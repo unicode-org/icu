@@ -8,6 +8,7 @@
 nl {
     Version { "2.0" }
     Countries { 
+        Fallback{ "en"}
         //AD { "Andorra" }
         AE { "Verenigde Arabische Emiraten" }
         //AF { "Afghanistan" }
@@ -287,6 +288,7 @@ nl {
     }
     ExemplarCharacters { "[a-z \u00e1 \u00e9 \u00ed \u00f3 \u00fa \u00e4 \u00eb \u00ef \u00f6 \u00fc \u0133]" }
     Languages { 
+        Fallback{ "en"}
         ar { "Arabisch" }
         bg { "Bulgaars" }
         cs { "Tsjechisch" }

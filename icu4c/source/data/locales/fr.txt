@@ -6,12 +6,19 @@
 // ***************************************************************************
 
 fr {
-    Version{"2.0"}
+    Version{"2.0"}	
     CollationElements { 
         Version { "1.0" }
         Sequence { "[backwards 2]&A<<\u00e6/e<<<\u00c6/E" }
     }
+    Variants{
+         Fallback{ "en"}
+    }  
+    Keys{
+        Fallback{ "en"}
+    }    
     Countries { 
+        Fallback{ "en"}
         AD { "Andorre" }
         AE { "Emirats Arabes Unis" }
         AG { "Antigua et Barbuda" }
@@ -200,6 +207,7 @@ fr {
     }
 
     Languages { 
+        Fallback{ "en"}
         root  { "racine" }
 
         ab { "abkhaze" }

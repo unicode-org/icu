@@ -6,13 +6,20 @@
 // ***************************************************************************
 
 es {
-    Version { "2.0" }
+    Version { "3.0" }
     CollationElements { 
         Version { "1.0" }
         Sequence { "& N < n\u0303<<< N\u0303" }
     }
+    Variants{
+        Fallback{"en"}
+    }
+    Keys{
+       Fallback{"en"}
+    }
     /* Duplicates from root commented out. */
     Countries { 
+        Fallback{ "en"}
         AE { "Emiratos \u00C1rabes Unidos" }
         AF { "Afganist\u00E1n" }
         AG { "Antigua y Barbuda" }
@@ -296,6 +303,7 @@ es {
     }
     // Spanish does not capitalize the language names like English
     Languages {
+        Fallback{ "en"}
         root{"ra\u00EDz" }    // The only exception to ISO-639
 
         af { "afrikaans" }

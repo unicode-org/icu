@@ -17,10 +17,13 @@
 // http://www.bkg.bund.de/kartographie/stagn/Staatennamen.htm
 
 de {
-    Version{ "2.0" }
-
-    "%%PHONEBOOK" { "Telefonbuch-Sortierregeln" }
-
+    Version{ "3.0" }
+    Variants{
+        Fallback{"en"}
+    }
+    Keys{
+             PHONEBOOK { "Telefonbuch-Sortierregeln" }
+    }
     // This shouldn't be used, but valid data should be here.
     // vorm. -> vormittags -> in the morning
     // nachm. -> nachmittags -> in the afternoon
@@ -29,6 +32,7 @@ de {
         "nachm.",
     }
     Countries {
+        Fallback{ "en"}
         //AD { "Andorra" }
         AE { "Vereinigte Arabische Emirate" }
         //AF { "Afghanistan" }
@@ -341,6 +345,7 @@ de {
     // further checking.
     //   Markus Scherer, 2000jun01
     Languages {
+        Fallback{ "en"}
         // ? aa { "Afar" }
         ab { "Abchasisch" }
         // same as in root? af { "Afrikaans" }

@@ -403,6 +403,7 @@ static void TestFallback()
 {
     UErrorCode status = U_ZERO_ERROR;
     UResourceBundle *fr_FR = NULL;
+    UResourceBundle *subResource = NULL;
     const UChar *junk; /* ignored */
     int32_t resultLen;
 
@@ -426,13 +427,13 @@ static void TestFallback()
     status = U_ZERO_ERROR;
 
     /* OK first one. This should be a Default value. */
-    junk = ures_getStringByKey(fr_FR, "%%PREEURO", &resultLen, &status);
+    subResource = ures_getByKey(fr_FR, "LocaleScript", NULL, &status);
     if(status != U_USING_DEFAULT_WARNING)
     {
-        log_data_err("Expected U_USING_DEFAULT_ERROR when trying to get %%PREEURO from fr_FR, got %s\n",
+        log_data_err("Expected U_USING_DEFAULT_ERROR when trying to get LocaleScript from fr_FR, got %s\n",
             u_errorName(status));
     }
-
+    ures_close(subResource);
     status = U_ZERO_ERROR;
 
     /* and this is a Fallback, to fr */

@@ -19,6 +19,7 @@ sv {
         }
     }
     Countries { 
+        Fallback{ "en"}
         // AD {"Andorra"}
         AE {"F\u00F6renade Arabemiraten"}
         AF {"Afganistan"}
@@ -296,6 +297,7 @@ sv {
     }
 
     Languages {
+        Fallback{ "en"}
         aa   {"afar"}
         ab   {"abkhaziska"}
         ace  {"achinese"}

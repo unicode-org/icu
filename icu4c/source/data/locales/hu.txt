@@ -16,6 +16,7 @@ hu {
         "& Z < zs <<< zS <<< Zs <<< ZS" }
     }
     Countries { 
+        Fallback{ "en"}
         //AD { "Andorra" }
         AE { "Egyes\u00FClt Arab Emir\u00E1tus" }
         AF { "Afganiszt\u00E1n" }
@@ -257,6 +258,7 @@ hu {
         //ZW { "Zimbabwe" }
     }
     Languages { 
+        Fallback{ "en"}
         ar { "arab" }
         bg { "bolg\u00E1r" }
         cs { "cseh" }

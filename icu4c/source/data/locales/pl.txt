@@ -19,6 +19,7 @@ pl {
                    "&Z < z\u0301 <<< Z\u0301 < z\u0307 <<< Z\u0307" }
     }
     Countries { 
+        Fallback{ "en"}
         AD { "Andora" }
         AE { "Zjednoczone Emiraty Arabskie" }
         AF { "Afganistan" }
@@ -297,6 +298,7 @@ pl {
         "n.e.",
     }
     Languages { 
+        Fallback{ "en"}
         ar { "arabski" }
         bg { "bu\u0142garski" }
         cs { "czeski" }

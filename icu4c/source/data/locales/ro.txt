@@ -14,6 +14,7 @@ ro {
         "Z\u0307" }
     }
     Countries { 
+        Fallback{ "en"}
         //AD { "Andorra" }
         AE { "Emiratele Arabe Unite" }
         AF { "Afganistan" }
@@ -289,6 +290,7 @@ ro {
         "\u00EE.d.C.",
     }
     Languages { 
+        Fallback{ "en"}
         ar { "Arab\u0103" }
         bg { "Bulgar\u0103" }
         cs { "Ceh\u0103" }

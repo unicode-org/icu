@@ -10,6 +10,13 @@ eu {
     Languages {
         eu { "euskara" }
     }
+
+    Variants{
+        Fallback{"en"}
+    }
+    Keys{
+       Fallback{"en"}
+    }
     DayAbbreviations {
         "ig",
         "al",
