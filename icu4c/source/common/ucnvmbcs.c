@@ -195,7 +195,7 @@ _MBCSReset(UConverter *cnv) {
     /* toUnicode */
     cnv->toUnicodeStatus=0;
     cnv->mode=0;
-    cnv->invalidCharLength=0;
+    cnv->toULength=0;
 
     /* fromUnicode */
     cnv->fromUSurrogateLead=0;
@@ -256,8 +256,8 @@ _MBCSToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
     /* get the converter state from UConverter */
     uint32_t offset=cnv->toUnicodeStatus;
     uint8_t state=(uint8_t)(cnv->mode);
-    int8_t byteIndex=cnv->invalidCharLength;
-    uint8_t *bytes=(uint8_t *)cnv->invalidCharBuffer;
+    int8_t byteIndex=cnv->toULength;
+    uint8_t *bytes=cnv->toUBytes;
 
     /* sourceIndex=-1 if the current character began in the previous buffer */
     int32_t sourceIndex=byteIndex==0 ? 0 : -1,
@@ -538,10 +538,16 @@ callback:
                 pArgs->target=target;
                 pArgs->offsets=offsets;
 
+                /* copy the current bytes to invalidCharBuffer */
+                for(b=0; b<(uint8_t)byteIndex; ++b) {
+                    cnv->invalidCharBuffer[b]=(char)bytes[b];
+                }
+                cnv->invalidCharLength=byteIndex;
+
                 /* set the converter state in UConverter to deal with the next character */
                 cnv->toUnicodeStatus=0;
                 cnv->mode=state;
-                cnv->invalidCharLength=0;
+                cnv->toULength=0;
 
                 /* call the callback function */
                 cnv->fromCharErrorBehaviour(cnv->toUContext, pArgs, (const char *)bytes, byteIndex, reason, pErrorCode);
@@ -549,7 +555,7 @@ callback:
                 /* get the converter state from UConverter */
                 offset=cnv->toUnicodeStatus;
                 state=(uint8_t)cnv->mode;
-                byteIndex=cnv->invalidCharLength;
+                byteIndex=cnv->toULength;
 
                 /* update target and deal with offsets if necessary */
                 if(offsets!=NULL) {
@@ -616,12 +622,12 @@ endloop:
         }
         cnv->toUnicodeStatus=0;
         cnv->mode=0;
-        cnv->invalidCharLength=0;
+        cnv->toULength=0;
     } else {
         /* set the converter state back into UConverter */
         cnv->toUnicodeStatus=offset;
         cnv->mode=state;
-        cnv->invalidCharLength=byteIndex;
+        cnv->toULength=byteIndex;
     }
 
     /* write back the updated pointers */
@@ -949,36 +955,23 @@ _MBCSFromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
                     p=bytes+(16*(uint32_t)table[i]+(c&0xf))*2;
                     if(U_IS_BIG_ENDIAN) {
                         value=*(uint16_t *)p;
-                        if(value<=0xff) {
-                            length=1;
-                        } else {
-                            length=2;
-                        }
                     } else {
-                        value=*p++;
-                        if(value==0) {
-                            value=*p;
-                            length=1;
-                        } else {
-                            value=(value<<8)|*p;
-                            length=2;
-                        }
+                        value=((uint32_t)*p<<8)|p[1];
+                    }
+                    if(value<=0xff) {
+                        length=1;
+                    } else {
+                        length=2;
                     }
                     break;
                 case MBCS_OUTPUT_3:
                     p=bytes+(16*(uint32_t)table[i]+(c&0xf))*3;
-                    value=*p++;
-                    if(value==0) {
-                        value=*p++;
-                        if(value==0) {
-                            value=*p;
-                            length=1;
-                        } else {
-                            value=(value<<8)|*p;
-                            length=2;
-                        }
+                    value=((uint32_t)*p<<16)|((uint32_t)p[1]<<8)|p[2];
+                    if(value<=0xff) {
+                        length=1;
+                    } else if(value<=0xffff) {
+                        length=2;
                     } else {
-                        value=(value<<16)|((uint32_t)*p<<8)|p[1];
                         length=3;
                     }
                     break;
@@ -986,86 +979,59 @@ _MBCSFromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
                     p=bytes+(16*(uint32_t)table[i]+(c&0xf))*4;
                     if(U_IS_BIG_ENDIAN) {
                         value=*(uint32_t *)p;
-                        if(value<=0xff) {
-                            length=1;
-                        } else if(value<=0xffff) {
-                            length=2;
-                        } else if(value<=0xffffff) {
-                            length=3;
-                        } else {
-                            length=4;
-                        }
                     } else {
-                        value=*p++;
-                        if(value==0) {
-                            value=*p++;
-                            if(value==0) {
-                                value=*p++;
-                                if(value==0) {
-                                    value=*p;
-                                    length=1;
-                                } else {
-                                    value=(value<<8)|*p;
-                                    length=2;
-                                }
-                            } else {
-                                value=(value<<16)|((uint32_t)*p<<8)|p[1];
-                                length=3;
-                            }
-                        } else {
-                            value=(value<<24)|((uint32_t)*p<<16)|(p[1]<<8)|p[2];
-                            length=4;
-                        }
+                        value=((uint32_t)*p<<24)|((uint32_t)p[1]<<16)|((uint32_t)p[2]<<8)|p[3];
+                    }
+                    if(value<=0xff) {
+                        length=1;
+                    } else if(value<=0xffff) {
+                        length=2;
+                    } else if(value<=0xffffff) {
+                        length=3;
+                    } else {
+                        length=4;
                     }
                     break;
                 case MBCS_OUTPUT_3_EUC:
                     p=bytes+(16*(uint32_t)table[i]+(c&0xf))*2;
-                    value=*(uint16_t *)p;
+                    if(U_IS_BIG_ENDIAN) {
+                        value=*(uint16_t *)p;
+                    } else {
+                        value=((uint32_t)*p<<8)|p[1];
+                    }
+                    /* EUC 16-bit fixed-length representation */
                     if(value<=0xff) {
                         length=1;
+                    } else if((value&0x8000)==0) {
+                        value|=0x8e8000;
+                        length=3;
+                    } else if((value&0x80)==0) {
+                        value|=0x8f0080;
+                        length=3;
                     } else {
-                        /* EUC 16-bit fixed-length representation */
-                        if((value&0x8000)==0) {
-                            value|=0x8e8000;
-                            length=3;
-                        } else if((value&0x80)==0) {
-                            value|=0x8f0080;
-                            length=3;
-                        } else {
-                            length=2;
-                        }
+                        length=2;
                     }
                     break;
                 case MBCS_OUTPUT_4_EUC:
                     p=bytes+(16*(uint32_t)table[i]+(c&0xf))*3;
-                    value=*p++;
-                    if(value==0) {
-                        value=*p++;
-                        if(value==0) {
-                            value=*p;
-                            length=1;
-                        } else {
-                            value=(value<<8)|*p;
-                            length=2;
-                        }
+                    value=((uint32_t)*p<<16)|((uint32_t)p[1]<<8)|p[2];
+                    /* EUC 16-bit fixed-length representation applied to the first two bytes */
+                    if(value<=0xff) {
+                        length=1;
+                    } else if(value<=0xffff) {
+                        length=2;
+                    } else if((value&0x800000)==0) {
+                        value|=0x8e800000;
+                        length=4;
+                    } else if((value&0x8000)==0) {
+                        value|=0x8f008000;
+                        length=4;
                     } else {
-                        /* EUC 16-bit fixed-length representation applied to the first two bytes */
-                        uint8_t b=*p++;
-                        if((value&0x80)==0) {
-                            value=0x8e8000|(value<<8)|b;
-                            length=4;
-                        } else if((b&0x80)==0) {
-                            value=0x8f0080|(value<<8)|b;
-                            length=4;
-                        } else {
-                            value=(value<<8)|b;
-                            length=3;
-                        }
-                        value=(value<<8)|*p;
+                        length=3;
                     }
                     break;
                 default:
-                    /* cannot occur */
+                    /* must not occur */
                     break;
                 }
 
