@@ -2,7 +2,7 @@
 
 use strict;
 
-use Dataset;
+#use Dataset;
 use Format;
 use Output;
 
@@ -108,7 +108,10 @@ sub compareLoop {
     # first we calibrate. Use time from somewhere
     # first test is used for calibration
       ($program, @argsAndTest) = split(/\ /, @{ $tests{$i} }[$j]);
-      my @res = measure1("$program -t $TIME -p $NUMPASSES $locAndData @argsAndTest");
+      my $commandLine = "$program -t $TIME -p $NUMPASSES $locAndData @argsAndTest";
+      #my $commandLine = "$program -i 5 -p $NUMPASSES $locAndData @argsAndTest";
+      my @res = measure1($commandLine);
+      store("$i, $program @argsAndTest", @res);
 
       push(@iterPerPass, shift(@res));
       push(@noopers, shift(@res));
