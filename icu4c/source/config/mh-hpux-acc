@@ -3,7 +3,7 @@
 ## Copyright (c) 1999-2000, International Business Machines Corporation and
 ## others. All Rights Reserved.
 ##
-## $Id: mh-hpux-acc,v 1.18 2000/10/17 02:01:33 srl Exp $
+## $Id: mh-hpux-acc,v 1.19 2000/10/18 19:02:06 yves Exp $
 
 ## Commands to generate dependency files
 GEN_DEPS.c=	:
@@ -31,9 +31,12 @@ LD_RPATH_PRE=
 ## Environment variable to set a runtime search path
 LDLIBRARYPATH_ENVVAR = SHLIB_PATH
 
+## Compiler switch to embed a library name
+LD_SONAME = +h $(MIDDLE_SO_TARGET)
+
 ## Versioned target for a shared library.
-FINAL_SO_TARGET = $(SO_TARGET)
-MIDDLE_SO_TARGET = 
+FINAL_SO_TARGET = $(basename $(SO_TARGET)).$(SO_TARGET_VERSION)
+MIDDLE_SO_TARGET = $(basename $(SO_TARGET)).$(SO_TARGET_VERSION_MAJOR)
 
 ###  How ICU libraries are named...  ex. $(LIBICU)uc$(SO)
 ## Prefix for the ICU library names
@@ -79,5 +82,12 @@ LIBUSTDIO=      -L$(top_builddir)/extra/ustdio -lustdio
 %.d : $(srcdir)/%.cpp
 	@echo "Generating dependency information for $<"
 	@$(GEN_DEPS.cc) $< > $@
+
+## Versioned libraries rules
+
+%.$(SO_TARGET_VERSION_MAJOR): %.$(SO_TARGET_VERSION)
+	$(RM) $@ && ln -s $< $@
+%.$(SO): %.$(SO_TARGET_VERSION_MAJOR)
+	$(RM) $@ && ln -s $*.$(SO).$(SO_TARGET_VERSION) $@
 
 ## End HP/UX-specific setup
