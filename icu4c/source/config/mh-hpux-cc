@@ -8,15 +8,15 @@ GEN_DEPS.c= 	:
 GEN_DEPS.cc= 	:
 
 ## Commands to compile
-COMPILE.c=	$(CC) -D_PTHREADS_DRAFT4 +z -Ae $(DEFS) $(CPPFLAGS) $(CFLAGS) -c
-COMPILE.cc=	$(CXX) -D_PTHREADS_DRAFT4 +z +a1 $(DEFS) $(CPPFLAGS) $(CXXFLAGS) -c
+COMPILE.c=	$(CC)  +z -Ae $(DEFS) $(CPPFLAGS) $(CFLAGS) -c
+COMPILE.cc=	$(CXX)  +z +a1 $(DEFS) $(CPPFLAGS) $(CXXFLAGS) -c
 
 ## Commands to link
 ## We need to use the C++ linker, even when linking C programs, since
 ##  our libraries contain C++ code (bug in linker?)
-#LINK.c=		$(CC) -D_PTHREADS_DRAFT4 +z -Ae $(DEFS) $(CPPFLAGS) $(CFLAGS) $(LDFLAGS)
-LINK.c=	$(CXX) -D_PTHREADS_DRAFT4 +z +a1 $(DEFS) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS)
-LINK.cc=	$(CXX) -D_PTHREADS_DRAFT4 +z +a1 $(DEFS) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS)
+#LINK.c=		$(CC)  +z -Ae $(DEFS) $(CPPFLAGS) $(CFLAGS) $(LDFLAGS)
+LINK.c=	$(CXX)  +z +a1 $(DEFS) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS)
+LINK.cc=	$(CXX)  +z +a1 $(DEFS) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS)
 
 ## Commands to make a shared library
 #SHLIB.c=	$(LD) $(LDFLAGS) -b

@@ -30,15 +30,43 @@ dnl Determine the host system and Makefile fragment
 AC_CANONICAL_HOST
 ICU_CHECK_MH_FRAG
 
+hpuxcma=false
+
 dnl Checks for libraries
 dnl On HP/UX, don't link to -lm from a shared lib because it isn't
 dnl  PIC (at least on 10.2)
 case "${host}" in
+	*-*-hpux10*)    hpuxcma=true
+			AC_CHECK_LIB(m, floor, LIB_M="-lm") ;;
 	*-*-hpux*) 	AC_CHECK_LIB(m, floor, LIB_M="-lm") ;;
 	*) 		AC_CHECK_LIB(m, floor) 
 			LIB_M="" ;;
 esac
 AC_SUBST(LIB_M)
+
+dnl Enable/disable hpuxcma
+
+if test $hpuxcma = false; then
+ AC_ARG_ENABLE(hpuxcma,
+	[  --enable-hpuxcma        build ICU with HPUX CMA threads (only ver>=11) [default=no]],
+	[case "${enableval}" in
+	     yes) hpuxcma=true;;
+	     no) hpuxcma=false;;
+		*) AC_MSG_ERROR(bad value ${enableval} for --enable-hpuxcma) ;;
+		esac], 
+	)
+fi
+
+dnl Note, we set the conditional outside of IF for non hpux plats
+ICU_CONDITIONAL(HPUX_CMA, test "$hpuxcma" = true)
+
+dnl Should this be a nested CASE?
+if test $hpuxcma = true; then
+  case "${host}" in
+	*-*-hpux*)	hpuxcma=true ;;
+	*)		AC_MSG_ERROR(--enable-hpuxcma is not valid on this platform ${host}) ;;
+  esac
+fi
 
 threads=true
 
@@ -55,7 +83,18 @@ ICU_CONDITIONAL(THREADS, test "$threads" = true)
 
 ICU_USE_THREADS=0
 
+dnl Test for HPUX cma threads first.. 
+if test $hpuxcma = true; then
+ dnl HPUX cma case
+ if test $threads = true; then
+  AC_CHECK_LIB(cma, pthread_create)
+  if test $ac_cv_lib_cma_pthread_create = yes; then
+   ICU_USE_THREADS=1
+  fi
+ fi
+else 
 if test $threads = true; then
+
  dnl special pthread handling 
  dnl AIX uses pthreads instead of pthread, and HP/UX uses cma
  dnl FreeBSD users -pthread
@@ -63,14 +102,23 @@ if test $threads = true; then
 
  if test $ac_cv_lib_pthread_pthread_create = yes; then
   ICU_USE_THREADS=1
+ else
+   dnl For HP 11
+   AC_CHECK_LIB(pthread, pthread_mutex_init)
+   if test $ac_cv_lib_pthread_pthread_mutex_init = yes; then
+     ICU_USE_THREADS=1
+   fi
  fi
- if test $ac_cv_lib_pthread_pthread_create = no; then
- AC_CHECK_LIB(pthreads, pthread_create)
+
+
+ if test $ICU_USE_THREADS = 0; then
+  AC_CHECK_LIB(pthreads, pthread_create)
   if test $ac_cv_lib_pthreads_pthread_create = yes; then
    ICU_USE_THREADS=1
   fi
  fi
- if test $ac_cv_lib_pthread_pthread_create = no; then
+
+ if test $ICU_USE_THREADS = 0; then
  AC_CHECK_LIB(cma, pthread_create)
   if test $ac_cv_lib_cma_pthread_create = yes; then
    ICU_USE_THREADS=1
@@ -83,6 +131,7 @@ if test $threads = true; then
  fi
 
  AC_CHECK_FUNC(pthread_mutex_create)
+fi
 fi
 
 AC_SUBST(ICU_USE_THREADS)
@@ -280,6 +329,12 @@ if test "${FORCE_LIBS}" != ""; then
    echo " *** Overriding automatically chosen [LIBS=$LIBS], using instead [FORCE_LIBS=${FORCE_LIBS}]"  1>&6
    LIBS=${FORCE_LIBS}
 fi
+
+dnl SPECIAL handling for HPUX 10 and also '11 & --enable-hpuxcma=true'
+if test $hpuxcma = true; then
+	CPPFLAGS="${CPPFLAGS} -D_PTHREADS_DRAFT_4 -DHPUX_CMA"
+fi
+dnl END special 
 
 dnl output the Makefiles
 AC_OUTPUT([Makefile \
