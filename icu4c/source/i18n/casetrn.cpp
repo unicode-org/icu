@@ -83,8 +83,9 @@ Transliterator* CaseMapTransliterator::clone(void) const {
 }
 
 /* case context iterator using a Replaceable */
-UChar32 U_CALLCONV
-CaseMapTransliterator::rep_caseContextIterator(void *context, int8_t dir) {
+U_CFUNC UChar32 U_CALLCONV
+utrans_rep_caseContextIterator(void *context, int8_t dir)
+{
     UCaseContext *csc=(UCaseContext *)context;
     Replaceable *rep=(Replaceable *)csc->p;
     UChar32 c;
@@ -157,7 +158,7 @@ void CaseMapTransliterator::handleTransliterate(Replaceable& text,
         c=text.char32At(textPos);
         csc.cpLimit=textPos+=U16_LENGTH(c);
 
-        result=fMap(fCsp, c, rep_caseContextIterator, &csc, &s, fLocName, &locCache);
+        result=fMap(fCsp, c, utrans_rep_caseContextIterator, &csc, &s, fLocName, &locCache);
 
         if(csc.b1 && isIncremental) {
             // fMap() tried to look beyond the context limit
