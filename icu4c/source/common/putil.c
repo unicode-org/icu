@@ -1358,10 +1358,7 @@ static char* u_bottomNBytesOfDouble(double* d, int n)
 const char* icu_getDefaultCodepage()
 {
 #if defined(OS400)
-  /* Currently TBD 
-     in the future should use thread specific CP
-  */
-  return NULL;
+  return "ibm-37";
 #elif defined(OS390)
   return "ibm-1047";
 #elif defined(XP_MAC)
