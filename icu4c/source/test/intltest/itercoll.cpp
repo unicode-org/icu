@@ -248,6 +248,19 @@ void CollationIteratorTest::TestSetText(/* char* par */)
         assertEqual(*iter1, *iter2);
     }
    
+    // test for an empty string
+    UnicodeString empty("");
+    iter1->setText(empty, status);
+    if (U_FAILURE(status) 
+        || iter1->next(status) != (int32_t)UCOL_NULLORDER) {
+        errln("Empty string should have no CEs.");
+    }
+    ((StringCharacterIterator *)chariter)->setText(empty);
+    iter1->setText(*chariter, status);
+    if (U_FAILURE(status) 
+        || iter1->next(status) != (int32_t)UCOL_NULLORDER) {
+        errln("Empty string should have no CEs.");
+    }
     delete chariter;
     delete iter2;
     delete iter1;
@@ -393,7 +406,52 @@ void CollationIteratorTest::TestAssignment()
         errln("Fail collation iterator copy constructor does not produce the same elements");
     }
 
+    source = CharsToUnicodeString("a\\u0300\\u0325");
+    coll->setDecomposition(Normalizer::DECOMP);
+    CollationElementIterator *iter4 
+                        = coll->createCollationElementIterator(source);
+    CollationElementIterator iter5(*iter4);
+    if (*iter4 != iter5) {
+        errln("collation iterator assignment does not produce the same elements");
+    }
+    iter4->next(status);
+    if (U_FAILURE(status) || *iter4 == iter5) {
+        errln("collation iterator not equal");
+    }
+    iter5.next(status);
+    if (U_FAILURE(status) || *iter4 != iter5) {
+        errln("collation iterator equal");
+    }
+    iter4->next(status);
+    if (U_FAILURE(status) || *iter4 == iter5) {
+        errln("collation iterator not equal");
+    }
+    iter5.next(status);
+    if (U_FAILURE(status) || *iter4 != iter5) {
+        errln("collation iterator equal");
+    }
+    CollationElementIterator iter6(*iter4);
+    if (*iter4 != iter6) {
+        errln("collation iterator equal");
+    }
+    iter4->next(status);
+    if (U_FAILURE(status) || *iter4 == iter5) {
+        errln("collation iterator not equal");
+    }
+    iter5.next(status);
+    if (U_FAILURE(status) || *iter4 != iter5) {
+        errln("collation iterator equal");
+    }
+    iter4->next(status);
+    if (U_FAILURE(status) || *iter4 == iter5) {
+        errln("collation iterator not equal");
+    }
+    iter5.next(status);
+    if (U_FAILURE(status) || *iter4 != iter5) {
+        errln("collation iterator equal");
+    }
     delete iter1;
+    delete iter4;
     delete coll;
 }
 
@@ -422,7 +480,31 @@ void CollationIteratorTest::TestConstructors()
     CollationElementIterator *iter2 = 
         coll->createCollationElementIterator(test1);
 
+    // initially the 2 collation element iterators should be the same
+    if (*iter1 != *iter1 || *iter2 != *iter2 || *iter1 != *iter2 
+        || *iter2 != *iter1) {
+        errln("CollationElementIterators constructed with the same string data should be the same at the start");
+    }
     assertEqual(*iter1, *iter2);
+
+    delete iter1;
+    delete iter2;
+
+    // tests empty strings
+    UnicodeString empty("");
+    iter1 = coll->createCollationElementIterator(empty);
+    chariter.setText(empty);
+    iter2 = coll->createCollationElementIterator(chariter);
+    if (*iter1 != *iter1 || *iter2 != *iter2 || *iter1 != *iter2 
+        || *iter2 != *iter1) {
+        errln("CollationElementIterators constructed with the same string data should be the same at the start");
+    } 
+    if (iter1->next(status) != (int32_t)UCOL_NULLORDER) {
+        errln("Empty string should have no CEs.");
+    }
+    if (iter2->next(status) != (int32_t)UCOL_NULLORDER) {
+        errln("Empty string should have no CEs.");
+    }
     delete iter1;
     delete iter2;
     delete coll;
