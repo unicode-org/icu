@@ -86,8 +86,8 @@ typedef int32_t UTextOffset;
 
 /* single-code point definitions -------------------------------------------- */
 
-/* is this code unit a surrogate? */
-#define UTF_IS_SURROGATE(uchar) (((uchar)&0xf800)==0xd800)
+/* is this code unit or code point a surrogate? */
+#define UTF_IS_SURROGATE(uchar) (((uchar)&0xfffff800)==0xd800)
 
 /*
  * Is a given 32-bit code point/Unicode scalar value
