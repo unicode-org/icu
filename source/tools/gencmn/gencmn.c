@@ -77,6 +77,7 @@ extern int
 main(int argc, char *argv[]) {
     static uint8_t buffer[4096];
     char line[512];
+    const char *destdir = 0;
     FileStream *in, *file;
     UNewDataMemory *out;
     char *s;
@@ -93,6 +94,10 @@ main(int argc, char *argv[]) {
 
     if(argc<2) {
         return U_ILLEGAL_ARGUMENT_ERROR;
+    }
+
+    if (!destdir) {
+        destdir = u_getDataDirectory();
     }
 
     maxSize=uprv_strtoul(argv[1], NULL, 0);
@@ -144,7 +149,7 @@ main(int argc, char *argv[]) {
     }
 
     /* create the output file */
-    out=udata_create(DATA_TYPE, COMMON_DATA_NAME, &dataInfo, U_COPYRIGHT_STRING, &errorCode);
+    out=udata_create(DATA_TYPE, COMMON_DATA_NAME, destdir, &dataInfo, U_COPYRIGHT_STRING, &errorCode);
     if(U_FAILURE(errorCode)) {
         fprintf(stderr, "gencmn: unable to open output file - error %s\n", u_errorName(errorCode));
         exit(errorCode);
@@ -265,3 +270,12 @@ compareFiles(const void *file1, const void *file2) {
     /* sort by basename */
     return uprv_strcmp(((File *)file1)->basename, ((File *)file2)->basename);
 }
+
+/*
+ * Hey, Emacs, please set the following:
+ *
+ * Local Variables:
+ * indent-tabs-mode: nil
+ * End:
+ *
+ */
