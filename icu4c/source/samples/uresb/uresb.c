@@ -52,6 +52,7 @@ const UChar baderror[] = { 0x0042, 0x0041, 0x0044, 0x0000 };
 
 const UChar *getErrorName(UErrorCode errorNumber);
 void reportError(UErrorCode *status);
+static UChar *quotedString(const UChar *string);
 void printOutBundle(UFILE *out, UResourceBundle *resource, int32_t indent, UErrorCode *status);
 void printIndent(UFILE *out, int32_t indent);
 void printHex(UFILE *out, const uint8_t *what);
@@ -100,7 +101,7 @@ main(int argc, char* argv[]) {
     if(options[2].doesOccur) {
         locale = options[2].value;
     } else {
-        locale = uloc_getDefault();
+        locale = 0;
     }
 
 	if(options[3].doesOccur) {
@@ -136,8 +137,6 @@ main(int argc, char* argv[]) {
 
     outerr = u_finit(stderr, locale, encoding);
 	out = u_finit(stdout, locale, encoding); 
-
-    u_fprintf(outerr, "We are running under %s locale\n", locale);
 
 /*
     for(i = 0; i<20; i++) {
@@ -182,6 +181,42 @@ void printHex(UFILE *out, const uint8_t *what) {
   u_fprintf(out, "%02X", *what);
 }
 
+static UChar *quotedString(const UChar *string) {
+    int len = u_strlen(string);
+    int alen = len;
+    const UChar *sp;
+    UChar *newstr, *np;
+
+    for (sp = string; *sp; ++sp) {
+        switch (*sp) {
+            case '\n':
+            case 0x0022:
+                ++alen;
+                break;
+        }
+    }
+
+    newstr = (UChar *) malloc((1 + alen) * sizeof(*newstr));
+    for (sp = string, np = newstr; *sp; ++sp) {
+        switch (*sp) {
+            case '\n':
+                *np++ = 0x005C;
+                *np++ = 0x006E;
+                break;
+
+            case 0x0022:
+                *np++ = 0x005C;
+                
+            default:
+                *np++ = *sp;
+                break;
+        }
+    }
+    *np = 0;
+
+    return newstr;
+}
+
 void printOutBundle(UFILE *out, UResourceBundle *resource, int32_t indent, UErrorCode *status) {
 	int32_t noOfElements = ures_getSize(resource);
 	int32_t i = 0;
@@ -191,7 +226,9 @@ void printOutBundle(UFILE *out, UResourceBundle *resource, int32_t indent, UErro
 	case RES_STRING :
 		{
 			int32_t len=0;
-			const UChar* string = ures_getString(resource, &len, status);
+			const UChar*thestr = ures_getString(resource, &len, status);
+                        UChar *string = quotedString(thestr);
+			
 			/* TODO: String truncation */
 			/*
 			if(trunc && len > truncsize) {
@@ -210,6 +247,7 @@ void printOutBundle(UFILE *out, UResourceBundle *resource, int32_t indent, UErro
               u_fprintf(out, " // STRING");
             }
 			u_fprintf(out, "\n");
+                        free(string);
 		}
 		break;
 	case RES_INT :
