@@ -21,9 +21,30 @@
 #include "unicode/ustring.h"
 #include "unicode/ures.h"
 #include "cmemory.h"
+#include "cstring.h"
 #include "ccolltst.h"
 
-static void TestGetSetAttr(void) {
+
+void addCollAPITest(TestNode** root)
+{
+    /* WEIVTODO: return tests here */
+    addTest(root, &TestProperty,      "tscoll/capitst/TestProperty");
+    addTest(root, &TestRuleBasedColl, "tscoll/capitst/TestRuleBasedColl");
+    addTest(root, &TestCompare,       "tscoll/capitst/TestCompare");
+    addTest(root, &TestSortKey,       "tscoll/capitst/TestSortKey");
+    addTest(root, &TestHashCode,      "tscoll/capitst/TestHashCode");
+    addTest(root, &TestElemIter,      "tscoll/capitst/TestElemIter");
+    addTest(root, &TestGetAll,        "tscoll/capitst/TestGetAll");
+    /*addTest(root, &TestGetDefaultRules, "tscoll/capitst/TestGetDefaultRules");*/
+    addTest(root, &TestDecomposition, "tscoll/capitst/TestDecomposition");
+    addTest(root, &TestSafeClone, "tscoll/capitst/TestSafeClone");
+    addTest(root, &TestGetSetAttr, "tscoll/capitst/TestGetSetAttr");
+    addTest(root, &TestBounds, "tscoll/capitst/TestBounds");
+    addTest(root, &TestGetLocale, "tscoll/capitst/TestGetLocale");    
+    addTest(root, &TestSortKeyBufferOverrun, "tscoll/capitst/TestSortKeyBufferOverrun");
+}
+
+void TestGetSetAttr(void) {
   UErrorCode status = U_ZERO_ERROR;
   UCollator *coll = ucol_open(NULL, &status);
   struct attrTest {
@@ -93,24 +114,6 @@ static void TestGetSetAttr(void) {
   ucol_close(coll);
 }
 
-
-void addCollAPITest(TestNode** root)
-{
-    /* WEIVTODO: return tests here */
-    addTest(root, &TestProperty,      "tscoll/capitst/TestProperty");
-    addTest(root, &TestRuleBasedColl, "tscoll/capitst/TestRuleBasedColl");
-    addTest(root, &TestCompare,       "tscoll/capitst/TestCompare");
-    addTest(root, &TestSortKey,       "tscoll/capitst/TestSortKey");
-    addTest(root, &TestHashCode,      "tscoll/capitst/TestHashCode");
-    addTest(root, &TestElemIter,      "tscoll/capitst/TestElemIter");
-    addTest(root, &TestGetAll,        "tscoll/capitst/TestGetAll");
-    /*addTest(root, &TestGetDefaultRules, "tscoll/capitst/TestGetDefaultRules");*/
-    addTest(root, &TestDecomposition, "tscoll/capitst/TestDecomposition");
-    addTest(root, &TestSafeClone, "tscoll/capitst/TestSafeClone");
-    addTest(root, &TestGetSetAttr, "tscoll/capitst/TestGetSetAttr");
-    addTest(root, &TestBounds, "tscoll/capitst/TestBounds");
-    addTest(root, &TestGetLocale, "tscoll/capitst/TestGetLocale");    
-}
 
 static void doAssert(int condition, const char *message)
 {
@@ -1300,5 +1303,63 @@ void TestBounds() {
     }
   }
   ucol_close(coll);
+}
+
+void doOverrunTest(UCollator *coll, const UChar *uString, int32_t strLen) {
+  int32_t skLen = 0, skLen2 = 0;
+  uint8_t sortKey[256];
+  int32_t i, j;
+  uint8_t filler = 0xFF;
+
+  skLen = ucol_getSortKey(coll, uString, strLen, NULL, 0);
+
+  for(i = 0; i < skLen; i++) {
+    uprv_memset(sortKey, filler, 256);
+    skLen2 = ucol_getSortKey(coll, uString, strLen, sortKey, i);
+    if(skLen != skLen2) {
+      log_err("For buffer size %i, got different sortkey length. Expected %i got %i\n", i, skLen, skLen2);
+    }
+    for(j = i; j < 256; j++) {
+      if(sortKey[j] != filler) {
+        log_err("Something run over index %i\n", j);
+        break;
+      }
+    }
+  }
+}
+
+/* j1865 reports that if a shorter buffer is passed to
+ * to get sort key, a buffer overrun happens in some 
+ * cases. This test tries to check this.
+ */
+void TestSortKeyBufferOverrun(void) {
+  UErrorCode status = U_ZERO_ERROR;
+  const char* cString = "A very Merry liTTle-lamB..";
+  UChar uString[256];
+  int32_t strLen = 0;
+  UCollator *coll = ucol_open("root", &status);
+  strLen = u_unescape(cString, uString, uprv_strlen(cString));
+
+  if(U_SUCCESS(status)) {
+    log_verbose("testing non ignorable\n");
+    ucol_setAttribute(coll, UCOL_ALTERNATE_HANDLING, UCOL_NON_IGNORABLE, &status);
+    doOverrunTest(coll, uString, strLen);
+
+    log_verbose("testing shifted\n");
+    ucol_setAttribute(coll, UCOL_ALTERNATE_HANDLING, UCOL_SHIFTED, &status);
+    doOverrunTest(coll, uString, strLen);
+
+    log_verbose("testing shifted quaternary\n");
+    ucol_setAttribute(coll, UCOL_STRENGTH, UCOL_QUATERNARY, &status);
+    doOverrunTest(coll, uString, strLen);
+
+    log_verbose("testing with french secondaries\n");
+    ucol_setAttribute(coll, UCOL_FRENCH_COLLATION, UCOL_ON, &status);
+    ucol_setAttribute(coll, UCOL_STRENGTH, UCOL_TERTIARY, &status);
+    ucol_setAttribute(coll, UCOL_ALTERNATE_HANDLING, UCOL_NON_IGNORABLE, &status);
+    doOverrunTest(coll, uString, strLen);
+
+
+  }
 }
 
