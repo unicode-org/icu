@@ -1,6 +1,6 @@
 /*
  *
- *   Copyright (C) 1998-1999, International Business Machines
+ *   Copyright (C) 1998-2001, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *
  * @version 1.0 06/19/98
@@ -27,8 +27,8 @@ CompactByteArray* charDirArray = 0;
 static const UChar LAST_CHAR_CODE_IN_FILE = 0xFFFD;
 const char charDirStrings[] = "L  R  EN ES ET AN CS B  S  WS ON LRELROAL RLERLOPDFNSMBN ";
 
-int tagValues[] = { 
-    0,  // kLeftToRight              = 0, 
+int tagValues[] = {
+    0,  // kLeftToRight              = 0,
     1,  // kRightToLeft              = 1,
     2,  // kEuropeanNumber           = 2,
     3,  // kEuropeanNumberSeparator  = 3,
@@ -37,7 +37,7 @@ int tagValues[] = {
     6,  // kCommonNumberSeparator    = 6,
     7,  // kParagraphSeparator       = 7,
     8,  // kSegmentSeparator         = 8,
-    9,  // kWhiteSpaceNeutral        = 9, 
+    9,  // kWhiteSpaceNeutral        = 9,
     10, // kOtherNeutral             = 10,
     11, // kLeftToRightEmbedding     = 11,
     12, // kLeftToRightOverride      = 12,
@@ -50,7 +50,7 @@ int tagValues[] = {
 
 };
 
-int MakeProp(char* str) 
+int MakeProp(char* str)
 {
     int result = 0;
     char* matchPosition;
@@ -121,7 +121,7 @@ getArray(FILE *input)
     return charDirArray;
 }
 
-void 
+void
 writeArrays()
 {
     const int8_t* values = ucmp8_getArray(charDirArray);

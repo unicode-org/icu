@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1998-1999, International Business Machines
+*   Copyright (C) 1998-2000, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -34,7 +34,7 @@ ustr_init(struct UString *s)
 
 void
 ustr_initChars(struct UString *s, const char* source, int32_t length, UErrorCode *status)
-{   
+{
     int i = 0;
     if (U_FAILURE(*status)) return;
     s->fChars = 0;
@@ -68,14 +68,14 @@ ustr_deinit(struct UString *s)
   s->fChars = 0;
   s->fLength = s->fCapacity = 0;
 }
-		       
+
 void
-ustr_cpy(struct UString *dst, 
-	 const struct UString *src, 
+ustr_cpy(struct UString *dst,
+	 const struct UString *src,
 	 UErrorCode *status)
 {
   if(U_FAILURE(*status) || dst == src) return;
-  
+
   if(dst->fCapacity < src->fLength) {
     ustr_resize(dst, ALLOCATION(src->fLength), status);
     if(U_FAILURE(*status)) return;
@@ -87,7 +87,7 @@ ustr_cpy(struct UString *dst,
 }
 
 void
-ustr_setlen(struct UString *s, 
+ustr_setlen(struct UString *s,
 	    int32_t len,
 	    UErrorCode *status)
 {
@@ -103,35 +103,35 @@ ustr_setlen(struct UString *s,
 }
 
 void
-ustr_cat(struct UString *dst, 
-	 const struct UString *src, 
+ustr_cat(struct UString *dst,
+	 const struct UString *src,
 	 UErrorCode *status)
 {
   ustr_ncat(dst, src, src->fLength, status);
 }
 
 void
-ustr_ncat(struct UString *dst, 
-	  const struct UString *src, 
-	  int32_t n, 
+ustr_ncat(struct UString *dst,
+	  const struct UString *src,
+	  int32_t n,
 	  UErrorCode *status)
 {
   if(U_FAILURE(*status) || dst == src) return;
-  
+
   if(dst->fCapacity < (dst->fLength + n)) {
     ustr_resize(dst, ALLOCATION(dst->fLength + n), status);
     if(U_FAILURE(*status)) return;
   }
-  
-  uprv_memcpy(dst->fChars + dst->fLength, src->fChars, 
+
+  uprv_memcpy(dst->fChars + dst->fLength, src->fChars,
 	     sizeof(UChar) * n);
   dst->fLength += src->fLength;
   dst->fChars[dst->fLength] = 0x0000;
 }
 
 void
-ustr_ucat(struct UString *dst, 
-	  UChar c, 
+ustr_ucat(struct UString *dst,
+	  UChar c,
 	  UErrorCode *status)
 {
   if(U_FAILURE(*status)) return;
@@ -140,8 +140,8 @@ ustr_ucat(struct UString *dst,
     ustr_resize(dst, ALLOCATION(dst->fLength + 1), status);
     if(U_FAILURE(*status)) return;
   }
-  
-  uprv_memcpy(dst->fChars + dst->fLength, &c, 
+
+  uprv_memcpy(dst->fChars + dst->fLength, &c,
 	     sizeof(UChar) * 1);
   dst->fLength += 1;
   dst->fChars[dst->fLength] = 0x0000;
@@ -149,8 +149,8 @@ ustr_ucat(struct UString *dst,
 
 /* Destroys data in the string */
 static void
-ustr_resize(struct UString *s, 
-	    int32_t len, 
+ustr_resize(struct UString *s,
+	    int32_t len,
 	    UErrorCode *status)
 {
   if(U_FAILURE(*status)) return;

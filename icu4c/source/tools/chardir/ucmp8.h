@@ -1,7 +1,7 @@
 /*
 ********************************************************************
 *
-*   Copyright (C) 1996-1999, International Business Machines
+*   Copyright (C) 1996-2000, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ********************************************************************
@@ -37,28 +37,28 @@ typedef struct{
   int8_t* fArray;
   uint16_t* fIndex;
   int32_t fCount;
-  UBool fCompact; 
+  UBool fCompact;
   UBool fBogus;
 } CompactByteArray;
 
 U_CAPI  CompactByteArray* ucmp8_open(int8_t defaultValue);
-U_CAPI  CompactByteArray* ucmp8_openAdopt(uint16_t* indexArray, 
+U_CAPI  CompactByteArray* ucmp8_openAdopt(uint16_t* indexArray,
                                int8_t* newValues,
                                int32_t count);
 U_CAPI  void ucmp8_close(CompactByteArray* array);
 U_CAPI  UBool isBogus(const CompactByteArray* array);
 
 
-U_CAPI int8_t ucmp8_get(CompactByteArray* array, uint16_t index); 
+U_CAPI int8_t ucmp8_get(CompactByteArray* array, uint16_t index);
 U_CAPI uint8_t ucmp8_getu(CompactByteArray* array, uint16_t index);
 
 U_CAPI  void ucmp8_set(CompactByteArray* array,
                  UChar index,
                  int8_t value);
 
-U_CAPI  void ucmp8_setRange(CompactByteArray* array, 
+U_CAPI  void ucmp8_setRange(CompactByteArray* array,
                   UChar start,
-                  UChar end, 
+                  UChar end,
                   int8_t value);
 
 U_CAPI  int32_t ucmp8_getCount(const CompactByteArray* array);
@@ -72,7 +72,7 @@ U_CAPI  const uint16_t* ucmp8_getIndex(const CompactByteArray* array);
    then using that will be faster than cycle = 1, and get almost the
    same compression.
 */
-U_CAPI  void ucmp8_compact(CompactByteArray* array, 
+U_CAPI  void ucmp8_compact(CompactByteArray* array,
                  uint32_t cycle);
 
 /* Expanded takes the array back to a 65536 element array*/

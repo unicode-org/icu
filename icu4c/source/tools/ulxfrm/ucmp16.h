@@ -2,7 +2,7 @@
 /*
 ********************************************************************
 *
-*   Copyright (C) 1996-1999, International Business Machines
+*   Copyright (C) 1996-2000, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ********************************************************************
@@ -13,7 +13,7 @@
  * @version 1.0 23/10/96
  * @author  Helena Shih
  * Based on Taligent international support for java
- * Modification History : 
+ * Modification History :
  *
  * 05/07/97     helena      Added isBogus()
  * 07/15/98        erm            Synched with Java 1.2 CompactShortArray.java.
@@ -72,18 +72,18 @@
  * @see                CompactIntArray
  * @see                CompactCharArray
  * @see                CompactStringArray
- * @version            $Revision: 1.6 $ 8/25/98
+ * @version            $Revision: 1.7 $ 8/25/98
  * @author             Helena Shih
  */
 
-typedef struct 
+typedef struct
 {
   int16_t* fArray;
   uint16_t* fIndex;
   int32_t* fHashes;
   int32_t fCount;
   int16_t fDefaultValue;
-  UBool fCompact;    
+  UBool fCompact;
   UBool fBogus;
   int32_t kBlockShift;
   int32_t kBlockMask;
@@ -172,7 +172,7 @@ U_CAPI  void ucmp16_set(CompactShortArray *array,
   */
 U_CAPI  void ucmp16_setRange(CompactShortArray* array,
                     UChar start,
-                    UChar end, 
+                    UChar end,
                     int16_t value);
 
 

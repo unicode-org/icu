@@ -1,3 +1,6 @@
+rem   Copyright (C) 2000, International Business Machines
+rem   Corporation and others.  All Rights Reserved.
+
 rem gbbmp.bat takes gbkuni30.txt and generates a mapping file for all BMP
 rem code points, as well as unidirectional files covering the BMP
 

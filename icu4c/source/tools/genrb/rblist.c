@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1998-1999, International Business Machines
+*   Copyright (C) 1998-2000, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -22,16 +22,16 @@
 #include "cstring.h"
 
 
-struct SRBItem* 
-make_rbitem(const UChar *tag, 
-        const struct SList *data, 
+struct SRBItem*
+make_rbitem(const UChar *tag,
+        const struct SList *data,
         UErrorCode *status)
 {
   struct SRBItem *item;
   char *s;
 
   if(U_FAILURE(*status)) return 0;
-  
+
   item = (struct SRBItem*) uprv_malloc(sizeof(struct SRBItem));
   if(item == 0) {
     *status = U_MEMORY_ALLOCATION_ERROR;
@@ -58,9 +58,9 @@ struct SRBItemList*
 rblist_open(UErrorCode *status)
 {
   struct SRBItemList *list;
-  
+
   if(U_FAILURE(*status)) return 0;
-  
+
   list = (struct SRBItemList*) uprv_malloc(sizeof(struct SRBItemList));
   if(list == 0) {
     *status = U_MEMORY_ALLOCATION_ERROR;
@@ -70,7 +70,7 @@ rblist_open(UErrorCode *status)
   list->fLocale = 0;
   list->fFirst = NULL;
 
-//  list->fData = 0; 
+//  list->fData = 0;
   list->fCount = 0;
   list->fCapacity = 32;
   list->fKeys = (char *) uprv_malloc(sizeof(char) * 65532);
@@ -90,18 +90,18 @@ void rblist_close(struct SRBItemList *list,
   current = list->fFirst;
   /* deallocate each list */
 //  for(i = 0; i < list->fCount; ++i) {
-  while(current != NULL) { 
-    
+  while(current != NULL) {
+
 //    switch(list->fData[i]->fData->fType) {
     switch(current->fData->fType) {
         case eStringList:
           strlist_close(current->fData, status);
           break;
-      
+
         case eStringList2d:
           strlist2d_close(current->fData, status);
           break;
-      
+
         case eTaggedList:
           taglist_close(current->fData, status);
           break;
@@ -120,14 +120,14 @@ void rblist_close(struct SRBItemList *list,
   uprv_free(list);
 }
 
-void rblist_setlocale(struct SRBItemList *list, 
-              const UChar *locale, 
+void rblist_setlocale(struct SRBItemList *list,
+              const UChar *locale,
               UErrorCode *status)
 {
   if(U_FAILURE(*status)) return;
 
   /* Allocate enough space */
-  list->fLocale = (UChar*) uprv_realloc(list->fLocale, 
+  list->fLocale = (UChar*) uprv_realloc(list->fLocale,
                        sizeof(UChar) * (u_strlen(locale) + 1));
   if(list->fLocale == 0) {
     *status = U_MEMORY_ALLOCATION_ERROR;
@@ -147,7 +147,7 @@ void rblist_add(struct SRBItemList *list,
     struct SRBItem *prev = NULL;
 
     if(U_FAILURE(*status)) return;
-    /* here we need to traverse the list */  
+    /* here we need to traverse the list */
 
     ++(list->fCount);
 

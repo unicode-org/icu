@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2000, International Business Machines
+*   Copyright (C) 2000-2001, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -58,18 +58,18 @@ typedef struct CCSIDStateTable {
 
 static const CCSIDStateTable
 knownStateTables[]={
-    
+
     301,  "<icu:state>                   0-ff:2, 81-9f:1, e0-fc:1\n"
            "<icu:state>                   40-7e, 80-fc\n"
            "<icu:state>\n",
     367,   "<icu:state>                   0-7f\n",
-    
+
     927, japanesePCDBCSStates,
-    
+
     926, japanesePCDBCSStates,
 
     928, japanesePCDBCSStates,
-    
+
     932, "<icu:state>                   0-7f,80,81-9f:1,a0-df,fd-ff, e0-fc:1\n"
          "<icu:state>                   40-7e, 80-fc\n",
 
@@ -87,14 +87,14 @@ knownStateTables[]={
 
     946,   "<icu:state>                   0-80, 81-fb:1,fc:2,fd-ff\n"
            "<icu:state>                   40-7e, 80-fe\n"
-           "<icu:state>                   80-fe.u,fc", 
+           "<icu:state>                   80-fe.u,fc",
 
     947,   "<icu:state>                   0-7f, 80-fe:1\n"
            "<icu:state>                   40-7e, 80-fe\n",
-    
+
     948,   "<icu:state>                   0-80, 81-fb:1,fc:2,fd-fe\n"
            "<icu:state>                   40-7e, 80-fe\n"
-           "<icu:state>                   80-fe.u,fc\n", 
+           "<icu:state>                   80-fe.u,fc\n",
 
     949,   "<icu:state>                   0-84, 8f-fe:1\n"
            "<icu:state>                   40-7e, 80-fe\n",
@@ -111,7 +111,7 @@ knownStateTables[]={
     955,   "<icu:state>                   0-20:2, 21-7e:1, 7f-ff:2\n"
            "<icu:state>                   21-7e\n"
            "<icu:state>\n",
-    
+
     963,   "<icu:state>                   0-20:2, 21-7e:1, 7f-ff:2\n"
            "<icu:state>                   21-7e\n"
            "<icu:state>\n",
@@ -140,7 +140,7 @@ knownStateTables[]={
     1351,  "<icu:state>                   0-ff:2, 81-9f:1, e0-fc:1\n"
            "<icu:state>                   40-7e, 80-fc\n"
            "<icu:state>\n",
-    
+
     1370,  "<icu:state>                   0-80, 81-fe:1\n"
            "<icu:state>                   40-7e, 81-fe\n",
 
@@ -159,7 +159,7 @@ knownStateTables[]={
 
     5039,   "<icu:state>                   0-80, 81-9f:1, a0-df, e0-fc:1, fd-ff\n"
            "<icu:state>                   40-7e, 80-fc\n",
-    
+
     5050,  "<icu:state>                   0-8d, 8e:2, 8f:3, 90-9f, a1-fe:1\n"
            "<icu:state>                   a1-fe\n"
            "<icu:state>                   a1-e4\n"
@@ -168,10 +168,10 @@ knownStateTables[]={
     5067,  "<icu:state>                   0-ff:2, 21-7e:1\n"
            "<icu:state>                   21-7e\n"
            "<icu:state>\n",
-    
+
     5478,  "<icu:state>                   0-ff:2, 21-7e:1\n"
            "<icu:state>                   21-7e\n"
-           "<icu:state>\n",                
+           "<icu:state>\n",
 
     21427, "<icu:state>                   0-80:2, 81-fe:1, ff:2\n"
            "<icu:state>                   40-7e, 80-fe\n"

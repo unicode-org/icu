@@ -1,7 +1,7 @@
 ## Makefile.in for ICU - tools/genccode
-## Copyright (c) 1999, International Business Machines Corporation and
+## Copyright (c) 1999-2000, International Business Machines Corporation and
 ## others. All Rights Reserved.
-## Steven R. Loomi
+## Steven R. Loomis
 
 ## Source directory information
 srcdir = @srcdir@

@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1998-1999, International Business Machines
+*   Copyright (C) 1998-2000, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -41,14 +41,14 @@ struct SRBItemList {
 
 struct SRBItemList* rblist_open(UErrorCode *status);
 
-struct SRBItem* make_rbitem(const UChar *tag, const struct SList *data, 
+struct SRBItem* make_rbitem(const UChar *tag, const struct SList *data,
 			    UErrorCode *status);
 
 void rblist_close(struct SRBItemList *list, UErrorCode *status);
 
-void rblist_setlocale(struct SRBItemList *list, const UChar *locale, 
+void rblist_setlocale(struct SRBItemList *list, const UChar *locale,
 		      UErrorCode *status);
-void rblist_add(struct SRBItemList *list, struct SRBItem *s, 
+void rblist_add(struct SRBItemList *list, struct SRBItem *s,
 		UErrorCode *status);
 
 #endif

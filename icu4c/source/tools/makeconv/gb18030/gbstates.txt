@@ -1,3 +1,6 @@
+#   Copyright (C) 2000, International Business Machines
+#   Corporation and others.  All Rights Reserved.
+#
 # ICU state information for the GB 18030 MBCS codepage
 # Note that the entire block for the supplementary Unicode planes is
 # marked unassigned because they are handled algorithmically.

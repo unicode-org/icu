@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1998-1999, International Business Machines
+*   Copyright (C) 1998-2000, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -54,7 +54,7 @@ main(int argc,
   /* parse the options */
   for(optind = 1; optind < argc; ++optind) {
     arg = argv[optind];
-    
+
     /* version info */
     if(uprv_strcmp(arg, "-v") == 0 || uprv_strcmp(arg, "--version") == 0) {
       printVersion = 1;
@@ -107,7 +107,7 @@ main(int argc,
 /* Usage information */
 static void
 usage()
-{  
+{
   puts("Usage: rbdump [OPTIONS] [FILES]");
   puts("Options:");
   puts("  -h, --help        Print this message and exit.");
@@ -118,7 +118,7 @@ usage()
 static void
 version()
 {
-  printf("rbdump version %s (ICU version %s).\n", 
+  printf("rbdump version %s (ICU version %s).\n",
 	 RBDUMP_VERSION, U_ICU_VERSION);
   puts(U_COPYRIGHT_STRING);
 }

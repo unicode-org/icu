@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1998-1999, International Business Machines
+*   Copyright (C) 1998-2001, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -87,7 +87,7 @@ main(int argc,
   const char *arg = NULL;
   const char *outputDir = NULL; /* NULL = no output directory, use current */
   const char *inputDir = NULL;
-  const char *encoding = ""; 
+  const char *encoding = "";
   UBool verbose;
 
 #ifdef XP_MAC_CONSOLE
@@ -104,7 +104,7 @@ main(int argc,
   }
 
   if(argc<0 || options[HELP1].doesOccur || options[HELP2].doesOccur) {
-      fprintf(stderr, 
+      fprintf(stderr,
       "Usage: %s [OPTIONS] [FILES]\n"
       "\treads the list of resource bundle source files and creates\n"
       "\tbinary version of reosurce bundles (.res files)\n"
@@ -121,9 +121,9 @@ main(int argc,
   }
 
   if(options[VERSION].doesOccur) {
-      fprintf(stderr, 
+      fprintf(stderr,
       "%s version %s (ICU version %s).\n"
-      "%s\n", 
+      "%s\n",
       argv[0], GENRB_VERSION, U_ICU_VERSION, U_COPYRIGHT_STRING);
       return U_ZERO_ERROR;
   }
@@ -280,7 +280,7 @@ make_res_filename(const char *filename,
     goto finish;
   }
   get_basename(basename, filename);
-  
+
   dirname = (char*) uprv_malloc(sizeof(char) * (uprv_strlen(filename) + 1));
   if(dirname == 0) {
     *status = U_MEMORY_ALLOCATION_ERROR;
@@ -292,7 +292,7 @@ make_res_filename(const char *filename,
   {
       /* output in same dir as .txt */
       resName = (char*) uprv_malloc(sizeof(char) * (uprv_strlen(dirname)
-                                                    + uprv_strlen(basename) 
+                                                    + uprv_strlen(basename)
                                                     + uprv_strlen(RES_SUFFIX) + 1));
       if(resName == 0) {
           *status = U_MEMORY_ALLOCATION_ERROR;
@@ -319,10 +319,10 @@ make_res_filename(const char *filename,
       if(outputDir[dirlen] != U_FILE_SEP_CHAR) {
           resName[dirlen] = U_FILE_SEP_CHAR;
           resName[dirlen+1] = '\0';
-      } 
+      }
       /*uprv_strcat(resName, dirname);*/
       /*uprv_strcpy(resName, dirname);*/
-      uprv_strcat(resName, basename);    
+      uprv_strcat(resName, basename);
   }
 
  finish:
@@ -357,7 +357,7 @@ make_col_filename(const char *filename,
     goto finish;
   }
   get_basename(basename, filename);
-  
+
   dirname = (char*) uprv_malloc(sizeof(char) * (uprv_strlen(filename) + 1));
   if(dirname == 0) {
     *status = U_MEMORY_ALLOCATION_ERROR;
@@ -366,11 +366,11 @@ make_col_filename(const char *filename,
 
   if(outputDir == NULL)
   {
-      
+
       get_dirname(dirname, filename);
-      
+
       colName = (char*) uprv_malloc(sizeof(char) * (uprv_strlen(dirname)
-                                                    + uprv_strlen(basename) 
+                                                    + uprv_strlen(basename)
                                                     + uprv_strlen(COL_SUFFIX) + 1));
       if(colName == 0) {
           *status = U_MEMORY_ALLOCATION_ERROR;
@@ -387,7 +387,7 @@ make_col_filename(const char *filename,
       get_dirname(dirname, filename);
 
       colName = (char*) uprv_malloc(sizeof(char) * (uprv_strlen(outputDir)
-                                                    + uprv_strlen(basename) 
+                                                    + uprv_strlen(basename)
                                                     + uprv_strlen(COL_SUFFIX) + 1));
       if(colName == 0) {
           *status = U_MEMORY_ALLOCATION_ERROR;
@@ -416,7 +416,7 @@ static void make_col(const char *filename, UErrorCode *status)
         return;
     }
     get_basename(basename, filename);
-    
+
     coll = ucol_open(basename, status);
     if(U_FAILURE(*status)) {
       printf("gencol: %s for locale \"%s\"", u_errorName(*status), basename);

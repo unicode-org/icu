@@ -1,7 +1,7 @@
 /*
 *****************************************************************************************
 *
-*   Copyright (C) 1997-1999, International Business Machines
+*   Copyright (C) 1997-200, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *****************************************************************************************
@@ -78,39 +78,39 @@ CompactShortArray* ucmp16_open(int16_t defaultValue)
   int32_t i;
   CompactShortArray* this = (CompactShortArray*) uprv_malloc(sizeof(CompactShortArray));
   if (this == NULL) return NULL;
-  
+
   this->fCount = UCMP16_kUnicodeCount;
-  this->fCompact = FALSE; 
+  this->fCompact = FALSE;
   this->fBogus = FALSE;
   this->fArray = NULL;
   this->fIndex = NULL;
-  this->fHashes = NULL; 
+  this->fHashes = NULL;
   this->fDefaultValue = defaultValue;
-  
+
   this->fArray = (int16_t*)uprv_malloc(UCMP16_kUnicodeCount * sizeof(int16_t));
   if (this->fArray == NULL)
     {
       this->fBogus = TRUE;
       return NULL;
     }
-  
+
   this->fIndex = (uint16_t*)uprv_malloc(UCMP16_kIndexCount * sizeof(uint16_t));
   if (this->fIndex == NULL)
     {
       uprv_free(this->fArray);
       this->fArray = NULL;
-      
+
       this->fBogus = TRUE;
       return NULL;
     }
-  
+
   this->kBlockShift = UCMP16_kBlockShift;
   this->kBlockMask = UCMP16_kBlockMask;
   for (i = 0; i < UCMP16_kUnicodeCount; i += 1)
     {
       this->fArray[i] = defaultValue;
     }
-  
+
   this->fHashes =(int32_t*)uprv_malloc(UCMP16_kIndexCount * sizeof(int32_t));
   if (this->fHashes == NULL)
     {
@@ -119,25 +119,25 @@ CompactShortArray* ucmp16_open(int16_t defaultValue)
       this->fBogus = TRUE;
       return NULL;
     }
-  
+
   for (i = 0; i < UCMP16_kIndexCount; i += 1)
     {
       this->fIndex[i] = (uint16_t)(i << UCMP16_kBlockShift);
       this->fHashes[i] = 0;
     }
-  
+
   return this;
 }
 
 CompactShortArray* ucmp16_openAdopt(uint16_t *indexArray,
-                    int16_t *newValues, 
+                    int16_t *newValues,
                     int32_t count,
                     int16_t defaultValue)
 {
   CompactShortArray* this = (CompactShortArray*) uprv_malloc(sizeof(CompactShortArray));
   if (this == NULL) return NULL;
   this->fHashes = NULL;
-  this->fCount = count; 
+  this->fCount = count;
   this->fDefaultValue = defaultValue;
   this->fBogus = FALSE;
   this->fArray = newValues;
@@ -160,15 +160,15 @@ CompactShortArray* ucmp16_openAdoptWithBlockShift(uint16_t *indexArray,
                          count,
                          defaultValue);
   if (this == NULL) return NULL;
-  
+
   this->kBlockShift  = blockShift;
   this->kBlockMask = (uint32_t) (((uint32_t)1 << (uint32_t)blockShift) - (uint32_t)1);
-  
+
   return this;
 }
 
 /*=======================================================*/
- 
+
 void ucmp16_close(CompactShortArray* this)
 {
   uprv_free(this->fArray);
@@ -183,17 +183,17 @@ CompactShortArray* setToBogus(CompactShortArray* this)
 {
   uprv_free(this->fArray);
   this->fArray = NULL;
-  
+
   uprv_free(this->fIndex);
   this->fIndex = NULL;
-  
+
   uprv_free(this->fHashes);
   this->fHashes = NULL;
-  
+
   this->fCount = 0;
   this->fCompact = FALSE;
   this->fBogus = TRUE;
-  
+
   return this;
 }
 
@@ -204,23 +204,23 @@ void ucmp16_expand(CompactShortArray* this)
     {
       int32_t i;
       int16_t *tempArray = (int16_t*)uprv_malloc(UCMP16_kUnicodeCount * sizeof(int16_t));
-      
+
       if (tempArray == NULL)
     {
       this->fBogus = TRUE;
       return;
     }
-      
+
       for (i = 0; i < UCMP16_kUnicodeCount; i += 1)
     {
       tempArray[i] = ucmp16_get(this, (UChar)i);  /* HSYS : How expand?*/
         }
-      
+
       for (i = 0; i < (1 << (16 - this->kBlockShift)); i += 1)
     {
       this->fIndex[i] = (uint16_t)(i<<this->kBlockShift);
         }
-      
+
       uprv_free(this->fArray);
       this->fArray = tempArray;
       this->fCompact = FALSE;
@@ -236,9 +236,9 @@ void ucmp16_set(CompactShortArray* this,
       ucmp16_expand(this);
       if (this->fBogus) return;
     }
-  
+
   this->fArray[(int32_t)c] = value;
-  
+
   if (value != this->fDefaultValue)
     {
       touchBlock(this, c >> this->kBlockShift, value);
@@ -246,7 +246,7 @@ void ucmp16_set(CompactShortArray* this,
 }
 
 
-void ucmp16_setRange(CompactShortArray* this, 
+void ucmp16_setRange(CompactShortArray* this,
              UChar start,
              UChar end,
              int16_t value)
@@ -280,13 +280,13 @@ void ucmp16_compact(CompactShortArray* this)
       int32_t limitCompacted = 0;
       int32_t i, iBlockStart;
       int16_t iUntouched = -1;
-      
+
       for (i = 0, iBlockStart = 0; i < (1 << (16 - this->kBlockShift)); i += 1, iBlockStart += (1 << this->kBlockShift))
     {
       UBool touched = blockTouched(this, i);
-      
+
       this->fIndex[i] = 0xFFFF;
-      
+
       if (!touched && iUntouched != -1)
         {
           /* If no values in this block were set, we can just set its
@@ -298,7 +298,7 @@ void ucmp16_compact(CompactShortArray* this)
       else
         {
           int32_t j, jBlockStart;
-          
+
           for (j = 0, jBlockStart = 0;
            j < limitCompacted;
            j += 1, jBlockStart += (1 << this->kBlockShift))
@@ -306,26 +306,26 @@ void ucmp16_compact(CompactShortArray* this)
           if (this->fHashes[i] == this->fHashes[j] &&
               arrayRegionMatches(this->fArray,
                      iBlockStart,
-                     this->fArray, 
+                     this->fArray,
                      jBlockStart,
                      (1 << this->kBlockShift)))
             {
               this->fIndex[i] = (int16_t)jBlockStart;
                     }
                 }
-          
+
                 /* TODO: verify this is correct*/
           if (this->fIndex[i] == 0xFFFF)
         {
           /* we didn't match, so copy & update*/
-          uprv_memcpy(&(this->fArray[jBlockStart]), 
+          uprv_memcpy(&(this->fArray[jBlockStart]),
                  &(this->fArray[iBlockStart]),
                  (1 << this->kBlockShift)*sizeof(int16_t));
-          
+
           this->fIndex[i] = (int16_t)jBlockStart;
           this->fHashes[j] = this->fHashes[i];
           limitCompacted += 1;
-          
+
           if (!touched)
             {
               /* If this is the first untouched block we've seen,*/
@@ -340,15 +340,15 @@ void ucmp16_compact(CompactShortArray* this)
       {
     int32_t newSize = limitCompacted * (1 << this->kBlockShift);
     int16_t *result = (int16_t*) uprv_malloc(sizeof(int16_t) * newSize);
-    
+
     uprv_memcpy(result, this->fArray, newSize * sizeof(int16_t));
-    
+
     uprv_free(this->fArray);
     this->fArray = result;
     this->fCount = newSize;
     uprv_free(this->fHashes);
     this->fHashes = NULL;
-    
+
     this->fCompact = TRUE;
       }
     }
@@ -390,7 +390,7 @@ ucmp16_getIndex(const CompactShortArray* this)
     return this->fIndex;
 }
 
-uint32_t 
+uint32_t
 ucmp16_getCount(const CompactShortArray* this)
 {
     return this->fCount;

@@ -1,7 +1,7 @@
-/*  
+/*
 *****************************************************************************************
 *
-*   Copyright (C) 1996-1999, International Business Machines
+*   Copyright (C) 1996-2000, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *****************************************************************************************
@@ -25,7 +25,7 @@
     #define C_CTEST_API extern "C"
 #else
     #define C_CTEST_API
-#endif 
+#endif
 
 #ifdef T_CTEST_IMPLEMENTATION
     #define T_CTEST_API C_CTEST_API  T_CTEST_EXPORT
@@ -55,7 +55,7 @@ typedef void (*TestFunctionPtr)();
 typedef struct TestNode TestNode;
 
 /**
- * Count of errors from all tests. 
+ * Count of errors from all tests.
  * May be reset.
  * @internal Internal APIs for testing purpose only
  */
@@ -67,7 +67,7 @@ T_CTEST_EXPORT_API extern int ERROR_COUNT;
  * @internal Internal APIs for testing purpose only
  *
  */
-T_CTEST_EXPORT_API extern int VERBOSITY;  
+T_CTEST_EXPORT_API extern int VERBOSITY;
 
 /**
  * Set this to zero to disable log_verbose() messages.
@@ -75,11 +75,11 @@ T_CTEST_EXPORT_API extern int VERBOSITY;
  * @internal Internal APIs for testing purpose only
  *
  */
-T_CTEST_EXPORT_API extern int ERR_MSG; 
+T_CTEST_EXPORT_API extern int ERR_MSG;
 
 /**
  * Show the names of all nodes.
- * 
+ *
  * @param root Subtree of tests.
  * @internal Internal APIs for testing purpose only
  */
@@ -87,7 +87,7 @@ T_CTEST_API void showTests ( const TestNode *root);
 
 /**
  * Run a subtree of tests.
- * 
+ *
  * @param root Subtree of tests.
  * @internal Internal APIs for testing purpose only
  */
