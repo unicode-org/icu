@@ -248,23 +248,99 @@ u_strcmp(const UChar     *s1,
 
 /**
  * Compare two Unicode strings in code point order.
- * This is different in UTF-16 from u_strcmp() if supplementary characters are present:
- * In UTF-16, supplementary characters (with code points U+10000 and above) are
- * stored with pairs of surrogate code units. These have values from 0xd800 to
- * 0xdfff, which means that they compare as less than some other BMP characters
- * like U+feff. This function compares Unicode strings in code point order.
- * If eihter of the UTF-16 strings is malformed (i.e., it contains unpaired
- * surrogates), then the result is not defined.
+ * See u_strCompare for details.
  *
  * @param s1 A string to compare.
  * @param s2 A string to compare.
  * @return a negative/zero/positive integer corresponding to whether
  * the first string is less than/equal to/greater than the second one
  * in code point order
- * @draft ICU 1.8
+ * @stable
  */
 U_CAPI int32_t U_EXPORT2
 u_strcmpCodePointOrder(const UChar *s1, const UChar *s2);
+
+/**
+ * Compare two Unicode strings (binary order).
+ *
+ * The comparison can be done in code unit order or in code point order.
+ * They differ only in UTF-16 when
+ * comparing supplementary code points (U+10000..U+10ffff)
+ * to BMP code points near the end of the BMP (i.e., U+e000..U+ffff).
+ * In code unit order, high BMP code points sort after supplementary code points
+ * because they are stored as pairs of surrogates which are at U+d800..U+dfff.
+ *
+ * This functions works with strings of different explicitly specified lengths
+ * unlike the ANSI C-like u_strcmp() and u_memcmp() etc.
+ * NUL-terminated strings are possible with length arguments of -1.
+ *
+ * @param s1 First source string.
+ * @param length1 Length of first source string, or -1 if NUL-terminated.
+ *
+ * @param s2 Second source string.
+ * @param length2 Length of second source string, or -1 if NUL-terminated.
+ *
+ * @param codePointOrder Choose between code unit order (FALSE)
+ *                       and code point order (TRUE).
+ *
+ * @return <0 or 0 or >0 as usual for string comparisons
+ *
+ * @draft ICU 2.2
+ */
+U_CAPI int32_t U_EXPORT2
+u_strCompare(const UChar *s1, int32_t length1,
+             const UChar *s2, int32_t length2,
+             UBool codePointOrder);
+
+/**
+ * Option bit for u_strCaseCompare, u_strcasecmp, unorm_compare, etc:
+ * Compare strings in code point order instead of code unit order.
+ * @draft ICU 2.2
+ */
+#define U_COMPARE_CODE_POINT_ORDER  0x8000
+
+/**
+ * Compare two strings case-insensitively using full case folding.
+ * This is equivalent to
+ *   u_strCompare(u_strFoldCase(s1, options),
+ *                u_strFoldCase(s2, options),
+ *                (options&U_COMPARE_CODE_POINT_ORDER)!=0).
+ *
+ * The comparison can be done in UTF-16 code unit order or in code point order.
+ * They differ only when comparing supplementary code points (U+10000..U+10ffff)
+ * to BMP code points near the end of the BMP (i.e., U+e000..U+ffff).
+ * In code unit order, high BMP code points sort after supplementary code points
+ * because they are stored as pairs of surrogates which are at U+d800..U+dfff.
+ *
+ * This functions works with strings of different explicitly specified lengths
+ * unlike the ANSI C-like u_strcmp() and u_memcmp() etc.
+ * NUL-terminated strings are possible with length arguments of -1.
+ *
+ * @param s1 First source string.
+ * @param length1 Length of first source string, or -1 if NUL-terminated.
+ *
+ * @param s2 Second source string.
+ * @param length2 Length of second source string, or -1 if NUL-terminated.
+ *
+ * @param options A bit set of options:
+ *   - U_FOLD_CASE_DEFAULT or 0 is used for default options:
+ *     Comparison in code unit order with default case folding.
+ *
+ *   - U_COMPARE_CODE_POINT_ORDER
+ *     Set to choose code point order instead of code unit order
+ *     (see u_strCompare for details).
+ *
+ *   - U_FOLD_CASE_EXCLUDE_SPECIAL_I
+ *
+ * @return <0 or 0 or >0 as usual for string comparisons
+ *
+ * @draft ICU 2.2
+ */
+U_CAPI int32_t U_EXPORT2
+u_strCaseCompare(const UChar *s1, int32_t length1,
+                 const UChar *s2, int32_t length2,
+                 uint32_t options,
+                 UErrorCode *pErrorCode);
 
 /**
  * Compare two ustrings for bitwise equality. 
@@ -286,7 +362,7 @@ u_strncmp(const UChar     *ucs1,
 /**
  * Compare two Unicode strings in code point order.
  * This is different in UTF-16 from u_strncmp() if supplementary characters are present.
- * For details, see u_strcmpCodePointOrder().
+ * For details, see u_strCompare().
  *
  * @param s1 A string to compare.
  * @param s2 A string to compare.
@@ -294,7 +370,7 @@ u_strncmp(const UChar     *ucs1,
  * @return a negative/zero/positive integer corresponding to whether
  * the first string is less than/equal to/greater than the second one
  * in code point order
- * @draft ICU 1.8
+ * @stable
  */
 U_CAPI int32_t U_EXPORT2
 u_strncmpCodePointOrder(const UChar *s1, const UChar *s2, int32_t n);
@@ -305,9 +381,18 @@ u_strncmpCodePointOrder(const UChar *s1, const UChar *s2, int32_t n);
  *
  * @param s1 A string to compare.
  * @param s2 A string to compare.
- * @param options Either U_FOLD_CASE_DEFAULT or U_FOLD_CASE_EXCLUDE_SPECIAL_I
+ * @param options A bit set of options:
+ *   - U_FOLD_CASE_DEFAULT or 0 is used for default options:
+ *     Comparison in code unit order with default case folding.
+ *
+ *   - U_COMPARE_CODE_POINT_ORDER
+ *     Set to choose code point order instead of code unit order
+ *     (see u_strCompare for details).
+ *
+ *   - U_FOLD_CASE_EXCLUDE_SPECIAL_I
+ *
  * @return A negative, zero, or positive integer indicating the comparison result.
- * @draft ICU 1.8
+ * @stable
  */
 U_CAPI int32_t U_EXPORT2
 u_strcasecmp(const UChar *s1, const UChar *s2, uint32_t options);
@@ -320,9 +405,18 @@ u_strcasecmp(const UChar *s1, const UChar *s2, uint32_t options);
  * @param s1 A string to compare.
  * @param s2 A string to compare.
  * @param n The maximum number of characters each string to case-fold and then compare.
- * @param options Either U_FOLD_CASE_DEFAULT or U_FOLD_CASE_EXCLUDE_SPECIAL_I
+ * @param options A bit set of options:
+ *   - U_FOLD_CASE_DEFAULT or 0 is used for default options:
+ *     Comparison in code unit order with default case folding.
+ *
+ *   - U_COMPARE_CODE_POINT_ORDER
+ *     Set to choose code point order instead of code unit order
+ *     (see u_strCompare for details).
+ *
+ *   - U_FOLD_CASE_EXCLUDE_SPECIAL_I
+ *
  * @return A negative, zero, or positive integer indicating the comparison result.
- * @draft ICU 1.8
+ * @stable
  */
 U_CAPI int32_t U_EXPORT2
 u_strncasecmp(const UChar *s1, const UChar *s2, int32_t n, uint32_t options);
@@ -335,7 +429,16 @@ u_strncasecmp(const UChar *s1, const UChar *s2, int32_t n, uint32_t options);
  * @param s1 A string to compare.
  * @param s2 A string to compare.
  * @param n The number of characters in each string to case-fold and then compare.
- * @param options Either U_FOLD_CASE_DEFAULT or U_FOLD_CASE_EXCLUDE_SPECIAL_I
+ * @param options A bit set of options:
+ *   - U_FOLD_CASE_DEFAULT or 0 is used for default options:
+ *     Comparison in code unit order with default case folding.
+ *
+ *   - U_COMPARE_CODE_POINT_ORDER
+ *     Set to choose code point order instead of code unit order
+ *     (see u_strCompare for details).
+ *
+ *   - U_FOLD_CASE_EXCLUDE_SPECIAL_I
+ *
  * @return A negative, zero, or positive integer indicating the comparison result.
  * @draft ICU 2.0
  */
@@ -471,7 +574,7 @@ u_memcmp(const UChar *buf1, const UChar *buf2, int32_t count);
 /**
  * Compare two Unicode strings in code point order.
  * This is different in UTF-16 from u_memcmp() if supplementary characters are present.
- * For details, see u_strcmpCodePointOrder().
+ * For details, see u_strCompare().
  *
  * @param s1 A string to compare.
  * @param s2 A string to compare.
@@ -479,7 +582,7 @@ u_memcmp(const UChar *buf1, const UChar *buf2, int32_t count);
  * @return a negative/zero/positive integer corresponding to whether
  * the first string is less than/equal to/greater than the second one
  * in code point order
- * @draft ICU 1.8
+ * @stable
  */
 U_CAPI int32_t U_EXPORT2
 u_memcmpCodePointOrder(const UChar *s1, const UChar *s2, int32_t count);
@@ -687,7 +790,7 @@ u_unescapeAt(UNESCAPE_CHAR_AT charAt,
  *                  which must not indicate a failure before the function call.
  * @return The length of the result string. It may be greater than destCapacity. In that case,
  *         only some of the result was written to the destination buffer.
- * @draft ICU 1.8
+ * @stable
  */
 U_CAPI int32_t U_EXPORT2
 u_strToUpper(UChar *dest, int32_t destCapacity,
@@ -713,7 +816,7 @@ u_strToUpper(UChar *dest, int32_t destCapacity,
  *                  which must not indicate a failure before the function call.
  * @return The length of the result string. It may be greater than destCapacity. In that case,
  *         only some of the result was written to the destination buffer.
- * @draft ICU 1.8
+ * @stable
  */
 U_CAPI int32_t U_EXPORT2
 u_strToLower(UChar *dest, int32_t destCapacity,
@@ -786,7 +889,7 @@ u_strToTitle(UChar *dest, int32_t destCapacity,
  *                  which must not indicate a failure before the function call.
  * @return The length of the result string. It may be greater than destCapacity. In that case,
  *         only some of the result was written to the destination buffer.
- * @draft ICU 1.8
+ * @stable
  */
 U_CAPI int32_t U_EXPORT2
 u_strFoldCase(UChar *dest, int32_t destCapacity,

@@ -49,9 +49,9 @@
  * @internal
  */
 U_CAPI int32_t U_EXPORT2
-u_strCompare(const UChar *s1, int32_t length1,
-             const UChar *s2, int32_t length2,
-             UBool strncmpStyle, UBool codePointOrder);
+uprv_strCompare(const UChar *s1, int32_t length1,
+                const UChar *s2, int32_t length2,
+                UBool strncmpStyle, UBool codePointOrder);
 
 /**
  * Are the Unicode properties loaded?

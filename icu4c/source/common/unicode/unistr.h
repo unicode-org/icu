@@ -511,7 +511,16 @@ public:
    * This is equivalent to this->foldCase(options).compare(text.foldCase(options)).
    *
    * @param text Another string to compare this one to.
-   * @param options Either U_FOLD_CASE_DEFAULT or U_FOLD_CASE_EXCLUDE_SPECIAL_I
+   * @param options A bit set of options:
+   *   - U_FOLD_CASE_DEFAULT or 0 is used for default options:
+   *     Comparison in code unit order with default case folding.
+   *
+   *   - U_COMPARE_CODE_POINT_ORDER
+   *     Set to choose code point order instead of code unit order
+   *     (see u_strCompare for details).
+   *
+   *   - U_FOLD_CASE_EXCLUDE_SPECIAL_I
+   *
    * @return A negative, zero, or positive integer indicating the comparison result.
    * @draft ICU 1.8
    */
@@ -524,7 +533,16 @@ public:
    * @param start The start offset in this string at which the compare operation begins.
    * @param length The number of code units from this string to compare.
    * @param srcText Another string to compare this one to.
-   * @param options Either U_FOLD_CASE_DEFAULT or U_FOLD_CASE_EXCLUDE_SPECIAL_I
+   * @param options A bit set of options:
+   *   - U_FOLD_CASE_DEFAULT or 0 is used for default options:
+   *     Comparison in code unit order with default case folding.
+   *
+   *   - U_COMPARE_CODE_POINT_ORDER
+   *     Set to choose code point order instead of code unit order
+   *     (see u_strCompare for details).
+   *
+   *   - U_FOLD_CASE_EXCLUDE_SPECIAL_I
+   *
    * @return A negative, zero, or positive integer indicating the comparison result.
    * @draft ICU 1.8
    */
@@ -542,7 +560,16 @@ public:
    * @param srcText Another string to compare this one to.
    * @param srcStart The start offset in that string at which the compare operation begins.
    * @param srcLength The number of code units from that string to compare.
-   * @param options Either U_FOLD_CASE_DEFAULT or U_FOLD_CASE_EXCLUDE_SPECIAL_I
+   * @param options A bit set of options:
+   *   - U_FOLD_CASE_DEFAULT or 0 is used for default options:
+   *     Comparison in code unit order with default case folding.
+   *
+   *   - U_COMPARE_CODE_POINT_ORDER
+   *     Set to choose code point order instead of code unit order
+   *     (see u_strCompare for details).
+   *
+   *   - U_FOLD_CASE_EXCLUDE_SPECIAL_I
+   *
    * @return A negative, zero, or positive integer indicating the comparison result.
    * @draft ICU 1.8
    */
@@ -559,7 +586,16 @@ public:
    *
    * @param srcChars A pointer to another string to compare this one to.
    * @param srcLength The number of code units from that string to compare.
-   * @param options Either U_FOLD_CASE_DEFAULT or U_FOLD_CASE_EXCLUDE_SPECIAL_I
+   * @param options A bit set of options:
+   *   - U_FOLD_CASE_DEFAULT or 0 is used for default options:
+   *     Comparison in code unit order with default case folding.
+   *
+   *   - U_COMPARE_CODE_POINT_ORDER
+   *     Set to choose code point order instead of code unit order
+   *     (see u_strCompare for details).
+   *
+   *   - U_FOLD_CASE_EXCLUDE_SPECIAL_I
+   *
    * @return A negative, zero, or positive integer indicating the comparison result.
    * @draft ICU 1.8
    */
@@ -574,7 +610,16 @@ public:
    * @param start The start offset in this string at which the compare operation begins.
    * @param length The number of code units from this string to compare.
    * @param srcChars A pointer to another string to compare this one to.
-   * @param options Either U_FOLD_CASE_DEFAULT or U_FOLD_CASE_EXCLUDE_SPECIAL_I
+   * @param options A bit set of options:
+   *   - U_FOLD_CASE_DEFAULT or 0 is used for default options:
+   *     Comparison in code unit order with default case folding.
+   *
+   *   - U_COMPARE_CODE_POINT_ORDER
+   *     Set to choose code point order instead of code unit order
+   *     (see u_strCompare for details).
+   *
+   *   - U_FOLD_CASE_EXCLUDE_SPECIAL_I
+   *
    * @return A negative, zero, or positive integer indicating the comparison result.
    * @draft ICU 1.8
    */
@@ -592,7 +637,16 @@ public:
    * @param srcChars A pointer to another string to compare this one to.
    * @param srcStart The start offset in that string at which the compare operation begins.
    * @param srcLength The number of code units from that string to compare.
-   * @param options Either U_FOLD_CASE_DEFAULT or U_FOLD_CASE_EXCLUDE_SPECIAL_I
+   * @param options A bit set of options:
+   *   - U_FOLD_CASE_DEFAULT or 0 is used for default options:
+   *     Comparison in code unit order with default case folding.
+   *
+   *   - U_COMPARE_CODE_POINT_ORDER
+   *     Set to choose code point order instead of code unit order
+   *     (see u_strCompare for details).
+   *
+   *   - U_FOLD_CASE_EXCLUDE_SPECIAL_I
+   *
    * @return A negative, zero, or positive integer indicating the comparison result.
    * @draft ICU 1.8
    */
@@ -612,7 +666,16 @@ public:
    * @param srcText Another string to compare this one to.
    * @param srcStart The start offset in that string at which the compare operation begins.
    * @param srcLimit The offset after the last code unit from that string to compare.
-   * @param options Either U_FOLD_CASE_DEFAULT or U_FOLD_CASE_EXCLUDE_SPECIAL_I
+   * @param options A bit set of options:
+   *   - U_FOLD_CASE_DEFAULT or 0 is used for default options:
+   *     Comparison in code unit order with default case folding.
+   *
+   *   - U_COMPARE_CODE_POINT_ORDER
+   *     Set to choose code point order instead of code unit order
+   *     (see u_strCompare for details).
+   *
+   *   - U_FOLD_CASE_EXCLUDE_SPECIAL_I
+   *
    * @return A negative, zero, or positive integer indicating the comparison result.
    * @draft ICU 1.8
    */
