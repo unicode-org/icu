@@ -392,8 +392,11 @@ UnicodeString& Transliterator::getDisplayName(const Locale& inLocale,
     ResourceBundle bundle(Locale::getDataDirectory(), inLocale, status);
     // Suspend checking status until later...
 
-    UnicodeString key(RB_DISPLAY_NAME_PREFIX);
-    key.append(ID);
+    // build the char* key
+    char key[100];
+    icu_strcpy(key, RB_DISPLAY_NAME_PREFIX);
+    int32_t length=icu_strlen(RB_DISPLAY_NAME_PREFIX);
+    key[ID.extract(0, sizeof(key)-length-1, key+length, "")]=0;
 
     // Try to retrieve a UnicodeString* from the bundle.  The result,
     // if any, should NOT be deleted.

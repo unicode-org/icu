@@ -196,7 +196,7 @@ public:
      * @param err          Set to U_MISSING_RESOURCE_ERROR if a resource with the
      *                     specified tag couldn't be found.
      */
-    void                getString(  const UnicodeString&    resourceTag,
+    void                getString(  const char             *resourceTag,
                                     UnicodeString&          theString,
                                     UErrorCode&              err) const;
 
@@ -211,7 +211,7 @@ public:
      * @return A pointer to the string from the resource bundle, or NULL if there was
      *           an error.
      */
-    const UnicodeString*    getString(    const UnicodeString&    resourceTag,
+    const UnicodeString*    getString(  const char                *resourceTag,
                                         UErrorCode&                err) const;
 
     /**
@@ -232,7 +232,7 @@ public:
      *                       UnicodeStrings. The caller does not own the storage and
      *                       must not delete it.
      */
-    const UnicodeString*    getStringArray( const UnicodeString&    resourceTag,
+    const UnicodeString*    getStringArray( const char             *resourceTag,
                                             int32_t&                numArrayItems,
                                             UErrorCode&              err) const;
 
@@ -250,7 +250,7 @@ public:
      * @param err           Set to U_MISSING_RESOURCE_ERROR if a resource with the
      *                      specified tag couldn't be found, or if the index was out of range.
      */
-    void                getArrayItem(   const UnicodeString&    resourceTag,
+    void                getArrayItem(   const char             *resourceTag,
                                         int32_t                 index,
                                         UnicodeString&          theArrayItem,
                                         UErrorCode&              err) const;
@@ -268,7 +268,7 @@ public:
      *                      specified tag couldn't be found, or if the index was out of range.
      * @return A pointer to the text of the array item, or NULL is there was an error.
      */
-    const UnicodeString*    getArrayItem(    const UnicodeString&    resourceTag,
+    const UnicodeString*    getArrayItem(   const char                *resourceTag,
                                             int32_t                    index,
                                             UErrorCode&                err) const;
 
@@ -289,7 +289,7 @@ public:
      * @return             The resource requested, as a UnicodeStrings**. The caller
      *                     does not own the storage and must not delete it.
      */
-    const UnicodeString**   get2dArray(const UnicodeString& resourceTag,
+    const UnicodeString**   get2dArray(const char          *resourceTag,
                                        int32_t&             rowCount,
                                        int32_t&             columnCount,
                                        UErrorCode&           err) const;
@@ -311,7 +311,7 @@ public:
      *                      specified tag couldn't be found, if the resource data was in
      *                      the wrong format, or if either index is out of bounds.
      */
-    void                get2dArrayItem(const UnicodeString& resourceTag,
+    void                get2dArrayItem(const char          *resourceTag,
                                        int32_t              rowIndex,
                                        int32_t              columnIndex,
                                        UnicodeString&       theArrayItem,
@@ -333,7 +333,7 @@ public:
      *                      the wrong format, or if either index is out of bounds.
      * @return A pointer to the text of the array item, or NULL is there was an error.
      */
-    const UnicodeString*    get2dArrayItem(    const UnicodeString&    resourceTag,
+    const UnicodeString*    get2dArrayItem( const char                *resourceTag,
                                             int32_t                    rowIndex,
                                             int32_t                    columnIndex,
                                             UErrorCode&                err) const;
@@ -353,7 +353,7 @@ public:
      *                      specified resource tag couldn't be found, or if an item
      *                      with the specified item tag couldn't be found in the resource.
      */
-    void                getTaggedArrayItem( const UnicodeString&    resourceTag,
+    void                getTaggedArrayItem( const char             *resourceTag,
                                             const UnicodeString&    itemTag,
                                             UnicodeString&          theArrayItem,
                                             UErrorCode&              err) const;
@@ -372,7 +372,7 @@ public:
      *                      with the specified item tag coldn't be found in the resource.
      * @return A pointer to the text of the array item, or NULL is there was an error.
      */
-    const UnicodeString*    getTaggedArrayItem(    const UnicodeString&    resourceTag,
+    const UnicodeString*    getTaggedArrayItem( const char             *resourceTag,
                                                 const UnicodeString&    itemTag,
                                                 UErrorCode&                err) const;
 
@@ -398,7 +398,7 @@ public:
      * @param err           Set to U_MISSING_RESOURCE_ERROR if a resource with the
      *                      specified tag couldn't be found.
      */
-    void                getTaggedArray( const UnicodeString&    resourceTag,
+    void                getTaggedArray( const char             *resourceTag,
                                         UnicodeString*&         itemTags,
                                         UnicodeString*&         items,
                                         int32_t&                numItems,
@@ -466,7 +466,7 @@ private:
                                    int32_t* numInstalledLocales);
     friend void getTaggedArrayUCharsImplementation(
                              const ResourceBundle*   bundle,
-                             const UnicodeString&    resourceTag,
+                             const char           *resourceTag,
                              UChar const**         itemTags,
                              UChar const**         items,
                              int32_t                    maxItems,
@@ -554,7 +554,7 @@ private:
     const UHashtable* getHashtableForLocale(const UnicodeString& desiredLocale,
                                            UErrorCode& error);
 
-    const ResourceBundleData* getDataForTag(const UnicodeString& tag,
+    const ResourceBundleData* getDataForTag(const char *tag,
                                             UErrorCode& err) const;
 
     void constructForLocale(const PathInfo& path,
@@ -609,7 +609,7 @@ private:
 
     static const char*          kDefaultMinorVersion;
     static const char*          kVersionSeparator;
-    static const UnicodeString  kVersionTag;
+    static const char*          kVersionTag;
 
     static ResourceBundleCache* fgUserCache;
     static VisitedFileCache*    fgUserVisitedFiles;

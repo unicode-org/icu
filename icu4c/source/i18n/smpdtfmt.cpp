@@ -58,20 +58,20 @@ const UnicodeString     SimpleDateFormat::fgDefaultPattern("yyMMdd hh:mm a");
  * These are the tags we expect to see in normal resource bundle files associated
  * with a locale.
  */
-const UnicodeString     SimpleDateFormat::fgErasTag("Eras");
-const UnicodeString     SimpleDateFormat::fgMonthNamesTag("MonthNames");
-const UnicodeString     SimpleDateFormat::fgMonthAbbreviationsTag("MonthAbbreviations");
-const UnicodeString     SimpleDateFormat::fgDayNamesTag("DayNames");
-const UnicodeString     SimpleDateFormat::fgDayAbbreviationsTag("DayAbbreviations");
-const UnicodeString     SimpleDateFormat::fgAmPmMarkersTag("AmPmMarkers");
-const UnicodeString     SimpleDateFormat::fgDateTimePatternsTag("DateTimePatterns");
+const char *SimpleDateFormat::fgErasTag="Eras";
+const char *SimpleDateFormat::fgMonthNamesTag="MonthNames";
+const char *SimpleDateFormat::fgMonthAbbreviationsTag="MonthAbbreviations";
+const char *SimpleDateFormat::fgDayNamesTag="DayNames";
+const char *SimpleDateFormat::fgDayAbbreviationsTag="DayAbbreviations";
+const char *SimpleDateFormat::fgAmPmMarkersTag="AmPmMarkers";
+const char *SimpleDateFormat::fgDateTimePatternsTag="DateTimePatterns";
 
 /**
  * These are the tags we expect to see in time zone data resource bundle files
  * associated with a locale.
  */
-const UnicodeString     SimpleDateFormat::fgZoneStringsTag("zoneStrings");
-const UnicodeString     SimpleDateFormat::fgLocalPatternCharsTag("localPatternChars");
+const char *SimpleDateFormat::fgZoneStringsTag="zoneStrings";
+const char *SimpleDateFormat::fgLocalPatternCharsTag="localPatternChars";
 
 char                    SimpleDateFormat::fgClassID = 0; // Value is irrelevant
 

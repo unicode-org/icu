@@ -355,15 +355,14 @@ UnicodeConverterCPP::getDisplayName(const Locale&   displayLocale,
 {
 
   UErrorCode err = U_ZERO_ERROR;
-  ResourceBundle rb("", displayLocale, err);
-  char tablename[UCNV_MAX_CONVERTER_NAME_LENGTH];
-
+  UChar name[UCNV_MAX_CONVERTER_NAME_LENGTH];
+  int32_t length = ucnv_getDisplayName(myUnicodeConverter, displayLocale.getName(), name, sizeof(name), &err);
   if (U_SUCCESS(err))
     {
-      rb.getString(UnicodeString(tablename), displayName, err);
+      displayName.replace(0, 0x7fffffff, name, length);
     }
 
-  if (U_FAILURE(err))
+  else
     {
       /*Error While creating the resource bundle use the internal name instead*/
       displayName.remove();
