@@ -175,8 +175,8 @@ public:
      * returned.
      * @return An array of UnicodeString pointers, where each
      * UnicodeString is a time zone ID for a time zone with the given
-     * GMT offset.  If there is no timezone that matches the GMT
-     * offset specified, NULL is returned.
+     * country.  If there is no timezone that matches the country
+     * specified, NULL is returned.
      */
     static const UnicodeString** const createAvailableIDs(const char* country,
                                                           int32_t& numIDs);
