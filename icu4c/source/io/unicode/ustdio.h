@@ -76,7 +76,9 @@
     Maybe a flush or a rewind are good enough.
  * Make sure that a UFile opened with "rw" can be used after using
     u_fflush with a u_frewind.
- * Complete the file documentation
+ * scanf(%i) should detect what type of number to use.
+ * Complete the file documentation with proper doxygen formatting.
+    See http://oss.software.ibm.com/pipermail/icu/2003-July/005647.html
 */
 
 /**
@@ -84,6 +86,59 @@
  * \brief C API: Unicode stdio-like API
  *
  * <h2>Unicode stdio-like C API</h2>
+printf
+fmt type        Comment
+%E  double      Scientific with an uppercase exponent
+%e  double      Scientific with a lowercase exponent
+%G  double      Use %E or %f for best format
+%g  double      Use %e or %f for best format
+%f  double      Simple floating point without the exponent
+%X  int32_t     ustdio special uppercase hex radix formatting
+%x  int32_t     ustdio special lowercase hex radix formatting
+%d  int32_t     Decimal format
+%i  int32_t     Same as %d
+%n  int32_t     count (write the number of chars written)
+%o  int32_t     octal ustdio special octal radix formatting
+%u  uint32_t    Decimal format
+%p  void *      Prints the pointer value
+%s  char *      Use default converter or specified converter from fopen
+%hs char *      (Unimplemented) Use invariant converter
+%ls N/A         (Unimplemented) Reserved for future implementation
+%c  char        Use default converter or specified converter from fopen
+%hc char        (Unimplemented) Use invariant converter
+%lc N/A         (Unimplemented) Reserved for future implementation
+%S  UChar *     Null terminated UTF-16 string
+%hS char *      (Unimplemented) Null terminated UTF-8 string
+%lS UChar32 *   (Unimplemented) Null terminated UTF-32 string
+%C  UChar       16-bit Unicode code unit
+%hC char        (Unimplemented) 8-bit Unicode code unit
+%lC UChar32     (Unimplemented) 32-bit Unicode code unit
+%%  N/A         Show a percent sign
+
+Format modifiers
+%h    int16_t   short format for %d, %i, %o, %x
+%l    int32_t   long format for %d, %i, %o, %x (no effect)
+%ll   int64_t   long long format for %d, %i, %o, %x
+%h    uint16_t  short format for %u
+%l    uint32_t  long format for %u (no effect)
+%ll   uint64_t  (Unimplemented) long long format for %u
+%-    N/A       Left justify
+%+    N/A       Always show the plus or minus sign. Needs data for plus sign.
+%     N/A       Instead of a "+" output a blank character for positive numbers.
+%#    N/A       Precede octal value with 0, hex with 0x and show the 
+                decimal point for floats.
+%num  N/A       Width of input/output. num is an actual number from 0 to 
+                some large number.
+%.num N/A       Significant digits precision. num is an actual number from
+                0 to some large number. Currently can only specify precision
+                before or after decimal, and not total precision.
+
+printf modifier
+%*  int32_t     Next argument after this one specifies the width
+
+scanf modifier
+%*  N/A         This field is scanned, but not stored
+
  */
 
 
