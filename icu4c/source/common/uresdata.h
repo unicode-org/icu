@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *                                                                            *
-* Copyright (C) 1999-2001, International Business Machines                   *
+* Copyright (C) 1999-2002, International Business Machines                   *
 *                Corporation and others. All Rights Reserved.                *
 *                                                                            *
 ******************************************************************************
@@ -12,6 +12,7 @@
 *
 *   created on: 1999dec08
 *   created by: Markus W. Scherer
+*   06/24/02    weiv        Added support for resource sharing
 */
 
 #ifndef __RESDATA_H__
@@ -109,8 +110,9 @@ res_countArrayItems(const ResourceData *pResData, const Resource res);
 
 U_CFUNC int32_t res_getTableSize(const ResourceData *pResData, Resource table);
 
-U_CFUNC Resource res_getArrayItem(const ResourceData *pResData, const Resource array, const int32_t indexS);
-U_CFUNC Resource res_getTableItemByIndex(const ResourceData *pResData, const Resource table, int32_t indexS, const char ** key);
-U_CFUNC Resource res_getTableItemByKey(const ResourceData *pResData, const Resource table, int32_t *indexS, const char* * key);
+U_CFUNC Resource res_getArrayItem(const ResourceData *pResData, Resource array, const int32_t indexS);
+U_CFUNC Resource res_getTableItemByIndex(const ResourceData *pResData, Resource table, int32_t indexS, const char ** key);
+U_CFUNC Resource res_getTableItemByKey(const ResourceData *pResData, Resource table, int32_t *indexS, const char* * key);
+U_CFUNC Resource res_findResource(const ResourceData *pResData, Resource r, const char** path);
 
 #endif
