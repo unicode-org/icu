@@ -1682,7 +1682,6 @@ int32_t   RegexCompile::blockTopLoc(UBool reserveLoc) {
         theLoc = fRXPat->fCompiledPat->size()-1;
         if (reserveLoc) {
             int32_t opAtTheLoc = fRXPat->fCompiledPat->elementAti(theLoc);
-            int32_t prevType = URX_TYPE(opAtTheLoc);
             int32_t  nop = URX_BUILD(URX_NOP, 0);
             fRXPat->fCompiledPat->insertElementAt(nop, theLoc, *fStatus);
         }
@@ -3147,7 +3146,7 @@ void RegexCompile::stripNOPs() {
 void RegexCompile::OptDotStar() {
     // Scan backwards in the pattern, looking for a JMP_SAV near the end.
     int32_t  jmpLoc;
-    int32_t  op;
+    int32_t  op = 0;
     int32_t  opType;
     for (jmpLoc=fRXPat->fCompiledPat->size(); jmpLoc--;) {
         U_ASSERT(jmpLoc>0);
