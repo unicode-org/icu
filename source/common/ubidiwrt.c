@@ -1,7 +1,7 @@
-/*  
+/*
 ******************************************************************************
 *
-*   Copyright (C) 2000-2004, International Business Machines
+*   Copyright (C) 2000-2005, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -28,7 +28,6 @@
 #include "unicode/ubidi.h"
 #include "cmemory.h"
 #include "ustr_imp.h"
-#include "ubidi_props.h"
 #include "ubidiimp.h"
 
 /*
@@ -448,6 +447,7 @@ ubidi_writeReordered(UBiDi *pBiDi,
             }
         } else {
             /* insert BiDi controls for "inverse BiDi" */
+            const DirProp *dirProps=pBiDi->dirProps;
             const UChar *src;
             UBiDiDirection dir;
 
@@ -456,7 +456,7 @@ ubidi_writeReordered(UBiDi *pBiDi,
                 src=text+logicalStart;
 
                 if(UBIDI_LTR==dir) {
-                    if(/*run>0 &&*/ ubidi_getClass(pBiDi->bdp, *src)!=U_LEFT_TO_RIGHT) {
+                    if(/*run>0 &&*/ dirProps[logicalStart]!=L) {
                         if(destSize>0) {
                             *dest++=LRM_CHAR;
                         }
@@ -469,14 +469,14 @@ ubidi_writeReordered(UBiDi *pBiDi,
                     dest+=runLength;
                     destSize-=runLength;
 
-                    if(/*run<runCount-1 &&*/ ubidi_getClass(pBiDi->bdp, src[runLength-1])!=U_LEFT_TO_RIGHT) {
+                    if(/*run<runCount-1 &&*/ dirProps[logicalStart+runLength-1]!=L) {
                         if(destSize>0) {
                             *dest++=LRM_CHAR;
                         }
                         --destSize;
                     }
                 } else {
-                    if(/*run>0 &&*/ !(MASK_R_AL&1UL<<ubidi_getClass(pBiDi->bdp, src[runLength-1]))) {
+                    if(/*run>0 &&*/ !(MASK_R_AL&DIRPROP_FLAG(dirProps[logicalStart+runLength-1]))) {
                         if(destSize>0) {
                             *dest++=RLM_CHAR;
                         }
@@ -489,7 +489,7 @@ ubidi_writeReordered(UBiDi *pBiDi,
                     dest+=runLength;
                     destSize-=runLength;
 
-                    if(/*run<runCount-1 &&*/ !(MASK_R_AL&1UL<<ubidi_getClass(pBiDi->bdp, *src))) {
+                    if(/*run<runCount-1 &&*/ !(MASK_R_AL&DIRPROP_FLAG(dirProps[logicalStart]))) {
                         if(destSize>0) {
                             *dest++=RLM_CHAR;
                         }
@@ -517,6 +517,7 @@ ubidi_writeReordered(UBiDi *pBiDi,
             }
         } else {
             /* insert BiDi controls for "inverse BiDi" */
+            const DirProp *dirProps=pBiDi->dirProps;
             const UChar *src;
             UBiDiDirection dir;
 
@@ -526,7 +527,7 @@ ubidi_writeReordered(UBiDi *pBiDi,
                 src=text+logicalStart;
 
                 if(UBIDI_LTR==dir) {
-                    if(/*run<runCount-1 &&*/ ubidi_getClass(pBiDi->bdp, src[runLength-1])!=U_LEFT_TO_RIGHT) {
+                    if(/*run<runCount-1 &&*/ dirProps[logicalStart+runLength-1]!=L) {
                         if(destSize>0) {
                             *dest++=LRM_CHAR;
                         }
@@ -539,14 +540,14 @@ ubidi_writeReordered(UBiDi *pBiDi,
                     dest+=runLength;
                     destSize-=runLength;
 
-                    if(/*run>0 &&*/ ubidi_getClass(pBiDi->bdp, *src)!=U_LEFT_TO_RIGHT) {
+                    if(/*run>0 &&*/ dirProps[logicalStart]!=L) {
                         if(destSize>0) {
                             *dest++=LRM_CHAR;
                         }
                         --destSize;
                     }
                 } else {
-                    if(/*run<runCount-1 &&*/ !(MASK_R_AL&1UL<<ubidi_getClass(pBiDi->bdp, *src))) {
+                    if(/*run<runCount-1 &&*/ !(MASK_R_AL&DIRPROP_FLAG(dirProps[logicalStart]))) {
                         if(destSize>0) {
                             *dest++=RLM_CHAR;
                         }
@@ -559,7 +560,7 @@ ubidi_writeReordered(UBiDi *pBiDi,
                     dest+=runLength;
                     destSize-=runLength;
 
-                    if(/*run>0 &&*/ !(MASK_R_AL&1UL<<ubidi_getClass(pBiDi->bdp, src[runLength-1]))) {
+                    if(/*run>0 &&*/ !(MASK_R_AL&DIRPROP_FLAG(dirProps[logicalStart+runLength-1]))) {
                         if(destSize>0) {
                             *dest++=RLM_CHAR;
                         }
