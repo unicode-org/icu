@@ -21,6 +21,10 @@
 #ifndef URENAME_H
 #define URENAME_H
 
+/* Uncomment the following line to disable renaming on platforms
+   that do not use Autoconf. */
+/* #define U_DISABLE_RENAMING 1 /**/
+
 #if !U_DISABLE_RENAMING
 
 /* C exports renaming data */
@@ -796,7 +800,6 @@
 #define _cnttab_findCP _cnttab_findCP_2_0
 #define _cnttab_getCE _cnttab_getCE_2_0
 #define _cnttab_getContractionTable _cnttab_getContractionTable_2_0
-
 
 /* C++ class names renaming defines */
 
