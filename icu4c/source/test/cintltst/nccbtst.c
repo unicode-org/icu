@@ -283,7 +283,7 @@ void TestSkip(int32_t inputsize, int32_t outputsize)
                 (UConverterToUCallback)UCNV_TO_U_CALLBACK_SKIP, from_euc_twOffs , NULL, 0))
             log_err("euc-tw->u with skip did not match.\n");
 
-        if(/* broken for icu 1.6, do not test */uprv_strcmp("1.6", U_ICU_VERSION) != 0 && !testConvertToUnicode(sampleTxtLMBCS, sizeof(sampleTxtLMBCS),
+        if(/* broken for icu 1.6 and 1.6.0.1, do not test */uprv_strcmp("1.6.0.1", U_ICU_VERSION) != 0 && !testConvertToUnicode(sampleTxtLMBCS, sizeof(sampleTxtLMBCS),
                 LMBCSToUnicode, sizeof(LMBCSToUnicode)/sizeof(LMBCSToUnicode[0]),"LMBCS-1",
                 (UConverterToUCallback)UCNV_TO_U_CALLBACK_SKIP, fromLMBCS , NULL, 0))
             log_err("LMBCS->u with skip did not match.\n");
@@ -795,7 +795,7 @@ void TestSubWithValue(int32_t inputsize, int32_t outputsize)
             
 
         /*got to confirm this*/
-        if(/* broken for icu 1.6, do not test */uprv_strcmp("1.6", U_ICU_VERSION) != 0 && !testConvertToUnicode(sampleTxtLMBCS, sizeof(sampleTxtLMBCS),
+        if(/* broken for icu 1.6.0.1, do not test */uprv_strcmp("1.6.0.1", U_ICU_VERSION) != 0 && !testConvertToUnicode(sampleTxtLMBCS, sizeof(sampleTxtLMBCS),
                 LMBCSToUnicode, sizeof(LMBCSToUnicode)/sizeof(LMBCSToUnicode[0]),"LMBCS",
                 (UConverterToUCallback)UCNV_TO_U_CALLBACK_ESCAPE, fromLMBCS, NULL, 0))
             log_err("LMBCS->u with substitute with value did not match.\n"); 
