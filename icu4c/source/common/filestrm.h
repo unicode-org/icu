@@ -86,8 +86,10 @@ T_FileStream_eof(FileStream* fileStream);
 U_CAPI int U_EXPORT2
 T_FileStream_error(FileStream* fileStream);
 
+/*
 U_CAPI void U_EXPORT2
 T_FileStream_setError(FileStream* fileStream);
+*/
 
 U_CAPI FileStream* U_EXPORT2
 T_FileStream_stdin(void);
