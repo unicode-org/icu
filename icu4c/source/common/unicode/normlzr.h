@@ -15,89 +15,92 @@
 #include "unicode/unorm.h"
 
 /**
- * <tt>Normalizer</tt> transforms Unicode text into an equivalent composed or
- * decomposed form, allowing for easier sorting and searching of text.
- * <tt>Normalizer</tt> supports the standard normalization forms described in
- * <a href="http://www.unicode.org/unicode/reports/tr15/" target="unicode">
- * Unicode Technical Report #15</a>.
- * <p>
- * Characters with accents or other adornments can be encoded in
- * several different ways in Unicode.  For example, take the character "Á"
- * (A-acute).   In Unicode, this can be encoded as a single character (the
- * "composed" form):
- * <pre>
- * \code
- *      00C1    LATIN CAPITAL LETTER A WITH ACUTE</pre>
- * \endcode
- * or as two separate characters (the "decomposed" form):
- * <pre>
- * \code
- *      0041    LATIN CAPITAL LETTER A
- *      0301    COMBINING ACUTE ACCENT</pre>
- * \endcode
- * <p>
- * To a user of your program, however, both of these sequences should be
- * treated as the same "user-level" character "Á".  When you are searching or
- * comparing text, you must ensure that these two sequences are treated 
- * equivalently.  In addition, you must handle characters with more than one
- * accent.  Sometimes the order of a character's combining accents is
- * significant, while in other cases accent sequences in different orders are
- * really equivalent.
- * <p>
- * Similarly, the string "ffi" can be encoded as three separate letters:
- * <pre>
- * \code
- *      0066    LATIN SMALL LETTER F
- *      0066    LATIN SMALL LETTER F
- *      0069    LATIN SMALL LETTER I</pre>
- * \endcode
- * or as the single character
- * <pre>
- * \code
- *      FB03    LATIN SMALL LIGATURE FFI</pre>
- * \endcode
- * <p>
- * The ffi ligature is not a distinct semantic character, and strictly speaking
- * it shouldn't be in Unicode at all, but it was included for compatibility
- * with existing character sets that already provided it.  The Unicode standard
- * identifies such characters by giving them "compatibility" decompositions
- * into the corresponding semantic characters.  When sorting and searching, you
- * will often want to use these mappings.
- * <p>
- * <tt>Normalizer</tt> helps solve these problems by transforming text into the
- * canonical composed and decomposed forms as shown in the first example above.  
- * In addition, you can have it perform compatibility decompositions so that 
- * you can treat compatibility characters the same as their equivalents.
- * Finally, <tt>Normalizer</tt> rearranges accents into the proper canonical
- * order, so that you do not have to worry about accent rearrangement on your
- * own.
- * <p>
- * There are three common usage models for <tt>Normalizer</tt>.  In the first,
- * the static {@link #normalize normalize()} method is used to process an
- * entire input string at once.  Second, you can create a <tt>Normalizer</tt>
- * object and use it to iterate through the normalized form of a string by
- * calling {@link #first} and {@link #next}.  Finally, you can use the
- * {@link #setIndex setIndex()} and {@link #getIndex} methods to perform
- * random-access iteration, which is very useful for searching.
- * <p>
- * <b>Note:</b> <tt>Normalizer</tt> objects behave like iterators and have
- * methods such as <tt>setIndex</tt>, <tt>next</tt>, <tt>previous</tt>, etc.
- * You should note that while the <tt>setIndex</tt> and <tt>getIndex</tt> refer
- * to indices in the underlying <em>input</em> text being processed, the
- * <tt>next</tt> and <tt>previous</tt> methods it iterate through characters
- * in the normalized <em>output</em>.  This means that there is not
- * necessarily a one-to-one correspondence between characters returned
- * by <tt>next</tt> and <tt>previous</tt> and the indices passed to and
- * returned from <tt>setIndex</tt> and <tt>getIndex</tt>.  It is for this
- * reason that <tt>Normalizer</tt> does not implement the
- * {@link CharacterIterator} interface.
- * <p>
+ * \file
+ * \brief C++ API: Unicode Normalization 
  *
- * Form FCD, "Fast C or D", is designed for collation.
- * It allows to work on strings that are not necessarily normalized
- * with an algorithm (like in collation) that works under "canonical closure", i.e., it treats precomposed
- * characters and their decomposed equivalents the same.
- * For more details see {@link unorm.h }.
+ * The Normalizer class consists of two parts:
+ * - static functions that normalize strings or test if strings are normalized
+ * - a Normalizer object is an iterator that takes any kind of text and
+ *   provides iteration over its normalized form
+ *
+ * The static functions are basically wrappers around the C implementation,
+ * using UnicodeString instead of UChar*.
+ * For basic information about normalization forms and details about the C API
+ * please see the documentation in unorm.h.
+ *
+ * The iterator API with the Normalizer constructors and the non-static functions
+ * uses a CharacterIterator as input. It is possible to pass a string which
+ * is then internally wrapped in a CharacterIterator.
+ * The input text is not normalized all at once, but incrementally where needed
+ * (providing efficient random access).
+ * This allows to pass in a large text but spend only a small amount of time
+ * normalizing a small part of that text.
+ * However, if the entire text is normalized, then the iterator will be
+ * slower than normalizing the entire text at once and iterating over the result.
+ * A possible use of the Normalizer iterator is also to report an index into the
+ * original text that is close to where the normalized characters come from.
+ *
+ * <em>Important:</em> The iterator API was cleaned up significantly for ICU 2.0.
+ * The earlier implementation reported the getIndex() inconsistently,
+ * and previous() could not be used after setIndex(), next(), first(), and current().
+ *
+ * Normalizer allows to start normalizing from anywhere in the input text by
+ * calling setIndexOnly(), setIndex(), first(), or last().
+ * Without calling any of these, the iterator will start at the beginning of the text.
+ *
+ * At any time, next() returns the next normalized code point (UChar32),
+ * with post-increment semantics (like CharacterIterator::next32PostInc()).
+ * previous() returns the previous normalized code point (UChar32),
+ * with pre-decrement semantics (like CharacterIterator::previous32()).
+ *
+ * current() and setIndex() return the current code point
+ * (respectively the one at the newly set index) without moving
+ * the getIndex(). Note that if the text at the current position
+ * needs to be normalized, then these functions will do that.
+ * (This is why current() is not const.)
+ * If you call setIndex() and then previous() then you normalize a piece of
+ * text (and get a code point from setIndex()) that you probably do not need.
+ * It is more efficient to call setIndexOnly() instead, which does not
+ * normalize.
+ *
+ * getIndex() always refers to the position in the input text where the normalized
+ * code points are returned from. It does not always change with each returned
+ * code point.
+ * The code point that is returned from any of the functions
+ * corresponds to text at or after getIndex(), according to the
+ * function's iteration semantics (post-increment or pre-decrement).
+ *
+ * next() returns a code point from at or after the getIndex()
+ * from before the next() call. After the next() call, the getIndex()
+ * might have moved to where the next code point will be returned from
+ * (from a next() or current() call).
+ * This is semantically equivalent to array access with array[index++]
+ * (post-increment semantics).
+ *
+ * previous() returns a code point from at or after the getIndex()
+ * from after the previous() call.
+ * This is semantically equivalent to array access with array[--index]
+ * (pre-decrement semantics).
+ *
+ * Internally, the Normalizer iterator normalizes a small piece of text
+ * starting at the getIndex() and ending at a following "safe" index.
+ * The normalized results is stored in an internal string buffer, and
+ * the code points are iterated from there.
+ * With multiple iteration calls, this is repeated until the next piece
+ * of text needs to be normalized, and the getIndex() needs to be moved.
+ *
+ * The following "safe" index, the internal buffer, and the secondary
+ * iteration index into that buffer are not exposed on the API.
+ * This also means that it is currently not practical to return to
+ * a particular, arbitrary position in the text because one would need to
+ * know, and be able to set, in addition to the getIndex(), at least also the
+ * current index into the internal buffer.
+ * It is currently only possible to observe when getIndex() changes
+ * (with careful consideration of the iteration semantics),
+ * at which time the internal index will be 0.
+ * For example, if getIndex() is different after next() than before it,
+ * then the internal index is 0 and one can return to this getIndex()
+ * later with setIndexOnly().
  *
  * @author Laura Werner, Mark Davis, Markus Scherer
  */
@@ -107,6 +110,7 @@ public:
   /**
    * If DONE is returned from an iteration function that returns a code point,
    * then there are no more normalization results available.
+   * @stable
    */
   enum {
       DONE=0xffff
@@ -115,40 +119,39 @@ public:
   // Constructors
 
   /**
-   * Creates a new <tt>Normalizer</tt> object for iterating over the
+   * Creates a new <code>Normalizer</code> object for iterating over the
    * normalized form of a given string.
    * <p>
    * @param str   The string to be normalized.  The normalization
    *              will start at the beginning of the string.
    *
    * @param mode  The normalization mode.
-   * @stable
+   * @draft ICU 2.0
    */
   Normalizer(const UnicodeString& str, UNormalizationMode mode);
     
   /**
-   * Creates a new <tt>Normalizer</tt> object for iterating over the
-   * normalized form of a given UChar string.
+   * Creates a new <code>Normalizer</code> object for iterating over the
+   * normalized form of a given string.
    * <p>
    * @param str   The string to be normalized.  The normalization
    *              will start at the beginning of the string.
    *
-   * @param length Lenght of the string
+   * @param length Length of the string, or -1 if NUL-terminated.
    * @param mode  The normalization mode.
-   * @stable
-   *
+   * @draft ICU 2.0
    */
   Normalizer(const UChar* str, int32_t length, UNormalizationMode mode);
 
   /**
-   * Creates a new <tt>Normalizer</tt> object for iterating over the
+   * Creates a new <code>Normalizer</code> object for iterating over the
    * normalized form of the given text.
    * <p>
    * @param iter  The input text to be normalized.  The normalization
    *              will start at the beginning of the string.
    *
    * @param mode  The normalization mode.
-   * @stable
+   * @draft ICU 2.0
    */
   Normalizer(const CharacterIterator& iter, UNormalizationMode mode);
 
@@ -170,20 +173,21 @@ public:
   //-------------------------------------------------------------------------
 
   /**
-   * Normalizes a <tt>String</tt> using the given normalization operation.
+   * Normalizes a <code>UnicodeString</code> according to the specified normalization mode.
+   * This is a wrapper for unorm_normalize(), using UnicodeString's.
    * <p>
-   * The <tt>options</tt> parameter specifies which optional
-   * <tt>Normalizer</tt> features are to be enabled for this operation.
+   * The <code>options</code> parameter specifies which optional
+   * <code>Normalizer</code> features are to be enabled for this operation.
    * Currently the only available option is deprecated.
    * If you want the default behavior corresponding to one of the standard
    * Unicode Normalization Forms, use 0 for this argument.
    * <p>
    * @param source    the input string to be normalized.
-   * @param aMode     the normalization mode
-   * @param options   the optional features to be enabled.
+   * @param mode      the normalization mode
+   * @param options   the optional features to be enabled (0 for no options)
    * @param result    The normalized string (on output).
    * @param status    The error code.
-   * @stable
+   * @draft ICU 2.0
    */
   static void normalize(const UnicodeString& source,
                         UNormalizationMode mode, int32_t options,
@@ -191,10 +195,12 @@ public:
                         UErrorCode &status);
 
   /**
-   * Compose a <tt>String</tt>.
+   * Compose a <code>UnicodeString</code>.
+   * This is equivalent to normalize() with mode UNORM_NFC or UNORM_NFKC.
+   * This is a wrapper for unorm_normalize(), using UnicodeString's.
    * <p>
-   * The <tt>options</tt> parameter specifies which optional
-   * <tt>Normalizer</tt> features are to be enabled for this operation.
+   * The <code>options</code> parameter specifies which optional
+   * <code>Normalizer</code> features are to be enabled for this operation.
    * Currently the only available option is deprecated.
    * If you want the default behavior corresponding
    * to Unicode Normalization Form <b>C</b> or <b>KC</b>,
@@ -202,9 +208,9 @@ public:
    * <p>
    * @param source    the string to be composed.
    * @param compat    Perform compatibility decomposition before composition.
-   *                  If this argument is <tt>false</tt>, only canonical
+   *                  If this argument is <code>FALSE</code>, only canonical
    *                  decomposition will be performed.
-   * @param options   the optional features to be enabled.
+   * @param options   the optional features to be enabled (0 for no options)
    * @param result    The composed string (on output).
    * @param status    The error code.
    * @stable
@@ -215,24 +221,25 @@ public:
                       UErrorCode &status);
 
   /**
-   * Static method to decompose a <tt>String</tt>.
+   * Static method to decompose a <code>UnicodeString</code>.
+   * This is equivalent to normalize() with mode UNORM_NFD or UNORM_NFKD.
+   * This is a wrapper for unorm_normalize(), using UnicodeString's.
    * <p>
-   * The <tt>options</tt> parameter specifies which optional
-   * <tt>Normalizer</tt> features are to be enabled for this operation.
+   * The <code>options</code> parameter specifies which optional
+   * <code>Normalizer</code> features are to be enabled for this operation.
    * Currently the only available option is deprecated.
    * The desired options should be OR'ed together to determine the value
    * of this argument.  If you want the default behavior corresponding
    * to Unicode Normalization Form <b>D</b> or <b>KD</b>,
    * use 0 for this argument.
    * <p>
-   * @param str   the string to be decomposed.
+   * @param source    the string to be decomposed.
    * @param compat    Perform compatibility decomposition.
-   *                  If this argument is <tt>false</tt>, only canonical
+   *                  If this argument is <code>FALSE</code>, only canonical
    *                  decomposition will be performed.
-   * @param options   the optional features to be enabled.
-   * @param result    The composed string (on output).
+   * @param options   the optional features to be enabled (0 for no options)
+   * @param result    The decomposed string (on output).
    * @param status    The error code.
-   * @return      the decomposed string.
    * @stable
    */
   static void decompose(const UnicodeString& source,
@@ -243,6 +250,8 @@ public:
   /**
    * Performing quick check on a string, to quickly determine if the string is 
    * in a particular normalization format.
+   * This is a wrapper for unorm_quickCheck(), using a UnicodeString.
+   *
    * Three types of result can be returned UNORM_YES, UNORM_NO or
    * UNORM_MAYBE. Result UNORM_YES indicates that the argument
    * string is in the desired normalized format, UNORM_NO determines that
@@ -252,7 +261,7 @@ public:
    * results.
    * @param source       string for determining if it is in a normalized format
    * @paran mode         normalization format
-   * @param status A pointer to an UErrorCode to receive any errors
+   * @param status A pointer to a UErrorCode to receive any errors
    * @return UNORM_YES, UNORM_NO or UNORM_MAYBE
    */
   static UNormalizationCheckResult
@@ -264,37 +273,50 @@ public:
   
   /**
    * Return the current character in the normalized text.
+   * current() may need to normalize some text at getIndex().
+   * The getIndex() is not changed.
+   *
+   * @return the current normalized code point
    * @draft
    */
   UChar32              current(void);
 
   /**
-   * Return the first character in the normalized text.  This resets
-   * the <tt>Normalizer's</tt> position to the beginning of the text.
+   * Return the first character in the normalized text.
+   * This is equivalent to setIndexOnly(startIndex()) followed by next().
+   * (Post-increment semantics.)
+   *
+   * @return the first normalized code point
    * @draft
    */
   UChar32              first(void);
 
   /**
-   * Return the last character in the normalized text.  This resets
-   * the <tt>Normalizer's</tt> position to be just before the
-   * the input text corresponding to that normalized character.
+   * Return the last character in the normalized text.
+   * This is equivalent to setIndexOnly(endIndex()) followed by previous().
+   * (Pre-decrement semantics.)
+   *
+   * @return the last normalized code point
    * @draft
    */
   UChar32              last(void);
 
   /**
-   * Return the next character in the normalized text and advance
-   * the iteration position by one.  If the end
-   * of the text has already been reached, {@link #DONE} is returned.
+   * Return the next character in the normalized text.
+   * (Post-increment semantics.)
+   * If the end of the text has already been reached, {@link #DONE} is returned.
+   *
+   * @return the next normalized code point
    * @draft
    */
   UChar32              next(void);
 
   /**
-   * Return the previous character in the normalized text and decrement
-   * the iteration position by one.  If the beginning
-   * of the text has already been reached, {@link #DONE} is returned.
+   * Return the previous character in the normalized text. and decrement
+   * (Pre-decrement semantics.)
+   * If the beginning of the text has already been reached, {@link #DONE} is returned.
+   *
+   * @return the previous normalized code point
    * @draft
    */
   UChar32              previous(void);
@@ -302,18 +324,20 @@ public:
   /**
    * Set the iteration position in the input text that is being normalized
    * and return the first normalized character at that position.
-   * <p>
-   * <b>Note:</b> This method sets the position in the <em>input</em> text,
-   * while {@link #next} and {@link #previous} iterate through characters
-   * in the normalized <em>output</em>.  This means that there is not
-   * necessarily a one-to-one correspondence between characters returned
-   * by <tt>next</tt> and <tt>previous</tt> and the indices passed to and
-   * returned from <tt>setIndex</tt> and {@link #getIndex}.
-   * <p>
-   * @param index the desired index in the input text.
+   * This is equivalent to setIndexOnly() followed by current().
+   * After setIndex(), getIndex() will return the same index that is
+   * specified here.
    *
-   * @return      the first normalized character that is the result of iterating
-   *              forward starting at the given index.
+   * Note that setIndex() normalizes some text starting at the specified index
+   * and returns the first code point from that normalization.
+   * If the next call is to previous() then this piece of text probably
+   * did not need to be normalized.
+   *
+   * This function is deprecated.
+   * It is recommended to use setIndexOnly() instead of setIndex().
+   *
+   * @param index the desired index in the input text.
+   * @return      the normalized character from the text at index
    * @deprecated To be removed after 2002-aug-31. Use setIndexOnly().
    */
   UChar32              setIndex(UTextOffset index);
@@ -321,66 +345,82 @@ public:
   void                 setIndexOnly(UTextOffset index);
 
   /**
-   * Reset the iterator so that it is in the same state that it was just after
-   * it was constructed.  A subsequent call to <tt>next</tt> will return the first
-   * character in the normalized text.  In contrast, calling <tt>setIndex(0)</tt> followed
-   * by <tt>next</tt> will return the <em>second</em> character in the normalized text,
-   * because <tt>setIndex</tt> itself returns the first character
+   * Reset the index to the beginning of the text.
+   * This is equivalent to setIndexOnly(startIndex)).
    * @stable
    */
   void                reset(void);
 
   /**
    * Retrieve the current iteration position in the input text that is
-   * being normalized.  This method is useful in applications such as
-   * searching, where you need to be able to determine the position in
-   * the input text that corresponds to a given normalized output character.
-   * <p>
-   * <b>Note:</b> This method sets the position in the <em>input</em>, while
-   * {@link #next} and {@link #previous} iterate through characters in the
-   * <em>output</em>.  This means that there is not necessarily a one-to-one
-   * correspondence between characters returned by <tt>next</tt> and
-   * <tt>previous</tt> and the indices passed to and returned from
-   * <tt>setIndex</tt> and {@link #getIndex}.
+   * being normalized.
+   *
+   * A following call to next() will return a normalized code point from
+   * the input text at or after this index.
+   *
+   * After a call to previous(), getIndex() will point at or before the
+   * position in the input text where the normalized code point
+   * was returned from with previous().
+   *
+   * @return the current index in the input text
    * @stable
    */
   UTextOffset            getIndex(void) const;
 
   /**
-   * Retrieve the index of the start of the input text.  This is the begin index
-   * of the <tt>CharacterIterator</tt> or the start (i.e. 0) of the <tt>String</tt>
-   * over which this <tt>Normalizer</tt> is iterating
+   * Retrieve the index of the start of the input text. This is the begin index
+   * of the <code>CharacterIterator</code> or the start (i.e. index 0) of the string
+   * over which this <code>Normalizer</code> is iterating.
+   *
+   * @return the smallest index in the input text where the Normalizer operates
    * @stable
    */
   UTextOffset            startIndex(void) const;
 
   /**
-   * Retrieve the index of the end of the input text.  This is the end index
-   * of the <tt>CharacterIterator</tt> or the length of the <tt>String</tt>
-   * over which this <tt>Normalizer</tt> is iterating
+   * Retrieve the index of the end of the input text. This is the end index
+   * of the <code>CharacterIterator</code> or the length of the string
+   * over which this <code>Normalizer</code> is iterating.
+   * This end index is exclusive, i.e., the Normalizer operates only on characters
+   * before this index.
+   *
+   * @return the first index in the input text where the Normalizer does not operate
    * @stable
    */
   UTextOffset            endIndex(void) const;
 
-
   /**
-   * Returns true when both iterators refer to the same character in the same
-   * character-storage object.
+   * Returns TRUE when both iterators refer to the same character in the same
+   * input text.
+   *
+   * @param that a Normalizer object to compare this one to
+   * @return comparison result
    * @stable
    */
-  //  virtual UBool    operator==(const CharacterIterator& that) const;
   UBool        operator==(const Normalizer& that) const;
+
+  /**
+   * Returns FALSE when both iterators refer to the same character in the same
+   * input text.
+   *
+   * @param that a Normalizer object to compare this one to
+   * @return comparison result
+   * @stable
+   */
   inline UBool        operator!=(const Normalizer& that) const;
 
   /**
    * Returns a pointer to a new Normalizer that is a clone of this one.
    * The caller is responsible for deleting the new clone.
+   *
    * @stable
    */
   Normalizer*        clone(void) const;
 
   /**
    * Generates a hash code for this iterator.
+   *
+   * @return the hash code
    * @stable
    */
   int32_t                hashCode(void) const;
@@ -396,36 +436,40 @@ public:
    * over a string, calls to {@link #next} and {@link #previous} may
    * return previously buffers characters in the old normalization mode
    * until the iteration is able to re-sync at the next base character.
-   * It is safest to call {@link #setText setText()}, {@link #first},
-   * {@link #last}, etc. after calling <tt>setMode</tt>.
+   * It is safest to call {@link #setIndexOnly}, {@link #reset},
+   * {@link #setText setText()}, {@link #first},
+   * {@link #last}, etc. after calling <code>setMode</code>.
    * <p>
-   * @param newMode the new mode for this <tt>Normalizer</tt>.
+   * @param newMode the new mode for this <code>Normalizer</code>.
    * @see #getUMode
    * @stable
    */
   void setMode(UNormalizationMode newMode);
 
   /**
-   * Return the basic operation performed by this <tt>Normalizer</tt>.
+   * Return the normalization mode for this object.
+   *
    * This is an unusual name because there used to be a getMode() that
    * returned a different type.
    *
    * @return the mode for this <code>Normalizer</code>
    * @see #setMode
-   * @stable
+   * @draft ICU 2.0
    */
   UNormalizationMode getUMode(void) const;
 
   /**
-   * Set options that affect this <tt>Normalizer</tt>'s operation.
+   * Set options that affect this <code>Normalizer</code>'s operation.
    * Options do not change the basic composition or decomposition operation
-   * that is being performed , but they control whether
+   * that is being performed, but they control whether
    * certain optional portions of the operation are done.
    * Currently the only available option is deprecated.
    *
-   * @param   option  the option whose value is to be set.
-   * @param   value   the new setting for the option.  Use <tt>TRUE</tt> to
-   *                  turn the option on and <tt>FALSE</tt> to turn it off.
+   * It is possible to specify multiple options that are all turned on or off.
+   *
+   * @param   option  the option(s) whose value is/are to be set.
+   * @param   value   the new setting for the option.  Use <code>TRUE</code> to
+   *                  turn the option(s) on and <code>FALSE</code> to turn it/them off.
    *
    * @see #getOption
    * @stable
@@ -435,41 +479,55 @@ public:
 
   /**
    * Determine whether an option is turned on or off.
+   * If multiple options are specified, then the result is TRUE if any
+   * of them are set.
    * <p>
+   * @param option the option(s) that are to be checked
+   * @return TRUE if any of the option(s) are set
    * @see #setOption
    * @stable
    */
   UBool getOption(int32_t option) const;
 
   /**
-   * Set the input text over which this <tt>Normalizer</tt> will iterate.
+   * Set the input text over which this <code>Normalizer</code> will iterate.
    * The iteration position is set to the beginning.
+   *
+   * @param newText a string that replaces the current input text
+   * @param status a UErrorCode
    * @stable
    */
   void setText(const UnicodeString& newText, 
            UErrorCode &status);
 
   /**
-   * Set the input text over which this <tt>Normalizer</tt> will iterate.
+   * Set the input text over which this <code>Normalizer</code> will iterate.
    * The iteration position is set to the beginning.
+   *
+   * @param newText a CharacterIterator object that replaces the current input text
+   * @param status a UErrorCode
    * @stable
    */
   void setText(const CharacterIterator& newText, 
            UErrorCode &status);
 
   /**
-   * Set the input text over which this <tt>Normalizer</tt> will iterate.
+   * Set the input text over which this <code>Normalizer</code> will iterate.
    * The iteration position is set to the beginning.
+   *
+   * @param newText a string that replaces the current input text
+   * @param length the length of the string, or -1 if NUL-terminated
+   * @param status a UErrorCode
    * @stable
    */
   void setText(const UChar* newText,
                     int32_t length,
             UErrorCode &status);
   /**
-   * Copies the text under iteration into the UnicodeString referred to by 
-   * "result".
+   * Copies the input text into the UnicodeString argument.
+   *
    * @param result Receives a copy of the text under iteration.
-   * @draft should also return the result UnicodeString &
+   * @draft
    */
   void            getText(UnicodeString&  result);
 
@@ -496,11 +554,11 @@ public:
     /**
      * Null operation for use with the {@link #Normalizer constructors}
      * and the static {@link #normalize normalize} method.  This value tells
-     * the <tt>Normalizer</tt> to do nothing but return unprocessed characters
-     * from the underlying String or CharacterIterator.  If you have code which
+     * the <code>Normalizer</code> to do nothing but return unprocessed characters
+     * from the underlying UnicodeString or CharacterIterator.  If you have code which
      * requires raw text at some times and normalized text at others, you can
-     * use <tt>NO_OP</tt> for the cases where you want raw text, rather
-     * than having a separate code path that bypasses <tt>Normalizer</tt>
+     * use <code>NO_OP</code> for the cases where you want raw text, rather
+     * than having a separate code path that bypasses <code>Normalizer</code>
      * altogether.
      * <p>
      * @see #setMode
@@ -606,7 +664,7 @@ public:
   };
 
   /**
-   * Creates a new <tt>Normalizer</tt> object for iterating over the
+   * Creates a new <code>Normalizer</code> object for iterating over the
    * normalized form of a given string.
    * <p>
    * @param str   The string to be normalized.  The normalization
@@ -619,11 +677,11 @@ public:
          EMode mode);
     
   /**
-   * Creates a new <tt>Normalizer</tt> object for iterating over the
+   * Creates a new <code>Normalizer</code> object for iterating over the
    * normalized form of a given string.
    * <p>
-   * The <tt>options</tt> parameter specifies which optional
-   * <tt>Normalizer</tt> features are to be enabled for this object.
+   * The <code>options</code> parameter specifies which optional
+   * <code>Normalizer</code> features are to be enabled for this object.
    * <p>
    * @param str   The string to be normalized.  The normalization
    *              will start at the beginning of the string.
@@ -641,7 +699,7 @@ public:
          int32_t opt);
 
   /**
-   * Creates a new <tt>Normalizer</tt> object for iterating over the
+   * Creates a new <code>Normalizer</code> object for iterating over the
    * normalized form of a given UChar string.
    * <p>
    * @param str   The string to be normalized.  The normalization
@@ -656,7 +714,7 @@ public:
          EMode mode);
 
   /**
-   * Creates a new <tt>Normalizer</tt> object for iterating over the
+   * Creates a new <code>Normalizer</code> object for iterating over the
    * normalized form of a given UChar string.
    * <p>
    * @param str   The string to be normalized.  The normalization
@@ -677,7 +735,7 @@ public:
          int32_t option);
 
   /**
-   * Creates a new <tt>Normalizer</tt> object for iterating over the
+   * Creates a new <code>Normalizer</code> object for iterating over the
    * normalized form of the given text.
    * <p>
    * @param iter  The input text to be normalized.  The normalization
@@ -690,7 +748,7 @@ public:
          EMode mode);
 
   /**
-   * Creates a new <tt>Normalizer</tt> object for iterating over the
+   * Creates a new <code>Normalizer</code> object for iterating over the
    * normalized form of the given text.
    * <p>
    * @param iter  The input text to be normalized.  The normalization
@@ -709,10 +767,10 @@ public:
          int32_t opt);
 
   /**
-   * Normalizes a <tt>String</tt> using the given normalization operation.
+   * Normalizes a <code>UnicodeString</code> using the given normalization operation.
    * <p>
-   * The <tt>options</tt> parameter specifies which optional
-   * <tt>Normalizer</tt> features are to be enabled for this operation.
+   * The <code>options</code> parameter specifies which optional
+   * <code>Normalizer</code> features are to be enabled for this operation.
    * Currently the only available option is {@link #IGNORE_HANGUL}.
    * If you want the default behavior corresponding to one of the standard
    * Unicode Normalization Forms, use 0 for this argument.
@@ -784,9 +842,9 @@ public:
    * return previously buffers characters in the old normalization mode
    * until the iteration is able to re-sync at the next base character.
    * It is safest to call {@link #setText setText()}, {@link #first},
-   * {@link #last}, etc. after calling <tt>setMode</tt>.
+   * {@link #last}, etc. after calling <code>setMode</code>.
    * <p>
-   * @param newMode the new mode for this <tt>Normalizer</tt>.
+   * @param newMode the new mode for this <code>Normalizer</code>.
    * The supported modes are:
    * <ul>
    *  <li>{@link #COMPOSE}        - Unicode canonical decompositiion
@@ -805,7 +863,7 @@ public:
   inline void setMode(EMode newMode);
 
   /**
-   * Return the basic operation performed by this <tt>Normalizer</tt>
+   * Return the basic operation performed by this <code>Normalizer</code>
    *
    * @see #setMode
    * @deprecated To be removed after 2002-sep-30. Use UNormalizationMode.
