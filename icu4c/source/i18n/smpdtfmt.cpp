@@ -27,6 +27,7 @@
 *  02/22/99     stephen     Removed character literals for EBCDIC safety
 *   10/14/99    aliu        Updated 2-digit year parsing so that only "00" thru
 *                           "99" are recognized. {j28 4182066}
+*   11/15/99    weiv        Added support for week of year/day of week format
 ********************************************************************************
 */
 
@@ -478,7 +479,8 @@ SimpleDateFormat::fgPatternIndexToCalendarField[] =
     Calendar::SECOND, Calendar::MILLISECOND, Calendar::DAY_OF_WEEK,
     Calendar::DAY_OF_YEAR, Calendar::DAY_OF_WEEK_IN_MONTH, 
     Calendar::WEEK_OF_YEAR, Calendar::WEEK_OF_MONTH, 
-    Calendar::AM_PM, Calendar::HOUR, Calendar::HOUR, Calendar::ZONE_OFFSET
+    Calendar::AM_PM, Calendar::HOUR, Calendar::HOUR, Calendar::ZONE_OFFSET,
+    Calendar::YEAR_WOY, Calendar::DOW_LOCAL
 };
 
 // Map index into pattern character string to DateFormat field number
@@ -492,7 +494,8 @@ SimpleDateFormat::fgPatternIndexToDateFormatField[] = {
     DateFormat::kDayOfWeekInMonthField, DateFormat::kWeekOfYearField,
     DateFormat::kWeekOfMonthField, DateFormat::kAmPmField,
     DateFormat::kHour1Field, DateFormat::kHour0Field,
-    DateFormat::kTimezoneField,
+    DateFormat::kTimezoneField, DateFormat::kYearWOYField, 
+    DateFormat::kDOWLocalField
 };
 
 
@@ -534,6 +537,7 @@ SimpleDateFormat::subFormat(UnicodeString& result,
 
     // for "yyyy", write out the whole year; for "yy", write out the last 2 digits
     case kYearField:
+	case kYearWOYField:
         if (count >= 4) 
             zeroPaddingNumber(result, value, 4, maxIntCount);
         else 
@@ -648,6 +652,7 @@ SimpleDateFormat::subFormat(UnicodeString& result,
     // case kWeekOfYearField:
     // case kWeekOfMonthField:
     // case kHour0Field:
+    // case kDOWLocalField:
         zeroPaddingNumber(result, value, count, maxIntCount);
         break;
     }
