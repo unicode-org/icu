@@ -898,6 +898,10 @@ _MBCSOpen(UConverter *cnv,
           const char *locale,
           uint32_t options,
           UErrorCode *pErrorCode) {
+    const int32_t *extIndexes;
+    uint8_t outputType;
+    int8_t maxBytesPerUChar;
+
     if((options&UCNV_OPTION_SWAP_LFNL)!=0) {
         /* do this because double-checked locking is broken */
         UBool isCached;
@@ -914,11 +918,28 @@ _MBCSOpen(UConverter *cnv,
         }
     }
 
-
     if(uprv_strstr(name, "18030")!=NULL) {
         if(uprv_strstr(name, "gb18030")!=NULL || uprv_strstr(name, "GB18030")!=NULL) {
             /* set a flag for GB 18030 mode, which changes the callback behavior */
             cnv->options|=_MBCS_OPTION_GB18030;
+        }
+    }
+
+    /* fix maxBytesPerUChar depending on outputType and options etc. */
+    outputType=cnv->sharedData->table->mbcs.outputType;
+    if(outputType==MBCS_OUTPUT_2_SISO) {
+        cnv->maxBytesPerUChar=3; /* SO+DBCS */
+    }
+
+    extIndexes=cnv->sharedData->table->mbcs.extIndexes;
+    if(extIndexes!=NULL) {
+        maxBytesPerUChar=(int8_t)UCNV_GET_MAX_BYTES_PER_UCHAR(extIndexes);
+        if(outputType==MBCS_OUTPUT_2_SISO) {
+            ++maxBytesPerUChar; /* SO + multiple DBCS */
+        }
+
+        if(maxBytesPerUChar>cnv->maxBytesPerUChar) {
+            cnv->maxBytesPerUChar=maxBytesPerUChar;
         }
     }
 

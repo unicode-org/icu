@@ -528,7 +528,7 @@ static const UConverterImpl _LMBCSImpl##n={\
 static const UConverterStaticData _LMBCSStaticData##n={\
   sizeof(UConverterStaticData),\
  "LMBCS-"  #n,\
-    0, UCNV_IBM, UCNV_LMBCS_##n, 1, 2,\
+    0, UCNV_IBM, UCNV_LMBCS_##n, 1, 3,\
     { 0x3f, 0, 0, 0 },1,FALSE,FALSE,0,0,{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0} \
 };\
 const UConverterSharedData _LMBCSData##n={\

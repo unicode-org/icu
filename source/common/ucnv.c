@@ -645,7 +645,7 @@ ucnv_resetFromUnicode(UConverter *converter)
 U_CAPI int8_t   U_EXPORT2
 ucnv_getMaxCharSize (const UConverter * converter)
 {
-    return converter->sharedData->staticData->maxBytesPerChar;
+    return converter->maxBytesPerUChar;
 }
 
 
