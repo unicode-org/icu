@@ -20,6 +20,8 @@ package com.ibm.icu.dev.test.collator;
 import com.ibm.icu.dev.test.*;
 import com.ibm.icu.text.*;
 import java.util.Locale;
+import java.util.Comparator;
+import java.util.Arrays;
 import java.io.*;
 
 public class CollationThaiTest extends TestFmwk {
@@ -75,7 +77,7 @@ public class CollationThaiTest extends TestFmwk {
         
         Collator coll = null;
         try {
-            coll = Collator.getInstance(new Locale("th", "TH", ""));
+            coll = getThaiCollator();
         } catch (Exception e) {
             errln("Error: could not construct Thai collator");
             return;
@@ -152,7 +154,7 @@ public class CollationThaiTest extends TestFmwk {
     public void TestDictionary() {
         Collator coll = null;
         try {
-            coll = Collator.getInstance(new Locale("th", "TH", ""));
+            coll = getThaiCollator();
         } catch (Exception e) {
             errln("Error: could not construct Thai collator");
             return;
@@ -252,6 +254,43 @@ public class CollationThaiTest extends TestFmwk {
         logln("Words checked: " + wordCount);
     }
     
+    public void TestInvalidThai() 
+    {
+        String tests[] = { "\u0E44\u0E01\u0E44\u0E01",
+                           "\u0E44\u0E01\u0E01\u0E44",
+                           "\u0E01\u0E44\u0E01\u0E44",
+                           "\u0E01\u0E01\u0E44\u0E44",
+                           "\u0E44\u0E44\u0E01\u0E01",
+                           "\u0E01\u0E44\u0E44\u0E01",
+                         };
+     
+        RuleBasedCollator collator;
+        StrCmp comparator;
+        try {
+            collator = getThaiCollator();
+            comparator = new StrCmp();
+        } catch (Exception e) {
+            errln("Error: could not construct Thai collator");
+            return;
+        }
+        
+        Arrays.sort(tests, comparator);
+     
+        for (int i = 0; i < tests.length; i ++)
+        {
+            for (int j = i + 1; j < tests.length; j ++) {
+                if (collator.compare(tests[i], tests[j]) > 0) {
+                    // inconsistency ordering found!
+                    errln("Inconsistent ordering between strings " + i 
+                          + " and " + j);
+                }
+            }
+            CollationElementIterator iterator 
+                = collator.getCollationElementIterator(tests[i]);
+            CollationIteratorTest.backAndForth(this, iterator);
+        }
+    }
+    
     private static final byte BOM[] = {(byte) 0xEF, (byte) 0xBB, (byte) 0xBF};
     
     private byte savedBytes[]= new byte[BOM.length];
@@ -342,5 +381,37 @@ public class CollationThaiTest extends TestFmwk {
         }
         target += "]";
         return target;
+    }
+    
+    // private inner class -------------------------------------------------
+    
+    private static final class StrCmp implements Comparator 
+    {
+        public int compare(Object string1, Object string2) 
+        {
+            return collator.compare(string1, string2);
+        }
+        
+        StrCmp() throws Exception
+        {
+            collator = getThaiCollator();
+        }
+        
+        Collator collator;
+    }
+    
+    // private data members ------------------------------------------------
+    
+    private static RuleBasedCollator m_collator_;
+    
+    // private methods -----------------------------------------------------
+    
+    private static RuleBasedCollator getThaiCollator() throws Exception
+    {
+        if (m_collator_ == null) {
+            m_collator_ = (RuleBasedCollator)Collator.getInstance(
+                                                new Locale("th", "TH", ""));
+        }
+        return m_collator_;
     }
 }
