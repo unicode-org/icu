@@ -270,9 +270,9 @@ case $platform in
         CC=cc; export CC
         CXX=cxx; export CXX
         export COMPILE_LINK_ENVVAR='_CXX_CVERSION=0x41020000 _C89_CVERSION=0x41020000 _CC_CVERSION=0x41020000 _CXX_PVERSION=0x41020000 _C89_PVERSION=0x41020000 _CC_PVERSION=0x41020000'
-        export LD_FLAGS=-Wl,"compat=pm3"
-        export CFLAGS=-Wc,"target(zOSV1R2)"
-        export CXXFLAGS=-Wc,"target(zOSV1R2)"
+        export LDFLAGS=-Wl,"compat=pm3"
+        export CFLAGS='-Wc,"target(zOSV1R2)"'
+        export CXXFLAGS='-Wc,"target(zOSV1R2)"'
         export RELEASE_CFLAGS='-2'
         export RELEASE_CXXFLAGS='-2'
         ;;
@@ -282,9 +282,9 @@ case $platform in
         CC=cc; export CC
         CXX=cxx; export CXX
         export COMPILE_LINK_ENVVAR='_CXX_CVERSION=0x220A0000 _C89_CVERSION=0x220A0000 _CC_CVERSION=0x220A0000 _CXX_PVERSION=0x220A0000 _C89_PVERSION=0x220A0000 _CC_PVERSION=0x220A0000'
-        export LD_FLAGS=-Wl,"compat=pm3"
-        export CFLAGS=-Wc,"target(OSV2R10)"
-        export CXXFLAGS=-Wc,"target(OSV2R10)"
+        export LDFLAGS=-Wl,"compat=pm3"
+        export CFLAGS='-Wc,"target(OSV2R10)"'
+        export CXXFLAGS='-Wc,"target(OSV2R10)"'
         export RELEASE_CFLAGS='-2'
         export RELEASE_CXXFLAGS='-2'
         ;;
