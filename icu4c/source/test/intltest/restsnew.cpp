@@ -416,12 +416,20 @@ NewResourceBundleTest::TestOtherAPI(){
     UErrorCode   err = U_ZERO_ERROR;
     const char* testdatapath;
     testdatapath=loadTestData(err);
+    UnicodeString tDataPathUS = UnicodeString(testdatapath, "");
+
     if(U_FAILURE(err))
     {
         errln("Could not load testdata.dat %s " + UnicodeString(u_errorName(err)));
         return;
     }
     Locale       *locale=new Locale("te_IN");
+
+    ResourceBundle test0(tDataPathUS, *locale, err);
+    if(U_FAILURE(err)){
+        errln("Construction failed");
+        return;
+    }
 
     ResourceBundle  test1(testdatapath, *locale, err);
     if(U_FAILURE(err)){
