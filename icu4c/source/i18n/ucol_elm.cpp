@@ -286,7 +286,7 @@ uprv_uca_cloneTempTable(tempUCATable *t, UErrorCode *status) {
           *status = U_MEMORY_ALLOCATION_ERROR;
           return NULL;
       }
-      uprv_memcpy(r->maxExpansions->endExpansionCE, t->maxExpansions->endExpansionCE, t->maxExpansions->size*sizeof(uint32_t));
+      uprv_memcpy(r->maxExpansions->endExpansionCE, t->maxExpansions->endExpansionCE, t->maxExpansions->position*sizeof(uint32_t));
     } else {
       r->maxExpansions->endExpansionCE = NULL;
     }
@@ -297,7 +297,7 @@ uprv_uca_cloneTempTable(tempUCATable *t, UErrorCode *status) {
           *status = U_MEMORY_ALLOCATION_ERROR;
           return NULL;
       }
-      uprv_memcpy(r->maxExpansions->expansionCESize, t->maxExpansions->expansionCESize, t->maxExpansions->size*sizeof(uint8_t));
+      uprv_memcpy(r->maxExpansions->expansionCESize, t->maxExpansions->expansionCESize, t->maxExpansions->position*sizeof(uint8_t));
     } else {
       r->maxExpansions->expansionCESize = NULL;
     }
@@ -322,14 +322,14 @@ uprv_uca_cloneTempTable(tempUCATable *t, UErrorCode *status) {
           *status = U_MEMORY_ALLOCATION_ERROR;
           return NULL;
       }
-      uprv_memcpy(r->maxJamoExpansions->endExpansionCE, t->maxJamoExpansions->endExpansionCE, t->maxJamoExpansions->size*sizeof(uint32_t));
+      uprv_memcpy(r->maxJamoExpansions->endExpansionCE, t->maxJamoExpansions->endExpansionCE, t->maxJamoExpansions->position*sizeof(uint32_t));
       r->maxJamoExpansions->isV = (UBool *)uprv_malloc(sizeof(UBool)*t->maxJamoExpansions->size);
       /* test for NULL */
       if (r->maxJamoExpansions->isV == NULL) {
           *status = U_MEMORY_ALLOCATION_ERROR;
           return NULL;
       }
-      uprv_memcpy(r->maxJamoExpansions->isV, t->maxJamoExpansions->isV, t->maxJamoExpansions->size*sizeof(UBool));
+      uprv_memcpy(r->maxJamoExpansions->isV, t->maxJamoExpansions->isV, t->maxJamoExpansions->position*sizeof(UBool));
     } else {
       r->maxJamoExpansions->endExpansionCE = NULL;
       r->maxJamoExpansions->isV = NULL;
