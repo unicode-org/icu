@@ -7,6 +7,8 @@
 *   11/19/2001  aliu        Creation.
 **********************************************************************
 */
+#ifndef ICU_UTIL_H
+#define ICU_UTIL_H
 
 #include "unicode/utypes.h"
 #include "unicode/unistr.h"
@@ -42,4 +44,5 @@ class Utility {
 
 U_NAMESPACE_END
 
+#endif
 //eof
