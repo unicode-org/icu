@@ -43,7 +43,7 @@ U_CFUNC void  T_UConverter_toUnicode_LATIN_1 (UConverterToUnicodeArgs * args,
   if ((args->targetLimit - args->target) < sourceLength)
     {
       readLen = args->targetLimit - args->target;
-      *err = U_INDEX_OUTOFBOUNDS_ERROR;
+      *err = U_BUFFER_OVERFLOW_ERROR;
     }
   else
     {
@@ -144,7 +144,7 @@ U_CFUNC void   T_UConverter_fromUnicode_LATIN_1 (UConverterFromUnicodeArgs * arg
         }
       else
         {
-          *err = U_INDEX_OUTOFBOUNDS_ERROR;
+          *err = U_BUFFER_OVERFLOW_ERROR;
           break;
         }
     }

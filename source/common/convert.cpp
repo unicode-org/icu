@@ -221,7 +221,7 @@ UnicodeConverter::toUnicodeString(UnicodeString&         target,
              myTargetUCharsAlias - myTargetUChars);
       /*Checks for the integrity of target (UnicodeString) as it adds data to it*/
       if (target.isBogus()) err = U_MEMORY_ALLOCATION_ERROR;
-    } while (err == U_INDEX_OUTOFBOUNDS_ERROR);
+    } while (err == U_BUFFER_OVERFLOW_ERROR);
 
 
   uprv_free(myTargetUChars);

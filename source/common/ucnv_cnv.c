@@ -64,7 +64,7 @@ void  flushInternalUnicodeBuffer (UConverter * _this,
                    sizeof (UChar) * (myUCharErrorBufferLength - targetLength));
       _this->UCharErrorBufferLength -= (int8_t) targetLength;
       *myTargetIndex = targetLength;
-      *err = U_INDEX_OUTOFBOUNDS_ERROR;
+      *err = U_BUFFER_OVERFLOW_ERROR;
     }
 
   return;
@@ -110,7 +110,7 @@ void  flushInternalCharBuffer (UConverter * _this,
                    (myCharErrorBufferLength - targetLength));
       _this->charErrorBufferLength -= (int8_t) targetLength;
       *myTargetIndex = targetLength;
-      *err = U_INDEX_OUTOFBOUNDS_ERROR;
+      *err = U_BUFFER_OVERFLOW_ERROR;
     }
 
   return;

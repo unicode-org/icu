@@ -372,7 +372,7 @@ _MBCSToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
                         /* target overflow */
                         cnv->UCharErrorBuffer[0]=c;
                         cnv->UCharErrorBufferLength=1;
-                        *pErrorCode=U_INDEX_OUTOFBOUNDS_ERROR;
+                        *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
 
                         offset=0;
                         byteIndex=0;
@@ -424,7 +424,7 @@ _MBCSToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
                             /* target overflow */
                             cnv->UCharErrorBuffer[0]=unicodeCodeUnits[offset];
                             cnv->UCharErrorBufferLength=1;
-                            *pErrorCode=U_INDEX_OUTOFBOUNDS_ERROR;
+                            *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
 
                             offset=0;
                             byteIndex=0;
@@ -517,7 +517,7 @@ output32:
                         /* target overflow */
                         cnv->UCharErrorBuffer[0]=c;
                         cnv->UCharErrorBufferLength=1;
-                        *pErrorCode=U_INDEX_OUTOFBOUNDS_ERROR;
+                        *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
 
                         offset=0;
                         byteIndex=0;
@@ -596,7 +596,7 @@ callback:
                  */
                 if(cnv->UCharErrorBufferLength>0) {
                     /* target is full */
-                    *pErrorCode=U_INDEX_OUTOFBOUNDS_ERROR;
+                    *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
                     break;
                 }
 
@@ -608,7 +608,7 @@ callback:
             }
         } else {
             /* target is full */
-            *pErrorCode=U_INDEX_OUTOFBOUNDS_ERROR;
+            *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
             break;
         }
     }
@@ -663,10 +663,10 @@ _MBCSGetNextUChar(UConverterToUnicodeArgs *pArgs,
         pArgs->sourceLimit=pArgs->source+1;
         pArgs->flush= (UBool)(pArgs->sourceLimit==realLimit);
         _MBCSToUnicode(pArgs, pErrorCode);
-        if(U_FAILURE(*pErrorCode) && *pErrorCode!=U_INDEX_OUTOFBOUNDS_ERROR) {
+        if(U_FAILURE(*pErrorCode) && *pErrorCode!=U_BUFFER_OVERFLOW_ERROR) {
             return 0xffff;
         } else if(pArgs->target!=buffer) {
-            if(*pErrorCode==U_INDEX_OUTOFBOUNDS_ERROR) {
+            if(*pErrorCode==U_BUFFER_OVERFLOW_ERROR) {
                 *pErrorCode=U_ZERO_ERROR;
             }
             return ucnv_getUChar32KeepOverflow(pArgs->converter, buffer, pArgs->target-buffer);
@@ -1143,7 +1143,7 @@ getTrail:
 
                     /* target overflow */
                     targetCapacity=0;
-                    *pErrorCode=U_INDEX_OUTOFBOUNDS_ERROR;
+                    *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
                     c=0;
                     break;
                 }
@@ -1217,7 +1217,7 @@ callback:
              */
             if(cnv->charErrorBufferLength>0) {
                 /* target is full */
-                *pErrorCode=U_INDEX_OUTOFBOUNDS_ERROR;
+                *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
                 break;
             }
 
@@ -1228,7 +1228,7 @@ callback:
              */
         } else {
             /* target is full */
-            *pErrorCode=U_INDEX_OUTOFBOUNDS_ERROR;
+            *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
             break;
         }
     }

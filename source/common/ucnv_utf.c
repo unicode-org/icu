@@ -218,7 +218,7 @@ morebytes:
                         /* Put in overflow buffer (not handled here) */
                         args->converter->UCharErrorBuffer[0] = (UChar) ch;
                         args->converter->UCharErrorBufferLength = 1;
-                        *err = U_INDEX_OUTOFBOUNDS_ERROR;
+                        *err = U_BUFFER_OVERFLOW_ERROR;
                         break;
                     }
                 }
@@ -249,7 +249,7 @@ morebytes:
                         /* Put in overflow buffer (not handled here) */
                         args->converter->UCharErrorBuffer[0] = (UChar) ch2;
                         args->converter->UCharErrorBufferLength = 1;
-                        *err = U_INDEX_OUTOFBOUNDS_ERROR;
+                        *err = U_BUFFER_OVERFLOW_ERROR;
                         break;
                     }
                 }
@@ -261,7 +261,7 @@ donefornow:
     if (mySource < sourceLimit && myTarget >= targetLimit && U_SUCCESS(*err))
     {
         /* End of target buffer */
-        *err = U_INDEX_OUTOFBOUNDS_ERROR;
+        *err = U_BUFFER_OVERFLOW_ERROR;
     }
 
     args->target = myTarget;
@@ -370,7 +370,7 @@ morebytes:
                     {
                         args->converter->UCharErrorBuffer[0] = (UChar) ch;
                         args->converter->UCharErrorBufferLength = 1;
-                        *err = U_INDEX_OUTOFBOUNDS_ERROR;
+                        *err = U_BUFFER_OVERFLOW_ERROR;
                     }
                 }
                 offsetNum += i;
@@ -417,7 +417,7 @@ morebytes:
                         /* Put in overflow buffer (not handled here) */
                         args->converter->UCharErrorBuffer[0] = (UChar) ch2;
                         args->converter->UCharErrorBufferLength = 1;
-                        *err = U_INDEX_OUTOFBOUNDS_ERROR;
+                        *err = U_BUFFER_OVERFLOW_ERROR;
                         break;
                     }
                 }
@@ -428,7 +428,7 @@ morebytes:
 donefornow:
     if (mySource < sourceLimit && myTarget >= targetLimit && U_SUCCESS(*err))
     {   /* End of target buffer */
-        *err = U_INDEX_OUTOFBOUNDS_ERROR;
+        *err = U_BUFFER_OVERFLOW_ERROR;
     }
 
     args->target = myTarget;
@@ -473,7 +473,7 @@ U_CFUNC void T_UConverter_fromUnicode_UTF8 (UConverterFromUnicodeArgs * args,
             {
                 args->converter->charErrorBuffer[0] = (char) ((ch & 0x3f) | 0x80);
                 args->converter->charErrorBufferLength = 1;
-                *err = U_INDEX_OUTOFBOUNDS_ERROR;
+                *err = U_BUFFER_OVERFLOW_ERROR;
             }
         }
         else
@@ -522,7 +522,7 @@ lowsurogate:
                 else
                 {
                     args->converter->charErrorBuffer[args->converter->charErrorBufferLength++] = temp[indexToWrite];
-                    *err = U_INDEX_OUTOFBOUNDS_ERROR;
+                    *err = U_BUFFER_OVERFLOW_ERROR;
                 }
             }
         }
@@ -530,7 +530,7 @@ lowsurogate:
 
     if (mySource < sourceLimit && myTarget >= targetLimit && U_SUCCESS(*err))
     {
-        *err = U_INDEX_OUTOFBOUNDS_ERROR;
+        *err = U_BUFFER_OVERFLOW_ERROR;
     }
 
     args->target = (char *) myTarget;
@@ -579,7 +579,7 @@ U_CFUNC void T_UConverter_fromUnicode_UTF8_OFFSETS_LOGIC (UConverterFromUnicodeA
             {
                 args->converter->charErrorBuffer[0] = (char) ((ch & 0x3f) | 0x80);
                 args->converter->charErrorBufferLength = 1;
-                *err = U_INDEX_OUTOFBOUNDS_ERROR;
+                *err = U_BUFFER_OVERFLOW_ERROR;
             }
         }
         else
@@ -629,7 +629,7 @@ lowsurogate:
                 else
                 {
                     args->converter->charErrorBuffer[args->converter->charErrorBufferLength++] = temp[indexToWrite];
-                    *err = U_INDEX_OUTOFBOUNDS_ERROR;
+                    *err = U_BUFFER_OVERFLOW_ERROR;
                 }
             }
             offsetNum += (ch >= 0x10000) + 1;
@@ -638,7 +638,7 @@ lowsurogate:
 
     if (mySource < sourceLimit && myTarget >= targetLimit && U_SUCCESS(*err))
     {
-        *err = U_INDEX_OUTOFBOUNDS_ERROR;
+        *err = U_BUFFER_OVERFLOW_ERROR;
     }
 
     args->target = (char *) myTarget;
@@ -749,7 +749,7 @@ CALL_ERROR_FUNCTION:
                                     err);
 
     /*makes the internal caching transparent to the user*/
-    if (*err == U_INDEX_OUTOFBOUNDS_ERROR)
+    if (*err == U_BUFFER_OVERFLOW_ERROR)
         *err = U_ZERO_ERROR;
 
     return (UChar32)myUChar;
@@ -827,7 +827,7 @@ U_CFUNC void T_UConverter_toUnicode_UTF16_BE (UConverterToUnicodeArgs * args,
         }
         else
         {
-            *err = U_INDEX_OUTOFBOUNDS_ERROR;
+            *err = U_BUFFER_OVERFLOW_ERROR;
             break;
         }
     }
@@ -873,12 +873,12 @@ U_CFUNC void  T_UConverter_fromUnicode_UTF16_BE (UConverterFromUnicodeArgs * arg
             {
                 args->converter->charErrorBuffer[0] = (char) mySourceChar;
                 args->converter->charErrorBufferLength = 1;
-                *err = U_INDEX_OUTOFBOUNDS_ERROR;
+                *err = U_BUFFER_OVERFLOW_ERROR;
             }
         }
         else
         {
-            *err = U_INDEX_OUTOFBOUNDS_ERROR;
+            *err = U_BUFFER_OVERFLOW_ERROR;
             break;
         }
     }
@@ -1009,7 +1009,7 @@ U_CFUNC void  T_UConverter_toUnicode_UTF16_LE (UConverterToUnicodeArgs * args,
         }
         else
         {
-            *err = U_INDEX_OUTOFBOUNDS_ERROR;
+            *err = U_BUFFER_OVERFLOW_ERROR;
             break;
         }
     }
@@ -1056,12 +1056,12 @@ U_CFUNC void   T_UConverter_fromUnicode_UTF16_LE (UConverterFromUnicodeArgs * ar
             {
                 args->converter->charErrorBuffer[0] = (char) (mySourceChar >> 8);
                 args->converter->charErrorBufferLength = 1;
-                *err = U_INDEX_OUTOFBOUNDS_ERROR;
+                *err = U_BUFFER_OVERFLOW_ERROR;
             }
         }
         else
         {
-            *err = U_INDEX_OUTOFBOUNDS_ERROR;
+            *err = U_BUFFER_OVERFLOW_ERROR;
             break;
         }
     }
