@@ -578,7 +578,7 @@ _getScript(const char *localeID,
         *pEnd = localeID;
     }
 
-    /* copy the country as far as possible and count its length */
+    /* copy the second item as far as possible and count its length */
     while(!_isTerminator(localeID[idLen]) && !_isIDSeparator(localeID[idLen])) {
         idLen++;
     }
@@ -1166,7 +1166,7 @@ typedef struct keywordConv {
 static const keywordConv variantsToKeywords[] = {
     { "",               "en_US_POSIX" }, /* .NET name */
     { "C",              "en_US_POSIX" }, /* POSIX name */
-    { "art_LOJBAN",     "art__LOJBAN" }, /* registered name */
+    { "art_LOJBAN",     "jbo" }, /* registered name */
     { "az_AZ_CYRL",     "az_Cyrl_AZ" }, /* .NET name */
     { "az_AZ_LATN",     "az_Latn_AZ" }, /* .NET name */
     { "ca_ES_PREEURO",  "ca_ES@currency=ESP" },
@@ -1203,7 +1203,7 @@ static const keywordConv variantsToKeywords[] = {
     { "uz_UZ_CYRL",     "uz_Cyrl_UZ" }, /* .NET name */
     { "uz_UZ_LATN",     "uz_Latn_UZ" }, /* .NET name */
     { "zh_CHS",         "zh_Hans" }, /* .NET name */
-    { "zh_CHT",         "zh_Hant" }, /* .NET name */
+    { "zh_CHT",         "zh_TW" }, /* .NET name TODO: This should really be zh_Hant once the locale structure is fixed. */
     { "zh_GAN",         "zh__GAN" }, /* registered name */
     { "zh_GUOYU",       "zh" }, /* registered name */
     { "zh_HAKKA",       "zh__HAKKA" }, /* registered name */
