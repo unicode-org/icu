@@ -256,7 +256,7 @@ typedef void* UClassID;
  * ICU is separated into three libraries.
  */
 
-/**
+/*
  * \def U_COMBINED_IMPLEMENTATION
  * Set to export library symbols from inside the ICU library
  * when all of ICU is in a single library.

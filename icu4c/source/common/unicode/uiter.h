@@ -46,10 +46,9 @@ typedef struct UCharIterator UCharIterator;
  * @see UCharIterator
  * @draft ICU 2.1
  */
-enum UCharIteratorOrigin {
+typedef enum UCharIteratorOrigin {
     UITER_START, UITER_CURRENT, UITER_LIMIT, UITER_ZERO, UITER_LENGTH
-};
-typedef enum UCharIteratorOrigin UCharIteratorOrigin;
+} UCharIteratorOrigin;
 
 /**
  * Function type declaration for UCharIterator.getIndex().
