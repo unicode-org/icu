@@ -89,7 +89,8 @@
 /* 1 or 0 to enable or disable threads.  If undefined, default is: enable threads. */
 #define ICU_USE_THREADS @ICU_USE_THREADS@
 
-/* Determine whether to disable renaming or not */
+/* Determine whether to disable renaming or not. This overrides the
+   setting in umachine.h which is for all platforms. */
 #ifndef U_DISABLE_RENAMING
 #define U_DISABLE_RENAMING @U_DISABLE_RENAMING@
 #endif
