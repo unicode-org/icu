@@ -101,8 +101,8 @@ public class RBReporter extends JFrame {
 				if (nextReport != null && (nextReport.compareTo(new Date()) <= 0)) {
 					try { generateReports(); } catch (IOException ioe) {}
 				}
-				if (nextReport == null) nextReport = generateNextReportDate();
-				boolean running = true;
+				if (nextReport == null)
+				    nextReport = generateNextReportDate();
 				updateStatusComponents();
 				updateDateFields();
 				while (true) {
@@ -128,12 +128,15 @@ public class RBReporter extends JFrame {
 	// Called when a report should be generated. Does not check if it should be generated
 	private void generateReports() throws IOException {
 		File baseFile = new File(bundleField.getText());
-		if (baseFile == null || !baseFile.isFile()) throw new IOException("Specified input file is unusable");
+		if (baseFile == null || !baseFile.isFile())
+		    throw new IOException("Specified input file is unusable");
 		File directory = new File(directoryField.getText());
 		rbm = new RBManager(baseFile);
 		
-		if (rbm == null) throw new IOException("Unable to load the resource bundle file");
-		if (directory == null || !directory.isDirectory()) throw new IOException("Specified output directory is unusable");
+		if (rbm == null)
+		    throw new IOException("Unable to load the resource bundle file");
+		if (directory == null || !directory.isDirectory())
+		    throw new IOException("Specified output directory is unusable");
 		RBReporterScanner scanner = null;
 		if (scanCheck.isSelected()) {
 			scanner = new RBReporterScanner((Bundle)rbm.getBundles().elementAt(0),
@@ -1172,7 +1175,8 @@ public class RBReporter extends JFrame {
 				reporter.thisWindowClosing(null);
 			} else if (args[0].equals("-line")) {
 				reporter = new RBReporter(false);
-				if (!reporter.running) reporter.toggleStatus();
+				if (!reporter.running)
+				    reporter.toggleStatus();
 				System.out.println("RBReporter: Next Report at " + reporter.nextReport.toString());
 			} else {
 				System.out.println(getUsage());
