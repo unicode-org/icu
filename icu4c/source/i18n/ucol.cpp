@@ -1636,7 +1636,7 @@ UChar peekCharacter(collIterate *source, int32_t offset) {
       return (UChar)source->iterator->current(source->iterator);
     }
   } else {
-    return U_SENTINEL;
+    return (UChar)U_SENTINEL;
   }
 }
 
@@ -6914,7 +6914,6 @@ static UCollationResult ucol_compareUsingSortKeys(collIterate *sColl,
     UChar *source = NULL;
     UChar *target = NULL;
     UChar sStackBuf[256], tStackBuf[256];
-    int32_t sBufSize = 256, tBufSize = 256;
     int32_t sourceLength = (sColl->flags&UCOL_ITER_HASLEN)?(sColl->endp-sColl->string):-1;
     int32_t targetLength = (tColl->flags&UCOL_ITER_HASLEN)?(tColl->endp-tColl->string):-1;
 
