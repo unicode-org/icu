@@ -2093,7 +2093,6 @@ static void TestResourceLevelAliasing(void) {
       } else {
         status = U_ZERO_ERROR;
       }
-      
       /* testing referencing/composed alias */
       uk = ures_findResource("ja/LocaleScript/2", uk, &status);
       if((uk == NULL) || U_FAILURE(status)) {
@@ -2527,7 +2526,8 @@ static void TestXPath(void) {
     UResourceBundle *rb = NULL, *alias = NULL;
     int32_t len = 0;
     const UChar* result = NULL;
-    const UChar expResult[] = { 0x0074, 0x0065, 0x0069, 0x006E, 0x0064, 0x0065, 0x0073, 0x0074, 0x0000 }; /*teindest*/
+    const UChar expResult[] = { 0x0063, 0x006F, 0x0072, 0x0072, 0x0065, 0x0063, 0x0074, 0x0000 }; /* "correct" */
+    /*const UChar expResult[] = { 0x0074, 0x0065, 0x0069, 0x006E, 0x0064, 0x0065, 0x0073, 0x0074, 0x0000 }; *//*teindest*/
     
     const char *testdatapath=loadTestData(&status);
     if(U_FAILURE(status))
@@ -2543,7 +2543,31 @@ static void TestXPath(void) {
       log_err("Could not open te_IN (%s)\n", myErrorName(status));
       return;
     }
-    alias = ures_getByKey(rb, "aliasClient", NULL, &status);
+    alias = ures_getByKey(rb, "rootAliasClient", alias, &status);
+    if(U_FAILURE(status)) {
+      log_err("Couldn't find the aliased resource (%s)\n", myErrorName(status));
+      ures_close(rb);
+      return;
+    }
+
+    result = ures_getString(alias, &len, &status);
+    if(U_FAILURE(status) || result == NULL || u_strcmp(result, expResult)) {
+      log_err("Couldn't get correct string value (%s)\n", myErrorName(status));
+    }
+
+    alias = ures_getByKey(rb, "aliasClient", alias, &status);
+    if(U_FAILURE(status)) {
+      log_err("Couldn't find the aliased resource (%s)\n", myErrorName(status));
+      ures_close(rb);
+      return;
+    }
+
+    result = ures_getString(alias, &len, &status);
+    if(U_FAILURE(status) || result == NULL || u_strcmp(result, expResult)) {
+      log_err("Couldn't get correct string value (%s)\n", myErrorName(status));
+    }
+
+    alias = ures_getByKey(rb, "nestedRootAliasClient", alias, &status);
     if(U_FAILURE(status)) {
       log_err("Couldn't find the aliased resource (%s)\n", myErrorName(status));
       ures_close(rb);
