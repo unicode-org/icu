@@ -612,18 +612,18 @@ TestChoiceFormat::testValue( double val )
         return;
     }
 
-    double middle;    
-    double *middlePtr = &middle;
-    *middlePtr = (val + valnext) / 2.0;
-    if ((*middlePtr != val) && (*middlePtr != valnext)) {
+    /* volatile so the compiler doesn't get confused.. --srl */
+    volatile double middle;  
+    middle = (val + valnext) / 2.0;
+    if ((middle != val) && (middle != valnext)) {
         errln( (UnicodeString)
             "*** TestChoiceFormat::testValue #3 WARNING: There seems to be a gap for:" + val );
         return;
     }
 
-    *middlePtr = (val + valprev) / 2.0;
+    middle = (val + valprev) / 2.0;
 
-    if ((*middlePtr != val) && (*middlePtr != valprev)) {
+    if ((middle != val) && (middle != valprev)) {
          errln( (UnicodeString)
             "*** TestChoiceFormat::testValue #4 WARNING: There seems to be a gap for:" + val );
         return;
