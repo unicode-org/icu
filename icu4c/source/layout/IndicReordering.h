@@ -101,7 +101,6 @@ struct IndicClassTable
     le_bool isReph(LEUnicode ch) const;
     le_bool isVirama(LEUnicode ch) const;
     le_bool isNukta(LEUnicode ch) const;
-	le_bool isConsonantOrNukta(LEUnicode ch) const;
     le_bool isVattu(LEUnicode ch) const;
     le_bool isMatra(LEUnicode ch) const;
     le_bool isSplitMatra(LEUnicode ch) const;
@@ -116,7 +115,6 @@ struct IndicClassTable
     static le_bool isReph(CharClass charClass);
     static le_bool isVirama(CharClass charClass);
     static le_bool isNukta(CharClass charClass);
-	static le_bool isConsonantOrNukta(CharClass charClass);
     static le_bool isVattu(CharClass charClass);
     static le_bool isMatra(CharClass charClass);
     static le_bool isSplitMatra(CharClass charClass);
@@ -183,11 +181,6 @@ inline le_bool IndicClassTable::isReph(CharClass charClass)
 inline le_bool IndicClassTable::isNukta(CharClass charClass)
 {
     return (charClass & CF_CLASS_MASK) == CC_NUKTA;
-}
-
-inline le_bool IndicClassTable::isConsonantOrNukta(CharClass charClass)
-{
-	return isConsonant(charClass) || isNukta(charClass);
 }
 
 inline le_bool IndicClassTable::isVirama(CharClass charClass)
@@ -258,11 +251,6 @@ inline le_bool IndicClassTable::isVirama(LEUnicode ch) const
 inline le_bool IndicClassTable::isNukta(LEUnicode ch) const
 {
     return isNukta(getCharClass(ch));
-}
-
-inline le_bool IndicClassTable::isConsonantOrNukta(LEUnicode ch) const
-{
-	return isConsonantOrNukta(getCharClass(ch));
 }
 
 inline le_bool IndicClassTable::isVattu(LEUnicode ch) const
