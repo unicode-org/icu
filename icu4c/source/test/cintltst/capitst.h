@@ -73,4 +73,10 @@
      */
     void TestBounds(void);
 
+    /**
+     * Test ucol_getLocale function
+     */
+    void TestGetLocale(void);
+
+
 #endif
