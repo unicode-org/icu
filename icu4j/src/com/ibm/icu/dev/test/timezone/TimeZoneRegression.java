@@ -41,9 +41,16 @@ public class TimeZoneRegression extends TestFmwk {
         z.setEndRule(Calendar.MARCH, -1, Calendar.SUNDAY, 0);
         if (!z.useDaylightTime())
             errln("Fail: DST not active");
-        if (z.inDaylightTime(new Date(97, Calendar.JANUARY, 31)) ||
-            !z.inDaylightTime(new Date(97, Calendar.MARCH, 1)) ||
-            z.inDaylightTime(new Date(97, Calendar.MARCH, 31))) {
+        java.util.Calendar tempcal = java.util.Calendar.getInstance();
+        tempcal.clear();
+        tempcal.set(1997, Calendar.JANUARY, 31);
+        Date d1 = tempcal.getTime();
+        tempcal.set(1997, Calendar.MARCH, 1);
+        Date d2 = tempcal.getTime();
+        tempcal.set(1997, Calendar.MARCH, 31);
+        Date d3 = tempcal.getTime();
+        if (z.inDaylightTime(d1) || !z.inDaylightTime(d2) ||
+            z.inDaylightTime(d3)) {
             errln("Fail: DST not working as expected");
         }
     }
@@ -136,9 +143,19 @@ public class TimeZoneRegression extends TestFmwk {
     public void Test4109314() {
         GregorianCalendar testCal = (GregorianCalendar)Calendar.getInstance(); 
         TimeZone PST = TimeZone.getTimeZone("PST");
+        java.util.Calendar tempcal = java.util.Calendar.getInstance();
+        tempcal.clear();
+        tempcal.set(1998,Calendar.APRIL,4,22,0);
+        Date d1 = tempcal.getTime();
+        tempcal.set(1998,Calendar.APRIL,5,6,0);
+        Date d2 = tempcal.getTime();
+        tempcal.set(1998,Calendar.OCTOBER,24,22,0);
+        Date d3 = tempcal.getTime();
+        tempcal.set(1998,Calendar.OCTOBER,25,6,0);
+        Date d4 = tempcal.getTime();
         Object[] testData = {
-            PST, new Date(98,Calendar.APRIL,4,22,0), new Date(98, Calendar.APRIL, 5,6,0),
-            PST, new Date(98,Calendar.OCTOBER,24,22,0), new Date(98,Calendar.OCTOBER,25,6,0),
+            PST, d1, d2,
+            PST, d3, d4,
         };
         boolean pass=true;
         for (int i=0; i<testData.length; i+=3) {
@@ -254,7 +271,10 @@ public class TimeZoneRegression extends TestFmwk {
 	TimeZone.setDefault(tz);
         cal.setTimeZone(tz);
 
-        Date dt = new Date(1998-1900, Calendar.APRIL, 5, 10, 0);
+        java.util.Calendar tempcal = java.util.Calendar.getInstance();
+        tempcal.clear();
+        tempcal.set(1998, Calendar.APRIL, 5, 10, 0);
+        Date dt = tempcal.getTime();
 	// the dt value is local time in PST.
         if (!tz.inDaylightTime(dt))
             errln("We're not in Daylight Savings Time and we should be.\n");
@@ -667,7 +687,8 @@ public class TimeZoneRegression extends TestFmwk {
         };
         
         String[] zone = new String[4];
-
+        java.util.Calendar tempcal = java.util.Calendar.getInstance();
+        
         for (int j=0; j<DATA.length; j+=3) {
             TimeZone tz = (TimeZone)DATA[j];
             TimeZone.setDefault(tz);
@@ -676,7 +697,9 @@ public class TimeZoneRegression extends TestFmwk {
 
             // Must construct the Date object AFTER setting the default zone
             int[] p = (int[])DATA[j+1];
-            Date d = new Date(p[0], p[1], p[2], p[3], p[4]);
+            tempcal.clear();
+            tempcal.set(p[0] + 1900, p[1], p[2], p[3], p[4]);
+            Date d = tempcal.getTime();
             boolean transitionExpected = ((Boolean)DATA[j+2]).booleanValue();
 
             logln(tz.getID() + ":");
@@ -757,8 +780,12 @@ public class TimeZoneRegression extends TestFmwk {
         fmt1.setTimeZone(z1); // Format uses standard zone
         DateFormat fmt2 = new SimpleDateFormat("z");
         fmt2.setTimeZone(z2); // Format uses DST zone
-        Date dst = new Date(1970-1900, Calendar.FEBRUARY, 1); // Time in DST
-        Date std = new Date(1970-1900, Calendar.AUGUST, 1); // Time in standard
+        java.util.Calendar tempcal = java.util.Calendar.getInstance();
+        tempcal.clear();
+        tempcal.set(1970, Calendar.FEBRUARY, 1);
+        Date dst = tempcal.getTime(); // Time in DST
+        tempcal.set(1970, Calendar.AUGUST, 1);
+        Date std = tempcal.getTime(); // Time in standard
 
         // Description, Result, Expected Result
         String[] DATA = {
