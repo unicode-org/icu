@@ -412,15 +412,22 @@ public:
 
 // -------------------------------------
 
-static UMTX gLock = 0;
+static UMTX gnLock = 0;
 
 static ICULocaleService* 
 getService(void)
 {
   if (gService == NULL) {
-    Mutex mutex(&gLock);
-    if (gService == NULL) {
-      gService = new ICUNumberFormatService();
+    ICULocaleService * newservice = new ICUNumberFormatService();
+    if (newservice) {
+      Mutex mutex(&gnLock);
+      if (gService == NULL) {
+        gService = newservice;
+        newservice = NULL;
+      }
+    }
+    if (newservice) {
+      delete newservice;
     }
   }
   return gService;
@@ -698,7 +705,7 @@ U_CFUNC UBool numfmt_cleanup(void) {
     delete gService;
     gService = NULL;
   }
-  umtx_destroy(&gLock);
+  umtx_destroy(&gnLock);
   return TRUE;
 }
 
