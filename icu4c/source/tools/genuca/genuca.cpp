@@ -701,7 +701,6 @@ write_uca_table(const char *filename,
 
     //printOutTable(myData, &status);
     //uhash_close(elements);
-    ucmp32_close(myData->mapping);
 
     free(myData);
     free(inverse);

@@ -298,9 +298,10 @@ ucol_open(    const    char         *loc,
   UResourceBundle *binary = ures_getByKey(b, "%%CollationNew", NULL, status);
 
   if(*status == U_MISSING_RESOURCE_ERROR) { /* if we don't find tailoring, we'll fallback to UCA */
-    result = UCA;
     *status = U_USING_DEFAULT_ERROR;
-    ures_close(binary);
+    result = ucol_initCollator(UCA->image, result, status); 
+    /*result = UCA;*/
+    result->hasRealData = FALSE;
   } else if(U_SUCCESS(*status)) { /* otherwise, we'll pick a collation data that exists */
     int32_t len = 0;
     const uint8_t *inData = ures_getBinary(binary, &len, status);
@@ -312,12 +313,12 @@ ucol_open(    const    char         *loc,
       ucol_setOptionsFromHeader(result, (const UCATableHeader *)inData, status);
       result->hasRealData = FALSE;
     }
-    result->rb = b;
   } else { /* There is another error, and we're just gonna clean up */
     ures_close(b);
     return NULL;
   }
 
+  result->rb = b;
   ures_close(binary);
 
   return result;
@@ -333,6 +334,9 @@ ucol_close(UCollator *coll)
   if(coll->freeOnClose == FALSE){
     return; /* for safeClone, if freeOnClose is FALSE, 
             don't free the other instance data */
+  }
+  if(coll->mapping != NULL) {
+      ucmp32_close(coll->mapping);
   }
   if(coll->rules != NULL) {
     uprv_free(coll->rules);
@@ -992,6 +996,9 @@ UCATableHeader *ucol_assembleTailoringTable(UColTokenParser *src, uint32_t *resL
 
    myData = uprv_uca_assembleTable(t, status);  
    UCollator *temp = ucol_initCollator(myData, NULL, status);
+   temp->rules = NULL;
+   temp->rb = NULL;
+   temp->hasRealData = FALSE;
 
   /* produce canonical & compatibility closure */
     for(u = 0; u < 0x10000; u++) {
@@ -1017,10 +1024,8 @@ UCATableHeader *ucol_assembleTailoringTable(UColTokenParser *src, uint32_t *resL
         }
       }
     }
+  ucol_close(temp);
   }
-
-
-
 
   myData = uprv_uca_reassembleTable(t, myData, status);  
 
@@ -1085,6 +1090,7 @@ ucol_openRules(    const    UChar                  *rules,
 
   listLen = ucol_tok_assembleTokenList(&src, status);
   if(U_FAILURE(*status)) { 
+    uprv_free(src.image);
     return NULL;
   }
   UCollator *result = NULL;
@@ -1113,6 +1119,8 @@ ucol_openRules(    const    UChar                  *rules,
     }
     return NULL;
   }
+
+  uprv_free(src.image);
 
   return result;
 }
@@ -1143,6 +1151,7 @@ void ucol_setOptionsFromHeader(UCollator* result, const UCATableHeader * image, 
     result->normalizationMode = image->normalizationMode;
     result->strength = image->strength;
     result->variableTopValue = image->variableTopValue;
+    result->alternateHandling = image->alternateHandling;
 
     result->caseFirstisDefault = TRUE;
     result->caseLevelisDefault = TRUE;
@@ -1159,6 +1168,7 @@ void ucol_putOptionsToHeader(UCollator* result, UCATableHeader * image, UErrorCo
     image->normalizationMode = result->normalizationMode;
     image->strength = result->strength;
     image->variableTopValue = result->variableTopValue;
+    image->alternateHandling = result->alternateHandling;
 }
 
 UCollator* ucol_initCollator(const UCATableHeader *image, UCollator *fillIn, UErrorCode *status) {
@@ -1202,6 +1212,7 @@ UCollator* ucol_initCollator(const UCATableHeader *image, UCollator *fillIn, UEr
     result->normalizationMode = result->image->normalizationMode;
     result->strength = result->image->strength;
     result->variableTopValue = result->image->variableTopValue;
+    result->alternateHandling = result->image->alternateHandling;
 
     result->caseFirstisDefault = TRUE;
     result->caseLevelisDefault = TRUE;
@@ -1209,6 +1220,7 @@ UCollator* ucol_initCollator(const UCATableHeader *image, UCollator *fillIn, UEr
     result->normalizationModeisDefault = TRUE;
     result->strengthisDefault = TRUE;
     result->variableTopValueisDefault = TRUE;
+    result->alternateHandlingisDefault = TRUE;
 
     uint32_t variableMaxCE = ucmp32_get(result->mapping, result->variableTopValue);
     result->variableMax1 = (variableMaxCE & 0xFF000000) >> 24;
@@ -1263,7 +1275,7 @@ void ucol_initInverseUCA(UErrorCode *status) {
   if(U_FAILURE(*status)) return;
 
   if(invUCA == NULL) {
-    InverseTableHeader *newInvUCA = (InverseTableHeader *)uprv_malloc(sizeof(InverseTableHeader ));
+    InverseTableHeader *newInvUCA = NULL; /*(InverseTableHeader *)uprv_malloc(sizeof(InverseTableHeader ));*/
     UDataMemory *result = udata_openChoice(NULL, INVC_DATA_TYPE, INVC_DATA_NAME, isAcceptableInvUCA, NULL, status);
 
     if(U_FAILURE(*status)) {
@@ -1920,7 +1932,7 @@ int32_t ucol_getSortKeySize(const UCollator *coll, collIterate *s, int32_t curre
     uint8_t compareQuad  = (strength >= UCOL_QUATERNARY)?0:0xFF;
     UBool  compareIdent = (strength == UCOL_IDENTICAL);
     UBool  doCase = (coll->caseLevel == UCOL_ON);
-    UBool  shifted = (coll->alternateHandling == UCOL_SHIFTED);
+    UBool  shifted = (coll->alternateHandling == UCOL_SHIFTED) && (compareQuad == 0);
     UBool  isFrenchSec = (coll->frenchCollation == UCOL_ON) && (compareSec == 0);
 
     uint8_t variableMax1 = coll->variableMax1;
@@ -1958,25 +1970,12 @@ int32_t ucol_getSortKeySize(const UCollator *coll, collIterate *s, int32_t curre
           notIsContinuation = !isContinuation(ce);
 
 
-          tertiary = (order & UCOL_TERTIARYORDERMASK);
+          //tertiary = (order & UCOL_TERTIARYORDERMASK);
+          tertiary = (order & 0x3f); /* this is temporary - removing case bit */         
           secondary = (order >>= 8) & 0xFF;
           primary2 = (order >>= 8) & 0xFF;;
           primary1 = order >>= 8;
 
-          if(isFlagged(ce)) { 
-#if 0
-            if(isLongPrimary(ce)) {
-              /* if we have a long primary, we'll mark secondary unmarked & add min value to tertiary */
-              primary3 = secondary;
-              secondary = UCOL_UNMARKED;
-              tertiary ^= 0x40;
-            }
-#endif /* we have decided to scrap long primaries */
-            tertiary ^= 0x80;
-          } else {
-            /* it appears tht something should be done with the case bit */
-            /* however, it is not clear when */
-          }
 
           if(shifted && ((notIsContinuation && primary1 <= variableMax1 && primary1 > 0 
             && (primary1 < variableMax1 || primary1 == variableMax1 && primary2 < variableMax2)) 
