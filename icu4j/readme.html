@@ -36,22 +36,35 @@ Reserved. </p>
 
 <h3><a NAME="introduction"></a><u>Introduction</u></h3>
 
-<p>Today's software market is a global one in which it is desirable to develop and
-maintain one application that supports a wide variety of national languages. International
-Components for Unicode for Java provides the following tools to help you write language
-independent applications: 
+<p>
+    In today's global market, it is crucial to develop and maintain programs that support a wide variety of national languages. Customers prefer software and web pages in their own languages.  Studies confirm that this leads to increased sales. Java provides a very strong foundation for global
+programs (IBM and the ICU4J team played a key role in providing such technology into Sun's standard Java version).
+    </p>
+    <p>
+    However, Java does not yet provide some features that are required in some products. The ICU4J library is an add-on to the regular JVM that provides the following tools:
+    <ul> 
+    <li> 
+    Unicode Normalization – NFC, NFD, NFKD, NFKC
+    	<blockquote>Produces canonical text representations, needed for XML and the net</blockquote>
+    <li>
+    International Calendars – Arabic, Buddhist, Hebrew, and Japanese
+              <blockquote>Required for correct presentation of dates in some countries.</blockquote>
+    <li> 
+    Number Format Enhancements – Scientific Notation, Spelled-out, etc.
+              <blockquote>Enhances the normal Java number formatting. The spell-out format is used
+for checks and similar documents.</blockquote>
 
-<ul type="disc">
-  <li>International Calendars &#150; Arabic, Buddhist, Hebrew, Japanese</li>
-  <li>Unicode Normalization &#150; Canonical text representation for W3C</li>
-  <li>Number Format Enhancements &#150; Scientific Notation, Spelled-out, ...</li>
-  <li>Enhanced word-break detection &#150; Rule-based, supports Thai</li>
-  <li>Unicode Text Searching &#150; Efficient multi-lingual searching</li>
-  <li>Unicode Text Compression &#150; 2:1 compression on English Unicode text</li>
-</ul>
+    <li>Enhanced word-break detection – Rule-based, supports Thai
+              <blockquote>Required for correct support of Thai.</blockquote>
 
-<p>Your comments are important to making this release successful.&nbsp; We are committed
-to fixing any bugs, and will also use your feedback to help plan future releases. </p>
+    <li>Unicode Text Compression – Standard compression of Unicode text
+              <blockquote>Suitable for large numbers of small fields, where LZW and similar schemes
+do not apply</blockquote>
+    </ul>
+In some cases, the above support has been rolled into a later release of
+Java. For example, the Thai word-break is now in Java 1.4. However, if you
+are using Java 1.2, you can use the ICU4J package until you upgrade to 1.4.
+</p>
 
 <h3><a name=license></a><u>License Information</u></h3>
 <p>
@@ -383,6 +396,9 @@ information on how to make applications global. </p>
 <h3><a NAME="SubmittingComments"></a><u>Submitting Comments, Requesting Features and
 Reporting Bugs</u></h3>
 
+<p>Your comments are important to making this release successful.&nbsp; We are committed
+to fixing any bugs, and will also use your feedback to help plan future releases. </p>
+
 <p>To submit comments, request features and report bugs, contact us through the <a href=http://oss.software.ibm.com/icu4j/archives/index.html>ICU4J mailing list</a>.<br>
 While we are not able to respond individually to each comment, we do review all comments. </p>
 
@@ -390,7 +406,6 @@ While we are not able to respond individually to each comment, we do review all 
 
 <p>Copyright © 2001 International Business Machines Corporation and others. All Rights
 Reserved. <br>
-IBM Center for Java Technology Silicon Valley, <br>
 10275 N De Anza Blvd., Cupertino, CA 95014 <br>
 All rights reserved. </p>
 
