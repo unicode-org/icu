@@ -11,7 +11,7 @@ ms{
         Fallback{ "en" }
     }
     Currencies {
-        MYR { "RM", "MYR" }
+        MYR { "RM", "Ringgit Malaysia" }
     }
     DayAbbreviations { 
         "Ahd",
