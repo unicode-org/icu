@@ -1204,6 +1204,7 @@ static void testCEs(UCollator *coll, UErrorCode *status) {
     }
     uprv_free(rulesCopy);
   }
+  ucol_close(UCA);
 }
 
 #if 0
