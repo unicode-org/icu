@@ -376,6 +376,25 @@ NewResourceBundleTest::TestIteration()
     delete locale;
 }
 
+// TODO: add operator== and != to ResourceBundle
+static UBool
+equalRB(ResourceBundle &a, ResourceBundle &b) {
+    UResType type;
+    UErrorCode status;
+
+    type=a.getType();
+    status=U_ZERO_ERROR;
+    return
+        type==b.getType() &&
+        a.getLocale()==b.getLocale() &&
+        0==strcmp(a.getName(), b.getName()) &&
+        type==URES_STRING ?
+            a.getString(status)==b.getString(status) :
+            type==URES_INT ?
+                a.getInt(status)==b.getInt(status) :
+                TRUE;
+}
+
 void
 NewResourceBundleTest::TestOtherAPI(){
     UErrorCode   err = U_ZERO_ERROR;
@@ -435,7 +454,19 @@ NewResourceBundleTest::TestOtherAPI(){
         errln("copy construction for subresource failed\n");
     }
 
+    ResourceBundle *p;
 
+    p = defaultresource.clone();
+    if(p == &defaultresource || !equalRB(*p, defaultresource)) {
+        errln("ResourceBundle.clone() failed");
+    }
+    delete p;
+
+    p = defaultSub.clone();
+    if(p == &defaultSub || !equalRB(*p, defaultSub)) {
+        errln("2nd ResourceBundle.clone() failed");
+    }
+    delete p;
 
     UVersionInfo ver;
     copyRes.getVersion(ver);

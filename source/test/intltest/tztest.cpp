@@ -381,6 +381,17 @@ TimeZoneTest::TestGetAvailableIDs913()
     for (i = 0; i < s_length;++i) {
         if (i > 0) *buf += ", ";
         *buf += *s->snext(ec);
+
+        if((i % 5) == 4) {
+            // replace s with a clone of itself
+            StringEnumeration *s2 = s->clone();
+            if(s2 == NULL || s_length != s2->count(ec)) {
+                errln("TimezoneEnumeration.clone() failed");
+            } else {
+                delete s;
+                s = s2;
+            }
+        }
     }
     *buf += " };";
     logln(*buf);
