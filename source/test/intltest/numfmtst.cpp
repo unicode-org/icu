@@ -376,13 +376,13 @@ NumberFormatTest::TestCurrency(void)
     if (!(s=="1,50 $")) errln((UnicodeString)"FAIL: Expected 1,50 $");
     delete currencyFmt;
     s.truncate(0);
-    currencyFmt = NumberFormat::createCurrencyInstance(Locale::GERMANY, status);
+    currencyFmt = NumberFormat::createCurrencyInstance(Locale("de_DE_PREEURO"),status);
     currencyFmt->format(1.50, s);
     logln((UnicodeString)"Un pauvre en Allemagne a.." + s);
     if (!(s=="1,50 DM")) errln((UnicodeString)"FAIL: Expected 1,50 DM");
     delete currencyFmt;
     s.truncate(0);
-    currencyFmt = NumberFormat::createCurrencyInstance(Locale::FRANCE, status);
+    currencyFmt = NumberFormat::createCurrencyInstance(Locale("fr_FR_PREEURO"), status);
     currencyFmt->format(1.50, s);
     logln((UnicodeString)"Un pauvre en France a....." + s);
     if (!(s=="1,50 F")) errln((UnicodeString)"FAIL: Expected 1,50 F");

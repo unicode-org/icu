@@ -723,14 +723,14 @@ public:
             case 1:
                 statusToCheck=                      U_INDEX_OUTOFBOUNDS_ERROR;
                 patternToCheck=                     "1:A customer in {2} is receiving a #{0} error - {1}. Their telephone call is costing {3,number,currency}."; // number,currency
-                messageLocale=                      Locale("de","DE");
+                messageLocale=                      Locale("de","DE_PREEURO");
                 countryToCheck=                     Locale("","BF");
                 currencyToCheck=                    2.32;
                 expected=                           "1:A customer in Burkina Faso is receiving a #8 error - U_INDEX_OUTOFBOUNDS_ERROR. Their telephone call is costing $2.32.";
             case 2:
                 statusToCheck=                      U_MEMORY_ALLOCATION_ERROR;
                 patternToCheck=                     "2:user in {2} is receiving a #{0} error - {1}. They insist they just spent {3,number,currency} on memory."; // number,currency
-                messageLocale=                      Locale("de","AT"); // Austrian German
+                messageLocale=                      Locale("de","AT_PREEURO"); // Austrian German
                 countryToCheck=                     Locale("","US"); // hmm
                 currencyToCheck=                    40193.12;
                 expected=                           CharsToUnicodeString("2:user in Vereinigte Staaten is receiving a #7 error - U_MEMORY_ALLOCATION_ERROR. They insist they just spent \\u00f6S 40.193,12 on memory.");
