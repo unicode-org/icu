@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/CollatorServiceShim.java,v $
-* $Date: 2003/05/14 19:03:31 $
-* $Revision: 1.4 $
+* $Date: 2003/06/04 20:24:14 $
+* $Revision: 1.5 $
 *
 *******************************************************************************
 */
@@ -36,7 +36,9 @@ final class CollatorServiceShim extends Collator.ServiceShim {
             return (Collator)((Collator)service.get(locale)).clone();
         }
         catch (CloneNotSupportedException e) {
+	    ///CLOVER:OFF
             throw new InternalError(e.getMessage());
+	    ///CLOVER:ON
         }
     }
 
@@ -83,11 +85,6 @@ final class CollatorServiceShim extends Collator.ServiceShim {
             return ICULocaleData.getAvailableLocales();
         }
         return service.getAvailableLocales();
-    }
-
-    Map getDisplayNames(Locale locale) {
-        Collator col = Collator.getInstance(locale);
-        return service.getDisplayNames(locale, col, null);
     }
 
     String getDisplayName(Locale objectLocale, Locale displayLocale) {

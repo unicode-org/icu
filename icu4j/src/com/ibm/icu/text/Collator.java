@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/Collator.java,v $
-* $Date: 2003/06/03 18:49:33 $
-* $Revision: 1.31 $
+* $Date: 2003/06/04 20:24:14 $
+* $Revision: 1.32 $
 *
 *******************************************************************************
 */
@@ -389,7 +389,6 @@ public abstract class Collator implements Comparator, Cloneable
         abstract Object registerFactory(CollatorFactory f);
         abstract boolean unregister(Object k);
         abstract Locale[] getAvailableLocales();
-        abstract Map getDisplayNames(Locale l);
         abstract String getDisplayName(Locale ol, Locale dl);
     }
     
@@ -405,8 +404,10 @@ public abstract class Collator implements Comparator, Cloneable
                 shim = (ServiceShim)cls.newInstance();
             }
             catch (Exception e) {
+		///CLOVER:OFF
                 e.printStackTrace();
                 throw new RuntimeException(e.getMessage());
+		///CLOVER:ON
             }
         }
         return shim;

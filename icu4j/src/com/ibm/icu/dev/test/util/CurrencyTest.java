@@ -47,6 +47,13 @@ public class CurrencyTest extends TestFmwk {
         if(avail==null){
             errln("FAIL: getAvailableLocales returned null");
         }
+
+	try {
+	  usd.getName(Locale.US, 5, new boolean[1]);
+	  errln("expected getName with invalid type parameter to throw exception");
+	}
+	catch (Exception e) {
+	}
     }
     
     /**
@@ -55,6 +62,17 @@ public class CurrencyTest extends TestFmwk {
     public void TestRegistration() {
         final Currency jpy = Currency.getInstance("JPY");
         final Currency usd = Currency.getInstance(Locale.US);
+
+	try {
+	  Currency.unregister(null); // should fail, coverage
+	  errln("expected unregister of null to throw exception");
+	}
+	catch (Exception e) {
+	}
+
+	if (Currency.unregister("")) { // coverage
+	  errln("unregister before register erroneously succeeded");
+	}
 
         Locale fu_FU = new Locale("fu", "FU", "");
 

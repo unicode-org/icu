@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/BreakIterator.java,v $
- * $Date: 2003/06/03 18:49:33 $
- * $Revision: 1.22 $
+ * $Date: 2003/06/04 20:24:14 $
+ * $Revision: 1.23 $
  *
  *****************************************************************************************
  */
@@ -226,7 +226,9 @@ public abstract class BreakIterator implements Cloneable
             return super.clone();
         }
         catch (CloneNotSupportedException e) {
+	    ///CLOVER:OFF
             throw new InternalError();
+	    ///CLOVER:ON
         }
     }
 
@@ -575,10 +577,20 @@ public abstract class BreakIterator implements Cloneable
         if (key == null) {
             throw new IllegalArgumentException("registry key must not be null");
         }
+	// TODO: we don't do code coverage for the following lines
+	// because in getBreakInstance we always instantiate the shim,
+	// and test execution is such that we always instantiate a
+	// breakiterator before we get to the break iterator tests.
+	// this is for modularization, and we could remove the
+	// dependencies in getBreakInstance by rewriting part of the
+	// LocaleData code, or perhaps by accepting it into the
+	// module.
+	///CLOVER:OFF
         if (shim != null) {
             return shim.unregister(key);
         }
         return false;
+	///CLOVER:ON
     }
 
     // end of registration
@@ -653,8 +665,10 @@ public abstract class BreakIterator implements Cloneable
                 shim = (BreakIteratorServiceShim)cls.newInstance();
             }
             catch (Exception e) {
+		///CLOVER:OFF
                 e.printStackTrace();
                 throw new RuntimeException(e.getMessage());
+		///CLOVER:ON
             }
         }
         return shim;

@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/BreakIteratorFactory.java,v $ 
- * $Date: 2003/06/03 18:49:33 $ 
- * $Revision: 1.5 $
+ * $Date: 2003/06/04 20:24:14 $ 
+ * $Revision: 1.6 $
  *
  *****************************************************************************************
  */
@@ -112,11 +112,19 @@ final class BreakIteratorFactory extends BreakIterator.BreakIteratorServiceShim 
             }
             catch(MissingResourceException e) {
             }
+	    // TODO: we don't have 'bad' resource data, so this should never happen
+	    // in our current tests.
+	    ///CLOVER:OFF
             return new RuleBasedBreakIterator(rules);
+	    ///CLOVER:ON
         }
         else {
+	    // TODO: we don't have 'bad' resource data, so this should never happen 
+	    // in our current tests.
+	    ///CLOVER:OFF
             throw new IllegalArgumentException("Invalid break iterator class \"" +
                             classNames[kind] + "\"");
+	    ///CLOVER:ON
         }
     }
 }
