@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 1999-2001, International Business Machines
+*   Copyright (C) 1999-2002, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 */
@@ -8,6 +8,10 @@
 #include "unicode/chariter.h"
 
 U_NAMESPACE_BEGIN
+
+CharacterIterator::CharacterIterator()
+: textLength(0), pos(0), begin(0), end(0) {
+}
 
 CharacterIterator::CharacterIterator(int32_t length)
 : textLength(length), pos(0), begin(0), end(length) {
