@@ -527,7 +527,7 @@ DecimalFormat::format(  double number,
         if (fieldPosition.getField() == NumberFormat::kIntegerField)
             fieldPosition.setEndIndex(result.length());
 
-        addPadding(result, FALSE, FALSE /*ignored*/);
+        addPadding(result, fieldPosition, FALSE, FALSE /*ignored*/);
         return result;
     }
 
@@ -576,7 +576,7 @@ DecimalFormat::format(  double number,
 
         result += (isNegative ? fNegativeSuffix : fPositiveSuffix);
 
-        addPadding(result, TRUE, isNegative);
+        addPadding(result, fieldPosition, TRUE, isNegative);
         return result;
     }
 
@@ -922,7 +922,7 @@ DecimalFormat::subformat(UnicodeString& result,
 
     result += (digits.fIsPositive ? fPositiveSuffix : fNegativeSuffix);
 
-    addPadding(result, TRUE, !digits.fIsPositive);
+    addPadding(result, fieldPosition, TRUE, !digits.fIsPositive);
     return result;
 }
 
@@ -936,8 +936,11 @@ DecimalFormat::subformat(UnicodeString& result,
  * @param isNegative must be true if result contains a formatted negative
  * number, and false otherwise.  Ignored if hasAffixes is false.
  */
-void DecimalFormat::addPadding(UnicodeString& result, UBool hasAffixes,
-                               UBool isNegative) const {
+void DecimalFormat::addPadding(UnicodeString& result,
+                               FieldPosition& fieldPosition,
+                               UBool hasAffixes,
+                               UBool isNegative) const
+{
     if (fFormatWidth > 0) {
         int32_t len = fFormatWidth - result.length();
         if (len > 0) {
@@ -969,6 +972,8 @@ void DecimalFormat::addPadding(UnicodeString& result, UBool hasAffixes,
                 break;
             }
             delete []padding;
+            fieldPosition.setBeginIndex(len + fieldPosition.getBeginIndex());
+            fieldPosition.setEndIndex(len + fieldPosition.getEndIndex());
         }
     }
 }
