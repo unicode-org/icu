@@ -318,7 +318,7 @@ public final class ULocale implements Serializable {
         "mus", "mwr", "my",  "myn", "myv", "na",  "nah", "nai", "nap",
         "nb",  "nd",  "nds", "ne",  "new", "ng",  "nia", "nic",
         "niu", "nl",  "nn",  "no",  "nog", "non", "nr",  "nso", "nub",
-        "nv",  "ny",  "nym", "nyn", "nyo", "nzi", "oc",  "oj",
+        "nv",  "nwc", "ny",  "nym", "nyn", "nyo", "nzi", "oc",  "oj",
         "om",  "or",  "os",  "osa", "ota", "oto", "pa",  "paa",
         "pag", "pal", "pam", "pap", "pau", "peo", "phi", "phn",
         "pi",  "pl",  "pon", "pra", "pro", "ps",  "pt",  "qu",
@@ -331,7 +331,7 @@ public final class ULocale implements Serializable {
         "srr", "ss",  "ssa", "st",  "su",  "suk", "sus", "sux",
         "sv",  "sw",  "syr", "ta",  "tai", "te",  "tem", "ter",
         "tet", "tg",  "th",  "ti",  "tig", "tiv", "tk",  "tkl",
-        "tl",  "tli", "tmh", "tn",  "to",  "tog", "tpi", "tr",
+        "tl",  "tlh", "tli", "tmh", "tn",  "to",  "tog", "tpi", "tr",
         "ts",  "tsi", "tt",  "tum", "tup", "tut", "tvl", "tw",
         "ty",  "tyv", "udm", "ug",  "uga", "uk",  "umb", "und", "ur",
         "uz",  "vai", "ve",  "vi",  "vo",  "vot", "wa",  "wak",
@@ -352,119 +352,119 @@ public final class ULocale implements Serializable {
            list above, and they MUST ne in the same order (i.e., the same language must
            be in the same place in both lists)! */
         String[] tempLanguages3 = {
-        /*  "aa",  "ab",  "ace", "ach", "ada", "ady", "ae",  "af",  "afa",    */
+        /*"aa",  "ab",  "ace", "ach", "ada", "ady", "ae",  "af",  "afa",    */
         "aar", "abk", "ace", "ach", "ada", "ady", "ave", "afr", "afa",
-        /*  "afh", "ak",  "akk", "ale", "alg", "am",  "an",  "ang", "apa",    */
+        /*"afh", "ak",  "akk", "ale", "alg", "am",  "an",  "ang", "apa",    */
         "afh", "aka", "akk", "ale", "alg", "amh", "arg", "ang", "apa",
-        /*  "ar",  "arc", "arn", "arp", "art", "arw", "as",  "ast",    */
+        /*"ar",  "arc", "arn", "arp", "art", "arw", "as",  "ast",    */
         "ara", "arc", "arn", "arp", "art", "arw", "asm", "ast",
-        /*  "ath", "aus", "av",  "awa", "ay",  "az",  "ba",  "bad",    */
+        /*"ath", "aus", "av",  "awa", "ay",  "az",  "ba",  "bad",    */
         "ath", "aus", "ava", "awa", "aym", "aze", "bak", "bad",
-        /*  "bai", "bal", "bam", "ban", "bas", "bat", "be",  "bej",    */
+        /*"bai", "bal", "bam", "ban", "bas", "bat", "be",  "bej",    */
         "bai", "bal", "bam", "ban", "bas", "bat", "bel", "bej",
-        /*  "bem", "ber", "bg",  "bh",  "bho", "bi",  "bik", "bin",    */
+        /*"bem", "ber", "bg",  "bh",  "bho", "bi",  "bik", "bin",    */
         "bem", "ber", "bul", "bih", "bho", "bis", "bik", "bin",
-        /*  "bla", "bm",  "bn",  "bnt", "bo",  "br",  "bra", "bs",     */
+        /*"bla", "bm",  "bn",  "bnt", "bo",  "br",  "bra", "bs",     */
         "bla", "bm",  "ben", "bnt", "bod", "bre", "bra", "bos",
-        /*  "btk", "bua", "bug", "byn", "ca",  "cad", "cai", "car", "cau",    */
+        /*"btk", "bua", "bug", "byn", "ca",  "cad", "cai", "car", "cau",    */
         "btk", "bua", "bug", "byn", "cat", "cad", "cai", "car", "cau",
-        /*  "ce",  "ceb", "cel", "ch",  "chb", "chg", "chk", "chm",    */
+        /*"ce",  "ceb", "cel", "ch",  "chb", "chg", "chk", "chm",    */
         "che", "ceb", "cel", "cha", "chb", "chg", "chk", "chm",
-        /*  "chn", "cho", "chp", "chr", "chy", "cmc", "co",  "cop",    */
+        /*"chn", "cho", "chp", "chr", "chy", "cmc", "co",  "cop",    */
         "chn", "cho", "chp", "chr", "chy", "cmc", "cos", "cop",
-        /*  "cpe", "cpf", "cpp", "cr",  "crh", "crp", "cs",  "csb", "cu",  "cus",    */
+        /*"cpe", "cpf", "cpp", "cr",  "crh", "crp", "cs",  "csb", "cu",  "cus",    */
         "cpe", "cpf", "cpp", "cre", "crh", "crp", "ces", "csb", "chu", "cus",
-        /*  "cv",  "cy",  "da",  "dak", "dar", "day", "de",  "del", "den",    */
+        /*"cv",  "cy",  "da",  "dak", "dar", "day", "de",  "del", "den",    */
         "chv", "cym", "dan", "dak", "dar", "day", "deu", "del", "den",
-        /*  "dgr", "din", "doi", "dra", "dsb", "dua", "dum", "dv",  "dyu",    */
+        /*"dgr", "din", "doi", "dra", "dsb", "dua", "dum", "dv",  "dyu",    */
         "dgr", "din", "doi", "dra", "dsb", "dua", "dum", "div", "dyu",
-        /*  "dz",  "ee",  "efi", "egy", "eka", "el",  "elx", "en",     */
+        /*"dz",  "ee",  "efi", "egy", "eka", "el",  "elx", "en",     */
         "dzo", "ewe", "efi", "egy", "eka", "ell", "elx", "eng",
-        /*  "enm", "eo",  "es",  "et",  "eu",  "ewo", "fa",     */
+        /*"enm", "eo",  "es",  "et",  "eu",  "ewo", "fa",     */
         "enm", "epo", "spa", "est", "eus", "ewo", "fas",
-        /*  "fan", "fat", "ff",  "fi",  "fiu", "fj",  "fo",  "fon",    */
+        /*"fan", "fat", "ff",  "fi",  "fiu", "fj",  "fo",  "fon",    */
         "fan", "fat", "ful", "fin", "fiu", "fij", "fao", "fon",
-        /*  "fr",  "frm", "fro", "fur", "fy",  "ga",  "gaa", "gay",    */
+        /*"fr",  "frm", "fro", "fur", "fy",  "ga",  "gaa", "gay",    */
         "fra", "frm", "fro", "fur", "fry", "gle", "gaa", "gay",
-        /*  "gba", "gd",  "gem", "gez", "gil", "gl",  "gmh", "gn",     */
+        /*"gba", "gd",  "gem", "gez", "gil", "gl",  "gmh", "gn",     */
         "gba", "gla", "gem", "gez", "gil", "glg", "gmh", "grn",
-        /*  "goh", "gon", "gor", "got", "grb", "grc", "gu",  "gv",     */
+        /*"goh", "gon", "gor", "got", "grb", "grc", "gu",  "gv",     */
         "goh", "gon", "gor", "got", "grb", "grc", "guj", "glv",
-        /*  "gwi", "ha",  "hai", "haw", "he",  "hi",  "hil", "him",    */
+        /*"gwi", "ha",  "hai", "haw", "he",  "hi",  "hil", "him",    */
         "gwi", "hau", "hai", "haw", "heb", "hin", "hil", "him",
-        /*  "hit", "hmn", "ho",  "hr",  "hsb", "ht",  "hu",  "hup", "hy",  "hz",     */
+        /*"hit", "hmn", "ho",  "hr",  "hsb", "ht",  "hu",  "hup", "hy",  "hz",     */
         "hit", "hmn", "hmo", "hrv", "hsb", "hat", "hun", "hup", "hye", "her",
-        /*  "ia",  "iba", "id",  "ie",  "ig",  "ii",  "ijo", "ik",     */
+        /*"ia",  "iba", "id",  "ie",  "ig",  "ii",  "ijo", "ik",     */
         "ina", "iba", "ind", "ile", "ibo", "iii", "ijo", "ipk",
-        /*  "ilo", "inc", "ine", "inh", "io",  "ira", "iro", "is",  "it",      */
+        /*"ilo", "inc", "ine", "inh", "io",  "ira", "iro", "is",  "it",      */
         "ilo", "inc", "ine", "inh", "ido", "ira", "iro", "isl", "ita",
-        /*  "iu",  "ja",  "jbo", "jpr", "jrb", "jv",  "ka",  "kaa", "kab",   */
+        /*"iu",  "ja",  "jbo", "jpr", "jrb", "jv",  "ka",  "kaa", "kab",   */
         "iku", "jpn", "jbo", "jpr", "jrb", "jaw", "kat", "kaa", "kab",
-        /*  "kac", "kam", "kar", "kaw", "kbd", "kg",  "kha", "khi",    */
+        /*"kac", "kam", "kar", "kaw", "kbd", "kg",  "kha", "khi",    */
         "kac", "kam", "kar", "kaw", "kbd", "kon", "kha", "khi",
-        /*  "kho", "ki",  "kj",  "kk",  "kl",  "km",  "kmb", "kn",     */
+        /*"kho", "ki",  "kj",  "kk",  "kl",  "km",  "kmb", "kn",     */
         "kho", "kik", "kua", "kaz", "kal", "khm", "kmb", "kan",
-        /*  "ko",  "kok", "kos", "kpe", "kr",  "krc", "kro", "kru", "ks",     */
+        /*"ko",  "kok", "kos", "kpe", "kr",  "krc", "kro", "kru", "ks",     */
         "kor", "kok", "kos", "kpe", "kau", "krc", "kro", "kru", "kas",
-        /*  "ku",  "kum", "kut", "kv",  "kw",  "ky",  "la",  "lad",    */
+        /*"ku",  "kum", "kut", "kv",  "kw",  "ky",  "la",  "lad",    */
         "kur", "kum", "kut", "kom", "cor", "kir", "lat", "lad",
-        /*  "lah", "lam", "lb",  "lez", "lg",  "li",  "ln",  "lo",  "lol",    */
+        /*"lah", "lam", "lb",  "lez", "lg",  "li",  "ln",  "lo",  "lol",    */
         "lah", "lam", "ltz", "lez", "lug", "lim", "lin", "lao", "lol",
-        /*  "loz", "lt",  "lu",  "lua", "lui", "lun", "luo", "lus",    */
+        /*"loz", "lt",  "lu",  "lua", "lui", "lun", "luo", "lus",    */
         "loz", "lit", "lub", "lua", "lui", "lun", "luo", "lus",
-        /*  "lv",  "mad", "mag", "mai", "mak", "man", "map", "mas",    */
+        /*"lv",  "mad", "mag", "mai", "mak", "man", "map", "mas",    */
         "lav", "mad", "mag", "mai", "mak", "man", "map", "mas",
-        /*  "mdf", "mdr", "men", "mg",  "mga", "mh",  "mi",  "mic", "min",    */
+        /*"mdf", "mdr", "men", "mg",  "mga", "mh",  "mi",  "mic", "min",    */
         "mdf", "mdr", "men", "mlg", "mga", "mah", "mri", "mic", "min",
-        /*  "mis", "mk",  "mkh", "ml",  "mn",  "mnc", "mni", "mno",    */
+        /*"mis", "mk",  "mkh", "ml",  "mn",  "mnc", "mni", "mno",    */
         "mis", "mkd", "mkh", "mal", "mon", "mnc", "mni", "mno",
-        /*  "mo",  "moh", "mos", "mr",  "ms",  "mt",  "mul", "mun",    */
+        /*"mo",  "moh", "mos", "mr",  "ms",  "mt",  "mul", "mun",    */
         "mol", "moh", "mos", "mar", "msa", "mlt", "mul", "mun",
-        /*  "mus", "mwr", "my",  "myn", "myv", "na",  "nah", "nai", "nap",    */
+        /*"mus", "mwr", "my",  "myn", "myv", "na",  "nah", "nai", "nap",    */
         "mus", "mwr", "mya", "myn", "myv", "nau", "nah", "nai", "nap",
-        /*  "nb",  "nd",  "nds", "ne",  "new", "ng",  "nia", "nic",    */
+        /*"nb",  "nd",  "nds", "ne",  "new", "ng",  "nia", "nic",    */
         "nob", "nde", "nds", "nep", "new", "ndo", "nia", "nic",
-        /*  "niu", "nl",  "nn",  "no",  "nog", "non", "nr",  "nso", "nub",    */
+        /*"niu", "nl",  "nn",  "no",  "nog", "non", "nr",  "nso", "nub",    */
         "niu", "nld", "nno", "nor", "nog", "non", "nbl", "nso", "nub",
-        /*  "nv",  "ny",  "nym", "nyn", "nyo", "nzi", "oc",  "oj",     */
-        "nav", "nya", "nym", "nyn", "nyo", "nzi", "oci", "oji",
-        /*  "om",  "or",  "os",  "osa", "ota", "oto", "pa",  "paa",    */
+        /*"nv",  "nwc", "ny",  "nym", "nyn", "nyo", "nzi", "oc",  "oj",     */
+        "nav", "nwc", "nya", "nym", "nyn", "nyo", "nzi", "oci", "oji",
+        /*"om",  "or",  "os",  "osa", "ota", "oto", "pa",  "paa",    */
         "orm", "ori", "oss", "osa", "ota", "oto", "pan", "paa",
-        /*  "pag", "pal", "pam", "pap", "pau", "peo", "phi", "phn",    */
+        /*"pag", "pal", "pam", "pap", "pau", "peo", "phi", "phn",    */
         "pag", "pal", "pam", "pap", "pau", "peo", "phi", "phn",
-        /*  "pi",  "pl",  "pon", "pra", "pro", "ps",  "pt",  "qu",     */
+        /*"pi",  "pl",  "pon", "pra", "pro", "ps",  "pt",  "qu",     */
         "pli", "pol", "pon", "pra", "pro", "pus", "por", "que",
-        /*  "raj", "rap", "rar", "rm",  "rn",  "ro",  "roa", "rom",    */
+        /*"raj", "rap", "rar", "rm",  "rn",  "ro",  "roa", "rom",    */
         "raj", "rap", "rar", "roh", "run", "ron", "roa", "rom",
-        /*  "ru",  "rw",  "sa",  "sad", "sah", "sai", "sal", "sam",    */
+        /*"ru",  "rw",  "sa",  "sad", "sah", "sai", "sal", "sam",    */
         "rus", "kin", "san", "sad", "sah", "sai", "sal", "sam",
-        /*  "sas", "sat", "sc",  "sco", "sd",  "se",  "sel", "sem",    */
+        /*"sas", "sat", "sc",  "sco", "sd",  "se",  "sel", "sem",    */
         "sas", "sat", "srd", "sco", "snd", "sme", "sel", "sem",
-        /*  "sg",  "sga", "sgn", "shn", "si",  "sid", "sio", "sit",    */
+        /*"sg",  "sga", "sgn", "shn", "si",  "sid", "sio", "sit",    */
         "sag", "sga", "sgn", "shn", "sin", "sid", "sio", "sit",
-        /*  "sk",  "sl",  "sla", "sm",  "sma", "smi", "smj", "smn",    */
+        /*"sk",  "sl",  "sla", "sm",  "sma", "smi", "smj", "smn",    */
         "slk", "slv", "sla", "smo", "sma", "smi", "smj", "smn",
-        /*  "sms", "sn",  "snk", "so",  "sog", "son", "sq",  "sr",     */
+        /*"sms", "sn",  "snk", "so",  "sog", "son", "sq",  "sr",     */
         "sms", "sna", "snk", "som", "sog", "son", "sqi", "srp",
-        /*  "srr", "ss",  "ssa", "st",  "su",  "suk", "sus", "sux",    */
+        /*"srr", "ss",  "ssa", "st",  "su",  "suk", "sus", "sux",    */
         "srr", "ssw", "ssa", "sot", "sun", "suk", "sus", "sux",
-        /*  "sv",  "sw",  "syr", "ta",  "tai", "te",  "tem", "ter",    */
+        /*"sv",  "sw",  "syr", "ta",  "tai", "te",  "tem", "ter",    */
         "swe", "swa", "syr", "tam", "tai", "tel", "tem", "ter",
-        /*  "tet", "tg",  "th",  "ti",  "tig", "tiv", "tk",  "tkl",    */
+        /*"tet", "tg",  "th",  "ti",  "tig", "tiv", "tk",  "tkl",    */
         "tet", "tgk", "tha", "tir", "tig", "tiv", "tuk", "tkl",
-        /*  "tl",  "tli", "tmh", "tn",  "to",  "tog", "tpi", "tr",     */
-        "tgl", "tli", "tmh", "tsn", "ton", "tog", "tpi", "tur",
-        /*  "ts",  "tsi", "tt",  "tum", "tup", "tut", "tvl", "tw",     */
+        /*"tl",  "tlh", "tli", "tmh", "tn",  "to",  "tog", "tpi", "tr",     */
+        "tgl", "tlh", "tli", "tmh", "tsn", "ton", "tog", "tpi", "tur",
+        /*"ts",  "tsi", "tt",  "tum", "tup", "tut", "tvl", "tw",     */
         "tso", "tsi", "tat", "tum", "tup", "tut", "tvl", "twi",
-        /*  "ty",  "tyv", "udm", "ug",  "uga", "uk",  "umb", "und", "ur",     */
+        /*"ty",  "tyv", "udm", "ug",  "uga", "uk",  "umb", "und", "ur",     */
         "tah", "tyv", "udm", "uig", "uga", "ukr", "umb", "und", "urd",
-        /*  "uz",  "vai", "ve",  "vi",  "vo",  "vot", "wa",  "wak",    */
+        /*"uz",  "vai", "ve",  "vi",  "vo",  "vot", "wa",  "wak",    */
         "uzb", "vai", "ven", "vie", "vol", "vot", "wln", "wak",
-        /*  "wal", "war", "was", "wen", "wo",  "xal", "xh",  "yao", "yap",    */
+        /*"wal", "war", "was", "wen", "wo",  "xal", "xh",  "yao", "yap",    */
         "wal", "war", "was", "wen", "wol", "xal", "xho", "yao", "yap",
-        /*  "yi",  "yo",  "ypk", "za",  "zap", "zen", "zh",  "znd",    */
+        /*"yi",  "yo",  "ypk", "za",  "zap", "zen", "zh",  "znd",    */
         "yid", "yor", "ypk", "zha", "zap", "zen", "zho", "znd",
-        /*  "zu",  "zun",                                              */
+        /*"zu",  "zun",                                              */
         "zul", "zun",  
         };
     
@@ -543,70 +543,70 @@ public final class ULocale implements Serializable {
         /* This list MUST contain a three-letter code for every two-letter code in
            the above list, and they MUST be listed in the same order! */
         String[] tempCountries3 = {
-        /*  "AD",  "AE",  "AF",  "AG",  "AI",  "AL",  "AM",  "AN",     */
+        /*"AD",  "AE",  "AF",  "AG",  "AI",  "AL",  "AM",  "AN",     */
         "AND", "ARE", "AFG", "ATG", "AIA", "ALB", "ARM", "ANT",
-        /*  "AO",  "AQ",  "AR",  "AS",  "AT",  "AU",  "AW",  "AZ",     */
+        /*"AO",  "AQ",  "AR",  "AS",  "AT",  "AU",  "AW",  "AZ",     */
         "AGO", "ATA", "ARG", "ASM", "AUT", "AUS", "ABW", "AZE",
-        /*  "BA",  "BB",  "BD",  "BE",  "BF",  "BG",  "BH",  "BI",     */
+        /*"BA",  "BB",  "BD",  "BE",  "BF",  "BG",  "BH",  "BI",     */
         "BIH", "BRB", "BGD", "BEL", "BFA", "BGR", "BHR", "BDI",
-        /*  "BJ",  "BM",  "BN",  "BO",  "BR",  "BS",  "BT",  "BV",     */
+        /*"BJ",  "BM",  "BN",  "BO",  "BR",  "BS",  "BT",  "BV",     */
         "BEN", "BMU", "BRN", "BOL", "BRA", "BHS", "BTN", "BVT",
-        /*  "BW",  "BY",  "BZ",  "CA",  "CC",  "CD",  "CF",  "CG",     */
+        /*"BW",  "BY",  "BZ",  "CA",  "CC",  "CD",  "CF",  "CG",     */
         "BWA", "BLR", "BLZ", "CAN", "CCK", "COD", "CAF", "COG",
-        /*  "CH",  "CI",  "CK",  "CL",  "CM",  "CN",  "CO",  "CR",     */
+        /*"CH",  "CI",  "CK",  "CL",  "CM",  "CN",  "CO",  "CR",     */
         "CHE", "CIV", "COK", "CHL", "CMR", "CHN", "COL", "CRI",
-        /*  "CU",  "CV",  "CX",  "CY",  "CZ",  "DE",  "DJ",  "DK",     */
+        /*"CU",  "CV",  "CX",  "CY",  "CZ",  "DE",  "DJ",  "DK",     */
         "CUB", "CPV", "CXR", "CYP", "CZE", "DEU", "DJI", "DNK",
-        /*  "DM",  "DO",  "DZ",  "EC",  "EE",  "EG",  "EH",  "ER",     */
+        /*"DM",  "DO",  "DZ",  "EC",  "EE",  "EG",  "EH",  "ER",     */
         "DMA", "DOM", "DZA", "ECU", "EST", "EGY", "ESH", "ERI",
-        /*  "ES",  "ET",  "FI",  "FJ",  "FK",  "FM",  "FO",  "FR",     */
+        /*"ES",  "ET",  "FI",  "FJ",  "FK",  "FM",  "FO",  "FR",     */
         "ESP", "ETH", "FIN", "FJI", "FLK", "FSM", "FRO", "FRA",
-        /*  "GA",  "GB",  "GD",  "GE",  "GF",  "GH",  "GI",  "GL",     */
+        /*"GA",  "GB",  "GD",  "GE",  "GF",  "GH",  "GI",  "GL",     */
         "GAB", "GBR", "GRD", "GEO", "GUF", "GHA", "GIB", "GRL",
-        /*  "GM",  "GN",  "GP",  "GQ",  "GR",  "GS",  "GT",  "GU",     */
+        /*"GM",  "GN",  "GP",  "GQ",  "GR",  "GS",  "GT",  "GU",     */
         "GMB", "GIN", "GLP", "GNQ", "GRC", "SGS", "GTM", "GUM",
-        /*  "GW",  "GY",  "HK",  "HM",  "HN",  "HR",  "HT",  "HU",     */
+        /*"GW",  "GY",  "HK",  "HM",  "HN",  "HR",  "HT",  "HU",     */
         "GNB", "GUY", "HKG", "HMD", "HND", "HRV", "HTI", "HUN",
-        /*  "ID",  "IE",  "IL",  "IN",  "IO",  "IQ",  "IR",  "IS",     */
+        /*"ID",  "IE",  "IL",  "IN",  "IO",  "IQ",  "IR",  "IS",     */
         "IDN", "IRL", "ISR", "IND", "IOT", "IRQ", "IRN", "ISL",
-        /*  "IT",  "JM",  "JO",  "JP",  "KE",  "KG",  "KH",  "KI",     */
+        /*"IT",  "JM",  "JO",  "JP",  "KE",  "KG",  "KH",  "KI",     */
         "ITA", "JAM", "JOR", "JPN", "KEN", "KGZ", "KHM", "KIR",
-        /*  "KM",  "KN",  "KP",  "KR",  "KW",  "KY",  "KZ",  "LA",     */
+        /*"KM",  "KN",  "KP",  "KR",  "KW",  "KY",  "KZ",  "LA",     */
         "COM", "KNA", "PRK", "KOR", "KWT", "CYM", "KAZ", "LAO",
-        /*  "LB",  "LC",  "LI",  "LK",  "LR",  "LS",  "LT",  "LU",     */
+        /*"LB",  "LC",  "LI",  "LK",  "LR",  "LS",  "LT",  "LU",     */
         "LBN", "LCA", "LIE", "LKA", "LBR", "LSO", "LTU", "LUX",
-        /*  "LV",  "LY",  "MA",  "MC",  "MD",  "MG",  "MH",  "MK",     */
+        /*"LV",  "LY",  "MA",  "MC",  "MD",  "MG",  "MH",  "MK",     */
         "LVA", "LBY", "MAR", "MCO", "MDA", "MDG", "MHL", "MKD",
-        /*  "ML",  "MM",  "MN",  "MO",  "MP",  "MQ",  "MR",  "MS",     */
+        /*"ML",  "MM",  "MN",  "MO",  "MP",  "MQ",  "MR",  "MS",     */
         "MLI", "MMR", "MNG", "MAC", "MNP", "MTQ", "MRT", "MSR",
-        /*  "MT",  "MU",  "MV",  "MW",  "MX",  "MY",  "MZ",  "NA",     */
+        /*"MT",  "MU",  "MV",  "MW",  "MX",  "MY",  "MZ",  "NA",     */
         "MLT", "MUS", "MDV", "MWI", "MEX", "MYS", "MOZ", "NAM",
-        /*  "NC",  "NE",  "NF",  "NG",  "NI",  "NL",  "NO",  "NP",     */
+        /*"NC",  "NE",  "NF",  "NG",  "NI",  "NL",  "NO",  "NP",     */
         "NCL", "NER", "NFK", "NGA", "NIC", "NLD", "NOR", "NPL",
-        /*  "NR",  "NU",  "NZ",  "OM",  "PA",  "PE",  "PF",  "PG",     */
+        /*"NR",  "NU",  "NZ",  "OM",  "PA",  "PE",  "PF",  "PG",     */
         "NRU", "NIU", "NZL", "OMN", "PAN", "PER", "PYF", "PNG",
-        /*  "PH",  "PK",  "PL",  "PM",  "PN",  "PR",  "PS",  "PT",     */
+        /*"PH",  "PK",  "PL",  "PM",  "PN",  "PR",  "PS",  "PT",     */
         "PHL", "PAK", "POL", "SPM", "PCN", "PRI", "PSE", "PRT",
-        /*  "PW",  "PY",  "QA",  "RE",  "RO",  "RU",  "RW",  "SA",     */
+        /*"PW",  "PY",  "QA",  "RE",  "RO",  "RU",  "RW",  "SA",     */
         "PLW", "PRY", "QAT", "REU", "ROU", "RUS", "RWA", "SAU",
-        /*  "SB",  "SC",  "SD",  "SE",  "SG",  "SH",  "SI",  "SJ",     */
+        /*"SB",  "SC",  "SD",  "SE",  "SG",  "SH",  "SI",  "SJ",     */
         "SLB", "SYC", "SDN", "SWE", "SGP", "SHN", "SVN", "SJM",
-        /*  "SK",  "SL",  "SM",  "SN",  "SO",  "SR",  "ST",  "SV",     */
+        /*"SK",  "SL",  "SM",  "SN",  "SO",  "SR",  "ST",  "SV",     */
         "SVK", "SLE", "SMR", "SEN", "SOM", "SUR", "STP", "SLV",
-        /*  "SY",  "SZ",  "TC",  "TD",  "TF",  "TG",  "TH",  "TJ",     */
+        /*"SY",  "SZ",  "TC",  "TD",  "TF",  "TG",  "TH",  "TJ",     */
         "SYR", "SWZ", "TCA", "TCD", "ATF", "TGO", "THA", "TJK",
-        /*  "TK",  "TL",  "TM",  "TN",  "TO",  "TR",  "TT",  "TV",     */
+        /*"TK",  "TL",  "TM",  "TN",  "TO",  "TR",  "TT",  "TV",     */
         "TKL", "TLS", "TKM", "TUN", "TON", "TUR", "TTO", "TUV",
-        /*  "TW",  "TZ",  "UA",  "UG",  "UM",  "US",  "UY",  "UZ",     */
+        /*"TW",  "TZ",  "UA",  "UG",  "UM",  "US",  "UY",  "UZ",     */
         "TWN", "TZA", "UKR", "UGA", "UMI", "USA", "URY", "UZB",
-        /*  "VA",  "VC",  "VE",  "VG",  "VI",  "VN",  "VU",  "WF",     */
+        /*"VA",  "VC",  "VE",  "VG",  "VI",  "VN",  "VU",  "WF",     */
         "VAT", "VCT", "VEN", "VGB", "VIR", "VNM", "VUT", "WLF",
-        /*  "WS",  "YE",  "YT",  "YU",  "ZA",  "ZM",  "ZW",            */
+        /*"WS",  "YE",  "YT",  "YU",  "ZA",  "ZM",  "ZW",            */
         "WSM", "YEM", "MYT", "YUG", "ZAF", "ZMB", "ZWE",
         };
     
         String[] tempObsoleteCountries3 = {
-        /*  "FX",  "RO",  "TP",  "ZR",   */
+        /*"FX",  "RO",  "TP",  "ZR",   */
         "FXX", "ROM", "TMP", "ZAR",    
         };
 
