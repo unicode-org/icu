@@ -654,7 +654,7 @@ uprv_tzset()
 int32_t 
 uprv_timezone()
 {
-#ifdef POSIX
+#if defined(POSIX) && !defined(RHAPSODY)
 #ifdef OS390
   return _timezone;
 #else
@@ -689,11 +689,11 @@ uprv_timezone()
 char* 
 uprv_tzname(int n)
 {
-#ifdef POSIX
+#if defined(POSIX) && !defined(RHAPSODY)
   return tzname[n];
 #endif
 
-#if defined(OS400) || defined(XP_MAC)
+#if defined(OS400) || defined(XP_MAC) || defined(RHAPSODY)
   return "";
 #endif
 
