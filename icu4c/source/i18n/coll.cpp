@@ -35,6 +35,7 @@
 //  6/20/97     helena      Java class name change.
 // 04/23/99     stephen     Removed EDecompositionMode, merged with 
 //                          Normalizer::EMode
+// 11/23/9      srl         Inlining of some critical functions
 //=============================================================================
 
 #include "colcache.h"
@@ -140,11 +141,6 @@ Collator::greater(const UnicodeString& source,
   return (compare(source, target) == Collator::GREATER);
 }
 
-Collator::ECollationStrength 
-Collator::getStrength() const
-{
-  return strength;
-}
 
 void 
 Collator::setStrength(Collator::ECollationStrength newStrength)
@@ -152,11 +148,6 @@ Collator::setStrength(Collator::ECollationStrength newStrength)
   strength = newStrength;
 }
 
-Normalizer::EMode
-Collator::getDecomposition() const
-{
-  return decmp;
-}
 void 
 Collator::setDecomposition(Normalizer::EMode decompositionMode)
 {

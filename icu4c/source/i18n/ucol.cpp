@@ -138,11 +138,7 @@ ucol_strcoll(    const    UCollator    *coll,
         const    UChar        *target,
         int32_t            targetLength)
 {
-  int32_t srcLen = (sourceLength == -1 ? u_strlen(source) : sourceLength);
-  const UnicodeString tempSource((UChar*)source, sourceLength, sourceLength);
-  int32_t targLen = (targetLength == -1 ? u_strlen(target) : targetLength);
-  const UnicodeString tempTarget((UChar*)target, targLen, targLen);
-  return (UCollationResult) ((Collator*)coll)->compare(tempSource, tempTarget);
+  return (UCollationResult) ((Collator*)coll)->compare(source,sourceLength,target,targetLength);
 }
 
 U_CAPI bool_t
@@ -290,12 +286,12 @@ ucol_getSortKey(const    UCollator    *coll,
   const uint8_t*     bytes = NULL;
   CollationKey         key;
   int32_t         copyLen;
-  int32_t         len = (sourceLength == -1 ? u_strlen(source) 
+    int32_t         len = (sourceLength == -1 ? u_strlen(source) 
                    : sourceLength);
-  UnicodeString     string((UChar*)source, len, len);
+  //  UnicodeString     string((UChar*)source, len, len);
   UErrorCode         status = U_ZERO_ERROR;
 
-  ((Collator*)coll)->getCollationKey(string, key, status);
+  ((Collator*)coll)->getCollationKey(source, len, key, status);
   if(U_FAILURE(status)) 
     return 0;
 
