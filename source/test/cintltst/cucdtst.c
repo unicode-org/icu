@@ -1052,6 +1052,10 @@ static void TestStringFunctions()
         if (findPtr == NULL || *findPtr != 0x005F) {
             log_err("u_memchr32 can't find '_' in the string\n");
         }
+        findPtr = u_memchr32(dataTable[i][j], 0xFFFD, dataSize);
+        if (findPtr != NULL) {
+            log_err("Should have found NULL when the character is not there.\n");
+        }
         dataTable[i][j][0] = saveVal;   /* Put it back for the other tests */
     }
 
@@ -1062,7 +1066,7 @@ static void TestStringFunctions()
      * Jitterbug 1542
      */
     {
-        UChar s[]={
+        static const UChar s[]={
             /*   0       1       2       3       4       5       6       7       8  9 */
             0x0061, 0xd841, 0xdc02, 0xd841, 0x0062, 0xdc02, 0xd841, 0xdc02, 0x0063, 0
         };
@@ -1462,6 +1466,23 @@ static void TestStringCopy()
         log_err("There is an error in u_strchr32() Expected match at position 5 Got %ld (pointer 0x%lx)\n", result-temp, result);
     }
 
+    temp[7]=0xfc00;
+    result=u_memchr32(temp, (UChar32)0x20402, 7);
+    if(result != temp+5){
+        log_err("There is an error in u_memchr32() Expected match at position 5 Got %ld (pointer 0x%lx)\n", result-temp, result);
+    }
+    result=u_memchr32(temp, (UChar32)0x20402, 6);
+    if(result != NULL){
+        log_err("There is an error in u_memchr32() Expected no match Got %ld (pointer 0x%lx)\n", result-temp, result);
+    }
+    result=u_memchr32(temp, (UChar32)0x20402, 1);
+    if(result != NULL){
+        log_err("There is an error in u_memchr32() Expected no match Got %ld (pointer 0x%lx)\n", result-temp, result);
+    }
+    result=u_memchr32(temp, (UChar32)0xfc00, 8);
+    if(result != temp+7){
+        log_err("There is an error in u_memchr32() Expected match at position 7 Got %ld (pointer 0x%lx)\n", result-temp, result);
+    }
 }
 
 
