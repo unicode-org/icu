@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/CompoundTransliterator.java,v $ 
- * $Date: 2001/11/17 06:43:17 $ 
- * $Revision: 1.19 $
+ * $Date: 2001/11/19 19:52:51 $ 
+ * $Revision: 1.20 $
  *
  *****************************************************************************************
  */
@@ -27,15 +27,10 @@ import java.util.Vector;
  * transliterator.  See the class documentation for {@link
  * Transliterator} for details.
  *
- * <p>If a non-<tt>null</tt> <tt>UnicodeFilter</tt> is applied to a
- * <tt>CompoundTransliterator</tt>, it has the effect of being
- * logically <b>and</b>ed with the filter of each transliterator in
- * the chain.
- *
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: CompoundTransliterator.java,v $ $Revision: 1.19 $ $Date: 2001/11/17 06:43:17 $
+ * @version $RCSfile: CompoundTransliterator.java,v $ $Revision: 1.20 $ $Date: 2001/11/19 19:52:51 $
  */
 public class CompoundTransliterator extends Transliterator {
 
@@ -87,11 +82,11 @@ public class CompoundTransliterator extends Transliterator {
     }
     
     /**
-     * Splits an ID of the form "ID;ID;..." into a compound using each
-     * of the IDs. 
-     * @param ID of above form
-     * @param forward if false, does the list in reverse order, and
-     * takes the inverse of each ID.
+     * Constructs a new compound transliterator.
+     * @param ID compound ID
+     * @param direction either Transliterator.FORWARD or Transliterator.REVERSE
+     * @param filter a global filter for this compound transliterator
+     * or null
      */
     public CompoundTransliterator(String ID, int direction,
                                   UnicodeFilter filter) {
@@ -99,10 +94,19 @@ public class CompoundTransliterator extends Transliterator {
         init(ID, direction, -1, null, true);
     }
     
+    /**
+     * Constructs a new compound transliterator with no filter.
+     * @param ID compound ID
+     * @param direction either Transliterator.FORWARD or Transliterator.REVERSE
+     */
     public CompoundTransliterator(String ID, int direction) {
         this(ID, direction, null);
     }
     
+    /**
+     * Constructs a new forward compound transliterator with no filter.
+     * @param ID compound ID
+     */
     public CompoundTransliterator(String ID) {
         this(ID, FORWARD, null);
     }
@@ -266,6 +270,17 @@ public class CompoundTransliterator extends Transliterator {
         }
     }
 
+    /**
+     * Override Transliterator:
+     * Create a rule string that can be passed to createFromRules()
+     * to recreate this transliterator.
+     * @param escapeUnprintable if TRUE then convert unprintable
+     * character to their hex escape representations, \\uxxxx or
+     * \\Uxxxxxxxx.  Unprintable characters are those other than
+     * U+000A, U+0020..U+007E.
+     * @return the rule string
+     * @deprecated To be removed after 2002-sep-30.
+     */
     public String toRules(boolean escapeUnprintable) {
         // We do NOT call toRules() on our component transliterators, in
         // general.  If we have several rule-based transliterators, this
@@ -315,41 +330,42 @@ public class CompoundTransliterator extends Transliterator {
          * up before we return.
          *
          * Assumptions we make here:
-         * (1) start <= cursor <= limit    ;cursor valid on entry
-         * (2) cursor <= cursor' <= limit' ;cursor doesn't move back
-         * (3) cursor <= limit'            ;text before cursor unchanged
-         * - cursor' is the value of cursor after calling handleKT
+         * (1) contextStart <= start <= limit <= contextLimit <= text.length()
+         * (2) start <= start' <= limit'  ;cursor doesn't move back
+         * (3) start <= limit'            ;text before cursor unchanged
+         * - start' is the value of start after calling handleKT
          * - limit' is the value of limit after calling handleKT
          */
 
         /**
          * Example: 3 transliterators.  This example illustrates the
-         * mechanics we need to implement.  S, C, and L are the start,
-         * cursor, and limit.  gl is the globalLimit.
+         * mechanics we need to implement.  C, S, and L are the contextStart,
+         * start, and limit.  gl is the globalLimit.  contextLimit is
+         * equal to limit throughout.
          *
          * 1. h-u, changes hex to Unicode
          *
          *    4  7  a  d  0      4  7  a
          *    abc/u0061/u    =>  abca/u    
-         *    S  C       L       S   C L   gl=f->a
+         *    C  S       L       C   S L   gl=f->a
          *
          * 2. upup, changes "x" to "XX"
          *
          *    4  7  a       4  7  a
          *    abca/u    =>  abcAA/u    
-         *    S  CL         S    C   
+         *    C  SL         C    S   
          *                       L    gl=a->b
          * 3. u-h, changes Unicode to hex
          *
          *    4  7  a        4  7  a  d  0  3
          *    abcAA/u    =>  abc/u0041/u0041/u    
-         *    S  C L         S              C
+         *    C  S L         C              S
          *                                  L   gl=b->15
          * 4. return
          *
          *    4  7  a  d  0  3
          *    abc/u0041/u0041/u    
-         *    S C L
+         *    C S L
          */
 
         if (trans.length < 1) {
