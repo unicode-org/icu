@@ -1688,6 +1688,7 @@ u_versionToString(UVersionInfo versionArray, char *versionString) {
 
     if(versionArray==NULL) {
         versionString[0]=0;
+        return;
     }
 
     /* count how many fields need to be written */
