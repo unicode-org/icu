@@ -1,0 +1,27 @@
+//--------------------------------------------------------------------
+// Copyright (c) 2003, International Business Machines
+// Corporation and others.  All Rights Reserved.
+//--------------------------------------------------------------------
+// Author: Alan Liu
+// Created: March 20 2003
+// Since: ICU 2.6
+//--------------------------------------------------------------------
+
+// Test locale file for the fake locale 'mc', used to test the
+// ucat.h message catalog API.
+
+mc
+{
+    "%cat%19006"
+    {
+        "4" { "Miranda" }
+        "24" { "Laura" }
+    }
+
+    "%cat%20014"
+    {
+        "5" { "Ava" }
+    }
+}
+
+//eof
