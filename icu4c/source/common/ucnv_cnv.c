@@ -3069,7 +3069,7 @@ UChar T_UConverter_getNextUChar_DBCS(UConverter* converter,
   
   /*Gets the corresponding codepoint*/
   myUChar = ucmp16_getu(converter->sharedData->table->dbcs.toUnicode,
-                        ((UChar)((**source)) << 8) |((uint8_t)*((*source)+1)));
+                        (uint16_t)(((UChar)((**source)) << 8) |((uint8_t)*((*source)+1))));
   
   /*update the input pointer*/
   *source += 2;
@@ -3135,8 +3135,8 @@ UChar T_UConverter_getNextUChar_MBCS(UConverter* converter,
           return 0xFFFD;
         }
 
-      myUChar = ucmp16_getu(converter->sharedData->table->mbcs.toUnicode,
-                            ((UChar)((**source)) << 8) |((uint8_t)*((*source)+1)));
+      myUChar = ucmp16_getu(converter->sharedData->table->mbcs.toUnicode, 
+          (uint16_t)(((UChar)((**source)) << 8) |((uint8_t)*((*source)+1))));
 
       (*source) += 2;
     }
