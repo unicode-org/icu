@@ -60,53 +60,15 @@ u_fopen(const char    *filename,
         const char    *locale,
         const char    *codepage)
 {
-    UErrorCode     status = U_ZERO_ERROR;
-    UBool     useSysCP = (UBool)(locale == 0 && codepage == 0);
-    UFILE     *result = (UFILE*) uprv_malloc(sizeof(UFILE));
-    if(result == 0)
-        return 0;
-
-    result->fFile = fopen(filename, perm);
-    if(result->fFile == 0) {
-        uprv_free(result);
+    UFILE     *result;
+    FILE     *systemFile = fopen(filename, perm);
+    if(systemFile == 0) {
         return 0;
     }
+
+    result = u_finit(systemFile, locale, codepage);
 
     result->fOwnFile = TRUE;
-
-    /* if locale is 0, use the default */
-    if(locale == 0)
-        locale = uloc_getDefault();
-
-    result->fBundle = u_loccache_get(locale);
-    if(result->fBundle == 0) {
-        fclose(result->fFile);
-        uprv_free(result);
-        return 0;
-    }
-
-    result->fTranslit  = NULL;
-    result->fOwnBundle = FALSE;
-    result->fUCPos     = result->fUCBuffer;
-    result->fUCLimit   = result->fUCBuffer;
-
-    /* if the codepage is 0, use the default for the locale */
-    if(codepage == 0) {
-        codepage = uprv_defaultCodePageForLocale(locale);
-
-        /* if the codepage is still 0, the default codepage will be used */
-    }
-    /* if both locale and codepage are 0, use the system default codepage */
-    else if(useSysCP) {
-        codepage = 0;
-    }
-
-    result->fConverter = ucnv_open(codepage, &status);
-    if(U_FAILURE(status) || result->fConverter == 0) {
-        fclose(result->fFile);
-        uprv_free(result);
-        return 0;
-    }
 
     return result;
 }
@@ -116,11 +78,12 @@ u_finit(FILE        *f,
         const char    *locale,
         const char    *codepage)
 {
-    UErrorCode     status         = U_ZERO_ERROR;
-    UBool     useSysCP     = (UBool)(locale == NULL && codepage == NULL);
+    UErrorCode status     = U_ZERO_ERROR;
+    UBool     useSysCP    = (UBool)(locale == NULL && codepage == NULL);
     UFILE     *result     = (UFILE*) uprv_malloc(sizeof(UFILE));
-    if(result == 0)
+    if(result == NULL || f == NULL) {
         return 0;
+    }
 
 
 #ifdef WIN32
