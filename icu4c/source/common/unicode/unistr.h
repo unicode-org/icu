@@ -1151,6 +1151,12 @@ public:
    * // go to the next-to-last code point of s
    * index=s.moveIndex32(s.length(), -2); // backward-skips U+2029 and U+10ffff
    * </pre>
+   *
+   * @param index input code unit index
+   * @param delta (signed) code point count to move the index forward or backward
+   *        in the string
+   * @return the resulting code unit index
+   * @draft
    */
   UTextOffset moveIndex32(UTextOffset index, int32_t delta) const;
 
@@ -1195,6 +1201,7 @@ public:
    * @param destCapacity Number of UChars available at dest.
    * @param errorCode ICU error code.
    * @return length()
+   * @draft
    */
   int32_t
   extract(UChar *dest, int32_t destCapacity,
@@ -1313,6 +1320,7 @@ public:
    * @return the length of the output string, not counting the terminating NUL;
    *         if the length is greater than destCapacity, then the string will not fit
    *         and a buffer of the indicated length would need to be passed in
+   * @draft
    */
   int32_t extract(char *dest, int32_t destCapacity,
                   UConverter *cnv,
@@ -2209,6 +2217,7 @@ public:
    * @param cnv converter object (ucnv_resetToUnicode() will be called),
    *        can be NULL for the default converter
    * @param errorCode normal ICU error code
+   * @draft
    */
   UnicodeString(
         const char *src, int32_t srcLength,
