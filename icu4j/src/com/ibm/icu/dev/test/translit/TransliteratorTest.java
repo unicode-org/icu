@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/translit/TransliteratorTest.java,v $
- * $Date: 2002/04/26 21:31:24 $
- * $Revision: 1.105 $
+ * $Date: 2002/06/12 17:37:10 $
+ * $Revision: 1.106 $
  *
  *****************************************************************************************
  */
@@ -83,7 +83,11 @@ public class TransliteratorTest extends TestFmwk {
             try {
                 t = Transliterator.getInstance(ID);
                 // We should get a new instance if we try again
-                Transliterator t2 = Transliterator.getInstance(ID);
+                Transliterator t2 = null;
+                // This is true only of RBT
+                if (t instanceof RuleBasedTransliterator) {
+                    t = Transliterator.getInstance(ID);
+                }
                 if (t != t2) {
                     logln("OK: " + Transliterator.getDisplayName(ID) + " (" + ID + "): " + t);
                 } else {
@@ -2590,6 +2594,18 @@ public class TransliteratorTest extends TestFmwk {
                 ids.remove(); // removes pair from m
             }
         }
+    }
+
+    /**
+     * Test the Any-X transliterators.
+     */
+    public void TestAnyX() {
+        Transliterator anyLatin =
+            Transliterator.getInstance("Any-Latin", Transliterator.FORWARD);
+        
+        expect(anyLatin,
+               "greek:\u03B1\u03B2\u03BA\u0391\u0392\u039A hiragana:\u3042\u3076\u304F cyrillic:\u0430\u0431\u0446",
+               "greek:abkABK hiragana:abuku cyrillic:abc");
     }
 
     //======================================================================
