@@ -3,6 +3,7 @@ icu (2.0-2) unstable; urgency=low
   * Fixed a bug in uprv_uca_cloneTempTable().  Closes: 128484
   * Update Debian bugs status.  Closes: 104642
   * Use the official 2.0 tarball as the original tar.
+  * Added manual pages for every tool.
 
  -- Yves Arrouye <yves@debian.org>  Wed, 16 Jan 2002 20:45:42 -0800
 
