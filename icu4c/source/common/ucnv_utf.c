@@ -62,7 +62,7 @@ static const int8_t bytesFromUTF8[256] = {
   3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4, 4, 4, 4, 5, 5, 5, 5, 6, 6, 0, 0
 };
 
-static const unsigned char firstByteMark[7] = {0x00, 0x00, 0xC0, 0xE0, 0xF0, 0xF8, 0xFC};
+//static const unsigned char firstByteMark[7] = {0x00, 0x00, 0xC0, 0xE0, 0xF0, 0xF8, 0xFC};
 
 U_CFUNC void T_UConverter_toUnicode_UTF8 (UConverterToUnicodeArgs * args,
                                   UErrorCode * err)
@@ -86,6 +86,7 @@ U_CFUNC void T_UConverter_toUnicode_UTF8 (UConverterToUnicodeArgs * args,
         converter->toULength = 0;
 
         ch = converter->mode; /*Stores the previously calculated ch from a previous call*/
+        converter->mode = 0;
         goto morebytes;
     }
 
@@ -131,9 +132,9 @@ morebytes:
                         }
                         else
                         {
-                            converter->mode = ch; /* stores a partially calculated target*/
                             converter->toUnicodeStatus = inBytes;
                             converter->toULength = (int8_t)i;
+                            converter->mode = ch; /* stores a partially calculated target*/
                         }
                         goto donefornow;
                     }
@@ -171,9 +172,6 @@ morebytes:
                     const char* saveSource = args->source;
 
                     *err = U_ILLEGAL_CHAR_FOUND;
-                    converter->toULength = 0;
-                    converter->mode = 0;
-                    converter->toUnicodeStatus = 0;
                     converter->invalidCharLength = (int8_t)i;
                     if (i > 0)
                     {
@@ -184,9 +182,9 @@ morebytes:
                     printf("inBytes %d\n, converter->invalidCharLength = %d,\n mySource[mySourceIndex]=%X\n",
                      inBytes, converter->invalidCharLength, mySource[mySourceIndex]);
 #endif
-/* Needed explicit cast for mySource on MVS to make compiler happy - JJD */
-                    args->target = myTarget + myTargetIndex;
+                    /* Needed explicit cast for mySource on MVS to make compiler happy - JJD */
                     args->source = (const char*) mySource + mySourceIndex;
+                    args->target = myTarget + myTargetIndex;
                     ToU_CALLBACK_MACRO(converter->toUContext,
                                        args,
                                        converter->invalidCharBuffer,
@@ -194,9 +192,9 @@ morebytes:
                                        UCNV_ILLEGAL,
                                        err);
                     /* restore the state in case the callback changed it */
+                    converter->toUnicodeStatus = 0;
                     converter->toULength = 0;
                     converter->mode = 0;
-                    converter->toUnicodeStatus = 0;
                     args->source = saveSource;
                     args->target = saveTarget;
 
@@ -223,6 +221,7 @@ U_CFUNC void T_UConverter_toUnicode_UTF8_OFFSETS_LOGIC (UConverterToUnicodeArgs 
 {
     const unsigned char *mySource = (unsigned char *) args->source;
     UChar *myTarget = args->target;
+    int32_t *myOffsets = args->offsets;
     UConverter *converter = args->converter;
     int32_t mySourceIndex = 0;
     int32_t myTargetIndex = 0;
@@ -248,7 +247,7 @@ U_CFUNC void T_UConverter_toUnicode_UTF8_OFFSETS_LOGIC (UConverterToUnicodeArgs 
             ch = mySource[mySourceIndex++];
             if (ch < 0x80)        /* Simple case */
             {
-                args->offsets[myTargetIndex] = mySourceIndex - 1;
+                myOffsets[myTargetIndex] = mySourceIndex - 1;
                 myTarget[myTargetIndex++] = (UChar) ch;
             }
             else
@@ -289,7 +288,7 @@ morebytes:
 
                 if (i == inBytes && ch <= MAXIMUM_UTF16)
                 {
-                    args->offsets[myTargetIndex] = mySourceIndex - inBytes;
+                    myOffsets[myTargetIndex] = mySourceIndex - inBytes;
                     if (ch <= MAXIMUM_UCS2)
                     {
                         myTarget[myTargetIndex++] = (UChar) ch;
@@ -301,7 +300,7 @@ morebytes:
                         ch = (ch & HALF_MASK) + SURROGATE_LOW_START;
                         if (myTargetIndex < targetLength)
                         {
-                            args->offsets[myTargetIndex] = mySourceIndex - inBytes;
+                            myOffsets[myTargetIndex] = mySourceIndex - inBytes;
                             myTarget[myTargetIndex++] = (char)ch;
                         }
                         else
@@ -314,18 +313,22 @@ morebytes:
                 }
                 else
                 {
-                    int32_t currentOffset = args->offsets[myTargetIndex-1];
+                    int32_t currentOffset = myOffsets[myTargetIndex - 1];
                     int32_t My_i = myTargetIndex;
                     UChar* saveTarget = args->target;
                     const char* saveSource = args->source;
-                    int32_t* saveOffsets = args->offsets;
+                    int32_t* saveOffsets = myOffsets;
 
                     *err = U_ILLEGAL_CHAR_FOUND;
                     converter->invalidCharLength = (int8_t)i;
+                    if (i > 0)
+                    {
+                        uprv_memcpy(converter->invalidCharBuffer, converter->toUBytes, i);
+                    }
 
                     args->target = myTarget + myTargetIndex;
                     args->source = (const char*)mySource + mySourceIndex;
-                    args->offsets = args->offsets?args->offsets+myTargetIndex:0;
+                    myOffsets = myOffsets ? (myOffsets + myTargetIndex) : 0;
 
                     /* To do HSYS: more smarts here, including offsets */
                     ToU_CALLBACK_OFFSETS_LOGIC_MACRO(converter->toUContext,
@@ -335,6 +338,9 @@ morebytes:
                                      UCNV_UNASSIGNED,
                                      err);
 
+                    converter->toUnicodeStatus = 0;
+                    converter->toULength = 0;
+                    converter->mode = 0;
                     args->source = saveSource;
                     args->target = saveTarget;
  
@@ -469,6 +475,7 @@ U_CFUNC void T_UConverter_fromUnicode_UTF8_OFFSETS_LOGIC (UConverterFromUnicodeA
 {
     const UChar *mySource = args->source;
     unsigned char *myTarget = (unsigned char *) args->target;
+    int32_t *myOffsets = args->offsets;
     int32_t mySourceIndex = 0;
     int32_t myTargetIndex = 0;
     int32_t targetLength = args->targetLimit - (char *) myTarget;
@@ -494,16 +501,16 @@ U_CFUNC void T_UConverter_fromUnicode_UTF8_OFFSETS_LOGIC (UConverterFromUnicodeA
 
             if (ch < 0x80)        /* Single byte */
             {
-                args->offsets[myTargetIndex] = mySourceIndex-1;
+                myOffsets[myTargetIndex] = mySourceIndex-1;
                 myTarget[myTargetIndex++] = (char) ch;
             }
             else if (ch < 0x800)  /* Double byte */
             {
-                args->offsets[myTargetIndex] = mySourceIndex-1;
+                myOffsets[myTargetIndex] = mySourceIndex-1;
                 myTarget[myTargetIndex++] = (char) ((ch >> 6) | 0xc0);
                 if (myTargetIndex < targetLength)
                 {
-                    args->offsets[myTargetIndex] = mySourceIndex-1;
+                    myOffsets[myTargetIndex] = mySourceIndex-1;
                     myTarget[myTargetIndex++] = (char) ((ch & 0x3f) | 0x80);
                 }
                 else
@@ -553,7 +560,7 @@ lowsurogate:
                 {
                     if (myTargetIndex < targetLength)
                     {
-                        args->offsets[myTargetIndex] = mySourceIndex-1;
+                        myOffsets[myTargetIndex] = mySourceIndex-1;
                         myTarget[myTargetIndex++] = temp[i];
                     }
                     else
