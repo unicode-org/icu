@@ -1,5 +1,5 @@
 ## Makefile.in for ICU - test/intltest
-## Copyright (c) 1999-2004, International Business Machines Corporation and
+## Copyright (c) 1999-2005, International Business Machines Corporation and
 ## others. All Rights Reserved.
 
 ## Source directory information
@@ -20,8 +20,9 @@ CLEANFILES = *~ $(DEPS)
 TARGET = intltest$(EXEEXT)
 
 BUILDDIR := $(CURR_SRCCODE_FULL_DIR)/../../
-BUILDDIR := $(BUILDDIR:test/intltest/../../=)
-BUILDDIR := $(BUILDDIR:test\\\\intltest/../../=)
+BUILDDIR := $(BUILDDIR:test/intltest/../../=)       # For Unix
+BUILDDIR := $(BUILDDIR:test\\\\intltest/../../=)    # For Windows
+BUILDDIR := $(BUILDDIR:TEST\\\\INTLTEST/../../=)    # For Windows 98
 
 CPPFLAGS += -I$(top_builddir)/common -I$(top_srcdir)/common -I$(top_srcdir)/i18n -I$(top_srcdir)/tools/toolutil -I$(top_srcdir)/tools/ctestfw
 DEFS += -D'U_TOPSRCDIR="$(top_srcdir)/"' -D'U_TOPBUILDDIR="$(BUILDDIR)"'
