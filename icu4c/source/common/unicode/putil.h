@@ -235,7 +235,7 @@ U_STABLE int32_t  U_EXPORT2 uprv_timezone(void);
  *              tzname(1) is an empty string.
  * @internal
  */
-U_INTERNAL char*    U_EXPORT2 uprv_tzname(int n);
+U_INTERNAL const char* U_EXPORT2 uprv_tzname(int n);
 
 /**
  * Get UTC (GMT) time measured in seconds since 0:00 on 1/1/70.

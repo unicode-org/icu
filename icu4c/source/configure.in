@@ -511,17 +511,23 @@ fi
 AC_SUBST(U_HAVE_POPEN)
 
 AC_CHECK_FUNC(tzset)
+U_HAVE_TZSET=0
 if test x$ac_cv_func_tzset = xyes
 then
     U_TZSET=tzset
+    U_HAVE_TZSET=1
 else
     AC_CHECK_FUNC(_tzset)
     if test x$ac_cv_func__tzset = xyes
     then
-	U_TZSET=_tzset
+        U_TZSET=_tzset
+        U_HAVE_TZSET=1
     fi
 fi
+AC_SUBST(U_HAVE_TZSET)
 AC_SUBST(U_TZSET)
+
+U_HAVE_TZNAME=0
 AC_CACHE_CHECK(for tzname,ac_cv_var_tzname,
 [AC_TRY_LINK(
 changequote(<<, >>)dnl
@@ -536,6 +542,7 @@ changequote([, ])dnl
 [atoi(*tzname);], ac_cv_var_tzname=yes, ac_cv_var_tzname=no)])
 if test $ac_cv_var_tzname = yes; then
   U_TZNAME=tzname
+  U_HAVE_TZNAME=1
 else
   AC_CACHE_CHECK(for _tzname,ac_cv_var__tzname,
   [AC_TRY_LINK(
@@ -547,8 +554,10 @@ else
   [atoi(*_tzname);], ac_cv_var__tzname=yes, ac_cv_var__tzname=no)])
     if test $ac_cv_var__tzname = yes; then
       U_TZNAME=_tzname
+      U_HAVE_TZNAME=1
     fi
 fi
+AC_SUBST(U_HAVE_TZNAME)
 AC_SUBST(U_TZNAME)
 
 AC_CACHE_CHECK(for timezone,ac_cv_var_timezone,
