@@ -883,7 +883,7 @@ createOneAliasList(uint16_t *aliasArrLists, uint32_t tag, uint32_t converter, ui
             }
             aliasLists[aliasListsSize++] = value;
             if (aliasListsSize >= MAX_LIST_SIZE) {
-                fprintf(stderr, "error: Too many alias lists\n", lineNum);
+                fprintf(stderr, "error: Too many alias lists\n");
                 exit(U_BUFFER_OVERFLOW_ERROR);
             }
 
@@ -893,7 +893,6 @@ createOneAliasList(uint16_t *aliasArrLists, uint32_t tag, uint32_t converter, ui
 
 static void
 writeAliasTable(UNewDataMemory *out) {
-    UBool dupFound = FALSE;
     uint32_t i, j;
     uint32_t uniqueAliasesSize;
     uint16_t aliasOffset = (uint16_t)(tagBlock.top/sizeof(uint16_t));

@@ -442,7 +442,7 @@ static void printOutBundle(FILE *out, UConverter *converter, UResourceBundle *re
 {
     static const UChar cr[] = { '\n' };
 
-    int32_t noOfElements = ures_getSize(resource);
+/*    int32_t noOfElements = ures_getSize(resource);*/
     int32_t i = 0;
     const char *key = ures_getKey(resource);
 
@@ -457,7 +457,8 @@ static void printOutBundle(FILE *out, UConverter *converter, UResourceBundle *re
             if(trunc && len > truncsize) {
                 char msg[128];
                 printIndent(out, converter, indent);
-                sprintf(msg, "// WARNING: this resource, size %li is truncated to %li\n", len, truncsize/2);
+                sprintf(msg, "// WARNING: this resource, size %li is truncated to %li\n",
+                        (long)len, (long)(truncsize/2));
                 printCString(out, converter, msg, -1);
                 len = truncsize/2;
             }
@@ -515,7 +516,8 @@ static void printOutBundle(FILE *out, UConverter *converter, UResourceBundle *re
             if(trunc && len > truncsize) {
                 char msg[128];
                 printIndent(out, converter, indent);
-                sprintf(msg, "// WARNING: this resource, size %li is truncated to %li\n", len, truncsize/2);
+                sprintf(msg, "// WARNING: this resource, size %li is truncated to %li\n",
+                        (long)len, (long)(truncsize/2));
                 printCString(out, converter, msg, -1);
                 len = truncsize;
             }
@@ -554,22 +556,22 @@ static void printOutBundle(FILE *out, UConverter *converter, UResourceBundle *re
                     printCString(out, converter, key, -1);
                 }
                 printString(out, converter, open, (int32_t)(sizeof(open) / sizeof(*open)));
-                    for(i = 0; i < len - 1; i++) {
-                        int32_t len =  uprv_itou(num, data[i], 10, 0);
-                        num[len++] = 0x002C; /* ',' */
-                        num[len++] = 0x0020; /* ' ' */
-                        num[len] = 0;
-                        printString(out, converter, num, u_strlen(num));
-                    }
-                    if(len > 0) {
-                        uprv_itou(num, data[len - 1], 10, 0);
-                        printString(out, converter, num, u_strlen(num));
-                    }
-                    printString(out, converter, close, (int32_t)(sizeof(close) / sizeof(*close)));
-                    if(verbose) {
-                        printCString(out, converter, "// INTVECTOR", -1);
-                    }
-                    printString(out, converter, cr, (int32_t)(sizeof(cr) / sizeof(*cr)));
+                for(i = 0; i < len - 1; i++) {
+                    int32_t numLen =  uprv_itou(num, data[i], 10, 0);
+                    num[numLen++] = 0x002C; /* ',' */
+                    num[numLen++] = 0x0020; /* ' ' */
+                    num[numLen] = 0;
+                    printString(out, converter, num, u_strlen(num));
+                }
+                if(len > 0) {
+                    uprv_itou(num, data[len - 1], 10, 0);
+                    printString(out, converter, num, u_strlen(num));
+                }
+                printString(out, converter, close, (int32_t)(sizeof(close) / sizeof(*close)));
+                if(verbose) {
+                    printCString(out, converter, "// INTVECTOR", -1);
+                }
+                printString(out, converter, cr, (int32_t)(sizeof(cr) / sizeof(*cr)));
             } else {
                 reportError(pname, status, "getting int vector");
             }
