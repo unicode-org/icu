@@ -254,6 +254,17 @@ class U_I18N_API UnicodeSet : public UnicodeFilter {
     UChar32* list; // MUST be terminated with HIGH
     UChar32* buffer; // internal buffer, may be NULL
 
+    /**
+     * The pattern representation of this set.  This may not be the
+     * most economical pattern.  It is the pattern supplied to
+     * applyPattern(), with variables substituted and whitespace
+     * removed.  For sets constructed without applyPattern(), or
+     * modified using the non-pattern API, this string will be empty,
+     * indicating that toPattern() must generate a pattern
+     * representation from the inversion list.
+     */
+    UnicodeString pat;
+
 #ifndef HPUX
     static const UChar32 HIGH; // HIGH > all valid values. 110000 for codepoints
 #endif
@@ -426,9 +437,16 @@ public:
      * Returns a string representation of this set.  If the result of
      * calling this function is passed to a UnicodeSet constructor, it
      * will produce another set that is equal to this one.
+     * @param result the string to receive the rules.  Previous
+     * contents will be deleted.
+     * @param escapeUnprintable if TRUE then convert unprintable
+     * character to their hex escape representations, \uxxxx or
+     * \Uxxxxxxxx.  Unprintable characters are those other than
+     * U+000A, U+0020..U+007E.
      * @draft
      */
-    virtual UnicodeString& toPattern(UnicodeString& result) const;
+    virtual UnicodeString& toPattern(UnicodeString& result,
+                                     UBool escapeUnprintable = FALSE) const;
 
     /**
      * Returns the number of elements in this set (its cardinality),
@@ -783,7 +801,23 @@ private:
 
     static const UChar HEX[16];
 
-    static void _toPat(UnicodeString& buf, UChar32 c);
+    void _applyPattern(const UnicodeString& pattern,
+                       ParsePosition& pos,
+                       const SymbolTable* symbols,
+                       UnicodeString& rebuiltPat,
+                       UErrorCode& status);
+
+    UnicodeString& _toPattern(UnicodeString& result,
+                              UBool escapeUnprintable) const;
+
+    UnicodeString& _generatePattern(UnicodeString& result,
+                                    UBool escapeUnprintable) const;
+
+    static void _appendToPat(UnicodeString& buf, UChar32 c, UBool escapeUnprintable);
+
+    static UBool _isUnprintable(UChar32 c);
+
+    static UBool _escapeUnprintable(UnicodeString& result, UChar32 c);
 
     //----------------------------------------------------------------
     // Implementation: Fundamental operators
