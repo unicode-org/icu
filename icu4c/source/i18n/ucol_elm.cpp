@@ -259,7 +259,7 @@ uprv_uca_cloneTempTable(tempUCATable *t, UErrorCode *status) {
           *status = U_MEMORY_ALLOCATION_ERROR;
           return NULL;
       }
-      uprv_memcpy(r->expansions->CEs, t->expansions->CEs, sizeof(uint32_t)*t->expansions->size);
+      uprv_memcpy(r->expansions->CEs, t->expansions->CEs, sizeof(uint32_t)*t->expansions->position);
     } else {
       r->expansions->CEs = NULL;
     }
