@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/search/SearchTest.java,v $ 
- * $Date: 2002/06/22 00:14:13 $ 
- * $Revision: 1.15 $
+ * $Date: 2002/06/26 18:33:52 $ 
+ * $Revision: 1.16 $
  *
  *****************************************************************************************
  */
@@ -176,14 +176,14 @@ public class SearchTest extends TestFmwk {
     	CharacterIterator text = new StringCharacterIterator(
     													"string spring string");
     	String pattern = "string";
-    	try {
+    	//try { // Try/catch disabled; there's no way Exception can be thrown
     		StringSearch strsrch = new StringSearch(pattern, text, encoll, brk);
     		strsrch = new StringSearch(pattern, text, encoll);
-    	}
-    	catch (Exception e) {
-    		e.printStackTrace();
-    		errln("Error getting instance");
-    	}
+    	//}
+    	//catch (Exception e) {
+    	//	e.printStackTrace();
+    	//	errln("Error getting instance");
+        //}
     }
 
     /**
