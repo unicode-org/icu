@@ -214,12 +214,14 @@ processFile(const char *filename, const char *cp, const char *inputDir, const ch
              */
             int32_t filenameSize = filenameBegin - filename + 1;
             inputDirBuf = uprv_strncpy((char *)uprv_malloc(filenameSize), filename, filenameSize);
-            //test for NULL
-			if(inputDirBuf == NULL) {
-				*status = U_MEMORY_ALLOCATION_ERROR;
-				goto finish;
-			}
-			inputDirBuf[filenameSize - 1] = 0;
+
+            /* test for NULL */
+            if(inputDirBuf == NULL) {
+                *status = U_MEMORY_ALLOCATION_ERROR;
+                goto finish;
+            }
+
+	    inputDirBuf[filenameSize - 1] = 0;
             inputDir = inputDirBuf;
         }
         in = T_FileStream_open(filename, "rb");
@@ -228,11 +230,13 @@ processFile(const char *filename, const char *cp, const char *inputDir, const ch
         int32_t filelen = (int32_t)uprv_strlen(filename);
         if(inputDir[dirlen-1] != U_FILE_SEP_CHAR) {
             openFileName = (char *) uprv_malloc(dirlen + filelen + 2);
-			//test for NULL
-			if(openFileName == NULL) {
-				*status = U_MEMORY_ALLOCATION_ERROR;
-				goto finish;
-			}
+
+	    /* test for NULL */
+	    if(openFileName == NULL) {
+                *status = U_MEMORY_ALLOCATION_ERROR;
+                goto finish;
+	    }
+
             openFileName[0] = '\0';
             /*
              * append the input dir to openFileName if the first char in 
@@ -253,11 +257,13 @@ processFile(const char *filename, const char *cp, const char *inputDir, const ch
             uprv_strcat(openFileName, filename);
         } else {
             openFileName = (char *) uprv_malloc(dirlen + filelen + 1);
-			//test for NULL
-			if(openFileName == NULL) {
-				*status = U_MEMORY_ALLOCATION_ERROR;
-				goto finish;
-			}
+
+            /* test for NULL */
+            if(openFileName == NULL) {
+                *status = U_MEMORY_ALLOCATION_ERROR;
+                goto finish;
+            }
+
             uprv_strcpy(openFileName, inputDir);
             uprv_strcat(openFileName, filename);
         }
