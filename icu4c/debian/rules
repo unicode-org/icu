@@ -91,8 +91,10 @@ debian/%: debian/%.in
 	cd source \
 	  && CONFIG_FILES=../$@ CONFIG_HEADERS= $(SHELL) ./config.status
 
+DEBIAN_FILES = icu.conffiles icu.postinst icu.prerm
+
 # Build architecture-dependent files here.
-binary-arch: build install debian/icu.conffiles debian/icu.postinst
+binary-arch: build install $(addprefix debian/,$(DEBIAN_FILES))
 #	dh_testversion
 	dh_testdir
 	dh_testroot
