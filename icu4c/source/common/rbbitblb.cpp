@@ -721,6 +721,7 @@ RBBIStateDescriptor::RBBIStateDescriptor(int lastInputSymbol, UErrorCode *fStatu
     fLookAhead = 0;
     fTagVal    = 0;
     fPositions = NULL;
+    fDtran     = NULL;
     /* test for buffer overflows */
     if (U_FAILURE(*fStatus)) {
         return;
