@@ -79,7 +79,7 @@ $CLcm = $CL $CM*;
 $EXcm = $EX $CM*;
 $GLcm = $GL $CM*;
 $HYcm = $HY $CM*;
-$IDcm = ($ID | HangulSyllable) $CM*;
+$IDcm = ($ID | $HangulSyllable) $CM*;
 $INcm = $IN $CM*;
 $IScm = $IS $CM*;
 $NScm = $NS $CM*;
@@ -183,7 +183,7 @@ $LB14CanBreakAfter = $LB14NonBreaks $CM* | $SP $CM+;
 # LB 15
 $LB14CanBreakAfter ($BAcm | $HYcm | $NScm);   
 $BBcm [^$CB];
-$BBcm [^$CB $CR $LF $BK $NL $ZW] CM*;  
+$BBcm [^$CB $CR $LF $BK $NL $ZW] $CM*;  
 
 # LB 16
 #($ALcm | $IDcm | $SP $CM+ | $INcm | $NUcm) $INcm;
