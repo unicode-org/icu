@@ -453,7 +453,7 @@ u_strcmpCodePointOrder(const UChar *s1, const UChar *s2);
  *
  * @return <0 or 0 or >0 as usual for string comparisons
  *
- * @draft ICU 2.2
+ * @stable ICU 2.2
  */
 U_CAPI int32_t U_EXPORT2
 u_strCompare(const UChar *s1, int32_t length1,
@@ -488,7 +488,7 @@ u_strCompareIter(UCharIterator *iter1, UCharIterator *iter2, UBool codePointOrde
 /**
  * Option bit for u_strCaseCompare, u_strcasecmp, unorm_compare, etc:
  * Compare strings in code point order instead of code unit order.
- * @draft ICU 2.2
+ * @stable ICU 2.2
  */
 #define U_COMPARE_CODE_POINT_ORDER  0x8000
 #endif
@@ -531,7 +531,7 @@ u_strCompareIter(UCharIterator *iter1, UCharIterator *iter2, UBool codePointOrde
  *
  * @return <0 or 0 or >0 as usual for string comparisons
  *
- * @draft ICU 2.2
+ * @stable ICU 2.2
  */
 U_CAPI int32_t U_EXPORT2
 u_strCaseCompare(const UChar *s1, int32_t length1,

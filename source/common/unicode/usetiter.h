@@ -48,7 +48,7 @@ class UnicodeString;
  * }
  * </pre>
  * @author M. Davis
- * @draft ICU 2.2
+ * @draft ICU 2.4
  */
 class U_COMMON_API UnicodeSetIterator : public UObject {
 
@@ -207,14 +207,14 @@ class U_COMMON_API UnicodeSetIterator : public UObject {
     /**
      * ICU "poor man's RTTI", returns a UClassID for this class.
      *
-     * @draft ICU 2.2
+     * @draft ICU 2.4
      */
     static UClassID getStaticClassID();
 
     /**
      * ICU "poor man's RTTI", returns a UClassID for the actual class.
      *
-     * @draft ICU 2.2
+     * @draft ICU 2.4
      */
     virtual UClassID getDynamicClassID() const;
 

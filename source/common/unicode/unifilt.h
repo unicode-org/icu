@@ -1,5 +1,6 @@
 /*
-* Copyright (C) 1999, International Business Machines Corporation and others. All Rights Reserved.
+* Copyright (C) 1999-2003, International Business Machines Corporation and others.
+* All Rights Reserved.
 **********************************************************************
 *   Date        Name        Description
 *   11/17/99    aliu        Creation.
@@ -90,14 +91,14 @@ public:
     /**
      * ICU "poor man's RTTI", returns a UClassID for the actual class.
      *
-     * @draft ICU 2.2
+     * @stable ICU 2.2
      */
     virtual UClassID getDynamicClassID() const = 0;
 
     /*
      * ICU "poor man's RTTI", returns a UClassID for this class.
      *
-     * @draft ICU 2.2
+     * @stable ICU 2.2
      */
 /*    static UClassID getStaticClassID() { return (UClassID)&fgClassID; }*/
 

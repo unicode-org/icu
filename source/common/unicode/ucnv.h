@@ -414,6 +414,9 @@ ucnv_openCCSID(int32_t codepage,
  * stored in the converter cache or the alias table. The only way to open further converters
  * is call this function multiple times, or use the ucnv_safeClone() function to clone a 
  * 'master' converter.</p>
+ *
+ * <p>A future version of ICU may add alias table lookups and/or caching
+ * to this function.</p>
  * 
  * <p>Example Use:
  *      <code>cnv = ucnv_openPackage("myapp", "myconverter", &err);</code>
@@ -427,7 +430,7 @@ ucnv_openCCSID(int32_t codepage,
  * @see ucnv_open
  * @see ucnv_safeClone
  * @see ucnv_close
- * @draft ICU 2.2
+ * @stable ICU 2.2
  */
 U_CAPI UConverter* U_EXPORT2 
 ucnv_openPackage(const char *packageName, const char *converterName, UErrorCode *err);
@@ -1595,7 +1598,7 @@ ucnv_getAliases(const char *alias, const char **aliases, UErrorCode *pErrorCode)
  * @see ucnv_getStandardName
  * @see uenum_close
  * @see uenum_next
- * @draft ICU 2.2
+ * @stable ICU 2.2
  */
 U_CAPI UEnumeration * U_EXPORT2
 ucnv_openStandardNames(const char *convName,

@@ -41,14 +41,14 @@ typedef struct USet USet;
 #endif
 
 /**
- * Bitmask values to be passed to the UnicodeSet constructor or
- * applyPattern() taking an option parameter.
- * @draft
+ * Bitmask values to be passed to uset_openPatternOptions() or
+ * uset_applyPattern() taking an option parameter.
+ * @draft ICU 2.4
  */
 enum {
     /**
      * Ignore white space within patterns unless quoted or escaped.
-     * @draft
+     * @draft ICU 2.4
      */
     USET_IGNORE_SPACE = 1,  
 
@@ -56,7 +56,7 @@ enum {
      * Enable case insensitive matching.  E.g., "[ab]" with this flag
      * will match 'a', 'A', 'b', and 'B'.  "[^ab]" with this flag will
      * match all except 'a', 'A', 'b', and 'B'.
-     * @draft
+     * @draft ICU 2.4
      */
     USET_CASE_INSENSITIVE = 2,  
 
@@ -232,7 +232,7 @@ uset_addAll(USet* set, const USet *additionalSet);
  * @param set the object to which to add the character
  * @param start the first character of the range to add, inclusive
  * @param end the last character of the range to add, inclusive
- * @draft ICU 2.2
+ * @stable ICU 2.2
  */
 U_CAPI void U_EXPORT2
 uset_addRange(USet* set, UChar32 start, UChar32 end);
@@ -264,7 +264,7 @@ uset_remove(USet* set, UChar32 c);
  * @param set the object to which to add the character
  * @param start the first character of the range to remove, inclusive
  * @param end the last character of the range to remove, inclusive
- * @draft ICU 2.2
+ * @stable ICU 2.2
  */
 U_CAPI void U_EXPORT2
 uset_removeRange(USet* set, UChar32 start, UChar32 end);
@@ -326,7 +326,7 @@ uset_contains(const USet* set, UChar32 c);
  * @param start the first character of the range to test, inclusive
  * @param end the last character of the range to test, inclusive
  * @return TRUE if set contains the range
- * @draft ICU 2.2
+ * @stable ICU 2.2
  */
 U_CAPI UBool U_EXPORT2
 uset_containsRange(const USet* set, UChar32 start, UChar32 end);

@@ -197,8 +197,9 @@ typedef enum UBreakIteratorType {
    * Title Case breaks 
    * The iterator created using this type locates title boundaries as described for 
    * Unicode 3.2 only. For Unicode 4.0 and above title boundary iteration,
-   * please use Word Boundary iterator.  @draft ICU 2.2
+   * please use Word Boundary iterator.
    *
+   * @deprecated ICU 2.8 Use the word break iterator for titlecasing for Unicode 4 and later.
    */
   UBRK_TITLE
 } UBreakIteratorType;
@@ -215,7 +216,7 @@ typedef enum UBreakIteratorType {
  *  word, to allow for further subdivisions of a category in future releases.
  *  Applications should check for tag values falling within the range, rather
  *  than for single individual values.
- *  @draft ICU 2.2
+ *  @stable ICU 2.2
 */
 typedef enum UWordBreak {
     /** Tag value for "words" that do not fit into any of other categories. 
@@ -325,7 +326,7 @@ ubrk_open(UBreakIteratorType type,
  * @param status A UErrorCode to receive any errors.
  * @return A UBreakIterator for the specified rules.
  * @see ubrk_open
- * @draft ICU 2.2
+ * @stable ICU 2.2
  */
 U_CAPI UBreakIterator* U_EXPORT2
 ubrk_openRules(const UChar     *rules,
@@ -515,7 +516,7 @@ ubrk_isBoundary(UBreakIterator *bi, int32_t offset);
  * status, a default value of 0 is returned.
  * <p>
  * For word break iterators, the possible values are defined in enum UWordBreak.
- * @draft ICU 2.2
+ * @stable ICU 2.2
  */
 U_CAPI  int32_t U_EXPORT2
 ubrk_getRuleStatus(UBreakIterator *bi);

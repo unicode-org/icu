@@ -1096,7 +1096,7 @@ public:
      * currency format through the application of a new pattern.
      * @param theCurrency a 3-letter ISO code indicating new currency
      * to use.  It need not be null-terminated.
-     * @draft ICU 2.2
+     * @stable ICU 2.2
      */
     virtual void setCurrency(const UChar* theCurrency);
 

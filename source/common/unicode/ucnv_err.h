@@ -172,7 +172,7 @@ typedef enum {
                               by the new converter, the callback must clone 
                               the data and call ucnv_setFromUCallback 
                               (or setToUCallback) with the correct pointer.
-                              @draft ICU 2.2
+                              @stable ICU 2.2
                            */
 } UConverterCallbackReason;
 
