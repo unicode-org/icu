@@ -295,6 +295,7 @@ protected:
                                 Transliterator *adoptedSplitTrans,
                                 UVector& result,
                                 int32_t& splitTransIndex,
+                                UnicodeSet*& compoundFilter,
                                 UParseError& parseError,
                                 UErrorCode& status);
     /**
@@ -304,6 +305,7 @@ protected:
                                    UnicodeString& regenID,
                                    int32_t& pos,
                                    UBool& sawDelimiter,
+                                   UnicodeSet*& compoundFilter,
                                    UTransDirection dir,
                                    UParseError& parseError,
                                    UBool create,
