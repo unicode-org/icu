@@ -10,12 +10,18 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <iostream.h>
 #include <string.h>
 #include <assert.h>
 
 #ifndef _CHARTBLD
 #include "chartbld.h"
+#endif
+
+#if U_IOSTREAM_SOURCE >= 199711
+#include <iostream>
+using namespace std;
+#elif U_IOSTREAM_SOURCE >= 198506
+#include <iostream.h>
 #endif
 
 const char CharTypeBuilder::tagStrings[] = "MnMcMeNdNlNoZsZlZpCcCfCsCoCnLuLlLtLmLoPcPdPsPePoSmScSkSoPiPf";

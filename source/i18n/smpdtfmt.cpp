@@ -35,9 +35,6 @@
 #include "unicode/dcfmtsym.h"
 #include "mutex.h"
 #include <float.h>
-#ifdef _DEBUG
-#include <iostream.h>
-#endif
 
 // *****************************************************************************
 // class SimpleDateFormat

@@ -10,11 +10,18 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <iostream.h>
 #include <string.h>
 #include <assert.h>
 
 #include "ucmp16.h"
+
+#if U_IOSTREAM_SOURCE >= 199711
+#include <iostream>
+using namespace std;
+#elif U_IOSTREAM_SOURCE >= 198506
+#include <iostream.h>
+#endif
+
 CompactShortArray* ulxfrmArray = 0;
 
 	enum	ECharTypeMapping {
