@@ -222,9 +222,24 @@ void RegexTest::regex_find(const UnicodeString &pattern,
     //
     //  Compile the caller's pattern
     //
-    callerPattern = RegexPattern::compile(pattern, 0, pe, status);
+    uint32_t bflags = 0;
+    if (flags.indexOf((UChar)0x69) >= 0)  { // 'i' flag 
+        bflags |= UREGEX_CASE_INSENSITIVE;
+    }
+    if (flags.indexOf((UChar)0x78) >= 0)  { // 'x' flag 
+        bflags |= UREGEX_COMMENTS;
+    }
+    if (flags.indexOf((UChar)0x73) >= 0)  { // 's' flag 
+        bflags |= UREGEX_DOTALL;
+    }
+    if (flags.indexOf((UChar)0x6d) >= 0)  { // 'm' flag 
+        bflags |= UREGEX_MULTILINE;
+    }
+
+
+    callerPattern = RegexPattern::compile(pattern, bflags, pe, status);
     if (status != U_ZERO_ERROR) {
-        errln("Line %d: error %x compiling pattern.", line, status);
+        errln("Line %d: error %s compiling pattern.", line, u_errorName(status));
         goto cleanupAndReturn;
     }
 
@@ -306,7 +321,10 @@ void RegexTest::regex_find(const UnicodeString &pattern,
 
 cleanupAndReturn:
     if (failed) {
-        callerPattern->dump();
+        errln("\"%s\"  %s  \"%s\"", (const char *)CharString(pattern),
+                                    (const char *)CharString(flags),
+                                    (const char *)CharString(inputString));
+        // callerPattern->dump();
     }
     delete parseMatcher;
     delete parsePat;
@@ -1223,10 +1241,10 @@ void RegexTest::Errors() {
     {
         UParseError   pe;
         UErrorCode    status = U_ZERO_ERROR;
-        int32_t       flags  = UREGEX_CASE_INSENSITIVE | UREGEX_CANON_EQ |
+        int32_t       flags  = UREGEX_CANON_EQ |
                                UREGEX_COMMENTS         | UREGEX_DOTALL   |
                                UREGEX_MULTILINE;
-        RegexPattern *pat1= RegexPattern::compile(".*", UREGEX_CASE_INSENSITIVE, pe, status);
+        RegexPattern *pat1= RegexPattern::compile(".*", flags, pe, status);
         REGEX_ASSERT(status == U_REGEX_UNIMPLEMENTED);
         delete pat1;
     }
@@ -1574,6 +1592,7 @@ void RegexTest::PerlTests() {
         if (expected != found) {
             errln("line %d: Expected %smatch, got %smatch", 
                 lineNum, expected?"":"no ", found?"":"no " );
+            continue;
         }
 
         //

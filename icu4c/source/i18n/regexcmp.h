@@ -53,9 +53,9 @@ public:
         UBool               fQuoted;
     };
 
-    RegexCompile(UErrorCode &e);
+    RegexCompile(RegexPattern *rp, UErrorCode &e);
     
-    void       compile(RegexPattern &rxp, const UnicodeString &pat, UParseError &pp, UErrorCode &e);
+    void       compile(const UnicodeString &pat, UParseError &pp, UErrorCode &e);
 
 
     virtual    ~RegexCompile();
