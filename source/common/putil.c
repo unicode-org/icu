@@ -32,6 +32,7 @@
 *   08/04/99    jeffrey R.  Added OS/2 changes
 *   11/15/99    helena      Integrated S/390 IEEE support.
 *   04/26/01    barry n.    OS/400 support for uprv_getDefaultLocaleID
+*   15/08/01    ram         Add itou,stod,dtos,utoi functions
 ******************************************************************************
 */
 
@@ -61,6 +62,7 @@
 #include <math.h>
 #include <locale.h>
 #include <time.h>
+#include <float.h>
 
 /* include ICU headers */
 #include "unicode/utypes.h"
@@ -596,6 +598,68 @@ uprv_longBitsFromDouble(double d, int32_t *hi, uint32_t *lo)
     *lo = *(uint32_t*)u_bottomNBytesOfDouble(&d, sizeof(uint32_t));
 }
 
+U_CAPI double   
+uprv_strtod(const char* source, char** end)
+{
+    return strtod(source,end);
+}
+
+
+U_CAPI char* 
+uprv_dtostr(double value, char *buffer, int maximumDigits,UBool fixedPoint)
+{
+    int start = 0;
+    int end =0;
+    sprintf(buffer,"%.3f",value);
+    /* truncate trailing zeros */
+    end = uprv_strlen(buffer);
+    start=(uprv_strchr(buffer, '.')+2-buffer);
+    while(end-- > start){
+        if(buffer[end]=='0'){
+            buffer[end]=0;
+        }else{
+            break;
+        }
+    }
+    return buffer;
+}
+
+/*Takes a int32_t and fills in  a UChar* string with that number "radix"-based
+ * and padded with "pad" zeroes
+ */
+#define MAX_DIGITS 10
+U_CAPI int32_t
+uprv_itou (UChar * buffer, uint32_t i, uint32_t radix, int32_t pad)
+{
+    int32_t length = 0;
+    int32_t num = 0;
+    int digit;
+    int32_t j;
+    UChar temp;
+
+    do{
+        digit = (int)(i % radix);
+        buffer[length++]=(UChar)(digit<=9?(0x0030+digit):(0x0030+digit+7));
+        i=i/radix;
+    } while(i);
+
+    while (length < pad){
+        buffer[length++] = (UChar) 0x0030;/*zero padding */
+    }
+    /* null terminate the buffer */
+    if(length<MAX_DIGITS){
+        buffer[length] = (UChar) 0x0000;
+    }
+    num= (pad>=length) ? pad :length;
+
+    /* Reverses the string */
+    for (j = 0; j < (num / 2); j++){
+        temp = buffer[(length-1) - j];
+        buffer[(length-1) - j] = buffer[j];
+        buffer[j] = temp;
+    }
+    return length;
+}
 
 /**
  * Return the floor of the log base 10 of a given double.
@@ -1954,7 +2018,7 @@ const char* uprv_getDefaultCodepage()
 /*
  * These maps for ASCII to/from EBCDIC are from
  * "UTF-EBCDIC - EBCDIC-Friendly Unicode (or UCS) Transformation Format"
- * at http://www.unicode.org/unicode/reports/tr16/
+ * at http:/*www.unicode.org/unicode/reports/tr16/
  * (which should reflect codepage 1047)
  * but modified to explicitly exclude the variant
  * control and graphical characters that are in ASCII-based
@@ -2191,6 +2255,33 @@ _uErrorInfoName[U_ERROR_INFO_LIMIT-U_ERROR_INFO_START]={
 };
 
 static const char *
+_uTransErrorName[U_PARSE_ERROR_END - U_PARSE_ERROR_BASE + 1 ]={
+    "U_PARSE_ERROR_BASE", 
+    "U_BAD_VARIABLE_DEFINITION",
+    "U_MALFORMED_RULE",
+    "U_MALFORMED_SET",
+    "U_MALFORMED_SYMBOL_REFERENCE",
+    "U_MALFORMED_UNICODE_ESCAPE",
+    "U_MALFORMED_VARIABLE_DEFINITION",
+    "U_MALFORMED_VARIABLE_REFERENCE",
+    "U_MISMATCHED_SEGMENT_DELIMITERS",
+    "U_MISPLACED_ANCHOR_START",
+    "U_MISPLACED_CURSOR_OFFSET",
+    "U_MISPLACED_QUANTIFIER",
+    "U_MISSING_OPERATOR",
+    "U_MISSING_SEGMENT_CLOSE",
+    "U_MULTIPLE_ANTE_CONTEXTS",
+    "U_MULTIPLE_CURSORS",
+    "U_MULTIPLE_POST_CONTEXTS",
+    "U_TRAILING_BACKSLASH",
+    "U_UNDEFINED_SEGMENT_REFERENCE",
+    "U_UNDEFINED_VARIABLE",
+    "U_UNQUOTED_SPECIAL",
+    "U_UNTERMINATED_QUOTE",
+    "U_PARSE_ERROR_END"
+};
+
+static const char *
 _uErrorName[U_ERROR_LIMIT]={
     "U_ZERO_ERROR",
 
@@ -2217,14 +2308,18 @@ _uErrorName[U_ERROR_LIMIT]={
     "U_CE_NOT_FOUND_ERROR",  
     "U_PRIMARY_TOO_LONG_ERROR",
     "U_STATE_TOO_OLD_ERROR"
+    "U_UNSUPPORTED_ATTRIBUTE",
+    "U_UNSUPPORTED_PROPERTY"
 };
 
 U_CAPI const char * U_EXPORT2
 u_errorName(UErrorCode code) {
-    if(code>=0 && code<U_ERROR_LIMIT) {
+    if(code>=0 && code<U_UNSUPPORTED_PROPERTY) {
         return _uErrorName[code];
     } else if(code>=U_ERROR_INFO_START && code<U_ERROR_INFO_LIMIT) {
         return _uErrorInfoName[code-U_ERROR_INFO_START];
+    }else if(U_PARSE_ERROR_END - code <= U_PARSE_ERROR_END - U_PARSE_ERROR_BASE){
+        return _uTransErrorName[code - U_PARSE_ERROR_BASE];
     } else {
         return "[BOGUS UErrorCode]";
     }
@@ -2238,7 +2333,7 @@ struct
 _localeToDefaultCharmapTable [] =
 {
 /*
-  See:         http://czyborra.com/charsets/iso8859.html
+  See:         http:/*czyborra.com/charsets/iso8859.html
 */
 
 /* xx_XX locales first, so they will match: */

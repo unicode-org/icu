@@ -39,43 +39,6 @@
 #define UCNV_PRV_ESCAPE_JAVA    'J'
 
 
-/*Takes a int32_t and fills in  a UChar* string with that number "radix"-based
- * and padded with "pad" zeroes
- */
-#define MAX_DIGITS 10
-static int32_t
-itou (UChar * buffer, uint32_t i, uint32_t radix, int32_t pad)
-{
-    int32_t length = 0;
-    int32_t num = 0;
-    int digit;
-    int32_t j;
-    UChar temp;
-
-    do{
-        digit = (int)(i % radix);
-        buffer[length++]=(UChar)(digit<=9?(0x0030+digit):(0x0030+digit+7));
-        i=i/radix;
-    } while(i);
-
-    while (length < pad){
-        buffer[length++] = (UChar) 0x0030;/*zero padding */
-    }
-    /* null terminate the buffer */
-    if(length<MAX_DIGITS){
-        buffer[length] = (UChar) 0x0000;
-    }
-    num= (pad>=length) ? pad :length;
-
-    /* Reverses the string */
-    for (j = 0; j < (num / 2); j++){
-        temp = buffer[(length-1) - j];
-        buffer[(length-1) - j] = buffer[j];
-        buffer[j] = temp;
-    }
-    return length;
-}
-
 /*Function Pointer STOPS at the ILLEGAL_SEQUENCE */
 void   UCNV_FROM_U_CALLBACK_STOP (
                   const void *context,
@@ -177,7 +140,7 @@ void   UCNV_FROM_U_CALLBACK_SUBSTITUTE (
     }
 }
 
-/*uses itou to get a unicode escape sequence of the offensive sequence,
+/*uses uprv_itou to get a unicode escape sequence of the offensive sequence,
  *uses a clean copy (resetted) of the converter, to convert that unicode
  *escape sequence to the target codepage (if conversion failure happens then
  *we revert to substituting with subchar)
@@ -227,7 +190,7 @@ void   UCNV_FROM_U_CALLBACK_ESCAPE (
       {
         valueString[valueStringLength++] = (UChar) UNICODE_PERCENT_SIGN_CODEPOINT;  /* adding % */
         valueString[valueStringLength++] = (UChar) UNICODE_U_CODEPOINT; /* adding U */
-        itou (valueString + valueStringLength, codeUnits[i++], 16, 4);
+        uprv_itou (valueString + valueStringLength, codeUnits[i++], 16, 4);
         valueStringLength += 4;
       }
   }
@@ -240,7 +203,7 @@ void   UCNV_FROM_U_CALLBACK_ESCAPE (
           {
             valueString[valueStringLength++] = (UChar) UNICODE_RS_CODEPOINT;    /* adding \ */
             valueString[valueStringLength++] = (UChar) UNICODE_U_LOW_CODEPOINT; /* adding u */
-            itou (valueString + valueStringLength, codeUnits[i++], 16, 4);
+            uprv_itou (valueString + valueStringLength, codeUnits[i++], 16, 4);
             valueStringLength += 4;
           }
           break;
@@ -251,12 +214,12 @@ void   UCNV_FROM_U_CALLBACK_ESCAPE (
             if(length==2){
                 UChar32 temp = UTF16_GET_PAIR_VALUE(codeUnits[0],codeUnits[1]);
                 valueString[valueStringLength++] = (UChar) UNICODE_U_LOW_CODEPOINT; /* adding u */
-                valueStringLength += itou (valueString + valueStringLength, temp, 16, 8);
+                valueStringLength += uprv_itou (valueString + valueStringLength, temp, 16, 8);
                 
             }
             else{
                 valueString[valueStringLength++] = (UChar) UNICODE_U_CODEPOINT; /* adding U */
-                valueStringLength += itou (valueString + valueStringLength, codeUnits[0], 16, 4);
+                valueStringLength += uprv_itou (valueString + valueStringLength, codeUnits[0], 16, 4);
             }
           break;
 
@@ -266,11 +229,11 @@ void   UCNV_FROM_U_CALLBACK_ESCAPE (
             valueString[valueStringLength++] = (UChar) UNICODE_HASH_CODEPOINT;  /* adding # */
             if(length==2){
                 UChar32 temp = UTF16_GET_PAIR_VALUE(codeUnits[0],codeUnits[1]);
-                valueStringLength += itou (valueString + valueStringLength, temp, 10, 0);
+                valueStringLength += uprv_itou (valueString + valueStringLength, temp, 10, 0);
                 
             }
             else{
-                valueStringLength += itou (valueString + valueStringLength, codeUnits[0], 10, 4);
+                valueStringLength += uprv_itou (valueString + valueStringLength, codeUnits[0], 10, 4);
             }
           break;
 
@@ -281,11 +244,11 @@ void   UCNV_FROM_U_CALLBACK_ESCAPE (
             valueString[valueStringLength++] = (UChar) UNICODE_X_LOW_CODEPOINT; /* adding x */
             if(length==2){
                 UChar32 temp = UTF16_GET_PAIR_VALUE(codeUnits[0],codeUnits[1]);
-                valueStringLength += itou (valueString + valueStringLength, temp, 16, 0);
+                valueStringLength += uprv_itou (valueString + valueStringLength, temp, 16, 0);
                 
             }
             else{
-                valueStringLength += itou (valueString + valueStringLength, codeUnits[0], 16, 4);
+                valueStringLength += uprv_itou (valueString + valueStringLength, codeUnits[0], 16, 4);
             }
           break;
        default:
@@ -293,7 +256,7 @@ void   UCNV_FROM_U_CALLBACK_ESCAPE (
           {
             valueString[valueStringLength++] = (UChar) UNICODE_PERCENT_SIGN_CODEPOINT;  /* adding % */
             valueString[valueStringLength++] = (UChar) UNICODE_U_CODEPOINT;             /* adding U */
-            itou (valueString + valueStringLength, codeUnits[i++], 16, 4);
+            uprv_itou (valueString + valueStringLength, codeUnits[i++], 16, 4);
             valueStringLength += 4;
           }
       }
@@ -395,7 +358,7 @@ void   UCNV_TO_U_CALLBACK_SUBSTITUTE (
 
 }
 
-/*uses itou to get a unicode escape sequence of the offensive sequence,
+/*uses uprv_itou to get a unicode escape sequence of the offensive sequence,
  *and uses that as the substitution sequence
  */
 void  UCNV_TO_U_CALLBACK_ESCAPE (
@@ -425,7 +388,7 @@ void  UCNV_TO_U_CALLBACK_ESCAPE (
     {
         uniValueString[valueStringLength++] = (UChar) UNICODE_PERCENT_SIGN_CODEPOINT; /* adding % */
         uniValueString[valueStringLength++] = (UChar) UNICODE_X_CODEPOINT;    /* adding X */
-        itou (uniValueString + valueStringLength, (uint8_t) codeUnits[i++], 16, 2);
+        uprv_itou (uniValueString + valueStringLength, (uint8_t) codeUnits[i++], 16, 2);
         valueStringLength += 2;
     }
 

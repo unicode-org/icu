@@ -326,21 +326,6 @@
 #define flushInternalUnicodeBuffer flushInternalUnicodeBuffer_1_9
 #define frenchSub frenchSub_1_9
 #define gGlobalMutex gGlobalMutex_1_9
-#define g_umsgDateModifierList g_umsgDateModifierList_1_9
-#define g_umsgListLength g_umsgListLength_1_9
-#define g_umsgModifierList g_umsgModifierList_1_9
-#define g_umsgTypeList g_umsgTypeList_1_9
-#define g_umsg_choice g_umsg_choice_1_9
-#define g_umsg_currency g_umsg_currency_1_9
-#define g_umsg_date g_umsg_date_1_9
-#define g_umsg_full g_umsg_full_1_9
-#define g_umsg_integer g_umsg_integer_1_9
-#define g_umsg_long g_umsg_long_1_9
-#define g_umsg_medium g_umsg_medium_1_9
-#define g_umsg_number g_umsg_number_1_9
-#define g_umsg_percent g_umsg_percent_1_9
-#define g_umsg_short g_umsg_short_1_9
-#define g_umsg_time g_umsg_time_1_9
 #define getDiscontiguous getDiscontiguous_1_9
 #define getFCHK_STAGE_1_ getFCHK_STAGE_1__1_9
 #define getFCHK_STAGE_2_ getFCHK_STAGE_2__1_9
@@ -766,7 +751,6 @@
 #define udat_getSymbols udat_getSymbols_1_9
 #define udat_isLenient udat_isLenient_1_9
 #define udat_open udat_open_1_9
-#define udat_openPattern udat_openPattern_1_9
 #define udat_parse udat_parse_1_9
 #define udat_set2DigitYearStart udat_set2DigitYearStart_1_9
 #define udat_setCalendar udat_setCalendar_1_9
@@ -859,7 +843,6 @@
 #define unum_getSymbols unum_getSymbols_1_9
 #define unum_getTextAttribute unum_getTextAttribute_1_9
 #define unum_open unum_open_1_9
-#define unum_openPattern unum_openPattern_1_9
 #define unum_parse unum_parse_1_9
 #define unum_parseDouble unum_parseDouble_1_9
 #define unum_setAttribute unum_setAttribute_1_9
