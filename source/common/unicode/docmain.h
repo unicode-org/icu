@@ -1,12 +1,13 @@
-opyright (C) 1996-1999, International Business Machines
-*   Corporation and others.  All Rights Reserved.
-**********************************************************************
-*
-*  FILE NAME: DOCMAIN.h
-*
-*   Date          Name        Description
-*   12/11/2000    Ram	      Creation.
-*/
+/********************************************************************
+ * COPYRIGHT: 
+ * Copyright (c) 1997-1999, International Business Machines Corporation and
+ * others. All Rights Reserved.
+ *
+ *  FILE NAME: DOCMAIN.h
+ *
+ *   Date          Name        Description
+ *   12/11/2000    Ram	      Creation.
+ */
 /* This file contains documentation for Doxygen and doesnot have
  * any significance with respect to C or C++ API
  */
@@ -69,7 +70,7 @@ opyright (C) 1996-1999, International Business Machines
  * </tr>
  * <tr>
  * <td>String and Character Iteration</td>
- * <td>chariter.h, ustring.h, utf.h, uchar.h</td>
+ * <td>ustring.h, utf.h, uchar.h</td>
  * <td>CharacterIterator, Unicode, UnicodeString</td>
  * </tr>
  * <tr>
@@ -99,7 +100,7 @@ opyright (C) 1996-1999, International Business Machines
  * </tr>
  * <tr>
  * <td>Message Formatting</td>
- * <td>umsg.h</td>
+ * <td>unum.h</td>
  * <td>MessageFormat</td>
  * </tr>
  * <tr>

@@ -218,7 +218,7 @@
  *                      UErrorCode *pErrorCode) {
  *     UBiDi *para;
  *
- *     if(pErrorCode==NULL || U_FAILURE(*pErrorCode) || length&lt;=0) {
+ *     if(pErrorCode==NULL || U_FAILURE(*pErrorCode) || length<=0) {
  *         return;
  *     }
  *
@@ -233,7 +233,7 @@
  *         StyleRun styleRun={ length, styleNormal };
  *         int width;
  *
- *         if(styleRuns==NULL || styleRunCount&lt;=0) {
+ *         if(styleRuns==NULL || styleRunCount<=0) {
  *            styleRunCount=1;
  *             styleRuns=&styleRun;
  *         }
@@ -241,7 +241,7 @@
  *        // assume styleRuns[styleRunCount-1].limit>=length
  *
  *         width=getTextWidth(text, 0, length, styleRuns, styleRunCount);
- *         if(width&lt;=lineWidth) {
+ *         if(width<=lineWidth) {
  *             // everything fits onto one line
  *
  *            // prepare rendering a new line from either left or right
@@ -559,7 +559,7 @@ ubidi_isInverse(UBiDi *pBiDi);
  *        (same index) character if the level has the
  *        <code>UBIDI_LEVEL_OVERRIDE</code> bit set.<p>
  *        Except for that bit, it must be
- *        <code>paraLevel&lt;=embeddingLevels[]&lt;=UBIDI_MAX_EXPLICIT_LEVEL</code>.<p>
+ *        <code>paraLevel<=embeddingLevels[]<=UBIDI_MAX_EXPLICIT_LEVEL</code>.<p>
  *        <strong>Caution: </strong>A copy of this pointer, not of the levels,
  *        will be stored in the <code>UBiDi</code> object;
  *        the <code>embeddingLevels</code> array must not be
@@ -614,7 +614,7 @@ ubidi_setPara(UBiDi *pBiDi, const UChar *text, UTextOffset length,
  *
  * @param limit is just behind the line's last index into the paragraph text
  *        (its last index +1).<br>
- *        It must be <code>0&lt;=start&lt;=limit&lt;=</code>paragraph length.
+ *        It must be <code>0<=start<=limit<=</code>paragraph length.
  *
  * @param pLineBiDi is the object that will now represent a line of the paragraph.
  *
@@ -908,7 +908,7 @@ ubidi_getVisualMap(UBiDi *pBiDi, UTextOffset *indexMap, UErrorCode *pErrorCode);
  *
  * @param length is the number of levels in the array, or, semantically,
  *        the number of objects to be reordered.
- *        It must be <code>length&gt;0</code>.
+ *        It must be <code>length>0</code>.
  *
  * @param indexMap is a pointer to an array of <code>length</code>
  *        indexes which will reflect the reordering of the characters.
@@ -930,7 +930,7 @@ ubidi_reorderLogical(const UBiDiLevel *levels, UTextOffset length, UTextOffset *
  *
  * @param length is the number of levels in the array, or, semantically,
  *        the number of objects to be reordered.
- *        It must be <code>length&gt;0</code>.
+ *        It must be <code>length>0</code>.
  *
  * @param indexMap is a pointer to an array of <code>length</code>
  *        indexes which will reflect the reordering of the characters.

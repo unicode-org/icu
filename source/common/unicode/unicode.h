@@ -902,7 +902,7 @@ public:
      * like A-Z, 0-9, space, and '-'.
      *
      * @param code The character (code point) for which to get the name.
-     *             It must be <code>0&lt;=code&lt;0x10ffff</code>.
+     *             It must be <code>0<=code<0x10ffff</code>.
      * @param buffer Destination address for copying the name.
      * @param bufferLength <code>==sizeof(buffer)</code>
      * @param nameChoice Selector for which name to get.
@@ -941,8 +941,8 @@ public:
      * Returns the numeric value of the character <code>ch</code> in the 
      * specified radix. 
      * <p>
-     * If the radix is not in the range <code>MIN_RADIX</code>&nbsp;&lt;= 
-     * <code>radix</code>&nbsp;&lt;= <code>MAX_RADIX</code> or if the 
+     * If the radix is not in the range <code>MIN_RADIX <= 
+     * radix <= MAX_RADIX</code> or if the 
      * value of <code>ch</code> is not a valid digit in the specified 
      * radix, <code>-1</code> is returned. A character is a valid digit 
      * if at least one of the following is true:
@@ -953,13 +953,13 @@ public:
      *     In this case the decimal digit value is returned. 
      * <li>The character is one of the uppercase Latin letters 
      *     <code>'A'</code> through <code>'Z'</code> and its code is less than
-     *     <code>radix&nbsp;+ 'A'&nbsp;-&nbsp;10</code>. 
-     *     In this case, <code>ch&nbsp;- 'A'&nbsp;+&nbsp;10</code> 
+     *     <code>radix + 'A' - 10</code>. 
+     *     In this case, <code>ch - 'A' + 10</code> 
      *     is returned. 
      * <li>The character is one of the lowercase Latin letters 
      *     <code>'a'</code> through <code>'z'</code> and its code is less than
-     *     <code>radix&nbsp;+ 'a'&nbsp;-&nbsp;10</code>. 
-     *     In this case, <code>ch&nbsp;- 'a'&nbsp;+&nbsp;10</code> 
+     *     <code>radix + 'a' - 10</code>. 
+     *     In this case, <code>ch - 'a' + 10</code> 
      *     is returned. 
      * </ul>
      *
@@ -986,11 +986,11 @@ public:
      * The <code>radix</code> argument is valid if it is greater than or 
      * equal to <code>MIN_RADIX</code> and less than or equal to 
      * <code>MAX_RADIX</code>. The <code>digit</code> argument is valid if
-     * <code>0&nbsp;&lt;= digit&nbsp;&lt;=&nbsp;radix</code>. 
+     * <code>0 <= digit <= radix</code>. 
      * <p>
      * If the digit is less than 10, then 
-     * <code>'0'&nbsp;+ digit</code> is returned. Otherwise, the value 
-     * <code>'a'&nbsp;+ digit&nbsp;-&nbsp;10</code> is returned. 
+     * <code>'0' + digit</code> is returned. Otherwise, the value 
+     * <code>'a' + digit - 10</code> is returned. 
      *
      * @param   digit   the number to convert to a character.
      * @param   radix   the radix.
