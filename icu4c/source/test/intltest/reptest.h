@@ -33,9 +33,8 @@ public:
     /*Tests the Replaceable class according to the API documentation. */
     void TestReplaceableClass(void);
 private:
-    void Check( const UnicodeString& transliteratorName, 
+    void check( const UnicodeString& transliteratorName, 
                 const UnicodeString& test, 
-                const UnicodeString& styles, 
                 const UnicodeString& shouldProduceStyles);
 };
 
