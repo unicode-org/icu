@@ -346,15 +346,15 @@ U_CFUNC uint32_t ucol_getCEGenerator(ucolCEGenerator *g, uint32_t* lows, uint32_
     ucol_countBytes(g->lastMid, g->midByteCount);
     ucol_countBytes(g->lastHigh, g->highByteCount);
 
-    if(g->firstLow < low || g->lastLow > high) {
+    if(g->firstLow < low || g->lastLow > high || g->firstLow > g->lastLow) {
       g->firstLow = g->lastLow = 0;
       g->lowByteCount = 0xFFFF;
     }
-    if(g->firstMid < low || g->lastMid > high) {
+    if(g->firstMid < low || g->lastMid > high || g->firstMid > g->lastMid) {
       g->firstMid = g->lastMid = 0;
       g->midByteCount = 0xFFFF;
     }
-    if(g->firstHigh < low || g->lastHigh > high) {
+    if(g->firstHigh < low || g->lastHigh > high || g->firstHigh > g->lastHigh) {
       g->firstHigh = g->lastHigh = 0;
       g->highByteCount = 0xFFFF;
     }
@@ -465,10 +465,6 @@ U_CFUNC void ucol_doCE(uint32_t *CEparts, UColToken *tok, UHashtable *tailored, 
       value = 0x80; /* Continuation marker */
     } else {
       value = 0;
-    }
-
-    if(tok->caseBit == TRUE) {
-      value |= 0x40;
     }
 
     if(2*CEi<noOfBytes[0]) {
