@@ -42,6 +42,7 @@
 #include "uprops.h"
 #include "gregoimp.h" 
 #include "cstring.h"
+#include "uassert.h"
 #include <float.h>
 
 #if defined( U_DEBUG_CALSVC ) || defined (U_DEBUG_CAL)
@@ -581,6 +582,10 @@ SimpleDateFormat::subFormat(UnicodeString &appendTo,
     if (U_FAILURE(status)) {
         return;
     }
+    // assert values are in range before using them to index arrays
+    U_ASSERT(field == UDAT_YEAR_FIELD || field == UDAT_YEAR_WOY_FIELD ||
+             (value >= cal.getMinimum(field) &&
+              value <= cal.getMaximum(field)));
 
     switch (patternCharIndex) {
     
