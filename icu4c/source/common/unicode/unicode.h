@@ -905,9 +905,10 @@ public:
     /**
      * Returns the script associated with a character.
      * @see #EUnicodeScript
-     * @draft
      * @param ch The character to be tested
      * @return the script associated with a character
+     *
+     * @deprecated See the Unicode class description.
      */
     static inline EUnicodeScript getScript(UChar32 ch);
 
