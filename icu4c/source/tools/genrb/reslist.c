@@ -134,7 +134,9 @@ static uint32_t bin_write(UNewDataMemory *mem, struct SResource *res,
     }
 
     udata_write32(mem, res->u.fBinaryValue.fLength);
-    udata_writeBlock(mem, res->u.fBinaryValue.fData, res->u.fBinaryValue.fLength);
+    if (res->u.fBinaryValue.fLength > 0) {
+        udata_writeBlock(mem, res->u.fBinaryValue.fData, res->u.fBinaryValue.fLength);
+    }
     udata_writePadding(mem, (BIN_ALIGNMENT - pad + extrapad));
 
     return usedOffset;
@@ -487,6 +489,9 @@ struct SResource *bin_open(struct SRBRoot *bundle, const char *tag, uint32_t len
         }
 
         uprv_memcpy(res->u.fBinaryValue.fData, data, length);
+    }
+    else {
+        res->u.fBinaryValue.fData = NULL;
     }
 
     res->fSize = sizeof(int32_t) + sizeof(uint8_t) * length + BIN_ALIGNMENT;
