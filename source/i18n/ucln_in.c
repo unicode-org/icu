@@ -25,7 +25,8 @@ static UBool i18n_cleanup(void)
 
 #if !UCONFIG_NO_FORMATTING
     timeZone_cleanup();
-	numfmt_cleanup();
+    numfmt_cleanup();
+    currency_cleanup();
 #endif
 
 #if !UCONFIG_NO_COLLATION

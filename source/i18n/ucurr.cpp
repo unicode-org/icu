@@ -13,6 +13,7 @@
 #include "unicode/locid.h"
 #include "unicode/resbund.h"
 #include "unicode/ustring.h"
+#include "cmemory.h"
 #include "cstring.h"
 #include "uassert.h"
 #include "iculserv.h"
@@ -118,35 +119,6 @@ _findMetaData(const UChar* currency) {
     return data;
 }
 
-const UChar* 
-internal_ucurr_forLocale(const char* locale, UErrorCode* ec) {
-
-        // Extract the country name and variant name.  We only
-        // recognize two variant names, EURO and PREEURO.
-        char country[12];
-        char variant[8];
-        uloc_getCountry(locale, country, sizeof(country), ec);
-        uloc_getVariant(locale, variant, sizeof(variant), ec);
-        if (0 == uprv_strcmp(variant, VAR_PRE_EURO) ||
-            0 == uprv_strcmp(variant, VAR_EURO)) {
-            uprv_strcat(country, VAR_DELIM);
-            uprv_strcat(country, variant);
-        }
-
-        // Look up the CurrencyMap element in the root bundle.
-	UResourceBundle* rb = ures_open(NULL, "", ec);
-	UResourceBundle* cm = ures_getByKey(rb, CURRENCY_MAP, NULL, ec);
-	int32_t len;
-	const UChar* s = ures_getStringByKey(cm, country, &len, ec);
-	ures_close(cm);
-	ures_close(rb);
-
-	if (U_SUCCESS(*ec)) {
-	    return s;
-	}
-
-    return NULL;
-}
 
 // ------------------------------------------
 //
@@ -154,91 +126,98 @@ internal_ucurr_forLocale(const char* locale, UErrorCode* ec) {
 //
 //-------------------------------------------
 
-static ICULocaleService* gService = NULL;
+// don't use ICUService since we don't need fallback
 
-// -------------------------------------
+struct CReg {
+  CReg *next;
+  UChar iso[4];
+  char  id[12];
 
-class CurrencyRef : public UObject {
-public:
-    const UChar* str;
-    CurrencyRef(const UChar* isoCode) : str(isoCode) {}
+  static UMTX gLock;
+  static CReg* gHead;
 
-    inline virtual UClassID getDynamicClassID() const {
-		return (UClassID)&fgClassID;
-	}
-
-	inline static  UClassID getStaticClassID() {
-		return (UClassID)&fgClassID;
-	}
-
-private:
-    /**
-     * Class ID
-     */
-    static const char fgClassID;
-};
-
-const char CurrencyRef::fgClassID = 0;
-
-// -------------------------------------
-
-CurrencyRef* 
-makeCurrencyRef(const Locale& loc, UErrorCode& status) {
-  const UChar* isoCode = internal_ucurr_forLocale(loc.getName(), &status);
-  if (isoCode) {
-    return new CurrencyRef(isoCode);
+  CReg(const UChar* _iso, const char* _id)
+    : next(0)
+  {
+    uprv_strcpy(id, _id);
+    uprv_memcpy(iso, _iso, 3 * sizeof(const UChar));
+    iso[3] = 0;
   }
-  return NULL;
-}
 
-// -------------------------------------
-
-class ICUCurrencyFactory : public ICUResourceBundleFactory {
-protected:
-  virtual UObject* handleCreate(const Locale& loc, int32_t kind, const ICUService* service, UErrorCode& status) const {
-    return makeCurrencyRef(loc, status);
+  static UCurrRegistryKey reg(const UChar* _iso, const char* _id, UErrorCode* status)
+  {
+    if (status && U_SUCCESS(*status)) {
+      CReg* n = new CReg(_iso, _id);
+      if (n) {
+        Mutex mutex(&gLock);
+        n->next = gHead;
+        gHead = n;
+        return n;
+      }
+      *status = U_MEMORY_ALLOCATION_ERROR;
+    }
+    return 0;
   }
-};
 
-// -------------------------------------
-
-class ICUCurrencyService : public ICULocaleService {
-public:
-    ICUCurrencyService()
-        : ICULocaleService("Currency")
-    {
-        UErrorCode status = U_ZERO_ERROR;
-        registerFactory(new ICUCurrencyFactory(), status);
-    }
-
-    virtual UObject* cloneInstance(UObject* instance) const {
-        return new CurrencyRef(((CurrencyRef*)instance)->str);
-    }
-
-    virtual UObject* handleDefault(const ICUServiceKey& key, UnicodeString* actualID, UErrorCode& status) const {
-        LocaleKey& lkey = (LocaleKey&)key;
-        Locale loc;
-        lkey.currentLocale(loc);
-        return makeCurrencyRef(loc, status);
-    }
-
-    virtual UBool isDefault() const {
-        return countFactories() == 1;
-    }
-};
-
-// -------------------------------------
-
-static UMTX gLock = 0;
-
-static ICULocaleService* 
-getService(void)
-{
+  static UBool unreg(UCurrRegistryKey key) {
     Mutex mutex(&gLock);
-    if (gService == NULL) {
-        gService = new ICUCurrencyService();
+    if (gHead == key) {
+      gHead = gHead->next;
+      return TRUE;
     }
-    return gService;
+
+    CReg* p = gHead;
+    while (p) {
+      if (p->next == key) {
+        p->next = ((CReg*)key)->next;
+	    delete (CReg*)key;	
+        return TRUE;
+      }
+      p = p->next;
+    }
+
+    return FALSE;
+  }
+
+  static const UChar* get(const char* id) {
+    Mutex mutex(&gLock);
+    CReg* p = gHead;
+    while (p) {
+      if (uprv_strcmp(id, p->id) == 0) {
+        return p->iso;
+      }
+      p = p->next;
+    }
+    return NULL;
+  }
+
+  static void cleanup(void) {
+    while (gHead) {
+      CReg* n = gHead;
+      gHead = gHead->next;
+      delete n;
+    }
+    umtx_destroy(&gLock);
+  }
+};
+
+UMTX CReg::gLock = 0;
+CReg* CReg::gHead = 0;
+
+// -------------------------------------
+
+void idForLocale(const char* locale, char* buffer, int capacity, UErrorCode* ec) {
+  // !!! this is internal only, assumes buffer is not null and capacity is sufficient
+  // Extract the country name and variant name.  We only
+  // recognize two variant names, EURO and PREEURO.
+  char variant[8];
+  uloc_getCountry(locale, buffer, capacity, ec);
+  uloc_getVariant(locale, variant, sizeof(variant), ec);
+  if (0 == uprv_strcmp(variant, VAR_PRE_EURO) ||
+      0 == uprv_strcmp(variant, VAR_EURO)) {
+    uprv_strcat(buffer, VAR_DELIM);
+    uprv_strcat(buffer, variant);
+  }
 }
 
 // -------------------------------------
@@ -246,13 +225,12 @@ getService(void)
 U_CAPI UCurrRegistryKey U_EXPORT2
 ucurr_register(const UChar* isoCode, const char* locale, UErrorCode *status) 
 {
-    URegistryKey result = NULL;
-    if (status && U_SUCCESS(*status)) {
-        CurrencyRef* ref = new CurrencyRef(isoCode);
-        Locale loc(locale);
-        result = getService()->registerInstance(ref, loc, *status);
-    }
-    return result;
+  if (status && U_SUCCESS(*status)) {
+    char id[12];
+    idForLocale(locale, id, sizeof(id), status);
+    return CReg::reg(isoCode, id, status);
+  }
+  return NULL;
 }
 
 // -------------------------------------
@@ -261,10 +239,7 @@ U_CAPI UBool U_EXPORT2
 ucurr_unregister(UCurrRegistryKey key, UErrorCode* status) 
 {
   if (status && U_SUCCESS(*status)) {
-    if (gService != NULL) {
-      return gService->unregister(key, *status);
-    }
-    *status = U_ILLEGAL_ARGUMENT_ERROR;
+    return CReg::unreg(key);
   }
   return FALSE;
 }
@@ -272,23 +247,35 @@ ucurr_unregister(UCurrRegistryKey key, UErrorCode* status)
 // -------------------------------------
 
 U_CAPI const UChar* U_EXPORT2
-ucurr_forLocale(const char* locale,
-                UErrorCode* ec) {
-    if (ec != NULL && U_SUCCESS(*ec)) {
-    if (gService) {
-      const UChar* result = NULL;
-      Locale loc(locale);
-      CurrencyRef* ref = (CurrencyRef*)gService->get(loc, *ec);
-      if (ref) {
-        result = ref->str; // points to original
-        delete ref;
-      }
+ucurr_forLocale(const char* locale, UErrorCode* ec) {
+  if (ec != NULL && U_SUCCESS(*ec)) {
+    char id[12];
+    idForLocale(locale, id, sizeof(id), ec);
+    if (U_FAILURE(*ec)) {
+      return NULL;
+    }
+
+    const UChar* result = CReg::get(id);
+    if (result) {
       return result;
-    } 
-    return internal_ucurr_forLocale(locale, ec);
-	}
-	return NULL;
+    }
+
+    // Look up the CurrencyMap element in the root bundle.
+    UResourceBundle* rb = ures_open(NULL, "", ec);
+    UResourceBundle* cm = ures_getByKey(rb, CURRENCY_MAP, NULL, ec);
+    int32_t len;
+    const UChar* s = ures_getStringByKey(cm, id, &len, ec);
+    ures_close(cm);
+    ures_close(rb);
+
+    if (U_SUCCESS(*ec)) {
+      return s;
+    }
+  }
+  return NULL;
 }
+
+// end registration
 
 /**
  * Modify the given locale name by removing the rightmost _-delimited
@@ -443,14 +430,10 @@ ucurr_getRoundingIncrement(const UChar* currency) {
 }
 
 /**
- * Release all static memory held by breakiterator.  
+ * Release all static memory held by currency.
  */
 U_CFUNC UBool currency_cleanup(void) {
-  if (gService) {
-    delete gService;
-    gService = NULL;
-  }
-  umtx_destroy(&gLock);
+  CReg::cleanup();
   return TRUE;
 }
 
