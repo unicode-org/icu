@@ -573,7 +573,10 @@ int32_t RuleBasedBreakIterator::handleNext(void) {
 
       // loop until we reach the end of the text or transition to state 0
       for (;;) {
-        if (c == CharacterIterator::DONE ) {
+        if (c == CharacterIterator::DONE && fText->hasNext()==FALSE) {
+            // Note: CharacterIterator::DONE is 0xffff, which is also a legal
+            //       character value.  Check for DONE first, because it's quicker,
+            //       but also need to check fText->hasNext() to be certain.
             break;
         }
         // look up the current character's character category, which tells us
@@ -667,9 +670,11 @@ continueOn:
     // a lookahead state, advance the break position to the lookahead position
     // (the theory here is that if there are no characters at all after the lookahead
     // position, that always matches the lookahead criteria)
-    if (c == CharacterIterator::DONE && lookaheadResult == fText->endIndex()) {
-        result          = lookaheadResult;
-        fLastBreakTag   = lookaheadTag;
+    if (c == CharacterIterator::DONE &&
+        fText->hasNext()==FALSE &&
+        lookaheadResult == fText->endIndex()) {
+            result          = lookaheadResult;
+            fLastBreakTag   = lookaheadTag;
     }
 
 
@@ -723,7 +728,7 @@ int32_t RuleBasedBreakIterator::handlePrevious(void) {
 
     // loop until we reach the beginning of the text or transition to state 0
     for (;;) {
-        if (c == CharacterIterator::DONE) {
+        if (c == CharacterIterator::DONE && fText->hasPrevious()==FALSE) {
             break;
         }
 
@@ -806,7 +811,7 @@ continueOn:
     // Note:  the result postion isn't what is returned to the user by previous(),
     //        but where the implementation of previous() turns around and
     //        starts iterating forward again.
-    if (c == CharacterIterator::DONE) {
+    if (c == CharacterIterator::DONE && fText->hasPrevious()==FALSE) {
         result = fText->startIndex();
     }
     fText->setIndex(result);
