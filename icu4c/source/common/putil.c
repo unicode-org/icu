@@ -151,8 +151,8 @@ static const char copyright[] = U_COPYRIGHT_STRING;
 
 #if USE_64BIT_DOUBLE_OPTIMIZATION
 /* gcc 3.2 has an optimization bug */
-static const int64_t gNan64 = 0x7FF8000000000000L;
-static const int64_t gInf64 = 0x7FF0000000000000L;
+static const int64_t gNan64 = 0x7FF8000000000000LL;
+static const int64_t gInf64 = 0x7FF0000000000000LL;
 static const double * const fgNan = (const double *)(&gNan64);
 static const double * const fgInf = (const double *)(&gInf64);
 #else
