@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
  *
- *   Copyright (C) 1999-2001, International Business Machines
+ *   Copyright (C) 1999-2003, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *
  *******************************************************************************
@@ -13,15 +13,6 @@
 
 #include <windows.h>
 #include <stdio.h>
-
-//#include "LETypes.h"
-//#include "LEFontInstance.h"
-//#include "LayoutEngine.h"
-//#include "unicode/loengine.h"
-//#include "unicode/uscript.h"
-//#include "LEScripts.h"
-
-//#include "GDIFontInstance.h"
 
 #include "paragraph.h"
 

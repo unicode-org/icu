@@ -16,12 +16,11 @@
 #include "unicode/utypes.h"
 
 #include "layout/LEFontInstance.h"
+#include "layout/ParagraphLayout.h"
 
 #include "GUISupport.h"
 #include "RenderingSurface.h"
 #include "FontMap.h"
-
-#include "ParagraphLayout.h"
 
 U_NAMESPACE_USE
 
