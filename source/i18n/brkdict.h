@@ -1,9 +1,10 @@
 /*
 **********************************************************************
-*   Copyright (C) 1999 IBM and others. All rights reserved.
+*   Copyright (C) 1999-2000 IBM and others. All rights reserved.
 **********************************************************************
 *   Date        Name        Description
 *   12/1/99     rtg         Ported from Java
+*   01/13/2000  helena      Added UErrorCode to ctors.
 **********************************************************************
 */
 
@@ -99,7 +100,7 @@ public:
      * Constructor.  Creates the BreakDictionary by using readDictionaryFile() to
      * load the dictionary tables from the disk.
      */
-    BreakDictionary(char* dictionaryFilename);
+    BreakDictionary(char* dictionaryFilename, UErrorCode& status);
 
     /**
      * Destructor.

@@ -575,14 +575,26 @@ UnicodeString IntlTestTextBoundary::createTestData(Enumeration* e)
 
 void IntlTestTextBoundary::TestSentenceIteration()
 {
-    BreakIterator* e = BreakIterator::createSentenceInstance();
+    UErrorCode status = U_ZERO_ERROR;
+    BreakIterator* e = BreakIterator::createSentenceInstance(Locale::getDefault(), status);
+    if (U_FAILURE(status))
+    {
+        errln("Failed to create the BreakIterator for default locale in TestSentenceIteration.\n");
+        return;
+    }
     generalIteratorTest(*e, sentenceSelectionData);
     delete e;
 }
 
 void IntlTestTextBoundary::TestSentenceInvariants()
 {
-    BreakIterator *e = BreakIterator::createSentenceInstance();
+    UErrorCode status = U_ZERO_ERROR;
+    BreakIterator *e = BreakIterator::createSentenceInstance(Locale::getDefault(), status);
+    if (U_FAILURE(status))
+    {
+        errln("Failed to create the BreakIterator for default locale in TestSentenceInvariant.\n");
+        return;
+    }
     UnicodeString s = *cannedTestChars + CharsToUnicodeString2(".,\\u3001\\u3002\\u3041\\u3042\\u3043\\ufeff");
     doOtherInvariantTest(*e, s);
     delete e;
@@ -592,13 +604,25 @@ void IntlTestTextBoundary::TestSentenceInvariants()
 //---------------------------------------------
 void IntlTestTextBoundary::TestWordIteration()
 {
-    BreakIterator* e = BreakIterator::createWordInstance();
+    UErrorCode status = U_ZERO_ERROR;
+    BreakIterator* e = BreakIterator::createWordInstance(Locale::getDefault(), status);
+    if (U_FAILURE(status))
+    {
+        errln("Failed to create the BreakIterator for default locale in TestWordIteration.\n");
+        return;
+    }
     generalIteratorTest(*e, wordSelectionData);
     delete e;
 }
 void IntlTestTextBoundary::TestWordInvariants()
 {
-    BreakIterator *e = BreakIterator::createWordInstance();
+    UErrorCode status = U_ZERO_ERROR;
+    BreakIterator *e = BreakIterator::createWordInstance(Locale::getDefault(), status);
+    if (U_FAILURE(status))
+    {
+        errln("Failed to create the BreakIterator for default locale in TestWordInvariants.\n");
+        return;
+    }
     UnicodeString s = *cannedTestChars + CharsToUnicodeString2("\',.\\u3041\\u3042\\u3043\\u309b\\u309c\\u30a1\\u30a2\\u30a3\\u4e00\\u4e01\\u4e02");
     doBreakInvariantTest(*e, s);
     s = *cannedTestChars + CharsToUnicodeString2("\',.\\u3041\\u3042\\u3043\\u309b\\u309c\\u30a1\\u30a2\\u30a3\\u4e00\\u4e01\\u4e02");
@@ -610,14 +634,26 @@ void IntlTestTextBoundary::TestWordInvariants()
 //---------------------------------------------
 void IntlTestTextBoundary::TestCharacterIteration()
 {
-    BreakIterator* e = BreakIterator::createCharacterInstance();
+    UErrorCode status = U_ZERO_ERROR;
+    BreakIterator* e = BreakIterator::createCharacterInstance(Locale::getDefault(), status);
+    if (U_FAILURE(status))
+    {
+        errln("Failed to create the BreakIterator for default locale in TestCharacterIteration.\n");
+        return;
+    }
    // generalIteratorTest(*e, testCharacterText, characterSelectionData);
 	generalIteratorTest(*e, characterSelectionData);
     delete e;
 }
 void IntlTestTextBoundary::TestCharacterInvariants()
 {
-    BreakIterator *e = BreakIterator::createCharacterInstance();
+    UErrorCode status = U_ZERO_ERROR;
+    BreakIterator *e = BreakIterator::createCharacterInstance(Locale::getDefault(), status);
+    if (U_FAILURE(status))
+    {
+        errln("Failed to create the BreakIterator for default locale in TestCharacterInvariants.\n");
+        return;
+    }
     UnicodeString s = *cannedTestChars + CharsToUnicodeString2("\\u1100\\u1101\\u1102\\u1160\\u1161\\u1162\\u11a8\\u11a9\\u11aa");
     doBreakInvariantTest(*e, s);
     s = *cannedTestChars + CharsToUnicodeString2("\\u1100\\u1101\\u1102\\u1160\\u1161\\u1162\\u11a8\\u11a9\\u11aa");
@@ -629,13 +665,25 @@ void IntlTestTextBoundary::TestCharacterInvariants()
 //---------------------------------------------
 void IntlTestTextBoundary::TestLineIteration()
 {
-    BreakIterator* e = BreakIterator::createLineInstance();
+    UErrorCode status = U_ZERO_ERROR;
+    BreakIterator* e = BreakIterator::createLineInstance(Locale::getDefault(), status);
+    if (U_FAILURE(status))
+    {
+        errln("Failed to create the BreakIterator for default locale in TestLineIteration.\n");
+        return;
+    }
     generalIteratorTest(*e, lineSelectionData);
     delete e;
 }
 void IntlTestTextBoundary::TestLineInvariants()
 {
-    BreakIterator *e = BreakIterator::createLineInstance(Locale::US);
+    UErrorCode status = U_ZERO_ERROR;
+    BreakIterator *e = BreakIterator::createLineInstance(Locale::US, status);
+    if (U_FAILURE(status))
+    {
+        errln("Failed to create the BreakIterator for default locale in TestLineInvariants.\n");
+        return;
+    }
     UnicodeString s = CharsToUnicodeString2(".,;:\\u3001\\u3002\\u3041\\u3042\\u3043\\u3044\\u3045\\u30a3\\u4e00\\u4e01\\u4e02");
     UnicodeString testChars = *cannedTestChars + s;
     doBreakInvariantTest(*e, testChars);
@@ -713,6 +761,7 @@ void IntlTestTextBoundary::TestLineInvariants()
 
 void IntlTestTextBoundary::TestThaiLineBreak() {
         Vector* thaiLineSelection = new Vector();
+        UErrorCode status = U_ZERO_ERROR;
 
         // \u0e2f-- the Thai paiyannoi character-- isn't a letter.  It's a symbol that
         // represents elided letters at the end of a long word.  It should be bound to
@@ -742,7 +791,12 @@ thaiLineSelection->addElement(CharsToUnicodeString2("\\u0e2b\\u0e19\\u0e49\\u0e3
         thaiLineSelection->addElement(CharsToUnicodeString2("\\u0e19\\u0e31\\u0e49\\u0e19"));
 
 	    BreakIterator* e = BreakIterator::createLineInstance(
-                                                Locale(UnicodeString("th", (char*)0))); 
+                                                Locale(UnicodeString("th", (char*)0)), status); 
+        if (U_FAILURE(status))
+        {
+            errln("Failed to create the BreakIterator for default locale in TestThaiLineBreak.\n");
+            return;
+        }
 			
         generalIteratorTest(*e, thaiLineSelection);
 		delete e;
@@ -751,6 +805,7 @@ thaiLineSelection->addElement(CharsToUnicodeString2("\\u0e2b\\u0e19\\u0e49\\u0e3
 
 void IntlTestTextBoundary::TestMixedThaiLineBreak() 
 {
+        UErrorCode status = U_ZERO_ERROR;
         Vector*  thaiLineSelection= new Vector();
 
         // Arabic numerals should always be separated from surrounding Thai text
@@ -803,7 +858,13 @@ thaiLineSelection->addElement(CharsToUnicodeString2("(\\u0e1b\\u0e23\\u0e30\\u0e
         thaiLineSelection->addElement(CharsToUnicodeString2("(\"\\u0e2e\\u0e32\\u0e23\\u0e4c\\u0e14\\u0e14\\u0e34\\u0e2a\\u0e01\\u0e4c\")."));
 
 	    BreakIterator* e = BreakIterator::createLineInstance(
-                                                Locale(UnicodeString("th", (char*)0))); 
+                                                Locale(UnicodeString("th", (char*)0)), status); 
+        if (U_FAILURE(status))
+        {
+            errln("Failed to create the BreakIterator for default locale in TestMixedThaiLineBreak.\n");
+            return;
+        }
+			
 			
         generalIteratorTest(*e, thaiLineSelection);
 		delete e;
@@ -814,6 +875,7 @@ thaiLineSelection->addElement(CharsToUnicodeString2("(\\u0e1b\\u0e23\\u0e30\\u0e
 void IntlTestTextBoundary::TestMaiyamok() 
 {
         Vector*  thaiLineSelection= new Vector();
+        UErrorCode status = U_ZERO_ERROR;
         // the Thai maiyamok character is a shorthand symbol that means "repeat the previous
         // word".  Instead of appearing as a word unto itself, however, it's kept together
         // with the word before it
@@ -826,8 +888,13 @@ void IntlTestTextBoundary::TestMaiyamok()
         thaiLineSelection->addElement(CharsToUnicodeString2("\\u0e43\\u0e2b\\u0e21\\u0e48"));
 
 	    BreakIterator* e = BreakIterator::createLineInstance(
-                                                Locale(UnicodeString("th", (char*)0))); 
+                                                Locale(UnicodeString("th", (char*)0)), status); 
 			
+        if (U_FAILURE(status))
+        {
+            errln("Failed to create the BreakIterator for default locale in TestMaiyamok.\n");
+            return;
+        }
         generalIteratorTest(*e, thaiLineSelection);
 		delete e;
 		delete thaiLineSelection;
@@ -839,12 +906,18 @@ void IntlTestTextBoundary::TestMaiyamok()
  */
 void IntlTestTextBoundary::TestJapaneseLineBreak()
 {
+    UErrorCode status = U_ZERO_ERROR;
     UnicodeString testString = CharsToUnicodeString2("\\u4e00x\\u4e8c");
     UnicodeString precedingChars = CharsToUnicodeString2("([{\\u00ab$\\u00a5\\u00a3\\u00a4\\u2018\\u201a\\u201c\\u201e\\u201b\\u201f");
     UnicodeString followingChars = CharsToUnicodeString2(")]}\\u00bb!%,.\\u3001\\u3002\\u3063\\u3083\\u3085\\u3087\\u30c3\\u30e3\\u30e5\\u30e7\\u30fc:;\\u309b\\u309c\\u3005\\u309d\\u309e\\u30fd\\u30fe\\u2019\\u201d\\u00b0\\u2032\\u2033\\u2034\\u2030\\u2031\\u2103\\u2109\\u00a2\\u0300\\u0301\\u0302");
-    BreakIterator *iter = BreakIterator::createLineInstance(Locale::JAPAN);
+    BreakIterator *iter = BreakIterator::createLineInstance(Locale::JAPAN, status);
 
     UTextOffset i;
+    if (U_FAILURE(status))
+    {
+        errln("Failed to create the BreakIterator for default locale in TestJapaneseLineBreak.\n");
+        return;
+    }
 
     for (i = 0; i < precedingChars.length(); i++) {
         testString[1] = precedingChars[i];
@@ -888,8 +961,14 @@ void IntlTestTextBoundary::TestEmptyString()
 {
     UnicodeString text = "";
     Vector x;
+    UErrorCode status = U_ZERO_ERROR;
     x.addElement(text);
-    BreakIterator* bi = BreakIterator::createLineInstance();
+    BreakIterator* bi = BreakIterator::createLineInstance(Locale::getDefault(), status);
+    if (U_FAILURE(status))
+    {
+        errln("Failed to create the BreakIterator for default locale in TestEmptyString.\n");
+        return;
+    }
     generalIteratorTest(*bi, &x);
    
     delete bi;
@@ -926,8 +1005,14 @@ void IntlTestTextBoundary::TestGetDisplayName()
  */
 void IntlTestTextBoundary::TestEndBehaviour()
 {
+    UErrorCode status = U_ZERO_ERROR;
     UnicodeString testString("boo.");
-    BreakIterator *wb = BreakIterator::createWordInstance();
+    BreakIterator *wb = BreakIterator::createWordInstance(Locale::getDefault(), status);
+    if (U_FAILURE(status))
+    {
+        errln("Failed to create the BreakIterator for default locale in TestEndBehaviour.\n");
+        return;
+    }
     wb->setText(&testString);
 
     if (wb->first() != 0)
@@ -942,7 +1027,13 @@ void IntlTestTextBoundary::TestEndBehaviour()
  * @bug 4153072
  */
 void IntlTestTextBoundary::TestBug4153072() {
-    BreakIterator *iter = BreakIterator::createWordInstance();
+    UErrorCode status = U_ZERO_ERROR;
+    BreakIterator *iter = BreakIterator::createWordInstance(Locale::getDefault(), status);
+    if (U_FAILURE(status))
+    {
+        errln("Failed to create the BreakIterator for default locale in TestBug4153072\n");
+        return;
+    }
     UnicodeString str("...Hello, World!...");
     int32_t begin = 3;
     int32_t end = str.length() - 3;
@@ -965,8 +1056,15 @@ void IntlTestTextBoundary::TestBug4153072() {
  */
 void IntlTestTextBoundary::TestPreceding()
 {
+    UErrorCode status = U_ZERO_ERROR;
     UnicodeString words3("aaa bbb ccc");
-    BreakIterator* e = BreakIterator::createWordInstance();
+    BreakIterator* e = BreakIterator::createWordInstance(Locale::getDefault(), status);
+    if (U_FAILURE(status))
+    {
+        errln("Failed to create the BreakIterator for default locale in TestPreceeding.\n");
+        return;
+    }
+
     e->setText( &words3 );
     e->first();
     UTextOffset p1 = e->next();

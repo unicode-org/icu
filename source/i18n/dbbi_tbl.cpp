@@ -1,9 +1,10 @@
 /*
 **********************************************************************
-*   Copyright (C) 1999 IBM Corp. All rights reserved.
+*   Copyright (C) 1999-2000 IBM Corp. All rights reserved.
 **********************************************************************
 *   Date        Name        Description
 *   12/1/99    rgillam     Complete port from Java.
+*   01/13/2000 helena      Added UErrorCode to ctors.
 **********************************************************************
 */
 
@@ -17,10 +18,12 @@
 
 DictionaryBasedBreakIteratorTables::DictionaryBasedBreakIteratorTables(
                                  const void* tablesImage,
-                                 char* dictionaryFilename)
+                                 char* dictionaryFilename, 
+                                 UErrorCode &status)
 : RuleBasedBreakIteratorTables(tablesImage),
-  dictionary(dictionaryFilename)
+  dictionary(dictionaryFilename, status)
 {
+    if (U_FAILURE(status)) return;
     const void** tablesIdx = (const void**)tablesImage;
     const void* dbbiImage = (const void*)((const int8_t*)tablesImage + (int32_t)tablesIdx[8]);
         // we know the offset into the memory image where the DBBI stuff

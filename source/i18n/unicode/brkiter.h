@@ -1,6 +1,6 @@
 /*
 *****************************************************************************************
-*   Copyright (C) 1997-1999, International Business Machines
+*   Copyright (C) 1997-2000, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *****************************************************************************************
 *
@@ -13,6 +13,7 @@
 *   05/07/97    aliu        Fixed DLL declaration.
 *   07/09/97    jfitz       Renamed BreakIterator and interface synced with JDK
 *   08/11/98    helena      Sync-up JDK1.2.
+*   01/13/2000  helena      Added UErrorCode parameter to createXXXInstance methods.
 *****************************************************************************************
 */
 
@@ -205,7 +206,7 @@ public:
      * Return a CharacterIterator over the text being analyzed.
      * @draft
      */
-    virtual const CharacterIterator& getText() const = 0;
+    virtual const CharacterIterator& getText(void) const = 0;
 
     /**
      * Get the text for which this object is finding the boundaries.
@@ -314,12 +315,23 @@ public:
      * Create BreakIterator for word-breaks using the given locale.
      * Returns an instance of a BreakIterator implementing word breaks.
      * WordBreak is useful for word selection (ex. double click)
-     * @param where the locale. If a specific WordBreak is not
-     * avaliable for the specified locale, a default WordBreak is returned.
-     * @return A BreakIterator for word-breaks
-     * @stable
+     * @param where the locale. 
+     * @param status the error code
+     * @return A BreakIterator for word-breaks.  The UErrorCode& status 
+     * parameter is used to return status information to the user.
+     * To check whether the construction succeeded or not, you should check
+     * the value of U_SUCCESS(err).  If you wish more detailed information, you
+     * can check for informational error results which still indicate success.
+     * U_USING_FALLBACK_ERROR indicates that a fall back locale was used.  For
+     * example, 'de_CH' was requested, but nothing was found there, so 'de' was
+     * used.  U_USING_DEFAULT_ERROR indicates that the default locale data was
+     * used; neither the requested locale nor any of its fall back locales
+     * could be found.
+     * The caller owns the returned object and is responsible for deleting it.
+     * @draft
      */
-    static BreakIterator* createWordInstance(const Locale& where = Locale::getDefault());
+    static BreakIterator* createWordInstance(const Locale& where, 
+                                                   UErrorCode& status);
 
     /**
      * Create BreakIterator for line-breaks using specified locale.
@@ -327,33 +339,63 @@ public:
      * breaks are logically possible line breaks, actual line breaks are
      * usually determined based on display width.
      * LineBreak is useful for word wrapping text.
-     * @param where the locale. If a specific LineBreak is not
-     * avaliable for the specified locale, a default LineBreak is returned.
-     * @return A BreakIterator for line-breaks
-     * @stable
+     * @param where the locale. .
+     * @return A BreakIterator for line-breaks.  The UErrorCode& status 
+     * parameter is used to return status information to the user.
+     * To check whether the construction succeeded or not, you should check
+     * the value of U_SUCCESS(err).  If you wish more detailed information, you
+     * can check for informational error results which still indicate success.
+     * U_USING_FALLBACK_ERROR indicates that a fall back locale was used.  For
+     * example, 'de_CH' was requested, but nothing was found there, so 'de' was
+     * used.  U_USING_DEFAULT_ERROR indicates that the default locale data was
+     * used; neither the requested locale nor any of its fall back locales
+     * could be found.
+     * The caller owns the returned object and is responsible for deleting it.
+     * @draft
      */
-    static BreakIterator* createLineInstance(const Locale& where = Locale::getDefault());
+    static BreakIterator* createLineInstance(const Locale& where, 
+                                                   UErrorCode& status);
 
     /**
      * Create BreakIterator for character-breaks using specified locale
      * Returns an instance of a BreakIterator implementing character breaks.
      * Character breaks are boundaries of combining character sequences.
-     * @param where the locale. If a specific character break is not
-     * avaliable for the specified locale, a default character break is returned.
-     * @return A BreakIterator for character-breaks
-     * @stable
+     * @param where the locale. 
+     * @return A BreakIterator for character-breaks.  The UErrorCode& status 
+     * parameter is used to return status information to the user.
+     * To check whether the construction succeeded or not, you should check
+     * the value of U_SUCCESS(err).  If you wish more detailed information, you
+     * can check for informational error results which still indicate success.
+     * U_USING_FALLBACK_ERROR indicates that a fall back locale was used.  For
+     * example, 'de_CH' was requested, but nothing was found there, so 'de' was
+     * used.  U_USING_DEFAULT_ERROR indicates that the default locale data was
+     * used; neither the requested locale nor any of its fall back locales
+     * could be found.
+     * The caller owns the returned object and is responsible for deleting it.
+     * @draft
      */
-    static BreakIterator* createCharacterInstance(const Locale& where = Locale::getDefault());
+    static BreakIterator* createCharacterInstance(const Locale& where, 
+                                                        UErrorCode& status);
 
     /**
      * Create BreakIterator for sentence-breaks using specified locale
      * Returns an instance of a BreakIterator implementing sentence breaks.
-     * @param where the locale. If a specific SentenceBreak is not
-     * avaliable for the specified locale, a default SentenceBreak is returned.
-     * @return A BreakIterator for sentence-breaks
-     * @stable
+     * @param where the locale. 
+     * @return A BreakIterator for sentence-breaks.  The UErrorCode& status 
+     * parameter is used to return status information to the user.
+     * To check whether the construction succeeded or not, you should check
+     * the value of U_SUCCESS(err).  If you wish more detailed information, you
+     * can check for informational error results which still indicate success.
+     * U_USING_FALLBACK_ERROR indicates that a fall back locale was used.  For
+     * example, 'de_CH' was requested, but nothing was found there, so 'de' was
+     * used.  U_USING_DEFAULT_ERROR indicates that the default locale data was
+     * used; neither the requested locale nor any of its fall back locales
+     * could be found.
+     * The caller owns the returned object and is responsible for deleting it.
+     * @draft
      */
-    static BreakIterator* createSentenceInstance(const Locale& where = Locale::getDefault());
+    static BreakIterator* createSentenceInstance(const Locale& where, 
+                                                       UErrorCode& status);
 
     /**
      * Get the set of Locales for which TextBoundaries are installed
