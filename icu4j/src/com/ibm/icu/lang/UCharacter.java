@@ -95,7 +95,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * Unicode specification, generated from Unicode Data file Blocks.txt. 
      * Character blocks generally define characters used for a specific script 
      * or purpose. A character is contained by at most one Unicode block. 
-     * @draft ICU 2.4
+     * @stable ICU 2.4
      */
     public static final class UnicodeBlock extends Character.Subset 
     {
@@ -105,495 +105,495 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
          * @draft ICU 2.6
          */
         public static final UnicodeBlock NO_BLOCK 
-                                        = new UnicodeBlock("NO_BLOCK", 0);
+	    = new UnicodeBlock("NO_BLOCK", 0);
 
         /** 
-         * @draft ICU 2.4
+         * @stable ICU 2.4
          */
         public static final UnicodeBlock BASIC_LATIN 
-                                        = new UnicodeBlock("BASIC_LATIN", 1);
+	    = new UnicodeBlock("BASIC_LATIN", 1);
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final UnicodeBlock LATIN_1_SUPPLEMENT 
-                                   = new UnicodeBlock("LATIN_1_SUPPLEMENT", 2);
+	    = new UnicodeBlock("LATIN_1_SUPPLEMENT", 2);
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final UnicodeBlock LATIN_EXTENDED_A
-                                    = new UnicodeBlock("LATIN_EXTENDED_A", 3);
+	    = new UnicodeBlock("LATIN_EXTENDED_A", 3);
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final UnicodeBlock LATIN_EXTENDED_B 
-                                    = new UnicodeBlock("LATIN_EXTENDED_B", 4);
+	    = new UnicodeBlock("LATIN_EXTENDED_B", 4);
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final UnicodeBlock IPA_EXTENSIONS 
-                                    = new UnicodeBlock("IPA_EXTENSIONS", 5);
+	    = new UnicodeBlock("IPA_EXTENSIONS", 5);
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final UnicodeBlock SPACING_MODIFIER_LETTERS 
-                           = new UnicodeBlock("SPACING_MODIFIER_LETTERS", 6);
+	    = new UnicodeBlock("SPACING_MODIFIER_LETTERS", 6);
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final UnicodeBlock COMBINING_DIACRITICAL_MARKS 
-                           = new UnicodeBlock("COMBINING_DIACRITICAL_MARKS", 7);
+	    = new UnicodeBlock("COMBINING_DIACRITICAL_MARKS", 7);
         /**
          * Unicode 3.2 renames this block to "Greek and Coptic".
-         * @draft ICU 2.4
+         * @stable ICU 2.4
          */
         public static final UnicodeBlock GREEK = new UnicodeBlock("GREEK", 8);
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final UnicodeBlock CYRILLIC 
-                                            = new UnicodeBlock("CYRILLIC", 9);
+	    = new UnicodeBlock("CYRILLIC", 9);
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final UnicodeBlock ARMENIAN 
-                                            = new UnicodeBlock("ARMENIAN", 10);
+	    = new UnicodeBlock("ARMENIAN", 10);
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final UnicodeBlock HEBREW 
-                                            = new UnicodeBlock("HEBREW", 11);  
+	    = new UnicodeBlock("HEBREW", 11);  
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final UnicodeBlock ARABIC
-                                            = new UnicodeBlock("ARABIC", 12);
+	    = new UnicodeBlock("ARABIC", 12);
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final UnicodeBlock SYRIAC 
-                                            = new UnicodeBlock("SYRIAC", 13);
+	    = new UnicodeBlock("SYRIAC", 13);
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final UnicodeBlock THAANA 
-                                            = new UnicodeBlock("THAANA", 14);
+	    = new UnicodeBlock("THAANA", 14);
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final UnicodeBlock DEVANAGARI 
-                                        = new UnicodeBlock("DEVANAGARI", 15);
+	    = new UnicodeBlock("DEVANAGARI", 15);
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final UnicodeBlock BENGALI 
-                                            = new UnicodeBlock("BENGALI", 16);
+	    = new UnicodeBlock("BENGALI", 16);
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final UnicodeBlock GURMUKHI 
-                                            = new UnicodeBlock("GURMUKHI", 17);
+	    = new UnicodeBlock("GURMUKHI", 17);
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final UnicodeBlock GUJARATI 
-                                            = new UnicodeBlock("GUJARATI", 18);
+	    = new UnicodeBlock("GUJARATI", 18);
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final UnicodeBlock ORIYA = new UnicodeBlock("ORIYA", 19);
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final UnicodeBlock TAMIL = new UnicodeBlock("TAMIL", 20);
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final UnicodeBlock TELUGU 
-                                            = new UnicodeBlock("TELUGU", 21);
+	    = new UnicodeBlock("TELUGU", 21);
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final UnicodeBlock KANNADA 
-                                            = new UnicodeBlock("KANNADA", 22);
+	    = new UnicodeBlock("KANNADA", 22);
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final UnicodeBlock MALAYALAM 
-                                            = new UnicodeBlock("MALAYALAM", 23);
+	    = new UnicodeBlock("MALAYALAM", 23);
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final UnicodeBlock SINHALA 
-                                            = new UnicodeBlock("SINHALA", 24);
+	    = new UnicodeBlock("SINHALA", 24);
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final UnicodeBlock THAI = new UnicodeBlock("THAI", 25);
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final UnicodeBlock LAO = new UnicodeBlock("LAO", 26);
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final UnicodeBlock TIBETAN 
-                                            = new UnicodeBlock("TIBETAN", 27);
+	    = new UnicodeBlock("TIBETAN", 27);
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final UnicodeBlock MYANMAR 
-                                            = new UnicodeBlock("MYANMAR", 28);
+	    = new UnicodeBlock("MYANMAR", 28);
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final UnicodeBlock GEORGIAN 
-                                            = new UnicodeBlock("GEORGIAN", 29);
+	    = new UnicodeBlock("GEORGIAN", 29);
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final UnicodeBlock HANGUL_JAMO 
-                                        = new UnicodeBlock("HANGUL_JAMO", 30);
+	    = new UnicodeBlock("HANGUL_JAMO", 30);
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final UnicodeBlock ETHIOPIC 
-                                        = new UnicodeBlock("ETHIOPIC", 31);
+	    = new UnicodeBlock("ETHIOPIC", 31);
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final UnicodeBlock CHEROKEE 
-                                        = new UnicodeBlock("CHEROKEE", 32);
+	    = new UnicodeBlock("CHEROKEE", 32);
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final UnicodeBlock UNIFIED_CANADIAN_ABORIGINAL_SYLLABICS 
-               = new UnicodeBlock("UNIFIED_CANADIAN_ABORIGINAL_SYLLABICS", 33);
+	    = new UnicodeBlock("UNIFIED_CANADIAN_ABORIGINAL_SYLLABICS", 33);
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final UnicodeBlock OGHAM = new UnicodeBlock("OGHAM", 34);
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final UnicodeBlock RUNIC = new UnicodeBlock("RUNIC", 35);
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final UnicodeBlock KHMER = new UnicodeBlock("KHMER", 36);
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final UnicodeBlock MONGOLIAN 
-                                            = new UnicodeBlock("MONGOLIAN", 37);
+	    = new UnicodeBlock("MONGOLIAN", 37);
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final UnicodeBlock LATIN_EXTENDED_ADDITIONAL 
-                            = new UnicodeBlock("LATIN_EXTENDED_ADDITIONAL", 38);
+	    = new UnicodeBlock("LATIN_EXTENDED_ADDITIONAL", 38);
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final UnicodeBlock GREEK_EXTENDED 
-                                    = new UnicodeBlock("GREEK_EXTENDED", 39);
+	    = new UnicodeBlock("GREEK_EXTENDED", 39);
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final UnicodeBlock GENERAL_PUNCTUATION 
-                                = new UnicodeBlock("GENERAL_PUNCTUATION", 40);
+	    = new UnicodeBlock("GENERAL_PUNCTUATION", 40);
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final UnicodeBlock SUPERSCRIPTS_AND_SUBSCRIPTS 
-                        = new UnicodeBlock("SUPERSCRIPTS_AND_SUBSCRIPTS", 41);
+	    = new UnicodeBlock("SUPERSCRIPTS_AND_SUBSCRIPTS", 41);
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final UnicodeBlock CURRENCY_SYMBOLS 
-                                    = new UnicodeBlock("CURRENCY_SYMBOLS", 42);
+	    = new UnicodeBlock("CURRENCY_SYMBOLS", 42);
         /**
          * Unicode 3.2 renames this block to "Combining Diacritical Marks for 
          * Symbols".
-         * @draft ICU 2.4
+         * @stable ICU 2.4
          */
         public static final UnicodeBlock COMBINING_MARKS_FOR_SYMBOLS 
-                        = new UnicodeBlock("COMBINING_MARKS_FOR_SYMBOLS", 43);
+	    = new UnicodeBlock("COMBINING_MARKS_FOR_SYMBOLS", 43);
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final UnicodeBlock LETTERLIKE_SYMBOLS 
-                                = new UnicodeBlock("LETTERLIKE_SYMBOLS", 44);
+	    = new UnicodeBlock("LETTERLIKE_SYMBOLS", 44);
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final UnicodeBlock NUMBER_FORMS 
-                                        = new UnicodeBlock("NUMBER_FORMS", 45);
+	    = new UnicodeBlock("NUMBER_FORMS", 45);
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final UnicodeBlock ARROWS 
-                                            = new UnicodeBlock("ARROWS", 46);
+	    = new UnicodeBlock("ARROWS", 46);
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final UnicodeBlock MATHEMATICAL_OPERATORS 
-                            = new UnicodeBlock("MATHEMATICAL_OPERATORS", 47);
+	    = new UnicodeBlock("MATHEMATICAL_OPERATORS", 47);
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final UnicodeBlock MISCELLANEOUS_TECHNICAL 
-                            = new UnicodeBlock("MISCELLANEOUS_TECHNICAL", 48);
+	    = new UnicodeBlock("MISCELLANEOUS_TECHNICAL", 48);
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final UnicodeBlock CONTROL_PICTURES 
-                                    = new UnicodeBlock("CONTROL_PICTURES", 49);
+	    = new UnicodeBlock("CONTROL_PICTURES", 49);
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final UnicodeBlock OPTICAL_CHARACTER_RECOGNITION 
-                        = new UnicodeBlock("OPTICAL_CHARACTER_RECOGNITION", 50);
+	    = new UnicodeBlock("OPTICAL_CHARACTER_RECOGNITION", 50);
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final UnicodeBlock ENCLOSED_ALPHANUMERICS 
-                            = new UnicodeBlock("ENCLOSED_ALPHANUMERICS", 51);
+	    = new UnicodeBlock("ENCLOSED_ALPHANUMERICS", 51);
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final UnicodeBlock BOX_DRAWING 
-                                        = new UnicodeBlock("BOX_DRAWING", 52);
+	    = new UnicodeBlock("BOX_DRAWING", 52);
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final UnicodeBlock BLOCK_ELEMENTS 
-                                    = new UnicodeBlock("BLOCK_ELEMENTS", 53);
+	    = new UnicodeBlock("BLOCK_ELEMENTS", 53);
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final UnicodeBlock GEOMETRIC_SHAPES 
-                                    = new UnicodeBlock("GEOMETRIC_SHAPES", 54);
+	    = new UnicodeBlock("GEOMETRIC_SHAPES", 54);
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final UnicodeBlock MISCELLANEOUS_SYMBOLS 
-                                = new UnicodeBlock("MISCELLANEOUS_SYMBOLS", 55);
+	    = new UnicodeBlock("MISCELLANEOUS_SYMBOLS", 55);
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final UnicodeBlock DINGBATS 
-                                            = new UnicodeBlock("DINGBATS", 56);
+	    = new UnicodeBlock("DINGBATS", 56);
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final UnicodeBlock BRAILLE_PATTERNS 
-                                    = new UnicodeBlock("BRAILLE_PATTERNS", 57);
+	    = new UnicodeBlock("BRAILLE_PATTERNS", 57);
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final UnicodeBlock CJK_RADICALS_SUPPLEMENT 
-                            = new UnicodeBlock("CJK_RADICALS_SUPPLEMENT", 58);
+	    = new UnicodeBlock("CJK_RADICALS_SUPPLEMENT", 58);
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final UnicodeBlock KANGXI_RADICALS 
-                                    = new UnicodeBlock("KANGXI_RADICALS", 59);
+	    = new UnicodeBlock("KANGXI_RADICALS", 59);
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final UnicodeBlock IDEOGRAPHIC_DESCRIPTION_CHARACTERS 
-                = new UnicodeBlock("IDEOGRAPHIC_DESCRIPTION_CHARACTERS", 60);
+	    = new UnicodeBlock("IDEOGRAPHIC_DESCRIPTION_CHARACTERS", 60);
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final UnicodeBlock CJK_SYMBOLS_AND_PUNCTUATION 
-                        = new UnicodeBlock("CJK_SYMBOLS_AND_PUNCTUATION", 61);
+	    = new UnicodeBlock("CJK_SYMBOLS_AND_PUNCTUATION", 61);
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final UnicodeBlock HIRAGANA 
-                                            = new UnicodeBlock("HIRAGANA", 62);
+	    = new UnicodeBlock("HIRAGANA", 62);
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final UnicodeBlock KATAKANA 
-                                            = new UnicodeBlock("KATAKANA", 63);
+	    = new UnicodeBlock("KATAKANA", 63);
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final UnicodeBlock BOPOMOFO 
-                                            = new UnicodeBlock("BOPOMOFO", 64);
+	    = new UnicodeBlock("BOPOMOFO", 64);
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final UnicodeBlock HANGUL_COMPATIBILITY_JAMO 
-                            = new UnicodeBlock("HANGUL_COMPATIBILITY_JAMO", 65);
+	    = new UnicodeBlock("HANGUL_COMPATIBILITY_JAMO", 65);
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final UnicodeBlock KANBUN 
-                                            = new UnicodeBlock("KANBUN", 66);
+	    = new UnicodeBlock("KANBUN", 66);
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final UnicodeBlock BOPOMOFO_EXTENDED 
-                                = new UnicodeBlock("BOPOMOFO_EXTENDED", 67);
+	    = new UnicodeBlock("BOPOMOFO_EXTENDED", 67);
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final UnicodeBlock ENCLOSED_CJK_LETTERS_AND_MONTHS 
-                    = new UnicodeBlock("ENCLOSED_CJK_LETTERS_AND_MONTHS", 68);
+	    = new UnicodeBlock("ENCLOSED_CJK_LETTERS_AND_MONTHS", 68);
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final UnicodeBlock CJK_COMPATIBILITY 
-                                = new UnicodeBlock("CJK_COMPATIBILITY", 69);
+	    = new UnicodeBlock("CJK_COMPATIBILITY", 69);
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final UnicodeBlock CJK_UNIFIED_IDEOGRAPHS_EXTENSION_A 
-                = new UnicodeBlock("CJK_UNIFIED_IDEOGRAPHS_EXTENSION_A", 70);
+	    = new UnicodeBlock("CJK_UNIFIED_IDEOGRAPHS_EXTENSION_A", 70);
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final UnicodeBlock CJK_UNIFIED_IDEOGRAPHS 
-                            = new UnicodeBlock("CJK_UNIFIED_IDEOGRAPHS", 71);
+	    = new UnicodeBlock("CJK_UNIFIED_IDEOGRAPHS", 71);
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final UnicodeBlock YI_SYLLABLES 
-                                        = new UnicodeBlock("YI_SYLLABLES", 72);
+	    = new UnicodeBlock("YI_SYLLABLES", 72);
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final UnicodeBlock YI_RADICALS 
-                                        = new UnicodeBlock("YI_RADICALS", 73);
+	    = new UnicodeBlock("YI_RADICALS", 73);
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final UnicodeBlock HANGUL_SYLLABLES 
-                                    = new UnicodeBlock("HANGUL_SYLLABLES", 74);
+	    = new UnicodeBlock("HANGUL_SYLLABLES", 74);
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final UnicodeBlock HIGH_SURROGATES 
-                                    = new UnicodeBlock("HIGH_SURROGATES", 75);
+	    = new UnicodeBlock("HIGH_SURROGATES", 75);
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final UnicodeBlock HIGH_PRIVATE_USE_SURROGATES 
-                        = new UnicodeBlock("HIGH_PRIVATE_USE_SURROGATES", 76);
+	    = new UnicodeBlock("HIGH_PRIVATE_USE_SURROGATES", 76);
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final UnicodeBlock LOW_SURROGATES 
-                                    = new UnicodeBlock("LOW_SURROGATES", 77);
+	    = new UnicodeBlock("LOW_SURROGATES", 77);
         /**
          * Same as public static final int PRIVATE_USE.
          * Until Unicode 3.1.1; the corresponding block name was "Private Use";
          * and multiple code point ranges had this block.
          * Unicode 3.2 renames the block for the BMP PUA to "Private Use Area" 
          * and adds separate blocks for the supplementary PUAs.
-         * @draft ICU 2.4
+         * @stable ICU 2.4
          */
         public static final UnicodeBlock PRIVATE_USE_AREA 
-                                = new UnicodeBlock("PRIVATE_USE_AREA",  78);
+	    = new UnicodeBlock("PRIVATE_USE_AREA",  78);
         /**
          * Same as public static final int PRIVATE_USE_AREA.
          * Until Unicode 3.1.1; the corresponding block name was "Private Use";
          * and multiple code point ranges had this block.
          * Unicode 3.2 renames the block for the BMP PUA to "Private Use Area" 
          * and adds separate blocks for the supplementary PUAs.
-         * @draft ICU 2.4
+         * @stable ICU 2.4
          */
         public static final UnicodeBlock PRIVATE_USE = PRIVATE_USE_AREA;
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final UnicodeBlock CJK_COMPATIBILITY_IDEOGRAPHS 
-                       = new UnicodeBlock("CJK_COMPATIBILITY_IDEOGRAPHS", 79);
+	    = new UnicodeBlock("CJK_COMPATIBILITY_IDEOGRAPHS", 79);
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final UnicodeBlock ALPHABETIC_PRESENTATION_FORMS 
-                        = new UnicodeBlock("ALPHABETIC_PRESENTATION_FORMS", 80);
+	    = new UnicodeBlock("ALPHABETIC_PRESENTATION_FORMS", 80);
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final UnicodeBlock ARABIC_PRESENTATION_FORMS_A 
-                        = new UnicodeBlock("ARABIC_PRESENTATION_FORMS_A", 81);
+	    = new UnicodeBlock("ARABIC_PRESENTATION_FORMS_A", 81);
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final UnicodeBlock COMBINING_HALF_MARKS 
-                            = new UnicodeBlock("COMBINING_HALF_MARKS", 82);
+	    = new UnicodeBlock("COMBINING_HALF_MARKS", 82);
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final UnicodeBlock CJK_COMPATIBILITY_FORMS 
-                            = new UnicodeBlock("CJK_COMPATIBILITY_FORMS", 83);
+	    = new UnicodeBlock("CJK_COMPATIBILITY_FORMS", 83);
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final UnicodeBlock SMALL_FORM_VARIANTS 
-                                = new UnicodeBlock("SMALL_FORM_VARIANTS", 84);
+	    = new UnicodeBlock("SMALL_FORM_VARIANTS", 84);
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final UnicodeBlock ARABIC_PRESENTATION_FORMS_B 
-                        = new UnicodeBlock("ARABIC_PRESENTATION_FORMS_B", 85);
+	    = new UnicodeBlock("ARABIC_PRESENTATION_FORMS_B", 85);
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final UnicodeBlock SPECIALS 
-                                            = new UnicodeBlock("SPECIALS", 86);
+	    = new UnicodeBlock("SPECIALS", 86);
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final UnicodeBlock HALFWIDTH_AND_FULLWIDTH_FORMS 
-                        = new UnicodeBlock("HALFWIDTH_AND_FULLWIDTH_FORMS", 87);
+	    = new UnicodeBlock("HALFWIDTH_AND_FULLWIDTH_FORMS", 87);
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final UnicodeBlock OLD_ITALIC 
-                                        = new UnicodeBlock("OLD_ITALIC", 88);
+	    = new UnicodeBlock("OLD_ITALIC", 88);
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final UnicodeBlock GOTHIC 
-                                            = new UnicodeBlock("GOTHIC", 89);
+	    = new UnicodeBlock("GOTHIC", 89);
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final UnicodeBlock DESERET 
-                                            = new UnicodeBlock("DESERET", 90);
+	    = new UnicodeBlock("DESERET", 90);
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final UnicodeBlock BYZANTINE_MUSICAL_SYMBOLS 
-                        = new UnicodeBlock("BYZANTINE_MUSICAL_SYMBOLS", 91);
+	    = new UnicodeBlock("BYZANTINE_MUSICAL_SYMBOLS", 91);
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final UnicodeBlock MUSICAL_SYMBOLS 
-                                    = new UnicodeBlock("MUSICAL_SYMBOLS", 92);
+	    = new UnicodeBlock("MUSICAL_SYMBOLS", 92);
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final UnicodeBlock MATHEMATICAL_ALPHANUMERIC_SYMBOLS 
-                = new UnicodeBlock("MATHEMATICAL_ALPHANUMERIC_SYMBOLS", 93);
+	    = new UnicodeBlock("MATHEMATICAL_ALPHANUMERIC_SYMBOLS", 93);
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final UnicodeBlock CJK_UNIFIED_IDEOGRAPHS_EXTENSION_B  
-                = new UnicodeBlock("CJK_UNIFIED_IDEOGRAPHS_EXTENSION_B", 94);
+	    = new UnicodeBlock("CJK_UNIFIED_IDEOGRAPHS_EXTENSION_B", 94);
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final UnicodeBlock 
             CJK_COMPATIBILITY_IDEOGRAPHS_SUPPLEMENT 
             = new UnicodeBlock("CJK_COMPATIBILITY_IDEOGRAPHS_SUPPLEMENT", 95);
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final UnicodeBlock TAGS = new UnicodeBlock("TAGS", 96);
     
@@ -601,481 +601,481 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
     
         /** 
          * Unicode 4.0.1 renames the "Cyrillic Supplementary" block to "Cyrillic Supplement".
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final UnicodeBlock CYRILLIC_SUPPLEMENTARY 
-                            = new UnicodeBlock("CYRILLIC_SUPPLEMENTARY", 97);
+	    = new UnicodeBlock("CYRILLIC_SUPPLEMENTARY", 97);
         /** 
          * Unicode 4.0.1 renames the "Cyrillic Supplementary" block to "Cyrillic Supplement".
          * @draft ICU 3.0
          */
         public static final UnicodeBlock CYRILLIC_SUPPLEMENT 
-                            = new UnicodeBlock("CYRILLIC_SUPPLEMENT", 97);
+	    = new UnicodeBlock("CYRILLIC_SUPPLEMENT", 97);
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final UnicodeBlock TAGALOG 
-                                            = new UnicodeBlock("TAGALOG", 98);
+	    = new UnicodeBlock("TAGALOG", 98);
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final UnicodeBlock HANUNOO 
-                                            = new UnicodeBlock("HANUNOO", 99);
+	    = new UnicodeBlock("HANUNOO", 99);
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final UnicodeBlock BUHID = new UnicodeBlock("BUHID", 100);
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final UnicodeBlock TAGBANWA 
-                                            = new UnicodeBlock("TAGBANWA", 101);
+	    = new UnicodeBlock("TAGBANWA", 101);
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final UnicodeBlock MISCELLANEOUS_MATHEMATICAL_SYMBOLS_A 
-                = new UnicodeBlock("MISCELLANEOUS_MATHEMATICAL_SYMBOLS_A", 102);
+	    = new UnicodeBlock("MISCELLANEOUS_MATHEMATICAL_SYMBOLS_A", 102);
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final UnicodeBlock SUPPLEMENTAL_ARROWS_A 
-                            = new UnicodeBlock("SUPPLEMENTAL_ARROWS_A", 103);
+	    = new UnicodeBlock("SUPPLEMENTAL_ARROWS_A", 103);
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final UnicodeBlock SUPPLEMENTAL_ARROWS_B 
-                            = new UnicodeBlock("SUPPLEMENTAL_ARROWS_B", 104);
+	    = new UnicodeBlock("SUPPLEMENTAL_ARROWS_B", 104);
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final UnicodeBlock MISCELLANEOUS_MATHEMATICAL_SYMBOLS_B 
-                = new UnicodeBlock("MISCELLANEOUS_MATHEMATICAL_SYMBOLS_B", 105);
+	    = new UnicodeBlock("MISCELLANEOUS_MATHEMATICAL_SYMBOLS_B", 105);
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final UnicodeBlock SUPPLEMENTAL_MATHEMATICAL_OPERATORS 
-                = new UnicodeBlock("SUPPLEMENTAL_MATHEMATICAL_OPERATORS", 106);
+	    = new UnicodeBlock("SUPPLEMENTAL_MATHEMATICAL_OPERATORS", 106);
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final UnicodeBlock KATAKANA_PHONETIC_EXTENSIONS 
-                    = new UnicodeBlock("KATAKANA_PHONETIC_EXTENSIONS", 107);
+	    = new UnicodeBlock("KATAKANA_PHONETIC_EXTENSIONS", 107);
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final UnicodeBlock VARIATION_SELECTORS 
-                                = new UnicodeBlock("VARIATION_SELECTORS", 108);
+	    = new UnicodeBlock("VARIATION_SELECTORS", 108);
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final UnicodeBlock SUPPLEMENTARY_PRIVATE_USE_AREA_A 
-                    = new UnicodeBlock("SUPPLEMENTARY_PRIVATE_USE_AREA_A", 109);
+	    = new UnicodeBlock("SUPPLEMENTARY_PRIVATE_USE_AREA_A", 109);
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final UnicodeBlock SUPPLEMENTARY_PRIVATE_USE_AREA_B 
-                    = new UnicodeBlock("SUPPLEMENTARY_PRIVATE_USE_AREA_B", 110);
+	    = new UnicodeBlock("SUPPLEMENTARY_PRIVATE_USE_AREA_B", 110);
    
         /** 
          * @draft ICU 2.6 
          */
         public static final UnicodeBlock LIMBU 
-                    = new UnicodeBlock("LIMBU", 111);
+	    = new UnicodeBlock("LIMBU", 111);
         /** 
          * @draft ICU 2.6 
          */
         public static final UnicodeBlock TAI_LE 
-                    = new UnicodeBlock("TAI LE", 112);
+	    = new UnicodeBlock("TAI LE", 112);
         /** 
          * @draft ICU 2.6 
          */
         public static final UnicodeBlock KHMER_SYMBOLS 
-                    = new UnicodeBlock("KHMER SYMBOLS", 113);
+	    = new UnicodeBlock("KHMER SYMBOLS", 113);
 
         /** 
          * @draft ICU 2.6 
          */
         public static final UnicodeBlock PHONETIC_EXTENSIONS 
-                    = new UnicodeBlock("PHONETIC EXTENSIONS", 114);
+	    = new UnicodeBlock("PHONETIC EXTENSIONS", 114);
 
         /** 
          * @draft ICU 2.6 
          */
         public static final UnicodeBlock MISCELLANEOUS_SYMBOLS_AND_ARROWS 
-                    = new UnicodeBlock("MISCELLANEOUS_SYMBOLS_AND_ARROWS", 115);
+	    = new UnicodeBlock("MISCELLANEOUS_SYMBOLS_AND_ARROWS", 115);
         /** 
          * @draft ICU 2.6 
          */
         public static final UnicodeBlock YIJING_HEXAGRAM_SYMBOLS 
-                    = new UnicodeBlock("YIJING_HEXAGRAM_SYMBOLS", 116);
+	    = new UnicodeBlock("YIJING_HEXAGRAM_SYMBOLS", 116);
         /** 
          * @draft ICU 2.6 
          */
         public static final UnicodeBlock LINEAR_B_SYLLABARY 
-                    = new UnicodeBlock("LINEAR_B_SYLLABARY", 117);
+	    = new UnicodeBlock("LINEAR_B_SYLLABARY", 117);
         /** 
          * @draft ICU 2.6 
          */
         public static final UnicodeBlock LINEAR_B_IDEOGRAMS 
-                    = new UnicodeBlock("LINEAR_B_IDEOGRAMS", 118);
+	    = new UnicodeBlock("LINEAR_B_IDEOGRAMS", 118);
         /** 
          * @draft ICU 2.6 
          */
         public static final UnicodeBlock AEGEAN_NUMBERS 
-                    = new UnicodeBlock("AEGEAN_NUMBERS", 119);                                               
+	    = new UnicodeBlock("AEGEAN_NUMBERS", 119);                                               
         /** 
          * @draft ICU 2.6 
          */
         public static final UnicodeBlock UGARITIC 
-                    = new UnicodeBlock("UGARITIC", 120);
+	    = new UnicodeBlock("UGARITIC", 120);
         /** 
          * @draft ICU 2.6 
          */
         public static final UnicodeBlock SHAVIAN 
-                    = new UnicodeBlock("SHAVIAN", 121);
+	    = new UnicodeBlock("SHAVIAN", 121);
         /** 
          * @draft ICU 2.6 
          */
         public static final UnicodeBlock OSMANYA 
-                    = new UnicodeBlock("OSMANYA", 122);
+	    = new UnicodeBlock("OSMANYA", 122);
         /** 
          * @draft ICU 2.6 
          */
         public static final UnicodeBlock CYPRIOT_SYLLABARY 
-                    = new UnicodeBlock("CYPRIOT_SYLLABARY", 123);
+	    = new UnicodeBlock("CYPRIOT_SYLLABARY", 123);
         /** 
          * @draft ICU 2.6 
          */
         public static final UnicodeBlock TAI_XUAN_JING_SYMBOLS 
-                    = new UnicodeBlock("TAI_XUAN_JING_SYMBOLS", 124);
+	    = new UnicodeBlock("TAI_XUAN_JING_SYMBOLS", 124);
         
         /** 
          * @draft ICU 2.6 
          */
         public static final UnicodeBlock VARIATION_SELECTORS_SUPPLEMENT 
-                    = new UnicodeBlock("VARIATION_SELECTORS_SUPPLEMENT", 125);                                      
+	    = new UnicodeBlock("VARIATION_SELECTORS_SUPPLEMENT", 125);                                      
 
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final UnicodeBlock INVALID_CODE 
-                                        = new UnicodeBlock("INVALID_CODE", -1);
+	    = new UnicodeBlock("INVALID_CODE", -1);
            
         // block id corresponding to icu4c -----------------------------------
            
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final int INVALID_CODE_ID = -1;                          
         /** 
-         * @draft ICU 2.4
+         * @stable ICU 2.4
          */
         public static final int BASIC_LATIN_ID = 1;
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final int LATIN_1_SUPPLEMENT_ID = 2;
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final int LATIN_EXTENDED_A_ID = 3;
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final int LATIN_EXTENDED_B_ID = 4;
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final int IPA_EXTENSIONS_ID = 5;
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final int SPACING_MODIFIER_LETTERS_ID = 6;
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final int COMBINING_DIACRITICAL_MARKS_ID = 7;
         /**
          * Unicode 3.2 renames this block to "Greek and Coptic".
-         * @draft ICU 2.4
+         * @stable ICU 2.4
          */
         public static final int GREEK_ID = 8;
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final int CYRILLIC_ID = 9;
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final int ARMENIAN_ID = 10;
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final int HEBREW_ID = 11;  
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final int ARABIC_ID = 12;
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final int SYRIAC_ID = 13;
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final int THAANA_ID = 14;
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final int DEVANAGARI_ID = 15;
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final int BENGALI_ID = 16;
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final int GURMUKHI_ID = 17;
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final int GUJARATI_ID = 18;
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final int ORIYA_ID = 19;
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final int TAMIL_ID = 20;
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final int TELUGU_ID = 21;
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final int KANNADA_ID = 22;
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final int MALAYALAM_ID = 23;
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final int SINHALA_ID = 24;
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final int THAI_ID = 25;
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final int LAO_ID = 26;
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final int TIBETAN_ID = 27;
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final int MYANMAR_ID = 28;
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final int GEORGIAN_ID = 29;
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final int HANGUL_JAMO_ID = 30;
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final int ETHIOPIC_ID = 31;
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final int CHEROKEE_ID = 32;
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final int UNIFIED_CANADIAN_ABORIGINAL_SYLLABICS_ID = 33;
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final int OGHAM_ID = 34;
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final int RUNIC_ID = 35;
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final int KHMER_ID = 36;
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final int MONGOLIAN_ID = 37;
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final int LATIN_EXTENDED_ADDITIONAL_ID = 38;
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final int GREEK_EXTENDED_ID = 39;
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final int GENERAL_PUNCTUATION_ID = 40;
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final int SUPERSCRIPTS_AND_SUBSCRIPTS_ID = 41;
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final int CURRENCY_SYMBOLS_ID = 42;
         /**
          * Unicode 3.2 renames this block to "Combining Diacritical Marks for 
          * Symbols".
-         * @draft ICU 2.4
+         * @stable ICU 2.4
          */
         public static final int COMBINING_MARKS_FOR_SYMBOLS_ID = 43;
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final int LETTERLIKE_SYMBOLS_ID = 44;
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final int NUMBER_FORMS_ID = 45;
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final int ARROWS_ID = 46;
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final int MATHEMATICAL_OPERATORS_ID = 47;
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final int MISCELLANEOUS_TECHNICAL_ID = 48;
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final int CONTROL_PICTURES_ID = 49;
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final int OPTICAL_CHARACTER_RECOGNITION_ID = 50;
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final int ENCLOSED_ALPHANUMERICS_ID = 51;
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final int BOX_DRAWING_ID = 52;
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final int BLOCK_ELEMENTS_ID = 53;
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final int GEOMETRIC_SHAPES_ID = 54;
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final int MISCELLANEOUS_SYMBOLS_ID = 55;
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final int DINGBATS_ID = 56;
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final int BRAILLE_PATTERNS_ID = 57;
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final int CJK_RADICALS_SUPPLEMENT_ID = 58;
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final int KANGXI_RADICALS_ID = 59;
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final int IDEOGRAPHIC_DESCRIPTION_CHARACTERS_ID = 60;
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final int CJK_SYMBOLS_AND_PUNCTUATION_ID = 61;
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final int HIRAGANA_ID = 62;
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final int KATAKANA_ID = 63;
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final int BOPOMOFO_ID = 64;
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final int HANGUL_COMPATIBILITY_JAMO_ID = 65;
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final int KANBUN_ID = 66;
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final int BOPOMOFO_EXTENDED_ID = 67;
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final int ENCLOSED_CJK_LETTERS_AND_MONTHS_ID = 68;
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final int CJK_COMPATIBILITY_ID = 69;
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final int CJK_UNIFIED_IDEOGRAPHS_EXTENSION_A_ID = 70;
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final int CJK_UNIFIED_IDEOGRAPHS_ID = 71;
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final int YI_SYLLABLES_ID = 72;
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final int YI_RADICALS_ID = 73;
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final int HANGUL_SYLLABLES_ID = 74;
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final int HIGH_SURROGATES_ID = 75;
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final int HIGH_PRIVATE_USE_SURROGATES_ID = 76;
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final int LOW_SURROGATES_ID = 77;
         /**
@@ -1084,7 +1084,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
          * and multiple code point ranges had this block.
          * Unicode 3.2 renames the block for the BMP PUA to "Private Use Area" 
          * and adds separate blocks for the supplementary PUAs.
-         * @draft ICU 2.4
+         * @stable ICU 2.4
          */
         public static final int PRIVATE_USE_AREA_ID = 78;
         /**
@@ -1093,80 +1093,80 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
          * and multiple code point ranges had this block.
          * Unicode 3.2 renames the block for the BMP PUA to "Private Use Area" 
          * and adds separate blocks for the supplementary PUAs.
-         * @draft ICU 2.4
+         * @stable ICU 2.4
          */
         public static final int PRIVATE_USE_ID = PRIVATE_USE_AREA_ID;
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final int CJK_COMPATIBILITY_IDEOGRAPHS_ID = 79;
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final int ALPHABETIC_PRESENTATION_FORMS_ID = 80;
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final int ARABIC_PRESENTATION_FORMS_A_ID = 81;
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final int COMBINING_HALF_MARKS_ID = 82;
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final int CJK_COMPATIBILITY_FORMS_ID = 83;
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final int SMALL_FORM_VARIANTS_ID = 84;
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final int ARABIC_PRESENTATION_FORMS_B_ID = 85;
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final int SPECIALS_ID = 86;
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final int HALFWIDTH_AND_FULLWIDTH_FORMS_ID = 87;
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final int OLD_ITALIC_ID = 88;
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final int GOTHIC_ID = 89;
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final int DESERET_ID = 90;
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final int BYZANTINE_MUSICAL_SYMBOLS_ID = 91;
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final int MUSICAL_SYMBOLS_ID = 92;
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final int MATHEMATICAL_ALPHANUMERIC_SYMBOLS_ID = 93;
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final int CJK_UNIFIED_IDEOGRAPHS_EXTENSION_B_ID = 94;
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final int 
             CJK_COMPATIBILITY_IDEOGRAPHS_SUPPLEMENT_ID = 95;
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final int TAGS_ID = 96;
     
@@ -1174,7 +1174,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
     
         /** 
          * Unicode 4.0.1 renames the "Cyrillic Supplementary" block to "Cyrillic Supplement".
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final int CYRILLIC_SUPPLEMENTARY_ID = 97;
         /** 
@@ -1183,90 +1183,90 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
          */
         public static final int CYRILLIC_SUPPLEMENT_ID = 97;
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final int TAGALOG_ID = 98;
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final int HANUNOO_ID = 99;
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final int BUHID_ID = 100;
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final int TAGBANWA_ID = 101;
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final int MISCELLANEOUS_MATHEMATICAL_SYMBOLS_A_ID = 102;
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final int SUPPLEMENTAL_ARROWS_A_ID = 103;
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final int SUPPLEMENTAL_ARROWS_B_ID = 104;
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final int MISCELLANEOUS_MATHEMATICAL_SYMBOLS_B_ID = 105;
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final int SUPPLEMENTAL_MATHEMATICAL_OPERATORS_ID = 106;
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final int KATAKANA_PHONETIC_EXTENSIONS_ID = 107;
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final int VARIATION_SELECTORS_ID = 108;
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final int SUPPLEMENTARY_PRIVATE_USE_AREA_A_ID = 109;
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final int SUPPLEMENTARY_PRIVATE_USE_AREA_B_ID = 110;
         
-            /** @draft ICU 2.6 */
-            public static final int LIMBU_ID = 111; /*[1900]*/
-            /** @draft ICU 2.6 */
-            public static final int TAI_LE_ID = 112; /*[1950]*/
-            /** @draft ICU 2.6 */
-            public static final int KHMER_SYMBOLS_ID = 113; /*[19E0]*/
-            /** @draft ICU 2.6 */
-            public static final int PHONETIC_EXTENSIONS_ID = 114; /*[1D00]*/
-            /** @draft ICU 2.6 */
-            public static final int MISCELLANEOUS_SYMBOLS_AND_ARROWS_ID = 115; /*[2B00]*/
-            /** @draft ICU 2.6 */
-            public static final int YIJING_HEXAGRAM_SYMBOLS_ID = 116; /*[4DC0]*/
-            /** @draft ICU 2.6 */
-            public static final int LINEAR_B_SYLLABARY_ID = 117; /*[10000]*/
-            /** @draft ICU 2.6 */
-            public static final int LINEAR_B_IDEOGRAMS_ID = 118; /*[10080]*/
-            /** @draft ICU 2.6 */
-            public static final int AEGEAN_NUMBERS_ID = 119; /*[10100]*/
-            /** @draft ICU 2.6 */
-            public static final int UGARITIC_ID = 120; /*[10380]*/
-            /** @draft ICU 2.6 */
-            public static final int SHAVIAN_ID = 121; /*[10450]*/
-            /** @draft ICU 2.6 */
-            public static final int OSMANYA_ID = 122; /*[10480]*/
-            /** @draft ICU 2.6 */
-            public static final int CYPRIOT_SYLLABARY_ID = 123; /*[10800]*/
-            /** @draft ICU 2.6 */
-            public static final int TAI_XUAN_JING_SYMBOLS_ID = 124; /*[1D300]*/
-            /** @draft ICU 2.6 */
-            public static final int VARIATION_SELECTORS_SUPPLEMENT_ID = 125; /*[E0100]*/
+	/** @draft ICU 2.6 */
+	public static final int LIMBU_ID = 111; /*[1900]*/
+	/** @draft ICU 2.6 */
+	public static final int TAI_LE_ID = 112; /*[1950]*/
+	/** @draft ICU 2.6 */
+	public static final int KHMER_SYMBOLS_ID = 113; /*[19E0]*/
+	/** @draft ICU 2.6 */
+	public static final int PHONETIC_EXTENSIONS_ID = 114; /*[1D00]*/
+	/** @draft ICU 2.6 */
+	public static final int MISCELLANEOUS_SYMBOLS_AND_ARROWS_ID = 115; /*[2B00]*/
+	/** @draft ICU 2.6 */
+	public static final int YIJING_HEXAGRAM_SYMBOLS_ID = 116; /*[4DC0]*/
+	/** @draft ICU 2.6 */
+	public static final int LINEAR_B_SYLLABARY_ID = 117; /*[10000]*/
+	/** @draft ICU 2.6 */
+	public static final int LINEAR_B_IDEOGRAMS_ID = 118; /*[10080]*/
+	/** @draft ICU 2.6 */
+	public static final int AEGEAN_NUMBERS_ID = 119; /*[10100]*/
+	/** @draft ICU 2.6 */
+	public static final int UGARITIC_ID = 120; /*[10380]*/
+	/** @draft ICU 2.6 */
+	public static final int SHAVIAN_ID = 121; /*[10450]*/
+	/** @draft ICU 2.6 */
+	public static final int OSMANYA_ID = 122; /*[10480]*/
+	/** @draft ICU 2.6 */
+	public static final int CYPRIOT_SYLLABARY_ID = 123; /*[10800]*/
+	/** @draft ICU 2.6 */
+	public static final int TAI_XUAN_JING_SYMBOLS_ID = 124; /*[1D300]*/
+	/** @draft ICU 2.6 */
+	public static final int VARIATION_SELECTORS_SUPPLEMENT_ID = 125; /*[E0100]*/
         /** 
-         * @draft ICU 2.4 
+         * @stable ICU 2.4 
          */
         public static final int COUNT = 126;
         
@@ -1279,7 +1279,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
          * @return the only instance of the UnicodeBlock with the argument ID
          *         if it exists, otherwise a INVALID_CODE UnicodeBlock will be 
          *         returned.
-         * @draft ICU 2.4
+         * @stable ICU 2.4
          */
         public static UnicodeBlock getInstance(int id)
         {
@@ -1294,7 +1294,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
          * or null if the code point is not a member of a defined block.
          * @param ch code point to be tested
          * @return the Unicode allocation block that contains the code point
-         * @draft ICU 2.4
+         * @stable ICU 2.4
          */
         public static UnicodeBlock of(int ch)
         {
@@ -1303,7 +1303,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
             }
 
             return UnicodeBlock.getInstance((PROPERTY_.getAdditional(ch, 0)
-                                            & BLOCK_MASK_) >> BLOCK_SHIFT_);
+					     & BLOCK_MASK_) >> BLOCK_SHIFT_);
         }
 
         /**
@@ -1359,7 +1359,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
         /**
          * Returns the type ID of this Unicode block
          * @return integer type ID of this Unicode block
-         * @draft ICU 2.4
+         * @stable ICU 2.4
          */
         public int getID()
         {
@@ -1372,69 +1372,69 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
          * Array of UnicodeBlocks, for easy access in getInstance(int)
          */
         private final static UnicodeBlock BLOCKS_[] = {
-                NO_BLOCK, BASIC_LATIN, 
-                LATIN_1_SUPPLEMENT, LATIN_EXTENDED_A, 
-                LATIN_EXTENDED_B, IPA_EXTENSIONS, 
-                SPACING_MODIFIER_LETTERS, COMBINING_DIACRITICAL_MARKS,
-                GREEK, CYRILLIC,
-                ARMENIAN, HEBREW,
-                ARABIC, SYRIAC, 
-                THAANA, DEVANAGARI, 
-                BENGALI, GURMUKHI, 
-                GUJARATI, ORIYA, 
-                TAMIL, TELUGU, 
-                KANNADA, MALAYALAM, 
-                SINHALA, THAI, 
-                LAO, TIBETAN, 
-                MYANMAR, GEORGIAN, 
-                HANGUL_JAMO, ETHIOPIC, 
-                CHEROKEE, UNIFIED_CANADIAN_ABORIGINAL_SYLLABICS,
-                OGHAM, RUNIC, 
-                KHMER, MONGOLIAN, 
-                LATIN_EXTENDED_ADDITIONAL, GREEK_EXTENDED, 
-                GENERAL_PUNCTUATION, SUPERSCRIPTS_AND_SUBSCRIPTS,
-                CURRENCY_SYMBOLS, COMBINING_MARKS_FOR_SYMBOLS, 
-                LETTERLIKE_SYMBOLS, NUMBER_FORMS, 
-                ARROWS, MATHEMATICAL_OPERATORS, 
-                MISCELLANEOUS_TECHNICAL, CONTROL_PICTURES,
-                OPTICAL_CHARACTER_RECOGNITION, ENCLOSED_ALPHANUMERICS,
-                BOX_DRAWING, BLOCK_ELEMENTS,
-                GEOMETRIC_SHAPES, MISCELLANEOUS_SYMBOLS,
-                DINGBATS, BRAILLE_PATTERNS,
-                CJK_RADICALS_SUPPLEMENT, KANGXI_RADICALS,
-                IDEOGRAPHIC_DESCRIPTION_CHARACTERS, CJK_SYMBOLS_AND_PUNCTUATION,
-                HIRAGANA, KATAKANA, 
-                BOPOMOFO, HANGUL_COMPATIBILITY_JAMO,
-                KANBUN, BOPOMOFO_EXTENDED, 
-                ENCLOSED_CJK_LETTERS_AND_MONTHS, CJK_COMPATIBILITY,
-                CJK_UNIFIED_IDEOGRAPHS_EXTENSION_A, CJK_UNIFIED_IDEOGRAPHS,
-                YI_SYLLABLES, YI_RADICALS, 
-                HANGUL_SYLLABLES, HIGH_SURROGATES,
-                HIGH_PRIVATE_USE_SURROGATES, LOW_SURROGATES,
-                PRIVATE_USE_AREA, CJK_COMPATIBILITY_IDEOGRAPHS,
-                ALPHABETIC_PRESENTATION_FORMS, ARABIC_PRESENTATION_FORMS_A,
-                COMBINING_HALF_MARKS, CJK_COMPATIBILITY_FORMS,
-                SMALL_FORM_VARIANTS, ARABIC_PRESENTATION_FORMS_B,
-                SPECIALS, HALFWIDTH_AND_FULLWIDTH_FORMS,
-                OLD_ITALIC, GOTHIC, 
-                DESERET, BYZANTINE_MUSICAL_SYMBOLS,
-                MUSICAL_SYMBOLS, MATHEMATICAL_ALPHANUMERIC_SYMBOLS,
-                CJK_UNIFIED_IDEOGRAPHS_EXTENSION_B, 
-                CJK_COMPATIBILITY_IDEOGRAPHS_SUPPLEMENT, 
-                TAGS, CYRILLIC_SUPPLEMENT,
-                TAGALOG, HANUNOO, 
-                BUHID, TAGBANWA, 
-                MISCELLANEOUS_MATHEMATICAL_SYMBOLS_A, SUPPLEMENTAL_ARROWS_A,
-                SUPPLEMENTAL_ARROWS_B, MISCELLANEOUS_MATHEMATICAL_SYMBOLS_B,
-                SUPPLEMENTAL_MATHEMATICAL_OPERATORS, 
-                KATAKANA_PHONETIC_EXTENSIONS,
-                VARIATION_SELECTORS, SUPPLEMENTARY_PRIVATE_USE_AREA_A,
-                SUPPLEMENTARY_PRIVATE_USE_AREA_B,
-                LIMBU, TAI_LE, KHMER_SYMBOLS, PHONETIC_EXTENSIONS,
-                MISCELLANEOUS_SYMBOLS_AND_ARROWS, YIJING_HEXAGRAM_SYMBOLS,
-                LINEAR_B_SYLLABARY, LINEAR_B_IDEOGRAMS, AEGEAN_NUMBERS,
-                UGARITIC, SHAVIAN, OSMANYA, CYPRIOT_SYLLABARY,
-                TAI_XUAN_JING_SYMBOLS, VARIATION_SELECTORS_SUPPLEMENT                                      
+	    NO_BLOCK, BASIC_LATIN, 
+	    LATIN_1_SUPPLEMENT, LATIN_EXTENDED_A, 
+	    LATIN_EXTENDED_B, IPA_EXTENSIONS, 
+	    SPACING_MODIFIER_LETTERS, COMBINING_DIACRITICAL_MARKS,
+	    GREEK, CYRILLIC,
+	    ARMENIAN, HEBREW,
+	    ARABIC, SYRIAC, 
+	    THAANA, DEVANAGARI, 
+	    BENGALI, GURMUKHI, 
+	    GUJARATI, ORIYA, 
+	    TAMIL, TELUGU, 
+	    KANNADA, MALAYALAM, 
+	    SINHALA, THAI, 
+	    LAO, TIBETAN, 
+	    MYANMAR, GEORGIAN, 
+	    HANGUL_JAMO, ETHIOPIC, 
+	    CHEROKEE, UNIFIED_CANADIAN_ABORIGINAL_SYLLABICS,
+	    OGHAM, RUNIC, 
+	    KHMER, MONGOLIAN, 
+	    LATIN_EXTENDED_ADDITIONAL, GREEK_EXTENDED, 
+	    GENERAL_PUNCTUATION, SUPERSCRIPTS_AND_SUBSCRIPTS,
+	    CURRENCY_SYMBOLS, COMBINING_MARKS_FOR_SYMBOLS, 
+	    LETTERLIKE_SYMBOLS, NUMBER_FORMS, 
+	    ARROWS, MATHEMATICAL_OPERATORS, 
+	    MISCELLANEOUS_TECHNICAL, CONTROL_PICTURES,
+	    OPTICAL_CHARACTER_RECOGNITION, ENCLOSED_ALPHANUMERICS,
+	    BOX_DRAWING, BLOCK_ELEMENTS,
+	    GEOMETRIC_SHAPES, MISCELLANEOUS_SYMBOLS,
+	    DINGBATS, BRAILLE_PATTERNS,
+	    CJK_RADICALS_SUPPLEMENT, KANGXI_RADICALS,
+	    IDEOGRAPHIC_DESCRIPTION_CHARACTERS, CJK_SYMBOLS_AND_PUNCTUATION,
+	    HIRAGANA, KATAKANA, 
+	    BOPOMOFO, HANGUL_COMPATIBILITY_JAMO,
+	    KANBUN, BOPOMOFO_EXTENDED, 
+	    ENCLOSED_CJK_LETTERS_AND_MONTHS, CJK_COMPATIBILITY,
+	    CJK_UNIFIED_IDEOGRAPHS_EXTENSION_A, CJK_UNIFIED_IDEOGRAPHS,
+	    YI_SYLLABLES, YI_RADICALS, 
+	    HANGUL_SYLLABLES, HIGH_SURROGATES,
+	    HIGH_PRIVATE_USE_SURROGATES, LOW_SURROGATES,
+	    PRIVATE_USE_AREA, CJK_COMPATIBILITY_IDEOGRAPHS,
+	    ALPHABETIC_PRESENTATION_FORMS, ARABIC_PRESENTATION_FORMS_A,
+	    COMBINING_HALF_MARKS, CJK_COMPATIBILITY_FORMS,
+	    SMALL_FORM_VARIANTS, ARABIC_PRESENTATION_FORMS_B,
+	    SPECIALS, HALFWIDTH_AND_FULLWIDTH_FORMS,
+	    OLD_ITALIC, GOTHIC, 
+	    DESERET, BYZANTINE_MUSICAL_SYMBOLS,
+	    MUSICAL_SYMBOLS, MATHEMATICAL_ALPHANUMERIC_SYMBOLS,
+	    CJK_UNIFIED_IDEOGRAPHS_EXTENSION_B, 
+	    CJK_COMPATIBILITY_IDEOGRAPHS_SUPPLEMENT, 
+	    TAGS, CYRILLIC_SUPPLEMENT,
+	    TAGALOG, HANUNOO, 
+	    BUHID, TAGBANWA, 
+	    MISCELLANEOUS_MATHEMATICAL_SYMBOLS_A, SUPPLEMENTAL_ARROWS_A,
+	    SUPPLEMENTAL_ARROWS_B, MISCELLANEOUS_MATHEMATICAL_SYMBOLS_B,
+	    SUPPLEMENTAL_MATHEMATICAL_OPERATORS, 
+	    KATAKANA_PHONETIC_EXTENSIONS,
+	    VARIATION_SELECTORS, SUPPLEMENTARY_PRIVATE_USE_AREA_A,
+	    SUPPLEMENTARY_PRIVATE_USE_AREA_B,
+	    LIMBU, TAI_LE, KHMER_SYMBOLS, PHONETIC_EXTENSIONS,
+	    MISCELLANEOUS_SYMBOLS_AND_ARROWS, YIJING_HEXAGRAM_SYMBOLS,
+	    LINEAR_B_SYLLABARY, LINEAR_B_IDEOGRAMS, AEGEAN_NUMBERS,
+	    UGARITIC, SHAVIAN, OSMANYA, CYPRIOT_SYLLABARY,
+	    TAI_XUAN_JING_SYMBOLS, VARIATION_SELECTORS_SUPPLEMENT                                      
         };
 
         static {
@@ -1471,31 +1471,31 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
     public static interface EastAsianWidth 
     {
         /**
-         * @draft ICU 2.4
+         * @stable ICU 2.4
          */
         public static final int NEUTRAL = 0;
         /**
-         * @draft ICU 2.4
+         * @stable ICU 2.4
          */
         public static final int AMBIGUOUS = 1;
         /**
-         * @draft ICU 2.4
+         * @stable ICU 2.4
          */
         public static final int HALFWIDTH = 2;
         /**
-         * @draft ICU 2.4
+         * @stable ICU 2.4
          */
         public static final int FULLWIDTH = 3;
         /**
-         * @draft ICU 2.4
+         * @stable ICU 2.4
          */
         public static final int NARROW = 4;
         /**
-         * @draft ICU 2.4
+         * @stable ICU 2.4
          */
         public static final int WIDE = 5;
         /**
-         * @draft ICU 2.4
+         * @stable ICU 2.4
          */
         public static final int COUNT = 6;
     };
@@ -1503,84 +1503,84 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
     /**
      * Decomposition Type constants.
      * @see UProperty#DECOMPOSITION_TYPE
-     * @draft ICU 2.4
+     * @stable ICU 2.4
      */
     public static interface DecompositionType 
     {
         /**
-         * @draft ICU 2.4
+         * @stable ICU 2.4
          */
         public static final int NONE = 0;
         /**
-         * @draft ICU 2.4
+         * @stable ICU 2.4
          */
         public static final int CANONICAL = 1;
         /**
-         * @draft ICU 2.4
+         * @stable ICU 2.4
          */
         public static final int COMPAT = 2;
         /**
-         * @draft ICU 2.4
+         * @stable ICU 2.4
          */
         public static final int CIRCLE = 3;
         /**
-         * @draft ICU 2.4
+         * @stable ICU 2.4
          */
         public static final int FINAL = 4;
         /**
-         * @draft ICU 2.4
+         * @stable ICU 2.4
          */
         public static final int FONT = 5;
         /**
-         * @draft ICU 2.4
+         * @stable ICU 2.4
          */
         public static final int FRACTION = 6;
         /**
-         * @draft ICU 2.4
+         * @stable ICU 2.4
          */
         public static final int INITIAL = 7;
         /**
-         * @draft ICU 2.4
+         * @stable ICU 2.4
          */
         public static final int ISOLATED = 8;
         /**
-         * @draft ICU 2.4
+         * @stable ICU 2.4
          */
         public static final int MEDIAL = 9;
         /**
-         * @draft ICU 2.4
+         * @stable ICU 2.4
          */
         public static final int NARROW = 10;
         /**
-         * @draft ICU 2.4
+         * @stable ICU 2.4
          */
         public static final int NOBREAK = 11;
         /**
-         * @draft ICU 2.4
+         * @stable ICU 2.4
          */
         public static final int SMALL = 12;
         /**
-         * @draft ICU 2.4
+         * @stable ICU 2.4
          */
         public static final int SQUARE = 13;
         /**
-         * @draft ICU 2.4
+         * @stable ICU 2.4
          */
         public static final int SUB = 14;
         /**
-         * @draft ICU 2.4
+         * @stable ICU 2.4
          */
         public static final int SUPER = 15;
         /**
-         * @draft ICU 2.4
+         * @stable ICU 2.4
          */
         public static final int VERTICAL = 16;
         /**
-         * @draft ICU 2.4
+         * @stable ICU 2.4
          */
         public static final int WIDE = 17;
         /**
-         * @draft ICU 2.4
+         * @stable ICU 2.4
          */
         public static final int COUNT = 18;
     };
@@ -1588,36 +1588,36 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
     /**
      * Joining Type constants.
      * @see UProperty#JOINING_TYPE
-     * @draft ICU 2.4
+     * @stable ICU 2.4
      */
     public static interface JoiningType 
     {
         /**
-         * @draft ICU 2.4
+         * @stable ICU 2.4
          */
         public static final int NON_JOINING = 0;
         /**
-         * @draft ICU 2.4
+         * @stable ICU 2.4
          */
         public static final int JOIN_CAUSING = 1;
         /**
-         * @draft ICU 2.4
+         * @stable ICU 2.4
          */
         public static final int DUAL_JOINING = 2;
         /**
-         * @draft ICU 2.4
+         * @stable ICU 2.4
          */
         public static final int LEFT_JOINING = 3;
         /**
-         * @draft ICU 2.4
+         * @stable ICU 2.4
          */
         public static final int RIGHT_JOINING = 4;
         /**
-         * @draft ICU 2.4
+         * @stable ICU 2.4
          */
         public static final int TRANSPARENT = 5;
         /**
-         * @draft ICU 2.4
+         * @stable ICU 2.4
          */
         public static final int COUNT = 6;
     };
@@ -1625,212 +1625,212 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
     /**
      * Joining Group constants.
      * @see UProperty#JOINING_GROUP
-     * @draft ICU 2.4
+     * @stable ICU 2.4
      */
     public static interface JoiningGroup 
     {
         /**
-         * @draft ICU 2.4
+         * @stable ICU 2.4
          */
         public static final int NO_JOINING_GROUP = 0;
         /**
-         * @draft ICU 2.4
+         * @stable ICU 2.4
          */
         public static final int AIN = 1;
         /**
-         * @draft ICU 2.4
+         * @stable ICU 2.4
          */
         public static final int ALAPH = 2;
         /**
-         * @draft ICU 2.4
+         * @stable ICU 2.4
          */
         public static final int ALEF = 3;
         /**
-         * @draft ICU 2.4
+         * @stable ICU 2.4
          */
         public static final int BEH = 4;
         /**
-         * @draft ICU 2.4
+         * @stable ICU 2.4
          */
         public static final int BETH = 5;
         /**
-         * @draft ICU 2.4
+         * @stable ICU 2.4
          */
         public static final int DAL = 6;
         /**
-         * @draft ICU 2.4
+         * @stable ICU 2.4
          */
         public static final int DALATH_RISH = 7;
         /**
-         * @draft ICU 2.4
+         * @stable ICU 2.4
          */
         public static final int E = 8;
         /**
-         * @draft ICU 2.4
+         * @stable ICU 2.4
          */
         public static final int FEH = 9;
         /**
-         * @draft ICU 2.4
+         * @stable ICU 2.4
          */
         public static final int FINAL_SEMKATH = 10;
         /**
-         * @draft ICU 2.4
+         * @stable ICU 2.4
          */
         public static final int GAF = 11;
         /**
-         * @draft ICU 2.4
+         * @stable ICU 2.4
          */
         public static final int GAMAL = 12;
         /** 
-         * @draft ICU 2.4
+         * @stable ICU 2.4
          */
         public static final int HAH = 13;
         /**
-         * @draft ICU 2.4
+         * @stable ICU 2.4
          */
         public static final int HAMZA_ON_HEH_GOAL = 14;
         /**
-         * @draft ICU 2.4
+         * @stable ICU 2.4
          */
         public static final int HE = 15;
         /**
-         * @draft ICU 2.4
+         * @stable ICU 2.4
          */
         public static final int HEH = 16;
         /**
-         * @draft ICU 2.4
+         * @stable ICU 2.4
          */
         public static final int HEH_GOAL = 17;
         /**
-         * @draft ICU 2.4
+         * @stable ICU 2.4
          */
         public static final int HETH = 18;
         /**
-         * @draft ICU 2.4
+         * @stable ICU 2.4
          */
         public static final int KAF = 19;
         /**
-         * @draft ICU 2.4
+         * @stable ICU 2.4
          */
         public static final int KAPH = 20;
         /**
-         * @draft ICU 2.4
+         * @stable ICU 2.4
          */
         public static final int KNOTTED_HEH = 21;
         /**
-         * @draft ICU 2.4
+         * @stable ICU 2.4
          */
         public static final int LAM = 22;
         /**
-         * @draft ICU 2.4
+         * @stable ICU 2.4
          */
         public static final int LAMADH = 23;
         /**
-         * @draft ICU 2.4
+         * @stable ICU 2.4
          */
         public static final int MEEM = 24;
         /**
-         * @draft ICU 2.4
+         * @stable ICU 2.4
          */
         public static final int MIM = 25;
         /**
-         * @draft ICU 2.4
+         * @stable ICU 2.4
          */
         public static final int NOON = 26;
         /**
-         * @draft ICU 2.4
+         * @stable ICU 2.4
          */
         public static final int NUN = 27;
         /**
-         * @draft ICU 2.4
+         * @stable ICU 2.4
          */
         public static final int PE = 28;
         /**
-         * @draft ICU 2.4
+         * @stable ICU 2.4
          */
         public static final int QAF = 29;
         /**
-         * @draft ICU 2.4
+         * @stable ICU 2.4
          */
         public static final int QAPH = 30;
         /**
-         * @draft ICU 2.4
+         * @stable ICU 2.4
          */
         public static final int REH = 31;
         /**
-         * @draft ICU 2.4
+         * @stable ICU 2.4
          */
         public static final int REVERSED_PE = 32;
         /**
-         * @draft ICU 2.4
+         * @stable ICU 2.4
          */
         public static final int SAD = 33;
         /**
-         * @draft ICU 2.4
+         * @stable ICU 2.4
          */
         public static final int SADHE = 34;
         /**
-         * @draft ICU 2.4
+         * @stable ICU 2.4
          */
         public static final int SEEN = 35;
         /**
-         * @draft ICU 2.4
+         * @stable ICU 2.4
          */
         public static final int SEMKATH = 36;
         /**
-         * @draft ICU 2.4
+         * @stable ICU 2.4
          */
         public static final int SHIN = 37;
         /**
-         * @draft ICU 2.4
+         * @stable ICU 2.4
          */
         public static final int SWASH_KAF = 38;
         /**
-         * @draft ICU 2.4
+         * @stable ICU 2.4
          */
         public static final int SYRIAC_WAW = 39;
         /**
-         * @draft ICU 2.4
+         * @stable ICU 2.4
          */
         public static final int TAH = 40;
         /**
-         * @draft ICU 2.4
+         * @stable ICU 2.4
          */
         public static final int TAW = 41;
         /**
-         * @draft ICU 2.4
+         * @stable ICU 2.4
          */
         public static final int TEH_MARBUTA = 42;
         /**
-         * @draft ICU 2.4
+         * @stable ICU 2.4
          */
         public static final int TETH = 43;
         /**
-         * @draft ICU 2.4
+         * @stable ICU 2.4
          */
         public static final int WAW = 44;
         /**
-         * @draft ICU 2.4
+         * @stable ICU 2.4
          */
         public static final int YEH = 45;
         /**
-         * @draft ICU 2.4
+         * @stable ICU 2.4
          */
         public static final int YEH_BARREE = 46;
         /**
-         * @draft ICU 2.4
+         * @stable ICU 2.4
          */
         public static final int YEH_WITH_TAIL = 47;
         /**
-         * @draft ICU 2.4
+         * @stable ICU 2.4
          */
         public static final int YUDH = 48;
         /**
-         * @draft ICU 2.4
+         * @stable ICU 2.4
          */
         public static final int YUDH_HE = 49;
         /**
-         * @draft ICU 2.4
+         * @stable ICU 2.4
          */
         public static final int ZAIN = 50;
         /** 
@@ -1846,7 +1846,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
          */
         public static final int ZHAIN =53;   
         /**
-         * @draft ICU 2.4
+         * @stable ICU 2.4
          */
         public static final int COUNT = 54;
     };
@@ -1854,73 +1854,73 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
     /**
      * Line Break constants.
      * @see UProperty#LINE_BREAK
-     * @draft ICU 2.4
+     * @stable ICU 2.4
      */
     public static interface LineBreak 
     {
         /**
-         * @draft ICU 2.4
+         * @stable ICU 2.4
          */
         public static final int UNKNOWN = 0;
         /**
-         * @draft ICU 2.4
+         * @stable ICU 2.4
          */
         public static final int AMBIGUOUS = 1;
         /**
-         * @draft ICU 2.4
+         * @stable ICU 2.4
          */
         public static final int ALPHABETIC = 2;
         /**
-         * @draft ICU 2.4
+         * @stable ICU 2.4
          */
         public static final int BREAK_BOTH = 3;
         /**
-         * @draft ICU 2.4
+         * @stable ICU 2.4
          */
         public static final int BREAK_AFTER = 4;
         /**
-         * @draft ICU 2.4
+         * @stable ICU 2.4
          */
         public static final int BREAK_BEFORE = 5;
         /**
-         * @draft ICU 2.4
+         * @stable ICU 2.4
          */
         public static final int MANDATORY_BREAK = 6;
         /**
-         * @draft ICU 2.4
+         * @stable ICU 2.4
          */
         public static final int CONTINGENT_BREAK = 7;
         /**
-         * @draft ICU 2.4
+         * @stable ICU 2.4
          */
         public static final int CLOSE_PUNCTUATION = 8;
         /**
-         * @draft ICU 2.4
+         * @stable ICU 2.4
          */
         public static final int COMBINING_MARK = 9;
         /**
-         * @draft ICU 2.4
+         * @stable ICU 2.4
          */
         public static final int CARRIAGE_RETURN = 10;
         /**
-         * @draft ICU 2.4
+         * @stable ICU 2.4
          */
         public static final int EXCLAMATION = 11;
         /**
-         * @draft ICU 2.4
+         * @stable ICU 2.4
          */
         public static final int GLUE = 12;
         /**
-         * @draft ICU 2.4
+         * @stable ICU 2.4
          */
         public static final int HYPHEN = 13;
         /**
-         * @draft ICU 2.4
+         * @stable ICU 2.4
          */
         public static final int IDEOGRAPHIC = 14;
         /**
          * @see #INSEPARABLE
-         * @draft ICU 2.4
+         * @stable ICU 2.4
          */
         public static final int INSEPERABLE = 15;
         /**
@@ -1929,55 +1929,55 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
          */
         public static final int INSEPARABLE = 15;
         /**
-         * @draft ICU 2.4
+         * @stable ICU 2.4
          */
         public static final int INFIX_NUMERIC = 16;
         /**
-         * @draft ICU 2.4
+         * @stable ICU 2.4
          */
         public static final int LINE_FEED = 17;
         /**
-         * @draft ICU 2.4
+         * @stable ICU 2.4
          */
         public static final int NONSTARTER = 18;
         /**
-         * @draft ICU 2.4
+         * @stable ICU 2.4
          */
         public static final int NUMERIC = 19;
         /**
-         * @draft ICU 2.4
+         * @stable ICU 2.4
          */
         public static final int OPEN_PUNCTUATION = 20;
         /**
-         * @draft ICU 2.4
+         * @stable ICU 2.4
          */
         public static final int POSTFIX_NUMERIC = 21;
         /**
-         * @draft ICU 2.4
+         * @stable ICU 2.4
          */
         public static final int PREFIX_NUMERIC = 22;
         /**
-         * @draft ICU 2.4
+         * @stable ICU 2.4
          */
         public static final int QUOTATION = 23;
         /**
-         * @draft ICU 2.4
+         * @stable ICU 2.4
          */
         public static final int COMPLEX_CONTEXT = 24;
         /**
-         * @draft ICU 2.4
+         * @stable ICU 2.4
          */
         public static final int SURROGATE = 25;
         /**
-         * @draft ICU 2.4
+         * @stable ICU 2.4
          */
         public static final int SPACE = 26;
         /**
-         * @draft ICU 2.4
+         * @stable ICU 2.4
          */
         public static final int BREAK_SYMBOLS = 27;
         /**
-         * @draft ICU 2.4
+         * @stable ICU 2.4
          */
         public static final int ZWSPACE = 28;
         
@@ -1992,7 +1992,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
         public static final int  WORD_JOINER = 30;      /*[WJ]*/
         
         /**
-         * @draft ICU 2.4
+         * @stable ICU 2.4
          */
         public static final int COUNT = 31;
     };
@@ -2000,69 +2000,69 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
     /**
      * Numeric Type constants.
      * @see UProperty#NUMERIC_TYPE
-     * @draft ICU 2.4
+     * @stable ICU 2.4
      */
     public static interface NumericType 
     {
         /**
-         * @draft ICU 2.4
+         * @stable ICU 2.4
          */
         public static final int NONE = 0;
         /**
-         * @draft ICU 2.4
+         * @stable ICU 2.4
          */
         public static final int DECIMAL = 1;
         /**
-         * @draft ICU 2.4
+         * @stable ICU 2.4
          */
         public static final int DIGIT = 2;
         /**
-         * @draft ICU 2.4
+         * @stable ICU 2.4
          */
         public static final int NUMERIC = 3;
         /**
-         * @draft ICU 2.4
+         * @stable ICU 2.4
          */
         public static final int COUNT = 4;
     }; 
     
     /**
-         * Hangul Syllable Type constants.
-         *
-         * @see UProperty#HANGUL_SYLLABLE_TYPE
+     * Hangul Syllable Type constants.
+     *
+     * @see UProperty#HANGUL_SYLLABLE_TYPE
+     * @draft ICU 2.6
+     */
+    public static interface HangulSyllableType 
+    {
+	/**
          * @draft ICU 2.6
          */
-        public static interface HangulSyllableType 
-        {
-                /**
+	public static final int NOT_APPLICABLE      = 0;   /*[NA]*/ /*See note !!*/
+	/**
          * @draft ICU 2.6
          */
-            public static final int NOT_APPLICABLE      = 0;   /*[NA]*/ /*See note !!*/
-            /**
+	public static final int LEADING_JAMO        = 1;   /*[L]*/
+	/**
          * @draft ICU 2.6
          */
-            public static final int LEADING_JAMO        = 1;   /*[L]*/
-            /**
+	public static final int VOWEL_JAMO          = 2;   /*[V]*/
+	/**
          * @draft ICU 2.6
          */
-            public static final int VOWEL_JAMO          = 2;   /*[V]*/
-            /**
+	public static final int TRAILING_JAMO       = 3;   /*[T]*/
+	/**
          * @draft ICU 2.6
          */
-            public static final int TRAILING_JAMO       = 3;   /*[T]*/
-            /**
+	public static final int LV_SYLLABLE         = 4;   /*[LV]*/
+	/**
          * @draft ICU 2.6
          */
-            public static final int LV_SYLLABLE         = 4;   /*[LV]*/
-            /**
+	public static final int LVT_SYLLABLE        = 5;   /*[LVT]*/
+	/**
          * @draft ICU 2.6
          */
-            public static final int LVT_SYLLABLE        = 5;   /*[LVT]*/
-            /**
-         * @draft ICU 2.6
-         */
-            public static final int COUNT                       = 6;
-        }
+	public static final int COUNT                       = 6;
+    }
 
     // public data members -----------------------------------------------
   
@@ -2086,19 +2086,19 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * @stable ICU 2.1
      */
     public static final int SUPPLEMENTARY_MIN_VALUE = 
-                                          UTF16.SUPPLEMENTARY_MIN_VALUE;
+	UTF16.SUPPLEMENTARY_MIN_VALUE;
       
     /**
      * Unicode value used when translating into Unicode encoding form and there 
      * is no existing character.
      * @stable ICU 2.1
      */
-        public static final int REPLACEMENT_CHAR = '\uFFFD';
+    public static final int REPLACEMENT_CHAR = '\uFFFD';
         
     /**
      * Special value that is returned by getUnicodeNumericValue(int) when no 
      * numeric value is defined for a code point.
-     * @draft ICU 2.4
+     * @stable ICU 2.4
      * @see #getUnicodeNumericValue
      */
     public static final double NO_NUMERIC_VALUE = -123456789;
@@ -2137,7 +2137,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
         }
         // if props == 0, it will just fall through and return -1
         if (isNotExceptionIndicator(props)) {
-                // not contained in exception data
+	    // not contained in exception data
             // getSignedValue is just shifting so we can check for the sign
             // first
             // Optimization
@@ -2151,10 +2151,10 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
         }
         else {
             int index = UCharacterProperty.getExceptionIndex(props);
-                if (PROPERTY_.hasExceptionValue(index, 
-                                     UCharacterProperty.EXC_NUMERIC_VALUE_)) {
+	    if (PROPERTY_.hasExceptionValue(index, 
+					    UCharacterProperty.EXC_NUMERIC_VALUE_)) {
                 int result = PROPERTY_.getException(index, 
-                                      UCharacterProperty.EXC_NUMERIC_VALUE_);
+						    UCharacterProperty.EXC_NUMERIC_VALUE_);
                 if (result >= 0) {
                     return result;
                 }  
@@ -2217,11 +2217,11 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
             
         int index = UCharacterProperty.getExceptionIndex(props);
         if (!PROPERTY_.hasExceptionValue(index, 
-                          UCharacterProperty.EXC_DENOMINATOR_VALUE_) && 
+					 UCharacterProperty.EXC_DENOMINATOR_VALUE_) && 
             PROPERTY_.hasExceptionValue(index, 
-                               UCharacterProperty.EXC_NUMERIC_VALUE_)) {
+					UCharacterProperty.EXC_NUMERIC_VALUE_)) {
             return PROPERTY_.getException(index, 
-                                     UCharacterProperty.EXC_NUMERIC_VALUE_);
+					  UCharacterProperty.EXC_NUMERIC_VALUE_);
         }
         
         int europeannumeric = getEuropeanDigit(ch);
@@ -2242,9 +2242,10 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * return type int and returns -1 when the argument ch does not have a 
      * corresponding numeric value. This has been changed to synch with ICU4C
      * </p>
+     * This corresponds to the ICU4C function u_getNumericValue.
      * @param ch Code point to get the numeric value for.
      * @return numeric value of ch, or NO_NUMERIC_VALUE if none is defined.
-     * @draft ICU 2.4
+     * @stable ICU 2.4
      */
     public static double getUnicodeNumericValue(int ch)
     {
@@ -2261,9 +2262,9 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
                 boolean dex = false;
                 double numerator = 0;
                 if (PROPERTY_.hasExceptionValue(index, 
-                               UCharacterProperty.EXC_NUMERIC_VALUE_)) {
+						UCharacterProperty.EXC_NUMERIC_VALUE_)) {
                     int num = PROPERTY_.getException(index, 
-                                         UCharacterProperty.EXC_NUMERIC_VALUE_);
+						     UCharacterProperty.EXC_NUMERIC_VALUE_);
                     // There are special values for huge numbers that are 
                     // powers of ten. genprops/store.c documents:
                     // if numericValue = 0x7fffff00 + x then 
@@ -2280,9 +2281,9 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
                 }
                 double denominator = 0;
                 if (PROPERTY_.hasExceptionValue(index, 
-                                  UCharacterProperty.EXC_DENOMINATOR_VALUE_)) {
+						UCharacterProperty.EXC_DENOMINATOR_VALUE_)) {
                     denominator = PROPERTY_.getException(index, 
-                                     UCharacterProperty.EXC_DENOMINATOR_VALUE_);
+							 UCharacterProperty.EXC_DENOMINATOR_VALUE_);
                     // faster path not in c
                     if (numerator != 0) {
                         return numerator / denominator;
@@ -2384,11 +2385,11 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
     {
         // if props == 0, it will just fall through and return false
         return ((1 << getType(ch)) 
-               & ((1 << UCharacterCategory.UPPERCASE_LETTER) 
-               | (1 << UCharacterCategory.LOWERCASE_LETTER)
-               | (1 << UCharacterCategory.TITLECASE_LETTER)
-               | (1 << UCharacterCategory.MODIFIER_LETTER)
-               | (1 << UCharacterCategory.OTHER_LETTER))) != 0;
+		& ((1 << UCharacterCategory.UPPERCASE_LETTER) 
+		   | (1 << UCharacterCategory.LOWERCASE_LETTER)
+		   | (1 << UCharacterCategory.TITLECASE_LETTER)
+		   | (1 << UCharacterCategory.MODIFIER_LETTER)
+		   | (1 << UCharacterCategory.OTHER_LETTER))) != 0;
     }
                 
     /**
@@ -2402,12 +2403,12 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
     public static boolean isLetterOrDigit(int ch)
     {
         return ((1 << getType(ch)) 
-               & ((1 << UCharacterCategory.UPPERCASE_LETTER) 
-                  | (1 << UCharacterCategory.LOWERCASE_LETTER)
-                  | (1 << UCharacterCategory.TITLECASE_LETTER)
-                  | (1 << UCharacterCategory.MODIFIER_LETTER)
-                  | (1 << UCharacterCategory.OTHER_LETTER)
-                  | (1 << UCharacterCategory.DECIMAL_DIGIT_NUMBER))) != 0;
+		& ((1 << UCharacterCategory.UPPERCASE_LETTER) 
+		   | (1 << UCharacterCategory.LOWERCASE_LETTER)
+		   | (1 << UCharacterCategory.TITLECASE_LETTER)
+		   | (1 << UCharacterCategory.MODIFIER_LETTER)
+		   | (1 << UCharacterCategory.OTHER_LETTER)
+		   | (1 << UCharacterCategory.DECIMAL_DIGIT_NUMBER))) != 0;
     }
         
     /**
@@ -2463,11 +2464,11 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
                 ((1 << UCharacterCategory.SPACE_SEPARATOR)
                  | (1 << UCharacterCategory.LINE_SEPARATOR)
                  | (1 << UCharacterCategory.PARAGRAPH_SEPARATOR))) != 0 
-                && (ch != NO_BREAK_SPACE_) && (ch != NARROW_NO_BREAK_SPACE_) 
-                && (ch != ZERO_WIDTH_NO_BREAK_SPACE_)
-                // TAB VT LF FF CR FS GS RS US NL are all control characters
-                // that are white spaces.
-                || (ch >= 0x9 && ch <= 0xd) || (ch >= 0x1c && ch <= 0x1f);
+	    && (ch != NO_BREAK_SPACE_) && (ch != NARROW_NO_BREAK_SPACE_) 
+	    && (ch != ZERO_WIDTH_NO_BREAK_SPACE_)
+	    // TAB VT LF FF CR FS GS RS US NL are all control characters
+	    // that are white spaces.
+	    || (ch >= 0x9 && ch <= 0xd) || (ch >= 0x1c && ch <= 0x1f);
     }
        
     /**
@@ -2482,9 +2483,9 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
     {
         // if props == 0, it will just fall through and return false
         return ((1 << getType(ch)) & ((1 << UCharacterCategory.SPACE_SEPARATOR) 
-                              | (1 << UCharacterCategory.LINE_SEPARATOR)
-                              | (1 << UCharacterCategory.PARAGRAPH_SEPARATOR)))
-               != 0;
+				      | (1 << UCharacterCategory.LINE_SEPARATOR)
+				      | (1 << UCharacterCategory.PARAGRAPH_SEPARATOR)))
+	    != 0;
     }
                                     
     /**
@@ -2538,17 +2539,17 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
         // if props == 0, it will just fall through and return false
         // cat == format
         return ((1 << getType(ch)) 
-                 & ((1 << UCharacterCategory.UPPERCASE_LETTER) 
-                    | (1 << UCharacterCategory.LOWERCASE_LETTER)
-                    | (1 << UCharacterCategory.TITLECASE_LETTER)
-                    | (1 << UCharacterCategory.MODIFIER_LETTER)
-                    | (1 << UCharacterCategory.OTHER_LETTER)
-                    | (1 << UCharacterCategory.LETTER_NUMBER) 
-                    | (1 << UCharacterCategory.CONNECTOR_PUNCTUATION)
-                    | (1 << UCharacterCategory.DECIMAL_DIGIT_NUMBER)
-                    | (1 << UCharacterCategory.COMBINING_SPACING_MARK)
-                    | (1 << UCharacterCategory.NON_SPACING_MARK))) != 0
-                || isIdentifierIgnorable(ch);
+		& ((1 << UCharacterCategory.UPPERCASE_LETTER) 
+		   | (1 << UCharacterCategory.LOWERCASE_LETTER)
+		   | (1 << UCharacterCategory.TITLECASE_LETTER)
+		   | (1 << UCharacterCategory.MODIFIER_LETTER)
+		   | (1 << UCharacterCategory.OTHER_LETTER)
+		   | (1 << UCharacterCategory.LETTER_NUMBER) 
+		   | (1 << UCharacterCategory.CONNECTOR_PUNCTUATION)
+		   | (1 << UCharacterCategory.DECIMAL_DIGIT_NUMBER)
+		   | (1 << UCharacterCategory.COMBINING_SPACING_MARK)
+		   | (1 << UCharacterCategory.NON_SPACING_MARK))) != 0
+	    || isIdentifierIgnorable(ch);
     }
                        
     /**
@@ -2576,12 +2577,12 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
         /*int cat = getType(ch);*/
         // if props == 0, it will just fall through and return false
         return ((1 << getType(ch)) 
-                 & ((1 << UCharacterCategory.UPPERCASE_LETTER) 
-                    | (1 << UCharacterCategory.LOWERCASE_LETTER)
-                    | (1 << UCharacterCategory.TITLECASE_LETTER)
-                    | (1 << UCharacterCategory.MODIFIER_LETTER)
-                    | (1 << UCharacterCategory.OTHER_LETTER)
-                    | (1 << UCharacterCategory.LETTER_NUMBER))) != 0;
+		& ((1 << UCharacterCategory.UPPERCASE_LETTER) 
+		   | (1 << UCharacterCategory.LOWERCASE_LETTER)
+		   | (1 << UCharacterCategory.TITLECASE_LETTER)
+		   | (1 << UCharacterCategory.MODIFIER_LETTER)
+		   | (1 << UCharacterCategory.OTHER_LETTER)
+		   | (1 << UCharacterCategory.LETTER_NUMBER))) != 0;
     }
 
     /**
@@ -2602,9 +2603,9 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
         // see java.lang.Character.isIdentifierIgnorable() on range of 
         // ignorable characters.
         if (ch <= 0x9f) {
-             return isISOControl(ch) 
-                    && !((ch >= 0x9 && ch <= 0xd) 
-                         || (ch >= 0x1c && ch <= 0x1f));
+	    return isISOControl(ch) 
+		&& !((ch >= 0x9 && ch <= 0xd) 
+		     || (ch >= 0x1c && ch <= 0x1f));
         } 
         return getType(ch) == UCharacterCategory.FORMAT;
     }
@@ -2663,14 +2664,14 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
             }
         } 
         else 
-        {
-            int index = UCharacterProperty.getExceptionIndex(props);
-            if (PROPERTY_.hasExceptionValue(index, 
-                                       UCharacterProperty.EXC_LOWERCASE_)) {
-                return PROPERTY_.getException(index, 
-                                         UCharacterProperty.EXC_LOWERCASE_); 
-            }
-        }
+	    {
+		int index = UCharacterProperty.getExceptionIndex(props);
+		if (PROPERTY_.hasExceptionValue(index, 
+						UCharacterProperty.EXC_LOWERCASE_)) {
+		    return PROPERTY_.getException(index, 
+						  UCharacterProperty.EXC_LOWERCASE_); 
+		}
+	    }
         return ch;
     }
 
@@ -2735,16 +2736,16 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
         else {
             int index = UCharacterProperty.getExceptionIndex(props);
             if (PROPERTY_.hasExceptionValue(index, 
-                                         UCharacterProperty.EXC_TITLECASE_)) {
+					    UCharacterProperty.EXC_TITLECASE_)) {
                 return PROPERTY_.getException(index,
-                                         UCharacterProperty.EXC_TITLECASE_);
+					      UCharacterProperty.EXC_TITLECASE_);
             }
             else {
                 // here, titlecase is same as uppercase
                 if (PROPERTY_.hasExceptionValue(index, 
-                                       UCharacterProperty.EXC_UPPERCASE_)) {
+						UCharacterProperty.EXC_UPPERCASE_)) {
                     return PROPERTY_.getException(index, 
-                                         UCharacterProperty.EXC_UPPERCASE_); 
+						  UCharacterProperty.EXC_UPPERCASE_); 
                 }
             }
         }
@@ -2778,14 +2779,14 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
             }
         }
         else 
-        {
-            int index = UCharacterProperty.getExceptionIndex(props);
-            if (PROPERTY_.hasExceptionValue(index, 
-                                         UCharacterProperty.EXC_UPPERCASE_)) {
-                return PROPERTY_.getException(index, 
-                                         UCharacterProperty.EXC_UPPERCASE_); 
-            }
-        }
+	    {
+		int index = UCharacterProperty.getExceptionIndex(props);
+		if (PROPERTY_.hasExceptionValue(index, 
+						UCharacterProperty.EXC_UPPERCASE_)) {
+		    return PROPERTY_.getException(index, 
+						  UCharacterProperty.EXC_UPPERCASE_); 
+		}
+	    }
         return ch; // no mapping - return c itself
     }
        
@@ -2830,11 +2831,11 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
         int cat = getType(ch);
         // if props == 0, it will just fall through and return false
         return (cat != UCharacterCategory.UNASSIGNED && 
-            cat != UCharacterCategory.CONTROL && 
-            cat != UCharacterCategory.FORMAT &&
-            cat != UCharacterCategory.PRIVATE_USE &&
-            cat != UCharacterCategory.SURROGATE &&
-            cat != UCharacterCategory.GENERAL_OTHER_TYPES);
+		cat != UCharacterCategory.CONTROL && 
+		cat != UCharacterCategory.FORMAT &&
+		cat != UCharacterCategory.PRIVATE_USE &&
+		cat != UCharacterCategory.SURROGATE &&
+		cat != UCharacterCategory.GENERAL_OTHER_TYPES);
     }
 
     /**
@@ -2891,7 +2892,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
     {
         // when ch is out of bounds getProperty == 0
         return (PROPERTY_.getProperty(ch) & UCharacterProperty.MIRROR_MASK) 
-                                                                         != 0;
+	    != 0;
     }
 
     /**
@@ -2919,13 +2920,13 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
                 return ch + UCharacterProperty.getSignedValue(props);
             }
             else 
-            {
-                int index = UCharacterProperty.getExceptionIndex(props);
-                if (PROPERTY_.hasExceptionValue(index, 
-                                    UCharacterProperty.EXC_MIRROR_MAPPING_)) 
-                return PROPERTY_.getException(index, 
-                                     UCharacterProperty.EXC_MIRROR_MAPPING_);   
-            }
+		{
+		    int index = UCharacterProperty.getExceptionIndex(props);
+		    if (PROPERTY_.hasExceptionValue(index, 
+						    UCharacterProperty.EXC_MIRROR_MAPPING_)) 
+			return PROPERTY_.getException(index, 
+						      UCharacterProperty.EXC_MIRROR_MAPPING_);   
+		}
         }
         return ch;
     }
@@ -2939,7 +2940,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
     public static int getCombiningClass(int ch)
     {
         if (ch < MIN_VALUE || ch > MAX_VALUE) {
-                throw new IllegalArgumentException("Codepoint out of bounds");
+	    throw new IllegalArgumentException("Codepoint out of bounds");
         }
         return NormalizerImpl.getCombiningClass(ch);
     }
@@ -2991,15 +2992,15 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
         int size = str.length();
         int codepoint;
         for (int i = 0; i < size; i ++)
-        {
-            codepoint = UTF16.charAt(str, i);
-            if (!isLegal(codepoint)) {
-                return false;
-            }
-            if (isSupplementary(codepoint)) {
-                i ++;
-            }
-        }
+	    {
+		codepoint = UTF16.charAt(str, i);
+		if (!isLegal(codepoint)) {
+		    return false;
+		}
+		if (isSupplementary(codepoint)) {
+		    i ++;
+		}
+	    }
         return true;
     }
 
@@ -3107,7 +3108,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      *           It must be <code>0<=c<=0x10ffff</code>.
      * @return The ISO comment, or null if there is no comment for this 
      *         character.
-     * @draft ICU 2.4
+     * @stable ICU 2.4
      */
     public static String getISOComment(int ch)
     {
@@ -3138,7 +3139,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
             throw new RuntimeException("Could not load unames.icu");
         }
         return NAME_.getCharFromName(
-                            UCharacterNameChoice.UNICODE_CHAR_NAME, name);
+				     UCharacterNameChoice.UNICODE_CHAR_NAME, name);
     }
       
     /**
@@ -3157,7 +3158,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
             throw new RuntimeException("Could not load unames.icu");
         }
         return NAME_.getCharFromName(
-                         UCharacterNameChoice.UNICODE_10_CHAR_NAME, name);
+				     UCharacterNameChoice.UNICODE_10_CHAR_NAME, name);
     }
     
     /**
@@ -3185,7 +3186,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
             throw new RuntimeException("Could not load unames.icu");
         }
         return NAME_.getCharFromName(
-                            UCharacterNameChoice.EXTENDED_CHAR_NAME, name);
+				     UCharacterNameChoice.EXTENDED_CHAR_NAME, name);
     }
 
     /**
@@ -3219,7 +3220,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      *
      * @see UProperty
      * @see UProperty.NameChoice
-     * @draft ICU 2.4
+     * @stable ICU 2.4
      */
     public static String getPropertyName(int property,
                                          int nameChoice) {
@@ -3246,7 +3247,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * is not recognized.
      *
      * @see UProperty
-     * @draft ICU 2.4
+     * @stable ICU 2.4
      */
     public static int getPropertyEnum(String propertyAlias) {
         return PNAMES_.getPropertyEnum(propertyAlias);
@@ -3298,7 +3299,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      *
      * @see UProperty
      * @see UProperty.NameChoice
-     * @draft ICU 2.4
+     * @stable ICU 2.4
      */
     public static String getPropertyValueName(int property,
                                               int value,
@@ -3306,9 +3307,9 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
     {
         if (property == UProperty.CANONICAL_COMBINING_CLASS 
             && value >= UCharacter.getIntPropertyMinValue(
-                                            UProperty.CANONICAL_COMBINING_CLASS)
+							  UProperty.CANONICAL_COMBINING_CLASS)
             && value <= UCharacter.getIntPropertyMaxValue(
-                                        UProperty.CANONICAL_COMBINING_CLASS)
+							  UProperty.CANONICAL_COMBINING_CLASS)
             && nameChoice >= 0 && nameChoice < UProperty.NameChoice.COUNT) {
             // this is hard coded for the valid cc
             // because PropertyValueAliases.txt does not contain all of them
@@ -3352,7 +3353,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * @see UProperty
      * @throws IllegalArgumentException if property is not a valid UProperty
      *         selector
-     * @draft ICU 2.4
+     * @stable ICU 2.4
      */
     public static int getPropertyValueEnum(int property,
                                            String valueAlias) {
@@ -3371,9 +3372,9 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
     public static int getCodePoint(char lead, char trail) 
     {
         if (lead >= UTF16.LEAD_SURROGATE_MIN_VALUE && 
-                lead <= UTF16.LEAD_SURROGATE_MAX_VALUE &&
+	    lead <= UTF16.LEAD_SURROGATE_MAX_VALUE &&
             trail >= UTF16.TRAIL_SURROGATE_MIN_VALUE && 
-                trail <= UTF16.TRAIL_SURROGATE_MAX_VALUE) {
+	    trail <= UTF16.TRAIL_SURROGATE_MAX_VALUE) {
             return UCharacterProperty.getRawSupplementary(lead, trail);
         }
         throw new IllegalArgumentException("Illegal surrogate characters");
@@ -3453,7 +3454,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
     public static String toUpperCase(Locale locale, String str)
     {
         if (locale == null) {
-                locale = Locale.getDefault();
+	    locale = Locale.getDefault();
         }
         return PROPERTY_.toUpperCase(locale, str, 0, str.length());
     }
@@ -3471,7 +3472,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
         int length = str.length();
         StringBuffer result = new StringBuffer(length);
         if (locale == null) {
-                locale = Locale.getDefault();
+	    locale = Locale.getDefault();
         }
         PROPERTY_.toLowerCase(locale, str, 0, length, result);
         return result.toString();
@@ -3500,9 +3501,9 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
                                      BreakIterator breakiter)
     {
         if (breakiter == null) {
-                if (locale == null) {
-                        locale = Locale.getDefault();
-                }
+	    if (locale == null) {
+		locale = Locale.getDefault();
+	    }
             breakiter = BreakIterator.getWordInstance(locale);
         }
         return PROPERTY_.toTitleCase(locale, str, breakiter);
@@ -3574,12 +3575,12 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
         else {
             int index = UCharacterProperty.getExceptionIndex(props);
             if (PROPERTY_.hasExceptionValue(index, 
-                                      UCharacterProperty.EXC_CASE_FOLDING_)) {
+					    UCharacterProperty.EXC_CASE_FOLDING_)) {
                 int exception = PROPERTY_.getException(index, 
-                                      UCharacterProperty.EXC_CASE_FOLDING_);
+						       UCharacterProperty.EXC_CASE_FOLDING_);
                 if (exception != 0) {
                     int foldedcasech = 
-                         PROPERTY_.getFoldCase(exception & LAST_CHAR_MASK_);
+			PROPERTY_.getFoldCase(exception & LAST_CHAR_MASK_);
                     if (foldedcasech != 0){
                         return foldedcasech;
                     }
@@ -3612,10 +3613,10 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
                 }                                  
             }
             if (PROPERTY_.hasExceptionValue(index, 
-                                       UCharacterProperty.EXC_LOWERCASE_)) {  
+					    UCharacterProperty.EXC_LOWERCASE_)) {  
                 // not else! - allow to fall through from above
                 return PROPERTY_.getException(index, 
-                                         UCharacterProperty.EXC_LOWERCASE_);
+					      UCharacterProperty.EXC_LOWERCASE_);
             }
         }
             
@@ -3661,12 +3662,12 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
             else {
                 int index = UCharacterProperty.getExceptionIndex(props);
                 if (PROPERTY_.hasExceptionValue(index, 
-                                    UCharacterProperty.EXC_CASE_FOLDING_)) {
+						UCharacterProperty.EXC_CASE_FOLDING_)) {
                     int exception = PROPERTY_.getException(index, 
-                                      UCharacterProperty.EXC_CASE_FOLDING_);                             
+							   UCharacterProperty.EXC_CASE_FOLDING_);                             
                     if (exception != 0) {
                         PROPERTY_.getFoldCase(exception & LAST_CHAR_MASK_, 
-                                             exception >> SHIFT_24_, result);
+					      exception >> SHIFT_24_, result);
                     } 
                     else {
                         // special case folding mappings, hardcoded
@@ -3681,13 +3682,13 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
                             if (ch == 0x49) {
                                 // 0049; C; 0069; # LATIN CAPITAL LETTER I
                                 result.append(
-                                    UCharacterProperty.LATIN_SMALL_LETTER_I_);
+					      UCharacterProperty.LATIN_SMALL_LETTER_I_);
                             }
                             else if (ch == 0x130) {
                                 // 0130; F; 0069 0307; 
                                 // # LATIN CAPITAL LETTER I WITH DOT ABOVE
                                 result.append(
-                                    UCharacterProperty.LATIN_SMALL_LETTER_I_);
+					      UCharacterProperty.LATIN_SMALL_LETTER_I_);
                                 result.append((char)0x307);
                             }
                         }
@@ -3701,7 +3702,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
                                 // 0130; T; 0069; 
                                 // # LATIN CAPITAL LETTER I WITH DOT ABOVE
                                 result.append(
-                                    UCharacterProperty.LATIN_SMALL_LETTER_I_);
+					      UCharacterProperty.LATIN_SMALL_LETTER_I_);
                             }
                         }
                     }
@@ -3710,9 +3711,9 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
                 } 
                 else {
                     if (PROPERTY_.hasExceptionValue(index, 
-                                         UCharacterProperty.EXC_LOWERCASE_)) {
+						    UCharacterProperty.EXC_LOWERCASE_)) {
                         ch = PROPERTY_.getException(index, 
-                                          UCharacterProperty.EXC_LOWERCASE_);
+						    UCharacterProperty.EXC_LOWERCASE_);
                     }
                 }
                 
@@ -3725,12 +3726,12 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
         return result.toString();
     }
     
-        /**
-         * Bit mask for getting just the options from a string compare options word
-         * that are relevant for case folding (of a single string or code point).
-         * @internal
-         */
-        private static final int FOLD_CASE_OPTIONS_MASK = 0xff;
+    /**
+     * Bit mask for getting just the options from a string compare options word
+     * that are relevant for case folding (of a single string or code point).
+     * @internal
+     */
+    private static final int FOLD_CASE_OPTIONS_MASK = 0xff;
     
     /**
      * Option value for case folding: use default mappings defined in CaseFolding.txt.
@@ -3759,22 +3760,22 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * @see                  #foldCase(String, boolean)
      * @draft ICU 2.6
      */
-        /*
-         * Issue for canonical caseless match (UAX #21):
-         * Turkic casefolding (using "T" mappings in CaseFolding.txt) does not preserve
-         * canonical equivalence, unlike default-option casefolding.
-         * For example, I-grave and I + grave fold to strings that are not canonically
-         * equivalent.
-         * For more details, see the comment in Normalizer.compare() 
-         * and the intermediate prototype changes for Jitterbug 2021.
-         * (For example, revision 1.104 of uchar.c and 1.4 of CaseFolding.txt.)
-         *
-         * This did not get fixed because it appears that it is not possible to fix
-         * it for uppercase and lowercase characters (I-grave vs. i-grave)
-         * together in a way that they still fold to common result strings.
-         */
-         public static int foldCase(int ch, int options)
-     {
+    /*
+     * Issue for canonical caseless match (UAX #21):
+     * Turkic casefolding (using "T" mappings in CaseFolding.txt) does not preserve
+     * canonical equivalence, unlike default-option casefolding.
+     * For example, I-grave and I + grave fold to strings that are not canonically
+     * equivalent.
+     * For more details, see the comment in Normalizer.compare() 
+     * and the intermediate prototype changes for Jitterbug 2021.
+     * (For example, revision 1.104 of uchar.c and 1.4 of CaseFolding.txt.)
+     *
+     * This did not get fixed because it appears that it is not possible to fix
+     * it for uppercase and lowercase characters (I-grave vs. i-grave)
+     * together in a way that they still fold to common result strings.
+     */
+    public static int foldCase(int ch, int options)
+    {
         int props = PROPERTY_.getProperty(ch);
         if (isNotExceptionIndicator(props)) {
             int type = UCharacterProperty.TYPE_MASK & props;
@@ -3786,12 +3787,12 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
         else {
             int index = UCharacterProperty.getExceptionIndex(props);
             if (PROPERTY_.hasExceptionValue(index, 
-                                      UCharacterProperty.EXC_CASE_FOLDING_)) {
+					    UCharacterProperty.EXC_CASE_FOLDING_)) {
                 int exception = PROPERTY_.getException(index, 
-                                      UCharacterProperty.EXC_CASE_FOLDING_);
+						       UCharacterProperty.EXC_CASE_FOLDING_);
                 if (exception != 0) {
                     int foldedcasech = 
-                         PROPERTY_.getFoldCase(exception & LAST_CHAR_MASK_);
+			PROPERTY_.getFoldCase(exception & LAST_CHAR_MASK_);
                     if (foldedcasech != 0){
                         return foldedcasech;
                     }
@@ -3824,10 +3825,10 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
                 }                                  
             }
             if (PROPERTY_.hasExceptionValue(index, 
-                                       UCharacterProperty.EXC_LOWERCASE_)) {  
+					    UCharacterProperty.EXC_LOWERCASE_)) {  
                 // not else! - allow to fall through from above
                 return PROPERTY_.getException(index, 
-                                         UCharacterProperty.EXC_LOWERCASE_);
+					      UCharacterProperty.EXC_LOWERCASE_);
             }
         }
             
@@ -3849,7 +3850,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * @see                  #foldCase(int, boolean)
      * @draft ICU 2.6
      */
-        public static final String foldCase(String str, int options){
+    public static final String foldCase(String str, int options){
         int          size   = str.length();
         StringBuffer result = new StringBuffer(size);
         int          offset  = 0;
@@ -3870,12 +3871,12 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
             else {
                 int index = UCharacterProperty.getExceptionIndex(props);
                 if (PROPERTY_.hasExceptionValue(index, 
-                                    UCharacterProperty.EXC_CASE_FOLDING_)) {
+						UCharacterProperty.EXC_CASE_FOLDING_)) {
                     int exception = PROPERTY_.getException(index, 
-                                      UCharacterProperty.EXC_CASE_FOLDING_);                             
+							   UCharacterProperty.EXC_CASE_FOLDING_);                             
                     if (exception != 0) {
                         PROPERTY_.getFoldCase(exception & LAST_CHAR_MASK_, 
-                                             exception >> SHIFT_24_, result);
+					      exception >> SHIFT_24_, result);
                     } 
                     else {
                         // special case folding mappings, hardcoded
@@ -3890,13 +3891,13 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
                             if (ch == 0x49) {
                                 // 0049; C; 0069; # LATIN CAPITAL LETTER I
                                 result.append(
-                                    UCharacterProperty.LATIN_SMALL_LETTER_I_);
+					      UCharacterProperty.LATIN_SMALL_LETTER_I_);
                             }
                             else if (ch == 0x130) {
                                 // 0130; F; 0069 0307; 
                                 // # LATIN CAPITAL LETTER I WITH DOT ABOVE
                                 result.append(
-                                    UCharacterProperty.LATIN_SMALL_LETTER_I_);
+					      UCharacterProperty.LATIN_SMALL_LETTER_I_);
                                 result.append((char)0x307);
                             }
                         }
@@ -3910,7 +3911,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
                                 // 0130; T; 0069; 
                                 // # LATIN CAPITAL LETTER I WITH DOT ABOVE
                                 result.append(
-                                    UCharacterProperty.LATIN_SMALL_LETTER_I_);
+					      UCharacterProperty.LATIN_SMALL_LETTER_I_);
                             }
                         }
                     }
@@ -3919,9 +3920,9 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
                 } 
                 else {
                     if (PROPERTY_.hasExceptionValue(index, 
-                                         UCharacterProperty.EXC_LOWERCASE_)) {
+						    UCharacterProperty.EXC_LOWERCASE_)) {
                         ch = PROPERTY_.getException(index, 
-                                          UCharacterProperty.EXC_LOWERCASE_);
+						    UCharacterProperty.EXC_LOWERCASE_);
                     }
                 }
                 
@@ -3932,7 +3933,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
         }
         
         return result.toString();
-        }
+    }
     /**
      * Return numeric value of Han code points.
      * <br> This returns the value of Han 'numeric' code points,
@@ -3948,51 +3949,51 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
     public static int getHanNumericValue(int ch)
     {
         switch(ch)
-        {
-        case IDEOGRAPHIC_NUMBER_ZERO_ :
-        case CJK_IDEOGRAPH_COMPLEX_ZERO_ :
-            return 0; // Han Zero
-        case CJK_IDEOGRAPH_FIRST_ :
-        case CJK_IDEOGRAPH_COMPLEX_ONE_ :
-            return 1; // Han One
-        case CJK_IDEOGRAPH_SECOND_ :
-        case CJK_IDEOGRAPH_COMPLEX_TWO_ :
-            return 2; // Han Two
-        case CJK_IDEOGRAPH_THIRD_ :
-        case CJK_IDEOGRAPH_COMPLEX_THREE_ :
-            return 3; // Han Three
-        case CJK_IDEOGRAPH_FOURTH_ :
-        case CJK_IDEOGRAPH_COMPLEX_FOUR_ :
-            return 4; // Han Four
-        case CJK_IDEOGRAPH_FIFTH_ :
-        case CJK_IDEOGRAPH_COMPLEX_FIVE_ :
-            return 5; // Han Five
-        case CJK_IDEOGRAPH_SIXTH_ :
-        case CJK_IDEOGRAPH_COMPLEX_SIX_ :
-            return 6; // Han Six
-        case CJK_IDEOGRAPH_SEVENTH_ :
-        case CJK_IDEOGRAPH_COMPLEX_SEVEN_ :
-            return 7; // Han Seven
-        case CJK_IDEOGRAPH_EIGHTH_ : 
-        case CJK_IDEOGRAPH_COMPLEX_EIGHT_ :
-            return 8; // Han Eight
-        case CJK_IDEOGRAPH_NINETH_ :
-        case CJK_IDEOGRAPH_COMPLEX_NINE_ :
-            return 9; // Han Nine
-        case CJK_IDEOGRAPH_TEN_ :
-        case CJK_IDEOGRAPH_COMPLEX_TEN_ :
-            return 10;
-        case CJK_IDEOGRAPH_HUNDRED_ :
-        case CJK_IDEOGRAPH_COMPLEX_HUNDRED_ :
-            return 100;
-        case CJK_IDEOGRAPH_THOUSAND_ :
-        case CJK_IDEOGRAPH_COMPLEX_THOUSAND_ :
-            return 1000;
-        case CJK_IDEOGRAPH_TEN_THOUSAND_ :
-            return 10000;
-        case CJK_IDEOGRAPH_HUNDRED_MILLION_ :
-            return 100000000;
-        }
+	    {
+	    case IDEOGRAPHIC_NUMBER_ZERO_ :
+	    case CJK_IDEOGRAPH_COMPLEX_ZERO_ :
+		return 0; // Han Zero
+	    case CJK_IDEOGRAPH_FIRST_ :
+	    case CJK_IDEOGRAPH_COMPLEX_ONE_ :
+		return 1; // Han One
+	    case CJK_IDEOGRAPH_SECOND_ :
+	    case CJK_IDEOGRAPH_COMPLEX_TWO_ :
+		return 2; // Han Two
+	    case CJK_IDEOGRAPH_THIRD_ :
+	    case CJK_IDEOGRAPH_COMPLEX_THREE_ :
+		return 3; // Han Three
+	    case CJK_IDEOGRAPH_FOURTH_ :
+	    case CJK_IDEOGRAPH_COMPLEX_FOUR_ :
+		return 4; // Han Four
+	    case CJK_IDEOGRAPH_FIFTH_ :
+	    case CJK_IDEOGRAPH_COMPLEX_FIVE_ :
+		return 5; // Han Five
+	    case CJK_IDEOGRAPH_SIXTH_ :
+	    case CJK_IDEOGRAPH_COMPLEX_SIX_ :
+		return 6; // Han Six
+	    case CJK_IDEOGRAPH_SEVENTH_ :
+	    case CJK_IDEOGRAPH_COMPLEX_SEVEN_ :
+		return 7; // Han Seven
+	    case CJK_IDEOGRAPH_EIGHTH_ : 
+	    case CJK_IDEOGRAPH_COMPLEX_EIGHT_ :
+		return 8; // Han Eight
+	    case CJK_IDEOGRAPH_NINETH_ :
+	    case CJK_IDEOGRAPH_COMPLEX_NINE_ :
+		return 9; // Han Nine
+	    case CJK_IDEOGRAPH_TEN_ :
+	    case CJK_IDEOGRAPH_COMPLEX_TEN_ :
+		return 10;
+	    case CJK_IDEOGRAPH_HUNDRED_ :
+	    case CJK_IDEOGRAPH_COMPLEX_HUNDRED_ :
+		return 100;
+	    case CJK_IDEOGRAPH_THOUSAND_ :
+	    case CJK_IDEOGRAPH_COMPLEX_THOUSAND_ :
+		return 1000;
+	    case CJK_IDEOGRAPH_TEN_THOUSAND_ :
+		return 10000;
+	    case CJK_IDEOGRAPH_HUNDRED_MILLION_ :
+		return 100000000;
+	    }
         return -1; // no value
     }
     
@@ -4019,7 +4020,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
         return new UCharacterTypeIterator(PROPERTY_);
     }
 
-        /**
+    /**
      * <p>Gets an iterator for character names, iterating over codepoints.</p>
      * <p>This API only gets the iterator for the modern, most up-to-date 
      * Unicode names. For older 1.0 Unicode names use get1_0NameIterator() or
@@ -4045,7 +4046,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
             throw new RuntimeException("Could not load unames.icu");
         }
         return new UCharacterNameIterator(NAME_,
-                                   UCharacterNameChoice.UNICODE_CHAR_NAME);
+					  UCharacterNameChoice.UNICODE_CHAR_NAME);
     }
     
     /**
@@ -4073,7 +4074,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
             throw new RuntimeException("Could not load unames.icu");
         }
         return new UCharacterNameIterator(NAME_,
-                                 UCharacterNameChoice.UNICODE_10_CHAR_NAME);
+					  UCharacterNameChoice.UNICODE_10_CHAR_NAME);
     }
     
     /**
@@ -4101,7 +4102,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
             throw new RuntimeException("Could not load unames.icu");
         }
         return new UCharacterNameIterator(NAME_,
-                                 UCharacterNameChoice.EXTENDED_CHAR_NAME);
+					  UCharacterNameChoice.EXTENDED_CHAR_NAME);
     }
     
     /**
@@ -4119,92 +4120,92 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
     public static VersionInfo getAge(int ch) 
     {
         if (ch < MIN_VALUE || ch > MAX_VALUE) {
-                throw new IllegalArgumentException("Codepoint out of bounds");
+	    throw new IllegalArgumentException("Codepoint out of bounds");
         }
         return PROPERTY_.getAge(ch);
     }
     
     /**
-         * <p>Check a binary Unicode property for a code point.</p> 
-         * <p>Unicode, especially in version 3.2, defines many more properties 
-         * than the original set in UnicodeData.txt.</p>
-         * <p>This API is intended to reflect Unicode properties as defined in 
-         * the Unicode Character Database (UCD) and Unicode Technical Reports 
-         * (UTR).</p>
-         * <p>For details about the properties see 
-         * <a href=http://www.unicode.org/>http://www.unicode.org/</a>.</p>
-         * <p>For names of Unicode properties see the UCD file 
-         * PropertyAliases.txt.</p>
-         * <p>This API does not check the validity of the codepoint.</p>
-         * <p>Important: If ICU is built with UCD files from Unicode versions 
-         * below 3.2, then properties marked with "new" are not or 
-         * not fully available.</p>
-         * @param ch code point to test.
-         * @param property selector constant from com.ibm.icu.lang.UProperty, 
-         *        identifies which binary property to check.
-         * @return true or false according to the binary Unicode property value 
-         *         for ch. Also false if property is out of bounds or if the 
-         *         Unicode version does not have data for the property at all, or 
-         *         not for this code point.
-         * @see com.ibm.icu.lang.UProperty
-         * @stable ICU 2.6
-         */
-        public static boolean hasBinaryProperty(int ch, int property) 
-        {
-                if (ch < MIN_VALUE || ch > MAX_VALUE) {
-                throw new IllegalArgumentException("Codepoint out of bounds");
+     * <p>Check a binary Unicode property for a code point.</p> 
+     * <p>Unicode, especially in version 3.2, defines many more properties 
+     * than the original set in UnicodeData.txt.</p>
+     * <p>This API is intended to reflect Unicode properties as defined in 
+     * the Unicode Character Database (UCD) and Unicode Technical Reports 
+     * (UTR).</p>
+     * <p>For details about the properties see 
+     * <a href=http://www.unicode.org/>http://www.unicode.org/</a>.</p>
+     * <p>For names of Unicode properties see the UCD file 
+     * PropertyAliases.txt.</p>
+     * <p>This API does not check the validity of the codepoint.</p>
+     * <p>Important: If ICU is built with UCD files from Unicode versions 
+     * below 3.2, then properties marked with "new" are not or 
+     * not fully available.</p>
+     * @param ch code point to test.
+     * @param property selector constant from com.ibm.icu.lang.UProperty, 
+     *        identifies which binary property to check.
+     * @return true or false according to the binary Unicode property value 
+     *         for ch. Also false if property is out of bounds or if the 
+     *         Unicode version does not have data for the property at all, or 
+     *         not for this code point.
+     * @see com.ibm.icu.lang.UProperty
+     * @stable ICU 2.6
+     */
+    public static boolean hasBinaryProperty(int ch, int property) 
+    {
+	if (ch < MIN_VALUE || ch > MAX_VALUE) {
+	    throw new IllegalArgumentException("Codepoint out of bounds");
         }
         return PROPERTY_.hasBinaryProperty(ch, property);
-        }
+    }
         
-        /**
-         * <p>Check if a code point has the Alphabetic Unicode property.</p> 
-         * <p>Same as UCharacter.hasBinaryProperty(ch, UProperty.ALPHABETIC).</p>
-         * <p>Different from UCharacter.isLetter(ch)!</p> 
-         * @stable ICU 2.6
-         * @param ch codepoint to be tested
-         */
-        public static boolean isUAlphabetic(int ch)
-        {
-                return hasBinaryProperty(ch, UProperty.ALPHABETIC);
-        }
+    /**
+     * <p>Check if a code point has the Alphabetic Unicode property.</p> 
+     * <p>Same as UCharacter.hasBinaryProperty(ch, UProperty.ALPHABETIC).</p>
+     * <p>Different from UCharacter.isLetter(ch)!</p> 
+     * @stable ICU 2.6
+     * @param ch codepoint to be tested
+     */
+    public static boolean isUAlphabetic(int ch)
+    {
+	return hasBinaryProperty(ch, UProperty.ALPHABETIC);
+    }
 
-        /**
-         * <p>Check if a code point has the Lowercase Unicode property.</p>
-         * <p>Same as UCharacter.hasBinaryProperty(ch, UProperty.LOWERCASE).</p>
-         * <p>This is different from UCharacter.isLowerCase(ch)!</p>
-         * @param ch codepoint to be tested
-         * @stable ICU 2.6
-         */
-        public static boolean isULowercase(int ch) 
-        {
-                return hasBinaryProperty(ch, UProperty.LOWERCASE);
-        }
+    /**
+     * <p>Check if a code point has the Lowercase Unicode property.</p>
+     * <p>Same as UCharacter.hasBinaryProperty(ch, UProperty.LOWERCASE).</p>
+     * <p>This is different from UCharacter.isLowerCase(ch)!</p>
+     * @param ch codepoint to be tested
+     * @stable ICU 2.6
+     */
+    public static boolean isULowercase(int ch) 
+    {
+	return hasBinaryProperty(ch, UProperty.LOWERCASE);
+    }
 
-        /**
-         * <p>Check if a code point has the Uppercase Unicode property.</p>
-         * <p>Same as UCharacter.hasBinaryProperty(ch, UProperty.UPPERCASE).</p>
-         * <p>This is different from UCharacter.isUpperCase(ch)!</p>
-         * @param ch codepoint to be tested
-         * @stable ICU 2.6
-         */
-        public static boolean isUUppercase(int ch) 
-        {
-                return hasBinaryProperty(ch, UProperty.UPPERCASE);
-        }
+    /**
+     * <p>Check if a code point has the Uppercase Unicode property.</p>
+     * <p>Same as UCharacter.hasBinaryProperty(ch, UProperty.UPPERCASE).</p>
+     * <p>This is different from UCharacter.isUpperCase(ch)!</p>
+     * @param ch codepoint to be tested
+     * @stable ICU 2.6
+     */
+    public static boolean isUUppercase(int ch) 
+    {
+	return hasBinaryProperty(ch, UProperty.UPPERCASE);
+    }
 
-        /**
-         * <p>Check if a code point has the White_Space Unicode property.</p>
-         * <p>Same as UCharacter.hasBinaryProperty(ch, UProperty.WHITE_SPACE).</p>
-         * <p>This is different from both UCharacter.isSpace(ch) and 
-         * UCharacter.isWhitespace(ch)!</p>
-         * @param ch codepoint to be tested
-         * @stable ICU 2.6
-         */
-        public static boolean isUWhiteSpace(int ch) 
-        {
-                return hasBinaryProperty(ch, UProperty.WHITE_SPACE);
-        }
+    /**
+     * <p>Check if a code point has the White_Space Unicode property.</p>
+     * <p>Same as UCharacter.hasBinaryProperty(ch, UProperty.WHITE_SPACE).</p>
+     * <p>This is different from both UCharacter.isSpace(ch) and 
+     * UCharacter.isWhitespace(ch)!</p>
+     * @param ch codepoint to be tested
+     * @stable ICU 2.6
+     */
+    public static boolean isUWhiteSpace(int ch) 
+    {
+	return hasBinaryProperty(ch, UProperty.WHITE_SPACE);
+    }
 
 
     /**
@@ -4244,7 +4245,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * @see #getIntPropertyMinValue
      * @see #getIntPropertyMaxValue
      * @see #getUnicodeVersion
-     * @draft ICU 2.4
+     * @stable ICU 2.4
      */
     public static int getIntPropertyValue(int ch, int type)
     {
@@ -4268,15 +4269,15 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
                 return getCombiningClass(ch);
             case UProperty.DECOMPOSITION_TYPE:
                 return PROPERTY_.getAdditional(ch, 2) 
-                       & DECOMPOSITION_TYPE_MASK_;
+		    & DECOMPOSITION_TYPE_MASK_;
             case UProperty.EAST_ASIAN_WIDTH:
                 return (PROPERTY_.getAdditional(ch, 0)
-                       & EAST_ASIAN_MASK_) >> EAST_ASIAN_SHIFT_;
+			& EAST_ASIAN_MASK_) >> EAST_ASIAN_SHIFT_;
             case UProperty.GENERAL_CATEGORY:
                 return getType(ch);
             case UProperty.JOINING_GROUP:
                 return (PROPERTY_.getAdditional(ch, 2) 
-                       & JOINING_GROUP_MASK_) >> JOINING_GROUP_SHIFT_;
+			& JOINING_GROUP_MASK_) >> JOINING_GROUP_SHIFT_;
             case UProperty.JOINING_TYPE:
                 return (int)(PROPERTY_.getAdditional(ch, 2)& JOINING_TYPE_MASK_)>> JOINING_TYPE_SHIFT_;
                 // ArabicShaping.txt:
@@ -4285,17 +4286,17 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
                 // Characters of joining type T can [be] derived by the following formula:
                 //   T = Mn + Cf - ZWNJ - ZWJ
                 /*
-                result = (PROPERTY_.getAdditional(ch, 2) 
-                         & JOINING_TYPE_MASK_) >> JOINING_TYPE_SHIFT_;
-                if (result == 0 && ch != ZERO_WIDTH_NON_JOINER_ 
-                                && ch != ZERO_WIDTH_JOINER_) {
-                    int t = getType(ch);
-                    if (t == UCharacterCategory.NON_SPACING_MARK
-                        || t == UCharacterCategory.FORMAT) {
-                        result = JoiningType.TRANSPARENT;
-                    }
-                }
-                return result;
+		  result = (PROPERTY_.getAdditional(ch, 2) 
+		  & JOINING_TYPE_MASK_) >> JOINING_TYPE_SHIFT_;
+		  if (result == 0 && ch != ZERO_WIDTH_NON_JOINER_ 
+		  && ch != ZERO_WIDTH_JOINER_) {
+		  int t = getType(ch);
+		  if (t == UCharacterCategory.NON_SPACING_MARK
+		  || t == UCharacterCategory.FORMAT) {
+		  result = JoiningType.TRANSPARENT;
+		  }
+		  }
+		  return result;
                 */
             case UProperty.LINE_BREAK:
                 return (int)(PROPERTY_.getAdditional(ch, 0)& LINE_BREAK_MASK_)>>LINE_BREAK_SHIFT_;
@@ -4309,51 +4310,51 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
                  * F0000..FFFFD;XX # <Plane 15 Private Use, First>..<Plane 15 Private Use, Last>
                  * 100000..10FFFD;XX # <Plane 16 Private Use, First>..<Plane 16 Private Use, Last>
                  */
-                 /*
-                result = (PROPERTY_.getAdditional(ch, 0) 
-                             & LINE_BREAK_MASK_) >> LINE_BREAK_SHIFT_;
-                if (result == 0) {
-                    int t = getType(ch);
-                    if (t != UCharacterCategory.UNASSIGNED 
-                        && t != UCharacterCategory.PRIVATE_USE) {
-                        result = LineBreak.ALPHABETIC;
-                    }
-                }
-                return result;
+		/*
+		  result = (PROPERTY_.getAdditional(ch, 0) 
+		  & LINE_BREAK_MASK_) >> LINE_BREAK_SHIFT_;
+		  if (result == 0) {
+		  int t = getType(ch);
+		  if (t != UCharacterCategory.UNASSIGNED 
+		  && t != UCharacterCategory.PRIVATE_USE) {
+		  result = LineBreak.ALPHABETIC;
+		  }
+		  }
+		  return result;
                 */
             case UProperty.NUMERIC_TYPE:
                 return getNumericType(PROPERTY_.getProperty(ch));
             case UProperty.SCRIPT:
                 return UScript.getScript(ch);
             case UProperty.HANGUL_SYLLABLE_TYPE:
-               /* purely algorithmic; hardcode known characters, check for assigned new ones */ 
-               if(ch<NormalizerImpl.JAMO_L_BASE) { 
-                   /* NA */ 
-               } else if(ch<=0x11ff) { 
-                   /* Jamo range */ 
-                   if(ch<=0x115f) { 
-                       /* Jamo L range, HANGUL CHOSEONG ... */ 
-                       if(ch==0x115f || ch<=0x1159 || getType(ch)==UCharacterCategory.OTHER_LETTER) { 
-                           return HangulSyllableType.LEADING_JAMO; 
-                       } 
-                   } else if(ch<=0x11a7) { 
-                       /* Jamo V range, HANGUL JUNGSEONG ... */ 
-                       if(ch<=0x11a2 || getType(ch)==UCharacterCategory.OTHER_LETTER) { 
-                           return HangulSyllableType.VOWEL_JAMO; 
-                       } 
-                   } else { 
-                       /* Jamo T range */ 
-                       if(ch<=0x11f9 || getType(ch)==UCharacterCategory.OTHER_LETTER) { 
-                           return HangulSyllableType.TRAILING_JAMO; 
-                       } 
-                   } 
-               } else if((ch-=NormalizerImpl.HANGUL_BASE)<0) { 
-                   /* NA */ 
-               } else if(ch<NormalizerImpl.HANGUL_COUNT) { 
-                   /* Hangul syllable */ 
-                   return ch%NormalizerImpl.JAMO_T_COUNT==0 ? HangulSyllableType.LV_SYLLABLE : HangulSyllableType.LVT_SYLLABLE; 
-               } 
-               return 0; /* NA */ 
+		/* purely algorithmic; hardcode known characters, check for assigned new ones */ 
+		if(ch<NormalizerImpl.JAMO_L_BASE) { 
+		    /* NA */ 
+		} else if(ch<=0x11ff) { 
+		    /* Jamo range */ 
+		    if(ch<=0x115f) { 
+			/* Jamo L range, HANGUL CHOSEONG ... */ 
+			if(ch==0x115f || ch<=0x1159 || getType(ch)==UCharacterCategory.OTHER_LETTER) { 
+			    return HangulSyllableType.LEADING_JAMO; 
+			} 
+		    } else if(ch<=0x11a7) { 
+			/* Jamo V range, HANGUL JUNGSEONG ... */ 
+			if(ch<=0x11a2 || getType(ch)==UCharacterCategory.OTHER_LETTER) { 
+			    return HangulSyllableType.VOWEL_JAMO; 
+			} 
+		    } else { 
+			/* Jamo T range */ 
+			if(ch<=0x11f9 || getType(ch)==UCharacterCategory.OTHER_LETTER) { 
+			    return HangulSyllableType.TRAILING_JAMO; 
+			} 
+		    } 
+		} else if((ch-=NormalizerImpl.HANGUL_BASE)<0) { 
+		    /* NA */ 
+		} else if(ch<NormalizerImpl.HANGUL_COUNT) { 
+		    /* Hangul syllable */ 
+		    return ch%NormalizerImpl.JAMO_T_COUNT==0 ? HangulSyllableType.LV_SYLLABLE : HangulSyllableType.LVT_SYLLABLE; 
+		} 
+		return 0; /* NA */ 
 
             case UProperty.NFD_QUICK_CHECK:
             case UProperty.NFKD_QUICK_CHECK:
@@ -4366,7 +4367,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
                 return NormalizerImpl.getFCD16(ch)&0xff;
             default:
                
-                                return 0; /* undefined */
+		return 0; /* undefined */
             }
         } else if (type == UProperty.GENERAL_CATEGORY_MASK) {
             return UCharacterProperty.getMask(getType(ch));
@@ -4390,13 +4391,13 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * @see #getUnicodeVersion
      * @see #getIntPropertyMaxValue
      * @see #getIntPropertyValue
-     * @draft ICU 2.4
+     * @stable ICU 2.4
      */
     public static int getIntPropertyMinValue(int type)
     {
 
         return 0; // undefined; and: all other properties have a minimum value 
-                  // of 0
+	// of 0
     }
 
     
@@ -4422,7 +4423,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * @see #getUnicodeVersion
      * @see #getIntPropertyMaxValue
      * @see #getIntPropertyValue
-     * @draft ICU 2.4
+     * @stable ICU 2.4
      */
     public static int getIntPropertyMaxValue(int type)
     { 
@@ -4442,13 +4443,13 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
                 return UCharacterDirection.CHAR_DIRECTION_COUNT - 1;
             case UProperty.BLOCK:
                 max = (PROPERTY_.getMaxValues(0)
-                      & BLOCK_MASK_) >> BLOCK_SHIFT_;
+		       & BLOCK_MASK_) >> BLOCK_SHIFT_;
                 return (max!=0) ? max : UnicodeBlock.COUNT - 1;
             case UProperty.CANONICAL_COMBINING_CLASS:
             case UProperty.LEAD_CANONICAL_COMBINING_CLASS:
             case UProperty.TRAIL_CANONICAL_COMBINING_CLASS:
                 return 0xff; // TODO do we need to be more precise, 
-                             // getting the actual maximum?
+		// getting the actual maximum?
             case UProperty.DECOMPOSITION_TYPE:
                 max=PROPERTY_.getMaxValues(2) & DECOMPOSITION_TYPE_MASK_;
                 return (max!=0) ? max : DecompositionType.COUNT - 1;
@@ -4458,8 +4459,8 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
             case UProperty.GENERAL_CATEGORY:
                 return UCharacterCategory.CHAR_CATEGORY_COUNT - 1;
             case UProperty.JOINING_GROUP:
-               max=(PROPERTY_.getMaxValues(2) & JOINING_GROUP_MASK_) >> JOINING_GROUP_SHIFT_;
-               return (max!=0) ? max : JoiningGroup.COUNT - 1;
+		max=(PROPERTY_.getMaxValues(2) & JOINING_GROUP_MASK_) >> JOINING_GROUP_SHIFT_;
+		return (max!=0) ? max : JoiningGroup.COUNT - 1;
             case UProperty.JOINING_TYPE:
                 max=(PROPERTY_.getMaxValues(2) & JOINING_TYPE_MASK_) >> JOINING_TYPE_SHIFT_;
                 return (max!=0) ? max :  JoiningType.COUNT - 1;
@@ -4472,7 +4473,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
                 max = PROPERTY_.getMaxValues(0) & SCRIPT_MASK_;   
                 return (max!= 0)? max :  UScript.CODE_LIMIT - 1;
             case UProperty.HANGUL_SYLLABLE_TYPE:
-                 return HangulSyllableType.COUNT-1;
+		return HangulSyllableType.COUNT-1;
             case UProperty.NFD_QUICK_CHECK:
             case UProperty.NFKD_QUICK_CHECK:
                 return 1; // YES -- these are never "maybe", only "no" or "yes"
@@ -4616,7 +4617,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * to represent the code point.  This does not check the
      * code point for validity.
      * @param cp the code point to check
-     * @param return the number of chars needed to represent the code point
+     * @return the number of chars needed to represent the code point
      * @see UTF16#getCharCount
      * @draft ICU 3.0
      */
@@ -4852,7 +4853,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * Cover the JDK API, for convenience.  Adjust the char index by a code point offset.
      * @param text the characters to check
      * @param index the index to adjust
-     * @param count the number of code points by which to offset the index
+     * @param codePointOffset the number of code points by which to offset the index
      * @return the adjusted index
      * @draft ICU 3.0
      */
@@ -4898,7 +4899,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * @param start the start of the range to check
      * @param count the length of the range to check
      * @param index the index to adjust
-     * @param count the number of code points by which to offset the index
+     * @param codePointOffset the number of code points by which to offset the index
      * @return the adjusted index
      * @draft ICU 3.0
      */
@@ -4966,17 +4967,17 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
     static
     {
         try
-        {
-            PNAMES_ = new UPropertyAliases();
-            NAME_ = UCharacterName.getInstance();
-        }
+	    {
+		PNAMES_ = new UPropertyAliases();
+		NAME_ = UCharacterName.getInstance();
+	    }
         catch (Exception e)
-        {
-            e.printStackTrace();
-            //throw new RuntimeException(e.getMessage());
-            // DONOT throw an exception
-            // we might be building ICU modularly wothout names.icu and pnames.icu
-        }
+	    {
+		e.printStackTrace();
+		//throw new RuntimeException(e.getMessage());
+		// DONOT throw an exception
+		// we might be building ICU modularly wothout names.icu and pnames.icu
+	    }
     }
         
     // private variables -------------------------------------------------
@@ -4993,22 +4994,22 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
     private static final int[] PROPERTY_DATA_;
     private static final int PROPERTY_INITIAL_VALUE_;
 
-        // block to initialise character property database
+    // block to initialise character property database
     static
     {
         try
-        {
-            PROPERTY_ = UCharacterProperty.getInstance();
-            PROPERTY_TRIE_INDEX_ = PROPERTY_.m_trieIndex_;
-            PROPERTY_TRIE_DATA_ = PROPERTY_.m_trieData_;
-            PROPERTY_DATA_ = PROPERTY_.m_property_;
-            PROPERTY_INITIAL_VALUE_ 
-                             = PROPERTY_DATA_[PROPERTY_.m_trieInitialValue_];
-        }
+	    {
+		PROPERTY_ = UCharacterProperty.getInstance();
+		PROPERTY_TRIE_INDEX_ = PROPERTY_.m_trieIndex_;
+		PROPERTY_TRIE_DATA_ = PROPERTY_.m_trieData_;
+		PROPERTY_DATA_ = PROPERTY_.m_property_;
+		PROPERTY_INITIAL_VALUE_ 
+		    = PROPERTY_DATA_[PROPERTY_.m_trieInitialValue_];
+	    }
         catch (Exception e)
-        {
-            throw new RuntimeException(e.getMessage());
-        }
+	    {
+		throw new RuntimeException(e.getMessage());
+	    }
     }
     
     /**
@@ -5290,21 +5291,21 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      */     
     private static boolean isNotExceptionIndicator(int props)
     {
-         return (props & UCharacterProperty.EXCEPTION_MASK) == 0;
+	return (props & UCharacterProperty.EXCEPTION_MASK) == 0;
     }
          
     /**
-    * Gets the property value at the index.
-    * This is optimized.
-    * Note this is alittle different from CharTrie the index m_trieData_
-    * is never negative.
-    * This is a duplicate of UCharacterProperty.getProperty. For optimization
-    * purposes, this method calls the trie data directly instead of through 
-    * UCharacterProperty.getProperty.
-    * @param ch code point whose property value is to be retrieved
-    * @return property value of code point
-    * @draft ICU 2.6
-    */
+     * Gets the property value at the index.
+     * This is optimized.
+     * Note this is alittle different from CharTrie the index m_trieData_
+     * is never negative.
+     * This is a duplicate of UCharacterProperty.getProperty. For optimization
+     * purposes, this method calls the trie data directly instead of through 
+     * UCharacterProperty.getProperty.
+     * @param ch code point whose property value is to be retrieved
+     * @return property value of code point
+     * @draft ICU 2.6
+     */
     private static int getProperty(int ch)
     {
         if (ch < UTF16.LEAD_SURROGATE_MIN_VALUE 
@@ -5313,9 +5314,9 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
             // BMP codepoint
             try { // using try for < 0 ch is faster than using an if statement
                 return PROPERTY_DATA_[
-                    PROPERTY_TRIE_DATA_[
-                    (PROPERTY_TRIE_INDEX_[ch >> 5] << 2) 
-                    + (ch & 0x1f)]];
+				      PROPERTY_TRIE_DATA_[
+							  (PROPERTY_TRIE_INDEX_[ch >> 5] << 2) 
+							  + (ch & 0x1f)]];
             } catch (ArrayIndexOutOfBoundsException e) {
                 return PROPERTY_INITIAL_VALUE_;
             }
@@ -5323,17 +5324,17 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
         if (ch <= UTF16.LEAD_SURROGATE_MAX_VALUE) {
             // surrogate 
             return PROPERTY_DATA_[
-                    PROPERTY_TRIE_DATA_[
-                    (PROPERTY_TRIE_INDEX_[(0x2800 >> 5) + (ch >> 5)] << 2) 
-                    + (ch & 0x1f)]];
+				  PROPERTY_TRIE_DATA_[
+						      (PROPERTY_TRIE_INDEX_[(0x2800 >> 5) + (ch >> 5)] << 2) 
+						      + (ch & 0x1f)]];
         }
         // for optimization
         if (ch <= UTF16.CODEPOINT_MAX_VALUE) {
             // look at the construction of supplementary characters
             // trail forms the ends of it.
             return PROPERTY_DATA_[PROPERTY_.m_trie_.getSurrogateValue(
-                                          UTF16.getLeadSurrogate(ch), 
-                                          (char)(ch & 0x3ff))];
+								      UTF16.getLeadSurrogate(ch), 
+								      (char)(ch & 0x3ff))];
         }
         // return m_dataOffset_ if there is an error, in this case we return 
         // the default value: m_initialValue_
