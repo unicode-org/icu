@@ -22,9 +22,14 @@ LIB_ICUDATA_NAME=lib$(ICUDATA_NAME)
 # sanity!
 ICUDT=$(ICUDATA_PLATFORM_NAME)_
 
+# Allow Windows to override these options
+ifeq ($(PKGDATA_OPTS),)
+PKGDATA_OPTS = -O $(top_builddir)/data/icupkg.inc
+endif
+
 top_builddir_from_tmp = $(patsubst ..%,../..%,$(top_builddir))
 CURDIR=$(shell pwd)
-PKGDATA = $(top_builddir)/tools/pkgdata/pkgdata -O $(top_builddir)/data/icupkg.inc -c -d $(CURDIR)/out
+PKGDATA = $(top_builddir)/tools/pkgdata/pkgdata $(PKGDATA_OPTS) -c -d $(CURDIR)/out
 PKGDATA_VERSIONING = -r $(SO_TARGET_VERSION)
 
 # OBJDATADIR must be a short path (with ..'s) to the data.
@@ -96,7 +101,7 @@ check-local:
 
 # During this INVOKE we only want to use stubdata.
 # We don't want to try to write over files that we are using.
-PKGDATA_INVOKE:=$(subst :$(top_builddir)/data/out,,$(INVOKE))
+PKGDATA_INVOKE:=$(subst :$(top_builddir)/data/out,,$(INVOKE)) $(PKGDATA_INVOKE_OPTS)
 
 packagedata: icupkg.inc $(BUILDDIR)/icudata.lst 
 	$(PKGDATA_INVOKE) $(PKGDATA) -e $(ICUDATA_ENTRY_POINT) -T $(BUILDDIR) -p $(ICUDATA_NAME) -m $(PKGDATA_MODE) $(PKGDATA_VERSIONING) $(BUILDDIR)/icudata.lst
@@ -394,6 +399,6 @@ $(TESTOUTDIR)/$(TESTDT)nam.typ: $(TESTBUILDDIR)/$(TESTDT)te_IN.res
 testdata: packagedata $(ALL_TEST_FILES) $(UNPACKAGEDTESTDATA)
 
 packagetest: testdata icupkg.inc $(TESTBUILDDIR)/testdata.lst 
-	$(INVOKE) $(PKGDATA) -T $(TESTBUILDDIR) -d $(TESTOUTDIR) -s $(TESTBUILDDIR) -p $(TESTDATA) -m common $(TESTBUILDDIR)/testdata.lst
+	$(PKGDATA_INVOKE) $(PKGDATA) -T $(TESTBUILDDIR) -d $(TESTOUTDIR) -s $(TESTBUILDDIR) -p $(TESTDATA) -m common $(TESTBUILDDIR)/testdata.lst
 
 
