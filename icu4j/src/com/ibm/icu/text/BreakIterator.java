@@ -569,9 +569,9 @@ public abstract class BreakIterator implements Cloneable
         }                                                           //ibm.597
         else if (classNames[type].equals("DictionaryBasedBreakIterator")) { //ibm.597
             try {                                                   //ibm.597
-				System.out.println(dictionaryName);
+				// System.out.println(dictionaryName);
                 Object t = bundle.getObject(dictionaryName);   //ibm.597
-				System.out.println(t);
+				// System.out.println(t);
                 URL url = (URL)t;   //ibm.597
                 InputStream dictionary = url.openStream();          //ibm.597
                 return new DictionaryBasedBreakIterator(rules, dictionary); //ibm.597
