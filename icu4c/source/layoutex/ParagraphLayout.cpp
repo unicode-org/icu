@@ -24,21 +24,6 @@ U_NAMESPACE_BEGIN
 
 #define ARRAY_SIZE(array) (sizeof array  / sizeof array[0])
 
-struct ParagraphLayout::StyleRunInfo
-{
-      LayoutEngine   *engine;
-const LEFontInstance *font;
-const Locale         *locale;
-      LEGlyphID      *glyphs;
-      float          *positions;
-      UScriptCode     script;
-      UBiDiLevel      level;
-      le_int32        runBase;
-      le_int32        runLimit;
-      le_int32        glyphBase;
-      le_int32        glyphCount;
-};
-
 class StyleRuns
 {
 public:
