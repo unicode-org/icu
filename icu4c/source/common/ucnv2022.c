@@ -223,7 +223,7 @@ _ISO2022Open(UConverter *cnv, const char *name, const char *locale, UErrorCode *
     if(cnv->extraInfo != NULL) {
 		UConverterDataISO2022 *myConverterData=(UConverterDataISO2022 *) cnv->extraInfo; 
 		UConverter **array= myConverterData->myConverterArray;
-		myConverterData->currentLocale = (char*) uprv_malloc(sizeof(char) strlen(locale));
+		myConverterData->currentLocale = (char*) uprv_malloc(sizeof(char) * strlen(locale));
 		strcpy(myConverterData->currentLocale,locale);
         myConverterData->myConverterArray[0] =NULL;
 		if(locale && uprv_stricmp(locale,"jp")==0){
