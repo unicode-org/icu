@@ -1269,7 +1269,8 @@ ucol_getSortKey(const    UCollator    *coll,
         int32_t        resultLength)
 {
   UErrorCode status = U_ZERO_ERROR;
-    return ucol_calcSortKey(coll, source, sourceLength, &result, resultLength, FALSE, &status);
+  return coll->sortKeyGen(coll, source, sourceLength, &result, resultLength, FALSE, &status);
+    /*return ucol_calcSortKey(coll, source, sourceLength, &result, resultLength, FALSE, &status);*/
     /*return ucol_calcSortKeySimpleTertiary(coll, source, sourceLength, &result, resultLength, FALSE, &status);*/
 }
 
@@ -1518,11 +1519,23 @@ ucol_calcSortKey(const    UCollator    *coll,
 
     /* If we need to normalize, we'll do it all at once at the beggining! */
     UColAttributeValue normMode = coll->normalizationMode;
-    if((normMode != UCOL_OFF)
+    if(compareIdent) {
+      if(unorm_quickCheck(source, len, UNORM_NFD, status) != UNORM_YES) {
+        normSourceLen = unorm_normalize(source, sourceLength, UNORM_NFD, 0, normSource, normSourceLen, status);
+        if(U_FAILURE(*status)) {
+            *status=U_ZERO_ERROR;
+            normSource = (UChar *) uprv_malloc((normSourceLen+1)*sizeof(UChar));
+            normSourceLen = unorm_normalize(source, sourceLength, UNORM_NFD, 0, normSource, (normSourceLen+1), status);
+        }
+        normSource[normSourceLen] = 0;
+        s.string = normSource;
+        s.pos = normSource;
+        s.len = normSource+normSourceLen;
+      }
+    } else if((normMode != UCOL_OFF)
       /* changed by synwee */
       && !checkFCD(source, len, status))
     {
-      /*fprintf(stderr, ".");*/
         normSourceLen = unorm_normalize(source, sourceLength, UNORM_NFD, 0, normSource, normSourceLen, status);
         if(U_FAILURE(*status)) {
             *status=U_ZERO_ERROR;
@@ -1906,7 +1919,7 @@ ucol_calcSortKeySimpleTertiary(const    UCollator    *coll,
         const    UChar        *source,
         int32_t        sourceLength,
         uint8_t        **result,
-        int32_t        resultLength,
+        uint32_t        resultLength,
         UBool allocatePrimary,
         UErrorCode *status)
 {
@@ -2033,55 +2046,59 @@ ucol_calcSortKeySimpleTertiary(const    UCollator    *coll,
               }
             }               
 
-            /* This is compression code. */
-            if (secondary == UCOL_COMMON2 && notIsContinuation) {
-              ++count2;
-            } else {
-              if (count2 > 0) {
-                if (secondary > UCOL_COMMON2) { // not necessary for 4th level.
-                  while (count2 >= UCOL_TOP_COUNT2) {
-                    *secondaries++ = UCOL_COMMON_TOP2 - UCOL_TOP_COUNT2;
-                    count2 -= UCOL_TOP_COUNT2;
+            if(secondary > 0) { /* I think that != 0 test should be != IGNORABLE */
+              /* This is compression code. */
+              if (secondary == UCOL_COMMON2 && notIsContinuation) {
+                ++count2;
+              } else {
+                if (count2 > 0) {
+                  if (secondary > UCOL_COMMON2) { // not necessary for 4th level.
+                    while (count2 >= UCOL_TOP_COUNT2) {
+                      *secondaries++ = UCOL_COMMON_TOP2 - UCOL_TOP_COUNT2;
+                      count2 -= UCOL_TOP_COUNT2;
+                    }
+                    *secondaries++ = (uint8_t)(UCOL_COMMON_TOP2 - count2);
+                  } else {
+                    while (count2 >= UCOL_BOT_COUNT2) {
+                      *secondaries++ = UCOL_COMMON_BOT2 + UCOL_BOT_COUNT2;
+                      count2 -= UCOL_BOT_COUNT2;
+                    }
+                    *secondaries++ = (uint8_t)(UCOL_COMMON_BOT2 + count2);
                   }
-                  *secondaries++ = (uint8_t)(UCOL_COMMON_TOP2 - count2);
-                } else {
-                  while (count2 >= UCOL_BOT_COUNT2) {
-                    *secondaries++ = UCOL_COMMON_BOT2 + UCOL_BOT_COUNT2;
-                    count2 -= UCOL_BOT_COUNT2;
-                  }
-                  *secondaries++ = (uint8_t)(UCOL_COMMON_BOT2 + count2);
+                  count2 = 0;
                 }
-                count2 = 0;
+                *secondaries++ = secondary;
               }
-              *secondaries++ = secondary;
             }
 
 
-            /* This is compression code. */
-            /* sequence size check is included in the if clause */
-            if (tertiary == UCOL_COMMON3 && notIsContinuation) {
-              ++count3;
-            } else {
-              if(tertiary > UCOL_COMMON3) {
-                tertiary |= UCOL_FLAG_BIT_MASK;
-              }
-              if (count3 > 0) {
-                if (tertiary > UCOL_COMMON3) {
-                  while (count3 >= UCOL_TOP_COUNT3) {
-                    *tertiaries++ = UCOL_COMMON_TOP3 - UCOL_TOP_COUNT3;
-                    count3 -= UCOL_TOP_COUNT3;
-                  }
-                  *tertiaries++ = (uint8_t)(UCOL_COMMON_TOP3 - count3);
-                } else {
-                  while (count3 >= UCOL_BOT_COUNT3) {
-                    *tertiaries++ = UCOL_COMMON_BOT3 + UCOL_BOT_COUNT3;
-                    count3 -= UCOL_BOT_COUNT3;
-                  }
-                  *tertiaries++ = (uint8_t)(UCOL_COMMON_BOT3 + count3);
+            if(tertiary > 0) {
+              /* This is compression code. */
+              /* sequence size check is included in the if clause */
+              if (tertiary == UCOL_COMMON3 && notIsContinuation) {
+                ++count3;
+              } else {
+                if(tertiary > UCOL_COMMON3) {
+                  tertiary |= UCOL_FLAG_BIT_MASK;
                 }
-                count3 = 0;
+                if (count3 > 0) {
+                  if (tertiary > UCOL_COMMON3) {
+                    while (count3 >= UCOL_TOP_COUNT3) {
+                      *tertiaries++ = UCOL_COMMON_TOP3 - UCOL_TOP_COUNT3;
+                      count3 -= UCOL_TOP_COUNT3;
+                    }
+                    *tertiaries++ = (uint8_t)(UCOL_COMMON_TOP3 - count3);
+                  } else {
+                    while (count3 >= UCOL_BOT_COUNT3) {
+                      *tertiaries++ = UCOL_COMMON_BOT3 + UCOL_BOT_COUNT3;
+                      count3 -= UCOL_BOT_COUNT3;
+                    }
+                    *tertiaries++ = (uint8_t)(UCOL_COMMON_BOT3 + count3);
+                  }
+                  count3 = 0;
+                }
+                *tertiaries++ = tertiary;
               }
-              *tertiaries++ = tertiary;
             }
 
             if(primaries > primarySafeEnd) { /* We have stepped over the primary buffer */
@@ -2226,6 +2243,13 @@ void ucol_updateInternalState(UCollator *coll) {
       } else {
         coll->tertiaryMask = UCOL_KEEP_CASE;
       }
+      if(coll->caseLevel == UCOL_OFF && coll->strength == UCOL_TERTIARY 
+        && coll->frenchCollation == UCOL_OFF) {
+        coll->sortKeyGen = ucol_calcSortKeySimpleTertiary;
+      } else {
+        coll->sortKeyGen = ucol_calcSortKey;
+      }
+
 }
 
 /* Attribute setter API */
@@ -2700,6 +2724,18 @@ ucol_strcoll(    const    UCollator    *coll,
     
     
 
+    UColAttributeValue strength = coll->strength;
+    UBool initialCheckSecTer = (strength  >= UCOL_SECONDARY);
+
+    UBool checkSecTer = initialCheckSecTer;
+    UBool checkTertiary = (strength  >= UCOL_TERTIARY);
+    UBool checkQuad = (strength  >= UCOL_QUATERNARY);
+    UBool checkIdent = (strength == UCOL_IDENTICAL);
+    UBool checkCase = (coll->caseLevel == UCOL_ON);
+    UBool isFrenchSec = (coll->frenchCollation == UCOL_ON) && checkSecTer;
+    UBool upperFirst = (coll->caseFirst == UCOL_UPPER_FIRST) && checkTertiary;
+    UBool shifted = (coll->alternateHandling == UCOL_SHIFTED) && checkQuad;
+
     UCollationResult result = UCOL_EQUAL;
     UErrorCode status = U_ZERO_ERROR;
 
@@ -2712,7 +2748,35 @@ ucol_strcoll(    const    UCollator    *coll,
 
     
     init_collIterate(coll, source, sourceLength, &sColl, FALSE);
-    if((coll->normalizationMode == UCOL_ON)
+    if(checkIdent) {
+      if(unorm_quickCheck(sColl.string, sColl.len - sColl.string, UNORM_NFD, &status) != UNORM_YES) {
+        normSourceLength = unorm_normalize(source, sourceLength, UNORM_NFD, 0, normSource, normSourceLength, &status);
+        /* if we don't have enough space in buffers, we'll recursively call strcoll, so that we have single point */
+        /* of exit - to free buffers we allocated. Otherwise, returns from strcoll are in various places and it   */
+        /* would be hard to track all the exit points.                                                            */
+        if(U_FAILURE(status)) { /* This would be buffer overflow */
+            UColAttributeValue mode = coll->normalizationMode;
+            normSourceP = (UChar *)uprv_malloc((normSourceLength+1)*sizeof(UChar));
+            status = U_ZERO_ERROR;
+            normSourceLength = unorm_normalize(source, sourceLength, UNORM_NFD, 0, normSourceP, normSourceLength+1, &status);
+            normTargetLength = unorm_normalize(target, targetLength, UNORM_NFD, 0, normTargetP, normTargetLength, &status);
+            if(U_FAILURE(status)) { /* This would be buffer overflow */
+                normTargetP = (UChar *)uprv_malloc((normTargetLength+1)*sizeof(UChar));
+                status = U_ZERO_ERROR;
+                normTargetLength = unorm_normalize(target, targetLength, UNORM_NFD, 0, normTargetP, normTargetLength+1, &status);
+            }
+            ((UCollator *)coll)->normalizationMode = UCOL_OFF;
+            UCollationResult result = ucol_strcoll(coll, normSourceP, normSourceLength, normTargetP, normTargetLength);
+            ((UCollator *)coll)->normalizationMode = mode;
+            uprv_free(normSourceP);
+            if(normTargetP != normTarget) {
+                uprv_free(normTargetP);
+            }
+            return result;
+        }
+        init_collIterate(coll, normSource, normSourceLength, &sColl, TRUE);
+      }
+    } else if((coll->normalizationMode == UCOL_ON)
       /* && (unorm_quickCheck( sColl.string, sColl.len - sColl.string, UNORM_NFD, &status) != UNORM_YES)
       && (unorm_quickCheck( sColl.string, sColl.len - sColl.string, UNORM_NFC, &status) != UNORM_YES)) */
       /* changed by synwee */
@@ -2746,7 +2810,23 @@ ucol_strcoll(    const    UCollator    *coll,
     }
 
     init_collIterate(coll, target, targetLength, &tColl, FALSE);
-    if((coll->normalizationMode == UCOL_ON)
+    if(checkIdent) {
+      if(unorm_quickCheck(tColl.string, tColl.len - tColl.string, UNORM_NFD, &status) != UNORM_YES) {
+      normTargetLength = unorm_normalize(target, targetLength, UNORM_NFD, 0, normTarget, normTargetLength, &status);
+      if(U_FAILURE(status)) { /* This would be buffer overflow */
+          UColAttributeValue mode = coll->normalizationMode;
+          normTargetP = (UChar *)uprv_malloc((normTargetLength+1)*sizeof(UChar));
+          status = U_ZERO_ERROR;
+          normTargetLength = unorm_normalize(target, targetLength, UNORM_NFD, 0, normTargetP, normTargetLength+1, &status);
+          ((UCollator *)coll)->normalizationMode = UCOL_OFF;
+          UCollationResult result = ucol_strcoll(coll, normSourceP, normSourceLength, normTargetP, normTargetLength);
+          ((UCollator *)coll)->normalizationMode = mode;
+          uprv_free(normTargetP);
+          return result;
+      }
+      init_collIterate(coll, normTarget, normTargetLength, &tColl, TRUE);
+      }
+    } else if((coll->normalizationMode == UCOL_ON)
       /* && (unorm_quickCheck(tColl.string, tColl.len - tColl.string, UNORM_NFD, &status) != UNORM_YES)
       && (unorm_quickCheck(tColl.string, tColl.len - tColl.string, UNORM_NFC, &status) != UNORM_YES)) */
       /* changed by synwee */
@@ -2771,18 +2851,6 @@ ucol_strcoll(    const    UCollator    *coll,
     {
         return UCOL_EQUAL;
     }
-
-    UColAttributeValue strength = coll->strength;
-    UBool initialCheckSecTer = (strength  >= UCOL_SECONDARY);
-
-    UBool checkSecTer = initialCheckSecTer;
-    UBool checkTertiary = (strength  >= UCOL_TERTIARY);
-    UBool checkQuad = (strength  >= UCOL_QUATERNARY);
-    UBool checkIdent = (strength == UCOL_IDENTICAL);
-    UBool checkCase = (coll->caseLevel == UCOL_ON);
-    UBool isFrenchSec = (coll->frenchCollation == UCOL_ON) && checkSecTer;
-    UBool upperFirst = (coll->caseFirst == UCOL_UPPER_FIRST) && checkTertiary;
-    UBool shifted = (coll->alternateHandling == UCOL_SHIFTED) && checkQuad;
 
     uint32_t sCEsArray[512], tCEsArray[512];
     uint32_t *sCEs = sCEsArray, *tCEs = tCEsArray;
@@ -3169,23 +3237,18 @@ ucol_strcoll(    const    UCollator    *coll,
     /*    if (result == UCOL_EQUAL && strength == UCOL_IDENTICAL) */
     if(checkIdent)
     {
-        UnicodeString sourceDecomp, targetDecomp;
-
         int8_t comparison;
-        UErrorCode status = U_ZERO_ERROR;
-        
-        /* 
-        synwee : called c++ codes since normalization is implemented in c++
-        */
-        Normalizer::EMode mode = Normalizer::getNormalizerEMode(
-                                                 ucol_getNormalization(coll), status);
-        Normalizer::normalize(UnicodeString(source, sourceLength), mode, 0, 
-                              sourceDecomp,  status);
+        uint32_t sLen = sColl.len-sColl.string;
+        uint32_t tLen = tColl.len-tColl.string;
+        uint32_t compLen = 0;
 
-        Normalizer::normalize(UnicodeString(target, targetLength), mode, 0, 
-                              targetDecomp,  status);
-        
-        comparison = sourceDecomp.compare(targetDecomp);
+        if(sLen > tLen) {
+          compLen = tLen;
+        } else {
+          compLen = sLen;
+        }
+
+        comparison = u_strncmp(sColl.string, tColl.string, compLen);
 
         if (comparison < 0)
         {
@@ -3193,7 +3256,13 @@ ucol_strcoll(    const    UCollator    *coll,
         }
         else if (comparison == 0)
         {
+          if(sLen > tLen) {
+            result = UCOL_GREATER;
+          } else if(sLen < tLen) {
+            result = UCOL_LESS;
+          } else {
             result = UCOL_EQUAL;
+          }
         }
         else
         {
