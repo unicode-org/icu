@@ -26,7 +26,9 @@
 #include "cintltst.h"
 #include "citertst.h"
 #include "ccolltst.h"
-
+#include "filestrm.h"
+#include "cstring.h"
+#include "ucol_imp.h"
 
 void addCollIterTest(TestNode** root)
 {
@@ -41,6 +43,8 @@ void addCollIterTest(TestNode** root)
     addTest(root, &TestBug672, "tscoll/citertst/TestBug672");
     addTest(root, &TestBug672Normalize, "tscoll/citertst/TestBug672Normalize");
     addTest(root, &TestSmallBuffer, "tscoll/citertst/TestSmallBuffer");
+    addTest(root, &TestCEs, "tscoll/citertst/TestCEs");
+    addTest(root, &TestDiscontiguos, "tscoll/citertst/TestDiscontiguos");
 }
 
 /* The locales we support */
@@ -280,7 +284,7 @@ static void TestNormalizedUnicodeChar()
               myErrorName(status));
         return;
     }
-    
+
     for (codepoint = 1; codepoint < 0xFFFE;)
     {
       test = source;
@@ -306,7 +310,7 @@ static void TestNormalizedUnicodeChar()
             ucol_close(th_th);
           return;
       }
-
+        
       backAndForth(iter);
       ucol_closeElements(iter);
 
@@ -338,30 +342,16 @@ static void TestNormalization()
           int                 rulelen = u_unescape(str, rule, 50);
           int                 count = 0;
     const char                *testdata[] =
-                        {"\\u0300\\u0315", "\\u0315\\u0300",
+                        {"\\u1ED9", "o\\u0323\\u0302",
+                        "\\u0300\\u0315", "\\u0315\\u0300",
                         "A\\u0300\\u0315B", "A\\u0315\\u0300B",
                         "A\\u0316\\u0315B", "A\\u0315\\u0316B",
                         "\\u0316\\u0300\\u0315", "\\u0315\\u0300\\u0316",
                         "A\\u0316\\u0300\\u0315B", "A\\u0315\\u0300\\u0316B",
                         "\\u0316\\u0315\\u0300", "A\\u0316\\u0315\\u0300B"};
-
-    coll = ucol_open("fr", &status);
-    if (U_SUCCESS(status)) {
-        UChar source[2];
-        UChar target[1];
-        UCollationElements *iter;
-        source[0] = 0x00E6;
-        source[1] = 'E';
-        iter = ucol_openElements(coll, source, 2, &status);
-        backAndForth(iter);
-        ucol_closeElements(iter);
-        target[0] = 0x00C6;
-        iter = ucol_openElements(coll, source, 1, &status);
-        backAndForth(iter);
-        ucol_closeElements(iter);
-        ucol_strcoll(coll, source, 2, target, 1);
-        ucol_close(coll);
-    }
+    int   srclen;
+    UChar source[10];
+    UCollationElements *iter;
 
     coll = ucol_openRules(rule, rulelen, UNORM_NFD, UCOL_TERTIARY, &status);
     ucol_setAttribute(coll, UCOL_NORMALIZATION_MODE, UCOL_ON, &status);
@@ -371,6 +361,16 @@ static void TestNormalization()
         return;
     }
 
+    srclen = u_unescape(testdata[0], source, 10);
+    iter = ucol_openElements(coll, source, srclen - 1, &status);
+    backAndForth(iter);
+    ucol_closeElements(iter);
+    
+    srclen = u_unescape(testdata[1], source, 10);
+    iter = ucol_openElements(coll, source, srclen - 1, &status);
+    backAndForth(iter);
+    ucol_closeElements(iter);
+    
     while (count < 12) {
         UCollationElements *iter;
         UChar               source[10];
@@ -709,6 +709,7 @@ static void backAndForth(UCollationElements *iter)
             log_err("Mismatch at index : 0x%x\n", index);
             return;
           }
+
         }
       }
     }
@@ -916,3 +917,401 @@ static void TestSmallBuffer()
     ucol_closeElements(iter);
     ucol_close(coll);
 }
+
+/**
+* Sniplets of code from genuca
+*/
+static int32_t hex2num(char hex) {
+    if(hex>='0' && hex <='9') {
+        return hex-'0';
+    } else if(hex>='a' && hex<='f') {
+        return hex-'a'+10;
+    } else if(hex>='A' && hex<='F') {
+        return hex-'A'+10;
+    } else {
+        return 0;
+    }
+}
+
+/** 
+* Getting codepoints from a string 
+* @param str character string contain codepoints seperated by space and ended 
+*        by a semicolon
+* @param codepoints array for storage, assuming size > 5
+* @return position at the end of the codepoint section
+*/
+static char * getCodePoints(char *str, UChar *codepoints) {
+    char *pStartCP = str;
+    char *pEndCP   = str + 4;
+    int   count    = 0;
+
+    *codepoints = (UChar)((hex2num(*pStartCP) << 12) | 
+                          (hex2num(*(pStartCP + 1)) << 8) | 
+                          (hex2num(*(pStartCP + 2)) << 4) | 
+                          (hex2num(*(pStartCP + 3))));
+    codepoints ++;
+    while (*pEndCP != ';') {
+        pStartCP = pEndCP + 1;
+        *codepoints = (UChar)((hex2num(*pStartCP) << 12) | 
+                          (hex2num(*(pStartCP + 1)) << 8) | 
+                          (hex2num(*(pStartCP + 2)) << 4) | 
+                          (hex2num(*(pStartCP + 3))));
+        codepoints ++;
+        pEndCP = pStartCP + 4;
+    }
+    *codepoints = 0;
+    return pEndCP + 1;
+}
+
+/**
+* Sniplets of code from genuca
+*/
+int32_t readElement(char **from, char *to, char separator, UErrorCode *status) {
+    if (U_SUCCESS(*status)) {
+        char    buffer[1024];
+        int32_t i = 0;
+        while (**from != separator) {
+            if (**from != ' ') {
+                *(buffer+i++) = **from;
+            }
+            (*from)++;
+        }
+        (*from)++;
+        *(buffer + i) = 0;
+        strcpy(to, buffer);
+        return i/2;            
+    }
+    
+    return 0;
+}
+
+/**
+* Sniplets of code from genuca
+*/
+uint32_t getSingleCEValue(char *primary, char *secondary, char *tertiary, 
+                          UErrorCode *status) {
+    if (U_SUCCESS(*status)) {
+        uint32_t  value    = 0;
+        char      primsave = '\0';
+        char      secsave  = '\0';
+        char      tersave  = '\0';
+        char     *primend  = primary+4;
+        char     *secend   = secondary+2;
+        char     *terend   = tertiary+2;
+        uint32_t  primvalue;
+        uint32_t  secvalue;
+        uint32_t  tervalue;
+
+        if (strlen(primary) > 4) {
+            primsave = *primend;
+            *primend = '\0';
+        }
+        
+        if (strlen(secondary) > 2) {
+            secsave = *secend;
+            *secend = '\0';
+        }
+        
+        if (strlen(tertiary) > 2) {
+            tersave = *terend;
+            *terend = '\0';
+        }
+
+        primvalue = (*primary!='\0')?strtoul(primary, &primend, 16):0;
+        secvalue  = (*secondary!='\0')?strtoul(secondary, &secend, 16):0;
+        tervalue  = (*tertiary!='\0')?strtoul(tertiary, &terend, 16):0;
+        if(primvalue <= 0xFF) {
+          primvalue <<= 8;
+        }
+
+        value = ((primvalue << UCOL_PRIMARYORDERSHIFT) & UCOL_PRIMARYORDERMASK) 
+           | ((secvalue << UCOL_SECONDARYORDERSHIFT) & UCOL_SECONDARYORDERMASK) 
+           | (tervalue & UCOL_TERTIARYORDERMASK);
+
+        if(primsave!='\0') {
+            *primend = primsave;
+        }
+        if(secsave!='\0') {
+            *secend = secsave;
+        }
+        if(tersave!='\0') {
+            *terend = tersave;
+        }
+        return value;
+    }
+    return 0;
+}
+
+/** 
+* Getting collation elements generated from a string 
+* @param str character string contain collation elements contained in [] and 
+*        seperated by space
+* @param ce array for storage, assuming size > 20
+* @param status error status
+* @return position at the end of the codepoint section
+*/
+static char * getCEs(char *str, uint32_t *ces, UErrorCode *status) {
+    char       *pStartCP     = uprv_strchr(str, '[');
+    int         count        = 0;
+    char       *pEndCP;
+    char        primary[100];
+    char        secondary[100];
+    char        tertiary[100];
+    
+    while (*pStartCP == '[') {
+        uint32_t primarycount   = 0;
+        uint32_t secondarycount = 0;
+        uint32_t tertiarycount  = 0;
+        uint32_t CEi = 1;
+        pEndCP = strchr(pStartCP, ']');
+        if(pEndCP == NULL) {
+            break;
+        }
+        pStartCP ++;
+
+        primarycount   = readElement(&pStartCP, primary, ',', status);
+        secondarycount = readElement(&pStartCP, secondary, ',', status);
+        tertiarycount  = readElement(&pStartCP, tertiary, ']', status);
+
+        /* I want to get the CEs entered right here, including continuation */
+        ces[count ++] = getSingleCEValue(primary, secondary, tertiary, status);
+        if (U_FAILURE(*status)) {
+            break;
+        }
+
+        while (2 * CEi < primarycount || CEi < secondarycount || 
+               CEi < tertiarycount) {
+            uint32_t value = UCOL_CONTINUATION_MARKER; /* Continuation marker */
+            if (2 * CEi < primarycount) {
+                value |= ((hex2num(*(primary + 4 * CEi)) & 0xF) << 28);
+                value |= ((hex2num(*(primary + 4 * CEi + 1)) & 0xF) << 24);
+            }
+
+            if (2 * CEi + 1 < primarycount) {
+                value |= ((hex2num(*(primary + 4 * CEi + 2)) & 0xF) << 20);
+                value |= ((hex2num(*(primary + 4 * CEi + 3)) &0xF) << 16);
+            }
+
+            if (CEi < secondarycount) {
+                value |= ((hex2num(*(secondary + 2 * CEi)) & 0xF) << 12);
+                value |= ((hex2num(*(secondary + 2 * CEi + 1)) & 0xF) << 8);
+            }
+
+            if (CEi < tertiarycount) {
+                value |= ((hex2num(*(tertiary + 2 * CEi)) & 0x3) << 4);
+                value |= (hex2num(*(tertiary + 2 * CEi + 1)) & 0xF);
+            }
+
+            CEi ++;
+            ces[count ++] = value;
+        }
+
+      pStartCP = pEndCP + 1;
+    }
+    ces[count] = 0;
+    return pStartCP;
+}
+
+/**
+* Testing the CEs returned by the iterator
+*/
+static void TestCEs() {
+    char        dir[100];        
+    FileStream *file = NULL;
+    char        line[300];
+    char       *pDir = dir;
+    char       *str;
+    UChar       codepoints[5];
+    uint32_t    ces[20];
+    UErrorCode  status = U_ZERO_ERROR;
+    UCollator          *coll = ucol_open("", &status);
+
+    if (U_FAILURE(status)) {
+        log_err("Error in opening root collator\n");
+        return;
+    }
+
+    uprv_strcpy(pDir, u_getDataDirectory());
+    pDir += uprv_strlen(pDir);
+    
+    if (*(pDir - 1) == U_FILE_SEP_CHAR) {
+        pDir --;
+        *pDir = 0;
+    }
+
+    pDir = uprv_strrchr(dir, U_FILE_SEP_CHAR);
+    *pDir = 0;
+    pDir = uprv_strrchr(dir, U_FILE_SEP_CHAR);
+    *pDir = 0;
+
+#ifdef XP_MAC
+    uprv_strcpy(pDir, ":data:unidata:FractionalUCA.txt");
+#elif defined(WIN32) || defined(OS2)
+    uprv_strcpy(pDir, "\\data\\unidata\\FractionalUCA.txt");
+#else 
+    uprv_strcpy(pDir, "/data/unidata/FractionalUCA.txt");
+#endif
+    
+    file = T_FileStream_open(dir, "r");
+
+    if (file == NULL) {
+        log_err("*** unable to open input FractionalUCA.txt file ***\n");
+        return;
+    }
+
+    while (T_FileStream_readLine(file, line, sizeof(line)) != NULL) {
+        int                 count = 0;
+        UCollationElements *iter;
+        /* skip this line if it is empty or a comment or is a return value 
+        or start of some variable section */
+        if(line[0] == 0 || line[0] == '#' || line[0] == '\n' || 
+            line[0] == '[') {
+            continue;
+        }
+
+        str = getCodePoints(line, codepoints);
+        getCEs(str, ces, &status);
+        if (U_FAILURE(status)) {
+            log_err("Error in parsing collation elements in FractionalUCA.txt\n");
+            break;
+        }
+        iter = ucol_openElements(coll, codepoints, -1, &status);      
+        if (U_FAILURE(status)) {
+            log_err("Error in opening collation elements\n");
+            break;
+        }     
+        while (TRUE) {
+            uint32_t ce = (uint32_t)ucol_next(iter, &status);
+            if (ce == 0xFFFFFFFF) {
+                ce = 0;
+            }
+            if (ce != ces[count] || U_FAILURE(status)) {
+                log_err("Collation elements in FractionalUCA.txt and iterators do not match!\n");
+                break;
+            }
+            if (ces[count] == 0) {
+                break;
+            }
+            count ++;
+        }
+        ucol_closeElements(iter);
+    }
+
+    T_FileStream_close(file);
+    ucol_close(coll);
+}
+
+/**
+* Testing the discontigous contractions
+*/
+static void TestDiscontiguos() {
+    const char               *rulestr    = 
+                            "&z < AB < X\\u0300 < ABC < X\\u0300\\u0315";
+          UChar               rule[50];
+          int                 rulelen = u_unescape(rulestr, rule, 50);
+    const char               *src[] = {
+     "ADB", "ADBC", "A\\u0315B", "A\\u0315BC", 
+    /* base character blocked */
+     "XD\\u0300", "XD\\u0300\\u0315", 
+    /* non blocking combining character */
+     "X\\u0319\\u0300", "X\\u0319\\u0300\\u0315", 
+     /* blocking combining character */
+     "X\\u0314\\u0300", "X\\u0314\\u0300\\u0315", 
+     /* contraction prefix */
+     "ABDC", "AB\\u0315C","X\\u0300D\\u0315", "X\\u0300\\u0319\\u0315",
+     "X\\u0300\\u031A\\u0315", 
+     /* ends not with a contraction character */
+     "X\\u0319\\u0300D", "X\\u0319\\u0300\\u0315D", "X\\u0300D\\u0315D", 
+     "X\\u0300\\u0319\\u0315D", "X\\u0300\\u031A\\u0315D"
+    };                              
+    const char               *tgt[] = {
+     /* non blocking combining character */
+     "A D B", "A D BC", "A \\u0315 B", "A \\u0315 BC", 
+    /* base character blocked */
+     "X D \\u0300", "X D \\u0300\\u0315", 
+    /* non blocking combining character */
+     "X\\u0300 \\u0319", "X\\u0300\\u0315 \\u0319", 
+     /* blocking combining character */
+     "X \\u0314 \\u0300", "X \\u0314 \\u0300\\u0315", 
+     /* contraction prefix */
+     "AB DC", "AB \\u0315 C","X\\u0300 D \\u0315", "X\\u0300\\u0315 \\u0319",
+     "X\\u0300 \\u031A \\u0315",
+     /* ends not with a contraction character */
+     "X\\u0300 \\u0319D", "X\\u0300\\u0315 \\u0319D", "X\\u0300 D\\u0315D", 
+     "X\\u0300\\u0315 \\u0319D", "X\\u0300 \\u031A\\u0315D"
+    };
+          int                 size   = 20;
+          UCollator          *coll;
+          UErrorCode          status    = U_ZERO_ERROR;
+          int                 count     = 0;
+          UCollationElements *iter;      
+          UCollationElements *resultiter;      
+    
+    coll       = ucol_openRules(rule, u_strlen(rule), UCOL_NO_NORMALIZATION,  
+                          UCOL_DEFAULT_STRENGTH, &status);
+    iter       = ucol_openElements(coll, rule, 1, &status);
+    resultiter = ucol_openElements(coll, rule, 1, &status);
+
+    if (U_FAILURE(status)) {
+        log_err("Error opening collation rules\n");
+        return;
+    }
+
+    while (count < size) {
+        UChar  str[20];
+        UChar  tstr[20];
+        int    strlen = u_unescape(src[count], str, 20);
+        UChar *s;
+
+        ucol_setText(iter, str, strlen, &status);
+        if (count == 0x13)
+            printf("count %x\n", count);
+        else 
+            printf("count %x\n", count);
+        
+        if (U_FAILURE(status)) {
+            log_err("Error opening collation iterator\n");
+            return;
+        }
+
+        u_unescape(tgt[count], tstr, 20);
+        s = tstr;
+        
+        while (TRUE) {
+            uint32_t  ce;
+            UChar    *e = u_strchr(s, ' ');
+            if (e == 0) {
+                e = u_strchr(s, 0);
+            }
+            ucol_setText(resultiter, s, e - s, &status);      
+            ce = ucol_next(resultiter, &status);
+            if (U_FAILURE(status)) {
+                log_err("Error manipulating collation iterator\n");
+                return;
+            }
+            while (ce != UCOL_NULLORDER) {
+                if (ce != (uint32_t)ucol_next(iter, &status) || 
+                    U_FAILURE(status)) {
+                    log_err("Discontiguos contraction test mismatch\n");
+                    return;
+                }
+                ce = ucol_next(resultiter, &status);
+                if (U_FAILURE(status)) {
+                    log_err("Error getting next collation element\n");
+                    return;
+                }
+            }
+            s = e + 1;
+            if (*e == 0) {
+                break;
+            }
+        }
+        ucol_reset(iter);
+        backAndForth(iter);
+        count ++;
+    }
+    ucol_closeElements(resultiter);
+    ucol_closeElements(iter);
+    ucol_close(coll);
+}
+
