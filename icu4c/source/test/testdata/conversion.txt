@@ -112,13 +112,17 @@ conversion {
         }
 
         // ISO-2022 SBCS
-        {
-          "ISO_2022",
-          :bin{ 0008090a0d1a1c1f203f415c7d7e7f },
-          "\x00\x08\t\n\r\x1a\x1c\x1f ?A\\}~\x7f",
-          :intvector{ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14 },
-          :int{1}, :int{1}, "", ".", :bin{""}
-        }
+        // [U_ENABLE_GENERIC_ISO_2022]
+        // The _generic_ ISO-2022 converter is disabled starting 2003-dec-03 (ICU 2.8).
+        // For details see the icu mailing list from 2003-dec-01 and the ucnv2022.c file.
+        // Language-specific variants of ISO-2022 continue to be available as listed below.
+        //{
+        //  "ISO_2022",
+        //  :bin{ 0008090a0d1a1c1f203f415c7d7e7f },
+        //  "\x00\x08\t\n\r\x1a\x1c\x1f ?A\\}~\x7f",
+        //  :intvector{ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14 },
+        //  :int{1}, :int{1}, "", ".", :bin{""}
+        //}
 
         // DBCS-only extensions
         {
