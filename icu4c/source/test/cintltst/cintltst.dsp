@@ -248,6 +248,10 @@ SOURCE=.\nccbtst.c
 # End Source File
 # Begin Source File
 
+SOURCE=.\ncnvfbts.c
+# End Source File
+# Begin Source File
+
 SOURCE=.\nucnvtst.c
 # End Source File
 # Begin Source File
@@ -401,6 +405,10 @@ SOURCE=.\encoll.h
 # Begin Source File
 
 SOURCE=.\nccbtst.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\ncnvfbts.h
 # End Source File
 # Begin Source File
 
