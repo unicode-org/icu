@@ -25,14 +25,10 @@ import java.io.PrintWriter;
 import java.io.File;
 import java.io.FileReader;
 import java.io.BufferedReader;
-import java.text.DecimalFormat;
 import java.util.Calendar;
-
-
 import java.util.Locale;
 
 // DOM imports
-import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -55,78 +51,118 @@ import com.ibm.icu.lang.UCharacter;
 
 
 public class XMLComparator {
-    String[] fileNames; 
-    private static final short OPT_SUN_JDK = 0x001;
-    private static final short OPT_IBM_JDK = 0x002;
-    private static final short OPT_WINDOWS = 0x004;
-    private static final short OPT_HP_UX   = 0x008;
-    private static final short OPT_SOLARIS = 0x010;
-    private static final short OPT_IBM_TOR = 0x020;
-    private static final short OPT_APPLE   = 0x040;
-    private static final short OPT_ICU     = 0x080;
-    private static final short OPT_OTHER   = 0x100;
-    private static final short OPT_SOURCE  = 0x120;
-    private static final short OPT_DEST    = 0x140;
-    private static final short OPT_LINUX   = 0x160;
-    private static final short OPT_AIX     = 0x180;
-    private static final short OPT_UNKNOWN = 0x2000;
+    /*
+     * This application will compare different locale data xml files
+     * conforming to localeElements.dtd and produces an xml file file
+     * in the format
+     */ 
+    private static final short OPT_SUN_JDK = 0x001; /*2exp0*/
+    private static final short OPT_IBM_JDK = 0x002; /*2exp1*/
+    private static final short OPT_WINDOWS = 0x004; /*2exp2*/
+    private static final short OPT_HP_UX   = 0x008; /*2exp3*/
+    private static final short OPT_SOLARIS = 0x010; /*2exp4*/
+    private static final short OPT_IBM_TOR = 0x020; /*2exp5*/
+    private static final short OPT_APPLE   = 0x040; /*2exp6*/
+    private static final short OPT_ICU     = 0x080; /*2exp7*/
+    private static final short OPT_OTHER   = 0x100; /*2exp8*/
+    private static final short OPT_SOURCE  = 0x200; /*2exp9*/
+    private static final short OPT_DEST    = 0x400; /*2exp10*/
+    private static final short OPT_LINUX   = 0x800; /*2exp11*/
+    private static final short OPT_AIX     = 0x1000; /*2exp12*/
+    private static final short OPT_COMMON  = 0x2000; /*2exp13*/
+    private static final short OPT_UNKNOWN = 0x4000; /*2exp15*/
     
-    private static final String POSIX= "0";/* NO inheritence of locale data */
-    private static final String ICU  = "1";/* Supports inheritence of locale data*/
-    private static final String USER_OPTIONS[][] = {
-        {"-sun_jdk",        "sun_jdk",ICU}, 
-        {"-ibm_jdk",        "ibm_jdk",ICU},
-        {"-windows",        "windows", POSIX},
-        {"-hp_ux",          "hp_ux",POSIX }, 
-        {"-solaris",        "solaris",POSIX },
-        {"-ibm_tor",        "ibm_toronto",POSIX},
-        {"-apple",          "apple", POSIX},
-        {"-icu",            "icu",ICU},
-        {"-open_office",    "open_office", POSIX},
-        {"-aix",            "aix", POSIX},
-        {"-linux",          "linux", POSIX},
-        {"-s",null,null},
-        {"-d",null, null},
+    private static final String COMMON      = "common";     
+    private static final String ICU         = "icu";    
+    private static final String IBM_TOR     = "ibm_tor";
+    private static final String WINDOWS     = "windows";    
+    private static final String SUNJDK      = "sun_jdk";    
+    private static final String IBMJDK      = "ibm_jdk";    
+    private static final String HPUX        = "hpux";      
+    private static final String APPLE       = "apple";      
+    private static final String SOLARIS     = "solaris";    
+    private static final String OPEN_OFFICE = "open_office";
+    private static final String AIX         = "aix";        
+    private static final String LINUX       = "linux";    
+    
+    private static final String[] PLATFORM_PRINT_ORDER ={
+        COMMON,     
+        ICU,
+        WINDOWS,
+        SUNJDK,     
+        IBMJDK,         
+        IBM_TOR,          
+        APPLE,      
+        SOLARIS,    
+        OPEN_OFFICE,
+        AIX,        
+        LINUX, 
+        HPUX,        
     };
     
-    Hashtable optionTable = new Hashtable();
-    private String sourceFolder = ".";
-    private String destFolder = ".";
+    private static final String USER_OPTIONS[] = {
+        "-"+COMMON,
+        "-"+ICU,
+        "-"+IBM_TOR,
+        "-"+WINDOWS,
+        "-"+SUNJDK,
+        "-"+IBMJDK,
+        "-"+HPUX,
+        "-"+APPLE,
+        "-"+SOLARIS,
+        "-"+OPEN_OFFICE,
+        "-"+AIX,
+        "-"+LINUX,        
+        "-s",              
+        "-d",              
+    };
+   
+
     
     public static void main(String[] args){
         XMLComparator comparator = new XMLComparator();
         comparator.processArgs(args);    
         
     }
-    
-    ArrayList doesNotExist = new ArrayList();
-    ArrayList notAvailable = new ArrayList();
-      
-    /*
-     * This application will compare different locale data xml files
-     * conforming to localeElements.dtd and produces an xml file file
-     * in the format
-     */ 
                         
-    Document resultDocument;
-    String localeStr;    
-    Locale locale;
-    Calendar cal = Calendar.getInstance();
-    Hashtable colorHash = new Hashtable();
+    Hashtable optionTable = new Hashtable();
+    private String sourceFolder = ".";
+    private String destFolder = ".";  
+    private String localeStr;    
+    private Calendar cal = Calendar.getInstance();
+    private Hashtable colorHash = new Hashtable();
+    private String goldFileName; 
+    private String goldKey;
+    private int numPlatforms = 0;
+    private int serialNumber =0;
+    private TreeMap compareMap = new TreeMap();
+    private Hashtable doesNotExist = new Hashtable();
+    private Hashtable requested = new Hashtable();
+    private String  encoding   = "UTF-8"; // default encoding
+    
+    private class CompareElement{
+        String node;
+        String index;
+        String parentNode;
+        Hashtable platformData = new Hashtable();
+    }
+    
     XMLComparator(){
         //initialize the color hash
-        colorHash.put("icu","#AD989D");        
-        colorHash.put("ibm_toronto","#FF7777");
-        colorHash.put("windows","#98FB98");
-        colorHash.put("sun_jdk","#FF6633");
-        colorHash.put("ibm_jdk","#CCFFFF");
-        colorHash.put("hp_ux","#FFE4B5");
-        colorHash.put("apple","#FFBBBB");
-        colorHash.put("solaris","#CC9966");
-        colorHash.put("open_office","#FFFF33");
-        colorHash.put("aix", "#EB97FE");
-        colorHash.put("linux", "#1191F1");
+        colorHash.put( COMMON,      "#AD989D");
+        colorHash.put( ICU,         "#CCFF00");
+        colorHash.put( IBM_TOR,     "#FF7777");
+        colorHash.put( WINDOWS,     "#98FB98");
+        colorHash.put( SUNJDK,      "#FF6633");
+        colorHash.put( IBMJDK,      "#CCFFFF");
+        colorHash.put( HPUX,        "#FFE4B5");
+        colorHash.put( APPLE,       "#FFBBBB");
+        colorHash.put( SOLARIS,     "#CC9966");
+        colorHash.put( OPEN_OFFICE, "#FFFF33");
+        colorHash.put( AIX,         "#EB97FE");
+        colorHash.put( LINUX,       "#1191F1");
     }
+    
     /**
      * A helper function to convert a string of the form
      * aa_BB_CC to a locale object.  Why isn't this in Locale?
@@ -153,6 +189,7 @@ public class XMLComparator {
 
         return new Locale(language, country, variant);
     }
+    
     private void processArgs(String[] args){
         short options = identifyOptions(args);
         if ((args.length < 2) || ((options & OPT_UNKNOWN) != 0)) {
@@ -164,27 +201,22 @@ public class XMLComparator {
         Enumeration enum = optionTable.keys();
         
         try{
-            
-            resultDocument = parse(sourceFolder+File.separator+"ResultXML.xml");
-            
+                        
             localeStr  = goldFileName.substring(goldFileName.lastIndexOf(File.separatorChar)+1,goldFileName.indexOf('.'));
        
-            locale = getLocaleFromName(localeStr);
+            String fileName = destFolder+File.separator+localeStr+".html";
+            OutputStreamWriter os = new OutputStreamWriter(new FileOutputStream(fileName),encoding);
+            System.out.println("INFO: Creating file named: " + fileName);
             
-            OutputStreamWriter os1 = new OutputStreamWriter(new FileOutputStream(destFolder+File.separator+locale+".xml"),encoding);
-            OutputStreamWriter os2 = new OutputStreamWriter(new FileOutputStream(destFolder+File.separator+locale+".html"),encoding);
-            
-            writeToResultDoc(goldFileName, goldKey);
+            addToCompareMap(goldFileName, goldKey);
             for(;enum.hasMoreElements();){
                 String key = (String)enum.nextElement();
-                String fileName = (String) optionTable.get(key);
-                writeToResultDoc(fileName,key);
+                String compFile = (String) optionTable.get(key);
+                addToCompareMap(compFile,key);
                 
             }
-            PrintWriter writer1 = new PrintWriter(os1);
-            PrintWriter writer2 = new PrintWriter(os2);
-            print(writer1,resultDocument);
-            printHTML(writer2);
+            PrintWriter writer = new PrintWriter(os);
+            printHTML(writer, localeStr);
         }catch(Exception e){
             e.printStackTrace();
         }
@@ -193,18 +225,15 @@ public class XMLComparator {
     
     private void printUsage() {
         System.err.println("Usage: XMLComparator [<option>:<gold>] filename1 [option] filename2 ... \n"+
-                           " XMLComparator [-sun_jdk:gold]  filename" +
+                           " XMLComparator [-common:<gold>] filename [-icu] filename" +
                            " [-ibm_jdk] filename [-windows] filename" +
-                           " [-hp_ux]  filename [-solaris] filename"  +
+                           " [-hpux]  filename [-solaris] filename"  +
                            " [-ibm_tor] filename [-apple] filename"   +
-                           " [-icu] filename [-open_office] filename" +
+                           " [-sun_jdk]  filename [-open_office] filename" +
                            " [-aix] filename [-linux] filename" 
                            );
     }
-    private String goldFileName; 
-    private String goldKey;
-    private String goldType;
-    
+   
     private short identifyOptions(String[] options) {
         short result = 0;
         for (int j = 0; j < options.length; j++) {
@@ -218,20 +247,19 @@ public class XMLComparator {
                 boolean optionRecognized = false;
                 for (short i = 0; i < USER_OPTIONS.length; i++) {
                    
-                    if (USER_OPTIONS[i][0].equals(option)) {
+                    if (USER_OPTIONS[i].equals(option)) {
                         result |= (short)(1 << i);
                         optionRecognized = true;
-                        if(i==11){
+                        if(USER_OPTIONS[i].equals("-s")){
                             sourceFolder = options[++j];
-                        }else if(i==12){
+                        }else if(USER_OPTIONS[i].equals("-d")){
                             destFolder = options[++j];
                         }else{
                             if(!isGold){
-                                optionTable.put(USER_OPTIONS[i][1],options[++j]);
+                                optionTable.put(option.substring(1,option.length()),options[++j]);
                             }else{
                                 goldFileName = options[++j];
-                                goldKey      = USER_OPTIONS[i][1];
-                                goldType     = USER_OPTIONS[i][2];
+                                goldKey      = option.substring(1,option.length());
                             }
                         }
                         break;
@@ -244,96 +272,83 @@ public class XMLComparator {
         }
         return result;
     }
-    private Hashtable platformNumber = new Hashtable();
-    private int numPlatforms = 0;
-    private void printTableHeader(PrintWriter writer, Node node){
-        Node firstChildElement=null;
-        NodeList list = node.getChildNodes();
-        for(int i=0;i<list.getLength();i++){
-            firstChildElement =list.item(i);
-            if(firstChildElement.getNodeType()==Node.ELEMENT_NODE && firstChildElement.getNodeName().equals("element")){
-                break;
-            }
-        }
-        writer.println("            <tr>\n" +
+  
+    private void printTableHeader(PrintWriter writer){
+
+        writer.print(  "            <tr>\n" +
                        "                <th>N.</th>\n"+
                        "                <th>ParentNode</th>\n"+
                        "                <th>Name</th>\n"+
-                       "                <th>ID</th>");
-        do{
-            NamedNodeMap map = firstChildElement.getAttributes();
-            String name = map.getNamedItem("platform").getNodeValue();
-            String printName;
+                       "                <th>ID</th>\n");
+        
+        for(int i=0; i< PLATFORM_PRINT_ORDER.length && PLATFORM_PRINT_ORDER[i]!=null; i++ ){
+            String name = PLATFORM_PRINT_ORDER[i];
             String folder;
-            if(name.equals("icu")){
-                printName = "common";
-            }else{
-                printName = name;
-                
+            
+            Object obj = requested.get(name);
+            if(obj!=null && doesNotExist.get(name)==null ){
+                folder = name+"/xml/";
+                writer.print("                <th bgcolor=\""+
+                               (String)colorHash.get(name)+ "\">" +
+                               name.toUpperCase()+
+                               " (<a href=\"../"+folder+localeStr+".xml\">xml</a>)"+
+                               "</th>\n");
+                numPlatforms++;
+               
             }
-            folder = printName+"/xml/";
-            writer.println("                <th bgcolor=\""+
-                           (String)colorHash.get(name)+ "\">" +
-                           printName.toUpperCase()+
-                           " (<a href=\"http://oss.software.ibm.com/cvs/icu/~checkout~/locale/"+folder+localeStr+".xml\">xml</a>)"+
-                           "</th>");
-            numPlatforms++;
-            platformNumber.put(name,new Integer(numPlatforms));
-        }while((firstChildElement=firstChildElement.getNextSibling())!=null);
-        writer.println("            </tr>");
+        }        
+        writer.print("            </tr>\n");
     }
 
-    private int numWritten = 0;
-    private void printValue(Node firstChildNode, Node currentNode, PrintWriter writer){
-        String platform = currentNode.getAttributes().getNamedItem("platform").getNodeValue();
-        String color = (String)colorHash.get(platform);
-        String currentValue = currentNode.getFirstChild().getNodeValue();
-        boolean caseDiff = false;
-        int mynum = ((Integer)platformNumber.get(platform)).intValue(); 
-        boolean colorPicked = false;
-        boolean isEqual = false;
-        do{
-            if(firstChildNode==currentNode){
-                
-                if(numWritten != mynum-1 && numWritten < numPlatforms && mynum>0){
-                    for(int i=numWritten; i<mynum-1; i++){
-                        writer.println("                <td>&nbsp;</td>");
-                    }
-                    numWritten = mynum-1;
+    private void printValue(CompareElement element, PrintWriter writer){
+        
+        
+        writer.print("            <tr>\n");
+        writer.print("                <td><a NAME=\""+serialNumber+"\" href=\"#"+serialNumber+"\">"+serialNumber+"</a></td>\n");
+        writer.print("                <td>"+mapToAbbr(element.parentNode)+"</td>\n");
+        writer.print("                <td>"+mapToAbbr(element.node)+"</td>\n");
+        writer.print("                <td>"+element.index+"</td>\n");
+        serialNumber++;
+        
+        for(int i=0; i<PLATFORM_PRINT_ORDER.length; i++){
+            String value = (String)element.platformData.get(PLATFORM_PRINT_ORDER[i]);
+            String color = (String)colorHash.get(PLATFORM_PRINT_ORDER[i]);
+            boolean caseDiff = false;
+            boolean isEqual = false;
+            // the locale exists for the given platform but there is no data
+            // so just write non breaking space and continue
+            // else the object contains value to be written .. so write it
+            if(value == null ){
+                if(requested.get(PLATFORM_PRINT_ORDER[i])!=null && doesNotExist.get(PLATFORM_PRINT_ORDER[i])==null){
+                    writer.print("                <td>&nbsp;</td>\n");
                 }
-                //print and break
+            }else{
+                //pick the correct color
+                for(int j=0; j<i; j++){
+                    String compareTo = (String)element.platformData.get(PLATFORM_PRINT_ORDER[j]);
+                    if(compareTo==null){
+                        continue;
+                    }else if(Normalizer.compare(compareTo,value,0)==0){
+                        color = (String)colorHash.get(PLATFORM_PRINT_ORDER[j]);
+                        isEqual = true;
+                        break;
+                    }else if(Normalizer.compare(compareTo,value,Normalizer.COMPARE_IGNORE_CASE)==0){
+                        caseDiff=true;
+                        color = (String)colorHash.get(PLATFORM_PRINT_ORDER[j]);
+                        break;
+                    }
+                }
                 if(isEqual){
-                    currentValue = "=";
+                    value = "=";
                 }
                 if(caseDiff==true){
-                    writer.println("                <td bgcolor="+color+">"+currentValue+"&#x2020;</td>");
+                    writer.print("                <td bgcolor="+color+">"+value+"&#x2020;</td>\n");
                 }else{
-                    writer.println("                <td bgcolor="+color+">"+currentValue+"</td>");
+                    writer.print("                <td bgcolor="+color+">"+value+"</td>\n");
                 }
-                numWritten++;
-                break;
             }
-            if(colorPicked == false){
-                
-                String value = firstChildNode.getFirstChild().getNodeValue();
-                
-                if(Normalizer.compare(currentValue,value,0)==0){
-                    String nodeName = firstChildNode.getAttributes().getNamedItem("platform").getNodeValue();
-                    isEqual = true;
-                    color = (String)colorHash.get(nodeName);
-                    colorPicked = true;
-                }else{
-                    //System.out.println("Value1: "+value1+ "  Value2: "+ value2);
-                    if(Normalizer.compare(currentValue,value,Normalizer.COMPARE_IGNORE_CASE)==0){
-                        caseDiff=true;
-                        color = (String)colorHash.get(firstChildNode.getAttributes().getNamedItem("platform").getNodeValue());
-                        colorPicked = true;
-                    }
-                }
-                
-            }
-        }while(((firstChildNode=firstChildNode.getNextSibling())!=null));
-            
+        }
+        writer.print("            </tr>\n");
     }
     private String mapToAbbr(String source){
         if(source.equals("icu:ruleBasedNumberFormat")){
@@ -350,50 +365,10 @@ public class XMLComparator {
         }
         return source;
     }
-    private int serialNumber =0;
-    private void comparePrintElementData(Node node, PrintWriter writer){
-        
-        Node firstChildElement = null;
-        NodeList list = node.getChildNodes();
-        for(int i=0;i<list.getLength();i++){
-            firstChildElement =list.item(i);
-            if(firstChildElement.getNodeType()==Node.ELEMENT_NODE && firstChildElement.getNodeName().equals("element")){
-                break;
-            }
-        }
-        Node s1   = firstChildElement;
-        
-        // print the index nodeName and parent node
-        NamedNodeMap attributes = node.getAttributes();
-        String nodeName="&nbsp;", parentNode="&nbsp;", index="&nbsp;";
-        if(attributes!=null){
-            nodeName   = attributes.getNamedItem("nodeName").getNodeValue();
-            parentNode = attributes.getNamedItem("parentNode").getNodeValue();
-            index      = attributes.getNamedItem("index").getNodeValue();
-            if(index.equals("")){
-                index="&nbsp;";
-            }
-        }
 
-        writer.println("            <tr>");
-        writer.println("                <td><a NAME=\""+serialNumber+"\" href=\"#"+serialNumber+"\">"+serialNumber+"</a></td>");
-        writer.println("                <td>"+mapToAbbr(parentNode)+"</td>");
-        writer.println("                <td>"+mapToAbbr(nodeName)+"</td>");
-        writer.println("                <td>"+index+"</td>");
-        serialNumber++;
-        do{
-            printValue(firstChildElement, s1, writer);
-            
-        }while((s1=s1.getNextSibling())!=null);
-        int numExisting = optionTable.size()-doesNotExist.size()+1;
-        for(;numWritten<numExisting;numWritten++){
-            writer.println("                <td>&nbsp;</td>");
-        }
-        numWritten = 0;     
-        writer.println("            </tr>");
-    }
-    private void   printHTML(PrintWriter writer){
-        NodeList list= resultDocument.getElementsByTagName("elements");
+    private void   printHTML(PrintWriter writer, String localeStr){
+        System.out.println("INFO: Creating the comparison chart ");
+        Locale locale = getLocaleFromName(localeStr);
         String displayLang = locale.getDisplayLanguage();
         String dispCountry = locale.getDisplayCountry();
         String dispVariant = locale.getDisplayVariant();
@@ -404,7 +379,7 @@ public class XMLComparator {
             displayName += ") ";
         }
         
-        writer.println("<html>\n"+
+        writer.print("<html>\n"+
                            "    <head>\n"+
                            "        <meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">\n"+
                            "        <title>"+localeStr+"</title>\n"+
@@ -420,46 +395,44 @@ public class XMLComparator {
                            "     <body bgcolor=\"#FFFFFF\">\n"+
                            "        <p><b>"+displayName+
                                     "<a href=\"http://oss.software.ibm.com/cgi-bin/icu/lx/en/?_="+localeStr+"\">Demo</a>, "+
-                                    "<a href=\"http://oss.software.ibm.com/cvs/icu/~checkout~/locale/all_diff_xml/comparison_charts.html\">Cover Page</a>, "+
-                                    "<a href=\"http://oss.software.ibm.com/cvs/icu/~checkout~/locale/all_diff_xml/index.html\">Index</a>"+
+                                    "<a href=\"../comparison_charts.html\">Cover Page</a>, "+
+                                    "<a href=\"./index.html\">Index</a>, "+
+                                    "<a href=\"../collation_diff/"+localeStr+"_collation.html\">Collation</a> "+
                                     "</b></p>\n"+
                            "        <table>\n");
         
-         
-        Node firstNode = resultDocument.getElementsByTagName("elements").item(1);// we are passig item(1) since item(0) has no children
-        printTableHeader(writer, firstNode);
-        
-        //TODO comparison and tree walking code goes here!
-        Node firstElementsNode = list.item(1);
-        do{
-            comparePrintElementData(firstElementsNode, writer);
-            
-        }while((firstElementsNode=firstElementsNode.getNextSibling()) != null);
-        
-        writer.println( "        </table>\n");
 
-        // writer.println("&#x2020; Indicates a case difference<br>");
-        // writer.println("= Indicates the data is same as the data in ICU<br>");
-        writer.println("        <p>Created on: " + cal.getTime() +"</p>\n"+
-                            "    </body>\n"+
-                            "</html>");
+        printTableHeader(writer);
+        
+        // walk down the compare map and print the data
+        Iterator iter = compareMap.keySet().iterator();
+        while(iter.hasNext()){
+            Object obj = iter.next();
+            CompareElement element;
+            if(obj != null){
+                Object value = compareMap.get(obj);
+                if(value instanceof CompareElement){
+                    element = (CompareElement)value;
+                }else{
+                    throw new RuntimeException("The object stored in the compare map is not an instance of CompareElement");
+                }
+                printValue(element,writer);
+            }else{
+                throw new RuntimeException("No objects stored in the compare map!");
+            }
+
+        }
+        writer.print( "        </table>\n");
+
+        writer.print( "        <p>Created on: " + cal.getTime() +"</p>\n"+
+                      "    </body>\n"+
+                      "</html>\n");
         writer.flush();
 
         writer.flush();
     }
-    /**
-      * Compare two files by parsing into DOMs and comparing trees.
-      * @param goldFileName expected file
-      * @param testFileName actual file
-      * @param reporter PrintWriter to dump status info to
-      * @param array of warning flags (for whitespace diffs, I think?)
-      * NEEDSDOC @param warning
-      * @param attributes to attempt to set onto parsers
-      * @return true if they match, false otherwise
-      */
-     private Document goldDoc=null;
     
-     public Document getFullyResolvedLocale(String localeName,String fileName){
+     private Document getFullyResolvedLocale(String localeName,String fileName){
          // here we assume that "_" is the delimiter
          Document doc = null;
          String temp = fileName;    
@@ -493,6 +466,8 @@ public class XMLComparator {
                  if(rootDoc != null && doc!=null){
                      mergeElements(doc.getDocumentElement(),rootDoc.getDocumentElement());
                     /*
+                     * debugging code
+                     
                     try{
                         OutputStreamWriter writer = new OutputStreamWriter(new FileOutputStream(destFolder+File.separator+locale+"_debug.xml"),encoding);
                         print(new PrintWriter(writer),doc);
@@ -506,275 +481,19 @@ public class XMLComparator {
          return doc;
      }
 
-     public boolean writeToResultDoc(String fileName, String key)
+     private boolean addToCompareMap(String fileName, String key)
      {
-        
- 
          // parse the test doc only if gold doc was parsed OK  
          Document testDoc = getFullyResolvedLocale(key,fileName);
+         requested.put(key,"");
          if (null == testDoc)
          {
-             doesNotExist.add(key);
+             doesNotExist.put(key, "");
              return false;
          }
          return extractMergeData(testDoc,key);
-
      }
-     
-     
-     boolean canonical  = false;
-    
-     String  encoding   = "UTF-8"; // default encoding
-    
-     /** Returns a sorted list of attributes. */
-     protected Attr[] sortAttributes(NamedNodeMap attrs) {
 
-         int len = (attrs != null) ? attrs.getLength() : 0;
-         Attr array[] = new Attr[len];
-         for ( int i = 0; i < len; i++ ) {
-             array[i] = (Attr)attrs.item(i);
-         }
-         for ( int i = 0; i < len - 1; i++ ) {
-             String name  = array[i].getNodeName();
-             int    index = i;
-             for ( int j = i + 1; j < len; j++ ) {
-                 String curName = array[j].getNodeName();
-                 if ( curName.compareTo(name) < 0 ) {
-                     name  = curName;
-                     index = j;
-                 }
-             }
-             if ( index != i ) {
-                 Attr temp    = array[i];
-                 array[i]     = array[index];
-                 array[index] = temp;
-             }
-         }
-
-         return(array);
-
-     } // sortAttributes(NamedNodeMap):Attr[]
-    
-         /** Normalizes the given string. */
-     protected String normalize(String s) {
-         StringBuffer str = new StringBuffer();
-
-         int len = (s != null) ? s.length() : 0;
-         for ( int i = 0; i < len; i++ ) {
-             char ch = s.charAt(i);
-             switch ( ch ) {
-             case '<': {
-                     str.append("&lt;");
-                     break;
-                 }
-             case '>': {
-                     str.append("&gt;");
-                     break;
-                 }
-             case '&': {
-                     str.append("&amp;");
-                     break;
-                 }
-             case '"': {
-                     str.append("&quot;");
-                     break;
-                 }
-             case '\'': {
-                     str.append("&apos;");
-                     break;
-                 }
-             case '\r':
-             case '\n': {
-                     if ( canonical ) {
-                         str.append("&#");
-                         str.append(Integer.toString(ch));
-                         str.append(';');
-                         break;
-                     }
-                     // else, default append char
-                 }
-             default: {
-                     str.append(ch);
-                 }
-             }
-         }
-
-         return(str.toString());
-
-     } // normalize(String):String
-     private int numIndent = 0;
-     private void indent(PrintWriter out){
-         numIndent++;
-         out.print("\n");
-         for(int i=0; i < numIndent; i++){
-             out.print("    ");
-         }
-     }
-     private void outdent(PrintWriter out){
-         for(int i=0; i < numIndent; i++){
-             out.print("    ");
-         }
-         numIndent--;
-     }
-     /** Prints the specified node, recursively. */
-     public void print(PrintWriter out, Node node) {
-
-         // is there anything to do?
-         if ( node == null ) {
-             return;
-         }
-
-         int type = node.getNodeType();
-        
-         switch ( type ) {
-         // print document
-         case Node.DOCUMENT_NODE: {
-                if ( !canonical ) {
-                     out.println("<?xml version=\"1.0\" encoding=\""+
-                                 encoding + "\"?>");
-                 }
-                 //print(((Document)node).getDocumentElement());
-
-                 NodeList children = node.getChildNodes();
-                 for ( int iChild = 0; iChild < children.getLength(); iChild++ ) {
-                     print(out,children.item(iChild));
-                 }
-                 out.flush();
-                 break;
-             }
-
-             // print element with attributes
-         case Node.ELEMENT_NODE: {
-                 indent(out);
-                 out.print('<');
-                 out.print(node.getNodeName());
-                 Attr attrs[] = sortAttributes(node.getAttributes());
-                 for ( int i = 0; i < attrs.length; i++ ) {
-                     Attr attr = attrs[i];
-                     out.print(' ');
-                     out.print(attr.getNodeName());
-                     out.print("=\"");
-                     out.print(normalize(attr.getNodeValue()));
-                     out.print('"');
-                 }
-                 out.print('>');
-                 outdent(out);
-                 NodeList children = node.getChildNodes();
-                 if ( children != null ) {
-                     int len = children.getLength();
-                     for ( int i = 0; i < len; i++ ) {
-                         print(out,children.item(i));
-                     }
-                 }
-                 break;
-             }
-
-             // handle entity reference nodes
-         case Node.ENTITY_REFERENCE_NODE: {
-                 if ( canonical ) {
-                     NodeList children = node.getChildNodes();
-                     if ( children != null ) {
-                         int len = children.getLength();
-                         for ( int i = 0; i < len; i++ ) {
-                             print(out,children.item(i));
-                         }
-                     }
-                 } else {
-                     out.print('&');
-                     out.print(node.getNodeName());
-                     out.print(';');
-                 }
-                 break;
-             }
-
-             // print cdata sections
-         case Node.CDATA_SECTION_NODE: {
-                 if ( canonical ) {
-                     out.print(normalize(node.getNodeValue()));
-                 } else {
-                     out.print("<![CDATA[");
-                     out.print(node.getNodeValue());
-                     out.print("]]>");
-                 }
-                 break;
-             }
-
-             // print text
-         case Node.TEXT_NODE: {
-                 out.print(normalize(node.getNodeValue()));
-                 break;
-             }
-
-             // print processing instruction
-         case Node.PROCESSING_INSTRUCTION_NODE: {
-                 out.print("<?");
-                 out.print(node.getNodeName());
-                 String data = node.getNodeValue();
-                 if ( data != null && data.length() > 0 ) {
-                     out.print(' ');
-                     out.print(data);
-                 }
-                 out.println("?>");
-                 break;
-             }
-         }
-
-         if ( type == Node.ELEMENT_NODE ) {
-             out.print("</");
-             out.print(node.getNodeName());
-             out.print('>');
-         }
-
-         out.flush();
-     } // print(Node)
-    
-
-
-     private static Node elementNode=null;
-     private static Node elementsNode=null;
-    private void addNodeValue(String nodeName, String value, 
-                              Node resultParentNode){
-        // clone the element node                          
-        Node resultNode = elementNode.cloneNode(true);
-        NamedNodeMap attrib= resultNode.getAttributes();
-        attrib.getNamedItem("platform").setNodeValue(nodeName);
-        resultNode.getFirstChild().setNodeValue(value);
-        resultParentNode.appendChild(resultNode);
-    }
-    
-    
-    private void addAttributes(Node element, NamedNodeMap attributes){
-        Node attributeElement = null;
-        NodeList childNodes = elementNode.getChildNodes();
-        for(int i=0; i<childNodes.getLength();i++){
-            attributeElement = childNodes.item(i);
-            if(attributeElement.getNodeName().equals("attribute")){
-                break;
-            }
-        }
-        //remove the attribute element 
-        NodeList children = element.getChildNodes();
-        for(int i=0; i<children.getLength(); i++){
-            Node item = children.item(i);
-            if(item.getNodeName().equals("attribute")){
-                element.removeChild(item);
-            }
-        }
-        for(int i=0; i < attributes.getLength(); i++){
-            Node valuesToSet = attributes.item(i);
-            String nameToSet = valuesToSet.getNodeName();
-            if(nameToSet.equals("type")){
-                continue;
-            }
-            Node clonedNode = attributeElement.cloneNode(true);
-            NamedNodeMap map = clonedNode.getAttributes();
-            Node name = map.getNamedItem("name");
-            name.setNodeValue(nameToSet);
-            clonedNode.getFirstChild().setNodeValue(valuesToSet.getNodeValue());
-            element.appendChild(clonedNode);
-        }
-        
-    }
     // ---------------------------------------------------------------------------
     //
     //   Merge element nodes.  dest and source are Element nodes of the same type.
@@ -788,48 +507,74 @@ public class XMLComparator {
         
         Document destDoc = dest.getOwnerDocument();
         Node spaces = destDoc.createTextNode("\n       ");
+        childOfSource = source.getFirstChild();
+        childOfDest = dest.getFirstChild();
         
-        for (childOfSource = source.getFirstChild(); childOfSource != null; childOfSource = childOfSource.getNextSibling()) {
-            //String dNodeVal = dest.getFirstChild().getNodeValue();
-            //String sNodeVal = childOfSource.getNodeValue();
-            if (childOfSource.getNodeType() != Node.ELEMENT_NODE) {
-                continue;
-            }
-           
-            boolean didMerge = false;
-            for (childOfDest = dest.getFirstChild(); childOfDest != null; childOfDest = childOfDest.getNextSibling()) {
-                //String childNodeName = childOfDest.getNodeName();
-                //String childNodeVal = childOfDest.getNodeValue();
-                if (childOfDest.getNodeType() == Node.ELEMENT_NODE  &&
-                       childOfDest.getNodeName().equals(childOfSource.getNodeName())) {
-                    // The destination document already has an element of this type at this level.
-                    //   Recurse to pick up any extra children that the source node may have.
-                    mergeElements(childOfDest, childOfSource);
-                    didMerge = true;
-                    break;
+        if(childOfSource != null){
+            for (childOfSource = source.getFirstChild(); childOfSource != null; childOfSource = childOfSource.getNextSibling()) {
+                //String dNodeVal = dest.getFirstChild().getNodeValue();
+                //String sNodeVal = childOfSource.getNodeValue();
+                if (childOfSource.getNodeType() != Node.ELEMENT_NODE) {
+                    continue;
+                }
+               
+                boolean didMerge = false;
+                for (childOfDest = dest.getFirstChild(); childOfDest != null; childOfDest = childOfDest.getNextSibling()) {
+                    String childNodeName = childOfDest.getNodeName();
+                    String childOfSourceNN = childOfSource.getNodeName();
+                    if (childOfDest.getNodeType() == Node.ELEMENT_NODE  &&
+                           childOfDest.getNodeName().equals(childOfSource.getNodeName())) {
+                        // The destination document already has an element of this type at this level.
+                        //   Recurse to pick up any extra children that the source node may have.
+                        
+                        // is the type attribute same on 
+                        mergeElements(childOfDest, childOfSource);
+                        didMerge = true;
+                        break;
+                    }
+                }
+        
+                if (didMerge == false) {
+                    // destination document had no corresponding node to the current childOfSource.  Add it.
+                    Node importedNode = destDoc.importNode(childOfSource, true);
+                    dest.appendChild(spaces);
+                    dest.appendChild(importedNode);
                 }
             }
-    
-            if (didMerge == false) {
-                // destination document had no corresponding node to the current childOfSource.  Add it.
-                Node importedNode = destDoc.importNode(childOfSource, true);
-                dest.appendChild(spaces);
-                dest.appendChild(importedNode);
+        }else{
+            // now we have an element node with data .. get the attributes of source and dest and check
+            // and then get the node value and merge if they are not equal
+            if(childOfSource != null){
+            
+                NamedNodeMap childOfSourceAttr = childOfSource.getAttributes();
+                Node childOfSourceTypeNode = childOfSourceAttr.getNamedItem("type");
+                String type = childOfSourceTypeNode.getNodeValue();
+                
+                Node node = childOfDest.getParentNode();
+                boolean foundNodeInDest = false;
+                for (node = source.getFirstChild(); node != null; node = node.getNextSibling()) {
+                    //String dNodeVal = dest.getFirstChild().getNodeValue();
+                    //String sNodeVal = childOfSource.getNodeValue();
+                    if (node.getNodeType() != Node.ELEMENT_NODE) {
+                        continue;
+                    }
+
+                }
             }
+                
+
         }
-        //dest.appendChild(spaces);
-        
     }
-    
-    double args1  = 10000000000.00;
-    double args2  = -10000000000.00;
-    
-    DecimalFormat fmt = new DecimalFormat(); 
     
     private boolean comparePatterns(String pat1,String pat2){
         //TODO: just return for now .. this is useful only 
         //when comparing data from toronto
         /*
+        double args1  = 10000000000.00;
+        double args2  = -10000000000.00;
+    
+        DecimalFormat fmt = new DecimalFormat(); 
+        
         fmt.applyPattern(pat1);
         String s1 = fmt.format(args1);
         String s3 = fmt.format(args2);
@@ -860,47 +605,36 @@ public class XMLComparator {
       
     }
     private void addElement(String childNode, String parentNode, String id, String index, 
-                            String nodeValue, String nodeName){
-
-        if(elementNode == null){
-            elementNode = resultDocument.getElementsByTagName("element").item(0);
-        }
-        if(elementsNode == null){
-            elementsNode = resultDocument.getElementsByTagName("elements").item(0);
-        }  
-        Node resultParentNode = null;
-            
-        //get "elements" node if it already exists with the given id
-        Node mainElements = resultDocument.getElementById(id);
-            
-        //did not find the elements node
-        if(mainElements == null){
-
-            NodeList list = elementsNode.getChildNodes();
-            for(int i=0;i<list.getLength(); i++){
-                Node item = list.item(i);
-                if(item.getNodeName().equals("element")){
-                    elementsNode.removeChild(item);
-                }
-            }
-            resultParentNode = elementsNode.cloneNode(true);
-            NamedNodeMap attribMap=resultParentNode.getAttributes();
-            Node parent_node = attribMap.getNamedItem("parentNode");
-            Node node_name   = attribMap.getNamedItem("nodeName");
-            Node id_attrib   = attribMap.getNamedItem("id");
-            Node indexNode   = attribMap.getNamedItem("index");
-            parent_node.setNodeValue(parentNode);
-            node_name.setNodeValue(childNode);
-            id_attrib.setNodeValue(id);
-            indexNode.setNodeValue((index==null) ? "&nbsp;" : index);
-            //append the newly created node to the document
-            elementsNode.getParentNode().appendChild(resultParentNode);
-            addNodeValue(nodeName, nodeValue, resultParentNode);
+                            String platformValue, String platformName){
+                                
+        Object obj = compareMap.get(id);
+        CompareElement element;
+        if(obj==null){
+            element = new CompareElement();
+            //initialize the values
+            element.index = index;
+            element.parentNode = parentNode;
+            element.node = childNode;
+            // add the element to the compare map
+            compareMap.put(id, element);
         }else{
-            resultParentNode = mainElements;
-            addNodeValue(nodeName, nodeValue, resultParentNode);
+            if(obj instanceof CompareElement){
+                element = (CompareElement) obj;
+            }else{
+                throw new RuntimeException("The object stored in the compareMap is not a CompareElement object!");
+            }
         }
+        
+        if((!element.index.equals(index)) ||
+            (!element.node.equals(childNode)) ||
+            (!element.parentNode.equals(parentNode))){
+              throw new RuntimeException("The retrieved object is not the same as the one trying to be saved");  
+        }
+        
+        element.platformData.put(platformName, platformValue);
+        
     }
+    
     private boolean childrenAreElements(Node node){
         NodeList list = node.getChildNodes();
         for(int i=0;i<list.getLength();i++){
@@ -966,7 +700,7 @@ public class XMLComparator {
                              if(type.equals("")){
                                  type = mytype;
                              }else{
-                                 type = type+"_"+mytype;
+                                 type = type+"\u200b_"+mytype;
                              }
                              
                          }
@@ -978,8 +712,12 @@ public class XMLComparator {
                  }
                  if(!nodeValue.equals("") && 
                     !childOfSource.getNodeName().equals("version")){
-                     
-                     String id = grandParentNodeName+"_"+parentNodeName+"_"+childNodeName+"_"+type+"_"+index;
+             
+                     if(grandParentNodeName.equals("zone")){
+                        parentNodeName = grandParentNodeName+"\u200b_"+parentNodeName;    
+                     } 
+                     String id = parentNodeName+"_"+childNodeName+"_"+type+"_"+index+"_"+grandParentNodeName;
+                           
                      if(!index.equals("")){
                          if(!index.equals(nodeValue) && !index.equals("Fallback")){
                             addElement(childNodeName, parentNodeName, id, index, nodeValue, key);
@@ -998,7 +736,10 @@ public class XMLComparator {
                          if(attrName.equals("type")){
                              continue;
                          }
-                         String id =grandParentNodeName+"_"+parentNodeName+"_"+childNodeName+"_"+type+"_"+attrName;
+                         if(grandParentNodeName.equals("zone")){
+                            parentNodeName = grandParentNodeName+"\u200b_"+parentNodeName;    
+                         } 
+                         String id = parentNodeName+"_"+childNodeName+"_"+type+"_"+attrName+"_"+grandParentNodeName;
                          if(!index.equals("")){
                              addElement(childNodeName, parentNodeName, id, index, item.getNodeValue(), key);
                          }else{
@@ -1095,14 +836,14 @@ public class XMLComparator {
      * otherwise throws an unchecked RuntimeException if there 
      * is any fatal problem
      */
-    Document parse(String filename)
+    private Document parse(String filename)
     {
         // Force filerefs to be URI's if needed: note this is independent of any other files
         String docURI = filenameToURL(filename);
         return parse(new InputSource(docURI),filename);
     }
     
-    Document parse(InputSource docSrc, String filename){
+    private Document parse(InputSource docSrc, String filename){
         
         DocumentBuilderFactory dfactory = DocumentBuilderFactory.newInstance();
         // Always set namespaces on
