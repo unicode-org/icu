@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/TestFmwk.java,v $ 
- * $Date: 2001/11/29 07:21:23 $ 
- * $Revision: 1.24 $
+ * $Date: 2001/12/03 18:21:57 $ 
+ * $Revision: 1.25 $
  *
  *****************************************************************************************
  */
@@ -124,6 +124,8 @@ public class TestFmwk implements TestLog {
                 params.nothrow = true;
             } else if (args[i].equals("-e")) {
                 params.quick = false;
+            } else if (args[i].toLowerCase().startsWith("-filter:")) {
+                params.filter = args[i].substring(8);
             } else {
                 Object m = testMethods.get(args[i]);
                 if (m != null) {
@@ -170,6 +172,10 @@ public class TestFmwk implements TestLog {
 
     public boolean isQuick() {
         return params.quick;
+    }
+
+    public String getFilter() {
+        return params.filter;
     }
 
     /**
@@ -376,6 +382,7 @@ public class TestFmwk implements TestLog {
     	public boolean   nothrow = false;
     	public boolean   verbose = false;
     	public boolean   quick = true;
+    	public String    filter = null;
 
     	public PrintWriter log = new ASCIIWriter(System.out, true);
     	public int         indentLevel = 0;
