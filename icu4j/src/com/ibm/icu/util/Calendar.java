@@ -1919,7 +1919,7 @@ public abstract class Calendar implements Serializable, Cloneable {
      */
     public final boolean isSet(int field)
     {
-        return areFieldsVirtuallySet ? true : (stamp[field] != UNSET);
+        return areFieldsVirtuallySet || (stamp[field] != UNSET);
     }
 
     /**
