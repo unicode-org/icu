@@ -22,14 +22,15 @@ case "${host}" in
 			icu_cv_host_frag=mh-solaris 
 		fi
 	fi ;;
-*-*-mips*)	icu_cv_host_frag=mh-irix ;;
+*-*-irix*)	icu_cv_host_frag=mh-irix ;;
 alpha*-*-linux-gnu)
 	if test "$ac_cv_prog_gcc" = yes; then
 		icu_cv_host_frag=mh-alpha-linux-gcc
 	else  
 		icu_cv_host_frag=mh-alpha-linux-cc
 	fi ;;
-*-*-linux*) 	icu_cv_host_frag=mh-linux ;;
+*-dec-osf) icu_cv_host_frag=mh-alpha-osf ;;
+*-*-linux*) icu_cv_host_frag=mh-linux ;;
 *-*-cygwin)	icu_cv_host_frag=mh-cygwin ;;
 *-*-freebsd*|*-*-netbsd*) 	icu_cv_host_frag=mh-bsd-gcc ;;
 *-*-aix*) 	
