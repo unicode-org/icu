@@ -1,6 +1,10 @@
 package com.ibm.test.translit;
+import com.ibm.text.UInfo;
+
 public final class TestUtility {
   
+    private static UInfo uinfo;
+
     public static byte getScript(char c) {
       return getScript(getBlock(c));
     }
@@ -32,6 +36,30 @@ public final class TestUtility {
         return c;
     }
     
+    // Supplements to Character methods; these methods go through
+    // UInfo if possible.  If not, they fall back to Character.
+
+    public static UInfo getUInfo() {
+        if (uinfo == null) {
+            uinfo = new UInfo();
+        }
+        return uinfo;
+    }
+
+    public static boolean isUnassigned(char c) {
+        try {
+            return getUInfo().getCategory(c) == UInfo.UNASSIGNED;
+        } catch (NullPointerException e) {}
+        return Character.getType(c) == Character.UNASSIGNED;
+    }
+
+    public static boolean isLetter(char c) {
+        try {
+            return getUInfo().isLetter(c);
+        } catch (NullPointerException e) {}
+        return Character.isLetter(c);
+    }
+
 	public static String hex(char ch) {
 		String foo = Integer.toString(ch,16).toUpperCase();
 		return "0000".substring(0,4-foo.length()) + foo;
@@ -51,7 +79,7 @@ public final class TestUtility {
 	  return result;
 	}
 	
-  public static void test() {
+  public static void main(String[] args) {
     System.out.println("Blocks: ");
     byte lastblock = -128;
     for (char cc = 0; cc < 0xFFFF; ++cc) {
