@@ -568,6 +568,7 @@ UBool RBBITableBuilder::setEquals(UVector *a, UVector *b) {
 //
 //-----------------------------------------------------------------------------
 void RBBITableBuilder::printPosSets(RBBINode *n) {
+#ifdef RBBI_DEBUG
     if (n==NULL) {
         return;
     }
@@ -585,6 +586,7 @@ void RBBITableBuilder::printPosSets(RBBINode *n) {
 
     printPosSets(n->fLeftChild);
     printPosSets(n->fRightChild);
+#endif
 }
 
 
@@ -668,12 +670,14 @@ void RBBITableBuilder::exportTable(void *where) {
 //
 //-----------------------------------------------------------------------------
 void RBBITableBuilder::printSet(UVector *s) {
+#ifdef RBBI_DEBUG
     int32_t  i;
     for (i=0; i<s->size(); i++) {
         void *v = s->elementAt(i);
         RBBIDebugPrintf("%10p", v);
     }
     RBBIDebugPrintf("\n");
+#endif
 }
 
 
@@ -683,7 +687,7 @@ void RBBITableBuilder::printSet(UVector *s) {
 //
 //-----------------------------------------------------------------------------
 void RBBITableBuilder::printStates() {
-
+#ifdef RBBI_DEBUG
     int     c;    // input "character"
     int     n;    // state number
 
@@ -705,6 +709,7 @@ void RBBITableBuilder::printStates() {
         RBBIDebugPrintf("\n");
     }
     RBBIDebugPrintf("\n\n");
+#endif
 }
 
 
