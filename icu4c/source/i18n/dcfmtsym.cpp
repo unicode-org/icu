@@ -68,7 +68,8 @@ DecimalFormatSymbols::DecimalFormatSymbols(const DecimalFormatSymbols &source)
 {
     int i;
     for(i = 0; i < (int)kFormatSymbolCount; ++i) {
-        fSymbols[(ENumberFormatSymbol)i] = source.fSymbols[(ENumberFormatSymbol)i];
+        // fastCopyFrom is safe, see docs on fSymbols
+        fSymbols[(ENumberFormatSymbol)i].fastCopyFrom(source.fSymbols[(ENumberFormatSymbol)i]);
     }
 }
 
@@ -82,7 +83,8 @@ DecimalFormatSymbols::operator=(const DecimalFormatSymbols& rhs)
     {
         int i;
         for(i = 0; i < (int)kFormatSymbolCount; ++i) {
-            fSymbols[(ENumberFormatSymbol)i] = rhs.fSymbols[(ENumberFormatSymbol)i];
+            // fastCopyFrom is safe, see docs on fSymbols
+            fSymbols[(ENumberFormatSymbol)i].fastCopyFrom(rhs.fSymbols[(ENumberFormatSymbol)i]);
         }
     }
     return *this;
@@ -139,7 +141,7 @@ DecimalFormatSymbols::initialize(const Locale& loc, UErrorCode& status,
         return;
     }
     for(i = 0; i<numberElementsLength; i++) {
-        numberElements[i] = numberElementsRes.getStringEx(i, status);
+        numberElements[i].fastCopyFrom(numberElementsRes.getStringEx(i, status));
     }
 
     // Gets the currency element array.
@@ -153,7 +155,7 @@ DecimalFormatSymbols::initialize(const Locale& loc, UErrorCode& status,
         return;
     }
     for(i = 0; i<currencyElementsLength; i++) {
-        currencyElements[i] = currencyElementsRes.getStringEx(i, status);
+        currencyElements[i].fastCopyFrom(currencyElementsRes.getStringEx(i, status));
     }
 
     if (U_FAILURE(status)) return;
@@ -178,30 +180,30 @@ DecimalFormatSymbols::initialize(const Locale& loc, UErrorCode& status,
 void
 DecimalFormatSymbols::initialize(const UnicodeString* numberElements, const UnicodeString* currencyElements)
 {
-    fSymbols[kDecimalSeparatorSymbol] = numberElements[0];
-    fSymbols[kGroupingSeparatorSymbol] = numberElements[1];
-    fSymbols[kPatternSeparatorSymbol] = numberElements[2];
-    fSymbols[kPercentSymbol] = numberElements[3];
-    fSymbols[kZeroDigitSymbol] = numberElements[4];
-    fSymbols[kDigitSymbol] = numberElements[5];
-    fSymbols[kMinusSignSymbol] = numberElements[6];
+    fSymbols[kDecimalSeparatorSymbol].fastCopyFrom(numberElements[0]);
+    fSymbols[kGroupingSeparatorSymbol].fastCopyFrom(numberElements[1]);
+    fSymbols[kPatternSeparatorSymbol].fastCopyFrom(numberElements[2]);
+    fSymbols[kPercentSymbol].fastCopyFrom(numberElements[3]);
+    fSymbols[kZeroDigitSymbol].fastCopyFrom(numberElements[4]);
+    fSymbols[kDigitSymbol].fastCopyFrom(numberElements[5]);
+    fSymbols[kMinusSignSymbol].fastCopyFrom(numberElements[6]);
     fSymbols[kPlusSignSymbol] = (UChar)0x002b; // '+' Hard coded for now; get from resource later
-    fSymbols[kCurrencySymbol] = currencyElements[0];
-    fSymbols[kIntlCurrencySymbol] = currencyElements[1];
+    fSymbols[kCurrencySymbol].fastCopyFrom(currencyElements[0]);
+    fSymbols[kIntlCurrencySymbol].fastCopyFrom(currencyElements[1]);
 
     // if the resource data specified the empty string as the monetary decimal
     // separator, that means we should just use the regular separator as the
     // monetary separator
-    fSymbols[kMonetarySeparatorSymbol] =
+    fSymbols[kMonetarySeparatorSymbol].fastCopyFrom(
         currencyElements[2].length() > 0 ?
             currencyElements[2] :
-            fSymbols[kDecimalSeparatorSymbol];
+            fSymbols[kDecimalSeparatorSymbol]);
 
-    fSymbols[kExponentialSymbol] = numberElements[7];
-    fSymbols[kPerMillSymbol] = numberElements[8];
+    fSymbols[kExponentialSymbol].fastCopyFrom(numberElements[7]);
+    fSymbols[kPerMillSymbol].fastCopyFrom(numberElements[8]);
     fSymbols[kPadEscapeSymbol] = (UChar)0x002a; // '*' Hard coded for now; get from resource later
-    fSymbols[kInfinitySymbol] = numberElements[9];
-    fSymbols[kNaNSymbol] = numberElements[10];
+    fSymbols[kInfinitySymbol].fastCopyFrom(numberElements[9]);
+    fSymbols[kNaNSymbol].fastCopyFrom(numberElements[10]);
 }
 
 // initialize with default values

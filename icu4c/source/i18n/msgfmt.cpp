@@ -839,15 +839,10 @@ MessageFormat::format(const Formattable* arguments,
         return result;
     }
     
-    UnicodeString buffer;
-    
     int32_t lastOffset = 0;
     for (int32_t i = 0; i <= fMaxOffset;++i) {
-        // Cleans up the temp buffer for each formattable arguments.
-        buffer.remove();
         // Append the prefix of current format element.
-        fPattern.extract(lastOffset, fOffsets[i] - lastOffset, buffer);
-        result += buffer;
+        result.append(fPattern, lastOffset, fOffsets[i] - lastOffset);
         lastOffset = fOffsets[i];
         int32_t argumentNumber = fArgumentNumbers[i];
         // Checks the scope of the argument number.
@@ -861,73 +856,70 @@ MessageFormat::format(const Formattable* arguments,
             continue;
         }
 
-        Formattable obj = arguments[argumentNumber];
-        UnicodeString arg;
-        UBool tryRecursion = FALSE;
+        const Formattable *obj = arguments + argumentNumber;
+        Formattable::Type type = obj->getType();
+
         // Recursively calling the format process only if the current format argument
         // refers to a ChoiceFormat object.
         if (fFormats[i] != NULL) {
-            fFormats[i]->format(obj, arg, success);
-            tryRecursion = (fFormats[i]->getDynamicClassID() == ChoiceFormat::getStaticClassID());
+            UnicodeString arg;
+            fFormats[i]->format(*obj, arg, success);
+
+            // Needs to reprocess the ChoiceFormat option by using the MessageFormat
+            // pattern application.
+            if (fFormats[i]->getDynamicClassID() == ChoiceFormat::getStaticClassID() &&
+                arg.indexOf(LEFT_CURLY_BRACE) >= 0
+            ) {
+                MessageFormat temp(arg, fLocale, success);
+                temp.format(arguments, cnt, result, status, recursionProtection, success);
+                if (U_FAILURE(success)) { 
+                    return result; 
+                }
+            }
+            else {
+                result += arg;
+            }
         }
-        // If the obj data type if a number, use a NumberFormat instance.
-        else if ((obj.getType() == Formattable::kDouble) ||
-                 (obj.getType() == Formattable::kLong)) {
+        // If the obj data type is a number, use a NumberFormat instance.
+        else if ((type == Formattable::kDouble) || (type == Formattable::kLong)) {
             NumberFormat *numTemplate = NULL;
             numTemplate = NumberFormat::createInstance(fLocale, success);
-            if (U_FAILURE(success)) { 
+            if (numTemplate == NULL || U_FAILURE(success)) { 
                 delete numTemplate; 
                 return result; 
             }
-            numTemplate->format((obj.getType() == Formattable::kDouble) ? obj.getDouble() : obj.getLong(), arg);
+            if (type == Formattable::kDouble) {
+                numTemplate->format(obj->getDouble(), result);
+            } else {
+                numTemplate->format(obj->getLong(), result);
+            }
             delete numTemplate;
             if (U_FAILURE(success)) 
                 return result;
         }
         // If the obj data type is a Date instance, use a DateFormat instance.
-        else if (obj.getType() == Formattable::kDate) {
+        else if (type == Formattable::kDate) {
             DateFormat *dateTemplate = NULL;
             dateTemplate = DateFormat::createDateTimeInstance(DateFormat::kShort, DateFormat::kShort, fLocale);
-            dateTemplate->format(obj.getDate(), arg);
+            if (dateTemplate == NULL) { 
+                return result; 
+            }
+            dateTemplate->format(obj->getDate(), result);
             delete dateTemplate;
         }
-        else if (obj.getType() == Formattable::kString) {
-            obj.getString(arg);
+        else if (type == Formattable::kString) {
+            result += obj->getString();
         }
         else {
 #ifdef LIUDEBUG  
-            cerr << "Unknown object of type:" << obj.getType() << endl;
+            cerr << "Unknown object of type:" << type << endl;
 #endif
             success = U_ILLEGAL_ARGUMENT_ERROR;
             return result;
         }
-        // Needs to reprocess the ChoiceFormat option by using the MessageFormat
-        // pattern application.
-        if (tryRecursion && arg.indexOf(LEFT_CURLY_BRACE) >= 0) {
-            MessageFormat *temp = NULL;
-            temp = new MessageFormat(arg, fLocale, success);
-            /* test for NULL */
-            if (temp == 0) {
-                status = U_MEMORY_ALLOCATION_ERROR;
-                return result;
-            }
-            if (U_FAILURE(success)) 
-                return result;
-            temp->format(arguments, cnt, result, status, recursionProtection, success);
-            if (U_FAILURE(success)) { 
-                delete temp; 
-                return result; 
-            }
-            delete temp;
-        }
-        else {
-            result += arg;
-        }
     }
-    buffer.remove();
     // Appends the rest of the pattern characters after the real last offset.
-    fPattern.extract(lastOffset, fPattern.length(), buffer);
-    result += buffer;
+    result.append(fPattern, lastOffset, 0x7fffffff);
     return result;
 }
 

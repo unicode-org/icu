@@ -577,7 +577,7 @@ DecimalFormat::format(  double number,
         if (fieldPosition.getField() == NumberFormat::kIntegerField)
             fieldPosition.setBeginIndex(result.length());
 
-        result += fSymbols->getSymbol(DecimalFormatSymbols::kNaNSymbol);
+        result += getConstSymbol(DecimalFormatSymbols::kNaNSymbol);
 
         if (fieldPosition.getField() == NumberFormat::kIntegerField)
             fieldPosition.setEndIndex(result.length());
@@ -623,7 +623,7 @@ DecimalFormat::format(  double number,
         if (fieldPosition.getField() == NumberFormat::kIntegerField)
             fieldPosition.setBeginIndex(result.length());
 
-        result += fSymbols->getSymbol(DecimalFormatSymbols::kInfinitySymbol);
+        result += getConstSymbol(DecimalFormatSymbols::kInfinitySymbol);
 
         if (fieldPosition.getField() == NumberFormat::kIntegerField)
             fieldPosition.setEndIndex(result.length());
@@ -724,12 +724,15 @@ DecimalFormat::subformat(UnicodeString& result,
                          UBool         isInteger) const
 {
     // Gets the localized zero Unicode character.
-    UChar32 zero = fSymbols->getSymbol(DecimalFormatSymbols::kZeroDigitSymbol).char32At(0);
+    UChar32 zero = getConstSymbol(DecimalFormatSymbols::kZeroDigitSymbol).char32At(0);
     int32_t zeroDelta = zero - '0'; // '0' is the DigitList representation of zero
-    UnicodeString grouping(fSymbols->getSymbol(DecimalFormatSymbols::kGroupingSeparatorSymbol));
-    UnicodeString decimal(fIsCurrencyFormat ?
-        fSymbols->getSymbol(DecimalFormatSymbols::kMonetarySeparatorSymbol) :
-        fSymbols->getSymbol(DecimalFormatSymbols::kDecimalSeparatorSymbol));
+    const UnicodeString *grouping = &getConstSymbol(DecimalFormatSymbols::kGroupingSeparatorSymbol);
+    const UnicodeString *decimal;
+    if(fIsCurrencyFormat) {
+        decimal = &getConstSymbol(DecimalFormatSymbols::kMonetarySeparatorSymbol);
+    } else {
+        decimal = &getConstSymbol(DecimalFormatSymbols::kDecimalSeparatorSymbol);
+    }
     int32_t maxIntDig = getMaximumIntegerDigits();
     int32_t minIntDig = getMinimumIntegerDigits();
 
@@ -809,7 +812,7 @@ DecimalFormat::subformat(UnicodeString& result,
                 if (fieldPosition.getField() == NumberFormat::kIntegerField)
                     fieldPosition.setEndIndex(result.length());
 
-                result += (decimal);
+                result += *decimal;
 
                 // Record field information for caller.
                 if (fieldPosition.getField() == NumberFormat::kFractionField)
@@ -839,8 +842,8 @@ DecimalFormat::subformat(UnicodeString& result,
         // exponent digits.  There is no maximum limit to the exponent
         // digits, since truncating the exponent would result in an
         // unacceptable inaccuracy.
-        result += fSymbols->getSymbol(DecimalFormatSymbols::kExponentialSymbol);
-        
+        result += getConstSymbol(DecimalFormatSymbols::kExponentialSymbol);
+
         // For zero values, we force the exponent to zero.  We
         // must do this here, and not earlier, because the value
         // is used to determine integer digit count above.
@@ -848,9 +851,9 @@ DecimalFormat::subformat(UnicodeString& result,
             exponent = 0;
 
         if (exponent < 0) {
-            result += fSymbols->getSymbol(DecimalFormatSymbols::kMinusSignSymbol);
+            result += getConstSymbol(DecimalFormatSymbols::kMinusSignSymbol);
         } else if (fExponentSignAlwaysShown) {
-            result += fSymbols->getSymbol(DecimalFormatSymbols::kPlusSignSymbol);
+            result += getConstSymbol(DecimalFormatSymbols::kPlusSignSymbol);
         }
 
         DigitList expDigits;
@@ -908,7 +911,7 @@ DecimalFormat::subformat(UnicodeString& result,
 
             // Output grouping separator if necessary.
             if (isGroupingPosition(i)) {
-                result.append(grouping);
+                result.append(*grouping);
             }
         }
 
@@ -929,7 +932,7 @@ DecimalFormat::subformat(UnicodeString& result,
 
         // Output the decimal separator if we always do so.
         if (fDecimalSeparatorAlwaysShown || fractionPresent)
-            result += (decimal);
+            result += *decimal;
 
         // Record field information for caller.
         if (fieldPosition.getField() == NumberFormat::kFractionField)
@@ -1061,9 +1064,9 @@ DecimalFormat::parse(const UnicodeString& text,
 
     // special case NaN
     // If the text is composed of the representation of NaN, returns NaN.length
-    UnicodeString nan(fSymbols->getSymbol(DecimalFormatSymbols::kNaNSymbol));
-    int32_t nanLen = (text.compare(parsePosition.getIndex(), nan.length(), nan)
-        ? 0 : nan.length());
+    const UnicodeString *nan = &getConstSymbol(DecimalFormatSymbols::kNaNSymbol);
+    int32_t nanLen = (text.compare(parsePosition.getIndex(), nan->length(), *nan)
+        ? 0 : nan->length());
     if (nanLen) {
         parsePosition.setIndex(parsePosition.getIndex() + nanLen);
         result.setDouble(uprv_getNaN());
@@ -1175,9 +1178,9 @@ UBool DecimalFormat::subparse(const UnicodeString& text, ParsePosition& parsePos
     }
 
     // process digits or Inf, find decimal position
-    UnicodeString inf(fSymbols->getSymbol(DecimalFormatSymbols::kInfinitySymbol));
-    int32_t infLen = (text.compare(position, inf.length(), inf)
-        ? 0 : inf.length());
+    const UnicodeString *inf = &getConstSymbol(DecimalFormatSymbols::kInfinitySymbol);
+    int32_t infLen = (text.compare(position, inf->length(), *inf)
+        ? 0 : inf->length());
     position += infLen; // infLen is non-zero when it does equal to infinity
     status[fgStatusInfinite] = (UBool)infLen;
     if (!infLen)
@@ -1190,20 +1193,24 @@ UBool DecimalFormat::subparse(const UnicodeString& text, ParsePosition& parsePos
         // exponent as needed.
 
         digits.fDecimalAt = digits.fCount = 0;
-        UChar32 zero = fSymbols->getSymbol(DecimalFormatSymbols::kZeroDigitSymbol).char32At(0);
-        UnicodeString decimal(fIsCurrencyFormat
-            ? fSymbols->getSymbol(DecimalFormatSymbols::kMonetarySeparatorSymbol)
-            : fSymbols->getSymbol(DecimalFormatSymbols::kDecimalSeparatorSymbol));
-        UnicodeString grouping(fSymbols->getSymbol(DecimalFormatSymbols::kGroupingSeparatorSymbol));
-        UnicodeString exponentChar(fSymbols->getSymbol(DecimalFormatSymbols::kExponentialSymbol));
+        UChar32 zero = getConstSymbol(DecimalFormatSymbols::kZeroDigitSymbol).char32At(0);
+
+        const UnicodeString *decimal;
+        if(fIsCurrencyFormat) {
+            decimal = &getConstSymbol(DecimalFormatSymbols::kMonetarySeparatorSymbol);
+        } else {
+            decimal = &getConstSymbol(DecimalFormatSymbols::kDecimalSeparatorSymbol);
+        }
+        const UnicodeString *grouping = &getConstSymbol(DecimalFormatSymbols::kGroupingSeparatorSymbol);
+        const UnicodeString *exponentChar = &getConstSymbol(DecimalFormatSymbols::kExponentialSymbol);
         UBool sawDecimal = FALSE;
         UBool sawDigit = FALSE;
         int32_t backup = -1;
         UChar32 ch;
         int32_t digit;
         int32_t textLength = text.length(); // One less pointer to follow
-        int32_t groupingLen = grouping.length();
-        int32_t decimalLen = decimal.length();
+        int32_t groupingLen = grouping->length();
+        int32_t decimalLen = decimal->length();
 
         // We have to track digitCount ourselves, because digits.fCount will
         // pin when the maximum allowable digits is reached.
@@ -1262,14 +1269,14 @@ UBool DecimalFormat::subparse(const UnicodeString& text, ParsePosition& parsePos
                 }
                 // else ignore leading zeros in integer part of number.
             }
-            else if (!text.compare(position, groupingLen, grouping) && isGroupingUsed())
+            else if (!text.compare(position, groupingLen, *grouping) && isGroupingUsed())
             {
                 // Ignore grouping characters, if we are using them, but require
                 // that they be followed by a digit.  Otherwise we backup and
                 // reprocess them.
                 backup = position;
             }
-            else if (!text.compare(position, decimalLen, decimal) && !isParseIntegerOnly() && !sawDecimal)
+            else if (!text.compare(position, decimalLen, *decimal) && !isParseIntegerOnly() && !sawDecimal)
             {
                 // If we're only parsing integers, or if we ALREADY saw the
                 // decimal, then don't parse this one.
@@ -1277,57 +1284,59 @@ UBool DecimalFormat::subparse(const UnicodeString& text, ParsePosition& parsePos
                 digits.fDecimalAt = digitCount; // Not digits.fCount!
                 sawDecimal = TRUE;
             }
-            else if (!text.caseCompare(position,
-                fSymbols->getSymbol(DecimalFormatSymbols::kExponentialSymbol).length(),
-                fSymbols->getSymbol(DecimalFormatSymbols::kExponentialSymbol),
-                U_FOLD_CASE_DEFAULT))    // error code is set below if !sawDigit
-            {
-                // Parse sign, if present
-                int32_t pos = position + 1; // position + exponentSep.length();
-                DigitList exponentDigits;
-
-                if (pos < textLength)
+            else {
+                const UnicodeString *tmp;
+                tmp = &getConstSymbol(DecimalFormatSymbols::kExponentialSymbol);
+                if (!text.caseCompare(position, tmp->length(), *tmp, U_FOLD_CASE_DEFAULT))    // error code is set below if !sawDigit
                 {
-                    if (!text.compare(pos,
-                        fSymbols->getSymbol(DecimalFormatSymbols::kPlusSignSymbol).length(),
-                        fSymbols->getSymbol(DecimalFormatSymbols::kPlusSignSymbol)))
+                    // Parse sign, if present
+                    int32_t pos = position + 1; // position + exponentSep.length();
+                    DigitList exponentDigits;
+
+                    if (pos < textLength)
                     {
-                        ++pos;
+                        tmp = &getConstSymbol(DecimalFormatSymbols::kPlusSignSymbol);
+                        if (!text.compare(pos, tmp->length(), *tmp))
+                        {
+                            ++pos;
+                        }
+                        else {
+                            tmp = &getConstSymbol(DecimalFormatSymbols::kMinusSignSymbol);
+                            if (!text.compare(pos, tmp->length(), *tmp))
+                            {
+                                ++pos;
+                                exponentDigits.fIsPositive = FALSE;
+                            }
+                        }
                     }
-                    else if (!text.compare(pos,
-                        fSymbols->getSymbol(DecimalFormatSymbols::kMinusSignSymbol).length(),
-                        fSymbols->getSymbol(DecimalFormatSymbols::kMinusSignSymbol)))
-                    {
-                        ++pos;
-                        exponentDigits.fIsPositive = FALSE;
+
+                    while (pos < textLength) {
+                        ch = text[(int32_t)pos];
+                        digit = ch - zero;
+
+                        if (digit < 0 || digit > 9) {
+                            digit = u_charDigitValue(ch);
+                        }
+                        if (0 <= digit && digit <= 9) {
+                            ++pos;
+                            exponentDigits.append((char)(digit + '0'));
+                        } else {
+                            break;
+                        }
                     }
+
+                    if (exponentDigits.fCount > 0) {
+                        exponentDigits.fDecimalAt = exponentDigits.fCount;
+                        digits.fDecimalAt += exponentDigits.getLong();
+                        position = pos; // Advance past the exponent
+                    }
+
+                    break; // Whether we fail or succeed, we exit this loop
                 }
-
-                while (pos < textLength) {
-                    ch = text[(int32_t)pos];
-                    digit = ch - zero;
-
-                    if (digit < 0 || digit > 9) {
-                        digit = u_charDigitValue(ch);
-                    }
-                    if (0 <= digit && digit <= 9) {
-                        ++pos;
-                        exponentDigits.append((char)(digit + '0'));
-                    } else {
-                        break;
-                    }
+                else {
+                    break;
                 }
-
-                if (exponentDigits.fCount > 0) {
-                    exponentDigits.fDecimalAt = exponentDigits.fCount;
-                    digits.fDecimalAt += exponentDigits.getLong();
-                    position = pos; // Advance past the exponent
-                }
-
-                break; // Whether we fail or succeed, we exit this loop
             }
-            else
-                break;
         }
 
         if (backup != -1)
@@ -1458,10 +1467,11 @@ DecimalFormat::setCurrencyForSymbols() {
     UErrorCode ec = U_ZERO_ERROR;
     DecimalFormatSymbols def(fSymbols->getLocale(), ec);
 
-    if (fSymbols->getSymbol(DecimalFormatSymbols::kCurrencySymbol) ==
-        def.getSymbol(DecimalFormatSymbols::kCurrencySymbol) &&
-        fSymbols->getSymbol(DecimalFormatSymbols::kIntlCurrencySymbol) ==
-        def.getSymbol(DecimalFormatSymbols::kIntlCurrencySymbol)) {
+    if (getConstSymbol(DecimalFormatSymbols::kCurrencySymbol) ==
+        def.getConstSymbol(DecimalFormatSymbols::kCurrencySymbol) &&
+        getConstSymbol(DecimalFormatSymbols::kIntlCurrencySymbol) ==
+        def.getConstSymbol(DecimalFormatSymbols::kIntlCurrencySymbol)
+    ) {
         setCurrencyForLocale(fSymbols->getLocale().getName(), ec);
     } else {
         currency[0] = 0; // Use DFS currency info
@@ -1960,29 +1970,34 @@ void DecimalFormat::expandAffix(const UnicodeString& pattern,
                 if (intl) {
                     ++i;
                 }
-                UnicodeString s;
                 if (currency[0] != 0) {
                     UErrorCode ec = U_ZERO_ERROR;
-                    int32_t len;
-                    s = UnicodeString(intl ? currency
-                        : ucurr_getSymbol(currency, fSymbols->getLocale().getName(), &len, &ec));
+                    if(intl) {
+                        affix += currency;
+                    } else {
+                        int32_t len;
+                        affix += ucurr_getSymbol(currency, fSymbols->getLocale().getName(), &len, &ec);
+                    }
                 } else {
-                    s = intl ? fSymbols->getSymbol(DecimalFormatSymbols::kIntlCurrencySymbol)
-                        : fSymbols->getSymbol(DecimalFormatSymbols::kCurrencySymbol);
+                    if(intl) {
+                        affix += getConstSymbol(DecimalFormatSymbols::kIntlCurrencySymbol);
+                    } else {
+                        affix += getConstSymbol(DecimalFormatSymbols::kCurrencySymbol);
+                    }
                 }
-                affix += s; }
                 break;
+            }
             case kPatternPercent:
-                affix.append(fSymbols->getSymbol(DecimalFormatSymbols::kPercentSymbol));
+                affix += getConstSymbol(DecimalFormatSymbols::kPercentSymbol);
                 break;
             case kPatternPerMill:
-                affix.append(fSymbols->getSymbol(DecimalFormatSymbols::kPerMillSymbol));
+                affix += getConstSymbol(DecimalFormatSymbols::kPerMillSymbol);
                 break;
             case kPatternPlus:
-                affix.append(fSymbols->getSymbol(DecimalFormatSymbols::kPlusSignSymbol));
+                affix += getConstSymbol(DecimalFormatSymbols::kPlusSignSymbol);
                 break;
             case kPatternMinus:
-                affix.append(fSymbols->getSymbol(DecimalFormatSymbols::kMinusSignSymbol));
+                affix += getConstSymbol(DecimalFormatSymbols::kMinusSignSymbol);
                 break;
             default:
                 affix.append(c);
@@ -2044,16 +2059,16 @@ void DecimalFormat::appendAffix(UnicodeString& buffer,
             } else if (localized) {
                 switch (c) {
                 case kPatternPercent:
-                    buffer.append(fSymbols->getSymbol(DecimalFormatSymbols::kPercentSymbol));
+                    buffer += getConstSymbol(DecimalFormatSymbols::kPercentSymbol);
                     break;
                 case kPatternPerMill:
-                    buffer.append(fSymbols->getSymbol(DecimalFormatSymbols::kPerMillSymbol));
+                    buffer += getConstSymbol(DecimalFormatSymbols::kPerMillSymbol);
                     break;
                 case kPatternPlus:
-                    buffer.append(fSymbols->getSymbol(DecimalFormatSymbols::kPlusSignSymbol));
+                    buffer += getConstSymbol(DecimalFormatSymbols::kPlusSignSymbol);
                     break;
                 case kPatternMinus:
-                    buffer.append(fSymbols->getSymbol(DecimalFormatSymbols::kMinusSignSymbol));
+                    buffer += getConstSymbol(DecimalFormatSymbols::kMinusSignSymbol);
                     break;
                 default:
                     buffer.append(c);
@@ -2076,15 +2091,15 @@ DecimalFormat::appendAffix(    UnicodeString& buffer,
                             UBool localized) const {
     UBool needQuote;
     if(localized) {
-        needQuote = affix.indexOf(fSymbols->getSymbol(DecimalFormatSymbols::kZeroDigitSymbol)) >= 0
-            || affix.indexOf(fSymbols->getSymbol(DecimalFormatSymbols::kGroupingSeparatorSymbol)) >= 0
-            || affix.indexOf(fSymbols->getSymbol(DecimalFormatSymbols::kDecimalSeparatorSymbol)) >= 0
-            || affix.indexOf(fSymbols->getSymbol(DecimalFormatSymbols::kPercentSymbol)) >= 0
-            || affix.indexOf(fSymbols->getSymbol(DecimalFormatSymbols::kPerMillSymbol)) >= 0
-            || affix.indexOf(fSymbols->getSymbol(DecimalFormatSymbols::kDigitSymbol)) >= 0
-            || affix.indexOf(fSymbols->getSymbol(DecimalFormatSymbols::kPatternSeparatorSymbol)) >= 0
-            || affix.indexOf(fSymbols->getSymbol(DecimalFormatSymbols::kPlusSignSymbol)) >= 0
-            || affix.indexOf(fSymbols->getSymbol(DecimalFormatSymbols::kMinusSignSymbol)) >= 0
+        needQuote = affix.indexOf(getConstSymbol(DecimalFormatSymbols::kZeroDigitSymbol)) >= 0
+            || affix.indexOf(getConstSymbol(DecimalFormatSymbols::kGroupingSeparatorSymbol)) >= 0
+            || affix.indexOf(getConstSymbol(DecimalFormatSymbols::kDecimalSeparatorSymbol)) >= 0
+            || affix.indexOf(getConstSymbol(DecimalFormatSymbols::kPercentSymbol)) >= 0
+            || affix.indexOf(getConstSymbol(DecimalFormatSymbols::kPerMillSymbol)) >= 0
+            || affix.indexOf(getConstSymbol(DecimalFormatSymbols::kDigitSymbol)) >= 0
+            || affix.indexOf(getConstSymbol(DecimalFormatSymbols::kPatternSeparatorSymbol)) >= 0
+            || affix.indexOf(getConstSymbol(DecimalFormatSymbols::kPlusSignSymbol)) >= 0
+            || affix.indexOf(getConstSymbol(DecimalFormatSymbols::kMinusSignSymbol)) >= 0
             || affix.indexOf(kCurrencySign) >= 0;
     }
     else {
@@ -2131,8 +2146,7 @@ DecimalFormat::toPattern(UnicodeString& result, UBool localized) const
 {
     result.remove();
     UChar32 zero;
-    UnicodeString digit;
-    UnicodeString group;
+    UnicodeString digit, group;
     int32_t i;
     int32_t roundingDecimalPos = 0; // Pos of decimal in roundingDigits
     UnicodeString roundingDigits;
@@ -2140,9 +2154,9 @@ DecimalFormat::toPattern(UnicodeString& result, UBool localized) const
     UnicodeString padSpec;
 
     if (localized) {
-        digit = fSymbols->getSymbol(DecimalFormatSymbols::kDigitSymbol);
-        group = fSymbols->getSymbol(DecimalFormatSymbols::kGroupingSeparatorSymbol);
-        zero = fSymbols->getSymbol(DecimalFormatSymbols::kZeroDigitSymbol).char32At(0);
+        digit.append(getConstSymbol(DecimalFormatSymbols::kDigitSymbol));
+        group.append(getConstSymbol(DecimalFormatSymbols::kGroupingSeparatorSymbol));
+        zero = getConstSymbol(DecimalFormatSymbols::kZeroDigitSymbol).char32At(0);
     }
     else {
         digit.append((UChar)kPatternDigit);
@@ -2151,7 +2165,7 @@ DecimalFormat::toPattern(UnicodeString& result, UBool localized) const
     }
     if (fFormatWidth > 0) {
         if (localized) {
-            padSpec.append(fSymbols->getSymbol(DecimalFormatSymbols::kPadEscapeSymbol));
+            padSpec.append(getConstSymbol(DecimalFormatSymbols::kPadEscapeSymbol));
         }
         else {
             padSpec.append((UChar)kPatternPadEscape);
@@ -2204,7 +2218,7 @@ DecimalFormat::toPattern(UnicodeString& result, UBool localized) const
         }
         if (getMaximumFractionDigits() > 0 || fDecimalSeparatorAlwaysShown) {
             if (localized) {
-                result.append(fSymbols->getSymbol(DecimalFormatSymbols::kDecimalSeparatorSymbol));
+                result += getConstSymbol(DecimalFormatSymbols::kDecimalSeparatorSymbol);
             }
             else {
                 result.append((UChar)kPatternDecimalSeparator);
@@ -2231,14 +2245,14 @@ DecimalFormat::toPattern(UnicodeString& result, UBool localized) const
         }
         if (fUseExponentialNotation) {
             if (localized) {
-                result.append(fSymbols->getSymbol(DecimalFormatSymbols::kExponentialSymbol));
+                result += getConstSymbol(DecimalFormatSymbols::kExponentialSymbol);
             }
             else {
                 result.append((UChar)kPatternExponent);
             }
             if (fExponentSignAlwaysShown) {
                 if (localized) {
-                    result.append(fSymbols->getSymbol(DecimalFormatSymbols::kPlusSignSymbol));
+                    result += getConstSymbol(DecimalFormatSymbols::kPlusSignSymbol);
                 }
                 else {
                     result.append((UChar)kPatternPlus);
@@ -2293,7 +2307,7 @@ DecimalFormat::toPattern(UnicodeString& result, UBool localized) const
                 {
                     int32_t length = fPositivePrefix.length();
                     isDefault = fNegativePrefix.length() == (length+1) &&
-                        fNegativePrefix.compare(fSymbols->getSymbol(DecimalFormatSymbols::kMinusSignSymbol)) == 0 &&
+                        fNegativePrefix.compare(getConstSymbol(DecimalFormatSymbols::kMinusSignSymbol)) == 0 &&
                         fNegativePrefix.compare(1, length, fPositivePrefix, 0, length) == 0;
                 }
             }
@@ -2301,7 +2315,7 @@ DecimalFormat::toPattern(UnicodeString& result, UBool localized) const
                 break; // Don't output default negative subpattern
             } else {
                 if (localized) {
-                    result.append(fSymbols->getSymbol(DecimalFormatSymbols::kPatternSeparatorSymbol));
+                    result += getConstSymbol(DecimalFormatSymbols::kPatternSeparatorSymbol);
                 }
                 else {
                     result.append((UChar)kPatternSeparator);
@@ -2385,17 +2399,17 @@ DecimalFormat::applyPattern(const UnicodeString& pattern,
     UnicodeString padEscape         ((UChar)kPatternPadEscape);
     // Substitute with the localized symbols if necessary
     if (localized) {
-        zeroDigit         = fSymbols->getSymbol(DecimalFormatSymbols::kZeroDigitSymbol).char32At(0);
-        groupingSeparator = fSymbols->getSymbol(DecimalFormatSymbols::kGroupingSeparatorSymbol);
-        decimalSeparator  = fSymbols->getSymbol(DecimalFormatSymbols::kDecimalSeparatorSymbol);
-        percent           = fSymbols->getSymbol(DecimalFormatSymbols::kPercentSymbol);
-        perMill           = fSymbols->getSymbol(DecimalFormatSymbols::kPerMillSymbol);
-        digit             = fSymbols->getSymbol(DecimalFormatSymbols::kDigitSymbol);
-        separator         = fSymbols->getSymbol(DecimalFormatSymbols::kPatternSeparatorSymbol);
-        exponent          = fSymbols->getSymbol(DecimalFormatSymbols::kExponentialSymbol);
-        plus              = fSymbols->getSymbol(DecimalFormatSymbols::kPlusSignSymbol);
-        minus             = fSymbols->getSymbol(DecimalFormatSymbols::kMinusSignSymbol);
-        padEscape         = fSymbols->getSymbol(DecimalFormatSymbols::kPadEscapeSymbol);
+        zeroDigit = getConstSymbol(DecimalFormatSymbols::kZeroDigitSymbol).char32At(0);
+        groupingSeparator.  remove().append(getConstSymbol(DecimalFormatSymbols::kGroupingSeparatorSymbol));
+        decimalSeparator.   remove().append(getConstSymbol(DecimalFormatSymbols::kDecimalSeparatorSymbol));
+        percent.            remove().append(getConstSymbol(DecimalFormatSymbols::kPercentSymbol));
+        perMill.            remove().append(getConstSymbol(DecimalFormatSymbols::kPerMillSymbol));
+        digit.              remove().append(getConstSymbol(DecimalFormatSymbols::kDigitSymbol));
+        separator.          remove().append(getConstSymbol(DecimalFormatSymbols::kPatternSeparatorSymbol));
+        exponent.           remove().append(getConstSymbol(DecimalFormatSymbols::kExponentialSymbol));
+        plus.               remove().append(getConstSymbol(DecimalFormatSymbols::kPlusSignSymbol));
+        minus.              remove().append(getConstSymbol(DecimalFormatSymbols::kMinusSignSymbol));
+        padEscape.          remove().append(getConstSymbol(DecimalFormatSymbols::kPadEscapeSymbol));
     }
     UChar nineDigit = (UChar)(zeroDigit + 9);
     int32_t digitLen = digit.length();

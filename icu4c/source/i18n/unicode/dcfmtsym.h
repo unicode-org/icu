@@ -244,7 +244,45 @@ private:
 
     void setCurrencyForSymbols();
 
+    /**
+     * More efficient version of getSymbol, returning a const reference to one of the symbol strings.
+     * The returned reference becomes invalid when the symbol is changed
+     * or when the DecimalFormatSymbols are destroyed.
+     *
+     * @param symbol Constant to indicate a number format symbol.
+     * @return the format symbol by the param 'symbol'
+     * @internal
+     */
+    inline const UnicodeString &getConstSymbol(ENumberFormatSymbol symbol) const;
+
+    /**
+     * Just for getConstSymbol().
+     * ### TODO markus 2002oct11: Consider proposing getConstSymbol() to be public instead.
+     */
+    friend class DecimalFormat;
+
+    /**
+     * Private symbol strings.
+     * They are either loaded from a resource bundle or otherwise owned.
+     * setSymbol() clones the symbol string.
+     * Readonly aliases can only come from a resource bundle, so that we can always
+     * use fastCopyFrom() with them.
+     *
+     * If DecimalFormatSymbols becomes subclassable and the status of fSymbols changes
+     * from private to protected,
+     * or when fSymbols can be set any other way that allows them to be readonly aliases
+     * to non-resource bundle strings,
+     * then regular UnicodeString copies must be used instead of fastCopyFrom().
+     *
+     * @internal
+     */
     UnicodeString fSymbols[kFormatSymbolCount];
+
+    /**
+     * Non-symbol variable for getConstSymbol(). Always empty.
+     * @internal
+     */
+    UnicodeString fNoSymbol;
 
     Locale locale;
 
@@ -267,6 +305,15 @@ DecimalFormatSymbols::getSymbol(ENumberFormatSymbol symbol) const {
         return fSymbols[symbol];
     } else {
         return UnicodeString();
+    }
+}
+
+inline const UnicodeString &
+DecimalFormatSymbols::getConstSymbol(ENumberFormatSymbol symbol) const {
+    if(symbol<kFormatSymbolCount) {
+        return fSymbols[symbol];
+    } else {
+        return fNoSymbol;
     }
 }
 
