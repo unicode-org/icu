@@ -26,16 +26,32 @@
 #endif
 
 /**
- * Compare two strings in code point order.
+ * Bit mask for getting just the options from a string compare options word
+ * that are relevant for case-insensitive string comparison.
+ * See uchar.h. Also include _STRNCMP_STYLE and U_COMPARE_CODE_POINT_ORDER.
+ * @internal
+ */
+#define _STRCASECMP_OPTIONS_MASK 0xffff
+
+/**
+ * Bit mask for getting just the options from a string compare options word
+ * that are relevant for case folding (of a single string or code point).
+ * See uchar.h.
+ * @internal
+ */
+#define _FOLD_CASE_OPTIONS_MASK 0xff
+
+/**
+ * Compare two strings in code point order or code unit order.
  * Works in strcmp style (both lengths -1),
  * strncmp style (lengths equal and >=0, flag TRUE),
  * and memcmp/UnicodeString style (at least one length >=0).
  * @internal
  */
-U_CFUNC int32_t
-u_strCompareCodePointOrder(const UChar *s1, int32_t length1,
-                           const UChar *s2, int32_t length2,
-                           UBool strncmpStyle);
+U_CAPI int32_t U_EXPORT2
+u_strCompare(const UChar *s1, int32_t length1,
+             const UChar *s2, int32_t length2,
+             UBool strncmpStyle, UBool codePointOrder);
 
 /**
  * Are the Unicode properties loaded?
@@ -164,15 +180,6 @@ U_CAPI int32_t U_EXPORT2
 u_internalFoldCase(UChar32 c,
                    UChar *dest, int32_t destCapacity,
                    uint32_t options);
-
-/**
- * Internal case-insensitive string compare function.
- * @internal
- */
-U_CFUNC int32_t
-u_internalStrcasecmp(const UChar *s1, int32_t length1,
-                     const UChar *s2, int32_t length2,
-                     uint32_t options);
 
 /**
  * Get the default converter. This is a commonly used converter
