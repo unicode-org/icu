@@ -24,6 +24,7 @@
 #include "uvectr32.h"
 #include "regeximp.h"
 
+// #include <malloc.h>        // Needed for heapcheck testing
 
 U_NAMESPACE_BEGIN
 
@@ -167,7 +168,7 @@ RegexMatcher &RegexMatcher::appendReplacement(UnicodeString &dest,
             if (c==0x55/*U*/ || c==0x75/*u*/) {
                 // We have a \udddd or \Udddddddd escape sequence.
                 UChar32 escapedChar = replacement.unescapeAt(replIdx);
-                if (escapedChar != 0xFFFFFFFF) {
+                if (escapedChar != (UChar32)0xFFFFFFFF) {
                     dest.append(escapedChar);
                     replIdx += (c==0x55? 9: 5); 
                     // TODO:  Report errors for mal-formed \u escapes?
@@ -996,6 +997,12 @@ void RegexMatcher::MatchAt(int32_t startIdx, UErrorCode &status) {
                 U_ASSERT(opType == URX_STRING_LEN);
                 U_ASSERT(stringLen >= 2);
 
+                if (fp->fInputIdx + stringLen > inputLen) {
+                    // No match.  String is longer than the remaining input text.
+                    fp = (REStackFrame *)fStack->popFrame(frameSize);
+                    break;
+                }
+
                 const UChar * pInp = inputBuf + fp->fInputIdx;
                 const UChar * pPat = litText+stringStartIdx;
                 const UChar * pEnd = pInp + stringLen;
@@ -1035,7 +1042,7 @@ void RegexMatcher::MatchAt(int32_t startIdx, UErrorCode &status) {
         // Start and End Capture stack frame variables are layout out like this:
             //  fp->fExtra[opValue]  - The start of a completed capture group
             //             opValue+1 - The end   of a completed capture group
-            //             opValue+2 - the start of a capture group that end
+            //             opValue+2 - the start of a capture group whose end
             //                          has not yet been reached (and might not ever be).
         case URX_START_CAPTURE:
             U_ASSERT(opValue >= 0 && opValue < frameSize-3);
