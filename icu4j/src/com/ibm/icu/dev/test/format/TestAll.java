@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/format/TestAll.java,v $
- * $Date: 2003/02/05 05:45:16 $
- * $Revision: 1.2 $
+ * $Date: 2003/02/25 23:39:43 $
+ * $Revision: 1.3 $
  *
  *******************************************************************************
  */
@@ -49,6 +49,7 @@ public class TestAll extends TestGroup {
                 "IntlTestNumberFormat",
                 "IntlTestNumberFormatAPI",
                 "NumberFormatTest",
+                "NumberFormatRegistrationTest",
                 "NumberFormatRoundTripTest",
                 "NumberRegression",
                 "NumberFormatRegressionTest",
