@@ -110,7 +110,7 @@ void NameUnicodeTransliterator::handleTransliterate(Replaceable& text, UTransPos
             break;
 
         case 1: // after open delimiter
-            // Look for [-a-zA-Z0-9<>].  If \w+ is found, convert it
+            // Look for [-a-zA-Z0-9<>].  If \s+ is found, convert it
             // to a single space.  If closeDelimiter is found, exit
             // the loop.  If any other character is found, exit the
             // loop.  If the limit is found, exit the loop.
