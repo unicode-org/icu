@@ -1430,11 +1430,11 @@ U_CAPI uint8_t U_EXPORT2
 u_getCombiningClass(UChar32 c);
 
 /**
- * Retrives the decimal numeric value of a digit character.
+ * Returns the decimal numeric value of a digit character.
  *
- * @param c the digit character for which to get the numeric value
- * @return the numeric value of ch in decimal radix.  This method returns
- * -1 if ch is not a valid digit character.
+ * @param c the decimal digit character for which to get the numeric value
+ * @return the numeric value of c in decimal radix.  This method returns
+ * -1 if c is not a valid digit character.
  * @stable
  */
 U_CAPI int32_t U_EXPORT2
