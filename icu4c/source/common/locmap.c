@@ -620,8 +620,8 @@ T_convertToLCID(const char* posixID, UErrorCode* status)
 {
 
     uint32_t   low    = 0;
-    uint32_t   mid;
     uint32_t   high   = gLocaleCount - 1;
+    uint32_t   mid    = high;
     int32_t    compVal;
     char       langID[ULOC_FULLNAME_CAPACITY];
 
@@ -641,9 +641,10 @@ T_convertToLCID(const char* posixID, UErrorCode* status)
     }
 
     /*Binary search for the map entry for normal cases */
-    while (low <= high) {
+    /* When mid == 0, it's not found */
+    while (low <= high && mid != 0) {
 
-        mid = (low + high) / 2;
+        mid = (low + high + 1) / 2;    /* +1 is to round properly */
 
         compVal = uprv_strcmp(langID, gPosixIDmap[mid].regionMaps->posixID);
 
@@ -653,9 +654,6 @@ T_convertToLCID(const char* posixID, UErrorCode* status)
             low = mid + 1;
         else  /* found match! */
             return hostID(&gPosixIDmap[mid], posixID, status);
-
-        if (mid == 0)  /* not found */
-            break;
     }
 
     /*
