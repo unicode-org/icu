@@ -29,6 +29,7 @@ $ID = [:LineBreak =  Ideographic:];
 $IN = [:LineBreak =  Inseperable:];
 $IS = [:LineBreak =  Infix_Numeric:];
 $LF = [:LineBreak =  Line_Feed:];
+$NL = [:LineBreak =  Next_Line:];
 $NS = [:LineBreak =  Nonstarter:];
 $NU = [:LineBreak =  Numeric:];
 $OP = [:LineBreak =  Open_Punctuation:];
@@ -81,8 +82,7 @@ $INcm = $IN $Extend*;
 #              Because we never break before these things, $Endings
 #              appears at the end of line break rule.
 #
-$NLF = $BK | $CR | $LF | $CR $LF;
-#$Endings = $SP* $ZW* $NLF?;
+$NLF = $BK | $CR | $LF | $NL | $CR $LF;
 $EndingsSoft = $SP* $ZW*;
 $EndingsHard = $SP* $ZW* $NLF;
 
@@ -102,21 +102,24 @@ $Closings =  ($SP*( ($CL ($SP* $NScm)?  |  $EX  | $IS  | $SY) $Extend*) | $BAcm 
 #  Words.  Includes mixed Alpha-numerics.
 #          Rules 11a, 16, 17, 19, more or less.
 #
-$NumberInterior = $IDcm | ($NUcm | $ALcm | $IS $NUcm)+;  
-$Number         =  $PR? ($OPcm | $HYcm)? $NumberInterior $CL? $POcm?; # Fancy Number     18 
-$Word   = (($IDcm | ($ALcm | $NUcm)+) ($POcm? | $INcm?))  ;           # Alpha-numeric.   16, 17 
-$Dashes = (($B2cm $SP*)*);                                            # Dashes           11a   
+$Number         =  $PR? ($OPcm | $HYcm)? $NU ($NU | $IS)* $CL? $POcm?; # Numbers 
+                                                                       # Regex form, rather than rule 18
+                                                                       
+$Word   = (($IDcm | ($ALcm | $NUcm)+) ($POcm? | $INcm?))  ;            # Alpha-numeric.   16, 17 
+$Dashes = (($B2cm $SP*)*);                                             # Dashes           11a   
         
         
 
-
+$HYMinus = $HYcm ($NUcm ($NUcm | $IS)* $CL? $POcm?)?;       # For Rle LB15, Don't break before  Hypen-minus,
+                                                            #  we also need to match a whole number, if that
+                                                            #  is what follows the '-'
  
  
         
-$Word15 = ($BBcm* ($Word | $Number | $Dashes)? ($BAcm | $HYcm | $NScm)*) |  # Rule 15. Stuff sticks around words.
-          [^[:Cc:] $BK $CR $LF $ZW $SP $GL] $Extend*  |                 # Allow characters that don't meet the
-          [^$BK $CR $LF $ZW $SP $GL ];                                   #  more elaborate definitions for WORD
-                                                                    #  to be glued.
+$Word15 = ($BBcm* ($Word | $Number | $Dashes)? ($BAcm | $HYMinus | $NScm)*) |  # Rule 15. Stuff sticks around words.
+          $BBcm* [^[:Cc:] $BK $CR $LF $ZW $SP $GL ] $Extend*  |                 # Allow characters that don't meet the
+          $BBcm* [^$BK $CR $LF $ZW $SP $GL ];                                      #  more elaborate definitions for WORD
+                                                                            #  to be glued.
         
 $GluedWord  = ($GLcm | $QUcm)? $Word15 (($GLcm | $QUcm) $Word15)*;  # "Glue" will stick anything below it together.
                                                                     # Rules 13, 14
@@ -124,7 +127,6 @@ $GluedWord  = ($GLcm | $QUcm)? $Word15 (($GLcm | $QUcm) $Word15)*;  # "Glue" wil
 #
 #  The actual rule, a combination of everything defined above.
 #
-#$Openings $GluedWord  $Closings $Endings;
 $Openings $GluedWord  $Closings $EndingsSoft{0};
 $Openings $GluedWord  $Closings $EndingsHard{100};
 # $GluedWord;
