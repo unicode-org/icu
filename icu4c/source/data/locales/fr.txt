@@ -1,42 +1,2068 @@
-// ***************************************************************************
+﻿// ***************************************************************************
 // *
-// *   Copyright (C) 1997-2004, International Business Machines
-// *   Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2004 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Date & Time: 2004/8/20 7:7
+// * Source File: \work\locale\common\main\\fr.xml
 // *
 // ***************************************************************************
-
-fr {
-    Version{"2.0"}
-    calendar {
-        islamic{
-            //eras:array {
-            //        "AH"        // Anno Hijri  (in root)
-            //}
-            monthNames{
-                format{
-                    abbreviated:alias {  // same as MonthNames (no data)
-                        "fr/calendar/islamic/monthNames/format/wide"
-                    }
-                    wide {
-                        "Mouharram",            // Muharram
-                        "Safar",                // Safar
-                        "Rabi\u02bb-oul-Aououal",    // Rabi' al-awwal
-                        "Rabi\u02bb-out-Tani",       // Rabi' al-thani
-                        "Djoumada-l-Oula",      // Jumada al-awwal
-                        "Djoumada-t-Tania",     // Jumada al-thani
-                        "Radjab",               // Rajab
-                        "Cha\u02bbban",              // Sha'ban
-                        "Ramadan",              // Ramadan
-                        "Chaououal",            // Shawwal
-                        "Dou-l-Qa\u02bbda",          // Dhu al-Qi'dah
-                        "Dou-l-Hidjja",         // Dhu al-Hijjah
-                    }
-                }
-            }
+fr{
+    Countries{
+        AD{"Andorre"}
+        AE{"Émirats arabes unis"}
+        AF{"Afghanistan"}
+        AG{"Antigua-et-Barbuda"}
+        AI{"Anguilla"}
+        AL{"Albanie"}
+        AM{"Arménie"}
+        AN{"Antilles néerlandaises"}
+        AO{"Angola"}
+        AQ{"Antarctique"}
+        AR{"Argentine"}
+        AS{"Samoa américaines"}
+        AT{"Autriche"}
+        AU{"Australie"}
+        AW{"Aruba"}
+        AZ{"Azerbaïdjan"}
+        BA{"Bosnie-Herzégovine"}
+        BB{"Barbade"}
+        BD{"Bangladesh"}
+        BE{"Belgique"}
+        BF{"Burkina Faso"}
+        BG{"Bulgarie"}
+        BH{"Bahreïn"}
+        BI{"Burundi"}
+        BJ{"Benin"}
+        BM{"Bermudes"}
+        BN{"Brunei"}
+        BO{"Bolivie"}
+        BR{"Brésil"}
+        BS{"Bahamas"}
+        BT{"Bhoutan"}
+        BV{"Île Bouvet"}
+        BW{"Botswana"}
+        BY{"Bélarus"}
+        BZ{"Belize"}
+        CA{"Canada"}
+        CC{"Îles Cocos"}
+        CD{"République démocratique du Congo"}
+        CF{"République centrafricaine"}
+        CG{"Congo"}
+        CH{"Suisse"}
+        CI{"Côte d’Ivoire"}
+        CK{"Îles Cook"}
+        CL{"Chili"}
+        CM{"Cameroun"}
+        CN{"Chine"}
+        CO{"Colombie"}
+        CR{"Costa Rica"}
+        CU{"Cuba"}
+        CV{"Cap Vert"}
+        CX{"Île Christmas"}
+        CY{"Chypre"}
+        CZ{"République tchèque"}
+        DE{"Allemagne"}
+        DJ{"Djibouti"}
+        DK{"Danemark"}
+        DM{"Dominique"}
+        DO{"République dominicaine"}
+        DZ{"Algérie"}
+        EC{"Équateur"}
+        EE{"Estonie"}
+        EG{"Égypte"}
+        EH{"Sahara occidental"}
+        ER{"Érythrée"}
+        ES{"Espagne"}
+        ET{"Éthiopie"}
+        FI{"Finlande"}
+        FJ{"Fidji"}
+        FK{"Îles Falkland (Malvinas)"}
+        FM{"Micronésie"}
+        FO{"Îles Féroé"}
+        FR{"France"}
+        GA{"Gabon"}
+        GB{"Royaume-Uni"}
+        GD{"Grenade"}
+        GE{"Géorgie"}
+        GF{"Guyane française"}
+        GH{"Ghana"}
+        GI{"Gibraltar"}
+        GL{"Groenland"}
+        GM{"Gambie"}
+        GN{"Guinée"}
+        GP{"Guadeloupe"}
+        GQ{"Guinée équatoriale"}
+        GR{"Grèce"}
+        GS{"Géorgie du Sud, Îles Sandwich du Sud"}
+        GT{"Guatemala"}
+        GU{"Guam"}
+        GW{"Guinée-Bissau"}
+        GY{"Guyana"}
+        HK{"Hong-Kong R.A.S."}
+        HM{"Îles Heard et MacDonald"}
+        HN{"Honduras"}
+        HR{"Croatie"}
+        HT{"Haïti"}
+        HU{"Hongrie"}
+        ID{"Indonésie"}
+        IE{"Irlande"}
+        IL{"Israël"}
+        IN{"Inde"}
+        IO{"Territoire britannique de l’océan indien"}
+        IQ{"Iraq"}
+        IR{"Iran"}
+        IS{"Islande"}
+        IT{"Italie"}
+        JM{"Jamaïque"}
+        JO{"Jordanie"}
+        JP{"Japon"}
+        KE{"Kenya"}
+        KG{"Kirghizistan"}
+        KH{"Cambodge"}
+        KI{"Kiribati"}
+        KM{"Comores"}
+        KN{"Saint Kitts et Nevis"}
+        KP{"Corée du Nord"}
+        KR{"Corée du Sud"}
+        KW{"Koweït"}
+        KY{"Îles Caïmanes"}
+        KZ{"Kazakhstan"}
+        LA{"Laos"}
+        LB{"Liban"}
+        LC{"Sainte-Lucie"}
+        LI{"Liechtenstein"}
+        LK{"Sri Lanka"}
+        LR{"Libéria"}
+        LS{"Lesotho"}
+        LT{"Lithuanie"}
+        LU{"Luxembourg"}
+        LV{"Lettonie"}
+        LY{"Libye"}
+        MA{"Maroc"}
+        MC{"Monaco"}
+        MD{"Moldova"}
+        MG{"Madagascar"}
+        MH{"Îles Marshall"}
+        MK{"Macédoine"}
+        ML{"Mali"}
+        MM{"Myanmar"}
+        MN{"Mongolie"}
+        MO{"Macao R.A.S. de Chine"}
+        MP{"Îles Mariannes du Nord"}
+        MQ{"Martinique"}
+        MR{"Mauritanie"}
+        MS{"Montserrat"}
+        MT{"Malte"}
+        MU{"Maurice"}
+        MV{"Maldives"}
+        MW{"Malawi"}
+        MX{"Mexique"}
+        MY{"Malaisie"}
+        MZ{"Mozambique"}
+        NA{"Namibie"}
+        NC{"Nouvelle-Calédonie"}
+        NE{"Niger"}
+        NF{"Île Norfolk"}
+        NG{"Nigéria"}
+        NI{"Nicaragua"}
+        NL{"Pays-Bas"}
+        NO{"Norvège"}
+        NP{"Népal"}
+        NR{"Nauru"}
+        NU{"Niué"}
+        NZ{"Nouvelle-Zélande"}
+        OM{"Oman"}
+        PA{"Panama"}
+        PE{"Pérou"}
+        PF{"Polynésie française"}
+        PG{"Papouasie-Nouvelle-Guinée"}
+        PH{"Philippines"}
+        PK{"Pakistan"}
+        PL{"Pologne"}
+        PM{"Saint-Pierre-et-Miquelon"}
+        PN{"Pitcairn"}
+        PR{"Porto Rico"}
+        PS{"Territoire palestinien"}
+        PT{"Portugal"}
+        PW{"Palaos"}
+        PY{"Paraguay"}
+        QA{"Qatar"}
+        RE{"Réunion"}
+        RO{"Roumanie"}
+        RU{"Russie"}
+        RW{"Rwanda"}
+        SA{"Arabie saoudite"}
+        SB{"Îles Salomon"}
+        SC{"Seychelles"}
+        SD{"Soudan"}
+        SE{"Suède"}
+        SG{"Singapour"}
+        SH{"Sainte-Hélène"}
+        SI{"Slovénie"}
+        SJ{"Svalbard et Île Jan Mayen"}
+        SK{"Slovaquie"}
+        SL{"Sierra Leone"}
+        SM{"Saint-Marin"}
+        SN{"Sénégal"}
+        SO{"Somalie"}
+        SP{"Serbie"}
+        SR{"Suriname"}
+        ST{"Sao Tomé-et-Principe"}
+        SV{"El Salvador"}
+        SY{"Syrie"}
+        SZ{"Swaziland"}
+        TC{"Îles Turks et Caïques"}
+        TD{"Tchad"}
+        TF{"Terres australes françaises"}
+        TG{"Togo"}
+        TH{"Thaïlande"}
+        TJ{"Tadjikistan"}
+        TK{"Tokelau"}
+        TL{"Timor-Leste"}
+        TM{"Turkmenistan"}
+        TN{"Tunisie"}
+        TO{"Tonga"}
+        TR{"Turquie"}
+        TT{"Trinité-et-Tobago"}
+        TV{"Tuvalu"}
+        TW{"Taïwan"}
+        TZ{"Tanzanie"}
+        UA{"Ukraine"}
+        UG{"Ouganda"}
+        UM{"Îles Mineures Éloignées des États-Unis"}
+        US{"États-Unis"}
+        UY{"Uruguay"}
+        UZ{"Ouzbékistan"}
+        VA{"Saint-Siège (Etat de la Cité du Vatican)"}
+        VC{"Saint-Vincent-et-les Grenadines"}
+        VE{"Vénézuela"}
+        VG{"Îles Vierges Britanniques"}
+        VI{"Îles Vierges des États-Unis"}
+        VN{"Viet Nam"}
+        VU{"Vanuatu"}
+        WF{"Wallis et Futuna"}
+        WS{"Samoa"}
+        YE{"Yémen"}
+        YT{"Mayotte"}
+        YU{"Yougoslavie"}
+        ZA{"Afrique du Sud"}
+        ZM{"Zambie"}
+        ZW{"Zimbabwe"}
+    }
+    Currencies{
+        ADD{
+            "ADD",
+            "diner andorran",
         }
-        islamic-civil:alias{
-            "fr/calendar/islamic"
+        ADP{
+            "ADP",
+            "peseta andorrane",
         }
+        AED{
+            "AED",
+            "dirham des Émirats arabes unis",
+        }
+        AFA{
+            "AFA",
+            "afghani",
+        }
+        AFN{
+            "Af",
+            "afghani",
+        }
+        AIF{
+            "AIF",
+            "franc Affars et Issas",
+        }
+        ALK{
+            "ALK",
+            "lek albanais (1946-1961)",
+        }
+        ALL{
+            "lek",
+            "lek albanais",
+        }
+        ALV{
+            "ALV",
+            "Albanian Lek Valute",
+        }
+        ALX{
+            "ALX",
+            "dollar albanais (certificat de devises étrangères)",
+        }
+        AMD{
+            "dram",
+            "dram arménien",
+        }
+        ANG{
+            "ANG",
+            "florin des Antilles néerl.",
+        }
+        AOA{
+            "AOA",
+            "kwanza angolais",
+        }
+        AOK{
+            "AOK",
+            "kwanza angolais (1977-1990)",
+        }
+        AON{
+            "AON",
+            "nouveau kwanza angolais (1990-2000)",
+        }
+        AOR{
+            "AOR",
+            "kwanza angolais réajusté (1995-1999)",
+        }
+        AOS{
+            "AOS",
+            "escudo angolais",
+        }
+        ARA{
+            "ARA",
+            "austral",
+        }
+        ARM{
+            "ARM",
+            "Argentine Peso Moneda Nacional",
+        }
+        ARP{
+            "ARP",
+            "peso argentin (1983-1985)",
+        }
+        ARS{
+            "Arg$",
+            "peso argentin",
+        }
+        ATS{
+            "ATS",
+            "schilling autrichien",
+        }
+        AUD{
+            "AUD",
+            "dollar australien",
+        }
+        AUP{
+            "AUP",
+            "livre australienne",
+        }
+        AWG{
+            "AWG",
+            "florin d’Aruba",
+        }
+        AZM{
+            "AZM",
+            "Azerbaijanian Manat",
+        }
+        BAD{
+            "BAD",
+            "dinar de Bosnie-Herzegovine",
+        }
+        BAM{
+            "KM",
+            "mark convertible de Bosnie-Herzegovine",
+        }
+        BAN{
+            "BAN",
+            "nouveau dinar de Bosnie-Herzegovine",
+        }
+        BBD{
+            "BBD",
+            "dollar de Barbade",
+        }
+        BDT{
+            "BDT",
+            "taka",
+        }
+        BEC{
+            "BEC",
+            "franc belge (convertible)",
+        }
+        BEF{
+            "FB",
+            "franc belge",
+        }
+        BEL{
+            "BEL",
+            "franc belge (financier)",
+        }
+        BGL{
+            "BGL",
+            "lev",
+        }
+        BGM{
+            "BGM",
+            "lev de Bulgarie socialiste",
+        }
+        BGN{
+            "BGN",
+            "nouveau lef",
+        }
+        BGO{
+            "BGO",
+            "lev (1879-1952)",
+        }
+        BGX{
+            "BGX",
+            "lev (certificat de devises étrangères)",
+        }
+        BHD{
+            "BHD",
+            "dinar de Bahrein",
+        }
+        BIF{
+            "BIF",
+            "franc du Burundi",
+        }
+        BMD{
+            "BMD",
+            "dollar des Bermudes",
+        }
+        BMP{
+            "BMP",
+            "livre des Bermudes",
+        }
+        BND{
+            "BND",
+            "dollar de Brunei",
+        }
+        BOB{
+            "Bs",
+            "boliviano",
+        }
+        BOL{
+            "BOL",
+            "boliviano (1863-1962)",
+        }
+        BOP{
+            "BOP",
+            "peso bolivien",
+        }
+        BOV{
+            "BOV",
+            "Bolivian Mvdol",
+        }
+        BRB{
+            "BRB",
+            "nouveau cruzeiro (1967-1986)",
+        }
+        BRC{
+            "BRC",
+            "cruzeiro",
+        }
+        BRE{
+            "BRE",
+            "cruzeiro (1990-1993)",
+        }
+        BRL{
+            "R$",
+            "réal",
+        }
+        BRN{
+            "BRN",
+            "nouveau cruzado",
+        }
+        BRR{
+            "BRR",
+            "cruzeiro",
+        }
+        BRZ{
+            "BRZ",
+            "cruzeiro (1942-1967)",
+        }
+        BSD{
+            "BSD",
+            "dollar des Bahamas",
+        }
+        BSP{
+            "BSP",
+            "livre des Bahamas",
+        }
+        BTN{
+            "Nu",
+            "ngultrum",
+        }
+        BTR{
+            "BTR",
+            "roupie de Bhoutan",
+        }
+        BUK{
+            "BUK",
+            "kyat",
+        }
+        BUR{
+            "BUR",
+            "roupie de Birmanie",
+        }
+        BWP{
+            "BWP",
+            "pula",
+        }
+        BYB{
+            "BYB",
+            "nouveau rouble biélorusse (1994-1999)",
+        }
+        BYL{
+            "BYL",
+            "rouble biélorusse (1992-1994)",
+        }
+        BYR{
+            "Rbl",
+            "rouble biélorusse",
+        }
+        BZD{
+            "BZD",
+            "dollar de Bélize",
+        }
+        BZH{
+            "BZH",
+            "dollar du Honduras britannique",
+        }
+        CAD{
+            "CAD",
+            "dollar canadien",
+        }
+        CDF{
+            "CDF",
+            "franc congolais",
+        }
+        CDG{
+            "CDG",
+            "franc de la République Congolaise",
+        }
+        CDL{
+            "CDL",
+            "Congolese Zaire",
+        }
+        CFF{
+            "CFF",
+            "franc CFA de la République du Centre Afrique",
+        }
+        CHF{
+            "sFr.",
+            "franc suisse",
+        }
+        CKD{
+            "CKD",
+            "dollar des îles Cook",
+        }
+        CLC{
+            "CLC",
+            "condor chilien",
+        }
+        CLE{
+            "CLE",
+            "escudo chilien",
+        }
+        CLF{
+            "CLF",
+            "Chilean Unidades de Fomento",
+        }
+        CLP{
+            "CLP",
+            "peso chilien",
+        }
+        CMF{
+            "CMF",
+            "franc CFA camerounais",
+        }
+        CNP{
+            "CNP",
+            "Chinese Jen Min Piao Yuan",
+        }
+        CNX{
+            "CNX",
+            "dollar US chinois (certificat de devises étrangères)",
+        }
+        CNY{
+            "CNY",
+            "Yuan Ren-min-bi",
+        }
+        COB{
+            "COB",
+            "Colombian Paper Peso",
+        }
+        COF{
+            "COF",
+            "franc CFA congolais",
+        }
+        COP{
+            "COP",
+            "peso colombien",
+        }
+        CRC{
+            "CRC",
+            "colon",
+        }
+        CSC{
+            "CSC",
+            "couronne tchèque",
+        }
+        CSK{
+            "CSK",
+            "couronne tchèque",
+        }
+        CUP{
+            "CUP",
+            "peso cubain",
+        }
+        CUX{
+            "CUX",
+            "certificat de devises étrangères de Cuba",
+        }
+        CVE{
+            "CVE",
+            "escudo du Cap-Vert",
+        }
+        CWG{
+            "CWG",
+            "florin de Curacao",
+        }
+        CYP{
+            "CYP",
+            "livre cypriote",
+        }
+        CZK{
+            "CZK",
+            "couronne tchèque",
+        }
+        DDM{
+            "DDM",
+            "mark est-allemand",
+        }
+        DEM{
+            "DEM",
+            "deutsche mark",
+        }
+        DES{
+            "DES",
+            "sperrmark allemand",
+        }
+        DJF{
+            "DF",
+            "franc de Djibouti",
+        }
+        DKK{
+            "DKK",
+            "couronne danoise",
+        }
+        DOP{
+            "DOP",
+            "peso dominicain",
+        }
+        DZD{
+            "DZD",
+            "dinar algérien",
+        }
+        DZF{
+            "DZF",
+            "nouveau franc algérien",
+        }
+        DZG{
+            "DZG",
+            "franc germinal algérien",
+        }
+        ECS{
+            "ECS",
+            "sucre",
+        }
+        ECV{
+            "ECV",
+            "unité de valeur constante équatoriale (UVC)",
+        }
+        EEK{
+            "EEK",
+            "couronne estonienne",
+        }
+        EGP{
+            "EGP",
+            "livre égyptienne",
+        }
+        ERN{
+            "ERN",
+            "Eritrean Nakfa",
+        }
+        ESP{
+            "ESP",
+            "peseta espagnole",
+        }
+        ETB{
+            "ETB",
+            "birr",
+        }
+        ETD{
+            "ETD",
+            "dollar éthiopien",
+        }
+        EUR{
+            "€",
+            "euro",
+        }
+        FIM{
+            "FIM",
+            "mark finlandais",
+        }
+        FIN{
+            "FIN",
+            "mark finlandais (1860-1962)",
+        }
+        FJD{
+            "FJD",
+            "dollar de Fidji",
+        }
+        FJP{
+            "FJP",
+            "livre de Fiji",
+        }
+        FKP{
+            "FKP",
+            "livre des Falkland (Malvinas)",
+        }
+        FOK{
+            "FOK",
+            "Faeroe Islands Kronur",
+        }
+        FRF{
+            "F",
+            "franc français",
+        }
+        FRG{
+            "FRG",
+            "franc germinal/franc Poincaré",
+        }
+        GAF{
+            "GAF",
+            "franc CFA gabonnais",
+        }
+        GBP{
+            "£",
+            "livre sterling",
+        }
+        GEK{
+            "GEK",
+            "Georgian Kupon Larit",
+        }
+        GEL{
+            "lari",
+            "lari",
+        }
+        GHC{
+            "GHC",
+            "cédi",
+        }
+        GHO{
+            "GHO",
+            "ancien cedi",
+        }
+        GHP{
+            "GHP",
+            "livre ghanéenne",
+        }
+        GHR{
+            "GHR",
+            "cedi revalorisé",
+        }
+        GIP{
+            "GIP",
+            "livre de Gibraltar",
+        }
+        GLK{
+            "GLK",
+            "couronne du Groenland",
+        }
+        GMD{
+            "GMD",
+            "dalasie",
+        }
+        GMP{
+            "GMP",
+            "livre de Gambie",
+        }
+        GNF{
+            "GF",
+            "franc guinéen",
+        }
+        GNI{
+            "GNI",
+            "franc guinéen (1960-1972)",
+        }
+        GNS{
+            "GNS",
+            "syli",
+        }
+        GPF{
+            "GPF",
+            "franc guadeloupéen",
+        }
+        GQE{
+            "GQE",
+            "ekwélé",
+        }
+        GQF{
+            "GQF",
+            "franco de Guinée Equatoriale",
+        }
+        GQP{
+            "GQP",
+            "peseta de Guinée Equatoriale",
+        }
+        GRD{
+            "GRD",
+            "drachme",
+        }
+        GRN{
+            "GRN",
+            "nouveau drachme",
+        }
+        GTQ{
+            "GTQ",
+            "quetzal",
+        }
+        GUF{
+            "GUF",
+            "franc guyanais",
+        }
+        GWE{
+            "GWE",
+            "Escudo de Guinée Portugaise",
+        }
+        GWM{
+            "GWM",
+            "Portuguese Guinea Mil Reis",
+        }
+        GWP{
+            "GWP",
+            "peso de Guinée-Bissau",
+        }
+        GYD{
+            "G$",
+            "dollar de Guyane",
+        }
+        HKD{
+            "HKD",
+            "dollar de Hong Kong",
+        }
+        HNL{
+            "HNL",
+            "lempira",
+        }
+        HRD{
+            "HRD",
+            "dinar croate",
+        }
+        HRK{
+            "HRK",
+            "kuna",
+        }
+        HTG{
+            "HTG",
+            "gourde",
+        }
+        HUF{
+            "HUF",
+            "forint",
+        }
+        IBP{
+            "IBP",
+            "livre d’Irlande du Nord",
+        }
+        IDG{
+            "IDG",
+            "florin de Nica",
+        }
+        IDJ{
+            "IDJ",
+            "roupie de Java",
+        }
+        IDN{
+            "IDN",
+            "nouvelle roupie indonésienne",
+        }
+        IDR{
+            "IDR",
+            "rupiah",
+        }
+        IEP{
+            "IEP",
+            "livre irlandaise",
+        }
+        ILL{
+            "ILL",
+            "shékel",
+        }
+        ILP{
+            "ILP",
+            "livre israélienne",
+        }
+        ILS{
+            "ILS",
+            "shékel",
+        }
+        IMP{
+            "IMP",
+            "livre sterling de l’Ile de Man",
+        }
+        INR{
+            "=0#Rs.|1#Re.|1<Rs.",
+            "roupie indienne",
+        }
+        IQD{
+            "IQD",
+            "dinar irakien",
+        }
+        IRR{
+            "IRR",
+            "rial iranien",
+        }
+        ISK{
+            "ISK",
+            "couronne islandaise",
+        }
+        ITL{
+            "₤",
+            "lire italienne",
+        }
+        JEP{
+            "JEP",
+            "livre sterling de Jersey",
+        }
+        JMD{
+            "JMD",
+            "dollar jamaïcain",
+        }
+        JMP{
+            "JMP",
+            "livre jamaïcaine",
+        }
+        JOD{
+            "JOD",
+            "dinar jordanien",
+        }
+        JPY{
+            "¥",
+            "yen",
+        }
+        KES{
+            "KES",
+            "shilling du Kenya",
+        }
+        KGS{
+            "som",
+            "som du Kyrgystan",
+        }
+        KHO{
+            "KHO",
+            "vieux riel",
+        }
+        KHR{
+            "KHR",
+            "riel",
+        }
+        KID{
+            "KID",
+            "dollar de Kiribati",
+        }
+        KMF{
+            "KMF",
+            "franc des Comores",
+        }
+        KPP{
+            "KPP",
+            "won du peuple nord-coréen",
+        }
+        KPW{
+            "KPW",
+            "won nord-coréen",
+        }
+        KRH{
+            "KRH",
+            "hwan",
+        }
+        KRO{
+            "KRO",
+            "vieux won",
+        }
+        KRW{
+            "KRW",
+            "won sud-coréen",
+        }
+        KWD{
+            "KWD",
+            "dinar koweitien",
+        }
+        KYD{
+            "KYD",
+            "dollar des îles Caïmans",
+        }
+        KZR{
+            "KZR",
+            "rouble du Kazakhstan",
+        }
+        KZT{
+            "T",
+            "tenge du Kazakhstan",
+        }
+        LAK{
+            "LAK",
+            "kip",
+        }
+        LBP{
+            "LBP",
+            "livre libanaise",
+        }
+        LIF{
+            "LIF",
+            "franc du Liechtenstein",
+        }
+        LKR{
+            "LKR",
+            "roupie de Sri Lanka",
+        }
+        LNR{
+            "LNR",
+            "roupie de Ceylan",
+        }
+        LRD{
+            "LRD",
+            "dollar libérien",
+        }
+        LSL{
+            "M",
+            "Lesotho Loti",
+        }
+        LTL{
+            "LTL",
+            "Lita de Lithuanian",
+        }
+        LTT{
+            "LTT",
+            "Talonas de Lithuanie",
+        }
+        LUF{
+            "LUF",
+            "franc luxembourgeois",
+        }
+        LVL{
+            "LVL",
+            "lats letton",
+        }
+        LVR{
+            "LVR",
+            "rouble letton",
+        }
+        LYB{
+            "LYB",
+            "lire de l’autorié militaire britannique de Libye",
+        }
+        LYD{
+            "LD",
+            "dinar Iibyen",
+        }
+        LYP{
+            "LYP",
+            "livre libyenne",
+        }
+        MAD{
+            "MAD",
+            "dirham marocain",
+        }
+        MAF{
+            "MAF",
+            "franc marocain",
+        }
+        MCF{
+            "MCF",
+            "nouveau franc marocain",
+        }
+        MCG{
+            "MCG",
+            "franc Germinal monégasque",
+        }
+        MDC{
+            "MDC",
+            "Moldovan Leu Cupon",
+        }
+        MDL{
+            "MDL",
+            "leu moldave",
+        }
+        MDR{
+            "MDR",
+            "rouble moldave",
+        }
+        MGA{
+            "MGA",
+            "ariary malgache",
+        }
+        MGF{
+            "MGF",
+            "franc malgache",
+        }
+        MHD{
+            "MHD",
+            "dollar des  îles Marshall",
+        }
+        MKD{
+            "MDen",
+            "dinar macédonien",
+        }
+        MKN{
+            "MKN",
+            "dinar macédonien (1992-1993)",
+        }
+        MLF{
+            "MLF",
+            "franc malien",
+        }
+        MMK{
+            "MMK",
+            "Myanmar Kyat",
+        }
+        MMX{
+            "MMX",
+            "dollar de Myanmar (certificat de devises étrangères)",
+        }
+        MNT{
+            "MNT",
+            "tugrik",
+        }
+        MOP{
+            "MOP",
+            "pataca",
+        }
+        MQF{
+            "MQF",
+            "franc martiniquais",
+        }
+        MRO{
+            "MRO",
+            "ouguija",
+        }
+        MTL{
+            "Lm",
+            "lire maltaise",
+        }
+        MTP{
+            "MTP",
+            "livre maltaise",
+        }
+        MUR{
+            "MUR",
+            "roupie de l’île Maurice",
+        }
+        MVP{
+            "MVP",
+            "roupie des Maldives",
+        }
+        MVR{
+            "MVR",
+            "roupie des Maldives",
+        }
+        MWK{
+            "MWK",
+            "kwacha",
+        }
+        MWP{
+            "MWP",
+            "livre de Malawi",
+        }
+        MXP{
+            "MXP",
+            "peso d’argent mexicain (1861-1992)",
+        }
+        MXV{
+            "MXV",
+            "unité de conversion mexicaine (UDI)",
+        }
+        MYR{
+            "MYR",
+            "ringgit",
+        }
+        MZE{
+            "MZE",
+            "escudo du Mozambique",
+        }
+        MZM{
+            "MZM",
+            "métical",
+        }
+        NAD{
+            "N$",
+            "dollar de Namibie",
+        }
+        NCF{
+            "NCF",
+            "franc Germinal de Nouvelle Calédonie",
+        }
+        NGN{
+            "NGN",
+            "naira",
+        }
+        NGP{
+            "NGP",
+            "livre nigériane",
+        }
+        NHF{
+            "NHF",
+            "franc CFP des Nouvelles Hébrides",
+        }
+        NIC{
+            "NIC",
+            "cordoba",
+        }
+        NIG{
+            "NIG",
+            "cordoba d’or",
+        }
+        NIO{
+            "NIO",
+            "cordoba d’or",
+        }
+        NLG{
+            "NLG",
+            "florin néerlandais",
+        }
+        NOK{
+            "NOK",
+            "couronne norvégienne",
+        }
+        NPR{
+            "NPR",
+            "roupie du Népal",
+        }
+        NZD{
+            "NZD",
+            "dollar néo-zélandais",
+        }
+        NZP{
+            "NZP",
+            "livre néo-zélandaise",
+        }
+        OMR{
+            "OMR",
+            "rial omani",
+        }
+        OMS{
+            "OMS",
+            "Oman Rial Saidi",
+        }
+        PAB{
+            "PAB",
+            "balboa",
+        }
+        PDK{
+            "PDK",
+            "Transdniestria Ruble Kupon",
+        }
+        PDN{
+            "PDN",
+            "nouveau rouble moldave",
+        }
+        PDR{
+            "PDR",
+            "rouble moldave",
+        }
+        PEI{
+            "PEI",
+            "Inti péruvien",
+        }
+        PEN{
+            "PEN",
+            "nouveau sol péruvien",
+        }
+        PES{
+            "PES",
+            "sol péruvien",
+        }
+        PGK{
+            "PGK",
+            "kina",
+        }
+        PHP{
+            "PHP",
+            "peso philippin",
+        }
+        PKR{
+            "PKR",
+            "roupie du Pakistan",
+        }
+        PLX{
+            "PLX",
+            "dollar US polonais (certificat de devises étrangères)",
+        }
+        PLZ{
+            "PLZ",
+            "zloty (1950-1995)",
+        }
+        PSP{
+            "PSP",
+            "livre palestinienne",
+        }
+        PTC{
+            "PTC",
+            "conto portugais",
+        }
+        PTE{
+            "PTE",
+            "escudo portugais",
+        }
+        PYG{
+            "PYG",
+            "guarani",
+        }
+        QAR{
+            "QAR",
+            "rial du Qatar",
+        }
+        REF{
+            "REF",
+            "franc de la Réunion",
+        }
+        ROL{
+            "ROL",
+            "leu",
+        }
+        RON{
+            "RON",
+            "nouveau leu",
+        }
+        RUR{
+            "RUR",
+            "rouble de Russie (1991-1998)",
+        }
+        RWF{
+            "RWF",
+            "franc du Rwanda",
+        }
+        SAR{
+            "SAR",
+            "riyal séoudien",
+        }
+        SAS{
+            "SAS",
+            "riyal saoudien",
+        }
+        SBD{
+            "SBD",
+            "dollar de Salomon",
+        }
+        SCR{
+            "SCR",
+            "roupie des Seychelles",
+        }
+        SDD{
+            "SDD",
+            "dinar soudanais",
+        }
+        SDP{
+            "SDP",
+            "livre soudanaise",
+        }
+        SEK{
+            "SEK",
+            "couronne suédoise",
+        }
+        SGD{
+            "SGD",
+            "dollar de Singapour",
+        }
+        SHP{
+            "SHP",
+            "livre de Sainte-Hélène",
+        }
+        SIB{
+            "SIB",
+            "bons de tolar slovène",
+        }
+        SIT{
+            "SIT",
+            "tolar slovène",
+        }
+        SKK{
+            "SKK",
+            "couronne slovaque",
+        }
+        SLL{
+            "SLL",
+            "léone",
+        }
+        SML{
+            "SML",
+            "lire de Saint-Marin",
+        }
+        SOS{
+            "SOS",
+            "shilling de Somalie",
+        }
+        SQS{
+            "SQS",
+            "shilling de Somalie",
+        }
+        SRG{
+            "SRG",
+            "florin du Surinam",
+        }
+        SSP{
+            "SSP",
+            "livre écossaise",
+        }
+        STD{
+            "STD",
+            "dobra",
+        }
+        STE{
+            "STE",
+            "escudo de Sao Tomé et Principe",
+        }
+        SUN{
+            "SUN",
+            "nouveau rouble soviétique",
+        }
+        SUR{
+            "SUR",
+            "rouble de C.E.I.",
+        }
+        SVC{
+            "SVC",
+            "colon",
+        }
+        SYP{
+            "SYP",
+            "livre syrienne",
+        }
+        SZL{
+            "SZL",
+            "lilangeni",
+        }
+        TCC{
+            "TCC",
+            "couronne des îles Turks et Caïques",
+        }
+        TDF{
+            "TDF",
+            "franc CFA du Tchad",
+        }
+        THB{
+            "THB",
+            "baht",
+        }
+        TJR{
+            "TJR",
+            "rouble du Tadjikistan",
+        }
+        TJS{
+            "TJS",
+            "somoni du Tadjikistan",
+        }
+        TMM{
+            "TMM",
+            "Turkmenistan Manat",
+        }
+        TND{
+            "TND",
+            "dinar tunisien",
+        }
+        TOP{
+            "TOP",
+            "paʻanga",
+        }
+        TOS{
+            "TOS",
+            "livre sterling du Tonga",
+        }
+        TPE{
+            "TPE",
+            "escudo de Timor",
+        }
+        TPP{
+            "TPP",
+            "pataca de Timor",
+        }
+        TRL{
+            "TL",
+            "livre turque",
+        }
+        TTD{
+            "TTD",
+            "dollar de la Trinité",
+        }
+        TTO{
+            "TTO",
+            "vieux dollar de la Trinité",
+        }
+        TVD{
+            "TVD",
+            "dollar du Tuvalu",
+        }
+        TWD{
+            "TWD",
+            "dollar taïwanais",
+        }
+        TZS{
+            "TZS",
+            "shilling de Tanzanie",
+        }
+        UAH{
+            "UAH",
+            "hryvnia",
+        }
+        UAK{
+            "UAK",
+            "karbovanetz",
+        }
+        UGS{
+            "UGS",
+            "shilling ougandais (1966-1987)",
+        }
+        UGX{
+            "U Sh",
+            "shilling ougandais",
+        }
+        USD{
+            "$",
+            "dollar des États-Unis",
+        }
+        USN{
+            "USN",
+            "dollar des Etats-Unis (jour suivant)",
+        }
+        USS{
+            "USS",
+            "dollar des Etats-Unis (jour même)",
+        }
+        UYF{
+            "UYF",
+            "peso fort uruguayen",
+        }
+        UYP{
+            "UYP",
+            "peso uruguayen (1975-1993)",
+        }
+        UYU{
+            "Ur$",
+            "peso uruguayen",
+        }
+        UZC{
+            "UZC",
+            "Uzbekistan Coupon Som",
+        }
+        UZS{
+            "UZS",
+            "sum",
+        }
+        VAL{
+            "VAL",
+            "lire du Vatican",
+        }
+        VDD{
+            "VDD",
+            "North Vietnam Piastre Dong Viet",
+        }
+        VDN{
+            "VDN",
+            "nouveau dong nord-vietnamien",
+        }
+        VDP{
+            "VDP",
+            "North Vietnam Viet Minh Piastre Dong Viet",
+        }
+        VEB{
+            "VEB",
+            "bolivar",
+        }
+        VGD{
+            "VGD",
+            "dollar des îles Vierges britanniques",
+        }
+        VND{
+            "VND",
+            "dong",
+        }
+        VNN{
+            "VNN",
+            "nouveau dong vietnamien",
+        }
+        VNR{
+            "VNR",
+            "dong de la République Vietnamienne",
+        }
+        VNS{
+            "VNS",
+            "dong national du Vietnam",
+        }
+        VUV{
+            "VUV",
+            "vatu",
+        }
+        WSP{
+            "WSP",
+            "livre du Samoa",
+        }
+        WST{
+            "WST",
+            "tala",
+        }
+        XAD{
+            "XAD",
+            "dinar asiatique (unité de compte)",
+        }
+        XAF{
+            "XAF",
+            "franc CFA (BEAC)",
+        }
+        XAM{
+            "XAM",
+            "unité monétaire asiatique",
+        }
+        XAU{
+            "XAU",
+            "Or",
+        }
+        XBA{
+            "XBA",
+            "unité composite européenne",
+        }
+        XBB{
+            "XBB",
+            "unité monétaire européenne",
+        }
+        XBC{
+            "XBC",
+            "unité de compte européenne (XBC)",
+        }
+        XBD{
+            "XBD",
+            "unité de compte européenne (XBD)",
+        }
+        XCD{
+            "XCD",
+            "dollar des Caraïbes",
+        }
+        XCF{
+            "XCF",
+            "nouveau franc CFA",
+        }
+        XEF{
+            "XEF",
+            "franc CFA (BCEAEC)",
+        }
+        XEU{
+            "XEU",
+            "unité de compte européenne (ECU)",
+        }
+        XFO{
+            "XFO",
+            "franc or",
+        }
+        XFU{
+            "XFU",
+            "franc UIC",
+        }
+        XID{
+            "XID",
+            "dinar musulman",
+        }
+        XMF{
+            "XMF",
+            "nouveau franc métropolitain",
+        }
+        XNF{
+            "XNF",
+            "franc CFA antillais",
+        }
+        XOF{
+            "XOF",
+            "franc CFA (BCEAO)",
+        }
+        XPF{
+            "XPF",
+            "franc CFP",
+        }
+        XTR{
+            "XTR",
+            "rouble transférable du COMECON",
+        }
+        YDD{
+            "YDD",
+            "dinar du Yémen",
+        }
+        YEI{
+            "YEI",
+            "riyal du Yémen",
+        }
+        YER{
+            "YER",
+            "riyal du Yémen",
+        }
+        YUD{
+            "YUD",
+            "nouveau dinar yougoslave",
+        }
+        YUF{
+            "YUF",
+            "dinar de la Fédération Yougoslave",
+        }
+        YUG{
+            "YUG",
+            "dinar yougoslave 1994",
+        }
+        YUM{
+            "YUM",
+            "dinar yougoslave Noviy",
+        }
+        YUN{
+            "YUN",
+            "dinar yougoslave convertible",
+        }
+        YUO{
+            "YUO",
+            "dinar yougoslave d’Octobre",
+        }
+        YUR{
+            "YUR",
+            "dinar yougoslave réformé",
+        }
+        ZAL{
+            "ZAL",
+            "rand sud-africain (financier)",
+        }
+        ZAP{
+            "ZAP",
+            "livre sud-africaine",
+        }
+        ZAR{
+            "ZAR",
+            "rand",
+        }
+        ZMK{
+            "ZMK",
+            "kwacha",
+        }
+        ZMP{
+            "ZMP",
+            "livre zambienne",
+        }
+        ZRN{
+            "ZRN",
+            "nouveau zaïre",
+        }
+        ZRZ{
+            "ZRZ",
+            "zaïre",
+        }
+        ZWD{
+            "Z$",
+            "dollar du Zimbabwe",
+        }
+    }
+    ExemplarCharacters{"[a-zéèùçàâêîôûæœëïÿü]"}
+    Keys{
+        calendar{"Calendrier"}
+        collation{"Ordonnancement"}
+        currency{"Devise"}
+    }
+    Languages{
+        aa{"afar"}
+        ab{"abkhaze"}
+        ae{"avestique"}
+        af{"afrikaans"}
+        ak{"akan"}
+        am{"amharique"}
+        an{"aragonais"}
+        ar{"arabe"}
+        as{"assamais"}
+        av{"avar"}
+        ay{"aymara"}
+        az{"azéri"}
+        ba{"bachkir"}
+        be{"biélorusse"}
+        bg{"bulgare"}
+        bh{"bihari"}
+        bi{"bichlamar"}
+        bm{"bambara"}
+        bn{"bengali"}
+        bo{"tibétain"}
+        br{"breton"}
+        bs{"bosniaque"}
+        byn{"blin"}
+        ca{"catalan"}
+        ce{"tchétchène"}
+        ch{"chamorro"}
+        chr{"cherokee"}
+        co{"corse"}
+        cr{"cree"}
+        cs{"tchèque"}
+        cu{"slavon d’église"}
+        cv{"tchouvache"}
+        cy{"gallois"}
+        da{"danois"}
+        de{"allemand"}
+        dv{"maldivien"}
+        dz{"dzongkha"}
+        ee{"éwé"}
+        el{"grec"}
+        en{"anglais"}
+        eo{"espéranto"}
+        es{"espagnol"}
+        et{"estonien"}
+        eu{"basque"}
+        fa{"persan"}
+        ff{"peul"}
+        fi{"finnois"}
+        fj{"fidjien"}
+        fo{"féroïen"}
+        fr{"français"}
+        fy{"frison"}
+        ga{"irlandais"}
+        gd{"gaélique écossais"}
+        gez{"guèze"}
+        gl{"galicien"}
+        gn{"guarani"}
+        gu{"goudjrati"}
+        gv{"manx"}
+        ha{"haoussa"}
+        haw{"hawaïen"}
+        he{"hébreu"}
+        hi{"hindi"}
+        ho{"hiri motu"}
+        hr{"croate"}
+        ht{"haïtien"}
+        hu{"hongrois"}
+        hy{"arménien"}
+        hz{"héréro"}
+        ia{"interlingua"}
+        id{"indonésien"}
+        ie{"interlingue"}
+        ig{"igbo"}
+        ii{"yi de Sichuan"}
+        ik{"inupiaq"}
+        io{"ido"}
+        is{"islandais"}
+        it{"italien"}
+        iu{"inuktitut"}
+        ja{"japonais"}
+        jv{"javanais"}
+        ka{"géorgien"}
+        kg{"kongo"}
+        ki{"kikuyu"}
+        kj{"kuanyama"}
+        kk{"kazakh"}
+        kl{"groenlandais"}
+        km{"khmer"}
+        kn{"kannada"}
+        ko{"coréen"}
+        kok{"konkani"}
+        kr{"kanouri"}
+        ks{"kashmiri"}
+        ku{"kurde"}
+        kv{"komi"}
+        kw{"cornique"}
+        ky{"kirghize"}
+        la{"latin"}
+        lb{"luxembourgeois"}
+        lg{"ganda"}
+        li{"limbourgeois"}
+        ln{"lingala"}
+        lo{"lao"}
+        lt{"lituanien"}
+        lu{"luba-katanga"}
+        lv{"letton"}
+        mg{"malgache"}
+        mh{"marshall"}
+        mi{"maori"}
+        mk{"macédonien"}
+        ml{"malayalam"}
+        mn{"mongol"}
+        mo{"moldave"}
+        mr{"marathe"}
+        ms{"malais"}
+        mt{"maltais"}
+        my{"birman"}
+        na{"nauruan"}
+        nb{"bokmål norvégien"}
+        nd{"ndébélé du Nord"}
+        ne{"népalais"}
+        ng{"ndonga"}
+        nl{"néerlandais"}
+        nn{"nynorsk norvégien"}
+        no{"norvégien"}
+        nr{"ndébélé du Sud"}
+        nv{"navaho"}
+        ny{"nyanja"}
+        oc{"occitan (après 1500)"}
+        oj{"ojibwa"}
+        om{"galla"}
+        or{"oriya"}
+        os{"ossète"}
+        pa{"pendjabi"}
+        pi{"pali"}
+        pl{"polonais"}
+        ps{"pachto"}
+        pt{"portugais"}
+        qu{"quechua"}
+        rm{"rhéto-roman"}
+        rn{"roundi"}
+        ro{"roumain"}
+        root{"racine"}
+        ru{"russe"}
+        rw{"rwanda"}
+        sa{"sanskrit"}
+        sc{"sarde"}
+        sd{"sindhi"}
+        se{"sami du Nord"}
+        sg{"sango"}
+        sh{"serbo-croate"}
+        si{"singhalais"}
+        sid{"sidamo"}
+        sk{"slovaque"}
+        sl{"slovène"}
+        sm{"samoan"}
+        sn{"shona"}
+        so{"somali"}
+        sq{"albanais"}
+        sr{"serbe"}
+        ss{"swati"}
+        st{"sotho du Sud"}
+        su{"soundanais"}
+        sv{"suédois"}
+        sw{"swahili"}
+        syr{"syriaque"}
+        ta{"tamoul"}
+        te{"télougou"}
+        tg{"tadjik"}
+        th{"thaï"}
+        ti{"tigrigna"}
+        tig{"tigré"}
+        tk{"turkmène"}
+        tl{"tagalog"}
+        tn{"setswana"}
+        to{"tongan (Îles Tonga)"}
+        tr{"turc"}
+        ts{"tsonga"}
+        tt{"tatar"}
+        tw{"twi"}
+        ty{"tahitien"}
+        ug{"ouïgour"}
+        uk{"ukrainien"}
+        ur{"ourdou"}
+        uz{"ouzbek"}
+        ve{"venda"}
+        vi{"vietnamien"}
+        vo{"volapük"}
+        wa{"wallon"}
+        wo{"wolof"}
+        xh{"xhosa"}
+        yi{"yiddish"}
+        yo{"yoruba"}
+        za{"zhuang"}
+        zh{"chinois"}
+        zu{"zoulou"}
+    }
+    LocaleScript{
+        "Latn",
+    }
+    NumberElements{
+        ",",
+        " ",
+        ";",
+        "%",
+        "0",
+        "#",
+        "-",
+        "E",
+        "‰",
+        "∞",
+        "�",
+        "+",
+    }
+    NumberPatterns{
+        "#,##0.###;-#,##0.###",
+        "#,##0.00 ¤;-#,##0.00 ¤",
+        "#,##0%",
+        "#E0",
+    }
+    Scripts{
+        Arab{"arabe"}
+        Armn{"arménien"}
+        Beng{"bengâglî"}
+        Bopo{"bopomofo"}
+        Brai{"braille"}
+        Buhd{"bouhide"}
+        Cans{"syllabaire autochthone canadien unifié"}
+        Cher{"tchérokî"}
+        Cprt{"chypriote"}
+        Cyrl{"cyrillique"}
+        Deva{"dévanâgarî"}
+        Dsrt{"déséret"}
+        Ethi{"éthiopique"}
+        Geor{"géorgien"}
+        Goth{"gotique"}
+        Grek{"grec"}
+        Gujr{"goudjarâtî"}
+        Guru{"gourmoukhî"}
+        Hang{"hangûl"}
+        Hani{"han"}
+        Hano{"hanounóo"}
+        Hans{"han simplifié"}
+        Hant{"han traditionnel"}
+        Hebr{"hébreu"}
+        Hira{"hiragana"}
+        Ital{"ancien italique"}
+        Kana{"katakana"}
+        Khmr{"khmer"}
+        Knda{"kannara"}
+        Laoo{"laotien"}
+        Latn{"latin"}
+        Limb{"limbou"}
+        Linb{"linéaire B"}
+        Mlym{"malayâlam"}
+        Mong{"mongol"}
+        Mymr{"birman"}
+        Ogam{"ogam"}
+        Orya{"oriyâ"}
+        Osma{"osmanais"}
+        Qaac{"copte"}
+        Qaai{"hérité"}
+        Runr{"runique"}
+        Shaw{"shavien"}
+        Sinh{"singhalais"}
+        Syrc{"syriaque"}
+        Tagb{"tagbanoua"}
+        Tale{"taï-le"}
+        Taml{"tamoul"}
+        Telu{"télougou"}
+        Tglg{"tagal"}
+        Thaa{"thâna"}
+        Thai{"thaï"}
+        Tibt{"tibétain"}
+        Ugar{"ougaritique"}
+        Yiii{"yi"}
+    }
+    Types{
+        calendar{
+            buddhist{"Calendrier bouddhiste"}
+            chinese{"Calendrier chinois"}
+            gregorian{"Calendrier grégorien"}
+            hebrew{"Calendrier hébraïque"}
+            islamic{"Calendrier musulman"}
+            islamic-civil{"Calendrier civil musulman"}
+            japanese{"Calendrier japonais"}
+        }
+        collation{
+            direct{"Ordre direct"}
+            phonebook{"Ordre de l’annuaire"}
+            pinyin{"Ordre pinyin"}
+            stroke{"Ordre des traits"}
+            traditional{"Ordre traditionnel"}
+        }
+    }
+    Variants{
+        REVISED{"Révisé"}
+    }
+    Version{"1.2"}
+    calendar{
+        
         gregorian{
             DateTimePatterns{
                 "HH' h 'mm z",
@@ -81,24 +2107,26 @@ fr {
                 }
             }
             eras{
-                "av. J.-C.",
-                "ap. J.-C.",
+                abbreviated{
+                    "av. J.-C.",
+                    "ap. J.-C.",
+                }
             }
             monthNames{
                 format{
                     abbreviated{
                         "janv.",
-                        "f\u00E9vr.",
+                        "févr.",
                         "mars",
                         "avr.",
                         "mai",
                         "juin",
                         "juil.",
-                        "ao\u00FBt",
+                        "août",
                         "sept.",
                         "oct.",
                         "nov.",
-                        "d\u00E9c.",
+                        "déc.",
                     }
                     narrow{
                         "J",
@@ -116,17 +2144,17 @@ fr {
                     }
                     wide{
                         "janvier",
-                        "f\u00E9vrier",
+                        "février",
                         "mars",
                         "avril",
                         "mai",
                         "juin",
                         "juillet",
-                        "ao\u00FBt",
+                        "août",
                         "septembre",
                         "octobre",
                         "novembre",
-                        "d\u00E9cembre",
+                        "décembre",
                     }
                 }
             }
@@ -134,924 +2162,55 @@ fr {
         hebrew{
             monthNames{
                 format{
-                    abbreviated:alias {
-                        "fr/calendar/hebrew/monthNames/format/wide" // no data
-                    }
-                    wide{                 
-                        "Tisseri",      // Tishri
-                        "Hesvan",       // Heshvan
-                        "Kislev",       // Kislev
-                        "T\u00e9beth",  // Tevet
-                        "Sch\u00e9bat", // Shevat
-                        "Adar",         // Adar I
-                        "Adar II",      // Adar
-                        "Nissan",       // Nisan
-                        "Iyar",         // Iyar
-                        "Sivan",        // Sivan
-                        "Tamouz",       // Tamuz
-                        "Ab",           // Av
-                        "Elloul",       // Elul
+                    abbreviated:alias{"fr/calendar/hebrew/monthNames/format/wide"}
+                    wide{
+                        "Tisseri",
+                        "Hesvan",
+                        "Kislev",
+                        "Tébeth",
+                        "Schébat",
+                        "Adar",
+                        "Adar II",
+                        "Nissan",
+                        "Iyar",
+                        "Sivan",
+                        "Tamouz",
+                        "Ab",
+                        "Elloul",
                     }
                 }
             }
         }
-    }
-    // http://www.iso.org/iso/en/prods-services/iso3166ma/index.html
-    Countries {
-        Fallback{ "en"}
-        AD { "Andorre" }
-        AE { "\u00c9mirats arabes unis" }
-        AG { "Antigua-et-Barbuda" }
-        AQ { "Antarctique" }
-        AL { "Albanie" }
-        AM { "Arm\u00E9nie" }
-        AN { "Antilles n\u00E9erlandaises" }
-        AR { "Argentine" }
-        AS { "Samoa am\u00E9ricaines" }
-        AT { "Autriche" }
-        AU { "Australie" }
-        AZ { "Azerba\u00EFdjan" }
-
-        BA { "Bosnie-Herz\u00E9govine" }
-        BB { "Barbade" }
-        BE { "Belgique" }
-        BG { "Bulgarie" }
-        BH { "Bahre\u00EFn" }
-        BM { "Bermudes" }
-        BO { "Bolivie" }
-        BR { "Br\u00E9sil" }
-        BT { "Bhoutan" }
-        BV { "\u00CEle Bouvet" }
-        BY { "B\u00E9larus" }
-        //BZ { "Belize" }
-
-        CC { "\u00CEles Cocos" }
-        CD { "R\u00E9publique d\u00E9mocratique du Congo" }
-        CF { "R\u00E9publique centrafricaine" }
-        CH { "Suisse" }
-        CK { "\u00CEles Cook" }
-        CL { "Chili" }
-        CM { "Cameroun" }
-        CN { "Chine" }
-        CO { "Colombie" }
-        CV { "Cap Vert" }
-        CX { "\u00CEle Christmas" }
-        CY { "Chypre" }
-        CZ { "R\u00E9publique tch\u00E8que" }
-
-        DE { "Allemagne" }
-        DK { "Danemark" }
-        DM { "Dominique" }
-        DO { "R\u00E9publique dominicaine" }
-        DZ { "Alg\u00E9rie" }
-
-        EC { "\u00C9quateur" }
-        EE { "Estonie" }
-        EG { "\u00C9gypte" }
-        EH { "Sahara occidental" }
-        ER { "\u00C9rythr\u00e9e" }
-        ES { "Espagne" }
-        ET { "\u00C9thiopie" }
-
-        FI { "Finlande" }
-        FJ { "Fidji" }
-        FK { "\u00CEles Falkland (Malvinas)" }
-        FM { "Micron\u00E9sie" }
-        FO { "\u00CEles F\u00E9ro\u00E9" }
-
-        GB { "Royaume-Uni" }
-        GD { "Grenade" }
-        GE { "G\u00E9orgie" }
-        GF { "Guyane fran\u00e7aise" }
-        GL { "Groenland" }
-        GM { "Gambie" }
-        GN { "Guin\u00E9e" }
-        GQ { "Guin\u00E9e \u00E9quatoriale" }
-        GR { "Gr\u00E8ce" }
-        GS { "G\u00E9orgie du Sud, \u00CEles Sandwich du Sud" }
-        GW { "Guin\u00E9e-Bissau" }
-        GY { "Guyana" }
-
-        HK { "Hong-Kong R.A.S." }
-        HM { "\u00CEles Heard et MacDonald" }
-        HR { "Croatie" }
-        HT { "Ha\u00EFti" }
-        HU { "Hongrie" }
-
-        ID { "Indon\u00E9sie" }
-        IE { "Irlande" }
-        //IQ { "Iraq" }
-        IL { "Isra\u00EBl" }
-        IN { "Inde" }
-        IO { "Territoire britannique de l\u2019oc\u00E9an indien" }
-        IS { "Islande" }
-        IT { "Italie" }
-
-        JM { "Jama\u00EFque" }
-        JO { "Jordanie" }
-        JP { "Japon" }
-
-        KG { "Kirghizistan" }
-        KH { "Cambodge" }
-        KM { "Comores" }
-        KN { "Saint Kitts et Nevis" }
-        KP { "Cor\u00E9e du Nord" }    // alternate name { "Cor\u00E9e, R\u00E9publique populaire d\u00E9mocratique de" }
-        KR { "Cor\u00E9e du Sud" }    // alternate name { "Cor\u00E9e, R\u00E9publique de" }
-        KY { "\u00celes Ca\u00efmanes" }
-        KW { "Kowe\u00EFt" }
-
-        LB { "Liban" }
-        LC { "Sainte-Lucie" }
-        LR { "Lib\u00E9ria" }
-        LT { "Lithuanie" }
-        LV { "Lettonie" }
-        LY { "Libye" }
-
-        MA { "Maroc" }
-        //MD { "Moldavie" }
-        MH { "\u00CEles Marshall" }
-        MK { "Mac\u00E9doine" }
-        //MM { "Myanmar" }
-        MN { "Mongolie" }
-        MO { "Macao R.A.S. de Chine" }
-        MP { "\u00celes Mariannes du Nord" }
-        MR { "Mauritanie" }
-        MT { "Malte" }
-        MU { "Maurice" }
-        MX { "Mexique" }
-        MY { "Malaisie" }
-
-        NA { "Namibie" }
-        NC { "Nouvelle-Cal\u00E9donie" }
-        NF { "\u00CEle Norfolk" }
-        NG { "Nig\u00E9ria" }
-        NL { "Pays-Bas" }
-        NO { "Norv\u00E8ge" }
-        NP { "N\u00E9pal" }
-        NU { "Niu\u00E9" }
-        NZ { "Nouvelle-Z\u00E9lande" }
-
-        PE { "P\u00E9rou" }
-        PF { "Polyn\u00E9sie fran\u00E7aise" }
-        PG { "Papouasie-Nouvelle-Guin\u00E9e" }
-        PL { "Pologne" }
-        PM { "Saint-Pierre-et-Miquelon" }
-        PR { "Porto Rico" }
-        PS { "Territoire palestinien" }
-        PW { "Palaos" }
-
-        RO { "Roumanie" }
-        RU { "Russie" }
-
-        SA { "Arabie saoudite" }
-        SB { "\u00CEles Salomon" }
-        SD { "Soudan" }
-        SE { "Su\u00E8de" }
-        SG { "Singapour" }
-        SH { "Sainte-H\u00E9l\u00E8ne" }
-        SI { "Slov\u00E9nie" }
-        SJ { "Svalbard et \u00CEle Jan Mayen" }
-        SK { "Slovaquie" }
-        SM { "Saint-Marin" }
-        SN { "S\u00E9n\u00E9gal" }
-        SO { "Somalie" }
-        SP { "Serbie" }
-        ST { "Sao Tom\u00E9-et-Principe" }
-        SY { "Syrie" }
-
-        TC { "\u00CEles Turks et Ca\u00EFques" }
-        TD { "Tchad" }
-        TF { "Terres australes fran\u00E7aises" }
-        TH { "Tha\u00EFlande" }
-        TJ { "Tadjikistan" }
-        //TL { "Timor" }
-        TN { "Tunisie" }
-        TR { "Turquie" }
-        TT { "Trinit\u00E9-et-Tobago" }
-        TW { "Ta\u00EFwan" }
-        TZ { "Tanzanie" }
-
-        UG { "Ouganda" }
-        UM { "\u00CEles Mineures \u00C9loign\u00e9es des \u00C9tats-Unis" }
-        US { "\u00C9tats-Unis" }
-        UZ { "Ouzb\u00e9kistan" }
-
-        VA { "Saint-Si\u00E8ge (Etat de la Cit\u00E9 du Vatican)" }
-        VC { "Saint-Vincent-et-les Grenadines" }
-        VE { "V\u00e9n\u00e9zuela" }
-        VG { "\u00CEles Vierges Britanniques" }
-        VI { "\u00CEles Vierges des \u00C9tats-Unis" }
-        VN { "Viet Nam" }
-
-        WF { "Wallis et Futuna" }
-
-        YE { "Y\u00E9men" }
-        YU { "Yougoslavie" }
-
-        ZA { "Afrique du Sud" }
-        ZM { "Zambie" }
-    }
-
-    // Currency display names
-    Currencies {
-        ADD { "ADD", "diner andorran" }
-        ADP { "ADP", "peseta andorrane" }
-        AED { "AED", "dirham des \u00c9mirats arabes unis" }
-        AFA { "AFA", "afghani" }
-        AFN { "Af",  "afghani" }
-        AIF { "AIF", "franc Affars et Issas" }
-        ALK { "ALK", "lek albanais (1946-1961)" }
-        ALL { "lek", "lek albanais" }
-        ALV { "ALV", "Albanian Lek Valute" }
-        ALX { "ALX", "dollar albanais (certificat de devises \u00E9trang\u00E8res)" }
-        AMD { "dram","dram arm\u00E9nien" }
-        ANG { "ANG", "florin des Antilles n\u00E9erl." }
-        AOA { "AOA", "kwanza angolais" }
-        AOK { "AOK", "kwanza angolais (1977-1990)" }
-        AON { "AON", "nouveau kwanza angolais (1990-2000)" }
-        AOR { "AOR", "kwanza angolais r\u00E9ajust\u00E9 (1995-1999)" }
-        AOS { "AOS", "escudo angolais" }
-        ARA { "ARA", "austral" }
-        ARM { "ARM", "Argentine Peso Moneda Nacional" }
-        ARP { "ARP", "peso argentin (1983-1985)" }
-        ARS { "Arg$","peso argentin" }
-        ATS { "ATS", "schilling autrichien" }
-        AUD { "AUD", "dollar australien" }
-        AUP { "AUP", "livre australienne" }
-        AWG { "AWG", "florin d\u2019Aruba" }
-        AZM { "AZM", "Azerbaijanian Manat" }
-        BAD { "BAD", "dinar de Bosnie-Herzegovine" }
-        BAM { "KM",  "mark convertible de Bosnie-Herzegovine" }
-        BAN { "BAN", "nouveau dinar de Bosnie-Herzegovine" }
-        BBD { "BBD", "dollar de Barbade" }
-        BDT { "BDT", "taka" }
-        BEC { "BEC", "franc belge (convertible)" }
-        BEF { "FB", "franc belge" }
-        BEL { "BEL", "franc belge (financier)" }
-        BGL { "BGL", "lev" }
-        BGM { "BGM", "lev de Bulgarie socialiste" }
-        BGN { "BGN", "nouveau lef" }
-        BGO { "BGO", "lev (1879-1952)" }
-        BGX { "BGX", "lev (certificat de devises \u00E9trang\u00E8res)" }
-        BHD { "BHD", "dinar de Bahrein" }
-        BIF { "BIF", "franc du Burundi" }
-        BMD { "BMD", "dollar des Bermudes" }
-        BMP { "BMP", "livre des Bermudes" }
-        BND { "BND", "dollar de Brunei" }
-        BOB { "Bs",  "boliviano" }
-        BOL { "BOL", "boliviano (1863-1962)" }
-        BOP { "BOP", "peso bolivien" }
-        BOV { "BOV", "Bolivian Mvdol"       }
-        BRB { "BRB", "nouveau cruzeiro (1967-1986)" }
-        BRC { "BRC", "cruzeiro" }
-        BRE { "BRE", "cruzeiro (1990-1993)" }
-        BRL { "R$",  "r\u00E9al" }
-        BRN { "BRN", "nouveau cruzado" }
-        BRR { "BRR", "cruzeiro" }
-        BRZ { "BRZ", "cruzeiro (1942-1967)" }
-        BSD { "BSD", "dollar des Bahamas" }
-        BSP { "BSP", "livre des Bahamas" }
-        BTN { "Nu",  "ngultrum" }
-        BTR { "BTR", "roupie de Bhoutan" }
-        BUK { "BUK", "kyat" }
-        BUR { "BUR", "roupie de Birmanie" }
-        BWP { "BWP", "pula" }
-        BYB { "BYB", "nouveau rouble bi\u00E9lorusse (1994-1999)" }
-        BYL { "BYL", "rouble bi\u00E9lorusse (1992-1994)" }
-        BYR { "Rbl", "rouble bi\u00E9lorusse" }
-        BZD { "BZD", "dollar de B\u00E9lize" }
-        BZH { "BZH", "dollar du Honduras britannique" }
-        CAD { "CAD", "dollar canadien" }
-        CDF { "CDF", "franc congolais" }
-        CDG { "CDG", "franc de la R\u00E9publique Congolaise" }
-        CDL { "CDL", "Congolese Zaire" }
-        CFF { "CFF", "franc CFA de la R\u00E9publique du Centre Afrique" }
-        CHF { "sFr.", "franc suisse" }
-        CKD { "CKD", "dollar des \u00EEles Cook" }
-        CLC { "CLC", "condor chilien" }
-        CLE { "CLE", "escudo chilien" }
-        CLF { "CLF", "Chilean Unidades de Fomento" }
-        CLP { "CLP", "peso chilien" }
-        CMF { "CMF", "franc CFA camerounais" }
-        CNP { "CNP", "Chinese Jen Min Piao Yuan" }
-        CNX { "CNX", "dollar US chinois (certificat de devises \u00E9trang\u00E8res)" }
-        CNY { "CNY", "Yuan Ren-min-bi" }
-        COB { "COB", "Colombian Paper Peso" }
-        COF { "COF", "franc CFA congolais" }
-        COP { "COP", "peso colombien" }
-        CRC { "CRC", "colon" }
-        CSC { "CSC", "couronne tch\u00E8que" }
-        CSK { "CSK", "couronne tch\u00E8que" }
-        CUP { "CUP", "peso cubain" }
-        CUX { "CUX", "certificat de devises \u00E9trang\u00E8res de Cuba" }
-        CVE { "CVE", "escudo du Cap-Vert" }
-        CWG { "CWG", "florin de Curacao" }
-        CYP { "CYP", "livre cypriote" }
-        CZK { "CZK", "couronne tch\u00E8que" }
-        DDM { "DDM", "mark est-allemand" }
-        DEM { "DEM", "deutsche mark" }
-        DES { "DES", "sperrmark allemand" }
-        // DIF { "DIF", "franc de Djibouti" } -- unconfirmed
-        DJF { "DF",  "franc de Djibouti" }
-        DKK { "DKK", "couronne danoise" }
-        DOP { "DOP", "peso dominicain" }
-        DZD { "DZD", "dinar alg\u00E9rien" }
-        DZF { "DZF", "nouveau franc alg\u00E9rien" }
-        DZG { "DZG", "franc germinal alg\u00E9rien" }
-        ECS { "ECS", "sucre" }
-        ECV { "ECV", "unit\u00E9 de valeur constante \u00E9quatoriale (UVC)" }
-        EEK { "EEK", "couronne estonienne" }
-        EGP { "EGP", "livre \u00E9gyptienne" }
-        ERN { "ERN", "Eritrean Nakfa" }
-        ESP { "ESP", "peseta espagnole" }
-        ETB { "ETB", "birr" }
-        ETD { "ETD", "dollar \u00E9thiopien" }
-        EUR { "\u20AC", "euro" }
-        FIM { "FIM", "mark finlandais" }
-        FIN { "FIN", "mark finlandais (1860-1962)" }
-        FJD { "FJD", "dollar de Fidji" }
-        FJP { "FJP", "livre de Fiji" }
-        FKP { "FKP", "livre des Falkland (Malvinas)" }
-        FOK { "FOK", "Faeroe Islands Kronur" }
-        FRF { "F", "franc fran\u00E7ais" }
-        FRG { "FRG", "franc germinal/franc Poincar\u00E9" }
-        GAF { "GAF", "franc CFA gabonnais" }
-        GBP { "\u00A3", "livre sterling" }
-        GEK { "GEK", "Georgian Kupon Larit" }
-        GEL { "lari","lari" }
-        GHC { "GHC", "c\u00E9di" }
-        GHO { "GHO", "ancien cedi" }
-        GHP { "GHP", "livre ghan\u00E9enne" }
-        GHR { "GHR", "cedi revaloris\u00E9" }
-        GIP { "GIP", "livre de Gibraltar" }
-        GLK { "GLK", "couronne du Groenland" }
-        GMD { "GMD", "dalasie" }
-        GMP { "GMP", "livre de Gambie" }
-        GNF { "GF",  "franc guin\u00E9en" }
-        GNI { "GNI", "franc guin\u00E9en (1960-1972)" }
-        GNS { "GNS", "syli" }
-        GPF { "GPF", "franc guadeloup\u00E9en" }
-        GQE { "GQE", "ekw\u00E9l\u00E9" }
-        GQF { "GQF", "franco de Guin\u00E9e Equatoriale" }
-        GQP { "GQP", "peseta de Guin\u00E9e Equatoriale" }
-        GRD { "GRD", "drachme" }
-        GRN { "GRN", "nouveau drachme" }
-        GTQ { "GTQ", "quetzal" }
-        GUF { "GUF", "franc guyanais" }
-        GWE { "GWE", "Escudo de Guin\u00E9e Portugaise" }
-        GWM { "GWM", "Portuguese Guinea Mil Reis" }
-        GWP { "GWP", "peso de Guin\u00E9e-Bissau" }
-        GYD { "G$",  "dollar de Guyane" }
-        HKD { "HKD", "dollar de Hong Kong" }
-        HNL { "HNL", "lempira" }
-        HRD { "HRD", "dinar croate" }
-        HRK { "HRK", "kuna" }
-        HTG { "HTG", "gourde" }
-        HUF { "HUF", "forint" }
-        IBP { "IBP", "livre d\u2019Irlande du Nord" }
-        IDG { "IDG", "florin de Nica" }
-        IDJ { "IDJ", "roupie de Java" }
-        IDN { "IDN", "nouvelle roupie indon\u00E9sienne" }
-        IDR { "IDR", "rupiah" }
-        IEP { "IEP", "livre irlandaise" }
-        ILL { "ILL", "sh\u00E9kel" }
-        ILP { "ILP", "livre isra\u00E9lienne" }
-        ILS { "ILS", "sh\u00E9kel" }
-        IMP { "IMP", "livre sterling de l\u2019Ile de Man" }
-        INR { "=0#Rs.|1#Re.|1<Rs.", "roupie indienne" }
-        IQD { "IQD", "dinar irakien" }
-        IRR { "IRR", "rial iranien" }
-        ISK { "ISK", "couronne islandaise" }
-        ITL { "\u20A4", "lire italienne" }
-        JEP { "JEP", "livre sterling de Jersey" }
-        JMD { "JMD", "dollar jama\u00EFcain" }
-        JMP { "JMP", "livre jama\u00EFcaine" }
-        JOD { "JOD", "dinar jordanien" }
-        JPY { "\u00A5", "yen" }
-        KES { "KES", "shilling du Kenya" }
-        KGS { "som", "som du Kyrgystan" }
-        KHO { "KHO", "vieux riel" }
-        KHR { "KHR", "riel" }
-        KID { "KID", "dollar de Kiribati" }
-        KMF { "KMF", "franc des Comores" }
-        KPP { "KPP", "won du peuple nord-cor\u00E9en" }
-        KPW { "KPW", "won nord-cor\u00E9en" }
-        KRH { "KRH", "hwan" }
-        KRO { "KRO", "vieux won" }
-        KRW { "KRW", "won sud-cor\u00E9en" }
-        KWD { "KWD", "dinar koweitien" }
-        KYD { "KYD", "dollar des \u00EEles Ca\u00EFmans" }
-        KZR { "KZR", "rouble du Kazakhstan" }
-        KZT { "T",   "tenge du Kazakhstan" }
-        LAK { "LAK", "kip" }
-        LBP { "LBP", "livre libanaise" }
-        LIF { "LIF", "franc du Liechtenstein" }
-        LKR { "LKR", "roupie de Sri Lanka" }
-        LNR { "LNR", "roupie de Ceylan" }
-        LRD { "LRD", "dollar lib\u00E9rien" }
-        LSL { "M",   "Lesotho Loti" }
-        LTL { "LTL", "Lita de Lithuanian" }
-        LTT { "LTT", "Talonas de Lithuanie" }
-        LUF { "LUF", "franc luxembourgeois" }
-        LVL { "LVL", "lats letton" }
-        LVR { "LVR", "rouble letton" }
-        LYB { "LYB", "lire de l\u2019autori\u00E9 militaire britannique de Libye" }
-        LYD { "LD",  "dinar Iibyen" }
-        LYP { "LYP", "livre libyenne" }
-        MAD { "MAD", "dirham marocain" }
-        MAF { "MAF", "franc marocain" }
-        MCF { "MCF", "nouveau franc marocain" }
-        MCG { "MCG", "franc Germinal mon\u00E9gasque" }
-        MDC { "MDC", "Moldovan Leu Cupon" }
-        MDL { "MDL", "leu moldave" }
-        MDR { "MDR", "rouble moldave" }
-        MGA { "MGA", "ariary malgache" }
-        MGF { "MGF", "franc malgache" }
-        MHD { "MHD", "dollar des  \u00EEles Marshall" }
-        MKD { "MDen","dinar mac\u00E9donien" }
-        MKN { "MKN", "dinar mac\u00E9donien (1992-1993)" }
-        MLF { "MLF", "franc malien" }
-        MMK { "MMK", "Myanmar Kyat" }
-        MMX { "MMX", "dollar de Myanmar (certificat de devises \u00E9trang\u00E8res)" }
-        MNT { "MNT", "tugrik" }
-        MOP { "MOP", "pataca" }
-        MQF { "MQF", "franc martiniquais" }
-        MRO { "MRO", "ouguija" }
-        MTL { "Lm",  "lire maltaise"         }
-        MTP { "MTP", "livre maltaise" }
-        MUR { "MUR", "roupie de l\u2019\u00EEle Maurice" }
-        MVP { "MVP", "roupie des Maldives" }
-        MVR { "MVR", "roupie des Maldives" }
-        MWK { "MWK", "kwacha" }
-        MWP { "MWP", "livre de Malawi" }
-        MXP { "MXP", "peso d\u2019argent mexicain (1861-1992)" }
-        MXV { "MXV", "unit\u00E9 de conversion mexicaine (UDI)" }
-        MYR { "MYR", "ringgit" }
-        MZE { "MZE", "escudo du Mozambique" }
-        MZM { "MZM", "m\u00E9tical" }
-        NAD { "N$",  "dollar de Namibie" }
-        NCF { "NCF", "franc Germinal de Nouvelle Cal\u00E9donie" }
-        NGN { "NGN", "naira" }
-        NGP { "NGP", "livre nig\u00E9riane" }
-        NHF { "NHF", "franc CFP des Nouvelles H\u00E9brides" }
-        NIC { "NIC", "cordoba" }
-        NIG { "NIG", "cordoba d\u2019or" }
-        NIO { "NIO", "cordoba d\u2019or" }
-        NLG { "NLG", "florin n\u00E9erlandais" }
-        NOK { "NOK", "couronne norv\u00E9gienne" }
-        NPR { "NPR", "roupie du N\u00E9pal" }
-        NZD { "NZD", "dollar n\u00E9o-z\u00E9landais" }
-        NZP { "NZP", "livre n\u00E9o-z\u00E9landaise" }
-        OMR { "OMR", "rial omani" }
-        OMS { "OMS", "Oman Rial Saidi" }
-        PAB { "PAB", "balboa" }
-        PDK { "PDK", "Transdniestria Ruble Kupon" }
-        PDN { "PDN", "nouveau rouble moldave" }
-        PDR { "PDR", "rouble moldave" }
-        PEI { "PEI", "Inti p\u00E9ruvien" }
-        PEN { "PEN", "nouveau sol p\u00E9ruvien" }
-        PES { "PES", "sol p\u00E9ruvien" }
-        PGK { "PGK", "kina" }
-        PHP { "PHP", "peso philippin" }
-        PKR { "PKR", "roupie du Pakistan" }
-        PLX { "PLX", "dollar US polonais (certificat de devises \u00E9trang\u00E8res)" }
-        PLZ { "PLZ", "zloty (1950-1995)" }
-        PSP { "PSP", "livre palestinienne" }
-        PTC { "PTC", "conto portugais" }
-        PTE { "PTE", "escudo portugais" }
-        PYG { "PYG", "guarani" }
-        QAR { "QAR", "rial du Qatar" }
-        REF { "REF", "franc de la R\u00E9union" }
-        ROL { "ROL", "leu" }
-        RON { "RON", "nouveau leu" }
-        RUR { "RUR", "rouble de Russie (1991-1998)" }
-        RWF { "RWF", "franc du Rwanda" }
-        SAR { "SAR", "riyal s\u00E9oudien" }
-        SAS { "SAS", "riyal saoudien" }
-        SBD { "SBD", "dollar de Salomon" }
-        SCR { "SCR", "roupie des Seychelles" }
-        SDD { "SDD", "dinar soudanais" }
-        SDP { "SDP", "livre soudanaise" }
-        SEK { "SEK", "couronne su\u00E9doise" }
-        SGD { "SGD", "dollar de Singapour" }
-        SHP { "SHP", "livre de Sainte-H\u00E9l\u00E8ne" }
-        SIB { "SIB", "bons de tolar slov\u00E8ne" }
-        SIT { "SIT", "tolar slov\u00E8ne" }
-        SKK { "SKK", "couronne slovaque" }
-        SLL { "SLL", "l\u00E9one" }
-        SML { "SML", "lire de Saint-Marin" }
-        SOS { "SOS", "shilling de Somalie" }
-        SQS { "SQS", "shilling de Somalie" }
-        SRG { "SRG", "florin du Surinam" }
-        SSP { "SSP", "livre \u00E9cossaise" }
-        STD { "STD", "dobra" }
-        STE { "STE", "escudo de Sao Tom\u00E9 et Principe" }
-        SUN { "SUN", "nouveau rouble sovi\u00E9tique" }
-        SUR { "SUR", "rouble de C.E.I." }
-        SVC { "SVC", "colon" }
-        SYP { "SYP", "livre syrienne" }
-        SZL { "SZL", "lilangeni" }
-        TCC { "TCC", "couronne des \u00EEles Turks et Ca\u00EFques" }
-        TDF { "TDF", "franc CFA du Tchad" }
-        THB { "THB", "baht" }
-        TJR { "TJR", "rouble du Tadjikistan" }
-        TJS { "TJS", "somoni du Tadjikistan" }
-        TMM { "TMM", "Turkmenistan Manat" }
-        TND { "TND", "dinar tunisien" }
-        TOP { "TOP", "pa\u02bbanga" }
-        TOS { "TOS", "livre sterling du Tonga" }
-        TPE { "TPE", "escudo de Timor" }
-        TPP { "TPP", "pataca de Timor" }
-        TRL { "TL",  "livre turque" }
-        TTD { "TTD", "dollar de la Trinit\u00E9" }
-        TTO { "TTO", "vieux dollar de la Trinit\u00E9" }
-        TVD { "TVD", "dollar du Tuvalu" }
-        TWD { "TWD", "dollar ta\u00EFwanais" }
-        TZS { "TZS", "shilling de Tanzanie" }
-        UAH { "UAH", "hryvnia" }
-        UAK { "UAK", "karbovanetz" }
-        UGS { "UGS", "shilling ougandais (1966-1987)" }
-        UGX { "U Sh","shilling ougandais" }
-        USD { "$", "dollar des \u00C9tats-Unis" }
-        USN { "USN", "dollar des Etats-Unis (jour suivant)" }
-        USS { "USS", "dollar des Etats-Unis (jour m\u00EAme)" }
-        UYF { "UYF", "peso fort uruguayen" }
-        UYP { "UYP", "peso uruguayen (1975-1993)" }
-        UYU { "Ur$", "peso uruguayen" }
-        UZC { "UZC", "Uzbekistan Coupon Som" }
-        UZS { "UZS", "sum" }
-        VAL { "VAL", "lire du Vatican" }
-        VDD { "VDD", "North Vietnam Piastre Dong Viet" }
-        VDN { "VDN", "nouveau dong nord-vietnamien" }
-        VDP { "VDP", "North Vietnam Viet Minh Piastre Dong Viet" }
-        VEB { "VEB", "bolivar" }
-        VGD { "VGD", "dollar des \u00EEles Vierges britanniques" }
-        VND { "VND", "dong" }
-        VNN { "VNN", "nouveau dong vietnamien" }
-        VNR { "VNR", "dong de la R\u00E9publique Vietnamienne" }
-        VNS { "VNS", "dong national du Vietnam" }
-        VUV { "VUV", "vatu" }
-        WSP { "WSP", "livre du Samoa" }
-        WST { "WST", "tala" }
-        XAD { "XAD", "dinar asiatique (unit\u00E9 de compte)" }
-        XAF { "XAF", "franc CFA (BEAC)" }
-        XAM { "XAM", "unit\u00E9 mon\u00E9taire asiatique" }
-        XAU { "XAU", "Or"                 }
-        XBA { "XBA", "unit\u00E9 composite europ\u00E9enne" }
-        XBB { "XBB", "unit\u00E9 mon\u00E9taire europ\u00E9enne" }
-        XBC { "XBC", "unit\u00E9 de compte europ\u00E9enne (XBC)" }
-        XBD { "XBD", "unit\u00E9 de compte europ\u00E9enne (XBD)" }
-        XCD { "XCD", "dollar des Cara\u00EFbes" }
-        XCF { "XCF", "nouveau franc CFA" }
-        XEF { "XEF", "franc CFA (BCEAEC)" }
-        XEU { "XEU", "unit\u00E9 de compte europ\u00E9enne (ECU)" }
-        XFO { "XFO", "franc or"    }
-        XFU { "XFU", "franc UIC"     }
-        XID { "XID", "dinar musulman"        }
-        XMF { "XMF", "nouveau franc m\u00E9tropolitain" }
-        XNF { "XNF", "franc CFA antillais" }
-        XOF { "XOF", "franc CFA (BCEAO)" }
-        XPF { "XPF", "franc CFP" }
-        //XPS { "XPS", "livre sterling" }
-        //XSS { "XSS", "shilling sterling" }
-        XTR { "XTR", "rouble transf\u00E9rable du COMECON" }
-        YDD { "YDD", "dinar du Y\u00E9men" }
-        YEI { "YEI", "riyal du Y\u00E9men" }
-        YER { "YER", "riyal du Y\u00E9men" }
-        YUD { "YUD", "nouveau dinar yougoslave" }
-        YUF { "YUF", "dinar de la F\u00E9d\u00E9ration Yougoslave" }
-        YUG { "YUG", "dinar yougoslave 1994" }
-        YUM { "YUM", "dinar yougoslave Noviy" }
-        YUN { "YUN", "dinar yougoslave convertible" }
-        YUO { "YUO", "dinar yougoslave d\u2019Octobre" }
-        YUR { "YUR", "dinar yougoslave r\u00E9form\u00E9" }
-        ZAL { "ZAL", "rand sud-africain (financier)"     }
-        ZAP { "ZAP", "livre sud-africaine" }
-        ZAR { "ZAR", "rand" }
-        ZMK { "ZMK", "kwacha" }
-        ZMP { "ZMP", "livre zambienne" }
-        ZRN { "ZRN", "nouveau za\u00EFre" }
-        ZRZ { "ZRZ", "za\u00EFre" }
-        ZWD { "Z$",  "dollar du Zimbabwe" }
-    }
-    localPatternChars { "GaMjkHmsSEDFwWxhKzAeugXZ" }
-    LocaleScript{  
-        "Latn",  // ISO 15924 Name 
-    }
-    ExemplarCharacters { "[a-z\u00e9\u00e8\u00f9\u00e7\u00e0\u00e2\u00ea\u00ee\u00f4\u00fb\u00e6\u0153\u00eb\u00ef\u00ff\u00fc]" }
-
-// http://lcweb.loc.gov/standards/iso639-2/frenchlangn.html
-    Languages { 
-        //Fallback { "en" }
-        root { "racine" }
-
-        aa { "afar" }
-        ab { "abkhaze" }
-        ae { "avestique" }
-        af { "afrikaans" }
-        ak  { "akan" }
-        am { "amharique" }
-        an { "aragonais" }
-        ar { "arabe" }
-        as { "assamais" }
-        av { "avar" }
-        ay { "aymara" }
-        az { "az\u00E9ri" }
-        ba { "bachkir" }
-        be { "bi\u00E9lorusse" }
-        bg { "bulgare" }
-        bh { "bihari" }
-        bi { "bichlamar" }
-        bm { "bambara" }
-        bn { "bengali" }
-        bo { "tib\u00E9tain" }
-        br { "breton" }
-        bs { "bosniaque" }
-        byn { "blin" }
-        ca { "catalan" }
-        ce { "tch\u00E9tch\u00E8ne" }
-        ch { "chamorro" }
-        chr { "cherokee" }
-        co { "corse" }
-        cr { "cree" }
-        cs { "tch\u00E8que" }
-        cu  { "slavon d\u2019\u00e9glise" }
-        cv { "tchouvache" }
-        cy { "gallois" }
-        da { "danois" }
-        de { "allemand" }
-        dv { "maldivien" }
-        dz { "dzongkha" }
-        ee { "\u00E9w\u00E9" }
-        el { "grec" }
-        en { "anglais" }
-        eo { "esp\u00E9ranto" }
-        es { "espagnol" }
-        et { "estonien" }
-        eu { "basque" }
-        fa { "persan" }
-        ff { "peul" }
-        fi { "finnois" }
-        fj { "fidjien" }
-        fo { "f\u00E9ro\u00EFen" }
-        fr { "fran\u00E7ais" }
-        fy { "frison" }
-        ga { "irlandais" }
-        gd { "ga\u00E9lique \u00E9cossais" }
-        gez { "gu\u00E8ze" }
-        gl { "galicien" }
-        gn { "guarani" }
-        gu { "goudjrati" }
-        gv { "manx" }
-        ha { "haoussa" }
-        haw { "hawa\u00EFen" }
-        he { "h\u00E9breu" }
-        hi { "hindi" }
-        ho { "hiri motu" }
-        hr { "croate" }
-        ht { "ha\u00EFtien" }
-        hu { "hongrois" }
-        hy { "arm\u00E9nien" }
-        hz { "h\u00E9r\u00E9ro" }
-        ia { "interlingua" }
-        id { "indon\u00E9sien" }
-        ie { "interlingue" }
-        ig { "igbo" }
-        ii { "yi de Sichuan" }
-        ik { "inupiaq" }
-        io { "ido" }
-        is { "islandais" }
-        it { "italien" }
-        iu { "inuktitut" }
-        ja { "japonais" }
-        jv { "javanais" }
-        ka { "g\u00E9orgien" }
-        kg { "kongo" }
-        ki { "kikuyu" }
-        kj { "kuanyama" }
-        kk { "kazakh" }
-        kl { "groenlandais" }
-        km { "khmer" }
-        kn { "kannada" }
-        ko { "cor\u00E9en" }
-        kok { "konkani" }
-        kr { "kanouri" }
-        ks { "kashmiri" }
-        ku { "kurde" }
-        kv { "komi" }
-        kw { "cornique" }
-        ky { "kirghize" }
-        la { "latin" }
-        lb { "luxembourgeois" }
-        lg { "ganda" }
-        li { "limbourgeois" }
-        ln { "lingala" }
-        lo { "lao" }
-        lt { "lituanien" }
-        lu { "luba-katanga" }
-        lv { "letton" }
-        mg { "malgache" }
-        mh { "marshall" }
-        mi { "maori" }
-        mk { "mac\u00E9donien" }
-        ml { "malayalam" }
-        mn { "mongol" }
-        mo { "moldave" }
-        mr { "marathe" }
-        ms { "malais" }
-        mt { "maltais" }
-        my { "birman" }
-        na { "nauruan" }
-        nb { "bokm\u00E5l norv\u00E9gien" }
-        nd { "nd\u00E9b\u00E9l\u00E9 du Nord" }
-        ne { "n\u00E9palais" }
-        ng { "ndonga" }
-        nl { "n\u00E9erlandais" }
-        nn { "nynorsk norv\u00E9gien" }
-        no { "norv\u00E9gien" }
-        nr { "nd\u00E9b\u00E9l\u00E9 du Sud" }
-        nv { "navaho" }
-        ny { "nyanja" }
-        oc { "occitan (apr\u00e8s 1500)" }
-        oj { "ojibwa" }
-        om { "galla" }
-        or { "oriya" }
-        os { "oss\u00E8te" }
-        pa { "pendjabi" }
-        pi { "pali" }
-        pl { "polonais" }
-        ps { "pachto" }
-        pt { "portugais" }
-        qu { "quechua" }
-        rm { "rh\u00E9to-roman" }
-        rn { "roundi" }
-        ro { "roumain" }
-        ru { "russe" }
-        rw { "rwanda" }
-        sa { "sanskrit" }
-        sc { "sarde" }
-        sd { "sindhi" }
-        se { "sami du Nord" }
-        sg { "sango" }
-        sh { "serbo-croate" }
-        si { "singhalais" }
-        sid { "sidamo" }
-        sk { "slovaque" }
-        sl { "slov\u00E8ne" }
-        sm { "samoan" }
-        sn { "shona" }
-        so { "somali" }
-        sq { "albanais" }
-        sr { "serbe" }
-        ss { "swati" }
-        st { "sotho du Sud" }
-        su { "soundanais" }
-        sv { "su\u00E9dois" }
-        sw { "swahili" }
-        syr { "syriaque" }
-        ta { "tamoul" }
-        te { "t\u00E9lougou" }
-        tg { "tadjik" }
-        th { "tha\u00EF" }
-        ti { "tigrigna" }
-        tig { "tigr\u00E9" }
-        tk { "turkm\u00E8ne" }
-        tl { "tagalog" }
-        tn { "setswana" }
-        to { "tongan (\u00celes Tonga)" }
-        tr { "turc" }
-        ts { "tsonga" }
-        tt { "tatar" }
-        tw { "twi" }
-        ty { "tahitien" }
-        ug { "ou\u00EFgour" }
-        uk { "ukrainien" }
-        ur { "ourdou" }
-        uz { "ouzbek" }
-        ve { "venda" }
-        vi { "vietnamien" }
-        vo { "volap\u00FCk" }
-        wa { "wallon" }
-        wo { "wolof" }
-        xh { "xhosa" }
-        yi { "yiddish" }
-        yo { "yoruba" }
-        za { "zhuang" }
-        zh { "chinois" }
-        zu { "zoulou" }
-    }
-    NumberElements { 
-        ",",
-        "\u00A0",
-        ";",
-        "%",
-        "0",
-        "#",
-        "-",
-        "E",
-        "\u2030",
-        "\u221E",
-        "\uFFFD",
-        "+",
-    }
-    NumberPatterns { 
-        "#,##0.###;-#,##0.###",
-        "#,##0.00 \u00A4;-#,##0.00 \u00A4",
-        "#,##0%",
-        "#E0",
-    }
-
-    Scripts {
-        Arab { "arabe" }
-        Armn { "arm\u00E9nien" }
-        Beng { "beng\u00E2gl\u00EE" }
-        Bopo { "bopomofo" }
-        Brai { "braille" }
-        Buhd { "bouhide" }
-        Cans { "syllabaire autochthone canadien unifi\u00E9" }
-        Cher { "tch\u00E9rok\u00EE" }
-        Cprt { "chypriote" }
-        Cyrl { "cyrillique" }
-        Deva { "d\u00E9van\u00E2gar\u00EE" }
-        Dsrt { "d\u00E9s\u00E9ret" }
-        Ethi { "\u00E9thiopique" }
-        Geor { "g\u00E9orgien" }
-        Goth { "gotique" }
-        Grek { "grec" }
-        Gujr { "goudjar\u00E2t\u00EE" }
-        Guru { "gourmoukh\u00EE" }
-        Hang { "hang\u00FBl" }
-        Hano { "hanoun\u00F3o" }
-        Hani { "han" }
-        Hans { "han simplifi\u00E9" }
-        Hant { "han traditionnel" }
-        Hebr { "h\u00E9breu" }
-        Hira { "hiragana" }
-        Ital { "ancien italique" }
-        Kana { "katakana" }
-        Khmr { "khmer" }
-        Knda { "kannara" }
-        Laoo { "laotien" }
-        Latn { "latin" }
-        Limb { "limbou" }
-        Linb { "lin\u00E9aire B" }
-        Mlym { "malay\u00E2lam" }
-        Mong { "mongol" }
-        Mymr { "birman" }
-        Ogam { "ogam" }
-        Orya { "oriy\u00E2" }
-        Osma { "osmanais" }
-        Qaac { "copte" } // Coptic is not a formal part of ISO-15924 yet
-        Qaai { "h\u00E9rit\u00E9" } // PUA
-        Runr { "runique" }
-        Shaw { "shavien" }
-        Sinh { "singhalais" }
-        Syrc { "syriaque" }
-        Tagb { "tagbanoua" }
-        Tale { "ta\u00EF-le" }
-        Taml { "tamoul" }
-        Telu { "t\u00E9lougou" }
-        Tglg { "tagal" }
-        Thaa { "th\u00E2na" }
-        Thai { "tha\u00EF" }
-        Tibt { "tib\u00E9tain" }
-        Ugar { "ougaritique" }
-        Yiii { "yi" }
-        //Zyyy { "commun" } // This could be "\u00E9criture ind\u00E9termin\u00E9e"
-    }
-    Keys{
-        collation{ "Ordonnancement" }
-        calendar { "Calendrier" }
-        currency { "Devise" }
-    }
-    Types {
-        collation{
-            direct      { "Ordre direct" }
-            phonebook   { "Ordre de l\u2019annuaire" }
-            pinyin      { "Ordre pinyin" }
-            stroke      { "Ordre des traits" }
-            traditional { "Ordre traditionnel" }
+        islamic{
+            monthNames{
+                format{
+                    abbreviated:alias{"fr/calendar/islamic/monthNames/format/wide"}
+                    wide{
+                        "Mouharram",
+                        "Safar",
+                        "Rabiʻ-oul-Aououal",
+                        "Rabiʻ-out-Tani",
+                        "Djoumada-l-Oula",
+                        "Djoumada-t-Tania",
+                        "Radjab",
+                        "Chaʻban",
+                        "Ramadan",
+                        "Chaououal",
+                        "Dou-l-Qaʻda",
+                        "Dou-l-Hidjja",
+                    }
+                }
+            }
         }
-        calendar{
-            japanese    { "Calendrier japonais"  }
-            buddhist    { "Calendrier bouddhiste" }
-            islamic     { "Calendrier musulman"   }
-            islamic-civil { "Calendrier civil musulman" }
-            hebrew      { "Calendrier h\u00E9bra\u00EFque" }
-            chinese     { "Calendrier chinois" }
-            gregorian   { "Calendrier gr\u00E9gorien" }
-        }
+        islamic-civil:alias{"fr/calendar/islamic"}
     }
-    Variants {
-        REVISED { "R\u00e9vis\u00e9" }
-    }
-
-    zoneStrings {
-         {
+    localPatternChars{"GaMjkHmsSEDFwWxhKzAeugXZ"}
+    zoneStrings{
+        {
             "PST",
             "Heure Normale du Pacifique",
             "PST",
-            "Heure Avanc\u00e9e du Pacifique",
+            "Heure Avancée du Pacifique",
             "PDT",
             "Los Angeles",
         }
@@ -1059,7 +2218,7 @@ fr {
             "America/Los_Angeles",
             "Heure Normale du Pacifique",
             "PST",
-            "Heure Avanc\u00e9e du Pacifique",
+            "Heure Avancée du Pacifique",
             "PDT",
             "Los Angeles",
         }
@@ -1067,7 +2226,7 @@ fr {
             "MST",
             "Heure Normale des Rocheuses",
             "MST",
-            "Heure Avanc\u00e9e des Rocheuses",
+            "Heure Avancée des Rocheuses",
             "MDT",
             "Denver",
         }
@@ -1075,7 +2234,7 @@ fr {
             "America/Denver",
             "Heure Normale des Rocheuses",
             "MST",
-            "Heure Avanc\u00e9e des Rocheuses",
+            "Heure Avancée des Rocheuses",
             "MDT",
             "Denver",
         }
@@ -1099,7 +2258,7 @@ fr {
             "CST",
             "Heure Normale du Centre",
             "CST",
-            "Heure Avanc\u00e9e du Centre",
+            "Heure Avancée du Centre",
             "CDT",
             "Chicago",
         }
@@ -1107,87 +2266,87 @@ fr {
             "America/Chicago",
             "Heure Normale du Centre",
             "CST",
-            "Heure Avanc\u00e9e du Centre",
+            "Heure Avancée du Centre",
             "CDT",
             "Chicago",
         }
         {
             "EST",
-            "Heure Normale de l\u2019Est",
+            "Heure Normale de l’Est",
             "EST",
-            "Heure Avanc\u00e9e de l\u2019Est",
+            "Heure Avancée de l’Est",
             "EDT",
             "New York",
         }
         {
             "America/New_York",
-            "Heure Normale de l\u2019Est",
+            "Heure Normale de l’Est",
             "EST",
-            "Heure Avanc\u00e9e de l\u2019Est",
+            "Heure Avancée de l’Est",
             "EDT",
             "New York",
         }
         {
             "IET",
-            "Heure Normale de l\u2019Est",
+            "Heure Normale de l’Est",
             "EST",
-            "Heure Normale de l\u2019Est",
+            "Heure Normale de l’Est",
             "EST",
             "Indianapolis",
         }
         {
             "America/Indianapolis",
-            "Heure Normale de l\u2019Est",
+            "Heure Normale de l’Est",
             "EST",
-            "Heure Normale de l\u2019Est",
+            "Heure Normale de l’Est",
             "EST",
             "Indianapolis",
         }
         {
             "HST",
-            "Heure Normale de Hawa\u00ef",
+            "Heure Normale de Hawaï",
             "HST",
-            "Heure Normale de Hawa\u00ef",
+            "Heure Normale de Hawaï",
             "HST",
             "Honolulu",
         }
         {
             "Pacific/Honolulu",
-            "Heure Normale de Hawa\u00ef",
+            "Heure Normale de Hawaï",
             "HST",
-            "Heure Normale de Hawa\u00ef",
+            "Heure Normale de Hawaï",
             "HST",
             "Honolulu",
         }
         {
             "AST",
-            "Heure Normale de l\u2019Alaska",
+            "Heure Normale de l’Alaska",
             "AST",
-            "Heure Avanc\u00e9e de l\u2019Alaska",
+            "Heure Avancée de l’Alaska",
             "ADT",
-            "Anchorage"
+            "Anchorage",
         }
         {
             "America/Anchorage",
-            "Heure Normale de l\u2019Alaska",
+            "Heure Normale de l’Alaska",
             "AST",
-            "Heure Avanc\u00e9e de l\u2019Alaska",
+            "Heure Avancée de l’Alaska",
             "ADT",
             "Anchorage",
         }
         {
             "America/Halifax",
-            "Heure Normale de l\u2019Atlantique",
+            "Heure Normale de l’Atlantique",
             "AST",
-            "Heure Avanc\u00e9e de l\u2019Atlantique",
+            "Heure Avancée de l’Atlantique",
             "ADT",
-            "Halifax"
+            "Halifax",
         }
         {
             "CNT",
             "Heure Normale de Terre-Neuve",
             "CNT",
-            "Heure Avanc\u00e9e de Terre-Neuve",
+            "Heure Avancée de Terre-Neuve",
             "CDT",
             "St. Johns",
         }
@@ -1195,23 +2354,23 @@ fr {
             "America/St_Johns",
             "Heure Normale de Terre-Neuve",
             "CNT",
-            "Heure Avanc\u00e9e de Terre-Neuve",
+            "Heure Avancée de Terre-Neuve",
             "CDT",
             "St. Johns",
         }
         {
             "ECT",
-            "Heure Normale de l\u2019Europe Centrale",
+            "Heure Normale de l’Europe Centrale",
             "CET",
-            "Heure Avanc\u00e9e de l\u2019Europe Centrale",
+            "Heure Avancée de l’Europe Centrale",
             "CEST",
             "Paris",
         }
         {
             "Europe/Paris",
-            "Heure Normale de l\u2019Europe Centrale",
+            "Heure Normale de l’Europe Centrale",
             "CET",
-            "Heure Avanc\u00e9e de l\u2019Europe Centrale",
+            "Heure Avancée de l’Europe Centrale",
             "CEST",
             "Paris",
         }
@@ -1233,9 +2392,9 @@ fr {
         }
         {
             "Asia/Jerusalem",
-            "Heure Normale d\u2019Isra\u00ebl",
+            "Heure Normale d’Israël",
             "IST",
-            "Heure Avanc\u00e9e d\u2019Isra\u00ebl",
+            "Heure Avancée d’Israël",
             "IDT",
             "Jerusalem",
         }
@@ -1257,9 +2416,9 @@ fr {
         }
         {
             "Europe/Bucharest",
-            "Heure Normale de l\u2019Europe de l\u2019Est",
+            "Heure Normale de l’Europe de l’Est",
             "EET",
-            "Heure Avanc\u00e9e de l\u2019Europe de l\u2019Est",
+            "Heure Avancée de l’Europe de l’Est",
             "EEST",
             "Bucharest",
         }

@@ -1,26 +1,16 @@
-// ***************************************************************************
+﻿// ***************************************************************************
 // *
-// *   Copyright (C) 1997-2004, International Business Machines
-// *   Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2004 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Date & Time: 2004/8/19 23:30
+// * Source File: \work\locale\common\main\\es_PA.xml
 // *
 // ***************************************************************************
-
-es_PA {
-    Version { "2.0" }
-//    NumberElements { 
-//        ".",
-//        ",",
-//        ";",
-//        "%",
-//        "0",
-//        "#",
-//        "-",
-//        "E",
-//        "\u2030",
-//        "\u221E",
-//        "\uFFFD",
-//    }
+es_PA{
+    Version{"1.2"}
     calendar{
+        
         gregorian{
             DateTimePatterns{
                 "hh:mm:ss a z",

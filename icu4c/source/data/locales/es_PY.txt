@@ -1,13 +1,14 @@
-// ***************************************************************************
+﻿// ***************************************************************************
 // *
-// *   Copyright (C) 1997-2004, International Business Machines
-// *   Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2004 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Date & Time: 2004/8/19 23:32
+// * Source File: \work\locale\common\main\\es_PY.xml
 // *
 // ***************************************************************************
-
-es_PY {
-    Version{ "2.0" }
-    NumberElements {
+es_PY{
+    NumberElements{
         ",",
         ".",
         ";",
@@ -16,18 +17,20 @@ es_PY {
         "#",
         "-",
         "E",
-        "\u2030",
-        "\u221E",
-        "\uFFFD",
+        "‰",
+        "∞",
+        "�",
         "+",
     }
-    NumberPatterns { 
+    NumberPatterns{
         "#,##0.###;-#,##0.###",
-        "\u00A4 #,##0;\u00A4 -#,##0",
+        "¤ #,##0;¤ -#,##0",
         "#,##0%",
         "#E0",
     }
+    Version{"1.2"}
     calendar{
+        
         gregorian{
             DateTimePatterns{
                 "hh:mm:ss a z",

@@ -1,32 +1,28 @@
-// ***************************************************************************
+﻿// ***************************************************************************
 // *
-// *   Copyright (C) 1997-2004, International Business Machines
-// *   Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2004 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Date & Time: 2004/8/19 23:8
+// * Source File: \work\locale\common\main\\en_IE.xml
 // *
 // ***************************************************************************
-
-en_IE {
-    Version { "2.0" }
-    Currencies {
-        IEP { "\u00A3","Irish Pound" } // 1922-2001
+en_IE{
+    Currencies{
+        IEP{
+            "£",
+            "Irish Pound",
+        }
     }
-    NumberPatterns { 
+    NumberPatterns{
         "#,##0.###;-#,##0.###",
-        "\u00a4#,##0.00;-\u00a4#,##0.00",
+        "¤#,##0.00;-¤#,##0.00",
         "#,##0%",
         "#E0",
     }
-    zoneStrings { 
-        {
-            "Europe/Dublin",
-            "Greenwich Mean Time",   // This doesn't look correct
-            "GMT",                   // This doesn't look correct
-            "Irish Summer Time",
-            "IST",
-            "Dublin",
-        }
-    }
+    Version{"1.2"}
     calendar{
+        
         gregorian{
             AmPmMarkers{
                 "a.m.",
@@ -43,6 +39,16 @@ en_IE {
                 "dd/MM/yyyy",
                 "{1} {0}",
             }
+        }
+    }
+    zoneStrings{
+        {
+            "Europe/Dublin",
+            "Greenwich Mean Time",
+            "GMT",
+            "Irish Summer Time",
+            "IST",
+            "Dublin",
         }
     }
 }

@@ -1,37 +1,28 @@
-// ***************************************************************************
+﻿// ***************************************************************************
 // *
-// *   Copyright (C) 1997-2004, International Business Machines
-// *   Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2004 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Date & Time: 2004/8/19 23:12
+// * Source File: \work\locale\common\main\\en_PH.xml
 // *
 // ***************************************************************************
-
-en_PH {
-    Version{"2.0"}
-
+en_PH{
     Currencies{
-        PHP { "PHP",  "Peso"     } 
+        PHP{
+            "PHP",
+            "Peso",
+        }
     }
-//    NumberElements {
-//        ".",
-//        ",",
-//        ";",
-//        "%",
-//        "0",
-//        "#",
-//        "-",
-//        "E",
-//        "\u2030",
-//        "\u221E",
-//        "\uFFFD",
-//    }
-    NumberPatterns { 
+    NumberPatterns{
         "#,##0.###;-#,##0.###",
-        "\u00A4#,##0.00;(\u00A4#,##0.00)",
+        "¤#,##0.00;(¤#,##0.00)",
         "#,##0%",
         "#E0",
     }
-
+    Version{"1.2"}
     calendar{
+        
         gregorian{
             DateTimePatterns{
                 "h:mm:ss a z",

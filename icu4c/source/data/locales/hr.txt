@@ -1,291 +1,298 @@
-// ***************************************************************************
+﻿// ***************************************************************************
 // *
-// *   Copyright (C) 1997-2004, International Business Machines
-// *   Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2004 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Date & Time: 2004/8/19 23:52
+// * Source File: \work\locale\common\main\\hr.xml
 // *
 // ***************************************************************************
-
-hr {
-    Version{"3.0"}
-
-    Countries { 
-        Fallback{ "en"}
-        AD { "Andora" }
-        AE { "Ujedinjeni Arapski Emirati" }
-        AF { "Afganistan" }
-        AG { "Antigua i Barbuda" }
-        AI { "Anguila" }
-        AL { "Albanija" }
-        AM { "Armenija" }
-        AN { "Nizozemski Antili" }
-        //AO { "Angola" }
-        AQ { "Antarktik" }
-        //AR { "Argentina" }
-        AS { "Ameri\u010Dka Samoa" }
-        AT { "Austrija" }
-        AU { "Australija" }
-        //AW { "Aruba" }
-        AZ { "Azerbajd\u017Ean" }
-        BA { "Bosna i Hercegovina" }
-        //BB { "Barbados" }
-        BD { "Banglade\u0161" }
-        BE { "Belgija" }
-        //BF { "Burkina Faso" }
-        BG { "Bugarska" }
-        BH { "Bahrein" }
-        //BI { "Burundi" }
-        //BJ { "Benin" }
-        //BM { "Bermuda" }
-        BN { "Brunei Darussalam" }
-        BO { "Bolivija" }
-        //BR { "Brazil" }
-        BS { "Bahami" }
-        BT { "Butan" }
-        BV { "Otok Bouvet" }
-        BW { "Bocvana" }
-        BY { "Bjelorusija" }
-        //BZ { "Belize" }
-        CA { "Kanada" }
-        CC { "Kokos (Keeling) Otoci" }
-        CD { "Kongo, Demokratska Republika" }
-        CF { "Srednjoafri\u010Dka Republika" }
-        CG { "Kongo" }
-        CH { "\u0160vicarska" }
-        CI { "Obala Bjelokosti" }
-        CK { "Kukovi Otoci" }
-        CL { "\u010Cile" }
-        CM { "Kamerun" }
-        CN { "Kina" }
-        CO { "Kolumbija" }
-        CR { "Kostarika" }
-        CU { "Kuba" }
-        CV { "Zeleni Rt" }
-        CX { "Bo\u017Ei\u0107ni Otoci" }
-        CY { "Cipar" }
-        CZ { "\u010Ce\u0161ka Republika" }
-        DE { "Njema\u010Dka" }
-        DJ { "D\u017Eibuti" }
-        DK { "Danska" }
-        DM { "Dominika" }
-        DO { "Dominikanska Republika" }
-        DZ { "Al\u017Eir" }
-        EC { "Ekvador" }
-        EE { "Estonija" }
-        EG { "Egipat" }
-        EH { "Zapadna Sahara" }
-        ER { "Eritreja" }
-        ES { "\u0160panjolska" }
-        ET { "Etiopija" }
-        FI { "Finska" }
-        FJ { "Fid\u017Ei" }
-        FK { "Falklandski Otoci" }
-        FM { "Mikronezija, Federalne Dr\u017Eave" }
-        FO { "Farski Otoci" }
-        FR { "Francuska" }
-        //GA { "Gabon" }
-        GB { "Ujedinjena Kraljevina" }
-        //GD { "Grenada" }
-        GE { "Gruzija" }
-        GF { "Francuska Gvajana" }
-        GH { "Gana" }
-        //GI { "Gibraltar" }
-        //GL { "Greenland" }
-        GM { "Gambija" }
-        GN { "Gvineja" }
-        //GP { "Guadeloupe" }
-        GQ { "Ekvatorska Gvineja" }
-        GR { "Gr\u010Dka" }
-        GS { "Ju\u017Ena Gruzija i Ju\u017Eni Sendvi\u010D Otoci" }
-        GT { "Gvatemala" }
-        //GU { "Guam" }
-        GW { "Gvineja Bisau" }
-        GY { "Gvajana" }
-        HK { "Hong Kong S.A.R. Kine" }
-        HM { "Heard Otok i McDonald Otoci" }
-        //HN { "Honduras" }
-        HR { "Hrvatska" }
-        //HT { "Haiti" }
-        HU { "Ma\u0111arska" }
-        ID { "Indonezija" }
-        IE { "Irska" }
-        IL { "Izrael" }
-        IN { "Indija" }
-        IO { "Britanski Teritorij Indijskog Oceana" }
-        IQ { "Irak" }
-        IR { "Iran, Islamska Republika" }
-        IS { "Island" }
-        IT { "Italija" }
-        JM { "Jamajka" }
-        //JO { "Jordan" }
-        //JP { "Japan" }
-        KE { "Kenija" }
-        KG { "Kirgistan" }
-        KH { "Kambod\u017Ea" }
-        //KI { "Kiribati" }
-        KM { "Komori" }
-        KN { "Sveti Kristofor i Nevis" }
-        KP { "Koreja, Sjeverna" } // alternate name { "Koreja, Demokratska Narodna Republika" }
-        KR { "Koreja, Ju\u017Ena" } // alternate name { "Koreja, Republika" }
-        KW { "Kuvajt" }
-        KY { "Kajmanski Otoci" }
-        KZ { "Kazakstan" }
-        LA { "Laoska Narodna Demokratska Republika" }
-        LB { "Libanon" }
-        LC { "Sveta Lucija" }
-        LI { "Lihten\u0161tajn" }
-        LK { "\u0160ri Lanka" }
-        LR { "Liberija" }
-        LS { "Lesoto" }
-        LT { "Litva" }
-        LU { "Luksemburg" }
-        LV { "Latvija" }
-        LY { "Libijska Arapska D\u017Eamahirija" }
-        MA { "Maroko" }
-        MC { "Monako" }
-        MD { "Moldavija, Republika" }
-        MG { "Madagaskar" }
-        MH { "Mar\u0161alovi Otoci" }
-        MK { "Makedonija, Republika" }
-        //ML { "Mali" }
-        MM { "Mijanma" }
-        MN { "Mongolija" }
-        MO { "Makao S.A.R. Kine" }
-        MP { "Sjeverni Marianski Otoci" }
-        MQ { "Martinik" }
-        MR { "Mauritanija" }
-        MS { "Montserat" }
-        //MT { "Malta" }
-        MU { "Mauricijus" }
-        MV { "Maldivi" }
-        MW { "Malavi" }
-        MX { "Meksiko" }
-        MY { "Malezija" }
-        MZ { "Mozambik" }
-        NA { "Namibija" }
-        NC { "Nova Kaledonija" }
-        //NE { "Niger" }
-        NF { "Norfol\u0161ki Otoci" }
-        NG { "Nigerija" }
-        NI { "Nikaragva" }
-        NL { "Nizozemska" }
-        NO { "Norve\u0161ka" }
-        //NP { "Nepal" }
-        //NR { "Nauru" }
-        //NU { "Niue" }
-        NZ { "Novi Zeland" }
-        //OM { "Oman" }
-        //PA { "Panama" }
-        //PE { "Peru" }
-        PF { "Francuska Polinezija" }
-        PG { "Papua Nova Gvineja" }
-        PH { "Filipini" }
-        //PK { "Pakistan" }
-        PL { "Poljska" }
-        PM { "Sveti Petar i Miguel" }
-        //PN { "Pitcairn" }
-        PR { "Portoriko" }
-        PS { "Palestinska Teritoija" }
-        //PT { "Portugal" }
-        //PW { "Palau" }
-        PY { "Paragvaj" }
-        QA { "Katar" }
-        RE { "Reunion" }
-        RO { "Rumunjska" }
-        RU { "Ruska Federacija" }
-        RW { "Ruanda" }
-        SA { "Saudijska Arabija" }
-        SB { "Salamunovi Otoci" }
-        SC { "Sej\u0161eli" }
-        //SD { "Sudan" }
-        SE { "\u0160vedska" }
-        SG { "Singapur" }
-        SH { "Sveta Helena" }
-        SI { "Slovenija" }
-        SJ { "Svalbard i Jan Mayen" }
-        SK { "Slova\u010Dka" }
-        SL { "Sijera Leone" }
-        //SM { "San Marino" }
-        //SN { "Senegal" }
-        SO { "Somalija" }
-        SR { "Surinam" }
-        ST { "Sveti Toma i Prinsipe" }
-        //SV { "El Salvador" }
-        SY { "Sirija" } // alternate name { "Sirijska Arapska Republika" }
-        SZ { "Svazi" }
-        TC { "Turkski i Kaikos Otoci" }
-        TD { "\u010Cad" }
-        TF { "Francuske Ju\u017Ene Teritorije" }
-        //TG { "Togo" }
-        TH { "Tajland" }
-        TJ { "Tad\u017Eikistan" }
-        //TK { "Tokelau" }
-        TL { "Isto\u010Dni Timor" }
-        //TM { "Turkmenistan" }
-        TN { "Tunis" }
-        //TO { "Tonga" }
-        TR { "Turska" }
-        TT { "Trinidad i Tobago" }
-        //TV { "Tuvalu" }
-        TW { "Tajvan, Kineska Pokrajina" }
-        TZ { "Tanzanija" }
-        UA { "Ukrajina" }
-        //UG { "Uganda" }
-        UM { "Sjedinjene Dr\u017Eave Manji Vanjski Otoci" }
-        US { "Sjedinjene Dr\u017Eave" }
-        UY { "Urugvaj" }
-        //UZ { "Uzbekistan" }
-        VA { "Sveta Stolica (Dr\u017Eava Vatikanskog Grada)" }
-        VC { "Sveti Vincent i Grenadini" }
-        //VE { "Venezuela" }
-        VG { "Britanski Djevi\u010Danski Otoci" }
-        VI { "U.S. Djevi\u010Danski Otoci" }
-        VN { "Vijetnam" }
-        //VU { "Vanuatu" }
-        WF { "Wallis i Futuna" }
-        //WS { "Samoa" }
-        YE { "Jemen" }
-        YT { "Majote" }
-        YU { "Jugoslavija" }
-        ZA { "Ju\u017Ena Afrika" }
-        ZM { "Zambija" }
-        ZW { "Zimbabve" }
+hr{
+    Countries{
+        AD{"Andora"}
+        AE{"Ujedinjeni Arapski Emirati"}
+        AF{"Afganistan"}
+        AG{"Antigua i Barbuda"}
+        AI{"Anguila"}
+        AL{"Albanija"}
+        AM{"Armenija"}
+        AN{"Nizozemski Antili"}
+        AO{"Angola"}
+        AQ{"Antarktik"}
+        AR{"Argentina"}
+        AS{"Američka Samoa"}
+        AT{"Austrija"}
+        AU{"Australija"}
+        AW{"Aruba"}
+        AZ{"Azerbajdžan"}
+        BA{"Bosna i Hercegovina"}
+        BB{"Barbados"}
+        BD{"Bangladeš"}
+        BE{"Belgija"}
+        BF{"Burkina Faso"}
+        BG{"Bugarska"}
+        BH{"Bahrein"}
+        BI{"Burundi"}
+        BJ{"Benin"}
+        BM{"Bermuda"}
+        BN{"Brunei Darussalam"}
+        BO{"Bolivija"}
+        BR{"Brazil"}
+        BS{"Bahami"}
+        BT{"Butan"}
+        BV{"Otok Bouvet"}
+        BW{"Bocvana"}
+        BY{"Bjelorusija"}
+        BZ{"Belize"}
+        CA{"Kanada"}
+        CC{"Kokos (Keeling) Otoci"}
+        CD{"Kongo, Demokratska Republika"}
+        CF{"Srednjoafrička Republika"}
+        CG{"Kongo"}
+        CH{"Švicarska"}
+        CI{"Obala Bjelokosti"}
+        CK{"Kukovi Otoci"}
+        CL{"Čile"}
+        CM{"Kamerun"}
+        CN{"Kina"}
+        CO{"Kolumbija"}
+        CR{"Kostarika"}
+        CU{"Kuba"}
+        CV{"Zeleni Rt"}
+        CX{"Božićni Otoci"}
+        CY{"Cipar"}
+        CZ{"Češka Republika"}
+        DE{"Njemačka"}
+        DJ{"Džibuti"}
+        DK{"Danska"}
+        DM{"Dominika"}
+        DO{"Dominikanska Republika"}
+        DZ{"Alžir"}
+        EC{"Ekvador"}
+        EE{"Estonija"}
+        EG{"Egipat"}
+        EH{"Zapadna Sahara"}
+        ER{"Eritreja"}
+        ES{"Španjolska"}
+        ET{"Etiopija"}
+        FI{"Finska"}
+        FJ{"Fidži"}
+        FK{"Falklandski Otoci"}
+        FM{"Mikronezija, Federalne Države"}
+        FO{"Farski Otoci"}
+        FR{"Francuska"}
+        GA{"Gabon"}
+        GB{"Ujedinjena Kraljevina"}
+        GD{"Grenada"}
+        GE{"Gruzija"}
+        GF{"Francuska Gvajana"}
+        GH{"Gana"}
+        GI{"Gibraltar"}
+        GL{"Greenland"}
+        GM{"Gambija"}
+        GN{"Gvineja"}
+        GP{"Guadeloupe"}
+        GQ{"Ekvatorska Gvineja"}
+        GR{"Grčka"}
+        GS{"Južna Gruzija i Južni Sendvič Otoci"}
+        GT{"Gvatemala"}
+        GU{"Guam"}
+        GW{"Gvineja Bisau"}
+        GY{"Gvajana"}
+        HK{"Hong Kong S.A.R. Kine"}
+        HM{"Heard Otok i McDonald Otoci"}
+        HN{"Honduras"}
+        HR{"Hrvatska"}
+        HT{"Haiti"}
+        HU{"Mađarska"}
+        ID{"Indonezija"}
+        IE{"Irska"}
+        IL{"Izrael"}
+        IN{"Indija"}
+        IO{"Britanski Teritorij Indijskog Oceana"}
+        IQ{"Irak"}
+        IR{"Iran, Islamska Republika"}
+        IS{"Island"}
+        IT{"Italija"}
+        JM{"Jamajka"}
+        JO{"Jordan"}
+        JP{"Japan"}
+        KE{"Kenija"}
+        KG{"Kirgistan"}
+        KH{"Kambodža"}
+        KI{"Kiribati"}
+        KM{"Komori"}
+        KN{"Sveti Kristofor i Nevis"}
+        KP{"Koreja, Sjeverna"}
+        KR{"Koreja, Južna"}
+        KW{"Kuvajt"}
+        KY{"Kajmanski Otoci"}
+        KZ{"Kazakstan"}
+        LA{"Laoska Narodna Demokratska Republika"}
+        LB{"Libanon"}
+        LC{"Sveta Lucija"}
+        LI{"Lihtenštajn"}
+        LK{"Šri Lanka"}
+        LR{"Liberija"}
+        LS{"Lesoto"}
+        LT{"Litva"}
+        LU{"Luksemburg"}
+        LV{"Latvija"}
+        LY{"Libijska Arapska Džamahirija"}
+        MA{"Maroko"}
+        MC{"Monako"}
+        MD{"Moldavija, Republika"}
+        MG{"Madagaskar"}
+        MH{"Maršalovi Otoci"}
+        MK{"Makedonija, Republika"}
+        ML{"Mali"}
+        MM{"Mijanma"}
+        MN{"Mongolija"}
+        MO{"Makao S.A.R. Kine"}
+        MP{"Sjeverni Marianski Otoci"}
+        MQ{"Martinik"}
+        MR{"Mauritanija"}
+        MS{"Montserat"}
+        MT{"Malta"}
+        MU{"Mauricijus"}
+        MV{"Maldivi"}
+        MW{"Malavi"}
+        MX{"Meksiko"}
+        MY{"Malezija"}
+        MZ{"Mozambik"}
+        NA{"Namibija"}
+        NC{"Nova Kaledonija"}
+        NE{"Niger"}
+        NF{"Norfolški Otoci"}
+        NG{"Nigerija"}
+        NI{"Nikaragva"}
+        NL{"Nizozemska"}
+        NO{"Norveška"}
+        NP{"Nepal"}
+        NR{"Nauru"}
+        NU{"Niue"}
+        NZ{"Novi Zeland"}
+        OM{"Oman"}
+        PA{"Panama"}
+        PE{"Peru"}
+        PF{"Francuska Polinezija"}
+        PG{"Papua Nova Gvineja"}
+        PH{"Filipini"}
+        PK{"Pakistan"}
+        PL{"Poljska"}
+        PM{"Sveti Petar i Miguel"}
+        PN{"Pitcairn"}
+        PR{"Portoriko"}
+        PS{"Palestinska Teritoija"}
+        PT{"Portugal"}
+        PW{"Palau"}
+        PY{"Paragvaj"}
+        QA{"Katar"}
+        RE{"Reunion"}
+        RO{"Rumunjska"}
+        RU{"Ruska Federacija"}
+        RW{"Ruanda"}
+        SA{"Saudijska Arabija"}
+        SB{"Salamunovi Otoci"}
+        SC{"Sejšeli"}
+        SD{"Sudan"}
+        SE{"Švedska"}
+        SG{"Singapur"}
+        SH{"Sveta Helena"}
+        SI{"Slovenija"}
+        SJ{"Svalbard i Jan Mayen"}
+        SK{"Slovačka"}
+        SL{"Sijera Leone"}
+        SM{"San Marino"}
+        SN{"Senegal"}
+        SO{"Somalija"}
+        SP{"Serbia"}
+        SR{"Surinam"}
+        ST{"Sveti Toma i Prinsipe"}
+        SV{"El Salvador"}
+        SY{"Sirija"}
+        SZ{"Svazi"}
+        TC{"Turkski i Kaikos Otoci"}
+        TD{"Čad"}
+        TF{"Francuske Južne Teritorije"}
+        TG{"Togo"}
+        TH{"Tajland"}
+        TJ{"Tadžikistan"}
+        TK{"Tokelau"}
+        TL{"Istočni Timor"}
+        TM{"Turkmenistan"}
+        TN{"Tunis"}
+        TO{"Tonga"}
+        TR{"Turska"}
+        TT{"Trinidad i Tobago"}
+        TV{"Tuvalu"}
+        TW{"Tajvan, Kineska Pokrajina"}
+        TZ{"Tanzanija"}
+        UA{"Ukrajina"}
+        UG{"Uganda"}
+        UM{"Sjedinjene Države Manji Vanjski Otoci"}
+        US{"Sjedinjene Države"}
+        UY{"Urugvaj"}
+        UZ{"Uzbekistan"}
+        VA{"Sveta Stolica (Država Vatikanskog Grada)"}
+        VC{"Sveti Vincent i Grenadini"}
+        VE{"Venezuela"}
+        VG{"Britanski Djevičanski Otoci"}
+        VI{"U.S. Djevičanski Otoci"}
+        VN{"Vijetnam"}
+        VU{"Vanuatu"}
+        WF{"Wallis i Futuna"}
+        WS{"Samoa"}
+        YE{"Jemen"}
+        YT{"Majote"}
+        YU{"Jugoslavija"}
+        ZA{"Južna Afrika"}
+        ZM{"Zambija"}
+        ZW{"Zimbabve"}
     }
-    Languages {
-        ar { "arapski" }
-        bg { "bugarski" }
-        cs { "\u010De\u0161ki" }
-        da { "danski" }
-        de { "njema\u010Dki" }
-        el { "gr\u010Dki" }
-        en { "engleski" }
-        es { "\u0161panjolski" }
-        et { "estonijski" }
-        fi { "finski" }
-        fr { "francuski" }
-        he { "hebrejski" }
-        hr { "hrvatski" }
-        hu { "ma\u0111arski" }
-        it { "talijanski" }
-        ja { "japanski" }
-        ko { "korejski" }
-        lt { "litvanski" }
-        lv { "latvijski" }
-        nl { "nizozemski" }
-        no { "norve\u0161ki" }
-        pl { "poljski" }
-        pt { "portugalski" }
-        ro { "rumunjski" }
-        ru { "ruski" }
-        sk { "slova\u010Dki" }
-        sl { "slovenski" }
-        sv { "\u0161vedski" }
-        tr { "turski" }
-        zh { "kineski" }
-        //zh_cn { "kineski (pojednostavljeni)" }
-        //zh_tw { "kineski (tradicionalni)" }
+    Currencies{
+        HRK{
+            "Kn",
+            "HRK",
+        }
     }
-
-    NumberElements { 
+    ExemplarCharacters{"[a-p r-v z đ ć č ž š {lj} {nj} {dž}]"}
+    Languages{
+        ar{"arapski"}
+        bg{"bugarski"}
+        cs{"češki"}
+        da{"danski"}
+        de{"njemački"}
+        el{"grčki"}
+        en{"engleski"}
+        es{"španjolski"}
+        et{"estonijski"}
+        fi{"finski"}
+        fr{"francuski"}
+        he{"hebrejski"}
+        hr{"hrvatski"}
+        hu{"mađarski"}
+        it{"talijanski"}
+        ja{"japanski"}
+        ko{"korejski"}
+        lt{"litvanski"}
+        lv{"latvijski"}
+        nl{"nizozemski"}
+        no{"norveški"}
+        pl{"poljski"}
+        pt{"portugalski"}
+        ro{"rumunjski"}
+        ru{"ruski"}
+        sk{"slovački"}
+        sl{"slovenski"}
+        sv{"švedski"}
+        tr{"turski"}
+        zh{"kineski"}
+    }
+    LocaleScript{
+        "Latn",
+    }
+    NumberElements{
         ",",
         ".",
         ";",
@@ -294,27 +301,18 @@ hr {
         "#",
         "-",
         "E",
-        "\u2030",
-        "\u221E",
-        "\uFFFD",
+        "‰",
+        "∞",
+        "�",
         "+",
     }
-    localPatternChars { "GanjkHmsSEDFwWxhKzAeugXZ" }
-
-    ExemplarCharacters { "[a-p r-v z \u0111 \u0107 \u010d \u017e \u0161 {lj} {nj} {d\u017e}]" }
-    LocaleScript:array {
-        "Latn"  // ISO 15924 Name 
-    }
-
-    // Currency display names
-    Currencies {
-        HRK { "Kn", "HRK" }
-    }
+    Version{"1.2"}
     calendar{
+        
         gregorian{
-            DateTimeElements:intvector {
+            DateTimeElements:intvector{
                 2,
-                1, // "Minimal Days in First Week" is unknown. Root value used instead
+                1,
             }
             DateTimePatterns{
                 "HH:mm:ss z",
@@ -334,7 +332,7 @@ hr {
                         "pon",
                         "uto",
                         "sri",
-                        "\u010Det",
+                        "čet",
                         "pet",
                         "sub",
                     }
@@ -343,7 +341,7 @@ hr {
                         "ponedjeljak",
                         "utorak",
                         "srijeda",
-                        "\u010Detvrtak",
+                        "četvrtak",
                         "petak",
                         "subota",
                     }
@@ -354,7 +352,7 @@ hr {
                     abbreviated{
                         "sij",
                         "vel",
-                        "o\u017Eu",
+                        "ožu",
                         "tra",
                         "svi",
                         "lip",
@@ -363,9 +361,9 @@ hr {
                         "ruj",
                         "lis",
                         "stu",
-                        "pro"
+                        "pro",
                     }
-                    narrow {
+                    narrow{
                         "s",
                         "v",
                         "o",
@@ -377,12 +375,12 @@ hr {
                         "r",
                         "l",
                         "s",
-                        "p"
+                        "p",
                     }
                     wide{
-                        "sije\u010dnja",
-                        "velja\u010de",
-                        "o\u017eujka",
+                        "siječnja",
+                        "veljače",
+                        "ožujka",
                         "travnja",
                         "svibnja",
                         "lipnja",
@@ -391,14 +389,14 @@ hr {
                         "rujna",
                         "listopada",
                         "studenoga",
-                        "prosinca"
+                        "prosinca",
                     }
                 }
                 stand-alone{
                     abbreviated{
                         "sij",
                         "vel",
-                        "o\u017Eu",
+                        "ožu",
                         "tra",
                         "svi",
                         "lip",
@@ -407,9 +405,9 @@ hr {
                         "ruj",
                         "lis",
                         "stu",
-                        "pro"
+                        "pro",
                     }
-                    narrow {
+                    narrow{
                         "s",
                         "v",
                         "o",
@@ -421,12 +419,12 @@ hr {
                         "r",
                         "l",
                         "s",
-                        "p"
+                        "p",
                     }
                     wide{
-                        "sije\u010Danj",
-                        "velja\u010Da",
-                        "o\u017Eujak",
+                        "siječanj",
+                        "veljača",
+                        "ožujak",
                         "travanj",
                         "svibanj",
                         "lipanj",
@@ -435,10 +433,11 @@ hr {
                         "rujan",
                         "listopad",
                         "studeni",
-                        "prosinac"
+                        "prosinac",
                     }
                 }
             }
         }
     }
+    localPatternChars{"GanjkHmsSEDFwWxhKzAeugXZ"}
 }

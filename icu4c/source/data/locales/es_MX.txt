@@ -1,32 +1,26 @@
-// ***************************************************************************
+﻿// ***************************************************************************
 // *
-// *   Copyright (C) 1997-2004, International Business Machines
-// *   Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2004 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Date & Time: 2004/8/19 23:28
+// * Source File: \work\locale\common\main\\es_MX.xml
 // *
 // ***************************************************************************
-
-es_MX {
-    Version { "2.0" }
-//    NumberElements { 
-//        ".",
-//        ",",
-//        ";",
-//        "%",
-//        "0",
-//        "#",
-//        "-",
-//        "E",
-//        "\u2030",
-//        "\u221E",
-//        "\uFFFD",
-//    }
-
-    // Currency display names
-    Currencies {
-        MXN { "$", "MXN" }
-        USD { "US$", "D\u00F3lar Americano" }
+es_MX{
+    Currencies{
+        MXN{
+            "$",
+            "MXN",
+        }
+        USD{
+            "US$",
+            "Dólar Americano",
+        }
     }
+    Version{"1.2"}
     calendar{
+        
         gregorian{
             DateTimePatterns{
                 "hh:mm:ss a z",

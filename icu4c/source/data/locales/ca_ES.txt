@@ -1,22 +1,24 @@
-// ***************************************************************************
+﻿// ***************************************************************************
 // *
-// *   Copyright (C) 1997-2004, International Business Machines
-// *   Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2004 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Date & Time: 2004/8/19 22:50
+// * Source File: \work\locale\common\main\\ca_ES.xml
 // *
 // ***************************************************************************
-
-ca_ES {
-    Version{ "2.0" }
-
-    NumberPatterns { 
+ca_ES{
+    NumberPatterns{
         "#,##0.###;-#,##0.###",
-        "#,##0.00 \u00A4;-#,##0.00 \u00A4",
+        "#,##0.00 ¤;-#,##0.00 ¤",
         "#,##0%",
         "#E0",
     }
+    Version{"1.2"}
     calendar{
+        
         gregorian{
-            DateTimeElements:intvector {
+            DateTimeElements:intvector{
                 2,
                 1,
             }

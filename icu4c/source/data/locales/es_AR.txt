@@ -1,13 +1,24 @@
-// ***************************************************************************
+﻿// ***************************************************************************
 // *
-// *   Copyright (C) 1997-2004, International Business Machines
-// *   Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2004 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Date & Time: 2004/8/19 23:20
+// * Source File: \work\locale\common\main\\es_AR.xml
 // *
 // ***************************************************************************
-
-es_AR {
-    Version { "2.0" }
-    NumberElements {
+es_AR{
+    Currencies{
+        ARS{
+            "$",
+            "Peso Argentino",
+        }
+        USD{
+            "US$",
+            "Dólar Americano",
+        }
+    }
+    NumberElements{
         ",",
         ".",
         ";",
@@ -16,17 +27,14 @@ es_AR {
         "#",
         "-",
         "E",
-        "\u2030",
-        "\u221E",
-        "\uFFFD",
+        "‰",
+        "∞",
+        "�",
         "+",
     }
-    // Currency display names
-    Currencies {
-        ARS { "$", "Peso Argentino" }
-        USD { "US$", "D\u00F3lar Americano" }
-    }
+    Version{"1.2"}
     calendar{
+        
         gregorian{
             DateTimePatterns{
                 "HH'h'''mm z",

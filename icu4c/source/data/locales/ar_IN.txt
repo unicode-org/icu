@@ -1,36 +1,22 @@
-// ***************************************************************************
+﻿// ***************************************************************************
 // *
-// *   Copyright (C) 2001-2004, International Business Machines
-// *   Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2004 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Date & Time: 2004/8/19 22:44
+// * Source File: \work\locale\common\main\\ar_IN.xml
 // *
-// *   Generated from - Universal Locales for Linux Project
 // ***************************************************************************
-
-ar_IN {
-    Version{ "2.0" }
-    //    Duplicated in parent
-//    NumberElements { 
-//        ".",
-//        ",",
-//        ";",
-//        "%",
-//        "0",
-//        "#",
-//        "-",
-//        "E",
-//        "\u2030",
-//        "\u221E",
-//        "\uFFFD",
-//    }
-    NumberPatterns { 
+ar_IN{
+    NumberPatterns{
         "##,##,##0.###;-##,##,##0.###",
-        "\u00A4 ##,##,##0.00;-\u00A4 ##,##,##0.00",
+        "¤ ##,##,##0.00;-¤ ##,##,##0.00",
         "##,##,##0%",
         "#E0",
     }
-//    LocaleString { "ar_IN" }
-//    ShortCountry { "IND" }
+    Version{"1.2"}
     calendar{
+        
         gregorian{
             DateTimePatterns{
                 "h:mm:ss a z",
@@ -41,12 +27,14 @@ ar_IN {
                 "d MMMM yyyy",
                 "dd-MM-yyyy",
                 "d-M-yy",
-                "{1} {0}"
+                "{1} {0}",
             }
-            weekend:intvector { // Sunday
-             1, 0,   // onset dow, millis in day  (Sunday 12:00am)
-             2, 0    // cease dow, millis in day  (Monday 12:00am)
-           }
+            weekend:intvector{
+                1,
+                0,
+                2,
+                0,
+            }
         }
     }
 }

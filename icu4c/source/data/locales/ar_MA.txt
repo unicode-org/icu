@@ -1,24 +1,26 @@
-// ***************************************************************************
+﻿// ***************************************************************************
 // *
-// *   Copyright (C) 1997-2004, International Business Machines
-// *   Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2004 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Date & Time: 2004/8/19 22:45
+// * Source File: \work\locale\common\main\\ar_MA.xml
 // *
 // ***************************************************************************
-
-ar_MA {
-    Version{ "2.0" }
-    NumberElements { 
-        "\u066B",
-        "\u066C",
+ar_MA{
+    NumberElements{
+        "٫",
+        "٬",
         ";",
-        "\u066A",
+        "٪",
         "0",
         "#",
         "-",
         "E",
-        "\u2030",
-        "\u221E",
-        "\uFFFD",
+        "‰",
+        "∞",
+        "�",
         "+",
     }
+    Version{"1.2"}
 }

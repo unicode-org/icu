@@ -1,34 +1,27 @@
-// ***************************************************************************
+﻿// ***************************************************************************
 // *
-// *   Copyright (C) 1997-2003, International Business Machines
-// *   Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2004 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Date & Time: 2004/8/19 22:57
+// * Source File: \work\locale\common\main\\de_CH.xml
 // *
 // ***************************************************************************
-
-// Country names in de, de_AT, and de_CH are short names from the
-// list of names maintained by the German
-// Federal Permanent Committee for Geographic Names,
-// Sta"ndiger Ausschuss fu"r Geographische Namen (StAGN),
-// as published at its web site at
-// http://www.ifag.de/kartographie/Stagn/Staatennamen.htm
-// Date there: 1999-apr-19
-
-de_CH {
-    Version { "2.0" }
-    Countries {
-        BD { "Bangladesh" }
-        BW { "Botswana" }
-        BN { "Brunei" }
-        DJ { "Djibouti" }
-        CV { "Kapverden" }
-        MH { "Marshall-Inseln" }
-        RW { "Rwanda" }
-        SB { "Salomon-Inseln" }
-        ST { "Sao Tom\u00e9 und Principe" }
-        ZW { "Zimbabwe" }
-        GB { "Grossbritannien" }
+de_CH{
+    Countries{
+        BD{"Bangladesh"}
+        BN{"Brunei"}
+        BW{"Botswana"}
+        CV{"Kapverden"}
+        DJ{"Djibouti"}
+        GB{"Grossbritannien"}
+        MH{"Marshall-Inseln"}
+        RW{"Rwanda"}
+        SB{"Salomon-Inseln"}
+        ST{"Sao Tomé und Principe"}
+        ZW{"Zimbabwe"}
     }
-    NumberElements { 
+    NumberElements{
         ".",
         "'",
         ";",
@@ -37,16 +30,16 @@ de_CH {
         "#",
         "-",
         "E",
-        "\u2030",
-        "\u221E",
-        "\uFFFD",
+        "‰",
+        "∞",
+        "�",
         "+",
     }
-    NumberPatterns { 
+    NumberPatterns{
         "#,##0.###;-#,##0.###",
-        "\u00A4 #,##0.00;\u00A4-#,##0.00",
+        "¤ #,##0.00;¤-#,##0.00",
         "#,##0%",
         "#E0",
     }
-
+    Version{"1.2"}
 }

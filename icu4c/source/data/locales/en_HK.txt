@@ -1,19 +1,30 @@
-// ***************************************************************************
+﻿// ***************************************************************************
 // *
-// *   Copyright (C) 1997-2004, International Business Machines
-// *   Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2004 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Date & Time: 2004/8/19 23:7
+// * Source File: \work\locale\common\main\\en_HK.xml
 // *
 // ***************************************************************************
-
-en_HK {
-    Version { "2.0" }
-//    AmPmMarkers { 
-//            "AM",
-//            "PM",
-//    }
+en_HK{
+    Currencies{
+        HKD{
+            "$",
+            "Hong Kong Dollar",
+        }
+    }
+    NumberPatterns{
+        "#,##0.###;-#,##0.###",
+        "¤#,##0.00;(¤#,##0.00)",
+        "#,##0%",
+        "#E0",
+    }
+    Version{"1.2"}
     calendar{
+        
         gregorian{
-            DateTimePatterns { 
+            DateTimePatterns{
                 "h:mm:ss a z",
                 "h:mm:ss a z",
                 "h:mm:ss a",
@@ -25,27 +36,5 @@ en_HK {
                 "{1} {0}",
             }
         }
-    }
-    Currencies{
-        HKD { "$",  "Hong Kong Dollar" }
-    }
-//    NumberElements {
-//        ".",
-//        ",",
-//        ";",
-//        "%",
-//        "0",
-//        "#",
-//        "-",
-//        "E",
-//        "\u2030",
-//        "\u221E",
-//        "\uFFFD",
-//    }
-    NumberPatterns { 
-        "#,##0.###;-#,##0.###",
-        "\u00A4#,##0.00;(\u00A4#,##0.00)",
-        "#,##0%",
-        "#E0",
     }
 }

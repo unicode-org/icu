@@ -1,27 +1,29 @@
-// ***************************************************************************
+﻿// ***************************************************************************
 // *
-// *   Copyright (C) 1997-2003, International Business Machines
-// *   Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2004 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Date & Time: 2004/8/19 22:59
+// * Source File: \work\locale\common\main\\el_GR.xml
 // *
 // ***************************************************************************
-
-el_GR {
-    Version { "2.0" }
-    NumberPatterns { 
+el_GR{
+    Currencies{
+        GRD{
+            "Δρχ",
+            "Δρχ",
+            {
+                "#,##0.00 ¤;-#,##0.00 ¤",
+                ",",
+                ".",
+            }
+        }
+    }
+    NumberPatterns{
         "#,##0.###;-#,##0.###",
-        "#,##0.00\u00a4;-\u00a4#,##0.00",
+        "#,##0.00¤;-¤#,##0.00",
         "#,##0%",
         "#E0",
     }
-    Currencies{
-        GRD { 
-            "\u0394\u03C1\u03C7", 
-            "\u0394\u03C1\u03C7", 
-            :array{
-                "#,##0.00 \u00A4;-#,##0.00 \u00A4", /*currency pattern*/  
-                ",", /*decimal sperator*/
-                ".", /*grouping separator*/ 
-            }
-        } // Currency symbol is the same as the name. This may need to change.
-    }
+    Version{"1.2"}
 }

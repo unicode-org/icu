@@ -1,13 +1,24 @@
-// ***************************************************************************
+﻿// ***************************************************************************
 // *
-// *   Copyright (C) 1997-2004, International Business Machines
-// *   Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2004 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Date & Time: 2004/8/19 23:22
+// * Source File: \work\locale\common\main\\es_CL.xml
 // *
 // ***************************************************************************
-
-es_CL {
-    Version { "2.0" }
-    NumberElements {
+es_CL{
+    Currencies{
+        CLP{
+            "$",
+            "Peso Chileno",
+        }
+        USD{
+            "US$",
+            "Dólar Americano",
+        }
+    }
+    NumberElements{
         ",",
         ".",
         ";",
@@ -16,23 +27,20 @@ es_CL {
         "#",
         "-",
         "E",
-        "\u2030",
-        "\u221E",
-        "\uFFFD",
+        "‰",
+        "∞",
+        "�",
         "+",
     }
-    NumberPatterns { 
+    NumberPatterns{
         "#,##0.###;-#,##0.###",
-        "\u00A4#,##0.00;\u00A4-#,##0.00",
+        "¤#,##0.00;¤-#,##0.00",
         "#,##0%",
         "#E0",
     }
-    // Currency display names
-    Currencies {
-        CLP { "$", "Peso Chileno" }
-        USD { "US$", "D\u00F3lar Americano" }
-    }
+    Version{"1.2"}
     calendar{
+        
         gregorian{
             DateTimePatterns{
                 "HH:mm:ss z",

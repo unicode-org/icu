@@ -874,7 +874,7 @@ static void TestISOFunctions()
     }
 
     /* We check root, just in case the en locale is removed. The en locale should have the same number of resources. */
-    expect = ures_getSize(res) - 2; /* Ignore Fallback and root */
+    expect = ures_getSize(res) - 1; /* Ignore root */
     expect -= 1; /* TODO: Remove this line once sh goes away. */
     ures_close(res);
 
@@ -1653,7 +1653,8 @@ TestKeyInRootRecursive(UResourceBundle *root, const char *rootName,
                             ures_getKey(currentBundle));
                     continue;
                 } else if (u_strcmp(string, rootString) == 0) {
-                    if (strcmp(locale, "de_CH") != 0 && strcmp(subBundleKey, "Countries") != 0) {
+                    if (strcmp(locale, "de_CH") != 0 && strcmp(subBundleKey, "Countries") != 0 && 
+                        strcmp(subBundleKey, "Version") != 0) {
                         log_err("Found duplicate data with key \"%s\" in \"%s\" in locale \"%s\"\n",
                                 ures_getKey(subRootBundle),
                                 ures_getKey(currentBundle),
@@ -2964,7 +2965,7 @@ static void TestGetLocale(void) {
                         UCAL_GREGORIAN,
                         &ec);
         if (U_FAILURE(ec)) {
-            log_err("ucal_open failed\n");
+            log_err("ucal_open failed with error: %s\n", u_errorName(ec));
             return;
         }
         valid = ucal_getLocaleByType(obj, ULOC_VALID_LOCALE, &ec);
@@ -2982,7 +2983,7 @@ static void TestGetLocale(void) {
 #if !UCONFIG_NO_FORMATTING
     {
         UNumberFormat *obj;
-        const char *req = "zh_TW_TAINAN", *valid, *actual;
+        const char *req = "zh_Hant_TW_TAINAN", *valid, *actual;
         obj = unum_open(UNUM_DECIMAL,
                         NULL, 0,
                         req,

@@ -1,105 +1,108 @@
-// ***************************************************************************
+﻿// ***************************************************************************
 // *
-// *   Copyright (C) 2001-2004, International Business Machines
-// *   Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2004 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Date & Time: 2004/8/20 0:19
+// * Source File: \work\locale\common\main\\pa.xml
 // *
 // ***************************************************************************
-
-pa {
-    Version{ "1.0"}
-    Languages {
-        pa { "\u0A2A\u0A70\u0A1C\u0A3E\u0A2C\u0A40" }
+pa{
+    Countries{
+        IN{"ਭਾਰਤ"}
     }
-    Countries {
-        IN { "\u0A2D\u0A3E\u0A30\u0A24" }
+    Currencies{
+        INR{
+            "ਰੁ.",
+            "ਰੁਪਿਯ",
+        }
     }
-
-
-
-
+    ExemplarCharacters{"[[:Guru:]‌‍]"}
+    Languages{
+        pa{"ਪੰਜਾਬੀ"}
+    }
+    LocaleScript{
+        "Guru",
+    }
     NumberElements{
         ".",
         ",",
         ";",
         "%",
-        "\u0a66",
+        "੦",
         "#",
         "-",
         "E",
-        "\u2030",
-        "\u221e",
-        "\ufffd",
+        "‰",
+        "∞",
+        "�",
         "+",
     }
-    Currencies {
-        INR { "\u0A30\u0A41.", "\u0a30\u0a41\u0a2a\u0a3f\u0a2f" }
-    }
-    NumberPatterns {
+    NumberPatterns{
         "##,##,##0.###;-##,##,##0.###",
-        "\u00A4 ##,##,##0.00;-\u00A4 ##,##,##0.00",
+        "¤ ##,##,##0.00;-¤ ##,##,##0.00",
         "##,##,##0%",
         "#E0",
     }
-    LocaleScript:array { "Guru" }
-
-    ExemplarCharacters { "[[:Guru:]\u200c\u200d]" }
+    Version{"1.2"}
     calendar{
+        
         gregorian{
             AmPmMarkers{
-                "\u0A38\u0A35\u0A47\u0A30\u0A47",
-                "\u0A36\u0A3E\u0A2E"
+                "ਸਵੇਰੇ",
+                "ਸ਼ਾਮ",
             }
             dayNames{
                 format{
                     abbreviated{
-                        "\u0A10\u0A24.",
-                        "\u0A38\u0A4B\u0A2E.",
-                        "\u0A2E\u0A70\u0A17\u0A32.",
-                        "\u0A2C\u0A41\u0A27.",
-                        "\u0A35\u0A40\u0A30.",
-                        "\u0A36\u0A41\u0A15\u0A30.",
-                        "\u0A36\u0A28\u0A40."
+                        "ਐਤ.",
+                        "ਸੋਮ.",
+                        "ਮੰਗਲ.",
+                        "ਬੁਧ.",
+                        "ਵੀਰ.",
+                        "ਸ਼ੁਕਰ.",
+                        "ਸ਼ਨੀ.",
                     }
                     wide{
-                        "\u0A10\u0A24\u0A35\u0A3E\u0A30",
-                        "\u0A38\u0A4B\u0A2E\u0A35\u0A3E\u0A30",
-                        "\u0A2E\u0A70\u0A17\u0A32\u0A35\u0A3E\u0A30",
-                        "\u0A2C\u0A41\u0A27\u0A35\u0A3E\u0A30",
-                        "\u0A35\u0A40\u0A30\u0A35\u0A3E\u0A30",
-                        "\u0A36\u0A41\u0A71\u0A15\u0A30\u0A35\u0A3E\u0A30",
-                        "\u0A36\u0A28\u0A40\u0A1A\u0A30\u0A35\u0A3E\u0A30"
+                        "ਐਤਵਾਰ",
+                        "ਸੋਮਵਾਰ",
+                        "ਮੰਗਲਵਾਰ",
+                        "ਬੁਧਵਾਰ",
+                        "ਵੀਰਵਾਰ",
+                        "ਸ਼ੁੱਕਰਵਾਰ",
+                        "ਸ਼ਨੀਚਰਵਾਰ",
                     }
                 }
             }
             monthNames{
                 format{
                     abbreviated{
-                        "\u0A1C\u0A28\u0A35\u0A30\u0A40",
-                        "\u0A5E\u0A30\u0A35\u0A30\u0A40",
-                        "\u0A2E\u0A3E\u0A30\u0A1A",
-                        "\u0A05\u0A2A\u0A4D\u0A30\u0A48\u0A32",
-                        "\u0A2E\u0A08",
-                        "\u0A1C\u0A42\u0A28",
-                        "\u0A1C\u0A41\u0A32\u0A3E\u0A08",
-                        "\u0A05\u0A17\u0A38\u0A24",
-                        "\u0A38\u0A24\u0A70\u0A2C\u0A30",
-                        "\u0A05\u0A15\u0A24\u0A42\u0A2C\u0A30",
-                        "\u0A28\u0A35\u0A70\u0A2C\u0A30",
-                        "\u0A26\u0A38\u0A70\u0A2C\u0A30",
+                        "ਜਨਵਰੀ",
+                        "ਫ਼ਰਵਰੀ",
+                        "ਮਾਰਚ",
+                        "ਅਪ੍ਰੈਲ",
+                        "ਮਈ",
+                        "ਜੂਨ",
+                        "ਜੁਲਾਈ",
+                        "ਅਗਸਤ",
+                        "ਸਤੰਬਰ",
+                        "ਅਕਤੂਬਰ",
+                        "ਨਵੰਬਰ",
+                        "ਦਸੰਬਰ",
                     }
                     wide{
-                        "\u0A1C\u0A28\u0A35\u0A30\u0A40",
-                        "\u0A5E\u0A30\u0A35\u0A30\u0A40",
-                        "\u0A2E\u0A3E\u0A30\u0A1A",
-                        "\u0A05\u0A2A\u0A4D\u0A30\u0A48\u0A32",
-                        "\u0A2E\u0A08",
-                        "\u0A1C\u0A42\u0A28",
-                        "\u0A1C\u0A41\u0A32\u0A3E\u0A08",
-                        "\u0A05\u0A17\u0A38\u0A24",
-                        "\u0A38\u0A24\u0A70\u0A2C\u0A30",
-                        "\u0A05\u0A15\u0A24\u0A42\u0A2C\u0A30",
-                        "\u0A28\u0A35\u0A70\u0A2C\u0A30",
-                        "\u0A26\u0A38\u0A70\u0A2C\u0A30",
+                        "ਜਨਵਰੀ",
+                        "ਫ਼ਰਵਰੀ",
+                        "ਮਾਰਚ",
+                        "ਅਪ੍ਰੈਲ",
+                        "ਮਈ",
+                        "ਜੂਨ",
+                        "ਜੁਲਾਈ",
+                        "ਅਗਸਤ",
+                        "ਸਤੰਬਰ",
+                        "ਅਕਤੂਬਰ",
+                        "ਨਵੰਬਰ",
+                        "ਦਸੰਬਰ",
                     }
                 }
             }

@@ -1,334 +1,299 @@
-// ***************************************************************************
+﻿// ***************************************************************************
 // *
-// *   Copyright (C) 1997-2004, International Business Machines
-// *   Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2004 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Date & Time: 2004/8/20 7:8
+// * Source File: \work\locale\common\main\\he.xml
 // *
 // ***************************************************************************
-
-he {
-    Version{"2.0"}
-    Countries {
-        AD { "\u05D0\u05E0\u05D3\u05D5\u05E8\u05D4" }
-        AE { "\u05D0\u05D9\u05D7\u05D5\u05D3 \u05D4\u05D0\u05DE\u05D9\u05E8\u05D5\u05D9\u05D5\u05EA \u05D4\u05E2\u05E8\u05D1\u05D9\u05D5\u05EA" }
-        AF { "\u05D0\u05E4\u05D2\u05E0\u05D9\u05E1\u05D8\u05DF" }
-        AG { "\u05D0\u05E0\u05D8\u05D9\u05D2\u05D5\u05D0\u05D4 \u05D5\u05D1\u05E8\u05D1\u05D5\u05D3\u05D4" }
-        AI { "\u05D0\u05E0\u05D2\u05D9\u05DC\u05D4" }
-        AL { "\u05D0\u05DC\u05D1\u05E0\u05D9\u05D4" }
-        AM { "\u05D0\u05E8\u05DE\u05E0\u05D9\u05D4" }
-        AN { "\u05D4\u05D0\u05D9\u05E0\u05D8\u05D9\u05DC\u05D9\u05DD \u05D4\u05D4\u05D5\u05DC\u05E0\u05D3\u05D9\u05D9\u05DD" }
-        AO { "\u05D0\u05E0\u05D2\u05D5\u05DC\u05D4" }
-        AQ { "\u05D0\u05E0\u05D8\u05D0\u05E8\u05E7\u05D8\u05D9\u05E7\u05D4" }
-        AR { "\u05D0\u05E8\u05D2\u05E0\u05D8\u05D9\u05E0\u05D4" }
-        AS { "\u05E1\u05DE\u05D5\u05D0\u05D4 \u05D4\u05D0\u05DE\u05E8\u05D9\u05E7\u05E0\u05D9\u05EA" }
-        AT { "\u05D0\u05D5\u05E1\u05D8\u05E8\u05D9\u05D4" }
-        AU { "\u05D0\u05D5\u05E1\u05D8\u05E8\u05DC\u05D9\u05D4" }
-        AW { "\u05D0\u05E8\u05D5\u05D1\u05D4" }
-        AZ { "\u05D0\u05D6\u05E8\u05D1\u05D9\u05D9\u05D2\u05F3\u05DF" }
-        BA { "\u05D1\u05D5\u05E1\u05E0\u05D9\u05D4 \u05D4\u05E8\u05E6\u05D2\u05D5\u05D1\u05D9\u05E0\u05D4" }
-        BB { "\u05D1\u05E8\u05D1\u05D3\u05D5\u05E1" }
-        BD { "\u05D1\u05E0\u05D2\u05DC\u05D3\u05E9" }
-        BE { "\u05D1\u05DC\u05D2\u05D9\u05D4" }
-        BF { "\u05D1\u05D5\u05E8\u05E7\u05D9\u05E0\u05D4 \u05E4\u05D0\u05E1\u05D5" }
-        BG { "\u05D1\u05D5\u05DC\u05D2\u05E8\u05D9\u05D4" }
-        BH { "\u05D1\u05D7\u05E8\u05D9\u05D9\u05DF" }
-        BI { "\u05D1\u05D5\u05E8\u05D5\u05E0\u05D3\u05D9" }
-        BJ { "\u05D1\u05E0\u05D9\u05DF" }
-        BM { "\u05D1\u05E8\u05DE\u05D5\u05D3\u05D4" }
-        BN { "\u05D1\u05E8\u05D5\u05E0\u05D9\u05D9 \u05D3\u05D0\u05E8\u05E1\u05DC\u05D0\u05DD" }
-        BO { "\u05D1\u05D5\u05DC\u05D9\u05D1\u05D9\u05D4" }
-        BR { "\u05D1\u05E8\u05D6\u05D9\u05DC" }
-        BS { "\u05D1\u05D4\u05D0\u05DE\u05D4" }
-        BT { "\u05D1\u05D5\u05D8\u05D0\u05DF" }
-        BV { "\u05D4\u05D0\u05D9 \u05D1\u05D5\u05D1\u05D4" }
-        BW { "\u05D1\u05D5\u05D8\u05E1\u05D5\u05D5\u05D0\u05E0\u05D4" }
-        BY { "\u05D1\u05DC\u05E8\u05D5\u05E1" }
-        BZ { "\u05D1\u05DC\u05D9\u05D6" }
-        CA { "\u05E7\u05E0\u05D3\u05D4" }
-        CC { "\u05D0\u05D9\u05D9 \u05E7\u05D5\u05E7\u05D5\u05E1 (\u05E7\u05D9\u05DC\u05D9\u05E0\u05D2)" }
-        CD { "\u05E7\u05D5\u05E0\u05D2\u05D5, \u05D4\u05E8\u05E4\u05D5\u05D1\u05DC\u05D9\u05E7\u05D4 \u05D4\u05D3\u05DE\u05D5\u05E7\u05E8\u05D8\u05D9\u05EA \u05E9\u05DC" }
-        CF { "\u05D4\u05E8\u05E4\u05D5\u05D1\u05DC\u05D9\u05E7\u05D4 \u05E9\u05DC \u05DE\u05E8\u05DB\u05D6 \u05D0\u05E4\u05E8\u05D9\u05E7\u05D4" }
-        CG { "\u05E7\u05D5\u05E0\u05D2\u05D5" }
-        CH { "\u05E9\u05D5\u05D5\u05D9\u05D9\u05E5" }
-        CI { "\u05D7\u05D5\u05E3 \u05D4\u05E9\u05E0\u05D4\u05D1" }
-        CK { "\u05D0\u05D9\u05D9 \u05E7\u05D5\u05E7" }
-        CL { "\u05E6\u05F3\u05D9\u05DC\u05D4" }
-        CM { "\u05E7\u05DE\u05E8\u05D5\u05DF" }
-        CN { "\u05E1\u05D9\u05DF" }
-        CO { "\u05E7\u05D5\u05DC\u05D5\u05DE\u05D1\u05D9\u05D4" }
-        CR { "\u05E7\u05D5\u05E1\u05D8\u05D4 \u05E8\u05D9\u05E7\u05D4" }
-        CU { "\u05E7\u05D5\u05D1\u05D4" }
-        CV { "\u05E7\u05D9\u05D9\u05E4 \u05D5\u05E8\u05D3\u05D4" }
-        CX { "\u05D0\u05D9\u05D9 \u05DB\u05E8\u05D9\u05E1\u05D8\u05DE\u05E1" }
-        CY { "\u05E7\u05E4\u05E8\u05D9\u05E1\u05D9\u05DF" }
-        CZ { "\u05D4\u05E8\u05E4\u05D5\u05D1\u05DC\u05D9\u05E7\u05D4 \u05D4\u05E6\u05F3\u05DB\u05D9\u05EA" }
-        DE { "\u05D2\u05E8\u05DE\u05E0\u05D9\u05D4" }
-        DJ { "\u05D2\u05F3\u05D9\u05D1\u05D5\u05D8\u05D9" }
-        DK { "\u05D3\u05E0\u05DE\u05E8\u05E7" }
-        DM { "\u05D3\u05D5\u05DE\u05D9\u05E0\u05D9\u05E7\u05D4" }
-        DO { "\u05D4\u05E8\u05E4\u05D5\u05D1\u05DC\u05D9\u05E7\u05D4 \u05D4\u05D3\u05D5\u05DE\u05D9\u05E0\u05D9\u05E7\u05E0\u05D9\u05EA" }
-        DZ { "\u05D0\u05DC\u05D2\u05F3\u05D9\u05E8\u05D9\u05D4" }
-        EC { "\u05D0\u05E7\u05D5\u05D5\u05D0\u05D3\u05D5\u05E8" }
-        EE { "\u05D0\u05E1\u05D8\u05D5\u05E0\u05D9\u05D4" }
-        EG { "\u05DE\u05E6\u05E8\u05D9\u05DD" }
-        EH { "\u05E1\u05D4\u05E8\u05D4 \u05D4\u05DE\u05E2\u05E8\u05D1\u05D9\u05EA" }
-        ER { "\u05D0\u05E8\u05D9\u05EA\u05E8\u05D9\u05D0\u05D4" }
-        ES { "\u05E1\u05E4\u05E8\u05D3" }
-        ET { "\u05D0\u05EA\u05D9\u05D5\u05E4\u05D9\u05D4" }
-        FI { "\u05E4\u05D9\u05E0\u05DC\u05E0\u05D3" }
-        FJ { "\u05E4\u05D9\u05D2\u05F3\u05D9" }
-        FK { "\u05D0\u05D9\u05D9 \u05E4\u05D5\u05E7\u05DC\u05E0\u05D3" }
-        FM { "\u05DE\u05D0\u05D5\u05E8\u05D9\u05E6\u05D9\u05D5\u05E1, \u05D4\u05DE\u05D3\u05D9\u05E0\u05D5\u05EA \u05D4\u05DE\u05D0\u05D5\u05D2\u05D3\u05D5\u05EA \u05E9\u05DC" }
-        FO { "\u05D0\u05D9\u05D9 \u05E4\u05D0\u05E8\u05D5" }
-        FR { "\u05E6\u05E8\u05E4\u05EA" }
-        GA { "\u05D2\u05D1\u05D5\u05DF" }
-        GB { "\u05D1\u05E8\u05D9\u05D8\u05E0\u05D9\u05D4" }
-        GD { "\u05D2\u05E8\u05E0\u05D3\u05D4" }
-        GE { "\u05D2\u05E8\u05D5\u05D6\u05D9\u05D4" }
-        GF { "\u05D2\u05D9\u05D0\u05E0\u05D4 \u05D4\u05E6\u05E8\u05E4\u05EA\u05D9\u05EA" }
-        GH { "\u05D2\u05D0\u05E0\u05D4" }
-        GI { "\u05D2\u05D9\u05D1\u05E8\u05DC\u05D8\u05E8" }
-        GL { "\u05D2\u05E8\u05D9\u05E0\u05DC\u05E0\u05D3" }
-        GM { "\u05D2\u05DE\u05D1\u05D9\u05D4" }
-        GN { "\u05D2\u05D9\u05E0\u05D9\u05D0\u05D4" }
-        GP { "\u05D2\u05D5\u05D5\u05D0\u05D3\u05DC\u05D5\u05E4" }
-        GQ { "\u05D2\u05D9\u05E0\u05D9\u05D0\u05D4 \u05D4\u05DE\u05E9\u05D5\u05D5\u05E0\u05D9\u05EA" }
-        GR { "\u05D9\u05D5\u05D5\u05DF" }
-        GS { "\u05D4\u05D0\u05D9 \u05D2\u05F3\u05D5\u05E8\u05D2\u05F3\u05D9\u05D4 \u05D4\u05D3\u05E8\u05D5\u05DE\u05D9\u05EA \u05D5\u05D0\u05D9\u05D9 \u05E1\u05E0\u05D3\u05D5\u05D5\u05D9\u05E5\u05F3 \u05D4\u05D3\u05E8\u05D5\u05DE\u05D9\u05D9\u05DD" }
-        GT { "\u05D2\u05D5\u05D5\u05D8\u05DE\u05D0\u05DC\u05D4" }
-        GU { "\u05D2\u05D5\u05D0\u05DD" }
-        GW { "\u05D2\u05D9\u05E0\u05D9\u05D0\u05D4-\u05D1\u05D9\u05E1\u05D0\u05D5" }
-        GY { "\u05D2\u05D9\u05D0\u05E0\u05D4" }
-        HK { "\u05D4\u05D5\u05E0\u05D2 \u05E7\u05D5\u05E0\u05D2 S.A.R. \u05E9\u05DC \u05E1\u05D9\u05DF" }
-        HM { "\u05D0\u05D9\u05D9 \u05D4\u05E8\u05D3 \u05D5\u05D0\u05D9\u05D9 \u05DE\u05E7\u05D3\u05D5\u05E0\u05DC\u05E0\u05D3" }
-        HN { "\u05D4\u05D5\u05E0\u05D3\u05D5\u05E8\u05E1" }
-        HR { "\u05E7\u05E8\u05D5\u05D0\u05D8\u05D9\u05D4" }
-        HT { "\u05D4\u05D0\u05D9\u05D8\u05D9" }
-        HU { "\u05D4\u05D5\u05E0\u05D2\u05E8\u05D9\u05D4" }
-        ID { "\u05D0\u05D9\u05E0\u05D3\u05D5\u05E0\u05D6\u05D9\u05D4" }
-        IE { "\u05D0\u05D9\u05E8\u05DC\u05E0\u05D3" }
-        IL { "\u05D9\u05E9\u05E8\u05D0\u05DC" }
-        IN { "\u05D4\u05D5\u05D3\u05D5" }
-        IO { "\u05D4\u05D8\u05E8\u05D9\u05D8\u05D5\u05E8\u05D9\u05D4 \u05D4\u05D1\u05E8\u05D9\u05D8\u05D9\u05EA \u05D1\u05D0\u05D5\u05E7\u05D9\u05E0\u05D5\u05E1 \u05D4\u05D4\u05D5\u05D3\u05D9" }
-        IQ { "\u05E2\u05D9\u05E8\u05E7" }
-        IR { "\u05D0\u05D9\u05E8\u05D0\u05DF, \u05D4\u05E8\u05E4\u05D5\u05D1\u05DC\u05D9\u05E7\u05D4 \u05D4\u05D0\u05D9\u05E1\u05DC\u05DE\u05D9\u05EA" }
-        IS { "\u05D0\u05D9\u05E1\u05DC\u05E0\u05D3" }
-        IT { "\u05D0\u05D9\u05D8\u05DC\u05D9\u05D4" }
-        JM { "\u05D2\u05F3\u05DE\u05D9\u05D9\u05E7\u05D4" }
-        JO { "\u05D9\u05E8\u05D3\u05DF" }
-        JP { "\u05D9\u05E4\u05DF" }
-        KE { "\u05E7\u05E0\u05D9\u05D4" }
-        KG { "\u05E7\u05D9\u05E8\u05D2\u05D9\u05D6\u05E1\u05D8\u05DF" }
-        KH { "\u05E7\u05DE\u05D1\u05D5\u05D3\u05D9\u05D4" }
-        KI { "\u05E7\u05D9\u05E8\u05D9\u05D1\u05D0\u05D8\u05D9" }
-        KM { "\u05E7\u05D5\u05DE\u05D5\u05E8\u05D5\u05E1" }
-        KN { "\u05E1\u05E0\u05D8 \u05E7\u05D9\u05D8\u05E1 \u05D5\u05E0\u05D9\u05D1\u05E1" }
-        KP { "\u05E7\u05D5\u05E8\u05D9\u05D0\u05D4, \u05E6\u05E4\u05D5\u05DF" }    // alternate name { "\u05E7\u05D5\u05E8\u05D9\u05D0\u05D4, \u05D4\u05E8\u05E4\u05D5\u05D1\u05DC\u05D9\u05E7\u05D4 \u05D4\u05D3\u05DE\u05D5\u05E7\u05E8\u05D8\u05D9\u05EA \u05D4\u05E2\u05DE\u05DE\u05D9\u05EA" }
-        KR { "\u05E7\u05D5\u05E8\u05D9\u05D0\u05D4, \u05D3\u05E8\u05D5\u05DD" }    // alternate name { "\u05E7\u05D5\u05E8\u05D9\u05D0\u05D4, \u05D4\u05E8\u05E4\u05D5\u05D1\u05DC\u05D9\u05E7\u05D4" }
-        KW { "\u05DB\u05D5\u05D5\u05D9\u05EA" }
-        KY { "\u05D0\u05D9\u05D9 \u05E7\u05D9\u05D9\u05DE\u05D0\u05DF" }
-        KZ { "\u05E7\u05D6\u05D7\u05E1\u05D8\u05DF" }
-        LA { "\u05DC\u05D0\u05D5\u05E1, \u05D4\u05E8\u05E4\u05D5\u05D1\u05DC\u05D9\u05E7\u05D4 \u05D4\u05D3\u05DE\u05E7\u05D5\u05E8\u05D8\u05D9\u05EA \u05D4\u05E2\u05DE\u05DE\u05D9\u05EA" }
-        LB { "\u05DC\u05D1\u05E0\u05D5\u05DF" }
-        LC { "\u05E1\u05E0\u05D8 \u05DC\u05D5\u05E9\u05D9\u05D4" }
-        LI { "\u05DC\u05D9\u05DB\u05D8\u05E0\u05E9\u05D8\u05D9\u05D9\u05DF" }
-        LK { "\u05E1\u05E8\u05D9 \u05DC\u05E0\u05E7\u05D4" }
-        LR { "\u05DC\u05D9\u05D1\u05E8\u05D9\u05D4" }
-        LS { "\u05DC\u05E1\u05D5\u05D8\u05D5" }
-        LT { "\u05DC\u05D9\u05D8\u05D0" }
-        LU { "\u05DC\u05D5\u05E7\u05E1\u05DE\u05D1\u05D5\u05E8\u05D2" }
-        LV { "\u05DC\u05D8\u05D1\u05D9\u05D4" }
-        LY { "\u05DC\u05D5\u05D1" }
-        MA { "\u05DE\u05E8\u05D5\u05E7\u05D5" }
-        MC { "\u05DE\u05D5\u05E0\u05E7\u05D5" }
-        MD { "\u05DE\u05D5\u05DC\u05D3\u05D5\u05D1\u05D4, \u05D4\u05E8\u05E4\u05D5\u05D1\u05DC\u05D9\u05E7\u05D4" }
-        MG { "\u05DE\u05D3\u05D2\u05E1\u05E7\u05E8" }
-        MH { "\u05D0\u05D9\u05D9 \u05DE\u05E8\u05E9\u05DC" }
-        MK { "\u05DE\u05E7\u05D3\u05D5\u05E0\u05D9\u05D4, \u05D4\u05E8\u05E4\u05D5\u05D1\u05DC\u05D9\u05E7\u05D4 \u05E9\u05DC" }
-        ML { "\u05DE\u05D0\u05DC\u05D9" }
-        MM { "\u05DE\u05D9\u05E0\u05DE\u05D0\u05E8" }
-        MN { "\u05DE\u05D5\u05E0\u05D2\u05D5\u05DC\u05D9\u05D4" }
-        MO { "\u05DE\u05E7\u05D0\u05D5 S.A.R. \u05E9\u05DC \u05E1\u05D9\u05DF" }
-        MP { "\u05D0\u05D9\u05D9 \u05DE\u05E8\u05D9\u05D0\u05E0\u05D4 \u05D4\u05E6\u05E4\u05D5\u05E0\u05D9\u05D9\u05DD" }
-        MQ { "\u05DE\u05E8\u05D8\u05D9\u05E0\u05D9\u05E7" }
-        MR { "\u05DE\u05D0\u05D5\u05E8\u05D9\u05D8\u05E0\u05D9\u05D4" }
-        MS { "\u05DE\u05D5\u05E0\u05D8\u05E1\u05E8\u05D0\u05D8" }
-        MT { "\u05DE\u05DC\u05D8\u05D4" }
-        MU { "\u05DE\u05D0\u05D5\u05E8\u05D9\u05E6\u05D9\u05D5\u05E1" }
-        MV { "\u05DE\u05DC\u05D3\u05D9\u05D1\u05D0\u05E1" }
-        MW { "\u05DE\u05DC\u05D0\u05D5\u05D5\u05D9" }
-        MX { "\u05DE\u05DB\u05E1\u05D9\u05E7\u05D5" }
-        MY { "\u05DE\u05DC\u05D6\u05D9\u05D4" }
-        MZ { "\u05DE\u05D5\u05D6\u05DE\u05D1\u05D9\u05E7" }
-        NA { "\u05E0\u05DE\u05D9\u05D1\u05D9\u05D4" }
-        NC { "\u05E7\u05DC\u05D3\u05D5\u05E0\u05D9\u05D4 \u05D4\u05D7\u05D3\u05E9\u05D4" }
-        NE { "\u05E0\u05D9\u05D6\u05F3\u05E8" }
-        NF { "\u05D0\u05D9\u05D9 \u05E0\u05D5\u05E8\u05E4\u05E7" }
-        NG { "\u05E0\u05D9\u05D2\u05E8\u05D9\u05D4" }
-        NI { "\u05E0\u05D9\u05E7\u05E8\u05D0\u05D2\u05D5\u05D5\u05D4" }
-        NL { "\u05D4\u05D5\u05DC\u05E0\u05D3" }
-        NO { "\u05E0\u05D5\u05E8\u05D5\u05D5\u05D2\u05D9\u05D4" }
-        NP { "\u05E0\u05E4\u05D0\u05DC" }
-        NR { "\u05E0\u05D0\u05D5\u05E8\u05D5" }
-        NU { "\u05E0\u05D9\u05D5\u05D5\u05D4" }
-        NZ { "\u05E0\u05D9\u05D5 \u05D6\u05D9\u05DC\u05E0\u05D3" }
-        OM { "\u05E2\u05D5\u05DE\u05DF" }
-        PA { "\u05E4\u05E0\u05DE\u05D4" }
-        PE { "\u05E4\u05E8\u05D5" }
-        PF { "\u05E4\u05D5\u05DC\u05D9\u05E0\u05D6\u05D9\u05D4 \u05D4\u05E6\u05E8\u05E4\u05EA\u05D9\u05EA" }
-        PG { "\u05E4\u05E4\u05D5\u05D0\u05D4 \u05D2\u05D9\u05E0\u05D9\u05D0\u05D4 \u05D4\u05D7\u05D3\u05E9\u05D4" }
-        PH { "\u05E4\u05D9\u05DC\u05D9\u05E4\u05D9\u05E0\u05D9\u05DD" }
-        PK { "\u05E4\u05E7\u05D9\u05E1\u05D8\u05DF" }
-        PL { "\u05E4\u05D5\u05DC\u05D9\u05DF" }
-        PM { "\u05E1\u05E0\u05D8 \u05E4\u05D9\u05D9\u05E8 \u05D5\u05DE\u05D9\u05E7\u05DC\u05D5\u05DF" }
-        PN { "\u05E4\u05D9\u05D8\u05E7\u05D9\u05D9\u05E8\u05DF" }
-        PR { "\u05E4\u05D5\u05E8\u05D8\u05D5 \u05E8\u05D9\u05E7\u05D5" }
-        PS { "\u05D4\u05E8\u05E9\u05D5\u05EA \u05D4\u05E4\u05DC\u05E9\u05EA\u05D9\u05E0\u05D9\u05EA" }
-        PT { "\u05E4\u05D5\u05E8\u05D8\u05D5\u05D2\u05DC" }
-        PW { "\u05E4\u05DC\u05D0\u05D5" }
-        PY { "\u05E4\u05E8\u05D0\u05D2\u05D5\u05D5\u05D0\u05D9" }
-        QA { "\u05E7\u05D8\u05E8" }
-        RE { "\u05E8\u05D0\u05D5\u05E0\u05D9\u05D5\u05DF" }
-        RO { "\u05E8\u05D5\u05DE\u05E0\u05D9\u05D4" }
-        RU { "\u05D7\u05D1\u05E8 \u05D4\u05DE\u05D3\u05D9\u05E0\u05D5\u05EA \u05D4\u05E8\u05D5\u05E1\u05D9\u05D5\u05EA" }
-        RW { "\u05E8\u05D5\u05D0\u05E0\u05D3\u05D4" }
-        SA { "\u05E2\u05E8\u05D1 \u05D4\u05E1\u05E2\u05D5\u05D3\u05D9\u05EA" }
-        SB { "\u05D0\u05D9\u05D9 \u05E9\u05DC\u05DE\u05D4" }
-        SC { "\u05D0\u05D9\u05D9 \u05E1\u05D9\u05D9\u05E9\u05DC" }
-        SD { "\u05E1\u05D5\u05D3\u05DF" }
-        SE { "\u05E9\u05D5\u05D5\u05D3\u05D9\u05D4" }
-        SG { "\u05E1\u05D9\u05E0\u05D2\u05E4\u05D5\u05E8" }
-        SH { "\u05E1\u05D9\u05D9\u05E0\u05D8 \u05D4\u05DC\u05E0\u05D4" }
-        SI { "\u05E1\u05DC\u05D5\u05D1\u05E0\u05D9\u05D4" }
-        SJ { "\u05E1\u05D5\u05D5\u05DC\u05D1\u05D0\u05E8\u05D3 \u05D5\u05D6\u05F3\u05D0\u05DF \u05DE\u05D0\u05D9\u05D9\u05DF" }
-        SK { "\u05E1\u05DC\u05D5\u05D1\u05E7\u05D9\u05D4" }
-        SL { "\u05E1\u05D9\u05D9\u05E8\u05D4 \u05DC\u05D0\u05D5\u05E0\u05D4" }
-        SM { "\u05E1\u05DF \u05DE\u05E8\u05D9\u05E0\u05D5" }
-        SN { "\u05E1\u05E0\u05D2\u05DC" }
-        SO { "\u05E1\u05D5\u05DE\u05DC\u05D9\u05D4" }
-        SR { "\u05E1\u05D5\u05E8\u05D9\u05E0\u05D0\u05DD" }
-        ST { "\u05E1\u05DF \u05EA\u05D5\u05DE\u05D4 \u05D5\u05E4\u05E8\u05D9\u05E0\u05E1\u05D9\u05E4\u05D4" }
-        SV { "\u05D0\u05DC \u05E1\u05DC\u05D1\u05D0\u05D3\u05D5\u05E8" }
-        SY { "\u05D4\u05E8\u05E4\u05D5\u05D1\u05DC\u05D9\u05E7\u05D4 \u05D4\u05E2\u05E8\u05D1\u05D9\u05EA \u05D4\u05E1\u05D5\u05E8\u05D9\u05EA" }    // alternate name { "\u05E1\u05D5\u05E8\u05D9\u05D4" }
-        SZ { "\u05E1\u05D5\u05D5\u05D6\u05D9\u05DC\u05E0\u05D3" }
-        TC { "\u05D0\u05D9\u05D9 \u05D8\u05D5\u05E8\u05E7\u05E1 \u05D5\u05E7\u05D0\u05D9\u05E7\u05D5\u05E1" }
-        TD { "\u05E6\u05F3\u05D0\u05D3" }
-        TF { "\u05D8\u05E8\u05D9\u05D8\u05D5\u05E8\u05D9\u05D5\u05EA \u05D3\u05E8\u05D5\u05DE\u05D9\u05D5\u05EA \u05E9\u05DC \u05E6\u05E8\u05E4\u05EA" }
-        TG { "\u05D8\u05D5\u05D2\u05D5" }
-        TH { "\u05EA\u05D0\u05D9\u05DC\u05E0\u05D3" }
-        TJ { "\u05D8\u05D2\u05F3\u05D9\u05E7\u05D9\u05E1\u05D8\u05DF" }
-        TK { "\u05D8\u05D5\u05E7\u05DC\u05D0\u05D5" }
-        TL { "\u05DE\u05D6\u05E8\u05D7 \u05D8\u05D9\u05DE\u05D5\u05E8" }
-        TM { "\u05D8\u05D5\u05E8\u05E7\u05DE\u05E0\u05D9\u05E1\u05D8\u05DF" }
-        TN { "\u05D8\u05D5\u05E0\u05D9\u05E1\u05D9\u05D4" }
-        TO { "\u05D8\u05D5\u05E0\u05D2\u05D4" }
-        TR { "\u05D8\u05D5\u05E8\u05E7\u05D9\u05D4" }
-        TT { "\u05D8\u05E8\u05D9\u05E0\u05D9\u05D3\u05D3 \u05D5\u05D8\u05D5\u05D1\u05D2\u05D5" }
-        TV { "\u05D8\u05D5\u05D1\u05D0\u05DC\u05D5" }
-        TW { "\u05D8\u05D9\u05D5\u05D5\u05D0\u05DF" }
-        TZ { "\u05D8\u05E0\u05D6\u05E0\u05D9\u05D4" }
-        UA { "\u05D0\u05D5\u05E7\u05E8\u05D0\u05D9\u05E0\u05D4" }
-        UG { "\u05D0\u05D5\u05D2\u05E0\u05D3\u05D4" }
-        UM { "\u05D0\u05D9\u05D9\u05DD \u05E7\u05D8\u05E0\u05D9\u05DD \u05E9\u05DC\u05D7\u05D5\u05E3 \u05D0\u05E8\u05E6\u05D5\u05EA \u05D4\u05D1\u05E8\u05D9\u05EA" }
-        US { "\u05D0\u05E8\u05E6\u05D5\u05EA \u05D4\u05D1\u05E8\u05D9\u05EA" }
-        UY { "\u05D0\u05D5\u05E8\u05D5\u05D2\u05D5\u05D5\u05D0\u05D9" }
-        UZ { "\u05D0\u05D5\u05D6\u05D1\u05E7\u05D9\u05E1\u05D8\u05DF" }
-        VA { "\u05D4\u05D5\u05D5\u05EA\u05D9\u05E7\u05DF" }
-        VC { "\u05E1\u05E0\u05D8 \u05D5\u05D9\u05E0\u05E1\u05E0\u05D8 \u05D5\u05D4\u05D2\u05E8\u05E0\u05D3\u05D9\u05E0\u05D9\u05DD" }
-        VE { "\u05D5\u05E0\u05E6\u05D5\u05D0\u05DC\u05D4" }
-        VG { "\u05D0\u05D9\u05D9 \u05D4\u05D1\u05EA\u05D5\u05DC\u05D4 \u05D4\u05D1\u05E8\u05D9\u05D8\u05D9\u05D9\u05DD" }
-        VI { "\u05D0\u05D9\u05D9 \u05D4\u05D1\u05EA\u05D5\u05DC\u05D4 \u05D4\u05D0\u05DE\u05E8\u05D9\u05E7\u05E0\u05D9\u05D9\u05DD" }
-        VN { "\u05D5\u05D9\u05D9\u05D8\u05E0\u05D0\u05DD" }
-        VU { "\u05D5\u05D0\u05E0\u05D5\u05D0\u05D8\u05D5" }
-        WF { "\u05D5\u05D0\u05DC\u05D9\u05E1 \u05D5\u05E4\u05D5\u05D8\u05D5\u05E0\u05D4" }
-        WS { "\u05E1\u05DE\u05D5\u05D0\u05D4" }
-        YE { "\u05EA\u05D9\u05DE\u05DF" }
-        YT { "\u05DE\u05D9\u05D5\u05D8\u05D4" }
-        YU { "\u05D9\u05D5\u05D2\u05D5\u05E1\u05DC\u05D1\u05D9\u05D4" }
-        ZA { "\u05D3\u05E8\u05D5\u05DD \u05D0\u05E4\u05E8\u05D9\u05E7\u05D4" }
-        ZM { "\u05D6\u05DE\u05D1\u05D9\u05D4" }
-        ZW { "\u05D6\u05D9\u05DE\u05D1\u05D1\u05D5\u05D5\u05D4" }
+he{
+    Countries{
+        AD{"אנדורה"}
+        AE{"איחוד האמירויות הערביות"}
+        AF{"אפגניסטן"}
+        AG{"אנטיגואה וברבודה"}
+        AI{"אנגילה"}
+        AL{"אלבניה"}
+        AM{"ארמניה"}
+        AN{"האינטילים ההולנדיים"}
+        AO{"אנגולה"}
+        AQ{"אנטארקטיקה"}
+        AR{"ארגנטינה"}
+        AS{"סמואה האמריקנית"}
+        AT{"אוסטריה"}
+        AU{"אוסטרליה"}
+        AW{"ארובה"}
+        AZ{"אזרבייג׳ן"}
+        BA{"בוסניה הרצגובינה"}
+        BB{"ברבדוס"}
+        BD{"בנגלדש"}
+        BE{"בלגיה"}
+        BF{"בורקינה פאסו"}
+        BG{"בולגריה"}
+        BH{"בחריין"}
+        BI{"בורונדי"}
+        BJ{"בנין"}
+        BM{"ברמודה"}
+        BN{"ברוניי דארסלאם"}
+        BO{"בוליביה"}
+        BR{"ברזיל"}
+        BS{"בהאמה"}
+        BT{"בוטאן"}
+        BV{"האי בובה"}
+        BW{"בוטסוואנה"}
+        BY{"בלרוס"}
+        BZ{"בליז"}
+        CA{"קנדה"}
+        CC{"איי קוקוס (קילינג)"}
+        CD{"קונגו, הרפובליקה הדמוקרטית של"}
+        CF{"הרפובליקה של מרכז אפריקה"}
+        CG{"קונגו"}
+        CH{"שווייץ"}
+        CI{"חוף השנהב"}
+        CK{"איי קוק"}
+        CL{"צ׳ילה"}
+        CM{"קמרון"}
+        CN{"סין"}
+        CO{"קולומביה"}
+        CR{"קוסטה ריקה"}
+        CU{"קובה"}
+        CV{"קייפ ורדה"}
+        CX{"איי כריסטמס"}
+        CY{"קפריסין"}
+        CZ{"הרפובליקה הצ׳כית"}
+        DE{"גרמניה"}
+        DJ{"ג׳יבוטי"}
+        DK{"דנמרק"}
+        DM{"דומיניקה"}
+        DO{"הרפובליקה הדומיניקנית"}
+        DZ{"אלג׳יריה"}
+        EC{"אקוואדור"}
+        EE{"אסטוניה"}
+        EG{"מצרים"}
+        EH{"סהרה המערבית"}
+        ER{"אריתריאה"}
+        ES{"ספרד"}
+        ET{"אתיופיה"}
+        FI{"פינלנד"}
+        FJ{"פיג׳י"}
+        FK{"איי פוקלנד"}
+        FM{"מאוריציוס, המדינות המאוגדות של"}
+        FO{"איי פארו"}
+        FR{"צרפת"}
+        GA{"גבון"}
+        GB{"בריטניה"}
+        GD{"גרנדה"}
+        GE{"גרוזיה"}
+        GF{"גיאנה הצרפתית"}
+        GH{"גאנה"}
+        GI{"גיברלטר"}
+        GL{"גרינלנד"}
+        GM{"גמביה"}
+        GN{"גיניאה"}
+        GP{"גוואדלופ"}
+        GQ{"גיניאה המשוונית"}
+        GR{"יוון"}
+        GS{"האי ג׳ורג׳יה הדרומית ואיי סנדוויץ׳ הדרומיים"}
+        GT{"גווטמאלה"}
+        GU{"גואם"}
+        GW{"גיניאה-ביסאו"}
+        GY{"גיאנה"}
+        HK{"הונג קונג S.A.R. של סין"}
+        HM{"איי הרד ואיי מקדונלנד"}
+        HN{"הונדורס"}
+        HR{"קרואטיה"}
+        HT{"האיטי"}
+        HU{"הונגריה"}
+        ID{"אינדונזיה"}
+        IE{"אירלנד"}
+        IL{"ישראל"}
+        IN{"הודו"}
+        IO{"הטריטוריה הבריטית באוקינוס ההודי"}
+        IQ{"עירק"}
+        IR{"איראן, הרפובליקה האיסלמית"}
+        IS{"איסלנד"}
+        IT{"איטליה"}
+        JM{"ג׳מייקה"}
+        JO{"ירדן"}
+        JP{"יפן"}
+        KE{"קניה"}
+        KG{"קירגיזסטן"}
+        KH{"קמבודיה"}
+        KI{"קיריבאטי"}
+        KM{"קומורוס"}
+        KN{"סנט קיטס וניבס"}
+        KP{"קוריאה, צפון"}
+        KR{"קוריאה, דרום"}
+        KW{"כווית"}
+        KY{"איי קיימאן"}
+        KZ{"קזחסטן"}
+        LA{"לאוס, הרפובליקה הדמקורטית העממית"}
+        LB{"לבנון"}
+        LC{"סנט לושיה"}
+        LI{"ליכטנשטיין"}
+        LK{"סרי לנקה"}
+        LR{"ליבריה"}
+        LS{"לסוטו"}
+        LT{"ליטא"}
+        LU{"לוקסמבורג"}
+        LV{"לטביה"}
+        LY{"לוב"}
+        MA{"מרוקו"}
+        MC{"מונקו"}
+        MD{"מולדובה, הרפובליקה"}
+        MG{"מדגסקר"}
+        MH{"איי מרשל"}
+        MK{"מקדוניה, הרפובליקה של"}
+        ML{"מאלי"}
+        MM{"מינמאר"}
+        MN{"מונגוליה"}
+        MO{"מקאו S.A.R. של סין"}
+        MP{"איי מריאנה הצפוניים"}
+        MQ{"מרטיניק"}
+        MR{"מאוריטניה"}
+        MS{"מונטסראט"}
+        MT{"מלטה"}
+        MU{"מאוריציוס"}
+        MV{"מלדיבאס"}
+        MW{"מלאווי"}
+        MX{"מכסיקו"}
+        MY{"מלזיה"}
+        MZ{"מוזמביק"}
+        NA{"נמיביה"}
+        NC{"קלדוניה החדשה"}
+        NE{"ניז׳ר"}
+        NF{"איי נורפק"}
+        NG{"ניגריה"}
+        NI{"ניקראגווה"}
+        NL{"הולנד"}
+        NO{"נורווגיה"}
+        NP{"נפאל"}
+        NR{"נאורו"}
+        NU{"ניווה"}
+        NZ{"ניו זילנד"}
+        OM{"עומן"}
+        PA{"פנמה"}
+        PE{"פרו"}
+        PF{"פולינזיה הצרפתית"}
+        PG{"פפואה גיניאה החדשה"}
+        PH{"פיליפינים"}
+        PK{"פקיסטן"}
+        PL{"פולין"}
+        PM{"סנט פייר ומיקלון"}
+        PN{"פיטקיירן"}
+        PR{"פורטו ריקו"}
+        PS{"הרשות הפלשתינית"}
+        PT{"פורטוגל"}
+        PW{"פלאו"}
+        PY{"פראגוואי"}
+        QA{"קטר"}
+        RE{"ראוניון"}
+        RO{"רומניה"}
+        RU{"חבר המדינות הרוסיות"}
+        RW{"רואנדה"}
+        SA{"ערב הסעודית"}
+        SB{"איי שלמה"}
+        SC{"איי סיישל"}
+        SD{"סודן"}
+        SE{"שוודיה"}
+        SG{"סינגפור"}
+        SH{"סיינט הלנה"}
+        SI{"סלובניה"}
+        SJ{"סוולבארד וז׳אן מאיין"}
+        SK{"סלובקיה"}
+        SL{"סיירה לאונה"}
+        SM{"סן מרינו"}
+        SN{"סנגל"}
+        SO{"סומליה"}
+        SR{"סורינאם"}
+        ST{"סן תומה ופרינסיפה"}
+        SV{"אל סלבאדור"}
+        SY{"הרפובליקה הערבית הסורית"}
+        SZ{"סווזילנד"}
+        TC{"איי טורקס וקאיקוס"}
+        TD{"צ׳אד"}
+        TF{"טריטוריות דרומיות של צרפת"}
+        TG{"טוגו"}
+        TH{"תאילנד"}
+        TJ{"טג׳יקיסטן"}
+        TK{"טוקלאו"}
+        TL{"מזרח טימור"}
+        TM{"טורקמניסטן"}
+        TN{"טוניסיה"}
+        TO{"טונגה"}
+        TR{"טורקיה"}
+        TT{"טרינידד וטובגו"}
+        TV{"טובאלו"}
+        TW{"טיוואן"}
+        TZ{"טנזניה"}
+        UA{"אוקראינה"}
+        UG{"אוגנדה"}
+        UM{"איים קטנים שלחוף ארצות הברית"}
+        US{"ארצות הברית"}
+        UY{"אורוגוואי"}
+        UZ{"אוזבקיסטן"}
+        VA{"הוותיקן"}
+        VC{"סנט וינסנט והגרנדינים"}
+        VE{"ונצואלה"}
+        VG{"איי הבתולה הבריטיים"}
+        VI{"איי הבתולה האמריקניים"}
+        VN{"וייטנאם"}
+        VU{"ואנואטו"}
+        WF{"ואליס ופוטונה"}
+        WS{"סמואה"}
+        YE{"תימן"}
+        YT{"מיוטה"}
+        YU{"יוגוסלביה"}
+        ZA{"דרום אפריקה"}
+        ZM{"זמביה"}
+        ZW{"זימבבווה"}
     }
-    Languages {
-        ar { "\u05E2\u05E8\u05D1\u05D9\u05EA" }
-        bg { "\u05D1\u05D5\u05DC\u05D2\u05E8\u05D9\u05EA" }
-        cs { "\u05E6\u05F3\u05DB\u05D9\u05EA" }
-        da { "\u05D3\u05E0\u05D9\u05EA" }
-        de { "\u05D2\u05E8\u05DE\u05E0\u05D9\u05EA" }
-        el { "\u05D9\u05D5\u05D5\u05E0\u05D9\u05EA" }
-        en { "\u05D0\u05E0\u05D2\u05DC\u05D9\u05EA" }
-        es { "\u05E1\u05E4\u05E8\u05D3\u05D9\u05EA" }
-        et { "\u05D0\u05E1\u05D8\u05D5\u05E0\u05D9\u05EA" }
-        fi { "\u05E4\u05D9\u05E0\u05D9\u05EA" }
-        fr { "\u05E6\u05E8\u05E4\u05EA\u05D9\u05EA" }
-        he { "\u05E2\u05D1\u05E8\u05D9\u05EA" }
-        hr { "\u05E7\u05E8\u05D5\u05D0\u05D8\u05D9\u05EA" }
-        hu { "\u05D4\u05D5\u05E0\u05D2\u05E8\u05D9\u05EA" }
-        it { "\u05D0\u05D9\u05D8\u05DC\u05E7\u05D9\u05EA" }
-        //iw { "\u05E2\u05D1\u05E8\u05D9\u05EA" } //Use he instead
-        ja { "\u05D9\u05E4\u05E0\u05D9\u05EA" }
-        ko { "\u05E7\u05D5\u05E8\u05D9\u05D0\u05E0\u05D9\u05EA" }
-        lt { "\u05DC\u05D9\u05D8\u05D0\u05D9\u05EA" }
-        lv { "\u05DC\u05D8\u05D1\u05D9\u05EA" }
-        nl { "\u05D4\u05D5\u05DC\u05E0\u05D3\u05D9\u05EA" }
-        no { "\u05E0\u05D5\u05E8\u05D5\u05D5\u05D2\u05D9\u05EA" }
-        pl { "\u05E4\u05D5\u05DC\u05E0\u05D9\u05EA" }
-        pt { "\u05E4\u05D5\u05E8\u05D8\u05D5\u05D2\u05D6\u05D9\u05EA" }
-        ro { "\u05E8\u05D5\u05DE\u05E0\u05D9\u05EA" }
-        ru { "\u05E8\u05D5\u05E1\u05D9\u05EA" }
-        sk { "\u05E1\u05DC\u05D5\u05D1\u05E7\u05D9\u05EA" }
-        sl { "\u05E1\u05DC\u05D5\u05D1\u05E0\u05D9\u05EA" }
-        sv { "\u05E9\u05D5\u05D5\u05D3\u05D9\u05EA" }
-        tr { "\u05D8\u05D5\u05E8\u05E7\u05D9\u05EA" }
-        zh { "\u05E1\u05D9\u05E0\u05D9\u05EA" }
-        //zh_cn { "\u05E1\u05D9\u05E0\u05D9\u05EA (\u05DE\u05E4\u05D5\u05E9\u05D8\u05EA)" }
-        //zh_tw { "\u05E1\u05D9\u05E0\u05D9\u05EA (\u05DE\u05E1\u05D5\u05E8\u05EA\u05D9\u05EA)" }
+    Currencies{
+        ILS{
+            "₪",
+            "ש\"ח",
+        }
     }
-    localPatternChars { "GanjkHmsSEDFwWxhKzAeugXZ" }
-
-    LocaleScript:array {
-        "Hebr"    // ISO 15924 Name
+    ExemplarCharacters{"[[:Hebr:]‏‎]"}
+    Languages{
+        ar{"ערבית"}
+        bg{"בולגרית"}
+        cs{"צ׳כית"}
+        da{"דנית"}
+        de{"גרמנית"}
+        el{"יוונית"}
+        en{"אנגלית"}
+        es{"ספרדית"}
+        et{"אסטונית"}
+        fi{"פינית"}
+        fr{"צרפתית"}
+        he{"עברית"}
+        hr{"קרואטית"}
+        hu{"הונגרית"}
+        it{"איטלקית"}
+        ja{"יפנית"}
+        ko{"קוריאנית"}
+        lt{"ליטאית"}
+        lv{"לטבית"}
+        nl{"הולנדית"}
+        no{"נורווגית"}
+        pl{"פולנית"}
+        pt{"פורטוגזית"}
+        ro{"רומנית"}
+        ru{"רוסית"}
+        sk{"סלובקית"}
+        sl{"סלובנית"}
+        sv{"שוודית"}
+        tr{"טורקית"}
+        zh{"סינית"}
     }
-    ExemplarCharacters{"[[:Hebr:]\u200f\u200e]"}
-
-    // Currency display names
-    Currencies {
-        ILS { "\u20AA", "\u05E9\u0022\u05D7" }
+    LocaleScript{
+        "Hebr",
     }
-
-    // International Calendars Data.
-    // NOTE (ICU 2.6) - the format of this data WILL CHANGE in future releases.
-
+    Version{"1.2"}
     calendar{
-        islamic{
-            // Islamic calendar
-            eras:array {
-                "\u05E9\u05E0\u05EA \u05D4\u05D9\u05D2\u05F3\u05E8\u05D4"
-            }
-            monthNames{
-                format{
-                    abbreviated:alias {  // same as MonthNames (no data)
-                        "he/calendar/islamic/monthNames/format/wide"
-                    }
-                    wide{
-                        "\u05DE\u05D5\u05D7\u05E8\u05DD",                                               // Muharram
-                        "\u05E1\u05E4\u05E8",                                                           // Safar
-                        "\u05E8\u05D1\u05D9\u05E2 \u05D0\u05DC-\u05D0\u05D5\u05D5\u05D0\u05DC",         // Rabi' al-awwal
-                        "\u05E8\u05D1\u05D9\u05E2 \u05D0\u05DC-\u05EA\u05E0\u05D9",                     // Rabi' al-thani
-                        "\u05D2\u05F3\u05D5\u05DE\u05D3\u05D4 \u05D0\u05DC-\u05D0\u05D5\u05D5\u05D0\u05DC",  // Jumada al-awwal
-                        "\u05D2\u05F3\u05D5\u05DE\u05D3\u05D4 \u05D0\u05DC-\u05EA\u05E0\u05D9",              // Jumada al-thani
-                        "\u05E8\u05D2\u05F3\u05D0\u05D1",                                                    // Rajab
-                        "\u05E9\u05E2\u05D1\u05D0\u05DF",                                               // Sha'ban
-                        "\u05E8\u05D0\u05DE\u05D3\u05DF",                                               // Ramadan
-                        "\u05E9\u05D5\u05D5\u05D0\u05DC",                                               // Shawwal
-                        "\u05D6\u05D5 \u05D0\u05DC-QI'DAH",                                             // Dhu al-Qi'dah  (NEED TRANSLATION!!)
-                        "\u05D6\u05D5 \u05D0\u05DC-\u05D7\u05D9\u05D2\u05F3\u05D4",                          // Dhu al-Hijjah
-                    }
-                }
-            }
-        }
-        islamic-civil:alias{
-            "he/calendar/islamic"
-        }
+        
         gregorian{
             DateTimePatterns{
                 "HH:mm:ss z",
@@ -344,89 +309,118 @@ he {
             dayNames{
                 format{
                     abbreviated{
-                        "\u05D0",
-                        "\u05D1",
-                        "\u05D2",
-                        "\u05D3",
-                        "\u05D4",
-                        "\u05D5",
-                        "\u05E9",
+                        "א",
+                        "ב",
+                        "ג",
+                        "ד",
+                        "ה",
+                        "ו",
+                        "ש",
                     }
                     wide{
-                        "\u05D9\u05D5\u05DD \u05E8\u05D0\u05E9\u05D5\u05DF",
-                        "\u05D9\u05D5\u05DD \u05E9\u05E0\u05D9",
-                        "\u05D9\u05D5\u05DD \u05E9\u05DC\u05D9\u05E9\u05D9",
-                        "\u05D9\u05D5\u05DD \u05E8\u05D1\u05D9\u05E2\u05D9",
-                        "\u05D9\u05D5\u05DD \u05D7\u05DE\u05D9\u05E9\u05D9",
-                        "\u05D9\u05D5\u05DD \u05E9\u05D9\u05E9\u05D9",
-                        "\u05E9\u05D1\u05EA",
+                        "יום ראשון",
+                        "יום שני",
+                        "יום שלישי",
+                        "יום רביעי",
+                        "יום חמישי",
+                        "יום שישי",
+                        "שבת",
                     }
                 }
             }
             eras{
-                "\u05DC\u05E4\u05E0\u05D4\u05F4\u05E1",
-                "\u05DC\u05E1\u05D4\u05F4\u05E0"
+                abbreviated{
+                    "לפנה״ס",
+                    "לסה״נ",
+                }
             }
             monthNames{
                 format{
                     abbreviated{
-                        "\u05D9\u05E0\u05D5",
-                        "\u05E4\u05D1\u05E8",
-                        "\u05DE\u05E8\u05E5",
-                        "\u05D0\u05E4\u05E8",
-                        "\u05DE\u05D0\u05D9",
-                        "\u05D9\u05D5\u05E0",
-                        "\u05D9\u05D5\u05DC",
-                        "\u05D0\u05D5\u05D2",
-                        "\u05E1\u05E4\u05D8",
-                        "\u05D0\u05D5\u05E7",
-                        "\u05E0\u05D5\u05D1",
-                        "\u05D3\u05E6\u05DE",
+                        "ינו",
+                        "פבר",
+                        "מרץ",
+                        "אפר",
+                        "מאי",
+                        "יונ",
+                        "יול",
+                        "אוג",
+                        "ספט",
+                        "אוק",
+                        "נוב",
+                        "דצמ",
                     }
                     wide{
-                        "\u05D9\u05E0\u05D5\u05D0\u05E8",
-                        "\u05E4\u05D1\u05E8\u05D5\u05D0\u05E8",
-                        "\u05DE\u05E8\u05E5",
-                        "\u05D0\u05E4\u05E8\u05D9\u05DC",
-                        "\u05DE\u05D0\u05D9",
-                        "\u05D9\u05D5\u05E0\u05D9",
-                        "\u05D9\u05D5\u05DC\u05D9",
-                        "\u05D0\u05D5\u05D2\u05D5\u05E1\u05D8",
-                        "\u05E1\u05E4\u05D8\u05DE\u05D1\u05E8",
-                        "\u05D0\u05D5\u05E7\u05D8\u05D5\u05D1\u05E8",
-                        "\u05E0\u05D5\u05D1\u05DE\u05D1\u05E8",
-                        "\u05D3\u05E6\u05DE\u05D1\u05E8",
+                        "ינואר",
+                        "פברואר",
+                        "מרץ",
+                        "אפריל",
+                        "מאי",
+                        "יוני",
+                        "יולי",
+                        "אוגוסט",
+                        "ספטמבר",
+                        "אוקטובר",
+                        "נובמבר",
+                        "דצמבר",
                     }
                 }
             }
         }
-
         hebrew{
-            eras:array {
-                "\u05DC\u05D1\u05D4\042\u05E2"
+            eras{
+                abbreviated{
+                    "לבה\"ע",
+                }
             }
             monthNames{
                 format{
-                    wide {
-                        "\u05EA\u05E9\u05E8\u05D9",                 // Tishri
-                        "\u05D7\u05E9\u05D5\u05DF",                 // Heshvan
-                        "\u05DB\u05E1\u05DC\u05D5",                 // Kislev
-                        "\u05D8\u05D1\u05EA",                       // Tevet
-                        "\u05E9\u05D1\u05D8",                       // Shevat
-                        "\u05D0\u05D3\u05E8 \u05E8\u05D0\u05E9\u05D5\u05DF",    // Adar I
-                        "\u05D0\u05D3\u05E8 \u05E9\u05E0\u05D9",    // Adar
-                        "\u05E0\u05D9\u05E1\u05DF",                 // Nisan
-                        "\u05D0\u05D9\u05D9\u05E8",                 // Iyar
-                        "\u05E1\u05D9\u05D5\u05DF",                 // Sivan
-                        "\u05EA\u05DE\u05D5\u05D6",                 // Tamuz
-                        "\u05D0\u05D1",                             // Av
-                        "\u05D0\u05DC\u05D5\u05DC",                 // Elul
-                    }
-                    abbreviated:alias {
-                        "he/calendar/hebrew/monthNames/format/wide"
+                    abbreviated:alias{"he/calendar/hebrew/monthNames/format/wide"}
+                    wide{
+                        "תשרי",
+                        "חשון",
+                        "כסלו",
+                        "טבת",
+                        "שבט",
+                        "אדר ראשון",
+                        "אדר שני",
+                        "ניסן",
+                        "אייר",
+                        "סיון",
+                        "תמוז",
+                        "אב",
+                        "אלול",
                     }
                 }
             }
         }
+        islamic{
+            eras{
+                abbreviated{
+                    "שנת היג׳רה",
+                }
+            }
+            monthNames{
+                format{
+                    abbreviated:alias{"he/calendar/islamic/monthNames/format/wide"}
+                    wide{
+                        "מוחרם",
+                        "ספר",
+                        "רביע אל-אוואל",
+                        "רביע אל-תני",
+                        "ג׳ומדה אל-אוואל",
+                        "ג׳ומדה אל-תני",
+                        "רג׳אב",
+                        "שעבאן",
+                        "ראמדן",
+                        "שוואל",
+                        "זו אל-QI'DAH",
+                        "זו אל-חיג׳ה",
+                    }
+                }
+            }
+        }
+        islamic-civil:alias{"he/calendar/islamic"}
     }
+    localPatternChars{"GanjkHmsSEDFwWxhKzAeugXZ"}
 }
