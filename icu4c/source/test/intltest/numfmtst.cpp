@@ -496,7 +496,7 @@ void NumberFormatTest::expectCurrency(NumberFormat& nf, const Locale& locale,
     DecimalFormat& fmt = * (DecimalFormat*) &nf;
     char curr[4] = {'-','-','-',0};
     if (*locale.getLanguage() != 0) {
-        UCurrency::forLocale(locale, curr, ec);
+        ucurr_forLocale(locale.getName(), curr, &ec);
         if (U_FAILURE(ec)) {
             errln("FAIL: UCurrency::forLocale");
             return;
