@@ -573,12 +573,13 @@ u_charDigitValue(UChar32 c) {
     /* ### TODO: new numericType==4 for Han numbers?! */
 
     /* if there is no value in the properties table, then check for some special characters */
+    /* see Unihan.txt kPrimaryNumeric values 0..9 ### TODO get from (new) UCD file */
     switch(c) {
     case 0x3007:    return 0; /* Han Zero*/
     case 0x4e00:    return 1; /* Han One*/
     case 0x4e8c:    return 2; /* Han Two*/
     case 0x4e09:    return 3; /* Han Three*/
-    case 0x56d8:    return 4; /* Han Four*/
+    case 0x56db:    return 4; /* Han Four*/
     case 0x4e94:    return 5; /* Han Five*/
     case 0x516d:    return 6; /* Han Six*/
     case 0x4e03:    return 7; /* Han Seven*/
