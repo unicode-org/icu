@@ -24,12 +24,12 @@ class WrongListener : public EventListener {
 
 class ICUNSubclass : public ICUNotifier {
     public:
-    UBool acceptsListener(const EventListener& l) const {
+    UBool acceptsListener(const EventListener& /*l*/) const {
         return TRUE;
         // return l instanceof MyListener;
     }
 
-    virtual void notifyListener(EventListener& l) const {
+    virtual void notifyListener(EventListener& /*l*/) const {
     }
 };
 
@@ -62,22 +62,22 @@ class Integer : public UObject {
     virtual ~Integer() {
     }
 
-    virtual UBool operator==(const UObject& other) const 
-    {
-        return other.getDynamicClassID() == getStaticClassID() &&
-            _val == ((Integer&)other)._val;
-    }
-
     public:
     /**
      * UObject boilerplate.
      */
+    static UClassID getStaticClassID() { 
+        return (UClassID)&fgClassID;
+    }
+
     virtual UClassID getDynamicClassID() const {
         return getStaticClassID();
     }
 
-    static UClassID getStaticClassID() { 
-        return (UClassID)&fgClassID;
+    virtual UBool operator==(const UObject& other) const 
+    {
+        return other.getDynamicClassID() == getStaticClassID() &&
+            _val == ((Integer&)other)._val;
     }
 
     public:
@@ -497,12 +497,12 @@ class AnonymousStringFactory : public ICUServiceFactory
         return result;
     }
 
-    virtual UClassID getDynamicClassID() const {
-        return getStaticClassID();
-    }
-
     static UClassID getStaticClassID() {
         return (UClassID)&fgClassID;
+    }
+
+    virtual UClassID getDynamicClassID() const {
+        return getStaticClassID();
     }
 
     private:
@@ -573,12 +573,12 @@ class TestMultipleKeyStringFactory : public ICUServiceFactory {
         return result;
     }
 
-    virtual UClassID getDynamicClassID() const {
-        return getStaticClassID();
-    }
-
     static UClassID getStaticClassID() {
         return (UClassID)&fgClassID;
+    }
+
+    virtual UClassID getDynamicClassID() const {
+        return getStaticClassID();
     }
 
     private:
@@ -1225,12 +1225,12 @@ class WrapFactory : public ICUServiceFactory {
     /**
      * UObject boilerplate.
      */
-    virtual UClassID getDynamicClassID() const {
-        return getStaticClassID();
-    }
-
     static UClassID getStaticClassID() { 
         return (UClassID)&fgClassID;
+    }
+
+    virtual UClassID getDynamicClassID() const {
+        return getStaticClassID();
     }
 
     private:

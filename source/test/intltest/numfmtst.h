@@ -153,20 +153,6 @@ class NumberFormatTest: public CalendarTimeZoneTest {
     void expectCurrency(NumberFormat& nf, const Locale& locale,
                         double value, const UnicodeString& string);
 
-    void expectPat(DecimalFormat& fmt, const UnicodeString& exp);
-
-    void expectPat(DecimalFormat& fmt, const char *exp) {
-        expectPat(fmt, UnicodeString(exp, ""));
-    }
-
-    void expectPad(DecimalFormat& fmt, const UnicodeString& pat,
-                   int32_t pos);
-
-    void expectPad(DecimalFormat& fmt, const char *pat,
-                   int32_t pos) {
-        expectPad(fmt, pat, pos, 0, (UChar)0);
-    }
-
     void expectPad(DecimalFormat& fmt, const UnicodeString& pat,
                    int32_t pos, int32_t width, UChar pad);
 
@@ -181,6 +167,20 @@ class NumberFormatTest: public CalendarTimeZoneTest {
     void expectPad(DecimalFormat& fmt, const char *pat,
                    int32_t pos, int32_t width, const UnicodeString& pad) {
         expectPad(fmt, UnicodeString(pat, ""), pos, width, pad);
+    }
+
+    void expectPat(DecimalFormat& fmt, const UnicodeString& exp);
+
+    void expectPat(DecimalFormat& fmt, const char *exp) {
+        expectPat(fmt, UnicodeString(exp, ""));
+    }
+
+    void expectPad(DecimalFormat& fmt, const UnicodeString& pat,
+                   int32_t pos);
+
+    void expectPad(DecimalFormat& fmt, const char *pat,
+                   int32_t pos) {
+        expectPad(fmt, pat, pos, 0, (UChar)0);
     }
 
     // internal utility routine
