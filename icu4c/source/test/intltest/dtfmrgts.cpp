@@ -53,6 +53,7 @@ DateFormatRegressionTest::runIndexedTest( int32_t index, UBool exec, const char*
         CASE(22,Test4182066)
         CASE(23,Test4210209)
         CASE(24,Test714)
+        CASE(25,Test1684)
         default: name = ""; break;
     }
 }
@@ -1174,6 +1175,163 @@ void DateFormatRegressionTest::Test714(void)
         }
 
    delete fmt;
+}
+
+class Test1684Data {
+public:
+  int32_t year;
+  int32_t month;
+  int32_t date;
+  int32_t womyear;
+  int32_t wommon;
+  int32_t wom;
+  int32_t dow;
+  UnicodeString data;
+  UnicodeString normalized;
+    
+  Test1684Data(int32_t xyear, int32_t xmonth, int32_t xdate,
+               int32_t xwomyear, int32_t xwommon, int32_t xwom, int32_t xdow,
+               const char *xdata, const char *xnormalized) :
+    year(xyear),
+    month(xmonth-1),
+    date(xdate),
+    womyear(xwomyear),
+    wommon(xwommon-1),
+    wom(xwom),
+    dow(xdow),
+    data(xdata,""),
+    normalized((xnormalized==NULL)?xdata:xnormalized,"")
+  { }
+};
+
+void DateFormatRegressionTest::Test1684(void)
+{
+  //      July 2001            August 2001           January 2002    
+  // Su Mo Tu We Th Fr Sa  Su Mo Tu We Th Fr Sa  Su Mo Tu We Th Fr Sa
+  //  1  2  3  4  5  6  7            1  2  3  4         1  2  3  4  5
+  //  8  9 10 11 12 13 14   5  6  7  8  9 10 11   6  7  8  9 10 11 12
+  // 15 16 17 18 19 20 21  12 13 14 15 16 17 18  13 14 15 16 17 18 19
+  // 22 23 24 25 26 27 28  19 20 21 22 23 24 25  20 21 22 23 24 25 26
+  // 29 30 31              26 27 28 29 30 31     27 28 29 30 31      
+  Test1684Data *tests[] = {
+    new Test1684Data(2001, 8,  6,  2001,8,2,UCAL_MONDAY,    "2001 08 02 Mon", NULL),
+    new Test1684Data(2001, 8,  7,  2001,8,2,UCAL_TUESDAY,   "2001 08 02 Tue", NULL),
+    new Test1684Data(2001, 8,  5,/*12,*/ 2001,8,2,UCAL_SUNDAY,    "2001 08 02 Sun", NULL),
+    new Test1684Data(2001, 8,6, /*7,  30,*/ 2001,7,6,UCAL_MONDAY,    "2001 07 06 Mon", "2001 08 02 Mon"),
+    new Test1684Data(2001, 8,7, /*7,  31,*/ 2001,7,6,UCAL_TUESDAY,   "2001 07 06 Tue", "2001 08 02 Tue"),
+    new Test1684Data(2001, 8,  5,  2001,7,6,UCAL_SUNDAY,    "2001 07 06 Sun", "2001 08 02 Sun"),
+    new Test1684Data(2001, 7,  30, 2001,8,1,UCAL_MONDAY,    "2001 08 01 Mon", "2001 07 05 Mon"),
+    new Test1684Data(2001, 7,  31, 2001,8,1,UCAL_TUESDAY,   "2001 08 01 Tue", "2001 07 05 Tue"),
+    new Test1684Data(2001, 7,29, /*8,  5,*/  2001,8,1,UCAL_SUNDAY,    "2001 08 01 Sun", "2001 07 05 Sun"),
+    new Test1684Data(2001, 12, 31, 2001,12,6,UCAL_MONDAY,   "2001 12 06 Mon", NULL),
+    new Test1684Data(2002, 1,  1,  2002,1,1,UCAL_TUESDAY,   "2002 01 01 Tue", NULL),
+    new Test1684Data(2002, 1,  2,  2002,1,1,UCAL_WEDNESDAY, "2002 01 01 Wed", NULL),
+    new Test1684Data(2002, 1,  3,  2002,1,1,UCAL_THURSDAY,  "2002 01 01 Thu", NULL),
+    new Test1684Data(2002, 1,  4,  2002,1,1,UCAL_FRIDAY,    "2002 01 01 Fri", NULL),
+    new Test1684Data(2002, 1,  5,  2002,1,1,UCAL_SATURDAY,  "2002 01 01 Sat", NULL),
+    new Test1684Data(2001,12,30, /*2002, 1,  6,*/  2002,1,1,UCAL_SUNDAY,    "2002 01 01 Sun", "2001 12 06 Sun")
+  };
+
+#define kTest1684Count  (sizeof(tests)/sizeof(tests[0]))
+
+  int32_t pass = 0, error = 0, warning = 0;
+  int32_t i;
+
+  UErrorCode status = U_ZERO_ERROR;
+  UnicodeString pattern("yyyy MM WW EEE","");
+  Calendar *cal = new GregorianCalendar(status);
+  SimpleDateFormat *sdf = new SimpleDateFormat(pattern,status);
+  cal->setFirstDayOfWeek(UCAL_SUNDAY);
+  cal->setMinimalDaysInFirstWeek(1);
+
+  sdf->adoptCalendar(cal);
+
+  cal = sdf->getCalendar()->clone(); // sdf may have deleted calendar
+
+  if(!cal || !sdf || U_FAILURE(status)) {
+    errln(UnicodeString("Error setting up test: ") + u_errorName(status));
+  }
+
+  for (i = 0; i < kTest1684Count; ++i) {
+    Test1684Data &test = *(tests[i]);
+    logln(UnicodeString("#") + i + UnicodeString("\n-----\nTesting round trip of ") + test.year +
+        " " + (test.month + 1) +
+        " " + test.date +
+          " (written as) " + test.data);
+    
+    cal->clear();
+    cal->set(test.year, test.month, test.date);
+    UDate ms = cal->getTime(status);
+    
+    cal->clear();
+    cal->set(UCAL_YEAR, test.womyear);
+    cal->set(UCAL_MONTH, test.wommon);
+    cal->set(UCAL_WEEK_OF_MONTH, test.wom);
+    cal->set(UCAL_DAY_OF_WEEK, test.dow);
+    UDate ms2 = cal->getTime(status);
+            
+    if (ms2 != ms) {
+      errln((UnicodeString)"\nError: GregorianUCAL_DOM gave " + ms +
+            "\n       GregorianUCAL_WOM gave " + ms2);
+      error++;
+    } else {
+      pass++;
+    }
+    
+    ms2 = NULL;
+    ms2 = sdf->parse(test.data, status);
+    if(U_FAILURE(status)) {
+      errln("parse exception: " + UnicodeString(u_errorName(status)));
+    }
+    
+    if (ms2!=ms) {
+      errln((UnicodeString)"\nError: GregorianCalendar gave      " + ms +
+            "\n       SimpleDateFormat.parse gave " + ms2);
+      error++;
+    } else {
+      pass++;
+    }
+
+    UnicodeString result;
+    sdf->format(ms, result);
+    if (result != test.normalized) {
+      errln("\nWarning: format of '" + test.data + "' gave" +
+            "\n                   '" + result + "'" +
+            "\n          expected '" + test.normalized + "'");
+      warning++;
+    } else {
+      pass++;
+    }
+            
+    UDate ms3;
+    ms3 = sdf->parse(result, status);
+    if(U_FAILURE(status)) {
+      errln("parse exception 2: " + (UnicodeString)u_errorName(status));
+    }
+    
+    if (ms3!=ms) {
+      error++;
+      errln((UnicodeString)"\nError: Re-parse of '" + result + "' gave time of " +
+          "\n        " + ms3 +
+          "\n    not " + ms);
+    } else {
+      pass++;
+            }
+  }
+
+  UnicodeString info 
+    = UnicodeString("Passed: ") + pass + ", Warnings: " + warning + ", Errors: " + error;
+  if (error > 0) {
+    errln(info);
+  } else {
+    logln(info);
+  }
+  
+  for(i=0;i<kTest1684Count;i++) {
+    delete tests[i];
+  }
+  delete cal;
+  delete sdf;
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
