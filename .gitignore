@@ -40,7 +40,7 @@ icu4c/source/samples/XMLConverter/*.pdb
 icu4c/source/samples/XMLConverter/Debug
 icu4c/source/samples/XMLConverter/Makefile
 icu4c/source/samples/XMLConverter/Release
-icu4c/source/samples/XMLConverter/cal
+icu4c/source/samples/XMLConverter/XMLConverter
 icu4c/source/samples/cal/*.d
 icu4c/source/samples/cal/*.pdb
 icu4c/source/samples/cal/Debug
