@@ -70,7 +70,7 @@ LIBS = $(LIBICUDT) @LIBS@
 CPPFLAGS += @DATA_PACKAGING_CPPFLAGS@
 
 OBJECTS = compdata.o dcmpdata.o normlzr.o unorm.o bidi.o ubidi.o \
-ubidiwrt.o ubidiln.o chariter.o compitr.o cwchar.o schriter.o uchriter.o \
+ubidiwrt.o ubidiln.o chariter.o cwchar.o schriter.o uchriter.o \
 cpputils.o digitlst.o filestrm.o ushape.o umemstrm.o locid.o locmap.o uloc.o \
 mutex.o umutex.o putil.o udata.o uresbund.o uresdata.o resbund.o \
 uchar.o ucmp8.o ucmp16.o ucmp32.o ucmpe32.o uvector.o uhash.o uhash_us.o \
