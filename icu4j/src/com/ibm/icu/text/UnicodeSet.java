@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/UnicodeSet.java,v $
- * $Date: 2001/10/05 23:23:50 $
- * $Revision: 1.37 $
+ * $Date: 2001/10/08 17:31:08 $
+ * $Revision: 1.38 $
  *
  *****************************************************************************************
  */
@@ -255,7 +255,7 @@ import com.ibm.util.Utility;
  * *Unsupported by Java (and hence unsupported by UnicodeSet).
  *
  * @author Alan Liu
- * @version $RCSfile: UnicodeSet.java,v $ $Revision: 1.37 $ $Date: 2001/10/05 23:23:50 $ */
+ * @version $RCSfile: UnicodeSet.java,v $ $Revision: 1.38 $ $Date: 2001/10/08 17:31:08 $ */
 public class UnicodeSet extends UnicodeFilter {
 
     /* Implementation Notes.
@@ -1649,7 +1649,7 @@ public class UnicodeSet extends UnicodeFilter {
         if (!match) {
             // TODO: Add caching of these, if desired
             int script = UScript.getCode(catName);
-            if (script != UScript.USCRIPT_INVALID_CODE) {
+            if (script != UScript.INVALID_CODE) {
                 match = true;
                 clear();
                 int start = -1;
