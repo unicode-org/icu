@@ -4,9 +4,6 @@
  * others. All Rights Reserved.
  ********************************************************************/
 
-#include <stdio.h>
-#include <string.h>
-#include <assert.h>
 #include "ucdtest.h"
 #include "unicode/unicode.h"
 #include "unicode/ustring.h"
@@ -325,6 +322,12 @@ UnicodeTest::unicodeDataLineFn(void *context,
         return;
     }
 
+    if(fieldCount != 15) {
+        me->errln("error in UnicodeData.txt: The data format changed. fieldCount=%lu and it should be 15\n", fieldCount);
+        *pErrorCode = U_PARSE_ERROR;
+        return;
+    }
+
     /* get the character code, field 0 */
     c=uprv_strtoul(fields[0][0], &end, 16);
     if(end<=fields[0][0] || end!=fields[0][1]) {
@@ -333,7 +336,7 @@ UnicodeTest::unicodeDataLineFn(void *context,
         return;
     }
     if((uint32_t)c>=0x110000) {
-        me->errln("error in UnicodeData.txt: code point %lu out of range\n" + c);
+        me->errln("error in UnicodeData.txt: code point %lu out of range\n", c);
         *pErrorCode = U_PARSE_ERROR;
         return;
     }

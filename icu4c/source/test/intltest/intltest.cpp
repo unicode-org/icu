@@ -529,8 +529,8 @@ IntlTest& operator<<(IntlTest& test, const int32_t num)
     if (&test == NULL)
         return *((IntlTest*) NULL);
     char convert[20];
-    sprintf( convert, "%li", num );
-    test.log( convert );
+    sprintf(convert, "%li", (long)num);
+    test.log(convert);
     return test;
 }
 
@@ -694,7 +694,7 @@ UBool IntlTest::runTestLoop( char* testname, char* par )
                 sprintf( msg, "---OK:   %s", name );
                 lastTestFailed = FALSE;
             }else{
-                sprintf( msg, "---ERRORS (%li) in %s", (errorCount-lastErrorCount), name );
+                sprintf(msg, "---ERRORS (%li) in %s", (long)(errorCount-lastErrorCount), name);
 
                 for(int i=0;i<LL_indentlevel;i++) {
                     errorList += " ";
@@ -1061,7 +1061,7 @@ main(int argc, char* argv[])
     if (major.getErrors() == 0) {
         fprintf(stdout, "OK: All tests passed without error.\n");
     }else{
-        fprintf(stdout, "Errors in total: %ld.\n", major.getErrors());
+        fprintf(stdout, "Errors in total: %ld.\n", (long)major.getErrors());
         major.printErrors();
     }
 
