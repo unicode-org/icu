@@ -46,6 +46,9 @@ void StringTest::TestSizeofInt64(void) {
         errln("TestSizeofInt64: 8!=sizeof(uint64_t) - uint64_t needs to be fixed in platform.h");
     }
 #endif
+    if(8!=sizeof(double)) {
+        errln("8!=sizeof(double) - putil.c code may not work");
+    }
 }
 
 void StringTest::TestCharsetFamily(void) {
