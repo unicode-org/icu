@@ -44,7 +44,7 @@ void pkg_mode_common(UPKGOptions *o, FileStream *makefile, UErrorCode *status)
     o->outFiles = pkg_appendToList(o->outFiles, &tail, uprv_strdup(tmp));
     
     if(o->nooutput || o->verbose) {
-      fprintf(stderr, "# Output file: %s%s%s\n", o->targetDir, U_FILE_SEP_STRING, tmp);
+      fprintf(stdout, "# Output file: %s%s%s\n", o->targetDir, U_FILE_SEP_STRING, tmp);
     }
     
     if(o->nooutput) {
