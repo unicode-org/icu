@@ -2566,10 +2566,10 @@ static UBool generalCategoryMaskFilter(UChar32 ch, void* context) {
 }
 
 static UBool versionFilter(UChar32 ch, void* context) {
-    UVersionInfo v;
+    UVersionInfo v, none = { 0, 0, 0, 0};
     UVersionInfo* version = (UVersionInfo*)context;
     u_charAge(ch, v);
-    return uprv_memcmp(&v, version, sizeof(v)) == 0;
+    return uprv_memcmp(&v, &none, sizeof(v)) > 0 && uprv_memcmp(&v, version, sizeof(v)) <= 0;
 }
 
 typedef struct {
