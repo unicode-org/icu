@@ -337,7 +337,9 @@ UnicodeSet* UnicodePropertySet::createScriptSet(const UnicodeString& valueName) 
 
 U_CDECL_BEGIN
 static UBool U_CALLCONV
-_enumCategoryRange(const void *context, UChar32 start, UChar32 limit, UCharCategory type) {
+_enumCategoryRange(const void * /*context*/,
+                   UChar32 start, UChar32 limit, UCharCategory type)
+{
     CATEGORY_CACHE[type].add(start, limit-1);
     return TRUE;
 }

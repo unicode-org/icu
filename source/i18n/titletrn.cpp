@@ -145,9 +145,6 @@ void TitlecaseTransliterator::handleTransliterate(
     int32_t newLen;
 
     for (; i < limit; ) {
-        UErrorCode status = U_ZERO_ERROR;
-        int32_t s = i;
-
         UTF_GET_CHAR(original.getBuffer(), 0, i, original.length(), cp);
         oldLen = UTF_CHAR_LENGTH(cp);
         i += oldLen;
