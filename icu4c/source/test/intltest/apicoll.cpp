@@ -1398,7 +1398,6 @@ void CollationAPITest::TestGetLocale() {
   UErrorCode status = U_ZERO_ERROR;
   const char *rules = "&a<x<y<z";
   UChar rlz[256] = {0};
-  uint32_t rlzLen = u_unescape(rules, rlz, 256);
 
   Collator *coll = NULL;
   Locale locale;
@@ -1416,8 +1415,10 @@ void CollationAPITest::TestGetLocale() {
     { "fr_FR_NONEXISTANT", "fr_FR", "fr" }
   };
 
+  u_unescape(rules, rlz, 256);
+
   /* test opening collators for different locales */
-  for(i = 0; i<sizeof(testStruct)/sizeof(testStruct[0]); i++) {
+  for(i = 0; i<(int32_t)(sizeof(testStruct)/sizeof(testStruct[0])); i++) {
     status = U_ZERO_ERROR;
     coll = Collator::createInstance(testStruct[i].requestedLocale, status);
     if(U_FAILURE(status)) {

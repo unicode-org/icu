@@ -689,7 +689,7 @@ static int countRoundtrips=0, countNonRoundtrips=0;
 void BiDiTest::TestInverseBiDi() {
     BiDi bidi;
     UErrorCode errorCode;
-    int i;
+    uint32_t i;
 
     logln("inverse BiDi: testInverseBiDi(L) with %u test cases ---\n", LENGTHOF(testCases));
     for(i=0; i<LENGTHOF(testCases); ++i) {

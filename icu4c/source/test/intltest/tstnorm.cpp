@@ -863,7 +863,7 @@ void BasicNormalizerTest::TestConcatenate() {
     int32_t i;
 
     /* test concatenation */
-    for(i=0; i<sizeof(cases)/sizeof(cases[0]); ++i) {
+    for(i=0; i<(int32_t)(sizeof(cases)/sizeof(cases[0])); ++i) {
         switch(*cases[i][0]) {
         case 'C': mode=UNORM_NFC; break;
         case 'D': mode=UNORM_NFD; break;
