@@ -79,17 +79,17 @@ enum {
     _NORM_EXTRA_SURROGATE_TOP=0x3f0,    /* hangul etc. */
 
     _NORM_EXTRA_HANGUL=_NORM_EXTRA_SURROGATE_TOP,
-    _NORM_EXTRA_JAMO_1,                 /* ### not used */
-    _NORM_EXTRA_JAMO_2,
-    _NORM_EXTRA_JAMO_3
+    _NORM_EXTRA_JAMO_L,                 /* ### not used */
+    _NORM_EXTRA_JAMO_V,
+    _NORM_EXTRA_JAMO_T
 };
 
 /* value constants using >16 bits */
 #define _NORM_MIN_SPECIAL       0xfc000000
 #define _NORM_SURROGATES_TOP    0xfff00000
 #define _NORM_MIN_HANGUL        0xfff00000
-#define _NORM_MIN_JAMO2         0xfff20000
-#define _NORM_JAMO2_TOP         0xfff30000
+#define _NORM_MIN_JAMO_V        0xfff20000
+#define _NORM_JAMO_V_TOP        0xfff30000
 
 
 /* index values */
