@@ -1330,7 +1330,7 @@ void ICUServiceTest::testCoverage()
     key = LocaleKey::createWithCanonicalFallback(&primary, &fallback, status);
 
     UnicodeString result;
-    LKFSubclass lkf(true); // empty
+    LKFSubclass lkf(TRUE); // empty
     Hashtable table;
 
     UObject *obj = lkf.create(*key, NULL, status);
@@ -1342,7 +1342,7 @@ void ICUServiceTest::testCoverage()
       errln("visible IDs does not contain en_US");
     }
 
-    LKFSubclass invisibleLKF(false);
+    LKFSubclass invisibleLKF(FALSE);
     obj = lkf.create(*key, NULL, status);
     logln("obj: " + UnicodeString(obj ? "obj" : "null"));
     logln(invisibleLKF.getDisplayName("en_US", Locale::getDefault(), result.remove()));
