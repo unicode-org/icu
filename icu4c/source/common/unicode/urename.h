@@ -583,6 +583,7 @@
 #define ucnv_getUChar32KeepOverflow ucnv_getUChar32KeepOverflow_2_6
 #define ucnv_getUnicodeSet ucnv_getUnicodeSet_2_6
 #define ucnv_incrementRefCount ucnv_incrementRefCount_2_6
+#define ucnv_init ucnv_init_2_6
 #define ucnv_io_cleanup ucnv_io_cleanup_2_6
 #define ucnv_io_countAliases ucnv_io_countAliases_2_6
 #define ucnv_io_countAvailableAliases ucnv_io_countAvailableAliases_2_6
@@ -1007,6 +1008,7 @@
 #define ures_getVersion ures_getVersion_2_6
 #define ures_getVersionNumber ures_getVersionNumber_2_6
 #define ures_hasNext ures_hasNext_2_6
+#define ures_init ures_init_2_6
 #define ures_initStackObject ures_initStackObject_2_6
 #define ures_isStackObject ures_isStackObject_2_6
 #define ures_open ures_open_2_6
