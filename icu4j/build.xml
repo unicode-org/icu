@@ -4,12 +4,6 @@
 * Copyright (C) 1997-2003, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
-*
-* $Source: /xsrl/Nsvn/icu/icu4j/build.xml,v $
-* $Date: 2004/03/24 18:40:35 $
-* $Revision: 1.90 $
-*
-*******************************************************************************
 * This is the ant build file for ICU4J.  See readme.html for more information.
 */
 -->
