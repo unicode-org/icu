@@ -1459,6 +1459,9 @@ static void TestChMove(void) {
   ucol_close(coll);
 }
 
+
+
+
 const static char impTest[][20] = {
   "\\u4e00",
     "a",
@@ -1470,6 +1473,24 @@ const static char impTest[][20] = {
 
 
 static void TestImplicitTailoring(void) {
+  static struct {
+    const char *rules;
+    const char *data[50];
+    const uint32_t len;
+  } tests[] = {  
+      { "&[before 1]\\u4e00 < b < c &[before 1]\\u4e00 < d < e", { "d", "e", "b", "c", "\\u4e00"}, 5 },
+      { "&\\u4e00 < a <<< A < b <<< B",   { "\\u4e00", "a", "A", "b", "B", "\\u4e01"}, 6 },
+      { "&[before 1]\\u4e00 < \\u4e01 < \\u4e02", { "\\u4e01", "\\u4e02", "\\u4e00"}, 3},
+      { "&[before 1]\\u4e01 < \\u4e02 < \\u4e03", { "\\u4e02", "\\u4e03", "\\u4e01"}, 3}
+  };
+
+  int32_t i = 0;
+
+  for(i = 0; i < sizeof(tests)/sizeof(tests[0]); i++) {
+      genericRulesStarter(tests[i].rules, tests[i].data, tests[i].len);
+  }
+
+/*
   UChar t1[256] = {0};
   UChar t2[256] = {0};
 
@@ -1498,6 +1519,7 @@ static void TestImplicitTailoring(void) {
     log_err("Can't open collator");
   }
   ucol_close(coll);
+  */
 }
 
 static void TestFCDProblem(void) {
@@ -4192,7 +4214,7 @@ static void TestImplicitGeneration(void) {
     UChar32 lastTop = 0;
     UChar32 currentTop = 0;
 
-    UCollator *col = ucol_open("root", &status);
+    UCollator *coll = ucol_open("root", &status);
     if(U_FAILURE(status)) {
         log_err("Couldn't open UCA\n");
         return;
@@ -4233,10 +4255,15 @@ static void TestImplicitGeneration(void) {
             showImplicit(i+2);
         }
         last = current;
+
+        if(uprv_uca_getCodePointFromRaw(uprv_uca_getRawFromCodePoint(i)) != i) {
+            log_err("No raw <-> code point roundtrip for 0x%08X\n", i);
+        }
     }
     showImplicit(TST_UCOL_MAX_INPUT-2);
     showImplicit(TST_UCOL_MAX_INPUT-1);
     showImplicit(TST_UCOL_MAX_INPUT);    
+    ucol_close(coll);
 }
 
 #define TEST(x) addTest(root, &x, "tscoll/cmsccoll/" # x)

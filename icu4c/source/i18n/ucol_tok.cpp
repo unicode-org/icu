@@ -1170,58 +1170,101 @@ inline UColToken *getVirginBefore(UColTokenParser *src, UColToken *sourceToken, 
     baseContCE = 0;
   }
 
-  invPos = ucol_inv_getPrevCE(src, baseCE, baseContCE, &CE, &SecondCE, strength);
 
-  uint32_t *CETable = (uint32_t *)((uint8_t *)src->invUCA+src->invUCA->table);
-  uint32_t ch = CETable[3*invPos+2];
-
-  if((ch &  UCOL_INV_SIZEMASK) != 0) {
-    uint16_t *conts = (uint16_t *)((uint8_t *)src->invUCA+src->invUCA->conts);
-    uint32_t offset = (ch & UCOL_INV_OFFSETMASK);
-    ch = conts[offset];
-  }      
-  *src->extraCurrent++ = (UChar)ch;
-  src->parsedToken.charsOffset = (uint32_t)(src->extraCurrent - src->source - 1);
-  src->parsedToken.charsLen = 1;
-
-  // We got an UCA before. However, this might have been tailored.
-  // example:
-  // &\u30ca = \u306a
-  // &[before 3]\u306a<<<\u306a|\u309d
-  
-  
-  // uint32_t key = (*newCharsLen << 24) | *charsOffset;
-  UColToken key;
+  UCAConstants *consts = (UCAConstants *)((uint8_t *)src->UCA->image + src->UCA->image->UCAConsts);
+  uint32_t ch = 0;
   uint32_t expandNext = 0;
-  key.source = (src->parsedToken.charsLen/**newCharsLen*/ << 24) | src->parsedToken.charsOffset/**charsOffset*/;
-  key.rulesToParse = src->source;
+  UColToken key;
 
-  //sourceToken = (UColToken *)uhash_iget(src->tailored, (int32_t)key);
-  sourceToken = (UColToken *)uhash_get(src->tailored, &key);
+  if(baseCE >= (consts->UCA_PRIMARY_IMPLICIT_MIN<<24) && baseCE <= (consts->UCA_PRIMARY_IMPLICIT_MAX<<24) ) { /* implicits - */ 
+      uint32_t primary = baseCE & UCOL_PRIMARYMASK | (baseContCE & UCOL_PRIMARYMASK) >> 16;
+      uint32_t raw = uprv_uca_getRawFromImplicit(primary);
+      ch = uprv_uca_getCodePointFromRaw(raw-1);
+      uint32_t primaryCE = uprv_uca_getImplicitFromRaw(raw-1);
+      CE = primaryCE & UCOL_PRIMARYMASK | 0x0505;
+      SecondCE = (primaryCE << 16) & UCOL_PRIMARYMASK | UCOL_CONTINUATION_MARKER;
+
+      src->parsedToken.charsOffset = (uint32_t)(src->extraCurrent - src->source);
+      *src->extraCurrent++ = 0xFFFE;
+      *src->extraCurrent++ = (UChar)ch;
+      src->parsedToken.charsLen++;
+
+      key.source = (src->parsedToken.charsLen/**newCharsLen*/ << 24) | src->parsedToken.charsOffset/**charsOffset*/;
+      key.rulesToParse = src->source;
+
+      //sourceToken = (UColToken *)uhash_iget(src->tailored, (int32_t)key);
+      sourceToken = (UColToken *)uhash_get(src->tailored, &key);
+
+      if(sourceToken == NULL) {
+          src->lh[src->resultLen].baseCE = CE & 0xFFFFFF3F;
+          if(isContinuation(SecondCE)) {
+            src->lh[src->resultLen].baseContCE = SecondCE;
+          } else {
+            src->lh[src->resultLen].baseContCE = 0;
+          }
+          src->lh[src->resultLen].nextCE = 0;
+          src->lh[src->resultLen].nextContCE = 0;
+          src->lh[src->resultLen].previousCE = 0;
+          src->lh[src->resultLen].previousContCE = 0;
+
+          src->lh[src->resultLen].indirect = FALSE;
+
+          sourceToken = ucol_tok_initAReset(src, 0, &expandNext, parseError, status);   
+      }
+
+  } else {
+      invPos = ucol_inv_getPrevCE(src, baseCE, baseContCE, &CE, &SecondCE, strength);
+
+      uint32_t *CETable = (uint32_t *)((uint8_t *)src->invUCA+src->invUCA->table);
+      ch = CETable[3*invPos+2];
+
+      if((ch &  UCOL_INV_SIZEMASK) != 0) {
+        uint16_t *conts = (uint16_t *)((uint8_t *)src->invUCA+src->invUCA->conts);
+        uint32_t offset = (ch & UCOL_INV_OFFSETMASK);
+        ch = conts[offset];
+      }      
+
+      *src->extraCurrent++ = (UChar)ch;
+      src->parsedToken.charsOffset = (uint32_t)(src->extraCurrent - src->source - 1);
+      src->parsedToken.charsLen = 1;
+
+      // We got an UCA before. However, this might have been tailored.
+      // example:
+      // &\u30ca = \u306a
+      // &[before 3]\u306a<<<\u306a|\u309d
   
-  // if we found a tailored thing, we have to use the UCA value and construct 
-  // a new reset token with constructed name
-  if(sourceToken != NULL && sourceToken->strength != UCOL_TOK_RESET) {
-    // character to which we want to anchor is already tailored. 
-    // We need to construct a new token which will be the anchor
-    // point
-    *(src->extraCurrent-1) = 0xFFFE;
-    *src->extraCurrent++ = (UChar)ch;
-    src->parsedToken.charsLen++;
-    src->lh[src->resultLen].baseCE = CE & 0xFFFFFF3F;
-    if(isContinuation(SecondCE)) {
-      src->lh[src->resultLen].baseContCE = SecondCE;
-    } else {
-      src->lh[src->resultLen].baseContCE = 0;
-    }
-    src->lh[src->resultLen].nextCE = 0;
-    src->lh[src->resultLen].nextContCE = 0;
-    src->lh[src->resultLen].previousCE = 0;
-    src->lh[src->resultLen].previousContCE = 0;
+  
+      // uint32_t key = (*newCharsLen << 24) | *charsOffset;
+      key.source = (src->parsedToken.charsLen/**newCharsLen*/ << 24) | src->parsedToken.charsOffset/**charsOffset*/;
+      key.rulesToParse = src->source;
 
-    src->lh[src->resultLen].indirect = FALSE;
+      //sourceToken = (UColToken *)uhash_iget(src->tailored, (int32_t)key);
+      sourceToken = (UColToken *)uhash_get(src->tailored, &key);
+  
+      // if we found a tailored thing, we have to use the UCA value and construct 
+      // a new reset token with constructed name
+      if(sourceToken != NULL && sourceToken->strength != UCOL_TOK_RESET) {
+        // character to which we want to anchor is already tailored. 
+        // We need to construct a new token which will be the anchor
+        // point
+        *(src->extraCurrent-1) = 0xFFFE;
+        *src->extraCurrent++ = (UChar)ch;
+        src->parsedToken.charsLen++;
+        src->lh[src->resultLen].baseCE = CE & 0xFFFFFF3F;
+        if(isContinuation(SecondCE)) {
+          src->lh[src->resultLen].baseContCE = SecondCE;
+        } else {
+          src->lh[src->resultLen].baseContCE = 0;
+        }
+        src->lh[src->resultLen].nextCE = 0;
+        src->lh[src->resultLen].nextContCE = 0;
+        src->lh[src->resultLen].previousCE = 0;
+        src->lh[src->resultLen].previousContCE = 0;
 
-    sourceToken = ucol_tok_initAReset(src, 0, &expandNext, parseError, status);   
+        src->lh[src->resultLen].indirect = FALSE;
+
+        sourceToken = ucol_tok_initAReset(src, 0, &expandNext, parseError, status);   
+      }
   }
 
   return sourceToken;
