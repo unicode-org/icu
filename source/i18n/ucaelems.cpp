@@ -453,10 +453,6 @@ UCATableHeader *uprv_uca_reassembleTable(tempUCATable *t, UCATableHeader *mD, UE
     }
 
     /* copy max expansion table */
-    for (i = 0; i <= maxexpansion->position; i ++)
-      fprintf(stderr, "%d %d\n", maxexpansion->endExpansionCE[i],
-                                 maxexpansion->expansionCESize[i]);
-
     myData->endExpansionCE      = tableOffset;
     myData->endExpansionCECount = maxexpansion->position;
     /* not copying the first element which is a dummy */
