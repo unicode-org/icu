@@ -352,7 +352,7 @@ Locale& Locale::init(const char* localeID)
 
         if(localeID == NULL) {
             // not an error, just set the default locale
-            break;
+            return *this = getDefault();
         }
 
         // "canonicalize" the locale ID to ICU/Java format
@@ -363,7 +363,7 @@ Locale& Locale::init(const char* localeID)
             fullName = (char *)uprv_malloc(sizeof(char)*(length + 1));
             if(fullName == 0) {
                 fullName = fullNameBuffer;
-                break;
+                break; // error: out of memory
             }
             err = U_ZERO_ERROR;
             length = uloc_getName(localeID, fullName, length + 1, &err);
@@ -384,7 +384,7 @@ Locale& Locale::init(const char* localeID)
             length = (int32_t)(separator - fullName);
             if(length > 0) {
                 if(length >= (int32_t)sizeof(language)) {
-                    break;
+                    break; // error: language code too long
                 }
                 uprv_memcpy(language, fullName, length);
             }
@@ -397,7 +397,7 @@ Locale& Locale::init(const char* localeID)
                 length = (int32_t)(separator - prev);
                 if(length > 0) {
                     if(length >= (int32_t)sizeof(country)) {
-                        break;
+                        break; // error: country code too long
                     }
                     uprv_memcpy(country, prev, length);
                 }
@@ -407,14 +407,14 @@ Locale& Locale::init(const char* localeID)
             } else {
                 /* variantBegin==strlen(fullName), length==strlen(language)==prev-1-fullName */
                 if((variantBegin - length - 1) >= (int32_t)sizeof(country)) {
-                    break;
+                    break; // error: country code too long
                 }
                 uprv_strcpy(country, prev);
             }
         } else {
             /* variantBegin==strlen(fullName) */
             if(variantBegin >= (int32_t)sizeof(language)) {
-                break;
+                break; // error: language code too long
             }
             uprv_strcpy(language, fullName);
         }
@@ -423,18 +423,9 @@ Locale& Locale::init(const char* localeID)
         return *this;
     } while(0);
 
-    umtx_lock(NULL);
-    UBool defaultLocaleIsOK = (gDefaultLocale != NULL);
-    umtx_unlock(NULL);
-    if (defaultLocaleIsOK) {   
-        // when an error occurs, then set the default locale (there is no UErrorCode here)
-        *this = getDefault();
-    }
-    else {
-        // Prevent any possible infinite recursion from Locale::getDefault()
-        // for bad default Locale IDs
-        init("en");
-    }
+    // when an error occurs, then set this object to "bogus" (there is no UErrorCode here)
+    setToBogus();
+
     return *this;
 }
 

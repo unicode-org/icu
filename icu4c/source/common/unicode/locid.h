@@ -224,26 +224,35 @@ public:
     static const Locale &getCanadaFrench(void);
 
 
-   /**
-    * Construct an empty locale. It's only used when a fill-in parameter is
-    * needed.
-    * @stable ICU 2.0
-    */
+    /**
+     * Construct a default locale object, a Locale for the default locale ID.
+     *
+     * @see getDefault
+     * @see uloc_getDefault
+     * @stable ICU 2.0
+     */
     Locale(); 
 
     /**
      * Construct a locale from language, country, variant.
+     * If an error occurs, then the constructed object will be "bogus"
+     * (isBogus() will return TRUE).
      *
-     * @param language Lowercase two-letter ISO-639 code.  This parameter can
-     *  instead be an ICU style C locale (e.g. "en_US"), but the other
-     *  parameters must not be used.  This parameter can be null, if so
+     * @param language Lowercase two-letter or three-letter ISO-639 code.
+     *  This parameter can instead be an ICU style C locale (e.g. "en_US"),
+     *  but the other parameters must not be used.
+     *  This parameter can be NULL; if so,
      *  the locale is initialized to match the current default locale.
+     *  (This is the same as using the default constructor.)
      *  Please note: The Java Locale class does NOT accept the form 
      *  'new Locale("en_US")' but only 'new Locale("en","US")'
      * 
      * @param country  Uppercase two-letter ISO-3166 code. (optional)
      * @param variant  Uppercase vendor and browser specific code. See class
      *                 description. (optional)
+     *
+     * @see getDefault
+     * @see uloc_getDefault
      * @stable ICU 2.0
      */
     Locale( const   char * language,
@@ -304,15 +313,17 @@ public:
      * different fields, e.g. in a spreadsheet.
      *
      * Note that the initial setting will match the host system.
-     * @retrun the default locale for this instance of the Java Virtual Machine
+     * @return a reference to the Locale object for the default locale ID
      * @system
      * @stable ICU 2.0
      */
     static  const Locale& getDefault(void);
 
     /**
-     * Sets the default. Normally set once at the beginning of applet or
-     * application, then never reset. setDefault does NOT reset the host locale.
+     * Sets the default. Normally set once at the beginning of a process,
+     * then never reset.
+     * setDefault() only changes ICU's default locale ID, <strong>not</strong>
+     * the default locale ID of the runtime environment.
      *
      * @param newLocale Locale to set to.
      * @param success The error code.
