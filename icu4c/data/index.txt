@@ -73,6 +73,7 @@ index {
         en_IN,
 //        en_MH,
 //        en_MP,
+        en_MT,
         en_NZ,
         en_PH,
         en_SG,
