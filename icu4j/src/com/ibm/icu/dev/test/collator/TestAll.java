@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/collator/TestAll.java,v $
- * $Date: 2003/02/05 05:45:16 $
- * $Revision: 1.2 $
+ * $Date: 2003/04/19 00:01:52 $
+ * $Revision: 1.3 $
  *
  *****************************************************************************************
  */
@@ -44,6 +44,7 @@ public class TestAll extends TestGroup {
                   "G7CollationTest",
                   "LotusCollationKoreanTest",
                   "CollationMiscTest",
+                  "CollationServiceTest",
                   "com.ibm.icu.dev.test.search.SearchTest"
               },
               "All Collation Tests and Search Test"

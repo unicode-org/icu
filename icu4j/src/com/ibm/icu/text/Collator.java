@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/Collator.java,v $
-* $Date: 2003/02/27 23:43:16 $
-* $Revision: 1.23 $
+* $Date: 2003/04/19 00:01:53 $
+* $Revision: 1.24 $
 *
 *******************************************************************************
 */
@@ -15,12 +15,14 @@ package com.ibm.icu.text;
 import java.util.Comparator;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 
 import com.ibm.icu.impl.ICULocaleData;
 import com.ibm.icu.impl.ICULocaleService;
 import com.ibm.icu.impl.ICULocaleService.ICUResourceBundleFactory;
 import com.ibm.icu.impl.ICUService;
 import com.ibm.icu.impl.ICUService.Factory;
+import com.ibm.icu.impl.LocaleUtility;
 
 /**
 * <p>Collator performs locale-sensitive string comparison. A concrete
@@ -310,7 +312,83 @@ public abstract class Collator implements Comparator, Cloneable
         return getInstance(Locale.getDefault());
     }
 
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();
+    }
+
     // begin registry stuff
+
+    public static abstract class CollatorFactory {
+        /**
+         * Return true if this factory will be visible.  Default is true.
+         * If not visible, the locales supported by this factory will not
+         * be listed by getAvailableLocales.
+         *
+         * @return true if this factory is visible
+         */
+        public boolean visible() {
+            return true;
+        }
+
+        /**
+         * Return an instance of the appropriate collator.  If the locale
+         * is not supported, return null.
+         * @param loc the locale for which this collator is to be created.
+         * @return the newly created collator.
+         */
+        public abstract Collator createCollator(Locale loc);
+
+        /**
+         * Return the name of the collator for the objectLocale, localized for the displayLocale.
+         * If objectLocale is not visible or not defined by the factory, return null.
+         * @param objectLocale the locale identifying the collator
+         * @param displayLocale the locale for which the display name of the collator should be localized
+         * @return the display name
+         */
+        public String getDisplayName(Locale objectLocale, Locale displayLocale) {
+            if (visible()) {
+                Set supported = getSupportedLocaleIDs();
+                String name = LocaleUtility.canonicalLocaleString(objectLocale.toString());
+                if (supported.contains(name)) {
+                    return objectLocale.getDisplayName(displayLocale);
+                }
+            }
+            return null;
+        }
+
+        /**
+         * Return an unmodifiable collection of the locale names directly 
+         * supported by this factory.
+         *
+         * @return the set of supported locale IDs.
+         */
+        public abstract Set getSupportedLocaleIDs();
+    }
+
+    static abstract class ServiceShim {
+        abstract Collator getInstance(Locale l);
+        abstract Object registerInstance(Collator c, Locale l);
+        abstract Object registerFactory(CollatorFactory f);
+        abstract boolean unregister(Object k);
+        abstract Locale[] getAvailableLocales();
+        abstract Map getDisplayNames(Locale l);
+        abstract String getDisplayName(Locale ol, Locale dl);
+    }
+    
+    private static ServiceShim shim;
+    private static ServiceShim getShim() {
+        if (shim == null) {
+            try {
+                Class cls = Class.forName("com.ibm.icu.text.CollatorServiceShim");
+                shim = (ServiceShim)cls.newInstance();
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+                throw new RuntimeException(e.getMessage());
+            }
+        }
+        return shim;
+    }
 
     /**
      * Gets the Collator for the desired locale.
@@ -326,21 +404,51 @@ public abstract class Collator implements Comparator, Cloneable
      */
     public static final Collator getInstance(Locale locale)
     {
-        if (service == null) {
+        if (shim == null) {
             return new RuleBasedCollator(locale);
-        } else {
-            ///CLOVER:OFF
-            try {
-                return (Collator)((Collator)service.get(locale)).clone();
-            }
-            catch (CloneNotSupportedException e) {
-                throw new InternalError(e.getMessage());
-            }
-            ///CLOVER:ON
         }
+        return shim.getInstance(locale);
     }
-    
-    ///CLOVER:ON
+
+    /**
+     * Register a collator as the default collator for the provided locale.  The
+     * collator should not be modified after it is registered.
+     *
+     * @param collator the collator to register
+     * @param locale the locale for which this is the default collator
+     * @return an object that can be used to unregister the registered collator.
+     *
+     * @draft ICU 2.6
+     */
+    public static final Object registerInstance(Collator collator, Locale locale) {
+        return getShim().registerInstance(collator, locale);
+    }
+
+    /**
+     * Register a collator factory.
+     *
+     * @param factory the factory to register
+     * @return an object that can be used to unregister the registered factory.
+     *
+     * @draft ICU 2.6
+     */
+    public static final Object registerFactory(CollatorFactory factory) {
+        return getShim().registerFactory(factory);
+    }
+
+    /**
+     * Unregister a collator previously registered using registerInstance.
+     * @param registryKey the object previously returned by registerInstance.
+     * @return true if the collator was successfully unregistered.
+     * @draft ICU 2.6
+     */
+    public static final boolean unregister(Object registryKey) {
+        if (shim == null) {
+            return false;
+        }
+        return shim.unregister(registryKey);
+    }
+
     /**
      * Get the set of Locales for which Collators are installed.
      * @return the list of available locales which collators are installed.
@@ -349,16 +457,37 @@ public abstract class Collator implements Comparator, Cloneable
      *         be the set of Locales that are installed with ICU4J.
      * @draft ICU 2.4
      */
-    public static final Locale[] getAvailableLocales() {
-        if (service != null) {
-            return service.getAvailableLocales();
-        } else {
-            ///CLOVER:OFF
+    public static Locale[] getAvailableLocales() {
+        if (shim == null) {
             return ICULocaleData.getAvailableLocales();
-            ///CLOVER:ON
         }
+        return shim.getAvailableLocales();
     }
-    
+
+    /**
+     * Return a mapping of display names to collators, localized to the provided locale.
+     * @draft 2.6
+     */
+    static final Map getDisplayNames(Locale displayLocale) {
+        return getShim().getDisplayNames(displayLocale);
+    }
+
+    /**
+     * Get the name of the collator for the objectLocale, localized for the displayLocale.
+     * @draft 2.6
+     */
+    static public String getDisplayName(Locale objectLocale, Locale displayLocale) {
+        return getShim().getDisplayName(objectLocale, displayLocale);
+    }
+
+    /**
+     * Return a mapping of display names to collators, localized to the provided locale.
+     * Get the name of the collator for the objectLocale, localized for the current locale.
+     * @draft 2.6
+     */
+    static public String getDisplayName(Locale objectLocale) {
+        return getShim().getDisplayName(objectLocale, Locale.getDefault());
+    }
 
     /**
      * <p>Returns this Collator's strength property. The strength property
@@ -573,27 +702,6 @@ public abstract class Collator implements Comparator, Cloneable
     
     // package private methods -----------------------------------------------
 
-    /* @prototype */
-    /* public */ static final Object register(Collator collator, Locale locale) {
-        return getService().registerObject(collator, locale);
-    }
-
-    /* @prototype */
-    /* public */ static final boolean unregister(Object registryKey) {
-        if (service != null) {
-            return service.unregisterFactory((Factory)registryKey);
-        }
-        return false;
-    }
-    
-    ////CLOVER:OFF
-    /* @prototype */
-    /* public */ static final Map getDisplayNames(Locale locale) {
-        Collator col = Collator.getInstance(locale);
-        return getService().getDisplayNames(locale, col, null);
-    }
-    ////CLOVER:ON
-    
     // private data members --------------------------------------------------
 
     /**
