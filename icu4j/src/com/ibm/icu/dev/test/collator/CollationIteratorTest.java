@@ -22,6 +22,7 @@ import com.ibm.icu.text.*;
 import com.ibm.icu.lang.UCharacter;
 import java.util.Locale;
 import java.text.CharacterIterator;
+import java.util.Arrays;
 
 public class CollationIteratorTest extends TestFmwk {
     
@@ -30,7 +31,7 @@ public class CollationIteratorTest extends TestFmwk {
    
     public static void main(String[] args) throws Exception {
         new CollationIteratorTest().run(args);
-        // new CollationIteratorTest().TestUnicodeChar();
+        // new CollationIteratorTest().TestNormalizedUnicodeChar();
     }
     
     /*
@@ -163,6 +164,48 @@ public class CollationIteratorTest extends TestFmwk {
         }
         assertEqual(iter, pristine);
     
+        // setting offset in the middle of a contraction
+        String contraction = "change";
+        RuleBasedCollator tailored = null;
+        try {
+            tailored = new RuleBasedCollator("& a < ch");
+        } catch (Exception e) {
+            errln("Error: in creation of Spanish collator");
+        }
+        iter = tailored.getCollationElementIterator(contraction);
+        int order[] = getOrders(iter);
+        iter.setOffset(1); // sets offset in the middle of ch
+        int order2[] = getOrders(iter);
+        if (!Arrays.equals(order, order2)) {
+            errln("Error: setting offset in the middle of a contraction should be the same as setting it to the start of the contraction");
+        }
+        contraction = "peache";
+        iter = tailored.getCollationElementIterator(contraction);
+        iter.setOffset(3);
+        order = getOrders(iter);
+        iter.setOffset(4); // sets offset in the middle of ch
+        order2 = getOrders(iter);
+        if (!Arrays.equals(order, order2)) {
+            errln("Error: setting offset in the middle of a contraction should be the same as setting it to the start of the contraction");
+        }
+        // setting offset in the middle of a surrogate pair
+        String surrogate = "\ud800\udc00str";
+        iter = tailored.getCollationElementIterator(surrogate);
+        order = getOrders(iter);
+        iter.setOffset(1); // sets offset in the middle of surrogate
+        order2 = getOrders(iter);
+        if (!Arrays.equals(order, order2)) {
+            errln("Error: setting offset in the middle of a surrogate pair should be the same as setting it to the start of the surrogate pair");
+        }
+        surrogate = "simple\ud800\udc00str";
+        iter = tailored.getCollationElementIterator(surrogate);
+        iter.setOffset(6);
+        order = getOrders(iter);
+        iter.setOffset(7); // sets offset in the middle of surrogate
+        order2 = getOrders(iter);
+        if (!Arrays.equals(order, order2)) {
+            errln("Error: setting offset in the middle of a surrogate pair should be the same as setting it to the start of the surrogate pair");
+        }
         // TODO: try iterating halfway through a messy string.
     }
     
@@ -304,8 +347,10 @@ public class CollationIteratorTest extends TestFmwk {
                 if (o == 0) {
                     index ++;
                 } else {
-                    while (index > 0 && orders[--index] == 0) {
-                    } if (o != orders[index]) {
+                    while (index > 0 && orders[index] == 0) {
+                        index --;
+                    } 
+                    if (o != orders[index]) {
                         errln("Mismatch at index " + index + ": 0x" 
                             + Integer.toHexString(orders[index]) + " vs 0x" + Integer.toHexString(o));
                         break;
@@ -420,6 +465,53 @@ public class CollationIteratorTest extends TestFmwk {
     }
     
     /**
+     * Test for CollationElementIterator previous and next for the whole set of
+     * unicode characters with normalization on.
+     */
+    public void TestNormalizedUnicodeChar()
+    {
+        // thai should have normalization on
+        RuleBasedCollator th_th = null;
+        try {
+            th_th = (RuleBasedCollator)Collator.getInstance(
+                                                       new Locale("th", "TH"));
+        } catch (Exception e) {
+            errln("Error creating Thai collator");
+        }
+        StringBuffer source = new StringBuffer();
+        for (char codepoint = 0xf71; codepoint < 0xf76; codepoint ++) {
+            if (UCharacter.isDefined(codepoint)) {
+                source.append(codepoint);
+            }
+        }
+        CollationElementIterator temp 
+                        = th_th.getCollationElementIterator(source.toString());
+        // A basic test to see if it's working at all 
+        backAndForth(temp);
+        for (char codepoint = 0x1; codepoint < 0xfffe;) {
+            source.delete(0, source.length());
+            while (codepoint % 0xFF != 0) {
+                if (UCharacter.isDefined(codepoint)) {
+                    source.append(codepoint);
+                }
+                codepoint ++;
+            }
+            
+            if (UCharacter.isDefined(codepoint)) {
+                source.append(codepoint);
+            }
+            
+            if (codepoint != 0xFFFF) {
+                codepoint ++;
+            }
+            CollationElementIterator iter 
+                        = th_th.getCollationElementIterator(source.toString());
+            // A basic test to see if it's working at all 
+            backAndForth(iter);
+        }
+    }
+    
+    /**
     * Testing the discontiguous contractions
     */
     public void TestDiscontiguous() 
@@ -494,4 +586,32 @@ public class CollationIteratorTest extends TestFmwk {
         }
     }
 
+    /**
+    * Test the incremental normalization
+    */
+    public void TestNormalization()
+    {
+        String rules = "&a < \u0300\u0315 < A\u0300\u0315 < \u0316\u0315B < \u0316\u0300\u0315";
+        String testdata[] = {"\u1ED9", "o\u0323\u0302",
+                            "\u0300\u0315", "\u0315\u0300",
+                            "A\u0300\u0315B", "A\u0315\u0300B",
+                            "A\u0316\u0315B", "A\u0315\u0316B",
+                            "\u0316\u0300\u0315", "\u0315\u0300\u0316",
+                            "A\u0316\u0300\u0315B", "A\u0315\u0300\u0316B",
+                            "\u0316\u0315\u0300", "A\u0316\u0315\u0300B"};
+        RuleBasedCollator coll = null;
+        try {
+            coll = new RuleBasedCollator(rules);
+            coll.setDecomposition(Collator.CANONICAL_DECOMPOSITION);
+        } catch (Exception e) {
+            errln("ERROR: in creation of collator using rules " + rules);
+            return;
+        }
+        
+        CollationElementIterator iter = coll.getCollationElementIterator("testing");
+        for (int count = 0; count < testdata.length; count ++) {
+            iter.setText(testdata[count]);
+            backAndForth(iter);
+        }
+    }
 }
