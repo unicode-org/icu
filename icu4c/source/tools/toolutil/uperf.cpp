@@ -5,6 +5,9 @@
  ********************************************************************/
 
 #include "uperf.h"
+#include "cmemory.h"
+#include <stdio.h>
+#include <stdlib.h>
 
 static const char delim = '/';
 static int32_t execCount = 0;

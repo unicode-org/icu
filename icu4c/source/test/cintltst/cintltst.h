@@ -22,6 +22,7 @@ The main root for C API tests
 #include "unicode/utypes.h"
 #include "unicode/putil.h"
 #include "unicode/ctest.h"
+#include <stdlib.h>
 
 #ifndef U_USE_DEPRECATED_API
 #define U_USE_DEPRECATED_API 1
