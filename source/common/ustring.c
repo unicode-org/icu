@@ -402,10 +402,10 @@ u_strcmp(const UChar *s1,
     return (int32_t)c1 - (int32_t)c2;
 }
 
-U_CFUNC int32_t
-u_strCompareCodePointOrder(const UChar *s1, int32_t length1,
-                           const UChar *s2, int32_t length2,
-                           UBool strncmpStyle) {
+U_CAPI int32_t U_EXPORT2
+u_strCompare(const UChar *s1, int32_t length1,
+             const UChar *s2, int32_t length2,
+             UBool strncmpStyle, UBool codePointOrder) {
     const UChar *start1, *start2, *limit1, *limit2;
     UChar c1, c2;
 
@@ -511,7 +511,7 @@ u_strCompareCodePointOrder(const UChar *s1, int32_t length1,
     }
 
     /* if both values are in or above the surrogate range, fix them up */
-    if(c1>=0xd800 && c2>=0xd800) {
+    if(c1>=0xd800 && c2>=0xd800 && codePointOrder) {
         /* subtract 0x2800 from BMP code points to make them smaller than supplementary ones */
         if(
             (c1<=0xdbff && (s1+1)!=limit1 && UTF_IS_TRAIL(*(s1+1))) ||
@@ -541,7 +541,7 @@ u_strCompareCodePointOrder(const UChar *s1, int32_t length1,
 /* String compare in code point order - u_strcmp() compares in code unit order. */
 U_CAPI int32_t U_EXPORT2
 u_strcmpCodePointOrder(const UChar *s1, const UChar *s2) {
-    return u_strCompareCodePointOrder(s1, -1, s2, -1, FALSE);
+    return u_strCompare(s1, -1, s2, -1, FALSE, TRUE);
 }
 
 U_CAPI int32_t   U_EXPORT2
@@ -566,7 +566,7 @@ u_strncmp(const UChar     *s1,
 
 U_CAPI int32_t U_EXPORT2
 u_strncmpCodePointOrder(const UChar *s1, const UChar *s2, int32_t n) {
-    return u_strCompareCodePointOrder(s1, n, s2, n, TRUE);
+    return u_strCompare(s1, n, s2, n, TRUE, TRUE);
 }
 
 U_CAPI UChar* U_EXPORT2
@@ -694,7 +694,7 @@ u_memcmp(const UChar *buf1, const UChar *buf2, int32_t count) {
 
 U_CAPI int32_t U_EXPORT2
 u_memcmpCodePointOrder(const UChar *s1, const UChar *s2, int32_t count) {
-    return u_strCompareCodePointOrder(s1, count, s2, count, FALSE);
+    return u_strCompare(s1, count, s2, count, FALSE, TRUE);
 }
 
 U_CAPI UChar * U_EXPORT2
