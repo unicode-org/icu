@@ -384,7 +384,7 @@ UChar32 unescape(UCHARBUF *buf,
      * u_fgetcx needs an ESCAPE to do its magic. */
     ucbuf_ungetc(ESCAPE, buf);
 
-    return ucbuf_getcx(buf, status);
+    return ucbuf_getcx32(buf, status);
 }
 
 static UBool isWhitespace(UChar32 c) {

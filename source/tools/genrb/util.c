@@ -58,3 +58,51 @@ get_basename(char *basename,
     *lastDot = '\0';
   }
 }
+
+#define MAX_DIGITS 10
+int32_t 
+itostr(char * buffer, int32_t i, uint32_t radix, int32_t pad)
+{
+    int32_t length = 0;
+    int32_t num = 0;
+    int32_t save = i;
+    int digit;
+    int32_t j;
+    char temp;
+    
+    /* if i is negative make it positive */
+    if(i<0){
+        i=-i;
+    }
+    
+    do{
+        digit = (int)(i % radix);
+        buffer[length++]=(char)(digit<=9?(0x0030+digit):(0x0030+digit+7));
+        i=i/radix;
+    } while(i);
+
+    while (length < pad){
+        buffer[length++] = 0x0030;/*zero padding */
+    }
+    
+    /* if i is negative add the negative sign */
+    if(save < 0){
+        buffer[length++]='-';
+    }
+
+    /* null terminate the buffer */
+    if(length<MAX_DIGITS){
+        buffer[length] =  0x0000;
+    }
+
+    num= (pad>=length) ? pad :length;
+ 
+
+    /* Reverses the string */
+    for (j = 0; j < (num / 2); j++){
+        temp = buffer[(length-1) - j];
+        buffer[(length-1) - j] = buffer[j];
+        buffer[j] = temp;
+    }
+    return length;
+}
