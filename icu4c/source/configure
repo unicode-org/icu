@@ -3970,7 +3970,7 @@ esac
 
 case "${host}" in
 	*-*-hpux*) 	
-		if test "$ac_cv_prog_gcc" != yes; then
+		if test "${icu_cv_host_frag}" = "mh-hpux-cc"; then
 			for file in samples/date/date \
 			  samples/cal/cal test/cintltst/cintltst \
 			  tools/makeconv/makeconv tools/genrb/genrb \
