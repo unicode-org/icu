@@ -10,6 +10,7 @@
 #include "unicode/gregocal.h"
 #include "unicode/resbund.h"
 #include "tztest.h"
+#include "cmemory.h"
 
 #define CASE(id,test) case id:                               \
                           name = #test;                      \
@@ -312,7 +313,8 @@ TimeZoneTest::TestGetAvailableIDs913()
         }
         delete z;
     }
-    delete [] s;
+    //   delete [] s;    ****BAD API  ***
+    uprv_free(s);
 
     buf->truncate(0);
     *buf += "TimeZone.getAvailableIDs(GMT+02:00) = { ";
@@ -343,8 +345,8 @@ TimeZoneTest::TestGetAvailableIDs913()
     delete tz;
 
     delete buf;
-    delete [] s;
-
+    //  delete [] s;    //  BAD API  !!!!
+    uprv_free(s);
 }
 
 
@@ -1005,7 +1007,8 @@ void TimeZoneTest::TestCountries() {
         errln("FAIL: " + laZone + " in US = " + la);
         errln("FAIL: " + tokyoZone + " in US = " + tokyo);
     }
-    delete[] s;
+    //  delete[] s;  // TODO:  BAD API
+    uprv_free(s);
     
     s = TimeZone::createAvailableIDs("JP", n);
     la = FALSE; tokyo = FALSE;
@@ -1022,5 +1025,6 @@ void TimeZoneTest::TestCountries() {
         errln("FAIL: " + laZone + " in JP = " + la);
         errln("FAIL: " + tokyoZone + " in JP = " + tokyo);
     }
-    delete[] s;
+    //  delete[] s;  // TODO:  bad API
+    uprv_free(s);
 }

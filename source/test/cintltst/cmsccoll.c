@@ -199,7 +199,7 @@ static void IncompleteCntTest(void)
           break;
         }
         backAndForth(iter);
-        free(iter);
+        ucol_closeElements(iter);
       }
     }
   }
@@ -226,7 +226,7 @@ static void IncompleteCntTest(void)
           break;
         }
         backAndForth(iter);
-        free(iter);
+        ucol_closeElements(iter);
       }
     }
   }
@@ -646,7 +646,7 @@ static void testCollator(UCollator *coll, UErrorCode *status) {
 
   rules = ucol_getRules(coll, &ruleLen);
   if(U_SUCCESS(*status) && ruleLen > 0) {
-    rulesCopy = (UChar *)uprv_malloc((ruleLen+UCOL_TOK_EXTRA_RULE_SPACE_SIZE)*sizeof(UChar));
+    rulesCopy = (UChar *)malloc((ruleLen+UCOL_TOK_EXTRA_RULE_SPACE_SIZE)*sizeof(UChar));
     uprv_memcpy(rulesCopy, rules, ruleLen*sizeof(UChar));
     src.source = src.current = rulesCopy;
     src.end = rulesCopy+ruleLen;
@@ -730,7 +730,7 @@ static void testCollator(UCollator *coll, UErrorCode *status) {
         u_strcpy(first, second);
       }
     }
-    uprv_free(rulesCopy);
+    free(rulesCopy);
   }
 }
 
@@ -1011,7 +1011,7 @@ static void testAgainstUCA(UCollator *coll, UCollator *UCA, const char *refName,
   /*printOutRules(rules);*/
 
   if(U_SUCCESS(*status) && ruleLen > 0) {
-    rulesCopy = (UChar *)uprv_malloc((ruleLen+UCOL_TOK_EXTRA_RULE_SPACE_SIZE)*sizeof(UChar));
+    rulesCopy = (UChar *)malloc((ruleLen+UCOL_TOK_EXTRA_RULE_SPACE_SIZE)*sizeof(UChar));
     uprv_memcpy(rulesCopy, rules, ruleLen*sizeof(UChar));
     src.source = src.current = rulesCopy;
     src.end = rulesCopy+ruleLen;
@@ -1064,7 +1064,7 @@ static void testAgainstUCA(UCollator *coll, UCollator *UCA, const char *refName,
     if(Windiff == 0) {
       log_verbose("No immediate difference with Win32!\n");
     }
-    uprv_free(rulesCopy);
+    free(rulesCopy);
   }
 }
 
@@ -1109,7 +1109,7 @@ static void testCEs(UCollator *coll, UErrorCode *status) {
   ucol_initInverseUCA(status);
 
   if(U_SUCCESS(*status) && ruleLen > 0) {
-    rulesCopy = (UChar *)uprv_malloc((ruleLen+UCOL_TOK_EXTRA_RULE_SPACE_SIZE)*sizeof(UChar));
+    rulesCopy = (UChar *)malloc((ruleLen+UCOL_TOK_EXTRA_RULE_SPACE_SIZE)*sizeof(UChar));
     uprv_memcpy(rulesCopy, rules, ruleLen*sizeof(UChar));
     src.source = src.current = rulesCopy;
     src.end = rulesCopy+ruleLen;
@@ -1202,7 +1202,7 @@ static void testCEs(UCollator *coll, UErrorCode *status) {
       lastCE = currCE & 0xFFFFFF3F;
       lastContCE = currContCE & 0xFFFFFFBF;
     }
-    uprv_free(rulesCopy);
+    free(rulesCopy);
   }
   ucol_close(UCA);
 }
@@ -1631,8 +1631,8 @@ static void TestComposeDecompose(void) {
 
     noOfLoc = uloc_countAvailable();
 
-    t = uprv_malloc(0x30000 * sizeof(tester *));
-    t[0] = (tester *)uprv_malloc(sizeof(tester));
+    t = malloc(0x30000 * sizeof(tester *));
+    t[0] = (tester *)malloc(sizeof(tester));
 
     for(u = 0; u < 0x30000; u++) {
       len = 0;
@@ -1648,7 +1648,7 @@ static void TestComposeDecompose(void) {
               t[noCases]->NFC[len] = 0;
             }
             noCases++;
-            t[noCases] = (tester *)uprv_malloc(sizeof(tester));
+            t[noCases] = (tester *)malloc(sizeof(tester));
             uprv_memset(t[noCases], 0, sizeof(tester));
         } 
     }
@@ -1708,9 +1708,9 @@ static void TestComposeDecompose(void) {
         }
     }
     for(u = 0; u <= noCases; u++) {
-        uprv_free(t[u]);
+        free(t[u]);
     }
-    uprv_free(t);
+    free(t);
 }
 
 static void TestEmptyRule(void) {
@@ -2151,8 +2151,8 @@ static void TestIncrementalNormalize(void) {
         UChar            *strA;
         UChar            *strB;
 
-        strA = uprv_malloc((maxSLen+1) * sizeof(UChar));
-        strB = uprv_malloc((maxSLen+1) * sizeof(UChar));
+        strA = malloc((maxSLen+1) * sizeof(UChar));
+        strB = malloc((maxSLen+1) * sizeof(UChar));
 
         coll = ucol_open("en_US", &status);
         ucol_setNormalization(coll, UNORM_NFD);
@@ -2173,8 +2173,8 @@ static void TestIncrementalNormalize(void) {
             ucol_setStrength(coll, UCOL_IDENTICAL);   /* Do again with the slow, general impl.*/
             doTest(coll, strA, strB, UCOL_EQUAL);
         }
-        uprv_free(strA);
-        uprv_free(strB);
+        free(strA);
+        free(strB);
     }
 
 
@@ -2836,7 +2836,7 @@ static void TestVariableTopSetting(void) {
 
   log_verbose("Slide variable top over UCARules\n");
   rulesLen = ucol_getRulesEx(coll, UCOL_FULL_RULES, rulesCopy, 0);
-  rulesCopy = (UChar *)uprv_malloc((rulesLen+UCOL_TOK_EXTRA_RULE_SPACE_SIZE)*sizeof(UChar));
+  rulesCopy = (UChar *)malloc((rulesLen+UCOL_TOK_EXTRA_RULE_SPACE_SIZE)*sizeof(UChar));
   rulesLen = ucol_getRulesEx(coll, UCOL_FULL_RULES, rulesCopy, rulesLen+UCOL_TOK_EXTRA_RULE_SPACE_SIZE);
 
   if(U_SUCCESS(status) && rulesLen > 0) {
@@ -2994,7 +2994,7 @@ static void TestVariableTopSetting(void) {
   if(status != U_INTERNAL_PROGRAM_ERROR) {
     log_err("Bad reaction to passed error!\n");
   }
-  uprv_free(rulesCopy);
+  free(rulesCopy);
   ucol_close(coll);
 }
 
@@ -3038,7 +3038,7 @@ static void TestExtremeCompression(void) {
   int32_t i = 0;
 
   for(i = 0; i<4; i++) {
-    test[i] = (char *)uprv_malloc(2048*sizeof(char));
+    test[i] = (char *)malloc(2048*sizeof(char));
     uprv_memset(test[i], 'a', 2046*sizeof(char));
     test[i][2046] = (char)('a'+i);
     test[i][2047] = 0;
@@ -3047,7 +3047,7 @@ static void TestExtremeCompression(void) {
   genericLocaleStarter("en_US", (const char **)test, 4);
 
   for(i = 0; i<4; i++) {
-    uprv_free(test[i]);
+    free(test[i]);
   }
 }
 
@@ -3409,10 +3409,10 @@ static void TestMergeSortKeys(void) {
   const char* suffix = "egg";
   char outBuff1[256], outBuff2[256];
   
-  uint8_t **sortkeys = (uint8_t **)uprv_malloc(casesSize*sizeof(uint8_t *));
-  uint8_t **mergedPrefixkeys = (uint8_t **)uprv_malloc(casesSize*sizeof(uint8_t *));
-  uint8_t **mergedSuffixkeys = (uint8_t **)uprv_malloc(casesSize*sizeof(uint8_t *));
-  uint32_t *sortKeysLen = (uint32_t *)uprv_malloc(casesSize*sizeof(uint32_t));
+  uint8_t **sortkeys = (uint8_t **)malloc(casesSize*sizeof(uint8_t *));
+  uint8_t **mergedPrefixkeys = (uint8_t **)malloc(casesSize*sizeof(uint8_t *));
+  uint8_t **mergedSuffixkeys = (uint8_t **)malloc(casesSize*sizeof(uint8_t *));
+  uint32_t *sortKeysLen = (uint32_t *)malloc(casesSize*sizeof(uint32_t));
   uint8_t prefixKey[256], suffixKey[256];
   uint32_t prefixKeyLen = 0, suffixKeyLen = 0, i = 0;
   UChar buffer[256];
@@ -3425,9 +3425,9 @@ static void TestMergeSortKeys(void) {
   genericLocaleStarter("en", cases, casesSize);
 
   for(i = 0; i<casesSize; i++) {
-    sortkeys[i] = (uint8_t *)uprv_malloc(256*sizeof(uint8_t));
-    mergedPrefixkeys[i] = (uint8_t *)uprv_malloc(256*sizeof(uint8_t));
-    mergedSuffixkeys[i] = (uint8_t *)uprv_malloc(256*sizeof(uint8_t));
+    sortkeys[i] = (uint8_t *)malloc(256*sizeof(uint8_t));
+    mergedPrefixkeys[i] = (uint8_t *)malloc(256*sizeof(uint8_t));
+    mergedSuffixkeys[i] = (uint8_t *)malloc(256*sizeof(uint8_t));
   }
 
   unescapedLen = u_unescape(prefix, buffer, 256);
@@ -3480,14 +3480,14 @@ static void TestMergeSortKeys(void) {
 
 
   for(i = 0; i<casesSize; i++) {
-    uprv_free(sortkeys[i]);
-    uprv_free(mergedPrefixkeys[i]);
-    uprv_free(mergedSuffixkeys[i]);
+    free(sortkeys[i]);
+    free(mergedPrefixkeys[i]);
+    free(mergedSuffixkeys[i]);
   }
-  uprv_free(sortkeys);
-  uprv_free(mergedPrefixkeys);
-  uprv_free(mergedSuffixkeys);
-  uprv_free(sortKeysLen);
+  free(sortkeys);
+  free(mergedPrefixkeys);
+  free(mergedSuffixkeys);
+  free(sortKeysLen);
   ucol_close(coll);
   /* need to finish this up */
 }

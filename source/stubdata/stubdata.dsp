@@ -118,9 +118,8 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /machine:IA64
-# ADD LINK32 kernel32.lib user32.lib /nologo /dll /machine:IA64 /out:"..\..\bin\icudt22l.dll" /implib:"..\..\lib\icudata.lib" /incremental:no
-# SUBTRACT LINK32 
+# ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /machine:IX86 /machine:IA64
+# ADD LINK32 kernel32.lib user32.lib /nologo /dll /machine:IX86 /out:"..\..\bin\icudt22l.dll" /implib:"..\..\lib\icudata.lib" /machine:IA64
 # Begin Special Build Tool
 ProjDir=.
 SOURCE="$(InputPath)"
@@ -150,9 +149,8 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /debug /machine:IA64 /pdbtype:sept
-# ADD LINK32 kernel32.lib user32.lib /nologo /dll /machine:IA64 /out:"..\..\bin\icudt22l.dll" /implib:"..\..\lib\icudata.lib" /pdbtype:sept /incremental:no
-# SUBTRACT LINK32 
+# ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /debug /machine:IX86 /pdbtype:sept /machine:IA64
+# ADD LINK32 kernel32.lib user32.lib /nologo /dll /incremental:no /machine:IX86 /out:"..\..\bin\icudt22l.dll" /implib:"..\..\lib\icudata.lib" /pdbtype:sept /machine:IA64
 # Begin Special Build Tool
 ProjDir=.
 SOURCE="$(InputPath)"

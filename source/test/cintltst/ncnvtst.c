@@ -745,8 +745,8 @@ static void TestRegressionUTF8(){
     UChar32 currCh = 0;
     int32_t offset8;
     int32_t offset16;
-    UChar *standardForm = (UChar*)uprv_malloc(MAX_LENGTH*sizeof(UChar));
-    uint8_t *utf8 = (uint8_t*)uprv_malloc(MAX_LENGTH);
+    UChar *standardForm = (UChar*)malloc(MAX_LENGTH*sizeof(UChar));
+    uint8_t *utf8 = (uint8_t*)malloc(MAX_LENGTH);
 
     while (currCh <= UNICODE_LIMIT) {
         offset16 = 0;
@@ -771,8 +771,8 @@ static void TestRegressionUTF8(){
             log_err("UTF8->Unicode did not match.\n");
         }
     }
-    uprv_free(standardForm);
-    uprv_free(utf8);
+    free(standardForm);
+    free(utf8);
 }
 
 #define MAX_UTF32_LEN 1
@@ -781,8 +781,8 @@ static void TestRegressionUTF32(){
     UChar32 currCh = 0;
     int32_t offset32;
     int32_t offset16;
-    UChar *standardForm = (UChar*)uprv_malloc(MAX_LENGTH*sizeof(UChar));
-    UChar32 *utf32 = (UChar32*)uprv_malloc(MAX_LENGTH*sizeof(UChar32));
+    UChar *standardForm = (UChar*)malloc(MAX_LENGTH*sizeof(UChar));
+    UChar32 *utf32 = (UChar32*)malloc(MAX_LENGTH*sizeof(UChar32));
 
     while (currCh <= UNICODE_LIMIT) {
         offset16 = 0;
@@ -807,8 +807,8 @@ static void TestRegressionUTF32(){
             log_err("UTF32->Unicode did not match.\n");
         }
     }
-    uprv_free(standardForm);
-    uprv_free(utf32);
+    free(standardForm);
+    free(utf32);
 }
 
 /*Walk through the available converters*/

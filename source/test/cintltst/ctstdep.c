@@ -111,7 +111,7 @@ TestDeprecatedCollationAPI(void)
           log_err("Creation of iterator failed\n");
           break;
         }
-        free(iter);
+        ucol_closeElements(iter);
       }
     }
   } 
@@ -134,7 +134,7 @@ TestDeprecatedCollationAPI(void)
           log_err("Creation of iterator failed\n");
           break;
         }
-        free(iter);
+        ucol_closeElements(iter);
       }
     }
   } 

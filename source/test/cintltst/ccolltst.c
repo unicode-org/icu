@@ -71,8 +71,8 @@ void reportCResult( const UChar source[], const UChar target[],
                          UCollationResult expectedResult )
 {
     UChar *sResult, *sExpect;
-    sResult=(UChar*)uprv_malloc(sizeof(UChar) * 10);
-    sExpect=(UChar*)uprv_malloc(sizeof(UChar) * 10);
+    sResult=(UChar*)malloc(sizeof(UChar) * 10);
+    sExpect=(UChar*)malloc(sizeof(UChar) * 10);
     if (expectedResult < -1 || expectedResult > 1)
     {
         log_err("***** invalid call to reportCResult ****\n");
@@ -128,8 +128,8 @@ void reportCResult( const UChar source[], const UChar target[],
       log_verbose("SortKey2: %s\n", dumpSk(targetKey, sk));
     }
 
-    uprv_free(sExpect);
-    uprv_free(sResult);
+    free(sExpect);
+    free(sResult);
 }
 
 UChar* appendCompareResult(UCollationResult result, UChar* target)
@@ -157,7 +157,8 @@ UChar* appendCompareResult(UCollationResult result, UChar* target)
 UChar* CharsToUChars(const char* str) {
     /* Might be faster to just use uprv_strlen() as the preflight len - liu */
     int32_t len = u_unescape(str, 0, 0); /* preflight */
-    UChar *buf = (UChar*) uprv_malloc(sizeof(UChar) * len);
+    /* Do NOT use malloc() - we are supposed to be acting like user code! */
+    UChar *buf = (UChar*) malloc(sizeof(UChar) * len);
     u_unescape(str, buf, len);
     return buf;
 }

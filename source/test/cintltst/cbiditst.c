@@ -244,8 +244,8 @@ static void TestReorder(){
     for(;i<(sizeof(logicalOrder)/sizeof(logicalOrder[0]));i++){
         int32_t srcSize = (int32_t)uprv_strlen(logicalOrder[i]);
         int32_t destSize = srcSize*2;
-        UChar* src = (UChar*) uprv_malloc(sizeof(UChar)*srcSize );
-        UChar* dest = (UChar*) uprv_malloc(sizeof(UChar)*destSize);
+        UChar* src = (UChar*) malloc(sizeof(UChar)*srcSize );
+        UChar* dest = (UChar*) malloc(sizeof(UChar)*destSize);
         char* chars=NULL;
         ec = U_ZERO_ERROR;
         u_unescape(logicalOrder[i],src,srcSize);
@@ -273,15 +273,15 @@ static void TestReorder(){
 
             
         }
-        uprv_free(src);
-        uprv_free(dest);
+        free(src);
+        free(dest);
     }
     
     for(i=0;i<(sizeof(logicalOrder)/sizeof(logicalOrder[0]));i++){
         int32_t srcSize = (int32_t)uprv_strlen(logicalOrder[i]);
         int32_t destSize = srcSize*2;
-        UChar* src = (UChar*) uprv_malloc(sizeof(UChar)*srcSize );
-        UChar* dest = (UChar*) uprv_malloc(sizeof(UChar)*destSize);
+        UChar* src = (UChar*) malloc(sizeof(UChar)*srcSize );
+        UChar* dest = (UChar*) malloc(sizeof(UChar)*destSize);
         char* chars=NULL;
         ec = U_ZERO_ERROR;
         u_unescape(logicalOrder[i],src,srcSize);
@@ -310,15 +310,15 @@ static void TestReorder(){
             
         }
         
-        uprv_free(src);
-        uprv_free(dest);
+        free(src);
+        free(dest);
     }
 
     for(i=0;i<(sizeof(logicalOrder)/sizeof(logicalOrder[0]));i++){
         int32_t srcSize = (int32_t)uprv_strlen(logicalOrder[i]);
         int32_t destSize = srcSize*2;
-        UChar* src = (UChar*) uprv_malloc(sizeof(UChar)*srcSize );
-        UChar* dest = (UChar*) uprv_malloc(sizeof(UChar)*destSize);
+        UChar* src = (UChar*) malloc(sizeof(UChar)*srcSize );
+        UChar* dest = (UChar*) malloc(sizeof(UChar)*destSize);
         char* chars=NULL;
         ec = U_ZERO_ERROR;
         u_unescape(logicalOrder[i],src,srcSize);
@@ -349,15 +349,15 @@ static void TestReorder(){
             
         }
         
-        uprv_free(src);
-        uprv_free(dest);
+        free(src);
+        free(dest);
     }
         /* Max Explicit level */
     for(i=0;i<(sizeof(logicalOrder)/sizeof(logicalOrder[0]));i++){
         int32_t srcSize = (int32_t)uprv_strlen(logicalOrder[i]);
         int32_t destSize = srcSize*2;
-        UChar* src = (UChar*) uprv_malloc(sizeof(UChar)*srcSize );
-        UChar* dest = (UChar*) uprv_malloc(sizeof(UChar)*destSize);
+        UChar* src = (UChar*) malloc(sizeof(UChar)*srcSize );
+        UChar* dest = (UChar*) malloc(sizeof(UChar)*destSize);
         char* chars=NULL;
         UBiDiLevel levels[UBIDI_MAX_EXPLICIT_LEVEL]={1,2,3,4,5,6,7,8,9,10};
         ec = U_ZERO_ERROR;
@@ -388,14 +388,14 @@ static void TestReorder(){
             
         }
         
-        uprv_free(src);
-        uprv_free(dest);
+        free(src);
+        free(dest);
     }
     for(i=0;i<(sizeof(logicalOrder)/sizeof(logicalOrder[0]));i++){
         int32_t srcSize = (int32_t)uprv_strlen(logicalOrder[i]);
         int32_t destSize = srcSize*2;
-        UChar* src = (UChar*) uprv_malloc(sizeof(UChar)*srcSize );
-        UChar* dest = (UChar*) uprv_malloc(sizeof(UChar)*destSize);
+        UChar* src = (UChar*) malloc(sizeof(UChar)*srcSize );
+        UChar* dest = (UChar*) malloc(sizeof(UChar)*destSize);
         char* chars=NULL;
         UBiDiLevel levels[UBIDI_MAX_EXPLICIT_LEVEL]={1,2,3,4,5,6,7,8,9,10};
         ec = U_ZERO_ERROR;
@@ -425,8 +425,8 @@ static void TestReorder(){
             log_err("ubidi_writeReordered() did not give expected results for UBIDI_DO_MIRRORING+UBIDI_REMOVE_BIDI_CONTROLS. Expected: %s Got: %s At Index: %d\n",visualOrder[i],chars,i);
         }
         
-        uprv_free(src);
-        uprv_free(dest);
+        free(src);
+        free(dest);
     }
     ubidi_close(bidi);
 }

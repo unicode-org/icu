@@ -77,7 +77,7 @@ static void TestPatterns(void)
       lneed=unum_toPattern(fmt, FALSE, NULL, lneed, &status);
       if(status==U_BUFFER_OVERFLOW_ERROR){
         status= U_ZERO_ERROR;
-        unewp=(UChar*)uprv_malloc(sizeof(UChar) * (lneed+1) );
+        unewp=(UChar*)malloc(sizeof(UChar) * (lneed+1) );
         unum_toPattern(fmt, FALSE, unewp, lneed+1, &status);
       }
       if(U_FAILURE(status)){
@@ -91,7 +91,7 @@ static void TestPatterns(void)
       lneed=unum_format(fmt, 0, NULL, lneed, NULL, &status);
       if(status==U_BUFFER_OVERFLOW_ERROR){
         status=U_ZERO_ERROR;
-        str=(UChar*)uprv_malloc(sizeof(UChar) * (lneed+1) );
+        str=(UChar*)malloc(sizeof(UChar) * (lneed+1) );
         unum_format(fmt, 0, str, lneed+1,  NULL, &status);
       }
       if(U_FAILURE(status)) {
@@ -103,8 +103,8 @@ static void TestPatterns(void)
           log_err("FAIL: Pattern %s should format zero as %s; %s Seen instead\n", pat[i], num[i], austrdup(str) );
 
         }
-      uprv_free(unewp);
-      uprv_free(str);
+      free(unewp);
+      free(str);
       unum_close(fmt);
     }
 }
@@ -129,7 +129,7 @@ static void TestQuotes(void)
   lneed=unum_format(fmt, 123, NULL, lneed, NULL, &status);
   if(status==U_BUFFER_OVERFLOW_ERROR){
     status=U_ZERO_ERROR;
-    str=(UChar*)uprv_malloc(sizeof(UChar) * (lneed+1) );
+    str=(UChar*)malloc(sizeof(UChar) * (lneed+1) );
     unum_format(fmt, 123, str, lneed+1,  NULL, &status);
   }
   if(U_FAILURE(status)) {
@@ -141,7 +141,7 @@ static void TestQuotes(void)
   if(u_strcmp(str, res) != 0)
     log_err("FAIL: Expected afo'ob123");
     
-  uprv_free(str);
+  free(str);
   unum_close(fmt);
 
 
@@ -157,7 +157,7 @@ static void TestQuotes(void)
   lneed=unum_format(fmt, 123, NULL, lneed, NULL, &status);
   if(status==U_BUFFER_OVERFLOW_ERROR){
     status=U_ZERO_ERROR;
-    str=(UChar*)uprv_malloc(sizeof(UChar) * (lneed+1) );
+    str=(UChar*)malloc(sizeof(UChar) * (lneed+1) );
     unum_format(fmt, 123, str, lneed+1,  NULL, &status);
   }
   if(U_FAILURE(status)) {
@@ -170,7 +170,7 @@ static void TestQuotes(void)
   if(u_strcmp(str, res) != 0)
     log_err("FAIL: Expected a'b123\n");
 
-  uprv_free(str);
+  free(str);
   unum_close(fmt);
 }
 
@@ -240,7 +240,7 @@ static void TestExponential(void)
   ilval = 0;
   for (p=0; p < pat_length; ++p)
     {
-      upat=(UChar*)uprv_malloc(sizeof(UChar) * (strlen(pat[p])+1) );
+      upat=(UChar*)malloc(sizeof(UChar) * (strlen(pat[p])+1) );
       u_uastrcpy(upat, pat[p]);
       fmt=unum_open(UNUM_IGNORE,upat, u_strlen(upat), "en_US",NULL, &status);
       if (U_FAILURE(status)) { 
@@ -257,7 +257,7 @@ static void TestExponential(void)
           lneed=unum_formatDouble(fmt, val[v], NULL, lneed, NULL, &status);
           if(status==U_BUFFER_OVERFLOW_ERROR){
             status=U_ZERO_ERROR;
-            str=(UChar*)uprv_malloc(sizeof(UChar) * (lneed+1) );
+            str=(UChar*)malloc(sizeof(UChar) * (lneed+1) );
             unum_formatDouble(fmt, val[v], str, lneed+1,  NULL, &status);
           }
           if(U_FAILURE(status)) {
@@ -280,7 +280,7 @@ static void TestExponential(void)
           else
             log_err(" FAIL: Partial parse (  %d  chars ) ->  %e\n",  ppos, a);
 
-          uprv_free(str);
+          free(str);
         }
       for (v=0; v<lval_length; ++v)
         {
@@ -289,7 +289,7 @@ static void TestExponential(void)
           lneed=unum_formatDouble(fmt, lval[v], NULL, lneed, NULL, &status);
           if(status==U_BUFFER_OVERFLOW_ERROR){
             status=U_ZERO_ERROR;
-            str=(UChar*)uprv_malloc(sizeof(UChar) * (lneed+1) );
+            str=(UChar*)malloc(sizeof(UChar) * (lneed+1) );
             unum_formatDouble(fmt, lval[v], str, lneed+1,  NULL, &status);
           }
           if(U_FAILURE(status)) {
@@ -311,13 +311,13 @@ static void TestExponential(void)
           else
             log_err(" FAIL: Partial parse (  %d  chars ) ->  %e\n",  ppos, a);
 
-          uprv_free(str);
+          free(str);
 
         }
       ival += val_length;
       ilval += lval_length;
       unum_close(fmt);
-      uprv_free(upat);
+      free(upat);
     }
 }
 
@@ -335,7 +335,7 @@ static void TestCurrencySign(void)
   UErrorCode status = U_ZERO_ERROR;
   char tempBuf[256];
 
-  pattern=(UChar*)uprv_malloc(sizeof(UChar) * (strlen("*#,##0.00;-*#,##0.00") + 1) );
+  pattern=(UChar*)malloc(sizeof(UChar) * (strlen("*#,##0.00;-*#,##0.00") + 1) );
   u_uastrcpy(pattern, "*#,##0.00;-*#,##0.00");
   pattern[0]=pattern[11]=0xa4; /* insert latin-1 currency symbol */
   fmt = unum_open(UNUM_IGNORE,pattern, u_strlen(pattern), "en_US",NULL, &status);
@@ -346,7 +346,7 @@ static void TestCurrencySign(void)
   lneed=unum_formatDouble(fmt, 1234.56, NULL, lneed, NULL, &status);
   if(status==U_BUFFER_OVERFLOW_ERROR){
     status=U_ZERO_ERROR;
-    str=(UChar*)uprv_malloc(sizeof(UChar) * (lneed+1) );
+    str=(UChar*)malloc(sizeof(UChar) * (lneed+1) );
     unum_formatDouble(fmt, 1234.56, str, lneed+1, NULL, &status);
   }
   if(U_FAILURE(status)) {
@@ -356,37 +356,37 @@ static void TestCurrencySign(void)
   lneed=unum_toPattern(fmt, FALSE, NULL, lneed, &status);
   if(status==U_BUFFER_OVERFLOW_ERROR){
     status=U_ZERO_ERROR;
-    pat=(UChar*)uprv_malloc(sizeof(UChar) * (lneed+1) );
+    pat=(UChar*)malloc(sizeof(UChar) * (lneed+1) );
     unum_formatDouble(fmt, FALSE, pat, lneed+1, NULL, &status);
   }
   log_verbose("Pattern \" %s \" \n", u_austrcpy(tempBuf, pat));
   log_verbose("Format 1234.56 -> %s\n", u_austrcpy(tempBuf, str) );
 
-  res=(UChar*)uprv_malloc(sizeof(UChar) * (strlen("$1,234.56")+1) );
+  res=(UChar*)malloc(sizeof(UChar) * (strlen("$1,234.56")+1) );
   u_uastrcpy(res, "$1,234.56");
   if (u_strcmp(str, res) !=0) log_err("FAIL: Expected $1,234.56\n");
-  uprv_free(str);
-  uprv_free(res);
-  uprv_free(pat);
+  free(str);
+  free(res);
+  free(pat);
 
   lneed=0; 
   lneed=unum_formatDouble(fmt, -1234.56, NULL, lneed, NULL, &status);
   if(status==U_BUFFER_OVERFLOW_ERROR){
     status=U_ZERO_ERROR;
-    str=(UChar*)uprv_malloc(sizeof(UChar) * (lneed+1) );
+    str=(UChar*)malloc(sizeof(UChar) * (lneed+1) );
     unum_formatDouble(fmt, -1234.56, str, lneed+1, NULL, &status);
   }
   if(U_FAILURE(status)) {
     log_err("Error in formatting using unum_format(.....): %s\n", myErrorName(status) );
   }
-  res=(UChar*)uprv_malloc(sizeof(UChar) * (strlen("-$1,234.56")+1) );
+  res=(UChar*)malloc(sizeof(UChar) * (strlen("-$1,234.56")+1) );
   u_uastrcpy(res, "-$1,234.56");
   if (u_strcmp(str, res) != 0) log_err("FAIL: Expected -$1,234.56\n");
-  uprv_free(str);
-  uprv_free(res);
+  free(str);
+  free(res);
 
   unum_close(fmt);  
-  uprv_free(pattern);
+  free(pattern);
 }
 
 /**
@@ -415,22 +415,22 @@ static void TestCurrency(void)
       lneed= unum_formatDouble(currencyFmt, 1.50, NULL, lneed, NULL, &status);
       if(status==U_BUFFER_OVERFLOW_ERROR){
         status=U_ZERO_ERROR;
-        str=(UChar*)uprv_malloc(sizeof(UChar) * (lneed+1) );
+        str=(UChar*)malloc(sizeof(UChar) * (lneed+1) );
         pos.field = 0;
         unum_formatDouble(currencyFmt, 1.50, str, lneed+1, &pos, &status);
       }
       if(U_FAILURE(status)) {
         log_err("Error in formatting using unum_formatDouble(.....): %s\n", myErrorName(status) );
       }
-      res=(UChar*)uprv_malloc(sizeof(UChar) * (strlen(result[i])+1) );
+      res=(UChar*)malloc(sizeof(UChar) * (strlen(result[i])+1) );
       u_uastrcpy(res, result[i]);
       u_UCharsToChars(str,cStr,u_strlen(res));
       if (u_strcmp(str, res) != 0){
           log_err("FAIL: Expected %s Got: %s for locale: %s\n", result[i],cStr,locale[i]);
       }
       unum_close(currencyFmt);
-      uprv_free(str);
-      uprv_free(res);
+      free(str);
+      free(res);
     }
 }
 /**
@@ -471,14 +471,14 @@ static void TestCurrencyPreEuro(void)
       lneed= unum_formatDouble(currencyFmt, 1.50, NULL, lneed, NULL, &status);
       if(status==U_BUFFER_OVERFLOW_ERROR){
         status=U_ZERO_ERROR;
-        str=(UChar*)uprv_malloc(sizeof(UChar) * (lneed+1) );
+        str=(UChar*)malloc(sizeof(UChar) * (lneed+1) );
         pos.field = 0;
         unum_formatDouble(currencyFmt, 1.50, str, lneed+1, &pos, &status);
       }
       if(U_FAILURE(status)) {
         log_err("Error in formatting using unum_formatDouble(.....): %s\n", myErrorName(status) );
       }
-      res=(UChar*)uprv_malloc(sizeof(UChar) * (strlen(result[i])+1) );
+      res=(UChar*)malloc(sizeof(UChar) * (strlen(result[i])+1) );
       u_unescape(result[i],res,(int32_t)(strlen(result[i])+1));
       u_UCharsToChars(str,cStr,u_strlen(str));
       if (u_strcmp(str, res) != 0){
@@ -486,8 +486,8 @@ static void TestCurrencyPreEuro(void)
       }
       
       unum_close(currencyFmt);
-      uprv_free(str);
-      uprv_free(res);
+      free(str);
+      free(res);
     }
 }
 
@@ -552,14 +552,14 @@ static void TestCurrencyObject(void)
       lneed= unum_formatDouble(currencyFmt, 1234.56, NULL, lneed, NULL, &status);
       if(status==U_BUFFER_OVERFLOW_ERROR){
         status=U_ZERO_ERROR;
-        str=(UChar*)uprv_malloc(sizeof(UChar) * (lneed+1) );
+        str=(UChar*)malloc(sizeof(UChar) * (lneed+1) );
         pos.field = 0;
         unum_formatDouble(currencyFmt, 1234.56, str, lneed+1, &pos, &status);
       }
       if(U_FAILURE(status)) {
         log_err("Error in formatting using unum_formatDouble(.....): %s\n", myErrorName(status) );
       }
-      res=(UChar*)uprv_malloc(sizeof(UChar) * (strlen(result[i])+1) );
+      res=(UChar*)malloc(sizeof(UChar) * (strlen(result[i])+1) );
       u_unescape(result[i],res, (int32_t)(strlen(result[i])+1));
       u_UCharsToChars(str,cStr,u_strlen(str));
       if (u_strcmp(str, res) != 0){
@@ -567,8 +567,8 @@ static void TestCurrencyObject(void)
       }
       
       unum_close(currencyFmt);
-      uprv_free(str);
-      uprv_free(res);
+      free(str);
+      free(res);
     }
 }
 
@@ -611,7 +611,7 @@ static void roundingTest(UNumberFormat* nf, double x, int32_t maxFractionDigits,
   lneed=unum_formatDouble(nf, x, NULL, lneed, NULL, &status);
   if(status==U_BUFFER_OVERFLOW_ERROR){
     status=U_ZERO_ERROR;
-    out=(UChar*)uprv_malloc(sizeof(UChar) * (lneed+1) );
+    out=(UChar*)malloc(sizeof(UChar) * (lneed+1) );
     pos.field=0;
     unum_formatDouble(nf, x, out, lneed+1, &pos, &status);
   }
@@ -620,13 +620,13 @@ static void roundingTest(UNumberFormat* nf, double x, int32_t maxFractionDigits,
   }
   /*Need to use log_verbose here. Problem with the float*/
   /*printf("%f format with %d fraction digits to %s\n", x, maxFractionDigits, austrdup(out) );*/
-  res=(UChar*)uprv_malloc(sizeof(UChar) * (strlen(expected)+1) );
+  res=(UChar*)malloc(sizeof(UChar) * (strlen(expected)+1) );
   u_uastrcpy(res, expected);
   if (u_strcmp(out, res) != 0)
     log_err("FAIL: Expected: %s or %s\n", expected, austrdup(res) );
-  uprv_free(res);
+  free(res);
   if(out != NULL) {
-    uprv_free(out);
+    free(out);
   }
 }
 

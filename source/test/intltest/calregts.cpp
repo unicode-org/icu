@@ -9,6 +9,7 @@
 #include "unicode/gregocal.h"
 #include "unicode/simpletz.h"
 #include "unicode/smpdtfmt.h"
+#include "cmemory.h"
 
 #include <float.h>
 
@@ -207,7 +208,8 @@ CalendarRegressionTest::test4031502()
     }
     if (bad) 
         errln("TimeZone problems with GC");
-    delete [] ids;
+    // delete [] ids;  // TODO: bad APIs
+    uprv_free(ids);
 }
 
     /**
@@ -267,7 +269,8 @@ CalendarRegressionTest::test4031502()
             errln(UnicodeString("Fail: Calendar::add misbehaves"));
     
         delete calendar;
-        delete ids;
+        uprv_free(ids);
+        // delete ids;   // TODO:  BAD API
     }
 
     /**
