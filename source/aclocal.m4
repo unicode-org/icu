@@ -18,14 +18,12 @@ case "${host}" in
 	else
 		icu_cv_host_frag=mh-solaris
 	fi ;;
-*-*-irix*)	icu_cv_host_frag=mh-irix ;;
 alpha*-*-linux-gnu)
 	if test "$ac_cv_prog_gcc" = yes; then
 		icu_cv_host_frag=mh-alpha-linux-gcc
 	else  
 		icu_cv_host_frag=mh-alpha-linux-cc
 	fi ;;
-*-dec-osf*) icu_cv_host_frag=mh-alpha-osf ;;
 *-*-linux*) icu_cv_host_frag=mh-linux ;;
 *-*-cygwin)
 	if test "$ac_cv_prog_gcc" = yes; then
@@ -40,7 +38,6 @@ alpha*-*-linux-gnu)
 	else
 		icu_cv_host_frag=mh-aix-va
 	fi ;;
-*-sequent-*) 	icu_cv_host_frag=mh-ptx ;;
 *-*-hpux*)
 	if test "$ac_cv_prog_gcc" = yes; then
 		icu_cv_host_frag=mh-hpux-gcc
@@ -54,6 +51,10 @@ alpha*-*-linux-gnu)
 *-*-os400*)	icu_cv_host_frag=mh-os400 ;;
 *-apple-rhapsody*)	icu_cv_host_frag=mh-darwin ;;
 *-apple-darwin*)	icu_cv_host_frag=mh-darwin ;;
+*-*-irix*)	icu_cv_host_frag=mh-irix ;;
+*-dec-osf*) icu_cv_host_frag=mh-alpha-osf ;;
+*-*-nto*)	icu_cv_host_frag=mh-qnx ;;
+*-sequent-*) 	icu_cv_host_frag=mh-ptx ;;
 *) 		icu_cv_host_frag=mh-unknown ;;
 esac
 		]
