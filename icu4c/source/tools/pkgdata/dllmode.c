@@ -101,6 +101,11 @@ void pkg_mode_dll(UPKGOptions *o, FileStream *makefile, UErrorCode *status)
         T_FileStream_writeLine(makefile, "FINAL_SO_TARGET=$(TARGET)\n");
         T_FileStream_writeLine(makefile, "MIDDLE_SO_TARGET=$(TARGET)\n");
     }
+
+    T_FileStream_writeLine(makefile, "DYNAMICCPPFLAGS=$(SHAREDLIBCPPFLAGS)\n");
+    T_FileStream_writeLine(makefile, "DYNAMICCFLAGS=$(SHAREDLIBCFLAGS)\n");
+    T_FileStream_writeLine(makefile, "DYNAMICCXXFLAGS=$(SHAREDLIBCXXFLAGS)\n");
+    T_FileStream_writeLine(makefile, "\n");
     
     uprv_strcpy(tmp, "all: $(TARGETDIR)/$(FINAL_SO_TARGET) $(BATCH_TARGET)");
     if (o->version) {
@@ -131,7 +136,7 @@ void pkg_mode_dll(UPKGOptions *o, FileStream *makefile, UErrorCode *status)
     }
     
     sprintf(tmp,"$(TEMP_DIR)/$(NAME)_dat.o : $(TEMP_DIR)/$(NAME)_dat.c\n"
-                "\t$(COMPILE.c) -o $@ $<\n\n");
+                "\t$(COMPILE.c) $(DYNAMICCPPFLAGS) $(DYNAMICCXXFLAGS) -o $@ $<\n\n");
     T_FileStream_writeLine(makefile, tmp);
     
     T_FileStream_writeLine(makefile, "# 'TOCOBJ' contains C Table of Contents objects [if any]\n");
@@ -151,7 +156,7 @@ void pkg_mode_dll(UPKGOptions *o, FileStream *makefile, UErrorCode *status)
     T_FileStream_writeLine(makefile, "\n\n");
     T_FileStream_writeLine(makefile, "OBJECTS=$(BASE_OBJECTS:%=$(TEMP_DIR)/%)\n\n");
     
-    T_FileStream_writeLine(makefile,"$(TEMP_DIR)/%.o: $(TEMP_DIR)/%.c\n\t  $(COMPILE.c) -o $@ $<\n\n");
+    T_FileStream_writeLine(makefile,"$(TEMP_DIR)/%.o: $(TEMP_DIR)/%.c\n\t$(COMPILE.c) $(DYNAMICCPPFLAGS) $(DYNAMICCXXFLAGS) -o $@ $<\n\n");
     
     T_FileStream_writeLine(makefile,"build-objs: $(SOURCES) $(OBJECTS)\n\n$(OBJECTS): $(SOURCES)\n\n");
     
@@ -164,7 +169,7 @@ void pkg_mode_dll(UPKGOptions *o, FileStream *makefile, UErrorCode *status)
                                      "\techo \"void to_emit_cxx_stuff_in_the_linker(){}\" >> $(TEMP_DIR)/hpux_junk_obj.cpp\n"
                                      "\n"
                                      "$(TEMP_DIR)/hpux_junk_obj.o: $(TEMP_DIR)/hpux_junk_obj.cpp\n"
-                                     "\t$(COMPILE.cc) -o $@ $<\n"
+                                     "\t$(COMPILE.cc) $(DYNAMICCPPFLAGS) $(DYNAMICCXXFLAGS) -o $@ $<\n"
                                      "\n");
 #else
     
