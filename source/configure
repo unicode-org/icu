@@ -1405,7 +1405,7 @@ if test "${enable_threads+set}" = set; then
 		*) { echo "configure: error: bad value ${enableval} for --enable-threads" 1>&2; exit 1; } ;;
 		esac
 else
-  w	threads=true
+  threads=true
 fi
 
 
