@@ -179,12 +179,13 @@ typedef enum {
    * @deprecated To be removed without replacement after 2002-mar-31.
    */
   UCOL_IGNORE_HANGUL    = 16,
-#endif /* ICU_UNORM_USE_DEPRECATES */
+
   /**
    * Do not normalize Hangul.
    * @deprecated To be removed without replacement after 2002-mar-31.
    */
   UNORM_IGNORE_HANGUL    = 16
+#endif /* ICU_UNORM_USE_DEPRECATES */
 } UNormalizationMode;
 
 /**

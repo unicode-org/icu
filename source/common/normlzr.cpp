@@ -18,6 +18,12 @@
 
 U_NAMESPACE_BEGIN
 
+#ifndef ICU_UNORM_USE_DEPRECATES
+enum {
+    IGNORE_HANGUL=1
+};
+#endif /* ICU_UNORM_USE_DEPRECATES */
+
 const char Normalizer::fgClassID=0;
 
 //-------------------------------------------------------------------------
