@@ -629,14 +629,14 @@ NumberFormatTest::TestCurrency(void)
     if (U_FAILURE(status))
         errln((UnicodeString)"FAIL: Status " + (int32_t)status);
     
-    for(int i=0; i < (sizeof(testCases)/sizeof(testCases[i])); i++){
+    for(int i=0; i < (int)(sizeof(testCases)/sizeof(testCases[i])); i++){
         status = U_ZERO_ERROR;
         const char *localeID = testCases[i][0];
         UnicodeString expected(testCases[i][1]);
         expected = expected.unescape();
         s.truncate(0);
         char loc[256]={0};
-        int len = uloc_canonicalize(localeID, loc, 256, &status);
+        uloc_canonicalize(localeID, loc, 256, &status);
         currencyFmt = NumberFormat::createCurrencyInstance(Locale(loc), status);
         if(U_FAILURE(status)){
             errln("Could not create currency formatter for locale %s",localeID);

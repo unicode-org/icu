@@ -1166,7 +1166,7 @@ static char *safeGetICUDataDirectory() {
 
 static void
 TestFCDCrash(void) {
-    static char *test[] = {
+    static const char *test[] = {
     "Gr\\u00F6\\u00DFe",
     "Grossist"
     };

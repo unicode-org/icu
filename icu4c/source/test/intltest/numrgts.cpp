@@ -922,7 +922,7 @@ void NumberFormatRegressionTest::Test4071014 (void)
 
     UErrorCode status = U_ZERO_ERROR;
     char loc[256]={0};
-    int len = uloc_canonicalize("de_DE_PREEURO", loc, 256, &status);
+    uloc_canonicalize("de_DE_PREEURO", loc, 256, &status);
     formatter = NumberFormat::createInstance(Locale(loc), status);
     failure(status, "NumberFormat::createNumberInstance");
     tempString.remove();
@@ -985,7 +985,7 @@ void NumberFormatRegressionTest::Test4071859 (void)
 
     UErrorCode status = U_ZERO_ERROR;
     char loc[256]={0};
-    int len = uloc_canonicalize("it_IT_PREEURO", loc, 256, &status);
+    uloc_canonicalize("it_IT_PREEURO", loc, 256, &status);
     formatter = NumberFormat::createInstance(Locale(loc), status);
     failure(status, "NumberFormat::createNumberInstance");
     tempString = formatter->format (-5789.9876, tempString);
