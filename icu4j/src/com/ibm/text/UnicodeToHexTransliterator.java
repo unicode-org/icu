@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/UnicodeToHexTransliterator.java,v $ 
- * $Date: 2000/06/28 20:36:32 $ 
- * $Revision: 1.8 $
+ * $Date: 2000/06/28 20:49:54 $ 
+ * $Revision: 1.9 $
  *
  *****************************************************************************************
  */
@@ -32,7 +32,7 @@ import java.util.*;
  * default is uppercase.
  *
  * @author Alan Liu
- * @version $RCSfile: UnicodeToHexTransliterator.java,v $ $Revision: 1.8 $ $Date: 2000/06/28 20:36:32 $
+ * @version $RCSfile: UnicodeToHexTransliterator.java,v $ $Revision: 1.9 $ $Date: 2000/06/28 20:49:54 $
  */
 public class UnicodeToHexTransliterator extends Transliterator {
 
@@ -292,7 +292,7 @@ public class UnicodeToHexTransliterator extends Transliterator {
          * assuming the prefix is "U+". 
          */
         int cursor = offsets.start;
-        int limit = offsets.contextLimit;
+        int limit = offsets.limit;
 
         UnicodeFilter filter = getFilter();
         StringBuffer hex = new StringBuffer(prefix);
@@ -323,7 +323,8 @@ public class UnicodeToHexTransliterator extends Transliterator {
             limit += len;
         }
 
-        offsets.contextLimit = limit;
+        offsets.contextLimit += limit - offsets.limit;
+        offsets.limit = limit;
         offsets.start = cursor;
     }
 }

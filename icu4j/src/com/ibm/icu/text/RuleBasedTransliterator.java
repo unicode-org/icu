@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/RuleBasedTransliterator.java,v $ 
- * $Date: 2000/06/28 20:36:32 $ 
- * $Revision: 1.34 $
+ * $Date: 2000/06/28 20:49:54 $ 
+ * $Revision: 1.35 $
  *
  *****************************************************************************************
  */
@@ -252,7 +252,7 @@ import com.ibm.util.Utility;
  * <p>Copyright (c) IBM Corporation 1999-2000. All rights reserved.</p>
  * 
  * @author Alan Liu
- * @version $RCSfile: RuleBasedTransliterator.java,v $ $Revision: 1.34 $ $Date: 2000/06/28 20:36:32 $
+ * @version $RCSfile: RuleBasedTransliterator.java,v $ $Revision: 1.35 $ $Date: 2000/06/28 20:49:54 $
  */
 public class RuleBasedTransliterator extends Transliterator {
 
@@ -325,7 +325,7 @@ public class RuleBasedTransliterator extends Transliterator {
          * exzd|    done
          */
         int start = index.contextStart;
-        int limit = index.contextLimit;
+        int limit = index.limit;
         int cursor = index.start;
 
         if (DEBUG) {
@@ -356,9 +356,9 @@ public class RuleBasedTransliterator extends Transliterator {
 
         while (cursor < limit && loopCount <= loopLimit) {
             TransliterationRule r = incremental ?
-                data.ruleSet.findIncrementalMatch(text, start, limit, cursor,
+                data.ruleSet.findIncrementalMatch(text, index.contextStart, limit, cursor,
                                                   data, partial, getFilter()) :
-                data.ruleSet.findMatch(text, start, limit,
+                data.ruleSet.findMatch(text, index.contextStart, limit,
                                        cursor, data, getFilter());
             /* If we match a rule then apply it by replacing the key
              * with the rule output and repositioning the cursor
@@ -391,7 +391,8 @@ public class RuleBasedTransliterator extends Transliterator {
                 Utility.escape(rsubstring(text, cursor, limit)) + "\"");
         }
 
-        index.contextLimit = limit;
+        index.contextLimit += limit - index.limit;
+        index.limit = limit;
         index.start = cursor;
     }
 
@@ -1328,6 +1329,9 @@ public class RuleBasedTransliterator extends Transliterator {
 
 /**
  * $Log: RuleBasedTransliterator.java,v $
+ * Revision 1.35  2000/06/28 20:49:54  alan4j
+ * Fix handling of Positions fields
+ *
  * Revision 1.34  2000/06/28 20:36:32  alan4j
  * Clean up Transliterator::Position - rename temporary names
  *
