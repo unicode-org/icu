@@ -1,19 +1,23 @@
 /**
 *******************************************************************************
-* Copyright (C) 1996-2003, International Business Machines Corporation and    *
+* Copyright (C) 1996-2004, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/lang/UCharacter.java,v $ 
-* $Date: 2004/02/06 21:54:00 $ 
-* $Revision: 1.86 $
+* $Date: 2004/03/10 02:21:38 $ 
+* $Revision: 1.87 $
 *
 *******************************************************************************
 */
 
 package com.ibm.icu.lang;
 
+import java.lang.ref.SoftReference;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
+
 import com.ibm.icu.impl.UCharacterProperty;
 import com.ibm.icu.util.RangeValueIterator;
 import com.ibm.icu.util.ValueIterator;
@@ -26,6 +30,8 @@ import com.ibm.icu.impl.UCharacterUtility;
 import com.ibm.icu.impl.UCharacterName;
 import com.ibm.icu.impl.UCharacterNameChoice;
 import com.ibm.icu.impl.UPropertyAliases;
+
+import com.ibm.icu.lang.UCharacterEnums.*;
 
 /**
  * <p>
@@ -83,17 +89,10 @@ import com.ibm.icu.impl.UPropertyAliases;
  * </p>
  * @author Syn Wee Quek
  * @stable ICU 2.1
- * @see com.ibm.icu.lang.UCharacterCategory
- * @see com.ibm.icu.lang.UCharacterDirection
+ * @see com.ibm.icu.lang.UCharacterEnums
  */
 
-/*
- * notes: 
- * 1) forDigit is not provided since there is no difference between the 
- * icu4c version and the jdk version
- */
- 
-public final class UCharacter
+public final class UCharacter implements ECharacterCategory, ECharacterDirection
 { 
     // public inner classes ----------------------------------------------
       
@@ -1229,36 +1228,36 @@ public final class UCharacter
          */
         public static final int SUPPLEMENTARY_PRIVATE_USE_AREA_B_ID = 110;
         
-	    /** @draft ICU 2.6 */
-	    public static final int LIMBU_ID = 111; /*[1900]*/
-	    /** @draft ICU 2.6 */
-	    public static final int TAI_LE_ID = 112; /*[1950]*/
-	    /** @draft ICU 2.6 */
-	    public static final int KHMER_SYMBOLS_ID = 113; /*[19E0]*/
-	    /** @draft ICU 2.6 */
-	    public static final int PHONETIC_EXTENSIONS_ID = 114; /*[1D00]*/
-	    /** @draft ICU 2.6 */
-	    public static final int MISCELLANEOUS_SYMBOLS_AND_ARROWS_ID = 115; /*[2B00]*/
-	    /** @draft ICU 2.6 */
-	    public static final int YIJING_HEXAGRAM_SYMBOLS_ID = 116; /*[4DC0]*/
-	    /** @draft ICU 2.6 */
-	    public static final int LINEAR_B_SYLLABARY_ID = 117; /*[10000]*/
-	    /** @draft ICU 2.6 */
-	    public static final int LINEAR_B_IDEOGRAMS_ID = 118; /*[10080]*/
-	    /** @draft ICU 2.6 */
-	    public static final int AEGEAN_NUMBERS_ID = 119; /*[10100]*/
-	    /** @draft ICU 2.6 */
-	    public static final int UGARITIC_ID = 120; /*[10380]*/
-	    /** @draft ICU 2.6 */
-	    public static final int SHAVIAN_ID = 121; /*[10450]*/
-	    /** @draft ICU 2.6 */
-	    public static final int OSMANYA_ID = 122; /*[10480]*/
-	    /** @draft ICU 2.6 */
-	    public static final int CYPRIOT_SYLLABARY_ID = 123; /*[10800]*/
-	    /** @draft ICU 2.6 */
-	    public static final int TAI_XUAN_JING_SYMBOLS_ID = 124; /*[1D300]*/
-	    /** @draft ICU 2.6 */
-	    public static final int VARIATION_SELECTORS_SUPPLEMENT_ID = 125; /*[E0100]*/
+            /** @draft ICU 2.6 */
+            public static final int LIMBU_ID = 111; /*[1900]*/
+            /** @draft ICU 2.6 */
+            public static final int TAI_LE_ID = 112; /*[1950]*/
+            /** @draft ICU 2.6 */
+            public static final int KHMER_SYMBOLS_ID = 113; /*[19E0]*/
+            /** @draft ICU 2.6 */
+            public static final int PHONETIC_EXTENSIONS_ID = 114; /*[1D00]*/
+            /** @draft ICU 2.6 */
+            public static final int MISCELLANEOUS_SYMBOLS_AND_ARROWS_ID = 115; /*[2B00]*/
+            /** @draft ICU 2.6 */
+            public static final int YIJING_HEXAGRAM_SYMBOLS_ID = 116; /*[4DC0]*/
+            /** @draft ICU 2.6 */
+            public static final int LINEAR_B_SYLLABARY_ID = 117; /*[10000]*/
+            /** @draft ICU 2.6 */
+            public static final int LINEAR_B_IDEOGRAMS_ID = 118; /*[10080]*/
+            /** @draft ICU 2.6 */
+            public static final int AEGEAN_NUMBERS_ID = 119; /*[10100]*/
+            /** @draft ICU 2.6 */
+            public static final int UGARITIC_ID = 120; /*[10380]*/
+            /** @draft ICU 2.6 */
+            public static final int SHAVIAN_ID = 121; /*[10450]*/
+            /** @draft ICU 2.6 */
+            public static final int OSMANYA_ID = 122; /*[10480]*/
+            /** @draft ICU 2.6 */
+            public static final int CYPRIOT_SYLLABARY_ID = 123; /*[10800]*/
+            /** @draft ICU 2.6 */
+            public static final int TAI_XUAN_JING_SYMBOLS_ID = 124; /*[1D300]*/
+            /** @draft ICU 2.6 */
+            public static final int VARIATION_SELECTORS_SUPPLEMENT_ID = 125; /*[E0100]*/
         /** 
          * @draft ICU 2.4 
          */
@@ -1300,6 +1299,40 @@ public final class UCharacter
                                             & BLOCK_MASK_) >> BLOCK_SHIFT_);
         }
         
+        /**
+         * Cover the JDK 1.5 API.  Return the Unicode block with the
+         * given name.  <br/><b>Note</b>: Unlike JDK 1.5, this only matches
+         * against the official UCD name and the Java block name
+         * (ignoring case).
+         * @param blockName the name of the block to match
+         * @return the UnicodeBlock with that name
+         * @throws IllegalArgumentException if the blockName could not be matched
+         * @draft ICU 3.0
+         */
+        public static final UnicodeBlock forName(String blockName) {
+            Map m = null;
+            if (mref != null) {
+                m = (Map)mref.get();
+            }
+            if (m == null) {
+                m = new HashMap(BLOCKS_.length);
+                for (int i = 0; i < BLOCKS_.length; ++i) {
+                    UnicodeBlock b = BLOCKS_[i];
+                    String name = getPropertyValueName(UProperty.BLOCK, b.getID(), UProperty.NameChoice.LONG);
+                    m.put(name.toUpperCase(), b);
+                    m.put(b.toString().toUpperCase(), b);
+                }
+                mref = new SoftReference(m);
+            }
+            UnicodeBlock b = (UnicodeBlock)m.get(blockName.toUpperCase());
+            if (b == null) {
+                throw new IllegalArgumentException();
+            }
+            return b;
+        }
+        private static SoftReference mref;
+
+
         /**
          * Returns the type ID of this Unicode block
          * @return integer type ID of this Unicode block
@@ -1954,42 +1987,42 @@ public final class UCharacter
     }; 
     
     /**
-	 * Hangul Syllable Type constants.
-	 *
-	 * @see UProperty#HANGUL_SYLLABLE_TYPE
-	 * @draft ICU 2.6
-	 */
-	public static interface HangulSyllableType 
-	{
-		/**
+         * Hangul Syllable Type constants.
+         *
+         * @see UProperty#HANGUL_SYLLABLE_TYPE
          * @draft ICU 2.6
          */
-	    public static final int NOT_APPLICABLE 	= 0;   /*[NA]*/ /*See note !!*/
-	    /**
+        public static interface HangulSyllableType 
+        {
+                /**
          * @draft ICU 2.6
          */
-	    public static final int LEADING_JAMO	= 1;   /*[L]*/
-	    /**
+            public static final int NOT_APPLICABLE      = 0;   /*[NA]*/ /*See note !!*/
+            /**
          * @draft ICU 2.6
          */
-	    public static final int VOWEL_JAMO		= 2;   /*[V]*/
-	    /**
+            public static final int LEADING_JAMO        = 1;   /*[L]*/
+            /**
          * @draft ICU 2.6
          */
-	    public static final int TRAILING_JAMO	= 3;   /*[T]*/
-	    /**
+            public static final int VOWEL_JAMO          = 2;   /*[V]*/
+            /**
          * @draft ICU 2.6
          */
-	    public static final int LV_SYLLABLE		= 4;   /*[LV]*/
-	    /**
+            public static final int TRAILING_JAMO       = 3;   /*[T]*/
+            /**
          * @draft ICU 2.6
          */
-	    public static final int LVT_SYLLABLE	= 5;   /*[LVT]*/
-	    /**
+            public static final int LV_SYLLABLE         = 4;   /*[LV]*/
+            /**
          * @draft ICU 2.6
          */
-	    public static final int COUNT			= 6;
-	}
+            public static final int LVT_SYLLABLE        = 5;   /*[LVT]*/
+            /**
+         * @draft ICU 2.6
+         */
+            public static final int COUNT                       = 6;
+        }
 
     // public data members -----------------------------------------------
   
@@ -2020,8 +2053,8 @@ public final class UCharacter
      * is no existing character.
      * @stable ICU 2.1
      */
-	public static final int REPLACEMENT_CHAR = '\uFFFD';
-    	
+        public static final int REPLACEMENT_CHAR = '\uFFFD';
+        
     /**
      * Special value that is returned by getUnicodeNumericValue(int) when no 
      * numeric value is defined for a code point.
@@ -2064,7 +2097,7 @@ public final class UCharacter
         }
         // if props == 0, it will just fall through and return -1
         if (isNotExceptionIndicator(props)) {
-         	// not contained in exception data
+                // not contained in exception data
             // getSignedValue is just shifting so we can check for the sign
             // first
             // Optimization
@@ -2078,7 +2111,7 @@ public final class UCharacter
         }
         else {
             int index = UCharacterProperty.getExceptionIndex(props);
-          	if (PROPERTY_.hasExceptionValue(index, 
+                if (PROPERTY_.hasExceptionValue(index, 
                                      UCharacterProperty.EXC_NUMERIC_VALUE_)) {
                 int result = PROPERTY_.getException(index, 
                                       UCharacterProperty.EXC_NUMERIC_VALUE_);
@@ -2865,10 +2898,10 @@ public final class UCharacter
      */
     public static int getCombiningClass(int ch)
     {
-    	if (ch < MIN_VALUE || ch > MAX_VALUE) {
-    		throw new IllegalArgumentException("Codepoint out of bounds");
-    	}
-    	return NormalizerImpl.getCombiningClass(ch);
+        if (ch < MIN_VALUE || ch > MAX_VALUE) {
+                throw new IllegalArgumentException("Codepoint out of bounds");
+        }
+        return NormalizerImpl.getCombiningClass(ch);
     }
       
     /**
@@ -2953,7 +2986,7 @@ public final class UCharacter
      */
     public static String getName(int ch)
     {
-    	if(NAME_==null){
+        if(NAME_==null){
             throw new RuntimeException("Could not load unames.icu");
         }
         return NAME_.getName(ch, UCharacterNameChoice.UNICODE_CHAR_NAME);
@@ -2993,7 +3026,7 @@ public final class UCharacter
      */
     public static String getName1_0(int ch)
     {
-    	if(NAME_==null){
+        if(NAME_==null){
             throw new RuntimeException("Could not load unames.icu");
         }
         return NAME_.getName(ch, 
@@ -3020,7 +3053,7 @@ public final class UCharacter
      */
     public static String getExtendedName(int ch) 
     {
-    	if(NAME_==null){
+        if(NAME_==null){
             throw new RuntimeException("Could not load unames.icu");
         }
         return NAME_.getName(ch, UCharacterNameChoice.EXTENDED_CHAR_NAME);
@@ -3080,7 +3113,7 @@ public final class UCharacter
      */
     public static int getCharFromName1_0(String name)
     {
-    	if(NAME_==null){
+        if(NAME_==null){
             throw new RuntimeException("Could not load unames.icu");
         }
         return NAME_.getCharFromName(
@@ -3108,7 +3141,7 @@ public final class UCharacter
      */
     public static int getCharFromExtendedName(String name)
     {
-    	if(NAME_==null){
+        if(NAME_==null){
             throw new RuntimeException("Could not load unames.icu");
         }
         return NAME_.getCharFromName(
@@ -3298,9 +3331,9 @@ public final class UCharacter
     public static int getCodePoint(char lead, char trail) 
     {
         if (lead >= UTF16.LEAD_SURROGATE_MIN_VALUE && 
-	        lead <= UTF16.LEAD_SURROGATE_MAX_VALUE &&
+                lead <= UTF16.LEAD_SURROGATE_MAX_VALUE &&
             trail >= UTF16.TRAIL_SURROGATE_MIN_VALUE && 
-	        trail <= UTF16.TRAIL_SURROGATE_MAX_VALUE) {
+                trail <= UTF16.TRAIL_SURROGATE_MAX_VALUE) {
             return UCharacterProperty.getRawSupplementary(lead, trail);
         }
         throw new IllegalArgumentException("Illegal surrogate characters");
@@ -3379,9 +3412,9 @@ public final class UCharacter
      */
     public static String toUpperCase(Locale locale, String str)
     {
-    	if (locale == null) {
-    		locale = Locale.getDefault();
-    	}
+        if (locale == null) {
+                locale = Locale.getDefault();
+        }
         return PROPERTY_.toUpperCase(locale, str, 0, str.length());
     }
       
@@ -3395,11 +3428,11 @@ public final class UCharacter
      */
     public static String toLowerCase(Locale locale, String str)
     {
-    	int length = str.length();
-    	StringBuffer result = new StringBuffer(length);
-    	if (locale == null) {
-    		locale = Locale.getDefault();
-    	}
+        int length = str.length();
+        StringBuffer result = new StringBuffer(length);
+        if (locale == null) {
+                locale = Locale.getDefault();
+        }
         PROPERTY_.toLowerCase(locale, str, 0, length, result);
         return result.toString();
     }
@@ -3427,9 +3460,9 @@ public final class UCharacter
                                      BreakIterator breakiter)
     {
         if (breakiter == null) {
-        	if (locale == null) {
-        		locale = Locale.getDefault();
-        	}
+                if (locale == null) {
+                        locale = Locale.getDefault();
+                }
             breakiter = BreakIterator.getWordInstance(locale);
         }
         return PROPERTY_.toTitleCase(locale, str, breakiter);
@@ -3652,12 +3685,12 @@ public final class UCharacter
         return result.toString();
     }
     
-	/**
-	 * Bit mask for getting just the options from a string compare options word
-	 * that are relevant for case folding (of a single string or code point).
-	 * @internal
-	 */
-	private static final int FOLD_CASE_OPTIONS_MASK = 0xff;
+        /**
+         * Bit mask for getting just the options from a string compare options word
+         * that are relevant for case folding (of a single string or code point).
+         * @internal
+         */
+        private static final int FOLD_CASE_OPTIONS_MASK = 0xff;
     
     /**
      * Option value for case folding: use default mappings defined in CaseFolding.txt.
@@ -3686,21 +3719,21 @@ public final class UCharacter
      * @see                  #foldCase(String, boolean)
      * @draft ICU 2.6
      */
-	/*
-	 * Issue for canonical caseless match (UAX #21):
-	 * Turkic casefolding (using "T" mappings in CaseFolding.txt) does not preserve
-	 * canonical equivalence, unlike default-option casefolding.
-	 * For example, I-grave and I + grave fold to strings that are not canonically
-	 * equivalent.
-	 * For more details, see the comment in Normalizer.compare() 
-	 * and the intermediate prototype changes for Jitterbug 2021.
-	 * (For example, revision 1.104 of uchar.c and 1.4 of CaseFolding.txt.)
-	 *
-	 * This did not get fixed because it appears that it is not possible to fix
-	 * it for uppercase and lowercase characters (I-grave vs. i-grave)
-	 * together in a way that they still fold to common result strings.
-	 */
-	 public static int foldCase(int ch, int options)
+        /*
+         * Issue for canonical caseless match (UAX #21):
+         * Turkic casefolding (using "T" mappings in CaseFolding.txt) does not preserve
+         * canonical equivalence, unlike default-option casefolding.
+         * For example, I-grave and I + grave fold to strings that are not canonically
+         * equivalent.
+         * For more details, see the comment in Normalizer.compare() 
+         * and the intermediate prototype changes for Jitterbug 2021.
+         * (For example, revision 1.104 of uchar.c and 1.4 of CaseFolding.txt.)
+         *
+         * This did not get fixed because it appears that it is not possible to fix
+         * it for uppercase and lowercase characters (I-grave vs. i-grave)
+         * together in a way that they still fold to common result strings.
+         */
+         public static int foldCase(int ch, int options)
      {
         int props = PROPERTY_.getProperty(ch);
         if (isNotExceptionIndicator(props)) {
@@ -3776,7 +3809,7 @@ public final class UCharacter
      * @see                  #foldCase(int, boolean)
      * @draft ICU 2.6
      */
-	public static final String foldCase(String str, int options){
+        public static final String foldCase(String str, int options){
         int          size   = str.length();
         StringBuffer result = new StringBuffer(size);
         int          offset  = 0;
@@ -3859,7 +3892,7 @@ public final class UCharacter
         }
         
         return result.toString();
-	}
+        }
     /**
      * Return numeric value of Han code points.
      * <br> This returns the value of Han 'numeric' code points,
@@ -3946,7 +3979,7 @@ public final class UCharacter
         return new UCharacterTypeIterator(PROPERTY_);
     }
 
-	/**
+        /**
      * <p>Gets an iterator for character names, iterating over codepoints.</p>
      * <p>This API only gets the iterator for the modern, most up-to-date 
      * Unicode names. For older 1.0 Unicode names use get1_0NameIterator() or
@@ -3968,7 +4001,7 @@ public final class UCharacter
      */
     public static ValueIterator getNameIterator()
     {
-    	if(NAME_==null){
+        if(NAME_==null){
             throw new RuntimeException("Could not load unames.icu");
         }
         return new UCharacterNameIterator(NAME_,
@@ -3996,7 +4029,7 @@ public final class UCharacter
      */
     public static ValueIterator getName1_0Iterator()
     {
-    	if(NAME_==null){
+        if(NAME_==null){
             throw new RuntimeException("Could not load unames.icu");
         }
         return new UCharacterNameIterator(NAME_,
@@ -4024,7 +4057,7 @@ public final class UCharacter
      */
     public static ValueIterator getExtendedNameIterator()
     {
-    	if(NAME_==null){
+        if(NAME_==null){
             throw new RuntimeException("Could not load unames.icu");
         }
         return new UCharacterNameIterator(NAME_,
@@ -4045,93 +4078,93 @@ public final class UCharacter
      */
     public static VersionInfo getAge(int ch) 
     {
-    	if (ch < MIN_VALUE || ch > MAX_VALUE) {
-    		throw new IllegalArgumentException("Codepoint out of bounds");
-    	}
-    	return PROPERTY_.getAge(ch);
+        if (ch < MIN_VALUE || ch > MAX_VALUE) {
+                throw new IllegalArgumentException("Codepoint out of bounds");
+        }
+        return PROPERTY_.getAge(ch);
     }
     
     /**
-	 * <p>Check a binary Unicode property for a code point.</p> 
-	 * <p>Unicode, especially in version 3.2, defines many more properties 
-	 * than the original set in UnicodeData.txt.</p>
-	 * <p>This API is intended to reflect Unicode properties as defined in 
-	 * the Unicode Character Database (UCD) and Unicode Technical Reports 
-	 * (UTR).</p>
-	 * <p>For details about the properties see 
-	 * <a href=http://www.unicode.org/>http://www.unicode.org/</a>.</p>
-	 * <p>For names of Unicode properties see the UCD file 
-	 * PropertyAliases.txt.</p>
-	 * <p>This API does not check the validity of the codepoint.</p>
-	 * <p>Important: If ICU is built with UCD files from Unicode versions 
-	 * below 3.2, then properties marked with "new" are not or 
-	 * not fully available.</p>
-	 * @param ch code point to test.
-	 * @param property selector constant from com.ibm.icu.lang.UProperty, 
-	 *        identifies which binary property to check.
-	 * @return true or false according to the binary Unicode property value 
-	 *         for ch. Also false if property is out of bounds or if the 
-	 *         Unicode version does not have data for the property at all, or 
-	 *         not for this code point.
-	 * @see com.ibm.icu.lang.UProperty
-	 * @stable ICU 2.6
-	 */
-	public static boolean hasBinaryProperty(int ch, int property) 
-	{
-		if (ch < MIN_VALUE || ch > MAX_VALUE) {
-    		throw new IllegalArgumentException("Codepoint out of bounds");
-    	}
-    	return PROPERTY_.hasBinaryProperty(ch, property);
-	}
-	
-	/**
-	 * <p>Check if a code point has the Alphabetic Unicode property.</p> 
-	 * <p>Same as UCharacter.hasBinaryProperty(ch, UProperty.ALPHABETIC).</p>
-	 * <p>Different from UCharacter.isLetter(ch)!</p> 
-	 * @stable ICU 2.6
-	 * @param ch codepoint to be tested
-	 */
-	public static boolean isUAlphabetic(int ch)
-	{
-		return hasBinaryProperty(ch, UProperty.ALPHABETIC);
-	}
+         * <p>Check a binary Unicode property for a code point.</p> 
+         * <p>Unicode, especially in version 3.2, defines many more properties 
+         * than the original set in UnicodeData.txt.</p>
+         * <p>This API is intended to reflect Unicode properties as defined in 
+         * the Unicode Character Database (UCD) and Unicode Technical Reports 
+         * (UTR).</p>
+         * <p>For details about the properties see 
+         * <a href=http://www.unicode.org/>http://www.unicode.org/</a>.</p>
+         * <p>For names of Unicode properties see the UCD file 
+         * PropertyAliases.txt.</p>
+         * <p>This API does not check the validity of the codepoint.</p>
+         * <p>Important: If ICU is built with UCD files from Unicode versions 
+         * below 3.2, then properties marked with "new" are not or 
+         * not fully available.</p>
+         * @param ch code point to test.
+         * @param property selector constant from com.ibm.icu.lang.UProperty, 
+         *        identifies which binary property to check.
+         * @return true or false according to the binary Unicode property value 
+         *         for ch. Also false if property is out of bounds or if the 
+         *         Unicode version does not have data for the property at all, or 
+         *         not for this code point.
+         * @see com.ibm.icu.lang.UProperty
+         * @stable ICU 2.6
+         */
+        public static boolean hasBinaryProperty(int ch, int property) 
+        {
+                if (ch < MIN_VALUE || ch > MAX_VALUE) {
+                throw new IllegalArgumentException("Codepoint out of bounds");
+        }
+        return PROPERTY_.hasBinaryProperty(ch, property);
+        }
+        
+        /**
+         * <p>Check if a code point has the Alphabetic Unicode property.</p> 
+         * <p>Same as UCharacter.hasBinaryProperty(ch, UProperty.ALPHABETIC).</p>
+         * <p>Different from UCharacter.isLetter(ch)!</p> 
+         * @stable ICU 2.6
+         * @param ch codepoint to be tested
+         */
+        public static boolean isUAlphabetic(int ch)
+        {
+                return hasBinaryProperty(ch, UProperty.ALPHABETIC);
+        }
 
-	/**
-	 * <p>Check if a code point has the Lowercase Unicode property.</p>
-	 * <p>Same as UCharacter.hasBinaryProperty(ch, UProperty.LOWERCASE).</p>
-	 * <p>This is different from UCharacter.isLowerCase(ch)!</p>
-	 * @param ch codepoint to be tested
-	 * @stable ICU 2.6
-	 */
-	public static boolean isULowercase(int ch) 
-	{
-		return hasBinaryProperty(ch, UProperty.LOWERCASE);
-	}
+        /**
+         * <p>Check if a code point has the Lowercase Unicode property.</p>
+         * <p>Same as UCharacter.hasBinaryProperty(ch, UProperty.LOWERCASE).</p>
+         * <p>This is different from UCharacter.isLowerCase(ch)!</p>
+         * @param ch codepoint to be tested
+         * @stable ICU 2.6
+         */
+        public static boolean isULowercase(int ch) 
+        {
+                return hasBinaryProperty(ch, UProperty.LOWERCASE);
+        }
 
-	/**
-	 * <p>Check if a code point has the Uppercase Unicode property.</p>
-	 * <p>Same as UCharacter.hasBinaryProperty(ch, UProperty.UPPERCASE).</p>
-	 * <p>This is different from UCharacter.isUpperCase(ch)!</p>
-	 * @param ch codepoint to be tested
-	 * @stable ICU 2.6
-	 */
-	public static boolean isUUppercase(int ch) 
-	{
-		return hasBinaryProperty(ch, UProperty.UPPERCASE);
-	}
+        /**
+         * <p>Check if a code point has the Uppercase Unicode property.</p>
+         * <p>Same as UCharacter.hasBinaryProperty(ch, UProperty.UPPERCASE).</p>
+         * <p>This is different from UCharacter.isUpperCase(ch)!</p>
+         * @param ch codepoint to be tested
+         * @stable ICU 2.6
+         */
+        public static boolean isUUppercase(int ch) 
+        {
+                return hasBinaryProperty(ch, UProperty.UPPERCASE);
+        }
 
-	/**
-	 * <p>Check if a code point has the White_Space Unicode property.</p>
-	 * <p>Same as UCharacter.hasBinaryProperty(ch, UProperty.WHITE_SPACE).</p>
-	 * <p>This is different from both UCharacter.isSpace(ch) and 
-	 * UCharacter.isWhitespace(ch)!</p>
-	 * @param ch codepoint to be tested
-	 * @stable ICU 2.6
-	 */
-	public static boolean isUWhiteSpace(int ch) 
-	{
-		return hasBinaryProperty(ch, UProperty.WHITE_SPACE);
-	}
+        /**
+         * <p>Check if a code point has the White_Space Unicode property.</p>
+         * <p>Same as UCharacter.hasBinaryProperty(ch, UProperty.WHITE_SPACE).</p>
+         * <p>This is different from both UCharacter.isSpace(ch) and 
+         * UCharacter.isWhitespace(ch)!</p>
+         * @param ch codepoint to be tested
+         * @stable ICU 2.6
+         */
+        public static boolean isUWhiteSpace(int ch) 
+        {
+                return hasBinaryProperty(ch, UProperty.WHITE_SPACE);
+        }
 
 
     /**
@@ -4205,7 +4238,7 @@ public final class UCharacter
                 return (PROPERTY_.getAdditional(ch, 2) 
                        & JOINING_GROUP_MASK_) >> JOINING_GROUP_SHIFT_;
             case UProperty.JOINING_TYPE:
-            	return (int)(PROPERTY_.getAdditional(ch, 2)& JOINING_TYPE_MASK_)>> JOINING_TYPE_SHIFT_;
+                return (int)(PROPERTY_.getAdditional(ch, 2)& JOINING_TYPE_MASK_)>> JOINING_TYPE_SHIFT_;
                 // ArabicShaping.txt:
                 // Note: Characters of joining type T and most characters of 
                 // joining type U are not explicitly listed in this file.
@@ -4225,7 +4258,7 @@ public final class UCharacter
                 return result;
                 */
             case UProperty.LINE_BREAK:
-            	return (int)(PROPERTY_.getAdditional(ch, 0)& LINE_BREAK_MASK_)>>LINE_BREAK_SHIFT_;
+                return (int)(PROPERTY_.getAdditional(ch, 0)& LINE_BREAK_MASK_)>>LINE_BREAK_SHIFT_;
                 /*
                  * LineBreak.txt:
                  *  - Assigned characters that are not listed explicitly are given the value
@@ -4284,7 +4317,7 @@ public final class UCharacter
             
             default:
                
-				return 0; /* undefined */
+                                return 0; /* undefined */
             }
         } else if (type == UProperty.GENERAL_CATEGORY_MASK) {
             return UCharacterProperty.getMask(getType(ch));
@@ -4395,11 +4428,309 @@ public final class UCharacter
         return -1; // undefined
     }
 
+    /**
+     * Provide the java.lang.Character forDigit API, for convenience.
+     * @draft ICU 3.0
+     */
+    public static char forDigit(int digit, int radix) {
+        return java.lang.Character.forDigit(digit, radix);
+    }
+
+    // JDK 1.5 API coverage
+
+    /**
+     * Cover the JDK 1.5 API, for convenience.
+     * @see UTF16.LEAD_SURROGATE_MIN_VALUE
+     * @draft ICU 3.0
+     */
+    public static final char MIN_HIGH_SURROGATE = UTF16.LEAD_SURROGATE_MIN_VALUE;
+
+    /**
+     * Cover the JDK 1.5 API, for convenience.
+     * @see UTF16.LEAD_SURROGATE_MAX_VALUE
+     * @draft ICU 3.0
+     */
+    public static final char MAX_HIGH_SURROGATE = UTF16.LEAD_SURROGATE_MAX_VALUE;
+
+    /**
+     * Cover the JDK 1.5 API, for convenience.
+     * @see UTF16.TRAIL_SURROGATE_MIN_VALUE
+     * @draft ICU 3.0
+     */
+    public static final char MIN_LOW_SURROGATE = UTF16.TRAIL_SURROGATE_MIN_VALUE;
+
+    /**
+     * Cover the JDK 1.5 API, for convenience.
+     * @see UTF16.TRAIL_SURROGATE_MAX_VALUE
+     * @draft ICU 3.0
+     */
+    public static final char MAX_LOW_SURROGATE = UTF16.TRAIL_SURROGATE_MAX_VALUE;
+
+    /**
+     * Cover the JDK 1.5 API, for convenience.
+     * @see UTF16.SURROGATE_MIN_VALUE
+     * @draft ICU 3.0
+     */
+    public static final char MIN_SURROGATE = UTF16.SURROGATE_MIN_VALUE;
+
+    /**
+     * Cover the JDK 1.5 API, for convenience.
+     * @see UTF16.SURROGATE_MAX_VALUE
+     * @draft ICU 3.0
+     */
+    public static final char MAX_SURROGATE = UTF16.SURROGATE_MAX_VALUE;
+
+    /**
+     * Cover the JDK 1.5 API, for convenience.
+     * @see UTF16.SUPPLEMENTARY_MIN_VALUE
+     * @draft ICU 3.0
+     */
+    public static final int  MIN_SUPPLEMENTARY_CODE_POINT = UTF16.SUPPLEMENTARY_MIN_VALUE;
+
+    /**
+     * Cover the JDK 1.5 API, for convenience.
+     * @see UTF16.CODEPOINT_MAX_VALUE
+     * @draft ICU 3.0
+     */
+    public static final int  MAX_CODE_POINT = UTF16.CODEPOINT_MAX_VALUE;
+
+    /**
+     * Cover the JDK 1.5 API, for convenience.
+     * @param cp the code point to check
+     * @return true if cp is a valid code point
+     * @draft ICU 3.0
+     */
+    public static final boolean isValidCodePoint(int cp) {
+        return cp >= 0 && cp <= MAX_CODE_POINT;
+    }
+
+    /**
+     * Cover the JDK 1.5 API, for convenience.
+     * @param cp the code point to check
+     * @return true if cp is a supplementary code point
+     * @draft ICU 3.0
+     */
+    public static final boolean isSupplementaryCodePoint(int cp) {
+        return cp >= UTF16.SUPPLEMENTARY_MIN_VALUE
+            && cp <= UTF16.CODEPOINT_MAX_VALUE;
+    }
+
+    /**
+     * Cover the JDK 1.5 API, for convenience.
+     * @param ch the char to check
+     * @return true if ch is a high (lead) surrogate
+     * @draft ICU 3.0
+     */
+    public static boolean isHighSurrogate(char ch) {
+        return ch >= MIN_HIGH_SURROGATE && ch <= MIN_LOW_SURROGATE;
+    }
+
+    /**
+     * Cover the JDK 1.5 API, for convenience.
+     * @param ch the char to check
+     * @return true if ch is a low (trail) surrogate
+     * @draft ICU 3.0
+     */
+    public static boolean isLowSurrogate(char ch) {
+        return ch >= MIN_LOW_SURROGATE && ch <= MIN_HIGH_SURROGATE;
+    }
+
+    /**
+     * Cover the JDK 1.5 API, for convenience.  Return true if the chars
+     * form a valid surrogate pair.
+     * @param high the high (lead) char
+     * @param low the low (trail) char
+     * @return true if high, low form a surrogate pair
+     * @draft ICU 3.0
+     */
+    public static final boolean isSurrogatePair(char high, char low) {
+        return isHighSurrogate(high) && isLowSurrogate(low);
+    }
+
+    /**
+     * Cover the JDK 1.5 API, for convenience.  Return the number of chars needed
+     * to represent the code point.  This does not check the
+     * code point for validity.
+     * @param cp the code point to check
+     * @param return the number of chars needed to represent the code point
+     * @see UTF16.getCharCount
+     * @draft ICU 3.0
+     */
+    public static int charCount(int cp) {
+        return UTF16.getCharCount(cp);
+    }
+
+    /**
+     * Cover the JDK 1.5 API, for convenience.  Return the code point represented by
+     * the characters.  This does not check the surrogate pair for validity.
+     * @param high the high (lead) surrogate
+     * @param low the low (trail) surrogate
+     * @return the code point formed by the surrogate pair
+     * @draft ICU 3.0
+     */
+    public static final int toCodePoint(char high, char low) {
+        return UCharacterProperty.getRawSupplementary(high, low);
+    }
+
+    /**
+     * Cover the JDK 1.5 API, for convenience.  Return the code point at index.
+     * <br/><b>Note</b>: the semantics of this API is different from the related UTF16
+     * API.  This examines only the characters at index and index+1.
+     * @param seq the characters to check
+     * @param index the index of the first or only char forming the code point
+     * @return the code point at the index
+     * @draft ICU 3.0
+     */
+    public static final int codePointAt(CharSequence seq, int index) {
+        char c1 = seq.charAt(index++);
+        if (isHighSurrogate(c1)) {
+            if (index < seq.length()) {
+                char c2 = seq.charAt(index);
+                if (isLowSurrogate(c2)) {
+                    return toCodePoint(c1, c2);
+                }
+            }
+        }
+        return c1;
+    }
+
+    /**
+     * Cover the JDK 1.5 API, for convenience.  Return the code point at index.
+     * <br/><b>Note</b>: the semantics of this API is different from the related UTF16
+     * API.  This examines only the characters at index and index+1.
+     * @param text the characters to check
+     * @param index the index of the first or only char forming the code point
+     * @return the code point at the index
+     * @draft ICU 3.0
+     */
+    public static final int codePointAt(char[] text, int index) {
+        char c1 = text[index++];
+        if (isHighSurrogate(c1)) {
+            if (index < text.length) {
+                char c2 = text[index];
+                if (isLowSurrogate(c2)) {
+                    return toCodePoint(c1, c2);
+                }
+            }
+        }
+        return c1;
+    }
+
+    /**
+     * Cover the JDK 1.5 API, for convenience.  Return the code point before index.
+     * <br/><b>Note</b>: the semantics of this API is different from the related UTF16
+     * API.  This examines only the characters at index-1 and index-2.
+     * @param seq the characters to check
+     * @param index the index after the last or only char forming the code point
+     * @return the code point before the index
+     * @draft ICU 3.0
+     */
+    public static final int codePointBefore(CharSequence seq, int index) {
+        char c2 = seq.charAt(--index);
+        if (isLowSurrogate(c2)) {
+            if (index > 0) {
+                char c1 = seq.charAt(--index);
+                if (isHighSurrogate(c1)) {
+                    return toCodePoint(c1, c2);
+                }
+            }
+        }
+        return c2;
+    }
+
+    /**
+     * Cover the JDK 1.5 API, for convenience.  Return the code point before index.
+     * <br/><b>Note</b>: the semantics of this API is different from the related UTF16
+     * API.  This examines only the characters at index-1 and index-2.
+     * @param text the characters to check
+     * @param index the index after the last or only char forming the code point
+     * @return the code point before the index
+     * @draft ICU 3.0
+     */
+    public static final int codePointBefore(char[] text, int index) {
+        char c2 = text[--index];
+        if (isLowSurrogate(c2)) {
+            if (index > 0) {
+                char c1 = text[--index];
+                if (isHighSurrogate(c1)) {
+                    return toCodePoint(c1, c2);
+                }
+            }
+        }
+        return c2;
+    }
+
+    /**
+     * Cover the JDK 1.5 API, for convenience.  Writes the chars representing the
+     * code point into the destination at the given index.
+     * @param cp the code point to convert
+     * @param dst the destination array into which to put the char(s) representing the code point
+     * @param dstIndex the index at which to put the first (or only) char
+     * @return the count of the number of chars written (1 or 2)
+     * @throws IllegalArgumentException if cp is not a valid code point
+     * @draft ICU 3.0
+     */
+    public static final int toChars(int cp, char[] dst, int dstIndex) {
+        if (cp >= 0) {
+            if (cp < MIN_SUPPLEMENTARY_CODE_POINT) {
+                dst[dstIndex] = (char)cp;
+                return 1;
+            }
+            if (cp <= MAX_CODE_POINT) {
+                dst[dstIndex] = UTF16.getLeadSurrogate(cp);
+                dst[dstIndex+1] = UTF16.getTrailSurrogate(cp);
+                return 2;
+            }
+        }
+        throw new IllegalArgumentException();
+    }
+
+    /**
+     * Cover the JDK 1.5 API, for convenience.  Returns a char array
+     * representing the code point.
+     * @param cp the code point to convert
+     * @return an array containing the char(s) representing the code point
+     * @throws IllegalArgumentException if cp is not a valid code point
+     * @draft ICU 3.0
+     */
+    public static final char[] toChars(int cp) {
+        if (cp >= 0) {
+            if (cp < MIN_SUPPLEMENTARY_CODE_POINT) {
+                return new char[] { (char)cp };
+            }
+            if (cp <= MAX_CODE_POINT) {
+                return new char[] {
+                    UTF16.getLeadSurrogate(cp),
+                    UTF16.getTrailSurrogate(cp)
+                };
+            }
+        }
+        throw new IllegalArgumentException();
+    }
+
+    /**
+     * Cover the JDK API, for convenience.  Return a byte representing the directionality of
+     * the character.
+     * <br/><b>Note</b>: Unlike the JDK, this returns DIRECTIONALITY_LEFT_TO_RIGHT for undefined or
+     * out-of-bounds characters.  <br/><b>Note</b>: The return value must be
+     * tested using the constants defined in {@link UCharacterEnums.ECharacterDirection}
+     * since the values are different from the ones defined by <code>java.lang.Character</code>.
+     * @param cp the code point to check
+     * @return the directionality of the code point
+     * @see #getDirection
+     * @draft ICU 3.0
+     */
+    public static byte getDirectionality(int cp)
+    {
+        // when ch is out of bounds getProperty == 0
+        return (byte)((getProperty(cp) >> BIDI_SHIFT_) & BIDI_MASK_AFTER_SHIFT_);
+    }
+
     // protected data members --------------------------------------------
     
     /**
-    * Database storing the sets of character name
-    */
+     * Database storing the sets of character name
+     */
     static UCharacterName NAME_ = null;
 
     /**
@@ -4417,7 +4748,7 @@ public final class UCharacter
         }
         catch (Exception e)
         {
-	    e.printStackTrace();
+            e.printStackTrace();
             //throw new RuntimeException(e.getMessage());
             // DONOT throw an exception
             // we might be building ICU modularly wothout names.icu and pnames.icu
@@ -4438,7 +4769,7 @@ public final class UCharacter
     private static final int[] PROPERTY_DATA_;
     private static final int PROPERTY_INITIAL_VALUE_;
 
-	// block to initialise character property database
+        // block to initialise character property database
     static
     {
         try
