@@ -419,6 +419,7 @@ TimeZoneTest::TestGetAvailableIDs913()
         if (i > 0) *buf += ", ";
         *buf += *s->snext(ec);
     }
+    delete s;
     *buf += " };";
     logln(*buf);
 
