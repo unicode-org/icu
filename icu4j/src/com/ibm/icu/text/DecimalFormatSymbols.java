@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/DecimalFormatSymbols.java,v $ 
- * $Date: 2002/03/10 19:40:16 $ 
- * $Revision: 1.5 $
+ * $Date: 2002/05/08 23:36:37 $ 
+ * $Revision: 1.6 $
  *
  *****************************************************************************************
  */
@@ -308,6 +308,13 @@ final public class DecimalFormatSymbols implements Cloneable, Serializable {
     }
 
     /**
+     * Returns the locale for which this object was constructed.
+     */
+    public Locale getLocale() {
+        return locale;
+    }
+
+    /**
      * Standard override.
      */
     public Object clone() {
@@ -361,6 +368,7 @@ final public class DecimalFormatSymbols implements Cloneable, Serializable {
      * cleaned up.
      */
     private void initialize( Locale locale ) {
+        this.locale = locale;
         /* try the cache first */
         String[][] data = (String[][]) cachedLocaleData.get(locale);
         String[] numberElements;
@@ -440,6 +448,14 @@ final public class DecimalFormatSymbols implements Cloneable, Serializable {
             // exponentSeparator, we don't do the reverse, since scientific
             // notation isn't supported by the old classes, even though the
             // symbol is there.
+        }
+        if (serialVersionOnStream < 3) {
+            // Resurrected objects from old streams will have no
+            // locale.  There is no 100% fix for this.  A
+            // 90% fix is to construct a mapping of data back to
+            // locale, perhaps a hash of all our members.  This is
+            // expensive and doesn't seem worth it.
+            locale = Locale.getDefault();
         }
         serialVersionOnStream = currentSerialVersion;
     }
@@ -581,6 +597,13 @@ final public class DecimalFormatSymbols implements Cloneable, Serializable {
      */
     private char plusSign;
 
+    /**
+     * The locale for which this object was constructed.  Set to the
+     * default locale for objects resurrected from old streams.
+     * @since ICU 2.2
+     */
+    private Locale locale;
+
     // Proclaim JDK 1.1 FCS compatibility
     static final long serialVersionUID = 5772796243397350300L;
 
@@ -590,7 +613,8 @@ final public class DecimalFormatSymbols implements Cloneable, Serializable {
     //     monetarySeparator and exponential.
     // - 2 for version from AlphaWorks, which includes 3 new fields:
     //     padEscape, exponentSeparator, and plusSign.
-    private static final int currentSerialVersion = 2;
+    // - 3 for ICU 2.2, which includes the locale field
+    private static final int currentSerialVersion = 3;
     
     /**
      * Describes the version of <code>DecimalFormatSymbols</code> present on the stream.
