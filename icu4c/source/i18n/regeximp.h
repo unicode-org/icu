@@ -21,7 +21,7 @@ U_NAMESPACE_BEGIN
 //
 #ifdef _DEBUG
 //#define REGEX_SCAN_DEBUG
-//#define REGEX_DUMP_DEBUG
+#define REGEX_DUMP_DEBUG
 //#define REGEX_RUN_DEBUG
 #endif
 //  End of #defines inteded to be directly set.
@@ -165,10 +165,12 @@ enum {
      URX_LOOP_C        = 51,   // Continue a [set]* or OneChar* loop.
                                //   Operand is a matcher static data location.
                                //   Must always immediately follow  LOOP_x_I instruction.
-     URX_LOOP_DOT_I    = 52    // .*, initialization of the optimized loop.
+     URX_LOOP_DOT_I    = 52,   // .*, initialization of the optimized loop.
                                //   Operand value:
                                //      0:  Normal (. doesn't match new-line) mode.
                                //      1:  . matches new-line mode.
+     URX_BACKSLASH_BU  = 53    // \b or \B in UREGEX_UWORD mode, using Unicode style
+                               //   word boundaries.
 
 };           
 
@@ -227,7 +229,8 @@ enum {
         "STAT_SETREF_N",       \
         "LOOP_SR_I",           \
         "LOOP_C",              \
-        "LOOP_DOT_I"
+        "LOOP_DOT_I",          \
+        "BACKSLASH_BU"
 
 
 //

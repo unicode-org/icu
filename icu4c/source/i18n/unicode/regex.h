@@ -55,6 +55,8 @@ class UVector32;
 class UnicodeSet;
 struct REStackFrame;
 struct Regex8BitSet;
+class  RuleBasedBreakIterator;
+
 
 
 /**
@@ -864,7 +866,8 @@ private:
     //
     void                 MatchAt(int32_t startIdx, UErrorCode &status);
     inline void          backTrack(int32_t &inputIdx, int32_t &patIdx);
-    UBool                isWordBoundary(int32_t pos);         // perform the \b test
+    UBool                isWordBoundary(int32_t pos);         // perform Perl-like  \b test
+    UBool                isUWordBoundary(int32_t pos);        // perform RBBI based \b test
     REStackFrame        *resetStack();
     inline REStackFrame *StateSave(REStackFrame *fp, int32_t savePatIdx,
                                    int32_t frameSize, UErrorCode &status);
@@ -895,6 +898,8 @@ private:
 
     UBool               fTouchedEnd;       // Set true if match engine reaches eof on input
                                            //   while attempting a match.
+
+    RuleBasedBreakIterator  *fWordBreakItr;
 
 };
 
