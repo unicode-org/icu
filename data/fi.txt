@@ -6,9 +6,13 @@
 // *******************************************************************************
 
 fi {
-    CollationElements { "& V ; w , W & Z < a\u030A , A\u030A< a\u0308 , A\u0308 "
+    CollationElements { 
+	    Version { "1.0" }
+		Override { "FALSE" }
+		Sequence { "& V ; w , W & Z < a\u030A , A\u030A< a\u0308 , A\u0308 "
         "< o\u0308 , O\u0308< o\u030B , O\u030B ; \u00F8 , \u00D8&  Y ; u\u030B, U\u030B"
         " ; u\u0308 , U\u0308" }
+	}
     Countries { 
         FI { "Suomi" }
     }

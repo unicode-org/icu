@@ -6,7 +6,11 @@
 // *******************************************************************************
 
 fr {
-    CollationElements { "@" }
+    CollationElements { 
+	    Version { "1.0" }
+		Override { "FALSE" }
+		Sequence { "@" }
+	}
     Countries { 
         FR { "France" }
         US { "\u00C9tats-Unis" }

@@ -10,7 +10,10 @@ el {
             "\u03C0\u03BC",
             "\u03BC\u03BC",
     }
-    CollationElements { "& \u0361 = \u0387 = \u03F3 & \u00B5 < \u0374 < \u0375 <"
+    CollationElements { 
+	    Version { "1.0" }
+		Override { "FALSE" }
+		Sequence { "& \u0361 = \u0387 = \u03F3 & \u00B5 < \u0374 < \u0375 <"
         " \u037A < \u037E < \u0384 < \u0385 & Z < \u03B1 , \u0391 ; \u03AC , \u0386 < \u03B2"
         " , \u0392 ; \u03D0 < \u03B3 , \u0393 < \u03B4 , \u0394 < \u03B5 , \u0395 ; \u03AD"
         " , \u0388 < \u03B6 , \u0396 < \u03B7 , \u0397 ; \u03AE , \u0389 < \u03B8 , \u0398"
@@ -23,6 +26,7 @@ el {
         " ; \u03CE , \u038F , \u03DA , \u03DC , \u03DE , \u03E0 < \u03E3 , \u03E2 < \u03E5"
         " , \u03E4 < \u03E7 , \u03E6 < \u03E9 , \u03E8 < \u03EB , \u03EA < \u03ED , \u03EC"
         " < \u03EF , \u03EE & \u03BC = \u00B5 " }
+	}
     Countries { 
         GR { "\u0395\u03BB\u03BB\u03AC\u03B4\u03B1" }
     }

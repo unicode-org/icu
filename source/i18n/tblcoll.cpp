@@ -977,23 +977,24 @@ RuleBasedCollator::constructFromFile(   const Locale&           locale,
   
     UnicodeString colString;
     UErrorCode intStatus = U_ZERO_ERROR;
-/* REDO */
-    const UnicodeString *t = bundle.getString("CollationElements", intStatus);
 
-    if(t != NULL) {
-        colString = *t;
-    } 
+    ResourceBundle colElems = bundle.get("CollationElements", intStatus);
+    if (U_FAILURE(intStatus))
+    {
+        status = U_MISSING_RESOURCE_ERROR;
+        return;
+    }
+    colString = colElems.getStringEx("Sequence", intStatus);
+
+    if(U_FAILURE(intStatus)) {
+        status = U_MISSING_RESOURCE_ERROR;
+        return;
+    }
 
     if(colString.isBogus()) {
         status = U_MEMORY_ALLOCATION_ERROR;
         return;
     }
-
-  // if this bundle doesn't contain collation data, break out
-  if(U_FAILURE(intStatus)) {
-    status = U_MISSING_RESOURCE_ERROR;
-    return;
-  }
 
   // Having loaded the collation from the resource bundle text file,
   // now retrieve the CollationElements tagged data, merged with the

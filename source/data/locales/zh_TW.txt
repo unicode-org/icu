@@ -6,7 +6,10 @@
 // *******************************************************************************
 
 zh_TW {
-    CollationElements { " & Z <\u3000<\uFF0C<\u3001<\u3002<\uFF0E<\u2022<\uFF1B<"
+    CollationElements { 
+	    Version { "1.0" }
+		Override { "FALSE" }
+		Sequence { " & Z <\u3000<\uFF0C<\u3001<\u3002<\uFF0E<\u2022<\uFF1B<"
         "\uFF1A<\uFF1F<\uFF01<\uFE30<\u2026<\u2025<\uFE50<\uFF64<\uFE52<\u00B7<\uFE54<\uFE55"
         "<\uFE56<\uFE57<\uFF5C<\u2013<\uFE31<\u2014<\uFE33<\uFE34<\uFE4F<\uFF08<\uFF09<\uFE35"
         "<\uFE36<\uFF5B<\uFF5D<\uFE37<\uFE38<\u3014<\u3015<\uFE39<\uFE3A<\u3010<\u3011<\uFE3B"
@@ -1149,6 +1152,7 @@ zh_TW {
         "<\u6207<\u6B1E<\u7227<\u864C<\u8EA8<\u9482<\u9480<\u9481<\u9A69<\u9A68<\u9B2E<\u9E19"
         "<\u7229<\u864B<\u8B9F<\u9483<\u9C79<\u9EB7<\u7675<\u9A6B<\u9C7A<\u9E1D<\u7069<\u706A"
         "<\u9EA4<\u9F7E<\u9F49<\u9F98" }
+	}
     Countries { 
         CN { "\u4E2D\u83EF\u4EBA\u6C11\u5171\u548C\u570B" }
         TW { "\u4E2D\u83EF\u6C11\u570B" }

@@ -6,9 +6,13 @@
 // *******************************************************************************
 
 lv {
-    CollationElements { "@& C < c\u030C , C\u030C & G < g\u0327 , G\u0327 & I < "
+    CollationElements { 
+	    Version { "1.0" }
+		Override { "FALSE" }
+		Sequence { "@& C < c\u030C , C\u030C & G < g\u0327 , G\u0327 & I < "
         "y, Y& K < k\u0327 , K\u0327 & L < l\u0327 , L\u0327 & N < n\u0327 , N\u0327 & S"
         " < s\u030C , S\u030C & Z < z\u030C , Z\u030C " }
+    }
     Countries { 
         LV { "Latvija" }
     }
