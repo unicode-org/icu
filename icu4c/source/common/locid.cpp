@@ -142,7 +142,7 @@ Locale::Locale( const   char * newLanguage,
   char togo_stack[ULOC_FULLNAME_CAPACITY];
   char *togo;
   char *togo_heap = NULL;
-  int32_t size;
+  int32_t size = 0;
   int32_t lsize = 0;
   int32_t csize = 0;
   int32_t vsize = 0;
