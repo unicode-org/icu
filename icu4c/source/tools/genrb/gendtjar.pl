@@ -37,13 +37,16 @@ GetOptions(
          );
 usage() unless defined $icuRootDir;
 usage() unless defined $jarDir;
+usage() unless defined $version;
   #usage() unless defined $icu4jRootDir;
   $icuswap = $icuRootDir."/bin/icuswap -tb";
   $tempDir =cwd();
   $tempDir .= "/temp";
   $version =~ s/\.//;
-  $icu4jDataDir ="com/ibm/icu/impl/data/icudt".$version."b";
-  $icu4jTestDataDir = "com/ibm/icu/dev/data/testdata";
+  $icu4jImpl = "com/ibm/icu/impl/data/";
+  $icu4jDataDir = $icu4jImpl."/icudt".$version."b";
+  $icu4jDevDataDir = "com/ibm/icu/dev/data/";
+  $icu4jTestDataDir = "$icu4jDevDataDir/testdata";
   $icuDataDir =$icuRootDir."/source/data/out/build/icudt".$version.checkPlatform();
   $icuTestDataDir =$icuRootDir."/source/test/testdata/out/build/";
   convertData($icuDataDir, $icuswap, $tempDir, $icu4jDataDir);
@@ -52,6 +55,7 @@ usage() unless defined $jarDir;
 
   convertTestData($icuTestDataDir, $icuswap, $tempDir, $icu4jTestDataDir);
   createJar("$jarDir/jar", "testdata.jar", $tempDir, $icu4jTestDataDir);
+  copyData();
 }
 
 #-----------------------------------------------------------------------
@@ -71,7 +75,12 @@ sub checkPlatform {
     }
 }
 #-----------------------------------------------------------------------
-
+sub copyData{
+  print("Copying: $tempDir/icudata.jar to $icu4jDir/src/$icu4jImpl");
+  copy("$tempDir/icudata.jar", "$icu4jDir/src/$icu4jImpl"); 
+  print("Copying: $tempDir/testData.jar $icu4jDir/src/$icu4jDevDataDir");
+  copy("$tempDir/testData.jar","$icu4jDir/src/$icu4jDevDataDir");
+}
 #-----------------------------------------------------------------------
 sub convertData{
     local($icuDataDir, $icuswap, $tempDir, $icu4jDataDir)  =@_;
