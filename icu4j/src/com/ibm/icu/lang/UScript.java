@@ -119,7 +119,7 @@ public final class UScript {
      * @param locale Locale
      * @return The script codes array. null if the the code cannot be found. 
      * @exception MissingResourceException
-     * @draft
+     * @draft 2.1
      */
     public static final int[] getCode(Locale locale)
         throws MissingResourceException {
@@ -137,7 +137,7 @@ public final class UScript {
      * data.
      * @param nameOrAbbrOrLocale name of the script or ISO 15924 code or locale
      * @return The script codes array. null if the the code cannot be found.
-     * @draft
+     * @draft 2.1
      */
     public static final int[] getCode(String nameOrAbbrOrLocale){
         try {
@@ -156,7 +156,7 @@ public final class UScript {
      * @param codepoint UChar32 codepoint
      * @return The script code 
      * @exception IllegalArgumentException
-     * @draft
+     * @draft 2.1
      */
     public static final int getScript(int codepoint){
         if (codepoint >= UCharacter.MIN_VALUE & codepoint <= UCharacter.MAX_VALUE) {
@@ -172,7 +172,7 @@ public final class UScript {
      * @param scriptCode int script code
      * @return script name as a string in full as given in TR#24
      * @exception IllegalArgumentException
-     * @draft
+     * @draft 2.1
      */
     public static final String getName(int scriptCode){
         return UCharacter.getPropertyValueName(UProperty.SCRIPT,
@@ -186,7 +186,7 @@ public final class UScript {
      * @param scriptCode int script code 
      * @return script abbreviated name as a string  as given in TR#24
      * @exception IllegalArgumentException
-     * @draft
+     * @draft 2.1
      */
     public static final String getShortName(int scriptCode){
         return UCharacter.getPropertyValueName(UProperty.SCRIPT,
