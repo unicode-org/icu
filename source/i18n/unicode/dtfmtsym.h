@@ -315,7 +315,7 @@ private:
         kEraLen = 3,
 
         kZoneNum = 5,
-        kZoneLen = 4,
+        kZoneLen = 4
     } LastResortSize;
 
     void initField(UnicodeString **field, int32_t& length, const ResourceBundle data, UErrorCode &status);
