@@ -1,12 +1,12 @@
 ﻿ // -*- Coding: utf-8; -*-
 //--------------------------------------------------------------------
-// Copyright (c) 1999-2002, International Business Machines
+// Copyright (c) 1999-2004, International Business Machines
 // Corporation and others.  All Rights Reserved.
 //--------------------------------------------------------------------
 // THIS IS A MACHINE-GENERATED FILE
-// Tool: dumpicurules.bat
+// Tool: dumpICUrules.bat
 // Source: ../../../impl/data/Transliterator_InterIndic_Kannada.txt
-// Date: Sat Jul 27 10:31:07 2002
+// Date: Tue May 18 17:24:49 2004
 //--------------------------------------------------------------------
 
 // InterIndic_Kannada
@@ -19,10 +19,11 @@ t_InterIndic_Knda {
 
 // InterIndic-Kannada
 //:: NFD (NFC) ;
-"\ue02b\ue03c>\u0cde;" // LETTER FA
+"\ue033\ue03c>\u0cde;" // LETTER FA
 "\ue001>\u0c82;" // REMAP (indicExceptions.txt): \u0c81>\u0c82 = SIGN CANDRABINDU>SIGN ANUSVARA
 "\ue002>\u0c82;" // SIGN ANUSVARA
 "\ue003>\u0c83;" // SIGN VISARGA
+"\uE004>\u0c85;" // FALLBACK TO LETTER A
 "\ue005>\u0c85;" // LETTER A
 "\ue006>\u0c86;" // LETTER AA
 "\ue007>\u0c87;" // LETTER I
@@ -71,15 +72,15 @@ t_InterIndic_Knda {
 "\ue031>\u0cb1;" // LETTER RRA
 "\ue032>\u0cb2;" // LETTER LA
 "\ue033>\u0cb3;" // LETTER LLA
-"\ue034>\u0cb3;" // REMAP (indicExceptions.txt): \u0cb4>\u0cb3 = LETTER LLLA>LETTER LLA
+"\ue034>\u0cde;" // REMAP (indicExceptions.txt): \u0cb4>\u0cb3 = LETTER LLLA>LETTER LLA
 "\ue035>\u0cb5;" // LETTER VA
 "\ue036>\u0cb6;" // LETTER SHA
 "\ue037>\u0cb7;" // LETTER SSA
 "\ue038>\u0cb8;" // LETTER SA
 "\ue039>\u0cb9;" // LETTER HA
 
-"\ue03c>;" // FALLBACK BLOW AWAY NUKTA
-"\ue03d>;" // FALLBACK BLOW AWAY AVAGRAHA
+"\ue03c>\u0cbc;" // NUKTA
+"\ue03d>\u0cbd;" // AVAGRAHA
 
 "\ue03e>\u0cbe;" // VOWEL SIGN AA
 "\ue03f>\u0cbf;" // VOWEL SIGN I
@@ -118,7 +119,7 @@ t_InterIndic_Knda {
 "\ue062>\u0cbf;" // REMAP (indicExceptions.txt): \u0ce2>\u0cbf = VOWEL SIGN VOCALIC L>VOWEL SIGN I
 "\ue063>\u0cc0;" // REMAP (indicExceptions.txt): \u0ce3>\u0cc0 = VOWEL SIGN VOCALIC LL>VOWEL SIGN II
 "\ue064>'.'   ;" // FALLBACK FOR DANDA
-"\ue065>'.'   ;" // FALLBACK FOR DOUBLE DANDA	
+"\ue065>'.'   ;" // FALLBACK FOR DOUBLE DANDA      
 "\ue066>\u0ce6;" // DIGIT ZERO
 "\ue067>\u0ce7;" // DIGIT ONE
 "\ue068>\u0ce8;" // DIGIT TWO
@@ -129,22 +130,27 @@ t_InterIndic_Knda {
 "\ue06d>\u0ced;" // DIGIT SEVEN
 "\ue06e>\u0cee;" // DIGIT EIGHT
 "\ue06f>\u0cef;" // DIGIT NINE
-"\ue080>;" // UNMAPPED InterIndic-Kannada: ISSHAR
-"\ue070>;"
-"\ue071>;"
-"\ue072>;"
-"\ue073>;"
-"\ue074>;"
-"\ue075>;"
-"\ue076>;"
-"\ue077>;"
-"\ue078>;"
-"\ue079>;"
-"\ue07A>;"
+"\ue070>;"       // ABBREVIATION SIGN
+"\ue071>\u0cb0;" // LETTER RA WITH MIDDLE DIAGONAL
+"\ue072>\u0cb0;" // LETTER RA WITH LOWER DIAGONAL
+"\ue073>;"       // RUPEE MARK
+"\ue074>;"       // RUPEE SIGN
+"\ue075>;"       // CURRENCY NUMERATOR ONE
+"\ue076>;"       // CURRENCY NUMERATOR TWO
+"\ue077>;"       // CURRENCY NUMERATOR THREE
+"\ue078>;"       // CURRENCY NUMERATOR FOUR
+"\ue079>;"       // CURRENCY NUMERATOR ONE LESS THAN THE DENOMINATOR
+"\ue07A>;"       // CURRENCY DENOMINATOR SIXTEEN
+"\ue07B>;"       // ISSHAR
+"\uE07C>;"       // TIPPI
+"\uE07D>;"       // ADDAK
+"\uE07E>;"       // IRI
+"\uE07F>;"       // URA
+"\uE080>;"       // EK ONKAR
+"\uE081>\u0cb5;" // FALLBACK FOR ORIYA LETTER WA 
 "0 > \u0ce6;"       // FALLBACK FOR TAMIL
 "1 > \u0ce7;"
-"\ue0f0 >  \u0cb0;"  // FALLBACK RA 
-"\ue0f1 >  \u0cb0;"  // FALLBACK RA
+
 //    :: NFC (NFD) ;
 // eof
   }

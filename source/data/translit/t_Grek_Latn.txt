@@ -6,7 +6,7 @@
 // THIS IS A MACHINE-GENERATED FILE
 // Tool: dumpICUrules.bat
 // Source: ../../../impl/data/Transliterator_Greek_Latin.txt
-// Date: Fri Apr 16 10:06:58 2004
+// Date: Tue May 18 17:24:48 2004
 //--------------------------------------------------------------------
 
 // Greek_Latin

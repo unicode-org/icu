@@ -1,12 +1,12 @@
 ﻿ // -*- Coding: utf-8; -*-
 //--------------------------------------------------------------------
-// Copyright (c) 1999-2002, International Business Machines
+// Copyright (c) 1999-2004, International Business Machines
 // Corporation and others.  All Rights Reserved.
 //--------------------------------------------------------------------
 // THIS IS A MACHINE-GENERATED FILE
-// Tool: dumpicurules.bat
+// Tool: dumpICUrules.bat
 // Source: ../../../impl/data/Transliterator_Devanagari_InterIndic.txt
-// Date: Sat Jul 27 10:31:01 2002
+// Date: Tue May 18 17:24:48 2004
 //--------------------------------------------------------------------
 
 // Devanagari_InterIndic
@@ -25,6 +25,7 @@ t_Deva_InterIndic {
  "\u0901>\uE001;"  // SIGN CANDRABINDU
  "\u0902>\uE002;"  // SIGN ANUSVARA
  "\u0903>\uE003;"  // SIGN VISARGA
+ "\u0904>\uE004;"  // SIGN SHORT A
  "\u0905>\uE005;"  // LETTER A
  "\u0906>\uE006;"  // LETTER AA
  "\u0907>\uE007;"  // LETTER I
@@ -126,7 +127,7 @@ t_Deva_InterIndic {
  "\u096D>\uE06D;"  // DIGIT SEVEN
  "\u096E>\uE06E;"  // DIGIT EIGHT
  "\u096F>\uE06F;"  // DIGIT NINE
-// \u0970>; # UNMAPPED Devanagari-InterIndic: ABBREVIATION SIGN
+ "\u0970>\uE070;"  // Devanagari-InterIndic: ABBREVIATION SIGN
 //    :: NFC (NFD) ;
   }
 }

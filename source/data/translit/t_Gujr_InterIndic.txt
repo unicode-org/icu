@@ -1,12 +1,12 @@
 ﻿ // -*- Coding: utf-8; -*-
 //--------------------------------------------------------------------
-// Copyright (c) 1999-2002, International Business Machines
+// Copyright (c) 1999-2004, International Business Machines
 // Corporation and others.  All Rights Reserved.
 //--------------------------------------------------------------------
 // THIS IS A MACHINE-GENERATED FILE
-// Tool: dumpicurules.bat
+// Tool: dumpICUrules.bat
 // Source: ../../../impl/data/Transliterator_Gujarati_InterIndic.txt
-// Date: Sat Jul 27 10:31:01 2002
+// Date: Tue May 18 17:24:48 2004
 //--------------------------------------------------------------------
 
 // Gujarati_InterIndic
@@ -29,10 +29,11 @@ t_Gujr_InterIndic {
 "\u0a89>\ue009;" // LETTER U
 "\u0a8a>\ue00a;" // LETTER UU
 "\u0a8b>\ue00b;" // LETTER VOCALIC R
-"\u0a8d>\ue00d;" // UNMAPPED Gujarati-InterIndic: VOWEL CANDRA E
+"\u0a8c>\ue00c;" // LETTER VOCALLIC L
+"\u0a8d>\ue00d;" // VOWEL CANDRA E
 "\u0a8f>\ue00f;" // LETTER E
 "\u0a90>\ue010;" // LETTER AI
-"\u0a91>\ue011;" // UNMAPPED Gujarati-InterIndic: VOWEL CANDRA O
+"\u0a91>\ue011;" // VOWEL CANDRA O
 "\u0a93>\ue013;" // LETTER O
 "\u0a94>\ue014;" // LETTER AU
 "\u0a95>\ue015;" // LETTER KA
@@ -87,6 +88,7 @@ t_Gujr_InterIndic {
 "\u0acd>\ue04d;" // SIGN VIRAMA
 "\u0ad0>\ue050;" // OM
 "\u0ae0>\ue060;" // LETTER VOCALIC RR
+"\u0ae1>\ue061;" // LETTER VOCALIC LL
 "\u0ae6>\ue066;" // DIGIT ZERO
 "\u0ae7>\ue067;" // DIGIT ONE
 "\u0ae8>\ue068;" // DIGIT TWO

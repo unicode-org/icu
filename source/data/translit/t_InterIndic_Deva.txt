@@ -1,12 +1,12 @@
 ﻿ // -*- Coding: utf-8; -*-
 //--------------------------------------------------------------------
-// Copyright (c) 1999-2002, International Business Machines
+// Copyright (c) 1999-2004, International Business Machines
 // Corporation and others.  All Rights Reserved.
 //--------------------------------------------------------------------
 // THIS IS A MACHINE-GENERATED FILE
-// Tool: dumpicurules.bat
+// Tool: dumpICUrules.bat
 // Source: ../../../impl/data/Transliterator_InterIndic_Devanagari.txt
-// Date: Sat Jul 27 10:31:07 2002
+// Date: Tue May 18 17:24:49 2004
 //--------------------------------------------------------------------
 
 // InterIndic_Devanagari
@@ -40,16 +40,11 @@ t_InterIndic_Deva {
  "\ue055>;" // FALLBACK BLOW AWAY KANNADA AND TELUGU LENGTH MARK
  "\ue056>;" // FALLBACK BLOW AWAY KANNADA AND TELUGU AI LENGTH MARK
  "\ue057>;" // FALLBACK BLOW AWAY TAMIL AU LENGTH MARK
- "\ue070>;" // FALLBACK BLOW AWAY GURMUKHI 
- "\ue071>;" // FALLBACK BLOW AWAY GURMUKHI
- "\ue072>;" // FALLBACK BLOW AWAY GURMUKHI
- "\ue073>;" // FALLBACK BLOW AWAY GURMUKHI
- "\ue074>;" // FALLBACK BLOW AWAY GURMUKHI
-
 
  "\ue001 >  \u0901;"  // SIGN CANDRABINDU
  "\ue002 >  \u0902;"  // SIGN ANUSVARA
  "\ue003 >  \u0903;"  // SIGN VISARGA
+ "\ue004 >  \u0904;"  // SIGN SHORT A
  "\ue005 >  \u0905;"  // LETTER A
  "\ue006 >  \u0906;"  // LETTER AA
  "\ue007 >  \u0907;"  // LETTER I
@@ -59,13 +54,11 @@ t_InterIndic_Deva {
  "\ue00b >  \u090b;"  // LETTER VOCALIC R
  "\ue00c >  \u090c;"  // LETTER VOCALIC L
  "\ue00d >  \u090d;"  // LETTER CANDRA E (For representing English sounds)
- "\ue00e >  \u090e;" // UNMAPPED LETTER SHORT E(For Southern Scripts)
- //\ue00e >  \u090f;
+ "\ue00e >  \u090e;"  // LETTER SHORT E(For Southern Scripts)
  "\ue00f >  \u090f;"  // LETTER E
  "\ue010 >  \u0910;"  // LETTER AI
  "\ue011 >  \u0911;"  // LETTER CANDRA O (For representing English sounds)
- "\ue012 >  \u0912;" // UNMAPPED LETTER SHORT O (For Southern Scripts)
- //\ue012 >  \u0913; 
+ "\ue012 >  \u0912;"  // LETTER SHORT O (For Southern Scripts)
  "\ue013 >  \u0913;"  // LETTER O
  "\ue014 >  \u0914;"  // LETTER AU
  "\ue015 >  \u0915;"  // LETTER KA
@@ -117,21 +110,19 @@ t_InterIndic_Deva {
  "\ue043 >  \u0943;"  // VOWEL SIGN VOCALIC R
  "\ue044 >  \u0944;"  // VOWEL SIGN VOCALIC RR
  "\ue045 >  \u0945;"  // VOWEL SIGN CANDRA E
- "\ue046 >  \u0946;" // UNMAPPED VOWEL SIGN SHORT E
- //\ue046 >  \u0947; 
+ "\ue046 >  \u0946;"  // VOWEL SIGN SHORT E
  "\ue047 >  \u0947;"  // VOWEL SIGN E
  "\ue048 >  \u0948;"  // VOWEL SIGN AI
  "\ue049 >  \u0949;"  // VOWEL SIGN CANDRA O
- "\ue04a >  \u094a;" // UNMAPPED VOWEL SIGN SHORT O
- //\ue04a >  \u094b; 
+ "\ue04a >  \u094a;"  // VOWEL SIGN SHORT O
  "\ue04b >  \u094b;"  // VOWEL SIGN O
  "\ue04c >  \u094c;"  // VOWEL SIGN AU
  "\ue04d >  \u094d;"  // SIGN VIRAMA
  "\ue050 >  \u0950;"  // OM
- "\ue051 >  \u0951;"  // UNMAPPED STRESS SIGN UDATTA
- "\ue052 >  \u0952;"  // UNMAPPED STRESS SIGN ANUDATTA
- "\ue053 >  \u0953;"  // UNMAPPED GRAVE ACCENT
- "\ue054 >  \u0954;"  // UNMAPPED ACUTE ACCENT
+ "\ue051 >  \u0951;"  // STRESS SIGN UDATTA
+ "\ue052 >  \u0952;"  // STRESS SIGN ANUDATTA
+ "\ue053 >  \u0953;"  // GRAVE ACCENT
+ "\ue054 >  \u0954;"  // ACUTE ACCENT
  "\ue058 >  \u0958;"  // LETTER QA   (For Urdu)
  "\ue059 >  \u0959;"  // LETTER KHHA (For Urdu)
  "\ue05a >  \u095a;"  // LETTER GHHA (For Urdu)
@@ -144,8 +135,8 @@ t_InterIndic_Deva {
  "\ue061 >  \u0961;"  // LETTER VOCALIC LL
  "\ue062 >  \u0962;"  // VOWEL SIGN VOCALIC L
  "\ue063 >  \u0963;"  // VOWEL SIGN VOCALIC LL
- "\ue064 >  \u0964;"  // UNMAPPED Devanagari-InterIndic: DANDA
- "\ue065 >  \u0965;"  // UNMAPPED Devanagari-InterIndic: DOUBLE DANDA
+ "\ue064 >  \u0964;"  // DANDA
+ "\ue065 >  \u0965;"  // DOUBLE DANDA
  "\ue066 >  \u0966;"  // DIGIT ZERO
  "\ue067 >  \u0967;"  // DIGIT ONE
  "\ue068 >  \u0968;"  // DIGIT TWO
@@ -156,15 +147,25 @@ t_InterIndic_Deva {
  "\ue06d >  \u096d;"  // DIGIT SEVEN
  "\ue06e >  \u096e;"  // DIGIT EIGHT
  "\ue06f >  \u096f;"  // DIGIT NINE
- "\ue0f0 >  \u0930;"  // FALLBACK RA 
- "\ue0f1 >  \u0930;"  // FALLBACK RA
 
-"\ue075>;"
-"\ue076>;"
-"\ue077>;"
-"\ue078>;"
-"\ue079>;"
-"\ue07A>;"
+ "\ue070>\u0970;"     // ABBREVIATION SIGN
+ "\ue071>\u0930;"     // LETTER RA WITH MIDDLE DIAGONAL
+ "\ue072>\u0930;"     // LETTER RA WITH LOWER DIAGONAL
+ "\ue073>;"           // RUPEE MARK
+ "\ue074>\u0930\u0942;"           // RUPEE SIGN
+ "\ue075>;"           // CURRENCY NUMERATOR ONE
+ "\ue076>;"           // CURRENCY NUMERATOR TWO
+ "\ue077>;"           // CURRENCY NUMERATOR THREE
+ "\ue078>;"           // CURRENCY NUMERATOR FOUR
+ "\ue079>;"           // CURRENCY NUMERATOR ONE LESS THAN THE DENOMINATOR
+ "\ue07A>;"           // CURRENCY DENOMINATOR SIXTEEN
+ "\ue07B>;"           // ISSHAR
+ "\uE07C>;"           // TIPPI
+ "\uE07D>;"           // ADDAK
+ "\uE07E>;"           // IRI
+ "\uE07F>;"           // URA
+ "\uE080>;"           // EK ONKAR
+ "\uE081>\u0935;"		// FALLBACK FOR ORIYA LETTER WA 
  
 //         \u0970  # UNMAPPED Devanagari-InterIndic: ABBREVIATION SIGN
 //    :: NFC;
