@@ -565,6 +565,7 @@ ICUService::ICUService()
   , idCache(NULL)
   , dnCache(NULL)
 {
+  umtx_init(&lock);
 }
 
 ICUService::ICUService(const UnicodeString& newName) 
@@ -575,6 +576,7 @@ ICUService::ICUService(const UnicodeString& newName)
   , serviceCache(NULL)
   , idCache(NULL)
   , dnCache(NULL) {
+  umtx_init(&lock);
 }
 
 ICUService::~ICUService()
