@@ -15,6 +15,7 @@
 #include "unicode/schriter.h"
 #include "unicode/uchriter.h"
 #include "unicode/uiter.h"
+#include "unicode/putil.h"
 #include "citrtest.h"
 
 

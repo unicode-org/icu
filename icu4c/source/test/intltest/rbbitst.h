@@ -75,6 +75,7 @@ public:
     void TestLineBreaks();
     void TestSentBreaks();
     void TestBug3818();
+    void TestJapaneseWordBreak();
     
     
 /***********************/

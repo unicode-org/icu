@@ -575,6 +575,31 @@ void RBBITest::TestBug3818() {
     delete bi;
 }
 
+
+void RBBITest::TestJapaneseWordBreak() {
+    UErrorCode status = U_ZERO_ERROR;
+    BITestData   japaneseWordSelection(status);
+
+    ADD_DATACHUNK(japaneseWordSelection, NULL, 0, status);           // Break at start of data
+    ADD_DATACHUNK(japaneseWordSelection, "\\u4ECA\\u65E5", 400, status); //2
+    ADD_DATACHUNK(japaneseWordSelection, "\\u306F\\u3044\\u3044", 300, status); //5
+    ADD_DATACHUNK(japaneseWordSelection, "\\u5929\\u6C17", 400, status); //7
+    ADD_DATACHUNK(japaneseWordSelection, "\\u3067\\u3059\\u306D", 300, status); //10
+    ADD_DATACHUNK(japaneseWordSelection, "\\u3002", 0, status); //11
+    ADD_DATACHUNK(japaneseWordSelection, "\\u000D\\u000A", 0, status); //12
+
+    RuleBasedBreakIterator* e = (RuleBasedBreakIterator *)BreakIterator::createWordInstance(
+        Locale("ja"), status);
+    if (U_FAILURE(status))
+    {
+        errln("Failed to create the BreakIterator for Japanese locale in TestJapaneseWordBreak.\n");
+        return;
+    }
+
+    generalIteratorTest(*e, japaneseWordSelection);
+    delete e;
+}
+
 //---------------------------------------------
 // runIndexedTest
 //---------------------------------------------
@@ -633,6 +658,8 @@ void RBBITest::runIndexedTest( int32_t index, UBool exec, const char* &name, cha
                                                                break;
         case 18: name = "TestBug3818";
             if(exec) TestBug3818();                            break;
+        case 19: name = "TestJapaneseWordBreak";
+            if(exec) TestJapaneseWordBreak();                  break;
 
         default: name = ""; break; //needed to end loop
     }

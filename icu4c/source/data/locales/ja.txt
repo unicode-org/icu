@@ -10,6 +10,9 @@
  *  ICU <specials> source: ../../../locale/icu/main\ja.xml
  */
 ja{
+    boundaries {
+        word { "word_ja" }
+    }
     Countries{
         AD{"アンドラ"}
         AE{"アラブ首長国連邦"}

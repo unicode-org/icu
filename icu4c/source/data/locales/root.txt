@@ -10,6 +10,14 @@
  *  ICU <specials> source: ../../../locale/icu/main\root.xml
  */
 root{
+    boundaries {
+        grapheme { "char" }
+        line { "line" }
+        sentence { "sent" }
+        title { "title" }
+        word { "word" }
+    }
+
     Currencies{
         EUR{
             "€",
