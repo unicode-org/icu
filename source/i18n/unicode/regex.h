@@ -16,7 +16,7 @@
 #ifndef REGEX_H
 #define REGEX_H
 
-// #define REGEX_DEBUG
+#define REGEX_DEBUG
 
 /**
  * \file
@@ -843,7 +843,8 @@ private:
     UBool                fMatch;           // True if the last match was successful.
     int32_t              fMatchStart;      // Position of the start of the most recent match
     int32_t              fMatchEnd;        // First position after the end of the most recent match
-    int32_t              fLastMatchEnd;    // First position after the end of the previous match.
+    int32_t              fLastMatchEnd;    // First position after the end of the previous match,
+                                           //   or -1 if there was no previous match.
 
     UVector32           *fStack;
     REStackFrame        *fFrame;           // After finding a match, the last active stack

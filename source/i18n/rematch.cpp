@@ -315,8 +315,8 @@ UBool RegexMatcher::find() {
     int32_t startPos = fMatchEnd;
 
     if (fMatch) {
-        // Save the position of any previous successful match for use by the appendTail()
-        //  functions.
+        // Save the position of any previous successful match for use by the 
+        //  appendReplacement() and appendTail() functions.
         fLastMatchEnd = fMatchEnd;
 
         if (fMatchStart == fMatchEnd) {
@@ -327,6 +327,13 @@ UBool RegexMatcher::find() {
                 return FALSE;
             }
             startPos = fInput->moveIndex32(startPos, 1);
+        }
+    } else {
+        if (fLastMatchEnd >= 0) {
+            // A previous find() failed to match.  Don't try again.
+            //   (without this test, a pattern with a zero-length match
+            //    could match again at the end of an input string.)
+            return FALSE;
         }
     }
 
@@ -696,7 +703,7 @@ UnicodeString RegexMatcher::replaceFirst(const UnicodeString &replacement, UErro
 RegexMatcher &RegexMatcher::reset() {
     fMatchStart   = 0;
     fMatchEnd     = 0;
-    fLastMatchEnd = 0;
+    fLastMatchEnd = -1;
     fMatch        = FALSE;
     resetStack();
     return *this;
