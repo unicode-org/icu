@@ -1,3 +1,16 @@
+/**
+*******************************************************************************
+* Copyright (C) 1996-2001, International Business Machines Corporation and    *
+* others. All Rights Reserved.                                                *
+*******************************************************************************
+*
+* $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/utility/Utility.java,v $
+* $Date: 2001/08/31 00:19:16 $
+* $Revision: 1.2 $
+*
+*******************************************************************************
+*/
+
 package com.ibm.text.utility;
 
 import java.util.*;
@@ -173,7 +186,7 @@ public final class Utility {    // COMMON UTILITIES
         if (p.length() != 0) den = Integer.parseInt(p);
         return num/den;
     }
-    
+
     public static int codePointFromHex(String p) {
         String temp = Utility.fromHex(p);
         if (UTF32.length32(temp) != 1) throw new ChainException("String is not single (UTF32) character: " + p, null);
