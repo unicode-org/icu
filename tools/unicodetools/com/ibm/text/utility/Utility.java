@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/utility/Utility.java,v $
-* $Date: 2002/10/05 01:28:56 $
-* $Revision: 1.26 $
+* $Date: 2003/02/25 23:38:22 $
+* $Revision: 1.27 $
 *
 *******************************************************************************
 */
@@ -144,7 +144,10 @@ public final class Utility implements UCD_Types {    // COMMON UTILITIES
         boolean haveFirstCased = true;
         for (int i = 0; i < source.length(); ++i) {
             char c = source.charAt(i);
-            if (c == ' ' || c == '-') c = '_';
+            if (c == ' ' || c == '-' || c == '_') {
+                c = '_';
+                haveFirstCased = true;
+            }
             int cat = Character.getType(c);
             if (lastCat == Character.LOWERCASE_LETTER && cat == Character.UPPERCASE_LETTER) {
                 result.append('_');
@@ -616,6 +619,7 @@ public final class Utility implements UCD_Types {    // COMMON UTILITIES
 
     private static final String[] searchPath = {
         "EXTRAS",
+        "4.0.0",
         "3.2.0",
         "3.1.1",
         "3.1.0",
@@ -654,8 +658,13 @@ public final class Utility implements UCD_Types {    // COMMON UTILITIES
         UTF8_UNIX = Encoding.add("UTF8_UNIX"),
         UTF8_WINDOWS = Encoding.add("UTF8_WINDOWS"),
         
-        UTF8 = Encoding.add("UTF8"), // for read-only
-        LATIN1 = Encoding.add("LATIN1"), // for read-only
+        //UTF8 = Encoding.add("UTF8"), // for read-only
+        //LATIN1 = Encoding.add("LATIN1"), // for read-only
+        
+        // read-only (platform doesn't matter, since it is only line-end)
+        
+        UTF8 = UTF8_WINDOWS,
+        LATIN1 = LATIN1_WINDOWS,
         
         FIRST = LATIN1_UNIX;
         
@@ -698,6 +707,24 @@ public final class Utility implements UCD_Types {    // COMMON UTILITIES
     public interface Breaker {
         public String get(Object current, Object old);
         public boolean filter(Object current); // true is keep
+    }
+    
+    public static void printMapOfCollection(PrintWriter pw, Map c, String mainSeparator, String itemSeparator, String subseparator) {
+        Iterator it = c.keySet().iterator();
+        boolean first = true;
+        Object last = null;
+        while (it.hasNext()) {
+            Object key = it.next();
+            Collection value = (Collection) c.get(key);
+            if (first) {
+                first = false;
+            } else {
+                pw.print(mainSeparator);
+            }
+            pw.print(key);
+            pw.print(itemSeparator);
+            print(pw, value, subseparator);
+        }
     }
     
     public static void print(PrintWriter pw, Collection c, String separator, Breaker b) {
@@ -745,7 +772,12 @@ public final class Utility implements UCD_Types {    // COMMON UTILITIES
     
     public static BufferedReader openReadFile(String filename, Encoding encoding) throws FileNotFoundException, UnsupportedEncodingException {
         FileInputStream fis = new FileInputStream(filename);
-        InputStreamReader isr = (encoding == UTF8_UNIX || encoding == UTF8_WINDOWS) ? new InputStreamReader(fis, "UTF8") : new InputStreamReader(fis);
+        InputStreamReader isr;
+        if (encoding == UTF8_UNIX || encoding == UTF8_WINDOWS) {
+            isr = new InputStreamReader(fis, "UTF8");
+        } else {
+            isr = new InputStreamReader(fis);
+        }
         BufferedReader br = new BufferedReader(isr, 32*1024);
         return br;
     }
@@ -817,10 +849,10 @@ public final class Utility implements UCD_Types {    // COMMON UTILITIES
         }
     }
     
-    public static void renameIdentical(String file1, String file2) throws IOException {
+    public static boolean renameIdentical(String file1, String file2, String batFile) throws IOException {
         if (file1 == null) {
             System.out.println("Null file");
-            return;
+            return false;
         }
         
         boolean identical = false;
@@ -845,23 +877,32 @@ public final class Utility implements UCD_Types {    // COMMON UTILITIES
             br2.close();
         }
         if (identical) {
-            File foo = new File(file2);
-            File newName = new File(foo.getParent(), "UNCHANGED-" + foo.getName());
-            if (newName.exists()) {
-                for (int i = 1; newName.exists(); ++i) {
-                    newName = new File(foo.getParent(), "UNCHANGED" + i + "-" + foo.getName());
-                }
-            }
-            System.out.println("IDENTICAL TO PREVIOUS, RENAMING : " + foo);
-            System.out.println("TO : " + newName);
-            boolean renameResult = foo.renameTo(newName);
-            if (!renameResult) System.out.println("Couldn't rename!");
+            renameIdentical(file2);
+            if (batFile != null) renameIdentical(batFile);
+            return true;
         } else {
+            if (line1 == null) line1 = "<end of file>";
+            if (line2 == null) line2 = "<end of file>";
             System.out.println("Found difference in : " + file1 + ", " + file2);
             int diff = compare(line1, line2);
             System.out.println(" Line1: '" + line1.substring(0,diff) + "', '" + line1.substring(diff));
             System.out.println(" Line2: '" + line2.substring(0,diff) + "', '" + line2.substring(diff));
+            return false;
         }
+    }
+    
+    static void renameIdentical(String file2) {
+        File foo = new File(file2);
+        File newName = new File(foo.getParent(), "UNCHANGED-" + foo.getName());
+        if (newName.exists()) {
+            for (int i = 1; newName.exists(); ++i) {
+                newName = new File(foo.getParent(), "UNCHANGED" + i + "-" + foo.getName());
+            }
+        }
+        System.out.println("IDENTICAL TO PREVIOUS, RENAMING : " + foo);
+        System.out.println("TO : " + newName);
+        boolean renameResult = foo.renameTo(newName);
+        if (!renameResult) System.out.println("Couldn't rename!");
     }
     
     static String getLineWithoutFluff(BufferedReader br1, boolean first) throws IOException {

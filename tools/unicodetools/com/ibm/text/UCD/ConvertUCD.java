@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/ConvertUCD.java,v $
-* $Date: 2002/10/05 01:28:58 $
-* $Revision: 1.9 $
+* $Date: 2003/02/25 23:38:23 $
+* $Revision: 1.10 $
 *
 *******************************************************************************
 */
@@ -718,6 +718,8 @@ public final class ConvertUCD implements UCD_Types {
 
     static Set jtSet = new TreeSet();
     static Set jgSet = new TreeSet();
+    
+    static final boolean SHOW_SAMPLE = false;
 
     /** Adds the character data. Signals duplicates with an exception
      */
@@ -725,6 +727,11 @@ public final class ConvertUCD implements UCD_Types {
         //if (cp < 10) System.out.println("A: " + Utility.hex(cp) + ", " + key + ", " + Utility.quoteJavaString(value));
         UData charEntry = getEntry(cp);
         //if (cp < 10) System.out.println("   " + charEntry);
+        
+        if (SHOW_SAMPLE && cp == 0x221) {
+            System.out.println("Sample: " + cp + ", " + key + ", " + value);
+            System.out.println(charEntry);
+        }
 
         if (key.equals("bm")) {
             if (value.equals("Y")) charEntry.binaryProperties |= 1;
@@ -780,6 +787,11 @@ public final class ConvertUCD implements UCD_Types {
         } else {
             setField(charEntry, key, value);
         }
+        if (SHOW_SAMPLE && cp == 0x221) {
+            System.out.println("Sample Result:");
+            System.out.println(charEntry);
+        }
+        
     }
 
     static public void setField(UData uData, String fieldName, String fieldValue) {

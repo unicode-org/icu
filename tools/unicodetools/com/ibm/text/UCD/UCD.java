@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/UCD.java,v $
-* $Date: 2002/10/05 01:28:58 $
-* $Revision: 1.19 $
+* $Date: 2003/02/25 23:38:22 $
+* $Revision: 1.20 $
 *
 *******************************************************************************
 */
@@ -35,7 +35,7 @@ public final class UCD implements UCD_Types {
     /**
      * Used for the default version.
      */
-    public static final String latestVersion = "3.2.1";
+    public static final String latestVersion = "4.0.0";
 
     /**
      * Create singleton instance for default (latest) version
@@ -79,17 +79,19 @@ public final class UCD implements UCD_Types {
      */
     public boolean isAllocated(int codePoint) {
         if (getCategory(codePoint) != Cn) return true;
-        if (major >= 2 && codePoint >= 0xF0000 && codePoint <= 0x10FFFD) return true;
+        if (compositeVersion >= 0x20000 && codePoint >= 0xF0000 && codePoint <= 0x10FFFD) return true;
         if (isNoncharacter(codePoint)) return true;
         return false;
     }
     
     public boolean isNoncharacter(int codePoint) {
         if ((codePoint & 0xFFFE) == 0xFFFE) {
-            if (major < 2 && codePoint > 0xFFFF) return false;
+            if (compositeVersion < 0x20000 && codePoint > 0xFFFF) return false;
+            // major < 2
             return true;
         }
-        if (codePoint >= 0xFDD0 && codePoint <= 0xFDEF && major >= 3 && minor >= 1) return true;
+        if (codePoint >= 0xFDD0 && codePoint <= 0xFDEF && compositeVersion >= 0x30100) return true;
+        // major >= 3 && minor >= 1
         return false;
     }
 
@@ -239,8 +241,9 @@ public final class UCD implements UCD_Types {
     
     public byte getModCat(int cp, int collapseBits) {
         byte cat = getCategory(cp);
-        if (cat == UNASSIGNED && isNoncharacter(cp)) cat = FAKENC;
-        if (((1<<cat) & collapseBits) != 0) {
+        if (cat == UNASSIGNED && isNoncharacter(cp)) {
+            cat = FAKENC;
+        } else if (((1<<cat) & collapseBits) != 0) {
         	switch (cat) {
 				case UNASSIGNED: cat = FAKE_OTHER; break;
 				case FAKENC: cat = FAKE_OTHER; break;
@@ -281,7 +284,17 @@ public final class UCD implements UCD_Types {
 				case CURRENCY_SYMBOL: cat = FAKE_SYMBOL; break;
 				case MODIFIER_SYMBOL: cat = FAKE_SYMBOL; break;
 				case OTHER_SYMBOL: cat = FAKE_SYMBOL; break;
-
+			}
+            if (collapseBits == -1) {
+                switch (cat) {
+                    case FAKE_MARK: 
+                    case FAKE_NUMBER:
+                    case FAKE_SEPERATOR:
+                    case FAKE_PUNCTUATION:
+                    case FAKE_SYMBOL:
+                        cat = FAKE_LETTER;
+                        break;
+                }
 			}
         }
         return cat;
@@ -832,7 +845,7 @@ public final class UCD implements UCD_Types {
         return style == SHORT ? UCD_Names.SHORT_BP[bit] : UCD_Names.BP[bit];
     }
 
-    public static int mapToRepresentative(int ch, boolean old) {
+    public static int mapToRepresentative(int ch, boolean lessThan20105) {
         if (ch <= 0xFFFD) {
             //if (ch <= 0x2800) return ch;
             //if (ch <= 0x28FF) return 0x2800;    // braille
@@ -850,7 +863,7 @@ public final class UCD implements UCD_Types {
             if (ch <= 0xDFFF) return 0xDC00;
             if (ch <= 0xE000) return ch;         // Private Use
             if (ch <= 0xF8FF) return 0xE000;
-            if (old) {
+            if (lessThan20105) {
                 if (ch <= 0xF900) return ch;         // CJK Compatibility Ideograp
                 if (ch <= 0xFA2D) return 0xF900;
             }
@@ -870,37 +883,43 @@ public final class UCD implements UCD_Types {
         return ch;
     }
 
-    public boolean isIdentifierStart(int cp, boolean extended) {
+    public boolean isIdentifierStart(int cp) {
+        /*
         if (extended) {
             if (cp == 0x0E33 || cp == 0x0EB3 || cp == 0xFF9E || cp == 0xFF9F) return false;
             if (cp == 0x037A || cp >= 0xFC5E && cp <= 0xFC63 || cp == 0xFDFA || cp == 0xFDFB) return false;
             if (cp >= 0xFE70 && cp <= 0xFE7E && (cp & 1) == 0) return false;
         }
+        */
         byte cat = getCategory(cp);
         if (cat == Lu || cat == Ll || cat == Lt || cat == Lm || cat == Lo || cat == Nl) return true;
+        if (getBinaryProperty(cp, ID_Start_Exceptions)) return true;
         return false;
     }
 
-    public boolean isIdentifierContinue_NO_Cf(int cp, boolean extended) {
-        if (isIdentifierStart(cp, extended)) return true;
+    public boolean isIdentifierContinue_NO_Cf(int cp) {
+        if (isIdentifierStart(cp)) return true;
+        /*
         if (extended) {
             if (cp == 0x00B7) return true;
             if (cp == 0x0E33 || cp == 0x0EB3 || cp == 0xFF9E || cp == 0xFF9F) return true;
         }
+        */
         byte cat = getCategory(cp);
         if (cat == Mn || cat == Mc || cat == Nd || cat == Pc) return true;
+        if (getBinaryProperty(cp, ID_Start_Exceptions)) return true;
         return false;
     }
 
-    public boolean isIdentifier(String s, boolean extended) {
+    public boolean isIdentifier(String s) {
         if (s.length() == 0) return false; // at least one!
         int cp;
         for (int i = 0; i < s.length(); i += UTF32.count16(cp)) {
             cp = UTF32.char32At(s, i);
             if (i == 0) {
-                if (!isIdentifierStart(cp, extended)) return false;
+                if (!isIdentifierStart(cp)) return false;
             } else {
-                if (!isIdentifierContinue_NO_Cf(cp, extended)) return false;
+                if (!isIdentifierContinue_NO_Cf(cp)) return false;
             }
         }
         return true;
@@ -940,9 +959,10 @@ to guarantee identifier closure.
     private String file;
     private long date = -1;
     private byte format = -1;
-    private byte major = -1;
-    private byte minor = -1;
-    private byte update = -1;
+    //private byte major = -1;
+    //private byte minor = -1;
+    //private byte update = -1;
+    private int compositeVersion = -1;
     private int size = -1;
 
     // cache last UData
@@ -971,7 +991,7 @@ to guarantee identifier closure.
         if (codePoint >= 0x2800 && codePoint <= 0x28FF) return true; 
         if (codePoint >= 0x2F800 && codePoint <= 0x2FA1D) return true;
         
-        int rangeStart = mapToRepresentative(codePoint, major < 2);
+        int rangeStart = mapToRepresentative(codePoint, compositeVersion < 0x020105);
         switch (rangeStart) {
           default:
             return getRaw(codePoint) == null;
@@ -999,6 +1019,11 @@ to guarantee identifier closure.
 
     // access data for codepoint
     UData get(int codePoint, boolean fixStrings) {
+        /*if (codePoint == 0xF901) {
+            System.out.println(version + ", " + Integer.toString(compositeVersion, 16));
+            System.out.println("debug: ");
+        }
+        */
         if (codePoint < 0 || codePoint > 0x10FFFF) {
             throw new IllegalArgumentException("Illegal Code Point: " + Utility.hex(codePoint));
         }
@@ -1024,11 +1049,11 @@ to guarantee identifier closure.
 
         // do range stuff
         String constructedName = null;
-        int rangeStart = mapToRepresentative(codePoint, major < 2);
+        int rangeStart = mapToRepresentative(codePoint, compositeVersion < 0x020105);
         boolean isHangul = false;
         switch (rangeStart) {
           case 0xF900:
-            if (major < 2) {
+            if (compositeVersion < 0x020105) {
                 if (fixStrings) constructedName = "CJK COMPATIBILITY IDEOGRAPH-" + Utility.hex(codePoint, 4);
                 break;
             }
@@ -1198,9 +1223,11 @@ to guarantee identifier closure.
     }
 
     static boolean isLeadingJamoComposition(int char1) {
-        return (LBase <= char1 && char1 < LLimit
-            ||  SBase <= char1 && char1 < SLimit
-                && ((char1 - SBase) % TCount) == 0);
+        return isLeadingJamo(char1) || isLV(char1);
+    }
+
+    static boolean isLV(int char1) {
+        return (SBase <= char1 && char1 < SLimit && ((char1 - SBase) % TCount) == 0);
     }
 
     static boolean isVowelJamo(int cp) {
@@ -1217,6 +1244,24 @@ to guarantee identifier closure.
 
     static boolean isNonLeadJamo(int cp) {
         return (VBase <= cp && cp < VLimit) || (TBase <= cp && cp < TLimit);
+    }
+    
+    static byte getHangulSyllableType(int cp) {
+        if (isLeadingJamo(cp)) return L;
+        else if (isVowelJamo(cp)) return V;
+        else if (isTrailingJamo(cp)) return T;
+        else if (isLV(cp)) return LV;
+        else if (isHangulSyllable(cp)) return LVT;
+        else return NA;
+    }
+
+    static String getHangulSyllableTypeID_fromIndex(byte index, byte style) {
+        if (style == LONG) return UCD_Names.LONG_HANGUL_SYLLABLE_TYPE[index];
+        return UCD_Names.HANGUL_SYLLABLE_TYPE[index];
+    }
+
+    static String getHangulSyllableTypeID(int char1, byte style) {
+        return getHangulSyllableTypeID_fromIndex(getHangulSyllableType(char1),style);
     }
 
     private void fillFromFile(String version) {
@@ -1243,9 +1288,11 @@ to guarantee identifier closure.
                     128*1024));
             // header
             format = dataIn.readByte();
-            major = dataIn.readByte();
-            minor = dataIn.readByte();
-            update = dataIn.readByte();
+            byte major = dataIn.readByte();
+            byte minor = dataIn.readByte();
+            byte update = dataIn.readByte();
+            compositeVersion = (major << 16) | (minor << 8) | update;
+            
             String foundVersion = major + "." + minor + "." + update;
             if (format != BINARY_FORMAT || !version.equals(foundVersion)) {
                 throw new ChainException("Illegal data file format for {0}: {1}, {2}",
@@ -1262,7 +1309,7 @@ to guarantee identifier closure.
                 UData uData = new UData();
                 uData.readBytes(dataIn);
 
-                if (DEBUG && uData.codePoint == 0x2801) {
+                if (uData.codePoint == 0x0221) {
                     System.out.println("SPOT-CHECK: " + uData);
                 }
 

@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/utility/FileLineIterator.java,v $
-* $Date: 2002/10/01 01:12:10 $
-* $Revision: 1.1 $
+* $Date: 2003/02/25 23:38:22 $
+* $Revision: 1.2 $
 *
 *******************************************************************************
 */
@@ -43,18 +43,18 @@ public class FileLineIterator {
     public int counter = 0;
     
     private BufferedReader br = null;
-    private boolean isUTF8 = false;
+    private Utility.Encoding encoding = Utility.UTF8;
     
     /**
      * Open the file for reading. If useGenDir is set, use the normal generation directory
      */
-    public void open(String filename, boolean isUTF8) throws IOException {
+    public void open(String filename, Utility.Encoding encoding) throws IOException {
         if (showFilename) {
             Utility.fixDot();
             System.out.println("Reading File: " + new File(filename).getCanonicalPath());
         }
-        br = Utility.openReadFile(filename, isUTF8);
-        this.isUTF8 = isUTF8;
+        br = Utility.openReadFile(filename, encoding);
+        this.encoding = encoding;
     }
     
     /**
@@ -68,7 +68,7 @@ public class FileLineIterator {
             if (cleanedLine == null) return null;
             
             // drop BOM
-            if (isUTF8 && counter == 0 && cleanedLine.length() > 0 && cleanedLine.charAt(0) == 0xFEFF) {
+            if (encoding == Utility.UTF8 && counter == 0 && cleanedLine.length() > 0 && cleanedLine.charAt(0) == 0xFEFF) {
                 cleanedLine = cleanedLine.substring(1);
             }
             

@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/Main.java,v $
-* $Date: 2002/10/05 01:28:58 $
-* $Revision: 1.25 $
+* $Date: 2003/02/25 23:38:22 $
+* $Revision: 1.26 $
 *
 *******************************************************************************
 */
@@ -37,7 +37,10 @@ public final class Main implements UCD_Types {
         "PropList",
         "Scripts",
         "SpecialCasing",
+        "HangulSyllableType",
         "DerivedAge",
+        "StandardizedVariants",
+        //"HangulSyllable",
         //"OtherDerivedProperties",
     };
 
@@ -70,6 +73,10 @@ public final class Main implements UCD_Types {
             else if (arg.equalsIgnoreCase("romajiTransliterator")) GenerateHanTransliterator.main(1);
             else if (arg.equalsIgnoreCase("pinYinTransliterator")) GenerateHanTransliterator.main(2);
             else if (arg.equalsIgnoreCase("hanproperties")) GenerateHanTransliterator.readUnihan();
+            
+            else if (arg.equalsIgnoreCase("fixChineseOverrides")) GenerateHanTransliterator.fixChineseOverrides();
+            
+            
             
             else if (arg.equalsIgnoreCase("compareBlueberry")) VerifyUCD.compareBlueberry();
             
@@ -115,6 +122,7 @@ public final class Main implements UCD_Types {
             else if (arg.equalsIgnoreCase("JavascriptProperties")) WriteJavaScriptInfo.assigned();
             else if (arg.equalsIgnoreCase("TestDirectoryIterator")) DirectoryIterator.test();
             else if (arg.equalsIgnoreCase("checkIdentical")) GenerateData.handleIdentical();
+            else if (arg.equalsIgnoreCase("testnameuniqueness")) TestNameUniqueness.test();
             
             //else if (arg.equalsIgnoreCase("NormalizationCharts")) ChartGenerator.writeNormalizationCharts();
             
@@ -191,9 +199,16 @@ public final class Main implements UCD_Types {
                 GenerateData.generateVerticalSlice(NUMERIC_TYPE, NUMERIC_TYPE+NEXT_ENUM, GenerateData.HEADER_DERIVED,
                     "DerivedData/extracted/", "DerivedNumericType" );
 
+            } else if (arg.equalsIgnoreCase("HangulSyllableType")) {
+                GenerateData.generateVerticalSlice(HANGUL_SYLLABLE_TYPE,HANGUL_SYLLABLE_TYPE+NEXT_ENUM, GenerateData.HEADER_EXTEND,
+                    "DerivedData/", "HangulSyllableType" );
+            
             } else if (arg.equalsIgnoreCase("DerivedNumericValues")) {
                 GenerateData.generateVerticalSlice(LIMIT_ENUM, LIMIT_ENUM, GenerateData.HEADER_DERIVED,
                     "DerivedData/extracted/", "DerivedNumericValues" );
+            
+            } else if (arg.equalsIgnoreCase("StandardizedVariants")) {
+                GenerateStandardizedVariants.generate();
             
     // OTHER STANDARD PROPERTIES
     
@@ -239,7 +254,7 @@ public final class Main implements UCD_Types {
             
             } else if (arg.equalsIgnoreCase("OtherDerivedProperties")) {
                 //mask = Utility.setBits(0, NFC_Leading, NFC_Resulting);
-                GenerateData.generateDerived(ALL, false, GenerateData.HEADER_DERIVED, "OtherData/", "OtherDerivedProperties");
+                GenerateData.generateDerived((byte)(ALL & ~DERIVED_CORE & ~DERIVED_NORMALIZATION), false, GenerateData.HEADER_DERIVED, "OtherData/", "OtherDerivedProperties");
 
             } else if (arg.equalsIgnoreCase("AllBinary")) {
                 GenerateData.generateVerticalSlice(BINARY_PROPERTIES, BINARY_PROPERTIES + NEXT_ENUM,

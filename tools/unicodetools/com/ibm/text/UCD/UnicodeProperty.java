@@ -35,6 +35,8 @@ public abstract class UnicodeProperty implements UCD_Types {
       public boolean isStandard() { return isStandard; }
       public void setStandard(boolean in) { isStandard = in; }
       
+      public boolean isDefaultValue() {return false;}
+      
       /**
        * What type is it? DERIVED..
        */

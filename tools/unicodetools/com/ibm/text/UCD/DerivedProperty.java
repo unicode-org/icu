@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/DerivedProperty.java,v $
-* $Date: 2002/08/04 21:38:45 $
-* $Revision: 1.17 $
+* $Date: 2003/02/25 23:38:23 $
+* $Revision: 1.18 $
 *
 *******************************************************************************
 */
@@ -14,11 +14,20 @@
 package com.ibm.text.UCD;
 import com.ibm.text.utility.*;
 import com.ibm.icu.text.UTF16;
+import com.ibm.icu.text.UnicodeSet;
 import java.util.*;
+import java.io.PrintWriter;
 
 public final class DerivedProperty implements UCD_Types {
   
     UCD ucdData;
+    Normalizer nfc;
+    Normalizer nfd;
+    Normalizer nfkc;
+    Normalizer nfkd;
+    Normalizer[] nf = new Normalizer[4];
+    UnicodeSet XID_Start_Set = new UnicodeSet();
+    UnicodeSet XID_Continue_Set = new UnicodeSet();
     
     // ADD CONSTANT to UCD_TYPES
     
@@ -33,9 +42,6 @@ public final class DerivedProperty implements UCD_Types {
     }
     
     ///////////////////////////////////////////////////////////
-    private DerivedProperty(UCD ucd) {
-      ucdData = ucd;
-    }
     
     static Map cache = new HashMap();
     static UCD lastUCD = null;
@@ -101,7 +107,7 @@ public final class DerivedProperty implements UCD_Types {
         Normalizer nfx;
         ExDProp(int i) {
             type = DERIVED_NORMALIZATION;
-            nfx = Default.nf[i];
+            nfx = nf[i];
             name = "Expands_On_" + nfx.getName();
             shortName = "XO_" + nfx.getName();
             header = "# Derived Property: " + name
@@ -125,7 +131,7 @@ public final class DerivedProperty implements UCD_Types {
         NF_UnsafeStartProp(int i) {
             isStandard = false;
             type = DERIVED_NORMALIZATION;
-            nfx = Default.nf[i];
+            nfx = nf[i];
             name = nfx.getName() + "_UnsafeStart";
             shortName = nfx.getName() + "_SS";
             header = "# Derived Property: " + name
@@ -144,6 +150,35 @@ public final class DerivedProperty implements UCD_Types {
         }
     };
     
+
+    /*
+    class HangulSyllableType extends UnicodeProperty {
+        Normalizer nfx;
+        //int prop;
+        
+        HangulSyllableType(int i) {
+            isStandard = false;
+            type = DERIVED_NORMALIZATION;
+            nfx = nf[i];
+            name = nfx.getName() + "_UnsafeStart";
+            shortName = nfx.getName() + "_SS";
+            header = "# Derived Property: " + name
+                + "\r\n#   Generated according to UAX #15."
+                + "\r\n#   Characters that are cc==0, BUT which may interact with previous characters."
+                ;
+        }
+        public boolean hasValue(int cp) {
+            if (ucdData.getCombiningClass(cp) != 0) return false;
+            String norm = nfx.normalize(cp);
+            int first = UTF16.charAt(norm, 0);
+            if (ucdData.getCombiningClass(first) != 0) return true;
+            if (nfx.isComposition()
+                && dprops[NFC_TrailingZero].hasValue(first)) return true; // 1,3 == composing
+            return false;
+        }
+    };
+    */
+    
     
     class NFC_Prop extends UnicodeProperty {
         BitSet bitset;
@@ -161,7 +196,7 @@ public final class DerivedProperty implements UCD_Types {
                 case NFC_TrailingNonZero: bitsets[1] = bitset = new BitSet(); break;
             }
             filter = bitsets[1] != null;
-            Default.nfc.getCompositionStatus(bitsets[0], bitsets[1], bitsets[2]);
+            nfc.getCompositionStatus(bitsets[0], bitsets[1], bitsets[2]);
             
             name = Names[i-NFC_Leading];
             shortName = SNames[i-NFC_Leading];
@@ -197,17 +232,17 @@ public final class DerivedProperty implements UCD_Types {
             isStandard = false;
             setValueType(NON_ENUMERATED);
             type = DERIVED_NORMALIZATION;
-            nfx = Default.nf[i];
+            nfx = nf[i];
             name = nfx.getName();
             String compName = "the character itself";
             
             if (i == NFKC || i == NFD) {
                 name += "-NFC";
-                nfComp = Default.nfc;
+                nfComp = nfc;
                 compName = "NFC for the character";
             } else if (i == NFKD) {
                 name += "-NFD";
-                nfComp = Default.nfd;
+                nfComp = nfd;
                 compName = "NFD for the character";
             }
             header = "# Derived Property: " + name              
@@ -273,7 +308,7 @@ public final class DerivedProperty implements UCD_Types {
         QuickDProp (int i) {
             setValueType((i == NFC || i == NFKC) ? ENUMERATED : BINARY);
             type = DERIVED_NORMALIZATION;
-            nfx = Default.nf[i];
+            nfx = nf[i];
             NO = nfx.getName() + "_NO";
             MAYBE = nfx.getName() + "_MAYBE";
             name = nfx.getName() + "_QuickCheck";
@@ -297,7 +332,14 @@ public final class DerivedProperty implements UCD_Types {
         public boolean hasValue(int cp) { return getValue(cp).length() != 0; }
     };
 
-    {
+    private DerivedProperty(UCD ucd) {
+        ucdData = ucd;
+    
+        nfd = nf[NFD] = new Normalizer(Normalizer.NFD, ucdData.getVersion());
+        nfc = nf[NFC] = new Normalizer(Normalizer.NFC, ucdData.getVersion());
+        nfkd = nf[NFKD] = new Normalizer(Normalizer.NFKD, ucdData.getVersion());
+        nfkc = nf[NFKC] = new Normalizer(Normalizer.NFKC, ucdData.getVersion());
+
         for (int i = ExpandsOnNFD; i <= ExpandsOnNFKC; ++i) {
             dprops[i] = new ExDProp(i-ExpandsOnNFD);
         }
@@ -321,10 +363,10 @@ public final class DerivedProperty implements UCD_Types {
                 shortName = "IDS";
                 header = "# Derived Property: " + name
                     + "\r\n#  Characters that can start an identifier."
-                    + "\r\n#  Generated from Lu+Ll+Lt+Lm+Lo+Nl";
+                    + "\r\n#  Generated from Lu+Ll+Lt+Lm+Lo+Nl+ID_Start_Exceptions";
             }
             public boolean hasValue(int cp) {
-                return ucdData.isIdentifierStart(cp, false);
+                return ucdData.isIdentifierStart(cp);
             }
         };
         
@@ -339,9 +381,64 @@ public final class DerivedProperty implements UCD_Types {
                     + "\r\n#  NOTE: Cf characters should be filtered out.";
             }
             public boolean hasValue(int cp) {
-                return ucdData.isIdentifierContinue_NO_Cf(cp, false);
+                return ucdData.isIdentifierContinue_NO_Cf(cp);
             }
         };
+        
+        StringBuffer tempBuf = new StringBuffer();
+        
+        //System.out.println("Deriving data for XID");
+        // special hack for middle dot
+        XID_Continue_Set.add(0x00B7);
+        //System.out.println("Adding (2)" + ucdData.getCodeAndName(0x00B7));
+        
+        
+        for (int cp = 0; cp < 0x10FFFF; ++cp) {
+            // skip cases that can't matter
+            if (!ucdData.isAssigned(cp)) continue;
+            
+            // find out normal status
+            int status = 0;
+            if (ucdData.isIdentifierStart(cp)) status = 1;
+            else if (ucdData.isIdentifierContinue_NO_Cf(cp)) status = 2;
+            
+            if (status != 0 && !nfkd.isNormalized(cp)) {
+                // now find out NFKD status
+                // if it is <start><extend>*, then it is start
+                // else if it is <extend>*, then it is extend
+                // else it is nothing
+                int status2 = 0;
+                tempBuf.setLength(0);
+                nfkd.normalize(UTF32.valueOf32(cp), tempBuf);
+                for (int i = 0; i < tempBuf.length(); i += UTF32.count16(cp)) {
+                    int cp2 = UTF32.char32At(tempBuf, i);
+                    if (i == 0) {
+                        if (ucdData.isIdentifierStart(cp2)) status2 = 1;
+                        else if (ucdData.isIdentifierContinue_NO_Cf(cp2)) status2 = 2;
+                        else {
+                            status2 = 0;
+                            break;
+                        }
+                    } else if (!ucdData.isIdentifierContinue_NO_Cf(cp2) && cp2 != 0xB7) {
+                        status2 = 0;
+                        break;
+                    }
+                }
+                
+                // Now see if the statuses are compatible.
+                if (status != status2) {
+                    //System.out.println("Need to do something with:");
+                    //System.out.println("  " + status + ": " + ucdData.getCodeAndName(cp));
+                    //System.out.println("  " + status2 + ": " + ucdData.getCodeAndName(tempBuf.toString()));
+                    if (status2 == 0) status = 0;
+                    else if (status2 > status) status = status2;
+                    //System.out.println("  " + status + ": " + ucdData.getCodeAndName(cp));
+                }
+            }
+            
+            if (status == 1) XID_Start_Set.add(cp);
+            if (status != 0) XID_Continue_Set.add(cp);
+        }
         
         dprops[Mod_ID_Start] = new UnicodeProperty() {
             {
@@ -355,7 +452,7 @@ public final class DerivedProperty implements UCD_Types {
                     + "\r\n#        Merely ensures that if isIdentifer(string) then isIdentifier(NFKx(string))";
             }
             public boolean hasValue(int cp) {
-                return ucdData.isIdentifierStart(cp, true);
+                return XID_Start_Set.contains(cp);
             }
         };
         
@@ -372,7 +469,7 @@ public final class DerivedProperty implements UCD_Types {
                     + "\r\n#        Merely ensures that if isIdentifer(string) then isIdentifier(NFKx(string))";
             }
             public boolean hasValue(int cp) {
-                return ucdData.isIdentifierContinue_NO_Cf(cp, true);
+                return XID_Continue_Set.contains(cp);
             }
         };
         
@@ -458,7 +555,6 @@ of characters, the first of which has a non-zero combining class.
                 shortName = "Comp_Ex";
                 defaultValueStyle = defaultPropertyStyle = SHORT;
                 header = "# Derived Property: " + name
-                    + ": Full Composition Exclusion"
                     + "\r\n#  Generated from: Composition Exclusions + Singletons + Non-Starter Decompositions";
             }
             public boolean hasValue(int cp) {
@@ -469,6 +565,9 @@ of characters, the first of which has a non-zero combining class.
                 if (isCompEx(cp)) return true;
                 return false;
             }
+		    /*public String getListingValue(int cp) {
+    		    return "Comp_Ex";
+    	    }*/
             /*
 			public String getListingValue(int cp) {
         		if (getValueType() != BINARY) return getValue(cp, SHORT);
@@ -511,8 +610,8 @@ of characters, the first of which has a non-zero combining class.
             }
             public String getValue(int cp, byte style) { 
                 if (!ucdData.isRepresented(cp)) return "";
-                String b = Default.nfkc.normalize(fold(cp));
-                String c = Default.nfkc.normalize(fold(b));
+                String b = nfkc.normalize(fold(cp));
+                String c = nfkc.normalize(fold(b));
                 if (c.equals(b)) return "";
                 return "FNC; " + Utility.hex(c);
             } // default
@@ -533,8 +632,8 @@ of characters, the first of which has a non-zero combining class.
             }
             public String getValue(int cp, byte style) { 
                 if (!ucdData.isRepresented(cp)) return "";
-                String b = Default.nfc.normalize(fold(cp));
-                String c = Default.nfc.normalize(fold(b));
+                String b = nfc.normalize(fold(cp));
+                String c = nfc.normalize(fold(b));
                 if (c.equals(b)) return "";
                 return "FN; " + Utility.hex(c);
             } // default
@@ -562,6 +661,94 @@ of characters, the first of which has a non-zero combining class.
                 byte cat = ucdData.getCategory(cp);
                 if (cat == Cf || cat == Cs || cat == Cc) return true;
                 return false;
+            }
+        };
+
+        dprops[Case_Sensitive] = new UnicodeProperty() {
+            {
+                type = DERIVED_CORE;
+                isStandard = false;
+                name = "Case_Sensitive";
+                hasUnassigned = false;
+                shortName = "CS";
+                header = header = "# Derived Property: " + name
+                    + "\r\n#  Generated from all characters that are either on the right or left side of a case mapping";
+            }
+            
+            UnicodeSet case_sensitive = null;
+            UnicodeSet tempSet = new UnicodeSet();
+            UnicodeSet cased = null;
+            PrintWriter log;
+            
+            private void addCase(String cps, byte c1, byte c2) {
+                String temp = ucdData.getCase(cps, c1, c2);
+                if (temp.equals(cps)) return;
+                
+                //temp = nfc.normalize(temp);
+                //if (temp.equals(cps)) return;
+                
+                tempSet.clear();
+                tempSet.addAll(cps);
+                tempSet.addAll(temp);
+                if (!case_sensitive.containsAll(tempSet)) {
+                    tempSet.removeAll(case_sensitive);
+                    if (!cased.containsAll(tempSet)) {
+                        log.println();
+                        log.println("Adding " + tempSet + " because of: ");
+                        log.println("\t" + ucdData.getCodeAndName(cps));
+                        log.println("=>\t" + ucdData.getCodeAndName(temp));
+                    }
+                    case_sensitive.addAll(tempSet);
+                }
+            }
+            
+            public boolean hasValue(int cp) {
+                if (case_sensitive == null) {
+                    try {
+                        log = Utility.openPrintWriter("Case_Sensitive_Log.txt", Utility.UTF8_UNIX);
+                        
+                        System.out.println("Building Case-Sensitive cache");
+                        case_sensitive = new UnicodeSet();
+                        cased = DerivedProperty.make(PropLowercase, ucdData).getSet()
+                            .addAll(DerivedProperty.make(PropUppercase, ucdData).getSet())
+                            .addAll(UnifiedBinaryProperty.make(CATEGORY | Lt).getSet());
+                        for (int c = 0; c < 0x10FFFF; ++c) {
+                            Utility.dot(c);
+                            // skip cases that can't matter
+                            if (!ucdData.isAssigned(c)) continue;
+                            
+                            String cps = UTF16.valueOf(c);
+                            addCase(cps, FULL, LOWER);
+                            addCase(cps, FULL, UPPER);
+                            addCase(cps, FULL, TITLE);
+                            addCase(cps, FULL, FOLD);
+                            addCase(cps, SIMPLE, LOWER);
+                            addCase(cps, SIMPLE, UPPER);
+                            addCase(cps, SIMPLE, TITLE);
+                            addCase(cps, SIMPLE, FOLD);
+                        }
+                        Utility.fixDot();
+                        UnicodeSet temp;
+                        log.println("Cased, but not Case_Sensitive");
+                        temp = new UnicodeSet().addAll(cased).removeAll(case_sensitive);
+                        Utility.showSetNames(log, "", temp, false, false, ucdData);
+                        
+                        log.println("Case_Sensitive, but not Cased");
+                        temp = new UnicodeSet().addAll(case_sensitive).removeAll(cased);
+                        Utility.showSetNames(log, "", temp, false, false, ucdData);
+                        
+                        log.println("Both Case_Sensitive, and Cased");
+                        temp = new UnicodeSet().addAll(case_sensitive).retainAll(cased);
+                        log.println(temp);
+                        System.out.println("Done Building Case-Sensitive cache");
+                        
+                        log.close();
+                        
+                    } catch (Exception e) {
+                        throw new ChainException("internal error", null, e);
+                    }
+                }
+                return case_sensitive.contains(cp);  
             }
         };
 
@@ -602,8 +789,8 @@ of characters, the first of which has a non-zero combining class.
             }
             public boolean hasValue(int cp) {
                 if (hasSoftDot(cp)) return true;
-                if (Default.nfkd.isNormalized(cp)) return false;
-                String decomp = Default.nfd.normalize(cp);
+                if (nfkd.isNormalized(cp)) return false;
+                String decomp = nfd.normalize(cp);
                 boolean ok = false;
                 for (int i = decomp.length()-1; i >= 0; --i) {
                     int ch = UTF16.charAt(decomp, i);
@@ -650,16 +837,19 @@ of characters, the first of which has a non-zero combining class.
                 name = "Grapheme_Extend";
                 shortName = "GrExt";
                 header = header = "# Derived Property: " + name
-                    + "\r\n#  Generated from: Me + Mn + Mc + Other_Grapheme_Extend - Grapheme_Link - CGJ"
-                    + "\r\n#  (CGJ = U+034F)";
+                    + "\r\n#  Generated from: Me + Mn + Other_Grapheme_Extend"
+                    + "\r\n#  Note: depending on an application's interpretation of Co (private use),"
+                    + "\r\n#  they may be either in Grapheme_Base, or in Grapheme_Extend, or in neither."                    
+                    ;
                      
             }
             public boolean hasValue(int cp) {
-            	if (cp == 0x034F) return false;
-                if (ucdData.getBinaryProperty(cp, GraphemeLink)) return false;
+            	//if (cp == 0x034F) return false;
+                //if (ucdData.getBinaryProperty(cp, GraphemeLink)) return false;
+                // || cat == Mc
                 byte cat = ucdData.getCategory(cp);
-                if (cat == Me || cat == Mn || cat == Mc
-                || ucdData.getBinaryProperty(cp,Other_GraphemeExtend)) return true;
+                if (cat == Me || cat == Mn
+                        || ucdData.getBinaryProperty(cp,Other_GraphemeExtend)) return true;
                 return false;
             }
         };
@@ -671,14 +861,16 @@ of characters, the first of which has a non-zero combining class.
                 shortName = "GrBase";
                 
                 header = header = "# Derived Property: " + name
-                    + "\r\n#  Generated from: [0..10FFFF] - Cc - Cf - Cs - Co - Cn - Zl - Zp"
-                    + "\r\n#    - Grapheme_Extend - Grapheme_Link - CGJ";
+                    + "\r\n#  Generated from: [0..10FFFF] - Cc - Cf - Cs - Co - Cn - Zl - Zp - Grapheme_Extend"
+                    + "\r\n#  Note: depending on an application's interpretation of Co (private use),"
+                    + "\r\n#  they may be either in Grapheme_Base, or in Grapheme_Extend, or in neither."                    
+                    ;
             }
             public boolean hasValue(int cp) {
-            	if (cp == 0x034F) return false;
+            	//if (cp == 0x034F) return false;
                 byte cat = ucdData.getCategory(cp);
-                if (cat == Cc || cat == Cf || cat == Cs || cat == Co || cat == Cn || cat == Zl || cat == Zp
-                || ucdData.getBinaryProperty(cp,GraphemeLink)) return false;
+                if (cat == Cc || cat == Cf || cat == Cs || cat == Co || cat == Cn || cat == Zl || cat == Zp) return false;
+                // || ucdData.getBinaryProperty(cp,GraphemeLink)
                 if (dprops[GraphemeExtend].hasValue(cp)) return false;
                 return true;
             }
@@ -702,11 +894,11 @@ of characters, the first of which has a non-zero combining class.
             || ucdData.getBinaryProperty(cp, Other_Lowercase)) return Ll;
         if (cat == Lt || cat == Lo || cat == Lm || cat == Nl) return cat;
         
-       // if (true) throw new IllegalArgumentException("FIX Default.nf[2]");
+       // if (true) throw new IllegalArgumentException("FIX nf[2]");
         
-        if (Default.nf[NFKD].isNormalized(cp)) return Lo;
+        if (nf[NFKD].isNormalized(cp)) return Lo;
 
-        String norm = Default.nf[NFKD].normalize(cp);
+        String norm = nf[NFKD].normalize(cp);
         int cp2;
         boolean gotUpper = false;
         boolean gotLower = false;

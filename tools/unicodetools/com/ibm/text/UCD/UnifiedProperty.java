@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/UnifiedProperty.java,v $
-* $Date: 2002/10/05 01:28:57 $
-* $Revision: 1.2 $
+* $Date: 2003/02/25 23:38:22 $
+* $Revision: 1.3 $
 *
 *******************************************************************************
 */
@@ -142,6 +142,7 @@ public final class UnifiedProperty extends UnicodeProperty {
           case JOINING_GROUP>>8:
           case SCRIPT>>8:
           case AGE>>8:
+          case HANGUL_SYLLABLE_TYPE>>8:
             return true;
             /*
           case DERIVED>>8:
@@ -181,6 +182,8 @@ public final class UnifiedProperty extends UnicodeProperty {
         case JOINING_GROUP>>8: return ucd.getJoiningGroupID_fromIndex(ucd.getJoiningGroup(cp), style);
         case SCRIPT>>8: return ucd.getScriptID_fromIndex(ucd.getScript(cp), style);
         case AGE>>8: return ucd.getAgeID_fromIndex(ucd.getAge(cp), style);
+        case HANGUL_SYLLABLE_TYPE>>8: 
+            return ucd.getHangulSyllableTypeID(cp,style);
         default: throw new IllegalArgumentException("Internal Error");
         }
     }
