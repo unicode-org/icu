@@ -68,6 +68,8 @@ private:
 
     void TestEscapePattern(void);
 
+    void TestInvalidCodePoint(void);
+
 private:
 
     UBool toPatternAux(UChar32 start, UChar32 end);
@@ -140,6 +142,9 @@ private:
     void expectToPattern(const UnicodeSet& set,
                          const UnicodeString& expPat,
                          const char** expStrings);
+    void expectRange(const UnicodeString& label,
+                     const UnicodeSet& set,
+                     UChar32 start, UChar32 end);
     void doAssert(UBool, const char*);
 public:
     static UnicodeString escape(const UnicodeString& s);

@@ -53,6 +53,7 @@ UnicodeSetTest::runIndexedTest(int32_t index, UBool exec,
         CASE(14,Testj2268);
         CASE(15,TestCloseOver);
         CASE(16,TestEscapePattern);
+        CASE(17,TestInvalidCodePoint);
         default: name = ""; break;
     }
 }
@@ -987,6 +988,134 @@ void UnicodeSetTest::TestEscapePattern() {
             } else {
                 logln(escape(str));
             }
+        }
+    }
+}
+
+void UnicodeSetTest::expectRange(const UnicodeString& label,
+                                 const UnicodeSet& set,
+                                 UChar32 start, UChar32 end) {
+    UnicodeSet exp(start, end);
+    UnicodeString pat;
+    if (set == exp) {
+        logln(label + " => " + set.toPattern(pat, TRUE));
+    } else {
+        UnicodeString xpat;
+        errln((UnicodeString)"FAIL: " + label + " => " +
+              set.toPattern(pat, TRUE) +
+              ", expected " + exp.toPattern(xpat, TRUE));
+    }
+}
+
+void UnicodeSetTest::TestInvalidCodePoint() {
+
+    const UChar32 DATA[] = {
+        // Test range             Expected range
+        0, 0x10FFFF,              0, 0x10FFFF,
+        (UChar32)-1, 8,           0, 8,
+        8, 0x110000,              8, 0x10FFFF
+    };
+    const int32_t DATA_LENGTH = sizeof(DATA)/sizeof(DATA[0]);
+
+    UnicodeString pat;
+    int32_t i;
+
+    for (i=0; i<DATA_LENGTH; i+=4) {
+        UChar32 start  = DATA[i];
+        UChar32 end    = DATA[i+1];
+        UChar32 xstart = DATA[i+2];
+        UChar32 xend   = DATA[i+3];
+
+        // Try various API using the test code points
+
+        UnicodeSet set(start, end);
+        expectRange((UnicodeString)"ct(" + start + "," + end + ")",
+                    set, xstart, xend);
+        
+        set.clear();
+        set.set(start, end);
+        expectRange((UnicodeString)"set(" + start + "," + end + ")",
+                    set, xstart, xend);
+        
+        UBool b = set.contains(start);
+        b = set.contains(start, end);
+        b = set.containsNone(start, end);
+        b = set.containsSome(start, end);
+
+        int32_t index = set.indexOf(start);
+        
+        set.clear();
+        set.add(start);
+        set.add(start, end);
+        expectRange((UnicodeString)"add(" + start + "," + end + ")",
+                    set, xstart, xend);
+
+        set.set(0, 0x10FFFF);
+        set.retain(start, end);
+        expectRange((UnicodeString)"retain(" + start + "," + end + ")",
+                    set, xstart, xend);
+        set.retain(start);
+
+        set.set(0, 0x10FFFF);
+        set.remove(start);
+        set.remove(start, end);
+        set.complement();
+        expectRange((UnicodeString)"!remove(" + start + "," + end + ")",
+                    set, xstart, xend);
+
+        set.set(0, 0x10FFFF);
+        set.complement(start, end);
+        set.complement();
+        expectRange((UnicodeString)"!complement(" + start + "," + end + ")",
+                    set, xstart, xend);
+        set.complement(start);
+    }
+
+    const UChar32 DATA2[] = {
+        0,
+        0x10FFFF,
+        (UChar32)-1,
+        0x110000
+    };
+    const int32_t DATA2_LENGTH = sizeof(DATA2)/sizeof(DATA2[0]);
+
+    for (i=0; i<DATA2_LENGTH; ++i) {
+        UChar32 c = DATA2[i], end = 0x10FFFF;
+        UBool valid = (c >= 0 && c <= 0x10FFFF);
+
+        UnicodeSet set(0, 0x10FFFF);
+
+        // For single-codepoint contains, invalid codepoints are NOT contained
+        UBool b = set.contains(c);
+        if (b == valid) {
+            logln((UnicodeString)"[\\u0000-\\U0010FFFF].contains(" + c +
+                  ") = " + b);
+        } else {
+            errln((UnicodeString)"FAIL: [\\u0000-\\U0010FFFF].contains(" + c +
+                  ") = " + b);
+        }
+
+        // For codepoint range contains, containsNone, and containsSome,
+        // invalid or empty (start > end) ranges have UNDEFINED behavior.
+        b = set.contains(c, end);
+        logln((UnicodeString)"* [\\u0000-\\U0010FFFF].contains(" + c +
+              "," + end + ") = " + b);
+
+        b = set.containsNone(c, end);
+        logln((UnicodeString)"* [\\u0000-\\U0010FFFF].containsNone(" + c +
+              "," + end + ") = " + b);
+
+        b = set.containsSome(c, end);
+        logln((UnicodeString)"* [\\u0000-\\U0010FFFF].containsSome(" + c +
+              "," + end + ") = " + b);
+
+        int32_t index = set.indexOf(c);
+        if ((index >= 0) == valid) {
+            logln((UnicodeString)"[\\u0000-\\U0010FFFF].indexOf(" + c +
+                  ") = " + index);
+        } else {
+            errln((UnicodeString)"FAIL: [\\u0000-\\U0010FFFF].indexOf(" + c +
+                  ") = " + index);
         }
     }
 }
