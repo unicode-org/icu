@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/util/VersionInfo.java,v $ 
- * $Date: 2002/03/23 00:58:21 $ 
- * $Revision: 1.6 $
+ * $Date: 2002/07/31 23:49:08 $ 
+ * $Revision: 1.7 $
  *
  * jitterbug 1741
  *****************************************************************************************
@@ -96,7 +96,15 @@ public final class VersionInfo
 	 * @draft 2.1
 	 */
 	public static final VersionInfo UNICODE_3_2;
-	
+	/**
+     * ICU4J current release version
+     */
+    public static final VersionInfo ICU4J_VERSION;
+    /**
+     * Standard Unicode version used in ICU4J
+     */
+    public static final VersionInfo UNICODE_VERSION;
+    
 	// public methods ------------------------------------------------------
 	
     /**
@@ -348,6 +356,8 @@ public final class VersionInfo
 		UNICODE_3_1_0 = getInstance(3, 1, 0, 0);
 		UNICODE_3_1_1 = getInstance(3, 1, 1, 0);
 		UNICODE_3_2   = getInstance(3, 2, 0, 0);
+        ICU4J_VERSION = getInstance(2, 2, 0, 0);
+        UNICODE_VERSION = UNICODE_3_2;
     }
     
     // private constructor -----------------------------------------------
