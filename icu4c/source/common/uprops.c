@@ -14,7 +14,7 @@
 *   created by: Markus W. Scherer
 *
 *   Implementations for mostly non-core Unicode character properties
-*   stored in uprops.dat.
+*   stored in uprops.icu.
 */
 
 #include "unicode/utypes.h"

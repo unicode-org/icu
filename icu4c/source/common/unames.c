@@ -34,7 +34,7 @@
 /* prototypes ------------------------------------------------------------- */
 
 static const char DATA_NAME[] = "unames";
-static const char DATA_TYPE[] = "dat";
+static const char DATA_TYPE[] = "icu";
 
 #define GROUP_SHIFT 5
 #define LINES_PER_GROUP (1UL<<GROUP_SHIFT)
