@@ -119,8 +119,10 @@ static UBool convertFile(const char* fromcpage,
     convfrom = new UnicodeConverter(fromcpage, err);
     if (U_FAILURE(err))
     {
-      u_wmsg("cantOpenFromCodeset",UnicodeString(fromcpage,"").getUChars(),
+      UnicodeString str(fromcpage,"");
+      u_wmsg("cantOpenFromCodeset",str.getBuffer(),
              u_wmsg_errorName(err));
+      str.releaseBuffer();
       goto error_exit;
     }
 
@@ -128,8 +130,10 @@ static UBool convertFile(const char* fromcpage,
 
     if (U_FAILURE(err))
     {
-      u_wmsg("cantOpenToCodeset",UnicodeString(tocpage,"").getUChars(),
+      UnicodeString str(tocpage,"");
+      u_wmsg("cantOpenToCodeset",str.getBuffer(),
              u_wmsg_errorName(err));
+      str.releaseBuffer();
       goto error_exit;
     }
 
@@ -145,8 +149,9 @@ static UBool convertFile(const char* fromcpage,
         rd = fread(buff, 1, readsize, infile);
         if (ferror(infile) != 0)
         {
-            u_wmsg("cantRead", 
-                   UnicodeString(strerror(errno), "").getUChars());
+            UnicodeString str(strerror(errno), "");
+            u_wmsg("cantRead",str.getBuffer());
+            str.releaseBuffer();
             goto error_exit;
         }
             
@@ -221,9 +226,9 @@ static UBool convertFile(const char* fromcpage,
         rd =  (size_t)(buffiter-buff);
         if (fwrite(buff, 1, rd, outfile) != rd)
         {
-          u_wmsg("cantWrite", 
-                 UnicodeString(strerror(errno),"").getUChars());
-
+          UnicodeString str(strerror(errno),"");
+          u_wmsg("cantWrite", str.getBuffer());
+          str.releaseBuffer();  
             goto error_exit;
         }
         
@@ -352,10 +357,14 @@ int main(int argc, char** argv)
         file = fopen(infilestr, "rb");
         if (file==0)
         {
+          UnicodeString str1(infilestr,"");
+          UnicodeString str2(strerror(errno),"");
           initMsg(pname);
           u_wmsg("cantOpenInputF", 
-                 UnicodeString(infilestr,"").getUChars(),
-                 UnicodeString(strerror(errno),"").getUChars());
+                 str1.getBuffer(),
+                 str2.getBuffer());
+          str1.releaseBuffer();
+          str2.releaseBuffer();
           return 1;
         }
         infile = file;
