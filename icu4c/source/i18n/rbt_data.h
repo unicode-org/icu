@@ -1,5 +1,5 @@
 /*
-* Copyright © {1999}, International Business Machines Corporation and others. All Rights Reserved.
+* Copyright (C) {1999}, International Business Machines Corporation and others. All Rights Reserved.
 **********************************************************************
 *   Date        Name        Description
 *   11/17/99    aliu        Creation.
@@ -52,7 +52,7 @@ public:
      * the stored rules.
      */
     Hashtable* variableNames;
-    
+
     /**
      * Map category variable (UChar) to set (UnicodeSet).
      * Variables that correspond to a set of characters are mapped
@@ -63,7 +63,7 @@ public:
      * setVariables[i] represents character (setVariablesBase + i).
      */
     UnicodeSet** setVariables;
-    
+
     /**
      * The character that represents setVariables[0].  Characters
      * setVariablesBase through setVariablesBase +

@@ -1,5 +1,5 @@
 /*
-* Copyright © {1997-2001}, International Business Machines Corporation and others. All Rights Reserved.
+* Copyright (C) {1997-2001}, International Business Machines Corporation and others. All Rights Reserved.
 ********************************************************************************
 *
 * File MSGFMT.H
@@ -15,10 +15,10 @@
 // *****************************************************************************
 // This file was generated from the java source file MessageFormat.java
 // *****************************************************************************
- 
+
 #ifndef MSGFMT_H
 #define MSGFMT_H
- 
+
 #include "unicode/utypes.h"
 #include "unicode/format.h"
 #include "unicode/locid.h"
@@ -42,17 +42,17 @@ class NumberFormat;
  *         Formattable( (Date) cal.getTime(success), Formattable::kIsDate),
  *         "a disturbance in the Force"
  *     };
- *     
+ *
  *     UnicodeString result;
  *     MessageFormat::format(
  *          "At {1,time} on {1,date}, there was {2} on planet {0,number}.",
  *          arguments, 3, result, success );
- *     
+ *
  *     cout << "result: " << result << endl;
  *     //<output>: At 4:34:20 PM on 23-Mar-98, there was a disturbance
  *     //             in the Force on planet 7.
  * \endcode
- * </pre>  
+ * </pre>
  * Typically, the message format will come from resources, and the
  * arguments will be dynamically set at runtime.
  * <P>
@@ -61,14 +61,14 @@ class NumberFormat;
  *  \code
  *     success = U_ZERO_ERROR;
  *     Formattable testArgs[] = {3L, "MyDisk"};
- *    
+ *
  *     MessageFormat* form = new MessageFormat(
  *         "The disk \"{1}\" contains {0} file(s).", success );
- *         
+ *
  *     UnicodeString string;
  *     FieldPosition fpos = 0;
  *     cout &lt;&lt; "format: " &lt;&lt; form->format(testArgs, 2, string, fpos, success ) &lt;&lt; endl;
- * 
+ *
  *     // output, with different testArgs:
  *     // output: The disk "MyDisk" contains 0 file(s).
  *     // output: The disk "MyDisk" contains 1 file(s).
@@ -89,25 +89,25 @@ class NumberFormat;
  *  <pre>
  *  \code
  *       messageFormatPattern := string ( "{" messageFormatElement "}" string )*
- *        
+ *
  *       messageFormatElement := argument { "," elementFormat }
- *        
+ *
  *       elementFormat := "time" { "," datetimeStyle }
  *                      | "date" { "," datetimeStyle }
  *                      | "number" { "," numberStyle }
  *                      | "choice" "," choiceStyle
- *   
+ *
  *       datetimeStyle := "short"
  *                      | "medium"
  *                      | "long"
  *                      | "full"
  *                      | dateFormatPattern
- * 
+ *
  *       numberStyle :=   "currency"
  *                      | "percent"
  *                      | "integer"
  *                      | numberFormatPattern
- *  
+ *
  *       choiceStyle :=   choiceFormatPattern
  * \endcode
  * </pre>
@@ -145,13 +145,13 @@ class NumberFormat;
  *     UnicodeString filepart[] = {"no files","one file","{0,number} files"};
  *     ChoiceFormat* fileform = new ChoiceFormat(filelimits, filepart, 3);
  *     form->setFormat(1, *fileform); // NOT zero, see below
- *     
+ *
  *     Formattable testArgs[] = {1273L, "MyDisk"};
- *      
+ *
  *     UnicodeString string;
  *     FieldPosition fpos = 0;
  *     cout << form->format(testArgs, 2, string, fpos, success) << endl;
- *     
+ *
  *     // output, with different testArgs
  *     // output: The disk "MyDisk" contains no files.
  *     // output: The disk "MyDisk" contains one file.
@@ -179,7 +179,7 @@ class NumberFormat;
  * <pre>
  * \code
  *    For example: with "abc{2}def{3}ghi{0}...",
- *    
+ *
  *    format0 affects the first variable {2}
  *    format1 affects the second variable {3}
  *    format2 affects the second variable {0}
@@ -340,7 +340,7 @@ public:
     static UnicodeString& format(   const UnicodeString& pattern,
                                     const Formattable* arguments,
                                     int32_t count,
-                                    UnicodeString& result, 
+                                    UnicodeString& result,
                                     UErrorCode& success);
 
     /**
@@ -498,7 +498,7 @@ private:
     int32_t             fCount;
     int32_t             *fArgumentNumbers;
     int32_t             fMaxOffset;
-    
+
     /**
      * Internal routine used by format.
      * @param recursionProtection Initially zero. Bits 0..9 are used to indicate
@@ -510,13 +510,13 @@ private:
     static const UnicodeString     fgModifierList[];
     static const UnicodeString     fgDateModifierList[];
 
-    /** 
+    /**
      * Finds the word s, in the keyword list and returns the located index.
      * @param s the keyword to be searched for.
      * @param list the list of keywords to be searched with.
      * @return the index of the list which matches the keyword s.
      */
-    static int32_t findKeyword( const UnicodeString& s, 
+    static int32_t findKeyword( const UnicodeString& s,
                             const UnicodeString* list);
 
     /**
@@ -530,24 +530,24 @@ private:
      * unused.
      * @param success the error code status.
      */
-    UnicodeString&  format( const Formattable* arguments, 
-                            int32_t cnt, 
-                            UnicodeString& result, 
-                            FieldPosition& status, 
+    UnicodeString&  format( const Formattable* arguments,
+                            int32_t cnt,
+                            UnicodeString& result,
+                            FieldPosition& status,
                             int32_t recursionProtection,
                             UErrorCode& success) const;
 
     /**
      * Checks the segments for the closest matched format instance and
      * updates the format array with the new format instance.
-     * @param position the last processed offset in the pattern 
+     * @param position the last processed offset in the pattern
      * @param offsetNumber the offset number of the last processed segment
      * @param segments the string that contains the parsed pattern segments.
      * @param success the error code
      */
     void            makeFormat( /*int32_t position, */
-                                int32_t offsetNumber, 
-                                UnicodeString* segments, 
+                                int32_t offsetNumber,
+                                UnicodeString* segments,
                                 UErrorCode& success);
 
     /**
@@ -585,11 +585,11 @@ private:
      */
     static UnicodeString& itos(int32_t i, UnicodeString& string);
 };
- 
-inline UClassID 
+
+inline UClassID
 MessageFormat::getDynamicClassID() const
-{ 
-    return MessageFormat::getStaticClassID(); 
+{
+    return MessageFormat::getStaticClassID();
 }
 
 inline UnicodeString&

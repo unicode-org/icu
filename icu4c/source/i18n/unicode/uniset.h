@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright © {1999}, International Business Machines Corporation and others. All Rights Reserved.
+* Copyright (C) 1999, International Business Machines Corporation and others. All Rights Reserved.
 **********************************************************************
 *   Date        Name        Description
 *   10/20/99    alan        Creation.
@@ -207,28 +207,28 @@ class TransliterationRule;
  *     Mn = Mark, Non-Spacing
  *     Mc = Mark, Spacing Combining
  *     Me = Mark, Enclosing
- * 
+ *
  *     Nd = Number, Decimal Digit
  *     Nl = Number, Letter
  *     No = Number, Other
- * 
+ *
  *     Zs = Separator, Space
  *     Zl = Separator, Line
  *     Zp = Separator, Paragraph
- * 
+ *
  *     Cc = Other, Control
  *     Cf = Other, Format
  *     Cs = Other, Surrogate
  *     Co = Other, Private Use
  *     Cn = Other, Not Assigned
- * 
+ *
  * Informative
  *     Lu = Letter, Uppercase
  *     Ll = Letter, Lowercase
  *     Lt = Letter, Titlecase
  *     Lm = Letter, Modifier
  *     Lo = Letter, Other
- * 
+ *
  *     Pc = Punctuation, Connector
  *     Pd = Punctuation, Dash
  *     Ps = Punctuation, Open
@@ -236,7 +236,7 @@ class TransliterationRule;
  *     Pi = Punctuation, Initial quote
  *     Pf = Punctuation, Final quote
  *     Po = Punctuation, Other
- * 
+ *
  *     Sm = Symbol, Math
  *     Sc = Symbol, Currency
  *     Sk = Symbol, Modifier
@@ -276,7 +276,7 @@ class U_I18N_API UnicodeSet : public UnicodeFilter {
      * ":]".  Example: "[:Lu:]".
      */
     static const UnicodeString CATEGORY_CLOSE;
-    
+
     // More special characters...
     static const UChar SET_OPEN;
     static const UChar SET_CLOSE;
@@ -286,7 +286,7 @@ class U_I18N_API UnicodeSet : public UnicodeFilter {
     static const UChar BACKSLASH;
     static const UChar INTERSECTION;
     static const UChar UPPER_U;
-    
+
 public:
 
     /**
@@ -521,7 +521,7 @@ public:
      * The set will not contain the specified range once the call
      * returns.  If <code>end > start</code> then an empty range is
      * removed, leaving the set unchanged.
-     * 
+     *
      * @param start first character, inclusive, of range to be removed
      * from this set.
      * @param end last character, inclusive, of range to be removed
@@ -775,13 +775,13 @@ private:
     static UChar charAfter(const UnicodeString& str, int32_t i);
 
     void ensureCapacity(int32_t newLen);
-    
+
     void ensureBufferCapacity(int32_t newLen);
-    
+
     void swapBuffers(void);
 
     static const UChar HEX[16];
-    
+
     static void _toPat(UnicodeString& buf, UChar32 c);
 
     //----------------------------------------------------------------
@@ -789,9 +789,9 @@ private:
     //----------------------------------------------------------------
 
     void exclusiveOr(const UChar32* other, int32_t otherLen, int8_t polarity);
-        
+
     void add(const UChar32* other, int32_t otherLen, int8_t polarity);
-            
+
     void retain(const UChar32* other, int32_t otherLen, int8_t polarity);
 };
 

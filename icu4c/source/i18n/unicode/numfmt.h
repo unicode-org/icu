@@ -1,5 +1,5 @@
 /*
-* Copyright © {1997-2001}, International Business Machines Corporation and others. All Rights Reserved.
+* Copyright (C) {1997-2001}, International Business Machines Corporation and others. All Rights Reserved.
 ********************************************************************************
 *
 * File NUMFMT.H
@@ -15,10 +15,10 @@
 *                            Derecated Java style constants (eg, INTEGER_FIELD)
 ********************************************************************************
 */
- 
+
 #ifndef NUMFMT_H
 #define NUMFMT_H
- 
+
 
 #include "unicode/utypes.h"
 #include "unicode/unistr.h"
@@ -54,7 +54,7 @@ class Locale;
  * have to fetch the information about the local language and country
  * conventions multiple times.
  * <pre>
- * \code 
+ * \code
  *     UnicodeString myString;
  *     UErrorCode success = U_ZERO_ERROR;
  *     nf = NumberFormat::createInstance( success );
@@ -140,7 +140,7 @@ public:
      * These constants are provided for backwards compatibility only,
      * and are deprecated.  Please use the C++ style constants defined above.
      * @stable
-     */       
+     */
         INTEGER_FIELD        = kIntegerField,
         FRACTION_FIELD        = kFractionField
     };
@@ -545,9 +545,9 @@ private:
     int32_t     fMinFractionDigits;
     UBool      fParseIntegerOnly;
 };
- 
+
 // -------------------------------------
- 
+
 inline UBool
 NumberFormat::isParseIntegerOnly() const
 {
@@ -560,6 +560,6 @@ NumberFormat::format(const Formattable& obj,
                      UErrorCode& status) const {
     return Format::format(obj, result, status);
 }
- 
+
 #endif // _NUMFMT
 //eof

@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-* Copyright © {1996-2001}, International Business Machines Corporation and 
+* Copyright (C) 1996-2001, International Business Machines Corporation and
 * others. All Rights Reserved.
 ******************************************************************************
 */
@@ -31,7 +31,7 @@
 *                          specifying whether or not binary loading is to be
 *                          attempted.  This is required for dynamic rule loading.
 * 05/07/97     helena      Added memory allocation error detection.
-*  6/17/97     helena      Added IDENTICAL strength for compare, changed getRules to 
+*  6/17/97     helena      Added IDENTICAL strength for compare, changed getRules to
 *                          use MergeCollation::getPattern.
 *  6/20/97     helena      Java class name change.
 *  8/18/97     helena      Added internal API documentation.
@@ -41,13 +41,13 @@
 * 04/23/99     stephen     Removed EDecompositionMode, merged with
 *                          Normalizer::EMode
 * 06/14/99     stephen     Removed kResourceBundleSuffix
-* 11/02/99     helena      Collator performance enhancements.  Eliminates the 
+* 11/02/99     helena      Collator performance enhancements.  Eliminates the
 *                          UnicodeString construction and special case for NO_OP.
 * 11/23/99     srl         More performance enhancements. Updates to NormalizerIterator
 *                          internal state management.
 * 12/15/99     aliu        Update to support Thai collation.  Move NormalizerIterator
 *                          to implementation file.
-* 01/29/01     synwee      Modified into a C++ wrapper which calls C API 
+* 01/29/01     synwee      Modified into a C++ wrapper which calls C API
 *                          (ucol.h)
 */
 
@@ -61,15 +61,15 @@
 class CollationElementIterator;
 
 /**
- * The RuleBasedCollator class provides the simple implementation of 
- * Collator, using data-driven tables. The user can create a customized 
+ * The RuleBasedCollator class provides the simple implementation of
+ * Collator, using data-driven tables. The user can create a customized
  * table-based collation.
  * <P>
  * RuleBasedCollator maps characters to collation keys.
  * <p>
  * Table Collation has the following restrictions for efficiency (other
  * subclasses may be used for more complex languages) :
- *       <p>1. If the French secondary ordering is specified in a collation 
+ *       <p>1. If the French secondary ordering is specified in a collation
  *             object, it is applied to the whole object.
  *       <p>2. All non-mentioned Unicode characters are at the end of the
  *             collation order.
@@ -94,7 +94,7 @@ class CollationElementIterator;
  *    <LI><strong>Modifier</strong>: There is a single modifier,
  *        which is used to specify that all secondary differences are
  *        sorted backwards.
- *        <p>'@' : Indicates that secondary differences, such as accents, are 
+ *        <p>'@' : Indicates that secondary differences, such as accents, are
  *                 sorted backwards, as in French.<P>
  *    <LI><strong>Relation</strong>: The relations are the following:
  *        <UL Type=square>
@@ -129,29 +129,29 @@ class CollationElementIterator;
  * \endcode
  * </pre>
  * Either the text-argument must already be present in the sequence, or some
- * initial substring of the text-argument must be present. (e.g. "a &lt; b & 
- * ae &lt; e" is valid since "a" is present in the sequence before "ae" is 
- * reset). In this latter case, "ae" is not entered and treated as a single 
- * character; instead, "e" is sorted as if it were expanded to two characters: 
+ * initial substring of the text-argument must be present. (e.g. "a &lt; b &
+ * ae &lt; e" is valid since "a" is present in the sequence before "ae" is
+ * reset). In this latter case, "ae" is not entered and treated as a single
+ * character; instead, "e" is sorted as if it were expanded to two characters:
  * "a" followed by an "e". This difference appears in natural languages: in
  * traditional Spanish "ch" is treated as though it contracts to a single
- * character (expressed as "c &lt; ch &lt; d"), while in traditional German 
- * "ä" (a-umlaut) is treated as though it expands to two characters (expressed 
+ * character (expressed as "c &lt; ch &lt; d"), while in traditional German
+ * "ä" (a-umlaut) is treated as though it expands to two characters (expressed
  * as "a & ae ; ä &lt; b").
  * <p><strong>Ignorable Characters</strong>
  * <p>For ignorable characters, the first rule must start with a relation (the
- * examples we have used above are really fragments; "a &lt; b" really should 
- * be "&lt; a &lt; b"). If, however, the first relation is not "&lt;", then 
- * all the text-arguments up to the first "&lt;" are ignorable. For example, 
- * ", - &lt; a &lt; b" makes "-" an ignorable character, as we saw earlier in 
- * the word "black-birds". In the samples for different languages, you see 
+ * examples we have used above are really fragments; "a &lt; b" really should
+ * be "&lt; a &lt; b"). If, however, the first relation is not "&lt;", then
+ * all the text-arguments up to the first "&lt;" are ignorable. For example,
+ * ", - &lt; a &lt; b" makes "-" an ignorable character, as we saw earlier in
+ * the word "black-birds". In the samples for different languages, you see
  * that most accents are ignorable.
  * <p><strong>Normalization and Accents</strong>
- * <p>The Collator object automatically normalizes text internally to 
- * separate accents from base characters where possible. This is done both 
- * when processing the rules, and when comparing two strings. Collator also 
- * uses the Unicode canonical mapping to ensure that combining sequences are 
- * sorted properly (for more information, see 
+ * <p>The Collator object automatically normalizes text internally to
+ * separate accents from base characters where possible. This is done both
+ * when processing the rules, and when comparing two strings. Collator also
+ * uses the Unicode canonical mapping to ensure that combining sequences are
+ * sorted properly (for more information, see
  * <A HREF="http://www.aw.com/devpress"> The Unicode Standard, Version 2.0</A>
  * .)</P>
  * <p><strong>Errors</strong>
@@ -181,7 +181,7 @@ class CollationElementIterator;
  * <pre>
  * \code
  *     UErrorCode status = U_ZERO_ERROR;
- *     RuleBasedCollator *mySimple = 
+ *     RuleBasedCollator *mySimple =
  *                                    new RuleBasedCollator(Simple, status);
  * \endcode
  * </pre>
@@ -189,7 +189,7 @@ class CollationElementIterator;
  * <pre>
  * \code
  *     UErrorCode status = U_ZERO_ERROR;
- *     RuleBasedCollator *myNorwegian = 
+ *     RuleBasedCollator *myNorwegian =
  *                                 new RuleBasedCollator(Norwegian, status);
  * \endcode
  * </pre>
@@ -216,7 +216,7 @@ class CollationElementIterator;
  *      UErrorCode status = U_ZERO_ERROR;
  *      UnicodeString rules(DEFAULTRULES);
  *      rules += "& C &lt; ch, cH, Ch, CH";
- *      RuleBasedCollator *mySpanish = 
+ *      RuleBasedCollator *mySpanish =
  *                                     new RuleBasedCollator(rules, status);
  * \endcode
  * </pre>
@@ -226,9 +226,9 @@ class CollationElementIterator;
  * \code
  *      UErrorCode status = U_ZERO_ERROR;
  *      UnicodeString rules(DEFAULTRULES);
- *      rules += "& Question-mark ; '?' & Ampersand ; '&' & Dollar-sign ; 
+ *      rules += "& Question-mark ; '?' & Ampersand ; '&' & Dollar-sign ;
  *               '$' ";
- *      RuleBasedCollator *myTable = 
+ *      RuleBasedCollator *myTable =
  *                                     new RuleBasedCollator(rules, status);
  * \endcode
  * </pre>
@@ -249,10 +249,10 @@ class CollationElementIterator;
  *            RuleBasedCollator(" < a < b < d & b < c", status);
  * \endcode
  * </pre>
- * Because " &lt; a &lt; b &lt; c &lt; d" is the same as "a &lt; b &lt; d & b 
+ * Because " &lt; a &lt; b &lt; c &lt; d" is the same as "a &lt; b &lt; d & b
  *          &lt; c" or "&lt; a &lt; b & b &lt; c & c &lt; d".
  *
- * <p>To combine collations from two locales, (without error handling for 
+ * <p>To combine collations from two locales, (without error handling for
  * clarity)
  * <pre>
  * \code
@@ -260,18 +260,18 @@ class CollationElementIterator;
  *     Locale locale_en_US("en", "US", "");
  *     RuleBasedCollator* en_USCollator = (RuleBasedCollator*)
  *         Collator::createInstance( locale_en_US, success );
- * 
+ *
  *     // Create a da_DK Collator object
  *     Locale locale_da_DK("da", "DK", "");
  *     RuleBasedCollator* da_DKCollator = (RuleBasedCollator*)
  *         Collator::createInstance( locale_da_DK, success );
- * 
+ *
  *     // Combine the two
  *     // First, get the collation rules from en_USCollator
  *     UnicodeString rules = en_USCollator->getRules();
  *     // Second, get the collation rules from da_DKCollator
  *     rules += da_DKCollator->getRules();
- *     RuleBasedCollator* newCollator = 
+ *     RuleBasedCollator* newCollator =
  *                                    new RuleBasedCollator(rules, success);
  *     // newCollator has the combined rules
  * \endcode
@@ -285,7 +285,7 @@ class CollationElementIterator;
  *     // Create a new Collator object with additional rules
  *     rules = en_USCollator->getRules();
  *     rules += "& C < ch, cH, Ch, CH";
- *     RuleBasedCollator* myCollator = 
+ *     RuleBasedCollator* myCollator =
  *                                    new RuleBasedCollator(rules, success);
  *     // myCollator contains the new rules
  * \endcode
@@ -305,14 +305,14 @@ class CollationElementIterator;
  *          ';', 0x0311, ';', 0x0312,                 // main accents
  *          '<', 'a', ',', 'A', ';', 'a', 'e', ',', 'A', 'E',
  *          ';', 0x00e6, ',', 0x00c6, '<', 'b', ',', 'B',
- *          '<', 'c', ',', 'C', '<', 'e', ',', 'E', '&', 
+ *          '<', 'c', ',', 'C', '<', 'e', ',', 'E', '&',
  *          'C', '<', 'd', ',', 'D', 0 };
  *      UnicodeString oldRules(contents);
  *      UErrorCode status = U_ZERO_ERROR;
  *      // change the order of accent characters
  *      UChar addOn[] = { '&', ',', 0x0300, ';', 0x0308, ';', 0x0302, 0 };
  *      oldRules += addOn;
- *      RuleBasedCollator *myCollation = 
+ *      RuleBasedCollator *myCollation =
  *                                  new RuleBasedCollator(oldRules, status);
  *  \endcode
  * </pre>
@@ -324,42 +324,42 @@ class CollationElementIterator;
  * \code
  *      UErrorCode status = U_ZERO_ERROR;
  *      // get en_US collation rules
- *      RuleBasedCollator* en_USCollation = (RuleBasedCollator*) 
+ *      RuleBasedCollator* en_USCollation = (RuleBasedCollator*)
  *                             Collator::createInstance(Locale::US, status);
  *      // Always check the error code after each call.
  *      if (U_FAILURE(status)) return;
  *      // add a few Japanese character to sort before English characters
  *      // suppose the last character before the first base letter 'a' in
  *      // the English collation rule is 0x2212
- *      UChar jaString[] = {'&', 0x2212, '<', 0x3041, ',', 0x3042, '<', 
+ *      UChar jaString[] = {'&', 0x2212, '<', 0x3041, ',', 0x3042, '<',
  *                          0x3043, ',', 0x3044, 0};
  *      UnicodeString rules(en_USCollation->getRules());
  *      rules += jaString;
- *      RuleBasedCollator *myJapaneseCollation = 
+ *      RuleBasedCollator *myJapaneseCollation =
  *                                     new RuleBasedCollator(rules, status);
  * \endcode
  * </pre>
  * <p><strong>NOTE</strong>: Typically, a collation object is created with
  * Collator::createInstance().
  * <p>
- * <strong>Note:</strong> <code>RuleBasedCollator</code>s with different 
- * Locale, CollationStrength and Decomposition mode settings will return 
- * different sort orders for the same set of strings. Locales have specific 
- * collation rules, and the way in which secondary and tertiary differences 
- * are taken into account, for example, will result in a different sorting 
+ * <strong>Note:</strong> <code>RuleBasedCollator</code>s with different
+ * Locale, CollationStrength and Decomposition mode settings will return
+ * different sort orders for the same set of strings. Locales have specific
+ * collation rules, and the way in which secondary and tertiary differences
+ * are taken into account, for example, will result in a different sorting
  * order for same strings.
  * <p>
  * @see        Collator
  * @version    1.8 Jan 8 2001
  */
-class U_I18N_API RuleBasedCollator : public Collator 
+class U_I18N_API RuleBasedCollator : public Collator
 {
-public: 
+public:
 
   // constructor -------------------------------------------------------------
 
   /**
-   * RuleBasedCollator constructor. This takes the table rules and builds a 
+   * RuleBasedCollator constructor. This takes the table rules and builds a
    * collation table out of them. Please see RuleBasedCollator class
    * description for more details on the collation rule syntax.
    * @param rules the collation rules to build the collation table from.
@@ -369,7 +369,7 @@ public:
 	RuleBasedCollator(const UnicodeString& rules, UErrorCode& status);
 
   /**
-   * RuleBasedCollator constructor. This takes the table rules and builds a 
+   * RuleBasedCollator constructor. This takes the table rules and builds a
    * collation table out of them. Please see RuleBasedCollator class
    * description for more details on the collation rule syntax.
    * @param rules the collation rules to build the collation table from.
@@ -377,12 +377,12 @@ public:
    * @param status reporting a success or an error.
    * @see Locale
    */
-  RuleBasedCollator(const UnicodeString& rules, 
-                       ECollationStrength collationStrength, 
+  RuleBasedCollator(const UnicodeString& rules,
+                       ECollationStrength collationStrength,
                        UErrorCode& status);
 
   /**
-   * RuleBasedCollator constructor. This takes the table rules and builds a 
+   * RuleBasedCollator constructor. This takes the table rules and builds a
    * collation table out of them. Please see RuleBasedCollator class
    * description for more details on the collation rule syntax.
    * @param rules the collation rules to build the collation table from.
@@ -391,11 +391,11 @@ public:
    * @see Locale
    */
   RuleBasedCollator(const UnicodeString& rules,
-                    Normalizer::EMode decompositionMode, 
+                    Normalizer::EMode decompositionMode,
                     UErrorCode& status);
 
   /**
-   * RuleBasedCollator constructor. This takes the table rules and builds a 
+   * RuleBasedCollator constructor. This takes the table rules and builds a
    * collation table out of them. Please see RuleBasedCollator class
    * description for more details on the collation rule syntax.
    * @param rules the collation rules to build the collation table from.
@@ -404,12 +404,12 @@ public:
    * @param status reporting a success or an error.
    * @see Locale
    */
-  RuleBasedCollator(const UnicodeString& rules, 
+  RuleBasedCollator(const UnicodeString& rules,
                     ECollationStrength collationStrength,
                     Normalizer::EMode decompositionMode,
                     UErrorCode& status);
 
-  /** 
+  /**
    * Copy constructor.
    * @param the RuleBasedCollator object to be copied
    * @see Locale
@@ -418,7 +418,7 @@ public:
 
   // destructor --------------------------------------------------------------
 
-  /** 
+  /**
    * Destructor.
    */
 	virtual ~RuleBasedCollator();
@@ -430,7 +430,7 @@ public:
    * @param other other RuleBasedCollator object to compare with.
    */
 	RuleBasedCollator& operator=(const RuleBasedCollator& other);
-    
+
   /**
    * Returns true if argument is the same as this object.
    * @param other Collator object to be compared.
@@ -446,17 +446,17 @@ public:
   virtual UBool operator!=(const Collator& other) const;
 
   /**
-   * Makes a deep copy of the object. 
+   * Makes a deep copy of the object.
    * The caller owns the returned object.
    * @return the cloned object.
    */
   virtual Collator* clone(void) const;
 
   /**
-   * Creates a collation element iterator for the source string. The caller of 
-   * this method is responsible for the memory management of the return 
+   * Creates a collation element iterator for the source string. The caller of
+   * this method is responsible for the memory management of the return
    * pointer.
-   * @param source the string over which the CollationElementIterator will 
+   * @param source the string over which the CollationElementIterator will
    *        iterate.
    * @return the collation element iterator of the source string using this as
    *         the based Collator.
@@ -465,66 +465,66 @@ public:
                                            const UnicodeString& source) const;
 
   /**
-   * Creates a collation element iterator for the source. The caller of this 
+   * Creates a collation element iterator for the source. The caller of this
    * method is responsible for the memory management of the returned pointer.
-   * @param source the CharacterIterator which produces the characters over 
+   * @param source the CharacterIterator which produces the characters over
    *        which the CollationElementItgerator will iterate.
-   * @return the collation element iterator of the source using this as the 
+   * @return the collation element iterator of the source using this as the
    *         based Collator.
    */
   virtual CollationElementIterator* createCollationElementIterator(
                                        const CharacterIterator& source) const;
 
   /**
-   * Compares a range of character data stored in two different strings based 
-   * on the collation rules. Returns information about whether a string is 
+   * Compares a range of character data stored in two different strings based
+   * on the collation rules. Returns information about whether a string is
    * less than, greater than or equal to another string in a language.
    * This can be overriden in a subclass.
    * @param source the source string.
    * @param target the target string to be compared with the source string.
    * @return the comparison result. GREATER if the source string is greater
-   *         than the target string, LESS if the source is less than the 
+   *         than the target string, LESS if the source is less than the
    *         target. Otherwise, returns EQUAL.
    */
-  virtual EComparisonResult compare(const UnicodeString& source, 
+  virtual EComparisonResult compare(const UnicodeString& source,
                                     const UnicodeString& target) const;
-        
-        
+
+
   /**
-   * Compares a range of character data stored in two different strings based 
-   * on the collation rules up to the specified length. Returns information 
-   * about whether a string is less than, greater than or equal to another 
+   * Compares a range of character data stored in two different strings based
+   * on the collation rules up to the specified length. Returns information
+   * about whether a string is less than, greater than or equal to another
    * string in a language. This can be overriden in a subclass.
    * @param source the source string.
    * @param target the target string to be compared with the source string.
    * @param length compares up to the specified length
    * @return the comparison result. GREATER if the source string is greater
-   *         than the target string, LESS if the source is less than the 
+   *         than the target string, LESS if the source is less than the
    *         target. Otherwise, returns EQUAL.
-   */ 
-  virtual EComparisonResult compare(const UnicodeString& source, 
+   */
+  virtual EComparisonResult compare(const UnicodeString& source,
                                     const UnicodeString&  target,
                                     int32_t length) const;
 
   /**
    * The comparison function compares the character data stored in two
-   * different string arrays. Returns information about whether a string array 
+   * different string arrays. Returns information about whether a string array
    * is less than, greater than or equal to another string array.
    * <p>Example of use:
    * <pre>
    * .       UErrorCode status = U_ZERO_ERROR;
-   * .       Collator *myCollation = 
+   * .       Collator *myCollation =
    * .                         Collator::createInstance(Locale::US, status);
    * .       if (U_FAILURE(status)) return;
    * .       myCollation->setStrength(Collator::PRIMARY);
    * .       // result would be Collator::EQUAL ("abc" == "ABC")
    * .       // (no primary difference between "abc" and "ABC")
-   * .       Collator::UCollationResult result = 
+   * .       Collator::UCollationResult result =
    * .                              myCollation->compare(L"abc", 3, L"ABC", 3);
    * .       myCollation->setStrength(Collator::TERTIARY);
    * .       // result would be Collator::LESS (abc" &lt;&lt;&lt; "ABC")
    * .       // (with tertiary difference between "abc" and "ABC")
-   * .       Collator::UCollationResult result = 
+   * .       Collator::UCollationResult result =
    * .                              myCollation->compare(L"abc", 3, L"ABC", 3);
    * </pre>
    * @param source the source string array to be compared with.
@@ -533,18 +533,18 @@ public:
    * @param target the string that is to be compared with the source string.
    * @param targetLength the length of the target string array. If this value
    *        is equal to -1, the string array is null-terminated.
-   * @return Returns a byte value. GREATER if source is greater than target; 
-   *         EQUAL if source is equal to target; LESS if source is less than 
+   * @return Returns a byte value. GREATER if source is greater than target;
+   *         EQUAL if source is equal to target; LESS if source is less than
    *         target
    */
   virtual EComparisonResult compare(const UChar* source, int32_t sourceLength,
-                                    const UChar* target, int32_t targetLength) 
+                                    const UChar* target, int32_t targetLength)
                                     const;
 
-  /** 
+  /**
   * Transforms a specified region of the string into a series of characters
-  * that can be compared with CollationKey.compare. Use a CollationKey when 
-  * you need to do repeated comparisions on the same string. For a single 
+  * that can be compared with CollationKey.compare. Use a CollationKey when
+  * you need to do repeated comparisions on the same string. For a single
   * comparison the compare method will be faster.
   * @param source the source string.
   * @param key the transformed key of the source string.
@@ -556,10 +556,10 @@ public:
                                         CollationKey& key,
                                         UErrorCode& status) const;
 
-  /** 
+  /**
   * Transforms a specified region of the string into a series of characters
   * that can be compared with CollationKey.compare. Use a CollationKey when
-  * you need to do repeated comparisions on the same string. For a single 
+  * you need to do repeated comparisions on the same string. For a single
   * comparison the compare method will be faster.
   * @param source the source string.
   * @param key the transformed key of the source string.
@@ -567,9 +567,9 @@ public:
   * @return the transformed key.
   * @see CollationKey
   */
-  virtual CollationKey& getCollationKey(const UChar *source, 
-                                        int32_t sourceLength, 
-                                        CollationKey& key, 
+  virtual CollationKey& getCollationKey(const UChar *source,
+                                        int32_t sourceLength,
+                                        CollationKey& key,
                                         UErrorCode& status) const;
 
   /**
@@ -580,54 +580,54 @@ public:
 
   /**
    * Gets the table-based rules for the collation object.
-   * @return returns the collation rules that the table collation object was 
+   * @return returns the collation rules that the table collation object was
    *         created from.
    */
   const UnicodeString& getRules(void) const;
 
   /**
-   * Return the maximum length of any expansion sequences that end with the 
+   * Return the maximum length of any expansion sequences that end with the
    * specified comparison order.
    * @param order a collation order returned by previous or next.
-   * @return maximum size of the expansion sequences ending with the collation 
-   *         element or 1 if collation element does not occur at the end of 
+   * @return maximum size of the expansion sequences ending with the collation
+   *         element or 1 if collation element does not occur at the end of
    *         any expansion sequence
    * @see CollationElementIterator#getMaxExpansion
    */
 	int32_t getMaxExpansion(int32_t order) const;
 
   /**
-   * Returns a unique class ID POLYMORPHICALLY. Pure virtual override. This 
-   * method is to implement a simple version of RTTI, since not all C++ 
-   * compilers support genuine RTTI. Polymorphic operator==() and clone() 
+   * Returns a unique class ID POLYMORPHICALLY. Pure virtual override. This
+   * method is to implement a simple version of RTTI, since not all C++
+   * compilers support genuine RTTI. Polymorphic operator==() and clone()
    * methods call this method.
-   * @return The class ID for this object. All objects of a given class have 
-   *         the same class ID. Objects of other classes have different class 
+   * @return The class ID for this object. All objects of a given class have
+   *         the same class ID. Objects of other classes have different class
    *         IDs.
    */
   virtual UClassID getDynamicClassID(void) const
-  { 
-    return RuleBasedCollator::getStaticClassID(); 
+  {
+    return RuleBasedCollator::getStaticClassID();
   }
 
   /**
-   * Returns the class ID for this class. This is useful only for comparing to 
+   * Returns the class ID for this class. This is useful only for comparing to
    * a return value from getDynamicClassID(). For example:
    * <pre>
    * Base* polymorphic_pointer = createPolymorphicObject();
-   * if (polymorphic_pointer->getDynamicClassID() == 
+   * if (polymorphic_pointer->getDynamicClassID() ==
    *                                          Derived::getStaticClassID()) ...
    * </pre>
    * @return The class ID for all objects of this class.
    */
-  static UClassID getStaticClassID(void) 
-  { 
-    return (UClassID)&fgClassID; 
+  static UClassID getStaticClassID(void)
+  {
+    return (UClassID)&fgClassID;
   }
 
   /**
-   * Returns the binary format of the class's rules. The format is that of 
-   * .col files.  
+   * Returns the binary format of the class's rules. The format is that of
+   * .col files.
    * @param length Returns the length of the data, in bytes
    * @param status the error code status.
    * @return memory, owned by the caller, of size 'length' bytes.
@@ -635,20 +635,20 @@ public:
   uint8_t *cloneRuleData(int32_t &length, UErrorCode &status);
 
 	/**
-	 * Returns current rules. Delta defines whether full rules are returned or 
-   * just the tailoring. 
-	 * @param delta one of 	UCOL_TAILORING_ONLY, UCOL_FULL_RULES. 
+	 * Returns current rules. Delta defines whether full rules are returned or
+   * just the tailoring.
+	 * @param delta one of 	UCOL_TAILORING_ONLY, UCOL_FULL_RULES.
 	 * @return UnicodeString with rules
 	 */
 	UnicodeString getRules(UColRuleOption delta);
 
   /**
    * Universal attribute setter
-   * @param attr attribute type 
+   * @param attr attribute type
    * @param value attribute value
    * @param status to indicate whether the operation went on smoothly or there were errors
    */
-  virtual void setAttribute(UColAttribute attr, UColAttributeValue value, 
+  virtual void setAttribute(UColAttribute attr, UColAttributeValue value,
                             UErrorCode &status);
 
   /**
@@ -657,7 +657,7 @@ public:
    * @param status to indicate whether the operation went on smoothly or there were errors
    * @return attribute value
    */
-  virtual UColAttributeValue getAttribute(UColAttribute attr, 
+  virtual UColAttributeValue getAttribute(UColAttribute attr,
                                           UErrorCode &status);
 
   /**
@@ -667,9 +667,9 @@ public:
   virtual Collator* safeClone(void);
 
   /**
-   * String compare that uses user supplied character iteration. The idea is 
-   * to prevent users from having to convert the whole string into UChar's 
-   * before comparing since sometimes strings differ on first couple of 
+   * String compare that uses user supplied character iteration. The idea is
+   * to prevent users from having to convert the whole string into UChar's
+   * before comparing since sometimes strings differ on first couple of
    * characters.
    * @param coll Collator to be used for comparing
    * @param source pointer to function for iterating over the first string
@@ -683,10 +683,10 @@ public:
   /**
    * Get the sort key as an array of bytes from an UnicodeString.
    * @param source string to be processed.
-   * @param result buffer to store result in. If NULL, number of bytes needed 
+   * @param result buffer to store result in. If NULL, number of bytes needed
    *        will be returned.
-   * @param resultLength length of the result buffer. If if not enough the 
-   *        buffer will be filled to capacity. 
+   * @param resultLength length of the result buffer. If if not enough the
+   *        buffer will be filled to capacity.
    * @return Number of bytes needed for storing the sort key
    */
   virtual int32_t getSortKey(const UnicodeString& source, uint8_t *result,
@@ -695,12 +695,12 @@ public:
   /**
    * Get the sort key as an array of bytes from an UChar buffer.
    * @param source string to be processed.
-   * @param sourceLength length of string to be processed. If -1, the string 
+   * @param sourceLength length of string to be processed. If -1, the string
    *        is 0 terminated and length will be decided by the function.
-   * @param result buffer to store result in. If NULL, number of bytes needed 
+   * @param result buffer to store result in. If NULL, number of bytes needed
    *        will be returned.
-   * @param resultLength length of the result buffer. If if not enough the 
-   *        buffer will be filled to capacity. 
+   * @param resultLength length of the result buffer. If if not enough the
+   *        buffer will be filled to capacity.
    * @return Number of bytes needed for storing the sort key
    */
   virtual int32_t getSortKey(const UChar *source, int32_t sourceLength,
@@ -716,19 +716,19 @@ public:
   * @see RuleBasedCollator#setStrength
   */
   virtual ECollationStrength getStrength(void) const;
-  
+
   /**
   * Sets the minimum strength to be used in comparison or transformation.
   * <p>Example of use:
   * <pre>
   * . UErrorCode status = U_ZERO_ERROR;
-  * . Collator*myCollation = Collator::createInstance(Locale::US, 
+  * . Collator*myCollation = Collator::createInstance(Locale::US,
   *                                                         status);
   * . if (U_FAILURE(status)) return;
   * . myCollation->setStrength(Collator::PRIMARY);
   * . // result will be "abc" == "ABC"
   * . // tertiary differences will be ignored
-  * . Collator::ComparisonResult result = myCollation->compare("abc", 
+  * . Collator::ComparisonResult result = myCollation->compare("abc",
   *                                                               "ABC");
   * </pre>
   * @see RuleBasedCollator#getStrength
@@ -738,7 +738,7 @@ public:
   virtual void setStrength(ECollationStrength newStrength);
 
   /**
-  * Set the decomposition mode of the Collator object. success is equal to 
+  * Set the decomposition mode of the Collator object. success is equal to
   * U_ILLEGAL_ARGUMENT_ERROR if error occurs.
   * @param the new decomposition mode
   * @see Collator#getDecomposition
@@ -753,7 +753,7 @@ public:
   virtual Normalizer::EMode getDecomposition(void) const;
 
 private:
-  
+
   // private static constants -----------------------------------------------
 
   static const int32_t UNMAPPED;
@@ -772,14 +772,14 @@ private:
   static const int32_t SECONDARYDIFFERENCEONLY;
   static const int32_t PRIMARYORDERSHIFT;
   static const int32_t SECONDARYORDERSHIFT;
-  
+
   static const int32_t COLELEMENTSTART;
   static const int32_t PRIMARYLOWZEROMASK;
   static const int32_t RESETSECONDARYTERTIARY;
   static const int32_t RESETTERTIARY;
 
   static const int32_t PRIMIGNORABLE;
-  
+
   static const int16_t FILEID;
   static const char    *kFilenameSuffix;
 
@@ -793,7 +793,7 @@ private:
   // private data members ---------------------------------------------------
 
   UBool dataIsOwned;
-  
+
   /**
   * c struct for collation. All initialisation for it has to be done through
   * setUCollator().
@@ -807,7 +807,7 @@ private:
 
   // friend classes --------------------------------------------------------
 
-  /** 
+  /**
   * Streamer used to read/write binary collation data files.
   */
   friend class RuleBasedCollatorStreamer;
@@ -816,16 +816,16 @@ private:
   * Used to iterate over collation elements in a character source.
   */
   friend class CollationElementIterator;
-        
+
   /**
-  * Collator ONLY needs access to RuleBasedCollator(const Locale&, 
+  * Collator ONLY needs access to RuleBasedCollator(const Locale&,
   *                                                       UErrorCode&)
   */
   friend class Collator;
-        
+
   // private constructors --------------------------------------------------
 
-  /** 
+  /**
    * Default constructor
    */
   RuleBasedCollator();
@@ -837,11 +837,11 @@ private:
   RuleBasedCollator(UCollator *collator, UnicodeString *rule);
 
   /**
-   * RuleBasedCollator constructor. This constructor takes a locale. The 
-   * only caller of this class should be Collator::createInstance(). If 
-   * createInstance() happens to know that the requested locale's collation is 
-   * implemented as a RuleBasedCollator, it can then call this constructor.  
-   * OTHERWISE IT SHOULDN'T, since this constructor ALWAYS RETURNS A VALID 
+   * RuleBasedCollator constructor. This constructor takes a locale. The
+   * only caller of this class should be Collator::createInstance(). If
+   * createInstance() happens to know that the requested locale's collation is
+   * implemented as a RuleBasedCollator, it can then call this constructor.
+   * OTHERWISE IT SHOULDN'T, since this constructor ALWAYS RETURNS A VALID
    * COLLATION TABLE. It does this by falling back to defaults.
    * @param desiredLocale locale used
    * @param status error code status
@@ -903,7 +903,7 @@ inline UBool RuleBasedCollator::operator!=(const Collator& other) const
   return !(*this == other);
 }
 
-inline void RuleBasedCollator::setUCollator(const char *locale, 
+inline void RuleBasedCollator::setUCollator(const char *locale,
                                                UErrorCode &status)
 {
   if (U_FAILURE(status))
@@ -913,7 +913,7 @@ inline void RuleBasedCollator::setUCollator(const char *locale,
   ucollator = ucol_open(locale, &status);
 }
 
-inline void RuleBasedCollator::setUCollator(const Locale &locale, 
+inline void RuleBasedCollator::setUCollator(const Locale &locale,
                                                UErrorCode &status)
 {
   setUCollator(locale.getName(), status);
@@ -934,7 +934,7 @@ inline Collator::EComparisonResult RuleBasedCollator::getEComparisonResult(
   case UCOL_LESS :
     return Collator::LESS;
   case UCOL_EQUAL :
-    return Collator::EQUAL;  
+    return Collator::EQUAL;
   default :
     return Collator::GREATER;
   }
@@ -942,14 +942,14 @@ inline Collator::EComparisonResult RuleBasedCollator::getEComparisonResult(
 
 inline Collator::ECollationStrength RuleBasedCollator::getECollationStrength(
                                        const UCollationStrength &strength) const
-{  
+{
   switch (strength)
   {
   case UCOL_PRIMARY :
     return Collator::PRIMARY;
   case UCOL_SECONDARY :
     return Collator::SECONDARY;
-  case UCOL_TERTIARY : 
+  case UCOL_TERTIARY :
     return Collator::TERTIARY;
   default :
     return Collator::IDENTICAL;
@@ -958,14 +958,14 @@ inline Collator::ECollationStrength RuleBasedCollator::getECollationStrength(
 
 inline UCollationStrength RuleBasedCollator::getUCollationStrength(
                              const Collator::ECollationStrength &strength) const
-{  
+{
   switch (strength)
   {
   case Collator::PRIMARY :
     return UCOL_PRIMARY;
   case Collator::SECONDARY :
     return UCOL_SECONDARY;
-  case Collator::TERTIARY : 
+  case Collator::TERTIARY :
     return UCOL_TERTIARY;
   default :
     return UCOL_IDENTICAL;

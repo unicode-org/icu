@@ -1,5 +1,5 @@
 /*
-* Copyright © {1999}, International Business Machines Corporation and others. All Rights Reserved.
+* Copyright (C) {1999}, International Business Machines Corporation and others. All Rights Reserved.
 **********************************************************************
 *   Date        Name        Description
 *   11/17/99    aliu        Creation.
@@ -86,7 +86,7 @@ public:
         parse(const UnicodeString& rules,
               UTransDirection direction,
               UParseError* parseError = 0);
-    
+
 private:
 
     /**
@@ -145,7 +145,7 @@ private:
      * character.
      */
     //UChar registerSet(UnicodeSet* adoptedSet);
- 
+
     /**
      * Parse a UnicodeSet out, store it, and return the stand-in character
      * used to represent it.
@@ -159,7 +159,7 @@ private:
      */
     void appendVariableDef(const UnicodeString& name,
                            UnicodeString& buf);
-        
+
     /**
      * Determines what part of the private use region of Unicode we can use for
      * variable stand-ins.  The correct way to do this is as follows: Parse each

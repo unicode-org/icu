@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright © {1997-2001}, International Business Machines Corporation and others. All Rights Reserved.
+* Copyright (C) 1997-2001, International Business Machines Corporation and others. All Rights Reserved.
 * Modification History:
 *
 *   Date        Name        Description
@@ -30,7 +30,7 @@
  * for decimal points, thousands-separators, or even the particular
  * decimal digits used, or whether the number format is even decimal.
  * There are different number format styles like decimal, currency,
- * percent and spellout. 
+ * percent and spellout.
  * <P>
  * To format a number for the current Locale, use one of the static
  * factory methods:
@@ -104,11 +104,11 @@
  * </ul>
  * <p>
  * It is also possible to change or set the symbols used for a particular
- * locale like the currency symbol, the grouping seperator , monetary seperator 
+ * locale like the currency symbol, the grouping seperator , monetary seperator
  * etc by making use of functions unum_setSymbols() and unum_getSymbols().
  */
 
-/** A number formatter. 
+/** A number formatter.
  *  For usage in C programs.
  */
 typedef void* UNumberFormat;
@@ -342,7 +342,7 @@ U_CAPI int32_t
 unum_countAvailable(void);
 
 /** The possible UNumberFormat numeric attributes */
-enum UNumberFormatAttribute { 
+enum UNumberFormatAttribute {
   /** Parse integers only */
   UNUM_PARSE_INT_ONLY,
   /** Use grouping separator */
@@ -382,8 +382,8 @@ typedef enum UNumberFormatAttribute UNumberFormatAttribute;
 ======================================================
     ---> Add to UErrorCode !!!! --->
 typedef enum {
-    AttributeNotSupported, 
-    PropertyNotSupported  
+    AttributeNotSupported,
+    PropertyNotSupported
 } UErrorCode;
     ---> Add to UErrorCode !!!! --->
 ======================================================
@@ -393,9 +393,9 @@ typedef enum {
 * Get a numeric attribute associated with a UNumberFormat.
 * An example of a numeric attribute is the number of integer digits a formatter will produce.
 * @param fmt The formatter to query.
-* @param attr The attribute to query; one of UNUM_PARSE_INT_ONLY, UNUM_GROUPING_USED, 
+* @param attr The attribute to query; one of UNUM_PARSE_INT_ONLY, UNUM_GROUPING_USED,
 * UNUM_DECIMAL_ALWAYS_SHOWN, UNUM_MAX_INTEGER_DIGITS, UNUM_MIN_INTEGER_DIGITS, UNUM_INTEGER_DIGITS,
-* UNUM_MAX_FRACTION_DIGITS, UNUM_MIN_FRACTION_DIGITS, UNUM_FRACTION_DIGITS, UNUM_MULTIPLIER, 
+* UNUM_MAX_FRACTION_DIGITS, UNUM_MIN_FRACTION_DIGITS, UNUM_FRACTION_DIGITS, UNUM_MULTIPLIER,
 * UNUM_GROUPING_SIZE, UNUM_ROUNDING_MODE, UNUM_FORMAT_WIDTH, UNUM_PADDING_POSITION, UNUM_SECONDARY_GROUPING_SIZE.
 * @return The value of attr.
 * @see unum_setAttribute
@@ -413,9 +413,9 @@ unum_getAttribute(const UNumberFormat*          fmt,
 * Set a numeric attribute associated with a UNumberFormat.
 * An example of a numeric attribute is the number of integer digits a formatter will produce.
 * @param fmt The formatter to set.
-* @param attr The attribute to set; one of UNUM_PARSE_INT_ONLY, UNUM_GROUPING_USED, 
+* @param attr The attribute to set; one of UNUM_PARSE_INT_ONLY, UNUM_GROUPING_USED,
 * UNUM_DECIMAL_ALWAYS_SHOWN, UNUM_MAX_INTEGER_DIGITS, UNUM_MIN_INTEGER_DIGITS, UNUM_INTEGER_DIGITS,
-* UNUM_MAX_FRACTION_DIGITS, UNUM_MIN_FRACTION_DIGITS, UNUM_FRACTION_DIGITS, UNUM_MULTIPLIER, 
+* UNUM_MAX_FRACTION_DIGITS, UNUM_MIN_FRACTION_DIGITS, UNUM_FRACTION_DIGITS, UNUM_MULTIPLIER,
 * UNUM_GROUPING_SIZE, UNUM_ROUNDING_MODE, UNUM_FORMAT_WIDTH, UNUM_PADDING_POSITION, UNUM_SECONDARY_GROUPING_SIZE.
 * @param newValue The new value of attr.
 * @see unum_getAttribute
@@ -485,7 +485,7 @@ typedef enum UNumberFormatTextAttribute UNumberFormatTextAttribute;
 * Get a text attribute associated with a UNumberFormat.
 * An example of a text attribute is the suffix for positive numbers.
 * @param fmt The formatter to query.
-* @param attr The attribute to query; one of UNUM_POSITIVE_PREFIX, UNUM_POSITIVE_SUFFIX, 
+* @param attr The attribute to query; one of UNUM_POSITIVE_PREFIX, UNUM_POSITIVE_SUFFIX,
 * UNUM_NEGATIVE_PREFIX, UNUM_NEGATIVE_SUFFIX
 * @param result A pointer to a buffer to receive the attribute.
 * @param resultLength The maximum size of result.
@@ -507,7 +507,7 @@ unum_getTextAttribute(    const    UNumberFormat*                    fmt,
 * Set a text attribute associated with a UNumberFormat.
 * An example of a text attribute is the suffix for positive numbers.
 * @param fmt The formatter to set.
-* @param attr The attribute to set; one of UNUM_POSITIVE_PREFIX, UNUM_POSITIVE_SUFFIX, 
+* @param attr The attribute to set; one of UNUM_POSITIVE_PREFIX, UNUM_POSITIVE_SUFFIX,
 * UNUM_NEGATIVE_PREFIX, UNUM_NEGATIVE_SUFFIX
 * @param newValue The new value of attr.
 * @param newValueLength The length of newValue, or -1 if null-terminated.
@@ -545,7 +545,7 @@ unum_toPattern(    const    UNumberFormat*          fmt,
 /* The maximum size for a textual number format symbol. */
 #define UNFSYMBOLSMAXSIZE 10
 
-/** The UNumberFormatSymbols struct 
+/** The UNumberFormatSymbols struct
  * @deprecated remove after 2000-dec-31. See UNumberFormatSymbol and unum_getSymbol() for a replacement.
  */
 struct UNumberFormatSymbols{
@@ -572,7 +572,7 @@ struct UNumberFormatSymbols{
   /** The monetary separator */
   UChar monetarySeparator;
   /** The exponential symbol */
-  UChar exponential;  
+  UChar exponential;
   /** Per mill symbol */
   UChar perMill;
   /** Escape padding character */
@@ -580,13 +580,13 @@ struct UNumberFormatSymbols{
   /** Infinity symbol */
   UChar infinity      [UNFSYMBOLSMAXSIZE];
   /** Nan symbol */
-  UChar naN           [UNFSYMBOLSMAXSIZE];  
+  UChar naN           [UNFSYMBOLSMAXSIZE];
 };
 typedef struct UNumberFormatSymbols UNumberFormatSymbols;
 
 /**
 * Get the symbols associated with a UNumberFormat.
-* A UNumberFormat uses symbols to represent the special locale-dependent 
+* A UNumberFormat uses symbols to represent the special locale-dependent
 * characters in a number, for example the percent sign.
 * @param fmt The formatter to query.
 * @param syms A pointer to a UNumberFormatSymbols to receive the symbols associated with fmt.
@@ -599,7 +599,7 @@ unum_getSymbols(    const    UNumberFormat            *fmt,
 
 /**
 * Set the symbols associated with a UNumberFormat.
-* A UNumberFormat uses symbols to represent the special locale-dependent 
+* A UNumberFormat uses symbols to represent the special locale-dependent
 * characters in a number, for example the percent sign.
 * @param fmt The formatter to set.
 * @param symbolsToSet The UNumberFormatSymbols to associate with fmt.
@@ -656,7 +656,7 @@ typedef enum UNumberFormatSymbol UNumberFormatSymbol;
 
 /**
 * Get a symbol associated with a UNumberFormat.
-* A UNumberFormat uses symbols to represent the special locale-dependent 
+* A UNumberFormat uses symbols to represent the special locale-dependent
 * characters in a number, for example the percent sign.
 * @param fmt The formatter to query.
 * @param symbol The UNumberFormatSymbol constant for the symbol to get
@@ -677,7 +677,7 @@ unum_getSymbol(UNumberFormat *fmt,
 
 /**
 * Set a symbol associated with a UNumberFormat.
-* A UNumberFormat uses symbols to represent the special locale-dependent 
+* A UNumberFormat uses symbols to represent the special locale-dependent
 * characters in a number, for example the percent sign.
 * @param fmt The formatter to set.
 * @param symbol The UNumberFormatSymbol constant for the symbol to set
