@@ -1,6 +1,7 @@
 /*
 **********************************************************************
-*   Copyright (C) 1999 Alan Liu and others. All rights reserved.
+*   Copyright (C) 1999, International Business Machines
+*   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   Date        Name        Description
 *   10/20/99    alan        Creation.
@@ -465,9 +466,7 @@ UnicodeString& UnicodeSet::parse(UnicodeString& pairsBuf /*result*/,
                     }
                     c = (UChar)0x0000;
                     for (int32_t j=(++i)+4; i<j; ++i) { // [sic]
-						// TO DO: Change this to use Unicode::digit()
-						// when that method exists.
-                        int32_t digit = /*Unicode::*/UnicodeSet::digit(pattern.charAt(i), 16);
+                        int32_t digit = Unicode::digit(pattern.charAt(i), 16);
                         if (digit<0) {
                             status = U_ILLEGAL_ARGUMENT_ERROR;
                             return pairsBuf;
@@ -1121,21 +1120,4 @@ const UnicodeString& UnicodeSet::getCategoryPairs(int8_t cat) {
  */
 UChar UnicodeSet::charAfter(const UnicodeString& str, int32_t i) {
     return ((++i) < str.length()) ? str.charAt(i) : (UChar)0xFFFF;
-}
-
-/**
- * TEMPORARY WORKAROUND UNTIL Unicode::digit() exists.
- * Return the digit value of the given UChar, or -1.  The radix
- * value is ignored for now and hardcoded as 16.
- */
-int8_t UnicodeSet::digit(UChar c, int8_t radix) {
-	int32_t d = Unicode::digitValue(c);
-	if (d < 0) {
-		if (c >= (UChar)'a' && c <= (UChar)'f') {
-			d = c - (UChar)('a' - 10);
-		} else if (c >= (UChar)'A' && c <= (UChar)'F') {
-			d = c - (UChar)('A' - 10);
-		}
-	}
-	return (int8_t)d;
 }

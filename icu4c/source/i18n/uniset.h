@@ -595,14 +595,6 @@ private:
      * there is none.
      */
     static UChar charAfter(const UnicodeString& str, int32_t i);
-
-public: // Make public for HexToUnicodeTransliterator
-	/**
-	 * TEMPORARY WORKAROUND UNTIL Unicode::digit() exists.
-	 * Return the digit value of the given UChar, or -1.  The radix
-	 * value is ignored for now and hardcoded as 16.
-	 */
-	static int8_t digit(UChar c, int8_t radix);
 };
 
 inline void UnicodeSet::applyPattern(const UnicodeString& pattern,
