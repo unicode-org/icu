@@ -112,7 +112,9 @@ ScriptAndLanguageTags.o \
 SinglePositioningSubtables.o \
 SingleSubstitutionSubtables.o \
 SubstitutionLookups.o \
-ValueRecords.o 
+ValueRecords.o \
+KhmerLayoutEngine.o \
+KhmerReordering.o
 
 STATIC_OBJECTS = $(OBJECTS:.o=.$(STATIC_O))
 

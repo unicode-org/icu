@@ -14,6 +14,7 @@
 #include "CanonShaping.h"
 #include "HanLayoutEngine.h"
 #include "IndicLayoutEngine.h"
+#include "KhmerLayoutEngine.h"
 #include "ThaiLayoutEngine.h"
 #include "GXLayoutEngine.h"
 #include "ScriptAndLanguageTags.h"
@@ -455,6 +456,10 @@ LayoutEngine *LayoutEngine::layoutEngineFactory(const LEFontInstance *fontInstan
                 break;
             }
 
+            break;
+
+        case khmrScriptCode:
+            result = new KhmerOpenTypeLayoutEngine(fontInstance, scriptCode, languageCode, gsubTable);
             break;
 
         default:
