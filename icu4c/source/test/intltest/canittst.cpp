@@ -45,17 +45,17 @@ static UnicodeString str(const char *input)
 
 
 CanonicalIteratorTest::CanonicalIteratorTest() :
-name(NULL), hex(NULL)
+nameTrans(NULL), hexTrans(NULL)
 {
 }
 
 CanonicalIteratorTest::~CanonicalIteratorTest()
 {
-  if(name != NULL) {
-    delete(name);
+  if(nameTrans != NULL) {
+    delete(nameTrans);
   }
-  if(hex != NULL) {
-    delete(hex);
+  if(hexTrans != NULL) {
+    delete(hexTrans);
   }
 }
 
@@ -195,22 +195,24 @@ UnicodeString CanonicalIteratorTest::getReadable(const UnicodeString &s) {
     if (s.length() == 0) return "";
     // set up for readable display
     if(verbose) {
-      if (name == NULL) name = Transliterator::createInstance("[^\\ -\\u007F] name", UTRANS_FORWARD, status);
+      if (nameTrans == NULL)
+          nameTrans = Transliterator::createInstance("[^\\ -\\u007F] name", UTRANS_FORWARD, status);
       UnicodeString sName = s;
-      name->transliterate(sName);
+      nameTrans->transliterate(sName);
       result += sName;
       result += ";";
     }
-    if (hex == NULL) hex = Transliterator::createInstance("[^\\ -\\u007F] hex", UTRANS_FORWARD, status);
+    if (hexTrans == NULL)
+        hexTrans = Transliterator::createInstance("[^\\ -\\u007F] hex", UTRANS_FORWARD, status);
     UnicodeString sHex = s;
-    hex->transliterate(sHex);
+    hexTrans->transliterate(sHex);
     result += sHex;
     result += "]";
     return result;
     //return "[" + (verbose ? name->transliterate(s) + "; " : "") + hex->transliterate(s) + "]";
 }
 
-int compareUnicodeStrings(const void *s1, const void *s2) {
+U_CAPI int compareUnicodeStrings(const void *s1, const void *s2) {
   UnicodeString **st1 = (UnicodeString **)s1;
   UnicodeString **st2 = (UnicodeString **)s2;
 

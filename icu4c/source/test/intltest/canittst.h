@@ -5,8 +5,8 @@
  ********************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu/source/test/intltest/canittst.h,v $ 
- * $Date: 2002/03/19 07:18:06 $ 
- * $Revision: 1.1 $
+ * $Date: 2002/03/29 19:56:29 $ 
+ * $Revision: 1.2 $
  *
  *****************************************************************************************
  * @author Mark E. Davis
@@ -40,8 +40,8 @@ public:
 private:
     void expectEqual(const UnicodeString &message, const UnicodeString &item, const UnicodeString &a, const UnicodeString &b);
 
-    Transliterator *name;
-    Transliterator *hex;
+    Transliterator *nameTrans;
+    Transliterator *hexTrans;
         
     UnicodeString getReadable(const UnicodeString &obj);
 };
