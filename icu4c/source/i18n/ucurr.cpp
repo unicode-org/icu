@@ -96,12 +96,18 @@ myUCharsToChars(char* resultOfLen4, const UChar* currency) {
  * units of 10^(-fraction_digits).
  */
 static const int32_t*
-_findMetaData(const UChar* currency) {
+_findMetaData(const UChar* currency, UErrorCode& ec) {
+
+    if (currency == 0 || *currency == 0) {
+        if (U_SUCCESS(ec)) {
+            ec = U_ILLEGAL_ARGUMENT_ERROR;
+        }
+        return LAST_RESORT_DATA;
+    }
 
     // Get CurrencyMeta resource out of root locale file.  [This may
     // move out of the root locale file later; if it does, update this
     // code.]
-    UErrorCode ec = U_ZERO_ERROR;
     ResourceBundle currencyMeta =
         ResourceBundle((char*)0, Locale(""), ec).get(CURRENCY_META, ec);
 
@@ -112,8 +118,9 @@ _findMetaData(const UChar* currency) {
 
     // Look up our currency, or if that's not available, then DEFAULT
     char buf[ISO_COUNTRY_CODE_LENGTH+1];
-    ResourceBundle rb = currencyMeta.get(myUCharsToChars(buf, currency), ec);
-    if (U_FAILURE(ec)) {
+    UErrorCode ec2 = U_ZERO_ERROR; // local error code: soft failure
+    ResourceBundle rb = currencyMeta.get(myUCharsToChars(buf, currency), ec2);
+    if (U_FAILURE(ec2)) {
         rb = currencyMeta.get(DEFAULT_META, ec);
         if (U_FAILURE(ec)) {
             // Config/build error; return hard-coded defaults
@@ -123,8 +130,11 @@ _findMetaData(const UChar* currency) {
 
     int32_t len;
     const int32_t *data = rb.getIntVector(len, ec);
-    if (U_FAILURE(ec) || len < 2) {
+    if (U_FAILURE(ec) || len != 2) {
         // Config/build error; return hard-coded defaults
+        if (U_SUCCESS(ec)) {
+            ec = U_INVALID_FORMAT_ERROR;
+        }
         return LAST_RESORT_DATA;
     }
 
@@ -239,22 +249,22 @@ struct CReg : public UMemory {
  * @see VARIANT_IS_PREEURO
  */
 static uint32_t
-idForLocale(const char* locale, char* buffer, int capacity, UErrorCode* ec)
+idForLocale(const char* locale, char* countryAndVariant, int capacity, UErrorCode* ec)
 {
     uint32_t variantType = 0;
     // !!! this is internal only, assumes buffer is not null and capacity is sufficient
     // Extract the country name and variant name.  We only
     // recognize two variant names, EURO and PREEURO.
     char variant[ULOC_FULLNAME_CAPACITY];
-    uloc_getCountry(locale, buffer, capacity, ec);
+    uloc_getCountry(locale, countryAndVariant, capacity, ec);
     uloc_getVariant(locale, variant, sizeof(variant), ec);
     if (variant[0] != 0) {
         variantType = (0 == uprv_strcmp(variant, VAR_EURO))
                    | ((0 == uprv_strcmp(variant, VAR_PRE_EURO)) << 1);
         if (variantType)
         {
-            uprv_strcat(buffer, VAR_DELIM);
-            uprv_strcat(buffer, variant);
+            uprv_strcat(countryAndVariant, VAR_DELIM);
+            uprv_strcat(countryAndVariant, variant);
         }
     }
     return variantType;
@@ -304,6 +314,7 @@ ucurr_forLocale(const char* locale,
                     u_charsToUChars(id, buff, resLen);
                 }
             } else {
+                // get country or country_variant in `id'
                 uint32_t variantType = idForLocale(locale, id, sizeof(id), ec);
 
                 if (U_FAILURE(*ec)) {
@@ -512,18 +523,25 @@ uprv_getStaticCurrencyName(const UChar* iso, const char* loc,
 }
 
 U_CAPI int32_t U_EXPORT2
-ucurr_getDefaultFractionDigits(const UChar* currency) {
-    return (_findMetaData(currency))[0];
+ucurr_getDefaultFractionDigits(const UChar* currency, UErrorCode* ec) {
+    return (_findMetaData(currency, *ec))[0];
 }
 
 U_CAPI double U_EXPORT2
-ucurr_getRoundingIncrement(const UChar* currency) {
-    const int32_t *data = _findMetaData(currency);
+ucurr_getRoundingIncrement(const UChar* currency, UErrorCode* ec) {
+    const int32_t *data = _findMetaData(currency, *ec);
 
-    // If there is no rounding, or if the meta data is invalid,
-    // return 0.0 to indicate no rounding.  A rounding value
-    // (data[1]) of 0 or 1 indicates no rounding.
-    if (data[1] < 2 || data[0] < 0 || data[0] > MAX_POW10) {
+    // If the meta data is invalid, return 0.0.
+    if (data[0] < 0 || data[0] > MAX_POW10) {
+        if (U_SUCCESS(*ec)) {
+            *ec = U_INVALID_FORMAT_ERROR;
+        }
+        return 0.0;
+    }
+
+    // If there is no rounding, return 0.0 to indicate no rounding.  A
+    // rounding value (data[1]) of 0 or 1 indicates no rounding.
+    if (data[1] < 2) {
         return 0.0;
     }
 
