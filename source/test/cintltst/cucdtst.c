@@ -2196,11 +2196,11 @@ TestAdditionalProperties() {
         { 0x0C4E, UCHAR_BLOCK, UBLOCK_TELUGU },
         { 0x155A, UCHAR_BLOCK, UBLOCK_UNIFIED_CANADIAN_ABORIGINAL_SYLLABICS },
         { 0x1717, UCHAR_BLOCK, UBLOCK_TAGALOG },
-        { 0x1AFF, UCHAR_BLOCK, UBLOCK_INVALID_CODE },
+        { 0x1AFF, UCHAR_BLOCK, UBLOCK_NO_BLOCK },
         { 0x3040, UCHAR_BLOCK, UBLOCK_HIRAGANA },
         { 0x1D0FF, UCHAR_BLOCK, UBLOCK_BYZANTINE_MUSICAL_SYMBOLS },
         { 0x10D0FF, UCHAR_BLOCK, UBLOCK_SUPPLEMENTARY_PRIVATE_USE_AREA_B },
-        { 0xEFFFF, UCHAR_BLOCK, UBLOCK_INVALID_CODE },
+        { 0xEFFFF, UCHAR_BLOCK, UBLOCK_NO_BLOCK },
 
         /* UCHAR_CANONICAL_COMBINING_CLASS tested for assigned characters in TestUnicodeData() */
         { 0xd7d7, UCHAR_CANONICAL_COMBINING_CLASS, 0 },
@@ -2307,7 +2307,7 @@ TestAdditionalProperties() {
 
     if( u_getIntPropertyMinValue(UCHAR_DASH)!=0 ||
         u_getIntPropertyMinValue(UCHAR_BIDI_CLASS)!=0 ||
-        u_getIntPropertyMinValue(UCHAR_BLOCK)!=(int32_t)UBLOCK_INVALID_CODE ||
+        u_getIntPropertyMinValue(UCHAR_BLOCK)!=0 ||   /* j2478 */
         u_getIntPropertyMinValue(UCHAR_SCRIPT)!=0 || /*JB#2410*/
         u_getIntPropertyMinValue(0x2345)!=0
     ) {

@@ -99,18 +99,7 @@ uscript_getScript(UChar32 c, UErrorCode *pErrorCode) {
 
 U_CAPI UBlockCode U_EXPORT2
 ublock_getCode(UChar32 c) {
-    uint32_t b;
-
-    if((uint32_t)c>0x10ffff) {
-        return UBLOCK_INVALID_CODE;
-    }
-
-    b=(u_getUnicodeProperties(c, 0)&UPROPS_BLOCK_MASK)>>UPROPS_BLOCK_SHIFT;
-    if(b==0) {
-        return UBLOCK_INVALID_CODE;
-    } else {
-        return (UBlockCode)b;
-    }
+    return (UBlockCode)((u_getUnicodeProperties(c, 0)&UPROPS_BLOCK_MASK)>>UPROPS_BLOCK_SHIFT);
 }
 
 U_CAPI UBool U_EXPORT2
@@ -349,12 +338,7 @@ u_getIntPropertyValue(UChar32 c, UProperty which) {
 
 U_CAPI int32_t U_EXPORT2
 u_getIntPropertyMinValue(UProperty which) {
-    switch(which) {
-    case UCHAR_BLOCK:
-        return UBLOCK_INVALID_CODE;
-    default:
-        return 0; /* undefined; and: all other properties have a minimum value of 0 */
-    }
+    return 0; /* all binary/enum/int properties have a minimum value of 0 */
 }
 
 U_CAPI int32_t U_EXPORT2
