@@ -161,14 +161,16 @@ static void TestAPI() {
         log_err("FAIL: utrans_open(%s) failed, error=%s\n",
                 buf, u_errorName(status));
     }
-    
-    /* Test getID */
-    utrans_getID(trans, buf2, BUF_CAP);
-    if (0 != strcmp(buf, buf2)) {
-        log_err("FAIL: utrans_getID(%s) returned %s\n",
-                buf, buf2);
+
+    else {
+        /* Test getID */
+        utrans_getID(trans, buf2, BUF_CAP);
+        if (0 != strcmp(buf, buf2)) {
+            log_err("FAIL: utrans_getID(%s) returned %s\n",
+                    buf, buf2);
+        }
+        utrans_close(trans);
     }
-    utrans_close(trans);
 }
 
 static void TestOpenInverse(){
@@ -446,9 +448,14 @@ static void TestExtractBetween() {
     trans = utrans_open("Lower", UTRANS_FORWARD, NULL, -1,
                         &parseErr, &status);
 
-    _expect(trans, "ABC", "abc");
+    if (U_FAILURE(status)) {
+        log_err("FAIL: utrans_open(Lower) failed, error=%s\n",
+                u_errorName(status));
+    } else {
+        _expect(trans, "ABC", "abc");
 
-    utrans_close(trans);
+        utrans_close(trans);
+    }
 }
 
 static void _expectRules(const char* crules,
