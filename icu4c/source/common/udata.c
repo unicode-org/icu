@@ -225,6 +225,8 @@ udata_close(UDataMemory *pData) {
 
 #elif defined (LINUX)||defined(POSIX)||defined(SOLARIS)||defined(AIX)||defined(HPUX)
 
+/* If you are excruciatingly bored turn this on .. */
+/*  #define UDATA_DEBUG 1 */
 
 typedef struct {
     uint16_t headerSize;
@@ -252,7 +254,69 @@ struct UDataMemory {
 #define LIB_SUFFIX UDATA_SO_SUFFIX
 
 /* Do we need to check the platform here? */
-#include <dlfcn.h>
+
+#if defined(ICU_USE_SHL_LOAD)
+
+
+# include <dl.h>
+ /* HPUX compatibility stubs:  shl_load, etc.. */
+#define  RTLD_LAZY 0
+#define  RTLD_GLOBAL 0
+
+void *dlopen (const char *filename, int flag)
+{
+	void *handle; /* real type: 'shl_t' */
+
+#ifdef UDATA_DEBUG
+	fprintf(stderr, "shl_load: %s ", filename);
+#endif
+	
+	handle = shl_load(filename, BIND_NONFATAL | BIND_DEFERRED | DYNAMIC_PATH  , 0L);
+
+#ifdef UDATA_DEBUG
+	fprintf(stderr, " -> %08X\n", handle );
+#endif
+
+	return handle;
+}
+
+
+
+void *dlsym(void *h, char *symbol)
+{
+	void *val = 0;
+	int rv;
+	shl_t mysh;
+
+	mysh = (shl_t)h; /* real type */
+
+	rv = shl_findsym(&mysh,symbol,TYPE_DATA,(void*)&val);
+
+#ifdef UDATA_DEBUG
+	fprintf(stderr, "shl_findsym(%08X, %s) -> %08X [%d]\n", h,
+		symbol, val, rv);
+#endif
+	
+
+	return val;
+	
+}
+
+int dlclose (void *handle)
+{
+#ifdef UDATA_DEBUG
+	fprintf(stderr, "shl_unload: %08X\n", handle);
+#endif
+
+	return shl_unload((shl_t)handle);
+}
+
+
+
+#else
+ /* 'de facto standard' dlopen etc */
+# include <dlfcn.h>
+#endif
 
 
 typedef void *Library;
