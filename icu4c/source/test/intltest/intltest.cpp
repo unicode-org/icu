@@ -1275,6 +1275,10 @@ UnicodeString CharsToUnicodeString(const char* chars)
     return str.unescape();
 }
 
+UnicodeString ctou(const char* chars) {
+    return CharsToUnicodeString(chars);
+}
+
 #define RAND_M  (714025)
 #define RAND_IA (1366)
 #define RAND_IC (150889)
@@ -1317,6 +1321,57 @@ float IntlTest::random(int32_t* seedp) {
  */
 float IntlTest::random() {
     return random(&RAND_SEED);
+}
+
+#define VERBOSE_ASSERTIONS
+
+UBool IntlTest::assertTrue(const char* message, UBool condition) {
+    if (!condition) {
+        errln("FAIL: assertTrue() failed: %s", message);
+    }
+#ifdef VERBOSE_ASSERTIONS
+    else {
+        logln("Ok: %s", message);
+    }
+#endif
+    return condition;
+}
+
+UBool IntlTest::assertFalse(const char* message, UBool condition) {
+    if (condition) {
+        errln("FAIL: assertFalse() failed: %s", message);
+    }
+#ifdef VERBOSE_ASSERTIONS
+    else {
+        logln("Ok: %s", message);
+    }
+#endif
+    return !condition;
+}
+
+UBool IntlTest::assertSuccess(const char* message, UErrorCode ec) {
+    if (U_FAILURE(ec)) {
+        errln("FAIL: %s (%s)", message, u_errorName(ec));
+        return FALSE;
+    }
+    return TRUE;
+}
+
+UBool IntlTest::assertEquals(const char* message,
+                             const UnicodeString& expected,
+                             const UnicodeString& actual) {
+    if (expected != actual) {
+        errln((UnicodeString)"FAIL: " + message + "; got " +
+              prettify(actual) +
+              "; expected " + prettify(expected));
+        return FALSE;
+    }
+#ifdef VERBOSE_ASSERTIONS
+    else {
+        logln((UnicodeString)"Ok: " + message + "; got " + prettify(actual));
+    }
+#endif
+    return TRUE;
 }
 
 /*

@@ -130,6 +130,13 @@ public:
     static float random();
 
 protected:
+    /* JUnit-like assertions. Each returns TRUE if it succeeds. */
+    UBool assertTrue(const char* message, UBool condition);
+    UBool assertFalse(const char* message, UBool condition);
+    UBool assertSuccess(const char* message, UErrorCode ec);
+    UBool assertEquals(const char* message, const UnicodeString& expected,
+                       const UnicodeString& actual);
+
     virtual void runIndexedTest( int32_t index, UBool exec, const char* &name, char* par = NULL ); // overide !
 
     virtual UBool runTestLoop( char* testname, char* par );
@@ -201,5 +208,8 @@ void it_errln( UnicodeString message );
  * unescaping \u sequences.
  */
 extern UnicodeString CharsToUnicodeString(const char* chars);
+
+/* alias for CharsToUnicodeString */
+extern UnicodeString ctou(const char* chars);
 
 #endif // _INTLTEST
