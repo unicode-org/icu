@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/UnicodeSet.java,v $
- * $Date: 2001/11/21 22:21:45 $
- * $Revision: 1.46 $
+ * $Date: 2001/11/22 00:05:50 $
+ * $Revision: 1.47 $
  *
  *****************************************************************************************
  */
@@ -18,15 +18,14 @@ import com.ibm.util.Utility;
 /**
  * A mutable set of Unicode characters.  Objects of this class
  * represent <em>character classes</em> used in regular expressions.
- * Such classes specify a subset of the set of all Unicode characters,
- * which in this implementation is the characters from U+0000 to
- * U+10FFFF.
+ * A character specifies a subset of Unicode code points.  Legal
+ * code points are U+0000 to U+10FFFF, inclusive.
  *
  * <p><code>UnicodeSet</code> supports two APIs. The first is the
  * <em>operand</em> API that allows the caller to modify the value of
  * a <code>UnicodeSet</code> object. It conforms to Java 2's
  * <code>java.util.Set</code> interface, although
- * <code>UnicodeSet</code> cannot actually implement that
+ * <code>UnicodeSet</code> does not actually implement that
  * interface. All methods of <code>Set</code> are supported, with the
  * modification that they take a character range or single character
  * instead of an <code>Object</code>, and they take a
@@ -50,9 +49,6 @@ import com.ibm.util.Utility;
  * attributes of a <code>UnicodeSet</code> at once, based on a
  * string pattern.
  *
- * <p>In addition, the set complement operation is supported through
- * the <code>complement()</code> method.
- *
  * <p><b>Pattern syntax</b></p>
  *
  * Patterns are accepted by the constructors and the
@@ -66,7 +62,7 @@ import com.ibm.util.Utility;
  *     <tr align="top">
  *       <td nowrap valign="top" align="right"><code>pattern :=&nbsp; </code></td>
  *       <td valign="top"><code>('[' '^'? item* ']') |
- *       ('[:' '^'? category ':]')</code></td>
+ *       property</code></td>
  *     </tr>
  *     <tr align="top">
  *       <td nowrap valign="top" align="right"><code>item :=&nbsp; </code></td>
@@ -103,12 +99,8 @@ import com.ibm.util.Utility;
  *       returns a non-negative result</em></td>
  *     </tr>
  *     <tr>
- *       <td nowrap valign="top" align="right"><code>category :=&nbsp; </code></td>
- *       <td valign="top"><code>'M' | 'N' | 'Z' | 'C' | 'L' | 'P' |
- *       'S' | 'Mn' | 'Mc' | 'Me' | 'Nd' | 'Nl' | 'No' | 'Zs' | 'Zl' |
- *       'Zp' | 'Cc' | 'Cf' | 'Cs' | 'Co' | 'Cn' | 'Lu' | 'Ll' | 'Lt'
- *       | 'Lm' | 'Lo' | 'Pc' | 'Pd' | 'Ps' | 'Pe' | 'Po' | 'Sm' |
- *       'Sc' | 'Sk' | 'So'</code></td>
+ *       <td nowrap valign="top" align="right"><code>property :=&nbsp; </code></td>
+ *       <td valign="top"><em>a Unicode property set pattern</td>
  *     </tr>
  *   </table>
  *   <br>
@@ -150,20 +142,30 @@ import com.ibm.util.Utility;
  * </blockquote>
  *
  * Any character may be preceded by a backslash in order to remove any special
- * meaning.  White space characters, as defined by Character.isWhitespace(), are
+ * meaning.  White space characters, as defined by UCharacter.isWhitespace(), are
  * ignored, unless they are escaped.
  *
- * Patterns specify individual characters, ranges of characters, and
- * Unicode character categories.  When elements are concatenated, they
+ * <p>Property patterns specify a set of characters having a certain
+ * property as defined by the Unicode standard.  Both the POSIX-like
+ * "[:Lu:]" and the Perl-like syntax "\p{Lu}" are recognized.  For a
+ * complete list of supported property patterns, see the User's Guide
+ * for UnicodeSet at
+ * <a href="http://oss.software.ibm.com/icu/userguide/unicodeset.html">
+ * http://oss.software.ibm.com/icu/userguide/unicodeset.html</a>.
+ * Actual determination of property data is defined by the underlying
+ * Unicode database as implemented by UCharacter.
+ *
+ * <p>Patterns specify individual characters, ranges of characters, and
+ * Unicode property sets.  When elements are concatenated, they
  * specify their union.  To complement a set, place a '^' immediately
- * after the opening '[' or '[:'.  In any other location, '^' has no
- * special meaning.
+ * after the opening '['.  Property patterns are inverted by modifying
+ * their delimiters; "[:^foo]" and "\P{foo}".  In any other location,
+ * '^' has no special meaning.
  *
  * <p>Ranges are indicated by placing two a '-' between two
  * characters, as in "a-z".  This specifies the range of all
  * characters from the left to the right, in Unicode order.  If the
- * left and right characters are the same, then the range consists of
- * just that character.  If the left character is greater than the
+ * left character is greater than or equal to the
  * right character it is a syntax error.  If a '-' occurs as the first
  * character after the opening '[' or '[^', or if it occurs as the
  * last character before the closing ']', then it is taken as a
@@ -193,34 +195,16 @@ import com.ibm.util.Utility;
  * <tr valign=top><td nowrap><code>[[<em>pat1</em>]-[<em>pat2</em>]]</code>
  * <td>The asymmetric difference of sets specified by <em>pat1</em> and
  * <em>pat2</em>
- * <tr valign=top><td nowrap><code>[:Lu:]</code>
- * <td>The set of characters belonging to the given
- * Unicode category, as defined by <code>Character.getType()</code>; in
+ * <tr valign=top><td nowrap><code>[:Lu:] or \p{Lu}</code>
+ * <td>The set of characters having the specified
+ * Unicode property; in
  * this case, Unicode uppercase letters
- * <tr valign=top><td nowrap><code>[:L:]</code>
- * <td>The set of characters belonging to all Unicode categories
- * starting wih 'L', that is, <code>[[:Lu:][:Ll:][:Lt:][:Lm:][:Lo:]]</code>.
+ * <tr valign=top><td nowrap><code>[:^Lu:] or \P{Lu}</code>
+ * <td>The set of characters <em>not</em> having the given
+ * Unicode property
  * </table>
- *
- * <p><b>Character properties.</b>
- *
- * <p>Character properties are specified using the POSIX-like syntax
- * "[:Lu:]" or the Perl-like syntax "\p{Lu}".  The complement of a
- * category is specified as "[:^Lu:]" or "\P{Lu}".  Actual
- * determination of category data is accomplished by UCharacter using
- * the underlying Unicode database.
- *
- * <p>For details of the property syntax please see this
- * <a href="http://oss.software.ibm.com/cvs/icu/~checkout~/icuhtml/design/unicodeset_properties.html">
- * draft document</a>.
- *
- * <p><em>Note:</em> Not all properties are currently supported.
- * Currently, only the general category, script, and numeric value
- * properties are supported.  Support for other properties will be
- * added in the future.
- *
  * @author Alan Liu
- * @version $RCSfile: UnicodeSet.java,v $ $Revision: 1.46 $ $Date: 2001/11/21 22:21:45 $
+ * @version $RCSfile: UnicodeSet.java,v $ $Revision: 1.47 $ $Date: 2001/11/22 00:05:50 $
  */
 public class UnicodeSet extends UnicodeFilter {
 
@@ -699,9 +683,10 @@ public class UnicodeSet extends UnicodeFilter {
     /**
      * Returns the character at the given index within this set, where
      * the set is ordered by ascending code point.  If the index is
-     * out of range, return U+FFFE.  The inverse of this method is
+     * out of range, return -1.  The inverse of this method is
      * <code>indexOf()</code>.
      * @param index an index from 0..size()-1
+     * @return the character at the given index, or -1.
      */
     public int charAt(int index) {
         if (index >= 0) {
@@ -714,7 +699,7 @@ public class UnicodeSet extends UnicodeFilter {
                 index -= count;
             }
         }
-        return '\uFFFE';
+        return -1;
     }
 
     /**
@@ -914,7 +899,6 @@ public class UnicodeSet extends UnicodeFilter {
      * collection is modified while the operation is in progress.
      *
      * @param c set whose elements are to be added to this set.
-     * @see #add(int[], int, int)
      */
     public void addAll(UnicodeSet c) {
         add(c.list, c.len, 0);
