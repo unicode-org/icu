@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/BreakIterator.java,v $
- * $Date: 2003/06/04 20:24:14 $
- * $Revision: 1.23 $
+ * $Date: 2003/11/14 23:45:01 $
+ * $Revision: 1.24 $
  *
  *****************************************************************************************
  */
@@ -16,6 +16,7 @@ import java.lang.ref.SoftReference;
 import java.text.CharacterIterator;
 import java.text.StringCharacterIterator;
 import java.util.Locale;
+import com.ibm.icu.util.ULocale;
 
 
 /**
@@ -409,6 +410,15 @@ public abstract class BreakIterator implements Cloneable
      * @stable ICU 2.0
      */
     public abstract void setText(CharacterIterator newText);
+    
+	/** Get the locale for this break iterator object. You can choose between valid and actual locale.
+	 *  @param type type of the locale we're looking for (valid or actual) 
+	 *  @return the locale
+	 *  @draft ICU 2.8
+	 */
+	public ULocale getLocale(ULocale.ULocaleDataType type) {
+		return new ULocale("");		
+	}
 
     /** @draft ICU 2.4 */
     public static final int KIND_CHARACTER = 0;

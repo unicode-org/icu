@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/Collator.java,v $
-* $Date: 2003/09/22 06:24:18 $
-* $Revision: 1.34 $
+* $Date: 2003/11/14 23:45:01 $
+* $Revision: 1.35 $
 *
 *******************************************************************************
 */
@@ -18,6 +18,7 @@ import java.util.Set;
 
 import com.ibm.icu.impl.ICULocaleData;
 import com.ibm.icu.impl.LocaleUtility;
+import com.ibm.icu.util.ULocale;
 
 /**
 * <p>Collator performs locale-sensitive string comparison. A concrete
@@ -726,6 +727,14 @@ public abstract class Collator implements Comparator, Cloneable
      */
     public abstract void setVariableTop(int varTop);
 
+	/** Get the locale for this collator object. You can choose between valid and actual locale.
+	 *  @param type type of the locale we're looking for (valid or actual) 
+	 *  @return the locale
+	 *  @draft ICU 2.8
+	 */
+	public ULocale getLocale(ULocale.ULocaleDataType type) {
+		return new ULocale("");		
+	}
     // protected constructor -------------------------------------------------
 
     /**
