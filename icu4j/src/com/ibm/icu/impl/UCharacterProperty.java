@@ -6,8 +6,8 @@
 *
 * $Source: 
 *         /usr/cvs/icu4j/icu4j/src/com/ibm/icu/text/UCharacterPropertyDB.java $ 
-* $Date: 2002/07/18 23:27:03 $ 
-* $Revision: 1.11 $
+* $Date: 2002/07/19 00:53:02 $ 
+* $Revision: 1.12 $
 *
 *******************************************************************************
 */
@@ -1042,7 +1042,7 @@ public final class UCharacterProperty implements Trie.DataManipulate
 	        
 	        toLowerCase(locale, ch, ucharIter, result);
 	        strIndex ++;
-	        if (ch > UTF16.SUPPLEMENTARY_MIN_VALUE) {
+	        if (ch >= UTF16.SUPPLEMENTARY_MIN_VALUE) {
 	        	strIndex ++;
 	        }
         }
@@ -1234,7 +1234,7 @@ public final class UCharacterProperty implements Trie.DataManipulate
 	        
 	        toUpperOrTitleCase(locale, ch, ucharIter, true, result);
 	        strIndex ++;
-	        if (ch > UTF16.SUPPLEMENTARY_MIN_VALUE) {
+	        if (ch >= UTF16.SUPPLEMENTARY_MIN_VALUE) {
 	        	strIndex ++;
 	        }
         }
