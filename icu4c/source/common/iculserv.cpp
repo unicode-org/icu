@@ -642,7 +642,7 @@ ICULocaleService::registerInstance(UObject* objToAdopt, const UnicodeString& loc
 }
 #endif
 
-class ServiceEnumeration : public UMemory, public StringEnumeration {
+class ServiceEnumeration : public StringEnumeration {
 private:
   const ICULocaleService* _service;
   int32_t _timestamp;
@@ -759,7 +759,14 @@ public:
     }
   }
 
+public:
+	virtual UClassID getDynamicClassID(void) const { return getStaticClassID(); }
+	static UClassID getStaticClassID(void) { return (UClassID)&fgClassID; }
+private:
+	static const char fgClassID;
 };
+
+const char ServiceEnumeration::fgClassID = '\0';
 
 StringEnumeration*
 ICULocaleService::getAvailableLocales(void) const 

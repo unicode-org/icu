@@ -10,7 +10,7 @@
 #ifndef STRENUM_H
 #define STRENUM_H
 
-#include "unicode/utypes.h"
+#include "unicode/uobject.h"
 
 U_NAMESPACE_BEGIN
 
@@ -45,7 +45,7 @@ class UnicodeString;
  *
  * @draft ICU 2.4 
  */
-class U_COMMON_API StringEnumeration { /* not : public UObject because this is an interface/mixin class */
+class U_COMMON_API StringEnumeration : public UObject { 
  public:
   /**
    * Destructor.
