@@ -128,7 +128,7 @@ public class JDKTimeZone extends TimeZone {
      * Boilerplate API; calls through to wrapped object.
      */
     public Object clone() {
-        return new JDKTimeZone((java.util.TimeZone)zone.clone());
+        return wrap((java.util.TimeZone)zone.clone());
     }
 
     /**
