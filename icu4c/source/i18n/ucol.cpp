@@ -283,6 +283,7 @@ ucol_open(    const    char         *loc,
     result = ucol_initCollator(UCA->image, result, status);
     // if we use UCA, real locale is root
     result->rb = ures_open(NULL, "", status);
+    result->binary = ures_open(NULL, "", status);
     if(U_FAILURE(*status)) {
       goto clean;
     }
@@ -309,25 +310,19 @@ ucol_open(    const    char         *loc,
       }
       result->hasRealData = FALSE;
     }
-    const char *realCollationDataLocale = ures_getLocale(binary, status);
-    ures_close(binary);
-    // if the real data came from the fallback, we want to drag around 
-    // the real resource bundle
-    if(uprv_strcmp(ures_getLocale(b, status), realCollationDataLocale) != 0) {
-      result->rb = ures_open(NULL, realCollationDataLocale, status);
-      if(U_FAILURE(*status)) {
-        goto clean;
-      }
-      ures_close(b);
-    } else { // otherwise, we'll keep the initial RB around
-      result->rb = b;
-    }
+    result->binary = binary;
+    result->rb = b;
   } else { /* There is another error, and we're just gonna clean up */
 clean:
     ures_close(b);
     ures_close(binary);
     return NULL;
   }
+  if(loc == NULL) {
+    loc = ures_getLocale(result->rb, status);
+  }
+  result->requestedLocale = (char *)uprv_malloc((uprv_strlen(loc)+1)*sizeof(char));
+  uprv_strcpy(result->requestedLocale, loc);
   return result;
 }
 
@@ -377,6 +372,12 @@ ucol_close(UCollator *coll)
     ures_close(coll->rb);
   } else if(coll->hasRealData == TRUE) {
     uprv_free((UCATableHeader *)coll->image);
+  }
+  if(coll->binary != NULL) {
+    ures_close(coll->binary);
+  }
+  if(coll->requestedLocale != NULL) {
+    uprv_free(coll->requestedLocale);
   }
   uprv_free(coll);
 }
@@ -484,7 +485,9 @@ ucol_openRules( const UChar        *rules,
     result->rules = newRules;
     result->rulesLength = rulesLength;
     result->freeRulesOnClose = TRUE;
-    result->rb = 0;
+    result->rb = NULL;
+    result->binary = NULL;
+    result->requestedLocale = NULL;
     ucol_setAttribute(result, UCOL_STRENGTH, strength, status);
     ucol_setAttribute(result, UCOL_NORMALIZATION_MODE, norm, status);
   } else {
@@ -5658,14 +5661,28 @@ ucol_equal(        const    UCollator        *coll,
 
 /* returns the locale name the collation data comes from */
 U_CAPI const char * U_EXPORT2
-ucol_getLocale(const UCollator *coll, UErrorCode *status) {
+ucol_getLocale(const UCollator *coll, ULocDataLocaleType type, UErrorCode *status) {
+  const char *result = NULL;
   if(status == NULL || U_FAILURE(*status)) {
     return NULL;
   }
-  if(coll->rb != NULL) {
-    return ures_getLocale(coll->rb, status);
-  } else {
-    return NULL;
+  switch(type) {
+  case ULOC_ACTUAL_LOCALE:
+    if(coll->binary != NULL) {
+      result = ures_getLocale(coll->binary, status);
+    }
+    break;
+  case ULOC_VALID_LOCALE:
+    if(coll->rb != NULL) {
+      result = ures_getLocale(coll->rb, status);
+    } 
+    break;
+  case ULOC_REQUESTED_LOCALE:
+    result = coll->requestedLocale;
+    break;
+  default:
+    *status = U_ILLEGAL_ARGUMENT_ERROR;
   }
+  return result;
 }
 
