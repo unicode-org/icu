@@ -33,7 +33,7 @@ T_CString_toLowerCase(char* str)
 
     if (str) {
         do
-            *str = (char)tolower(*str);
+            *str = (char)uprv_tolower(*str);
         while (*(str++));
     }
 
@@ -47,7 +47,7 @@ T_CString_toUpperCase(char* str)
 
     if (str) {
         do
-            *str = (char)toupper(*str);
+            *str = (char)uprv_toupper(*str);
         while (*(str++));
     }
 
