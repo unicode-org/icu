@@ -2199,7 +2199,14 @@ private:
   UBool cloneArrayIfNeeded(int32_t newCapacity = -1,
                             int32_t growCapacity = -1,
                             UBool doCopyArray = TRUE,
-                            int32_t **pBufferToDelete = 0);
+                            int32_t **pBufferToDelete = 0,
+                            UBool forceClone = FALSE);
+
+  // GrowBuffer function for string case mapping
+  static UBool
+  growBuffer(void *context,
+             UChar **buffer, int32_t *pCapacity, int32_t reqCapacity,
+             int32_t length);
 
   // ref counting
   inline int32_t addRef(void);
