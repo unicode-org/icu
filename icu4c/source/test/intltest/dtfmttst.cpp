@@ -245,7 +245,7 @@ DateFormatTest::TestFieldPosition(void)
 {
     UErrorCode status = U_ZERO_ERROR;
     DateFormat* dateFormats[4];
-    int32_t dateFormats_length = sizeof(dateFormats) / sizeof(dateFormats[0]);
+    int32_t dateFormats_length = (int32_t)(sizeof(dateFormats) / sizeof(dateFormats[0]));
 
     /* {sfb} This test was coded incorrectly.
     / FieldPosition uses the fields in the class you are formatting with
@@ -599,11 +599,11 @@ DateFormatTest::TestBadInput135()
     int32_t looks[] = {
         DateFormat::SHORT, DateFormat::MEDIUM, DateFormat::LONG, DateFormat::FULL
     };
-    int32_t looks_length = sizeof(looks) / sizeof(looks[0]);
+    int32_t looks_length = (int32_t)(sizeof(looks) / sizeof(looks[0]));
     const char* strings[] = {
         "Mar 15", "Mar 15 1997", "asdf", "3/1/97 1:23:", "3/1/00 1:23:45 AM"
     };
-    int32_t strings_length = sizeof(strings) / sizeof(strings[0]);
+    int32_t strings_length = (int32_t)(sizeof(strings) / sizeof(strings[0]));
     DateFormat *full = DateFormat::createDateTimeInstance(DateFormat::LONG, DateFormat::LONG);
     UnicodeString expected("March 1, 2000 1:23:45 AM ");
     for (int32_t i = 0; i < strings_length;++i) {
@@ -682,8 +682,8 @@ DateFormatTest::TestBadInput135a()
   SimpleDateFormat* dateParse = new SimpleDateFormat(status);
   const char* s;
   UDate date;
-  const uint32_t PF_LENGTH = sizeof(parseFormats)/sizeof(parseFormats[0]);
-  const uint32_t INPUT_LENGTH = sizeof(inputStrings)/sizeof(inputStrings[0]);
+  const uint32_t PF_LENGTH = (int32_t)(sizeof(parseFormats)/sizeof(parseFormats[0]));
+  const uint32_t INPUT_LENGTH = (int32_t)(sizeof(inputStrings)/sizeof(inputStrings[0]));
 
   dateParse->applyPattern("d MMMM, yyyy");
   dateParse->adoptTimeZone(TimeZone::createDefault());
@@ -856,7 +856,7 @@ DateFormatTest::TestDateFormatZone146()
             UnicodeString("short format:   "), UnicodeString("4/4/97 11:00 PM"),
                 UnicodeString("M/d/yy h:mm a")
         };
-        int32_t DATA_length = sizeof(DATA) / sizeof(DATA[0]);
+        int32_t DATA_length = (int32_t)(sizeof(DATA) / sizeof(DATA[0]));
 
         for (int32_t i=0; i<DATA_length; i+=3) {
             DateFormat *fmt = new SimpleDateFormat(DATA[i+2], Locale::ENGLISH, status);

@@ -751,7 +751,7 @@ TimeZoneRegressionTest::Test4154650()
         BAD,  GOOD_ERA, GOOD_YEAR, GOOD_MONTH, GOOD_DAY, GOOD_DOW, 24*3600000,
     };
 
-    int32_t dataLen = sizeof(DATA) / sizeof(DATA[0]);
+    int32_t dataLen = (int32_t)(sizeof(DATA) / sizeof(DATA[0]));
 
     UErrorCode status = U_ZERO_ERROR;
     TimeZone *tz = TimeZone::createDefault();

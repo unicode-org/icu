@@ -460,7 +460,7 @@ void ConvertTest::TestConvert()
 
 
         /*Reads in the file*/
-        while(!feof(ucs_file_in)&&(i+=fread(ucs_file_buffer+i, (unsigned int)sizeof(UChar), 1, ucs_file_in)))
+        while(!feof(ucs_file_in)&&(i+=fread(ucs_file_buffer+i, sizeof(UChar), 1, ucs_file_in)))
         {
             myUChar = ucs_file_buffer[i-1];
             
