@@ -101,6 +101,15 @@ static void TestAPI() {
     uset_complement(set);
     expect(set, "bef{bc}", "acd{ac}", NULL);
 
+    /* [a-e{bc}] */
+    uset_complement(set);
+    uset_addRange(set, 0x0062, 0x0065);
+    expect(set, "abcde{bc}", "fg{ab}", NULL);
+
+    /* [de{bc}] */
+    uset_removeRange(set, 0x0050, 0x0063);
+    expect(set, "de{bc}", "bcfg{ab}", NULL);
+
     uset_close(set);
 }
 
@@ -147,6 +156,7 @@ static void expectContainment(const USet* set,
     UChar ustr[128];
     char pat[128];
     UErrorCode ec;
+    int32_t rangeStart = -1, rangeEnd = -1;
             
     ec = U_ZERO_ERROR;
     uset_toPattern(set, ustr, sizeof(ustr), TRUE, &ec);
@@ -192,7 +202,37 @@ static void expectContainment(const USet* set,
                         *p);
             }
 
+            /* Test the range API too by looking for ranges */
+            if (c == rangeEnd+1) {
+                rangeEnd = c;
+            } else {
+                if (rangeStart >= 0) {
+                    if (uset_containsRange(set, rangeStart, rangeEnd) == isIn) {
+                        log_verbose("Ok: %s %s U+%04X-U+%04X\n", pat,
+                                    (isIn ? "contains" : "does not contain"),
+                                    rangeStart, rangeEnd);
+                    } else {
+                        log_err("FAIL: %s %s U+%04X-U+%04X\n", pat,
+                                (isIn ? "does not contain" : "contains"),
+                                rangeStart, rangeEnd);
+                    }
+                }
+                rangeStart = rangeEnd = c;
+            }
+
             ++p;
+        }
+    }
+
+    if (rangeStart >= 0) {
+        if (uset_containsRange(set, rangeStart, rangeEnd) == isIn) {
+            log_verbose("Ok: %s %s U+%04X-U+%04X\n", pat,
+                        (isIn ? "contains" : "does not contain"),
+                        rangeStart, rangeEnd);
+        } else {
+            log_err("FAIL: %s %s U+%04X-U+%04X\n", pat,
+                    (isIn ? "does not contain" : "contains"),
+                    rangeStart, rangeEnd);
         }
     }
 }
