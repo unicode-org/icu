@@ -524,6 +524,28 @@ ucase_isCaseSensitive(const UCaseProps *csp, UChar32 c) {
     return (UBool)((props&UCASE_SENSITIVE)!=0);
 }
 
+/* public API (see uchar.h) ------------------------------------------------- */
+
+U_CAPI UBool U_EXPORT2
+u_isULowercase(UChar32 c) {
+    UErrorCode errorCode=U_ZERO_ERROR;
+    UCaseProps *csp=ucase_getSingleton(&errorCode);
+    if(U_FAILURE(errorCode)) {
+        return FALSE;
+    }
+    return (UBool)(UCASE_LOWER==ucase_getType(csp, c));
+}
+
+U_CAPI UBool U_EXPORT2
+u_isUUppercase(UChar32 c) {
+    UErrorCode errorCode=U_ZERO_ERROR;
+    UCaseProps *csp=ucase_getSingleton(&errorCode);
+    if(U_FAILURE(errorCode)) {
+        return FALSE;
+    }
+    return (UBool)(UCASE_UPPER==ucase_getType(csp, c));
+}
+
 /* string casing ------------------------------------------------------------ */
 
 /*

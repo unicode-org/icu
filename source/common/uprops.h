@@ -211,6 +211,13 @@ U_CFUNC int32_t
 uprv_getMaxValues(int32_t column);
 
 /**
+ * Get the Hangul Syllable Type for c.
+ * @internal
+ */
+U_CFUNC UHangulSyllableType
+uchar_getHST(UChar32 c);
+
+/**
  * Get internal UCaseProps pointer from uchar.c for uprops.c.
  * Other code should use ucase_getSingleton().
  */
