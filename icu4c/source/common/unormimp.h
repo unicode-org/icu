@@ -51,7 +51,7 @@ enum {
 /* this may be >0xffff and may not work as an enum */
 #define _NORM_STAGE_1_MAX_COUNT (0x110000>>_NORM_TRIE_SHIFT)
 
-/* value constants */
+/* norm32 value constants */
 enum {
     /* quick check flags 0..3 set mean "no" for their forms */
     _NORM_QC_NFC=0x11,          /* no|maybe */
@@ -84,7 +84,7 @@ enum {
     _NORM_EXTRA_JAMO_T
 };
 
-/* value constants using >16 bits */
+/* norm32 value constants using >16 bits */
 #define _NORM_MIN_SPECIAL       0xfc000000
 #define _NORM_SURROGATES_TOP    0xfff00000
 #define _NORM_MIN_HANGUL        0xfff00000
@@ -92,7 +92,7 @@ enum {
 #define _NORM_JAMO_V_TOP        0xfff30000
 
 
-/* index values */
+/* indexes[] value names */
 enum {
     _NORM_INDEX_COUNT,
     _NORM_INDEX_TRIE_SHIFT,
@@ -119,6 +119,21 @@ enum {
 enum {
     /* FCD check: everything below this code point is known to have a 0 lead combining class */
     _NORM_MIN_WITH_LEAD_CC=0x300
+};
+
+enum {
+    /**
+     * Bit 7 of the length byte for a decomposition string in extra data is
+     * a flag indicating whether the decomposition string is
+     * preceded by a 16-bit word with the leading and trailing cc
+     * of the decomposition (like for A-umlaut);
+     * if not, then both cc's are zero (like for compatibility ideographs).
+     */
+    _NORM_DECOMP_FLAG_LENGTH_HAS_CC=0x80,
+    /**
+     * Bits 6..0 of the length byte contain the actual length.
+     */
+    _NORM_DECOMP_LENGTH_MASK=0x7f
 };
 
 /**
