@@ -101,6 +101,7 @@ all-local: build-local
 
 DAT_FILES=uprops.dat unames.dat cnvalias.dat tz.dat
 BRK_FILES=char.brk line.brk line_th.brk sent.brk word.brk word_th.brk
+# don't include thaidict.brk - it goes into a resource bundle.
 
 DATAFILESD=$(DAT_FILES:%=$(OBJDATADIR)/%)
 DATAFILESB=$(BRK_FILES:%=$(OBJDATADIR)/%)
@@ -121,7 +122,7 @@ ALL_UCM_SOURCE= $(UCM_SOURCE) $(UCM_SOURCE_LOCAL)
 
 include $(srcdir)/genrb/genrbfiles.mk
 -include $(srcdir)/genrb/reslocal.mk
-ALL_RES_SOURCE= $(GENRB_SOURCE) $(TRANSLIT_SOURCE) $(RESOURCE_SRC) $(RES_SOURCE_LOCAL)
+ALL_RES_SOURCE= $(GENRB_SOURCE) $(TRANSLIT_SOURCE) $(RESOURCE_SRC) $(GENRB_SOURCE_LOCAL)
 
 UCM_FILES = $(ALL_UCM_SOURCE:%=$(top_srcdir)/../data/%)
 CNV_FILES = $(ALL_UCM_SOURCE:%.ucm=$(OBJDATADIR)/%.cnv)
@@ -262,12 +263,14 @@ install-local: build-local install-udata
 install-everything: install-files install-dlls
 
 install-files:
+	$(mkinstalldirs) $(DESTDIR)$(pkgdatadir)/$(VERSION)/
 	@for file in $(UDATA_FILES); do \
 	  echo $(INSTALL_DATA) @DATABUILDDIR@/$$file $(DESTDIR)$(pkgdatadir)/$(VERSION)/$$file; \
 	  $(INSTALL_DATA) @DATABUILDDIR@/$$file $(DESTDIR)$(pkgdatadir)/$(VERSION)/$$file || exit; \
 	done
 
 install-dlls:
+	$(mkinstalldirs) $(DESTDIR)$(pkgdatadir)/$(VERSION)/
 	@for file in $(UDATA_DLLS); do \
 	  echo $(INSTALL_DATA) @DATABUILDDIR@/$$file $(DESTDIR)$(pkgdatadir)/$(VERSION)/$$file; \
 	  $(INSTALL-S) @DATABUILDDIR@/$$file $(DESTDIR)$(pkgdatadir)/$(VERSION)/$$file || exit; \
