@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/RuleBasedCollator.java,v $ 
-* $Date: 2002/08/07 01:01:18 $ 
-* $Revision: 1.13 $
+* $Date: 2002/08/07 18:45:03 $ 
+* $Revision: 1.14 $
 *
 *******************************************************************************
 */
@@ -596,7 +596,7 @@ public final class RuleBasedCollator extends Collator
     												!= Normalizer.YES) {
             // for the rest of the strength, if decomposition is on, FCD is                                            
             // enough for us to work on.
-        	source = Normalizer.FCD.dispatch(source);
+        	source = Normalizer.normalize(source,Normalizer.FCD);
     	}
 		getSortKeyBytes(source, compare, bytes, bytescount, count, doFrench,
 						hiragana4, commonBottom4, bottomCount4);
