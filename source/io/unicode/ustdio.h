@@ -372,7 +372,7 @@ u_fprintf(UFILE         *f,
 /**
  * Write formatted data to a UFILE.
  * This is identical to <TT>u_fprintf</TT>, except that it will
- * <EM>not</EM> call <TT>va_start/TT> and <TT>va_end</TT>.
+ * <EM>not</EM> call <TT>va_start</TT> and <TT>va_end</TT>.
  * @param f The UFILE to which to write.
  * @param patternSpecification A pattern specifying how <TT>u_fprintf</TT> will
  * interpret the variable arguments received and format the data.
@@ -402,7 +402,7 @@ u_fprintf_u(UFILE       *f,
 /**
  * Write formatted data to a UFILE.
  * This is identical to <TT>u_fprintf_u</TT>, except that it will
- * <EM>not</EM> call <TT>va_start/TT> and <TT>va_end</TT>.
+ * <EM>not</EM> call <TT>va_start</TT> and <TT>va_end</TT>.
  * @param f The UFILE to which to write.
  * @param patternSpecification A pattern specifying how <TT>u_fprintf</TT> will
  * interpret the variable arguments received and format the data.
@@ -477,7 +477,7 @@ u_fscanf(UFILE      *f,
 /**
  * Read formatted data from a UFILE.
  * This is identical to <TT>u_fscanf</TT>, except that it will
- * <EM>not</EM> call <TT>va_start/TT> and <TT>va_end</TT>.
+ * <EM>not</EM> call <TT>va_start</TT> and <TT>va_end</TT>.
  * @param f The UFILE from which to read.
  * @param patternSpecification A pattern specifying how <TT>u_fscanf</TT> will
  * interpret the variable arguments received and parse the data.
@@ -509,7 +509,7 @@ u_fscanf_u(UFILE        *f,
 /**
  * Read formatted data from a UFILE.
  * This is identical to <TT>u_fscanf_u</TT>, except that it will
- * <EM>not</EM> call <TT>va_start/TT> and <TT>va_end</TT>.
+ * <EM>not</EM> call <TT>va_start</TT> and <TT>va_end</TT>.
  * @param f The UFILE from which to read.
  * @param patternSpecification A pattern specifying how <TT>u_fscanf</TT> will
  * interpret the variable arguments received and parse the data.
@@ -665,7 +665,7 @@ u_snprintf(UChar      *buffer,
 /**
  * Write formatted data to a Unicode string.
  * This is identical to <TT>u_sprintf</TT>, except that it will
- * <EM>not</EM> call <TT>va_start/TT> and <TT>va_end</TT>.
+ * <EM>not</EM> call <TT>va_start</TT> and <TT>va_end</TT>.
  *
  * @param buffer The Unicode string to which to write.
  * @param patternSpecification A pattern specifying how <TT>u_sprintf</TT> will
@@ -683,7 +683,7 @@ u_vsprintf(UChar      *buffer,
 /**
  * Write formatted data to a Unicode string.
  * This is identical to <TT>u_snprintf</TT>, except that it will
- * <EM>not</EM> call <TT>va_start/TT> and <TT>va_end</TT>.<br><br>
+ * <EM>not</EM> call <TT>va_start</TT> and <TT>va_end</TT>.<br><br>
  * When the number of code units required to store the data exceeds
  * <TT>count</TT>, then <TT>count</TT> code units of data are stored in
  * <TT>buffer</TT> and a negative value is returned. When the number of code
@@ -743,7 +743,7 @@ u_snprintf_u(UChar     *buffer,
 /**
  * Write formatted data to a Unicode string.
  * This is identical to <TT>u_sprintf_u</TT>, except that it will
- * <EM>not</EM> call <TT>va_start/TT> and <TT>va_end</TT>.
+ * <EM>not</EM> call <TT>va_start</TT> and <TT>va_end</TT>.
  *
  * @param buffer The Unicode string to which to write.
  * @param patternSpecification A pattern specifying how <TT>u_sprintf</TT> will
@@ -761,7 +761,7 @@ u_vsprintf_u(UChar     *buffer,
 /**
  * Write formatted data to a Unicode string.
  * This is identical to <TT>u_snprintf_u</TT>, except that it will
- * <EM>not</EM> call <TT>va_start/TT> and <TT>va_end</TT>.
+ * <EM>not</EM> call <TT>va_start</TT> and <TT>va_end</TT>.
  * When the number of code units required to store the data exceeds
  * <TT>count</TT>, then <TT>count</TT> code units of data are stored in
  * <TT>buffer</TT> and a negative value is returned. When the number of code
@@ -803,7 +803,7 @@ u_sscanf(const UChar   *buffer,
 /**
  * Read formatted data from a Unicode string.
  * This is identical to <TT>u_sscanf</TT>, except that it will
- * <EM>not</EM> call <TT>va_start/TT> and <TT>va_end</TT>.
+ * <EM>not</EM> call <TT>va_start</TT> and <TT>va_end</TT>.
  *
  * @param buffer The Unicode string from which to read.
  * @param patternSpecification A pattern specifying how <TT>u_sscanf</TT> will
@@ -837,7 +837,7 @@ u_sscanf_u(const UChar  *buffer,
 /**
  * Read formatted data from a Unicode string.
  * This is identical to <TT>u_sscanf_u</TT>, except that it will
- * <EM>not</EM> call <TT>va_start/TT> and <TT>va_end</TT>.
+ * <EM>not</EM> call <TT>va_start</TT> and <TT>va_end</TT>.
  *
  * @param buffer The Unicode string from which to read.
  * @param patternSpecification A pattern specifying how <TT>u_sscanf</TT> will
