@@ -35,7 +35,9 @@
 #include "unewdata.h"
 
 /* This is the version of FractionalUCA.txt tailoring rules*/
-#define UCA_TAILORING_RULES_VERSION 200
+/* Regular tailorings have versions from 1-199 and UCA */
+/* has version numbers from 200 up */
+#define UCA_TAILORING_RULES_VERSION 201
 
 /* UDataInfo for UCA mapping table */
 static const UDataInfo dataInfo={
