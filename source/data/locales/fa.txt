@@ -392,7 +392,7 @@ fa {
         YU { "\u06cc\u0648\u06af\u0633\u0644\u0627\u0648\u06cc" }
 
         ZA { "\u0627\u0641\u0631\u06cc\u0642\u0627\u06cc \u062c\u0646\u0648\u0628\u06cc" }
-        ZR { "\u0632\u0626\u06cc\u0631" }
+//        ZR { "\u0632\u0626\u06cc\u0631" } // Zaire is now the Democratic Republic of Congo (CD)
         ZM { "\u0632\u0627\u0645\u0628\u06cc\u0627" }
         ZW { "\u0632\u06cc\u0645\u0628\u0627\u0628\u0648\u0647" }
     }
