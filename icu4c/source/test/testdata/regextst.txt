@@ -213,7 +213,7 @@
 
 # Case Insensitive
 "aBc"                    i      "<0>ABC</0>"      
-#"a[^bc]d"               i      "ABD"                      #  TODO:   case closure bug  
+"a[^bc]d"                i      "ABD"   
 '((((((((((a))))))))))\10' i    "<0><1><2><3><4><5><6><7><8><9><10>A</10></9></8></7></6></5></4></3></2></1>A</0>"
 
 "(?:(?i)a)b"                    "<0>Ab</0>"
@@ -224,12 +224,21 @@
 "a b"                           "ab"
 "abc "                          "abc"
 "abc "                          "<0>abc </0>"
-#"ab[cd e]z"                     "<0>ab z</0>"           #TODO:  white space handling in Unicode Sets.
+"ab[cd e]z"                     "<0>ab z</0>" 
+"ab\ c"                         "<0>ab c</0> "
+"ab c"                          "<0>ab c</0> "
+"ab c"                        x "ab c "
+"ab\ c"                       x "<0>ab c</0> "
 
 
 #Multi-line mode
-'b\s^'                     m     "a\nb\n"
+'b\s^'                        m  "a\nb\n"
 
 # Free-spacing mode
 "a b c  # this is a comment"  x "<0>abc</0> "
 '^a (?#xxx) (?#yyy) {3}c'  x    "<0>aaac</0>"
+"a b c [x y z]"               x "abc "
+"a b c [x y z]"               x "a b c "
+"a b c [x y z]"               x "<0>abcx</0>yz"
+"a b c [x y z]"               x "<0>abcy</0>yz"
+
