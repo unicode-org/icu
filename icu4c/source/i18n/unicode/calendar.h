@@ -516,7 +516,7 @@ public:
      *                leniency, this will be set to an error status.
      * @deprecated ICU 2.6. Use roll(UCalendarDateFields field, UBool up, UErrorCode& status) instead.
      */
-    void roll(EDateFields field, UBool up, UErrorCode& status);
+    inline void roll(EDateFields field, UBool up, UErrorCode& status);
 
     /**
      * Time Field Rolling function. Rolls (up/down) a single unit of time on the given
@@ -541,7 +541,7 @@ public:
      *                leniency, this will be set to an error status.
      * @draft ICU 2.6.
      */
-    void roll(UCalendarDateFields field, UBool up, UErrorCode& status);
+    inline void roll(UCalendarDateFields field, UBool up, UErrorCode& status);
 
     /**
      * Time Field Rolling function. Rolls by the given amount on the given
@@ -1247,7 +1247,7 @@ protected:
      * @return       The value for the given time field.
      * @deprecated ICU 2.6. Use internalGet(UCalendarDateFields field) instead.
      */
-    int32_t internalGet(EDateFields field) const {return fFields[field];}
+    inline int32_t internalGet(EDateFields field) const {return fFields[field];}
 
     /**
      * Gets the value for a given time field. Subclasses can use this function to get
@@ -1257,7 +1257,7 @@ protected:
      * @return       The value for the given time field.
      * @draft ICU 2.6.
      */
-    int32_t internalGet(UCalendarDateFields field) const {return fFields[field];}
+    inline int32_t internalGet(UCalendarDateFields field) const {return fFields[field];}
 
     /**
      * Sets the value for a given time field.  This is a fast internal method for
@@ -1279,7 +1279,7 @@ protected:
      * @param value    The value for the given time field.
      * @draft ICU 2.6.
      */
-    void internalSet(UCalendarDateFields field, int32_t value);
+    inline void internalSet(UCalendarDateFields field, int32_t value);
 
 protected:
     /**
@@ -1478,16 +1478,16 @@ Calendar::createInstance(TimeZone* zone, UErrorCode& errorCode)
 
 // -------------------------------------
 
-inline void
-Calendar::roll(EDateFields field, UBool up, UErrorCode& status)
-{
-    roll((UCalendarDateFields) field, up, status);
-}
-
 inline void 
 Calendar::roll(UCalendarDateFields field, UBool up, UErrorCode& status)
 {
     roll(field, (int32_t)(up ? +1 : -1), status);
+}
+
+inline void
+Calendar::roll(EDateFields field, UBool up, UErrorCode& status)
+{
+    roll((UCalendarDateFields) field, up, status);
 }
 
 // -------------------------------------
@@ -1498,15 +1498,15 @@ Calendar::roll(UCalendarDateFields field, UBool up, UErrorCode& status)
  */
 
 inline void
-Calendar::internalSet(EDateFields field, int32_t value)
-{
-    internalSet((UCalendarDateFields) field, value);
-}
-
-inline void
 Calendar::internalSet(UCalendarDateFields field, int32_t value)
 {
     fFields[field] = value;
+}
+
+inline void
+Calendar::internalSet(EDateFields field, int32_t value)
+{
+    internalSet((UCalendarDateFields) field, value);
 }
 
 U_NAMESPACE_END
