@@ -1,5 +1,5 @@
 /*
- * @(#)$RCSfile: TextOffset.java,v $ $Revision: 1.1 $ $Date: 2000/04/20 17:50:03 $
+ * @(#)$RCSfile: TextOffset.java,v $ $Revision: 1.2 $ $Date: 2003/12/02 01:34:32 $
  *
  * (C) Copyright IBM Corp. 1998-1999.  All Rights Reserved.
  *
@@ -100,7 +100,7 @@ public final class TextOffset
 
     /**
     * Constructs a new TextOffset from an existing one.
-    * @param ths the TextOffset to copy
+    * @param rhs the TextOffset to copy
     */
     public TextOffset(TextOffset rhs) {
 

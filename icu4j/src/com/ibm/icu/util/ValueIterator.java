@@ -5,8 +5,8 @@
 ******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/util/ValueIterator.java,v $
-* $Date: 2003/06/03 18:49:36 $
-* $Revision: 1.11 $
+* $Date: 2003/12/02 01:34:31 $
+* $Revision: 1.12 $
 *
 ******************************************************************************
 */
@@ -105,11 +105,11 @@ public interface ValueIterator
      * If this range is set outside the meaningful range specified by the 
      * implementation, next(element) will always return false.
      * </p>
-     * @param start first integer in range to iterate
-     * @param limit 1 integer after the last integer in range 
+     * @param start first integer in the range to iterate
+     * @param limit one more than the last integer in the range 
      * @exception IllegalArgumentException thrown when attempting to set an 
      *            illegal range. E.g limit <= start
      * @stable ICU 2.6
      */
-    public void setRange(int start, int end);
+    public void setRange(int start, int limit);
 }

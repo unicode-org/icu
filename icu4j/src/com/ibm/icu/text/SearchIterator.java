@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/SearchIterator.java,v $ 
- * $Date: 2003/11/18 17:53:53 $ 
- * $Revision: 1.16 $
+ * $Date: 2003/12/02 01:34:31 $ 
+ * $Revision: 1.17 $
  *
  *****************************************************************************************
  */
@@ -755,7 +755,7 @@ public abstract class SearchIterator
      * {@link #getIndex}, is the starting position of the match if one was 
      * found. If a match is not found, <tt>DONE</tt> will be returned.
      * </p> 
-	 * @param start index in the target text at which the backwards search 
+	 * @param startAt index in the target text at which the backwards search 
      *        should begin.
 	 * @return the starting index of the next backwards match if found, 
      *         DONE otherwise
@@ -763,7 +763,7 @@ public abstract class SearchIterator
      * @see #handleNext(int)
      * @see #DONE
      * @stable ICU 2.0
-	 */
+     */
     protected abstract int handlePrevious(int startAt);
     
     // private data members ------------------------------------------------

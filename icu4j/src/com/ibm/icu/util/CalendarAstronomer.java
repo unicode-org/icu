@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/util/Attic/CalendarAstronomer.java,v $ 
- * $Date: 2003/06/11 22:27:10 $ 
- * $Revision: 1.18 $
+ * $Date: 2003/12/02 01:34:31 $ 
+ * $Revision: 1.19 $
  *
  *****************************************************************************************
  */
@@ -289,7 +289,7 @@ public class CalendarAstronomer {
      * Set the current date and time of this <code>CalendarAstronomer</code> object.  All
      * astronomical calculations are performed based on this time setting.
      *
-     * @param aTime the time and date, expressed as a <code>Date</code> object.
+     * @param date the time and date, expressed as a <code>Date</code> object.
      *
      * @see #setTime
      * @see #getDate

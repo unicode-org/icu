@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/Transliterator.java,v $
- * $Date: 2003/11/22 01:07:24 $
- * $Revision: 1.92 $
+ * $Date: 2003/12/02 01:34:31 $
+ * $Revision: 1.93 $
  *
  *****************************************************************************************
  */
@@ -1592,7 +1592,6 @@ public abstract class Transliterator {
 
     /**
      * Register a Transliterator object with the given ID.
-     * @param ID the ID of this transliterator
      * @param trans the Transliterator object
      * @stable ICU 2.2
      */

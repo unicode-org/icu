@@ -1,5 +1,5 @@
 /*
- * @(#)$RCSfile: EditApplication.java,v $ $Revision: 1.4 $ $Date: 2003/06/03 18:49:36 $
+ * @(#)$RCSfile: EditApplication.java,v $ $Revision: 1.5 $ $Date: 2003/12/02 01:34:32 $
  *
  * (C) Copyright IBM Corp. 1998-2003.  All Rights Reserved.
  *
@@ -80,7 +80,7 @@ public abstract class EditApplication {
     /**
      * Remove document from list of documents.  Quit application if list
      * length falls to zero.
-     * @param document the document to remove
+     * @param window window of the document to remove
      */
     public final void removeDocumentWindow(DocumentWindow window) {
 

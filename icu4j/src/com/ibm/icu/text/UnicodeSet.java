@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/UnicodeSet.java,v $
- * $Date: 2003/11/25 00:34:56 $
- * $Revision: 1.104 $
+ * $Date: 2003/12/02 01:34:31 $
+ * $Revision: 1.105 $
  *
  *****************************************************************************************
  */
@@ -1218,7 +1218,7 @@ public class UnicodeSet extends UnicodeFilter {
      * Retain the specified character from this set if it is present.
      * Upon return this set will be empty if it did not contain c, or
      * will only contain c if it did contain c.
-     * @param s the character to be retained
+     * @param c the character to be retained
      * @return this object, for chaining
      * @stable ICU 2.0
      */
@@ -1714,7 +1714,7 @@ public class UnicodeSet extends UnicodeFilter {
     /**
      * Returns true if this set contains one or more of the characters
      * and strings of the given set.
-     * @param c set to be checked for containment
+     * @param s set to be checked for containment
      * @return true if the condition is met
      * @stable ICU 2.0
      */

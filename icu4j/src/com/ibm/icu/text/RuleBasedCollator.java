@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/RuleBasedCollator.java,v $
-* $Date: 2003/11/21 19:46:25 $
-* $Revision: 1.52 $
+* $Date: 2003/12/02 01:34:31 $
+* $Revision: 1.53 $
 *
 *******************************************************************************
 */
@@ -558,7 +558,7 @@ public final class RuleBasedCollator extends Collator
      * during comparison.
      * </p>
      * <p>See the Collator class description for an example of use.</p>
-     * @param the new strength value.
+     * @param newStrength the new strength value.
      * @see #getStrength
      * @see #setStrengthDefault
      * @see #PRIMARY

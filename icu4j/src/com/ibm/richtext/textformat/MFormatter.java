@@ -1,5 +1,5 @@
 /*
- * @(#)$RCSfile: MFormatter.java,v $ $Revision: 1.4 $ $Date: 2002/03/20 05:11:17 $
+ * @(#)$RCSfile: MFormatter.java,v $ $Revision: 1.5 $ $Date: 2003/12/02 01:34:32 $
  *
  * (C) Copyright IBM Corp. 1998-1999.  All Rights Reserved.
  *
@@ -126,12 +126,13 @@ public abstract class MFormatter {
 * Specify the number of pixels along the "line dimension".
 * Lines are formatted to fit within the line dimension.  The
 * line dimension in Roman script is horizontal.
-* @param lineWidth the length, in pixels, to which lines will be formatted
+* @param lineBound the length, in pixels, to which lines will be formatted
 */
     public abstract void setLineBound(int lineBound);
 
 /**
 * Return the number of pixels along the line dimension.
+* @return the number of pixels along the line dimension.
 */
     public abstract int lineBound();
     
@@ -232,7 +233,8 @@ public abstract class MFormatter {
 /**
 * Given two offsets in the text, return a rectangle which encloses the lines containing the offsets.
 * Offsets do not need to be ordered or nonnegative.
-* @param offset1,offset2 offsets into the text
+* @param offset1 an offset into the text
+* @param offset2 the other offset into the text
 * @param origin the top-left corner of the text, in the display's coordinate system
 * @param tight if equal to TIGHT, the bounds is as small as possible.  If LOOSE, the width
 * of the bounds is allowed to be wider than necesary.  Loose bounds are easier to compute.

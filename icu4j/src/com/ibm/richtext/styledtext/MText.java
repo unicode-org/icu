@@ -1,5 +1,5 @@
 /*
- * @(#)$RCSfile: MText.java,v $ $Revision: 1.2 $ $Date: 2002/02/16 03:06:36 $
+ * @(#)$RCSfile: MText.java,v $ $Revision: 1.3 $ $Date: 2003/12/02 01:34:32 $
  *
  * (C) Copyright IBM Corp. 1998-1999.  All Rights Reserved.
  *
@@ -122,7 +122,7 @@ public abstract class MText extends MConstText
 * @param start the offset at which the replace operation begins
 * @param limit the offset at which the replace operation ends.  The character and style at
 * <code>limit</code> is not modified.
-* @param srcText the source for the new characters and styles
+* @param text the source for the new characters and styles
 */
     public abstract void replace(int start, int limit, MConstText text);
 
@@ -148,7 +148,7 @@ public abstract class MText extends MConstText
 * @param limit the offset at which the replace operation ends.  The character at
 * <code>limit</code> is not modified.
 * @param srcChar the new character
-* @param charsStyle the style of the new character
+* @param charStyle the style of the new character
 */
     public abstract void replace(int start, int limit, char srcChar, AttributeMap charStyle);
 

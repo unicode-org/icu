@@ -1,5 +1,5 @@
 /*
- * @(#)$RCSfile: JTextPanel.java,v $ $Revision: 1.6 $ $Date: 2003/06/03 18:49:37 $
+ * @(#)$RCSfile: JTextPanel.java,v $ $Revision: 1.7 $ $Date: 2003/12/02 01:34:32 $
  *
  * (C) Copyright IBM Corp. 1998-2003.  All Rights Reserved.
  *
@@ -271,7 +271,7 @@ public final class JTextPanel extends JPanel implements MTextPanel {
     /**
      * Set the end of the selection range.  This is
      * equivalent to <tt>select(getSelectionStart(), selectionEnd)</tt>.
-     * @param selectionStart the start of the new selection range
+     * @param selectionEnd the end of the new selection range
      */
     public void setSelectionEnd(int selectionEnd) {
 

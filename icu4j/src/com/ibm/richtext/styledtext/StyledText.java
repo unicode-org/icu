@@ -1,5 +1,5 @@
 /*
- * @(#)$RCSfile: StyledText.java,v $ $Revision: 1.3 $ $Date: 2002/03/20 05:11:17 $
+ * @(#)$RCSfile: StyledText.java,v $ $Revision: 1.4 $ $Date: 2003/12/02 01:34:32 $
  *
  * (C) Copyright IBM Corp. 1998-1999.  All Rights Reserved.
  *
@@ -358,7 +358,7 @@ public final class StyledText extends MText implements Externalizable
 * @param start the offset at which the replace operation begins
 * @param limit the offset at which the replace operation ends.  The character and style at
 * <code>limit</code> is not modified.
-* @param srcText the source for the new characters and styles
+* @param text the source for the new characters and styles
 * @param srcStart the offset into <code>srcText</code> where new characters and styles will be obtained
 * @param srcLimit the offset into <code>srcText</code> where the new characters and styles end
 */
@@ -389,7 +389,7 @@ public final class StyledText extends MText implements Externalizable
 * @param start the offset at which the replace operation begins
 * @param limit the offset at which the replace operation ends.  The character and style at
 * <code>limit</code> is not modified.
-* @param srcText the source for the new characters and styles
+* @param text the source for the new characters and styles
 */
     public void replace(int start, int limit, MConstText text) {
 
@@ -451,7 +451,7 @@ public final class StyledText extends MText implements Externalizable
 * @param limit the offset at which the replace operation ends.  The character at
 * <code>limit</code> is not modified.
 * @param srcChar the new character
-* @param charsStyle the style of the new character
+* @param charStyle the style of the new character
 */
     public void replace(int start, int limit, char srcChar, AttributeMap charStyle)
     {
