@@ -91,8 +91,14 @@ U_CDECL_END
 static UBool U_CALLCONV
 loadData(UErrorCode &errorCode) {
     /* load Unicode IDNA data from file */
+    UBool isCached;
 
-    if(_isDataLoaded==FALSE) {
+    /* do this because double-checked locking is broken */
+    umtx_lock(NULL);
+    isCached=_isDataLoaded;
+    umtx_unlock(NULL);
+
+    if(!isCached) {
         UTrie _idnTrie={ 0,0,0,0,0,0,0 };
         UDataMemory *data;
         const int32_t *p=NULL;
