@@ -68,13 +68,13 @@ void IntlTestDateFormatSymbols::testSymbols(/* char *par */)
 
     DateFormatSymbols fr(Locale::getFrench(), status);
     if(U_FAILURE(status)) {
-        errln("ERROR: Couldn't create French DateFormatSymbols");
+        errln("ERROR: Couldn't create French DateFormatSymbols " + (UnicodeString)u_errorName(status));
     }
 
     status = U_ZERO_ERROR;
     DateFormatSymbols en(Locale::getEnglish(), status);
     if(U_FAILURE(status)) {
-        errln("ERROR: Couldn't create English DateFormatSymbols");
+        errln("ERROR: Couldn't create English DateFormatSymbols " + (UnicodeString)u_errorName(status));
     }
 
     if(en == fr || ! (en != fr) ) {
