@@ -34,20 +34,13 @@
  The following is a small list as to what is currently wrong/suggestions for
  ustdio.
 
- * %p should be deprecated. Pointers are 2-16 bytes big and scanf should
-    really read them.
- * The format specification should use int32_t and ICU type variants instead of
-    the compiler dependent int.
- * Make sure that #, blank and precision in the printf format specification
-    works.
- * Make sure that * in the scanf format specification works.
+ * Make sure that * in the scanf format specification works for all formats.
  * Each UFILE takes up at least 2KB.
     Look into adding setvbuf() for configurable buffers.
  * This library does buffering. The OS should do this for us already. Check on
     this, and remove it from this library, if this is the case. Double buffering
     wastes a lot of time and space.
- * Make sure that surrogates are supported. It doesn't look like %[], %s or %U
-    properly handle surrogates in both scanf()'s.
+ * Test stdin and stdout with the u_f* functions
  * Testing should be done for reading and writing multi-byte encodings,
     and make sure that a character that is contained across buffer boundries
     works even for incomplete characters.
@@ -65,13 +58,9 @@
     without memory leaks and the unconvertable characters are valid
     substitution or are escaped characters.
  * u_fungetc() can't unget a character when it's at the beginning of the
-    internal conversion buffer, and it shouldn't be writing new
-    characters to this buffer because they might be different characters.
-    This can be tested by writing a file, and reading it backwards by
-    using u_fgetc and two u_fungetc() calls with incorrect data.
-    FYI The behavior is undefined for ungetc() when an incorrect character
-    is put back, when its called multiple times in a row, or when
-    a its called without a read operation.
+    internal conversion buffer. For example, read the buffer size # of
+    characters, and then ungetc to get the previous character that was
+    at the end of the last buffer.
  * u_fflush() and u_fclose should return an int32_t like C99 functions.
     0 is returned if the operation was successful and EOF otherwise.
  * u_fsettransliterator does not support U_READ side of transliteration.
@@ -81,23 +70,21 @@
     data structures without any conversion.
  * u_file_read and u_file_write are used for writing strings. u_fgets and
     u_fputs or u_fread and u_fwrite should be used to do this.
- * u_fgetcx may not be needed anymore. Maybe u_fgetc should return a UChar32.
- * u_fgetc() should use UChar32 instead of UChar. Maybe u_fgetcx is good enough
-    for now.
- * We should consider using a UnicodeSet for scanset.
- * scanset has a buffer overflow and underflow bug for both string and file
-    APIs.
  * The width parameter for all scanf formats, including scanset, needs
     better testing. This prevents buffer overflows.
- * The skip '*' parameter for all scanf formats, including scanset, needs
-    better testing. This prevents writing to bad memory.
  * Figure out what is suppose to happen when a codepage is changed midstream.
     Maybe a flush or a rewind are good enough.
  * Make sure that a UFile opened with "rw" can be used after using
     u_fflush with a u_frewind.
- * Test stdin and stdout with the u_f* functions
- * More testing is needed.
+ * Complete the file documentation
 */
+
+/**
+ * \file
+ * \brief C API: Unicode stdio-like API
+ *
+ * <h2>Unicode stdio-like C API</h2>
+ */
 
 
 /**
@@ -483,7 +470,10 @@ u_fgets(UChar  *s,
         UFILE  *f);
 
 /**
- * Read a UChar from a UFILE.
+ * Read a UChar from a UFILE. It is recommended that <TT>u_fgetcx</TT>
+ * used instead for proper parsing functions, but sometimes reading
+ * code units is needed instead of codepoints.
+ *
  * @param f The UFILE from which to read.
  * @return The UChar value read, or U+FFFF if no character was available.
  * @draft 3.0
@@ -508,6 +498,8 @@ u_fgetcx(UFILE  *f);
  * Unget a UChar from a UFILE.
  * If this function is not the first to operate on <TT>f</TT> after a call
  * to <TT>u_fgetc</TT>, the results are undefined.
+ * If this function is passed a character that was not recieved from the
+ * previous <TT>u_fgetc</TT> or <TT>u_fgetcx</TT> call, the results are undefined.
  * @param c The UChar to put back on the stream.
  * @param f The UFILE to receive <TT>c</TT>.
  * @return The UChar32 value put back if successful, U_EOF otherwise.
