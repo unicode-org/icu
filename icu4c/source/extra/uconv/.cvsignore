@@ -1,0 +1,7 @@
+*.d
+uconv
+Debug
+Release
+Makefile
+uconvmsg
+

@@ -1,0 +1,110 @@
+## ******************************************************************************
+## *
+## *   Copyright (C) 1999-2000, International Business Machines
+## *   Corporation and others.  All Rights Reserved.
+## *
+## *******************************************************************************
+## Makefile.in for ICU - uconv
+## Steven  R. Loomis
+
+srcdir=@srcdir@
+top_srcdir=@top_srcdir@
+
+top_builddir = ../..
+subdir = extra/uconv
+
+include $(top_builddir)/icudefs.mk
+ 
+## Platform-specific setup
+include @platform_make_fragment@
+
+# RESSRC comes from resfiles.mk
+include $(srcdir)/resfiles.mk
+
+RESDIR=uconvmsg
+RESFILES=$(RESSRC:%.txt=$(RESDIR)/%.res)
+
+## Extra files to remove for 'make clean'
+CLEANFILES = *~
+
+## Target information
+TARGET = uconv
+
+DEFS = @DEFS@
+CPPFLAGS = @CPPFLAGS@ -I$(top_builddir)/common -I$(top_srcdir)/common -I$(srcdir)/../toolutil
+CFLAGS = @CFLAGS@
+CXXFLAGS = @CXXFLAGS@
+ENABLE_RPATH = @ENABLE_RPATH@
+ifeq ($(ENABLE_RPATH),YES)
+RPATHLDFLAGS = $(LD_RPATH)$(LD_RPATH_PRE)$(libdir)
+endif
+LDFLAGS = @LDFLAGS@ $(RPATHLDFLAGS)
+INVOKE = $(LDLIBRARYPATH_ENVVAR)=$(top_builddir)/common:$(top_builddir)/tools/toolutil:$$$(LDLIBRARYPATH_ENVVAR)
+LIBS = $(LIBICUI18N) $(LIBICUUC) @LIBS@ @LIB_M@
+
+OBJECTS = uconv.o uwmsg.o
+
+DEPS = $(OBJECTS:.o=.d)
+
+## List of phony targets
+.PHONY : all all-local install install-local clean clean-local \
+distclean distclean-local dist dist-local check check-local resfiles resinst
+
+## Clear suffix list
+.SUFFIXES :
+
+## List of standard targets
+all: all-local
+install: install-local
+clean: clean-local
+distclean : distclean-local
+dist: dist-local
+check: check-local
+
+all-local: $(TARGET) resfiles
+
+install-local: all-local install-target
+
+install-target: all-local
+	$(MKINSTALLDIRS) $(DESTDIR)$(bindir)
+	$(INSTALL) $(TARGET) $(DESTDIR)$(bindir)/$(TARGET)
+
+dist-local:
+
+clean-local:
+	test -z "$(CLEANFILES)" || rm -f $(CLEANFILES) $(RESFILES)
+	rm -f $(OBJECTS) $(TARGET)
+
+distclean-local: clean-local
+	rm -f Makefile $(DEPS) $(RESDIR)
+
+check-local:
+
+Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
+	cd $(top_builddir) \
+	 && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
+
+$(TARGET) : $(OBJECTS)
+	$(LINK.c) -o $@ $^ $(LIBS)
+
+resfiles: $(RESFILES) resinst
+
+$(RESDIR)/$(RESDIR).lst: Makefile $(srcdir)/resfiles.mk
+	@$(MKINSTALLDIRS) $(RESDIR)
+	@-$(RMV) $@
+	@for file in $(RESFILES); do \
+	  echo `pwd`/$$file >> $@; \
+	done;
+
+resinst: $(RESFILES) $(RESDIR)/$(RESDIR).lst
+	$(MKINSTALLDIRS) $(DESTDIR)$(libdir)/$(PACKAGE)/$(VERSION)
+	$(INVOKE) $(top_builddir)/tools/pkgdata/pkgdata -p $(RESDIR) -O $(top_builddir)/tools/pkgdata/icupkg.inc -m dll -v -c -d $(DESTDIR)$(libdir)/$(PACKAGE)/$(VERSION) -T $(RESDIR) $(RESDIR)/$(RESDIR).lst
+
+$(RESDIR)/%.res: $(srcdir)/%.txt
+	@$(MKINSTALLDIRS) $(RESDIR)
+	$(INVOKE) $(top_builddir)/tools/genrb/genrb -eutf-8 -d $(RESDIR) -s . $^
+
+ifneq ($(MAKECMDGOALS),distclean)
+-include $(DEPS)
+endif
+

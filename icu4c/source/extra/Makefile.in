@@ -15,6 +15,9 @@ top_builddir = ..
 
 include $(top_builddir)/icudefs.mk
 
+@USTDIO_TRUE@USTDIO = ustdio
+@USTDIO_FALSE@USTDIO =
+
 ## Build directory information
 subdir = extra
 
@@ -24,7 +27,7 @@ include @platform_make_fragment@
 ## Files to remove for 'make clean'
 CLEANFILES = *~
 
-SUBDIRS = ustdio
+SUBDIRS = $(USTDIO) uconv
 
 ## List of phony targets
 .PHONY : all all-local all-recursive install install-local		\
