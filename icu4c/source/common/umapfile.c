@@ -52,7 +52,9 @@
 #   define IS_MAP(map) ((map)!=0)
 
     /* Needed by OSF to get the correct mmap version */
-#   define _XOPEN_SOURCE_EXTENDED
+#   ifndef _XOPEN_SOURCE_EXTENDED
+#       define _XOPEN_SOURCE_EXTENDED
+#   endif
 
 #   include <unistd.h>
 #   include <sys/mman.h>
