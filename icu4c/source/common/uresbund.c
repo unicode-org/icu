@@ -205,7 +205,7 @@ static int32_t ures_flushCache()
     return rbDeletedNum;
 }
 
-UBool ucln_ures(void)
+UBool ures_cleanup(void)
 {
     if (cache != NULL) {
         ures_flushCache();

@@ -991,7 +991,7 @@ char* u_austrcpy(char *s1,
 
 /* mutexed access to a shared default converter ----------------------------- */
 
-UBool ucln_ustring(void) {
+UBool ustring_cleanup(void) {
     UConverter *converter = 0;
 
     if (gDefaultConverter) {

@@ -115,7 +115,7 @@ U_CAPI  UConverterSharedData* U_EXPORT2 ucnv_data_unFlattenClone(UDataMemory *pD
 UHashtable *SHARED_DATA_HASHTABLE = NULL;
 
 /* The calling function uses the global mutex, so there is no need to use it here too */
-UBool ucln_ucnv(void) {
+UBool ucnv_cleanup(void) {
     if (SHARED_DATA_HASHTABLE != NULL) {
         ucnv_flushCache();
         umtx_lock(NULL);
