@@ -32,7 +32,7 @@ import com.ibm.util.Utility;
  * variants with the system which are then accessed via their IDs.
  *
  * @author Alan Liu
- * @version $RCSfile: EscapeTransliterator.java,v $ $Revision: 1.1 $ $Date: 2001/11/20 17:55:22 $
+ * @version $RCSfile: EscapeTransliterator.java,v $ $Revision: 1.2 $ $Date: 2001/11/20 23:55:09 $
  */
 class EscapeTransliterator extends Transliterator {
 
@@ -181,6 +181,7 @@ class EscapeTransliterator extends Transliterator {
                 if (redoPrefix) {
                     buf.setLength(0);
                     buf.append(prefix);
+                    redoPrefix = false;
                 } else {
                     buf.setLength(prefixLen);
                 }
