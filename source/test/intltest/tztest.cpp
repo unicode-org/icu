@@ -795,7 +795,12 @@ TimeZoneTest::TestDisplayName()
     zone2->setStartRule(UCAL_JANUARY, 1, 0, 0, status);
     zone2->setEndRule(UCAL_DECEMBER, 31, 0, 0, status);
 
-    UnicodeString inDaylight = (zone2->inDaylightTime(UDate(0), status)? UnicodeString("TRUE"):UnicodeString("FALSE"));
+    UnicodeString inDaylight;
+    if (zone2->inDaylightTime(UDate(0), status)) {
+        inDaylight = UnicodeString("TRUE");
+    } else {
+        inDaylight = UnicodeString("FALSE");
+    }
     logln(UnicodeString("Modified PST inDaylightTime->") + inDaylight );
     if(U_FAILURE(status))
     {

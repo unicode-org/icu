@@ -564,7 +564,7 @@ void RTTest::test2(UBool quickRt, int32_t density) {
     TransliteratorPointer sourceToTarget(
         Transliterator::createInstance(transliteratorID, UTRANS_FORWARD, parseError,
                                        status));
-    if (sourceToTarget == NULL) {
+    if ((const Transliterator *)sourceToTarget == NULL) {
         parent->errln("FAIL: createInstance(" + transliteratorID +
                    ") returned NULL. Error: " + u_errorName(status)
                    + "\n\tpreContext : " + prettify(parseError.preContext) 
@@ -573,7 +573,7 @@ void RTTest::test2(UBool quickRt, int32_t density) {
                 return;
     }
     TransliteratorPointer targetToSource(sourceToTarget->createInverse(status));
-    if (targetToSource == NULL) {
+    if ((const Transliterator *)targetToSource == NULL) {
         parent->errln("FAIL: " + transliteratorID +
                    ".createInverse() returned NULL. Error:" + u_errorName(status)          
                    + "\n\tpreContext : " + prettify(parseError.preContext) 
@@ -1174,7 +1174,7 @@ void TransliteratorRoundTripTest::TestDevanagariLatin() {
     {
         UErrorCode status = U_ZERO_ERROR;
         TransliteratorPointer t1(Transliterator::createInstance("[\\u0000-\\u00FE \\u0982\\u0983 [:Bengali:][:nonspacing mark:]];NFD;Bengali-InterIndic;InterIndic-Gujarati;NFC;( [ \\u0000-\\u00FE [:Gujarati:][[:nonspacing mark:]])",UTRANS_FORWARD, status));
-        if(t1){
+        if((const Transliterator *)t1 != NULL){
             TransliteratorPointer t2(t1->createInverse(status));
             if(U_FAILURE(status)){
                 errln("FAIL: could not create the Inverse:-( \n");

@@ -408,12 +408,16 @@ void TransliteratorAPITest::TestSimpleKeyboardTransliterator(){
     UParseError parseError;
     Transliterator* t=Transliterator::createInstance("Any-Hex", UTRANS_FORWARD, parseError, status);
     if(t == 0) {
+        UnicodeString context;
+
+        if (parseError.preContext[0]) {
+            context += (UnicodeString)" at " + parseError.preContext;
+        }
+        if (parseError.postContext[0]) {
+            context += (UnicodeString)" | " + parseError.postContext;
+        }
         errln((UnicodeString)"FAIL: can't create Any-Hex, " +
-              (UnicodeString)u_errorName(status) +
-              (parseError.preContext[0] ?
-               ((UnicodeString)" at " + parseError.preContext +
-                (parseError.postContext[0] ?
-                 ((UnicodeString)" | " + parseError.postContext) : (UnicodeString)"")) : (UnicodeString)""));
+              (UnicodeString)u_errorName(status) + context);
         return;
     }
     UTransPosition index={19,20,20,20};

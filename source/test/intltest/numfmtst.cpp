@@ -1503,9 +1503,11 @@ void NumberFormatTest::expectPad(DecimalFormat& fmt, const UnicodeString& pat,
         apadStr = pad;
     }
     if (apos == pos && awidth == width && apadStr == pad) {
-        logln(UnicodeString("Ok   \"") + pat + "\" pos=" + apos +
-              ((pos == ILLEGAL) ? UnicodeString() :
-               (UnicodeString(" width=") + awidth + " pad=" + apadStr)));
+        UnicodeString infoStr;
+        if (pos == ILLEGAL) {
+            infoStr = UnicodeString(" width=", "") + awidth + UnicodeString(" pad=", "") + apadStr;
+        }
+        logln(UnicodeString("Ok   \"") + pat + "\" pos=" + apos + infoStr);
     } else {
         errln(UnicodeString("FAIL \"") + pat + "\" pos=" + apos +
               " width=" + awidth + " pad=" + apadStr +

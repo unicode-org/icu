@@ -486,7 +486,7 @@ void TimeZoneRegressionTest:: Test4151406() {
         // h is in half-hours from GMT; rawoffset is in millis
         int32_t rawoffset = h * 1800000;
         int32_t hh = (h<0) ? -h : h;
-        UnicodeString hname = ((h<0) ? UnicodeString("GMT-") : UnicodeString("GMT+")) +
+        UnicodeString hname = UnicodeString((h<0) ? "GMT-" : "GMT+") +
             ((hh/2 < 10) ? "0" : "") +
             (hh/2) + ':' +
             ((hh%2==0) ? "00" : "30");
@@ -497,8 +497,11 @@ void TimeZoneRegressionTest:: Test4151406() {
             count = ids->count(ec);
             if (count> max) 
                 max = count;
-            logln(hname + ' ' + count +
-                  ((count > 0) ? (" e.g. " + *ids->snext(ec)) : UnicodeString("")));
+            if (count > 0) {
+                logln(hname + ' ' + (UnicodeString)count + (UnicodeString)" e.g. " + *ids->snext(ec));
+            } else {
+                logln(hname + ' ' + count);
+            }
             // weiv 11/27/2002: why uprv_free? This should be a delete
             delete ids;
             //delete [] ids;
@@ -795,10 +798,17 @@ TimeZoneRegressionTest::Test4154650()
         //   e = ex;
         //}
         if(good != U_SUCCESS(status)) {
+            UnicodeString errMsg;
+            if (good) {
+                errMsg = (UnicodeString(") threw ") + u_errorName(status));
+            }
+            else {
+                errMsg = UnicodeString(") accepts invalid args", "");
+            }
             errln(UnicodeString("Fail: getOffset(") +
                   DATA[i+1] + ", " + DATA[i+2] + ", " + DATA[i+3] + ", " +
                   DATA[i+4] + ", " + DATA[i+5] + ", " + DATA[i+6] +
-                  (good ? (UnicodeString(") threw ") + u_errorName(status)) : UnicodeString(") accepts invalid args")));
+                  errMsg);
         }
         status = U_ZERO_ERROR; // reset
     }

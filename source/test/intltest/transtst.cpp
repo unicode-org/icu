@@ -2250,15 +2250,22 @@ void TransliteratorTest::TestCompoundFilterID(void) {
             t = Transliterator::createInstance(id, direction, pe, ec);
         }
         UBool ok = (t != NULL && U_SUCCESS(ec));
+        UnicodeString transID;
+        if (t!=0) {
+            transID = t->getID();
+        }
+        else {
+            transID = UnicodeString("NULL", "");
+        }
         if (ok == expOk) {
-            logln((UnicodeString)"Ok: " + id + " => " + (t!=0?t->getID():(UnicodeString)"NULL") + ", " +
+            logln((UnicodeString)"Ok: " + id + " => " + transID + ", " +
                   u_errorName(ec));
             if (source.length() != 0) {
                 expect(*t, source, exp);
             }
             delete t;
         } else {
-            errln((UnicodeString)"FAIL: " + id + " => " + (t!=0?t->getID():(UnicodeString)"NULL") + ", " +
+            errln((UnicodeString)"FAIL: " + id + " => " + transID + ", " +
                   u_errorName(ec));
         }
     }
