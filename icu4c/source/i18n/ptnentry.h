@@ -1,11 +1,5 @@
 /******************************************************************************
- * COPYRIGHT:                                                               
- *  (C) Copyright Taligent, Inc., 1996
- *  (C) Copyright IBM Corp. 1996-1999
- *  Licensed Material - Program-Property of IBM - All Rights Reserved.
- *  US Government Users Restricted Rights - Use, duplication, or disclosure
- *  restricted by GSA ADP Schedule Contact with IBM Corp.
- *
+* Copyright © {1996-1999}, International Business Machines Corporation and others. All Rights Reserved.
  ******************************************************************************
  */
 
