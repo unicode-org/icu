@@ -59,6 +59,7 @@ am {
     LocaleScript {
     	"Ethi",
     }
+    ExemplarCharacters{"[:Ethi:]"}
     Eras {
         "\u12D3/\u12D3",
         "\u12D3/\u121D"

@@ -1343,5 +1343,52 @@ zh_TW {
             "GMT",
         }
     }
-    LocaleScript { "Hani" , "Bopo" }  
+    LocaleScript { "Hani" , "Bopo" }
+    ExemplarCharacters{
+            "[\u3005-\u3015  \u3041-\u3093  \u30A1-\u30F6  \u3105-\u3129 "
+            " \u4E07-\u4E11  \u4F4C-\u4F64  \u4F73-\u4F89  \u4FD6-\u4FE1 "
+            " \u5011-\u501C  \u5045-\u504F  \u505A-\u5065  \u50AC-\u50B8 "
+            " \u5102-\u510C  \u53E8-\u53F3  \u5406-\u5412  \u5424-\u542E "
+            " \u54A5-\u54B1  \u54BA-\u54C9  \u552C-\u5539  \u55C2-\u55D6 "
+            " \u5668-\u5674  \u57F0-\u57FD  \u5804-\u580E  \u582C-\u5839 "
+            " \u5879-\u5883  \u597B-\u5985  \u59CA-\u59D4  \u5AAE-\u5AC2 "
+            " \u5AD5-\u5AE3  \u5BDE-\u5BEC  \u5C07-\u5C12  \u5C9F-\u5CB1 "
+            " \u5D30-\u5D3A  \u5E66-\u5E70  \u5ED1-\u5EE3  \u6009-\u6017 "
+            " \u6024-\u602F  \u6062-\u6070  \u60B4-\u60C1  \u60C3-\u60CF "
+            " \u60F0-\u60FC  \u6144-\u614F  \u61A7-\u61B6  \u61F5-\u6201 "
+            " \u62C6-\u62D4  \u62EB-\u6303  \u6340-\u6351  \u639B-\u63A5 "
+            " \u63A7-\u63B1  \u63C2-\u63D0  \u641E-\u6428  \u6572-\u657C "
+            " \u6602-\u6615  \u676F-\u677F  \u67C8-\u67D4  \u67E9-\u67F8 "
+            " \u68A7-\u68B5  \u68EE-\u68FD  \u690A-\u6915  \u6956-\u6960 "
+            " \u69A3-\u69B1  \u6BC3-\u6BCD  \u6BFB-\u6C06  \u6C80-\u6C90 "
+            " \u6CB6-\u6CC7  \u6D07-\u6D12  \u6D27-\u6D42  \u6D5E-\u6D6A "
+            " \u6D74-\u6D80  \u6D82-\u6D8E  \u6DCF-\u6DE6  \u6DE8-\u6DF7 "
+            " \u6E2B-\u6E36  \u6E5A-\u6E69  \u6E9B-\u6EA7  \u6EBC-\u6ED6 "
+            " \u6F29-\u6F33  \u6FA0-\u6FB4  \u715C-\u716A  \u71BC-\u71CB "
+            " \u72F6-\u7301  \u737A-\u738B  \u7403-\u740D  \u7428-\u7436 "
+            " \u74D4-\u74E6  \u7528-\u7533  \u75B8-\u75C2  \u75EF-\u7601 "
+            " \u7619-\u7629  \u7731-\u773E  \u7765-\u776F  \u7799-\u77A3 "
+            " \u7825-\u7835  \u7923-\u792D  \u7B2A-\u7B35  \u7B44-\u7B52 "
+            " \u7BD8-\u7BEB  \u7D00-\u7D22  \u7D38-\u7D47  \u7DB7-\u7DC2 "
+            " \u7E08-\u7E17  \u7E1A-\u7E25  \u7E2D-\u7E49  \u7E50-\u7E5A "
+            " \u7E72-\u7E7E  \u7FB5-\u7FC3  \u7FE8-\u7FF5  \u80D4-\u80DE "
+            " \u814A-\u8155  \u82B3-\u82BE  \u8331-\u833C  \u8347-\u8354 "
+            " \u8386-\u8390  \u83BF-\u83CC  \u83DB-\u83E5  \u8409-\u8413 "
+            " \u842F-\u843D  \u8497-\u84A2  \u84C9-\u84D4  \u8523-\u8531 "
+            " \u8560-\u856E  \u8580-\u8591  \u8598-\u85A4  \u86B3-\u86C9 "
+            " \u8700-\u870E  \u8720-\u872A  \u874C-\u876F  \u87B2-\u87C0 "
+            " \u87DB-\u87E8  \u88D4-\u88DF  \u8910-\u891A  \u8929-\u8933 "
+            " \u8956-\u8964  \u8AED-\u8AF8  \u8B0D-\u8B1E  \u8B4E-\u8B5A "
+            " \u8C45-\u8C50  \u8CB2-\u8CC5  \u8CDC-\u8CE8  \u8D8C-\u8D96 "
+            " \u8E0F-\u8E27  \u8E59-\u8E67  \u8E84-\u8E8E  \u8F4D-\u8F5B "
+            " \u8FFA-\u9006  \u9019-\u9024  \u9072-\u9088  \u90F9-\u9109 "
+            " \u9116-\u9124  \u9126-\u9136  \u9143-\u9150  \u9199-\u91A3 "
+            " \u91AA-\u91B5  \u9248-\u9254  \u9293-\u929D  \u92A0-\u92AC "
+            " \u92C0-\u92D3  \u931D-\u932B  \u93F5-\u9400  \u9409-\u9416 "
+            " \u946D-\u9478  \u96BF-\u96CE  \u96D2-\u96DF  \u9722-\u972C "
+            " \u977A-\u9785  \u97FD-\u9808  \u9927-\u9933  \u99AB-\u99B5 "
+            " \u99CB-\u99D9  \u9D96-\u9DA4  \u9DB1-\u9DBC  \u9DD5-\u9DDF "
+            " \u9DFD-\u9E07  \u9F28-\u9F38]"
+
+    }
 }

@@ -1274,7 +1274,7 @@ root {
     DurationRules {
         "=#,##0=;\n"
     }
-
+    ExemplarCharacters{"[a-z]"}
     Scripts { 
         ARAB { "Arabic" }
         ARMN { "Armenian" }

@@ -144,4 +144,5 @@ uk {
     LocaleScript:array {
         "Cyrl"      // ISO 15924 Name 
     }
+    ExemplarCharacters { "[\u0430-\u0449 \u044e \u044f \u0454 \u0456 \u0457 \u0491]" }
 }

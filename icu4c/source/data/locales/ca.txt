@@ -105,5 +105,6 @@ ca {
 //    LocaleScript{ 
 //                "Latn",  // ISO 15924 Name 
 //    }
+    ExemplarCharacters { "[a-z \u00e9 \u00ed \u00f3 \u00fa \u00e0 \u00e8 \u00f2 \u00ef \u00fc \u0140 \u00e7 \u00f1]" }
 
 }

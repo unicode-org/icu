@@ -73,6 +73,7 @@ af {
 //        "\ufffd",
 //    }
     LocaleID:int { 0x36 }
+    ExemplarCharacters { "[a-z \u00e1 \u00e9 \u00e8 \u00e2 \u00ea \u00ee \u00f4 \u00fb \u00eb \u00ef \u00f6]" }
 //    LocaleScript{ 
 //                "Latn",  // ISO 15924 Name 
 //    }

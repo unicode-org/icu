@@ -291,6 +291,7 @@ ru {
     LocaleScript:array {
         "Cyrl"      // ISO 15924 Name 
     }
+    ExemplarCharacters { "[\u0430-\u044f \u0451 \u0456 \u0463 \u0473 \u0475]" }
 
     //------------------------------------------------------------
     // Rule Based Number Format Support
