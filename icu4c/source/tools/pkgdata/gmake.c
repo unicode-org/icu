@@ -17,6 +17,7 @@
 
 #include "makefile.h"
 #include <stdio.h>
+#include <string.h>
 
 char linebuf[2048];
 
