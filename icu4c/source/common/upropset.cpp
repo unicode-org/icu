@@ -27,6 +27,8 @@ static Hashtable* BIDI_CLASS_MAP = NULL;
 
 static Hashtable* BINARY_PROPERTY_MAP = NULL;
 
+static Hashtable* BOOLEAN_VALUE_MAP = NULL;
+
 /**
  * A cache mapping character category integers, as returned by
  * UCharacter.getType(), to sets.  Entries are initially
@@ -43,6 +45,8 @@ static UnicodeSet* SCRIPT_CACHE = NULL;
 
 // Special value codes
 static const int32_t ANY = -1; // general category: all code points
+
+static const int32_t ASCII = -2; // [\u0000-\u007F]
 
 // Offset used to ensure non-zero values
 #define MAPVAL 0x10000
@@ -133,6 +137,7 @@ U_CFUNC UBool upropset_cleanup(void) {
         delete COMBINING_CLASS_MAP; COMBINING_CLASS_MAP = NULL;
         delete BIDI_CLASS_MAP; BIDI_CLASS_MAP = NULL;
         delete BINARY_PROPERTY_MAP; BINARY_PROPERTY_MAP = NULL;
+        delete BOOLEAN_VALUE_MAP; BOOLEAN_VALUE_MAP = NULL;
         delete[] CATEGORY_CACHE; CATEGORY_CACHE = NULL;
         delete[] SCRIPT_CACHE; SCRIPT_CACHE = NULL;
         delete INCLUSIONS; INCLUSIONS = NULL;
@@ -236,10 +241,22 @@ UnicodeSet* UnicodePropertySet::createFromPattern(const UnicodeString& pattern,
         SetFactory factory;
         factory = voidPtrToSetFactory(NAME_MAP->get(typeName));
         if (factory == NULL) {
-            // Syntax error; type name not recognized
-            return NULL;
+            // Not a factory; try a binary property of the form
+            // \p{foo=true}, where the value can be 'true', 't',
+            // 'false', or 'f'.
+            int32_t v = BOOLEAN_VALUE_MAP->geti(valueName) - MAPVAL;
+            if (v >= 0) {
+                set = createBinaryPropertySet(typeName);
+                invert ^= !v;
+            }
+
+            if (set == NULL) {
+                // Syntax error; type name not recognized
+                return NULL;
+            }
+        } else {
+            set = (*factory)(valueName);
         }
-        set = (*factory)(valueName);
     } else {
         // No equals seen; parse short format \p{Cf}
         UnicodeString shortName = munge(pattern, pos, close);
@@ -352,12 +369,14 @@ UnicodeSet* UnicodePropertySet::createCategorySet(const UnicodeString& valueName
 
     UnicodeSet* set = new UnicodeSet();
     if (valueCode == ANY) {
-        set->complement();
-        return set;
-    }
-    for (int32_t cat=0; cat<U_CHAR_CATEGORY_COUNT; ++cat) {
-        if ((valueCode & (1 << cat)) != 0) {
-            set->addAll(getCategorySet(cat));
+        set->set(0x00, 0x10FFFF);
+    } else if (valueCode == ASCII) {
+        set->set(0x00, 0x7F);
+    } else {
+        for (int32_t cat=0; cat<U_CHAR_CATEGORY_COUNT; ++cat) {
+            if ((valueCode & (1 << cat)) != 0) {
+                set->addAll(getCategorySet(cat));
+            }
         }
     }
     return set;
@@ -601,7 +620,11 @@ void UnicodePropertySet::init() {
     COMBINING_CLASS_MAP = new Hashtable(TRUE);
     BIDI_CLASS_MAP = new Hashtable(TRUE);
     BINARY_PROPERTY_MAP = new Hashtable(TRUE);
+    BOOLEAN_VALUE_MAP = new Hashtable(TRUE);
     SCRIPT_CACHE = new UnicodeSet[(size_t)USCRIPT_CODE_LIMIT];
+
+    // NOTE:  All short and long names taken from
+    // PropertyAliases.txt and PropertyValueAliases.txt.
 
     // NOTE:  We munge all search keys to have no whitespace
     // and upper case.  As such, all stored keys should have
@@ -612,7 +635,7 @@ void UnicodePropertySet::init() {
 
     addType("GC", "GENERALCATEGORY", createCategorySet);
 
-    addType("CC", "COMBININGCLASS", createCombiningClassSet);
+    addType("CCC", "CANONICALCOMBININGCLASS", createCombiningClassSet);
 
     addType("BC", "BIDICLASS", createBidiClassSet);
 
@@ -628,9 +651,17 @@ void UnicodePropertySet::init() {
     addType("SC", "SCRIPT", createScriptSet);
 
     //------------------------------------------------------------
+    // Boolean Value MAP
+
+    addValue(BOOLEAN_VALUE_MAP, "T", "TRUE", MAPVAL + 1);
+    addValue(BOOLEAN_VALUE_MAP, "F", "FALSE", MAPVAL + 0);
+
+    //------------------------------------------------------------
     // General Category MAP
 
     addValue(CATEGORY_MAP, "ANY", "", ANY); // special case
+
+    addValue(CATEGORY_MAP, "ASCII", "", ASCII); // special case
 
     addValue(CATEGORY_MAP, "C", "OTHER",
              (1 << U_CONTROL_CHAR) |
@@ -747,18 +778,12 @@ void UnicodePropertySet::init() {
     // Combining Class MAP
 
     addValue(COMBINING_CLASS_MAP, "NR", "NOTREORDERED", MAPVAL + 0);
-    addValue(COMBINING_CLASS_MAP, "OV", "OVERLAYSINTERIORS", MAPVAL + 1);
-    addValue(COMBINING_CLASS_MAP, "NU", "NUKTAS", MAPVAL + 7);
-    addValue(COMBINING_CLASS_MAP, "KV", "KANAVOICINGMARKS", MAPVAL + 8);
-    addValue(COMBINING_CLASS_MAP, "V", "VIRAMAS", MAPVAL + 9);
-    addValue(COMBINING_CLASS_MAP, "BLA", "BELOWLEFTATTACHED", MAPVAL + 200);
-    addValue(COMBINING_CLASS_MAP, "BA", "BELOWATTACHED", MAPVAL + 202);
-    addValue(COMBINING_CLASS_MAP, "BRA", "BELOWRIGHTATTACHED", MAPVAL + 204);
-    addValue(COMBINING_CLASS_MAP, "LAR", "LEFTATTACHEDREORDRANT", MAPVAL + 208);
-    addValue(COMBINING_CLASS_MAP, "RA", "RIGHTATTACHED", MAPVAL + 210);
-    addValue(COMBINING_CLASS_MAP, "ALA", "ABOVELEFTATTACHED", MAPVAL + 212);
-    addValue(COMBINING_CLASS_MAP, "AA", "ABOVEATTACHED", MAPVAL + 214);
-    addValue(COMBINING_CLASS_MAP, "ARA", "ABOVERIGHTATTACHED", MAPVAL + 216);
+    addValue(COMBINING_CLASS_MAP, "OV", "OVERLAY", MAPVAL + 1);
+    addValue(COMBINING_CLASS_MAP, "NU", "NUKTA", MAPVAL + 7);
+    addValue(COMBINING_CLASS_MAP, "KV", "KANAVOICING", MAPVAL + 8);
+    addValue(COMBINING_CLASS_MAP, "V", "VIRAMA", MAPVAL + 9);
+    addValue(COMBINING_CLASS_MAP, "ATBL", "ATTACHEDBELOWLEFT", MAPVAL + 202);
+    addValue(COMBINING_CLASS_MAP, "ATAR", "ATTACHEDABOVERIGHT", MAPVAL + 216);
     addValue(COMBINING_CLASS_MAP, "BL", "BELOWLEFT", MAPVAL + 218);
     addValue(COMBINING_CLASS_MAP, "B", "BELOW", MAPVAL + 220);
     addValue(COMBINING_CLASS_MAP, "BR", "BELOWRIGHT", MAPVAL + 222);
@@ -774,61 +799,77 @@ void UnicodePropertySet::init() {
     //------------------------------------------------------------
     // Bidi Class MAP
 
-    addValue(BIDI_CLASS_MAP, "L", "LEFTTORIGHT", MAPVAL + U_LEFT_TO_RIGHT); 
-    addValue(BIDI_CLASS_MAP, "R", "RIGHTTOLEFT", MAPVAL + U_RIGHT_TO_LEFT); 
-    addValue(BIDI_CLASS_MAP, "EN", "EUROPEANNUMBER", MAPVAL + U_EUROPEAN_NUMBER);
-    addValue(BIDI_CLASS_MAP, "ES", "EUROPEANNUMBERSEPARATOR", MAPVAL + U_EUROPEAN_NUMBER_SEPARATOR);
-    addValue(BIDI_CLASS_MAP, "ET", "EUROPEANNUMBERTERMINATOR", MAPVAL + U_EUROPEAN_NUMBER_TERMINATOR);
+    addValue(BIDI_CLASS_MAP, "AL", "ARABICLETTER", MAPVAL + U_RIGHT_TO_LEFT_ARABIC);
     addValue(BIDI_CLASS_MAP, "AN", "ARABICNUMBER", MAPVAL + U_ARABIC_NUMBER);
-    addValue(BIDI_CLASS_MAP, "CS", "COMMONNUMBERSEPARATOR", MAPVAL + U_COMMON_NUMBER_SEPARATOR);
-    addValue(BIDI_CLASS_MAP, "B", "BLOCKSEPARATOR", MAPVAL + U_BLOCK_SEPARATOR);
-    addValue(BIDI_CLASS_MAP, "S", "SEGMENTSEPARATOR", MAPVAL + U_SEGMENT_SEPARATOR);
-    addValue(BIDI_CLASS_MAP, "WS", "WHITESPACENEUTRAL", MAPVAL + U_WHITE_SPACE_NEUTRAL); 
-    addValue(BIDI_CLASS_MAP, "ON", "OTHERNEUTRAL", MAPVAL + U_OTHER_NEUTRAL); 
+    addValue(BIDI_CLASS_MAP, "B", "PARAGRAPHSEPARATOR", MAPVAL + U_BLOCK_SEPARATOR);
+    addValue(BIDI_CLASS_MAP, "BN", "BOUNDARYNEUTRAL", MAPVAL + U_BOUNDARY_NEUTRAL);
+    addValue(BIDI_CLASS_MAP, "CS", "COMMONSEPARATOR", MAPVAL + U_COMMON_NUMBER_SEPARATOR);
+    addValue(BIDI_CLASS_MAP, "EN", "EUROPEANNUMBER", MAPVAL + U_EUROPEAN_NUMBER);
+    addValue(BIDI_CLASS_MAP, "ES", "EUROPEANSEPARATOR", MAPVAL + U_EUROPEAN_NUMBER_SEPARATOR);
+    addValue(BIDI_CLASS_MAP, "ET", "EUROPEANTERMINATOR", MAPVAL + U_EUROPEAN_NUMBER_TERMINATOR);
+    addValue(BIDI_CLASS_MAP, "L", "LEFTTORIGHT", MAPVAL + U_LEFT_TO_RIGHT); 
     addValue(BIDI_CLASS_MAP, "LRE", "LEFTTORIGHTEMBEDDING", MAPVAL + U_LEFT_TO_RIGHT_EMBEDDING);
     addValue(BIDI_CLASS_MAP, "LRO", "LEFTTORIGHTOVERRIDE", MAPVAL + U_LEFT_TO_RIGHT_OVERRIDE);
-    addValue(BIDI_CLASS_MAP, "AL", "RIGHTTOLEFTARABIC", MAPVAL + U_RIGHT_TO_LEFT_ARABIC);
+    addValue(BIDI_CLASS_MAP, "NSM", "NONSPACINGMARK", MAPVAL + U_DIR_NON_SPACING_MARK);
+    addValue(BIDI_CLASS_MAP, "ON", "OTHERNEUTRAL", MAPVAL + U_OTHER_NEUTRAL); 
+    addValue(BIDI_CLASS_MAP, "PDF", "POPDIRECTIONALFORMAT", MAPVAL + U_POP_DIRECTIONAL_FORMAT);
+    addValue(BIDI_CLASS_MAP, "R", "RIGHTTOLEFT", MAPVAL + U_RIGHT_TO_LEFT); 
     addValue(BIDI_CLASS_MAP, "RLE", "RIGHTTOLEFTEMBEDDING", MAPVAL + U_RIGHT_TO_LEFT_EMBEDDING);
     addValue(BIDI_CLASS_MAP, "RLO", "RIGHTTOLEFTOVERRIDE", MAPVAL + U_RIGHT_TO_LEFT_OVERRIDE);
-    addValue(BIDI_CLASS_MAP, "PDF", "POPDIRECTIONALFORMAT", MAPVAL + U_POP_DIRECTIONAL_FORMAT);
-    addValue(BIDI_CLASS_MAP, "NSM", "DIRNONSPACINGMARK", MAPVAL + U_DIR_NON_SPACING_MARK);
-    addValue(BIDI_CLASS_MAP, "BN", "BOUNDARYNEUTRAL", MAPVAL + U_BOUNDARY_NEUTRAL);
+    addValue(BIDI_CLASS_MAP, "S", "SEGMENTSEPARATOR", MAPVAL + U_SEGMENT_SEPARATOR);
+    addValue(BIDI_CLASS_MAP, "WS", "WHITESPACENEUTRAL", MAPVAL + U_WHITE_SPACE_NEUTRAL);
     
     //------------------------------------------------------------
-    // Binary Properties MAP
+    // Binary Properties MAP.  Names taken from PropertyAliases.txt.
+    // The following are not supported:
 
-    addValue(BINARY_PROPERTY_MAP, "ALPH", "ALPHABETIC", MAPVAL + UCHAR_ALPHABETIC);
-    addValue(BINARY_PROPERTY_MAP, "AHEXD", "ASCII_HEXDIGIT", MAPVAL + UCHAR_ASCII_HEX_DIGIT);
-    addValue(BINARY_PROPERTY_MAP, "BDCON", "BIDICONTROL", MAPVAL + UCHAR_BIDI_CONTROL);
-    addValue(BINARY_PROPERTY_MAP, "BDMIR", "BIDIMIRRORED", MAPVAL + UCHAR_BIDI_MIRRORED);
+    // CE        ; Composition_Exclusion
+    // NBrk      ; Non_Break
+    // NFD_QC    ; NFD_Quick_Check
+    // NFKD_QC   ; NFKD_Quick_Check
+    // OAlpha    ; Other_Alphabetic
+    // ODI       ; Other_Default_Ignorable_Code_Point
+    // OGr_Ext   ; Other_Grapheme_Extend
+    // OLower    ; Other_Lowercase
+    // OMath     ; Other_Math
+    // OUpper    ; Other_Uppercase
+    // XO_NFC    ; Expands_On_NFC
+    // XO_NFD    ; Expands_On_NFD
+    // XO_NFKC   ; Expands_On_NFKC
+    // XO_NFKD   ; Expands_On_NFKD
+
+    addValue(BINARY_PROPERTY_MAP, "ALPHA", "ALPHABETIC", MAPVAL + UCHAR_ALPHABETIC);
+    addValue(BINARY_PROPERTY_MAP, "AHEX", "ASCII_HEXDIGIT", MAPVAL + UCHAR_ASCII_HEX_DIGIT);
+    addValue(BINARY_PROPERTY_MAP, "BIDIC", "BIDICONTROL", MAPVAL + UCHAR_BIDI_CONTROL);
+    addValue(BINARY_PROPERTY_MAP, "BIDIM", "BIDIMIRRORED", MAPVAL + UCHAR_BIDI_MIRRORED);
     addValue(BINARY_PROPERTY_MAP, "DASH", "", MAPVAL + UCHAR_DASH);
-    addValue(BINARY_PROPERTY_MAP, "DICP", "DEFAULTIGNORABLECODEPOINT", MAPVAL + UCHAR_DEFAULT_IGNORABLE_CODE_POINT);
-    addValue(BINARY_PROPERTY_MAP, "DEPR", "DEPRECATED", MAPVAL + UCHAR_DEPRECATED);
-    addValue(BINARY_PROPERTY_MAP, "DIAC", "DIACRITIC", MAPVAL + UCHAR_DIACRITIC);
+    addValue(BINARY_PROPERTY_MAP, "DI", "DEFAULTIGNORABLECODEPOINT", MAPVAL + UCHAR_DEFAULT_IGNORABLE_CODE_POINT);
+    addValue(BINARY_PROPERTY_MAP, "DEP", "DEPRECATED", MAPVAL + UCHAR_DEPRECATED);
+    addValue(BINARY_PROPERTY_MAP, "DIA", "DIACRITIC", MAPVAL + UCHAR_DIACRITIC);
     addValue(BINARY_PROPERTY_MAP, "EXT", "EXTENDER", MAPVAL + UCHAR_EXTENDER);
-    addValue(BINARY_PROPERTY_MAP, "FCE", "FULLCOMPOSITIONEXCLUSION", MAPVAL + UCHAR_FULL_COMPOSITION_EXCLUSION);
-    addValue(BINARY_PROPERTY_MAP, "GBASE", "GRAPHEMEBASE", MAPVAL + UCHAR_GRAPHEME_BASE);
-    addValue(BINARY_PROPERTY_MAP, "GEXT", "GRAPHEMEEXTEND", MAPVAL + UCHAR_GRAPHEME_EXTEND);
-    addValue(BINARY_PROPERTY_MAP, "GLINK", "GRAPHEMELINK", MAPVAL + UCHAR_GRAPHEME_LINK);
-    addValue(BINARY_PROPERTY_MAP, "HEXD", "HEXDIGIT", MAPVAL + UCHAR_HEX_DIGIT);
-    addValue(BINARY_PROPERTY_MAP, "HYPH", "HYPHEN", MAPVAL + UCHAR_HYPHEN);
+    addValue(BINARY_PROPERTY_MAP, "COMPEX", "FULLCOMPOSITIONEXCLUSION", MAPVAL + UCHAR_FULL_COMPOSITION_EXCLUSION);
+    addValue(BINARY_PROPERTY_MAP, "GRBASE", "GRAPHEMEBASE", MAPVAL + UCHAR_GRAPHEME_BASE);
+    addValue(BINARY_PROPERTY_MAP, "GREXT", "GRAPHEMEEXTEND", MAPVAL + UCHAR_GRAPHEME_EXTEND);
+    addValue(BINARY_PROPERTY_MAP, "GRLINK", "GRAPHEMELINK", MAPVAL + UCHAR_GRAPHEME_LINK);
+    addValue(BINARY_PROPERTY_MAP, "HEX", "HEXDIGIT", MAPVAL + UCHAR_HEX_DIGIT);
+    addValue(BINARY_PROPERTY_MAP, "HYPHEN", "", MAPVAL + UCHAR_HYPHEN);
     addValue(BINARY_PROPERTY_MAP, "IDC", "IDCONTINUE", MAPVAL + UCHAR_ID_CONTINUE);
     addValue(BINARY_PROPERTY_MAP, "IDS", "IDSTART", MAPVAL + UCHAR_ID_START);
     addValue(BINARY_PROPERTY_MAP, "IDEO", "IDEOGRAPHIC", MAPVAL + UCHAR_IDEOGRAPHIC);
     addValue(BINARY_PROPERTY_MAP, "IDSB", "IDSBINARYOPERATOR", MAPVAL + UCHAR_IDS_BINARY_OPERATOR);
     addValue(BINARY_PROPERTY_MAP, "IDST", "IDSTRINARYOPERATOR", MAPVAL + UCHAR_IDS_TRINARY_OPERATOR);
-    addValue(BINARY_PROPERTY_MAP, "JCON", "JOINCONTROL", MAPVAL + UCHAR_JOIN_CONTROL);
+    addValue(BINARY_PROPERTY_MAP, "JOINC", "JOINCONTROL", MAPVAL + UCHAR_JOIN_CONTROL);
     addValue(BINARY_PROPERTY_MAP, "LOE", "LOGICALORDEREXCEPTION", MAPVAL + UCHAR_LOGICAL_ORDER_EXCEPTION);
-    addValue(BINARY_PROPERTY_MAP, "LC", "LOWERCASE", MAPVAL + UCHAR_LOWERCASE);
+    addValue(BINARY_PROPERTY_MAP, "LOWER", "LOWERCASE", MAPVAL + UCHAR_LOWERCASE);
     addValue(BINARY_PROPERTY_MAP, "MATH", "", MAPVAL + UCHAR_MATH);
     addValue(BINARY_PROPERTY_MAP, "NCHAR", "NONCHARACTERCODEPOINT", MAPVAL + UCHAR_NONCHARACTER_CODE_POINT);
-    addValue(BINARY_PROPERTY_MAP, "QUOT", "QUOTATIONMARK", MAPVAL + UCHAR_QUOTATION_MARK);
-    addValue(BINARY_PROPERTY_MAP, "RAD", "RADICAL", MAPVAL + UCHAR_RADICAL);
-    addValue(BINARY_PROPERTY_MAP, "SOFT", "SOFTDOTTED", MAPVAL + UCHAR_SOFT_DOTTED);
+    addValue(BINARY_PROPERTY_MAP, "QMARK", "QUOTATIONMARK", MAPVAL + UCHAR_QUOTATION_MARK);
+    addValue(BINARY_PROPERTY_MAP, "RADICAL", "", MAPVAL + UCHAR_RADICAL);
+    addValue(BINARY_PROPERTY_MAP, "SD", "SOFTDOTTED", MAPVAL + UCHAR_SOFT_DOTTED);
     addValue(BINARY_PROPERTY_MAP, "TERM", "TERMINALPUNCTUATION", MAPVAL + UCHAR_TERMINAL_PUNCTUATION);
-    addValue(BINARY_PROPERTY_MAP, "UID", "UNIFIEDIDEOGRAPH", MAPVAL + UCHAR_UNIFIED_IDEOGRAPH);
-    addValue(BINARY_PROPERTY_MAP, "UC", "UPPERCASE", MAPVAL + UCHAR_UPPERCASE);
-    addValue(BINARY_PROPERTY_MAP, "SPAC", "WHITESPACE", MAPVAL + UCHAR_WHITE_SPACE);
+    addValue(BINARY_PROPERTY_MAP, "UIDEO", "UNIFIEDIDEOGRAPH", MAPVAL + UCHAR_UNIFIED_IDEOGRAPH);
+    addValue(BINARY_PROPERTY_MAP, "UPPER", "UPPERCASE", MAPVAL + UCHAR_UPPERCASE);
+    addValue(BINARY_PROPERTY_MAP, "WSPACE", "WHITESPACE", MAPVAL + UCHAR_WHITE_SPACE);
     addValue(BINARY_PROPERTY_MAP, "XIDC", "XIDCONTINUE", MAPVAL + UCHAR_XID_CONTINUE);
     addValue(BINARY_PROPERTY_MAP, "XIDS", "XIDSTART", MAPVAL + UCHAR_XID_START);
 }

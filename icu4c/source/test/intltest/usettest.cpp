@@ -627,15 +627,15 @@ void UnicodeSetTest::TestPropertySet() {
 
         // Combining class: @since ICU 2.2
         // Check both symbolic and numeric
-        "\\p{cc=Nuktas}",
+        "\\p{ccc=Nukta}",
         "\\u0ABC",
         "abc",
 
-        "\\p{Combining Class = 11}",
+        "\\p{Canonical Combining Class = 11}",
         "\\u05B1",
         "\\u05B2",
 
-        "[:c c = iota subscript :]",
+        "[:c c c = iota subscript :]",
         "\\u0345",
         "xyz",
 
@@ -649,7 +649,7 @@ void UnicodeSetTest::TestPropertySet() {
         "\\u4E0A",
         "x",
 
-        "[:^math:]",
+        "[:math=false:]",
         "q",
         "(*+)",
     };
