@@ -1008,6 +1008,7 @@ T_UConverter_toUnicode_ISO_2022(UConverterToUnicodeArgs *args,
                 args->flush,
                 err);
             args->converter = saveThis;
+            myData->isFirstBuffer = FALSE;
         }
         if((myData->isFirstBuffer) && (args->source[0]!=(char)ESC_2022)
             &&  (myData->currentConverter==NULL)){
@@ -1099,6 +1100,8 @@ T_UConverter_toUnicode_ISO_2022_OFFSETS_LOGIC(UConverterToUnicodeArgs* args,
                 args->offsets,
                 args->flush,
                 err);
+
+            myData->isFirstBuffer = FALSE;
 
             args->converter = saveThis;
             {
