@@ -3346,7 +3346,7 @@ UChar T_UConverter_getNextUChar_UTF8(UConverter* converter,
 
   /*The byte sequence is longer than the buffer area passed*/
 
-  if ((*source + extraBytesToWrite) > sourceLimit)
+  if ((*source + extraBytesToWrite - 1) > sourceLimit)
     {
       *err = U_TRUNCATED_CHAR_FOUND;
       return 0xFFFD;
