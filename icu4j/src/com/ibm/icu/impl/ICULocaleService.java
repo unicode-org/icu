@@ -137,7 +137,7 @@ public class ICULocaleService extends ICUService {
      */
     public Factory registerObject(Object obj, Locale locale, int kind, int coverage) {
         Factory factory = new SimpleLocaleKeyFactory(obj, locale, kind, coverage);
-	return registerFactory(factory);
+        return registerFactory(factory);
     }
 
     /**
@@ -186,57 +186,57 @@ public class ICULocaleService extends ICUService {
      */
     public static class LocaleKey extends ICUService.Key {
         private int kind;
-	private String primaryID;
-	private String fallbackID;
-	private String currentID;
+        private String primaryID;
+        private String fallbackID;
+        private String currentID;
 
         public static final int KIND_ANY = -1;
 
-	/**
-	 * Create a LocaleKey with canonical primary and fallback IDs.
-	 */
-	public static LocaleKey createWithCanonicalFallback(String primaryID, String canonicalFallbackID) {
+        /**
+         * Create a LocaleKey with canonical primary and fallback IDs.
+         */
+        public static LocaleKey createWithCanonicalFallback(String primaryID, String canonicalFallbackID) {
             return createWithCanonicalFallback(primaryID, canonicalFallbackID, KIND_ANY);
-	}
+        }
 	    
-	/**
-	 * Create a LocaleKey with canonical primary and fallback IDs.
-	 */
-	public static LocaleKey createWithCanonicalFallback(String primaryID, String canonicalFallbackID, int kind) {
+        /**
+         * Create a LocaleKey with canonical primary and fallback IDs.
+         */
+        public static LocaleKey createWithCanonicalFallback(String primaryID, String canonicalFallbackID, int kind) {
             if (primaryID == null) {
                 return null;
             }
             String canonicalPrimaryID = LocaleUtility.canonicalLocaleString(primaryID);
-	    return new LocaleKey(primaryID, canonicalPrimaryID, canonicalFallbackID, kind);
-	}
+            return new LocaleKey(primaryID, canonicalPrimaryID, canonicalFallbackID, kind);
+        }
 	    
-	/**
-	 * PrimaryID is the user's requested locale string,
-	 * canonicalPrimaryID is this string in canonical form,
-	 * fallbackID is the current default locale's string in
-	 * canonical form.
-	 */
+        /**
+         * PrimaryID is the user's requested locale string,
+         * canonicalPrimaryID is this string in canonical form,
+         * fallbackID is the current default locale's string in
+         * canonical form.
+         */
         protected LocaleKey(String primaryID, String canonicalPrimaryID, String canonicalFallbackID, int kind) {
-	    super(primaryID);
+            super(primaryID);
 
             this.kind = kind;
 	    
-	    if (canonicalPrimaryID == null) {
-		this.primaryID = "";
-	    } else {
-		this.primaryID = canonicalPrimaryID;
-	    }
-	    if (this.primaryID == "") {
-		this.fallbackID = null;
-	    } else {
-		if (canonicalFallbackID == null || this.primaryID.equals(canonicalFallbackID)) {
-		    this.fallbackID = "";
-		} else {
-		    this.fallbackID = canonicalFallbackID;
-		}
-	    }
+            if (canonicalPrimaryID == null) {
+                this.primaryID = "";
+            } else {
+                this.primaryID = canonicalPrimaryID;
+            }
+            if (this.primaryID == "") {
+                this.fallbackID = null;
+            } else {
+                if (canonicalFallbackID == null || this.primaryID.equals(canonicalFallbackID)) {
+                    this.fallbackID = "";
+                } else {
+                    this.fallbackID = canonicalFallbackID;
+                }
+            }
 
-	    this.currentID = this.primaryID;
+            this.currentID = this.primaryID;
         }
 
         /**
@@ -253,18 +253,18 @@ public class ICULocaleService extends ICUService {
             return kind;
         }
 
-	/**
-	 * Return the (canonical) original ID.
-	 */
-	public String canonicalID() {
-	    return primaryID;
-	}
+        /**
+         * Return the (canonical) original ID.
+         */
+        public String canonicalID() {
+            return primaryID;
+        }
 
         /**
          * Return the (canonical) current ID, or null if no current id.
          */
         public String currentID() {
-	    return currentID;
+            return currentID;
         }
 
         /**
@@ -298,25 +298,25 @@ public class ICULocaleService extends ICUService {
         /**
          * If the key has a fallback, modify the key and return true,
          * otherwise return false.</p>
-	 *
-	 * <p>First falls back through the primary ID, then through
-	 * the fallbackID.  The final fallback is the empty string,
-	 * unless the primary id was the empty string, in which case
-	 * there is no fallback.  
-	 */
+         *
+         * <p>First falls back through the primary ID, then through
+         * the fallbackID.  The final fallback is the empty string,
+         * unless the primary id was the empty string, in which case
+         * there is no fallback.  
+         */
         public boolean fallback() {
-	    int x = currentID.lastIndexOf('_');
-	    if (x != -1) {
-		currentID = currentID.substring(0, x);
-		return true;
-	    }
-	    if (fallbackID != null) {
-		currentID = fallbackID;
-		fallbackID = fallbackID.length() == 0 ? null : "";
-		return true;
-	    }
-	    currentID = null;
-	    return false;
+            int x = currentID.lastIndexOf('_');
+            if (x != -1) {
+                currentID = currentID.substring(0, x);
+                return true;
+            }
+            if (fallbackID != null) {
+                currentID = fallbackID;
+                fallbackID = fallbackID.length() == 0 ? null : "";
+                return true;
+            }
+            currentID = null;
+            return false;
         }
 
         /**
@@ -367,23 +367,23 @@ public class ICULocaleService extends ICUService {
          * locales, and provides localization for the covered
          * locales.
          *
-        public static final int VISIBLE_COVERS = 2;
+         public static final int VISIBLE_COVERS = 2;
 
-        /**
+         /**
          * Coverage value indicating that the factory does not
          * make its locales visible, covers more specific
          * locales, and also does not allow the locales it
          * covers to be visible.
          *
-        public static final int INVISIBLE_COVERS = 3;
+         public static final int INVISIBLE_COVERS = 3;
 
-        /**
+         /**
          * Coverage value indicating that the factory makes
          * its locales visible, covers more specific 
          * locales, but does not allow the locales it covers
          * to be visible.
          *
-        public static final int VISIBLE_COVERS_REMOVE = 6;
+         public static final int VISIBLE_COVERS_REMOVE = 6;
         */
 
         
@@ -411,10 +411,15 @@ public class ICULocaleService extends ICUService {
         public Object create(Key key, ICUService service) {
             if (handlesKey(key)) {
                 LocaleKey lkey = (LocaleKey)key;
-                Locale loc = lkey.currentLocale();
                 int kind = lkey.kind();
-
-                return handleCreate(loc, kind, service);
+                
+                if (supportsULocale()) {
+                    ULocale uloc = new ULocale(lkey.currentID());
+                    return handleCreate(uloc, kind, service);
+                } else {
+                    Locale loc = lkey.currentLocale();
+                    return handleCreate(loc, kind, service);
+                }
             } else {
                 // System.out.println("factory: " + this + " did not support id: " + key.currentID());
                 // System.out.println("supported ids: " + getSupportedIDs());
@@ -433,19 +438,19 @@ public class ICULocaleService extends ICUService {
             /*
              * coverage not supported
 
-            if (supported.contains(id)) {
-                return true;
-            }
-            if ((coverage & 0x2) != 0) { 
-                Iterator iter = supported.iterator();
-                while (iter.hasNext()) {
-                    String s = (String)iter.next();
-                    if (LocaleUtility.isFallbackOf(s, id)) {
-                        return true;
-                    }
-                }
-            }
-            return false;
+             if (supported.contains(id)) {
+             return true;
+             }
+             if ((coverage & 0x2) != 0) { 
+             Iterator iter = supported.iterator();
+             while (iter.hasNext()) {
+             String s = (String)iter.next();
+             if (LocaleUtility.isFallbackOf(s, id)) {
+             return true;
+             }
+             }
+             }
+             return false;
             */
         }
 
@@ -453,12 +458,12 @@ public class ICULocaleService extends ICUService {
          * Override of superclass method.  This adjusts the result based
          * on the coverage rule for this factory.
          */
-	public void updateVisibleIDs(Map result) {
+        public void updateVisibleIDs(Map result) {
             Set cache = getSupportedIDs();
             
             boolean visible = (coverage & 0x1) == 0;
-           // boolean covers = (coverage & 0x2) != 0;
-           // boolean removes = !visible || (coverage & 0x4) != 0;
+            // boolean covers = (coverage & 0x2) != 0;
+            // boolean removes = !visible || (coverage & 0x4) != 0;
 
             // System.out.println("vis: " + visible + " covers: " + covers + " removes: " + removes);
             Map toRemap = new HashMap();
@@ -467,23 +472,23 @@ public class ICULocaleService extends ICUService {
                 String id = (String)iter.next();
                 /*
                  * Coverage not supported
-                if (covers) {
-                    int idlen = id.length();
-                    Iterator miter = result.keySet().iterator();
-                    while (miter.hasNext()) {
-                        String mid = (String)miter.next();
-                        if (mid.startsWith(id) &&
-                            (mid.length() == idlen ||
-                             mid.charAt(idlen) == '_')) {
+                 if (covers) {
+                 int idlen = id.length();
+                 Iterator miter = result.keySet().iterator();
+                 while (miter.hasNext()) {
+                 String mid = (String)miter.next();
+                 if (mid.startsWith(id) &&
+                 (mid.length() == idlen ||
+                 mid.charAt(idlen) == '_')) {
 
-                            if (removes) {
-                                miter.remove();
-                            } else {
-                                toRemap.put(mid, this);
-                            }
-                        }
-                    }
-                }
+                 if (removes) {
+                 miter.remove();
+                 } else {
+                 toRemap.put(mid, this);
+                 }
+                 }
+                 }
+                 }
                 */
                 if (!visible) {
                     result.remove(id);
@@ -493,30 +498,49 @@ public class ICULocaleService extends ICUService {
 
             }                    
             result.putAll(toRemap);
-	}
+        }
 
-	/**
-	 * Return a localized name for the locale represented by id.
-	 */
-	public String getDisplayName(String id, Locale locale) {
-	    // assume if the user called this on us, we must have handled some fallback of this id
-//          if (isSupportedID(id)) {
-                if (locale == null) {
-                    return id;
-                }
-                Locale loc = LocaleUtility.getLocaleFromName(id);
-                return loc.getDisplayName(locale);
-//  	    }
-//          return null;
-	}
+        /**
+         * Return a localized name for the locale represented by id.
+         */
+        public String getDisplayName(String id, Locale locale) {
+            // assume if the user called this on us, we must have handled some fallback of this id
+            //          if (isSupportedID(id)) {
+            if (locale == null) {
+                return id;
+            }
+            Locale loc = LocaleUtility.getLocaleFromName(id);
+            return loc.getDisplayName(locale);
+            //  	    }
+            //          return null;
+        }
 
+        /**
+         * Return true if this object supports ULocale.  If so, then
+         * handleCreate(ULocale,...) will be called to instantiate objects.
+         * Otherwise handleCreate(Locale,...) will be called.  By default,
+         * subclasses do NOT support ULocale.
+         */
+        protected boolean supportsULocale() {
+            return false;   
+        }
+    
+        ///CLOVER:OFF
         /**
          * Utility method used by create(Key, ICUService).  Subclasses can implement
          * this instead of create.
          */
+        protected Object handleCreate(Locale loc, int kind, ICUService service) {
+            return null;
+        }
+        ///CLOVER:ON
 
         ///CLOVER:OFF
-        protected Object handleCreate(Locale loc, int kind, ICUService service) {
+        /**
+         * Utility method used by create(Key, ICUService).  Subclasses can
+         * implement this instead of create.
+         */
+        protected Object handleCreate(ULocale loc, int kind, ICUService service) {
             return null;
         }
         ///CLOVER:ON
@@ -620,7 +644,7 @@ public class ICULocaleService extends ICUService {
      * object.  The default implementation returns a resource bundle.
      */
     public static class ICUResourceBundleFactory extends LocaleKeyFactory {
-	protected final String bundleName;
+        protected final String bundleName;
 
         /**
          * Convenience constructor that uses the main ICU bundle name.
@@ -629,22 +653,22 @@ public class ICULocaleService extends ICUService {
             this(ICUResourceBundle.ICU_BASE_NAME);
         }
 
-	/**
-	 * A service factory based on ICU resource data in resources
-	 * with the given name.
-	 */
-	public ICUResourceBundleFactory(String bundleName) {
+        /**
+         * A service factory based on ICU resource data in resources
+         * with the given name.
+         */
+        public ICUResourceBundleFactory(String bundleName) {
             super(VISIBLE);
 
             this.bundleName = bundleName;
         }
 
-	/**
+        /**
          * Return the supported IDs.  This is the set of all locale names in ICU_BASE_NAME.
-	 */
-	protected Set getSupportedIDs() {
+         */
+        protected Set getSupportedIDs() {
             return ICUResourceBundle.getAvailableLocaleNameSet(bundleName);
-	}
+        }
 
         /**
          * Create the service.  The default implementation returns the resource bundle
@@ -664,24 +688,24 @@ public class ICULocaleService extends ICUService {
      * last accessed, the service cache is cleared.
      */
     public String validateFallbackLocale() {
-	Locale loc = Locale.getDefault();
-	if (loc != fallbackLocale) {
-	    synchronized (this) {
-		if (loc != fallbackLocale) {
-		    fallbackLocale = loc;
-		    fallbackLocaleName = LocaleUtility.canonicalLocaleString(loc.toString());
-		    clearServiceCache();
-		}
-	    }
-	}
+        Locale loc = Locale.getDefault();
+        if (loc != fallbackLocale) {
+            synchronized (this) {
+                if (loc != fallbackLocale) {
+                    fallbackLocale = loc;
+                    fallbackLocaleName = LocaleUtility.canonicalLocaleString(loc.toString());
+                    clearServiceCache();
+                }
+            }
+        }
         return fallbackLocaleName;
     }
 
     public Key createKey(String id) {
-	return LocaleKey.createWithCanonicalFallback(id, validateFallbackLocale());
+        return LocaleKey.createWithCanonicalFallback(id, validateFallbackLocale());
     }
 
     public Key createKey(String id, int kind) {
-	return LocaleKey.createWithCanonicalFallback(id, validateFallbackLocale(), kind);
+        return LocaleKey.createWithCanonicalFallback(id, validateFallbackLocale(), kind);
     }
 }
