@@ -317,15 +317,6 @@ uloc_getLanguage(const char*    localeID,
   if (languageCapacity > 0) 
     {
       language[icu_min(i,languageCapacity-1)] = '\0';
-      /*We need to normalize for changes in ISO language names,
-        We special case out the recent ISO changes, translating them
-        internally to the old iso codes.*/
-      if (U_SUCCESS(*err))
-    {
-      if (icu_strcmp("he", language) == 0) icu_strcpy(language, "iw");
-      else if (icu_strcmp("yi", language) == 0) icu_strcpy(language, "ji");
-      else if (icu_strcmp("id", language) == 0) icu_strcpy(language, "in");
-    }
     }
   
   return i+1;
