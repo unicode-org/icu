@@ -2143,11 +2143,11 @@ RBBIWordMonkey::RBBIWordMonkey() : fGCFMatcher(0),
 
     fSets          = new UVector(status);
 
-    fKatakanaSet   = new UnicodeSet("[\\p{script=KATAKANA}\\u30fc\\uff70\\ufe9e\\ff9f]", status);
+    fKatakanaSet   = new UnicodeSet("[\\p{script=KATAKANA}\\u30fc\\uff70\\uff9e\\uff9f]", status);
 
     const UnicodeString ALetterStr( "[[\\p{Alphabetic}\\u05f3]-[\\p{Ideographic}]-[\\p{Script=Thai}]"
                                     "-[\\p{Script=Lao}]-[\\p{Script=Hiragana}]-"
-                                    "[\\p{script=KATAKANA}\\u30fc\\uff70\\ufe9e\\ff9f]]");
+                                    "[\\p{script=KATAKANA}\\u30fc\\uff70\\uff9e\\uff9f]]");
 
     fALetterSet    = new UnicodeSet(ALetterStr, status);
     fMidLetterSet  = new UnicodeSet("[\\u0027\\u00b7\\u05f4\\u2019\\u2027]", status);
@@ -2918,10 +2918,6 @@ void RBBITest::TestMonkey(char *params) {
         logln("Word Break Monkey Test");
         RBBIWordMonkey  m;
         BreakIterator  *bi = BreakIterator::createWordInstance(locale, status);
-        if (params == NULL) {
-            // TODO:  Resolve rule ambiguities, unpin loop count.
-            loopCount = 2;
-        }
         RunMonkey(bi, m, "word", seed, loopCount);
         delete bi;
     }
