@@ -213,6 +213,7 @@ typedef enum {
      UCOL_CASE_FIRST, /* who goes first, lower case or uppercase */
      UCOL_CASE_LEVEL, /* do we have an extra case level */
      UCOL_NORMALIZATION_MODE, /* attribute for normalization */
+     UCOL_DECOMPOSITION_MODE = UCOL_NORMALIZATION_MODE,
      UCOL_STRENGTH,         /* attribute for strength */
      UCOL_ATTRIBUTE_COUNT
 } UColAttribute;

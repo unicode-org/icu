@@ -315,6 +315,7 @@ ucol_openRules(    const    UChar                  *rules,
     norm = UCOL_ON;
     break;
   case UCOL_DEFAULT_NORMALIZATION: 
+  case UCOL_DEFAULT:
     norm = UCOL_DEFAULT;
     break;
   default:
