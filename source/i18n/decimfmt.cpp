@@ -258,7 +258,13 @@ DecimalFormat::construct(UErrorCode&             status,
  * Sets our currency to be the default currency for the given locale.
  */
 void DecimalFormat::setCurrencyForLocale(const char* locale, UErrorCode& ec) {
-    const UChar* c = ucurr_forLocale(locale, &ec);
+    const UChar* c = NULL;
+    if (U_SUCCESS(ec)) {
+        // Trap an error in mapping locale to currency.  If we can't
+        // map, then don't fail and set the currency to "".
+        UErrorCode ec2 = U_ZERO_ERROR;
+        c = ucurr_forLocale(locale, &ec2);
+    }
     if (c == NULL) {
         *currency = 0;
     } else {
@@ -2009,7 +2015,15 @@ void DecimalFormat::expandAffix(const UnicodeString& pattern,
                         affix += currency;
                     } else {
                         int32_t len;
-                        affix += ucurr_getSymbol(currency, fSymbols->getLocale().getName(), &len, &ec);
+                        UBool isChoiceFormat;
+                        const UChar* s = ucurr_getName(currency, fSymbols->getLocale().getName(),
+                                                       UCURR_SYMBOL_NAME, &isChoiceFormat, &len, &ec);
+                        if (isChoiceFormat) {
+                            // TODO add support for ChoiceFormat
+                            len = u_strlen(currency); // Should == 3, but maybe not...?
+                            s = currency;
+                        }
+                        affix += UnicodeString(s, len);
                     }
                 } else {
                     if(intl) {

@@ -14,6 +14,7 @@
 #include "unicode/resbund.h"
 #include "unicode/ustring.h"
 #include "cstring.h"
+#include "uassert.h"
 
 //------------------------------------------------------------
 // Constants
@@ -36,14 +37,29 @@ static const int32_t MAX_POW10 = (sizeof(POW10)/sizeof(POW10[0])) - 1;
 // Tag for meta-data, in root.
 static const char CURRENCY_META[] = "CurrencyMeta";
 
+// Tag for map from countries to currencies, in root.
+static const char CURRENCY_MAP[] = "CurrencyMap";
+
 // Tag for default meta-data, in CURRENCY_META
 static const char DEFAULT_META[] = "DEFAULT";
 
-// Tag for legacy currency elements data
-static const char CURRENCY_ELEMENTS[] = "CurrencyElements";
+// Variant for legacy pre-euro mapping in CurrencyMap
+static const char VAR_PRE_EURO[] = "PREEURO";
+
+// Variant for legacy euro mapping in CurrencyMap
+static const char VAR_EURO[] = "EURO";
+
+// Variant delimiter
+static const char VAR_DELIM[] = "_";
 
 // Tag for localized display names (symbols) of currencies
 static const char CURRENCIES[] = "Currencies";
+
+// Marker character indicating that a display name is a ChoiceFormat
+// pattern.  Strings that start with one mark are ChoiceFormat
+// patterns.  Strings that start with 2 marks are static strings, and
+// the first mark is deleted.
+static const UChar CHOICE_FORMAT_MARK = 0x003D; // Equals sign
 
 //------------------------------------------------------------
 // Code
@@ -66,7 +82,7 @@ myUCharsToChars(char* resultOfLen4, const UChar* currency) {
  * units of 10^(-fraction_digits).
  */
 static const int32_t*
-_findData(const UChar* currency) {
+_findMetaData(const UChar* currency) {
 
     // Get CurrencyMeta resource out of root locale file.  [This may
     // move out of the root locale file later; if it does, update this
@@ -105,26 +121,28 @@ U_CAPI const UChar* U_EXPORT2
 ucurr_forLocale(const char* locale,
                 UErrorCode* ec) {
 
-    // TODO: ? Establish separate resource for locale->currency mapping
-    //       ? <IF> we end up deleting the CurrencyElements resource.
-    //       ? In the meantime the CurrencyElements tag has exactly the
-    //       ? data we want.
-
-    // Look up the CurrencyElements resource for this locale.
-    // It contains: [0] = currency symbol, e.g. "$";
-    //              [1] = intl. currency symbol, e.g. "USD";
-    //              [2] = monetary decimal separator, e.g. ".".
-
     if (ec != NULL && U_SUCCESS(*ec)) {
-	UResourceBundle* rb = ures_open(NULL, locale, ec);
-	UResourceBundle* ce = ures_getByKey(rb, CURRENCY_ELEMENTS, NULL, ec);
+        // Extract the country name and variant name.  We only
+        // recognize two variant names, EURO and PREEURO.
+        char country[12];
+        char variant[8];
+        uloc_getCountry(locale, country, sizeof(country), ec);
+        uloc_getVariant(locale, variant, sizeof(variant), ec);
+        if (0 == uprv_strcmp(variant, VAR_PRE_EURO) ||
+            0 == uprv_strcmp(variant, VAR_EURO)) {
+            uprv_strcat(country, VAR_DELIM);
+            uprv_strcat(country, variant);
+        }
+
+        // Look up the CurrencyMap element in the root bundle.
+	UResourceBundle* rb = ures_open(NULL, "", ec);
+	UResourceBundle* cm = ures_getByKey(rb, CURRENCY_MAP, NULL, ec);
 	int32_t len;
-	const UChar* s = ures_getStringByIndex(ce, 1, &len, ec);
-	ures_close(ce);
+	const UChar* s = ures_getStringByKey(cm, country, &len, ec);
+	ures_close(cm);
 	ures_close(rb);
-	// All resource data SHOULD be of length 3.  If it is not,
-	// then the resource data is in error and we don't return it.
-	if (U_SUCCESS(*ec) && len == 3) {
+
+	if (U_SUCCESS(*ec)) {
 	    return s;
 	}
     }
@@ -132,74 +150,161 @@ ucurr_forLocale(const char* locale,
     return NULL;
 }
 
-U_CAPI const UChar* U_EXPORT2
-ucurr_getSymbol(const UChar* currency,
-                const char* locale,
-		int32_t* len, // fillin
-                UErrorCode* ec) {
-
-    if (ec == NULL || U_FAILURE(*ec)) {
-        return 0;
+/**
+ * Modify the given locale name by removing the rightmost _-delimited
+ * element.  If there is none, empty the string ("" == root).
+ * NOTE: The string "root" is not recognized; do not use it.
+ * @return TRUE if the fallback happened; FALSE if locale is already
+ * root ("").
+ */
+static UBool fallback(char *loc) {
+    if (!*loc) {
+        return FALSE;
     }
+    char *i = uprv_strrchr(loc, '_');
+    if (i == NULL) {
+        i = loc;
+    }
+    *i = 0;
+    return TRUE;
+}
+
+U_CAPI const UChar* U_EXPORT2
+ucurr_getName(const UChar* currency,
+              const char* locale,
+              UCurrNameStyle nameStyle,
+              UBool* isChoiceFormat, // fillin
+              int32_t* len, // fillin
+              UErrorCode* ec) {
 
     // Look up the Currencies resource for the given locale.  The
     // Currencies locale data looks like this:
     //|en {
     //|  Currencies { 
-    //|    USD { "$" }
-    //|    CHF { "sFr" }
+    //|    USD { "US$", "US Dollar" }
+    //|    CHF { "Sw F", "Swiss Franc" }
+    //|    INR { "=0#Rs|1#Re|1<Rs", "=0#Rupees|1#Rupee|1<Rupees" }
     //|    //...
     //|  }
     //|}
+    // There may be 2, 3, or 4 entries.  If entry 3 or 4 is absent
+    // it is assumed to be identical to entry 0 or 1.
+
+    if (ec == NULL || U_FAILURE(*ec)) {
+        return 0;
+    }
+
+    int32_t choice = (int32_t) nameStyle;
+    if (choice < 0 || choice > 3) {
+        *ec = U_ILLEGAL_ARGUMENT_ERROR;
+        return 0;
+    }
+    
+    // In the future, resource bundles may implement multi-level
+    // fallback.  That is, if a currency is not found in the en_US
+    // Currencies data, then the en Currencies data will be searched.
+    // Currently, if a Currencies datum exists in en_US and en, the
+    // en_US entry hides that in en.
+
+    // We want multi-level fallback for this resource, so we implement
+    // it manually.
+
+    // Use a separate UErrorCode here that does not propagate out of
+    // this function.
+    UErrorCode ec2 = U_ZERO_ERROR;
+
+    char loc[100];
+    int32_t loclen = uloc_getName(locale, loc, sizeof(loc), &ec2);
+    if (U_FAILURE(ec2) || ec2 == U_STRING_NOT_TERMINATED_WARNING) {
+        *ec = U_ILLEGAL_ARGUMENT_ERROR;
+        return 0;
+    }
+
+    char buf[4];
+    myUCharsToChars(buf, currency);
 
     const UChar* s = NULL;
-    char buf[4];
-    UResourceBundle* rb = ures_open(NULL, locale, ec);
-    UResourceBundle* rb_c = ures_getByKey(rb, CURRENCIES, NULL, ec);
-    s = ures_getStringByKey(rb_c, myUCharsToChars(buf, currency), len, ec);
-    ures_close(rb_c);
-    UBool found = U_SUCCESS(*ec);
 
-    if (!found) {
-        // Since the Currencies resource is not fully populated yet,
-        // check to see if we can find the currency in the
-        // CurrencyElements resource.
-        *ec = U_ZERO_ERROR;
-	rb_c = ures_getByKey(rb, CURRENCY_ELEMENTS, NULL, ec);
-	const UChar* elem1 = ures_getStringByIndex(rb_c, 1, len, ec);
-	if (U_SUCCESS(*ec) &&  u_strcmp(elem1, currency) == 0) {
-	    s = ures_getStringByIndex(rb_c, 0, len, ec);
-	    found = U_SUCCESS(*ec);
-	}
-	ures_close(rb_c);
+    // Multi-level resource inheritance fallback loop
+    for (;;) {
+        ec2 = U_ZERO_ERROR;
+        UResourceBundle* rb = ures_open(NULL, loc, &ec2);
+        UResourceBundle* curr = ures_getByKey(rb, CURRENCIES, NULL, &ec2);
+        UResourceBundle* names = ures_getByKey(curr, buf, NULL, &ec2);
+        int32_t n = ures_getSize(names); // should be 2, 3, or 4
+        if (choice >= n) {
+            choice &= 1; // fold 2..3 down to 0..1
+        }
+        s = ures_getStringByIndex(names, choice, len, &ec2);
+        ures_close(names);
+        ures_close(curr);
+        ures_close(rb);
 
-        if (!found) {
-            // If we fail to find a match, use the full ISO code
-            s = currency;
+        // If we've succeeded we're done.  Otherwise, try to fallback.
+        // If that fails (because we are already at root) then exit.
+        if (U_SUCCESS(ec2) || !fallback(loc)) {
+            break;
         }
     }
 
-    ures_close(rb);
-    return s;
+    // Determine if this is a ChoiceFormat pattern.  One leading mark
+    // indicates a ChoiceFormat.  Two indicates a static string that
+    // starts with a mark.  In either case, the first mark is ignored,
+    // if present.  Marks in the rest of the string have no special
+    // meaning.
+    *isChoiceFormat = FALSE;
+    if (U_SUCCESS(ec2)) {
+        U_ASSERT(s != NULL);
+        int32_t i=0;
+        while (i < *len && s[i] == CHOICE_FORMAT_MARK && i < 2) {
+            ++i;
+        }
+        *isChoiceFormat = (i == 1);
+        if (i != 0) ++s; // Skip over first mark
+        return s;
+    }
+
+    // If we fail to find a match, use the ISO 4217 code
+    *len = u_strlen(currency); // Should == 3, but maybe not...?
+    return currency;
 }
+
+//!// This API is now redundant.  It predates ucurr_getName, which
+//!// replaces and extends it.
+//!U_CAPI const UChar* U_EXPORT2
+//!ucurr_getSymbol(const UChar* currency,
+//!                const char* locale,
+//!		int32_t* len, // fillin
+//!                UErrorCode* ec) {
+//!    UBool isChoiceFormat;
+//!    const UChar* s = ucurr_getName(currency, locale, UCURR_SYMBOL_NAME,
+//!                                   &isChoiceFormat, len, ec);
+//!    if (isChoiceFormat) {
+//!        // Don't let ChoiceFormat patterns out through this API
+//!        *len = u_strlen(currency); // Should == 3, but maybe not...?
+//!        return currency;
+//!    }
+//!    return s;
+//!}
 
 U_CAPI int32_t U_EXPORT2
 ucurr_getDefaultFractionDigits(const UChar* currency) {
-    return (_findData(currency))[0];
+    return (_findMetaData(currency))[0];
 }
 
 U_CAPI double U_EXPORT2
 ucurr_getRoundingIncrement(const UChar* currency) {
-    const int32_t *data = _findData(currency);
+    const int32_t *data = _findMetaData(currency);
 
     // If there is no rounding, or if the meta data is invalid,
-    // return 0.0 to indicate no rounding.
-    if (data[1] == 0 || data[0] < 0 || data[0] > MAX_POW10) {
+    // return 0.0 to indicate no rounding.  A rounding value
+    // (data[1]) of 0 or 1 indicates no rounding.
+    if (data[1] < 2 || data[0] < 0 || data[0] > MAX_POW10) {
         return 0.0;
     }
 
     // Return data[1] / 10^(data[0]).  The only actual rounding data,
-    // as of this writing, is CHF { 2, 25 }.
+    // as of this writing, is CHF { 2, 5 }.
     return double(data[1]) / POW10[data[0]];
 }
 
