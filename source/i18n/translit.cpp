@@ -580,10 +580,11 @@ Transliterator* Transliterator::createInstance(const UnicodeString& ID,
 
         // Look for embedded filter pattern
         UnicodeSet *filter = 0;
-        int32_t bracket = id.indexOf((UChar)0x005B /*[*/);
-        if (bracket >= 0) {
+        int32_t setStart = id.indexOf((UChar)0x005B /*[*/);
+        int32_t setLimit;
+        if (setStart >= 0) {
             UErrorCode status = U_ZERO_ERROR;
-            ParsePosition pos(bracket);
+            ParsePosition pos(setStart);
             filter = new UnicodeSet();
             filter->applyPattern(id, pos, 0, status);
             if (U_FAILURE(status)) {
@@ -591,7 +592,8 @@ Transliterator* Transliterator::createInstance(const UnicodeString& ID,
                 delete filter;
                 return 0;
             }
-            id.removeBetween(bracket, pos.getIndex());
+            setLimit = pos.getIndex();
+            id.removeBetween(setStart, setLimit);
         }
 
         // Delete whitespace
@@ -603,50 +605,45 @@ Transliterator* Transliterator::createInstance(const UnicodeString& ID,
             }
         }
 
-        // The 'facadeID' is the ID to be applied to an alias
-        // transliterator like Hangul-Latin, which is really
-        // Hangul-Jamo;Jamo-Latin, but which should have a getID()
-        // result of "Hangul-Latin".  The 'facadeID' is only used in
-        // that way for alias transliterators.  The 'alias' parameter
-        // is non-empty if _createInstance() finds that the given ID
-        // refers to an alias.  The reason _createInstance() doesn't
-        // call createInstance() (this method) directly is to avoid
-        // deadlock.  There are other ways to do this but this is one
-        // of the more efficient ways.
-        UnicodeString alias, facadeID;
-        if (dir == UTRANS_REVERSE) {
-            i = id.indexOf(ID_SEP);
-            if (i >= 0) {
-                UnicodeString right;
-                id.extractBetween(i+1, id.length(), facadeID);
-                id.extractBetween(0, i, right);
-                facadeID.append(ID_SEP).append(right);
-            } else if (id == NullTransliterator::ID ||
-                       id == RemoveTransliterator::ID) {
-                facadeID = id;
+        // Fix the id, if necessary, by reversing it (A-B => B-A).
+        // Record the position of the separator.  Detect the special
+        // case of Null, whose inverse is itself.  Given an ID with no
+        // separator "Foo", an abbreviation for "Any-Foo", consider
+        // the inverse to be "Foo-Any".
+        int32_t sep = id.indexOf(ID_SEP);
+        if (id.caseCompare(NullTransliterator::ID,
+                           U_FOLD_CASE_DEFAULT) == 0) {
+            sep = id.length();
+        } else if (dir == UTRANS_REVERSE) {
+            UnicodeString left;
+            if (sep >= 0) {
+                id.extractBetween(0, sep, left);
+                id.removeBetween(0, sep+1);
             } else {
-                return 0;
+                left = UnicodeString("Any", "");
             }
-        } else {
-            facadeID = id;
+            sep = id.length();
+            id.append(ID_SEP).append(left);
         }
-        t = _createInstance(facadeID, alias, parseError);
 
-        UBool fixID = FALSE;
+        // The 'alias' parameter is non-empty if _createInstance()
+        // finds that the given ID refers to an alias.  The reason
+        // _createInstance() doesn't call createInstance() (this
+        // method) directly is to avoid deadlock.  There are other
+        // ways to do this but this is one of the more efficient ways.
+        UnicodeString alias;
+        t = _createInstance(id, alias, parseError);
 
         if (alias.length() > 0) { // assert(t==0)
             t = createInstance(alias);
-            fixID = (t != 0);
         }
 
-        if (t != 0 && filter != 0) {
-            t->adoptFilter(filter);
-            fixID = TRUE;
-            facadeID.append(ID, bracket, INT32_MAX);
-        }
-
-        if (fixID) {
-            t->setID(facadeID);
+        if (t != 0) {
+            if (filter != 0) {
+                t->adoptFilter(filter);
+                id.insert(sep, ID, setStart, setLimit-setStart);
+            }
+            t->setID(id);
         }
     }
     return t;
