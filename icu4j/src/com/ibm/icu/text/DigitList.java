@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/DigitList.java,v $ 
- * $Date: 2000/04/05 17:40:54 $ 
- * $Revision: 1.4 $
+ * $Date: 2000/05/26 21:38:55 $ 
+ * $Revision: 1.5 $
  *
  *****************************************************************************************
  */
@@ -40,8 +40,8 @@ import java.math.BigInteger;
  *
  * @see java.util.Locale
  * @see java.text.Format
- * @see java.text.NumberFormat
- * @see java.text.DecimalFormat
+ * @see NumberFormat
+ * @see DecimalFormat
  * @see java.text.ChoiceFormat
  * @see java.text.MessageFormat
  * @version      1.18 08/12/98

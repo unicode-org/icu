@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/NumberFormat.java,v $ 
- * $Date: 2000/04/05 17:40:54 $ 
- * $Revision: 1.6 $
+ * $Date: 2000/05/26 21:38:55 $ 
+ * $Revision: 1.7 $
  *
  *****************************************************************************************
  */
@@ -139,9 +139,9 @@ import java.io.ObjectOutputStream;
  *      numbers: "(12)" for -12.
  * </ol>
  *
- * see          java.text.DecimalFormat
+ * see          DecimalFormat
  * see          java.text.ChoiceFormat
- * @version      $Revision: 1.6 $
+ * @version      $Revision: 1.7 $
  * @author       Mark Davis
  * @author       Helena Shih
  * @author       Alan Liu
@@ -285,7 +285,7 @@ public abstract class NumberFormat extends Format{
      * after the 1).
      * Does not throw an exception; if no object can be parsed, index is
      * unchanged!
-     * @see java.text.NumberFormat#isParseIntegerOnly
+     * @see #isParseIntegerOnly
      * @see java.text.Format#parseObject
      */
     public abstract Number parse(String text, ParsePosition parsePosition);
