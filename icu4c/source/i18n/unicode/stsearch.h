@@ -438,7 +438,7 @@ protected:
      * @param status for errors if any occurs
      * @return The index at which the matched text in the target starts, or 
      *         USEARCH_DONE if no match was found.
-	 * @stable.
+     * @stable ICU 2.0
      */
     virtual int32_t handleNext(int32_t position, UErrorCode &status);
 
@@ -462,7 +462,7 @@ protected:
      * @param status for errors if any occurs
      * @return The index at which the matched text in the target starts, or 
      *         USEARCH_DONE if no match was found.
-	 * @stable.
+     * @stable ICU 2.0
      */
     virtual int32_t handlePrev(int32_t position, UErrorCode &status);
     
@@ -472,22 +472,22 @@ private :
 
     /**
     * RuleBasedCollator, contains exactly the same UCollator * in m_strsrch_
-	* @stable.
+    * @stable ICU 2.0
     */
     RuleBasedCollator  m_collator_;
     /**
     * Pattern text
-	* @stable.
+    * @stable ICU 2.0
     */
     UnicodeString      m_pattern_;
     /**
     * Corresponding collation rules
-	* @stable.
+    * @stable ICU 2.0
     */
     UnicodeString      m_collation_rules_;
     /**
     * String search struct data
-	* @stable.
+    * @stable ICU 2.0
     */
     UStringSearch     *m_strsrch_;
 
