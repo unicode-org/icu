@@ -1,0 +1,87 @@
+#
+#   Copyright (C) 2002-2003, International Business Machines Corporation and others.
+#       All Rights Reserved.
+#
+#   file:  sent.txt   
+#
+#   ICU Sentence Break Rules
+#      See Unicode Standard Annex #29.
+#      These rules are based on TR 29 version 4.0.0
+#
+    
+
+#
+# Character categories as defined in TR 29
+#
+$Sep     = [\u000a \u000d \u0085 \u2028 \u2029];
+$Format  = [[:Format:]];
+$Sp      = [[:Whitespace:] - $Sep];
+$Lower   = [[:Lowercase:]];
+$Upper   = [[:TitleCase_Letter:] [:Uppercase:]];
+$OLetter = [[:Alphabetic:] [:name = HEBREW PUNCTUATION GERESH:] - [$Lower $Upper]];
+$Numeric = [:LineBreak = Numeric:];
+
+$ATerm = [.];  
+
+$Term  = [\u0021 \u003F \u0589 \u061F \u06D4 \u0700 \u0701 \u0702 \u0964 \u1362
+          \u1367 \u1368 \u104a \u104b \u166e \u1803 \u1809 \u203C \u203D \u2047 
+          \u2048 \u2049 \u3002 \uFE52 \uFE57 \uFF01 \uFF0E \uFF1F \uFF61];
+          
+$Close   = [[:Open_Punctuation:] [:Close_Punctuation:] [:Linebreak = Quotation:] -
+           [[:name = HEBREW PUNCTUATION GERESH:] $ATerm $Term]];
+           
+           
+
+# Define extended forms of the character classes,
+#   incorporate grapheme cluster + format chars.
+
+$Extend     = [[:Grapheme_Extend = TRUE:]]; 
+$ATermEx    = $ATerm   $Extend* $Format*;
+$NumericEx  = $Numeric $Extend* $Format*;
+$UpperEx    = $Upper   $Extend* $Format*;
+$TermEx     = $Term    $Extend* $Format*;
+
+#
+#  $SepSeq keeps together CRLF as a separator.  (CRLF is a grapheme cluster)
+#
+$SepSeq  = $Sep | \u000d\u000a;
+
+# $InteriorChars are those that never trigger a following break.
+$InteriorChars = [^$Term $ATerm $Sep];   #Note:  includes Extend and Format chars
+
+
+# Rule 6.  Match an ATerm (.) that does not cause a break because a number immediately follows it.
+$NumberFollows = $InteriorChars* $ATermEx $NumericEx;
+
+
+# Rule 7.  $UppersSurround   Match a no-break sentence fragment containing a . surrounded by Uppers
+$UppersSurround = $InteriorChars* $UpperEx $ATermEx $UpperEx;
+
+# Rule 8   Matches a sentence fragment containing "." that should not cause a sentence break,
+#          because a lower case word follows the period.
+$LowerWordFollows  = $InteriorChars* $ATermEx $Close* $Sp* [^$OLetter $Upper $Lower $Sep]* $Lower;
+
+# Rules 3, 9, 10, 11
+#                       Matches a simple sentence, or the trailing part of a complex sentence,
+#                       where a simple sentence contains no interior "."s.
+$EndSequence       = $InteriorChars* ($TermEx | $ATermEx) $Close* $Sp* $SepSeq? |
+                     $InteriorChars* $SepSeq?;
+
+
+
+# Put them all together.  
+($NumberFollows | $UppersSurround |  $LowerWordFollows)*  $EndSequence;
+
+     
+#
+#  Reverse Rules
+#
+$EndGorp                  = ($Term | $ATerm | $Sep | $Close | $Extend | $Format | $Sp);
+$RevEndSequence           = $EndGorp* $InteriorChars* $EndGorp* | $Sep [^$ATerm $Term]*;
+$ReverseLowerWordFollows  = $Lower [^$OLetter $Upper $Lower $Sep]* $ATerm $InteriorChars*;
+$ReverseUpperSurround     = $Upper $Format* $Extend* $ATerm $Format* $Extend* $Upper $InteriorChars*;
+$ReverseNumberFollows     = $Numeric $Format* $Extend* $ATerm $InteriorChars*;
+
+! $RevEndSequence ($ReverseLowerWordFollows | $ReverseUpperSurround | $ReverseNumberFollows)* .?;
+#! .*;
+ 

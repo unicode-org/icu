@@ -1,0 +1,42 @@
+######################################################################
+# Copyright (C) 1999-2003, International Business Machines
+# Corporation and others.  All Rights Reserved.
+######################################################################
+# Default zone list.  If ICU cannot find an exact match for the host
+# time zone, it picks a zone that matches the host offset.  There may
+# be many such zones, however, so it must know which one to select.
+# 
+# This list is read by tz.pl and the default names listed here are
+# incorporated into the tz.txt file as preferred default zones.
+# Any conflicts (multiple defaults for the same offset) or absences
+# (no defaults specified for an offset) are reported.
+#
+# Format: default_name # optional comment
+
+Africa/Addis_Ababa
+Africa/Cairo
+America/Anchorage
+America/Buenos_Aires
+America/Chicago
+America/Denver
+America/New_York
+America/Los_Angeles
+America/Puerto_Rico
+America/St_Johns
+Asia/Calcutta
+Asia/Dhaka # spelling changed in 2000h; was Asia/Dacca
+Asia/Karachi
+Asia/Riyadh89 # Pick the chronologically lastest of this group
+Asia/Saigon
+Asia/Shanghai
+Asia/Tokyo
+Asia/Yerevan
+Atlantic/Azores # Windows lists Azores, Cape Verde
+Australia/Darwin
+Australia/Sydney
+Europe/Paris
+GMT
+Pacific/Apia
+Pacific/Auckland
+Pacific/Guadalcanal
+Pacific/Honolulu

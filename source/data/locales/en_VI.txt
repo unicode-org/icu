@@ -1,0 +1,19 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 1997-2003, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+
+en_VI {
+    Version{ "2.0" }
+//    LocaleString { "en_VI" }
+    NumberPatterns { 
+        "#,##0.###;-#,##0.###",
+        "\u00A4#,##0.00;(\u00A4#,##0.00)",
+        "#,##0%",
+        "#E0",
+    }
+//    ShortCountry { "VIR" }
+    LocaleID:int { 0x2409 }
+}

@@ -1,0 +1,138 @@
+## -*-makefile-*-
+## Cygwin-specific setup
+## Copyright (c) 2001-2003, International Business Machines Corporation and
+## others. All Rights Reserved.
+##
+## $Id: mh-cygwin-msvc,v 1.9 2003/06/03 20:52:55 alan Exp $
+
+## Commands to generate dependency files
+GEN_DEPS.c=	:
+GEN_DEPS.cc=	:
+
+## Flags for position independent code
+SHAREDLIBCFLAGS = 
+SHAREDLIBCXXFLAGS = 
+SHAREDLIBCPPFLAGS =
+
+## Additional flags when building libraries and with threads
+LIBCPPFLAGS = 
+THREADSCPPFLAGS = 
+
+CPPFLAGS+=/nologo
+DEFS+=/D"WIN32"
+LDFLAGS+=/nologo
+
+# Commands to compile
+COMPILE.c=	$(CC) $(CPPFLAGS) $(DEFS) $(CFLAGS) /GF /c
+COMPILE.cc=	$(CXX) $(CPPFLAGS) $(DEFS) $(CXXFLAGS) /GF /c
+
+# Commands to link
+LINK.c=		LINK.EXE /subsystem:console $(LDFLAGS)
+LINK.cc=	LINK.EXE /subsystem:console $(LDFLAGS)
+
+## Commands to make a shared library
+SHLIB.c=	LINK.EXE /DLL $(LDFLAGS)
+SHLIB.cc=	LINK.EXE /DLL $(LDFLAGS)
+
+## Compiler switch to embed a runtime search path
+LD_RPATH=	
+LD_RPATH_PRE=
+
+## Compiler switch to embed a library name
+LD_SONAME =
+
+## Shared object suffix
+SO = dll
+## Non-shared intermediate object suffix
+STATIC_O = o
+# OUTOPT is for creating a specific output name
+OUTOPT = /out:
+
+## An import library is needed for z/OS and MSVC
+IMPORT_LIB_EXT = .lib
+
+LIBICU = $(ICUPREFIX)
+DEFAULT_LIBS =
+
+## Link commands to link to ICU libs
+LIBICUDT=	$(top_builddir)/stubdata/$(LIBICU)data$(ICULIBSUFFIX)$(SO_TARGET_VERSION_MAJOR).lib
+LIBICUUC=	$(top_builddir)/common/$(LIBICU)uc$(ICULIBSUFFIX)$(SO_TARGET_VERSION_MAJOR).lib
+LIBICUI18N=	$(top_builddir)/i18n/$(LIBICU)i18n$(ICULIBSUFFIX)$(SO_TARGET_VERSION_MAJOR).lib
+LIBICULE=	$(top_builddir)/layout/$(LIBICU)le$(ICULIBSUFFIX)$(SO_TARGET_VERSION_MAJOR).lib
+LIBICULX=	$(top_builddir)/layoutex/$(LIBICU)lx$(ICULIBSUFFIX)$(SO_TARGET_VERSION_MAJOR).lib
+LIBCTESTFW=	$(top_builddir)/tools/ctestfw/$(LIBICU)ctestfw$(ICULIBSUFFIX)$(SO_TARGET_VERSION_MAJOR).lib
+LIBICUTOOLUTIL=	$(top_builddir)/tools/toolutil/$(LIBICU)toolutil$(ICULIBSUFFIX)$(SO_TARGET_VERSION_MAJOR).lib
+LIBUSTDIO=	$(top_builddir)/extra/ustdio/$(LIBICU)io$(ICULIBSUFFIX)$(SO_TARGET_VERSION_MAJOR).lib
+
+
+## Compilation rules
+%.$(STATIC_O): $(srcdir)/%.c
+	$(COMPILE.c) $(STATICCPPFLAGS) $(STATICCFLAGS) /Fo$@ $<
+%.o: $(srcdir)/%.c
+	$(COMPILE.c) $(DYNAMICCPPFLAGS) $(DYNAMICCFLAGS) /Fo$@ $<
+
+%.$(STATIC_O): $(srcdir)/%.cpp
+	$(COMPILE.cc) $(STATICCPPFLAGS) $(STATICCXXFLAGS) /Fo$@ $<
+%.o: $(srcdir)/%.cpp
+	$(COMPILE.cc) $(DYNAMICCPPFLAGS) $(DYNAMICCXXFLAGS) /Fo$@ $<
+
+../data/%.o: ../data/%.c
+	$(COMPILE.c) $(DYNAMICCPPFLAGS) $(DYNAMICCFLAGS) /Fo$@ $<
+
+## Dependency rules
+#%.d: $(srcdir)/%.c
+#	@echo "generating dependency information for $<"
+#	$(SHELL) -ec '$(GEN_DEPS.c) $< \
+#		| sed '\''s%\($*\)\.o[ :]*%\1.o $@ : %g'\'' > $@; \
+#		[ -s $@ ] || rm -f $@'
+#
+#%.d: $(srcdir)/%.cpp
+#	@echo "generating dependency information for $<"
+#	$(SHELL) -ec '$(GEN_DEPS.cc) $< \
+#		| sed '\''s%\($*\)\.o[ :]*%\1.o $@ : %g'\'' > $@; \
+#		[ -s $@ ] || rm -f $@'
+
+## Dependency rules
+%.d : $(srcdir)/%.c
+	@echo "generating dependency information for $<"
+	@$(GEN_DEPS.c) $< > $@
+
+%.d : $(srcdir)/%.cpp
+	@echo "generating dependency information for $<"
+	@$(GEN_DEPS.cc) $< > $@
+
+## Compile a Windows resource file
+%.res : $(srcdir)/%.rc
+	@rc.exe /fo$@ $<
+
+## Versioned target for a shared library.
+FINAL_SO_TARGET=  $(basename $(SO_TARGET))$(SO_TARGET_VERSION_MAJOR).$(SO)
+MIDDLE_SO_TARGET=$(SO_TARGET)
+
+## Versioned import library names.
+IMPORT_LIB = $(LIBICU)$(TARGET_STUBNAME)$(ICULIBSUFFIX)$(IMPORT_LIB_EXT)
+MIDDLE_IMPORT_LIB = $(LIBICU)$(TARGET_STUBNAME)$(ICULIBSUFFIX)$(SO_TARGET_VERSION_MAJOR)$(IMPORT_LIB_EXT)
+FINAL_IMPORT_LIB := $(MIDDLE_IMPORT_LIB)
+
+## Versioned libraries rules
+#%$(SO_TARGET_VERSION_MAJOR).$(SO): %$(SO_TARGET_VERSION).$(SO)
+#	$(RM) $@ && cp $< $@
+%.$(SO): %$(SO_TARGET_VERSION_MAJOR).$(SO)
+	$(RM) $@ && ln -s $< $@
+
+##  Bind internal references
+
+# LDflags that pkgdata will use
+BIR_LDFLAGS= -Wl,-Bsymbolic
+
+# CPPflags for genccode/gencmn
+BIR_CPPFLAGS= -DU_HAVE_BIND_INTERNAL_REFERENCES
+
+# Dependencies [i.e. map files] for the final library
+BIR_DEPS=
+
+# Environment variable to set a runtime search path
+LDLIBRARYPATH_ENVVAR = PATH
+
+## End Cygwin-specific setup
+
