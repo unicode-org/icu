@@ -326,30 +326,34 @@ public class ArabicShapingRegTest extends TestFmwk {
             ArabicShaping shaper = null;
             try {
                 shaper = new ArabicShaping(test.flags);
-                result = shaper.shape(test.source);
+                // result = shaper.shape(test.source);
+                switch (test.type) {
+                case TestData.STANDARD:
+                    result = shaper.shape(test.source);
+                    if (!test.result.equals(result)) {
+                        reportTestFailure(i, test, shaper, result, ex);
+                    }
+                    break;
+                    
+                case TestData.PREFLIGHT:
+                    char src[] = test.source.toCharArray();
+                    int len = shaper.shape(src, 0, test.source.length(), null, 0, 0);
+                    
+                    if (test.length != len) {
+                        reportTestFailure(i, test, shaper, test.source, ex);
+                    }
+                    break;
+
+                case TestData.ERROR:
+                    result = shaper.shape(test.source);
+                    if (!test.error.isInstance(ex)) {
+                        reportTestFailure(i, test, shaper, result, ex);
+                    }
+                    break;
+                }
             }
             catch (Exception e) {
                 ex = e;
-            }
-            
-            switch (test.type) {
-            case TestData.STANDARD:
-                if (!test.result.equals(result)) {
-                    reportTestFailure(i, test, shaper, result, ex);
-                }
-                break;
-                
-            case TestData.PREFLIGHT:
-                if (result == null || test.length != result.length()) {
-                    reportTestFailure(i, test, shaper, result, ex);
-                }
-                break;
-
-            case TestData.ERROR:
-                if (!test.error.isInstance(ex)) {
-                    reportTestFailure(i, test, shaper, result, ex);
-                }
-                break;
             }
         }                    
     }
