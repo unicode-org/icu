@@ -808,7 +808,8 @@ int32_t   ucnv_fromUChars (const UConverter * converter,
   myTarget_limit = target + targetSize;
 
   /* Pin the limit to U_MAX_PTR.  NULL check is for AS/400. */
-  if((myTarget_limit < target) || (myTarget_limit == NULL)) {
+  if((myTarget_limit < target) || ( (myTarget_limit == NULL) &&
+                                    (target != NULL))) {
     myTarget_limit = (char *)U_MAX_PTR;
   }
 
