@@ -147,18 +147,30 @@ class ICUCollatorService;
 
 static ICULocaleService* gService = NULL;
 
-static UMTX gLock = 0;
-
 static ICULocaleService* 
 getService(void)
 {
-    Mutex mutex(&gLock);
-    if (gService == NULL) {
-        gService = new ICUCollatorService();
-        ucln_i18n_registerCleanup();
+  UBool needInit;
+  {
+    Mutex mutex;
+    needInit = (UBool)(gService == NULL);
+  }
+  if(needInit) {
+    ICULocaleService *newservice = new ICUCollatorService();
+    if(newservice) {
+      Mutex mutex;
+      if(gService == NULL) {
+        gService = newservice;
+        newservice = NULL;
+      }
     }
-
-    return gService;
+    if(newservice) {
+      delete newservice;
+    } else {
+      ucln_i18n_registerCleanup();
+    }
+  }
+  return gService;
 }
 
 // -------------------------------------
@@ -166,7 +178,7 @@ getService(void)
 static UBool
 hasService(void) 
 {
-  Mutex mutex(&gLock);
+  Mutex mutex;
   return gService != NULL;
 }
 
@@ -557,7 +569,6 @@ U_CFUNC UBool collator_cleanup(void) {
     delete gService;
     gService = NULL;
   }
-  umtx_destroy(&gLock);
   return TRUE;
 }
 

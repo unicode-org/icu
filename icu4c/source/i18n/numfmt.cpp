@@ -413,20 +413,18 @@ public:
 
 // -------------------------------------
 
-static UMTX gnLock = 0;
-
 static ICULocaleService* 
 getService(void)
 {
     UBool needInit;
     {
-        Mutex mutex(&gnLock);
+        Mutex mutex;
         needInit = (UBool)(gService == NULL);
     }
     if (needInit) {
         ICULocaleService * newservice = new ICUNumberFormatService();
         if (newservice) {
-            Mutex mutex(&gnLock);
+            Mutex mutex;
             if (gService == NULL) {
                 gService = newservice;
                 newservice = NULL;
@@ -435,6 +433,7 @@ getService(void)
         if (newservice) {
             delete newservice;
         } else {
+            // we won the contention, this thread can register cleanup.
             ucln_i18n_registerCleanup();
         }
     }
@@ -722,7 +721,6 @@ U_CFUNC UBool numfmt_cleanup(void) {
     delete gService;
     gService = NULL;
   }
-  umtx_destroy(&gnLock);
   return TRUE;
 }
 
