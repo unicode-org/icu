@@ -530,7 +530,6 @@ public final class ArabicShaping {
 
         for(int i = start + length; --i >= start;) {
             char ch = dest[i];
-            int dir = UCharacter.getDirection(ch);
             switch (UCharacter.getDirection(ch)) {
             case UCharacterDirection.LEFT_TO_RIGHT:
             case UCharacterDirection.RIGHT_TO_LEFT:
