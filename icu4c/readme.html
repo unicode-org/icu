@@ -79,7 +79,7 @@
         <ul class="TOC">
           <li><a href="#ImportantNotesWindows">Windows Platform</a></li>
 
-          <li><a href="#sharedLibNote">Using Shared Data Libraries</a></li>
+          <li><a href="#ImportantNotesUnix">Unix Type Platforms</a></li>
         </ul>
       </li>
 
@@ -153,8 +153,8 @@
 
     <h3><a name="NewsUnicodeVer">Support for Unicode 3.1</a></h3>
 
-    <p>The ICU data has been upgraded to support Unicode 3.1. This means that
-    the character property data and normalization has changed. Recent
+    <p>The ICU 2.0 data has been upgraded to support Unicode 3.1. This means
+    that the character property data and normalization has changed. Recent
     versions of ICU already supported Unicode 3.0 data with UTF-16 surrogate
     pairs.</p>
 
@@ -973,9 +973,9 @@
          Release build: <code>CFLAGS=-2 IEEE390=1 ./configure</code></p>
       </li>
 
-      <li>Since the default make on OS/390 is not gmake, pkgdata tool
-      requires that the environment variable MAKE be set to fully qualified
-      path to gmake.</li>
+      <li>Since the default make on OS/390 is not gmake, the pkgdata tool
+      requires that the "make" command is aliased to your installed version
+      of gmake.</li>
 
       <li>The makedep executable that is used with the OS/390 ICU build
       process is not shipped with ICU. It is available at the <a href=
@@ -1219,16 +1219,12 @@ Data set name type  : PDS
     seemingly get memory errors when you run the executable.<br>
     </p>
 
-    <h3><a name="sharedLibNote">Using Shared Data Libraries</a></h3>
+    <h3><a name="ImportantNotesUnix">Unix Type Platform</a></h3>
 
-    <p>HP/UX has a documented characteristic where the shl_unload() function
-    always unloads a library, regardless of how many times the library has
-    been loaded. Most operating systems reference count libraries as they are
-    opened. In the future (Jitterbug 414) this may be corrected in ICU, but
-    at present, we work around this problem by simply NOT ever unloading
-    shared libraries. This means that once a data library is loaded (ex:
-    libicudata.sl) by a process, it cannot be unloaded and replaced without
-    stopping and restarting the process.</p>
+    <p>If you are building on a Unix platform, it is important that you add
+    the location of your ICU libraries (including the data library) to your
+    LD_LIBRARY_PATH environment variable. The ICU libraries may not link or
+    load properly without doing this.</p>
 
     <h2><a name="UsageInformation">Getting More Information About
     ICU</a></h2>
