@@ -6,8 +6,8 @@
 *
 * $Source: 
 *     /usr/cvs/icu4j/icu4j/src/com/ibm/icu/text/UCharacterName.java $ 
-* $Date: 2002/02/08 01:08:38 $ 
-* $Revision: 1.6 $
+* $Date: 2002/02/15 02:53:34 $ 
+* $Revision: 1.7 $
 *
 *******************************************************************************
 */
@@ -409,20 +409,29 @@ final class UCharacterName
             return null;
         }
           
+        int tempChoice = choice;
+        if (tempChoice == UCharacterNameChoice.U_EXTENDED_CHAR_NAME) {
+            tempChoice = UCharacterNameChoice.U_UNICODE_CHAR_NAME;
+        }
+            
         String result = "";
         
         // Do not write algorithmic Unicode 1.0 names because Unihan names are 
         // the same as the modern ones, extension A was only introduced with 
         // Unicode 3.0, and the Hangul syllable block was moved and changed around 
         // Unicode 1.1.5.
-        if (choice == UCharacterNameChoice.U_UNICODE_CHAR_NAME) {
+        if (tempChoice == UCharacterNameChoice.U_UNICODE_CHAR_NAME) {
         // try getting algorithmic name first
             result = getAlgName(ch);
         }
         
         // getting normal character name
         if (result == null || result.length() == 0) {
-            result = getGroupName(ch, choice);
+            if (choice == UCharacterNameChoice.U_EXTENDED_CHAR_NAME) {	  
+                result = getExtendedName(ch);	
+            } else {
+                result = getGroupName(ch, choice);
+            }
         }
           
         return result;
@@ -442,26 +451,42 @@ final class UCharacterName
             name == null || name.length() == 0) {
             return -1;
         }
-       
-        String uppercasename = UCharacter.toUpperCase(Locale.ENGLISH, name);
+        
+        // try extended names first  
+        int result = getExtendedChar(name, choice);
+        if (result >= -1) {
+            return result;
+        }
         // try algorithmic names first, if fails then try group names
         // int result = getAlgorithmChar(choice, uppercasename);
+        int tempChoice = choice;    
+        if (choice == UCharacterNameChoice.U_EXTENDED_CHAR_NAME) {
+            tempChoice = UCharacterNameChoice.U_UNICODE_CHAR_NAME;
+        }
         
-        // 1.0 has no algorithmic names
+        String upperCaseName = UCharacter.toUpperCase(Locale.ENGLISH, name);
+        // try algorithmic names now, 1.0 has no algorithmic names
         if (choice != UCharacterNameChoice.U_UNICODE_CHAR_NAME) {
-            return getGroupChar(uppercasename, choice);
+            return getGroupChar(upperCaseName, tempChoice);
         }
         int count = 0;
         if (m_algorithm_ != null) {
             count = m_algorithm_.length;
         }
         for (count --; count >= 0; count --) {
-            int result = m_algorithm_[count].getAlgorithmChar(name); 
+            result = m_algorithm_[count].getAlgorithmChar(name); 
             if (result >= 0) {
                 return result;
             }
         }
-       return getGroupChar(uppercasename, choice);
+        
+        result = getGroupChar(upperCaseName, tempChoice);
+        if (result == -1 && 
+            choice == UCharacterNameChoice.U_EXTENDED_CHAR_NAME) {
+            result = getGroupChar(upperCaseName, 
+                                UCharacterNameChoice.U_UNICODE_10_CHAR_NAME);        
+        } 
+        return result;
     }
     
     /**
@@ -942,5 +967,119 @@ final class UCharacterName
                    result;
         }
         return -1;
+    }
+    
+    /**
+    * Getting the character with extended name of the form <....>.
+    * @param name of the character to be found
+    * @param choice name choice
+    * @return character associated with the name, -1 if such character is not
+    *                   found and -2 if we should continue with the search.
+    */
+    private int getExtendedChar(String name, int choice)
+    {
+        if (name.charAt(0) == '<') {        
+            if (choice == UCharacterNameChoice.U_EXTENDED_CHAR_NAME) {            
+                int endIndex = name.length() - 1;
+                if (name.charAt(endIndex) == '>') {
+                    int startIndex = name.lastIndexOf('-');
+                    if (startIndex >= 0) { // We've got a category.     
+                        startIndex ++;
+                        int result = -1;
+                        try {
+                            result = Integer.parseInt(
+                                        name.substring(startIndex, endIndex), 
+                                        16);
+                        }
+                        catch (NumberFormatException e) {
+                            return -1;     
+                        } 
+                        // Now validate the category name. We could use a 
+                        // binary search, or a trie, if we really wanted to. 
+                        String type = name.substring(1, startIndex - 1);
+                        int length = UCharacterCategory.TYPE_NAMES_.length;
+                        for (int i = 0; i < length; ++ i) {             
+                            if (type.compareToIgnoreCase(
+                                   UCharacterCategory.TYPE_NAMES_[i]) == 0) { 
+                                if (getType(result) == i) { 
+                                    return result;     
+                                }  
+                                break;          
+                            } 
+                        }
+                    }
+                }
+            }            
+            return -1; 
+        }    
+        return -2;
+    }
+    
+    /**
+    * Gets the character extended type
+    * @param ch character to be tested
+    * @return extended type it is associated with
+    */
+    private int getType(int ch)
+    {
+        if ((ch & 0xFFFE) == 0xFFFE || (ch >= 0xFDD0 && ch <= 0xFDEF)) {  
+            // not a character we return a invalid category count
+            return UCharacterCategory.NON_CHARACTER_;    
+        }    
+        // Undo ICU exceptions to the UCD when determining the category.  
+        int result;   
+        if (UCharacter.isISOControl(ch)) {        
+            result = UCharacterCategory.CONTROL;    
+        } 
+        else {        
+            result = UCharacter.getType(ch);
+            if (result == UCharacterCategory.SURROGATE) {            
+                if (UTF16.isLeadSurrogate((char)ch)) {
+                    result = UCharacterCategory.LEAD_SURROGATE_;
+                }
+                else {
+                    result = UCharacterCategory.TRAIL_SURROGATE_;
+                }
+            }    
+        }    
+        return result;
+    }
+    
+    /**
+    * Retrieves the extended name
+    */
+    private String getExtendedName(int ch) 
+    {    
+        String result = getName(ch, UCharacterNameChoice.U_UNICODE_CHAR_NAME);    
+        if (result == null) {        
+            if (getType(ch) == UCharacterCategory.CONTROL) {            
+                result = getName(ch, 
+                                 UCharacterNameChoice.U_UNICODE_10_CHAR_NAME);        
+            }        
+            if (result == null) {            
+                int type = getType(ch);    
+                // Return unknown if the table of names above is not up to 
+                // date.
+                if (type >= UCharacterCategory.TYPE_NAMES_.length) {       
+                    result = UCharacterCategory.UNKNOWN_TYPE_NAME_;    
+                } 
+                else {        
+                    result = UCharacterCategory.TYPE_NAMES_[type];    
+                }
+                StringBuffer tempResult = new StringBuffer(result);
+                tempResult.insert(0, '<');
+                tempResult.append('-');
+                String chStr = Integer.toHexString(ch).toUpperCase();
+                int zeros = 4 - chStr.length();
+                while (zeros > 0) {
+                    tempResult.append('0');
+                    zeros --;
+                }
+                tempResult.append(chStr);
+                tempResult.append('>');
+                result = tempResult.toString();
+            }
+        }    
+        return result;
     }
 }

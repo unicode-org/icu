@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/lang/UCharacter.java,v $ 
-* $Date: 2002/02/08 01:08:38 $ 
-* $Revision: 1.21 $
+* $Date: 2002/02/15 02:53:32 $ 
+* $Revision: 1.22 $
 *
 *******************************************************************************
 */
@@ -17,6 +17,8 @@ package com.ibm.text;
 import java.util.Locale;
 import com.ibm.util.Utility;
 import com.ibm.icu.util.RangeValueIterator;
+import com.ibm.text.BreakIterator;
+import com.ibm.text.RuleBasedBreakIterator;
 
 /**
 * <p>
@@ -910,8 +912,7 @@ public final class UCharacter
     */
     public static String getName(int ch)
     {
-        return NAME_.getName(ch, 
-                                    UCharacterNameChoice.U_UNICODE_CHAR_NAME);
+        return NAME_.getName(ch, UCharacterNameChoice.U_UNICODE_CHAR_NAME);
     }
       
     /**
@@ -929,10 +930,33 @@ public final class UCharacter
         return NAME_.getName(ch, 
                              UCharacterNameChoice.U_UNICODE_10_CHAR_NAME);
     }
+    
+    /**
+    * <p>Retrieves a name for a valid codepoint. Unlike, getName(int) and
+    * getName1_0(int), this method will return a name even for codepoints that
+    * are not assigned a name in UnicodeData.txt.
+    * </p>
+    * The names are returned in the following order.
+    * <ul>
+    * <li> Most current Unicode name if there is any
+    * <li> Unicode 1.0 name if there is any
+    * <li> Extended name in the form of "<codepoint_type-codepoint_hex_digits>". 
+    *      E.g. <noncharacter-fffe>
+    * </ul>
+    * Note calling any methods related to code point names, e.g. get*Name*() 
+    * incurs a one-time initialisation cost to construct the name tables.
+    * @param ch the code point for which to get the name
+    * @return a name for the argument codepoint
+    * @draft 2.1
+    */
+    public static String getExtendedName(int ch) 
+    {
+        return NAME_.getName(ch, UCharacterNameChoice.U_EXTENDED_CHAR_NAME);
+    }
       
     /**
-    * Find a Unicode code point by its most current Unicode name and return its 
-    * code point value.<br>
+    * <p>Find a Unicode code point by its most current Unicode name and 
+    * return its code point value. All Unicode names are in uppercase.</p>
     * Note calling any methods related to code point names, e.g. get*Name*() 
     * incurs a one-time initialisation cost to construct the name tables.
     * @param name most current Unicode character name whose code point is to be 
@@ -946,8 +970,8 @@ public final class UCharacter
     }
       
     /**
-    * Find a Unicode character by its version 1.0 Unicode name and return its 
-    * code point value.<br>
+    * <p>Find a Unicode character by its version 1.0 Unicode name and return 
+    * its code point value. All Unicode names are in uppercase.</p>
     * Note calling any methods related to code point names, e.g. get*Name*() 
     * incurs a one-time initialisation cost to construct the name tables.
     * @param name Unicode 1.0 code point name whose code point is to 
@@ -958,6 +982,31 @@ public final class UCharacter
     {
         return NAME_.getCharFromName(
                          UCharacterNameChoice.U_UNICODE_10_CHAR_NAME, name);
+    }
+    
+    /**
+    * <p>Find a Unicode character by either its name and return its code 
+    * point value. All Unicode names are in uppercase. 
+    * Extended names are all lowercase except for numbers and are contained
+    * within angle brackets.</p>
+    * The names are searched in the following order
+    * <ul>
+    * <li> Most current Unicode name if there is any
+    * <li> Unicode 1.0 name if there is any
+    * <li> Extended name in the form of "<codepoint_type-codepoint_hex_digits>". 
+    *      E.g. <noncharacter-FFFE>
+    * </ul>
+    * Note calling any methods related to code point names, e.g. get*Name*() 
+    * incurs a one-time initialisation cost to construct the name tables.
+    * @param name codepoint name
+    * @return code point associated with the name or -1 if the name is not
+    *         found.
+    * @draft 2.1
+    */
+    public static int getCharFromExtendedName(String name)
+    {
+        return NAME_.getCharFromName(
+                            UCharacterNameChoice.U_EXTENDED_CHAR_NAME, name);
     }
       
     /**
@@ -1015,6 +1064,38 @@ public final class UCharacter
     public static String toLowerCase(String str)
     {
         return toLowerCase(Locale.getDefault(), str);
+    }
+    
+    /**
+    * <p>Gets the titlecase version of the argument string.</p>
+    * <p>Position for titlecasing is determined by the argument break 
+    * iterator, hence the user can customized his break iterator for 
+    * a specialized titlecasing. In this case only the forward iteration 
+    * needs to be implemented.
+    * If the break iterator passed in is null, the default Unicode algorithm
+    * will be used to determine the titlecase positions.
+    * </p>
+    * <p>Only positions returned by the break iterator will be title cased,
+    * character in between the positions will all be in lower case.</p>
+    * <p>Casing is dependent on the default locale and context-sensitive</p>
+    * @param str source string to be performed on
+    * @param breakiter break iterator to determine the positions in which
+    *        the character should be title cased.
+    * @return lowercase version of the argument string
+    */
+    public static String toTitleCase(String str, BreakIterator breakiter)
+    {
+        if (breakiter == null) {
+            String rules = "$cased=[[:Lu:][:Lt:][:Ll:]];" +  
+                           "$case_ignorable=[[:Mn:][:Me:][:Cf:][:Lm:][:Sk:]" 
+                                            + " \\u0027\u00AD\u2019];" +
+                           "$not_cased=[^$cased$case_ignorable];" +
+                           "[$not_cased$case_ignorable]*/" + 
+                           "$cased[$cased$case_ignorable]*$not_cased*;";
+            breakiter = new RuleBasedBreakIterator(rules);
+        }
+        
+        return str;
     }
       
     /**
@@ -1109,6 +1190,30 @@ public final class UCharacter
             offset += chsize;
         }
         return result.toString();
+    }
+    
+    /**
+    * <p>Gets the titlecase version of the argument string.</p>
+    * <p>Position for titlecasing is determined by the argument break 
+    * iterator, hence the user can customized his break iterator for 
+    * a specialized titlecasing. In this case only the forward iteration 
+    * needs to be implemented.
+    * If the break iterator passed in is null, the default Unicode algorithm
+    * will be used to determine the titlecase positions.
+    * </p>
+    * <p>Only positions returned by the break iterator will be title cased,
+    * character in between the positions will all be in lower case.</p>
+    * <p>Casing is dependent on the argument locale and context-sensitive</p>
+    * @param locale which string is to be converted in
+    * @param str source string to be performed on
+    * @param breakiter break iterator to determine the positions in which
+    *        the character should be title cased.
+    * @return lowercase version of the argument string
+    */
+    public static String toTitleCase(Locale locale, String str, 
+                                     BreakIterator breakiter)
+    {
+        return str;
     }
     
     /**

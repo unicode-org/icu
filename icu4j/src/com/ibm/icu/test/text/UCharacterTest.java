@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/test/text/Attic/UCharacterTest.java,v $ 
-* $Date: 2002/02/08 23:44:17 $ 
-* $Revision: 1.21 $
+* $Date: 2002/02/15 02:53:32 $ 
+* $Revision: 1.22 $
 *
 *******************************************************************************
 */
@@ -555,16 +555,33 @@ public final class UCharacterTest extends TestFmwk
   */
   public void TestNames()
   {
-    int c[] = {0x0061, 0x0284, 0x3401, 0x7fed, 0xac00, 0xd7a3, 0xff08, 0xffe5,
-               0x23456};
+    int c[] = {0x0061, 0x0284, 0x3401, 0x7fed, 0xac00, 0xd7a3, 0xd800, 0xdc00, 
+               0xff08, 0xffe5, 0xffff, 0x23456, 0x9};
     String name[] = {"LATIN SMALL LETTER A", 
                      "LATIN SMALL LETTER DOTLESS J WITH STROKE AND HOOK", 
                      "CJK UNIFIED IDEOGRAPH-3401", 
                      "CJK UNIFIED IDEOGRAPH-7FED", "HANGUL SYLLABLE GA", 
-                     "HANGUL SYLLABLE HIH", "FULLWIDTH LEFT PARENTHESIS",
-                     "FULLWIDTH YEN SIGN", "CJK UNIFIED IDEOGRAPH-23456"};
+                     "HANGUL SYLLABLE HIH", "", "",
+                     "FULLWIDTH LEFT PARENTHESIS",
+                     "FULLWIDTH YEN SIGN", "", "CJK UNIFIED IDEOGRAPH-23456",
+                     ""};
     String oldname[] = {"", "LATIN SMALL LETTER DOTLESS J BAR HOOK", "", "",
-                        "", "", "FULLWIDTH OPENING PARENTHESIS", "", ""};
+                        "", "", "", "", "FULLWIDTH OPENING PARENTHESIS", "", 
+                        "", "", "HORIZONTAL TABULATION"};
+    String extendedname[] = {"LATIN SMALL LETTER A", 
+                             "LATIN SMALL LETTER DOTLESS J WITH STROKE AND HOOK",
+                             "CJK UNIFIED IDEOGRAPH-3401",
+                             "CJK UNIFIED IDEOGRAPH-7FED",
+                             "HANGUL SYLLABLE GA",
+                             "HANGUL SYLLABLE HIH",
+                             "<lead surrogate-D800>",
+                             "<trail surrogate-DC00>",
+                             "FULLWIDTH LEFT PARENTHESIS",
+                             "FULLWIDTH YEN SIGN",
+                             "<noncharacter-FFFF>",
+                             "CJK UNIFIED IDEOGRAPH-23456", 
+                             "HORIZONTAL TABULATION"};
+                             
     int size = c.length;
     String str;
     int uc;
@@ -573,7 +590,8 @@ public final class UCharacterTest extends TestFmwk
     {
       // modern Unicode character name
       str = UCharacter.getName(c[i]);
-      if (!str.equals(name[i]))
+      if ((str == null && name[i].length() > 0) || 
+          (str != null && !str.equals(name[i])))
       {
         errln("FAIL \\u" + hex(c[i]) + " expected name " +
               name[i]);
@@ -590,9 +608,18 @@ public final class UCharacterTest extends TestFmwk
         break;
       }
       
+      // extended character name
+      str = UCharacter.getExtendedName(c[i]);
+      if (str == null || !str.equals(extendedname[i]))
+      {
+        errln("FAIL \\u" + hex(c[i]) + " expected extended name " +
+              extendedname[i]);
+        break;
+      }
+      
       // retrieving unicode character from modern name
       uc = UCharacter.getCharFromName(name[i]);
-      if (uc != c[i])
+      if (uc != c[i] && name[i].length() != 0)
       {
         errln("FAIL " + name[i] + " expected character \\u" + hex(c[i]));
         break;
@@ -600,9 +627,17 @@ public final class UCharacterTest extends TestFmwk
       
       //retrieving unicode character from 1.0 name
       uc = UCharacter.getCharFromName1_0(oldname[i]);
+      if (uc != c[i] && oldname[i].length() != 0)
+      {
+        errln("FAIL " + oldname[i] + " expected 1.0 character \\u" + hex(c[i]));
+        break;
+      }
+      
+      //retrieving unicode character from 1.0 name
+      uc = UCharacter.getCharFromExtendedName(extendedname[i]);
       if (uc != c[i] && i != 0 && (i == 1 || i == 6))
       {
-        errln("FAIL " + name[i] + " expected 1.0 character \\u" + hex(c[i]));
+        errln("FAIL " + extendedname[i] + " expected extended character \\u" + hex(c[i]));
         break;
       }
     }
@@ -1014,8 +1049,8 @@ public final class UCharacterTest extends TestFmwk
     try
     {
       UCharacterTest test = new UCharacterTest();
-      //test.TestEnumeration();
-      test.run(arg);
+      test.TestNames();
+      //test.run(arg);
     }
     catch (Exception e)
     {
