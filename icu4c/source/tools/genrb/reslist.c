@@ -571,7 +571,7 @@ struct SResource *int_open(struct SRBRoot *bundle, char *tag, int32_t value, UEr
     return res;
 }
 
-struct SResource *bin_open(struct SRBRoot *bundle, const char *tag, uint32_t length, uint8_t *data, UErrorCode *status) {
+struct SResource *bin_open(struct SRBRoot *bundle, const char *tag, uint32_t length, uint8_t *data,const char* fileName,UErrorCode *status) {
     struct SResource *res;
 
     if (U_FAILURE(*status)) {
@@ -592,10 +592,15 @@ struct SResource *bin_open(struct SRBRoot *bundle, const char *tag, uint32_t len
         uprv_free(res);
         return NULL;
     }
-
+    
     res->fNext = NULL;
 
     res->u.fBinaryValue.fLength = length;
+    res->u.fBinaryValue.fFileName = NULL;
+    if(fileName!=NULL && uprv_strcmp(fileName, "") !=0){
+        res->u.fBinaryValue.fFileName = (char*) uprv_malloc(sizeof(char) * uprv_strlen(fileName));
+        uprv_strcpy(res->u.fBinaryValue.fFileName,fileName);
+    }
     if (length > 0) {
         res->u.fBinaryValue.fData   = (uint8_t *) uprv_malloc(sizeof(uint8_t) * length);
 

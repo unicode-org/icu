@@ -48,6 +48,7 @@ enum
     COPYRIGHT,
     PACKAGE_NAME,
     BUNDLE_NAME,
+    WRITE_XML,
     TOUCHFILE
 };
 
@@ -65,11 +66,14 @@ UOption options[]={
                       UOPTION_COPYRIGHT,
                       UOPTION_PACKAGE_NAME,
                       UOPTION_BUNDLE_NAME,
-                      UOPTION_DEF( "touchfile", 't', UOPT_NO_ARG) /* 12 */
+                      UOPTION_DEF( "write-xml", 'x', UOPT_NO_ARG),
+                      UOPTION_DEF( "touchfile", 't', UOPT_NO_ARG) /* 13 */
+
                   };
 
 static     UBool       verbose = FALSE;
 static     UBool       write_java = FALSE;
+static     UBool       write_xml = FALSE;
 static     UBool       touchfile = FALSE;
 static     const char* outputEnc ="";
 static     const char* gPackageName=NULL;
@@ -138,7 +142,8 @@ main(int argc,
                 "\t                         'ICUDATA' defaults to the current ICU4C data name.\n");
         fprintf(stderr,
                 "\t-b or --bundle-name      bundle name for writing the ListResourceBundle for ICU4J,\n"
-                "\t                         defaults to LocaleElements");
+                "\t                         defaults to LocaleElements\n"
+                "\t-x or --write-xml        write a XML file for the resource bundle.\n");
 
         return argc < 0 ? U_ILLEGAL_ARGUMENT_ERROR : U_ZERO_ERROR;
     }
@@ -199,7 +204,9 @@ main(int argc,
         bundleName = options[BUNDLE_NAME].value;
     }
 
-
+    if(options[WRITE_XML].doesOccur) {
+        write_xml = TRUE;
+    }
     initParser();
 
     /* generate the binary files */
@@ -227,7 +234,7 @@ main(int argc,
 /* Process a file */
 static void
 processFile(const char *filename, const char *cp, const char *inputDir, const char *outputDir, const char *packageName, UErrorCode *status) {
-    FileStream     *in           = NULL;
+    /*FileStream     *in           = NULL;*/
     struct SRBRoot *data         = NULL;
     UCHARBUF       *ucbuf        = NULL;
     char           *rbname       = NULL;
@@ -235,19 +242,23 @@ processFile(const char *filename, const char *cp, const char *inputDir, const ch
     char           *inputDirBuf  = NULL;
 
     char           outputFileName[256];
-
-    if (U_FAILURE(*status)) {
+    
+    int32_t dirlen  = 0;
+    int32_t filelen = 0;
+    
+    if (status==NULL || U_FAILURE(*status)) {
         return;
     }
-
-    /* Setup */
-    in = 0;
-
-    /* Open the input file for reading */
-    if (!uprv_strcmp(filename, "-")) {
-        in = T_FileStream_stdin();
-    } else if(inputDir == NULL) {
+    if(filename==NULL){
+        *status=U_ILLEGAL_ARGUMENT_ERROR;
+        return;
+    }else{
+        filelen = (int32_t)uprv_strlen(filename);
+    }
+    if(inputDir == NULL) {
         const char *filenameBegin = uprv_strrchr(filename, U_FILE_SEP_CHAR);
+        openFileName = (char *) uprv_malloc(dirlen + filelen + 2);
+        openFileName[0] = '\0';
         if (filenameBegin != NULL) {
             /*
              * When a filename ../../../data/root.txt is specified, 
@@ -266,11 +277,12 @@ processFile(const char *filename, const char *cp, const char *inputDir, const ch
 
             inputDirBuf[filenameSize - 1] = 0;
             inputDir = inputDirBuf;
+            dirlen  = (int32_t)uprv_strlen(inputDir);
+
         }
-        in = T_FileStream_open(filename, "rb");
-    } else {
-        int32_t dirlen  = (int32_t)uprv_strlen(inputDir);
-        int32_t filelen = (int32_t)uprv_strlen(filename);
+    }else{
+        dirlen  = (int32_t)uprv_strlen(inputDir);
+
         if(inputDir[dirlen-1] != U_FILE_SEP_CHAR) {
             openFileName = (char *) uprv_malloc(dirlen + filelen + 2);
 
@@ -297,7 +309,6 @@ processFile(const char *filename, const char *cp, const char *inputDir, const ch
                 openFileName[dirlen]     = U_FILE_SEP_CHAR;
             }
             openFileName[dirlen + 1] = '\0';
-            uprv_strcat(openFileName, filename);
         } else {
             openFileName = (char *) uprv_malloc(dirlen + filelen + 1);
 
@@ -308,28 +319,27 @@ processFile(const char *filename, const char *cp, const char *inputDir, const ch
             }
 
             uprv_strcpy(openFileName, inputDir);
-            uprv_strcat(openFileName, filename);
+        
         }
-        in = T_FileStream_open(openFileName, "rb");
     }
 
-    if(in == 0) {
-        *status = U_FILE_ACCESS_ERROR;
+    uprv_strcat(openFileName, filename);
+
+    ucbuf = ucbuf_open(openFileName, &cp,getShowWarning(),TRUE, status);
+    
+    if(*status == U_FILE_ACCESS_ERROR) {
+        
         fprintf(stderr, "couldn't open file %s\n", openFileName == NULL ? filename : openFileName);
         goto finish;
-    } else {
-        /* auto detect popular encodings */
-        if (*cp=='\0' && ucbuf_autodetect(in, &cp) && verbose) {
-            printf("autodetected encoding %s\n", cp);
-        }
     }
-
-    ucbuf = ucbuf_open(in, cp, 0, status);
-
     if (ucbuf == NULL || U_FAILURE(*status)) {
+        fprintf(stderr, "An error occured processing file %s. Error: %s\n", openFileName == NULL ? filename : openFileName,u_errorName(*status));
         goto finish;
     }
-
+    /* auto detected popular encodings? */
+    if (cp!=NULL) {
+        printf("autodetected encoding %s\n", cp);
+    }
     /* Parse the data into an SRBRoot */
     data = parse(ucbuf, inputDir, status);
 
@@ -373,11 +383,13 @@ processFile(const char *filename, const char *cp, const char *inputDir, const ch
     if(U_FAILURE(*status)) {
         goto finish;
     }
-    if(write_java== FALSE){
+    if(write_java== TRUE){
+        bundle_write_java(data,outputDir,outputEnc, outputFileName, sizeof(outputFileName),packageName,bundleName,status);
+    }else if(write_xml ==TRUE){
+        bundle_write_xml(data,outputDir,outputEnc, outputFileName, sizeof(outputFileName),status);
+    }else{
         /* Write the data to the file */
         bundle_write(data, outputDir, packageName, outputFileName, sizeof(outputFileName), status);
-    }else{
-        bundle_write_java(data,outputDir,outputEnc, outputFileName, sizeof(outputFileName),packageName,bundleName,status);
     }
     if (U_FAILURE(*status)) {
         fprintf(stderr, "couldn't write bundle %s. Error:%s\n", outputFileName,u_errorName(*status));
@@ -396,11 +408,6 @@ finish:
 
     if(ucbuf) {
         ucbuf_close(ucbuf);
-    }
-
-    /* Clean up */
-    if (in != T_FileStream_stdin()) {
-        T_FileStream_close(in);
     }
 
     if (rbname) {

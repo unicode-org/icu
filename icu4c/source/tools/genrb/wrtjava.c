@@ -96,56 +96,6 @@ static void write_tabs(FileStream* os){
 static const char* enc ="";
 static UConverter* conv = NULL;
 
-#define MAX_DIGITS 10
-static int32_t 
-itostr(char * buffer, int32_t i, uint32_t radix, int32_t pad)
-{
-    int32_t length = 0;
-    int32_t num = 0;
-    int32_t save = i;
-    int digit;
-    int32_t j;
-    char temp;
-    
-    /* if i is negative make it positive */
-    if(i<0){
-        i=-i;
-    }
-    
-    do{
-        digit = (int)(i % radix);
-        buffer[length++]=(char)(digit<=9?(0x0030+digit):(0x0030+digit+7));
-        i=i/radix;
-    } while(i);
-
-    while (length < pad){
-        buffer[length++] = 0x0030;/*zero padding */
-    }
-    
-    /* if i is negative add the negative sign */
-    if(save < 0){
-        buffer[length++]='-';
-    }
-
-    /* null terminate the buffer */
-    if(length<MAX_DIGITS){
-        buffer[length] =  0x0000;
-    }
-
-    num= (pad>=length) ? pad :length;
- 
-
-    /* Reverses the string */
-    for (j = 0; j < (num / 2); j++){
-        temp = buffer[(length-1) - j];
-        buffer[(length-1) - j] = buffer[j];
-        buffer[j] = temp;
-    }
-    return length;
-}
-
-
-
 static int32_t 
 uCharsToChars( char* target,int32_t targetLen, UChar* source, int32_t sourceLen,UErrorCode* status){
     int i=0, j=0;
@@ -371,6 +321,67 @@ string_write_java(struct SResource *res,UErrorCode *status) {
         T_FileStream_close(datFile);
         uprv_free(dest);
 
+    }else if( res->u.fString.fLength > 2000){
+
+            int32_t srcLen = res->u.fBinaryValue.fLength/2;
+            uint16_t* target = (uint16_t*)malloc(sizeof(uint16_t) * srcLen);
+            uint16_t* saveTarget;
+            int32_t tgtLen=0;
+            const char* type = "new ICUListResourceBundle.CompressedString(\n";
+            if(target){
+                saveTarget  = target;
+                tgtLen = usArrayToRLEString((uint16_t*)res->u.fBinaryValue.fData,
+                                             srcLen,target, srcLen, status);
+                if(U_FAILURE(*status)){
+                     printf("Could not encode got error : %s \n", u_errorName(*status));
+                     return;
+                }
+#if DEBUG
+                {
+                    /***************** Test Roundtripping *********************/
+                    int32_t myTargetLen = rleStringToUCharArray(target,tgtLen,NULL,0,status);
+                    uint16_t* myTarget = (uint16_t*) malloc(sizeof(uint16_t) * myTargetLen);
+
+                    /* test for NULL */
+                    if(myTarget == NULL) {
+                        *status = U_MEMORY_ALLOCATION_ERROR;
+                        return;    
+                    }
+                    
+                    int i=0;
+                    int32_t retVal=0;
+                    uint16_t* saveSrc = (uint16_t*)res->u.fBinaryValue.fData;
+                    *status = U_ZERO_ERROR;
+                    retVal=rleStringToUCharArray(target,tgtLen,myTarget,myTargetLen,status);
+                    if(U_SUCCESS(*status)){
+
+                        for(i=0; i< srcLen;i++){
+                            if(saveSrc[i]!= myTarget[i]){
+                                printf("the encoded string cannot be decoded Expected : 0x%04X Got : %: 0x%04X at %i\n",res->u.fBinaryValue.fData[i],myTarget[i], i);
+                            }
+                        }
+                    }else{
+                        printf("Could not decode got error : %s \n", u_errorName(*status));
+                    }
+                    free(myTarget);
+                 }
+#endif
+
+            }else{
+                *status= U_MEMORY_ALLOCATION_ERROR;
+                return;
+            }
+            write_tabs(out);
+            T_FileStream_write(out, type, (int32_t)uprv_strlen(type));
+            T_FileStream_write(out, "\n", 1);
+            tabCount++;
+            write_tabs(out);
+            str_write_java(target, tgtLen,FALSE, status);
+            tabCount--;
+            T_FileStream_write(out, "),\n", 3);
+
+            free(target);
+           
     }else{
         str_write_java(res->u.fString.fChars,res->u.fString.fLength,TRUE,status);
 
@@ -576,54 +587,7 @@ bin_write_java( struct SResource *res, UErrorCode *status) {
             T_FileStream_close(datFile);
 
         }else{
-            if(uprv_strcmp(srBundle->fKeys+res->fKey, "%%")==0){
-                srcLen = res->u.fBinaryValue.fLength/2;
-                target = (uint16_t*)malloc(sizeof(uint16_t) * srcLen);
-                if(target){
-                    saveTarget  = target;
-                    type = "new ICUListResourceBundle.CompressedString(\n";
-                    tgtLen = usArrayToRLEString((uint16_t*)res->u.fBinaryValue.fData,
-                                                 srcLen,target, srcLen, status);
-                    if(U_FAILURE(*status)){
-                         printf("Could not encode got error : %s \n", u_errorName(*status));
-                         return;
-                    }
-#if DEBUG
-                    {
-                        /***************** Test Roundtripping *********************/
-                        int32_t myTargetLen = rleStringToUCharArray(target,tgtLen,NULL,0,status);
-                        uint16_t* myTarget = (uint16_t*) malloc(sizeof(uint16_t) * myTargetLen);
 
-                        /* test for NULL */
-                        if(myTarget == NULL) {
-                            *status = U_MEMORY_ALLOCATION_ERROR;
-                            return;    
-                        }
-                        
-                        int i=0;
-                        int32_t retVal=0;
-                        uint16_t* saveSrc = (uint16_t*)res->u.fBinaryValue.fData;
-                        *status = U_ZERO_ERROR;
-                        retVal=rleStringToUCharArray(target,tgtLen,myTarget,myTargetLen,status);
-                        if(U_SUCCESS(*status)){
-
-                            for(i=0; i< srcLen;i++){
-                                if(saveSrc[i]!= myTarget[i]){
-                                    printf("the encoded string cannot be decoded Expected : 0x%04X Got : %: 0x%04X at %i\n",res->u.fBinaryValue.fData[i],myTarget[i], i);
-                                }
-                            }
-                        }else{
-                            printf("Could not decode got error : %s \n", u_errorName(*status));
-                        }
-                        free(myTarget);
-                     }
-#endif
-
-                }else{
-                    *status= U_MEMORY_ALLOCATION_ERROR;
-                    return;
-                }
-            }else{
                 srcLen = res->u.fBinaryValue.fLength;
                 target = (uint16_t*)malloc(sizeof(uint16_t) * srcLen);
                 saveTarget  = target;
@@ -673,8 +637,6 @@ bin_write_java( struct SResource *res, UErrorCode *status) {
 
             }
         
-        
-
             write_tabs(out);
             T_FileStream_write(out, type, (int32_t)uprv_strlen(type));
             T_FileStream_write(out, "\n", 1);
@@ -685,7 +647,6 @@ bin_write_java( struct SResource *res, UErrorCode *status) {
             T_FileStream_write(out, "),\n", 3);
 
             free(target);
-        }
    }else{
         write_tabs(out);
         T_FileStream_write(out,type,uprv_strlen(type));
