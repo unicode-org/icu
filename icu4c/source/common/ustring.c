@@ -258,15 +258,23 @@ u_strtok_r(UChar    *src,
     nonDelimIdx = u_strspn(tokSource, delim);
     tokSource = &tokSource[nonDelimIdx];
 
-    nextToken = u_strpbrk(tokSource, delim);
-    if (nextToken != NULL) {
-        *(nextToken++) = 0;
-        *saveState = nextToken;
-        return tokSource;
+    if (*tokSource) {
+        nextToken = u_strpbrk(tokSource, delim);
+        if (nextToken != NULL) {
+            /* Create a token */
+            *(nextToken++) = 0;
+            *saveState = nextToken;
+            return tokSource;
+        }
+        else if (saveState && *saveState) {
+            /* Return the last token */
+            *saveState = NULL;
+            return tokSource;
+        }
     }
-    else if (saveState && *saveState) {
+    else {
+        /* No tokens were found. Only delimiters were left. */
         *saveState = NULL;
-        return tokSource;
     }
     return NULL;
 }
