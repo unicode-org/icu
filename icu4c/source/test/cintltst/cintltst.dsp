@@ -244,6 +244,10 @@ SOURCE=.\cucdtst.c
 # End Source File
 # Begin Source File
 
+SOURCE=.\custrtrn.c
+# End Source File
+# Begin Source File
+
 SOURCE=.\cutiltst.c
 # End Source File
 # Begin Source File
