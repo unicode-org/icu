@@ -132,16 +132,15 @@ static void outputHexBytes(int64_t val, int32_t charsToOutput,
 
 /* Output a pointer value in hex.  Work with any size of pointer   */
 static void outputPtrBytes(void *val, char *outBuf, int32_t *outIx, int32_t capacity) {
-    static const int16_t endianTestVal = (int16_t)0xabcd;
     int32_t  i;
     int32_t  incVal = 1;              /* +1 for big endian, -1 for little endian          */
     char     *p     = (char *)&val;   /* point to current byte to output in the ptr val  */
 
-    if (*(uint8_t *)&endianTestVal == (uint8_t)0xcd) {
-        /* Little Endian.  Move p to most significant end of the value      */
-        incVal = -1;
-        p += sizeof(void *) - 1;
-    }
+#if !U_IS_BIG_ENDIAN
+    /* Little Endian.  Move p to most significant end of the value      */
+    incVal = -1;
+    p += sizeof(void *) - 1;
+#endif
 
     /* Loop through the bytes of the ptr as it sits in memory, from 
      * most significant to least significant end                    */
