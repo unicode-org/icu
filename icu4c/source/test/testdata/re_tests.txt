@@ -822,9 +822,9 @@ foo.bart	foo.bart	y	-	-
 .[X](.+)+[X][X]	bbbbXXXaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa	ni	-	-
 .[X][X](.+)+[X]	bbbbXXXaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa	ni	-	-
 tt+$	xxxtt	y	-	-
-([a-\d]+)	za-9z	y	$1	a-9
-([\d-z]+)	a0-za	y	$1	0-z
-([\d-\s]+)	a0- z	y	$1	0- 
+([a-\d]+)	za-9z	yi	$1	a-9
+([\d-z]+)	a0-za	yi	$1	0-z
+([\d-\s]+)	a0- z	yi	$1	0- 
 ([a-[:digit:]]+)	za-9z	iy	$1	a-9
 ([[:digit:]-z]+)	=0-z=	iy	$1	0-z
 ([[:digit:]-[:alpha:]]+)	=0-z=	iy	$1	0-z

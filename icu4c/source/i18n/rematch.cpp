@@ -100,8 +100,21 @@ RegexMatcher &RegexMatcher::appendReplacement(UnicodeString &dest,
                 break;
             }
             c = replacement.charAt(replIdx);
-            replIdx++;
+
+            if (c==0x55/*U*/ || c==0x75/*u*/) {
+                // We have a \udddd or \Udddddddd escape sequence.
+                UChar32 escapedChar = replacement.unescapeAt(replIdx);
+                if (escapedChar != 0xFFFFFFFF) {
+                    dest.append(escapedChar);
+                    replIdx += (c==0x55? 9: 5); 
+                    // TODO:  Report errors for mal-formed \u escapes?
+                    continue;
+                }
+            }
+
+            // Plain backslash escape.  Just put out the escaped character.
             dest.append(c);
+            replIdx++;
             continue;
         }
 
@@ -1094,13 +1107,17 @@ void RegexMatcher::MatchAt(int32_t startIdx, UErrorCode &status) {
                 int32_t groupEndIdx   = fp->fExtra[opValue+1];
                 U_ASSERT(groupStartIdx <= groupEndIdx);
                 int32_t len = groupEndIdx-groupStartIdx;
-                if (groupStartIdx < 0 || len == 0) {
-                    // This capture group has not participated in the match thus far,
-                    //   or the match was of an empty string.
-                    //   Verified by testing:  Perl matches succeed in these cases, so
-                    //   we do too.
-                    break;
+                if (groupStartIdx < 0) {
+                    fp = (REStackFrame *)fStack->popFrame(frameSize);   // FAIL, no match.
                 }
+
+                if (groupStartIdx < 0 || len == 0) {
+                        // This capture group has not participated in the match thus far,
+                        //   or the match was of an empty string.
+                        //   Verified by testing:  Perl matches succeed in these cases, so
+                        //   we do too.
+                        break;
+                    }
                 if ((fp->fInputIdx + len > inputLen) || 
                     u_strncmp(fInputUC+groupStartIdx, fInputUC+fp->fInputIdx, len) != 0) {
                     fp = (REStackFrame *)fStack->popFrame(frameSize);   // FAIL, no match.
