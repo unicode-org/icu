@@ -1416,11 +1416,11 @@ static const struct {
 static UBool
 enumCharNamesFn(void *context,
                 UChar32 code, UCharNameChoice nameChoice,
-                const char *name, UTextOffset length) {
-    UTextOffset *pCount=(UTextOffset *)context;
+                const char *name, int32_t length) {
+    int32_t *pCount=(int32_t *)context;
     int i;
 
-    if(length<=0 || length!=(UTextOffset)uprv_strlen(name)) {
+    if(length<=0 || length!=(int32_t)uprv_strlen(name)) {
         /* should not be called with an empty string or invalid length */
         log_err("u_enumCharName(0x%lx)=%s but length=%ld\n", name, length);
         return TRUE;
@@ -1460,7 +1460,7 @@ struct enumExtCharNamesContext {
 static UBool
 enumExtCharNamesFn(void *context,
                 UChar32 code, UCharNameChoice nameChoice,
-                const char *name, UTextOffset length) {
+                const char *name, int32_t length) {
     struct enumExtCharNamesContext *ecncp = (struct enumExtCharNamesContext *) context;
 
     if (ecncp->last != (int32_t) code - 1) {
@@ -1484,7 +1484,7 @@ TestCharNames() {
     static char name[80];
     UErrorCode errorCode=U_ZERO_ERROR;
     struct enumExtCharNamesContext extContext;
-    UTextOffset length;
+    int32_t length;
     UChar32 c;
     int i;
 

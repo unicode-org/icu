@@ -83,8 +83,8 @@ utf8_errorValue[6]={
 };
 
 U_CAPI UChar32 U_EXPORT2
-utf8_nextCharSafeBody(const uint8_t *s, UTextOffset *pi, UTextOffset length, UChar32 c, UBool strict) {
-    UTextOffset i=*pi;
+utf8_nextCharSafeBody(const uint8_t *s, int32_t *pi, int32_t length, UChar32 c, UBool strict) {
+    int32_t i=*pi;
     uint8_t count=UTF8_COUNT_TRAIL_BYTES(c);
     if((i)+count<=(length)) {
         uint8_t trail, illegal=0;
@@ -147,7 +147,7 @@ utf8_nextCharSafeBody(const uint8_t *s, UTextOffset *pi, UTextOffset length, UCh
         }
     } else /* too few bytes left */ {
         /* error handling */
-        UTextOffset i0=i;
+        int32_t i0=i;
         /* don't just set (i)=(length) in case there is an illegal sequence */
         while((i)<(length) && UTF8_IS_TRAIL(s[i])) {
             ++(i);
@@ -158,8 +158,8 @@ utf8_nextCharSafeBody(const uint8_t *s, UTextOffset *pi, UTextOffset length, UCh
     return c;
 }
 
-U_CAPI UTextOffset U_EXPORT2
-utf8_appendCharSafeBody(uint8_t *s, UTextOffset i, UTextOffset length, UChar32 c) {
+U_CAPI int32_t U_EXPORT2
+utf8_appendCharSafeBody(uint8_t *s, int32_t i, int32_t length, UChar32 c) {
     if((c)<=0x7ff) {
         if((i)+1<(length)) {
             (s)[(i)++]=(uint8_t)(((c)>>6)|0xc0);
@@ -185,7 +185,7 @@ utf8_appendCharSafeBody(uint8_t *s, UTextOffset i, UTextOffset length, UChar32 c
     /* c>0x10ffff or not enough space, write an error value */
     length-=i;
     if(length>0) {
-        UTextOffset offset;
+        int32_t offset;
         if(length>3) {
             length=3;
         }
@@ -199,8 +199,8 @@ utf8_appendCharSafeBody(uint8_t *s, UTextOffset i, UTextOffset length, UChar32 c
 }
 
 U_CAPI UChar32 U_EXPORT2
-utf8_prevCharSafeBody(const uint8_t *s, UTextOffset start, UTextOffset *pi, UChar32 c, UBool strict) {
-    UTextOffset i=*pi;
+utf8_prevCharSafeBody(const uint8_t *s, int32_t start, int32_t *pi, UChar32 c, UBool strict) {
+    int32_t i=*pi;
     uint8_t b, count=1, shift=6;
 
     /* extract value bits from the last trail byte */
@@ -265,10 +265,10 @@ utf8_prevCharSafeBody(const uint8_t *s, UTextOffset start, UTextOffset *pi, UCha
     return c;
 }
 
-U_CAPI UTextOffset U_EXPORT2
-utf8_back1SafeBody(const uint8_t *s, UTextOffset start, UTextOffset i) {
+U_CAPI int32_t U_EXPORT2
+utf8_back1SafeBody(const uint8_t *s, int32_t start, int32_t i) {
     /* i had been decremented once before the function call */
-    UTextOffset I=i, Z;
+    int32_t I=i, Z;
     uint8_t b;
 
     /* read at most the 6 bytes s[Z] to s[i], inclusively */

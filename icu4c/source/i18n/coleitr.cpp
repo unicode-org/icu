@@ -58,7 +58,7 @@ CollationElementIterator::~CollationElementIterator()
 
 /* CollationElementIterator public methods --------------------------------- */
 
-UTextOffset CollationElementIterator::getOffset() const
+int32_t CollationElementIterator::getOffset() const
 {
   return ucol_getOffset(m_data_);
 }
@@ -145,7 +145,7 @@ void CollationElementIterator::reset()
   ucol_reset(m_data_);
 }
 
-void CollationElementIterator::setOffset(UTextOffset newOffset, 
+void CollationElementIterator::setOffset(int32_t newOffset, 
                                          UErrorCode& status)
 {
   ucol_setOffset(m_data_, newOffset, &status);

@@ -77,7 +77,7 @@ public:
      * @return code unit of text at given offset
      * @draft ICU 1.8
      */
-    inline UChar charAt(UTextOffset offset) const;
+    inline UChar charAt(int32_t offset) const;
 
     /**
      * Return the Unicode code point that contains the code unit
@@ -88,7 +88,7 @@ public:
      * @return code point of text at given offset
      * @draft ICU 1.8
      */
-    inline UChar32 char32At(UTextOffset offset) const;
+    inline UChar32 char32At(int32_t offset) const;
 
     /**
      * Copy the characters in the range [<tt>start</tt>, <tt>limit</tt>) 
@@ -100,8 +100,8 @@ public:
      * @return A reference to <TT>target</TT>
      * @draft ICU 2.1
      */
-    virtual void extractBetween(UTextOffset start,
-                                UTextOffset limit,
+    virtual void extractBetween(int32_t start,
+                                int32_t limit,
                                 UnicodeString& target) const = 0;
 
     /**
@@ -124,8 +124,8 @@ public:
      * to <code>limit - 1</code> 
      * @stable
      */
-    virtual void handleReplaceBetween(UTextOffset start,
-                                      UTextOffset limit,
+    virtual void handleReplaceBetween(int32_t start,
+                                      int32_t limit,
                                       const UnicodeString& text) = 0;
     // Note: All other methods in this class take the names of
     // existing UnicodeString methods.  This method is the exception.
@@ -175,12 +175,12 @@ protected:
     /**
      * Virtual version of charAt().
      */
-    virtual UChar getCharAt(UTextOffset offset) const = 0;
+    virtual UChar getCharAt(int32_t offset) const = 0;
 
     /**
      * Virtual version of char32At().
      */
-    virtual UChar32 getChar32At(UTextOffset offset) const = 0;
+    virtual UChar32 getChar32At(int32_t offset) const = 0;
 };
 
 inline Replaceable::Replaceable() {}
@@ -193,12 +193,12 @@ Replaceable::length() const {
 }
 
 inline UChar
-Replaceable::charAt(UTextOffset offset) const {
+Replaceable::charAt(int32_t offset) const {
     return getCharAt(offset);
 }
 
 inline UChar32
-Replaceable::char32At(UTextOffset offset) const {
+Replaceable::char32At(int32_t offset) const {
     return getChar32At(offset);
 }
 

@@ -88,18 +88,18 @@ static void
 reorderLine(UBiDi *pBiDi, UBiDiLevel minLevel, UBiDiLevel maxLevel);
 
 static UBool
-prepareReorder(const UBiDiLevel *levels, UTextOffset length,
-               UTextOffset *indexMap,
+prepareReorder(const UBiDiLevel *levels, int32_t length,
+               int32_t *indexMap,
                UBiDiLevel *pMinLevel, UBiDiLevel *pMaxLevel);
 
 /* ubidi_setLine ------------------------------------------------------------ */
 
 U_CAPI void U_EXPORT2
 ubidi_setLine(const UBiDi *pParaBiDi,
-              UTextOffset start, UTextOffset limit,
+              int32_t start, int32_t limit,
               UBiDi *pLineBiDi,
               UErrorCode *pErrorCode) {
-    UTextOffset length;
+    int32_t length;
 
     /* check the argument values */
     if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
@@ -143,7 +143,7 @@ ubidi_setLine(const UBiDi *pParaBiDi,
             }
         } else {
             const UBiDiLevel *levels=pLineBiDi->levels;
-            UTextOffset i, trailingWSStart;
+            int32_t i, trailingWSStart;
             UBiDiLevel level;
 
             setTrailingWSStart(pLineBiDi);
@@ -209,7 +209,7 @@ ubidi_setLine(const UBiDi *pParaBiDi,
 }
 
 U_CAPI UBiDiLevel U_EXPORT2
-ubidi_getLevelAt(const UBiDi *pBiDi, UTextOffset charIndex) {
+ubidi_getLevelAt(const UBiDi *pBiDi, int32_t charIndex) {
     /* return paraLevel if in the trailing WS run, otherwise the real level */
     if(pBiDi==NULL || charIndex<0 || pBiDi->length<=charIndex) {
         return 0;
@@ -222,7 +222,7 @@ ubidi_getLevelAt(const UBiDi *pBiDi, UTextOffset charIndex) {
 
 U_CAPI const UBiDiLevel * U_EXPORT2
 ubidi_getLevels(UBiDi *pBiDi, UErrorCode *pErrorCode) {
-    UTextOffset start, length;
+    int32_t start, length;
 
     if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
         return NULL;
@@ -263,9 +263,9 @@ ubidi_getLevels(UBiDi *pBiDi, UErrorCode *pErrorCode) {
 }
 
 U_CAPI void U_EXPORT2
-ubidi_getLogicalRun(const UBiDi *pBiDi, UTextOffset logicalStart,
-                    UTextOffset *pLogicalLimit, UBiDiLevel *pLevel) {
-    UTextOffset length;
+ubidi_getLogicalRun(const UBiDi *pBiDi, int32_t logicalStart,
+                    int32_t *pLogicalLimit, UBiDiLevel *pLevel) {
+    int32_t length;
 
     if(pBiDi==NULL || logicalStart<0 || (length=pBiDi->length)<=logicalStart) {
         return;
@@ -312,7 +312,7 @@ setTrailingWSStart(UBiDi *pBiDi) {
 
     const DirProp *dirProps=pBiDi->dirProps;
     UBiDiLevel *levels=pBiDi->levels;
-    UTextOffset start=pBiDi->length;
+    int32_t start=pBiDi->length;
     UBiDiLevel paraLevel=pBiDi->paraLevel;
 
     /* go backwards across all WS, BN, explicit codes */
@@ -330,7 +330,7 @@ setTrailingWSStart(UBiDi *pBiDi) {
 
 /* runs API functions ------------------------------------------------------- */
 
-U_CAPI UTextOffset U_EXPORT2
+U_CAPI int32_t U_EXPORT2
 ubidi_countRuns(UBiDi *pBiDi, UErrorCode *pErrorCode) {
     if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
         return -1;
@@ -343,15 +343,15 @@ ubidi_countRuns(UBiDi *pBiDi, UErrorCode *pErrorCode) {
 }
 
 U_CAPI UBiDiDirection U_EXPORT2
-ubidi_getVisualRun(UBiDi *pBiDi, UTextOffset runIndex,
-                   UTextOffset *pLogicalStart, UTextOffset *pLength) {
+ubidi_getVisualRun(UBiDi *pBiDi, int32_t runIndex,
+                   int32_t *pLogicalStart, int32_t *pLength) {
     if( pBiDi==NULL || runIndex<0 ||
         (pBiDi->runCount==-1 && !ubidi_getRuns(pBiDi)) ||
         runIndex>=pBiDi->runCount
     ) {
         return UBIDI_LTR;
     } else {
-        UTextOffset start=pBiDi->runs[runIndex].logicalStart;
+        int32_t start=pBiDi->runs[runIndex].logicalStart;
         if(pLogicalStart!=NULL) {
             *pLogicalStart=GET_INDEX(start);
         }
@@ -383,7 +383,7 @@ ubidi_getRuns(UBiDi *pBiDi) {
         getSingleRun(pBiDi, pBiDi->paraLevel);
     } else /* UBIDI_MIXED, length>0 */ {
         /* mixed directionality */
-        UTextOffset length=pBiDi->length, limit;
+        int32_t length=pBiDi->length, limit;
 
         /*
          * If there are WS characters at the end of the line
@@ -402,7 +402,7 @@ ubidi_getRuns(UBiDi *pBiDi) {
             getSingleRun(pBiDi, pBiDi->paraLevel);
         } else {
             UBiDiLevel *levels=pBiDi->levels;
-            UTextOffset i, runCount;
+            int32_t i, runCount;
             UBiDiLevel level=UBIDI_DEFAULT_LTR;   /* initialize with no valid level */
 
             /* count the runs, there is at least one non-WS run, and limit>0 */
@@ -425,7 +425,7 @@ ubidi_getRuns(UBiDi *pBiDi) {
             } else /* runCount>1 || limit<length */ {
                 /* allocate and set the runs */
                 Run *runs;
-                UTextOffset runIndex, start;
+                int32_t runIndex, start;
                 UBiDiLevel minLevel=UBIDI_MAX_EXPLICIT_LEVEL+1, maxLevel=0;
 
                 /* now, count a (non-mergable) WS run */
@@ -550,7 +550,7 @@ static void
 reorderLine(UBiDi *pBiDi, UBiDiLevel minLevel, UBiDiLevel maxLevel) {
     Run *runs;
     UBiDiLevel *levels;
-    UTextOffset firstRun, endRun, limitRun, runCount,
+    int32_t firstRun, endRun, limitRun, runCount,
     temp;
 
     /* nothing to do? */
@@ -642,8 +642,8 @@ reorderLine(UBiDi *pBiDi, UBiDiLevel minLevel, UBiDiLevel maxLevel) {
 /* reorder a line based on a levels array (L2) ------------------------------ */
 
 U_CAPI void U_EXPORT2
-ubidi_reorderLogical(const UBiDiLevel *levels, UTextOffset length, UTextOffset *indexMap) {
-    UTextOffset start, limit, sumOfSosEos;
+ubidi_reorderLogical(const UBiDiLevel *levels, int32_t length, int32_t *indexMap) {
+    int32_t start, limit, sumOfSosEos;
     UBiDiLevel minLevel, maxLevel;
 
     if(indexMap==NULL || !prepareReorder(levels, length, indexMap, &minLevel, &maxLevel)) {
@@ -705,8 +705,8 @@ ubidi_reorderLogical(const UBiDiLevel *levels, UTextOffset length, UTextOffset *
 }
 
 U_CAPI void U_EXPORT2
-ubidi_reorderVisual(const UBiDiLevel *levels, UTextOffset length, UTextOffset *indexMap) {
-    UTextOffset start, end, limit, temp;
+ubidi_reorderVisual(const UBiDiLevel *levels, int32_t length, int32_t *indexMap) {
+    int32_t start, end, limit, temp;
     UBiDiLevel minLevel, maxLevel;
 
     if(indexMap==NULL || !prepareReorder(levels, length, indexMap, &minLevel, &maxLevel)) {
@@ -765,10 +765,10 @@ ubidi_reorderVisual(const UBiDiLevel *levels, UTextOffset length, UTextOffset *i
 }
 
 static UBool
-prepareReorder(const UBiDiLevel *levels, UTextOffset length,
-               UTextOffset *indexMap,
+prepareReorder(const UBiDiLevel *levels, int32_t length,
+               int32_t *indexMap,
                UBiDiLevel *pMinLevel, UBiDiLevel *pMaxLevel) {
-    UTextOffset start;
+    int32_t start;
     UBiDiLevel level, minLevel, maxLevel;
 
     if(levels==NULL || length<=0) {
@@ -804,8 +804,8 @@ prepareReorder(const UBiDiLevel *levels, UTextOffset length,
 
 /* API functions for logical<->visual mapping ------------------------------- */
 
-U_CAPI UTextOffset U_EXPORT2
-ubidi_getVisualIndex(UBiDi *pBiDi, UTextOffset logicalIndex, UErrorCode *pErrorCode) {
+U_CAPI int32_t U_EXPORT2
+ubidi_getVisualIndex(UBiDi *pBiDi, int32_t logicalIndex, UErrorCode *pErrorCode) {
     if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
         return 0;
     } else if(pBiDi==NULL) {
@@ -827,7 +827,7 @@ ubidi_getVisualIndex(UBiDi *pBiDi, UTextOffset logicalIndex, UErrorCode *pErrorC
                 return 0;
             } else {
                 Run *runs=pBiDi->runs;
-                UTextOffset i, visualStart=0, offset, length;
+                int32_t i, visualStart=0, offset, length;
 
                 /* linear search for the run, search on the visual runs */
                 for(i=0;; ++i) {
@@ -849,8 +849,8 @@ ubidi_getVisualIndex(UBiDi *pBiDi, UTextOffset logicalIndex, UErrorCode *pErrorC
     }
 }
 
-U_CAPI UTextOffset U_EXPORT2
-ubidi_getLogicalIndex(UBiDi *pBiDi, UTextOffset visualIndex, UErrorCode *pErrorCode) {
+U_CAPI int32_t U_EXPORT2
+ubidi_getLogicalIndex(UBiDi *pBiDi, int32_t visualIndex, UErrorCode *pErrorCode) {
     if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
         return 0;
     } else if(pBiDi==NULL) {
@@ -872,14 +872,14 @@ ubidi_getLogicalIndex(UBiDi *pBiDi, UTextOffset visualIndex, UErrorCode *pErrorC
                 return 0;
             } else {
                 Run *runs=pBiDi->runs;
-                UTextOffset i, runCount=pBiDi->runCount, start;
+                int32_t i, runCount=pBiDi->runCount, start;
 
                 if(runCount<=10) {
                     /* linear search for the run */
                     for(i=0; visualIndex>=runs[i].visualLimit; ++i) {}
                 } else {
                     /* binary search for the run */
-                    UTextOffset begin=0, limit=runCount;
+                    int32_t begin=0, limit=runCount;
 
                     /* the middle if() will guaranteed find the run, we don't need a loop limit */
                     for(;;) {
@@ -912,7 +912,7 @@ ubidi_getLogicalIndex(UBiDi *pBiDi, UTextOffset visualIndex, UErrorCode *pErrorC
 }
 
 U_CAPI void U_EXPORT2
-ubidi_getLogicalMap(UBiDi *pBiDi, UTextOffset *indexMap, UErrorCode *pErrorCode) {
+ubidi_getLogicalMap(UBiDi *pBiDi, int32_t *indexMap, UErrorCode *pErrorCode) {
     UBiDiLevel *levels;
 
     /* ubidi_getLevels() checks all of its and our arguments */
@@ -926,7 +926,7 @@ ubidi_getLogicalMap(UBiDi *pBiDi, UTextOffset *indexMap, UErrorCode *pErrorCode)
 }
 
 U_CAPI void U_EXPORT2
-ubidi_getVisualMap(UBiDi *pBiDi, UTextOffset *indexMap, UErrorCode *pErrorCode) {
+ubidi_getVisualMap(UBiDi *pBiDi, int32_t *indexMap, UErrorCode *pErrorCode) {
     /* ubidi_countRuns() checks all of its and our arguments */
     if(ubidi_countRuns(pBiDi, pErrorCode)<=0) {
         /* no op */
@@ -935,7 +935,7 @@ ubidi_getVisualMap(UBiDi *pBiDi, UTextOffset *indexMap, UErrorCode *pErrorCode) 
     } else {
         /* fill a visual-to-logical index map using the runs[] */
         Run *runs=pBiDi->runs, *runsLimit=runs+pBiDi->runCount;
-        UTextOffset logicalStart, visualStart, visualLimit;
+        int32_t logicalStart, visualStart, visualLimit;
 
         visualStart=0;
         for(; runs<runsLimit; ++runs) {
@@ -958,7 +958,7 @@ ubidi_getVisualMap(UBiDi *pBiDi, UTextOffset *indexMap, UErrorCode *pErrorCode) 
 }
 
 U_CAPI void U_EXPORT2
-ubidi_invertMap(const UTextOffset *srcMap, UTextOffset *destMap, UTextOffset length) {
+ubidi_invertMap(const int32_t *srcMap, int32_t *destMap, int32_t length) {
     if(srcMap!=NULL && destMap!=NULL) {
         srcMap+=length;
         while(length>0) {

@@ -34,7 +34,7 @@
 
 U_NAMESPACE_BEGIN
 
-const UTextOffset BreakIterator::DONE = (int32_t)-1;
+const int32_t BreakIterator::DONE = (int32_t)-1;
 
 // -------------------------------------
 

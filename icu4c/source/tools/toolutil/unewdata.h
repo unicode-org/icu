@@ -80,19 +80,19 @@ udata_write32(UNewDataMemory *pData, uint32_t wyde);
 
 /** @memo Write a block of bytes to the file. */
 U_CAPI void U_EXPORT2
-udata_writeBlock(UNewDataMemory *pData, const void *s, UTextOffset length);
+udata_writeBlock(UNewDataMemory *pData, const void *s, int32_t length);
 
 /** @memo Write a block of arbitrary padding bytes to the file. */
 U_CAPI void U_EXPORT2
-udata_writePadding(UNewDataMemory *pData, UTextOffset length);
+udata_writePadding(UNewDataMemory *pData, int32_t length);
 
 /** @memo Write a <code>char*</code> string of platform "invariant characters" to the file. */
 U_CAPI void U_EXPORT2
-udata_writeString(UNewDataMemory *pData, const char *s, UTextOffset length);
+udata_writeString(UNewDataMemory *pData, const char *s, int32_t length);
 
 /** @memo Write a <code>UChar*</code> string of Unicode character code units to the file. */
 U_CAPI void U_EXPORT2
-udata_writeUString(UNewDataMemory *pData, const UChar *s, UTextOffset length);
+udata_writeUString(UNewDataMemory *pData, const UChar *s, int32_t length);
 
 
 /*

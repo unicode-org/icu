@@ -52,7 +52,7 @@ U_NAMESPACE_BEGIN
 #include <stdio.h>
 static void debugout(UnicodeString s) {
     char buf[2000];
-    s.extract((UTextOffset) 0, s.length(), buf);
+    s.extract((int32_t) 0, s.length(), buf);
     printf("%s", buf);
 }
 #define debug(x) printf("%s", x);
@@ -1117,8 +1117,8 @@ is here if we change our minds.
 UBool DecimalFormat::subparse(const UnicodeString& text, ParsePosition& parsePosition,
                                DigitList& digits, UBool* status) const
 {
-    UTextOffset position = parsePosition.getIndex();
-    UTextOffset oldStart = position;
+    int32_t position = parsePosition.getIndex();
+    int32_t oldStart = position;
 
     // check for positivePrefix; take longest
     UBool gotPositive = text.compare(position,fPositivePrefix.length(),fPositivePrefix,0,
@@ -1273,7 +1273,7 @@ UBool DecimalFormat::subparse(const UnicodeString& text, ParsePosition& parsePos
                 }
 
                 while (pos < textLength) {
-                    ch = text[(UTextOffset)pos];
+                    ch = text[(int32_t)pos];
                     digit = ch - zero;
 
                     if (digit < 0 || digit > 9) {
@@ -2207,8 +2207,8 @@ DecimalFormat::toPattern(UnicodeString& result, UBool localized) const
                 {
                     int32_t length = fPosPrefixPattern->length();
                     isDefault = fNegPrefixPattern->length() == (length+2) &&
-                        (*fNegPrefixPattern)[(UTextOffset)0] == kQuote &&
-                        (*fNegPrefixPattern)[(UTextOffset)1] == kPatternMinus &&
+                        (*fNegPrefixPattern)[(int32_t)0] == kQuote &&
+                        (*fNegPrefixPattern)[(int32_t)1] == kPatternMinus &&
                         fNegPrefixPattern->compare(2, length, *fPosPrefixPattern, 0, length) == 0;
                 }
                 if (!isDefault &&
@@ -2325,7 +2325,7 @@ DecimalFormat::applyPattern(const UnicodeString& pattern,
     int32_t groupSepLen = groupingSeparator.length();
     int32_t decimalSepLen = decimalSeparator.length();
 
-    UTextOffset pos = 0;
+    int32_t pos = 0;
     int32_t patLen = pattern.length();
     // Part 0 is the positive pattern.  Part 1, if present, is the negative
     // pattern.
@@ -2450,7 +2450,7 @@ DecimalFormat::applyPattern(const UnicodeString& pattern,
                         }
                         // Check for positive prefix
                         if ((pos+1) < patLen
-                            && pattern.compare((UTextOffset) (pos+1), plus.length(), plus) == 0)
+                            && pattern.compare((int32_t) (pos+1), plus.length(), plus) == 0)
                         {
                             expSignAlways = TRUE;
                             pos += plus.length();
@@ -2460,7 +2460,7 @@ DecimalFormat::applyPattern(const UnicodeString& pattern,
                         expDigits = 0;
                         pos += exponent.length() - 1;
                         while (++pos < patLen &&
-                               pattern[(UTextOffset) pos] == zeroDigit)
+                               pattern[(int32_t) pos] == zeroDigit)
                         {
                             ++expDigits;
                         }

@@ -188,7 +188,7 @@ static void TestNextPrevChar(){
         0x0840,        UTF8_ERROR_VALUE_1, UTF8_ERROR_VALUE_1,  0xf0,         UTF8_ERROR_VALUE_1, UTF8_ERROR_VALUE_1,
         0x0000,        0x0000,             0x0000,              0x0061,       0x0061,             0x0061
     };
-    static UTextOffset movedOffset[]={
+    static int32_t movedOffset[]={
    /*next_unsafe    next_safe_ns  next_safe_s       prev_unsafe   prev_safe_ns     prev_safe_s*/
         1,            1,           1,                15,           15,               15,
         5,            5,           5,                14,           14 ,              14, 
@@ -214,7 +214,7 @@ static void TestNextPrevChar(){
     UChar32 c=0x0000;
     uint32_t i=0;
     uint32_t offset=0;
-    UTextOffset setOffset=0;
+    int32_t setOffset=0;
     for(offset=0; offset<sizeof(input); offset++){
          if (offset < sizeof(input) - 2) { /* Can't have it go off the end of the array based on input */
              setOffset=offset;
@@ -544,7 +544,7 @@ static void TestAppendChar(){
             if((uint32_t)(c)<=0x7f) { 
                   (str)[(offset)++]=(uint8_t)(c); 
             } else { 
-                 (offset)=utf8_appendCharSafeBody(str, (UTextOffset)(offset), (UTextOffset)(size), c); 
+                 (offset)=utf8_appendCharSafeBody(str, (int32_t)(offset), (int32_t)(size), c); 
             }
             if(offset != movedOffset[count]){
                 log_err("ERROR: utf8_appendCharSafeBody() failed to move the offset correctly for count=%d.\nExpectedOffset=%d  currentOffset=%d\n", 

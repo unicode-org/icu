@@ -123,7 +123,7 @@ directionFromFlags(Flags flags);
 
 static void
 resolveImplicitLevels(UBiDi *pBiDi,
-                      UTextOffset start, UTextOffset limit,
+                      int32_t start, int32_t limit,
                       DirProp sor, DirProp eor);
 
 static void
@@ -148,7 +148,7 @@ ubidi_open(void)
 }
 
 U_CAPI UBiDi * U_EXPORT2
-ubidi_openSized(UTextOffset maxLength, UTextOffset maxRunCount, UErrorCode *pErrorCode) {
+ubidi_openSized(int32_t maxLength, int32_t maxRunCount, UErrorCode *pErrorCode) {
     UBiDi *pBiDi;
 
     /* check the argument values */
@@ -213,7 +213,7 @@ ubidi_openSized(UTextOffset maxLength, UTextOffset maxRunCount, UErrorCode *pErr
  * is this the best way to do this??
  */
 U_CFUNC UBool
-ubidi_getMemory(void **pMemory, UTextOffset *pSize, UBool mayAllocate, UTextOffset sizeNeeded) {
+ubidi_getMemory(void **pMemory, int32_t *pSize, UBool mayAllocate, int32_t sizeNeeded) {
     /* check for existing memory */
     if(*pMemory==NULL) {
         /* we need to allocate memory */
@@ -284,7 +284,7 @@ ubidi_isInverse(UBiDi *pBiDi) {
 /* ubidi_setPara ------------------------------------------------------------ */
 
 U_CAPI void U_EXPORT2
-ubidi_setPara(UBiDi *pBiDi, const UChar *text, UTextOffset length,
+ubidi_setPara(UBiDi *pBiDi, const UChar *text, int32_t length,
               UBiDiLevel paraLevel, UBiDiLevel *embeddingLevels,
               UErrorCode *pErrorCode) {
     UBiDiDirection direction;
@@ -409,7 +409,7 @@ ubidi_setPara(UBiDi *pBiDi, const UChar *text, UTextOffset length,
         } else {
             /* sor, eor: start and end types of same-level-run */
             UBiDiLevel *levels=pBiDi->levels;
-            UTextOffset start, limit=0;
+            int32_t start, limit=0;
             UBiDiLevel level, nextLevel;
             DirProp sor, eor;
 
@@ -485,7 +485,7 @@ static void
 getDirProps(UBiDi *pBiDi, const UChar *text) {
     DirProp *dirProps=pBiDi->dirPropsMemory;    /* pBiDi->dirProps is const */
 
-    UTextOffset i=0, i0, i1, length=pBiDi->length;
+    int32_t i=0, i0, i1, length=pBiDi->length;
     Flags flags=0;      /* collect all directionalities in the text */
     UChar32 uchar;
     DirProp dirProp;
@@ -602,7 +602,7 @@ resolveExplicitLevels(UBiDi *pBiDi) {
     const DirProp *dirProps=pBiDi->dirProps;
     UBiDiLevel *levels=pBiDi->levels;
     
-    UTextOffset i=0, length=pBiDi->length;
+    int32_t i=0, length=pBiDi->length;
     Flags flags=pBiDi->flags;       /* collect all directionalities in the text */
     DirProp dirProp;
     UBiDiLevel level=pBiDi->paraLevel;
@@ -759,7 +759,7 @@ checkExplicitLevels(UBiDi *pBiDi, UErrorCode *pErrorCode) {
     const DirProp *dirProps=pBiDi->dirProps;
     UBiDiLevel *levels=pBiDi->levels;
     
-    UTextOffset i, length=pBiDi->length;
+    int32_t i, length=pBiDi->length;
     Flags flags=0;  /* collect all directionalities in the text */
     UBiDiLevel level, paraLevel=pBiDi->paraLevel;
 
@@ -835,12 +835,12 @@ directionFromFlags(Flags flags) {
 
 static void
 resolveImplicitLevels(UBiDi *pBiDi,
-                      UTextOffset start, UTextOffset limit,
+                      int32_t start, int32_t limit,
                       DirProp sor, DirProp eor) {
     const DirProp *dirProps=pBiDi->dirProps;
     UBiDiLevel *levels=pBiDi->levels;
 
-    UTextOffset i, next, neutralStart=-1;
+    int32_t i, next, neutralStart=-1;
     DirProp prevDirProp, dirProp, nextDirProp, lastStrong, beforeNeutral=L;
     UBiDiLevel numberLevel;
     uint8_t historyOfEN;
@@ -1183,7 +1183,7 @@ static void
 adjustWSLevels(UBiDi *pBiDi) {
     const DirProp *dirProps=pBiDi->dirProps;
     UBiDiLevel *levels=pBiDi->levels;
-    UTextOffset i;
+    int32_t i;
 
     if(pBiDi->flags&MASK_WS) {
         UBiDiLevel paraLevel=pBiDi->paraLevel;
@@ -1231,7 +1231,7 @@ ubidi_getText(const UBiDi *pBiDi) {
     }
 }
 
-U_CAPI UTextOffset U_EXPORT2
+U_CAPI int32_t U_EXPORT2
 ubidi_getLength(const UBiDi *pBiDi) {
     if(pBiDi!=NULL) {
         return pBiDi->length;

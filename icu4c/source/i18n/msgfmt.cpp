@@ -1332,7 +1332,7 @@ MessageFormat::copyAndFixQuotes(const UnicodeString& source,
 {
     UBool gotLB = FALSE;
     
-    for (UTextOffset i = start; i < end; ++i) {
+    for (int32_t i = start; i < end; ++i) {
         UChar ch = source[i];
         if (ch == LEFT_CURLY_BRACE) {
             target += SINGLE_QUOTE;

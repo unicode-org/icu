@@ -52,9 +52,9 @@ void ParsePositionTest::TestParsePosition()
         int to = 5;
         ParsePosition pp2( to );
         if (pp2.getIndex() == 5) {
-            logln("PP getIndex and constructor(UTextOffset) tested.");
+            logln("PP getIndex and constructor(int32_t) tested.");
         }else{
-            errln("*** PP getIndex or constructor(UTextOffset) result");
+            errln("*** PP getIndex or constructor(int32_t) result");
         }
         pp2.setIndex( 3 );
         if (pp2.getIndex() == 3) {

@@ -243,7 +243,7 @@ public:
   * @return the offset of the character.
   * @stable
   */
-  UTextOffset getOffset(void) const;
+  int32_t getOffset(void) const;
 
   /**
   * Sets the offset of the currently processed character in the source string.
@@ -252,7 +252,7 @@ public:
   * @return the offset of the character.
   * @stable
   */
-  void setOffset(UTextOffset newOffset, UErrorCode& status);
+  void setOffset(int32_t newOffset, UErrorCode& status);
 
 protected:
   

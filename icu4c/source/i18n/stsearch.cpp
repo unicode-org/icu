@@ -229,13 +229,13 @@ UBool StringSearch::operator==(const SearchIterator &that) const
 
 // public get and set methods ----------------------------------------
 
-void StringSearch::setOffset(UTextOffset position, UErrorCode &status)
+void StringSearch::setOffset(int32_t position, UErrorCode &status)
 {
     // status checked in usearch_setOffset
     usearch_setOffset(m_strsrch_, position, &status);
 }
 
-UTextOffset StringSearch::getOffset(void) const
+int32_t StringSearch::getOffset(void) const
 {
     return usearch_getOffset(m_strsrch_);
 }
@@ -311,7 +311,7 @@ SearchIterator * StringSearch::safeClone(void) const
     
 // protected method -------------------------------------------------
 
-UTextOffset StringSearch::handleNext(int32_t position, UErrorCode &status)
+int32_t StringSearch::handleNext(int32_t position, UErrorCode &status)
 {
     // values passed here are already in the pre-shift position
     if (U_SUCCESS(status)) {
@@ -360,7 +360,7 @@ UTextOffset StringSearch::handleNext(int32_t position, UErrorCode &status)
     return USEARCH_DONE;
 }
 
-UTextOffset StringSearch::handlePrev(int32_t position, UErrorCode &status)
+int32_t StringSearch::handlePrev(int32_t position, UErrorCode &status)
 {
     // values passed here are already in the pre-shift position
     if (U_SUCCESS(status)) {

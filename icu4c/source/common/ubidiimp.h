@@ -106,7 +106,7 @@ enum {
 /* Run structure for reordering --------------------------------------------- */
 
 typedef struct Run {
-    UTextOffset logicalStart,   /* first character of the run; b31 indicates even/odd level */
+    int32_t logicalStart,   /* first character of the run; b31 indicates even/odd level */
                 visualLimit;    /* last visual position of the run +1 */
 } Run;
 
@@ -132,10 +132,10 @@ struct UBiDi {
     const UChar *text;
 
     /* length of the current text */
-    UTextOffset length;
+    int32_t length;
 
     /* memory sizes in bytes */
-    UTextOffset dirPropsSize, levelsSize, runsSize;
+    int32_t dirPropsSize, levelsSize, runsSize;
 
     /* allocated memory */
     DirProp *dirPropsMemory;
@@ -163,10 +163,10 @@ struct UBiDi {
 
     /* characters after trailingWSStart are WS and are */
     /* implicitly at the paraLevel (rule (L1)) - levels may not reflect that */
-    UTextOffset trailingWSStart;
+    int32_t trailingWSStart;
 
     /* fields for line reordering */
-    UTextOffset runCount;     /* ==-1: runs not set up yet */
+    int32_t runCount;     /* ==-1: runs not set up yet */
     Run *runs;
 
     /* for non-mixed text, we only need a tiny array of runs (no malloc()) */
@@ -175,7 +175,7 @@ struct UBiDi {
 
 /* helper function to (re)allocate memory if allowed */
 U_CFUNC UBool
-ubidi_getMemory(void **pMemory, UTextOffset *pSize, UBool mayAllocate, UTextOffset sizeNeeded);
+ubidi_getMemory(void **pMemory, int32_t *pSize, UBool mayAllocate, int32_t sizeNeeded);
 
 /* helper macros for each allocated array in UBiDi */
 #define getDirPropsMemory(pBiDi, length) \

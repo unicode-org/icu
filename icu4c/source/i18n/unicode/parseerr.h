@@ -69,7 +69,7 @@ typedef struct _UParseError {
      * is -1. It will be set to appropriate value by the code that 
      * populating the struct.
      */
-    UTextOffset    offset;
+    int32_t    offset;
 
     /**
      * Textual context before the error.  Null-terminated.

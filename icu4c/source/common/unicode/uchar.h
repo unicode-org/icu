@@ -1336,9 +1336,9 @@ ublock_getCode(UChar32    ch);
  * @see u_enumCharNames
  * @stable
  */
-U_CAPI UTextOffset U_EXPORT2
+U_CAPI int32_t U_EXPORT2
 u_charName(UChar32 code, UCharNameChoice nameChoice,
-           char *buffer, UTextOffset bufferLength,
+           char *buffer, int32_t bufferLength,
            UErrorCode *pErrorCode);
 
 /**
@@ -1385,7 +1385,7 @@ typedef UBool UEnumCharNamesFn(void *context,
                                UChar32 code,
                                UCharNameChoice nameChoice,
                                const char *name,
-                               UTextOffset length);
+                               int32_t length);
 
 /**
  * Enumerate all assigned Unicode characters between the start and limit

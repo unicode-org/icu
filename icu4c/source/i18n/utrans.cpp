@@ -45,12 +45,12 @@ public:
 
     virtual ~ReplaceableGlue();
 
-    virtual void handleReplaceBetween(UTextOffset start,
-                                      UTextOffset limit,
+    virtual void handleReplaceBetween(int32_t start,
+                                      int32_t limit,
                                       const UnicodeString& text);
 
-    virtual void extractBetween(UTextOffset start,
-                                UTextOffset limit,
+    virtual void extractBetween(int32_t start,
+                                int32_t limit,
                                 UnicodeString& target) const;
 
     virtual void copy(int32_t start, int32_t limit, int32_t dest);
@@ -59,9 +59,9 @@ protected:
 
     virtual int32_t getLength() const;
 
-    virtual UChar getCharAt(UTextOffset offset) const;
+    virtual UChar getCharAt(int32_t offset) const;
 
-    virtual UChar32 getChar32At(UTextOffset offset) const;
+    virtual UChar32 getChar32At(int32_t offset) const;
 };
 
 
@@ -83,16 +83,16 @@ int32_t ReplaceableGlue::getLength() const {
     return (*func->length)(rep);
 }
 
-UChar ReplaceableGlue::getCharAt(UTextOffset offset) const {
+UChar ReplaceableGlue::getCharAt(int32_t offset) const {
     return (*func->charAt)(rep, offset);
 }
 
-UChar32 ReplaceableGlue::getChar32At(UTextOffset offset) const {
+UChar32 ReplaceableGlue::getChar32At(int32_t offset) const {
     return (*func->char32At)(rep, offset);
 }
 
-void ReplaceableGlue::handleReplaceBetween(UTextOffset start,
-                          UTextOffset limit,
+void ReplaceableGlue::handleReplaceBetween(int32_t start,
+                          int32_t limit,
                           const UnicodeString& text) {
     int32_t len = text.length();
     if (buf == 0 || bufLen < len) {
@@ -104,8 +104,8 @@ void ReplaceableGlue::handleReplaceBetween(UTextOffset start,
     (*func->replace)(rep, start, limit, buf, len);
 }
 
-void ReplaceableGlue::extractBetween(UTextOffset start,
-                                     UTextOffset limit,
+void ReplaceableGlue::extractBetween(int32_t start,
+                                     int32_t limit,
                                      UnicodeString& target) const {
     (*func->extract)(rep, start, limit, target.getBuffer(limit-start));
     target.releaseBuffer(limit-start);

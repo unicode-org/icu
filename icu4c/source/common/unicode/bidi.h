@@ -55,7 +55,7 @@ public:
     /** @memo Preallocating constructor, calls ubidi_openSized(). 
      * @deprecated
      */
-    BiDi(UTextOffset maxLength, UTextOffset maxRunCount, UErrorCode &rErrorCode);
+    BiDi(int32_t maxLength, int32_t maxRunCount, UErrorCode &rErrorCode);
 
     /** @memo Destructor, calls ubidi_close(). 
      * @deprecated
@@ -89,7 +89,7 @@ public:
      * @deprecated
      */
     BiDi &
-    setPara(const UChar *text, UTextOffset length,
+    setPara(const UChar *text, int32_t length,
             UBiDiLevel paraLevel, UBiDiLevel *embeddingLevels,
             UErrorCode &rErrorCode);
 
@@ -99,7 +99,7 @@ public:
      */
     BiDi &
     setLine(const BiDi &rParaBiDi,
-            UTextOffset start, UTextOffset limit,
+            int32_t start, int32_t limit,
             UErrorCode &rErrorCode);
 
     /** @memo Get the directionality of the text. 
@@ -117,7 +117,7 @@ public:
     /** @memo Get the length of the text. 
      * @deprecated
      */
-    UTextOffset
+    int32_t
     getLength() const;
 
     /** @memo Get the paragraph level of the text. 
@@ -130,7 +130,7 @@ public:
      * @deprecated
      */
     UBiDiLevel
-    getLevelAt(UTextOffset charIndex) const;
+    getLevelAt(int32_t charIndex) const;
 
     /** @memo Get an array of levels for each character. 
      * @deprecated
@@ -142,13 +142,13 @@ public:
      * @deprecated
      */
     void
-    getLogicalRun(UTextOffset logicalStart,
-                  UTextOffset &rLogicalLimit, UBiDiLevel &rLevel) const;
+    getLogicalRun(int32_t logicalStart,
+                  int32_t &rLogicalLimit, UBiDiLevel &rLevel) const;
 
     /** @memo Get the number of runs. 
      * @deprecated
      */
-    UTextOffset
+    int32_t
     countRuns(UErrorCode &rErrorCode);
 
     /**
@@ -157,19 +157,19 @@ public:
      * @deprecated
      */
     UBiDiDirection
-    getVisualRun(UTextOffset runIndex, UTextOffset &rLogicalStart, UTextOffset &rLength);
+    getVisualRun(int32_t runIndex, int32_t &rLogicalStart, int32_t &rLength);
 
     /** @memo Get the visual position from a logical text position. 
      * @deprecated
      */
-    UTextOffset
-    getVisualIndex(UTextOffset logicalIndex, UErrorCode &rErrorCode);
+    int32_t
+    getVisualIndex(int32_t logicalIndex, UErrorCode &rErrorCode);
 
     /** @memo Get the logical text position from a visual position. 
      * @deprecated
      */
-    UTextOffset
-    getLogicalIndex(UTextOffset visualIndex, UErrorCode &rErrorCode);
+    int32_t
+    getLogicalIndex(int32_t visualIndex, UErrorCode &rErrorCode);
 
     /**
      *  @memo Get a logical-to-visual index map (array) for the characters in the UBiDi
@@ -177,7 +177,7 @@ public:
      * @deprecated
      */
     void
-    getLogicalMap(UTextOffset *indexMap, UErrorCode &rErrorCode);
+    getLogicalMap(int32_t *indexMap, UErrorCode &rErrorCode);
 
     /**
      * @memo Get a visual-to-logical index map (array) for the characters in the UBiDi
@@ -185,25 +185,25 @@ public:
      * @deprecated
      */
     void
-    getVisualMap(UTextOffset *indexMap, UErrorCode &rErrorCode);
+    getVisualMap(int32_t *indexMap, UErrorCode &rErrorCode);
 
     /** @memo Same as ubidi_reorderLogical(). 
      * @deprecated
      */
     static void
-    reorderLogical(const UBiDiLevel *levels, UTextOffset length, UTextOffset *indexMap);
+    reorderLogical(const UBiDiLevel *levels, int32_t length, int32_t *indexMap);
 
     /** @memo Same as ubidi_reorderVisual(). 
      * @deprecated
      */
     static void
-    reorderVisual(const UBiDiLevel *levels, UTextOffset length, UTextOffset *indexMap);
+    reorderVisual(const UBiDiLevel *levels, int32_t length, int32_t *indexMap);
 
     /** @memo Same as ubidi_invertMap(). 
      * @deprecated
      */
     static void
-    invertMap(const UTextOffset *srcMap, UTextOffset *destMap, UTextOffset length);
+    invertMap(const int32_t *srcMap, int32_t *destMap, int32_t length);
 
     /**
      * Use the <code>BiDi</code> object containing the reordering
@@ -214,7 +214,7 @@ public:
      * @see ubidi_writeReordered
      * @deprecated
      */
-    UTextOffset
+    int32_t
     writeReordered(UChar *dest, int32_t destSize,
                    uint16_t options,
                    UErrorCode &rErrorCode);
@@ -225,7 +225,7 @@ public:
      * @see ubidi_writeReverse
      * @deprecated
      */
-    static UTextOffset
+    static int32_t
     writeReverse(const UChar *src, int32_t srcLength,
                  UChar *dest, int32_t destSize,
                  uint16_t options,
@@ -252,7 +252,7 @@ inline BiDi::BiDi(UErrorCode &rErrorCode) {
     }
 }
 
-inline BiDi::BiDi(UTextOffset maxLength, UTextOffset maxRunCount, UErrorCode &rErrorCode) {
+inline BiDi::BiDi(int32_t maxLength, int32_t maxRunCount, UErrorCode &rErrorCode) {
     pBiDi=ubidi_openSized(maxLength, maxRunCount, &rErrorCode);
 }
 
@@ -272,7 +272,7 @@ BiDi::isInverse() {
 }
 
 inline BiDi &
-BiDi::setPara(const UChar *text, UTextOffset length,
+BiDi::setPara(const UChar *text, int32_t length,
         UBiDiLevel paraLevel, UBiDiLevel *embeddingLevels,
         UErrorCode &rErrorCode) {
     ubidi_setPara(pBiDi, text, length, paraLevel, embeddingLevels, &rErrorCode);
@@ -282,7 +282,7 @@ BiDi::setPara(const UChar *text, UTextOffset length,
 
 inline BiDi &
 BiDi::setLine(const BiDi &rParaBiDi,
-        UTextOffset start, UTextOffset limit,
+        int32_t start, int32_t limit,
         UErrorCode &rErrorCode) {
     ubidi_setLine(rParaBiDi.pBiDi, start, limit, pBiDi, &rErrorCode);
     return *this;
@@ -298,7 +298,7 @@ BiDi::getText() const {
     return ubidi_getText(pBiDi);
 }
 
-inline UTextOffset
+inline int32_t
 BiDi::getLength() const {
     return ubidi_getLength(pBiDi);
 }
@@ -309,7 +309,7 @@ BiDi::getParaLevel() const {
 }
 
 inline UBiDiLevel
-BiDi::getLevelAt(UTextOffset charIndex) const {
+BiDi::getLevelAt(int32_t charIndex) const {
     return ubidi_getLevelAt(pBiDi, charIndex);
 }
 
@@ -319,64 +319,64 @@ BiDi::getLevels(UErrorCode &rErrorCode) {
 }
 
 inline void
-BiDi::getLogicalRun(UTextOffset logicalStart,
-              UTextOffset &rLogicalLimit, UBiDiLevel &rLevel) const {
+BiDi::getLogicalRun(int32_t logicalStart,
+              int32_t &rLogicalLimit, UBiDiLevel &rLevel) const {
     ubidi_getLogicalRun(pBiDi, logicalStart, &rLogicalLimit, &rLevel);
 }
 
-inline UTextOffset
+inline int32_t
 BiDi::countRuns(UErrorCode &rErrorCode) {
     return ubidi_countRuns(pBiDi, &rErrorCode);
 }
 
 inline UBiDiDirection
-BiDi::getVisualRun(UTextOffset runIndex, UTextOffset &rLogicalStart, UTextOffset &rLength) {
+BiDi::getVisualRun(int32_t runIndex, int32_t &rLogicalStart, int32_t &rLength) {
     return ubidi_getVisualRun(pBiDi, runIndex, &rLogicalStart, &rLength);
 }
 
-inline UTextOffset
-BiDi::getVisualIndex(UTextOffset logicalIndex, UErrorCode &rErrorCode) {
+inline int32_t
+BiDi::getVisualIndex(int32_t logicalIndex, UErrorCode &rErrorCode) {
     return ubidi_getVisualIndex(pBiDi, logicalIndex, &rErrorCode);
 }
 
-inline UTextOffset
-BiDi::getLogicalIndex(UTextOffset visualIndex, UErrorCode &rErrorCode) {
+inline int32_t
+BiDi::getLogicalIndex(int32_t visualIndex, UErrorCode &rErrorCode) {
     return ubidi_getLogicalIndex(pBiDi, visualIndex, &rErrorCode);
 }
 
 inline void
-BiDi::getLogicalMap(UTextOffset *indexMap, UErrorCode &rErrorCode) {
+BiDi::getLogicalMap(int32_t *indexMap, UErrorCode &rErrorCode) {
     ubidi_getLogicalMap(pBiDi, indexMap, &rErrorCode);
 }
 
 inline void
-BiDi::getVisualMap(UTextOffset *indexMap, UErrorCode &rErrorCode) {
+BiDi::getVisualMap(int32_t *indexMap, UErrorCode &rErrorCode) {
     ubidi_getVisualMap(pBiDi, indexMap, &rErrorCode);
 }
 
 inline void
-BiDi::reorderLogical(const UBiDiLevel *levels, UTextOffset length, UTextOffset *indexMap) {
+BiDi::reorderLogical(const UBiDiLevel *levels, int32_t length, int32_t *indexMap) {
     ubidi_reorderLogical(levels, length, indexMap);
 }
 
 inline void
-BiDi::reorderVisual(const UBiDiLevel *levels, UTextOffset length, UTextOffset *indexMap) {
+BiDi::reorderVisual(const UBiDiLevel *levels, int32_t length, int32_t *indexMap) {
     ubidi_reorderVisual(levels, length, indexMap);
 }
 
 inline void
-BiDi::invertMap(const UTextOffset *srcMap, UTextOffset *destMap, UTextOffset length) {
+BiDi::invertMap(const int32_t *srcMap, int32_t *destMap, int32_t length) {
     ubidi_invertMap(srcMap, destMap, length);
 }
 
-inline UTextOffset
+inline int32_t
 BiDi::writeReordered(UChar *dest, int32_t destSize,
                      uint16_t options,
                      UErrorCode &rErrorCode) {
     return ubidi_writeReordered(pBiDi, dest, destSize, options, &rErrorCode);
 }
 
-inline UTextOffset
+inline int32_t
 BiDi::writeReverse(const UChar *src, int32_t srcLength,
                    UChar *dest, int32_t destSize,
                    uint16_t options,

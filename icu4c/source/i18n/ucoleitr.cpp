@@ -192,7 +192,7 @@ ucol_setText(      UCollationElements *elems,
   elems->reset_   = TRUE;
 }
 
-U_CAPI UTextOffset U_EXPORT2
+U_CAPI int32_t U_EXPORT2
 ucol_getOffset(const UCollationElements *elems)
 {
   const collIterate *ci = &(elems->iteratordata_);
@@ -214,7 +214,7 @@ ucol_getOffset(const UCollationElements *elems)
 
 U_CAPI void U_EXPORT2
 ucol_setOffset(UCollationElements    *elems,
-               UTextOffset           offset,
+               int32_t           offset,
                UErrorCode            *status)
 {
   if (U_FAILURE(*status)) {

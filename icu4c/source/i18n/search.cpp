@@ -75,7 +75,7 @@ USearchAttributeValue SearchIterator::getAttribute(
     }
 }
     
-UTextOffset SearchIterator::getMatchedStart() const
+int32_t SearchIterator::getMatchedStart() const
 {
     return m_search_->matchedIndex;
 }
@@ -87,7 +87,7 @@ int32_t SearchIterator::getMatchedLength() const
     
 void SearchIterator::getMatchedText(UnicodeString &result) const
 {
-    UTextOffset matchedindex  = m_search_->matchedIndex;
+    int32_t matchedindex  = m_search_->matchedIndex;
     int32_t     matchedlength = m_search_->matchedLength;
     if (matchedindex != USEARCH_DONE && matchedlength != 0) {
         result.setTo(m_search_->text + matchedindex, matchedlength); 
@@ -159,7 +159,7 @@ UBool SearchIterator::operator==(const SearchIterator &that) const
 
 // public methods ----------------------------------------------------
 
-UTextOffset SearchIterator::first(UErrorCode &status)
+int32_t SearchIterator::first(UErrorCode &status)
 {
     if (U_FAILURE(status)) {
         return USEARCH_DONE;
@@ -168,7 +168,7 @@ UTextOffset SearchIterator::first(UErrorCode &status)
     return handleNext(0, status);
 }
 
-UTextOffset SearchIterator::following(UTextOffset position, 
+int32_t SearchIterator::following(int32_t position, 
                                       UErrorCode &status)
 {
     if (U_FAILURE(status)) {
@@ -178,7 +178,7 @@ UTextOffset SearchIterator::following(UTextOffset position,
     return handleNext(position, status);
 }
     
-UTextOffset SearchIterator::last(UErrorCode &status)
+int32_t SearchIterator::last(UErrorCode &status)
 {
     if (U_FAILURE(status)) {
         return USEARCH_DONE;
@@ -187,7 +187,7 @@ UTextOffset SearchIterator::last(UErrorCode &status)
     return handlePrev(m_search_->textLength, status);
 }
 
-UTextOffset SearchIterator::preceding(UTextOffset position, 
+int32_t SearchIterator::preceding(int32_t position, 
                                       UErrorCode &status)
 {
     if (U_FAILURE(status)) {
@@ -197,11 +197,11 @@ UTextOffset SearchIterator::preceding(UTextOffset position,
     return handlePrev(position, status);
 }
 
-UTextOffset SearchIterator::next(UErrorCode &status)
+int32_t SearchIterator::next(UErrorCode &status)
 {
     if (U_SUCCESS(status)) {
-        UTextOffset offset      = getOffset();
-        UTextOffset matchindex  = m_search_->matchedIndex;
+        int32_t offset      = getOffset();
+        int32_t matchindex  = m_search_->matchedIndex;
         int32_t     matchlength = m_search_->matchedLength;
         m_search_->reset        = FALSE;
         if (m_search_->isForwardSearching == TRUE) {
@@ -236,10 +236,10 @@ UTextOffset SearchIterator::next(UErrorCode &status)
     return USEARCH_DONE;
 }
 
-UTextOffset SearchIterator::previous(UErrorCode &status)
+int32_t SearchIterator::previous(UErrorCode &status)
 {
     if (U_SUCCESS(status)) {
-        UTextOffset offset;
+        int32_t offset;
         if (m_search_->reset) {
             offset                       = m_search_->textLength;
             m_search_->isForwardSearching = FALSE;
@@ -250,7 +250,7 @@ UTextOffset SearchIterator::previous(UErrorCode &status)
             offset = getOffset();
         }
         
-        UTextOffset matchindex = m_search_->matchedIndex;
+        int32_t matchindex = m_search_->matchedIndex;
         if (m_search_->isForwardSearching == TRUE) {
             // switching direction. 
             // if matchedIndex == USEARCH_DONE, it means that either a 
@@ -361,7 +361,7 @@ void SearchIterator::setMatchLength(int32_t length)
     m_search_->matchedLength = length;
 }
 
-void SearchIterator::setMatchStart(UTextOffset position)
+void SearchIterator::setMatchStart(int32_t position)
 {
     m_search_->matchedIndex = position;
 }

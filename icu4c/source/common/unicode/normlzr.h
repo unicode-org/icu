@@ -345,7 +345,7 @@ public:
    * @return      the normalized character from the text at index
    * @deprecated To be removed after 2002-aug-31. Use setIndexOnly().
    */
-  UChar32              setIndex(UTextOffset index);
+  UChar32              setIndex(int32_t index);
 
   /**
    * Set the iteration position in the input text that is being normalized,
@@ -356,7 +356,7 @@ public:
    * @param index the desired index in the input text.
    * @draft ICU 2.0
    */
-  void                 setIndexOnly(UTextOffset index);
+  void                 setIndexOnly(int32_t index);
 
   /**
    * Reset the index to the beginning of the text.
@@ -379,7 +379,7 @@ public:
    * @return the current index in the input text
    * @stable
    */
-  UTextOffset            getIndex(void) const;
+  int32_t            getIndex(void) const;
 
   /**
    * Retrieve the index of the start of the input text. This is the begin index
@@ -389,7 +389,7 @@ public:
    * @return the smallest index in the input text where the Normalizer operates
    * @stable
    */
-  UTextOffset            startIndex(void) const;
+  int32_t            startIndex(void) const;
 
   /**
    * Retrieve the index of the end of the input text. This is the end index
@@ -401,7 +401,7 @@ public:
    * @return the first index in the input text where the Normalizer does not operate
    * @stable
    */
-  UTextOffset            endIndex(void) const;
+  int32_t            endIndex(void) const;
 
   /**
    * Returns TRUE when both iterators refer to the same character in the same
@@ -912,11 +912,11 @@ private:
 
   // The normalization buffer is the result of normalization
   // of the source in [currentIndex..nextIndex[ .
-  UTextOffset         currentIndex, nextIndex;
+  int32_t         currentIndex, nextIndex;
 
   // A buffer for holding intermediate results
   UnicodeString       buffer;
-  UTextOffset         bufferPos;
+  int32_t         bufferPos;
 };
 
 //-------------------------------------------------------------------------

@@ -91,7 +91,7 @@ public:
      * @param status for errors if it occurs
      * @draft ICU 2.0
      */
-    virtual void setOffset(UTextOffset position, UErrorCode &status) = 0;
+    virtual void setOffset(int32_t position, UErrorCode &status) = 0;
 
     /**
      * Return the current index in the text being searched.
@@ -101,7 +101,7 @@ public:
      * @return current index in the text being searched.
      * @draft ICU 2.0
      */
-    virtual UTextOffset getOffset(void) const = 0;
+    virtual int32_t getOffset(void) const = 0;
 
     /**
     * Sets the text searching attributes located in the enum 
@@ -136,7 +136,7 @@ public:
     *         searched.
     * @draft ICU 2.0
     */
-    UTextOffset getMatchedStart(void) const;
+    int32_t getMatchedStart(void) const;
 
     /**
      * Returns the length of text in the string which matches the search 
@@ -268,7 +268,7 @@ public:
      *         <tt>USEARCH_DONE</tt> if there are no matches.
      * @draft ICU 2.0
      */
-    UTextOffset first(UErrorCode &status);
+    int32_t first(UErrorCode &status);
 
     /**
      * Returns the first index greater than <tt>position</tt> at which the 
@@ -284,7 +284,7 @@ public:
      *         matches.
      * @draft ICU 2.0
      */
-    UTextOffset following(UTextOffset position, UErrorCode &status);
+    int32_t following(int32_t position, UErrorCode &status);
     
     /**
      * Returns the last index in the target text at which it matches the 
@@ -298,7 +298,7 @@ public:
      *         there are no matches.
      * @draft ICU 2.0
      */
-    UTextOffset last(UErrorCode &status);
+    int32_t last(UErrorCode &status);
 
     /**
      * Returns the first index less than <tt>position</tt> at which the string 
@@ -314,7 +314,7 @@ public:
      *         no matches.
      * @draft ICU 2.0
      */
-    UTextOffset preceding(UTextOffset position, UErrorCode &status);
+    int32_t preceding(int32_t position, UErrorCode &status);
 
     /**
      * Returns the index of the next point at which the text matches the
@@ -329,7 +329,7 @@ public:
      *          or <tt>USEARCH_DONE</tt> if there are no more matches.
      * @draft ICU 2.0
      */
-     UTextOffset next(UErrorCode &status);
+     int32_t next(UErrorCode &status);
 
     /**
      * Returns the index of the previous point at which the string text 
@@ -343,7 +343,7 @@ public:
      *          or <tt>USEARCH_DONE</tt> if there are no more matches.
      * @draft ICU 2.0
      */
-    UTextOffset previous(UErrorCode &status);
+    int32_t previous(UErrorCode &status);
 
     /** 
     * Resets the iteration.
@@ -444,7 +444,7 @@ protected:
      * @return index at which the match starts, else if match is not found 
      *         USEARCH_DONE is returned
      */
-    virtual UTextOffset handleNext(UTextOffset position, UErrorCode &status) 
+    virtual int32_t handleNext(int32_t position, UErrorCode &status) 
                                                                          = 0;
 
     /**
@@ -464,7 +464,7 @@ protected:
      * @return index at which the match starts, else if match is not found 
      *         USEARCH_DONE is returned
      */
-     virtual UTextOffset handlePrev(UTextOffset position, UErrorCode &status) 
+     virtual int32_t handlePrev(int32_t position, UErrorCode &status) 
                                                                          = 0;
 
     /**
@@ -483,7 +483,7 @@ protected:
      * methods should call this when they find a match in the target text.
      * @param position start offset of the matched text.
      */
-    virtual void setMatchStart(UTextOffset position);
+    virtual void setMatchStart(int32_t position);
 
     /**
     * sets match not found 

@@ -394,7 +394,7 @@ RuleBasedNumberFormat::init(const UnicodeString& rules, UParseError& pErr, UErro
     // is, pull them out into our temporary holding place for them,
     // and delete them from the description before the real desciption-
     // parsing code sees them
-    UTextOffset lp = description.indexOf(gLenientParse);
+    int32_t lp = description.indexOf(gLenientParse);
     if (lp != -1) {
         // we've got to make sure we're not in the middle of a rule
         // (where "%%lenient-parse" would actually get treated as
@@ -426,7 +426,7 @@ RuleBasedNumberFormat::init(const UnicodeString& rules, UParseError& pErr, UErro
     // rule sets (";%" marks the end of one rule set and the beginning
     // of the next)
     int numRuleSets = 0;
-    for (UTextOffset p = description.indexOf(gSemiPercent); p != -1; p = description.indexOf(gSemiPercent, p)) {
+    for (int32_t p = description.indexOf(gSemiPercent); p != -1; p = description.indexOf(gSemiPercent, p)) {
         ++numRuleSets;
         ++p;
     }
@@ -449,8 +449,8 @@ RuleBasedNumberFormat::init(const UnicodeString& rules, UParseError& pErr, UErro
 
     {
         int curRuleSet = 0;
-        UTextOffset start = 0;
-        for (UTextOffset p = description.indexOf(gSemiPercent); p != -1; p = description.indexOf(gSemiPercent, start)) {
+        int32_t start = 0;
+        for (int32_t p = description.indexOf(gSemiPercent); p != -1; p = description.indexOf(gSemiPercent, start)) {
             ruleSetDescriptions[curRuleSet].setTo(description, start, p + 1 - start);
             ruleSets[curRuleSet] = new NFRuleSet(ruleSetDescriptions, curRuleSet, status);
             ++curRuleSet;
@@ -506,7 +506,7 @@ RuleBasedNumberFormat::stripWhitespace(UnicodeString& description)
 
         // locate the next semicolon in the text and copy the text from
         // our current position up to that semicolon into the result
-        UTextOffset p = description.indexOf(gSemiColon, start);
+        int32_t p = description.indexOf(gSemiColon, start);
         if (p == -1) {
             // or if we don't find a semicolon, just copy the rest of
             // the string into the result

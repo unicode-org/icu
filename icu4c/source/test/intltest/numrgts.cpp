@@ -688,9 +688,9 @@ void NumberFormatRegressionTest::Test4087244 (void) {
     FieldPosition pos;
     df->format(1.23, str, pos);
     UnicodeString monStr("1x23");
-    monStr.replace((UTextOffset)1, 1, monSep);
+    monStr.replace((int32_t)1, 1, monSep);
     UnicodeString decStr("1x23");
-    decStr.replace((UTextOffset)1, 1, decSep);
+    decStr.replace((int32_t)1, 1, decSep);
     if (str.indexOf(monStr) >= 0 && str.indexOf(decStr) < 0) {
         logln(UnicodeString("OK: 1.23 -> \"") + str + "\" contains \"" +
               monStr + "\" and not \"" + decStr + '"');
