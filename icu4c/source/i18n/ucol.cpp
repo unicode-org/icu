@@ -112,6 +112,24 @@ ucol_open(    const    char         *loc,
   return result;
 }
 
+U_CAPI UCollator * U_EXPORT2
+ucol_openVersion(const char *loc,
+                 UVersionInfo version,
+                 UErrorCode *status) {
+  UCollator *collator;
+  UVersionInfo info;
+
+  collator=ucol_open(loc, status);
+  if(U_SUCCESS(*status)) {
+    ucol_getVersion(collator, info);
+    if(0!=uprv_memcmp(version, info, sizeof(UVersionInfo))) {
+      ucol_close(collator);
+      *status=U_MISSING_RESOURCE_ERROR;
+      return NULL;
+    }
+  }
+  return collator;
+}
 
 U_CAPI void
 ucol_close(UCollator *coll)
