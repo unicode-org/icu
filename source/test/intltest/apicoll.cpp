@@ -207,7 +207,7 @@ CollationAPITest::TestProperty(/* char* par */)
     }
 
     delete col;
-    col = Collator::createInstance(Locale::ENGLISH, success);
+    col = Collator::createInstance(success);
     if (U_FAILURE(success))
     {
         errln("Creating default collator failed.");
