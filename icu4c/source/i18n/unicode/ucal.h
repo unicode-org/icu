@@ -135,6 +135,7 @@
 
 /** A calendar.
  *  For usage in C programs.
+ * @stable 
  */
 typedef void* UCalendar;
 
@@ -147,6 +148,8 @@ enum UCalendarType {
   /** The Gregorian calendar */
   UCAL_GREGORIAN
 };
+
+/** @stable */
 typedef enum UCalendarType UCalendarType;
 
 /** Possible fields in a UCalendar 
@@ -194,6 +197,8 @@ enum UCalendarDateFields {
   /** Field count */
   UCAL_FIELD_COUNT
 };
+
+/** @stable */
 typedef enum UCalendarDateFields UCalendarDateFields;
     /**
      * Useful constant for days of week. Note: Calendar day-of-week is 1-based. Clients
@@ -219,6 +224,8 @@ enum UCalendarDaysOfWeek {
   /** Saturday */
   UCAL_SATURDAY
 };
+
+/** @stable */
 typedef enum UCalendarDaysOfWeek UCalendarDaysOfWeek;
 
 /** Possible months in a UCalendar. Note: Calendar month is 0-based.
@@ -252,6 +259,8 @@ enum UCalendarMonths {
   /** Undecimber */
   UCAL_UNDECIMBER
 };
+
+/** @stable */
 typedef enum UCalendarMonths UCalendarMonths;
 
 /** Possible AM/PM values in a UCalendar 
@@ -263,6 +272,8 @@ enum UCalendarAMPMs {
   /** PM */
   UCAL_PM
 };
+
+/** @stable */
 typedef enum UCalendarAMPMs UCalendarAMPMs;
 
 /**
@@ -357,6 +368,8 @@ enum UCalendarDisplayNameType {
   /** Short daylight savings display name */
   UCAL_SHORT_DST
 };
+
+/** @stable */
 typedef enum UCalendarDisplayNameType UCalendarDisplayNameType;
 
 /**
@@ -394,7 +407,9 @@ U_CAPI UBool
 ucal_inDaylightTime(    const    UCalendar*      cal,
                 UErrorCode*     status );
 
-/** Types of UCalendar attributes */
+/** Types of UCalendar attributes 
+ * @stable 
+ */
 enum UCalendarAttribute {
     /** Lenient parsing */
   UCAL_LENIENT,
@@ -403,6 +418,8 @@ enum UCalendarAttribute {
   /** Minimum number of days in first week */
   UCAL_MINIMAL_DAYS_IN_FIRST_WEEK
 };
+
+/** @stable */
 typedef enum UCalendarAttribute UCalendarAttribute;
 
 /**
@@ -701,6 +718,8 @@ enum UCalendarLimitType {
   /** Actual maximum value */
   UCAL_ACTUAL_MAXIMUM
 };
+
+/** @stable */
 typedef enum UCalendarLimitType UCalendarLimitType;
 
 /**
