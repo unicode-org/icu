@@ -2930,7 +2930,7 @@ uint32_t ucol_prv_getSpecialPrevCE(const UCollator *coll, UChar ch, uint32_t CE,
 				//test for NULL
 				if (strbuffer == NULL) {
 					*status = U_MEMORY_ALLOCATION_ERROR;
-					return NULL;
+					return UCOL_NO_MORE_CES;
 				}
                 UCharOffset = strbuffer + newsize;
                 uprv_memcpy(UCharOffset, buffer,
