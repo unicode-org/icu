@@ -41,7 +41,7 @@
 *                           Cleaned up.
 * 06/14/99      stephen     Removed methods taking a filename suffix.
 * 06/22/99      stephen     Added missing T_FileStream_close in parse()
-* 11/09/99		weiv		Added getLocale(), rewritten constructForLocale()
+* 11/09/99              weiv            Added getLocale(), rewritten constructForLocale()
 * March 2000    weiv        complete overhaul.
 *******************************************************************************
 */
@@ -196,7 +196,7 @@ ResourceBundle::ResourceBundle( const UnicodeString&    path,
                                 UErrorCode&              error)
 {
   constructForLocale(path, 
-		     Locale::getDefault(), error);
+                     Locale::getDefault(), error);
 }
 
 /**
@@ -228,8 +228,8 @@ ResourceBundle::ResourceBundle( const UnicodeString&    path,
 }
 
 ResourceBundle::ResourceBundle(const wchar_t* path,
-			       const Locale& locale, 
-			       UErrorCode& err)
+                               const Locale& locale, 
+                               UErrorCode& err)
 {
         constructForLocale(path, locale, err);
 }
@@ -239,11 +239,11 @@ ResourceBundle::ResourceBundle(const ResourceBundle &other) {
 
         if(other.resource->fIsTopLevel == TRUE) {
         constructForLocale(ures_getPath(other.resource), Locale(ures_getName(other.resource)), status);
-	    } else {
-	      resource = 0;
-	      fItemCache = 0;
-	        resource = copyResb(0, other.resource);
-	    }
+            } else {
+              resource = 0;
+              fItemCache = 0;
+                resource = copyResb(0, other.resource);
+            }
 }
 
 ResourceBundle::ResourceBundle(UResourceBundle *res) {
@@ -299,8 +299,8 @@ void ResourceBundle::initItemCache(UErrorCode& error) {
 
 void 
 ResourceBundle::constructForLocale(const UnicodeString& path,
-				   const Locale& locale,
-				   UErrorCode& error)
+                                   const Locale& locale,
+                                   UErrorCode& error)
 {
     char name[128];
     fItemCache = 0;
@@ -321,8 +321,8 @@ ResourceBundle::constructForLocale(const UnicodeString& path,
 
 void 
 ResourceBundle::constructForLocale(const wchar_t* path,
-				   const Locale& locale,
-				   UErrorCode& error)
+                                   const Locale& locale,
+                                   UErrorCode& error)
 {
     fItemCache = 0;
 
@@ -415,7 +415,7 @@ ResourceBundle::getVersionNumber()  const
 
 const Locale &ResourceBundle::getLocale(void) const
 {
-	return fRealLocale;
+        return fRealLocale;
 }
 
 // Start deprecated API
@@ -515,9 +515,9 @@ ResourceBundle::getArrayItem(   const char             *resourceTag,
 
 const UnicodeString** 
 ResourceBundle::get2dArray(const char *resourceTag,
-			   int32_t&             rowCount,
-			   int32_t&             columnCount,
-			   UErrorCode&           err) const
+                           int32_t&             rowCount,
+                           int32_t&             columnCount,
+                           UErrorCode&           err) const
 {
     UnicodeString **result = 0;
     String2dList *sldata = 0;
@@ -574,9 +574,9 @@ ResourceBundle::get2dArray(const char *resourceTag,
 
 const UnicodeString*
 ResourceBundle::get2dArrayItem(const char *resourceTag,
-			       int32_t              rowIndex,
-			       int32_t              columnIndex,
-			       UErrorCode&           err) const
+                               int32_t              rowIndex,
+                               int32_t              columnIndex,
+                               UErrorCode&           err) const
 { 
     int32_t rows = 0;
     int32_t columns = 0;

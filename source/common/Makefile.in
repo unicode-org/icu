@@ -77,8 +77,6 @@ uresbund.o uresdata.o ustring.o rbdata.o ubidi.o ubidiln.o \
 bidi.o uvector.o udata.o unames.o utf_impl.o \
 ucnv2022.o ucnvlat1.o ucnv_utf.o ucnvsbcs.o ucnvmbcs.o ucnv_lmb.o
 
-##ures.o ustring.o rbread.o rbdata.o ubidi.o ubidiln.o \
-
 DEPS = $(OBJECTS:.o=.d)
 
 ## Header files to install

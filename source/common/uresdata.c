@@ -234,8 +234,6 @@ res_unload(ResourceData *pResData) {
 }
 
 U_CFUNC const UChar *
-/*res_getString(const ResourceData *pResData, const char *key, int32_t *pLength) {
-  Resource res=_res_findTableItem(pResData->pRoot, pResData->rootRes, key);*/
 res_getString(const ResourceData *pResData, const Resource res, int32_t *pLength) {
     if(res!=RES_BOGUS && RES_GET_TYPE(res)==RES_STRING) {
         return _res_getString(pResData->pRoot, res, pLength);
@@ -278,7 +276,6 @@ res_getStringArray(const ResourceData *pResData, const char *key, int32_t *pCoun
 
 U_CFUNC int32_t
 res_countArrayItems(const ResourceData *pResData, const Resource res) {
-  /*Resource res=_res_findTableItem(pResData->pRoot, pResData->rootRes, key);*/
     if(res!=RES_BOGUS) {
         if(RES_GET_TYPE(res)==RES_STRING) {
             return 1;
@@ -295,7 +292,6 @@ res_countArrayItems(const ResourceData *pResData, const Resource res) {
 
 U_CFUNC int32_t
 res_count2dArrayCols(const ResourceData *pResData, const Resource res) {
-  /*Resource res=_res_findTableItem(pResData->pRoot, pResData->rootRes, key);*/
     if(res!=RES_BOGUS) {
         if(RES_GET_TYPE(res)==RES_ARRAY) {
             Resource *p=RES_GET_POINTER(pResData->pRoot, res);
@@ -367,7 +363,6 @@ U_CFUNC Resource res_getTableItemByKey(const ResourceData *pResData, const Resou
 	} else {
 	  return RES_BOGUS;
 	}
-        /*return _res_findTableItem(pResData->pRoot, table, key);*/
     } else {
         return RES_BOGUS;
     }
