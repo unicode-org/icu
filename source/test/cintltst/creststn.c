@@ -23,7 +23,6 @@
 #include "unicode/ucnv.h"
 #include "string.h"
 #include "cstring.h"
-#include "cmemory.h"
 #include "unicode/uchar.h"
 
 #define RESTEST_HEAP_CHECK 0
@@ -535,7 +534,7 @@ static void TestNewTypes() {
             "]";
 
         int32_t patternLen = uprv_strlen(pattern);
-        UChar* expectedEscaped = (UChar*)uprv_malloc(U_SIZEOF_UCHAR * patternLen);
+        UChar* expectedEscaped = (UChar*)malloc(U_SIZEOF_UCHAR * patternLen);
         const UChar* got = ures_getStringByKey(theBundle,"test_unescaping",&len,&status);
         int32_t expectedLen = u_unescape(pattern,expectedEscaped,patternLen);
         if(u_strncmp(expectedEscaped,got,expectedLen)!=0 || expectedLen != len){
@@ -546,7 +545,7 @@ static void TestNewTypes() {
                 log_verbose("Expected: 0x%04X Got: 0x%04X \n",expectedEscaped[i], got[i]);
             }
         }
-        uprv_free(expectedEscaped);
+        free(expectedEscaped);
         status = U_ZERO_ERROR;
     }
     /* test for jitterbug#1435 */
@@ -576,7 +575,7 @@ static void TestNewTypes() {
     {
         const char *sourcePath = ctest_dataSrcDir();
         int32_t srcPathLen = strlen(sourcePath);
-        const char *deltaPath = U_FILE_SEP_STRING".."U_FILE_SEP_STRING"test"U_FILE_SEP_STRING"testdata"U_FILE_SEP_STRING;
+        const char *deltaPath = ".."U_FILE_SEP_STRING"test"U_FILE_SEP_STRING"testdata"U_FILE_SEP_STRING;
         int32_t deltaPathLen = strlen(deltaPath);
         char *testDataFileName = (char *) malloc( srcPathLen+ deltaPathLen + 50 );
         char *path = testDataFileName;
@@ -612,6 +611,7 @@ static void TestNewTypes() {
                         log_err("ucbuf failed to open %s. Error: %s\n", testDataFileName, u_errorName(status));
                     }
 
+                    ucbuf_close(ucbuf);
                 }else{
                     log_err("Could not get th18057.txt (path : %s). Error: %s\n",testDataFileName,u_errorName(status));
                 }
@@ -644,13 +644,13 @@ static void TestNewTypes() {
                     }else{
                         log_err("ucbuf failed to open %s. Error: %s\n", testDataFileName, u_errorName(status));
                     }
-
+                    ucbuf_close(ucbuf);
                 }else{
                     log_err("Could not get translit_rules.txt (path : %s). Error: %s\n",testDataFileName,u_errorName(status));
                 }
             }
         }
-
+        free(testDataFileName);
     }
     ures_close(res);
     ures_close(theBundle);
