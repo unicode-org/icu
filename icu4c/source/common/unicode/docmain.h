@@ -127,8 +127,8 @@
  * <tr>
  * <tr>
  * <td>Collation and Searching</td>
- * <td>ucol.h</td>
- * <td>Collator</td>
+ * <td>ucol.h,usearch.h</td>
+ * <td>Collator, StringSeach</td>
  * </tr>
  * <tr>
  * <td>Text boundary analysis (Break Iteration)</td>
