@@ -46,8 +46,10 @@ public:
      * @stable ICU 2.0
      */
     ParsePosition()
-        : UObject()
-      { this->index = 0; this->errorIndex = -1; }
+        : UObject(),
+        index(0),
+        errorIndex(-1)
+      {}
 
     /**
      * Create a new ParsePosition with the given initial index.
@@ -55,8 +57,10 @@ public:
      * @stable ICU 2.0
      */
     ParsePosition(int32_t newIndex)
-        : UObject()
-      {    this->index = newIndex; this->errorIndex = -1; }
+        : UObject(),
+        index(newIndex),
+        errorIndex(-1)
+      {}
 
     /**
      * Copy constructor
@@ -64,8 +68,10 @@ public:
      * @stable ICU 2.0
      */
     ParsePosition(const ParsePosition& copy)
-        : UObject(copy)
-      {    this->index = copy.index; this->errorIndex = copy.errorIndex; }
+        : UObject(copy),
+        index(copy.index),
+        errorIndex(copy.errorIndex)
+      {}
 
     /**
      * Destructor
