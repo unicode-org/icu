@@ -14,12 +14,12 @@
 *
 *   created on: 2000dec11
 *   created by: Vladimir Weinstein
-* 
+*
 * Modification history
 * Date        Name      Comments
 * 02/16/2001  synwee    Added UCOL_GETPREVCE for the use in ucoleitr
-* 02/27/2001  synwee    Added getMaxExpansion data structure in UCollator   
-* 03/02/2001  synwee    Added UCOL_IMPLICIT_CE                    
+* 02/27/2001  synwee    Added getMaxExpansion data structure in UCollator
+* 03/02/2001  synwee    Added UCOL_IMPLICIT_CE
 * 03/12/2001  synwee    Added pointer start to collIterate.
 */
 
@@ -46,10 +46,10 @@
 
 /* This writable buffer is used if we encounter Thai and need to reorder the string on the fly */
 /* Sometimes we already have a writable buffer (like in case of normalized strings). */
-/* 
-you can change this value to any value >= 3 if you need memory - 
+/*
+you can change this value to any value >= 3 if you need memory -
 it will affect the performance, though, since we're going to malloc.
-Note 3 is the minimum value for Thai collation to work correctly. 
+Note 3 is the minimum value for Thai collation to work correctly.
 */
 #define UCOL_WRITABLE_BUFFER_SIZE 256
 
@@ -68,7 +68,7 @@ Note 3 is the minimum value for Thai collation to work correctly.
 #define UCOL_UNSAFECP_TABLE_SIZE 1056
                                     /* mask value down to "some power of two"-1  */
                                     /*  number of bits, not num of bytes.        */
-#define UCOL_UNSAFECP_TABLE_MASK 0x1fff    
+#define UCOL_UNSAFECP_TABLE_MASK 0x1fff
 
 
 #define UCOL_RUNTIME_VERSION 1
@@ -81,10 +81,14 @@ Note 3 is the minimum value for Thai collation to work correctly.
 
 #define UCOL_ITER_HASLEN 2
 
-/* UCOL_ITER_INNORMBUF - set if the "pos" is in       */
-/*               the writable side buffer, handling   */
-/*               incrementally normalized characters. */
+                              /* UCOL_ITER_INNORMBUF - set if the "pos" is in          */
+                              /*               the writable side buffer, handling      */
+                              /*               incrementally normalized characters.    */
 #define UCOL_ITER_INNORMBUF 4
+
+                              /* UCOL_ITER_ALLOCATED - set if this iterator has        */
+                              /*    malloced storage to expand a buffer.               */
+#define UCOL_ITER_ALLOCATED 8
 
 #define NFC_ZERO_CC_BLOCK_LIMIT_  0x300
 
@@ -102,7 +106,7 @@ struct collIterate {
   UChar *fcdPosition; /* Position in the original string to continue FCD check from. */
   const UCollator *coll;
   uint8_t   flags;
-  uint8_t   origFlags; 
+  uint8_t   origFlags;
   uint32_t CEs[UCOL_EXPAND_CE_BUFFER_SIZE]; /* This is where we store CEs */
   UChar stackWritableBuffer[UCOL_WRITABLE_BUFFER_SIZE]; /* A writable buffer. */
 };
@@ -125,7 +129,7 @@ struct UCollationElements
 {
   /**
   * Normalization mode, not exactly the same as the data in collator_.
-  * If collation strength requested is UCOL_IDENTICAL, this mode will be 
+  * If collation strength requested is UCOL_IDENTICAL, this mode will be
   * UNORM_NONE otherwise it follows collator_.
   */
         UNormalizationMode normalization_;
@@ -144,7 +148,7 @@ struct UCollationElements
 };
 
 struct incrementalContext {
-    UCharForwardIterator *source; 
+    UCharForwardIterator *source;
     void *sourceContext;
     UChar currentChar;
     UChar lastChar;
@@ -163,17 +167,17 @@ struct incrementalContext {
 #define UCOL_LEVELTERMINATOR 1
 
 /* mask off anything but primary order */
-#define UCOL_PRIMARYORDERMASK 0xffff0000      
+#define UCOL_PRIMARYORDERMASK 0xffff0000
 /* mask off anything but secondary order */
-#define UCOL_SECONDARYORDERMASK 0x0000ff00    
+#define UCOL_SECONDARYORDERMASK 0x0000ff00
 /* mask off anything but tertiary order */
-#define UCOL_TERTIARYORDERMASK 0x000000ff     
+#define UCOL_TERTIARYORDERMASK 0x000000ff
 /* primary order shift */
-#define UCOL_PRIMARYORDERSHIFT 16             
+#define UCOL_PRIMARYORDERSHIFT 16
 /* secondary order shift */
-#define UCOL_SECONDARYORDERSHIFT 8    
+#define UCOL_SECONDARYORDERSHIFT 8
 
-#define UCOL_BYTE_SIZE_MASK 0xFF        
+#define UCOL_BYTE_SIZE_MASK 0xFF
 
 #define UCOL_CASE_BYTE_START 0x80
 #define UCOL_CASE_SHIFT_START 7
@@ -223,27 +227,6 @@ struct incrementalContext {
 #endif
 
 
-/* CEBuf - a growable buffer for holding CEs during strcoll            */
-#define UCOL_CEBUF_SIZE 512
-typedef struct ucol_CEBuf {
-    uint32_t    *buf;
-    uint32_t    *endp;
-    uint32_t    *pos;
-    uint32_t     localArray[UCOL_CEBUF_SIZE];
-} ucol_CEBuf;
-
-
-#define UCOL_INIT_CEBUF(b) {                 \
-    (b)->buf = (b)->pos = (b)->localArray;   \
-    (b)->endp = (b)->buf + UCOL_CEBUF_SIZE;  \
-}
-    
-void ucol_CEBuf_Expand(ucol_CEBuf *b);
-
-#define UCOL_CEBUF_PUT(b, ce) {                       \
-    if ((b)->pos == (b)->endp) ucol_CEBuf_Expand(b);  \
-    *(b)->pos++ = ce;                                 \
-}
 
 /* a macro that gets a simple CE */
 /* for more complicated CEs it resorts to getComplicatedCE (what else) */
@@ -271,7 +254,7 @@ void ucol_CEBuf_Expand(ucol_CEBuf *b);
     }                                                                                 \
 }
 
-/* 
+/*
 * Macro to get the maximum size of an expansion ending with the argument ce.
 * Used in the Boyer Moore algorithm.
 * Note for tailoring, the UCA maxexpansion table has been merged.
@@ -312,11 +295,11 @@ void ucol_CEBuf_Expand(ucol_CEBuf *b);
 }
 
 uint32_t getSpecialCE(const UCollator *coll, uint32_t CE, collIterate *source, UErrorCode *status);
-uint32_t getSpecialPrevCE(const UCollator *coll, uint32_t CE, 
+uint32_t getSpecialPrevCE(const UCollator *coll, uint32_t CE,
                           collIterate *source, UErrorCode *status);
 U_CAPI uint32_t U_EXPORT2 ucol_getNextCE(const UCollator *coll, collIterate *collationSource, UErrorCode *status);
-U_CAPI uint32_t U_EXPORT2 ucol_getPrevCE(const UCollator *coll, 
-                                         collIterate *collationSource, 
+U_CAPI uint32_t U_EXPORT2 ucol_getPrevCE(const UCollator *coll,
+                                         collIterate *collationSource,
                                          UErrorCode *status);
 uint32_t ucol_getNextUCA(UChar ch, collIterate *collationSource, UErrorCode *status);
 uint32_t ucol_getPrevUCA(UChar ch, collIterate *collationSource, UErrorCode *status);
@@ -325,7 +308,7 @@ void incctx_cleanUpContext(incrementalContext *ctx);
 UChar incctx_appendChar(incrementalContext *ctx, UChar c);
 
 /* function used by C++ getCollationKey to prevent restarting the calculation */
-U_CFUNC uint8_t *ucol_getSortKeyWithAllocation(const UCollator *coll, 
+U_CFUNC uint8_t *ucol_getSortKeyWithAllocation(const UCollator *coll,
         const    UChar        *source,
         int32_t            sourceLength, int32_t *resultLen);
 
@@ -354,7 +337,7 @@ ucol_calcSortKeySimpleTertiary(const    UCollator    *coll,
 /**
  * Makes a copy of the Collator's rule data. The format is
  * that of .col files.
- * 
+ *
  * @param length returns the length of the data, in bytes.
  * @param status the error status
  * @return memory, owned by the caller, of size 'length' bytes.
@@ -372,7 +355,7 @@ ucol_cloneRuleData(UCollator *coll, int32_t *length, UErrorCode *status);
 #define UCOL_CONTRACTION 0xF2000000
 #define UCOL_THAI 0xF3000000
 #define UCOL_UNMARKED 0x03
-#define UCOL_NEW_TERTIARYORDERMASK 0x0000003f     
+#define UCOL_NEW_TERTIARYORDERMASK 0x0000003f
 
 /* Bit mask for primary collation strength. */
 #define UCOL_PRIMARYMASK    0xFFFF0000
@@ -383,9 +366,9 @@ ucol_cloneRuleData(UCollator *coll, int32_t *length, UErrorCode *status);
 /* Bit mask for tertiary collation strength. */
 #define UCOL_TERTIARYMASK   0x000000FF
 
-/** 
+/**
  * Internal.
- * This indicates the last element in a UCollationElements has been consumed. 
+ * This indicates the last element in a UCollationElements has been consumed.
  * Compare with the UCOL_NULLORDER, UCOL_NULLORDER is returned if error occurs.
  */
 #define UCOL_NO_MORE_CES        0x00010101
@@ -411,14 +394,14 @@ ucol_cloneRuleData(UCollator *coll, int32_t *length, UErrorCode *status);
 #define UCOL_FLAG_BIT_MASK 0x80
 #define INVC_DATA_TYPE "dat"
 #define INVC_DATA_NAME "invuca"
-#define UCOL_COMMON_TOP2 0x79  
-#define UCOL_COMMON_BOT2 0x03  
-#define UCOL_TOP_COUNT2  0x40 
+#define UCOL_COMMON_TOP2 0x79
+#define UCOL_COMMON_BOT2 0x03
+#define UCOL_TOP_COUNT2  0x40
 #define UCOL_BOT_COUNT2  0x3D
 
-#define UCOL_COMMON_TOP3 0x84 
-#define UCOL_COMMON_BOT3 0x03 
-#define UCOL_TOP_COUNT3  0x40 
+#define UCOL_COMMON_TOP3 0x84
+#define UCOL_COMMON_BOT3 0x03
+#define UCOL_TOP_COUNT3  0x40
 #define UCOL_BOT_COUNT3  0x40
 
 #define UCOL_COMMON2 0x03
@@ -470,11 +453,11 @@ typedef struct {
       uint32_t contractionCEs;   /* uint32_t *contractionCEs;       */
       uint32_t contractionSize;  /* needed for various closures */
       uint32_t latinOneMapping;  /* fast track to latin1 chars      */
-      
-      uint32_t endExpansionCE;      /* array of last collation element in 
+
+      uint32_t endExpansionCE;      /* array of last collation element in
                                        expansion */
-      uint32_t expansionCESize;     /* array of maximum expansion size 
-                                       corresponding to the expansion 
+      uint32_t expansionCESize;     /* array of maximum expansion size
+                                       corresponding to the expansion
                                        collation elements with last element
                                        in endExpansionCE*/
       int32_t  endExpansionCECount; /* size of endExpansionCE */
@@ -512,11 +495,11 @@ struct UCollator {
     UBool freeOnClose;
     UResourceBundle *rb;
     const UCATableHeader *image;
-    CompactIntArray *mapping; 
+    CompactIntArray *mapping;
     const uint32_t *latinOneMapping;
-    const uint32_t *expansion;            
-    const UChar *contractionIndex;        
-    const uint32_t *contractionCEs;       
+    const uint32_t *expansion;
+    const UChar *contractionIndex;
+    const uint32_t *contractionCEs;
     const uint8_t *scriptOrder;
     uint8_t variableMax1;
     uint8_t variableMax2;
@@ -548,11 +531,12 @@ struct UCollator {
     const uint32_t *endExpansionCE;    /* array of last ces in an expansion ce.
                                           corresponds to expansionCESize */
     const uint32_t *lastEndExpansionCE;/* pointer to the last element in endExpansionCE */
-    const uint8_t  *expansionCESize;   /* array of the maximum size of a 
-                                         expansion ce with the last ce 
-                                         corresponding to endExpansionCE, 
+    const uint8_t  *expansionCESize;   /* array of the maximum size of a
+                                         expansion ce with the last ce
+                                         corresponding to endExpansionCE,
                                          terminated with a null */
-    const uint8_t *unsafeCP;          /* unsafe code points hashtable */
+    const uint8_t *unsafeCP;           /* unsafe code points hashtable */
+    UChar          minUnsafeCP;        /* Smallest unsafe Code Point. */
 };
 
 /* various internal functions */
@@ -576,11 +560,11 @@ U_CAPI char U_EXPORT2 *ucol_sortKeyToString(const UCollator *coll, const uint8_t
 U_CAPI UBool U_EXPORT2 isTailored(const UCollator *coll, const UChar u, UErrorCode *status);
 
 U_CAPI const U_EXPORT2 InverseTableHeader *ucol_initInverseUCA(UErrorCode *status);
-U_CAPI int32_t U_EXPORT2 ucol_inv_getNextCE(uint32_t CE, uint32_t contCE, 
-                                            uint32_t *nextCE, uint32_t *nextContCE, 
+U_CAPI int32_t U_EXPORT2 ucol_inv_getNextCE(uint32_t CE, uint32_t contCE,
+                                            uint32_t *nextCE, uint32_t *nextContCE,
                                             uint32_t strength);
-U_CAPI int32_t U_EXPORT2 ucol_inv_getPrevCE(uint32_t CE, uint32_t contCE, 
-                                            uint32_t *prevCE, uint32_t *prevContCE, 
+U_CAPI int32_t U_EXPORT2 ucol_inv_getPrevCE(uint32_t CE, uint32_t contCE,
+                                            uint32_t *prevCE, uint32_t *prevContCE,
                                             uint32_t strength);
 
 void collIterFCD(collIterate *ci);
