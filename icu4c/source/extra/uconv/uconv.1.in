@@ -281,6 +281,12 @@ where
 .I hhhh
 is the hexadecimal value of the character. This is the format
 universally used to denote a Unicode codepoint in the litterature.
+.SH FILES
+.TP 15
+.B uconvmsg.dat
+Compiled resource bundle containing localized messages printed
+by
+.BR uconv .
 .SH VERSION
 @VERSION@
 .SH COPYRIGHT
