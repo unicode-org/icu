@@ -18,25 +18,25 @@
 #include "symtable.h"
 
 // Operators
-const UChar TransliterationRuleParser::VARIABLE_DEF_OP = '=';
-const UChar TransliterationRuleParser::FORWARD_RULE_OP = '>';
-const UChar TransliterationRuleParser::REVERSE_RULE_OP = '<';
-const UChar TransliterationRuleParser::FWDREV_RULE_OP  = '~'; // internal rep of <> op
+const UChar TransliterationRuleParser::VARIABLE_DEF_OP = 0x003D/*=*/;
+const UChar TransliterationRuleParser::FORWARD_RULE_OP = 0x003E/*>*/;
+const UChar TransliterationRuleParser::REVERSE_RULE_OP = 0x003C/*<*/;
+const UChar TransliterationRuleParser::FWDREV_RULE_OP  = 0x007E/*~*/; // internal rep of <> op
 const UnicodeString TransliterationRuleParser::OPERATORS = UNICODE_STRING("=><", 3);
 
 // Other special characters
-const UChar TransliterationRuleParser::QUOTE = '\'';
-const UChar TransliterationRuleParser::ESCAPE = '\\';
-const UChar TransliterationRuleParser::END_OF_RULE = ';';
-const UChar TransliterationRuleParser::RULE_COMMENT_CHAR = '#';
+const UChar TransliterationRuleParser::QUOTE = 0x0027/*'*/;
+const UChar TransliterationRuleParser::ESCAPE = 0x005C/*\*/;
+const UChar TransliterationRuleParser::END_OF_RULE = 0x003B/*;*/;
+const UChar TransliterationRuleParser::RULE_COMMENT_CHAR = 0x0023/*#*/;
 
-const UChar TransliterationRuleParser::VARIABLE_REF_OPEN = '{';
-const UChar TransliterationRuleParser::VARIABLE_REF_CLOSE = '}';
-const UChar TransliterationRuleParser::CONTEXT_OPEN = '(';
-const UChar TransliterationRuleParser::CONTEXT_CLOSE = ')';
-const UChar TransliterationRuleParser::SET_OPEN = '[';
-const UChar TransliterationRuleParser::SET_CLOSE = ']';
-const UChar TransliterationRuleParser::CURSOR_POS = '|';
+const UChar TransliterationRuleParser::VARIABLE_REF_OPEN = 0x007B/*{*/;
+const UChar TransliterationRuleParser::VARIABLE_REF_CLOSE = 0x007D/*}*/;
+const UChar TransliterationRuleParser::CONTEXT_OPEN = 0x0028/*(*/;
+const UChar TransliterationRuleParser::CONTEXT_CLOSE = 0x0029/*)*/;
+const UChar TransliterationRuleParser::SET_OPEN = 0x005B/*[*/;
+const UChar TransliterationRuleParser::SET_CLOSE = 0x005D/*]*/;
+const UChar TransliterationRuleParser::CURSOR_POS = 0x007C/*|*/;
 
 //----------------------------------------------------------------------
 // BEGIN ParseData
@@ -229,7 +229,7 @@ int32_t TransliterationRuleParser::parseRule(int32_t pos, int32_t limit) {
             }
             // Parse \uXXXX escapes
             c = rules.charAt(pos++);
-            if (c == 'u') {
+            if (c == 0x0075/*u*/) {
                 if ((pos+4) > limit) {
                     return syntaxError("Malformed Unicode escape", rules, start);
                 }
