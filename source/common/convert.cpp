@@ -61,8 +61,12 @@ UnicodeConverterCPP&   UnicodeConverterCPP::operator=(const UnicodeConverterCPP&
          *Increments the assigner converter's ref count
          */
       Mutex updateReferenceCounters;
-      myUnicodeConverter->sharedData->referenceCounter--;
-      that.myUnicodeConverter->sharedData->referenceCounter++;
+      if (myUnicodeConverter->sharedData->referenceCounter != 0 && myUnicodeConverter->sharedData->referenceCounter != ~0) {
+        myUnicodeConverter->sharedData->referenceCounter--;
+      }
+      if (that.myUnicodeConverter->sharedData->referenceCounter != ~0) {
+        that.myUnicodeConverter->sharedData->referenceCounter++;
+      }
     }
 
     *myUnicodeConverter = *(that.myUnicodeConverter);
@@ -98,7 +102,9 @@ UnicodeConverterCPP::UnicodeConverterCPP(const UnicodeConverterCPP&  that)
     myUnicodeConverter = new UConverter;
     {
       Mutex updateReferenceCounter;
-      that.myUnicodeConverter->sharedData->referenceCounter++;
+      if (that.myUnicodeConverter->sharedData->referenceCounter != ~0) {
+        that.myUnicodeConverter->sharedData->referenceCounter++;
+      }
     }
     *myUnicodeConverter = *(that.myUnicodeConverter);
 }
