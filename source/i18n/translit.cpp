@@ -30,6 +30,7 @@
 #include "unicode/toupptrn.h"
 #include "unicode/translit.h"
 #include "unicode/uni2name.h"
+#include "unicode/unicode.h"
 #include "unicode/unifilt.h"
 #include "unicode/uniset.h"
 #include "unicode/unitohex.h"
@@ -37,8 +38,8 @@
 const UChar Transliterator::ID_SEP   = 0x002D; /*-*/
 const UChar Transliterator::ID_DELIM = 0x003B; /*;*/
 
-static Hashtable _cache;
-static Hashtable _internalCache;
+static Hashtable _cache(TRUE); // TRUE = keys are case insensitive
+static Hashtable _internalCache(TRUE); // TRUE = keys are case insensitive
 
 /**
  * Cache of public system transliterators.  Keys are UnicodeString
@@ -567,27 +568,33 @@ Transliterator* Transliterator::createInstance(const UnicodeString& ID,
             t = 0;
         }
     } else {
-        // ID and id are identical, unless there is a filter pattern,
-        // in which case id is the substring of ID preceding the
-        // filter pattern.
+        // 'id' is the ID with the filter pattern removed and with
+        // whitespace deleted.
         UnicodeString id(ID);
 
         // Look for embedded filter pattern
         UnicodeSet *filter = 0;
-        int32_t bracket = ID.indexOf((UChar)0x005B /*[*/);
+        int32_t bracket = id.indexOf((UChar)0x005B /*[*/);
         if (bracket >= 0) {
             UErrorCode status = U_ZERO_ERROR;
             ParsePosition pos(bracket);
             filter = new UnicodeSet();
-            filter->applyPattern(ID, pos, 0, status);
-            if (U_FAILURE(status) || pos.getIndex() != ID.length()) {
-                // There was a parse failure in the filter pattern, or
-                // there was trailing junk after the closing ']'.  We
-                // fail.
+            filter->applyPattern(id, pos, 0, status);
+            if (U_FAILURE(status)) {
+                // There was a parse failure in the filter pattern
                 delete filter;
                 return 0;
             }
-            id.remove(bracket);
+            id.removeBetween(bracket, pos.getIndex());
+        }
+
+        // Delete whitespace
+        int32_t i;
+        for (i=0; i<id.length(); ++i) {
+            if (Unicode::isWhitespace(id.charAt(i))) {
+                id.remove(i, 1);
+                --i;
+            }
         }
 
         // The 'facadeID' is the ID to be applied to an alias
@@ -602,7 +609,7 @@ Transliterator* Transliterator::createInstance(const UnicodeString& ID,
         // of the more efficient ways.
         UnicodeString alias, facadeID;
         if (dir == UTRANS_REVERSE) {
-            int32_t i = id.indexOf(ID_SEP);
+            i = id.indexOf(ID_SEP);
             if (i >= 0) {
                 UnicodeString right;
                 id.extractBetween(i+1, id.length(), facadeID);
