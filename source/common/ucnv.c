@@ -34,11 +34,6 @@
 #include "ucnv_cnv.h"
 #include "ucnv_bld.h"
 
-extern UHashtable *SHARED_DATA_HASHTABLE;
-extern UConverter *createConverter (const char *converterName, UErrorCode * err);
-extern void copyPlatformString(char *platformString, UConverterPlatform pltfrm);
-extern UBool deleteSharedConverterData(UConverterSharedData * deadSharedData);
-
 #if 0
 /* debugging for converters */
 # include <stdio.h>
