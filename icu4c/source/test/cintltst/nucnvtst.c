@@ -20,10 +20,11 @@
 #include "cintltst.h"
 #include "unicode/utypes.h"
 #include "unicode/ustring.h"
+#include "unicode/ucol.h"
 
 static void TestNextUChar(UConverter* cnv, const char* source, const char* limit, const uint32_t results[], const char* message);
 static void TestNextUCharError(UConverter* cnv, const char* source, const char* limit, UErrorCode expected, const char* message);
-
+static void TestJitterbug981();
 static void TestNewConvertWithBufferSizes(int32_t osize, int32_t isize) ;
 static void TestConverterTypesAndStarters(void);
 static void TestAmbiguous(void);
@@ -213,6 +214,7 @@ void addTestNewConvert(TestNode** root)
    addTest(root, &TestJitterbug792, "tsconv/nucnvtst/TestJitterbug792");
    addTest(root, &TestEBCDICUS4XML, "tsconv/nucnvtst/TestEBCDICUS4XML");
    addTest(root, &TestISCII, "tsconv/nucnvtst/TestISCII");
+   addTest(root, &TestJitterbug981, "tsconv/nucnvtst/TestJitterbug981");
 
 }
 
@@ -4255,5 +4257,38 @@ static void TestEBCDICUS4XML()
     ucnv_close(cnv);
 }
 
+static void TestJitterbug981(){
+  const UChar* rules;
+  int32_t rules_length, target_cap, bytes_needed;
+  UErrorCode status = U_ZERO_ERROR;
+  UConverter *utf8cnv;
+  UCollator* myCollator;
+  char buff[50000];
+  int numNeeded=0;
+  utf8cnv = ucnv_open ("utf8", &status); 
+  if(U_FAILURE(status)){
+      log_err("Could not open UTF-8 converter. Error: %s", u_errorName(status));
+  }
+  myCollator = ucol_open("zh", &status);
+  if(U_FAILURE(status)){
+      log_err("Could not open collator for zh locale. Error: %s", u_errorName(status));
+  }
+
+  rules = ucol_getRules(myCollator, &rules_length);
+
+  target_cap = 0;
+  do {
+      ucnv_reset(utf8cnv);
+      status = U_ZERO_ERROR;
+      bytes_needed = ucnv_fromUChars(utf8cnv, buff, target_cap,
+				     rules, rules_length, &status);
+      target_cap = (bytes_needed > target_cap) ? bytes_needed : target_cap +1;
+      if(numNeeded!=0 && numNeeded!= bytes_needed){
+          log_err("ucnv_fromUChars returns different values for required capacity in pre-flight and conversion modes");
+      }
+      numNeeded = bytes_needed;
+  } while (status == U_BUFFER_OVERFLOW_ERROR);
+  ucol_close(myCollator);
+}
 
 #endif
