@@ -131,34 +131,27 @@ class TransliteratorIDParser {
     }
 
     /**
-     * Parse a basic ID from the given string.  A basic ID contains
-     * only a single source, target, and variant.  It does not contain
-     * a filter or an explicit inverse.
+     * Parse a filter ID, that is, an ID of the general form
+     * "[f1] s1-t1/v1", with the filters optional, and the variants optional.
      * @param id the id to be parsed
      * @param pos INPUT-OUTPUT parameter.  On input, the position of
      * the first character to parse.  On output, the position after
-     * the last character parsed.  If the parse fails pos[0] will be
-     * unchanged.
-     * @return the parsed ID in canonical format, or null on parse
-     * failure.  If the parsed ID did not contain a source, the return
-     * ID will not.
+     * the last character parsed.
+     * @return a SingleID object or null if the parse fails
      */
-    public static String parseBasicID(String id, int[] pos) {
-        Specs specs = parseFilterID(id, pos, false);
-        if (specs != null) {
-            StringBuffer buf = new StringBuffer();
-            if (specs.sawSource) {
-                buf.append(specs.source);
-                buf.append(TARGET_SEP);
-            }
-            buf.append(specs.target);
-            if (specs.variant != null) {
-                buf.append(VARIANT_SEP);
-                buf.append(specs.variant);
-            }
-            return buf.toString();
+    public static SingleID parseFilterID(String id, int[] pos) {
+
+        int start = pos[0];
+        Specs specs = parseFilterID(id, pos, true);
+        if (specs == null) {
+            pos[0] = start;
+            return null;
         }
-        return null;
+
+        // Assemble return results
+        SingleID single = specsToID(specs, FORWARD);
+        single.filter = specs.filter;
+        return single;
     }
 
     /**

@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/translit/TransliteratorTest.java,v $
- * $Date: 2002/04/01 22:15:23 $
- * $Revision: 1.103 $
+ * $Date: 2002/04/17 16:48:28 $
+ * $Revision: 1.104 $
  *
  *****************************************************************************************
  */
@@ -15,6 +15,7 @@ import com.ibm.icu.lang.*;
 import com.ibm.icu.text.*;
 import com.ibm.icu.dev.test.*;
 import com.ibm.icu.impl.Utility;
+import com.ibm.icu.util.CaseInsensitiveString;
 import java.text.*;
 import java.util.*;
 
@@ -2529,6 +2530,71 @@ public class TransliteratorTest extends TestFmwk {
         
         expect(t, "a ab abc qte qste qrste",
                   "x x x qtp qstp qrstp");
+    }
+
+    /**
+     * Test that user-registered transliterators can be used under function
+     * syntax.
+     */
+    public void TestUserFunction() {
+        Transliterator t;
+
+        // There's no need to register inverses if we don't use them
+        TestUserFunctionFactory.add("Any-gif",
+            Transliterator.createFromRules("gif",
+                "'\\'u(..)(..) > '<img src=\"http://www.unicode.org/gifs/24/' $1 '/U' $1$2 '.gif\">';",
+                Transliterator.FORWARD));
+        //TestUserFunctionFactory.add("gif-Any", Transliterator.getInstance("Any-Null"));
+
+        TestUserFunctionFactory.add("Any-RemoveCurly",
+            Transliterator.createFromRules("RemoveCurly", "[\\{\\}] > ;", Transliterator.FORWARD));
+        //TestUserFunctionFactory.add("RemoveCurly-Any", Transliterator.getInstance("Any-Null"));
+
+        logln("Trying &hex");
+        t = Transliterator.createFromRules("hex2", "(.) > &hex($1);", Transliterator.FORWARD);
+        logln("Registering");
+        TestUserFunctionFactory.add("Any-hex2", t);
+        t = Transliterator.getInstance("Any-hex2");
+        expect(t, "abc", "\\u0061\\u0062\\u0063");
+
+        logln("Trying &gif");
+        t = Transliterator.createFromRules("gif2", "(.) > &Gif(&Hex2($1));", Transliterator.FORWARD);
+        logln("Registering");
+        TestUserFunctionFactory.add("Any-gif2", t);
+        t = Transliterator.getInstance("Any-gif2");
+        expect(t, "ab", "<img src=\"http://www.unicode.org/gifs/24/00/U0061.gif\">" +
+               "<img src=\"http://www.unicode.org/gifs/24/00/U0062.gif\">");
+
+        // Test that filters are allowed after &
+        t = Transliterator.createFromRules("test",
+                "(.) > &Hex($1) ' ' &[\\{\\}]Remove(&Name($1)) ' ';", Transliterator.FORWARD);
+        expect(t, "abc", "\\u0061 LATIN SMALL LETTER A \\u0062 LATIN SMALL LETTER B \\u0063 LATIN SMALL LETTER C ");
+
+        // Unregister our test stuff
+        TestUserFunctionFactory.unregister();
+    }
+
+    static class TestUserFunctionFactory implements Transliterator.Factory {
+        static TestUserFunctionFactory singleton = new TestUserFunctionFactory();
+        static HashMap m = new HashMap();
+
+        static void add(String ID, Transliterator t) {
+            m.put(new CaseInsensitiveString(ID), t);
+            Transliterator.registerFactory(ID, singleton);
+        }
+
+        public Transliterator getInstance(String ID) {
+            return (Transliterator) m.get(new CaseInsensitiveString(ID));
+        }
+        
+        static void unregister() {
+            Iterator ids = m.keySet().iterator();
+            while (ids.hasNext()) {
+                CaseInsensitiveString id = (CaseInsensitiveString) ids.next();
+                Transliterator.unregister(id.getString());
+                ids.remove(); // removes pair from m
+            }
+        }
     }
 
     //======================================================================

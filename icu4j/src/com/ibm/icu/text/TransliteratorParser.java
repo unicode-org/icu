@@ -4,8 +4,8 @@
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/TransliteratorParser.java,v $
-* $Date: 2002/03/06 00:37:52 $
-* $Revision: 1.20 $
+* $Date: 2002/04/17 16:46:11 $
+* $Revision: 1.21 $
 **********************************************************************
 */
 package com.ibm.icu.text;
@@ -573,14 +573,17 @@ class TransliteratorParser {
                 case FUNCTION:
                     {
                         iref[0] = pos;
-                        String id = TransliteratorIDParser.parseBasicID(rule, iref);
+                        TransliteratorIDParser.SingleID single = TransliteratorIDParser.parseFilterID(rule, iref);
                         // The next character MUST be a segment open
-                        if (id == null ||
+                        if (single == null ||
                             !Utility.parseChar(rule, iref, SEGMENT_OPEN)) {
                             syntaxError("Invalid function", rule, start);
                         }
 
-                        Transliterator t = Transliterator.getBasicInstance(id, id);
+                        Transliterator t = single.getInstance();
+                        if (t == null) {
+                            syntaxError("Invalid function ID", rule, start);
+                        }
 
                         // bufSegStart is the offset in buf to the first
                         // character of the segment we are parsing.
