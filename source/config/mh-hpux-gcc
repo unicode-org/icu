@@ -1,7 +1,9 @@
 ## -*-makefile-*-
 ## HPUX/gcc specific setup
+## Copyright (c) 1999-2001, International Business Machines Corporation and
+## others. All Rights Reserved.
 ##
-## $Id: mh-hpux-gcc,v 1.1 2002/11/01 19:12:24 grhoten-oss Exp $
+## $Id: mh-hpux-gcc,v 1.2 2002/12/06 01:40:39 weiv-oss Exp $
 
 ## Commands to generate dependency files
 GEN_DEPS.c=	$(CC) -E -MM $(DEFS) $(CPPFLAGS)

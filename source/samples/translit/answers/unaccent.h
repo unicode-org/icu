@@ -1,3 +1,8 @@
+/********************************************************************
+ * COPYRIGHT:
+ * Copyright (c) 1999-2002, International Business Machines Corporation and
+ * others. All Rights Reserved.
+ ********************************************************************/
 
 #include "unicode/translit.h"
 #include "unicode/normlzr.h"
