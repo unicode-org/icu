@@ -1,5 +1,5 @@
 *.d
-libustdio.*
+libicuio.*
 Debug
 Release
 Makefile
