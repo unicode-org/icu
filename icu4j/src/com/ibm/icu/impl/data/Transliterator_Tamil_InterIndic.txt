@@ -77,8 +77,10 @@
 \u0BED>\uE06D;      # DIGIT SEVEN
 \u0BEE>\uE06E;      # DIGIT EIGHT
 \u0BEF>\uE06F;      # DIGIT NINE
-\u0BF0>10;          # UNMAPPED Tamil-InterIndic: NUMBER TEN
-\u0BF1>100;         # UNMAPPED Tamil-InterIndic: NUMBER ONE HUNDRED
-\u0BF2>1000;        # UNMAPPED Tamil-InterIndic: NUMBER ONE THOUSAND
+\u0BF0>\uE067\uE066;          	# UNMAPPED Tamil-InterIndic: NUMBER TEN
+\u0BF1>\uE067\uE066\uE066;     	# UNMAPPED Tamil-InterIndic: NUMBER ONE HUNDRED
+\u0BF2>\uE067\uE066\uE066\uE066;# UNMAPPED Tamil-InterIndic: NUMBER ONE THOUSAND
+0>\ue066;
+
 #    :: NFC (NFD) ;
 # eof
