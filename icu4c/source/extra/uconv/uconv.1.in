@@ -328,15 +328,78 @@ That hexadecimal string is of variable length and can use from 4 to
 This is the format universally used to denote a Unicode codepoint in
 the litterature, delimited by curly braces for easy recognition of those
 substitutions in the output.
+.SH EXAMPLES
+Convert data from a given
+.I encoding
+to the platform encoding:
+
+.RS 4
+.B \fR$ \fPuconv \-f \fIencoding\fP
+.RE
+.PP
+Check if a
+.I file
+contains valid data for a given
+.IR encoding :
+
+.RS 4
+.B \fR$ \fPuconv \-f \fIencoding\fP \-c \fIfile\fP >/dev/null
+.RE
+.PP
+Convert a UTF-8
+.I file
+to a given
+.I encoding
+and ensure that the resulting text is good for any version of HTML:
+
+.RS 4
+.B \fR$ \fPuconv \-f utf-8 \-t \fIencoding\fP \e
+.br
+.B "    \-\-callback escape-xml-dec \fIfile\fP"
+.RE
+.PP
+Display the names of the Unicode code points in a UTF-file:
+
+.RS 4
+.B \fR$ \fPuconv \-f utf-8 \-x any-name \fIfile\fP
+.RE
+.PP
+Print the name of a Unicode code point whose value is known (\fBU+30AB\fP
+in this example):
+
+.RS 4
+.B \fR$ \fPecho '\u30ab' | uconv \-x 'hex-any; any-name'; echo
+.br
+{KATAKANA LETTER KA}{<control-000A>}
+.br
+$ 
+.RE
+.br
+(The names are delimited by curly braces.
+Also, the name of the line terminator is also displayed.)
+.PP
+Normalize data using Unicode NFKC, remove all control characters,
+and map Katakana to Hiragana, in an UTF-8 file:
+
+.RS 4
+.B \fR$ \fPuconv \-f utf-8 \-t utf-8 \e
+.br
+.B "      \-x '::nfkc; [:Cc:] >; ::katakana-hiragana;'"
+
 .SH FILES
 .TP 15
 .B @thepkgicudatadir@/@PACKAGE@/@VERSION@/uconvmsg.dat
 Compiled resource bundle containing localized messages printed
 by
 .BR uconv .
+.SH AUTHORS
+Jonas Utterstroem <jonas.utterstrom@vittran.norrnod.se>
+.br
+Yves Arrouye <yves@realnames.com>
 .SH VERSION
 @VERSION@
 .SH COPYRIGHT
 Copyright (C) 2001 IBM, Inc. and others.
 .SH SEE ALSO
 .BR convrtrs.txt (5)
+
