@@ -220,6 +220,12 @@ class TransliteratorTest : public IntlTest {
      */
     void TestNewEngine(void);
 
+    /**
+     * Test quantified segment behavior.  We want:
+     * ([abc])+ > x $1 x; applied to "cba" produces "xax"
+     */
+    void TestQuantifiedSegment(void);
+        
     /* Devanagari-Latin rules Test */
     void TestDevanagariLatinRT(void);
 
