@@ -101,6 +101,7 @@ clean-local: resclean
 	$(RMV) $(OBJECTS) $(TARGET)
 
 resclean:
+	-$(INVOKE) $(top_builddir)/tools/pkgdata/pkgdata --clean -p $(RESDIR) -O pkgdata.inc -m $(PKGMODE) -d $(RESDIR) -T $(RESDIR) $(RESDIR)/$(RESDIR).lst
 	$(RMV) $(RESDIR)
 
 distclean-local: clean-local

@@ -6,3 +6,4 @@ Makefile
 uconvmsg
 uconv.1
 pkgdata.inc
+pkgdatain.txt

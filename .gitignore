@@ -98,7 +98,9 @@ icu4c/source/extra/uconv/*.d
 icu4c/source/extra/uconv/Debug
 icu4c/source/extra/uconv/Makefile
 icu4c/source/extra/uconv/Release
+icu4c/source/extra/uconv/bundles/*.res
 icu4c/source/extra/uconv/pkgdata.inc
+icu4c/source/extra/uconv/pkgdatain.txt
 icu4c/source/extra/uconv/uconv
 icu4c/source/extra/uconv/uconv.1
 icu4c/source/extra/uconv/uconvmsg
