@@ -17,13 +17,15 @@
 *******************************************************************************
 */
 
-#include "unistr.h"
 
+#include "utypes.h"
+#include "putil.h"
 #include "locid.h"
 #include "cstring.h"
 #include "cmemory.h"
 #include "ustring.h"
 #include "mutex.h"
+#include "unistr.h"
 
 #if 0
 //DEBUGGING
@@ -150,6 +152,21 @@ UnicodeString::UnicodeString( const UChar *text,
     fBogus(FALSE)
 {
   doReplace(0, 0, text, 0, textLength);
+}
+
+UnicodeString::UnicodeString(bool_t isTerminated,
+                             UChar *text,
+                             int32_t textLength)
+  : fArray(text),
+    fLength(textLength != -1 || !isTerminated ? textLength : u_strlen(text)),
+    fCapacity(isTerminated ? fLength + 1 : fLength),
+    fRefCounted(FALSE),
+    fHashCode(kInvalidHashCode),
+    fBogus(FALSE)
+{
+  if(fLength < 0) {
+    setToBogus();
+  }
 }
 
 UnicodeString::UnicodeString(const char *codepageData,
@@ -621,10 +638,10 @@ UnicodeString::doReplace(UTextOffset start,
       // don't delete it until the end of the method.  this can happen
       // in code like UnicodeString s = "foo"; s += s;
       if(srcChars != getArrayStart())
-    delete [] fArray;
+        delete [] fArray;
       else {
-    deleteWhenDone = TRUE;
-    bufferToDelete = fArray;
+        deleteWhenDone = TRUE;
+        bufferToDelete = fArray;
       }
     }
 
@@ -771,15 +788,19 @@ UnicodeString::extract(UTextOffset start,
   int32_t arraySize        = 0x0FFFFFFF;
 
   // create the converter
-  UConverter *converter = 0;
+  UConverter *converter;
 
   // if the codepage is the default, use our cache
-  if(codepage == 0)
+  if(codepage == 0) {
     converter = getDefaultConverter(status);
-  else
+  } else if(*codepage == 0) {
+    converter = 0;
+  } else {
     converter = ucnv_open(codepage, &status);
+  }
 
   // if we failed, set the appropriate flags and return
+  // if it is an empty string, then use the "invariant character" conversion
   if(U_FAILURE(status)) {
     // close the converter
     if(codepage == 0)
@@ -789,13 +810,21 @@ UnicodeString::extract(UTextOffset start,
     return 0;
   }
 
+  // perform the conversion
+  if(converter == 0) {
+    // use the "invariant characters" conversion
+    if(length > fLength - start) {
+      length = fLength - start;
+    }
+    u_UCharsToChars(mySource, myTarget, length);
+    return length;
+  }
+
+  // there is no loop here since we assume the buffer is large enough
   myTargetLimit = myTarget + arraySize;
 
   if(myTargetLimit < myTarget)  /* ptr wrapped around: pin to U_MAX_PTR */
     myTargetLimit = (char*)U_MAX_PTR; 
-
-  // perform the conversion
-  // there is no loop here since we assume the buffer is large enough
 
   ucnv_fromUnicode(converter, &myTarget,  myTargetLimit,
            &mySource, mySourceEnd, NULL, TRUE, &status);
@@ -822,7 +851,7 @@ UnicodeString::doCodepageCreate(const char *codepageData,
   int32_t sourceLen        = dataLength;
   const char *mySource     = codepageData;
   const char *mySourceEnd  = mySource + sourceLen;
-  UChar *myTarget          = getArrayStart();
+  UChar *myTarget;
   UErrorCode status        = U_ZERO_ERROR;
   int32_t arraySize        = getCapacity();
 
@@ -830,9 +859,12 @@ UnicodeString::doCodepageCreate(const char *codepageData,
   UConverter *converter = 0;
 
   // if the codepage is the default, use our cache
-  converter = (codepage == 0
-           ? getDefaultConverter(status)
-           : ucnv_open(codepage, &status));
+  // if it is an empty string, then use the "invariant character" conversion
+  converter = (codepage == 0 ?
+                 getDefaultConverter(status) :
+                 *codepage == 0 ?
+                   0 :
+                   ucnv_open(codepage, &status));
 
   // if we failed, set the appropriate flags and return
   if(U_FAILURE(status)) {
@@ -845,8 +877,37 @@ UnicodeString::doCodepageCreate(const char *codepageData,
     return;
   }
 
+  fHashCode = kInvalidHashCode;
+
   // perform the conversion
-  do {
+  if(converter == 0) {
+    // use the "invariant characters" conversion
+    if(arraySize < dataLength) {
+      int32_t tempCapacity;
+      // allocate enough space for the dataLength, the refCount, and a NUL
+      UChar *temp = allocate(dataLength + 2, tempCapacity);
+
+      if(temp == 0) {
+        // set flags and return
+        setToBogus();
+        return;
+      }
+
+      fArray      = temp;
+      fCapacity   = tempCapacity;
+
+      setRefCount(1);
+
+      u_charsToUChars(codepageData, fArray + 1, dataLength);
+      fArray[dataLength + 1] = 0;
+    } else {
+      u_charsToUChars(codepageData, getArrayStart(), dataLength);
+    }
+    return;
+  }
+
+  myTarget = getArrayStart();
+  for(;;) {
     // reset the error code
     status = U_ZERO_ERROR;
 
@@ -859,30 +920,24 @@ UnicodeString::doCodepageCreate(const char *codepageData,
     arraySize    = getCapacity() - fLength;
 
     // allocate more space and copy data, if needed
-    if(fLength < dataLength) {
+    if(status == U_INDEX_OUTOFBOUNDS_ERROR) {
       int32_t tempCapacity;
       UChar *temp = allocate(fCapacity, tempCapacity);
 
       if(! temp) {
-    // close the converter
-    if(codepage == 0)
-      releaseDefaultConverter(converter);
-    else
-      ucnv_close(converter);
-    // set flags and return
-    setToBogus();
-    return;
+        // set flags and return
+        setToBogus();
+        break;
       }
 
-      // if we're not currently ref counted, shift the array right by one
-      if(fRefCounted == FALSE)
-    us_arrayCopy(fArray, 0, temp, 1, fLength);
-      // otherwise, copy the old array into temp, including the ref count
-      else
-          us_arrayCopy(fArray, 0, temp, 0, fLength + 1);
-
-      if(fRefCounted && removeRef() == 0)
-    delete [] fArray;
+      if(fRefCounted) {
+        // copy the old array into temp, including the ref count
+        us_arrayCopy(fArray, 0, temp, 0, fLength + 1);
+        delete [] fArray;
+      } else {
+        // if we're not currently ref counted, shift the array right by one
+        us_arrayCopy(fArray, 0, temp, 1, fLength);
+      }
 
       fArray      = temp;
       fCapacity   = tempCapacity;
@@ -891,11 +946,10 @@ UnicodeString::doCodepageCreate(const char *codepageData,
 
       myTarget    = getArrayStart() + fLength;
       arraySize   = getCapacity() - fLength;
+    } else {
+      break;
     }
   }
-  while(status == U_INDEX_OUTOFBOUNDS_ERROR);
-
-  fHashCode = kInvalidHashCode;
 
   // close the converter
   if(codepage == 0)
@@ -925,9 +979,6 @@ UnicodeString::getUChars() const
   if(fBogus)
     return 0;
 
-  // clone our array, if necessary
-  ((UnicodeString*)this)->cloneArrayIfNeeded();
-
   // no room for null, resize
   if(getCapacity() <= fLength) {
     // allocate at minimum the current capacity + needed space
@@ -955,8 +1006,10 @@ UnicodeString::getUChars() const
     ((UnicodeString*)this)->setRefCount(1);
   }
 
-  // tack on a trailing null
-  fArray[(fRefCounted ? 1 : 0) + fLength] = 0;
+  if(getArrayStart()[fLength] != 0) {
+    // tack on a trailing null
+    ((UChar *)getArrayStart())[fLength] = 0;
+  }
 
   return getArrayStart();
 }

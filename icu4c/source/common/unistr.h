@@ -41,6 +41,30 @@ class Locale;
 class UCharReference;
 
 /**
+ * Unicode String literals in C++.
+ * Dependent on the platform properties, different UnicodeString
+ * constructors should be used to create a UnicodeString object from
+ * a string literal.
+ * The macros are defined for maximum performance.
+ * They work only for strings that contain "invariant characters", i.e.,
+ * only latin letters, digits, and some punctuation.
+ * See utypes.h for details.
+ *
+ * The string parameter must be a C string literal.
+ * The length of the string, not including the terminating
+ * <code>NUL</code>, must be specified as a constant.
+ * The U_STRING_DECL macro should be invoked exactly once for one
+ * such string variable before it is used.
+ */
+#if U_SIZEOF_WCHAR_T==U_SIZEOF_UCHAR && U_CHARSET_FAMILY==U_ASCII_FAMILY
+#   define UNICODE_STRING(cs, length) UnicodeString(TRUE, (UChar *)L ## cs, length)
+#elif U_SIZEOF_UCHAR==1 && U_CHARSET_FAMILY==U_ASCII_FAMILY
+#   define UNICODE_STRING(cs, length) UnicodeString(TRUE, (UChar *)cs, length)
+#else
+#   define UNICODE_STRING(cs, length) UnicodeString(cs, length, "")
+#endif
+
+/**
  * UnicodeString is a concrete implementation of the abstract class 
  * UnicodeText.  UnicodeString performs codeset conversion from char*
  * data based on the type of data specified.
@@ -678,6 +702,9 @@ public:
    * @param target the target buffer for extraction
    * @param codepage the desired codepage for the characters.  0 has 
    * the special meaning of the default codepage
+   * If <code>codepage</code> is an empty string (<code>""</code>),
+   * then a simple conversion is performed on the codepage-invariant
+   * subset ("invariant characters") of the platform encoding. See utypes.h.
    * @return the number of characters written to <TT>dst</TT>
    */
   int32_t extract(UTextOffset start,
@@ -1303,11 +1330,33 @@ public:
         int32_t textLength);
 
   /**
+   * Aliasing UChar* constructor.
+   * The text will be used for the new UnicodeString object, but
+   * it will not be released when the UnicodeString is destroyed.
+   * Be careful not to attempt to modify the contents of the UnicodeString
+   * if the text is read-only. Operations that allocate an entirely
+   * new buffer are harmless.
+   *
+   * @param isTerminated specifies if <code>text</code> is <code>NUL</code>-terminated.
+   *                     This must be true if <code>textLength==-1</code>.
+   * @param text The characters to alias for the UnicodeString.
+   * @param textLength The number of Unicode characters in <code>text</code> to alias.
+   *                   If -1, then this constructor will determine the length
+   *                   by calling <code>u_strlen()</code>.
+   */
+  UnicodeString(bool_t isTerminated,
+                UChar *text,
+                int32_t textLength);
+
+  /**
    * char* constructor.
    * @param codepageData an array of bytes, null-terminated
    * @param codepage the encoding of <TT>codepageData</TT>.  The special
    * value 0 for <TT>codepage</TT> indicates that the text is in the 
    * platform's default codepage.
+   * If <code>codepage</code> is an empty string (<code>""</code>),
+   * then a simple conversion is performed on the codepage-invariant
+   * subset ("invariant characters") of the platform encoding. See utypes.h.
    */
   UnicodeString(const char *codepageData,
         const char *codepage = 0);
@@ -1319,6 +1368,9 @@ public:
    * @param codepage the encoding of <TT>codepageData</TT>.  The special
    * value 0 for <TT>codepage</TT> indicates that the text is in the 
    * platform's default codepage.
+   * If <code>codepage</code> is an empty string (<code>""</code>),
+   * then a simple conversion is performed on the codepage-invariant
+   * subset ("invariant characters") of the platform encoding. See utypes.h.
    */
   UnicodeString(const char *codepageData,
         int32_t dataLength,
@@ -1454,7 +1506,16 @@ private:
   void pinIndices(UTextOffset& start,
           int32_t& length) const;
 
-  // Real ctor for converting from codepage data
+  /*
+   * Real constructor for converting from codepage data.
+   * It assumes that it is called with !fRefCounted.
+   *
+   * If <code>codepage==0</code>, then the default converter
+   * is used for the platform encoding.
+   * If <code>codepage</code> is an empty string (<code>""</code>),
+   * then a simple conversion is performed on the codepage-invariant
+   * subset ("invariant characters") of the platform encoding. See utypes.h.
+   */
   void doCodepageCreate(const char *codepageData,
             int32_t dataLength,
             const char *codepage);
@@ -1472,8 +1533,8 @@ private:
   UChar     *fArray;        // the Unicode data
   int32_t   fLength;        // number characters in fArray
   int32_t   fCapacity;      // sizeof fArray
-  bool_t    fRefCounted;    // indicates if we own storage
   int32_t   fHashCode;      // the hash code
+  bool_t    fRefCounted;    // indicates if we own storage
   bool_t    fBogus;         // indicates if an operation failed
 
   // constants
