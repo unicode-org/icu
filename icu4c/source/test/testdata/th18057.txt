@@ -1,12 +1,12 @@
-#*******************************************************************************
+﻿#*******************************************************************************
 #*
-#*   Copyright (C) 1998-2000, International Business Machines
+#*   Copyright (C) 1998-2001, International Business Machines
 #*   Corporation and others.  All Rights Reserved.
 #*
 #*******************************************************************************
 
 #
-# @(#)$RCSfile: th18057.txt,v $ $Revision: 1.2 $ $Date: 2000/01/15 01:58:58 $
+# @(#)$RCSfile: th18057.txt,v $ $Revision: 1.3 $ $Date: 2001/07/30 22:45:46 $
 # 
 # Sorted Thai word list used for testing the ThaiCollator class.
 # This list was taken from the Web: <http://seasrc.th.net/dict/dict.htm>
