@@ -99,7 +99,7 @@ LINK32=link.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MT /W3 /GX /O2 /D "WIN64" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "COMMON_EXPORTS" /FD /c
-# ADD CPP /nologo /MD /Za /W3 /GX /Zi /O2 /D "NDEBUG" /D "WIN64" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "COMMON_EXPORTS" /D "U_COMMON_IMPLEMENTATION" /D "UDATA_STATIC_LIB" /D "_IA64_" /D "WIN32" /D "_AFX_NO_DAO_SUPPORT" /FD /GF /QIA64_fmaopt /Zm600 /c
+# ADD CPP /nologo /MD /Za /W3 /GX /Zi /O2 /Ob2 /D "NDEBUG" /D "WIN64" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "COMMON_EXPORTS" /D "U_COMMON_IMPLEMENTATION" /D "UDATA_STATIC_LIB" /D "_IA64_" /D "WIN32" /D "_AFX_NO_DAO_SUPPORT" /FD /GF /QIA64_fmaopt /Zm600 /c
 # ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /win64
 # ADD MTL /nologo /D "NDEBUG" /mktyplib203 /win64
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
@@ -1711,12 +1711,12 @@ SOURCE=.\udataswp.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\umapfile.c
-# ADD CPP /Ze
+SOURCE=.\uinit.c
 # End Source File
 # Begin Source File
 
-SOURCE=.\uinit.c
+SOURCE=.\umapfile.c
+# ADD CPP /Ze
 # End Source File
 # Begin Source File
 
