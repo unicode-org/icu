@@ -65,69 +65,69 @@
  */
 enum UCharCategory
 {
-	/** */
+	/** Non-category for unassigned and non-character code points. */
 	U_UNASSIGNED              = 0,
-	/** */
+	/** Lu */
     U_UPPERCASE_LETTER        = 1,
-	/** */
+	/** Ll */
     U_LOWERCASE_LETTER        = 2,
-	/** */
+	/** Lt */
     U_TITLECASE_LETTER        = 3,
-	/** */
+	/** Lm */
     U_MODIFIER_LETTER         = 4,
-	/** */
+	/** Lo */
     U_OTHER_LETTER            = 5,
-	/** */
+	/** Mn */
     U_NON_SPACING_MARK        = 6,
-	/** */
+	/** Me */
     U_ENCLOSING_MARK          = 7,
-	/** */
+	/** Mc */
     U_COMBINING_SPACING_MARK  = 8,
-	/** */
+	/** Nd */
     U_DECIMAL_DIGIT_NUMBER    = 9,
-	/** */
+	/** Nl */
     U_LETTER_NUMBER           = 10,
-	/** */
+	/** No */
     U_OTHER_NUMBER            = 11,
-	/** */
+	/** Zs */
     U_SPACE_SEPARATOR         = 12,
-	/** */
+	/** Zl */
     U_LINE_SEPARATOR          = 13,
-	/** */
+	/** Zp */
     U_PARAGRAPH_SEPARATOR     = 14,
-	/** */
+	/** Cc */
     U_CONTROL_CHAR            = 15,
-	/** */
+	/** Cf */
     U_FORMAT_CHAR             = 16,
-	/** */
+	/** Co */
     U_PRIVATE_USE_CHAR        = 17,
-	/** */
+	/** Cs */
     U_SURROGATE               = 18,
-	/** */
+	/** Pd */
     U_DASH_PUNCTUATION        = 19,
-	/** */
+	/** Ps */
     U_START_PUNCTUATION       = 20,
-	/** */
+	/** Pe */
     U_END_PUNCTUATION         = 21,
-	/** */
+	/** Pc */
     U_CONNECTOR_PUNCTUATION   = 22,
-	/** */
+	/** Po */
     U_OTHER_PUNCTUATION       = 23,
-	/** */
+	/** Sm */
     U_MATH_SYMBOL             = 24,
-	/** */
+	/** Sc */
     U_CURRENCY_SYMBOL         = 25,
-	/** */
+	/** Sk */
     U_MODIFIER_SYMBOL         = 26,
-	/** */
+	/** So */
     U_OTHER_SYMBOL            = 27,
-	/** */
+	/** Pi */
     U_INITIAL_PUNCTUATION     = 28,
-	/** */
+	/** Pf */
     U_FINAL_PUNCTUATION       = 29,
-	/** */
+	/** Cn */
     U_GENERAL_OTHER_TYPES     = 30,
-	/** */
+	/** One higher than the last enum UCharCategory constant. */
     U_CHAR_CATEGORY_COUNT
 };
 
@@ -553,6 +553,12 @@ u_isWhitespace(UChar32 c);
 
 /**
  * Determines whether the specified character is a control character or not.
+ * A control character is one of the following:
+ * - ISO 8-bit control character (U+0000..U+001f and U+007f..U+009f)
+ * - U_CONTROL_CHAR (Cc)
+ * - U_FORMAT_CHAR (Cf)
+ * - U_LINE_SEPARATOR (Zl)
+ * - U_PARAGRAPH_SEPARATOR (Zp)
  *
  * @param ch    the character to be tested
  * @return  true if the Unicode character is a control character; false otherwise.
