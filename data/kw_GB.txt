@@ -16,13 +16,13 @@ kw_GB {
             ".",
     }
     DateTimePatterns { 
-            "HH:mm:ss",
-            "HH:mm:ss",
-            "HH:mm:ss",
-            "HH:mm:ss ",
-            "EEE dd MMM yyyy z",
-            "EEE dd MMM yyyy z",
-            "dd/MM/yy",
+            "h:mm:ss a",
+            "h:mm:ss a",
+            "h:mm:ss a",
+            "h:mm a",
+            "EEEE dd MMMM yyyy",
+            "dd MMMM yyyy",
+            "MMM dd,yy",
             "dd/MM/yy",
             "{1} {0}",
     }

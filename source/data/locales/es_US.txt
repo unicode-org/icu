@@ -13,17 +13,6 @@ es_US {
             "USD ",
             ".",
     }
-    DateTimePatterns { 
-            "HH:mm:ss",
-            "HH:mm:ss",
-            "HH:mm:ss",
-            "HH:mm:ss ",
-            "EEE dd MMM yyyy z",
-            "EEE dd MMM yyyy z",
-            "dd/MM/yy",
-            "dd/MM/yy",
-            "{1} {0}",
-    }
     NumberElements { 
             ".",
             ",",

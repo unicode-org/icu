@@ -16,8 +16,8 @@ ru_UA {
             ".",
     }
     DateTimePatterns { 
-            "H:mm:ss z",
-            "H:mm:ss z",
+            "H:mm:ss a z",
+            "H:mm:ss a z",
             "H:mm:ss",
             "H:mm",
             "d MMMM yyyy '\u0433.'",
