@@ -17,6 +17,13 @@
 #ifndef __UITER_H__
 #define __UITER_H__
 
+/**
+ * \file
+ * \brief C API: Unicode Character Iteration
+ *
+ * @see UCharIterator
+ */
+
 #include "unicode/utypes.h"
 #ifdef XP_CPLUSPLUS
 #   include "unicode/chariter.h"
@@ -29,27 +36,44 @@ struct UCharIterator;
 typedef struct UCharIterator UCharIterator;
 
 /**
- * Origin constants for UCharIterator.move().
+ * Origin constants for UCharIterator.getIndex() and UCharIterator.move().
  * @see UCharIteratorMove
  * @see UCharIterator
  * @draft ICU 2.1
  */
 enum UCharIteratorOrigin {
-    UITERATOR_START, UITERATOR_CURRENT, UITERATOR_END
+    UITERATOR_START, UITERATOR_CURRENT, UITERATOR_LIMIT
 };
 typedef enum UCharIteratorOrigin UCharIteratorOrigin;
 
 /**
+ * Function type declaration for UCharIterator.getIndex().
+ *
+ * Gets the current position, or the start or limit of the
+ * iteration range.
+ *
+ * @param iter the UCharIterator structure ("this pointer")
+ * @param origin move relative to the start, limit, or current index
+ * @return the requested index
+ *
+ * @see UCharIteratorOrigin
+ * @see UCharIterator
+ * @draft ICU 2.1
+ */
+typedef int32_t U_CALLCONV
+UCharIteratorGetIndex(UCharIterator *iter, UCharIteratorOrigin origin);
+
+/**
  * Function type declaration for UCharIterator.move().
  *
- * Moves the current position relative to the start or end of the
+ * Moves the current position relative to the start or limit of the
  * iteration range, or relative to the current position itself.
  * The movement is expressed in numbers of code units forward
  * or backward by specifying a positive or negative delta.
  *
- * @param the UCharIterator structure ("this pointer")
+ * @param iter the UCharIterator structure ("this pointer")
  * @param delta can be positive, zero, or negative
- * @param origin move relative to the start, end, or current index
+ * @param origin move relative to the start, limit, or current index
  * @return the new index
  *
  * @see UCharIteratorOrigin
@@ -65,7 +89,7 @@ UCharIteratorMove(UCharIterator *iter, int32_t delta, UCharIteratorOrigin origin
  * Check if current() and next() can still
  * return another code unit.
  *
- * @param the UCharIterator structure ("this pointer")
+ * @param iter the UCharIterator structure ("this pointer")
  * @return boolean value for whether current() and next() can still return another code unit
  *
  * @see UCharIterator
@@ -79,7 +103,7 @@ UCharIteratorHasNext(UCharIterator *iter);
  *
  * Check if previous() can still return another code unit.
  *
- * @param the UCharIterator structure ("this pointer")
+ * @param iter the UCharIterator structure ("this pointer")
  * @return boolean value for whether previous() can still return another code unit
  *
  * @see UCharIterator
@@ -92,15 +116,15 @@ UCharIteratorHasPrevious(UCharIterator *iter);
  * Function type declaration for UCharIterator.current().
  *
  * Return the code unit at the current position,
- * or 0xffff if there is none (index is at the end).
+ * or -1 if there is none (index is at the limit).
  *
- * @param the UCharIterator structure ("this pointer")
+ * @param iter the UCharIterator structure ("this pointer")
  * @return the current code unit
  *
  * @see UCharIterator
  * @draft ICU 2.1
  */
-typedef UChar U_CALLCONV
+typedef int32_t U_CALLCONV
 UCharIteratorCurrent(UCharIterator *iter);
 
 /**
@@ -108,15 +132,15 @@ UCharIteratorCurrent(UCharIterator *iter);
  *
  * Return the code unit at the current index and increment
  * the index (post-increment, like s[i++]),
- * or return 0xffff if there is none (index is at the end).
+ * or return -1 if there is none (index is at the limit).
  *
- * @param the UCharIterator structure ("this pointer")
+ * @param iter the UCharIterator structure ("this pointer")
  * @return the current code unit (and post-increment the current index)
  *
  * @see UCharIterator
  * @draft ICU 2.1
  */
-typedef UChar U_CALLCONV
+typedef int32_t U_CALLCONV
 UCharIteratorNext(UCharIterator *iter);
 
 /**
@@ -124,16 +148,30 @@ UCharIteratorNext(UCharIterator *iter);
  *
  * Decrement the index and return the code unit from there
  * (pre-decrement, like s[--i]),
- * or return 0xffff if there is none (index is at the start).
+ * or return -1 if there is none (index is at the start).
  *
- * @param the UCharIterator structure ("this pointer")
+ * @param iter the UCharIterator structure ("this pointer")
  * @return the previous code unit (after pre-decrementing the current index)
  *
  * @see UCharIterator
  * @draft ICU 2.1
  */
-typedef UChar U_CALLCONV
+typedef int32_t U_CALLCONV
 UCharIteratorPrevious(UCharIterator *iter);
+
+/**
+ * Function type declaration for UCharIterator.reservedFn().
+ * Reserved for future use.
+ *
+ * @param iter the UCharIterator structure ("this pointer")
+ * @param something some integer argument
+ * @return some integer
+ *
+ * @see UCharIterator
+ * @draft ICU 2.1
+ */
+typedef int32_t U_CALLCONV
+UCharIteratorReserved(UCharIterator *iter, int32_t something);
 
 
 /**
@@ -150,6 +188,10 @@ UCharIteratorPrevious(UCharIterator *iter);
  * Implementations of such C APIs are "callers" of UCharIterator functions;
  * they only use the "public" function pointers and never access the "protected"
  * fields directly.
+ *
+ * UCharIterator functions return code unit values 0..0xffff,
+ * or -1 if the iteration bounds are reached.
+ * Therefore, the return type is int32_t.
  *
  * @draft ICU 2.1
  */
@@ -185,7 +227,20 @@ struct UCharIterator {
     int32_t limit;
 
     /**
-     * (public) Moves the current position relative to the start or end of the
+     * (protected) Not currently used by any instance.
+     */
+    int32_t reservedField;
+
+    /**
+     * (public) Returns the current position or the
+     * start or limit index of the iteration range.
+     *
+     * @see UCharIteratorGetIndex
+     */
+    UCharIteratorGetIndex *getIndex;
+
+    /**
+     * (public) Moves the current position relative to the start or limit of the
      * iteration range, or relative to the current position itself.
      * The movement is expressed in numbers of code units forward
      * or backward by specifying a positive or negative delta.
@@ -211,7 +266,7 @@ struct UCharIterator {
 
     /**
      * (public) Return the code unit at the current position,
-     * or 0xffff if there is none (index is at the end).
+     * or -1 if there is none (index is at the limit).
      *
      * @see UCharIteratorCurrent
      */
@@ -220,7 +275,7 @@ struct UCharIterator {
     /**
      * (public) Return the code unit at the current index and increment
      * the index (post-increment, like s[i++]),
-     * or return 0xffff if there is none (index is at the end).
+     * or return -1 if there is none (index is at the limit).
      *
      * @see UCharIteratorNext
      */
@@ -229,11 +284,18 @@ struct UCharIterator {
     /**
      * (public) Decrement the index and return the code unit from there
      * (pre-decrement, like s[--i]),
-     * or return 0xffff if there is none (index is at the start).
+     * or return -1 if there is none (index is at the start).
      *
      * @see UCharIteratorPrevious
      */
     UCharIteratorPrevious *previous;
+
+    /**
+     * (public) Reserved for future use. Currently NULL.
+     *
+     * @see UCharIteratorReserved
+     */
+    UCharIteratorReserved *reservedFn;
 };
 
 /**
