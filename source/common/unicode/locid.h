@@ -621,8 +621,11 @@ public:
 #endif /* ICU_LOCID_NO_DEPRECATES */
     
 protected: /* only protected for testing purposes. DO NOT USE. */
-    void setFromPOSIXID(const char *posixID); /* set it from a single string. */
+    /** set it from a single string. */
+    void setFromPOSIXID(const char *posixID);
 
+#ifdef ICU_LOCID_USE_DEPRECATES
+    /* This never worked, and it's leaky */
     /**
      * Given an ISO country code, returns an array of Strings containing the ISO
      * codes of the languages spoken in that country.  Official languages are listed
@@ -640,7 +643,7 @@ protected: /* only protected for testing purposes. DO NOT USE. */
      */
     static const UnicodeString* getLanguagesForCountry(const UnicodeString& country, 
                                                        int32_t& count);
-
+#endif
 
 private:
     /**
@@ -667,11 +670,11 @@ private:
     static int32_t isoLanguagesCount;
     static UnicodeString *isoCountries;
     static int32_t isoCountriesCount;
-/* End deprecated fields */
-#endif
 
     static UHashtable *ctry2LangMapping;
     static const UnicodeString compressedCtry2LangMapping;
+/* End deprecated fields */
+#endif
 
     static Locale fgDefaultLocale;
 
