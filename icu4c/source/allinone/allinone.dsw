@@ -3,6 +3,57 @@ Microsoft Developer Studio Workspace File, Format Version 6.00
 
 ###############################################################################
 
+Project: "all"=.\all\all.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name cintltst
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name common
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name ctestfw
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name genccode
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name gencmn
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name gencnval
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name gencol
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name gennames
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name genrb
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name i18n
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name intltest
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name makeconv
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name toolutil
+    End Project Dependency
+}}}
+
+###############################################################################
+
 Project: "cintltst"=..\test\cintltst\cintltst.dsp - Package Owner=<4>
 
 Package=<5>
