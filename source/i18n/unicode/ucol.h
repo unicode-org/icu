@@ -577,7 +577,7 @@ U_CAPI UCollator * ucol_safeClone(
           int32_t        *pBufferSize,
           UErrorCode          *status);
 
-#define U_COL_SAFECLONE_BUFFERSIZE 256
+#define U_COL_SAFECLONE_BUFFERSIZE 384
 
 /* declaration for forward iterating function */
 U_CDECL_BEGIN
