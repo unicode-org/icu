@@ -812,7 +812,7 @@ ures_swap(const UDataSwapper *ds,
     const UDataInfo *pInfo;
     const Resource *inBundle;
     Resource rootRes;
-    int32_t headerSize, maxTableLength, stringsLength;
+    int32_t headerSize, maxTableLength;
 
     Row rows[STACK_ROW_CAPACITY];
     int32_t resort[STACK_ROW_CAPACITY];
@@ -873,7 +873,6 @@ ures_swap(const UDataSwapper *ds,
 
     if(length>=0) {
         Resource *outBundle=(Resource *)((char *)outData+headerSize);
-        const uint8_t *inChars;
 
         /* copy the bundle for binary and inaccessible data */
         if(inData!=outData) {
@@ -881,15 +880,9 @@ ures_swap(const UDataSwapper *ds,
         }
 
         /* swap the key strings, but not the padding bytes (0xaa) after the last string and its NUL */
-        inChars=(const uint8_t *)(inBundle+1);
-        stringsLength=4*(bottom-1);
-        while(stringsLength>0 && inChars[stringsLength-1]!=0) {
-            --stringsLength;
-        }
-
-        ds->swapInvChars(ds, inChars, stringsLength, outBundle+1, pErrorCode);
+        udata_swapInvStringBlock(ds, inBundle+1, 4*(bottom-1), outBundle+1, pErrorCode);
         if(U_FAILURE(*pErrorCode)) {
-            udata_printError(ds, "ures_swap().swapInvChars(keys[%d]) failed - %s\n",  stringsLength,
+            udata_printError(ds, "ures_swap().udata_swapInvStringBlock(keys[%d]) failed - %s\n", 4*(bottom-1),
                              u_errorName(*pErrorCode));
             return 0;
         }
