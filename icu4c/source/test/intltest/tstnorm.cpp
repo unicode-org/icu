@@ -41,7 +41,8 @@ void BasicNormalizerTest::runIndexedTest(int32_t index, UBool exec,
         CASE(11,TestPreviousNext);
         CASE(12,TestNormalizerAPI);
         CASE(13,TestConcatenate);
-        CASE(14,TestCompare);
+        CASE(14,FindFoldFCDExceptions);
+        CASE(15,TestCompare);
         default: name = ""; break;
     }
 }
@@ -896,29 +897,33 @@ void BasicNormalizerTest::TestConcatenate() {
     errorCode=U_UNEXPECTED_TOKEN;
     r=Normalizer::concatenate(left, right, result, mode, 0, errorCode);
     if(errorCode!=U_UNEXPECTED_TOKEN || result!=r || !result.isBogus()) {
-        errln("error in Normalizer::concatenate(), violates UErrorCode protocol\n");
+        errln("error in Normalizer::concatenate(), violates UErrorCode protocol");
     }
 
     left.setToBogus();
     errorCode=U_ZERO_ERROR;
     r=Normalizer::concatenate(left, right, result, mode, 0, errorCode);
     if(errorCode!=U_ILLEGAL_ARGUMENT_ERROR || result!=r || !result.isBogus()) {
-        errln("error in Normalizer::concatenate(), does not detect left.isBogus()\n");
+        errln("error in Normalizer::concatenate(), does not detect left.isBogus()");
     }
 }
 
 // reference implementation of Normalizer::compare
 static int32_t
 ref_norm_compare(const UnicodeString &s1, const UnicodeString &s2, uint32_t options, UErrorCode &errorCode) {
-    UnicodeString t1, t2;
+    UnicodeString r1, r2, t1, t2;
 
-    Normalizer::decompose(s1, FALSE, 0, t1, errorCode);
-    Normalizer::decompose(s2, FALSE, 0, t2, errorCode);
+    // get writable objects
+    r1=s1;
+    r2=s2;
 
     if(options&U_COMPARE_IGNORE_CASE) {
-        t1.foldCase(options);
-        t2.foldCase(options);
+        r1.foldCase(options);
+        r2.foldCase(options);
     }
+
+    Normalizer::decompose(r1, FALSE, 0, t1, errorCode);
+    Normalizer::decompose(r2, FALSE, 0, t2, errorCode);
 
     if(options&U_COMPARE_CODE_POINT_ORDER) {
         return t1.compareCodePointOrder(t2);
@@ -1057,8 +1062,23 @@ BasicNormalizerTest::TestCompare() {
         "\\u1100\\u116f\\u11aa\\uAD8B\\uAD8B\\u1100\\u116f\\u11aa"
         "\\u1E0C\\u031B\\u0307",
 
+        // some strings that may make a difference whether the compare function
+        // case-folds or decomposes first
+        // 34..41
+        "\\u0360\\u0345\\u0334",
+        "\\u0360\\u03b9\\u0334",
+
+        "\\u0360\\u1f80\\u0334",
+        "\\u0360\\u03b1\\u0313\\u03b9\\u0334",
+
+        "\\u0360\\u1ffc\\u0334",
+        "\\u0360\\u03c9\\u03b9\\u0334",
+
+        "\\u00cc",
+        "\\u0069\\u0300",
+
         // empty string
-        // 34
+        // 42
         ""
     };
 
@@ -1097,7 +1117,7 @@ BasicNormalizerTest::TestCompare() {
                 result=_norm_compare(s[i], s[j], opt[k].options, errorCode);
                 refResult=ref_norm_compare(s[i], s[j], opt[k].options, errorCode);
                 if(_sign(result)!=_sign(refResult)) {
-                    errln("Normalizer::compare(%d, %d, %s)=%d should be same sign as %d (%s)\n",
+                    errln("Normalizer::compare(%d, %d, %s)=%d should be same sign as %d (%s)",
                         i, j, opt[k].name, result, refResult, u_errorName(errorCode));
                 }
 
@@ -1107,11 +1127,110 @@ BasicNormalizerTest::TestCompare() {
                     result=s[i].caseCompare(s[j], opt[k].options);
                     refResult=ref_case_compare(s[i], s[j], opt[k].options);
                     if(_sign(result)!=_sign(refResult)) {
-                        errln("Normalizer::compare(%d, %d, %s)=%d should be same sign as %d (%s)\n",
+                        errln("Normalizer::compare(%d, %d, %s)=%d should be same sign as %d (%s)",
                             i, j, opt[k].name, result, refResult, u_errorName(errorCode));
                     }
                 }
             }
         }
+    }
+}
+
+// verify that case-folding does not un-FCD strings
+int32_t
+BasicNormalizerTest::countFoldFCDExceptions(uint32_t foldingOptions) {
+    UnicodeString s, fold, d;
+    UChar32 c;
+    int32_t count;
+    uint8_t cc, trailCC, foldCC, foldTrailCC;
+    UNormalizationCheckResult qcResult;
+    int8_t category;
+    UBool isNFD;
+    UErrorCode errorCode;
+
+    logln("Test if case folding may un-FCD a string (folding options %04lx)", foldingOptions);
+
+    count=0;
+    for(c=0; c<=0x10ffff; ++c) {
+        category=u_charType(c);
+        if(category==U_UNASSIGNED) {
+            continue; // skip unassigned code points
+        }
+        if(c==0xac00) {
+            c=0xd7a3; // skip Hangul - no case folding there
+            continue;
+        }
+        // skip Han blocks - no case folding there either
+        if(c==0x3400) {
+            c=0x4db5;
+            continue;
+        }
+        if(c==0x4e00) {
+            c=0x9fa5;
+            continue;
+        }
+        if(c==0x20000) {
+            c=0x2a6d6;
+            continue;
+        }
+
+        s.setTo(c);
+
+        // get leading and trailing cc for c
+        Normalizer::decompose(s, FALSE, 0, d, errorCode);
+        isNFD= s==d;
+        cc=u_getCombiningClass(d.char32At(0));
+        trailCC=u_getCombiningClass(d.char32At(d.length()-1));
+
+        // get leading and trailing cc for the case-folding of c
+        s.foldCase(foldingOptions);
+        Normalizer::decompose(s, FALSE, 0, d, errorCode);
+        foldCC=u_getCombiningClass(d.char32At(0));
+        foldTrailCC=u_getCombiningClass(d.char32At(d.length()-1));
+
+        qcResult=Normalizer::quickCheck(s, UNORM_FCD, errorCode);
+
+        // bad:
+        // - character maps to empty string: adjacent characters may then need reordering
+        // - folding has different leading/trailing cc's, and they don't become just 0
+        // - folding itself is not FCD
+        if( qcResult!=UNORM_YES ||
+            s.isEmpty() ||
+            (cc!=foldCC && foldCC!=0) || (trailCC!=foldTrailCC && foldTrailCC!=0)
+        ) {
+            ++count;
+            errln("U+%04lx: case-folding may un-FCD a string (folding options %04lx)", c, foldingOptions);
+            errln("  cc %02x trailCC %02x    foldCC(U+%04lx) %02x foldTrailCC(U+%04lx) %02x   quickCheck(folded)=%d", cc, trailCC, d.char32At(0), foldCC, d.char32At(d.length()-1), foldTrailCC, qcResult);
+            continue;
+        }
+
+        // also bad:
+        // if a code point is in NFD but its case folding is not, then
+        // unorm_compare will also fail
+        if(isNFD && UNORM_YES!=Normalizer::quickCheck(s, UNORM_NFD, errorCode)) {
+            ++count;
+            errln("U+%04lx: case-folding un-NFDs this character (folding options %04lx)", c, foldingOptions);
+        }
+    }
+
+    logln("There are %ld code points for which case-folding may un-FCD a string (folding options %04lx)", count, foldingOptions);
+    return count;
+}
+
+void
+BasicNormalizerTest::FindFoldFCDExceptions() {
+    int32_t count;
+
+    count=countFoldFCDExceptions(0);
+    count+=countFoldFCDExceptions(U_FOLD_CASE_EXCLUDE_SPECIAL_I);
+    if(count>0) {
+        /*
+         * If case-folding un-FCDs any strings, then unorm_compare() must be
+         * re-implemented.
+         * It currently assumes that one can check for FCD then case-fold
+         * and then still have FCD strings for raw decomposition without reordering.
+         */
+        errln("error: There are %ld code points for which case-folding may un-FCD a string for all folding options.\n"
+              "See comment in BasicNormalizerTest::FindFoldFCDExceptions()!", count);
     }
 }
