@@ -88,7 +88,7 @@ ca {
             "\uFFFD",
     }
     ShortLanguage { "cat" }
-    localPatternChars { "GuMtkHmsSEDFwWahKz" }
+    localPatternChars { "GuMtkHmsSEDFwWahKzUe" }
     zoneStrings { 
         {
                 "Africa/Casablanca",

@@ -111,7 +111,7 @@ mk {
             "\uFFFD",
     }
     ShortLanguage { "mkd" }
-    localPatternChars { "GuMtkHmsSEDFwWahKz" }
+    localPatternChars { "GuMtkHmsSEDFwWahKzUe" }
     zoneStrings { 
         {
                 "Africa/Casablanca",

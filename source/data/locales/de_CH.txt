@@ -32,7 +32,7 @@ de_CH {
             "#,##0%",
     }
     ShortCountry { "CHE" }
-    localPatternChars { "GuMtkHmsSEDFwWahKz" }
+    localPatternChars { "GuMtkHmsSEDFwWahKzUe" }
     zoneStrings { 
         {
                 "Africa/Casablanca",

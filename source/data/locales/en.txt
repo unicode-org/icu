@@ -11,7 +11,7 @@ en {
             "\u00A4#,##0.00;-\u00A4#,##0.00",
             "#,##0%",
     }
-    localPatternChars { "GyMdkHmsSEDFwWahKz" }
+    localPatternChars { "GyMdkHmsSEDFwWahKzYe" }
 
     // Format for the display name of a Transliterator.
     // This is the English form of this resource.

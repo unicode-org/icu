@@ -993,7 +993,7 @@ ko {
             "",
     }
     ShortLanguage { "kor" }
-    localPatternChars { "GanjkHmsSEDFwWxhKz" }
+    localPatternChars { "GanjkHmsSEDFwWxhKzAe" }
     zoneStrings { 
         {
                 "Africa/Casablanca",

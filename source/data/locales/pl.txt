@@ -99,7 +99,7 @@ pl {
             "\uFFFD",
     }
     ShortLanguage { "pol" }
-    localPatternChars { "GyMdkHmsSEDFwWahKz" }
+    localPatternChars { "GyMdkHmsSEDFwWahKzYe" }
     zoneStrings { 
         {
                 "Africa/Casablanca",
