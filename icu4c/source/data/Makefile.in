@@ -469,8 +469,11 @@ testdata: packagedata $(ALL_TEST_FILES) $(UNPACKAGEDTESTDATA)
 packagetest: testdata icupkg.inc $(TESTBUILDDIR)/testdata.lst 
 	$(PKGDATA_INVOKE) $(PKGDATA) -T $(TESTBUILDDIR) -d $(TESTOUTDIR) -s $(TESTBUILDDIR) -p $(TESTDATA) -m common $(TESTBUILDDIR)/testdata.lst
 
-os400-data-rebind:
+ifeq ($(POST_DATA_BUILD), os400-data-rebind)
+os400-data-rebind: $(LIBICUUC)
+
+$(LIBICUUC): $(LIBICUDT)
 	$(RMV) $(LIBICUUC)
 	(cd ../common && $(MAKE) RECURSIVE=YES) || exit;
-
+endif
 
