@@ -31,6 +31,7 @@
 #include "uhash.h"
 #include "cstring.h"
 #include "udataswp.h"
+#include "unormimp.h"
 
 U_CDECL_BEGIN
 
@@ -41,6 +42,11 @@ static UHashtable *SHARED_DATA_HASHTABLE = NULL;
 
 static UMTX usprepMutex = NULL;
 
+/* format version of spp file */
+static uint8_t formatVersion[4]={ 0, 0, 0, 0 };
+
+/* the Unicode version of the sprep data */
+static UVersionInfo dataVersion={ 0, 0, 0, 0 };
 
 static UBool U_CALLCONV
 isAcceptable(void * /* context */,
@@ -59,6 +65,8 @@ isAcceptable(void * /* context */,
         pInfo->formatVersion[2]==UTRIE_SHIFT &&
         pInfo->formatVersion[3]==UTRIE_INDEX_SHIFT
     ) {
+        uprv_memcpy(formatVersion, pInfo->formatVersion, 4);
+        uprv_memcpy(dataVersion, pInfo->dataVersion, 4);
         return TRUE;
     } else {
         return FALSE;
@@ -138,8 +146,8 @@ loadData(UStringPrepProfile* profile,
     UDataMemory *dataMemory;
     const int32_t *p=NULL;
     const uint8_t *pb;
-    UVersionInfo unicodeVersion;
-    int32_t normVer, uniVer;
+    UVersionInfo normUnicodeVersion;
+    int32_t normUniVer, sprepUniVer, normCorrVer;
 
     if(errorCode==NULL || U_FAILURE(*errorCode)) {
         return 0;
@@ -177,16 +185,19 @@ loadData(UStringPrepProfile* profile,
     /* initialize some variables */
     profile->mappingData=(uint16_t *)((uint8_t *)(p+_SPREP_INDEX_TOP)+profile->indexes[_SPREP_INDEX_TRIE_SIZE]);
     
-    /* 
-     * check the normalization corrections version and the current Unicode version 
-     * supported by ICU 
-     */
-    u_versionFromString(unicodeVersion, U_UNICODE_VERSION);
-    normVer = profile->indexes[_SPREP_NORM_CORRECTNS_LAST_UNI_VERSION];
-    uniVer  = (unicodeVersion[0] << 24) + (unicodeVersion[1] << 16) + 
-              (unicodeVersion[2] << 8 ) + (unicodeVersion[3]);
-
-    if( normVer < uniVer &&
+    unorm_getUnicodeVersion(&normUnicodeVersion, errorCode);
+    normUniVer = (normUnicodeVersion[0] << 24) + (normUnicodeVersion[1] << 16) + 
+                 (normUnicodeVersion[2] << 8 ) + (normUnicodeVersion[3]);
+    sprepUniVer = (dataVersion[0] << 24) + (dataVersion[1] << 16) + 
+                  (dataVersion[2] << 8 ) + (dataVersion[3]);
+    normCorrVer = profile->indexes[_SPREP_NORM_CORRECTNS_LAST_UNI_VERSION];
+    
+    if(U_FAILURE(*errorCode)){
+        udata_close(dataMemory);
+        return FALSE;
+    }
+    if( normUniVer < sprepUniVer && /* the Unicode version of SPREP file must be less than the Unicode Vesion of the normalization data */
+        normUniVer < normCorrVer && /* the Unicode version of the NormalizationCorrections.txt file should be less than the Unicode Vesion of the normalization data */
         ((profile->indexes[_SPREP_OPTIONS] & _SPREP_NORMALIZATION_ON) > 0) /* normalization turned on*/
       ){
         *errorCode = U_INVALID_FORMAT_ERROR;
