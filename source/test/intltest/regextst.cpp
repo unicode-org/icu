@@ -1237,6 +1237,11 @@ void RegexTest::Errors() {
     // {Numeric Quantifiers}
     REGEX_ERR("abc{4}", 1, 5, U_REGEX_UNIMPLEMENTED);
 
+    // Possessive Quantifiers
+    REGEX_ERR("abc++d", 1, 5, U_REGEX_UNIMPLEMENTED);
+    REGEX_ERR("abc*+d", 1, 5, U_REGEX_UNIMPLEMENTED);
+    REGEX_ERR("abc?+d", 1, 5, U_REGEX_UNIMPLEMENTED);
+
     // Attempt to use non-default flags 
     {
         UParseError   pe;
