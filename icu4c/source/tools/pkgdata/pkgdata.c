@@ -77,7 +77,7 @@ static UOption options[]={
 const char options_help[][160]={
   "Set the data name",
 #ifdef WIN32
-      "R:icupath for release version or D:icupath for debug version, where icupath is the directory where ICU is located"
+      "R:icupath for release version or D:icupath for debug version, where icupath is the directory where ICU is located",
 #else
       "Specify options for the builder",
 #endif
