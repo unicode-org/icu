@@ -14,6 +14,7 @@
 #include "unicode/utypes.h"
 #include "unicode/unistr.h"
 #include "unicode/uchar.h"
+#include "unicode/uset.h"
 
 U_NAMESPACE_BEGIN
 
@@ -24,6 +25,7 @@ class TransliterationRule;
 class Transliterator;
 class TransliteratorParser;
 class UVector;
+class CaseEquivClass;
 
 /**
  * A mutable set of Unicode characters and multicharacter strings.  Objects of this class
@@ -940,6 +942,31 @@ public:
     virtual UnicodeSet& clear(void);
 
     /**
+     * Close this set over the given attribute.  For the attribute
+     * USET_CASE, the result is to modify this set so that:
+     *
+     * 1. For each character or string 'a' in this set, all strings or
+     * characters 'b' such that foldCase(a) == foldCase(b) are added
+     * to this set.
+     *
+     * 2. For each string 'e' in the resulting set, if e !=
+     * foldCase(e), 'e' will be removed.
+     *
+     * Example: [aq\u00DF{Bc}{bC}{Fi}] => [aAqQ\u00DF\uFB01{ss}{bc}{fi}]
+     *
+     * (Here foldCase(x) refers to the operation u_strFoldCase, and a
+     * == b denotes that the contents are the same, not pointer
+     * comparison.)
+     *
+     * @param attribute bitmask for attributes to close over.
+     * Currently only the USET_CASE bit is supported.  Any undefined bits
+     * are ignored.
+     * @return a reference to this set.
+     * @draft ICU 2.6
+     */
+    UnicodeSet& closeOver(int32_t attribute);
+
+    /**
      * Iteration method that returns the number of ranges contained in
      * this set.
      * @see #getRangeStart
@@ -1257,6 +1284,20 @@ private:
     static const UnicodeSet* getInclusions();
 
     friend class UnicodeSetIterator;
+
+    //----------------------------------------------------------------
+    // Implementation: closeOver
+    //----------------------------------------------------------------
+
+    void caseCloseOne(const UnicodeString& folded);
+
+    void caseCloseOne(const CaseEquivClass& c);
+
+    void caseCloseOne(UChar folded);
+
+    static const CaseEquivClass* getCaseMapOf(const UnicodeString& folded);
+
+    static const CaseEquivClass* getCaseMapOf(UChar folded);
 };
 
 inline UClassID
