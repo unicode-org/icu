@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1999-2003, International Business Machines
+*   Copyright (C) 1999-2004, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -50,11 +50,12 @@
  */
 #ifdef U_UTF8_IMPL
 U_STABLE const uint8_t 
-utf8_countTrailBytes[256];
+#elif defined(U_STATIC_IMPLEMENTATION)
+U_CFUNC const uint8_t
 #else
 U_CFUNC U_IMPORT const uint8_t /* U_IMPORT2? */ /*U_IMPORT*/ 
-utf8_countTrailBytes[256];
 #endif
+utf8_countTrailBytes[256];
 
 /**
  * Count the trail bytes for a UTF-8 lead byte.
