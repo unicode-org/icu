@@ -690,3 +690,4 @@ free(result);
 
     unum_close(pattern);
 }
+
