@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/TransliterationRule.java,v $ 
- * $Date: 2000/06/29 21:59:23 $ 
- * $Revision: 1.23 $
+ * $Date: 2000/08/30 20:40:30 $ 
+ * $Revision: 1.24 $
  *
  *****************************************************************************************
  */
@@ -44,7 +44,7 @@ import com.ibm.util.Utility;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: TransliterationRule.java,v $ $Revision: 1.23 $ $Date: 2000/06/29 21:59:23 $
+ * @version $RCSfile: TransliterationRule.java,v $ $Revision: 1.24 $ $Date: 2000/08/30 20:40:30 $
  */
 class TransliterationRule {
     /**
@@ -123,6 +123,14 @@ class TransliterationRule {
      */
     private int cursorPos;
 
+    /**
+     * The character at index i, where i < contextStart || i >= contextLimit,
+     * is ETHER.  This allows explicit matching by rules and UnicodeSets
+     * of text outside the context.  In traditional terms, this allows anchoring
+     * at the start and/or end.
+     */
+    static final char ETHER = '\uFFFF';
+
     private static final String COPYRIGHT =
         "\u00A9 IBM Corporation 1999. All rights reserved.";
 
@@ -151,12 +159,17 @@ class TransliterationRule {
      * associated RuleBasedTransliterator.Data object.  May be null if there are
      * no segments.  The caller is responsible for validating that segments
      * are well-formed.
+     * @param anchorStart true if the the rule is anchored on the left to
+     * the context start
+     * @param anchorEnd true if the rule is anchored on the right to the
+     * context limit
      */
     public TransliterationRule(String input,
                                int anteContextPos, int postContextPos,
                                String output,
                                int cursorPos, int cursorOffset,
-                               int[] segs) {
+                               int[] segs,
+                               boolean anchorStart, boolean anchorEnd) {
         // Do range checks only when warranted to save time
         if (anteContextPos < 0) {
             anteContextLength = 0;
@@ -187,6 +200,30 @@ class TransliterationRule {
         // We don't validate the segments array.  The caller must
         // guarantee that the segments are well-formed.
         this.segments = segs;
+
+        // Implement anchors by inserting an ETHER character on the
+        // left or right.  If on the left, then the indices must be
+        // incremented.  If on the right, no index change is
+        // necessary.
+        if (anchorStart || anchorEnd) {
+            StringBuffer buf = new StringBuffer();
+            if (anchorStart) {
+                buf.append(ETHER);
+                ++anteContextLength;
+                ++cursorPos;
+                // Adjust segment offsets
+                if (segments != null) {
+                    for (int i=0; i<segments.length; ++i) {
+                        ++segments[i];
+                    }
+                }
+            }
+            buf.append(input);
+            if (anchorEnd) {
+                buf.append(ETHER);
+            }
+            pattern = buf.toString();
+        }
     }
 
     /**
@@ -211,7 +248,7 @@ class TransliterationRule {
                                String output,
                                int cursorPos) {
         this(input, anteContextPos, postContextPos,
-             output, cursorPos, 0, null);
+             output, cursorPos, 0, null, false, false);
     }
 
     /**
@@ -408,12 +445,20 @@ class TransliterationRule {
                                  UnicodeFilter filter) {
         // Match anteContext, key, and postContext
         int cursor = pos.start - anteContextLength;
-        if (cursor < pos.contextStart
-            || (cursor + pattern.length()) > pos.contextLimit) {
+        //[ANCHOR]if (cursor < pos.contextStart
+        //[ANCHOR]    || (cursor + pattern.length()) > pos.contextLimit) {
+        //[ANCHOR]    return false;
+        //[ANCHOR]}
+        // Quick length check; this is a performance win for long rules.
+        // Widen by one (on both sides) to allow anchor matching.
+        if (cursor < (pos.contextStart - 1)
+            || (cursor + pattern.length()) > (pos.contextLimit + 1)) {
             return false;
         }
         for (int i=0; i<pattern.length(); ++i, ++cursor) {
-            if (!charMatches(pattern.charAt(i), text.charAt(cursor),
+            //[ANCHOR]if (!charMatches(pattern.charAt(i), text.charAt(cursor),
+            //[ANCHOR]                 variables, filter)) {
+            if (!charMatches(pattern.charAt(i), text, cursor, pos,
                              variables, filter)) {
                 return false;
             }
@@ -450,8 +495,7 @@ class TransliterationRule {
                               Transliterator.Position pos,
                               RuleBasedTransliterator.Data variables,
                               UnicodeFilter filter) {
-        int len = getRegionMatchLength(text, pos,
-                                       pattern, variables, filter);
+        int len = getRegionMatchLength(text, pos, variables, filter);
         return len < anteContextLength ? MISMATCH :
             (len < pattern.length() ? PARTIAL_MATCH : FULL_MATCH);
     }
@@ -468,7 +512,6 @@ class TransliterationRule {
      * @param cursor position at which to translate next, representing offset
      * into text.  This value must be between <code>start</code> and
      * <code>limit</code>.
-     * @param template the text to match against.  All characters must match.
      * @param variables a dictionary of variables mapping <code>Character</code>
      * to <code>UnicodeSet</code>
      * @param filter the filter.  Any character for which
@@ -481,21 +524,53 @@ class TransliterationRule {
      */
     protected int getRegionMatchLength(Replaceable text,
                                        Transliterator.Position pos,
-                                       String template,
                                        RuleBasedTransliterator.Data variables,
                                        UnicodeFilter filter) {
         int cursor = pos.start - anteContextLength;
-        if (cursor < pos.contextStart) {
+        //[ANCHOR]if (cursor < pos.contextStart) {
+        //[ANCHOR]    return -1;
+        //[ANCHOR]}
+        // Quick length check; this is a performance win for long rules.
+        // Widen by one to allow anchor matching.
+        if (cursor < (pos.contextStart - 1)) {
             return -1;
         }
         int i;
-        for (i=0; i<template.length() && cursor<pos.contextLimit; ++i, ++cursor) {
-            if (!charMatches(template.charAt(i), text.charAt(cursor),
+        for (i=0; i<pattern.length() && cursor<pos.contextLimit; ++i, ++cursor) {
+            //[ANCHOR]if (!charMatches(pattern.charAt(i), text.charAt(cursor),
+            //[ANCHOR]                 variables, filter)) {
+            if (!charMatches(pattern.charAt(i), text, cursor, pos,
                              variables, filter)) {
                 return -1;
             }
         }
         return i;
+    }
+
+    /**
+     * Return true if the given key matches the given text.  This method
+     * accounts for the fact that the key character may represent a character
+     * set.  Note that the key and text characters may not be interchanged
+     * without altering the results.
+     * @param keyChar a character in the match key
+     * @param textChar a character in the text being transliterated
+     * @param variables a dictionary of variables mapping <code>Character</code>
+     * to <code>UnicodeSet</code>
+     * @param filter the filter.  Any character for which
+     * <tt>filter.contains()</tt> returns <tt>false</tt> will not be
+     * altered by this transliterator.  If <tt>filter</tt> is
+     * <tt>null</tt> then no filtering is applied.
+     */
+    protected static final boolean charMatches(char keyChar, Replaceable text,
+                                               int index, Transliterator.Position pos,
+                                               RuleBasedTransliterator.Data variables,
+                                               UnicodeFilter filter) {
+        UnicodeSet set = null;
+        char textChar = (index >= pos.contextStart && index < pos.contextLimit)
+            ? text.charAt(index) : ETHER;
+        return (filter == null || filter.contains(textChar)) &&
+            (((set = variables.lookupSet(keyChar)) == null) ?
+             keyChar == textChar : set.contains(textChar));
     }
 
     /**
@@ -524,6 +599,9 @@ class TransliterationRule {
 
 /**
  * $Log: TransliterationRule.java,v $
+ * Revision 1.24  2000/08/30 20:40:30  alan4j
+ * Implement anchors.
+ *
  * Revision 1.23  2000/06/29 21:59:23  alan4j
  * Fix handling of Transliterator.Position fields
  *

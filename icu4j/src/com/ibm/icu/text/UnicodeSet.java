@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/UnicodeSet.java,v $
- * $Date: 2000/05/26 20:57:24 $
- * $Revision: 1.28 $
+ * $Date: 2000/08/30 20:40:30 $
+ * $Revision: 1.29 $
  *
  *****************************************************************************************
  */
@@ -254,7 +254,7 @@ import java.text.*;
  * *Unsupported by Java (and hence unsupported by UnicodeSet).
  *
  * @author Alan Liu
- * @version $RCSfile: UnicodeSet.java,v $ $Revision: 1.28 $ $Date: 2000/05/26 20:57:24 $ */
+ * @version $RCSfile: UnicodeSet.java,v $ $Revision: 1.29 $ $Date: 2000/08/30 20:40:30 $ */
 public class UnicodeSet implements UnicodeFilter {
 
     /* Implementation Notes.
@@ -965,6 +965,7 @@ public class UnicodeSet implements UnicodeFilter {
          * they are stand-ins for a nested UnicodeSet.  */
         char[] varValueBuffer = null;
         int ivarValueBuffer = 0;
+        int anchor = 0;
         for (; i<limit; i+=((varValueBuffer==null)?1:0)) {
             /* If the next element is a single character, c will be set to it,
              * and nestedSet will be null.  In this case isLiteral indicates
@@ -993,6 +994,11 @@ public class UnicodeSet implements UnicodeFilter {
             // whitespace, a subset of Unicode whitespace.
             if (ignoreWhitespace && Character.isWhitespace(c)) {
                 continue;
+            }
+
+            // Keep track of the count of characters after an alleged anchor
+            if (anchor > 0) {
+                ++anchor;
             }
 
             // Parse the opening '[' and optional following '^'
@@ -1074,13 +1080,20 @@ public class UnicodeSet implements UnicodeFilter {
                 else if (symbols != null && !isLiteral && c == SymbolTable.SYMBOL_REF) {
                     pos.setIndex(++i);
                     String name = symbols.parseReference(pattern, pos, limit);
-                    varValueBuffer = symbols.lookup(name);
-                    if (varValueBuffer == null) {
-                        throw new IllegalArgumentException("Undefined variable: "
-                                                           + name);
+                    if (name != null) {
+                        varValueBuffer = symbols.lookup(name);
+                        if (varValueBuffer == null) {
+                            throw new IllegalArgumentException("Undefined variable: "
+                                                               + name);
+                        }
+                        ivarValueBuffer = 0;
+                        i = pos.getIndex(); // Make i point PAST last char of var name
+                    } else {
+                        // Got a null; this means we have an isolated $.
+                        // Tentatively assume this is an anchor.
+                        anchor = 1;
+                        --i; // Back up so loop increment works properly
                     }
-                    ivarValueBuffer = 0;
-                    i = pos.getIndex(); // Make i point PAST last char of var name
                     continue; // Back to the top to get varValueBuffer[0]
                 }
 
@@ -1146,6 +1159,13 @@ public class UnicodeSet implements UnicodeFilter {
             } else if (!isLiteral && c == ']') {
                 // Final closing delimiter.  This is the only way we leave this
                 // loop if the pattern is well-formed.
+                if (anchor > 2 || anchor == 1) {
+                    throw new IllegalArgumentException("Syntax error near $" + pattern);
+                    
+                }
+                if (anchor == 2) {
+                    add(TransliterationRule.ETHER);
+                }
                 break;
             } else if (lastOp == 0 && !isLiteral && (c == '-' || c == '&')) {
                 lastOp = c;
@@ -1211,7 +1231,7 @@ public class UnicodeSet implements UnicodeFilter {
             // Debug parser
             System.out.println("UnicodeSet(" +
                                pattern.substring(start, i+1) + ") -> " +
-                               toString());
+                               com.ibm.util.Utility.escape(toString()));
         }
     }
 

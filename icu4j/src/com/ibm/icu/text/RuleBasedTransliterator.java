@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/RuleBasedTransliterator.java,v $ 
- * $Date: 2000/07/12 16:31:36 $ 
- * $Revision: 1.37 $
+ * $Date: 2000/08/30 20:40:30 $ 
+ * $Revision: 1.38 $
  *
  *****************************************************************************************
  */
@@ -252,7 +252,7 @@ import com.ibm.util.Utility;
  * <p>Copyright (c) IBM Corporation 1999-2000. All rights reserved.</p>
  * 
  * @author Alan Liu
- * @version $RCSfile: RuleBasedTransliterator.java,v $ $Revision: 1.37 $ $Date: 2000/07/12 16:31:36 $
+ * @version $RCSfile: RuleBasedTransliterator.java,v $ $Revision: 1.38 $ $Date: 2000/08/30 20:40:30 $
  */
 public class RuleBasedTransliterator extends Transliterator {
 
@@ -496,12 +496,7 @@ public class RuleBasedTransliterator extends Transliterator {
                     ++i;
                 }
                 if (i == start) { // No valid name chars
-                    if (start > 0) {
-                        --start;
-                    }
-                    limit = ruleEnd(text, start, limit);
-                    throw new IllegalArgumentException("Illegal variable reference " +
-                                                       text.substring(start, limit));
+                    return null;
                 }
                 pos.setIndex(i);
                 return text.substring(start, i);
@@ -565,6 +560,11 @@ public class RuleBasedTransliterator extends Transliterator {
         private static final char SET_CLOSE           = ']';
         private static final char CURSOR_POS          = '|';
         private static final char CURSOR_OFFSET       = '@';
+        private static final char ANCHOR_START        = '^';
+
+        // By definition, the ANCHOR_END special character is a
+        // trailing SymbolTable.SYMBOL_REF character.
+        // private static final char ANCHOR_END       = '$';
 
         // Segments of the input string are delimited by "(" and ")".  In the
         // output string these segments are referenced as "$1" through "$9".
@@ -700,6 +700,9 @@ public class RuleBasedTransliterator extends Transliterator {
             // output text.
             public int cursorOffset = 0; // only nonzero on output side
 
+            public boolean anchorStart = false;
+            public boolean anchorEnd   = false;
+
             /**
              * Parse one side of a rule, stopping at either the limit,
              * the END_OF_RULE character, or an operator.  Return
@@ -720,6 +723,14 @@ public class RuleBasedTransliterator extends Transliterator {
                         // spaces, but Java spaces -- a subset, representing
                         // whitespace likely to be seen in code.
                         continue;
+                    }
+                    if (OPERATORS.indexOf(c) >= 0) {
+                        --pos; // Backup to point to operator
+                        break main;
+                    }
+                    if (anchorEnd) {
+                        // Text after a presumed end anchor is a syntax err
+                        syntaxError("Syntax error: $", rule, start);
                     }
                     // Handle escapes
                     if (c == ESCAPE) {
@@ -759,11 +770,15 @@ public class RuleBasedTransliterator extends Transliterator {
                         }
                         continue;
                     }
-                    if (OPERATORS.indexOf(c) >= 0) {
-                        --pos; // Backup to point to operator
-                        break main;
-                    }
                     switch (c) {
+                    case ANCHOR_START:
+                        if (buf.length() == 0 && !anchorStart) {
+                            anchorStart = true;
+                        } else {
+                            syntaxError("Misplaced anchor start",
+                                        rule, start);
+                        }
+                        break;
                     case SEGMENT_OPEN:
                     case SEGMENT_CLOSE:
                         // Handle segment definitions "(" and ")"
@@ -789,7 +804,10 @@ public class RuleBasedTransliterator extends Transliterator {
                             // Unicode identifier part characters, or by a digit
                             // 1..9 if it is a segment reference.
                             if (pos == limit) {
-                                syntaxError("Trailing " + c, rule, start);
+                                // A variable ref character at the end acts as
+                                // an anchor to the context limit, as in perl.
+                                anchorEnd = true;
+                                break;
                             }
                             // Parse "$1" "$2" .. "$9"
                             c = rule.charAt(pos);
@@ -807,13 +825,20 @@ public class RuleBasedTransliterator extends Transliterator {
                                 pp.setIndex(pos);
                                 String name = parser.parseData.
                                                 parseReference(rule, pp, limit);
+                                if (name == null) {
+                                    // This means the '$' was not followed by a
+                                    // valid name.  Try to interpret it as an
+                                    // end anchor then.  If this also doesn't work
+                                    // (if we see a following character) then signal
+                                    // an error.
+                                    anchorEnd = true;
+                                    break;
+                                }
                                 pos = pp.getIndex();
                                 // If this is a variable definition statement,
                                 // then the LHS variable will be undefined.  In
                                 // that case appendVariableDef() will append the
                                 // special placeholder char variableLimit-1.
-
-                                //buf.append(parser.getVariableDef(name));
                                 parser.appendVariableDef(name, buf);
                             }
                         }
@@ -896,6 +921,7 @@ public class RuleBasedTransliterator extends Transliterator {
                 text = text.substring(ante < 0 ? 0 : ante,
                                       post < 0 ? text.length() : post);
                 ante = post = -1;
+                anchorStart = anchorEnd = false;
             }
 
             /**
@@ -976,6 +1002,10 @@ public class RuleBasedTransliterator extends Transliterator {
                 if (left.text.length() != 1 || left.text.charAt(0) != variableLimit) {
                     syntaxError("Malformed LHS", rule, start);
                 }
+                if (left.anchorStart || left.anchorEnd ||
+                    right.anchorStart || right.anchorEnd) {
+                    syntaxError("Malformed variable def", rule, start);
+                }
                 // We allow anything on the right, including an empty string.
                 int n = right.text.length();
                 char[] value = new char[n];
@@ -1031,11 +1061,13 @@ public class RuleBasedTransliterator extends Transliterator {
             // on the left, and references on the right.  Cursor offset
             // cannot appear without an explicit cursor.  Cursor offset
             // cannot place the cursor outside the limits of the context.
+            // Anchors are only allowed on the input side.
             if (right.ante >= 0 || right.post >= 0 || left.cursor >= 0 ||
                 right.segments != null || left.maxRef >= 0 ||
                 (right.cursorOffset != 0 && right.cursor < 0) ||
                 (right.cursorOffset > (left.text.length() - left.post)) ||
-                (-right.cursorOffset > left.ante)) {
+                (-right.cursorOffset > left.ante) ||
+                right.anchorStart || right.anchorEnd) {
                 syntaxError("Malformed rule", rule, start);
             }
 
@@ -1056,7 +1088,8 @@ public class RuleBasedTransliterator extends Transliterator {
             data.ruleSet.addRule(new TransliterationRule(
                                          left.text, left.ante, left.post,
                                          right.text, right.cursor, right.cursorOffset,
-                                         left.getSegments()));
+                                         left.getSegments(),
+                                         left.anchorStart, left.anchorEnd));
             
             return pos;
         }
@@ -1290,6 +1323,9 @@ public class RuleBasedTransliterator extends Transliterator {
 
 /**
  * $Log: RuleBasedTransliterator.java,v $
+ * Revision 1.38  2000/08/30 20:40:30  alan4j
+ * Implement anchors.
+ *
  * Revision 1.37  2000/07/12 16:31:36  alan4j
  * Simplify loop limit logic
  *
