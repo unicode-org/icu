@@ -68,6 +68,7 @@ public:
     void TestMalaysianInstance(void);
     void TestWeekShift(void);
     void TestTimeZoneTransitionAdd(void);
+    void TestDeprecates(void);
 
     void printdate(GregorianCalendar *cal, const char *string);
     void dowTest(UBool lenient) ;

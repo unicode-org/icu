@@ -152,6 +152,9 @@ void IntlTestSimpleDateFormatAPI::testAPI(/*char *par*/)
       errln("Couldn't obtain DateFormatSymbols. Quitting test!");
       return;
     }
+    if(syms->getDynamicClassID() != DateFormatSymbols::getStaticClassID()) {
+        errln("ERROR: format->getDateFormatSymbols()->getDynamicClassID() != DateFormatSymbols::getStaticClassID()");
+    }
     DateFormatSymbols *newSyms = new DateFormatSymbols(*syms);
     def.adoptDateFormatSymbols(newSyms);    
     pat_fr.setDateFormatSymbols(*newSyms);
@@ -170,6 +173,13 @@ void IntlTestSimpleDateFormatAPI::testAPI(/*char *par*/)
     if(U_FAILURE(status)) {
         errln("ERROR: setTwoDigitStartDate() failed");
     }
+
+// ======= Test DateFormatSymbols constructor
+    newSyms  =new DateFormatSymbols("gregorian", status);
+    if(U_FAILURE(status)) {
+        errln("ERROR: new DateFormatSymbols() failed");
+    }
+    def.adoptDateFormatSymbols(newSyms);
 
 // ======= Test applyPattern()
 
