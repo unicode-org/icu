@@ -16,6 +16,7 @@ U_NAMESPACE_BEGIN
 
 class Replaceable;
 class TransliterationRuleData;
+class StringMatcher;
 
 /**
  * A transliteration rule used by
@@ -58,6 +59,29 @@ public:
     static const UChar ETHER;
 
 private:
+
+    // TODO Eliminate the pattern and keyLength data members.  They
+    // are used only by masks() and getIndexValue() which are called
+    // only during build time, not during run-time.  Perhaps these
+    // methods and pattern/keyLength can be isolated into a separate
+    // object.
+
+    /**
+     * The match that must occur before the key, or null if there is no
+     * preceding context.
+     */
+    StringMatcher *anteContext;
+
+    /**
+     * The matcher object for the key.  If null, then the key is empty.
+     */
+    StringMatcher *key;
+
+    /**
+     * The match that must occur after the key, or null if there is no
+     * following context.
+     */
+    StringMatcher *postContext;
 
     /**
      * The string that must be matched, consisting of the anteContext, key,
@@ -277,6 +301,11 @@ public:
     static void appendToRule(UnicodeString& rule,
                              const UnicodeString& text,
                              UBool isLiteral,
+                             UBool escapeUnprintable,
+                             UnicodeString& quoteBuf);
+
+    static void appendToRule(UnicodeString& rule,
+                             const UnicodeMatcher* matcher,
                              UBool escapeUnprintable,
                              UnicodeString& quoteBuf);
 };
