@@ -988,12 +988,12 @@ public class ULocaleTest extends TestFmwk {
     public void TestDisplayKeyword() {
         //prepare testing data
         initHashtable();
-        String[] Data={"en_US@collation=direct;calendar=islamic-civil", 
-                        "zh_Hans@collation=pinyin;calendar=chinese", 
-                        "foo_Bar_BAZ@collation=traditional;calendar=buddhist"};
+        String[] data = {"en_US@collation=direct;calendar=islamic-civil", 
+			 "zh_Hans@collation=pinyin;calendar=chinese", 
+			 "foo_Bar_BAZ@collation=traditional;calendar=buddhist"};
         
-        for (int i = 0; i < Data.length; i++) {
-            String localeID = Data[i];
+        for (int i = 0; i < data.length; i++) {
+            String localeID = data[i];
             logln("");
             logln("Testing locale " + localeID + " ...");
             ULocale loc = new ULocale(localeID);
@@ -1010,11 +1010,11 @@ public class ULocaleTest extends TestFmwk {
                 String s1 = ULocale.getDisplayKeyword(key, ULocale.US);
                 String s2 = ULocale.getDisplayKeyword(key, "en_US");
                 if (!s1.equals(s2)) {
-                    errln ("FAIL: one of getDisplaykeyword methods failed.");
+                    errln ("FAIL: one of the getDisplayKeyword methods failed.");
                 }
                 if (!s1.equals(h[0].get(key))) {
                     errln("FAIL: Locale " + localeID + " getDisplayKeyword for key: " + key + 
-                          " in English expected \"" + h[0].get(key) + "\" seen \"" + s1 + "\" instead");
+                          " in English expected \"" + h[0].get(key) + "\" saw \"" + s1 + "\" instead");
                 } else {
                     logln("OK: getDisplayKeyword for key: " + key + " in English got " + s1);
                 }
@@ -1023,11 +1023,11 @@ public class ULocaleTest extends TestFmwk {
                 s1 = ULocale.getDisplayKeyword(key, ULocale.CHINA);
                 s2 = ULocale.getDisplayKeyword(key, "zh_Hans");
                 if (!s1.equals(s2)) {
-                    errln ("FAIL: one of getDisplaykeyword methods failed.");
+                    errln ("FAIL: one of the getDisplayKeyword methods failed.");
                 }
                 if (!s1.equals(h[1].get(key))) {
                     errln("FAIL: Locale " + localeID + " getDisplayKeyword for key: " + key + 
-                          " in Chinese expected \"" + h[1].get(key) + "\" seen \"" + s1 + "\" instead");
+                          " in Chinese expected \"" + h[1].get(key) + "\" saw \"" + s1 + "\" instead");
                 } else {
                     logln("OK: getDisplayKeyword for key: " + key + " in Chinese got " + s1);
                 }
@@ -1040,11 +1040,11 @@ public class ULocaleTest extends TestFmwk {
                 String ss2 = ULocale.getDisplayKeywordValue(localeID, key, "en_US");
                 String ss3 = ULocale.getDisplayKeywordValue(localeID, key, ULocale.US);
                 if (!ss1.equals(ss2) || !ss1.equals(ss3)) {
-                    errln ("FAIL: one of getDisplaykeywordValue methods failed.");
+                    errln ("FAIL: one of the getDisplayKeywordValue methods failed.");
                 }
                 if (!ss1.equals(h[0].get(type))) {
                     errln("FAIL: Locale " + localeID + " getDisplayKeywordValue for key: " + key + 
-                          " in English expected \"" + h[0].get(type) + "\" seen \"" + ss1 + "\" instead");
+                          " in English expected \"" + h[0].get(type) + "\" saw \"" + ss1 + "\" instead");
                 } else {
                     logln("OK: getDisplayKeywordValue for key: " + key + " in English got " + ss1);                    
                 }
@@ -1055,11 +1055,11 @@ public class ULocaleTest extends TestFmwk {
                 ss2 = ULocale.getDisplayKeywordValue(localeID, key, "zh_Hans");
                 ss3 = ULocale.getDisplayKeywordValue(localeID, key, ULocale.CHINA);
                 if (!ss1.equals(ss2) || !ss1.equals(ss3)) {
-                    errln ("FAIL: one of getDisplaykeywordValue methods failed.");
+                    errln ("FAIL: one of the getDisplayKeywordValue methods failed.");
                 }
                 if (!ss1.equals(h[1].get(type))) {
                     errln("FAIL: Locale " + localeID + " getDisplayKeywordValue for key: " + key + 
-                          " in Chinese expected \"" + h[1].get(type) + "\" seen \"" + ss1 + "\" instead");
+                          " in Chinese expected \"" + h[1].get(type) + "\" saw \"" + ss1 + "\" instead");
                 } else {
                     logln("OK: getDisplayKeywordValue for key: " + key + " in Chinese got " + ss1);                    
                 }                   
