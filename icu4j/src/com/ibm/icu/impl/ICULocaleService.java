@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/ICULocaleService.java,v $
- * $Date: 2002/10/05 01:07:02 $
- * $Revision: 1.10 $
+ * $Date: 2002/10/09 18:56:58 $
+ * $Revision: 1.11 $
  *
  *******************************************************************************
  */
@@ -165,6 +165,9 @@ public class ICULocaleService extends ICUService {
 	 * Create a LocaleKey with canonical primary and fallback IDs.
 	 */
 	public static LocaleKey createWithCanonicalFallback(String primaryID, String canonicalFallbackID, int kind) {
+            if (primaryID == null) {
+                return null;
+            }
             String canonicalPrimaryID = LocaleUtility.canonicalLocaleString(primaryID);
 	    return new LocaleKey(primaryID, canonicalPrimaryID, canonicalFallbackID, kind);
 	}
@@ -374,6 +377,10 @@ public class ICULocaleService extends ICUService {
         }
 
         protected boolean handlesKey(Key key) {
+            if (key == null) {
+                return false;
+            }
+
             String id = key.currentID();
             Set supported = getSupportedIDs();
             return supported.contains(id);
