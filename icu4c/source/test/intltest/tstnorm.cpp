@@ -8,12 +8,14 @@
 #include "unicode/uchar.h"
 #include "unicode/normlzr.h"
 #include "unicode/uniset.h"
+#include "unicode/usetiter.h"
 #include "unicode/schriter.h"
 #include "cstring.h"
 #include "unormimp.h"
 #include "tstnorm.h"
 
-#define ARRAY_LENGTH(array) ((int32_t)(sizeof (array) / sizeof (*array)))
+#define LENGTHOF(array) ((int32_t)(sizeof(array)/sizeof((array)[0])))
+#define ARRAY_LENGTH(array) LENGTHOF(array)
 
 #define CASE(id,test) case id:                          \
                           name = #test;                 \
@@ -1005,6 +1007,17 @@ _sign(int32_t value) {
     }
 }
 
+static const char *
+_signString(int32_t value) {
+    if(value<0) {
+        return "<0";
+    } else if(value==0) {
+        return "=0";
+    } else /* value>0 */ {
+        return ">0";
+    }
+}
+
 void
 BasicNormalizerTest::TestCompare() {
     // test Normalizer::compare and unorm_compare (thinly wrapped by the former)
@@ -1128,16 +1141,16 @@ BasicNormalizerTest::TestCompare() {
     static const struct {
         uint32_t options;
         const char *name;
-    } opt[6]={
+    } opt[]={
         { 0, "default" },
-        { U_COMPARE_CODE_POINT_ORDER, "code point order" },
+        { U_COMPARE_CODE_POINT_ORDER, "c.p. order" },
         { U_COMPARE_IGNORE_CASE, "ignore case" },
-        { U_COMPARE_CODE_POINT_ORDER|U_COMPARE_IGNORE_CASE, "code point order & ignore case" },
+        { U_COMPARE_CODE_POINT_ORDER|U_COMPARE_IGNORE_CASE, "c.p. order & ignore case" },
         { U_COMPARE_IGNORE_CASE|U_FOLD_CASE_EXCLUDE_SPECIAL_I, "ignore case & special i" },
-        { U_COMPARE_CODE_POINT_ORDER|U_COMPARE_IGNORE_CASE|U_FOLD_CASE_EXCLUDE_SPECIAL_I, "code point order & ignore case & special i" }
+        { U_COMPARE_CODE_POINT_ORDER|U_COMPARE_IGNORE_CASE|U_FOLD_CASE_EXCLUDE_SPECIAL_I, "c.p. order & ignore case & special i" }
     };
 
-    int32_t i, j, k, count=(int32_t)(sizeof(strings)/sizeof(strings[0]));
+    int32_t i, j, k, count=LENGTHOF(strings);
     int32_t result, refResult;
 
     UErrorCode errorCode;
@@ -1150,14 +1163,15 @@ BasicNormalizerTest::TestCompare() {
     // test them each with each other
     for(i=0; i<count; ++i) {
         for(j=i; j<count; ++j) {
-            for(k=0; k<(int32_t)(sizeof(opt)/sizeof(opt[0])); ++k) {
+            for(k=0; k<LENGTHOF(opt); ++k) {
                 // test Normalizer::compare
                 errorCode=U_ZERO_ERROR;
                 result=_norm_compare(s[i], s[j], opt[k].options, errorCode);
                 refResult=ref_norm_compare(s[i], s[j], opt[k].options, errorCode);
                 if(_sign(result)!=_sign(refResult)) {
-                    errln("Normalizer::compare(%d, %d, %s)=%d should be same sign as %d (%s)",
-                        i, j, opt[k].name, result, refResult, u_errorName(errorCode));
+                    errln("Normalizer::compare(%d, %d, %s)%s should be %s %s",
+                        i, j, opt[k].name, _signString(result), _signString(refResult),
+                        U_SUCCESS(errorCode) ? "" : u_errorName(errorCode));
                 }
 
                 // test UnicodeString::caseCompare - same internal implementation function
@@ -1166,11 +1180,73 @@ BasicNormalizerTest::TestCompare() {
                     result=s[i].caseCompare(s[j], opt[k].options);
                     refResult=ref_case_compare(s[i], s[j], opt[k].options);
                     if(_sign(result)!=_sign(refResult)) {
-                        errln("Normalizer::compare(%d, %d, %s)=%d should be same sign as %d (%s)",
-                            i, j, opt[k].name, result, refResult, u_errorName(errorCode));
+                        errln("UniStr::caseCompare(%d, %d, %s)%s should be %s %s",
+                            i, j, opt[k].name, _signString(result), _signString(refResult),
+                            U_SUCCESS(errorCode) ? "" : u_errorName(errorCode));
                     }
                 }
             }
+        }
+    }
+
+    // test cases with i and I to make sure Turkic works
+    static const UChar iI[]={ 0x49, 0x69, 0x130, 0x131 };
+    USerializedSet sset;
+    UnicodeSet set;
+
+    UnicodeString s1, s2;
+    UChar32 start, end;
+
+    // collect all sets into one for contiguous output
+    for(i=0; i<LENGTHOF(iI); ++i) {
+        if(unorm_getCanonStartSet(iI[i], &sset)) {
+            count=uset_getSerializedRangeCount(&sset);
+            for(j=0; j<count; ++j) {
+                uset_getSerializedRange(&sset, j, &start, &end);
+                set.add(start, end);
+            }
+        }
+    }
+
+    // test all of these precomposed characters
+    UnicodeSetIterator it(set);
+    while(it.nextRange() && !it.isString()) {
+        start=it.getCodepoint();
+        end=it.getCodepointEnd();
+        while(start<=end) {
+            s1.setTo(start);
+            errorCode=U_ZERO_ERROR;
+            Normalizer::decompose(s1, FALSE, 0, s2, errorCode);
+            if(U_FAILURE(errorCode)) {
+                errln("Normalizer::decompose(U+%04x) failed: %s", start, u_errorName(errorCode));
+                return;
+            }
+
+            for(k=0; k<LENGTHOF(opt); ++k) {
+                // test Normalizer::compare
+                errorCode=U_ZERO_ERROR;
+                result=_norm_compare(s1, s2, opt[k].options, errorCode);
+                refResult=ref_norm_compare(s1, s2, opt[k].options, errorCode);
+                if(_sign(result)!=_sign(refResult)) {
+                    errln("Normalizer::compare(U+%04x with its NFD, %s)%s should be %s %s",
+                        start, opt[k].name, _signString(result), _signString(refResult),
+                        U_SUCCESS(errorCode) ? "" : u_errorName(errorCode));
+                }
+
+                // test UnicodeString::caseCompare - same internal implementation function
+                if(opt[k].options&U_COMPARE_IGNORE_CASE) {
+                    errorCode=U_ZERO_ERROR;
+                    result=s1.caseCompare(s2, opt[k].options);
+                    refResult=ref_case_compare(s1, s2, opt[k].options);
+                    if(_sign(result)!=_sign(refResult)) {
+                        errln("UniStr::caseCompare(U+%04x with its NFD, %s)%s should be %s %s",
+                            start, opt[k].name, _signString(result), _signString(refResult),
+                            U_SUCCESS(errorCode) ? "" : u_errorName(errorCode));
+                    }
+                }
+            }
+
+            ++start;
         }
     }
 }
