@@ -34,6 +34,11 @@
     void TestConstruction2(void);
 
     void TestAliasConflict(void);
+
+    static void TestGetSize(void);
+
+    static void TestGetLocaleByType(void);
+
     /**
      * extensive subtests called by TestResourceBundles
      **/
