@@ -136,7 +136,12 @@
  *        15.. 8 maximum output UChars
  *         7.. 0 maximum UChars per byte
  *
- *   [19]..[30] reserved, 0
+ *   [19] Bit field containing flags:
+ *               (extension table unicodeMask)
+ *         1     UCNV_HAS_SURROGATES flag for the extension table
+ *         0     UCNV_HAS_SUPPLEMENTARY flag for the extension table
+ *
+ *   [20]..[30] reserved, 0
  *   [31] number of bytes for the entire extension structure
  *   [>31] reserved; there are indexes[0] indexes
  *
@@ -317,8 +322,9 @@ enum {
 
     UCNV_EXT_COUNT_BYTES,               /* 17 */
     UCNV_EXT_COUNT_UCHARS,
+    UCNV_EXT_FLAGS,
 
-    UCNV_EXT_RESERVED_INDEX,            /* 19, moves with additional indexes */
+    UCNV_EXT_RESERVED_INDEX,            /* 20, moves with additional indexes */
 
     UCNV_EXT_SIZE=31,
     UCNV_EXT_INDEXES_MIN_LENGTH=32
