@@ -2819,7 +2819,7 @@ uloc_acceptLanguageFromHTTP(char *result, int32_t resultAvailable, UAcceptResult
                           UErrorCode *status)
 {
   _acceptLangItem j[200];
-  const char **strs;
+  char **strs;
   char tmp[ULOC_FULLNAME_CAPACITY +1];
   int32_t n = 0;
   const char *itemEnd;
@@ -2844,7 +2844,6 @@ uloc_acceptLanguageFromHTTP(char *result, int32_t resultAvailable, UAcceptResult
     }
     if(paramEnd && paramEnd<itemEnd) { 
       /* semicolon (;) is closer than end (,) */
-      double q;
       t = paramEnd+1;
       if(*t=='q') {
         t++;
@@ -2858,8 +2857,7 @@ uloc_acceptLanguageFromHTTP(char *result, int32_t resultAvailable, UAcceptResult
       while(isspace(*t)) {
         t++;
       }
-      q = atof(t);
-      j[n].q = q;
+      j[n].q = atof(t);
     } else {
       /* no semicolon - it's 1.0 */
       j[n].q = 1.0;
@@ -2884,11 +2882,11 @@ uloc_acceptLanguageFromHTTP(char *result, int32_t resultAvailable, UAcceptResult
     }
     if(n>=(sizeof(j)/sizeof(j[0]))) { /* overflowed */
       *status = U_INTERNAL_PROGRAM_ERROR;
-      return;
+      return -1;
     }
   }
   qsort(j, n, sizeof(j[0]), uloc_acceptLanguageCompare);
-  strs = uprv_malloc(sizeof(strs[0])*n);
+  strs = uprv_malloc((size_t)(sizeof(strs[0])*n));
   for(i=0;i<n;i++) {
 #if defined(ULOC_DEBUG)
     /*fprintf(stderr,"%d: s <%s> q <%g>\n", i, j[i].locale, j[i].q);*/
@@ -2896,9 +2894,9 @@ uloc_acceptLanguageFromHTTP(char *result, int32_t resultAvailable, UAcceptResult
     strs[i]=j[i].locale;
   }
   res =  uloc_acceptLanguage(result, resultAvailable, outResult, 
-                             strs, n, availableLocales, status);
+                             (const char**)strs, n, availableLocales, status);
   for(i=0;i<n;i++) {
-    uprv_free((char*)strs[i]);
+    uprv_free(strs[i]);
   }
   uprv_free(strs);
   return res;
@@ -2906,25 +2904,25 @@ uloc_acceptLanguageFromHTTP(char *result, int32_t resultAvailable, UAcceptResult
 
 U_CAPI int32_t U_EXPORT2
 uloc_acceptLanguage(char *result, int32_t resultAvailable, 
-                    UAcceptResult *outResult, const char *acceptList[],
+                    UAcceptResult *outResult, const char **acceptList,
                     int32_t acceptListCount,
                     UEnumeration* availableLocales,
                     UErrorCode *status) {
   int32_t i,j;
   int32_t len;
-  int32_t maxLen=0;
+  size_t maxLen=0;
   char tmp[ULOC_FULLNAME_CAPACITY+1];
   const char *l;
   char **fallbackList;
   if(U_FAILURE(*status)) {
     return -1;
   }
-  fallbackList = uprv_malloc(sizeof(fallbackList[0])*acceptListCount);
+  fallbackList = uprv_malloc((size_t)(sizeof(fallbackList[0])*acceptListCount));
   for(i=0;i<acceptListCount;i++) {
 #if defined(ULOC_DEBUG)
     fprintf(stderr,"%02d: %s\n", i, acceptList[i]);
 #endif
-    while(l=uenum_next(availableLocales, NULL, status)) {
+    while((l=uenum_next(availableLocales, NULL, status))) {
 #if defined(ULOC_DEBUG)
       fprintf(stderr,"  %s\n", l);
 #endif
@@ -2964,7 +2962,7 @@ uloc_acceptLanguage(char *result, int32_t resultAvailable,
 #if defined(ULOC_DEBUG)
         fprintf(stderr,"Try: [%s]", fallbackList[i]);
 #endif
-        while(l=uenum_next(availableLocales, NULL, status)) {
+        while((l=uenum_next(availableLocales, NULL, status))) {
 #if defined(ULOC_DEBUG)
           fprintf(stderr,"  %s\n", l);
 #endif
