@@ -9,6 +9,7 @@
 #define TRANSLIT_H
 
 #include "unicode/unistr.h"
+#include "unicode/parseerr.h"
 
 class Replaceable;
 class UnicodeFilter;
@@ -753,7 +754,8 @@ public:
      * @see #getID
      */
     static Transliterator* createInstance(const UnicodeString& ID,
-                                          Direction dir = FORWARD);
+                                          Direction dir = FORWARD,
+                                          ParseError* parseError = 0);
 
 private:
 
@@ -784,7 +786,8 @@ private:
      * Returns a transliterator object given its ID.  Unlike getInstance(),
      * this method returns null if it cannot make use of the given ID.
      */
-    static Transliterator* _createInstance(const UnicodeString& ID);
+    static Transliterator* _createInstance(const UnicodeString& ID,
+                                           ParseError* parseError = 0);
 
 public:
 
