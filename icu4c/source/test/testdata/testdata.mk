@@ -30,4 +30,4 @@ test.dat
         @"$(ICUTOOLS)\genrb\$(CFG)\genrb" -s$(TESTDATA) -d$(TESTDATA) $(?F)
 
 test.dat : {"$(ICUTOOLS)\gentest\$(CFG)"}gentest.exe
-	"$(ICUTOOLS)\gentest\$(CFG)"\gentest.exe -d$(TESTDATA)
+	"$(ICUTOOLS)\gentest\$(CFG)\gentest" -d$(TESTDATA)
