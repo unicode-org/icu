@@ -4,8 +4,8 @@
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 * $Source: /xsrl/Nsvn/icu/icu/source/i18n/Attic/upropset.cpp,v $
-* $Date: 2001/11/13 22:35:03 $
-* $Revision: 1.5 $
+* $Date: 2001/11/19 21:25:34 $
+* $Revision: 1.6 $
 **********************************************************************
 */
 #include "upropset.h"
@@ -17,6 +17,7 @@
 #include "hash.h"
 #include "mutex.h"
 #include "ucln_in.h"
+#include "charstr.h"
 
 U_NAMESPACE_BEGIN
 
@@ -111,38 +112,6 @@ static const UChar INCLUSIONS_PATTERN[] =
 92,85,48,48,48,70,48,48,48,49,45,92,85,48,48,48,70,70,70,70,68,32,
 92,85,48,48,49,48,48,48,48,49,45,92,85,48,48,49,48,70,70,70,68,93,0};
 // "[^\\u3401-\\u4DB5 \\u4E01-\\u9FA5 \\uAC01-\\uD7A3 \\uD801-\\uDB7F \\uDB81-\\uDBFF \\uDC01-\\uDFFF \\uE001-\\uF8FF \\U0001044F-\\U0001CFFF \\U0001D801-\\U0001FFFF \\U00020001-\\U0002A6D6 \\U0002A6D8-\\U0002F7FF \\U0002FA1F-\\U000E0000 \\U000E0081-\\U000EFFFF \\U000F0001-\\U000FFFFD \\U00100001-\\U0010FFFD]"
-
-//----------------------------------------------------------------------
-// class _CharString
-// An identical class named CharString can be found in transreg.cpp.
-// If we find ourselves needing another copy of this utility class we
-// should probably pull it out into putil or some such place.
-//----------------------------------------------------------------------
-
-class _CharString {
- public:
-    _CharString(const UnicodeString& str);
-    ~_CharString();
-    operator char*() { return ptr; }
- private:
-    char buf[128];
-    char* ptr;
-};
-
-_CharString::_CharString(const UnicodeString& str) {
-    if (str.length() >= (int32_t)sizeof(buf)) {
-        ptr = new char[str.length() + 8];
-    } else {
-        ptr = buf;
-    }
-    str.extract(0, 0x7FFFFFFF, ptr, "");
-}
-
-_CharString::~_CharString() {
-    if (ptr != buf) {
-        delete[] ptr;
-    }
-}
 
 //----------------------------------------------------------------
 // Public API
@@ -284,7 +253,7 @@ static UBool _numericValueFilter(UChar32 c, void* context) {
 }
 
 UnicodeSet* UnicodePropertySet::createNumericValueSet(const UnicodeString& valueName) {
-    _CharString cvalueName(valueName);
+    CharString cvalueName(valueName);
     UnicodeSet* set = new UnicodeSet();
     char* end;
     double value = uprv_strtod(cvalueName, &end);
@@ -328,7 +297,7 @@ UnicodeSet* UnicodePropertySet::createCategorySet(const UnicodeString& valueName
  * @param valueName a pre-munged script value name
  */
 UnicodeSet* UnicodePropertySet::createScriptSet(const UnicodeString& valueName) {
-    _CharString cvalueName(valueName);
+    CharString cvalueName(valueName);
     UErrorCode ec = U_ZERO_ERROR;
     const int32_t capacity = 10;
     UScriptCode script[capacity]={USCRIPT_INVALID_CODE};
