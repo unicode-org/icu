@@ -183,7 +183,7 @@ public:
    * <p>
    * The <code>options</code> parameter specifies which optional
    * <code>Normalizer</code> features are to be enabled for this operation.
-   * Currently the only available option is deprecated.
+   * Currently the only available option is obsolete.
    * If you want the default behavior corresponding to one of the standard
    * Unicode Normalization Forms, use 0 for this argument.
    * <p>
@@ -206,7 +206,7 @@ public:
    * <p>
    * The <code>options</code> parameter specifies which optional
    * <code>Normalizer</code> features are to be enabled for this operation.
-   * Currently the only available option is deprecated.
+   * Currently the only available option is obsolete.
    * If you want the default behavior corresponding
    * to Unicode Normalization Form <b>C</b> or <b>KC</b>,
    * use 0 for this argument.
@@ -232,7 +232,7 @@ public:
    * <p>
    * The <code>options</code> parameter specifies which optional
    * <code>Normalizer</code> features are to be enabled for this operation.
-   * Currently the only available option is deprecated.
+   * Currently the only available option is obsolete.
    * The desired options should be OR'ed together to determine the value
    * of this argument.  If you want the default behavior corresponding
    * to Unicode Normalization Form <b>D</b> or <b>KD</b>,
@@ -467,7 +467,7 @@ public:
    * If the next call is to previous() then this piece of text probably
    * did not need to be normalized.
    *
-   * This function is deprecated.
+   * This function is obsolete.
    * It is recommended to use setIndexOnly() instead of setIndex().
    *
    * @param index the desired index in the input text.

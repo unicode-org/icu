@@ -33,7 +33,7 @@
 #ifdef ICU_UNICODE_CLASS_USE_DEPRECATES
 U_NAMESPACE_BEGIN
 /**
- * This class is deprecated and will be removed.
+ * This class is obsolete and will be removed.
  * Use the C API, see uchar.h and utf.h.
  * The Unicode class is a pure 1:1 wrapper for the functions and macros there.
  *

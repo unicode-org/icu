@@ -21,7 +21,7 @@
 
 U_NAMESPACE_BEGIN
 /**
- * This class is deprecated and will be removed.
+ * This class is obsolete and will be removed.
  * Use the more powerful C conversion API with the UConverter type and ucnv_... functions.
  *
  * There are also two new functions in ICU 2.0 that convert a UnicodeString
