@@ -20,7 +20,7 @@ include @platform_make_fragment@
 CLEANFILES = *~
 
 SUBDIRS = date cal
-ALLSUBDIRS = datefmt msgfmt numfmt props translit ucnv udata ufortune uresb ustring
+ALLSUBDIRS = datefmt msgfmt numfmt props translit ucnv udata ufortune uresb ustring break
 
 ## List of phony targets
 .PHONY : all all-local all-recursive install install-local		\
