@@ -297,12 +297,9 @@ str_write_java( uint16_t* src, int32_t srcLen, UBool printEndLine, UErrorCode *s
     }
 }
 
-/* Writing Functions */
 static void 
-string_write_java(struct SResource *res,UErrorCode *status) {       
-    if(uprv_strcmp(srBundle->fKeys+res->fKey,"%%UCARULES")==0 ){
+write_utf8_file(struct SResource *res, const char *file, UErrorCode *status){
         char fileName[1024] ={0};
-        const char* file = "UCARules.utf8";
         FileStream* datFile = NULL;
         const char* type = "new ICUListResourceBundle.ResourceString(";
         char* dest  = (char*) uprv_malloc( 8 * res->u.fString.fLength);
@@ -336,7 +333,24 @@ string_write_java(struct SResource *res,UErrorCode *status) {
         T_FileStream_write(datFile,dest,len);
         T_FileStream_close(datFile);
         uprv_free(dest);
-           
+}
+#define MAX_SEQUENCE_LENGTH 30000
+/* Writing Functions */
+static void 
+string_write_java(struct SResource *res,UErrorCode *status) {       
+    if(uprv_strcmp(srBundle->fKeys+res->fKey,"%%UCARULES")==0 ){
+
+        const char* file = "UCARules.utf8";
+        write_utf8_file(res, file, status);
+    }else if(uprv_strcmp(srBundle->fKeys+res->fKey,"Sequence")==0 
+             && res->fType == RES_STRING 
+             && res->u.fString.fLength > MAX_SEQUENCE_LENGTH){
+        char file[1024] = {0};
+        uprv_strcpy(file, "CollationSequence_");
+        uprv_strcat(file, srBundle->fLocale);
+        uprv_strcat(file, ".utf8");
+        write_utf8_file(res, file, status);
+
     }else{
         str_write_java(res->u.fString.fChars,res->u.fString.fLength,TRUE,status);
 
