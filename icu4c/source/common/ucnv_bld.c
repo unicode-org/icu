@@ -141,46 +141,14 @@ static struct {
 };
 
 
-/*Takes an alias name gets an actual converter file name
- *goes to disk and opens it.
- *allocates the memory and returns a new UConverter object
- */
-static UConverterSharedData *createConverterFromFile(const char *pkg, const char *converterName, UErrorCode * err);
-
-static const UConverterSharedData *getAlgorithmicTypeFromName(const char *realName);
-
-/* Stores the shared data in the SHARED_DATA_HASHTABLE
- * @param data The shared data
- */
-static void ucnv_shareConverterData(UConverterSharedData * data);
-
-/* gets the shared data from the SHARED_DATA_HASHTABLE (might return NULL if it isn't there)
- * @param name The name of the shared data
- * @return the shared data from the SHARED_DATA_HASHTABLE
- */
-static UConverterSharedData *ucnv_getSharedConverterData(const char *name);
-
-/* Deletes (frees) the Shared data it's passed. first it checks the referenceCounter to
- * see if anyone is using it, if not it frees all the memory stemming from sharedConverterData and
- * returns TRUE,
- * otherwise returns FALSE
- * @param sharedConverterData The shared data
- * @return if not it frees all the memory stemming from sharedConverterData and
- * returns TRUE, otherwise returns FALSE
- */
-static UBool ucnv_deleteSharedConverterData(UConverterSharedData * sharedConverterData);
-
-/**
- * Un flatten shared data from a UDATA..
- */
-static UConverterSharedData* ucnv_data_unFlattenClone(UDataMemory *pData, UErrorCode *status);
-
 /*initializes some global variables */
 static UHashtable *SHARED_DATA_HASHTABLE = NULL;
 static UMTX        cnvCacheMutex = NULL;  /* Mutex for synchronizing cnv cache access. */
                                           /*  Note:  the global mutex is used for      */
                                           /*         reference count updates.          */
 
+
+static const char DATA_TYPE[] = "cnv";
 
 /* ucnv_cleanup - delete all storage held by the converter cache, except any in use    */
 /*                by open converters.                                                  */
@@ -217,9 +185,77 @@ isCnvAcceptable(void *context,
         pInfo->formatVersion[0]==6);  /* Everything will be version 6 */
 }
 
-#define DATA_TYPE "cnv"
+/**
+ * Un flatten shared data from a UDATA..
+ */
+static UConverterSharedData*
+ucnv_data_unFlattenClone(UDataMemory *pData, UErrorCode *status)
+{
+    /* UDataInfo info; -- necessary only if some converters have different formatVersion */
+    const uint8_t *raw = (const uint8_t *)udata_getMemory(pData);
+    const UConverterStaticData *source = (const UConverterStaticData *) raw;
+    UConverterSharedData *data;
+    UConverterType type = (UConverterType)source->conversionType;
 
-static UConverterSharedData *createConverterFromFile (const char* pkg, const char *fileName, UErrorCode * err)
+    if(U_FAILURE(*status))
+        return NULL;
+
+    if( (uint16_t)type >= UCNV_NUMBER_OF_SUPPORTED_CONVERTER_TYPES ||
+        converterData[type] == NULL ||
+        converterData[type]->referenceCounter != 1 ||
+        source->structSize != sizeof(UConverterStaticData))
+    {
+        *status = U_INVALID_TABLE_FORMAT;
+        return NULL;
+    }
+
+    data = (UConverterSharedData *)uprv_malloc(sizeof(UConverterSharedData));
+    if(data == NULL) {
+        *status = U_MEMORY_ALLOCATION_ERROR;
+        return NULL;
+    }
+
+    /* copy initial values from the static structure for this type */
+    uprv_memcpy(data, converterData[type], sizeof(UConverterSharedData));
+
+    /*
+     * It would be much more efficient if the table were a direct member, not a pointer.
+     * However, that would add to the size of all UConverterSharedData objects
+     * even if they do not use this table (especially algorithmic ones).
+     * If this changes, then the static templates from converterData[type]
+     * need more entries.
+     */
+    data->table = (UConverterTable *)uprv_malloc(sizeof(UConverterTable));
+    if(data->table == NULL) {
+        uprv_free(data);
+        *status = U_MEMORY_ALLOCATION_ERROR;
+        return NULL;
+    }
+    uprv_memset(data->table, 0, sizeof(UConverterTable));
+    
+    data->staticData = source;
+    
+    data->sharedDataCached = FALSE;
+
+    /* fill in fields from the loaded data */
+    data->dataMemory = (void*)pData; /* for future use */
+
+    if(data->impl->load != NULL) {
+        data->impl->load(data, raw + source->structSize, status);
+        if(U_FAILURE(*status)) {
+            uprv_free(data->table);
+            uprv_free(data);
+            return NULL;
+        }
+    }
+    return data;
+}
+
+/*Takes an alias name gets an actual converter file name
+ *goes to disk and opens it.
+ *allocates the memory and returns a new UConverter object
+ */
+static UConverterSharedData *createConverterFromFile(const char* pkg, const char *fileName, UErrorCode * err)
 {
     UDataMemory *data;
     UConverterSharedData *sharedData;
@@ -303,6 +339,9 @@ getAlgorithmicTypeFromName(const char *realName)
 /* Puts the shared data in the static hashtable SHARED_DATA_HASHTABLE */
 /*   Will always be called with the cnvCacheMutex alrady being held   */
 /*     by the calling function.                                       */
+/* Stores the shared data in the SHARED_DATA_HASHTABLE
+ * @param data The shared data
+ */
 static void
 ucnv_shareConverterData(UConverterSharedData * data)
 {
@@ -344,6 +383,10 @@ ucnv_shareConverterData(UConverterSharedData * data)
 
 /*  Look up a converter name in the shared data cache.                    */
 /*    cnvCacheMutex must be held by the caller to protect the hash table. */
+/* gets the shared data from the SHARED_DATA_HASHTABLE (might return NULL if it isn't there)
+ * @param name The name of the shared data
+ * @return the shared data from the SHARED_DATA_HASHTABLE
+ */
 static UConverterSharedData *
 ucnv_getSharedConverterData(const char *name)
 {
@@ -364,6 +407,14 @@ ucnv_getSharedConverterData(const char *name)
 
 /*frees the string of memory blocks associates with a sharedConverter
  *if and only if the referenceCounter == 0
+ */
+/* Deletes (frees) the Shared data it's passed. first it checks the referenceCounter to
+ * see if anyone is using it, if not it frees all the memory stemming from sharedConverterData and
+ * returns TRUE,
+ * otherwise returns FALSE
+ * @param sharedConverterData The shared data
+ * @return if not it frees all the memory stemming from sharedConverterData and
+ * returns TRUE, otherwise returns FALSE
  */
 static UBool
 ucnv_deleteSharedConverterData(UConverterSharedData * deadSharedData)
@@ -504,12 +555,11 @@ parseConverterOptions(const char *inName,
         /* add processing for new options here with another } else if(uprv_strncmp(inName, "option-name=", XX)==0) { */
         } else {
             /* ignore any other options until we define some */
-            do {
-                c=*inName++;
-                if(c==0) {
-                    return;
-                }
-            } while(c!=UCNV_OPTION_SEP_CHAR);
+            while(((c = *inName++) != 0) && (c != UCNV_OPTION_SEP_CHAR)) {
+            }
+            if(c==0) {
+                return;
+            }
         }
     }
 }
@@ -606,11 +656,11 @@ ucnv_createConverter(UConverter *myUConverter, const char *converterName, UError
 
     if (U_FAILURE(*err))
     {
+        umtx_lock(&cnvCacheMutex);
         if (mySharedConverterData->referenceCounter != ~0) {
-            umtx_lock(&cnvCacheMutex);
             --mySharedConverterData->referenceCounter;
-            umtx_unlock(&cnvCacheMutex);
         }
+        umtx_unlock(&cnvCacheMutex);
         return NULL;
     }
 
@@ -623,6 +673,7 @@ ucnv_createAlgorithmicConverter(UConverter *myUConverter,
                                 const char *locale, uint32_t options,
                                 UErrorCode *err) {
     const UConverterSharedData *sharedData;
+    UBool isAlgorithmicConverter;
 
     if(type<0 || UCNV_NUMBER_OF_SUPPORTED_CONVERTER_TYPES<=type) {
         *err = U_ILLEGAL_ARGUMENT_ERROR;
@@ -630,7 +681,10 @@ ucnv_createAlgorithmicConverter(UConverter *myUConverter,
     }
 
     sharedData = converterData[type];
-    if(sharedData == NULL || sharedData->referenceCounter != ~0) {
+    umtx_lock(&cnvCacheMutex);
+    isAlgorithmicConverter = (UBool)(sharedData == NULL || sharedData->referenceCounter != ~0);
+    umtx_unlock(&cnvCacheMutex);
+    if (isAlgorithmicConverter) {
         /* not a valid type, or not an algorithmic converter */
         *err = U_ILLEGAL_ARGUMENT_ERROR;
         return NULL;
@@ -721,69 +775,6 @@ ucnv_createConverterFromSharedData(UConverter *myUConverter,
     }
 
     return myUConverter;
-}
-
-static UConverterSharedData*
-ucnv_data_unFlattenClone(UDataMemory *pData, UErrorCode *status)
-{
-    /* UDataInfo info; -- necessary only if some converters have different formatVersion */
-    const uint8_t *raw = (const uint8_t *)udata_getMemory(pData);
-    const UConverterStaticData *source = (const UConverterStaticData *) raw;
-    UConverterSharedData *data;
-    UConverterType type = (UConverterType)source->conversionType;
-
-    if(U_FAILURE(*status))
-        return NULL;
-
-    if( (uint16_t)type >= UCNV_NUMBER_OF_SUPPORTED_CONVERTER_TYPES ||
-        converterData[type] == NULL ||
-        converterData[type]->referenceCounter != 1 ||
-        source->structSize != sizeof(UConverterStaticData))
-    {
-        *status = U_INVALID_TABLE_FORMAT;
-        return NULL;
-    }
-
-    data = (UConverterSharedData *)uprv_malloc(sizeof(UConverterSharedData));
-    if(data == NULL) {
-        *status = U_MEMORY_ALLOCATION_ERROR;
-        return NULL;
-    }
-
-    /* copy initial values from the static structure for this type */
-    uprv_memcpy(data, converterData[type], sizeof(UConverterSharedData));
-
-    /*
-     * It would be much more efficient if the table were a direct member, not a pointer.
-     * However, that would add to the size of all UConverterSharedData objects
-     * even if they do not use this table (especially algorithmic ones).
-     * If this changes, then the static templates from converterData[type]
-     * need more entries.
-     */
-    data->table = (UConverterTable *)uprv_malloc(sizeof(UConverterTable));
-    if(data->table == NULL) {
-        uprv_free(data);
-        *status = U_MEMORY_ALLOCATION_ERROR;
-        return NULL;
-    }
-    uprv_memset(data->table, 0, sizeof(UConverterTable));
-    
-    data->staticData = source;
-    
-    data->sharedDataCached = FALSE;
-
-    /* fill in fields from the loaded data */
-    data->dataMemory = (void*)pData; /* for future use */
-
-    if(data->impl->load != NULL) {
-        data->impl->load(data, raw + source->structSize, status);
-        if(U_FAILURE(*status)) {
-            uprv_free(data->table);
-            uprv_free(data);
-            return NULL;
-        }
-    }
-    return data;
 }
 
 /*Frees all shared immutable objects that aren't referred to (reference count = 0)
