@@ -100,7 +100,7 @@ parseMappings(const char *filename, UStringPrepProfile* data, UBool reportError,
 
     u_parseDelimitedFile(filename, ';', fields, 3, strprepProfileLineFn, (void*)data, pErrorCode);
 
-    //fprintf(stdout,"Number of code points that have mappings with length >1 : %i\n",len);
+    /*fprintf(stdout,"Number of code points that have mappings with length >1 : %i\n",len);*/
 
     if(U_FAILURE(*pErrorCode) && (reportError || *pErrorCode!=U_FILE_ACCESS_ERROR)) {
         log_err( "testidn error: u_parseDelimitedFile(\"%s\") failed - %s\n", filename, u_errorName(*pErrorCode));
