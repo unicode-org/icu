@@ -65,19 +65,19 @@ Transliterator* EscapeTransliterator::_createPerl(const UnicodeString& ID, Token
 void EscapeTransliterator::registerIDs() {
     Token t = integerToken(0);
 
-    Transliterator::_registerFactory("Any-Hex/Unicode", _createUnicode, t);
+    Transliterator::_registerFactory(UNICODE_STRING_SIMPLE("Any-Hex/Unicode"), _createUnicode, t);
 
-    Transliterator::_registerFactory("Any-Hex/Java", _createJava, t);
+    Transliterator::_registerFactory(UNICODE_STRING_SIMPLE("Any-Hex/Java"), _createJava, t);
 
-    Transliterator::_registerFactory("Any-Hex/C", _createC, t);
+    Transliterator::_registerFactory(UNICODE_STRING_SIMPLE("Any-Hex/C"), _createC, t);
 
-    Transliterator::_registerFactory("Any-Hex/XML", _createXML, t);
+    Transliterator::_registerFactory(UNICODE_STRING_SIMPLE("Any-Hex/XML"), _createXML, t);
 
-    Transliterator::_registerFactory("Any-Hex/XML10", _createXML10, t);
+    Transliterator::_registerFactory(UNICODE_STRING_SIMPLE("Any-Hex/XML10"), _createXML10, t);
 
-    Transliterator::_registerFactory("Any-Hex/Perl", _createPerl, t);
+    Transliterator::_registerFactory(UNICODE_STRING_SIMPLE("Any-Hex/Perl"), _createPerl, t);
 
-    Transliterator::_registerFactory("Any-Hex", _createJava, t);
+    Transliterator::_registerFactory(UNICODE_STRING_SIMPLE("Any-Hex"), _createJava, t);
 }
 
 /**
