@@ -47,11 +47,11 @@ endif
 
 # Build flags
 
-CFLAGS = -O2 # -Wall
+CFLAGS = -O3 # -Wall
 ifeq ($(shell uname -m),s390)
 CXXFLAGS = -O1 # -Wall
 else
-CXXFLAGS = -O2 # -Wall
+CXXFLAGS = -O # -Wall
 endif
 
 INSTALL_PROGRAM = /usr/bin/install
@@ -70,7 +70,7 @@ configure: $(builddir)/configure-stamp
 $(builddir)/configure-stamp:
 	# Add here commands to configure the package.
 	test -d $(builddir) || mkdir $(builddir)
-	cd $(builddir); CFLAGS='$(CFLAGS)' CXXFLAGS='$(CXXFLAGS)' INSTALL_PROGRAM='$(INSTALL_PROGRAM)' $(SHELL) $(builddir_relative_srcdir)/configure --srcdir=$(builddir_relative_srcdir) --prefix=/usr --mandir=/usr/share/man --sysconfdir=/etc --localstatedir=/var --with-data-packaging=files --disable-rpath --enable-shared --enable-static --disable-samples
+	cd $(builddir); CFLAGS='$(CFLAGS)' CXXFLAGS='$(CXXFLAGS)' INSTALL_PROGRAM='$(INSTALL_PROGRAM)' $(SHELL) $(builddir_relative_srcdir)/configure --srcdir=$(builddir_relative_srcdir) --prefix=/usr --mandir=/usr/share/man --sysconfdir=/etc --localstatedir=/var --with-data-packaging=files --enable-shared --enable-static --disable-samples
 	touch $@
 
 build: $(builddir)/configure-stamp debian-files $(builddir)/build-stamp
@@ -94,12 +94,18 @@ $(builddir)/build-stamp:
 
 	# Add here commands to compile the package.
 	$(MAKE) -C $(builddir)
+	$(MAKE) -C $(builddir) doc
 
 	touch $@
 
 clean: update-debian-files
 	dh_testdir
 	dh_testroot
+	-test -r /usr/share/misc/config.sub && \
+	   cp -f /usr/share/misc/config.sub $(srcdir)/config.sub
+	-test -r /usr/share/misc/config.guess && \
+	   cp -f /usr/share/misc/config.guess $(srcdir)/config.guess
+
 	 $(RM) $(builddir)/build-stamp $(builddir)/configure-stamp
 
 	# Add here commands to clean up after the build process.
@@ -120,6 +126,7 @@ install: build
 
 	# Add here commands to install the package into debian/tmp
 	$(MAKE) -C $(builddir) install DESTDIR=`pwd`/debian/tmp
+	$(MAKE) -C $(builddir) install-doc DESTDIR=`pwd`/debian/tmp
 
 # Build architecture-independent files here.
 binary-indep: build install
@@ -163,7 +170,7 @@ binary-arch: build install
 	#
 	# massage data files
 	#
-	$(RM) debian/tmp/$(iculibdir)/cnvalias.dat
+#	$(RM) debian/tmp/$(iculibdir)/cnvalias.dat
 ifneq ($(iculibdir),$(icufildir))
 	test -d debian/tmp/$(icufildir) || mkdir debian/tmp/$(icufildir)
 	mv debian/tmp/$(iculibdir)/*.* debian/tmp/$(icufildir)
@@ -178,11 +185,12 @@ ifneq ($(iculibdir),$(icufildir))
 	dh_movefiles -picu \
 	    $(iculibdir)/*msg.dat
 endif
+	# The license.html must be installed with ICU's source code.
+	# This includes the headers.
 	dh_movefiles -picu \
 	    etc \
 	    usr/bin \
 	    usr/sbin \
-	    $(icudatadir)/README \
 	    $(icudatadir)/license.html \
 	    $(iculibdir)/*.inc \
 	    $(icufildir)/*.cnv \
@@ -198,7 +206,7 @@ endif
 	# move the rest of the development files
 	# in their package
 	#
-	dh_movefiles usr
+	dh_movefiles -a usr
 	#
 	# do a bit of cleanup
 	#
@@ -208,30 +216,30 @@ endif
 	# continue to prepare packages
 	#
 #	dh_installdebconf
-	dh_installdocs
-	dh_installexamples $(srcdir)/samples/*
+	dh_installdocs -a
+	dh_installexamples -a $(srcdir)/samples/*
 	find debian/libicu$(major)-dev -name CVS -o -name .cvsignore | xargs $(RM) -r
-	dh_installmenu
+	dh_installmenu -a
 #	dh_installemacsen
 #	dh_installpam
 #	dh_installinit
-	dh_installcron
+	dh_installcron -a
 	dh_installmanpages -picu
-	dh_installinfo
+	dh_installinfo -a
 	# dh_undocumented -picu
-	dh_installchangelogs 
-	dh_link
-	dh_strip
-	dh_compress
-	dh_fixperms
+	dh_installchangelogs -a
+	dh_link -a
+	dh_strip -a
+	dh_compress -a
+	dh_fixperms -a
 	# You may want to make some executables suid here.
-	dh_makeshlibs
-	dh_installdeb
+	dh_makeshlibs -a
+	dh_installdeb -a
 #	dh_perl
-	dh_shlibdeps -ldebian/libicu$(major)/usr/lib
-	dh_gencontrol -- -Vversion=$(version) -Vmajor=$(major)
-	dh_md5sums
-	dh_builddeb
+	dh_shlibdeps -a -ldebian/libicu$(major)/usr/lib
+	dh_gencontrol -a -- -Vversion=$(version) -Vmajor=$(major)
+	dh_md5sums -a
+	dh_builddeb -a
 
 # Automatically update changelog and control
 update-debian-files:

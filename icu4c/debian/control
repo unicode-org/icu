@@ -1,11 +1,12 @@
 Source: icu
 Section: libs
 Priority: optional
-Maintainer: Yves Arrouye <yves@debian.org>
-Standards-Version: 3.5.6
-Build-Depends: debhelper, doxygen
+Maintainer: Daniel Glassey <wdg@debian.org>
+Uploaders: Ivo Timmermans <ivo@debian.org>
+Standards-Version: 3.6.0
+Build-Depends: debhelper (>> 3.0), doxygen, autotools-dev
 
-Package: libicu21-dev
+Package: libicu30-dev
 Section: devel
 Architecture: any
 Depends: libicu${major} (= ${Source-Version}), libc6-dev
@@ -24,7 +25,7 @@ Description: API documentation for ICU classes and functions
  and locale support. This package contains HTML files documenting the ICU
  APIs.
  
-Package: libicu21
+Package: libicu30
 Section: libs
 Architecture: any
 Depends: ${shlibs:Depends}
