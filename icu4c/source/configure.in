@@ -360,6 +360,7 @@ case "${host}" in
 	*-*-irix*)      platform=IRIX ;;
 	*-*-os390*)	platform=OS390 ;;
 	*-*-os400*)	platform=OS400 ;;
+	*-apple-rhapsody*)	platform=RHAPSODY ;;
 	*) 		platform=UNKNOWN ;;
 esac
 AC_SUBST(platform)
