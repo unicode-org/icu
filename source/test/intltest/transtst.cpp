@@ -140,6 +140,7 @@ TransliteratorTest::runIndexedTest(int32_t index, UBool exec,
         TESTCASE(58,TestInvalidPostContext);
         TESTCASE(59,TestIDForms);
         TESTCASE(60,TestToRulesMark);
+        TESTCASE(61,TestEscape);
         default: name = ""; break;
     }
 }
@@ -2832,6 +2833,59 @@ void TransliteratorTest::TestToRulesMark() {
 
     delete t2;
     delete t3;
+}
+
+/**
+ * Test Escape and Unescape transliterators.
+ */
+void TransliteratorTest::TestEscape() {
+    UParseError pe;
+    UErrorCode ec;
+    Transliterator *t;
+
+    ec = U_ZERO_ERROR;
+    t = Transliterator::createInstance("Hex-Any", UTRANS_FORWARD, pe, ec);
+    if (U_FAILURE(ec)) {
+        errln((UnicodeString)"FAIL: createInstance");
+    } else {
+        expect(*t,
+               "\\x{40}\\U00000031&#x32;&#81;",
+               "@12Q");
+    }
+    delete t;
+
+    ec = U_ZERO_ERROR;
+    t = Transliterator::createInstance("Any-Hex/C", UTRANS_FORWARD, pe, ec);
+    if (U_FAILURE(ec)) {
+        errln((UnicodeString)"FAIL: createInstance");
+    } else {
+        expect(*t,
+               CharsToUnicodeString("A\\U0010BEEF\\uFEED"),
+               "\\u0041\\U0010BEEF\\uFEED");
+    }
+    delete t;
+
+    ec = U_ZERO_ERROR;
+    t = Transliterator::createInstance("Any-Hex/Java", UTRANS_FORWARD, pe, ec);
+    if (U_FAILURE(ec)) {
+        errln((UnicodeString)"FAIL: createInstance");
+    } else {
+        expect(*t,
+               CharsToUnicodeString("A\\U0010BEEF\\uFEED"),
+               "\\u0041\\uDBEF\\uDEEF\\uFEED");
+    }
+    delete t;
+
+    ec = U_ZERO_ERROR;
+    t = Transliterator::createInstance("Any-Hex/Perl", UTRANS_FORWARD, pe, ec);
+    if (U_FAILURE(ec)) {
+        errln((UnicodeString)"FAIL: createInstance");
+    } else {
+        expect(*t,
+               CharsToUnicodeString("A\\U0010BEEF\\uFEED"),
+               "\\x{41}\\x{10BEEF}\\x{FEED}");
+    }
+    delete t;
 }
 
 //======================================================================
