@@ -64,6 +64,7 @@ FILESEPCHAR=
 !ERROR ERROR: cannot find "$(RESFILES)"
 !ENDIF
 RB_FILES = $(RESSRC:.txt=.res)
+RB_FILES = resources\$(RB_FILES:.res =.res resources\)
 RESOURCESDIR=
 
 # This target should build all the data files
@@ -80,7 +81,7 @@ ALL : $(OUTPUT)
 # invoke pkgdata - static
 "$(DLL_OUTPUT)\$(RESNAME).lib" : $(RB_FILES) $(RESFILES)
 	@echo Building $(RESNAME).lib
-	@"$(ICUTOOLS)\pkgdata" -f -v -m static -c -p $(RESNAME) -d "$(DLL_OUTPUT)" -s "$(RESDIR)" <<pkgdatain.txt
+	@"$(ICUTOOLS)\pkgdata" -f -v -m static -c -p $(RESNAME) -d "$(DLL_OUTPUT)" <<pkgdatain.txt
 $(RB_FILES:.res =.res
 )
 <<KEEP
@@ -88,14 +89,13 @@ $(RB_FILES:.res =.res
 # This is to remove all the data files
 CLEAN :
     -@erase "$(RB_FILES)"
-	-@erase "$(RESDIR)\uconvmsg*.*"
 	-@erase "$(CFG)\*uconvmsg*.*"
-    -@"$(ICUTOOLS)\pkgdata" -f --clean -v -m static -c -p $(RESNAME) -d "$(DLL_OUTPUT)" -s "$(RESDIR)" pkgdatain.txt
+    -@"$(ICUTOOLS)\pkgdata" -f --clean -v -m static -c -p $(RESNAME) -d "$(DLL_OUTPUT)" pkgdatain.txt
 
 # Inference rule for creating resource bundles
-.txt.res:
+{$(RESDIR)}.txt{$(RESDIR)}.res:
 	@echo Making Resource Bundle files
-	"$(ICUTOOLS)\genrb" -s $(@D)\$(RESDIR) -d $(@D) $(?F)
+	"$(ICUTOOLS)\genrb" -s $(@D) -d $(@D) $(?F)
 
 
 $(RESSRC) : {"$(ICUTOOLS)"}genrb.exe
