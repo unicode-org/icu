@@ -1954,7 +1954,56 @@ static void TestIncrementalNormalize() {
     uprv_free(strB);
 }
 
+#if 0
+static void TestGetCaseBit() {
+  static const char *caseBitData[] = {
+    "a", "A", "ch", "Ch", "CH",
+      "\\uFF9E", "\\u0009"
+  };
 
+  static const uint8_t results[] = {
+    UCOL_LOWER_CASE, UCOL_UPPER_CASE, UCOL_LOWER_CASE, UCOL_MIXED_CASE, UCOL_UPPER_CASE,
+      UCOL_UPPER_CASE, UCOL_LOWER_CASE
+  };
+
+  uint32_t i, blen = 0;
+  UChar b[256] = {0};
+  UErrorCode status = U_ZERO_ERROR;
+  UCollator *UCA = ucol_open("", &status);
+  uint8_t res = 0;
+  
+  for(i = 0; i<sizeof(results)/sizeof(results[0]); i++) {
+    blen = u_unescape(caseBitData[i], b, 256);
+    res = ucol_uprv_getCaseBits(UCA, b, blen, &status);
+    if(results[i] != res) {
+      log_err("Expected case = %02X, got %02X for %04X\n", results[i], res, b[0]);
+    }
+  }
+}
+#endif
+
+static void TestHangulTailoring() {
+  static const char *koreanData[] = {
+    "\\uac00", "\\u4f3d", "\\u4f73", "\\u5047", "\\u50f9", "\\u52a0", "\\u53ef", "\\u5475," 
+        " \\u54e5", "\\u5609", "\\u5ac1", "\\u5bb6", "\\u6687", "\\u67b6", "\\u67b7", "\\u67ef," 
+        " \\u6b4c", "\\u73c2", "\\u75c2", "\\u7a3c", "\\u82db", "\\u8304", "\\u8857", "\\u8888," 
+        " \\u8a36", "\\u8cc8", "\\u8dcf", "\\u8efb", "\\u8fe6", "\\u99d5," 
+	" \\u4EEE", "\\u50A2", "\\u5496", "\\u54FF", "\\u5777", "\\u5B8A", "\\u659D", "\\u698E," 
+	" \\u6A9F", "\\u73C8", "\\u7B33", "\\u801E", "\\u8238", "\\u846D", "\\u8B0C"
+  };
+
+  char rules = 
+        "&\\uac00 <<< \\u4f3d <<< \\u4f73 <<< \\u5047 <<< \\u50f9 <<< \\u52a0 <<< \\u53ef <<< \\u5475 " 
+        "<<< \\u54e5 <<< \\u5609 <<< \\u5ac1 <<< \\u5bb6 <<< \\u6687 <<< \\u67b6 <<< \\u67b7 <<< \\u67ef " 
+        "<<< \\u6b4c <<< \\u73c2 <<< \\u75c2 <<< \\u7a3c <<< \\u82db <<< \\u8304 <<< \\u8857 <<< \\u8888 " 
+        "<<< \\u8a36 <<< \\u8cc8 <<< \\u8dcf <<< \\u8efb <<< \\u8fe6 <<< \\u99d5 " 
+	    "<<< \\u4EEE <<< \\u50A2 <<< \\u5496 <<< \\u54FF <<< \\u5777 <<< \\u5B8A <<< \\u659D <<< \\u698E " //k1
+	    "<<< \\u6A9F <<< \\u73C8 <<< \\u7B33 <<< \\u801E <<< \\u8238 <<< \\u846D <<< \\u8B0C"
+
+
+  genericRulesStarter(rules, koreanData, sizeof(koreanData)/sizeof(koreanData[0]));
+  
+}
 
 void addMiscCollTest(TestNode** root)
 {
@@ -1975,11 +2024,13 @@ void addMiscCollTest(TestNode** root)
     addTest(root, &TestJ831, "tscoll/cmsccoll/TestJ831");
     addTest(root, &TestBefore, "tscoll/cmsccoll/TestBefore");
     addTest(root, &TestRedundantRules, "tscoll/cmsccoll/TestRedundantRules");
+    addTest(root, &TestHangulTailoring, "tscoll/cmsccoll/TestHangulTailoring");
     /*addTest(root, &TestUCAZero, "tscoll/cmsccoll/TestUCAZero");*/
     /*addTest(root, &TestUnmappedSpaces, "tscoll/cmsccoll/TestUnmappedSpaces");*/
     /*addTest(root, &PrintMarkDavis, "tscoll/cmsccoll/PrintMarkDavis");*/
     /*addTest(root, &TestVariableTop, "tscoll/cmsccoll/TestVariableTop");*/
     addTest(root, &TestIncrementalNormalize, "tscoll/cmsccoll/TestIncrementalNormalize");
     addTest(root, &TestComposeDecompose, "tscoll/cmsccoll/TestComposeDecompose");
+    /*addTest(root, &TestGetCaseBit, "tscoll/cmsccoll/TestGetCaseBit");*/
 }
 

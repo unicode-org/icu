@@ -735,6 +735,16 @@ uint32_t ucol_uprv_tok_assembleTokenList(UColTokenParser *src, UErrorCode *statu
         }
 
         /*
+          If "xy" doesn't occur earlier in the list or in the UCA, convert &xy * c * 
+          d * ... into &x * c/y * d * ... 
+        */
+        if(expandNext != 0 && sourceToken->expansion == 0) {
+          sourceToken->expansion = expandNext;
+          sourceToken->debugExpansion = *(src->source + (expandNext & 0xFFFFFF));
+          //expandNext = 0;
+        }
+
+        /*
         1.	Find the strongest strength in each list, and set strongestP and strongestN 
         accordingly in the headers. 
         */
@@ -768,16 +778,6 @@ uint32_t ucol_uprv_tok_assembleTokenList(UColTokenParser *src, UErrorCode *statu
               sourceToken->next = lastToken->next;
               lastToken->next = sourceToken;
             }
-          }
-
-          /*
-            If "xy" doesn't occur earlier in the list or in the UCA, convert &xy * c * 
-            d * ... into &x * c/y * d * ... 
-          */
-          if(expandNext != 0 && sourceToken->expansion == 0) {
-            sourceToken->expansion = expandNext;
-            sourceToken->debugExpansion = *(src->source + (expandNext & 0xFFFFFF));
-            expandNext = 0;
           }
         } else {
         /* Otherwise (when LAST is not a reset) 
