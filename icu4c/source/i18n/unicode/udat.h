@@ -199,10 +199,15 @@ udat_clone(const UDateFormat *fmt,
 * @param dateToFormat The date to format
 * @param result A pointer to a buffer to receive the formatted number.
 * @param resultLength The maximum size of result.
-* @param pos If not 0, a UFieldPosition which will receive the information on a specific field.
+* @param position A pointer to a UFieldPosition.  On input, position->field
+* is read.  On output, position->beginIndex and position->endIndex indicate
+* the beginning and ending indices of field number position->field, if such
+* a field exists.  This parameter may be NULL, in which case no field
+* position data is returned.
 * @param status A pointer to an UErrorCode to receive any errors
 * @return The total buffer size needed; if greater than resultLength, the output was truncated.
 * @see udat_parse
+* @see UFieldPosition
 * @draft
 */
 U_CAPI int32_t
