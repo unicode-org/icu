@@ -8,7 +8,7 @@
 #ifndef UNIFILT_H
 #define UNIFILT_H
 
-#include "unicode/utypes.h"
+#include "unicode/unimatch.h"
 
 /**
  * <code>UnicodeFilter</code> defines a protocol for selecting a
@@ -20,7 +20,7 @@
  * @see UnicodeFilterLogic
  * @draft
  */
-class U_I18N_API UnicodeFilter {
+class U_I18N_API UnicodeFilter : public UnicodeMatcher {
 
 public:
     /**
@@ -35,7 +35,7 @@ public:
      * <b><tt>false</tt></b>.
      * @draft
      */
-    virtual UBool contains(UChar c) const = 0;
+    virtual UBool contains(UChar32 c) const = 0;
 
     /**
      * Returns a copy of this object.  All UnicodeFilter objects have
@@ -44,6 +44,14 @@ public:
      * @draft
      */
     virtual UnicodeFilter* clone() const = 0;
+
+    /**
+     * Implement UnicodeMatcher API.
+     */
+    virtual UMatchDegree matches(const Replaceable& text,
+                                 int32_t& offset,
+                                 int32_t limit,
+                                 UBool incremental) const;
 
 protected:
 

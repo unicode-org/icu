@@ -458,14 +458,13 @@ public:
     virtual UBool contains(UChar32 c) const;
 
     /**
-     * Implement UnicodeFilter:
-     * Returns <tt>true</tt> if this set contains the specified char.
-     *
-     * @return <tt>true</tt> if this set contains the specified char.
-     * @draft
+     * Implement UnicodeMatcher::matches()
      */
-    virtual UBool contains(UChar c) const;
-
+    UMatchDegree matches(const Replaceable& text,
+                         int32_t& offset,
+                         int32_t limit,
+                         UBool incremental) const;
+    
     /**
      * Adds the specified range to this set if it is not already
      * present.  If this set already contains the specified range,
@@ -760,12 +759,6 @@ private:
     //----------------------------------------------------------------
     // Implementation: Utility methods
     //----------------------------------------------------------------
-
-    /**
-     * Returns the character after the given position, or '\uFFFE' if
-     * there is none.
-     */
-    static UChar charAfter(const UnicodeString& str, int32_t i);
 
     void ensureCapacity(int32_t newLen);
 
