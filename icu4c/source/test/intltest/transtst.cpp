@@ -73,8 +73,10 @@ void TransliteratorTest::TestInstantiation() {
         Transliterator::getDisplayName(id, name);
         if (t == 0) {
             errln(UnicodeString("FAIL: Couldn't create ") + id +
-                  ", parse error " + parseError.code + ", line " +
-                  parseError.line + ", offset " + parseError.offset);
+                  ", parse error " + parseError.code +
+                  ", line " + parseError.line +
+                  ", offset " + parseError.offset +
+                  ", context \"" + parseError.context + "\"");
             // When createInstance fails, it deletes the failing
             // entry from the available ID list.  We detect this
             // here by looking for a change in countAvailableIDs.
