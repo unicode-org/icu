@@ -1034,6 +1034,18 @@ static void TestAlias() {
     int32_t UTF8_NAMES_LENGTH =
         sizeof(UTF8_NAMES) / sizeof(UTF8_NAMES[0]);
 
+    struct {
+	const char *name;
+	const char *alias;
+    } CONVERTERS_NAMES[] = {
+	{ "UTF32_BigEndian",		"utf-32be" },
+	{ "UTF32_LittleEndian",		"utf-32le" },
+	{ "UTF32_PlatformEndian",	"ISO-10646-UCS-4" },
+	{ "UTF32_PlatformEndian",	"utf-32" },
+	{ "UTF32_PlatformEndian",	"ucs-4" }
+    };
+    int32_t CONVERTERS_NAMES_LENGTH = sizeof(CONVERTERS_NAMES) / sizeof(*CONVERTERS_NAMES);
+
     /* When there are bugs in gencnval or in ucnv_io, converters can
        appear to have no aliases. */
     ncnv = ucnv_countAvailable();
@@ -1100,6 +1112,19 @@ static void TestAlias() {
         if (0 != uprv_strcmp(mapBack, UTF8_NAMES[0])) {
             log_err("FAIL: \"%s\" -> \"%s\", expect UTF8\n",
                     UTF8_NAMES[i], mapBack);
+        }
+    }
+
+    /*
+     * Check a list of predetermined aliases that we expect to map
+     * back to predermined converter names.
+     */
+
+    for (i = 0; i < CONVERTERS_NAMES_LENGTH; ++i) {
+        const char* mapBack = ucnv_getAlias(CONVERTERS_NAMES[i].alias, 0, &status);
+        if (0 != uprv_strcmp(mapBack, CONVERTERS_NAMES[i].name)) {
+            log_err("FAIL: \"%s\" -> \"%s\", expect %s\n",
+                    CONVERTERS_NAMES[i].alias, mapBack, CONVERTERS_NAMES[i].name);
         }
     }
 }
