@@ -1140,8 +1140,6 @@ UBool ucnv_usesFallback(const UConverter *cnv)
     return cnv->useFallback;
 }
 
-
-
 void 
 ucnv_getInvalidChars (const UConverter * converter,
 			  char *errBytes,
@@ -1157,17 +1155,16 @@ ucnv_getInvalidChars (const UConverter * converter,
         *err = U_ILLEGAL_ARGUMENT_ERROR;
         return;
     }
-    if (*len < converter->charErrorBufferLength)
+    if (*len < converter->invalidCharLength)
     {
         *err = U_INDEX_OUTOFBOUNDS_ERROR;
         return;
     }
-    if ((*len = converter->charErrorBufferLength) > 0)
+    if ((*len = converter->invalidCharLength) > 0)
     {
-        uprv_memcpy (errBytes, converter->charErrorBuffer, *len);
+        uprv_memcpy (errBytes, converter->invalidCharBuffer, *len);
     }
 }
-
 
 void 
 ucnv_getInvalidUChars (const UConverter * converter,
@@ -1184,13 +1181,13 @@ ucnv_getInvalidUChars (const UConverter * converter,
         *err = U_ILLEGAL_ARGUMENT_ERROR;
         return;
     }
-    if (*len < converter->UCharErrorBufferLength)
+    if (*len < converter->invalidUCharLength)
     {
         *err = U_INDEX_OUTOFBOUNDS_ERROR;
         return;
     }
-    if ((*len = converter->UCharErrorBufferLength) > 0)
+    if ((*len = converter->invalidUCharLength) > 0)
     {
-        uprv_memcpy (errChars, converter->UCharErrorBuffer, sizeof(UChar) * (*len));
+        uprv_memcpy (errChars, converter->invalidUCharBuffer, sizeof(UChar) * (*len));
     }
 }
