@@ -10,7 +10,7 @@
 * Modification History:
 *        Name                     Description            
 *     Madhu Katragadda            Converted to C
-*********************************************************************************
+*********************************************************************************/
 
 /**
  * Collation Iterator tests.

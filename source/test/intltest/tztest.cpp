@@ -425,22 +425,6 @@ TimeZoneTest::TestGetAvailableIDs913()
     delete buf;
     delete [] s;
 
- /*
-#if defined(WIN32) && defined(_DEBUG) && CHECK_HEAP
-    }
-    _CrtMemDumpAllObjectsSince(&memstate);
-
-    /*
-     * Set the debug-heap flag to keep freed blocks in the
-     * heap's linked list - This will allow us to catch any
-     * inadvertent use of freed memory
-     */ /*
-    tmpDbgFlag = _CrtSetDbgFlag(_CRTDBG_REPORT_FLAG);
-    tmpDbgFlag |= _CRTDBG_DELAY_FREE_MEM_DF;
-    tmpDbgFlag &= ~_CRTDBG_LEAK_CHECK_DF;
-    tmpDbgFlag &= ~_CRTDBG_CHECK_ALWAYS_DF;
-    _CrtSetDbgFlag(tmpDbgFlag);
-#endif*/
 }
 
 

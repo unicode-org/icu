@@ -56,8 +56,8 @@ void TestUDataOpen(){
    const char* name = "test";
    const char* type="dat";
    
-   char* path=malloc(sizeof(char) * (strlen(u_getDataDirectory()) + strlen("icudata") +1 ) );
-   char* testPath=malloc(sizeof(char) * (strlen(u_getDataDirectory()) + strlen("base") +1 ) );
+   char* path=(char*)malloc(sizeof(char) * (strlen(u_getDataDirectory()) + strlen("icudata") +1 ) );
+   char* testPath=(char*)malloc(sizeof(char) * (strlen(u_getDataDirectory()) + strlen("base") +1 ) );
 
    strcat(strcpy(path, u_getDataDirectory()), "icudata");
    strcat(strcpy(testPath, u_getDataDirectory()), "base");
@@ -196,7 +196,7 @@ void TestUDataOpenChoiceDemo1() {
 	};
     char* type="dat";
    
-   char* testPath=malloc(sizeof(char) * (strlen(u_getDataDirectory()) + strlen("base") +1 ) );
+   char* testPath=(char*)malloc(sizeof(char) * (strlen(u_getDataDirectory()) + strlen("base") +1 ) );
 
    strcat(strcpy(testPath, u_getDataDirectory()), "base");
 
@@ -274,7 +274,7 @@ void TestUDataOpenChoiceDemo2() {
 	"base_test"  /* libbase_test.so, libbase_test.a, etc... */
 	};
 	
-	char* path=malloc(sizeof(char) * (strlen(u_getDataDirectory()) + strlen(base[0]) + 1) );
+	char* path=(char*)malloc(sizeof(char) * (strlen(u_getDataDirectory()) + strlen(base[0]) + 1) );
     strcpy(path, u_getDataDirectory());
 	strcat(path, base[0]);	
 	
@@ -289,7 +289,7 @@ void TestUDataOpenChoiceDemo2() {
 	
 	p=0;
 	for(i=0;i<sizeof(base)/sizeof(base[0]); i++){
-		path=realloc(path, sizeof(char) * (strlen(u_getDataDirectory()) + strlen(base[i]) +1 ) );
+		path=(char*)realloc(path, sizeof(char) * (strlen(u_getDataDirectory()) + strlen(base[i]) +1 ) );
 		strcat(strcpy(path, u_getDataDirectory()), base[i]);
 		result=udata_openChoice(path, type, name, isAcceptable, &p, &status);
 		if(p<2) {
@@ -343,8 +343,8 @@ void TestUDataGetInfo() {
 	const char* name2="test";
     const char* type="dat";
     
-	char* path=malloc(sizeof(char) * (strlen(u_getDataDirectory()) + strlen("icudata") +1 ) );
-	char* testPath=malloc(sizeof(char) * (strlen(u_getDataDirectory()) + strlen("base") +1 ) );
+	char* path=(char*)malloc(sizeof(char) * (strlen(u_getDataDirectory()) + strlen("icudata") +1 ) );
+	char* testPath=(char*)malloc(sizeof(char) * (strlen(u_getDataDirectory()) + strlen("base") +1 ) );
 
 	strcat(strcpy(path, u_getDataDirectory()), "icudata");
 	strcat(strcpy(testPath, u_getDataDirectory()), "base");
@@ -411,7 +411,7 @@ void TestUDataGetMemory() {
 
 	const char* name2="test";
 
-   char* testPath=malloc(sizeof(char) * (strlen(u_getDataDirectory()) + strlen("base") +1 ) );
+   char* testPath=(char*)malloc(sizeof(char) * (strlen(u_getDataDirectory()) + strlen("base") +1 ) );
 
    strcat(strcpy(testPath, u_getDataDirectory()), "base");
 
@@ -465,8 +465,8 @@ void TestErrorConditions(){
    const char* name = "test";
    const char* type="dat";
    
-   char* path=malloc(sizeof(char) * (strlen(u_getDataDirectory()) + strlen("icudata") +1 ) );
-   char* testPath=malloc(sizeof(char) * (strlen(u_getDataDirectory()) + strlen("base") +1 ) );
+   char* path=(char*)malloc(sizeof(char) * (strlen(u_getDataDirectory()) + strlen("icudata") +1 ) );
+   char* testPath=(char*)malloc(sizeof(char) * (strlen(u_getDataDirectory()) + strlen("base") +1 ) );
 
    strcat(strcpy(path, u_getDataDirectory()), "icudata");
    strcat(strcpy(testPath, u_getDataDirectory()), "base");

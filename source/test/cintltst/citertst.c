@@ -10,7 +10,7 @@
 * Modification History:
 *        Name                     Description            
 *     Madhu Katragadda            Ported for C API
-*********************************************************************************
+*********************************************************************************/
 /*
  * Collation Iterator tests.
  * (Let me reiterate my position...)

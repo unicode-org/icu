@@ -192,7 +192,7 @@ void TestNextPrevChar(){
         0x0000,        0x0000,             0x0000,              0x0061,       0x0061,             0x0061,
 
     };
-    static uint32_t movedOffset[]={
+    static UTextOffset movedOffset[]={
    /*next_unsafe    next_safe_ns  next_safe_s       prev_unsafe   prev_safe_ns     prev_safe_s*/
         1,            1,           1,                15,           15,               15,
         5,            5,           5,                14,           14 ,              14, 
@@ -217,7 +217,8 @@ void TestNextPrevChar(){
 
     UChar32 c=0x0000;
     uint32_t i=0;
-    uint32_t offset=0, setOffset=0;
+    uint32_t offset=0;
+    UTextOffset setOffset=0;
     for(offset=0; offset<sizeof(input); offset++){
          if (offset < sizeof(input) - 2) { /* Can't have it go off the end of the array based on input */
              setOffset=offset;

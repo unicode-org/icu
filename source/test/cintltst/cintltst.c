@@ -76,7 +76,7 @@ int main ( int argc, const char **argv )
 
     root = NULL;
     addAllTests(&root);
-    nerrors = processArgs(root, argc, argv);
+    nerrors = processArgs(root, argc, (const char**)argv);
     cleanUpTestTree(root);
     cleanUpDataTable();
     ctst_freeAll();

@@ -46,7 +46,9 @@ testManyInverseBiDi(UBiDi *pBiDi, UBiDiLevel direction);
 static void
 testInverseBiDi(UBiDi *pBiDi, const UChar *src, int32_t srcLength, UBiDiLevel direction, UErrorCode *pErrorCode);
 
-static char *levelString;
+/* helpers ------------------------------------------------------------------ */
+
+static char *levelString="...............................................................";
 
 static UChar *
 getStringFromDirProps(const uint8_t *dirProps, UTextOffset length);
@@ -739,10 +741,6 @@ doArabicShapingTest() {
         log_err("u_shapeArabic(shape letters) does not return U_UNSUPPORTED_ERROR but %s\n", u_errorName(errorCode));
     }
 }
-
-/* helpers ------------------------------------------------------------------ */
-
-static char *levelString="...............................................................";
 
 /* return a string with characters according to the desired directional properties */
 static UChar *

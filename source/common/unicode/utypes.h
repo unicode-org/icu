@@ -35,9 +35,7 @@
 #include "unicode/umachine.h"
 #include "unicode/utf.h"
 
-#ifndef __OS400__
 #include <memory.h>
-#endif
 #include <stdlib.h>
 
 /*===========================================================================*/

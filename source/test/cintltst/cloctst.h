@@ -22,7 +22,7 @@ static void addLocaleTests(TestNode**);
 
 /**
 Test functions to set and get data fields
- /**/
+ **/
 static void TestBasicGetters(void);
 /**
  * Use Locale to access Resource file data and compare against expected values

@@ -10,7 +10,7 @@
 * Modification History:
 *        Name                      Description            
 *     Madhu Katragadda              Ported for C API
-*********************************************************************************
+*********************************************************************************/
 /**
  * CollationDanishTest is a third level test class.  This tests the locale
  * specific primary, secondary and tertiary rules.  For example, the ignorable

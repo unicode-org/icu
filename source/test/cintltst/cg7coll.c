@@ -10,7 +10,7 @@
 * Modification History:
 *        Name                     Description            
 *     Madhu Katragadda            Ported for C API
-*********************************************************************************
+*********************************************************************************/
 /**
  * G7CollationTest is a third level test class.  This test performs the examples 
  * mentioned on the Taligent international demos web site.  
