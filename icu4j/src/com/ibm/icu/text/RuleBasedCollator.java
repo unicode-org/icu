@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/RuleBasedCollator.java,v $ 
-* $Date: 2002/08/08 23:37:53 $ 
-* $Revision: 1.17 $
+* $Date: 2002/09/06 01:53:17 $ 
+* $Revision: 1.18 $
 *
 *******************************************************************************
 */
@@ -17,6 +17,7 @@ import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.util.Locale;
 import java.util.ResourceBundle;
+import java.util.Arrays;
 import java.text.CharacterIterator;
 import java.text.StringCharacterIterator;
 import com.ibm.icu.impl.IntTrie;
@@ -24,6 +25,7 @@ import com.ibm.icu.impl.Trie;
 import com.ibm.icu.impl.ICULocaleData;
 import com.ibm.icu.impl.BOCU;
 import com.ibm.icu.impl.Utility;
+import com.ibm.icu.impl.ICUDebug;
 
 /**
  * <p>RuleBasedCollator is a concrete subclass of Collator. It allows
@@ -735,23 +737,48 @@ public final class RuleBasedCollator extends Collator
         }
         RuleBasedCollator other = (RuleBasedCollator)obj;
         // all other non-transient information is also contained in rules.
-        boolean property = getStrength() == other.getStrength() 
-               && getDecomposition() == other.getDecomposition() 
-               && other.m_caseFirst_ == m_caseFirst_
-               && other.m_caseSwitch_ == m_caseSwitch_
-               && other.m_isAlternateHandlingShifted_ 
-                                             == m_isAlternateHandlingShifted_
-               && other.m_isCaseLevel_ == m_isCaseLevel_
-               && other.m_isFrenchCollation_ == m_isFrenchCollation_
-               && other.m_isHiragana4_ == m_isHiragana4_;
-        if (!property) {
+        if (getStrength() != other.getStrength() 
+               || getDecomposition() != other.getDecomposition() 
+               || other.m_caseFirst_ != m_caseFirst_
+               || other.m_caseSwitch_ != m_caseSwitch_
+               || other.m_isAlternateHandlingShifted_ 
+                                             != m_isAlternateHandlingShifted_
+               || other.m_isCaseLevel_ != m_isCaseLevel_
+               || other.m_isFrenchCollation_ != m_isFrenchCollation_
+               || other.m_isHiragana4_ != m_isHiragana4_) {
             return false;
         }
         boolean rules = m_rules_ == other.m_rules_;
         if (!rules && (m_rules_ != null && other.m_rules_ != null)) {
             rules = m_rules_.equals(other.m_rules_);
         }
-        return rules;
+        if (!rules || !ICUDebug.enabled("collation")) {
+            return rules;
+        }
+        if (m_addition3_ != other.m_addition3_ 
+                  || m_bottom3_ != other.m_bottom3_ 
+                  || m_bottomCount3_ != other.m_bottomCount3_ 
+                  || m_common3_ != other.m_common3_ 
+                  || m_isSimple3_ != other.m_isSimple3_
+                  || m_mask3_ != other.m_mask3_
+                  || m_minContractionEnd_ != other.m_minContractionEnd_
+                  || m_minUnsafe_ != other.m_minUnsafe_
+                  || m_top3_ != other.m_top3_
+                  || m_topCount3_ != other.m_topCount3_
+                  || !Arrays.equals(m_unsafe_, other.m_unsafe_)) {
+            return false;
+        }
+        if (!m_trie_.equals(other.m_trie_)) {
+            return false;
+        }
+        return Arrays.equals(m_contractionCE_, other.m_contractionCE_)
+                  && Arrays.equals(m_contractionEnd_, other.m_contractionEnd_)
+                  && Arrays.equals(m_contractionIndex_, 
+                                   other.m_contractionIndex_)
+                  && Arrays.equals(m_expansion_, other.m_expansion_)
+                  && Arrays.equals(m_expansionEndCE_, other.m_expansionEndCE_)
+                  && Arrays.equals(m_expansionEndCEMaxSize_, 
+                                   other.m_expansionEndCEMaxSize_);
     }
     
 	/**

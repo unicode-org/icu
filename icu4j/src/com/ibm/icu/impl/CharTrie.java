@@ -5,8 +5,8 @@
 ******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/CharTrie.java,v $
-* $Date: 2002/08/08 22:43:05 $
-* $Revision: 1.6 $
+* $Date: 2002/09/06 01:53:17 $
+* $Revision: 1.7 $
 *
 ******************************************************************************
 */
@@ -16,6 +16,7 @@ package com.ibm.icu.impl;
 import java.io.InputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
+import com.ibm.icu.lang.UCharacter;
 
 /**
  * Trie implementation which stores data in char, 16 bits.
@@ -149,6 +150,31 @@ public class CharTrie extends Trie
     public final char getLatin1LinearValue(char ch) 
     {
     	return m_data_[INDEX_STAGE_3_MASK_ + 1 + m_dataOffset_ + ch];
+    }
+    
+    /**
+     * Checks if the argument Trie has the same data as this Trie
+     * @param other Trie to check
+     * @return true if the argument Trie has the same data as this Trie, false
+     *         otherwise
+     */
+    public boolean equals(Object other) 
+    {
+        boolean result = super.equals(other);
+        if (result && other instanceof CharTrie) {
+            CharTrie othertrie = (CharTrie)other;
+            if (m_initialValue_ != othertrie.m_initialValue_) {
+                return false;
+            }
+            for (int i = UCharacter.MAX_VALUE; i >= UCharacter.MIN_VALUE; i --)
+            {
+                if (getCodePointValue(i) != othertrie.getCodePointValue(i)) {
+                    return false;
+                }
+            }
+            return true;
+        }
+        return false;
     }
 
     // protected methods -----------------------------------------------
