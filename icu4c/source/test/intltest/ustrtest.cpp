@@ -288,7 +288,7 @@ UnicodeStringTest::TestExtract()
 
     test1.extract(11, 12, test2);
     test1.extract(11, 12, test3);
-    if (test1.extract(11, 12, test4) != 12 || test4[12] != 13) {
+    if (test1.extract(11, 12, test4) != 12 || test4[12] != 0) {
         errln("UnicodeString.extract(char *) failed to return the correct size of destination buffer.");
     }
     test1.extractBetween(11, 23, test5);
@@ -333,11 +333,11 @@ UnicodeStringTest::TestExtract()
         errln("UnicodeString.extract(0, 10, (char *)NULL, \"\") != 10");
     }
 
-    test4[2] = (char)0xffu;
-    if (test1.extract(0, 10, test4, 2, "") != 2) {
-        errln("UnicodeString.extract(0, 10, test4, 2, \"\") != 2");
+    test4[2] = (char)0xff;
+    if (test1.extract(0, 10, test4, 2, "") != 10) {
+        errln("UnicodeString.extract(0, 10, test4, 2, \"\") != 10");
     }
-    if (test4[2] != (char)0xffu) {
+    if (test4[2] != (char)0xff) {
         errln("UnicodeString.extract(0, 10, test4, 2, \"\") overwrote test4[2]");
     }
 
