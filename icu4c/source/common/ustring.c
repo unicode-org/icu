@@ -16,8 +16,6 @@
 */
 
 #include "unicode/utypes.h"
-#include "unicode/uchar.h"
-#include "unicode/uiter.h"
 #include "unicode/ustring.h"
 #include "cstring.h"
 #include "cwchar.h"
