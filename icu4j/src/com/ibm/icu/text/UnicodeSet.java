@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/UnicodeSet.java,v $
- * $Date: 2002/12/03 21:41:50 $
- * $Revision: 1.80 $
+ * $Date: 2002/12/04 00:25:51 $
+ * $Revision: 1.81 $
  *
  *****************************************************************************************
  */
@@ -17,8 +17,8 @@ import com.ibm.icu.impl.Utility;
 import com.ibm.icu.lang.*;
 import com.ibm.icu.impl.UCharacterProperty;
 import com.ibm.icu.impl.UPropertyAliases;
+import com.ibm.icu.impl.SortedSetRelation;
 import java.util.TreeSet;
-import java.util.SortedSet;
 import java.util.Iterator;
 
 /**
@@ -1664,7 +1664,7 @@ public class UnicodeSet extends UnicodeFilter {
                 return false;
             }
         }
-        if (!hasRelation(strings, DISJOINT, c.strings)) return false;
+        if (!SortedSetRelation.hasRelation(strings, SortedSetRelation.DISJOINT, c.strings)) return false;
         return true;
     }
     
@@ -1778,7 +1778,7 @@ public class UnicodeSet extends UnicodeFilter {
      */
     public UnicodeSet complementAll(UnicodeSet c) {
         xor(c.list, c.len, 0);
-        doOperation(strings, COMPLEMENTALL, c.strings);
+        SortedSetRelation.doOperation(strings, SortedSetRelation.COMPLEMENTALL, c.strings);
         return this;
     }
 
@@ -2612,164 +2612,6 @@ public class UnicodeSet extends UnicodeFilter {
         return (a > b) ? a : b;
     }
     
-    /**
-     * The relationship between two sets A and B can be determined by looking at:
-     * A - B
-     * A & B (intersection)
-     * B - A
-     * These are represented by a set of bits.
-     * Bit 2 is true if A - B is not empty
-     * Bit 1 is true if A & B is not empty
-     * BIT 0 is true if B - A is not empty
-     */
-    static final int
-        A_NOT_B = 4,
-        A_AND_B = 2,
-        B_NOT_A = 1;
-    
-    /**
-     * There are 8 combinations of the relationship bits. These correspond to
-     * the filters (combinations of allowed bits) in hasRelation. They also
-     * correspond to the modification functions, listed in comments.
-     */
-    static final int 
-       ANY =            A_NOT_B |   A_AND_B |   B_NOT_A,    // union,           addAll
-       CONTAINS =       A_NOT_B |   A_AND_B,                // A                (unnecessary)
-       DISJOINT =       A_NOT_B |               B_NOT_A,    // A xor B,         missing Java function
-       ISCONTAINED =                A_AND_B |   B_NOT_A,    // B                (unnecessary)
-       NO_B =           A_NOT_B,                            // A setDiff B,     removeAll
-       EQUALS =                     A_AND_B,                // A intersect B,   retainAll
-       NO_A =                                   B_NOT_A,    // B setDiff A,     removeAll
-       NONE =           0,                                  // null             (unnecessary)
-       
-       ADDALL = ANY,                // union,           addAll
-       A = CONTAINS,                // A                (unnecessary)
-       COMPLEMENTALL = DISJOINT,    // A xor B,         missing Java function
-       B = ISCONTAINED,             // B                (unnecessary)
-       REMOVEALL = NO_B,            // A setDiff B,     removeAll
-       RETAINALL = EQUALS,          // A intersect B,   retainAll
-       B_REMOVEALL = NO_A;          // B setDiff A,     removeAll
-       
-  
-    /**
-     * Utility that could be on SortedSet. Faster implementation than
-     * what is in Java for doing contains, equals, etc.
-     * @param a first set
-     * @param allow filter, using ANY, CONTAINS, etc.
-     * @param b second set
-     * @return whether the filter relationship is true or not.
-     */    
-    static boolean hasRelation(SortedSet a, int allow, SortedSet b) {
-        if (allow < NONE || allow > ANY) {
-            throw new IllegalArgumentException("Relation " + allow + " out of range");
-        }
-        
-        // extract filter conditions
-        // these are the ALLOWED conditions Set
-        
-        boolean anb = (allow & A_NOT_B) != 0;
-        boolean ab = (allow & A_AND_B) != 0;
-        boolean bna = (allow & B_NOT_A) != 0;
-        
-        // quick check on sizes
-        switch(allow) {
-            case CONTAINS: if (a.size() < b.size()) return false; break;
-            case ISCONTAINED: if (a.size() > b.size()) return false; break;
-            case EQUALS: if (a.size() != b.size()) return false; break;
-        }
-        
-        // check for null sets
-        if (a.size() == 0) {
-            if (b.size() == 0) return true;
-            return bna;
-        } else if (b.size() == 0) {
-            return anb;
-        }
-        
-        // pick up first strings, and start comparing
-        Iterator ait = a.iterator();
-        Iterator bit = b.iterator();
-        
-        Comparable aa = (Comparable) ait.next();
-        Comparable bb = (Comparable) bit.next();
-        
-        while (true) {
-            int comp = aa.compareTo(bb);
-            if (comp == 0) {
-                if (!ab) return false;
-                if (!ait.hasNext()) {
-                    if (!bit.hasNext()) return true;
-                    return bna;
-                } else if (!bit.hasNext()) {
-                    return anb;
-                }
-                aa = (Comparable) ait.next();
-                bb = (Comparable) bit.next();
-            } else if (comp < 0) {
-                if (!anb) return false;
-                if (!ait.hasNext()) {
-                    return bna;
-                }
-                aa = (Comparable) ait.next(); 
-            } else  {
-                if (!bna) return false;
-                if (!bit.hasNext()) {
-                    return anb;
-                }
-                bb = (Comparable) bit.next();
-            }
-        }
-    }
-    
-    /**
-     * Utility that could be on SortedSet. Allows faster implementation than
-     * what is in Java for doing addAll, removeAll, retainAll, (complementAll).
-     * @param a first set
-     * @param allow filter, using ANY, CONTAINS, etc.
-     * @param b second set
-     * @return whether the filter relationship is true or not.
-     */    
-    static SortedSet doOperation(SortedSet a, int relation, SortedSet b) {
-        // TODO: optimize this as above
-        TreeSet temp;
-        switch (relation) {
-            case ADDALL:
-                a.addAll(b); 
-                return a;
-            case A:
-                return a; // no action
-            case B:
-                a.clear(); 
-                a.addAll(b); 
-                return a;
-            case REMOVEALL: 
-                a.removeAll(b);
-                return a;
-            case RETAINALL: 
-                a.retainAll(b);
-                return a;
-            // the following is the only case not really supported by Java
-            // although all could be optimized
-            case COMPLEMENTALL:
-                temp = new TreeSet(b);
-                temp.removeAll(a);
-                a.removeAll(b);
-                a.addAll(temp);
-                return a;
-            case B_REMOVEALL:
-                temp = new TreeSet(b);
-                temp.removeAll(a);
-                a.clear();
-                a.addAll(temp);
-                return a;
-            case NONE:
-                a.clear();
-                return a;
-            default: 
-                throw new IllegalArgumentException("Relation " + relation + " out of range");
-        }
-    }    
-
     //----------------------------------------------------------------
     // Generic filter-based scanning code
     //----------------------------------------------------------------
