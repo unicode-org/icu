@@ -917,9 +917,10 @@ main(int argc, char* argv[])
         ucnv_close(cnv);
     } else {
         fprintf(stdout,
-                "*** Failure! The default converter cannot be opened.\n"
+                "*** Failure! The default converter [%s] cannot be opened.\n"
                 "*** Check the ICU_DATA environment variable and\n"
-                "*** check that the data files are present.\n");
+                "*** check that the data files are present.\n",
+                ucnv_getDefaultName());
         return 1;
     }
 
