@@ -1216,7 +1216,7 @@ public:
         }
     }
 
-    ~KeywordEnumeration() {
+    virtual ~KeywordEnumeration() {
         uprv_free(keywords);
     }
 
