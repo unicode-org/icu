@@ -211,12 +211,12 @@ u_bottomNBytesOfDouble(double* d, int n)
 
 #if defined(U_WINDOWS)
 typedef union {
-    uint64_t int64;
+    int64_t int64;
     FILETIME fileTime;
 } FileTimeConversion;   /* This is like a ULARGE_INTEGER */
 
 /* Number of 100 nanoseconds from 1/1/1601 to 1/1/1970 */
-#define EPOCH_BIAS  UINT64_C(116444736000000000)
+#define EPOCH_BIAS  INT64_C(116444736000000000)
 #define HECTONANOSECOND_PER_MILLISECOND   10000
 
 #endif
