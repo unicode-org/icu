@@ -201,7 +201,7 @@ protected:
     //
     RBBIDataWrapper    *fData;
     UTrie              *fCharMappings;
-    int16_t             fLastBreakStatus;
+    int32_t             fLastBreakTag;      // Rule {tag} value for the most recent match.
 
     //
     // Counter for the number of characters encountered with the "dictionary"
@@ -414,7 +414,7 @@ protected:
      * within brackets, {123}, for example.  For rules that do not specify a
      * status, a default value of 0 is returned.
      */
-    virtual int16_t getRuleStatus() const;
+    virtual int32_t getRuleStatus() const;
 
     /**
      * Returns a unique class ID POLYMORPHICALLY.  Pure virtual override.
@@ -446,17 +446,20 @@ protected:
 
 
     /**
-     * Return the flattened form of compiled break rules,
+     * Return the binary form of compiled break rules,
      * which can then be used to create a new break iterator at some
      * time in the future.  Creating a break iterator in this way
      * is much faster than building one from the source form of the
      * break rules.
      *
-     * @return   A pointer to the flattened rule data.  The storage
+     * The binary data is can only be used with the same version of ICU
+     *  and on the same platform type (processor endian-ness)
+     *
+     * @return   A pointer to the binary (compiled) rule data.  The storage
      *           belongs to the RulesBasedBreakIterator object, no the
      *           caller, and must not be modified or deleted.
      */
-    virtual const uint8_t *getFlattenedData(uint32_t *length);
+    virtual const uint8_t *getBinaryRules(uint32_t &length);
 
 
 #ifdef RBBI_DEBUG

@@ -55,6 +55,12 @@ public:
      * Tests Title Case break iteration
      **/  
     void TestTitleBreak(void);
+
+    /**
+     * Tests rule status return values
+     **/  
+    void TestStatusReturn();
+
     /**
     * Test Hindi Danda i.e make sure we have a break point before and after danda 
     **/ 

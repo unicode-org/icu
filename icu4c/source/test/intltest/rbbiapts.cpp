@@ -610,6 +610,7 @@ void RBBIAPITest::TestBuilder() {
          bi->setText(testString1);
          doBoundaryTest(*bi, testString1, bounds1);
      }
+     delete bi;
 }
 
 
