@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/stringprep/TestIDNA.java,v $
- * $Date: 2003/08/28 23:03:06 $
- * $Revision: 1.4 $
+ * $Date: 2003/09/02 23:30:20 $
+ * $Revision: 1.5 $
  *
  *******************************************************************************
 */
@@ -626,6 +626,12 @@ public class TestIDNA extends TestFmwk {
          
          //StringBuffer src = new StringBuffer(Utility.unescape("\\uDEE8\\U000E228C\\U0002EE8E\\U000E6350\\U00024DD9\u4049\\U000E0DE4\\U000E448C\\U0001869B\\U000E3380\\U00016A8E\\U000172D5\\U0001C408\\U000E9FB5"));
          //doTestCompareReferenceImpl(src);
+         
+         //test deletion of code points
+         source = new StringBuffer(Utility.unescape("\\u043f\\u00AD\\u034f\\u043e\\u0447\\u0435\\u043c\\u0443\\u0436\\u0435\\u043e\\u043d\\u0438\\u043d\\u0435\\u0433\\u043e\\u0432\\u043e\\u0440\\u044f\\u0442\\u043f\\u043e\\u0440\\u0443\\u0441\\u0441\\u043a\\u0438"));
+         StringBuffer expected = new StringBuffer("xn--b1abfaaepdrnnbgefbadotcwatmq2g4l");
+         doTestCompareReferenceImpl(source);
+         doTestToASCII(source.toString(),expected.toString(), IDNA.DEFAULT, null);
     }
     private void doTestCompareReferenceImpl(StringBuffer src) throws Exception{
         
