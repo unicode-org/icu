@@ -58,6 +58,8 @@ public final class UScriptRun
     /**
      * Construct an empty <code>UScriptRun</code> object. The <code>next()</code>
      * method will return <code>false</code> the first time it is called.
+     *
+     * @internal
      */
     public UScriptRun()
     {
@@ -71,6 +73,8 @@ public final class UScriptRun
      * characters in the given string.
      *
      * @param text the string of characters over which to iterate.
+     *
+     * @internal
      */
     public UScriptRun(String text)
     {
@@ -84,6 +88,8 @@ public final class UScriptRun
      * @param text the string of characters over which to iterate.
      * @param start the index of the first character over which to iterate
      * @param count the number of characters over which to iterate
+     *
+     * @internal
      */
     public UScriptRun(String text, int start, int count)
     {
@@ -95,6 +101,8 @@ public final class UScriptRun
      * characetrs.
      *
      * @param chars the array of characters over which to iterate.
+     *
+     * @internal
      */
     public UScriptRun(char[] chars)
     {
@@ -108,6 +116,8 @@ public final class UScriptRun
      * @param chars the array of characters over which to iterate.
      * @param start the index of the first character over which to iterate
      * @param count the number of characters over which to iterate
+     *
+     * @internal
      */
     public UScriptRun(char[] chars, int start, int count)
     {
@@ -117,6 +127,8 @@ public final class UScriptRun
 
     /**
      * Reset the iterator to the start of the text.
+     *
+     * @internal
      */
     public final void reset()
     {
@@ -136,6 +148,8 @@ public final class UScriptRun
      * @param start the index of the new first character over which to iterate
      * @param count the new number of characters over which to iterate.
      * @exception IllegalArgumentException
+     *
+     * @internal
      */
     public final void reset(int start, int count)
     throws IllegalArgumentException
@@ -164,6 +178,8 @@ public final class UScriptRun
      * @param chars the new array of characters over which to iterate.
      * @param start the index of the first character over which to iterate.
      * @param count the nuber of characters over which to iterate.
+     *
+     * @internal
      */
     public final void reset(char[] chars, int start, int count)
     {
@@ -181,6 +197,8 @@ public final class UScriptRun
      * in <code>chars</code>. This allows clients to reuse an iterator.
      *
      * @param chars the new array of characters over which to iterate.
+     *
+     * @internal
      */
     public final void reset(char[] chars)
     {
@@ -201,6 +219,8 @@ public final class UScriptRun
      * @param text the new string of characters over which to iterate.
      * @param start the index of the first character over which to iterate.
      * @param count the nuber of characters over which to iterate.
+     *
+     * @internal
      */
     public final void reset(String text, int start, int count)
     {
@@ -218,6 +238,8 @@ public final class UScriptRun
      * in <code>text</code>. This allows clients to reuse an iterator.
      *
      * @param text the new string of characters over which to iterate.
+     *
+     * @internal
      */
     public final void reset(String text)
     {
@@ -236,6 +258,8 @@ public final class UScriptRun
      * Get the starting index of the current script run.
      *
      * @returns the index of the first character in the current script run.
+     *
+     * @internal
      */
     public final int getScriptStart()
     {
@@ -246,6 +270,8 @@ public final class UScriptRun
      * Get the index of the first character after the current script run.
      *
      * @return the index of the first character after the current script run.
+     *
+     * @internal
      */
     public final int getScriptLimit()
     {
@@ -257,6 +283,8 @@ public final class UScriptRun
      *
      * @return the script code for the script of the current script run.
      * @see com.ibm.icu.lang.UScript
+     *
+     * @internal
      */
     public final int getScriptCode()
     {
@@ -268,6 +296,8 @@ public final class UScriptRun
      * isn't another run, returns <code>true</code> if there is.
      *
      * @return <code>false</code> if there isn't another run, <code>true</code> if there is.
+     *
+     * @internal
      */
     public final boolean next()
 	{
