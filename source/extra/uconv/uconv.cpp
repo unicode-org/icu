@@ -81,16 +81,22 @@ static void initMsg(const char *pname) {
             fprintf(stderr,
                     "%s: warning: couldn't open bundle %s: %s\n",
                     pname, UCONVMSG, u_errorName(err));
+#ifdef UCONVMSG_LINK
+            fprintf(stderr,
+                    "%s: setAppData was called, internal data %s failed to load\n",
+                        UCONVMSG);
+#endif
  
             err = U_ZERO_ERROR;
             /* that was try #1, try again with a path */
             uprv_strcpy(dataPath, u_getDataDirectory());
+            uprv_strcat(dataPath, U_FILE_SEP_STRING);
             uprv_strcat(dataPath, UCONVMSG);
 
             gBundle = u_wmsg_setPath(dataPath, &err);
             if (U_FAILURE(err)) {
                 fprintf(stderr,
-                    "%s: warning: couldn't open bundle %s: %s\n",
+                    "%s: warning: still couldn't open bundle %s: %s\n",
                     pname, dataPath, u_errorName(err));
                 fprintf(stderr, "%s: warning: messages will not be displayed\n", pname);
             }
