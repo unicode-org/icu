@@ -487,7 +487,7 @@ _strToWCS(wchar_t *dest,
             
             /* we dont have enough room on the stack grow the buffer */
             if(!u_growAnyBufferFromStatic(stackBuffer,(void**) &tempBuf, &tempBufCapacity, 
-                (2*(pSrcLimit-pSrc)+100), count,sizeof(char))){
+                (2*(srcLength)+100), count,sizeof(char))){
                 goto cleanup;
             }
           
@@ -559,12 +559,14 @@ _strToWCS(wchar_t *dest,
                 }
 
             }else{
+                int32_t nulVal;
                 /*scan for nulls */
                 /* we donot check for limit since tempBuf is null terminated */
                 while(tempBuf[nulLen++] != 0){
                 }
-                pIntTarget = pIntTarget + retVal+1;
-                remaining -=(retVal+1);
+                nulVal = (nulLen < srcLength) ? 1 : 0; 
+                pIntTarget = pIntTarget + retVal+nulVal;
+                remaining -=(retVal+nulVal);
             
                 /* check if we have reached the source limit*/
                 if(nulLen>=(count)){
@@ -645,6 +647,7 @@ u_strToWCS(wchar_t *dest,
     return _strToWCS(dest,destCapacity,pDestLength,src,srcLength, pErrorCode);
     
 #endif
+
 }
 
 #if !defined(U_WCHAR_IS_UTF16) && !defined(U_WCHAR_IS_UTF32)
@@ -788,7 +791,7 @@ _strFromWCS( UChar   *dest,
                 /* convert to chars */
                 retVal = uprv_wcstombs(pCSrc,pWStack,remaining);
             
-                pCSrc += retVal +1;
+                pCSrc += retVal;
                 pSrc  += nulLen;
                 srcLength-=nulLen; /* decrement the srcLength */
                 break;
