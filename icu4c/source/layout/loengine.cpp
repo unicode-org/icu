@@ -18,6 +18,7 @@
 // both with EUnicodeScripts and LEScripts...
 //
 int32_t ICULayoutEngine::le_scriptCodes[] = {
+        zyyyScriptCode,    // (no EUnicodeScript w/ vaule 0)
         latnScriptCode,    // kBasicLatin
         latnScriptCode,    // kLatin1Supplement
         latnScriptCode,    // kLatinExtendedA
