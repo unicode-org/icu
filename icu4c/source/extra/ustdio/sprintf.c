@@ -1,10 +1,10 @@
 /*
-*******************************************************************************
+******************************************************************************
 *
 *   Copyright (C) 1998-2003, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
-*******************************************************************************
+******************************************************************************
 *
 * File sprintf.c
 *
@@ -28,7 +28,7 @@
 #include "unicode/uloc.h"
 
 #include "sprintf.h"
-#include "sprntf_p.h"
+#include "uprntf_p.h"
 #include "locbund.h"
 #include "loccache.h"
 
@@ -87,31 +87,22 @@
 #define UFMT_EMPTY {ufmt_empty, NULL}
 
 typedef struct u_sprintf_info {
-    enum ufmt_type_info info;
+    ufmt_type_info info;
     u_sprintf_handler handler;
 } u_sprintf_info;
 
-#define USPRINTF_NUM_FMT_HANDLERS sizeof(g_u_sprintf_infos)
+#define UPRINTF_NUM_FMT_HANDLERS 108
 
 /* We do not use handlers for 0-0x1f */
-#define USPRINTF_BASE_FMT_HANDLERS 0x20
+#define UPRINTF_BASE_FMT_HANDLERS 0x20
 
 /* buffer size for formatting */
-#define USPRINTF_BUFFER_SIZE 1024
-#define USPRINTF_SYMBOL_BUFFER_SIZE 8
+#define UPRINTF_BUFFER_SIZE 1024
+#define UPRINTF_SYMBOL_BUFFER_SIZE 8
 
 static const UChar gNullStr[] = {0x28, 0x6E, 0x75, 0x6C, 0x6C, 0x29, 0}; /* "(null)" */
 static const UChar gSpaceStr[] = {0x20, 0}; /* " " */
 
-
-static UChar *
-u_strset(UChar *str, int32_t count, UChar c) {
-    int32_t idx;
-    for(idx = 0; idx < count; ++idx) {
-        str[idx] = c;
-    }
-    return str;
-}
 
 /* copies the minimum number of code units of (count or output->available) */
 static int32_t
@@ -125,7 +116,7 @@ u_minstrncpy(u_localized_string *output, const UChar *str, int32_t count) {
 
 static int32_t
 u_sprintf_pad_and_justify(u_localized_string *output,
-                          const u_sprintf_spec_info    *info,
+                          const u_printf_spec_info    *info,
                           const UChar                 *result,
                           int32_t                     resultLen)
 {
@@ -150,12 +141,12 @@ u_sprintf_pad_and_justify(u_localized_string *output,
         /* left justify */
         if(info->fLeft) {
             written += u_minstrncpy(output, result, resultLen);
-            u_strset(&output->str[outputPos + resultLen], paddingLeft, info->fPadChar);
+            u_memset(&output->str[outputPos + resultLen], info->fPadChar, paddingLeft);
             output->available -= paddingLeft;
         }
         /* right justify */
         else {
-            u_strset(&output->str[outputPos], paddingLeft, info->fPadChar);
+            u_memset(&output->str[outputPos], info->fPadChar, paddingLeft);
             output->available -= paddingLeft;
             written += u_minstrncpy(output, result, resultLen);
         }
@@ -168,11 +159,11 @@ u_sprintf_pad_and_justify(u_localized_string *output,
     return written;
 }
 
-/* Sets the sign of a format based on u_sprintf_spec_info */
+/* Sets the sign of a format based on u_printf_spec_info */
 /* TODO: Is setting the prefix symbol to a positive sign a good idea in all locales? */
 static void
-u_sprintf_set_sign(UNumberFormat        *format,
-                   const u_sprintf_spec_info     *info,
+u_printf_set_sign(UNumberFormat        *format,
+                   const u_printf_spec_info     *info,
                    UErrorCode *status)
 {
     if(info->fShowSign) {
@@ -182,7 +173,7 @@ u_sprintf_set_sign(UNumberFormat        *format,
             unum_setTextAttribute(format, UNUM_POSITIVE_PREFIX, gSpaceStr, 1, status);
         }
         else {
-            UChar plusSymbol[USPRINTF_SYMBOL_BUFFER_SIZE];
+            UChar plusSymbol[UPRINTF_SYMBOL_BUFFER_SIZE];
             int32_t symbolLen;
 
             symbolLen = unum_getSymbol(format,
@@ -202,10 +193,10 @@ u_sprintf_set_sign(UNumberFormat        *format,
 /* handle a '%' */
 static int32_t
 u_sprintf_simple_percent_handler(u_localized_string *output,
-                                 const u_sprintf_spec_info     *info,
+                                 const u_printf_spec_info     *info,
                                  const ufmt_args            *args)
 {
-    /* put a single '%' on the stream */
+    /* put a single '%' onto the output */
     if (output->available >= 1) {
         output->str[output->len - output->available--] = 0x0025;
         /* we wrote one character */
@@ -217,7 +208,7 @@ u_sprintf_simple_percent_handler(u_localized_string *output,
 /* handle 's' */
 static int32_t
 u_sprintf_string_handler(u_localized_string *output,
-                         const u_sprintf_spec_info     *info,
+                         const u_printf_spec_info     *info,
                          const ufmt_args            *args)
 {
     UChar *s;
@@ -270,18 +261,20 @@ u_sprintf_string_handler(u_localized_string *output,
 
 static int32_t
 u_sprintf_char_handler(u_localized_string *output,
-                       const u_sprintf_spec_info         *info,
+                       const u_printf_spec_info         *info,
                        const ufmt_args              *args)
 {
     UChar s[UTF_MAX_CHAR_LENGTH+1];
-    int32_t len, written;
+    int32_t len = 1, written;
     unsigned char arg = (unsigned char)(args[0].intValue);
 
     /* convert from default codepage to Unicode */
     ufmt_defaultCPToUnicode((const char *)&arg, 2, s, sizeof(s)/sizeof(UChar));
 
-    /* Remember that this may be a surrogate pair */
-    len = u_strlen(s);
+    /* Remember that this may be an MBCS character */
+    if (arg != 0) {
+        len = u_strlen(s);
+    }
 
     /* width = minimum # of characters to write */
     /* precision = maximum # of characters to write */
@@ -301,12 +294,12 @@ u_sprintf_char_handler(u_localized_string *output,
 
 static int32_t
 u_sprintf_double_handler(u_localized_string *output,
-                         const u_sprintf_spec_info     *info,
+                         const u_printf_spec_info     *info,
                          const ufmt_args            *args)
 {
     double        num         = (double) (args[0].doubleValue);
     UNumberFormat        *format;
-    UChar            result        [USPRINTF_BUFFER_SIZE];
+    UChar            result        [UPRINTF_BUFFER_SIZE];
     int32_t        minDecimalDigits;
     int32_t        maxDecimalDigits;
     UErrorCode        status        = U_ZERO_ERROR;
@@ -324,7 +317,7 @@ u_sprintf_double_handler(u_localized_string *output,
 
     /* set the appropriate flags on the formatter */
 
-    /* clone the stream's bundle if it isn't owned */
+    /* clone the output's bundle if it isn't owned */
     if(! output->fOwnBundle) {
         output->fBundle    = u_locbund_clone(output->fBundle);
         output->fOwnBundle = TRUE;
@@ -356,10 +349,10 @@ u_sprintf_double_handler(u_localized_string *output,
     }
 
     /* set whether to show the sign */
-    u_sprintf_set_sign(format, info, &status);
+    u_printf_set_sign(format, info, &status);
 
     /* format the number */
-    unum_formatDouble(format, num, result, USPRINTF_BUFFER_SIZE, 0, &status);
+    unum_formatDouble(format, num, result, UPRINTF_BUFFER_SIZE, 0, &status);
 
     /* restore the number format */
     unum_setAttribute(format, UNUM_MIN_FRACTION_DIGITS, minDecimalDigits);
@@ -371,12 +364,12 @@ u_sprintf_double_handler(u_localized_string *output,
 /* HSYS */
 static int32_t
 u_sprintf_integer_handler(u_localized_string *output,
-                          const u_sprintf_spec_info     *info,
+                          const u_printf_spec_info     *info,
                           const ufmt_args            *args)
 {
     long            num         = (long) (args[0].intValue);
     UNumberFormat        *format;
-    UChar            result        [USPRINTF_BUFFER_SIZE];
+    UChar            result        [UPRINTF_BUFFER_SIZE];
     int32_t        minDigits     = -1;
     UErrorCode        status        = U_ZERO_ERROR;
 
@@ -398,7 +391,7 @@ u_sprintf_integer_handler(u_localized_string *output,
 
     /* set the minimum integer digits */
     if(info->fPrecision != -1) {
-        /* clone the stream's bundle if it isn't owned */
+        /* clone the output's bundle if it isn't owned */
         if(! output->fOwnBundle) {
             output->fBundle     = u_locbund_clone(output->fBundle);
             output->fOwnBundle = TRUE;
@@ -412,21 +405,21 @@ u_sprintf_integer_handler(u_localized_string *output,
 
     /* set whether to show the sign */
     if(info->fShowSign) {
-        /* clone the stream's bundle if it isn't owned */
+        /* clone the output's bundle if it isn't owned */
         if(! output->fOwnBundle) {
             output->fBundle     = u_locbund_clone(output->fBundle);
             output->fOwnBundle = TRUE;
             format           = u_locbund_getNumberFormat(output->fBundle);
         }
 
-        u_sprintf_set_sign(format, info, &status);
+        u_printf_set_sign(format, info, &status);
     }
 
     /* format the number */
-    unum_format(format, num, result, USPRINTF_BUFFER_SIZE, 0, &status);
+    unum_format(format, num, result, UPRINTF_BUFFER_SIZE, 0, &status);
 
     /* restore the number format */
-    if(minDigits != -1) {
+    if (minDigits != -1) {
         unum_setAttribute(format, UNUM_MIN_INTEGER_DIGITS, minDigits);
     }
 
@@ -435,12 +428,12 @@ u_sprintf_integer_handler(u_localized_string *output,
 
 static int32_t
 u_sprintf_hex_handler(u_localized_string *output,
-                      const u_sprintf_spec_info     *info,
+                      const u_printf_spec_info     *info,
                       const ufmt_args            *args)
 {
     long            num         = (long) (args[0].intValue);
-    UChar            result         [USPRINTF_BUFFER_SIZE];
-    int32_t         len        = USPRINTF_BUFFER_SIZE;
+    UChar            result         [UPRINTF_BUFFER_SIZE];
+    int32_t         len        = UPRINTF_BUFFER_SIZE;
 
 
     /* mask off any necessary bits */
@@ -455,7 +448,7 @@ u_sprintf_hex_handler(u_localized_string *output,
         (info->fPrecision == -1 && info->fZero) ? info->fWidth : info->fPrecision);
 
     /* convert to alt form, if desired */
-    if(num != 0 && info->fAlt && len < USPRINTF_BUFFER_SIZE - 2) {
+    if(num != 0 && info->fAlt && len < UPRINTF_BUFFER_SIZE - 2) {
         /* shift the formatted string right by 2 chars */
         memmove(result + 2, result, len * sizeof(UChar));
         result[0] = 0x0030;
@@ -468,12 +461,12 @@ u_sprintf_hex_handler(u_localized_string *output,
 
 static int32_t
 u_sprintf_octal_handler(u_localized_string *output,
-                        const u_sprintf_spec_info     *info,
+                        const u_printf_spec_info     *info,
                         const ufmt_args            *args)
 {
     long            num         = (long) (args[0].intValue);
-    UChar            result         [USPRINTF_BUFFER_SIZE];
-    int32_t         len        = USPRINTF_BUFFER_SIZE;
+    UChar            result         [UPRINTF_BUFFER_SIZE];
+    int32_t         len        = UPRINTF_BUFFER_SIZE;
 
 
     /* mask off any necessary bits */
@@ -488,7 +481,7 @@ u_sprintf_octal_handler(u_localized_string *output,
         info->fPrecision == -1 && info->fZero ? info->fWidth : info->fPrecision);
 
     /* convert to alt form, if desired */
-    if(info->fAlt && result[0] != 0x0030 && len < USPRINTF_BUFFER_SIZE - 1) {
+    if(info->fAlt && result[0] != 0x0030 && len < UPRINTF_BUFFER_SIZE - 1) {
         /* shift the formatted string right by 1 char */
         memmove(result + 1, result, len * sizeof(UChar));
         result[0] = 0x0030;
@@ -501,13 +494,13 @@ u_sprintf_octal_handler(u_localized_string *output,
 
 static int32_t
 u_sprintf_uinteger_handler(u_localized_string *output,
-                           const u_sprintf_spec_info     *info,
+                           const u_printf_spec_info     *info,
                            const ufmt_args            *args)
 {
-    u_sprintf_spec_info uint_info;
+    u_printf_spec_info uint_info;
     ufmt_args uint_args;
 
-    memcpy(&uint_info, info, sizeof(u_sprintf_spec_info));
+    memcpy(&uint_info, info, sizeof(u_printf_spec_info));
     memcpy(&uint_args, args, sizeof(ufmt_args));
 
     uint_info.fPrecision = 0;
@@ -521,12 +514,12 @@ u_sprintf_uinteger_handler(u_localized_string *output,
 
 static int32_t
 u_sprintf_pointer_handler(u_localized_string *output,
-                          const u_sprintf_spec_info     *info,
+                          const u_printf_spec_info     *info,
                           const ufmt_args            *args)
 {
     long            num         = (long) (args[0].intValue);
-    UChar            result         [USPRINTF_BUFFER_SIZE];
-    int32_t         len        = USPRINTF_BUFFER_SIZE;
+    UChar            result         [UPRINTF_BUFFER_SIZE];
+    int32_t         len        = UPRINTF_BUFFER_SIZE;
 
 
     /* format the pointer in hex */
@@ -537,18 +530,18 @@ u_sprintf_pointer_handler(u_localized_string *output,
 
 static int32_t
 u_sprintf_scientific_handler(u_localized_string *output,
-                             const u_sprintf_spec_info     *info,
+                             const u_printf_spec_info     *info,
                              const ufmt_args            *args)
 {
     double        num         = (double) (args[0].doubleValue);
     UNumberFormat        *format;
-    UChar            result        [USPRINTF_BUFFER_SIZE];
+    UChar            result        [UPRINTF_BUFFER_SIZE];
     int32_t        minDecimalDigits;
     int32_t        maxDecimalDigits;
     UErrorCode        status        = U_ZERO_ERROR;
-    UChar srcExpBuf[USPRINTF_SYMBOL_BUFFER_SIZE];
+    UChar srcExpBuf[UPRINTF_SYMBOL_BUFFER_SIZE];
     int32_t srcLen, expLen;
-    UChar expBuf[USPRINTF_SYMBOL_BUFFER_SIZE];
+    UChar expBuf[UPRINTF_SYMBOL_BUFFER_SIZE];
 
 
     /* mask off any necessary bits */
@@ -564,7 +557,7 @@ u_sprintf_scientific_handler(u_localized_string *output,
 
     /* set the appropriate flags on the formatter */
 
-    /* clone the stream's bundle if it isn't owned */
+    /* clone the output's bundle if it isn't owned */
     if(! output->fOwnBundle) {
         output->fBundle     = u_locbund_clone(output->fBundle);
         output->fOwnBundle  = TRUE;
@@ -622,10 +615,10 @@ u_sprintf_scientific_handler(u_localized_string *output,
     }
 
     /* set whether to show the sign */
-    u_sprintf_set_sign(format, info, &status);
+    u_printf_set_sign(format, info, &status);
 
     /* format the number */
-    unum_formatDouble(format, num, result, USPRINTF_BUFFER_SIZE, 0, &status);
+    unum_formatDouble(format, num, result, UPRINTF_BUFFER_SIZE, 0, &status);
 
     /* restore the number format */
     unum_setAttribute(format, UNUM_MIN_FRACTION_DIGITS, minDecimalDigits);
@@ -644,12 +637,12 @@ u_sprintf_scientific_handler(u_localized_string *output,
 
 static int32_t
 u_sprintf_date_handler(u_localized_string *output,
-                       const u_sprintf_spec_info     *info,
+                       const u_printf_spec_info     *info,
                        const ufmt_args         *args)
 {
     UDate            num         = (UDate) (args[0].dateValue);
     UDateFormat        *format;
-    UChar            result        [USPRINTF_BUFFER_SIZE];
+    UChar            result        [UPRINTF_BUFFER_SIZE];
     UErrorCode        status        = U_ZERO_ERROR;
 
 
@@ -661,19 +654,19 @@ u_sprintf_date_handler(u_localized_string *output,
         return 0;
 
     /* format the date */
-    udat_format(format, num, result, USPRINTF_BUFFER_SIZE, 0, &status);
+    udat_format(format, num, result, UPRINTF_BUFFER_SIZE, 0, &status);
 
     return u_sprintf_pad_and_justify(output, info, result, u_strlen(result));
 }
 
 static int32_t
 u_sprintf_time_handler(u_localized_string *output,
-                       const u_sprintf_spec_info     *info,
+                       const u_printf_spec_info     *info,
                        const ufmt_args         *args)
 {
     UDate            num         = (UDate) (args[0].dateValue);
     UDateFormat        *format;
-    UChar            result        [USPRINTF_BUFFER_SIZE];
+    UChar            result        [UPRINTF_BUFFER_SIZE];
     UErrorCode        status        = U_ZERO_ERROR;
 
 
@@ -685,7 +678,7 @@ u_sprintf_time_handler(u_localized_string *output,
         return 0;
 
     /* format the time */
-    udat_format(format, num, result, USPRINTF_BUFFER_SIZE, 0, &status);
+    udat_format(format, num, result, UPRINTF_BUFFER_SIZE, 0, &status);
 
     return u_sprintf_pad_and_justify(output, info, result, u_strlen(result));
 }
@@ -693,12 +686,12 @@ u_sprintf_time_handler(u_localized_string *output,
 
 static int32_t
 u_sprintf_percent_handler(u_localized_string *output,
-                          const u_sprintf_spec_info     *info,
+                          const u_printf_spec_info     *info,
                           const ufmt_args            *args)
 {
     double        num         = (double) (args[0].doubleValue);
     UNumberFormat        *format;
-    UChar            result        [USPRINTF_BUFFER_SIZE];
+    UChar            result        [UPRINTF_BUFFER_SIZE];
     int32_t        minDecimalDigits;
     int32_t        maxDecimalDigits;
     UErrorCode        status        = U_ZERO_ERROR;
@@ -717,7 +710,7 @@ u_sprintf_percent_handler(u_localized_string *output,
 
     /* set the appropriate flags on the formatter */
 
-    /* clone the stream's bundle if it isn't owned */
+    /* clone the output's bundle if it isn't owned */
     if(! output->fOwnBundle) {
         output->fBundle     = u_locbund_clone(output->fBundle);
         output->fOwnBundle     = TRUE;
@@ -749,10 +742,10 @@ u_sprintf_percent_handler(u_localized_string *output,
     }
 
     /* set whether to show the sign */
-    u_sprintf_set_sign(format, info, &status);
+    u_printf_set_sign(format, info, &status);
 
     /* format the number */
-    unum_formatDouble(format, num, result, USPRINTF_BUFFER_SIZE, 0, &status);
+    unum_formatDouble(format, num, result, UPRINTF_BUFFER_SIZE, 0, &status);
 
     /* restore the number format */
     unum_setAttribute(format, UNUM_MIN_FRACTION_DIGITS, minDecimalDigits);
@@ -764,12 +757,12 @@ u_sprintf_percent_handler(u_localized_string *output,
 
 static int32_t
 u_sprintf_currency_handler(u_localized_string *output,
-                           const u_sprintf_spec_info     *info,
+                           const u_printf_spec_info     *info,
                            const ufmt_args            *args)
 {
     double        num         = (double) (args[0].doubleValue);
     UNumberFormat        *format;
-    UChar            result        [USPRINTF_BUFFER_SIZE];
+    UChar            result        [UPRINTF_BUFFER_SIZE];
     int32_t        minDecimalDigits;
     int32_t        maxDecimalDigits;
     UErrorCode        status        = U_ZERO_ERROR;
@@ -788,7 +781,7 @@ u_sprintf_currency_handler(u_localized_string *output,
 
     /* set the appropriate flags on the formatter */
 
-    /* clone the stream's bundle if it isn't owned */
+    /* clone the output's bundle if it isn't owned */
     if(! output->fOwnBundle) {
         output->fBundle     = u_locbund_clone(output->fBundle);
         output->fOwnBundle     = TRUE;
@@ -820,10 +813,10 @@ u_sprintf_currency_handler(u_localized_string *output,
     }
 
     /* set whether to show the sign */
-    u_sprintf_set_sign(format, info, &status);
+    u_printf_set_sign(format, info, &status);
 
     /* format the number */
-    unum_formatDouble(format, num, result, USPRINTF_BUFFER_SIZE, 0, &status);
+    unum_formatDouble(format, num, result, UPRINTF_BUFFER_SIZE, 0, &status);
 
     /* restore the number format */
     unum_setAttribute(format, UNUM_MIN_FRACTION_DIGITS, minDecimalDigits);
@@ -834,14 +827,14 @@ u_sprintf_currency_handler(u_localized_string *output,
 
 static int32_t
 u_sprintf_ustring_handler(u_localized_string *output,
-                          const u_sprintf_spec_info     *info,
+                          const u_printf_spec_info     *info,
                           const ufmt_args         *args)
 {
     int32_t len, written;
     const UChar *arg = (const UChar*)(args[0].ptrValue);
 
     /* allocate enough space for the buffer */
-    if (!arg) {
+    if (arg == NULL) {
         arg = gNullStr;
     }
     len = u_strlen(arg);
@@ -864,7 +857,7 @@ u_sprintf_ustring_handler(u_localized_string *output,
 
 static int32_t
 u_sprintf_uchar_handler(u_localized_string *output,
-                        const u_sprintf_spec_info     *info,
+                        const u_printf_spec_info     *info,
                         const ufmt_args            *args)
 {
     int32_t written = 0;
@@ -890,13 +883,13 @@ u_sprintf_uchar_handler(u_localized_string *output,
 
 static int32_t
 u_sprintf_scidbl_handler(u_localized_string *output,
-                         const u_sprintf_spec_info     *info,
+                         const u_printf_spec_info     *info,
                          const ufmt_args            *args)
 {
-    u_sprintf_spec_info scidbl_info;
+    u_printf_spec_info scidbl_info;
     double      num = args[0].doubleValue;
 
-    memcpy(&scidbl_info, info, sizeof(u_sprintf_spec_info));
+    memcpy(&scidbl_info, info, sizeof(u_printf_spec_info));
 
     /* determine whether to use 'd', 'e' or 'f' notation */
     if (scidbl_info.fPrecision == -1 && num == uprv_trunc(num))
@@ -926,7 +919,7 @@ u_sprintf_scidbl_handler(u_localized_string *output,
 
 static int32_t
 u_sprintf_count_handler(u_localized_string *output,
-                        const u_sprintf_spec_info     *info,
+                        const u_printf_spec_info     *info,
                         const ufmt_args            *args)
 {
     int *count = (int*)(args[0].ptrValue);
@@ -940,12 +933,12 @@ u_sprintf_count_handler(u_localized_string *output,
 
 static int32_t
 u_sprintf_spellout_handler(u_localized_string *output,
-                           const u_sprintf_spec_info     *info,
+                           const u_printf_spec_info     *info,
                            const ufmt_args            *args)
 {
     double        num         = (double) (args[0].doubleValue);
     UNumberFormat        *format;
-    UChar            result        [USPRINTF_BUFFER_SIZE];
+    UChar            result        [UPRINTF_BUFFER_SIZE];
     int32_t        minDecimalDigits;
     int32_t        maxDecimalDigits;
     UErrorCode        status        = U_ZERO_ERROR;
@@ -964,7 +957,7 @@ u_sprintf_spellout_handler(u_localized_string *output,
 
     /* set the appropriate flags on the formatter */
 
-    /* clone the stream's bundle if it isn't owned */
+    /* clone the output's bundle if it isn't owned */
     if(! output->fOwnBundle) {
         output->fBundle    = u_locbund_clone(output->fBundle);
         output->fOwnBundle = TRUE;
@@ -996,10 +989,10 @@ u_sprintf_spellout_handler(u_localized_string *output,
     }
 
     /* set whether to show the sign */
-    u_sprintf_set_sign(format, info, &status);
+    u_printf_set_sign(format, info, &status);
 
     /* format the number */
-    unum_formatDouble(format, num, result, USPRINTF_BUFFER_SIZE, 0, &status);
+    unum_formatDouble(format, num, result, UPRINTF_BUFFER_SIZE, 0, &status);
 
     /* restore the number format */
     unum_setAttribute(format, UNUM_MIN_FRACTION_DIGITS, minDecimalDigits);
@@ -1131,7 +1124,7 @@ u_vsprintf_u(UChar       *buffer,
 characters 20-7F from Unicode. Using any other codepage specific
 characters will make it very difficult to format the string on
 non-Unicode machines */
-static const u_sprintf_info g_u_sprintf_infos[108] = {
+static const u_sprintf_info g_u_sprintf_infos[UPRINTF_NUM_FMT_HANDLERS] = {
     /* 0x20 */
     UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,
     UFMT_EMPTY,         UFMT_SIMPLE_PERCENT,UFMT_EMPTY,         UFMT_EMPTY,
@@ -1176,15 +1169,15 @@ u_vsnprintf_u(UChar    *buffer,
               const UChar    *patternSpecification,
               va_list        ap)
 {
-    const UChar       *alias = patternSpecification;
-    const UChar       *lastAlias;
-    int32_t           patCount;
-    int32_t           written = 0;
-    uint16_t          handlerNum;
+    const UChar      *alias = patternSpecification; /* alias the pattern */
+    const UChar      *lastAlias;
+    int32_t          patCount;
+    int32_t          written = 0;   /* haven't written anything yet */
+    uint16_t         handlerNum;
 
     ufmt_args         args;
     u_localized_string outStr;
-    u_sprintf_spec    spec;
+    u_printf_spec     spec;
     ufmt_type_info    info;
     u_sprintf_handler handler;
 
@@ -1227,7 +1220,7 @@ u_vsnprintf_u(UChar    *buffer,
         }
 
         /* parse the specifier */
-        patCount = u_sprintf_parse_spec(alias, &spec);
+        patCount = u_printf_parse_spec(alias, &spec);
 
         /* fill in the precision and width, if specified out of line */
 
@@ -1263,8 +1256,8 @@ u_vsnprintf_u(UChar    *buffer,
                 spec.fInfo.fPrecision = 0;
         }
 
-        handlerNum = (uint16_t)(spec.fInfo.fSpec - USPRINTF_BASE_FMT_HANDLERS);
-        if (handlerNum < USPRINTF_NUM_FMT_HANDLERS) {
+        handlerNum = (uint16_t)(spec.fInfo.fSpec - UPRINTF_BASE_FMT_HANDLERS);
+        if (handlerNum < UPRINTF_NUM_FMT_HANDLERS) {
             /* query the info function for argument information */
             info = g_u_sprintf_infos[ handlerNum ].info;
             if(info > ufmt_simple_percent) {

@@ -94,7 +94,7 @@ typedef struct u_scanf_info {
     u_scanf_handler handler;
 } u_scanf_info;
 
-#define USCANF_NUM_FMT_HANDLERS sizeof(g_u_scanf_infos)
+#define USCANF_NUM_FMT_HANDLERS 108
 
 /* We do not use handlers for 0-0x1f */
 #define USCANF_BASE_FMT_HANDLERS 0x20
@@ -109,7 +109,9 @@ u_scanf_skip_leading_ws(UFILE     *stream,
 
     /* skip all leading ws in the stream */
     while( ((c = u_fgetc(stream)) != U_EOF) && (c == pad || u_isWhitespace(c)) )
-        ++count;
+    {
+        count++;
+    }
 
     /* put the final character back on the stream */
     if(c != U_EOF)
@@ -160,9 +162,9 @@ u_scanf_string_handler(UFILE             *stream,
     if(U_FAILURE(status))
         return -1;
 
-    while( ((c = u_fgetc(stream)) != U_EOF) &&
-        (c != info->fPadChar && !u_isWhitespace(c)) &&
-        (info->fWidth == -1 || count < info->fWidth) )
+    while( ((c = u_fgetc(stream)) != U_EOF)
+        && (c != info->fPadChar && !u_isWhitespace(c))
+        && (info->fWidth == -1 || count < info->fWidth) )
     {
 
         /* put the character from the stream onto the target */
@@ -216,9 +218,10 @@ u_scanf_ustring_handler(UFILE             *stream,
     /* get the string one character at a time, truncating to the width */
     count = 0;
 
-    while( ((c = u_fgetc(stream)) != U_EOF) &&
-        (c != info->fPadChar && ! u_isWhitespace(c)) &&
-        (info->fWidth == -1 || count < info->fWidth) ) {
+    while( ((c = u_fgetc(stream)) != U_EOF)
+        && (c != info->fPadChar && ! u_isWhitespace(c))
+        && (info->fWidth == -1 || count < info->fWidth) )
+    {
 
         /* put the character from the stream onto the target */
         *alias++ = c;
@@ -366,7 +369,6 @@ u_scanf_scidbl_handler(UFILE             *stream,
     int32_t       scientificParsePos = 0, genericParsePos = 0;
     UErrorCode    scientificStatus = U_ZERO_ERROR;
     UErrorCode    genericStatus = U_ZERO_ERROR;
-    UBool         useScientific;
 
 
     /* since we can't determine by scanning the characters whether */
@@ -405,17 +407,23 @@ u_scanf_scidbl_handler(UFILE             *stream,
         &genericParsePos, &genericStatus);
 
     /* determine which parse made it farther */
-    useScientific = (UBool)(scientificParsePos > genericParsePos);
-
-    /* stash the result in num */
-    *num = useScientific ? scientificResult : genericResult;
+    if(scientificParsePos > genericParsePos) {
+        /* stash the result in num */
+        *num = scientificResult;
+        /* update the stream's position to reflect consumed data */
+        stream->fUCPos += scientificParsePos;
+    }
+    else {
+        /* stash the result in num */
+        *num = genericResult;
+        /* update the stream's position to reflect consumed data */
+        stream->fUCPos += genericParsePos;
+    }
 
     /* mask off any necessary bits */
     /*  if(! info->fIsLong_double)
     num &= DBL_MAX;*/
 
-    /* update the stream's position to reflect consumed data */
-    stream->fUCPos += useScientific ? scientificParsePos : genericParsePos;
 
     /* we converted 1 arg */
     return 1;
@@ -1006,18 +1014,18 @@ u_vfscanf(UFILE        *f,
 {
     int32_t converted;
     UChar *pattern;
-    UChar buffer[UFMT_DEFAULT_BUFFER_SIZE];
+    UChar patBuffer[UFMT_DEFAULT_BUFFER_SIZE];
     int32_t size = (int32_t)strlen(patternSpecification) + 1;
 
     /* convert from the default codepage to Unicode */
-    if (size >= MAX_UCHAR_BUFFER_SIZE(buffer)) {
+    if (size >= MAX_UCHAR_BUFFER_SIZE(patBuffer)) {
         pattern = (UChar *)uprv_malloc(size * sizeof(UChar));
         if(pattern == 0) {
             return 0;
         }
     }
     else {
-        pattern = buffer;
+        pattern = patBuffer;
     }
     u_charsToUChars(patternSpecification, pattern, size);
 
@@ -1025,7 +1033,7 @@ u_vfscanf(UFILE        *f,
     converted = u_vfscanf_u(f, pattern, ap);
 
     /* clean up */
-    if (pattern != buffer) {
+    if (pattern != patBuffer) {
         uprv_free(pattern);
     }
 
@@ -1036,7 +1044,7 @@ u_vfscanf(UFILE        *f,
  characters 20-7F from Unicode. Using any other codepage specific
  characters will make it very difficult to format the string on
  non-Unicode machines */
-static const u_scanf_info g_u_scanf_infos[108] = {
+static const u_scanf_info g_u_scanf_infos[USCANF_NUM_FMT_HANDLERS] = {
 /* 0x20 */
     UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,
     UFMT_EMPTY,         UFMT_SIMPLE_PERCENT,UFMT_EMPTY,         UFMT_EMPTY,
@@ -1075,18 +1083,17 @@ static const u_scanf_info g_u_scanf_infos[108] = {
 };
 
 U_CAPI int32_t  U_EXPORT2 /* U_CAPI ... U_EXPORT2 added by Peter Kirk 17 Nov 2001 */
-u_vfscanf_u(UFILE        *f,
-            const UChar    *patternSpecification,
-            va_list        ap)
+u_vfscanf_u(UFILE       *f,
+            const UChar *patternSpecification,
+            va_list     ap)
 {
-    u_scanf_spec         spec;
-    const UChar         *alias;
+    const UChar     *alias;
     int32_t         count, converted, temp;
-    uint16_t      handlerNum;
+    uint16_t        handlerNum;
 
     ufmt_args       args;
-
-    ufmt_type_info    info;
+    u_scanf_spec    spec;
+    ufmt_type_info  info;
     u_scanf_handler handler;
 
     /* alias the pattern */
