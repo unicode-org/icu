@@ -317,10 +317,6 @@ SOURCE=.\cutiltst.c
 # End Source File
 # Begin Source File
 
-SOURCE=.\dadrcoll.c
-# End Source File
-# Begin Source File
-
 SOURCE=.\encoll.c
 # End Source File
 # Begin Source File
@@ -523,10 +519,6 @@ SOURCE=.\cturtst.h
 # Begin Source File
 
 SOURCE=.\cucdtst.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\dadrcoll.h
 # End Source File
 # Begin Source File
 
