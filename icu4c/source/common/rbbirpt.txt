@@ -129,7 +129,7 @@ expr-cont:
     '$'                     term                                    doExprCatOperator
     '.'                     term                                    doExprCatOperator
     '/'                     look-ahead                              doExprCatOperator
-    '{'                     tag-open                                doExprCatOperator
+    '{'                  n  tag-open                                doExprCatOperator
     '|'                  n  term                                    doExprOrOperator
     ')'                  n  pop                                     doExprRParen
     default                 pop                                     doExprFinished

@@ -164,10 +164,12 @@ RBBIDataHeader *RBBIRuleBuilder::flattenData() {
 
 
 
+//----------------------------------------------------------------------------------------
 //
-//  RulesBasedBreakIterator, construct from source rules that are passed in
-//                           in a UnicodeString
+//  createRuleBasedBreakIterator    construct from source rules that are passed in
+//                                  in a UnicodeString
 //
+//----------------------------------------------------------------------------------------
 BreakIterator * 
 RBBIRuleBuilder::createRuleBasedBreakIterator( const UnicodeString    &rules,
                                     UParseError      &parseError,

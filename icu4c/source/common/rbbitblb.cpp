@@ -111,6 +111,7 @@ void  RBBITableBuilder::build() {
     buildStateTable();
     flagAcceptingStates();
     flagLookAheadStates();
+    flagTaggedStates();
     if (fRB->fDebugEnv && strstr(fRB->fDebugEnv, "states")) {printStates();};
 
 }
