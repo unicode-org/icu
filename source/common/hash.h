@@ -39,7 +39,6 @@ public:
 
     /**
      * Construct a hashtable
-     * @param ignoreKeyCase If true, keys are case insensitive.
      * @param status Error code
     */
     Hashtable(UErrorCode& status);
@@ -47,7 +46,6 @@ public:
     /**
      * Construct a hashtable, _disregarding any error_.  Use this constructor
      * with caution.
-     * @param ignoreKeyCase if TRUE, keys are case insensitive
      */
     Hashtable();
 
