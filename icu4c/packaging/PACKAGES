@@ -1,6 +1,7 @@
 ICU is packaged into a number of small, interdependent packages. This
 file describes what these packages are, what their name should be
-like, and what their contents are.
+like, and what their contents are. It is useful as a reference and a
+guide when packaging ICU on a new system.
 
 + List of ICU packages.
 
