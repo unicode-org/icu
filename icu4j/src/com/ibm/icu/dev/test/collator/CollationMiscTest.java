@@ -1757,7 +1757,7 @@ public class CollationMiscTest extends TestFmwk{
     
     public void TestUCARules() 
     {
-        try {
+       try {
             RuleBasedCollator coll 
                 = (RuleBasedCollator)Collator.getInstance(Locale.ENGLISH);
             String rule 
