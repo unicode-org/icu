@@ -46,11 +46,14 @@ static char* U_EXPORT2 ucol_sortKeyToString(const UCollator *coll, const uint8_t
   char *current = buffer;
   const uint8_t *currentSk = sortkey;
 
-  UErrorCode error_code;
+  UErrorCode error_code = U_ZERO_ERROR;
 
   strcpy(current, "[");
 
   while(strength <= UCOL_QUATERNARY && strength <= ucol_getAttribute(coll,UCOL_STRENGTH, &error_code)) {
+    if(U_FAILURE(error_code)) {
+      log_err("ucol_getAttribute returned error: %s\n", u_errorName(error_code));
+    }
     if(strength > UCOL_PRIMARY) {
       strcat(current, " . ");
     }
@@ -62,6 +65,9 @@ static char* U_EXPORT2 ucol_sortKeyToString(const UCollator *coll, const uint8_t
         doneCase = TRUE;
     } else if(ucol_getAttribute(coll,UCOL_CASE_LEVEL, &error_code) == UCOL_OFF || doneCase == TRUE || strength != UCOL_SECONDARY) {
       strength ++;
+    }
+    if(U_FAILURE(error_code)) {
+      log_err("ucol_getAttribute returned error: %s\n", u_errorName(error_code));
     }
     uprv_appendByteToHexString(current, *currentSk++); /* This should print '01' */
     if(strength == UCOL_QUATERNARY && ucol_getAttribute(coll,UCOL_ALTERNATE_HANDLING, &error_code) == UCOL_NON_IGNORABLE) {
@@ -77,6 +83,9 @@ static char* U_EXPORT2 ucol_sortKeyToString(const UCollator *coll, const uint8_t
     }
 
     uprv_appendByteToHexString(current, *currentSk++);
+  }
+  if(U_FAILURE(error_code)) {
+    log_err("ucol_getAttribute returned error: %s\n", u_errorName(error_code));
   }
   strcat(current, "]");
 
