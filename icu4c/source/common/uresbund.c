@@ -1139,6 +1139,43 @@ U_CAPI UResourceBundle* U_EXPORT2 ures_openU(const UChar* myPath,
     return r;
 }
 
+/**
+ *  Opens a resource bundle without "canonicalizing" the locale name. No fallback will be performed 
+ *  or sought.
+ */
+U_CFUNC UResourceBundle* ures_openDirect(const char* path, const char* localeID, UErrorCode* status) {
+    UResourceBundle *r = (UResourceBundle *)uprv_malloc(sizeof(UResourceBundle));
+    if(r == NULL) {
+        *status = U_MEMORY_ALLOCATION_ERROR;
+        return NULL;
+    }
+
+    r->fHasFallback = FALSE;
+    r->fIsTopLevel = TRUE;
+    ures_setIsStackObject(r, FALSE);
+    r->fIndex = -1;
+    r->fData = entryOpen(path, localeID, status);
+    if(U_FAILURE(*status)) {
+        uprv_free(r);
+        return NULL;
+    }
+    if(r->fData->fBogus != U_ZERO_ERROR) {
+        entryClose(r->fData);
+        uprv_free(r);
+        *status = U_MISSING_RESOURCE_ERROR;
+        return NULL;
+    }
+
+    r->fKey = NULL;
+    r->fVersion = NULL;
+    r->fResData.data = r->fData->fData.data;
+    r->fResData.pRoot = r->fData->fData.pRoot;
+    r->fResData.rootRes = r->fData->fData.rootRes;
+    r->fRes = r->fResData.rootRes;
+    r->fSize = res_countArrayItems(&(r->fResData), r->fRes);
+    return r;
+}
+
 U_CFUNC void ures_setIsStackObject( UResourceBundle* resB, UBool state) {
     if(state) {
         resB->fMagic1 = 0;
