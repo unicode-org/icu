@@ -3,8 +3,8 @@
 # Corporation and others. All Rights Reserved.
 #--------------------------------------------------------------------
 # $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/data/Attic/Transliterator_index.txt,v $
-# $Date: 2002/06/13 18:29:53 $
-# $Revision: 1.32 $
+# $Date: 2002/07/13 03:30:28 $
+# $Revision: 1.33 $
 #--------------------------------------------------------------------
 #
 # TRANSLITERATOR INDEX FILE.  This file lists the non-algorithmic
@@ -74,6 +74,25 @@ Katakana-Latin:file:Transliterator_Latin_Katakana.txt:UTF8:REVERSE
 
 Latin-Hiragana:file:Transliterator_Hiragana_Latin.txt:UTF8:REVERSE
 Hiragana-Latin:file:Transliterator_Hiragana_Latin.txt:UTF8:FORWARD
+
+#Thai Stuff: will change if we get \b into Transliterator
+
+Thai-ThaiSemi:internal:Transliterator_Thai_ThaiSemi.txt:UTF8:FORWARD
+
+Thai-ThaiLogical:internal:Transliterator_Thai_ThaiLogical.txt:UTF8:FORWARD
+ThaiLogical-Thai:internal:Transliterator_Thai_ThaiLogical.txt:UTF8:REVERSE
+
+ThaiLogical-Latin:internal:Transliterator_ThaiLogical_Latin.txt:UTF8:FORWARD
+Latin-ThaiLogical:internal:Transliterator_ThaiLogical_Latin.txt:UTF8:REVERSE
+
+# Must use the order below!
+# We need two separate passes because of the Thai vowel reversal
+# Thai-Logical also converts spaces to semicolons. That has to be done before we insert latin spaces
+
+Thai-Latin:alias:[\u0E00-\u0E7F\u0020];NFD;Thai-ThaiSemi;Any-BreakInternal;Thai-ThaiLogical;ThaiLogical-Latin;NFC
+Latin-Thai:alias:[[:latin:][:thai:]\ 0-9;|~\u00A7\u00AB\u00BB\u02B9\u0300-\u0302\u0304\u0306\u030A\u030C\u0312\u0323\u0325\u0331\u0E4F\u0E5A-\u0E5B\u2021];NFD;Latin-ThaiLogical;ThaiLogical-Thai;NFC
+
+# end of Thai Stuff
 
 Hiragana-Katakana:file:Transliterator_Hiragana_Katakana.txt:UTF8:FORWARD
 Katakana-Hiragana:file:Transliterator_Hiragana_Katakana.txt:UTF8:REVERSE

@@ -1,0 +1,4 @@
+﻿# The rules that convert space into semicolon are in this file;
+# since they have to come BEFORE the break iterator.
+
+[:thai:] [:mark:]* { ' ' } [:thai:] > '; ' ;
