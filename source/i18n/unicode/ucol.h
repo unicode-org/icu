@@ -611,6 +611,15 @@ ucol_getBound(const uint8_t       *source,
 U_CAPI void U_EXPORT2
 ucol_getVersion(const UCollator* coll, UVersionInfo info);
 
+/**
+ * Gets the UCA version information for a Collator. Version is the
+ * UCA version number (3.1.1, 4.0).
+ * @param coll The UCollator to query.
+ * @param info the version # information, the result will be filled in
+ * @stable ICU 2.0
+ */
+U_CAPI void U_EXPORT2
+ucol_getUCAVersion(const UCollator* coll, UVersionInfo info);
 
 /** 
  * Merge two sort keys. The levels are merged with their corresponding counterparts

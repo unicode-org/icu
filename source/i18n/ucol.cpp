@@ -8992,5 +8992,13 @@ returnResult:
   return result;
 
 }
+
+U_CAPI void U_EXPORT2
+ucol_getUCAVersion(const UCollator* coll, UVersionInfo info) {
+  if(coll) {
+    uprv_memcpy(&info, coll->UCA->image->UCAVersion, sizeof(UVersionInfo));
+  }
+}
+
 #endif /* #if !UCONFIG_NO_COLLATION */
 
