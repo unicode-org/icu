@@ -76,7 +76,7 @@
         <a href="#ImportantNotes">Important Notes About Using ICU</a>
 
         <ul class="TOC">
-          <li><a href="#ImportantNotesWin32">Windows Platform</a></li>
+          <li><a href="#ImportantNotesWindows">Windows Platform</a></li>
 
           <li><a href="#sharedLibNote">Using Shared Data Libraries</a></li>
         </ul>
@@ -123,9 +123,8 @@
 
       <li>Over 160 locales supported. Visit the <a href=
       "http://oss.software.ibm.com/developerworks/opensource/icu/localeexplorer">
-      LocaleExplorer</a>
-      on the ICU website for a demonstration and a full list of supported locales or see
-      the <a href=
+      LocaleExplorer</a> on the ICU website for a demonstration and a full
+      list of supported locales or see the <a href=
       "http://oss.software.ibm.com/cvs/icu/~checkout~/icu/data/index.txt">index
       file</a> with the supported locales.</li>
     </ul>
@@ -541,6 +540,40 @@
       which must also be adapted to any new platform.</li>
     </ul>
 
+    <p>It is possible to build each library individually. They must be built
+    in the following order:<br>
+    </p>
+
+    <ol start="1" type="1">
+      <li>stubdata</li>
+
+      <li>common</li>
+
+      <li>i18n</li>
+
+      <li>toolutil</li>
+
+      <li>makeconv</li>
+
+      <li>genrb</li>
+
+      <li>gentz</li>
+
+      <li>genccode</li>
+
+      <li>gennames</li>
+
+      <li>genuca</li>
+
+      <li>gennorm</li>
+
+      <li>makedata (a project on Windows, or source/data/Makefile on
+      Unix)</li>
+
+      <li>ctestfw, intltest and cintltst, if you want to run the test
+      suite.</li>
+    </ol>
+
     <h2><a name="HowToBuild">How To Build And Install ICU</a></h2>
 
     <h3><a name="HowToBuildSupported">Supported Platforms</a></h3>
@@ -586,7 +619,7 @@
       <tr>
         <td>Solaris 2.6</td>
 
-        <td>Workshop 4.2</td>
+        <td>Workshop Pro CC 4.2</td>
 
         <td>Reference platform</td>
       </tr>
@@ -611,6 +644,14 @@
         <td>Windows 95</td>
 
         <td>Microsoft Visual C++ 6.0</td>
+
+        <td>Regularly tested</td>
+      </tr>
+
+      <tr>
+        <td>Solaris 2.6</td>
+
+        <td>gcc 2.91.66</td>
 
         <td>Regularly tested</td>
       </tr>
@@ -697,7 +738,7 @@
     <p>Building International Components for Unicode requires:</p>
 
     <ul type="disc">
-      <li>Microsoft NT 3.51 or above</li>
+      <li>Microsoft NT 3.51 and above, or Windows 95 and above</li>
 
       <li>Microsoft Visual C++ 6.0 (Service Pack 2 is required to work with
       the release build of max speed optimization).</li>
@@ -739,16 +780,11 @@
       the "all" workspace.</li>
 
       <li>Set the active configuration to "Win32 Debug" or "Win32 Release"
-      (See note below).</li>
+      (See <a href="#HowToBuildWindowsConfig">note</a> below).</li>
 
       <li>Choose the "Build" menu and select "Rebuild All". If you want to
-      build the Debug and Release configurations at the same time, choose
-      "Build" menu and select "Batch Build..." instead (and mark all
-      configurations as checked), then click the button named "Rebuild All".
-      The "all" workspace will build all the test programs as well as the
-      tools for generating binary locale data files. The "makedata" project
-      will be run automatically to convert the locale data files from text
-      format into icudata.dll.</li>
+      build the Debug and Release at the same time, see the <a href=
+      "#HowToBuildWindowsBatch">note</a> below.</li>
 
       <li>Run the C++ test suite, "intltest". To do this: set the active
       project to "intltest", and press F5 to run it.</li>
@@ -760,7 +796,9 @@
       errors. The return codes are non-zero when they do not pass. Visual C++
       will display the return codes in the debug tag of the output window.
       When "intltest" and "cintltest" return 0, it means that everything is
-      installed correctly.</li>
+      installed correctly. You can press Ctrl+F5 on the test project to run
+      the test and see what error messages were displayed (if any tests
+      failed).</li>
 
       <li>Reset the <strong>TZ</strong> environment variable to its original
       value, unless you plan on testing ICU any further.</li>
@@ -768,7 +806,8 @@
       <li>You are now able to develop applications with ICU.</li>
     </ol>
 
-    <p><strong>Note:</strong> To set the active configuration, two different
+    <p><a name="HowToBuildWindowsConfig"><strong>Setting Active Configuration
+    Note:</strong></a> To set the active configuration, two different
     possibilities are:</p>
 
     <ul type="disc">
@@ -785,27 +824,16 @@
       bar for later selection.</li>
     </ul>
 
-    <p>It is also possible to build each library individually, using the
-    workspaces in each respective directory. They have to be built in the
-    following order:<br>
-    </p>
-
-    <ol start="1" type="1">
-      <li>common</li>
-
-      <li>i18n</li>
-
-      <li>makedata (which invokes makeconv, genrb, genccode, etc.)</li>
-
-      <li>ctestfw</li>
-
-      <li>intltest and cintltst, if you want to run the test suite.</li>
-    </ol>
+    <p><a name="HowToBuildWindowsBatch"><strong>Batch Configuration
+    Note:</strong></a> If you want to build the Debug and Release
+    configurations at the same time, choose "Build" menu and select "Batch
+    Build..." instead (and mark all configurations as checked), then click
+    the button named "Rebuild All". The "all" workspace will build all the
+    test programs as well as the tools for generating binary locale data
+    files. The "makedata" project will be run automatically to convert the
+    locale data files from text format into icudata.dll.</p>
 
     <h3><a name="HowToBuildUnix">How To Build And Install On Unix</a></h3>
-
-    <p>There is a set of Makefiles for Unix that supports Linux w/gcc,
-    Solaris w/gcc and Workshop CC, AIX w/xlc and OS/390 with C++.</p>
 
     <p>Building International Components for Unicode on Unix requires:</p>
 
@@ -836,24 +864,27 @@
       following files (by executing 'chmod +x' command): runConfigureICU,
       configure, install-sh and config.*,</li>
 
-      <li>You also need to set other environment variables for different
-      build systems. See the <a href=
-      "http://oss.software.ibm.com/icu/userguide/">User Guide</a> or the
-      provided <a href="source/runConfigureICU">script</a>.</li>
+      <li>Run the <a href="source/runConfigureICU">runConfigureICU</a> script
+      for your platform. If you are not using the runConfigureICU script or
+      your platform is not supported by the script, you need to set your CC,
+      CXX, CFLAGS and CXXFLAGS environment variables, and type "./configure".
+      You can type "./configure --help" to print the available options.</li>
 
-      <li>Type "./configure" or type "./configure --help" to print the
-      available options.</li>
+      <li>
+        Type "gmake" to compile the libraries and all the data files. 
 
-      <li>Type "make" to compile the libraries and all the data files. On
-      OS/390, both IEEE binary floating point and native S/390 hexadecimal
-      floating point calculations are supported. The default is to build with
-      native floating-point support. Please set the environment variable
-      IEEE390=1 if you would like to make the ICU DLLs with IEEE floating
-      point support.</li>
+        <div class="indent">
+          <strong>Note:</strong> On OS/390, both IEEE binary floating point
+          and native S/390 hexadecimal floating point calculations are
+          supported. The default is to build with native floating-point
+          support. Please set the environment variable IEEE390=1 if you would
+          like to make the ICU DLLs with IEEE floating point support.
+        </div>
+      </li>
 
-      <li>Optionally, type "make check" to verify the test suite.</li>
+      <li>Optionally, type "gmake check" to verify the test suite.</li>
 
-      <li>Type "make install" to install.</li>
+      <li>Type "gmake install" to install.</li>
     </ol>
 
     <p>Some platforms use package management tools to control the
@@ -864,28 +895,6 @@
     ICU from CVS, it is probable that the packaging scripts or related files
     are not up to date with the contents of ICU at this time, so use them
     with caution.)</p>
-
-    <p>It is also possible to build each library individually, using the
-    Makefiles in each respective directory. They have to be built in the
-    following order:</p>
-
-    <ol start="1" type="1">
-      <li>common</li>
-
-      <li>i18n</li>
-
-      <li>makeconv</li>
-
-      <li>genrb</li>
-
-      <li>gentz</li>
-
-      <li>genccode</li>
-
-      <li>ctestfw</li>
-
-      <li>intltest and cintltst, if you want to run the test suite.</li>
-    </ol>
 
     <h3><a name="HowToBuildOS390">OS/390 (zSeries) Platform</a></h3>
 
