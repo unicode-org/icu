@@ -65,14 +65,6 @@ operator<<(STD_OSTREAM& stream, const UnicodeString& str)
     return stream;
 }
 
-U_USTDIO_API STD_OSTREAM &
-operator<<(STD_OSTREAM& stream, const UChar *s)
-{
-    UnicodeString localStr(s);
-    return operator<<(stream, localStr);
-}
-
-
 U_USTDIO_API STD_ISTREAM &
 operator>>(STD_ISTREAM& stream, UnicodeString& str)
 {
