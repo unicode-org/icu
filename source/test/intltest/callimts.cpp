@@ -32,20 +32,19 @@ void CalendarLimitTest::runIndexedTest( int32_t index, UBool exec, char* &name, 
 // *****************************************************************************
 // class CalendarLimitTest
 // *****************************************************************************
- 
+
 // this is 2^52 - 1, the largest allowable mantissa with a 0 exponent in a 64-bit double
 const UDate CalendarLimitTest::EARLIEST_SUPPORTED_MILLIS = - 4503599627370495.0;
 const UDate CalendarLimitTest::LATEST_SUPPORTED_MILLIS    =   4503599627370495.0;
- 
+
 // -------------------------------------
- 
+
 void
 CalendarLimitTest::test(UDate millis, Calendar* cal, DateFormat* fmt)
 {
     UErrorCode exception = U_ZERO_ERROR;
     UnicodeString theDate;
     UErrorCode status = U_ZERO_ERROR;
-    UDate d = millis;
     cal->setTime(millis, exception);
     if (U_SUCCESS(exception)) {
         fmt->format(millis, theDate);
@@ -152,7 +151,7 @@ CalendarLimitTest::explore3(UDate expectedLateLimit)
     int32_t* fields = new int32_t[3];
     int32_t oldYear = -1;
     int32_t newYear = -1;
-    while (TRUE) {
+    for (;;) {
         if(! timeToFields(millis, fields))
             break;
         newYear = fields[0];
@@ -166,7 +165,7 @@ CalendarLimitTest::explore3(UDate expectedLateLimit)
     oldYear = -1;
     newYear = -1;
     millis /= 2;
-    while (TRUE) {
+    for (;;) {
         if(! timeToFields(millis, fields))
             break;
         newYear = fields[0];

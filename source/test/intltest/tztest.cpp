@@ -147,7 +147,6 @@ TimeZoneTest::TestGenericAPI()
     logln(UnicodeString("Value returned from t_timezone = ") + tzoffset);
     // Invert sign because UNIX semantics are backwards
     if (tzoffset < 0) tzoffset = -tzoffset;
-        UErrorCode status = U_ZERO_ERROR;
     // --- The following test would fail outside PST now that
     // --- PST is generally set to be default timezone in format tests
     //if ((*saveDefault == *pstZone) && (tzoffset != 28800)) {

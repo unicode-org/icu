@@ -737,7 +737,6 @@ LocaleTest::TestGetLangsAndCountries()
     const char spotCheck1[ ][4] = { "en", "es", "fr", "de", "it", 
                                     "ja", "ko", "zh", "th", "he", 
                                     "id", "iu", "ug", "yi", "za" };
-    int32_t spotLen = 15;
 
     int32_t i;
     
