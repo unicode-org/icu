@@ -110,7 +110,11 @@ _Latin1FromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
     targetCapacity=pArgs->targetLimit-pArgs->target;
     offsets=pArgs->offsets;
 
-    max=0xff; /* ### 0x7f for US-ASCII */
+    if(cnv->sharedData==&_Latin1Data) {
+        max=0xff; /* Latin-1 */
+    } else {
+        max=0x7f; /* US-ASCII */
+    }
 
     /* get the converter state from UConverter */
     c=cnv->fromUSurrogateLead;
@@ -302,18 +306,236 @@ static const UConverterImpl _Latin1Impl={
     NULL
 };
 
-const UConverterStaticData _Latin1StaticData={
+static const UConverterStaticData _Latin1StaticData={
     sizeof(UConverterStaticData),
     "LATIN_1",
     819, UCNV_IBM, UCNV_LATIN_1, 1, 1,
-    { 0x1a, 0, 0, 0 },1,FALSE, FALSE,
+    { 0x1a, 0, 0, 0 }, 1, FALSE, FALSE,
     0,
     { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 } /* reserved */
 };
 
-
 const UConverterSharedData _Latin1Data={
     sizeof(UConverterSharedData), ~((uint32_t) 0),
     NULL, NULL, &_Latin1StaticData, FALSE, &_Latin1Impl, 
+    0
+};
+
+/* US-ASCII ----------------------------------------------------------------- */
+
+/* This is a table-less version of _MBCSSingleToBMPWithOffsets(). */
+U_CFUNC void
+_ASCIIToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
+                           UErrorCode *pErrorCode) {
+    const uint8_t *source, *sourceLimit, *lastSource;
+    UChar *target;
+    int32_t targetCapacity, length;
+    int32_t *offsets;
+
+    int32_t sourceIndex;
+    uint8_t b;
+
+    /* set up the local pointers */
+    source=(const uint8_t *)pArgs->source;
+    sourceLimit=(const uint8_t *)pArgs->sourceLimit;
+    target=pArgs->target;
+    targetCapacity=pArgs->targetLimit-pArgs->target;
+    offsets=pArgs->offsets;
+
+    /* sourceIndex=-1 if the current character began in the previous buffer */
+    sourceIndex=0;
+    lastSource=source;
+
+    /*
+     * since the conversion here is 1:1 UChar:uint8_t, we need only one counter
+     * for the minimum of the sourceLength and targetCapacity
+     */
+    length=sourceLimit-source;
+    if(length<targetCapacity) {
+        targetCapacity=length;
+    }
+
+    /* conversion loop */
+    while(targetCapacity>0) {
+        b=*source++;
+        if(b<=0x7f) {
+            *target++=b;
+            --targetCapacity;
+        } else {
+            /* call the callback function with all the preparations and post-processing */
+            UConverter *cnv=pArgs->converter;
+
+            /* callback(illegal) */
+            *pErrorCode=U_ILLEGAL_CHAR_FOUND;
+
+            /* set offsets since the start or the last callback */
+            if(offsets!=NULL) {
+                int32_t count=(int32_t)(source-lastSource);
+
+                /* predecrement: do not set the offset for the callback-causing character */
+                while(--count>0) {
+                    *offsets++=sourceIndex++;
+                }
+                /* offset and sourceIndex are now set for the current character */
+            }
+
+            /* update the arguments structure */
+            pArgs->source=(const char *)source;
+            pArgs->target=target;
+            pArgs->offsets=offsets;
+
+            /* copy the current bytes to invalidCharBuffer */
+            cnv->invalidCharBuffer[0]=b;
+            cnv->invalidCharLength=1;
+
+            /* call the callback function */
+            cnv->fromCharErrorBehaviour(cnv->toUContext, pArgs, cnv->invalidCharBuffer, 1, UCNV_ILLEGAL, pErrorCode);
+
+            /* update target and deal with offsets if necessary */
+            offsets=ucnv_updateCallbackOffsets(offsets, pArgs->target-target, sourceIndex);
+            target=pArgs->target;
+
+            /* update the source pointer and index */
+            sourceIndex+=1+((const uint8_t *)pArgs->source-source);
+            source=lastSource=(const uint8_t *)pArgs->source;
+            targetCapacity=pArgs->targetLimit-target;
+            length=sourceLimit-source;
+            if(length<targetCapacity) {
+                targetCapacity=length;
+            }
+
+            /*
+             * If the callback overflowed the target, then we need to
+             * stop here with an overflow indication.
+             */
+            if(*pErrorCode==U_BUFFER_OVERFLOW_ERROR) {
+                break;
+            } else if(U_FAILURE(*pErrorCode)) {
+                /* break on error */
+                break;
+            } else if(cnv->UCharErrorBufferLength>0) {
+                /* target is full */
+                *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
+                break;
+            }
+        }
+    }
+
+    if(U_SUCCESS(*pErrorCode) && source<sourceLimit && target>=pArgs->targetLimit) {
+        /* target is full */
+        *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
+    }
+
+    /* set offsets since the start or the last callback */
+    if(offsets!=NULL) {
+        size_t count=source-lastSource;
+        while(count>0) {
+            *offsets++=sourceIndex++;
+            --count;
+        }
+    }
+
+    /* write back the updated pointers */
+    pArgs->source=(const char *)source;
+    pArgs->target=target;
+    pArgs->offsets=offsets;
+}
+
+/* This is a table-less version of _MBCSSingleGetNextUChar(). */
+U_CFUNC UChar32
+_ASCIIGetNextUChar(UConverterToUnicodeArgs *pArgs,
+                   UErrorCode *pErrorCode) {
+    UChar buffer[UTF_MAX_CHAR_LENGTH];
+    const uint8_t *source;
+    uint8_t b;
+
+    /* set up the local pointers */
+    source=(const uint8_t *)pArgs->source;
+
+    /* conversion loop */
+    while(source<(const uint8_t *)pArgs->sourceLimit) {
+        b=*source++;
+        pArgs->source=(const char *)source;
+        if(b<=0x7f) {
+            return b;
+        } else {
+            /* call the callback function with all the preparations and post-processing */
+            UConverter *cnv=pArgs->converter;
+
+            /* callback(illegal) */
+            *pErrorCode=U_ILLEGAL_CHAR_FOUND;
+
+            /* update the arguments structure */
+            pArgs->target=buffer;
+            pArgs->targetLimit=buffer+UTF_MAX_CHAR_LENGTH;
+
+            /* copy the current byte to invalidCharBuffer */
+            cnv->invalidCharBuffer[0]=(char)b;
+            cnv->invalidCharLength=1;
+
+            /* call the callback function */
+            cnv->fromCharErrorBehaviour(cnv->toUContext, pArgs, cnv->invalidCharBuffer, 1, UCNV_ILLEGAL, pErrorCode);
+
+            /* update the source pointer */
+            source=(const uint8_t *)pArgs->source;
+
+            /*
+             * return the first character if the callback wrote some
+             * we do not need to goto finish because the converter state is already set
+             */
+            if(U_SUCCESS(*pErrorCode)) {
+                int32_t length=pArgs->target-buffer;
+                if(length>0) {
+                    return ucnv_getUChar32KeepOverflow(cnv, buffer, length);
+                }
+                /* else (callback did not write anything) continue */
+            } else if(*pErrorCode==U_BUFFER_OVERFLOW_ERROR) {
+                *pErrorCode=U_ZERO_ERROR;
+                return ucnv_getUChar32KeepOverflow(cnv, buffer, UTF_MAX_CHAR_LENGTH);
+            } else {
+                /* break on error */
+                /* ### what if a callback set an error but _also_ generated output?! */
+                return 0xffff;
+            }
+        }
+    }
+
+    /* no output because of empty input or only skipping callbacks */
+    *pErrorCode=U_INDEX_OUTOFBOUNDS_ERROR;
+    return 0xffff;
+}
+
+static const UConverterImpl _ASCIIImpl={
+    UCNV_US_ASCII,
+
+    NULL,
+    NULL,
+
+    NULL,
+    NULL,
+    NULL,
+
+    _ASCIIToUnicodeWithOffsets,
+    _ASCIIToUnicodeWithOffsets,
+    _Latin1FromUnicodeWithOffsets,
+    _Latin1FromUnicodeWithOffsets,
+    _ASCIIGetNextUChar,
+
+    NULL,
+    NULL
+};
+
+static const UConverterStaticData _ASCIIStaticData={
+    sizeof(UConverterStaticData),
+    "US-ASCII",
+    367, UCNV_IBM, UCNV_US_ASCII, 1, 1,
+    { 0x1a, 0, 0, 0 }, 1, FALSE, FALSE,
+    0,
+    { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 } /* reserved */
+};
+
+const UConverterSharedData _ASCIIData={
+    sizeof(UConverterSharedData), ~((uint32_t) 0),
+    NULL, NULL, &_ASCIIStaticData, FALSE, &_ASCIIImpl, 
     0
 };
