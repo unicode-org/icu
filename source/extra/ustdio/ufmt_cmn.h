@@ -22,7 +22,7 @@
 
 #include "unicode/utypes.h"
 
-#define UFMT_DEFAULT_BUFFER_SIZE 64
+#define UFMT_DEFAULT_BUFFER_SIZE 128
 #define MAX_UCHAR_BUFFER_SIZE(buffer) (sizeof(buffer)/(UTF_MAX_CHAR_LENGTH*sizeof(UChar)))
 #define MAX_UCHAR_BUFFER_NEEDED(strLen) ((strLen+1)*UTF_MAX_CHAR_LENGTH*sizeof(UChar))
 
