@@ -34,6 +34,9 @@ static void TestCharNames(void);
 static void TestMirroring(void);
 static void TestUnescape(void);
 static void TestCaseMapping(void);
+static void TestCaseFolding(void);
+static void TestCaseCompare(void);
+static void TestUScriptCodeAPI(void);
 
 /* internal methods used */
 static int32_t MakeProp(char* str);
