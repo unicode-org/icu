@@ -123,12 +123,12 @@ public class LDMLUtilities {
         }
         icu.append(source);
         if(xpath!=null){
-            XPathTokenizer.relativeToAbsolute(xpath, fullPath);
+            StringBuffer resolved = XPathTokenizer.relativeToAbsolute(xpath, fullPath);
             // make sure that fullPath is not corrupted!
             XPathAPI.eval(context, fullPath.toString());
             
             //TODO .. do the conversion
-            XPathTokenizer tokenizer = new XPathTokenizer(fullPath);
+            XPathTokenizer tokenizer = new XPathTokenizer(resolved);
             
             String token = tokenizer.nextToken();
             while(token!=null){
