@@ -29,6 +29,7 @@
 #include "hajatrts.h"
 #include "ufltlgts.h"
 #include "transrt.h"
+#include "usettest.h"
 
 #define CASE(id,test) case id:                                \
                           name = #test;                       \
@@ -52,6 +53,7 @@ void IntlTestTransliterator::runIndexedTest( int32_t index, UBool exec, char* &n
         CASE(6, HangToJamoTransliteratorTest);
         CASE(7, UnicodeFilterLogicTest);
         CASE(8, TransliteratorRoundTripTest);
+        CASE(9, UnicodeSetTest);
 		default: name=""; break;		
 	}
 }
