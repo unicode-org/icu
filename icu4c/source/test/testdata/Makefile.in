@@ -27,7 +27,9 @@ SUBDIRS =
 .PHONY : all all-local all-recursive install install-local install-udata install-udata-files install-udata-dlls		\
 install-recursive clean clean-local clean-recursive distclean		\
 distclean-local distclean-recursive doc dist dist-local dist-recursive	\
-check check-local check-recursive
+check check-local check-recursive build-dir
+
+.NOTPARALLEL: build-dir
 
 ## Clear suffix list
 .SUFFIXES :
@@ -40,7 +42,7 @@ distclean : distclean-recursive distclean-local
 dist: dist-recursive dist-local
 check: all check-recursive check-local
 
-all-local: $(BUILD_DIRS) build-testdata testdata packagetest
+all-local: build-dir build-testdata testdata packagetest
 
 install-local: 
 
@@ -119,7 +121,7 @@ $(TESTBUILDDIR)/testdata.lst: $(SRCLISTDEPS)
 	done;
 
 
-build-testdata: $(BUILD_DIRS) $(ALL_TEST_FILES) $(TESTBUILDDIR)/testdata.lst $(TESTBUILDDIR)/$(TESTDT)iscii.res
+build-testdata: build-dir $(ALL_TEST_FILES) $(TESTBUILDDIR)/testdata.lst $(TESTBUILDDIR)/$(TESTDT)iscii.res
 
 # test.icu
 $(TESTBUILDDIR)/$(TESTDT)test.icu: $(TOOLDIR)/gentest/gentest$(EXEEXT)
@@ -174,14 +176,15 @@ $(TESTOUTDIR)/$(TESTDT)nam.typ: $(TESTBUILDDIR)/$(TESTDT)te_IN.res
 	cp $< $@
 
 
-testdata: $(BUILD_DIRS) $(ALL_TEST_FILES) $(UNPACKAGEDTESTDATA)
+testdata: build-dir $(ALL_TEST_FILES) $(UNPACKAGEDTESTDATA)
 
-#$(ALL_TEST_FILES) $(TESTBUILDDIR)/testtable32.txt $(TESTBUILDDIR)/testdata.lst: $(BUILD_DIRS)
+#$(ALL_TEST_FILES) $(TESTBUILDDIR)/testtable32.txt $(TESTBUILDDIR)/testdata.lst: build-dir
 
-packagetest: $(BUILD_DIRS) testdata pkgdata.inc $(TESTBUILDDIR)/testdata.lst 
+packagetest: build-dir testdata pkgdata.inc $(TESTBUILDDIR)/testdata.lst 
 	$(PKGDATA_INVOKE) $(PKGDATA) -T $(TESTBUILDDIR) -d $(TESTOUTDIR) -s $(TESTBUILDDIR) -p $(TESTDATA) -m common $(TESTBUILDDIR)/testdata.lst
 
+build-dir: $(BUILD_DIRS)
 $(BUILD_DIRS):
-	-$(MKINSTALLDIRS) $(TESTOUTDIR) $(TESTBUILDDIR)
+	-$(MKINSTALLDIRS) $(BUILD_DIRS)
 
 
