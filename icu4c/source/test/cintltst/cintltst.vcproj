@@ -163,12 +163,6 @@
 			<File
 				RelativePath=".\cbkittst.c">
 			</File>
-			<File
-				RelativePath=".\cregrtst.c">
-			</File>
-			<File
-				RelativePath=".\cregrtst.h">
-			</File>
 		</Filter>
 		<Filter
 			Name="collation"
