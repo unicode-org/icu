@@ -28,7 +28,7 @@
  *  <code>RegexPattern</code> and <code>RegexMatcher</code>.
  *  <code>RegexPattern</code> objects represent a pre-processed, or compiled
  *  regular expression.  They are created from a regular expression pattern string,
- *  and can be used to create <RegexMatcher> objects for the pattern.</p>
+ *  and can be used to create <code>RegexMatcher</code> objects for the pattern.</p>
  *
  * <p>Class <code>RegexMatcher</code> bundles together a regular expression
  *  pattern and a target string to which the search pattern will be applied.

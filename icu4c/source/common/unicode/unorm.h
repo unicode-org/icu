@@ -31,7 +31,7 @@
  * decomposed form, allowing for easier sorting and searching of text.
  * <code>unorm_normalize</code> supports the standard normalization forms described in
  * <a href="http://www.unicode.org/unicode/reports/tr15/" target="unicode">
- * Unicode Standard Annex #15 &mdash; Unicode Normalization Forms</a>.
+ * Unicode Standard Annex #15 &#8212; Unicode Normalization Forms</a>.
  *
  * Characters with accents or other adornments can be encoded in
  * several different ways in Unicode.  For example, take the character A-acute.

@@ -34,6 +34,9 @@ U_NAMESPACE_BEGIN
 class NumberFormatFactory;
 class StringEnumeration;
 
+/**
+ * @internal
+ */
 typedef const void* URegistryKey;
 
 /**
@@ -756,7 +759,7 @@ private:
  * supports.  When registered, the locales it supports extend or override the
  * locale already supported by ICU.
  *
- * @prototype
+ * @draft ICU 2.6
  */
 class U_I18N_API NumberFormatFactory : public UObject {
 public:
@@ -794,7 +797,7 @@ public:
 
 /**
  * A NumberFormatFactory that supports a single locale.  It can be visible or invisible.
- * @prototype 
+ * @draft ICU 3.0 
  */
 class U_I18N_API SimpleNumberFormatFactory : public NumberFormatFactory {
 protected:

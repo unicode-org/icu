@@ -64,7 +64,7 @@ uenum_count(UEnumeration* en, UErrorCode* status);
  * The result is terminated by (UChar)0.
  * @param en the iterator object
  * @param resultLength pointer to receive the length of the result
- *                     (not including the terminating \0).
+ *                     (not including the terminating \\0).
  *                     If the pointer is NULL it is ignored.
  * @param status the error code, set to U_ENUM_OUT_OF_SYNC_ERROR if
  *               the iterator is out of sync with its service.
@@ -93,7 +93,7 @@ uenum_unext(UEnumeration* en,
  * (but non-NULL).
  * @param en the iterator object
  * @param resultLength pointer to receive the length of the result
- *                     (not including the terminating \0).
+ *                     (not including the terminating \\0).
  *                     If the pointer is NULL it is ignored.
  * @param status the error code, set to U_ENUM_OUT_OF_SYNC_ERROR if
  *               the iterator is out of sync with its service.  Set to

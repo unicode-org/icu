@@ -188,8 +188,8 @@ uset_applyPattern(USet *set,
  * @param result the string to receive the rules, may be NULL
  * @param resultCapacity the capacity of result, may be 0 if result is NULL
  * @param escapeUnprintable if TRUE then convert unprintable
- * character to their hex escape representations, \uxxxx or
- * \Uxxxxxxxx.  Unprintable characters are those other than
+ * character to their hex escape representations, \\uxxxx or
+ * \\Uxxxxxxxx.  Unprintable characters are those other than
  * U+000A, U+0020..U+007E.
  * @param ec error code.
  * @return length of string, possibly larger than resultCapacity

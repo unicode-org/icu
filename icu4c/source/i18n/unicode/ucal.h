@@ -618,7 +618,7 @@ ucal_getAvailable(int32_t index);
 /**
  * Determine how many locales have calendars available.
  * This function is most useful as determining the loop ending condition for
- * calls to \Ref{ucal_getAvailable}.
+ * calls to \ref ucal_getAvailable.
  * @return The number of locales for which calendars are available.
  * @see ucal_getAvailable
  * @stable ICU 2.0
@@ -912,7 +912,7 @@ ucal_getAvailableTZIDs(int32_t      rawOffset,
 /**
  * Determine how many TimeZones exist with a certain offset.
  * This function is most useful as determining the loop ending condition for
- * calls to \Ref{ucal_getAvailableTZIDs}.
+ * calls to \ref ucal_getAvailableTZIDs.
  * @param rawOffset The desired GMT offset.
  * @return The number of TimeZones with rawOffset.
  * @see ucal_getAvailableTZIDs
