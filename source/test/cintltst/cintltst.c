@@ -232,7 +232,7 @@ void ctest_setICU_DATA() {
         u_setDataDirectory(env_string);
         return;
     }
-#endif
+#else
 
     /* On Windows, the file name obtained from __FILE__ includes a full path.
      *             This file is "wherever\icu\source\test\cintltst\cintltst.c"
@@ -262,6 +262,7 @@ void ctest_setICU_DATA() {
             return;
         }
     }
+#endif
 
     /* No location for the data dir was identifiable.
      *   Add other fallbacks for the test data location here if the need arises

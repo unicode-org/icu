@@ -4255,8 +4255,8 @@ static void TestEBCDICUS4XML()
     if (U_FAILURE(status) || memcmp(target_x, fromUnicodeMaps, sizeof(char)*3) != 0) {
         log_err("From Unicode conversion failed in EBCDICUS4XML test. %s\n",
             u_errorName(status));
-        printSeqErr(target_x, 3);
-        printSeqErr(fromUnicodeMaps, 3);
+        printSeqErr((const unsigned char*)target_x, 3);
+        printSeqErr((const unsigned char*)fromUnicodeMaps, 3);
     }
     ucnv_close(cnv);
 }
