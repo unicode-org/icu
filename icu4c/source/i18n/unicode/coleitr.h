@@ -1,8 +1,8 @@
 /*
-*****************************************************************************************
+******************************************************************************
 *   Copyright (C) 1997-1999, International Business Machines
 *   Corporation and others.  All Rights Reserved.
-*****************************************************************************************
+******************************************************************************
 */
 
 /**
@@ -14,12 +14,14 @@
 *
 * Modification History:
 *
-*  Date         Name          Description
+*  Date       Name        Description
 *
-*  8/18/97     helena      Added internal API documentation.
-* 08/03/98        erm            Synched with 1.2 version CollationElementIterator.java
-* 12/10/99      aliu          Ported Thai collation support from Java.
-* 01/25/01     swquek      Modified into a C++ wrapper calling C APIs (ucoliter.h)
+*  8/18/97    helena      Added internal API documentation.
+* 08/03/98    erm         Synched with 1.2 version CollationElementIterator.java
+* 12/10/99    aliu        Ported Thai collation support from Java.
+* 01/25/01    swquek      Modified into a C++ wrapper calling C APIs (ucoliter.h)
+* 02/19/01    swquek      Removed CollationElementsIterator() since it is 
+*                         private constructor and no calls are made to it
 */
 
 #ifndef COLEITR_H
@@ -27,15 +29,21 @@
 
 // #include "unicode/unistr.h"
 #include "unicode/tblcoll.h"
+#include "unicode/ucoleitr.h"
+
 // #include "tables.h"
 // #include "unicode/chariter.h"
 
 // have to do this because the include path in the main project does not have 
 // tables.h.
-class VectorOfInt;
+// class VectorOfInt;
 // class Normalizer;
 // class VectorOfPToContractElement;
 // class RuleBasedCollator;
+
+// typedef void * UCollationElements;
+// struct UCollationElements;
+typedef struct UCollationElements UCollationElements;
 
 /**
 * The CollationElementIterator class is used as an iterator to walk through     
@@ -225,6 +233,8 @@ protected:
   
   // CollationElementIterator protected constructors --------------------------
 
+  friend RuleBasedCollator;
+
   /**
   * CollationElementIterator constructor. This takes the source string and the 
   * collation object. The cursor will walk thru the source string based on the 
@@ -265,15 +275,17 @@ protected:
 
 private:
 
-  friend  class   RuleBasedCollator;
+  // friend  class   RuleBasedCollator;
 
   // CollationElementIterator private data members ----------------------------
 
-  static const int32_t UNMAPPEDCHARVALUE;
+  // static const int32_t UNMAPPEDCHARVALUE;
 
+  /* 
   Normalizer* text;       // owning 
 
   VectorOfInt* bufferAlias; // not owned
+  */
 
   /**
   * ownBuffer wants to be a subobject, not a pointer, but that means exposing 
@@ -282,7 +294,7 @@ private:
   * is used to handle Thai collation; bufferAlias points to ownBuffer in some 
   * situations. [j159 - aliu]
   */
-  VectorOfInt* ownBuffer;
+  // VectorOfInt* ownBuffer;
 
   /**
   * reorderBuffer is created on demand, so it doesn't want to be a subobject -- 
@@ -290,18 +302,30 @@ private:
   * conditions. Once created, it is reused for the life of this object. Because 
   * of the implementation of VectorOfInt, it grows monotonically. [j159 - aliu]
   */
+  /*
   VectorOfInt* reorderBuffer;
 
   int32_t expIndex;
   UnicodeString key;
   const RuleBasedCollator* orderAlias;
+  */
+
+  /**
+  * Data wrapper for collation elements
+  */
+  UCollationElements *m_data_;
+
+  /**
+  * Indicates if m_data_ belongs to this object.
+  */
+  UBool isDataOwned_;
   
   // CollationElementIterator private constructor/destructor ------------------
 
   /**
   * Default constructor.
   */
-  CollationElementIterator();
+  /* CollationElementIterator(); */
   
   /**
   * Constructor.
@@ -377,7 +401,7 @@ inline int32_t CollationElementIterator::tertiaryOrder(int32_t order)
 
 inline int32_t CollationElementIterator::getMaxExpansion(int32_t order) const
 {
-  return orderAlias->getMaxExpansion(order);
+  return ucol_getMaxExpansion(m_data_, order);
 }
 
 inline UBool CollationElementIterator::isIgnorable(int32_t order)

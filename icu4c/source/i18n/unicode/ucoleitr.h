@@ -3,22 +3,32 @@
 *   Copyright (C) 2001, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
-*/
+*
+* File ucoleitr.cpp
+*
+* Modification History:
+*
+* Date        Name        Description
+* 02/15/2001  synwee      Modified all methods to process its own function 
+*                         instead of calling the equivalent c++ api (coleitr.h)
+*******************************************************************************/
 
 #ifndef UCOLEITR_H
 #define UCOLEITR_H
 
-/** This indicates the last element in a UCollationElements has been consumed. 
- *
+/**  
+ * This indicates the last element in a UCollationElements has been consumed.
  */
 #define UCOL_NULLORDER        0xFFFFFFFF
 
 #include "unicode/ucol.h"
 
-/** The UCollationElements struct.
- *  For usage in C programs.
+/** 
+ * The UCollationElements struct.
+ * For usage in C programs.
  */
-typedef void * UCollationElements;
+// typedef void * UCollationElements;
+typedef struct UCollationElements UCollationElements;
 
 /**
  * The UCollationElements  is used as an iterator to walk through
@@ -66,7 +76,7 @@ typedef void * UCollationElements;
  * a collation order is its primary order; the next 8 bits is the secondary 
  * order and the last 8 bits is the tertiary order.
  *
- * @see                Collator
+ * @see UCollator
  */
 
 /**
@@ -76,13 +86,13 @@ typedef void * UCollationElements;
  * @param text The text to iterate over.
  * @param textLength The number of characters in text, or -1 if null-terminated
  * @param status A pointer to an UErrorCode to receive any errors.
- * @stable
+ * @return a struct containing collation element information
  */
 U_CAPI UCollationElements*
-ucol_openElements(    const    UCollator       *coll,
-            const    UChar           *text,
-            int32_t                  textLength,
-            UErrorCode         *status);
+ucol_openElements(const UCollator  *coll,
+                  const UChar      *text,
+                        int32_t    textLength,
+                        UErrorCode *status);
 
 /**
  * get a hash code for a key... Not very useful!
@@ -95,7 +105,6 @@ ucol_keyHashCode(const uint8_t* key, int32_t length);
  * Close a UCollationElements.
  * Once closed, a UCollationElements may no longer be used.
  * @param elems The UCollationElements to close.
- * @stable
  */
 U_CAPI void
 ucol_closeElements(UCollationElements *elems);
@@ -106,7 +115,6 @@ ucol_closeElements(UCollationElements *elems);
  * @param elems The UCollationElements to reset.
  * @see ucol_next
  * @see ucol_previous
- * @stable
  */
 U_CAPI void
 ucol_reset(UCollationElements *elems);
@@ -116,13 +124,11 @@ ucol_reset(UCollationElements *elems);
  * A single character may contain more than one collation element.
  * @param elems The UCollationElements containing the text.
  * @param status A pointer to an UErrorCode to receive any errors.
- * @return The next collation elements ordering, or \Ref{UCOL_NULLORDER} if the
- * end of the text is reached.
- * @stable
+ * @return The next collation elements ordering, or \Ref{UCOL_NULLORDER} if 
+ *         the end of the text is reached.
  */
 U_CAPI int32_t
-ucol_next(    UCollationElements    *elems,
-        UErrorCode        *status);
+ucol_next(UCollationElements *elems, UErrorCode *status);
 
 /**
  * Get the ordering priority of the previous collation element in the text.
@@ -131,11 +137,9 @@ ucol_next(    UCollationElements    *elems,
  * @param status A pointer to an UErrorCode to receive any errors.
  * @return The previous collation elements ordering, or \Ref{UCOL_NULLORDER}
  * if the end of the text is reached.
- * @stable
  */
 U_CAPI int32_t
-ucol_previous(    UCollationElements    *elems,
-        UErrorCode        *status);
+ucol_previous(UCollationElements *elems, UErrorCode *status);
 
 /**
  * Get the maximum length of any expansion sequences that end with the 
@@ -144,28 +148,24 @@ ucol_previous(    UCollationElements    *elems,
  * @param elems The UCollationElements containing the text.
  * @param order A collation order returned by previous or next.
  * @return The maximum length of any expansion sequences ending with the 
- * specified order.
- * @stable
+ *         specified order.
  */
 U_CAPI int32_t
-ucol_getMaxExpansion(    const    UCollationElements    *elems,
-            int32_t                order);
+ucol_getMaxExpansion(const UCollationElements *elems, int32_t order);
 
 /**
  * Set the text containing the collation elements.
- * This 
  * @param elems The UCollationElements to set.
  * @param text The source text containing the collation elements.
  * @param textLength The length of text, or -1 if null-terminated.
  * @param status A pointer to an UErrorCode to receive any errors.
  * @see ucol_getText
- * @stable
  */
 U_CAPI void
-ucol_setText(    UCollationElements    *elems,
-        const    UChar        *text,
-        int32_t            textLength,
-        UErrorCode        *status);
+ucol_setText(      UCollationElements *elems, 
+             const UChar              *text,
+                   int32_t            textLength,
+                   UErrorCode         *status);
 
 /**
  * Get the offset of the current source character.
@@ -174,7 +174,6 @@ ucol_setText(    UCollationElements    *elems,
  * @param elems The UCollationElements to query.
  * @return The offset of the current source character.
  * @see ucol_setOffset
- * @stable
  */
 U_CAPI UTextOffset
 ucol_getOffset(const UCollationElements *elems);
@@ -186,11 +185,10 @@ ucol_getOffset(const UCollationElements *elems);
  * @param offset The desired character offset.
  * @param status A pointer to an UErrorCode to receive any errors.
  * @see ucol_getOffset
- * @stable
  */
 U_CAPI void
-ucol_setOffset(    UCollationElements    *elems,
-        UTextOffset        offset,
-        UErrorCode        *status);
+ucol_setOffset(UCollationElements *elems,
+               UTextOffset        offset,
+               UErrorCode         *status);
 
 #endif
