@@ -4,16 +4,12 @@
  * others. All Rights Reserved.
  ********************************************************************
  *
- * $Source: /xsrl/Nsvn/icu/icu/source/test/intltest/canittst.cpp,v $ 
- * $Date: 2002/03/20 05:14:00 $ 
- * $Revision: 1.3 $
- *
- *****************************************************************************************
  * @author Mark E. Davis
  * @author Vladimir Weinstein
  */
 
 
+#include "intltest.h"
 #include "cstring.h"
 #include "canittst.h"
 #include "caniter.h"
@@ -64,52 +60,52 @@ CanonicalIteratorTest::~CanonicalIteratorTest()
 }
 
 void CanonicalIteratorTest::TestExhaustive() {
-  UErrorCode status = U_ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     int counter = 0;
     CanonicalIterator it("", status);
     UChar32 i = 0;
     UnicodeString s, decomp, comp;
-
+    
     for (i = 0; i < 0x10FFFF; quick?i+=0x10:++i) {
-    //for (i = 0xae00; i < 0xaf00; ++i) {
-    	
-     if ((i % 0x100) == 0) {
-        logln("Testing U+%06X", i);
-      }
-    	
-    	// skip characters we know don't have decomps
-    	int8_t type = u_charType(i);
-    	if (type == U_UNASSIGNED || type == U_PRIVATE_USE_CHAR
-    		|| type == U_SURROGATE) continue;
-    		
-    	s = i;
+        //for (i = 0xae00; i < 0xaf00; ++i) {
+        
+        if ((i % 0x100) == 0) {
+            logln("Testing U+%06X", i);
+        }
+        
+        // skip characters we know don't have decomps
+        int8_t type = u_charType(i);
+        if (type == U_UNASSIGNED || type == U_PRIVATE_USE_CHAR
+            || type == U_SURROGATE) continue;
+        
+        s = i;
         s += (UChar32)0x0345; //"\\u0345";
-
+        
         Normalizer::decompose(s, FALSE, 0, decomp, status);
         Normalizer::compose(s, FALSE, 0, comp, status);
-
-    	// skip characters that don't have either decomp.
-    	// need quick test for this!
+        
+        // skip characters that don't have either decomp.
+        // need quick test for this!
         if (s == decomp && s == comp) {
-          continue;
+            continue;
         }
-    	
-    	it.setSource(s, status);
-    	UBool gotDecomp = FALSE;
-    	UBool gotComp = FALSE;
-    	UBool gotSource = FALSE;
-
-    	while (TRUE) {
-    		UnicodeString item = it.next();
-    		if (item == "") break;
-    		if (item == s) gotSource = TRUE;
-    		if (item == decomp) gotDecomp = TRUE;
-    		if (item == comp) gotComp = TRUE;
-    	}
-
-    	if (!gotSource || !gotDecomp || !gotComp) {
-    		errln("FAIL CanonicalIterator: " + s + i);
-    	}
+        
+        it.setSource(s, status);
+        UBool gotDecomp = FALSE;
+        UBool gotComp = FALSE;
+        UBool gotSource = FALSE;
+        
+        while (TRUE) {
+            UnicodeString item = it.next();
+            if (item == "") break;
+            if (item == s) gotSource = TRUE;
+            if (item == decomp) gotDecomp = TRUE;
+            if (item == comp) gotComp = TRUE;
+        }
+        
+        if (!gotSource || !gotDecomp || !gotComp) {
+            errln("FAIL CanonicalIterator: " + s + i);
+        }
     }
 }
 
@@ -119,9 +115,9 @@ void CanonicalIteratorTest::TestBasic() {
 
   UnicodeString testArray[][2] = {
         {CharsToUnicodeString("Åd\\u0307\\u0327"), CharsToUnicodeString("A\\u030Ad\\u0307\\u0327, A\\u030Ad\\u0327\\u0307, A\\u030A\\u1E0B\\u0327, "
-        	"A\\u030A\\u1E11\\u0307, \\u00C5d\\u0307\\u0327, \\u00C5d\\u0327\\u0307, "
-        	"\\u00C5\\u1E0B\\u0327, \\u00C5\\u1E11\\u0307, \\u212Bd\\u0307\\u0327, "
-        	"\\u212Bd\\u0327\\u0307, \\u212B\\u1E0B\\u0327, \\u212B\\u1E11\\u0307")},
+            "A\\u030A\\u1E11\\u0307, \\u00C5d\\u0307\\u0327, \\u00C5d\\u0327\\u0307, "
+            "\\u00C5\\u1E0B\\u0327, \\u00C5\\u1E11\\u0307, \\u212Bd\\u0307\\u0327, "
+            "\\u212Bd\\u0327\\u0307, \\u212B\\u1E0B\\u0327, \\u212B\\u1E11\\u0307")},
         {CharsToUnicodeString("\\u010d\\u017E"), CharsToUnicodeString("c\\u030Cz\\u030C, c\\u030C\\u017E, \\u010Dz\\u030C, \\u010D\\u017E")},
         {CharsToUnicodeString("x\\u0307\\u0327"), CharsToUnicodeString("x\\u0307\\u0327, x\\u0327\\u0307, \\u1E8B\\u0327")},
     };
@@ -135,7 +131,7 @@ void CanonicalIteratorTest::TestBasic() {
     expectEqual("Characters with 'a' at the start of their decomposition: ", "", CanonicalIterator.getStarts('a'),
         new UnicodeSet("[\u00E0-\u00E5\u0101\u0103\u0105\u01CE\u01DF\u01E1\u01FB"
         + "\u0201\u0203\u0227\u1E01\u1EA1\u1EA3\u1EA5\u1EA7\u1EA9\u1EAB\u1EAD\u1EAF\u1EB1\u1EB3\u1EB5\u1EB7]")
-        	);
+            );
 #endif
 
     // check permute
@@ -179,13 +175,13 @@ void CanonicalIteratorTest::TestBasic() {
 
 void CanonicalIteratorTest::expectEqual(const UnicodeString &message, const UnicodeString &item, const UnicodeString &a, const UnicodeString &b) {
     if (!(a==b)) {
-    	errln("FAIL: " + message + getReadable(item));
-    	errln("\t" + getReadable(a));
-    	errln("\t" + getReadable(b));
+        errln("FAIL: " + message + getReadable(item));
+        errln("\t" + getReadable(a));
+        errln("\t" + getReadable(b));
     } else {
-    	logln("Checked: " + message + getReadable(item));
-    	logln("\t" + getReadable(a));
-    	logln("\t" + getReadable(b));
+        logln("Checked: " + message + getReadable(item));
+        logln("\t" + getReadable(a));
+        logln("\t" + getReadable(b));
     }
 }
 
