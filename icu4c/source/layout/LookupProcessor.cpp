@@ -89,25 +89,19 @@ le_uint32 LookupProcessor::applySingleLookup(le_uint16 lookupTableIndex, GlyphIt
     return delta;
 }
 
-LETag LookupProcessor::selectFeature(le_uint16 featureIndex, LETag tagOverride) const
+le_int32 LookupProcessor::selectLookups(const FeatureTable *featureTable, LETag featureTag, le_int32 order)
 {
-    LETag featureTag;
-    const FeatureTable *featureTable = featureListTable->getFeatureTable(featureIndex, &featureTag);
     le_uint16 lookupCount = featureTable? SWAPW(featureTable->lookupCount) : 0;
-
-    if (tagOverride != notSelected) {
-        featureTag = tagOverride;
-    }
 
     for (le_uint16 lookup = 0; lookup < lookupCount; lookup += 1) {
         le_uint16 lookupListIndex = SWAPW(featureTable->lookupListIndexArray[lookup]);
 
         lookupSelectArray[lookupListIndex] = featureTag;
+        lookupOrderArray[order + lookup]   = lookupListIndex;
     }
 
-    return featureTag;
- }
-
+    return lookupCount;
+}
 
 LookupProcessor::LookupProcessor(const char *baseAddress,
         Offset scriptListOffset, Offset featureListOffset, Offset lookupListOffset,
@@ -152,63 +146,48 @@ LookupProcessor::LookupProcessor(const char *baseAddress,
         lookupSelectArray[i] = notSelected;
     }
 
-    if (requiredFeatureIndex != 0xFFFF) {
-        requiredFeatureTag = selectFeature(requiredFeatureIndex, defaultFeature);
-    }
-
-    for (le_uint16 feature = 0; feature < featureCount; feature += 1) {
-        le_uint16 featureIndex = SWAPW(langSysTable->featureIndexArray[feature]);
-
-        selectFeature(featureIndex);
-    }
-
-    int lookup;
+    le_int32 count, order = 0;
+    const FeatureTable *featureTable = 0;
+    LETag featureTag;
 
     lookupOrderArray = new le_uint16[lookupListCount];
 
-    // FIXME: selectFeature looks at all the lookups for a given feature, and
-    // so does this code. It should be possible to combine the processing:
-    // use a routine that takes a featureTable (or a feature index if we add
-    // a routine to get the feature index from the tag) dumps the lookups into
-    // lookupOrderArray starting at a given index, sets the lookupSelectArray,
-    // and returns the number of lookups added. Then both branches below can
-    // call the routine - the featureOrder branch will sort as it goes, and
-    // the other branch will sort when it's done
-    if (featureOrder != 0) {
-        int tag, order = 0;
-
-	// FIXME: figure out where the default feature goes in all of this...
-	// (a hack that will work for Devamt.ttf is to just put it first)
-        for (tag = 0; featureOrder[tag] != emptyTag; tag += 1) {
-            const FeatureTable *featureTable = featureListTable->getFeatureTable(featureOrder[tag]);
-            le_uint16 lookupCount = featureTable? SWAPW(featureTable->lookupCount) : 0;
-
-            if (featureTable != 0) {
-                le_uint16 lookupCount = SWAPW(featureTable->lookupCount);
-
-                for (lookup = 0; lookup < lookupCount; lookup += 1) {
-                    lookupOrderArray[order + lookup] = SWAPW(featureTable->lookupListIndexArray[lookup]);
-                }
-
-                if (lookupCount > 1) {
-                    OpenTypeUtilities::sort(&lookupOrderArray[order], lookupCount);
-                }
-
-                order += lookupCount;
-            }
-        }
-
-        lookupOrderCount = order;
-    } else {
-	// FIXME - lookup up the features from the featureListTable by feature index,
-	// and add the lookups to the lookupOrderArray in the order they come. Sort the
-	// whole array when finished.
-        for (lookup = 0; lookup < lookupListCount; lookup += 1) {
-            lookupOrderArray[lookup] = lookup;
-        }
-
-        lookupOrderCount = lookupListCount;
+    if (requiredFeatureIndex != 0xFFFF) {
+        featureTable = featureListTable->getFeatureTable(requiredFeatureIndex, &featureTag);
+        order += selectLookups(featureTable, defaultFeature, order);
     }
+
+    if (featureOrder != NULL) {
+        if (order > 1) {
+            OpenTypeUtilities::sort(lookupOrderArray, order);
+        }
+
+        for (le_int32 tag = 0; featureOrder[tag] != emptyTag; tag += 1) {
+            featureTag = featureOrder[tag];
+            featureTable = featureListTable->getFeatureTable(featureTag);
+            count = selectLookups(featureTable, featureTag, order);
+
+            if (count > 1) {
+                OpenTypeUtilities::sort(&lookupOrderArray[order], count);
+            }
+
+            order += count;
+        }
+    } else {
+        for (le_uint16 feature = 0; feature < featureCount; feature += 1) {
+            le_uint16 featureIndex = SWAPW(langSysTable->featureIndexArray[feature]);
+ 
+            featureTable = featureListTable->getFeatureTable(featureIndex, &featureTag);
+            count = selectLookups(featureTable, featureTag, order);
+            order += count;
+        }
+
+        if (order > 1) {
+            OpenTypeUtilities::sort(lookupOrderArray, order);
+        }
+    }
+
+    lookupOrderCount = order;
 }
 
 LookupProcessor::LookupProcessor()
