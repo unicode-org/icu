@@ -299,8 +299,8 @@ void IntlCalendarTest::TestJapanese() {
     JapaneseCalendar_TAISHO, 1, 1912, UCAL_AUGUST, 1,
 
     // new tests (not in java)
-    JapaneseCalendar_SHOWA,     64,   1989,  UCAL_JANUARY, 7,
-    JapaneseCalendar_HEISEI,    1,   1989,  UCAL_JANUARY, 8,
+    JapaneseCalendar_SHOWA,     64,   1989,  UCAL_JANUARY, 7,  // Test current era transition (different code path than others)
+    JapaneseCalendar_HEISEI,    1,   1989,  UCAL_JANUARY, 8,   
     JapaneseCalendar_HEISEI,    1,   1989,  UCAL_JANUARY, 9,
     JapaneseCalendar_HEISEI,    1,   1989,  UCAL_DECEMBER, 20,
     JapaneseCalendar_HEISEI,  15,  2003,  UCAL_MAY, 22,
@@ -415,7 +415,7 @@ void IntlCalendarTest::TestJapaneseFormat() {
   // Now, try in Japanese
   {
     UnicodeString expect = CharsToUnicodeString("\\u5e73\\u621013\\u5e749\\u67088\\u65e5");
-    UDate         expectDate = 999932400000.0;
+    UDate         expectDate = 999932400000.0; // Testing a recent date
     Locale        loc("ja_JP_TRADITIONAL");
 
     status = U_ZERO_ERROR;
@@ -430,7 +430,7 @@ void IntlCalendarTest::TestJapaneseFormat() {
     simpleTest(loc, expect, expectDate, status);    
 
   }
-  {   // Jitterbug 1869 - this is an ambiguous era. (Showa 64 = Jan 6 1989
+  {   // Jitterbug 1869 - this is an ambiguous era. (Showa 64 = Jan 6 1989, but Showa could be 2 other eras) )
     UnicodeString expect = CharsToUnicodeString("\\u662d\\u548c64\\u5e741\\u67086\\u65e5");
     UDate         expectDate = 600076800000.0;
     Locale        loc("ja_JP_TRADITIONAL");
@@ -439,7 +439,7 @@ void IntlCalendarTest::TestJapaneseFormat() {
     simpleTest(loc, expect, expectDate, status);    
 
   }
-  {   // another nice bug - 
+  {   // This Feb 29th falls on a leap year by gregorian year, but not by Japanese year.
     UnicodeString expect = CharsToUnicodeString("\\u5EB7\\u6B632\\u5e742\\u670829\\u65e5");
     UDate         expectDate =  -16214400000000.0;  // courtesy of date format round trip test
     Locale        loc("ja_JP_TRADITIONAL");
