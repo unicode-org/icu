@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/CompoundTransliterator.java,v $ 
- * $Date: 2001/11/29 22:31:17 $ 
- * $Revision: 1.25 $
+ * $Date: 2001/11/30 05:50:35 $ 
+ * $Revision: 1.26 $
  *
  *****************************************************************************************
  */
@@ -30,7 +30,7 @@ import java.util.Vector;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: CompoundTransliterator.java,v $ $Revision: 1.25 $ $Date: 2001/11/29 22:31:17 $
+ * @version $RCSfile: CompoundTransliterator.java,v $ $Revision: 1.26 $ $Date: 2001/11/30 05:50:35 $
  */
 public class CompoundTransliterator extends Transliterator {
 
@@ -314,6 +314,17 @@ public class CompoundTransliterator extends Transliterator {
         UnicodeSet set = new UnicodeSet();
         for (int i=0; i<trans.length; ++i) {
             set.addAll(trans[i].getSourceSet());
+            // Take the example of Hiragana-Latin.  This is really
+            // Hiragana-Katakana; Katakana-Latin.  The source set of
+            // these two is roughly [:Hiragana:] and [:Katakana:].
+            // But the source set for the entire transliterator is
+            // actually [:Hiragana:] ONLY -- that is, the first
+            // non-empty source set.
+
+            // This is a heuristic, and not 100% reliable.
+            if (!set.isEmpty()) {
+                break;
+            }
         }
         return set;
     }
