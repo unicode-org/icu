@@ -139,16 +139,16 @@ struct _UniLMBCSGrpMap
 } UniLMBCSGrpMap[]
 =
 {
-   0x0001, 0x001F,  ULMBCS_GRP_CTRL,
-   0x0080, 0x009F,  ULMBCS_GRP_CTRL,
-   0x00A0, 0x0113,  ULMBCS_AMBIGUOUS_SBCS,
-   0x0115, 0x0120,  ULMBCS_AMBIGUOUS_SBCS, 
-   0x0120, 0x012B,  ULMBCS_GRP_EXCEPT,
-   0x012C, 0x01CD,  ULMBCS_AMBIGUOUS_SBCS,
-   0x01CE, 0x01CE,  ULMBCS_AMBIGUOUS_MBCS, 
-   0x01CF, 0x1FFF,  ULMBCS_AMBIGUOUS_SBCS,
-   0x2000, 0xFFFD,  ULMBCS_AMBIGUOUS_MBCS,
-   0xFFFF, 0xFFFF,
+   { 0x0001, 0x001F,  ULMBCS_GRP_CTRL },
+   { 0x0080, 0x009F,  ULMBCS_GRP_CTRL },
+   { 0x00A0, 0x0113,  ULMBCS_AMBIGUOUS_SBCS },
+   { 0x0115, 0x0120,  ULMBCS_AMBIGUOUS_SBCS }, 
+   { 0x0120, 0x012B,  ULMBCS_GRP_EXCEPT },
+   { 0x012C, 0x01CD,  ULMBCS_AMBIGUOUS_SBCS },
+   { 0x01CE, 0x01CE,  ULMBCS_AMBIGUOUS_MBCS },
+   { 0x01CF, 0x1FFF,  ULMBCS_AMBIGUOUS_SBCS },
+   { 0x2000, 0xFFFD,  ULMBCS_AMBIGUOUS_MBCS },
+   { 0xFFFF, 0xFFFF }
 };
    
 ulmbcs_grp_t FindLMBCSUniRange(UChar uniChar, UErrorCode*    err)
@@ -224,7 +224,7 @@ int LMBCSConversionWorker (
    MyAssert(xcnv);
    MyAssert(group<ULMBCS_GRP_UNICODE);
 
-   ucnv_fromUnicode(xcnv, (char **)&pmbChar,(char *)mbChar+sizeof(mbChar),&pUniChar,pUniChar+1,NULL,TRUE,&localErr);
+   ucnv_fromUnicode(xcnv, (char **)&pmbChar,(char *)mbChar+sizeof(mbChar),(const UChar **)&pUniChar,pUniChar+1,NULL,TRUE,&localErr);
    bytesConverted = pmbChar - mbChar;
    pmbChar = mbChar;
 
@@ -933,11 +933,11 @@ DEFINE_LMBCS_OPEN(19)
     _LMBCSGetNextUChar,\
     NULL\
 };\
-extern const UConverterSharedData _LMBCSData##n={\
+const UConverterSharedData _LMBCSData##n={\
     sizeof(UConverterSharedData), ~0,\
     NULL, NULL, &_LMBCSImpl##n, "LMBCS_" ## #n,\
     0, UCNV_IBM, UCNV_LMBCS_1, 1, 1,\
-    { 0, 1, 0x3f, 0, 0, 0 }\
+    { 0, 1, { 0x3f, 0, 0, 0 } }\
 };
 
 DECLARE_LMBCS_DATA(1)

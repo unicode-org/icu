@@ -42,7 +42,7 @@ ucnv_io_getAliases(const char *alias, const char **aliases, UErrorCode *pErrorCo
  * Returns NULL if the alias is not found.
  */
 U_CFUNC const char *
-ucnv_io_getAlias(const char *alias, uint16_t index, UErrorCode *pErrorCode);
+ucnv_io_getAlias(const char *alias, uint16_t idx, UErrorCode *pErrorCode);
 
 /**
  * Return the number of all converter names.
@@ -56,7 +56,7 @@ ucnv_io_countAvailableConverters(UErrorCode *pErrorCode);
  * 0<=index<ucnv_io_countAvailableConverters().
  */
 U_CFUNC const char *
-ucnv_io_getAvailableConverter(uint16_t index, UErrorCode *pErrorCode);
+ucnv_io_getAvailableConverter(uint16_t idx, UErrorCode *pErrorCode);
 
 /**
  * Fill an array const char *aliases[ucnv_io_countAvailableConverters()]
@@ -77,7 +77,7 @@ ucnv_io_countAvailableAliases(UErrorCode *pErrorCode);
  * 0<=index<ucnv_io_countAvailableAliases().
  */
 U_CFUNC const char *
-ucnv_io_getAvailableAlias(uint16_t index, UErrorCode *pErrorCode);
+ucnv_io_getAvailableAlias(uint16_t idx, UErrorCode *pErrorCode);
 
 /**
  * Fill an array const char *aliases[ucnv_io_countAvailableAliases()]

@@ -82,11 +82,6 @@ udata_openChoice(const char *path, const char *type, const char *name,
  */
 #define UDATA_INDIRECT
 
-static bool_t
-isCommonDataAcceptable(void *context,
-                       const char *type, const char *name,
-                       UDataInfo *pInfo);
-
 #if defined(WIN32) /* Win32 implementations --------------------------------- */
 
 #include <windows.h>
@@ -758,7 +753,7 @@ doOpenChoice(const char *path, const char *type, const char *name,
     const char *entryName;
     bool_t isICUData, hasPath, hasBasename;
 
-    Library lib;
+    Library lib = 0;
     MappedData *p;
     UErrorCode errorCode=U_ZERO_ERROR;
 

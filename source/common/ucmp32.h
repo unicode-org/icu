@@ -27,9 +27,9 @@
 /* INTERNAL CONSTANTS */
 #define UCMP32_kBlockShift  7
 #define UCMP32_kBlockCount  (1<<UCMP32_kBlockShift)
-#define UCMP32_kIndexShift  16-UCMP32_kBlockShift
+#define UCMP32_kIndexShift  (16-UCMP32_kBlockShift)
 #define UCMP32_kIndexCount  (1<<UCMP32_kIndexShift)
-#define UCMP32_kBlockMask   UCMP32_kBlockCount-1
+#define UCMP32_kBlockMask   (UCMP32_kBlockCount-1)
 #define UCMP32_kUnicodeCount  65536
 
  /**
@@ -75,7 +75,7 @@
  * @see                CompactIntArray
  * @see                CompactCharArray
  * @see                CompactStringArray
- * @version            $Revision: 1.6 $ 8/25/98
+ * @version            $Revision: 1.7 $ 8/25/98
  * @author             Helena Shih
  */
 /*====================================*/
@@ -145,7 +145,7 @@ U_CAPI  bool_t U_EXPORT2 ucmp32_isBogus(const CompactIntArray* array);
   * @param value the new mapped value
   */
 U_CAPI  void U_EXPORT2 ucmp32_set(CompactIntArray *array,
-                  UChar index,
+                  UChar idx,
                   int32_t value);
 
  /**

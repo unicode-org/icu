@@ -206,7 +206,6 @@ void   UCNV_FROM_U_CALLBACK_ESCAPE (UConverter * _this,
 
   UChar valueString[VALUE_STRING_LENGTH];
   int32_t valueStringLength = 0;
-  const UChar *mySource = *source;
   UChar codepoint[CODEPOINT_STRING_LENGTH];
   int32_t i = 0;
   /*Makes a bitwise copy of the converter passwd in */
@@ -282,8 +281,8 @@ void   UCNV_FROM_U_CALLBACK_ESCAPE (UConverter * _this,
 
       if (offsets)
 	{
-	  int i=0;
-	  for (i=0;i<valueStringLength;i++) offsets[i]=0;
+	  int j=0;
+	  for (j=0;j<valueStringLength;j++) offsets[j]=0;
 	  offsets += valueStringLength;
 	}
     }
@@ -297,8 +296,8 @@ void   UCNV_FROM_U_CALLBACK_ESCAPE (UConverter * _this,
 
       if (offsets)
 	{
-	  int i=0;
-	  for (i=0;i<(targetLimit - *target);i++) offsets[i]=0;
+	  int j=0;
+	  for (j=0;j<(targetLimit - *target);j++) offsets[j]=0;
 	  offsets += (targetLimit - *target);
 	}
       uprv_memcpy (*target, myTarget, (targetLimit - *target));
@@ -372,10 +371,8 @@ void  UCNV_TO_U_CALLBACK_ESCAPE (UConverter * _this,
 {
   UChar uniValueString[VALUE_STRING_LENGTH];
   int32_t valueStringLength = 0;
-  const unsigned char *mySource = (const unsigned char *) *source;
   UChar codepoint[CODEPOINT_STRING_LENGTH];
-  int32_t j = 0, i = 0;
-  const int32_t* offsets_end = offsets +( targetLimit - *target);
+  int32_t i = 0;
   
   if (CONVERSION_U_SUCCESS (*err))   return;
   

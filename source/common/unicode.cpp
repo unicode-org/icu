@@ -42,9 +42,9 @@
  * instantiation and subclassing. Therefore, empty.
  */
 Unicode::Unicode() {}
-Unicode::Unicode(const Unicode &other) {}
+Unicode::Unicode(const Unicode &) {}
 Unicode::~Unicode() {}
 const Unicode &
-Unicode::operator=(const Unicode &other) {
+Unicode::operator=(const Unicode &) {
     return *this;
 }

@@ -167,7 +167,7 @@ Normalizer::normalize(const UnicodeString& source,
 void
 Normalizer::compose(const UnicodeString& source, 
             bool_t compat,
-            int32_t options,
+            int32_t,
             UnicodeString& result, 
             UErrorCode &status)
 {
@@ -1162,7 +1162,7 @@ void Normalizer::jamoToHangul(UnicodeString& buffer, UTextOffset start) {
     UTextOffset limit = buffer.length() - 1;
 
     UTextOffset in;
-    int16_t l, v, t;
+    int16_t l, v = 0, t;
 
     for (in = start; in < limit; in++) {
         UChar ch = buffer[in];

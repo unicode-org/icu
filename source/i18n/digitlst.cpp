@@ -413,7 +413,6 @@ DigitList::round(int32_t maximumDigits)
  * incremented
  */
 bool_t DigitList::shouldRoundUp(int32_t maximumDigits) {
-    bool_t increment = FALSE;
     // Implement IEEE half-even rounding
     if (fDigits[maximumDigits] > '5') {
         return TRUE;

@@ -241,11 +241,11 @@ static const UConverterImpl _SBCSImpl={
     NULL
 };
 
-extern const UConverterSharedData _SBCSData={
+const UConverterSharedData _SBCSData={
     sizeof(UConverterSharedData), 1,
     NULL, NULL, &_SBCSImpl, "SBCS",
     0, UCNV_IBM, UCNV_SBCS, 1, 1,
-    { 0, 1, 0, 0, 0, 0 }
+    { 0, 1, { 0, 0, 0, 0 } }
 };
 
 /* DBCS --------------------------------------------------------------------- */
@@ -527,9 +527,9 @@ static const UConverterImpl _DBCSImpl={
     NULL
 };
 
-extern const UConverterSharedData _DBCSData={
+const UConverterSharedData _DBCSData={
     sizeof(UConverterSharedData), 1,
     NULL, NULL, &_DBCSImpl, "DBCS",
     0, UCNV_IBM, UCNV_DBCS, 2, 2,
-    { 0, 1, 0, 0, 0, 0 }
+    { 0, 1, { 0, 0, 0, 0 } }
 };

@@ -800,7 +800,7 @@ resolveImplicitLevels(UBiDi *pBiDi,
     UBiDiLevel *levels=pBiDi->levels;
 
     UTextOffset i, next, neutralStart=-1;
-    DirProp prevDirProp, dirProp, nextDirProp, lastStrong, beforeNeutral;
+    DirProp prevDirProp, dirProp, nextDirProp, lastStrong, beforeNeutral = L;
     uint8_t historyOfEN;
 
     /* initialize: current at sor, next at start (it is start<limit) */
