@@ -9,8 +9,7 @@ SHELL = @SHELL@
 VERSION = @VERSION@
 UNICODE_VERSION = @UNICODE_VERSION@
 
-ICUDATADIR=@DATABUILDDIR@
-UNICODEFILE=$(top_builddir)/../data/UnicodeData-$(UNICODE_VERSION).txt
+ICUDATADIR=$(top_builddir)/data
 
 ## Install directory information
 srcdir = @srcdir@

@@ -27,6 +27,3 @@
 /* Define to the size of wchar_t */
 #undef SIZEOF_WCHAR_T
 
-/* Define if the build is out of source */
-#undef BUILD_OUT_OF_SOURCE
-

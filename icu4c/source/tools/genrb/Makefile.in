@@ -68,9 +68,9 @@ include $(srcdir)/genrbfiles.mk
 TXT_SOURCE = $(GENRB_SOURCE) $(GENRB_SOURCE_LOCAL) $(TRANSLIT_SOURCE)
 
 TXT_FILES = $(TXT_SOURCE:%=$(top_srcdir)/../data/%)
-RES_FILES = $(TXT_FILES:$(top_srcdir)/../data/%.txt=@DATABUILDDIR@/%.res)
+RES_FILES = $(TXT_FILES:$(top_srcdir)/../data/%.txt=$(top_builddir)/data/%.res)
 #TRANSLIT_FILES = $(TRANSLIT_SOURCE:%=$(top_srcdir)/../data/translit/%)
-#TRANSLIT_RES = $(TRANSLIT_SOURCE:%.txt=@DATABUILDDIR@/translit/%.res)
+#TRANSLIT_RES = $(TRANSLIT_SOURCE:%.txt=$(top_builddir)/data/translit/%.res)
 TEST_FILES = $(top_builddir)/test/testdata/root.res \
 $(top_builddir)/test/testdata/te.res \
 $(top_builddir)/test/testdata/te_IN.res \
@@ -121,11 +121,11 @@ $(TARGET) : $(OBJECTS)
 
 $(top_builddir)/test/testdata/%.res : $(top_srcdir)/test/testdata/%.txt
 	@echo "Creating testdata resource file for $<"
-	ICU_DATA=@DATABUILDDIR@ ./genrb -s $(top_srcdir)/test/testdata/ -d $(top_builddir)/test/testdata/ $(<F)
+	ICU_DATA=$(top_builddir)/data ./genrb -s $(top_srcdir)/test/testdata/ -d $(top_builddir)/test/testdata/ $(<F)
 
-@DATABUILDDIR@/%.res : $(top_srcdir)/../data/%.txt
+$(top_builddir)/data/%.res : $(top_srcdir)/../data/%.txt
 	@echo "Creating compiled resource file for $<"
-	@ICU_DATA=@DATABUILDDIR@ ./genrb -s $(top_srcdir)/../data/ -d @DATABUILDDIR@/ $(<F)
+	@ICU_DATA=$(top_builddir)/data ./genrb -s $(top_srcdir)/../data/ -d $(top_builddir)/data/ $(<F)
 
 
 # the 'mv' will always fail if you are building in the source dir
