@@ -671,7 +671,7 @@ void DateFormatRegressionTest::Test4101483(void)
     UErrorCode status = U_ZERO_ERROR;
     SimpleDateFormat *sdf = new SimpleDateFormat(UnicodeString("z"), Locale::getUS(), status);
     failure(status, "new SimpleDateFormat");
-    FieldPosition fp(DateFormat::TIMEZONE_FIELD);
+    FieldPosition fp(UDAT_TIMEZONE_FIELD);
     //Date d = date(9234567890L);
     UDate d = 9234567890.0;
     //StringBuffer buf = new StringBuffer("");
