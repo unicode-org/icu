@@ -734,8 +734,8 @@ void ucol_putOptionsToHeader(UCollator* result, UColOptionSet * opts, UErrorCode
     opts->strength = result->strength;
     opts->variableTopValue = result->variableTopValue;
     opts->alternateHandling = result->alternateHandling;
-    opts->hiraganaQ = opts->hiraganaQ;
-    opts->numericCollation = opts->numericCollation;
+    opts->hiraganaQ = result->hiraganaQ;
+    opts->numericCollation = result->numericCollation;
 }
 #endif
 
@@ -3130,13 +3130,12 @@ uint32_t ucol_prv_getSpecialCE(const UCollator *coll, UChar ch, uint32_t CE, col
 				if (digIndx % 2 == 1){
 					collateVal += (uint8_t)digVal;	
 					 
-					 // This removes trailing zeroes.
-					if (collateVal == 0 && !trailingZeroIndex)
-						trailingZeroIndex = ((digIndx-1)/2) + 2;
-					else if (trailingZeroIndex)
+					// We don't enter the low-order-digit case unless we've already seen
+					// the high order, or for the first digit, which is always non-zero.
+					if (collateVal != 0)
 						trailingZeroIndex = 0;
 						
-					numTempBuf[((digIndx-1)/2) + 2] = collateVal*2 + 6;
+					numTempBuf[(digIndx/2) + 2] = collateVal*2 + 6;
 					collateVal = 0;
 				}
 				else{
@@ -3144,7 +3143,17 @@ uint32_t ucol_prv_getSpecialCE(const UCollator *coll, UChar ch, uint32_t CE, col
 					// a "front patch" we don't have to check to see if we're hitting the
 					// last element.
 					collateVal = (uint8_t)(digVal * 10);
-					numTempBuf[((digIndx)/2) + 2] = collateVal*2 + 6;
+
+					// Check for trailing zeroes.
+					if (collateVal == 0)
+					{
+						if (!trailingZeroIndex)
+							trailingZeroIndex = (digIndx/2) + 2;
+					}
+					else
+						trailingZeroIndex = 0;
+
+					numTempBuf[(digIndx/2) + 2] = collateVal*2 + 6;
 				}
 				digIndx++;
       		}
