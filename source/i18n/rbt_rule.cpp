@@ -697,7 +697,7 @@ UnicodeString& TransliterationRule::toRule(UnicodeString& rule,
         rule.append((UChar)36/*$*/);
     }
 
-    appendToRule(rule, UnicodeString(" > ", ""), TRUE, escapeUnprintable, quoteBuf);
+    appendToRule(rule, UNICODE_STRING_SIMPLE(" > "), TRUE, escapeUnprintable, quoteBuf);
 
     // Emit the output pattern
 

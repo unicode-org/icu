@@ -96,8 +96,8 @@ void TitlecaseTransliterator::handleTransliterate(
         Mutex lock(&MUTEX);
         if (SKIP == NULL) {
             UErrorCode ec = U_ZERO_ERROR;
-            SKIP = new UnicodeSet(UnicodeString("[\\u00AD \\u2019 \\' [:Mn:] [:Me:] [:Cf:] [:Lm:] [:Sk:]]", ""), ec);
-            CASED = new UnicodeSet(UnicodeString("[[:Lu:] [:Ll:] [:Lt:]]", ""), ec);
+            SKIP = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\u00AD \\u2019 \\' [:Mn:] [:Me:] [:Cf:] [:Lm:] [:Sk:]]"), ec);
+            CASED = new UnicodeSet(UNICODE_STRING_SIMPLE("[[:Lu:] [:Ll:] [:Lt:]]"), ec);
             ucln_i18n_registerCleanup();
         }
     }
