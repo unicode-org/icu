@@ -20,6 +20,7 @@
  * TODO: make a complete i18n layout for this program.
  ******************************************************************************/
 
+#include "unicode/putil.h"
 #include "unicode/ures.h"
 #include "unicode/ustdio.h"
 #include "unicode/uloc.h"
