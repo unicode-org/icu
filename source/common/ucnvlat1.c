@@ -112,7 +112,6 @@ U_CFUNC void   T_UConverter_fromUnicode_LATIN_1 (UConverterFromUnicodeArgs * arg
               }
               if (args->converter->fromUSurrogateLead == 0) 
               {
-                  int32_t currentOffset = myTargetIndex;
                   const UChar *saveSource = args->source;
                   char *saveTarget = args->target;
                   int32_t *saveOffset = args->offsets;

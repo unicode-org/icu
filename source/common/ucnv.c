@@ -483,8 +483,6 @@ void   ucnv_setToUCallBack (UConverter * converter,
 					void** oldContext,
 					UErrorCode * err)
 {
-  UConverterToUCallback myReturn = NULL;
-
   if (U_FAILURE (*err))
     return;
   *oldAction = converter->fromCharErrorBehaviour;
