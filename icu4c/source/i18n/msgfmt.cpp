@@ -24,10 +24,9 @@
 #include "unicode/datefmt.h"
 #include "unicode/smpdtfmt.h"
 #include "unicode/choicfmt.h"
-//#include "mutex.h"
 #include "unicode/ustring.h"
 #include "unicode/ucnv_err.h"
-
+#include "ustrfmt.h"
 
 // *****************************************************************************
 // class MessageFormat
@@ -442,7 +441,7 @@ MessageFormat::applyPattern(const UnicodeString& newPattern,
                     part = 0;
                     makeFormat(/*i,*/ formatNumber, segments, parseError,success);
                     if(U_FAILURE(success)){
-                        parseError.offset=i;
+                        syntaxError(newPattern,i,parseError);
                         return;
                     }
                     formatNumber++;
@@ -462,7 +461,8 @@ MessageFormat::applyPattern(const UnicodeString& newPattern,
     }
     if (braceStack == 0 && part != 0) {
         fMaxOffset = -1;
-        syntaxError(newPattern,i,parseError,success);
+        success = U_UNMATCHED_BRACES;
+        syntaxError(newPattern,i,parseError);
         return;
         //throw new IllegalArgumentException("Unmatched braces in the pattern.");
     }

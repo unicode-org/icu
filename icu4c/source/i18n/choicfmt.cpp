@@ -27,7 +27,7 @@
 #include "unicode/choicfmt.h"
 #include "unicode/numfmt.h"
 #include "unicode/locid.h"
-#include "mutex.h"
+#include "ustrfmt.h"
 
 // *****************************************************************************
 // class ChoiceFormat
@@ -561,8 +561,8 @@ ChoiceFormat::applyPattern(const UnicodeString& pattern,
     return;
 
  error:
-    //status = U_ILLEGAL_ARGUMENT_ERROR;
-    syntaxError(pattern,i,parseError,status);
+    status = U_ILLEGAL_ARGUMENT_ERROR;
+    syntaxError(pattern,i,parseError);
     delete[] newLimits;
     delete[] newClosures;
     delete[] newFormats;

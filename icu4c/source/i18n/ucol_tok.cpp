@@ -63,32 +63,34 @@ void ucol_tok_initTokenList(UColTokenParser *src, const UChar *rules, const uint
   src->resultLen = 0;
 }
 
-U_INLINE void syntaxError( const UChar* rules, 
-                           int32_t pos, 
-                           UParseError* parseError,
-                           UErrorCode* status){
+U_INLINE void 
+syntaxError(   const UChar* rules, 
+               int32_t pos,
+               int32_t rulesLen,
+               UParseError* parseError){
     parseError->offset = pos;
-
+    parseError->line = 0 ; /* we are not using line numbers */
+    
     // for pre-context
-    int32_t start = (pos <=U_PARSE_CONTEXT_LEN)? 0 : (pos - U_PARSE_CONTEXT_LEN);
+    int32_t start = (pos <=U_PARSE_CONTEXT_LEN)? 0 : (pos - (U_PARSE_CONTEXT_LEN-1));
     int32_t stop  = pos;
-
-    u_memcpy(parseError->preContext,rules+start,pos);
+    
+    u_memcpy(parseError->preContext,rules+start,stop-start);
     //null terminate the buffer
     parseError->preContext[stop-start] = 0;
     
     //for post-context
-    start = pos;
-    stop  = ((pos+U_PARSE_CONTEXT_LEN)<=u_strlen(rules)) ? (pos+U_PARSE_CONTEXT_LEN) : 
+    start = pos+1;
+    stop  = ((pos+U_PARSE_CONTEXT_LEN)<= rulesLen )? (pos+(U_PARSE_CONTEXT_LEN-1)) : 
                                                             u_strlen(rules);
-    u_memcpy(parseError->postContext,rules+start,stop);
+
+    u_memcpy(parseError->postContext,rules+start,stop-start);
     //null terminate the buffer
     parseError->postContext[stop-start]= 0;
-
-    *status = U_PARSE_ERROR;
 }
 
-void ucol_uprv_tok_setOptionInImage(UColOptionSet *opts, UColAttribute attrib, UColAttributeValue value) {
+void 
+ucol_uprv_tok_setOptionInImage(UColOptionSet *opts, UColAttribute attrib, UColAttributeValue value) {
   switch(attrib) {
   case UCOL_FRENCH_COLLATION:
     opts->frenchCollation = value;
@@ -410,6 +412,7 @@ const UChar *ucol_tok_parseNextToken(UColTokenParser *src,
 
         case 0x0026/*'&'*/:  
           if (newStrength != UCOL_TOK_UNSET) {
+            /**/
             goto EndOfLoop;
           }
 
@@ -440,15 +443,19 @@ const UChar *ucol_tok_parseNextToken(UColTokenParser *src,
                   goto EndOfLoop;
                 } else {
                   *status = U_INVALID_FORMAT_ERROR;
+                  syntaxError(src->source,(src->current-src->source),(src->end-src->source),parseError);
                 }
               } else if (result & UCOL_TOK_BEFORE){
                 if(newStrength == UCOL_TOK_RESET) {
                   before = result & UCOL_TOK_BEFORE;
                 } else {
                   *status = U_INVALID_FORMAT_ERROR;
+                  syntaxError(src->source,(src->current-src->source),(src->end-src->source),parseError);
+
                 }
               } 
             } else {
+              syntaxError(src->source,(src->current-src->source),(src->end-src->source),parseError);
               return NULL;
             }
           }
@@ -469,6 +476,7 @@ const UChar *ucol_tok_parseNextToken(UColTokenParser *src,
         case 0x0027/*'\''*/:
           if (newStrength == UCOL_TOK_UNSET) { /* quote is illegal until we have a strength */
             *status = U_INVALID_FORMAT_ERROR;
+            syntaxError(src->source,(src->current-src->source),(src->end-src->source),parseError);
             return NULL;
           }
 
@@ -514,11 +522,13 @@ const UChar *ucol_tok_parseNextToken(UColTokenParser *src,
         default:
           if (newStrength == UCOL_TOK_UNSET) {
             *status = U_INVALID_FORMAT_ERROR;
+            syntaxError(src->source,(src->current-src->source),(src->end-src->source),parseError);
             return NULL;
           }
 
           if (ucol_tok_isSpecialChar(ch) && (inQuote == FALSE)) {
             *status = U_INVALID_FORMAT_ERROR;
+            syntaxError(src->source,(src->current-src->source),(src->end-src->source),parseError);
             return NULL;
           }
 
@@ -573,6 +583,7 @@ const UChar *ucol_tok_parseNextToken(UColTokenParser *src,
   }
 
   if (newCharsLen == 0 && top == FALSE) {
+    syntaxError(src->source,(src->current-src->source),(src->end-src->source),parseError); 
     *status = U_INVALID_FORMAT_ERROR;
     return NULL;
   }
