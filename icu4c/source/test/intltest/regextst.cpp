@@ -1018,11 +1018,13 @@ void RegexTest::API_Pattern() {
     REGEX_ASSERT(fields[2]=="the");   // left over from previous test
 
     fields[1] = "*";
+    status = U_ZERO_ERROR;
     n = pat1->split("Now is the time", fields, 1, status);
     REGEX_CHECK_STATUS;
     REGEX_ASSERT(n==1);
     REGEX_ASSERT(fields[0]=="Now is the time");
     REGEX_ASSERT(fields[1]=="*");
+    status = U_ZERO_ERROR;
 
     n = pat1->split("    Now       is the time   ", fields, 10, status);
     REGEX_CHECK_STATUS;
@@ -1051,6 +1053,7 @@ void RegexTest::API_Pattern() {
     pat1 = RegexPattern::compile("<(\\w*)>",  pe, status);
     REGEX_CHECK_STATUS;
 
+    status = U_ZERO_ERROR;
     n = pat1->split("<a>Now is <b>the time<c>", fields, 10, status);
     REGEX_CHECK_STATUS;
     REGEX_ASSERT(n==6);
@@ -1061,6 +1064,7 @@ void RegexTest::API_Pattern() {
     REGEX_ASSERT(fields[4]=="the time");
     REGEX_ASSERT(fields[5]=="c");
     REGEX_ASSERT(fields[6]=="");
+    REGEX_ASSERT(status==U_ZERO_ERROR);
 
     n = pat1->split("  <a>Now is <b>the time<c>", fields, 10, status);
     REGEX_CHECK_STATUS;
@@ -1073,6 +1077,44 @@ void RegexTest::API_Pattern() {
     REGEX_ASSERT(fields[5]=="c");
     REGEX_ASSERT(fields[6]=="");
 
+    status = U_ZERO_ERROR;
+    fields[6] = "foo";
+    n = pat1->split("  <a>Now is <b>the time<c>", fields, 6, status);
+    REGEX_CHECK_STATUS;
+    REGEX_ASSERT(n==6);
+    REGEX_ASSERT(fields[0]=="  ");
+    REGEX_ASSERT(fields[1]=="a");
+    REGEX_ASSERT(fields[2]=="Now is ");
+    REGEX_ASSERT(fields[3]=="b");
+    REGEX_ASSERT(fields[4]=="the time");
+    REGEX_ASSERT(fields[5]=="c");
+    REGEX_ASSERT(fields[6]=="foo");
+
+    status = U_ZERO_ERROR;
+    fields[5] = "foo";
+    n = pat1->split("  <a>Now is <b>the time<c>", fields, 5, status);
+    REGEX_CHECK_STATUS;
+    REGEX_ASSERT(n==5);
+    REGEX_ASSERT(fields[0]=="  ");
+    REGEX_ASSERT(fields[1]=="a");
+    REGEX_ASSERT(fields[2]=="Now is ");
+    REGEX_ASSERT(fields[3]=="b");
+    REGEX_ASSERT(fields[4]=="the time<c>");
+    REGEX_ASSERT(fields[5]=="foo");
+
+    status = U_ZERO_ERROR;
+    fields[5] = "foo";
+    n = pat1->split("  <a>Now is <b>the time", fields, 5, status);
+    REGEX_CHECK_STATUS;
+    REGEX_ASSERT(n==5);
+    REGEX_ASSERT(fields[0]=="  ");
+    REGEX_ASSERT(fields[1]=="a");
+    REGEX_ASSERT(fields[2]=="Now is ");
+    REGEX_ASSERT(fields[3]=="b");
+    REGEX_ASSERT(fields[4]=="the time");
+    REGEX_ASSERT(fields[5]=="foo");
+
+    status = U_ZERO_ERROR;
     n = pat1->split("  <a>Now is <b>the time<c>", fields, 4, status);
     REGEX_CHECK_STATUS;
     REGEX_ASSERT(n==4);
@@ -1080,6 +1122,7 @@ void RegexTest::API_Pattern() {
     REGEX_ASSERT(fields[1]=="a");
     REGEX_ASSERT(fields[2]=="Now is ");
     REGEX_ASSERT(fields[3]=="the time<c>");
+    status = U_ZERO_ERROR;
     delete pat1;
 
     pat1 = RegexPattern::compile("([-,])",  pe, status);
