@@ -142,10 +142,6 @@ SOURCE=.\dcfmtsym.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\common\dcmpdata.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=.\decimfmt.cpp
 # End Source File
 # Begin Source File

@@ -104,10 +104,6 @@ SOURCE=.\chariter.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\compdata.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=.\convert.cpp
 # End Source File
 # Begin Source File
@@ -121,10 +117,6 @@ SOURCE=.\cstring.c
 # Begin Source File
 
 SOURCE=.\cwchar.c
-# End Source File
-# Begin Source File
-
-SOURCE=.\dcmpdata.cpp
 # End Source File
 # Begin Source File
 
@@ -406,10 +398,6 @@ SOURCE=.\cmemory.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\compdata.h
-# End Source File
-# Begin Source File
-
 SOURCE=.\unicode\convert.h
 
 !IF  "$(CFG)" == "common - Win32 Release"
@@ -446,10 +434,6 @@ SOURCE=.\cstring.h
 # Begin Source File
 
 SOURCE=.\cwchar.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\dcmpdata.h
 # End Source File
 # Begin Source File
 
