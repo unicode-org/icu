@@ -127,6 +127,7 @@ protected:
             const LETag **featureTags, LEGlyphID *&glyphs, le_int32 *&charIndices);
 };
 
+#if 0
 /**
  * This class implements Indic OpenType layout for CDAC fonts. Since CDAC fonts don't contain
  * a GSUB table, it uses a canned GSUB table, using logical glyph indices. Each logical glyph
@@ -200,6 +201,7 @@ protected:
     virtual void mapCharsToGlyphs(const LEUnicode chars[], le_int32 offset, le_int32 count, le_bool reverse, le_bool mirror,
         LEGlyphID *&glyphs, le_int32 *&charIndices);
 };
+#endif
 
 #endif
 

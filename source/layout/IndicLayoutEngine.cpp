@@ -18,7 +18,7 @@
 
 #include "GDEFMarkFilter.h"
 
-#include "CDACLayout.h"
+//#include "CDACLayout.h"
 #include "IndicReordering.h"
 
 IndicOpenTypeLayoutEngine::IndicOpenTypeLayoutEngine(LEFontInstance *fontInstance, le_int32 scriptCode, le_int32 languageCode,
@@ -68,6 +68,7 @@ le_int32 IndicOpenTypeLayoutEngine::characterProcessing(const LEUnicode chars[],
     return IndicReordering::reorder(&chars[offset], count, fScriptCode, outChars, charIndices, featureTags);
 }
 
+#if 0
 CDACOpenTypeLayoutEngine::CDACOpenTypeLayoutEngine(LEFontInstance *fontInstance, le_int32 scriptCode, le_int32 languageCode,
                                                    const CDACLayout::ScriptInfo *scriptInfo)
     : IndicOpenTypeLayoutEngine(fontInstance, scriptCode, languageCode), fScriptInfo(scriptInfo)
@@ -109,4 +110,5 @@ void CDACOpenTypeLayoutEngine::mapCharsToGlyphs(const LEUnicode chars[], le_int3
 
     CDACLayout::initCDACGlyphs(fScriptInfo, chars, offset, count, glyphs);
 }
+#endif
 
