@@ -102,7 +102,7 @@ clean-local: resclean
 
 resclean:
 	-$(INVOKE) $(top_builddir)/tools/pkgdata/pkgdata --clean -p $(RESDIR) -O pkgdata.inc -m $(PKGMODE) -d $(RESDIR) -T $(RESDIR) $(RESDIR)/$(RESDIR).lst
-	$(RMV) $(RESDIR)
+	$(RMV) pkgdata.inc $(RESDIR)
 
 distclean-local: clean-local
 	$(RMV) Makefile $(DEPS)
@@ -145,8 +145,8 @@ install-resfiles: $(RESFILES)
 endif
 
 $(RESDIR)/%.res: $(srcdir)/%.txt
-	@$(MKINSTALLDIRS) $(RESDIR)
-	$(INVOKE) $(top_builddir)/tools/genrb/genrb -eUTF-8 -d $(RESDIR) $^
+	$(MKINSTALLDIRS) $(@D)
+	$(INVOKE) $(top_builddir)/tools/genrb/genrb -eUTF-8 -s $(^D) -d $(@D) $(^F)
 
 install-man: $(ALL_MAN_FILES)
 	$(MKINSTALLDIRS) $(DESTDIR)$(mandir)/man$(SECTION)
