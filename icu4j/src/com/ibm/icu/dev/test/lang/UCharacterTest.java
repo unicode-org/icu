@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/lang/UCharacterTest.java,v $ 
-* $Date: 2001/03/08 01:48:02 $ 
-* $Revision: 1.7 $
+* $Date: 2001/03/17 01:37:17 $ 
+* $Revision: 1.8 $
 *
 *******************************************************************************
 */
@@ -290,6 +290,7 @@ public final class UCharacterTest extends TestFmwk
   /**
   * Tests for control characters
   */
+  /*
   public void TestControl()
   {
     int control[] = {0x001b, 0x0097, 0x0082};
@@ -315,6 +316,7 @@ public final class UCharacterTest extends TestFmwk
             Integer.toHexString(noncontrol[i]));
     }
   }
+  */
   
   /**
   * Tests for printable characters
@@ -341,6 +343,29 @@ public final class UCharacterTest extends TestFmwk
       }
       logln("Ok    0x" + Integer.toHexString(printable[i]) + " and 0x" +
             Integer.toHexString(nonprintable[i]));
+    }
+    
+    // test all ISO 8 controls
+    for (int ch = 0; ch <= 0x9f; ++ ch) {
+      if (ch == 0x20) {
+      // skip ASCII graphic characters and continue with DEL
+        ch = 0x7f;
+      }
+      if (UCharacter.isPrintable(ch)) {
+        errln("Fail 0x" + Integer.toHexString(ch) + 
+              " is a ISO 8 control character hence not printable\n");
+      }
+    }
+
+    /* test all Latin-1 graphic characters */
+    for (int ch = 0x20; ch <= 0xff; ++ ch) {
+      if (ch == 0x7f) {
+        ch = 0xa0;
+      }
+      if (!UCharacter.isPrintable(ch)) {
+        errln("Fail 0x" + Integer.toHexString(ch) + 
+              " is a Latin-1 graphic character\n");
+        }
     }
   }
   
