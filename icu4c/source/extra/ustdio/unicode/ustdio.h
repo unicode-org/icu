@@ -69,8 +69,9 @@
     characters to this buffer because they might be different characters.
     This can be tested by writing a file, and reading it backwards by
     using u_fgetc and two u_fungetc() calls with incorrect data.
-    The behavior is undefined for fungetc() when an incorrect character
-    is put back.
+    FYI The behavior is undefined for ungetc() when an incorrect character
+    is put back, when its called multiple times in a row, or when
+    a its called without a read operation.
  * u_fflush() and u_fclose should return an int32_t like C99 functions.
    0 is returned if the operation was successful and EOF otherwise.
 */
@@ -102,7 +103,7 @@ typedef enum {
  * read from the file. If this paramter is NULL, data will be written and
  * read using the default codepage for <TT>locale</TT>, unless <TT>locale</TT>
  * is NULL, in which case the system default codepage will be used.
- * @return A new UFILE, or 0 if an error occurred.
+ * @return A new UFILE, or NULL if an error occurred.
  * @draft
  */
 U_CAPI UFILE* U_EXPORT2
@@ -121,7 +122,7 @@ u_fopen(const char    *filename,
  * read from the file. If this paramter is NULL, data will be written and
  * read using the default codepage for <TT>locale</TT>, unless <TT>locale</TT>
  * is NULL, in which case the system default codepage will be used.
- * @return A new UFILE, or 0 if an error occurred.
+ * @return A new UFILE, or NULL if an error occurred.
  * @draft
  */
 U_CAPI UFILE* U_EXPORT2
@@ -173,7 +174,7 @@ u_fgetlocale(UFILE *file);
  * @param locale The locale whose conventions will be used to format 
  * and parse output.
  * @param file The UFILE to query.
- * @return 0 if successful, otherwise a negative number.
+ * @return NULL if successful, otherwise a negative number.
  * @draft
  */
 U_CAPI int32_t U_EXPORT2
@@ -186,7 +187,7 @@ u_fsetlocale(const char        *locale,
  * <TT>u_fsetcodepage</TT> or <TT>u_fopen</TT>.
  * @param file The UFILE to query.
  * @return The codepage in which data is written to and read from the UFILE,
- * or 0 if an error occurred.
+ * or NULL if an error occurred.
  * @draft
  */
 U_CAPI const char* U_EXPORT2
@@ -201,7 +202,7 @@ u_fgetcodepage(UFILE *file);
  * A value of NULL means the default codepage for the UFILE's current 
  * locale will be used.
  * @param file The UFILE to set.
- * @return 0 if successful, otherwise a negative number.
+ * @return NULL if successful, otherwise a negative number.
  * @draft
  */
 U_CAPI int32_t U_EXPORT2
@@ -386,13 +387,15 @@ u_vfscanf_u(    UFILE        *f,
         va_list        ap);
 
 /**
- * Read a UChar* from a UFILE.
+ * Read one line of text into a UChar* string from a UFILE. The newline
+ * at the end of the line is read into the string. The string is always
+ * null terminated
  * @param f The UFILE from which to read.
  * @param n The maximum number of characters - 1 to read.
  * @param s The UChar* to receive the read data.  Characters will be
  * stored successively in <TT>s</TT> until a newline or EOF is
- * reached. A NULL character (U+0000) will be appended to <TT>s</TT>.
- * @return A pointer to <TT>s</TT>, or 0 if no characters were available.
+ * reached. A null character (U+0000) will be appended to <TT>s</TT>.
+ * @return A pointer to <TT>s</TT>, or NULL if no characters were available.
  * @draft
  */
 U_CAPI UChar* U_EXPORT2
