@@ -437,6 +437,7 @@ parseUCARules(char *tag, uint32_t startline, UErrorCode *status)
     */
     size = ucbuf_size(ucbuf);
     pTarget     = (UChar*) uprv_malloc(U_SIZEOF_UCHAR * size);
+    uprv_memset(pTarget, 0, size*U_SIZEOF_UCHAR);
     target      = pTarget;
     targetLimit = pTarget+size;
 
@@ -451,7 +452,7 @@ parseUCARules(char *tag, uint32_t startline, UErrorCode *status)
          * - preserving spaces in commands [...]
          * - # comments until the end of line
          */
-        if (c == STARTCOMMAND)
+        if (c == STARTCOMMAND && !quoted)
         {
           /* preserve commands
            * closing bracket will be handled by the
@@ -466,6 +467,7 @@ parseUCARules(char *tag, uint32_t startline, UErrorCode *status)
           while(c != CR && c != LF) {
             c = ucbuf_getc(ucbuf, status);
           }
+          continue;
         } else if (c == ESCAPE)
         {
             c = unescape(ucbuf, status);
@@ -477,7 +479,7 @@ parseUCARules(char *tag, uint32_t startline, UErrorCode *status)
                 return NULL;
             }
         }
-        else if (c == SPACE || c == CR || c == LF || c == TAB)
+        else if (!quoted && (c == SPACE || c == TAB || c == CR || c == LF))
         {
         /* ignore spaces carriage returns
         * and line feed unless in the form \uXXXX
