@@ -1,5 +1,5 @@
 /*
- * @(#)$RCSfile: MenuBuilder.java,v $ $Revision: 1.1 $ $Date: 2000/04/20 17:52:32 $
+ * @(#)$RCSfile: MenuBuilder.java,v $ $Revision: 1.2 $ $Date: 2001/11/21 19:25:58 $
  *
  * (C) Copyright IBM Corp. 1998-1999.  All Rights Reserved.
  *
@@ -37,13 +37,13 @@ public abstract class MenuBuilder {
     static final String COPYRIGHT =
                 "(C) Copyright IBM Corp. 1998-1999 - All Rights Reserved";
     
-    protected static final int EDIT = 0;
-    protected static final int SIZE = 1;
-    protected static final int STYLE = 2;
-    protected static final int FLUSH = 3;
-    protected static final int KEYMAP = 4;
-    protected static final int BIDI = 5;
-    protected static final int ABOUT = 6;
+    public static final int EDIT = 0;
+    public static final int SIZE = 1;
+    public static final int STYLE = 2;
+    public static final int FLUSH = 3;
+    public static final int KEYMAP = 4;
+    public static final int BIDI = 5;
+    public static final int ABOUT = 6;
     
     private Color[] colors = { Color.black, Color.white, Color.green, Color.blue,
                                 Color.cyan, Color.gray, Color.darkGray, Color.lightGray,
