@@ -324,8 +324,8 @@
       <strong>icu-nnnn.tgz</strong>, where nnnn is the version number. The .zip
       file is used for Windows platforms, while the .tgz file is preferred on
       most other platforms.<br>
-       Please unzip this file. It will reconstruct the source directory,
-      including anonymous CVS control directories (see below).</li>
+       Please unzip this file. It will reconstruct the source directory, which
+      includes anonymous CVS control directories (see below).</li>
 
       <li><strong>CVS Source Repository:</strong><br>
        If you are interested in developing features, patches, or bug fixes for
@@ -385,7 +385,7 @@
         <td><i>&lt;ICU&gt;</i>/source/<b>i18n</b>/</td>
 
         <td>Modules in i18n are generally the more data-driven, that is to say
-        resource bundle driven, components. These deal with higher level
+        resource bundle driven, components. These deal with higher-level
         internationalization issues such as formatting, collation, text break
         analysis, and transliteration.</td>
       </tr>
@@ -394,7 +394,7 @@
         <td><i>&lt;ICU&gt;</i>/source/<b>data</b> </td>
 
         <td>
-          This directory contains the source data in text format which is
+          This directory contains the source data in text format, which is
           compiled into binary form during the ICU build process. It contains
           several subdirectories, in which the data files are grouped by
           function. Note that the build process must be run again after any
@@ -407,7 +407,7 @@
             <li><b>locales/</b> These .txt files contain ICU language and
             culture-specific localization data. Two special bundles are
             <b>root</b>, which is the fallback data and parent of other
-            bundles, and <b>index</b> which contains a list of installed
+            bundles, and <b>index</b>, which contains a list of installed
             bundles. The makefile <b>resfiles.mk</b> contains the list of
             resource bundle files.</li>
 
@@ -416,10 +416,10 @@
             These are compiled into .cnv files. <b>convrtrs.txt</b> is the
             alias mapping table from various converter name formats to ICU
             internal format and vice versa. It produces cnvalias.dat. The
-            makefiles which contain the list of converters to be built are
-            <b>ucmfiles.mk, ucmcore.mk,</b> and <b>ucmebcdic.mk.</b></li>
+            makefiles <b>ucmfiles.mk, ucmcore.mk,</b> and <b>ucmebcdic.mk</b>
+            contain the list of converters to be built.</li>
 
-            <li><b>translit/</b> This directory contains Transliterator rules
+            <li><b>translit/</b> This directory contains transliterator rules
             as resource bundles, a makefile <b>trnsfiles.mk</b> containing the
             list of installed system translitaration files, and as well the
             special bundle <b>translit_index</b> which lists the system
@@ -432,8 +432,8 @@
 
             <li><b>misc/</b> The misc directory contains other data files which
             did not fit into the above categories. Currently it only contains
-            <b>timezone.txt,</b> a generated file which is compiled into
-            tz.dat, and containing time zone information.</li>
+            <b>timezone.txt,</b> a generated file, which is compiled into
+            tz.dat. The <b>tz.dat</b> file contains time zone information.</li>
 
             <li><b>out/</b> This directory contains the assembled memory mapped
             files.</li>
@@ -461,15 +461,16 @@
       <tr>
         <td><i>&lt;ICU&gt;</i>/source/test/<b>testdata</b>/</td>
 
-        <td>Source text files for data which is read by the tests. It contains
-        the subdirectories <b>out/build/</b> which is used for intermediate
-        files, and <b>out/</b> which contains the files <b>test1.cnv</b>
-        through <b>test4.cnv,</b> and <b>testdata.dat.</b> Note that the tests
-        call u_setDataDirectory("&lt;ICU&gt;/source/test/testdata/lib"), so
-        that ICU will load these files as if they were part of the ICU data
-        package, for testing purposes. This was formerly accomplished by
-        setting the ICU_DATA environment variable to point at these files.
-        ICU_DATA should not be set under normal circumstances.</td>
+        <td>Source text files for data, which are read by the tests. It
+        contains the subdirectories <b>out/build/</b> which is used for
+        intermediate files, and <b>out/</b> which contains the files
+        <b>test1.cnv</b> through <b>test4.cnv,</b> and <b>testdata.dat.</b>
+        Note that the tests call
+        u_setDataDirectory("&lt;ICU&gt;/source/test/testdata/lib"), so that ICU
+        will load these files as if they were part of the ICU data package, for
+        testing purposes. This was formerly accomplished by setting the
+        ICU_DATA environment variable to point at these files. ICU_DATA should
+        not be set under normal circumstances.</td>
       </tr>
 
       <tr>
@@ -742,8 +743,8 @@
       will not work without the location of the ICU dll files in the path.</li>
 
       <li>Set the <strong>TZ</strong> environment variable to
-      <strong>PST8PDT</strong>. The tests will not work in any other
-      timezone.</li>
+      <strong>PST8PDT</strong>. The tests will not work in any other time
+      zone.</li>
 
       <li>Open the "<i>&lt;ICU&gt;</i>\source\allinone\allinone.dsw" workspace
       file in Microsoft Visual C++ 6.0. (This workspace includes all the
@@ -812,10 +813,9 @@
     Note:</strong></a> If you want to build the Debug and Release
     configurations at the same time, choose "Build" menu and select "Batch
     Build..." instead (and mark all configurations as checked), then click the
-    button named "Rebuild All". The "all" workspace will build all the test
-    programs as well as the tools for generating binary locale data files. The
-    "makedata" project will be run automatically to convert the locale data
-    files from text format into icudata.dll.</p>
+    button named "Rebuild All". The "all" workspace will build all the
+    libraries, test programs and various ICU tools (e.g. genrb for generating
+    binary locale data files).</p>
 
     <p><a name="HowToBuildWindowsDotNet"><strong>Microsoft Visual Studio .NET
     Note:</strong></a> ICU will build with Microsoft Visual Studio .NET, though
@@ -888,9 +888,9 @@
     acceptable). You do not need to set <strong>ICU_DATA</strong> if the
     complete data library is in your library path.</p>
 
-    <p><a name="#HowToInstallICU"><strong>Installing ICU NOTE:</strong></a>
-    If you are using the "gmake install" command, using the "--prefix" option
-    on configure or runConfigureICU will install ICU to the specified
+    <p><a name="#HowToInstallICU"><strong>Installing ICU NOTE:</strong></a> If
+    you are using the "gmake install" command, using the "--prefix" option on
+    configure or runConfigureICU will install ICU to the specified
     location.</p>
 
     <p>Some platforms use package management tools to control the installation
@@ -1093,7 +1093,7 @@ ADDENVVAR ENVVAR(OUTPUTDIR) VALUE('<i>libraryname</i>')</samp>
             <br>
           </li>
           <!--li>Add QCXXN, to your build process library list. This results in
-                                                                                                                                                                                                                  the resolution of CRTCPPMOD used by the icc compiler</li-->
+                                                                                                                                                                                                                                      the resolution of CRTCPPMOD used by the icc compiler</li-->
 
           <li>
             In order to get the tests to run correctly, the QUTCOFFSET needs to
@@ -1147,7 +1147,7 @@ ADDENVVAR ENVVAR(OUTPUTDIR) VALUE('<i>libraryname</i>')</samp>
     <h4>DLL directories and the PATH setting</h4>
 
     <p>As delivered, the International Components for Unicode build as several
-    DLLs which are placed in the "<i>&lt;ICU&gt;</i>\bin" directory. You must
+    DLLs, which are placed in the "<i>&lt;ICU&gt;</i>\bin" directory. You must
     add this directory to the PATH environment variable in your system, or any
     executables you build will not be able to access International Components
     for Unicode libraries. Alternatively, you can copy the DLL files into a
@@ -1177,13 +1177,13 @@ ADDENVVAR ENVVAR(OUTPUTDIR) VALUE('<i>libraryname</i>')</samp>
       PATH=%PATH%;<i>&lt;ICU&gt;</i>\bin"</li>
     </ul>
 
-    <p>Note: when packaging a Windows application for distribution and
-    installation on user systems, copies of the ICU dlls should be included
+    <p>Note: When packaging a Windows application for distribution and
+    installation on user systems, copies of the ICU DLLs should be included
     with the application, and installed for exclusive use by the application.
     This is the only way to insure that your app is running with the same
     version of ICU, built with exactly the same options, that you developed and
-    tested with. Refer to Microsoft's guidelines on the usage of dlls, or
-    search for the phrase "dll hell" on <a href=
+    tested with. Refer to Microsoft's guidelines on the usage of DLLs, or
+    search for the phrase "DLL hell" on <a href=
     "http://msdn.microsoft.com/">msdn.microsoft.com</a>.</p>
 
     <h4>Linking with Runtime libraries</h4>
@@ -1303,7 +1303,7 @@ int main(){
     <p>Deprecated C++ APIs cannot be enabled without recompiling ICU libraries.
     Every service has a specific symbol that should be defined to enable the
     deprecated API of that service. For example: To enable deprecated APIs in
-    Transliteration service, the U_USE_DEPRECATED_TRANSLITERATOR_API symbol
+    transliteration service, the U_USE_DEPRECATED_TRANSLITERATOR_API symbol
     should be defined before compiling ICU.</p>
 
     <h2><a name="PlatformDependencies" href="#PlatformDependencies">Platform
@@ -1343,7 +1343,7 @@ int main(){
           handling special floating point values.</li>
 
           <li>uprv_tzset, uprv_timezone, uprv_tzname and time for getting
-          platform specific time and timezone information.</li>
+          platform specific time and time zone information.</li>
 
           <li>u_getDataDirectory for getting the default data directory.</li>
 
@@ -1379,7 +1379,7 @@ int main(){
       <br>
       </li>
 
-      <li>For the Intltest test suite, intltest.cpp in
+      <li>For the intltest test suite, intltest.cpp in
       "icu/source/test/intltest/" contains the method pathnameInContext, which
       must also be adapted to any new platform.</li>
 
