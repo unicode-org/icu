@@ -491,6 +491,38 @@ Calendar::complete(UErrorCode& status)
 
 // -------------------------------------
 
+int32_t Calendar::fieldDifference(UDate when, EDateFields field, UErrorCode& status) {
+    if (U_FAILURE(status)) return 0;
+    int32_t result = 0;
+    double ms = getTimeInMillis(status);
+    if (ms < when) {
+        while (U_SUCCESS(status)) {
+            add(field, 1, status);
+            double newMs = getTimeInMillis(status);
+            if (newMs > when) {
+                setTimeInMillis(ms, status);
+                break;
+            }
+            ms = newMs;
+            ++result;
+        }
+    } else if (ms > when) {
+        while (U_SUCCESS(status)) {
+            add(field, -1, status);
+            double newMs = getTimeInMillis(status);
+            if (newMs < when) {
+                setTimeInMillis(ms, status);
+                break;
+            }
+            ms = newMs;
+            --result;
+        }
+    }
+    return result;
+}
+
+// -------------------------------------
+
 void
 Calendar::adoptTimeZone(TimeZone* zone)
 {

@@ -62,6 +62,7 @@ public:
     void Test4167060(void) ;
     void Test4197699(void);
     void TestJ81(void);
+    void TestJ438(void);
 
     void printdate(GregorianCalendar *cal, char *string);
     void dowTest(UBool lenient) ;
