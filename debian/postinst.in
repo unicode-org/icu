@@ -33,23 +33,6 @@ case "$1" in
 	then
 	    ln -s "$icucurrent" current
 	fi
-
-	prefix=@prefix@
-	exec_prefix=@exec_prefix@
-
-	# Set ICU_DATA for ease of testing files. It is not necessary to
-	# export it as we are guaranteed that the binaries we invoke will
-	# use the right directory. But we're not taking chances with the
-	# future :)
-
-	ICU_DATA=@libdir@/@PACKAGE@/@VERSION@
-	export ICU_DATA
-
-	if test ! -f $ICU_DATA/cnvalias.dat -o @sysconfdir@/icu/convrtrs.txt -nt $ICU_DATA/cnvalias.dat
-	then
-	    echo Compiling converters and aliases list from @sysconfdir@/icu/convrtrs.txt
-	    /usr/sbin/gencnval @sysconfdir@/icu/convrtrs.txt
-	fi
     ;;
 
     abort-upgrade|abort-remove|abort-deconfigure)
