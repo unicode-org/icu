@@ -37,7 +37,7 @@ endif
 
 top_builddir_from_tmp = $(patsubst ..%,../..%,$(top_builddir))
 CURDIR:=$(CURR_FULL_DIR)
-PKGDATA = $(BINDIR)/pkgdata $(PKGDATA_OPTS) -q -c -s $(CURDIR)/out/build/$(ICUDATA_PLATFORM_NAME) -d $(ICUPKGDATA_OUTDIR) -M"LDFLAGS=\"$(LDFLAGS) $(LDFLAGSICUDT)\""
+PKGDATA = $(BINDIR)/pkgdata $(PKGDATA_OPTS) -q -c -s $(CURDIR)/out/build/$(ICUDATA_PLATFORM_NAME) -d $(ICUPKGDATA_OUTDIR) -M"PKGDATA_LDFLAGS=\"$(LDFLAGSICUDT)\""
 
 
 # OBJDATADIR must be a short path (with ..'s) to the data.
