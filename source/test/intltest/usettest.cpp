@@ -58,6 +58,7 @@ UnicodeSetTest::runIndexedTest(int32_t index, UBool exec,
         CASE(16,TestEscapePattern);
         CASE(17,TestInvalidCodePoint);
         CASE(18,TestSymbolTable);
+        CASE(19,TestSurrogate);
         default: name = ""; break;
     }
 }
@@ -1255,6 +1256,32 @@ void UnicodeSetTest::TestSymbolTable() {
                   ", expected " + us2.toPattern(b, TRUE));
         } else {
             logln((UnicodeString)"Ok, got " + us.toPattern(a, TRUE));
+        }
+    }
+}
+
+void UnicodeSetTest::TestSurrogate() {
+    const char* DATA[] = {
+        // These should all behave identically
+        "[abc\\uD800\\uDC00]",
+        // "[abc\uD800\uDC00]", // Can't do this on C -- only Java
+        "[abc\\U00010000]",
+        0
+    };
+    for (int i=0; DATA[i] != 0; ++i) {
+        UErrorCode ec = U_ZERO_ERROR;
+        logln((UnicodeString)"Test pattern " + i + " :" + DATA[i]);
+        UnicodeSet set(DATA[i], ec);
+        if (U_FAILURE(ec)) {
+            errln("FAIL: UnicodeSet constructor");
+            continue;
+        }
+        expectContainment(set,
+                          CharsToUnicodeString("abc\\U00010000"),
+                          CharsToUnicodeString("\\uD800;\\uDC00")); // split apart surrogate-pair
+        if (set.size() != 4) {
+            errln((UnicodeString)"FAIL: " + DATA[i] + ".size() == " + 
+                  set.size() + ", expected 4");
         }
     }
 }
