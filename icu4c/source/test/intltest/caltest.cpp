@@ -138,6 +138,13 @@ void CalendarTest::runIndexedTest( int32_t index, bool_t exec, char* &name, char
                 TestDOW_LOCALandYEAR_WOY();
             }
             break;
+        case 17:
+            name = "TestWOY";
+            if (exec) {
+                logln("TestWOY---"); logln("");
+                TestWOY();
+            }
+            break;
         default: name = ""; break;
     }
 }
@@ -510,11 +517,26 @@ CalendarTest::TestDisambiguation765()
     //    errln("FAIL: Exception seen:");
     //    ex.printStackTrace(log);
     //}
+    /* Note: The following test used to expect YEAR 1997, WOY 1 to
+     * resolve to a date in Dec 1996; that is, to behave as if
+     * YEAR_WOY were 1997.  With the addition of a new explicit
+     * YEAR_WOY field, YEAR_WOY must itself be set if that is what is
+     * desired.  Using YEAR in combination with WOY is ambiguous, and
+     * results in the first WOY/DOW day of the year satisfying the
+     * given fields (there may be up to two such days). In this case,
+     * it propertly resolves to Tue Dec 30 1997, which has a WOY value
+     * of 1 (for YEAR_WOY 1998) and a DOW of Tuesday, and falls in the
+     * _calendar_ year 1997, as specified. - aliu */
     c->clear();
+    c->set(Calendar::YEAR_WOY, 1997); // aliu
+    c->set(Calendar::DAY_OF_WEEK, Calendar::TUESDAY);
+    c->set(Calendar::WEEK_OF_YEAR, 1);
+    verify765("1997 Tuesday in week 1 of yearWOY = ", c, 1996, Calendar::DECEMBER, 31);
+    c->clear(); // - add test for YEAR
     c->set(Calendar::YEAR, 1997);
     c->set(Calendar::DAY_OF_WEEK, Calendar::TUESDAY);
     c->set(Calendar::WEEK_OF_YEAR, 1);
-    verify765("1997 Tuesday in week 1 of year = ", c, 1996, Calendar::DECEMBER, 31);
+    verify765("1997 Tuesday in week 1 of year = ", c, 1997, Calendar::DECEMBER, 30);
     c->clear();
     c->set(Calendar::YEAR, 1997);
     c->set(Calendar::DAY_OF_WEEK, Calendar::TUESDAY);
@@ -1134,6 +1156,12 @@ CalendarTest::TestDOWProgression()
 void
 CalendarTest::TestDOW_LOCALandYEAR_WOY()
 {
+    /* Note: I've commented out the loop_addroll tests for YEAR and
+     * YEAR_WOY below because these two fields should NOT behave
+     * identically when adding.  YEAR should keep the month/dom
+     * invariant.  YEAR_WOY should keep the woy/dow invariant.  I've
+     * added a new test that checks for this in place of the old call
+     * to loop_addroll. - aliu */
     UErrorCode status = U_ZERO_ERROR;
     int32_t times = 20;
     Calendar *cal=Calendar::createInstance(Locale::GERMANY, status);
@@ -1145,40 +1173,123 @@ CalendarTest::TestDOW_LOCALandYEAR_WOY()
     cal->clear();
     cal->set(1997, Calendar::DECEMBER, 25);
 	doYEAR_WOYLoop(cal, sdf, times, status);
-    loop_addroll(cal, sdf, times, Calendar::YEAR_WOY, Calendar::YEAR,  status);
+    //loop_addroll(cal, sdf, times, Calendar::YEAR_WOY, Calendar::YEAR,  status);
+    yearAddTest(*cal, status); // aliu
     loop_addroll(cal, sdf, times, Calendar::DOW_LOCAL, Calendar::DAY_OF_WEEK, status);
     if (U_FAILURE(status)) { errln("Error in parse/calculate test for 1997"); return; }
     cal->clear();
     cal->set(1998, Calendar::DECEMBER, 25);
 	doYEAR_WOYLoop(cal, sdf, times, status);
-    loop_addroll(cal, sdf, times, Calendar::YEAR_WOY, Calendar::YEAR,  status);
+    //loop_addroll(cal, sdf, times, Calendar::YEAR_WOY, Calendar::YEAR,  status);
+    yearAddTest(*cal, status); // aliu
     loop_addroll(cal, sdf, times, Calendar::DOW_LOCAL, Calendar::DAY_OF_WEEK, status);
     if (U_FAILURE(status)) { errln("Error in parse/calculate test for 1998"); return; }
     cal->clear();
     cal->set(1582, Calendar::OCTOBER, 1);
 	doYEAR_WOYLoop(cal, sdf, times, status);
-    loop_addroll(cal, sdf, times, Calendar::YEAR_WOY, Calendar::YEAR,  status);
+    //loop_addroll(cal, sdf, times, Calendar::YEAR_WOY, Calendar::YEAR,  status);
+    yearAddTest(*cal, status); // aliu
     loop_addroll(cal, sdf, times, Calendar::DOW_LOCAL, Calendar::DAY_OF_WEEK, status);
     if (U_FAILURE(status)) { errln("Error in parse/calculate test for 1582"); return; }
 
     return;
 }
 
+/**
+ * Confirm that adding a YEAR and adding a YEAR_WOY work properly for
+ * the given Calendar at its current setting.
+ */
+void CalendarTest::yearAddTest(Calendar& cal, UErrorCode& status) {
+    /**
+     * When adding the YEAR, the month and day should remain constant.
+     * When adding the YEAR_WOY, the WOY and DOW should remain constant. - aliu
+     * Examples:
+     *  Wed Jan 14 1998 / 1998-W03-03 Add(YEAR_WOY, 1) -> Wed Jan 20 1999 / 1999-W03-03
+     *                                Add(YEAR, 1)     -> Thu Jan 14 1999 / 1999-W02-04
+     *  Thu Jan 14 1999 / 1999-W02-04 Add(YEAR_WOY, 1) -> Thu Jan 13 2000 / 2000-W02-04
+     *                                Add(YEAR, 1)     -> Fri Jan 14 2000 / 2000-W02-05
+     *  Sun Oct 31 1582 / 1582-W42-07 Add(YEAR_WOY, 1) -> Sun Oct 23 1583 / 1583-W42-07
+     *                                Add(YEAR, 1)     -> Mon Oct 31 1583 / 1583-W44-01
+     */
+    int32_t y   = cal.get(Calendar::YEAR, status);
+    int32_t mon = cal.get(Calendar::MONTH, status);
+    int32_t day = cal.get(Calendar::DATE, status);
+    int32_t ywy = cal.get(Calendar::YEAR_WOY, status);
+    int32_t woy = cal.get(Calendar::WEEK_OF_YEAR, status);
+    int32_t dow = cal.get(Calendar::DOW_LOCAL, status);
+    UDate t = cal.getTime(status);
+
+    UnicodeString str, str2;
+    SimpleDateFormat fmt("EEE MMM dd yyyy / YYYY'-W'ww-ee", status);
+    fmt.setCalendar(cal);
+
+    fmt.format(t, str.remove());
+    str += ".add(YEAR, 1)    =>";
+    cal.add(Calendar::YEAR, 1, status);
+    int32_t y2   = cal.get(Calendar::YEAR, status);
+    int32_t mon2 = cal.get(Calendar::MONTH, status);
+    int32_t day2 = cal.get(Calendar::DATE, status);
+    fmt.format(cal.getTime(status), str);
+    if (y2 != (y+1) || mon2 != mon || day2 != day) {
+        str += (UnicodeString)", expected year " +
+            (y+1) + ", month " + (mon+1) + ", day " + day;
+        errln((UnicodeString)"FAIL: " + str);
+    } else {
+        logln(str);
+    }
+
+    fmt.format(t, str.remove());
+    str += ".add(YEAR_WOY, 1)=>";
+    cal.setTime(t, status);
+    cal.add(Calendar::YEAR_WOY, 1, status);
+    int32_t ywy2 = cal.get(Calendar::YEAR_WOY, status);
+    int32_t woy2 = cal.get(Calendar::WEEK_OF_YEAR, status);
+    int32_t dow2 = cal.get(Calendar::DOW_LOCAL, status);
+    fmt.format(cal.getTime(status), str);
+    if (ywy2 != (ywy+1) || woy2 != woy || dow2 != dow) {
+        str += (UnicodeString)", expected yearWOY " +
+            (ywy+1) + ", woy " + woy + ", dowLocal " + dow;
+        errln((UnicodeString)"FAIL: " + str);
+    } else {
+        logln(str);
+    }
+}
+
 // -------------------------------------
+
+static UnicodeString fieldName(Calendar::EDateFields f) {
+    switch (f) {
+    case 1:
+        return "YEAR";
+    case 17:
+        return "YEAR_WOY";
+    default:
+        return UnicodeString("") + f;
+    }
+}
 
 void CalendarTest::loop_addroll(Calendar *cal, SimpleDateFormat *sdf, int times, Calendar::EDateFields field, Calendar::EDateFields field2, UErrorCode& errorCode) {
     Calendar *calclone;
+    SimpleDateFormat fmt("EEE MMM dd yyyy / YYYY'-W'ww-ee", errorCode);
+    fmt.setCalendar(*cal);
     int i;
 
     for(i = 0; i<times; i++) {
         calclone = cal->clone();
+        UDate start = cal->getTime(errorCode);
         cal->add(field,1,errorCode);
         if (U_FAILURE(errorCode)) { errln("Error in add"); delete calclone; return; }
         calclone->add(field2,1,errorCode);
         if (U_FAILURE(errorCode)) { errln("Error in add"); delete calclone; return; }
         if(cal->getTime(errorCode) != calclone->getTime(errorCode)) {
+            UnicodeString str("FAIL: Results of add differ. "), str2;
+            str += fmt.format(start, str2) + " ";
+            str += UnicodeString("Add(") + fieldName(field) + ", 1) -> " +
+                fmt.format(cal->getTime(errorCode), str2.remove()) + "; ";
+            str += UnicodeString("Add(") + fieldName(field2) + ", 1) -> " +
+                fmt.format(calclone->getTime(errorCode), str2.remove());
+            errln(str);
             delete calclone;
-            errln("Results of add differ!");
             return;
         }
         delete calclone;
@@ -1286,5 +1397,262 @@ CalendarTest::marchByDelta(Calendar* cal, int32_t delta)
     while (newDOW != initialDOW);
     delete cur;
 }
+
+#define CHECK(status, msg) \
+    if (U_FAILURE(status)) { \
+        errln(msg); \
+        return; \
+    }
+
+void CalendarTest::TestWOY(void) {
+    /*
+      FDW = Mon, MDFW = 4:
+         Sun Dec 26 1999, WOY 51
+         Mon Dec 27 1999, WOY 52
+         Tue Dec 28 1999, WOY 52
+         Wed Dec 29 1999, WOY 52
+         Thu Dec 30 1999, WOY 52
+         Fri Dec 31 1999, WOY 52
+         Sat Jan 01 2000, WOY 52 ***
+         Sun Jan 02 2000, WOY 52 ***
+         Mon Jan 03 2000, WOY 1
+         Tue Jan 04 2000, WOY 1
+         Wed Jan 05 2000, WOY 1
+         Thu Jan 06 2000, WOY 1
+         Fri Jan 07 2000, WOY 1
+         Sat Jan 08 2000, WOY 1
+         Sun Jan 09 2000, WOY 1
+         Mon Jan 10 2000, WOY 2
+
+      FDW = Mon, MDFW = 2:
+         Sun Dec 26 1999, WOY 52
+         Mon Dec 27 1999, WOY 1  ***
+         Tue Dec 28 1999, WOY 1  ***
+         Wed Dec 29 1999, WOY 1  ***
+         Thu Dec 30 1999, WOY 1  ***
+         Fri Dec 31 1999, WOY 1  ***
+         Sat Jan 01 2000, WOY 1
+         Sun Jan 02 2000, WOY 1
+         Mon Jan 03 2000, WOY 2
+         Tue Jan 04 2000, WOY 2
+         Wed Jan 05 2000, WOY 2
+         Thu Jan 06 2000, WOY 2
+         Fri Jan 07 2000, WOY 2
+         Sat Jan 08 2000, WOY 2
+         Sun Jan 09 2000, WOY 2
+         Mon Jan 10 2000, WOY 3
+    */
+
+    UnicodeString str;
+    UErrorCode status = U_ZERO_ERROR;
+    int32_t i;
+
+    GregorianCalendar cal(status);
+    SimpleDateFormat fmt("EEE MMM dd yyyy', WOY' w", status);
+    CHECK(status, "Fail: Cannot construct calendar/format");
+
+    Calendar::EDaysOfWeek fdw;
+
+    for (int8_t pass=1; pass<=2; ++pass) {
+        switch (pass) {
+        case 1:
+            fdw = Calendar::MONDAY;
+            cal.setFirstDayOfWeek(fdw);
+            cal.setMinimalDaysInFirstWeek(4);
+            fmt.setCalendar(cal);
+            break;
+        case 2:
+            fdw = Calendar::MONDAY;
+            cal.setFirstDayOfWeek(fdw);
+            cal.setMinimalDaysInFirstWeek(2);
+            fmt.setCalendar(cal);
+            break;
+        }
+
+    for (i=0; i<16; ++i) {
+        UDate t, t2;
+        int32_t t_y, t_woy, t_dow;
+        cal.clear();
+        cal.set(1999, Calendar::DECEMBER, 26 + i);
+        fmt.format(t = cal.getTime(status), str.remove());
+        CHECK(status, "Fail: getTime failed");
+        logln(str);
+
+        int32_t dow = cal.get(Calendar::DAY_OF_WEEK, status);
+        int32_t woy = cal.get(Calendar::WEEK_OF_YEAR, status);
+        int32_t year = cal.get(Calendar::YEAR, status);
+        int32_t mon = cal.get(Calendar::MONTH, status);
+        CHECK(status, "Fail: get failed");
+        int32_t dowLocal = dow - fdw;
+        if (dowLocal < 0) dowLocal += 7;
+        dowLocal++;
+        int32_t yearWoy = year;
+        if (mon == Calendar::JANUARY) {
+            if (woy >= 52) --yearWoy;
+        } else {
+            if (woy == 1) ++yearWoy;
+        }
+
+        // Basic fields->time check y/woy/dow
+        // Since Y/WOY is ambiguous, we do a check of the fields,
+        // not of the specific time.
+        cal.clear();
+        cal.set(Calendar::YEAR, year);
+        cal.set(Calendar::WEEK_OF_YEAR, woy);
+        cal.set(Calendar::DAY_OF_WEEK, dow);
+        t_y = cal.get(Calendar::YEAR, status);
+        t_woy = cal.get(Calendar::WEEK_OF_YEAR, status);
+        t_dow = cal.get(Calendar::DAY_OF_WEEK, status);
+        CHECK(status, "Fail: get failed");
+        if (t_y != year || t_woy != woy || t_dow != dow) {
+            str = "Fail: y/woy/dow fields->time => ";
+            fmt.format(cal.getTime(status), str);
+            errln(str);
+        }
+
+        // Basic fields->time check y/woy/dow_local
+        // Since Y/WOY is ambiguous, we do a check of the fields,
+        // not of the specific time.
+        cal.clear();
+        cal.set(Calendar::YEAR, year);
+        cal.set(Calendar::WEEK_OF_YEAR, woy);
+        cal.set(Calendar::DOW_LOCAL, dowLocal);
+        t_y = cal.get(Calendar::YEAR, status);
+        t_woy = cal.get(Calendar::WEEK_OF_YEAR, status);
+        t_dow = cal.get(Calendar::DOW_LOCAL, status);
+        CHECK(status, "Fail: get failed");
+        if (t_y != year || t_woy != woy || t_dow != dowLocal) {
+            str = "Fail: y/woy/dow_local fields->time => ";
+            fmt.format(cal.getTime(status), str);
+            errln(str);
+        }
+
+        // Basic fields->time check y_woy/woy/dow
+        cal.clear();
+        cal.set(Calendar::YEAR_WOY, yearWoy);
+        cal.set(Calendar::WEEK_OF_YEAR, woy);
+        cal.set(Calendar::DAY_OF_WEEK, dow);
+        t2 = cal.getTime(status);
+        CHECK(status, "Fail: getTime failed");
+        if (t != t2) {
+            str = "Fail: y_woy/woy/dow fields->time => ";
+            fmt.format(t2, str);
+            errln(str);
+        }
+
+        // Basic fields->time check y_woy/woy/dow_local
+        cal.clear();
+        cal.set(Calendar::YEAR_WOY, yearWoy);
+        cal.set(Calendar::WEEK_OF_YEAR, woy);
+        cal.set(Calendar::DOW_LOCAL, dowLocal);
+        t2 = cal.getTime(status);
+        CHECK(status, "Fail: getTime failed");
+        if (t != t2) {
+            str = "Fail: y_woy/woy/dow_local fields->time => ";
+            fmt.format(t2, str);
+            errln(str);
+        }
+
+        // Make sure DOW_LOCAL disambiguates over DOW
+        int32_t wrongDow = dow - 3;
+        if (wrongDow < 1) wrongDow += 7;
+        cal.setTime(t, status);
+        cal.set(Calendar::DAY_OF_WEEK, wrongDow);
+        cal.set(Calendar::DOW_LOCAL, dowLocal);
+        t2 = cal.getTime(status);
+        CHECK(status, "Fail: set/getTime failed");
+        if (t != t2) {
+            str = "Fail: DOW_LOCAL fields->time => ";
+            fmt.format(t2, str);
+            errln(str);
+        }
+
+        // Make sure DOW disambiguates over DOW_LOCAL
+        int32_t wrongDowLocal = dowLocal - 3;
+        if (wrongDowLocal < 1) wrongDowLocal += 7;
+        cal.setTime(t, status);
+        cal.set(Calendar::DOW_LOCAL, wrongDowLocal);
+        cal.set(Calendar::DAY_OF_WEEK, dow);
+        t2 = cal.getTime(status);
+        CHECK(status, "Fail: set/getTime failed");
+        if (t != t2) {
+            str = "Fail: DOW       fields->time => ";
+            fmt.format(t2, str);
+            errln(str);
+        }
+
+        // Make sure YEAR_WOY disambiguates over YEAR
+        cal.setTime(t, status);
+        cal.set(Calendar::YEAR, year - 2);
+        cal.set(Calendar::YEAR_WOY, yearWoy);
+        t2 = cal.getTime(status);
+        CHECK(status, "Fail: set/getTime failed");
+        if (t != t2) {
+            str = "Fail: YEAR_WOY  fields->time => ";
+            fmt.format(t2, str);
+            errln(str);
+        }
+
+        // Make sure YEAR disambiguates over YEAR_WOY
+        cal.setTime(t, status);
+        cal.set(Calendar::YEAR_WOY, yearWoy - 2);
+        cal.set(Calendar::YEAR, year);
+        t2 = cal.getTime(status);
+        CHECK(status, "Fail: set/getTime failed");
+        if (t != t2) {
+            str = "Fail: YEAR      fields->time => ";
+            fmt.format(t2, str);
+            errln(str);
+        }
+    }
+    }
+
+    /*
+      FDW = Mon, MDFW = 4:
+         Sun Dec 26 1999, WOY 51
+         Mon Dec 27 1999, WOY 52
+         Tue Dec 28 1999, WOY 52
+         Wed Dec 29 1999, WOY 52
+         Thu Dec 30 1999, WOY 52
+         Fri Dec 31 1999, WOY 52
+         Sat Jan 01 2000, WOY 52
+         Sun Jan 02 2000, WOY 52
+    */
+
+    // Roll the DOW_LOCAL within week 52
+    for (i=27; i<=33; ++i) {
+        int32_t amount;
+        for (amount=-7; amount<=7; ++amount) {
+            str = "roll(";
+            cal.set(1999, Calendar::DECEMBER, i);
+            UDate t, t2;
+            fmt.format(cal.getTime(status), str);
+            CHECK(status, "Fail: getTime failed");
+            str += UnicodeString(", ") + amount + ") = ";
+
+            cal.roll(Calendar::DOW_LOCAL, amount, status);
+            CHECK(status, "Fail: roll failed");
+
+            t = cal.getTime(status);
+            int32_t newDom = i + amount;
+            while (newDom < 27) newDom += 7;
+            while (newDom > 33) newDom -= 7;
+            cal.set(1999, Calendar::DECEMBER, newDom);
+            t2 = cal.getTime(status);
+            CHECK(status, "Fail: getTime failed");
+            fmt.format(t, str);
+
+            if (t != t2) {
+                str.append(", exp ");
+                fmt.format(t2, str);
+                errln(str);
+            } else {
+                logln(str);
+            }
+        }
+    }
+}
+
+#undef CHECK
 
 //eof
