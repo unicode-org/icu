@@ -1123,6 +1123,20 @@ root {
         zu  { "Zulu" }
         zun { "Zuni" }
     }
+
+    // Localized display names of currencies, analogous to Countries
+    // and Languages.  "Universal" display names are listed here in
+    // root.
+    // @since ICU 2.2
+    Currencies {
+        // Only a few unique symbols should be listed here.  "$", for
+        // example, is used to indicate not only USD, but also ARS,
+        // AUD, BND, CAD, CLP, COP, JDF, ETB, MXN, NZD, and SOS, so it
+        // isn't listed here.
+        EUR { "\u20AC" } // Euro
+        JPY { "\uFFE5" } // Yen
+    }
+
     LocaleID:int { 0x0000 }
 //    LocaleString { "en" }
     MonthAbbreviations { 
