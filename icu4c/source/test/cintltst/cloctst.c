@@ -2560,7 +2560,8 @@ static void TestCanonicalization(void)
         /* test cases reflecting internal resource bundle usage */
         { "root@kw=foo", "root@kw=foo", "root@kw=foo" },
         { "@calendar=gregorian", "@calendar=gregorian", "@calendar=gregorian" },
-        { "ja_JP@calendar=Japanese", "ja_JP@calendar=Japanese", "ja_JP@calendar=Japanese" }
+        { "ja_JP@calendar=Japanese", "ja_JP@calendar=Japanese", "ja_JP@calendar=Japanese" },
+        { "ja_JP", "ja_JP", "ja_JP" }
     };
     
     static const char* label[] = { "getName", "canonicalize" };
