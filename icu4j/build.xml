@@ -6,8 +6,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/build.xml,v $ 
-* $Date: 2002/02/19 04:09:26 $ 
-* $Revision: 1.45 $
+* $Date: 2002/03/01 01:35:44 $ 
+* $Revision: 1.46 $
 *
 *******************************************************************************
 * This is the ant build file for ICU4J.  See readme.html for more information.
@@ -33,18 +33,6 @@
         <property name="richedit.doc.dir" value="${richedit.archive.dir}/doc"/>
         <property name="richedit.zip.file" value="${richedit.dist.dir}/richedit.zip"/>
         <property name="richedit.manifest" value="${richedit.dist.dir}/manifest.stub"/>
-
-        <!-- Used for Javadoc generation, strangely for sun jdk1.2, the os 
-        name for Windows 98 is Windows 95-->   
-        <condition property="isWin98JDKVersion1.2">
-            <and>
-                <equals arg1="${ant.java.version}" arg2="1.2"/>    
-                <or>
-                    <equals arg1="${os.name}" arg2="Windows 98"/>
-                    <equals arg1="${os.name}" arg2="Windows 95"/>
-                </or>
-            </and>
-        </condition>  
       </target>
 
     <target name="all" depends="core,tests,tools,richtext,demos,jar,docs"/>
@@ -97,31 +85,11 @@
             debug="on" deprecation="off"/>
     </target>
 
-    <!-- Javadoc fails on Windows 98 and JDK 1.2, for some reason, Ant Javadoc searches for the classpath and fails. Hence we seperate the platform out -->
-    <target name="docs" depends="gennewdocs, genolddocs">
-    </target>
-      
-    <target name="gennewdocs" depends="init" unless="isWin98JDKVersion1.2">
+    <target name="docs" depends="init">
         <mkdir dir="${doc.dir}"/>
         <javadoc packagenames="com.ibm.icu.lang,com.ibm.icu.dev.tool.translit,com.ibm.icu.text,com.ibm.icu.impl.data,com.ibm.icu.dev.tool.compression,com.ibm.icu.dev.tool.normalizer,com.ibm.icu.util,com.ibm.icu.dev.tool.rbbi,com.ibm.icu.math,com.ibm.richtext.textlayout,com.ibm.richtext.textlayout.attributes,com.ibm.richtext.awtui,com.ibm.richtext.print,com.ibm.richtext.styledtext,com.ibm.richtext.swingui,com.ibm.richtext.textapps,com.ibm.richtext.textformat,com.ibm.richtext.textpanel,com.ibm.richtext.uiimpl,com.ibm.richtext.uiimpl.resources,com.ibm.richtext.textapps.resources"
             sourcepath="${src.dir}"
             destdir="${doc.dir}"
-            nodeprecatedlist="true"
-	        windowtitle="icu4j"
-	        doctitle="icu4j"
-	        encoding="iso-8859-1"
-	        docencoding="iso-8859-1"
-	        bottom="&lt;font size=-1>Copyright (c) 2001 IBM Corporation and others.&lt;/font>"
-        />    	
-    </target>
-
-    <target name="genolddocs" depends="init" if="isWin98JDKVersion1.2">
-        <mkdir dir="${doc.dir}"/>
-        <javadoc packagenames="com.ibm.icu.lang,com.ibm.icu.util,com.ibm.icu.text,com.ibm.icu.impl.data,com.ibm.icu.dev.tool.translit,com.ibm.icu.dev.tool.compression,com.ibm.icu.dev.tool.normalizer,com.ibm.icu.dev.tool.rbbi,com.ibm.icu.math,com.ibm.richtext.textlayout,com.ibm.richtext.textlayout.attributes,com.ibm.richtext.awtui,com.ibm.richtext.print,com.ibm.richtext.styledtext,com.ibm.richtext.swingui,com.ibm.richtext.textapps,com.ibm.richtext.textformat,com.ibm.richtext.textpanel,com.ibm.richtext.uiimpl,com.ibm.richtext.uiimpl.resources,com.ibm.richtext.textapps.resources"
-            sourcepath="${src.dir}"
-            destdir="${doc.dir}"
-            classpath=""
-            maxmemory="100M"
             nodeprecatedlist="true"
 	        windowtitle="icu4j"
 	        doctitle="icu4j"
@@ -146,7 +114,7 @@
     <target name="jar" depends="core">
         <jar jarfile="${jar.file}"
             compress="false"
-            includes="com/ibm/util/**/*,com/ibm/text/**/*,com/ibm/math/**/*,com/ibm/richtext/**/*,com/ibm/textlayout/**/*"
+            includes="com/ibm/icu/util/**/*,com/ibm/icu/text/**/*,com/ibm/icu/math/**/*,com/ibm/icu/richtext/**/*,com/ibm/icu/textlayout/**/*,com/ibm/icu/impl/**/*,com/ibm/icu/lang/**/*"
             basedir="${build.dir}"/>
     </target>
 
@@ -164,32 +132,12 @@
         on the build machine at a known location.
     -->
 
-    <!-- Javadoc fails on Windows 98 and JDK 1.2, for some reason, Ant Javadoc searches for the classpath and fails. Hence we seperate the platform out -->
-    <target name="richeditDocs" depends="gennewricheditDocs, genoldricheditDocs">
-    </target>
-      
-    <target name="gennewricheditDocs" depends="init" unless="isWin98JDKVersion1.2">  
+    <target name="richeditDocs" depends="init">  
         <mkdir dir="${richedit.doc.dir}"/>
         <javadoc  packagenames="com.ibm.richtext.awtui,com.ibm.richtext.swingui,com.ibm.richtext.textpanel,com.ibm.richtext.styledtext,com.ibm.textlayout.attributes,com.ibm.richtext.print"
             sourcepath="${src.dir}"
             destdir="${richedit.doc.dir}"
             nodeprecatedlist="true"
-	        windowtitle="RichEdit Control"
-	        doctitle="RichEdit Control"
-	        encoding="iso-8859-1"
-	        docencoding="iso-8859-1"
-	        bottom="&lt;font size=-1>Copyright (c) 1998-2001 IBM Corporation and others.&lt;/font>"
-    		    />    		  
-    </target>
-
-    <target name="genoldricheditDocs" depends="init" if="isWin98JDKVersion1.2">  
-        <mkdir dir="${richedit.doc.dir}"/>
-        <javadoc packagenames="com.ibm.richtext.awtui,com.ibm.richtext.swingui,com.ibm.richtext.textpanel,com.ibm.richtext.styledtext,com.ibm.textlayout.attributes,com.ibm.richtext.print"
-            sourcepath="${src.dir}"
-            destdir="${richedit.doc.dir}"
-            classpath=""
-            maxmemory="100M"
-    	    nodeprecatedlist="true"
 	        windowtitle="RichEdit Control"
 	        doctitle="RichEdit Control"
 	        encoding="iso-8859-1"
