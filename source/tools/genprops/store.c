@@ -310,7 +310,7 @@ setUnicodeVersion(const char *v) {
 
 extern void
 initStore() {
-    pTrie=utrie_open(NULL, NULL, MAX_PROPS_COUNT, FALSE);
+    pTrie=utrie_open(NULL, NULL, MAX_PROPS_COUNT, 0, FALSE);
     if(pTrie==NULL) {
         fprintf(stderr, "error: unable to create a UNewTrie\n");
         exit(U_MEMORY_ALLOCATION_ERROR);
@@ -625,14 +625,20 @@ makeProps(Props *p) {
 
 extern void
 addProps(uint32_t c, uint32_t x) {
-    utrie_set32(pTrie, (UChar32)c, x);
+    if(!utrie_set32(pTrie, (UChar32)c, x)) {
+        fprintf(stderr, "error: too many entries for the properties trie\n");
+        exit(U_BUFFER_OVERFLOW_ERROR);
+    }
 }
 
 /* areas of same properties ------------------------------------------------- */
 
 extern void
 repeatProps(uint32_t first, uint32_t last, uint32_t x) {
-    utrie_setRange32(pTrie, (UChar32)first, (UChar32)(last+1), x, FALSE);
+    if(!utrie_setRange32(pTrie, (UChar32)first, (UChar32)(last+1), x, FALSE)) {
+        fprintf(stderr, "error: too many entries for the properties trie\n");
+        exit(U_BUFFER_OVERFLOW_ERROR);
+    }
 }
 
 /* compacting --------------------------------------------------------------- */
@@ -832,6 +838,8 @@ generateData(const char *dataDir) {
             dataLength, (unsigned long)size);
         exit(U_INTERNAL_PROGRAM_ERROR);
     }
+
+    utrie_close(pTrie);
 }
 
 /* helpers ------------------------------------------------------------------ */
