@@ -1614,7 +1614,7 @@ public:
     /**
      * The resource tags we use to retrieve decimal format data from
      * locale resource bundles.
-     * @stable ICU 2.0
+     * @deprecated ICU 3.4. This string has no public purpose. Please don't use it.
      */
     static const char fgNumberPatterns[];
 
