@@ -186,7 +186,7 @@ void SimpleTimeZone::construct(int32_t rawOffsetGMT,
 
     decodeRules(status);
 
-    if (savingsDST < 0) {
+    if (savingsDST <= 0) {
         status = U_ILLEGAL_ARGUMENT_ERROR;
     }
 }
@@ -654,7 +654,7 @@ SimpleTimeZone::setDSTSavings(int32_t millisSavedDuringDST)
 void 
 SimpleTimeZone::setDSTSavings(int32_t millisSavedDuringDST, UErrorCode& status) 
 {
-    if (millisSavedDuringDST < 0) {
+    if (millisSavedDuringDST <= 0) {
         status = U_ILLEGAL_ARGUMENT_ERROR;
     }
     else {
