@@ -362,7 +362,7 @@ public:
      * @return  Pointer to the clone object.  This may differ from the stackBuffer
      *          address if the byte alignment of the stack buffer was not suitable
      *          or if the stackBuffer was too small to hold the clone.
-     * @draft stable
+     * @stable
      */
     virtual BreakIterator *  createBufferClone(void *stackBuffer,
                                                int32_t &BufferSize,
