@@ -312,6 +312,7 @@ public final class Normalizer implements Cloneable {
                                                                               NormalizerImpl.INDEX_MIN_NFD_NO_MAYBE
                                                                               ),
                                              NormalizerImpl.QC_NFD,
+                                             0,
                                              allowMaybe,
                                              nx
                                              );
@@ -373,6 +374,7 @@ public final class Normalizer implements Cloneable {
                                                                               NormalizerImpl.INDEX_MIN_NFKD_NO_MAYBE
                                                                               ),
                                              NormalizerImpl.QC_NFKD,
+                                             NormalizerImpl.OPTIONS_COMPAT,
                                              allowMaybe,
                                              nx
                                              );
@@ -400,11 +402,11 @@ public final class Normalizer implements Cloneable {
                                 UnicodeSet nx) {
             return NormalizerImpl.compose( src, srcStart, srcLimit,
                                            dest,destStart,destLimit,
-                                           false, nx);
+                                           0, nx);
         }
   
         protected String normalize( String src, int options) {
-            return compose(src,false);
+            return compose(src, false, options);
         }
        
         protected int getMinC() {
@@ -430,6 +432,7 @@ public final class Normalizer implements Cloneable {
                                                                               NormalizerImpl.INDEX_MIN_NFC_NO_MAYBE
                                                                               ),
                                              NormalizerImpl.QC_NFC,
+                                             0,
                                              allowMaybe,
                                              nx
                                              );
@@ -464,11 +467,11 @@ public final class Normalizer implements Cloneable {
                                 UnicodeSet nx) {
             return NormalizerImpl.compose(src,  srcStart,srcLimit,
                                           dest, destStart,destLimit,
-                                          true, nx);
+                                          NormalizerImpl.OPTIONS_COMPAT, nx);
         }
 
         protected String normalize( String src, int options) {
-            return compose(src,true);
+            return compose(src, true, options);
         }
         protected int getMinC() {
             return NormalizerImpl.getFromIndexesArr(
@@ -493,6 +496,7 @@ public final class Normalizer implements Cloneable {
                                                                               NormalizerImpl.INDEX_MIN_NFKC_NO_MAYBE
                                                                               ),
                                              NormalizerImpl.QC_NFKC,
+                                             NormalizerImpl.OPTIONS_COMPAT,
                                              allowMaybe,
                                              nx
                                              );
@@ -877,9 +881,17 @@ public final class Normalizer implements Cloneable {
         int destSize=0;
         char[] src = str.toCharArray();
         UnicodeSet nx = NormalizerImpl.getNX(options);
+
+        /* reset options bits that should only be set here or inside compose() */
+        options&=~(NormalizerImpl.OPTIONS_SETS_MASK|NormalizerImpl.OPTIONS_COMPAT|NormalizerImpl.OPTIONS_COMPOSE_CONTIGUOUS);
+
+        if(compat) {
+            options|=NormalizerImpl.OPTIONS_COMPAT;
+        }
+
         for(;;) {
             destSize=NormalizerImpl.compose(src,0,src.length,
-                                            dest,0,dest.length,compat,
+                                            dest,0,dest.length,options,
                                             nx);
             if(destSize<=dest.length) {
                 return new String(dest,0,destSize);  
@@ -907,9 +919,17 @@ public final class Normalizer implements Cloneable {
      */         
     public static int compose(char[] source,char[] target, boolean compat, int options) {
         UnicodeSet nx = NormalizerImpl.getNX(options);
+
+        /* reset options bits that should only be set here or inside compose() */
+        options&=~(NormalizerImpl.OPTIONS_SETS_MASK|NormalizerImpl.OPTIONS_COMPAT|NormalizerImpl.OPTIONS_COMPOSE_CONTIGUOUS);
+
+        if(compat) {
+            options|=NormalizerImpl.OPTIONS_COMPAT;
+        }
+
         int length = NormalizerImpl.compose(source,0,source.length,
                                             target,0,target.length,
-                                            compat,nx);
+                                            options,nx);
         if(length<=target.length) {
             return length;
         } else {
@@ -941,9 +961,17 @@ public final class Normalizer implements Cloneable {
                               char[] dest,int destStart, int destLimit,
                               boolean compat, int options) {
         UnicodeSet nx = NormalizerImpl.getNX(options);
+
+        /* reset options bits that should only be set here or inside compose() */
+        options&=~(NormalizerImpl.OPTIONS_SETS_MASK|NormalizerImpl.OPTIONS_COMPAT|NormalizerImpl.OPTIONS_COMPOSE_CONTIGUOUS);
+
+        if(compat) {
+            options|=NormalizerImpl.OPTIONS_COMPAT;
+        }
+
         int length = NormalizerImpl.compose(src,srcStart,srcLimit,
                                             dest,destStart,destLimit,
-                                            compat, nx);
+                                            options, nx);
         if(length<=(destLimit-destStart)) {
             return length;
         } else {

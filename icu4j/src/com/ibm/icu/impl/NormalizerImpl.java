@@ -925,6 +925,7 @@ public final class NormalizerImpl {
                                                             int srcLimit,
                                                             int minNoMaybe,
                                                             int qcMask,
+                                                            int options,
                                                             boolean allowMaybe,
                                                             UnicodeSet nx){
         
@@ -1022,7 +1023,7 @@ public final class NormalizerImpl {
                     args.prevCC = prevCC;
                        
                     // decompose and recompose [prevStarter..src[ 
-                    buffer = composePart(args,prevStarter,src,srcStart,srcLimit,qcMask,nx);
+                    buffer = composePart(args,prevStarter,src,srcStart,srcLimit,options,nx);
     
                     // compare the normalized version with the original 
                     if(0!=strCompare(buffer,0,args.length,src,prevStarter,(srcStart-prevStarter), false)) {
@@ -1393,7 +1394,7 @@ public final class NormalizerImpl {
                 return 0; /* excluded: norm32==0 */
             }
     
-            args.cc= (char)(byte)(norm32>>CC_SHIFT);
+            args.cc= (char)((norm32>>CC_SHIFT)&0xff);
         
             combineFlags=(int)(norm32&COMBINES_ANY);
             if(combineFlags!=0) {
@@ -1514,7 +1515,7 @@ public final class NormalizerImpl {
      * starter, while the combining mark that is removed has at least one code 
      * unit
      */
-    private static char/*unsigned byte*/ recompose(RecomposeArgs args, UnicodeSet nx) {
+    private static char/*unsigned byte*/ recompose(RecomposeArgs args, int options, UnicodeSet nx) {
         int  remove, q, r;
         int /*unsigned*/ combineFlags;
         int /*unsigned*/ combineFwdIndex, combineBackIndex;
@@ -1545,50 +1546,93 @@ public final class NormalizerImpl {
                     /* c is a Jamo V/T, see if we can compose it with the 
                      * previous character 
                      */
-                    remove=-1; /* NULL while no Hangul composition */
-                    ncArg.c2=args.source[starter];
-                    if(combineBackIndex==0xfff2) {
-                        /* Jamo V, compose with previous Jamo L and following 
-                         * Jamo T 
-                         */
-                        ncArg.c2=(char)(ncArg.c2-JAMO_L_BASE);
-                        if(ncArg.c2<JAMO_L_COUNT) {
-                            remove=args.start-1;
-                            ncArg.c=(char)(HANGUL_BASE+(ncArg.c2*JAMO_V_COUNT+
-                                           (ncArg.c-JAMO_V_BASE))*JAMO_T_COUNT);
-                            if(args.start!=args.limit && 
-                                        (ncArg.c2=(char)(args.source[args.start]
-                                         -JAMO_T_BASE))<JAMO_T_COUNT) {
-                                ++args.start;
-                                ncArg.c+=ncArg.c2;
-                            }
-                            if(!nx_contains(nx, ncArg.c)) {
-                                args.source[starter]=ncArg.c;
-                               } else {
-                                /* excluded */
-                                if(!isHangulWithoutJamoT(ncArg.c)) {
-                                    --args.start; /* undo the ++args.start from reading the Jamo T */
+                    /* for the PRI #29 fix, check that there is no intervening combining mark */
+                    if((options&BEFORE_PRI_29)!=0 || prevCC==0) {
+                        remove=-1; /* NULL while no Hangul composition */
+                        combineFlags=0;
+                        ncArg.c2=args.source[starter];
+                        if(combineBackIndex==0xfff2) {
+                            /* Jamo V, compose with previous Jamo L and following 
+                             * Jamo T 
+                             */
+                            ncArg.c2=(char)(ncArg.c2-JAMO_L_BASE);
+                            if(ncArg.c2<JAMO_L_COUNT) {
+                                remove=args.start-1;
+                                ncArg.c=(char)(HANGUL_BASE+(ncArg.c2*JAMO_V_COUNT+
+                                               (ncArg.c-JAMO_V_BASE))*JAMO_T_COUNT);
+                                if(args.start!=args.limit && 
+                                            (ncArg.c2=(char)(args.source[args.start]
+                                             -JAMO_T_BASE))<JAMO_T_COUNT) {
+                                    ++args.start;
+                                    ncArg.c+=ncArg.c2;
+                                 } else {
+                                     /* the result is an LV syllable, which is a starter (unlike LVT) */
+                                     combineFlags=COMBINES_FWD;
                                 }
-                                /* c is modified but not used any more -- c=*(p-1); -- re-read the Jamo V/T */
-                                remove=args.start;
+                                if(!nx_contains(nx, ncArg.c)) {
+                                    args.source[starter]=ncArg.c;
+                                   } else {
+                                    /* excluded */
+                                    if(!isHangulWithoutJamoT(ncArg.c)) {
+                                        --args.start; /* undo the ++args.start from reading the Jamo T */
+                                    }
+                                    /* c is modified but not used any more -- c=*(p-1); -- re-read the Jamo V/T */
+                                    remove=args.start;
+                                }
+                            }
+
+                        /*
+                         * Normally, the following can not occur:
+                         * Since the input is in NFD, there are no Hangul LV syllables that
+                         * a Jamo T could combine with.
+                         * All Jamo Ts are combined above when handling Jamo Vs.
+                         *
+                         * However, before the PRI #29 fix, this can occur due to
+                         * an intervening combining mark between the Hangul LV and the Jamo T.
+                         */
+                        } else {
+                            /* Jamo T, compose with previous Hangul that does not have a Jamo T */
+                            if(isHangulWithoutJamoT(ncArg.c2)) {
+                                ncArg.c2+=ncArg.c-JAMO_T_BASE;
+                                if(!nx_contains(nx, ncArg.c2)) {
+                                    remove=args.start-1;
+                                    args.source[starter]=ncArg.c2;
+                                }
                             }
                         }
-
-                    }
-    
-                    if(remove!=-1) {
-                        /* remove the Jamo(s) */
-                        q=remove;
-                        r=args.start;
-                        while(r<args.limit) {
-                            args.source[q++]=args.source[r++];
+        
+                        if(remove!=-1) {
+                            /* remove the Jamo(s) */
+                            q=remove;
+                            r=args.start;
+                            while(r<args.limit) {
+                                args.source[q++]=args.source[r++];
+                            }
+                            args.start=remove;
+                            args.limit=q;
                         }
-                        args.start=remove;
-                        args.limit=q;
+        
+                        ncArg.c2=0; /* c2 held *starter temporarily */
+
+                        if(combineFlags!=0) {
+                            /*
+                             * not starter=NULL because the composition is a Hangul LV syllable
+                             * and might combine once more (but only before the PRI #29 fix)
+                             */
+
+                            /* done? */
+                            if(args.start==args.limit) {
+                                return (char)prevCC;
+                            }
+
+                            /* the composition is a Hangul LV syllable which is a starter that combines forward */
+                            combineFwdIndex=0xfff0;
+
+                            /* we combined; continue with looking for compositions */
+                            continue;
+                        }
                     }
-    
-                    ncArg.c2=0; /* c2 held *starter temporarily */
-    
+
                     /*
                      * now: cc==0 and the combining index does not include 
                      * "forward" -> the rest of the loop body will reset starter
@@ -1599,10 +1643,12 @@ public final class NormalizerImpl {
                      */
     
                 } else if(
-                    /* the starter is not a Jamo V/T and */
+                    /* the starter is not a Hangul LV or Jamo V/T and */
                     !((combineFwdIndex&0x8000)!=0) &&
                     /* the combining mark is not blocked and */
-                    (prevCC<ncArg.cc || prevCC==0) &&
+                    ((options&BEFORE_PRI_29)!=0 ?
+                        (prevCC!=ncArg.cc || prevCC==0) :
+                        (prevCC<ncArg.cc || prevCC==0)) &&
                     /* the starter and the combining mark (c, c2) do combine */
                     0!=(result=combine(combiningTable,combineFwdIndex, 
                                        combineBackIndex, outValues)) &&
@@ -1676,8 +1722,7 @@ public final class NormalizerImpl {
                        starter=-1;
                     }
     
-                    /* we combined and set prevCC, continue with looking for 
-                     * compositions */
+                    /* we combined; continue with looking for compositions */
                     continue;
                 }
             }
@@ -1705,6 +1750,9 @@ public final class NormalizerImpl {
                     /* it will not combine with anything */
                     starter=-1;
                 }
+            } else if((options&OPTIONS_COMPOSE_CONTIGUOUS)!=0) {
+                /* FCC: no discontiguous compositions; any intervening character blocks */
+                starter=-1;
             }
         }
     }
@@ -1805,10 +1853,10 @@ public final class NormalizerImpl {
     private static char[] composePart(ComposePartArgs args, 
                                       int prevStarter, 
                                          char[] src, int start, int limit,
-                                       int/*unsigned*/ qcMask,
+                                       int options,
                                        UnicodeSet nx) {
         int recomposeLimit;
-        boolean compat =((qcMask&QC_NFKC)!=0);
+        boolean compat =((options&OPTIONS_COMPAT)!=0);
         
         /* decompose [prevStarter..src[ */
         int[] outTrailCC = new int[1];
@@ -1833,7 +1881,7 @@ public final class NormalizerImpl {
             rcArgs.source    = buffer;
             rcArgs.start    = 0;
             rcArgs.limit    = recomposeLimit; 
-            args.prevCC=recompose(rcArgs,nx);
+            args.prevCC=recompose(rcArgs, options, nx);
             recomposeLimit = rcArgs.limit;
         }
         
@@ -1916,7 +1964,7 @@ public final class NormalizerImpl {
     
     public static int compose(char[] src, int srcStart, int srcLimit,
                               char[] dest,int destStart,int destLimit,
-                              boolean compat,UnicodeSet nx) {
+                              int options,UnicodeSet nx) {
         
         int prevSrc, prevStarter;
         long/*unsigned*/ norm32; 
@@ -1928,12 +1976,12 @@ public final class NormalizerImpl {
         int destIndex = destStart;
         int srcIndex = srcStart;
         
-        if(!compat) {
-            minNoMaybe=(char)indexes[INDEX_MIN_NFC_NO_MAYBE];
-            qcMask=QC_NFC;
-        } else {
+        if((options&OPTIONS_COMPAT)!=0) {
             minNoMaybe=(char)indexes[INDEX_MIN_NFKC_NO_MAYBE];
             qcMask=QC_NFKC;
+        } else {
+            minNoMaybe=(char)indexes[INDEX_MIN_NFC_NO_MAYBE];
+            qcMask=QC_NFC;
         }
     
         /*
@@ -2053,7 +2101,7 @@ public final class NormalizerImpl {
                 if( 
                     destIndex>0 &&
                     composeHangul(src[(prevSrc-1)], c, norm32,src, ioIndex,
-                                  srcLimit, compat, dest,
+                                  srcLimit, (options&OPTIONS_COMPAT)!=0, dest,
                                   destIndex<=destLimit ? destIndex-1: 0,
                                   nx)
                 ) {
@@ -2131,7 +2179,7 @@ public final class NormalizerImpl {
                     args.prevCC    = prevCC;                    
                     //args.destIndex = destIndex;
                     args.length = length;
-                    p=composePart(args,prevStarter,src,srcIndex,srcLimit,qcMask,nx);
+                    p=composePart(args,prevStarter,src,srcIndex,srcLimit,options,nx);
                         
                     if(p==null) {
                         /* an error occurred (out of memory) */
@@ -3537,17 +3585,17 @@ public final class NormalizerImpl {
      * - c is treated as having a combining class of 0
      */
      
-    /* ### TODO prototype 
+    /* 
      * Constants for the bit fields in the options bit set parameter. 
      * These need not be public. 
      * A user only needs to know the currently assigned values. 
      * The number and positions of reserved bits per field can remain private. 
      */ 
-     private static final int OPTIONS_NX_MASK=0x1f;
-     private static final int OPTIONS_UNICODE_MASK=0xe0; 
-     private static final int OPTIONS_SETS_MASK=0xff;
-     private static final int OPTIONS_UNICODE_SHIFT=5;  
-     private static final UnicodeSet[] nxCache = new UnicodeSet[OPTIONS_SETS_MASK+1];
+    private static final int OPTIONS_NX_MASK=0x1f;
+    private static final int OPTIONS_UNICODE_MASK=0xe0; 
+    public  static final int OPTIONS_SETS_MASK=0xff;
+    private static final int OPTIONS_UNICODE_SHIFT=5;
+    private static final UnicodeSet[] nxCache = new UnicodeSet[OPTIONS_SETS_MASK+1];
      
     /* Constants for options flags for normalization.*/
 
@@ -3561,6 +3609,32 @@ public final class NormalizerImpl {
      * @draft ICU 2.6 
      */
     private static final int NX_CJK_COMPAT=2;
+    /**
+     * Options bit 8, use buggy recomposition described in
+     * Unicode Public Review Issue #29
+     * at http://www.unicode.org/review/resolved-pri.html#pri29
+     *
+     * Used in IDNA implementation according to strict interpretation
+     * of IDNA definition based on Unicode 3.2 which predates PRI #29.
+     *
+     * See ICU4C unormimp.h
+     * 
+     * @draft ICU 3.2
+     */
+    public static final int BEFORE_PRI_29=0x100;
+
+    /*
+     * The following options are used only in some composition functions.
+     * They use bits 12 and up to preserve lower bits for the available options
+     * space in unorm_compare() -
+     * see documentation for UNORM_COMPARE_NORM_OPTIONS_SHIFT.
+     */
+
+    /** Options bit 12, for compatibility vs. canonical decomposition. */
+    public static final int OPTIONS_COMPAT=0x1000;
+    /** Options bit 13, no discontiguous composition (FCC vs. NFC). */
+    public static final int OPTIONS_COMPOSE_CONTIGUOUS=0x2000;
+
     /* normalization exclusion sets --------------------------------------------- */
     
     /*

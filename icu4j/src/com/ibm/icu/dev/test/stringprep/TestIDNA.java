@@ -697,5 +697,33 @@ public class TestIDNA extends TestFmwk {
             doTestCompareReferenceImpl(src);
 
         }  
-    }  
+    }
+    public void TestUnicode32Norm() {
+        /*
+         * test Unicode 3.2 normalization, before Public Review Issue #29
+         * see cnormtst.c TestComposition()
+         */
+        final String strings[]={
+            "\u1100\u0300\u1161\u0327",
+            "\u0b47\u0300\u0b3e\u0327"
+        };
+
+        String ascii, unicode;
+        StringPrepParseException ex2;
+        int i;
+
+        for(i=0; i<strings.length; ++i) {
+            ex2=null;
+            try {
+                ascii=IDNA.convertToASCII(strings[i], 0).toString();
+                unicode=IDNA.convertToUnicode(ascii, 0).toString();
+            } catch(StringPrepParseException ex) {
+                ex2=ex;
+            }
+            if(ex2==null || ex2.getMessage().indexOf("verification")<0) {
+                String es= ex2==null ? "null" : ex2.toString();
+                errln("string "+i+" yields "+es+" instead of VERIFICATION_ERROR");
+            }
+        }
+    }
 }
