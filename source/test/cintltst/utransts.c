@@ -171,12 +171,12 @@ static void TestOpenInverse(){
            "Fullwidth-Halfwidth",
            "Greek-Latin" ,
            "Latin-Greek", 
-           //"Arabic-Latin", // Removed in 2.0
-           //"Latin-Arabic", // Removed in 2.0
+           /*"Arabic-Latin", // Removed in 2.0*/
+           /*"Latin-Arabic", // Removed in 2.0*/
            "Katakana-Latin",
            "Latin-Katakana",
-           //"Hebrew-Latin", // Removed in 2.0
-           //"Latin-Hebrew", // Removed in 2.0
+           /*"Hebrew-Latin", // Removed in 2.0*/
+           /*"Latin-Hebrew", // Removed in 2.0*/
            "Cyrillic-Latin", 
            "Latin-Cyrillic", 
            "Devanagari-Latin", 
