@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/UnicodeSet.java,v $
- * $Date: 2002/06/28 19:15:53 $
- * $Revision: 1.68 $
+ * $Date: 2002/07/10 17:36:42 $
+ * $Revision: 1.69 $
  *
  *****************************************************************************************
  */
@@ -209,7 +209,7 @@ import java.util.Iterator;
  * </table>
  * <br><b>Warning: you cannot add an empty string ("") to a UnicodeSet.</b>
  * @author Alan Liu
- * @version $RCSfile: UnicodeSet.java,v $ $Revision: 1.68 $ $Date: 2002/06/28 19:15:53 $
+ * @version $RCSfile: UnicodeSet.java,v $ $Revision: 1.69 $ $Date: 2002/07/10 17:36:42 $
  */
 public class UnicodeSet extends UnicodeFilter {
 
@@ -1179,18 +1179,47 @@ public class UnicodeSet extends UnicodeFilter {
         if (c < MIN_VALUE || c > MAX_VALUE) {
             throw new IllegalArgumentException("Invalid code point U+" + Utility.hex(c, 6));
         }
-        // catch degenerate cases (not needed unless HIGH > 0x10000
-        if (c == HIGH) {   // catch final, so we don't do it in loop!
-            return (len & 1) == 0;  // even length includes everything
-        }
+
+        /*
         // Set i to the index of the start item greater than ch
         // We know we will terminate without length test!
-        // LATER: for large sets, add binary search
         int i = -1;
         while (true) {
             if (c < list[++i]) break;
         }
+        */
+
+        int i = findCodePoint(c);
+
         return ((i & 1) != 0); // return true if odd
+    }
+
+    /**
+     * Returns the smallest value i such that c < list[i].  Caller
+     * must ensure that c is a legal value or this method will enter
+     * an infinite loop.  This method performs a binary search.
+     * @param c a character in the range MIN_VALUE..MAX_VALUE
+     * inclusive
+     * @return the smallest integer i in the range 0..len-1,
+     * inclusive, such that c < list[i]
+     */
+    private final int findCodePoint(int c) {
+        // Return the smallest i such that c < list[i].  Assume
+        // list[len - 1] == HIGH and that c is legal (0..HIGH-1).
+        if (c < list[0]) return 0;
+        int lo = 0;
+        int hi = len - 1;
+        // invariant: c >= list[lo]
+        // invariant: c < list[hi]
+        for (;;) {
+            int i = (lo + hi) / 2;
+            if (i == lo) return hi;
+            if (c < list[i]) {
+                hi = i;
+            } else {
+                lo = i;
+            }
+        }
     }
     
     /**
