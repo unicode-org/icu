@@ -564,7 +564,7 @@ U_CAPI UColAttributeValue ucol_getAttribute(const UCollator *coll, UColAttribute
  * @return a 32 bit value containing the value of the variable top in upper 16 bits. Lower 16 bits are undefined
  * @draft
  */
-U_CAPI uint32_t ucol_setVariableTop(UCollator *coll, const UChar *varTop, const int32_t len, UErrorCode *status);
+U_CAPI uint32_t ucol_setVariableTop(UCollator *coll, const UChar *varTop, int32_t len, UErrorCode *status);
 
 /** 
  * Gets the variable top value of a Collator. 
