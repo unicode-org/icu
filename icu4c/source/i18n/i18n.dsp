@@ -698,6 +698,22 @@ SOURCE=.\calendar.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\chnsecal.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\chnsecal.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\hebrwcal.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\hebrwcal.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\unicode\calendar.h
 
 !IF  "$(CFG)" == "i18n - Win32 Release"

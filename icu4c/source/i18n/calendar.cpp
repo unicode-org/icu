@@ -34,6 +34,8 @@
 #include "buddhcal.h"
 #include "japancal.h"
 #include "islamcal.h"
+#include "hebrwcal.h"
+#include "chnsecal.h"
 #include "unicode/calendar.h"
 #include "cpputils.h"
 #include "iculserv.h"
@@ -167,6 +169,10 @@ protected:
     return new IslamicCalendar(canLoc, status, IslamicCalendar::CIVIL);
   } else if(!uprv_strcmp(fType, "@calendar=islamic")) {
     return new IslamicCalendar(canLoc, status, IslamicCalendar::ASTRONOMICAL);
+  } else if(!uprv_strcmp(fType, "@calendar=hebrew")) {
+    return new HebrewCalendar(canLoc, status);
+  //} else if(!uprv_strcmp(fType, "@calendar=chinese")) {
+  //return new ChineseCalendar(canLoc, status);
   } else { 
     status = U_UNSUPPORTED_ERROR;
     return NULL;
@@ -335,9 +341,11 @@ getService(void)
     // Register all basic instances. 
     newservice->registerFactory(new BasicCalendarFactory("@calendar=japanese"),status);
     newservice->registerFactory(new BasicCalendarFactory("@calendar=buddhist"),status);
-    newservice->registerFactory(new BasicCalendarFactory("@calendar=gregorian"),status);
+    newservice->registerFactory(new BasicCalendarFactory("@calendar=hebrew"),status);
     newservice->registerFactory(new BasicCalendarFactory("@calendar=islamic"),status);
+    //    newservice->registerFactory(new BasicCalendarFactory("@calendar=chinese"),status);
     newservice->registerFactory(new BasicCalendarFactory("@calendar=islamic-civil"),status);
+    newservice->registerFactory(new BasicCalendarFactory("@calendar=gregorian"),status);
 
 #ifdef U_DEBUG_CALSVC
     fprintf(stderr, "Done..\n");
@@ -2982,9 +2990,13 @@ U_NAMESPACE_END
 // INTERNAL - for cleanup
 // clean up the astronomical data & cache
 U_CFUNC UBool calendar_islamic_cleanup(void);
+U_CFUNC UBool calendar_hebrew_cleanup(void);
+U_CFUNC UBool calendar_astro_cleanup(void);
 
 U_CFUNC UBool calendar_cleanup(void) {
   calendar_islamic_cleanup();
+  calendar_hebrew_cleanup();
+  calendar_astro_cleanup();
   if (gService) {
     delete gService;
     gService = NULL;

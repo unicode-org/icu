@@ -585,10 +585,22 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath=".\chnsecal.cpp">
+			</File>
+			<File
+				RelativePath=".\chnsecal.h">
+			</File>
+			<File
 				RelativePath=".\gregoimp.cpp">
 			</File>
 			<File
 				RelativePath=".\gregoimp.h">
+			</File>
+			<File
+				RelativePath=".\hebrwcal.cpp">
+			</File>
+			<File
+				RelativePath=".\hebrwcal.h">
 			</File>
 			<File
 				RelativePath=".\islamcal.cpp">
