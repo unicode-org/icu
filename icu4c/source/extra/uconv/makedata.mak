@@ -37,7 +37,7 @@ CFG=Debug
 !ENDIF
 !MESSAGE ICU path is $(ICUP)
 RESNAME=uconvmsg
-RESDIR=.
+RESDIR=resources
 RESFILES=resfiles.mk
 ICUDATA=$(ICUP)\data
 
@@ -56,7 +56,7 @@ PATH = $(PATH);$(ICUP)\bin
 .SUFFIXES : .ucm .cnv .dll .dat .res .txt .c
 
 # We're including a list of resource files.
-FILESEPCHAR=\\
+FILESEPCHAR=
 
 !IF EXISTS("$(RESFILES)")
 !INCLUDE "$(RESFILES)"
@@ -64,6 +64,7 @@ FILESEPCHAR=\\
 !ERROR ERROR: cannot find "$(RESFILES)"
 !ENDIF
 RB_FILES = $(RESSRC:.txt=.res)
+RESOURCESDIR=
 
 # This target should build all the data files
 !IF "$(PKGMODE)" == "dll"
@@ -94,7 +95,7 @@ CLEAN :
 # Inference rule for creating resource bundles
 .txt.res:
 	@echo Making Resource Bundle files
-	"$(ICUTOOLS)\genrb" -t -p $(RESNAME) -s $(@D) -d $(@D) $(?F)
+	"$(ICUTOOLS)\genrb" -s $(@D)\$(RESDIR) -d $(@D) $(?F)
 
 
 $(RESSRC) : {"$(ICUTOOLS)"}genrb.exe
