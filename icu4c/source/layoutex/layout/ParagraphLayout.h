@@ -314,7 +314,7 @@ public:
                   const LEGlyphID glyphs[], const float positions[], const le_int32 glyphToCharMap[]);
 
         ~VisualRun();
-};
+    };
 
     /**
      * Construct a <code>ParagraphLayout</code> object for a styled paragraph. The paragraph is specified
