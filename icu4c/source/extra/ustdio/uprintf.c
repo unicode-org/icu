@@ -1694,7 +1694,7 @@ u_vfprintf_u(    UFILE        *f,
         break;
     
       case ufmt_float:
-        args[cur_arg].floatValue = va_arg(ap, float);
+        args[cur_arg].floatValue = (float) va_arg(ap, double);
         break;
     
       case ufmt_double:
