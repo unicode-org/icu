@@ -614,8 +614,8 @@ bool_t testConvertToUnicode( const char *source, int sourcelen, const UChar *exp
 	if(status == INVALID_CHAR_FOUND || status == ILLEGAL_CHAR_FOUND )
 	{
 		for(p = junkout;p<targ;p++)
-						sprintf(junk + strlen(junk), "0x%04x, ", (0xFFFF) & (unsigned int)*p);
-		printUSeqErr(junkout, expectlen);
+		  sprintf(junk + strlen(junk), "0x%04x, ", (0xFFFF) & (unsigned int)*p);
+		/*		printUSeqErr(junkout, expectlen);*/
 		if(!memcmp(junkout, expect, expectlen*2))
 		{
 		log_verbose("Matches!\n");

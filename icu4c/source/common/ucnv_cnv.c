@@ -495,7 +495,7 @@ void   T_UConverter_fromUnicode_LATIN_1 (UConverter * _this,
 	  else
 	    {
 	      *err = INVALID_CHAR_FOUND;
-	      _this->invalidUCharBuffer[0] = (char) mySource[mySourceIndex++];
+	      _this->invalidUCharBuffer[0] = (UChar) mySource[mySourceIndex++];
 	      _this->invalidUCharLength = 1;
 
 /* Needed explicit cast for myTarget on MVS to make compiler happy - JJD */
@@ -565,7 +565,7 @@ void T_UConverter_fromUnicode_SBCS (UConverter * _this,
 	    {
 
 	      *err = INVALID_CHAR_FOUND;
-	      _this->invalidUCharBuffer[0] = mySource[mySourceIndex - 1];
+	      _this->invalidUCharBuffer[0] = (UChar)mySource[mySourceIndex - 1];
 	      _this->invalidUCharLength = 1;
 
 /* Needed explicit cast for myTarget on MVS to make compiler happy - JJD */
@@ -2058,7 +2058,7 @@ void   T_UConverter_fromUnicode_DBCS (UConverter * _this,
 	  else
 	    {
 	      *err = INVALID_CHAR_FOUND;
-	      _this->invalidUCharBuffer[0] = (char) mySourceChar;
+	      _this->invalidUCharBuffer[0] = (UChar) mySourceChar;
 	      _this->invalidUCharLength = 1;
 
 
@@ -2654,7 +2654,7 @@ void T_UConverter_toUnicode_UTF8 (UConverter * _this,
 			}
 		      else
 			{
-			  _this->invalidUCharBuffer[0] = (char) ch;
+			  _this->invalidUCharBuffer[0] = (UChar) ch;
 			  _this->invalidUCharLength = 1;
 			  *err = INDEX_OUTOFBOUNDS_ERROR;
 			}
@@ -2795,7 +2795,7 @@ void T_UConverter_toUnicode_UTF8_OFFSETS_LOGIC (UConverter * _this,
 			}
 		      else
 			{
-			  _this->invalidUCharBuffer[0] = (char) ch;
+			  _this->invalidUCharBuffer[0] = (UChar) ch;
 			  _this->invalidUCharLength = 1;
 			  *err = INDEX_OUTOFBOUNDS_ERROR;
 			}

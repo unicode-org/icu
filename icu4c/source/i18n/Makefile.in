@@ -51,7 +51,7 @@ CPPFLAGS = @CPPFLAGS@ -I$(top_srcdir)/common
 CFLAGS = @CFLAGS@
 CXXFLAGS = @CXXFLAGS@
 LDFLAGS = @LDFLAGS@ $(LD_RPATH)$(LD_RPATH_PRE)$(libdir)
-LIBS = @LIBS@ -L$(top_builddir)/common -licu-uc
+LIBS = $(LIBICU-UC) @LIBS@
 
 OBJECTS = brkiter.o calendar.o chbkdat.o choicfmt.o colcache.o		\
 coleitr.o coll.o colrules.o datefmt.o dcfmtsym.o decimfmt.o dtfmtsym.o	\

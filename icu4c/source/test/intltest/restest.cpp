@@ -47,12 +47,12 @@ enum E_Where
 #define CONFIRM_EQ(actual,expected) if ((expected)==(actual)) { record_pass(); } else { record_fail(); OUT << action << " returned " << (actual) << " instead of " << (expected) << endl; pass=FALSE; }
 #define CONFIRM_GE(actual,expected) if ((actual)>=(expected)) { record_pass(); } else { record_fail(); OUT << action << " returned " << (actual) << " instead of x >= " << (expected) << endl; pass=FALSE; }
 #define CONFIRM_NE(actual,expected) if ((expected)!=(actual)) { record_pass(); } else { record_fail(); OUT << action << " returned " << (actual) << " instead of x != " << (expected) << endl; pass=FALSE; }
+
 #ifdef _DEBUG
 #define CONFIRM_UErrorCode(actual,expected) if ((expected)==(actual)) { record_pass(); } else { record_fail(); OUT << action << " returned " << errorName(actual) << " instead of " << errorName(expected) << endl; pass=FALSE; }
 #else
-#define CONFIRM_UErrorCode(actual,expected)
+#define CONFIRM_UErrorCode(actual,expected) if ((expected)==(actual)) { record_pass(); } else { record_fail(); OUT << action << " returned " << actual << " instead of " << expected << endl; pass=FALSE; }
 #endif
-
 //***************************************************************************************
 
 /**
@@ -344,7 +344,7 @@ ResourceBundleTest::testTag(const char* frag,
     UnicodeString tag;
     UnicodeString action;
 
-    int32_t i,j,row,col;
+    int32_t i,j,row,col, actual_bundle;
     int32_t index;
     const char *directory;
 
@@ -359,12 +359,28 @@ ResourceBundleTest::testTag(const char* frag,
         ResourceBundle theBundle( directory, *param[i].locale, status);
         CONFIRM_UErrorCode(status,param[i].expected_constructor_status);
 
+	if(i == 5)
+	  actual_bundle = 0; /* ne -> default */
+	else if(i == 3)
+	  actual_bundle = 1; /* te_NE -> te */
+	else if(i == 4)
+	  actual_bundle = 2; /* te_IN_NE -> te_IN */
+	else
+	  actual_bundle = i;
+
+
         UErrorCode expected_resource_status = MISSING_RESOURCE_ERROR;
         for (j=e_te_IN; j>=e_Default; --j)
         {
             if (is_in[j] && param[i].inherits[j])
-            {
-                expected_resource_status = ZERO_ERROR;
+	      {
+		if(j == actual_bundle) /* it's in the same bundle OR it's a nonexistent=default bundle (5) */
+		  expected_resource_status = ZERO_ERROR;
+		else if(j == 0)
+		  expected_resource_status = USING_DEFAULT_ERROR;
+		else
+		  expected_resource_status = USING_FALLBACK_ERROR;
+		
                 break;
             }
         }
@@ -453,7 +469,7 @@ ResourceBundleTest::testTag(const char* frag,
             status = ZERO_ERROR;
             string = kERROR;
             theBundle.getArrayItem(tag, index, string, status);
-            expected_status = (index >= 0 && index < count) ? ZERO_ERROR : MISSING_RESOURCE_ERROR;
+            expected_status = (index >= 0 && index < count) ? expected_resource_status : MISSING_RESOURCE_ERROR;
             CONFIRM_UErrorCode(status,expected_status);
 
             if (SUCCESS(status))
@@ -527,7 +543,7 @@ ResourceBundleTest::testTag(const char* frag,
             string = kERROR;
             theBundle.get2dArrayItem(tag, row, col, string, status);
             expected_status = (row >= 0 && row < row_count && col >= 0 && col < column_count) ?
-                ZERO_ERROR : MISSING_RESOURCE_ERROR;
+	      expected_resource_status: MISSING_RESOURCE_ERROR;
             CONFIRM_UErrorCode(status,expected_status);
 
             if (SUCCESS(status))

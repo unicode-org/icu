@@ -85,7 +85,7 @@
 
 #ifdef XP_CPLUSPLUS
 # define C_FUNC extern "C"
-# ifdef OS390OE
+# ifdef OS390
 #  define CAPI C_FUNC
 #  define U_EXPORT2 U_EXPORT
 # else
@@ -94,7 +94,7 @@
 # endif
 #else
 #define C_FUNC
-#if defined(OS390OE)
+#if defined(OS390)
 # define CAPI
 # define U_EXPORT2 U_EXPORT
 #else

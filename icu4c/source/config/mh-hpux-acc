@@ -1,3 +1,4 @@
+## -*-makefile-*-
 ## HP/UX-specific setup using aCC
 
 ## Commands to generate dependency files
@@ -25,6 +26,11 @@ LD_RPATH_PRE=
 
 ## Shared object suffix
 SO=		sl
+
+## Link commands to link to ICU libs
+LIBICU-UC= 	-L$(top_builddir)/common -licu-uc
+LIBICU-I18N= 	-L$(top_builddir)/i18n -licu-i18n
+LIBCTESTFW= 	-L$(top_builddir)/tools/ctestfw -lctestfw
 
 ## Compilation rules
 %.o : $(srcdir)/%.c

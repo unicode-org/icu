@@ -52,7 +52,7 @@ CFLAGS = @CFLAGS@
 CXXFLAGS = @CXXFLAGS@
 LDFLAGS = @LDFLAGS@ \
 $(LD_RPATH)$(LD_RPATH_PRE)$(top_builddir)/common@ld_rpath_suf@$(LD_RPATH_PRE)$(top_builddir)/i18n@ld_rpath_suf@$(LD_RPATH_PRE)$(top_builddir)/tools/ctestfw
-LIBS =-L$(top_builddir)/common -licu-uc -L$(top_builddir)/i18n -licu-i18n -L$(top_builddir)/tools/ctestfw -lctestfw @LIBS@ @LIB_M@
+LIBS = $(LIBICU-UC) $(LIBICU-I18N) $(LIBCTESTFW) @LIBS@ @LIB_M@
 
 OBJECTS = callcoll.o calltest.o capitst.o cbiapts.o cbkittst.o		\
 ccaltst.o ccapitst.o ccolltst.o cconvtst.o ccurrtst.o cdantst.o		\
@@ -92,7 +92,7 @@ distclean-local: clean-local
 	rm -f Makefile $(DEPS)
 
 check-local: $(TARGET)
-	ICU_DATA=$(top_builddir)/../data/ TZ=PST8PDT ./$(TARGET)
+	HOME=$(top_builddir)/../.. ICU_DATA=$(top_builddir)/../data/ TZ=PST8PDT ./$(TARGET)
 
 Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
 	cd $(top_builddir) \
