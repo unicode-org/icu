@@ -19,7 +19,6 @@ typedef struct UCharIterator UCharIterator;
 
 U_NAMESPACE_BEGIN
 /**
- * \file
  * \brief C++ API: Unicode Normalization 
  *
  * The Normalizer class consists of two parts:
