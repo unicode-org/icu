@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding = "Windows-1252"?>
+<VisualStudioProject
+	ProjectType="Visual C++"
+	Version="7.00"
+	Name="makedata"
+	SccProjectName=""
+	SccLocalPath=""
+	Keyword="MakeFileProj">
+	<Platforms>
+		<Platform
+			Name="Win32"/>
+	</Platforms>
+	<Configurations>
+		<Configuration
+			Name="Release|Win32"
+			OutputDirectory=".\Release"
+			IntermediateDirectory=".\Release"
+			ConfigurationType="0"
+			UseOfMFC="0"
+			ATLMinimizesCRunTimeLibraryUsage="FALSE">
+			<Tool
+				Name="VCNMakeTool"
+				BuildCommandLine="NMAKE /f makedata.mak icumake=$(ProjectDir)  cfg=release"
+				ReBuildCommandLine="NMAKE /f makedata.mak icumake=$(ProjectDir)  cfg=release clean all"
+				Output="makedata.exe"/>
+		</Configuration>
+		<Configuration
+			Name="Debug|Win32"
+			OutputDirectory=".\Debug"
+			IntermediateDirectory=".\Debug"
+			ConfigurationType="0"
+			UseOfMFC="0"
+			ATLMinimizesCRunTimeLibraryUsage="FALSE">
+			<Tool
+				Name="VCNMakeTool"
+				BuildCommandLine="NMAKE /f makedata.mak icumake=$(ProjectDir) cfg=debug"
+				ReBuildCommandLine="NMAKE /f makedata.mak icumake=$(ProjectDir) cfg=debug clean all"
+				Output="makedata.exe"/>
+		</Configuration>
+	</Configurations>
+	<Files>
+		<Filter
+			Name="Resource Files"
+			Filter="ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe">
+			<File
+				RelativePath=".\makedata.mak">
+			</File>
+			<File
+				RelativePath=".\locales\resfiles.mk">
+			</File>
+			<File
+				RelativePath="..\test\testdata\testdata.mk">
+			</File>
+			<File
+				RelativePath=".\translit\trnsfiles.mk">
+			</File>
+			<File
+				RelativePath=".\mappings\ucmcore.mk">
+			</File>
+			<File
+				RelativePath=".\mappings\ucmebcdic.mk">
+			</File>
+			<File
+				RelativePath=".\mappings\ucmfiles.mk">
+			</File>
+		</Filter>
+		<Filter
+			Name="Source Files"
+			Filter="cpp;c;cxx;rc;def;r;odl;idl;hpj;bat">
+		</Filter>
+		<Filter
+			Name="Header Files"
+			Filter="h;hpp;hxx;hm;inl">
+		</Filter>
+	</Files>
+	<Globals>
+	</Globals>
+</VisualStudioProject>
