@@ -341,9 +341,6 @@ uint32_t ucol_tok_assembleTokenList(UColTokenParser *src, UErrorCode *status) {
         1.	Find the strongest strength in each list, and set strongestP and strongestN 
         accordingly in the headers. 
         */
-        if(sourceToken->listHeader->strongest[sourceToken->polarity] > sourceToken->strength) {
-          sourceToken->listHeader->strongest[sourceToken->polarity] = sourceToken->strength;
-        }
 
         if(lastToken->strength == UCOL_TOK_RESET) {
         /* If LAST is a reset 
@@ -482,8 +479,6 @@ uint32_t ucol_tok_assembleTokenList(UColTokenParser *src, UErrorCode *status) {
           ListList[listPosition].last[UCOL_TOK_POLARITY_NEGATIVE] = NULL;
           ListList[listPosition].first[UCOL_TOK_POLARITY_POSITIVE] = NULL;
           ListList[listPosition].last[UCOL_TOK_POLARITY_POSITIVE] = NULL;
-          ListList[listPosition].strongest[UCOL_TOK_POLARITY_NEGATIVE] = UCOL_TOK_UNSET;
-          ListList[listPosition].strongest[UCOL_TOK_POLARITY_POSITIVE] = UCOL_TOK_UNSET;
 
           ListList[listPosition].reset = sourceToken;
 

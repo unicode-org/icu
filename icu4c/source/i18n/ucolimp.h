@@ -317,6 +317,15 @@ typedef enum {
 
 
 typedef struct {
+  uint32_t firstHigh; uint32_t lastHigh; uint32_t highCount; uint32_t highByteCount;
+  uint32_t firstMid; uint32_t lastMid;   uint32_t midCount; uint32_t midByteCount;
+  uint32_t firstLow; uint32_t lastLow;   uint32_t lowCount; uint32_t lowByteCount;
+  uint32_t byteSize; uint32_t start; uint32_t limit;
+  int32_t count;
+  uint32_t current;
+
+} ucolCEGenerator;
+typedef struct {
       int32_t size;
       /* all the offsets are in bytes */
       /* to get the address add to the header address and cast properly */

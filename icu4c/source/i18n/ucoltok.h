@@ -24,7 +24,14 @@ typedef struct  {
   uint32_t nextContCE;
   uint32_t previousCE;
   uint32_t previousContCE;
-  uint32_t strongest[2];
+/*  uint32_t strongest[2];*/
+  int32_t pos[3];
+  uint32_t gapsLo[9];
+  uint32_t gapsHi[9];
+  uint32_t numStr[3];
+  UColToken* fStrToken[3];
+  UColToken* lStrToken[3];
+
 /*
   UColAttributeValue strongestP;
   UColAttributeValue strongestN;
@@ -37,6 +44,7 @@ struct UColToken {
   uint32_t source;
   uint32_t expansion;
   uint32_t strength;
+  uint32_t toInsert;
   uint32_t polarity; /* 1 for <, <<, <<<, , ; and -1 for >, >>, >>> */
   UColTokListHeader *listHeader;
   UColToken* previous;
