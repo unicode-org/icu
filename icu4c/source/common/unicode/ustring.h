@@ -727,7 +727,7 @@ u_strFromWCS(UChar   *dest,
  * @retrun The pointer to destination buffer.
  */
 U_CAPI char* U_EXPORT2 
-u_strToUTF8(uint8_t *dest,           
+u_strToUTF8(char *dest,           
             int32_t destCapacity,
             int32_t *pDestLength,
             const UChar *src, 

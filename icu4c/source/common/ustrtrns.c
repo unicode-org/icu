@@ -291,7 +291,7 @@ u_strFromUTF8(UChar *dest,
 }
     
 U_CAPI char* U_EXPORT2 
-u_strToUTF8(uint8_t *dest,           
+u_strToUTF8(char *dest,           
             int32_t destCapacity,
             int32_t *pDestLength,
             const UChar *pSrc, 
@@ -319,7 +319,7 @@ u_strToUTF8(uint8_t *dest,
                 if(ch<=0x7f) { 
                     dest[reqLength++]=(uint8_t)ch; 
                 } else { 
-                    int num = utf8_appendCharSafeBody(dest, reqLength, destCapacity, ch); 
+                    int num = utf8_appendCharSafeBody((uint8_t*)dest, reqLength, destCapacity, ch); 
                     if(num==reqLength){
                         *pErrorCode =U_BUFFER_OVERFLOW_ERROR;
                         break;
@@ -343,7 +343,7 @@ u_strToUTF8(uint8_t *dest,
                 if(ch<=0x7f) { 
                     dest[reqLength++]=(uint8_t)ch; 
                 } else { 
-                    int num = utf8_appendCharSafeBody(dest, reqLength, destCapacity, ch); 
+                    int num = utf8_appendCharSafeBody((uint8_t*)dest, reqLength, destCapacity, ch); 
                     if(num==reqLength){
                         *pErrorCode =U_BUFFER_OVERFLOW_ERROR;
                         break;
