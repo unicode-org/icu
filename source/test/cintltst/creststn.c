@@ -330,7 +330,8 @@ void TestAPI(){
 	directory= ctest_getTestDirectory();
     uprv_strcpy(testdatapath, directory);
     uprv_strcat(testdatapath, "testdata");
-    u_uastrcpy(utestdatapath, testdatapath);
+    u_charsToUChars(testdatapath, utestdatapath, strlen(testdatapath)+1);
+    /*u_uastrcpy(utestdatapath, testdatapath);*/
 
     /*Test ures_openU */
     log_verbose("Testing ures_openU()......\n");

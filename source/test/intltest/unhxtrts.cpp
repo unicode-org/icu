@@ -213,9 +213,9 @@ void UniToHexTransliteratorTest::TestUpperCase(){
 		errln("UnicodeToHexTransliterator construction failed");
 		return;
 	}
-	expect(*transdefault, "where uppercase=default", str, UnicodeString("\\u0061\\u0062\\u006B"));
+	expect(*transdefault, "where uppercase=default", str, UnicodeString("\\u0061\\u0062\\u006B", ""));
 	
-	UnicodeString pattern("\\\\u0000");
+	UnicodeString pattern("\\\\u0000", "");
 	/*transliterator with Uppercase FALSE*/
     UnicodeToHexTransliterator *trans1=new UnicodeToHexTransliterator(pattern, FALSE, NULL, status);
 	if(U_FAILURE(status) && status==U_ILLEGAL_ARGUMENT_ERROR){
@@ -223,7 +223,7 @@ void UniToHexTransliteratorTest::TestUpperCase(){
 		status=U_ZERO_ERROR;
 		return;
 	}
-	expect(*trans1, "where uppercase=FALSE", str, UnicodeString("\\u0061\\u0062\\u006b"));  /*doesn't display uppercase*/
+	expect(*trans1, "where uppercase=FALSE", str, UnicodeString("\\u0061\\u0062\\u006b", ""));  /*doesn't display uppercase*/
     
 	if(transdefault->isUppercase() != TRUE  || trans1->isUppercase() != FALSE ){
 		errln("isUpperCase() failed");
@@ -234,7 +234,7 @@ void UniToHexTransliteratorTest::TestUpperCase(){
 		errln("setUppercase() failed");
 	}
    /*doesn't ouput uppercase hex, since transdefault's uppercase is set to FALSE using setUppercase*/
-	expect(*transdefault, "where uppercase=FALSE", str, UnicodeString("\\u0061\\u0062\\u006b"));     
+	expect(*transdefault, "where uppercase=FALSE", str, UnicodeString("\\u0061\\u0062\\u006b", ""));     
 	
 	/*trying round trip*/
 	transdefault->setUppercase(TRUE);
@@ -242,7 +242,7 @@ void UniToHexTransliteratorTest::TestUpperCase(){
 		errln("setUppercase() failed");
 	}
 	/*displays upper case since it is set to TRUE*/
-	expect(*transdefault, "where uppercase=TRUE", str, UnicodeString("\\u0061\\u0062\\u006B"));
+	expect(*transdefault, "where uppercase=TRUE", str, UnicodeString("\\u0061\\u0062\\u006B", ""));
 
 	delete transdefault;
 	delete trans1;
@@ -259,7 +259,7 @@ void UniToHexTransliteratorTest::TestPattern(){
 	}
     UnicodeString defaultpattern=transdefault->toPattern();
 	
-	UnicodeString pattern1("\\\\U+0000");
+	UnicodeString pattern1("\\\\U+0000", "");
 	UnicodeToHexTransliterator *trans1=new UnicodeToHexTransliterator(pattern1, TRUE, NULL, status);
 	if(U_FAILURE(status) && status==U_ILLEGAL_ARGUMENT_ERROR){
 		errln("UnicodeToHexTransliterator construction failed with pattern =" + pattern1);
@@ -268,21 +268,21 @@ void UniToHexTransliteratorTest::TestPattern(){
 	}
     /*test toPattern() */
 	if(transdefault->toPattern() == trans1->toPattern() ||
-		transdefault->toPattern() != UnicodeString("\\\\u0000") ||
+		transdefault->toPattern() != UnicodeString("\\\\u0000", "") ||
 		trans1->toPattern() != pattern1 ){
 		errln("Error: toPattern() failed");
 	}
     
 	/*apply patterns for transdefault*/
 	UnicodeString str("abKf");
-	expectPattern(*transdefault,  pattern1, str, "\\U+0061\\U+0062\\U+004B\\U+0066");
-	expectPattern(*transdefault,  "\\U##00,", str, "U61,U62,U4B,U66,");
-	expectPattern(*transdefault, defaultpattern, str, "\\u0061\\u0062\\u004B\\u0066");
-	expectPattern(*trans1, "\\uni0000", str, "uni0061uni0062uni004Buni0066");
-	expectPattern(*trans1, "\\\\S-0000-E", str, "\\S-0061-E\\S-0062-E\\S-004B-E\\S-0066-E");
-	expectPattern(*trans1, "\\u##0000", str, "FAIL");
-	expectPattern(*trans1, "\\*0000", str, "*0061*0062*004B*0066"); 
-	expectPattern(*trans1, "\\u####", str, "FAIL");
+	expectPattern(*transdefault,  pattern1, str, UnicodeString("\\U+0061\\U+0062\\U+004B\\U+0066", ""));
+	expectPattern(*transdefault,  UnicodeString("\\U##00,", ""), str, UnicodeString("U61,U62,U4B,U66,", ""));
+	expectPattern(*transdefault, defaultpattern, str, UnicodeString("\\u0061\\u0062\\u004B\\u0066", ""));
+	expectPattern(*trans1, UnicodeString("\\uni0000", ""), str, UnicodeString("uni0061uni0062uni004Buni0066", ""));
+	expectPattern(*trans1, UnicodeString("\\\\S-0000-E", ""), str, UnicodeString("\\S-0061-E\\S-0062-E\\S-004B-E\\S-0066-E", ""));
+	expectPattern(*trans1, UnicodeString("\\u##0000", ""), str, UnicodeString("FAIL", ""));
+	expectPattern(*trans1, UnicodeString("\\*0000", ""), str, UnicodeString("*0061*0062*004B*0066", "")); 
+	expectPattern(*trans1, UnicodeString("\\u####", ""), str, UnicodeString("FAIL", ""));
 
 	delete trans1;
 	delete transdefault;
@@ -290,7 +290,7 @@ void UniToHexTransliteratorTest::TestPattern(){
 }
 void UniToHexTransliteratorTest::TestSimpleTransliterate(){
 	UErrorCode status=U_ZERO_ERROR;
-	UnicodeString pattern1("\\\\U+0000");
+	UnicodeString pattern1("\\\\U+0000", "");
 	UnicodeToHexTransliterator *trans1=new UnicodeToHexTransliterator(pattern1, TRUE, NULL, status);
 	if(U_FAILURE(status) && status==U_ILLEGAL_ARGUMENT_ERROR){
 		errln("UnicodeToHexTransliterator construction failed with pattern =" + pattern1);
@@ -300,7 +300,7 @@ void UniToHexTransliteratorTest::TestSimpleTransliterate(){
 	UTransPosition index={1,5,2,5};
 	UnicodeString source("Hello");
 	UnicodeString rsource(source);
-	UnicodeString expected("He\\U+006C\\U+006C\\U+006F");
+	UnicodeString expected("He\\U+006C\\U+006C\\U+006F", "");
 	trans1->handleTransliterate(rsource, index, FALSE);
 	expectAux(trans1->getID() + ":handleTransliterator ", source + "-->" + rsource, rsource==expected, expected);
     delete trans1;
@@ -310,12 +310,12 @@ void UniToHexTransliteratorTest::TestTransliterate(){
     UErrorCode status=U_ZERO_ERROR;
 	UnicodeString Data[]={
 		//pattern, source, index.contextStart, index.contextLimit, index.start, expectedResult, expectedResult using filter(a, b)
-		(UnicodeString)"U+##00",    (UnicodeString)"abc", "1", "3", "2", (UnicodeString)"abU+63", (UnicodeString)"abc",		
-		(UnicodeString)"\\\\u0000", (UnicodeString)"abc", "1", "2", "1", (UnicodeString)"a\\u0062c", (UnicodeString)"a\\u0062c",
-		(UnicodeString)"Uni0000",   (UnicodeString)"abc", "1", "3", "2", (UnicodeString)"abUni0063", (UnicodeString)"abc",
-		(UnicodeString)"U[0000]",   (UnicodeString)"hello", "0", "4", "2", (UnicodeString)"heU[006C]U[006C]o", (UnicodeString)"heU[006C]U[006C]o",
-		(UnicodeString)"prefix-0000-suffix", (UnicodeString)"abc", "1", "3", "1", (UnicodeString)"aprefix-0062-suffixprefix-0063-suffix", (UnicodeString)"aprefix-0062-suffixc",
-		(UnicodeString)"*##00*",     (UnicodeString)"hellothere", "1", "8", "4", (UnicodeString)"hell*6F**74**68**65*re", (UnicodeString)"hell*6F**74**68**65*re",
+		UnicodeString("U+##00", ""),    UnicodeString("abc", ""), "1", "3", "2", UnicodeString("abU+63", ""), UnicodeString("abc", ""),		
+		UnicodeString("\\\\u0000", ""), UnicodeString("abc", ""), "1", "2", "1", UnicodeString("a\\u0062c", ""), UnicodeString("a\\u0062c", ""),
+		UnicodeString("Uni0000", ""),   UnicodeString("abc", ""), "1", "3", "2", UnicodeString("abUni0063", ""), UnicodeString("abc", ""),
+		UnicodeString("U[0000]", ""),   UnicodeString("hello", ""), "0", "4", "2", UnicodeString("heU[006C]U[006C]o", ""), UnicodeString("heU[006C]U[006C]o", ""),
+		UnicodeString("prefix-0000-suffix", ""), UnicodeString("abc", ""), "1", "3", "1", UnicodeString("aprefix-0062-suffixprefix-0063-suffix", ""), UnicodeString("aprefix-0062-suffixc", ""),
+		UnicodeString("*##00*", ""),     UnicodeString("hellothere", ""), "1", "8", "4", UnicodeString("hell*6F**74**68**65*re", ""), UnicodeString("hell*6F**74**68**65*re", ""),
 	
 	};
 	int i;

@@ -221,7 +221,7 @@ void TransliteratorAPITest::TestGetDisplayName() {
 			}
 			t->getDisplayName(t->getID(), name);
             message="Display name for ID:" + t->getID();
-            doTest(message, name, dispNames[i+1]);
+          //  doTest(message, name, dispNames[i+1]); //!!! This will obviously fail for any locale other than english and its children!!!
             name=""; 
 		    t->getDisplayName(t->getID(), Locale::US, name);
 			message.remove();
@@ -243,9 +243,9 @@ void TransliteratorAPITest::TestTransliterate1(){
 	     
          UnicodeString Data[]={ 
              //ID, input string, transliterated string
-             "Unicode-Hex",         "hello",                               "\\u0068\\u0065\\u006C\\u006C\\u006F" ,
-             "Hex-Unicode",         "\\u0068\\u0065\\u006C\\u006C\\u006F", "hello"  ,
-             "Latin-Devanagari",    "bhaarata",                            CharsToUnicodeString("\\u092D\\u093E\\u0930\\u0924") ,
+             "Unicode-Hex",         "hello",                                                  UnicodeString("\\u0068\\u0065\\u006C\\u006C\\u006F", "") ,
+             "Hex-Unicode",         UnicodeString("\\u0068\\u0065\\u006C\\u006C\\u006F", ""), "hello"  ,
+             "Latin-Devanagari",    "bhaarata",                                                CharsToUnicodeString("\\u092D\\u093E\\u0930\\u0924") ,
              "Devanagari-Latin",    CharsToUnicodeString("\\u092D\\u093E\\u0930\\u0924"),        "bhaarata" ,
          //  "Contracted-Expanded", CharsToUnicodeString("\\u00C0\\u00C1\\u0042"),               CharsToUnicodeString("\\u0041\\u0300\\u0041\\u0301\\u0042") ,
          //  "Expanded-Contracted", CharsToUnicodeString("\\u0041\\u0300\\u0041\\u0301\\u0042"), CharsToUnicodeString("\\u00C0\\u00C1\\u0042") ,
@@ -289,8 +289,8 @@ void TransliteratorAPITest::TestTransliterate2(){
          //testing tranliterate(String text, int start, int limit, StringBuffer result)
        UnicodeString Data2[]={
              //ID, input string, start, limit, transliterated string
-             "Unicode-Hex",         "hello! How are you?",  "0", "5", "\\u0068\\u0065\\u006C\\u006C\\u006F", "\\u0068\\u0065\\u006C\\u006C\\u006F! How are you?" ,
-             "Unicode-Hex",         "hello! How are you?",  "7", "12", "\\u0048\\u006F\\u0077\\u0020\\u0061", "hello! \\u0048\\u006F\\u0077\\u0020\\u0061re you?",
+             "Unicode-Hex",         "hello! How are you?",  "0", "5", UnicodeString("\\u0068\\u0065\\u006C\\u006C\\u006F", ""), UnicodeString("\\u0068\\u0065\\u006C\\u006C\\u006F! How are you?", "") ,
+             "Unicode-Hex",         "hello! How are you?",  "7", "12", UnicodeString("\\u0048\\u006F\\u0077\\u0020\\u0061", ""), UnicodeString("hello! \\u0048\\u006F\\u0077\\u0020\\u0061re you?", ""),
              "Hex-Unicode",         CharsToUnicodeString("\\u0068\\u0065\\u006C\\u006C\\u006F\\u0021\\u0020"), "0", "5",  "hello", "hello! "  ,
            //  "Contracted-Expanded", CharsToUnicodeString("\\u00C0\\u00C1\\u0042"),        "1", "2",  CharsToUnicodeString("\\u0041\\u0301"), CharsToUnicodeString("\\u00C0\\u0041\\u0301\\u0042") ,
              "Devanagari-Latin",    CharsToUnicodeString("\\u092D\\u093E\\u0930\\u0924"), "0", "1",  "bha", CharsToUnicodeString("bha\\u093E\\u0930\\u0924") ,
@@ -338,9 +338,9 @@ void TransliteratorAPITest::TestTransliterate3(){
          UnicodeString rs="This is the replaceable String";
          UnicodeString Data[] = {
              "0",  "0",  "This is the replaceable String",
-             "2",  "3",  "Th\\u0069s is the replaceable String",
-             "21", "23", "Th\\u0069s is the repl\\u0061\\u0063eable String",
-             "14", "17", "Th\\u0069s is t\\u0068\\u0065\\u0020repl\\u0061\\u0063eable String",
+             "2",  "3",  UnicodeString("Th\\u0069s is the replaceable String", ""),
+             "21", "23", UnicodeString("Th\\u0069s is the repl\\u0061\\u0063eable String", ""),
+             "14", "17", UnicodeString("Th\\u0069s is t\\u0068\\u0065\\u0020repl\\u0061\\u0063eable String", ""),
              
          };
          int start, limit;
@@ -366,7 +366,7 @@ void TransliteratorAPITest::TestSimpleKeyboardTransliterator(){
          UTransPosition index={19,20,20,20};
          UnicodeString rs= "Transliterate this-''";
          UnicodeString insertion="abc";
-         UnicodeString expected="Transliterate this-'\\u0061\\u0062\\u0063'";
+         UnicodeString expected=UnicodeString("Transliterate this-'\\u0061\\u0062\\u0063'", "");
          t->transliterate(rs, index, insertion, status);
          if(U_FAILURE(status))
 			 errln("FAIL: " + t->getID()+ ".translitere(Replaceable, int[], UnicodeString, UErrorCode)-->" + (UnicodeString)u_errorName(status));
@@ -396,16 +396,16 @@ void TransliteratorAPITest::TestSimpleKeyboardTransliterator(){
 void TransliteratorAPITest::TestKeyboardTransliterator1(){
         UnicodeString Data[]={
             //insertion, buffer
-            "a",   "\\u0061"                                           ,
-            "bbb", "\\u0061\\u0062\\u0062\\u0062"                      ,
-            "ca",  "\\u0061\\u0062\\u0062\\u0062\\u0063\\u0061"        ,
-            " ",   "\\u0061\\u0062\\u0062\\u0062\\u0063\\u0061\\u0020" ,
-            "",  "\\u0061\\u0062\\u0062\\u0062\\u0063\\u0061\\u0020"   ,
+            "a",   UnicodeString("\\u0061", "")                                           ,
+            "bbb", UnicodeString("\\u0061\\u0062\\u0062\\u0062", "")                      ,
+            "ca",  UnicodeString("\\u0061\\u0062\\u0062\\u0062\\u0063\\u0061", "")        ,
+            " ",   UnicodeString("\\u0061\\u0062\\u0062\\u0062\\u0063\\u0061\\u0020", "") ,
+            "",    UnicodeString("\\u0061\\u0062\\u0062\\u0062\\u0063\\u0061\\u0020", "")   ,
 			
-			"a",   "\\u0061"                                           ,
-			"b",   "\\u0061\\u0062"                                    ,
-			"z",   "\\u0061\\u0062\\u007A"                             ,
-			"",    "\\u0061\\u0062\\u007A"                              
+			"a",   UnicodeString("\\u0061", "")                                           ,
+			"b",   UnicodeString("\\u0061\\u0062", "")                                    ,
+			"z",   UnicodeString("\\u0061\\u0062\\u007A", "")                             ,
+			"",    UnicodeString("\\u0061\\u0062\\u007A", "")                              
 
         };
 		Transliterator* t=Transliterator::createInstance("Unicode-Hex");
@@ -460,10 +460,10 @@ void TransliteratorAPITest::TestKeyboardTransliterator2(){
           UnicodeString Data[]={
              //insertion, buffer, index[START], index[LIMIT], index[CURSOR]
              //data for Unicode-Hex
-             "abc",    "Initial String: add-\\u0061\\u0062\\u0063-",                     "19", "20", "20",
-             "a",      "In\\u0069\\u0061tial String: add-\\u0061\\u0062\\u0063-",        "2",  "3",  "2" ,
-             "b",      "\\u0062In\\u0069\\u0061tial String: add-\\u0061\\u0062\\u0063-", "0",  "0",  "0" ,
-             "",     "\\u0062In\\u0069\\u0061tial String: add-\\u0061\\u0062\\u0063-", "0",  "0",  "0" ,
+             "abc",    UnicodeString("Initial String: add-\\u0061\\u0062\\u0063-", ""),                     "19", "20", "20",
+             "a",      UnicodeString("In\\u0069\\u0061tial String: add-\\u0061\\u0062\\u0063-", ""),        "2",  "3",  "2" ,
+             "b",      UnicodeString("\\u0062In\\u0069\\u0061tial String: add-\\u0061\\u0062\\u0063-", ""), "0",  "0",  "0" ,
+             "",     UnicodeString("\\u0062In\\u0069\\u0061tial String: add-\\u0061\\u0062\\u0063-", ""), "0",  "0",  "0" ,
              //data for Latin-Devanagiri
              "aa",     CharsToUnicodeString("Hindi -\\u0906-"),                    "6",  "7",  "6",
              "maa",    CharsToUnicodeString("Hindi -\\u0906\\u092E\\u093E-"),        "7",  "8",  "7",
@@ -507,8 +507,8 @@ void TransliteratorAPITest::TestKeyboardTransliterator3(){
 	UnicodeString s="This is the main string";
 	 UnicodeString Data[] = {
 		"0", "0", "0",  "This is the main string",
-	    "1", "3", "2",  "Th\\u0069s is the main string",
-		"20", "21", "20",  "Th\\u0069s is the mai\\u006E string"
+	    "1", "3", "2",  UnicodeString("Th\\u0069s is the main string", ""),
+		"20", "21", "20",  UnicodeString("Th\\u0069s is the mai\\u006E string", "")
 	};
 	
 	UErrorCode status=U_ZERO_ERROR;
@@ -670,7 +670,7 @@ void TransliteratorAPITest::TestGetAdoptFilter(){
 
     got = data;
 	t->transliterate(got);
-    UnicodeString exp="A\\u0042Ca\\u0062c\\u0062\\u0062C\\u0042a";
+    UnicodeString exp=UnicodeString("A\\u0042Ca\\u0062c\\u0062\\u0062C\\u0042a", "");
 	message="transliteration after adoptFilter(a,A,c,C) ";
     doTest(message, got, exp);
          
@@ -683,7 +683,7 @@ void TransliteratorAPITest::TestGetAdoptFilter(){
 
     got = data;
     t->transliterate(got);
-    exp="\\u0041\\u0042\\u0043\\u0061\\u0062\\u0063\\u0062\\u0062\\u0043\\u0042\\u0061";
+    exp=UnicodeString("\\u0041\\u0042\\u0043\\u0061\\u0062\\u0063\\u0062\\u0062\\u0043\\u0042\\u0061", "");
     message="transliteration after adopting null filter";
     doTest(message, got, exp);
     message="adoptFilter round trip"; 
@@ -691,28 +691,28 @@ void TransliteratorAPITest::TestGetAdoptFilter(){
 
     t->adoptFilter(new TestFilter2);
     data="heelloe";
-	exp="\\u0068eell\\u006Fe";
+	exp=UnicodeString("\\u0068eell\\u006Fe", "");
     got = data;
 	t->transliterate(got);
 	message="transliteration using (e,l) filter";
     doTest("transliteration using (e,l) filter", got, exp);
 	
 	data="are well";
-	exp="\\u0061\\u0072e\\u0020\\u0077ell";
+	exp=UnicodeString("\\u0061\\u0072e\\u0020\\u0077ell", "");
     got = data;
     t->transliterate(got);
 	doTest(message, got, exp);
     
     t->adoptFilter(new TestFilter3);
 	data="ho, wow!";
-	exp="\\u0068o\\u002C\\u0020wow\\u0021";
+	exp=UnicodeString("\\u0068o\\u002C\\u0020wow\\u0021", "");
     got = data;
     t->transliterate(got);
 	message="transliteration using (o,w) filter";
     doTest("transliteration using (o,w) filter", got, exp);
 
     data="owl";
-	exp="ow\\u006C";
+	exp=UnicodeString("ow\\u006C", "");
     got = data;
     t->transliterate(got);
 	doTest("transliteration using (o,w) filter", got, exp);
