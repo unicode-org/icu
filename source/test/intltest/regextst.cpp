@@ -71,13 +71,14 @@ void RegexTest::runIndexedTest( int32_t index, UBool exec, const char* &name, ch
 //   Error Checking / Reporting macros used in all of the tests.
 //
 //---------------------------------------------------------------------------
-#define REGEX_CHECK_STATUS {if (U_FAILURE(status)) {errln("RegexTest failure at line %d.  status=%d\n", \
-__LINE__, status); return;}}
+#define REGEX_CHECK_STATUS {if (U_FAILURE(status)) {errln("RegexTest failure at line %d.  status=%s\n", \
+__LINE__, u_errorName(status)); return;}}
 
 #define REGEX_ASSERT(expr) {if ((expr)==FALSE) {errln("RegexTest failure at line %d.\n", __LINE__);};}
 
 #define REGEX_ASSERT_FAIL(expr, errcode) {UErrorCode status=U_ZERO_ERROR; (expr);\
-if (status!=errcode) {errln("RegexTest failure at line %d.\n", __LINE__);};}
+if (status!=errcode) {errln("RegexTest failure at line %d.  Expected status=%s, got %s\n", \
+    __LINE__, u_errorName(errcode), u_errorName(status));};}
 
 #define REGEX_CHECK_STATUS_L(line) {if (U_FAILURE(status)) {errln( \
     "RegexTest failure at line %d, from %d.  status=%d\n",__LINE__, (line), status); }}
@@ -804,6 +805,24 @@ void RegexTest::API_Replace() {
     dest = matcher2->replaceFirst("$1$1", status);
     REGEX_CHECK_STATUS;
     REGEX_ASSERT(dest == "bcbcdefg");
+
+    dest = matcher2->replaceFirst("The value of \\$1 is $1.", status);
+    REGEX_CHECK_STATUS;
+    REGEX_ASSERT(dest == "The value of $1 is bc.defg");
+
+    dest = matcher2->replaceFirst("$ by itself, no group number $$$", status);
+    REGEX_CHECK_STATUS;
+    REGEX_ASSERT(dest == "$ by itself, no group number $$$defg");
+
+    UnicodeString replacement = "Supplemental Digit 1 $\\U0001D7CF.";
+    replacement = replacement.unescape();
+    dest = matcher2->replaceFirst(replacement, status);
+    REGEX_CHECK_STATUS;
+    REGEX_ASSERT(dest == "Supplemental Digit 1 bc.defg");
+    
+    REGEX_ASSERT_FAIL(matcher2->replaceFirst("bad capture group number $5...",status), U_INDEX_OUTOFBOUNDS_ERROR);
+    
+    
     
     // TODO:  need more through testing of capture substitutions.
     

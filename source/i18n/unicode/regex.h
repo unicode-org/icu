@@ -314,7 +314,7 @@ private:
     int32_t         fNumCaptureGroups;
     int32_t         fMaxCaptureDigits;
 
-    const UnicodeSet  **fStaticSets;  // Ptr to static (shared) sets for predefined
+    UnicodeSet    **fStaticSets;  // Ptr to static (shared) sets for predefined
                                     //   regex character classes, e.g. Word.
 
     friend class RegexCompile;
