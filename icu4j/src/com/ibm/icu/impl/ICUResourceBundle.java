@@ -447,21 +447,19 @@ public class ICUResourceBundle extends UResourceBundle{
      * }
      * If the value of "default" key needs to be accessed, then do:
      * <code>
-     *  ResourceBundle bundle = new ResourceBundle(getLocaleFromString("de__PHONEBOOK"));
-     *  Object result = null;
+     *  UResourceBundle bundle = UResourceBundle.getBundleInstance("de__PHONEBOOK");
+     *  ICUResourceBundle result = null;
      *  if(bundle instanceof ICUListResourceBundle){
-     *      result = ((ICUListResourceBundle) bundle).getObjectWithFallback("collations/default");
+     *      result = ((ICUListResourceBundle) bundle).getWithFallback("collations/default");
      *  }
      * </code>
      * @param path  The path to the required resource key
-     * @return Object represented by the key
+     * @return resource represented by the key
      * @exception MissingResourceException
      */
-    public Object getObjectWithFallback(String path) 
-                  throws MissingResourceException{
+    public ICUResourceBundle getWithFallback(String path) throws MissingResourceException {
         ICUResourceBundle result = null;      
         ICUResourceBundle actualBundle = this;
-        
         
         // now recuse to pick up sub levels of the items
         result = findResourceWithFallback(path, actualBundle);
@@ -473,11 +471,14 @@ public class ICUResourceBundle extends UResourceBundle{
                     path,
                     key);
         }
-        if(result.getType()==STRING){
-            return result.getString();   
-        }
         return result;
     }
+
+    // will throw type mismatch exception if the resource is not a string
+    public String getStringWithFallback(String path) throws MissingResourceException {
+	return getWithFallback(path).getString();
+    }
+
     private ICUResourceBundle findResourceWithFallback(String path, ICUResourceBundle actualBundle) {
         ICUResourceBundle sub = null;
         while (actualBundle != null) {

@@ -149,10 +149,11 @@ public abstract class UResourceBundle extends ResourceBundle{
      *                
      * @draft ICU 3.0 
      */    
-    public static final ResourceBundle getBundleInstance(String baseName){
+    public static final UResourceBundle getBundleInstance(String baseName){
         return getBundleInstance( baseName, ULocale.getDefault().toString(), ICU_DATA_CLASS_LOADER );
     }
-    public static final ResourceBundle getBundleInstance(String baseName, Locale locale){
+
+    public static final UResourceBundle getBundleInstance(String baseName, Locale locale){
         return getBundleInstance(baseName, new ULocale(locale));
     }
    
