@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/TransliterationRuleSet.java,v $
- * $Date: 2001/09/26 18:00:06 $
- * $Revision: 1.12 $
+ * $Date: 2001/09/26 18:17:42 $
+ * $Revision: 1.13 $
  *
  *****************************************************************************************
  */
@@ -27,9 +27,12 @@ import java.util.*;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: TransliterationRuleSet.java,v $ $Revision: 1.12 $ $Date: 2001/09/26 18:00:06 $
+ * @version $RCSfile: TransliterationRuleSet.java,v $ $Revision: 1.13 $ $Date: 2001/09/26 18:17:42 $
  *
  * $Log: TransliterationRuleSet.java,v $
+ * Revision 1.13  2001/09/26 18:17:42  alan
+ * jitterbug 67: delete obsolete code
+ *
  * Revision 1.12  2001/09/26 18:00:06  alan
  * jitterbug 67: sync parser with icu4c, allow unlimited, nested segments
  *
@@ -91,7 +94,7 @@ class TransliterationRuleSet {
     private int[] index;
 
     private static final String COPYRIGHT =
-        "\u00A9 IBM Corporation 1999. All rights reserved.";
+        "\u00A9 IBM Corporation 1999-2001. All rights reserved.";
 
     /**
      * Construct a new empty rule set.
@@ -251,89 +254,6 @@ class TransliterationRuleSet {
         pos.start += UTF16.getCharCount(UTF16.charAt(text, pos.start));
         return true;
     }
-
-//& /**
-//&  * Attempt to find a matching rule at the specified point in the text.
-//&  * @param text the text, both translated and untranslated
-//&  * @param start the beginning index, inclusive; <code>0 <= start
-//&  * <= limit</code>.
-//&  * @param limit the ending index, exclusive; <code>start <= limit
-//&  * <= text.length()</code>.
-//&  * @param cursor position at which to translate next, representing offset
-//&  * into text.  This value must be between <code>start</code> and
-//&  * <code>limit</code>.
-//&  * @param variables a dictionary mapping variables to the sets they
-//&  * represent (maps <code>Character</code> to <code>UnicodeSet</code>)
-//&  * @param filter the filter.  Any character for which
-//&  * <tt>filter.contains()</tt> returns <tt>false</tt> will not be
-//&  * altered by this transliterator.  If <tt>filter</tt> is
-//&  * <tt>null</tt> then no filtering is applied.
-//&  * @return the matching rule, or null if none found.
-//&  */
-//& public TransliterationRule findMatch(Replaceable text,
-//&                                      Transliterator.Position pos,
-//&                                      UnicodeFilter filter) {
-//&     /* We only need to check our indexed bin of the rule table,
-//&      * based on the low byte of the first key character.
-//&      */
-//&     int x = text.charAt(pos.start) & 0xFF;
-//&     for (int i=index[x]; i<index[x+1]; ++i) {
-//&         if (rules[i].matches(text, pos, filter)) {
-//&             return rules[i];
-//&         }
-//&     }
-//&     return null;
-//& }
-
-//& /**
-//&  * Attempt to find a matching rule at the specified point in the text.
-//&  * Unlike <code>findMatch()</code>, this method does an incremental match.
-//&  * An incremental match requires that there be no partial matches that might
-//&  * pre-empt the full match that is found.  If there are partial matches,
-//&  * then null is returned.  A non-null result indicates that a full match has
-//&  * been found, and that it cannot be pre-empted by a partial match
-//&  * regardless of what additional text is added to the translation buffer.
-//&  * @param text the text, both translated and untranslated
-//&  * @param start the beginning index, inclusive; <code>0 <= start
-//&  * <= limit</code>.
-//&  * @param limit the ending index, exclusive; <code>start <= limit
-//&  * <= text.length()</code>.
-//&  * @param cursor position at which to translate next, representing offset
-//&  * into text.  This value must be between <code>start</code> and
-//&  * <code>limit</code>.
-//&  * @param variables a dictionary mapping variables to the sets they
-//&  * represent (maps <code>Character</code> to <code>UnicodeSet</code>)
-//&  * @param partial output parameter.  <code>partial[0]</code> is set to
-//&  * true if a partial match is returned.
-//&  * @param filter the filter.  Any character for which
-//&  * <tt>filter.contains()</tt> returns <tt>false</tt> will not be
-//&  * altered by this transliterator.  If <tt>filter</tt> is
-//&  * <tt>null</tt> then no filtering is applied.
-//&  * @return the matching rule, or null if none found, or if the text buffer
-//&  * does not have enough text yet to unambiguously match a rule.
-//&  */
-//& public TransliterationRule findIncrementalMatch(Replaceable text,
-//&                                                 Transliterator.Position pos,
-//&                                                 boolean partial[],
-//&                                                 UnicodeFilter filter) {
-//&     /* We only need to check our indexed bin of the rule table,
-//&      * based on the low byte of the first key character.
-//&      */
-//&     partial[0] = false;
-//&     int x = text.charAt(pos.start) & 0xFF;
-//&     for (int i=index[x]; i<index[x+1]; ++i) {
-//&         int match = rules[i].getMatchDegree(text, pos,
-//&                                             filter);
-//&         switch (match) {
-//&         case TransliterationRule.FULL_MATCH:
-//&             return rules[i];
-//&         case TransliterationRule.PARTIAL_MATCH:
-//&             partial[0] = true;
-//&             return null;
-//&         }
-//&     }
-//&     return null;
-//& }
 
     /**
      * Create rule strings that represents this rule set.
