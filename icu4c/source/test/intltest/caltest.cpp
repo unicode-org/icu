@@ -1343,7 +1343,6 @@ void
 CalendarTest::doYEAR_WOYLoop(Calendar *cal, SimpleDateFormat *sdf, 
                                     int32_t times, UErrorCode& errorCode) {
 
-    char s[100];
     UnicodeString us;
     UDate tst, original;
     Calendar *tstres = new GregorianCalendar(Locale::GERMANY, errorCode);
@@ -1362,7 +1361,6 @@ CalendarTest::doYEAR_WOYLoop(Calendar *cal, SimpleDateFormat *sdf,
         sdf->format(Formattable(tst,Formattable::kIsDate), us, errorCode);
         //logln("got: "+us);
         if (U_FAILURE(errorCode)) { errln("Get time error"); return; }
-        s[us.extract(0, us.length(), s)]=0;
         if(original!=tst) {
             us.remove();
             sdf->format(Formattable(original, Formattable::kIsDate), us, errorCode);
