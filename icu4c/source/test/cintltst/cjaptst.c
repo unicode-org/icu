@@ -263,7 +263,7 @@ static void TestChooonKigoo(void)
   ucol_setNormalization(myCollation, UCOL_DECOMP_COMPAT);
   ucol_setStrength(myCollation, UCOL_QUATERNARY);
   ucol_setAttribute(myCollation, UCOL_CASE_LEVEL, UCOL_ON, &status);
-  for (i = 0; i < 6 ; i++) {
+  for (i = 0; i < 7 ; i++) {
     doTest(myCollation, testChooonKigooCases[i], testChooonKigooCases[i + 1], 
            UCOL_LESS);
   }
