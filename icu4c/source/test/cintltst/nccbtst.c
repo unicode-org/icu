@@ -194,8 +194,8 @@ static void TestSkip(int32_t inputsize, int32_t outputsize)
         static const uint8_t usasciiFromUBytes[] = { 0x61, 0x31, 0x39 };
         static const int32_t usasciiFromUOffsets[] = { 0, 3, 6 };
 
-        static const UChar latin1FromU[] = { 0x61, 0x80, 0x4e00, 0x31, 0xd800, 0xdfff, 0x39 };
-        static const uint8_t latin1FromUBytes[] = { 0x61, 0x80, 0x31, 0x39 };
+        static const UChar latin1FromU[] = { 0x61, 0xa0, 0x4e00, 0x31, 0xd800, 0xdfff, 0x39 };
+        static const uint8_t latin1FromUBytes[] = { 0x61, 0xa0, 0x31, 0x39 };
         static const int32_t latin1FromUOffsets[] = { 0, 1, 3, 6 };
 
         /* US-ASCII */
@@ -226,6 +226,16 @@ static void TestSkip(int32_t inputsize, int32_t outputsize)
                                    NULL, 0)
         ) {
             log_err("u->LATIN_1 with skip did not match.\n");
+        }
+
+        /* windows-1252 */
+        if(!testConvertFromUnicode(latin1FromU, sizeof(latin1FromU)/U_SIZEOF_UCHAR,
+                                   latin1FromUBytes, sizeof(latin1FromUBytes),
+                                   "windows-1252",
+                                   UCNV_FROM_U_CALLBACK_SKIP, latin1FromUOffsets,
+                                   NULL, 0)
+        ) {
+            log_err("u->windows-1252 with skip did not match.\n");
         }
     }
 
@@ -364,8 +374,8 @@ static void TestSkip(int32_t inputsize, int32_t outputsize)
         static const UChar usasciiToU[] = { 0x61, 0x31 };
         static const int32_t usasciiToUOffsets[] = { 0, 2 };
 
-        static const uint8_t latin1ToUBytes[] = { 0x61, 0x80, 0x31 };
-        static const UChar latin1ToU[] = { 0x61, 0x80, 0x31 };
+        static const uint8_t latin1ToUBytes[] = { 0x61, 0xa0, 0x31 };
+        static const UChar latin1ToU[] = { 0x61, 0xa0, 0x31 };
         static const int32_t latin1ToUOffsets[] = { 0, 1, 2 };
 
         /* US-ASCII */
@@ -396,6 +406,16 @@ static void TestSkip(int32_t inputsize, int32_t outputsize)
                                  NULL, 0)
         ) {
             log_err("LATIN_1->u with skip did not match.\n");
+        }
+
+        /* windows-1252 */
+        if(!testConvertToUnicode(latin1ToUBytes, sizeof(latin1ToUBytes),
+                                 latin1ToU, sizeof(latin1ToU)/U_SIZEOF_UCHAR,
+                                 "windows-1252",
+                                 UCNV_TO_U_CALLBACK_SKIP, latin1ToUOffsets,
+                                 NULL, 0)
+        ) {
+            log_err("windows-1252->u with skip did not match.\n");
         }
     }
 
