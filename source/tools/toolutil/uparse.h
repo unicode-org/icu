@@ -25,7 +25,7 @@
 
 U_CDECL_BEGIN
 
-U_INLINE const char *
+static U_INLINE const char *
 u_skipWhitespace(const char *s) {
     while(*s==' ' || *s=='\t') {
         ++s;
