@@ -80,7 +80,7 @@ ALL_RES_SOURCE= $(GENRB_SOURCE) $(TRANSLIT_SOURCE) $(RESOURCE_SRC) $(GENRB_SOURC
 RES_SRC_FILES = $(ALL_RES_SOURCE:%=$(SRCDATADIR)/%)
 RES_FILES = $(ALL_RES_SOURCE:%.txt=%.res)
 
-TEST_RES = root.txt te.txt te_IN.txt testtypes.txt
+TEST_RES = root.txt te.txt te_IN.txt testtypes.txt testempty.txt
 TEST_RES_SRC_FILES=$(ALL_TEST_RES_SOURCE:%=$(TESTSRCDATADIR)/%)
 TEST_RES_FILES=$(TEST_RES:%.txt=$(TESTOBJDATADIR)/%.res)
 
@@ -198,7 +198,7 @@ endif
 ####################################################    RES
 # RES FILES
 $(TESTOBJDATADIR)/%.res: $(TESTSRCDATADIR)/%.txt $(TOOLDIR)/genrb/genrb
-	@ICU_DATA=. $(INVOKE) $(TOOLDIR)/genrb/genrb -s $(TESTSRCDATADIR) -d $(TESTOBJDATADIR) $(<F)
+	@ICU_DATA=. $(INVOKE) $(TOOLDIR)/genrb/genrb -q -s $(TESTSRCDATADIR) -d $(TESTOBJDATADIR) $(<F)
 
 %.res: $(SRCDATADIR)/%.txt $(TOOLDIR)/genrb/genrb ucadata.dat uprops.dat unorm.dat
 	@ICU_DATA=. $(INVOKE) $(TOOLDIR)/genrb/genrb -s $(SRCDATADIR) -d . $(<F)
