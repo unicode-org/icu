@@ -17,33 +17,39 @@
 //
 //  This program tests string collation and sort key generation performance.
 //      Three APIs can be teste: ICU C , Unix strcoll, strxfrm and Windows LCMapString
-//      A file of names is required as input, one per line.  It must be in utf-16 format, and
-//      include a byte order mark.  Either LE or BE format is OK.
+//      A file of names is required as input, one per line.  It must be in utf-8 or utf-16 format,
+//      and include a byte order mark.  Either LE or BE format is OK.
 //
-//      Usage:
-//         collperf options...
-//            -file file_name            utf-16 format file of names to sort/search
-//            -locale name               ICU locale to use.  Default is en_US
-//            -langid 0x1234             Windows Language ID number.  Default 0x409 (en_US)
-//                                          see http://msdn.microsoft.com/library/psdk/winbase/nls_8xo3.htm
-//            -win                       Run test using Windows native services.  (ICU is default)
-//            -unix                      Run test using Unix strxfrm, strcoll services.
-//            -uselen                    Use API with string lengths.  Default is null-terminated strings
-//            -usekeys                   Run tests using sortkeys rather than strcoll
-//            -loop nnnn                 Loopcount for test.  Adjust for reasonable total running time.
-//            -terse                     Terse numbers-only output.  Intended for use by scripts.
-//            -help                      Display this message.
-//            -qsort                     Quicksort timing test
-//            -binsearch                 Binary Search timing test
-//            -keygen                    Sort Key Generation timing test
-//            -french                    French accent ordering
-//            -norm                      Normalizing mode on
-//            -shifted                   Shifted mode
-//            -lower                     Lower case first
-//            -upper                     Upper case first
-//            -case                      Enable separate case level
-//            -level n                   Sort level, 1 to 5, for Primary, Secndary, Tertiary, Quaternary, Identical
-//            -keyhist                   Sort Key size histogram
+
+const char gUsageString[] =
+ "usage:  collperf options...\n"
+    "-help                      Display this message.\n"
+    "-file file_name            utf-16 format file of names.\n"
+    "-locale name               ICU locale to use.  Default is en_US\n"
+    "-rules file_name           Collation rules file (overrides locale)\n"
+    "-langid 0x1234             Windows Language ID number.  Default to value for -locale option\n"
+    "                              see http://msdn.microsoft.com/library/psdk/winbase/nls_8xo3.htm\n"
+    "-win                       Run test using Windows native services.  (ICU is default)\n"
+    "-unix                      Run test using Unix strxfrm, strcoll services.\n"
+    "-uselen                    Use API with string lengths.  Default is null-terminated strings\n"
+    "-usekeys                   Run tests using sortkeys rather than strcoll\n"
+    "-loop nnnn                 Loopcount for test.  Adjust for reasonable total running time.\n"
+    "-terse                     Terse numbers-only output.  Intended for use by scripts.\n"
+    "-french                    French accent ordering\n"
+    "-norm                      Normalizing mode on\n"
+    "-shifted                   Shifted mode\n"
+    "-lower                     Lower case first\n"
+    "-upper                     Upper case first\n"
+    "-case                      Enable separate case level\n"
+    "-level n                   Sort level, 1 to 5, for Primary, Secndary, Tertiary, Quaternary, Identical\n"
+    "-keyhist                   Produce a table sort key size vs. string length\n"
+    "-binsearch                 Binary Search timing test\n"
+    "-keygen                    Sort Key Generation timing test\n"
+    "-qsort                     Quicksort timing test\n"
+    "-iter                      Iteration Performance Test\n"
+    "-dump                      Display strings, sort keys and CEs.\n"
+    ;
+
 
 
 #include <stdio.h>
@@ -60,6 +66,7 @@
 #include <unicode/ures.h>
 #include <unicode/uchar.h>
 #include <unicode/ucnv.h>
+#include <unicode/utf8.h>
 
 #ifdef WIN32
 #include <windows.h>
@@ -91,7 +98,8 @@ const int SORT_DEFAULT = 0;
 //     on the command line by the user.
 char * opt_fName      = 0;
 char * opt_locale     = "en_US";
-int    opt_langid     = 0x409;      // English, US
+int    opt_langid     = 0;         // Defaults to value corresponding to opt_locale.
+char * opt_rules      = 0;
 UBool  opt_help       = FALSE;
 int    opt_loopCount  = 1;
 UBool  opt_terse      = FALSE;
@@ -112,6 +120,7 @@ UBool  opt_case       = FALSE;
 int    opt_level      = 0;
 UBool  opt_keyhist    = FALSE;
 UBool  opt_itertest   = FALSE;
+UBool  opt_dump       = FALSE;
 
 
 
@@ -128,6 +137,7 @@ OptSpec opts[] = {
     {"-file",        OptSpec::STRING, &opt_fName},
     {"-locale",      OptSpec::STRING, &opt_locale},
     {"-langid",      OptSpec::NUM,    &opt_langid},
+    {"-rules",       OptSpec::STRING, &opt_rules},
     {"-qsort",       OptSpec::FLAG,   &opt_qsort},
     {"-binsearch",   OptSpec::FLAG,   &opt_binsearch},
     {"-iter",        OptSpec::FLAG,   &opt_itertest},
@@ -146,6 +156,7 @@ OptSpec opts[] = {
     {"-keygen",      OptSpec::FLAG,   &opt_keygen},
     {"-loop",        OptSpec::NUM,    &opt_loopCount},
     {"-terse",       OptSpec::FLAG,   &opt_terse},
+    {"-dump",        OptSpec::FLAG,   &opt_dump},
     {"-help",        OptSpec::FLAG,   &opt_help},
     {"-?",           OptSpec::FLAG,   &opt_help},
     {0, OptSpec::FLAG, 0}
@@ -520,7 +531,9 @@ void doBinarySearch()
                         }
                         r = CompareStringW(gWinLCID, 0, (gSortedLines[line])->name, lineLen, (gSortedLines[guess])->name, guessLen);
                         if (r == 0) {
-                            fprintf(stderr, "Error returned from Windows CompareStringW.\n");
+                            if (opt_terse == FALSE) {
+                                fprintf(stderr, "Error returned from Windows CompareStringW.\n");
+                            }
                             exit(-1);
                         }
                         gCount++;
@@ -721,14 +734,14 @@ void doForwardIterTest(UBool haslen) {
     int count = 0;
     UErrorCode error = U_ZERO_ERROR;
     printf("\n\nPerforming forward iteration performance test with ");
-    
+
     if (haslen) {
         printf("non-null terminated data -----------\n");
     }
     else {
         printf("null terminated data -----------\n");
     }
-    
+
     gCount = 0;
     unsigned long startTime = timeGetTime();
     while (count < opt_loopCount) {
@@ -782,14 +795,14 @@ void doBackwardIterTest(UBool haslen) {
     int count = 0;
     UErrorCode error = U_ZERO_ERROR;
     printf("\n\nPerforming backward iteration performance test with ");
-    
+
     if (haslen) {
         printf("non-null terminated data -----------\n");
     }
     else {
         printf("null terminated data -----------\n");
     }
-    
+
     gCount = 0;
     unsigned long startTime = timeGetTime();
     while (count < opt_loopCount) {
@@ -896,37 +909,221 @@ void  UnixConvert() {
 
 //----------------------------------------------------------------------------------------
 //
+//  class UCharFile   Class to hide all the gorp to read a file in
+//                    and produce a stream of UChars.
+//
+//----------------------------------------------------------------------------------------
+class UCharFile {
+public:
+    UCharFile(const char *fileName);
+    ~UCharFile();
+    UChar   get();
+    UBool   eof() {return fEof;};
+    UBool   error() {return fError;};
+    
+private:
+    UCharFile (const UCharFile &other) {};                         // No copy constructor.
+    UCharFile & operator = (const UCharFile &other) {return *this;};   // No assignment op
+
+    FILE         *fFile;
+    const char   *fName;
+    UBool        fEof;
+    UBool        fError;
+    UChar        fPending2ndSurrogate;
+    
+    enum {UTF16LE, UTF16BE, UTF8} fEncoding;
+};
+
+UCharFile::UCharFile(const char * fileName) {
+    fEof                 = FALSE;
+    fError               = FALSE;
+    fName                = fileName;
+    fFile                = fopen(fName, "rb");
+    fPending2ndSurrogate = 0;
+    if (fFile == NULL) {
+        fprintf(stderr, "Can not open file \"%s\"\n", opt_fName);
+        fError = TRUE;
+        return;
+    }
+    //
+    //  Look for the byte order mark at the start of the file.
+    //
+    int BOMC1, BOMC2, BOMC3;
+    BOMC1 = fgetc(fFile);
+    BOMC2 = fgetc(fFile);
+
+    if (BOMC1 == 0xff && BOMC2 == 0xfe) {
+        fEncoding = UTF16LE; }
+    else if (BOMC1 == 0xfe && BOMC2 == 0xff) {
+        fEncoding = UTF16BE; }
+    else if (BOMC1 == 0xEF && BOMC2 == 0xBB && (BOMC3 = fgetc(fFile)) == 0xBF ) {
+        fEncoding = UTF8; }
+    else
+    {
+        fprintf(stderr, "collperf:  file \"%s\" encoding must be UTF-8 or UTF-16, and "
+            "must include a BOM.\n", fileName);
+        fError = true;
+        return;
+    }
+}
+
+
+UCharFile::~UCharFile() {
+    fclose(fFile);
+}
+
+
+
+UChar UCharFile::get() {
+    UChar   c;
+    switch (fEncoding) {
+    case UTF16LE:
+        {
+            int  cL, cH;
+            cL = fgetc(fFile);
+            cH = fgetc(fFile);
+            c  = cL  | (cH << 8);
+            if (cH == EOF) {
+                c   = 0;
+                fEof = TRUE;
+            }
+            break;
+        }
+    case UTF16BE:
+        {
+            int  cL, cH;
+            cH = fgetc(fFile);
+            cL = fgetc(fFile);
+            c  = cL  | (cH << 8);
+            if (cL == EOF) {
+                c   = 0;
+                fEof = TRUE;
+            }
+            break;
+        }
+    case UTF8:
+        {
+            if (fPending2ndSurrogate != 0) {
+                c = fPending2ndSurrogate;
+                fPending2ndSurrogate = 0;
+                break;
+            }
+            
+            int ch = fgetc(fFile);   // Note:  c and ch are separate cause eof test doesn't work on UChar type.
+            if (ch == EOF) {
+                c = 0;
+                fEof = TRUE;
+                break;
+            }
+            
+            if (ch <= 0x7f) {
+                // It's ascii.  No further utf-8 conversion.
+                c = ch;
+                break;
+            }
+            
+            // Figure out the lenght of the char and read the rest of the bytes
+            //   into a temp array.
+            int nBytes;
+            if (ch >= 0xF0) {nBytes=4;}
+            else if (ch >= 0xE0) {nBytes=3;}
+            else if (ch >= 0xC0) {nBytes=2;}
+            else {
+                fprintf(stderr, "utf-8 encoded file contains corrupt data.\n");
+                fError = TRUE;
+                return 0;
+            }
+            
+            unsigned char  bytes[10];
+            bytes[0] = (unsigned char)ch;
+            int i;
+            for (i=1; i<nBytes; i++) {
+                bytes[i] = fgetc(fFile);
+                if (bytes[i] < 0x80 || bytes[i] >= 0xc0) {
+                    fprintf(stderr, "utf-8 encoded file contains corrupt data.\n");
+                    fError = TRUE;
+                    return 0;
+                }
+            }
+            
+            // Convert the bytes from the temp array to a Unicode char.
+            i = 0;
+            uint32_t  cp;
+            UTF8_NEXT_CHAR_UNSAFE(bytes, i, cp);
+            c = (UChar)cp;
+            
+            if (cp >= 0x10000) {
+                // The code point needs to be broken up into a utf-16 surrogate pair.
+                //  Process first half this time through the main loop, and
+                //   remember the other half for the next time through.
+                UChar utf16Buf[3];
+                i = 0;
+                UTF16_APPEND_CHAR_UNSAFE(utf16Buf, i, cp);
+                fPending2ndSurrogate = utf16Buf[1];
+                c = utf16Buf[0];
+            }
+            break;
+        };
+    }
+    return c;
+}
+
+//----------------------------------------------------------------------------------------
+//
+//   openRulesCollator  - Command line specified a rules file.  Read it in
+//                        and open a collator with it.
+//
+//----------------------------------------------------------------------------------------
+UCollator *openRulesCollator() {
+    UCharFile f(opt_rules);
+    if (f.error()) {
+        return 0;
+    }
+
+    int  bufLen = 10000;
+    UChar *buf = (UChar *)malloc(bufLen * sizeof(UChar));
+    int i = 0;
+
+    for(;;) {
+        buf[i] = f.get();
+        if (f.eof()) {
+            break;
+        }
+        if (f.error()) {
+            return 0;
+        }
+        i++;
+        if (i >= bufLen) {
+            bufLen += 10000;
+            buf = (UChar *)realloc(buf, bufLen);
+        }
+    }
+    buf[i] = 0;
+
+    UErrorCode    status = U_ZERO_ERROR;
+    UCollator *coll = ucol_openRules(buf, u_strlen(buf), UCOL_NO_NORMALIZATION,
+                                                UCOL_DEFAULT_STRENGTH, &status);
+    if (U_FAILURE(status)) {
+        fprintf(stderr, "ICU ucol_openRules() open failed.: %d\n", status);
+        return 0;
+    }
+    free(buf);
+    return coll;
+}
+
+
+
+
+
+//----------------------------------------------------------------------------------------
+//
 //    Main   --  process command line, read in and pre-process the test file,
 //                 call other functions to do the actual tests.
 //
 //----------------------------------------------------------------------------------------
 int main(int argc, const char** argv) {
     if (ProcessOptions(argc, argv, opts) != TRUE || opt_help || opt_fName == 0) {
-        printf("Usage:  strperf options...\n"
-            "-help                      Display this message.\n"
-            "-file file_name            utf-16 format file of names.\n"
-            "-locale name               ICU locale to use.  Default is en_US\n"
-            "-langid 0x1234             Windows Language ID number.  Default 0x409 (en_US)\n"
-            "                              see http://msdn.microsoft.com/library/psdk/winbase/nls_8xo3.htm\n"
-            "-win                       Run test using Windows native services.  (ICU is default)\n"
-            "-unix                      Run test using Unix strxfrm, strcoll services.\n"
-            "-uselen                    Use API with string lengths.  Default is null-terminated strings\n"
-            "-usekeys                   Run tests using sortkeys rather than strcoll\n"
-            "-loop nnnn                 Loopcount for test.  Adjust for reasonable total running time.\n"
-            "-terse                     Terse numbers-only output.  Intended for use by scripts.\n"
-            "-french                    French accent ordering\n"
-            "-norm                      Normalizing mode on\n"
-            "-shifted                   Shifted mode\n"
-            "-lower                     Lower case first\n"
-            "-upper                     Upper case first\n"
-            "-case                      Enable separate case level\n"
-            "-level n                   Sort level, 1 to 5, for Primary, Secndary, Tertiary, Quaternary, Identical\n"
-            "-keyhist                   Produce a table sort key size vs. string length\n"
-            "-binsearch                 Binary Search timing test\n"
-            "-keygen                    Sort Key Generation timing test\n"
-            "-qsort                     Quicksort timing test\n"
-            "-iter                      Iteration Performance Test\n"
-            );
+        printf(gUsageString);
         exit (1);
     }
 
@@ -939,10 +1136,16 @@ int main(int argc, const char** argv) {
     //
     UErrorCode          status = U_ZERO_ERROR;
 
-    gCol = ucol_open(opt_locale, &status);
-    if (U_FAILURE(status)) {
-        fprintf(stderr, "Collator creation failed.: %d\n", status);
-        return -1;
+    if (opt_rules != 0) {
+        gCol = openRulesCollator();
+        if (gCol == 0) {return -1;}
+    }
+    else {
+        gCol = ucol_open(opt_locale, &status);
+        if (U_FAILURE(status)) {
+            fprintf(stderr, "Collator creation failed.: %d\n", status);
+            return -1;
+        }
     }
     if (status==U_USING_DEFAULT_ERROR && opt_terse==FALSE) {
         fprintf(stderr, "Warning, U_USING_DEFAULT_ERROR for %s\n", opt_locale);
@@ -950,7 +1153,7 @@ int main(int argc, const char** argv) {
     if (status==U_USING_FALLBACK_ERROR && opt_terse==FALSE) {
         fprintf(stderr, "Warning, U_USING_FALLBACK_ERROR for %s\n", opt_locale);
     }
-    
+
     if (opt_norm) {
         ucol_setAttribute(gCol, UCOL_NORMALIZATION_MODE, UCOL_ON, &status);
     }
@@ -1001,7 +1204,13 @@ int main(int argc, const char** argv) {
     //
     //  Set up a Windows LCID
     //
-    gWinLCID = MAKELCID(opt_langid, SORT_DEFAULT);
+    if (opt_langid != 0) {
+        gWinLCID = MAKELCID(opt_langid, SORT_DEFAULT);
+    }
+    else {
+        gWinLCID = uloc_getLCID(opt_locale);
+    }
+
 
     //
     //  Set the UNIX locale
@@ -1018,10 +1227,9 @@ int main(int argc, const char** argv) {
     //   Lines go onto heap buffers.  Global index array to line starts is created.
     //   Lines themselves are null terminated.
     //
-    FILE *f;
-    f = fopen(opt_fName, "rb");
-    if (f == NULL) {
-        fprintf(stderr, "Can not open file \"%s\"\n", opt_fName);
+
+    UCharFile f(opt_fName);
+    if (f.error()) {
         exit(-1);
     }
 
@@ -1029,49 +1237,26 @@ int main(int argc, const char** argv) {
     gFileLines = new Line[MAXLINES];
     UChar buf[1024];
     int   column = 0;
-    UBool  littleEndian = TRUE;
-    UBool  sawBOM       = FALSE;
+
+    //  Read the file, split into lines, and save in memory.
+    //  Loop runs once per utf-16 value from the input file,
+    //    (The number of bytes read from file per loop iteration depends on external encoding.)
     for (;;) {
-        UChar c;
-        int  cL, cH;
 
-        // Get next utf-16 UChar
-        //
-        if (littleEndian) {
-            cL = fgetc(f);
-            cH = fgetc(f);
-        }
-        else
-        {
-            cH = fgetc(f);
-            cL = fgetc(f);
-        }
-        c  = cL  | (cH << 8);
-
-        //
-        //  Look for the byte order mark at the start of the file.
-        //
-        if (sawBOM == FALSE) {
-
-            if (c == 0xfeff) {   // Little Endian BOM
-                sawBOM = TRUE;
-                continue;
-            }
-            if (c == 0xfffe) {  // Big endian BOM
-                sawBOM = TRUE;
-                littleEndian = FALSE;
-                continue;
-            }
-            fprintf(stderr, "Error - no BOM in file.  File format must be UTF-16.\n");
+        UChar c = f.get();
+        if (f.error()){
             exit(-1);
         }
+
+
+        // We now have a good UTF-16 value in c.
 
         // Watch for CR, LF, EOF; these finish off a line.
         if (c == 0xd) {
             continue;
         }
 
-        if (cL == EOF || cH == EOF || c == 0x0a || c==0x2028) {  // Unipad inserts 2028 line separators!
+        if (f.eof() || c == 0x0a || c==0x2028) {  // Unipad inserts 2028 line separators!
             buf[column++] = 0;
             if (column > 1) {
                 gFileLines[gNumFileLines].name  = new UChar[column];
@@ -1102,7 +1287,6 @@ int main(int argc, const char** argv) {
         }
     }
 
-    fclose(f);
     if (opt_terse == FALSE) {
         printf("file \"%s\", %d lines.\n", opt_fName, gNumFileLines);
     }
@@ -1166,6 +1350,59 @@ int main(int argc, const char** argv) {
         }
     }
 
+
+    //
+    //  Dump file lines, CEs, Sort Keys if requested.
+    //
+    if (opt_dump) {
+        int  i;
+        for (line=0; line<gNumFileLines; line++) {
+            for (i=0;;i++) {
+                UChar  c = gFileLines[line].name[i];
+                if (c == 0)
+                    break;
+                if (c < 0x20 || c > 0x7e) {
+                    printf("\\u%.4x", c);
+                }
+                else {
+                    printf("%c", c);
+                }
+            }
+            printf("\n");
+
+            printf("   CEs: ");
+            UCollationElements *CEiter = ucol_openElements(gCol, gFileLines[line].name, -1, &status);
+            int32_t ce;
+            i = 0;
+            for (;;) {
+                ce = ucol_next(CEiter, &status);
+                if (ce == UCOL_NULLORDER) {
+                    break;
+                }
+                printf(" %.8x", ce);
+                if (++i > 8) {
+                    printf("\n        ");
+                    i = 0;
+                }
+            }
+            printf("\n");
+            ucol_closeElements(CEiter);
+
+
+            printf("   ICU Sort Key: ");
+            for (i=0; ; i++) {
+                unsigned char c = gFileLines[line].icuSortKey[i];
+                printf("%02x ", c);
+                if (c == 0) {
+                    break;
+                }
+                if (i > 0 && i % 20 == 0) {
+                    printf("\n                 ");
+                }
+           }
+            printf("\n");
+        }
+    }
 
 
     //
