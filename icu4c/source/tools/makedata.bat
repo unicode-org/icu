@@ -26,13 +26,26 @@ cd ..\gencol
 
 cd ..
 
+echo create unames.dat and unames_dat.c from UnicodeData.txt
+gennames\%toolversion%\gennames -v- -c- "%ICU_DATA%UnicodeData-3.0.0.txt"
+genccode\%toolversion%\genccode "%ICU_DATA%unames.dat"
+
+echo create the data DLL
+cl "/I..\..\include" /GD /c "%ICU_DATA%unames_dat.c"
+echo "/out:%ICU_DATA%icudata.dll">mkdll.tmp
+echo unames_dat.obj>>mkdll.tmp
+type mkdll.lk>>mkdll.tmp
+link @mkdll.tmp
+
 goto :end
 
 :error
 echo call makedata with the absolute path to the icu directory
 echo for example, if the full path is d:\mytools\icu then call
 echo makedata d:\mytools
-echo the current directory must be the icu\source\tools directory with makedata.bat
 echo a second, optional, parameter can be Debug or Release to specify the tools versions
+echo.
+echo the current directory must be the icu\source\tools directory with makedata.bat
+echo also, the cl compiler and link linker must be on the PATH
 
 :end
