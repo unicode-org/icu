@@ -5,8 +5,8 @@
 ******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/util/ValueIterator.java,v $
-* $Date: 2002/03/13 04:48:59 $
-* $Revision: 1.4 $
+* $Date: 2002/04/05 00:09:16 $
+* $Revision: 1.5 $
 *
 ******************************************************************************
 */
@@ -14,13 +14,13 @@
 package com.ibm.icu.util;
 
 /**
- * <p>Interface for enabling iteration over any set of integers, giving
- * back a integer result with a value. 
- * The result is represented by [integer, value] where</p>
- * <ul>
- * <li> integer is the current integer in the iteration.
- * <li> value is the value that the result integers is associated with.
- * </ul>
+ * <p>Interface for enabling iteration over sets of [int, Object], where
+ * int is the sorted integer index in ascending order and Object, its 
+ * associated value.</p>
+ * <p>The ValueIterator allows iterations over integer indexes in the range 
+ * of Integer.MIN_VALUE to Integer.MAX_VALUE inclusive. Implementations of 
+ * ValueIterator should specify their own maximum subrange within the above 
+ * range that is meaningful to its applications.</p>
  * <p>Most implementations will be created by factory methods, such as the
  * character name iterator in UCharacter.getNameIterator. See example below.
  * </p>
@@ -28,6 +28,7 @@ package com.ibm.icu.util;
  * <pre>
  * ValueIterator iterator = UCharacter.getNameIterator();
  * ValueIterator.Element result = new ValueIterator.Element();
+ * iterator.setRange(UCharacter.MIN_VALUE, UCharacter.MAX_VALUE);
  * while (iterator.next(result)) {
  *     System.out.println("Codepoint \\u" + 
  *                        Integer.toHexString(result.integer) + 
@@ -43,20 +44,19 @@ public interface ValueIterator
     // public inner class ---------------------------------------------
     
     /**
-    * Return result wrapper for com.ibm.icu.util.RangeValueIterator.
-    * Stores the start and limit of the continous result range and the
-    * common value all integers between [start, limit - 1] has.
+    * <p>The return result container of each iteration. Stores the next 
+    * integer index and its associated value Object.</p> 
     * @draft 2.1
     */
     public static final class Element
     {
         /**
-        * Integer of the current iteration
+        * Integer index of the current iteration
         * @draft 2.1
         */
         public int integer;
         /**
-        * Gets the value of integer
+        * Gets the Object value associated with the integer index.
         * @draft 2.1
         */ 
         public Object value;
@@ -77,7 +77,9 @@ public interface ValueIterator
     public boolean next(Element element);
     
     /**
-    * Resets the iterator to the beginning of the iteration.
+    * <p>Resets the iterator to start iterating from the integer index 
+    * Integer.MIN_VALUE or X if a setRange(X, Y) has been called previously.
+    * </p>
     * @draft 2.1
     */
     public void reset();
