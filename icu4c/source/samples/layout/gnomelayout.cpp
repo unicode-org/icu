@@ -301,7 +301,7 @@ void closeSample(GtkWidget *app)
 
 int main (int argc, char *argv[])
 {
-    RFIErrorCode   fontStatus = RFI_NO_ERROR;
+    LEErrorCode   fontStatus = LE_NO_ERROR;
     GtkWidget     *app;
 
     TT_Init_FreeType(&engine);

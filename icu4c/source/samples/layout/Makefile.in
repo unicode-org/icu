@@ -30,7 +30,7 @@ CPPFLAGS +=  -I/usr/include/freetype1
 LIBS = $(LIBICULE) $(LIBICUUC) $(LIBICUI18N) @LIBS@ @LIB_M@ `gnome-config --libs gnomeui` -lttf
 
 
-OBJECTS=cmaps.o UnicodeReader.o GnomeGUISupport.o FontMap.o GnomeFontMap.o RenderingFontInstance.o GnomeFontInstance.o paragraph.o ParagraphLayout.o Utilities.o gnomelayout.o
+OBJECTS=cmaps.o UnicodeReader.o GnomeGUISupport.o FontMap.o GnomeFontMap.o ScriptCompositeFontInstance.o GnomeFontInstance.o FontTableCache.o  paragraph.o ParagraphLayout.o RunArrays.o Utilities.o gnomelayout.o
 
 DEPS = $(OBJECTS:.o=.d)
 
