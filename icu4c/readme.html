@@ -883,6 +883,32 @@ When running the test suite, the TZ environment variable should be set to
 export TZ=&quot;PST8PDT&quot; so<br>
 that time zone comparisons are correct.</p>
 
+<p><a name=OS400><strong>OS/400 Platform</strong></a></p>
+
+ ICU Reference Release 1.4.0 contains partial support for the  400
+platform, but additional work by the user is currently needed to get
+it to compile. A future release of the ICU should work out-of-the-box
+under OS/400.
+<UL>
+   <LI> Run 'configure --host=AS400-OS400' 
+   <LI> Change the TARGET entries in 
+   <TT>common/Makefile.in, i18n/Makefile.in,</TT> etc, so that instead
+   of <TT>TARGET=<U>libicu-</U>uc.$(SO)<TT> they read
+   <TT>TARGET=<B>$(LIBICU)</B>uc.$(SO)
+   <LI> Change Makefile.in's (under source/tools) that have
+   LIBICU-TOOLUTIL so that it follows the other LIBICU variables on
+   the link line:
+   <TT>$(LIBICU-UC)&nbsp;$(LIBICU-TOOLUTIL)&nbsp;@LIBS@&nbsp;@LIB_M</TT>
+   <LI> The 'clean' and 'install' targets will not function correctly
+   unless <TT>rm -rf</TT> is replaced by <B>$(RMV)</B>, and in the
+   library installation targets (install-library) change
+   <TT>$(INSTALL)</TT> to <B><TT>$(INSTALL-S)</TT></B>.
+ 
+</UL>
+In common/ucnv.c and common/unistr.c (search for U_MAX_PTR), there are
+additional checks for NULL pointers.  This is because pointer
+comparison works differently on the AS/400 architecture.
+
 <h3><a name=HowToInstall></a><u>How to Install/Build on Win NT</u></h3>
 
 <p>Building International Components for Unicode requires: </p>
@@ -1419,18 +1445,18 @@ margin-bottom:.0001pt'><span style='font-size:7.5pt'>&nbsp;&nbsp;&nbsp;&nbsp;&nb
 is a pointer to general information about the International Components for
 Unicode. </p>
 
-<p><a href="docs\udata.html">docs\udata.html</a> is a raw draft of ICU data
+<p><a href="docs/udata.html">docs/udata.html</a> is a raw draft of ICU data
 handling.</p>
 
-<p><a href="..\icuhtml\aindex.html">html/aindex.html</a> is an alphabetical
+<p><a href="../icuhtml/aindex.html">html/aindex.html</a> is an alphabetical
 index to detailed API documentation. <br>
-<a href="..\icuhtml\HIERjava.html">html/HIERjava.html</a> is a hierarchical
+<a href="../icuhtml/HIERjava.html">html/HIERjava.html</a> is a hierarchical
 index to detailed API documentation. </p>
 
-<p><a href="docs\collate.html">docs\collate.html</a> is an overview to
+<p><a href="docs/collate.html">docs/collate.html</a> is an overview to
 Collation. </p>
 
-<p><a href="docs\BreakIterator.html">docs\BreakIterator.html</a> is a diagram
+<p><a href="docs/BreakIterator.html">docs/BreakIterator.html</a> is a diagram
 showing how BreakIterator processes text elements. </p>
 
 <p><a href="http://www.ibm.com/unicode">http://www.ibm.com/unicode</a> is a
