@@ -395,6 +395,7 @@ UColAttributeValue strengths[] = {
     UCOL_IDENTICAL
 };
 
+#if 0
 static const char * caseFirstC[] = {
     "UCOL_OFF",
     "UCOL_LOWER_FIRST",
@@ -420,7 +421,7 @@ static const char * strengthsC[] = {
     "UCOL_IDENTICAL"
 };
 
-
+/* not used currently - does not test only prints */
 static void PrintMarkDavis( )
 {
   UErrorCode status = U_ZERO_ERROR;
@@ -470,6 +471,7 @@ static void PrintMarkDavis( )
 
   }
 }
+#endif
 
 static void BillFairmanTest( ) {
 /*
@@ -742,8 +744,8 @@ static uint32_t probeStrength(tst_strcoll* func, void *collator, int opts,
                               const UChar *s, const uint32_t sLen,
                               const UChar *t, const uint32_t tLen,
                               UCollationResult result) {
-  UChar fPrimary = 0x6d;
-  UChar sPrimary = 0x6e;
+  /*UChar fPrimary = 0x6d;*/
+  /*UChar sPrimary = 0x6e;*/
   UChar fSecondary = 0x310d;
   UChar sSecondary = 0x31a3;
   UChar fTertiary = 0x310f;
@@ -1142,6 +1144,8 @@ static void testCEs(UCollator *coll, UErrorCode *status) {
   }
 }
 
+#if 0
+/* these locales are now picked from index RB */
 static const char* localesToTest[] = {
 "ar", "bg", "ca", "cs", "da",
 "el", "en_BE", "en_US_POSIX",
@@ -1153,6 +1157,7 @@ static const char* localesToTest[] = {
 "sr", "sv", "th", "tr", "uk",
 "vi", "zh", "zh_TW"
 };
+#endif
 
 static const char* rulesToTest[] = {
   /*"& Z < p, P",*/
@@ -1515,18 +1520,6 @@ static void TestComposeDecompose(void) {
     uprv_free(t);
 }
 
-static void TestUnmappedSpaces(void) {
-  UChar u;
-  UErrorCode status = U_ZERO_ERROR;
-  UCollator *uca = ucol_open("", &status);
-  for(u = 0; u < 0xFFFF; u++) {
-    if(ucmp32_get(uca->mapping, u) == UCOL_NOT_FOUND) {
-      log_verbose("Codepoint %04X doesn't get mapped in the UCA!\n", u);
-    }
-  }
-  ucol_close(uca);
-}
-
 static void TestEmptyRule() {
   UErrorCode status = U_ZERO_ERROR;
   UChar rulez[] = { 0 };
@@ -1537,7 +1530,6 @@ static void TestEmptyRule() {
 
 static void TestUCARules() {
   UErrorCode status = U_ZERO_ERROR;
-  char blah[] =  "\\u9fff";
   UChar b[256];
   UChar *rules = b;
   UCollator *UCAfromRules = NULL;
@@ -2285,8 +2277,8 @@ static void TestCompressOverlap() {
     }
 }
 
-void TestCyrillicTailoring(void) {
-  static char *test[] = {
+static void TestCyrillicTailoring(void) {
+  static const char *test[] = {
     "\\u0410b",
       "\\u0410\\u0306a",
       "\\u04d0A"
