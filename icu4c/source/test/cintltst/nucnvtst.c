@@ -1237,6 +1237,18 @@ TestEBCDIC_STATEFUL() {
         1, 0x0096,
            
     };
+    static const uint8_t in2[]={
+        0x0f,
+        0xa1,
+        0x01
+    };
+
+    /* expected test results */
+    static const uint32_t results2[]={
+        /* number of bytes read, code point */
+        2, 0x203E,
+        1, 0x0001,
+    };
 
     const char *source=(const char *)in, *limit=(const char *)in+sizeof(in);
     UErrorCode errorCode=U_ZERO_ERROR;
@@ -1245,19 +1257,27 @@ TestEBCDIC_STATEFUL() {
         log_err("Unable to open a EBCDIC_STATEFUL(ibm-930) converter: %s\n", u_errorName(errorCode));
     }
     TestNextUChar(cnv, source, limit, results, "EBCDIC_STATEFUL(ibm-930)");
+    ucnv_reset(cnv);
      /*Test the condition when source > sourceLimit*/
     TestNextUCharError(cnv, source, source, U_INDEX_OUTOFBOUNDS_ERROR, "sourceLimit < source");
+    ucnv_reset(cnv);
     /*Test for the condition where source > sourcelimit after consuming the shift chracter */
     {
         static const uint8_t source1[]={0x0f};
         TestNextUCharError(cnv, (const char*)source1, (const char*)source1+sizeof(source1), U_INDEX_OUTOFBOUNDS_ERROR, "a character is truncated");
     }
     /*Test for the condition where there is an invalid character*/
+    ucnv_reset(cnv);
     {
-        static const uint8_t source2[]={0x0f, 0xa1, 0x01};
-        TestNextUCharError(cnv, (const char*)source2, (const char*)source2+sizeof(source2), U_ZERO_ERROR, "an invalid character");
+        static const uint8_t source2[]={0x0e, 0x7F, 0xFF};
+        TestNextUCharError(cnv, (const char*)source2, (const char*)source2+sizeof(source2), U_ZERO_ERROR, "an invalid character [EBCDIC STATEFUL]");
     }
+    ucnv_reset(cnv);
+    source=in2;
+    limit=in2+sizeof(in2);
+    TestNextUChar(cnv,source,limit,results2,"EBCDIC_STATEFUL(ibm-930),seq#2");
     ucnv_close(cnv);
+
 }
 void
 TestLMBCS() {

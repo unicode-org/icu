@@ -1212,9 +1212,8 @@ U_CFUNC UChar32 T_UConverter_getNextUChar_EBCDIC_STATEFUL(UConverterToUnicodeArg
   
   if (args->converter->mode == UCNV_SI)
     {
-      /*Not lead byte: we update the source ptr and get the codepoint*/
       myUChar = ucmp16_getu( (&(args->converter->sharedData->table->dbcs.toUnicode)),
-                            (UChar)(*(args->source)));
+                             ((UChar)(uint8_t)(*(args->source))));
       args->source++;
     }
   else
@@ -1228,7 +1227,7 @@ U_CFUNC UChar32 T_UConverter_getNextUChar_EBCDIC_STATEFUL(UConverterToUnicodeArg
         }
 
       myUChar = ucmp16_getu( (&(args->converter->sharedData->table->dbcs.toUnicode)),
-                            ((UChar)((*(args->source))) << 8) |((uint8_t)*(args->source+1)));
+                             (((UChar)(uint8_t)((*(args->source))) << 8) |((uint8_t)*(args->source+1))) );
 
       args->source += 2;
     }
