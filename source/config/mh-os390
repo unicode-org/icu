@@ -3,7 +3,7 @@
 ## Copyright (c) 1999-2001, International Business Machines Corporation and
 ## others. All Rights Reserved.
 ##
-## $Id: mh-os390,v 1.23 2001/03/21 20:31:13 weiv Exp $
+## $Id: mh-os390,v 1.24 2001/10/03 23:32:11 grhoten-oss Exp $
 
 ###################################################################
 #                    IMPORTANT NOTE                               #
@@ -47,10 +47,6 @@ GEN_DEPS.cc=	makedep
 COMPILE.c=	_CXX_CXXSUFFIX="cpp" _CXX_STEPS="-1" $(CXX) $(DEFS) $(CPPFLAGS) $(CFLAGS) $(CFLAGS390) $(DEFS390) -c
 COMPILE.cc=	_CXX_CXXSUFFIX="cpp" _CXX_STEPS="-1" $(CXX) $(DEFS) $(CPPFLAGS) $(CFLAGS) $(CFLAGS390) $(DEFS390) -c
 
-## Commands to link
-LINK.c=		$(CC) $(DEFS) $(CPPFLAGS) $(CFLAGS) $(LDFLAGS)
-LINK.cc=	$(CXX) $(DEFS) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS)
-
 ## Commands for shared library (dll)
 SHLIB.c=	$(LINK.c) -Wl,dll
 SHLIB.cc=	$(LINK.cc) -Wl,dll
@@ -58,34 +54,23 @@ SHLIB.cc=	$(LINK.cc) -Wl,dll
 ## Compiler switch to embed a runtime search path
 LD_RPATH=	-I
 
-## Environment variable to set a runtime search path
-LDLIBRARYPATH_ENVVAR = LD_LIBRARY_PATH
-
 ## Versioned target for a shared library.
-FINAL_SO_TARGET = $(SO_TARGET)
+FINAL_SO_TARGET = $(basename $(SO_TARGET)).$(SO_TARGET_VERSION).$(SO)
 MIDDLE_SO_TARGET = 
 
-###  How ICU libraries are named...  ex. $(LIBICU)uc$(SO)
-## Prefix for the ICU library names
-ICUPREFIX = icu
-LIBICU = lib$(ICUPREFIX)
 ## Shared object suffix (switch to dll for shared library build)
 SO=		dll
 ## Non-shared intermediate object suffix
 STATIC_O = o
 
-## Force removal [for make clean]
-RMV = rm -rf
-## Platform commands to remove or move executable and library targets
-INSTALL-S = $(INSTALL_PROGRAM)
-INSTALL-L = $(INSTALL_DATA)
-
 ## Link commands to link to ICU libs
-LIBICUUC= 	$(top_builddir)/common/libicuuc.x
-LIBICUI18N= 	$(top_builddir)/i18n/libicui18n.x
-LIBCTESTFW= 	$(top_builddir)/tools/ctestfw/libctestfw.x
-LIBICUTOOLUTIL=$(top_builddir)/tools/toolutil/libicutoolutil.x
-LIBUSTDIO=      $(top_builddir)/extra/ustdio/libustdio.x
+LIBICUDT= 	$(top_builddir)/data/libicudata.$(SO_TARGET_VERSION).x
+LIBICUUC= 	$(top_builddir)/common/libicuuc.$(SO_TARGET_VERSION).x
+LIBICUI18N= 	$(top_builddir)/i18n/libicui18n.$(SO_TARGET_VERSION).x
+LIBICULE=       $(top_builddir)/layout/libicule.$(SO_TARGET_VERSION).x
+LIBCTESTFW= 	$(top_builddir)/tools/ctestfw/libctestfw.$(SO_TARGET_VERSION).x
+LIBICUTOOLUTIL= $(top_builddir)/tools/toolutil/libicutoolutil.$(SO_TARGET_VERSION).x
+LIBUSTDIO=      $(top_builddir)/extra/ustdio/libustdio.$(SO_TARGET_VERSION).x
 
 ## Special 390 rules
 
@@ -119,5 +104,9 @@ LIBUSTDIO=      $(top_builddir)/extra/ustdio/libustdio.x
 	@echo "Generating dependency information for $<"
 	@$(SHELL) -ec 'touch              $*.u  > /dev/null 2>&1'
 	@$(SHELL) -ec '$(GEN_DEPS.cc)  -f $*.u $< > /dev/null 2>&1'
+
+## Versioned libraries rules
+%.$(SO): %.$(SO_TARGET_VERSION).$(SO)
+	$(RM) $@ && ln -s $*.$(SO_TARGET_VERSION).$(SO) $@
 
 ## End 390-specific setup

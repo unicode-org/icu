@@ -3,7 +3,7 @@
 ## Copyright (c) 1999-2000, International Business Machines Corporation and
 ## others. All Rights Reserved.
 ##
-## $Id: mh-aix-va,v 1.11 2001/09/28 00:31:53 aheninger-oss Exp $
+## $Id: mh-aix-va,v 1.12 2001/10/03 23:32:11 grhoten-oss Exp $
 
 ## Commands to generate dependency files
 GEN_DEPS.c=	$(CC) -E -M $(DEFS) $(CPPFLAGS)
@@ -31,32 +31,11 @@ LD_RPATH_PRE=
 ## Environment variable to set a runtime search path
 LDLIBRARYPATH_ENVVAR = LIBPATH
 
-## Versioned target for a shared library.
-FINAL_SO_TARGET = $(SO_TARGET)
-MIDDLE_SO_TARGET = $(SO_TARGET)
-
-###  How ICU libraries are named...  ex. $(LIBICU)uc$(SO)
-## Prefix for the ICU library names
-ICUPREFIX = icu
-LIBICU = lib$(ICUPREFIX)
 ## Shared object suffix
 ## AIX doesnot support versioning so we tag the version to name
 SO=		so.$(SO_TARGET_VERSION_MAJOR)
 ## Non-shared intermediate object suffix
 STATIC_O = o
-
-RMV = rm -rf
-## Platform commands to remove or move executable and library targets
-INSTALL-S = $(INSTALL_PROGRAM)
-INSTALL-L = $(INSTALL_DATA)
-
-
-## Link commands to link to ICU libs
-LIBICUUC= 	-L$(top_builddir)/common -l$(ICUPREFIX)uc
-LIBICUI18N= 	-L$(top_builddir)/i18n -l$(ICUPREFIX)i18n
-LIBCTESTFW= 	-L$(top_builddir)/tools/ctestfw -l$(ICUPREFIX)ctestfw
-LIBICUTOOLUTIL=-L$(top_builddir)/tools/toolutil -l$(ICUPREFIX)toolutil
-LIBUSTDIO=      -L$(top_builddir)/extra/ustdio -lustdio
 
 ## Special AIX rules
 

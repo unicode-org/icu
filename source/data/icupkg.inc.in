@@ -78,6 +78,7 @@ platform=@platform@
 
 ld_rpath_suf=@ld_rpath_suf@
 
+include $(top_builddir)/icudefs.mk
 include @platform_make_fragment@
 
 top_builddir = ../..
