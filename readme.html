@@ -51,7 +51,7 @@
       <li><a href="#SourceCode">ICU Source Code Organization</a></li>
 
       <li>
-        <a href="#HowToBuild">How to Build And Install ICU</a> 
+        <a href="#HowToBuild">How to Build And Install ICU</a>
 
         <ul class="TOC">
           <li><a href="#HowToBuildSupported">Supported Platforms</a></li>
@@ -67,7 +67,7 @@
       </li>
 
       <li>
-        <a href="#ImportantNotes">Important Notes About Using ICU</a> 
+        <a href="#ImportantNotes">Important Notes About Using ICU</a>
 
         <ul class="TOC">
           <li><a href="#ImportantNotesWindows">Windows Platform</a></li>
@@ -428,7 +428,7 @@
         below. The text after the underscore in each tag is always
         canonicalized to uppercase before lookup. <em>Note: The underscore is
         currently omitted from ICU4C tags, but will be restored when
-        possible.</em> 
+        possible.</em>
 
         <ul>
           <li><tt>TransliterateTo_<em>SCRIPT</em></tt>: Unidirectional rules
@@ -441,7 +441,7 @@
           the forward direction being To and the reverse direction being
           From.</li>
         </ul>
-        Lookup proceeds in the following order: 
+        Lookup proceeds in the following order:
 
         <ul>
           <li>In the dynamic registry: <em>source-target</em></li>
@@ -630,139 +630,209 @@
         The following directories contain source code and data files.
       </caption>
 
-      <tr>
-        <td><i>&lt;ICU&gt;</i>/source/common/</td>
+		<tr>
+			<td>
+				<i>&lt;ICU&gt;</i>/source/<b>common</b>/
+			</td>
 
-        <td>The core Unicode and support functionality, such as resource
-        bundles, character properties, locales, codepage conversion,
-        normalization, Unicode properties, Locale, and UnicodeString.</td>
-      </tr>
+			<td>
+				The core Unicode and support functionality, such as resource bundles,
+				character properties, locales, codepage conversion, normalization, Unicode
+				properties, Locale, and UnicodeString.
+			</td>
+		</tr>
 
-      <tr>
-        <td><i>&lt;ICU&gt;</i>/source/i18n/</td>
+		<tr>
+			<td>
+				<i>&lt;ICU&gt;</i>/source/<b>i18n</b>/
+			</td>
 
-        <td>Modules in i18n are generally the more data-driven, that is to say
-        resource bundle driven, components. These deal with higher level
-        internationalization issues such as formatting, collation, text break
-        analysis, and transliteration.</td>
-      </tr>
+			<td>
+				Modules in i18n are generally the more data-driven, that is to say
+				resource bundle driven, components. These deal with higher level internationalization
+				issues such as formatting, collation, text break analysis, and transliteration.
+			</td>
+		</tr>
 
-      <tr>
-        <td><i>&lt;ICU&gt;</i>/source/test/intltest/</td>
+		<tr>
+			<td>
+				<i>&lt;ICU&gt;</i>/source/<b>data</b>
+			</td>
 
-        <td>A test suite including all C++ APIs. For information about running
-        the test suite, see the users' guide.</td>
-      </tr>
+			<td>This directory contains the source data in text format which is compiled
+				into binary form during the ICU build process. It contains several subdirectories,
+				in which the data files are grouped by function. Note that the build process
+				must be run again after any changes are made to this directory.
+				<ul>
+					<li>
+						<b>brkitr/</b>&nbsp;<b> </b>Data files for character, word, sentence, and
+						line boundary analysis.
+					</li>
 
-      <tr>
-        <td><i>&lt;ICU&gt;</i>/source/test/cintltst/</td>
+					<li>
+						<b>locales/</b>&nbsp; These .txt files contain ICU language and culture-specific
+						localization data. Two special bundles are <b>root</b>, which is the fallback
+						data and parent of other bundles, and <b>index</b> which contains a list
+						of installed bundles. The makefile <b>resfiles.mk</b> contains the list
+						of resource bundle files.
+					</li>
 
-        <td>A test suite written in C, including all C APIs. For information
-        about running the test suite, see the users' guide.</td>
-      </tr>
+					<li>
+						<b>mappings/</b>&nbsp;&nbsp; Here are the <b>code page converter tables,</b>
+						.ucm files containing mappings to and from Unicode. These are compiled
+						into .cnv files. <b>convrtrs.txt</b> is the alias mapping table from various
+						converter name formats to ICU internal format and vice versa. It produces
+						cnvalias.dat. The makefiles which contain the list of converters to be
+						built are <b>ucmfiles.mk, ucmcore.mk, </b>and <b>ucmebcdic.mk.</b>
+					</li>
 
-      <tr>
-        <td><i>&lt;ICU&gt;</i>/data/</td>
+					<li>
+						<b>translit/&nbsp;</b>&nbsp; This directory contains Transliterator rules
+						as resource bundles, a makefile <b>trnsfiles.mk</b> containing the list
+						of installed system translitaration files, and as well the special bundle
+						<b>translit_index</b>
+						which lists the system transliterator aliases.
+					</li>
 
-        <td>
-          This directory contains the source data in text format, which is
-          compiled into binary form during the ICU build process. The output
-          from these files is stored in <i>&lt;ICU&gt;</i>/source/data/build
-          while awaiting further packaging. 
+					<li>
+						<b>unidata/</b> This directory contains the Unicode data files. Please
+						see <a href="http://www.unicode.org/">http://www.unicode.org/</a> for more
+						information.
+					</li>
 
-          <ul>
-            <li><b>unidata/</b> This directory contains the Unicode data files.
-            Please see <a href=
-            "http://www.unicode.org/">http://www.unicode.org/</a> for more
-            information.</li>
+					<li>
+						<b>misc/</b>&nbsp; The misc directory contains other data files which did
+						not fit into the above categories. Currently it only contains <b>timezone.txt,</b>
+						a generated file which is compiled into tz.dat, and containing time zone
+						information.
+					</li>
 
-            <li>
-              <p><b>Resource Bundle sources</b> .txt files containing ICU
-              language and culture-specific localization data. Two special
-              bundles are <b>root</b>, which is the fallback data and parent of
-              other bundles, and <b>index</b> which contains a list of
-              installed bundles. <b>resfiles.txt</b> contains the list of
-              resource bundle files.</p>
+					<li>
+						<b>out/ </b>This directory contains the assembled memory mapped files.
+					</li>
 
-              <p>Also here are transliteration bundles, and the list of
-              installed transliteration files in <b>translit_index.txt</b>.</p>
+					<li>
+						<b>out/build </b>This directory contains intermediate (compiled) files,
+						such as .cnv, .res, etc.
+					</li>
+				</ul>
+			</td>
+		</tr>
 
-              <p>All resource bundles are compiled into .res files. The
-              <b>ucmfiles.txt</b> file contains the list of converter
-              files.</p>
-            </li>
+		<tr>
+			<td>
+				<i>&lt;ICU></i>/source/test/<b>intltest</b>/
+			</td>
 
-            <li><b>Code page converter tables</b> .ucm files containing
-            mappings to and from Unicode. These are compiled into .cnv
-            files.</li>
+			<td>
+				A test suite including all C++ APIs. For information about running
+				the test suite, see the users' guide.
+			</td>
+		</tr>
 
-            <li><b>convrtrs.txt</b> is the alias mapping table from various
-            converter name formats to ICU internal format and vice versa. It
-            produces cnvalias.dat.</li>
+		<tr>
+			<td>
+				<i>&lt;ICU></i>/source/test/<b>cintltst</b>/
+			</td>
 
-            <li><b>timezone.txt</b> is a generated file which is compiled into
-            tz.dat, containing time zone information.</li>
-          </ul>
-        </td>
-      </tr>
+			<td>
+				A test suite written in C, including all C APIs. For information about
+				running the test suite, see the users' guide.
+			</td>
+		</tr>
 
-      <tr>
-        <td><i>&lt;ICU&gt;</i>/source/data</td>
+		<tr>
+			<td>
+				<i>&lt;ICU></i>/source/test/<b>testdata</b>
+			</td>
 
-        <td>This directory is where the final, packaged version of the ICU
-        binary data ends up. The intermediate individual data files (.res,
-        .cnv) are kept in the subdirectory
-        "<i>&lt;ICU&gt;</i>/source/data/build" prior to packaging.</td>
-      </tr>
+			<td>
+				Source text files for data which is read by the tests. It contains
+				the subdirectories <b>out/build/</b> which is used for intermediate files,
+				and <b>out/ </b>which contains the files <b>test1.cnv</b> through <b>test4.cnv,</b>
+				and <b>testdata.dat.</b>&nbsp; Note that the tests call u_setDataDirectory("&lt;ICU>/source/test/testdata/lib"),
+				so that ICU will load these files as if they were part of the ICU data
+				package, for testing purposes. This was formerly accomplished by setting
+				the ICU_DATA environment variable to point at these files. ICU_DATA should
+				not be set under normal circumstances.
+			</td>
+		</tr>
 
-      <tr>
-        <td><i>&lt;ICU&gt;</i>/source/tools</td>
+		<tr>
+			<td>
+				<i>&lt;ICU&gt;</i>/source/<b>tools</b>
+			</td>
 
-        <td>Tools for generating the data files. Data files are generated by
-        invoking <i>&lt;ICU&gt;</i>/source/data/build/makedata.bat on Win32 or
-        <i>&lt;ICU&gt;</i>/source/make on Unix.</td>
-      </tr>
+			<td>
+				Tools for generating the data files. Data files are generated by invoking
+				<i>&lt;ICU></i>/source/data/build/makedata.bat
+				on Win32 or <i>&lt;ICU></i>/source/make on Unix.
+			</td>
+		</tr>
 
-      <tr>
-        <td><i>&lt;ICU&gt;</i>/source/samples</td>
+		<tr>
+			<td>
+				<i>&lt;ICU></i>/source/<b>samples</b>
+			</td>
 
-        <td>Various sample programs that use ICU</td>
-      </tr>
+			<td>
+				Various sample programs that use ICU
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<i>&lt;ICU></i>/source/<b>extra</b>
+			</td>
 
-      <tr>
-        <td><i>&lt;ICU&gt;</i>/source/extra</td>
+			<td>
+				Non-supported API additions. Currently, it contains the 'ustdio' file
+				i/o library
+			</td>
+		</tr>
 
-        <td>Non-supported API additions. Currently, it contains the 'ustdio'
-        file i/o library</td>
-      </tr>
+		<tr>
+			<td>
+				<i>&lt;ICU></i>/source/<b>layout</b>
+			</td>
 
-      <tr>
-        <td><i>&lt;ICU&gt;</i>/source/layout</td>
+			<td>
+				Contains the ICU layout engine (not a rasterizer).
+			</td>
+		</tr>
 
-        <td>Contains the ICU layout engine (not a rasterizer).</td>
-      </tr>
+		<tr>
+			<td>
+				<i>&lt;ICU></i>/<b>packaging</b>
+				<br><i>&lt;ICU></i>/<b>debian</b>
+			</td>
 
-      <tr>
-        <td><i>&lt;ICU&gt;</i>/packaging<br>
-         <i>&lt;ICU&gt;</i>/debian</td>
+			<td>
+				These directories contain scripts and tools for packaging the final
+				ICU build for various release platforms.
+			</td>
+		</tr>
 
-        <td>These directories contain scripts and tools for packaging the final
-        ICU build for various release platforms.</td>
-      </tr>
+		<tr>
+			<td>
+				<i>&lt;ICU></i>/source/<b>config</b>
+			</td>
 
-      <tr>
-        <td><i>&lt;ICU&gt;</i>/source/config</td>
+			<td>
+				Contains helper makefiles for platform specific build commands. Used
+				by 'configure'.
+			</td>
+		</tr>
 
-        <td>Contains helper makefiles for platform specific build commands.
-        Used by 'configure'.</td>
-      </tr>
+		<tr>
+			<td>
+				<i>&lt;ICU></i>/source/<b>allinone</b>
+			</td>
 
-      <tr>
-        <td><i>&lt;ICU&gt;</i>/source/allinone</td>
-
-        <td>Contains top-level ICU project files, for instance to build all of
-        ICU under one MSVC project.</td>
-      </tr>
+			<td>
+				Contains top-level ICU project files, for instance to build all of
+				ICU under one MSVC project.
+			</td>
+		</tr>
     </table>
     <!-- end of ICU structure ==================================== -->
 
@@ -1069,7 +1139,7 @@
       <li>Type "gmake" to compile the libraries and all the data files.</li>
 
       <li>
-        Optionally, type "gmake check" to verify the test suite. 
+        Optionally, type "gmake check" to verify the test suite.
 
         <ul>
           <li>
@@ -1081,7 +1151,7 @@
             data directory, to indicate where the locale data files and
             conversion mapping tables are. The trailing "/" is required after
             the directory name (e.g. "$Root/source/data/" will work, but the
-            value "$Root/source/data" is not acceptable). 
+            value "$Root/source/data" is not acceptable).
 
             <p>When running samples or other applications, ICU_DATA only needs
             to be set if the data is not installed (such as via 'make install')
@@ -1121,9 +1191,9 @@
       it). The pax command converts all of the source code files from ASCII to
       codepage ibm-1047 (USS) EBCDIC. However, some files are binary files and
       must not be converted, or must be converted back to their original state.
-      You can use the <a href="as_is\os390\unpax-icu.sh">unpax-icu.sh</a>
+      You can use the <a href="as_is/os390/unpax-icu.sh">unpax-icu.sh</a>
       script to do this for you automatically. It will unpackage the tar file
-      and convert all the necessary files for you automatically. 
+      and convert all the necessary files for you automatically.
       <!--The files that must not be converted to ibm-1047 are the
                                             following:
 
@@ -1177,7 +1247,7 @@
         correct. Building and testing ICU without using gmake requires that the
         ICU libraries in the LIBPATH. In other words, the LIBPATH should
         contain (each path prepended with the root directory that contains the
-        icu directory): 
+        icu directory):
 
         <ul>
           <li>icu/source/common</li>
@@ -1261,7 +1331,7 @@ Data set name type  : PDS</samp>
 
     <ul>
       <li>
-        Requirements: 
+        Requirements:
 
         <ul>
           <li>QSHELL interpreter installed (install base option 30, operating
@@ -1279,7 +1349,7 @@ Data set name type  : PDS</samp>
       </li>
 
       <li>
-        Build environment setup: 
+        Build environment setup:
 
         <ol>
           <li>
@@ -1287,7 +1357,7 @@ Data set name type  : PDS</samp>
             the resulting modules, programs and service programs. You will
             specify this library on the OUTPUTDIR environment variable in step
             2.<br>
-             
+
 <pre>
 <samp>CRTLIB LIB(<i>libraryname</i>)</samp>
 </pre>
@@ -1296,7 +1366,7 @@ Data set name type  : PDS</samp>
 
           <li>
             Set up the following environment variables in your build process
-            (use the <i>libraryname</i> from the previous step) 
+            (use the <i>libraryname</i> from the previous step)
 <pre>
 <samp>ADDENVVAR ENVVAR(ICU_DATA) VALUE('/icu/source/data')
 ADDENVVAR ENVVAR(CC) VALUE('/usr/bin/icc')
@@ -1315,7 +1385,7 @@ ADDENVVAR ENVVAR(OUTPUTDIR) VALUE('<i>libraryname</i>')</samp>
             In order to get the tests to run correctly, the QUTCOFFSET needs to
             be set to the Pacific Time Zone offset.<br>
             <br>
-             To check your QUTCOFFSET: 
+             To check your QUTCOFFSET:
 <pre>
 <samp>DSPSYSVAL SYSVAL(QUTCOFFSET)</samp>
 </pre>
@@ -1522,7 +1592,7 @@ int main(){
          <strong>unicode/p<i>XXXX</i>.h</strong> (others: pwin32.h, pmacos.h,
         ..): Platform-dependent typedefs and defines:<br>
         <br>
-         
+
 
         <ul>
           <li>XP_CPLUSPLUS for C++ only.</li>
@@ -1539,7 +1609,7 @@ int main(){
         <strong>unicode/putil.h, putil.c</strong>: platform-dependent
         implementations of various functions that are platform dependent:<br>
         <br>
-         
+
 
         <ul>
           <li>uprv_isNaN, uprv_isInfinite, uprv_getNaN and uprv_getInfinity for
@@ -1567,7 +1637,7 @@ int main(){
         global data against simultaneous modifications. See Users' guide for
         more information.<br>
         <br>
-         
+
 
         <ul>
           <li>We supply sample implementations for WinNT, Win95, Win98,
