@@ -678,9 +678,9 @@ private:
      */
     // For time zones that have no names, use strings GMT+minutes and
     // GMT-minutes. For instance, in France the time zone is GMT+60.
-    static const UnicodeString fgGmtPlus;
-    static const UnicodeString fgGmtMinus;
-    static const UnicodeString fgGmt;
+    static const UChar fgGmtPlus[];
+    static const UChar fgGmtMinus[];
+    static const UChar fgGmt[];
 
     /**
      * Used to map pattern characters to Calendar field identifiers.
