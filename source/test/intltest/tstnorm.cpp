@@ -946,10 +946,11 @@ void BasicNormalizerTest::TestConcatenate() {
 static int32_t
 ref_norm_compare(const UnicodeString &s1, const UnicodeString &s2, uint32_t options, UErrorCode &errorCode) {
     UnicodeString r1, r2, t1, t2;
+    int32_t normOptions=(int32_t)(options>>UNORM_COMPARE_NORM_OPTIONS_SHIFT);
 
     if(options&U_COMPARE_IGNORE_CASE) {
-        Normalizer::decompose(s1, FALSE, 0, r1, errorCode);
-        Normalizer::decompose(s2, FALSE, 0, r2, errorCode);
+        Normalizer::decompose(s1, FALSE, normOptions, r1, errorCode);
+        Normalizer::decompose(s2, FALSE, normOptions, r2, errorCode);
 
         r1.foldCase(options);
         r2.foldCase(options);
@@ -958,8 +959,8 @@ ref_norm_compare(const UnicodeString &s1, const UnicodeString &s2, uint32_t opti
         r2=s2;
     }
 
-    Normalizer::decompose(r1, FALSE, 0, t1, errorCode);
-    Normalizer::decompose(r2, FALSE, 0, t2, errorCode);
+    Normalizer::decompose(r1, FALSE, normOptions, t1, errorCode);
+    Normalizer::decompose(r2, FALSE, normOptions, t2, errorCode);
 
     if(options&U_COMPARE_CODE_POINT_ORDER) {
         return t1.compareCodePointOrder(t2);
@@ -971,8 +972,10 @@ ref_norm_compare(const UnicodeString &s1, const UnicodeString &s2, uint32_t opti
 // test wrapper for Normalizer::compare, sets UNORM_INPUT_IS_FCD appropriately
 static int32_t
 _norm_compare(const UnicodeString &s1, const UnicodeString &s2, uint32_t options, UErrorCode &errorCode) {
-    if( UNORM_YES==Normalizer::quickCheck(s1, UNORM_FCD, errorCode) &&
-        UNORM_YES==Normalizer::quickCheck(s2, UNORM_FCD, errorCode)) {
+    int32_t normOptions=(int32_t)(options>>UNORM_COMPARE_NORM_OPTIONS_SHIFT);
+
+    if( UNORM_YES==Normalizer::quickCheck(s1, UNORM_FCD, normOptions, errorCode) &&
+        UNORM_YES==Normalizer::quickCheck(s2, UNORM_FCD, normOptions, errorCode)) {
         options|=UNORM_INPUT_IS_FCD;
     }
 
@@ -1129,8 +1132,13 @@ BasicNormalizerTest::TestCompare() {
         "\\u00cc",
         "\\u0069\\u0300",
 
+        // strings with post-Unicode 3.2 normalization or normalization corrections
+        // 44..45
+        "\\u00e4\\u193b\\U0002f868",
+        "\\u0061\\u193b\\u0308\\u36fc",
+
         // empty string
-        // 44
+        // 46
         ""
     };
 
@@ -1138,6 +1146,7 @@ BasicNormalizerTest::TestCompare() {
 
     // all combinations of options
     // UNORM_INPUT_IS_FCD is set automatically if both input strings fulfill FCD conditions
+    // set UNORM_UNICODE_3_2 in one additional combination
     static const struct {
         uint32_t options;
         const char *name;
@@ -1147,7 +1156,8 @@ BasicNormalizerTest::TestCompare() {
         { U_COMPARE_IGNORE_CASE, "ignore case" },
         { U_COMPARE_CODE_POINT_ORDER|U_COMPARE_IGNORE_CASE, "c.p. order & ignore case" },
         { U_COMPARE_IGNORE_CASE|U_FOLD_CASE_EXCLUDE_SPECIAL_I, "ignore case & special i" },
-        { U_COMPARE_CODE_POINT_ORDER|U_COMPARE_IGNORE_CASE|U_FOLD_CASE_EXCLUDE_SPECIAL_I, "c.p. order & ignore case & special i" }
+        { U_COMPARE_CODE_POINT_ORDER|U_COMPARE_IGNORE_CASE|U_FOLD_CASE_EXCLUDE_SPECIAL_I, "c.p. order & ignore case & special i" },
+        { UNORM_UNICODE_3_2<<UNORM_COMPARE_NORM_OPTIONS_SHIFT, "Unicode 3.2" }
     };
 
     int32_t i, j, k, count=LENGTHOF(strings);
