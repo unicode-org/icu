@@ -3079,7 +3079,7 @@ private:
  * @return UnicodeString(s1).append(s2)
  * @draft ICU 2.8
  */
-inline UnicodeString
+U_COMMON_API UnicodeString
 operator+ (const UnicodeString &s1, const UnicodeString &s2);
 
 U_NAMESPACE_END
@@ -4017,16 +4017,6 @@ inline UnicodeString&
 UnicodeString::reverse(int32_t start,
                int32_t _length)
 { return doReverse(start, _length); }
-
-// functions that are not UnicodeString members ---------------------------- ***
-
-inline UnicodeString
-operator+ (const UnicodeString &s1, const UnicodeString &s2) {
-    return
-        UnicodeString(s1.length()+s2.length()+1, (UChar32)0, 0).
-            append(s1).
-                append(s2);
-}
 
 U_NAMESPACE_END
 
