@@ -300,60 +300,6 @@ static void ctest_appendToDataDirectory(const char *toAppend)
 }
 */
 
-void
-ctest_pathnameInContext( char* fullname, int32_t maxsize, const char* relPath )
-{
-    char mainDirBuffer[1024];
-    char* mainDir = NULL;
-    const char *dataDirectory = ctest_dataOutDir();
-    const char inpSepChar = '|';
-    char* tmp;
-    int32_t lenMainDir;
-    int32_t lenRelPath;
-
-#ifdef XP_MAC
-    Str255 volName;
-    int16_t volNum;
-    OSErr err = GetVol( volName, &volNum );
-    if (err != noErr)
-        volName[0] = 0;
-    mainDir = (char*) &(volName[1]);
-    mainDir[volName[0]] = 0;
-#else
-    if (dataDirectory != NULL) {
-        strcpy(mainDirBuffer, dataDirectory);
-        strcat(mainDirBuffer, ".." U_FILE_SEP_STRING);
-    } else {
-        mainDirBuffer[0]='\0';
-    }
-    mainDir = mainDirBuffer;
-#endif
-
-    lenMainDir = (int32_t)strlen(mainDir);
-    if(lenMainDir > 0 && mainDir[lenMainDir - 1] != U_FILE_SEP_CHAR) {
-        mainDir[lenMainDir++] = U_FILE_SEP_CHAR;
-        mainDir[lenMainDir] = 0;
-    }
-
-    if (relPath[0] == '|')
-        relPath++;
-    lenRelPath = (int32_t)strlen(relPath);
-    if (maxsize < lenMainDir + lenRelPath + 2) {
-        fullname[0] = 0;
-        return;
-    }
-    strcpy(fullname, mainDir);
-    /*strcat(fullname, U_FILE_SEP_STRING);*/
-    strcat(fullname, relPath);
-    strchr(fullname, inpSepChar);
-    tmp = strchr(fullname, inpSepChar);
-    while (tmp) {
-        *tmp = U_FILE_SEP_CHAR;
-        tmp = strchr(tmp+1, inpSepChar);
-    }
-}
-
-
 /* returns the path to icu/source/data */
 const char *  ctest_dataSrcDir()
 {
