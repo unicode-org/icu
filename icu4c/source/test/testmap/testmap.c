@@ -18,7 +18,6 @@
 #include <string.h>
 #include "unicode/udata.h"
 #include "unicode/ucnv.h"
-//#include "unicode/platform.h"
 
 extern const  char U_IMPORT U_ICUDATA_ENTRY_POINT [];
 
