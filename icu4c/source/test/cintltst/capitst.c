@@ -108,6 +108,7 @@ void addCollAPITest(TestNode** root)
     addTest(root, &TestDecomposition, "tscoll/capitst/TestDecomposition");
     addTest(root, &TestSafeClone, "tscoll/capitst/TestSafeClone");
     addTest(root, &TestGetSetAttr, "tscoll/capitst/TestGetSetAttr");
+    addTest(root, &TestBounds, "tscoll/capitst/TestBounds");
     
 }
 
@@ -976,4 +977,41 @@ void TestGetAll()
         log_verbose("%s\n", ucol_getAvailable(i));
 
 
+}
+
+void TestBounds() {
+  UErrorCode status = U_ZERO_ERROR;
+
+  UCollator *coll = ucol_open("en_US", &status);
+  
+  uint8_t sortkey[512], lower[512], upper[512];
+  UChar buffer[512];
+
+  const char *test[] = {
+    "John Smith",
+      "JOHN SMITH",
+      "john SMITH",
+      "j\\u00F6hn sm\\u00EFth",
+      "J\\u00F6hn Sm\\u00EFth",
+      "J\\u00D6HN SM\\u00CFTH"
+  };
+
+  int32_t i = 0, j = 0, buffSize = 0, skSize = 0, lowerSize = 0, upperSize = 0;
+
+  UColAttributeValue strength = UCOL_SECONDARY;
+
+  for(i = 0; i<sizeof(test)/sizeof(test[0]); i++) {
+    buffSize = u_unescape(test[i], buffer, 512);
+    skSize = ucol_getSortKey(coll, buffer, buffSize, sortkey, 512);
+    lowerSize = ucol_getLowerBoundSortKey(coll, sortkey, skSize, strength, lower, 512, &status);
+    upperSize = ucol_getUpperBoundSortKey(coll, sortkey, skSize, strength, upper, 512, &status);
+    for(j = i+1; j<sizeof(test)/sizeof(test[0]); j++) {
+      buffSize = u_unescape(test[j], buffer, 512);
+      skSize = ucol_getSortKey(coll, buffer, buffSize, sortkey, 512);
+      if(strcmp(lower, sortkey) == 1 || strcmp(upper, sortkey) != 1) {
+        log_err("Problem! i = %i, j = %i (%s vs %s)\n", i, j, test[i], test[j]);
+      }
+    }
+  }
+  ucol_close(coll);
 }
