@@ -1195,7 +1195,7 @@ UnicodeString::caseMap(BreakIterator *titleIter,
                              oldArray, oldLength,
                              &errorCode);
       if(U_FAILURE(errorCode)) {
-        delete [] bufferToDelete;
+        uprv_free(bufferToDelete);
         setToBogus();
         return *this;
       }

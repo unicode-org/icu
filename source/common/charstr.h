@@ -11,6 +11,7 @@
 #include "unicode/utypes.h"
 #include "unicode/uobject.h"
 #include "unicode/unistr.h"
+#include "cmemory.h"
 
 //--------------------------------------------------------------------
 // class CharString
@@ -57,7 +58,7 @@ inline CharString::CharString(const UnicodeString& str) {
     // TODO This isn't quite right -- we should probably do
     // preflighting here to determine the real length.
     if (str.length() >= (int32_t)sizeof(buf)) {
-        ptr = new char[str.length() + 8];
+        ptr = (char *)uprv_malloc(str.length() + 8);
     } else {
         ptr = buf;
     }
@@ -66,7 +67,7 @@ inline CharString::CharString(const UnicodeString& str) {
 
 inline CharString::~CharString() {
     if (ptr != buf) {
-        delete[] ptr;
+        uprv_free(ptr);
     }
 }
 

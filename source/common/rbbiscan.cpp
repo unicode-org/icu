@@ -633,7 +633,7 @@ static void  U_EXPORT2 U_CALLCONV RBBISetTable_deleter(void *p) {
     delete px->key;
     // Note:  px->val is owned by the linked list "fSetsListHead" in scanner.
     //        Don't delete the value nodes here.
-    delete px;
+    uprv_free(px);
 };
 U_CDECL_END
 
@@ -685,7 +685,7 @@ void RBBIRuleScanner::findSetFor(const UnicodeString &s, RBBINode *node, Unicode
     //
     // Add the new set to the set hash table.
     //
-    el      = new RBBISetTableEl;
+    el      = (RBBISetTableEl *)uprv_malloc(sizeof(RBBISetTableEl));
     UnicodeString *tkey = new UnicodeString(s);
     if (tkey == NULL || el == NULL || setToAdopt == NULL) {
         error(U_MEMORY_ALLOCATION_ERROR);
