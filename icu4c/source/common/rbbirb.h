@@ -219,7 +219,12 @@ struct RBBISetTableEl {
 //                      is unavailable.
 //
 //----------------------------------------------------------------------------
-void RBBIDebugPrintf(const char *fmt, ...);
+#ifdef RBBI_DEBUG
+#include <stdio.h>
+#define RBBIDebugPrintf printf
+#else
+#define RBBIDebugPrintf
+#endif
 
 U_NAMESPACE_END
 #endif
