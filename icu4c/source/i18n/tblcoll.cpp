@@ -139,6 +139,16 @@ const int32_t RuleBasedCollator::SECONDARYORDERSHIFT = 8;            // secondar
 const int32_t RuleBasedCollator::SORTKEYOFFSET = 1;                  // minimum sort key offset
 const int32_t RuleBasedCollator::CONTRACTCHAROVERFLOW = 0x7FFFFFFF;  // Indicates the char is a contract char
 
+const int32_t RuleBasedCollator::COLELEMENTSTART = 0x02020202;       // starting value for collation elements
+const int32_t RuleBasedCollator::PRIMARYLOWZEROMASK = 0x00FF0000;    // testing mask for primary low element
+const int32_t RuleBasedCollator::RESETSECONDARYTERTIARY = 0x00000202;// reseting value for secondaries and tertiaries
+const int32_t RuleBasedCollator::RESETTERTIARY = 0x00000002;         // reseting value for tertiaries
+
+const int32_t RuleBasedCollator::IGNORABLE = 0x02020202;
+const int32_t RuleBasedCollator::PRIMIGNORABLE = 0x0202;
+const int32_t RuleBasedCollator::SECIGNORABLE = 0x02;
+const int32_t RuleBasedCollator::TERIGNORABLE = 0x02;
+
 const int16_t RuleBasedCollator::FILEID = 0x5443;                    // unique file id for parity check
 const char* RuleBasedCollator::kFilenameSuffix = ".col";             // binary collation file extension
 char  RuleBasedCollator::fgClassID = 0; // Value is irrelevant       // class id
@@ -1316,7 +1326,7 @@ RuleBasedCollator::compareEx(const   UChar* source,
         pTOrder = CollationElementIterator::primaryOrder(tOrder);
         if (sOrder == tOrder)
         {
-            if (isFrenchSec && pSOrder != 0)
+            if (isFrenchSec && pSOrder != SECIGNORABLE)
             {
                 if (!checkSecTer)
                 {
@@ -1336,7 +1346,7 @@ RuleBasedCollator::compareEx(const   UChar* source,
         // Compare primary differences first.
         if (pSOrder != pTOrder)
         {
-            if (sOrder == 0)
+            if (sOrder == IGNORABLE)
             {
                 // The entire source element is ignorable.
                 // Skip to the next source element, but don't fetch another target element.
@@ -1344,7 +1354,7 @@ RuleBasedCollator::compareEx(const   UChar* source,
                 continue;
             }
 
-            if (tOrder == 0)
+            if (tOrder == IGNORABLE)
             {
                 gets = FALSE;
                 continue;
@@ -1352,7 +1362,7 @@ RuleBasedCollator::compareEx(const   UChar* source,
 
             // The source and target elements aren't ignorable, but it's still possible
             // for the primary component of one of the elements to be ignorable....
-            if (pSOrder == 0)  // primary order in source is ignorable
+            if (pSOrder == PRIMIGNORABLE)  // primary order in source is ignorable
             {
                 // The source's primary is ignorable, but the target's isn't.  We treat ignorables
                 // as a secondary difference, so remember that we found one.
@@ -1365,7 +1375,7 @@ RuleBasedCollator::compareEx(const   UChar* source,
                 // Skip to the next source element, but don't fetch another target element.
                 gett = FALSE;
             }
-            else if (pTOrder == 0)
+            else if (pTOrder == PRIMIGNORABLE)
             {
                 // record differences - see the comment above.
                 if (checkSecTer)
@@ -1440,14 +1450,14 @@ RuleBasedCollator::compareEx(const   UChar* source,
         // The source string has more elements, but the target string hasn't.
         do
         {
-            if (CollationElementIterator::primaryOrder(sOrder) != 0)
+            if (CollationElementIterator::primaryOrder(sOrder) != PRIMIGNORABLE)
             {
                 // We found an additional non-ignorable base character in the source string.
                 // This is a primary difference, so the source is greater
                 return Collator::GREATER; // (strength is PRIMARY)
             }
 
-            if (CollationElementIterator::secondaryOrder(sOrder) != 0)
+            if (CollationElementIterator::secondaryOrder(sOrder) != SECIGNORABLE)
             {
                 // Additional secondary elements mean the source string is greater
                 if (checkSecTer)
@@ -1464,14 +1474,14 @@ RuleBasedCollator::compareEx(const   UChar* source,
         // The target string has more elements, but the source string hasn't.
         do
         {
-            if (CollationElementIterator::primaryOrder(tOrder) != 0)
+            if (CollationElementIterator::primaryOrder(tOrder) != PRIMIGNORABLE)
             {
                 // We found an additional non-ignorable base character in the target string.
                 // This is a primary difference, so the source is less
                 return Collator::LESS; // (strength is PRIMARY)
             }
 
-            if (CollationElementIterator::secondaryOrder(tOrder) != 0)
+            if (CollationElementIterator::secondaryOrder(tOrder) != SECIGNORABLE)
             {
                 // Additional secondary elements in the target mean the source string is less
                 if (checkSecTer)
@@ -1770,12 +1780,12 @@ RuleBasedCollator::getCollationKeyEx( const   UChar*  source,
         }
         else
         {
-            if (compareSec && secOrder != 0)
+            if (compareSec && secOrder != SECIGNORABLE)
             {
                 totalSec += 1;
             }
 
-            if (compareTer && terOrder != 0)
+            if (compareTer && terOrder != TERIGNORABLE)
             {
                 totalTer += 1;
             }
@@ -1863,12 +1873,12 @@ RuleBasedCollator::getCollationKeyEx( const   UChar*  source,
         }
         else
         {
-            if (compareSec && secOrder != 0)
+            if (compareSec && secOrder != SECIGNORABLE)
             {
                 secCursor = sortkey.storeBytes(secCursor, secOrder + data->maxSecOrder + SORTKEYOFFSET);
             }
 
-            if (compareTer && terOrder != 0)
+            if (compareTer && terOrder != TERIGNORABLE)
             {
                 terCursor = sortkey.storeBytes(terCursor, terOrder + data->maxTerOrder + SORTKEYOFFSET);
             }
@@ -1964,7 +1974,7 @@ RuleBasedCollator::build(const UnicodeString&   pattern,
         return;
     }
 
-    int32_t order = 0;
+    int32_t order = COLELEMENTSTART;
 
     // Walk through each entry
     for (i = 0; i < mPattern->getCount(); ++i)
@@ -2162,7 +2172,13 @@ RuleBasedCollator::increment(Collator::ECollationStrength aStrength, int32_t las
     case Collator::PRIMARY:
         // increment priamry order  and mask off secondary and tertiary difference
         lastValue += PRIMARYORDERINCREMENT;
+        if((lastValue & PRIMARYLOWZEROMASK) == 0) {
+            lastValue += PRIMARYORDERINCREMENT;
+            lastValue += PRIMARYORDERINCREMENT;
+        }
         lastValue &= PRIMARYORDERMASK;
+
+        lastValue |= RESETSECONDARYTERTIARY; // Start all values from 02
         isOverIgnore = TRUE;
         break;
 
@@ -2170,6 +2186,7 @@ RuleBasedCollator::increment(Collator::ECollationStrength aStrength, int32_t las
         // increment secondary order and mask off tertiary difference
         lastValue += SECONDARYORDERINCREMENT;
         lastValue &= SECONDARYDIFFERENCEONLY;
+        lastValue |= RESETTERTIARY; // Start all values from 02
 
         // record max # of ignorable chars with secondary difference
         if (isOverIgnore == FALSE)
