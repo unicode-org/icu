@@ -703,7 +703,8 @@ parse(FileStream *f, const char *cp, const char *inputDir,
                 UChar *rules = NULL;
                 struct UString newTag;
 
-                coll = ucol_openRules(token.fChars, token.fLength, UCOL_DECOMP_CAN, 0, &intStatus);
+                coll = ucol_openRules(token.fChars, token.fLength, 
+                  UNORM_NONE, UCOL_DEFAULT_STRENGTH, &intStatus);
 
                 if(U_SUCCESS(intStatus) && coll !=NULL) {
                     binColData = ucol_cloneRuleData(coll, &len, &intStatus);
