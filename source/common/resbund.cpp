@@ -57,7 +57,10 @@
 #include "uresimp.h"
 
 #include <string.h>
-#include <wchar.h>
+
+#if U_HAVE_WCHAR_H
+# include <wchar.h>
+#endif
 
 #include "cmemory.h"
 
