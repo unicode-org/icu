@@ -188,7 +188,7 @@ main(int argc, char* argv[]) {
 
         /* check for comment */
 
-	if (*line == '#') {
+        if (*line == '#') {
             continue;
         }
 

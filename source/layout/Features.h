@@ -15,21 +15,21 @@ U_NAMESPACE_BEGIN
 
 struct FeatureRecord
 {
-    ATag		featureTag;
-    Offset		featureTableOffset;
+    ATag        featureTag;
+    Offset      featureTableOffset;
 };
 
 struct FeatureTable
 {
-    Offset		featureParamsOffset;
-    le_uint16	lookupCount;
-    le_uint16	lookupListIndexArray[ANY_NUMBER];
+    Offset      featureParamsOffset;
+    le_uint16   lookupCount;
+    le_uint16   lookupListIndexArray[ANY_NUMBER];
 };
 
 struct FeatureListTable
 {
-    le_uint16			featureCount;
-    FeatureRecord		featureRecordArray[ANY_NUMBER];
+    le_uint16           featureCount;
+    FeatureRecord       featureRecordArray[ANY_NUMBER];
 
     const FeatureTable	*getFeatureTable(le_uint16 featureIndex, LETag *featureTag) const;
 
