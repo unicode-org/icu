@@ -2,8 +2,8 @@
  * (C) Copyright IBM Corp. 1998-2003 - All Rights Reserved
  *
  * $Source: /xsrl/Nsvn/icu/icu/source/layout/IndicReordering.h,v $
- * $Date: 2003/06/03 20:58:21 $
- * $Revision: 1.9 $
+ * $Date: 2003/11/25 23:41:24 $
+ * $Revision: 1.10 $
  *
  */
 
@@ -68,7 +68,7 @@ struct IndicClassTable
         CF_INDEX_SHIFT  = 16
     };
 
-    typedef le_int32 CharClass;
+    typedef le_uint32 CharClass;
 
     enum ScriptFlagBits
     {
