@@ -99,7 +99,7 @@ compareEntries(const UHashTok p1, const UHashTok p2) {
 U_CDECL_END
 
 U_CFUNC void 
-usprep_init(UErrorCode *status) {
+usprep_init() {
     umtx_init(&usprepMutex);
 }
 
@@ -304,11 +304,8 @@ usprep_open(const char* path,
     if(status == NULL || U_FAILURE(*status)){
         return NULL;
     }
-
-    usprep_init(status);
-    if (U_FAILURE(*status)) {
-        return NULL;
-    }
+    /* initialize the mutex */
+    usprep_init();
        
     /* initialize the profile struct members */
     return usprep_getProfile(path,name,status);;
@@ -385,11 +382,12 @@ usprep_internal_flushCache(UBool noRefCount){
     return deletedNum;
 }
 
-/* Works just like ucnv_flushCache() */
+/* Works just like ucnv_flushCache() 
 static int32_t 
 usprep_flushCache(){
     return usprep_internal_flushCache(FALSE);
 }
+*/
 
 U_CFUNC UBool 
 usprep_cleanup(void){
@@ -500,7 +498,7 @@ usprep_map(  const UStringPrepProfile* profile,
     UStringPrepType type;
     int16_t value;
     UBool isIndex;
-    int32_t* indexes = (int32_t*)profile->indexes;
+    const int32_t* indexes = profile->indexes;
 
     // no error checking the caller check for error and arguments
     // no string length check the caller finds out the string length
@@ -660,7 +658,6 @@ usprep_prepare(   const UStringPrepProfile* profile,
     UCharDirection direction=U_CHAR_DIRECTION_COUNT, firstCharDir=U_CHAR_DIRECTION_COUNT;
     UBool leftToRight=FALSE, rightToLeft=FALSE;
     int32_t rtlPos =-1, ltrPos =-1;
-    const int32_t *indexes = profile->indexes;
 
     //get the string length
     if(srcLength == -1){

@@ -64,6 +64,7 @@ void bundle_setlocale(struct SRBRoot *bundle, UChar *locale, UErrorCode *status)
 int32_t bundle_addtag(struct SRBRoot *bundle, const char *tag, UErrorCode *status);
 
 /* Various resource types */
+struct SResource* res_open(const struct UString* comment, UErrorCode* status);
 
 struct SResTable {
     uint32_t fCount;
