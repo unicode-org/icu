@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/StringMatcher.java,v $ 
- * $Date: 2002/02/25 22:43:58 $ 
- * $Revision: 1.9 $
+ * $Date: 2002/06/26 18:12:39 $ 
+ * $Revision: 1.10 $
  *
  *****************************************************************************************
  */
@@ -279,6 +279,21 @@ class StringMatcher implements UnicodeMatcher, UnicodeReplacer {
      */
     public void resetMatch() {
         matchStart = matchLimit = -1;
+    }
+
+    /**
+     * Union the set of all characters that may output by this object
+     * into the given set.
+     * @param toUnionTo the set into which to union the output characters
+     * @return a reference to toUnionTo
+     */
+    public UnicodeSet getReplacementSet(UnicodeSet toUnionTo) {
+        // The output of this replacer varies; it is the source text between
+        // matchStart and matchLimit.  Since this varies depending on the
+        // input text, we can't compute it here.  We can either do nothing
+        // or we can add ALL characters to the set.  It's probably more useful
+        // to do nothing.
+        return toUnionTo;
     }
 }
 

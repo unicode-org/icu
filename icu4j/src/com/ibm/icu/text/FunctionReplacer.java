@@ -71,6 +71,16 @@ class FunctionReplacer implements UnicodeReplacer {
         rule.append(" )");
         return rule.toString();
     }
+
+    /**
+     * Union the set of all characters that may output by this object
+     * into the given set.
+     * @param toUnionTo the set into which to union the output characters
+     * @return a reference to toUnionTo
+     */
+    public UnicodeSet getReplacementSet(UnicodeSet toUnionTo) {
+        return toUnionTo.addAll(translit.getTargetSet());
+    }
 }
 
 //eof

@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/CompoundTransliterator.java,v $ 
- * $Date: 2002/02/25 22:43:58 $ 
- * $Revision: 1.29 $
+ * $Date: 2002/06/26 18:12:39 $ 
+ * $Revision: 1.30 $
  *
  *****************************************************************************************
  */
@@ -30,7 +30,7 @@ import java.util.Vector;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: CompoundTransliterator.java,v $ $Revision: 1.29 $ $Date: 2002/02/25 22:43:58 $
+ * @version $RCSfile: CompoundTransliterator.java,v $ $Revision: 1.30 $ $Date: 2002/06/26 18:12:39 $
  */
 public class CompoundTransliterator extends Transliterator {
 
@@ -307,9 +307,9 @@ public class CompoundTransliterator extends Transliterator {
 
     /**
      * Return the set of all characters that may be modified by this
-     * Transliterator, ignoring the effect of filters.
+     * Transliterator, ignoring the effect of our filter.
      */
-    UnicodeSet getSourceSet() {
+    protected UnicodeSet handleGetSourceSet() {
         UnicodeSet set = new UnicodeSet();
         for (int i=0; i<trans.length; ++i) {
             set.addAll(trans[i].getSourceSet());
@@ -324,6 +324,19 @@ public class CompoundTransliterator extends Transliterator {
             if (!set.isEmpty()) {
                 break;
             }
+        }
+        return set;
+    }
+
+    /**
+     * Returns the set of all characters that may be generated as
+     * replacement text by this transliterator.
+     */
+    public UnicodeSet getTargetSet() {
+        UnicodeSet set = new UnicodeSet();
+        for (int i=0; i<trans.length; ++i) {
+            // This is a heuristic, and not 100% reliable.
+            set.addAll(trans[i].getTargetSet());
         }
         return set;
     }

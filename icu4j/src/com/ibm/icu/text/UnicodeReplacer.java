@@ -52,6 +52,14 @@ interface UnicodeReplacer {
      * Utility.isUnprintable().
      */
     public abstract String toReplacerPattern(boolean escapeUnprintable);
+
+    /**
+     * Union the set of all characters that may output by this object
+     * into the given set.
+     * @param toUnionTo the set into which to union the output characters
+     * @return a reference to toUnionTo
+     */
+    public abstract UnicodeSet getReplacementSet(UnicodeSet toUnionTo);
 }
 
 //eof

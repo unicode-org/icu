@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/TransliterationRuleSet.java,v $
- * $Date: 2002/02/25 22:43:58 $
- * $Revision: 1.23 $
+ * $Date: 2002/06/26 18:12:40 $
+ * $Revision: 1.24 $
  *
  *****************************************************************************************
  */
@@ -28,7 +28,7 @@ import com.ibm.icu.impl.Utility;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: TransliterationRuleSet.java,v $ $Revision: 1.23 $ $Date: 2002/02/25 22:43:58 $
+ * @version $RCSfile: TransliterationRuleSet.java,v $ $Revision: 1.24 $ $Date: 2002/06/26 18:12:40 $
  */
 class TransliterationRuleSet {
     /**
@@ -256,12 +256,29 @@ class TransliterationRuleSet {
         }
         return set;
     }
+
+    /**
+     * Return the set of all characters that may be emitted by this set.
+     */
+    UnicodeSet getTargetSet() {
+        UnicodeSet set = new UnicodeSet();
+        int count = ruleVector.size();
+        for (int i=0; i<count; ++i) {
+            TransliterationRule r =
+                (TransliterationRule) ruleVector.elementAt(i);
+            r.getTargetSet(set);
+        }
+        return set;
+    }
 }
 
 /* $Log: TransliterationRuleSet.java,v $
- * Revision 1.23  2002/02/25 22:43:58  ram
- * Move Utility class to icu.impl
+ * Revision 1.24  2002/06/26 18:12:40  alan
+ * jitterbug 1434: initial public implementation of getSourceSet and getTargetSet
  *
+/* Revision 1.23  2002/02/25 22:43:58  ram
+/* Move Utility class to icu.impl
+/*
 /* Revision 1.22  2002/02/16 03:06:17  Mohan
 /* ICU4J reorganization
 /*
