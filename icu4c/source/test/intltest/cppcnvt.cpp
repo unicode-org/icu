@@ -239,7 +239,14 @@ void ConvertTest::TestConvert()
     if (((*someConverters[1] == *someConverters[0])==TRUE)&&
     (*someConverters[1] == *someConverters[2])==FALSE)
       logln("Equality test ok");
-    else errln("Equality test failed");
+    else {
+      if(!((*someConverters[1] == *someConverters[0])==TRUE)) {
+        errln("Equality test failed line " + UnicodeString() + 244);
+      }
+      if(!((*someConverters[1] == *someConverters[2])==FALSE)) {
+        errln("Equality test failed line " + UnicodeString() + 247);
+      }
+    }
     
     logln("\n---Testing UnicodeConverterCPP::operator!=...");
     if (((*someConverters[1] != *someConverters[0])==FALSE)&&
@@ -252,7 +259,7 @@ void ConvertTest::TestConvert()
     *someConverters[3] = *someConverters[2];
     if ((*someConverters[2] == *someConverters[3]))
       logln("Equality test ok");
-    else errln("Equality test failed");
+    else  errln("Equality test failed line "  + UnicodeString() + 262);
    
     delete someConverters[0];
     delete someConverters[1];
@@ -490,13 +497,13 @@ void ConvertTest::TestConvert()
     //uniString3 = new UnicodeString(my_ucs_file_buffer,i);
     
     /*checks if Uni1 == Uni3*/ 
-    if (uniString->compare(*uniString3)) errln("Equality test failed");
+    if (uniString->compare(*uniString3)) errln("Equality test failed line "  + UnicodeString() + 500);
     else logln("Equality test ok");
 
     /*checks if Uni2 == Uni3 This is a sanity check for the consistency of the
     UnicodeString and Unicode Convters*/ 
     logln("\n---Testing Consistency between UChar* and UnicodeString Conversion...");
-    if (uniString2->compare(*uniString3)) errln("Equality test failed");
+    if (uniString2->compare(*uniString3)) errln("Equality test failed line "  + UnicodeString() + 506);
     else logln("Equality test ok");
 
     logln("\n---Testing Regression 1100057 ...");
