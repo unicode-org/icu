@@ -4,7 +4,6 @@
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * $Source: /xsrl/Nsvn/icu/icu/source/common/unicode/usetiter.h,v $ 
-* $Revision: 1.6 $
 **********************************************************************
 */
 #ifndef USETITER_H
