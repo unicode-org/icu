@@ -175,7 +175,7 @@ static int16_t getTagNumber(const char *tagname) {
 
 #else
 
-	const char *name = tagname;
+        const char *name = tagname;
 
 #endif
 
@@ -373,7 +373,7 @@ ucnv_getStandardName(const char *alias, const char *standard, UErrorCode *pError
    return NULL;
 }
 
-U_CAPI uint16_t
+U_CFUNC uint16_t
 ucnv_io_countAvailableConverters(UErrorCode *pErrorCode) {
     if(haveAliasData(pErrorCode)) {
         return *converterTable;
