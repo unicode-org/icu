@@ -2204,6 +2204,11 @@ public:
 
 protected:
   /**
+   * Implement Replaceable::getLength() (see jitterbug 1027).
+   */
+  virtual int32_t getLength() const;
+
+  /**
    * The change in Replaceable to use virtual getCharAt() allows
    * UnicodeString::charAt() to be inline again (see jitterbug 709).
    */
@@ -2422,8 +2427,7 @@ private:
    * on 64-bit machines (8-byte pointers), it should be 40 bytes.
    */
   // (implicit) *vtable;
-  // fLength is moved into the superclass Replaceable (jitterbug 709)
-  // int32_t   fLength;        // number characters in fArray
+  int32_t   fLength;        // number of characters in fArray
   int32_t   fCapacity;      // sizeof fArray
   UChar     *fArray;        // the Unicode data
   uint16_t  fFlags;         // bit flags: see constants above

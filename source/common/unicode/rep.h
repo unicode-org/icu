@@ -160,39 +160,28 @@ protected:
     Replaceable();
 
     /**
-     * Constructor with initial length.
-     */
-    Replaceable(int32_t initialLength);
+     * Virtual version of length().
+     */ 
+    virtual int32_t getLength() const = 0;
 
     /**
      * Virtual version of charAt().
-     * This allows UnicodeString::charAt() to be inline again (see jitterbug 709).
      */
     virtual UChar getCharAt(UTextOffset offset) const = 0;
 
     /**
      * Virtual version of char32At().
-     * This allows UnicodeString::char32At() to be inline again (see jitterbug 709).
      */
     virtual UChar32 getChar32At(UTextOffset offset) const = 0;
-
-    /**
-     * This field must always reflect the number of UChars in the text
-     * object. A subclass must keep this up to date.
-     * Moved here from UnicodeString so that length() can be inline (see jitterbug 709).
-     */
-    int32_t   fLength;        // number characters in fArray
 };
 
-inline Replaceable::Replaceable() : fLength(0) {}
-
-inline Replaceable::Replaceable(int32_t initialLength) : fLength(initialLength) {}
+inline Replaceable::Replaceable() {}
 
 inline Replaceable::~Replaceable() {}
 
 inline int32_t
 Replaceable::length() const {
-    return fLength;
+    return getLength();
 }
 
 inline UChar

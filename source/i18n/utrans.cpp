@@ -52,6 +52,8 @@ public:
 
 protected:
 
+    virtual int32_t getLength() const;
+
     virtual UChar getCharAt(UTextOffset offset) const;
 
     virtual UChar32 getChar32At(UTextOffset offset) const;
@@ -60,7 +62,7 @@ protected:
 
 ReplaceableGlue::ReplaceableGlue(UReplaceable *replaceable,
                                  UReplaceableCallbacks *funcCallback)
-  : Replaceable((*funcCallback->length)(replaceable))
+  : Replaceable()
 {
     this->rep = replaceable;
     this->func = funcCallback;
@@ -70,6 +72,10 @@ ReplaceableGlue::ReplaceableGlue(UReplaceable *replaceable,
 
 ReplaceableGlue::~ReplaceableGlue() {
     delete[] buf;
+}
+
+int32_t ReplaceableGlue::getLength() const {
+    return (*func->length)(rep);
 }
 
 UChar ReplaceableGlue::getCharAt(UTextOffset offset) const {
@@ -91,12 +97,10 @@ void ReplaceableGlue::handleReplaceBetween(UTextOffset start,
     }
     text.extract(0, len, buf);
     (*func->replace)(rep, start, limit, buf, len);
-    fLength = (*func->length)(rep);
 }
 
 void ReplaceableGlue::copy(int32_t start, int32_t limit, int32_t dest) {
     (*func->copy)(rep, start, limit, dest);
-    fLength = (*func->length)(rep);
 }
 
 /********************************************************************
