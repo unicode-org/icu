@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/util/VersionInfoTest.java,v $ 
-* $Date: 2002/03/08 23:38:26 $ 
-* $Revision: 1.3 $
+* $Date: 2002/03/23 00:58:20 $ 
+* $Revision: 1.4 $
 *
 *******************************************************************************
 */
@@ -75,7 +75,7 @@ public final class VersionInfoTest extends TestFmwk
     	}
     	try {
     		version = VersionInfo.getInstance("-2.0.0");
-    		errln("\"2.0.0\" should produce an exception");
+    		errln("\"-2.0.0\" should produce an exception");
     	} catch (RuntimeException e) {
     	}
     	try {

@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/util/VersionInfo.java,v $ 
- * $Date: 2002/03/12 00:00:44 $ 
- * $Revision: 1.5 $
+ * $Date: 2002/03/23 00:58:21 $ 
+ * $Revision: 1.6 $
  *
  * jitterbug 1741
  *****************************************************************************************
@@ -104,8 +104,8 @@ public final class VersionInfo
      * @param version version String in the format of "major.minor.milli.micro"
      *                or "major.minor.milli" or "major.minor" or "major",
      *                where major, minor, milli, micro are non-negative numbers
-     *                less than 255. If the trailing version numbers are not 
-     *                specified they are taken as 0s. E.g. Version "3.1" is
+     *                <= 255. If the trailing version numbers are 
+     *                not specified they are taken as 0s. E.g. Version "3.1" is
      *                equivalent to "3.1.0.0".
      * @return an instance of VersionInfo with the argument version.
      * @exception throws an IllegalArgumentException when the argument version 
@@ -149,12 +149,12 @@ public final class VersionInfo
  
     /** 
      * Returns an instance of VersionInfo with the argument version.
-     * @param major major version, non-negative number less than 255.
-     * @param minor minor version, non-negative number less than 255.
-     * @param milli milli version, non-negative number less than 255.
-     * @param micro micro version, non-negative number less than 255.
+     * @param major major version, non-negative number <= 255.
+     * @param minor minor version, non-negative number <= 255.
+     * @param milli milli version, non-negative number <= 255.
+     * @param micro micro version, non-negative number <= 255.
      * @exception throws an IllegalArgumentException when either arguments are
-     *                                     negative or greater than 255 
+     *                                     negative or > 255 
      * @draft 2.1
      */
     public static VersionInfo getInstance(int major, int minor, int milli, 
@@ -179,11 +179,11 @@ public final class VersionInfo
     /** 
      * Returns an instance of VersionInfo with the argument version.
      * Equivalent to getInstance(major, minor, milli, 0).
-     * @param major major version, non-negative number less than 255.
-     * @param minor minor version, non-negative number less than 255.
-     * @param milli milli version, non-negative number less than 255.
+     * @param major major version, non-negative number <= 255.
+     * @param minor minor version, non-negative number <= 255.
+     * @param milli milli version, non-negative number <= 255.
      * @exception throws an IllegalArgumentException when either arguments are
-     *                                     negative or greater than 255 
+     *                                     negative or > 255 
      * @draft 2.1
      */
     public static VersionInfo getInstance(int major, int minor, int milli)
@@ -194,10 +194,10 @@ public final class VersionInfo
     /** 
      * Returns an instance of VersionInfo with the argument version.
      * Equivalent to getInstance(major, minor, 0, 0).
-     * @param major major version, non-negative number less than 255.
-     * @param minor minor version, non-negative number less than 255.
+     * @param major major version, non-negative number <= 255.
+     * @param minor minor version, non-negative number <= 255.
      * @exception throws an IllegalArgumentException when either arguments are
-     *                                     negative or greater than 255 
+     *                                     negative or > 255 
      * @draft 2.1
      */
     public static VersionInfo getInstance(int major, int minor)
@@ -208,9 +208,9 @@ public final class VersionInfo
     /** 
      * Returns an instance of VersionInfo with the argument version.
      * Equivalent to getInstance(major, 0, 0, 0).
-     * @param major major version, non-negative number less than 255.
+     * @param major major version, non-negative number <= 255.
      * @exception throws an IllegalArgumentException when either arguments are
-     *                                     negative or greater than 255 
+     *                                     negative or > 255 
      * @draft 2.1
      */
     public static VersionInfo getInstance(int major)
