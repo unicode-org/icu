@@ -251,7 +251,7 @@ protected:
  ******************************************************************
  */
 
-const UChar ICUServiceKey::PREFIX_DELIMITER = '/';
+const UChar ICUServiceKey::PREFIX_DELIMITER = 0x002F;   /* '/' */
 
 ICUServiceKey::ICUServiceKey(const UnicodeString& id) 
   : _id(id) {
