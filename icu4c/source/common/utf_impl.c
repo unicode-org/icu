@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 1999-2001, International Business Machines
+*   Copyright (C) 1999-2002, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -127,11 +127,13 @@ utf8_nextCharSafeBody(const uint8_t *s, int32_t *pi, int32_t length, UChar32 c, 
          * that needs count bytes so that UTF8_GET_CHAR_SAFE() works right.
          *
          * Starting with Unicode 3.0.1, non-shortest forms are illegal.
+         * Starting with Unicode 3.2, surrogate code points must not be
+         * encoded in UTF-8, and there are no irregular sequences any more.
          */
 
         /* correct sequence - all trail bytes have (b7..b6)==(10)? */
         /* illegal is also set if count>=4 */
-        if(illegal || (c)<utf8_minLegal[count]) {
+        if(illegal || (c)<utf8_minLegal[count] || UTF_IS_SURROGATE(c)) {
             /* error handling */
             uint8_t errorCount=count;
             /* don't go beyond this sequence */
@@ -141,8 +143,8 @@ utf8_nextCharSafeBody(const uint8_t *s, int32_t *pi, int32_t length, UChar32 c, 
                 --count;
             }
             c=utf8_errorValue[errorCount-count];
-        } else if((strict) && !UTF_IS_UNICODE_CHAR(c)) {
-            /* irregular sequence */
+        } else if((strict) && UTF_IS_UNICODE_NONCHAR(c)) {
+            /* strict: forbid non-characters like U+fffe */
             c=utf8_errorValue[count];
         }
     } else /* too few bytes left */ {
@@ -167,7 +169,8 @@ utf8_appendCharSafeBody(uint8_t *s, int32_t i, int32_t length, UChar32 c) {
             return i;
         }
     } else if((uint32_t)(c)<=0xffff) {
-        if((i)+2<(length)) {
+        /* Starting with Unicode 3.2, surrogate code points must not be encoded in UTF-8. */
+        if((i)+2<(length) && !UTF_IS_SURROGATE(c)) {
             (s)[(i)++]=(uint8_t)(((c)>>12)|0xe0);
             (s)[(i)++]=(uint8_t)((((c)>>6)&0x3f)|0x80);
             (s)[(i)++]=(uint8_t)(((c)&0x3f)|0x80);
@@ -225,8 +228,8 @@ utf8_prevCharSafeBody(const uint8_t *s, int32_t start, int32_t *pi, UChar32 c, U
                     *pi=i;
                     UTF8_MASK_LEAD_BYTE(b, count);
                     c|=(UChar32)b<<shift;
-                    if(count>=4 || c>0x10ffff || c<utf8_minLegal[count] || (strict && !UTF_IS_UNICODE_CHAR(c))) {
-                        /* illegal or irregular sequence */
+                    if(count>=4 || c>0x10ffff || c<utf8_minLegal[count] || UTF_IS_SURROGATE(c) || (strict && UTF_IS_UNICODE_NONCHAR(c))) {
+                        /* illegal sequence or (strict and non-character) */
                         if(count>=4) {
                             count=3;
                         }
