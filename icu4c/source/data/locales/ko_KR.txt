@@ -23,7 +23,7 @@ ko_KR {
     LocaleID:int { 0x0412 }
     Countries {
         //KR { "\uB300\uD55C\uBBFC\uAD6D" }
-        KP { "\uC870\uC120 \uBBFC\uC8FC\uC8FC\uC758 \uC778\uBBFC \uACF5\uD654\uAD6D" }
+        //KP { "\uC870\uC120 \uBBFC\uC8FC\uC8FC\uC758 \uC778\uBBFC \uACF5\uD654\uAD6D" }
         //US { "\uBBF8\uAD6D" }
         //JP { "\uC77C\uBCF8" }
         //GB { "\uC601\uAD6D" }
