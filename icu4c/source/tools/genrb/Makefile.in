@@ -28,7 +28,7 @@ CLEANFILES = *~ $(TARGET).$(SECTION) $(DEPS)
 
 ## Target information
 TARGET = genrb
-DERB = derb
+# DERB = derb
 
 ENABLE_STATIC = @ENABLE_STATIC@
 
