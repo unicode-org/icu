@@ -791,7 +791,7 @@ ucnv_getAliases(const char *alias, const char **aliases, UErrorCode *pErrorCode)
  * @return number of standards
  * @stable
  */
-U_CAPI uint16_t
+U_CAPI uint16_t U_EXPORT2
 ucnv_countStandards(void);
 
 /**
@@ -801,7 +801,7 @@ ucnv_countStandards(void);
  * @return returns the name of the standard at given index
  * @stable
  */
-U_CAPI const char *
+U_CAPI const char * U_EXPORT2
 ucnv_getStandard(uint16_t n, UErrorCode *pErrorCode);
 
 /**
@@ -815,7 +815,8 @@ ucnv_getStandard(uint16_t n, UErrorCode *pErrorCode);
  *         then <code>NULL</code> is returned
  * @stable
  */
-U_CAPI const char *ucnv_getStandardName(const char *name, const char *standard, UErrorCode *pErrorCode);
+U_CAPI const char * U_EXPORT2
+ucnv_getStandardName(const char *name, const char *standard, UErrorCode *pErrorCode);
 
 /**
  * returns the current default converter name.

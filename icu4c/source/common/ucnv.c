@@ -264,22 +264,6 @@ ucnv_getAliases(const char *alias, const char **aliases, UErrorCode *pErrorCode)
     }
 }
 
-U_CAPI uint16_t
-ucnv_countStandards(void) {
-    UErrorCode err = U_ZERO_ERROR;
-    return ucnv_io_countStandards(&err);
-}
-
-U_CAPI const char *
-ucnv_getStandard(uint16_t n, UErrorCode *pErrorCode) {
-    return ucnv_io_getStandard(n, pErrorCode);
-}
-
-U_CAPI const char *
-ucnv_getStandardName(const char *name, const char *standard, UErrorCode *pErrorCode) {
-    return ucnv_io_getStandardName(name, standard, pErrorCode);
-}
-
 void   ucnv_getSubstChars (const UConverter * converter,
                            char *mySubChar,
                            int8_t * len,

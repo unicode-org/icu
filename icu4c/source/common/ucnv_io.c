@@ -22,6 +22,7 @@
 */
 
 #include "unicode/utypes.h"
+#include "unicode/ucnv.h"           /* This file implements ucnv_xXXX() APIs */
 #include "umutex.h"
 #include "cstring.h"
 #include "cmemory.h"
@@ -324,11 +325,12 @@ ucnv_io_getAlias(const char *alias, uint16_t n, UErrorCode *pErrorCode) {
     return NULL;
 }
 
-U_CFUNC uint16_t
-ucnv_io_countStandards(UErrorCode *pErrorCode) {
-    if (haveAliasData(pErrorCode)) {
+U_CAPI uint16_t U_EXPORT2
+ucnv_countStandards(void) {
+    UErrorCode errorCode = U_ZERO_ERROR;
+    if (haveAliasData(&errorCode)) {
         if (!tagTable) {
-            *pErrorCode = U_INVALID_FORMAT_ERROR;
+            /* errorCode = U_INVALID_FORMAT_ERROR; */
             return 0;
         }
 
@@ -338,8 +340,8 @@ ucnv_io_countStandards(UErrorCode *pErrorCode) {
     return 0;
 }
 
-U_CFUNC const char *
-ucnv_io_getStandard(uint16_t n, UErrorCode *pErrorCode) {
+U_CAPI const char * U_EXPORT2
+ucnv_getStandard(uint16_t n, UErrorCode *pErrorCode) {
     if (haveAliasData(pErrorCode) && tagTable) {
         int16_t count = (int16_t) *tagTable;
         const char *tags = (const char *) (tagTable + 1 + count * *converterTable);
@@ -354,8 +356,8 @@ ucnv_io_getStandard(uint16_t n, UErrorCode *pErrorCode) {
     return NULL;
 }
 
-U_CFUNC const char *
-ucnv_io_getStandardName(const char *alias, const char *standard, UErrorCode *pErrorCode) {
+U_CFUNC const char * U_EXPORT2
+ucnv_getStandardName(const char *alias, const char *standard, UErrorCode *pErrorCode) {
     if (haveAliasData(pErrorCode) && isAlias(alias, pErrorCode)) {
         const uint16_t *p = findAlias(alias);
         if(p != NULL) {
@@ -371,7 +373,7 @@ ucnv_io_getStandardName(const char *alias, const char *standard, UErrorCode *pEr
    return NULL;
 }
 
-U_CFUNC uint16_t
+U_CAPI uint16_t
 ucnv_io_countAvailableConverters(UErrorCode *pErrorCode) {
     if(haveAliasData(pErrorCode)) {
         return *converterTable;
