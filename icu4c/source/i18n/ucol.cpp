@@ -523,9 +523,9 @@ ucol_strcollEx(    const    UCollator    *coll,
     int32_t sOrder, tOrder;
     //    int32_t sOrder = CollationElementIterator::NULLORDER, tOrder = CollationElementIterator::NULLORDER;
     UBool gets = TRUE, gett = TRUE;
-    UBool initialCheckSecTer = ucol_getStrength(coll) >= Collator::SECONDARY;
+    UBool initialCheckSecTer = ucol_getStrength(coll) >= UCOL_SECONDARY;
     UBool checkSecTer = initialCheckSecTer;
-    UBool checkTertiary = ucol_getStrength(coll) >= Collator::TERTIARY;
+    UBool checkTertiary = ucol_getStrength(coll) >= UCOL_TERTIARY;
     UBool isFrenchSec = (ucol_getAttribute(coll, UCOL_FRENCH_COLLATION, &status) == UCOL_ATTR_ON);
     uint32_t pSOrder, pTOrder;
 
@@ -751,7 +751,7 @@ ucol_strcollEx(    const    UCollator    *coll,
     // as a tiebreaker if all else is equal
     // NOTE: The java code compares result with 0, and 
     // puts the result of the string comparison directly into result
-    if (result == Collator::EQUAL && ucol_getStrength(coll) == UCOL_IDENTICAL)
+    if (result == UCOL_EQUAL && ucol_getStrength(coll) == UCOL_IDENTICAL)
     {
 #if 0
       // ******** for the  UChar normalization interface.
