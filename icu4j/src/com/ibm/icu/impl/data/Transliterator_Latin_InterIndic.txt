@@ -144,7 +144,7 @@
     # $x was originally called '&'; $z was '%'
     $x=[$virama$aa$ai$au$ii$i$uu$u$rrh$rh$lh$e$o$se$ce$so$co];
     $z=[bcdfghjklmnpqrstvwxyz];
-    $consonants=[$ka-$ha $virama];
+    #DEBUG: $consonants=[$ka-$ha $virama];
     \u0315 > $avagraha;
     '-'\u0303>$chandrabindu$anusvara;
     '-'m\u0310>$chandrabindu;
