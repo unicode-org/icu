@@ -18,6 +18,19 @@
 
 // tests have obvious memory leaks!
 
+void TestChoiceFormat::runIndexedTest(int32_t index, UBool exec,
+                                      const char* &name, char* /*par*/) {
+    switch (index) {
+        TESTCASE(0,TestSimpleExample);
+        TESTCASE(1,TestComplexExample);
+        TESTCASE(2,TestChoiceNextDouble);
+        TESTCASE(3,TestGapNextDouble);
+        TESTCASE(4,TestClosures);
+        TESTCASE(5,TestPatterns);
+        default: name = ""; break;
+    }
+}
+
 static UBool chkstatus( UErrorCode &status, const char* msg = NULL )
 {
     UBool ok = U_SUCCESS(status);
@@ -641,20 +654,156 @@ TestChoiceFormat::testValue( double val )
     }
 }
 
+/**
+ * Test new closure API
+ */
+void TestChoiceFormat::TestClosures(void) {
+    // Construct open, half-open, half-open (the other way), and closed
+    // intervals.  Do this both using arrays and using a pattern.
 
-void TestChoiceFormat::runIndexedTest( int32_t index, UBool exec, const char* &name, char* /*par*/ )
-{
-    switch (index) {
-        case 0: name = "TestSimpleExample"; 
-                if (exec) logln("TestSuite Format/ChoiceFormat/Simple (f/chc/simple): ");
-                if (exec) TestSimpleExample(); 
-                break;
-        case 1: name = "TestComplexExample"; 
-                if (exec) logln("TestSuite Format/ChoiceFormat/Complex (f/chc/complex): ");
-                if (exec) TestComplexExample(); 
-                break;
-        case 2: name = "TestChoiceNextDouble"; if (exec) TestChoiceNextDouble(); break;
-        case 3: name = "TestGapNextDouble"; if (exec) TestGapNextDouble(); break;
-        default: name = ""; break; //needed to end loop
+    // 'fmt1' is created using arrays
+    UBool T = TRUE, F = FALSE;
+    // 0:   ,1)
+    // 1: [1,2]
+    // 2: (2,3]
+    // 3: (3,4)
+    // 4: [4,5)
+    // 5: [5,
+    double limits[]  = { 0, 1, 2, 3, 4, 5 };
+    UBool closures[] = { F, F, T, T, F, F };
+    UnicodeString fmts[] = {
+        ",1)", "[1,2]", "(2,3]", "(3,4)", "[4,5)", "[5,"
+    };
+    ChoiceFormat fmt1(limits, closures, fmts, 6);
+
+    // 'fmt2' is created using a pattern; it should be equivalent
+    UErrorCode status = U_ZERO_ERROR;
+    const char* PAT = "0.0#,1)|1.0#[1,2]|2.0<(2,3]|3.0<(3,4)|4.0#[4,5)|5.0#[5,";
+    ChoiceFormat fmt2(PAT, status);
+    if (U_FAILURE(status)) {
+        errln("FAIL: ChoiceFormat constructor failed");
+        return;
     }
+    
+    // Check the patterns
+    UnicodeString str;
+    fmt1.toPattern(str);
+    if (str == PAT) {
+        logln("Ok: " + str);
+    } else {
+        errln("FAIL: " + str + ", expected " + PAT);
+    }
+    str.truncate(0);
+
+    // Check equality
+    if (fmt1 != fmt2) {
+        errln("FAIL: fmt1 != fmt2");
+    }
+
+    // Now test both format objects
+    UnicodeString exp[] = {
+        /*-0.5 => */ ",1)",
+        /* 0.0 => */ ",1)",
+        /* 0.5 => */ ",1)",
+        /* 1.0 => */ "[1,2]",
+        /* 1.5 => */ "[1,2]",
+        /* 2.0 => */ "[1,2]",
+        /* 2.5 => */ "(2,3]",
+        /* 3.0 => */ "(2,3]",
+        /* 3.5 => */ "(3,4)",
+        /* 4.0 => */ "[4,5)",
+        /* 4.5 => */ "[4,5)",
+        /* 5.0 => */ "[5,",
+        /* 5.5 => */ "[5,"
+    };
+
+    // Each format object should behave exactly the same
+    ChoiceFormat* FMT[] = { &fmt1, &fmt2 };
+    for (int32_t pass=0; pass<2; ++pass) {
+        int32_t j=0;
+        for (int32_t ix=-5; ix<=55; ix+=5) {
+            double x = ix / 10.0; // -0.5 to 5.5 step +0.5
+            FMT[pass]->format(x, str);
+            if (str == exp[j]) {
+                logln((UnicodeString)"Ok: " + x + " => " + str);
+            } else {
+                errln((UnicodeString)"FAIL: " + x + " => " + str +
+                      ", expected " + exp[j]);
+            }
+            str.truncate(0);
+            ++j;
+        }
+    }
+}
+
+/**
+ * Helper for TestPatterns()
+ */
+void TestChoiceFormat::_testPattern(const char* pattern,
+                                    UBool isValid,
+                                    double v1, const char* str1,
+                                    double v2, const char* str2,
+                                    double v3, const char* str3) {
+    UErrorCode ec = U_ZERO_ERROR;
+    ChoiceFormat fmt(pattern, ec);
+    if (!isValid) {
+        if (U_FAILURE(ec)) {
+            logln((UnicodeString)"Ok: " + pattern + " failed");
+        } else {
+            logln((UnicodeString)"FAIL: " + pattern + " accepted");
+        }
+        return;
+    }
+    if (U_FAILURE(ec)) {
+        errln((UnicodeString)"FAIL: ChoiceFormat(" + pattern + ") failed");
+        return;
+    } else {
+        logln((UnicodeString)"Ok: Pattern: " + pattern);
+    }
+    UnicodeString out;
+    logln((UnicodeString)"  toPattern: " + fmt.toPattern(out));
+
+    double v[] = {v1, v2, v3};
+    const char* str[] = {str1, str2, str3};
+    for (int32_t i=0; i<3; ++i) {
+        out.truncate(0);
+        fmt.format(v[i], out);
+        if (out == str[i]) {
+            logln((UnicodeString)"Ok: " + v[i] + " => " + out); 
+        } else {
+            errln((UnicodeString)"FAIL: " + v[i] + " => " + out +
+                  ", expected " + str[i]);
+        }
+    }
+}
+
+/**
+ * Test applyPattern
+ */
+void TestChoiceFormat::TestPatterns(void) {
+    // Try a pattern that isolates a single value.  Create
+    // three ranges: [-Inf,1.0) [1.0,1.0] (1.0,+Inf]
+    _testPattern("0.0#a|1.0#b|1.0<c", TRUE,
+                 1.0 - 1e-9, "a",
+                 1.0, "b",
+                 1.0 + 1e-9, "c");
+
+    // Try an invalid pattern that isolates a single value.
+    // [-Inf,1.0) [1.0,1.0) [1.0,+Inf]
+    _testPattern("0.0#a|1.0#b|1.0#c", FALSE,
+                 0, 0, 0, 0, 0, 0);
+
+    // Another
+    // [-Inf,1.0] (1.0,1.0) [1.0,+Inf]
+    _testPattern("0.0#a|1.0<b|1.0#c", FALSE,
+                 0, 0, 0, 0, 0, 0);
+    // Another
+    // [-Inf,1.0] (1.0,1.0] (1.0,+Inf]
+    _testPattern("0.0#a|1.0<b|1.0<c", FALSE,
+                 0, 0, 0, 0, 0, 0);
+
+    // Try a grossly invalid pattern.
+    // [-Inf,2.0) [2.0,1.0) [1.0,+Inf]
+    _testPattern("0.0#a|2.0#b|1.0#c", FALSE,
+                 0, 0, 0, 0, 0, 0);
 }
