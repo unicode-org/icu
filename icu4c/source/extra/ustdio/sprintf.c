@@ -325,7 +325,7 @@ u_vsnprintf(UChar       *buffer,
 
     /* convert from the default codepage to Unicode */
     pattern = ufmt_defaultCPToUnicode(patternSpecification,
-        strlen(patternSpecification));
+        (int32_t)strlen(patternSpecification));
     if(pattern == 0) {
         return 0;
     }
@@ -473,7 +473,7 @@ u_sprintf_string_handler(u_localized_string *output,
 
     /* convert from the default codepage to Unicode */
     if (arg)
-        s = ufmt_defaultCPToUnicode(arg, strlen(arg));
+        s = ufmt_defaultCPToUnicode(arg, (int32_t)strlen(arg));
     else {
         s = gNullStr;
     }

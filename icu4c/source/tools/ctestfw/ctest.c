@@ -74,41 +74,47 @@ static int strncmp_nullcheck( const char* s1,
                const char* s2,
                int n )
 {
-  if ( ( (int)strlen(s2)>=n) && s2[n] != 0 )    return 3; /* null check fails */
-  else  return strncmp ( s1, s2, n );
+    if (((int)strlen(s2) >= n) && s2[n] != 0) {
+        return 3; /* null check fails */
+    }
+    else {
+        return strncmp ( s1, s2, n );
+    }
 }
 
 static void getNextLevel( const char* name,
            int* nameLen,
            const char** nextName )
 {
-  /* Get the next component of the name */
-  *nextName = strchr(name, TEST_SEPARATOR);
+    /* Get the next component of the name */
+    *nextName = strchr(name, TEST_SEPARATOR);
 
-  if( *nextName != 0 )
+    if( *nextName != 0 )
     {
-      char n[255];
-      *nameLen = (*nextName) - name;
-      (*nextName)++; /* skip '/' */
-      strncpy(n, name, *nameLen);
-      n[*nameLen] = 0;
-      /*      printf("->%s-< [%d] -> [%s]\n", name, *nameLen, *nextName);*/
+        char n[255];
+        *nameLen = (int)((*nextName) - name);
+        (*nextName)++; /* skip '/' */
+        strncpy(n, name, *nameLen);
+        n[*nameLen] = 0;
+        /*printf("->%s-< [%d] -> [%s]\n", name, *nameLen, *nextName);*/
     }
-  else    *nameLen = strlen(name);
+    else {
+        *nameLen = (int)strlen(name);
+    }
 }
 
 static TestNode *createTestNode( )
 {
-  TestNode *newNode;
+    TestNode *newNode;
 
-  newNode = (TestNode*)malloc ( sizeof ( TestNode ) );
+    newNode = (TestNode*)malloc ( sizeof ( TestNode ) );
 
-  newNode->name[0]  = '\0';
-  newNode->test = NULL;
-  newNode->sibling = NULL;
-  newNode->child = NULL;
+    newNode->name[0]  = '\0';
+    newNode->test = NULL;
+    newNode->sibling = NULL;
+    newNode->child = NULL;
 
-  return  newNode;
+    return  newNode;
 }
 
 void cleanUpTestTree(TestNode *tn) {
@@ -124,8 +130,8 @@ void cleanUpTestTree(TestNode *tn) {
 
 
 void addTest ( TestNode** root,
-           TestFunctionPtr test,
-           const char* name )
+              TestFunctionPtr test,
+              const char* name )
 {
     TestNode *newNode;
 

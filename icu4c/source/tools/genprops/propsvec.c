@@ -150,7 +150,7 @@ upvec_setValue(uint32_t *pv,
         }
 
         /* count the number of row cells to move after the last row, and move them */
-        count=(pv+UPVEC_HEADER_LENGTH+rows*columns)-(lastRow+columns);
+        count = (int32_t)((pv+UPVEC_HEADER_LENGTH+rows*columns)-(lastRow+columns));
         if(count>0) {
             uprv_memmove(
                 lastRow+(1+splitFirstRow+splitLastRow)*columns,
@@ -162,7 +162,7 @@ upvec_setValue(uint32_t *pv,
         /* split the first row, and move the firstRow pointer to the second part */
         if(splitFirstRow) {
             /* copy all affected rows up one and move the lastRow pointer */
-            count=(lastRow-firstRow)+columns;
+            count = (int32_t)((lastRow-firstRow)+columns);
             uprv_memmove(firstRow+columns, firstRow, count*4);
             lastRow+=columns;
 

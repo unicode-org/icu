@@ -230,7 +230,7 @@ U_CAPI const UChar *u_wmsg_errorName(UErrorCode err)
             textMsg = error;
         }
         msg = (UChar*)malloc((strlen(textMsg)+1)*sizeof(msg[0]));
-        u_charsToUChars(textMsg, msg, strlen(textMsg)+1);
+        u_charsToUChars(textMsg, msg, (int32_t)(strlen(textMsg)+1));
     }
 
     if(err>=0)
