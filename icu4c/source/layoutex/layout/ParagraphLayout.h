@@ -60,6 +60,8 @@ public:
          * created by <code>ParagraphLayout</code>. However, it is the
          * clients responsibility to destroy the objects, so the destructor
          * is public.
+        *
+        * @draft ICU 2.6
          */
         ~Line();
 
@@ -370,6 +372,12 @@ public:
                     const LocaleRuns *localeRuns,
                     UBiDiLevel paragraphLevel, le_bool vertical);
 
+    /**
+     * The destructor. Virtual so that it works correctly with
+     * sublcasses.
+     *
+     * @draft ICU 2.6
+     */
     ~ParagraphLayout();
 
     // Note: the following is #if 0'd out because there's no good
@@ -388,6 +396,8 @@ public:
      * @param fontRuns is a pointer to a <code>FontRuns</code> object representing the font runs.
      *
      * @return <code>true</code> if the paragraph contains complex text.
+     *
+     * @draft ICU 2.6
      */
     static le_bool isComplex(const LEUnicode chars[], le_int32 count, const FontRuns *fontRuns);
 #else
@@ -400,6 +410,8 @@ public:
      * @param count is the number of characters in the paragraph.
      *
      * @return <code>true</code> if any of the text requires complex processing.
+     *
+     * @draft ICU 2.6
      */
     static le_bool isComplex(const LEUnicode chars[], le_int32 count);
 
@@ -411,6 +423,8 @@ public:
      * strong character in the paragraph.
      *
      * @return the resolved paragraph level.
+     *
+     * @draft ICU 2.6
      */
     UBiDiLevel getParagraphLevel();
 
@@ -420,6 +434,8 @@ public:
      * @return <code>UBIDI_LTR</code> if the text is all left to right,
      *         <code>UBIDI_RTL</code> if the text is all right to left,
      *         or <code>UBIDI_MIXED</code> if the text has mixed direction.
+     *
+     * @draft ICU 2.6
      */
     UBiDiDirection getTextDirection();
 
@@ -428,6 +444,8 @@ public:
      * in the paragraph.
      *
      * @return the ascent value.
+     *
+     * @draft ICU 2.6
      */
     virtual le_int32 getAscent() const;
 
@@ -436,6 +454,8 @@ public:
      * in the paragraph.
      *
      * @return the decent value.
+     *
+     * @draft ICU 2.6
      */
     virtual le_int32 getDescent() const;
 
@@ -444,12 +464,16 @@ public:
      * in the paragraph.
      *
      * @return the leading value.
+     *
+     * @draft ICU 2.6
      */
     virtual le_int32 getLeading() const;
 
     /**
      * Reset line breaking to start from the beginning of the paragraph.
      *
+     *
+     * @draft ICU 2.6
      */
     void reflow();
 
