@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/Normalizer.java,v $ 
- * $Date: 2002/06/20 01:21:18 $ 
- * $Revision: 1.18 $
+ * $Date: 2002/07/16 00:20:35 $ 
+ * $Revision: 1.19 $
  *
  *******************************************************************************
  */
@@ -664,7 +664,7 @@ public final class Normalizer implements Cloneable{
     /**
      * Compose a string.
      * The string will be composed to according the the specified mode.
-     * @param source     The string to compose.
+     * @param str        The string to compose.
      * @param compat     If true the char array will be composed accoding to 
      *                    NFKC rules and if false will be composed according to 
      *                    NFC rules.
@@ -688,10 +688,11 @@ public final class Normalizer implements Cloneable{
     /**
      *  Compose a string.
      * The string will be composed to according the the specified mode.
-     * @param source     The string to compose.
+     * @param str        The string to compose.
      * @param compat     If true the char array will be composed accoding to 
      *                    NFKC rules and if false will be composed according to 
      *                    NFC rules.
+     * @param options    The only recognized option is IGNORE_HANGUL
      * @return String    The composed string   
      * @deprecated
      */            
@@ -703,7 +704,7 @@ public final class Normalizer implements Cloneable{
      * Compose a string.
      * The string will be composed to according the the specified mode.
      * @param source The char array to compose.
-     * @param result A char buffer to receive the normalized text.
+     * @param target A char buffer to receive the normalized text.
      * @param compat If true the char array will be composed accoding to 
      *                NFKC rules and if false will be composed according to 
      *                NFC rules.
@@ -726,8 +727,12 @@ public final class Normalizer implements Cloneable{
     /**
      * Compose a string.
      * The string will be composed to according the the specified mode.
-     * @param source The char array to compose.
-     * @param result A char buffer to receive the normalized text.
+     * @param src       The char array to compose.
+     * @param srcStart  Start index of the source
+     * @param srcLimit  Limit index of the source
+     * @param dest      The char buffer to fill in
+     * @param destStart Start index of the destination buffer  
+     * @param destLimit End index of the destination buffer
      * @param compat If true the char array will be composed accoding to 
      *                NFKC rules and if false will be composed according to 
      *                NFC rules.
@@ -754,10 +759,10 @@ public final class Normalizer implements Cloneable{
     /**
      * Decompose a string.
      * The string will be decomposed to according the the specified mode.
-     * @param source     The string to decompose.
-     * @param compat     If true the char array will be decomposed accoding to NFKD rules
+     * @param str       The string to decompose.
+     * @param compat    If true the char array will be decomposed accoding to NFKD rules
      *                   and if false will be decomposed according to NFD rules.
-     * @return String    The decomposed string   
+     * @return String   The decomposed string   
      */         
     public static String decompose(String str, boolean compat){
         char[] dest = new char[str.length()*MAX_BUF_SIZE];
@@ -779,10 +784,10 @@ public final class Normalizer implements Cloneable{
     /**
      * Decompose a string.
      * The string will be decomposed to according the the specified mode.
-     * @param source     The string to decompose.
-     * @param compat     If true the char array will be decomposed accoding to NFKD rules
-     *                   and if false will be decomposed according to NFD rules.
-     * @return String    The decomposed string 
+     * @param str     The string to decompose.
+     * @param compat  If true the char array will be decomposed accoding to NFKD rules
+     *                 and if false will be decomposed according to NFD rules.
+     * @return String The decomposed string 
      * @deprecated  
      */         
     public static String decompose(String str, boolean compat, int options){
@@ -793,7 +798,7 @@ public final class Normalizer implements Cloneable{
      * Decompose a string.
      * The string will be decomposed to according the the specified mode.
      * @param source The char array to decompose.
-     * @param result A char buffer to receive the normalized text.
+     * @param target A char buffer to receive the normalized text.
      * @param compat If true the char array will be decomposed accoding to NFKD 
      *                rules and if false will be decomposed according to 
      *                NFD rules.
@@ -814,6 +819,23 @@ public final class Normalizer implements Cloneable{
 		} 
     }
     
+    /**
+     * Decompose a string.
+     * The string will be decomposed to according the the specified mode.
+     * @param src       The char array to compose.
+     * @param srcStart  Start index of the source
+     * @param srcLimit  Limit index of the source
+     * @param dest      The char buffer to fill in
+     * @param destStart Start index of the destination buffer  
+     * @param destLimit End index of the destination buffer
+     * @param compat If true the char array will be decomposed accoding to NFKD 
+     *                rules and if false will be decomposed according to 
+     *                NFD rules.
+     * @return int   The total buffer size needed;if greater than length of 
+     *                result,the output was truncated.
+     * @exception IndexOutOfBoundsException if the target capacity is less than
+     *             the required length   
+     */
     public static int decompose(char[] src,int srcStart, int srcLimit,
                                 char[] dest,int destStart, int destLimit,
                                 boolean compat){
@@ -827,14 +849,15 @@ public final class Normalizer implements Cloneable{
             throw new IndexOutOfBoundsException(Integer.toString(length));
         } 
     }
+    
     /**
      * Normalize a string.
      * The string will be normalized according the the specified normalization mode
      * and options.
      * @param source     The string to normalize.
      * @param mode       The normalization mode; one of Normalizer.NONE, 
-     *                   Normalizer.NFD, Normalizer.NFC, Normalizer.NFKC, 
-     *                   Normalizer.NFKD, Normalizer.DEFAULT
+     *                    Normalizer.NFD, Normalizer.NFC, Normalizer.NFKC, 
+     *                    Normalizer.NFKD, Normalizer.DEFAULT
      * @return String    The normalized string
      *   
      */
@@ -862,18 +885,16 @@ public final class Normalizer implements Cloneable{
      * The string will be normalized according the the specified normalization mode
      * and options.
      * @param source The char array to normalize.
-     * @param result A char buffer to receive the normalized text.
+     * @param target A char buffer to receive the normalized text.
      * @param mode   The normalization mode; one of Normalizer.NONE, 
-     *               Normalizer.NFD, Normalizer.NFC, Normalizer.NFKC, 
-     *               Normalizer.NFKD, Normalizer.DEFAULT
+     *                Normalizer.NFD, Normalizer.NFC, Normalizer.NFKC, 
+     *                Normalizer.NFKD, Normalizer.DEFAULT
      * @return int   The total buffer size needed;if greater than length of result,
-     *               the output was truncated.
-     * @exception IndexOutOfBoundsException if the target capacity is less than
-     *             the required length     
+     *                the output was truncated.
+     * @exception    IndexOutOfBoundsException if the target capacity is less than
+     *                the required length     
      */
-    public static int normalize(char[] source, 
-                                char[] target, 
-                                Mode  mode){
+    public static int normalize(char[] source,char[] target, Mode  mode){
 		int length = normalize(source,0,source.length,target,0,target.length,mode);
 		if(length<=target.length){
 		    return length;
@@ -886,8 +907,12 @@ public final class Normalizer implements Cloneable{
      * Normalize a string.
      * The string will be normalized according the the specified normalization mode
      * and options.
-     * @param source The char array to normalize.
-     * @param result A char buffer to receive the normalized text.
+     * @param src       The char array to compose.
+     * @param srcStart  Start index of the source
+     * @param srcLimit  Limit index of the source
+     * @param dest      The char buffer to fill in
+     * @param destStart Start index of the destination buffer  
+     * @param destLimit End index of the destination buffer
      * @param mode   The normalization mode; one of Normalizer.NONE, 
      *               Normalizer.NFD, Normalizer.NFC, Normalizer.NFKC, 
      *               Normalizer.NFKD, Normalizer.DEFAULT
@@ -899,7 +924,6 @@ public final class Normalizer implements Cloneable{
     public static int normalize(char[] src,int srcStart, int srcLimit, 
                                 char[] dest,int destStart, int destLimit,
                                 Mode  mode){
-        int[] outTrailCC = new int[2];
         int length =mode.dispatch(src,srcStart,srcLimit,dest,destStart,destLimit);
        
         if(length<=(destLimit-destStart)){
@@ -916,8 +940,7 @@ public final class Normalizer implements Cloneable{
      * @param mode         normalization format (Normalizer.NFC,Normalizer.NFD,  
      *                     Normalizer.NFKC,Normalizer.NFKD)
      * @return             Return code to specify if the text is normalized or not 
-     *                     (Normalizer.YES, Normalizer.NO or
-     *                     Normalizer.MAYBE)
+     *                     (Normalizer.YES, Normalizer.NO or Normalizer.MAYBE)
      */
     public static QuickCheckResult quickCheck( String source, Mode mode){
 	    return mode.quickCheck(source.toCharArray(),0,source.length(),true);
@@ -926,16 +949,16 @@ public final class Normalizer implements Cloneable{
     /**
      * Conveinience method.
      *
-     * @param source       string for determining if it is in a normalized format
-     * @param mode         normalization format (Normalizer.NFC,Normalizer.NFD,  
-     *                     Normalizer.NFKC,Normalizer.NFKD)
-     * @return             Return code to specify if the text is normalized or not 
-     *                     (Normalizer.YES, Normalizer.NO or
-     *                     Normalizer.MAYBE)
+     * @param source Array of characters for determining if it is in a normalized format
+     * @param mode   normalization format (Normalizer.NFC,Normalizer.NFD,  
+     *                Normalizer.NFKC,Normalizer.NFKD)
+     * @return       Return code to specify if the text is normalized or not 
+     *                (Normalizer.YES, Normalizer.NO or Normalizer.MAYBE)
      */
     public static QuickCheckResult quickCheck(char[] source, Mode mode){
         return mode.quickCheck(source,0,source.length,true);
     }
+    
     /**
      * Performing quick check on a string, to quickly determine if the string is 
      * in a particular normalization format.
@@ -958,7 +981,7 @@ public final class Normalizer implements Cloneable{
 
     public static QuickCheckResult quickCheck(char[] source,int start, 
                                               int limit, Mode mode){    	
-	    return mode.quickCheck(source,0,source.length,true);
+	    return mode.quickCheck(source,start,limit,true);
     }
     
     //-------------------------------------------------------------------------
@@ -966,13 +989,10 @@ public final class Normalizer implements Cloneable{
     //-------------------------------------------------------------------------
 
     /**
-     * Convenience method that can have faster implementation
-     * by simply accessing the data for a single character.
-     * @internal
-     * @param char32    the input string to be normalized.
-     *
-     * @param aMode     the normalization mode
-     *
+     * Normalize a codepoint accoding to the given mode
+     * @param char32    The input string to be normalized.
+     * @param aMode     The normalization mode
+     * @return String   The normalized string
      */
     // TODO: actually do the optimization when the guts of Normalizer are upgraded
     // --has just dumb implementation for now
@@ -981,25 +1001,34 @@ public final class Normalizer implements Cloneable{
     }
     
     /**
-     * Convenience method that can have faster implementation
-     * by not allocating buffers.
-     * @internal
-     * @param str       the input string to be checked to see if it is normalized
-     *
+	 * Test if a string is in a given normalization form.
+	 * This is semantically equivalent to source.equals(normalize(source, mode)).
+	 *
+	 * Unlike quickCheck(), this function returns a definitive result,
+	 * never a "maybe".
+	 * For NFD, NFKD, and FCD, both functions work exactly the same.
+	 * For NFC and NFKC where quickCheck may return "maybe", this function will
+	 * perform further tests to arrive at a true/false result.
+     * @param src       The input array of characters to be checked to see if 
+     *                   it is normalized
+     * @param start     The strart index in the source
+     * @param limit     The limit index in the source
      * @param aMode     the normalization mode
+     * @return Boolean value indicating whether the source string is in the
+     *         "mode" normalization form
      */
     // TODO: actually do the optimization when the guts of Normalizer are upgraded
     // --has just dumb implementation for now
     public static boolean isNormalized(char[] src,int start,int limit, Mode mode) {
         return (mode.quickCheck(src,start,limit,false)==YES);
     }
+    
     /**
-     * Convenience method that can have faster implementation
-     * by not allocating buffers.
-     * @internal
+     * Convenience Method
      * @param str       the input string to be checked to see if it is normalized
      *
      * @param aMode     the normalization mode
+     * @see #isNormalized
      */
     // TODO: actually do the optimization when the guts of Normalizer are upgraded
     // --has just dumb implementation for now
@@ -1008,24 +1037,158 @@ public final class Normalizer implements Cloneable{
     }
     
     /**
-     * Convenience method that can have faster implementation
-     * by not allocating buffers.
-     * @internal
+     * Convenience Method
      * @param char32    the input code point to be checked to see if it is normalized
      *
      * @param aMode     the normalization mode
+     * @see #isNormalized
      */
     // TODO: actually do the optimization when the guts of Normalizer are upgraded
     // --has just dumb implementation for now
     public static boolean isNormalized(int char32, Mode mode) {
         return isNormalized(UTF16.valueOf(char32), mode);
     }
+     
+    /**
+     * Compare two strings for canonical equivalence.
+     * Further options include case-insensitive comparison and
+     * code point order (as opposed to code unit order).
+     *
+     * Canonical equivalence between two strings is defined as their normalized
+     * forms (NFD or NFC) being identical.
+     * This function compares strings incrementally instead of normalizing
+     * (and optionally case-folding) both strings entirely,
+     * improving performance significantly.
+     *
+     * Bulk normalization is only necessary if the strings do not fulfill the FCD
+     * conditions. Only in this case, and only if the strings are relatively long,
+     * is memory allocated temporarily.
+     * For FCD strings and short non-FCD strings there is no memory allocation.
+     *
+     * Semantically, this is equivalent to
+     *   strcmp[CodePointOrder](foldCase(NFD(s1)), foldCase(NFD(s2)))
+     * where code point order and foldCase are all optional.
+     *
+     * @param s1        First source character array.
+     * @param s1Start   start index of source
+     * @param s1Limit   limit of the source
+     *
+     * @param s2        Second source character array.
+     * @param s2Start   start index of the source
+     * @param s2Limit   limit of the source
+     * 
+     * @param options A bit set of options:
+     *   - FOLD_CASE_DEFAULT or 0 is used for default options:
+     *     Case-sensitive comparison in code unit order, and the input strings
+     *     are quick-checked for FCD.
+     *
+     *   - INPUT_IS_FCD
+     *     Set if the caller knows that both s1 and s2 fulfill the FCD conditions.
+     *     If not set, the function will quickCheck for FCD
+     *     and normalize if necessary.
+     *
+     *   - COMPARE_CODE_POINT_ORDER
+     *     Set to choose code point order instead of code unit order
+     *
+     *   - COMPARE_IGNORE_CASE
+     *     Set to compare strings case-insensitively using case folding,
+     *     instead of case-sensitively.
+     *     If set, then the following case folding options are used.
+     *
+     *
+     * @return <0 or 0 or >0 as usual for string comparisons
+     *
+     * @see #normalize
+     * @see #FCD
+     */
+     public static int compare(char[] s1, int s1Start, int s1Limit,
+                               char[] s2, int s2Start, int s2Limit,
+                               int options){
+         return NormalizerImpl.compare(s1, s1Start, s1Limit, 
+                                       s2, s2Start, s2Limit, options);
+     } 
        
-    
+    /**
+     * Compare two strings for canonical equivalence.
+     * Further options include case-insensitive comparison and
+     * code point order (as opposed to code unit order).
+     * Conveinience method.
+     *
+     * @param s1 First source string.
+     * @param s2 Second source string.
+     *
+     * @param options A bit set of options:
+     *   - FOLD_CASE_DEFAULT or 0 is used for default options:
+     *     Case-sensitive comparison in code unit order, and the input strings
+     *     are quick-checked for FCD.
+     *
+     *   - INPUT_IS_FCD
+     *     Set if the caller knows that both s1 and s2 fulfill the FCD conditions.
+     *     If not set, the function will quickCheck for FCD
+     *     and normalize if necessary.
+     *
+     *   - COMPARE_CODE_POINT_ORDER
+     *     Set to choose code point order instead of code unit order
+     *
+     *   - COMPARE_IGNORE_CASE
+     *     Set to compare strings case-insensitively using case folding,
+     *     instead of case-sensitively.
+     *     If set, then the following case folding options are used.
+     *
+     *
+     * @return <0 or 0 or >0 as usual for string comparisons
+     *
+     * @see #normalize
+     * @see #FCD
+     */
+     public static int compare(String s1, String s2, int options){
+         
+         return compare(s1.toCharArray(),0,s1.length(),
+                                       s2.toCharArray(),0,s2.length(),
+                                       options);
+     }
+     
+    /**
+     * Compare two strings for canonical equivalence.
+     * Further options include case-insensitive comparison and
+     * code point order (as opposed to code unit order).
+     * Conveinience method.
+     *
+     * @param s1 First source string.
+     * @param s2 Second source string.
+     *
+     * @param options A bit set of options:
+     *   - FOLD_CASE_DEFAULT or 0 is used for default options:
+     *     Case-sensitive comparison in code unit order, and the input strings
+     *     are quick-checked for FCD.
+     *
+     *   - INPUT_IS_FCD
+     *     Set if the caller knows that both s1 and s2 fulfill the FCD conditions.
+     *     If not set, the function will quickCheck for FCD
+     *     and normalize if necessary.
+     *
+     *   - COMPARE_CODE_POINT_ORDER
+     *     Set to choose code point order instead of code unit order
+     *
+     *   - COMPARE_IGNORE_CASE
+     *     Set to compare strings case-insensitively using case folding,
+     *     instead of case-sensitively.
+     *     If set, then the following case folding options are used.
+     *
+     *
+     * @return <0 or 0 or >0 as usual for string comparisons
+     *
+     * @see #normalize
+     * @see #FCD
+     */
+     public static int compare(char[] s1, char[] s2, int options){
+         
+         return compare(s1,0,s1.length,s2,0,s2.length,options);
+     } 
+        
     /**
      * Convenience method that can have faster implementation
      * by not allocating buffers.
-     * @internal
      * @param char32a    the first code point to be checked against the
      * @param char32b    the second code point
      *
@@ -1053,12 +1216,250 @@ public final class Normalizer implements Cloneable{
     public static int compare(int charA, String str2, int options) {
         return compare(UTF16.valueOf(charA), str2, options);
     }
+   
+    /**
+     * Concatenate normalized strings, making sure that the result is normalized
+     * as well.
+     *
+     * If both the left and the right strings are in
+     * the normalization form according to "mode",
+     * then the result will be
+     *
+     * \code
+     *     dest=normalize(left+right, mode)
+     * \endcode
+     *
+     * With the input strings already being normalized,
+     * this function will use next() and previous()
+     * to find the adjacent end pieces of the input strings.
+     * Only the concatenation of these end pieces will be normalized and
+     * then concatenated with the remaining parts of the input strings.
+     *
+     * It is allowed to have dest==left to avoid copying the entire left string.
+     *
+     * @param left Left source array, may be same as dest.
+     * @param leftStart start index of the left array.
+     * @param leftLimit end index of the left array (==length)
+     * @param right Right source array.
+     * @param rightStart start index of the right array.
+     * @param leftLimit end index of the right array (==length)
+     * @param dest The output buffer; can be null if destStart==destLimit==0 
+     *              for pure preflighting.
+     * @param destStart start index of the destination array
+     * @param mode The normalization mode.
+     * @return Length of output (number of chars) when successful or 
+     *          IndexOutOfBoundsException
+     * @exception IndexOutOfBoundsException whose message has the string 
+     *             representation of destination capacity required. 
+     * @see #normalize
+     * @see #next
+     * @see #previous
+     * @exception IndexOutOfBoundsException if target capacity is less than the
+     *             required length
+     */
+     /* Concatenation of normalized strings ---------------------------------- */
+    
+    public static int concatenate(char[] left,  int leftStart,  int leftLimit,
+                                  char[] right, int rightStart, int rightLimit, 
+                                  char[] dest,  int destStart,  int destLimit,
+                                  Normalizer.Mode mode) {
+                               
+        char[] buffer=new char[100];
+        int bufferLength;
+    
+        UCharacterIterator iter;
+        
+        int leftBoundary, rightBoundary, destLength;
+    
+        if(dest == null){
+            throw new IllegalArgumentException();
+        }
+    
+        /* check for overlapping right and destination */
+        if (right == dest && rightStart < destLimit && destStart < rightLimit) {
+            throw new IllegalArgumentException("overlapping right and dst ranges");
+        }
+    
+        /* allow left==dest */
+    
+    
+        /*
+         * Input: left[0..leftLength[ + right[0..rightLength[
+         *
+         * Find normalization-safe boundaries leftBoundary and rightBoundary
+         * and copy the end parts together:
+         * buffer=left[leftBoundary..leftLength[ + right[0..rightBoundary[
+         *
+         * dest=left[0..leftBoundary[ +
+         *      normalize(buffer) +
+         *      right[rightBoundary..rightLength[
+         */
+    
+        /*
+         * find a normalization boundary at the end of the left string
+         * and copy the end part into the buffer
+         */
+
+        iter = UCharacterIterator.getInstance(left, leftStart, leftLimit);
+                                             
+        iter.setIndex(iter.getLength()); /* end of left string */
+    
+        bufferLength=previous(iter, buffer,0,buffer.length,mode,false,null);
+        
+        leftBoundary=iter.getIndex();
+        
+        if(bufferLength>buffer.length) {
+            char[] newBuf = new char[buffer.length*2];
+            // TODO: this may need to be commented ???
+            //System.arraycopy(newBuf,0,buffer,0,bufferLength);
+            buffer = newBuf;
+            newBuf = null; // null the reference for GC
+            /* just copy from the left string: we know the boundary already */
+            System.arraycopy(left,leftBoundary,buffer,0,bufferLength);
+        }
+    
+        /*
+         * find a normalization boundary at the beginning of the right string
+         * and concatenate the beginning part to the buffer
+         */
+
+        iter = UCharacterIterator.getInstance(right, rightStart, rightLimit);
+        
+        rightBoundary=next(iter,buffer,bufferLength, buffer.length-bufferLength,
+                           mode, false,null);
+                           
+        if(bufferLength>buffer.length) {
+            char[] newBuf = new char[buffer.length*2];
+            buffer = newBuf;
+            newBuf = null; // null the reference for GC
+            /* just copy from the right string: we know the boundary already */
+            System.arraycopy(right,rightBoundary,buffer,
+                             bufferLength,rightBoundary);
+        }
+
+        bufferLength+=rightBoundary;
+    
+        /* copy left[0..leftBoundary[ to dest */
+        if(left!=dest && leftBoundary>0 && (destLimit)>0) {
+            System.arraycopy(left,0,dest,0, Math.min(leftBoundary,destLimit)); 
+        }
+        destLength=leftBoundary;
+    
+        /* concatenate the normalization of the buffer to dest */
+        if(destLimit>destLength) {
+            destLength+=Normalizer.normalize(buffer,0,bufferLength,dest,
+                                                     destLength,destLimit,mode);
+            
+        } else {
+            destLength+=Normalizer.normalize(buffer, 0, bufferLength,null,0,0,mode);
+        }
+    
+        /* concatenate right[rightBoundary..rightLength[ to dest */
+        rightStart+=rightBoundary;
+        int rightLength=(rightLimit-rightStart);
+        if(rightLength>0 && destLimit>destLength) {
+            System.arraycopy(right,rightStart,dest,destLength,
+                                Math.min(rightLength,destLength)
+                            );
+        }
+        destLength+=rightLength;
+        
+        if(destLength<=(destLimit-destStart)){
+            return destLength;
+        }else{
+            throw new IndexOutOfBoundsException(Integer.toString(destLength));
+        }  
+    }
+    
+    /**
+     * Concatenate normalized strings, making sure that the result is normalized
+     * as well.
+     *
+     * If both the left and the right strings are in
+     * the normalization form according to "mode",
+     * then the result will be
+     *
+     * <code>
+     *     dest=normalize(left+right, mode)
+     * </code>
+     *
+     * For details see concatenate 
+     *
+     * @param left Left source string.
+     * @param right Right source string.
+     * @param mode The normalization mode.
+     * @return result
+     *
+     * @see #concatenate
+     * @see #normalize
+     * @see #next
+     * @see #previous
+     * @see #concatenate
+     */
+    public static String concatenate(char[] left, char[] right,Mode mode){
+        char[] result = new char[(left.length+right.length)* MAX_BUF_SIZE];
+        for(;;){
+               
+            int length = concatenate(left,  0, left.length,
+                                     right, 0, right.length,
+                                     result,0, result.length,
+                                     mode);
+            if(length<=result.length){
+                return new String(result,0,length);
+            }else{
+                result = new char[length];
+            }
+        }            
+    }
+    
+    /**
+     * Concatenate normalized strings, making sure that the result is normalized
+     * as well.
+     *
+     * If both the left and the right strings are in
+     * the normalization form according to "mode",
+     * then the result will be
+     *
+     * <code>
+     *     dest=normalize(left+right, mode)
+     * </code>
+     *
+     * For details see concatenate
+     *
+     * @param left Left source string.
+     * @param right Right source string.
+     * @param mode The normalization mode.
+     * @return result
+     *
+     * @see #concatenate
+     * @see #normalize
+     * @see #next
+     * @see #previous
+     * @see #concatenate
+     */
+    public static String concatenate(String left, String right,Mode mode){
+        char[] result = new char[(left.length()+right.length())* MAX_BUF_SIZE];
+        for(;;){
+               
+            int length = concatenate(left.toCharArray(), 0, left.length(),
+                         right.toCharArray(),0, right.length(),
+                         result,             0, result.length,
+                         mode);
+            if(length<=result.length){
+                return new String(result,0,length);
+            }else{
+                result = new char[length];
+            }
+        }            
+    }
+    
     //-------------------------------------------------------------------------
     // Iteration API
     //-------------------------------------------------------------------------
 	
     /**
      * Return the current character in the normalized text->
+     * @return The codepoint as an int
      */
     public int current() {
 		if(bufferPos<bufferLimit || nextNormalize()) {
@@ -1072,6 +1473,7 @@ public final class Normalizer implements Cloneable{
      * Return the next character in the normalized text and advance
      * the iteration position by one.  If the end
      * of the text has already been reached, {@link #DONE} is returned.
+     * @return The codepoint as an int
      */
     public int next() {
 		if(bufferPos<bufferLimit ||  nextNormalize()) {
@@ -1088,6 +1490,7 @@ public final class Normalizer implements Cloneable{
      * Return the previous character in the normalized text and decrement
      * the iteration position by one.  If the beginning
      * of the text has already been reached, {@link #DONE} is returned.
+     * @return The codepoint as an int
      */
     public int previous() {
 		if(bufferPos>0 || previousNormalize()) {
@@ -1099,12 +1502,24 @@ public final class Normalizer implements Cloneable{
 		}
     }
 	
+   /**
+    * Reset the index to the beginning of the text.
+    * This is equivalent to setIndexOnly(startIndex)).
+    */
     public void reset() {
         text.setIndex(0);
 		currentIndex=nextIndex=0;
 		clearBuffer();
     }
-	
+    
+   /**
+    * Set the iteration position in the input text that is being normalized,
+    * without any immediate normalization.
+    * After setIndexOnly(), getIndex() will return the same index that is
+    * specified here.
+    *
+    * @param index the desired index in the input text.
+    */
     public void setIndexOnly(int index) {
         text.setIndex(index);
 		currentIndex=nextIndex=index; // validates index
@@ -1129,6 +1544,7 @@ public final class Normalizer implements Cloneable{
      *
      * @throws IllegalArgumentException if the given index is less than
      *          {@link #getBeginIndex} or greater than {@link #getEndIndex}.
+     * @return The codepoint as an int
      */
     public int setIndex(int index) {
 		setIndexOnly(index);
@@ -1140,6 +1556,7 @@ public final class Normalizer implements Cloneable{
      * of the <tt>CharacterIterator</tt> or the start (i.e. 0) of the <tt>String</tt>
      * over which this <tt>Normalizer</tt> is iterating
      * @deprecated
+     * @return The codepoint as an int
      */
     public int getBeginIndex() {
         return 0;
@@ -1150,6 +1567,7 @@ public final class Normalizer implements Cloneable{
      * of the <tt>CharacterIterator</tt> or the length of the <tt>String</tt>
      * over which this <tt>Normalizer</tt> is iterating
      * @deprecated
+     * @return The codepoint as an int
      */
     public int getEndIndex() {
         return text.getLength()-1;
@@ -1157,6 +1575,7 @@ public final class Normalizer implements Cloneable{
     /**
      * Return the first character in the normalized text->  This resets
      * the <tt>Normalizer's</tt> position to the beginning of the text->
+     * @return The codepoint as an int
      */
     public int first() {
 		reset();
@@ -1167,6 +1586,7 @@ public final class Normalizer implements Cloneable{
      * Return the last character in the normalized text->  This resets
      * the <tt>Normalizer's</tt> position to be just before the
      * the input text corresponding to that normalized character.
+     * @return The codepoint as an int
      */
     public int last() {
         text.setToLimit();
@@ -1187,7 +1607,7 @@ public final class Normalizer implements Cloneable{
      * correspondence between characters returned by <tt>next</tt> and
      * <tt>previous</tt> and the indices passed to and returned from
      * <tt>setIndex</tt> and {@link #getIndex}.
-     *
+     *@return The current iteration position
      */
     public int getIndex(){
 		if(bufferPos<bufferLimit) {
@@ -1201,6 +1621,7 @@ public final class Normalizer implements Cloneable{
      * Retrieve the index of the start of the input text->  This is the begin index
      * of the <tt>CharacterIterator</tt> or the start (i.e. 0) of the <tt>String</tt>
      * over which this <tt>Normalizer</tt> is iterating
+     * @return The current iteration position
      */
     public int startIndex(){
 		return 0;
@@ -1210,6 +1631,7 @@ public final class Normalizer implements Cloneable{
      * Retrieve the index of the end of the input text->  This is the end index
      * of the <tt>CharacterIterator</tt> or the length of the <tt>String</tt>
      * over which this <tt>Normalizer</tt> is iterating
+     * @return The current iteration position
      */
     public int endIndex(){
 		return text.getLength();
@@ -1404,378 +1826,6 @@ public final class Normalizer implements Cloneable{
         }
     }
     
-    /**
-     * Concatenate normalized strings, making sure that the result is normalized
-     * as well.
-     *
-     * If both the left and the right strings are in
-     * the normalization form according to "mode",
-     * then the result will be
-     *
-     * <code>
-     *     dest=normalize(left+right, mode)
-     * </code>
-     *
-     * For details see unorm_concatenate in unorm.h.
-     *
-     * @param left Left source string.
-     * @param right Right source string.
-     * @param mode The normalization mode.
-     * @return result
-     *
-     * @see #concatenate
-     * @see #normalize
-     * @see #next
-     * @see #previous
-     */
-    public static String concatenate(char[] left, char[] right,Mode mode){
-        char[] result = new char[(left.length+right.length)* MAX_BUF_SIZE];
-        for(;;){
-               
-            int length = concatenate(left,  0, left.length,
-			                         right, 0, right.length,
-			                         result,0, result.length,
-			                         mode);
-            if(length<=result.length){
-                return new String(result,0,length);
-            }else{
-                result = new char[length];
-            }
-        }            
-    }
-    /**
-     * Concatenate normalized strings, making sure that the result is normalized
-     * as well.
-     *
-     * If both the left and the right strings are in
-     * the normalization form according to "mode",
-     * then the result will be
-     *
-     * <code>
-     *     dest=normalize(left+right, mode)
-     * </code>
-     *
-     * For details see unorm_concatenate in unorm.h.
-     *
-     * @param left Left source string.
-     * @param right Right source string.
-     * @param mode The normalization mode.
-     * @return result
-     *
-     * @see #concatenate
-     * @see #normalize
-     * @see #next
-     * @see #previous
-     */
-    public static String concatenate(String left, String right,Mode mode){
-	    char[] result = new char[(left.length()+right.length())* MAX_BUF_SIZE];
-		for(;;){
-	           
-		    int length = concatenate(left.toCharArray(), 0, left.length(),
-					     right.toCharArray(),0, right.length(),
-					     result,             0, result.length,
-					     mode);
-		    if(length<=result.length){
-			    return new String(result,0,length);
-		    }else{
-			    result = new char[length];
-		    }
-		}            
-    }
-	
-    /**
-     * Concatenate normalized strings, making sure that the result is normalized
-     * as well.
-     *
-     * If both the left and the right strings are in
-     * the normalization form according to "mode",
-     * then the result will be
-     *
-     * \code
-     *     dest=normalize(left+right, mode)
-     * \endcode
-     *
-     * With the input strings already being normalized,
-     * this function will use next() and previous()
-     * to find the adjacent end pieces of the input strings.
-     * Only the concatenation of these end pieces will be normalized and
-     * then concatenated with the remaining parts of the input strings.
-     *
-     * It is allowed to have dest==left to avoid copying the entire left string.
-     *
-     * @param left Left source array, may be same as dest.
-     * @param leftStart start index of the left array.
-     * @param leftLimit end index of the left array (==length)
-     * @param right Right source array.
-     * @param rightStart start index of the right array.
-     * @param leftLimit end index of the right array (==length)
-     * @param dest The output buffer; can be null if destStart==destLimit==0 
-     *              for pure preflighting.
-     * @param destStart start index of the destination array
-     * @param mode The normalization mode.
-     * @return Length of output (number of chars) when successful or 
-     *          IndexOutOfBoundsException
-     * @exception IndexOutOfBoundsException whose message has the string 
-     *             representation of destination capacity required. 
-     * @see #normalize
-     * @see #next
-     * @see #previous
-     * @exception IndexOutOfBoundsException if target capacity is less than the
-     *             required length
-     */
-     /* Concatenation of normalized strings ---------------------------------- */
-    
-    public static int concatenate(char[] left,  int leftStart,  int leftLimit,
-		                          char[] right, int rightStart, int rightLimit, 
-		                          char[] dest,  int destStart,  int destLimit,
-		                          Normalizer.Mode mode) {
-                               
-        char[] buffer=new char[100];
-        int bufferLength;
-    
-        UCharacterIterator iter;
-        
-        int leftBoundary, rightBoundary, destLength;
-    
-        if(dest == null){
-            throw new IllegalArgumentException();
-        }
-    
-        /* check for overlapping right and destination */
-        if (right == dest && rightStart < destLimit && destStart < rightLimit) {
-            throw new IllegalArgumentException("overlapping right and dst ranges");
-        }
-    
-        /* allow left==dest */
-    
-    
-        /*
-         * Input: left[0..leftLength[ + right[0..rightLength[
-         *
-         * Find normalization-safe boundaries leftBoundary and rightBoundary
-         * and copy the end parts together:
-         * buffer=left[leftBoundary..leftLength[ + right[0..rightBoundary[
-         *
-         * dest=left[0..leftBoundary[ +
-         *      normalize(buffer) +
-         *      right[rightBoundary..rightLength[
-         */
-    
-        /*
-         * find a normalization boundary at the end of the left string
-         * and copy the end part into the buffer
-         */
-
-        iter = UCharacterIterator.getInstance(left, leftStart, leftLimit);
-                                             
-        iter.setIndex(iter.getLength()); /* end of left string */
-    
-        bufferLength=previous(iter, buffer,0,buffer.length,mode,false,null);
-        
-        leftBoundary=iter.getIndex();
-        
-        if(bufferLength>buffer.length) {
-            char[] newBuf = new char[buffer.length*2];
-            // TODO: this may need to be commented ???
-            //System.arraycopy(newBuf,0,buffer,0,bufferLength);
-            buffer = newBuf;
-            newBuf = null; // null the reference for GC
-            /* just copy from the left string: we know the boundary already */
-            System.arraycopy(left,leftBoundary,buffer,0,bufferLength);
-        }
-    
-        /*
-         * find a normalization boundary at the beginning of the right string
-         * and concatenate the beginning part to the buffer
-         */
-
-        iter = UCharacterIterator.getInstance(right, rightStart, rightLimit);
-        
-        rightBoundary=next(iter,buffer,bufferLength, buffer.length-bufferLength,
-                           mode, false,null);
-                           
-        if(bufferLength>buffer.length) {
-            char[] newBuf = new char[buffer.length*2];
-            buffer = newBuf;
-            newBuf = null; // null the reference for GC
-            /* just copy from the right string: we know the boundary already */
-            System.arraycopy(right,rightBoundary,buffer,
-                             bufferLength,rightBoundary);
-        }
-
-        bufferLength+=rightBoundary;
-    
-        /* copy left[0..leftBoundary[ to dest */
-        if(left!=dest && leftBoundary>0 && (destLimit)>0) {
-            System.arraycopy(left,0,dest,0, Math.min(leftBoundary,destLimit)); 
-        }
-        destLength=leftBoundary;
-    
-        /* concatenate the normalization of the buffer to dest */
-        if(destLimit>destLength) {
-            destLength+=Normalizer.normalize(buffer,0,bufferLength,dest,
-                                                     destLength,destLimit,mode);
-            
-        } else {
-            destLength+=Normalizer.normalize(buffer, 0, bufferLength,null,0,0,mode);
-        }
-    
-        /* concatenate right[rightBoundary..rightLength[ to dest */
-        rightStart+=rightBoundary;
-        int rightLength=(rightLimit-rightStart);
-        if(rightLength>0 && destLimit>destLength) {
-            System.arraycopy(right,rightStart,dest,destLength,
-                                Math.min(rightLength,destLength)
-                            );
-        }
-        destLength+=rightLength;
-        
-        if(destLength<=(destLimit-destStart)){
-            return destLength;
-        }else{
-            throw new IndexOutOfBoundsException(Integer.toString(destLength));
-        }  
-    }
-
-
-	/**
-	 * Compare two strings for canonical equivalence.
-	 * Further options include case-insensitive comparison and
-	 * code point order (as opposed to code unit order).
-	 * Conveinience method.
-	 *
-	 * @param s1 First source string.
-	 * @param s2 Second source string.
-	 *
-	 * @param options A bit set of options:
-	 *   - FOLD_CASE_DEFAULT or 0 is used for default options:
-	 *     Case-sensitive comparison in code unit order, and the input strings
-	 *     are quick-checked for FCD.
-	 *
-	 *   - INPUT_IS_FCD
-	 *     Set if the caller knows that both s1 and s2 fulfill the FCD conditions.
-	 *     If not set, the function will quickCheck for FCD
-	 *     and normalize if necessary.
-	 *
-	 *   - COMPARE_CODE_POINT_ORDER
-	 *     Set to choose code point order instead of code unit order
-	 *     (see u_strCompare for details).
-	 *
-	 *   - COMPARE_IGNORE_CASE
-	 *     Set to compare strings case-insensitively using case folding,
-	 *     instead of case-sensitively.
-	 *     If set, then the following case folding options are used.
-	 *
-	 *
-	 * @return <0 or 0 or >0 as usual for string comparisons
-	 *
-	 * @see #normalize
-	 * @see #FCD
-	 */
-     public static int compare(String s1, String s2, int options){
-         
-         return compare(s1.toCharArray(),0,s1.length(),
-                                       s2.toCharArray(),0,s2.length(),
-                                       options);
-     }
-        /**
-     * Compare two strings for canonical equivalence.
-     * Further options include case-insensitive comparison and
-     * code point order (as opposed to code unit order).
-     * Conveinience method.
-     *
-     * @param s1 First source string.
-     * @param s2 Second source string.
-     *
-     * @param options A bit set of options:
-     *   - FOLD_CASE_DEFAULT or 0 is used for default options:
-     *     Case-sensitive comparison in code unit order, and the input strings
-     *     are quick-checked for FCD.
-     *
-     *   - INPUT_IS_FCD
-     *     Set if the caller knows that both s1 and s2 fulfill the FCD conditions.
-     *     If not set, the function will quickCheck for FCD
-     *     and normalize if necessary.
-     *
-     *   - COMPARE_CODE_POINT_ORDER
-     *     Set to choose code point order instead of code unit order
-     *     (see u_strCompare for details).
-     *
-     *   - COMPARE_IGNORE_CASE
-     *     Set to compare strings case-insensitively using case folding,
-     *     instead of case-sensitively.
-     *     If set, then the following case folding options are used.
-     *
-     *
-     * @return <0 or 0 or >0 as usual for string comparisons
-     *
-     * @see #normalize
-     * @see #FCD
-     */
-     public static int compare(char[] s1, char[] s2, int options){
-         
-         return compare(s1,0,s1.length,s2,0,s2.length,options);
-     } 
-     
-    /**
-     * Compare two strings for canonical equivalence.
-     * Further options include case-insensitive comparison and
-     * code point order (as opposed to code unit order).
-     *
-     * Canonical equivalence between two strings is defined as their normalized
-     * forms (NFD or NFC) being identical.
-     * This function compares strings incrementally instead of normalizing
-     * (and optionally case-folding) both strings entirely,
-     * improving performance significantly.
-     *
-     * Bulk normalization is only necessary if the strings do not fulfill the FCD
-     * conditions. Only in this case, and only if the strings are relatively long,
-     * is memory allocated temporarily.
-     * For FCD strings and short non-FCD strings there is no memory allocation.
-     *
-     * Semantically, this is equivalent to
-     *   strcmp[CodePointOrder](foldCase(NFD(s1)), foldCase(NFD(s2)))
-     * where code point order and foldCase are all optional.
-     *
-     * @param s1        First source character array.
-     * @param s1Start   start index of source
-     * @param s1Limit   limit of the source
-     *
-     * @param s2        Second source character array.
-     * @param s2Start   start index of the source
-     * @param s2Limit   limit of the source
-     * 
-     * @param options A bit set of options:
-     *   - FOLD_CASE_DEFAULT or 0 is used for default options:
-     *     Case-sensitive comparison in code unit order, and the input strings
-     *     are quick-checked for FCD.
-     *
-     *   - INPUT_IS_FCD
-     *     Set if the caller knows that both s1 and s2 fulfill the FCD conditions.
-     *     If not set, the function will quickCheck for FCD
-     *     and normalize if necessary.
-     *
-     *   - COMPARE_CODE_POINT_ORDER
-     *     Set to choose code point order instead of code unit order
-     *     (see u_strCompare for details).
-     *
-     *   - COMPARE_IGNORE_CASE
-     *     Set to compare strings case-insensitively using case folding,
-     *     instead of case-sensitively.
-     *     If set, then the following case folding options are used.
-     *
-     *
-     * @return <0 or 0 or >0 as usual for string comparisons
-     *
-     * @see #normalize
-     * @see #FCD
-     */
-     public static int compare(char[] s1, int s1Start, int s1Limit,
-                               char[] s2, int s2Start, int s2Limit,
-                               int options){
-         return NormalizerImpl.compare(s1, s1Start, s1Limit, 
-                                       s2, s2Start, s2Limit, options);
-     } 
     //-------------------------------------------------------------------------
     // Private utility methods
     //-------------------------------------------------------------------------
@@ -2097,8 +2147,7 @@ public final class Normalizer implements Cloneable{
                                                  IsNextBoundary obj, 
                                                  int/*unsigned*/ minC, 
                                                  int/*unsigned*/ mask,
-                                                 char[] buffer, 
-                                                 int[] startIndex) {
+                                                 char[] buffer) {
         char[] chars = new char[2];
         int bufferIndex =0;
         
@@ -2156,7 +2205,7 @@ public final class Normalizer implements Cloneable{
         char[] buffer=new char[100];
         IsNextBoundary isNextBoundary;
         int /*unsigned*/ mask;
-        int /*unsigned*/ bufferLength, bufferCapacity;
+        int /*unsigned*/ bufferLength;
         char[] chars = new char[2];
         char minC;
         int destCapacity = destLimit - destStart;
@@ -2198,7 +2247,7 @@ public final class Normalizer implements Cloneable{
         }
         
         bufferLength=findNextIterationBoundary(src,isNextBoundary, minC, mask,
-                                               buffer, startIndex);
+                                               buffer);
         if(bufferLength>0) {
             if(doNormalize) {
                 destLength=mode.dispatch(buffer,startIndex[0],bufferLength,
