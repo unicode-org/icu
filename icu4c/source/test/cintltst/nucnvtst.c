@@ -2181,7 +2181,7 @@ TestISO_2022_JP() {
     free(offsets);
 }
 
-static void TestConv(uint16_t in[],int len, char* conv, char* lang, char byteArr[],int byteArrLen){
+static void TestConv(uint16_t in[],int len, const char* conv, const char* lang, char byteArr[],int byteArrLen){
     const UChar* uSource;
     const UChar* uSourceLimit;
     const char* cSource;
