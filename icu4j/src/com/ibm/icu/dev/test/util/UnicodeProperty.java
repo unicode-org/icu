@@ -147,7 +147,7 @@ public abstract class UnicodeProperty extends UnicodeLabel {
     }
     
     static public class Factory {
-        static boolean DEBUG = true;
+        static boolean DEBUG = false;
 
         Map canonicalNames = new TreeMap();
         Map skeletonNames = new TreeMap();
