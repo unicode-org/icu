@@ -41,9 +41,9 @@ DecimalFormatSymbols::DecimalFormatSymbols(UErrorCode& status)
 // -------------------------------------
 // Initializes this with the decimal format symbols in the desired locale.
  
-DecimalFormatSymbols::DecimalFormatSymbols(const Locale& locale, UErrorCode& status)
+DecimalFormatSymbols::DecimalFormatSymbols(const Locale& loc, UErrorCode& status)
 {
-    initialize(locale, status);
+    initialize(loc, status);
 }
  
 // -------------------------------------
@@ -99,14 +99,14 @@ DecimalFormatSymbols::operator==(const DecimalFormatSymbols& that) const
 // -------------------------------------
  
 void
-DecimalFormatSymbols::initialize(const Locale& locale, UErrorCode& status,
+DecimalFormatSymbols::initialize(const Locale& loc, UErrorCode& status,
                                  UBool useLastResortData)
 {
     if (U_FAILURE(status)) return;
 
-    this->locale = locale;
+    this->locale = loc;
 
-    ResourceBundle resource((char *)0, locale, status);
+    ResourceBundle resource((char *)0, loc, status);
     if (U_FAILURE(status))
     {
         // Initializes with last resort data if necessary.
