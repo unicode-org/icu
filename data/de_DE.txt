@@ -7,8 +7,8 @@
 
 de_DE {
     CurrencyElements { 
-            "DM",
-            "DEM",
+            "\u20AC",
+            "EUR",
             ",",
     }
     LocaleString { "de_DE" }

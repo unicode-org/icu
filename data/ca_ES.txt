@@ -7,16 +7,16 @@
 
 ca_ES {
     CurrencyElements { 
-            "Pts",
-            "ESP",
+            "\u20AC",
+            "EUR",
             ",",
     }
-    LocaleString { "ca_ES" }
     NumberPatterns { 
             "#,##0.###;#,##0.###",
-            "\u00A4 #,##0;-\u00A4 #,##0",
+            "\u00A4 #,##0.00;-\u00A4 #,##0.00",
             "#,##0%",
     }
+    LocaleString { "ca_ES" }
     ShortCountry { "ESP" }
     LocaleID { "0403" }
 }

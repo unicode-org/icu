@@ -8,8 +8,8 @@
 fr_FR {
     Version{ "1.0"}
     CurrencyElements { 
-            "F",
-            "FRF",
+            "\u20AC",
+            "EUR",
             ",",
     }
     LocaleString { "fr_FR" }

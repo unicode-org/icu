@@ -5,19 +5,10 @@
 // *
 // *******************************************************************************
 
-pt_PT {
-    Version{ "1.0" }
+nl_NL_PREEURO {
     CurrencyElements { 
-            "\u20AC",
-            "EUR",
-            "$",
+            "fl",
+            "NLG",
+            ",",
     }
-    LocaleString { "pt_PT" }
-    NumberPatterns { 
-            "#,##0.###;-#,##0.###",
-            "#,##0 \u00A4;-#,##0 \u00A4",
-            "#,##0%",
-    }
-    ShortCountry { "PRT" }
-    LocaleID { "0816" }
 }

@@ -8,8 +8,8 @@
 de_LU {
     Version{ "1.0" }
     CurrencyElements { 
-            "F",
-            "LUF",
+            "\u20AC",
+            "EUR",
             ",",
     }
     LocaleString { "de_LU" }

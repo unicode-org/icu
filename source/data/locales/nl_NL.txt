@@ -7,8 +7,8 @@
 
 nl_NL {
     CurrencyElements { 
-            "fl",
-            "NLG",
+            "\u20AC",
+            "EUR",
             ",",
     }
     LocaleString { "nl_NL" }
