@@ -1,6 +1,6 @@
 ﻿// -*- Coding: utf-8; -*-  [all uconv resource files]
 // Copyright (c) 2000 IBM, Inc. and Others.
-// $Revision: 1.22 $
+// $Revision: 1.23 $
 //
 // Root translation file for uconv messages.
 // So you want to translate this file??? Great!
@@ -39,7 +39,7 @@ root
 	  "          --default-code                list only the default encoding\n"
 	  "          -L, --list-transliterators    list all available transliterators\n"
           "          --canon                       print list in cnvrtrs.txt(5) format\n"
-	  "          -x transliterator             run everything through transliterator\n" 
+	  "          -x transliteration            run everything through transliteration\n" 
 	  "          --to-callback callback        use callback on destination encoding\n"
 	  "          -c                            omit invalid characters from the output\n"
 	  "          --from-callback callback      use callback on original encoding\n"
@@ -59,19 +59,19 @@ root
   cantGetTag   { "Couldn''t get standard tag name: {0}.\n" } // 0: err
 
   noSuchCodeset  { "Couldn''t find encoding: {0}.\n" } // 0: name of the encoding
-  noFromCodeset  { "No conversion from encoding given (use -f)\n" }
-  noToCodeset    {  "No conversion to encoding given (use -t)\n"  }
+  noFromCodeset  { "No conversion from encoding given (use -f).\n" }
+  noToCodeset    {  "No conversion to encoding given (use -t).\n"  }
 
   badBlockSize	{ "Bad block size: {0}.\n" } // 0: size of the block
 
-  cantOpenFromCodeset { "Couldn''t open from encoding {0}: {1}\n" }  // 0:set, 1: err
-  cantOpenToCodeset { "Couldn''t open to encoding {0}: {1}\n" } // 0: set, 1: err
+  cantOpenFromCodeset { "Couldn''t open from encoding {0}.: {1}.\n" }  // 0:set, 1: err
+  cantOpenToCodeset { "Couldn''t open to encoding {0}: {1}.\n" } // 0: set, 1: err
 
-  cantCreateTranslit { "Couldn''t create transliteror {0}: {1}\n" } // 0: set, 1: err
+  cantCreateTranslit { "Couldn''t create transliteration \"{0}\": {1}{2}.\n" } // 0: set, 1: err, 2: parse err details
 
-  cantSetCallback { "Couldn''t set transcoding callback: {0}\n" } // 0: err
+  cantSetCallback { "Couldn''t set transcoding callback: {0}.\n" } // 0: err
 
-  unknownCallback { "Unknown callback: {0}\n" } // 0: callback name
+  unknownCallback { "Unknown callback: {0}.\n" } // 0: callback name
 
   cantOpenInputF  { "Couldn''t open input file {0}: {1}.\n" } // 0: file, 1: strerror [OS error string]
   cantCreateOutputF  { "Couldn''t create output file {0}: {1}.\n" } // 0: file, 1: strerror [OS error string]
