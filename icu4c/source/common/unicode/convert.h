@@ -58,8 +58,8 @@ class U_COMMON_API UnicodeConverter : public UObject {
 /**
  * Creates Unicode Conversion Object by specifying the codepage name.  The name
  * string is in ASCII format.
- * @param code_set the pointer to a char[] object containing a codepage name. (I)
- * @param UErrorCode Error status (I/O) IILLEGAL_ARGUMENT_ERROR will be returned if the string is empty.
+ * @param name the pointer to a char[] object containing a codepage name. (I)
+ * @param err Error status (I/O) IILLEGAL_ARGUMENT_ERROR will be returned if the string is empty.
  * If the internal program does not work correctly, for example, if there's no such codepage,
  * U_INTERNAL_PROGRAM_ERROR will be returned.
  * @return the created Unicode converter object
@@ -72,7 +72,7 @@ class U_COMMON_API UnicodeConverter : public UObject {
   *Creates a UnicodeConverter object with the names specified as unicode strings. The name should be limited to
   *the ASCII-7 alphanumerics. Dash and underscore characters are allowed for readability, but are ignored in the
   *search.
-  *@param code_set name of the uconv table in Unicode string (I)
+  *@param name name of the uconv table in Unicode string (I)
   *@param err error status (I/O) IILLEGAL_ARGUMENT_ERROR will be returned if the string is empty.  If the internal
   *program does not work correctly, for example, if there's no such codepage, U_INTERNAL_PROGRAM_ERROR will be
   *returned.
@@ -84,8 +84,9 @@ class U_COMMON_API UnicodeConverter : public UObject {
 
  /**
   * Creates Unicode Conversion Object using the codepage ID number.
-  * @param code_set a codepage # (I)
-  * @UErrorCode Error status (I/O) IILLEGAL_ARGUMENT_ERROR will be returned if the string is empty.
+  * @param codepageNumber a codepage # (I)
+  * @param platform Enum for specifying which platform a converter ID refers to.
+  * @UErrorCode err Error status (I/O) IILLEGAL_ARGUMENT_ERROR will be returned if the string is empty.
   * If the internal program does not work correctly, for example, if there's no such codepage,
   * U_INTERNAL_PROGRAM_ERROR will be returned.
   * @return the Unicode converter object
@@ -104,9 +105,9 @@ class U_COMMON_API UnicodeConverter : public UObject {
   * converter is specified, the source string in Unicode will be transcoded to JIS
   * encoding.  The result will be stored in JIS encoding.
   *
-  * @param source the source Unicode string
-  * @param target the target string in codepage encoding
+  * @param target The target string in codepage encoding
   * @param targetSize Input the number of bytes available in the "target" buffer, Output the number of bytes copied to it
+  * @param source the source Unicode string
   * @param err the error status code.  U_MEMORY_ALLOCATION_ERROR will be returned if the
   * the internal process buffer cannot be allocated for transcoding.  U_ILLEGAL_ARGUMENT_ERROR
   * is returned if the converter is null or the source or target string is empty.
@@ -122,9 +123,9 @@ void fromUnicodeString(char*                    target,
  * Unicode encoding.  For example, if a Unicode to/from JIS
  * converter is specified, the source string in JIS encoding will be transcoded
  * to Unicode encoding.  The result will be stored in Unicode encoding.
- * @param source the source string in codepage encoding
  * @param target the target string in Unicode encoding
- * @param targetSize : I/O parameter, Input size buffer, Output # of bytes copied to it
+ * @param source the source string in codepage encoding
+ * @param sourceSize : I/O parameter, Input size buffer, Output # of bytes copied to it
  * @param err the error status code U_MEMORY_ALLOCATION_ERROR will be returned if the
  * the internal process buffer cannot be allocated for transcoding.  U_ILLEGAL_ARGUMENT_ERROR
  * is returned if the converter is null or the source or target string is empty.
@@ -264,7 +265,7 @@ void getSubstitutionChars(char*         subChars,
  * Sets the substitution chars when converting from unicode to a codepage. The
  * substitution is specified as a string of 1-4 bytes, and may contain null byte.
  * The fill-in parameter err will get the error status on return.
- * @param cstr the substitution character array to be set with
+ * @param subchars the substitution character array to be set with
  * @param len the number of bytes of the substitution character array and upon return will contain the
  * number of bytes copied to that buffer
  * @param err the error status code.  U_ILLEGAL_ARGUMENT_ERROR if the converter is
@@ -285,9 +286,9 @@ void resetState(void);
 /**
  * Gets the name of the converter (zero-terminated).
  * the name will be the internal name of the converter
- * @param converter the Unicode converter
  * @param err the error status code. U_INDEX_OUTOFBOUNDS_ERROR in the converterNameLen is too
  * small to contain the name.
+ * @return the name of the converter.
  * @deprecated
  */
 const char*  getName( UErrorCode&  err) const;
@@ -300,7 +301,7 @@ const char*  getName( UErrorCode&  err) const;
  * The error code fill-in parameter indicates if the codepage number is available.
  * @param err the error status code.  U_ILLEGAL_ARGUMENT_ERROR will returned if
  * the converter is null or if converter's data table is null.
- * @return If any error occurrs, null will be returned.
+ * @return the converter's codepage number. If any error occurrs, null will be returned.
  * @deprecated
  */
  int32_t  getCodepage(UErrorCode& err) const;
@@ -361,7 +362,7 @@ const char*  getName( UErrorCode&  err) const;
  * Returns the localized name of the UnicodeConverter, if for any reason it is
  * available, the internal name will be returned instead.
  * @param displayLocale the valid Locale, from which we want to localize
- * @param displayString a UnicodeString that is going to be filled in.
+ * @param displayName a UnicodeString that is going to be filled in.
  * @deprecated
  */
 void getDisplayName(const Locale&   displayLocale,
@@ -376,10 +377,39 @@ void getDisplayName(const Locale&   displayLocale,
  */
 UConverterPlatform  getCodepagePlatform(UErrorCode& err) const;
 
-
+ /**
+  * Assignment operator. 
+  * @param that object to be copied
+  * @return the newly created Unicode Converter.
+  */
  UnicodeConverter&   operator=(const UnicodeConverter& that);
+ 
+ /**
+   * Returns true when both UnicodeConveters refer to the same
+   * character in the same character-storage object.  
+   * @param that The UnicodeConverter to be compared for equality
+   * @return true when both UnicodeConverters refer to the same
+   * character in the same character-storage object
+   * @stable
+   */
  UBool              operator==(const UnicodeConverter& that) const;
+ 
+ /**
+   * Returns true when the UnicodeConverters refer to different
+   * text-storage objects, or to different characters in the
+   * same text-storage object.  
+   * @param that The UnicodeConverter to be compared for inequality
+   * @Returns true when the iterators refer to different
+   * text-storage objects, or to different characters in the
+   * same text-storage object
+   * @stable
+   */
  UBool              operator!=(const UnicodeConverter& that) const;
+ 
+ /* copy constructor
+  * @param that The UnicodeConverter to be copied.
+  * @return the newly created Unicode Converter.
+  * */
  UnicodeConverter(const UnicodeConverter&  that);
 
 /**

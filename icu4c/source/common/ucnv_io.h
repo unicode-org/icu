@@ -23,12 +23,18 @@
  * The alias is searched for case-insensitively, the converter name
  * is returned in mixed-case.
  * Returns NULL if the alias is not found.
+ * @param alias The alias name to be searched.
+ * @pErrorCode The error code
+ * @return the converter name in mixed-case, return NULL if the alias is not found.
  */
 U_CFUNC const char *
 ucnv_io_getConverterName(const char *alias, UErrorCode *pErrorCode);
 
 /**
  * The count for ucnv_io_getAliases and ucnv_io_getAlias
+ * @param alias The alias name to be counted
+ * @pErrorCode The error code
+ * @return the alias count
  */
 U_CFUNC uint16_t
 ucnv_io_countAliases(const char *alias, UErrorCode *pErrorCode);
@@ -41,6 +47,10 @@ ucnv_io_countAliases(const char *alias, UErrorCode *pErrorCode);
  * There are as many strings in this list as the return value specifies.
  * Returns the number of aliases including the canonical converter name,
  * or 0 if the alias is not found.
+ * @param alias The canonical converter name
+ * @param start 
+ * @param aliases A pointer to the list of aliases for the actual converter
+ * @return the number of aliases including the canonical converter name, or 0 if the alias is not found.
  */
 U_CFUNC uint16_t
 ucnv_io_getAliases(const char *alias, uint16_t start, const char **aliases, UErrorCode *pErrorCode);
@@ -49,18 +59,26 @@ ucnv_io_getAliases(const char *alias, uint16_t start, const char **aliases, UErr
  * Search case-insensitively for a converter alias and return
  * the (n)th alias.
  * Returns NULL if the alias is not found.
+ * @param alias The converter alias
+ * @param n The number specifies which alias to get
+ * @pErrorCode The error code
+ * @return the (n)th alias and return NULL if the alias is not found.
  */
 U_CFUNC const char *
 ucnv_io_getAlias(const char *alias, uint16_t n, UErrorCode *pErrorCode);
 
 /**
  * Return the number of all standard names.
+ * @param pErrorCode The error code
+ * @return the number of all standard names
  */
 U_CFUNC uint16_t
 ucnv_io_countStandards(UErrorCode *pErrorCode);
 
 /**
  * Return the number of all converter names.
+ * @param pErrorCode The error code
+ * @return the number of all converter names
  */
 U_CFUNC uint16_t
 ucnv_io_countAvailableConverters(UErrorCode *pErrorCode);
@@ -69,6 +87,9 @@ ucnv_io_countAvailableConverters(UErrorCode *pErrorCode);
  * Return the (n)th converter name in mixed case, or NULL
  * if there is none (typically, if the data cannot be loaded).
  * 0<=index<ucnv_io_countAvailableConverters().
+ * @param n The number specifies which converter name to get
+ * @param pErrorCode The error code
+ * @return the (n)th converter name in mixed case, or NULL if there is none.
  */
 U_CFUNC const char *
 ucnv_io_getAvailableConverter(uint16_t n, UErrorCode *pErrorCode);
@@ -76,6 +97,8 @@ ucnv_io_getAvailableConverter(uint16_t n, UErrorCode *pErrorCode);
 /**
  * Fill an array const char *aliases[ucnv_io_countAvailableConverters()]
  * with pointers to all converter names in mixed-case.
+ * @param aliases The alias array to be filled
+ * @param pErrorCode The error code
  */
 U_CFUNC void
 ucnv_io_fillAvailableConverters(const char **aliases, UErrorCode *pErrorCode);
@@ -90,6 +113,8 @@ ucnv_io_flushAvailableConverterCache(void);
 
 /**
  * Return the number of all aliases (and converter names).
+ * @param pErrorCode The error code
+ * @return the number of all aliases
  */
 U_CFUNC uint16_t
 ucnv_io_countAvailableAliases(UErrorCode *pErrorCode);
@@ -97,12 +122,14 @@ ucnv_io_countAvailableAliases(UErrorCode *pErrorCode);
 /**
  * Get the name of the default converter.
  * This name is already resolved by <code>ucnv_io_getConverterName()</code>.
+ * @return the name of the default converter
  */
 U_CFUNC const char *
 ucnv_io_getDefaultConverterName(void);
 
 /**
  * Set the name of the default converter.
+ * @param name The name set to the default converter
  */
 U_CFUNC void
 ucnv_io_setDefaultConverterName(const char *name);

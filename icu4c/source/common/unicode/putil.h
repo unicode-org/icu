@@ -91,12 +91,16 @@ U_CAPI int16_t  U_EXPORT2 uprv_log10(double d);
 U_CAPI double  U_EXPORT2 uprv_log(double d);
 
 /** Does common notion of rounding e.g. uprv_floor(x + 0.5); */
+/* @param x the double number
+ * @return the rounded double
+ */
 U_CAPI double  U_EXPORT2 uprv_round(double x);
 
 /**
  * Returns the number of digits after the decimal point in a double number x.
  *
  * @param x the double number
+ * @return the number of digits after the decimal point in a double number x.
  */
 U_CAPI int32_t  U_EXPORT2 uprv_digitsAfterDecimal(double x);
 
@@ -137,6 +141,7 @@ U_CAPI void     U_EXPORT2 uprv_tzset(void);
 /**
  * Difference in seconds between coordinated universal
  * time and local time. E.g., -28,800 for PST (GMT-8hrs)
+ * @return the difference in seconds between coordinated universal time and local time.
  */
 U_CAPI int32_t  U_EXPORT2 uprv_timezone(void);
 
@@ -150,7 +155,8 @@ U_CAPI int32_t  U_EXPORT2 uprv_timezone(void);
 U_CAPI char*    U_EXPORT2 uprv_tzname(int n);
 
 /**
- * Get UTC (GMT) time measured in seconds since 0:00 on 1/1/70. 
+ * Get UTC (GMT) time measured in seconds since 0:00 on 1/1/70.
+ * @return the UTC time measured in seconds 
  * @stable
  */
 U_CAPI int32_t  U_EXPORT2 uprv_getUTCtime(void);
@@ -188,13 +194,14 @@ U_CAPI const char* U_EXPORT2 u_getDataDirectory(void);
  *
  * This function should be called at most once in a process, before the
  * first ICU operation that will require the loading of an ICU data file.
- *
+ * @param disrectory The directory to be set.
  * @stable
  */
 U_CAPI void U_EXPORT2 u_setDataDirectory(const char *directory);
 
 /**
  * Return the default codepage for this platform and locale 
+ * @return the default codepage for this platform 
  * @stable
  */
 U_CAPI const char*  U_EXPORT2 uprv_getDefaultCodepage(void);
@@ -202,6 +209,7 @@ U_CAPI const char*  U_EXPORT2 uprv_getDefaultCodepage(void);
 /**
  * Return the default locale ID string by querying ths system, or
  *     zero if one cannot be found. 
+ * @return the default locale ID string
  * @stable
  */
 U_CAPI const char*  U_EXPORT2 uprv_getDefaultLocaleID(void);
@@ -213,6 +221,8 @@ U_CAPI const char*  U_EXPORT2 uprv_getDefaultLocaleID(void);
  * This is a special purpose function defined by the ChoiceFormat API
  * documentation.
  * It is not a general purpose function and not defined for NaN or Infinity
+ * @return the least double greater than d (if positive == true),
+ * or the greatest double less than d (if positive == false).
  * @deprecated This will be removed after 2002-Jun-30. Use the ChoiceFormat closures API instead.
  */
 U_CAPI double       U_EXPORT2 uprv_nextDouble(double d, UBool positive);

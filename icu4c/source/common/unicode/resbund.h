@@ -175,6 +175,7 @@ public:
      *                resources that pertain to the French locale. If the caller doesn't
      *                pass a locale parameter, the default locale for the system (as
      *                returned by Locale::getDefault()) will be used.
+     * @param err     The Error Code.
      * The UErrorCode& err parameter is used to return status information to the user. To
      * check whether the construction succeeded or not, you should check the value of
      * U_SUCCESS(err). If you wish more detailed information, you can check for
@@ -363,6 +364,7 @@ public:
      * Gets the locale ID of the resource bundle as a string.
      * Same as getLocale().getName() .
      *
+     * @return the locale ID of the resource bundle as a string
      * @stable
      */
     const char *getName(void);

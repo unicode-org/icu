@@ -1061,7 +1061,7 @@ public:
    * in <TT>srcText</TT> in the range 
    * [<TT>srcStart</TT>, <TT>srcStart + srcLength</TT>), 
    * using bitwise comparison.   
-   * @param text The text to search for.
+   * @param srcText The text to search for.
    * @param srcStart the offset into <TT>srcText</TT> at which 
    * to start matching
    * @param srcLength the number of characters in <TT>srcText</TT> to match
@@ -1751,6 +1751,7 @@ public:
    * @param textLength The number of Unicode characters in <code>text</code> to alias.
    *                   If -1, then this constructor will determine the length
    *                   by calling <code>u_strlen()</code>.
+   * @return a reference to this
    * @stable
    */
   UnicodeString &setTo(UBool isTerminated,
@@ -1773,6 +1774,7 @@ public:
    * @param buffer The characters to alias for the UnicodeString.
    * @param buffLength The number of Unicode characters in <code>buffer</code> to alias.
    * @param buffCapacity The size of <code>buffer</code> in UChars.
+   * @return a reference to this
    * @stable
    */
   UnicodeString &setTo(UChar *buffer,
@@ -2160,9 +2162,10 @@ public:
 
   /**
    * Replaceable API
+   * @return TRUE if it has MetaData
    */
   virtual UBool hasMetaData() const;
-
+  
   /**
    * Copy a substring of this object, retaining attribute (out-of-band)
    * information.  This method is used to duplicate or reorder substrings.

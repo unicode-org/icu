@@ -32,6 +32,8 @@ public:
    * The iteration range is 0 to <code>length-1</code>.
    * text is only aliased, not adopted (the
    * destructor will not delete it).
+   * @param textPtr The UChar array to be iterated over
+   * @param length The length of the UChar array
    * @stable
    */
   UCharCharacterIterator(const UChar* textPtr, int32_t length);
@@ -44,6 +46,9 @@ public:
    * The starting
    * position is specified by "position". If "position" is outside the valid
    * iteration range, the behavior of this object is undefined.
+   * @param textPtr The UChar array to be iteratd over
+   * @param length The length of the UChar array
+   * @param position The starting position of the iteration
    * @stable
    */
   UCharCharacterIterator(const UChar* textPtr, int32_t length,
@@ -58,6 +63,11 @@ public:
    * position is specified by "position". If begin and end do not
    * form a valid iteration range or "position" is outside the valid
    * iteration range, the behavior of this object is undefined.
+   * @param textPtr The UChar array to be iterated over
+   * @param length The length of the UChar array
+   * @param textBegin  The begin position of the iteration range
+   * @param textEnd    The end position of the iteration range
+   * @param position    The starting position of the iteration
    * @stable
    */
   UCharCharacterIterator(const UChar* textPtr, int32_t length,
@@ -69,6 +79,7 @@ public:
    * Copy constructor.  The new iterator iterates over the same range
    * of the same string as "that", and its initial position is the
    * same as "that"'s current position.  
+   * @param that The UCharCharacterIterator to be copied
    * @stable
    */
   UCharCharacterIterator(const UCharCharacterIterator&  that);
@@ -82,7 +93,9 @@ public:
   /**
    * Assignment operator.  *this is altered to iterate over the sane
    * range of the same string as "that", and refers to the same
-   * character within that string as "that" does.  
+   * character within that string as "that" does. 
+   * @param that The object to be copied
+   * @return the newly created object 
    * @stable
    */
   UCharCharacterIterator&
@@ -91,12 +104,16 @@ public:
   /**
    * Returns true if the iterators iterate over the same range of the
    * same string and are pointing at the same character.  
+   * @param that The ForwardCharacterIterator used to be compared for equality
+   * @return true if the iterators iterate over the same range of the
+   * same string and are pointing at the same character.
    * @stable
    */
   virtual UBool          operator==(const ForwardCharacterIterator& that) const;
 
   /**
    * Generates a hash code for this iterator.  
+   * @return the hash code.
    * @stable
    */
   virtual int32_t         hashCode(void) const;
@@ -105,6 +122,7 @@ public:
    * Returns a new UCharCharacterIterator referring to the same
    * character in the same range of the same string as this one.  The
    * caller must delete the new iterator.  
+   * @return the CharacterIterator newly created
    * @stable
    */
   virtual CharacterIterator* clone(void) const;
@@ -113,6 +131,7 @@ public:
    * Sets the iterator to refer to the first code unit in its
    * iteration range, and returns that code unit.
    * This can be used to begin an iteration with next().
+   * @return the first code unit in its iteration range.
    * @stable
    */
   virtual UChar         first(void);
@@ -122,6 +141,7 @@ public:
    * iteration range, returns that code unit, and moves the position
    * to the second code unit. This is an alternative to setToStart()
    * for forward iteration with nextPostInc().
+   * @return the first code unit in its iteration range
    * @stable
    */
   virtual UChar         firstPostInc(void);
@@ -132,6 +152,7 @@ public:
    * This can be used to begin an iteration with next32().
    * Note that an iteration with next32PostInc(), beginning with,
    * e.g., setToStart() or firstPostInc(), is more efficient.
+   * @return the first code point in its iteration range
    * @stable
    */
   virtual UChar32       first32(void);
@@ -141,6 +162,7 @@ public:
    * iteration range, returns that code point, and moves the position
    * to the second code point. This is an alternative to setToStart()
    * for forward iteration with next32PostInc().
+   * @return the first code point in its iteration range.
    * @stable
    */
   virtual UChar32       first32PostInc(void);
@@ -149,6 +171,7 @@ public:
    * Sets the iterator to refer to the last code unit in its
    * iteration range, and returns that code unit.
    * This can be used to begin an iteration with previous().
+   * @return the last code unit in its iteration range.
    * @stable
    */
   virtual UChar         last(void);
@@ -157,6 +180,7 @@ public:
    * Sets the iterator to refer to the last code point in its
    * iteration range, and returns that code unit.
    * This can be used to begin an iteration with previous32().
+   * @return the last code point in its iteration range.
    * @stable
    */
   virtual UChar32       last32(void);
@@ -165,6 +189,8 @@ public:
    * Sets the iterator to refer to the "position"-th code unit
    * in the text-storage object the iterator refers to, and
    * returns that code unit.  
+   * @position the position within the text-storage object
+   * @return the code unit
    * @stable
    */
   virtual UChar         setIndex(int32_t position);
@@ -176,18 +202,22 @@ public:
    * returns that code point.
    * The current position is adjusted to the beginning of the code point
    * (its first code unit).
+   * @position the position within the text-storage object
+   * @return the code unit
    * @stable
    */
   virtual UChar32       setIndex32(int32_t position);
 
   /**
    * Returns the code unit the iterator currently refers to.  
+   * @return the code unit the iterator currently refers to.
    * @stable
    */
   virtual UChar         current(void) const;
 
   /**
    * Returns the code point the iterator currently refers to.  
+   * @return the code point the iterator currently refers to.
    * @stable
    */
   virtual UChar32       current32(void) const;
@@ -195,7 +225,8 @@ public:
   /**
    * Advances to the next code unit in the iteration range (toward
    * endIndex()), and returns that code unit.  If there are no more
-   * code units to return, returns DONE.  
+   * code units to return, returns DONE. 
+   * @return the next code unit in the iteration range. 
    * @stable
    */
   virtual UChar         next(void);
@@ -205,6 +236,7 @@ public:
    * in the iteration range
    * (toward endIndex()).  If there are
    * no more code units to return, returns DONE.
+   * @return the current code unit.
    * @stable
    */
   virtual UChar         nextPostInc(void);
@@ -216,6 +248,7 @@ public:
    * Note that iteration with "pre-increment" semantics is less
    * efficient than iteration with "post-increment" semantics
    * that is provided by next32PostInc().
+   * @return the next code point in the iteration range.
    * @stable
    */
   virtual UChar32       next32(void);
@@ -225,6 +258,7 @@ public:
    * in the iteration range
    * (toward endIndex()).  If there are
    * no more code points to return, returns DONE.
+   * @return the current point.
    * @stable
    */
   virtual UChar32       next32PostInc(void);
@@ -234,22 +268,26 @@ public:
    * at or after the current position in the iteration range.
    * This is used with nextPostInc() or next32PostInc() in forward
    * iteration.
+   * @return FALSE if there are no more code units or code points
+   * at or after the current position in the iteration range.
    * @stable
    */
   virtual UBool        hasNext();
 
   /**
-   * Advances to the previous code unit in the iteration rance (toward
+   * Advances to the previous code unit in the iteration range (toward
    * startIndex()), and returns that code unit.  If there are no more
    * code units to return, returns DONE.  
+   * @return the previous code unit in the iteration range.
    * @stable
    */
   virtual UChar         previous(void);
 
   /**
-   * Advances to the previous code point in the iteration rance (toward
+   * Advances to the previous code point in the iteration range (toward
    * startIndex()), and returns that code point.  If there are no more
-   * code points to return, returns DONE.  
+   * code points to return, returns DONE.
+   * @return the previous code point in the iteration range.  
    * @stable
    */
   virtual UChar32       previous32(void);
@@ -259,6 +297,8 @@ public:
    * before the current position in the iteration range.
    * This is used with previous() or previous32() in backward
    * iteration.
+   * @return FALSE if there are no more code units or code points
+   * before the current position in the iteration range.
    * @stable
    */
   virtual UBool        hasPrevious();
@@ -268,6 +308,9 @@ public:
    * iteration range, or relative to the current position itself.
    * The movement is expressed in numbers of code units forward
    * or backward by specifying a positive or negative delta.
+   * @delta the position relative to origin. A positive delta means forward;
+   * a negative delta means backward.
+   * @origin Origin enumeration {kStart, kCurrent, kEnd}
    * @return the new position
    * @stable
    */
@@ -278,6 +321,9 @@ public:
    * iteration range, or relative to the current position itself.
    * The movement is expressed in numbers of code points forward
    * or backward by specifying a positive or negative delta.
+   * @delta the position relative to origin. A positive delta means forward;
+   * a negative delta means backward.
+   * @origin Origin enumeration {kStart, kCurrent, kEnd}
    * @return the new position
    * @stable
    */
@@ -299,14 +345,16 @@ public:
   virtual void            getText(UnicodeString& result);
 
   /**
-   * Return a class ID for this object (not really public)   
+   * Return a class ID for this object (not really public) 
+   * @return a class ID for this object.  
    * @stable
    */
   virtual UClassID         getDynamicClassID(void) const 
     { return getStaticClassID(); }
 
   /**
-   * Return a class ID for this class (not really public)   
+   * Return a class ID for this class (not really public) 
+   * @return a class ID for this class  
    * @stable
    */
   static UClassID          getStaticClassID(void) 

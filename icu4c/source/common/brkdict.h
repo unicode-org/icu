@@ -103,6 +103,8 @@ public:
     /**
      * Constructor.  Creates the BreakDictionary by using readDictionaryFile() to
      * load the dictionary tables from the disk.
+     * @param dictionaryFilename The name of the dictionary file
+     * @param status for errors if it occurs
      */
     BreakDictionary(const char* dictionaryFilename, UErrorCode& status);
 
@@ -114,6 +116,7 @@ public:
     /**
      * Reads the dictionary file on the disk and constructs the appropriate in-memory
      * representation.
+     * @param in The given memory stream
      */
     void readDictionaryFile(UMemoryStream* in);
 
@@ -161,6 +164,9 @@ private:
     /**
      * Given (logical) row and column numbers, returns true if the
      * cell in that position is populated
+     * @param row The LOGICAL row number of the cell
+     * @param col The PHYSICAL row number of the cell
+     * @return true if the cell in that position is populated
      */
     UBool cellIsPopulated(int32_t row, int32_t col) const;
 

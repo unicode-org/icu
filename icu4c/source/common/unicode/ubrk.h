@@ -275,6 +275,10 @@ ubrk_close(UBreakIterator *bi);
 
 /**
  * Sets an existing iterator to point to a new piece of text
+ * @param bi The iterator to use
+ * @param text The text to be set
+ * @param textLength The length of the text
+ * @param status The error code
  * @stable
  */
 U_CAPI void U_EXPORT2 

@@ -433,6 +433,7 @@ public:
      * different fields, e.g. in a spreadsheet.
      *
      * Note that the initial setting will match the host system.
+     * @retrun the default locale for this instance of the Java Virtual Machine
      * @system
      * @stable
      */
@@ -443,6 +444,7 @@ public:
      * application, then never reset. setDefault does NOT reset the host locale.
      *
      * @param newLocale Locale to set to.
+     * @param success The error code.
      * @system
      * @stable
      */

@@ -512,6 +512,7 @@ ubidi_setInverse(UBiDi *pBiDi, UBool isInverse);
  * Is this BiDi object set to perform the inverse BiDi algorithm?
  *
  * @param pBiDi is a <code>UBiDi</code> object.
+ * @return TRUE if the BiDi object set to perform the inverse BiDi algorithm
  *
  * @see ubidi_setInverse
  * @stable

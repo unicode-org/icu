@@ -242,7 +242,7 @@ ucnv_open   (const char *converterName, UErrorCode * err);
  * E.g., the names "UTF8", "utf-8", and "Utf 8" are all equivalent.
  * If <TT>NULL</TT> is passed for the converter name, it will create 
  * one with the ucnv_getDefaultName() return value.
- * @param converterName : name of the uconv table in a zero terminated 
+ * @param name : name of the uconv table in a zero terminated 
  *        Unicode string
  * @param err outgoing error status <TT>U_MEMORY_ALLOCATION_ERROR, 
  *        U_FILE_ACCESS_ERROR</TT>
@@ -1086,7 +1086,7 @@ ucnv_setDefaultName (const char *name);
  *
  * @param cnv The converter representing the target codepage.
  * @param source the input buffer to be fixed
- * @param sourceLength the length of the input buffer
+ * @param sourceLen the length of the input buffer
  * @see ucnv_isAmbiguous
  * @stable
  */
@@ -1096,6 +1096,7 @@ ucnv_fixFileSeparator(const UConverter *cnv, UChar* source, int32_t sourceLen);
 /**
  * Determines if the converter contains ambiguous mappings of the same
  * character or not.
+ * @param cnv the converter to be tested
  * @return TRUE if the converter contains ambiguous mapping of the same 
  * character, FALSE otherwise.
  * @stable
@@ -1115,6 +1116,7 @@ ucnv_setFallback(UConverter *cnv, UBool usesFallback);
 
 /**
  * Determines if the converter uses fallback mappings or not.
+ * @param cnv The converter to be tested
  * @return TRUE if the converter uses fallback, FALSE otherwise.
  * @stable
  */
