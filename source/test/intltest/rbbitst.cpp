@@ -1382,7 +1382,6 @@ void RBBITest::TestExtended() {
     enum EParseState{
         PARSE_COMMENT,
         PARSE_TAG,
-        PARSE_RULE,
         PARSE_DATA,
         PARSE_NUM
     }
