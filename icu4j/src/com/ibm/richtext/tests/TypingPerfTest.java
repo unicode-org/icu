@@ -1,5 +1,5 @@
 /*
- * @(#)$RCSfile: TypingPerfTest.java,v $ $Revision: 1.1 $ $Date: 2000/04/20 17:46:57 $
+ * @(#)$RCSfile: TypingPerfTest.java,v $ $Revision: 1.2 $ $Date: 2000/04/22 17:08:46 $
  *
  * (C) Copyright IBM Corp. 1998-1999.  All Rights Reserved.
  *
@@ -18,7 +18,6 @@ import java.awt.Button;
 import java.awt.GridLayout;
 import java.awt.Frame;
 import java.awt.Toolkit;
-import java.awt.EventQueue;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -26,6 +25,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
@@ -37,6 +37,10 @@ import java.util.Date;
 import com.ibm.richtext.textpanel.KeyEventForwarder;
 import com.ibm.richtext.textpanel.TextPanel;
 import com.ibm.richtext.awtui.TextFrame;
+import com.ibm.richtext.styledtext.MConstText;
+
+import com.ibm.richtext.demo.EditDemo;
+import com.ibm.richtext.demo.TextDocument;
 
 public class TypingPerfTest implements ActionListener {
 
@@ -53,33 +57,46 @@ public class TypingPerfTest implements ActionListener {
     private static final String fgAtCurrentPosCommand = "Insert at current position";
     private static final String fgLotsOfTextCommand = "Insert a lot of text";
 
-    private static final char[] fgInsText =
-                    "The quick brown fox jumps over the lazy dog.  The end.".toCharArray();
+    private static final String USAGE = "Usage: java com.ibm.richtext.tests.TypingPerfTest [file] [-insertionText text]";
+    private char[] fInsText;
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
 
         OutputStream outStream = null;
-        PrintWriter writer;
+        PrintWriter writer = new PrintWriter(System.out);
 
-        try {
-            if (args.length == 1) {
-                outStream = new FileOutputStream(args[0], true);
-                writer = new PrintWriter(outStream);
+        MConstText text = Declaration.fgDeclaration;
+        char[] insText = "The quick brown fox jumps over the lazy dog. The end. ".toCharArray();
+        
+        int index = 0;
+        while (index < args.length) {
+            if (args[index].equals("-insertionText")) {
+                if (args.length == ++index) {
+                    throw new Error(USAGE);
+                }
+                insText = args[index++].toCharArray();
             }
             else {
-                writer = new PrintWriter(System.out);
+                // This will try MConstText first, then plain text.
+                TextDocument doc = EditDemo.getDocumentFromFile(new File(args[index++]));
+                if (doc == null) {
+                    throw new Error("Couldn't open file "+args[index-1]);
+                }
+                text = doc.getText();
             }
-
-            new TypingPerfTest(writer);
         }
-        catch(IOException e) {
-            System.out.println("Caught exception: " + e);
+        
+        if (index != args.length) {
+            throw new Error(USAGE);
         }
+        
+        new TypingPerfTest(writer, text, insText);
     }
 
-    public TypingPerfTest(PrintWriter out) throws IOException {
+    public TypingPerfTest(PrintWriter out, MConstText text, char[] insText) throws IOException {
 
-        fTextFrame = new TextFrame(Declaration.fgDeclaration, "", null);
+        fInsText = insText;
+        fTextFrame = new TextFrame(text, "", null);
         TextPanel textPanel = (TextPanel) fTextFrame.getTextPanel();
         fKeyEventForwarder = new KeyEventForwarder(textPanel);
         fOut = out;
@@ -160,7 +177,6 @@ public class TypingPerfTest implements ActionListener {
 
     private void insertAtCurrentPos(final int times) throws IOException {
 
-        //EventQueue eventQueue = Toolkit.getDefaultToolkit().getSystemEventQueue();
         fTextFrame.toFront();
 
         System.gc();
@@ -168,18 +184,17 @@ public class TypingPerfTest implements ActionListener {
         long startTime = System.currentTimeMillis();
 
         for (int t=0; t < times; t++) {
-            for (int i=0; i < fgInsText.length; i++) {
+            for (int i=0; i < fInsText.length; i++) {
 
-                KeyEvent event = new KeyEvent(fTextFrame, KeyEvent.KEY_TYPED, 0, 0, 0, fgInsText[i]);
+                KeyEvent event = new KeyEvent(fTextFrame, KeyEvent.KEY_TYPED, 0, 0, 0, fInsText[i]);
                 fKeyEventForwarder.handleKeyEvent(event);
-                //eventQueue.postEvent(event);
             }
         }
 
         long time = System.currentTimeMillis() - startTime;
 
         fOut.println("Total time: " + time);
-        fOut.println("Millis per character: " + (time / (fgInsText.length*times)));
+        fOut.println("Millis per character: " + (time / (fInsText.length*times)));
         fOut.flush();
     }
 
@@ -190,7 +205,7 @@ public class TypingPerfTest implements ActionListener {
         long startTime = System.currentTimeMillis();
 
         for (int t=0; t < times; t++) {
-            for (int i=0; i < fgInsText.length; i++) {
+            for (int i=0; i < fInsText.length; i++) {
 
                 KeyEvent event = new KeyEvent(fTextFrame, 0, 0, 0, KeyEvent.VK_DELETE, '\u00FF');
                 fKeyEventForwarder.handleKeyEvent(event);
@@ -200,7 +215,7 @@ public class TypingPerfTest implements ActionListener {
         long time = System.currentTimeMillis() - startTime;
 
         fOut.println("Total time: " + time);
-        fOut.println("Millis per character: " + (time / (fgInsText.length*times)));
+        fOut.println("Millis per character: " + (time / (fInsText.length*times)));
         fOut.flush();
     }
 
@@ -211,7 +226,7 @@ public class TypingPerfTest implements ActionListener {
         long startTime = System.currentTimeMillis();
 
         for (int t=0; t < times; t++) {
-            for (int i=0; i < fgInsText.length; i++) {
+            for (int i=0; i < fInsText.length; i++) {
 
                 KeyEvent event = new KeyEvent(fTextFrame, 0, 0, 0, KeyEvent.VK_BACK_SPACE, '\u0010');
                 fKeyEventForwarder.handleKeyEvent(event);
@@ -221,7 +236,7 @@ public class TypingPerfTest implements ActionListener {
         long time = System.currentTimeMillis() - startTime;
 
         fOut.println("Total time: " + time);
-        fOut.println("Millis per character: " + (time / (fgInsText.length*times)));
+        fOut.println("Millis per character: " + (time / (fInsText.length*times)));
         fOut.flush();
     }
 }
