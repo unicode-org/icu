@@ -61,7 +61,7 @@ NULL=nul
 PATH = $(PATH);$(ICUP)\icu\bin\$(CFG)
 
 # Suffixes for data files
-.SUFFIXES : .ucm .cnv .dll .dat .col .res .txt .c
+.SUFFIXES : .ucm .cnv .dll .dat .res .txt .c
 
 # We're including a list of ucm files. There are two lists, one is essential 'ucmfiles.mk' and
 # the other is optional 'ucmlocal.mk'
@@ -97,28 +97,11 @@ GENRB_SOURCE=$(GENRB_SOURCE) $(GENRB_SOURCE_LOCAL)
 RB_FILES = $(GENRB_SOURCE:.txt=.res) 
 TRANSLIT_FILES = $(TRANSLIT_SOURCE:.txt=.res)
 #TRANSLIT_SOURCE = $(TRANSLIT_SOURCE: = translit\)
-!MESSAGE $(TRANSLIT_SOURCE) $(RB_FILES)
 C_RB_FILES = $(RB_FILES:.res=_res.c) $(TRANSLIT_FILES:.res=_res.c) 
 OBJ_RB_FILES = $(C_RB_FILES:.c=.obj)
 
-
-# Read list of resource bundle files for colation
-!IF EXISTS("$(ICUTOOLS)\gencol\gencolfiles.mk")
-!INCLUDE "$(ICUTOOLS)\gencol\gencolfiles.mk"
-!IF EXISTS("$(ICUTOOLS)\gencol\gencollocal.mk")
-!INCLUDE "$(ICUTOOLS)\gencol\gencollocal.mk"
-GENCOL_SOURCE=$(GENCOL_SOURCE) $(GENCOL_SOURCE_LOCAL)
-!ELSE
-#!MESSAGE Warning: cannot find "gencollocal.mk"
-!ENDIF
-!ELSE
-!ERROR ERROR: cannot find "gencolfiles.mk"
-!ENDIF
-COL_FILES = $(GENCOL_SOURCE:.txt=.col)
-
-
 # This target should build all the data files
-ALL : GODATA  test.dat base_test.dat test_dat.dll base_test_dat.dll base_dat.dll icudata.dat $(TESTDATA)testdata.dll icudata.dll $(COL_FILES) GOBACK
+ALL : GODATA  test.dat base_test.dat test_dat.dll base_test_dat.dll base_dat.dll icudata.dat $(TESTDATA)testdata.dll icudata.dll GOBACK
 	@echo All targets are up to date
 
 BRK_FILES = $(ICUDATA)\sent.brk $(ICUDATA)\char.brk $(ICUDATA)\line.brk $(ICUDATA)\word.brk $(ICUDATA)\line_th.brk $(ICUDATA)\word_th.brk
@@ -313,7 +296,6 @@ CLEAN :
 	-@erase "*.cnv"
 	-@erase "*.res"
 	-@erase "$(TRANS)*.res"
-	-@erase "*.col"
 	-@erase "uprops*.*"
 	-@erase "unames*.*"
 	-@erase "cnvalias*.*"
@@ -347,6 +329,8 @@ CLEAN :
 	@echo set ICU_DATA=$(ICUDATA)
 	$(ICUTOOLS)\genrb\$(CFG)\genrb -s$(@D) -d$(@D) $(?F)
 
+#$(ICUTOOLS)\genrb\$(CFG)\genrb $<
+
 # Inference rule for creating converters, with a kludge to create
 # c versions of converters at the same time
 .ucm.cnv::
@@ -355,14 +339,6 @@ CLEAN :
 	@set ICU_DATA=$(ICUDATA)
 	@$(ICUTOOLS)\makeconv\$(CFG)\makeconv $<
 #	@$(ICUTOOLS)\genccode\$(CFG)\genccode $(CNV_FILES)
-
-# Inference rule for creating collation files -
-# this should be integrated in genrb
-.txt.col::
-	@echo Making Collation files
-	@cd $(ICUDATA)
-	@set ICU_DATA=$(ICUDATA)
-	$(ICUTOOLS)\gencol\$(CFG)\gencol $<
 
 # Inference rule for compiling :)
 .c.obj:
@@ -420,7 +396,7 @@ tz.txt : {$(ICUTOOLS)\gentz\$(CFG)}gentz.exe
 
 uprops.dat unames.dat cnvalias.dat tz.dat : {$(ICUTOOLS)\genccode\$(CFG)}genccode.exe
 
-$(GENRB_SOURCE) $(GENCOL_SOURCE) : {$(ICUTOOLS)\genrb\$(CFG)}genrb.exe
+$(GENRB_SOURCE) : {$(ICUTOOLS)\genrb\$(CFG)}genrb.exe
 
 $(UCM_SOURCE) : {$(ICUTOOLS)\makeconv\$(CFG)}makeconv.exe {$(ICUTOOLS)\genccode\$(CFG)}genccode.exe
 
