@@ -657,23 +657,31 @@ ibm-16804 { IBM* }      cpibm16804 ebcdic-ar # EBCDIC Arabic
 # ibm-870   IBM870 { IANA* } ebcdic-cp-roece ebcdic-cp-yu csIBM870 cp870 870
 
 # EBCDIC codepages for S/390, with LF and NL codes swapped
+# Starting with ICU 2.4, the swapping is done by modifying the
+# normal tables at runtime instead of at build time.
+# Append UCNV_SWAP_LFNL_OPTION_STRING to the "ibm-CCSID" name to select this.
 
-# without Euro
-ibm-37-s390 { UTR22* }    ibm037-s390   # EBCDIC US
-ibm-1047-s390 { UTR22* }    # EBCDIC for S/390 Open Edition
+# This avoids the duplication of all EBCDIC SBCS and mixed-SBCS/DBCS
+# mapping files.
 
-# with Euro 
-ibm-1140-s390 { UTR22* }    # EBCDIC US
-ebcdic-xml-us               # Yet another form of ibm-1140
-ibm-1142-s390 { UTR22* }    # EBCDIC Denmark
-ibm-1143-s390 { UTR22* }    # EBCDIC Sweden
-ibm-1144-s390 { UTR22* }    # EBCDIC Italy
-ibm-1145-s390 { UTR22* }    # EBCDIC Spain
-ibm-1146-s390 { UTR22* }    # EBCDIC UK Ireland
-ibm-1147-s390 { UTR22* }    # EBCDIC France
-ibm-1148-s390 { UTR22* }    # EBCDIC International Latin1
-ibm-1149-s390 { UTR22* }    # EBCDIC Iceland
-ibm-1153-s390 { UTR22* }    # EBCDIC latin 2
-ibm-12712-s390 { UTR22* }   # EBCDIC Hebrew
-ibm-16804-s390 { UTR22* }   # EBCDIC Arabic
+# Some examples
+ibm-37,swaplfnl     ibm-37-s390     ibm037-s390
+ibm-1047,swaplfnl   ibm-1047-s390
+ibm-1140,swaplfnl   ibm-1140-s390
+ibm-1142,swaplfnl   ibm-1142-s390
+ibm-1143,swaplfnl   ibm-1143-s390
+ibm-1144,swaplfnl   ibm-1144-s390
+ibm-1145,swaplfnl   ibm-1145-s390
+ibm-1146,swaplfnl   ibm-1146-s390
+ibm-1147,swaplfnl   ibm-1147-s390
+ibm-1148,swaplfnl   ibm-1148-s390
+ibm-1149,swaplfnl   ibm-1149-s390
+ibm-1153,swaplfnl   ibm-1153-s390
+ibm-12712,swaplfnl  ibm-12712-s390
+ibm-16804,swaplfnl  ibm-16804-s390
 
+# This is a special version of ibm-1140 that the XML4C (Xerces) parser team
+# requested in 2000.
+# It maps both EBCDIC LF and NL controls to Unicode LF U+000A.
+
+ebcdic-xml-us
