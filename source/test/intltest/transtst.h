@@ -292,6 +292,7 @@ class TransliteratorTest : public IntlTest {
      */
     void TestEscape();
 
+    void TestAnchorMasking();
     //======================================================================
     // Support methods
     //======================================================================
