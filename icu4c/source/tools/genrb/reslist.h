@@ -43,7 +43,7 @@ struct SRBRoot *bundle_open(UErrorCode *status);
 void bundle_write(struct SRBRoot *bundle, const char *outputDir, UErrorCode *status);
 void bundle_close(struct SRBRoot *bundle, UErrorCode *status);
 void bundle_setlocale(struct SRBRoot *bundle, UChar *locale, UErrorCode *status);
-uint16_t bundle_addtag(struct SRBRoot *bundle, char *tag, UErrorCode *status);
+uint16_t bundle_addtag(struct SRBRoot *bundle, const char *tag, UErrorCode *status);
 
 /* Various resource types */
 
@@ -99,7 +99,7 @@ struct SResBinary {
     uint8_t *fData;
 };
 
-struct SResource *bin_open(struct SRBRoot *bundle, char *tag, uint32_t length, uint8_t *data, UErrorCode *status);
+struct SResource *bin_open(struct SRBRoot *bundle, const char *tag, uint32_t length, uint8_t *data, UErrorCode *status);
 void bin_close(struct SResource *binres, UErrorCode *status);
 
 /* Resource place holder */
