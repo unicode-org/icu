@@ -25,6 +25,12 @@ public class RoundTripTest extends TestFmwk {
     }
     */
     
+    public void TestKana() throws IOException, ParseException {
+        new Test("Katakana-Hiragana")
+          .test("[[:katakana:]\u30A1-\u30FA\u30FC]", "[[:hiragana:]\u3040-\u3094\u30FC]",
+            "[\u30FC\u309D\u309E\uFF66-\uFF9D]", this, new Legal());
+    }
+
     public void TestHiragana() throws IOException, ParseException {
         new Test("Latin-Hiragana")
           .test("[a-zA-Z]", "[[:hiragana:]\u3040-\u3094]", "[\u309D\u309E]", this, new Legal());
@@ -120,6 +126,10 @@ public class RoundTripTest extends TestFmwk {
                   this, new Legal());
     }
     public void TestDevanagariGurmukhi() throws IOException, ParseException {
+        if (isQuick()) {
+            logln("Skipping (use -e for exhaustive)");
+            return;
+        }
         new Test("GURMUKHI-DEVANAGARI")
           .test("[:GURMUKHI:]", "[:Devanagari:]", 
                 "[\u090B\u090C\u090D\u090e\u0911\u0912\u0934\u0937\u093D\u0950\u0960\u0961\u0a72\u0a73\u0a74]", /*roundtrip exclusions*/
@@ -130,6 +140,10 @@ public class RoundTripTest extends TestFmwk {
                   this, new Legal());
     } 
     public void TestDevanagariGujarati() throws IOException, ParseException {
+        if (isQuick()) {
+            logln("Skipping (use -e for exhaustive)");
+            return;
+        }
         new Test("GUJARATI-DEVANAGARI")
           .test("[:GUJARATI:]", "[:Devanagari:]", 
                 "[\u0961\u090c\u090e\u0912]", /*roundtrip exclusions*/
@@ -140,6 +154,10 @@ public class RoundTripTest extends TestFmwk {
                   this, new Legal());
    }
    public void TestDevanagariOriya() throws IOException, ParseException {
+        if (isQuick()) {
+            logln("Skipping (use -e for exhaustive)");
+            return;
+        }
         new Test("ORIYA-DEVANAGARI")
           .test("[:ORIYA:]", "[:Devanagari:]", 
                 "[\u0950\u090D\u090e\u0912\u0911\u0931\u0935]", /*roundtrip exclusions*/
@@ -160,6 +178,10 @@ public class RoundTripTest extends TestFmwk {
                   this, new Legal());
    }
    public void TestDevanagariTelugu() throws IOException, ParseException {
+        if (isQuick()) {
+            logln("Skipping (use -e for exhaustive)");
+            return;
+        }
         new Test("Telugu-DEVANAGARI")
           .test("[:telugu:]", "[:Devanagari:]", 
                 "[\u0950\u090D\u0911\u093d\u0929\u0934[\u0958-\u095f]]", /*roundtrip exclusions*/
@@ -170,6 +192,10 @@ public class RoundTripTest extends TestFmwk {
                   this, new Legal());
     }
     public void TestDevanagariKannada() throws IOException, ParseException {
+        if (isQuick()) {
+            logln("Skipping (use -e for exhaustive)");
+            return;
+        }
         new Test("KANNADA-DEVANAGARI")
           .test("[:KANNADA:]", "[:Devanagari:]", 
                 "[\u0950\u090D\u0911\u093d\u0929\u0934[\u0958-\u095f]]", /*roundtrip exclusions*/
@@ -180,6 +206,10 @@ public class RoundTripTest extends TestFmwk {
                   this, new Legal());
     }
     public void TestDevanagariMalayalam() throws IOException, ParseException {
+        if (isQuick()) {
+            logln("Skipping (use -e for exhaustive)");
+            return;
+        }
         new Test("MALAYALAM-DEVANAGARI")
           .test("[:MALAYALAM:]", "[:Devanagari:]", 
                 "[\u0950\u090D\u0911\u093d\u0929\u0934[\u0958-\u095f]]", /*roundtrip exclusions*/
@@ -190,6 +220,10 @@ public class RoundTripTest extends TestFmwk {
                   this, new Legal());
     }
     public void TestBengaliGurmukhi() throws IOException, ParseException {
+        if (isQuick()) {
+            logln("Skipping (use -e for exhaustive)");
+            return;
+        }
         new Test("GURMUKHI-BENGALI")
           .test("[:GURMUKHI:]", "[:BENGALI:]",  
                 "[\u098B\u098C\u09B7\u09E0\u09E1\u09F0\u09F1]", /*roundtrip exclusions*/
@@ -200,6 +234,10 @@ public class RoundTripTest extends TestFmwk {
                   this, new Legal());
     } 
     public void TestBengaliGujarati() throws IOException, ParseException {
+        if (isQuick()) {
+            logln("Skipping (use -e for exhaustive)");
+            return;
+        }
         new Test("GUJARATI-BENGALI")
           .test("[:GUJARATI:]", "[:BENGALI:]", 
                 "[\u098c\u09e1\u09f0\u09f1]", /*roundtrip exclusions*/
@@ -210,6 +248,10 @@ public class RoundTripTest extends TestFmwk {
                   this, new Legal());
    }
    public void TestBengaliOriya() throws IOException, ParseException {
+        if (isQuick()) {
+            logln("Skipping (use -e for exhaustive)");
+            return;
+        }
         new Test("ORIYA-BENGALI")
           .test("[:ORIYA:]", "[:BENGALI:]", 
                 "[\u09f0\u09f1]", /*roundtrip exclusions*/
@@ -220,6 +262,10 @@ public class RoundTripTest extends TestFmwk {
                   this, new Legal());
    }
    public void TestBengaliTamil() throws IOException, ParseException {
+        if (isQuick()) {
+            logln("Skipping (use -e for exhaustive)");
+            return;
+        }
         new Test("Tamil-BENGALI")
           .test("[:tamil:]", "[:BENGALI:]", 
                   "[\u09f0\u09f1\u098B\u098C\u0996\u0997\u0998\u099B\u099D\u09A0\u09A1\u09A2\u09A5\u09A6\u09A7\u09AB\u09AC\u09AD\u09B6\u09DC\u09DD\u09DF\u09E0\u09E1]", /*roundtrip exclusions*/
@@ -230,6 +276,10 @@ public class RoundTripTest extends TestFmwk {
                   this, new Legal());
    }
    public void TestBengaliTelugu() throws IOException, ParseException {
+        if (isQuick()) {
+            logln("Skipping (use -e for exhaustive)");
+            return;
+        }
         new Test("Telugu-BENGALI")
           .test("[:telugu:]", "[:BENGALI:]", 
                 "[\u09f0\u09f1\u09dc\u09dd\u09df]", /*roundtrip exclusions*/
@@ -240,6 +290,10 @@ public class RoundTripTest extends TestFmwk {
                   this, new Legal());
     }
     public void TestBengaliKannada() throws IOException, ParseException {
+        if (isQuick()) {
+            logln("Skipping (use -e for exhaustive)");
+            return;
+        }
         new Test("KANNADA-BENGALI")
           .test("[:KANNADA:]", "[:BENGALI:]", 
                 "[\u09f0\u09f1\u09dc\u09dd\u09df]", /*roundtrip exclusions*/
@@ -250,6 +304,10 @@ public class RoundTripTest extends TestFmwk {
                   this, new Legal());
     }
     public void TestBengaliMalayalam() throws IOException, ParseException {
+        if (isQuick()) {
+            logln("Skipping (use -e for exhaustive)");
+            return;
+        }
         new Test("MALAYALAM-BENGALI")
           .test("[:MALAYALAM:]", "[:BENGALI:]", 
                 "[\u09f0\u09f1\u09dc\u09dd\u09df]", /*roundtrip exclusions*/
@@ -260,6 +318,10 @@ public class RoundTripTest extends TestFmwk {
                   this, new Legal());
     }
     public void TestGurmukhiGujarati() throws IOException, ParseException {
+        if (isQuick()) {
+            logln("Skipping (use -e for exhaustive)");
+            return;
+        }
         new Test("GUJARATI-GURMUKHI")
           .test("[:GUJARATI:]", "[:GURMUKHI:]", 
                 "[\u0a5c\u0a72\u0a73\u0a74\u0a8b\u0a8d\u0a91\u0abd]", /*roundtrip exclusions*/
@@ -270,6 +332,10 @@ public class RoundTripTest extends TestFmwk {
                   this, new Legal());
     }
     public void TestGurmukhiOriya() throws IOException, ParseException {
+        if (isQuick()) {
+            logln("Skipping (use -e for exhaustive)");
+            return;
+        }
         new Test("ORIYA-GURMUKHI")
           .test("[:ORIYA:]", "[:GURMUKHI:]", 
                 "[\u0B0B\u0B0C\u0B37\u0B3D\u0B5F\u0B60\u0B61\u0a35\u0a72\u0a73\u0a74]", /*roundtrip exclusions*/
@@ -280,6 +346,10 @@ public class RoundTripTest extends TestFmwk {
                   this, new Legal());
     }
     public void TestGurmukhiTamil() throws IOException, ParseException {
+        if (isQuick()) {
+            logln("Skipping (use -e for exhaustive)");
+            return;
+        }
         new Test("TAMIL-GURMUKHI")
           .test("[:TAMIL:]", "[:GURMUKHI:]", 
                 "[\u0A16\u0A17\u0A18\u0A1B\u0A1D\u0A20\u0A21\u0A22\u0A25\u0A26\u0A27\u0A2B\u0A2C\u0A2D\u0A59\u0A5A\u0A5B\u0A5C\u0A5E\u0A72\u0A73\u0A74]", /*roundtrip exclusions*/
@@ -290,6 +360,10 @@ public class RoundTripTest extends TestFmwk {
                   this, new Legal());
     }
     public void TestGurmukhiTelugu() throws IOException, ParseException {
+        if (isQuick()) {
+            logln("Skipping (use -e for exhaustive)");
+            return;
+        }
         new Test("TELUGU-GURMUKHI")
           .test("[:TELUGU:]", "[:GURMUKHI:]", 
                 "[\u0A59\u0A5A\u0A5B\u0A5C\u0A5E\u0A72\u0A73\u0A74]", /*roundtrip exclusions*/
@@ -300,6 +374,10 @@ public class RoundTripTest extends TestFmwk {
                   this, new Legal());
     }
     public void TestGurmukhiKannada() throws IOException, ParseException {
+        if (isQuick()) {
+            logln("Skipping (use -e for exhaustive)");
+            return;
+        }
         new Test("KANNADA-GURMUKHI")
           .test("[:KANNADA:]", "[:GURMUKHI:]", 
                 "[\u0A59\u0A5A\u0A5B\u0A5C\u0A5E\u0A72\u0A73\u0A74]", /*roundtrip exclusions*/
@@ -310,6 +388,10 @@ public class RoundTripTest extends TestFmwk {
                   this, new Legal());
     }
     public void TestGurmukhiMalayalam() throws IOException, ParseException {
+        if (isQuick()) {
+            logln("Skipping (use -e for exhaustive)");
+            return;
+        }
         new Test("MALAYALAM-GURMUKHI")
           .test("[:MALAYALAM:]", "[:GURMUKHI:]", 
                 "[\u0A59\u0A5A\u0A5B\u0A5C\u0A5E\u0A72\u0A73\u0A74]", /*roundtrip exclusions*/
@@ -321,6 +403,10 @@ public class RoundTripTest extends TestFmwk {
     }
     
      public void TestGujaratiOriya() throws IOException, ParseException {
+        if (isQuick()) {
+            logln("Skipping (use -e for exhaustive)");
+            return;
+        }
         new Test("GUJARATI-ORIYA")
           .test("[:GUJARATI:]", "[:ORIYA:]", 
                 "[\u0B0C\u0B5F\u0B61]", /*roundtrip exclusions*/
@@ -331,6 +417,10 @@ public class RoundTripTest extends TestFmwk {
                   this, new Legal());
     }
     public void TestGujaratiTamil() throws IOException, ParseException {
+        if (isQuick()) {
+            logln("Skipping (use -e for exhaustive)");
+            return;
+        }
         new Test("TAMIL-GUJARATI")
           .test("[:TAMIL:]", "[:GUJARATI:]", 
                 "[\u0A8B\u0A8D\u0A91\u0A96\u0A97\u0A98\u0A9B\u0A9D\u0AA0\u0AA1\u0AA2\u0AA5\u0AA6\u0AA7\u0AAB\u0AAC\u0AAD\u0AB6\u0ABD\u0AD0\u0AE0]", /*roundtrip exclusions*/
@@ -341,6 +431,10 @@ public class RoundTripTest extends TestFmwk {
                   this, new Legal());
     }
     public void TestGujaratiTelugu() throws IOException, ParseException {
+        if (isQuick()) {
+            logln("Skipping (use -e for exhaustive)");
+            return;
+        }
         new Test("TELUGU-GUJARATI")
           .test("[:TELUGU:]", "[:GUJARATI:]", 
                 "[\u0A8D\u0A91\u0ABD\u0Ad0]", /*roundtrip exclusions*/
@@ -351,6 +445,10 @@ public class RoundTripTest extends TestFmwk {
                   this, new Legal());
     }
     public void TestGujaratiKannada() throws IOException, ParseException {
+        if (isQuick()) {
+            logln("Skipping (use -e for exhaustive)");
+            return;
+        }
         new Test("KANNADA-GUJARATI")
           .test("[:KANNADA:]", "[:GUJARATI:]", 
                 "[\u0A8D\u0A91\u0ABD\u0Ad0]", /*roundtrip exclusions*/
@@ -361,6 +459,10 @@ public class RoundTripTest extends TestFmwk {
                   this, new Legal());
     }
     public void TestGujaratiMalayalam() throws IOException, ParseException {
+        if (isQuick()) {
+            logln("Skipping (use -e for exhaustive)");
+            return;
+        }
         new Test("MALAYALAM-GUJARATI")
           .test("[:MALAYALAM:]", "[:GUJARATI:]", 
                 "[\u0A8D\u0A91\u0ABD\u0Ad0]", /*roundtrip exclusions*/
@@ -371,6 +473,10 @@ public class RoundTripTest extends TestFmwk {
                   this, new Legal());
     }
   public void TestOriyaTamil() throws IOException, ParseException {
+        if (isQuick()) {
+            logln("Skipping (use -e for exhaustive)");
+            return;
+        }
         new Test("TAMIL-ORIYA")
           .test("[:TAMIL:]", "[:ORIYA:]", 
                 "[\u0B0B\u0B0C\u0B16\u0B17\u0B18\u0B1B\u0B1D\u0B20\u0B21\u0B22\u0B25\u0B26\u0B27\u0B2B\u0B2C\u0B2D\u0B36\u0B3D\u0B5C\u0B5D\u0B5F\u0B60\u0B61]", /*roundtrip exclusions*/
@@ -381,6 +487,10 @@ public class RoundTripTest extends TestFmwk {
                   this, new Legal());
     }
     public void TestOriyaTelugu() throws IOException, ParseException {
+        if (isQuick()) {
+            logln("Skipping (use -e for exhaustive)");
+            return;
+        }
         new Test("TELUGU-ORIYA")
           .test("[:TELUGU:]", "[:ORIYA:]", 
                 "[\u0B3D\u0B5C\u0B5D\u0B5F]", /*roundtrip exclusions*/
@@ -391,6 +501,10 @@ public class RoundTripTest extends TestFmwk {
                   this, new Legal());
     }
     public void TestOriyaKannada() throws IOException, ParseException {
+        if (isQuick()) {
+            logln("Skipping (use -e for exhaustive)");
+            return;
+        }
         new Test("KANNADA-ORIYA")
           .test("[:KANNADA:]", "[:ORIYA:]", 
                 "[\u0B3D\u0B5C\u0B5D\u0B5F]", /*roundtrip exclusions*/
@@ -401,6 +515,10 @@ public class RoundTripTest extends TestFmwk {
                   this, new Legal());
     }
     public void TestOriyaMalayalam() throws IOException, ParseException {
+        if (isQuick()) {
+            logln("Skipping (use -e for exhaustive)");
+            return;
+        }
         new Test("MALAYALAM-ORIYA")
           .test("[:MALAYALAM:]", "[:ORIYA:]", 
                 "[\u0B3D\u0B5C\u0B5D\u0B5F]", /*roundtrip exclusions*/
@@ -412,6 +530,10 @@ public class RoundTripTest extends TestFmwk {
     }
     
     public void TestTamilTelugu() throws IOException, ParseException {
+        if (isQuick()) {
+            logln("Skipping (use -e for exhaustive)");
+            return;
+        }
         new Test("TELUGU-TAMIL")
           .test("[:TELUGU:]", "[:TAMIL:]", 
                 "[\u0ba9\u0bb4]", /*roundtrip exclusions*/
@@ -422,6 +544,10 @@ public class RoundTripTest extends TestFmwk {
                   this, new Legal());
     }
     public void TestTamilKannada() throws IOException, ParseException {
+        if (isQuick()) {
+            logln("Skipping (use -e for exhaustive)");
+            return;
+        }
         new Test("KANNADA-TAMIL")
           .test("[:KANNADA:]", "[:TAMIL:]", 
                 "[\u0ba9\u0bb4]", /*roundtrip exclusions*/
@@ -432,6 +558,10 @@ public class RoundTripTest extends TestFmwk {
                   this, new Legal());
     }
     public void TestTamilMalayalam() throws IOException, ParseException {
+        if (isQuick()) {
+            logln("Skipping (use -e for exhaustive)");
+            return;
+        }
         new Test("MALAYALAM-TAMIL")
           .test("[:MALAYALAM:]", "[:TAMIL:]", 
                 "[\u0ba9]", /*roundtrip exclusions*/
@@ -442,6 +572,10 @@ public class RoundTripTest extends TestFmwk {
                   this, new Legal());
     }
     public void TestTeluguKannada() throws IOException, ParseException {
+        if (isQuick()) {
+            logln("Skipping (use -e for exhaustive)");
+            return;
+        }
         new Test("KANNADA-TELUGU")
           .test("[:KANNADA:]", "[:TELUGU:]", 
                 "[]", /*roundtrip exclusions*/
@@ -452,6 +586,10 @@ public class RoundTripTest extends TestFmwk {
                   this, new Legal());
     }
     public void TestTeluguMalayalam() throws IOException, ParseException {
+        if (isQuick()) {
+            logln("Skipping (use -e for exhaustive)");
+            return;
+        }
         new Test("MALAYALAM-TELUGU")
           .test("[:MALAYALAM:]", "[:TELUGU:]", 
                 "[]", /*roundtrip exclusions*/
@@ -463,6 +601,10 @@ public class RoundTripTest extends TestFmwk {
     }
     
     public void TestKannadaMalayalam() throws IOException, ParseException {
+        if (isQuick()) {
+            logln("Skipping (use -e for exhaustive)");
+            return;
+        }
         new Test("MALAYALAM-KANNADA")
           .test("[:MALAYALAM:]", "[:KANNADA:]", 
                 "[\u0cDe]", /*roundtrip exclusions*/
@@ -762,8 +904,8 @@ public class RoundTripTest extends TestFmwk {
             if (!checkIrrelevants(sourceToTarget, irrelevants)) {
                 logFails("Source-Target, irrelevants");
             }
-            if (!checkIrrelevants(sourceToTarget, irrelevants)) {
-                logFails("Source-Target, irrelevants");
+            if (!checkIrrelevants(targetToSource, irrelevants)) {
+                logFails("Target-Source, irrelevants");
             }
             
             if (EXTRA_TESTS) {

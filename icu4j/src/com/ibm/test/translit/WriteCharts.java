@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/test/translit/Attic/WriteCharts.java,v $
- * $Date: 2001/11/14 01:55:04 $
- * $Revision: 1.10 $
+ * $Date: 2001/11/20 01:14:43 $
+ * $Revision: 1.11 $
  *
  *****************************************************************************************
  */
@@ -78,7 +78,7 @@ public class WriteCharts {
                     String id = source + "-" + target;
                     if (variant.length() != 0) {
                         id += "/" + variant;
-                        if (true) {
+                        if (false) {
                             System.out.println("SKIPPING VARIANT, SINCE IT CURRENTLY BREAKS!\t" + id);
                             continue;
                         }
@@ -297,7 +297,10 @@ public class WriteCharts {
             int columnCount = 3;
             String headerBase = "<th>Source</th><th>Target</th><th>Return</th>";
             String headers = headerBase;
-            for (int i = columnCount - 1; i > 0; --i) headers += headerBase;
+            for (int i = columnCount - 1; i > 0; --i) {
+                if (i != columnCount - 1) headers += "<th>&nbsp;</th>";
+                headers += headerBase;
+            }
             
             String tableHeader = "<p><table border='1'><tr>" + headers + "</tr>";
             String tableFooter = "</table></p>";
@@ -335,6 +338,7 @@ public class WriteCharts {
                 }
                 String value = (String) map.get(key);
                 if (column++ == 0) out.print("<tr>");
+                else out.print("<th>&nbsp;</th>");
                 out.println(value);
                 if (column == 3) {
                     out.println("</tr>");
