@@ -54,7 +54,7 @@ public class RoundTripTest extends TestFmwk {
 
     public void TestJamo() throws IOException, ParseException {
         new Test("Latin-Jamo")
-            .test("[a-zA-Z]", "[\u1100-\u1113 \u1161-\u1176 \u11A8-\u11C2]", "", this, new Legal());
+            .test("[a-zA-Z]", "[\u1100-\u1112 \u1161-\u1175 \u11A8-\u11C2]", "", this, new LegalJamo());
     }
 
 /*
@@ -475,6 +475,42 @@ public class RoundTripTest extends TestFmwk {
     //---------------
     public static class Legal {
         public boolean is(String sourceString) {return true;}
+    }
+    
+    public static class LegalJamo extends Legal {
+        // any initial must be followed by a medial (EX initial)
+        // any medial must follow an initial (EX medial)
+        // any final must follow a medial (EX final)
+        
+        public boolean is(String sourceString) {
+            try {
+                String decomp = Normalizer.normalize(sourceString, Normalizer.DECOMP, 0);
+                int oldType = -1;
+                for (int i = 0; i < decomp.length(); ++i) { // don't worry about surrogates
+                    switch (getType(decomp.charAt(i))) {
+                    case 0:
+                        if (getType(decomp.charAt(i+1)) != 1) return false;
+                        break;
+                    case 1:
+                        if (getType(decomp.charAt(i-1)) != 0) return false;
+                        break;
+                    case 2:
+                        if (getType(decomp.charAt(i-1)) != 1) return false;
+                        break;
+                    }
+                }
+                return true;
+            } catch (StringIndexOutOfBoundsException e) {
+                return false;
+            }
+        }
+        
+        public int getType(char c) {
+            if ('\u1100' <= c && c <= '\u1112') return 0;
+            else if ('\u1161' <= c && c  <= '\u1175') return 1;
+            else if ('\u11A8' <= c && c  <= '\u11C2') return 2;
+            return -1; // other
+        }
     }
     
     public static class LegalGreek extends Legal {
