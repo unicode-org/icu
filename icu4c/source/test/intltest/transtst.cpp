@@ -2551,7 +2551,7 @@ void TransliteratorTest::TestLocaleInstantiation(void) {
         delete t;
         return;
     }
-    expect(*t, "a", CharsToUnicodeString("\\u1F00"));
+    expect(*t, "a", CharsToUnicodeString("\\u03B1"));
     delete t;
 }
         
