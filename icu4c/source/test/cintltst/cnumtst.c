@@ -45,8 +45,10 @@ static int32_t ustrToAstr(const UChar* src, int32_t srcLength, char* dst, int32_
     const char *e = p + dstLength;
     if (srcLength < 0) {
         const UChar* s = src;
-        while (*s) ++s;
-        srcLength = s - src;
+        while (*s) {
+            ++s;
+        }
+        srcLength = (int32_t)(s - src);
     }
     while (p < e && --srcLength >= 0) {
         UChar c = *src++;
@@ -66,7 +68,7 @@ static int32_t ustrToAstr(const UChar* src, int32_t srcLength, char* dst, int32_
     if (p < e) {
         *p = 0;
     }
-    return p - dst;
+    return (int32_t)(p - dst);
 }
 
 /* test Number Format API */

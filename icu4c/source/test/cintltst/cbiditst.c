@@ -242,7 +242,7 @@ static void TestReorder(){
     UBiDi* bidi = ubidi_open();
     int i=0;
     for(;i<(sizeof(logicalOrder)/sizeof(logicalOrder[0]));i++){
-        int32_t srcSize = uprv_strlen(logicalOrder[i]);
+        int32_t srcSize = (int32_t)uprv_strlen(logicalOrder[i]);
         int32_t destSize = srcSize*2;
         UChar* src = (UChar*) uprv_malloc(sizeof(UChar)*srcSize );
         UChar* dest = (UChar*) uprv_malloc(sizeof(UChar)*destSize);
@@ -278,7 +278,7 @@ static void TestReorder(){
     }
     
     for(i=0;i<(sizeof(logicalOrder)/sizeof(logicalOrder[0]));i++){
-        int32_t srcSize = uprv_strlen(logicalOrder[i]);
+        int32_t srcSize = (int32_t)uprv_strlen(logicalOrder[i]);
         int32_t destSize = srcSize*2;
         UChar* src = (UChar*) uprv_malloc(sizeof(UChar)*srcSize );
         UChar* dest = (UChar*) uprv_malloc(sizeof(UChar)*destSize);
@@ -315,7 +315,7 @@ static void TestReorder(){
     }
 
     for(i=0;i<(sizeof(logicalOrder)/sizeof(logicalOrder[0]));i++){
-        int32_t srcSize = uprv_strlen(logicalOrder[i]);
+        int32_t srcSize = (int32_t)uprv_strlen(logicalOrder[i]);
         int32_t destSize = srcSize*2;
         UChar* src = (UChar*) uprv_malloc(sizeof(UChar)*srcSize );
         UChar* dest = (UChar*) uprv_malloc(sizeof(UChar)*destSize);
@@ -354,7 +354,7 @@ static void TestReorder(){
     }
         /* Max Explicit level */
     for(i=0;i<(sizeof(logicalOrder)/sizeof(logicalOrder[0]));i++){
-        int32_t srcSize = uprv_strlen(logicalOrder[i]);
+        int32_t srcSize = (int32_t)uprv_strlen(logicalOrder[i]);
         int32_t destSize = srcSize*2;
         UChar* src = (UChar*) uprv_malloc(sizeof(UChar)*srcSize );
         UChar* dest = (UChar*) uprv_malloc(sizeof(UChar)*destSize);
@@ -392,7 +392,7 @@ static void TestReorder(){
         uprv_free(dest);
     }
     for(i=0;i<(sizeof(logicalOrder)/sizeof(logicalOrder[0]));i++){
-        int32_t srcSize = uprv_strlen(logicalOrder[i]);
+        int32_t srcSize = (int32_t)uprv_strlen(logicalOrder[i]);
         int32_t destSize = srcSize*2;
         UChar* src = (UChar*) uprv_malloc(sizeof(UChar)*srcSize );
         UChar* dest = (UChar*) uprv_malloc(sizeof(UChar)*destSize);
