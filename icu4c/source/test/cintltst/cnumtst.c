@@ -264,6 +264,9 @@ free(result);
         log_err("Fail: Error in parsing\n");
     else
         log_verbose("Pass: parsing successful\n");
+    if (result)
+        free(result);
+    result = 0;
 
 
     /* Testing unum_formatDoubleCurrency / unum_parseDoubleCurrency */

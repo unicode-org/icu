@@ -193,6 +193,7 @@ static int32_t ures_flushCache()
         /* 04/05/2002 [weiv] fCountExisting should now be accurate. If it's not zero, that means that    */
         /* some resource bundles are still open somewhere. */
 
+        /*U_ASSERT(resB->fCountExisting == 0);*/
         if (resB->fCountExisting == 0) {
             rbDeletedNum++;
             uhash_removeElement(cache, e);
@@ -1810,23 +1811,23 @@ ures_countArrayItems(const UResourceBundle* resourceBundle,
 {
     UResourceBundle resData;
     ures_initStackObject(&resData);
-        if (status==NULL || U_FAILURE(*status)) {
-                return 0;
-        }
-        if(resourceBundle == NULL) {
-                *status = U_ILLEGAL_ARGUMENT_ERROR;
-                return 0;
-        }
+    if (status==NULL || U_FAILURE(*status)) {
+        return 0;
+    }
+    if(resourceBundle == NULL) {
+        *status = U_ILLEGAL_ARGUMENT_ERROR;
+        return 0;
+    }
     ures_getByKey(resourceBundle, resourceKey, &resData, status);
-
+    
     if(resData.fResData.data != NULL) {
-      int32_t result = res_countArrayItems(&resData.fResData, resData.fRes);
-      ures_close(&resData);
-      return result;
+        int32_t result = res_countArrayItems(&resData.fResData, resData.fRes);
+        ures_close(&resData);
+        return result;
     } else {
-      *status = U_MISSING_RESOURCE_ERROR;
-      ures_close(&resData);
-      return 0;
+        *status = U_MISSING_RESOURCE_ERROR;
+        ures_close(&resData);
+        return 0;
     }
 }
 
@@ -1844,6 +1845,12 @@ ures_close(UResourceBundle*    resB)
 
         if(ures_isStackObject(resB) == FALSE) {
             uprv_free(resB);
+        }
+        else {
+#if 0 /*U_DEBUG*/
+            /* poison the data */
+            uprv_memset(resB, -1, sizeof(UResourceBundle));
+#endif
         }
     }
 }
@@ -1904,327 +1911,328 @@ U_CAPI void U_EXPORT2 ures_getVersion(const UResourceBundle* resB, UVersionInfo 
 #endif
 
 typedef struct ULocalesContext {
-  UResourceBundle installed;
-  UResourceBundle curr;
+    UResourceBundle installed;
+    UResourceBundle curr;
 } ULocalesContext;
 
 static void U_CALLCONV
 ures_loc_closeLocales(UEnumeration *enumerator) {
-  ULocalesContext *ctx = (ULocalesContext *)enumerator->context;
-  ures_close(&ctx->curr);
-  ures_close(&ctx->installed);
-  uprv_free(enumerator);
+    ULocalesContext *ctx = (ULocalesContext *)enumerator->context;
+    ures_close(&ctx->curr);
+    ures_close(&ctx->installed);
+    uprv_free(ctx);
+    uprv_free(enumerator);
 }
 
 static int32_t U_CALLCONV
 ures_loc_countLocales(UEnumeration *en, UErrorCode *status) {
-  ULocalesContext *ctx = (ULocalesContext *)en->context;
-  return ures_getSize(&ctx->installed);
+    ULocalesContext *ctx = (ULocalesContext *)en->context;
+    return ures_getSize(&ctx->installed);
 }
 
 static const char* U_CALLCONV 
 ures_loc_nextLocale(UEnumeration* en,
                     int32_t* resultLength,
                     UErrorCode* status) {
-  ULocalesContext *ctx = (ULocalesContext *)en->context;
-  UResourceBundle *res = &(ctx->installed);
-  UResourceBundle *k = NULL;
-  const char *result = NULL;
-  if(ures_hasNext(res) && (k = ures_getNextResource(res, &ctx->curr, status))) {
-    result = ures_getKey(k);
-    *resultLength = uprv_strlen(result);
-  } else {
-    *resultLength = 0;
-  }
-  return result;
+    ULocalesContext *ctx = (ULocalesContext *)en->context;
+    UResourceBundle *res = &(ctx->installed);
+    UResourceBundle *k = NULL;
+    const char *result = NULL;
+    if(ures_hasNext(res) && (k = ures_getNextResource(res, &ctx->curr, status))) {
+        result = ures_getKey(k);
+        *resultLength = uprv_strlen(result);
+    } else {
+        *resultLength = 0;
+    }
+    return result;
 }
 
 static void U_CALLCONV 
 ures_loc_resetLocales(UEnumeration* en, 
                       UErrorCode* status) {
-  UResourceBundle *res = &((ULocalesContext *)en->context)->installed;
-  ures_resetIterator(res);
+    UResourceBundle *res = &((ULocalesContext *)en->context)->installed;
+    ures_resetIterator(res);
 }
 
 
 static const UEnumeration gLocalesEnum = {
     NULL,
-    NULL,
-    ures_loc_closeLocales,
-    ures_loc_countLocales,
-    uenum_unextDefault,
-    ures_loc_nextLocale,
-    ures_loc_resetLocales
+        NULL,
+        ures_loc_closeLocales,
+        ures_loc_countLocales,
+        uenum_unextDefault,
+        ures_loc_nextLocale,
+        ures_loc_resetLocales
 };
 
 
 U_CAPI UEnumeration* U_EXPORT2
 ures_openAvailableLocales(const char *path, UErrorCode *status)
 {
-  UResourceBundle *index = NULL;
-  UEnumeration *en = NULL;
-  ULocalesContext *myContext = NULL;
-
-  if(U_FAILURE(*status)) {
-    return NULL;
-  }
-  myContext = uprv_malloc(sizeof(ULocalesContext));
-  en =  (UEnumeration *)uprv_malloc(sizeof(UEnumeration));
-  if(!en || !myContext) {
-    *status = U_MEMORY_ALLOCATION_ERROR;
-    uprv_free(en);
-    uprv_free(myContext);
-    return NULL;
-  }
-  uprv_memcpy(en, &gLocalesEnum, sizeof(UEnumeration));
-
-  ures_initStackObject(&myContext->installed);
-  ures_initStackObject(&myContext->curr);
-  index = ures_openDirect(path, INDEX_LOCALE_NAME, status);
-  ures_getByKey(index, INDEX_TAG, &myContext->installed, status);
-  if(U_SUCCESS(*status)) {
+    UResourceBundle *index = NULL;
+    UEnumeration *en = NULL;
+    ULocalesContext *myContext = NULL;
+    
+    if(U_FAILURE(*status)) {
+        return NULL;
+    }
+    myContext = uprv_malloc(sizeof(ULocalesContext));
+    en =  (UEnumeration *)uprv_malloc(sizeof(UEnumeration));
+    if(!en || !myContext) {
+        *status = U_MEMORY_ALLOCATION_ERROR;
+        uprv_free(en);
+        uprv_free(myContext);
+        return NULL;
+    }
+    uprv_memcpy(en, &gLocalesEnum, sizeof(UEnumeration));
+    
+    ures_initStackObject(&myContext->installed);
+    ures_initStackObject(&myContext->curr);
+    index = ures_openDirect(path, INDEX_LOCALE_NAME, status);
+    ures_getByKey(index, INDEX_TAG, &myContext->installed, status);
+    if(U_SUCCESS(*status)) {
 #if defined(URES_TREE_DEBUG)
-    fprintf(stderr, "Got %s::%s::[%s] : %s\n", 
+        fprintf(stderr, "Got %s::%s::[%s] : %s\n", 
             path, INDEX_LOCALE_NAME, INDEX_TAG, ures_getKey(&myContext->installed));
 #endif
-    en->context = myContext;
-  } else {
+        en->context = myContext;
+    } else {
 #if defined(URES_TREE_DEBUG)
-    fprintf(stderr, "%s open failed - %s\n", path, u_errorName(*status));
+        fprintf(stderr, "%s open failed - %s\n", path, u_errorName(*status));
 #endif
-    ures_close(&myContext->installed);
-    uprv_free(myContext);
-    uprv_free(en);
-    en = NULL;
-  }
-
-  ures_close(index);
-
-  return en;
+        ures_close(&myContext->installed);
+        uprv_free(myContext);
+        uprv_free(en);
+        en = NULL;
+    }
+    
+    ures_close(index);
+    
+    return en;
 }
 
 U_CAPI int32_t U_EXPORT2
 ures_getFunctionalEquivalent(char *result, int32_t resultCapacity,
-const char *path, const char *resName, const char *keyword, const char *locid,
-UBool *isAvailable, UErrorCode *status)
+                             const char *path, const char *resName, const char *keyword, const char *locid,
+                             UBool *isAvailable, UErrorCode *status)
 {
-  char kwVal[1024] = ""; /* value of keyword 'keyword' */
-  char defVal[1024] = ""; /* default value for given locale */
-  char defLoc[1024] = ""; /* default value for given locale */
-  char base[1024] = ""; /* base locale */
-  char found[1024];
-  char parent[1024];
-  char full[1024] = "";
-  UResourceBundle bund1, bund2;
-  UResourceBundle *res = NULL;
-  UErrorCode subStatus = U_ZERO_ERROR;
-  int32_t length = 0;
-  if(U_FAILURE(*status)) return 0;
-  if(isAvailable) { 
-    *isAvailable = TRUE;
-  }
-  uloc_getKeywordValue(locid, keyword, kwVal, 1024-1,&subStatus);
-  if(!uprv_strcmp(kwVal, DEFAULT_TAG)) {
-    kwVal[0]=0;
-  }
-  uloc_getBaseName(locid, base, 1024-1,&subStatus);
-#if defined(URES_TREE_DEBUG)
-  fprintf(stderr, "gFE: %s: [%s @ %s = %s] - %s\n", 
-          locid, keyword, base, kwVal, u_errorName(subStatus));
-#endif
-  ures_initStackObject(&bund1);
-  ures_initStackObject(&bund2);
-  
-
-  uprv_strcpy(parent, base);
-  uprv_strcpy(found, base);
-  
-  if(U_FAILURE(subStatus)) {
-    *status = subStatus;
-    return 0;
-  }
-
-  do {
-    subStatus = U_ZERO_ERROR;
-    res = ures_open(path, parent, &subStatus);
-    if(((subStatus == U_USING_FALLBACK_WARNING) ||
-        (subStatus == U_USING_DEFAULT_WARNING)) && isAvailable) {
-      *isAvailable = FALSE;
+    char kwVal[1024] = ""; /* value of keyword 'keyword' */
+    char defVal[1024] = ""; /* default value for given locale */
+    char defLoc[1024] = ""; /* default value for given locale */
+    char base[1024] = ""; /* base locale */
+    char found[1024];
+    char parent[1024];
+    char full[1024] = "";
+    UResourceBundle bund1, bund2;
+    UResourceBundle *res = NULL;
+    UErrorCode subStatus = U_ZERO_ERROR;
+    int32_t length = 0;
+    if(U_FAILURE(*status)) return 0;
+    if(isAvailable) { 
+        *isAvailable = TRUE;
     }
-    isAvailable = NULL; /* only want to set this the first time around */
-
-#if defined(URES_TREE_DEBUG)
-    fprintf(stderr, "%s;%s -> %s\n", path?path:"ICUDATA", parent, u_errorName(subStatus));
-#endif
-    if(U_FAILURE(subStatus)) {
-      *status = subStatus;
-    } else if(subStatus == U_ZERO_ERROR) {
-      ures_getByKey(res,resName,&bund1, &subStatus);
-      if(subStatus == U_ZERO_ERROR) {
-        const UChar *defUstr;
-        int32_t defLen;
-        /* look for default item */
-#if defined(URES_TREE_DEBUG)
-        fprintf(stderr, "%s;%s : loaded default -> %s\n",
-                path?path:"ICUDATA", parent, u_errorName(subStatus));
-#endif
-        defUstr = ures_getStringByKey(&bund1, DEFAULT_TAG, &defLen, &subStatus);
-        if(U_SUCCESS(subStatus) && defLen) {
-          u_UCharsToChars(defUstr, defVal, 1023);
-#if defined(URES_TREE_DEBUG)
-          fprintf(stderr, "%s;%s -> default %s=%s,  %s\n", 
-                  path?path:"ICUDATA", parent, keyword, defVal, u_errorName(subStatus));
-#endif
-          uprv_strcpy(defLoc, parent);
-          if(kwVal[0]==0) {
-            uprv_strcpy(kwVal, defVal);
-#if defined(URES_TREE_DEBUG)
-            fprintf(stderr, "%s;%s -> kwVal =  %s\n", 
-                    path?path:"ICUDATA", parent, keyword, kwVal);
-#endif
-          }
-        }
-      }
+    uloc_getKeywordValue(locid, keyword, kwVal, 1024-1,&subStatus);
+    if(!uprv_strcmp(kwVal, DEFAULT_TAG)) {
+        kwVal[0]=0;
     }
-
-    subStatus = U_ZERO_ERROR;
-
-    uprv_strcpy(found, parent);
-    uloc_getParent(found,parent,1023,&subStatus);
-    ures_close(res);
-  } while(!defVal[0] && *found && U_SUCCESS(*status));
-
-  /* Now, see if we can find the kwVal collator.. start the search over.. */
-  uprv_strcpy(parent, base);
-  uprv_strcpy(found, base);
-  
-  do {
-    subStatus = U_ZERO_ERROR;
-    res = ures_open(path, parent, &subStatus);
-    if((subStatus == U_USING_FALLBACK_WARNING) && isAvailable) {
-      *isAvailable = FALSE;
-    }
-    isAvailable = NULL; /* only want to set this the first time around */
-
+    uloc_getBaseName(locid, base, 1024-1,&subStatus);
 #if defined(URES_TREE_DEBUG)
-    fprintf(stderr, "%s;%s -> %s (looking for %s)\n", 
-            path?path:"ICUDATA", parent, u_errorName(subStatus), kwVal);
+    fprintf(stderr, "gFE: %s: [%s @ %s = %s] - %s\n", 
+        locid, keyword, base, kwVal, u_errorName(subStatus));
 #endif
-    if(U_FAILURE(subStatus)) {
-      *status = subStatus;
-    } else if(subStatus == U_ZERO_ERROR) {
-      ures_getByKey(res,resName,&bund1, &subStatus);
-      if(subStatus == U_ZERO_ERROR) {
-        ures_getByKey(&bund1, kwVal, &bund2, &subStatus);
-        if(subStatus == U_ZERO_ERROR) {
-#if defined(URES_TREE_DEBUG)
-          fprintf(stderr, "%s;%s -> full %s=%s,  %s\n", 
-                  path?path:"ICUDATA", parent, keyword, kwVal, u_errorName(subStatus));
-#endif
-          uprv_strcpy(full, parent);
-          if(*full == 0) {
-            uprv_strcpy(full, "root");
-          }
-        } else {
-#if defined(URES_TREE_DEBUG)
-          fprintf(stderr, "err=%s in %s looking for %s\n", 
-                  u_errorName(subStatus), parent, kwVal);
-#endif
-        }
-      }
-    }
-
-    subStatus = U_ZERO_ERROR;
-
-    uprv_strcpy(found, parent);
-    uloc_getParent(found,parent,1023,&subStatus);
-    ures_close(res);
-  } while(!full[0] && *found && U_SUCCESS(*status));
-  
-  if((full[0]==0) && uprv_strcmp(kwVal, defVal)) {
-#if defined(URES_TREE_DEBUG)
-    fprintf(stderr, "Failed to locate kw %s - try default %s\n", kwVal, defVal);
-#endif
-    uprv_strcpy(kwVal, defVal);
+    ures_initStackObject(&bund1);
+    ures_initStackObject(&bund2);
+    
+    
     uprv_strcpy(parent, base);
     uprv_strcpy(found, base);
-
-    do { /* search for 'default' named item */
-      subStatus = U_ZERO_ERROR;
-      res = ures_open(path, parent, &subStatus);
-      if((subStatus == U_USING_FALLBACK_WARNING) && isAvailable) {
-        *isAvailable = FALSE;
-      }
-      isAvailable = NULL; /* only want to set this the first time around */
-      
-#if defined(URES_TREE_DEBUG)
-      fprintf(stderr, "%s;%s -> %s (looking for default %s)\n",
-              path?path:"ICUDATA", parent, u_errorName(subStatus), kwVal);
-#endif
-      if(U_FAILURE(subStatus)) {
+    
+    if(U_FAILURE(subStatus)) {
         *status = subStatus;
-      } else if(subStatus == U_ZERO_ERROR) {
-        ures_getByKey(res,resName,&bund1, &subStatus);
-        if(subStatus == U_ZERO_ERROR) {
-          ures_getByKey(&bund1, kwVal, &bund2, &subStatus);
-          if(subStatus == U_ZERO_ERROR) {
-#if defined(URES_TREE_DEBUG)
-            fprintf(stderr, "%s;%s -> full %s=%s,  %s\n", path?path:"ICUDATA",
-                    parent, keyword, kwVal, u_errorName(subStatus));
-#endif
-            uprv_strcpy(full, parent);
-            if(*full == 0) {
-              uprv_strcpy(full, "root");
-            }
-          }
+        return 0;
+    }
+    
+    do {
+        subStatus = U_ZERO_ERROR;
+        res = ures_open(path, parent, &subStatus);
+        if(((subStatus == U_USING_FALLBACK_WARNING) ||
+            (subStatus == U_USING_DEFAULT_WARNING)) && isAvailable) {
+            *isAvailable = FALSE;
         }
-      }
-      subStatus = U_ZERO_ERROR;
-      
-      uprv_strcpy(found, parent);
-      uloc_getParent(found,parent,1023,&subStatus);
-      ures_close(res);
+        isAvailable = NULL; /* only want to set this the first time around */
+        
+#if defined(URES_TREE_DEBUG)
+        fprintf(stderr, "%s;%s -> %s\n", path?path:"ICUDATA", parent, u_errorName(subStatus));
+#endif
+        if(U_FAILURE(subStatus)) {
+            *status = subStatus;
+        } else if(subStatus == U_ZERO_ERROR) {
+            ures_getByKey(res,resName,&bund1, &subStatus);
+            if(subStatus == U_ZERO_ERROR) {
+                const UChar *defUstr;
+                int32_t defLen;
+                /* look for default item */
+#if defined(URES_TREE_DEBUG)
+                fprintf(stderr, "%s;%s : loaded default -> %s\n",
+                    path?path:"ICUDATA", parent, u_errorName(subStatus));
+#endif
+                defUstr = ures_getStringByKey(&bund1, DEFAULT_TAG, &defLen, &subStatus);
+                if(U_SUCCESS(subStatus) && defLen) {
+                    u_UCharsToChars(defUstr, defVal, 1023);
+#if defined(URES_TREE_DEBUG)
+                    fprintf(stderr, "%s;%s -> default %s=%s,  %s\n", 
+                        path?path:"ICUDATA", parent, keyword, defVal, u_errorName(subStatus));
+#endif
+                    uprv_strcpy(defLoc, parent);
+                    if(kwVal[0]==0) {
+                        uprv_strcpy(kwVal, defVal);
+#if defined(URES_TREE_DEBUG)
+                        fprintf(stderr, "%s;%s -> kwVal =  %s\n", 
+                            path?path:"ICUDATA", parent, keyword, kwVal);
+#endif
+                    }
+                }
+            }
+        }
+        
+        subStatus = U_ZERO_ERROR;
+        
+        uprv_strcpy(found, parent);
+        uloc_getParent(found,parent,1023,&subStatus);
+        ures_close(res);
+    } while(!defVal[0] && *found && U_SUCCESS(*status));
+    
+    /* Now, see if we can find the kwVal collator.. start the search over.. */
+    uprv_strcpy(parent, base);
+    uprv_strcpy(found, base);
+    
+    do {
+        subStatus = U_ZERO_ERROR;
+        res = ures_open(path, parent, &subStatus);
+        if((subStatus == U_USING_FALLBACK_WARNING) && isAvailable) {
+            *isAvailable = FALSE;
+        }
+        isAvailable = NULL; /* only want to set this the first time around */
+        
+#if defined(URES_TREE_DEBUG)
+        fprintf(stderr, "%s;%s -> %s (looking for %s)\n", 
+            path?path:"ICUDATA", parent, u_errorName(subStatus), kwVal);
+#endif
+        if(U_FAILURE(subStatus)) {
+            *status = subStatus;
+        } else if(subStatus == U_ZERO_ERROR) {
+            ures_getByKey(res,resName,&bund1, &subStatus);
+            if(subStatus == U_ZERO_ERROR) {
+                ures_getByKey(&bund1, kwVal, &bund2, &subStatus);
+                if(subStatus == U_ZERO_ERROR) {
+#if defined(URES_TREE_DEBUG)
+                    fprintf(stderr, "%s;%s -> full %s=%s,  %s\n", 
+                        path?path:"ICUDATA", parent, keyword, kwVal, u_errorName(subStatus));
+#endif
+                    uprv_strcpy(full, parent);
+                    if(*full == 0) {
+                        uprv_strcpy(full, "root");
+                    }
+                } else {
+#if defined(URES_TREE_DEBUG)
+                    fprintf(stderr, "err=%s in %s looking for %s\n", 
+                        u_errorName(subStatus), parent, kwVal);
+#endif
+                }
+            }
+        }
+        
+        subStatus = U_ZERO_ERROR;
+        
+        uprv_strcpy(found, parent);
+        uloc_getParent(found,parent,1023,&subStatus);
+        ures_close(res);
     } while(!full[0] && *found && U_SUCCESS(*status));
-  }
-
-  if(U_SUCCESS(*status)) {
-    if(!full[0]) {
+    
+    if((full[0]==0) && uprv_strcmp(kwVal, defVal)) {
 #if defined(URES_TREE_DEBUG)
-      fprintf(stderr, "Still could not load keyword %s=%s\n", keyword, kwVal);
-      *status = U_MISSING_RESOURCE_ERROR;
+        fprintf(stderr, "Failed to locate kw %s - try default %s\n", kwVal, defVal);
 #endif
-    } else if( (!uprv_strcmp(kwVal, defVal)) && /* if the requested kw is default, */
-        uprv_strlen(defLoc) <= uprv_strlen(full)) { /* and the default is in or in an 
-                                                       ancestor of the current locale */
+        uprv_strcpy(kwVal, defVal);
+        uprv_strcpy(parent, base);
+        uprv_strcpy(found, base);
+        
+        do { /* search for 'default' named item */
+            subStatus = U_ZERO_ERROR;
+            res = ures_open(path, parent, &subStatus);
+            if((subStatus == U_USING_FALLBACK_WARNING) && isAvailable) {
+                *isAvailable = FALSE;
+            }
+            isAvailable = NULL; /* only want to set this the first time around */
+            
 #if defined(URES_TREE_DEBUG)
-      fprintf(stderr, "Removing unneeded var %s=%s\n", keyword, kwVal);
+            fprintf(stderr, "%s;%s -> %s (looking for default %s)\n",
+                path?path:"ICUDATA", parent, u_errorName(subStatus), kwVal);
 #endif
-      kwVal[0]=0;
+            if(U_FAILURE(subStatus)) {
+                *status = subStatus;
+            } else if(subStatus == U_ZERO_ERROR) {
+                ures_getByKey(res,resName,&bund1, &subStatus);
+                if(subStatus == U_ZERO_ERROR) {
+                    ures_getByKey(&bund1, kwVal, &bund2, &subStatus);
+                    if(subStatus == U_ZERO_ERROR) {
+#if defined(URES_TREE_DEBUG)
+                        fprintf(stderr, "%s;%s -> full %s=%s,  %s\n", path?path:"ICUDATA",
+                            parent, keyword, kwVal, u_errorName(subStatus));
+#endif
+                        uprv_strcpy(full, parent);
+                        if(*full == 0) {
+                            uprv_strcpy(full, "root");
+                        }
+                    }
+                }
+            }
+            subStatus = U_ZERO_ERROR;
+            
+            uprv_strcpy(found, parent);
+            uloc_getParent(found,parent,1023,&subStatus);
+            ures_close(res);
+        } while(!full[0] && *found && U_SUCCESS(*status));
     }
-    uprv_strcpy(found, full);
-    if(kwVal[0]) {
-      uprv_strcat(found, "@");
-      uprv_strcat(found, keyword);
-      uprv_strcat(found, "=");
-      uprv_strcat(found, kwVal);
+    
+    if(U_SUCCESS(*status)) {
+        if(!full[0]) {
+#if defined(URES_TREE_DEBUG)
+            fprintf(stderr, "Still could not load keyword %s=%s\n", keyword, kwVal);
+            *status = U_MISSING_RESOURCE_ERROR;
+#endif
+        } else if( (!uprv_strcmp(kwVal, defVal)) && /* if the requested kw is default, */
+                                                    uprv_strlen(defLoc) <= uprv_strlen(full)) { /* and the default is in or in an 
+            ancestor of the current locale */
+#if defined(URES_TREE_DEBUG)
+            fprintf(stderr, "Removing unneeded var %s=%s\n", keyword, kwVal);
+#endif
+            kwVal[0]=0;
+        }
+        uprv_strcpy(found, full);
+        if(kwVal[0]) {
+            uprv_strcat(found, "@");
+            uprv_strcat(found, keyword);
+            uprv_strcat(found, "=");
+            uprv_strcat(found, kwVal);
+        }
     }
-  }
-  /* we found the default locale - no need to repeat it.*/
-  
-  ures_close(&bund1);
-  ures_close(&bund2);
-
-  length = uprv_strlen(found);
-  if(U_SUCCESS(*status)) {
-    int32_t copyLength = uprv_min(length, resultCapacity);
-    if(copyLength>0) {
-      uprv_strncpy(result, found, copyLength);
+    /* we found the default locale - no need to repeat it.*/
+    
+    ures_close(&bund1);
+    ures_close(&bund2);
+    
+    length = uprv_strlen(found);
+    if(U_SUCCESS(*status)) {
+        int32_t copyLength = uprv_min(length, resultCapacity);
+        if(copyLength>0) {
+            uprv_strncpy(result, found, copyLength);
+        }
+    } else {
+        length = 0;
+        result[0]=0;
     }
-  } else {
-    length = 0;
-    result[0]=0;
-  }
-  return u_terminateChars(result, resultCapacity, length, status);
+    return u_terminateChars(result, resultCapacity, length, status);
 }
 
 U_CAPI UEnumeration* U_EXPORT2
@@ -2232,98 +2240,98 @@ ures_getKeywordValues(const char *path, const char *keyword, UErrorCode *status)
 {
 #define VALUES_BUF_SIZE 1024
 #define VALUES_LIST_SIZE 256
-  
-  char       valuesBuf[VALUES_BUF_SIZE];
-  int32_t    valuesIndex = 0;
-  const char *valuesList[VALUES_LIST_SIZE];
-  int32_t    valuesCount = 0;
-
-  const char *locale;
-  int32_t     locLen;
-
-  UEnumeration *locs = NULL;
-
-  UResourceBundle    item;
-  UResourceBundle    subItem;
-
-  ures_initStackObject(&item);
-  ures_initStackObject(&subItem);
-  locs = ures_openAvailableLocales(path, status);
-
-  if(U_FAILURE(*status)) {
-    return NULL;
-  }
-
-  valuesBuf[0]=0;
-  valuesBuf[1]=0;
-  
-  while((locale = uenum_next(locs, &locLen, status))) {
-    UResourceBundle   *bund = NULL;
-    UResourceBundle    *subPtr = NULL;
-    UErrorCode subStatus = U_ZERO_ERROR; /* don't fail if a bundle is unopenable */
-    bund = ures_openDirect(path, locale, &subStatus);
-
-#if defined(URES_TREE_DEBUG)
-    if(!bund || U_FAILURE(subStatus)) {
-      fprintf(stderr, "%s-%s values: Can't open %s locale - skipping. (%s)\n", 
-              path?path:"<ICUDATA>", keyword, locale, u_errorName(subStatus));
-    }
-#endif
-
-    ures_getByKey(bund, keyword, &item, &subStatus);
     
-    if(!bund || U_FAILURE(subStatus)) {
-#if defined(URES_TREE_DEBUG)
-      fprintf(stderr, "%s-%s values: Can't find in %s - skipping. (%s)\n", 
-              path?path:"<ICUDATA>", keyword, locale, u_errorName(subStatus));
-      continue;
-#endif
+    char       valuesBuf[VALUES_BUF_SIZE];
+    int32_t    valuesIndex = 0;
+    const char *valuesList[VALUES_LIST_SIZE];
+    int32_t    valuesCount = 0;
+    
+    const char *locale;
+    int32_t     locLen;
+    
+    UEnumeration *locs = NULL;
+    
+    UResourceBundle    item;
+    UResourceBundle    subItem;
+    
+    ures_initStackObject(&item);
+    ures_initStackObject(&subItem);
+    locs = ures_openAvailableLocales(path, status);
+    
+    if(U_FAILURE(*status)) {
+        return NULL;
     }
-
-    while((subPtr = ures_getNextResource(&item,&subItem,&subStatus))
-          && U_SUCCESS(subStatus)) {
-      const char *k;
-      int32_t i;
-      k = ures_getKey(&subItem);
-
+    
+    valuesBuf[0]=0;
+    valuesBuf[1]=0;
+    
+    while((locale = uenum_next(locs, &locLen, status))) {
+        UResourceBundle   *bund = NULL;
+        UResourceBundle    *subPtr = NULL;
+        UErrorCode subStatus = U_ZERO_ERROR; /* don't fail if a bundle is unopenable */
+        bund = ures_openDirect(path, locale, &subStatus);
+        
 #if defined(URES_TREE_DEBUG)
-      /* fprintf(stderr, "%s | %s | %s | %s\n", path?path:"<ICUDATA>", keyword, locale, k); */
+        if(!bund || U_FAILURE(subStatus)) {
+            fprintf(stderr, "%s-%s values: Can't open %s locale - skipping. (%s)\n", 
+                path?path:"<ICUDATA>", keyword, locale, u_errorName(subStatus));
+        }
 #endif
-      for(i=0;k&&i<valuesCount;i++) {
-        if(!uprv_strcmp(valuesList[i],k)) {
-          k = NULL; /* found duplicate */
-        }
-      }
-      if(k && *k) {
-        int32_t kLen = uprv_strlen(k);
-        if(!uprv_strcmp(k,DEFAULT_TAG)) {
-          continue; /* don't need 'default'. */
-        }
-        if((valuesCount >= (VALUES_LIST_SIZE-1)) ||       /* no more space in list .. */
-           ((valuesIndex+kLen+1+1) >= VALUES_BUF_SIZE)) { /* no more space in buffer (string + 2 nulls) */
-          *status = U_ILLEGAL_ARGUMENT_ERROR; /* out of space.. */
-        } else {
-          uprv_strcpy(valuesBuf+valuesIndex, k);
-          valuesList[valuesCount++] = valuesBuf+valuesIndex;
-          valuesIndex += kLen;
+        
+        ures_getByKey(bund, keyword, &item, &subStatus);
+        
+        if(!bund || U_FAILURE(subStatus)) {
 #if defined(URES_TREE_DEBUG)
-      fprintf(stderr, "%s | %s | %s | [%s]   (UNIQUE)\n",
-              path?path:"<ICUDATA>", keyword, locale, k);
+            fprintf(stderr, "%s-%s values: Can't find in %s - skipping. (%s)\n", 
+                path?path:"<ICUDATA>", keyword, locale, u_errorName(subStatus));
+            continue;
 #endif
-          valuesBuf[valuesIndex++] = 0; /* terminate */
         }
-      }
+        
+        while((subPtr = ures_getNextResource(&item,&subItem,&subStatus))
+            && U_SUCCESS(subStatus)) {
+            const char *k;
+            int32_t i;
+            k = ures_getKey(&subItem);
+            
+#if defined(URES_TREE_DEBUG)
+            /* fprintf(stderr, "%s | %s | %s | %s\n", path?path:"<ICUDATA>", keyword, locale, k); */
+#endif
+            for(i=0;k&&i<valuesCount;i++) {
+                if(!uprv_strcmp(valuesList[i],k)) {
+                    k = NULL; /* found duplicate */
+                }
+            }
+            if(k && *k) {
+                int32_t kLen = uprv_strlen(k);
+                if(!uprv_strcmp(k,DEFAULT_TAG)) {
+                    continue; /* don't need 'default'. */
+                }
+                if((valuesCount >= (VALUES_LIST_SIZE-1)) ||       /* no more space in list .. */
+                    ((valuesIndex+kLen+1+1) >= VALUES_BUF_SIZE)) { /* no more space in buffer (string + 2 nulls) */
+                    *status = U_ILLEGAL_ARGUMENT_ERROR; /* out of space.. */
+                } else {
+                    uprv_strcpy(valuesBuf+valuesIndex, k);
+                    valuesList[valuesCount++] = valuesBuf+valuesIndex;
+                    valuesIndex += kLen;
+#if defined(URES_TREE_DEBUG)
+                    fprintf(stderr, "%s | %s | %s | [%s]   (UNIQUE)\n",
+                        path?path:"<ICUDATA>", keyword, locale, k);
+#endif
+                    valuesBuf[valuesIndex++] = 0; /* terminate */
+                }
+            }
+        }
     }
-  }
-  valuesBuf[valuesIndex++] = 0; /* terminate */
-
-  ures_close(&item);
-  ures_close(&subItem);
+    valuesBuf[valuesIndex++] = 0; /* terminate */
+    
+    ures_close(&item);
+    ures_close(&subItem);
 #if defined(URES_TREE_DEBUG)
-  fprintf(stderr, "%s:  size %d, #%d\n", u_errorName(*status), 
-          valuesIndex, valuesCount);
+    fprintf(stderr, "%s:  size %d, #%d\n", u_errorName(*status), 
+        valuesIndex, valuesCount);
 #endif
-  return uloc_openKeywordList(valuesBuf, valuesIndex, status);
+    return uloc_openKeywordList(valuesBuf, valuesIndex, status);
 }
 
 /* eof */
