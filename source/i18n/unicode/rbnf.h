@@ -457,6 +457,10 @@ class Collator;
  * <p>See the resource data and the demo program for annotated examples of real rule sets
  * using these features.</p>
  *
+ * <p><em>User subclasses are not supported.</em> While clients may write
+ * subclasses, such code will not necessarily work and will not be
+ * guaranteed to work stably from release to release.
+ *
  * @author Richard Gillam
  * @see NumberFormat
  * @see DecimalFormat

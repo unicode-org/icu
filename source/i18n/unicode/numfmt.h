@@ -128,6 +128,11 @@ typedef const void* URegistryKey;
  * widthToAlignmentPoint) before drawing the text.  It also works
  * where there is no decimal, but possibly additional characters at
  * the end, e.g. with parentheses in negative numbers: "(12)" for -12.
+ * <p>
+ * <em>User subclasses are not supported.</em> While clients may write
+ * subclasses, such code will not necessarily work and will not be
+ * guaranteed to work stably from release to release.
+ *
  * @stable ICU 2.0
  */
 class U_I18N_API NumberFormat : public Format {
