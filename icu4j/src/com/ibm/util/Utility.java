@@ -5,14 +5,13 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/util/Attic/Utility.java,v $
- * $Date: 2001/11/27 21:48:50 $
- * $Revision: 1.14 $
+ * $Date: 2001/11/29 17:31:45 $
+ * $Revision: 1.15 $
  *
  *****************************************************************************************
  */
 package com.ibm.util;
-import com.ibm.text.UCharacter;
-import com.ibm.text.UTF16;
+import com.ibm.text.*;
 
 public final class Utility {
 
@@ -1170,5 +1169,69 @@ public final class Utility {
             }
         }
         return -1;
+    }
+
+    /**
+     * For debugging purposes; format the given text in the form
+     * aaa{bbb|ccc|ddd}eee, where the {} indicate the context start
+     * and limit, and the || indicate the start and limit.
+     */
+    public static String formatInput(ReplaceableString input,
+                                     Transliterator.Position pos) {
+        StringBuffer appendTo = new StringBuffer();
+        formatInput(appendTo, input, pos);
+        return com.ibm.util.Utility.escape(appendTo.toString());
+    }
+
+    /**
+     * For debugging purposes; format the given text in the form
+     * aaa{bbb|ccc|ddd}eee, where the {} indicate the context start
+     * and limit, and the || indicate the start and limit.
+     */
+    public static StringBuffer formatInput(StringBuffer appendTo,
+                                           ReplaceableString input,
+                                           Transliterator.Position pos) {
+        if (0 <= pos.contextStart &&
+            pos.contextStart <= pos.start &&
+            pos.start <= pos.limit &&
+            pos.limit <= pos.contextLimit &&
+            pos.contextLimit <= input.length()) {
+            
+            String a, b, c, d, e;
+            //a = input.substring(0, pos.contextStart);
+            b = input.substring(pos.contextStart, pos.start);
+            c = input.substring(pos.start, pos.limit);
+            d = input.substring(pos.limit, pos.contextLimit);
+            //e = input.substring(pos.contextLimit, input.length());
+            appendTo.//append(a).
+                append('{').append(b).
+                append('|').append(c).append('|').append(d).
+                append('}')
+                //.append(e)
+                ;
+        } else {
+            appendTo.append("INVALID Position {cs=" +
+                            pos.contextStart + ", s=" + pos.start + ", l=" +
+                            pos.limit + ", cl=" + pos.contextLimit + "} on " +
+                            input);
+        }
+        return appendTo;
+    }
+
+    /**
+     * Convenience method.
+     */
+    public static String formatInput(Replaceable input,
+                                     Transliterator.Position pos) {
+        return formatInput((ReplaceableString) input, pos);
+    }
+
+    /**
+     * Convenience method.
+     */
+    public static StringBuffer formatInput(StringBuffer appendTo,
+                                           Replaceable input,
+                                           Transliterator.Position pos) { 
+        return formatInput(appendTo, (ReplaceableString) input, pos);
     }
 }
