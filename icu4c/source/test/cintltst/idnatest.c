@@ -392,22 +392,22 @@ static const char *domainNames[] = {
     "pool029.max2.denver.co.dynip.alter.net",
     "cust49.max9.new-york.ny.ms.uu.net",
     "s61.abq-dialin2.hollyberry.com",
-    "\\u0917\\u0928\\u0947\\u0936.sanjose.ibm.com", //':'(0x003a) produces U_IDNA_STD3_ASCII_RULES_ERROR
+    "\\u0917\\u0928\\u0947\\u0936.sanjose.ibm.com", /*':'(0x003a) produces U_IDNA_STD3_ASCII_RULES_ERROR*/
     "www.xn--vea.com",
-   // "www.\\u00E0\\u00B3\\u00AF.com",//' ' (0x0020) produces U_IDNA_STD3_ASCII_RULES_ERROR
+    /* "www.\\u00E0\\u00B3\\u00AF.com",//' ' (0x0020) produces U_IDNA_STD3_ASCII_RULES_ERROR*/
     "www.\\u00C2\\u00A4.com",
     "www.\\u00C2\\u00A3.com",
-    // "\\u0025", //'%' (0x0025) produces U_IDNA_STD3_ASCII_RULES_ERROR
-    // "\\u005C\\u005C", //'\' (0x005C) produces U_IDNA_STD3_ASCII_RULES_ERROR
-    //"@",
-    //"\\u002F",
-    //"www.\\u0021.com",
-    //"www.\\u0024.com",
-    //"\\u003f",
-    // These yeild U_IDNA_PROHIBITED_ERROR
-    //"\\u00CF\\u0082.com",
-    //"\\u00CE\\u00B2\\u00C3\\u009Fss.com",
-    //"\\u00E2\\u0098\\u00BA.com",
+    /* "\\u0025", //'%' (0x0025) produces U_IDNA_STD3_ASCII_RULES_ERROR*/
+    /* "\\u005C\\u005C", //'\' (0x005C) produces U_IDNA_STD3_ASCII_RULES_ERROR*/
+    /*"@",*/
+    /*"\\u002F",*/
+    /*"www.\\u0021.com",*/
+    /*"www.\\u0024.com",*/
+    /*"\\u003f",*/
+    /* These yeild U_IDNA_PROHIBITED_ERROR*/
+    /*"\\u00CF\\u0082.com",*/
+    /*"\\u00CE\\u00B2\\u00C3\\u009Fss.com",*/
+    /*"\\u00E2\\u0098\\u00BA.com",*/
     "\\u00C3\\u00BC.com",
 
 };
