@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/util/IslamicCalendar.java,v $ 
- * $Date: 2000/11/18 00:30:54 $ 
- * $Revision: 1.8 $
+ * $Date: 2000/11/28 00:50:13 $ 
+ * $Revision: 1.9 $
  *
  *****************************************************************************************
  */
@@ -479,7 +479,7 @@ public class IslamicCalendar extends Calendar {
     //-------------------------------------------------------------------------
 
     // Return JD of start of given month/year
-    protected int handleComputeMonthStart(int eyear, int month) {
+    protected int handleComputeMonthStart(int eyear, int month, boolean useMonth) {
         return (int) monthStart(eyear, month) + 1948439;
     }    
 

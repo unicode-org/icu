@@ -3,8 +3,8 @@
  * others. All Rights Reserved.
  *********************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/util/ChineseCalendar.java,v $
- * $Date: 2000/11/21 20:17:39 $
- * $Revision: 1.5 $
+ * $Date: 2000/11/28 00:50:12 $
+ * $Revision: 1.6 $
  */
 package com.ibm.util;
 import com.ibm.text.*;
@@ -249,7 +249,7 @@ public class ChineseCalendar extends Calendar {
      * whether or not the given month is a leap month.
      */
     protected int handleGetMonthLength(int extendedYear, int month) {
-        int thisStart = handleComputeMonthStart(extendedYear, month) -
+        int thisStart = handleComputeMonthStart(extendedYear, month, true) -
             EPOCH_JULIAN_DAY + 1; // Julian day -> local days
         int nextStart = newMoonNear(thisStart + SYNODIC_GAP, true);
         return nextStart - thisStart;
@@ -583,20 +583,22 @@ public class ChineseCalendar extends Calendar {
      * @param return the Julian day number of the day before the first
      * day of the given month and year
      */
-    protected int handleComputeMonthStart(int eyear, int month) {
+    protected int handleComputeMonthStart(int eyear, int month, boolean useMonth) {
 
         int gyear = eyear + CHINESE_EPOCH_YEAR - 1; // Gregorian year
         int newYear = newYear(gyear);
         int newMoon = newMoonNear(newYear + month * 29, true);
         
         int julianDay = newMoon + EPOCH_JULIAN_DAY;
-        int isLeapMonth = internalGet(IS_LEAP_MONTH);
+
+        // Save fields for later restoration
+        int saveMonth = internalGet(MONTH);
+        int saveIsLeapMonth = internalGet(IS_LEAP_MONTH);
+
+        int isLeapMonth = useMonth ? saveIsLeapMonth : 0;
 
         computeGregorianFields(julianDay);
         
-        // Save fields for later restoration
-        int saveMonth = internalGet(MONTH);
-
         // This will modify the MONTH and IS_LEAP_MONTH fields (only)
         computeChineseFields(newMoon, getGregorianYear(),
                              getGregorianMonth(), false);        
@@ -608,7 +610,7 @@ public class ChineseCalendar extends Calendar {
         }
 
         internalSet(MONTH, saveMonth);
-        internalSet(IS_LEAP_MONTH, isLeapMonth);
+        internalSet(IS_LEAP_MONTH, saveIsLeapMonth);
 
         return julianDay - 1;
     }
