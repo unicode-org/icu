@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/DecimalFormat.java,v $ 
- * $Date: 2003/04/04 20:43:38 $ 
- * $Revision: 1.23 $
+ * $Date: 2003/04/04 20:54:16 $ 
+ * $Revision: 1.24 $
  *
  *****************************************************************************************
  */
@@ -1415,7 +1415,7 @@ public class DecimalFormat extends NumberFormat {
      * @param pos offset into input at which to begin matching
      * @return length of input that matches, or -1 if match failure
      */
-    private int compareAffix(String affix, String input, int pos) {
+    private static int compareAffix(String affix, String input, int pos) {
         int start = pos;
         for (int i=0; i<affix.length(); ) {
             int c = UTF16.charAt(affix, i);
