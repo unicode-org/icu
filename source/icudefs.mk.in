@@ -65,7 +65,7 @@ endif
 
 pkgdatadir = $(datadir)/$(PACKAGE)$(ICULIBSUFFIX)/$(VERSION)
 pkglibdir = $(libdir)/$(PACKAGE)$(ICULIBSUFFIX)/$(VERSION)
-pkgsysconfdir = $(sysconfdir)$(ICULIBSUFFIX)/$(PACKAGE)
+pkgsysconfdir = $(sysconfdir)/$(PACKAGE)$(ICULIBSUFFIX)
 
 # Installation programs
 
