@@ -1309,17 +1309,18 @@ private:
      * property-conformant.  That is, if it returns value v for one
      * code point, then it must return v for all affiliated code
      * points, as defined by the inclusions list.  See
-     * uprv_getInclusions().
+     * getInclusions().
+     * src is a UPropertySource value.
      */
     void applyFilter(Filter filter,
                      void* context,
+                     int32_t src,
                      UErrorCode &status);
 
     /**
-     * Return a cached copy of the inclusions list that
-     * uprv_getInclusions() produces.
+     * Return a cached copy of the inclusions list for the property source.
      */
-    static const UnicodeSet* getInclusions(UErrorCode &errorCode);
+    static const UnicodeSet* getInclusions(int32_t src, UErrorCode &errorCode);
 
     friend class UnicodeSetIterator;
 
