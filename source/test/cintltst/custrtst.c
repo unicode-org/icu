@@ -34,6 +34,7 @@
 static void TestStringCopy(void);
 static void TestStringFunctions(void);
 static void TestStringSearching(void);
+static void TestSurrogateSearching(void);
 static void TestUnescape(void);
 static void TestCountChar32(void);
 
@@ -42,6 +43,7 @@ void addUStringTest(TestNode** root)
     addTest(root, &TestStringCopy, "tsutil/custrtst/TestStringCopy");
     addTest(root, &TestStringFunctions, "tsutil/custrtst/TestStringFunctions");
     addTest(root, &TestStringSearching, "tsutil/custrtst/TestStringSearching");
+    addTest(root, &TestSurrogateSearching, "tsutil/custrtst/TestSurrogateSearching");
     addTest(root, &TestUnescape, "tsutil/custrtst/TestUnescape");
     addTest(root, &TestCountChar32, "tsutil/custrtst/TestCountChar32");
 
@@ -657,6 +659,290 @@ static void TestStringSearching()
     }
     if (u_strspn(testSurrogateString, surrMatchSet4) != 0) {
         log_err("u_strspn should have returned 0 for empty string.\n");
+    }
+}
+
+/*
+ * All binary Unicode string searches should behave the same for equivalent input.
+ * See Jitterbug 2145.
+ * There are some new functions, too - just test them all.
+ */
+static void
+TestSurrogateSearching() {
+    static const UChar s[]={
+        /* 0       1       2     3       4     5       6     7       8       9    10 11 */
+        0x61, 0xd801, 0xdc02, 0x61, 0xdc02, 0x61, 0xd801, 0x61, 0xd801, 0xdc02, 0x61, 0
+    }, sub_a[]={
+        0x61, 0
+    }, sub_b[]={
+        0x62, 0
+    }, sub_lead[]={
+        0xd801, 0
+    }, sub_trail[]={
+        0xdc02, 0
+    }, sub_supp[]={
+        0xd801, 0xdc02, 0
+    }, sub_supp2[]={
+        0xd801, 0xdc03, 0
+    }, sub_a_lead[]={
+        0x61, 0xd801, 0
+    }, sub_trail_a[]={
+        0xdc02, 0x61, 0
+    }, sub_aba[]={
+        0x61, 0x62, 0x61, 0
+    };
+    static const UChar a=0x61, b=0x62, lead=0xd801, trail=0xdc02, nul=0;
+    static const UChar32 supp=0x10402, supp2=0x10403, ill=0x123456;
+
+    const UChar *first, *last;
+
+    /* search for NUL code point: find end of string */
+    first=s+u_strlen(s);
+
+    if(
+        first!=u_strchr(s, nul) ||
+        first!=u_strchr32(s, nul) ||
+        first!=u_memchr(s, nul, LENGTHOF(s)) ||
+        first!=u_memchr32(s, nul, LENGTHOF(s)) ||
+        first!=u_strrchr(s, nul) ||
+        first!=u_strrchr32(s, nul) ||
+        first!=u_memrchr(s, nul, LENGTHOF(s)) ||
+        first!=u_memrchr32(s, nul, LENGTHOF(s))
+    ) {
+        log_err("error: one of the u_str[|mem][r]chr[32](s, nul) does not find the terminator of s\n");
+    }
+
+    /* search for empty substring: find beginning of string */
+    if(
+        s!=u_strstr(s, &nul) ||
+        s!=u_strFindFirst(s, -1, &nul, -1) ||
+        s!=u_strFindFirst(s, -1, &nul, 0) ||
+        s!=u_strFindFirst(s, LENGTHOF(s), &nul, -1) ||
+        s!=u_strFindFirst(s, LENGTHOF(s), &nul, 0) ||
+        s!=u_strrstr(s, &nul) ||
+        s!=u_strFindLast(s, -1, &nul, -1) ||
+        s!=u_strFindLast(s, -1, &nul, 0) ||
+        s!=u_strFindLast(s, LENGTHOF(s), &nul, -1) ||
+        s!=u_strFindLast(s, LENGTHOF(s), &nul, 0)
+    ) {
+        log_err("error: one of the u_str[str etc](s, \"\") does not find s itself\n");
+    }
+
+    /* find 'a' in s[1..10[ */
+    first=s+3;
+    last=s+7;
+    if(
+        first!=u_strchr(s+1, a) ||
+        first!=u_strchr32(s+1, a) ||
+        first!=u_memchr(s+1, a, 9) ||
+        first!=u_memchr32(s+1, a, 9) ||
+        first!=u_strstr(s+1, sub_a) ||
+        first!=u_strFindFirst(s+1, -1, sub_a, -1) ||
+        first!=u_strFindFirst(s+1, -1, &a, 1) ||
+        first!=u_strFindFirst(s+1, 9, sub_a, -1) ||
+        first!=u_strFindFirst(s+1, 9, &a, 1) ||
+        (s+10)!=u_strrchr(s+1, a) ||
+        (s+10)!=u_strrchr32(s+1, a) ||
+        last!=u_memrchr(s+1, a, 9) ||
+        last!=u_memrchr32(s+1, a, 9) ||
+        (s+10)!=u_strrstr(s+1, sub_a) ||
+        (s+10)!=u_strFindLast(s+1, -1, sub_a, -1) ||
+        (s+10)!=u_strFindLast(s+1, -1, &a, 1) ||
+        last!=u_strFindLast(s+1, 9, sub_a, -1) ||
+        last!=u_strFindLast(s+1, 9, &a, 1)
+    ) {
+        log_err("error: one of the u_str[chr etc]('a') does not find the correct place\n");
+    }
+
+    /* do not find 'b' in s[1..10[ */
+    if(
+        NULL!=u_strchr(s+1, b) ||
+        NULL!=u_strchr32(s+1, b) ||
+        NULL!=u_memchr(s+1, b, 9) ||
+        NULL!=u_memchr32(s+1, b, 9) ||
+        NULL!=u_strstr(s+1, sub_b) ||
+        NULL!=u_strFindFirst(s+1, -1, sub_b, -1) ||
+        NULL!=u_strFindFirst(s+1, -1, &b, 1) ||
+        NULL!=u_strFindFirst(s+1, 9, sub_b, -1) ||
+        NULL!=u_strFindFirst(s+1, 9, &b, 1) ||
+        NULL!=u_strrchr(s+1, b) ||
+        NULL!=u_strrchr32(s+1, b) ||
+        NULL!=u_memrchr(s+1, b, 9) ||
+        NULL!=u_memrchr32(s+1, b, 9) ||
+        NULL!=u_strrstr(s+1, sub_b) ||
+        NULL!=u_strFindLast(s+1, -1, sub_b, -1) ||
+        NULL!=u_strFindLast(s+1, -1, &b, 1) ||
+        NULL!=u_strFindLast(s+1, 9, sub_b, -1) ||
+        NULL!=u_strFindLast(s+1, 9, &b, 1)
+    ) {
+        log_err("error: one of the u_str[chr etc]('b') incorrectly finds something\n");
+    }
+
+    /* do not find a non-code point in s[1..10[ */
+    if(
+        NULL!=u_strchr32(s+1, ill) ||
+        NULL!=u_memchr32(s+1, ill, 9) ||
+        NULL!=u_strrchr32(s+1, ill) ||
+        NULL!=u_memrchr32(s+1, ill, 9)
+    ) {
+        log_err("error: one of the u_str[chr etc](illegal code point) incorrectly finds something\n");
+    }
+
+    /* find U+d801 in s[1..10[ */
+    first=s+6;
+    if(
+        first!=u_strchr(s+1, lead) ||
+        first!=u_strchr32(s+1, lead) ||
+        first!=u_memchr(s+1, lead, 9) ||
+        first!=u_memchr32(s+1, lead, 9) ||
+        first!=u_strstr(s+1, sub_lead) ||
+        first!=u_strFindFirst(s+1, -1, sub_lead, -1) ||
+        first!=u_strFindFirst(s+1, -1, &lead, 1) ||
+        first!=u_strFindFirst(s+1, 9, sub_lead, -1) ||
+        first!=u_strFindFirst(s+1, 9, &lead, 1) ||
+        first!=u_strrchr(s+1, lead) ||
+        first!=u_strrchr32(s+1, lead) ||
+        first!=u_memrchr(s+1, lead, 9) ||
+        first!=u_memrchr32(s+1, lead, 9) ||
+        first!=u_strrstr(s+1, sub_lead) ||
+        first!=u_strFindLast(s+1, -1, sub_lead, -1) ||
+        first!=u_strFindLast(s+1, -1, &lead, 1) ||
+        first!=u_strFindLast(s+1, 9, sub_lead, -1) ||
+        first!=u_strFindLast(s+1, 9, &lead, 1)
+    ) {
+        log_err("error: one of the u_str[chr etc](U+d801) does not find the correct place\n");
+    }
+
+    /* find U+dc02 in s[1..10[ */
+    first=s+4;
+    if(
+        first!=u_strchr(s+1, trail) ||
+        first!=u_strchr32(s+1, trail) ||
+        first!=u_memchr(s+1, trail, 9) ||
+        first!=u_memchr32(s+1, trail, 9) ||
+        first!=u_strstr(s+1, sub_trail) ||
+        first!=u_strFindFirst(s+1, -1, sub_trail, -1) ||
+        first!=u_strFindFirst(s+1, -1, &trail, 1) ||
+        first!=u_strFindFirst(s+1, 9, sub_trail, -1) ||
+        first!=u_strFindFirst(s+1, 9, &trail, 1) ||
+        first!=u_strrchr(s+1, trail) ||
+        first!=u_strrchr32(s+1, trail) ||
+        first!=u_memrchr(s+1, trail, 9) ||
+        first!=u_memrchr32(s+1, trail, 9) ||
+        first!=u_strrstr(s+1, sub_trail) ||
+        first!=u_strFindLast(s+1, -1, sub_trail, -1) ||
+        first!=u_strFindLast(s+1, -1, &trail, 1) ||
+        first!=u_strFindLast(s+1, 9, sub_trail, -1) ||
+        first!=u_strFindLast(s+1, 9, &trail, 1)
+    ) {
+        log_err("error: one of the u_str[chr etc](U+dc02) does not find the correct place\n");
+    }
+
+    /* find U+10402 in s[1..10[ */
+    first=s+1;
+    last=s+8;
+    if(
+        first!=u_strchr32(s+1, supp) ||
+        first!=u_memchr32(s+1, supp, 9) ||
+        first!=u_strstr(s+1, sub_supp) ||
+        first!=u_strFindFirst(s+1, -1, sub_supp, -1) ||
+        first!=u_strFindFirst(s+1, -1, sub_supp, 2) ||
+        first!=u_strFindFirst(s+1, 9, sub_supp, -1) ||
+        first!=u_strFindFirst(s+1, 9, sub_supp, 2) ||
+        last!=u_strrchr32(s+1, supp) ||
+        last!=u_memrchr32(s+1, supp, 9) ||
+        last!=u_strrstr(s+1, sub_supp) ||
+        last!=u_strFindLast(s+1, -1, sub_supp, -1) ||
+        last!=u_strFindLast(s+1, -1, sub_supp, 2) ||
+        last!=u_strFindLast(s+1, 9, sub_supp, -1) ||
+        last!=u_strFindLast(s+1, 9, sub_supp, 2)
+    ) {
+        log_err("error: one of the u_str[chr etc](U+10402) does not find the correct place\n");
+    }
+
+    /* do not find U+10402 in a single UChar */
+    if(
+        NULL!=u_memchr32(s+1, supp, 1) ||
+        NULL!=u_strFindFirst(s+1, 1, sub_supp, -1) ||
+        NULL!=u_strFindFirst(s+1, 1, sub_supp, 2) ||
+        NULL!=u_memrchr32(s+1, supp, 1) ||
+        NULL!=u_strFindLast(s+1, 1, sub_supp, -1) ||
+        NULL!=u_strFindLast(s+1, 1, sub_supp, 2) ||
+        NULL!=u_memrchr32(s+2, supp, 1) ||
+        NULL!=u_strFindLast(s+2, 1, sub_supp, -1) ||
+        NULL!=u_strFindLast(s+2, 1, sub_supp, 2)
+    ) {
+        log_err("error: one of the u_str[chr etc](U+10402) incorrectly finds a supplementary c.p. in a single UChar\n");
+    }
+
+    /* do not find U+10403 in s[1..10[ */
+    if(
+        NULL!=u_strchr32(s+1, supp2) ||
+        NULL!=u_memchr32(s+1, supp2, 9) ||
+        NULL!=u_strstr(s+1, sub_supp2) ||
+        NULL!=u_strFindFirst(s+1, -1, sub_supp2, -1) ||
+        NULL!=u_strFindFirst(s+1, -1, sub_supp2, 1) ||
+        NULL!=u_strFindFirst(s+1, 9, sub_supp2, -1) ||
+        NULL!=u_strFindFirst(s+1, 9, sub_supp2, 1) ||
+        NULL!=u_strrchr32(s+1, supp2) ||
+        NULL!=u_memrchr32(s+1, supp2, 9) ||
+        NULL!=u_strrstr(s+1, sub_supp2) ||
+        NULL!=u_strFindLast(s+1, -1, sub_supp2, -1) ||
+        NULL!=u_strFindLast(s+1, -1, sub_supp2, 1) ||
+        NULL!=u_strFindLast(s+1, 9, sub_supp2, -1) ||
+        NULL!=u_strFindLast(s+1, 9, sub_supp2, 1)
+    ) {
+        log_err("error: one of the u_str[chr etc](U+10403) incorrectly finds something\n");
+    }
+
+    /* find <0061 d801> in s[1..10[ */
+    first=s+5;
+    if(
+        first!=u_strstr(s+1, sub_a_lead) ||
+        first!=u_strFindFirst(s+1, -1, sub_a_lead, -1) ||
+        first!=u_strFindFirst(s+1, -1, sub_a_lead, 2) ||
+        first!=u_strFindFirst(s+1, 9, sub_a_lead, -1) ||
+        first!=u_strFindFirst(s+1, 9, sub_a_lead, 2) ||
+        first!=u_strrstr(s+1, sub_a_lead) ||
+        first!=u_strFindLast(s+1, -1, sub_a_lead, -1) ||
+        first!=u_strFindLast(s+1, -1, sub_a_lead, 2) ||
+        first!=u_strFindLast(s+1, 9, sub_a_lead, -1) ||
+        first!=u_strFindLast(s+1, 9, sub_a_lead, 2)
+    ) {
+        log_err("error: one of the u_str[str etc](<0061 d801>) does not find the correct place\n");
+    }
+
+    /* find <dc02 0061> in s[1..10[ */
+    first=s+4;
+    if(
+        first!=u_strstr(s+1, sub_trail_a) ||
+        first!=u_strFindFirst(s+1, -1, sub_trail_a, -1) ||
+        first!=u_strFindFirst(s+1, -1, sub_trail_a, 2) ||
+        first!=u_strFindFirst(s+1, 9, sub_trail_a, -1) ||
+        first!=u_strFindFirst(s+1, 9, sub_trail_a, 2) ||
+        first!=u_strrstr(s+1, sub_trail_a) ||
+        first!=u_strFindLast(s+1, -1, sub_trail_a, -1) ||
+        first!=u_strFindLast(s+1, -1, sub_trail_a, 2) ||
+        first!=u_strFindLast(s+1, 9, sub_trail_a, -1) ||
+        first!=u_strFindLast(s+1, 9, sub_trail_a, 2)
+    ) {
+        log_err("error: one of the u_str[str etc](<dc02 0061>) does not find the correct place\n");
+    }
+
+    /* do not find "aba" in s[1..10[ */
+    if(
+        NULL!=u_strstr(s+1, sub_aba) ||
+        NULL!=u_strFindFirst(s+1, -1, sub_aba, -1) ||
+        NULL!=u_strFindFirst(s+1, -1, sub_aba, 3) ||
+        NULL!=u_strFindFirst(s+1, 9, sub_aba, -1) ||
+        NULL!=u_strFindFirst(s+1, 9, sub_aba, 3) ||
+        NULL!=u_strrstr(s+1, sub_aba) ||
+        NULL!=u_strFindLast(s+1, -1, sub_aba, -1) ||
+        NULL!=u_strFindLast(s+1, -1, sub_aba, 3) ||
+        NULL!=u_strFindLast(s+1, 9, sub_aba, -1) ||
+        NULL!=u_strFindLast(s+1, 9, sub_aba, 3)
+    ) {
+        log_err("error: one of the u_str[str etc](\"aba\") incorrectly finds something\n");
     }
 }
 
