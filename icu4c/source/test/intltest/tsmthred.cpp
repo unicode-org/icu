@@ -8,17 +8,6 @@
 # ifndef _INCLUDE_POSIX_SOURCE
 #  define _INCLUDE_POSIX_SOURCE
 # endif
-# ifndef _INCLUDE_XOPEN_SOURCE
-#  define _INCLUDE_XOPEN_SOURCE
-# endif
-# ifndef _INCLUDE_XOPEN_SOURCE_EXTENDED
-#  define _INCLUDE_XOPEN_SOURCE_EXTENDED
-# endif
-# ifndef _XPG4_EXTENDED
-#  define _XPG4_EXTENDED
-# endif
-# include <sys/newsig.h>
-# include <sys/types.h>
 #endif
 
 #include <unicode/umachine.h>
