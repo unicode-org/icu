@@ -1103,6 +1103,9 @@ void StringSearchTest::TestGetSetOffset()
         pattern.setTo(temp, u_strlen(temp));
         strsrch->setText(text, status);
         strsrch->setPattern(pattern, status);
+        strsrch->getCollator()->setStrength(getECollationStrength(
+                                                          search.strength));
+        strsrch->reset();
 
         int count = 0;
         int32_t matchindex  = search.offset[count];
@@ -1144,6 +1147,8 @@ void StringSearchTest::TestGetSetOffset()
             return;
         }
     }
+    strsrch->getCollator()->setStrength(getECollationStrength(
+                                                             UCOL_TERTIARY));
     delete strsrch;
 }
  
