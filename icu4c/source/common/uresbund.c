@@ -25,8 +25,13 @@ static void entryCloseInt(UResourceDataEntry *resB);
 void entryClose(UResourceDataEntry *resB);
 
 
-/* Static cache for already opened resource bundles - mostly for keeping fallback info */
+/*
+Static cache for already opened resource bundles - mostly for keeping fallback info
+TODO: This cache should probably be removed when the deprecated code is
+      completely removed.
+*/
 static UHashtable *cache = NULL;
+
 static UBool isMutexInited = FALSE;
 static UMTX resbMutex = NULL;
 
