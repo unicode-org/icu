@@ -70,6 +70,11 @@ UMTX Transliterator::cacheMutex = NULL;
 UBool Transliterator::cacheInitialized = FALSE;
 
 /**
+ * Vector of registered IDs.
+ */
+UVector Transliterator::cacheIDs;
+
+/**
  * Prefix for resource bundle key for the display name for a
  * transliterator.  The ID is appended to this to form the key.
  * The resource bundle value should be a String.
@@ -750,6 +755,28 @@ Transliterator* Transliterator::_createInstance(const UnicodeString& ID,
     return 0;
 }
 
+void Transliterator::registerFactory(const UnicodeString& id,
+                                     TransliteratorFactory* factory,
+                                     UErrorCode &status) {
+    if (U_FAILURE(status)) {
+        return;
+    }
+
+    if (!cacheInitialized) {
+        initializeCache();
+    }
+
+    Mutex lock(&cacheMutex);
+    CacheEntry* entry = (CacheEntry*) cache->get(id);
+    if (entry == 0) {
+        cacheIDs.addElement((void*) new UnicodeString(id));
+        entry = new CacheEntry();
+    }
+    entry->setFactory(factory);
+
+    cache->put(id, entry, status);
+}
+
 /**
  * Registers a instance <tt>obj</tt> of a subclass of
  * <code>Transliterator</code> with the system.  This object must
@@ -780,29 +807,21 @@ void Transliterator::registerInstance(Transliterator* adoptedPrototype,
 void Transliterator::_registerInstance(Transliterator* adoptedPrototype,
                                        UErrorCode &status) {
     if (U_FAILURE(status)) {
+        delete adoptedPrototype;
         return;
     }
 
-    /*int32_t hashCode = hash(adoptedPrototype->getID());*/
+    const UnicodeString& id = adoptedPrototype->getID();
 
-    // This needs explaining: The string reference that getID returns
-    // is to the ID data member of Transliterator.  As long as the
-    // Transliterator object exists, this reference is valid, and in
-    // fact we can take its address and store it in IDS.  No problem
-    // there.  The only thing we have to be sure of is that before we
-    // remove the prototype (via unregister()), we remove the ID
-    // entry.
-    cacheIDs.addElement((void*) &adoptedPrototype->getID());
-
-    CacheEntry* entry = (CacheEntry*) cache->get(adoptedPrototype->getID());
+    CacheEntry* entry = (CacheEntry*) cache->get(id);
     if (entry == 0) {
+        cacheIDs.addElement((void*) new UnicodeString(id));
         entry = new CacheEntry();
     }
 
     entry->adoptPrototype(adoptedPrototype);
 
-    //uhash_putKey(cache, hashCode, entry, &status);
-    cache->put(adoptedPrototype->getID(), entry, status);
+    cache->put(id, entry, status);
 }
 
 /**
@@ -811,6 +830,7 @@ void Transliterator::_registerInstance(Transliterator* adoptedPrototype,
  * 
  * @param ID the ID of the transliterator or class
  * @see #registerInstance
+
  */
 void Transliterator::unregister(const UnicodeString& ID) {
     if (!cacheInitialized) {
@@ -827,18 +847,12 @@ void Transliterator::unregister(const UnicodeString& ID) {
  */
 void Transliterator::_unregister(const UnicodeString& ID) {
     cacheIDs.removeElement((void*) &ID);
-    //int32_t hc = hash(ID);
     CacheEntry* entry = (CacheEntry*) cache->get(ID);
     if (entry != 0) {
         cache->remove(ID);
         delete entry;
     }
 }
-
-/**
- * Vector of registered IDs.
- */
-UVector Transliterator::cacheIDs;
 
 /**
  * Return the number of IDs currently registered with the system.
@@ -880,16 +894,6 @@ UChar Transliterator::filteredCharAt(const Replaceable& text, int32_t i) const {
         (localFilter->contains(c = text.charAt(i)) ? c : (UChar)0xFFFE);
 }
 
-/**
- * Comparison function for UVector.  Compares two UnicodeString
- * objects given void* pointers to them.
- */
-UBool Transliterator::compareIDs(void* a, void* b) {
-    const UnicodeString* aa = (const UnicodeString*) a;
-    const UnicodeString* bb = (const UnicodeString*) b;
-    return *aa == *bb;
-}
-
 void Transliterator::initializeCache(void) {
     // Lock first, check init boolean second
     Mutex lock(&cacheMutex);
@@ -902,7 +906,8 @@ void Transliterator::initializeCache(void) {
     // Before looking for the resource, construct our cache.
     // That way if the resource is absent, we will at least
     // have a valid cache object.
-    cacheIDs.setComparer(compareIDs);
+    cacheIDs.setDeleter(uhash_deleteUnicodeString);
+    cacheIDs.setComparer(uhash_compareCaselessUnicodeString);
 
     /* The following code parses the index table located in
      * icu/data/translit_index.txt.  The index is an n x 4 table
@@ -1012,4 +1017,12 @@ void Transliterator::CacheEntry::adoptPrototype(Transliterator* adopted) {
     }
     entryType = PROTOTYPE;
     u.prototype = adopted;
+}
+
+void Transliterator::CacheEntry::setFactory(TransliteratorFactory* factory) {
+    if (entryType == PROTOTYPE) {
+        delete u.prototype;
+    }
+    entryType = FACTORY;
+    u.factory = factory;
 }
