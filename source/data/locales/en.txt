@@ -1484,19 +1484,19 @@ en {
         // variants for collation (traditional may also be used for traditional chinese)
         collation{
             phonebook   { "Phonebook Order" }
-            pinyin      { "Pinyin Order"    }
-            traditional { "Traditional"     }
-            stroke      { "Stroke Order"    }
-            direct      { "Direct Order"    }
+            pinyin      { "Pinyin Order" }
+            traditional { "Traditional" }
+            stroke      { "Stroke Order" }
+            direct      { "Direct Order" }
         }
         calendar{
             //traditional   { "Traditional Calendar" }
-            japanese      { "Japanese Calendar"  }
-            buddhist      { "Buddhist Calendar"  }
-            islamic       { "Islamic Calendar"   }
+            japanese      { "Japanese Calendar" }
+            buddhist      { "Buddhist Calendar" }
+            islamic       { "Islamic Calendar" }
             islamic-civil { "Islamic-Civil Calendar" }
-            hebrew        { "Hebrew Calendar"    }
-            chinese       { "Chinese Calendar"   }
+            hebrew        { "Hebrew Calendar" }
+            chinese       { "Chinese Calendar" }
             gregorian     { "Gregorian Calendar" }
         }
 
