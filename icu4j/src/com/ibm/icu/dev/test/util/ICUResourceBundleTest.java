@@ -640,9 +640,17 @@ public final class ICUResourceBundleTest extends TestFmwk {
                errln(new Integer(i/3).toString() + ":  Error, expected  Equiv=" + new Boolean(expectAvail).toString() + "\t\t" + 
                        inLocale.toString() + "\t\t--> " + expectLocale.toString() + ",  but got " + new Boolean(gotAvail).toString() + " " +
                        equivLocale.toString());
-           } else {
            }
        }      
+       
+       logln("Testing error conditions:");
+       try {
+           ULocale equivLocale = ICUResourceBundle.getFunctionalEquivalent(UResourceBundle.ICU_COLLATION_BASE_NAME, "calendar",
+              "calendar", new ULocale("ar_EG@calendar=islamic"), new boolean[1]);
+           errln("Err: expected MissingResourceException");
+       } catch ( MissingResourceException t ) {
+           logln("expected MissingResourceException caught (PASS): " + t.toString());
+       }
     }
 }
 
