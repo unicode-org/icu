@@ -6,8 +6,8 @@
 *
 * $Source: 
 *         /usr/cvs/icu4j/icu4j/src/com/ibm/icu/text/UCharacterPropertyDB.java $ 
-* $Date: 2003/06/09 23:15:00 $ 
-* $Revision: 1.31 $
+* $Date: 2003/07/17 21:13:23 $ 
+* $Revision: 1.32 $
 *
 *******************************************************************************
 */
@@ -1211,9 +1211,8 @@ public final class UCharacterProperty implements Trie.DataManipulate
     {
         // "white space" in the sense of ICU rule parsers: Cf+White_Space
         UCharacterProperty property = UCharacterProperty.getInstance();
-        return (property.getProperty(c) & TYPE_MASK) 
-                                                   == UCharacterCategory.FORMAT 
-               || property.hasBinaryProperty(c, UProperty.WHITE_SPACE);
+        return property.hasBinaryProperty(c, UProperty.WHITE_SPACE) 
+               || c == LEFT_RIGHT_MARK_ || c == RIGHT_LEFT_MARK_;
     }
 
     /**
@@ -1992,6 +1991,8 @@ public final class UCharacterProperty implements Trie.DataManipulate
 	private static final int FIGURESP= 0x2007;
 	private static final int HAIRSP  = 0x200a;
 	private static final int ZWNJ    = 0x200c;
+    private static final int LEFT_RIGHT_MARK_ = 0x200E;
+    private static final int RIGHT_LEFT_MARK_ = 0x200F;
 	private static final int ZWJ     = 0x200d;
 	private static final int RLM     = 0x200f;
 	private static final int NNBSP   = 0x202f;
