@@ -731,6 +731,12 @@ void readHeaderFromFile(UConverterSharedData* mySharedData,
     } else if(staticData->conversionType==UCNV_MBCS && mySharedData->table==NULL) {
         fprintf(stderr, "error: missing state table information (<icu:state>) for MBCS\n");
         *pErrorCode=U_INVALID_TABLE_FORMAT;
+    } else if(staticData->subChar1!=0 &&
+              !staticData->conversionType==UCNV_MBCS &&
+              !staticData->conversionType==UCNV_EBCDIC_STATEFUL
+    ) {
+        fprintf(stderr, "error: <subchar1> defined for a type other than MBCS or EBCDIC_STATEFUL\n");
+        *pErrorCode=U_INVALID_TABLE_FORMAT;
     }
 }
 
