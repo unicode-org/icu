@@ -69,8 +69,9 @@ PATH = $(PATH);$(ICUP)\bin
 # Suffixes for data files
 .SUFFIXES : .ucm .cnv .dll .dat .res .txt .c
 
-# We're including a list of ucm files. There are two lists, one is essential 'ucmfiles.mk' and
-# the other is optional 'ucmlocal.mk'
+# We're including a list of resource files.
+FILESEPCHAR=\
+
 !IF EXISTS("$(RESFILES)")
 !INCLUDE "$(RESFILES)"
 !ELSE
