@@ -88,7 +88,7 @@ generateData(const char *dataDir);
 
 /* props2.c */
 U_CFUNC void
-initAdditionalProperties();
+initAdditionalProperties(void);
 
 U_CFUNC void
 setMainProperties(uint32_t start, uint32_t limit, uint32_t value);
