@@ -55,6 +55,7 @@ private:
     void     flagAcceptingStates();
     void     flagLookAheadStates();
     void     flagTaggedStates();
+    void     mergeRuleStatusVals();
 
     // Set functions for UVector.
     //   TODO:  make a USet subclass of UVector
@@ -62,14 +63,19 @@ private:
     void     setAdd(UVector *dest, UVector *source);
     UBool    setEquals(UVector *a, UVector *b);
 
+    void     sortedAdd(UVector **dest, int32_t val);
+
+public:
 #ifdef RBBI_DEBUG
     void     printSet(UVector *s);
     void     printPosSets(RBBINode *n /* = NULL*/);
     void     printStates();
+    void     printRuleStatusTable();
 #else
     #define  printSet(s)
     #define  printPosSets(n)
     #define  printStates()
+    #define  printRuleStatusTable()
 #endif
 
 private:
@@ -95,7 +101,8 @@ public:
     UBool            fMarked;
     int32_t          fAccepting;
     int32_t          fLookAhead;
-    int32_t          fTagVal;
+    UVector          *fTagVals;
+    int32_t          fTagsIdx;
     UVector          *fPositions;          // Set of parse tree positions associated
                                            //   with this state.  Unordered (it's a set).
                                            //   UVector contents are RBBINode *

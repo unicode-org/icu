@@ -104,6 +104,10 @@ void RBBIDataWrapper::init(const RBBIDataHeader *data, UErrorCode &status) {
 
     fRuleSource   = (UChar *)((char *)data + fHeader->fRuleSource);
     fRuleString.setTo(TRUE, fRuleSource, -1);
+    U_ASSERT(data->fRuleSourceLen > 0);
+
+    fRuleStatusTable = (int32_t *)((char *)data + fHeader->fStatusTable);
+    fStatusMaxIdx    = data->fStatusTableLen / sizeof(int32_t);
 
     fRefCount = 1;
 
@@ -116,7 +120,7 @@ void RBBIDataWrapper::init(const RBBIDataHeader *data, UErrorCode &status) {
 
 //-----------------------------------------------------------------------------
 //
-//    Destructor.     Don't call this - use removeReferenc() instead.
+//    Destructor.     Don't call this - use removeReference() instead.
 //
 //-----------------------------------------------------------------------------
 RBBIDataWrapper::~RBBIDataWrapper() {
@@ -202,7 +206,7 @@ void  RBBIDataWrapper::printTable(const char *heading, const RBBIStateTable *tab
 
     RBBIDebugPrintf("   %s\n", heading);
 
-    RBBIDebugPrintf("State |  Acc  LA   Tag");
+    RBBIDebugPrintf("State |  Acc  LA TagIx");
     for (c=0; c<fHeader->fCatCount; c++) {RBBIDebugPrintf("%3d ", c);}
     RBBIDebugPrintf("\n------|---------------"); for (c=0;c<fHeader->fCatCount; c++) {
         RBBIDebugPrintf("----");
@@ -216,7 +220,7 @@ void  RBBIDataWrapper::printTable(const char *heading, const RBBIStateTable *tab
     for (s=0; s<table->fNumStates; s++) {
         RBBIStateTableRow *row = (RBBIStateTableRow *)
                                   (table->fTableData + (table->fRowLen * s));
-        RBBIDebugPrintf("%4d  |  %3d %3d %3d ", s, row->fAccepting, row->fLookAhead, row->fTag);
+        RBBIDebugPrintf("%4d  |  %3d %3d %3d ", s, row->fAccepting, row->fLookAhead, row->fTagIdx);
         for (c=0; c<fHeader->fCatCount; c++)  {
             RBBIDebugPrintf("%3d ", row->fNextState[c]);
         }
@@ -246,6 +250,7 @@ void  RBBIDataWrapper::printData() {
     RBBIDebugPrintf("\n\n");
 }
 #endif
+
 
 U_NAMESPACE_END
 
@@ -402,6 +407,10 @@ ubrk_swap(const UDataSwapper *ds, const void *inData, int32_t length, void *outD
     // Source Rules Text.  It's UChar data
     ds->swapArray16(ds, inBytes+ds->readUInt32(rbbiDH->fRuleSource), ds->readUInt32(rbbiDH->fRuleSourceLen),
                         outBytes+ds->readUInt32(rbbiDH->fRuleSource), status);
+
+    // Table of rule status values.  It's all int_32 values
+    ds->swapArray32(ds, inBytes+ds->readUInt32(rbbiDH->fStatusTable), ds->readUInt32(rbbiDH->fStatusTableLen),
+                        outBytes+ds->readUInt32(rbbiDH->fStatusTable), status);
 
     // And, last, the header.  All 32 bit values.
     ds->swapArray32(ds, inBytes,  sizeof(RBBIDataHeader), outBytes, status);
