@@ -14,7 +14,6 @@
 #include "unicode/utypes.h"
 #include "unicode/unistr.h"
 #include "unicode/uchar.h"
-#include "unicode/uset.h"
 
 U_NAMESPACE_BEGIN
 
@@ -27,6 +26,34 @@ class TransliteratorParser;
 class UVector;
 class CaseEquivClass;
 
+/**
+ * Bitmask values to be passed to the UnicodeSet constructor or
+ * applyPattern() taking an option parameter.
+ * @internal
+ */
+enum {
+    /**
+     * Ignore white space within patterns unless quoted or escaped.
+     * @internal
+     */
+    USET_IGNORE_SPACE = 1,  
+
+    /**
+     * Enable case insensitive matching.  E.g., "[ab]" with this flag
+     * will match 'a', 'A', 'b', and 'B'.  "[^ab]" with this flag will
+     * match all except 'a', 'A', 'b', and 'B'.
+     * @internal
+     */
+    USET_CASE_INSENSITIVE = 2,  
+
+    /**
+     * Bitmask for UnicodeSet::closeOver() indicating letter case.
+     * This may be ORed together with other selectors.
+     * @internal
+     */
+    USET_CASE = 2
+};
+    
 /**
  * A mutable set of Unicode characters and multicharacter strings.  Objects of this class
  * represent <em>character classes</em> used in regular expressions.
@@ -327,6 +354,18 @@ public:
                UErrorCode& status);
 
     /**
+     * Constructs a set from the given pattern.  See the class
+     * description for the syntax of the pattern language.
+     * @param pattern a string specifying what characters are in the set
+     * @param options bitmask for options to apply to the pattern.
+     * Valid options are USET_IGNORE_SPACE and USET_CASE_INSENSITIVE.
+     * @internal
+     */
+    UnicodeSet(const UnicodeString& pattern,
+               uint32_t options,
+               UErrorCode& status);
+
+    /**
      * Obsolete: Constructs a set from the given Unicode character category.
      * @param category an integer indicating the character category as
      * defined in uchar.h.
@@ -423,6 +462,19 @@ public:
      */
     virtual UnicodeSet& applyPattern(const UnicodeString& pattern,
                                      UErrorCode& status);
+
+    /**
+     * Modifies this set to represent the set specified by the given
+     * pattern, optionally ignoring white space.  See the class
+     * description for the syntax of the pattern language.
+     * @param pattern a string specifying what characters are in the set
+     * @param options bitmask for options to apply to the pattern.
+     * Valid options are USET_IGNORE_SPACE and USET_CASE_INSENSITIVE.
+     * @internal
+     */
+    UnicodeSet& applyPattern(const UnicodeString& pattern,
+                             uint32_t options,
+                             UErrorCode& status);
 
     /**
      * Returns a string representation of this set.  If the result of
@@ -962,7 +1014,7 @@ public:
      * Currently only the USET_CASE bit is supported.  Any undefined bits
      * are ignored.
      * @return a reference to this set.
-     * @draft ICU 2.6
+     * @internal
      */
     UnicodeSet& closeOver(int32_t attribute);
 
@@ -1168,6 +1220,7 @@ private:
      */
     void applyPattern(const UnicodeString& pattern,
                       ParsePosition& pos,
+                      uint32_t options,
                       const SymbolTable* symbols,
                       UErrorCode& status);
 
@@ -1185,6 +1238,7 @@ private:
 
     void _applyPattern(const UnicodeString& pattern,
                        ParsePosition& pos,
+                       uint32_t options,
                        const SymbolTable* symbols,
                        UnicodeString& rebuiltPat,
                        UErrorCode& status);

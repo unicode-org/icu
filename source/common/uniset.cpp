@@ -244,7 +244,34 @@ UnicodeSet::UnicodeSet(const UnicodeString& pattern,
             status = U_MEMORY_ALLOCATION_ERROR;  
         }else{
             allocateStrings();
-            applyPattern(pattern, status);
+            applyPattern(pattern, 0, status);
+        }
+    }
+    _dbgct(this);
+}
+
+/**
+ * Constructs a set from the given pattern, optionally ignoring
+ * white space.  See the class description for the syntax of the
+ * pattern language.
+ * @param pattern a string specifying what characters are in the set
+ * @param options bitmask for options to apply to the pattern.
+ * Valid options are USET_IGNORE_SPACE and USET_CASE_INSENSITIVE.
+ */
+UnicodeSet::UnicodeSet(const UnicodeString& pattern,
+                       uint32_t options,
+                       UErrorCode& status) :
+    len(0), capacity(START_EXTRA), bufferCapacity(0),
+    list(0), buffer(0), strings(0)
+{   
+    if(U_SUCCESS(status)){
+        list = (UChar32*) uprv_malloc(sizeof(UChar32) * capacity);
+        /* test for NULL */
+        if(list == NULL) {
+            status = U_MEMORY_ALLOCATION_ERROR;  
+        }else{
+            allocateStrings();
+            applyPattern(pattern, options, status);
         }
     }
     _dbgct(this);
@@ -264,7 +291,7 @@ UnicodeSet::UnicodeSet(const UnicodeString& pattern, ParsePosition& pos,
             status = U_MEMORY_ALLOCATION_ERROR;   
         }else{
             allocateStrings();
-            applyPattern(pattern, pos, &symbols, status);
+            applyPattern(pattern, pos, 0, &symbols, status);
         }
     }
     _dbgct(this);
@@ -283,7 +310,7 @@ UnicodeSet::UnicodeSet(const UnicodeString& pattern, ParsePosition& pos,
             status = U_MEMORY_ALLOCATION_ERROR; 
         }else{
             allocateStrings();
-            applyPattern(pattern, pos, NULL, status);
+            applyPattern(pattern, pos, 0, NULL, status);
         }
     }
     _dbgct(this);
@@ -439,19 +466,36 @@ UnicodeSet& UnicodeSet::set(UChar32 start, UChar32 end) {
  */
 UnicodeSet& UnicodeSet::applyPattern(const UnicodeString& pattern,
                                      UErrorCode& status) {
+    return applyPattern(pattern, 0, status);
+}
+
+/**
+ * Modifies this set to represent the set specified by the given
+ * pattern, optionally ignoring white space.  See the class
+ * description for the syntax of the pattern language.
+ * @param pattern a string specifying what characters are in the set
+ * @param options bitmask for options to apply to the pattern.
+ * Valid options are USET_IGNORE_SPACE and USET_CASE_INSENSITIVE.
+ */
+UnicodeSet& UnicodeSet::applyPattern(const UnicodeString& pattern,
+                                     uint32_t options,
+                                     UErrorCode& status) {
     if (U_FAILURE(status)) {
         return *this;
     }
 
     ParsePosition pos(0);
-    applyPattern(pattern, pos, NULL, status);
+    applyPattern(pattern, pos, options, NULL, status);
     if (U_FAILURE(status)) return *this;
 
-    // Skip over trailing whitespace
     int32_t i = pos.getIndex();
     int32_t n = pattern.length();
-    while (i<n && uprv_isRuleWhiteSpace(pattern.charAt(i))) {
-        ++i;
+
+    if (options & USET_IGNORE_SPACE) {
+        // Skip over trailing whitespace
+        while (i<n && uprv_isRuleWhiteSpace(pattern.charAt(i))) {
+            ++i;
+        }
     }
 
     if (i != n) {
@@ -1743,6 +1787,7 @@ int32_t UnicodeSet::serialize(uint16_t *dest, int32_t destCapacity, UErrorCode& 
  */
 void UnicodeSet::applyPattern(const UnicodeString& pattern,
                               ParsePosition& pos,
+                              uint32_t options,
                               const SymbolTable* symbols,
                               UErrorCode& status) {
     if (U_FAILURE(status)) {
@@ -1752,12 +1797,13 @@ void UnicodeSet::applyPattern(const UnicodeString& pattern,
     // Need to build the pattern in a temporary string because
     // _applyPattern calls add() etc., which set pat to empty.
     UnicodeString rebuiltPat;
-    _applyPattern(pattern, pos, symbols, rebuiltPat, status);
+    _applyPattern(pattern, pos, options, symbols, rebuiltPat, status);
     pat = rebuiltPat;
 }
 
 void UnicodeSet::_applyPattern(const UnicodeString& pattern,
                                ParsePosition& pos,
+                               uint32_t options,
                                const SymbolTable* symbols,
                                UnicodeString& rebuiltPat,
                                UErrorCode& status) {
@@ -1851,7 +1897,7 @@ void UnicodeSet::_applyPattern(const UnicodeString& pattern,
             i += UTF_CHAR_LENGTH(c);
         }
 
-        if (uprv_isRuleWhiteSpace(c)) {
+        if ((options & USET_IGNORE_SPACE) && uprv_isRuleWhiteSpace(c)) {
             continue;
         }
 
@@ -2001,7 +2047,7 @@ void UnicodeSet::_applyPattern(const UnicodeString& pattern,
                     newPat.append(lastOp);
                     break;
                 }
-                nestedAux._applyPattern(pattern, pos, symbols, newPat, status);
+                nestedAux._applyPattern(pattern, pos, options, symbols, newPat, status);
                 nestedSet = &nestedAux;
                 nestedPatDone =  TRUE;
                 if (U_FAILURE(status)) {
@@ -2181,6 +2227,15 @@ void UnicodeSet::_applyPattern(const UnicodeString& pattern,
 
     if (mode == 4) {
         newPat.append(SET_CLOSE);
+    }
+
+    /**
+     * If this pattern should be compiled case-insensitive, then
+     * we need to close over case BEFORE complementing.  This
+     * makes patterns like /[^abc]/i work.
+     */
+    if ((options & USET_CASE_INSENSITIVE) != 0) {
+        closeOver(USET_CASE);
     }
 
     /**
