@@ -648,6 +648,12 @@ public:
         pos = 0;
     }
 
+public:
+	virtual UClassID getDynamicClassID(void) const { return getStaticClassID(); }
+	static UClassID getStaticClassID(void) { return (UClassID)&fgClassID; }
+private:
+	static const char fgClassID;
+
 private:
     /**
      * Guarantee that _bufp is allocated to include _buflen characters
@@ -664,6 +670,8 @@ private:
         return _bufp != NULL;
     }
 };
+
+const char TZEnumeration::fgClassID = '\0';
 
 StringEnumeration*
 TimeZone::createEnumeration() {
