@@ -181,21 +181,6 @@ const UChar CollationDanishTest::testNTList[][CollationDanishTest::MAX_TOKEN_LEN
     {0x00e4, (UChar)0x006E /* 'n' */, (UChar)0x0064 /* 'd' */, (UChar)0x0065 /* 'e' */, (UChar)0x0072 /* 'r' */, (UChar)0x0065 /* 'e' */, (UChar)0x0000 /* '\0' */}                  
 };
 
-void CollationDanishTest::doTest( UnicodeString source, UnicodeString target, Collator::EComparisonResult result)
-{
-    Collator::EComparisonResult compareResult = myCollation->compare(source, target);
-    CollationKey sortKey1, sortKey2;
-    UErrorCode key1status = U_ZERO_ERROR, key2status = U_ZERO_ERROR; //nos
-    myCollation->getCollationKey(source, /*nos*/ sortKey1, key1status );
-    myCollation->getCollationKey(target, /*nos*/ sortKey2, key2status );
-    if (U_FAILURE(key1status) || U_FAILURE(key2status)) {
-        errln("SortKey generation Failed.\n");
-        return;
-    }
-    Collator::EComparisonResult keyResult = sortKey1.compareTo(sortKey2);
-    reportCResult( source, target, sortKey1, sortKey2, compareResult, keyResult, compareResult, result );
-}
-
 void CollationDanishTest::TestTertiary(/* char* par */)
 {
     int32_t i = 0;
@@ -207,19 +192,19 @@ void CollationDanishTest::TestTertiary(/* char* par */)
       return;
     }
     for (i = 0; i < 5 ; i++) {
-        doTest(testSourceCases[i], testTargetCases[i], results[i]);
+        doTest(myCollation, testSourceCases[i], testTargetCases[i], results[i]);
     }
     int32_t j = 0;
     logln("Test internet data list : ");
     for (i = 0; i < 53; i++) {
         for (j = i+1; j < 54; j++) {
-            doTest(testBugs[i], testBugs[j], Collator::LESS);
+            doTest(myCollation, testBugs[i], testBugs[j], Collator::LESS);
         }
     }
     logln("Test NT data list : ");
     for (i = 0; i < 52; i++) {
         for (j = i+1; j < 53; j++) {
-            doTest(testNTList[i], testNTList[j], Collator::LESS);
+            doTest(myCollation, testNTList[i], testNTList[j], Collator::LESS);
         }
     }
 }
@@ -229,7 +214,7 @@ void CollationDanishTest::TestPrimary(/* char* par */)
     int32_t i;
     myCollation->setStrength(Collator::PRIMARY);
     for (i = 5; i < 8; i++) {
-        doTest(testSourceCases[i], testTargetCases[i], results[i]);
+        doTest(myCollation, testSourceCases[i], testTargetCases[i], results[i]);
     }
 }
 
