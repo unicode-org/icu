@@ -15,7 +15,7 @@
 #include "unicode/unistr.h"
 
 class ParsePosition;
-class TransliterationRuleData;
+class SymbolTable;
 class TransliterationRuleParser;
 class TransliterationRule;
 
@@ -557,7 +557,7 @@ private:
      * contains a syntax error.
      */
     UnicodeSet(const UnicodeString& pattern, ParsePosition& pos,
-               const TransliterationRuleData* data,
+               const SymbolTable& symbols,
                UErrorCode& status);
 
     /**
@@ -600,7 +600,7 @@ private:
     static UnicodeString& parse(UnicodeString& pairsBuf /*result*/,
                                 const UnicodeString& pattern,
                                 ParsePosition& pos,
-                                const TransliterationRuleData* data,
+                                const SymbolTable* symbols,
                                 UErrorCode& status);
 
     //----------------------------------------------------------------
