@@ -33,7 +33,7 @@ public class TestUScript extends TestFmwk {
         new ULocale("he"), new ULocale("ar"),
         new ULocale("abcde"),
         new ULocale("abcde_cdef"),
-        //new ULocale(ULocale.canonicalize("iw"))
+        new ULocale("iw")
         };
         final int[] expected ={
                 /* locales should return */
@@ -42,7 +42,7 @@ public class TestUScript extends TestFmwk {
                 UScript.TELUGU,UScript.DEVANAGARI,
                 UScript.HEBREW, UScript.ARABIC,
                 UScript.INVALID_CODE,UScript.INVALID_CODE,
-                //UScript.HEBREW
+                UScript.HEBREW
         };
         int i =0;
         int numErrors =0;
@@ -64,6 +64,16 @@ public class TestUScript extends TestFmwk {
             }
         }
         reportDataErrors(numErrors);
+        
+        // 
+        ULocale defaultLoc = ULocale.getDefault(); 
+        ULocale esparanto = new ULocale("eo_DE");
+        ULocale.setDefault(esparanto);
+        int[] code = UScript.getCode(esparanto); 
+        if(code[0] != UScript.LATIN){
+            errln("Did not get the expected script code for Esparanto");
+        }
+        ULocale.setDefault(defaultLoc);
     }
 
     private void reportDataErrors(int numErrors) {

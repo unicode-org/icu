@@ -351,6 +351,9 @@ public abstract class UResourceBundle extends ResourceBundle{
     }
     
     private static final ResourceCacheKey cacheKey = new ResourceCacheKey();
+    
+
+                             
     /**
      * Loads a new resource bundle for the give base name, locale and class loader.
      * Optionally will disable loading of fallback bundles.
@@ -392,6 +395,9 @@ public abstract class UResourceBundle extends ResourceBundle{
         }
         return b;
     }
+    
+    protected abstract void setLoadingStatus(int newStatus);
+    
     /**
      * Creates a new ICUResourceBundle for the given locale, baseName and class loader
      * @param baseName the base name of the resource bundle, a fully qualified class name
@@ -428,11 +434,20 @@ public abstract class UResourceBundle extends ResourceBundle{
                 int i = localeName.lastIndexOf('_');
                 if (i != -1) {
                     b = instantiateICUResource(baseName, localeName.substring(0, i), root);
+                    if(b!=null && b.getULocale().equals(localeName)){
+                        b.setLoadingStatus(ICUResourceBundle.FROM_FALLBACK);
+                    }
                 }else{
                     if(defaultID.indexOf(localeName)==-1){
-                        b = instantiateICUResource(baseName, defaultID, root);   
+                        b = instantiateICUResource(baseName, defaultID, root);
+                        if(b!=null){
+                            b.setLoadingStatus(ICUResourceBundle.FROM_DEFAULT);
+                        }
                     }else if(rootLocale.length()!=0){
-                        b = ICUResourceBundle.createBundle(baseName, rootLocale, root);
+                        b = ICUResourceBundle.createBundle(baseName, rootLocale, root); 
+                        if(b!=null){
+                            b.setLoadingStatus(ICUResourceBundle.FROM_ROOT);
+                        }
                     }
                 }
             }else{

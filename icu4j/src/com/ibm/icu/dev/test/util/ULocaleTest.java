@@ -778,7 +778,7 @@ public class ULocaleTest extends TestFmwk {
             { "uz-UZ-Cyrl", "uz_UZ_CYRL", "uz_Cyrl_UZ" }, /* .NET name */
             { "uz-UZ-Latn", "uz_UZ_LATN", "uz_Latn_UZ" }, /* .NET name */
             { "zh-CHS", "zh_CHS", "zh_Hans" }, /* .NET name */
-            { "zh-CHT", "zh_CHT", "zh_TW" }, /* .NET name This may change back to zh_Hant */
+            { "zh-CHT", "zh_CHT", "zh_Hant" }, /* .NET name This may change back to zh_Hant */
 
             /* posix behavior that used to be performed by getName */
             { "mr.utf8", null, "mr" },

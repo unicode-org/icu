@@ -145,6 +145,18 @@ public abstract class ICUResourceBundle extends UResourceBundle{
      */
     public static final int INT_VECTOR=14;
     
+    public static final int FROM_FALLBACK =1,
+                            FROM_ROOT = 2,
+                            FROM_DEFAULT = 3;
+
+    private int loadingStatus = -1;
+    
+    public void setLoadingStatus(int newStatus){
+        loadingStatus = newStatus;
+    }
+    public int getLoadingStatus(){
+        return loadingStatus;
+    }
     /**
      * Return the version number associated with this UResourceBundle as an 
      * VersionInfo object.
