@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCA/WriteCharts.java,v $
-* $Date: 2004/02/07 01:01:12 $
-* $Revision: 1.19 $
+* $Date: 2004/02/12 08:23:19 $
+* $Revision: 1.20 $
 *
 *******************************************************************************
 */
@@ -1033,19 +1033,28 @@ public class WriteCharts implements UCD_Types {
         int[] starts = new int[names.length];
         int[] ends = new int[names.length];
         
-        UCD.BlockData blockData = new UCD.BlockData();
+        Iterator blockIterator = Default.ucd().getBlockNames().iterator();
+
+        //UCD.BlockData blockData = new UCD.BlockData();
         
         int counter = 0;
-        int blockId = 0;
-        while (Default.ucd().getBlockData(blockId++, blockData)) {
-            names[counter] = blockData.name;
-            starts[counter] = blockData.start;
-            ends[counter] = blockData.end;
+        String currentName;
+        //int blockId = 0;
+        while (blockIterator.hasNext()) {
+        //while (Default.ucd().getBlockData(blockId++, blockData)) {
+            names[counter] = currentName = (String) blockIterator.next();
+            if (currentName.equals("No_Block")) continue;
+            UnicodeSet s = Default.ucd().getBlockSet(currentName, null);
+            if (s.getRangeCount() != 1) {
+                throw new IllegalArgumentException("Failure with block set: " + currentName);
+            } 
+            starts[counter] = s.getRangeStart(0);
+            ends[counter] = s.getRangeEnd(0);
             //System.out.println(names[counter] + ", " + values[counter]);
             ++counter;
                 
             // HACK
-            if (blockData.name.equals("Tags")) {
+            if (currentName.equals("Tags")) {
                 names[counter] = "<i>reserved default ignorable</i>";
                 starts[counter] = 0xE0080;
                 ends[counter] = 0xE0FFF;

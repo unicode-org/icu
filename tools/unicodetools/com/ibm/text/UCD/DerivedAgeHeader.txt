@@ -1,0 +1,16 @@
+#
+# Unicode Character Database: Derived Property Data
+# This file shows when various code points were designated in Unicode
+# Notes:
+# - The term 'designated' means that a previously reserved code point was specified
+#   to be a noncharacter or surrogate, or assigned as a character,
+#   control or format code.
+# - Versions are only tracked from 1.1 onwards, since version 1.0
+#   predated changes required by the ISO 10646 merger.
+# - The Hangul Syllables that were removed from 2.0 are not included in the 1.1 listing.
+# - The supplementary private use code points and the non-character code points
+#   were designated in version 2.0, but not specifically listed in the UCD
+#   until versions 3.0 and 3.1 respectively.
+#
+# For details on the contents of each version, see
+#   http://www.unicode.org/versions/enumeratedversions.html.

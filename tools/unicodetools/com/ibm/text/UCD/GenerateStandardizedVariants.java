@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/GenerateStandardizedVariants.java,v $
-* $Date: 2004/02/07 01:01:14 $
-* $Revision: 1.4 $
+* $Date: 2004/02/12 08:23:15 $
+* $Revision: 1.5 $
 *
 *******************************************************************************
 */
@@ -97,10 +97,10 @@ public final class GenerateStandardizedVariants implements UCD_Types {
         // now write out the results
         
         String directory = "DerivedData/";
-        String filename = directory + "StandardizedVariants" + GenerateData.getHTMLFileSuffix(true);
+        String filename = directory + "StandardizedVariants" + UnicodeDataFile.getHTMLFileSuffix(true);
         PrintWriter out = Utility.openPrintWriter(filename, Utility.LATIN1_UNIX);
         String[] batName = {""};
-        String mostRecent = GenerateData.generateBat(directory, filename, GenerateData.getFileSuffix(true), batName);
+        String mostRecent = UnicodeDataFile.generateBat(directory, filename, UnicodeDataFile.getFileSuffix(true), batName);
         
         String version = Default.ucd().getVersion();
         int lastDot = version.lastIndexOf('.');

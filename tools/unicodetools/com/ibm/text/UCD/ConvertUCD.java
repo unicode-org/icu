@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/ConvertUCD.java,v $
-* $Date: 2004/02/06 18:30:23 $
-* $Revision: 1.13 $
+* $Date: 2004/02/12 08:23:17 $
+* $Revision: 1.14 $
 *
 *******************************************************************************
 */
@@ -834,9 +834,9 @@ public final class ConvertUCD implements UCD_Types {
                 //UCD_Names.BP_OLD
 
             } else if (fieldName.equals("gc")) {
-                uData.generalCategory = Utility.lookup(fieldValue, UCD_Names.GC, true);
+                uData.generalCategory = Utility.lookup(fieldValue, UCD_Names.GENERAL_CATEGORY, true);
             } else if (fieldName.equals("bc")) {
-                uData.bidiClass = Utility.lookup(fieldValue, UCD_Names.BC, true);
+                uData.bidiClass = Utility.lookup(fieldValue, UCD_Names.BIDI_CLASS, true);
             } else if (fieldName.equals("dt")) {
                 if (major < 2) {
                     if (fieldValue.equals("no-break")) fieldValue = "noBreak";
@@ -847,17 +847,17 @@ public final class ConvertUCD implements UCD_Types {
                     else if (fieldValue.equals("no-join")) fieldValue = "compat";
                     else if (fieldValue.equals("join")) fieldValue = "compat";
                 }
-                uData.decompositionType = Utility.lookup(fieldValue, UCD_Names.DT, true);
+                uData.decompositionType = Utility.lookup(fieldValue, UCD_Names.LONG_DECOMPOSITION_TYPE, true);
             } else if (fieldName.equals("nt")) {
-                uData.numericType = Utility.lookup(fieldValue, UCD_Names.NT, true);
+                uData.numericType = Utility.lookup(fieldValue, UCD_Names.LONG_NUMERIC_TYPE, true);
 
             } else if (fieldName.equals("ea")) {
-                uData.eastAsianWidth = Utility.lookup(fieldValue, UCD_Names.SHORT_EA, true);
+                uData.eastAsianWidth = Utility.lookup(fieldValue, UCD_Names.EAST_ASIAN_WIDTH, true);
             } else if (fieldName.equals("lb")) {
-                uData.lineBreak = Utility.lookup(fieldValue, UCD_Names.LB, true);
+                uData.lineBreak = Utility.lookup(fieldValue, UCD_Names.LINE_BREAK, true);
 
             } else if (fieldName.equals("sn")) {
-                uData.script = Utility.lookup(fieldValue, UCD_Names.SCRIPT, true);
+                uData.script = Utility.lookup(fieldValue, UCD_Names.LONG_SCRIPT, true);
 
             } else if (fieldName.equals("jt")) {
                 uData.joiningType = Utility.lookup(fieldValue, UCD_Names.JOINING_TYPE, true);

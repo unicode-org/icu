@@ -28,18 +28,22 @@ public class CallArgs {
             }
             int pos = arg.indexOf('.');
             Method method = null;
+            String className = "Main";
+            String methodName = "";
     
             if (pos >= 0) {
-                String className = prefix + arg.substring(0,pos);
-                String methodName = arg.substring(pos+1);
+                className = prefix + arg.substring(0,pos);
+                methodName = arg.substring(pos+1);
                 method = tryMethod(className, methodName, methodArgs);
             } else {
-                method = tryMethod("Main", arg, methodArgs);
+                method = tryMethod(className, arg, methodArgs);
                 if (method == null) {
-                    method = tryMethod(arg, "main", methodArgs);
+                    className = arg;
+                    methodName = "main";
+                    method = tryMethod(className, methodName, methodArgs);
                 }
             }
-            if (method == null) throw new IllegalArgumentException("Bad parameter: " + arg);
+            if (method == null) throw new IllegalArgumentException("Bad parameter: " + className + ", " + methodName);
             System.out.println(method.getName() + "\t" + bf.join(methodArgs));
             method.invoke(null,methodArgs);
         }

@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/GenerateBreakTest.java,v $
-* $Date: 2004/02/07 01:01:16 $
-* $Revision: 1.9 $
+* $Date: 2004/02/12 08:23:15 $
+* $Revision: 1.10 $
 *
 *******************************************************************************
 */
@@ -28,8 +28,8 @@ abstract public class GenerateBreakTest implements UCD_Types {
     Normalizer nfd;
     Normalizer nfkd;
     
-    UnicodeMap sampleMap = null;
-    UnicodeMap map = new UnicodeMap();
+    OldUnicodeMap sampleMap = null;
+    OldUnicodeMap map = new OldUnicodeMap();
    
     // ====================== Main ===========================
     

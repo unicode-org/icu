@@ -4,9 +4,13 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
@@ -20,7 +24,6 @@ import com.ibm.text.utility.Utility;
 
 public class CheckICU {
     static final BagFormatter bf = new BagFormatter();
-    static final BagFormatter bf2 = new BagFormatter();
     
     public static void main(String[] args) throws IOException {
         System.out.println("Start");
@@ -45,25 +48,24 @@ public class CheckICU {
             return p.getMaxWidth(v);           
         }
     }
-
+    
+ 
     public static void test() throws IOException {
+        //generateFile("4.0.0", "DerivedCombiningClass");
+        //generateFile("4.0.0", "DerivedCoreProperties");
+         if (true) return;
         checkUCD();
         itemFailures = new UnicodeSet();
         icuFactory = ICUPropertyFactory.make();
         toolFactory = ToolUnicodePropertySource.make("4.0.0");
 
         String[] quickList = {
-            "Block",
+            "Math",
             // "Script", "Bidi_Mirroring_Glyph", "Case_Folding",
             //"Numeric_Value"
         };
         for (int i = 0; i < quickList.length; ++i) {
-            //testProperty(quickList[i], -1);
-            bf2.setValueSource(new ReplaceLabel(toolFactory.getProperty(quickList[i])))
-            .setLabelSource(null)
-            .setNameSource(null)
-            .setShowCount(false);
-            bf2.showSetNames(bf2.CONSOLE, quickList[i], new UnicodeSet(0,0x10FFFF));
+            testProperty(quickList[i], -1);
         }
         if (quickList.length > 0) return;
 
@@ -97,11 +99,16 @@ public class CheckICU {
             if (nfc.isLeading(i)) leading.add(i);
         }
         PrintWriter pw = bf.openUTF8Writer(UCD_Types.GEN_DIR, "Trailing.txt");
-        bf.showSetNames(pw, "+Trailing+Starter", new UnicodeSet(trailing).retainAll(starter));
-        bf.showSetNames(pw, "+Trailing-Starter", new UnicodeSet(trailing).removeAll(starter));
-        bf.showSetNames(pw, "-Trailing-Starter", new UnicodeSet(trailing).complement().removeAll(starter));
-        bf.showSetNames(pw, "+Trailing+Leading", new UnicodeSet(trailing).retainAll(leading));
-        bf.showSetNames(pw, "+Trailing-Leading", new UnicodeSet(trailing).removeAll(leading));
+        pw.println("+Trailing+Starter");
+        bf.showSetNames(pw,  new UnicodeSet(trailing).retainAll(starter));
+        pw.println("+Trailing-Starter");
+        bf.showSetNames(pw, new UnicodeSet(trailing).removeAll(starter));
+        pw.println("-Trailing-Starter");
+        bf.showSetNames(pw, new UnicodeSet(trailing).complement().removeAll(starter));
+        pw.println("+Trailing+Leading");
+        bf.showSetNames(pw, new UnicodeSet(trailing).retainAll(leading));
+        pw.println("+Trailing-Leading");
+        bf.showSetNames(pw, new UnicodeSet(trailing).removeAll(leading));
         pw.close();
     }
     /*
