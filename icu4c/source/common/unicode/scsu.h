@@ -24,10 +24,10 @@
 
 /**
  * \file
- * \brief C API:  Standard Compression for Unicode
+ * \brief C API: Standard Compression Scheme for Unicode
  *
- * <h2> Standard Compression for Unicode </h2>
- * @deprecated To be replaced by scsu encoding converter
+ * <h2>Standard Compression Scheme for Unicode</h2>
+ * @deprecated To be replaced by scsu encoding converter; this entire module will be removed after 2001-dec-31.
  */
 
 /* Number of windows */
