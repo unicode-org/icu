@@ -62,7 +62,7 @@ getText(const UChar* source, int32_t srcLen,
         UErrorCode* status){
     
     if(status == NULL || U_FAILURE(*status)){
-        return NULL;
+        return 0;
     }
 
     UnicodeString     stringArray[3];
@@ -97,7 +97,7 @@ getDescription( const UChar* source, int32_t srcLen,
                 UChar** dest, int32_t destCapacity,
                 UErrorCode* status){
     if(status == NULL || U_FAILURE(*status)){
-        return NULL;
+        return 0;
     }
 
     UnicodeString     stringArray[3];
@@ -136,3 +136,4 @@ getNote(const UChar* source, int32_t srcLen,
     return trim(*dest, destLen, status);
 
 }
+
