@@ -44,9 +44,9 @@
 				AdditionalOptions="/MACHINE:I386"
 				AdditionalDependencies="icuucd.lib icuind.lib icutud.lib ctestfwd.lib"
 				OutputFile=".\Debug/cintltst.exe"
-				LinkIncremental="1"
+				LinkIncremental="2"
 				SuppressStartupBanner="TRUE"
-				AdditionalLibraryDirectories="..\..\..\lib"
+				AdditionalLibraryDirectories="..\..\..\lib\"
 				GenerateDebugInformation="TRUE"
 				ProgramDatabaseFile=".\Debug/cintltst.pdb"
 				SubSystem="1"/>
