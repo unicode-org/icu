@@ -1687,11 +1687,13 @@ TestCaseFolding() {
         0xfb03, 0xfb03, 0xfb03,
         0x5ffff,0x5ffff,0x5ffff
     };
-    static const UChar
 
+    static const UChar
     mixed[]=                { 0x61, 0x42, 0x131, 0x3d0, 0xdf,       0xfb03,           0xd93f, 0xdfff },
     foldedDefault[]=        { 0x61, 0x62, 0x69,  0x3b2, 0x73, 0x73, 0x66, 0x66, 0x69, 0xd93f, 0xdfff },
     foldedExcludeSpecialI[]={ 0x61, 0x62, 0x131, 0x3b2, 0x73, 0x73, 0x66, 0x66, 0x69, 0xd93f, 0xdfff };
+
+    UVersionInfo unicodeVersion={ 0, 0, 17, 89 }, unicode_3_1={ 3, 1, 0, 0 };
 
     const UChar32 *p;
     int32_t i;
@@ -1699,8 +1701,11 @@ TestCaseFolding() {
     UChar buffer[32];
     int32_t length;
     UErrorCode errorCode;
+    UBool isUnicode_3_1;
 
-    /* ### TODO after ICU 1.8: if u_getUnicodeVersion()>=3.1.0.0 then test exclude-special-i cases as well */
+    /* if unicodeVersion()>=3.1 then test exclude-special-i cases as well */
+    u_getUnicodeVersion(unicodeVersion);
+    isUnicode_3_1= uprv_memcmp(unicodeVersion, unicode_3_1, 4)>=0;
 
     /* test simple case folding */
     p=simple;
@@ -1708,6 +1713,12 @@ TestCaseFolding() {
         if(u_foldCase(p[0], U_FOLD_CASE_DEFAULT)!=p[1]) {
             log_err("error: u_foldCase(0x%04lx, default)=0x%04lx instead of 0x%04lx\n",
                     p[0], u_foldCase(p[0], U_FOLD_CASE_DEFAULT), p[1]);
+            return;
+        }
+
+        if(isUnicode_3_1 && u_foldCase(p[0], U_FOLD_CASE_EXCLUDE_SPECIAL_I)!=p[2]) {
+            log_err("error: u_foldCase(0x%04lx, exclude special i)=0x%04lx instead of 0x%04lx\n",
+                    p[0], u_foldCase(p[0], U_FOLD_CASE_EXCLUDE_SPECIAL_I), p[2]);
             return;
         }
     }
@@ -1730,13 +1741,152 @@ TestCaseFolding() {
             uprv_memcmp(foldedDefault, buffer, length*U_SIZEOF_UCHAR)==0 && buffer[length]==0 ? "yes" : "no");
     }
 
-    /* ### TODO for ICU 1.8: add the following tests similar to TestCaseMapping  */
+    /* exclude special i */
+    if(isUnicode_3_1) {
+        buffer[0]=0xabcd;
+        errorCode=U_ZERO_ERROR;
+        length=u_strFoldCase(buffer, sizeof(buffer)/U_SIZEOF_UCHAR,
+                            mixed, sizeof(mixed)/U_SIZEOF_UCHAR,
+                            U_FOLD_CASE_EXCLUDE_SPECIAL_I,
+                            &errorCode);
+        if( U_FAILURE(errorCode) ||
+            length!=(sizeof(foldedExcludeSpecialI)/U_SIZEOF_UCHAR) ||
+            uprv_memcmp(foldedExcludeSpecialI, buffer, length*U_SIZEOF_UCHAR)!=0 ||
+            buffer[length]!=0
+        ) {
+            log_err("error in u_strFoldCase(exclude special i)=%ld error=%s string matches: %s\n",
+                length,
+                u_errorName(errorCode),
+                uprv_memcmp(foldedExcludeSpecialI, buffer, length*U_SIZEOF_UCHAR)==0 && buffer[length]==0 ? "yes" : "no");
+        }
+    }
 
     /* test full string case folding with default option and in the same buffer */
+    uprv_memcpy(buffer, mixed, sizeof(mixed));
+    buffer[sizeof(mixed)/U_SIZEOF_UCHAR]=0;
+    errorCode=U_ZERO_ERROR;
+    length=u_strFoldCase(buffer, sizeof(buffer)/U_SIZEOF_UCHAR,
+                        buffer, -1, /* implicit srcLength */
+                        U_FOLD_CASE_DEFAULT,
+                        &errorCode);
+    if( U_FAILURE(errorCode) ||
+        length!=(sizeof(foldedDefault)/U_SIZEOF_UCHAR) ||
+        uprv_memcmp(foldedDefault, buffer, length*U_SIZEOF_UCHAR)!=0 ||
+        buffer[length]!=0
+    ) {
+        log_err("error in u_strFoldCase(default same buffer)=%ld error=%s string matches: %s\n",
+            length,
+            u_errorName(errorCode),
+            uprv_memcmp(foldedDefault, buffer, length*U_SIZEOF_UCHAR)==0 && buffer[length]==0 ? "yes" : "no");
+    }
+
+    /* test full string case folding, exclude special i, in the same buffer */
+    if(isUnicode_3_1) {
+        uprv_memcpy(buffer, mixed, sizeof(mixed));
+        errorCode=U_ZERO_ERROR;
+        length=u_strFoldCase(buffer, sizeof(buffer)/U_SIZEOF_UCHAR,
+                            buffer, sizeof(mixed)/U_SIZEOF_UCHAR,
+                            U_FOLD_CASE_EXCLUDE_SPECIAL_I,
+                            &errorCode);
+        if( U_FAILURE(errorCode) ||
+            length!=(sizeof(foldedExcludeSpecialI)/U_SIZEOF_UCHAR) ||
+            uprv_memcmp(foldedExcludeSpecialI, buffer, length*U_SIZEOF_UCHAR)!=0 ||
+            buffer[length]!=0
+        ) {
+            log_err("error in u_strFoldCase(exclude special i same buffer)=%ld error=%s string matches: %s\n",
+                length,
+                u_errorName(errorCode),
+                uprv_memcmp(foldedExcludeSpecialI, buffer, length*U_SIZEOF_UCHAR)==0 && buffer[length]==0 ? "yes" : "no");
+        }
+    }
 
     /* test preflighting */
+    buffer[0]=buffer[2]=0xabcd;
+    errorCode=U_ZERO_ERROR;
+    length=u_strFoldCase(buffer, 2, /* set destCapacity=2 */
+                        mixed, sizeof(mixed)/U_SIZEOF_UCHAR,
+                        U_FOLD_CASE_DEFAULT,
+                        &errorCode);
+    if( errorCode!=U_BUFFER_OVERFLOW_ERROR ||
+        length!=(sizeof(foldedDefault)/U_SIZEOF_UCHAR) ||
+        uprv_memcmp(foldedDefault, buffer, 2*U_SIZEOF_UCHAR)!=0 ||
+        buffer[2]!=0xabcd
+    ) {
+        log_err("error in u_strFoldCase(default preflighting)=%ld error=%s string matches: %s\n",
+            length,
+            u_errorName(errorCode),
+            uprv_memcmp(foldedDefault, buffer, 2*U_SIZEOF_UCHAR)==0 && buffer[2]==0xabcd ? "yes" : "no");
+    }
+
+    errorCode=U_ZERO_ERROR;
+    length=u_strFoldCase(NULL, 0,
+                        mixed, sizeof(mixed)/U_SIZEOF_UCHAR,
+                        U_FOLD_CASE_DEFAULT,
+                        &errorCode);
+    if( errorCode!=U_BUFFER_OVERFLOW_ERROR ||
+        length!=(sizeof(foldedDefault)/U_SIZEOF_UCHAR)
+    ) {
+        log_err("error in u_strFoldCase(default pure preflighting)=%ld error=%s\n",
+            length,
+            u_errorName(errorCode));
+    }
 
     /* test error handling */
+    errorCode=U_ZERO_ERROR;
+    length=u_strFoldCase(NULL, sizeof(buffer)/U_SIZEOF_UCHAR,
+                        mixed, sizeof(mixed)/U_SIZEOF_UCHAR,
+                        U_FOLD_CASE_DEFAULT,
+                        &errorCode);
+    if(errorCode!=U_ILLEGAL_ARGUMENT_ERROR) {
+        log_err("error in u_strFoldCase(default dest=NULL)=%ld error=%s\n",
+            length,
+            u_errorName(errorCode));
+    }
+
+    buffer[0]=0xabcd;
+    errorCode=U_ZERO_ERROR;
+    length=u_strFoldCase(buffer, -1,
+                        mixed, sizeof(mixed)/U_SIZEOF_UCHAR,
+                        U_FOLD_CASE_DEFAULT,
+                        &errorCode);
+    if( errorCode!=U_ILLEGAL_ARGUMENT_ERROR ||
+        buffer[0]!=0xabcd
+    ) {
+        log_err("error in u_strFoldCase(default destCapacity=-1)=%ld error=%s buffer[0]==0x%lx\n",
+            length,
+            u_errorName(errorCode),
+            buffer[0]);
+    }
+
+    buffer[0]=0xabcd;
+    errorCode=U_ZERO_ERROR;
+    length=u_strFoldCase(buffer, sizeof(buffer)/U_SIZEOF_UCHAR,
+                        NULL, sizeof(mixed)/U_SIZEOF_UCHAR,
+                        U_FOLD_CASE_EXCLUDE_SPECIAL_I,
+                        &errorCode);
+    if( errorCode!=U_ILLEGAL_ARGUMENT_ERROR ||
+        buffer[0]!=0xabcd
+    ) {
+        log_err("error in u_strFoldCase(exclude special i src=NULL)=%ld error=%s buffer[0]==0x%lx\n",
+            length,
+            u_errorName(errorCode),
+            buffer[0]);
+    }
+
+    buffer[0]=0xabcd;
+    errorCode=U_ZERO_ERROR;
+    length=u_strFoldCase(buffer, sizeof(buffer)/U_SIZEOF_UCHAR,
+                        mixed, -2,
+                        U_FOLD_CASE_EXCLUDE_SPECIAL_I,
+                        &errorCode);
+    if( errorCode!=U_ILLEGAL_ARGUMENT_ERROR ||
+        buffer[0]!=0xabcd
+    ) {
+        log_err("error in u_strFoldCase(exclude special i srcLength=-2)=%ld error=%s buffer[0]==0x%lx\n",
+            length,
+            u_errorName(errorCode),
+            buffer[0]);
+    }
 }
 
 static void
@@ -1748,14 +1898,25 @@ TestCaseCompare() {
     otherExcludeSpecialI[]={ 0x41, 0x62, 0x131, 0x3c3, 0x53, 0x73, 0x66, 0x46, 0x69, 0xd93f, 0xdfff, 0 },
     different[]=           { 0x41, 0x62, 0x69,  0x3c3, 0x73, 0x53, 0x46, 0x66, 0x49, 0xd93f, 0xdffd, 0 };
 
-    int32_t result;
+    UVersionInfo unicodeVersion={ 0, 0, 17, 89 }, unicode_3_1={ 3, 1, 0, 0 };
 
-    /* ### TODO after ICU 1.8: if u_getUnicodeVersion()>=3.1.0.0 then test exclude-special-i cases as well */
+    int32_t result;
+    UBool isUnicode_3_1;
+
+    /* if unicodeVersion()>=3.1 then test exclude-special-i cases as well */
+    u_getUnicodeVersion(unicodeVersion);
+    isUnicode_3_1= uprv_memcmp(unicodeVersion, unicode_3_1, 4)>=0;
 
     /* test u_strcasecmp() */
     result=u_strcasecmp(mixed, otherDefault, U_FOLD_CASE_DEFAULT);
     if(result!=0) {
         log_err("error: u_strcasecmp(mixed, other, default)=%ld instead of 0\n", result);
+    }
+
+    /* test u_strcasecmp() - exclude special i */
+    result=u_strcasecmp(mixed, otherExcludeSpecialI, U_FOLD_CASE_EXCLUDE_SPECIAL_I);
+    if(result!=0) {
+        log_err("error: u_strcasecmp(mixed, other, exclude special i)=%ld instead of 0\n", result);
     }
 
     /* test u_strcasecmp() */
