@@ -2220,7 +2220,7 @@ static void TestKeywordVariants(void)
   for(i = 0; i < sizeof(testCases)/sizeof(testCases[0]); i++) {
     status = U_ZERO_ERROR;
     *buffer = 0;
-    keywords = uloc_getKeywords(testCases[i].localeID, &status);
+    keywords = uloc_openKeywords(testCases[i].localeID, &status);
 
     if(status != testCases[i].expectedStatus) {
       log_err("Expected to get status %s. Got %s instead\n", 
@@ -2398,7 +2398,7 @@ static void TestDisplayKeywords(void)
         int32_t keywordCount = 0;
         UChar *displayKeyword=NULL, *displayKeywordValue = NULL;
         int32_t displayKeywordLen = 0, displayKeywordValueLen = 0;
-        UEnumeration* keywordEnum = uloc_getKeywords(testCases[i].localeID, &status);
+        UEnumeration* keywordEnum = uloc_openKeywords(testCases[i].localeID, &status);
         for(keywordCount = uenum_count(keywordEnum, &status); keywordCount > 0 ; keywordCount--){
               if(U_FAILURE(status)){
                   log_err("ulog_getKeywords failed for locale id: %s with error : %s \n", testCases[i].localeID, u_errorName(status)); 
@@ -2476,7 +2476,7 @@ static void TestDisplayKeywordValues(void){
         int32_t keywordCount = 0;
         UChar *displayKeywordValue = NULL;
         int32_t displayKeywordValueLen = 0;
-        UEnumeration* keywordEnum = uloc_getKeywords(testCases[i].localeID, &status);
+        UEnumeration* keywordEnum = uloc_openKeywords(testCases[i].localeID, &status);
         for(keywordCount = uenum_count(keywordEnum, &status); keywordCount > 0 ; keywordCount--){
               if(U_FAILURE(status)){
                   log_err("ulog_getKeywords failed for locale id: %s in display locale: % with error : %s \n", testCases[i].localeID, testCases[i].displayLocale, u_errorName(status)); 
@@ -2522,7 +2522,7 @@ static void TestDisplayKeywordValues(void){
             {0x0044, 0x0065, 0x0075, 0x0074, 0x0073, 0x0063, 0x0068, 0x0065, 0x0020, 0x004d, 0x0061, 0x0072, 0x006b, 0x0000},
         };
 
-        UEnumeration* keywordEnum = uloc_getKeywords(localeID, &status);
+        UEnumeration* keywordEnum = uloc_openKeywords(localeID, &status);
 
         for(keywordCount = 0; keywordCount < uenum_count(keywordEnum, &status) ; keywordCount++){
               UChar *displayKeywordValue = NULL;

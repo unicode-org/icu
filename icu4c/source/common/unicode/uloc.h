@@ -416,11 +416,11 @@ uloc_getVariant(const char*    localeID,
  * and if the components were in 'POSIX' format they are changed to
  * ICU format.  It does NOT map aliased names in any way.
  * See the top of this header file.
+ * This API supports preflighting.
  *
  * @param localeID the locale to get the full name with
- * @param name the full name for localeID
- * @param nameCapacity the size of the name buffer to store the 
- * full name with
+ * @param name fill in buffer for the name without keywords.
+ * @param nameCapacity capacity of the fill in buffer.
  * @param err error information if retrieving the full name failed
  * @return the actual buffer size needed for the full name.  If it's greater 
  * than nameCapacity, the returned full name will be truncated.  
@@ -766,19 +766,19 @@ uloc_getParent(const char*    localeID,
  * ICU format.  It does NOT map aliased names in any way.
  * See the top of this header file.
  * This API strips off the keyword part, so "de_DE@collation=phonebook" 
- * will become "de_DE"
+ * will become "de_DE". 
+ * This API supports preflighting.
  *
  * @param localeID the locale to get the full name with
- * @param name the full name for localeID
- * @param nameCapacity the size of the name buffer to store the 
- * full name with
+ * @param name fill in buffer for the name without keywords.
+ * @param nameCapacity capacity of the fill in buffer.
  * @param err error information if retrieving the full name failed
  * @return the actual buffer size needed for the full name.  If it's greater 
  * than nameCapacity, the returned full name will be truncated.  
  * @draft ICU 2.8
  */
 U_CAPI int32_t U_EXPORT2
-uloc_getNameNoKeywords(const char*    localeID,
+uloc_getBaseName(const char*    localeID,
          char* name,
          int32_t nameCapacity,
          UErrorCode* err);
@@ -793,7 +793,7 @@ uloc_getNameNoKeywords(const char*    localeID,
  * @draft ICU 2.8
  */
 U_CAPI UEnumeration* U_EXPORT2
-uloc_getKeywords(const char* localeID,
+uloc_openKeywords(const char* localeID,
                         UErrorCode* status);
 
 /**
