@@ -80,16 +80,14 @@
  *  substituted to be the default substitution character.
  */
 
-/* This file isn't designed to be included all by itself. */
-#ifndef UCNV_H
-# include "unicode/ucnv.h"
- /* and the rest of this file will be ignored. */
-#endif
-
 #ifndef UCNV_ERR_H
 #define UCNV_ERR_H
 
 #include "unicode/utypes.h"
+
+/** From unicode/ucnv.h @stable ICU 2.0 */
+typedef struct UConverter UConverter;
+
 
 #if !UCONFIG_NO_CONVERSION
 
