@@ -251,12 +251,62 @@ static void doTestVariant(UCollator* myCollation, const UChar source[], const UC
 {
     int32_t sortklen1, sortklen2, sortklenmax, sortklenmin;
     int temp=0, gSortklen1=0,gSortklen2=0;
-    UCollationResult compareResult, compareResulta, keyResult, incResult = result;
+    UCollationResult compareResult, compareResulta, keyResult, compareResultIter = result;
     uint8_t *sortKey1, *sortKey2, *sortKey1a, *sortKey2a;
     uint32_t sLen = u_strlen(source);
     uint32_t tLen = u_strlen(target);
     char buffer[256];
     uint32_t len;
+    UErrorCode status = U_ZERO_ERROR;
+    UColAttributeValue norm = ucol_getAttribute(myCollation, UCOL_NORMALIZATION_MODE, &status);
+
+    {
+      UCharIterator sIter, tIter;
+      uiter_setString(&sIter, source, sLen);
+      uiter_setString(&tIter, target, tLen);
+      compareResultIter = ucol_strcollIter(myCollation, &sIter, &tIter, &status);
+    }
+    /* convert the strings to UTF-8 and do try comparing with char iterator */
+    if(!QUICK) {
+      char utf8Source[256], utf8Target[256];
+      int32_t utf8SourceLen = 0, utf8TargetLen = 0;
+      u_strToUTF8(utf8Source, 256, &utf8SourceLen, source, sLen, &status);
+      if(U_FAILURE(status)) { /* probably buffer is not big enough */
+        log_verbose("Src UTF-8 buffer too small! Will not compare!\n");
+      } else {
+        u_strToUTF8(utf8Target, 256, &utf8TargetLen, target, tLen, &status);
+        if(U_SUCCESS(status)) { /* probably buffer is not big enough */
+          UCollationResult compareResultUTF8 = result, compareResultUTF8Norm = result;
+          UCharIterator sIter, tIter;
+          log_verbose("Strings converted to UTF-8:%s, %s\n", aescstrdup(source,-1), aescstrdup(target,-1));
+          uiter_setUTF8(&sIter, utf8Source, utf8SourceLen);
+          uiter_setUTF8(&tIter, utf8Target, utf8TargetLen);
+       /*uiter_setString(&sIter, source, sLen);
+      uiter_setString(&tIter, target, tLen);*/
+          compareResultUTF8 = ucol_strcollIter(myCollation, &sIter, &tIter, &status);
+          ucol_setAttribute(myCollation, UCOL_NORMALIZATION_MODE, UCOL_ON, &status);
+          sIter.move(&sIter, 0, UITER_START);
+          tIter.move(&tIter, 0, UITER_START);
+          compareResultUTF8Norm = ucol_strcollIter(myCollation, &sIter, &tIter, &status);
+          ucol_setAttribute(myCollation, UCOL_NORMALIZATION_MODE, norm, &status);
+          if(compareResultUTF8 != compareResultIter) {
+            log_err("different results in iterative comparison for normalization on and UTF-8. %s, %s\n", aescstrdup(source,-1), aescstrdup(target,-1));
+          }
+          if(compareResultUTF8 != compareResultUTF8Norm) {
+            log_err("different results in iterative when normalization is turned on. %s, %s\n", aescstrdup(source,-1), aescstrdup(target,-1));
+          }
+        } else {
+          log_verbose("Target UTF-8 buffer too small! Did not compare!\n");
+        }
+        if(U_FAILURE(status)) {
+          log_verbose("UTF-8 strcoll failed! Ignoring result\n");
+        }
+      }
+    }
+
+
+
+
 
     
     compareResult  = ucol_strcoll(myCollation, source, sLen, target, tLen);
@@ -310,7 +360,7 @@ static void doTestVariant(UCollator* myCollation, const UChar source[], const UC
     else {
         keyResult = UCOL_EQUAL;
     }
-    reportCResult( source, target, sortKey1, sortKey2, compareResult, keyResult, incResult, result );
+    reportCResult( source, target, sortKey1, sortKey2, compareResult, keyResult, compareResultIter, result );
     free(sortKey1);
     free(sortKey2);
     free(sortKey1a);
