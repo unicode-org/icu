@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/TestFmwk.java,v $
- * $Date: 2004/02/12 01:08:32 $
- * $Revision: 1.61 $
+ * $Date: 2004/02/25 00:01:34 $
+ * $Revision: 1.62 $
  *
  *****************************************************************************************
  */
@@ -852,6 +852,26 @@ public class TestFmwk extends AbstractTestLog {
     }
     public static String prettify(StringBuffer s) {
         return prettify(s.toString());
+    }
+
+    private static java.util.GregorianCalendar cal;
+
+    /**
+     * Return a Date given a year, month, and day of month.  This is
+     * similar to new Date(y-1900, m, d).  It uses the default time
+     * zone at the time this method is first called.
+     * @param year use 2000 for 2000, unlike new Date()
+     * @param month use Calendar.JANUARY etc.
+     * @param dom day of month, 1-based
+     * @return a Date object for the given y/m/d
+     */
+    protected static synchronized java.util.Date getDate(int year, int month, int dom) {
+        if (cal == null) {
+            cal = new java.util.GregorianCalendar();
+        }
+        cal.clear();
+        cal.set(year, month, dom);
+        return cal.getTime();
     }
 
     private static class NullWriter extends PrintWriter {
