@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/translit/TransliteratorTest.java,v $
- * $Date: 2002/07/26 23:14:38 $
- * $Revision: 1.114 $
+ * $Date: 2002/08/02 21:18:44 $
+ * $Revision: 1.115 $
  *
  *****************************************************************************************
  */
@@ -2658,6 +2658,25 @@ public class TransliteratorTest extends TestFmwk {
                   ", expected " + expSrc.toPattern(true) +
                   "; target = " + trg.toPattern(true) +
                   ", expected " + expTrg.toPattern(true));
+        }
+    }
+
+    /**
+     * Test handling of rule whitespace, for both RBT and UnicodeSet.
+     */
+    public void TestRuleWhitespace() {
+        // Rules
+        String r = "a > \u200E b;";
+
+        Transliterator t = Transliterator.createFromRules("test", r, Transliterator.FORWARD);
+
+        expect(t, "a", "b");
+
+        // UnicodeSet
+        UnicodeSet set = new UnicodeSet("[a \u200E]");
+
+        if (set.contains(0x200E)) {
+            errln("FAIL: U+200E not being ignored by UnicodeSet");
         }
     }
 
