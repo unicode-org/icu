@@ -713,31 +713,31 @@ and UCharScript enum values are the same.
 */
 void UnicodeTest::TestScript()
 {
-    if ((int32_t)Unicode::kScriptCount != (int32_t)U_SCRIPT_BLOCK_COUNT) {
+    if ((int32_t)Unicode::kScriptCount != (int32_t)UBLOCK_COUNT) {
         errln("ERROR: Unicode::EUnicodeScript is not the same size as UCharScript");
     }
 
-    if ((int32_t)Unicode::kBasicLatin != (int32_t)U_BASIC_LATIN_BLOCK) {
+    if ((int32_t)Unicode::kBasicLatin != (int32_t)U_BASIC_LATIN) {
         errln("ERROR: Different Basic Latin values in EUnicodeScript and UCharScript");
     }
 
-    if ((int32_t)Unicode::kHighSurrogate != (int32_t)U_HIGH_SURROGATES_BLOCK) {
+    if ((int32_t)Unicode::kHighSurrogate != (int32_t)U_HIGH_SURROGATES) {
         errln("ERROR: Different High Surrogate values in EUnicodeScript and UCharScript");
     }
 
-    if ((int32_t)Unicode::kLowSurrogate != (int32_t)U_LOW_SURROGATES_BLOCK) {
+    if ((int32_t)Unicode::kLowSurrogate != (int32_t)U_LOW_SURROGATES) {
         errln("ERROR: Different Low Surrogate values in EUnicodeScript and UCharScript");
     }
 
-    if ((int32_t)Unicode::kCJKRadicalsSupplement != (int32_t)U_CJK_RADICALS_SUPPLEMENT_BLOCK) {
+    if ((int32_t)Unicode::kCJKRadicalsSupplement != (int32_t)U_CJK_RADICALS_SUPPLEMENT) {
         errln("ERROR: Different CJK Radicals Supplement values in EUnicodeScript and UCharScript");
     }
 
-    if ((int32_t)Unicode::kGreek != (int32_t)U_GREEK_BLOCK) {
+    if ((int32_t)Unicode::kGreek != (int32_t)U_GREEK) {
         errln("ERROR: Different Greek values in EUnicodeScript and UCharScript");
     }
 
-    if ((int32_t)Unicode::kThai != (int32_t)U_THAI_BLOCK) {
-        errln("ERROR: Different Thai values in EUnicodeScript and UCharScript");
+    if ((int32_t)Unicode::kThai != (int32_t)U_THAI) {
+        errln("ERROR: Diffe rent Thai values in EUnicodeScript and UCharScript");
     }
 }
