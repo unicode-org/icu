@@ -710,12 +710,12 @@ uloc_getCountry(const char* localeID,
 static const char * 
 locale_getKeywordsStart(const char *localeID) {
     const char *result = NULL;
-    const uint8_t ebcdicSigns[] = { 0x44, 0x66, 0x80, 0xAC, 0xAE, 0xAF, 0xB5, 0xEC, 0xEF, 0x00 };
+    static const uint8_t ebcdicSigns[] = { 0x7C, 0x44, 0x66, 0x80, 0xAC, 0xAE, 0xAF, 0xB5, 0xEC, 0xEF, 0x00 };
     if((result = uprv_strchr(localeID, '@')) != NULL) {
         return result;
     } else if(U_CHARSET_FAMILY == U_EBCDIC_FAMILY) {
         const uint8_t *charToFind = ebcdicSigns;
-        while(charToFind) {
+        while(*charToFind) {
             if((result = uprv_strchr(localeID, *charToFind)) != NULL) {
                 return result;
             }
