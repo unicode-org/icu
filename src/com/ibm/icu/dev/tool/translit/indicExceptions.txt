@@ -1,0 +1,377 @@
+/**
+ *******************************************************************************
+ * Copyright (C) 2002-2004, International Business Machines Corporation and    *
+ * others. All Rights Reserved.                                                *
+ *******************************************************************************
+ */
+
+/* Reserved in all 9 scripts */
+
+/*
+   These codepoints are marked RESERVED in all 9 indic scripts.
+   There should not be any transliteration work on these codepoints, 
+   if they are ever encountered.  Ignore these codepoints.
+
+   Common reserved codepoints in ALL 9 scripts : (offset)
+   00, 04, 
+   3A, 3B, 
+   4E, 4F, 
+   7B, 7C, 7D, 7E, 7F
+*/
+
+/* Script-specific */
+/*
+   These codepoints are specific to their respective script.
+   Transliteration of these codepoints from one script to another is meaningless.
+
+   For example,
+      \u0B70 (Oriya) and \u0BF0 (Tamil) are non-reserved codepoints within each script.
+      On transliterating \u0B70 from Oriya to Tamil, we will get \u0BF0.
+      But \u0B70 in Oriya represents ISSHAR, whereas \u0BF0 in Tamil represents NUMBER TEN.
+
+   \u0970 Devanagari abbreviation sign
+
+   \u09F0 Bengali letter RA with middle diagonal (Assamese)
+   \u09F1 Bengali letter RA with lower diagonal 
+          (=Bengali letter VA with lower diagonal, Assamese)
+   \u09F2 Bengali rupee mark
+   \u09F3 Bengali rupee sign
+   \u09F4 Bengali currency numerator one
+   \u09F5 Bengali currency numerator two
+   \u09F6 Bengali currency numerator three
+   \u09F7 Bengali currency numerator four
+   \u09F8 Bengali currency numerator one less than the denominator
+   \u09F9 Bengali currency denominator sixteen
+   \u09FA Bengali isshar
+
+   \u0A70 Gurmukhi tippi (nasalization)
+   \u0A71 Gurmukhi addak (doubles following consonant)
+   \u0A72 Gurmukhi iri (base for vowels)
+   \u0A73 Gurmukhi ura (base for vowels)
+   \u0A74 Gurmukhi ek onkar (God is One)
+
+   \u0B70 Oriya isshar
+
+   \u0BF0 Tamil number ten
+   \u0BF1 Tamil number one hundred
+   \u0BF2 Tamil number one thousand
+*/
+
+
+
+/*****************************************************************************/
+/*  NOTE : <unknown> code will map back to itself                            */
+/*         till we find a good match                                         */
+/*****************************************************************************/
+
+
+
+/*****************************************************************************/
+/* Devanagari                                                                */
+/*****************************************************************************/
+
+"\u0955>\u0955;"  // <unknown> Length Mark - Kannada (\u0CD5), Telugu (\u0C55)
+"\u0956>\u0948;"  // AI Length Mark -> Devanagari Vowel Sign AI
+"\u0957>\u094C;"  // AU Length Mark -> Devanagari Vowel Sign AU
+
+
+
+/*****************************************************************************/
+/* Bengali                                                                   */
+/*****************************************************************************/
+
+"\u098D>\u098D;"  // <unknown> independent vowel Candra E
+"\u098E>\u098F;"  // Letter Short E -> Letter E
+"\u0991>\u0993;"  // Letter Candra O -> Letter O
+"\u0992>\u0993;"  // Letter Short O -> Letter O
+"\u09A9>\u09A8;"  // Letter NNNA -> Letter NA
+"\u09B1>\u09B0;"  // Letter RRA -> Letter RA
+"\u09B3>\u09B2;"  // Letter LLA -> Letter LA
+"\u09B4>\u09B2;"  // Letter LLLA -> Letter LA
+"\u09B5>\u09AC;"  // Letter VA -> Letter BA
+"\u09BD>\u09BD;"  // <unknown> Sign Avagraha - Devanagari (\u093D)
+"\u09C5>\u09C7;"  // Vowel Candra E -> Vowel E
+"\u09C6>\u09C7;"  // Vowel Short E -> Vowel E
+"\u09C9>\u09CB;"  // Vowel Candra O -> Vowel O
+"\u09CA>\u09CB;"  // Vowel Short O -> Vowel O
+"\u09D0>\u09D0;"  // <unknown> OM - Devanagari (\u0950), Gujarati (\u0AD0)
+"\u09D1>\u09D1;"  // <unknown> Stress - Devanagari (\u0951)
+"\u09D2>\u09D2;"  // <unknown> Stress - Devanagari (\u0952)
+"\u09D3>\u09D3;"  // <unknown> Accent - Devanagari (\u0953)
+"\u09D4>\u09D4;"  // <unknown> Accent - Devanagari (\u0954)
+"\u09D5>\u09D5;"  // <unknown> Length Mark - Kannada (\u0CD5), Telugu (\u0C55)
+"\u09D6>\u09C8;"  // AI Length Mark -> Bengali Vowel Sign AI
+"\u09D8>\u0995;"  // Letter QA -> Letter KA
+"\u09D9>\u0996;"  // Letter KHHA -> Letter KHA
+"\u09DA>\u0997;"  // Letter GHHA -> Letter GA
+"\u09DB>\u099C;"  // Letter ZA -> Letter JA
+"\u09DE>\u09AB;"  // Letter FA -> Letter PHA
+"\u09E4>\u09E4;"  // <unknown> Danda - Devanagari (\u0964)
+"\u09E5>\u09E5;"  // <unknown> Double Danda - Devanagari (\u0965)
+
+
+
+/*****************************************************************************/
+/* Gurmukhi                                                                  */
+/*****************************************************************************/
+
+"\u0A01>\u0A02;"
+"\u0A03>\u0A03;"  // <unknown> Sign Visarga - Devanagari (\u0903) & the rest
+"\u0A0B>\u0A30\u0A3F;"
+"\u0A0C>\u0A07;"
+"\u0A0D>\u0A10;"
+"\u0A0E>\u0A0F;"
+"\u0A11>\u0A14;"
+"\u0A12>\u0A13;"
+"\u0A29>\u0A28;"
+"\u0A31>\u0A30;"
+"\u0A34>\u0A33;"
+"\u0A37>\u0A36;"
+"\u0A3D>\u0A3D;"  // <unknown> Sign Avagraha - Devanagari (\u093D)
+"\u0A43>\u0A43;"  // <unknown> Vocalic R - Devanagari (\u0943)
+"\u0A44>\u0A44;"  // <unknown> Vocalic RR - Devanagari (\u0944)
+"\u0A45>\u0A48;"
+"\u0A46>\u0A47;"
+"\u0A49>\u0A4C;"
+"\u0A4A>\u0A4B;"
+"\u0A50>\u0A50;"  // <unknown> OM - Devanagari (\u0950), Gujarati (\u0AD0)
+"\u0A51>\u0A51;"  // <unknown> Stress - Devanagari (\u0951)
+"\u0A52>\u0A52;"  // <unknown> Stress - Devanagari (\u0952)
+"\u0A53>\u0A53;"  // <unknown> Accent - Devanagari (\u0953)
+"\u0A54>\u0A54;"  // <unknown> Accent - Devanagari (\u0954)
+"\u0A55>\u0A55;"  // <unknown> Length Mark - Kannada (\u0CD5), Telugu (\u0C55)
+"\u0A56>\u0A48;"  // AI Length Mark -> Gurmukhi Vowel Sign AI
+"\u0A57>\u0A4C;"  // AU Length Mark -> Gurmukhi Vowel Sign AU
+"\u0A58>\u0A15\u0A3C;"
+"\u0A5D>\u0A22\u0A3C;"  // Letter RHA -> Gurmukhi letter ddha (\u0A22) + nukta (\u0A3C)
+"\u0A5F>\u0A2F;"
+"\u0A60>\u0A30\u0A3F;"
+"\u0A61>\u0A08\u0A3C;"
+"\u0A62>\u0A3F\u0A3C;"
+"\u0A63>\u0A40\u0A3C;"
+"\u0A64>\u0A64;"  // <unknown> Danda - Devanagari (\u0964)
+"\u0A65>\u0A65;"  // <unknown> Double Danda - Devanagari (\u0965)
+
+
+
+/*****************************************************************************/
+/* Gujarati                                                                  */
+/*****************************************************************************/
+"\u0A8C>\u0AB2\u0AC3;"
+"\u0A8E>\u0A8D;"
+"\u0A92>\u0A91;"
+"\u0AA9>\u0AA8;"
+"\u0AB1>\u0AB0;"
+"\u0AB4>\u0AB3;"
+"\u0AC6>\u0AC5;"
+"\u0ACA>\u0AC9;"
+"\u0AD1>\u0AD1;"  // <unknown> Stress - Devanagari (\u0951)
+"\u0AD2>\u0AD2;"  // <unknown> Stress - Devanagari (\u0952)
+"\u0AD3>\u0AD3;"  // <unknown> Accent - Devanagari (\u0953)
+"\u0AD4>\u0AD4;"  // <unknown> Accent - Devanagari (\u0954)
+"\u0AD5>\u0AD5;"  // <unknown> Length Mark - Kannada (\u0CD5), Telugu (\u0C55)
+"\u0AD6>\u0AC8;"  // AI Length Mark -> Gujarati Vowel Sign AI
+"\u0AD7>\u0ACC;"  // AU Length Mark -> Gujarati Vowel Sign AU
+"\u0AD8>\u0A95\u0ABC;"
+"\u0AD9>\u0A96\u0ABC;"
+"\u0ADA>\u0A97\u0ABC;"
+"\u0ADB>\u0A9C\u0ABC;"
+"\u0ADC>\u0AA1\u0ABC;"
+"\u0ADD>\u0AA2\u0ABC;"
+"\u0ADE>\u0AAB\u0ABC;"
+"\u0ADF>\u0AAF\u0ABC;"
+"\u0AE1>\u0AB2\u0AC3;"
+"\u0AE2>\u0ABF\u0ABC;"
+"\u0AE3>\u0AC0\u0ABC;"
+"\u0AE4>\u0AE4;"  // <unknown> Danda - Devanagari (\u0964)
+"\u0AE5>\u0AE5;"  // <unknown> Double Danda - Devanagari (\u0965)
+
+
+
+/*****************************************************************************/
+/* Oriya                                                                     */
+/*****************************************************************************/
+"\u0B0D>\u0B0F;"
+"\u0B0E>\u0B0F;"
+"\u0B11>\u0B13;"
+"\u0B12>\u0B13;"
+"\u0B29>\u0B28;"
+"\u0B31>\u0B30;"
+"\u0B34>\u0B33;"
+"\u0B35>\u0B2C;"  // Letter VA -> Oriya Letter BA
+"\u0B44>\u0B43\u0B3C;"
+"\u0B45>\u0B47;"
+"\u0B46>\u0B47;"
+"\u0B49>\u0B4B;"
+"\u0B4A>\u0B4B;"
+"\u0B50>\u0B13\u0B01;"
+"\u0B51>\u0B51;"  // <unknown> Stress - Devanagari (\u0951)
+"\u0B52>\u0B52;"  // <unknown> Stress - Devanagari (\u0952)
+"\u0B53>\u0B53;"  // <unknown> Accent - Devanagari (\u0953)
+"\u0B54>\u0B54;"  // <unknown> Accent - Devanagari (\u0954)
+"\u0B55>\u0B55;"  // <unknown> Length Mark - Kannada (\u0CD5), Telugu (\u0C55)
+"\u0B58>\u0B15\u0B3C;"
+"\u0B59>\u0B16\u0B3C;"
+"\u0B5A>\u0B17\u0B3C;"
+"\u0B5B>\u0B1C\u0B3C;"
+"\u0B5E>\u0B2B\u0B3C;"
+"\u0B62>\u0B56\u0B3C;"
+"\u0B63>\u0B57\u0B3C;"
+"\u0B64>\u0B64;"  // <unknown> Danda - Devanagari (\u0964)
+"\u0B65>\u0B65;"  // <unknown> Double Danda - Devanagari (\u0965)
+
+
+
+/*****************************************************************************/
+/* Tamil                                                                     */
+/*****************************************************************************/
+
+"\u0B81>\u0B81;"  // <unknown> Candrabindu - Devanagari (\u0901) ,etc
+"\u0B8B>\u0BB0\u0BBF;"
+"\u0B8C>\u0B87;"
+"\u0B8D>\u0B86;"
+"\u0B91>\u0B86;"
+"\u0B96>\u0B95;"
+"\u0B97>\u0B95;"
+"\u0B98>\u0B95;"
+"\u0B9B>\u0B9A;"
+"\u0B9D>\u0B9A;"
+"\u0BA0>\u0B9F;"
+"\u0BA1>\u0B9F;"
+"\u0BA2>\u0B9F;"
+"\u0BA5>\u0BA4;"
+"\u0BA6>\u0BA4;"
+"\u0BA7>\u0BA4;"
+"\u0BAB>\u0BAA;"
+"\u0BAC>\u0BAA;"
+"\u0BAD>\u0BAA;"
+"\u0BB6>\u0BB7;"
+"\u0BBC>\u0BBC;"  // <unknown> Nukta
+"\u0BBD>\u0BBD;"  // <unknown> Sign Avagraha - Devanagari (\u093D)
+"\u0BC3>\u0BCD\u0BB0\u0BBF;"
+"\u0BC4>\u0BCD\u0BB0\u0BBF;"
+"\u0BC5>\u0BBE;"
+"\u0BC9>\u0BBE;"
+"\u0BD0>\u0B93\u0BAE\u0BCD;"
+"\u0BD1>\u0BD1;"  // <unknown> Stress - Devanagari (\u0951)
+"\u0BD2>\u0BD2;"  // <unknown> Stress - Devanagari (\u0952)
+"\u0BD3>\u0BD3;"  // <unknown> Accent - Devanagari (\u0953)
+"\u0BD4>\u0BD4;"  // <unknown> Accent - Devanagari (\u0954)
+"\u0BD5>\u0BD5;"  // <unknown> Length Mark - Kannada (\u0CD5), Telugu (\u0C55)
+"\u0BD6>\u0BC8;"  // AI Length Mark -> Tamil Vowel Sign AI
+"\u0BD8>\u0B95;"
+"\u0BD9>\u0B95;"
+"\u0BDA>\u0B95;"
+"\u0BDB>\u0B9C;"
+"\u0BDC>\u0B9F;"
+"\u0BDD>\u0B9F;"
+"\u0BDE>\u0BAA;"
+"\u0BDF>\u0BAF;"
+"\u0BE0>\u0BB0\u0BBF;"
+"\u0BE1>\u0B88;"
+"\u0BE2>\u0BE2;"  // <unknown> Vocalic L - Devanagari (\u0962)
+"\u0BE3>\u0BE3;"  // <unknown> Vocalic LL - Devanagari (\u0963)
+"\u0BE4>\u0BE4;"  // <unknown> Danda - Devanagari (\u0964)
+"\u0BE5>\u0BE5;"  // <unknown> Double Danda - Devanagari (\u0965)
+"\u0BE6>\u0030;"  // ZERO - Digit ZERO
+
+
+
+/*****************************************************************************/
+/* Telugu                                                                    */
+/*****************************************************************************/
+
+"\u0C0D>\u0C0E;"
+"\u0C11>\u0C12;"
+"\u0C29>\u0C28;"
+"\u0C34>\u0C33;"
+"\u0C3C>\u0C3C;"  // <unknown> Nukta
+"\u0C3D>\u0C3D;"  // <unknown> Sign Avagraha - Devanagari (\u093D)
+"\u0C45>\u0C46;"
+"\u0C49>\u0C4A;"
+"\u0C50>\u0C13\u0C02;"
+"\u0C51>\u0C51;"  // <unknown> Stress - Devanagari (\u0951)
+"\u0C52>\u0C52;"  // <unknown> Stress - Devanagari (\u0952)
+"\u0C53>\u0C53;"  // <unknown> Accent - Devanagari (\u0953)
+"\u0C54>\u0C54;"  // <unknown> Accent - Devanagari (\u0954)
+"\u0C57>\u0C4C;"
+"\u0C58>\u0C15;"
+"\u0C59>\u0C16;"
+"\u0C5A>\u0C17;"
+"\u0C5B>\u0C1C;"
+"\u0C5C>\u0C21;"
+"\u0C5D>\u0C22;"
+"\u0C5E>\u0C2B;"
+"\u0C5F>\u0C2F;"
+"\u0C62>\u0C3F;"
+"\u0C63>\u0C40;"
+"\u0C64>\u0C64;"  // <unknown> Danda - Devanagari (\u0964)
+"\u0C65>\u0C65;"  // <unknown> Double Danda - Devanagari (\u0965)
+
+
+
+/*****************************************************************************/
+/* Kannada                                                                   */
+/*****************************************************************************/
+
+"\u0C81>\u0C82;"
+"\u0C8D>\u0C8E;"
+"\u0C91>\u0C92;"
+"\u0CA9>\u0CA8;"
+"\u0CB4>\u0CB3;"
+"\u0CBC>\u0CBC;"  // <unknown> Nukta
+"\u0CBD>\u0CBD;"  // <unknown> Sign Avagraha - Devanagari (\u093D)
+"\u0CC5>\u0CC6;"
+"\u0CC9>\u0CCA;"
+"\u0CD0>\u0C93\u0C82;"
+"\u0CD1>\u0CD1;"  // <unknown> Stress - Devanagari (\u0951)
+"\u0CD2>\u0CD2;"  // <unknown> Stress - Devanagari (\u0952)
+"\u0CD3>\u0CD3;"  // <unknown> Accent - Devanagari (\u0953)
+"\u0CD4>\u0CD4;"  // <unknown> Accent - Devanagari (\u0954)
+"\u0CD7>\u0CCC;"
+"\u0CD8>\u0C95;"
+"\u0CD9>\u0C96;"
+"\u0CDA>\u0C97;"
+"\u0CDB>\u0C9C;"
+"\u0CDC>\u0CA1;"
+"\u0CDD>\u0CA2;"
+"\u0CDF>\u0CAF;"
+"\u0CE2>\u0CBF;"
+"\u0CE3>\u0CC0;"
+"\u0CE4>\u0CE4;"  // <unknown> Danda - Devanagari (\u0964)
+"\u0CE5>\u0CE5;"  // <unknown> Double Danda - Devanagari (\u0965)
+
+
+
+/*****************************************************************************/
+/* Malayalam                                                                 */
+/*****************************************************************************/
+
+"\u0D01>\u0D02;"
+"\u0D0D>\u0D06;"
+"\u0D11>\u0D13;"
+"\u0D29>\u0D28;"
+"\u0D3C>\u0D3C;"  // <unknown> Nukta
+"\u0D3D>\u0D3D;"  // <unknown> Sign Avagraha - Devanagari (\u093D)
+"\u0D44>\u0D44;"  // <unknown> Vocalic RR - Devanagari (\u0944)
+"\u0D45>\u0D3E;"
+"\u0D49>\u0D4B;"
+"\u0D50>\u0D50;"  // <unknown> OM - Devanagari (\u0950), Gujarati (\u0AD0)
+"\u0D51>\u0D51;"  // <unknown> Stress - Devanagari (\u0951)
+"\u0D52>\u0D52;"  // <unknown> Stress - Devanagari (\u0952)
+"\u0D53>\u0D53;"  // <unknown> Accent - Devanagari (\u0953)
+"\u0D54>\u0D54;"  // <unknown> Accent - Devanagari (\u0954)
+"\u0D55>\u0D55;"  // <unknown> Length Mark - Kannada (\u0CD5), Telugu (\u0C55)
+"\u0D56>\u0D48;"  // AI Length Mark -> Malayalam Vowel Sign AI
+"\u0D58>\u0D15;"
+"\u0D59>\u0D16;"
+"\u0D5A>\u0D17;"
+"\u0D5B>\u0D1C;"
+"\u0D5C>\u0D21;"
+"\u0D5D>\u0D22;"
+"\u0D5E>\u0D2B;"
+"\u0D5F>\u0D2F;"
+"\u0D62>\u0D62;"  // <unknown> Vocalic L - Devanagari (\u0962)
+"\u0D63>\u0D63;"  // <unknown> Vocalic LL - Devanagari (\u0963)
+"\u0D64>\u0D64;"  // <unknown> Danda - Devanagari (\u0964)
+"\u0D65>\u0D65;"  // <unknown> Double Danda - Devanagari (\u0965)
