@@ -1,4 +1,5 @@
 * text=auto !eol
+icu4c/as_is/codewarrior/mac/icu.mcp.zip -text
 icu4c/data/charBE.brk -text
 icu4c/data/charLE.brk -text
 icu4c/data/lineBE.brk -text
