@@ -14,10 +14,9 @@
 #include "unicode/unistr.h"
 #include "unicode/chariter.h"
 #include "unicode/unorm.h"
-#include "unormimp.h" // ### TODO remove when prototyping is done!!
 
 struct UCharIterator;
-typedef struct UCharIterator UCharIterator; /**< C typedef for struct UCharIterator. @draft ICU 2.1 */
+typedef struct UCharIterator UCharIterator; /**< C typedef for struct UCharIterator. @stable ICU 2.1 */
 
 U_NAMESPACE_BEGIN
 /**
@@ -181,13 +180,10 @@ public:
   /**
    * Normalizes a <code>UnicodeString</code> according to the specified normalization mode.
    * This is a wrapper for unorm_normalize(), using UnicodeString's.
-   * <p>
+   *
    * The <code>options</code> parameter specifies which optional
    * <code>Normalizer</code> features are to be enabled for this operation.
-   * Currently the only available option is obsolete.
-   * If you want the default behavior corresponding to one of the standard
-   * Unicode Normalization Forms, use 0 for this argument.
-   * <p>
+   *
    * @param source    the input string to be normalized.
    * @param mode      the normalization mode
    * @param options   the optional features to be enabled (0 for no options)
@@ -204,14 +200,10 @@ public:
    * Compose a <code>UnicodeString</code>.
    * This is equivalent to normalize() with mode UNORM_NFC or UNORM_NFKC.
    * This is a wrapper for unorm_normalize(), using UnicodeString's.
-   * <p>
+   *
    * The <code>options</code> parameter specifies which optional
    * <code>Normalizer</code> features are to be enabled for this operation.
-   * Currently the only available option is obsolete.
-   * If you want the default behavior corresponding
-   * to Unicode Normalization Form <b>C</b> or <b>KC</b>,
-   * use 0 for this argument.
-   * <p>
+   *
    * @param source    the string to be composed.
    * @param compat    Perform compatibility decomposition before composition.
    *                  If this argument is <code>FALSE</code>, only canonical
@@ -230,15 +222,10 @@ public:
    * Static method to decompose a <code>UnicodeString</code>.
    * This is equivalent to normalize() with mode UNORM_NFD or UNORM_NFKD.
    * This is a wrapper for unorm_normalize(), using UnicodeString's.
-   * <p>
+   *
    * The <code>options</code> parameter specifies which optional
    * <code>Normalizer</code> features are to be enabled for this operation.
-   * Currently the only available option is obsolete.
-   * The desired options should be OR'ed together to determine the value
-   * of this argument.  If you want the default behavior corresponding
-   * to Unicode Normalization Form <b>D</b> or <b>KD</b>,
-   * use 0 for this argument.
-   * <p>
+   *
    * @param source    the string to be decomposed.
    * @param compat    Perform compatibility decomposition.
    *                  If this argument is <code>FALSE</code>, only canonical
@@ -276,7 +263,19 @@ public:
   static inline UNormalizationCheckResult
   quickCheck(const UnicodeString &source, UNormalizationMode mode, UErrorCode &status);
 
-  /** ### TODO @draft ICU 2.6 */
+  /**
+   * Performing quick check on a string; same as the other version of quickCheck
+   * but takes an extra options parameter like most normalization functions.
+   *
+   * @param source       string for determining if it is in a normalized format
+   * @paran mode         normalization format
+   * @param options      the optional features to be enabled (0 for no options)
+   * @param status A reference to a UErrorCode to receive any errors
+   * @return UNORM_YES, UNORM_NO or UNORM_MAYBE
+   *
+   * @see isNormalized
+   * @draft ICU 2.6
+   */
   static inline UNormalizationCheckResult
   quickCheck(const UnicodeString &source, UNormalizationMode mode, int32_t options, UErrorCode &status);
 
@@ -303,7 +302,21 @@ public:
   static inline UBool
   isNormalized(const UnicodeString &src, UNormalizationMode mode, UErrorCode &errorCode);
 
-  /** ### TODO @draft ICU 2.6 */
+  /**
+   * Test if a string is in a given normalization form; same as the other version of isNormalized
+   * but takes an extra options parameter like most normalization functions.
+   *
+   * @param src        String that is to be tested if it is in a normalization format.
+   * @paran mode       Which normalization form to test for.
+   * @param options      the optional features to be enabled (0 for no options)
+   * @param errorCode  ICU error code in/out parameter.
+   *                   Must fulfill U_SUCCESS before the function call.
+   * @return Boolean value indicating whether the source string is in the
+   *         "mode" normalization form.
+   *
+   * @see quickCheck
+   * @draft ICU 2.6
+   */
   static inline UBool
   isNormalized(const UnicodeString &src, UNormalizationMode mode, int32_t options, UErrorCode &errorCode);
 
@@ -311,11 +324,11 @@ public:
    * Concatenate normalized strings, making sure that the result is normalized as well.
    *
    * If both the left and the right strings are in
-   * the normalization form according to "mode",
+   * the normalization form according to "mode/options",
    * then the result will be
    *
    * \code
-   *     dest=normalize(left+right, mode)
+   *     dest=normalize(left+right, mode, options)
    * \endcode
    *
    * For details see unorm_concatenate in unorm.h.
@@ -334,7 +347,7 @@ public:
    * @see unorm_next
    * @see unorm_previous
    *
-   * @draft ICU 2.1
+   * @stable ICU 2.1
    */
   static UnicodeString &
   concatenate(UnicodeString &left, UnicodeString &right,
@@ -391,6 +404,8 @@ public:
    *
    *   - U_FOLD_CASE_EXCLUDE_SPECIAL_I
    *    (see u_strCaseCompare for details)
+   *
+   *   - regular normalization options shifted left by UNORM_COMPARE_NORM_OPTIONS_SHIFT
    *
    * @param errorCode ICU error code in/out parameter.
    *                  Must fulfill U_SUCCESS before the function call.
