@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/DecimalFormat.java,v $ 
- * $Date: 2003/11/21 08:11:49 $ 
- * $Revision: 1.38 $
+ * $Date: 2003/11/21 22:52:05 $ 
+ * $Revision: 1.39 $
  *
  *****************************************************************************************
  */
@@ -3423,7 +3423,7 @@ public class DecimalFormat extends NumberFormat {
      * currency format through the application of a new pattern.
      * @param theCurrency new currency object to use.  Must not be
      * null.
-     * @draft ICU 2.2
+     * @stable ICU 2.2
      */
     public void setCurrency(Currency theCurrency) {
         // If we are a currency format, then modify our affixes to

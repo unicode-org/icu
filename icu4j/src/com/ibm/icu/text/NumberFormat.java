@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/NumberFormat.java,v $ 
- * $Date: 2003/11/21 08:11:49 $ 
- * $Revision: 1.32 $
+ * $Date: 2003/11/21 22:52:05 $ 
+ * $Revision: 1.33 $
  *
  *****************************************************************************************
  */
@@ -924,7 +924,7 @@ public abstract class NumberFormat extends UFormat {
 	 *  @draft ICU 2.8
 	 */
 	public ULocale getLocale(ULocale.ULocaleDataType type) {
-		return new ULocale(Locale.getDefault());		
+		return ULocale.getDefault();		
 	}
 	
     // =======================privates===============================
@@ -962,9 +962,8 @@ public abstract class NumberFormat extends UFormat {
      * @param forLocale the locale of the data.
      * @param choice the pattern format.
      * @return the pattern
-     * @draft ICU 2.2
+     * @stable ICU 2.2
      */
-    // [NEW]
     protected static String getPattern(Locale forLocale, int choice) {
 
         /* The following code takes care of a few cases where the

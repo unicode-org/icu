@@ -736,7 +736,7 @@ public abstract class DateFormat extends UFormat {
 	 *  @draft ICU 2.8
 	 */
 	public ULocale getLocale(ULocale.ULocaleDataType type) {
-		return new ULocale("");		
+	    return ULocale.ROOT;
 	}
 
     /**
