@@ -41,7 +41,7 @@ ibm-1282.ucm ibm-5347.ucm ibm-902.ucm\
 ibm-1283.ucm ibm-5349.ucm ibm-9027.ucm\
 ibm-5350.ucm ibm-9044.ucm\
 ibm-5351.ucm ibm-9049.ucm\
-ibm-1363_P100-2000.ucm ibm-1363_P11B-2000.ucm\
+ibm-1363_P110-2000.ucm ibm-1363_P11B-2000.ucm\
 ibm-5352.ucm ibm-9061.ucm\
 ibm-5353.ucm ibm-912.ucm\
 ibm-1370.ucm ibm-5354.ucm ibm-913.ucm\
