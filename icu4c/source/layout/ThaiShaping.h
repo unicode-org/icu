@@ -19,6 +19,27 @@
 
 U_NAMESPACE_BEGIN
 
+/*
+ * These symbols are also defined in ctypes.h, which is
+ * included on some platforms. Nuke those definitions
+ * before we redefine them.
+ */
+#ifdef _C
+#undef _C
+#endif
+
+#ifdef _A
+#undef _A
+#endif
+
+#ifdef _G
+#undef _G
+#endif
+
+#ifdef _S
+#undef _S
+#endif
+
 class ThaiShaping /* not : public UObject because all methods are static */ {
 public:
 
