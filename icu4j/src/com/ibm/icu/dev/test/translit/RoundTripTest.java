@@ -11,6 +11,8 @@ import java.text.ParseException;
  * @summary Round trip test of Transliterator
  */
 public class RoundTripTest extends TestFmwk {
+    
+    static final boolean CHECKCASE = true;
 
     public static void main(String[] args) throws Exception {
         new RoundTripTest().run(args);
@@ -66,7 +68,13 @@ public class RoundTripTest extends TestFmwk {
     public void TestGreek() throws IOException, ParseException {
         new Test("Latin-Greek", 
           TestUtility.LATIN_SCRIPT, TestUtility.GREEK_SCRIPT)
-          .test(null, "[\u003B\u00B7[:Greek:]-[\u03D7-\u03EF]]", this, new LegalGreek());
+          .test(null, "[\u003B\u00B7[:Greek:]-[\u03D7-\u03EF]]", this, new LegalGreek(true));
+    }
+
+    public void Testel() throws IOException, ParseException {
+        new Test("Latin-el", 
+          TestUtility.LATIN_SCRIPT, TestUtility.GREEK_SCRIPT)
+          .test(null, "[\u003B\u00B7[:Greek:]-[\u03D7-\u03EF]]", this, new LegalGreek(false));
     }
 
     public void TestCyrillic() throws IOException, ParseException {
@@ -81,6 +89,12 @@ public class RoundTripTest extends TestFmwk {
     
     public static class LegalGreek extends Legal {
         
+        boolean full;
+        
+        public LegalGreek(boolean full) {
+            this.full = full;
+        }
+        
         public static boolean isVowel(char c) {
             return "\u03B1\u03B5\u03B7\u03B9\u03BF\u03C5\u03C9\u0391\u0395\u0397\u0399\u039F\u03A5\u03A9".indexOf(c) >= 0;
         }
@@ -91,11 +105,26 @@ public class RoundTripTest extends TestFmwk {
         
         public boolean is(String sourceString) { 
             try {
-                // Legal greek has breathing marks IFF there is a vowel or RHO at the start
+                String decomp = Normalizer.normalize(sourceString, Normalizer.DECOMP, 0);
+                
+                // modern is simpler: don't care about anything but a grave
+                if (!full) {
+                    for (int i = 0; i < decomp.length(); ++i) {
+                        char c = decomp.charAt(i);
+                        if (c == '\u0313' || c == '\u0314' || c == '\u0300' || c == '\u0302'
+                            || c == '\u0342' || c == '\u0345'
+                            || c == '\u037A' || c == '\u03D2' || c == '\u03D3' || c == '\u03D4' || c == '\u03F2'
+                            || c == '\u03F3' || c == '\u03F4' || c == '\u03F5'
+                            ) return false;
+                    }
+                    return true;
+                }
+                
+                // Legal full Greek has breathing marks IFF there is a vowel or RHO at the start
                 // IF it has them, it has exactly one.
                 // IF it starts with a RHO, then the breathing mark must come before the second letter.
                 // Since there are no surrogates in greek, don't worry about them
-                String decomp = Normalizer.normalize(sourceString, Normalizer.DECOMP, 0);
+
                 boolean firstIsVowel = false;
                 boolean firstIsRho = false;
                 boolean noLetterYet = true;
@@ -103,6 +132,8 @@ public class RoundTripTest extends TestFmwk {
                 int letterCount = 0;
                 for (int i = 0; i < decomp.length(); ++i) {
                     char c = decomp.charAt(i);
+                    if (c == '\u037A' || c == '\u03D2' || c == '\u03D3' || c == '\u03D4' || c == '\u03F2'
+                        || c == '\u03F3' || c == '\u03F4' || c == '\u03F5') return false;
                     if (UCharacter.isLetter(c)) {
                         ++letterCount;
                         if (noLetterYet) {
@@ -157,6 +188,24 @@ public class RoundTripTest extends TestFmwk {
     
         public void setPairLimit(int limit) {
             pairLimit = limit;
+        }
+        
+        // Added to do better equality check.
+        
+        public boolean isSame(String a, String b) {
+            if (CHECKCASE) {
+                if (a.equals(b)) return true;
+            } else {
+                if (a.equalsIgnoreCase(b)) return true;
+            }
+            a = Normalizer.normalize(a, Normalizer.DECOMP, 0);
+            b = Normalizer.normalize(b, Normalizer.DECOMP, 0);
+            if (CHECKCASE) {
+                if (a.equals(b)) return true;
+            } else {
+                if (a.equalsIgnoreCase(b)) return true;
+            }
+            return false;
         }
       
         public void test(String sourceRange, String targetRange, TestLog log, Legal legalSource) 
@@ -265,7 +314,7 @@ public class RoundTripTest extends TestFmwk {
                 if (!isReceivingSource(targ)) {
                     logWrongScript("Target-Source", cs, targ);
                     failTargSource.set(c);
-                } else if (!cs.equals(reverse)) { // (!cs.equalsIgnoreCase(reverse)) {
+                } else if (!isSame(cs, reverse)) {
                     logRoundTripFailure(cs, targ, reverse);
                     failRound.set(c);
                 }
@@ -291,7 +340,7 @@ public class RoundTripTest extends TestFmwk {
                     String reverse = sourceToTarget.transliterate(targ);
                     if (!isReceivingSource(targ) && !failTargSource.get(c) && !failTargSource.get(d)) {
                         logWrongScript("Target-Source", cs, targ);
-                    } else if (!cs.equalsIgnoreCase(reverse) && !failRound.get(c) && !failRound.get(d)) {
+                    } else if (!isSame(cs, reverse) && !failRound.get(c) && !failRound.get(d)) {
                         logRoundTripFailure(cs, targ, reverse);
                     }
                 }
