@@ -182,6 +182,9 @@ class DigitList;
  */
 class U_I18N_API DecimalFormat: public NumberFormat {
 public:
+  /** Rounding mode 
+   *  @draft ICU 2.4
+   */
     enum ERoundingMode {
         kRoundCeiling,
         kRoundFloor,
@@ -193,6 +196,9 @@ public:
         // We don't support ROUND_UNNECESSARY
     };
 
+  /** Pad position
+   *  @draft ICU 2.4
+   */
     enum EPadPosition {
         kPadBeforePrefix,
         kPadAfterPrefix,
@@ -854,6 +860,7 @@ public:
      * @see setSecondaryGroupingSize
      * @see NumberFormat::isGroupingUsed
      * @see DecimalFormatSymbols::getGroupingSeparator
+     * @draft ICU 2.4
      */
     int32_t getSecondaryGroupingSize(void) const;
 
@@ -866,6 +873,7 @@ public:
      * @see getSecondaryGroupingSize
      * @see NumberFormat#setGroupingUsed
      * @see DecimalFormatSymbols::setGroupingSeparator
+     * @draft ICU 2.4
      */
     virtual void setSecondaryGroupingSize(int32_t newValue);
 
@@ -940,7 +948,7 @@ public:
      * @param status     Output param set to success/failure code on
      *                   exit. If the pattern is invalid, this will be
      *                   set to a failure result.
-     * @draft ICU 2.0
+     * @stable ICU 2.0
      */
     virtual void applyPattern(const UnicodeString& pattern,
                              UParseError& parseError,
@@ -1055,7 +1063,7 @@ public:
      * currency format through the application of a new pattern.
      * @param theCurrency a 3-letter ISO code indicating new currency
      * to use.  It need not be null-terminated.
-     * @since ICU 2.2
+     * @draft ICU 2.2
      */
     void setCurrency(const UChar* theCurrency);
 
@@ -1069,7 +1077,7 @@ public:
      * @return a 3-letter null-terminated ISO code indicating
      * the currency in use, or a pointer to the empty string.
 
-     * @since ICU 2.2
+     * @draft ICU 2.2
      */
     const UChar* getCurrency() const;
 
@@ -1281,7 +1289,13 @@ private:
     static const UChar    kQuote;
 
 protected:
+  /** number of integer digits 
+   * @draft ICU 2.4
+   */  
     static const int32_t  kDoubleIntegerDigits;
+  /** number of fraction digits 
+   * @draft ICU 2.4
+   */  
     static const int32_t  kDoubleFractionDigits;
 };
 

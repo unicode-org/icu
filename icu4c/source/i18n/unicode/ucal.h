@@ -21,8 +21,7 @@
  * and a set of integer fields such as <code>UCAL_YEAR</code>, <code>UCAL_MONTH</code>,
  * <code>UCAL_DAY</code>, <code>UCAL_HOUR</code>, and so on.
  * (A <code>UDate</code> object represents a specific instant in
- * time with millisecond precision. See
- * {@link UDate}
+ * time with millisecond precision. See UDate
  * for information about the <code>UDate</code> .)
  *
  * <p>

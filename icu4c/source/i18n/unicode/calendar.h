@@ -39,8 +39,7 @@ U_NAMESPACE_BEGIN
  * a <code>UDate</code> object and a set of integer fields such as
  * <code>YEAR</code>, <code>MONTH</code>, <code>DAY</code>, <code>HOUR</code>,
  * and so on. (A <code>UDate</code> object represents a specific instant in
- * time with millisecond precision. See
- * {@link UDate}
+ * time with millisecond precision. See UDate
  * for information about the <code>UDate</code> class.)
  *
  * <p>
