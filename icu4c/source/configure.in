@@ -4,7 +4,7 @@ dnl Copyright (c) 1999-2000, International Business Machines Corporation and
 dnl others. All Rights Reserved.
 dnl Stephen F. Booth, heavily modified by Yves and others
 
-dnl $Id: configure.in,v 1.132 2001/10/31 00:38:57 aheninger-oss Exp $
+dnl $Id: configure.in,v 1.133 2001/10/31 21:24:49 grhoten-oss Exp $
 
 dnl Process this file with autoconf to produce a configure script
 AC_INIT(common/unicode/utypes.h)
@@ -425,8 +425,14 @@ AC_LANG_CPLUSPLUS
 U_HAVE_NAMESPACE=0
 AC_MSG_CHECKING([for namespace support])
             AC_CACHE_VAL(ac_cv_namespace_ok,
-AC_TRY_LINK([namespace x {void f(){}}], [x::f()], ac_cv_namespace_ok=yes,
-            ac_cv_namespace_ok=no) )
+    [AC_TRY_LINK(
+    changequote(<<, >>)dnl
+    <<namespace x_version {void f(){}};
+    namespace x = x_version;
+    using namespace x_version;
+    >>,
+    changequote([, ])dnl
+    [f();], ac_cv_namespace_ok=yes, ac_cv_namespace_ok=no)] )
 AC_MSG_RESULT($ac_cv_namespace_ok)
 U_HAVE_NAMESPACE=1
 if test $ac_cv_namespace_ok = no
