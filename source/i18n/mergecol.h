@@ -199,7 +199,7 @@ private:
      * if the strength is RESET and a previous entry can't be found.
      * @return the offset of the found entry
      */
-  int32_t findLastEntry(  const PatternEntry* lastEntry, 
+  int32_t findLastEntry(  const PatternEntry* lastPatEntry, 
               UnicodeString&  excess,
               UErrorCode&      success) const;
 };
