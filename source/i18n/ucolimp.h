@@ -179,16 +179,14 @@ static uint8_t utf16fixup[32] = {
 /* a macro that gets a simple CE */
 /* for more complicated CEs it resorts to getComplicatedCE (what else) */
 #define UCOL_GETNEXTCE(order, coll, collationSource, status) {                        \
-    if (U_FAILURE(*(status)) || ((collationSource).pos>=(collationSource).len         \
-      && (collationSource).CEpos <= (collationSource).toReturn)) {                    \
-      (order) = UCOL_NO_MORE_CES;                                                       \
-    } else if ((collationSource).CEpos > (collationSource).toReturn) {                \
+    if ((collationSource).CEpos > (collationSource).toReturn) {                       \
       (order) = *((collationSource).toReturn++);                                      \
-      (collationSource).pos--;                                                        \
-    } else {                                                                          \
+      if((collationSource).CEpos == (collationSource).toReturn) {                     \
+        (collationSource).CEpos = (collationSource).toReturn = (collationSource).CEs; \
+      }                                                                               \
+    } else if((collationSource).pos < (collationSource).len) {                       \
       UChar ch = *(collationSource).pos;                                              \
-      (collationSource).CEpos = (collationSource).toReturn = (collationSource).CEs;   \
-      if(ch < 0xFF) {                                                                 \
+      if(ch <= 0xFF) {                                                                 \
       (order) = (coll)->latinOneMapping[ch];                                          \
       } else {                                                                        \
       (order) = ucmp32_get((coll)->mapping, ch);                                      \
@@ -200,8 +198,10 @@ static uint8_t utf16fixup[32] = {
           (order) = ucol_getNextUCA(ch, &(collationSource), (status));                \
         }                                                                             \
       }                                                                               \
+      (collationSource).pos++;                                                        \
+    } else {                                                                          \
+      (order) = UCOL_NO_MORE_CES;                                                     \
     }                                                                                 \
-    (collationSource).pos++;                                                          \
 }
 
 uint32_t getSpecialCE(const UCollator *coll, collIterate *source, UErrorCode *status);
