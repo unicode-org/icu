@@ -52,6 +52,11 @@
 [
 .BI "\-\-callback" " callback"
 ]
+[
+.BI "\-\-fallback"
+|
+.BI "\-\-no\-fallback"
+]
 .BI "\-f\fP, \fB\-\-from\-code" " encoding"
 .BI "\-t\fP, \fB\-\-to\-code" " encoding"
 [
@@ -164,6 +169,15 @@ encoding and characters that cannot be transcoded to the destination
 encoding. See section
 .B CALLBACKS
 for details on valid callbacks.
+.TP
+.BI "\-\-fallback"
+Use the fallback mapping when transcoding from
+Unicode to the destination encoding.
+.TP
+.BI "\-\-no\-fallback"
+Do not use the fallback mapping when transcoding from Unicode to the
+destination encoding.
+This is the default.
 .TP
 .BI "\-f\fP, \fB\-\-from\-code" " encoding"
 Set the original encoding of the data to 
