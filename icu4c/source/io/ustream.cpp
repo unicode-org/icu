@@ -18,7 +18,7 @@
 #include "unicode/ustream.h"
 #include "unicode/ucnv.h"
 #include "unicode/uchar.h"
-#include "ustr_imp.h"
+#include "ustr_cnv.h"
 #include <string.h>
 
 // console IO

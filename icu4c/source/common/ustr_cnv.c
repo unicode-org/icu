@@ -25,7 +25,7 @@
 #include "cstring.h"
 #include "cmemory.h"
 #include "umutex.h"
-#include "ustr_imp.h"
+#include "ustr_cnv.h"
 
 /* mutexed access to a shared default converter ----------------------------- */
 

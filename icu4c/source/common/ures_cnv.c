@@ -20,7 +20,7 @@
 #include "unicode/ustring.h"
 #include "unicode/ucnv.h"
 #include "unicode/ures.h"
-#include "ustr_imp.h"
+#include "ustr_cnv.h"
 
 U_CAPI UResourceBundle * U_EXPORT2
 ures_openU(const UChar *myPath, 
