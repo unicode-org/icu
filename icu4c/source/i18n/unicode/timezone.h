@@ -200,7 +200,7 @@ public:
      * The caller owns the list that is returned, but does not own the strings contained
      * in that list.  Delete the array with uprv_free(), but DON'T delete the elements in the array.
      *
-     * <p>NOTE: uprv_free() is declared in the private header source/cmemory.h.
+     * <p>NOTE: uprv_free() is declared in the private header source/common/cmemory.h.
      *
      * @param rawOffset  An offset from GMT in milliseconds.
      * @param numIDs     Receives the number of items in the array that is returned.
@@ -208,7 +208,7 @@ public:
      *                   a time zone ID for a time zone with the given GMT offset.  If
      *                   there is no timezone that matches the GMT offset
      *                   specified, NULL is returned.
-     * @deprecated To be removed after 2003-Nov-8.  Use createAvailableIDs(int32_t) instead.
+     * @deprecated To be removed after 2003-Nov-8.  Use createEnumeration(int32_t) instead.
      */
     static const UnicodeString** createAvailableIDs(int32_t rawOffset, int32_t& numIDs);
 
@@ -221,7 +221,7 @@ public:
      * the strings contained in that list.  Delete the array with uprv_free(), but
      * <b>DON'T</b> delete the elements in the array.
      *
-     * <p>NOTE: uprv_free() is declared in the private header source/cmemory.h.
+     * <p>NOTE: uprv_free() is declared in the private header source/common/cmemory.h.
      *
      * @param country The ISO 3166 two-letter country code, or NULL to
      * retrieve zones not affiliated with any country.
@@ -231,7 +231,7 @@ public:
      * UnicodeString is a time zone ID for a time zone with the given
      * country.  If there is no timezone that matches the country
      * specified, NULL is returned.
-     * @deprecated To be removed after 2003-Nov-8.  Use createAvailableIDs(const char*) instead.
+     * @deprecated To be removed after 2003-Nov-8.  Use createEnumeration(const char*) instead.
      */
     static const UnicodeString** createAvailableIDs(const char* country,
                                                           int32_t& numIDs);
@@ -242,12 +242,12 @@ public:
      * is returned, but does not own the strings contained in that list.  Delete the array with uprv_free(),
      * but DON'T delete the elements in the array.
      *
-     * <p>NOTE: uprv_free() is declared in the private header source/cmemory.h.
+     * <p>NOTE: uprv_free() is declared in the private header source/common/cmemory.h.
      *
      * @param numIDs  Receives the number of zone IDs returned.
      * @return        An array of UnicodeString pointers, where each is a time zone ID
      *                supported by the TimeZone class.
-     * @deprecated To be removed after 2003-Nov-8.  Use createAvailableIDs(void) instead.
+     * @deprecated To be removed after 2003-Nov-8.  Use createEnumeration(void) instead.
      */
     static const UnicodeString** createAvailableIDs(int32_t& numIDs);
 
