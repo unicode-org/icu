@@ -1,14 +1,12 @@
-﻿
-// *******************************************************************************
+﻿// *******************************************************************************
 // *
-// *   Copyright (C) 1997-2000, International Business Machines
+// *   Copyright (C) 1997-2001, International Business Machines
 // *   Corporation and others.  All Rights Reserved.
 // *
 // *******************************************************************************
 
 ga{
    Version { "1.0" }
-
     
    DayAbbreviations { 
             "Domh",
@@ -72,9 +70,9 @@ ga{
             "�",
     }
     LocaleScript{ 
-                "Latin", // Script Name  
-                "Latn",  // ISO 15924 Name 
-                "Latf",  // ISO 15924 Name 
-                "Latg",  // ISO 15924 Name 
+            "Latin", // Script Name  
+            "Latn",  // ISO 15924 Name 
+            "Latf",  // ISO 15924 Name 
+            "Latg",  // ISO 15924 Name 
     }
 }
