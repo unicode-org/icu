@@ -78,9 +78,6 @@
 
           <li><a href="#MakeICUSmaller">How to Make ICU Smaller</a></li>
 
-          <li><a href="#ImportantNotesBinaryCompat">Binary
-          Compatibility</a></li>
-
           <li><a href="#ImportantNotesWindows">Windows Platform</a></li>
 
           <li><a href="#ImportantNotesUnix">Unix Type Platforms</a></li>
@@ -145,7 +142,7 @@
      The ICU homepage also links to related information about writing
     internationalized software.</p>
 
-    <table border="1" cellpadding="3" width="100%" summary="">
+    <table border="1" cellpadding="3" width="100%">
       <caption>
         Here are some useful links regarding ICU and internationalization in
         general.
@@ -411,7 +408,7 @@
     the data (<code>[lib]icudt</code>) and the common (<code>[lib]icuuc</code>)
     libraries in order to use ICU.</p>
 
-    <table border="1" cellpadding="0" width="100%" summary="">
+    <table border="1" cellpadding="0" width="100%">
       <caption>
         The following files describe the code drop.
       </caption>
@@ -438,7 +435,7 @@
     <p><br>
     </p>
 
-    <table border="1" cellpadding="0" width="100%" summary="">
+    <table border="1" cellpadding="0" width="100%">
       <caption>
         The following directories contain source code and data files.
       </caption>
@@ -620,7 +617,7 @@
     <h3><a name="HowToBuildSupported" href="#HowToBuildSupported">Supported
     Platforms</a></h3>
 
-    <table border="1" cellpadding="3" summary="">
+    <table border="1" cellpadding="3">
       <caption>
         Here is a status of functionality of ICU on several different
         platforms.
@@ -635,7 +632,7 @@
       </tr>
 
       <tr>
-        <td>Windows NT/2000/XP</td>
+        <td>Windows 2000/XP</td>
 
         <td>Microsoft Visual C++ 6.0</td>
 
@@ -661,7 +658,7 @@
       <tr>
         <td>Solaris 7 (SunOS 5.7)</td>
 
-        <td>Workshop Pro CC 6.0</td>
+        <td>Workshop Pro (Forte) CC 6.0</td>
 
         <td>Reference platform</td>
       </tr>
@@ -669,13 +666,14 @@
       <tr>
         <td>HP/UX 11.01</td>
 
-        <td>aCC A.12.10</td>
+        <td>aCC A.12.10<br>
+        cc A.11.01.00</td>
 
         <td>Reference platform</td>
       </tr>
 
       <tr>
-        <td>Windows 98</td>
+        <td>Windows NT/98</td>
 
         <td>Microsoft Visual C++ 6.0</td>
 
@@ -683,9 +681,10 @@
       </tr>
 
       <tr>
-        <td>AIX 4.3.3</td>
+        <td>Mac OS X (10.1)</td>
 
-        <td>xlC_r 3.6.6</td>
+        <td>gcc-932.1, based on gcc version 2.95.2<br>
+         (Developer Tools December 2001)</td>
 
         <td>Regularly tested</td>
       </tr>
@@ -716,10 +715,18 @@
       </tr>
 
       <tr>
-        <td>Mac OS X (10.1)</td>
+        <td>Red Hat Alpha Linux 7.2</td>
 
-        <td>gcc-932.1, based on gcc version 2.95.2<br>
-         (Developer Tools December 2001)</td>
+        <td>gcc 2.96</td>
+
+        <td>Regularly tested</td>
+      </tr>
+
+      <tr>
+        <td>Red Hat Alpha Linux 7.2</td>
+
+        <td>Compaq C++ Compiler 3.2<br>
+        Compaq C Compiler 6.5.6</td>
 
         <td>Regularly tested</td>
       </tr>
@@ -733,9 +740,9 @@
       </tr>
 
       <tr>
-        <td>HP/UX 11.01</td>
+        <td>AIX 4.3.3</td>
 
-        <td>CC A.03.10</td>
+        <td>xlC_r 4.0.2.1</td>
 
         <td>Rarely tested</td>
       </tr>
@@ -749,9 +756,17 @@
       </tr>
 
       <tr>
+        <td>HP/UX 11.01</td>
+
+        <td>CC A.03.10</td>
+
+        <td>Rarely tested</td>
+      </tr>
+
+      <tr>
         <td>NetBSD, OpenBSD</td>
 
-        <td>&nbsp;</td>
+        <td>gcc</td>
 
         <td>Rarely tested</td>
       </tr>
@@ -776,7 +791,7 @@
     <p><br>
     </p>
 
-    <p><strong>Key to testing frequency</strong></p>
+    <h4>Key to testing frequency</h4>
 
     <dl>
       <dt><i>Reference platform</i></dt>
@@ -1380,16 +1395,6 @@ del common/libicuuc.o
     makefiles are modified. For further details on data building see the <a
     href="http://oss.software.ibm.com/icu/userguide/">User Guide</a> "ICU Data"
     chapter.</p>
-
-    <h3><a name="ImportantNotesBinaryCompat" href=
-    "#ImportantNotesBinaryCompat">Binary Compatibility</a></h3>
-
-    <p>Even though the ICU development team tries to make a stable API, some
-    breaking changes are required from time to time. ICU does not guarentee
-    binary compatibility of its functions or its data between releases. Please
-    view the <a href=
-    "http://oss.software.ibm.com/icu/userguide/design.html">ICU Design</a>
-    chapter of the User's Guide for details.</p>
 
     <h3><a name="ImportantNotesWindows" href="#ImportantNotesWindows">Windows
     Platform</a></h3>
