@@ -12,7 +12,7 @@
 
 #if !UCONFIG_NO_TRANSLITERATION
 
-#include <malloc.h>
+#include <stdlib.h>
 #include <string.h>
 #include "unicode/utrans.h"
 #include "unicode/ustring.h"
