@@ -50,7 +50,6 @@ struct UColToken {
   UColTokListHeader *listHeader;
   UColToken* previous;
   UColToken* next;
-  UBool caseBit;
 };
 
 typedef struct {
