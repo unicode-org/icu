@@ -918,10 +918,13 @@ uloc_getVariant(const char* localeID,
         }
     }
     
+    /* removed by weiv. We don't want to handle POSIX variants anymore. Use canonicalization function */
     /* if we do not have a variant tag yet then try a POSIX variant after '@' */
+    /*
     if(!haveVariant && (localeID=uprv_strrchr(localeID, '@'))!=NULL) {
         i=_getVariant(localeID+1, '@', variant, variantCapacity);
     }
+    */
     return u_terminateChars(variant, variantCapacity, i, err);
 }
 
@@ -1692,8 +1695,14 @@ uloc_getDisplayName(const char *locale,
                     UChar *dest, int32_t destCapacity,
                     UErrorCode *pErrorCode)
 {
-    int32_t length, length2;
-    UBool hasLanguage, hasScript, hasCountry, hasVariant;
+    int32_t length, length2, length3 = 0;
+    UBool hasLanguage, hasScript, hasCountry, hasVariant, hasKeywords;
+    UEnumeration* keywordEnum = NULL;
+    int32_t keywordCount = 0;
+    const char *keyword = NULL;
+    int32_t keywordLen = 0;
+    char keywordValue[256];
+    int32_t keywordValueLen = 0;
 
     /* argument checking */
     if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
@@ -1806,14 +1815,75 @@ uloc_getDisplayName(const char *locale,
     hasVariant= length2>0;
     length+=length2;
 
+    if(hasVariant) {
+        /* append ", " */
+        if(length<destCapacity) {
+            dest[length]=0x2c;
+        }
+        ++length;
+        if(length<destCapacity) {
+            dest[length]=0x20;
+        }
+        ++length;
+    }
+
+    keywordEnum = uloc_openKeywords(locale, pErrorCode);
+    
+    for(keywordCount = uenum_count(keywordEnum, pErrorCode); keywordCount > 0 ; keywordCount--){
+          if(U_FAILURE(*pErrorCode)){
+              break;
+          }
+          // the uenum_next returns NUL terminated string
+          keyword = uenum_next(keywordEnum, &keywordLen, pErrorCode);
+          if(length + length3 < destCapacity) {
+            length3 += uloc_getDisplayKeyword(keyword, displayLocale, dest+length+length3, destCapacity-length-length3, pErrorCode);
+          } else {
+            length3 += uloc_getDisplayKeyword(keyword, displayLocale, NULL, 0, pErrorCode);
+          }
+          if(*pErrorCode==U_BUFFER_OVERFLOW_ERROR) {
+              /* keep preflighting */
+              *pErrorCode=U_ZERO_ERROR;
+          }
+          keywordValueLen = uloc_getKeywordValue(locale, keyword, keywordValue, 256, pErrorCode);
+          if(keywordValueLen) {
+            if(length + length3 < destCapacity) {
+              dest[length + length3] = 0x3D;
+            }
+            length3++;
+            if(length + length3 < destCapacity) {
+              length3 += uloc_getDisplayKeywordValue(locale, keyword, displayLocale, dest+length+length3, destCapacity-length-length3, pErrorCode);
+            } else {
+              length3 += uloc_getDisplayKeywordValue(locale, keyword, displayLocale, NULL, 0, pErrorCode);
+            }
+            if(*pErrorCode==U_BUFFER_OVERFLOW_ERROR) {
+                /* keep preflighting */
+                *pErrorCode=U_ZERO_ERROR;
+            }
+          }
+          if(keywordCount > 1) {
+            if(length + length3 + 1 < destCapacity && keywordCount) {
+              dest[length + length3]=0x2c;
+              dest[length + length3+1]=0x20;
+            }
+            length3++;
+          }
+    }
+    uenum_close(keywordEnum);
+
+    hasKeywords = length3 > 0;
+    length += length3;
+
+
+
     if ((hasScript && !hasCountry)
-        || (hasScript || hasCountry) && !hasVariant)
+        || ((hasScript || hasCountry) && !hasVariant && !hasKeywords)
+        || ((hasScript || hasCountry || hasVariant) && !hasKeywords))
     {
         /* remove ", " */
         length-=2;
     }
 
-    if (hasLanguage && (hasScript || hasCountry || hasVariant)) {
+    if (hasLanguage && (hasScript || hasCountry || hasVariant || hasKeywords)) {
         /* append ")" */
         if(length<destCapacity) {
             dest[length]=0x29;
