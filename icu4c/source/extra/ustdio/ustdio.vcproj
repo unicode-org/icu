@@ -142,9 +142,6 @@
 				RelativePath=".\locbund.c">
 			</File>
 			<File
-				RelativePath=".\loccache.c">
-			</File>
-			<File
 				RelativePath=".\sprintf.c">
 			</File>
 			<File
@@ -195,9 +192,6 @@
 			Filter="h;hpp;hxx;hm;inl">
 			<File
 				RelativePath=".\locbund.h">
-			</File>
-			<File
-				RelativePath=".\loccache.h">
 			</File>
 			<File
 				RelativePath=".\sprintf.h">

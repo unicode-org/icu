@@ -26,43 +26,49 @@
 #include "unicode/unum.h"
 #include "unicode/udat.h"
 
-struct ULocaleBundle {
-  char         *fLocale;
-  
-  UNumberFormat    *fNumberFormat;
-  UNumberFormat    *fPercentFormat;
-  UNumberFormat    *fCurrencyFormat;
-  UNumberFormat    *fScientificFormat;
-  UNumberFormat    *fSpelloutFormat;
+#define ULOCALEBUNDLE_NUMBERFORMAT_COUNT ((int32_t)UNUM_SPELLOUT)
 
-  UDateFormat    *fDateFormat;
-  UDateFormat    *fTimeFormat;
-};
-typedef struct ULocaleBundle ULocaleBundle;
+typedef struct ULocaleBundle {
+    char            *fLocale;
 
+    UNumberFormat   *fNumberFormat[ULOCALEBUNDLE_NUMBERFORMAT_COUNT];
+
+    UDateFormat     *fDateFormat;
+    UDateFormat     *fTimeFormat;
+} ULocaleBundle;
+
+
+/**
+ * Initialize a ULocaleBundle, initializing all formatters to 0.
+ * @param result A ULocaleBundle to initialize.
+ * @param loc The locale of the ULocaleBundle.
+ * @return A pointer to a ULocaleBundle, or 0 if <TT>loc</TT> was invalid.
+ */
+ULocaleBundle*        
+u_locbund_init(ULocaleBundle *result, const char *loc);
 
 /**
  * Create a new ULocaleBundle, initializing all formatters to 0.
  * @param loc The locale of the ULocaleBundle.
  * @return A pointer to a ULocaleBundle, or 0 if <TT>loc</TT> was invalid.
  */
-ULocaleBundle*
-u_locbund_new(const char *loc);
+/*ULocaleBundle*
+u_locbund_new(const char *loc);*/
 
 /**
  * Create a deep copy of this ULocaleBundle;
  * @param bundle The ULocaleBundle to clone.
  * @return A new ULocaleBundle.
  */
-ULocaleBundle*
-u_locbund_clone(const ULocaleBundle *bundle);
+/*ULocaleBundle*
+u_locbund_clone(const ULocaleBundle *bundle);*/
 
 /**
  * Delete the specified ULocaleBundle, freeing all associated memory.
  * @param bundle The ULocaleBundle to delete
  */
 void
-u_locbund_delete(ULocaleBundle *bundle);
+u_locbund_close(ULocaleBundle *bundle);
 
 /**
  * Get the NumberFormat used to format and parse numbers in a ULocaleBundle.
@@ -70,39 +76,7 @@ u_locbund_delete(ULocaleBundle *bundle);
  * @return A pointer to the NumberFormat used for number formatting and parsing.
  */
 UNumberFormat*        
-u_locbund_getNumberFormat(ULocaleBundle *bundle);
-
-/**
- * Get the NumberFormat used to format and parse percents in a ULocaleBundle.
- * @param bundle The ULocaleBundle to use
- * @return A pointer to the NumberFormat used for percent formatting and parsing.
- */
-UNumberFormat*        
-u_locbund_getPercentFormat(ULocaleBundle *bundle);
-
-/**
- * Get the NumberFormat used to format and parse currency in a ULocaleBundle.
- * @param bundle The ULocaleBundle to use
- * @return A pointer to the NumberFormat used for currency formatting and parsing.
- */
-UNumberFormat*    
-u_locbund_getCurrencyFormat(ULocaleBundle *bundle);
-
-/**
- * Get the NumberFormat used to format and parse scientific numbers in a ULocaleBundle.
- * @param bundle The ULocaleBundle to use
- * @return A pointer to the NumberFormat used for scientific formatting and parsing.
- */
-UNumberFormat*    
-u_locbund_getScientificFormat(ULocaleBundle *bundle);
-
-/**
- * Get the NumberFormat used format to and parse spelled-out numbers in a ULocaleBundle.
- * @param bundle The ULocaleBundle to use
- * @return A pointer to the NumberFormat used for spelled-out number formatting and parsing.
- */
-UNumberFormat*
-u_locbund_getSpelloutFormat(ULocaleBundle *bundle);
+u_locbund_getNumberFormat(ULocaleBundle *bundle, UNumberFormatStyle style);
 
 /**
  * Get the DateFormat used to format and parse dates in a ULocaleBundle.
