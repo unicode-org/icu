@@ -1184,15 +1184,17 @@ void TransliteratorRoundTripTest::TestDevanagariLatin() {
     RTTest test("Latin-Devanagari");
     Legal *legal = new LegalIndic();
 
-#if (U_ICU_VERSION_MAJOR_NUM==2 && U_ICU_VERSION_MINOR_NUM==6)
-    test.test(UnicodeString(latinForIndic, ""), 
+    if (isICUVersionAtLeast(ICU_30)) {
+        // We temporarily filter against Unicode 3.2, but we only do this
+        // before version 3.0.    
+        test.test(UnicodeString(latinForIndic, ""), 
               UnicodeString("[[:Devanagari:]&[:Age=3.2:]]", ""), NULL, this, quick, 
               legal, 50);
-#else
-    test.test(UnicodeString(latinForIndic, ""), 
-              UnicodeString("[:Devanagari:]", ""), NULL, this, quick, 
-              legal, 50);
-#endif
+        return;
+    } else {
+        logln("Warning: TestDevanagariLatin needs to be updated to remove Unicode 3.2 filter");
+    }
+
     delete legal;
 }
 
@@ -1459,22 +1461,26 @@ void TransliteratorRoundTripTest::TestInterIndic() {
     for(int i = 0; i < num;i++){
         RTTest test(interIndicArray[i*INTER_INDIC_ARRAY_WIDTH + 0]);
         Legal *legal = new LegalIndic();
-#if (U_ICU_VERSION_MAJOR_NUM==2 && U_ICU_VERSION_MINOR_NUM==6)
-        UnicodeString temp1 = "[";
-        temp1.append(interIndicArray[i*INTER_INDIC_ARRAY_WIDTH + 1]);
-        temp1.append("& [:Age=3.2:]]");
-        UnicodeString temp2 = "[";
-        temp2.append(interIndicArray[i*INTER_INDIC_ARRAY_WIDTH + 2]);
-        temp2.append("& [:Age=3.2:]]");
-#else
-        UnicodeString temp1 = interIndicArray[i*INTER_INDIC_ARRAY_WIDTH + 1];
-        UnicodeString temp2 = interIndicArray[i*INTER_INDIC_ARRAY_WIDTH + 2];
-#endif
-        test.test(temp1, 
-                  temp2, 
-                  interIndicArray[i*INTER_INDIC_ARRAY_WIDTH + 3], // roundtrip exclusions 
-                  this, quick, legal, 50);
-       delete legal;
+
+        if (isICUVersionAtLeast(ICU_30)) {
+            // We temporarily filter against Unicode 3.2, but we only do this
+            // before version 3.0.    
+            UnicodeString temp1 = "[";
+            temp1.append(interIndicArray[i*INTER_INDIC_ARRAY_WIDTH + 1]);
+            temp1.append("& [:Age=3.2:]]");
+            UnicodeString temp2 = "[";
+            temp2.append(interIndicArray[i*INTER_INDIC_ARRAY_WIDTH + 2]);
+            temp2.append("& [:Age=3.2:]]");
+
+            test.test(temp1, 
+                      temp2, 
+                      interIndicArray[i*INTER_INDIC_ARRAY_WIDTH + 3], // roundtrip exclusions 
+                      this, quick, legal, 50);
+            return;
+        } else {
+            logln("Warning: TestDevanagariLatin needs to be updated to remove Unicode 3.2 filter");
+        }
+        delete legal;
     }
     
 }
