@@ -13,7 +13,7 @@ import java.util.*;
 
 /*
  * @author Alan Liu
- * @version $RCSfile: NormalizationTransliterator.java,v $ $Revision: 1.2 $ $Date: 2001/09/20 21:20:39 $
+ * @version $RCSfile: NormalizationTransliterator.java,v $ $Revision: 1.3 $ $Date: 2001/09/28 05:45:46 $
  */
 public class NormalizationTransliterator extends Transliterator {
 
@@ -100,10 +100,40 @@ public class NormalizationTransliterator extends Transliterator {
         // character b, and pass everything from the start up to the
         // character before b to normalizer.
         if (isIncremental) {
-            --limit;
-            while (limit > start &&
-                   UCharacter.getCombiningClass(text.charAt(limit)) != 0) {
+            // Wrinkle: Jamo has a combining class of zero, but we
+            // don't want to normalize individual Jamo one at a time
+            // if we're composing incrementally.  If we are composing
+            // in incremental mode then we collect up trailing jamo
+            // and save them for next time.
+            boolean doStandardBackup = true;
+            if (mode.compose() && isIncremental) {
+                // As a minor optimization, if there are three or more
+                // trailing jamo, we let the first three through --
+                // these should be handled correctly.
+                char c;
+                while (limit > offsets.start &&
+                       (c=text.charAt(limit-1)) >= 0x1100 &&
+                       c < 0x1200) {
+                    --limit;
+                }
+                // Characters in [limit, offsets.limit) are jamo.
+                // If we have at least 3 jamo, then allow them
+                // to be transliterated.  If we have zero jamo,
+                // then proceed as usual.
+                if (limit < offsets.limit) {
+                    if ((offsets.limit - limit) >= 3) {
+                        limit += 3;
+                    }
+                    doStandardBackup = false;
+                }
+            }
+
+            if (doStandardBackup) {
                 --limit;
+                while (limit > start &&
+                       UCharacter.getCombiningClass(text.charAt(limit)) != 0) {
+                    --limit;
+                }
             }
         }
 
@@ -113,11 +143,11 @@ public class NormalizationTransliterator extends Transliterator {
             String input = new String(chars);
             String output = Normalizer.normalize(input, mode, options);
             text.replace(start, limit, output);
-            
+
             int delta = output.length() - input.length();
             offsets.contextLimit += delta;
             offsets.limit += delta;
-            offsets.start = limit;
+            offsets.start = limit + delta;
         }
     }
 }
