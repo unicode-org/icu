@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/UTF16.java,v $ 
-* $Date: 2001/09/01 00:59:13 $ 
-* $Revision: 1.7 $
+* $Date: 2001/09/06 16:32:26 $ 
+* $Revision: 1.8 $
 *
 *******************************************************************************
 */
@@ -609,6 +609,8 @@ public final class UTF16
   * If a validity check is required, use 
   * <a href="../UCharacter.html#isLegal(char)">isLegal()</a></code> on the 
   * codepoint at offset16 before calling.
+  * The result returned will be a newly created String obtained by calling 
+  * source.substring(..) with the appropriate indexes.
   * @param source the input string.
   * @param offset16 the UTF16 index to the codepoint in source
   * @return string value of char32 in UTF16 format
@@ -633,6 +635,8 @@ public final class UTF16
   * If a validity check is required, use 
   * <a href="../UCharacter.html#isLegal(char)">isLegal()</a></code> on the 
   * codepoint at offset16 before calling.
+  * The result returned will be a newly created String obtained by calling 
+  * source.substring(..) with the appropriate indexes.
   * @param source the input string buffer.
   * @param offset16 the UTF16 index to the codepoint in source
   * @return string value of char32 in UTF16 format
@@ -658,6 +662,8 @@ public final class UTF16
   * If a validity check is required, use 
   * <a href="../UCharacter.html#isLegal(char)">isLegal()</a></code> on the 
   * codepoint at offset16 before calling.
+  * The result returned will be a newly created String containing the relevant
+  * characters.
   * @param source the input char array.
   * @param start start index of the subarray
   * @param limit end index of the subarray
