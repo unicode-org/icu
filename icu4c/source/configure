@@ -1258,7 +1258,7 @@ alpha*-*-linux-gnu)
 	else  
 		icu_cv_host_frag=mh-alpha-linux-cc
 	fi ;;
-*-dec-osf) icu_cv_host_frag=mh-alpha-osf ;;
+*-dec-osf*) icu_cv_host_frag=mh-alpha-osf ;;
 *-*-linux*) icu_cv_host_frag=mh-linux ;;
 *-*-cygwin)	icu_cv_host_frag=mh-cygwin ;;
 *-*-freebsd*|*-*-netbsd*) 	icu_cv_host_frag=mh-bsd-gcc ;;
@@ -3977,7 +3977,7 @@ case "${host}" in
 	*-*-hpux*) 	platform=HPUX ;;
 	*-dec-osf*) 	platform=U_OSF ;;
 	*-*-irix*)      platform=IRIX ;;
-	*-*-os390*)	platform=OS390
+	*-*ibm-openedition*|*-*-os390*)	platform=OS390
 			ICUDATA_CHAR="e" ;;
 	*-*-os400*)	platform=OS400
 			ICUDATA_CHAR="e" ;;
@@ -3999,7 +3999,7 @@ case "${host}" in
 	*-sequent-*)	ld_rpath_suf="" ;;
 	*-*-hpux*) 	ld_rpath_suf=":" ;;
 	*-*-irix*)      ld_rpath_suf=" " ;;
-	*-*-os390*)	ld_rpath_suf="" ;;
+	*-*ibm-openedition*|*-*-os390*)	ld_rpath_suf="" ;;
 	*-*-os400*)	ld_rpath_suf=" " ;;
 	*) 		ld_rpath_suf="" ;;
 esac
