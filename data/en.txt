@@ -16,6 +16,16 @@ en {
             "#,##0%",
     }
     localPatternChars { "GyMdkHmsSEDFwWahKz" }
+
+    // Format for the display name of a Transliterator.
+    // This is the English form of this resource.
+    TransliteratorNamePattern { "{0,choice,0#|1#{1}|2#{1} to {2}}" }
+
+    // Transliterator display names
+    "%Translit%Hex"         { "Hex Escape" }
+    "%Translit%UnicodeName" { "Unicode Name" }
+    "%Translit%UnicodeChar" { "Unicode Character" }
+
     zoneStrings { 
         {
                 "PST",
