@@ -12,17 +12,16 @@
  */
 
 package com.ibm.text;
+import com.ibm.util.*;
 // This class is MACHINE GENERATED.  Run NormalizerBuilder to regenerate.
 
-import com.ibm.util.Utility;
-import com.ibm.util.CompactCharArray;
 
 class ComposeData {
     static final short BASE_COUNT = 773;
     static final short COMBINING_COUNT = 61;
     static final int MAX_COMPAT = 4341;
     static final int MAX_CANON = 5124;
-    static final char MAX_COMPOSED = 0xFB1D;
+    static final char MAX_COMPOSED = 0xfb1d;
     static final int MAX_INDEX = 8899;
     static final int INITIAL_JAMO_INDEX = 8900;
     static final int MEDIAL_JAMO_INDEX = 8901;
@@ -832,7 +831,7 @@ class ComposeData {
         "\u22B6\u22BA\u22BD\u22C0"
     );
 
-    static final String replace =
+    static final String replace = 
         "  \u0308\000s\000\u03A5\000 \u0313\000 \u0314\000 \000a\000 \u0304\000"+
         "2\0003\000 \u0301\000\u03BC\000 \u0327\0001\000o\0001\u20444\0001\u2044"+
         "2\0003\u20444\000IJ\000ij\000L\u00B7\000l\u00B7\000\u02BCn\000DZ\u030C"+

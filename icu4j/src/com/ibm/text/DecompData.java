@@ -12,10 +12,9 @@
  */
 
 package com.ibm.text;
+import com.ibm.util.*;
 // This class is MACHINE GENERATED.  Run NormalizerBuilder to regenerate.
 
-import com.ibm.util.CompactCharArray;
-import com.ibm.util.CompactByteArray;
 
 class DecompData {
     static final int MAX_CANONICAL = 21754;
@@ -366,7 +365,7 @@ class DecompData {
         "\000\u2B91\u2B95\u2B99\u2B9D\u2BA1\u2BA5\u2BA9\uA5A5\021\000"
         );
 
-    static final String contents =
+    static final String contents = 
         "\uFFFF  \u0308a \u030423 \u0301\u03BC \u03271o1\u204441\u204423\u2044"+
         "4IJijL\u00B7l\u00B7\u02BCnsDZ\u030CDz\u030Cdz\u030CLJLjljNJNjnjh\u0266"+
         "r\u0279\u027B\u0281wy \u0306 \u0307 \u030A \u0328 \u0303 \u030B\u0263"+
