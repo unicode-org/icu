@@ -320,6 +320,7 @@ icu4j/src/com/ibm/icu/dev/tool/xmlcomparator/ResultXML.xml svneol=native#text/xm
 icu4j/src/com/ibm/icu/impl/data/ICULocaleData.jar -text svneol=unset#application/java-archive
 icu4j/src/com/ibm/icu/impl/data/invuca.icu -text
 icu4j/src/com/ibm/icu/impl/data/package.html svneol=native#text/html
+icu4j/src/com/ibm/icu/impl/data/pnames.icu -text
 icu4j/src/com/ibm/icu/impl/data/thai_dict -text
 icu4j/src/com/ibm/icu/impl/data/ucadata.icu -text
 icu4j/src/com/ibm/icu/impl/data/unames.icu -text
