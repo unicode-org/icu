@@ -66,7 +66,7 @@ DEPS = $(OBJECTS:.o=.d)
 HEADERS = utypes.h uloc.h ures.h ustring.h uchar.h chariter.h		\
 uchriter.h locid.h resbund.h unicode.h putil.h platform.h unistr.h	\
 schriter.h normlzr.h ucnv_err.h ucnv.h ucnv_bld.h convert.h         \
-ubidi.h bidi.h cmemory.h
+ubidi.h bidi.h
 
 ## List of phony targets
 .PHONY : all all-local install install-local clean clean-local	\
