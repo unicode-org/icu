@@ -20,7 +20,7 @@
 
 #if !UCONFIG_NO_FORMATTING
 
-#include "uscanf_p.h"
+#include "uscanf.h"
 #include "ufmt_cmn.h"
 
 /* flag characters for u_scanf */

@@ -25,12 +25,19 @@
 #include "unicode/ustdio.h"
 #include "unicode/ustring.h"
 
-#include "sprintf.h"
-#include "uprntf_p.h"
+#include "uprintf.h"
 #include "locbund.h"
 
 #include "cmemory.h"
 #include <ctype.h>
+
+typedef struct u_localized_print_string {
+    UChar     *str;     /* Place to write the string */
+    int32_t   available;/* Number of codeunits available to write to */
+    int32_t   len;      /* Maximum number of code units that can be written to output */
+
+    ULocaleBundle  fBundle;     /* formatters */
+} u_localized_print_string;
 
 /* u_minstrncpy copies the minimum number of code units of (count or output->available) */
 static int32_t
