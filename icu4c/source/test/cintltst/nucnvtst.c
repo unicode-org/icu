@@ -3085,8 +3085,6 @@ TestLMBCS() {
        }
        {
          /* limits & surrogate error testing */
-         UErrorCode errorCode=U_ZERO_ERROR;
-       
          uint8_t LIn [sizeof(pszLMBCS)];
          const uint8_t * pLIn = LIn;
                 
@@ -3102,7 +3100,9 @@ TestLMBCS() {
          int32_t off [sizeof(offsets)];
          UChar32 uniChar;
 
-          /* negative source request should always return U_ILLEGAL_ARGUMENT_ERROR */
+         errorCode=U_ZERO_ERROR;
+
+         /* negative source request should always return U_ILLEGAL_ARGUMENT_ERROR */
          ucnv_fromUnicode(cnv, &pLOut,pLOut+1,&pUIn,pUIn-1,off,FALSE, &errorCode);
          if (errorCode != U_ILLEGAL_ARGUMENT_ERROR)
          {
