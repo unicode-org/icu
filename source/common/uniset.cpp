@@ -733,7 +733,9 @@ UnicodeString& UnicodeSet::_generatePattern(UnicodeString& result,
             UChar32 end = getRangeStart(i)-1;
             _appendToPat(result, start, escapeUnprintable);
             if (start != end) {
-                result.append(HYPHEN);
+                if ((start+1) != end) {
+                    result.append(HYPHEN);
+                }
                 _appendToPat(result, end, escapeUnprintable);
             }
         }
@@ -746,7 +748,9 @@ UnicodeString& UnicodeSet::_generatePattern(UnicodeString& result,
             UChar32 end = getRangeEnd(i);
             _appendToPat(result, start, escapeUnprintable);
             if (start != end) {
-                result.append(HYPHEN);
+                if ((start+1) != end) {
+                    result.append(HYPHEN);
+                }
                 _appendToPat(result, end, escapeUnprintable);
             }
         }
