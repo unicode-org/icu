@@ -915,6 +915,10 @@ U_CAPI void U_EXPORT2
 ubidi_getLogicalMap(UBiDi *pBiDi, int32_t *indexMap, UErrorCode *pErrorCode) {
     UBiDiLevel *levels;
 
+    /* test for buffer overflows */
+    if (U_FAILURE(*pErrorCode)) {
+        return;
+    }
     /* ubidi_getLevels() checks all of its and our arguments */
     if((levels=(UBiDiLevel *)ubidi_getLevels(pBiDi, pErrorCode))==NULL) {
         /* no op */
@@ -927,6 +931,10 @@ ubidi_getLogicalMap(UBiDi *pBiDi, int32_t *indexMap, UErrorCode *pErrorCode) {
 
 U_CAPI void U_EXPORT2
 ubidi_getVisualMap(UBiDi *pBiDi, int32_t *indexMap, UErrorCode *pErrorCode) {
+    /* test for buffer overflows */
+    if (U_FAILURE(*pErrorCode)) {
+        return;
+    }
     /* ubidi_countRuns() checks all of its and our arguments */
     if(ubidi_countRuns(pBiDi, pErrorCode)<=0) {
         /* no op */

@@ -39,14 +39,20 @@ u_formatMessage(const char  *locale,
 {
     va_list    ap;
     int32_t actLen;
-    
+    /* test for buffer overflows */
+    if (U_FAILURE(*status)) {
+        return 0;
+    }
     //argument checking defered to subsequent method calls
 
     // start vararg processing
     va_start(ap, status);
 
     actLen = u_vformatMessage(locale,pattern,patternLength,result,resultLength,ap,status);
-
+    /* test for buffer overflows */
+    if (U_FAILURE(*status)) {
+        return 0;
+    }
     // end vararg processing
     va_end(ap);
 
@@ -64,7 +70,10 @@ u_vformatMessage(   const char  *locale,
 
 {
     //argument checking defered to subsequent method calls
-
+    /* test for buffer overflows */
+    if (U_FAILURE(*status)) {
+        return 0;
+    }
     UMessageFormat *fmt = umsg_open(pattern,patternLength,locale,NULL,status);
     int32_t retVal = umsg_vformat(fmt,result,resultLength,ap,status);
     umsg_close(fmt);
@@ -84,12 +93,18 @@ u_formatMessageWithError(const char *locale,
     va_list    ap;
     int32_t actLen;
     //argument checking defered to subsequent method calls
-
+    /* test for buffer overflows */
+    if (U_FAILURE(*status)) {
+        return 0;
+    }
     // start vararg processing
     va_start(ap, status);
 
     actLen = u_vformatMessageWithError(locale,pattern,patternLength,result,resultLength,parseError,ap,status);
-
+    /* test for buffer overflows */
+    if (U_FAILURE(*status)) {
+        return 0;
+    }
     // end vararg processing
     va_end(ap);
 
@@ -108,7 +123,10 @@ u_vformatMessageWithError(  const char  *locale,
 
 {
     //argument checking defered to subsequent method calls
-
+    /* test for buffer overflows */
+    if (U_FAILURE(*status)) {
+        return 0;
+    }
     UMessageFormat *fmt = umsg_open(pattern,patternLength,locale,parseError,status);
     int32_t retVal = umsg_vformat(fmt,result,resultLength,ap,status);
     umsg_close(fmt);
@@ -130,14 +148,20 @@ u_parseMessage( const char   *locale,
                 ...)
 {
     va_list    ap;
-
+    /* test for buffer overflows */
+    if (U_FAILURE(*status)) {
+        return;
+    }
     //argument checking defered to subsequent method calls
 
     // start vararg processing
     va_start(ap, status);
 
     u_vparseMessage(locale,pattern,patternLength,source,sourceLength,ap,status);
-
+    /* test for buffer overflows */
+    if (U_FAILURE(*status)) {
+        return;
+    }
     // end vararg processing
     va_end(ap);
 }
@@ -152,7 +176,10 @@ u_vparseMessage(const char  *locale,
                 UErrorCode  *status)
 {
     //argument checking defered to subsequent method calls
-
+    /* test for buffer overflows */
+    if (U_FAILURE(*status)) {
+        return;
+    }
     UMessageFormat *fmt = umsg_open(pattern,patternLength,locale,NULL,status);
     int32_t count = 0;
     umsg_vparse(fmt,source,sourceLength,&count,ap,status);
@@ -172,12 +199,19 @@ u_parseMessageWithError(const char  *locale,
     va_list    ap;
 
     //argument checking defered to subsequent method calls
+    /* test for buffer overflows */
+    if (U_FAILURE(*status)) {
+        return;
+    }
 
     // start vararg processing
     va_start(ap, status);
 
     u_vparseMessageWithError(locale,pattern,patternLength,source,sourceLength,ap,error,status);
-
+    /* test for buffer overflows */
+    if (U_FAILURE(*status)) {
+        return;
+    }
     // end vararg processing
     va_end(ap);
 }
@@ -192,7 +226,10 @@ u_vparseMessageWithError(const char  *locale,
                          UErrorCode* status)
 {
     //argument checking defered to subsequent method calls
-
+    /* test for buffer overflows */
+    if (U_FAILURE(*status)) {
+        return;
+    }
     UMessageFormat *fmt = umsg_open(pattern,patternLength,locale,error,status);
     int32_t count = 0;
     umsg_vparse(fmt,source,sourceLength,&count,ap,status);
@@ -351,7 +388,10 @@ umsg_format(    UMessageFormat *fmt,
 {
     va_list    ap;
     int32_t actLen;
-    
+    /* test for buffer overflows */
+    if (U_FAILURE(*status)) {
+        return 0;
+    }
     //argument checking defered to last method call umsg_vformat which
     //saves time when arguments are valid and we dont care when arguments are not
     //since we return an error anyway
@@ -454,7 +494,10 @@ umsg_parse( UMessageFormat *fmt,
             ...)
 {
     va_list    ap;
-
+    /* test for buffer overflows */
+    if (U_FAILURE(*status)) {
+        return;
+    }
     //argument checking defered to last method call umsg_vparse which
     //saves time when arguments are valid and we dont care when arguments are not
     //since we return an error anyway
@@ -491,6 +534,10 @@ umsg_vparse(UMessageFormat *fmt,
 
     UnicodeString srcString(source,sourceLength);
     Formattable *args = ((MessageFormat*)fmt)->parse(source,*count,*status);
+    /* test for buffer overflows */
+    if (U_FAILURE(*status)) {
+        return;
+    }
     UDate *aDate;
     double *aDouble;
     UChar *aString;

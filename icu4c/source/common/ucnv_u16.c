@@ -35,6 +35,10 @@ _UTF16PEToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
     int32_t count;
     int32_t sourceIndex     = 0;
 
+    /* test for buffer overflows */
+    if (U_FAILURE(*pErrorCode)) {
+        return;
+    }
     if(length <= 0 && cnv->toUnicodeStatus == 0) {
         /* no input, nothing to do */
         return;
@@ -118,6 +122,10 @@ _UTF16PEFromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
     int32_t count;
     int32_t sourceIndex     = 0;
 
+    /* test for buffer overflows */
+    if (U_FAILURE(*pErrorCode)) {
+        return;
+    }
     if(length <= 0 && cnv->fromUnicodeStatus == 0) {
         /* no input, nothing to do */
         return;
@@ -199,6 +207,10 @@ _UTF16OEToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
     int32_t count;
     int32_t sourceIndex     = 0;
 
+    /* test for buffer overflows */
+    if (U_FAILURE(*pErrorCode)) {
+        return;
+    }
     if(length <= 0 && cnv->toUnicodeStatus == 0) {
         /* no input, nothing to do */
         return;
@@ -291,6 +303,10 @@ _UTF16OEFromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
     int32_t count;
     int32_t sourceIndex = 0;
 
+    /* test for buffer overflows */
+    if (U_FAILURE(*pErrorCode)) {
+        return;
+    }
     if(length <= 0 && cnv->fromUnicodeStatus == 0) {
         /* no input, nothing to do */
         return;

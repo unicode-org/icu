@@ -712,6 +712,10 @@ UnicodeString& Transliterator::getDisplayName(const UnicodeString& id,
     UErrorCode status = U_ZERO_ERROR;
 
     ResourceBundle bundle(u_getDataDirectory(), inLocale, status);
+    /* test for buffer overflows */
+    if (U_FAILURE(status)) {
+        return result;
+    }
 
     // Suspend checking status until later...
 

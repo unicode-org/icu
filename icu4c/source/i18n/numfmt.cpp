@@ -452,6 +452,10 @@ NumberFormat::createInstance(const Locale& desiredLocale,
     }
 
     ResourceBundle numberPatterns(resource.get(DecimalFormat::fgNumberPatterns, status));
+    /* test for buffer overflows */
+    if (U_FAILURE(status)) {
+        return NULL;
+    }
     // If not all the styled patterns exists for the NumberFormat in this locale,
     // sets the status code to failure and returns nil.
     //if (patternCount < fgNumberPatternsCount) status = U_INVALID_FORMAT_ERROR;

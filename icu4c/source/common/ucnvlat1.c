@@ -36,6 +36,10 @@ _Latin1ToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
 
     int32_t sourceIndex;
 
+    /* test for buffer overflows */
+    if (U_FAILURE(*pErrorCode)) {
+        return;
+    }
     /* set up the local pointers */
     source=(const uint8_t *)pArgs->source;
     target=pArgs->target;
@@ -157,6 +161,10 @@ _Latin1FromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
     UConverterCallbackReason reason;
     int32_t i;
 
+    /* test for buffer overflows */
+    if (U_FAILURE(*pErrorCode)) {
+        return;
+    }
     /* set up the local pointers */
     cnv=pArgs->converter;
     source=pArgs->source;
@@ -474,6 +482,10 @@ _ASCIIToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
 
     int32_t sourceIndex;
 
+    /* test for buffer overflows */
+    if (U_FAILURE(*pErrorCode)) {
+        return;
+    }
     /* set up the local pointers */
     source=(const uint8_t *)pArgs->source;
     sourceLimit=(const uint8_t *)pArgs->sourceLimit;

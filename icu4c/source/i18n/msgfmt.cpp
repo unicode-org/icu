@@ -777,6 +777,10 @@ MessageFormat::format(  const UnicodeString& pattern,
                         UnicodeString& result, 
                         UErrorCode& success)
 {
+    /* test for buffer overflows */
+    if (U_FAILURE(success)) {
+        return result;
+    }
     // {sfb} why does this use a local when so many other places use a static?
     MessageFormat *temp = new MessageFormat(pattern, success);
     /* test for NULL */
@@ -828,6 +832,11 @@ MessageFormat::format(const Formattable* arguments,
                       int32_t recursionProtection,
                       UErrorCode& success) const 
 {
+    /* test for buffer overflows */
+    if (U_FAILURE(success)) {
+        return result;
+    }
+    
     if(/*arguments == NULL ||*/ cnt < 0) {
         success = U_ILLEGAL_ARGUMENT_ERROR;
         return result;
@@ -862,6 +871,10 @@ MessageFormat::format(const Formattable* arguments,
         // refers to a ChoiceFormat object.
         if (fFormats[i] != NULL) {
             fFormats[i]->format(obj, arg, success);
+            /* test for buffer overflows */
+            if (U_FAILURE(success)) {
+                return result;
+            }
             tryRecursion = (fFormats[i]->getDynamicClassID() == ChoiceFormat::getStaticClassID());
         }
         // If the obj data type if a number, use a NumberFormat instance.
