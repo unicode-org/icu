@@ -120,9 +120,10 @@ typedef unsigned short uint16_t;
 /* Character data types                                                      */
 /*===========================================================================*/
 
-#define U_SIZEOF_WCHAR_T 2
-#define U_HAVE_WCHAR_H 0
+#define U_HAVE_WCHAR_H		0
+#define U_SIZEOF_WCHAR_T	2
 
+#define U_HAVE_WCSCPY		0
 
 /*===========================================================================*/
 /* Symbol import-export control                                              */

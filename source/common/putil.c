@@ -130,20 +130,10 @@ static char* u_bottomNBytesOfDouble(double* d, int n);
   functions).
   ---------------------------------------------------------------------------*/
 
-/* Assume POSIX, and modify as necessary below*/
-#if defined(WIN32) || defined(XP_MAC) || defined(OS400) || defined(OS2) || defined(U_DARWIN)
-#   undef U_POSIX
+#if defined(_WIN32) || defined(XP_MAC) || defined(OS400) || defined(OS2)
+#   undef U_POSIX_LOCALE
 #else
-#   define U_POSIX
-#endif
-
-/* Separate POSIX into a few different features, allow for some but not all */
-#if defined(U_POSIX)
-#define U_POSIX_LOCALE 1
-#define U_POSIX_TIMEZONE 1
-#define U_HAVE_NL_LANGINFO 1
-#elif defined(U_DARWIN)
-#define U_POSIX_LOCALE 1
+#   define U_POSIX_LOCALE	1
 #endif
 
 #ifdef U_HAVE_NL_LANGINFO
@@ -679,7 +669,7 @@ uprv_tzset()
 #elif defined(WIN32) || defined(OS2)
   _tzset();
 
-#elif defined(U_POSIX)
+#elif U_HAVE_TZSET
   tzset();
 
 #endif
@@ -710,7 +700,7 @@ uprv_timezone()
 #elif defined(WIN32) || defined(OS2) || defined(OS390)
   return _timezone;
 
-#elif defined(U_POSIX)
+#elif U_HAVE_TZSET
   return timezone;
 
 #endif
@@ -725,7 +715,7 @@ uprv_tzname(int n)
 #elif defined(WIN32) || defined(OS2)
   return _tzname[n];
 
-#elif defined(U_POSIX)
+#elif U_HAVE_TZSET
   return tzname[n];
 
 #endif
@@ -1644,13 +1634,17 @@ const char* uprv_getDefaultCodepage()
         uprv_memset(codesetName, 0, 100);
     }
 #if U_HAVE_NL_LANGINFO
-#ifdef U_LINUX
-    if (nl_langinfo(_NL_CTYPE_CODESET_NAME) != NULL)
-        uprv_strcpy(codesetName, nl_langinfo(_NL_CTYPE_CODESET_NAME));     
+    /**/ {
+        const char *codeset;
+#if U_HAVE_CODESET
+        codeset = nl_langinfo(CODESET);
 #else
-    if (nl_langinfo(CODESET) != NULL)
-        uprv_strcpy(codesetName, nl_langinfo(CODESET));    
-#endif  
+        codeset = nl_langinfo(_NL_CTYPE_CODESET_NAME);
+#endif
+        if (codeset != NULL) {
+            uprv_strcpy(codesetName, codeset);
+        }
+    }
 #endif
     if (uprv_strlen(codesetName) == 0) 
     {
