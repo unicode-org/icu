@@ -844,22 +844,22 @@ static void TestMaxExpansion()
 
     /* testing special jamo &a<\u1160 */
     rule[0] = 0x26;
-    rule[1] = 0x61;
+    rule[1] = 0x71;
     rule[2] = 0x3c;
     rule[3] = 0x1165;
     rule[4] = 0x2f;
     rule[5] = 0x71;
     rule[6] = 0x71;
-    rule[5] = 0x71;
     rule[7] = 0x71;
-    rule[8] = 0;
+    rule[8] = 0x71;
+    rule[9] = 0;
     
     coll = ucol_openRules(rule, u_strlen(rule), UCOL_DEFAULT_NORMALIZATION,
         UCOL_DEFAULT_STRENGTH, &status);
     iter = ucol_openElements(coll, &ch, 1, &status);
 
     temporder = ucol_previous(iter, &status);
-    if (U_FAILURE(status) || ucol_getMaxExpansion(iter, temporder) != 5) {
+    if (U_FAILURE(status) || ucol_getMaxExpansion(iter, temporder) != 6) {
         log_err("Failure at codepoint %d, maximum expansion count > %d\n",
                 ch, 5);
     }
