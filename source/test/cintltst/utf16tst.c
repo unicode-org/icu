@@ -151,15 +151,7 @@ void TestGetChar()
         if(c != result[i+1]){
             log_err("ERROR: UTF16_GET_CHAR_SAFE failed for offset=%ld. Expected:%lx Got:%lx\n", offset, result[i+1], c);
         }
-        UTF16_GET_CHAR_SAFE_LENIENT(input, 0, offset, sizeof(input)/U_SIZEOF_UCHAR, c);
-        if(c != result[i+1]){
-            log_err("ERROR: UTF16_GET_CHAR_SAFE failed for offset=%ld. Expected:%lx Got:%lx\n", offset, result[i+1], c);
-        }
         UTF16_GET_CHAR_SAFE(input, 0, offset, sizeof(input)/U_SIZEOF_UCHAR, c, TRUE);
-        if(c != result[i+2]){
-            log_err("ERROR: UTF16_GET_CHAR_SAFE(strict) failed for offset=%ld. Expected:%lx Got:%lx\n", offset, result[i+2], c);
-        }
-        UTF16_GET_CHAR_SAFE_STRICT(input, 0, offset, sizeof(input)/U_SIZEOF_UCHAR, c);
         if(c != result[i+2]){
             log_err("ERROR: UTF16_GET_CHAR_SAFE(strict) failed for offset=%ld. Expected:%lx Got:%lx\n", offset, result[i+2], c);
         }
@@ -227,27 +219,7 @@ void TestNextPrevChar(){
          }
 
          setOffset=offset;
-         UTF16_NEXT_CHAR_SAFE_LENIENT(input, setOffset, sizeof(input)/U_SIZEOF_UCHAR, c);
-         if(setOffset != movedOffset[i+1]){
-             log_err("ERROR: UTF16_NEXT_CHAR_SAFE failed to move the offset correctly at %d\n ExpectedOffset:%d Got %d\n",
-                 offset, movedOffset[i+1], setOffset);
-         }
-         if(c != result[i+1]){
-             log_err("ERROR: UTF16_NEXT_CHAR_SAFE failed for input=%ld. Expected:%lx Got:%lx\n", offset, result[i+1], c);
-         }
-
-         setOffset=offset;
          UTF16_NEXT_CHAR_SAFE(input, setOffset, sizeof(input)/U_SIZEOF_UCHAR, c, TRUE);
-         if(setOffset != movedOffset[i+1]){
-             log_err("ERROR: UTF16_NEXT_CHAR_SAFE(strict) failed to move the offset correctly at %d\n ExpectedOffset:%d Got %d\n",
-                 offset, movedOffset[i+2], setOffset);
-         }
-         if(c != result[i+2]){
-             log_err("ERROR: UTF16_NEXT_CHAR_SAFE(strict) failed for input=%ld. Expected:%lx Got:%lx\n", offset, result[i+2], c);
-         }
-
-         setOffset=offset;
-         UTF16_NEXT_CHAR_SAFE_STRICT(input, setOffset, sizeof(input)/U_SIZEOF_UCHAR, c);
          if(setOffset != movedOffset[i+1]){
              log_err("ERROR: UTF16_NEXT_CHAR_SAFE(strict) failed to move the offset correctly at %d\n ExpectedOffset:%d Got %d\n",
                  offset, movedOffset[i+2], setOffset);
@@ -281,27 +253,7 @@ void TestNextPrevChar(){
          }
 
          setOffset=offset;
-         UTF16_PREV_CHAR_SAFE_LENIENT(input, 0, setOffset, c);
-         if(setOffset != movedOffset[i+4]){
-             log_err("ERROR: UTF16_PREV_CHAR_SAFE failed to move the offset correctly at %d\n ExpectedOffset:%d Got %d\n",
-                 offset, movedOffset[i+4], setOffset);
-         }
-         if(c != result[i+4]){
-             log_err("ERROR: UTF16_PREV_CHAR_SAFE failed for input=%ld. Expected:%lx Got:%lx\n", offset, result[i+4], c);
-         }
-
-         setOffset=offset;
          UTF16_PREV_CHAR_SAFE(input, 0,  setOffset, c, TRUE);
-         if(setOffset != movedOffset[i+5]){
-             log_err("ERROR: UTF16_PREV_CHAR_SAFE(strict) failed to move the offset correctly at %d\n ExpectedOffset:%d Got %d\n",
-                 offset, movedOffset[i+5], setOffset);
-         } 
-         if(c != result[i+5]){
-             log_err("ERROR: UTF16_PREV_CHAR_SAFE(strict) failed for input=%ld. Expected:%lx Got:%lx\n", offset, result[i+5], c);
-         }
-
-         setOffset=offset;
-         UTF16_PREV_CHAR_SAFE_STRICT(input, 0,  setOffset, c);
          if(setOffset != movedOffset[i+5]){
              log_err("ERROR: UTF16_PREV_CHAR_SAFE(strict) failed to move the offset correctly at %d\n ExpectedOffset:%d Got %d\n",
                  offset, movedOffset[i+5], setOffset);
