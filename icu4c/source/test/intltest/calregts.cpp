@@ -78,6 +78,7 @@ CalendarRegressionTest::runIndexedTest( int32_t index, UBool exec, const char* &
         CASE(40,test4059654);
         CASE(41,test4092362);
         CASE(42,TestWeekShift);
+        CASE(43,TestTimeZoneTransitionAdd);
     default: name = ""; break;
     }
 }
@@ -2159,6 +2160,72 @@ void CalendarRegressionTest::TestWeekShift() {
                   " after week shift");
         }
     }
+}
+
+/**
+ * Make sure that when adding a day, we actually wind up in a
+ * different day.  The DST adjustments we use to keep the hour
+ * constant across DST changes can backfire and change the day.
+ */
+void CalendarRegressionTest::TestTimeZoneTransitionAdd() {
+    UErrorCode ec = U_ZERO_ERROR;
+    Locale locale(Locale::getUS()); // could also be CHINA
+    SimpleDateFormat dateFormat("MM/dd/yyyy HH:mm z", locale, ec);
+
+    StringEnumeration *tz = TimeZone::createEnumeration();
+    if (tz == NULL) {
+        errln("FAIL: TimeZone::createEnumeration");
+        return;
+    }
+
+    UnicodeString buf1, buf2;
+
+    const UChar* id;
+    while ((id = tz->unext(NULL, ec)) != NULL && U_SUCCESS(ec)) {
+        if (U_FAILURE(ec)) {
+            errln("FAIL: StringEnumeration::unext");
+            break;
+        }
+        
+        TimeZone *t = TimeZone::createTimeZone(id);
+        if (t == NULL) {
+            errln("FAIL: TimeZone::createTimeZone");
+            break;
+        }
+        dateFormat.setTimeZone(*t);
+
+        Calendar *cal = Calendar::createInstance(t, locale, ec);
+        if (cal == NULL || U_FAILURE(ec)) {
+            errln("FAIL: Calendar::createTimeZone");
+            delete cal;
+            break;
+        }
+
+        cal->clear();
+        // Scan the year 2003, overlapping the edges of the year
+        cal->set(UCAL_YEAR, 2002);
+        cal->set(UCAL_MONTH, UCAL_DECEMBER);
+        cal->set(UCAL_DATE, 25);
+
+        for (int32_t i=0; i<365+10 && U_SUCCESS(ec); ++i) {
+            UDate yesterday = cal->getTime(ec);
+            int32_t yesterday_day = cal->get(UCAL_DATE, ec);
+            cal->add(UCAL_DATE, 1, ec);
+            if (yesterday_day == cal->get(UCAL_DATE, ec)) {
+                errln(UnicodeString(id) + " " +
+                      dateFormat.format(yesterday, buf1) + " +1d= " +
+                      dateFormat.format(cal->getTime(ec), buf2));
+                buf1.truncate(0);
+                buf2.truncate(0);
+            }
+        }
+    }
+
+    if (U_FAILURE(ec)) {
+        errln("FAIL: %s", u_errorName(ec));
+    }
+
+    delete tz;
 }
 
 UDate
