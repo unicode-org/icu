@@ -54,7 +54,7 @@ enum
     STRICT,
     NO_BINARY_COLLATION,
     /*added by Jing*/
-    LANGUAGE,
+    LANGUAGE
 };
 
 UOption options[]={
