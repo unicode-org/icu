@@ -260,7 +260,7 @@ public:
 private:
     void _init(int32_t initialCapacity, UErrorCode &status);
 
-    int32_t indexOf(UHashTok key, int32_t startIndex = 0) const;
+    int32_t indexOf(UHashTok key, int32_t startIndex = 0, int8_t hint = 0) const;
 
     void sortedInsert(UHashTok tok, USortComparator compare, UErrorCode& ec);
 
