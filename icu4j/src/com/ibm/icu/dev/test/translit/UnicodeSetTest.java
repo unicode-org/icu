@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/translit/UnicodeSetTest.java,v $ 
- * $Date: 2004/02/20 23:31:54 $ 
- * $Revision: 1.56 $
+ * $Date: 2004/02/21 04:17:33 $ 
+ * $Revision: 1.57 $
  *
  *****************************************************************************************
  */
@@ -32,10 +32,11 @@ public class UnicodeSetTest extends TestFmwk {
     }
 
     /**
-     * Test that toPattern() round trips with syntax characters and
-     * whitespace.
+     * Test toPattern().
      */
     public void TestToPattern() throws Exception {
+        // Test that toPattern() round trips with syntax characters
+        // and whitespace.
         for (int i = 0; i < OTHER_TOPATTERN_TESTS.length; ++i) {
             checkPat(OTHER_TOPATTERN_TESTS[i], new UnicodeSet(OTHER_TOPATTERN_TESTS[i]));
         }
@@ -46,9 +47,39 @@ public class UnicodeSetTest extends TestFmwk {
                 if (!toPatternAux(0, i)) continue;
                 if (!toPatternAux(i, 0xFFFF)) continue;
             }
-        }
+        } 
+
+        // Test pattern behavior of multicharacter strings.
+        UnicodeSet s = new UnicodeSet("[a-z {aa} {ab}]");
+        expectToPattern(s, "[a-z{aa}{ab}]",
+                        new String[] {"aa", "ab", NOT, "ac"});
+        s.add("ac");
+        expectToPattern(s, "[a-z{aa}{ab}{ac}]",
+                        new String[] {"aa", "ab", "ac", NOT, "xy"});
+
+        s.applyPattern("[a-z {\\{l} {r\\}}]");
+        expectToPattern(s, "[a-z{r\\}}{\\{l}]",
+                        new String[] {"{l", "r}", NOT, "xy"});
+        s.add("[]");
+        expectToPattern(s, "[a-z{\\[\\]}{r\\}}{\\{l}]",
+                        new String[] {"{l", "r}", "[]", NOT, "xy"});
+
+        s.applyPattern("[a-z {\u4E01\u4E02}{\\n\\r}]");
+        expectToPattern(s, "[a-z{\\u000A\\u000D}{\\u4E01\\u4E02}]",
+                        new String[] {"\u4E01\u4E02", "\n\r"});
+
+        s.clear();
+        s.add("abc");
+        s.add("abc");
+        expectToPattern(s, "[{abc}]",
+                        new String[] {"abc", NOT, "ab"});
+
+        // JB#3400: For 2 character ranges prefer [ab] to [a-b]
+        s.clear(); 
+        s.add('a', 'b');
+        expectToPattern(s, "[ab]", null);
     }
-    
+
     static String[] OTHER_TOPATTERN_TESTS = {
                 "[[:latin:]&[:greek:]]", 
                 "[[:latin:]-[:greek:]]",
@@ -581,41 +612,6 @@ public class UnicodeSetTest extends TestFmwk {
         }        
     }
     
-    /**
-     * Test toPattern().
-     */
-    public void TestToPattern() {
-        // Test pattern behavior of multicharacter strings.
-        UnicodeSet s = new UnicodeSet("[a-z {aa} {ab}]");
-        expectToPattern(s, "[a-z{aa}{ab}]",
-                        new String[] {"aa", "ab", NOT, "ac"});
-        s.add("ac");
-        expectToPattern(s, "[a-z{aa}{ab}{ac}]",
-                        new String[] {"aa", "ab", "ac", NOT, "xy"});
-
-        s.applyPattern("[a-z {\\{l} {r\\}}]");
-        expectToPattern(s, "[a-z{r\\}}{\\{l}]",
-                        new String[] {"{l", "r}", NOT, "xy"});
-        s.add("[]");
-        expectToPattern(s, "[a-z{\\[\\]}{r\\}}{\\{l}]",
-                        new String[] {"{l", "r}", "[]", NOT, "xy"});
-
-        s.applyPattern("[a-z {\u4E01\u4E02}{\\n\\r}]");
-        expectToPattern(s, "[a-z{\\u000A\\u000D}{\\u4E01\\u4E02}]",
-                        new String[] {"\u4E01\u4E02", "\n\r"});
-
-        s.clear();
-        s.add("abc");
-        s.add("abc");
-        expectToPattern(s, "[{abc}]",
-                        new String[] {"abc", NOT, "ab"});
-
-        // JB#3400: For 2 character ranges prefer [ab] to [a-b]
-        s.clear(); 
-        s.add('a', 'b');
-        expectToPattern(s, "[ab]", null);
-   }
-
     static final Integer 
         I_ANY = new Integer(SortedSetRelation.ANY),
         I_CONTAINS = new Integer(SortedSetRelation.CONTAINS),
