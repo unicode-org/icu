@@ -768,10 +768,14 @@ DateFormatTest::TestBadInput135a()
 void
 DateFormatTest::TestTwoDigitYear()
 {
-    DateFormat* fmt = DateFormat::createDateInstance(DateFormat::SHORT, Locale::getUK());
-    parse2DigitYear(*fmt, "5/6/17", date(117, UCAL_JUNE, 5));
-    parse2DigitYear(*fmt, "4/6/34", date(34, UCAL_JUNE, 4));
-    delete fmt;
+    UErrorCode ec = U_ZERO_ERROR;
+    SimpleDateFormat fmt("dd/MM/yy", Locale::getUK(), ec);
+    if (U_FAILURE(ec)) {
+        errln("FAIL: SimpleDateFormat constructor");
+        return;
+    }
+    parse2DigitYear(fmt, "5/6/17", date(117, UCAL_JUNE, 5));
+    parse2DigitYear(fmt, "4/6/34", date(34, UCAL_JUNE, 4));
 }
  
 // -------------------------------------
@@ -1039,10 +1043,10 @@ void DateFormatTest::TestExactCountFormat() {
         // pattern, input, expected parse or NULL if expect parse failure
         "HHmmss", "123456", "1970 01 01 12:34:56",
         NULL, "12345", "1970 01 01 12:34:05",
-        NULL, "1234",  NULL,
-        NULL, "00-05", NULL,
-        NULL, "12-34", NULL,
-        NULL, "00+05", NULL,
+        NULL,     "1234",   NULL,
+        NULL,     "00-05",  NULL,
+        NULL,     "12-34",  NULL,
+        NULL,     "00+05",  NULL,
     };
     const int32_t DATA_len = sizeof(DATA)/sizeof(DATA[0]);
 
