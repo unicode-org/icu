@@ -233,7 +233,7 @@ $(BUILDDIR)/$(ICUDT)tz.icu: $(MISCSRCDIR)/timezone.txt $(TOOLDIR)/gentz/gentz$(E
 
 # uidna.spp
 $(BUILDDIR)/$(ICUDT)uidna.spp: $(MISCSRCDIR)/NamePrepProfile.txt $(TOOLDIR)/gensprep/gensprep$(EXEEXT)
-	ICU_DATA=$(BUILDDIR) $(INVOKE) $(TOOLDIR)/gensprep/gensprep -d $(BUILDDIR) -s $(MISSRCDIR) -b uidna -n $(UNICODEDATADIR) -u 3.2.0 -k NamePrepProfile.txt
+	ICU_DATA=$(BUILDDIR) $(INVOKE) $(TOOLDIR)/gensprep/gensprep -d $(BUILDDIR) -s $(MISCSRCDIR) -b uidna -n $(UNICODEDATADIR) -u 3.2.0 -k NamePrepProfile.txt
 
 ####################################################    BRK
 # BRK FILES
