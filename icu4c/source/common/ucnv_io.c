@@ -129,7 +129,7 @@ haveAliasData(UErrorCode *pErrorCode) {
             table=NULL;
             converterTable = aliasTable + 1 + 2 * *aliasTable;
 
-            if (info.formatVersion[0] > 2) {
+            if (info.formatVersion[0] > 1 && info.formatVersion[1] > 0) {
                 tagTable = converterTable + 1 + 2 * *converterTable;
             }
         }
@@ -161,6 +161,8 @@ static int16_t getTagNumber(const char *tagname) {
         int16_t tag, count = (int16_t) *tagTable;
         const char *tags = (const char *) (tagTable + 1 + count * *converterTable);
 
+#if 0
+
         char name[100];
         int i;
 
@@ -170,8 +172,14 @@ static int16_t getTagNumber(const char *tagname) {
         }
         name[i] = 0;
 
+#else
+
+	const char *name = tagname;
+
+#endif
+
         for (tag = 0; count--; ++tag) {
-            if (!charsetNameCmp(name, tags)) {
+            if (!uprv_stricmp(name, tags)) {
                 return tag;
             }
             tags += strlen(tags) + 1;
