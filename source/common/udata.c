@@ -209,7 +209,7 @@
 #   define MAP_IMPLEMENTATION MAP_WIN32
 
 /* ### Todo: auto detect mmap(). Until then, just add your platform here. */
-#elif defined(U_LINUX) || defined(POSIX) || defined(U_SOLARIS) || defined(AIX) || defined(HPUX) || defined(OS390) || defined(PTX)
+#elif HAVE_MMAP || defined(U_LINUX) || defined(POSIX) || defined(U_SOLARIS) || defined(AIX) || defined(HPUX) || defined(OS390) || defined(PTX)
     typedef size_t MemoryMap;
 
 #   define NO_MAP 0
