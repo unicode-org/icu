@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/UnicodeSetIterator.java,v $ 
- * $Date: 2002/03/13 19:52:34 $ 
- * $Revision: 1.4 $
+ * $Date: 2002/03/14 15:08:21 $ 
+ * $Revision: 1.5 $
  *
  *****************************************************************************************
  */
@@ -29,6 +29,7 @@ public final class UnicodeSetIterator {
 	// for results of iteration
 	
 	public int codepoint;
+	public int codepointEnd;
 	public String string;
 
     /**
@@ -63,6 +64,40 @@ public final class UnicodeSetIterator {
             	endElement = startElement + 50;
         	}
         	codepoint = nextElement++;
+        	return true;
+        }
+        
+        // stringIterator == null iff there are no string elements remaining
+        
+        if (stringIterator == null) return false;
+        codepoint = IS_STRING; // signal that value is actually a string
+        string = (String)stringIterator.next();
+        if (!stringIterator.hasNext()) stringIterator = null;
+        return true;
+    }
+        
+    /**
+     *@return true if there was another element in the set.
+     *if so, if codepoint == IS_STRING, the value is a string in the string field
+     *else the value is a range of codepoints in the <codepoint, codepointEnd> fields.
+     */
+    public boolean nextRange() {
+        if (nextElement <= endElement) {
+        	codepointEnd = endElement;
+        	codepoint = nextElement;
+        	nextElement = endElement+1;
+            return true;
+        }
+        if (range < endRange) {
+        	++range;
+        	nextElement = startElement = set.getRangeStart(range);
+        	endElement = set.getRangeEnd(range);
+        	if (abbreviated && (endElement > startElement + 50)) {
+            	endElement = startElement + 50;
+        	}
+        	codepointEnd = endElement;
+        	codepoint = nextElement;
+        	nextElement = endElement+1;
         	return true;
         }
         
