@@ -87,46 +87,66 @@ public class LocaleDataTest extends TestFmwk{
         }
     }
     public void TestExemplarSet(){
+        int equalCount = 0;
         for(int i=0; i<availableLocales.length; i++){
             ULocale locale = availableLocales[i];
-            UnicodeSet exemplarSet = LocaleData.getExemplarSet(locale);
-            int[] code = UScript.getCode(locale);
-            if(code != null){
-                UnicodeSet[] sets = new UnicodeSet[code.length];
-                // create the UnicodeSets for the script
-                for(int j=0; j < code.length; j++){
-                    sets[j] = new UnicodeSet("[:" + UScript.getShortName(code[j]) + ":]");
-                }
-                boolean existsInScript = false;
-                UnicodeSetIterator iter = new UnicodeSetIterator(exemplarSet);
-                // iterate over the 
-                while (iter.nextRange()) {
-                   if (iter.codepoint != UnicodeSetIterator.IS_STRING) {
-                       for(int j=0; j<sets.length; j++){
-                           if(sets[j].contains(iter.codepoint, iter.codepointEnd)){
-                               existsInScript = true;
-                           }
-                       }
-                   } else {
-                       for(int j=0; j<sets.length; j++){
-                           if(sets[j].contains(iter.string)){
-                               existsInScript = true;
-                           }
-                       }
-                   }
-                }
-                if(existsInScript == false){
-                    errln("ExemplarSet containment failed for locale : "+ locale);
-                }
-            }else{
-                // I hate the JDK's solution for deprecated language codes.
-                // Why does the Locale constructor change the string I passed to it ?
-                // such a broken hack !!!!!
-                // so in effect I can never test the script code for Indonesian :(
-                if(locale.toString().indexOf(("in"))<0){
-                    errln("UScript.getCode returned null for locale: " + locale); 
+            UnicodeSet exemplarSets[] = new UnicodeSet[2];
+            for (int k=0; k<2; ++k) {
+                int option = (k==0) ? 0 : UnicodeSet.CASE;
+                UnicodeSet exemplarSet = LocaleData.getExemplarSet(locale, option);
+                exemplarSets[k] = exemplarSet;
+                int[] code = UScript.getCode(locale);
+                if(code != null){
+                    UnicodeSet[] sets = new UnicodeSet[code.length];
+                    // create the UnicodeSets for the script
+                    for(int j=0; j < code.length; j++){
+                        sets[j] = new UnicodeSet("[:" + UScript.getShortName(code[j]) + ":]");
+                    }
+                    boolean existsInScript = false;
+                    UnicodeSetIterator iter = new UnicodeSetIterator(exemplarSet);
+                    // iterate over the 
+                    while (iter.nextRange()) {
+                        if (iter.codepoint != UnicodeSetIterator.IS_STRING) {
+                            for(int j=0; j<sets.length; j++){
+                                if(sets[j].contains(iter.codepoint, iter.codepointEnd)){
+                                    existsInScript = true;
+                                }
+                            }
+                        } else {
+                            for(int j=0; j<sets.length; j++){
+                                if(sets[j].contains(iter.string)){
+                                    existsInScript = true;
+                                }
+                            }
+                        }
+                    }
+                    if(existsInScript == false){
+                        errln("ExemplarSet containment failed for locale : "+ locale);
+                    }
+                }else{
+                    // I hate the JDK's solution for deprecated language codes.
+                    // Why does the Locale constructor change the string I passed to it ?
+                    // such a broken hack !!!!!
+                    // so in effect I can never test the script code for Indonesian :(
+                    if(locale.toString().indexOf(("in"))<0){
+                        errln("UScript.getCode returned null for locale: " + locale); 
+                    }
                 }
             }
-        }  
+            // This is expensive, so only do it if it will be visible
+            if (isVerbose()) {
+                logln(locale.toString() + " exemplar " + exemplarSets[0]);
+                logln(locale.toString() + " exemplar(case-folded) " + exemplarSets[1]);
+            }
+            assertTrue(locale.toString() + " case-folded is a superset",
+                       exemplarSets[1].containsAll(exemplarSets[0]));
+            if (exemplarSets[1].equals(exemplarSets[0])) {
+                ++equalCount;
+            }
+        }
+        // Note: The case-folded set should sometimes be a strict superset
+        // and sometimes be equal.
+        assertTrue("case-folded is sometimes a strict superset, and sometimes equal",
+                   equalCount > 0 && equalCount < availableLocales.length);
     }
 }

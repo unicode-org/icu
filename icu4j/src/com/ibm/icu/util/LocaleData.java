@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2003, International Business Machines Corporation and         *
+ * Copyright (C) 2004, International Business Machines Corporation and         *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
 */
@@ -25,17 +25,25 @@ public final class LocaleData {
     private LocaleData(){}
     ///CLOVER:ON
     /**
-     * Returns the exemplar characters for the given locale ID.
+     * Returns the set of exemplar characters for a locale.
      *
-     * @param locale    The locale for which the exemplar character set 
-     *                  needs to be retrieved.
-     * @return UnicodeSet The set representing the exemplar characters
+     * @param locale    Locale for which the exemplar character set
+     *                  is to be retrieved.
+     * @param options   Bitmask for options to apply to the exemplar pattern.
+     *                  Specify zero to retrieve the exemplar set as it is
+     *                  defined in the locale data.  Specify
+     *                  UnicodeSet.CASE to retrieve a case-folded exemplar
+     *                  set.  See {@link UnicodeSet#applyPattern(String,
+     *                  int)} for a complete list of valid options.  The
+     *                  IGNORE_SPACE bit is always set, regardless of the
+     *                  value of 'options'.
+     * @return          The set of exemplar characters for the given locale.
      * @draft ICU 3.0
      */
-    public static UnicodeSet getExemplarSet(ULocale locale){
+    public static UnicodeSet getExemplarSet(ULocale locale, int options) {
         ICUResourceBundle bundle = (ICUResourceBundle)UResourceBundle.getBundleInstance(UResourceBundle.ICU_BASE_NAME, locale);
         String pattern = bundle.getString(EXEMPLAR_CHARS);
-        return new UnicodeSet(pattern);
+        return new UnicodeSet(pattern, UnicodeSet.IGNORE_SPACE | options);
     }
     
     /**
