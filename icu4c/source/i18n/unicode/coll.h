@@ -328,7 +328,7 @@ public:
   * than target
   * @stable ICU 2.0
   **/
-  virtual UCollationResult compare(const UnicodeString& source, 
+  virtual EComparisonResult compare(const UnicodeString& source, 
                                     const UnicodeString& target) const = 0;
 
   /**
@@ -343,7 +343,7 @@ public:
   *         length) is less  than target.   
   * @stable ICU 2.0
   */
-  virtual UCollationResult compare(const UnicodeString& source,
+  virtual EComparisonResult compare(const UnicodeString& source,
                                     const UnicodeString& target,
                                     int32_t length) const = 0;
     
@@ -362,7 +362,7 @@ public:
   *         target
   * @stable ICU 2.0
   */
-  virtual UCollationResult compare(const UChar* source, int32_t sourceLength,
+  virtual EComparisonResult compare(const UChar* source, int32_t sourceLength,
                                     const UChar* target, int32_t targetLength) 
                                     const = 0;
 
