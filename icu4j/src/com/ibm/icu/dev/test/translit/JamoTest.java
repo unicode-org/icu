@@ -61,6 +61,35 @@ public class JamoTest extends TransliteratorTest {
         }
     }
 
+    public void TestRoundTrip() {
+        String HANGUL[] = { "\uAC03\uC2F8" };
+        
+        Transliterator latinJamo = Transliterator.getInstance("Latin-Jamo");
+        Transliterator jamoLatin = latinJamo.getInverse();
+        Transliterator jamoHangul = Transliterator.getInstance("Jamo-Hangul");
+        Transliterator hangulJamo = jamoHangul.getInverse();
+
+        StringBuffer buf = new StringBuffer();
+        for (int i=0; i<HANGUL.length; ++i) {
+            String hangul = HANGUL[i];
+            String jamo = hangulJamo.transliterate(hangul);
+            String latin = jamoLatin.transliterate(jamo);
+            String jamo2 = latinJamo.transliterate(latin);
+            String hangul2 = jamoHangul.transliterate(jamo2);
+            buf.setLength(0);
+            buf.append(hangul + " => " +
+                       jamoToName(jamo) + " => " +
+                       latin + " => " + jamoToName(jamo2)
+                       + " => " + hangul2
+                       );
+            if (!hangul.equals(hangul2)) {
+                errln("FAIL: " + Utility.escape(buf.toString()));
+            } else {
+                logln(Utility.escape(buf.toString()));
+            }
+        }
+    }
+
     public void TestRealText() {
         Transliterator latinJamo = Transliterator.getInstance("Latin-Jamo");
         Transliterator jamoLatin = latinJamo.getInverse();
