@@ -91,11 +91,14 @@ void ParsePositionTest::TestParsePosition()
         errln("*** PP operator= operator== or operator != result");
     }
 
+    errln("%s:%d: clone test commented out..\n", __FILE__, __LINE__);
+#if 0
     ParsePosition *ppp = pp5.clone();
     if(ppp == &pp5 || *ppp != pp5) {
         errln("ParsePosition.clone() failed");
     }
     delete ppp;
+#endif
 }
 
 void ParsePositionTest::TestFieldPosition() 
@@ -148,11 +151,14 @@ void ParsePositionTest::TestFieldPosition()
 
     logln("");
 
+    errln("%s:%d: clone test commented out..\n", __FILE__, __LINE__);
+#if 0
     FieldPosition *pfp = fp.clone();
     if(pfp == &fp || *pfp != fp) {
         errln("FieldPosition.clone() failed");
     }
     delete pfp;
+#endif
 }
 
 void ParsePositionTest::TestFieldPosition_example() 

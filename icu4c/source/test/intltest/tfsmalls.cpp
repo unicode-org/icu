@@ -244,6 +244,9 @@ void test_Formattable( void )
         it_errln(UnicodeString("*** FT getArray count res_cnt=") + res_cnt + UnicodeString("ft_cnt=") + ft_cnt);
     }
 
+
+    it_errln(UnicodeString("tfsmalls.cpp:") + __LINE__ + ": clone test commented out..\n");
+#if 0
     Formattable *pf;
     for(i = 0; i < ft_cnt; ++i) {
         pf = ftarray[i].clone();
@@ -252,6 +255,7 @@ void test_Formattable( void )
         }
         delete pf;
     }
+#endif
 
     const Formattable ftarr1[] = { Formattable( (int32_t)1 ), Formattable( (int32_t)2 ) };
     const Formattable ftarr2[] = { Formattable( (int32_t)3 ), Formattable( (int32_t)4 ) };
@@ -267,7 +271,7 @@ void test_Formattable( void )
     }
 
     Formattable* ft_dynarr = new Formattable[ftarr2_cnt];
-    for (int32_t i = 0; i < ftarr2_cnt; i++ ) {
+    for (i = 0; i < ftarr2_cnt; i++ ) {
         ft_dynarr[i] = ftarr2[i];
     }
     if ((ft_dynarr[0].getType() == Formattable::kLong) && (ft_dynarr[0].getLong() == (int32_t)3)
