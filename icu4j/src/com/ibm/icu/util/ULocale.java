@@ -1937,7 +1937,7 @@ public final class ULocale implements Serializable {
      * locale id.  Otherwise, this adds/replaces the value for this keyword in the locale id.
      * The keyword and value must not be empty.
      * @param keyword the keyword to add/remove, or null to remove all keywords.
-     * @param the value to add/set, or null to remove this particular keyword.
+     * @param value the value to add/set, or null to remove this particular keyword.
      * @return the updated locale
      * @draft ICU 3.2
      * @deprecated This is a draft API and might change in a future release of ICU.
@@ -1954,7 +1954,7 @@ public final class ULocale implements Serializable {
      * The keyword and value must not be empty.
      * @param localeID the locale id to modify
      * @param keyword the keyword to add/remove, or null to remove all keywords.
-     * @param the value to add/set, or null to remove this particular keyword.
+     * @param value the value to add/set, or null to remove this particular keyword.
      * @return the updated locale id
      * @draft ICU 3.2
      * @deprecated This is a draft API and might change in a future release of ICU.
