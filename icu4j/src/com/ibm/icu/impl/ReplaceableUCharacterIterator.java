@@ -4,8 +4,8 @@
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  *
- * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/Attic/ReplaceableCharacterIterator.java,v $ 
- * $Date: 2002/06/20 01:18:09 $ 
+ * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/ReplaceableUCharacterIterator.java,v $ 
+ * $Date: 2002/07/16 00:41:10 $ 
  * $Revision: 1.1 $
  *
  *******************************************************************************
@@ -26,7 +26,7 @@ import com.ibm.icu.text.UTF16;
  *
  * What are first, last, and getBeginIndex doing here?!?!?!
  */
-public class ReplaceableCharacterIterator extends UCharacterIterator {
+public class ReplaceableUCharacterIterator extends UCharacterIterator {
 
     // public constructor ------------------------------------------------------
     
@@ -34,7 +34,7 @@ public class ReplaceableCharacterIterator extends UCharacterIterator {
      * Public constructor
      * @param replacable text which the iterator will be based on
      */
-    public ReplaceableCharacterIterator(Replaceable replaceable){
+    public ReplaceableUCharacterIterator(Replaceable replaceable){
         if(replaceable==null){
             throw new IllegalArgumentException();
         }
@@ -47,7 +47,7 @@ public class ReplaceableCharacterIterator extends UCharacterIterator {
      * Public constructor
      * @param str text which the iterator will be based on
      */
-    public ReplaceableCharacterIterator(String str){
+    public ReplaceableUCharacterIterator(String str){
         if(str==null){
             throw new IllegalArgumentException();
         }
@@ -60,7 +60,7 @@ public class ReplaceableCharacterIterator extends UCharacterIterator {
      * Public constructor
      * @param src an array of characters on which the iterator will be based
      */
-    public ReplaceableCharacterIterator(char[] src){
+    public ReplaceableUCharacterIterator(char[] src){
         if(src==null){
             throw new IllegalArgumentException();
         }
@@ -73,7 +73,7 @@ public class ReplaceableCharacterIterator extends UCharacterIterator {
      * Public constructor
      * @param buf buffer of text on which the iterator will be based
      */
-    public ReplaceableCharacterIterator(StringBuffer buf){
+    public ReplaceableUCharacterIterator(StringBuffer buf){
         if(buf==null){
             throw new IllegalArgumentException();
         }
