@@ -267,6 +267,15 @@
             u_setDataDirectory() function.<br>
             ICU does not perform any other heuristics any more.</li>
         </ul>
+        <b>Note:</b> while some of the old binary data may be still readable by ICU 2.2 (resource bundles,
+          for example), they need to be repackaged in order to be used.
+	  <ul>
+	    <li>If you have individual binary files, you have to rename them so that you prepend a <code>'packagename_'</code>. 
+	      Then use <code>packagename</code> for opening.</li>
+	    <li>If you have a memory-mapped package file, you'll need do unpack it (use decmn tool), rename individual files 
+	      as above (prepending the package name), and repack the files.</li>
+	    <li>If you have a shared library file, you'll need to somehow get individual files and repackage them.</li>
+	  </ul>
 
     <h3><b>Customizable memory management</b></h3>
 
