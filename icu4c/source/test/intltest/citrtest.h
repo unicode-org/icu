@@ -34,6 +34,9 @@ public:
      * test the iteration functionality in different ways with  unicodestring of UChar32's
      **/
     void TestIterationUChar32(void);
+
+    void TestUCharIterator();
+    void TestUCharIterator(UCharIterator *iter, CharacterIterator &ci, const char *moves, const char *which);
 };
 
 #endif
