@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/translit/TransliteratorTest.java,v $
- * $Date: 2001/11/15 23:38:31 $
- * $Revision: 1.70 $
+ * $Date: 2001/11/16 00:50:47 $
+ * $Revision: 1.71 $
  *
  *****************************************************************************************
  */
@@ -2016,22 +2016,41 @@ public class TransliteratorTest extends TestFmwk {
             "nfd", "NFC", // make sure case is ignored
             "Any-NFKD", "Any-NFKC",
             "Null", "Null",
+            "-nfkc", "NFKD",
+            "-nfkc/", "NFKD",
             "Latin-Greek/UNGEGN", "Greek-Latin/UNGEGN",
             "Greek/UNGEGN-Latin", "Latin-Greek/UNGEGN",
             "Bengali-Devanagari/", "Devanagari-Bengali",
+            "Source-", null,
+            "Source/Variant-", null,
+            "Source-/Variant", null,
+            "/Variant", null,
+            "/Variant-", null,
+            "-/Variant", null,
+            "-/", null,
+            "-", null,
+            "/", null,
         };
 
         for (int i=0; i<DATA.length; i+=2) {
-            Transliterator t =
-                Transliterator.getInstance(DATA[i]);
-            Transliterator u = t.getInverse();
-            if (t.getID().equals(DATA[i]) &&
-                u.getID().equals(DATA[i+1])) {
-                logln("Ok: " + DATA[i] + ".getInverse() => " + DATA[i+1]);
-            } else {
-                errln("FAIL: getInstance(" + DATA[i] + ") => " +
-                      t.getID() + " x getInverse() => " + u.getID() +
-                      ", expected " + DATA[i+1]);
+            try {
+                Transliterator t =
+                    Transliterator.getInstance(DATA[i]);
+                Transliterator u = t.getInverse();
+                if (t.getID().equals(DATA[i]) &&
+                    u.getID().equals(DATA[i+1])) {
+                    logln("Ok: " + DATA[i] + ".getInverse() => " + DATA[i+1]);
+                } else {
+                    errln("FAIL: getInstance(" + DATA[i] + ") => " +
+                          t.getID() + " x getInverse() => " + u.getID() +
+                          ", expected " + DATA[i+1]);
+                }
+            } catch (IllegalArgumentException e) {
+                if (DATA[i+1] == null) {
+                    errln("Ok: getInstance(" + DATA[i] + ") => " + e.getMessage());
+                } else {
+                    errln("FAIL: getInstance(" + DATA[i] + ") => " + e.getMessage());
+                }
             }
         }
     }
