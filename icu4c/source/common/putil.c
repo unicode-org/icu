@@ -2146,6 +2146,7 @@ uprv_isInvariantUString(const UChar *s, int32_t length) {
 
 /* UDataSwapFn implementations used in udataswp.c ------- */
 
+/* convert ASCII to EBCDIC and verify that all characters are invariant */
 U_CFUNC int32_t
 uprv_ebcdicFromAscii(const UDataSwapper *ds,
                      const void *inData, int32_t length, void *outData,
@@ -2159,7 +2160,7 @@ uprv_ebcdicFromAscii(const UDataSwapper *ds,
     if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
         return 0;
     }
-    if(ds==NULL || inData==NULL || length<0 || (length&1)!=0 || outData!=NULL) {
+    if(ds==NULL || inData==NULL || length<0 || (length&1)!=0 || outData==NULL) {
         *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
         return 0;
     }
@@ -2183,6 +2184,46 @@ uprv_ebcdicFromAscii(const UDataSwapper *ds,
     return length;
 }
 
+/* this function only checks and copies ASCII strings without conversion */
+U_CFUNC int32_t
+uprv_copyAscii(const UDataSwapper *ds,
+               const void *inData, int32_t length, void *outData,
+               UErrorCode *pErrorCode) {
+    const uint8_t *s;
+    uint8_t c;
+
+    int32_t count;
+
+    if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
+        return 0;
+    }
+    if(ds==NULL || inData==NULL || length<0 || (length&1)!=0 || outData==NULL) {
+        *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
+        return 0;
+    }
+
+    /* setup and checking */
+    s=(const uint8_t *)inData;
+    count=length;
+    while(count>0) {
+        c=*s++;
+        if(!CHAR_IS_INVARIANT(c)) {
+            udata_printError(ds, "uprv_copyFromAscii() string[%] contains a variant character in position %d\n",
+                             length, length-count);
+            *pErrorCode=U_INVALID_CHAR_FOUND;
+            return 0;
+        }
+        --count;
+    }
+
+    if(length>0 && inData!=outData) {
+        uprv_memcpy(outData, inData, length);
+    }
+
+    return length;
+}
+
+/* convert EBCDIC to ASCII and verify that all characters are invariant */
 U_CFUNC int32_t
 uprv_asciiFromEbcdic(const UDataSwapper *ds,
                      const void *inData, int32_t length, void *outData,
@@ -2196,7 +2237,7 @@ uprv_asciiFromEbcdic(const UDataSwapper *ds,
     if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
         return 0;
     }
-    if(ds==NULL || inData==NULL || length<0 || (length&1)!=0 || outData!=NULL) {
+    if(ds==NULL || inData==NULL || length<0 || (length&1)!=0 || outData==NULL) {
         *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
         return 0;
     }
@@ -2215,6 +2256,45 @@ uprv_asciiFromEbcdic(const UDataSwapper *ds,
         }
         *t++=c;
         --count;
+    }
+
+    return length;
+}
+
+/* this function only checks and copies EBCDIC strings without conversion */
+U_CFUNC int32_t
+uprv_copyEbcdic(const UDataSwapper *ds,
+                const void *inData, int32_t length, void *outData,
+                UErrorCode *pErrorCode) {
+    const uint8_t *s;
+    uint8_t c;
+
+    int32_t count;
+
+    if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
+        return 0;
+    }
+    if(ds==NULL || inData==NULL || length<0 || (length&1)!=0 || outData==NULL) {
+        *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
+        return 0;
+    }
+
+    /* setup and checking */
+    s=(const uint8_t *)inData;
+    count=length;
+    while(count>0) {
+        c=*s++;
+        if(c!=0 && ((c=asciiFromEbcdic[c])==0 || !CHAR_IS_INVARIANT(c))) {
+            udata_printError(ds, "uprv_copyEbcdic() string[%] contains a variant character in position %d\n",
+                             length, length-count);
+            *pErrorCode=U_INVALID_CHAR_FOUND;
+            return 0;
+        }
+        --count;
+    }
+
+    if(length>0 && inData!=outData) {
+        uprv_memcpy(outData, inData, length);
     }
 
     return length;
