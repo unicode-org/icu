@@ -9,7 +9,7 @@
 */
 
 #include "unicode/utypes.h"
-#include "unicode/nortrans.h"
+#include "nortrans.h"
 #include "unormimp.h"
 
 U_NAMESPACE_BEGIN

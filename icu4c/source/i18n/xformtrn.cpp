@@ -8,7 +8,7 @@
 **********************************************************************
 */
 
-#include "unicode/xformtrn.h"
+#include "xformtrn.h"
 #include "unicode/unifilt.h"
 
 U_NAMESPACE_BEGIN
