@@ -13,4 +13,6 @@ de__PHONEBOOK {
         "&oe <<< \u00F6 &OE <<< \u00D6" 
         "&ue <<< \u00FC &UE <<< \u00DC" }
     }
+    // This LCID may be de_DE_PHONEBOOK, but it's unclear in the Microsoft documentation.
+    LocaleID { "10407" }
 }

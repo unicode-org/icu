@@ -42,4 +42,6 @@ bn_IN {
             "\u00A4 #,#0.00;-\u00A4 #,#0.00",
             "#,##0%",
     }
+    LocaleString { "bn_IN" }
+    LocaleID { "0445" }
 }
