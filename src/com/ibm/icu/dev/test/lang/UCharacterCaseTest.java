@@ -1,0 +1,702 @@
+/**
+*******************************************************************************
+* Copyright (C) 1996-2001, International Business Machines Corporation and    *
+* others. All Rights Reserved.                                                *
+*******************************************************************************
+*
+* $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/lang/UCharacterCaseTest.java,v $ 
+* $Date: 2002/03/15 22:39:20 $ 
+* $Revision: 1.2 $
+*
+*******************************************************************************
+*/
+
+package com.ibm.icu.dev.test.lang;
+
+import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.dev.test.TestUtil;
+import com.ibm.icu.lang.UCharacter;
+import com.ibm.icu.text.UTF16;
+import com.ibm.icu.text.BreakIterator;
+import com.ibm.icu.impl.Utility;
+import java.util.Locale;
+import java.io.BufferedReader;
+import java.util.Vector;
+
+/**
+* <p>Testing character casing</p>
+* <p>Mostly following the test cases in strcase.cpp for ICU</p>
+* @author Syn Wee Quek
+* @since march 14 2002
+*/
+public final class UCharacterCaseTest extends TestFmwk
+{ 
+	// constructor -----------------------------------------------------------
+	  
+	/**
+	 * Constructor
+	 */
+	public UCharacterCaseTest()
+	{
+	}
+	  
+	// public methods --------------------------------------------------------
+	  
+	public static void main(String[] arg)  
+	{
+	    try
+	    {
+	      	UCharacterCaseTest test = new UCharacterCaseTest();
+	      	test.run(arg);
+	    }
+	    catch (Exception e)
+	    {
+	      	e.printStackTrace();
+	    }
+	}
+	  
+	/**
+	 * Testing the uppercase and lowercase function of UCharacter
+	 */
+	public void TestCharacter()
+	{
+	    for (int i = 0; i < CHARACTER_LOWER_.length; i ++) {
+	      	if (UCharacter.isLetter(CHARACTER_LOWER_[i]) && 
+	      	 	!UCharacter.isLowerCase(CHARACTER_LOWER_[i])) {
+	        	errln("FAIL isLowerCase test for \\u" + 
+	        	      hex(CHARACTER_LOWER_[i]));
+	        	break;
+	      	}
+	      	if (UCharacter.isLetter(CHARACTER_UPPER_[i]) && 
+	      	    !(UCharacter.isUpperCase(CHARACTER_UPPER_[i]) ||
+	      	      UCharacter.isTitleCase(CHARACTER_UPPER_[i]))) {
+	        	errln("FAIL isUpperCase test for \\u" + 
+	        	      hex(CHARACTER_UPPER_[i]));
+	        	break;
+	      	}
+	      	if (CHARACTER_LOWER_[i] != 
+	      	    UCharacter.toLowerCase(CHARACTER_UPPER_[i]) || 
+	          	(CHARACTER_UPPER_[i] != 
+	          	UCharacter.toUpperCase(CHARACTER_LOWER_[i]) &&
+	            CHARACTER_UPPER_[i] != 
+	            UCharacter.toTitleCase(CHARACTER_LOWER_[i]))) {
+	        	errln("FAIL case conversion test for \\u" + 
+	        	      hex(CHARACTER_UPPER_[i]) + 
+	        	      " to \\u" + hex(CHARACTER_LOWER_[i]));
+	        	break;
+	      	}
+	      	if (CHARACTER_LOWER_[i] != 
+	      	    UCharacter.toLowerCase(CHARACTER_LOWER_[i])) {
+	        	errln("FAIL lower case conversion test for \\u" + 
+	        	      hex(CHARACTER_LOWER_[i]));
+	        	break;
+	      	}
+	      	if (CHARACTER_UPPER_[i] != 
+	      	    UCharacter.toUpperCase(CHARACTER_UPPER_[i]) && 
+	          	CHARACTER_UPPER_[i] != 
+	          	UCharacter.toTitleCase(CHARACTER_UPPER_[i])) {
+	        	errln("FAIL upper case conversion test for \\u" + 
+	        	      hex(CHARACTER_UPPER_[i]));
+	        	break;
+	      	}
+	      	logln("Ok    \\u" + hex(CHARACTER_UPPER_[i]) + " and \\u" + 
+	      	      hex(CHARACTER_LOWER_[i]));
+	    }
+	}
+	  
+	public void TestFolding() 
+	{
+	    // test simple case folding
+	    for (int i = 0; i < FOLDING_SIMPLE_.length; i += 3) {
+	        if (UCharacter.foldCase(FOLDING_SIMPLE_[i], true) != 
+	            FOLDING_SIMPLE_[i + 1]) {
+	            errln("FAIL: foldCase(\\u" + hex(FOLDING_SIMPLE_[i]) + 
+	                  ", true) should be \\u" + hex(FOLDING_SIMPLE_[i + 1]));
+	        }
+	        if (UCharacter.foldCase(FOLDING_SIMPLE_[i], false) != 
+	            FOLDING_SIMPLE_[i + 2]) {
+	            errln("FAIL: foldCase(\\u" + hex(FOLDING_SIMPLE_[i]) + 
+	                  ", false) should be \\u" + hex(FOLDING_SIMPLE_[i + 2]));
+	        }
+	    }
+
+		// Test full string case folding with default option and separate 
+		// buffers   
+	    if (!FOLDING_DEFAULT_[0].equals(UCharacter.foldCase(FOLDING_MIXED_[0], 
+	                                                        true))) {
+	        errln("FAIL: foldCase(" + hex(FOLDING_MIXED_[0]) + 
+	              ", true) should be " + FOLDING_DEFAULT_[0]);
+	    }
+	    
+		if (!FOLDING_EXCLUDE_SPECIAL_I_[0].equals(      		                    
+							UCharacter.foldCase(FOLDING_MIXED_[0], false))) {
+	      	errln("FAIL: foldCase(" + hex(FOLDING_MIXED_[0]) + 
+	      	      ", false) should be " + FOLDING_EXCLUDE_SPECIAL_I_[0]);
+	    }
+	    
+	    if (!FOLDING_DEFAULT_[1].equals(UCharacter.foldCase(FOLDING_MIXED_[1], 
+	                                                        true))) {
+	       errln("FAIL: foldCase(" + hex(FOLDING_MIXED_[1]) + 
+	             ", true) should be " + hex(FOLDING_DEFAULT_[1]));
+	    }
+	
+	
+	    // alternate handling for dotted I/dotless i (U+0130, U+0131)
+	    if (!FOLDING_EXCLUDE_SPECIAL_I_[1].equals(
+	                    UCharacter.foldCase(FOLDING_MIXED_[1], false))) {
+	        errln("FAIL: foldCase(" + hex(FOLDING_MIXED_[1]) + 
+	              ", false) should be " + hex(FOLDING_EXCLUDE_SPECIAL_I_[1]));
+	    }
+	}
+		
+	/**
+	 * Testing the strings case mapping methods
+	 */
+	public void TestUpper() 
+	{	
+	    // uppercase with root locale and in the same buffer
+	    if (!UPPER_ROOT_.equals(UCharacter.toUpperCase(UPPER_BEFORE_))) {
+	    	errln("Fail " + UPPER_BEFORE_ + " after uppercase should be " + 
+	      		  UPPER_ROOT_ + " instead got " + 
+	      		  UCharacter.toUpperCase(UPPER_BEFORE_));
+	    }
+	      
+	    // uppercase with turkish locale and separate buffers
+	    if (!UPPER_TURKISH_.equals(UCharacter.toUpperCase(TURKISH_LOCALE_,
+	                                                     UPPER_BEFORE_))) {
+      		errln("Fail " + UPPER_BEFORE_ + 
+      		      " after turkish-sensitive uppercase should be " + 
+      		      UPPER_TURKISH_ + " instead of " +
+      		      UCharacter.toUpperCase(TURKISH_LOCALE_, UPPER_BEFORE_));
+	  	}
+	  		
+	  	// uppercase a short string with root locale
+	    if (!UPPER_MINI_UPPER_.equals(UCharacter.toUpperCase(UPPER_MINI_))) {
+	        errln("error in toUpper(root locale)=\"" + UPPER_MINI_ + 
+	              "\" expected \"" + UPPER_MINI_UPPER_ + "\"");
+	    }
+	    
+	    if (!SHARED_UPPERCASE_TOPKAP_.equals(
+                       UCharacter.toUpperCase(SHARED_LOWERCASE_TOPKAP_))) {
+	        errln("toUpper failed: expected \"" +
+	              SHARED_UPPERCASE_TOPKAP_ + "\", got \"" + 
+                  UCharacter.toUpperCase(SHARED_LOWERCASE_TOPKAP_) + "\".");
+		}
+	
+	    if (!SHARED_UPPERCASE_TURKISH_.equals(
+                  UCharacter.toUpperCase(TURKISH_LOCALE_, 
+                                         SHARED_LOWERCASE_TOPKAP_))) {
+	        errln("toUpper failed: expected \"" + 
+	              SHARED_UPPERCASE_TURKISH_ + "\", got \"" + 
+	              UCharacter.toUpperCase(TURKISH_LOCALE_, 
+	                                 SHARED_LOWERCASE_TOPKAP_) + "\".");
+		}
+	
+	    if (!SHARED_UPPERCASE_GERMAN_.equals(
+	    		UCharacter.toUpperCase(GERMAN_LOCALE_, 
+	     	                           SHARED_LOWERCASE_GERMAN_))) {
+	        errln("toUpper failed: expected \"" + SHARED_UPPERCASE_GERMAN_ 
+	              + "\", got \"" + UCharacter.toUpperCase(GERMAN_LOCALE_, 
+	                                    SHARED_LOWERCASE_GERMAN_) + "\".");
+        }
+	    
+	    if (!SHARED_UPPERCASE_GREEK_.equals(
+	    		UCharacter.toUpperCase(SHARED_LOWERCASE_GREEK_))) {
+	        errln("toLower failed: expected \"" + SHARED_UPPERCASE_GREEK_ +
+	              "\", got \"" + UCharacter.toUpperCase(
+       	                                SHARED_LOWERCASE_GREEK_) + "\".");
+    	}
+	}
+	  
+	public void TestLower() 
+	{
+		if (!LOWER_ROOT_.equals(UCharacter.toLowerCase(LOWER_BEFORE_))) {
+	   		errln("Fail " + LOWER_BEFORE_ + " after lowercase should be " + 
+	   		      LOWER_ROOT_ + " instead of " + 
+	   		      UCharacter.toLowerCase(LOWER_BEFORE_));
+		}
+	   
+	   	// lowercase with turkish locale
+	   	if (!LOWER_TURKISH_.equals(UCharacter.toLowerCase(TURKISH_LOCALE_, 
+	   	                                                  LOWER_BEFORE_))) {
+	   		errln("Fail " + LOWER_BEFORE_ + 
+	     		  " after turkish-sensitive lowercase should be " + 
+	     		  LOWER_TURKISH_ + " instead of " + 
+	     		  UCharacter.toLowerCase(TURKISH_LOCALE_, LOWER_BEFORE_));
+	    }
+	    if (!SHARED_LOWERCASE_ISTANBUL_.equals(
+                     UCharacter.toLowerCase(SHARED_UPPERCASE_ISTANBUL_))) {
+	        errln("1. toLower failed: expected \"" + 
+	              SHARED_LOWERCASE_ISTANBUL_ + "\", got \"" + 
+              UCharacter.toLowerCase(SHARED_UPPERCASE_ISTANBUL_) + "\".");
+	    }
+
+		if (!SHARED_LOWERCASE_TURKISH_.equals(
+	            UCharacter.toLowerCase(TURKISH_LOCALE_, 
+	                                   SHARED_UPPERCASE_ISTANBUL_))) {	
+	    	errln("2. toLower failed: expected \"" + 
+	    	      SHARED_LOWERCASE_TURKISH_ + "\", got \"" + 
+	    	      UCharacter.toLowerCase(TURKISH_LOCALE_,
+		                        SHARED_UPPERCASE_ISTANBUL_) + "\".");
+	    }
+	    if (!SHARED_LOWERCASE_GREEK_.equals(
+	    		UCharacter.toLowerCase(GREEK_LOCALE_, 
+	    		                       SHARED_UPPERCASE_GREEK_))) {
+	        errln("toLower failed: expected \"" + SHARED_LOWERCASE_GREEK_ +
+	              "\", got \"" + UCharacter.toLowerCase(GREEK_LOCALE_, 
+       	                                SHARED_UPPERCASE_GREEK_) + "\".");
+    	}
+	}
+	  	
+	public void TestTitle() 
+	{
+	    for (int i = 0; i < TITLE_BREAKITERATORS_.length; i ++) {
+	    	String test = TITLE_DATA_[i << 1];
+	    	String expected = TITLE_DATA_[(i << 1) + 1];
+	    	if (!expected.equals(
+	    	    UCharacter.toTitleCase(test,
+	    	                           TITLE_BREAKITERATORS_[i]))) {
+	            errln("error: titlecasing for " + hex(test) + " should be " + 
+	                  hex(expected) + " but got " +
+	                  hex(UCharacter.toTitleCase(test, 
+	                                             TITLE_BREAKITERATORS_[i])));
+	        }
+	    }
+	}
+	
+	public void TestSpecial()
+	{   
+	    for (int i = 0; i < SPECIAL_LOCALES_.length; i ++) {
+	    	int    j      = i * 3;
+	    	Locale locale = SPECIAL_LOCALES_[i];
+	    	String str    = SPECIAL_DATA_[j];
+	    	if (locale != null) {
+	 			if (!SPECIAL_DATA_[j + 1].equals(
+	                 UCharacter.toLowerCase(locale, str))) {
+		        	errln("error lowercasing special characters " + 
+		              	hex(str) + " expected " + hex(SPECIAL_DATA_[j + 1]) 
+		              	+ " for locale " + locale.toString() + " but got " + 
+		              	hex(UCharacter.toLowerCase(locale, str)));
+	            }
+	            if (!SPECIAL_DATA_[j + 2].equals(
+	                 UCharacter.toUpperCase(locale, str))) {
+		        	errln("error uppercasing special characters " + 
+		              	hex(str) + " expected " + SPECIAL_DATA_[j + 2] 
+		              	+ " for locale " + locale.toString() + " but got " + 
+		              	hex(UCharacter.toUpperCase(locale, str)));
+	            }
+		    }   	
+		    else {
+		    	if (!SPECIAL_DATA_[j + 1].equals(
+	                 UCharacter.toLowerCase(str))) {
+		        	errln("error lowercasing special characters " + 
+		              	hex(str) + " expected " + SPECIAL_DATA_[j + 1] + 
+		              	" but got " + 
+		              	hex(UCharacter.toLowerCase(locale, str)));
+	            }
+	            if (!SPECIAL_DATA_[j + 2].equals(
+	                 UCharacter.toUpperCase(locale, str))) {
+		        	errln("error uppercasing special characters " + 
+		              	hex(str) + " expected " + SPECIAL_DATA_[j + 2] + 
+		              	" but got " + 
+		              	hex(UCharacter.toUpperCase(locale, str)));
+	            }
+		    }
+	    }
+	    
+	    // turkish & azerbaijani dotless i & dotted I
+	    // remove dot above if there was a capital I before and there are no 
+	    // more accents above
+	    if (!SPECIAL_DOTTED_LOWER_TURKISH_.equals(UCharacter.toLowerCase(
+                                        TURKISH_LOCALE_, SPECIAL_DOTTED_))) {
+	        errln("error in dots.toLower(tr)=\"" + SPECIAL_DOTTED_ + 
+	              "\" expected \"" + SPECIAL_DOTTED_LOWER_TURKISH_ + 
+	              "\" but got " + UCharacter.toLowerCase(TURKISH_LOCALE_,
+	                                                     SPECIAL_DOTTED_));
+	    }
+		if (!SPECIAL_DOTTED_LOWER_GERMAN_.equals(UCharacter.toLowerCase(
+	                                         GERMAN_LOCALE_, SPECIAL_DOTTED_))) {
+	        errln("error in dots.toLower(de)=\"" + SPECIAL_DOTTED_ + 
+	              "\" expected \"" + SPECIAL_DOTTED_LOWER_GERMAN_ + 
+	              "\" but got " + UCharacter.toLowerCase(GERMAN_LOCALE_,
+	                                                     SPECIAL_DOTTED_));
+	    }
+	
+		// lithuanian dot above in uppercasing
+		if (!SPECIAL_DOT_ABOVE_UPPER_LITHUANIAN_.equals(
+		     UCharacter.toUpperCase(LITHUANIAN_LOCALE_, SPECIAL_DOT_ABOVE_))) {
+	        errln("error in dots.toUpper(lt)=\"" + SPECIAL_DOT_ABOVE_ + 
+	              "\" expected \"" + SPECIAL_DOT_ABOVE_UPPER_LITHUANIAN_ + 
+	              "\" but got " + UCharacter.toUpperCase(LITHUANIAN_LOCALE_,
+	                                                     SPECIAL_DOT_ABOVE_));
+	    }
+		if (!SPECIAL_DOT_ABOVE_UPPER_GERMAN_.equals(UCharacter.toUpperCase(
+                                        GERMAN_LOCALE_, SPECIAL_DOT_ABOVE_))) {
+	        errln("error in dots.toUpper(de)=\"" + SPECIAL_DOT_ABOVE_ + 
+	              "\" expected \"" + SPECIAL_DOT_ABOVE_UPPER_GERMAN_ + 
+	              "\" but got " + UCharacter.toUpperCase(GERMAN_LOCALE_,
+	                                                     SPECIAL_DOT_ABOVE_));
+	    }	    
+	    
+		// lithuanian adds dot above to i in lowercasing if there are more 
+		// above accents
+		if (!SPECIAL_DOT_ABOVE_LOWER_LITHUANIAN_.equals(
+			UCharacter.toLowerCase(LITHUANIAN_LOCALE_, 
+			                       SPECIAL_DOT_ABOVE_UPPER_))) {
+	        errln("error in dots.toLower(lt)=\"" + SPECIAL_DOT_ABOVE_UPPER_ + 
+	              "\" expected \"" + SPECIAL_DOT_ABOVE_LOWER_LITHUANIAN_ + 
+	              "\" but got " + UCharacter.toLowerCase(LITHUANIAN_LOCALE_,
+                                                   SPECIAL_DOT_ABOVE_UPPER_));
+	    }
+		if (!SPECIAL_DOT_ABOVE_LOWER_GERMAN_.equals(
+			UCharacter.toLowerCase(GERMAN_LOCALE_, 
+			                       SPECIAL_DOT_ABOVE_UPPER_))) {
+	        errln("error in dots.toLower(de)=\"" + SPECIAL_DOT_ABOVE_UPPER_ + 
+	              "\" expected \"" + SPECIAL_DOT_ABOVE_LOWER_GERMAN_ + 
+	              "\" but got " + UCharacter.toLowerCase(GERMAN_LOCALE_,
+                                                   SPECIAL_DOT_ABOVE_UPPER_));
+	    }
+	}
+	  
+	/**
+	 * Tests for case mapping in the file SpecialCasing.txt
+	 * This method reads in SpecialCasing.txt file for testing purposes. 
+	 * A default path is provided relative to the src path, however the user 
+	 * could set a system property to change the directory path.<br>
+	 * e.g. java -DUnicodeData="data_dir_path" com.ibm.dev.test.lang.UCharacterTest
+	 */
+	public void TestSpecialCasingTxt()
+	{
+	    try
+		{
+		  	// reading in the SpecialCasing file
+		  	BufferedReader input = TestUtil.getDataReader(
+		  	                                      "unicode/SpecialCasing.txt"); 
+		  	int i = 0;
+	      	while (true)
+	      	{
+	        	String s = input.readLine();
+	        	if (s == null) {
+	            	break;
+	        	}
+	        	if (s.length() == 0 || s.charAt(0) == '#') {
+	            	continue;
+	        	}
+	        	String chstr[] = getUnicodeStrings(s);
+	        	if (chstr.length == 5) {
+	            	StringBuffer strbuffer   = new StringBuffer(chstr[0]);
+	            	StringBuffer lowerbuffer = new StringBuffer(chstr[1]); 
+	            	StringBuffer upperbuffer = new StringBuffer(chstr[3]); 
+	            
+	            	if (chstr[4].indexOf("AFTER_i NOT_MORE_ABOVE") != -1) {
+	                	strbuffer.insert(0, 'i');
+	                	lowerbuffer.insert(0, strbuffer);
+	                	upperbuffer.insert(0, (char)(0x130));
+	            	}	 
+	            	else {
+	                	if (chstr[4].indexOf("MORE_ABOVE") != -1) {
+	                    	strbuffer.append((char)0x300);
+	                    	lowerbuffer.append((char)0x300);
+	                    	upperbuffer.append((char)0x300);
+	                	}
+	                	if (chstr[4].indexOf("AFTER_i") != -1) {
+	                    	strbuffer.insert(0, 'i');
+	                    	lowerbuffer.insert(0, 'i');
+	                    	upperbuffer.insert(0, 'I');
+	                	}
+	                	if (chstr[4].indexOf("FINAL_SIGMA") != -1) {
+	                    	strbuffer.insert(0, 'c');
+	                    	lowerbuffer.insert(0, 'c');
+	                    	upperbuffer.insert(0, 'C');
+	                	}
+	            	}
+	            	if (UCharacter.isLowerCase(chstr[4].charAt(0))) {
+	                	Locale locale = new Locale(chstr[4].substring(0, 2), 
+	                	                           "");
+	                	if (!UCharacter.toLowerCase(locale, 
+	                        				strbuffer.toString()).equals(
+	                        				lowerbuffer.toString())) {
+	                    	errln(s);
+	                    	errln("Fail: toLowerCase for locale " + locale + 
+	                        	", character " + 
+	                        	Utility.escape(strbuffer.toString()) +
+	                        	", expected " + 
+	                        	Utility.escape(lowerbuffer.toString()) 
+	                        	+ " but resulted in " + 
+	                        	Utility.escape(UCharacter.toLowerCase(locale, 
+	                                                   strbuffer.toString())));
+	                	}
+	                	if (!UCharacter.toUpperCase(locale, 
+	                       		strbuffer.toString()).equals(
+	                       		                     upperbuffer.toString())) {
+	                    	errln(s);
+	                    	errln("Fail: toUpperCase for locale " + locale + 
+	                        	", character " + 
+	                        	Utility.escape(strbuffer.toString()) 
+	                        	+ ", expected "
+	                        	+ Utility.escape(upperbuffer.toString()) + 
+	                        	" but resulted in " + 
+	             	           	Utility.escape(UCharacter.toUpperCase(locale, 
+	                                                   strbuffer.toString())));
+	                	}
+	            	}
+	            	else {
+	                	if (!UCharacter.toLowerCase(
+	                	                         strbuffer.toString()).equals(
+	                                                lowerbuffer.toString())) {
+	                    	errln(s);
+	                    	errln("Fail: toLowerCase for character " + 
+	                          	Utility.escape(strbuffer.toString()) + 
+	                          	", expected " 
+	                          	+ Utility.escape(lowerbuffer.toString()) 
+	                          	+ " but resulted in " + 
+	                          	Utility.escape(UCharacter.toLowerCase( 
+	                                                   strbuffer.toString())));
+	                	}
+	                	if (!UCharacter.toUpperCase(
+	                	                         strbuffer.toString()).equals(
+	                                                upperbuffer.toString())) {
+	                    	errln(s);
+	                    	errln("Fail: toUpperCase for character " + 
+	                          	Utility.escape(strbuffer.toString()) + 
+	                          	", expected "
+	                          	+ Utility.escape(upperbuffer.toString()) + 
+	                          	" but resulted in " + 
+	                          	Utility.escape(UCharacter.toUpperCase( 
+	                                                  strbuffer.toString())));
+	                	}
+	            	}
+	        	}
+	        	else {
+	            	if (!UCharacter.toLowerCase(chstr[0]).equals(chstr[1])) {
+	                	errln(s);
+	                	errln("Fail: toLowerCase for character " + 
+	                      	Utility.escape(chstr[0]) + ", expected "
+	                      	+ Utility.escape(chstr[1]) + " but resulted in " + 
+	                      	Utility.escape(UCharacter.toLowerCase(chstr[0])));
+	            	}
+	            	if (!UCharacter.toUpperCase(chstr[0]).equals(chstr[3])) {
+	                	errln(s);
+	                	errln("Fail: toUpperCase for character " + 
+	                      	Utility.escape(chstr[0]) + ", expected "
+	                      	+ Utility.escape(chstr[3]) + " but resulted in " + 
+	                      	Utility.escape(UCharacter.toUpperCase(chstr[0])));
+	            	}
+	        	}
+	      	}
+	      	input.close();
+	    }
+	    catch (Exception e)
+	    {
+	      e.printStackTrace();
+	    }
+	}
+	
+	// private data members - test data --------------------------------------
+	
+	private static final Locale TURKISH_LOCALE_ = new Locale("tr", "TR");
+	private static final Locale GERMAN_LOCALE_ = new Locale("de", "DE");
+	private static final Locale GREEK_LOCALE_ = new Locale("el", "GR");
+	private static final Locale ENGLISH_LOCALE_ = new Locale("en", "US");
+	private static final Locale LITHUANIAN_LOCALE_ = new Locale("lt", "LT");
+	
+	private static final BreakIterator BREAKITERATOR_CHARACTER_ = 
+	                             BreakIterator.getCharacterInstance();
+	private static final BreakIterator BREAKITERATOR_WORD_ = 
+	                             BreakIterator.getWordInstance();
+	private static final BreakIterator BREAKITERATOR_TITLE_ = 
+	                             BreakIterator.getTitleInstance();	                             
+	                             	
+	private static final int CHARACTER_UPPER_[] = 
+	                  {0x41, 0x0042, 0x0043, 0x0044, 0x0045, 0x0046, 0x0047, 
+	    	           0x00b1, 0x00b2, 0xb3, 0x0048, 0x0049, 0x004a, 0x002e, 
+	    	           0x003f, 0x003a, 0x004b, 0x004c, 0x4d, 0x004e, 0x004f, 
+	    	           0x01c4, 0x01c8, 0x000c, 0x0000};
+	private static final int CHARACTER_LOWER_[] = 
+	                  {0x61, 0x0062, 0x0063, 0x0064, 0x0065, 0x0066, 0x0067, 
+	    	           0x00b1, 0x00b2, 0xb3, 0x0068, 0x0069, 0x006a, 0x002e, 
+	    	           0x003f, 0x003a, 0x006b, 0x006c, 0x6d, 0x006e, 0x006f, 
+	    	           0x01c6, 0x01c9, 0x000c, 0x0000};
+	    	           
+	private static final int FOLDING_SIMPLE_[] = {
+		// input, default, exclude special i
+	    0x61,   0x61,  0x61,
+	    0x49,   0x69,  0x69,
+	    0x131,  0x69,  0x131,
+	    0xdf,   0xdf,  0xdf,
+	    0xfb03, 0x00fb03, 0x00fb03,
+	    0x5ffff,0x5ffff,0x5ffff
+	};
+	private static final String FOLDING_MIXED_[] = 
+	                      {"\u0061\u0042\u0131\u03d0\u00df\ufb03\ud93f\udfff",
+	                       "A\u00df\u00b5\ufb03\uD801\uDC0C\u0131"};
+	private static final String FOLDING_DEFAULT_[] = 
+	     {"\u0061\u0062\u0069\u03b2\u0073\u0073\u0066\u0066\u0069\ud93f\udfff",
+	      "ass\u03bcffi\uD801\uDC34i"};
+	private static final String FOLDING_EXCLUDE_SPECIAL_I_[] = 
+	     {"\u0061\u0062\u0131\u03b2\u0073\u0073\u0066\u0066\u0069\ud93f\udfff",
+	      "ass\u03bcffi\uD801\uDC34\u0131"};
+	/** 
+	 * "IESUS CHRISTOS"
+	 */
+	private static final String SHARED_UPPERCASE_GREEK_ =
+		"\u0399\u0395\u03a3\u03a5\u03a3\u0020\u03a7\u03a1\u0399\u03a3\u03a4\u039f\u03a3";
+	/**
+	 * "iesus christos"
+	 */
+	private static final String SHARED_LOWERCASE_GREEK_ = 
+	    "\u03b9\u03b5\u03c3\u03c5\u03c2\u0020\u03c7\u03c1\u03b9\u03c3\u03c4\u03bf\u03c2";
+	private static final String SHARED_LOWERCASE_TURKISH_ = 
+	    "\u0069\u0073\u0074\u0061\u006e\u0062\u0075\u006c\u002c\u0020\u006e\u006f\u0074\u0020\u0063\u006f\u006e\u0073\u0074\u0061\u006e\u0074\u0131\u006e\u006f\u0070\u006c\u0065\u0021";
+	private static final String SHARED_UPPERCASE_TURKISH_ = 
+	    "\u0054\u004f\u0050\u004b\u0041\u0050\u0049\u0020\u0050\u0041\u004c\u0041\u0043\u0045\u002c\u0020\u0130\u0053\u0054\u0041\u004e\u0042\u0055\u004c";      
+	private static final String SHARED_UPPERCASE_ISTANBUL_ = 
+	                                      "\u0130STANBUL, NOT CONSTANTINOPLE!";
+	private static final String SHARED_LOWERCASE_ISTANBUL_ = 
+	                                      "istanbul, not constantinople!";
+	private static final String SHARED_LOWERCASE_TOPKAP_ = 
+	                                      "topkap\u0131 palace, istanbul";
+	private static final String SHARED_UPPERCASE_TOPKAP_ =  
+	                                      "TOPKAPI PALACE, ISTANBUL";
+	private static final String SHARED_LOWERCASE_GERMAN_ = 
+	                                      "S\u00FC\u00DFmayrstra\u00DFe";	
+    private static final String SHARED_UPPERCASE_GERMAN_ = 
+    									  "S\u00DCSSMAYRSTRASSE";
+ 	
+ 	private static final String UPPER_BEFORE_ =  
+   	     "\u0061\u0042\u0069\u03c2\u00df\u03c3\u002f\ufb03\ufb03\ufb03\ud93f\udfff";
+	private static final String UPPER_ROOT_ =    
+	     "\u0041\u0042\u0049\u03a3\u0053\u0053\u03a3\u002f\u0046\u0046\u0049\u0046\u0046\u0049\u0046\u0046\u0049\ud93f\udfff";
+	private static final String UPPER_TURKISH_ = 	
+	     "\u0041\u0042\u0130\u03a3\u0053\u0053\u03a3\u002f\u0046\u0046\u0049\u0046\u0046\u0049\u0046\u0046\u0049\ud93f\udfff";
+	private static final String UPPER_MINI_ = "\u00df\u0061";
+	private static final String UPPER_MINI_UPPER_ = "\u0053\u0053\u0041";
+	
+	private static final String LOWER_BEFORE_ = 
+                      "\u0061\u0042\u0049\u03a3\u00df\u03a3\u002f\ud93f\udfff";
+	private static final String LOWER_ROOT_ =    
+	                  "\u0061\u0062\u0069\u03c3\u00df\u03c2\u002f\ud93f\udfff";
+	private static final String LOWER_TURKISH_ = 
+	                  "\u0061\u0062\u0131\u03c3\u00df\u03c2\u002f\ud93f\udfff";
+
+	/**
+	 * each item is an array with input string, result string, locale
+	 */
+	private static final String TITLE_DATA_[] = {
+		"\u0061\u0042\u0020\u0069\u03c2\u0020\u00df\u03c3\u002f\ufb03\ud93f\udfff",
+		"\u0041\u0042\u0020\u0049\u03a3\u0020\u0053\u0073\u03a3\u002f\u0046\u0066\u0069\ud93f\udfff",
+		
+		"\u0061\u0042\u0020\u0069\u03c2\u0020\u00df\u03c3\u002f\ufb03\ud93f\udfff",
+		"\u0041\u0062\u0020\u0049\u03c2\u0020\u0053\u0073\u03c3\u002f\u0046\u0066\u0069\ud93f\udfff",
+		
+		" tHe QUIcK bRoWn", " The Quick Brown",
+		
+		"\u01c4\u01c5\u01c6\u01c7\u01c8\u01c9\u01ca\u01cb\u01cc", 
+		"\u01c5\u01c5\u01c5\u01c8\u01c8\u01c8\u01cb\u01cb\u01cb", // UBRK_CHARACTER
+		
+    	"\u01c9ubav ljubav", "\u01c8ubav Ljubav", // Lj vs. L+j
+    	
+    	"'oH dOn'T tItLeCaSe AfTeR lEtTeR+'", 
+    	"'Oh Don't Titlecase After Letter+'"
+	};
+	       
+    private static final BreakIterator TITLE_BREAKITERATORS_[] =
+    {
+    	BREAKITERATOR_CHARACTER_,
+    	BREAKITERATOR_WORD_,
+    	BREAKITERATOR_TITLE_,
+    	BREAKITERATOR_CHARACTER_,
+    	null,
+    	null
+    };
+    
+    /**
+     * <p>basic string, lower string, upper string, title string</p>
+     */
+    private static final String SPECIAL_DATA_[] = {
+    	UTF16.valueOf(0x1043C) + UTF16.valueOf(0x10414),
+		UTF16.valueOf(0x1043C) + UTF16.valueOf(0x1043C),
+		UTF16.valueOf(0x10414) + UTF16.valueOf(0x10414),
+		"ab'cD \uFB00i\u0131I\u0130 \u01C7\u01C8\u01C9 " + 
+	                     UTF16.valueOf(0x1043C) + UTF16.valueOf(0x10414),
+	    "ab'cd \uFB00i\u0131ii \u01C9\u01C9\u01C9 " + 
+	                          UTF16.valueOf(0x1043C) + UTF16.valueOf(0x1043C),
+	    "AB'CD FFIII\u0130 \u01C7\u01C7\u01C7 " +
+	                          UTF16.valueOf(0x10414) + UTF16.valueOf(0x10414),
+	    // sigmas followed/preceded by cased letters
+	    "i\u0307\u03a3\u0308j \u0307\u03a3\u0308j i\u00ad\u03a3\u0308 \u0307\u03a3\u0308 ",
+	    "i\u0307\u03c3\u0308j \u0307\u03c3\u0308j i\u00ad\u03c2\u0308 \u0307\u03c3\u0308 ",
+	    "I\u0307\u03a3\u0308J \u0307\u03a3\u0308J I\u00ad\u03a3\u0308 \u0307\u03a3\u0308 "
+    };
+    private static final Locale SPECIAL_LOCALES_[] = {
+    	null,
+    	ENGLISH_LOCALE_,
+    	null,
+    };
+
+    private static final String SPECIAL_DOTTED_ = 
+            "I \u0130 I\u0307 I\u0327\u0307 I\u0301\u0307 I\u0327\u0307\u0301";
+	private static final String SPECIAL_DOTTED_LOWER_TURKISH_ =
+			"\u0131 i i i\u0327 \u0131\u0301\u0307 i\u0327\u0307\u0301";
+	private static final String SPECIAL_DOTTED_LOWER_GERMAN_ = 
+	        "i i i i\u0327 i\u0301\u0307 i\u0327\u0307\u0301";
+	private static final String SPECIAL_DOT_ABOVE_ =
+			"a\u0307 \u0307 i\u0307 j\u0327\u0307 j\u0301\u0307";
+	private static final String SPECIAL_DOT_ABOVE_UPPER_LITHUANIAN_ = 
+	        "A\u0307 \u0307 I J\u0327 J\u0301\u0307";
+	private static final String SPECIAL_DOT_ABOVE_UPPER_GERMAN_ = 
+	        "A\u0307 \u0307 I\u0307 J\u0327\u0307 J\u0301\u0307";
+	private static final String SPECIAL_DOT_ABOVE_UPPER_ =
+	        "I I\u0301 J J\u0301 \u012e \u012e\u0301 \u00cc\u00cd\u0128";
+	private static final String SPECIAL_DOT_ABOVE_LOWER_LITHUANIAN_ =
+	        "i i\u0307\u0301 j j\u0307\u0301 \u012f \u012f\u0307\u0301 i\u0307\u0300i\u0307\u0301i\u0307\u0303";
+	private static final String SPECIAL_DOT_ABOVE_LOWER_GERMAN_ =
+	  		"i i\u0301 j j\u0301 \u012f \u012f\u0301 \u00ec\u00ed\u0129";
+	                  
+	// private methods -------------------------------------------------------
+	
+	/**
+  	 * Converting the hex numbers represented betwee                             n ';' to Unicode strings
+  	 * @param str string to break up into Unicode strings
+  	 * @return array of Unicode strings ending with a null
+  	 */
+  	private String[] getUnicodeStrings(String str)
+  	{
+    	Vector v = new Vector(10);
+    	int end = str.indexOf("; ");
+    	int start = 0;
+    	while (end != -1) {
+        	StringBuffer buffer = new StringBuffer(10);
+	        int tempstart = start;
+	        int tempend   = str.indexOf(' ', tempstart);
+	        while (tempend != -1 && tempend < end) {
+	           buffer.append((char)Integer.parseInt(str.substring(tempstart, 
+	                                                            tempend), 16));
+	           tempstart = tempend + 1;
+	           tempend   = str.indexOf(' ', tempstart);
+	        }
+	        String s = str.substring(tempstart, end);
+	        try {
+	            if (s.length() != 0) {
+	                buffer.append((char)Integer.parseInt(s, 16));
+	            }
+	        } catch (NumberFormatException e) {
+	            buffer.append(s);
+	        }
+	        start = end + 2;
+	        end   = str.indexOf("; ", start);
+	        v.addElement(buffer.toString());
+	    }
+	    String s = str.substring(start);
+	    if (s.charAt(0) != '#') {
+	        v.addElement(s);
+	    }
+	    int size = v.size();
+	    String result[] = new String[size];
+	    for (int i = 0; i < size; i ++) {
+	        result[i] = (String)v.elementAt(i);
+	    }
+	    return result;
+  	}
+}
+
