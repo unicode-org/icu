@@ -281,11 +281,13 @@ public:
 
     /**
      * Minimum value that can be stored in a UnicodeSet.
+     * @draft ICU 2.4
      */
     static const UChar32 MIN_VALUE;
 
     /**
      * Maximum value that can be stored in a UnicodeSet.
+     * @draft ICU 2.4
      */
     static const UChar32 MAX_VALUE;
 
@@ -307,6 +309,7 @@ public:
      *
      * @param start first character, inclusive, of range
      * @param end last character, inclusive, of range
+     * @draft ICU 2.4
      */
     UnicodeSet(UChar32 start, UChar32 end);
 
@@ -394,13 +397,15 @@ public:
      * an empty range.
      *
      * @param start first character in the set, inclusive
-     * @rparam end last character in the set, inclusive
+     * @param end last character in the set, inclusive
+     * @draft ICU 2.4
      */
     UnicodeSet& set(UChar32 start, UChar32 end);
 
     /**
      * Return true if the given position, in the given pattern, appears
      * to be the start of a UnicodeSet pattern.
+     * @draft ICU 2.4
      */
     static UBool resemblesPattern(const UnicodeString& pattern,
                                   int32_t pos);
@@ -528,6 +533,7 @@ public:
      * multicharacter string.
      * @param s string to be checked for containment
      * @return <tt>true</tt> if this set contains the specified string
+     * @draft ICU 2.4
      */
     UBool contains(const UnicodeString& s) const;
     
@@ -536,6 +542,7 @@ public:
      * of the given set.
      * @param c set to be checked for containment
      * @return true if the test condition is met
+     * @draft ICU 2.4
      */
     virtual UBool containsAll(const UnicodeSet& c) const;
     
@@ -544,6 +551,7 @@ public:
      * of the given string.
      * @param s string containing characters to be checked for containment
      * @return true if the test condition is met
+     * @draft ICU 2.4
      */
     UBool containsAll(const UnicodeString& s) const;
     
@@ -553,6 +561,7 @@ public:
      * @param start first character, inclusive, of the range
      * @param end last character, inclusive, of the range
      * @return true if the test condition is met
+     * @draft ICU 2.4
      */
     UBool containsNone(UChar32 start, UChar32 end) const;
 
@@ -561,6 +570,7 @@ public:
      * of the given set.
      * @param c set to be checked for containment
      * @return true if the test condition is met
+     * @draft ICU 2.4
      */
     UBool containsNone(const UnicodeSet& c) const;
     
@@ -569,6 +579,7 @@ public:
      * of the given string.
      * @param s string containing characters to be checked for containment
      * @return true if the test condition is met
+     * @draft ICU 2.4
      */
     UBool containsNone(const UnicodeString& s) const;
         
@@ -578,6 +589,7 @@ public:
      * @param start first character, inclusive, of the range
      * @param end last character, inclusive, of the range
      * @return true if the condition is met
+     * @draft ICU 2.4
      */
     inline UBool containsSome(UChar32 start, UChar32 end) const;
         
@@ -586,6 +598,7 @@ public:
      * and strings of the given set.
      * @param c set to be checked for containment
      * @return true if the condition is met
+     * @draft ICU 2.4
      */
     inline UBool containsSome(const UnicodeSet& s) const;
         
@@ -594,11 +607,13 @@ public:
      * of the given string.
      * @param s string containing characters to be checked for containment
      * @return true if the condition is met
+     * @draft ICU 2.4
      */
     inline UBool containsSome(const UnicodeString& s) const;
         
     /**
      * Implement UnicodeMatcher::matches()
+     * @draft ICU 2.4
      */
     UMatchDegree matches(const Replaceable& text,
                          int32_t& offset,
@@ -649,6 +664,7 @@ public:
      * characters that may be matched by this object into the given
      * set.
      * @param toUnionTo the set into which to union the source characters
+     * @draft ICU 2.4
      */
     void addMatchSetTo(UnicodeSet& toUnionTo) const;
 
@@ -658,6 +674,7 @@ public:
      * is not in this set, return -1.  The inverse of this method is
      * <code>charAt()</code>.
      * @return an index from 0..size()-1, or -1
+     * @draft ICU 2.4
      */
     int32_t indexOf(UChar32 c) const;
 
@@ -668,6 +685,7 @@ public:
      * <code>indexOf()</code>.
      * @param index an index from 0..size()-1
      * @return the character at the given index, or (UChar32)-1.
+     * @draft ICU 2.4
      */
     UChar32 charAt(int32_t index) const;
 
@@ -702,6 +720,7 @@ public:
      * <br><b>Warning: you cannot add an empty string ("") to a UnicodeSet.</b>
      * @param s the source string
      * @return this object, for chaining
+     * @draft ICU 2.4
      */
     UnicodeSet& add(const UnicodeString& s);
 
@@ -721,6 +740,7 @@ public:
      * If this set already any particular character, it has no effect on that character.
      * @param s the source string
      * @return this object, for chaining
+     * @draft ICU 2.4
      */
     UnicodeSet& addAll(const UnicodeString& s);
 
@@ -729,6 +749,7 @@ public:
      * If this set already any particular character, it has no effect on that character.
      * @param s the source string
      * @return this object, for chaining
+     * @draft ICU 2.4
      */
     UnicodeSet& retainAll(const UnicodeString& s);
 
@@ -737,6 +758,7 @@ public:
      * If this set already any particular character, it has no effect on that character.
      * @param s the source string
      * @return this object, for chaining
+     * @draft ICU 2.4
      */
     UnicodeSet& complementAll(const UnicodeString& s);
 
@@ -754,6 +776,7 @@ public:
      * @param s the source string
      * @return a newly created set containing the given string.
      * The caller owns the return object and is responsible for deleting it.
+     * @draft ICU 2.4
      */
     static UnicodeSet* createFrom(const UnicodeString& s);
 
@@ -763,6 +786,7 @@ public:
      * @param s the source string
      * @return a newly created set containing the given characters
      * The caller owns the return object and is responsible for deleting it.
+     * @draft ICU 2.4
      */
     static UnicodeSet* createFromAll(const UnicodeString& s);
 
@@ -815,6 +839,7 @@ public:
      * returns.
      * @param s the source string
      * @return this object, for chaining
+     * @draft ICU 2.4
      */
     UnicodeSet& remove(const UnicodeString& s);
 
@@ -903,6 +928,7 @@ public:
      *
      * @param c set that defines which elements will be xor'ed from
      *          this set.
+     * @draft ICU 2.4
      */
     virtual UnicodeSet& complementAll(const UnicodeSet& c);
 
@@ -918,6 +944,7 @@ public:
      * this set.
      * @see #getRangeStart
      * @see #getRangeEnd
+     * @draft ICU 2.4
      */
     virtual int32_t getRangeCount(void) const;
 
@@ -926,6 +953,7 @@ public:
      * specified range of this set.
      * @see #getRangeCount
      * @see #getRangeEnd
+     * @draft ICU 2.4
      */
     virtual UChar32 getRangeStart(int32_t index) const;
 
@@ -934,6 +962,7 @@ public:
      * specified range of this set.
      * @see #getRangeStart
      * @see #getRangeEnd
+     * @draft ICU 2.4
      */
     virtual UChar32 getRangeEnd(int32_t index) const;
 
@@ -983,12 +1012,14 @@ public:
      * @return the total length of the serialized format, including
      * the header, that is, n+2*m+(m!=0?2:1), or 0 on error other
      * than U_BUFFER_OVERFLOW_ERROR.
+     * @draft ICU 2.4
      */
     int32_t serialize(uint16_t *dest, int32_t destCapacity, UErrorCode& ec) const;
 
     /**
      * Reallocate this objects internal structures to take up the least
      * possible space, without changing this object's value.
+     * @draft ICU 2.4
      */
     virtual UnicodeSet& compact();
 
@@ -1011,6 +1042,7 @@ public:
      * @return The class ID for this object. All objects of a given
      * class have the same class ID.  Objects of other classes have
      * different class IDs.
+     * @draft ICU 2.4
      */
     virtual UClassID getDynamicClassID(void) const { return getStaticClassID(); }
 
