@@ -641,7 +641,7 @@ import com.ibm.text.SimpleDateFormat;
  * @see          GregorianCalendar
  * @see          TimeZone
  * @see          DateFormat
- * @version      $Revision: 1.15 $ $Date: 2000/11/28 00:50:12 $
+ * @version      $Revision: 1.16 $ $Date: 2000/11/28 01:10:06 $
  * @author Mark Davis, David Goldsmith, Chen-Lieh Huang, Alan Liu, Laura Werner
  * @since JDK1.1
  */
@@ -1126,13 +1126,13 @@ public abstract class Calendar implements Serializable, Cloneable {
      * @see #JULIAN_DAY
      */
     public static final int MIN_JULIAN = -0x7F000000;
-    // Get around bug in jikes 1.12 for now:
 
     /**
      * The minimum supported epoch milliseconds.  This value is equivalent
      * to <code>MIN_JULIAN</code> and <code>MIN_DATE</code>.
      */
     public static final long MIN_MILLIS = -184303902528000000L;
+    // Get around bug in jikes 1.12 for now.  Later, use:
     //public static final long MIN_MILLIS = (MIN_JULIAN - EPOCH_JULIAN_DAY) * ONE_DAY;
 
     /**
