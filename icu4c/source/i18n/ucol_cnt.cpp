@@ -360,3 +360,36 @@ uint32_t uprv_cnttab_getCE(CntTable *table, uint32_t element, int32_t position, 
       return tbl->CEs[position];
     }
 }
+
+uint32_t uprv_cnttab_changeContraction(CntTable *table, uint32_t element, UChar codePoint, uint32_t newCE, UBool forward, UErrorCode *status) {
+
+    element &= 0xFFFFFF;
+    ContractionTable *tbl = NULL;
+
+    if(U_FAILURE(*status)) {
+        return 0;
+    }
+
+    if((element == 0xFFFFFF) || (tbl = table->elements[element]) == NULL) {
+      return 0;
+    }
+
+    if(forward == FALSE) {
+        tbl = tbl->reversed;
+    }
+
+    int32_t position = 0;
+
+    while(codePoint > tbl->codePoints[position]) {
+      position++;
+      if(position > tbl->position) {
+        return UCOL_NOT_FOUND;
+      }
+    }
+    if (codePoint == tbl->codePoints[position]) {
+      tbl->CEs[position] = newCE;
+      return element;
+    } else {
+      return UCOL_NOT_FOUND;
+    }
+}
