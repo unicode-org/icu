@@ -372,6 +372,18 @@ Package=<4>
 
 ###############################################################################
 
+Project: "layout"=..\layout\layout.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
 Project: "makeconv"=..\tools\makeconv\makeconv.dsp - Package Owner=<4>
 
 Package=<5>
