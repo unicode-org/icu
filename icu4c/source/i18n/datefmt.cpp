@@ -121,6 +121,21 @@ DateFormat::format(const Formattable& obj,
 //----------------------------------------------------------------------
 
 UnicodeString&
+DateFormat::format(UDate date, UnicodeString& result, FieldPosition& fieldPosition) const {
+    if (fCalendar != NULL) {
+        // Use our calendar instance
+        UErrorCode ec = U_ZERO_ERROR;
+        fCalendar->setTime(date, ec);
+        if (U_SUCCESS(ec)) {
+            return format(*fCalendar, result, fieldPosition);
+        }
+    }
+    return result;
+}
+
+//----------------------------------------------------------------------
+
+UnicodeString&
 DateFormat::format(UDate date, UnicodeString& result) const
 {
     // Note that any error information is just lost.  That's okay
@@ -128,6 +143,32 @@ DateFormat::format(UDate date, UnicodeString& result) const
     FieldPosition fpos(0);
     format(date, result, fpos);
     return result;
+}
+
+//----------------------------------------------------------------------
+
+UDate
+DateFormat::parse(const UnicodeString& text,
+                  ParsePosition& pos) const
+{
+    if (fCalendar != NULL) {
+        int32_t start = pos.getIndex();
+        fCalendar->clear();
+        parse(text, *fCalendar, pos);
+        if (pos.getIndex() != start) {
+            UErrorCode ec = U_ZERO_ERROR;
+            UDate d = fCalendar->getTime(ec);
+            if (U_SUCCESS(ec)) {
+                return d; // Successful function exit
+            }
+            // We arrive here if fCalendar is non-lenient and there
+            // is an out-of-range field.  We don't know which field
+            // was illegal so we set the error index to the start.
+            pos.setIndex(start);
+            pos.setErrorIndex(start);
+		}
+    }
+    return 0; // Error return UDate is 0 (the epoch)
 }
 
 //----------------------------------------------------------------------
