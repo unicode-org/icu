@@ -431,10 +431,11 @@ u_scanf_integer_handler(UFILE             *input,
                         int32_t            *consumed)
 {
     int32_t        len;
-    long            *num         = (long*) (args[0].ptrValue);
-    UNumberFormat        *format;
-    int32_t        parsePos     = 0;
-    UErrorCode         status         = U_ZERO_ERROR;
+    void            *num         = (void*) (args[0].ptrValue);
+    UNumberFormat   *format;
+    int32_t         parsePos     = 0;
+    UErrorCode      status         = U_ZERO_ERROR;
+    int64_t         result;
 
 
     /* skip all ws in the input */
@@ -458,13 +459,15 @@ u_scanf_integer_handler(UFILE             *input,
         return 0;
 
     /* parse the number */
-    *num = unum_parse(format, input->fUCPos, len, &parsePos, &status);
+    result = unum_parseInt64(format, input->fUCPos, len, &parsePos, &status);
 
     /* mask off any necessary bits */
-    if(info->fIsShort)
-        *num &= UINT16_MAX;
-    else if(! info->fIsLong || ! info->fIsLongLong)
-        *num &= UINT32_MAX;
+    if (info->fIsShort)
+        *(int16_t*)num = (int16_t)(UINT16_MAX & result);
+    else if (info->fIsLongLong)
+        *(int64_t*)num = result;
+    else
+        *(int32_t*)num = (int32_t)(UINT32_MAX & result);
 
     /* update the input's position to reflect consumed data */
     input->fUCPos += parsePos;
@@ -654,8 +657,8 @@ u_scanf_hex_handler(UFILE             *input,
                     int32_t            *consumed)
 {
     int32_t        len;
-    long            *num         = (long*) (args[0].ptrValue);
-
+    void           *num         = (void*) (args[0].ptrValue);
+    int64_t        result;
 
     /* skip all ws in the input */
     u_scanf_skip_leading_ws(input, info->fPadChar);
@@ -680,16 +683,18 @@ u_scanf_hex_handler(UFILE             *input,
     }
 
     /* parse the number */
-    *num = ufmt_utol(input->fUCPos, &len, 16);
+    result = ufmt_uto64(input->fUCPos, &len, 16);
 
     /* update the input's position to reflect consumed data */
     input->fUCPos += len;
 
     /* mask off any necessary bits */
-    if(info->fIsShort)
-        *num &= UINT16_MAX;
-    else if(! info->fIsLong || ! info->fIsLongLong)
-        *num &= UINT32_MAX;
+    if (info->fIsShort)
+        *(int16_t*)num = (int16_t)(UINT16_MAX & result);
+    else if (info->fIsLongLong)
+        *(int64_t*)num = result;
+    else
+        *(int32_t*)num = (int32_t)(UINT32_MAX & result);
 
     /* we converted 1 arg */
     return 1;
@@ -703,7 +708,8 @@ u_scanf_octal_handler(UFILE             *input,
                       int32_t            *consumed)
 {
     int32_t        len;
-    long            *num         = (long*) (args[0].ptrValue);
+    void            *num         = (void*) (args[0].ptrValue);
+    int64_t         result;
 
 
     /* skip all ws in the input */
@@ -720,16 +726,18 @@ u_scanf_octal_handler(UFILE             *input,
         len = ufmt_min(len, info->fWidth);
 
     /* parse the number */
-    *num = ufmt_utol(input->fUCPos, &len, 8);
+    result = ufmt_uto64(input->fUCPos, &len, 8);
 
     /* update the input's position to reflect consumed data */
     input->fUCPos += len;
 
     /* mask off any necessary bits */
-    if(info->fIsShort)
-        *num &= UINT16_MAX;
-    else if(! info->fIsLong || ! info->fIsLongLong)
-        *num &= UINT32_MAX;
+    if (info->fIsShort)
+        *(int16_t*)num = (int16_t)(UINT16_MAX & result);
+    else if (info->fIsLongLong)
+        *(int64_t*)num = result;
+    else
+        *(int32_t*)num = (int32_t)(UINT32_MAX & result);
 
     /* we converted 1 arg */
     return 1;
@@ -760,7 +768,7 @@ u_scanf_pointer_handler(UFILE             *input,
         len = ufmt_min(len, info->fWidth);
 
     /* parse the pointer - cast to void** to assign to *p */
-    *(void**)p = (void*) ufmt_utol(input->fUCPos, &len, 16);
+    *(void**)p = (void*) ufmt_uto64(input->fUCPos, &len, 16);
 
     /* update the input's position to reflect consumed data */
     input->fUCPos += len;
@@ -1014,7 +1022,7 @@ u_vfscanf_u(UFILE       *f,
                     break;
 
                 case ufmt_count:
-                    args.intValue = va_arg(ap, int);
+                    args.int64Value = va_arg(ap, int);
                     /* set the spec's width to the # of items converted */
                     spec.fInfo.fWidth = converted;
                     break;

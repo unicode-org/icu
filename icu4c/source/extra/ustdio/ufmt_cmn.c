@@ -60,10 +60,10 @@ ufmt_isdigit(UChar     c,
 #define TO_LC_DIGIT(a) a <= 9 ? (0x0030 + a) : (0x0030 + a + 39)
 
 void 
-ufmt_ltou(UChar     *buffer, 
+ufmt_64tou(UChar     *buffer, 
           int32_t   *len,
-          uint32_t  value, 
-          uint32_t  radix,
+          uint64_t  value, 
+          uint8_t  radix,
           UBool     uselower,
           int32_t   minDigits)
 {
@@ -72,7 +72,7 @@ ufmt_ltou(UChar     *buffer,
     UChar    *left, *right, temp;
     
     do {
-        digit = value % radix;
+        digit = (uint32_t)(value % radix);
         value = value / radix;
         buffer[length++] = (UChar)(uselower ? TO_LC_DIGIT(digit) 
             : TO_UC_DIGIT(digit));
@@ -96,14 +96,14 @@ ufmt_ltou(UChar     *buffer,
     *len = length;
 }
 
-long
-ufmt_utol(const UChar     *buffer, 
+int64_t
+ufmt_uto64(const UChar     *buffer, 
           int32_t     *len,
-          int32_t     radix)
+          int8_t     radix)
 {
     const UChar     *limit;
     int32_t         count;
-    long        result;
+    int64_t        result;
     
     
     /* intialize parameters */

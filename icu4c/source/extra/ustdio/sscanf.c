@@ -421,10 +421,11 @@ u_scanf_integer_handler(u_localized_string    *input,
                          int32_t            *consumed)
 {
     int32_t        len;
-    long            *num         = (long*) (args[0].ptrValue);
-    UNumberFormat        *format;
+    void            *num         = (void*) (args[0].ptrValue);
+    UNumberFormat   *format;
     int32_t        parsePos     = 0;
-    UErrorCode         status         = U_ZERO_ERROR;
+    UErrorCode      status         = U_ZERO_ERROR;
+    int64_t         result;
 
 
     /* skip all ws in the input */
@@ -445,13 +446,15 @@ u_scanf_integer_handler(u_localized_string    *input,
         return 0;
 
     /* parse the number */
-    *num = unum_parse(format, &(input->str[input->pos]), len, &parsePos, &status);
+    result = unum_parseInt64(format, &(input->str[input->pos]), len, &parsePos, &status);
 
     /* mask off any necessary bits */
-    if(info->fIsShort)
-        *num &= UINT16_MAX;
-    else if(! info->fIsLong || ! info->fIsLongLong)
-        *num &= UINT32_MAX;
+    if (info->fIsShort)
+        *(int16_t*)num = (int16_t)(UINT16_MAX & result);
+    else if (info->fIsLongLong)
+        *(int64_t*)num = result;
+    else
+        *(int32_t*)num = (int32_t)(UINT32_MAX & result);
 
     /* update the input's position to reflect consumed data */
     input->pos += parsePos;
@@ -635,7 +638,8 @@ u_scanf_hex_handler(u_localized_string    *input,
                      int32_t            *consumed)
 {
     int32_t        len;
-    long            *num         = (long*) (args[0].ptrValue);
+    void           *num         = (void*) (args[0].ptrValue);
+    int64_t         result;
 
 
     /* skip all ws in the input */
@@ -658,16 +662,18 @@ u_scanf_hex_handler(u_localized_string    *input,
     }
 
     /* parse the number */
-    *num = ufmt_utol(&(input->str[input->pos]), &len, 16);
+    result = ufmt_uto64(&(input->str[input->pos]), &len, 16);
 
     /* update the input's position to reflect consumed data */
     input->pos += len;
 
     /* mask off any necessary bits */
-    if(info->fIsShort)
-        *num &= UINT16_MAX;
-    else if(! info->fIsLong || ! info->fIsLongLong)
-        *num &= UINT32_MAX;
+    if (info->fIsShort)
+        *(int16_t*)num = (int16_t)(UINT16_MAX & result);
+    else if (info->fIsLongLong)
+        *(int64_t*)num = result;
+    else
+        *(int32_t*)num = (int32_t)(UINT32_MAX & result);
 
     /* we converted 1 arg */
     return 1;
@@ -681,8 +687,8 @@ u_scanf_octal_handler(u_localized_string    *input,
                        int32_t            *consumed)
 {
     int32_t        len;
-    long            *num         = (long*) (args[0].ptrValue);
-
+    void            *num         = (void*) (args[0].ptrValue);
+    int64_t         result;
 
     /* skip all ws in the input */
     u_scanf_skip_leading_ws(input, info->fPadChar);
@@ -695,16 +701,18 @@ u_scanf_octal_handler(u_localized_string    *input,
         len = ufmt_min(len, info->fWidth);
 
     /* parse the number */
-    *num = ufmt_utol(&(input->str[input->pos]), &len, 8);
+    result = ufmt_uto64(&(input->str[input->pos]), &len, 8);
 
     /* update the input's position to reflect consumed data */
     input->pos += len;
 
     /* mask off any necessary bits */
-    if(info->fIsShort)
-        *num &= UINT16_MAX;
-    else if(! info->fIsLong || ! info->fIsLongLong)
-        *num &= UINT32_MAX;
+    if (info->fIsShort)
+        *(int16_t*)num = (int16_t)(UINT16_MAX & result);
+    else if (info->fIsLongLong)
+        *(int64_t*)num = result;
+    else
+        *(int32_t*)num = (int32_t)(UINT32_MAX & result);
 
     /* we converted 1 arg */
     return 1;
@@ -732,7 +740,7 @@ u_scanf_pointer_handler(u_localized_string    *input,
         len = ufmt_min(len, info->fWidth);
 
     /* parse the pointer - cast to void** to assign to *p */
-    *(void**)p = (void*) ufmt_utol(&(input->str[input->pos]), &len, 16);
+    *(void**)p = (void*) ufmt_uto64(&(input->str[input->pos]), &len, 16);
 
     /* update the input's position to reflect consumed data */
     input->pos += len;
@@ -751,7 +759,7 @@ u_scanf_scanset_handler(u_localized_string    *input,
     USet            *scanset;
     int32_t         len;
     UErrorCode      status = U_ZERO_ERROR;
-    UChar           c;
+    UChar32         c;
     UChar           *s     = (UChar*) (args[0].ptrValue);
     UChar           *alias, *limit;
 
@@ -997,7 +1005,7 @@ u_vsscanf_u(const UChar *buffer,
                     break;
 
                 case ufmt_count:
-                    args.intValue = va_arg(ap, int);
+                    args.int64Value = va_arg(ap, int);
                     /* set the spec's width to the # of items converted */
                     spec.fInfo.fWidth = converted;
                     break;
