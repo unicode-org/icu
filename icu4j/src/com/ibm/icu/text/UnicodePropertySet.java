@@ -4,8 +4,8 @@
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/Attic/UnicodePropertySet.java,v $
-* $Date: 2002/06/06 22:39:58 $
-* $Revision: 1.13 $
+* $Date: 2002/07/26 20:40:46 $
+* $Revision: 1.14 $
 **********************************************************************
 */
 package com.ibm.icu.text;
@@ -14,6 +14,7 @@ import java.text.*;
 import java.util.*;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.lang.*;
+import com.ibm.icu.impl.NormalizerImpl;
 
 /**
  * INTERNAL CLASS implementing the UnicodeSet properties as outlined
@@ -54,7 +55,7 @@ import com.ibm.icu.lang.*;
  * '+' indicates a supported property.
  *
  * @author Alan Liu
- * @version $RCSfile: UnicodePropertySet.java,v $ $Revision: 1.13 $ $Date: 2002/06/06 22:39:58 $
+ * @version $RCSfile: UnicodePropertySet.java,v $ $Revision: 1.14 $ $Date: 2002/07/26 20:40:46 $
  */
 class UnicodePropertySet {
 
@@ -315,7 +316,7 @@ class UnicodePropertySet {
             final int fivalue = ivalue;
             return createSetFromFilter(new Filter() {
                 public boolean contains(int cp) {
-                    return UCharacter.getCombiningClass(cp) == fivalue;
+                    return NormalizerImpl.getCombiningClass(cp) == fivalue;
                 }
             });
         }
