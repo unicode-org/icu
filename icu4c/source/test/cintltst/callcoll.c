@@ -222,6 +222,8 @@ const UChar testCases[][4] =
 
 #ifndef INCLUDE_CALLCOLL_C
 
+static void TestJitterbug1098();
+
 void addAllCollTest(TestNode** root)
 {
     
@@ -236,6 +238,8 @@ void addAllCollTest(TestNode** root)
     addTest(root, &TestSurrogates, "tscoll/callcoll/TestSurrogates");
     addTest(root, &TestInvalidRules, "tscoll/callcoll/TestInvalidRules");
     addTest(root, &TestJB1401, "tscoll/callcoll/TestJB1401");      
+    addTest(root, &TestJitterbug1098, "tscoll/callcoll/TestJitterbug1098");      
+
    }
 
 static void doTestVariant(UCollator* myCollation, const UChar source[], const UChar target[], UCollationResult result)
@@ -792,6 +796,57 @@ TestInvalidRules(){
             log_err("postContext in UParseError for ucol_openRules does not match\n");
         }
     }  
+}
+static void
+TestJitterbug1098(){
+    UChar rule[1000];
+    UCollator* c1 = NULL;
+    UErrorCode status = U_ZERO_ERROR;
+    UParseError parseError;
+    int32_t length = 1000;
+    char preContext[200]={0};
+    char postContext[200]={0};
+    const UChar* retRule=NULL;
+    int i=0;    
+    const char* rules[] = {
+         "&''<\\\\",
+         "&\\'<\\\\",
+         "&\\\"<'\\'",
+         "&'\"'<\\'",
+         '\0'
+
+    };
+    const UCollationResult results[] = {
+        UCOL_LESS,
+        UCOL_LESS, 
+        UCOL_LESS,
+        UCOL_LESS,
+    };
+    const UChar input[][2]= {
+        {0x0027,0x005c},
+        {0x0027,0x005c},
+        {0x0022,0x005c},
+        {0x0022,0x0027},
+    };
+    UChar X[2] ={0};
+    UChar Y[2] ={0};
+    u_memset(parseError.preContext,0x0000,U_PARSE_CONTEXT_LEN);      
+    u_memset(parseError.postContext,0x0000,U_PARSE_CONTEXT_LEN);
+    for(;rules[i]!=0;i++){
+        u_uastrcpy(rule, rules[i]);
+        c1 = ucol_openRules(rule, u_strlen(rule), UCOL_OFF, UCOL_DEFAULT_STRENGTH, &parseError, &status);
+        if(U_FAILURE(status)){
+            u_UCharsToChars(parseError.preContext,preContext,20);
+            u_UCharsToChars(parseError.postContext,postContext,20);
+            log_err("Could not parse the rules syntax. Error: %s ", u_errorName(status));
+            log_verbose("\n\tPre-Context: %s \n\tPost-Context:%s \n",preContext,postContext);
+            return;
+        }
+        X[0] = input[i][0];
+        Y[0] = input[i][1];
+        doTest(c1,X,Y,results[i]);
+        ucol_close(c1);
+    }
 }
 
 #endif
