@@ -5,7 +5,7 @@
 **********************************************************************
 */
 
-#include "unicode/uvector.h"
+#include "uvector.h"
 
 U_NAMESPACE_BEGIN
 
