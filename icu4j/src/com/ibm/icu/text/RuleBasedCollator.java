@@ -1616,9 +1616,12 @@ public final class RuleBasedCollator extends Collator
         initUtility();
         if (rb != null) {
             try {
-                // TODO: this is to be updated after the key word search
-                //       is implemented.
-                String collkey = rb.getStringWithFallback("collations/default");
+                // Use keywords, if supplied for lookup
+            	String collkey = locale.getKeywordValue("collation");
+			  	if(collkey == null) {
+			  		collkey = rb.getStringWithFallback("collations/default");
+			    }
+			           
                 // collations/default will always give a string back
                 // keyword for the real collation data
                 // if "collations/collkey" will return null if collkey == null 
