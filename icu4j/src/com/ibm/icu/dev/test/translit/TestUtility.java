@@ -41,14 +41,18 @@ public final class TestUtility {
     public static boolean isUnassigned(char c) {
         try {
             return UCharacter.getType(c) == UCharacterCategory.UNASSIGNED;
-        } catch (NullPointerException e) {}
+        } catch (NullPointerException e) {
+            System.out.print("");
+        }
         return Character.getType(c) == Character.UNASSIGNED;
     }
 
     public static boolean isLetter(char c) {
         try {
             return UCharacter.isLetter(c);
-        } catch (NullPointerException e) {}
+        } catch (NullPointerException e) {
+            System.out.print("");
+        }
         return Character.isLetter(c);
     }
 

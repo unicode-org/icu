@@ -216,7 +216,9 @@ public class CalendarRegression extends com.ibm.test.TestFmwk {
                 Date date = fmt.parse("29MAY97");
                 cal.setTime(date);
             }
-        catch (Exception e) {;}
+        catch (Exception e) {
+            System.out.print("");
+        }
         cal.set(Calendar.HOUR_OF_DAY, 13);
         logln("Hour: "+cal.get(Calendar.HOUR_OF_DAY));
         cal.add(Calendar.HOUR_OF_DAY, 6);
@@ -373,7 +375,9 @@ public class CalendarRegression extends com.ibm.test.TestFmwk {
 
         logln( " Cal1 = " + cal1.getTime().getTime() ); 
         logln( " Cal1 time in ms = " + cal1.get(Calendar.MILLISECOND) ); 
-        for( int k = 0; k < 100 ; k++ ); 
+        for( int k = 0; k < 100 ; k++ ) {
+            System.out.print(""); 
+        }
 
         GregorianCalendar cal2 = new GregorianCalendar(1997, 10, 11, 10, 20, 40); 
         /*cal2.set( Calendar.YEAR, 1997 ); 
@@ -804,6 +808,7 @@ public class CalendarRegression extends com.ibm.test.TestFmwk {
     public void Test4125892() {
         GregorianCalendar cal = (GregorianCalendar) Calendar.getInstance();
         DateFormat fmt = new SimpleDateFormat("MMMM d, yyyy G");
+        fmt = null;
         cal.clear();
         cal.set(Calendar.ERA, GregorianCalendar.BC);
         cal.set(Calendar.YEAR, 81); // 81 BC is a leap year (proleptically)
@@ -904,6 +909,7 @@ public class CalendarRegression extends com.ibm.test.TestFmwk {
         catch (IllegalArgumentException e) {
             // OK: Do nothing
             // logln("Test passed");
+            System.out.print("");
         }
         catch (Exception e) {
             errln("Test failed. Unexpected exception is thrown: " + e);
@@ -980,7 +986,9 @@ public class CalendarRegression extends com.ibm.test.TestFmwk {
                       ", date before: " + date +
                       ", date after: " + calendar.getTime() +
                       ", value: " + value + " (max = " + max +")");
-            } catch (IllegalArgumentException e) {} 
+            } catch (IllegalArgumentException e) {
+                System.out.print("");
+            } 
         }
     }
 
@@ -1284,11 +1292,13 @@ public class CalendarRegression extends com.ibm.test.TestFmwk {
 
         calendar.add(Calendar.MONTH, 10); 
         Date date1 = calendar.getTime();
+        date1 = null;
         int d1 = calendar.get(Calendar.DAY_OF_MONTH);
 
         calendar = new GregorianCalendar(1996, 1, 29);
         calendar.add(Calendar.MONTH, 11); 
         Date date2 = calendar.getTime();
+        date2 = null;
         int d2 = calendar.get(Calendar.DAY_OF_MONTH);
 
         if (d1 != d2) {

@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/demo/impl/DemoUtility.java,v $ 
- * $Date: 2000/04/26 18:40:15 $ 
- * $Revision: 1.3 $
+ * $Date: 2001/09/08 01:12:17 $ 
+ * $Revision: 1.4 $
  *
  *****************************************************************************************
  */
@@ -49,7 +49,7 @@ public class DemoUtility
 
         Component[] components = cont.getComponents();
         for (int i = 0; i < components.length; ++i) {
-            int colNumber = i%columns;
+            // not used int colNumber = i%columns;
             c.gridwidth = 1;    // default
             if ((i%columns) == columns - 1)
                 c.gridwidth = GridBagConstraints.REMAINDER;    // last in grid

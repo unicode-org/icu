@@ -1,5 +1,5 @@
 /*
- * @(#)$RCSfile: CodeEdit.java,v $ $Revision: 1.1 $ $Date: 2000/04/20 17:43:09 $
+ * @(#)$RCSfile: CodeEdit.java,v $ $Revision: 1.2 $ $Date: 2001/09/08 01:14:31 $
  *
  * (C) Copyright IBM Corp. 1998-1999.  All Rights Reserved.
  *
@@ -116,6 +116,7 @@ public class CodeEdit extends EditApplication {
                 return TextDocument.createFromFile(file, TextDocument.PLAIN_TEXT);
             }
             catch(Exception e) {
+                System.out.print("");
             }
         }
         return null;

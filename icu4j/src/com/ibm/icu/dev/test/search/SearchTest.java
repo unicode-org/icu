@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/search/SearchTest.java,v $ 
- * $Date: 2001/03/23 20:28:21 $ 
- * $Revision: 1.6 $
+ * $Date: 2001/09/08 01:17:24 $ 
+ * $Revision: 1.7 $
  *
  *****************************************************************************************
  */
@@ -50,6 +50,7 @@ public class SearchTest extends com.ibm.test.TestFmwk {
                                                              + " & ue ; \u00fc & UE ; \u00dc"); 
         }
         catch (ParseException e) {
+            System.out.print("");
         }
     }
     
@@ -256,7 +257,7 @@ public class SearchTest extends com.ibm.test.TestFmwk {
         String  pat = "fox";
         String  targ = "the foxy brown Fox";
         
-        int[] match1 = new int[] { 4, 15 };   // expected results
+        // not used int[] match1 = new int[] { 4, 15 };   // expected results
         int[] match3 = new int[] { 4 };
 
         StringSearch iter = new StringSearch(pat, new StringCharacterIterator(targ),

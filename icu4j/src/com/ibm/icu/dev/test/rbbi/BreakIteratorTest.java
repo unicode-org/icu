@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/rbbi/BreakIteratorTest.java,v $ 
- * $Date: 2000/05/18 19:11:55 $ 
- * $Revision: 1.5 $
+ * $Date: 2001/09/08 01:16:42 $ 
+ * $Revision: 1.6 $
  *
  *****************************************************************************************
  */
@@ -1061,7 +1061,7 @@ lineSelectionData.addElement("(\u0e1b\u0e23\u0e30\u0e40\u0e17\u0e28\u0e44\u0e17\
         String str = "...Hello, World!...";
         int begin = 3;
         int end = str.length() - 3;
-        boolean gotException = false;
+        // not used boolean gotException = false;
         boolean dummy;
 
         iter.setText(new StringCharacterIterator(str, begin, end, begin));

@@ -497,7 +497,7 @@ public class TimeZoneTest extends TestFmwk
         logln("Binary Search Before: " + min + " = " + new Date(min));
         logln("Binary Search After:  " + max + " = " + new Date(max));
         long mindelta = expectedBoundary - min;
-        long maxdelta = max - expectedBoundary;
+        // not used long maxdelta = max - expectedBoundary;
         if (mindelta >= 0 &&
             mindelta <= INTERVAL &&
             mindelta >= 0 &&

@@ -69,7 +69,9 @@ public class ConformanceTest extends TestFmwk {
         } catch (IOException ex) {
             try {
                 input.close();
-            } catch (Exception ex2) {}
+            } catch (Exception ex2) {
+                System.out.print("");
+            }
             ex.printStackTrace();
             throw new IllegalArgumentException("Couldn't read file "
               + ex.getClass().getName() + " " + ex.getMessage()

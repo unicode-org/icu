@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/test/normalizer/Attic/ExhaustiveTest.java,v $ 
- * $Date: 2001/03/15 23:35:50 $ 
- * $Revision: 1.7 $
+ * $Date: 2001/09/08 01:16:35 $ 
+ * $Revision: 1.8 $
  *
  *****************************************************************************************
  */
@@ -127,6 +127,7 @@ public class ExhaustiveTest extends TestFmwk
             String comp = Normalizer.compose(decomp, compat, options);
 
             short cClass = info.getCanonicalClass(decomp.charAt(0));
+            cClass = 0;
 
             if (info.isExcludedComposition(ch)) {
                 logln("Skipped excluded char " + hex(ch) + " (" + info.getName(ch,true) + ")" );

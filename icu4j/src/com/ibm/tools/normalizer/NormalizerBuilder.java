@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/tools/normalizer/Attic/NormalizerBuilder.java,v $ 
- * $Date: 2001/03/15 23:36:02 $ 
- * $Revision: 1.12 $
+ * $Date: 2001/09/08 01:18:03 $ 
+ * $Revision: 1.13 $
  *
  *****************************************************************************************
  */
@@ -26,6 +26,7 @@ public final class NormalizerBuilder
     public static void main(String args[]) throws IOException {
         try {
             NormalizerBuilder foo = new NormalizerBuilder(args);
+            foo = null;
         } catch (Throwable e) {
             System.err.println(e.getLocalizedMessage());
             e.printStackTrace();
@@ -134,7 +135,7 @@ public final class NormalizerBuilder
         }
         if (!fOutDir.endsWith("/")) { fOutDir += '/'; }
 
-        boolean canonicalOnly = true;
+        // not used boolean canonicalOnly = true;
 
         // Build decomps, a char->String mapping of characters to their
         // decompositions, either canonical or compatibility.
@@ -280,6 +281,7 @@ public final class NormalizerBuilder
 
                     if (!source.equals(comp)) {
                         String decomp = fullDecomposition(source);
+                        decomp = null;
                         pairExplosions.put(source,comp);
                         bases.add(unichar);
                     }
@@ -734,7 +736,7 @@ public final class NormalizerBuilder
         //
         for (char ch = 0; ch < 0xFFFF; ch++) {
             short cclass = uinfo.getCanonicalClass(ch);
-            String explosion = null;
+            // not used String explosion = null;
 
             if (explodeOnly.contains(ch) && uinfo.hasCanonicalDecomposition(ch)) {
                 maxCanon = put(replace, explodeOnly.get(ch), maxCompat);
@@ -808,7 +810,7 @@ public final class NormalizerBuilder
 
         // Now run through the combining classes again and assign bit numbers
         // in the same ascending order as the canonical classes
-        int maskShift = 0;
+        // not used int maskShift = 0;
         int bit = 0;
         for (int i = 0; i < 256; i++) {
             if (classMap[i] != 0) {

@@ -310,10 +310,15 @@ public class TimeZoneRegression extends TestFmwk {
     public void Test4151429() {
         try {
             TimeZone tz = TimeZone.getTimeZone("GMT");
+            /* not used 
             String name = tz.getDisplayName(true, Integer.MAX_VALUE,
                                             Locale.getDefault());
+                                            */
+            tz = null;
             errln("IllegalArgumentException not thrown by TimeZone.getDisplayName()");
-        } catch(IllegalArgumentException e) {}
+        } catch(IllegalArgumentException e) {
+            System.out.print("");
+        }
     }
 
     /**
@@ -466,6 +471,7 @@ public class TimeZoneRegression extends TestFmwk {
                 SimpleTimeZone temp = new SimpleTimeZone(0, "Z",
                         month, day, dayOfWeek, time,
                         GOOD_MONTH, GOOD_DAY, GOOD_DAY_OF_WEEK, GOOD_TIME);
+                temp = null;
             } catch (IllegalArgumentException e) {
                 ex = e;
             }
@@ -481,6 +487,7 @@ public class TimeZoneRegression extends TestFmwk {
                 SimpleTimeZone temp = new SimpleTimeZone(0, "Z",
                         GOOD_MONTH, GOOD_DAY, GOOD_DAY_OF_WEEK, GOOD_TIME,
                         month, day, dayOfWeek, time);
+                temp = null;
             } catch (IllegalArgumentException e) {
                 ex = e;
             }
@@ -536,6 +543,7 @@ public class TimeZoneRegression extends TestFmwk {
             try {
                 int offset = tz.getOffset(DATA[i+1], DATA[i+2], DATA[i+3],
                                           DATA[i+4], DATA[i+5], DATA[i+6]); 
+                offset = 0;
            } catch (IllegalArgumentException ex) {
                 e = ex;
             }
@@ -559,16 +567,22 @@ public class TimeZoneRegression extends TestFmwk {
         try {
             z = TimeZone.getTimeZone(null);
             errln("FAIL: Null allowed in getTimeZone");
-        } catch (NullPointerException e) {}
+        } catch (NullPointerException e) {
+            System.out.print("");
+        }
         z = TimeZone.getTimeZone("GMT");
         try {
             z.getDisplayName(false, TimeZone.SHORT, null);
             errln("FAIL: Null allowed in getDisplayName(3)");
-        } catch (NullPointerException e) {}
+        } catch (NullPointerException e) {
+            System.out.print("");
+        }
         try {
             z.getDisplayName(null);
             errln("FAIL: Null allowed in getDisplayName(1)");
-        } catch (NullPointerException e) {}
+        } catch (NullPointerException e) {
+            System.out.print("");
+        }
         try {
             if (z.hasSameRules(null)) {
                 errln("FAIL: hasSameRules returned true");
@@ -579,11 +593,15 @@ public class TimeZoneRegression extends TestFmwk {
         try {
             z.inDaylightTime(null);
             errln("FAIL: Null allowed in inDaylightTime");
-        } catch (NullPointerException e) {}
+        } catch (NullPointerException e) {
+            System.out.print("");
+        }
         try {
             z.setID(null);
             errln("FAIL: Null allowed in setID");
-        } catch (NullPointerException e) {}
+        } catch (NullPointerException e) {
+            System.out.print("");
+        }
 
         TimeZone save = TimeZone.getDefault();
         try {
@@ -599,15 +617,21 @@ public class TimeZoneRegression extends TestFmwk {
         try {
             s = new SimpleTimeZone(0, null);
             errln("FAIL: Null allowed in SimpleTimeZone(2)");
-        } catch (NullPointerException e) {}
+        } catch (NullPointerException e) {
+            System.out.print("");
+        }
         try {
             s = new SimpleTimeZone(0, null, 0, 1, 0, 0, 0, 1, 0, 0);
             errln("FAIL: Null allowed in SimpleTimeZone(10)");
-        } catch (NullPointerException e) {}
+        } catch (NullPointerException e) {
+            System.out.print("");
+        }
         try {
             s = new SimpleTimeZone(0, null, 0, 1, 0, 0, 0, 1, 0, 0, 1000);
             errln("FAIL: Null allowed in SimpleTimeZone(11)");
-        } catch (NullPointerException e) {}
+        } catch (NullPointerException e) {
+            System.out.print("");
+        }
     }
 
     /**
@@ -835,12 +859,14 @@ public class TimeZoneRegression extends TestFmwk {
 	try {
 	    int offset = tz.getOffset(GregorianCalendar.AD, 1996, Calendar.FEBRUARY, 29, 
 				      Calendar.THURSDAY, 0);
+        offset = 0;
 	} catch (IllegalArgumentException e) {
 	    errln("FAILED: to get TimeZone.getOffset(2/29/96)");
 	}
 	try {
 	    int offset = tz.getOffset(GregorianCalendar.AD, 1997, Calendar.FEBRUARY, 29, 
 				      Calendar.THURSDAY, 0);
+	    offset = 0;
 	    errln("FAILED: TimeZone.getOffset(2/29/97) expected to throw Exception.");
 	} catch (IllegalArgumentException e) {
 	    logln("got IllegalArgumentException");
@@ -859,7 +885,7 @@ public class TimeZoneRegression extends TestFmwk {
      * data, and the other doesn't, in some locale.
      */
     public void TestJ449() {
-        String str;
+        // not used String str;
 
         // Modify the following three as necessary.  The two IDs must
         // specify two zones in the same equivalency group.  One must have

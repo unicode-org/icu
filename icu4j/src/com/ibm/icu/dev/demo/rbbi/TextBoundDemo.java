@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/demo/rbbi/TextBoundDemo.java,v $ 
- * $Date: 2000/03/10 03:47:43 $ 
- * $Revision: 1.3 $
+ * $Date: 2001/09/08 01:13:00 $ 
+ * $Revision: 1.4 $
  *
  *****************************************************************************************
  */
@@ -90,8 +90,8 @@ JTextArea text;
         if ((text.getSelectionStart() & 0x7FFF) != ts ||
             (text.getSelectionEnd() & 0x7FFF) != te) {
 
-            int tempS = text.getSelectionStart() & 0x7FFF;
-            int tempE = text.getSelectionEnd() & 0x7FFF;
+            // not used int tempS = text.getSelectionStart() & 0x7FFF;
+            // not used int tempE = text.getSelectionEnd() & 0x7FFF;
 
 //          System.out.println(">");
 //          select(0, 0);

@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/translit/TransliteratorTest.java,v $ 
- * $Date: 2001/07/05 23:35:52 $ 
- * $Revision: 1.41 $
+ * $Date: 2001/09/08 01:17:50 $ 
+ * $Revision: 1.42 $
  *
  *****************************************************************************************
  */
@@ -121,6 +121,7 @@ public class TransliteratorTest extends TestFmwk {
         String rule = "$initial } a <> \u1161;";
         try {
             Transliterator t = new RuleBasedTransliterator("<ID>", rule);
+            t = null;
         } catch (IllegalArgumentException e) {
             logln("OK: Got exception for " + rule + ", as expected: " +
                   e.getMessage());
@@ -424,11 +425,11 @@ public class TransliteratorTest extends TestFmwk {
         char sigma = (char)0x3C3;
         char upsilon = (char)0x3C5;
         char nu = (char)0x3BD;
-        char PHI = (char)0x3A6;
+        // not used char PHI = (char)0x3A6;
         char alpha = (char)0x3B1;
-        char omega = (char)0x3C9;
-        char omicron = (char)0x3BF;
-        char epsilon = (char)0x3B5;
+        // not used char omega = (char)0x3C9;
+        // not used char omicron = (char)0x3BF;
+        // not used char epsilon = (char)0x3B5;
 
         // sigma upsilon nu -> syn
         StringBuffer buf = new StringBuffer();
@@ -810,7 +811,7 @@ public class TransliteratorTest extends TestFmwk {
         // icu4j: CJK UNIFIED IDEOGRAPH-4e01
 
         expect(uni2name, "\u00A0abc\u4E01\u00B5\u0A81\uFFFD\uFFFF",
-               "{NO-BREAK SPACE}abc{CJK UNIFIED IDEOGRAPH-4e01}{MICRO SIGN}{GUJARATI SIGN CANDRABINDU}{REPLACEMENT CHARACTER}\uFFFF");
+               "{NO-BREAK SPACE}abc{CJK UNIFIED IDEOGRAPH-4E01}{MICRO SIGN}{GUJARATI SIGN CANDRABINDU}{REPLACEMENT CHARACTER}\uFFFF");
         expect(name2uni, "{ NO-BREAK SPACE}abc{  CJK UNIFIED  IDEOGRAPH-4E01  }{x{MICRO SIGN}{GUJARATI SIGN CANDRABINDU}{REPLACEMENT CHARACTER}{",
                "\u00A0abc\u4E01{x\u00B5\u0A81\uFFFD{");
     }

@@ -1,5 +1,5 @@
 /*
- * @(#)$RCSfile: TextDocument.java,v $ $Revision: 1.1 $ $Date: 2000/04/20 17:43:09 $
+ * @(#)$RCSfile: TextDocument.java,v $ $Revision: 1.2 $ $Date: 2001/09/08 01:14:31 $
  *
  * (C) Copyright IBM Corp. 1998-1999.  All Rights Reserved.
  *
@@ -223,6 +223,7 @@ public final class TextDocument {
                     inStream.close();
                 }
                 catch(IOException e) {
+                    System.out.print("");
                 }
             }
         }
@@ -256,6 +257,7 @@ public final class TextDocument {
                     in.close();
                 }
                 catch(IOException e) {
+                    System.out.print("");
                 }
             }
         }
@@ -288,6 +290,7 @@ public final class TextDocument {
                     outStream.close();
                 }
                 catch(IOException e) {
+                    System.out.print("");
                 }
             }
         }
@@ -331,6 +334,7 @@ public final class TextDocument {
                     outStream.close();
                 }
                 catch(IOException e) {
+                    System.out.print("");
                 }
             }
         }
