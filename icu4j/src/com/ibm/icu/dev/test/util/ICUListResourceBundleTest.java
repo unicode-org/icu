@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/util/ICUListResourceBundleTest.java,v $
- * $Date: 2003/11/20 19:32:49 $
- * $Revision: 1.9 $
+ * $Date: 2003/11/21 00:23:34 $
+ * $Revision: 1.10 $
  *
  *******************************************************************************
  */
@@ -320,7 +320,20 @@ public final class ICUListResourceBundleTest extends TestFmwk
         }catch(MissingResourceException ex){
             logln("got the expected exception");
         }
-         
+
+        
+        ResourceBundle bundle1 = ICULocaleData.getResourceBundle("com.ibm.icu.impl.data","LocaleElements","fr_FR");
+        if(bundle instanceof ICUListResourceBundle){
+            ICUListResourceBundle ilrb = (ICUListResourceBundle) bundle1;
+            String key = (String) ilrb.getObjectWithFallback("collations/default");
+            if(!key.equals("standard")){
+                errln("Did not get the expected result from getObjectWithFallback method.");
+            }
+
+        }else{
+            errln("Did not get the expected bundle.");
+        } 
+
                
     }
     
