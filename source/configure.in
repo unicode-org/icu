@@ -31,6 +31,7 @@ AC_CANONICAL_HOST
 ICU_CHECK_MH_FRAG
 
 hpuxcma=false
+ac_cv_lib_dld_shl_load=false
 
 dnl Checks for libraries
 dnl On HP/UX, don't link to -lm from a shared lib because it isn't
@@ -149,6 +150,15 @@ AC_CHECK_LIB(dl, dlopen)
 if test $ac_cv_lib_dl_dlopen = yes; then
 HAVE_DLOPEN=1
 fi
+
+if test $HAVE_DLOPEN = 0; then
+	AC_CHECK_LIB(dld, shl_load)
+	if test $ac_cv_lib_dld_shl_load = yes; then
+		HAVE_DLOPEN=1
+		
+        fi
+fi
+
 
 AC_SUBST(HAVE_DLOPEN)
 
@@ -335,6 +345,12 @@ if test $hpuxcma = true; then
 	CPPFLAGS="${CPPFLAGS} -D_PTHREADS_DRAFT_4 -DHPUX_CMA"
 fi
 dnl END special 
+
+
+if test $ac_cv_lib_dld_shl_load = yes; then
+	CPPFLAGS="${CPPFLAGS} -DICU_USE_SHL_LOAD"
+fi
+	
 
 dnl output the Makefiles
 AC_OUTPUT([Makefile \
