@@ -63,10 +63,7 @@ check: all check-local
 
 all-local: $(TARGET) 
 
-install-local: all-local
-	$(MKINSTALLDIRS) $(DESTDIR)$(sbindir)
-	$(INSTALL) $(TARGET) $(DESTDIR)$(sbindir)/$(TARGET)
-
+install-local:
 
 dist-local:
 
