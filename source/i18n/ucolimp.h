@@ -242,6 +242,20 @@ ucol_cloneRuleData(UCollator *coll, int32_t *length, UErrorCode *status);
 #define UCOL_UNMARKED 0x03
 #define UCOL_NEW_TERTIARYORDERMASK 0x0000003f     
 
+/* Bit mask for primary collation strength. */
+#define UCOL_PRIMARYMASK    0xFFFF0000
+
+/* Bit mask for secondary collation strength. */
+#define UCOL_SECONDARYMASK  0x0000FF00
+
+/* Bit mask for tertiary collation strength. */
+#define UCOL_TERTIARYMASK   0x000000FF
+
+/** This indicates the last element in a UCollationElements has been consumed. 
+ *
+ */
+#define UCOL_NULLORDER        0xFFFFFFFF
+
 #define isSpecial(CE) ((((CE)&UCOL_SPECIAL_FLAG)>>28)==0xF)
 #define isContinuation(CE) ((CE) & 0XC0) == 0x80
 #define isLongPrimary(CE) ((CE) & 0xC0) == 0xC0

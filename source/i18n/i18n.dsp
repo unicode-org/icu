@@ -655,6 +655,10 @@ SOURCE=.\ucol.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\ucoleitr.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\udat.cpp
 
 !IF  "$(CFG)" == "i18n - Win32 Release"
@@ -1718,6 +1722,33 @@ InputPath=.\unicode\ucol.h
 
 "..\..\include\unicode\ucol.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
 	copy                unicode\ucol.h                ..\..\include\unicode
+
+# End Custom Build
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\unicode\ucoleitr.h
+
+!IF  "$(CFG)" == "i18n - Win32 Release"
+
+# Begin Custom Build
+InputPath=.\unicode\ucoleitr.h
+
+"..\..\include\unicode\ucoleitr.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy               unicode\ucoleitr.h                ..\..\include\unicode
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
+
+# Begin Custom Build
+InputPath=.\unicode\ucoleitr.h
+
+"..\..\include\unicode\ucoleitr.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy               unicode\ucoleitr.h                ..\..\include\unicode
 
 # End Custom Build
 
