@@ -398,8 +398,8 @@ el {
     calendar{
         gregorian{
             AmPmMarkers{
-                "\u03A0\u039C",	// The lowercase form is "\u03C0\u03BC". Both are valid. It's also been seen as mixed case too.
-                "\u039C\u039C",	// The lowercase form is "\u03BC\u03BC". Both are valid. It's also been seen as mixed case too.
+                "\u03A0\u039C", // The lowercase form is "\u03C0\u03BC". Both are valid. It's also been seen as mixed case too.
+                "\u039C\u039C", // The lowercase form is "\u03BC\u03BC". Both are valid. It's also been seen as mixed case too.
             }
             DateTimeElements:intvector { 
                 2,
@@ -473,18 +473,18 @@ el {
                         "\u0394"
                     }
                     wide{
-                        "\u0399\u03B1\u03BD\u03BF\u03C5\u03AC\u03C1\u03B9\u03BF\u03C2",
-                        "\u03A6\u03B5\u03B2\u03C1\u03BF\u03C5\u03AC\u03C1\u03B9\u03BF\u03C2",
-                        "\u039C\u03AC\u03C1\u03C4\u03B9\u03BF\u03C2",
-                        "\u0391\u03C0\u03C1\u03AF\u03BB\u03B9\u03BF\u03C2",
-                        "\u039C\u03AC\u03B9\u03BF\u03C2",
-                        "\u0399\u03BF\u03CD\u03BD\u03B9\u03BF\u03C2",
-                        "\u0399\u03BF\u03CD\u03BB\u03B9\u03BF\u03C2",
-                        "\u0391\u03CD\u03B3\u03BF\u03C5\u03C3\u03C4\u03BF\u03C2",
-                        "\u03A3\u03B5\u03C0\u03C4\u03AD\u03BC\u03B2\u03C1\u03B9\u03BF\u03C2",
-                        "\u039F\u03BA\u03C4\u03CE\u03B2\u03C1\u03B9\u03BF\u03C2",
-                        "\u039D\u03BF\u03AD\u03BC\u03B2\u03C1\u03B9\u03BF\u03C2",
-                        "\u0394\u03B5\u03BA\u03AD\u03BC\u03B2\u03C1\u03B9\u03BF\u03C2"
+                        "\u0399\u03b1\u03bd\u03bf\u03c5\u03b1\u03c1\u03af\u03bf\u03c5",
+                        "\u03a6\u03b5\u03b2\u03c1\u03bf\u03c5\u03b1\u03c1\u03af\u03bf\u03c5",
+                        "\u039c\u03b1\u03c1\u03c4\u03af\u03bf\u03c5",
+                        "\u0391\u03c0\u03c1\u03b9\u03bb\u03af\u03bf\u03c5",
+                        "\u039c\u03b1\u0390\u03bf\u03c5",
+                        "\u0399\u03bf\u03c5\u03bd\u03af\u03bf\u03c5",
+                        "\u0399\u03bf\u03c5\u03bb\u03af\u03bf\u03c5",
+                        "\u0391\u03c5\u03b3\u03bf\u03cd\u03c3\u03c4\u03bf\u03c5",
+                        "\u03a3\u03b5\u03c0\u03c4\u03b5\u03bc\u03b2\u03c1\u03af\u03bf\u03c5",
+                        "\u039f\u03ba\u03c4\u03c9\u03b2\u03c1\u03af\u03bf\u03c5",
+                        "\u039d\u03bf\u03b5\u03bc\u03b2\u03c1\u03af\u03bf\u03c5",
+                        "\u0394\u03b5\u03ba\u03b5\u03bc\u03b2\u03c1\u03af\u03bf\u03c5"
                     }
                 }
                 stand-alone{

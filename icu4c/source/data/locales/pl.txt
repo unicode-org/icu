@@ -416,18 +416,18 @@ pl {
                         "g"
                     }
                     wide{
-                        "stycze\u0144",
-                        "luty",
-                        "marzec",
-                        "kwiecie\u0144",
-                        "maj",
-                        "czerwiec",
-                        "lipiec",
-                        "sierpie\u0144",
-                        "wrzesie\u0144",
-                        "pa\u017Adziernik",
-                        "listopad",
-                        "grudzie\u0144"
+                        "stycznia",
+                        "lutego",
+                        "marca",
+                        "kwietnia",
+                        "maja",
+                        "czerwca",
+                        "lipca",
+                        "sierpnia",
+                        "wrze\u015bnia",
+                        "pa\u017adziernika",
+                        "listopada",
+                        "grudnia"
                     }
                 }
                 stand-alone{
