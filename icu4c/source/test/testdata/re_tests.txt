@@ -82,8 +82,8 @@ a]	a]	y	$&	a]
 a[]]b	a]b	yi	$&	a]b	ICU makes [] into an empty set.
 a[^bc]d	aed	y	$&	aed
 a[^bc]d	abd	n	-	-
-a[^-b]c	adc	y	$&	adc
-a[^-b]c	a-c	n	-	-
+a[^-b]c	adc	yi	$&	adc	ICU [] set rules
+a[^-b]c	a-c	ni	-	-	ICU [] set rules
 a[^]b]c	a]c	n	-	-
 a[^]b]c	adc	yi	$&	adc     ICU [] set rules.
 \ba\b	a-	y	-	-
@@ -311,9 +311,9 @@ a[-]?c	ac	y	$&	ac
 'a]'i	A]	y	$&	A]
 'a[]]b'i	A]B	yi	$&	A]B
 'a[^bc]d'i	AED	y	$&	AED
-'a[^bc]d'i	ABD	ni	-	-          #  TODO:  icu set handling bug
-'a[^-b]c'i	ADC	y	$&	ADC
-'a[^-b]c'i	A-C	n	-	-
+'a[^bc]d'i	ABD	n	-	-
+'a[^-b]c'i	ADC	yi	$&	ADC	ICU [] set rules
+'a[^-b]c'i	A-C	ni	-	-	ICU [] set rules
 'a[^]b]c'i	A]C	n	-	-
 'a[^]b]c'i	ADC	yi	$&	ADC
 'ab|cd'i	ABC	y	$&	AB
@@ -803,7 +803,7 @@ round\(((?>[^()]+))\)	_I(round(xs * sz),1)	y	$1	xs * sz
 '((?-x:.) )'x	x 	y	$1-	x-
 foo.bart	foo.bart	y	-	-
 '^d[x][x][x]'m	abcd\ndxxx	y	-	-
-.X(.+)+X	bbbbXcXaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa	yi	-	-
+.X(.+)+X	bbbbXcXaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa	yi	-	-	# TODO:  ICU doesn't optimize on trailing literals in pattern.
 .X(.+)+XX	bbbbXcXXaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa	yi	-	-
 .XX(.+)+X	bbbbXXcXaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa	yi	-	-
 .X(.+)+X	bbbbXXaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa	ni	-	-

@@ -251,7 +251,7 @@ UnicodeSet* TransliteratorIDParser::parseGlobalFilter(const UnicodeString& id, i
     if (UnicodeSet::resemblesPattern(id, pos)) {
         ParsePosition ppos(pos);
         UErrorCode ec = U_ZERO_ERROR;
-        filter = new UnicodeSet(id, ppos, ec);
+        filter = new UnicodeSet(id, ppos, USET_IGNORE_SPACE, ec);
         /* test for NULL */
         if (filter == 0) {
             pos = start;
@@ -704,7 +704,7 @@ TransliteratorIDParser::parseFilterID(const UnicodeString& id, int32_t& pos,
 
             ParsePosition ppos(pos);
             UErrorCode ec = U_ZERO_ERROR;
-            UnicodeSet set(id, ppos, ec);
+            UnicodeSet set(id, ppos, USET_IGNORE_SPACE, ec);
             if (U_FAILURE(ec)) {
                 pos = start;
                 return NULL;

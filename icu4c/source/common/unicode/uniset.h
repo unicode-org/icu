@@ -1179,7 +1179,7 @@ private:
      * SymbolTable, and does not recognize embedded variables.
      */
     UnicodeSet(const UnicodeString& pattern, ParsePosition& pos,
-               UErrorCode& status);
+               uint32_t options, UErrorCode& status);
 
     /**
      * Returns <tt>true</tt> if this set contains any character whose low byte
