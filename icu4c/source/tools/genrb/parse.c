@@ -346,7 +346,7 @@ parse(FileStream *f, const char *cp, const char *inputDir,
 	    if(uprv_strcmp(modificator, "bin") == 0) {
 	      char *binaryValue;
 	      char toConv[3];
-	      int32_t i = 0, bytesConverted = 0;
+	      uint32_t i = 0, bytesConverted = 0;
 	      uint8_t val = 0;
 	      uint8_t *newValue;
 	      fprintf(stderr, "bin\n");
@@ -359,7 +359,7 @@ parse(FileStream *f, const char *cp, const char *inputDir,
 		  toConv[0] = *(binaryValue+i);
 		  toConv[1] = *(binaryValue+i+1);
 		  toConv[2] = '\0';
-		  val = strtoul(toConv, NULL, 16);
+		  val = (uint8_t)uprv_strtoul(toConv, NULL, 16);
 		  newValue[bytesConverted] = val;
 		  bytesConverted++;
 		}
@@ -385,7 +385,7 @@ parse(FileStream *f, const char *cp, const char *inputDir,
 	      if(U_SUCCESS(*status) && intValue != NULL) {
 		/* do the parsing & outputing of the data */
 		fprintf(stderr, "Will parse integer value  %s and store it in tag: %s\n", intValue, cTag);
-		val = atoi(intValue);
+		val = uprv_strtol(intValue, NULL, 10);
 		uprv_free(intValue);
 		temp1 = int_open(bundle, cTag, val, status);
 		fprintf(stderr, "Added integer %s, value %d -> %s\n", cTag, val,
