@@ -2,7 +2,7 @@
 #******************************************************************************
 #   Copyright (C) 1999-2001, International Business Machines
 #   Corporation and others.  All Rights Reserved.
-# $Revision: 1.22 $
+# $Revision: 1.23 $
 #******************************************************************************
 # This Makefile is designed to be included into projects which make use
 # of the ICU.
@@ -106,7 +106,7 @@ platform = @platform@
 
 ld_rpath_suf = @ld_rpath_suf@
 
-include $(pkgdatadir)/$(VERSION)/config/@platform_make_fragment_name@
+include $(pkgdatadir)/config/@platform_make_fragment_name@
 
 DEFAULT_MODE = @DATA_PACKAGING_MODE@
 
@@ -122,14 +122,14 @@ PKGDATA_MODE=@DATA_PACKAGING_MODE@
 endif
 ifeq ($(PKGDATA_MODE),common)
 ICUDATA_DIR = $(pkgdatadir)
-ICUPKGDATA_DIR = $(ICUDATA_DIR)/$(VERSION)
+ICUPKGDATA_DIR = $(ICUDATA_DIR)
 else
 ifeq ($(PKGDATA_MODE),dll)
 ICUDATA_DIR = $(pkgdatadir)
 ICUPKGDATA_DIR = $(libdir)
 else
 ICUDATA_DIR = $(pkglibdir)
-ICUPKGDATA_DIR = $(ICUDATA_DIR)/$(VERSION)
+ICUPKGDATA_DIR = $(ICUDATA_DIR)
 endif
 endif
 
