@@ -434,8 +434,9 @@ getService(void)
         }
         if (newservice) {
             delete newservice;
+        } else {
+            ucln_i18n_registerCleanup();
         }
-        ucln_i18n_registerCleanup();
     }
     return gService;
 }
@@ -458,7 +459,12 @@ NumberFormat::createInstance(const Locale& loc, EStyles kind, UErrorCode& status
 URegistryKey 
 NumberFormat::registerFactory(NumberFormatFactory* toAdopt, UErrorCode& status)
 {
-  return getService()->registerFactory(new NFFactory(toAdopt), status);
+  ICULocaleService *service = getService();
+  if (service) {
+    return service->registerFactory(new NFFactory(toAdopt), status);
+  }
+  status = U_MEMORY_ALLOCATION_ERROR;
+  return NULL;
 }
 
 // -------------------------------------
@@ -479,7 +485,11 @@ NumberFormat::unregister(URegistryKey key, UErrorCode& status)
 StringEnumeration* 
 NumberFormat::getAvailableLocales(void)
 {
-  return getService()->getAvailableLocales();
+  ICULocaleService *service = getService();
+  if (service) {
+    return service->getAvailableLocales();
+  }
+  return NULL; // no way to return error condition
 }
 
 // -------------------------------------

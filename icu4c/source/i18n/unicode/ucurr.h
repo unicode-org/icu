@@ -4,7 +4,7 @@
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * $Source: /xsrl/Nsvn/icu/icu/source/i18n/unicode/ucurr.h,v $ 
-* $Revision: 1.7 $
+* $Revision: 1.8 $
 **********************************************************************
 */
 #ifndef _UCURR_H_
@@ -70,10 +70,13 @@ typedef enum UCurrNameStyle {
 
 /**
  * Register an (existing) ISO 4217 currency code for the given locale.
+ * Only the country code and the two variants EURO and PRE_EURO are
+ * recognized.
  * @param isoCode the three-letter ISO 4217 currency code
  * @param locale  the locale for which to register this currency code
- * @param status the in/out status code, no special meanings are assigned
- * @return a registry key that can be used to unregister this currency code
+ * @param status the in/out status code
+ * @return a registry key that can be used to unregister this currency code, or NULL
+ * if there was an error.
  * @draft ICU 2.6
  */
 U_CAPI UCurrRegistryKey U_EXPORT2
@@ -83,8 +86,10 @@ U_CAPI UCurrRegistryKey U_EXPORT2
 /**
  * Unregister the previously-registered currency definitions using the
  * URegistryKey returned from ucurr_register.  Key becomes invalid after
- * a successful call and should not be used again.
- * @param key the retgistry key returned by a previous call to ucurr_register
+ * a successful call and should not be used again.  Any currency 
+ * that might have been hidden by the original ucurr_register call is 
+ * restored.
+ * @param key the registry key returned by a previous call to ucurr_register
  * @param status the in/out status code, no special meanings are assigned
  * @return TRUE if the currency for this key was successfully unregistered
  */
