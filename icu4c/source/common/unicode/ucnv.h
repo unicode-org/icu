@@ -86,9 +86,12 @@ typedef enum {
 } UConverterType;
 
 /**
- * Enum for specifying which platform a converter ID refers to
+ * Enum for specifying which platform a converter ID refers to.
+ * The use of platform/CCSID is not recommended. See ucnv_openCCSID().
+ *
  * @see ucnv_getPlatform
  * @see ucnv_openCCSID
+ * @see ucnv_getCCSID
  */
 
 typedef enum {
@@ -244,7 +247,51 @@ ucnv_openU (const UChar * name,
             UErrorCode * err);
 
 /**
- * Creates a UConverter object from a CCSID number and platform pair
+ * Creates a UConverter object from a CCSID number and platform pair.
+ * Note that the usefulness of this function is limited to platforms with numeric
+ * encoding IDs. Only IBM and Microsoft platforms use numeric (16-bit) identifiers for
+ * encodings.
+ *
+ * In addition, IBM CCSIDs and Unicode conversion tables are not 1:1 related.
+ * For many IBM CCSIDs there are multiple (up to six) Unicode conversion tables, and
+ * for some Unicode conversion tables there are multiple CCSIDs.
+ * Some "alternate" Unicode conversion tables are provided by the
+ * IBM CDRA conversion table registry.
+ * The most prominent example of a systematic modification of conversion tables that is
+ * not provided in the form of conversion table files in the repository is
+ * that S/390 Unix System Services swaps the codes for Line Feed and New Line in all
+ * EBCDIC codepages, which requires such a swap in the Unicode conversion tables as well.
+ *
+ * Only IBM default conversion tables are accessible with ucnv_openCCSID().
+ * ucnv_getCCSID() will return the same CCSID for all conversion tables that are associated
+ * with that CCSID.
+ *
+ * Currently, the only "platform" supported in the ICU converter API is UCNV_IBM.
+ *
+ * In summary, the use of CCSIDs and the associated API functions is not recommended.
+ *
+ * In order to open a converter with the default IBM CDRA Unicode conversion table,
+ * you can use this function or use the prefix "ibm-":
+ * \code
+ *     char name[20];
+ *     sprintf(name, "ibm-%hu", ccsid);
+ *     cnv=ucnv_open(name, &errorCode);
+ * \endcode
+ *
+ * In order to open a converter with the IBM S/390 Unix System Services variant of a Unicode/EBCDIC conversion table,
+ * you can use the prefix "ibm-" together with the suffix "-s390":
+ * \code
+ *     char name[20];
+ *     sprintf(name, "ibm-%hu-s390", ccsid);
+ *     cnv=ucnv_open(name, &errorCode);
+ * \endcode
+ *
+ * In order to open a converter from a Microsoft codepage number, use the prefix "cp":
+ * \code
+ *     char name[20];
+ *     sprintf(name, "cp%hu", codepageID);
+ *     cnv=ucnv_open(name, &errorCode);
+ * \endcode
  *
  * @param codepage codepage number to create
  * @param platform the platform in which the codepage number exists
@@ -254,6 +301,8 @@ ucnv_openU (const UChar * name,
  * @see ucnv_open
  * @see ucnv_openU
  * @see ucnv_close
+ * @see ucnv_getCCSID
+ * @see ucnv_getPlatform
  * @see UConverterPlatform
  * @stable
  */
@@ -300,10 +349,6 @@ U_CAPI UConverter *
  * @see ucnv_openCCSID
  * @stable
  */
-
-
-
-
 U_CAPI void  U_EXPORT2
 ucnv_close (UConverter * converter);
 
@@ -487,10 +532,19 @@ ucnv_getName (const UConverter * converter, UErrorCode * err);
  * is available.
  * Does not check if the converter is <TT>NULL</TT> or if converter's data
  * table is <TT>NULL</TT>.
+ *
+ * Important: The use of CCSIDs is not recommended because it is limited
+ * to only two platforms in principle and only one (UCNV_IBM) in the current
+ * ICU converter API.
+ * Also, CCSIDs are insufficient to identify IBM Unicode conversion tables precisely.
+ * For more details see ucnv_openCCSID().
+ *
  * @param converter the Unicode converter
  * @param err the error status code.
  * @return If any error occurrs, -1 will be returned otherwise, the codepage number
  * will be returned
+ * @see ucnv_openCCSID
+ * @see ucnv_getPlatform
  * @stable
  */
 U_CAPI int32_t U_EXPORT2
