@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/Normalizer.java,v $ 
- * $Date: 2002/09/19 18:12:31 $ 
- * $Revision: 1.23 $
+ * $Date: 2002/10/31 01:12:38 $ 
+ * $Revision: 1.24 $
  *
  *******************************************************************************
  */
@@ -551,7 +551,8 @@ public final class Normalizer implements Cloneable{
      * @param mode  The normalization mode.
      */
     public Normalizer(String str, Mode mode) {
-        this( UCharacterIterator.getInstance(str), mode);
+        this.text = UCharacterIterator.getInstance(str);
+        this.mode = mode;
     }
 
     /**
@@ -573,7 +574,8 @@ public final class Normalizer implements Cloneable{
      * @deprecated To be removed after 2003-Aug-31. Use Normalizer( String str, Mode mode).
      */
     public Normalizer(String str, Mode mode, int opt) {
-        this( UCharacterIterator.getInstance(str), mode );
+        this.text = UCharacterIterator.getInstance(str);
+        this.mode = mode; 
         this.options=opt;
     }
 
@@ -588,7 +590,10 @@ public final class Normalizer implements Cloneable{
      *
      */
     public Normalizer(CharacterIterator iter, Mode mode) {
-        this( UCharacterIterator.getInstance(iter), mode);
+        this.text = UCharacterIterator.getInstance(
+                                        (CharacterIterator)iter.clone()
+                                    );
+        this.mode = mode;
     }
 
     /**
@@ -606,8 +611,11 @@ public final class Normalizer implements Cloneable{
      *            standard Unicode Normalization Forms, use 0 for this argument.
      * @deprecated To be removed after 2003-Aug-31. Use Normalizer(CharacterIterator iter, Mode mode).
      */
-    public Normalizer(CharacterIterator iter, Mode mode, int opt) {
-        this( UCharacterIterator.getInstance(iter), mode);
+    public Normalizer(CharacterIterator iter, Mode mode, int opt){
+        this.text = UCharacterIterator.getInstance(
+                                        (CharacterIterator)iter.clone()
+                                    );
+        this.mode = mode;
         this.options = opt;
     }
     
@@ -622,8 +630,13 @@ public final class Normalizer implements Cloneable{
      */
     //internal constructor for now
     public Normalizer(UCharacterIterator iter, Mode mode){
-        this.text     = iter;
-        this.mode     = mode;
+        try{
+            this.text     = (UCharacterIterator)iter.clone();
+            this.mode     = mode;
+        }catch (CloneNotSupportedException e) {
+            throw new InternalError(e.toString());
+        }
+            
     }
 
     /**
