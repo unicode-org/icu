@@ -338,8 +338,8 @@ void runTests ( const TestNode *root )
 
     if(DATA_ERROR_COUNT) {
       if(WARN_ON_MISSING_DATA==0) {
-        log_info("\t*Note* some errors are data-loading related. If the data used is not the "
-                 "\tstock ICU data (i.e some have been added or removed), consider using"
+        log_info("\t*Note* some errors are data-loading related. If the data used is not the \n"
+                 "\tstock ICU data (i.e some have been added or removed), consider using\n"
                  "\tthe '-w' option to turn these errors into warnings.\n");
       } else {
         log_info("\t*WARNING* some data-loading errors were ignored by the -w option.\n");
