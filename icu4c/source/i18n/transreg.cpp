@@ -134,8 +134,8 @@ Spec::Spec(const UnicodeString& theSpec) : top(theSpec) {
     if (res != 0) {
         // Canonicalize locale name
         status = U_ZERO_ERROR;
-        buf[uloc_getName(spc, buf, sizeof(buf)-1, &status)] = 0;
-        if (U_SUCCESS(status)) {
+        uloc_getName(spc, buf, sizeof(buf), &status);
+        if (U_SUCCESS(status) && status != U_STRING_NOT_TERMINATED_WARNING) {
             top = UnicodeString(buf, "");
         }
     } else if (scriptName.length() != 0) {
@@ -884,9 +884,12 @@ Transliterator* TransliteratorRegistry::instantiateEntry(const UnicodeString& ID
         // just using the locale mechanism to map through to a file
         // name; this in no way represents an actual locale.
         CharString ch(entry->stringArg);
-        Locale fakeLocale(ch);
-        ResourceBundle bundle((char*)0, fakeLocale, status);
-        UnicodeString rules = bundle.getStringEx(RB_RULE, status);
+        // TODO call internal ures_openXYZ() that guarantees to not canonicalize
+        // (uloc_getName()) the ch resource bundle name, and that also
+        // will not try fallbacks
+        UResourceBundle *bundle = ures_open(0, ch, &status);
+        UnicodeString rules = ures_getUnicodeStringByKey(bundle, RB_RULE, &status);
+        ures_close(bundle);
 
         // If the status indicates a failure, then we don't have any
         // rules -- there is probably an installation error.  The list

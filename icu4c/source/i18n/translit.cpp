@@ -1380,22 +1380,23 @@ void Transliterator::initializeRegistry(void) {
      * The extra blank field on "alias" lines is to make the array square.
      */
 
-    Locale indexLoc("translit_index");
-
-    ResourceBundle bundle((char *)0,
-                          indexLoc, status);
-    ResourceBundle transIDs(bundle.get(RB_RULE_BASED_IDS, status));
+    UResourceBundle *bundle, *transIDs, *colBund;
+    // TODO call internal ures_openXYZ() that guarantees to not canonicalize
+    // (uloc_getName()) the ch resource bundle name, and that also
+    // will not try fallbacks
+    bundle = ures_open(0, "translit_index", &status);
+    transIDs = ures_getByKey(bundle, RB_RULE_BASED_IDS, 0, &status);
 
     int32_t row, maxRows;
     if (U_SUCCESS(status)) {
-        maxRows = transIDs.getSize();
+        maxRows = ures_getSize(transIDs);
         for (row = 0; row < maxRows; row++) {
-            ResourceBundle colBund(transIDs.get(row, status));
+            colBund = ures_getByIndex(transIDs, row, 0, &status);
 
-            if (U_SUCCESS(status) && colBund.getSize() == 4) {
-                UnicodeString id(colBund.getStringEx((int32_t)0, status));
-                UChar type = colBund.getStringEx(1, status).charAt(0);
-                UnicodeString resString(colBund.getStringEx(2, status));
+            if (U_SUCCESS(status) && ures_getSize(colBund) == 4) {
+                UnicodeString id = ures_getUnicodeStringByIndex(colBund, 0, &status);
+                UChar type = ures_getUnicodeStringByIndex(colBund, 1, &status).charAt(0);
+                UnicodeString resString = ures_getUnicodeStringByIndex(colBund, 2, &status);
 
                 if (U_SUCCESS(status)) {
                     switch (type) {
@@ -1406,7 +1407,7 @@ void Transliterator::initializeRegistry(void) {
                         {
                             UBool visible = (type == 0x0066 /*f*/);
                             UTransDirection dir = 
-                                (colBund.getStringEx(3, status).charAt(0) ==
+                                (ures_getUnicodeStringByIndex(colBund, 3, &status).charAt(0) ==
                                  0x0046 /*F*/) ?
                                 UTRANS_FORWARD : UTRANS_REVERSE;
                             registry->put(id, resString, dir, visible);
@@ -1419,8 +1420,14 @@ void Transliterator::initializeRegistry(void) {
                     }
                 }
             }
+
+            ures_close(colBund);
         }
     }
+
+    ures_close(transIDs);
+    ures_close(bundle);
+
     // Manually add prototypes that the system knows about to the
     // cache.  This is how new non-rule-based transliterators are
     // added to the system.
