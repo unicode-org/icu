@@ -218,10 +218,59 @@ static void addToExistingInverse(UCAElements *element, uint32_t position, UError
       }
 }
 
+/* 
+ * Takes two CEs (lead and continuation) and 
+ * compares them as CEs should be compared:
+ * primary vs. primary, secondary vs. secondary
+ * tertiary vs. tertiary
+ */
+static int32_t compareCEs(uint32_t *source, uint32_t *target) {
+  uint32_t s1 = source[0], s2, t1 = target[0], t2;
+  if(isContinuation(source[1])) {
+    s2 = source[1];
+  } else {
+    s2 = 0;
+  }
+  if(isContinuation(target[1])) {
+    t2 = target[1];
+  } else {
+    t2 = 0;
+  }
+  
+  uint32_t s = 0, t = 0;
+  if(s1 == t1 && s2 == t2) {
+    return 0;
+  }
+  s = (s1 & 0xFFFF0000)|((s2 & 0xFFFF0000)>>16); 
+  t = (t1 & 0xFFFF0000)|((t2 & 0xFFFF0000)>>16); 
+  if(s < t) {
+    return -1;
+  } else if(s > t) {
+    return 1;
+  } else {
+    s = (s1 & 0x0000FF00) | (s2 & 0x0000FF00)>>8;
+    t = (t1 & 0x0000FF00) | (t2 & 0x0000FF00)>>8;
+    if(s < t) {
+      return -1;
+    } else if(s > t) {
+      return 1;
+    } else {
+      s = (s1 & 0x000000FF)<<8 | (s2 & 0x000000FF);
+      t = (t1 & 0x000000FF)<<8 | (t2 & 0x000000FF);
+      if(s < t) {
+        return -1;
+      } else {
+        return 1;
+      }
+    }
+  }
+}
+
 static uint32_t addToInverse(UCAElements *element, UErrorCode *status) {
   uint32_t comp = 0;
   uint32_t position = inversePos;
   uint32_t saveElement = element->CEs[0];
+  int32_t compResult = 0;
   element->CEs[0] &= 0xFFFFFF3F;
   if(element->noOfCEs == 1) {
     element->CEs[1] = 0;
@@ -229,42 +278,17 @@ static uint32_t addToInverse(UCAElements *element, UErrorCode *status) {
   if(inversePos == 0) {
     inverseTable[0][0] = inverseTable[0][1] = inverseTable[0][2] = 0;
     addNewInverse(element, status);
-  } else if(inverseTable[inversePos][0] > element->CEs[0]) {
-    while(inverseTable[--position][0] > element->CEs[0]) {}
-        if(VERBOSE) { fprintf(stdout, "p:%i ", position); }
-    if(inverseTable[position][0] == element->CEs[0]) {
-      if(isContinuation(element->CEs[1])) {
-        comp = element->CEs[1];
-        } else {
-          comp = 0;
-        }
-        if(inverseTable[position][1] > comp) {
-          while(inverseTable[--position][1] > comp) {}
-        }
-        if(inverseTable[position][1] == comp) {
-        addToExistingInverse(element, position, status);
-        } else {
-        insertInverse(element, position+1, status);
-        }
-      } else {
-      if(VERBOSE) { fprintf(stdout, "ins"); }
+  } else if(compareCEs(inverseTable[inversePos], element->CEs) > 0) {
+    while((compResult = compareCEs(inverseTable[--position], element->CEs)) > 0);
+    if(VERBOSE) { fprintf(stdout, "p:%i ", position); }
+    if(compResult == 0) {
+      addToExistingInverse(element, position, status);
+    } else {
       insertInverse(element, position+1, status);
     }
-  } else if(inverseTable[inversePos][0] == element->CEs[0]) {
-    if(element->noOfCEs > 1 && isContinuation(element->CEs[1])) {
-      comp = element->CEs[1];
-        if(inverseTable[position][1] > comp) {
-          while(inverseTable[--position][1] > comp) {}
-        }
-        if(inverseTable[position][1] == comp) {
-        addToExistingInverse(element, position, status);
-        } else {
-        insertInverse(element, position+1, status);
-        }
-      } else {
-        addToExistingInverse(element, inversePos, status);
-      } 
-    } else {
+  } else if(compareCEs(inverseTable[inversePos], element->CEs) == 0) {
+    addToExistingInverse(element, inversePos, status);
+  } else {
     addNewInverse(element, status);
   }
   element->CEs[0] = saveElement;
@@ -291,7 +315,7 @@ static InverseUCATableHeader *assembleInverseTable(UErrorCode *status)
     inversePos++;
 
     for(i = 2; i<inversePos; i++) {
-      if(inverseTable[i-1][0] > inverseTable[i][0]) {
+      if(compareCEs(inverseTable[i-1], inverseTable[i]) > 0) { 
         fprintf(stderr, "Error at %i: %08X & %08X\n", i, inverseTable[i-1][0], inverseTable[i][0]);
       } else if(inverseTable[i-1][0] == inverseTable[i][0] && !(inverseTable[i-1][1] < inverseTable[i][1])) {
         fprintf(stderr, "Continuation error at %i: %08X %08X & %08X %08X\n", i, inverseTable[i-1][0], inverseTable[i-1][1], inverseTable[i][0], inverseTable[i][1]);
@@ -621,7 +645,8 @@ UCAElements *readAnElement(FILE *data, tempUCATable *t, UCAConstants *consts, UE
 
     // we don't want any strange stuff after useful data!
     while(pointer < commentStart)  {
-        if(*pointer != ' ') {
+        if(*pointer != ' ' && *pointer != 0x09)
+        {
             *status=U_INVALID_FORMAT_ERROR;
             break;
         }
@@ -629,7 +654,7 @@ UCAElements *readAnElement(FILE *data, tempUCATable *t, UCAConstants *consts, UE
     }
 
     if(U_FAILURE(*status)) {
-        fprintf(stderr, "problem putting stuff in hash table\n");
+        fprintf(stderr, "problem putting stuff in hash table %s\n", u_errorName(*status));
         *status = U_INTERNAL_PROGRAM_ERROR;
         return NULL;
     }
