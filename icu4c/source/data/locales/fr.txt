@@ -8,27 +8,12 @@
 fr {
     Version{"2.0"}
     collations {
-      standard { 
-        Version { "1.0" }
-        Sequence { "[backwards 2]&A<<\u00e6/e<<<\u00c6/E" }
-      }
-    }
-    Variants {
-        REVISED { "R\u00e9vis\u00e9" }
-    }
-    Keys{
-        collation{ "Ordonnancement" }
-        calendar { "Calendrier" }
-	//currency { "" }
-    }
-    Types {
-        collation{
-            traditional{ "Traditionnel Ordonnancement" }
-        }
-        calendar{
-            traditional{ "Traditionnel Calendrier" }
+        standard { 
+            Version { "1.0" }
+            Sequence { "[backwards 2]&A<<\u00e6/e<<<\u00c6/E" }
         }
     }
+    // http://www.iso.org/iso/en/prods-services/iso3166ma/index.html
     Countries {
         Fallback{ "en"}
         AD { "Andorre" }
@@ -219,6 +204,211 @@ fr {
         ZM { "Zambie" }
     }
 
+    // Currency display names
+    Currencies {
+        AED { "AED", "dirham des E A.U." } // UAE Dirham
+        AFA { "AFA", "afghani" } // Afghani
+        ALL { "ALL", "lek" } // Leck
+        ANG { "ANG", "florin des Antilles n\u00E9erl." } // Netherlands Antillan Guilder
+        AOK { "AOK", "kwanza" } // Kwanza
+        ARA { "ARA", "austral" }
+        ARP { "ARP", "peso argentin" } // Argentine Peso
+        ATS { "ATS", "schilling autrichien" } // Schilling
+        AUD { "AUD", "dollar australien" } // Australian Dollar
+        BBD { "BBD", "dollar de Barbade" } // Barbados Dollar
+        BDT { "BDT", "taka" } // Taka
+        BEF { "FB", "franc belge" } // Belgian Franc
+        BGL { "BGL", "lev" } // Lev
+        BHD { "BHD", "dinar de Bahrein" } // Bahraini Dinar
+        BIF { "BIF", "franc du Burundi" } // Burundi Franc
+        BMD { "BMD", "dollar des Bermudes" } // Bermudian Dollar
+        BND { "BND", "dollar de Brunei" } // Brunei Dollar
+        BOP { "BOP", "peso bolivien" } // Bolivian Peso
+        BRC { "BRC", "cruzeiro" } // Cruzeiro
+        BSD { "BSD", "dollar des Bahamas" } // Bahamian Dollar
+        BUK { "BUK", "kyat" } // Kyat
+        BWP { "BWP", "pula" } // Pula
+        BZD { "BZD", "dollar de Belize" } // Belize Dollar
+        CAD { "CAD", "dollar canadien" } // Canadian Dollar
+        CHF { "sFr.", "franc suisse" } // Swiss Franc
+        CLP { "CLP", "peso chilien" } // Chilean Peso
+        CNY { "CNY", "Yuan Ren-min-bi" } // Yuan Renminbi
+        COP { "COP", "peso colombien" } // Colombian Peso
+        CRC { "CRC", "colon" } // Costa Rican Colon
+        CSK { "CSK", "couronne tch\u00E8que" } // Koruna
+        CUP { "CUP", "peso cubain" } // Cuban Peso
+        CVE { "CVE", "escudo du Cap-Vert" } // Cape Verde Escudo
+        CYP { "CYP", "livre cypriote" } // Cyprus Pound
+        CZK { "CZK", "couronne tch\u00E8que" } // Czech Koruna
+        DEM { "DEM", "deutsche mark" } // Deutsche Mark
+        // DIF { "DIF", "franc de Djibouti" } -- unconfirmed
+        DKK { "DKK", "couronne danoise" } // Danish Krone
+        DOP { "DOP", "peso dominicain" } // Dominican Peso
+        DZD { "DZD", "dinar alg\u00E9rien" } // Algerian Dinar
+        ECS { "ECS", "sucre" } // Sucre
+        EGP { "EGP", "livre \u00E9gyptienne" } // Egyptian Pound
+        ESP { "ESP", "peseta espagnole" } // Spanish Peseta
+        ETB { "ETB", "birr" } // Ethiopian Birr
+        EUR { "\u20AC", "euro" } // Euro
+        FIM { "FIM", "mark finlandais" } // Markka
+        FJD { "FJD", "dollar de Fidji" } // Fiji Dollar
+        FKP { "FKP", "livre des Falkland" } // Falkland Islands Pound
+        FRF { "F", "franc fran\u00E7ais" } // French Franc
+        GBP { "\u00A3", "livre sterling" } // Pound Sterling
+        GHC { "GHC", "cedi" } // Cedi
+        GIP { "GIP", "livre de Gibraltar" } // Gibraltar Pound
+        GMD { "GMD", "dalasie" } // Dalasi
+        GNS { "GNS", "syli" } // Syli
+        GQE { "GQE", "ekwele" } // Ekwele
+        GRD { "GRD", "drachme" } // Drachma
+        GTQ { "GTQ", "quetzal" } // Quetzal
+        GWP { "GWP", "peso de Guin\u00E9e-Bissau" } // Guinea-Bissau Peso
+        GYD { "GYD", "dollar de Guyane" } // Guyana Dollar
+        HKD { "HKD", "dollar de Hong Kong" } // Hong Kong Dollar
+        HNL { "HNL", "lempira" } // Lempira
+        HRD { "HRD", "dinar croate" }
+        HTG { "HTG", "gourde" } // Gourde
+        HUF { "HUF", "forint" } // Forint
+        IDR { "IDR", "rupiah" } // Rupiah
+        IEP { "IEP", "livre irlandaise" } // Irish Pound
+        ILS { "ILS", "sh\u00E9kel" } // New Israeli Sheqel
+        INR { "=0#Rs.|1#Re.|1<Rs.", "roupie indienne" } // Indian Rupee
+        IQD { "IQD", "dinar irakien" } // Iraqi Dinar
+        IRR { "IRR", "rial iranien" } // Iranian Rial
+        ISK { "ISK", "couronne islandaise" } // Iceland Krona
+        ITL { "\u20A4", "lire italienne" } // Lira
+        JMD { "JMD", "dollar jamaicain" } // Jamaican Dollar
+        JOD { "JOD", "dinar jordanien" } // Jordanian Dinar
+        JPY { "\u00A5", "yen" } // Yen
+        KES { "KES", "shilling du Kenya" } // Kenyan Shilling
+        KHR { "KHR", "riel" } // Riel
+        KMF { "KMF", "franc des Comores" } // Comoro Franc
+        KPW { "KPW", "won nord-cor\u00E9en" } // North Korean Won
+        KRW { "KRW", "won" } // Won
+        KWD { "KWD", "dinar koweitien" } // Kuwaiti Dinar
+        KYD { "KYD", "dollar des Caimanes" } // Cayman Islands Dollar
+        LAK { "LAK", "kip" } // Kip
+        LBP { "LBP", "livre libanaise" } // Lebanese Pound
+        LKR { "LKR", "roupie de Sri Lanka" } // Sri Lanka Rupee
+        LRD { "LRD", "dollar lib\u00E9rien" } // Liberian Dollar
+        LUF { "LUF", "franc luxembourgeois" } // Luxembourg Franc
+        LYD { "LYD", "dinar Iybien" } // Lybian Dinar
+        MAD { "MAD", "dirham marocain" } // Moroccan Dirham
+        MGF { "MGF", "franc malgache" } // Malagasy Franc
+        MLF { "MLF", "franc malien" } // Mali Franc
+        MNT { "MNT", "tugrik" } // Tugrik
+        MOP { "MOP", "pataca" } // Pataca
+        MRO { "MRO", "ouguija" } // Ouguiya
+        MTP { "MTP", "livre maltaise" } // Maltese Pound
+        MUR { "MUR", "roupie de l'\u00EEle Maurice" } // Mauritius Rupee
+        MVR { "MVR", "roupie des Maldives" } // Rufiyaa
+        MWK { "MWK", "kwacha" } // Kwacha
+        MXP { "MXP", "peso mexicain" } // Mexican Peso
+        MYR { "MYR", "ringgit" } // Malaysian Ringgit
+        MZM { "MZM", "metical" } // Metical
+        NGN { "NGN", "naira" } // Naira
+        NIC { "NIC", "cordoba" } // Cordoba
+        NLG { "NLG", "florin n\u00E9erlandais" } // Netherlands Guilder
+        NOK { "NOK", "couronne norv\u00E9gienne" } // Norwegian Krone
+        NPR { "NPR", "roupie du N\u00E9pal" } // Nepalese Rupee
+        NZD { "NZD", "dollar n\u00E9o-z\u00E9landais" } // New Zealand Dollar
+        OMR { "OMR", "rial omani" } // Rial Omani
+        PAB { "PAB", "balboa" } // Balboa
+        PES { "PES", "sol" } // Sol
+        PGK { "PGK", "kina" } // Kina
+        PHP { "PHP", "peso philippin" } // Philippine Peso
+        PKR { "PKR", "roupie du Pakistan" } // Pakistan Rupee
+        PLZ { "PLZ", "zloty" } // Zloty
+        PTE { "PTE", "escudo portugais" } // Portugese Escudo
+        PYG { "PYG", "guarani" } // Guarani
+        QAR { "QAR", "rial du Qatar" } // Qatari Rial
+        ROL { "ROL", "leu" } // Leu
+        RUR { "RUR", "rouble de Russie" } // Russian Ruble
+        RWF { "RWF", "franc du Rwanda" } // Rwanda Franc
+        SAR { "SAR", "riyal saoudien" } // Saudi Riyal
+        SBD { "SBD", "dollar de Salomon" } // Solomon Islands Dollar
+        SCR { "SCR", "roupie des Seychelles" } // Seychelles Rupee
+        SDP { "SDP", "livre soudanaise" } // Sudanese Pound
+        SEK { "SEK", "couronne su\u00E9doise" } // Swedish Krona
+        SGD { "SGD", "dollar de Singapour" } // Singapore Dollar
+        SHP { "SHP", "livre de Sainte-H\u00E9l\u00E8ne" } // Saint Helena Pound
+        SIT { "SIT", "monnaie slov\u00E8ne" } // Tolar
+        SKK { "SKK", "couronne slovaque" } // Slovak Koruna
+        SLL { "SLL", "leone" } // Leone
+        SOS { "SOS", "shilling de Somalie" } // Somali Shilling
+        SRG { "SRG", "florin de Surinam" } // Suriname Guilder
+        STD { "STD", "dobra" } // Dobra
+        SUR { "SUR", "rouble de C.E.I." } // Rouble
+        SYP { "SYP", "livre syrienne" } // Syrian Pound
+        SZL { "SZL", "lilangeni" } // Lilangeni
+        THB { "THB", "baht" } // Baht
+        TND { "TND", "dinar tunisien" } // Tunisian Dinar
+        TOP { "TOP", "pa'anga" } // Pa'anga
+        TPE { "TPE", "escudo de Timor" } // Timor Escudo
+        TRL { "TRL", "livre turque" } // Turkish Lira
+        TTD { "TTD", "dollar de la Trinit\u00E9" } // Trinidad and Tobago Dollar
+        TWD { "TWD", "dollar ta\u00EFwanien" } // New Taiwan Dollar
+        TZS { "TZS", "shilling de Tanzanie" } // Tanzanian Shilling
+        UGS { "UGS", "shilling ougandais" } // Uganda Shilling
+        USD { "$", "dollar des Etats-Unis" } // US Dollar
+        UYP { "UYP", "peso uruguayen" } // Uruguayan Peso
+        VEB { "VEB", "bolivar" } // Bolivar
+        VND { "VND", "dong" } // Dong
+        VUV { "VUV", "vatu" } // Vatu
+        WST { "WST", "tala" } // Tala
+        XAF { "XAF", "franc CFA (BEAC)" } // CFA Franc BEAC
+        XCD { "XCD", "dollar des Cara\u00EFbes" } // East Caribbean Dollar
+        XEU { "XEU", "unit\u00E9 de compte europ\u00E9enne (ECU)" } // European Currency Unit
+        XOF { "XOF", "franc CFA (BCEAO)" } // CFA Franc BCEAO
+        XPF { "XPF", "franc CFP" } // CFP Franc
+        YDD { "YDD", "dinar du Y\u00E9men" } // Yemeni Dinar
+        YER { "YER", "riyal du Y\u00E9men" } // Yemeni Rial
+        YUD { "YUD", "nouveau dinar yougoslave" } // New Yugoslavian
+        ZAR { "ZAR", "rand" } // Rand
+        ZMK { "ZMK", "kwacha" } // Kwacha
+        ZRZ { "ZRZ", "za\u00EFre" } // Zaire
+        ZWD { "ZWD", "Zimbabwe dollar" } // Zimbabwe Dollar
+    }
+    DateTimePatterns { 
+        "HH' h 'mm z",
+        "HH:mm:ss z",
+        "HH:mm:ss",
+        "HH:mm",
+        "EEEE d MMMM yyyy",
+        "d MMMM yyyy",
+        "d MMM yy",
+        "dd/MM/yy",
+        "{1} {0}",
+    }
+    DayAbbreviations { 
+        "dim.",
+        "lun.",
+        "mar.",
+        "mer.",
+        "jeu.",
+        "ven.",
+        "sam.",
+    }
+    DayNames { 
+        "dimanche",
+        "lundi",
+        "mardi",
+        "mercredi",
+        "jeudi",
+        "vendredi",
+        "samedi",
+    }
+    Eras { 
+        "av. J.-C.",
+        "ap. J.-C.",
+    }
+    localPatternChars { "GaMjkHmsSEDFwWxhKzAe" }
+    LocaleScript{  
+        "Latn",  // ISO 15924 Name 
+    }
+    ExemplarCharacters { "[a-z\u00e9\u00e8\u00f9\u00e7\u00e0\u00e2\u00ea\u00ee\u00f4\u00fb\u00e6\u0153\u00eb\u00ef\u00ff]" }
+
+// http://lcweb.loc.gov/standards/iso639-2/frenchlangn.html
     Languages { 
         //Fallback { "en" }
         root { "racine" }
@@ -409,41 +599,6 @@ fr {
         zh { "chinois" }
         zu { "zoulou" }
     }
-
-    DateTimePatterns { 
-        "HH' h 'mm z",
-        "HH:mm:ss z",
-        "HH:mm:ss",
-        "HH:mm",
-        "EEEE d MMMM yyyy",
-        "d MMMM yyyy",
-        "d MMM yy",
-        "dd/MM/yy",
-        "{1} {0}",
-    }
-    DayAbbreviations { 
-        "dim.",
-        "lun.",
-        "mar.",
-        "mer.",
-        "jeu.",
-        "ven.",
-        "sam.",
-    }
-    DayNames { 
-        "dimanche",
-        "lundi",
-        "mardi",
-        "mercredi",
-        "jeudi",
-        "vendredi",
-        "samedi",
-    }
-
-    Eras { 
-        "av. J.-C.",
-        "ap. J.-C.",
-    }
     MonthAbbreviations { 
         "janv.",
         "f\u00E9vr.",
@@ -493,38 +648,79 @@ fr {
         "#,##0%",
         "#E0",
     }
-    localPatternChars { "GaMjkHmsSEDFwWxhKzAe" }
-    zoneStrings { 
-        {
-            "Africa/Casablanca",
-            "GMT",
-            "GMT",
-            "GMT",
-            "GMT",
-        }
-    }
-    LocaleScript{  
-        "Latn",  // ISO 15924 Name 
-    }
-    ExemplarCharacters { "[a-z \u00e9 \u00e8 \u00f9 \u00e7 \u00e0 \u00e2 \u00ea \u00ee \u00f4 \u00fb \u00e6 \u0153 \u00eb \u00ef \u00ff]" }
 
-// http://www.elections.ca/gen_info/backgrounders/ec90815_f.html
-// http://lcweb.loc.gov/standards/iso639-2/frenchlangn.html
-// http://www.egt.ie/standards/iso3166/iso3166-1-fr.html
+    Scripts {
+        Arab { "arabe" }
+        Armn { "arm\u00E9nien" }
+        Beng { "beng\u00E2gl\u00EE" }
+        Bopo { "bopomofo" }
+        Brai { "braille" }
+        Buhd { "bouhide" }
+        Cans { "syllabaire autochthone canadien unifi\u00E9" }
+        Cher { "tch\u00E9rok\u00EE" }
+        Cprt { "chypriote" }
+        Cyrl { "cyrillique" }
+        Deva { "d\u00E9van\u00E2gar\u00EE" }
+        Dsrt { "d\u00E9s\u00E9ret" }
+        Ethi { "\u00E9thiopique" }
+        Geor { "g\u00E9orgien" }
+        Goth { "gotique" }
+        Grek { "grec" }
+        Gujr { "goudjar\u00E2t\u00EE" }
+        Guru { "gourmoukh\u00EE" }
+        Hang { "hang\u00FBl" }
+        Hano { "hanoun\u00F3o" }
+        Hani { "han" }
+        //Hans { "Simplified Han" } // Not a formal part of ISO-15924 yet, and missing data.
+        //Hant { "Traditional Han" } // Not a formal part of ISO-15924 yet, and missing data.
+        Hebr { "h\u00E9breu" }
+        Hira { "hiragana" }
+        Ital { "ancien italique" }
+        Kana { "katakana" }
+        Khmr { "khmer" }
+        Knda { "kannara" }
+        Laoo { "laotien" }
+        Latn { "latin" }
+        //Limb { "Limbu" } // translation missing
+        Linb { "lin\u00E9aire B" }
+        Mlym { "malay\u00E2lam" }
+        Mong { "mongol" }
+        Mymr { "birman" }
+        Ogam { "ogam" }
+        Orya { "oriy\u00E2" }
+        Osma { "osmanais" }
+        //Qaac { "Coptic" } // translation missing, and this is PUA
+        //Qaai { "Inherited" }// translation missing, and this is PUA
+        Runr { "runique" }
+        Shaw { "shavien" }
+        Sinh { "singhalais" }
+        Syrc { "syriaque" }
+        Tagb { "tagbanoua" }
+        //Tale { "Tai Le" } // translation missing
+        Taml { "tamoul" }
+        Telu { "t\u00E9lougou" }
+        Tglg { "tagal" }
+        Thaa { "th\u00E2na" }
+        Thai { "tha\u00EF" }
+        Tibt { "tib\u00E9tain" }
+        //Ugar { "Ugaritic" } // translation missing
+        Yiii { "yi" }
+        //Zyyy { "Common" } // This could be "\u00E9criture ind\u00E9termin\u00E9e"
+    }
 
     //------------------------------------------------------------
     // Rule Based Number Format Support
     //------------------------------------------------------------
 
-//         * Spellout rules for French.  French adds some interesting quirks of its
-//         * own: 1) The word "et" is interposed between the tens and ones digits,
-//         * but only if the ones digit if 1: 20 is "vingt," and 2 is "vingt-deux,"
-//         * but 21 is "vingt-et-un."  2)  There are no words for 70, 80, or 90.
-//         * "quatre-vingts" ("four twenties") is used for 80, and values proceed
-//         * by score from 60 to 99 (e.g., 73 is "soixante-treize" ["sixty-thirteen"]).
-//         * Numbers from 1,100 to 1,199 are rendered as hundreds rather than
-//         * thousands: 1,100 is "onze cents" ("eleven hundred"), rather than
-//         * "mille cent" ("one thousand one hundred")
+    // * Spellout rules for French.  French adds some interesting quirks of its
+    // * own: 1) The word "et" is interposed between the tens and ones digits,
+    // * but only if the ones digit if 1: 20 is "vingt," and 2 is "vingt-deux,"
+    // * but 21 is "vingt-et-un."  2)  There are no words for 70, 80, or 90.
+    // * "quatre-vingts" ("four twenties") is used for 80, and values proceed
+    // * by score from 60 to 99 (e.g., 73 is "soixante-treize" ["sixty-thirteen"]).
+    // * Numbers from 1,100 to 1,199 are rendered as hundreds rather than
+    // * thousands: 1,100 is "onze cents" ("eleven hundred"), rather than
+    // * "mille cent" ("one thousand one hundred")
 
     SpelloutRules {
         // the main rule set
@@ -580,170 +776,29 @@ fr {
         "%%lenient-parse:\n"
         "    &\u0000 << ' ' << ',' << '-';\n"
     }
-
-    // Currency display names
-    Currencies {
-        AED { "AED", "dirham des E A.U." } // UAE Dirham
-        AFA { "AFA", "afghani" } // Afghani
-        ALL { "ALL", "lek" } // Leck
-        ANG { "ANG", "florin des Antilles n\u00E9erl." } // Netherlands Antillan Guilder
-        AOK { "AOK", "kwanza" } // Kwanza
-        ARA { "ARA", "austral" }
-        ARP { "ARP", "peso argentin" } // Argentine Peso
-        ATS { "ATS", "schilling autrichien" } // Schilling
-        AUD { "AUD", "dollar australien" } // Australian Dollar
-        BBD { "BBD", "dollar de Barbade" } // Barbados Dollar
-        BDT { "BDT", "taka" } // Taka
-        BEF { "FB", "franc belge" } // Belgian Franc
-        BGL { "BGL", "lev" } // Lev
-        BHD { "BHD", "dinar de Bahrein" } // Bahraini Dinar
-        BIF { "BIF", "franc du Burundi" } // Burundi Franc
-        BMD { "BMD", "dollar des Bermudes" } // Bermudian Dollar
-        BND { "BND", "dollar de Brunei" } // Brunei Dollar
-        BOP { "BOP", "peso bolivien" } // Bolivian Peso
-        BRC { "BRC", "cruzeiro" } // Cruzeiro
-        BSD { "BSD", "dollar des Bahamas" } // Bahamian Dollar
-        BUK { "BUK", "kyat" } // Kyat
-        BWP { "BWP", "pula" } // Pula
-        BZD { "BZD", "dollar de Belize" } // Belize Dollar
-        CAD { "CAD", "dollar canadien" } // Canadian Dollar
-        CHF { "sFr.", "franc suisse" } // Swiss Franc
-        CLP { "CLP", "peso chilien" } // Chilean Peso
-        CNY { "CNY", "Yuan Ren-min-bi" } // Yuan Renminbi
-        COP { "COP", "peso colombien" } // Colombian Peso
-        CRC { "CRC", "colon" } // Costa Rican Colon
-        CSK { "CSK", "couronne tch\u00E8que" } // Koruna
-        CUP { "CUP", "peso cubain" } // Cuban Peso
-        CVE { "CVE", "escudo du Cap-Vert" } // Cape Verde Escudo
-        CYP { "CYP", "livre cypriote" } // Cyprus Pound
-        CZK { "CZK", "couronne tch\u00E8que" } // Czech Koruna
-        DEM { "DEM", "deutsche mark" } // Deutsche Mark
-        // DIF { "DIF", "franc de Djibouti" } -- unconfirmed
-        DKK { "DKK", "couronne danoise" } // Danish Krone
-        DOP { "DOP", "peso dominicain" } // Dominican Peso
-        DZD { "DZD", "dinar alg\u00E9rien" } // Algerian Dinar
-        ECS { "ECS", "sucre" } // Sucre
-        EGP { "EGP", "livre \u00E9gyptienne" } // Egyptian Pound
-        ESP { "ESP", "peseta espagnole" } // Spanish Peseta
-        ETB { "ETB", "birr" } // Ethiopian Birr
-        EUR { "\u20AC", "euro" } // Euro
-        FIM { "FIM", "mark finlandais" } // Markka
-        FJD { "FJD", "dollar de Fidji" } // Fiji Dollar
-        FKP { "FKP", "livre des Falkland" } // Falkland Islands Pound
-        FRF { "F", "franc fran\u00E7ais" } // French Franc
-        GBP { "\u00A3", "livre sterling" } // Pound Sterling
-        GHC { "GHC", "cedi" } // Cedi
-        GIP { "GIP", "livre de Gibraltar" } // Gibraltar Pound
-        GMD { "GMD", "dalasie" } // Dalasi
-        GNS { "GNS", "syli" } // Syli
-        GQE { "GQE", "ekwele" } // Ekwele
-        GRD { "GRD", "drachme" } // Drachma
-        GTQ { "GTQ", "quetzal" } // Quetzal
-        GWP { "GWP", "peso de Guin\u00E9e-Bissau" } // Guinea-Bissau Peso
-        GYD { "GYD", "dollar de Guyane" } // Guyana Dollar
-        HKD { "HKD", "dollar de Hong Kong" } // Hong Kong Dollar
-        HNL { "HNL", "lempira" } // Lempira
-        HRD { "HRD", "dinar croate" }
-        HTG { "HTG", "gourde" } // Gourde
-        HUF { "HUF", "forint" } // Forint
-        IDR { "IDR", "rupiah" } // Rupiah
-        IEP { "IEP", "livre irlandaise" } // Irish Pound
-        ILS { "ILS", "sh\u00E9kel" } // New Israeli Sheqel
-        INR { "=0#Rs.|1#Re.|1<Rs.", "roupie indienne" } // Indian Rupee
-        IQD { "IQD", "dinar irakien" } // Iraqi Dinar
-        IRR { "IRR", "rial iranien" } // Iranian Rial
-        ISK { "ISK", "couronne islandaise" } // Iceland Krona
-        ITL { "\u20A4", "lire italienne" } // Lira
-        JMD { "JMD", "dollar jamaicain" } // Jamaican Dollar
-        JOD { "JOD", "dinar jordanien" } // Jordanian Dinar
-        JPY { "\u00A5", "yen" } // Yen
-        KES { "KES", "shilling du Kenya" } // Kenyan Shilling
-        KHR { "KHR", "riel" } // Riel
-        KMF { "KMF", "franc des Comores" } // Comoro Franc
-        KPW { "KPW", "won nord-cor\u00E9en" } // North Korean Won
-        KRW { "KRW", "won" } // Won
-        KWD { "KWD", "dinar koweitien" } // Kuwaiti Dinar
-        KYD { "KYD", "dollar des Caimanes" } // Cayman Islands Dollar
-        LAK { "LAK", "kip" } // Kip
-        LBP { "LBP", "livre libanaise" } // Lebanese Pound
-        LKR { "LKR", "roupie de Sri Lanka" } // Sri Lanka Rupee
-        LRD { "LRD", "dollar lib\u00E9rien" } // Liberian Dollar
-        LUF { "LUF", "franc luxembourgeois" } // Luxembourg Franc
-        LYD { "LYD", "dinar Iybien" } // Lybian Dinar
-        MAD { "MAD", "dirham marocain" } // Moroccan Dirham
-        MGF { "MGF", "franc malgache" } // Malagasy Franc
-        MLF { "MLF", "franc malien" } // Mali Franc
-        MNT { "MNT", "tugrik" } // Tugrik
-        MOP { "MOP", "pataca" } // Pataca
-        MRO { "MRO", "ouguija" } // Ouguiya
-        MTP { "MTP", "livre maltaise" } // Maltese Pound
-        MUR { "MUR", "roupie de l'\u00EEle Maurice" } // Mauritius Rupee
-        MVR { "MVR", "roupie des Maldives" } // Rufiyaa
-        MWK { "MWK", "kwacha" } // Kwacha
-        MXP { "MXP", "peso mexicain" } // Mexican Peso
-        MYR { "MYR", "ringgit" } // Malaysian Ringgit
-        MZM { "MZM", "metical" } // Metical
-        NGN { "NGN", "naira" } // Naira
-        NIC { "NIC", "cordoba" } // Cordoba
-        NLG { "NLG", "florin n\u00E9erlandais" } // Netherlands Guilder
-        NOK { "NOK", "couronne norv\u00E9gienne" } // Norwegian Krone
-        NPR { "NPR", "roupie du N\u00E9pal" } // Nepalese Rupee
-        NZD { "NZD", "dollar n\u00E9o-z\u00E9landais" } // New Zealand Dollar
-        OMR { "OMR", "rial omani" } // Rial Omani
-        PAB { "PAB", "balboa" } // Balboa
-        PES { "PES", "sol" } // Sol
-        PGK { "PGK", "kina" } // Kina
-        PHP { "PHP", "peso philippin" } // Philippine Peso
-        PKR { "PKR", "roupie du Pakistan" } // Pakistan Rupee
-        PLZ { "PLZ", "zloty" } // Zloty
-        PTE { "PTE", "escudo portugais" } // Portugese Escudo
-        PYG { "PYG", "guarani" } // Guarani
-        QAR { "QAR", "rial du Qatar" } // Qatari Rial
-        ROL { "ROL", "leu" } // Leu
-        RUR { "RUR", "rouble de Russie" } // Russian Ruble
-        RWF { "RWF", "franc du Rwanda" } // Rwanda Franc
-        SAR { "SAR", "riyal saoudien" } // Saudi Riyal
-        SBD { "SBD", "dollar de Salomon" } // Solomon Islands Dollar
-        SCR { "SCR", "roupie des Seychelles" } // Seychelles Rupee
-        SDP { "SDP", "livre soudanaise" } // Sudanese Pound
-        SEK { "SEK", "couronne su\u00E9doise" } // Swedish Krona
-        SGD { "SGD", "dollar de Singapour" } // Singapore Dollar
-        SHP { "SHP", "livre de Sainte-H\u00E9l\u00E8ne" } // Saint Helena Pound
-        SIT { "SIT", "monnaie slov\u00E8ne" } // Tolar
-        SKK { "SKK", "couronne slovaque" } // Slovak Koruna
-        SLL { "SLL", "leone" } // Leone
-        SOS { "SOS", "shilling de Somalie" } // Somali Shilling
-        SRG { "SRG", "florin de Surinam" } // Suriname Guilder
-        STD { "STD", "dobra" } // Dobra
-        SUR { "SUR", "rouble de C.E.I." } // Rouble
-        SYP { "SYP", "livre syrienne" } // Syrian Pound
-        SZL { "SZL", "lilangeni" } // Lilangeni
-        THB { "THB", "baht" } // Baht
-        TND { "TND", "dinar tunisien" } // Tunisian Dinar
-        TOP { "TOP", "pa'anga" } // Pa'anga
-        TPE { "TPE", "escudo de Timor" } // Timor Escudo
-        TRL { "TRL", "livre turque" } // Turkish Lira
-        TTD { "TTD", "dollar de la Trinit\u00E9" } // Trinidad and Tobago Dollar
-        TWD { "TWD", "dollar ta\u00EFwanien" } // New Taiwan Dollar
-        TZS { "TZS", "shilling de Tanzanie" } // Tanzanian Shilling
-        UGS { "UGS", "shilling ougandais" } // Uganda Shilling
-        USD { "$", "dollar des Etats-Unis" } // US Dollar
-        UYP { "UYP", "peso uruguayen" } // Uruguayan Peso
-        VEB { "VEB", "bolivar" } // Bolivar
-        VND { "VND", "dong" } // Dong
-        VUV { "VUV", "vatu" } // Vatu
-        WST { "WST", "tala" } // Tala
-        XAF { "XAF", "franc CFA (BEAC)" } // CFA Franc BEAC
-        XCD { "XCD", "dollar des Cara\u00EFbes" } // East Caribbean Dollar
-        XEU { "XEU", "unit\u00E9 de compte europ\u00E9enne (ECU)" } // European Currency Unit
-        XOF { "XOF", "franc CFA (BCEAO)" } // CFA Franc BCEAO
-        XPF { "XPF", "franc CFP" } // CFP Franc
-        YDD { "YDD", "dinar du Y\u00E9men" } // Yemeni Dinar
-        YER { "YER", "riyal du Y\u00E9men" } // Yemeni Rial
-        YUD { "YUD", "nouveau dinar yougoslave" } // New Yugoslavian
-        ZAR { "ZAR", "rand" } // Rand
-        ZMK { "ZMK", "kwacha" } // Kwacha
-        ZRZ { "ZRZ", "za\u00EFre" } // Zaire
-        ZWD { "ZWD", "Zimbabwe dollar" } // Zimbabwe Dollar
+    Keys{
+        collation{ "Ordonnancement" }
+        calendar { "Calendrier" }
+        //currency { "" }
+    }
+    Types {
+        collation{
+            traditional{ "Traditionnel Ordonnancement" }
+        }
+        calendar{
+            traditional{ "Traditionnel Calendrier" }
+        }
+    }
+    Variants {
+        REVISED { "R\u00e9vis\u00e9" }
+    }
+    zoneStrings { 
+        {
+            "Africa/Casablanca",
+            "GMT",
+            "GMT",
+            "GMT",
+            "GMT",
+        }
     }
 }
