@@ -426,16 +426,24 @@ uprv_IEEEremainder(double x, double p)
 
     /* purge off exception values */
     if((hp|lp) == 0) 
+    {
         return (x*p) / (x*p);     /* p = 0 */
+    }
     if((hx >= 0x7ff00000)||        /* x not finite */
       ((hp>=0x7ff00000) &&    /* p is NaN */
       (((hp-0x7ff00000)|lp) != 0)))
-        return (x*p) / (x*p);
+    {
+        return uprv_getNaN();
+    }
 
     if(hp <= 0x7fdfffff) 
+    {
         x = uprv_fmod(x, p + p);    /* now x < 2p */
+    }
     if(((hx-hp)|(lx-lp)) == 0) 
+    {
         return 0.0 * x;
+    }
     x = uprv_fabs(x);
     p = uprv_fabs(p);
     if (hp < 0x00200000) {
