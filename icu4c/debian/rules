@@ -66,10 +66,19 @@ $(builddir)/configure-stamp:
 	cd $(builddir); CFLAGS='$(CFLAGS)' CXXFLAGS='$(CFLAGS)' INSTALL_PROGRAM='$(INSTALL_PROGRAM)' $(builddir_relative_srcdir)/configure --srcdir=$(builddir_relative_srcdir) --prefix=/usr --mandir=/usr/share/man --sysconfdir=/etc --with-data-packaging=files --disable-rpath --enable-shared --enable-static --disable-samples
 	touch $@
 
-build: $(builddir)/configure-stamp $(builddir)/build-stamp
+build: $(builddir)/configure-stamp debian-files $(builddir)/build-stamp
 
-$(builddir)/build-stamp: 
-	@$(MAKE) -f debian/rules $(addprefix debian/,$(DEBIAN_FILES))
+# Build some Debian files
+DEBIAN_FILES=control icu.conffiles postinst prerm icu.postinst icu.prerm libicu$(lib_version_major).postinst
+
+debian/%: debian/%.in
+	cd $(builddir) \
+	  && CONFIG_FILES=$(builddir_relative_topdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
+
+debian-files: $(addprefix debian/,$(DEBIAN_FILES))
+
+$(builddir)/build-stamp:
+	@$(MAKE) -f debian/rules 
 
 	dh_testdir
 
@@ -105,16 +114,6 @@ install: build
 # Build architecture-independent files here.
 binary-indep: build install
 # We have nothing to do by default.
-
-# Build some Debian files
-DEBIAN_FILES = control icu.conffiles icu.postinst icu.prerm libicu$(lib_version_major).prerm.in libicu$(lib_version_major).prerm libicu$(lib_version_major).postinst
-
-debian/libicu$(lib_version_major).%: debian/libicu.%
-	cp $< $@
-
-debian/%: debian/%.in
-	cd $(builddir) \
-	  && CONFIG_FILES=$(builddir_relative_topdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
 
 # Build architecture-dependent files here.
 binary-arch: build install
@@ -220,4 +219,4 @@ update-changelog:
  	fi
 
 binary: update-changelog binary-indep binary-arch
-.PHONY: build clean binary-indep binary-arch binary install update-changelog
+.PHONY: build clean binary-indep binary-arch binary install debian-files update-changelog

@@ -28,7 +28,6 @@ case "$1" in
 	fi
 #       install-info --quiet --remove /usr/info/foo.info.gz
         ;;
-
     failed-upgrade)
         ;;
     *)

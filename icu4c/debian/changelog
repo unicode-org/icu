@@ -1,3 +1,9 @@
+icu (1.7-1) unstable; urgency=low
+
+  * Update to ICU version 1.7.
+
+ -- Yves Arrouye <yves@debian.org>  Tue, 21 Nov 2000 14:09:37 -0800
+
 icu (1.6.0.1-20001113-2) unstable; urgency=low
 
   * New snapshot with better ISO-2022.
