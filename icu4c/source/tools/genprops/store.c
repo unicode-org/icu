@@ -341,7 +341,7 @@ setUnicodeVersion(const char *v) {
 
 extern void
 initStore() {
-    pTrie=utrie_open(NULL, NULL, MAX_PROPS_COUNT, 0, TRUE);
+    pTrie=utrie_open(NULL, NULL, MAX_PROPS_COUNT, 0, 0, TRUE);
     if(pTrie==NULL) {
         fprintf(stderr, "error: unable to create a UNewTrie\n");
         exit(U_MEMORY_ALLOCATION_ERROR);

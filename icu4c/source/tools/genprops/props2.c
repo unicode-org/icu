@@ -470,7 +470,7 @@ generateAdditionalProperties(char *filename, const char *suffix, UErrorCode *pEr
     /* parse EastAsianWidth.txt */
     parseSingleEnumFile(filename, basename, suffix, &eawSingleEnum, pErrorCode);
 
-    trie=utrie_open(NULL, NULL, 50000, 0, TRUE);
+    trie=utrie_open(NULL, NULL, 50000, 0, 0, TRUE);
     if(trie==NULL) {
         *pErrorCode=U_MEMORY_ALLOCATION_ERROR;
         upvec_close(pv);
