@@ -198,7 +198,7 @@ import java.text.MessageFormat;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: Transliterator.java,v $ $Revision: 1.9 $ $Date: 2000/01/18 20:36:17 $
+ * @version $RCSfile: Transliterator.java,v $ $Revision: 1.10 $ $Date: 2000/01/18 21:39:27 $
  */
 public abstract class Transliterator {
     /**
@@ -653,7 +653,6 @@ public abstract class Transliterator {
      * Returns a programmatic identifier for this transliterator.
      * If this identifier is passed to <code>getInstance()</code>, it
      * will return this object, if it has been registered.
-     * @see #registerInstance
      * @see #registerClass
      * @see #getAvailableIDs
      */
@@ -757,12 +756,12 @@ public abstract class Transliterator {
     /**
      * Returns a <code>Transliterator</code> object given its ID.
      * The ID must be either a system transliterator ID or a ID registered
-     * using <code>registerInstance()</code>.
+     * using <code>registerClass()</code>.
      *
      * @param ID a valid ID, as enumerated by <code>getAvailableIDs()</code>
      * @return A <code>Transliterator</code> object with the given ID
      * @exception IllegalArgumentException if the given ID is invalid.
-     * @see #registerInstance
+     * @see #registerClass
      * @see #getAvailableIDs
      * @see #getID
      */
@@ -809,7 +808,7 @@ public abstract class Transliterator {
      * @return a transliterator that is an inverse, not necessarily
      * exact, of this transliterator, or <code>null</code> if no such
      * transliterator is registered.
-     * @see #registerInstance
+     * @see #registerClass
      */
     public final Transliterator getInverse() {
         return getInstance(ID, REVERSE);
@@ -885,7 +884,6 @@ public abstract class Transliterator {
      * @param ID the result of <code>getID()</code> for this
      * transliterator
      * @param transClass a subclass of <code>Transliterator</code>
-     * @see #registerInstance
      * @see #unregister
      */
     public static void registerClass(String ID, Class transClass, String displayName) {
@@ -902,7 +900,6 @@ public abstract class Transliterator {
      * @param ID the ID of the transliterator or class
      * @return the <code>Object</code> that was registered with
      * <code>ID</code>, or <code>null</code> if none was
-     * @see #registerInstance
      * @see #registerClass
      */
     public static Object unregister(String ID) {
@@ -914,12 +911,12 @@ public abstract class Transliterator {
      * Returns an enumeration over the programmatic names of registered
      * <code>Transliterator</code> objects.  This includes both system
      * transliterators and user transliterators registered using
-     * <code>registerInstance()</code>.  The enumerated names may be
+     * <code>registerClass()</code>.  The enumerated names may be
      * passed to <code>getInstance()</code>.
      *
      * @return An <code>Enumeration</code> over <code>String</code> objects
      * @see #getInstance
-     * @see #registerInstance
+     * @see #registerClass
      */
     public static final Enumeration getAvailableIDs() {
         return cache.keys();

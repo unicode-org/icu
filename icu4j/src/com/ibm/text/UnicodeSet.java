@@ -230,7 +230,7 @@ import java.util.Dictionary;
  * *Unsupported by Java (and hence unsupported by UnicodeSet).
  *
  * @author Alan Liu
- * @version $RCSfile: UnicodeSet.java,v $ $Revision: 1.6 $ $Date: 2000/01/18 20:36:17 $
+ * @version $RCSfile: UnicodeSet.java,v $ $Revision: 1.7 $ $Date: 2000/01/18 21:39:27 $
  */
 public class UnicodeSet implements UnicodeFilter {
     /**
@@ -298,7 +298,7 @@ public class UnicodeSet implements UnicodeFilter {
      * Constructs a set from the given pattern.  See the class description
      * for the syntax of the pattern language.
      * @param pattern a string specifying what characters are in the set
-     * @exception IllegalArgumentException if the pattern contains
+     * @exception java.lang.IllegalArgumentException if the pattern contains
      * a syntax error.
      */
     public UnicodeSet(String pattern) {
@@ -319,7 +319,7 @@ public class UnicodeSet implements UnicodeFilter {
      * @param varCharToSet a mapping from characters (Character objects from
      * varNameToChar) to UnicodeSet objects.  May be null.  Is only used if
      * varNameToChar is also non-null.
-     * @exception <code>IllegalArgumentException</code> if the pattern
+     * @exception java.lang.IllegalArgumentException if the pattern
      * contains a syntax error.
      */
     public UnicodeSet(String pattern, ParsePosition pos,
@@ -331,7 +331,7 @@ public class UnicodeSet implements UnicodeFilter {
      * Constructs a set from the given Unicode character category.
      * @param category an integer indicating the character category as
      * returned by <code>Character.getType()</code>.
-     * @exception <code>IllegalArgumentException</code> if the given
+     * @exception java.lang.IllegalArgumentException if the given
      * category is invalid.
      */
     public UnicodeSet(int category) {
@@ -346,7 +346,7 @@ public class UnicodeSet implements UnicodeFilter {
      * Modifies this set to represent the set specified by the given pattern.
      * See the class description for the syntax of the pattern language.
      * @param pattern a string specifying what characters are in the set
-     * @exception <code>IllegalArgumentException</code> if the pattern
+     * @exception java.lang.IllegalArgumentException if the pattern
      * contains a syntax error.
      */
     public void applyPattern(String pattern) {
@@ -379,7 +379,7 @@ public class UnicodeSet implements UnicodeFilter {
      * @param varCharToSet a mapping from characters (Character objects from
      * varNameToChar) to UnicodeSet objects.  May be null.  Is only used if
      * varNameToChar is also non-null.
-     * @exception <code>IllegalArgumentException</code> if the pattern
+     * @exception java.lang.IllegalArgumentException if the pattern
      * contains a syntax error.
      */
     private void applyPattern(String pattern, ParsePosition pos,
@@ -675,7 +675,7 @@ public class UnicodeSet implements UnicodeFilter {
      * is the last character of the pattern string.
      * @return a StringBuffer containing a pairs list for the parsed substring
      * of <code>pattern</code>
-     * @exception IllegalArgumentException if the parse fails.
+     * @exception java.lang.IllegalArgumentException if the parse fails.
      */
     private static StringBuffer parse(String pattern, ParsePosition pos,
                                       Dictionary varNameToChar, Dictionary varCharToSet) {
