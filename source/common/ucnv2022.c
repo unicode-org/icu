@@ -52,6 +52,10 @@
     }\
 }
 
+/* This macro replicates code in _MBCSFromUChar32() function in ucnvmbcs.c
+ * any future change in _MBCSFromUChar32() function should be reflected in 
+ * this macro
+ */
 #define  MBCS_FROM_UCHAR32_ISO2022(sharedData,c,  value, useFallback, length, outputType) {\
     const uint16_t *table=sharedData->table->mbcs.fromUnicodeTable;\
     uint32_t stage2Entry;\
