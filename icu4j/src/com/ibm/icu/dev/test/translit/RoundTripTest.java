@@ -26,20 +26,38 @@ public class RoundTripTest extends TestFmwk {
     }
     */
     
+    /*
+    Note: Unicode 3.2 added new Hiragana/Katakana characters:
+    
+3095..3096    ; 3.2 #   [2] HIRAGANA LETTER SMALL KA..HIRAGANA LETTER SMALL KE
+309F..30A0    ; 3.2 #   [2] HIRAGANA DIGRAPH YORI..KATAKANA-HIRAGANA DOUBLE HYPHEN
+30FF          ; 3.2 #       KATAKANA DIGRAPH KOTO
+31F0..31FF    ; 3.2 #  [16] KATAKANA LETTER SMALL KU..KATAKANA LETTER SMALL RO
+
+    We will not add them to the rules until they are more supported (e.g. in fonts on Windows)
+    A bug has been filed to remind us to do this: #1979.
+    */
+    
+    static String KATAKANA = "[[[:katakana:][\u30A1-\u30FA\u30FC]]-[\u30FF\u31F0-\u31FF]]";
+    static String HIRAGANA = "[[[:hiragana:][\u3040-\u3094]]-[\u3095-\u3096\u309F-\u30A0]]";
+    static String LENGTH = "[\u30FC]";
+    static String HALFWIDTH_KATAKANA = "[\uFF65-\uFF9D]";
+    static String KATAKANA_ITERATION = "[\u30FD\u30FE]";
+    static String HIRAGANA_ITERATION = "[\u309D\u309E]";
+    
     public void TestKana() throws IOException, ParseException {
         new Test("Katakana-Hiragana")
-          .test("[[:katakana:]\u30A1-\u30FA\u30FC]", "[[:hiragana:]\u3040-\u3094\u30FC]",
-            "[\u30FC\u309D\u309E\uFF66-\uFF9D]", this, new Legal());
+          .test(KATAKANA, "[" + HIRAGANA + LENGTH + "]", "[" + HALFWIDTH_KATAKANA + LENGTH + "]", this, new Legal());
     }
 
     public void TestHiragana() throws IOException, ParseException {
         new Test("Latin-Hiragana")
-          .test("[a-zA-Z]", "[[:hiragana:]\u3040-\u3094]", "[\u309D\u309E]", this, new Legal());
+          .test("[a-zA-Z]", HIRAGANA, HIRAGANA_ITERATION, this, new Legal());
     }
-
+    
     public void TestKatakana() throws IOException, ParseException {
         new Test("Latin-Katakana")
-          .test("[a-zA-Z]", "[[:katakana:]\u30A1-\u30FA\u30FC]", "[\u30FD\u30FE\uFF66-\uFF9D]", this, new Legal());
+          .test("[a-zA-Z]", KATAKANA, "[" + KATAKANA_ITERATION + HALFWIDTH_KATAKANA + "]", this, new Legal());
     }
 
 // Some transliterators removed for 2.0
