@@ -297,7 +297,7 @@ struct incrementalContext {
 uint32_t getSpecialCE(const UCollator *coll, uint32_t CE, collIterate *source, UErrorCode *status);
 uint32_t getSpecialPrevCE(const UCollator *coll, uint32_t CE, 
                           collIterate *source, UErrorCode *status);
-U_CFUNC uint32_t ucol_getNextCE(const UCollator *coll, collIterate *collationSource, UErrorCode *status);
+U_CAPI uint32_t U_EXPORT2 ucol_getNextCE(const UCollator *coll, collIterate *collationSource, UErrorCode *status);
 uint32_t ucol_getNextUCA(UChar ch, collIterate *collationSource, UErrorCode *status);
 uint32_t ucol_getPrevUCA(UChar ch, collIterate *collationSource, UErrorCode *status);
 
@@ -551,8 +551,12 @@ U_CAPI char U_EXPORT2 *ucol_sortKeyToString(const UCollator *coll, const uint8_t
 U_CAPI UBool U_EXPORT2 isTailored(const UCollator *coll, const UChar u, UErrorCode *status);
 
 U_CAPI const U_EXPORT2 InverseTableHeader *ucol_initInverseUCA(UErrorCode *status);
-U_CAPI uint32_t U_EXPORT2 ucol_inv_getNextCE(uint32_t CE, uint32_t strength);
-U_CAPI uint32_t U_EXPORT2 ucol_inv_getPrevCE(uint32_t CE, uint32_t strength);
+U_CAPI int32_t U_EXPORT2 ucol_inv_getNextCE(uint32_t CE, uint32_t contCE, 
+                                            uint32_t *nextCE, uint32_t *nextContCE, 
+                                            uint32_t strength);
+U_CAPI int32_t U_EXPORT2 ucol_inv_getPrevCE(uint32_t CE, uint32_t contCE, 
+                                            uint32_t *prevCE, uint32_t *prevContCE, 
+                                            uint32_t strength);
 
 #endif
 
