@@ -2192,7 +2192,7 @@ int32_t TestSearch::handlePrev(int32_t start, UErrorCode &status)
 
 TestSearch & TestSearch::operator=(const TestSearch &that)
 {
-	this->SearchIterator::operator=(that);
+    SearchIterator::operator=(that);
     m_offset_ = that.m_offset_;
     m_pattern_ = that.m_pattern_;
     return *this;
