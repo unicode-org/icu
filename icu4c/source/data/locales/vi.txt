@@ -260,14 +260,14 @@ vi {
         1,
     }
     DateTimePatterns {
-        "HH.mm.ss z",
-        "HH.mm.ss z",
-        "HH.mm.ss",
-        "HH.mm",
-        "EEEE dd MMMM yyyy",
-        "dd MMMM yyyy",
-        "dd MMM yyyy",
-        "dd/MM/yy",
+        "HH:mm:ss z",
+        "HH:mm:ss z",
+        "HH:mm:ss",
+        "HH:mm",
+        "EEEE dd MMMM yyyy",    // Should this be "EEEE dd MMMM n\u0103m yyyy"?
+        "dd MMMM yyyy",         // Should this be "dd MMMM n\u0103m yyyy"?
+        "dd-MM-yyyy",
+        "dd/MM/yyyy",
         "{0} {1}",
     }
     DayAbbreviations {
