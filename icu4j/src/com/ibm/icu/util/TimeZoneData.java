@@ -3,8 +3,8 @@
  * others. All Rights Reserved.
  *********************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/util/Attic/TimeZoneData.java,v $
- * $Date: 2001/02/02 19:30:02 $
- * $Revision: 1.3 $
+ * $Date: 2001/10/29 21:22:13 $
+ * $Revision: 1.4 $
  */
 package com.ibm.util;
 import java.util.Hashtable;
@@ -140,7 +140,7 @@ class TimeZoneData {
      */
     public static int countEquivalentIDs(String ID) {
         int i = lookup(ID);
-        return (i<0) ? 0 : DATA[i + ((DATA[i+1]==0)?2:13)];
+        return (i<0) ? 0 : DATA[i + ((DATA[i]==0)?2:13)];
     }
 
     /**
@@ -166,7 +166,7 @@ class TimeZoneData {
         if (i<0) {
             return "";
         }
-        int j = i + ((DATA[i+1]==0)?2:13);
+        int j = i + ((DATA[i]==0)?2:13);
         return (index<DATA[j]) ? IDS[DATA[j+index+1]] : "";
     }
 
