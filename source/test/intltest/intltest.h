@@ -158,6 +158,8 @@ protected:
 public:
     static void setICU_DATA();       // Set up ICU_DATA if necessary.
 
+    static const char* pathToDataDirectory();
+
 public:
     UBool run_phase2( char* name, char* par ); // internally, supports reporting memory leaks
     static const char* loadTestData(UErrorCode& err);
@@ -165,6 +167,7 @@ public:
 // static members
 public:
     static IntlTest* gTest;
+    static const char* fgDataDir;
 
 };
 
