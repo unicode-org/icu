@@ -286,6 +286,7 @@ public:
      * then the limit belongs to the range below it.
      * @param formats Array of formats
      * @param count Size of 'limits', 'closures', and 'formats' arrays
+     * @draft ICU 2.4
      */
     ChoiceFormat(const double* limits,
                  const UBool* closures,
@@ -422,6 +423,7 @@ public:
      * @param closures Array of limit booleans
      * @param formats Array of format string
      * @param count The size of the above arrays
+     * @draft ICU 2.4
      */
     virtual void setChoices(const double* limits,
                             const UBool* closures,
@@ -443,6 +445,7 @@ public:
      *
      * @param count   The size of the arrays
      * @return the closures
+     * @draft ICU 2.4
      */
     virtual const UBool* getClosures(int32_t& count) const;
 
