@@ -367,7 +367,7 @@ u_iscntrl(UChar32 c) {
 
 /* Some control characters that are used as space. */
 #define IS_THAT_CONTROL_SPACE(c) \
-    ((c>=0x09 && c <= 0x0d) || (c>=0x1c && c <=0x1f) || c==0x85)
+    ((c>=TAB && c<=CR) || (c>=0x1c && c <=0x1f) || c==NL)
 
 /* Checks if the Unicode character is a space character.*/
 U_CAPI UBool U_EXPORT2
@@ -387,7 +387,7 @@ u_isWhitespace(UChar32 c) {
     return (UBool)((((1UL<<GET_CATEGORY(props))&
             (1UL<<U_SPACE_SEPARATOR|1UL<<U_LINE_SEPARATOR|1UL<<U_PARAGRAPH_SEPARATOR)
            )!=0 &&
-           c!=0xa0 && c!=0x202f && c!=0xfeff) || /* exclude no-break spaces */
+           c!=NBSP && c!=NNBSP && c!=ZWNBSP) || /* exclude no-break spaces */
            IS_THAT_CONTROL_SPACE(c));
 }
 
@@ -828,6 +828,8 @@ u_charCellWidth(UChar32 ch)
     }
 }
 
+/* miscellaneous, and support for uprops.c ---------------------------------- */
+
 U_CAPI void U_EXPORT2
 u_getUnicodeVersion(UVersionInfo versionArray) {
     if(versionArray!=NULL) {
@@ -865,6 +867,90 @@ uprv_getMaxValues() {
     } else {
         return 0;
     }
+}
+
+static UBool U_CALLCONV
+_enumPropertyStartsRange(const void *context, UChar32 start, UChar32 limit, uint32_t value) {
+    /* add the start code point to the USet */
+    uset_add((USet *)context, start);
+    return TRUE;
+}
+
+#define USET_ADD_CP_AND_NEXT(set, cp) uset_add(set, cp); uset_add(set, cp+1)
+
+U_CAPI void U_EXPORT2
+uchar_addPropertyStarts(USet *set) {
+    if(!HAVE_DATA) {
+        return;
+    }
+
+    /* add the start code point of each same-value range of each trie */
+    utrie_enum(&propsTrie, NULL, _enumPropertyStartsRange, set);
+    utrie_enum(&propsVectorsTrie, NULL, _enumPropertyStartsRange, set);
+
+    /* add code points with hardcoded properties, plus the ones following them */
+
+    /* add for IS_THAT_CONTROL_SPACE() */
+    uset_add(set, TAB); /* range TAB..CR */
+    uset_add(set, CR+1);
+    uset_add(set, 0x1c);
+    uset_add(set, 0x1f+1);
+    USET_ADD_CP_AND_NEXT(set, NL);
+
+    /* add for u_isIDIgnorable() what was not added above */
+    uset_add(set, DEL); /* range DEL..NBSP-1, NBSP added below */
+    uset_add(set, HAIRSP);
+    uset_add(set, RLM+1);
+    uset_add(set, INHSWAP);
+    uset_add(set, NOMDIG+1);
+    USET_ADD_CP_AND_NEXT(set, ZWNBSP);
+
+    /* add no-break spaces for u_isWhitespace() what was not added above */
+    USET_ADD_CP_AND_NEXT(set, NBSP);
+    USET_ADD_CP_AND_NEXT(set, NNBSP);
+
+    /* add for u_charDigitValue() */
+    USET_ADD_CP_AND_NEXT(set, 0x3007);
+    USET_ADD_CP_AND_NEXT(set, 0x4e00);
+    USET_ADD_CP_AND_NEXT(set, 0x4e8c);
+    USET_ADD_CP_AND_NEXT(set, 0x4e09);
+    USET_ADD_CP_AND_NEXT(set, 0x56db);
+    USET_ADD_CP_AND_NEXT(set, 0x4e94);
+    USET_ADD_CP_AND_NEXT(set, 0x516d);
+    USET_ADD_CP_AND_NEXT(set, 0x4e03);
+    USET_ADD_CP_AND_NEXT(set, 0x516b);
+    USET_ADD_CP_AND_NEXT(set, 0x4e5d);
+
+    /* add for u_digit() */
+    uset_add(set, _a);
+    uset_add(set, _z+1);
+    uset_add(set, _A);
+    uset_add(set, _Z+1);
+
+    /* add for UCHAR_DEFAULT_IGNORABLE_CODE_POINT what was not added above */
+    uset_add(set, WJ); /* range WJ..NOMDIG */
+    uset_add(set, 0xfff0);
+    uset_add(set, 0xfffb+1);
+    uset_add(set, 0xe0000);
+    uset_add(set, 0xe0fff+1);
+
+    /* add for UCHAR_GRAPHEME_BASE and others */
+    USET_ADD_CP_AND_NEXT(set, CGJ);
+
+    /* add for UCHAR_JOINING_TYPE */
+    uset_add(set, ZWNJ); /* range ZWNJ..ZWJ */
+    uset_add(set, ZWJ+1);
+
+    /*
+     * Omit code points for u_charCellWidth() because
+     * - it is deprecated and not a real Unicode property
+     * - they are probably already set from the trie enumeration
+     */
+
+    /*
+     * Omit code points with hardcoded specialcasing properties
+     * because we do not build property UnicodeSets for them right now.
+     */
 }
 
 /* string casing ------------------------------------------------------------ */
