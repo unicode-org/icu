@@ -209,7 +209,7 @@ getAlgorithmicTypeFromName(const char *realName)
 {
     int i;
     for(i=0; i<sizeof(cnvNameType)/sizeof(cnvNameType[0]); ++i) {
-        if(uprv_strcmp(realName, cnvNameType[i].name)==0) {
+        if(ucnv_compareNames(realName, cnvNameType[i].name)==0) {
             return converterData[cnvNameType[i].type];
         }
     }
