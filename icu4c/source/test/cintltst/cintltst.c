@@ -34,6 +34,7 @@
 #   include <console.h>
 #endif
 
+#define CTST_LEAK_CHECK 1
 #ifdef CTST_LEAK_CHECK
 U_CFUNC void ctst_init(void);
 #endif
@@ -197,7 +198,7 @@ ctest_setTestDirectory(const char* newDir)
     ctest_pathnameInContext(newTestDir, (int32_t)sizeof(newTestDir), newDir);
     if(_testDirectory != NULL)
         free(_testDirectory);
-    _testDirectory = (char*) malloc(sizeof(char*) * (strlen(newTestDir) + 1));
+    _testDirectory = (char*) ctst_malloc(sizeof(char*) * (strlen(newTestDir) + 1));
     strcpy(_testDirectory, newTestDir);
 }
 
