@@ -9,7 +9,7 @@ fr {
     Version{"1.0"}
     CollationElements { 
 	    Version { "1.0" }
-		Sequence { "@" }
+		Sequence { "[backwards 2]&A<<\u00e6/e<<<\u00c6/E" }
 	}
     Countries { 
         AR { "Argentine" }
