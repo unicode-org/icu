@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 2001, International Business Machines Corporation and
+ * Copyright (c) 2001-2003, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /************************************************************************
@@ -59,16 +59,20 @@ public:
             if (i < newStyles.length()) {
                 s.append(newStyles.charAt(i));
             } else {
-		if (text.charAt(i) == NO_STYLE_MARK) {
-		    s.append(NO_STYLE);
-		} else {
-		    s.append((UChar)(i + 0x0031));
-		}
+                if (text.charAt(i) == NO_STYLE_MARK) {
+                    s.append(NO_STYLE);
+                } else {
+                    s.append((UChar)(i + 0x0031));
+                }
             }
         }
         this->styles = s;
     }
-    
+
+    virtual Replaceable *clone() const {
+        return new TestReplaceable(chars, styles);
+    }
+
     ~TestReplaceable(void) {}
 
     UnicodeString getStyles() {
@@ -135,14 +139,14 @@ protected:
         // dumb implementation for now.
         UnicodeString s;
         for (int i = 0; i < newLen; ++i) {
-	    // this doesn't really handle an embedded NO_STYLE_MARK
-	    // in the middle of a long run of characters right -- but
-	    // that case shouldn't happen anyway
-	    if (getCharAt(start+i) == NO_STYLE_MARK) {
-		s.append(NO_STYLE);
-	    } else {
-		s.append(newStyle);
-	    }
+            // this doesn't really handle an embedded NO_STYLE_MARK
+            // in the middle of a long run of characters right -- but
+            // that case shouldn't happen anyway
+            if (getCharAt(start+i) == NO_STYLE_MARK) {
+                s.append(NO_STYLE);
+            } else {
+                s.append(newStyle);
+            }
         }
         styles.replaceBetween(start, limit, s);
     }
@@ -179,10 +183,10 @@ void ReplaceableTest::TestReplaceableClass(void) {
         {0x0077, 0x0078, 0x0079, 0x0000, 0x0000, 0x0000}, /* "wxy" */
         {0x0077, 0x0078, 0x0079, 0x007A, 0x0000, 0x0000}, /* "wxyz" */
         {0x0077, 0x0078, 0x0079, 0x007A, 0x0075, 0x0000}, /* "wxyzu" */
-	{0x0078, 0x0079, 0x007A, 0x0000, 0x0000, 0x0000}, /* "xyz" */
-	{0x0077, 0x0078, 0x0079, 0x0000, 0x0000, 0x0000}, /* "wxy" */
-	{0xFFFF, 0x0078, 0x0079, 0x0000, 0x0000, 0x0000}, /* "*xy" */
-	{0xFFFF, 0x0078, 0x0079, 0x0000, 0x0000, 0x0000}, /* "*xy" */
+        {0x0078, 0x0079, 0x007A, 0x0000, 0x0000, 0x0000}, /* "xyz" */
+        {0x0077, 0x0078, 0x0079, 0x0000, 0x0000, 0x0000}, /* "wxy" */
+        {0xFFFF, 0x0078, 0x0079, 0x0000, 0x0000, 0x0000}, /* "*xy" */
+        {0xFFFF, 0x0078, 0x0079, 0x0000, 0x0000, 0x0000}, /* "*xy" */
     };
     check("Lower", rawTestArray[0], "1234");
     check("Upper", rawTestArray[1], "123455"); // must map 00DF to SS
@@ -215,6 +219,13 @@ void ReplaceableTest::check(const UnicodeString& transliteratorName,
         UParseError pe;
         t = Transliterator::createFromRules("test", rules, UTRANS_FORWARD,
                                             pe, status);
+
+        // test clone()
+        TestReplaceable *tr2 = (TestReplaceable *)tr->clone();
+        if(tr2 != NULL) {
+            delete tr;
+            tr = tr2;
+        }
     } else {
         t = Transliterator::createInstance(transliteratorName, UTRANS_FORWARD, status);
     }
