@@ -844,7 +844,9 @@ static void TestEmptyBundle(){
 static void TestBinaryCollationData(){
     UErrorCode status=U_ZERO_ERROR;
     const char*      locale="te";
+#if !UCONFIG_NO_COLLATION 
     const char* testdatapath;
+#endif
     UResourceBundle *teRes = NULL;
     UResourceBundle *coll=NULL;
     UResourceBundle *binColl = NULL;
@@ -1920,10 +1922,12 @@ static void TestResourceLevelAliasing(void) {
     const UChar *string = NULL, *sequence = NULL;
     const uint8_t *binary = NULL, *binSequence = NULL;
     int32_t strLen = 0, seqLen = 0, binLen = 0, binSeqLen = 0;
-    
+
+#if !UCONFIG_NO_COLLATION 
     char buffer[100];
     char *s;
-    
+#endif
+
     testdatapath=loadTestData(&status);
     if(U_FAILURE(status))
     {
