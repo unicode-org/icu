@@ -8,14 +8,110 @@
 **********************************************************************
 */
 
+#include "unicode/utypes.h"
 #include "unicode/nortrans.h"
+#include "unormimp.h"
 
 U_NAMESPACE_BEGIN
+
+U_CDECL_BEGIN
+
+/*
+ * This is an implementation of a code unit (UChar) iterator
+ * based on a Replaceable object.
+ * It is used with the internal API for incremental normalization.
+ *
+ * The UCharIterator.context field holds a pointer to the Replaceable.
+ * UCharIterator.length and UCharIterator.index hold Replaceable.length()
+ * and the iteration index.
+ */
+
+static int32_t U_CALLCONV
+replaceableIteratorMove(UCharIterator *iter, int32_t delta, UCharIteratorOrigin origin) {
+    int32_t pos;
+
+    switch(origin) {
+    case UITERATOR_START:
+        pos=iter->start+delta;
+        break;
+    case UITERATOR_CURRENT:
+        pos=iter->index+delta;
+        break;
+    case UITERATOR_END:
+        pos=iter->limit+delta;
+        break;
+    default:
+        /* not a valid origin, no move */
+        break;
+    }
+
+    if(pos<iter->start) {
+        pos=iter->start;
+    } else if(pos>iter->limit) {
+        pos=iter->limit;
+    }
+
+    return iter->index=pos;
+}
+
+static UBool U_CALLCONV
+replaceableIteratorHasNext(UCharIterator *iter) {
+    return iter->index<iter->limit;
+}
+
+static UBool U_CALLCONV
+replaceableIteratorHasPrevious(UCharIterator *iter) {
+    return iter->index>iter->start;
+}
+
+static UChar U_CALLCONV
+replaceableIteratorCurrent(UCharIterator *iter) {
+    if(iter->index<iter->limit) {
+        return ((Replaceable *)(iter->context))->charAt(iter->index);
+    } else {
+        return 0xffff;
+    }
+}
+
+static UChar U_CALLCONV
+replaceableIteratorNext(UCharIterator *iter) {
+    if(iter->index<iter->limit) {
+        return ((Replaceable *)(iter->context))->charAt(iter->index++);
+    } else {
+        return 0xffff;
+    }
+}
+
+static UChar U_CALLCONV
+replaceableIteratorPrevious(UCharIterator *iter) {
+    if(iter->index>iter->start) {
+        return ((Replaceable *)(iter->context))->charAt(--iter->index);
+    } else {
+        return 0xffff;
+    }
+}
+
+static const UCharIterator replaceableIterator={
+    0, 0, 0, 0, 0,
+    replaceableIteratorMove,
+    replaceableIteratorHasNext,
+    replaceableIteratorHasPrevious,
+    replaceableIteratorCurrent,
+    replaceableIteratorNext,
+    replaceableIteratorPrevious
+};
+
+U_CDECL_END
 
 /**
  * System registration hook.
  */
 void NormalizationTransliterator::registerIDs() {
+    UErrorCode errorCode = U_ZERO_ERROR;
+    if(!unorm_haveData(&errorCode)) {
+        return;
+    }
+
     Transliterator::_registerFactory(UnicodeString("Any-NFC", ""),
                                      _create, integerToken(UNORM_NFC));
     Transliterator::_registerFactory(UnicodeString("Any-NFKC", ""),
@@ -99,83 +195,103 @@ static void _Replaceable_extractBetween(const Replaceable& text,
  */
 void NormalizationTransliterator::handleTransliterate(Replaceable& text, UTransPosition& offsets,
                                                       UBool isIncremental) const {
+    // start and limit of the input range
     int32_t start = offsets.start;
     int32_t limit = offsets.limit;
+    int32_t length, delta;
 
-    // For the non-incremental case normalize right up to
-    // offsets.limit.  In the incremental case, find the last base
-    // character b, and pass everything from the start up to the
-    // character before b to normalizer.
-    if (isIncremental) {
-        // Wrinkle: Jamo has a combining class of zero, but we
-        // don't want to normalize individual Jamo one at a time
-        // if we're composing incrementally.  If we are composing
-        // in incremental mode then we collect up trailing jamo
-        // and save them for next time.
-        UBool doStandardBackup = TRUE;
-        if (fMode == UNORM_NFC || fMode == UNORM_NFKC) {
-            // As a minor optimization, if there are three or more
-            // trailing jamo, we let the first three through --
-            // these should be handled correctly.
-            UChar c;
-            while (limit > offsets.start &&
-                   (c=text.charAt(limit-1)) >= 0x1100 &&
-                   c < 0x1200) {
-                --limit;
-            }
-            // Characters in [limit, offsets.limit) are jamo.
-            // If we have at least 3 jamo, then allow them
-            // to be transliterated.  If we have zero jamo,
-            // then proceed as usual.
-            if (limit < offsets.limit) {
-                if ((offsets.limit - limit) >= 3) {
-                    limit += 3;
-                }
-                doStandardBackup = FALSE;
-            }
-        }
-
-        if (doStandardBackup) {
-            --limit;
-            while (limit > start &&
-                   u_getCombiningClass(text.charAt(limit)) != 0) {
-                --limit;
-            }
-        }
+    if(start >= limit) {
+        return;
     }
 
-    if (limit > start) {
+    // a C code unit iterator, implemented around the Replaceable
+    UCharIterator iter = replaceableIterator;
+    iter.context = &text;
+    // iter.length = text.length(); is not used
 
-        UChar staticChars[256];
-        UChar* chars = staticChars;
+    // the output string and buffer pointer
+    UnicodeString output;
+    UChar *buffer;
 
-        if ((limit - start) > 255) {
-            // Allocate extra buffer space if needed
-            chars = new UChar[limit-start+1];
-            if (chars == NULL) {
-                return;
-            }
+    UErrorCode errorCode;
+
+    /*
+     * Normalize as short chunks at a time as possible even in
+     * bulk mode, so that styled text is minimally disrupted.
+     * In incremental mode, a chunk that ends with offsets.limit
+     * must not be normalized.
+     *
+     * If it was known that the input text is not styled, then
+     * a bulk mode normalization could look like this:
+     *
+
+    UChar staticChars[256];
+    UnicodeString input;
+
+    length = limit - start;
+    input.setTo(staticChars, 0, sizeof(staticChars)/U_SIZEOF_UCHAR); // writable alias
+
+    _Replaceable_extractBetween(text, start, limit, input.getBuffer(length));
+    input.releaseBuffer(length);
+
+    UErrorCode status = U_ZERO_ERROR;
+    Normalizer::normalize(input, fMode, options, output, status);
+
+    text.handleReplaceBetween(start, limit, output);
+
+    int32_t delta = output.length() - length;
+    offsets.contextLimit += delta;
+    offsets.limit += delta;
+    offsets.start = limit + delta;
+
+     *
+     */
+    while(start < limit) {
+        // set the iterator limits for the remaining input range
+        // this is a moving target because of the replacements in the text object
+        iter.start = iter.index = start;
+        iter.limit = limit;
+
+        // incrementally normalize a small chunk of the input
+        buffer = output.getBuffer(-1);
+        errorCode = U_ZERO_ERROR;
+        length = unorm_nextNormalize(buffer, output.getCapacity(), &iter,
+                                     fMode, FALSE, &errorCode);
+        output.releaseBuffer(length);
+
+        if(errorCode == U_BUFFER_OVERFLOW_ERROR) {
+            // use a larger output string buffer and do it again from the start
+            iter.index = start;
+            buffer = output.getBuffer(length);
+            errorCode = U_ZERO_ERROR;
+            length = unorm_nextNormalize(buffer, output.getCapacity(), &iter,
+                                         fMode, FALSE, &errorCode);
+            output.releaseBuffer(length);
         }
 
-        _Replaceable_extractBetween(text, start, limit, chars);
-
-        UnicodeString input(FALSE, chars, limit-start); // readonly alias
-        UnicodeString output;
-        UErrorCode status = U_ZERO_ERROR;
-        Normalizer::normalize(input, fMode, options, output, status);
-
-        if (chars != staticChars) {
-            delete[] chars;
+        if(U_FAILURE(errorCode)) {
+            break;
         }
 
+        limit = iter.index;
+        if(isIncremental && limit == iter.limit) {
+            // stop in incremental mode when we reach the input limit
+            // in case there are additional characters that could change the
+            // normalization result
+            break;
+        }
+
+        // replace the input chunk with its normalized form
         text.handleReplaceBetween(start, limit, output);
 
-        int32_t delta = output.length() - input.length();
+        // update all necessary indexes accordingly
+        delta = length - (limit - start);   // length change in the text object
+        start = limit += delta;             // the next chunk starts where this one ends, with adjustment
+        limit = offsets.limit += delta;     // set the iteration limit to the adjusted end of the input range
         offsets.contextLimit += delta;
-        offsets.limit += delta;
-        offsets.start = limit + delta;
     }
+
+    offsets.start = start;
 }
 
 U_NAMESPACE_END
-
