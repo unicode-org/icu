@@ -1,6 +1,6 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 
-<html>
+<html lang="en-US">
   <head>
     <meta name="generator" content="HTML Tidy, see www.w3.org">
     <meta name="GENERATOR" content="Microsoft FrontPage 4.0">
@@ -13,7 +13,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 
     <title>ReadMe for ICU</title>
-    <style type="text/css">
+<style type="text/css">
       h1 {border-width: 2px; border-style: solid; text-align: center; width: 100%; font-size: 200%; font-weight: bold}
       h2 {margin-top: 3em; text-decoration: underline; page-break-before: always}
       h2.TOC {page-break-before: auto}
@@ -27,11 +27,12 @@
 </style>
   </head>
 
-  <body lang="en-US">
+  <body>
     <h1>International Components for Unicode<br>
-     ICU 2.4 ReadMe</h1>
+     <abbr title="International Components for Unicode">ICU</abbr> 2.4
+    ReadMe</h1>
 
-    <p>Version: 2002-Dec-05<br>
+    <p>Version: 2002-Dec-09<br>
      Copyright &copy; 1997-2002 International Business Machines Corporation and
     others. All Rights Reserved.</p>
     <!-- Remember that there is a copyright at the end too -->
@@ -69,15 +70,13 @@
       </li>
 
       <li>
-        <a href="#MakeICUSmaller">How to Make ICU Smaller</a>
-      </li>
-
-      <li>
         <a href="#ImportantNotes">Important Notes About Using ICU</a> 
 
         <ul class="TOC">
           <li><a href="#ImportantNotesCPlusPlus">Using ICU in a Multithreaded
           Environment</a></li>
+
+          <li><a href="#MakeICUSmaller">How to Make ICU Smaller</a></li>
 
           <li><a href="#ImportantNotesBinaryCompat">Binary
           Compatibility</a></li>
@@ -216,37 +215,38 @@
 
     <h3>UnicodeString assignments</h3>
 
-    <p>ICU 2.4 changes the behavior of the <code>UnicodeString</code> assignment operator
-    and copy constructor for where the source string is a readonly alias.
-    For such strings, the copy used to also be a readonly alias to the same buffer,
-    but that was seen as too dangerous (see <a href="http://www.jtcsv.com/cgibin/icu-bugs?findid=2296">Jitterbug 2296</a>).
-    The new <code>fastCopyFrom()</code> member function provides the old
-    assignment behavior.
-    It can be used explicitly when it is known to be safe to maintain readonly aliases
-    instead of cloning the buffer.
-    For more information about string aliasing and other <code>UnicodeString</code> storage models
-    see the <a href="http://oss.software.ibm.com/icu/userguide/strings.html">User Guide Strings chapter</a>.</p>
+    <p>ICU 2.4 changes the behavior of the <code>UnicodeString</code>
+    assignment operator and copy constructor for where the source string is a
+    readonly alias. For such strings, the copy used to also be a readonly alias
+    to the same buffer, but that was seen as too dangerous (see <a href=
+    "http://www.jtcsv.com/cgibin/icu-bugs?findid=2296">Jitterbug 2296</a>). The
+    new <code>fastCopyFrom()</code> member function provides the old assignment
+    behavior. It can be used explicitly when it is known to be safe to maintain
+    readonly aliases instead of cloning the buffer. For more information about
+    string aliasing and other <code>UnicodeString</code> storage models see the
+    <a href="http://oss.software.ibm.com/icu/userguide/strings.html">User Guide
+    Strings chapter</a>.</p>
 
     <h3>Unicode-handling macros (utf*.h)</h3>
 
     <p>The macros in <code>source/common/unicode/utf*.h</code> have been
     revamped, improved, simplified, and renamed. The old macros continue to be
     available. They are in <code>utf_old.h</code>, together with an explanation
-    of the change. <code>utf.h</code>, <code>utf8.h</code> and <code>utf16.h</code>
-    contain the new macros instead. The new macros are intended to be more
-    consistent, more useful, and less confusing. Some macros were simply renamed
-    for consistency with a new naming scheme.</p>
+    of the change. <code>utf.h</code>, <code>utf8.h</code> and
+    <code>utf16.h</code> contain the new macros instead. The new macros are
+    intended to be more consistent, more useful, and less confusing. Some
+    macros were simply renamed for consistency with a new naming scheme.</p>
 
-    <p>A related change is that <code>UChar32</code> is not a platform-dependent
-    type any more, but is now always defined to be the same as <code>int32_t</code>.
-    This allows for consistent, more portable code and C++ function overloading
-    as well as negative values as sentinels on all platforms. See the definition
-    in <code>utf.h</code>.</p>
+    <p>A related change is that <code>UChar32</code> is not a
+    platform-dependent type any more, but is now always defined to be the same
+    as <code>int32_t</code>. This allows for consistent, more portable code and
+    C++ function overloading as well as negative values as sentinels on all
+    platforms. See the definition in <code>utf.h</code>.</p>
 
     <h3>ICU code library size</h3>
 
-    <p>ICU code libraries can be made smaller by removing functionality. See <a href="#MakeICUSmaller">How
-    to Make ICU Smaller</a>.</p>
+    <p>ICU code libraries can be made smaller by removing functionality. See <a
+    href="#MakeICUSmaller">How to Make ICU Smaller</a>.</p>
 
     <h3>Support for Unicode 3.2</h3>
 
@@ -411,6 +411,12 @@
       </caption>
 
       <tr>
+        <th scope="col">File</th>
+
+        <th scope="col">Description</th>
+      </tr>
+
+      <tr>
         <td>readme.html</td>
 
         <td>Describes the International Components for Unicode (this file)</td>
@@ -430,6 +436,12 @@
       <caption>
         The following directories contain source code and data files.
       </caption>
+
+      <tr>
+        <th scope="col">Directory</th>
+
+        <th scope="col">Description</th>
+      </tr>
 
       <tr>
         <td><i>&lt;ICU&gt;</i>/source/<b>common</b>/</td>
@@ -609,11 +621,11 @@
       </caption>
 
       <tr>
-        <th>Operating system</th>
+        <th scope="col">Operating system</th>
 
-        <th>Compiler</th>
+        <th scope="col">Compiler</th>
 
-        <th>Testing frequency</th>
+        <th scope="col">Testing frequency</th>
       </tr>
 
       <tr>
@@ -675,15 +687,8 @@
       <tr>
         <td>Solaris 8 (SunOS 5.8)</td>
 
-        <td rowspan=2>Workshop Pro CC 4.2<br>(use 'runConfigureICU SOLARISCC/W4.2')</td>
-
-        <td>Regularly tested</td>
-      </tr>
-
-      <tr>
-        <td>Solaris 7 (SunOS 5.7)</td>
-
-	<!-- from previous row -->
+        <td>Workshop Pro CC 4.2<br>
+         (use 'runConfigureICU SOLARISCC/W4.2')</td>
 
         <td>Regularly tested</td>
       </tr>
@@ -1180,8 +1185,8 @@ Data set name type  : PDS</samp>
     <p>ICU Reference Release 2.4 contains partial support for the iSeries
     platform. After building ICU and running the tests, you may notice that
     some of the formatting tests fail. The formating failures can be ignored
-    for now. These failures are expected to be resolved in a future release
-    of ICU.</p>
+    for now. These failures are expected to be resolved in a future release of
+    ICU.</p>
 
     <p>The following describes how to setup and build ICU.</p>
 
@@ -1198,7 +1203,8 @@ Data set name type  : PDS</samp>
 
           <li>The latest GNU facilities (You can get the GNU facilities for
           OS/400 from <a href=
-          "http://www.as400.ibm.com/developer/factory/porting/gnu_utilities.html">http://www.as400.ibm.com/developer/factory/porting/gnu_utilities.html</a>).
+          "http://www.as400.ibm.com/developer/factory/porting/gnu_utilities.html">
+          http://www.as400.ibm.com/developer/factory/porting/gnu_utilities.html</a>).
           Older versions may not work properly.</li>
         </ul>
         <!-- end requirements -->
@@ -1278,37 +1284,6 @@ ADDENVVAR ENVVAR(QIBM_MULTI_THREADED) VALUE('Y')</samp>
       </li>
     </ul>
 
-    <h2><a name="MakeICUSmaller">How to Make ICU Smaller</a></h2>
-
-    <p>For some environments, ICU &quot;is too large&quot;. There are two ways
-    to remove parts and make it smaller: Remove some of its library code modules
-    from the build (reducing functionality), or remove some of its data
-    (possibly reducing only codepage/locale/etc. coverage without sacrifycing
-    overall functionality). For details about reducing the data size see the <a href="http://oss.software.ibm.com/icu/userguide/">User
-    Guide</a> &quot;ICU Data&quot; chapter.</p>
-
-    <p>The header file <code>source/common/unicode/uconfig.h</code> contains
-    source-code-level &quot;switches&quot; corresponding to <code>#if</code>
-    directives in the ICU source code. Setting one of the <code>UCONFIG_NO_...</code>
-    switches to 1 (by setting <code>CFLAGS/CPPFLAGS</code> or adding a <code>#define</code>
-    at the beginning of <code>uconfig.h</code>) turns off the code associated
-    with one of the ICU service modules. Setting one of the <code>UCONFIG_ONLY_...</code>
-    switches to 1 turns off all modules that are not essential for the
-    functioning of the associated &quot;only&quot; service. For the current set
-    of available switches see <code>uconfig.h</code> itself.</p>
-
-    <p>When a source code module is turned off, then the data-building makefiles
-    should be modified to not generate the data files that are used with that
-    module. Some of the data-generating genxyz tools rely on the module itself
-    to build its data; they will generate dummy data files to satisfy the
-    dependencies of the unmodified makefiles (to make these switches easily
-    testable). Other data files for which the tools do not rely on the related
-    library modules (e.g., mapping tables [<code>.cnv</code>] and transliterator
-    files [<code>.res</code>, from <code>source/data/translit/</code>]) continue
-    to be built unless the data makefiles are modified. For further details on
-    data building see the <a href="http://oss.software.ibm.com/icu/userguide/">User
-    Guide</a> &quot;ICU Data&quot; chapter.</p>
-
     <h2><a name="ImportantNotes" href="#ImportantNotes">Important Notes About
     Using ICU</a></h2>
 
@@ -1334,6 +1309,40 @@ ADDENVVAR ENVVAR(QIBM_MULTI_THREADED) VALUE('Y')</samp>
     <p>ICU does not use C++ static initialization for anything else, and
     disabling threads in ICU will disable all C++ static initialization in
     ICU.</p>
+
+    <h3><a name="MakeICUSmaller" href="#MakeICUSmaller">How to Make ICU
+    Smaller</a></h3>
+
+    <p>For some environments, ICU "is too large". There are two ways to remove
+    parts and make it smaller: Remove some of its library code modules from the
+    build (reducing functionality), or remove some of its data (possibly
+    reducing only codepage/locale/etc. coverage without sacrifycing overall
+    functionality). For details about reducing the data size see the <a href=
+    "http://oss.software.ibm.com/icu/userguide/">User Guide</a> "ICU Data"
+    chapter.</p>
+
+    <p>The header file <code>source/common/unicode/uconfig.h</code> contains
+    source-code-level "switches" corresponding to <code>#if</code> directives
+    in the ICU source code. Setting one of the <code>UCONFIG_NO_...</code>
+    switches to 1 (by setting <code>CFLAGS/CPPFLAGS</code> or adding a
+    <code>#define</code> at the beginning of <code>uconfig.h</code>) turns off
+    the code associated with one of the ICU service modules. Setting one of the
+    <code>UCONFIG_ONLY_...</code> switches to 1 turns off all modules that are
+    not essential for the functioning of the associated "only" service. For the
+    current set of available switches see <code>uconfig.h</code> itself.</p>
+
+    <p>When a source code module is turned off, then the data-building
+    makefiles should be modified to not generate the data files that are used
+    with that module. Some of the data-generating genxyz tools rely on the
+    module itself to build its data; they will generate dummy data files to
+    satisfy the dependencies of the unmodified makefiles (to make these
+    switches easily testable). Other data files for which the tools do not rely
+    on the related library modules (e.g., mapping tables [<code>.cnv</code>]
+    and transliterator files [<code>.res</code>, from
+    <code>source/data/translit/</code>]) continue to be built unless the data
+    makefiles are modified. For further details on data building see the <a
+    href="http://oss.software.ibm.com/icu/userguide/">User Guide</a> "ICU Data"
+    chapter.</p>
 
     <h3><a name="ImportantNotesBinaryCompat" href=
     "#ImportantNotesBinaryCompat">Binary Compatibility</a></h3>
