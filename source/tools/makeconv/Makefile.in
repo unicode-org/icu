@@ -23,6 +23,7 @@ bindir = @bindir@
 sbindir = @sbindir@
 datadir = @datadir@
 libdir = @libdir@
+mandir = @mandir@
 includedir = @includedir@
 
 pkgdatadir = $(datadir)/@PACKAGE@
