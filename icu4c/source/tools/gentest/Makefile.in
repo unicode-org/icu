@@ -89,7 +89,7 @@ install-local: all-local build-data
 	$(mkinstalldirs) $(DESTDIR)$(sbindir)
 	$(INSTALL) $(TARGET) $(DESTDIR)$(sbindir)/$(TARGET)
 
-build-data: $(TESTFILES)
+build-data: $(TEST_FILES)
 
 # we set the ICU_DATA directory here so that test.dat ends up in 
 # icu/data rather than PREFIX/share/icu/VERSION/
