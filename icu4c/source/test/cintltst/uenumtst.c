@@ -98,8 +98,29 @@ UEnumeration chEnum = {
     chArrayCount,
     chArrayUNext,
     chArrayNext,
-    chArrayReset   
+    chArrayReset
 };
+
+static const UEnumeration emptyEnumerator = {
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+};
+
+static const UEnumeration emptyPartialEnumerator = {
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    uenum_unextDefault,
+    NULL,
+    NULL,
+};
+
 
 static UEnumeration *getchArrayEnum(const char** source, int32_t size) {
     UEnumeration *en = (UEnumeration *)malloc(sizeof(UEnumeration));
@@ -126,9 +147,56 @@ static void EnumerationTest(void) {
     uenum_close(en);
 }
 
+static void EmptyEnumerationTest(void) {
+    UErrorCode status = U_ZERO_ERROR;
+    UEnumeration *emptyEnum = uprv_malloc(sizeof(UEnumeration));
+
+    uprv_memcpy(emptyEnum, &emptyEnumerator, sizeof(UEnumeration));
+    if (uenum_count(emptyEnum, &status) != -1 || status != U_UNSUPPORTED_ERROR) {
+        log_err("uenum_count failed\n");
+    }
+    status = U_ZERO_ERROR;
+    if (uenum_next(emptyEnum, NULL, &status) != NULL || status != U_UNSUPPORTED_ERROR) {
+        log_err("uenum_next failed\n");
+    }
+    status = U_ZERO_ERROR;
+    if (uenum_unext(emptyEnum, NULL, &status) != NULL || status != U_UNSUPPORTED_ERROR) {
+        log_err("uenum_unext failed\n");
+    }
+    status = U_ZERO_ERROR;
+    uenum_reset(emptyEnum, &status);
+    if (status != U_UNSUPPORTED_ERROR) {
+        log_err("uenum_reset failed\n");
+    }
+    uenum_close(emptyEnum);
+
+    status = U_ZERO_ERROR;
+    if (uenum_next(NULL, NULL, &status) != NULL || status != U_ZERO_ERROR) {
+        log_err("uenum_next(NULL) failed\n");
+    }
+    status = U_ZERO_ERROR;
+    if (uenum_unext(NULL, NULL, &status) != NULL || status != U_ZERO_ERROR) {
+        log_err("uenum_unext(NULL) failed\n");
+    }
+    status = U_ZERO_ERROR;
+    uenum_reset(NULL, &status);
+    if (status != U_ZERO_ERROR) {
+        log_err("uenum_reset(NULL) failed\n");
+    }
+
+    emptyEnum = uprv_malloc(sizeof(UEnumeration));
+    uprv_memcpy(emptyEnum, &emptyPartialEnumerator, sizeof(UEnumeration));
+    status = U_ZERO_ERROR;
+    if (uenum_unext(emptyEnum, NULL, &status) != NULL || status != U_UNSUPPORTED_ERROR) {
+        log_err("partial uenum_unext failed\n");
+    }
+    uenum_close(emptyEnum);
+}
+
 void addEnumerationTest(TestNode** root);
 
 void addEnumerationTest(TestNode** root)
 {
     addTest(root, &EnumerationTest, "tsutil/uenumtst/EnumerationTest");
+    addTest(root, &EmptyEnumerationTest, "tsutil/uenumtst/EmptyEnumerationTest");
 }
