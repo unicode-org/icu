@@ -121,12 +121,9 @@ void pkg_mode_dll(UPKGOptions *o, FileStream *makefile, UErrorCode *status)
   else if (uprv_strcmp(o->shortName, U_ICUDATA_NAME"_390") == 0)
     sprintf(tmp, "# File to make:\nBATCH_TARGET=\"//'${LOADMOD}(IXMICUD1)'\"\n\n"); 
   T_FileStream_writeLine(makefile, tmp);
-
-  /* sprintf(tmp, "# File to make (OS390BATCH):\nTARGET='${LOADMOD}(%s)'\n\n", o->shortName); */ 
-  sprintf(tmp, "# File to make (OS390BATCH):\nTARGET='${LOADMOD}(%s)'\"\n\n", o->shortName); 
-#else
-  sprintf(tmp, "# File to make:\nTARGET=%s\n\n", o->outFiles->str);
 #endif
+
+  sprintf(tmp, "# File to make:\nTARGET=%s\n\n", o->outFiles->str);
   T_FileStream_writeLine(makefile, tmp);
 
   sprintf(tmp, "all: $(TARGETDIR)/$(TARGET) $(BATCH_TARGET)\n\n");
