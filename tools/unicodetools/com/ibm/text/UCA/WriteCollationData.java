@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCA/WriteCollationData.java,v $ 
-* $Date: 2003/08/20 03:48:43 $ 
-* $Revision: 1.33 $
+* $Date: 2003/08/21 07:32:51 $ 
+* $Revision: 1.34 $
 *
 *******************************************************************************
 */
@@ -1785,6 +1785,7 @@ F900..FAFF; CJK Compatibility Ideographs
         
         String filename = "UCA_Rules";
         if (shortPrint) filename += "_SHORT";
+        if (noCE) filename += "_NoCE";
         if (option == IN_XML) filename += ".xml"; else filename += ".txt";
         
         log = Utility.openPrintWriter(UCA_GEN_DIR, filename, Utility.UTF8_WINDOWS);
@@ -4122,6 +4123,10 @@ static int swapCJK(int i) {
         log.println("<table><tr><td>Generated: </td><td>" + getNormalDate() + "</td></tr>");
         log.println("<tr><td>File Version: </td><td>" + collator.getDataVersion() + "/" + collator.getUCDVersion() + "</td></tr></table>");
         
+        if (collator.getDataVersion() == UCA.BADVERSION) {
+            log.println(SERIOUS_ERROR);
+        }
+
         
         if (GENERATED_NFC_MISMATCHES) showMismatches();
         removeAdjacentDuplicates2();
@@ -4153,10 +4158,10 @@ static int swapCJK(int i) {
         int canCount = 0;
         System.out.println("Add missing decomposibles");
     	log.println("<h2>7. Comparing Other Equivalents</h2>");
-    	log.println("<p>These are not necessarily errors, but should be examined for <i>possible</i> errors</p>");
+    	log.println("<p>These are usually problems with contractions.</p>");
     	log.println("<p>Each of the three strings is canonically equivalent, but has different sort keys</p>");
         log.println("<table border='1' cellspacing='0' cellpadding='2'>");
-        log.println("<tr><th>Count</th><th>Name</th><th>Code</th><th>Sort Keys</th></tr>");
+        log.println("<tr><th>Count</th><th>Type</th><th>Name</th><th>Code</th><th>Sort Keys</th></tr>");
     	
         
         Set contentsForCanonicalIteration = new TreeSet();
@@ -4206,28 +4211,42 @@ static int swapCJK(int i) {
                     System.out.println(" " + ucd.getCodeAndName(key));
                     first = false;
                 }
-                log.println("<tr><td rowspan='3'>" + (++canCount) + "</td><td>" + Utility.replace(ucd.getName(key), ", ", ",<br>") + "</td>");
+                log.println("<tr><td rowspan='3'>" + (++canCount) + 
+                    "</td><td>Orig.</td><td>" + Utility.replace(ucd.getName(key), ", ", ",<br>") + "</td>");
                 log.println("<td>" + Utility.hex(key) + "</td>");
                 log.println("<td>" + collator.toString(sortKey) + "</td></tr>");
-                log.println("<tr><td>" + Utility.replace(ucd.getName(nfdKey), ", ", ",<br>") + "</td>");
+                log.println("<tr><td>NFD</td><td>" + Utility.replace(ucd.getName(nfdKey), ", ", ",<br>") + "</td>");
                 log.println("<td>" + Utility.hex(nfdKey) + "</td>");
                 log.println("<td>" + collator.toString(sortKey) + "</td></tr>");
-                log.println("<tr><td class='bottom'>" + Utility.replace(ucd.getName(s), ", ", ",<br>") + "</td>");
+                log.println("<tr><td>Equiv.</td><td class='bottom'>" + Utility.replace(ucd.getName(s), ", ", ",<br>") + "</td>");
                 log.println("<td class='bottom'>" + Utility.hex(s) + "</td>");
                 log.println("<td class='bottom'>" + collator.toString(nonDecompSortKey) + "</td></tr>");
                 additionalSet.add(s);
             }
         }
     	log.println("</table>");
-    	log.println("<p>Items: " + canCount + "</p>");
+    	log.println("<p>Errors: " + canCount + "</p>");
+        if (canCount != 0) {
+            log.println(IMPORTANT_ERROR);
+        }
     	log.flush();
     }
     
 	static void checkWellformedTable() throws IOException {
-    	System.out.println("Checking for well-formedness");
+        int errorCount = 0;
+       	System.out.println("Checking for well-formedness");
     	
     	log.println("<h2>6. Checking for well-formedness</h2>");
-    	
+        if (collator.haveVariableWarning) {
+            log.println("<p><b>Ill-formed: alternate values overlap!</b></p>");
+            errorCount++;           
+        }
+        
+        if (collator.haveZeroVariableWarning) {
+            log.println("<p><b>Ill-formed: alternate values on zero primaries!</b></p>"); 
+            errorCount++;          
+        }
+        
         Normalizer nfd = new Normalizer(Normalizer.NFD, UNICODE_VERSION);
         
         int[] ces = new int[50];
@@ -4238,7 +4257,6 @@ static int swapCJK(int i) {
         int minps = Integer.MAX_VALUE;
         int minpst = Integer.MAX_VALUE;
         String minpsSample = "", minpstSample = "";
-        int errorCount = 0;
         
         while (true) {
             String str = cc.next(ces, lenArray);
@@ -4356,8 +4374,15 @@ static int swapCJK(int i) {
                 
         
         log.println("<p>Errors: " + errorCount + "</p>");
+        if (errorCount != 0) {
+            log.println(SERIOUS_ERROR);
+        }
     	log.flush();
     }
+    
+
+static final String SERIOUS_ERROR = "<p><b><font color='#FF0000'>SERIOUS_ERROR!</font></b></p>";
+static final String IMPORTANT_ERROR = "<p><b><font color='#FF0000'>IMPORTANT_ERROR!</font></b></p>";
     
     
 /*            
@@ -4635,6 +4660,9 @@ A4C6;YI RADICAL KE;So;0;ON;;;;;N;;;;;
         }
         log.println("</table>");
         log.println("<p>Errors: " + errorCount + "</p>");
+        if (errorCount != 0) {
+            log.println(IMPORTANT_ERROR);
+        }
         log.println("<br>");
     	log.flush();
     }
