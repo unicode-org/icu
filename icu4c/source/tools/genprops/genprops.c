@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1999-2002, International Business Machines
+*   Copyright (C) 1999-2003, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -13,8 +13,8 @@
 *   created on: 1999dec08
 *   created by: Markus W. Scherer
 *
-*   This program reads the Unicode character database text file,
-*   parses it, and extracts most of the properties for each character.
+*   This program reads several of the Unicode character database text files,
+*   parses them, and extracts most of the properties for each character.
 *   It then writes a binary file containing the properties
 *   that is designed to be used directly for random-access to
 *   the properties of each Unicode character.
@@ -24,6 +24,7 @@
 #include <stdlib.h>
 #include "unicode/utypes.h"
 #include "unicode/uchar.h"
+#include "unicode/uset.h"
 #include "unicode/putil.h"
 #include "cmemory.h"
 #include "cstring.h"
@@ -40,6 +41,14 @@ U_CDECL_END
 #define LENGTHOF(array) (sizeof(array)/sizeof((array)[0]))
 
 UBool beVerbose=FALSE, haveCopyright=TRUE;
+
+/*
+ * Unicode set collecting the case-sensitive characters;
+ * see uchar.h UCHAR_CASE_SENSITIVE.
+ * Add code points from case mappings/foldings in
+ * the root locale and with default options.
+ */
+static USet *caseSensitive;
 
 /* prototypes --------------------------------------------------------------- */
 
@@ -79,7 +88,7 @@ main(int argc, char* argv[]) {
     /* preset then read command line options */
     options[4].value=u_getDataDirectory();
     options[5].value="";
-    options[6].value="3.0.0";
+    options[6].value="";
     argc=u_parseArgs(argc, argv, sizeof(options)/sizeof(options[0]), options);
 
     /* error handling, printing usage message */
@@ -127,7 +136,10 @@ main(int argc, char* argv[]) {
         suffix=NULL;
     }
 
-    setUnicodeVersion(options[6].value);
+    if(options[6].doesOccur) {
+        setUnicodeVersion(options[6].value);
+    }
+    /* else use the default dataVersion in store.c */
 
     /* prepare the filename beginning with the source dir */
     uprv_strcpy(filename, srcDir);
@@ -138,6 +150,7 @@ main(int argc, char* argv[]) {
 
     /* initialize */
     initStore();
+    caseSensitive=uset_open(1, 0); /* empty set (start>end) */
 
     /* process BidiMirroring.txt */
     writeUCDFilename(basename, "BidiMirroring", suffix);
@@ -232,6 +245,18 @@ getTokenIndex(const char *const tokens[], int32_t countTokens, const char *s) {
     return -1;
 }
 
+static void
+_set_addAll(USet *set, const UChar *s, int32_t length) {
+    UChar32 c;
+    int32_t i;
+
+    /* needs length>=0 */
+    for(i=0; i<length; /* U16_NEXT advances i */) {
+        U16_NEXT(s, i, length, c);
+        uset_add(set, c);
+    }
+}
+
 /* parser for BidiMirroring.txt --------------------------------------------- */
 
 #define MAX_MIRROR_COUNT 2000
@@ -311,7 +336,7 @@ specialCasingLineFn(void *context,
     }
 
     /* is this a complex mapping? */
-    if(*u_skipWhitespace(fields[4][0])!=0) {
+    if(*(end=(char *)u_skipWhitespace(fields[4][0]))!=0 && *end!=';' && *end!='#') {
         /* there is some condition text in the fifth field */
         specialCasings[specialCasingCount].isComplex=TRUE;
 
@@ -332,6 +357,11 @@ specialCasingLineFn(void *context,
             fprintf(stderr, "genprops: error parsing special casing at %s\n", fields[0][0]);
             exit(*pErrorCode);
         }
+
+        uset_add(caseSensitive, (UChar32)specialCasings[specialCasingCount].code);
+        _set_addAll(caseSensitive, specialCasings[specialCasingCount].lowerCase+1, specialCasings[specialCasingCount].lowerCase[0]);
+        _set_addAll(caseSensitive, specialCasings[specialCasingCount].upperCase+1, specialCasings[specialCasingCount].upperCase[0]);
+        _set_addAll(caseSensitive, specialCasings[specialCasingCount].titleCase+1, specialCasings[specialCasingCount].titleCase[0]);
     }
 
     if(++specialCasingCount==MAX_SPECIAL_CASING_COUNT) {
@@ -381,6 +411,14 @@ parseSpecialCasing(const char *filename, UErrorCode *pErrorCode) {
         qsort(specialCasings, specialCasingCount, sizeof(SpecialCasing), compareSpecialCasings);
         specialCasingCount-=j;
     }
+
+    /*
+     * Add one complex mapping to caseSensitive that was filtered out above:
+     * Greek final Sigma has a conditional mapping but not locale-sensitive,
+     * and it is taken when lowercasing just U+03A3 alone.
+     * 03A3; 03C2; 03A3; 03A3; Final_Sigma; # GREEK CAPITAL LETTER SIGMA
+     */
+    uset_add(caseSensitive, 0x3c2);
 }
 
 /* parser for CaseFolding.txt ----------------------------------------------- */
@@ -432,6 +470,12 @@ caseFoldingLineFn(void *context,
     /* there is a simple mapping only if there is exactly one code point (count is in UChars) */
     if(count==0 || count>2 || (count==2 && UTF_IS_SINGLE(caseFoldings[caseFoldingCount].full[1]))) {
         caseFoldings[caseFoldingCount].simple=0;
+    }
+
+    /* update the case-sensitive set */
+    if(status!='T') {
+        uset_add(caseSensitive, (UChar32)caseFoldings[caseFoldingCount].code);
+        _set_addAll(caseSensitive, caseFoldings[caseFoldingCount].full+1, caseFoldings[caseFoldingCount].full[0]);
     }
 
     /* check the status */
@@ -720,7 +764,11 @@ unicodeDataLineFn(void *context,
         *pErrorCode=U_PARSE_ERROR;
         exit(U_PARSE_ERROR);
     }
-    p.upperCase=value;
+    if(value!=0 && value!=p.code) {
+        p.upperCase=value;
+        uset_add(caseSensitive, (UChar32)p.code);
+        uset_add(caseSensitive, (UChar32)value);
+    }
 
     /* get lowercase value, field 13 */
     value=(uint32_t)uprv_strtoul(fields[13][0], &end, 16);
@@ -730,7 +778,11 @@ unicodeDataLineFn(void *context,
         *pErrorCode=U_PARSE_ERROR;
         exit(U_PARSE_ERROR);
     }
-    p.lowerCase=value;
+    if(value!=0 && value!=p.code) {
+        p.lowerCase=value;
+        uset_add(caseSensitive, (UChar32)p.code);
+        uset_add(caseSensitive, (UChar32)value);
+    }
 
     /* get titlecase value, field 14 */
     value=(uint32_t)uprv_strtoul(fields[14][0], &end, 16);
@@ -740,7 +792,11 @@ unicodeDataLineFn(void *context,
         *pErrorCode=U_PARSE_ERROR;
         exit(U_PARSE_ERROR);
     }
-    p.titleCase=value;
+    if(value!=0 && value!=p.code) {
+        p.titleCase=value;
+        uset_add(caseSensitive, (UChar32)p.code);
+        uset_add(caseSensitive, (UChar32)value);
+    }
 
     /* set additional properties from previously parsed files */
     if(mirrorIndex<mirrorCount && p.code==mirrorMappings[mirrorIndex][0]) {
@@ -899,6 +955,7 @@ parseDB(const char *filename, UErrorCode *pErrorCode) {
     };
 
     char *fields[15][2];
+    UChar32 start, end;
     uint32_t prev;
     int32_t i;
 
@@ -949,6 +1006,20 @@ parseDB(const char *filename, UErrorCode *pErrorCode) {
         fprintf(stderr, "genprops: error - some code points in CaseFolding.txt are missing from UnicodeData.txt\n");
         *pErrorCode=U_PARSE_ERROR;
         exit(U_PARSE_ERROR);
+    }
+
+    if(U_FAILURE(*pErrorCode)) {
+        return;
+    }
+
+    for(i=0;
+        0==uset_getItem(caseSensitive, i, &start, &end, NULL, 0, pErrorCode) && U_SUCCESS(*pErrorCode);
+        ++i
+    ) {
+        addCaseSensitive(start, end);
+    }
+    if(*pErrorCode==U_INDEX_OUTOFBOUNDS_ERROR) {
+        *pErrorCode=U_ZERO_ERROR;
     }
 }
 
