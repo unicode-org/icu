@@ -42,6 +42,12 @@ DOXYGEN = @DOXYGEN@
 ## Files to remove for 'make clean'
 CLEANFILES = *~ README
 
+## Files built (autoconfed) and installed
+INSTALLED_BUILT_FILES = $(top_builddir)/config/Makefile.inc $(top_builddir)/config/icu-config @platform_make_fragment@ README $(EXTRA_DATA:%=$(DESTDIR)$(pkglibdir)/%)
+
+## Files built (autoconfed) but not installed
+LOCAL_BUILT_FILES = icudefs.mk
+
 DOCDIRS = common i18n
 SUBDIRS =  stubdata common i18n $(LAYOUT) tools data $(EXTRA) $(TEST) $(SAMPLE)
 
@@ -104,10 +110,10 @@ all-recursive install-recursive clean-recursive distclean-recursive dist-recursi
 clean-recursive-with-twist:
 	$(MAKE) clean-recursive LOCAL_SUBDIRS='$(CLEAN_FIRST_SUBDIRS) $(filter-out $(CLEAN_FIRST_SUBDIRS),$(LOCAL_SUBDIRS))'
 
-all-local: $(srcdir)/configure icudefs.mk
+all-local: $(srcdir)/configure $(LOCAL_BUILT_FILES) $(INSTALLED_BUILT_FILES)
 
 install-local: install-icu install-doc
-install-icu: $(top_builddir)/config/Makefile.inc @platform_make_fragment@ README $(EXTRA_DATA:%=$(DESTDIR)$(pkglibdir)/%)
+install-icu: $(INSTALLED_BUILT_FILES)
 	@$(MKINSTALLDIRS) $(DESTDIR)$(pkgdatadir)/config
 	@$(MKINSTALLDIRS) $(DESTDIR)$(pkglibdir)
 	@$(MKINSTALLDIRS) $(DESTDIR)$(sbindir)
@@ -118,6 +124,8 @@ install-icu: $(top_builddir)/config/Makefile.inc @platform_make_fragment@ README
 	$(INSTALL_DATA) @platform_make_fragment@ $(DESTDIR)$(pkgdatadir)/config/@platform_make_fragment_name@
 	$(INSTALL_SCRIPT) $(top_srcdir)/mkinstalldirs $(DESTDIR)$(pkgdatadir)/mkinstalldirs
 	$(INSTALL_DATA) README $(DESTDIR)$(pkgdatadir)/README
+	$(INSTALL_PROGRAM) $(top_builddir)/config/icu-config $(DESTDIR)$(bindir)/icu-config
+
 ifeq ($(DOXYGEN),)
 install-doc:
 else
@@ -161,6 +169,14 @@ Makefile: $(srcdir)/Makefile.in icudefs.mk $(top_builddir)/config.status
 $(top_builddir)/config/Makefile.inc: $(srcdir)/config/Makefile.inc.in  $(top_builddir)/config.status
 	cd $(top_builddir) \
 		&& CONFIG_FILES=$@ CONFIG_HEADERS= $(SHELL) ./config.status
+
+$(top_builddir)/config/icu-config: $(top_builddir)/Makefile $(top_builddir)/config/icu-config-top $(top_builddir)/config/Makefile.inc @platform_make_fragment@ $(top_srcdir)/config/make2sh.sed $(top_srcdir)/config/icu-config-bottom
+	cp $(top_builddir)/config/icu-config-top $@
+	@echo "# Following from @platform_make_fragment@" >> $@
+	sed -f $(top_srcdir)/config/make2sh.sed < $(top_builddir)/config/Makefile.inc | grep -v '#M#' | uniq >> $@
+	sed -f $(top_srcdir)/config/make2sh.sed < @platform_make_fragment@ | grep -v '#M#' | uniq >> $@
+	cat $(top_srcdir)/config/icu-config-bottom >> $@
+	echo "# Rebuilt on "`date` >> $@
 
 config.status: $(srcdir)/configure
 	$(SHELL) ./config.status --recheck
