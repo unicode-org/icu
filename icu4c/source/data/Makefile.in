@@ -166,7 +166,7 @@ TRNS_SRC_FILES=$(TRNS_SOURCE:%=$(TRNSSRCDIR)/%)
 ALL_RES_SOURCE= $(RES_SOURCE) $(TRNS_SOURCE)
 RES_FILES = $(ALL_RES_SOURCE:%.txt=$(BUILDDIR)/%.res)
 
-TEST_RES = casing.txt root.txt te.txt te_IN.txt testtypes.txt testempty.txt DataDrivenCollationTest.txt
+TEST_RES = casing.txt root.txt te.txt te_IN.txt testaliases.txt testtypes.txt testempty.txt DataDrivenCollationTest.txt
 TEST_RES_FILES=$(TEST_RES:%.txt=$(TESTBUILDDIR)/%.res)
 
 INDEX_FILES=$(BUILDDIR)/res_index.txt
