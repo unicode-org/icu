@@ -459,6 +459,7 @@ ibm-33722_P120-1999 { UTR22* }  # Japan EUC with \ <-> Yen mapping
                         # ibm-954 seems to be a superset of ibm-33722
 ibm-1373_P100-2002 { UTR22* }               # Taiwan Big-5 (w/ euro update)
                         ibm-1373 { IBM* }
+                        windows-950 # Alternate mapping. Leave untagged. This is the IBM interpretation of a Windows codepage.
 
 windows-950-2000 { UTR22* }
                         Big5 { IANA* MIME* JAVA* WINDOWS }
@@ -479,6 +480,7 @@ macos-2566-10.2 { UTR22* }
 ibm-1386_P100-2002  { UTR22* }
                         ibm-1386 { IBM* JAVA }
                         cp1386 { JAVA* }
+                        windows-936 # Alternate mapping. Leave untagged. This is the IBM interpretation of a Windows codepage.
                         ibm-1386_VSUB_VPUA
                         # zh_cn
 
@@ -578,6 +580,7 @@ ibm-1363_P11B-1998 { UTR22* }
                         5601
                         cp1363
                         ksc
+                        windows-949 # Alternate mapping. Leave untagged. This is the IBM interpretation of a Windows codepage.
                         ibm-1363_VSUB_VPUA
                         # ks_x_1001:1992
                         # ksc5601-1992
@@ -603,7 +606,7 @@ ibm-874_P100-1995 { UTR22* }    # Thai PC (w/o euro update).
                         ibm-874 { IBM* JAVA }
                         ibm-9066 { IBM }    # Yes ibm-874 == ibm-9066. ibm-1161 has the euro update.
                         cp874 { JAVA* }
-                        TIS-620 { IANA* JAVA } # This actually separate from ibm-874, which is similar to this table
+                        TIS-620 { IANA* JAVA }  # This actually separate from ibm-874, which is similar to this table
                         tis620.2533 { JAVA }    # This actually separate from ibm-874, which is similar to this table
                         eucTH               # eucTH is an unusual alias from Solaris.  eucTH has fewer mappings than TIS620
                         cp9066
@@ -639,32 +642,34 @@ ibm-902_P100-1999 { UTR22* }    ibm-902 { IBM* } # PC Estonian (w/ euro update),
 ibm-922_P100-1999 { UTR22* }    ibm-922 { IBM* JAVA }   cp922 { MIME* JAVA* } 922 { JAVA } # PC Estonian (w/o euro update)
 ibm-4909_P100-1999 { UTR22* }   ibm-4909 { IBM* } # ISO Greek (w/ euro update), update of ibm-813
 
-# The cp aliases in this section aren't really windows aliases, but it's used by ICU for Windows.
+# The cp aliases in this section aren't really windows aliases, but it was used by ICU for Windows.
+# cp is used to denote IBM in Java, and that is why we don't do that anymore.
+# The windows-* aliases mean windows codepages.
 ibm-5346_P100-1998 { UTR22* }   ibm-5346 { IBM* } windows-1250 { IANA* JAVA* WINDOWS* } cp1250 { WINDOWS }  # Windows Latin2 (w/ euro update)
 ibm-5347_P100-1998 { UTR22* }   ibm-5347 { IBM* } windows-1251 { IANA* JAVA* WINDOWS* } cp1251 { WINDOWS }  # Windows Cyrillic (w/ euro update)
 ibm-5348_P100-1997 { UTR22* }   ibm-5348 { IBM* } windows-1252 { IANA* JAVA* WINDOWS* } cp1252 { WINDOWS }  # Windows Latin1 (w/ euro update)
 ibm-5349_P100-1998 { UTR22* }   ibm-5349 { IBM* } windows-1253 { IANA* JAVA* WINDOWS* } cp1253 { WINDOWS }  # Windows Greek (w/ euro update)
 ibm-5350_P100-1998 { UTR22* }   ibm-5350 { IBM* } windows-1254 { IANA* JAVA* WINDOWS* } cp1254 { WINDOWS }  # Windows Turkish (w/ euro update)
-windows-1255-2000 { UTR22* }    windows-1255 { IANA* JAVA* WINDOWS* } cp1255 { WINDOWS }  # Windows Hebrew (w/ euro update)
-windows-1256-2000 { UTR22* }    windows-1256 { IANA* JAVA* WINDOWS* } cp1256 { WINDOWS }  # Windows Arabic (w/ euro update)
+windows-1255-2000 { UTR22* }    windows-1255 { IANA* JAVA* WINDOWS* } cp1255 { WINDOWS }                    # Windows Hebrew (w/ euro update)
+windows-1256-2000 { UTR22* }    windows-1256 { IANA* JAVA* WINDOWS* } cp1256 { WINDOWS }                    # Windows Arabic (w/ euro update)
 ibm-9449_P100-2002 { UTR22* }   ibm-9449 { IBM* } windows-1257 { IANA* JAVA* WINDOWS* } cp1257 { WINDOWS }  # Windows Baltic (w/ euro update)
 ibm-5354_P100-1998 { UTR22* }   ibm-5354 { IBM* } windows-1258 { IANA* JAVA* WINDOWS* } cp1258 { WINDOWS }  # Windows Vietnamese (w/ euro update)
 
-ibm-9447_P100-2002 { UTR22* }   ibm-9447 { IBM* } # Windows Hebrew (w/ euro update)
-ibm-5352_P100-1998 { UTR22* }   ibm-5352 { IBM* } # Windows Arabic (w/ euro update)
-
 # These tables are out of date, and most don't have the Euro
-ibm-1250_P100-1995 { UTR22* }   ibm-1250 { IBM* }       # Windows Latin2 (w/o euro update)
-ibm-1251_P100-1995 { UTR22* }   ibm-1251 { IBM* }       # Windows Cyrillic (w/o euro update)
-ibm-1252_P100-2000 { UTR22* }   ibm-1252 { IBM* }       # Windows Latin 1 without Euro
-ibm-1253_P100-1995 { UTR22* }   ibm-1253 { IBM* }       # Windows Greek (w/o euro update)
-ibm-1254_P100-1995 { UTR22* }   ibm-1254 { IBM* }       # Windows Turkish (w/o euro update)
-ibm-1255_P100-1995 { UTR22* }   ibm-1255 { IBM* }       # Windows Hebrew (w/o euro update)
-ibm-1256_P110-1997 { UTR22* }   ibm-1256 { IBM* }       # Windows Arabic (w/o euro update)
-ibm-1257_P100-1995 { UTR22* }   ibm-1257 { IBM* }       # Windows Baltic (w/o euro update)
-ibm-1258_P100-1997 { UTR22* }   ibm-1258 { IBM* }       # Windows Vietnamese (w/o euro update)
-ibm-5351_P100-1998 { UTR22* }   ibm-5351 { IBM* }       # Somewhat old Windows Hebrew (w/ euro update)
-ibm-5353_P100-1998 { UTR22* }   ibm-5353 { IBM* }       # Somewhat old Windows Baltic (w/ euro update)
+# Leave the windows- variants untagged. They are alternate tables of the newer ones above.
+ibm-1250_P100-1995 { UTR22* }   ibm-1250 { IBM* } windows-1250  # Old Windows Latin2 (w/o euro update)
+ibm-1251_P100-1995 { UTR22* }   ibm-1251 { IBM* } windows-1251  # Old Windows Cyrillic (w/o euro update)
+ibm-1252_P100-2000 { UTR22* }   ibm-1252 { IBM* } windows-1252  # Old Windows Latin 1 without Euro
+ibm-1253_P100-1995 { UTR22* }   ibm-1253 { IBM* } windows-1253  # Old Windows Greek (w/o euro update)
+ibm-1254_P100-1995 { UTR22* }   ibm-1254 { IBM* } windows-1254  # Old Windows Turkish (w/o euro update)
+ibm-1255_P100-1995 { UTR22* }   ibm-1255 { IBM* }               # Very old Windows Hebrew (w/o euro update)
+ibm-5351_P100-1998 { UTR22* }   ibm-5351 { IBM* }               # Old Windows Hebrew (w/ euro update)
+ibm-9447_P100-2002 { UTR22* }   ibm-9447 { IBM* } windows-1255  # Somewhat old Windows Hebrew (w/ euro update)
+ibm-1256_P110-1997 { UTR22* }   ibm-1256 { IBM* }               # Old Windows Arabic (w/o euro update)
+ibm-5352_P100-1998 { UTR22* }   ibm-5352 { IBM* } windows-1256  # Somewhat old Windows Arabic (w/ euro update)
+ibm-1257_P100-1995 { UTR22* }   ibm-1257 { IBM* }               # Old Windows Baltic (w/o euro update)
+ibm-5353_P100-1998 { UTR22* }   ibm-5353 { IBM* } windows-1257  # Somewhat old Windows Baltic (w/ euro update)
+ibm-1258_P100-1997 { UTR22* }   ibm-1258 { IBM* } windows-1258  # Old Windows Vietnamese (w/o euro update)
 
 ibm-1275_P100-1995 { UTR22* }   ibm-1275 { IBM* } macintosh { IANA* MIME* WINDOWS } mac { IANA } csMacintosh { IANA } windows-10000 { WINDOWS* } # Apple latin 1
 ibm-1280_P100-1996 { UTR22* }   ibm-1280 { IBM* } x-mac-greek { MIME* WINDOWS } windows-10006 { WINDOWS* } macgr           # Apple Greek
