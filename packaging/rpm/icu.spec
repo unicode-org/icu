@@ -1,18 +1,10 @@
 #
 # RPM specification file for ICU.
 #
-# Yves Arrouye <yves@realnames.com>
+# Neal Probert <nprobert@walid.com> is the current maintainer.
+# Yves Arrouye <yves@realnames.com> is the original author.
 
-# This file can be freely redistributed under the same license as ICU, namely
-# the IBM Public License.
-
-# Disclaimer: this is my first and only RPM spec file. Bear with me, and do
-# not hesitate to report bugs in this spec file using the ICU bug reporting
-# system. There will be a better spec file later, using files -f and other
-# nice things like that.
-
-# Additional disclaimer: this file was made for ICU 1.6.0.1 and was not
-# checked for completeness for ICU 1.8.
+# This file can be freely redistributed under the same license as ICU.
 
 Name: icu
 Version: 1.8.1
