@@ -11,7 +11,7 @@ $NotCased        = [^ $Cased];
 #
 #  If the iterator was not stopped on a cased character, advance it to the first cased char
 #
-($NotCased | $CaseIgnorable)*;
+$NotCased+;
 
 #
 #  If the iterator starts on a cased item, advance through all adjacent cased items plus
@@ -22,5 +22,11 @@ $Cased ($Cased | $CaseIgnorable)* $NotCased*;
 #
 #  Reverse Rules
 #
-!$NotCased* ($Cased | $CaseIgnorable)* $NotCased?;
 
+! $NotCased+;
+
+#
+#  If the iterator starts on a cased item, advance through all adjacent cased items plus
+#    any non-cased stuff, to reach the start of the next word.
+#
+! $NotCased* ($Cased | $CaseIgnorable)* $Cased;

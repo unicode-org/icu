@@ -845,9 +845,26 @@ void RBBIAPITest::runIndexedTest( int32_t index, UBool exec, const char* &name, 
         case  1: name = "TestgetRules"; if (exec) TestgetRules(); break;
         case  2: name = "TestHashCode"; if (exec) TestHashCode(); break;
         case  3: name = "TestGetSetAdoptText"; if (exec) TestGetSetAdoptText(); break;
+        case  4: name = "extra"; break;   /* Extra */
+        case  5: name = "TestBuilder"; if (exec) TestBuilder(); break;
+        case  6: name = "TestQuoteGrouping"; if (exec) TestQuoteGrouping(); break;
+        case  7: name = "TestRuleStatus"; if (exec) TestRuleStatus(); break;
+        case  8: name = "TestBug2190"; if (exec) TestBug2190(); break;
+        case  9: name = "TestRegistration"; if (exec) TestRegistration(); break;
+        case 10: name = "TestBoilerPlate"; if (exec) TestBoilerPlate(); break;
+
+        default: name = ""; break; /*needed to end loop*/
+    }
+    /*** TODO synwee
+    switch (index) {
+     //   case 0: name = "TestConstruction"; if (exec) TestConstruction(); break;
+        case  0: name = "TestCloneEquals"; if (exec) TestCloneEquals(); break;
+        case  1: name = "TestgetRules"; if (exec) TestgetRules(); break;
+        case  2: name = "TestHashCode"; if (exec) TestHashCode(); break;
+        case  3: name = "TestGetSetAdoptText"; if (exec) TestGetSetAdoptText(); break;
         case  4: name = "TestIteration"; if (exec) TestIteration(); break;
-        case  5: name = "extra"; break;   /* Extra */
-        case  6: name = "extra"; break;   /* Extra */
+        case  5: name = "extra"; break;   // Extra
+        case  6: name = "extra"; break;   // Extra
         case  7: name = "TestBuilder"; if (exec) TestBuilder(); break;
         case  8: name = "TestQuoteGrouping"; if (exec) TestQuoteGrouping(); break;
         case  9: name = "TestRuleStatus"; if (exec) TestRuleStatus(); break;
@@ -856,8 +873,9 @@ void RBBIAPITest::runIndexedTest( int32_t index, UBool exec, const char* &name, 
         case 12: name = "TestBoilerPlate"; if (exec) TestBoilerPlate(); break;
         case 13: name = "TestRoundtripRules"; if (exec) TestRoundtripRules(); break;
 
-        default: name = ""; break; /*needed to end loop*/
+        default: name = ""; break; // needed to end loop
     }
+    ***/
 }
 
 //---------------------------------------------

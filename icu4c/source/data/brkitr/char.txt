@@ -36,10 +36,11 @@ $HangulSyllable = $L+ | ($L* ($LV? $V+ | $LV | $LVT) $T*) | $T+;
 #
 $CR $LF;
 ([^$Control] | $HangulSyllable) $Extend*;
-.;
 
 
 #
 #  Reverse Rule, back up to the beginning of some preceding grapheme cluster.
 #
-! ($Extend | $V | $T )*   ($LF $CR | ($LV | $LVT)?$L* | .);
+$BackHangulSyllable = $L+ | ($T* ($V+$LV? | $LV | $LVT) $L*) | $T+;
+$BackOneCluster = ($LF $CR) | ($Extend* ([^$Control] | $BackHangulSyllable));
+! $BackOneCluster; 
