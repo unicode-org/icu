@@ -33,12 +33,14 @@ import java.util.Locale;
  * may change in the future as we add more historical data.  Use the predefined
  * constants rather than using actual, absolute numbers.
  * <p>
+ * Note This API has not been promoted to @stable and instead has been left
+ * as @draft ICU 2.4.  It may yet change or be removed in a future release.
  *
  * @see com.ibm.icu.util.GregorianCalendar
  *
  * @author Laura Werner
  * @author Alan Liu
- * @internal
+ * @draft ICU 2.4
  */
 public class JapaneseCalendar extends GregorianCalendar {
     
@@ -51,7 +53,7 @@ public class JapaneseCalendar extends GregorianCalendar {
     /**
      * Constructs a default <code>JapaneseCalendar</code> using the current time
      * in the default time zone with the default locale.
-     * @internal
+     * @draft ICU 2.4
      */
     public JapaneseCalendar() {
         super();
@@ -61,7 +63,7 @@ public class JapaneseCalendar extends GregorianCalendar {
      * Constructs a <code>JapaneseCalendar</code> based on the current time
      * in the given time zone with the default locale.
      * @param zone the given time zone.
-     * @internal
+     * @draft ICU 2.4
      */
     public JapaneseCalendar(TimeZone zone) {
         super(zone);
@@ -71,7 +73,7 @@ public class JapaneseCalendar extends GregorianCalendar {
      * Constructs a <code>JapaneseCalendar</code> based on the current time
      * in the default time zone with the given locale.
      * @param aLocale the given locale.
-     * @internal
+     * @draft ICU 2.4
      */
     public JapaneseCalendar(Locale aLocale) {
         super(aLocale);
@@ -84,7 +86,7 @@ public class JapaneseCalendar extends GregorianCalendar {
      * @param zone the given time zone.
      *
      * @param aLocale the given locale.
-     * @internal
+     * @draft ICU 2.4
      */
     public JapaneseCalendar(TimeZone zone, Locale aLocale) {
         super(zone, aLocale);
@@ -95,7 +97,7 @@ public class JapaneseCalendar extends GregorianCalendar {
      * in the default time zone with the default locale.
      *
      * @param date      The date to which the new calendar is set.
-     * @internal
+     * @draft ICU 2.4
      */
     public JapaneseCalendar(Date date) {
         this();
@@ -122,7 +124,7 @@ public class JapaneseCalendar extends GregorianCalendar {
      *                  The value is 0-based. e.g., 0 for January.
      *
      * @param date      The value used to set the calendar's DATE field.
-     * @internal
+     * @draft ICU 2.4
      */
     public JapaneseCalendar(int era, int year, int month, int date) {
         super(year, month, date);
@@ -141,7 +143,7 @@ public class JapaneseCalendar extends GregorianCalendar {
      *                  The value is 0-based. e.g., 0 for January.
      *
      * @param date      The value used to set the calendar's {@link #DATE DATE} field.
-     * @internal
+     * @draft ICU 2.4
      */
     public JapaneseCalendar(int year, int month, int date) {
         super(year, month, date);
@@ -166,7 +168,7 @@ public class JapaneseCalendar extends GregorianCalendar {
      * @param minute    The value used to set the calendar's {@link #MINUTE MINUTE} time field.
      *
      * @param second    The value used to set the calendar's {@link #SECOND SECOND} time field.
-     * @internal
+     * @draft ICU 2.4
      */
     public JapaneseCalendar(int year, int month, int date, int hour,
                              int minute, int second)
@@ -178,7 +180,7 @@ public class JapaneseCalendar extends GregorianCalendar {
     //-------------------------------------------------------------------------
 
     /**
-     * @internal
+     * @draft ICU 2.4
      */
     protected int handleGetExtendedYear() {
         int year;
@@ -194,7 +196,7 @@ public class JapaneseCalendar extends GregorianCalendar {
     }
 
     /**
-     * @internal
+     * @draft ICU 2.4
      */
     protected void handleComputeFields(int julianDay) {
         super.handleComputeFields(julianDay);
@@ -489,31 +491,31 @@ public class JapaneseCalendar extends GregorianCalendar {
 
     // Constant for the current era.  This must be regularly updated.
     /**
-     * @internal
+     * @draft ICU 2.4
      */
     static public final int CURRENT_ERA = (ERAS.length / 3) - 1;
     
     /** 
      * Constant for the era starting on Sept. 8, 1868 AD.
-     * @internal 
+     * @draft ICU 2.4 
      */
     static public final int MEIJI = CURRENT_ERA - 3;
 
     /** 
      * Constant for the era starting on July 30, 1912 AD. 
-     * @internal 
+     * @draft ICU 2.4 
      */
     static public final int TAISHO = CURRENT_ERA - 2;
     
     /** 
      * Constant for the era starting on Dec. 25, 1926 AD. 
-     * @internal 
+     * @draft ICU 2.4 
      */
     static public final int SHOWA = CURRENT_ERA - 1;
 
     /** 
      * Constant for the era starting on Jan. 7, 1989 AD. 
-     * @internal 
+     * @draft ICU 2.4 
      */
     static public final int HEISEI = CURRENT_ERA;
 
@@ -534,7 +536,7 @@ public class JapaneseCalendar extends GregorianCalendar {
      * Override GregorianCalendar.  We should really handle YEAR_WOY and
      * EXTENDED_YEAR here too to implement the 1..5000000 range, but it's
      * not critical.
-     * @internal
+     * @draft ICU 2.4
      */
     protected int handleGetLimit(int field, int limitType) {
         switch (field) {
