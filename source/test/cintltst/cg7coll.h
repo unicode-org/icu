@@ -45,10 +45,7 @@
 #define  FIXEDTESTSET 15 
 #define  TOTALTESTSET  30 
 
-        
-    /* main test routine, tests comparisons for a set of strings against sets of expected results */
-    static void doTest(UCollator *myCollation, const UChar* source, const UChar* target, UCollationResult result);
-    
+     
     /* perform test for G7 locales */
     static void TestG7Locales(void);
 
