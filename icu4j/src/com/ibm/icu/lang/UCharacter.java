@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/lang/UCharacter.java,v $ 
-* $Date: 2002/03/15 22:58:12 $ 
-* $Revision: 1.33 $
+* $Date: 2002/03/15 23:47:10 $ 
+* $Revision: 1.34 $
 *
 *******************************************************************************
 */
@@ -47,11 +47,6 @@ import com.ibm.icu.impl.NormalizerImpl;
 * unames.dat from the icu4j source subdirectory 
 * <i>$ICU4J_SRC/src/com.ibm.icu.impl.data</i> to your class directory 
 * <i>$ICU4J_CLASS/com.ibm.icu.impl.data</i>.
-* </p>
-* <p>
-* For more information about the data file format, please refer to 
-* <a href=http://oss.software.ibm.com/icu4j/doc/com/ibm/icu/lang/ReadMe.html>
-* Read Me</a>.
 * </p>
 * <p>
 * Aside from the additions for UTF-16 support, and the updated Unicode 3.1
