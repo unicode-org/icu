@@ -1059,9 +1059,7 @@ ResourceBundle::getFromCache(const PathInfo& path,
 {
     UnicodeString keyname(path.makeHashkey(localeName));
     Mutex lock;
-    
-    return (const UHashtable*)
-      uhash_OLD_get(fgCache->hashTable, keyname.hashCode() & 0x7FFFFFFF);
+    return fgCache->get(keyname);
 }
 
 /**
@@ -1127,9 +1125,8 @@ ResourceBundle::addToCache(const UnicodeString& localeName,
   UnicodeString keyName(c->makeHashkey(localeName));
   UErrorCode err = U_ZERO_ERROR;
   Mutex lock;
-  if(uhash_OLD_get(fgCache->hashTable, keyName.hashCode() & 0x7FFFFFFF) == 0) {
-    uhash_OLD_putKey(fgCache->hashTable, keyName.hashCode() & 0x7FFFFFFF, 
-		 hashtable, &err);
+  if (fgCache->get(keyName) == 0) {
+      fgCache->put(keyName, hashtable);
   }
 }
 
