@@ -29,7 +29,7 @@ void PrintDataTable();
  --------------------------------------------------- */
 
 
-static  char* rawData2[23][5] = {
+static const char* rawData2[23][5] = {
     /* language code */
     {   "en",   "fr",   "hr",   "el",   "no"    },
     /* country code */
@@ -148,7 +148,7 @@ void TestBasicGetters() {
     for (i = 0; i <= MAX_LOCALES; i++) {
         testLocale=(char*)malloc(sizeof(char) * (strlen(rawData2[NAME][i])+1));
         strcpy(testLocale,rawData2[NAME][i]);
-        
+
         log_verbose("Testing   %s  .....\n", testLocale);
         cap=uloc_getLanguage(testLocale, NULL, 0, &status);
         if(status==U_BUFFER_OVERFLOW_ERROR){
@@ -161,10 +161,9 @@ void TestBasicGetters() {
         }
         if (0 !=strcmp(temp,rawData2[LANG][i]))    {
             log_err("  Language code mismatch: %s versus  %s\n", temp, rawData2[LANG][i]); 
-                        
         }
-        
-        
+
+
         cap=uloc_getCountry(testLocale, temp, cap, &status);
         if(status==U_BUFFER_OVERFLOW_ERROR){
             status=U_ZERO_ERROR;
@@ -208,13 +207,13 @@ void TestBasicGetters() {
             log_err(" Mismatch in getName:  %s  versus   %s\n", name, rawData2[NAME][i]);
         }
 
-    
+
         free(temp);
         free(name);
-        
+
     free(testLocale);
     }
-  
+
 }
 /* testing uloc_getISO3Language(), uloc_getISO3Country(),  */
 void TestSimpleResourceInfo() {
@@ -222,12 +221,12 @@ void TestSimpleResourceInfo() {
     int32_t i;
     char* testLocale = 0;
     UChar* expected = 0;
-    
+
     const char* temp;
     char            temp2[20];
     testLocale=(char*)malloc(sizeof(char) * 1);
     expected=(UChar*)malloc(sizeof(UChar) * 1);
-    
+
     log_verbose("Testing getISO3Language and getISO3Country\n");
     for (i = 0; i <= MAX_LOCALES; i++) {
         
@@ -663,31 +662,30 @@ void TestISOFunctions()
 }
 
 
-
 static UChar greekDisplayLanguage[] = { 0x03b5, 0x03bb, 0x03bb, 0x03b7, 0x03bd, 0x03b9, 0x03ba, 0x03ac, 0 };
 static UChar greekDisplayCountry[] = { 0x0395, 0x03bb, 0x03bb, 0x03ac, 0x03b4, 0x03b1, 0 };
 static UChar greekDisplayName[] = { 0x03b5, 0x03bb, 0x03bb, 0x03b7, 0x03bd, 0x03b9, 0x03ba,
     0x03ac, 0x20, 0x28, 0x0395, 0x03bb, 0x03bb, 0x03ac, 0x03b4, 0x03b1, 0x29, 0 };
-    
+
 
 void setUpDataTable()
 {
     int32_t i,j;
     dataTable = (UChar***)(calloc(sizeof(UChar**),23));
 
-        for (i = 0; i < 23; i++) {
-          dataTable[i] = (UChar**)(calloc(sizeof(UChar*),5));
-            for (j = 0; j < 5; j++){
-                dataTable[i][j] = CharsToUChars(rawData2[i][j]);
-            }
+    for (i = 0; i < 23; i++) {
+      dataTable[i] = (UChar**)(calloc(sizeof(UChar*),5));
+        for (j = 0; j < 5; j++){
+            dataTable[i][j] = CharsToUChars(rawData2[i][j]);
         }
-        dataTable[DLANG_EL][GREEKS]=(UChar*)realloc(dataTable[DLANG_EL][GREEKS],sizeof(UChar)*(u_strlen(greekDisplayLanguage)+1)); 
+    }
+    dataTable[DLANG_EL][GREEKS]=(UChar*)realloc(dataTable[DLANG_EL][GREEKS],sizeof(UChar)*(u_strlen(greekDisplayLanguage)+1));
     u_strncpy(dataTable[DLANG_EL][GREEKS],greekDisplayLanguage,8);
-        dataTable[DCTRY_EL][GREEKS]=(UChar*)realloc(dataTable[DCTRY_EL][GREEKS],sizeof(UChar)*(u_strlen(greekDisplayCountry)+1));
+    dataTable[DCTRY_EL][GREEKS]=(UChar*)realloc(dataTable[DCTRY_EL][GREEKS],sizeof(UChar)*(u_strlen(greekDisplayCountry)+1));
     u_strncpy(dataTable[DCTRY_EL][GREEKS],greekDisplayCountry,6);
-        dataTable[DNAME_EL][GREEKS]=(UChar*)realloc(dataTable[DNAME_EL][GREEKS],sizeof(UChar)*(u_strlen(greekDisplayName)+1));        
+    dataTable[DNAME_EL][GREEKS]=(UChar*)realloc(dataTable[DNAME_EL][GREEKS],sizeof(UChar)*(u_strlen(greekDisplayName)+1));
     u_strncpy(dataTable[DNAME_EL][GREEKS],greekDisplayName,17);
-    
+
 }
 /**
  * @bug 4011756 4011380

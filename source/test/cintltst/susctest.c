@@ -9,7 +9,7 @@
 * Modification History:
 *
 *   Date        Name        Description
-*   05/17/99    stephen	    Creation (ported from java)
+*   05/17/99    stephen     Creation (ported from java)
 *   09/24/99    stephen     Added new test for data split on decompression.
 *******************************************************************************
 */
@@ -144,7 +144,7 @@ unescape(const char *s)
 
 static void
 printChars(const UChar *chars, 
-	   int32_t len)
+           int32_t len)
 {
   int32_t i;
 
@@ -157,7 +157,7 @@ printChars(const UChar *chars,
 
 static void 
 printChars2(const UChar *chars, 
-	    int32_t len)
+            int32_t len)
 {
   int32_t i;
   
@@ -173,7 +173,7 @@ printChars2(const UChar *chars,
 
 static void 
 printBytes(const uint8_t *byteBuffer, 
-	   int32_t len)
+           int32_t len)
 {
   int32_t curByteIndex = 0;
   int32_t byteBufferLimit = len;
@@ -184,110 +184,110 @@ printBytes(const uint8_t *byteBuffer,
     switch(mode) {  
     case SINGLEBYTEMODE:
       while(curByteIndex < byteBufferLimit && mode == SINGLEBYTEMODE) {
-	aByte = byteBuffer[curByteIndex++] & 0xFF;
-	switch(aByte) {
-	default:
-	  printf("%#x ", aByte);
-	  break;
-	  
-	  
-	  /* quote unicode*/
-	case SQUOTEU:
-	  printf("SQUOTEU ");
-	  if(curByteIndex < byteBufferLimit)
-	    printf("%#x ", byteBuffer[curByteIndex++]);
-	  if(curByteIndex < byteBufferLimit)
-	    printf("%#x ", byteBuffer[curByteIndex++]);
-	  break;
-	  
-	  /* switch to Unicode mode*/
-	case SCHANGEU:
-	  printf("SCHANGEU ");
-	  mode = UNICODEMODE;
-	  break;
-	  
-	  /* handle all quote tags*/
-	case SQUOTE0: 	case SQUOTE1: 	case SQUOTE2:	case SQUOTE3:
-	case SQUOTE4: 	case SQUOTE5: 	case SQUOTE6:	case SQUOTE7:
-	  printf("SQUOTE%d ", aByte - SQUOTE0);
-	  if(curByteIndex < byteBufferLimit)
-	    printf("%#x ", byteBuffer[curByteIndex++]);
-	  break;
-	  
-	  /* handle all switch tags*/
-	case SCHANGE0: 	case SCHANGE1: 	case SCHANGE2:	case SCHANGE3:
-	case SCHANGE4: 	case SCHANGE5: 	case SCHANGE6:	case SCHANGE7:
-	  printf("SCHANGE%d ", aByte - SCHANGE0);
-	  break;
-	  
-	  /* handle all define tags*/
-	case SDEFINE0: 	case SDEFINE1: 	case SDEFINE2:	case SDEFINE3:
-	case SDEFINE4: 	case SDEFINE5: 	case SDEFINE6:	case SDEFINE7:
-	  printf("SDEFINE%d ", aByte - SDEFINE0);
-	  if(curByteIndex < byteBufferLimit)
-	    printf("%#x ", byteBuffer[curByteIndex++]);
-	  break;
-	  
-	  /* handle define extended tag*/
-	case SDEFINEX:
-	  printf("SDEFINEX ");
-	  if(curByteIndex < byteBufferLimit)
-	    printf("%#x ", byteBuffer[curByteIndex++]);
-	  if(curByteIndex < byteBufferLimit)
-	    printf("%#x ", byteBuffer[curByteIndex++]);
-	  break;
-	  
-	} /* end switch*/
+    aByte = byteBuffer[curByteIndex++] & 0xFF;
+    switch(aByte) {
+    default:
+      printf("%#x ", aByte);
+      break;
+      
+      
+      /* quote unicode*/
+    case SQUOTEU:
+      printf("SQUOTEU ");
+      if(curByteIndex < byteBufferLimit)
+        printf("%#x ", byteBuffer[curByteIndex++]);
+      if(curByteIndex < byteBufferLimit)
+        printf("%#x ", byteBuffer[curByteIndex++]);
+      break;
+
+      /* switch to Unicode mode*/
+    case SCHANGEU:
+      printf("SCHANGEU ");
+      mode = UNICODEMODE;
+      break;
+
+      /* handle all quote tags*/
+    case SQUOTE0:   case SQUOTE1:   case SQUOTE2:   case SQUOTE3:
+    case SQUOTE4:   case SQUOTE5:   case SQUOTE6:   case SQUOTE7:
+      printf("SQUOTE%d ", aByte - SQUOTE0);
+      if(curByteIndex < byteBufferLimit)
+        printf("%#x ", byteBuffer[curByteIndex++]);
+      break;
+
+      /* handle all switch tags*/
+    case SCHANGE0:  case SCHANGE1:  case SCHANGE2:  case SCHANGE3:
+    case SCHANGE4:  case SCHANGE5:  case SCHANGE6:  case SCHANGE7:
+      printf("SCHANGE%d ", aByte - SCHANGE0);
+      break;
+      
+      /* handle all define tags*/
+    case SDEFINE0:  case SDEFINE1:  case SDEFINE2:  case SDEFINE3:
+    case SDEFINE4:  case SDEFINE5:  case SDEFINE6:  case SDEFINE7:
+      printf("SDEFINE%d ", aByte - SDEFINE0);
+      if(curByteIndex < byteBufferLimit)
+        printf("%#x ", byteBuffer[curByteIndex++]);
+      break;
+
+      /* handle define extended tag*/
+    case SDEFINEX:
+      printf("SDEFINEX ");
+      if(curByteIndex < byteBufferLimit)
+        printf("%#x ", byteBuffer[curByteIndex++]);
+      if(curByteIndex < byteBufferLimit)
+        printf("%#x ", byteBuffer[curByteIndex++]);
+      break;
+
+    } /* end switch*/
       } /* end while*/
       break;
       
     case UNICODEMODE:
       while(curByteIndex < byteBufferLimit && mode == UNICODEMODE) {
 
-	aByte = byteBuffer[curByteIndex++] & 0xFF;
+    aByte = byteBuffer[curByteIndex++] & 0xFF;
 
-	switch(aByte) {
-	  /* handle all define tags*/
-	case UDEFINE0: 	case UDEFINE1: 	case UDEFINE2:	case UDEFINE3:
-	case UDEFINE4: 	case UDEFINE5: 	case UDEFINE6:	case UDEFINE7:
-	  printf("UDEFINE%d ", aByte - UDEFINE0);
-	  if(curByteIndex < byteBufferLimit)
-	    printf("%#x ", byteBuffer[curByteIndex++]);
-	  mode = SINGLEBYTEMODE;
-	  break;
-	  
-	  /* handle define extended tag*/
-	case UDEFINEX:
-	  printf("UDEFINEX ");
-	  if(curByteIndex < byteBufferLimit)
-	    printf("%#x ", byteBuffer[curByteIndex++]);
-	  if(curByteIndex < byteBufferLimit)
-	    printf("%#x ", byteBuffer[curByteIndex++]);
-	  break;
-	  
-	  /* handle all switch tags*/
-	case UCHANGE0: 	case UCHANGE1: 	case UCHANGE2:	case UCHANGE3:
-	case UCHANGE4: 	case UCHANGE5: 	case UCHANGE6:	case UCHANGE7:
-	  printf("UCHANGE%d ", aByte - UCHANGE0);
-	  mode = SINGLEBYTEMODE;
-	  break;
-	  
-	  /* quote unicode*/
-	case UQUOTEU:
-	  printf("UQUOTEU ");
-	  if(curByteIndex < byteBufferLimit)
-	    printf("%#x ", byteBuffer[curByteIndex++]);
-	  if(curByteIndex < byteBufferLimit)
-	    printf("%#x ", byteBuffer[curByteIndex++]);
-	  break;
-	  
-	default:
-	  printf("%#x ", aByte);
-	  if(curByteIndex < byteBufferLimit)
-	    printf("%#x ", byteBuffer[curByteIndex++]);
-	  break;
-	  
-	} /* end switch*/
+    switch(aByte) {
+      /* handle all define tags*/
+    case UDEFINE0:  case UDEFINE1:  case UDEFINE2:  case UDEFINE3:
+    case UDEFINE4:  case UDEFINE5:  case UDEFINE6:  case UDEFINE7:
+      printf("UDEFINE%d ", aByte - UDEFINE0);
+      if(curByteIndex < byteBufferLimit)
+        printf("%#x ", byteBuffer[curByteIndex++]);
+      mode = SINGLEBYTEMODE;
+      break;
+
+      /* handle define extended tag*/
+    case UDEFINEX:
+      printf("UDEFINEX ");
+      if(curByteIndex < byteBufferLimit)
+        printf("%#x ", byteBuffer[curByteIndex++]);
+      if(curByteIndex < byteBufferLimit)
+        printf("%#x ", byteBuffer[curByteIndex++]);
+      break;
+
+      /* handle all switch tags*/
+    case UCHANGE0:  case UCHANGE1:  case UCHANGE2:  case UCHANGE3:
+    case UCHANGE4:  case UCHANGE5:  case UCHANGE6:  case UCHANGE7:
+      printf("UCHANGE%d ", aByte - UCHANGE0);
+      mode = SINGLEBYTEMODE;
+      break;
+
+      /* quote unicode*/
+    case UQUOTEU:
+      printf("UQUOTEU ");
+      if(curByteIndex < byteBufferLimit)
+        printf("%#x ", byteBuffer[curByteIndex++]);
+      if(curByteIndex < byteBufferLimit)
+        printf("%#x ", byteBuffer[curByteIndex++]);
+      break;
+      
+    default:
+      printf("%#x ", aByte);
+      if(curByteIndex < byteBufferLimit)
+        printf("%#x ", byteBuffer[curByteIndex++]);
+      break;
+      
+    } /* end switch*/
       } /* end while*/
       break;
       
@@ -299,9 +299,9 @@ printBytes(const uint8_t *byteBuffer,
 
 static UBool
 printDiffs(const UChar *s1, 
-	   int32_t s1len, 
-	   const UChar *s2, 
-	   int32_t s2len)
+           int32_t s1len, 
+           const UChar *s2, 
+           int32_t s2len)
 {
   UBool result  = FALSE;
   int32_t len;
@@ -321,7 +321,7 @@ printDiffs(const UChar *s1,
   for(i = 0; i < len; ++i) {
     if(s1[i] != s2[i]) {
       if(result == FALSE)
-	puts("====================");
+        puts("====================");
       printf("First difference at char %d\n", i);
       printf("Exp. char: %#x\n", s1[i]);
       printf("Got char : %#x\n", s2[i]);
@@ -340,8 +340,8 @@ printDiffs(const UChar *s1,
 /* generate a run of characters in a "window" */
 static void
 randomRun(UChar *target, 
-	  int32_t pos, 
-	  int32_t len)
+      int32_t pos, 
+      int32_t len)
 {
   int32_t offset = (int32_t)(0xFFFF * (double)(rand()/(double)RAND_MAX));
   int32_t i;
@@ -421,11 +421,11 @@ myTest(const UChar *chars,
   /* compress */
   myCTarget = myCompressed;
   scsu_compress(&myCompressor,
-		&myCTarget,
-		myCTarget + myCTargetSize,
-		&myCSource,
-		myCSource + len,
-		&status);
+        &myCTarget,
+        myCTarget + myCTargetSize,
+        &myCSource,
+        myCSource + len,
+        &status);
 
   if(U_FAILURE(status)) {
     log_err("Failing status code at line %d.\n", __LINE__);
@@ -441,11 +441,11 @@ myTest(const UChar *chars,
   myDTarget = myDecompressed;
   myDSource = myCompressed;
   scsu_decompress(&myCompressor,
-		  &myDTarget,
-		  myDTarget + myDTargetSize,
-		  &myDSource,
-		  myDSource + myByteCount,
-		  &status);
+          &myDTarget,
+          myDTarget + myDTargetSize,
+          &myDSource,
+          myDSource + myByteCount,
+          &status);
 
   if(U_FAILURE(status)) {
     log_err("Failing status code at line %d.\n", __LINE__);
@@ -476,7 +476,7 @@ myTest(const UChar *chars,
 
 static void 
 myMultipassTest(const UChar *chars, 
-		int32_t len)
+        int32_t len)
 {
   UnicodeCompressor myCompressor;
 
@@ -495,65 +495,65 @@ myMultipassTest(const UChar *chars,
   int32_t myDTargetSize = MAX(2 * len, 2);
   const uint8_t *myDSource = 0;
   const uint8_t *myDSourceAlias = 0;
-  
+
   /* counts */
   int32_t totalCharsCompressed    = 0;
   int32_t totalBytesWritten       = 0;
-  
+
   int32_t totalBytesDecompressed  = 0;
   int32_t totalCharsWritten       = 0;
- 
+
   /* error code */
   UErrorCode status = U_ZERO_ERROR;
-  
+
   /* allocate memory */
   myCompressed = (uint8_t*) calloc(myCTargetSize, sizeof(uint8_t));
   myDecompressed = (UChar*) calloc(myDTargetSize, sizeof(UChar));
-  
+
   if(myCompressed == 0 || myDecompressed == 0) {
     log_err("calloc error at line %d.\n", __LINE__);
     return ;
   }
-  
+
   /* init compressor */
   scsu_init(&myCompressor);
-  
+
   /* perform the compression in a loop */
   do {      
     status = U_ZERO_ERROR;
     myCTarget = myCompressionBuffer;    
     myCSourceAlias = myCSource;
-    
+
     scsu_compress(&myCompressor,
-		  &myCTarget,
-		  myCTarget + COMPRESSIONBUFFERSIZE,
-		  &myCSource,
-		  chars + len,
-		  &status);
-    
+          &myCTarget,
+          myCTarget + COMPRESSIONBUFFERSIZE,
+          &myCSource,
+          chars + len,
+          &status);
+
     if(status != U_BUFFER_OVERFLOW_ERROR && U_FAILURE(status)) {
       log_err("Failing status code at line %d.\n", __LINE__);
       return;
     }
-    
+
     /* copy the newly-compressed chunk to the target */
     memcpy(myCompressed + totalBytesWritten,
-	   myCompressionBuffer,
-	   sizeof(uint8_t) * (myCTarget - myCompressionBuffer));
-    
+       myCompressionBuffer,
+       sizeof(uint8_t) * (myCTarget - myCompressionBuffer));
+
     /*      printf("Compression pass complete.  Compressed %d chars into %d bytes\n",
-	    (myCSource - myCSourceAlias), (myCTarget - myCompressionBuffer));*/
-    
+        (myCSource - myCSourceAlias), (myCTarget - myCompressionBuffer));*/
+
     /* update pointers */
     totalCharsCompressed = (myCSource - chars);
-    
+
     totalBytesWritten += (myCTarget - myCompressionBuffer);
-    
+
   } while(status == U_BUFFER_OVERFLOW_ERROR/*totalCharsCompressed < len*/);
-  
+
   /* reset */
   scsu_reset(&myCompressor);
-  
+
   /* set up decompression params */
   myDSource = myCompressed;
 
@@ -564,12 +564,12 @@ myMultipassTest(const UChar *chars,
     myDSourceAlias = myDSource;
     
     scsu_decompress(&myCompressor,
-		    &myDTarget,
-		    myDTarget + DECOMPRESSIONBUFFERSIZE,
-		    &myDSource,
-		    myCompressed + totalBytesWritten,
-		    &status);
-    
+            &myDTarget,
+            myDTarget + DECOMPRESSIONBUFFERSIZE,
+            &myDSource,
+            myCompressed + totalBytesWritten,
+            &status);
+
     if(status != U_BUFFER_OVERFLOW_ERROR && U_FAILURE(status)) {
       log_err("Failing status code at line %d.\n", __LINE__);
       return;
@@ -577,11 +577,11 @@ myMultipassTest(const UChar *chars,
     
     /* copy the newly-decompressed chunk to the target */
     memcpy(myDecompressed + totalCharsWritten,
-	   myDecompressionBuffer,
-	   sizeof(UChar) * (myDTarget - myDecompressionBuffer));
+       myDecompressionBuffer,
+       sizeof(UChar) * (myDTarget - myDecompressionBuffer));
 
     /*    printf("Decompression pass complete.  Decompressed %d bytes into %d chars\n",
-	  (myDSource - myDSourceAlias), (myDTarget - myDecompressionBuffer));*/
+      (myDSource - myDSourceAlias), (myDTarget - myDecompressionBuffer));*/
     
     /* update pointers */
     totalBytesDecompressed = (myDSource - myCompressed);
@@ -593,8 +593,8 @@ myMultipassTest(const UChar *chars,
   /* find differences */
   if( printDiffs(chars, len, myDecompressed, totalCharsWritten) == FALSE) {
     /*printf("%d chars ===> %d bytes ===> %d chars (%f) (MP)\n", len, 
-	   totalBytesWritten, totalCharsWritten,
-	   (double)(totalBytesWritten/(totalCharsWritten*2.0)));*/
+       totalBytesWritten, totalCharsWritten,
+       (double)(totalBytesWritten/(totalCharsWritten*2.0)));*/
   }
   else {
     puts("Compressed:");
@@ -606,7 +606,7 @@ myMultipassTest(const UChar *chars,
   free(myDecompressed);
 }
 
-static char *fTestCases [] = {
+static const char *fTestCases [] = {
   "Hello \\9292 \\9192 World!",
   "Hell\\0429o \\9292 \\9192 W\\00e4rld!",
   "Hell\\0429o \\9292 \\9292W\\00e4rld!",
@@ -618,7 +618,7 @@ static char *fTestCases [] = {
   "\\4444\\f2FF", /* highest quotable*/
   "\\4444\\f188\\4444",
   "\\4444\\f188\\f288",
-  "\\4444\\f188abc\0429\\f288",
+  "\\4444\\f188abc\\0429\\f288",
   "\\9292\\2222",
   "Hell\\0429\\04230o \\9292 \\9292W\\00e4\\0192rld!",
   "Hell\\0429o \\9292 \\9292W\\00e4rld!",
@@ -651,7 +651,7 @@ static char *fTestCases [] = {
   "\\d266\\43d7\\\\e386\\c9c0\\4a6b\\9222\\901f\\7410\\a63f\\539b\\9596\\482e\\9d47\\cfe4\\7b71\\c280\\f26a\\982f\\862a\\4edd\\f513\\fda6\\869d\\2ee0\\a216\\3ff6\\3c70\\89c0\\9576\\d5ec\\bfda\\6cca\\5bb3\\bcea\\554c\\914e\\fa4a\\ede3\\2990\\d2f5\\2729\\5141\\0f26\\ccd8\\5413\\d196\\bbe2\\51b9\\9b48\\0dc8\\2195\\21a2\\21e9\\00e4\\9d92\\0bc0\\06c5",
   "\\f95b\\2458\\2468\\0e20\\f51b\\e36e\\bfc1\\0080\\02dd\\f1b5\\0cf3\\6059\\7489",
   0
-  
+
 };
 
 static unsigned long gTotalChars;
@@ -661,9 +661,9 @@ static unsigned long gTotalChars;
 /* Decompress the two segments */
 static UChar*
 segment_test(uint8_t *segment1,
-	     int32_t seg1Len,
-	     uint8_t *segment2,
-	     int32_t seg2Len)
+         int32_t seg1Len,
+         uint8_t *segment2,
+         int32_t seg2Len)
 {
     UErrorCode status = U_ZERO_ERROR;
     UnicodeCompressor myDecompressor;
@@ -681,33 +681,33 @@ segment_test(uint8_t *segment1,
     scsu_init(&myDecompressor);
 
     scsu_decompress(&myDecompressor, &target, charBuffer + charBufferCap,
-		    &seg1, segment1 + seg1Len, &status);
+            &seg1, segment1 + seg1Len, &status);
 
     count1 = seg1 - segment1;
 
     /*    println("Segment 1 (" + segment1.length + " bytes) " +
-	  "decompressed into " + count1  + " chars");
-	  println("Bytes consumed: " + bytesRead[0]);
-    
-	  print("Got chars: ");
-	  println(System.out, charBuffer, 0, count1);*/
+      "decompressed into " + count1  + " chars");
+      println("Bytes consumed: " + bytesRead[0]);
+
+      print("Got chars: ");
+      println(System.out, charBuffer, 0, count1);*/
 
     /*s.append(charBuffer, 0, count1);*/
 
     scsu_decompress(&myDecompressor, &target,
-		    charBuffer + charBufferCap,
-		    &seg2, segment2 + seg2Len, &status);
+            charBuffer + charBufferCap,
+            &seg2, segment2 + seg2Len, &status);
 
     count2 = seg2 - segment2;
 
     outCount = (target - charBuffer);
 
     /*    println("Segment 2 (" + segment2.length + " bytes) " +
-	  "decompressed into " + count2  + " chars");
-	  println("Bytes consumed: " + bytesRead[0]);
-	  
-	  print("Got chars: ");
-	  println(System.out, charBuffer, count1, count2);*/
+      "decompressed into " + count2  + " chars");
+      println("Bytes consumed: " + bytesRead[0]);
+
+      print("Got chars: ");
+      println(System.out, charBuffer, count1, count2);*/
     
     /*s.append(charBuffer, count1, count2);*/
     
@@ -736,7 +736,7 @@ TestSCSU(void)
   uint8_t segment1b [] = { 0x01, 0x2c, 0x20, 0x53, 0x2e };
   /* expected result */
   UChar result1 [] = { 0x0042, 0x006f, 0x006f, 0x0074, 0x0068, 
-		       0x002c, 0x0020, 0x0053, 0x002e, 0x0000 };
+               0x002c, 0x0020, 0x0053, 0x002e, 0x0000 };
 
   /* compressed segment breaking on a quote unicode sequence */
   /*                       B     o     o     t     SQU        */
@@ -746,7 +746,7 @@ TestSCSU(void)
   uint8_t segment2b [] = { 0x68, 0x2c, 0x20, 0x53, 0x2e };
   /* expected result */
   UChar result2 [] = { 0x0042, 0x006f, 0x006f, 0x0074, 0x0068, 
-		       0x002c, 0x0020, 0x0053, 0x002e, 0x0000 };
+               0x002c, 0x0020, 0x0053, 0x002e, 0x0000 };
 
   /* compressed segment breaking on a quote unicode sequence */
   /*                       SCU   UQU                         */
@@ -817,7 +817,7 @@ TestSCSU(void)
     myMultipassTest(chars, len);
     free(chars);
     gTotalChars += len;
-	i++;
+    i++;
   }
 }
 
