@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/util/LocaleDataTest.java,v $
- * $Date: 2003/11/21 22:21:49 $
- * $Revision: 1.2 $
+ * $Date: 2003/12/31 21:22:16 $
+ * $Revision: 1.3 $
  *
  *******************************************************************************
 */
@@ -42,6 +42,11 @@ public class LocaleDataTest extends TestFmwk{
         for(int i = 0; i < availableLocales.length; i++){
             Locale locale = availableLocales[i];
             LocaleData.PaperSize paperSize = LocaleData.getPaperSize(locale);
+            // skip testing of "in" .. deprecated code for Indonesian
+            String lang = locale.getLanguage();
+            if(lang.equals("in")){
+                continue;
+            }
             if(locale.toString().indexOf("_US") >= 0){
                 if(paperSize.getHeight()!= 279 || paperSize.getWidth() != 216 ){
                     errln("PaperSize did not return the expected value for locale "+ locale+
@@ -67,6 +72,11 @@ public class LocaleDataTest extends TestFmwk{
         for(int i=0; i<availableLocales.length; i++){
             Locale locale = availableLocales[i];
             LocaleData.MeasurementSystem ms = LocaleData.getMeasurementSystem(locale);
+            // skip testing of "in" .. deprecated code for Indonesian
+            String lang = locale.getLanguage();
+            if(lang.equals("in")){
+                continue;
+            }           
             if(locale.toString().indexOf("_US") >= 0){
                 if(ms == LocaleData.MeasurementSystem.US){
                     logln("Got the expected measurement system for locale: " + locale);
