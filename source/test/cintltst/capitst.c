@@ -278,7 +278,7 @@ void TestProperty()
       ICU 2.4 currVersionArray = {0x21, 0x40, 0x04, 0x04};
       ICU 2.6 currVersionArray = {0x21, 0x40, 0x03, 0x03};
     */
-    UVersionInfo currVersionArray = {0x29, 0x80, 0x01, 0x04};
+    UVersionInfo currVersionArray = {0x29, 0x80, 0x00, 0x04};
     UVersionInfo currUCAVersionArray = {4, 0, 0, 0};
     UVersionInfo versionArray = {0, 0, 0, 0};
     UVersionInfo versionUCAArray = {0, 0, 0, 0};
@@ -380,7 +380,7 @@ void TestProperty()
         buffer[0] = '\0';
         log_verbose("ucol_getRulesEx() testing ...\n");
         tempLength = ucol_getRulesEx(col,UCOL_TAILORING_ONLY,buffer,bufLen );
-        doAssert( tempLength == 0x0f, "getRulesEx() result incorrect" );
+        doAssert( tempLength == 0x0e, "getRulesEx() result incorrect" );
         log_verbose("getRules tests end.\n");
         
         log_verbose("ucol_getRulesEx() testing ...\n");

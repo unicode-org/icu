@@ -1482,6 +1482,15 @@ TestKeyInRootRecursive(UResourceBundle *root, const char *rootName,
                             ures_getSize(subRootBundle),
                             ures_getSize(subBundle));
                 }
+                /*
+                if(isCurrencyPreEuro(subBundleKey) && ures_getSize(subBundle)!=3){
+                    log_err("Different size array with key \"%s\" in \"%s\" for locale \"%s\" the expected size is 3 got size=%d\n",
+                            subBundleKey,
+                            ures_getKey(currentBundle),
+                            locale,
+                            ures_getSize(subBundle));
+                }
+                */
                 for (idx = 0; idx < minSize; idx++) {
                     int32_t rootStrLen, localeStrLen;
                     const UChar *rootStr = ures_getStringByIndex(subRootBundle,idx,&rootStrLen,&errorCode);
