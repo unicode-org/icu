@@ -127,8 +127,11 @@ main(int argc, const char *argv[]) {
       fprintf(stderr, "Run '%s --help' for help.\n", progname);
       return 1;
     }
-    
+#ifdef WIN32     
+    if(! (options[0].doesOccur && 
+#else
     if(! (options[0].doesOccur && options[1].doesOccur &&
+#endif
           options[2].doesOccur) ) {
       fprintf(stderr, " required parameters are missing: -p AND -O AND -m \n");
       fprintf(stderr, "Run '%s --help' for help.\n", progname);

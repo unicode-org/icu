@@ -19,6 +19,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "unicode/utypes.h"
+#include "unicode/putil.h"
 #include "cmemory.h"
 #include "cstring.h"
 #include "filestrm.h"
@@ -27,6 +28,8 @@
 #include "uoptions.h"
 #include "pkgtypes.h"
 #include "makefile.h"
+
+#define WINBUILDMODE "debug"
 
 void writeCmnRules(UPKGOptions *o,  FileStream *makefile, CharList **objects)
 {
@@ -40,48 +43,16 @@ void writeCmnRules(UPKGOptions *o,  FileStream *makefile, CharList **objects)
 
   infiles = o->filePaths;
 
-  sprintf(tmp, "$(CMNTARGET) : $(DATAFILEPATHS)\n");
+  sprintf(tmp, "$(CMNTARGET) : $(DATAFILEPATHS)\n\t@$(GENCMN) -C \"%s\" -d %s -n %s 10000 <<\n", 
+	  o->comment, o->targetDir, o->shortName);
+    T_FileStream_writeLine(makefile, tmp);
 
   for(;infiles;infiles = infiles->next) {
-    baseName = findBasename(infiles->str);
-    p = uprv_strrchr(baseName, '.');
-    if( (p == NULL) || (*p == '\0' ) ) {
-      continue;
-    }
-
-    uprv_strncpy(tmp, baseName, p-baseName);
-    p++;
-
-    uprv_strcpy(tmp+(p-1-baseName), "_"); /* to append */
-    uprv_strcat(tmp, p);
-    uprv_strcat(tmp, OBJ_SUFFIX);
-
-    *objects = pkg_appendToList(*objects, &oTail, uprv_strdup(tmp));
-
-    /* write source list */
-    strcpy(cfile,tmp);
-    strcpy(cfile+strlen(cfile)-strlen(OBJ_SUFFIX), ".c" );
-
-
-    /* Make up parents.. */
-    parents = pkg_appendToList(parents, NULL, uprv_strdup(infiles->str));
-
-    /* make up commands.. */
-    sprintf(stanza, "$(TOOL) $(GENCCODE) -d $(TEMP_DIR) $<");
-    commands = pkg_appendToList(commands, NULL, uprv_strdup(stanza));
-
-    sprintf(stanza, "$(COMPILE.cc) -o $@ $(TEMP_DIR)/%s", cfile);
-    commands = pkg_appendToList(commands, NULL, uprv_strdup(stanza));
-
-    sprintf(stanza, "$(TEMP_DIR)/%s", tmp);
-    pkg_mak_writeStanza(makefile, o, stanza, parents, commands);
-
-    pkg_deleteList(parents);
-    pkg_deleteList(commands);
-    parents = NULL;
-    commands = NULL;
+	  sprintf(tmp, "%s\n", infiles->str);
+	  T_FileStream_writeLine(makefile, tmp);
   }
-
+  sprintf(tmp, "<<\n");
+  T_FileStream_writeLine(makefile, tmp);
 }
 
 
@@ -92,11 +63,18 @@ void pkg_mode_windows(UPKGOptions *o, FileStream *makefile, UErrorCode *status) 
   CharList *tail = NULL;
   CharList *objects = NULL;
   CharList *iter;
+  const char *dataDir =   u_getDataDirectory(); /* we need data directory to know where to look for tools */
+  const char *separator = dataDir[uprv_strlen(dataDir)-1]=='\\'?"":"\\";
   UBool isDll = (uprv_strcmp(o->mode, "dll") == 0);
 
   if(U_FAILURE(*status)) { 
     return;
   }
+
+  sprintf(tmp2,
+	  "GENCMN = %s%s..\\source\\tools\\gencmn\\%s\\gencmn.exe\n",
+	  dataDir, separator, WINBUILDMODE);
+  T_FileStream_writeLine(makefile, tmp2);
 
   if(isDll) {
       uprv_strcpy(tmp, LIB_PREFIX);
@@ -114,6 +92,20 @@ void pkg_mode_windows(UPKGOptions *o, FileStream *makefile, UErrorCode *status) 
 
       sprintf(tmp2, "# DLL file to make:\nDLLTARGET=%s\n\n", tmp);
       T_FileStream_writeLine(makefile, tmp2);
+
+	  sprintf(tmp2, 
+		  "LINK32 = link.exe\n"
+		  "LINK32_FLAGS = /out:\"$(TARGETDIR)\\$(DLLTARGET)\" /DLL /NOENTRY /base:\"0x4ad00000\" /comment:\"%s\"\n",
+		  o->comment
+		);
+      T_FileStream_writeLine(makefile, tmp2);
+
+	  sprintf(tmp2,
+		  "GENCCODE = %s%s..\\source\\tools\\genccode\\%s\\genccode.exe\n",
+		  dataDir, separator, WINBUILDMODE);
+      T_FileStream_writeLine(makefile, tmp2);
+
+
 
       uprv_strcpy(tmp, UDATA_CMN_PREFIX);
       uprv_strcat(tmp, o->shortName);
@@ -142,17 +134,17 @@ void pkg_mode_windows(UPKGOptions *o, FileStream *makefile, UErrorCode *status) 
     T_FileStream_writeLine(makefile, tmp2);
 
   if(isDll) {
-      sprintf(tmp, "all: $(TARGETDIR)\\$(DLLTARGET)\n\n");
+      sprintf(tmp, "all: $(DLLTARGET)\n\n");
       T_FileStream_writeLine(makefile, tmp);
 
       sprintf(tmp, "$(DLLTARGET): $(CMNOBJTARGET)\n"
 				    "\t@$(LINK32) $(LINK32_FLAGS) $?\n\n");
       T_FileStream_writeLine(makefile, tmp);
       sprintf(tmp, "$(CMNOBJTARGET): $(CMNTARGET)\n"
-				    "\t@$(GENCCODE) $(GENCOPTIONS) -o $(TARGETDIR) $?\n\n");
+				    "\t@$(GENCCODE) $(GENCOPTIONS) -o $(TARGETDIR) $(TARGETDIR)\\$(CMNTARGET)\n\n");
       T_FileStream_writeLine(makefile, tmp);
   } else {
-      sprintf(tmp, "all: $(TARGETDIR)\\$(CMNTARGET)\n\n");
+      sprintf(tmp, "all: $(CMNTARGET)\n\n");
       T_FileStream_writeLine(makefile, tmp);
   }
 
@@ -352,8 +344,6 @@ void pkg_mode_common(UPKGOptions *o, FileStream *makefile, UErrorCode *status)
     T_FileStream_writeLine(makefile, tmp);
 
   }
-//  T_FileStream_writeLine(makefile, "$(CMNLIST): $(LISTFILES)\n\n\n");
-//# error How do I do this??
 #else
 
   if(o->hadStdin == FALSE) { /* shortcut */
