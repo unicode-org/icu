@@ -13,6 +13,7 @@
 #include "unicode/translit.h"
 #include "unicode/rbt.h"
 #include "unicode/uniset.h"
+#include "unicode/unicode.h"
 
 #define CASE(id,test) case id:                          \
                           name = #test;                 \

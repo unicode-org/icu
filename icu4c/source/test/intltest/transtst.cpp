@@ -16,6 +16,7 @@
 #include "unicode/dtfmtsym.h"
 #include "unicode/hextouni.h"
 #include "unicode/unitohex.h"
+#include "unicode/unicode.h"
 #include "unicode/ucnv.h"
 #include "unicode/ucnv_err.h"
 
