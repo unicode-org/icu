@@ -86,7 +86,7 @@ diff -u -r ../tzcode.orig/zic.c ./zic.c
 @@ -86,8 +100,14 @@
  extern int	optind;
  
- static void	addtt P((time_t starttime, int type));
+ static void	addtt P((zic_t starttime, int type));
 +#ifdef ICU
 +static int	addtype P((long gmtoff, long rawoff, long dstoff,
 +				const char * abbr, int isdst,
@@ -95,7 +95,7 @@ diff -u -r ../tzcode.orig/zic.c ./zic.c
  static int	addtype P((long gmtoff, const char * abbr, int isdst,
  				int ttisstd, int ttisgmt));
 +#endif
- static void	leapadd P((time_t t, int positive, int rolling, int count));
+ static void	leapadd P((zic_t t, int positive, int rolling, int count));
  static void	adjleap P((void));
  static void	associate P((void));
 @@ -256,6 +276,18 @@
