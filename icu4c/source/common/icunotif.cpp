@@ -109,7 +109,7 @@ ICUNotifier::notifyChanged(void)
   }
 }
 
-U_NAMESPACE_END;
+U_NAMESPACE_END
 
 /* UCONFIG_NO_SERVICE */
 #endif
