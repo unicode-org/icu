@@ -1025,27 +1025,26 @@ LocaleTest::TestAtypicalLocales()
                                     CharsToUnicodeString("Su\\u00E8de"),
                                     CharsToUnicodeString("R\\u00E9publique Dominicaine"),
                                     "Belgique" };
-    UnicodeString rus("Russian (M");
-    rus += (UChar32)0x00e9;
-    rus += "xico)";
-
-    UnicodeString esp("espa");
-    esp += (UChar32)0x00f1;
-    esp += "ol (Germany)";
-
-    UnicodeString dr("Rep");
-    dr += (UChar32)0x00fa;
-    dr += "blica Dominicana";
-
-    UnicodeString spanishDisplayNames [] = { "German (Canada)",
+    UnicodeString spanishDisplayNames [] = {
+                                     CharsToUnicodeString("alem\\u00E1n (Canad\\u00E1)"),
+                                     CharsToUnicodeString("japon\\u00E9s (South Africa)"),
+                                     CharsToUnicodeString("ruso (M\\u00E9xico)"),
+                                     CharsToUnicodeString("ingl\\u00E9s (Francia)"),
+                                     CharsToUnicodeString("espa\\u00F1ol (Alemania)"),
+                                     "Croatia",
+                                     "Suecia",
+                                     CharsToUnicodeString("Rep\\u00FAblica Dominicana"),
+                                     CharsToUnicodeString("B\\u00E9lgica") };
+    UnicodeString arabicDisplayNames [] = { "German (Canada)",
                                      "Japanese (South Africa)",
-                                     rus,
+                                     "Russian (Mexico)",
                                      "English (France)",
-                                     esp,
+                                     "Spanish (Germany)",
                                      "Croatia",
                                      "Sweden",
-                                     dr,
+                                     "Dominican Republic",
                                      "Belgium" };
+
 
     int32_t i;
     UErrorCode status = U_ZERO_ERROR;
@@ -1077,6 +1076,20 @@ LocaleTest::TestAtypicalLocales()
         logln(name);
         if (name != frenchDisplayNames[i])
             errln("Lookup in French failed: expected \"" + frenchDisplayNames[i]
+                        + "\", got \"" + name + "\"");
+    }
+
+    for (i = 0; i < 9; i++) {
+        UnicodeString name;
+        localesToTest[i].getDisplayName(Locale("ar", "ES"), name);
+        logln(name + " Locale fallback to ar, and data fallback to root");
+        if (name != arabicDisplayNames[i])
+            errln("Lookup in Arabic failed: expected \"" + arabicDisplayNames[i]
+                        + "\", got \"" + name + "\"");
+        localesToTest[i].getDisplayName(Locale("ar", "EG"), name);
+        logln(name + " Data fallback to root");
+        if (name != arabicDisplayNames[i])
+            errln("Lookup in Arabic failed: expected \"" + arabicDisplayNames[i]
                         + "\", got \"" + name + "\"");
     }
 }
