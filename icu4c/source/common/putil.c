@@ -40,10 +40,12 @@
 #    include<sys/types.h>
 #endif
 
-/* Define _XOPEN_SOURCE for Solaris and friends. */
 #ifndef PTX
+
+/* Define _XOPEN_SOURCE for Solaris and friends. */
+/* NetBSD needs it to be >= 4 */
 #ifndef _XOPEN_SOURCE
-#define _XOPEN_SOURCE
+#define _XOPEN_SOURCE 4
 #endif
 
 /* Define __USE_POSIX and __USE_XOPEN for Linux and glibc. */
@@ -53,7 +55,8 @@
 #ifndef __USE_XOPEN
 #define __USE_XOPEN
 #endif
-#endif
+
+#endif /* PTX */
 
 /* Include standard headers. */
 #include <stdio.h>
