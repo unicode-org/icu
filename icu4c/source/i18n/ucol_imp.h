@@ -277,9 +277,16 @@ struct incrementalContext {
       if (ch <= 0xFF) {                                                      \
         (order) = (coll)->latinOneMapping[ch];                               \
       }                                                                      \
-      else {                                                                 \
-        (order) = ucmp32_get((coll)->mapping, ch);                           \
-      }                                                                      \
+      else                                                                   \
+        if ((data).isThai && UCOL_ISTHAIBASECONSONANT(ch) &&                 \
+               ((data).pos) != (data).string &&                              \
+               ((data).pos) != (data).writableBuffer &&                      \
+               UCOL_ISTHAIPREVOWEL(*((data).pos -1))) {                      \
+          result = UCOL_THAI;                                                \
+        }                                                                    \
+        else {                                                               \
+          (result) = ucmp32_get((coll)->mapping, ch);                        \
+        }                                                                    \
       if ((order) >= UCOL_NOT_FOUND) {                                       \
         (order) = getSpecialPrevCE((coll), (order), &(data), (length),       \
                                                              (status));      \
