@@ -94,7 +94,7 @@ for(;@ARGV; shift(@ARGV)) {
     foreach (@NMRESULT) { # Process every line of result and stuff it in $_
         ($_, $address, $type) = split(/\|/);
         &verbose( "type: \"$type\" ");
-        if(!($type =~ /[UAw]/)) {
+        if(!($type =~ /[UAwW]/)) {
             if(/@@/) { # These would be imports
                 &verbose( "Import: $_ \"$type\"\n");
             } elsif (/::/) { # C++ methods, stuff class name in associative array
