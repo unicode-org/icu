@@ -1,0 +1,77 @@
+<!-- Ant own build file -->
+
+<project name="ICU4J" default="core" basedir=".">
+
+  <property name="src.dir" value="src"/>
+  <property name="doc.dir" value="doc"/>
+  <property name="build.dir" value="classes"/>
+  <property name="classpath" value="${build.dir}"/>
+  <property name="build.compiler" value="classic"/>
+  
+  <target name="all" depends="core,tests,tools,demos,jar,docs"/>
+  
+  <target name="core">
+    <mkdir dir="${build.dir}"/>
+    <copyfile src="${src.dir}/com/ibm/text/resources/thai_dict"
+    	   dest="${build.dir}/com/ibm/text/resources/thai_dict"/>
+    <compile srcfiles="com/ibm/util,com/ibm/text"
+    	   srcdir="${src.dir}"
+    	   destdir="${build.dir}" 
+    	   classpath="${classpath}"
+           debug="on" deprecation="off" target="1.2"/>
+  </target>
+  
+  <target name="tests" depends="core">
+    <mkdir dir="${build.dir}"/>
+    <compile srcfiles="com/ibm/test"
+    	   srcdir="${src.dir}"
+    	   destdir="${build.dir}" 
+    	   classpath="${classpath}"
+           debug="on" deprecation="off" target="1.2"/>
+  </target>
+  
+  <target name="demos" depends="core">
+    <mkdir dir="${build.dir}"/>
+    <compile srcfiles="com/ibm/demo"
+    	   srcdir="${src.dir}"
+    	   destdir="${build.dir}" 
+    	   classpath="${classpath}"
+           debug="on" deprecation="off" target="1.2"/>
+  </target>
+  
+  <target name="tools" depends="core">
+    <mkdir dir="${build.dir}"/>
+    <compile srcfiles="com/ibm/tools"
+    	   srcdir="${src.dir}"
+    	   destdir="${build.dir}" 
+    	   classpath="${classpath}"
+           debug="on" deprecation="off" target="1.2"/>
+  </target>
+  
+  <target name="docs" depends="core,tests,tools">
+    <mkdir dir="${doc.dir}"/>
+    <docs sourcepath="${src.dir}"
+    		  destdir="${doc.dir}"
+    		  nodeprecatedlist="true"
+			  windowtitle="ICU4J"
+			  doctitle="ICU4J"
+			  encoding="iso-8859-1"
+			  docencoding="iso-8859-1"
+			  bottom="&quot;&lt;font size=-1>Copyright (c); 1998-2000 IBM Corporation.&lt;/font>&quot;"
+	    	  sourcefiles="src/com/ibm/text/*.java src/com/ibm/util/*.java"
+    		  />
+    		  
+  </target>
+
+  <target name="jar" depends="core">
+     <jar jarfile="ICU4J.jar" basedir="${build.dir}" items="com"/>
+  </target>
+
+  <target name="clean">
+    <deltree dir="${build.dir}"/>
+    <deltree dir="${doc.dir}"/>
+    <deltree dir="ICU4J.jar"/>
+  </target>
+
+</project>
+
