@@ -4244,7 +4244,7 @@ unorm_compare(const UChar *s1, int32_t length1,
               const UChar *s2, int32_t length2,
               uint32_t options,
               UErrorCode *pErrorCode) {
-    UChar fold1[300], fold2[300], fcd1[300], fcd2[300];
+    UChar fcd1[300], fcd2[300];
     UChar *f1, *f2, *d1, *d2;
     const UnicodeSet *dx;
     int32_t result;
@@ -4274,6 +4274,22 @@ unorm_compare(const UChar *s1, int32_t length1,
     options|=_COMPARE_EQUIV;
     result=0;
 
+    /*
+     * UAX #21 Case Mappings, as fixed for Unicode version 4
+     * (see Jitterbug 2021), defines a canonical caseless match as
+     *
+     * A string X is a canonical caseless match
+     * for a string Y if and only if
+     * NFD(toCasefold(NFD(X))) = NFD(toCasefold(NFD(Y)))
+     *
+     * For better performance, we check for FCD (or let the caller tell us that
+     * both strings are in FCD) for the inner normalization.
+     * BasicNormalizerTest::FindFoldFCDExceptions() makes sure that
+     * case-folding preserves the FCD-ness of a string.
+     * The outer normalization is then only performed by unorm_cmpEquivFold()
+     * when there is a difference.
+     */
+
     if(!(options&UNORM_INPUT_IS_FCD)) {
         int32_t _len1, _len2;
         UBool isFCD1, isFCD2;
@@ -4281,66 +4297,6 @@ unorm_compare(const UChar *s1, int32_t length1,
         // check if s1 and/or s2 fulfill the FCD conditions
         isFCD1=unorm_checkFCD(s1, length1, dx);
         isFCD2=unorm_checkFCD(s2, length2, dx);
-
-        if((options&U_COMPARE_IGNORE_CASE)!=0 && !(isFCD1 && isFCD2)) {
-            // case-fold first to keep the order of operations as in UAX 21 2.5
-            _len1=u_strFoldCase(fold1, sizeof(fold1)/U_SIZEOF_UCHAR,
-                                s1, length1,
-                                options,
-                                pErrorCode);
-            if(*pErrorCode!=U_BUFFER_OVERFLOW_ERROR) {
-                s1=fold1;
-            } else {
-                f1=(UChar *)uprv_malloc(_len1*U_SIZEOF_UCHAR);
-                if(f1==0) {
-                    *pErrorCode=U_MEMORY_ALLOCATION_ERROR;
-                    goto cleanup;
-                }
-
-                *pErrorCode=U_ZERO_ERROR;
-                _len1=u_strFoldCase(f1, _len1,
-                                    s1, length1,
-                                    options,
-                                    pErrorCode);
-                if(U_FAILURE(*pErrorCode)) {
-                    goto cleanup;
-                }
-
-                s1=f1;
-            }
-            length1=_len1;
-
-            _len2=u_strFoldCase(fold2, sizeof(fold2)/U_SIZEOF_UCHAR,
-                                s2, length2,
-                                options,
-                                pErrorCode);
-            if(*pErrorCode!=U_BUFFER_OVERFLOW_ERROR) {
-                s2=fold2;
-            } else {
-                f2=(UChar *)uprv_malloc(_len2*U_SIZEOF_UCHAR);
-                if(f2==0) {
-                    *pErrorCode=U_MEMORY_ALLOCATION_ERROR;
-                    goto cleanup;
-                }
-
-                *pErrorCode=U_ZERO_ERROR;
-                _len2=u_strFoldCase(f2, _len2,
-                                    s2, length2,
-                                    options,
-                                    pErrorCode);
-                if(U_FAILURE(*pErrorCode)) {
-                    goto cleanup;
-                }
-
-                s2=f2;
-            }
-            length2=_len2;
-
-            // turn off U_COMPARE_IGNORE_CASE and re-check FCD
-            options&=~U_COMPARE_IGNORE_CASE;
-            isFCD1=unorm_checkFCD(s1, length1, dx);
-            isFCD2=unorm_checkFCD(s2, length2, dx);
-        }
 
         if(!isFCD1 && !isFCD2) {
             // if both strings need normalization then make them NFD right away and
