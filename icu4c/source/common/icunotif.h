@@ -82,6 +82,7 @@ class U_COMMON_API ICUNotifier : public UMemory  {
  ICUNotifier(void) 
    : notifyLock(0), listeners(NULL) 
    {
+     umtx_init(&notifyLock);
    }
 
  virtual ~ICUNotifier(void) {
