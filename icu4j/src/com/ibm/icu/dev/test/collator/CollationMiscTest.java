@@ -66,7 +66,7 @@ public class CollationMiscTest extends TestFmwk{
                 {"c", "b", "\\u0009", "a", "\\u000a"},
                 {"c", "b", "\\uD800\\uDF23", "a", "\\u02d0"},
                 {"b", "\\u02d0", "a", "\\u02d1"},
-                {"b", "\\u11f9", "a", "\\u4e00"},
+                {"b", "\\ud801\\udc25", "a", "\\u4e00"},
                 {"b", "\\u4e00", "a", "\\u4e01"},
                 {"b", "\\U0010FFFC", "a"},
                 {"\ufffb",  "w", "y", "\u20e3", "x", "\u137c", "z", "u"},
