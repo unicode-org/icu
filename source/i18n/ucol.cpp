@@ -2116,7 +2116,12 @@ uint32_t ucol_prv_getSpecialCE(const UCollator *coll, UChar ch, uint32_t CE, col
         UTF_IS_SECOND_SURROGATE((nextChar=*source->pos))) {
         cp = ((((uint32_t)ch)<<10UL)+(nextChar)-(((uint32_t)0xd800<<10UL)+0xdc00-0x10000));
         source->pos++;
-        return getImplicit(cp, source, 0);
+        if((cp >= 0x20000 && cp <= 0x2a6d6) || 
+           (cp >= 0x2F800 && cp <= 0x2FA1D)) { // this might be a CJK supplementary cp
+          return getImplicit(cp, source, 0x04000000);
+        } else { // or a regular one
+          return getImplicit(cp, source, 0);
+        }
       } else {
         return 0; /* completely ignorable */
       }
