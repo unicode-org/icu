@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/translit/TransliteratorTest.java,v $ 
- * $Date: 2000/03/22 02:00:08 $ 
- * $Revision: 1.14 $
+ * $Date: 2000/04/19 16:37:38 $ 
+ * $Revision: 1.15 $
  *
  *****************************************************************************************
  */
@@ -410,6 +410,25 @@ public class TransliteratorTest extends TestFmwk {
         // Try custom Unicode-Hex (default is tested elsewhere)
         UnicodeToHexTransliterator hex3 = new UnicodeToHexTransliterator("&\\#x###0;");
         expect(hex3, "012", "&#x30;&#x31;&#x32;");
+    }
+
+    /**
+     * Test segments and segment references.
+     */
+    public void TestSegments() {
+        // Array of 3n items
+        // Each item is <rules>, <input>, <expected output>
+        String[] DATA = {
+            "$([a-z]$) . $([0-9]$) > $2-$1",
+            "abc.123.xyz.456",
+            "ab1-c23.xy4-z56",
+        };
+
+        for (int i=0; i<DATA.length; i+=3) {
+            logln("Pattern: " + Utility.escape(DATA[i]));
+            Transliterator t = new RuleBasedTransliterator("<ID>", DATA[i]);
+            expect(t, DATA[i+1], DATA[i+2]);
+        }
     }
 
     //======================================================================

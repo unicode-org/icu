@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/TransliterationRule.java,v $ 
- * $Date: 2000/04/12 20:17:45 $ 
- * $Revision: 1.15 $
+ * $Date: 2000/04/19 16:34:18 $ 
+ * $Revision: 1.16 $
  *
  *****************************************************************************************
  */
@@ -30,12 +30,26 @@ import com.ibm.util.Utility;
  * Variables are detected by looking up each character in a supplied
  * variable list to see if it has been so defined. 
  *
+ * <p>A rule may contain segments in its input string and segment references in
+ * its output string.  A segment is a substring of the input pattern, indicated
+ * by an offset and limit.  The segment may span the preceding or following
+ * context.  A segment reference is a special character in the output string
+ * that causes a segment of the input string (not the input pattern) to be
+ * copied to the output string.  The range of special characters that represent
+ * segment references is defined by RuleBasedTransliterator.Data.
+ *
+ * <p>Example: The rule "$([a-z]$) . $([0-9]$) > $2 . $1" will change the input
+ * string "abc.123" to "ab1.c23".
+ *
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: TransliterationRule.java,v $ $Revision: 1.15 $ $Date: 2000/04/12 20:17:45 $
+ * @version $RCSfile: TransliterationRule.java,v $ $Revision: 1.16 $ $Date: 2000/04/19 16:34:18 $
  *
  * $Log: TransliterationRule.java,v $
+ * Revision 1.16  2000/04/19 16:34:18  alan
+ * Add segment support.
+ *
  * Revision 1.15  2000/04/12 20:17:45  alan
  * Delegate replace operation to rule object
  *
@@ -122,6 +136,21 @@ class TransliterationRule {
     private String output;
 
     /**
+     * Array of segments.  These are segments of the input string that may be
+     * referenced and appear in the output string.  Each segment is stored as an
+     * offset, limit pair.  Segments are referenced by a 1-based index;
+     * reference i thus includes characters at offset segments[2*i-2] to
+     * segments[2*i-1]-1 in the pattern string.
+     *
+     * In the output string, a segment reference is indicated by a character in
+     * a special range, as defined by RuleBasedTransliterator.Data.
+     *
+     * Most rules have no segments, in which case segments is null, and the
+     * output string need not be checked for segment reference characters.
+     */
+    private int[] segments;
+
+    /**
      * The length of the string that must match before the key.  If
      * zero, then there is no matching requirement before the key.
      * Substring [0,anteContextLength) of pattern is the anteContext.
@@ -160,11 +189,17 @@ class TransliterationRule {
      * <code>output</code>; that is, -1 is equivalent to
      * <code>output.length()</code>.  If greater than
      * <code>output.length()</code> then an exception is thrown.
+     * @param segs array of 2n integers.  Each of n pairs consists of offset,
+     * limit for a segment of the input string.  Characters in the output string
+     * refer to these segments if they are in a special range determined by the
+     * associated RuleBasedTransliterator.Data object.  May be null if there are
+     * no segments.
      */
     public TransliterationRule(String input,
                                int anteContextPos, int postContextPos,
                                String output,
-                               int cursorPos) {
+                               int cursorPos,
+                               int[] segs) {
         // Do range checks only when warranted to save time
         if (anteContextPos < 0) {
             anteContextLength = 0;
@@ -193,6 +228,34 @@ class TransliterationRule {
         }
         pattern = input;
         this.output = output;
+        // We don't validate the segments array.  The caller must
+        // guarantee that the segments are well-formed.
+        this.segments = segs;
+    }
+
+    /**
+     * Construct a new rule with the given input, output text, and other
+     * attributes.  A cursor position may be specified for the output text.
+     * @param input input string, including key and optional ante and
+     * post context
+     * @param anteContextPos offset into input to end of ante context, or -1 if
+     * none.  Must be <= input.length() if not -1.
+     * @param postContextPos offset into input to start of post context, or -1
+     * if none.  Must be <= input.length() if not -1, and must be >=
+     * anteContextPos.
+     * @param output output string
+     * @param cursorPos offset into output at which cursor is located, or -1 if
+     * none.  If less than zero, then the cursor is placed after the
+     * <code>output</code>; that is, -1 is equivalent to
+     * <code>output.length()</code>.  If greater than
+     * <code>output.length()</code> then an exception is thrown.
+     */
+    public TransliterationRule(String input,
+                               int anteContextPos, int postContextPos,
+                               String output,
+                               int cursorPos) {
+        this(input, anteContextPos, postContextPos,
+             output, cursorPos, null);
     }
 
     /**
@@ -238,11 +301,34 @@ class TransliterationRule {
      * matches.  This is the offset to the point after the ante
      * context, if any, and before the match string and any post
      * context.
+     * @param data the RuleBasedTransliterator.Data object specifying
+     * context for this transliterator.
      * @return the change in the length of the text
      */
-    int replace(Replaceable text, int offset) {
-        text.replace(offset, offset + keyLength, output);
-        return output.length() - keyLength;
+    public int replace(Replaceable text, int offset,
+                       RuleBasedTransliterator.Data data) {
+        String out;
+        if (segments == null) {
+            out = output;
+        } else {
+            int textStart = offset - anteContextLength;
+            StringBuffer buf = new StringBuffer();
+            for (int i=0; i<output.length(); ++i) {
+                char c = output.charAt(i);
+                int b = data.lookupSegmentReference(c);
+                if (b < 0) {
+                    buf.append(c);
+                } else {
+                    for (int j=textStart + segments[2*b];
+                         j<textStart + segments[2*b+1]; ++j) {
+                        buf.append(text.charAt(j));
+                    }
+                }
+            }
+            out = buf.toString();
+        }
+        text.replace(offset, offset + keyLength, out);
+        return out.length() - keyLength;
     }
 
     /**
