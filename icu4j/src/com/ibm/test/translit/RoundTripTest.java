@@ -15,7 +15,13 @@ public class RoundTripTest extends TestFmwk {
     public static void main(String[] args) throws Exception {
         new RoundTripTest().run(args);
     }
-
+    /*
+    public void TestSingle() throws IOException, ParseException {
+        Transliterator t = Transliterator.getInstance("Latin-Greek");
+        String s = t.transliterate("\u0101\u0069");
+    }
+    */
+    
     public void TestHiragana() throws IOException, ParseException {
         new Test("Latin-Hiragana", 
           TestUtility.LATIN_SCRIPT, TestUtility.HIRAGANA_SCRIPT)
@@ -95,6 +101,12 @@ public class RoundTripTest extends TestFmwk {
         new Test("Latin-DEVANAGARI", 
           TestUtility.LATIN_SCRIPT, TestUtility.DEVANAGARI_SCRIPT)
           .test(null, "[:Devanagari:]", null, this, new Legal());
+    }
+    
+    public void TestDevanagariTamil() throws IOException, ParseException {
+        new Test("Tamil-DEVANAGARI", 
+          TestUtility.TAMIL_SCRIPT, TestUtility.DEVANAGARI_SCRIPT)
+          .test("[:tamil:]", "[:Devanagari:]", null, this, new Legal());
     }
     
     public static class Legal {
@@ -184,6 +196,7 @@ public class RoundTripTest extends TestFmwk {
         UnicodeSet roundtripExclusions;
         TestLog log;
         Legal legalSource;
+        UnicodeSet badCharacters;
     
         /*
          * create a test for the given script transliterator.
@@ -212,6 +225,15 @@ public class RoundTripTest extends TestFmwk {
             b = Normalizer.normalize(b, Normalizer.DECOMP, 0);
             if (a.equals(b)) return true;
             if (a.equalsIgnoreCase(b) && isCamel(a)) return true;
+            return false;
+        }
+        
+        public boolean includesSome(UnicodeSet set, String a) {
+            int cp;
+            for (int i = 0; i < a.length(); i += UTF16.getCharCount(cp)) {
+                cp = UTF16.charAt(a, i);
+                if (set.contains(cp)) return true;
+            }
             return false;
         }
         
@@ -263,6 +285,8 @@ public class RoundTripTest extends TestFmwk {
             log.logln(Utility.escape("Source:  " + this.sourceRange));
             log.logln(Utility.escape("Target:  " + this.targetRange));
             log.logln(Utility.escape("Exclude: " + this.roundtripExclusions));
+            
+            badCharacters = new UnicodeSet("[:other:]");
 
             // make a UTF-8 output file we can read with a browser
 
@@ -310,10 +334,16 @@ public class RoundTripTest extends TestFmwk {
                 if (TestUtility.isUnassigned(c) ||
                     !isSource(c)) continue;
                 String cs = String.valueOf(c);
-                String targ = sourceToTarget.transliterate(String.valueOf(cs));
-                if (!isReceivingTarget(targ)) {
+                String targ = sourceToTarget.transliterate(cs);
+                if (!isReceivingTarget(targ) || includesSome(badCharacters, targ)) {
                     logWrongScript("Source-Target", cs, targ);
                     failSourceTarg.set(c);
+                } else {
+                    String cs2 = Normalizer.normalize(cs, Normalizer.DECOMP, 0);
+                    String targ2 = sourceToTarget.transliterate(cs2);
+                    if (!targ.equals(targ2)) {
+                        logNotCanonical("Source-Target", cs, targ, targ2);
+                    }
                 }
             }
 
@@ -331,9 +361,15 @@ public class RoundTripTest extends TestFmwk {
                     
                     String cs = String.valueOf(c) + d;
                     String targ = sourceToTarget.transliterate(cs);
-                    if (!isReceivingTarget(targ)) {
+                    if (!isReceivingTarget(targ) || includesSome(badCharacters, targ)) {
                         logWrongScript("Source-Target", cs, targ);
+                } else {
+                    String cs2 = Normalizer.normalize(cs, Normalizer.DECOMP, 0);
+                    String targ2 = sourceToTarget.transliterate(cs2);
+                    if (!targ.equals(targ2)) {
+                        logNotCanonical("Source-Target", cs, targ, targ2);
                     }
+                }
                 }
             }
 
@@ -348,12 +384,18 @@ public class RoundTripTest extends TestFmwk {
                 String cs = String.valueOf(c);
                 String targ = targetToSource.transliterate(cs);
                 String reverse = sourceToTarget.transliterate(targ);
-                if (!isReceivingSource(targ)) {
+                if (!isReceivingSource(targ) || includesSome(badCharacters, targ)) {
                     logWrongScript("Target-Source", cs, targ);
                     failTargSource.set(c);
                 } else if (!isSame(cs, reverse) && !roundtripExclusions.contains(c)) {
                     logRoundTripFailure(cs, targ, reverse);
                     failRound.set(c);
+                } else {
+                    String targ2 = Normalizer.normalize(targ, Normalizer.DECOMP, 0);
+                    String reverse2 = sourceToTarget.transliterate(targ2);
+                    if (!reverse.equals(reverse2)) {
+                        logNotCanonical("Target-Source", cs, targ, targ2);
+                    }
                 }
             }
 
@@ -375,11 +417,18 @@ public class RoundTripTest extends TestFmwk {
                     String cs = buf.toString();
                     String targ = targetToSource.transliterate(cs);
                     String reverse = sourceToTarget.transliterate(targ);
-                    if (!isReceivingSource(targ) && !failTargSource.get(c) && !failTargSource.get(d)) {
+                    if (!isReceivingSource(targ) && !failTargSource.get(c) && !failTargSource.get(d)
+                         || includesSome(badCharacters, targ)) {
                         logWrongScript("Target-Source", cs, targ);
                     } else if (!isSame(cs, reverse) && !failRound.get(c) && !failRound.get(d)
                          && !roundtripExclusions.contains(c) && !roundtripExclusions.contains(d)) {
                         logRoundTripFailure(cs, targ, reverse);
+                    } else {
+                        String targ2 = Normalizer.normalize(targ, Normalizer.DECOMP, 0);
+                        String reverse2 = sourceToTarget.transliterate(targ2);
+                        if (!reverse.equals(reverse2)) {
+                            logNotCanonical("Target-Source", cs, targ, targ2);
+                        }
                     }
                 }
             }
@@ -394,6 +443,20 @@ public class RoundTripTest extends TestFmwk {
                         from + " (" +
                         TestUtility.hex(from) + ") => " +
                         to + " (" +
+                        TestUtility.hex(to) + ")"
+                        );
+        }
+
+        final void logNotCanonical(String label, String from, String to, String toCan) {
+            if (++errorCount >= errorLimit) {
+                throw new TestTruncated("Test truncated; too many failures");
+            }
+            out.println("<br>Fail (can.equiv)" + label + ": " +
+                        from + " (" +
+                        TestUtility.hex(from) + ") => " +
+                        to + " (" +
+                        TestUtility.hex(to) + ")" +
+                        toCan + " (" +
                         TestUtility.hex(to) + ")"
                         );
         }
