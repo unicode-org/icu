@@ -196,7 +196,7 @@ void ctest_appendToDataDirectory(const char *toAppend)
         
         if(newLen > 1022)
         {
-            newPath = malloc(newLen);
+            newPath = (char *)ctst_malloc(newLen);
         }
 
         strcpy(newPath, oldPath);
@@ -269,7 +269,7 @@ ctest_pathnameInContext( char* fullname, int32_t maxsize, const char* relPath )
 /* returns the path to icu/source/data/out */
 const char *ctest_dataOutDir()
 {
-    static char *dataOutDir = NULL;
+    static const char *dataOutDir = NULL;
 
     if(dataOutDir) {
         return dataOutDir;
