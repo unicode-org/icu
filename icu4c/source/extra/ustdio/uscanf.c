@@ -118,17 +118,18 @@ static int32_t
 u_scanf_skip_leading_ws(UFILE     *input,
                         UChar     pad)
 {
-    UChar     c;
-    int32_t    count = 0;
+    UChar   c;
+    int32_t count = 0;
+    UBool isNotEOF;
 
     /* skip all leading ws in the input */
-    while( ((c = u_fgetc(input)) != U_EOF) && (c == pad || u_isWhitespace(c)) )
+    while( (isNotEOF = ufile_getch(input, &c)) && (c == pad || u_isWhitespace(c)) )
     {
         count++;
     }
 
     /* put the final character back on the input */
-    if(c != U_EOF)
+    if(isNotEOF)
         u_fungetc(c, input);
 
     return count;
@@ -156,6 +157,7 @@ u_scanf_string_handler(UFILE             *input,
                        int32_t            *consumed)
 {
     UChar     c;
+    UBool       isNotEOF;
     int32_t     count;
     const UChar     *source;
     UConverter     *conv;
@@ -176,7 +178,7 @@ u_scanf_string_handler(UFILE             *input,
     if(U_FAILURE(status))
         return -1;
 
-    while( ((c = u_fgetc(input)) != U_EOF)
+    while( (isNotEOF = ufile_getch(input, &c))
         && (c != info->fPadChar && !u_isWhitespace(c))
         && (info->fWidth == -1 || count < info->fWidth) )
     {
@@ -201,7 +203,7 @@ u_scanf_string_handler(UFILE             *input,
     }
 
     /* put the final character we read back on the input */
-    if(c != U_EOF)
+    if(isNotEOF)
         u_fungetc(c, input);
 
     /* add the terminator */
@@ -222,6 +224,7 @@ u_scanf_ustring_handler(UFILE             *input,
                         int32_t            *consumed)
 {
     UChar     c;
+    UBool       isNotEOF;
     int32_t     count;
     UChar     *arg     = (UChar*)(args[0].ptrValue);
     UChar     *alias     = arg;
@@ -232,7 +235,7 @@ u_scanf_ustring_handler(UFILE             *input,
     /* get the string one character at a time, truncating to the width */
     count = 0;
 
-    while( ((c = u_fgetc(input)) != U_EOF)
+    while( (isNotEOF = ufile_getch(input, &c))
         && (c != info->fPadChar && ! u_isWhitespace(c))
         && (info->fWidth == -1 || count < info->fWidth) )
     {
@@ -245,7 +248,7 @@ u_scanf_ustring_handler(UFILE             *input,
     }
 
     /* put the final character we read back on the input */
-    if(c != U_EOF)
+    if(isNotEOF)
         u_fungetc(c, input);
 
     /* add the terminator */
@@ -579,11 +582,8 @@ u_scanf_char_handler(UFILE             *input,
 
     /* get the character from the input, truncating to the width */
     if(info->fWidth == -1 || info->fWidth > 1)
-        uc = u_fgetc(input);
-
-    /* handle EOF */
-    if(uc == U_EOF)
-        return -1;
+        if (!ufile_getch(input, &uc))
+            return -1; /* no character */
 
     /* convert the character to the default codepage */
     result = ufmt_unicodeToDefaultCP(&uc, 1);
@@ -610,11 +610,8 @@ u_scanf_uchar_handler(UFILE             *input,
 
     /* get the character from the input, truncating to the width */
     if(info->fWidth == -1 || info->fWidth > 1)
-        *c = u_fgetc(input);
-
-    /* handle EOF */
-    if(*c == U_EOF)
-        return -1;
+        if (!ufile_getch(input, c))
+            return -1; /* no character */
 
     /* we converted 1 arg */
     return 1;
