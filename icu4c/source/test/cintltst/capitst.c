@@ -244,8 +244,9 @@ void TestProperty()
     doAssert( tempLength != 0, "getRules() result incorrect" );
     log_verbose("getRules tests end.\n");
     {
-        UChar buffer[200000] ={'\0'};
+        UChar *buffer = (UChar *)uprv_malloc(200000);
         int32_t bufLen = 200000;
+        buffer[0] = '\0';
         log_verbose("ucol_getRulesEx() testing ...\n");
         tempLength = ucol_getRulesEx(col,UCOL_TAILORING_ONLY,buffer,bufLen );
         doAssert( tempLength == 0, "getRulesEx() result incorrect" );
@@ -255,6 +256,7 @@ void TestProperty()
         tempLength=ucol_getRulesEx(col,UCOL_FULL_RULES,buffer,bufLen );
         doAssert( tempLength != 0, "getRulesEx() result incorrect" );
         log_verbose("getRules tests end.\n");
+        uprv_free(buffer);
     }
     ucol_close(ruled);
     ucol_close(col);
