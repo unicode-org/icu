@@ -21,9 +21,12 @@ import java.util.Dictionary;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: TransliterationRule.java,v $ $Revision: 1.3 $ $Date: 1999/12/22 01:05:54 $
+ * @version $RCSfile: TransliterationRule.java,v $ $Revision: 1.4 $ $Date: 1999/12/22 01:40:54 $
  *
  * $Log: TransliterationRule.java,v $
+ * Revision 1.4  1999/12/22 01:40:54  Alan
+ * Consolidate rule pattern anteContext, key, and postContext into one string.
+ *
  * Revision 1.3  1999/12/22 01:05:54  Alan
  * Improve masking checking; turn it off by default, for better performance
  *
@@ -59,9 +62,13 @@ class TransliterationRule {
     public static final int FULL_MATCH    = 2;
 
     /**
-     * The string that must be matched.
+     * The string that must be matched, consisting of the anteContext, key,
+     * and postContext, concatenated together, in that order.  Some components
+     * may be empty (zero length).
+     * @see anteContextLength
+     * @see keyLength
      */
-    private String key;
+    private String pattern;
 
     /**
      * The string that is emitted if the key, anteContext, and postContext
@@ -70,18 +77,17 @@ class TransliterationRule {
     private String output;
 
     /**
-     * The string that must match before the key.  Must not be the empty string.
-     * May be null; if null, then there is no matching requirement before the
-     * key.
+     * The length of the string that must match before the key.  If
+     * zero, then there is no matching requirement before the key.
+     * Substring [0,anteContextLength) of pattern is the anteContext.
      */
-    private String anteContext;
+    private int anteContextLength;
 
     /**
-     * The string that must match after the key.  Must not be the empty string.
-     * May be null; if null, then there is no matching requirement after the
-     * key.
+     * The length of the key.  Substring [anteContextLength,
+     * anteContextLength + keyLength) is the key.
      */
-    private String postContext;
+    private int keyLength;
 
     /**
      * The position of the cursor after emitting the output string, from 0 to
@@ -89,12 +95,6 @@ class TransliterationRule {
      * the cursorPos is output.length().
      */
     private int cursorPos;
-
-    /**
-     * A string used to implement masks().  It is the concatenated anteContext,
-     * key, and postContext.  See freeze() method.
-     */
-    private String maskKey;
 
     private static final String COPYRIGHT =
         "\u00A9 IBM Corporation 1999. All rights reserved.";
@@ -120,27 +120,14 @@ class TransliterationRule {
     public TransliterationRule(String key, String output,
                                String anteContext, String postContext,
                                int cursorPos) {
-        this.key = key;
+        keyLength = key.length();
+        anteContextLength = (anteContext != null) ? anteContext.length() : 0;
+        pattern = (anteContextLength > 0 ? (anteContext + key) : key) +
+            (postContext != null ? postContext : "");
         this.output = output;
-        this.anteContext = (anteContext != null && anteContext.length() > 0)
-            ? anteContext : null;
-        this.postContext = (postContext != null && postContext.length() > 0)
-            ? postContext : null;
         this.cursorPos = cursorPos < 0 ? output.length() : cursorPos;
         if (this.cursorPos > output.length()) {
             throw new IllegalArgumentException("Illegal cursor position");
-        }
-
-        /* The mask key is needed when we are adding individual rules to a rule
-         * set, for performance.  Here are the numbers: Without mask key, 13.0
-         * seconds.  With mask key, 6.2 seconds.  However, once the rules have
-         * been added to the set, then they can be discarded to free up space.
-         * This is what the freeze() method does.  After freeze() has been
-         * called, the method masks() must NOT be called.
-         */
-        maskKey = anteContext != null ? (anteContext + key) : key;
-        if (postContext != null) {
-            maskKey += postContext;
         }
     }
 
@@ -149,15 +136,7 @@ class TransliterationRule {
      * @return the length of the match key.
      */
     public int getKeyLength() {
-        return key.length();
-    }
-
-    /**
-     * Return the key.
-     * @return the match key.
-     */
-    public String getKey() {
-        return key;
+        return keyLength;
     }
 
     /**
@@ -182,7 +161,7 @@ class TransliterationRule {
      * <code>getMaximumContextLength()</code>.
      */
     public int getAnteContextLength() {
-        return anteContext == null ? 0 : anteContext.length();
+        return anteContextLength;
     }
 
     /**
@@ -190,8 +169,6 @@ class TransliterationRule {
      * r1 matches any input string that r2 matches.  If r1 masks r2 and r2 masks
      * r1 then r1 == r2.  Examples: "a>x" masks "ab>y".  "a>x" masks "a[b]>y".
      * "[c]a>x" masks "[dc]a>y".
-     *
-     * <p>This method must not be called after freeze() is called.
      */
     public boolean masks(TransliterationRule r2) {
         /* Rule r1 masks rule r2 if the string formed of the
@@ -218,21 +195,12 @@ class TransliterationRule {
          * currently do not have.  This can be added later.
          */
 
-        // maskKey = anteContext + key + postContext
-        int left = getAnteContextLength();
-        int left2 = r2.getAnteContextLength();
-        int right = maskKey.length() - left;
-        int right2 = r2.maskKey.length() - left2;
+        int left = anteContextLength;
+        int left2 = r2.anteContextLength;
+        int right = pattern.length() - left;
+        int right2 = r2.pattern.length() - left2;
         return left <= left2 && right <= right2 &&
-            r2.maskKey.substring(left2 - left).startsWith(maskKey);
-    }
-
-    /**
-     * Free up space.  Once this method is called, masks() must NOT be called.
-     * If it is called, an exception will be thrown.
-     */
-    public void freeze() {
-        maskKey = null;
+            r2.pattern.substring(left2 - left).startsWith(pattern);
     }
 
     /**
@@ -241,13 +209,15 @@ class TransliterationRule {
      */
     public String toString() {
         return getClass().getName() + '{'
-            + escape((anteContext != null ? ("[" + anteContext + ']') : "")
-            + key
-            + (postContext != null ? ("[" + postContext + ']') : "")
+            + escape(anteContextLength > 0 ? ("[" + pattern.substring(0, anteContextLength) +
+                                              ']') : "")
+            + pattern.substring(anteContextLength, anteContextLength + keyLength)
+            + (anteContextLength + keyLength < pattern.length() ?
+               ("[" + pattern.substring(anteContextLength + keyLength) + ']') : "")
             + " -> "
             + (cursorPos < output.length()
                ? (output.substring(0, cursorPos) + '|' + output.substring(cursorPos))
-               : output))
+               : output)
             + '}';
     }
 
@@ -274,21 +244,14 @@ class TransliterationRule {
      * altered by this transliterator.  If <tt>filter</tt> is
      * <tt>null</tt> then no filtering is applied.
      */
-    public boolean matches(String text, int start, int limit,
-                           StringBuffer result, int cursor,
-                           Dictionary variables,
-                           UnicodeFilter filter) {
-        return
-            (anteContext == null
-             || regionMatches(text, start, limit, result,
-                              cursor - anteContext.length(),
-                              anteContext, variables, filter)) &&
-            regionMatches(text, start, limit, result, cursor,
-                          key, variables, filter) &&
-            (postContext == null
-             || regionMatches(text, start, limit, result,
-                              cursor + key.length(),
-                              postContext, variables, filter));
+    public final boolean matches(String text, int start, int limit,
+                                 StringBuffer result, int cursor,
+                                 Dictionary variables,
+                                 UnicodeFilter filter) {
+        // Match anteContext, key, and postContext
+        return regionMatches(text, start, limit, result,
+                             cursor - anteContextLength,
+                             pattern, variables, filter);
     }
 
     /**
@@ -306,18 +269,13 @@ class TransliterationRule {
      * altered by this transliterator.  If <tt>filter</tt> is
      * <tt>null</tt> then no filtering is applied.
      */
-    public boolean matches(Replaceable text, int start, int limit,
-                           int cursor, Dictionary variables,
-                           UnicodeFilter filter) {
-        return
-            (anteContext == null
-             || regionMatches(text, start, limit, cursor - anteContext.length(),
-                              anteContext, variables, filter)) &&
-            regionMatches(text, start, limit, cursor,
-                          key, variables, filter) &&
-            (postContext == null
-             || regionMatches(text, start, limit, cursor + key.length(),
-                              postContext, variables, filter));
+    public final boolean matches(Replaceable text, int start, int limit,
+                                 int cursor, Dictionary variables,
+                                 UnicodeFilter filter) {
+        // Match anteContext, key, and postContext
+        return regionMatches(text, start, limit,
+                             cursor - anteContextLength,
+                             pattern, variables, filter);
     }
 
     /**
@@ -348,28 +306,10 @@ class TransliterationRule {
     public int getMatchDegree(Replaceable text, int start, int limit,
                               int cursor, Dictionary variables,
                               UnicodeFilter filter) {
-        if (anteContext != null
-            && !regionMatches(text, start, limit, cursor - anteContext.length(),
-                              anteContext, variables, filter)) {
-            return MISMATCH;
-        }
-        int len = getRegionMatchLength(text, start, limit, cursor,
-                                       key, variables, filter);
-        if (len < 0) {
-            return MISMATCH;
-        }
-        if (len < key.length()) {
-            return PARTIAL_MATCH;
-        }
-        if (postContext == null) {
-            return FULL_MATCH;
-        }
-        len = getRegionMatchLength(text, start, limit,
-                                   cursor + key.length(),
-                                   postContext, variables, filter);
-        return (len < 0) ? MISMATCH
-                         : ((len == postContext.length()) ? FULL_MATCH
-                                                          : PARTIAL_MATCH);
+        int len = getRegionMatchLength(text, start, limit, cursor - anteContextLength,
+                                       pattern, variables, filter);
+        return len < anteContextLength ? MISMATCH :
+            (len < pattern.length() ? PARTIAL_MATCH : FULL_MATCH);
     }
 
     /**

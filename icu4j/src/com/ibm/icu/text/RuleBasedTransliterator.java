@@ -181,9 +181,12 @@ import java.util.Vector;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: RuleBasedTransliterator.java,v $ $Revision: 1.4 $ $Date: 1999/12/22 01:05:54 $
+ * @version $RCSfile: RuleBasedTransliterator.java,v $ $Revision: 1.5 $ $Date: 1999/12/22 01:40:54 $
  *
  * $Log: RuleBasedTransliterator.java,v $
+ * Revision 1.5  1999/12/22 01:40:54  Alan
+ * Consolidate rule pattern anteContext, key, and postContext into one string.
+ *
  * Revision 1.4  1999/12/22 01:05:54  Alan
  * Improve masking checking; turn it off by default, for better performance
  *
@@ -205,7 +208,7 @@ public class RuleBasedTransliterator extends Transliterator {
 
     static final boolean DEBUG = false;
 
-    static final boolean CHECK_MASKING = false;
+    static final boolean CHECK_MASKING = true;
 
     private static final String COPYRIGHT =
         "\u00A9 IBM Corporation 1999. All rights reserved.";
@@ -654,8 +657,6 @@ public class RuleBasedTransliterator extends Transliterator {
             if (errors != null) {
                 throw new IllegalArgumentException(errors.toString());
             }
-
-            data.ruleSet.freeze();
         }
 
         /**
