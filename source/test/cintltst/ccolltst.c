@@ -176,28 +176,3 @@ UChar U_CALLCONV testInc(void *context) {
 }
 
 
-/* This is test for incremental */
-UCollationResult
-ctst_strcollTestIncremental(    const    UCollator    *coll,
-        const    UChar        *source,
-        int32_t            sourceLength,
-        const    UChar        *target,
-        int32_t            targetLength)
-{
-   testContext tcSource, tcTarget;
-
-    if(sourceLength == -1) {
-        sourceLength = u_strlen(source);
-    }
-    if(targetLength == -1) {
-        targetLength = u_strlen(target
-            );
-    }
-   tcSource.start = source;
-   tcSource.end = source+sourceLength;
-   tcTarget.start = target;
-   tcTarget.end = target + targetLength;
-
-   return ucol_strcollinc(coll, testInc, &tcSource, testInc, &tcTarget);
-
-}
