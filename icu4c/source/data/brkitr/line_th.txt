@@ -294,11 +294,17 @@ $Extend     =   # From UNIDATA/DerivedCoreProperties.txt
 
 
 #
+#  Rule LB1.  By default, treat AI  (characters with ambiguous east Asian width) and
+#                               SA  (South East Asian: Thai, Lao, Khmer) as $AL  (Alphabetic)
+#
+$ALPlus = $AL | $AI | [$SA - $dictionary];
+
+#
 #  Combining Marks.   X $CM*  behaves as if it were X.  Rule LB6.
 #                     TODO:  This is going to produce some odd results, because of the non-combining
 #                            chars that are included in $CM.  Use $Extend instead, where possible.
 #
-$ALcm = $AL $CM*;
+$ALcm = $ALPlus $CM*;
 $IDcm = $ID $CM*;
 $NUcm = $NU $Extend*;
 $HYcm = $HY $Extend*;
