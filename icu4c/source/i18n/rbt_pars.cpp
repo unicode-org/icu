@@ -23,6 +23,7 @@
 #include "unicode/uchar.h"
 #include "unicode/ustring.h"
 #include "unicode/uniset.h"
+#include "util.h"
 
 // Operators
 #define VARIABLE_DEF_OP ((UChar)0x003D) /*=*/
@@ -982,7 +983,7 @@ static const UChar PRAGMA_NFC_RULES[] = {0x7E,0x6E,0x66,0x63,0x20,0x72,0x75,0x6C
  */
 UBool TransliteratorParser::resemblesPragma(const UnicodeString& rule, int32_t pos, int32_t limit) {
     // Must start with /use\s/i
-    return parsePattern(rule, pos, limit, PRAGMA_USE, NULL) >= 0;
+    return Utility::parsePattern(rule, pos, limit, PRAGMA_USE, NULL) >= 0;
 }
 
 /**
@@ -1007,25 +1008,25 @@ int32_t TransliteratorParser::parsePragma(const UnicodeString& rule, int32_t pos
     // use maximum backup 16;
     // use nfd rules;
     // use nfc rules;
-    int p = parsePattern(rule, pos, limit, PRAGMA_VARIABLE_RANGE, array);
+    int p = Utility::parsePattern(rule, pos, limit, PRAGMA_VARIABLE_RANGE, array);
     if (p >= 0) {
         setVariableRange(array[0], array[1]);
         return p;
     }
     
-    p = parsePattern(rule, pos, limit, PRAGMA_MAXIMUM_BACKUP, array);
+    p = Utility::parsePattern(rule, pos, limit, PRAGMA_MAXIMUM_BACKUP, array);
     if (p >= 0) {
         pragmaMaximumBackup(array[0]);
         return p;
     }
     
-    p = parsePattern(rule, pos, limit, PRAGMA_NFD_RULES, NULL);
+    p = Utility::parsePattern(rule, pos, limit, PRAGMA_NFD_RULES, NULL);
     if (p >= 0) {
         pragmaNormalizeRules(UNORM_NFD);
         return p;
     }
     
-    p = parsePattern(rule, pos, limit, PRAGMA_NFC_RULES, NULL);
+    p = Utility::parsePattern(rule, pos, limit, PRAGMA_NFC_RULES, NULL);
     if (p >= 0) {
         pragmaNormalizeRules(UNORM_NFC);
         return p;
@@ -1329,161 +1330,6 @@ UChar TransliteratorParser::getSegmentStandin(int32_t r) {
         }
     }
     return data->getSegmentStandin(r);
-}
-
-/**
- * Returns the index of a character, ignoring quoted text.
- * For example, in the string "abc'hide'h", the 'h' in "hide" will not be
- * found by a search for 'h'.
- */
-int32_t TransliteratorParser::quotedIndexOf(const UnicodeString& text,
-                                                 int32_t start, int32_t limit,
-                                                 UChar charToFind) {
-    for (int32_t i=start; i<limit; ++i) {
-        UChar c = text.charAt(i);
-        if (c == ESCAPE) {
-            ++i;
-        } else if (c == QUOTE) {
-            while (++i < limit
-                   && text.charAt(i) != QUOTE) {}
-        } else if (c == charToFind) {
-            return i;
-        }
-    }
-    return -1;
-}
-
-//----------------------------------------------------------------------
-// Utility methods
-//
-// These should be moved to a separate module later:  common/utility.*
-//----------------------------------------------------------------------
-
-/**
- * Skip over a sequence of zero or more white space characters
- * at pos.  Return the index of the first non-white-space character
- * at or after pos, or str.length(), if there is none.
- */
-int32_t TransliteratorParser::skipWhitespace(const UnicodeString& str, int32_t pos) {
-    while (pos < str.length()) {
-        UChar32 c = str.char32At(pos);
-        if (!u_isWhitespace(c)) {
-            break;
-        }
-        pos += UTF_CHAR_LENGTH(c);
-    }
-    return pos;
-}
-
-/**
- * Parse a pattern string starting at offset pos.  Keywords are
- * matched case-insensitively.  Spaces may be skipped and may be
- * optional or required.  Integer values may be parsed, and if
- * they are, they will be returned in the given array.  If
- * successful, the offset of the next non-space character is
- * returned.  On failure, -1 is returned.
- * @param pattern must only contain lowercase characters, which
- * will match their uppercase equivalents as well.  A space
- * character matches one or more required spaces.  A '~' character
- * matches zero or more optional spaces.  A '#' character matches
- * an integer and stores it in parsedInts, which the caller must
- * ensure has enough capacity.
- * @param parsedInts array to receive parsed integers.  Caller
- * must ensure that parsedInts.length is >= the number of '#'
- * signs in 'pattern'.
- * @return the position after the last character parsed, or -1 if
- * the parse failed
- */
-int32_t TransliteratorParser::parsePattern(const UnicodeString& rule, int32_t pos, int32_t limit,
-                                           const UnicodeString& pattern, int32_t* parsedInts) {
-    // TODO Update this to handle surrogates
-    int32_t p;
-    int32_t intCount = 0; // number of integers parsed
-    for (int32_t i=0; i<pattern.length(); ++i) {
-        UChar cpat = pattern.charAt(i);
-        UChar c;
-        switch (cpat) {
-        case 32 /*' '*/:
-            if (pos >= limit) {
-                return -1;
-            }
-            c = rule.charAt(pos++);
-            if (!u_isWhitespace(c)) {
-                return -1;
-            }
-            // FALL THROUGH to skipWhitespace
-        case 126 /*'~'*/:
-            pos = skipWhitespace(rule, pos);
-            break;
-        case 35 /*'#'*/:
-            p = pos;
-            parsedInts[intCount++] = parseInteger(rule, p, limit);
-            if (p == pos) {
-                // Syntax error; failed to parse integer
-                return -1;
-            }
-            pos = p;
-            break;
-        default:
-            if (pos >= limit) {
-                return -1;
-            }
-            c = (UChar) u_tolower(rule.charAt(pos++));
-            if (c != cpat) {
-                return -1;
-            }
-            break;
-        }
-    }
-    return pos;
-}
-
-static const UChar ZERO_X[] = {48, 120, 0}; // "0x"
-
-/**
- * Parse an integer at pos, either of the form \d+ or of the form
- * 0x[0-9A-Fa-f]+ or 0[0-7]+, that is, in standard decimal, hex,
- * or octal format.
- * @param pos INPUT-OUTPUT parameter.  On input, the first
- * character to parse.  On output, the character after the last
- * parsed character.
- */
-int32_t TransliteratorParser::parseInteger(const UnicodeString& rule, int32_t& pos, int32_t limit) {
-    int32_t count = 0;
-    int32_t value = 0;
-    int32_t p = pos;
-    int8_t radix = 10;
-
-    if (0 == rule.caseCompare(p, 2, ZERO_X, U_FOLD_CASE_DEFAULT)) {
-        p += 2;
-        radix = 16;
-    } else if (p < limit && rule.charAt(p) == 48 /*0*/) {
-        p++;
-        count = 1;
-        radix = 8;
-    }
-
-    while (p < limit) {
-        int32_t d = u_digit(rule.charAt(p++), radix);
-        if (d < 0) {
-            --p;
-            break;
-        }
-        ++count;
-        int32_t v = (value * radix) + d;
-        if (v <= value) {
-            // If there are too many input digits, at some point
-            // the value will go negative, e.g., if we have seen
-            // "0x8000000" already and there is another '0', when
-            // we parse the next 0 the value will go negative.
-            return 0;
-        }
-        value = v;
-    }
-    if (count > 0) {
-        pos = p;
-    }
-    return value;
 }
 
 U_NAMESPACE_END
