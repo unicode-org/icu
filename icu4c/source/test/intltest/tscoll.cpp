@@ -391,7 +391,7 @@ IntlTestCollator::doTestVariant(Collator* col, const UnicodeString &source, cons
       uiter_setString(&sIter, src, sLen);
       uiter_setString(&tIter, trg, tLen);
       compareResultIter = ucol_strcollIter(myCollation, &sIter, &tIter, &status);
-      if(compareResultIter != result) {
+      if(compareResultIter != (UCollationResult)result) {
         errln("Different result for iterative comparison "+source+" "+target);
       }
     }
@@ -447,7 +447,7 @@ IntlTestCollator::doTestVariant(Collator* col, const UnicodeString &source, cons
         log("%i ", partialSizes[i]);
 
         partialSKResult = compareUsingPartials(myCollation, src, sLen, trg, tLen, partialSizes[i], status);
-        if(partialSKResult != result) {
+        if(partialSKResult != (UCollationResult)result) {
           errln("Partial sortkey comparison returned wrong result: "+source+", "+target+" (size "+partialSizes[i]+")");           
         }
 
