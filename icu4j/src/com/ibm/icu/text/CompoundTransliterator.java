@@ -23,13 +23,18 @@ import java.util.Vector;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: CompoundTransliterator.java,v $ $Revision: 1.5 $ $Date: 2000/01/27 18:59:19 $
+ * @version $RCSfile: CompoundTransliterator.java,v $ $Revision: 1.6 $ $Date: 2000/01/27 20:12:14 $
  */
 public class CompoundTransliterator extends Transliterator {
 
     private static final boolean DEBUG = false;
 
     private Transliterator[] trans;
+
+    /**
+     * Array of original filters associated with transliterators.
+     */
+    private UnicodeFilter[] filters = null;
 
     private static final String COPYRIGHT =
         "\u00A9 IBM Corporation 1999. All rights reserved.";
@@ -48,10 +53,13 @@ public class CompoundTransliterator extends Transliterator {
      */
     public CompoundTransliterator(Transliterator[] transliterators,
                                   UnicodeFilter filter) {
-        super(joinIDs(transliterators), filter);
+        super(joinIDs(transliterators), null); // don't set filter here!
         trans = new Transliterator[transliterators.length];
         System.arraycopy(transliterators, 0, trans, 0, trans.length);
         computeMaximumContextLength();
+        if (filter != null) {
+            setFilter(filter);
+        }
     }
 
     /**
@@ -77,7 +85,7 @@ public class CompoundTransliterator extends Transliterator {
                                   UnicodeFilter filter) {
         // changed MED
         // Later, add "rule1[filter];rule2...
-        super(ID, filter);
+        super(ID, null); // don't set filter here!
         String[] list = split(ID, ';');
         trans = new Transliterator[list.length];
         for (int i = 0; i < list.length; ++i) {
@@ -85,6 +93,9 @@ public class CompoundTransliterator extends Transliterator {
                                    direction);
         }
         computeMaximumContextLength();
+        if (filter != null) {
+            setFilter(filter);
+        }
     }
     
     public CompoundTransliterator(String ID, int direction) {
@@ -157,6 +168,42 @@ public class CompoundTransliterator extends Transliterator {
     }
 
     /**
+     * Override Transliterator.  Modify the transliterators that make up
+     * this compound transliterator so their filters are the logical AND
+     * of this transliterator's filter and their own.  Original filters
+     * are kept in the filters array.
+     */
+    public void setFilter(UnicodeFilter f) {
+        /**
+         * If there is a filter F for the compound transliterator as a
+         * whole, then we need to modify every non-null filter f in
+         * the chain to be f' = F & f.
+         *
+         * If anyone else is using the transliterators in the chain
+         * outside of this context, they will get unexpected results.
+         */
+        if (f == null) {
+            // Restore original filters
+            if (filters != null) {
+                for (int i=0; i<filters.length; ++i) {
+                    trans[i].setFilter(filters[i]);
+                }
+            }
+        } else {
+            if (filters == null) {
+                filters = new UnicodeFilter[trans.length];
+                for (int i=0; i<filters.length; ++i) {
+                    filters[i] = trans[i].getFilter();
+                }
+            }
+            for (int i=0; i<filters.length; ++i) {
+                trans[i].setFilter(UnicodeFilterLogic.and(f, filters[i]));
+            }
+        }
+        super.setFilter(f);
+    }
+
+    /**
      * Implements {@link Transliterator#handleTransliterate}.
      */
     protected void handleTransliterate(Replaceable text,
@@ -214,75 +261,43 @@ public class CompoundTransliterator extends Transliterator {
          *    abc/u0041/u0041/u    
          *    S C L
          */
-
-        /**
-         * One more wrinkle.  If there is a filter F for the compound
-         * transliterator as a whole, then we need to modify every
-         * non-null filter f in the chain to be f' = F & f.  Then,
-         * when we're done, we restore the original filters.
-         *
-         * A possible future optimization is to change f to f' at
-         * construction time, but then if anyone else is using the
-         * transliterators in the chain outside of this context, they
-         * will get unexpected results.
+        int cursor = index.cursor;
+        int limit = index.limit;
+        int globalLimit = limit;
+        /* globalLimit is the overall limit.  We keep track of this
+         * since we overwrite index.limit with the previous
+         * index.cursor.  After each transliteration, we update
+         * globalLimit for insertions or deletions that have happened.
          */
-        UnicodeFilter F = getFilter();
-        UnicodeFilter[] f = null;
-        if (F != null) {
-            f = new UnicodeFilter[trans.length];
-            for (int i=0; i<f.length; ++i) {
-                f[i] = trans[i].getFilter();
-                trans[i].setFilter(UnicodeFilterLogic.and(F, f[i]));
+
+        for (int i=0; i<trans.length; ++i) {
+            index.cursor = cursor; // Reset cursor
+            index.limit = limit;
+
+            if (DEBUG) {
+                System.out.print(Utility.escape(i + ": \"" +
+                    substring(text, index.start, index.cursor) + '|' +
+                    substring(text, index.cursor, index.limit) +
+                    "\" -> \""));
             }
+
+            trans[i].handleTransliterate(text, index, incremental);
+
+            if (DEBUG) {
+                System.out.println(Utility.escape(
+                    substring(text, index.start, index.cursor) + '|' +
+                    substring(text, index.cursor, index.limit) +
+                    '"'));
+            }
+
+            // Adjust overall limit for insertions/deletions
+            globalLimit += index.limit - limit;
+            limit = index.cursor; // Move limit to end of committed text
         }
-
-        try {
-            int cursor = index.cursor;
-            int limit = index.limit;
-            int globalLimit = limit;
-            /* globalLimit is the overall limit.  We keep track of this
-             * since we overwrite index.limit with the previous
-             * index.cursor.  After each transliteration, we update
-             * globalLimit for insertions or deletions that have happened.
-             */
-
-            for (int i=0; i<trans.length; ++i) {
-                index.cursor = cursor; // Reset cursor
-                index.limit = limit;
-
-                if (DEBUG) {
-                    System.out.print(Utility.escape(i + ": \"" +
-                        substring(text, index.start, index.cursor) + '|' +
-                        substring(text, index.cursor, index.limit) +
-                        "\" -> \""));
-                }
-
-                trans[i].handleTransliterate(text, index, incremental);
-
-                if (DEBUG) {
-                    System.out.println(Utility.escape(
-                        substring(text, index.start, index.cursor) + '|' +
-                        substring(text, index.cursor, index.limit) +
-                        '"'));
-                }
-            
-                // Adjust overall limit for insertions/deletions
-                globalLimit += index.limit - limit;
-                limit = index.cursor; // Move limit to end of committed text
-            }
-            // Cursor is good where it is -- where the last
-            // transliterator left it.  Limit needs to be put back
-            // where it was, modulo adjustments for deletions/insertions.
-            index.limit = globalLimit;
-
-        } finally {
-            // Fixup the transliterator filters, if we had to modify them.
-            if (f != null) {
-                for (int i=0; i<f.length; ++i) {
-                    trans[i].setFilter(f[i]);
-                }
-            }
-        }
+        // Cursor is good where it is -- where the last
+        // transliterator left it.  Limit needs to be put back
+        // where it was, modulo adjustments for deletions/insertions.
+        index.limit = globalLimit;
     }
 
     /**
