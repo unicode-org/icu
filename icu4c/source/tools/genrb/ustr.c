@@ -18,6 +18,7 @@
 #include "ustr.h"
 #include "cmemory.h"
 #include "cstring.h"
+#include "unicode/ustring.h"
 
 /* Protos */
 static void ustr_resize(struct UString *s, int32_t len, UErrorCode *status);
@@ -146,7 +147,24 @@ ustr_ucat(struct UString *dst,
   dst->fLength += 1;
   dst->fChars[dst->fLength] = 0x0000;
 }
+void
+ustr_uscat(struct UString *dst,
+	  const UChar* src,
+	  UErrorCode *status)
+{
+  int len =0;
+  if(U_FAILURE(*status)) return;
+  len=u_strlen(src);
+  if(dst->fCapacity < (dst->fLength + len)) {
+    ustr_resize(dst, ALLOCATION(dst->fLength + len), status);
+    if(U_FAILURE(*status)) return;
+  }
 
+  uprv_memcpy(dst->fChars + dst->fLength, src,
+	     sizeof(UChar) * len);
+  dst->fLength += len;
+  dst->fChars[dst->fLength] = 0x0000;
+}
 /* Destroys data in the string */
 static void
 ustr_resize(struct UString *s,

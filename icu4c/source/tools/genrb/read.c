@@ -52,8 +52,8 @@ static enum ETokenType getStringToken(UCHARBUF* buf, UChar initialChar,
 static UChar getNextChar(UCHARBUF* buf, UBool skipwhite, UErrorCode *status);
 static void seekUntilNewline(UCHARBUF* buf, UErrorCode *status);
 static void seekUntilEndOfComment(UCHARBUF* buf, UErrorCode *status);
-static UBool isWhitespace(UChar c);
-static UBool isNewline(UChar c);
+static UBool isWhitespace(UChar32 c);
+static UBool isNewline(UChar32 c);
 
 
 /* Read and return the next token from the stream.  If the token is of
@@ -142,8 +142,9 @@ static enum ETokenType getStringToken(UCHARBUF* buf,
                                       UErrorCode *status)
 {
   UBool lastStringWasQuoted;
-  UChar c;
-
+  UChar32 c;
+  UChar target[3] ={'\0'};
+  UChar* pTarget=target;
   /* We are guaranteed on entry that initialChar is not a whitespace
      character. If we are at the EOF, or have some other problem, it
      doesn't matter; we still want to validly return the initialChar
@@ -170,7 +171,7 @@ static enum ETokenType getStringToken(UCHARBUF* buf,
       lastStringWasQuoted = TRUE;
 
       for(;;) {
-        c = (UChar)ucbuf_getc(buf,status);
+        c = ucbuf_getc(buf,status);
         /*  c = u_fgetc(f, status);*/
 
         /* EOF reached */
@@ -182,9 +183,16 @@ static enum ETokenType getStringToken(UCHARBUF* buf,
           return tok_error;
         if(c == QUOTE)
           break;
-        if(c == ESCAPE)
+        if(c == ESCAPE){
+          pTarget=target;
           c = unescape(buf, status);
-        ustr_ucat(token, c, status);
+          if(c==U_ERR){
+              return tok_error;
+          }
+        }
+        U_APPEND_CHAR32(c,pTarget);
+        pTarget=target;
+        ustr_uscat(token,pTarget, status);
         if(U_FAILURE(*status))
           return tok_error;
       }
@@ -196,10 +204,18 @@ static enum ETokenType getStringToken(UCHARBUF* buf,
           return tok_error;
       }
       lastStringWasQuoted = FALSE;
-
-      if(c == ESCAPE)
+      if(c == ESCAPE){
+        pTarget=target;
         c = unescape(buf, status);
-      ustr_ucat(token, c, status);
+        /* EOF reached */
+        if(c == (UChar)U_EOF) {
+            return tok_error;
+        }
+      }
+      U_APPEND_CHAR32(c,pTarget);
+      pTarget=target;
+      ustr_uscat(token,pTarget, status);
+
       if(U_FAILURE(*status))
         return tok_error;
 
@@ -229,9 +245,16 @@ static enum ETokenType getStringToken(UCHARBUF* buf,
         if(isWhitespace(c))
           break;
 
-        if(c == ESCAPE)
+        if(c == ESCAPE){
+          pTarget=target;
           c = unescape(buf, status);
-        ustr_ucat(token, c, status);
+          if(c==U_ERR){
+              return tok_error;
+          }
+        }
+        U_APPEND_CHAR32(c,pTarget);
+        pTarget=target;
+        ustr_uscat(token,pTarget, status);
         if(U_FAILURE(*status))
           return tok_error;
       }
@@ -262,7 +285,7 @@ static UChar getNextChar(UCHARBUF* buf,
     return U_EOF;
 
   for(;;) {
-    c =(UChar) ucbuf_getc(buf,status);
+    c = (UChar)ucbuf_getc(buf,status);
     /*c = u_fgetc(f, status);*/
     if(c == (UChar)U_EOF)
       return U_EOF;
@@ -343,7 +366,7 @@ static void seekUntilEndOfComment(UCHARBUF* buf,
   }
 }
 
-UChar unescape(UCHARBUF* buf,
+UChar32 unescape(UCHARBUF* buf,
                       UErrorCode *status)
 {
   if(U_FAILURE(*status))
@@ -351,10 +374,10 @@ UChar unescape(UCHARBUF* buf,
   /* We expect to be called after the ESCAPE has been seen, but
    * u_fgetcx needs an ESCAPE to do its magic. */
   ucbuf_ungetc(ESCAPE, buf);
-  return (UChar) ucbuf_getcx(buf,status);
+  return ucbuf_getcx(buf,status);
 }
 
-static UBool isWhitespace(UChar c)
+static UBool isWhitespace(UChar32 c)
 {
   switch (c) {
     /* ' ', '\t', '\n', '\r', 0x2029, 0xFEFF */
@@ -372,7 +395,7 @@ static UBool isWhitespace(UChar c)
   }
 }
 
-static UBool isNewline(UChar c)
+static UBool isNewline(UChar32 c)
 {
   switch (c) {
     /* '\n', '\r', 0x2029 */

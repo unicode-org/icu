@@ -44,7 +44,7 @@ enum ETokenType
   tok_token_type_count = 12 /* Number of "real" token types */
 };
 
-UChar unescape(UCHARBUF* buf, UErrorCode *status);
+UChar32 unescape(UCHARBUF* buf, UErrorCode *status);
 enum ETokenType getNextToken(UCHARBUF* buf,
 			     struct UString *token,
 			     UErrorCode *status);
