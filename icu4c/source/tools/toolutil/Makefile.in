@@ -76,7 +76,7 @@ ifeq ($(ENABLE_RPATH),YES)
 RPATHLDFLAGS = $(LD_RPATH)$(LD_RPATH_PRE)$(libdir)
 endif
 LDFLAGS = @LDFLAGS@ $(RPATHLDFLAGS)
-LIBS = $(LIBICU-UC) @LIBS@ 
+LIBS = $(LIBICUUC) @LIBS@ 
 
 OBJECTS = toolutil.o unewdata.o ucmpwrit.o uoptions.o uparse.o
 
