@@ -824,6 +824,25 @@ U_CFUNC void ucol_createElements(UColTokenParser *src, tempUCATable *t, UColTokL
     fprintf(stderr, "Adding: %04X with %08X\n", el.cPoints[0], el.CEs[0]);
 #endif
     uprv_uca_addAnElement(t, &el, status);
+
+#if 0
+    if(el.cSize > 1) { // this is a contraction, we should check whether a composed form should also be included
+      UChar composed[256];
+      uint32_t compLen = unorm_normalize(el.cPoints, el.cSize, UNORM_NFC, 0, composed, 256, status);;
+
+      if(compLen != el.cSize || uprv_memcmp(composed, el.cPoints, el.cSize*sizeof(UChar))) {
+        // composed form of a contraction is different than the decomposed form!
+        // do it!
+#ifdef UCOL_DEBUG
+        fprintf(stderr, "Adding composed for %04X->%04X\n", *element->cPoints, *composed);
+#endif
+        el.cSize = compLen;
+        uprv_memcpy(el.cPoints, composed, el.cSize*sizeof(UChar));
+        uprv_uca_addAnElement(t, &el, status);
+      }
+    }
+#endif 
+
 #if UCOL_DEBUG_DUPLICATES
     if(*status != U_ZERO_ERROR) {
       fprintf(stderr, "replaced CE for %04X with CE for %04X\n", el.cPoints[0], tok->debugSource);

@@ -843,7 +843,7 @@ static uint32_t uprv_uca_finalizeAddition(tempUCATable *t, UCAElements *element,
 
     UTF_NEXT_CHAR(element->cPoints, i, element->cSize, cp);
     CE = ucmpe32_get(t->mapping, cp);
-
+#if 0
     UCAElements *composed = (UCAElements *)uprv_malloc(sizeof(UCAElements));
     uprv_memcpy(composed, element, sizeof(UCAElements));
     composed->cPoints = composed->uchars;
@@ -858,13 +858,14 @@ static uint32_t uprv_uca_finalizeAddition(tempUCATable *t, UCAElements *element,
 #endif
     }
     uprv_free(composed);
+#endif
 
     CE = uprv_uca_addContraction(t, CE, element, status);
   } else { /* easy case, */
     CE = ucmpe32_get(t->mapping, element->cPoints[0]);
 
     if( CE != UCOL_NOT_FOUND) {
-      if(isCntTableElement(CE) /*isContraction(CE)*/) { /* adding a non contraction element (thai, expansion, single) to already existing contraction */
+      if(/*isCntTableElement(CE)*/ isContraction(CE)) { /* adding a non contraction element (thai, expansion, single) to already existing contraction */
             uprv_cnttab_setContraction(t->contractions, CE, 0, 0, element->mapCE, status);
             /* This loop has to change the CE at the end of contraction REDO!*/
             uprv_cnttab_changeLastCE(t->contractions, CE, element->mapCE, status);
@@ -970,6 +971,22 @@ uint32_t uprv_uca_addAnElement(tempUCATable *t, UCAElements *element, UErrorCode
   }
 
   CE = uprv_uca_finalizeAddition(t, element, status);
+
+  if(element->cSize > 1) { // this is a contraction, we should check whether a composed form should also be included
+    UChar composed[256];
+    uint32_t compLen = unorm_normalize(element->cPoints, element->cSize, UNORM_NFC, 0, composed, 256, status);;
+
+    if(compLen != element->cSize || uprv_memcmp(composed, element->cPoints, element->cSize*sizeof(UChar))) {
+      // composed form of a contraction is different than the decomposed form!
+      // do it!
+#ifdef UCOL_DEBUG
+      fprintf(stderr, "Adding composed for %04X->%04X\n", *element->cPoints, *composed);
+#endif
+      element->cSize = compLen;
+      uprv_memcpy(element->cPoints, composed, element->cSize*sizeof(UChar));
+      uprv_uca_finalizeAddition(t, element, status);
+    }
+  }
 
   return CE;
 }
