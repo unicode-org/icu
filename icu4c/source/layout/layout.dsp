@@ -262,6 +262,10 @@ SOURCE=.\IndicReordering.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\KernTable.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\KhmerLayoutEngine.cpp
 # End Source File
 # Begin Source File
@@ -551,6 +555,10 @@ SOURCE=.\IndicRearrangementProcessor.h
 # Begin Source File
 
 SOURCE=.\IndicReordering.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\KernTable.h
 # End Source File
 # Begin Source File
 
