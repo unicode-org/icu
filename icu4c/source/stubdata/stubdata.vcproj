@@ -40,10 +40,10 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions="/MACHINE:I386"
-				OutputFile="..\..\bin\icudt31.dll"
+				OutputFile="..\..\bin\icudt32.dll"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
-				ProgramDatabaseFile=".\Release/icudt31.pdb"
+				ProgramDatabaseFile=".\Release/icudt32.pdb"
 				ImportLibrary="..\..\lib\icudt.lib"/>
 			<Tool
 				Name="VCMIDLTool"
@@ -105,10 +105,10 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions="/MACHINE:I386"
-				OutputFile="..\..\bin\icudt31.dll"
+				OutputFile="..\..\bin\icudt32.dll"
 				LinkIncremental="2"
 				SuppressStartupBanner="TRUE"
-				ProgramDatabaseFile=".\Debug/icudt31.pdb"
+				ProgramDatabaseFile=".\Debug/icudt32.pdb"
 				ImportLibrary="..\..\lib\icudt.lib"/>
 			<Tool
 				Name="VCMIDLTool"

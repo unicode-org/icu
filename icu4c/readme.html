@@ -2,9 +2,6 @@
 
 <html lang="en-US">
   <head>
-    <meta name="generator" content=
-    "HTML Tidy for Windows (vers 1st March 2004), see www.w3.org">
-
     <title>ReadMe for ICU</title>
     <meta name="COPYRIGHT" content=
     "Copyright (c) 1997-2004 IBM Corporation and others. All Rights Reserved.">
@@ -29,10 +26,10 @@
 
   <body>
     <h1>International Components for Unicode<br>
-     <abbr title="International Components for Unicode">ICU</abbr> 3.1
+     <abbr title="International Components for Unicode">ICU</abbr> 3.2
     ReadMe</h1>
 
-    <p>Version: 2004-Aug-04<br>
+    <p>Version: 2004-Oct-25<br>
      Copyright &copy; 1997-2004 International Business Machines Corporation and
     others. All Rights Reserved.</p>
     <!-- Remember that there is a copyright at the end too -->
@@ -228,183 +225,23 @@
     <p>The following list concentrates on <em>changes that affect existing
     applications migrating from previous ICU releases</em>. For more news about
     this release, see the <a href=
-    "http://oss.software.ibm.com/icu/download/3.0/index.html">ICU 3.0 download
+    "http://oss.software.ibm.com/icu/download/3.2/index.html">ICU 3.2 download
     page</a>.</p>
 
-    <h3><a name="News_Respath" id="News_Respath">Resource Path Issue</a></h3>
+    <h3><a name="News_putil_h" id="News_putil_h">Changes to putil.h and
+    utypes.h</a></h3>
 
-    <p>In 3.0, do not set the ICU data path to a short name consisting of only
-    a directory or package name. For example, if your resource package is named
-    'mydata', and resides in a directory named 'mydata', the following will
-    fail:</p>
-<pre>
-<samp>u_setDataDirectory("mydata");
-ures_open("mydata", NULL, &amp;status);
-</samp>
-</pre>
+    <p>Starting in ICU 3.2, the unicode/utypes.h and unicode/putil.h headers
+    are no longer circularly dependent on each other. This means that if you
+    use any of the functions from unicode/putil.h and only included
+    unicode/utypes.h, you will now have to include unicode/putil.h too. No
+    stable API functions have been removed from these headers, but some
+    internal function declarations (marked with @internal) have been moved to
+    internal headers.</p>
 
-    <p>When the data directory and the path (first argument to ures_open) are
-    exactly the same string, ICU will load the ICU data rather than your
-    'mydata' package. This is a known bug and is <a href=
-    "http://www.jtcsv.com/cgibin/icu-bugs?findid=3841">#3841</a>. The solution
-    is to make sure these strings are different. For example, setting a path of
-    "mydata:/otherdir" would work, because there are two path segments and the
-    path is not identical to "mydata". Another solution would be to use a full
-    or relative path such as "C:\\path\\to\\mydata", "./mydata", "./mydata/" or
-    "mydata/".</p>
-
-    <h3><a name="News_Locale" id="News_Locale">Locale Identifier
-    Changes</a></h3>
-
-    <p>The ICU locale identifier format has recently changed. In order to
-    improve support for RFC 3066 identifiers and to support keyword
-    identifiers, some minor breaking changes have been introduced. When your
-    application is working with POSIX locale identifiers or .NET locale
-    identifiers, you should use <code><a href=
-    "http://oss.software.ibm.com/icu/apiref/uloc_8h.html">uloc_canonicalize</a>()</code>
-    to convert it to an ICU locale identifier. It was an undocumented feature
-    that you could pass a POSIX locale to ICU, and ICU would convert it for you
-    automatically. For example, if you used @EURO or @PREEURO to identify
-    certain currencies, you should now be using the "@currency=" keyword for
-    the locale identifiers. If you use the <code>uloc_canonicalize()</code>
-    function, it will convert the @PREEURO variants to the proper ICU locale
-    identifier. For example, it will convert "fr-fr@PREEURO" to
-    "fr_FR@currency=FRF". More information about keywords can be found in the
-    <a href="http://oss.software.ibm.com/icu/userguide/locale.html">Locale
-    Section</a> of the User's Guide and <a href=
-    "http://www.openi18n.org/specs/ldml/1.0/ldml-spec.htm">on the OpenI18N
-    site</a>.</p>
-
-    <p>Some ISO 15924 script codes are used in some RFC 3066 language tags.
-    This is especially helpful when you need to differentiate cases where a
-    language can be written with more than one script. Since ICU now supports
-    ISO 15924 script codes in the locale identifier, you can now specify
-    locales like "zh_Hant" to specify Traditional Chinese. Previously, people
-    had to use "zh_TW" to specify Traditional Chinese, which isn't quite
-    correct because the locale identifier is specifying the language of a
-    region and not the type of language. The current locale identifiers, like
-    en_US, still work, and do not require any changes in your code. Future
-    versions of ICU will move the data into the proper locale resources, and
-    the locale infrastructure will be improved.</p>
-
-    <p>In order to differentiate between the two library names on all
-    platforms, static libraries now use an "s" as a prefix to differentiate
-    between the shared and static libraries. For example, "libicuuc.a" is now
-    "lib<strong>s</strong>icuuc.a". This means that if you used "-licuuc" to
-    link the common library into your application, you now need to use
-    "-lsicuuc".</p>
-
-    <h3><a name="News_ICUIO" id="News_ICUIO">ICUIO Library Changes</a></h3>
-
-    <p>The ICUIO library is still unsupported (this was previously called the
-    ustdio library), and some breaking fixes have been made to the library. %S
-    should be used for UTF-16 strings, and %C should be used for UChar for the
-    format strings. The %K and %U format specifiers are deprecated and will be
-    removed in a future version of ICU. Also u_fgets now uses the same argument
-    ordering as stdio fgets, which will make it easier for people to migrate
-    their existing stdio implementations to use ICUIO. Fortunately, u_fgets now
-    follows the Unicode algorithm for detecting hard line breaks, and some
-    performance enhancements to this library have been implemented so that most
-    of the formatting and parsing functions will run faster.</p>
-
-    <h3><a name="News_Library_Init" id="News_Library_Init">Library
-    Initialization</a></h3>
-
-    <p>ICU4C 2.6 introduces a library initialization function. It is required
-    to call it before using any ICU services in a multi-threaded environment.
-    For details please see the <a href=
-    "http://oss.software.ibm.com/icu/apiref/index.html">documentation</a> of
-    <code>u_init()</code> in the <code>unicode/uclean.h</code> header file.</p>
-
-    <h3><a name="News_TimeZone_IDs" id="News_TimeZone_IDs">TimeZone
-    Identifiers</a></h3>
-
-    <p>ICU supports over 500 TimeZone identifiers. Most of these are current
-    Olson identifiers (see TimeZone documentation). However, some of these are
-    obsolete names for current identifiers. There are two sources of obsolete
-    identifiers: the Olson database itself, and JDK legacy identifiers. (For
-    example, the Olson database defines "US/Pacific" as an old identifier for
-    "America/Los_Angeles". JDK 1.5 defines "PST" as a legacy identifier
-    equivalent to "America/Los_Angeles".) Currently, the ICU TimeZone API does
-    not distinguish between current identifiers and obsolete identifiers. This
-    section lists obsolete identifiers and their modern equivalents.</p>
-
-    <p>As of ICU 3.0 there are 136 obsolete Olson names (modern names given in
-    parentheses): <small>America/Atka (America/Adak), America/Ensenada
-    (America/Tijuana), America/Fort_Wayne (America/Indianapolis),
-    America/Indiana/Indianapolis (America/Indianapolis),
-    America/Kentucky/Louisville (America/Louisville), America/Knox_IN
-    (America/Indiana/Knox), America/Porto_Acre (America/Rio_Branco),
-    America/Rosario (America/Cordoba), America/Shiprock (America/Denver),
-    America/Virgin (America/St_Thomas), Antarctica/South_Pole
-    (Antarctica/McMurdo), Arctic/Longyearbyen (Europe/Oslo), Asia/Ashkhabad
-    (Asia/Ashgabat), Asia/Chungking (Asia/Chongqing), Asia/Dacca (Asia/Dhaka),
-    Asia/Istanbul (Europe/Istanbul), Asia/Macao (Asia/Macau), Asia/Tel_Aviv
-    (Asia/Jerusalem), Asia/Thimbu (Asia/Thimphu), Asia/Ujung_Pandang
-    (Asia/Makassar), Asia/Ulan_Bator (Asia/Ulaanbaatar), Atlantic/Jan_Mayen
-    (Europe/Oslo), Australia/ACT (Australia/Sydney), Australia/Canberra
-    (Australia/Sydney), Australia/LHI (Australia/Lord_Howe), Australia/NSW
-    (Australia/Sydney), Australia/North (Australia/Darwin),
-    Australia/Queensland (Australia/Brisbane), Australia/South
-    (Australia/Adelaide), Australia/Tasmania (Australia/Hobart),
-    Australia/Victoria (Australia/Melbourne), Australia/West (Australia/Perth),
-    Australia/Yancowinna (Australia/Broken_Hill), Brazil/Acre
-    (America/Porto_Acre), Brazil/DeNoronha (America/Noronha), Brazil/East
-    (America/Sao_Paulo), Brazil/West (America/Manaus), CST6CDT
-    (America/Chicago), Canada/Atlantic (America/Halifax), Canada/Central
-    (America/Winnipeg), Canada/East-Saskatchewan (America/Regina),
-    Canada/Eastern (America/Toronto), Canada/Mountain (America/Edmonton),
-    Canada/Newfoundland (America/St_Johns), Canada/Pacific (America/Vancouver),
-    Canada/Saskatchewan (America/Regina), Canada/Yukon (America/Whitehorse),
-    Chile/Continental (America/Santiago), Chile/EasterIsland (Pacific/Easter),
-    Cuba (America/Havana), EST (America/Indianapolis), EST5EDT
-    (America/New_York), Egypt (Africa/Cairo), Eire (Europe/Dublin), Etc/GMT+0
-    (Etc/GMT), Etc/GMT-0 (Etc/GMT), Etc/GMT0 (Etc/GMT), Etc/Greenwich
-    (Etc/GMT), Etc/Universal (Etc/UTC), Etc/Zulu (Etc/UTC), Europe/Bratislava
-    (Europe/Prague), Europe/Ljubljana (Europe/Belgrade), Europe/Nicosia
-    (Asia/Nicosia), Europe/San_Marino (Europe/Rome), Europe/Sarajevo
-    (Europe/Belgrade), Europe/Skopje (Europe/Belgrade), Europe/Tiraspol
-    (Europe/Chisinau), Europe/Vatican (Europe/Rome), Europe/Zagreb
-    (Europe/Belgrade), GB (Europe/London), GB-Eire (Europe/London), GMT
-    (Etc/GMT), GMT+0 (Etc/GMT+0), GMT-0 (Etc/GMT-0), GMT0 (Etc/GMT0), Greenwich
-    (Etc/Greenwich), HST (Pacific/Honolulu), Hongkong (Asia/Hong_Kong), Iceland
-    (Atlantic/Reykjavik), Iran (Asia/Tehran), Israel (Asia/Jerusalem), Jamaica
-    (America/Jamaica), Japan (Asia/Tokyo), Kwajalein (Pacific/Kwajalein), Libya
-    (Africa/Tripoli), MST (America/Phoenix), MST7MDT (America/Denver),
-    Mexico/BajaNorte (America/Tijuana), Mexico/BajaSur (America/Mazatlan),
-    Mexico/General (America/Mexico_City), Mideast/Riyadh87 (Asia/Riyadh87),
-    Mideast/Riyadh88 (Asia/Riyadh88), Mideast/Riyadh89 (Asia/Riyadh89), NZ
-    (Pacific/Auckland), NZ-CHAT (Pacific/Chatham), Navajo (America/Denver), PRC
-    (Asia/Shanghai), PST8PDT (America/Los_Angeles), Pacific/Samoa
-    (Pacific/Pago_Pago), Poland (Europe/Warsaw), Portugal (Europe/Lisbon), ROC
-    (Asia/Taipei), ROK (Asia/Seoul), Singapore (Asia/Singapore), SystemV/AST4
-    (America/Puerto_Rico), SystemV/AST4ADT (America/Halifax), SystemV/CST6
-    (America/Regina), SystemV/CST6CDT (America/Chicago), SystemV/EST5
-    (America/Indianapolis), SystemV/EST5EDT (America/New_York), SystemV/HST10
-    (Pacific/Honolulu), SystemV/MST7 (America/Phoenix), SystemV/MST7MDT
-    (America/Denver), SystemV/PST8 (Pacific/Pitcairn), SystemV/PST8PDT
-    (America/Los_Angeles), SystemV/YST9 (Pacific/Gambier), SystemV/YST9YDT
-    (America/Anchorage), Turkey (Europe/Istanbul), UCT (Etc/UCT), US/Alaska
-    (America/Anchorage), US/Aleutian (America/Adak), US/Arizona
-    (America/Phoenix), US/Central (America/Chicago), US/East-Indiana
-    (America/Indianapolis), US/Eastern (America/New_York), US/Hawaii
-    (Pacific/Honolulu), US/Indiana-Starke (America/Indiana/Knox), US/Michigan
-    (America/Detroit), US/Mountain (America/Denver), US/Pacific
-    (America/Los_Angeles), US/Pacific-New (America/Los_Angeles), US/Samoa
-    (Pacific/Pago_Pago), UTC (Etc/UTC), Universal (Etc/Universal), W-SU
-    (Europe/Moscow), Zulu (Etc/Zulu).</small></p>
-
-    <p>As of ICU 3.0 there are 25 legacy JDK identifiers (modern names given in
-    parentheses): <small>ACT (Australia/Darwin), AET (Australia/Sydney), AGT
-    (America/Buenos_Aires), ART (Africa/Cairo), AST (America/Anchorage), BET
-    (America/Sao_Paulo), BST (Asia/Dhaka), CAT (Africa/Harare), CNT
-    (America/St_Johns), CST (America/Chicago), CTT (Asia/Shanghai), EAT
-    (Africa/Addis_Ababa), ECT (Europe/Paris), IET (America/Indianapolis), IST
-    (Asia/Calcutta), JST (Asia/Tokyo), MIT (Pacific/Apia), NET (Asia/Yerevan),
-    NST (Pacific/Auckland), PLT (Asia/Karachi), PNT (America/Phoenix), PRT
-    (America/Puerto_Rico), PST (America/Los_Angeles), SST
-    (Pacific/Guadalcanal), VST (Asia/Saigon).</small></p>
-    <hr>
+    <p>This change was announced on the icu mailing list, and it was done to
+    fix some header dependency issues that appeared while trying to make some
+    changes to the utf.h header macros.</p>
 
     <h2><a name="Download" href="#Download" id="Download">How To Download the
     Source Code</a></h2>
@@ -1055,8 +892,8 @@ ures_open("mydata", NULL, &amp;status);
     The instructions for building with Visual Studio 6 are similar to the
     instructions for Visual Studio .NET. If you have Microsoft Visual Studio
     .NET 2002, it is recommended that you build from the command line with
-    Cygwin. The Cygwin building instructions are in <a
-    href="#HowToBuildCygwin">How To Build And Install On Windows with Cygwin</a>
+    Cygwin. The Cygwin building instructions are in <a href=
+    "#HowToBuildCygwin">How To Build And Install On Windows with Cygwin</a>
     section of this document.</p>
 
     <h3><a name="HowToBuildWindowsXP64" href="#HowToBuildWindowsXP64" id=
@@ -1588,10 +1425,10 @@ ADDENVVAR ENVVAR(OUTPUTDIR) VALUE('<i>libraryname</i>')</samp>
     </ol>
 
     <p>Following these guidelines prevents other applications that use a
-    standard ICU distribution from conflicting with any libraries that you need. On
-    operating systems that do not have a standard C++ ABI (name mangling) for
-    compilers, it is recommended to do this special packaging anyway. More
-    details on customizing ICU are available in the <a href=
+    standard ICU distribution from conflicting with any libraries that you
+    need. On operating systems that do not have a standard C++ ABI (name
+    mangling) for compilers, it is recommended to do this special packaging
+    anyway. More details on customizing ICU are available in the <a href=
     "http://oss.software.ibm.com/icu/userguide/index.html">User's Guide</a>.
     The <a href="#SourceCode">ICU Source Code Organization</a> section of this
     readme.html gives a more complete description of the libraries.</p>
