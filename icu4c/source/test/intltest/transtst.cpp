@@ -59,6 +59,7 @@ TransliteratorTest::runIndexedTest(int32_t index, UBool exec,
         TESTCASE(24,TestCaseMap);
         TESTCASE(25,TestNameMap);
         TESTCASE(26,TestLiberalizedID);
+        TESTCASE(27,TestCreateInstance);
         default: name = ""; break;
     }
 }
@@ -1120,5 +1121,13 @@ void TransliteratorTest::expectAux(const UnicodeString& tag,
               + ", expected " + prettify(expectedResult));
     }
 }
-
+/* test for Jitterbug 912 */
+void TransliteratorTest::TestCreateInstance(){
+    UParseError *err = 0;
+    Transliterator*  myTrans = Transliterator::createInstance(UnicodeString("Latin-Hangul"),UTRANS_REVERSE,err);
+    UnicodeString newID =myTrans->getID();
+    if(newID!=UnicodeString("Hangul-Latin")){
+        errln(UnicodeString("Test for Jitterbug 912 Transliterator::createInstance(id,UTRANS_REVERSE) failed"));
+    }
+}
 /*static UChar toHexString(int32_t i) { return (UChar)(i + (i < 10 ? ZERO : (UPPER_A - 10))); }*/
