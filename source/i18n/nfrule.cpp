@@ -78,9 +78,9 @@ static const UChar gEmptyString[] =             {0};                /* "" */
 static const UChar gGreaterGreaterGreater[] =   {0x3E, 0x3E, 0x3E, 0}; /* ">>>" */
 
 static const UChar * const tokenStrings[] = {
-	gLessLess, gLessPercent, gLessHash, gLessZero,
-	gGreaterGreater, gGreaterPercent,gGreaterHash, gGreaterZero,
-	gEqualPercent, gEqualHash, gEqualZero, NULL
+    gLessLess, gLessPercent, gLessHash, gLessZero,
+    gGreaterGreater, gGreaterPercent,gGreaterHash, gGreaterZero,
+    gEqualPercent, gEqualHash, gEqualZero, NULL
 };
 
 void 
@@ -492,7 +492,7 @@ NFRule::expectedExponent() const
     // we get rounding error in some cases-- for example, log 1000 / log 10
     // gives us 1.9999999996 instead of 2.  The extra logic here is to take
     // that into account
-    int16_t tempResult = (int16_t)(log(llong_asDouble(baseValue)) / log((double)radix));
+    int16_t tempResult = (int16_t)(uprv_log(llong_asDouble(baseValue)) / uprv_log((double)radix));
     llong temp = llong_pow(radix, tempResult + 1);
     if (temp <= baseValue) {
         tempResult += 1;
@@ -709,7 +709,7 @@ NFRule::shouldRollBack(double number) const
     // multiple of 100.  This is called the "rollback rule."
     if ((sub1->isModulusSubstitution()) || (sub2->isModulusSubstitution())) {
         llong re = llong_pow(radix, exponent);
-        return java_fmod(number, llong_asDouble(re)) == 0 && (baseValue % re) != 0;
+        return uprv_fmod(number, llong_asDouble(re)) == 0 && (baseValue % re) != 0;
     }
     return FALSE;
 }

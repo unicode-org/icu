@@ -292,7 +292,7 @@ NFSubstitution::doSubstitution(llong number, UnicodeString& toInsertInto, int32_
         // to format the result
         double numberToFormat = transformNumber(llong_asDouble(number));
         if (numberFormat->getMaximumFractionDigits() == 0) {
-            numberToFormat = floor(numberToFormat);
+            numberToFormat = uprv_floor(numberToFormat);
         }
 
         UnicodeString temp;
@@ -319,7 +319,7 @@ NFSubstitution::doSubstitution(double number, UnicodeString& toInsertInto, int32
 
     // if the result is an integer, from here on out we work in integer
     // space (saving time and memory and preserving accuracy)
-    if (numberToFormat == floor(numberToFormat) && ruleSet != NULL) {
+    if (numberToFormat == uprv_floor(numberToFormat) && ruleSet != NULL) {
         ruleSet->format(llong(numberToFormat), toInsertInto, _pos + this->pos);
 
         // if the result isn't an integer, then call either our rule set's
@@ -490,7 +490,7 @@ SameValueSubstitution::SameValueSubstitution(int32_t _pos,
     }
 }
 
-char SameValueSubstitution::fgClassID;
+const char SameValueSubstitution::fgClassID = 0;
 
 UClassID
 SameValueSubstitution::getDynamicClassID() const {
@@ -749,7 +749,7 @@ FractionalPartSubstitution::doSubstitution(double number, UnicodeString& toInser
         // (this is slower, but more accurate, than doing it from the
         // other end)
     } else {
-        int32_t numberToFormat = (int32_t)round(transformNumber(number) * pow(10, kMaxDecimalDigits));
+        int32_t numberToFormat = (int32_t)uprv_round(transformNumber(number) * uprv_pow(10, kMaxDecimalDigits));
         // this flag keeps us from formatting trailing zeros.  It starts
         // out false because we're pulling from the right, and switches
         // to true the first time we encounter a non-zero digit

@@ -14,6 +14,9 @@
 */
 
 #include "llong.h"
+#include <float.h>
+
+U_NAMESPACE_BEGIN
 
 #if 0
 /*
@@ -29,7 +32,6 @@ const llong& llong::kOne = llong(0x0, 0x1);
 const llong& llong::kTwo = llong(0x0, 0x2);
 const llong& llong::kMaxDouble = llong(0x200000, 0x0);
 const llong& llong::kMinDouble = -kMaxDouble;
-#endif
 
 static llong kMaxValueObj(0x7fffffff, 0xffffffff);
 static llong kMinValueObj(0x80000000, 0x0);
@@ -49,11 +51,38 @@ const llong& llong::kTwo = kTwoObj;
 const llong& llong::kMaxDouble = kMaxDoubleObj;
 const llong& llong::kMinDouble = kMinDoubleObj;
 
+const double llong::kDMax = llong_asDouble(kMaxDouble);
+const double llong::kDMin = -kDMax;
+#endif
+
 #define SQRT231 46340
 
 const double llong::kD32 = ((double)(0xffffffffu)) + 1;
-const double llong::kDMax = llong_asDouble(kMaxDouble);
-const double llong::kDMin = -kDMax;
+
+llong::llong(double d) { // avoid dependency on bit representation of double
+    if (uprv_isNaN(d)) {
+        hi = 0;
+        lo = 0; /* zero */
+    } else {
+        double mant = uprv_maxMantissa();
+        if (d < -mant) {
+            d = -mant;
+        } else if (d > mant) {
+            d = mant;
+        }
+        UBool neg = d < 0; 
+        if (neg) {
+            d = -d;
+        }
+        d = uprv_floor(d);
+        hi = (int32_t)uprv_floor(d / kD32);
+        d -= kD32 * hi;
+        lo = (uint32_t)d;
+        if (neg) {
+            negate();
+        }
+    }
+}
 
 llong& llong::operator*=(const llong& rhs)
 {
@@ -119,11 +148,12 @@ llong& llong::operator/=(const llong& rhs)
     }
 
     if (b.isZero()) { // should throw div by zero error
-        *this = sign < 0 ? kMinValue : kMaxValue;
+        *this = sign < 0 ? -uprv_maxMantissa() : uprv_maxMantissa();
     } else if (a.hi == 0 && b.hi == 0) {
         *this = (int32_t)(sign * (a.lo / b.lo));
     } else if (b > a) {
-        *this = kZero;
+        hi = 0;
+        lo = 0; /* zero */
     } else if (b == a) {
         *this = sign;
     } else {
@@ -322,3 +352,5 @@ uint32_t u_lltoa(const llong& val, UChar* buf, uint32_t len, uint32_t radix, UBo
 
     return len;
 }
+
+U_NAMESPACE_END

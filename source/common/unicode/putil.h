@@ -39,30 +39,31 @@
 /**
  * Platform utilities isolates the platform dependencies of the
  * libarary.  For each platform which this code is ported to, these
- * functions may have to be re-implemented.  */
+ * functions may have to be re-implemented.
+ */
 
 /* Floating point utilities 
  * @draft
  */
-U_CAPI UBool  U_EXPORT2  uprv_isNaN(double);
-U_CAPI UBool  U_EXPORT2 uprv_isInfinite(double);
+U_CAPI UBool   U_EXPORT2 uprv_isNaN(double);
+U_CAPI UBool   U_EXPORT2 uprv_isInfinite(double);
 U_CAPI UBool   U_EXPORT2 uprv_isPositiveInfinity(double);
 U_CAPI UBool   U_EXPORT2 uprv_isNegativeInfinity(double);
-U_CAPI double   U_EXPORT2 uprv_getNaN(void);
-U_CAPI double   U_EXPORT2 uprv_getInfinity(void);
+U_CAPI double  U_EXPORT2 uprv_getNaN(void);
+U_CAPI double  U_EXPORT2 uprv_getInfinity(void);
 
-U_CAPI double   U_EXPORT2 uprv_floor(double x);
-U_CAPI double   U_EXPORT2 uprv_ceil(double x);
-U_CAPI double   U_EXPORT2 uprv_fabs(double x);
-U_CAPI double   U_EXPORT2 uprv_modf(double x, double* y);
-U_CAPI double   U_EXPORT2 uprv_fmod(double x, double y);
-U_CAPI double   U_EXPORT2 uprv_pow10(int32_t x);
-U_CAPI double   U_EXPORT2 uprv_fmax(double x, double y);
-U_CAPI double   U_EXPORT2 uprv_fmin(double x, double y);
-U_CAPI int32_t  U_EXPORT2 uprv_max(int32_t x, int32_t y);
-U_CAPI int32_t  U_EXPORT2 uprv_min(int32_t x, int32_t y);
-U_CAPI double   U_EXPORT2 uprv_trunc(double d);
-U_CAPI void     U_EXPORT2 uprv_longBitsFromDouble(double d, int32_t *hi, uint32_t *lo);
+U_CAPI double  U_EXPORT2 uprv_trunc(double d);
+U_CAPI double  U_EXPORT2 uprv_floor(double x);
+U_CAPI double  U_EXPORT2 uprv_ceil(double x);
+U_CAPI double  U_EXPORT2 uprv_fabs(double x);
+U_CAPI double  U_EXPORT2 uprv_modf(double x, double* y);
+U_CAPI double  U_EXPORT2 uprv_fmod(double x, double y);
+U_CAPI double  U_EXPORT2 uprv_pow(double x, double y);
+U_CAPI double  U_EXPORT2 uprv_pow10(int32_t x);
+U_CAPI double  U_EXPORT2 uprv_fmax(double x, double y);
+U_CAPI double  U_EXPORT2 uprv_fmin(double x, double y);
+U_CAPI int32_t U_EXPORT2 uprv_max(int32_t x, int32_t y);
+U_CAPI int32_t U_EXPORT2 uprv_min(int32_t x, int32_t y);
 
 #if U_IS_BIG_ENDIAN
 #   define uprv_isNegative(number) (*((signed char *)&(number))<0)
@@ -70,21 +71,29 @@ U_CAPI void     U_EXPORT2 uprv_longBitsFromDouble(double d, int32_t *hi, uint32_
 #   define uprv_isNegative(number) (*((signed char *)&(number)+sizeof(number)-1)<0)
 #endif
 
-/*
+/**
+ * Return the largest positive number that can be represented by an integer
+ * type of arbitrary bit length.
+ */
+U_CAPI double  U_EXPORT2 uprv_maxMantissa(void);
+
+/**
  * Return the floor of the log base 10 of a given double.
  * This method compensates for inaccuracies which arise naturally when
  * computing logs, and always gives the correct value.  The parameter
  * must be positive and finite.
  * (Thanks to Alan Liu for supplying this function.)
- */
-/**
- * Returns the common log of the double value d.
  *
  * @param d the double value to apply the common log function for.
  * @return the log of value d.
  * @draft
  */
 U_CAPI int16_t  U_EXPORT2 uprv_log10(double d);
+
+U_CAPI double  U_EXPORT2 uprv_log(double d);
+
+/** Does common notion of rounding e.g. uprv_floor(x + 0.5); */
+U_CAPI double  U_EXPORT2 uprv_round(double x);
 
 /**
  * Returns the number of digits after the decimal point in a double number x.
