@@ -3,7 +3,7 @@
 ## Copyright (c) 2001-2004, International Business Machines Corporation and
 ## others. All Rights Reserved.
 ##
-## $Id: mh-cygwin-msvc,v 1.17 2004/03/26 01:22:25 grhoten-oss Exp $
+## $Id: mh-cygwin-msvc,v 1.18 2004/03/29 22:31:23 grhoten-oss Exp $
 
 ## Commands to generate dependency files
 GEN_DEPS.c=	:
@@ -26,8 +26,9 @@ THREADSCFLAGS += /MD
 THREADSCXXFLAGS += /MD
 
 # /GF pools strings and places them into read-only memory
+# /GX enables exception handling
 CFLAGS += /GF
-CXXFLAGS += /GF
+CXXFLAGS += /GF /GX
 CPPFLAGS+=/nologo
 DEFS+=/D"WIN32"
 LDFLAGS+=/nologo
