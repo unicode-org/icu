@@ -986,12 +986,15 @@ uloc_kw_nextKeyword(UEnumeration* en,
                     int32_t* resultLength,
                     UErrorCode* status) {
     const char* result = ((UKeywordsContext *)en->context)->current;
+    int32_t len = 0;
     if(*result) {
-        *resultLength = uprv_strlen(((UKeywordsContext *)en->context)->current);
-        ((UKeywordsContext *)en->context)->current += *resultLength+1;
+        len = uprv_strlen(((UKeywordsContext *)en->context)->current);
+        ((UKeywordsContext *)en->context)->current += len+1;
     } else {
-        *resultLength = 0;
         result = NULL;
+    }
+    if (resultLength) {
+        *resultLength = len;
     }
     return result;
 }
