@@ -2416,6 +2416,61 @@ uint32_t getSpecialPrevCE(const UCollator *coll, UChar ch, uint32_t CE,
           return(UCOL_IGNORABLE);
       }
       break;
+    case SPEC_PROC_TAG:
+      {
+        // Special processing is getting a CE that is preceded by a certain prefix
+        // Currently this is only needed for optimizing Japanese length and iteration marks.
+        // When we encouter a special processing tag, we go backwards and try to see if 
+        // we have a match. 
+        // Contraction tables are used - so the whole process is not unlike contraction.
+        // prefix data is stored backwards in the table.
+        const UChar *UCharOffset;
+        UChar schar, tchar, *sourcePointer = source->pos;
+        Normalizer n(source->string, source->pos-source->string+1, UNORM_NFKC);
+        n.last();
+        for(;;) {
+        // This loop will run once per source string character, for as long as we
+        //  are matching a potential contraction sequence                  
+
+        // First we position ourselves at the begining of contraction sequence 
+        const UChar *ContractionStart = UCharOffset = (UChar *)coll->image+getContractOffset(CE);
+        schar = (UChar)n.previous();
+
+        if(schar==Normalizer::DONE) {
+          CE = *(coll->contractionCEs + (UCharOffset - coll->contractionIndex));
+          break;
+        }
+
+        while(schar > (tchar = *UCharOffset)) { /* since the contraction codepoints should be ordered, we skip all that are smaller */
+          UCharOffset++;
+        }
+
+        if (schar == tchar) {
+            // Found the source string char in the table.
+            //  Pick up the corresponding CE from the table.
+            CE = *(coll->contractionCEs +
+                (UCharOffset - coll->contractionIndex));
+        }
+        else
+        {
+            // Source string char was not in the table.
+            //   We have not found the prefix.
+            CE = *(coll->contractionCEs +
+                (ContractionStart - coll->contractionIndex));
+        }
+
+        if(!isPrefix(CE)) {
+            // The source string char was in the contraction table, and the corresponding
+            //   CE is not a prefix CE.  We found the prefix, break
+            //   out of loop, this CE will end up being returned.  This is the normal
+            //   way out of prefix handling when the source actually contained
+            //   the prefix.
+            break;
+        }
+      }
+      break;
+      }
+
     case CONTRACTION_TAG:
         /* to ensure that the backwards and forwards iteration matches, we
         take the current region of most possible match and pass it through
