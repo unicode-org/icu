@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2001, International Business Machines Corporation and
+ * Copyright (c) 1997-2003, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -400,6 +400,22 @@ LocaleTest::TestDisplayNames()
     if(s.length()<=3 && s.charAt(0)<=0x7f) {
         /* check <=3 to reject getting the language code as a display name */
         errln("unable to get a display string for the language of the default locale\n");
+    }
+
+    /*
+     * API coverage improvements: call
+     * Locale::getDisplayLanguage(UnicodeString &) and
+     * Locale::getDisplayCountry(UnicodeString &)
+     */
+    s.remove();
+    Locale().getDisplayLanguage(s);
+    if(s.length()<=3 && s.charAt(0)<=0x7f) {
+        errln("unable to get a display string for the language of the default locale [2]\n");
+    }
+    s.remove();
+    french.getDisplayCountry(s);
+    if(s.isEmpty()) {
+        errln("unable to get any default-locale display string for the country of fr_FR\n");
     }
 }
 
