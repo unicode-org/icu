@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/test/text/Attic/UTF16Test.java,v $ 
-* $Date: 2001/03/05 19:26:48 $ 
-* $Revision: 1.1 $
+* $Date: 2001/03/07 02:51:12 $ 
+* $Revision: 1.2 $
 *
 *******************************************************************************
 */
@@ -54,7 +54,7 @@ public final class UTF16Test extends TestFmwk
       if (i == 0xDC50)
         initstrsize --;
         
-      if (UTF16.countCP(str.toString()) != initstrsize + (i / 100) + 1)
+      if (UTF16.countCodePoint(str.toString()) != initstrsize + (i / 100) + 1)
       {
         errln("FAIL Counting code points in string appended with " + 
               " 0x" + Integer.toHexString(i));
@@ -76,7 +76,8 @@ public final class UTF16Test extends TestFmwk
         if (!UTF16.isSurrogate((char)i) && 
             (UTF16.bounds(str.toString(), str.length() - 1) != 
                                                 UTF16.SINGLE_CHAR_BOUNDARY ||
-             UTF16.boundsAtCPOffset(str.toString(), initstrsize + (i /100)) 
+             UTF16.boundsAtCodePointOffset(str.toString(), 
+                                           initstrsize + (i /100)) 
                                               != UTF16.SINGLE_CHAR_BOUNDARY))
         {
           errln("FAIL Finding BMP character bounds error" );
@@ -100,7 +101,8 @@ public final class UTF16Test extends TestFmwk
             UTF16.LEAD_SURROGATE_BOUNDARY || 
             UTF16.bounds(str.toString(), str.length() - 1) != 
             UTF16.TRAIL_SURROGATE_BOUNDARY ||
-            UTF16.boundsAtCPOffset(str.toString(), initstrsize + (i / 100)) 
+            UTF16.boundsAtCodePointOffset(str.toString(), 
+                                          initstrsize + (i / 100)) 
                                             != UTF16.LEAD_SURROGATE_BOUNDARY)
         {
           errln("FAIL Finding Supplementary character bounds error with " +
@@ -112,8 +114,8 @@ public final class UTF16Test extends TestFmwk
   }
   
   /**
-  * Testing UTF16 class methods findCPOffset, findOffsetFromCP, charAt and
-  * charAtCP 
+  * Testing UTF16 class methods findCodePointOffset, findOffsetFromCodePoint, charAt and
+  * charAtCodePoint 
   */
   public void TestUTF16OffsetCharAt()
   {
@@ -125,59 +127,61 @@ public final class UTF16Test extends TestFmwk
     if (UTF16.charAt(s, 0) != '1' || UTF16.charAt(s, 2) != '3' || 
         UTF16.charAt(s, 5) != 0x10001 || UTF16.charAt(s, 6) != 0x10001 || 
         UTF16.charAt(s, 12) != 0x10002 || UTF16.charAt(s, 13) != 0x10002 ||
-        UTF16.charAtCPOffset(s, 0) != '1' || UTF16.charAtCPOffset(s, 2) != '3' || 
-        UTF16.charAtCPOffset(s, 5) != 0x10001 || 
-        UTF16.charAtCPOffset(s, 6) != '6' || 
-        UTF16.charAtCPOffset(s, 11) != 0x10002)
+        UTF16.charAtCodePointOffset(s, 0) != '1' || 
+        UTF16.charAtCodePointOffset(s, 2) != '3' || 
+        UTF16.charAtCodePointOffset(s, 5) != 0x10001 || 
+        UTF16.charAtCodePointOffset(s, 6) != '6' || 
+        UTF16.charAtCodePointOffset(s, 11) != 0x10002)
       errln("FAIL Getting character from string error" );
 
-    if (UTF16.findCPOffset(s, 3) != 3 || UTF16.findCPOffset(s, 5) != 5 || 
-        UTF16.findCPOffset(s, 6) != 5)
+    if (UTF16.findCodePointOffset(s, 3) != 3 || 
+        UTF16.findCodePointOffset(s, 5) != 5 || 
+        UTF16.findCodePointOffset(s, 6) != 5)
       errln("FAIL Getting codepoint offset from string error" );
-    if (UTF16.findOffsetFromCP(s, 3) != 3 || 
-        UTF16.findOffsetFromCP(s, 5) != 5 || 
-        UTF16.findOffsetFromCP(s, 6) != 7)
+    if (UTF16.findOffsetFromCodePoint(s, 3) != 3 || 
+        UTF16.findOffsetFromCodePoint(s, 5) != 5 || 
+        UTF16.findOffsetFromCodePoint(s, 6) != 7)
       errln("FAIL Getting UTF16 offset from codepoint in string error" );
       
     UTF16.setCharAt(str, 3, '3');
-    UTF16.setCharAtCPOffset(str, 4, '3');
+    UTF16.setCharAtCodePointOffset(str, 4, '3');
     if (UTF16.charAt(str.toString(), 3) != '3' || 
-        UTF16.charAtCPOffset(str.toString(), 3) != '3' ||
+        UTF16.charAtCodePointOffset(str.toString(), 3) != '3' ||
         UTF16.charAt(str.toString(), 4) != '3' || 
-        UTF16.charAtCPOffset(str.toString(), 4) != '3')
+        UTF16.charAtCodePointOffset(str.toString(), 4) != '3')
       errln("FAIL Setting non-supplementary characters at a " +
             "non-supplementary position");
             
     UTF16.setCharAt(str, 5, '3');
     if (UTF16.charAt(str.toString(), 5) != '3' || 
-        UTF16.charAtCPOffset(str.toString(), 5) != '3' || 
+        UTF16.charAtCodePointOffset(str.toString(), 5) != '3' || 
         UTF16.charAt(str.toString(), 6) != '6' || 
-        UTF16.charAtCPOffset(str.toString(), 5) != '3' || 
-        UTF16.charAtCPOffset(str.toString(), 6) != '6')
+        UTF16.charAtCodePointOffset(str.toString(), 5) != '3' || 
+        UTF16.charAtCodePointOffset(str.toString(), 6) != '6')
       errln("FAIL Setting non-supplementary characters at a " +
             "supplementary position");
             
     UTF16.setCharAt(str, 5, 0x10001);
     if (UTF16.charAt(str.toString(), 5) != 0x10001 || 
-        UTF16.charAtCPOffset(str.toString(), 5) != 0x10001 ||
+        UTF16.charAtCodePointOffset(str.toString(), 5) != 0x10001 ||
         UTF16.charAt(str.toString(), 7) != '6' || 
-        UTF16.charAtCPOffset(str.toString(), 6) != '6')
+        UTF16.charAtCodePointOffset(str.toString(), 6) != '6')
       errln("FAIL Setting supplementary characters at a " +
             "non-supplementary position");
             
-    UTF16.setCharAtCPOffset(str, 5, '3');
+    UTF16.setCharAtCodePointOffset(str, 5, '3');
     if (UTF16.charAt(str.toString(), 5) != '3' || 
-        UTF16.charAtCPOffset(str.toString(), 5) != '3' ||
+        UTF16.charAtCodePointOffset(str.toString(), 5) != '3' ||
         UTF16.charAt(str.toString(), 6) != '6' || 
-        UTF16.charAtCPOffset(str.toString(), 6) != '6')
+        UTF16.charAtCodePointOffset(str.toString(), 6) != '6')
       errln("FAIL Setting non-supplementary characters at a " +
             "supplementary position");
             
     UTF16.setCharAt(str, 5, 0x10001);
     if (UTF16.charAt(str.toString(), 5) != 0x10001 || 
-        UTF16.charAtCPOffset(str.toString(), 5) != 0x10001 ||
+        UTF16.charAtCodePointOffset(str.toString(), 5) != 0x10001 ||
         UTF16.charAt(str.toString(), 7) != '6' || 
-        UTF16.charAtCPOffset(str.toString(), 6) != '6')
+        UTF16.charAtCodePointOffset(str.toString(), 6) != '6')
       errln("FAIL Setting supplementary characters at a " +
             "non-supplementary position");
             
@@ -186,22 +190,22 @@ public final class UTF16Test extends TestFmwk
    UTF16.setCharAt(str, 6, 0xD800);
    if (UTF16.charAt(str.toString(), 5) != 0xD800 ||
        UTF16.charAt(str.toString(), 6) != 0xD800 ||
-       UTF16.charAtCPOffset(str.toString(), 5) != 0xD800 ||
-       UTF16.charAtCPOffset(str.toString(), 6) != 0xD800)
+       UTF16.charAtCodePointOffset(str.toString(), 5) != 0xD800 ||
+       UTF16.charAtCodePointOffset(str.toString(), 6) != 0xD800)
       errln("FAIL Setting lead characters at a supplementary position");   
       
    UTF16.setCharAt(str, 5, 0xDDDD);
    if (UTF16.charAt(str.toString(), 5) != 0xDDDD ||
        UTF16.charAt(str.toString(), 6) != 0xD800 ||
-       UTF16.charAtCPOffset(str.toString(), 5) != 0xDDDD ||
-       UTF16.charAtCPOffset(str.toString(), 6) != 0xD800)
+       UTF16.charAtCodePointOffset(str.toString(), 5) != 0xDDDD ||
+       UTF16.charAtCodePointOffset(str.toString(), 6) != 0xD800)
       errln("FAIL Setting trail characters at a surrogate position");
       
    UTF16.setCharAt(str, 5, '3');
    if (UTF16.charAt(str.toString(), 5) != '3' ||
        UTF16.charAt(str.toString(), 6) != 0xD800 ||
-       UTF16.charAtCPOffset(str.toString(), 5) != '3' ||
-       UTF16.charAtCPOffset(str.toString(), 6) != 0xD800)
+       UTF16.charAtCodePointOffset(str.toString(), 5) != '3' ||
+       UTF16.charAtCodePointOffset(str.toString(), 6) != 0xD800)
       errln("FAIL Setting non-supplementary characters at a surrogate " +
             "position");
   }
