@@ -17,6 +17,7 @@
 
 #include "list.h"
 #include "cmemory.h"
+#include "cstring.h"
 #include "unicode/ustring.h"
 
 /* Protos */
@@ -348,11 +349,12 @@ taglist_open(UErrorCode *status)
 
   list->fType = eTaggedList;
   
-  list->u.fTaggedList.fData = 0;
+  /*list->u.fTaggedList.fData = 0;*/
+  list->u.fTaggedList.fFirst = NULL;
   list->u.fTaggedList.fCount = 0;
-  list->u.fTaggedList.fCapacity = 32;
+  /*list->u.fTaggedList.fCapacity = 32;*/
 
-  taglist_grow(list, status);
+  /*taglist_grow(list, status);*/
   
   return list;
 }
@@ -361,54 +363,30 @@ void
 taglist_close(struct SList *list,
 	      UErrorCode *status)
 {
-  if(U_FAILURE(*status)) return;
+    struct SStringPair *current;
+    struct SStringPair *prev;
+    if(U_FAILURE(*status)) return;
 
   if(list->fType != eTaggedList) {
     *status = U_ILLEGAL_ARGUMENT_ERROR;
     return;
   }
+
+    current = list->u.fTaggedList.fFirst;
+
+    while(current != NULL) {
+        prev = current;
+        current = current->fNext;
+        uprv_free(prev);
+    }
+ 
   
-  uprv_free(list->u.fTaggedList.fData);
+    /*uprv_free(list->u.fTaggedList.fData);*/
   
   list->fType = eEmpty;
   uprv_free(list);
 }
 
-
-static void 
-taglist_grow(struct SList *list,
-	     UErrorCode *status)
-{
-  int32_t i;
-  int32_t newCapacity;
-  struct SStringPair *newData;
-  
-  if(U_FAILURE(*status)) return;
-  
-  if(list->fType != eTaggedList) {
-    *status = U_ILLEGAL_ARGUMENT_ERROR;
-    return;
-  }
-  
-  newCapacity = list->u.fTaggedList.fCapacity << 1; 
-  
-  /* allocate space for the array of string pairs */
-  newData = (struct SStringPair*) 
-    uprv_malloc(sizeof(struct SStringPair) * newCapacity);
-  if(newData == 0) {
-    *status = U_MEMORY_ALLOCATION_ERROR;
-    return;
-  }
-
-  /* copy each string pair */
-  for(i = 0; i < list->u.fTaggedList.fCount; ++i) {
-    newData[i] = list->u.fTaggedList.fData[i];
-  }
-  
-  uprv_free(list->u.fTaggedList.fData);
-  list->u.fTaggedList.fData = newData;
-  list->u.fTaggedList.fCapacity = newCapacity;
-}
 
 void
 taglist_add(struct SList *list,
@@ -416,47 +394,89 @@ taglist_add(struct SList *list,
 	    const UChar *data,
 	    UErrorCode *status)
 {
-  int32_t index;
-  struct SStringPair pair;
+  /*int32_t index;*/
+  struct SStringPair *pair = NULL;
+  struct SStringPair *current = NULL;
+  struct SStringPair *prev = NULL;
   
   if(U_FAILURE(*status)) return;
-  
+
   if(list->fType != eTaggedList) {
     *status = U_ILLEGAL_ARGUMENT_ERROR;
     return;
   }
-
-  pair.fKey = (UChar*) uprv_malloc(sizeof(UChar) * (u_strlen(tag) + 1));
-  if(pair.fKey == 0) {
+  
+  pair = (struct SStringPair *) uprv_malloc(sizeof(struct SStringPair));
+  if(pair->fKey == 0) {
     *status = U_MEMORY_ALLOCATION_ERROR;
     return;
   }
 
-  pair.fValue = (UChar*) uprv_malloc(sizeof(UChar) * (u_strlen(data) + 1));
-  if(pair.fValue == 0) {
+
+  pair->fKey = (char*) uprv_malloc(sizeof(char) * (u_strlen(tag) + 1));
+  if(pair->fKey == 0) {
     *status = U_MEMORY_ALLOCATION_ERROR;
-    uprv_free(pair.fKey);
+    uprv_free(pair);
     return;
   }
 
-  u_strcpy(pair.fKey, tag);
-  u_strcpy(pair.fValue, data);
-  
-  index = list->u.fTaggedList.fCount;
-  
-  if(list->u.fTaggedList.fCount == list->u.fTaggedList.fCapacity)
-    taglist_grow(list, status);
-  
-  list->u.fTaggedList.fData[index] = pair;
+  pair->fValue = (UChar*) uprv_malloc(sizeof(UChar) * (u_strlen(data) + 1));
+  if(pair->fValue == 0) {
+    *status = U_MEMORY_ALLOCATION_ERROR;
+    uprv_free(pair->fKey);
+    uprv_free(pair);
+    return;
+  }
+
   ++(list->u.fTaggedList.fCount);
+
+  /*u_strcpy(pair.fKey, tag);*/
+  u_UCharsToChars(tag, pair->fKey, u_strlen(tag)+1);
+  u_strcpy(pair->fValue, data);
+
+    /* is list still empty? */
+    if(list->u.fTaggedList.fFirst == NULL) {
+        list->u.fTaggedList.fFirst = pair;
+        pair->fNext = NULL;
+        return;
+    } else {
+        current = list->u.fTaggedList.fFirst;
+    }
+
+    while(current != NULL) {
+        if(uprv_strcmp(current->fKey, pair->fKey)<0) {
+            prev = current;
+            current = current->fNext;
+        } else { /*we're either in front of list, or in middle*/
+            if(prev == NULL) { /*front of the list*/
+                list->u.fTaggedList.fFirst = pair;
+            } else { /*middle of the list*/
+                prev->fNext = pair;
+            }
+            pair->fNext = current;
+            return;
+        }
+    }
+
+    /* end of list */
+    prev->fNext = pair;
+    pair->fNext = NULL;
+  
+    /*index = list->u.fTaggedList.fCount;*/
+  
+    /*if(list->u.fTaggedList.fCount == list->u.fTaggedList.fCapacity)*/
+    /*taglist_grow(list, status);*/
+  
+    /*list->u.fTaggedList.fData[index] = pair;*/
 }
 
 const UChar* 
 taglist_get(const struct SList *list,
-	    const UChar *tag,
+	    const char *tag,
 	    UErrorCode *status)
 {
-  int32_t i;
+  /*int32_t i;*/
+  struct SStringPair *current;
 
   if(U_FAILURE(*status)) return 0;
   
@@ -465,10 +485,20 @@ taglist_get(const struct SList *list,
     return 0;
   }
 
-  for(i = 0; i < list->u.fTaggedList.fCount; ++i) {
-    if(u_strcmp(list->u.fTaggedList.fData[i].fKey, tag) == 0)
-      return list->u.fTaggedList.fData[i].fValue;
-  }
+    /* is list still empty? */
+    if(list->u.fTaggedList.fFirst == NULL) {
+        return NULL;
+    } else {
+        current = list->u.fTaggedList.fFirst;
+    }
 
-  return 0;
+    while(current != NULL) {
+        if(uprv_strcmp(current->fKey, tag)!=0) {
+            current = current->fNext;
+        } else { /*we're either in front of list, or in middle*/
+            return current->fValue;
+        }
+    }
+
+  return NULL;
 }

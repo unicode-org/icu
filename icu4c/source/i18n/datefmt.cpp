@@ -17,10 +17,10 @@
 ********************************************************************************
 */
 
+#include "unicode/resbund.h"
 #include "unicode/datefmt.h"
 #include "unicode/smpdtfmt.h"
 #include "mutex.h"
-#include "unicode/resbund.h"
 
 // *****************************************************************************
 // class DateFormat
@@ -242,9 +242,12 @@ DateFormat::getAvailableLocales(int32_t& count)
         for (i=0; i<localesCount; ++i)
         {
             UErrorCode status = U_ZERO_ERROR;
-            ResourceBundle resource(u_getDataDirectory(), locales[i], status);
-            int32_t ignoredCount;
-            resource.getStringArray(SimpleDateFormat::fgDateTimePatternsTag, ignoredCount, status);
+            /*ResourceBundle resource(Locale::getDataDirectory(), locales[i], status);*/
+            ResourceBundle resource(NULL, locales[i], status);
+
+            //int32_t ignoredCount;
+            resource.get(SimpleDateFormat::fgDateTimePatternsTag, status);
+            //resource.getStringArray(SimpleDateFormat::fgDateTimePatternsTag, ignoredCount, status);
             if (U_SUCCESS(status))
             {
                 temp[newLocalesCount++] = locales[i];

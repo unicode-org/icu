@@ -406,7 +406,9 @@ NumberFormat::createInstance(const Locale& desiredLocale,
         return NULL;
     }
 
-    ResourceBundle resource(u_getDataDirectory(), desiredLocale, status);
+    /*ResourceBundle resource(Locale::getDataDirectory(), desiredLocale, status);*/
+    ResourceBundle resource(NULL, desiredLocale, status);
+
     if (U_FAILURE(status))
     {
         // We don't appear to have resource data available -- use the last-resort data
@@ -422,19 +424,24 @@ NumberFormat::createInstance(const Locale& desiredLocale,
         return f;
     }
 
-    int32_t patternCount=0;
-    const UnicodeString* numberPatterns = resource.getStringArray(DecimalFormat::fgNumberPatterns,
-                                                                  patternCount, status);
+    //int32_t patternCount=0;
+    //const UnicodeString* numberPatterns = resource.getStringArray(DecimalFormat::fgNumberPatterns,
+    //                                                              patternCount, status);
+
+    ResourceBundle numberPatterns = resource.get(DecimalFormat::fgNumberPatterns, status);
     // If not all the styled patterns exists for the NumberFormat in this locale,
     // sets the status code to failure and returns nil.
-    if (patternCount < fgNumberPatternsCount) status = U_INVALID_FORMAT_ERROR;
+    //if (patternCount < fgNumberPatternsCount) status = U_INVALID_FORMAT_ERROR;
+    if (numberPatterns.getSize() < fgNumberPatternsCount) status = U_INVALID_FORMAT_ERROR;
     if (U_FAILURE(status)) return NULL;
 
     // If the requested style doesn't exist, use a last-resort style.
     // This is to support scientific styles before we have all the
     // resource data in place.
-    const UnicodeString& pattern = style < patternCount ?
-        numberPatterns[style] : fgLastResortNumberPatterns[style];
+    //const UnicodeString& pattern = style < patternCount ?
+    //    numberPatterns[style] : fgLastResortNumberPatterns[style];
+    const UnicodeString& pattern = style < numberPatterns.getSize()?
+        numberPatterns.getStringEx(style, status) : fgLastResortNumberPatterns[style];
 
     // Loads the decimal symbols of the desired locale.
     DecimalFormatSymbols* symbolsToAdopt = new DecimalFormatSymbols(desiredLocale, status);

@@ -49,22 +49,24 @@ void strlist2d_add(struct SList *list, const UChar *s, UErrorCode *status);
 
 /* A name/value pair for a tagged list */
 struct SStringPair {
-  UChar *fKey;
+  char *fKey;
   UChar *fValue;
+  struct SStringPair *fNext;
 };
 
 /* A tagged list */
 struct STaggedList {
-  struct SStringPair *fData;
+  struct SStringPair *fFirst;
+  /*struct SStringPair *fData;*/
   int32_t fCount;
-  int32_t fCapacity;
+  /*int32_t fCapacity;*/
 };
 
 struct SList* taglist_open(UErrorCode *status);
 void taglist_close(struct SList *list, UErrorCode *status);
 void taglist_add(struct SList *list, const UChar *tag, 
 		 const UChar *data, UErrorCode *status);
-const UChar* taglist_get(const struct SList *list, const UChar *tag, 
+const UChar* taglist_get(const struct SList *list, const char *tag, 
 			 UErrorCode *status);
 
 /* Types of lists */

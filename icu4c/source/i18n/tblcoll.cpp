@@ -947,17 +947,19 @@ RuleBasedCollator::constructFromFile(   const Locale&           locale,
   char *binaryFilePath = createPathName(UnicodeString(u_getDataDirectory(),""), 
 					localeFileName, UnicodeString(kFilenameSuffix,""));
   
-  if(tryBinaryFile) {
-    // Try to load up the collation from a binary file first
-    constructFromFile(binaryFilePath, status);
-#ifdef COLLDEBUG
-    cerr << localeFileName  << kFilenameSuffix << " binary load " << u_errorName(status) << endl;
-#endif
-    if(U_SUCCESS(status) || status == U_MEMORY_ALLOCATION_ERROR) 
-      {
-          delete [] binaryFilePath;
-          return;
-      }
+    if(tryBinaryFile) {
+        // Try to load up the collation from a binary file first
+        constructFromFile(binaryFilePath, status);
+        #ifdef COLLDEBUG
+            cerr << localeFileName  << kFilenameSuffix << " binary load " << u_errorName(status) << endl;
+        #endif
+        if(U_SUCCESS(status) || status == U_MEMORY_ALLOCATION_ERROR) {
+            delete [] binaryFilePath;
+            return;
+        }
+        if(status == U_FILE_ACCESS_ERROR) {
+            status = U_ZERO_ERROR;
+        }
     }
 
   // Now try to load it up from a resource bundle text source file
@@ -966,7 +968,6 @@ RuleBasedCollator::constructFromFile(   const Locale&           locale,
     char *ch;
     ch = new char[localeFileName.size() + 1];
     ch[localeFileName.extract(0, 0x7fffffff, ch, "")] = 0;
-
     ResourceBundle bundle(dataDir, ch, status);
   
     delete [] ch;
@@ -978,21 +979,26 @@ RuleBasedCollator::constructFromFile(   const Locale&           locale,
       return;
   }
 
-#ifdef COLLDEBUG
-  cerr << localeFileName << " ascii load " << u_errorName(status) << endl;
-#endif
+    #ifdef COLLDEBUG
+        cerr << localeFileName << " ascii load " << u_errorName(status) << endl;
+    #endif
 
-  // check and see if this resource bundle contains collation data
+    // check and see if this resource bundle contains collation data
   
-  UnicodeString colString;
-  UErrorCode intStatus = U_ZERO_ERROR;
+    UnicodeString colString;
+    UErrorCode intStatus = U_ZERO_ERROR;
+/* REDO */
+    const UnicodeString *t = bundle.getString("CollationElements", intStatus);
 
-  bundle.getString("CollationElements", colString, intStatus);
-  if(colString.isBogus()) {
-    status = U_MEMORY_ALLOCATION_ERROR;
-    delete [] binaryFilePath;
-    return;
-  }
+    if(t != NULL) {
+        colString = *t;
+    } 
+
+    if(colString.isBogus()) {
+        status = U_MEMORY_ALLOCATION_ERROR;
+        delete [] binaryFilePath;
+        return;
+    }
 
   // if this bundle doesn't contain collation data, break out
   if(U_FAILURE(intStatus)) {

@@ -20,6 +20,7 @@
  
 #include "unicode/utypes.h"
 #include "unicode/locid.h"
+#include "unicode/resbund.h"
 
 /* forward declaration */
 class SimpleDateFormat;
@@ -298,6 +299,8 @@ private:
     static UnicodeString fgPatternChars;
 
 private:
+
+    void initField(UnicodeString **field, int32_t& length, const ResourceBundle data, uint8_t ownfield, UErrorCode &status);
     /**
      * Called by the constructors to actually load data from the resources
      */

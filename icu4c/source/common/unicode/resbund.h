@@ -46,14 +46,14 @@
 #ifndef RESBUND_H
 #define RESBUND_H
   
+#include "unicode/ures.h"
 #include "unicode/utypes.h"
 #include "unicode/unistr.h"
 #include "unicode/locid.h"
+#include "uhash.h"
+#include <wchar.h>
 
-class RBHashtable;
-class ResourceBundleData;
-class ResourceBundleCache;
-class VisitedFileCache;
+
 #ifndef _FILESTRM
 typedef struct _FileStream FileStream;
 #endif
@@ -62,21 +62,8 @@ typedef struct _FileStream FileStream;
 class Locale;
 class RuleBasedCollator;
 class ResourceBundle;
-extern int32_t T_ResourceBundle_countArrayItemsImplementation(
-                const ResourceBundle* resourceBundle, 
-                const char* resourceKey,
-                UErrorCode& err);
-extern const UnicodeString** listInstalledLocalesImplementation(
-                const char* path,
-                int32_t* numInstalledLocales);
-extern void getTaggedArrayUCharsImplementation(
-                const ResourceBundle*   bundle,
-                const char           *resourceTag,
-                UChar const**         itemTags,
-                UChar const**         items,
-                int32_t                    maxItems,
-                int32_t&                numItems,
-                UErrorCode&              err);
+//struct UHashtable;
+
 
 /**
  * A class representing a collection of resource information pertaining to a given
@@ -199,23 +186,148 @@ public:
                         ResourceBundle( const wchar_t* path,
                                         const Locale& locale,
                                         UErrorCode& err);
+                        ResourceBundle(const ResourceBundle &original);
+                        ResourceBundle(UResourceBundle *res);
+
+                        ResourceBundle& operator=(const ResourceBundle& other);
                         ~ResourceBundle();
+
+/**
+ * Returns the size of a resource. Size for scalar types is always 1, and for vector/table types is
+ * the number of child resources.
+ *
+ * @return number of resources in a given resource.
+ * @draft
+ */
+    int32_t getSize(void) const;
+/**
+ * returns a string from a string resource type
+ *
+ * @param status: fills in the outgoing error code
+ *                could be <TT>U_MISSING_RESOURCE_ERROR</T> if the key is not found
+ *                could be a non-failing error 
+ *                e.g.: <TT>U_USING_FALLBACK_ERROR</TT>,<TT>U_USING_DEFAULT_ERROR </TT>
+ * @return a pointer to a zero-terminated UChar array which lives in a memory mapped/DLL file.
+ * @draft
+ */
+    UnicodeString getString(UErrorCode& status) const;
+/**
+ * Checks whether the resource has another element to iterate over.
+ *
+ * @return TRUE if there are more elements, FALSE if there is no more elements
+ * @draft
+ */
+    bool_t hasNext(void) const;
+/**
+ * Resets the internal context of a resource so that iteration starts from the first element.
+ *
+ * @draft
+ */
+    void resetIterator(void);
+
+/**
+ * Returns the key associated with this resource. Not all the resources have a key - only 
+ * those that are members of a table.
+ *
+ * @return a key associated to this resource, or NULL if it doesn't have a key
+ * @draft
+ */
+    const char *getKey(void);
+
+/**
+ * Returns the type of a resource. Available types are defined in enum UResType
+ *
+ * @return type of the given resource.
+ * @draft
+ */
+    UResType getType(void);
+
+/**
+ * Returns the next resource in a given resource or NULL if there are no more resources 
+ *
+ * @param status            fills in the outgoing error code
+ * @return                  ResourceBundle object.
+ * @draft
+ */
+    ResourceBundle getNext(UErrorCode& status);
+
+/**
+ * Returns the next string in a resource or NULL if there are no more resources 
+ * to iterate over. 
+ *
+ * @param status            fills in the outgoing error code
+ * @return an UnicodeString object.
+ * @draft
+ */
+    UnicodeString getNextString(UErrorCode& status);
+/**
+ * Returns the next string in a resource or NULL if there are no more resources 
+ * to iterate over. 
+ *
+ * @param key               fill in for key associated with this string
+ * @param status            fills in the outgoing error code
+ * @return an UnicodeString object.
+ * @draft
+ */
+    UnicodeString getNextString(const char ** key, UErrorCode& status);
+
+/**
+ * Returns the resource in a resource at the specified index. 
+ *
+ * @param index             an index to the wanted resource.
+ * @param status            fills in the outgoing error code
+ * @return                  ResourceBundle object. If there is an error, resource is invalid.
+ * @draft
+ */
+    ResourceBundle get(int32_t index, UErrorCode& status) const;
+
+/**
+ * Returns the string in a given resource at the specified index.
+ *
+ * @param index             an index to the wanted string.
+ * @param status            fills in the outgoing error code
+ * @return                  an UnicodeString object. If there is an error, string is bogus
+ * @draft
+ */
+    UnicodeString getStringEx(int32_t index, UErrorCode& status) const;
+
+/**
+ * Returns a resource in a resource that has a given key. This procedure works only with table
+ * resources. 
+ *
+ * @param key               a key associated with the wanted resource
+ * @param status            fills in the outgoing error code.
+ * @return                  ResourceBundle object. If there is an error, resource is invalid.
+ * @draft
+ */
+    ResourceBundle get(const char* key, UErrorCode& status) const;
+
+/**
+ * Returns a string in a resource that has a given key. This procedure works only with table
+ * resources. 
+ *
+ * @param key               a key associated with the wanted string
+ * @param status            fills in the outgoing error code
+ * @return                  an UnicodeString object. If there is an error, string is bogus
+ * @draft
+ */
+    UnicodeString getStringEx(const char* key, UErrorCode& status) const;
 
     /**
      * Returns the contents of a string resource. Resource data is undifferentiated
      * Unicode text. The resource file may contain quoted strings or escape sequences;
      * these will be parsed prior to the data's return.
-     * [THIS FUNCTION IS DERECATED; USE THE OVERLOAD BELOW INSTEAD]
+     * [THIS FUNCTION IS DEPRECATED; USE THE OVERLOAD BELOW INSTEAD]
      *
      * @param resourceTag  The resource tag of the string resource the caller wants
      * @param theString    Receives the actual data in the resource
      * @param err          Set to U_MISSING_RESOURCE_ERROR if a resource with the
      *                     specified tag couldn't be found.
-     * @draft
-     */
+     * @deprecated removed
     void                getString(  const char             *resourceTag,
                                     UnicodeString&          theString,
                                     UErrorCode&              err) const;
+     */
 
     /**
      * Returns the contents of a string resource. Resource data is undifferentiated
@@ -226,8 +338,8 @@ public:
      * @param err          Set to U_MISSING_RESOURCE_ERROR if a resource with the
      *                     specified tag couldn't be found.
      * @return A pointer to the string from the resource bundle, or NULL if there was
-     *           an error.
-     * @draft
+     *           an error.(its lifetime is that of the resource bundle.)
+     * @deprecated to be removed in first release in 2001
      */
     const UnicodeString*    getString(  const char                *resourceTag,
                                         UErrorCode&                err) const;
@@ -248,8 +360,8 @@ public:
      *                       specified tag couldn't be found.
      * @return               The resource requested, as a pointer to an array of
      *                       UnicodeStrings. The caller does not own the storage and
-     *                       must not delete it.
-     * @draft
+     *                       must not delete it. (its lifetime is that of the resource bundle.)
+     * @deprecated to be removed in first release in 2001
      */
     const UnicodeString*    getStringArray( const char             *resourceTag,
                                             int32_t&                numArrayItems,
@@ -268,12 +380,12 @@ public:
      * @param theArrayItem  Receives the actual text of the desired array item.
      * @param err           Set to U_MISSING_RESOURCE_ERROR if a resource with the
      *                      specified tag couldn't be found, or if the index was out of range.
-     * @draft
-     */
+     * @deprecated removed
     void                getArrayItem(   const char             *resourceTag,
                                         int32_t                 index,
                                         UnicodeString&          theArrayItem,
                                         UErrorCode&              err) const;
+     */
 
     /**
      * Returns a single item from a string-array resource. This will return the contents
@@ -286,8 +398,9 @@ public:
      *                      wants to extract from the resource.
      * @param err           Set to U_MISSING_RESOURCE_ERROR if a resource with the
      *                      specified tag couldn't be found, or if the index was out of range.
-     * @return A pointer to the text of the array item, or NULL is there was an error.
-     * @draft
+     * @return A pointer to the text of the array item, or NULL is there was an error. 
+     *                      (its lifetime is that of the resource bundle.)
+     * @deprecated to be removed in first release in 2001
      */
     const UnicodeString*    getArrayItem(   const char                *resourceTag,
                                             int32_t                    index,
@@ -308,8 +421,9 @@ public:
      * @param err          Set to U_MISSING_RESOURCE_ERROR if a resource with the
      *                     specified tag couldn't be found.
      * @return             The resource requested, as a UnicodeStrings**. The caller
-     *                     does not own the storage and must not delete it.
-     * @draft
+     *                     does not own the storage and must not delete it. (its lifetime 
+     *                      is that of the resource bundle.)
+     * @deprecated to be removed in first release in 2001
      */
     const UnicodeString**   get2dArray(const char          *resourceTag,
                                        int32_t&             rowCount,
@@ -332,13 +446,13 @@ public:
      * @param err           Set to U_MISSING_RESOURCE_ERROR if a resource with the
      *                      specified tag couldn't be found, if the resource data was in
      *                      the wrong format, or if either index is out of bounds.
-     * @draft
-     */
+     * @deprecated removed
     void                get2dArrayItem(const char          *resourceTag,
                                        int32_t              rowIndex,
                                        int32_t              columnIndex,
                                        UnicodeString&       theArrayItem,
                                        UErrorCode&           err) const;
+    */
 
     /**
      * Return a single string from a 2-dimensional array resource. If the resource does
@@ -355,7 +469,8 @@ public:
      *                      specified tag couldn't be found, if the resource data was in
      *                      the wrong format, or if either index is out of bounds.
      * @return A pointer to the text of the array item, or NULL is there was an error.
-     * @draft
+     *                      (its lifetime is that of the resource bundle.)
+     * @deprecated to be removed in first release in 2001
      */
     const UnicodeString*    get2dArrayItem( const char                *resourceTag,
                                             int32_t                    rowIndex,
@@ -376,12 +491,12 @@ public:
      * @param err           Set to U_MISSING_RESOURCE_ERROR if a resource with the
      *                      specified resource tag couldn't be found, or if an item
      *                      with the specified item tag couldn't be found in the resource.
-     * @draft
-     */
+     * @deprecated removed 
     void                getTaggedArrayItem( const char             *resourceTag,
                                             const UnicodeString&    itemTag,
                                             UnicodeString&          theArrayItem,
                                             UErrorCode&              err) const;
+    */
 
     /**
      * Returns a single item from a tagged-array resource This will return the contents
@@ -396,7 +511,8 @@ public:
      *                      specified resource tag couldn't be found, or if an item
      *                      with the specified item tag coldn't be found in the resource.
      * @return A pointer to the text of the array item, or NULL is there was an error.
-     * @draft
+     *                      (its lifetime is that of the resource bundle.)
+     * @deprecated to be removed in first release in 2001
      */
     const UnicodeString*    getTaggedArrayItem( const char             *resourceTag,
                                                 const UnicodeString&    itemTag,
@@ -423,7 +539,7 @@ public:
      *                      items and itemTags.
      * @param err           Set to U_MISSING_RESOURCE_ERROR if a resource with the
      *                      specified tag couldn't be found.
-     * @draft
+     * @deprecated to be removed in first release in 2001
      */
     void                getTaggedArray( const char             *resourceTag,
                                         UnicodeString*&         itemTags,
@@ -461,47 +577,12 @@ public:
 	const Locale &getLocale(void) const ;
 
 private:
-    class U_COMMON_API PathInfo {
-    public:
-        PathInfo();
-        PathInfo(const PathInfo& source);
-        PathInfo(const UnicodeString& path);
-        PathInfo(const UnicodeString& path, const UnicodeString& suffix);
-        PathInfo(const wchar_t* path, const wchar_t* suffix);
-        ~PathInfo();
+    UResourceBundle *resource;
+    void constructForLocale(const UnicodeString& path, const Locale& locale, UErrorCode& error);
+    void constructForLocale(const wchar_t* path, const Locale& locale, UErrorCode& error);
+    void initItemCache(UErrorCode& error);
 
-        PathInfo& operator=(const PathInfo& source);
-
-        bool_t fileExists(const UnicodeString& localeName) const;
-        UnicodeString makeCacheKey(const UnicodeString& localeName) const;
-        UnicodeString makeHashkey(const UnicodeString& localeName) const;
-        FileStream* openFile(const UnicodeString& localeName) const;
-
-    private:
-        static const UChar        kSeparator;
-        UnicodeString                fPrefix;
-        UnicodeString                fSuffix;
-        wchar_t*                    fWPrefix;
-        wchar_t*                    fWSuffix;
-    };
-
-private:
-    friend class Locale;
     friend class RuleBasedCollator;
-    friend int32_t T_ResourceBundle_countArrayItemsImplementation(const ResourceBundle* resourceBundle, 
-                                  const char* resourceKey,
-                                  UErrorCode& err) ;
-    friend const UnicodeString** listInstalledLocalesImplementation(const char* path,
-                                   int32_t* numInstalledLocales);
-    friend void getTaggedArrayUCharsImplementation(
-                             const ResourceBundle*   bundle,
-                             const char           *resourceTag,
-                             UChar const**         itemTags,
-                             UChar const**         items,
-                             int32_t                    maxItems,
-                             int32_t&                numItems,
-                             UErrorCode&              err);
-
 
     /**
      * This constructor is used by Collation to load a resource bundle from a specific
@@ -512,155 +593,15 @@ private:
                                             const char *localeName,
                                             UErrorCode&              status);
 
-    /**
-     * Return a list of all installed locales. This function returns a list of the IDs
-     * of all locales represented in the directory specified by this ResourceBundle. It
-     * depends on that directory having an "Index" tagged-list item in its "index.txt"
-     * file; it parses that list to determine its return value (therefore, that list
-     * also has to be up to date). This function is static.
-     *
-     * This function is the implementation of the Locale::listInstalledLocales()
-     * function. It's private because the API for it real;ly belongs in Locale.
-     *
-     * @param path                 The path to the locale data files. The function will
-     *                             look here for "index.txt".
-     * @param numInstalledLocales  Receives the number of installed locales, according
-     *                             to the Index resource in index.txt.
-     * @return                     A list of the installed locales, as a pointer to an
-     *                             array of UnicodeStrings. This storage is not owned by
-     *                             the caller, who must not delete it. The information
-     *                             in this list is derived from the Index resource in
-     *                             default.txt, which must be kept up to date.
-     */
-    static const UnicodeString* listInstalledLocales(const UnicodeString& path,
-                                                     int32_t&   numInstalledLocales);
-
-    /**
-     * Retrieve a ResourceBundle from the cache. Return NULL if not found.
-     */
-    static const UHashtable* getFromCache(const PathInfo& path,
-                                         const UnicodeString& localeName,
-                     ResourceBundleCache* someCache);
-
-    static const UHashtable* getFromCacheWithFallback(const PathInfo& path,
-                                                     const UnicodeString& desiredLocale,
-                                                     UnicodeString& returnedLocale,
-                             ResourceBundleCache* someCache,
-                                                     UErrorCode& error);
-
-    /**
-     * Handlers which are passed to parse() have this signature.
-     */
-    typedef void (*Handler)(const UnicodeString& localeName,
-                            UHashtable* hashtable,
-                            void* context,
-                ResourceBundleCache* someCache);
-
-    /**
-     * Parse a file, storing the resource data in the cache.
-     */
-    static void parse(const PathInfo& path, 
-              const UnicodeString& localeName,
-                      Handler handler,
-                      void* context,
-              ResourceBundleCache* someCache,
-                      UErrorCode &error);
-
-    /**
-     * If the given file exists and has not been parsed, then parse it (caching the
-     * resultant data) and return true.
-     */
-    static bool_t parseIfUnparsed(const PathInfo& path,
-                                const UnicodeString& locale,
-                                ResourceBundleCache* fCache,
-                  VisitedFileCache* vCache,
-                  UErrorCode& error);
-
-    const UHashtable* getHashtableForLocale(const UnicodeString& localeName,
-                                           UnicodeString& returnedLocale,
-                                           UErrorCode& err);
-
-    const UHashtable* getHashtableForLocale(const UnicodeString& desiredLocale,
-                                           UErrorCode& error);
-
-    const ResourceBundleData* getDataForTag(const char *tag,
-                                            UErrorCode& err) const;
-
-    void constructForLocale(const PathInfo& path,
-                            const Locale& locale,
-                            UErrorCode& error);
-
-    static void addToCache(const UnicodeString& localeName,
-                           UHashtable* hashtable,
-                           void* context,
-               ResourceBundleCache* someCache);
-
-    static void saveCollationHashtable(const UnicodeString& localeName,
-                                       UHashtable* hashtable,
-                                       void* context,
-                       ResourceBundleCache* cache);
 private:
-    /**
-     * This internal class iterates over the fallback and/or default locales. It
-     * progresses as follows: Specific: language+country+variant language+country
-     * language Default: language+country+variant language+country language Root:
-     */
-    class LocaleFallbackIterator
-    {
-    public:
-        LocaleFallbackIterator(const UnicodeString& startingLocale,
-                               const UnicodeString& root,
-                               bool_t useDefaultLocale);
+    static void U_CALLCONV deleteValue(void* value);
+	Locale					fRealLocale;
 
-        const UnicodeString& getLocale(void) const { return fLocale; }
-
-        bool_t nextLocale(UErrorCode& status);
-
-    private:
-        void chopLocale(void);
-
-        UnicodeString fLocale;
-        UnicodeString fDefaultLocale;
-        UnicodeString fRoot;
-        bool_t fUseDefaultLocale;
-        bool_t fTriedDefaultLocale;
-        bool_t fTriedRoot;
-    };
-
-private:
+    UHashtable*          fItemCache;
     static const char*          kDefaultSuffix;
     static const int32_t        kDefaultSuffixLen;
     static const char*          kDefaultFilename;
     static const char*          kDefaultLocaleName;
-    static const char*          kIndexLocaleName;
-    static const char*          kIndexFilename;
-    static const char*          kIndexTag;
-
-    static const char*          kDefaultMinorVersion;
-    static const char*          kVersionSeparator;
-    static const char*          kVersionTag;
-
-    static ResourceBundleCache* fgUserCache;
-    static VisitedFileCache*    fgUserVisitedFiles;
-
-    ResourceBundleCache* fgCache;
-    VisitedFileCache*    fgVisitedFiles;
-
-    /**
-     * Data members. The ResourceBundle object is kept lightweight by having the fData[]
-     * array entries be non-owned pointers. The cache (fgCache) owns the entries and
-     * will delete them at static destruction time.
-     */
-    PathInfo                fPath;
-
-    enum {                  kDataCount = 4 };
-    const UHashtable*        fData[kDataCount]; // These aren't const if fIsDataOwned is true
-    bool_t                  fLoaded[kDataCount];
-    UErrorCode              fDataStatus[kDataCount]; // Returns the appropriate error code for each data table.
-    bool_t                  fIsDataOwned;
-    Locale		    fRealLocale;
-    LocaleFallbackIterator* fLocaleIterator;
-    char*                   fVersionID;
 };
 
 #endif

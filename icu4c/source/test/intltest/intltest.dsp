@@ -66,7 +66,7 @@ LINK32=link.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /YX /FD /GZ /c
-# ADD CPP /nologo /MDd /W3 /Gm /GX /ZI /Od /I "..\..\..\include" /I "..\..\..\source\common" /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /YX /FD /GZ /c
+# ADD CPP /nologo /MDd /W3 /Gm /GX /ZI /Od /I "..\..\..\include" /I "..\..\..\source\common" /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /D "UDATA_MAP_DLL" /YX /FD /GZ /c
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
 # ADD RSC /l 0x409 /d "_DEBUG"
 BSC32=bscmake.exe
@@ -116,6 +116,15 @@ SOURCE=.\citrtest.cpp
 # Begin Source File
 
 SOURCE=.\cpdtrtst.cpp
+
+!IF  "$(CFG)" == "intltest - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "intltest - Win32 Debug"
+
+# ADD CPP /YX
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
@@ -284,6 +293,10 @@ SOURCE=.\regcoll.cpp
 # Begin Source File
 
 SOURCE=.\restest.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\restsnew.cpp
 # End Source File
 # Begin Source File
 
@@ -591,6 +604,10 @@ SOURCE=.\restest.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\restsnew.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\sdtfmtts.h
 # End Source File
 # Begin Source File
@@ -680,6 +697,10 @@ SOURCE=.\unhxtrts.h
 # Begin Source File
 
 SOURCE=..\..\i18n\uniset.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\unicode\ures.h
 # End Source File
 # Begin Source File
 

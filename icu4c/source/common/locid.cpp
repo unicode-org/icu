@@ -34,6 +34,7 @@
 #include "unicode/locid.h"
 #include "unicode/uloc.h"
 #include "unicode/resbund.h"
+#include "uresimp.h"
 #include "mutex.h"
 #include "unicode/unicode.h"
 #include "cmemory.h"
@@ -677,15 +678,27 @@ const Locale*
 Locale::getAvailableLocales(int32_t& count) 
 {
   // for now, there is a hardcoded list, so just walk through that list and set it up.
-  if (localeList == 0)
-    {
-        count = uloc_countAvailable();   
-        
-        Locale *newLocaleList = new Locale[count];
-      
-        for(int32_t i = 0; i < count; i++) 
-          newLocaleList[i].setFromPOSIXID(uloc_getAvailable(i));
-      
+  if (localeList == 0) {
+      UErrorCode status = U_ZERO_ERROR;
+      ResourceBundle index(UnicodeString(""), Locale(kIndexLocaleName), status);
+      ResourceBundle locales = index.get(kIndexTag, status);
+
+      char name[96];
+      locales.resetIterator();
+
+      count = locales.getSize();
+
+      Locale *newLocaleList = new Locale[count];
+
+      int32_t i = 0;
+      UnicodeString temp;
+      while(locales.hasNext()) {
+          temp = locales.getNextString(status);
+          temp.extract(0, temp.length(), name);
+          name[temp.length()] = '\0';
+          newLocaleList[i++].setFromPOSIXID(name);
+      }
+
       Mutex mutex;
       if(localeList != 0) {
     delete []newLocaleList;

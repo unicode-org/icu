@@ -61,7 +61,7 @@ dcfmapts.o decoll.o dtfmapts.o dtfmrgts.o dtfmtrtts.o dtfmttst.o	\
 encoll.o escoll.o ficoll.o frcoll.o g7coll.o intltest.o isocoll.o	\
 itconv.o itercoll.o itformat.o itmajor.o ittxtbd.o itutil.o jacoll.o	\
 loctest.o miscdtfm.o mnkytst.o msfmrgts.o nmfmapts.o nmfmtrt.o		\
-numfmtst.o numrgts.o pptest.o regcoll.o restest.o sdtfmtts.o tchcfmt.o	\
+numfmtst.o numrgts.o pptest.o regcoll.o restest.o restsnew.o sdtfmtts.o tchcfmt.o	\
 tfsmalls.o tmsgfmt.o trcoll.o tscoll.o tsdate.o tsdcfmsy.o tsdtfmsy.o	\
 tsmthred.o tsmutex.o tsnmfmt.o tsputil.o tstnorm.o tzbdtest.o		\
 tzregts.o tztest.o ucdtest.o usettest.o ustrtest.o transtst.o strtest.o thcoll.o \

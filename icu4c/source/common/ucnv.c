@@ -273,16 +273,14 @@ int32_t  ucnv_getDisplayName (const UConverter * converter,
   /*create an RB, init the fill-in string, gets it from the RB */
   rb = ures_open (NULL, displayLocale, err);
 
-  stringToWrite = ures_get (rb,
+  stringToWrite = ures_getStringByKey(rb,
 			    converter->sharedData->staticData->name,
+                &stringToWriteLength,
 			    err);
-
   if (rb)
     ures_close (rb);
 
-  if (U_SUCCESS (*err))
-    stringToWriteLength = u_strlen (stringToWrite);
-  else
+  if(U_FAILURE(*err))
     {
       /*Error While creating or getting resource from the resource bundle
        *use the internal name instead
