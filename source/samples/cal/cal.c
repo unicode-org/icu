@@ -1,13 +1,8 @@
 /*
-*******************************************************************************
-*                                                                             *
-* COPYRIGHT:                                                                  *
-*   (C) Copyright International Business Machines Corporation, 1998, 1999     *
-*   Licensed Material - Program-Property of IBM - All Rights Reserved.        *
-*   US Government Users Restricted Rights - Use, duplication, or disclosure   *
-*   restricted by GSA ADP Schedule Contract with IBM Corp.                    *
-*                                                                             *
-*******************************************************************************
+**********************************************************************
+*   Copyright (C) 1998-2000, International Business Machines
+*   Corporation and others.  All Rights Reserved.
+**********************************************************************
 *
 * File date.c
 *
@@ -184,7 +179,7 @@ static void
 version()
 {
   printf("cal version %s (ICU version %s), by Stephen F. Booth.\n", 
-	 CAL_VERSION, ICU_VERSION); 
+	 CAL_VERSION, U_ICU_VERSION); 
   puts("(C) Copyright International Business Machines Corporation, 1998, 1999");
   puts("Licensed Material - Program-Property of IBM - All Rights Reserved.");
   puts("US Government Users Restricted Rights - Use, duplication, or disclosure");
