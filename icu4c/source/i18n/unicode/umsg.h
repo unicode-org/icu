@@ -469,7 +469,7 @@ umsg_getLocale(UMessageFormat *fmt);
  * @param status        Output param set to success/failure code on
  *                      exit. If the pattern is invalid, this will be
  *                      set to a failure result.
- * @draft
+ * @draft ICU 2.0
  */
 U_CAPI void  U_EXPORT2 
 umsg_applyPattern( UMessageFormat *fmt,
@@ -487,7 +487,7 @@ umsg_applyPattern( UMessageFormat *fmt,
  *                     exit. If the pattern is invalid, this will be
  *                     set to a failure result.  
  * @return the pattern of the format
- * @draft
+ * @draft ICU 2.0
  */
 U_CAPI int32_t  U_EXPORT2 
 umsg_toPattern(UMessageFormat *fmt,
