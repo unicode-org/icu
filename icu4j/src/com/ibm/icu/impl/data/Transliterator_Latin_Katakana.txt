@@ -3,13 +3,14 @@
 # Corporation and others. All Rights Reserved.
 #--------------------------------------------------------------------
 # $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/data/Attic/Transliterator_Latin_Katakana.txt,v $
-# $Date: 2001/11/02 01:26:59 $
-# $Revision: 1.7 $
+# $Date: 2001/11/13 00:29:17 $
+# $Revision: 1.8 $
 #--------------------------------------------------------------------
 
-:: [:Latin:] NFKD ();
-:: [:Latin:] Lower ();
-::NFD (NFC) ;
+:: [\u0020-\u00FF [:Latin:][:Mark:]] ;   # note: a global filter is more efficient, but MUST include all source chars
+:: NFKD (NFC);  # use NFKD to get the fullwidth latin characters
+:: Lower ();    # whenever transliterating from cased to uncased script, include this
+# :: NFD () ;   # this would catch the odd cases where a lowercase is not in NFD, but none are important for Japanese
 
 # Uses modified Hepburn. Small changes to make  unambiguous.
 
@@ -449,9 +450,7 @@ x > | ks ;
 '~' > ; # delete stray tildes between letters
 [:Katakana:] { '' } [:Latin:] > ; # delete stray quotes between letters
 
-:: NFC (NFD) ;
-# Note: both of these don't work yet, causing different bugs
-:: ([[:Katakana:]\u30FC\uFF70] NFKD);
-# :: (NFKD) ;
+:: NFC (NFKD) ;  # use NFKD to get the halfwidth katakana characters
+:: ([[\u0020-\u007F \u30A1-\u30FC \uFF61-\uFF9F 。、][:Katakana:][:Mark:]]); # note: a global filter is more efficient, but MUST include all source chars
 
 # eof
