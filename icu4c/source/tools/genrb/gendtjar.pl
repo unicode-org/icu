@@ -47,7 +47,7 @@ usage() unless defined $jarDir;
   $icuDataDir =$icuRootDir."/source/data/out/build/icudt".$version.checkPlatform();
   $icuTestDataDir =$icuRootDir."/source/test/testdata/out/build/";
   convertData($icuDataDir, $icuswap, $tempDir, $icu4jDataDir);
-  convertData($icuDataDir."/coll/", $icuswap, $tempDir, $icu4jDataDir."/coll");
+  #convertData($icuDataDir."/coll/", $icuswap, $tempDir, $icu4jDataDir."/coll");
   createJar("$jarDir/jar", "icudata.jar", $tempDir, $icu4jDataDir);
 
   convertTestData($icuTestDataDir, $icuswap, $tempDir, $icu4jTestDataDir);
@@ -93,10 +93,13 @@ sub convertData{
     foreach $item (@list){
         next if($item eq "." || $item eq "..");
         next if($item =~ /^t_.*$\.res/ ||$item =~ /^translit_.*$\.res/   || $item =~ /$\.cnv/ ||
-               $item=~/$\.crs/ || $item=~ /$\.txt/ || $item=~/coll/ || $item=~ /^zoneinfo/  ||
+               $item=~/$\.crs/ || $item=~ /$\.txt/ || $item=~ /^zoneinfo/  ||
                $item=~/icudata\.res/ || $item=~/$\.exp/ || $item=~/$\.lib/ || $item=~/$\.obj/ ||
-               $item=~/cnvalias\.icu/);
-
+               $item=~/cnvalias\.icu/ || $item=~/$\.lst/);
+        if(-d "$icuDataDir/$item"){
+            convertData("$icuDataDir/$item/", $icuswap, $tempDir, "$icu4jDataDir./$item/");
+            next;
+        }
         $command = $icuswap." $icuDataDir/$item $tempDir/$icu4jDataDir/$item";
         cmd($command);
 
@@ -126,7 +129,7 @@ sub convertTestData{
         next if($item eq "." || $item eq "..");
         next if($item =~ /$\.cnv/ || item=~/$\.crs/ || $item=~ /$\.txt/ ||
                 $item=~/$\.exp/ || $item=~/$\.lib/ || $item=~/$\.obj/ ||
-                $item=~/$\.mak/ || $item=~/test\.icu/);
+                $item=~/$\.mak/ || $item=~/test\.icu/ || $item=~/$\.lst/);
         
         if($item =~ /^testdata_/){
             $file = $item;
