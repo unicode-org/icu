@@ -6,8 +6,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/build.xml,v $ 
-* $Date: 2002/03/20 05:11:14 $ 
-* $Revision: 1.50 $
+* $Date: 2002/03/31 06:37:10 $ 
+* $Revision: 1.51 $
 *
 *******************************************************************************
 * This is the ant build file for ICU4J.  See readme.html for more information.
@@ -23,6 +23,7 @@
         <property name="build.dir" value="classes"/>
         <property name="obsolete.dir" value="build"/>
         <property name="jar.file" value="icu4j.jar"/>
+        <property name="icu4j.manifest" value="${src.dir}/com/ibm/icu/manifest.stub"/>
         <property name="zipbin.file" value="../icu4jbin${DSTAMP}.zip"/>
         <property name="zip.file" value="../icu4j${DSTAMP}.zip"/>
         <property name="classpath" value="${build.dir}"/>
@@ -138,7 +139,8 @@
         <jar jarfile="${jar.file}"
             compress="false"
             includes="com/ibm/icu/util/**/*,com/ibm/icu/text/**/*,com/ibm/icu/math/**/*,com/ibm/icu/richtext/**/*,com/ibm/icu/textlayout/**/*,com/ibm/icu/impl/**/*,com/ibm/icu/lang/**/*"
-            basedir="${build.dir}"/>
+            basedir="${build.dir}"
+            manifest="${icu4j.manifest}"/>
     </target>
 
     <target name="richeditJar" depends="core">
