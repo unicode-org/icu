@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/CollationParsedRuleBuilder.java,v $ 
-* $Date: 2002/09/17 21:31:58 $ 
-* $Revision: 1.7 $
+* $Date: 2002/10/25 22:05:19 $ 
+* $Revision: 1.8 $
 *
 *******************************************************************************
 */
@@ -3393,6 +3393,7 @@ final class CollationParsedRuleBuilder
     private static final void setAttributes(RuleBasedCollator collator,
                                           CollationRuleParser.OptionSet option)
     {
+        collator.latinOneFailed_ = true;
         collator.m_caseFirst_ = option.m_caseFirst_;
         collator.setDecomposition(option.m_decomposition_);
         collator.setAlternateHandlingShifted(
@@ -3402,6 +3403,7 @@ final class CollationParsedRuleBuilder
         collator.m_isHiragana4_ = option.m_isHiragana4_;
         collator.setStrength(option.m_strength_);
         collator.m_variableTopValue_ = option.m_variableTopValue_;    
+        collator.latinOneFailed_ = false;
     }
     
     /**

@@ -807,7 +807,7 @@ public final class CollationElementIterator
     private static final int SECOND_LAST_BYTE_SHIFT_ = 8;
 
     // special ce values and tags -------------------------------------------
-    private static final int CE_NOT_FOUND_ = 0xF0000000;
+    /*private*/ static final int CE_NOT_FOUND_ = 0xF0000000;
     private static final int CE_EXPANSION_ = 0xF1000000;
     private static final int CE_CONTRACTION_ = 0xF2000000;
     private static final int CE_THAI_ = 0xF3000000;
@@ -821,8 +821,8 @@ public final class CollationElementIterator
     private static final int CE_NO_MORE_CES_TERTIARY_ = 0x00000001;
 
     private static final int CE_NOT_FOUND_TAG_ = 0;
-    private static final int CE_EXPANSION_TAG_ = 1;       
-    private static final int CE_CONTRACTION_TAG_ = 2;     
+    /*private*/ static final int CE_EXPANSION_TAG_ = 1;       
+    /*private*/ static final int CE_CONTRACTION_TAG_ = 2;     
     private static final int CE_THAI_TAG_ = 3;
     /** 
      * Charset processing, not yet implemented 
@@ -2490,5 +2490,5 @@ public final class CollationElementIterator
                    + (CJK_COMPAT_USED_LIMIT_ - CJK_COMPAT_USED_BASE_);
         }
         return cp + NON_CJK_OFFSET_; // non-CJK
-    }
+    }       
 }
