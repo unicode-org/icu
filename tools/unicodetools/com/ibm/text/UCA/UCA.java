@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCA/UCA.java,v $ 
-* $Date: 2002/06/15 02:47:12 $ 
-* $Revision: 1.14 $
+* $Date: 2002/06/24 15:25:10 $ 
+* $Revision: 1.15 $
 *
 *******************************************************************************
 */
@@ -199,6 +199,7 @@ final public class UCA implements Comparator, UCA_Types {
         hangulBuffer.setLength(0);           // clear hangul buffer
         
         char weight4 = '\u0000'; // DEFAULT FOR NON_IGNORABLE
+        boolean lastWasVariable = false;
 
         // process CEs, building weight strings
         while (true) {
@@ -219,8 +220,13 @@ final public class UCA implements Comparator, UCA_Types {
                     weight4 = 0;
                 } else if (isVariable(ce)) { // variables
                     weight4 = getPrimary(ce);
+                    lastWasVariable = true;
                     ce = 0;
+                } else if (lastWasVariable && getPrimary(ce) == 0) { // zap trailing ignorables
+                    ce = 0;
+                    weight4 = 0;
                 } else { // above variables
+                    lastWasVariable = false;
                     weight4 = '\uFFFF';
                 }
                 break;

@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCA/WriteCollationData.java,v $ 
-* $Date: 2002/06/22 21:02:16 $ 
-* $Revision: 1.22 $
+* $Date: 2002/06/24 15:25:10 $ 
+* $Revision: 1.23 $
 *
 *******************************************************************************
 */
@@ -415,7 +415,7 @@ U+01D5 LATIN CAPITAL LETTER U WITH DIAERESIS AND MACRON
                 log.print(
                     ";\t# " + (extra != LOW_ACCENT ? extra : '.') + " " + ucd.getName(clipped, SHORT) + "\t" + UCA.toString(key));
             } else {
-                log.print(Utility.hex(source) + "\t" + Utility.hex(clipped));
+                log.print(Utility.hex(source) + ";\t" + Utility.hex(clipped));
             }
             log.println();
         }
@@ -430,6 +430,11 @@ U+01D5 LATIN CAPITAL LETTER U WITH DIAERESIS AND MACRON
     }
     
     static final char LOW_ACCENT = '\u0334';
+    static final String SUPPLEMENTARY_ACCENT = UTF16.valueOf(0x1D165);
+    static final String COMPLETELY_IGNOREABLE = "\u0001";
+    static final String COMPLETELY_IGNOREABLE_ACCENT = "\u0591";
+    static final String[] CONTRACTION_TEST = {SUPPLEMENTARY_ACCENT, COMPLETELY_IGNOREABLE, COMPLETELY_IGNOREABLE_ACCENT};
+    
     static int addCounter = 0;
    
     static void addStringX(String s, byte option) {
@@ -457,6 +462,17 @@ U+01D5 LATIN CAPITAL LETTER U WITH DIAERESIS AND MACRON
                     if (--limit < 0) continue; // just include a sampling
                     addStringY(can, option);
                     // System.out.println(addCounter++ + " Adding " + Default.ucd.getCodeAndName(can));
+                }
+            }
+        }
+        if (UTF16.countCodePoint(s) > 1) {
+            for (int i = 1; i < s.length(); ++i) {
+                if (UTF16.isLeadSurrogate(s.charAt(i-1))) continue; // skip if in middle of supplementary
+                
+                for (int j = 0; j < CONTRACTION_TEST.length; ++j) {
+                    String extra = s.substring(0,i) + CONTRACTION_TEST[j] + s.substring(i);
+                    addStringY(extra + 'a', option);
+                    System.out.println(addCounter++ + " Adding " + Default.ucd.getCodeAndName(extra));
                 }
             }
         }
@@ -1399,13 +1415,14 @@ F900..FAFF; CJK Compatibility Ideographs
         };
         
         if (option == IN_XML) {
-        	log.println("<uca>");
+        	log.println("<collation>");
         	log.println("<!--");
         	for (int i = 0; i < commentText.length; ++i) {
         		log.println(commentText[i]);
         	}
         	log.println("-->");
-        	log.println("<version UCA='" + collator.getDataVersion() + "' UCD='" + collator.getUCDVersion() + "'/>");
+        	log.println("<base uca='" + collator.getDataVersion() + "/" + collator.getUCDVersion() + "'/>");
+        	log.println("<rules>");
         } else {
         	log.write('\uFEFF'); // BOM
         	for (int i = 0; i < commentText.length; ++i) {
@@ -1538,38 +1555,60 @@ F900..FAFF; CJK Compatibility Ideographs
             String reset = "";
             String resetComment = "";
             int xmlReset = 0;
-
+            boolean insertVariableTop = false;
+            boolean resetToParameter = false;
+            
+            int ceLayout = getCELayout(ce);
+            if (ceLayout == IMPLICIT) {
+                if (relation == PRIMARY_DIFF) {
+                    int primary = UCA.getPrimary(ce);
+                    int resetCp = UCA.ImplicitToCodePoint(primary, UCA.getPrimary(ces[1]));
+                    	
+                    int[] ces2 = new int[50];
+                    int len2 = collator.getCEs(UTF16.valueOf(resetCp), true, ces2);
+                    relation = getStrengthDifference(ces, len, ces2, len2);
+                    	
+                    reset = quoteOperand(UTF16.valueOf(resetCp));
+                    resetComment = ucd.getCodeAndName(resetCp);
+                    // lastCE = UCA.makeKey(primary, UCA.NEUTRAL_SECONDARY, UCA.NEUTRAL_TERTIARY);
+                    xmlReset = 2;
+                }
+                // lastCJKPrimary = primary;
+            } else if (ceLayout != getCELayout(lastCE) || firstTime) {
+                resetToParameter = true;
+                switch (ceLayout) {
+                    case T_IGNORE: reset = "last tertiary ignorable"; break;
+                    case S_IGNORE: reset = "last secondary ignorable"; break;
+                    case P_IGNORE: reset = "last primary ignorable"; break;
+                    case VARIABLE: reset = "last non-ignorable"; break;
+                    case NON_IGNORE: /*reset = "top"; */ insertVariableTop = true; break;
+                    case TRAILING: reset = "last trailing"; break;
+                }
+            }
+            
+            /*
             if (firstTime
               || collator.getPrimary(lastCE) == 0 && collator.getPrimary(ce) != 0
               || collator.getSecondary(lastCE) == 0 && collator.getSecondary(ce) != 0
               || collator.getTertiary(lastCE) == 0 && collator.getTertiary(ce) != 0) {
                 if (collator.getPrimary(ce) != 0) {
-                    reset = "[top]";
+                    
+                } else if (collator.getSecondary(ce) != 0) {
+                    reset = "[last secondary ignorable]";
+                } else if (collator.getTertiary(ce) != 0) {
+                    reset = "[last tertiary ignorable]";
                 } else {
-                    reset = quoteOperand(chr);
+                    
+                    //reset = quoteOperand(chr);
                 }
-            } else if (variableTop != 0 && (ce & 0xFFFF0000L) > variableTop) {
-                reset = "[variable\\u0020top]";
+            } else if (variableTop != 0 && ce > variableTop) {
+                reset = "[variable top]";
                 xmlReset = 1;
                 variableTop = 0;
             } else {
                 int primary = collator.getPrimary(ce);
                 if (UCA.isImplicitLeadPrimary(primary)) {
-                    if (relation == PRIMARY_DIFF) {
-                    	int resetCp = UCA.ImplicitToCodePoint(primary, UCA.getPrimary(ces[1]));
-                    	
-                    	int[] ces2 = new int[50];
-                    	int len2 = collator.getCEs(UTF16.valueOf(resetCp), true, ces2);
-                    	relation = getStrengthDifference(ces, len, ces2, len2);
-                    	
-                        reset = quoteOperand(UTF16.valueOf(resetCp));
-                        resetComment = ucd.getCodeAndName(resetCp);
-                        // lastCE = UCA.makeKey(primary, UCA.NEUTRAL_SECONDARY, UCA.NEUTRAL_TERTIARY);
-                        xmlReset = 2;
-                    }
-                	// lastCJKPrimary = primary;
-                }
-            }
+             */   
             
             /*
             if (primary >= 0x3400) {
@@ -1607,26 +1646,30 @@ F900..FAFF; CJK Compatibility Ideographs
             // print results
             
             if (option == IN_XML) {
-                if (xmlReset == 1) log.print("<variableTop/>");
+                if (insertVariableTop) log.println(XML_RELATION_NAMES[0] + "<variableTop/>");
                 
                 /*log.print("  <!--" + ucd.getCodeAndName(chr));
                 if (len > 1) log.print(" / " + Utility.hex(expansion));
                 log.println("-->");
                 */
                 
-                if (xmlReset == 2) {
-                    log.print("<reset/>" + Utility.quoteXML(reset));
+                if (reset.length() != 0) {
+                    log.println("<reset/>"
+                    + (resetToParameter ? "<position at=\"" + reset + "\"/>" : Utility.quoteXML(reset))
+                	+ (resetComment.length() != 0 ? "<!-- " + resetComment + "-->": ""));
                 }
                 if (!firstTime) {
                     log.print("  <" + XML_RELATION_NAMES[relation] + "/>");
-                    log.print(Utility.quoteXML(chr));
+                    log.println(Utility.quoteXML(chr));
                     //log.print("</" + XML_RELATION_NAMES[relation] + ">");
                 }
                 if (expansion.length() > 0) {
-                    log.print("<x/>" + Utility.quoteXML(expansion));
+                    log.println("<x/>" + Utility.quoteXML(expansion));
                 }
             } else {
-                if (reset.length() != 0) log.println("& " + reset 
+                if (insertVariableTop) log.println(RELATION_NAMES[0] + " [variable top]");
+                if (reset.length() != 0) log.println("& " 
+                    + (resetToParameter ? "[" : "") + reset + (resetToParameter ? "]" : "")
                 	+ (resetComment.length() != 0 ? "\t\t# " + resetComment : ""));
                 if (!firstTime) log.print(RELATION_NAMES[relation] + " " + quoteOperand(chr));
                 if (expansion.length() > 0) log.print(" / " + quoteOperand(expansion));
@@ -1641,12 +1684,31 @@ F900..FAFF; CJK Compatibility Ideographs
             firstTime = false;
         }
         // log.println("& [top]"); // RESET
-        if (option == IN_XML) log.println("</uca>");
+        if (option == IN_XML) log.println("</rules></collation>");
         log2.close();
         log.close();
         Utility.fixDot();
     }
     
+    static final int NONE = 0, T_IGNORE = 1, S_IGNORE = 2, P_IGNORE = 3, VARIABLE = 4, NON_IGNORE = 5, IMPLICIT = 6, TRAILING = 7;
+    
+    static int getCELayout(int ce) {
+        int primary = collator.getPrimary(ce);
+        int secondary = collator.getSecondary(ce);
+        int tertiary = collator.getSecondary(ce);
+        if (primary == 0) {
+            if (secondary == 0) {
+                if (tertiary == 0) return T_IGNORE;
+                return S_IGNORE;
+            }
+            return P_IGNORE;
+        }
+        if (collator.isVariable(ce)) return VARIABLE;
+        if (primary < UNSUPPORTED_BASE) return NON_IGNORE;
+        if (primary < UNSUPPORTED_LIMIT) return IMPLICIT;
+        return TRAILING;
+    }
+        
     static long getPrimary(int[] ces, int len) {
         if (len <= 0) return 0;
     	if (UCA.isImplicitLeadCE(ces[0])) {

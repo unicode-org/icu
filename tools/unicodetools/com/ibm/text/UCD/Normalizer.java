@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/Normalizer.java,v $
-* $Date: 2002/06/22 21:02:16 $
-* $Revision: 1.11 $
+* $Date: 2002/06/24 15:25:10 $
+* $Revision: 1.12 $
 *
 *******************************************************************************
 */
@@ -212,7 +212,7 @@ public final class Normalizer implements UCD_Types {
     * @return          value from 0 to 255
     */
 
-    public short getCanonicalClass(char ch) {
+    public short getCanonicalClass(int ch) {
         return data.getCanonicalClass(ch);
     }
 
