@@ -393,7 +393,7 @@ U_CFUNC UResourceBundle* ures_openNoFallback(const char* path, const char* local
 
     r->fHasFallback = FALSE;
     r->fIsTopLevel = TRUE;
-    r->fIsStackObject = FALSE;
+    ures_setIsStackObject(r, FALSE);
     r->fIndex = -1;
     r->fData = entryOpen(path, localeID, status);
     if(U_FAILURE(*status)) {
@@ -417,13 +417,16 @@ U_CFUNC UResourceBundle* ures_openNoFallback(const char* path, const char* local
     return r;
 }
 
-UResourceBundle *init_resb_result(const ResourceData *rdata, const Resource r, const char *key, UResourceDataEntry *realData, UResourceBundle *resB) {
+UResourceBundle *init_resb_result(const ResourceData *rdata, const Resource r, const char *key, UResourceDataEntry *realData, UResourceBundle *resB, UErrorCode *status) {
+    if(status == NULL || U_FAILURE(*status)) {
+        return resB;
+    }
     if(resB == NULL) {
         resB = (UResourceBundle *)uprv_malloc(sizeof(UResourceBundle));
-        resB->fIsStackObject = FALSE;
+        ures_setIsStackObject(resB, FALSE);
     } else {
-        if(resB->fIsStackObject != FALSE) {
-            resB->fIsStackObject = TRUE;
+        if(ures_isStackObject(resB, status) != FALSE) {
+            ures_setIsStackObject(resB, TRUE);
         }
     }
     resB->fData = realData;
@@ -451,10 +454,17 @@ UResourceBundle *copyResb(UResourceBundle *r, const UResourceBundle *original, U
             isStackObject = FALSE;
             r = (UResourceBundle *)uprv_malloc(sizeof(UResourceBundle));
         } else {
-            isStackObject = TRUE;
+            isStackObject = ures_isStackObject(r, status);
+            if(U_FAILURE(*status)) {
+                return r;
+            }
+            if(isStackObject == FALSE) {
+                ures_close(r);
+                r = (UResourceBundle *)uprv_malloc(sizeof(UResourceBundle));
+            }
         }
         uprv_memcpy(r, original, sizeof(UResourceBundle));
-        r->fIsStackObject = isStackObject;
+        ures_setIsStackObject(r, isStackObject);
         if(r->fData != NULL) {
           entryIncrease(r->fData);
         }
@@ -469,7 +479,7 @@ void copyResbFillIn(UResourceBundle *r, const UResourceBundle *original) {
         return;
     }
     uprv_memcpy(r, original, sizeof(UResourceBundle));
-    r->fIsStackObject = TRUE;
+    ures_setIsStackObject(r, TRUE);
     if(original->fData != NULL) {
       entryIncrease(r->fData);
     }
@@ -664,14 +674,14 @@ U_CAPI UResourceBundle* U_EXPORT2 ures_getNextResource(UResourceBundle *resB, UR
             if(r == RES_BOGUS && resB->fHasFallback) {
                 /* TODO: do the fallback */
             }
-            return init_resb_result(&(resB->fResData), r, key, resB->fData, fillIn);
+            return init_resb_result(&(resB->fResData), r, key, resB->fData, fillIn, status);
             break;
         case RES_ARRAY:
             r = res_getArrayItem(&(resB->fResData), resB->fRes, resB->fIndex);
             if(r == RES_BOGUS && resB->fHasFallback) {
                 /* TODO: do the fallback */
             }
-            return init_resb_result(&(resB->fResData), r, key, resB->fData, fillIn);
+            return init_resb_result(&(resB->fResData), r, key, resB->fData, fillIn, status);
             break;
         case RES_INT_VECTOR:
         default:
@@ -710,14 +720,14 @@ U_CAPI UResourceBundle* U_EXPORT2 ures_getByIndex(const UResourceBundle *resB, i
             if(r == RES_BOGUS && resB->fHasFallback) {
                 /* TODO: do the fallback */
             }
-            return init_resb_result(&(resB->fResData), r, key, resB->fData, fillIn);
+            return init_resb_result(&(resB->fResData), r, key, resB->fData, fillIn, status);
             break;
         case RES_ARRAY:
             r = res_getArrayItem(&(resB->fResData), resB->fRes, indexR);
             if(r == RES_BOGUS && resB->fHasFallback) {
                 /* TODO: do the fallback */
             }
-            return init_resb_result(&(resB->fResData), r, key, resB->fData, fillIn);
+            return init_resb_result(&(resB->fResData), r, key, resB->fData, fillIn, status);
             break;
         case RES_INT_VECTOR:
         default:
@@ -805,7 +815,7 @@ U_CAPI UResourceBundle* U_EXPORT2 ures_getByKey(const UResourceBundle *resB, con
                         /*return NULL;*/
                         return fillIn;
                     } else {
-                        return init_resb_result(rd, res, key, realData, fillIn);
+                        return init_resb_result(rd, res, key, realData, fillIn, status);
                     }
                 } else {
                     *status = U_MISSING_RESOURCE_ERROR;
@@ -813,7 +823,7 @@ U_CAPI UResourceBundle* U_EXPORT2 ures_getByKey(const UResourceBundle *resB, con
                     return fillIn;
                 }
         } else {
-            return init_resb_result(&(resB->fResData), res, key, resB->fData, fillIn);
+            return init_resb_result(&(resB->fResData), res, key, resB->fData, fillIn, status);
         }
     } else if(RES_GET_TYPE(resB->fRes) == RES_ARRAY && resB->fHasFallback == TRUE) {
         /* here should go a first attempt to locate the key using index table */
@@ -822,7 +832,7 @@ U_CAPI UResourceBundle* U_EXPORT2 ures_getByKey(const UResourceBundle *resB, con
             /*return NULL;*/
             return fillIn;
         } else {
-            return init_resb_result(rd, res, key, realData, fillIn);
+            return init_resb_result(rd, res, key, realData, fillIn, status);
         }
     } else {
         *status = U_RESOURCE_TYPE_MISMATCH;
@@ -980,7 +990,6 @@ U_CAPI void ures_openFillIn(UResourceBundle *r, const char* path,
         UResourceDataEntry *firstData;
         r->fHasFallback = TRUE;
         r->fIsTopLevel = TRUE;
-        r->fIsStackObject = TRUE;
         r->fKey = NULL;
         r->fVersion = NULL;
         r->fIndex = -1;
@@ -1010,7 +1019,7 @@ U_CAPI UResourceBundle* ures_open(const char* path,
 
     r->fHasFallback = TRUE;
     r->fIsTopLevel = TRUE;
-    r->fIsStackObject = FALSE;
+    ures_setIsStackObject(r, FALSE);
     r->fKey = NULL;
     r->fVersion = NULL;
     r->fIndex = -1;
@@ -1085,9 +1094,31 @@ U_CAPI UResourceBundle* U_EXPORT2 ures_openU(const UChar* myPath,
     return r;
 }
 
-U_CAPI void ures_initStackObject( UResourceBundle* resB) {
-  resB->fIsStackObject = TRUE;
+U_CAPI void ures_setIsStackObject( UResourceBundle* resB, UBool state) {
+    if(state == TRUE) {
+        resB->fMagic1 = 0;
+        resB->fMagic2 = 0;
+    } else {
+        resB->fMagic1 = MAGIC1;
+        resB->fMagic2 = MAGIC2;
+    }
 }
+
+U_CAPI UBool ures_isStackObject( UResourceBundle* resB, UErrorCode *status) {
+    if(status == NULL || U_FAILURE(*status)) {
+        return FALSE;
+    }
+    if(resB == NULL) {
+        *status = U_ILLEGAL_ARGUMENT_ERROR;
+        return TRUE;
+    }
+    if(resB->fMagic1 == MAGIC1 && resB->fMagic2 == MAGIC2) {
+        return FALSE;
+    } else {
+        return TRUE;
+    }
+}
+
 
 U_CAPI const UChar* ures_get(    const UResourceBundle*    resB,
                 const char*              resourceTag,
@@ -1107,7 +1138,7 @@ U_CAPI const UChar* ures_getArrayItem(const UResourceBundle*     resB,
                     UErrorCode*                status)
 {
     UResourceBundle res;
-    ures_initStackObject(&res);
+    ures_setIsStackObject(&res, TRUE);
         if (status==NULL || U_FAILURE(*status)) {
                 return NULL;
         }
@@ -1133,7 +1164,7 @@ U_CAPI const UChar* ures_get2dArrayItem(const UResourceBundle*   resB,
                       UErrorCode*              status)
 {
     UResourceBundle res;
-    ures_initStackObject(&res);
+    ures_setIsStackObject(&res, TRUE);
         if (status==NULL || U_FAILURE(*status)) {
                 return NULL;
         }
@@ -1144,7 +1175,7 @@ U_CAPI const UChar* ures_get2dArrayItem(const UResourceBundle*   resB,
     ures_getByKey(resB, resourceTag, &res, status);
     if(U_SUCCESS(*status)) {
         UResourceBundle res2;
-	ures_initStackObject(&res2);
+	ures_setIsStackObject(&res2, TRUE);
         ures_getByIndex(&res, rowIndex, &res2, status);
         ures_close(&res);
         if(U_SUCCESS(*status)) {
@@ -1166,7 +1197,7 @@ U_CAPI const UChar* ures_getTaggedArrayItem(const UResourceBundle*   resB,
                       UErrorCode*              status)
 {
     UResourceBundle res;
-    ures_initStackObject(&res);
+    ures_setIsStackObject(&res, TRUE);
         if (status==NULL || U_FAILURE(*status)) {
                 return NULL;
         }
@@ -1196,7 +1227,7 @@ U_CAPI int32_t ures_countArrayItems(const UResourceBundle* resourceBundle,
     Resource res = RES_BOGUS;
 
     UResourceBundle resData;
-    ures_initStackObject(&resData);
+    ures_setIsStackObject(&resData, TRUE);
         if (status==NULL || U_FAILURE(*status)) {
                 return 0;
         }
@@ -1219,6 +1250,7 @@ U_CAPI int32_t ures_countArrayItems(const UResourceBundle* resourceBundle,
 
 U_CAPI void ures_close(UResourceBundle*    resB)
 {
+    UErrorCode status = U_ZERO_ERROR;
     if(resB != NULL) {
         if(resB->fData != NULL) {
             entryClose(resB->fData);
@@ -1232,7 +1264,7 @@ U_CAPI void ures_close(UResourceBundle*    resB)
             uprv_free(resB->fVersion);
         }
 
-        if(resB->fIsStackObject == FALSE) {
+        if(ures_isStackObject(resB, &status) == FALSE) {
             uprv_free(resB);
         }
     }

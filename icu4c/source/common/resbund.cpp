@@ -502,7 +502,7 @@ ResourceBundle::getStringArray( const char             *resourceTag,
 
     if(sldata == 0) {
         UResourceBundle array;
-	ures_initStackObject(&array);
+	ures_setIsStackObject(&array, TRUE);
         UErrorCode fallbackInfo = U_ZERO_ERROR;
         ures_getByKey(resource, resourceTag, &array, &fallbackInfo);
         if(U_SUCCESS(fallbackInfo)) {
@@ -566,7 +566,7 @@ ResourceBundle::get2dArray(const char *resourceTag,
 
     if(sldata == 0) {
         UResourceBundle array;
-	ures_initStackObject(&array);
+	ures_setIsStackObject(&array, TRUE);
         UErrorCode fallbackInfo = U_ZERO_ERROR;
         ures_getByKey(resource, resourceTag, &array, &fallbackInfo);
         if(U_SUCCESS(fallbackInfo)) {
@@ -574,7 +574,7 @@ ResourceBundle::get2dArray(const char *resourceTag,
             if(rowCount > 0) {
                 result = new UnicodeString*[rowCount];
                 UResourceBundle row;
-		ures_initStackObject(&row);
+		ures_setIsStackObject(&row, TRUE);
                 ures_getByIndex(&array, 0, &row, &err);
                 columnCount = ures_getSize(&row);
                 const UChar* string = 0;
@@ -653,7 +653,7 @@ ResourceBundle::getTaggedArrayItem( const char             *resourceTag,
 
     if(sldata == 0) {
         UResourceBundle table;
-	ures_initStackObject(&table);
+	ures_setIsStackObject(&table, TRUE);
         UErrorCode fallbackInfo = U_ZERO_ERROR;
         ures_getByKey(resource, resourceTag, &table, &fallbackInfo);
         if(U_SUCCESS(fallbackInfo)) {
