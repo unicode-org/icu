@@ -215,12 +215,12 @@ NumberFormatRoundTripTest::test(NumberFormat *fmt, const Formattable& value)
     Formattable n;
     UBool show = verbose;
     if(DEBUG)
-        logln(UnicodeString("  ") + /*value.getString(temp) +*/ " F> " + escape(s));
+        logln(/*value.getString(temp) +*/ " F> " + escape(s));
 
     fmt->parse(s, n, status);
     failure(status, "fmt->parse");
     if(DEBUG) 
-        logln("  " + escape(s) + " P> " /*+ n.getString(temp)*/);
+        logln(escape(s) + " P> " /*+ n.getString(temp)*/);
 
     if(isDouble(n))
         s2 = fmt->format(n.getDouble(), s2);
@@ -228,18 +228,18 @@ NumberFormatRoundTripTest::test(NumberFormat *fmt, const Formattable& value)
         s2 = fmt->format(n.getLong(), s2);
     
     if(DEBUG) 
-        logln(UnicodeString("  ") + /*n.getString(temp) +*/ " F> " + escape(s2));
+        logln(/*n.getString(temp) +*/ " F> " + escape(s2));
 
     if(STRING_COMPARE) {
         if (s != s2) {
-            errln(" *** STRING ERROR");
+            errln("*** STRING ERROR \"" + escape(s) + "\" != \"" + escape(s2) + "\"");
             show = TRUE;
         }
     }
 
     if(EXACT_NUMERIC_COMPARE) {
         if(value != n) {
-            errln(" *** NUMERIC ERROR");
+            errln("*** NUMERIC ERROR");
             show = TRUE;
         }
     }
@@ -248,7 +248,7 @@ NumberFormatRoundTripTest::test(NumberFormat *fmt, const Formattable& value)
         double error = proportionalError(value, n);
 
         if(error > MAX_ERROR) {
-            errln(UnicodeString(" *** NUMERIC ERROR ") + error);
+            errln(UnicodeString("*** NUMERIC ERROR ") + error);
             show = TRUE;
         }
 
