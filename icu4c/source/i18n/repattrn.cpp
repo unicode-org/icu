@@ -324,14 +324,14 @@ RegexMatcher *RegexPattern::matcher(const UnicodeString &input,
     return retMatcher;
 };
 
-RegexMatcher *RegexPattern::matcher(const UChar *input,
+RegexMatcher *RegexPattern::matcher(const UChar * /*input*/,
                                     UErrorCode          &status)  const 
 {
-    RegexMatcher *retMatcher = NULL;
+    /* This should never get called. The API with UnicodeString should be called instead. */
     if (U_SUCCESS(status)) {
         status = U_UNSUPPORTED_ERROR;
     }
-    return retMatcher;
+    return NULL;
 }
 
 
