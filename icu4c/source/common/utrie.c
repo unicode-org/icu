@@ -27,8 +27,20 @@
 #include "cmemory.h"
 #include "utrie.h"
 
+/* miscellaneous ------------------------------------------------------------ */
+
 #undef ABS
 #define ABS(x) ((x)>=0 ? (x) : -(x))
+
+static U_INLINE UBool
+equal_uint32(const uint32_t *s, const uint32_t *t, int32_t length) {
+    while(length>0 && *s==*t) {
+        ++s;
+        ++t;
+        --length;
+    }
+    return (UBool)(length==0);
+}
 
 /* Building a trie ----------------------------------------------------------*/
 
@@ -539,18 +551,13 @@ _findUnusedBlocks(UNewTrie *trie) {
 static int32_t
 _findSameDataBlock(const uint32_t *data, int32_t dataLength,
                    int32_t otherBlock, int32_t step) {
-    int32_t block, i;
+    int32_t block;
 
     /* ensure that we do not even partially get past dataLength */
     dataLength-=UTRIE_DATA_BLOCK_LENGTH;
 
     for(block=0; block<=dataLength; block+=step) {
-        for(i=0; i<UTRIE_DATA_BLOCK_LENGTH; ++i) {
-            if(data[block+i]!=data[otherBlock+i]) {
-                break;
-            }
-        }
-        if(i==UTRIE_DATA_BLOCK_LENGTH) {
+        if(equal_uint32(data+block, data+otherBlock, UTRIE_DATA_BLOCK_LENGTH)) {
             return block;
         }
     }
@@ -564,15 +571,14 @@ _findSameDataBlock(const uint32_t *data, int32_t dataLength,
  * - removes blocks that are identical with earlier ones
  * - overlaps adjacent blocks as much as possible (if overlap==TRUE)
  * - moves blocks in steps of the data granularity
+ * - moves and overlaps blocks that overlap with multiple values in the overlap region
  *
  * It does not
  * - try to move and overlap blocks that are not already adjacent
- * - try to move and overlap blocks that overlap with multiple values in the overlap region
  */
 static void
 utrie_compact(UNewTrie *trie, UBool overlap, UErrorCode *pErrorCode) {
-    uint32_t x;
-    int32_t i, start, prevEnd, newStart, overlapStart;
+    int32_t i, start, newStart, overlapStart;
 
     if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
         return;
@@ -600,12 +606,11 @@ utrie_compact(UNewTrie *trie, UBool overlap, UErrorCode *pErrorCode) {
     }
 
     newStart=UTRIE_DATA_BLOCK_LENGTH;
-    prevEnd=newStart-1;
     for(start=newStart; start<trie->dataLength;) {
         /*
          * start: index of first entry of current block
-         * prevEnd: index to last entry of previous block
          * newStart: index where the current block is to be moved
+         *           (right after current end of already-compacted data)
          */
 
         /* skip blocks that are not used */
@@ -613,7 +618,7 @@ utrie_compact(UNewTrie *trie, UBool overlap, UErrorCode *pErrorCode) {
             /* advance start to the next block */
             start+=UTRIE_DATA_BLOCK_LENGTH;
 
-            /* leave prevEnd and newStart with the previous block! */
+            /* leave newStart with the previous block! */
             continue;
         }
 
@@ -629,19 +634,16 @@ utrie_compact(UNewTrie *trie, UBool overlap, UErrorCode *pErrorCode) {
             /* advance start to the next block */
             start+=UTRIE_DATA_BLOCK_LENGTH;
 
-            /* leave prevEnd and newStart with the previous block! */
+            /* leave newStart with the previous block! */
             continue;
         }
 
         /* see if the beginning of this block can be overlapped with the end of the previous block */
-        /* x: first value in the current block */
-        x=trie->data[start];
-        if(x==trie->data[prevEnd] && overlap && start>=overlapStart) {
-            /* overlap by at least one */
-            for(i=1; i<UTRIE_DATA_BLOCK_LENGTH && x==trie->data[start+i] && x==trie->data[prevEnd-i]; ++i) {}
-
-            /* overlap by i, rounded down for the data block granularity */
-            i&=~(UTRIE_DATA_GRANULARITY-1);
+        if(overlap && start>=overlapStart) {
+            /* look for maximum overlap (modulo granularity) with the previous, adjacent block */
+            for(i=UTRIE_DATA_BLOCK_LENGTH-UTRIE_DATA_GRANULARITY;
+                i>0 && !equal_uint32(trie->data+(newStart-i), trie->data+start, i);
+                i-=UTRIE_DATA_GRANULARITY) {}
         } else {
             i=0;
         }
@@ -666,8 +668,6 @@ utrie_compact(UNewTrie *trie, UBool overlap, UErrorCode *pErrorCode) {
             newStart+=UTRIE_DATA_BLOCK_LENGTH;
             start=newStart;
         }
-
-        prevEnd=newStart-1;
     }
 
     /* now adjust the index (stage 1) table */
