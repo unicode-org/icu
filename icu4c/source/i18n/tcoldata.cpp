@@ -75,7 +75,7 @@ void TableCollationData::streamIn(FileStream* is)
             // Slight ugliness: We are a friend of TableCollation solely so
             // we can access the constant UNMAPPED here.  In fact, this code
             // path shouldn't really happen, because mapping should always != 0.
-            if (mapping == 0) mapping = ucmp32_open(RuleBasedCollator::UNMAPPED);
+            // if (mapping == 0) mapping = ucmp32_open(RuleBasedCollator::UNMAPPED);
             if (mapping->fBogus ){
                 fBogus = TRUE;
                 return;
@@ -179,9 +179,9 @@ void TableCollationData::streamOut(FileStream* os) const
     }
 }
 
-void TableCollationData::streamIn(UMemoryStream* is)
+void TableCollationData::streamIn(UMemoryStream* is, UErrorCode &status)
 {
-    if (!uprv_mstrm_error(is))
+    if (!uprv_mstrm_error(is) && U_SUCCESS(status))
     {
         // Stream in large objects
         char isNull;
@@ -203,7 +203,6 @@ void TableCollationData::streamIn(UMemoryStream* is)
             }
 			int32_t len = 0;
 			const uint8_t *map = uprv_mstrm_getCurrentBuffer(is, &len);
-			UErrorCode status = U_ZERO_ERROR;
 			ucmp32_initFromData(mapping, &map, &status);
 			uprv_mstrm_jump(is, map);
             // ucmp32_streamMemIn(mapping, is);
@@ -211,6 +210,7 @@ void TableCollationData::streamIn(UMemoryStream* is)
                 fBogus = TRUE;
                 ucmp32_close(mapping);
                 mapping = 0;
+                status = U_MISSING_RESOURCE_ERROR;
                 return;
             }
         }

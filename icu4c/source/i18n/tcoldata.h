@@ -100,7 +100,7 @@ public:
     /**
      * For internal use only - streaming to memory
      */
-            void                streamIn(UMemoryStream* is);
+            void                streamIn(UMemoryStream* is, UErrorCode& status);
             void                streamOut(UMemoryStream* os) const;
 
         /**

@@ -85,7 +85,7 @@ class RuleBasedCollatorStreamer
 public:
    static void streamIn(RuleBasedCollator* collator, FileStream* is);
    static void streamOut(const RuleBasedCollator* collator, FileStream* os);
-   static void streamIn(RuleBasedCollator* collator, UMemoryStream* is);
+   static void streamIn(RuleBasedCollator* collator, UMemoryStream* is, UErrorCode& status);
    static void streamOut(const RuleBasedCollator* collator, UMemoryStream* os);
 };
 
@@ -807,7 +807,7 @@ RuleBasedCollator::constructFromBundle(const Locale & name,
         }
 
         // The streamIn function does the actual work here...
-        RuleBasedCollatorStreamer::streamIn(this, ifs);
+        RuleBasedCollatorStreamer::streamIn(this, ifs, status);
 
         if (!uprv_mstrm_error(ifs)) {
         }
@@ -2492,10 +2492,9 @@ VectorOfInt *RuleBasedCollator::getExpandValueList(int32_t order) const
 
 
 
-void RuleBasedCollatorStreamer::streamIn(RuleBasedCollator* collator, UMemoryStream* is)
+void RuleBasedCollatorStreamer::streamIn(RuleBasedCollator* collator, UMemoryStream* is, UErrorCode& status)
 {
-    if (!uprv_mstrm_error(is))
-    {
+    if (!uprv_mstrm_error(is) && U_SUCCESS(status)) {
         // Check that this is the correct file type
         int16_t id;
 
@@ -2516,6 +2515,7 @@ void RuleBasedCollatorStreamer::streamIn(RuleBasedCollator* collator, UMemoryStr
         {
             delete collator->data;
             collator->data = NULL;
+            status = U_MISSING_RESOURCE_ERROR;
         }
         else
         {
@@ -2524,9 +2524,10 @@ void RuleBasedCollatorStreamer::streamIn(RuleBasedCollator* collator, UMemoryStr
                 collator->data = new TableCollationData;
             }
             
-            collator->data->streamIn(is);
+            collator->data->streamIn(is, status);
             if (collator->data->isBogus()) {
                 uprv_mstrm_setError(is); // force the stream to set its error flag
+                status = U_MISSING_RESOURCE_ERROR;
                 return;
             }
         }
@@ -2538,6 +2539,7 @@ void RuleBasedCollatorStreamer::streamIn(RuleBasedCollator* collator, UMemoryStr
             // This isn't the right type of file.  Mark the ios
             // as failing and return.
             uprv_mstrm_setError(is); // force the stream to set its error flag
+            status = U_MISSING_RESOURCE_ERROR;
             return;
         }
 
