@@ -1,3 +1,9 @@
+/********************************************************************
+ * COPYRIGHT: 
+ * Copyright (c) 1997-2001, International Business Machines Corporation and
+ * others. All Rights Reserved.
+ ********************************************************************/
+
 #ifndef SFDWCHIT_H
 #define SFDWCHIT_H
 
