@@ -2948,6 +2948,10 @@ SOURCE=.\ustr_imp.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\ustrenum.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\ustrfmt.h
 # End Source File
 # Begin Source File
