@@ -237,18 +237,6 @@ parseLine(const char *line) {
     }
     limit=pos;
 
-    if (line[pos] == '{') {   /* skip over tags */
-        ++pos;
-        while (line[pos] && line[pos] != '}' && line[pos] != '#') {
-            ++pos;
-        }
-        if (line[pos] == '}') {
-            ++pos;
-        } else {
-            fprintf(stderr, "unterminated tag list: %s\n", line);
-            exit(U_PARSE_ERROR);
-        }
-    }
     /* store the converter name */
     length=limit-start;
     converter=allocString(length+1);
@@ -261,6 +249,22 @@ parseLine(const char *line) {
     /* add the converter as its own alias to the alias table */
     addAlias(converter, cnv);
 
+    /* skip white space */
+    while(line[pos]!=0 && isspace((unsigned char)line[pos])) {
+        ++pos;
+    }
+    if (line[pos] == '{') {   /* skip over tags */
+        ++pos;
+        while (line[pos] && line[pos] != '}' && line[pos] != '#') {
+            ++pos;
+        }
+        if (line[pos] == '}') {
+            ++pos;
+        } else {
+            fprintf(stderr, "unterminated tag list: %s\n", line);
+            exit(U_PARSE_ERROR);
+        }
+    }
     /* get all the real aliases */
     for(;;) {
         /* skip white space */
