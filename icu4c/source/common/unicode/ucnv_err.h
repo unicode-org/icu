@@ -63,14 +63,14 @@
 
 /**
  * FROM_U, TO_U options for sub and skip callbacks
- * @draft ICU 1.8
+ * @stable
  */
 #define UCNV_SUB_STOP_ON_ILLEGAL "i"
 #define UCNV_SKIP_STOP_ON_ILLEGAL "i"
 
 /**
  * FROM_U_CALLBACK_ESCAPE options
- * @draft ICU 1.8
+ * @stable
  */
 #define UCNV_ESCAPE_ICU       NULL
 #define UCNV_ESCAPE_JAVA      "J"
