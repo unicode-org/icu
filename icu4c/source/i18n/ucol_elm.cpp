@@ -352,7 +352,7 @@ int uprv_uca_setMaxExpansion(uint32_t           endexpansion,
     }
     maxexpansion->position ++;
 
-#ifdef _DEBUG
+#ifdef UCOL_DEBUG
     int   temp;
     UBool found = FALSE;
     for (temp = 0; temp < maxexpansion->position; temp ++) {
