@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/CollationParsedRuleBuilder.java,v $ 
-* $Date: 2004/01/09 07:31:57 $ 
-* $Revision: 1.27 $
+* $Date: 2004/01/22 06:41:10 $ 
+* $Revision: 1.28 $
 *
 *******************************************************************************
 */
@@ -205,19 +205,25 @@ final class CollationParsedRuleBuilder
 	                                              Collator.SECONDARY);
 			    listheader.m_gapsLo_[2] = mergeCE(t1, t2, 
 	                                              Collator.TERTIARY);
-			    if (listheader.m_baseCE_ < 0xEF000000) {
-			        // first implicits have three byte primaries, with a gap of
-                    // one so we esentially need to add 2 to the top byte in 
-	                // listheader.m_baseContCE_
-			        t2 += 0x02000000;
-			    } 
-	            else {
-			        // second implicits have four byte primaries, with a gap of
-                    // IMPLICIT_LAST2_MULTIPLIER_
-			        // Now, this guy is not really accessible here, so until we 
-	                // find a better way to pass it around, assume that the gap is 1
-			        t2 += 0x00020000;
-			    }
+			    int primaryCE = t1 & RuleBasedCollator.CE_PRIMARY_MASK_ | (t2 & RuleBasedCollator.CE_PRIMARY_MASK_) >>> 16;
+			    primaryCE = RuleBasedCollator.impCEGen_.getImplicitFromRaw(RuleBasedCollator.impCEGen_.getRawFromImplicit(primaryCE)+1);
+
+			    t1 = primaryCE & RuleBasedCollator.CE_PRIMARY_MASK_ | 0x0505;
+			    t2 = (primaryCE << 16) & RuleBasedCollator.CE_PRIMARY_MASK_ | RuleBasedCollator.CE_CONTINUATION_MARKER_;
+			    
+//			    if (listheader.m_baseCE_ < 0xEF000000) {
+//			        // first implicits have three byte primaries, with a gap of
+//                    // one so we esentially need to add 2 to the top byte in 
+//	                // listheader.m_baseContCE_
+//			        t2 += 0x02000000;
+//			    } 
+//	            else {
+//			        // second implicits have four byte primaries, with a gap of
+//                    // IMPLICIT_LAST2_MULTIPLIER_
+//			        // Now, this guy is not really accessible here, so until we 
+//	                // find a better way to pass it around, assume that the gap is 1
+//			        t2 += 0x00020000;
+//			    }
 		        listheader.m_gapsHi_[0] = mergeCE(t1, t2, 
 	                                              Collator.PRIMARY);
 		        listheader.m_gapsHi_[1] = mergeCE(t1, t2, 

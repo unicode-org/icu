@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/CollationRuleParser.java,v $ 
-* $Date: 2003/06/03 18:49:33 $ 
-* $Revision: 1.15 $
+* $Date: 2004/01/22 06:41:09 $ 
+* $Revision: 1.16 $
 *
 *******************************************************************************
 */
@@ -1530,58 +1530,107 @@ final class CollationRuleParser
 	    if (basecontce == CollationElementIterator.NULLORDER) {
 	        basecontce = 0;
 	    }
-	    // first ce and second ce m_utilCEBuffer_
-	    int invpos = CollationParsedRuleBuilder.INVERSE_UCA_.getInversePrevCE(
-                                                     basece, basecontce, 
-                                                     strength, m_utilCEBuffer_);
-	    int ch = CollationParsedRuleBuilder.INVERSE_UCA_.m_table_[3 * invpos 
-                                                                  + 2];
-        if ((ch &  INVERSE_SIZE_MASK_) != 0) {
-	        int offset = ch & INVERSE_OFFSET_MASK_;
-	        ch = CollationParsedRuleBuilder.INVERSE_UCA_.m_continuations_[
-                                                                       offset];
-	    }      
-	    m_source_.append((char)ch);
-	    m_extraCurrent_ ++;
-	    m_parsedToken_.m_charsOffset_ = m_extraCurrent_ - 1;
-	    m_parsedToken_.m_charsLen_ = 1;
-	
-	    // We got an UCA before. However, this might have been tailored.
-	    // example:
-	    // &\u30ca = \u306a
-	    // &[before 3]\u306a<<<\u306a|\u309d
-	  
-	    m_utilToken_.m_source_ = (m_parsedToken_.m_charsLen_ << 24) 
-	                                         | m_parsedToken_.m_charsOffset_;
-	    m_utilToken_.m_rules_ = m_source_;
-	    sourcetoken = (Token)m_hashTable_.get(m_utilToken_);
-	  
-	    // if we found a tailored thing, we have to use the UCA value and 
-	    // construct a new reset token with constructed name
-	    if (sourcetoken != null && sourcetoken.m_strength_ != TOKEN_RESET_) {
-	        // character to which we want to anchor is already tailored. 
-	        // We need to construct a new token which will be the anchor point
-            m_source_.setCharAt(m_extraCurrent_ - 1, '\uFFFE');
-	        m_source_.append(ch);
-	        m_extraCurrent_ ++;
-	        m_parsedToken_.m_charsLen_ ++;
-            m_listHeader_[m_resultLength_] = new TokenListHeader();
-	        m_listHeader_[m_resultLength_].m_baseCE_ 
-                                             = m_utilCEBuffer_[0] & 0xFFFFFF3F;
-	        if (RuleBasedCollator.isContinuation(m_utilCEBuffer_[1])) {
-	            m_listHeader_[m_resultLength_].m_baseContCE_ 
-                                                          = m_utilCEBuffer_[1];
-	        } 
-	        else {
-	            m_listHeader_[m_resultLength_].m_baseContCE_ = 0;
-	        }
-	        m_listHeader_[m_resultLength_].m_nextCE_ = 0;
-	        m_listHeader_[m_resultLength_].m_nextContCE_ = 0;
-	        m_listHeader_[m_resultLength_].m_previousCE_ = 0;
-	        m_listHeader_[m_resultLength_].m_previousContCE_ = 0;
-	        m_listHeader_[m_resultLength_].m_indirect_ = false;
-	        sourcetoken = new Token();
-	        initAReset(-1, sourcetoken);   
+	    
+	    int ch = 0;
+
+
+	    if((basece >>> 24 >= RuleBasedCollator.UCA_CONSTANTS_.PRIMARY_IMPLICIT_MIN_) 
+	    		&& (basece >>> 24 <=  RuleBasedCollator.UCA_CONSTANTS_.PRIMARY_IMPLICIT_MAX_)) { /* implicits - */
+	    	
+	    	int primary = basece & RuleBasedCollator.CE_PRIMARY_MASK_ | (basecontce & RuleBasedCollator.CE_PRIMARY_MASK_) >> 16;
+	    	int raw = RuleBasedCollator.impCEGen_.getRawFromImplicit(primary);
+	    	ch = RuleBasedCollator.impCEGen_.getCodePointFromRaw(raw-1);
+	    	int primaryCE = RuleBasedCollator.impCEGen_.getImplicitFromRaw(raw-1);
+	    	m_utilCEBuffer_[0] = primaryCE & RuleBasedCollator.CE_PRIMARY_MASK_ | 0x0505;
+	    	m_utilCEBuffer_[1] = (primaryCE << 16) & RuleBasedCollator.CE_PRIMARY_MASK_ | RuleBasedCollator.CE_CONTINUATION_MARKER_;
+
+	    	m_parsedToken_.m_charsOffset_ = m_extraCurrent_;
+	    	m_source_.append('\uFFFE');
+	    	m_source_.append((char)ch);
+	    	m_extraCurrent_ += 2;
+	    	m_parsedToken_.m_charsLen_++;
+
+	    	m_utilToken_.m_source_ = (m_parsedToken_.m_charsLen_ << 24) 
+			| m_parsedToken_.m_charsOffset_;
+	    	m_utilToken_.m_rules_ = m_source_;
+	    	sourcetoken = (Token)m_hashTable_.get(m_utilToken_);
+	    	
+	    	if(sourcetoken == null) {
+	    		m_listHeader_[m_resultLength_] = new TokenListHeader();
+	    		m_listHeader_[m_resultLength_].m_baseCE_ 
+					= m_utilCEBuffer_[0] & 0xFFFFFF3F;
+	    		if (RuleBasedCollator.isContinuation(m_utilCEBuffer_[1])) {
+	    			m_listHeader_[m_resultLength_].m_baseContCE_ 
+					= m_utilCEBuffer_[1];
+	    		} 
+	    		else {
+	    			m_listHeader_[m_resultLength_].m_baseContCE_ = 0;
+	    		}
+	    		m_listHeader_[m_resultLength_].m_nextCE_ = 0;
+	    		m_listHeader_[m_resultLength_].m_nextContCE_ = 0;
+	    		m_listHeader_[m_resultLength_].m_previousCE_ = 0;
+	    		m_listHeader_[m_resultLength_].m_previousContCE_ = 0;
+	    		m_listHeader_[m_resultLength_].m_indirect_ = false;
+
+	    		sourcetoken = new Token();
+	    		initAReset(-1, sourcetoken);   
+	    	}
+
+	    } else {
+	    	
+		    // first ce and second ce m_utilCEBuffer_
+		    int invpos = CollationParsedRuleBuilder.INVERSE_UCA_.getInversePrevCE(
+	                                                     basece, basecontce, 
+	                                                     strength, m_utilCEBuffer_);
+		    ch = CollationParsedRuleBuilder.INVERSE_UCA_.m_table_[3 * invpos 
+	                                                                  + 2];
+	        if ((ch &  INVERSE_SIZE_MASK_) != 0) {
+		        int offset = ch & INVERSE_OFFSET_MASK_;
+		        ch = CollationParsedRuleBuilder.INVERSE_UCA_.m_continuations_[
+	                                                                       offset];
+		    }      
+		    m_source_.append((char)ch);
+		    m_extraCurrent_ ++;
+		    m_parsedToken_.m_charsOffset_ = m_extraCurrent_ - 1;
+		    m_parsedToken_.m_charsLen_ = 1;
+		
+		    // We got an UCA before. However, this might have been tailored.
+		    // example:
+		    // &\u30ca = \u306a
+		    // &[before 3]\u306a<<<\u306a|\u309d
+		  
+		    m_utilToken_.m_source_ = (m_parsedToken_.m_charsLen_ << 24) 
+		                                         | m_parsedToken_.m_charsOffset_;
+		    m_utilToken_.m_rules_ = m_source_;
+		    sourcetoken = (Token)m_hashTable_.get(m_utilToken_);
+		  
+		    // if we found a tailored thing, we have to use the UCA value and 
+		    // construct a new reset token with constructed name
+		    if (sourcetoken != null && sourcetoken.m_strength_ != TOKEN_RESET_) {
+		        // character to which we want to anchor is already tailored. 
+		        // We need to construct a new token which will be the anchor point
+	            m_source_.setCharAt(m_extraCurrent_ - 1, '\uFFFE');
+		        m_source_.append(ch);
+		        m_extraCurrent_ ++;
+		        m_parsedToken_.m_charsLen_ ++;
+	            m_listHeader_[m_resultLength_] = new TokenListHeader();
+		        m_listHeader_[m_resultLength_].m_baseCE_ 
+	                                             = m_utilCEBuffer_[0] & 0xFFFFFF3F;
+		        if (RuleBasedCollator.isContinuation(m_utilCEBuffer_[1])) {
+		            m_listHeader_[m_resultLength_].m_baseContCE_ 
+	                                                          = m_utilCEBuffer_[1];
+		        } 
+		        else {
+		            m_listHeader_[m_resultLength_].m_baseContCE_ = 0;
+		        }
+		        m_listHeader_[m_resultLength_].m_nextCE_ = 0;
+		        m_listHeader_[m_resultLength_].m_nextContCE_ = 0;
+		        m_listHeader_[m_resultLength_].m_previousCE_ = 0;
+		        m_listHeader_[m_resultLength_].m_previousContCE_ = 0;
+		        m_listHeader_[m_resultLength_].m_indirect_ = false;
+		        sourcetoken = new Token();
+		        initAReset(-1, sourcetoken);   
+		    }
 	    }
 	    return sourcetoken;
 	}
