@@ -775,9 +775,12 @@ usprep_prepare(   const UStringPrepProfile* profile,
 CLEANUP:
     if(b1!=b1Stack){
         uprv_free(b1);
+        b1=NULL;
     }
-    if(b2!=b1Stack && b2!=b2Stack && b1!=b2){
+
+    if(b2!=b1Stack && b2!=b2Stack && b2!=b1 /* b1 should not be freed twice */){
         uprv_free(b2);
+        b2=NULL;
     }
     return u_terminateUChars(dest, destCapacity, b2Len, status);
 }
