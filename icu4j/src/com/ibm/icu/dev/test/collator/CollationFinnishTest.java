@@ -3,9 +3,9 @@
  * Copyright (C) 2002, International Business Machines Corporation and         *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
- * $Source: 
- * $Date: 
- * $Revision: 
+ * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/collator/CollationFinnishTest.java,v $
+ * $Date: 2004/01/09 03:04:11 $
+ * $Revision: 1.3 $
  *
  *****************************************************************************************
  */
