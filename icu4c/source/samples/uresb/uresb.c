@@ -65,7 +65,7 @@ static UOption options[]={
 
 
 extern int
-main(int argc, const char *argv[]) {
+main(int argc, char* argv[]) {
 
     UResourceBundle *bundle = NULL;
 	UErrorCode status = U_ZERO_ERROR;

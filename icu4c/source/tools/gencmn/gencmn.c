@@ -89,7 +89,7 @@ static UOption options[]={
 char symPrefix[100];
 
 extern int
-main(int argc, const char *argv[]) {
+main(int argc, char* argv[]) {
     static uint8_t buffer[4096];
     char line[512];
     FileStream *in, *file;
