@@ -105,7 +105,7 @@ int32_t uprv_cnttab_constructTable(CntTable *table, uint32_t mainOffset, UErrorC
         table->position += table->elements[i]->position;
         if(table->elements[i]->reversed->position > 0) {
             table->elements[i]->codePoints[0] = (UChar)(table->elements[i]->position); /* set offset for backwards table */
-            table->position += table->elements[i]->reversed->position-1;
+            table->position += table->elements[i]->reversed->position;
         }
     }
 
@@ -136,10 +136,10 @@ int32_t uprv_cnttab_constructTable(CntTable *table, uint32_t mainOffset, UErrorC
         }
         cpPointer += size;
         CEPointer += size;
-        if(table->elements[i]->reversed->position-1 > 0) {
-            int32_t size2 = table->elements[i]->reversed->position-1;
-            memcpy(cpPointer, (table->elements[i]->reversed->codePoints)+1, size2*sizeof(UChar));
-            memcpy(CEPointer, (table->elements[i]->reversed->CEs)+1, size2*sizeof(uint32_t));
+        if(table->elements[i]->reversed->position > 0) {
+            int32_t size2 = table->elements[i]->reversed->position;
+            memcpy(cpPointer, (table->elements[i]->reversed->codePoints), size2*sizeof(UChar));
+            memcpy(CEPointer, (table->elements[i]->reversed->CEs), size2*sizeof(uint32_t));
             for(j = 0; j<size2; j++) {
                 if(isContraction(*(CEPointer+j))) {
                     *(CEPointer+j) = constructContractCE(table->offsets[getContractOffset(*(CEPointer+j))]);
