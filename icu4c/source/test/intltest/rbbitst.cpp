@@ -2532,7 +2532,6 @@ RBBILineMonkey::RBBILineMonkey()
 
     fCharBI = BreakIterator::createCharacterInstance(Locale::getEnglish(), status);
 
-
     if (U_FAILURE(status)) {
         deferredStatus = status;
     }
@@ -2559,18 +2558,37 @@ int32_t RBBILineMonkey::next(int32_t prevPos) {
         return -1;
     }
 
-  
+    // We need to figure out where the next character of interest starts
+    //   Depends on the previous char, and whether it eats following CombiningMarks
+    //   or not.
+    UChar32   c = fText->char32At(prevPos);
+    if (c == 0x0d || c == 0x0a || c == 0x85 || fBK->contains(c) || fSP->contains(c)) {
+        // char doesn't automatically combine with CM.
+        nextPos = fText->moveIndex32(prevPos, 1);
+    } else {
+        nextPos = fCharBI->following(prevPos);
+        for (;;) {
+            UChar32 c = fText->char32At(nextPos);
+            if (!fCM->contains(c)) {
+                break;
+            }
+            nextPos = fText->moveIndex32(nextPos, 1);
+        }
+    }
+    pos = prevPos;
+
+
     // Loop runs once per position in the test text, until a break position
     //  is found.
-    nextPos = fCharBI->following(prevPos);
-    pos     = prevPos;
     for (;;) {
         prevPos   = pos;
         pos       = nextPos;
-        nextCPPos = fText->moveIndex32(pos, 1);
-        nextPos   = fCharBI->following(pos);     // Advance by grapheme cluster
+
         UChar32 prevChar = fText->char32At(prevPos);
         UChar32 thisChar = fText->char32At(pos);
+
+        nextCPPos = fText->moveIndex32(pos, 1);
+        nextPos   = nextCPPos;
 
         // Break at end of text.
         if (pos >= fText->length()) {
@@ -2598,12 +2616,29 @@ int32_t RBBILineMonkey::next(int32_t prevPos) {
                 continue;
         }
 
-        // LB 4  DOn't break before spaces or zero-width space.
+        // LB 4  Don't break before spaces or zero-width space.
         if (fSP->contains(thisChar)) {
             continue;
         }
         if (fZW->contains(thisChar)) {
             continue;
+        }
+
+        if (!fSP->contains(thisChar)) {
+            // nextPos advances over Hangul Syllables plus any chars
+            //    of line break class CM.
+            // Advancing by a grapheme cluster with a character break iterator
+            //  almost gets this, except Line Break CM includes some
+            //  stuff that is not combining from the grapheme cluster definition.
+            nextPos   = fCharBI->following(pos);     // Advance by grapheme cluster
+            // now advance over any CM class chars that were missed
+            for (;;) {
+                UChar32 c = fText->char32At(nextPos);
+                if (!fCM->contains(c)) {
+                    break;
+                }
+                nextPos = fText->moveIndex32(nextPos, 1);
+            }
         }
 
 
@@ -2739,8 +2774,11 @@ fall_through_11:
         }
 
 
-        // LB 17
+        // LB 17    ID x PO    (Note:  Leading CM behaves like ID)
+        //          AL x NU
+        //          NU x AL
         if (fID->contains(prevChar) && fPO->contains(thisChar) ||
+            fCM->contains(prevChar) && fPO->contains(thisChar) || 
             fAL->contains(prevChar) && fNU->contains(thisChar) ||
             fNU->contains(prevChar) && fAL->contains(thisChar) )   {
             continue; 
@@ -2773,7 +2811,6 @@ fall_through_11:
             
     }
     
-    // We should never get here.
     return pos;
 }
 
@@ -2916,7 +2953,7 @@ void RBBITest::TestMonkey(char *params) {
     }
 
     if (breakType == "line" || breakType == "all") {
-#if 0
+#if 1
         // TODO:  Enable test
         RBBILineMonkey  m;
         BreakIterator  *bi = BreakIterator::createLineInstance(locale, status);
