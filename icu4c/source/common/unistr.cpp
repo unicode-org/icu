@@ -227,7 +227,10 @@ UnicodeString::UnicodeString(UBool isTerminated,
     fArray((UChar *)text),
     fFlags(kReadonlyAlias)
 {
-  if(text == 0 || textLength < -1 || textLength == -1 && !isTerminated) {
+  if( text == 0 || textLength < -1 ||
+      (textLength == -1 && !isTerminated) ||
+      (textLength >= 0 && isTerminated && text[textLength] != 0)
+  ) {
     setToBogus();
   } else if(textLength == -1) {
     // text is terminated, or else it would have failed the above test
@@ -1034,7 +1037,10 @@ UnicodeString::setTo(UBool isTerminated,
     return *this;
   }
 
-  if(text == 0 || textLength < -1 || textLength == -1 && !isTerminated) {
+  if( text == 0 || textLength < -1 ||
+      (textLength == -1 && !isTerminated) ||
+      (textLength >= 0 && isTerminated && text[textLength] != 0)
+  ) {
     setToBogus();
     return *this;
   }
@@ -1044,13 +1050,13 @@ UnicodeString::setTo(UBool isTerminated,
   fArray = (UChar *)text;
   if(textLength != -1) {
     fLength = textLength;
+    fCapacity = isTerminated ? fLength + 1 : fLength;
   } else {
     // text is terminated, or else it would have failed the above test
     fLength = u_strlen(text);
     fCapacity = fLength + 1;
   }
 
-  fCapacity = isTerminated ? fLength + 1 : fLength;
   fFlags = kReadonlyAlias;
   return *this;
 }
