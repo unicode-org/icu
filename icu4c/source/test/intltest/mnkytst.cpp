@@ -221,16 +221,16 @@ void CollationMonkeyTest::TestRules(char *par){
     };
 
     UChar testTargetCases[][10] = {
-    {0x0061, 0x0062, 0x00e4, 0},
-    {0x0061, 0x0062, 0x0061, 0x0308, 0},
+        {0x0061, 0x0062, 0x00e4, 0},
+        {0x0061, 0x0062, 0x0061, 0x0308, 0},
     };
-
-
+    
+    int i=0;
     logln("Demo Test 1 : Create a new table collation with rules \"& z < 0x00e4\"");
     UErrorCode status = U_ZERO_ERROR;
     Collator *col = Collator::createInstance(status);
     const UnicodeString baseRules = ((RuleBasedCollator*)col)->getRules();
-    UnicodeString newRules(" & Z < ");
+    UnicodeString newRules(" & z < ");
     newRules.append((UChar)0x00e4);
     newRules.insert(0, baseRules);
     RuleBasedCollator *myCollation = new RuleBasedCollator(newRules, status);
@@ -238,14 +238,26 @@ void CollationMonkeyTest::TestRules(char *par){
         errln( "Demo Test 1 Table Collation object creation failed.");
         return;
     }
-    for(int i=0; i<2; i++){
+    for(i=0; i<2; i++){
         doTest(myCollation, testSourceCases[i], testTargetCases[i], Collator::LESS);
     }
     delete myCollation;
 
+    logln("Demo Test 2 : Create a new table collation with rules \"& z < a 0x0308\"");
+    newRules.remove();
+    newRules.append(" & z < a");
+    newRules.append((UChar)0x0308);
+    newRules.insert(0, baseRules);
+    myCollation = new RuleBasedCollator(newRules, status);
+    if (U_FAILURE(status)) {
+        errln( "Demo Test 1 Table Collation object creation failed.");
+        return;
+    }
+    for(i=0; i<2; i++){
+        doTest(myCollation, testSourceCases[i], testTargetCases[i], Collator::LESS);
+    }
+    delete myCollation;
     delete col;
-
-
 
 }
 void CollationMonkeyTest::doTest(RuleBasedCollator *myCollation, UnicodeString mysource, UnicodeString target, Collator::EComparisonResult result)
