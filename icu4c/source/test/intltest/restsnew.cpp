@@ -538,6 +538,7 @@ NewResourceBundleTest::TestOtherAPI(){
           err=U_ZERO_ERROR;
           bundle = ures_getByKey(testCAPI, data[i], bundle, &err); 
           if(!U_FAILURE(err)){
+            const char* key = NULL;
               action = "te_IN";
               action +=".getKey()";
 
@@ -549,7 +550,7 @@ NewResourceBundleTest::TestOtherAPI(){
                   action = data[i];
                   action +=".getNextString(err)";
                   row=count;   
-                  UnicodeString got=ures_getNextUnicodeString(bundle, &err);
+                  UnicodeString got=ures_getNextUnicodeString(bundle, &key, &err);
                   if(U_SUCCESS(err)){
                       expected=element;
                       if(ures_getSize(bundle) > 1){
@@ -560,7 +561,7 @@ NewResourceBundleTest::TestOtherAPI(){
                               col=0;
                               while(ures_hasNext(rowbundle)){
                                   expected=element;
-                                  got=ures_getNextUnicodeString(rowbundle, &err);
+                                  got=ures_getNextUnicodeString(rowbundle, &key, &err);
                                   temp = ures_getByIndex(rowbundle, col, temp, &err);
                                   UnicodeString bla = ures_getUnicodeString(temp, &err);
                                   UnicodeString bla2 = ures_getUnicodeStringByIndex(rowbundle, col, &err);
