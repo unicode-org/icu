@@ -22,7 +22,7 @@
 #ifndef UHASH_H
 #define UHASH_H
 
-#include "utypes.h"
+#include "unicode/utypes.h"
 
 /*
  * Hashtable stores key-value pairs and does efficient lookup based on keys.

@@ -18,10 +18,10 @@
 #ifndef RBREAD_H
 #define RBREAD_H 1
 
-#include "utypes.h"
+#include "unicode/utypes.h"
 #include "filestrm.h"
 #include "uhash.h"
-#include "unistr.h"
+#include "unicode/unistr.h"
 
 /* Byte order mark for compiled resource bundle files */
 static const int32_t sBOM          = 0x021C;

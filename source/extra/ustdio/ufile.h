@@ -22,8 +22,8 @@
 #ifndef UFILE_H
 #define UFILE_H
 
-#include "utypes.h"
-#include "ucnv.h"
+#include "unicode/utypes.h"
+#include "unicode/ucnv.h"
 #include "locbund.h"
 
 /* The buffer size for fromUnicode calls */

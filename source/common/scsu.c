@@ -21,7 +21,7 @@
 
 #include <limits.h>
 
-#include "scsu.h"
+#include "unicode/scsu.h"
 
 #include "cmemory.h"
 
@@ -889,7 +889,7 @@ scsu_decompress(UnicodeCompressor *comp,
       if(sourceLimit - byteBuffer < newBytes)
 	newBytes = sourceLimit - byteBuffer;
 
-      icu_memcpy(comp->fBuffer + comp->fBufferLength, byteBuffer, newBytes);
+      uprv_memcpy(comp->fBuffer + comp->fBufferLength, byteBuffer, newBytes);
     }
 
     /* reset buffer length to 0 before recursive call */
@@ -967,7 +967,7 @@ scsu_decompress(UnicodeCompressor *comp,
 	       if not, save state and break out */
 	    if((unicharBuffer + 1) >= targetLimit) {
 	      --byteBuffer;
-	      icu_memcpy(comp->fBuffer, byteBuffer, 
+	      uprv_memcpy(comp->fBuffer, byteBuffer, 
 			 sourceLimit - byteBuffer);
 	      comp->fBufferLength = sourceLimit - byteBuffer;
 	      byteBuffer += comp->fBufferLength;
@@ -1019,7 +1019,7 @@ scsu_decompress(UnicodeCompressor *comp,
 	     rewind the source stream and break out */
 	  if( (byteBuffer + 1) >= sourceLimit ) {
 	    --byteBuffer;
-	    icu_memcpy(comp->fBuffer, byteBuffer, 
+	    uprv_memcpy(comp->fBuffer, byteBuffer, 
 		       sourceLimit - byteBuffer);
 	    comp->fBufferLength = sourceLimit - byteBuffer;
 	    byteBuffer += comp->fBufferLength;
@@ -1046,7 +1046,7 @@ scsu_decompress(UnicodeCompressor *comp,
 	     not, rewind the source stream and break out*/
 	  if( byteBuffer >= sourceLimit ) { 
 	    --byteBuffer;
-	    icu_memcpy(comp->fBuffer, byteBuffer, 
+	    uprv_memcpy(comp->fBuffer, byteBuffer, 
 		       sourceLimit - byteBuffer);
 	    comp->fBufferLength = sourceLimit - byteBuffer;
 	    byteBuffer += comp->fBufferLength;
@@ -1076,7 +1076,7 @@ scsu_decompress(UnicodeCompressor *comp,
 	     not, rewind the source stream and break out*/
 	  if( byteBuffer >= sourceLimit ) {
 	    --byteBuffer;
-	    icu_memcpy(comp->fBuffer, byteBuffer, 
+	    uprv_memcpy(comp->fBuffer, byteBuffer, 
 		       sourceLimit - byteBuffer);
 	    comp->fBufferLength = sourceLimit - byteBuffer;
 	    byteBuffer += comp->fBufferLength;
@@ -1094,7 +1094,7 @@ scsu_decompress(UnicodeCompressor *comp,
 	     rewind the source stream and break out*/
 	  if( (byteBuffer + 1) >= sourceLimit ) {
 	    --byteBuffer;
-	    icu_memcpy(comp->fBuffer, byteBuffer, 
+	    uprv_memcpy(comp->fBuffer, byteBuffer, 
 		       sourceLimit - byteBuffer);
 	    comp->fBufferLength = sourceLimit - byteBuffer;
 	    byteBuffer += comp->fBufferLength;
@@ -1131,7 +1131,7 @@ scsu_decompress(UnicodeCompressor *comp,
 	     rewind the source stream and break out*/
 	  if( byteBuffer >= sourceLimit ) { 
 	    --byteBuffer;
-	    icu_memcpy(comp->fBuffer, byteBuffer, 
+	    uprv_memcpy(comp->fBuffer, byteBuffer, 
 		       sourceLimit - byteBuffer);
 	    comp->fBufferLength = sourceLimit - byteBuffer;
 	    byteBuffer += comp->fBufferLength;
@@ -1153,7 +1153,7 @@ scsu_decompress(UnicodeCompressor *comp,
 	     rewind the source stream and break out*/
 	  if( (byteBuffer + 1) >= sourceLimit ) {
 	    --byteBuffer;
-	    icu_memcpy(comp->fBuffer, byteBuffer, 
+	    uprv_memcpy(comp->fBuffer, byteBuffer, 
 		       sourceLimit - byteBuffer);
 	    comp->fBufferLength = sourceLimit - byteBuffer;
 	    byteBuffer += comp->fBufferLength;
@@ -1187,7 +1187,7 @@ scsu_decompress(UnicodeCompressor *comp,
 	     rewind the source stream and break out*/
 	  if( byteBuffer >= sourceLimit  - 1) { 
 	    --byteBuffer;
-	    icu_memcpy(comp->fBuffer, byteBuffer, 
+	    uprv_memcpy(comp->fBuffer, byteBuffer, 
 		       sourceLimit - byteBuffer);
 	    comp->fBufferLength = sourceLimit - byteBuffer;
 	    byteBuffer += comp->fBufferLength;
@@ -1204,7 +1204,7 @@ scsu_decompress(UnicodeCompressor *comp,
 	     the source stream and break out*/
 	  if( byteBuffer >= sourceLimit ) { 
 	    --byteBuffer;
-	    icu_memcpy(comp->fBuffer, byteBuffer, 
+	    uprv_memcpy(comp->fBuffer, byteBuffer, 
 		       sourceLimit - byteBuffer);
 	    comp->fBufferLength = sourceLimit - byteBuffer;
 	    byteBuffer += comp->fBufferLength;

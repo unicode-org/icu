@@ -24,7 +24,7 @@
 #include "uhash.h"
 #include "ustdio.h"
 #include "ufile.h"
-#include "uloc.h"
+#include "unicode/uloc.h"
 #include "loccache.h"
 
 #include <string.h>

@@ -18,11 +18,11 @@
 *******************************************************************************
 */
 
-#include "ustring.h"
-#include "utypes.h"
+#include "unicode/ustring.h"
+#include "unicode/utypes.h"
 #include "cstring.h"
 #include "umutex.h"
-#include "ucnv.h"
+#include "unicode/ucnv.h"
 
 /* forward declaractions of definitions for the shared default converter */
 
@@ -170,7 +170,7 @@ int32_t
 u_strlen(const UChar *s) 
 {
   if(U_SIZEOF_WCHAR_T == sizeof(UChar)) {
-    return icu_wcslen(s);
+    return uprv_wcslen(s);
   } else {
     const UChar *t = s;
     while(*t != 0) {
@@ -192,7 +192,7 @@ UChar* u_uastrcpy(UChar *ucs1,
                     ucs1,
                     MAX_STRLEN,
                     s2,
-                    icu_strlen(s2),
+                    uprv_strlen(s2),
                     &err);
     releaseDefaultConverter(cnv);
     if(U_FAILURE(err)) {
@@ -215,7 +215,7 @@ UChar* u_uastrncpy(UChar *ucs1,
                     ucs1,
                     n,
                     s2,
-                    icu_strlen(s2),
+                    uprv_strlen(s2),
                     &err);
     releaseDefaultConverter(cnv);
     if(U_FAILURE(err)) {

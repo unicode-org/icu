@@ -33,9 +33,9 @@
 //  11/22/99     aliu       Added MIN_RADIX, MAX_RADIX, digit, forDigit
 //********************************************************************************************
 
-#include "unicode.h"
+#include "unicode/unicode.h"
 
-#include "uchar.h"
+#include "unicode/uchar.h"
 
 
 const UChar Unicode::MIN_VALUE = 0x0000;

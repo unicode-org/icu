@@ -22,7 +22,7 @@
 
 #include "loccache.h"
 
-#include "uloc.h"
+#include "unicode/uloc.h"
 #include "umutex.h"
 
 /* The global cache */

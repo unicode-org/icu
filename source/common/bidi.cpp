@@ -18,4 +18,4 @@
 #endif
 
 // provide an object for the implementations of the member functions of BiDi
-#include "bidi.h"
+#include "unicode/bidi.h"

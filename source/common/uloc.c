@@ -19,14 +19,14 @@
 ******************************************************************************/
 
 
-#include "uloc.h"
+#include "unicode/uloc.h"
 
-#include "utypes.h"
-#include "ures.h"
-#include "uchar.h"
+#include "unicode/utypes.h"
+#include "unicode/ures.h"
+#include "unicode/uchar.h"
 #include "umutex.h"
 #include "cstring.h"
-#include "ustring.h"
+#include "unicode/ustring.h"
 #include "cmemory.h"
 
 /****************************************************************************
@@ -188,11 +188,11 @@ int16_t _findIndex(const char* list, int32_t listLength, const char* key)
   const char* listEnd = anchor + listLength;
   bool_t found = FALSE;
   int index = 0;
-  int tokenSize = icu_strlen(list)+1; /*gets the size of the tokens*/
+  int tokenSize = uprv_strlen(list)+1; /*gets the size of the tokens*/
   
   while (!found && list<listEnd)
     {
-      if (icu_strcmp(key, list) == 0) 
+      if (uprv_strcmp(key, list) == 0) 
     {
       found = TRUE;
       break;
@@ -227,16 +227,16 @@ void uloc_setDefault(const char*   newDefaultLocale,
   
   if (newDefaultLocale == NULL) 
     {
-      newDefaultLocale = icu_getDefaultLocaleID();
+      newDefaultLocale = uprv_getDefaultLocaleID();
     }
   
   umtx_lock(NULL);
   if(_defaultLocale == NULL)
-    _defaultLocale = (char*)icu_malloc(sizeof(char) * (icu_strlen(newDefaultLocale) + 1));
+    _defaultLocale = (char*)uprv_malloc(sizeof(char) * (uprv_strlen(newDefaultLocale) + 1));
   else
-    _defaultLocale = (char*)icu_realloc(_defaultLocale, 
-                         sizeof(char) * (icu_strlen(newDefaultLocale) + 1));
-  icu_strcpy(_defaultLocale, newDefaultLocale);
+    _defaultLocale = (char*)uprv_realloc(_defaultLocale, 
+                         sizeof(char) * (uprv_strlen(newDefaultLocale) + 1));
+  uprv_strcpy(_defaultLocale, newDefaultLocale);
   umtx_unlock(NULL);
 
   /* propagate change to C++ */
@@ -281,7 +281,7 @@ int32_t uloc_getParent(const char*    localeID,
       *err = U_BUFFER_OVERFLOW_ERROR;
     }
   
-  if (parentCapacity>0)   parent[icu_min(i,parentCapacity-1)] = '\0';
+  if (parentCapacity>0)   parent[uprv_min(i,parentCapacity-1)] = '\0';
  
   
   return i+1;
@@ -316,7 +316,8 @@ uloc_getLanguage(const char*    localeID,
   
   if (languageCapacity > 0) 
     {
-      language[icu_min(i,languageCapacity-1)] = '\0';
+      language[uprv_min(i,languageCapacity-1)] = '\0';
+    }
     }
   
   return i+1;
@@ -353,7 +354,7 @@ int32_t uloc_getCountry(const char* localeID,
       *err = U_BUFFER_OVERFLOW_ERROR;
     }
   
-  if (countryCapacity > 0) {country[icu_min(i,countryCapacity-1)] = '\0';}
+  if (countryCapacity > 0) {country[uprv_min(i,countryCapacity-1)] = '\0';}
   return i+1;
 }
 
@@ -390,7 +391,7 @@ int32_t uloc_getVariant(const char* localeID,
     }
   
   
-  if (variantCapacity>0) {variant[icu_min(i,variantCapacity-1)] = '\0';}
+  if (variantCapacity>0) {variant[uprv_min(i,variantCapacity-1)] = '\0';}
   return i+1;
 }
 
@@ -441,20 +442,20 @@ int32_t uloc_getName(const char* localeID,
   /*We fill in the users buffer*/
   if ((nameCapacity>0) && cntSze)
     {
-      if (U_SUCCESS(int_err)) icu_strcat(name, "_");
+      if (U_SUCCESS(int_err)) uprv_strcat(name, "_");
       
       uloc_getCountry(localeID,
-          name + icu_strlen(name),
-              nameCapacity - icu_strlen(name),
+          name + uprv_strlen(name),
+              nameCapacity - uprv_strlen(name),
               &int_err);
       
       if (varSze)
     {
-      if (U_SUCCESS(int_err)) icu_strcat(name, "_");
+      if (U_SUCCESS(int_err)) uprv_strcat(name, "_");
       
       uloc_getVariant(localeID,
-                   name + icu_strlen(name),
-                   nameCapacity - icu_strlen(name), 
+                   name + uprv_strlen(name),
+                   nameCapacity - uprv_strlen(name), 
                    &int_err);
     }
       
@@ -542,7 +543,7 @@ int32_t uloc_getDisplayLanguage(const char* locale,
       inLocale = uloc_getDefault();
       isDefaultLocale = TRUE;
     }
-  else if (icu_strcmp(inLocale, uloc_getDefault()) == 0) isDefaultLocale = TRUE;
+  else if (uprv_strcmp(inLocale, uloc_getDefault()) == 0) isDefaultLocale = TRUE;
   /*truncates the fallback mechanism if we start out with a defaultLocale*/
   
   if (locale == NULL) locale = uloc_getDefault();
@@ -669,7 +670,7 @@ int32_t uloc_getDisplayCountry(const char* locale,
       inLocale = uloc_getDefault();
       isDefaultLocale = TRUE;
     }
-  else if (icu_strcmp(inLocale, uloc_getDefault()) == 0) isDefaultLocale = TRUE;
+  else if (uprv_strcmp(inLocale, uloc_getDefault()) == 0) isDefaultLocale = TRUE;
     /*truncates the fallback mechanism if we start out with a defaultLocale*/
 
   if (locale == NULL) locale = uloc_getDefault();
@@ -793,7 +794,7 @@ int32_t uloc_getDisplayVariant(const char* locale,
       inLocale = uloc_getDefault();
       isDefaultLocale = TRUE;
     }
-  else if (icu_strcmp(inLocale, uloc_getDefault()) == 0) isDefaultLocale = TRUE;
+  else if (uprv_strcmp(inLocale, uloc_getDefault()) == 0) isDefaultLocale = TRUE;
     /*truncates the fallback mechanism if we start out with a defaultLocale*/
 
   if (locale == NULL) locale = uloc_getDefault();
@@ -806,20 +807,20 @@ int32_t uloc_getDisplayVariant(const char* locale,
       /*In case the variant is longer than our stack buffers*/
       if (err == U_BUFFER_OVERFLOW_ERROR)
     {
-      inVariant = (char*)icu_malloc(varBufSize*sizeof(char)+1);
+      inVariant = (char*)uprv_malloc(varBufSize*sizeof(char)+1);
       if (inVariant == NULL) goto NO_MEMORY;
-      inVariantTag = (char*)icu_malloc(varBufSize*sizeof(char)+icu_strlen("%%")+1);
+      inVariantTag = (char*)uprv_malloc(varBufSize*sizeof(char)+uprv_strlen("%%")+1);
       if (inVariantTag == NULL) 
         {
-          icu_free(inVariant);
+          uprv_free(inVariant);
           goto NO_MEMORY;
         }
       err = U_ZERO_ERROR;
       uloc_getVariant(locale, inVariant, varBufSize, &err);
     }
       
-      icu_strcpy(inVariantTag,"%%");  
-      icu_strcat(inVariantTag, inVariant);
+      uprv_strcpy(inVariantTag,"%%");  
+      uprv_strcat(inVariantTag, inVariant);
       
       /*We need to implement a fallback mechanism here because we are getting keys out of a
     tagged array, there is no capability of doing this with fallback through the resource
@@ -902,8 +903,8 @@ int32_t uloc_getDisplayVariant(const char* locale,
   /*Clean up memory*/
   if (inVariant != inVariantBuffer)
     {
-      icu_free(inVariant);
-      icu_free(inVariantTag);
+      uprv_free(inVariant);
+      uprv_free(inVariantTag);
     } 
   return i;
 
@@ -1047,13 +1048,13 @@ void _lazyEvaluate_installedLocales()
     {
       temp = T_ResourceBundle_listInstalledLocales(u_getDataDirectory(),
                            &_installedLocalesCount);
-      temp2 = (char **) icu_malloc(sizeof(char*) * (_installedLocalesCount+1));
+      temp2 = (char **) uprv_malloc(sizeof(char*) * (_installedLocalesCount+1));
       
       for (i = 0; i < _installedLocalesCount; i++)
     {
       strSize = u_strlen(T_UnicodeString_getUChars(temp[i]));
 
-      temp2[i] = (char*) icu_malloc(sizeof(char) *
+      temp2[i] = (char*) uprv_malloc(sizeof(char) *
                         (strSize + 1));
 
       T_UnicodeString_extract(temp[i], temp2[i]);
@@ -1067,8 +1068,8 @@ void _lazyEvaluate_installedLocales()
         temp2 = NULL;
       }
     else {
-      for (i = 0; i < _installedLocalesCount; i++) icu_free(temp2[i]);
-      icu_free(temp2);
+      for (i = 0; i < _installedLocalesCount; i++) uprv_free(temp2[i]);
+      uprv_free(temp2);
     }
     umtx_unlock(NULL);
     
@@ -1095,7 +1096,7 @@ const char* const* uloc_getISOLanguages()
     
     if (_isoLanguages == NULL) 
       {
-        _isoLanguages = (char**) icu_malloc(sizeof(char*)*(1+(sizeof(_languages) / 3)));
+        _isoLanguages = (char**) uprv_malloc(sizeof(char*)*(1+(sizeof(_languages) / 3)));
         
         end = _languages + (sizeof(_languages));
         from = _languages; 
@@ -1132,7 +1133,7 @@ const char* const* uloc_getISOCountries()
     
     if (_isoCountries == NULL) 
       {
-        _isoCountries = (char**) icu_malloc(sizeof(char*)*(1+(sizeof(_countries) / 3)));
+        _isoCountries = (char**) uprv_malloc(sizeof(char*)*(1+(sizeof(_countries) / 3)));
         
         end = _countries + (sizeof(_countries));
         from = _countries;

@@ -16,14 +16,14 @@
    *
  */
 
-#include "utypes.h"
+#include "unicode/utypes.h"
 #include "uhash.h"
 #include "ucmp16.h"
 #include "ucmp8.h"
-#include "ucnv_bld.h"
-#include "ucnv_err.h"
+#include "unicode/ucnv_bld.h"
+#include "unicode/ucnv_err.h"
 #include "ucnv_cnv.h"
-#include "ucnv.h"
+#include "unicode/ucnv.h"
 #include "cmemory.h"
 
 #ifdef Debug
@@ -1581,7 +1581,7 @@ void T_UConverter_fromUnicode_ISO_2022_OFFSETS_LOGIC(UConverter* _this,
   {
     int32_t len = *target - targetStart;
     int32_t i;
-    /* icu_memmove(offsets+3, offsets, len);   MEMMOVE SEEMS BROKEN --srl */
+    /* uprv_memmove(offsets+3, offsets, len);   MEMMOVE SEEMS BROKEN --srl */
     
     for(i=len-1;i>=0;i--)	offsets[i] = offsets[i];
     
@@ -1797,7 +1797,7 @@ void changeState_2022(UConverter* _this,
 	/*Customize the converter with the attributes set on the 2022 converter*/
 	myUConverter->fromUCharErrorBehaviour = _this->fromUCharErrorBehaviour;
 	myUConverter->fromCharErrorBehaviour = _this->fromCharErrorBehaviour;
-	icu_memcpy(myUConverter->subChar, 
+	uprv_memcpy(myUConverter->subChar, 
 		   _this->subChar,
 		   myUConverter->subCharLen = _this->subCharLen);
 	
@@ -2855,7 +2855,7 @@ void  flushInternalUnicodeBuffer (UConverter * _this,
     {
       /*we have enough space
        *So we just copy the whole Error Buffer in to the output stream*/
-      icu_memcpy (myTarget,
+      uprv_memcpy (myTarget,
 		  _this->UCharErrorBuffer,
 		  sizeof (UChar) * myUCharErrorBufferLength);
       if (offsets) 
@@ -2872,14 +2872,14 @@ void  flushInternalUnicodeBuffer (UConverter * _this,
       /* We don't have enough space so we copy as much as we can
        * on the output stream and update the object
        * by updating the internal buffer*/
-      icu_memcpy (myTarget, _this->UCharErrorBuffer, sizeof (UChar) * targetLength);
+      uprv_memcpy (myTarget, _this->UCharErrorBuffer, sizeof (UChar) * targetLength);
       if (offsets) 
 	{
 	  int32_t i=0;
 	  for (i=0; i< targetLength;i++) (*offsets)[i] = -1; 
 	  *offsets += targetLength;
 	}
-      icu_memmove (_this->UCharErrorBuffer,
+      uprv_memmove (_this->UCharErrorBuffer,
 		   _this->UCharErrorBuffer + targetLength,
 		   sizeof (UChar) * (myUCharErrorBufferLength - targetLength));
       _this->UCharErrorBufferLength -= (int8_t) targetLength;
@@ -2903,7 +2903,7 @@ void  flushInternalCharBuffer (UConverter * _this,
   /*we have enough space */
   if (myCharErrorBufferLength <= targetLength)
     {
-      icu_memcpy (myTarget, _this->charErrorBuffer, myCharErrorBufferLength);
+      uprv_memcpy (myTarget, _this->charErrorBuffer, myCharErrorBufferLength);
       if (offsets) 
 	{
 	  int32_t i=0;
@@ -2918,14 +2918,14 @@ void  flushInternalCharBuffer (UConverter * _this,
     /* We don't have enough space so we copy as much as we can
      * on the output stream and update the object*/
     {
-      icu_memcpy (myTarget, _this->charErrorBuffer, targetLength);
+      uprv_memcpy (myTarget, _this->charErrorBuffer, targetLength);
       if (offsets) 
 	{
 	  int32_t i=0;
 	  for (i=0; i< targetLength;i++) (*offsets)[i] = -1; 
 	  *offsets += targetLength;
 	}
-      icu_memmove (_this->charErrorBuffer,
+      uprv_memmove (_this->charErrorBuffer,
 		   _this->charErrorBuffer + targetLength,
 		   (myCharErrorBufferLength - targetLength));
       _this->charErrorBufferLength -= (int8_t) targetLength;

@@ -20,9 +20,10 @@
 */
 
 #include "locbund.h"
+
 #include "string.h"
-#include "ustring.h"
-#include "uloc.h"
+#include "unicode/ustring.h"
+#include "unicode/uloc.h"
 
 ULocaleBundle*        
 u_locbund_new(const char *loc)

@@ -5,7 +5,7 @@
 *******************************************************************************
 */
 
-#include "uchriter.h"
+#include "unicode/uchriter.h"
 
 UCharCharacterIterator::UCharCharacterIterator(const UChar* text,
                            int32_t textLength)

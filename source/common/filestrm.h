@@ -26,7 +26,7 @@
 #define FILESTRM_H
 
 #ifndef _UTYPES
-#include "utypes.h"
+#include "unicode/utypes.h"
 #endif
 
 #include <wchar.h>

@@ -37,7 +37,7 @@
 
 
 /* Check our settings... */
-#include "utypes.h"
+#include "unicode/utypes.h"
 
 /* APP_NO_THREADS is an old symbol. We'll honour it if present. */
 #ifdef APP_NO_THREADS
@@ -154,12 +154,12 @@ if( mutex == NULL ) /* initialize the global mutex */
     return;
 
 #if defined( _WIN32 )
-  *mutex = icu_malloc(sizeof(CRITICAL_SECTION));
+  *mutex = uprv_malloc(sizeof(CRITICAL_SECTION));
   InitializeCriticalSection((CRITICAL_SECTION*)*mutex);
 
 #elif defined( POSIX )
 
-  *mutex = icu_malloc(sizeof(pthread_mutex_t));
+  *mutex = uprv_malloc(sizeof(pthread_mutex_t));
 
 #if defined(HPUX)
     pthread_mutex_init((pthread_mutex_t*)*mutex, pthread_mutexattr_default);
