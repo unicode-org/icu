@@ -1358,6 +1358,9 @@ void RegexTest::Extended() {
 
     int    len;
     UChar *testData = ReadAndConvertFile(srcPath, len, status);
+    if (U_FAILURE(status)) {
+        return; /* something went wrong, error already output */
+    }
 
     //
     //  Put the test data into a UnicodeString
@@ -1539,7 +1542,8 @@ UChar *RegexTest::ReadAndConvertFile(const char *fileName, int &ulen, UErrorCode
     f = fopen(fileName, "rb");
     if (f == 0) {
         errln("Error opening test data file %s\n", fileName);
-        goto cleanUpAndReturn;
+        status = U_FILE_ACCESS_ERROR;
+        return NULL;
     }
     //
     //  Read it in
@@ -1677,6 +1681,9 @@ void RegexTest::PerlTests() {
 
     int    len;
     UChar *testData = ReadAndConvertFile(srcPath, len, status);
+    if (U_FAILURE(status)) {
+        return; /* something went wrong, error already output */
+    }
 
     //
     //  Put the test data into a UnicodeString
