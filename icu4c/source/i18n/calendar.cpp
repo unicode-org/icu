@@ -275,37 +275,19 @@ UBool
 Calendar::operator==(const Calendar& that) const
 {
     UErrorCode status = U_ZERO_ERROR;
-    // {sfb} is this correct? (Java equals)
-    return (getDynamicClassID() == that.getDynamicClassID() && 
+    return isEquivalentTo(that) &&
         getTimeInMillis(status) == that.getTimeInMillis(status) &&
-        fLenient == that.fLenient &&
-        fFirstDayOfWeek == that.fFirstDayOfWeek &&
-        fMinimalDaysInFirstWeek == that.fMinimalDaysInFirstWeek &&
-        *fZone == *(that.fZone));
+        U_SUCCESS(status);
+}
 
-    // As it stands, this is a very narrowly defined ==, since the
-    // Calendars must not only represent the same time; they must
-    // also be in exactly the same state.  This would be looser if
-    // we forced field or fTime computation, and then did the comparison.
-/*
-    if (this == &that) return TRUE;
-    for (int32_t i=0; i<FIELD_COUNT; ++i)
-    {
-        if (fFields[i] != that.fFields[i] ||
-            fIsSet[i] != that.fIsSet[i]) return FALSE;
-    }
-    return (getDynamicClassID() == that.getDynamicClassID() &&
-            fTime == that.fTime &&
-            fIsTimeSet == that.fIsTimeSet &&
-            fAreAllFieldsSet == that.fAreAllFieldsSet &&
-            fAreFieldsSet == that.fAreFieldsSet &&
-            fLenient == that.fLenient &&
-            (!fIsSet[ZONE_OFFSET] || (fUserSetZoneOffset == that.fUserSetZoneOffset)) &&
-            (!fIsSet[DST_OFFSET] || (fUserSetDSTOffset == that.fUserSetDSTOffset)) &&
-            fFirstDayOfWeek == that.fFirstDayOfWeek &&
-            fMinimalDaysInFirstWeek == that.fMinimalDaysInFirstWeek &&
-            *fZone == *(that.fZone));
-*/
+UBool 
+Calendar::isEquivalentTo(const Calendar& other) const
+{
+    return getDynamicClassID() == other.getDynamicClassID() &&
+        fLenient                == other.fLenient &&
+        fFirstDayOfWeek         == other.fFirstDayOfWeek &&
+        fMinimalDaysInFirstWeek == other.fMinimalDaysInFirstWeek &&
+        *fZone                  == *other.fZone;
 }
 
 // -------------------------------------
@@ -334,7 +316,6 @@ Calendar::after(const Calendar& when, UErrorCode& status) const
     return (this != &when &&
             getTimeInMillis(status) > when.getTimeInMillis(status));
 }
-
 
 // -------------------------------------
 

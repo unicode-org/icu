@@ -80,7 +80,7 @@ DateFormat::operator==(const Format& other) const
 
     return (this == fmt) ||
         ((getDynamicClassID() == other.getDynamicClassID()) &&
-         (*fCalendar == (*fmt->fCalendar))&&
+         fCalendar->isEquivalentTo(*fmt->fCalendar) &&
          (*fNumberFormat == *fmt->fNumberFormat));
 }
 
