@@ -147,4 +147,19 @@ enum UEAWidthCode {
 };
 typedef enum UEAWidthCode UEAWidthCode;
 
+/**
+ * Unicode property names and property value names are compared
+ * "loosely". Property[Value]Aliases.txt say:
+ *   "With loose matching of property names, the case distinctions, whitespace,
+ *    and '_' are ignored."
+ *
+ * This function does just that, for ASCII (char *) name strings.
+ * It is almost identical to ucnv_compareNames() but also ignores
+ * ASCII White_Space characters (U+0009..U+000d).
+ *
+ * @internal
+ */
+U_CAPI int32_t U_EXPORT2
+uprv_comparePropertyNames(const char *name1, const char *name2);
+
 #endif
