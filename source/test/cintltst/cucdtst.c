@@ -284,8 +284,16 @@ void TestMisc()
     }
     if (strncmp(icuVersion, U_ICU_VERSION, MIN(strlen(icuVersion), strlen(U_ICU_VERSION))) != 0)
     {
-        log_err("ICU version test failed.\n");
+        log_err("ICU version test failed. Header says=%s, got=%s \n", U_ICU_VERSION, icuVersion);
     }
+#if defined(ICU_VERSION)
+    /* test only happens where we have configure.in with VERSION - sanity check. */
+    if(strcmp(U_ICU_VERSION, ICU_VERSION))
+      {
+        log_err("ICU version mismatch: Header says %s, build environment says %s.\n",  U_ICU_VERSION, ICU_VERSION);
+      }
+#endif
+
 }
 
 
