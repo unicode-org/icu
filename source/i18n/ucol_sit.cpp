@@ -61,9 +61,11 @@ struct CollatorSpec {
 };
 
 
+U_CDECL_BEGIN
 typedef const char* U_CALLCONV
 ActionFunction(CollatorSpec *spec, uint32_t value1, const char* string, 
                UErrorCode *status);
+U_CDECL_END
 
 struct AttributeConversion {
     char letter;
