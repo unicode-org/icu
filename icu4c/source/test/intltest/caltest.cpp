@@ -1776,10 +1776,8 @@ void CalendarTest::TestYWOY()
 {
    UnicodeString str;
    UErrorCode status = U_ZERO_ERROR;
-   int32_t i;
    
    GregorianCalendar cal(status);
-   //SimpleDateFormat fmt(UnicodeString("EEE MMM dd yyyy', WOY' w"), status);
    CHECK(status, "Fail: Cannot construct calendar/format");
 
    cal.setFirstDayOfWeek(UCAL_SUNDAY);
