@@ -4,8 +4,8 @@
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/format/NumberFormatTest.java,v $ 
- * $Date: 2003/05/23 01:04:48 $ 
- * $Revision: 1.15 $
+ * $Date: 2003/05/23 11:52:29 $ 
+ * $Revision: 1.16 $
  *
  *****************************************************************************************
  */
@@ -794,12 +794,12 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         Locale loc = new Locale("en", "IN", "");
         NumberFormat fmt = NumberFormat.getCurrencyInstance(loc);
 
-        expect2(fmt, 1.0, "Re.1.00");
-        expect(fmt, 1.001, "Re.1.00"); // tricky
-        expect2(fmt, 12345678.0, "Rs.1,23,45,678.00");
-        expect2(fmt, 0.5, "Rs.0.50");
-        expect2(fmt, -1.0, "-Re.1.00");
-        expect2(fmt, -10.0, "-Rs.10.00");
+        expect2(fmt, 1.0, "Re. 1.00");
+        expect(fmt, 1.001, "Re. 1.00"); // tricky
+        expect2(fmt, 12345678.0, "Rs. 1,23,45,678.00");
+        expect2(fmt, 0.5, "Rs. 0.50");
+        expect2(fmt, -1.0, "-Re. 1.00");
+        expect2(fmt, -10.0, "-Rs. 10.00");
     }
     
     //------------------------------------------------------------------
