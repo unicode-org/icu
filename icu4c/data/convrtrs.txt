@@ -64,9 +64,9 @@
 # be changed - or else code and/or file names must also be changed.
 
 # Algorithmic
-UTF8                    utf-8 { MIME } ibm-1208 cp1208
-UTF16_BigEndian         utf-16be { MIME }
-UTF16_LittleEndian       utf-16le { MIME }
+UTF8                    utf-8 { MIME } ibm-1208 cp1208 
+UTF16_BigEndian         utf-16be { MIME } x-utf-16be
+UTF16_LittleEndian       utf-16le { MIME } x-utf-16le
 UTF16_PlatformEndian     ISO-10646-UCS-2 { IANA } csUnicode utf-16 { MIME } ibm-1200 cp1200 ucs-2
 UTF16_OppositeEndian
 UTF32_BigEndian          utf-32be { MIME }
@@ -85,7 +85,7 @@ UTF-7 { IANA MIME }
 #     utf7Converter=ucnv_open("UTF-7,version=1");
 
 SCSU { IANA }
-LATIN_1                  iso-8859-1     { MIME } ibm-819 cp819 latin1 8859-1 csisolatin1 iso-ir-100 cp367 ISO_8859-1:1987 { IANA } l1 ANSI_X3.110-1983   #!!!!! There's whole lot of names for this
+LATIN_1                  iso-8859-1     { MIME } ibm-819 cp819 latin1 8859-1 csisolatin1 iso-ir-100 cp367 ISO_8859-1:1987 { IANA } l1 ANSI_X3.110-1983   819 #!!!!! There's whole lot of names for this
 US-ASCII { MIME }        ascii ascii-7 ANSI_X3.4-1968 { IANA } ANSI_X3.4-1986 ISO_646.irv:1991 iso646-us us csASCII 646 iso-ir-6
 ISO_2022                         ISO-2022 { MIME } 2022 cp2022
 ISO_2022,locale=ja,version=0     ISO-2022-JP { IANA MIME } csISO2022JP
@@ -116,27 +116,27 @@ ibm-367
 ebcdic-xml-us
 
 # Interchange codepages
-ibm-912                 iso-8859-2 { MIME } cp912 latin2 8859-2 csisolatin2     iso-ir-101 ISO_8859-2:1987 { IANA } l2 # Central Europe
-ibm-913                 iso-8859-3 { MIME } latin3 cp913 8859-3 csisolatin3     iso-ir-109 ISO_8859-3:1988 { IANA } l3 # Maltese Esperanto
-ibm-914                 iso-8859-4 { MIME } latin4 cp914 8859-4 csisolatin4     iso-ir-110 ISO_8859-4:1988 { IANA } l4 # Baltic
-ibm-915                 iso-8859-5 { MIME } cyrillic cp915 8859-5 csisolatincyrillic iso-ir-144 ISO_8859-5:1988 { IANA } # Cyrillic
-ibm-1089                iso-8859-6 { MIME } arabic cp1089 8859-6 csisolatinarabic iso-ir-127 ISO_8859-6:1987 { IANA } ecma-114 asmo-708   # Arabic
-ibm-4909                cp813 iso-8859-7 { MIME } greek greek8 elot_928 ecma-118 8859-7 csisolatingreek iso-ir-126 ISO_8859-7:1987 { IANA } # ISO Greek (w/ euro update)
+ibm-912                 iso-8859-2 { MIME } cp912 latin2 8859-2 csisolatin2     iso-ir-101  ISO_8859-2:1987 { IANA } l2 912 # Central Europe
+ibm-913                 iso-8859-3 { MIME } latin3 cp913 8859-3 csisolatin3     iso-ir-109  ISO_8859-3:1988 { IANA } l3 913 # Maltese Esperanto
+ibm-914                 iso-8859-4 { MIME } latin4 cp914 8859-4 csisolatin4     iso-ir-110  ISO_8859-4:1988 { IANA } l4 914 # Baltic
+ibm-915                 iso-8859-5 { MIME } cyrillic cp915 8859-5 csisolatincyrillic iso-ir-144 ISO_8859-5:1988 { IANA } 915 # Cyrillic
+ibm-1089                iso-8859-6 { MIME } arabic cp1089 8859-6 csisolatinarabic iso-ir-127 ISO_8859-6:1987 { IANA } ecma-114 asmo-708 1089   # Arabic
+ibm-4909                cp813 iso-8859-7 { MIME } greek greek8 elot_928 ecma-118 8859-7 csisolatingreek iso-ir-126 ISO_8859-7:1987 { IANA } 813 # ISO Greek (w/ euro update)
 ibm-813                 # Same as 4909 (w/o euro update)
-ibm-916                 iso-8859-8 { MIME } hebrew cp916 8859-8 csisolatinhebrew iso-ir-138 ISO_8859-8:1988 { IANA }   # hebrew iso-8859-8i - typo?
-ibm-920                 iso-8859-9 { MIME } ECMA-128 latin5     cp920 8859-9 csisolatin5 iso-ir-148 ISO_8859-9:1989 { IANA } l5 # Turkish
-ibm-923                 iso-8859-15     { MIME } latin9 cp923 8859-15 latin0 csisolatin0 csisolatin9       # Latin 9
+ibm-916                 iso-8859-8 { MIME } hebrew cp916 8859-8 csisolatinhebrew iso-ir-138 ISO_8859-8:1988 { IANA }   916 # hebrew iso-8859-8i - typo?
+ibm-920                 iso-8859-9 { MIME } ECMA-128 latin5     cp920 8859-9 csisolatin5 iso-ir-148 ISO_8859-9:1989 { IANA } l5 920 # Turkish
+ibm-923                 iso-8859-15     { MIME } latin9 cp923 8859-15 latin0 csisolatin0 iso8859_15_fdis csisolatin9       923 # Latin 9
 ibm-1252                ibm-1004 cp1004      # Windows Latin 1 without Euro
-ibm-943                 Shift_JIS { MIME } csWindows31J     sjis cp943 cp932 ms_kanji csshiftjis windows-31j  x-sjis  # japanese. Unicode name is \u30b7\u30d5\u30c8\u7b26\u53f7\u5316\u8868\u73fe Iana says that Windows-31J is an extension to csshiftjis ibm-932 removed
-ibm-949                 KS_C_5601-1987 { IANA } iso-ir-149 KS_C_5601-1989 csKSC56011987 KSC_5601 { MIME } johab ks_x_1001:1992       # KSC-5601-1992, korean
-ibm-1370                Big5 { MIME     } csBig5 x-big5 cp950 # Taiwan Big-5 (w/ euro update)
+ibm-943                 Shift_JIS { MIME } csWindows31J     sjis cp943 cp932 ms_kanji csshiftjis windows-31j  x-sjis 943 # japanese. Unicode name is \u30b7\u30d5\u30c8\u7b26\u53f7\u5316\u8868\u73fe Iana says that Windows-31J is an extension to csshiftjis ibm-932 removed
+ibm-949                 KS_C_5601-1987 { IANA } iso-ir-149 KS_C_5601-1989 csKSC56011987 KSC_5601 { MIME } johab ks_x_1001:1992 949 ksc5601_1992 # KSC-5601-1992, korean
+ibm-1370                Big5 { MIME     } csBig5 x-big5 cp950 950 # Taiwan Big-5 (w/ euro update)
 ibm-950                 # Taiwan Big-5 (w/o euro update)
 ibm-1386                iso-ir-58 gbk chinese gb  cp936 zh_cn # Chinese GBK removed
-ibm-33722               EUC-JP { MIME } ibm-eucJP eucjis extended_unix_code_packed_format_for_japanese cseuckdfmtjapanese X-EUC-JP  # Japan EUC
+ibm-33722               EUC-JP { MIME } ibm-eucJP eucjis extended_unix_code_packed_format_for_japanese cseucpkdfmtjapanese X-EUC-JP  cp33722 33722# Japan EUC
 ibm-970                 EUC-KR { IANA MIME } ibm-eucKR csEUCKR                       # Korean EUC
 ibm-964                 EUC-TW { MIME } ibm-eucTW cns11643              # Taiwan EUC
-ibm-1383                EUC-CN { MIME } ibm-eucCN GB_2312-80 { IANA } csISO58GB231280 GB2312 { MIME } gb2312-1980                       # China EUC
-ibm-1162                tis-620 cp874 windows-874 { MIME } ms874 cp9066 # Thai (w/ euro update)
+ibm-1383                EUC-CN { MIME } ibm-eucCN GB_2312-80 { IANA } csISO58GB231280 GB2312 { MIME } gb2312-1980 cp1383 1383                      # China EUC
+ibm-1162                tis-620 cp874 windows-874 { MIME } ms874 cp9066 874 # Thai (w/ euro update)
 ibm-874                 ibm-1161 # Same as 1162 (w/o euro update)
 
 lmb-excp                # Special exceptions list for LMBCS     algorithm
@@ -149,9 +149,9 @@ ibm-851                 IBM851 { IANA } cp851 { MIME } 851 csPC851           # P
 ibm-858                 cp858  { MIME } IBM00858 { IANA }       # PC latin1     with Euro cp850 removed
 ibm-9044                852 csPCp852 cp852 { MIME } # PC latin2 (w/ euro update)
 ibm-852                 IBM852 { IANA } # PC latin2     (w/o euro update)
-ibm-872                 855 csIBM855 cp855 { MIME } # PC cyrillic (w/ euro update)
+ibm-872                 855 csIBM855 cp855 { MIME } csPCp855 # PC cyrillic (w/ euro update)
 ibm-855                 IBM855 { IANA } # PC cyrillic (w/o euro update)
-ibm-856                 cp856 { MIME }           # PC Hebrew (old)
+ibm-856                 cp856 { MIME }          856 # PC Hebrew (old)
 ibm-9049                857 csIBM857 cp857 { MIME } # PC Latin 5 (Turkish) (w/ euro     update)
 ibm-857                 IBM857 { IANA } # PC Latin 5 (w/o euro update)
 ibm-859                 cp859 { MIME }           # PC Latin     9 (w/ euro update)
@@ -165,15 +165,15 @@ ibm-864                 IBM864 { IANA } # PC Arabic     (w/o euro update)
 ibm-865                 IBM865 { IANA } cp865 { MIME } 865 csIBM865            # PC     Nordic
 ibm-808                 cp866 { MIME } 866 csIBM866 # PC Russian (w/ euro update)
 ibm-866                 # PC Russian (w/o euro update)
-ibm-868                 IBM868 { IANA } cp868 { MIME } cp-ar csIBM868            # PC Urdu
+ibm-868                 IBM868 { IANA } cp868 { MIME } cp-ar csIBM868  868          # PC Urdu
 ibm-9061                cp869 { MIME } 869 cp-gr csIBM869 # PC Greek (w/ euro update)
 ibm-869                 IBM869 { IANA } # PC Greek (w/o euro update)
 ibm-878                 KOI8-R { IANA MIME } cp878 koi8 cskoi8r  # Russian internet
-ibm-901                 cp921 { MIME } # PC     Baltic (w/ euro update)
+ibm-901                 cp921 { MIME } 921 # PC     Baltic (w/ euro update)
 ibm-921                 # PC Baltic     (w/o euro update)
-ibm-902                 cp922 { MIME } # PC     Estonian (w/ euro update)
+ibm-902                 cp922 { MIME } 922 # PC     Estonian (w/ euro update)
 ibm-922                 # PC Estonian (w/o euro update)
-ibm-942                 shift_jis78     sjis78 ibm-932   # Old s_jis ibm-932 added!
+ibm-942                 shift_jis78     sjis78 ibm-932  pck # Old s_jis ibm-932 added!
 #ibm-941                 jis-208 jisx-208 # Pure DBCS jisx-208# ibm-941 is not JISX 208 code page
 #ibm-1038               Adobe-Symbol-Encoding csHPPSMath symbol
 ibm-5346                windows-1250 { IANA MIME } cp1250       # Windows Latin2 (w/ euro update)
@@ -220,27 +220,27 @@ ibm-21427              cp947           # PC     DBCS Big-5 (w/ euro     update)
 # EBCDIC codepages according to the CDRA
 
 # without Euro
-ibm-37                 IBM037 { IANA } ibm-037 cpibm37 ebcdic-cp-us     ebcdic-cp-ca ebcdic-cp-wt ebcdic-cp-nl csIBM037 cp37 cp037 # EBCDIC US
-ibm-273                IBM273 { IANA } csIBM273 ebcdic-de cp273 cpibm273 # EBCDIC Germanay,     Austria...
-ibm-277                IBM277 { IANA } EBCDIC-CP-DK EBCDIC-CP-NO csIBM277 ebcdic-dk  cp277 cpibm277 # EBCDIC Denmark...
-ibm-278                IBM278 { IANA } ebcdic-cp-fi ebcdic-cp-se csIBM278 ebcdic-sv  cp278 cpibm278 # EBCDIC Sweden
-ibm-280                IBM280 { IANA } ebcdic-cp-it csIBM280 cp280 cpibm280 # EBCDIC Italy
-ibm-284                IBM284 { IANA } ebcdic-cp-es csIBM284 cp284 cpibm284 # EBCDIC Spain
-ibm-285                IBM285 { IANA } ebcdic-cp-gb csIBM285 ebcdic-gb cp285 cpibm285 # EBCDIC UK Ireland
+ibm-37                 IBM037 { IANA } ibm-037 cpibm37 ebcdic-cp-us     ebcdic-cp-ca ebcdic-cp-wt ebcdic-cp-nl csIBM037 cp37 cp037 037 # EBCDIC US
+ibm-273                IBM273 { IANA } csIBM273 ebcdic-de cp273 cpibm273 273 # EBCDIC Germanay,     Austria...
+ibm-277                IBM277 { IANA } EBCDIC-CP-DK EBCDIC-CP-NO csIBM277 ebcdic-dk  cp277 cpibm277 277 # EBCDIC Denmark...
+ibm-278                IBM278 { IANA } ebcdic-cp-fi ebcdic-cp-se csIBM278 ebcdic-sv  cp278 cpibm278 278 # EBCDIC Sweden
+ibm-280                IBM280 { IANA } ebcdic-cp-it csIBM280 cp280 cpibm280 280 # EBCDIC Italy
+ibm-284                IBM284 { IANA } ebcdic-cp-es csIBM284 cp284 cpibm284 284 # EBCDIC Spain
+ibm-285                IBM285 { IANA } ebcdic-cp-gb csIBM285 ebcdic-gb cp285 cpibm285 285 # EBCDIC UK Ireland
 ibm-290                IBM290 { IANA } EBCDIC-JP-kana csIBM290 cp290 # host SBCS (Katakana)
-ibm-297                IBM297 { IANA } ebcdic-cp-fr csIBM297 cp297 cpibm297 # EBCDIC France
-ibm-420                IBM420 { IANA } ebcdic-cp-ar1 csIBM420 cp420
-ibm-424                IBM424 { IANA } ebcdic-cp-he csIBM424 cp424
-ibm-500                IBM500 { IANA } cpibm500 csIBM500 cp500 ebcdic-cp-be ebcdic-cp-ch # EBCDIC International Latin1
+ibm-297                IBM297 { IANA } ebcdic-cp-fr csIBM297 cp297 cpibm297 297 # EBCDIC France
+ibm-420                IBM420 { IANA } ebcdic-cp-ar1 csIBM420 cp420 420
+ibm-424                IBM424 { IANA } ebcdic-cp-he csIBM424 cp424 424
+ibm-500                IBM500 { IANA } cpibm500 csIBM500 cp500 ebcdic-cp-be ebcdic-cp-ch 500 # EBCDIC International Latin1
 ibm-803                cp803 # Old EBCDIC Hebrew
 ibm-834                cp834 # Korean DBCS Host
 ibm-835                cp835 # DBCS T-Ch Host
-ibm-871                IBM871 { IANA } ebcdic-cp-is csIBM871 cpibm871 cp871 # EBCDIC Iceland
-ibm-930                cp930 cpibm930   # Japan EBCDIC MIXED
-ibm-933                cp933 cpibm933           # Korea EBCDIC MIXED 
-ibm-935                cp935 cpibm935           # China EBCDIC MIXED 
-ibm-937                cp937 cpibm937 # Taiwan EBCDIC MIXED
-ibm-939                cp939 # Host MBCS (Latin-Kanji)
+ibm-871                IBM871 { IANA } ebcdic-cp-is csIBM871 cpibm871 cp871 871 # EBCDIC Iceland
+ibm-930                cp930 cpibm930  930 # Japan EBCDIC MIXED
+ibm-933                cp933 cpibm933  933         # Korea EBCDIC MIXED 
+ibm-935                cp935 cpibm935  935         # China EBCDIC MIXED 
+ibm-937                cp937 cpibm937  937 # Taiwan EBCDIC MIXED
+ibm-939                cp939 939 # Host MBCS (Latin-Kanji)
 #ibm-1046              # PC     Arabic without EURO
 # with Euro
 ibm-1390               cpibm1390 # Japan EBCDIC MIXED
@@ -259,10 +259,10 @@ ibm-1148               cpibm1148 # EBCDIC International Latin1
 ibm-1149               cpibm1149 ebcdic-is # EBCDIC     Iceland
 ibm-1153               cpibm1153 # EBCDIC latin 2
 ibm-1154               cp1025 cpibm1154                         # EBCDIC Cyrillic Multilingual
-ibm-1155               IBM1026 { IANA } csIBM1026 cp1026 cpibm1155       # EBCDIC Turkey
-ibm-1156               cp1112 cpibm1156                         # EBCDIC Baltic Multilingual
-ibm-1157               cp1122 cpibm1157                         # EBCDIC Estonia
-ibm-1158               cp1123 cpibm1158                         # Cyrillic Ukraine EBCDIC
+ibm-1155               IBM1026 { IANA } csIBM1026 cp1026 cpibm1155 1026      # EBCDIC Turkey
+ibm-1156               cp1112 cpibm1156  ibm-1112 1112                       # EBCDIC Baltic Multilingual
+ibm-1157               cp1122 cpibm1157  ibm-1122 1122                       # EBCDIC Estonia
+ibm-1158               cp1123 cpibm1158 1123                        # Cyrillic Ukraine EBCDIC
 ibm-1159               cp28709         # SBCS T-Ch Host
 ibm-1160               cp9030 cpibm1160                         # EBCDIC Thailand
 ibm-1164               cp1130 cpibm1164                         # EBCDIC Viet Nam
@@ -272,7 +272,7 @@ ibm-4930               cp4930 # Korean DBCS     Host
 ibm-1364               cp1364 # Korean Host     Mixed
 ibm-8482               # host SBCS (Katakana)
 ibm-4899               cpibm4899                          # Old EBCDIC Hebrew
-ibm-4971               cp875 cpibm4971                          # EBCDIC Greek
+ibm-4971               cp875 cpibm4971 ibm-875 875                         # EBCDIC Greek
 ibm-9027               # DBCS T-Ch Host
 ibm-5123               cp1027          # Host Roman Jis
 ibm-12712              cpibm12712 ebcdic-he # EBCDIC Hebrew (new sheqel, control charaters update)
@@ -284,7 +284,7 @@ ibm-16804              cpibm16804 ebcdic-ar # EBCDIC Arabic
 # ebcdic-es csEBCDICES
 # csEBCDICFR ebcdic-fr
 # ibm-274                IBM274 { IANA } cp274 csIBM274 ebcdic-be
-# ibm-870 IBM870 { IANA } ebcdic-cp-roece ebcdic-cp-yu csIBM870 cp870
+# ibm-870 IBM870 { IANA } ebcdic-cp-roece ebcdic-cp-yu csIBM870 cp870 870
 
 # EBCDIC codepages for S/390, with LF and NL codes swapped
 
