@@ -47,7 +47,7 @@ vi {
         AO { "\u0102ng-g\u00f4-la" }
         AR { "\u00c1c-hen-ti-na" }
         AT { "\u00c1o" } // \u00c1o Qu\u1ed1c ?
-        AU { "\u00dac \u0110\u1ea1i L\u1ee3i" }
+        AU { "\u00dac" } // \u00dac \u0110\u1ea1i L\u1ee3i?
         AZ { "Ai-d\u00e9c-bai-gian" }
 
         BA { "B\u00f4-xni-a H\u00e9c-x\u00ea-g\u00f4-vi-na" }
@@ -70,14 +70,14 @@ vi {
         CA { "Ca-na-\u0111a" }
         CF { "C\u1ed9ng h\u00f2a Trung Phi" }
         CG { "C\u00f4ng-g\u00f4" }
-        CH { "Thu\u1ef5 S\u0129" }
+        CH { "Th\u1ee5y S\u0129" }
         CI { "B\u1edd Bi\u1ec3n Ng\u00e0" }
         CL { "Chi-l\u00ea" }
         CM { "Ca-m\u01a1-run" }
         CN { "Trung Qu\u1ed1c" }
         CO { "C\u00f4-l\u00f4m-bi-a" }
         CR { "C\u1ed1t-xta Ri-ca" }
-        CU { "Cu-ba" }
+        CU { "Cu Ba" }
         CV { "C\u00e1p-ve" }
         CY { "S\u00edp" }
         CZ { "C\u1ed9ng h\u00f2a S\u00e9c" }
@@ -89,8 +89,8 @@ vi {
 
         EC { "\u00ca-cu-a-\u0111o" }
         EE { "E-xt\u00f4-ni-a" }
-        EG { "Ai-c\u1eadp" }
-        EH { "Ph\u00eda t\u00e2y Sahara" }
+        EG { "Ai C\u1eadp" }
+        EH { "T\u00e2y Sahara" }
         ER { "\u00ca-ri-t\u01a1-r\u00ea-a" }
         ES { "T\u00e2y Ban Nha" }
         ET { "\u00ca-ti-\u00f4-pi-a" }
@@ -113,6 +113,7 @@ vi {
         GW { "Ghi-n\u00ea B\u00edt-xao" }
         GY { "Guy-a-na" }
 
+        //HK { "H\u1ED3ng K\u00F4ng SAR Trung Qu\u1ed1c" }  // "H\u1ED3ng K\u00F4ng" is original form. SAR needs translation.
         HN { "H\u00f4n-\u0111u-r\u00e1t" }
         HR { "Cr\u00f4-a-ti-a" }
         HT { "Ha-i-ti" }
@@ -133,11 +134,11 @@ vi {
 
         KE { "K\u00ea-ni-a" }
         KG { "C\u01b0-r\u01a1-g\u01b0-xtan" }
-        KH { "Cam-pu-chia" }
+        KH { "Campuchia" }
         KI { "Ki-ri-ba-ti" }
         KM { "C\u00f4-m\u00f4" }
         KN { "Xan-k\u00edt v\u00e0 N\u00ea-vi" }
-        KP { "Tri\u1ec1u Ti\u00ean" } // Alt name?: C\u1ed9ng h\u00f2a D\u00e2n ch\u1ee7 Nh\u00e2n d\u00e2n Tri\u1ec1u Ti\u00ean
+        KP { "B\u1eafc Tri\u1ec1u Ti\u00ean" } // Alt name?: C\u1ed9ng h\u00f2a D\u00e2n ch\u1ee7 Nh\u00e2n d\u00e2n Tri\u1ec1u Ti\u00ean
         KR { "H\u00e0n Qu\u1ed1c" }
         KW { "C\u00f4-o\u00e9t" }
         KZ { "Ka-d\u1eafc-xtan" }
@@ -198,11 +199,11 @@ vi {
         RU { "Nga" }
         RW { "Ru-an-\u0111a" }
 
-        SA { "\u1ea2-r\u1eadp X\u00ea-\u00fat" }
+        SA { "A-r\u1eadp X\u00ea-\u00fat" }
         SB { "Qu\u1ea7n \u0111\u1ea3o X\u00f4-l\u00f4-m\u00f4ng" }
         SC { "X\u00e2y-sen" }
         SD { "Xu-\u0111\u0103ng" }
-        SE { "Thu\u1ef5 \u0110i\u1ec3" }
+        SE { "Th\u1ee5y \u0110i\u1ec3n" }
         SG { "Xin-ga-po" }
         SI { "Xl\u00f4-ven-ni-a" }
         SK { "Xl\u00f4-va-ki-a" }
@@ -210,7 +211,7 @@ vi {
         SM { "Xan Ma-ri-n\u00f4" }
         SN { "X\u00ea-n\u00ea-gan" }
         SO { "X\u00f4-ma-li" }
-        SP { "S\u00e9cbia" }
+        SP { "S\u00e9c-bia" }
         SR { "Xu-ri-nam" }
         ST { "Xao T\u00f4-m\u00ea v\u00e0 Prin-xi-p\u00ea" }
         SV { "En-san-va-\u0111o" }
@@ -245,6 +246,7 @@ vi {
         WS { "Xa-moa" }
 
         YE { "Y-\u00ea-men" }
+        YU { "Nam T\u01B0" }
 
         ZA { "Nam Phi" }
         ZM { "D\u0103m-bi-a" }
@@ -275,7 +277,7 @@ vi {
         "Th 4",
         "Th 5",
         "Th 6",
-        "Th 7",
+        "Th 7"
     }
     DayNames {
         "Ch\u1EE7 nh\u1EADt",
@@ -284,7 +286,11 @@ vi {
         "Th\u1EE9 t\u01B0",
         "Th\u1EE9 n\u0103m",
         "Th\u1EE9 s\u00E1u",
-        "Th\u1EE9 b\u1EA3y",
+        "Th\u1EE9 b\u1EA3y"
+    }
+    Eras { 
+        "tr. CN",
+        "sau CN"
     }
     // The case of the letters may be wrong for languages because Ti\u1EBFng is used.
     // Ti\u1EBFng is used in order to clarify some of the names, and ti\u1EBFng means "language".
@@ -292,25 +298,65 @@ vi {
     //   which are frequently the same in Vietnamese.
     // It is difficult to decide whether Ti\u1EBFng should precede the translation, but it doesn't hurt to keep it there.
     Languages {
-        ca { "Ti\u1EBFng Catalan" }
+        ar { "Ti\u1EBFng A-r\u1EADp" }
+        az { "Ti\u1EBFng Ai-d\u00E9c-bai-gian" }
+        be { "Ti\u1EBFng B\u00EA-la-r\u00FAt" }
+        bg { "Ti\u1EBFng Bun-ga-ri" }
+        bo { "Ti\u1EBFng T\u00E2y T\u1EA1ng" }
+        ca { "Ti\u1EBFng Ca-ta-l\u0103ng" }
+        cs { "Ti\u1EBFng S\u00E9c" }
         da { "Ti\u1EBFng \u0110an M\u1EA1ch" }
         de { "Ti\u1EBFng \u0110\u1EE9c" }
+        el { "Ti\u1EBFng Hy L\u1EA1p" }
         en { "Ti\u1EBFng Anh" }
-        eo { "Ti\u1EBFng Esp\u00E9ranto" }
+        eo { "Ti\u1EBFng Qu\u1ED1c T\u1EBF Ng\u1EEF" }
         es { "Ti\u1EBFng T\u00E2y Ban Nha" }
+        et { "Ti\u1EBFng E-xt\u00F4-ni-a" }
+        fa { "Ti\u1EBFng Ba T\u01B0" }
+        fi { "Ti\u1EBFng Ph\u1EA7n Lan" }
         fr { "Ti\u1EBFng Ph\u00E1p" }
-        hr { "Ti\u1EBFng Cr\u00f4atia" }
+        ga { "Ti\u1EBFng Ai-len" }
+        he { "Ti\u1EBFng H\u00EA-br\u01A1" }
+        hi { "Ti\u1EBFng Hin-\u0111i" }
+        hr { "Ti\u1EBFng Cr\u00F4-a-ti-a" }
         hu { "Ti\u1EBFng Hung-ga-ri" }
+        hy { "Ti\u1EBFng \u00C1c-m\u00EA-ni" }
+        ia { "Ti\u1EBFng Khoa H\u1ECDc Qu\u1ED1c T\u1EBF" }
+        id { "Ti\u1EBFng In-\u0111\u00F4-n\u00EA-xia" }
+        is { "Ti\u1EBFng Ai-x\u01A1-len" }
         it { "Ti\u1EBFng \u00DD" } // Just \u00DD seems okay because Ti\u1EBFng is used. \u00DD is sometimes used to mean Italy too.
         ja { "Ti\u1EBFng Nh\u1EADt" }
+        jv { "Ti\u1EBFng Gia-va" }
+        km { "Ti\u1EBFng Campuchia" }
+        kn { "Ti\u1EBFng Kan-na-\u0111a" }
         ko { "Ti\u1EBFng H\u00E0n Qu\u1ED1c" }
+        la { "Ti\u1EBFng La-tinh" }
+        lo { "Ti\u1EBFng L\u00E0o" }
+        lt { "Ti\u1EBFng L\u00EDt-va" }
+        lv { "Ti\u1EBFng L\u00E1t-vi-a" }
+        mk { "Ti\u1EBFng Ma-x\u00EA-\u0111\u00F4-ni-a" }
+        mn { "Ti\u1EBFng M\u00F4ng C\u1ED5" }
+        ms { "Ti\u1EBFng Ma-lay-xi-a" }
+        ne { "Ti\u1EBFng N\u00EA-pan" }
         nl { "Ti\u1EBFng H\u00E0 Lan" }
+        no { "Ti\u1EBFng Na Uy" }
+        pl { "Ti\u1EBFng Ba Lan" }
         pt { "Ti\u1EBFng B\u1ED3 \u0110\u00E0o Nha" }
-        ro { "Ti\u1EBFng La M\u00E3" }
+        ro { "Ti\u1EBFng Ru-ma-ni" }
         ru { "Ti\u1EBFng Nga" }
-        sv { "Ti\u1EBFng Thu\u1EF5 \u0110i\u1EC3n" }
+        sa { "Ti\u1EBFng Ph\u1EA1n" }
+        sk { "Ti\u1EBFng Xl\u00F4-v\u00E1c" }
+        sl { "Ti\u1EBFng Xl\u00F4-ven" }
+        so { "Ti\u1EBFng X\u00F4-ma-li" }
+        sq { "Ti\u1EBFng An-ba-ni" }
+        sr { "Ti\u1EBFng S\u00E9c-bi" }
+        sv { "Ti\u1EBFng Th\u1EE5y \u0110i\u1EC3n" }
+        th { "Ti\u1EBFng Th\u00E1i" }
         tr { "Ti\u1EBFng Th\u1ED5 Nh\u0129 K\u1EF3" }
+        uk { "Ti\u1EBFng U-crai-na" }
+        uz { "Ti\u1EBFng U-d\u01A1-b\u1EBFch" }
         vi { "Ti\u1EBFng Vi\u1EC7t" }
+        yi { "Ti\u1EBFng Y-\u0111it" }
         zh { "Ti\u1EBFng Trung Qu\u1ED1c" }
     }
     LocaleScript{ 
