@@ -25,6 +25,6 @@ check: $(TARGET)
 	$(INVOKE) $(CHECK_VARS) ./$(TARGET) $(CHECK_ARGS) | tee $(TARGET).out
 
 ## resources
-%.res: %.txt
+$(RESNAME)_%.res: %.txt
 	@echo "generating $@"
 	$(GENRB) $(GENRBOPT) $^
