@@ -360,10 +360,10 @@ compareProps(const void *l, const void *r);
 #if DO_DEBUG_OUT
 static uint32_t
 getProps2(uint32_t c, uint16_t *pI1, uint16_t *pI2, uint16_t *pI3, uint16_t *pI4);
-#endif
 
 static uint32_t
 getProps(uint32_t c, uint16_t *pI1, uint16_t *pI2, uint16_t *pI3);
+#endif
 
 static void
 setProps(uint32_t c, uint32_t x, uint16_t *pI1, uint16_t *pI2, uint16_t *pI3);
@@ -530,9 +530,11 @@ makeProps(Props *p) {
             if(x!=0) {
                 printf("*** code 0x%06x needs an exception because it is irregular\n", p->code);
             } else if(count==1) {
-                printf("*** code 0x%06x needs an exception because its value would be %ld\n", p->code, value);
+                printf("*** code 0x%06x needs an exception because its value would be %ld\n",
+                    p->code, (long)value);
             } else if(value<MIN_VALUE || MAX_VALUE<value) {
-                printf("*** code 0x%06x needs an exception because its value is out-of-bounds at %ld (not [%ld..%ld]\n", p->code, value, MIN_VALUE,MAX_VALUE);
+                printf("*** code 0x%06x needs an exception because its value is out-of-bounds at %ld (not [%ld..%ld]\n",
+                    p->code, (long)value, (long)MIN_VALUE, (long)MAX_VALUE);
             } else {
                 printf("*** code 0x%06x needs an exception because it has %u values\n", p->code, count);
             }
@@ -668,9 +670,11 @@ makeProps(Props *p) {
         }
         if(x&EXCEPTION_BIT) {
             /* ### TODO: do something more intelligent if there is an exception */
-            printf("    /* 0x%02lx */ 0x%lx, /* has exception */\n", p->code, x&~EXCEPTION_BIT);
+            printf("    /* 0x%02lx */ 0x%lx, /* has exception */\n",
+                (unsigned long)p->code, (unsigned long)x&~EXCEPTION_BIT);
         } else {
-            printf("    /* 0x%02lx */ 0x%lx,\n", p->code, x);
+            printf("    /* 0x%02lx */ 0x%lx,\n",
+                (unsigned long)p->code, (unsigned long)x);
         }
         if(p->code==0x9f) {
             printf("};\n");
@@ -1118,12 +1122,12 @@ generateData(const char *dataDir) {
     size=4*offset;                          /* total size of data */
 
     if(beVerbose) {
-        printf("number of stage 2 entries:              %5u\n", stage2Top);
-        printf("number of stage 3 entries:              %5u\n", stage3Top);
-        printf("number of unique properties values:     %5u\n", propsTop);
-        printf("number of code points with exceptions:  %5u\n", exceptionsCount);
-        printf("size in bytes of exceptions:            %5u\n", 4*exceptionsTop);
-        printf("data size:                             %6lu\n", size);
+        printf("number of stage 2 entries:             %5u\n", stage2Top);
+        printf("number of stage 3 entries:             %5u\n", stage3Top);
+        printf("number of unique properties values:    %5u\n", propsTop);
+        printf("number of code points with exceptions: %5u\n", exceptionsCount);
+        printf("size in bytes of exceptions:           %5u\n", 4*exceptionsTop);
+        printf("data size:                            %6lu\n", (unsigned long)size);
     }
 
     /* write the data */
@@ -1151,7 +1155,8 @@ generateData(const char *dataDir) {
     }
 
     if(dataLength!=(long)size) {
-        fprintf(stderr, "genprops: data length %ld != calculated size %lu\n", dataLength, size);
+        fprintf(stderr, "genprops: data length %ld != calculated size %lu\n",
+            dataLength, (unsigned long)size);
         exit(U_INTERNAL_PROGRAM_ERROR);
     }
 }
