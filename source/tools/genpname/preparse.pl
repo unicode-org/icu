@@ -62,6 +62,9 @@ my $OUT_FILE = shift() || 'data.h';
 my $HEADER_DIR = "$ICU_DIR/source/common/unicode";
 my $UNIDATA_DIR = "$ICU_DIR/source/data/unidata";
 
+# Get the current year from the system
+my $YEAR = 1900+@{[localtime]}[5]; # Get the current year
+
 #----------------------------------------------------------------------
 # Top level property keys for binary, enumerated, string, and double props
 my @TOP     = qw( _bp _ep _sp _dp _mp );
@@ -191,6 +194,9 @@ sub formatData {
     my $date = scalar localtime();
     print <<"END";
 /**
+ * Copyright (C) 2002-$YEAR, International Business Machines Corporation and
+ * others. All Rights Reserved.
+ *
  * MACHINE GENERATED FILE.  !!! Do not edit manually !!!
  *
  * Generated from
@@ -417,7 +423,10 @@ sub readAndMerge {
     delete $pa->{'_family'};
     
     # Note: uscript.h has no version string, so don't check it
-    my $version = check_versions($h, $b, $pa, $va);
+    my $version = check_versions([ 'uchar.h', $h ],
+                                 [ 'Blocks.txt', $b ],
+                                 [ 'PropertyAliases.txt', $pa ],
+                                 [ 'PropertyValueAliases.txt', $va ]);
     
     # Do this BEFORE merging; merging modifies the hashes
     check_PropertyValueAliases($pa, $va);
@@ -459,13 +468,16 @@ sub readAndMerge {
 # identical, with the exception that "X.Y" will match "X.Y.0".
 # All hashes must define the key '_version'.
 #
-# @param a list of hash references
+# @param a list of pairs of (file name, hash reference)
 #
 # @return the version of all the hashes.  Upon return, the '_version'
 # will be removed from all hashes.
 sub check_versions {
     my $version = '';
-    foreach my $h (@_) {
+    my $msg = '';
+    foreach my $a (@_) {
+        my $name = $a->[0];
+        my $h    = $a->[1];
         die "Error: No version found" unless (exists $h->{'_version'});
         my $v = $h->{'_version'};
         delete $h->{'_version'};
@@ -473,8 +485,9 @@ sub check_versions {
         # append ".0" if necessary, to standardize to X.Y.Z
         $v .= '.0' unless ($v =~ /\.\d+\./);
         $v .= '.0' unless ($v =~ /\.\d+\./);
+        $msg .= "$name = $v\n";
         if ($version) {
-            die "Error: Mismatched Unicode versions"
+            die "Error: Mismatched Unicode versions\n$msg"
                 unless ($version eq $v);
         } else {
             $version = $v;
@@ -1151,7 +1164,7 @@ sub read_uchar {
 
                 if ($left eq 'U_UNICODE_VERSION') {
                     my $version = $right;
-                    $version = $1 if ($version =~ /^\"(.*)\"$/);
+                    $version = $1 if ($version =~ /^\"(.*)\"/);
                     # print "Unicode version: ", $version, "\n";
                     die "Error: Multiple versions in $filename"
                         if (defined $hash->{'_version'});
