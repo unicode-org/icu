@@ -65,27 +65,9 @@ prefixLookupComp(const UHashTok e1, const UHashTok e2) {
   uprv_memcpy(buf2, element2->cPoints, element2->cSize*sizeof(UChar));
   buf2[element2->cSize] = 0;
 
-  //key1.pointer = element1->cPoints;
-  //key2.pointer = element2->cPoints;
-  //element1->cPoints[element1->cSize] = 0;
-  //element2->cPoints[element2->cSize] = 0;
-
   return uhash_compareUChars(key1, key2);
 }
 U_CDECL_END
-
-/*
-static void uprv_uca_reverseElement(UCAElements *el) {
-    uint32_t i = 0;
-    UChar temp;
-
-    for(i = 0; i<el->cSize/2; i++) {
-        temp = el->cPoints[i];
-        el->cPoints[i] = el->cPoints[el->cSize-i-1];
-        el->cPoints[el->cSize-i-1] = temp;
-    }
-}
-*/
 
 static int32_t uprv_uca_addExpansion(ExpansionTable *expansions, uint32_t value, UErrorCode *status) {
     if(U_FAILURE(*status)) {
@@ -117,11 +99,6 @@ static int32_t uprv_uca_addExpansion(ExpansionTable *expansions, uint32_t value,
 
     expansions->CEs[expansions->position] = value;
     return(expansions->position++);
-}
-
-static inline void U_CALLCONV
-uhash_freeBlockWrapper(void *obj) {
-  uhash_freeBlock(obj);
 }
 
 U_CAPI tempUCATable*  U_EXPORT2
@@ -753,21 +730,6 @@ uint32_t uprv_uca_addPrefix(tempUCATable *t, uint32_t CE,
       }
     }
 
-#if 0
-    // These are all fairly small prefixes... We should be fine...
-    UChar nfcBuffer[256];
-    uint32_t nfcSize = unorm_normalize(element->prefix, element->prefixSize, UNORM_NFC, 0, nfcBuffer, 256, status);
-    for (j = 1; j<nfcSize; j++) {   /* First add NFC prefix chars to unsafe CP hash table */
-      // Unless it is a trail surrogate, which is handled algoritmically and 
-      // shouldn't take up space in the table.
-      if(!(UTF_IS_TRAIL(nfcBuffer[j]))) {
-        unsafeCPSet(t->unsafeCP, nfcBuffer[j]);
-      }
-    }
-
-    element->prefixSize = nfcSize;
-#endif
-
     UChar tempPrefix = 0;
 
     for(j = 0; j < /*nfcSize*/element->prefixSize/2; j++) { // prefixes are going to be looked up backwards
@@ -1346,19 +1308,6 @@ uprv_uca_assembleTable(tempUCATable *t, UErrorCode *status) {
     UCATableHeader *myData = (UCATableHeader *)dataStart;
     uprv_memcpy(myData, t->image, sizeof(UCATableHeader));
 
-#if 0
-    /* above memcpy should save us from problems */
-    myData->variableTopValue = t->image->variableTopValue;
-    myData->strength = t->image->strength;
-    myData->frenchCollation = t->image->frenchCollation;
-    myData->alternateHandling = t->image->alternateHandling; /* attribute for handling variable elements*/
-    myData->caseFirst = t->image->caseFirst;         /* who goes first, lower case or uppercase */
-    myData->caseLevel = t->image->caseLevel;         /* do we have an extra case level */
-    myData->normalizationMode = t->image->normalizationMode; /* attribute for normalization */
-    myData->version[0] = t->image->version[0];
-    myData->version[1] = t->image->version[1];  
-#endif
-
     myData->contractionSize = contractionsSize;
 
     tableOffset += (uint32_t)(paddedsize(sizeof(UCATableHeader)));
@@ -1413,16 +1362,6 @@ uprv_uca_assembleTable(tempUCATable *t, UErrorCode *status) {
 
 
     int32_t i = 0;
-#if 0
-    /* construct the fast tracker for latin one*/
-    myData->latinOneMapping = tableOffset;
-    uint32_t *store = (uint32_t*)(dataStart+tableOffset);
-    for(i = 0; i<=0xFF; i++) {
-        /**(store++) = ucmpe32_get(mapping,i);*/
-        *(store++) = utrie_get32(mapping, i, NULL);
-        tableOffset+=(uint32_t)(sizeof(uint32_t));
-    }
-#endif
 
     /* copy max expansion table */
     myData->endExpansionCE      = tableOffset;
