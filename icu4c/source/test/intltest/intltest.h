@@ -11,9 +11,7 @@
 #ifndef _INTLTEST
 #define _INTLTEST
 
-#include "unicode/utypes.h"
-#include "unicode/uobject.h"
-#include "unicode/unistr.h"
+// The following includes utypes.h, uobject.h and unistr.h
 #include "unicode/fmtable.h"
 
 U_NAMESPACE_USE
