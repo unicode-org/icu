@@ -162,13 +162,13 @@ UNumberFormat*
 u_locbund_getScientificFormat(ULocaleBundle *bundle)
 {
   UErrorCode status = U_ZERO_ERROR;
-  UChar pattern [PAT_SIZE];
+/*  UChar pattern [PAT_SIZE];*/
 
   if(bundle->fScientificFormat == 0) {
-    /* create the pattern */
-    u_uastrcpy(pattern, "0.000000E00");
+    /* create the pattern for the locale */
+/*    u_uastrcpy(pattern, "0.000000E000");*/
     
-    bundle->fScientificFormat = unum_open(UNUM_IGNORE,pattern, -1,
+    bundle->fScientificFormat = unum_open(UNUM_SCIENTIFIC, NULL, 0,
                          bundle->fLocale, NULL,&status);
     
     if(U_FAILURE(status))

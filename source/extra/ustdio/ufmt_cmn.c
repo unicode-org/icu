@@ -44,36 +44,29 @@ ufmt_isdigit(UChar     c,
 
 void 
 ufmt_ltou(UChar     *buffer, 
-          int32_t     *len,
-          uint32_t         value, 
-          uint32_t     radix,
-          UBool    uselower,
-          int32_t    minDigits)
+          int32_t   *len,
+          uint32_t  value, 
+          uint32_t  radix,
+          UBool     uselower,
+          int32_t   minDigits)
 {
-    int32_t     length     = 0;
-    uint32_t         q;
-    int8_t     digit;
+    int32_t  length = 0;
+    uint32_t digit;
     UChar    *left, *right, temp;
     
-    while(value > radix && length < *len) {
-        q = value / radix;
-        digit = (int8_t)(value - q * radix);
+    do {
+        digit = value % radix;
+        value = value / radix;
         buffer[length++] = (UChar)(uselower ? TO_LC_DIGIT(digit) 
             : TO_UC_DIGIT(digit));
-        value = q;
-    }
-    
-    if(length < *len) {
-        buffer[length++] = (UChar)(uselower ? TO_LC_DIGIT(value) 
-            : TO_UC_DIGIT(value));
-    }
-    
+    } while(value);
+
     /* pad with zeroes to make it minDigits long */
     if(minDigits != -1 && length < minDigits) {
         while(length < minDigits && length < *len)
-            buffer[length++] = 0x0030;
+            buffer[length++] = 0x0030;  /*zero padding */
     }
-    
+
     /* reverse the buffer */
     left     = buffer;
     right = buffer + length;
