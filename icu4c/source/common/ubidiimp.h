@@ -116,8 +116,7 @@ static Flags flagO[2]={ DIRPROP_FLAG(LRO), DIRPROP_FLAG(RLO) };
 
 typedef struct Run {
     UTextOffset logicalStart,   /* first character of the run; b31 indicates even/odd level */
-                visualLimit;    /* last visual position of the run +1;
-                                   b31 indicates that the run needs an LRM fixup for "inverse BiDi" */
+                visualLimit;    /* last visual position of the run +1 */
 } Run;
 
 /* in a Run, logicalStart will get this bit set if the run level is odd */
