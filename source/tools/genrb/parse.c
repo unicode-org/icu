@@ -320,7 +320,7 @@ parseResourceType(UErrorCode *status)
      } else {
           char tokenBuffer[1024];
           u_austrncpy(tokenBuffer, tokenValue->fChars, sizeof(tokenBuffer));
-          tokenBuffer[sizeof(tokenBuffer)] = 0;
+          tokenBuffer[sizeof(tokenBuffer) - 1] = 0;
           *status = U_INVALID_FORMAT_ERROR;
           error(line, "unknown resource type '%s'", tokenBuffer);
      }
