@@ -13,7 +13,7 @@ ja {
     }
 
 	CollationElements {
-      Version { "3.0" }
+      Version { "4.0" }
       Sequence {
 			"[strength 4][hiraganaQ on]"
 
