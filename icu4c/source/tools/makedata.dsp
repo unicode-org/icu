@@ -42,7 +42,7 @@ CFG=makedata - Win32 Debug
 # PROP Output_Dir "Release"
 # PROP Intermediate_Dir "Release"
 # PROP Cmd_Line "NMAKE /f makedata.mak icup=$(MAKEDIR)\..\..\.. cfg=release"
-# PROP Rebuild_Opt ""
+# PROP Rebuild_Opt "NMAKE /f makedata.mak icup=$(MAKEDIR)\..\..\.. cfg=release clean all"
 # PROP Target_File "makedata.exe"
 # PROP Bsc_Name ""
 # PROP Target_Dir ""
@@ -63,7 +63,7 @@ CFG=makedata - Win32 Debug
 # PROP Output_Dir "Debug"
 # PROP Intermediate_Dir "Debug"
 # PROP Cmd_Line "NMAKE /f makedata.mak icup=$(MAKEDIR)\..\..\.. cfg=debug"
-# PROP Rebuild_Opt ""
+# PROP Rebuild_Opt "NMAKE /f makedata.mak icup=$(MAKEDIR)\..\..\.. cfg=debug clean all"
 # PROP Bsc_Name ""
 # PROP Target_Dir ""
 
@@ -94,6 +94,17 @@ CFG=makedata - Win32 Debug
 # Begin Source File
 
 SOURCE=.\makedata.mak
+
+!IF  "$(CFG)" == "makedata - Win32 Release"
+
+# PROP Intermediate_Dir "..\..\data\*.obj"
+
+!ELSEIF  "$(CFG)" == "makedata - Win32 Debug"
+
+# PROP Intermediate_Dir "..\..\data\*.obj"
+
+!ENDIF 
+
 # End Source File
 # End Group
 # End Target
