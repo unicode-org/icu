@@ -2499,7 +2499,7 @@ static UBool numericValueFilter(UChar32 ch, void* context) {
     return u_getNumericValue(ch) == *(double*)context;
 }
 
-static UBool generalCategoryFilter(UChar32 ch, void* context) {
+static UBool generalCategoryMaskFilter(UChar32 ch, void* context) {
     int32_t value = *(int32_t*)context;
     return (U_GET_GC_MASK((UChar32) ch) & value) != 0;
 }
@@ -2597,8 +2597,8 @@ UnicodeSet&
 UnicodeSet::applyIntPropertyValue(UProperty prop, int32_t value, UErrorCode& ec) {
     if (U_FAILURE(ec)) return *this;
 
-    if (prop == UCHAR_GENERAL_CATEGORY) {
-        applyFilter(generalCategoryFilter, &value, ec);
+    if (prop == UCHAR_GENERAL_CATEGORY_MASK) {
+        applyFilter(generalCategoryMaskFilter, &value, ec);
     } else {
         IntPropertyContext c = {prop, value};
         applyFilter(intPropertyFilter, &c, ec);
@@ -2622,8 +2622,14 @@ UnicodeSet::applyPropertyAlias(const UnicodeString& prop,
         p = u_getPropertyEnum(pname);
         if (p == UCHAR_INVALID_CODE) FAIL(ec);
 
+        // Treat gc as gcm
+        if (p == UCHAR_GENERAL_CATEGORY) {
+            p = UCHAR_GENERAL_CATEGORY_MASK;
+        }
+
         if ((p >= UCHAR_BINARY_START && p < UCHAR_BINARY_LIMIT) ||
-            (p >= UCHAR_INT_START && p < UCHAR_INT_LIMIT)) {
+            (p >= UCHAR_INT_START && p < UCHAR_INT_LIMIT) ||
+            (p >= UCHAR_MASK_START && p < UCHAR_MASK_LIMIT)) {
             v = u_getPropertyValueEnum(p, vname);
             if (v == UCHAR_INVALID_CODE) {
                 // Handle numeric CCC
@@ -2688,7 +2694,7 @@ UnicodeSet::applyPropertyAlias(const UnicodeString& prop,
     else {
         // value is empty.  Interpret as General Category, Script, or
         // Binary property.
-        p = UCHAR_GENERAL_CATEGORY;
+        p = UCHAR_GENERAL_CATEGORY_MASK;
         v = u_getPropertyValueEnum(p, pname);
         if (v == UCHAR_INVALID_CODE) {
             p = UCHAR_SCRIPT;
