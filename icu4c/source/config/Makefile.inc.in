@@ -2,7 +2,7 @@
 #******************************************************************************
 #   Copyright (C) 1999-2002, International Business Machines
 #   Corporation and others.  All Rights Reserved.
-# $Revision: 1.31 $
+# $Revision: 1.32 $
 #******************************************************************************
 # This Makefile.inc is designed to be included into projects which make use
 # of the ICU.
@@ -113,7 +113,7 @@ LDLIBRARYPATH_ENVVAR = LD_LIBRARY_PATH
 
 # Access to important ICU tools.
 # Use as follows:  $(INVOKE) $(GENRB) arguments .. 
-INVOKE = $(LDLIBRARYPATH_ENVVAR)=$(libdir):$$$(LDLIBRARYPATH_ENVVAR)
+INVOKE = $(LDLIBRARYPATH_ENVVAR)=$(libdir):$$$(LDLIBRARYPATH_ENVVAR) $(LEAK_CHECKER)
 GENCCODE = $(sbindir)/genccode
 GENCMN   = $(sbindir)/gencmn
 GENRB    = $(bindir)/genrb
