@@ -3,7 +3,7 @@
 ## Copyright (c) 1999-2003, International Business Machines Corporation and
 ## others. All Rights Reserved.
 ##
-## $Id: mh-solaris,v 1.34 2004/03/10 17:57:36 grhoten-oss Exp $
+## $Id: mh-solaris,v 1.35 2004/03/10 22:34:38 grhoten-oss Exp $
 
 ## Flags for position independent code
 SHAREDLIBCFLAGS = -KPIC
@@ -74,7 +74,10 @@ STATIC_O = o
 	$(RM) $@ && ln -s $*.$(SO).$(SO_TARGET_VERSION) $@
 
 # 
+ifeq (strip $(GENCCODE_ASSEMBLY),)
 BIR_LDFLAGS=  -Wl,-M,$(NAME).map -Wl,-B,symbolic -Wl,-B,eliminate
 BIR_CPPFLAGS= -DU_HAVE_BIND_INTERNAL_REFERENCES
 BIR_DEPS=   $(NAME).map
+endif
+
 ## End Solaris-specific setup

@@ -343,7 +343,7 @@ void
 pkg_mak_writeAssemblyHeader(FileStream *f, const UPKGOptions *o)
 {
     T_FileStream_writeLine(f, "\n");
-    T_FileStream_writeLine(f, "ifneq ($(GENCCODE_ASSEMBLY),)\n");
+    T_FileStream_writeLine(f, "ifneq (strip $(GENCCODE_ASSEMBLY),)\n");
     T_FileStream_writeLine(f, "\n");
     T_FileStream_writeLine(f, "BASE_OBJECTS=$(NAME)_dat.o\n");
     T_FileStream_writeLine(f, "\n");
