@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1999-2001, International Business Machines
+*   Copyright (C) 1999-2003, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -26,6 +26,7 @@
 #include "cmemory.h"
 #include "cstring.h"
 #include "uoptions.h"
+#include "gentest.h"
 
 #define DATA_PKG  "testdata"
 #define DATA_NAME "test"
@@ -46,8 +47,7 @@ static const UDataInfo dataInfo={
     {1, 0, 0, 0}                  /* dataVersion */
 };
 
-static void createData(const char*);
-U_CAPI int genres32(const char *prog, const char *path);
+static void createData(const char*, UErrorCode *);
 
 static UOption options[]={
   /*0*/ UOPTION_HELP_H,
@@ -83,19 +83,18 @@ main(int argc, char* argv[]) {
     }
 
     if ( options[3].doesOccur ) {
-      return genres32( argv[0], options[2].value );
+        return genres32( argv[0], options[2].value );
     } else { 
-      /* printf("Generating the test memory mapped file\n"); */
-      createData(options[2].value);
+        /* printf("Generating the test memory mapped file\n"); */
+        createData(options[2].value, &errorCode);
     }
-    return 0;
+    return U_FAILURE(errorCode);
 }
 
 /* Create data file ----------------------------------------------------- */
 static void
-createData(const char* outputDirectory) {
+createData(const char* outputDirectory, UErrorCode *errorCode) {
     UNewDataMemory *pData;
-    UErrorCode errorCode=U_ZERO_ERROR;
     char stringValue[]={'Y', 'E', 'A', 'R', '\0'};
     uint16_t intValue=2000;
 
@@ -103,10 +102,10 @@ createData(const char* outputDirectory) {
     uint32_t size;
 
     pData=udata_create(outputDirectory, DATA_TYPE, DATA_PKG "_" DATA_NAME, &dataInfo,
-                       U_COPYRIGHT_STRING, &errorCode);
-    if(U_FAILURE(errorCode)) {
-        fprintf(stderr, "gentest: unable to create data memory, error %d\n", errorCode);
-        exit(errorCode);
+                       U_COPYRIGHT_STRING, errorCode);
+    if(U_FAILURE(*errorCode)) {
+        fprintf(stderr, "gentest: unable to create data memory, error %d\n", *errorCode);
+        exit(*errorCode);
     }
 
     /* write the data to the file */
@@ -115,10 +114,10 @@ createData(const char* outputDirectory) {
     udata_writeString(pData, stringValue, sizeof(stringValue));
 
     /* finish up */
-    dataLength=udata_finish(pData, &errorCode);
-    if(U_FAILURE(errorCode)) {
-        fprintf(stderr, "gentest: error %d writing the output file\n", errorCode);
-        exit(errorCode);
+    dataLength=udata_finish(pData, errorCode);
+    if(U_FAILURE(*errorCode)) {
+        fprintf(stderr, "gentest: error %d writing the output file\n", *errorCode);
+        exit(*errorCode);
     }
     size=sizeof(stringValue) + sizeof(intValue);
 

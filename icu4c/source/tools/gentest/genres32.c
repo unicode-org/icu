@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2003, International Business Machines
+*   Copyright (C) 2003-2003, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -21,6 +21,7 @@
 #include <stdio.h>
 #include "unicode/putil.h"
 #include "cstring.h"
+#include "gentest.h"
 
 static void
 incKey(char *key, char *limit) {
