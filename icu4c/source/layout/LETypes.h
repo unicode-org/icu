@@ -9,9 +9,16 @@
 #ifndef __LETYPES_H
 #define __LETYPES_H
 
+#if !defined(LE_USE_CMEMORY) && (defined(U_LAYOUT_IMPLEMENTATION) || defined(U_LAYOUTEX_IMPLEMENTATION))
+#define LE_USE_CMEMORY
+#endif
+
 #include "unicode/utypes.h"
 #include "unicode/uobject.h"
+
+#ifdef LE_USE_CMEMORY
 #include "cmemory.h"
+#endif
 
 U_NAMESPACE_BEGIN
 
@@ -274,10 +281,11 @@ struct LEPoint
 typedef struct LEPoint LEPoint;
 #endif
 
+#ifdef LE_USE_CMEMORY
 /**
  * A convenience macro for copying an array.
  *
- * @stable ICU 2.4
+ * @internal
  */
 #define LE_ARRAY_COPY(dst, src, count) uprv_memcpy((void *) (dst), (void *) (src), (count) * sizeof (src)[0])
 
@@ -285,7 +293,7 @@ typedef struct LEPoint LEPoint;
  * Allocate an array of basic types. This is used to isolate the rest of
  * the LayoutEngine code from cmemory.h.
  *
- * @draft ICU 2.6
+ * @internal
  */
 #define LE_NEW_ARRAY(type, count) (type *) uprv_malloc((count) * sizeof(type))
 
@@ -293,7 +301,7 @@ typedef struct LEPoint LEPoint;
  * Re-allocate an array of basic types. This is used to isolate the rest of
  * the LayoutEngine code from cmemory.h.
  *
- * @draft ICU 2.6
+ * @internal
  */
 #define LE_GROW_ARRAY(array, newSize) uprv_realloc((void *) (array), (newSize) * sizeof (array)[0])
 
@@ -301,9 +309,10 @@ typedef struct LEPoint LEPoint;
  * Free an array of basic types. This is used to isolate the rest of
  * the LayoutEngine code from cmemory.h.
  *
- * @draft ICU 2.6
+ * @internal
  */
 #define LE_DELETE_ARRAY(array) uprv_free((void *) (array))
+#endif
 
 /**
  * A macro to construct the four-letter tags used to
