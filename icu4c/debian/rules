@@ -145,14 +145,12 @@ binary-arch: build install
 	#
 	test -d debian/icu-data/$(datasrcdir) || \
 	    mkdir -p debian/icu-data/$(datasrcdir)
-	install -m 644 $(srcdir)/../data/ucname.txt \
-	    $(srcdir)/../data/*.ucm \
+	install -m 644 $(srcdir)/../data/*.ucm \
 	    debian/icu-data/$(datasrcdir)
 	test -d debian/icu-data/$(datasrcdir)/unidata || \
 	    mkdir -p debian/icu-data/$(datasrcdir)/unidata
 	install -m 644 $(srcdir)/../data/unidata/*.* \
 	    debian/icu-data/$(datasrcdir)/unidata
-	unidatafile=`(cd $(srcdir)/../data; ls UnicodeData*.txt)`; cd debian/icu-data/$(datasrcdir) && ln -s unidata/UnicodeData.txt $$unidatafile
 	#
 	# build icu-i18ndata from the source data
 	#
@@ -162,7 +160,7 @@ binary-arch: build install
 	    $(srcdir)/../data/*.brk \
 	    debian/icu-i18ndata/$(datasrcdir)
 	cd debian/icu-i18ndata/$(datasrcdir) && \
-	    $(RM) convrtrs.txt UnicodeData*.txt ucname.txt
+	    $(RM) convrtrs.txt
 	#
 	# move the rest of the development files
 	# in their package
