@@ -221,13 +221,13 @@ processFile(const char *filename, const char *cp, const char *inputDir, const ch
       char start[3];
       T_FileStream_read(in, start, 3);
       if(start[0] == '\xFE' && start[1] == '\xFF') {
-          cp = "utf-16be";
+          cp = "UTF16_BigEndian";
           autodetect = TRUE;
       } else if(start[0] == '\xFF' && start[1] == '\xFE') {
-          cp = "utf-16le";
+          cp = "UTF16_LittleEndian";
           autodetect = TRUE;
       } else if(start[0] == '\xEF' && start[1] == '\xBB' && start[2] == '\xBF') {
-          cp = "utf-8";
+          cp = "UTF8";
           autodetect = TRUE;
       }
       T_FileStream_rewind(in);
