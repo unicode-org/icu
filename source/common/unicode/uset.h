@@ -29,6 +29,7 @@
 
 #include "unicode/utypes.h"
 
+#ifndef UCNV_H
 struct USet;
 /**
  * A UnicodeSet.  Use the uset_* API to manipulate.  Create with
@@ -36,9 +37,39 @@ struct USet;
  * @draft ICU 2.4
  */
 typedef struct USet USet;
+#endif
 
+/**
+ * Bitmask values to be passed to the UnicodeSet constructor or
+ * applyPattern() taking an option parameter.
+ * @draft
+ */
 enum {
-    USET_SERIALIZED_STATIC_ARRAY_CAPACITY=8     /**< enough for any single-code point set */
+    /**
+     * Ignore white space within patterns unless quoted or escaped.
+     * @draft
+     */
+    USET_IGNORE_SPACE = 1,  
+
+    /**
+     * Enable case insensitive matching.  E.g., "[ab]" with this flag
+     * will match 'a', 'A', 'b', and 'B'.  "[^ab]" with this flag will
+     * match all except 'a', 'A', 'b', and 'B'.
+     * @draft
+     */
+    USET_CASE_INSENSITIVE = 2,  
+
+    /**
+     * Bitmask for UnicodeSet::closeOver() indicating letter case.
+     * This may be ORed together with other selectors.
+     * @internal
+     */
+    USET_CASE = 2,
+    /**
+     * Enough for any single-code point set
+     * @internal
+     */
+    USET_SERIALIZED_STATIC_ARRAY_CAPACITY=8
 };
 
 /**
@@ -96,6 +127,20 @@ uset_open(UChar32 start, UChar32 end);
  */
 U_CAPI USet* U_EXPORT2
 uset_openPattern(const UChar* pattern, int32_t patternLength,
+                 UErrorCode* ec);
+
+/**
+ * Creates a set from the given pattern.  See the UnicodeSet class
+ * description for the syntax of the pattern language.
+ * @param pattern a string specifying what characters are in the set
+ * @param patternLength the length of the pattern, or -1 if null
+ * terminated
+ * @param ec the error code
+ * @draft ICU 2.4
+ */
+U_CAPI USet* U_EXPORT2
+uset_openPatternOptions(const UChar* pattern, int32_t patternLength,
+                 uint32_t options,
                  UErrorCode* ec);
 
 /**
