@@ -121,6 +121,7 @@ void CollationServiceTest::TestRegister()
     if (*fucol != *ncol) {
       errln("collator after unregister does not match original fu_FU");
     }
+	delete uscol; uscol = NULL;
     delete ncol; ncol = NULL;
     delete fucol; fucol = NULL;
   }
@@ -194,7 +195,7 @@ public:
     for (CollatorInfo** p = info; *p; ++p) {
       delete *p;
     }
-    delete info;
+    delete[] info;
     delete[] ids;
   }
 
