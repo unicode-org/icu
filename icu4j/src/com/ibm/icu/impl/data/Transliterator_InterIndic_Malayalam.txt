@@ -2,10 +2,6 @@
 # Copyright (c) 1999-2004, International Business Machines
 # Corporation and others. All Rights Reserved.
 #--------------------------------------------------------------------
-# $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/data/Attic/Transliterator_InterIndic_Malayalam.txt,v $
-# $Date: 2004/05/21 01:01:49 $
-# $Revision: 1.11 $
-#--------------------------------------------------------------------
 
 # InterIndic-Malayalam
 #:: NFD (NFC) ;

@@ -1,10 +1,6 @@
 ﻿#--------------------------------------------------------------------
-# Copyright (c) 1999-2001, International Business Machines
+# Copyright (c) 1999-2004, International Business Machines
 # Corporation and others. All Rights Reserved.
-#--------------------------------------------------------------------
-# $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/data/Transliterator_Han_Latin_Definition.txt,v $
-# $Date: 2002/07/14 21:59:15 $
-# $Revision: 1.2 $
 #--------------------------------------------------------------------
 # Convert CJK characters, according to the defintions in CEDICT and Unihan.txt
 # Note: adds space between them and letters.
