@@ -1849,6 +1849,9 @@ uint32_t ucol_prv_getSpecialCE(const UCollator *coll, UChar ch, uint32_t CE, col
         collIterateState state;
         backupState(source, &state);
         if (collIter_eos(source) || !(UTF16_IS_TRAIL((trail = getNextNormalizedChar(source))))) {
+          // we chould have stepped one char forward and it might have turned that it 
+          // was not a trail surrogate. In that case, we have to backup.
+          loadState(source, &state, TRUE);
           return 0;
         } else {
           CE = ucmpe32_getSurrogate(coll->mapping, CE, trail);
