@@ -3,7 +3,7 @@
 ## Copyright (c) 1999-2003, International Business Machines Corporation and
 ## others. All Rights Reserved.
 ##
-## $Id: mh-os390,v 1.55 2003/06/02 22:12:03 grhoten-oss Exp $
+## $Id: mh-os390,v 1.56 2003/06/04 18:12:51 grhoten-oss Exp $
 
 ###################################################################
 #                    IMPORTANT NOTE                               #
@@ -44,8 +44,8 @@ endif
 
 # TODO: Consider using  -Wc,roc,ros for making the data and strings readonly
 #       -Wc,"ros" seems to work, but not the "roc"
-CFLAGS          += -Wc,"langlvl(extended),spill(2000)" $(ICU_BUILD_OPTIONS) $(ICU_IEEE) -Wc,dll,expo
-CXXFLAGS        += -Wc,"langlvl(extended),spill(2000)" $(ICU_BUILD_OPTIONS) $(ICU_IEEE) -Wc,dll,expo
+CFLAGS          += -Wc,"langlvl(extended),spill(2000)" -Wc,"ros" $(ICU_BUILD_OPTIONS) $(ICU_IEEE) -Wc,dll,expo
+CXXFLAGS        += -Wc,"langlvl(extended),spill(2000)" -Wc,"ros" $(ICU_BUILD_OPTIONS) $(ICU_IEEE) -Wc,dll,expo
 DEFS            += -D_OPEN_THREADS -D_XOPEN_SOURCE_EXTENDED -D_MSE_PROTOS -D_SHR_TZNAME -D_SHR_TIMEZONE -DU_LIBICUDATA_NAME=\"$(ICUDATA_NAME)\"
 ARFLAGS         = -cr
 
