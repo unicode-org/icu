@@ -666,19 +666,9 @@ getTrail:
         }
     }
 
-    if(pArgs->flush && source>=sourceLimit) {
-        /* reset the state for the next conversion */
-        if(c<0 && U_SUCCESS(*pErrorCode)) {
-            /* a Unicode code point remains incomplete (only a first surrogate) */
-            *pErrorCode=U_TRUNCATED_CHAR_FOUND;
-        }
-        cnv->fromUSurrogateLead=0;
-        cnv->fromUnicodeStatus=BOCU1_ASCII_PREV;
-    } else {
-        /* set the converter state back into UConverter */
-        cnv->fromUSurrogateLead= c<0 ? (UChar)-c : 0;
-        cnv->fromUnicodeStatus=(uint32_t)prev;
-    }
+    /* set the converter state back into UConverter */
+    cnv->fromUSurrogateLead= c<0 ? (UChar)-c : 0;
+    cnv->fromUnicodeStatus=(uint32_t)prev;
 
     /* write back the updated pointers */
     pArgs->source=source;
@@ -897,19 +887,9 @@ getTrail:
         }
     }
 
-    if(pArgs->flush && source>=sourceLimit) {
-        /* reset the state for the next conversion */
-        if(c<0 && U_SUCCESS(*pErrorCode)) {
-            /* a Unicode code point remains incomplete (only a first surrogate) */
-            *pErrorCode=U_TRUNCATED_CHAR_FOUND;
-        }
-        cnv->fromUSurrogateLead=0;
-        cnv->fromUnicodeStatus=BOCU1_ASCII_PREV;
-    } else {
-        /* set the converter state back into UConverter */
-        cnv->fromUSurrogateLead= c<0 ? (UChar)-c : 0;
-        cnv->fromUnicodeStatus=(uint32_t)prev;
-    }
+    /* set the converter state back into UConverter */
+    cnv->fromUSurrogateLead= c<0 ? (UChar)-c : 0;
+    cnv->fromUnicodeStatus=(uint32_t)prev;
 
     /* write back the updated pointers */
     pArgs->source=source;
@@ -1228,21 +1208,10 @@ getTrail:
     }
 endloop:
 
-    if(pArgs->flush && source>=sourceLimit) {
-        /* reset the state for the next conversion */
-        if(byteIndex>0 && U_SUCCESS(*pErrorCode)) {
-            /* a character byte sequence remains incomplete */
-            *pErrorCode=U_TRUNCATED_CHAR_FOUND;
-        }
-        cnv->toUnicodeStatus=BOCU1_ASCII_PREV;
-        cnv->mode=0;
-        cnv->toULength=0;
-    } else {
-        /* set the converter state back into UConverter */
-        cnv->toUnicodeStatus=(uint32_t)prev;
-        cnv->mode=(diff<<2)|count;
-        cnv->toULength=byteIndex;
-    }
+    /* set the converter state back into UConverter */
+    cnv->toUnicodeStatus=(uint32_t)prev;
+    cnv->mode=(diff<<2)|count;
+    cnv->toULength=byteIndex;
 
 finish:
     /* write back the updated pointers */
@@ -1495,21 +1464,10 @@ getTrail:
     }
 endloop:
 
-    if(pArgs->flush && source>=sourceLimit) {
-        /* reset the state for the next conversion */
-        if(byteIndex>0 && U_SUCCESS(*pErrorCode)) {
-            /* a character byte sequence remains incomplete */
-            *pErrorCode=U_TRUNCATED_CHAR_FOUND;
-        }
-        cnv->toUnicodeStatus=BOCU1_ASCII_PREV;
-        cnv->mode=0;
-        cnv->toULength=0;
-    } else {
-        /* set the converter state back into UConverter */
-        cnv->toUnicodeStatus=(uint32_t)prev;
-        cnv->mode=(diff<<2)|count;
-        cnv->toULength=byteIndex;
-    }
+    /* set the converter state back into UConverter */
+    cnv->toUnicodeStatus=(uint32_t)prev;
+    cnv->mode=(diff<<2)|count;
+    cnv->toULength=byteIndex;
 
 finish:
     /* write back the updated pointers */

@@ -416,19 +416,19 @@ unicodeMode:
     }
 endloop:
 
-    if(pArgs->flush && source>=sourceLimit) {
-        /* reset the state for the next conversion */
-        if(!inDirectMode && bits!=0 && U_SUCCESS(*pErrorCode)) {
-            /* a character byte sequence remains incomplete */
-            *pErrorCode=U_TRUNCATED_CHAR_FOUND;
-        }
-        cnv->toUnicodeStatus=0x1000000; /* inDirectMode=TRUE */
-        cnv->toULength=0;
-    } else {
-        /* set the converter state back into UConverter */
-        cnv->toUnicodeStatus=((uint32_t)inDirectMode<<24)|((uint32_t)((uint8_t)base64Counter)<<16)|(uint32_t)bits;
-        cnv->toULength=byteIndex;
+    if(U_SUCCESS(*pErrorCode) && pArgs->flush && source==sourceLimit && bits==0) {
+        /*
+         * if we are in Unicode mode, then the byteIndex might not be 0,
+         * but that is ok if bits==0
+         * -> we set byteIndex=0 at the end of the stream to avoid a truncated error
+         * (not true for IMAP-mailbox-name where we must end in direct mode)
+         */
+        byteIndex=0;
     }
+
+    /* set the converter state back into UConverter */
+    cnv->toUnicodeStatus=((uint32_t)inDirectMode<<24)|((uint32_t)((uint8_t)base64Counter)<<16)|(uint32_t)bits;
+    cnv->toULength=byteIndex;
 
 finish:
     /* write back the updated pointers */
@@ -493,12 +493,6 @@ callback:
     } else {
         goto loop;
     }
-}
-
-static UChar32
-_UTF7GetNextUChar(UConverterToUnicodeArgs *pArgs,
-                  UErrorCode *pErrorCode) {
-    return ucnv_getNextUCharFromToUImpl(pArgs, pArgs->converter->sharedData->impl->toUnicode, TRUE, pErrorCode);
 }
 
 static void
@@ -788,7 +782,7 @@ static const UConverterImpl _UTF7Impl={
     _UTF7ToUnicodeWithOffsets,
     _UTF7FromUnicodeWithOffsets,
     _UTF7FromUnicodeWithOffsets,
-    _UTF7GetNextUChar,
+    NULL,
 
     NULL,
     _UTF7GetName,
@@ -1001,7 +995,8 @@ directMode:
                 /* switch to Unicode mode */
                 nextSourceIndex=++sourceIndex;
                 inDirectMode=FALSE;
-                byteIndex=0;
+                bytes[0]=b;
+                byteIndex=1;
                 bits=0;
                 base64Counter=-1;
                 goto unicodeMode;
@@ -1145,19 +1140,9 @@ unicodeMode:
     }
 endloop:
 
-    if(pArgs->flush && source>=sourceLimit) {
-        /* reset the state for the next conversion */
-        if(!inDirectMode && U_SUCCESS(*pErrorCode)) {
-            /* a character byte sequence remains incomplete - IMAP must end in ASCII/direct mode */
-            *pErrorCode=U_TRUNCATED_CHAR_FOUND;
-        }
-        cnv->toUnicodeStatus=0x1000000; /* inDirectMode=TRUE */
-        cnv->toULength=0;
-    } else {
-        /* set the converter state back into UConverter */
-        cnv->toUnicodeStatus=((uint32_t)inDirectMode<<24)|((uint32_t)((uint8_t)base64Counter)<<16)|(uint32_t)bits;
-        cnv->toULength=byteIndex;
-    }
+    /* set the converter state back into UConverter */
+    cnv->toUnicodeStatus=((uint32_t)inDirectMode<<24)|((uint32_t)((uint8_t)base64Counter)<<16)|(uint32_t)bits;
+    cnv->toULength=byteIndex;
 
 finish:
     /* write back the updated pointers */
@@ -1525,7 +1510,7 @@ static const UConverterImpl _IMAPImpl={
     _IMAPToUnicodeWithOffsets,
     _IMAPFromUnicodeWithOffsets,
     _IMAPFromUnicodeWithOffsets,
-    _UTF7GetNextUChar,
+    NULL,
 
     NULL,
     NULL,

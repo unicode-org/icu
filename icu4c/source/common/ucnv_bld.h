@@ -25,7 +25,11 @@
 /* size of the overflow buffers in UConverter, enough for escaping callbacks */
 #define UCNV_ERROR_BUFFER_LENGTH 32
 
+/* at most 4 bytes per substitution character (part of .cnv file format! see UConverterStaticData) */
 #define UCNV_MAX_SUBCHAR_LEN 4
+
+/* at most 8 bytes per character in toUBytes[] (UTF-8 uses up to 6) */
+#define UCNV_MAX_CHAR_LEN 8
 
 /* converter options bits */
 #define UCNV_OPTION_VERSION     0xf
@@ -140,7 +144,7 @@ struct UConverter {
 
     UBool  useFallback;
     int8_t toULength;                   /* number of bytes in toUBytes */
-    uint8_t toUBytes[7];                /* more "toU status"; keeps the bytes of the current character */
+    uint8_t toUBytes[UCNV_MAX_CHAR_LEN-1];/* more "toU status"; keeps the bytes of the current character */
     uint32_t toUnicodeStatus;           /* Used to internalize stream status information */
     int32_t mode;
     uint32_t fromUnicodeStatus;
@@ -155,12 +159,11 @@ struct UConverter {
 
     uint8_t subChar1;                                   /* single-byte substitution character if different from subChar */
     uint8_t subChar[UCNV_MAX_SUBCHAR_LEN];              /* codepage specific character sequence */
-    char invalidCharBuffer[UCNV_MAX_SUBCHAR_LEN];       /* bytes from last error/callback situation */
+    char invalidCharBuffer[UCNV_MAX_CHAR_LEN];          /* bytes from last error/callback situation */
     uint8_t charErrorBuffer[UCNV_ERROR_BUFFER_LENGTH];  /* codepage output from Error functions */
 
-    UChar invalidUCharBuffer[3];                        /* UChars from last error/callback situation */
+    UChar invalidUCharBuffer[U16_MAX_LENGTH];           /* UChars from last error/callback situation */
     UChar UCharErrorBuffer[UCNV_ERROR_BUFFER_LENGTH];   /* unicode output from Error functions */
-
 };
 
 U_CDECL_END /* end of UConverter */

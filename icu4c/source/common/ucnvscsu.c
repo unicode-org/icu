@@ -272,11 +272,9 @@ _SCSUToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
      * The end of the input or output buffer is also handled by the slower loop.
      * The slow loop jumps (goto) to the fast-path loop again as soon as possible.
      *
-     * The callback handling is done by jumping (goto) to the callback section at the end
-     * of the function. From there, it either jumps to here to continue or to
-     * the endloop section to clean up and return.
+     * The callback handling is done by returning with an error code.
+     * The conversion framework actually calls the callback function.
      */
-loop:
     if(isSingleByteMode) {
         /* fast path for single-byte mode */
         if(state==readCommand) {
@@ -367,13 +365,20 @@ singleByteMode:
                     goto fastUnicode;
                 } else /* Srs */ {
                     /* callback(illegal) */
-                    cnv->invalidCharBuffer[0]=b;
-                    cnv->invalidCharLength=1;
-                    goto callback;
+                    *pErrorCode=U_ILLEGAL_CHAR_FOUND;
+                    cnv->toUBytes[0]=b;
+                    cnv->toULength=1;
+                    goto endloop;
                 }
+
+                /* store the first byte of a multibyte sequence in toUBytes[] */
+                cnv->toUBytes[0]=b;
+                cnv->toULength=1;
                 break;
             case quotePairOne:
                 byteOne=b;
+                cnv->toUBytes[1]=b;
+                cnv->toULength=2;
                 state=quotePairTwo;
                 break;
             case quotePairTwo:
@@ -426,6 +431,8 @@ singleByteMode:
             case definePairOne:
                 dynamicWindow=(int8_t)((b>>5)&7);
                 byteOne=(uint8_t)(b&0x1f);
+                cnv->toUBytes[1]=b;
+                cnv->toULength=2;
                 state=definePairTwo;
                 break;
             case definePairTwo:
@@ -436,10 +443,9 @@ singleByteMode:
             case defineOne:
                 if(b==0) {
                     /* callback(illegal): Reserved window offset value 0 */
-                    cnv->invalidCharBuffer[0]=(char)(SD0+dynamicWindow);
-                    cnv->invalidCharBuffer[1]=b;
-                    cnv->invalidCharLength=2;
-                    goto callback;
+                    cnv->toUBytes[1]=b;
+                    cnv->toULength=2;
+                    goto endloop;
                 } else if(b<gapThreshold) {
                     scsu->toUDynamicOffsets[dynamicWindow]=b<<7UL;
                 } else if((uint8_t)(b-gapThreshold)<(reservedStart-gapThreshold)) {
@@ -448,10 +454,9 @@ singleByteMode:
                     scsu->toUDynamicOffsets[dynamicWindow]=fixedOffsets[b-fixedThreshold];
                 } else {
                     /* callback(illegal): Reserved window offset value 0xa8..0xf8 */
-                    cnv->invalidCharBuffer[0]=(char)(SD0+dynamicWindow);
-                    cnv->invalidCharBuffer[1]=b;
-                    cnv->invalidCharLength=2;
-                    goto callback;
+                    cnv->toUBytes[1]=b;
+                    cnv->toULength=2;
+                    goto endloop;
                 }
                 sourceIndex=nextSourceIndex;
                 state=readCommand;
@@ -487,6 +492,8 @@ fastUnicode:
             case readCommand:
                 if((uint8_t)(b-UC0)>(Urs-UC0)) {
                     byteOne=b;
+                    cnv->toUBytes[0]=b;
+                    cnv->toULength=1;
                     state=quotePairTwo;
                 } else if(/* UC0<=b && */ b<=UC7) {
                     dynamicWindow=(int8_t)(b-UC0);
@@ -496,23 +503,32 @@ fastUnicode:
                 } else if(/* UD0<=b && */ b<=UD7) {
                     dynamicWindow=(int8_t)(b-UD0);
                     isSingleByteMode=TRUE;
+                    cnv->toUBytes[0]=b;
+                    cnv->toULength=1;
                     state=defineOne;
                     goto singleByteMode;
                 } else if(b==UDX) {
                     isSingleByteMode=TRUE;
+                    cnv->toUBytes[0]=b;
+                    cnv->toULength=1;
                     state=definePairOne;
                     goto singleByteMode;
                 } else if(b==UQU) {
+                    cnv->toUBytes[0]=b;
+                    cnv->toULength=1;
                     state=quotePairOne;
                 } else /* Urs */ {
                     /* callback(illegal) */
-                    cnv->invalidCharBuffer[0]=b;
-                    cnv->invalidCharLength=1;
-                    goto callback;
+                    *pErrorCode=U_ILLEGAL_CHAR_FOUND;
+                    cnv->toUBytes[0]=b;
+                    cnv->toULength=1;
+                    goto endloop;
                 }
                 break;
             case quotePairOne:
                 byteOne=b;
+                cnv->toUBytes[1]=b;
+                cnv->toULength=2;
                 state=quotePairTwo;
                 break;
             case quotePairTwo:
@@ -528,80 +544,35 @@ fastUnicode:
     }
 endloop:
 
-    if(pArgs->flush && source>=sourceLimit) {
-        /* reset the state for the next conversion */
-        if(state!=readCommand && U_SUCCESS(*pErrorCode)) {
-            /* a character byte sequence remains incomplete */
-            *pErrorCode=U_TRUNCATED_CHAR_FOUND;
+    if(U_FAILURE(*pErrorCode) && *pErrorCode!=U_BUFFER_OVERFLOW_ERROR) {
+        /* copy the input sequence into the error buffer */
+        int8_t i;
+
+        for(i=0; i<cnv->toULength; ++i) {
+            cnv->invalidCharBuffer[i]=(char)cnv->toUBytes[i];
         }
-        _SCSUReset(cnv, UCNV_RESET_TO_UNICODE);
-    } else {
-        /* set the converter state back into UConverter */
-        scsu->toUIsSingleByteMode=isSingleByteMode;
-        scsu->toUState=state;
-        scsu->toUQuoteWindow=quoteWindow;
-        scsu->toUDynamicWindow=dynamicWindow;
-        scsu->toUByteOne=byteOne;
+        cnv->invalidCharLength=i;
+
+        /* reset to deal with the next character */
+        state=readCommand;
     }
 
-finish:
+    /* set the converter state back into UConverter */
+    if(state==readCommand) {
+        /* not in a multi-byte sequence, reset toULength */
+        cnv->toULength=0;
+    }
+    scsu->toUIsSingleByteMode=isSingleByteMode;
+    scsu->toUState=state;
+    scsu->toUQuoteWindow=quoteWindow;
+    scsu->toUDynamicWindow=dynamicWindow;
+    scsu->toUByteOne=byteOne;
+
     /* write back the updated pointers */
     pArgs->source=(const char *)source;
     pArgs->target=target;
     pArgs->offsets=offsets;
     return;
-
-callback:
-    /* call the callback function with all the preparations and post-processing */
-    /* update the arguments structure */
-    pArgs->source=(const char *)source;
-    pArgs->target=target;
-    pArgs->offsets=offsets;
-    /* the current bytes were copied to invalidCharBuffer before the goto callback jump */
-
-    /* set the converter state in UConverter to deal with the next character */
-    scsu->toUIsSingleByteMode=isSingleByteMode;
-    scsu->toUState=readCommand;
-    scsu->toUQuoteWindow=quoteWindow;
-    scsu->toUDynamicWindow=dynamicWindow;
-    scsu->toUByteOne=0;
-
-    /* call the callback function */
-    *pErrorCode=U_ILLEGAL_CHAR_FOUND;
-    cnv->fromCharErrorBehaviour(cnv->toUContext, pArgs, cnv->invalidCharBuffer, cnv->invalidCharLength, UCNV_ILLEGAL, pErrorCode);
-
-    /* get the converter state from UConverter */
-    isSingleByteMode=scsu->toUIsSingleByteMode;
-    state=scsu->toUState;
-    quoteWindow=scsu->toUQuoteWindow;
-    dynamicWindow=scsu->toUDynamicWindow;
-    byteOne=scsu->toUByteOne;
-
-    /* update target and deal with offsets if necessary */
-    offsets=ucnv_updateCallbackOffsets(offsets, (int32_t)(pArgs->target-target), sourceIndex);
-    target=pArgs->target;
-
-    /* update the source pointer and index */
-    sourceIndex=(int32_t)(nextSourceIndex+((const uint8_t *)pArgs->source-source));
-    source=(const uint8_t *)pArgs->source;
-
-    /*
-     * If the callback overflowed the target, then we need to
-     * stop here with an overflow indication.
-     */
-    if(*pErrorCode==U_BUFFER_OVERFLOW_ERROR) {
-        goto endloop;
-    } else if(cnv->UCharErrorBufferLength>0) {
-        /* target is full */
-        *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
-        goto endloop;
-    } else if(U_FAILURE(*pErrorCode)) {
-        /* break on error */
-        _SCSUReset(cnv, UCNV_RESET_TO_UNICODE);
-        goto finish;
-    } else {
-        goto loop;
-    }
 }
 
 /*
@@ -619,7 +590,6 @@ _SCSUToUnicode(UConverterToUnicodeArgs *pArgs,
     const uint8_t *source, *sourceLimit;
     UChar *target;
     const UChar *targetLimit;
-
     UBool isSingleByteMode;
     uint8_t state, byteOne;
     int8_t quoteWindow, dynamicWindow;
@@ -658,11 +628,9 @@ _SCSUToUnicode(UConverterToUnicodeArgs *pArgs,
      * The end of the input or output buffer is also handled by the slower loop.
      * The slow loop jumps (goto) to the fast-path loop again as soon as possible.
      *
-     * The callback handling is done by jumping (goto) to the callback section at the end
-     * of the function. From there, it either jumps to here to continue or to
-     * the endloop section to clean up and return.
+     * The callback handling is done by returning with an error code.
+     * The conversion framework actually calls the callback function.
      */
-loop:
     if(isSingleByteMode) {
         /* fast path for single-byte mode */
         if(state==readCommand) {
@@ -731,13 +699,20 @@ singleByteMode:
                     goto fastUnicode;
                 } else /* Srs */ {
                     /* callback(illegal) */
-                    cnv->invalidCharBuffer[0]=b;
-                    cnv->invalidCharLength=1;
-                    goto callback;
+                    *pErrorCode=U_ILLEGAL_CHAR_FOUND;
+                    cnv->toUBytes[0]=b;
+                    cnv->toULength=1;
+                    goto endloop;
                 }
+
+                /* store the first byte of a multibyte sequence in toUBytes[] */
+                cnv->toUBytes[0]=b;
+                cnv->toULength=1;
                 break;
             case quotePairOne:
                 byteOne=b;
+                cnv->toUBytes[1]=b;
+                cnv->toULength=2;
                 state=quotePairTwo;
                 break;
             case quotePairTwo:
@@ -772,6 +747,8 @@ singleByteMode:
             case definePairOne:
                 dynamicWindow=(int8_t)((b>>5)&7);
                 byteOne=(uint8_t)(b&0x1f);
+                cnv->toUBytes[1]=b;
+                cnv->toULength=2;
                 state=definePairTwo;
                 break;
             case definePairTwo:
@@ -781,10 +758,9 @@ singleByteMode:
             case defineOne:
                 if(b==0) {
                     /* callback(illegal): Reserved window offset value 0 */
-                    cnv->invalidCharBuffer[0]=(char)(SD0+dynamicWindow);
-                    cnv->invalidCharBuffer[1]=b;
-                    cnv->invalidCharLength=2;
-                    goto callback;
+                    cnv->toUBytes[1]=b;
+                    cnv->toULength=2;
+                    goto endloop;
                 } else if(b<gapThreshold) {
                     scsu->toUDynamicOffsets[dynamicWindow]=b<<7UL;
                 } else if((uint8_t)(b-gapThreshold)<(reservedStart-gapThreshold)) {
@@ -793,10 +769,9 @@ singleByteMode:
                     scsu->toUDynamicOffsets[dynamicWindow]=fixedOffsets[b-fixedThreshold];
                 } else {
                     /* callback(illegal): Reserved window offset value 0xa8..0xf8 */
-                    cnv->invalidCharBuffer[0]=(char)(SD0+dynamicWindow);
-                    cnv->invalidCharBuffer[1]=b;
-                    cnv->invalidCharLength=2;
-                    goto callback;
+                    cnv->toUBytes[1]=b;
+                    cnv->toULength=2;
+                    goto endloop;
                 }
                 state=readCommand;
                 goto fastSingle;
@@ -825,6 +800,8 @@ fastUnicode:
             case readCommand:
                 if((uint8_t)(b-UC0)>(Urs-UC0)) {
                     byteOne=b;
+                    cnv->toUBytes[0]=b;
+                    cnv->toULength=1;
                     state=quotePairTwo;
                 } else if(/* UC0<=b && */ b<=UC7) {
                     dynamicWindow=(int8_t)(b-UC0);
@@ -833,23 +810,32 @@ fastUnicode:
                 } else if(/* UD0<=b && */ b<=UD7) {
                     dynamicWindow=(int8_t)(b-UD0);
                     isSingleByteMode=TRUE;
+                    cnv->toUBytes[0]=b;
+                    cnv->toULength=1;
                     state=defineOne;
                     goto singleByteMode;
                 } else if(b==UDX) {
                     isSingleByteMode=TRUE;
+                    cnv->toUBytes[0]=b;
+                    cnv->toULength=1;
                     state=definePairOne;
                     goto singleByteMode;
                 } else if(b==UQU) {
+                    cnv->toUBytes[0]=b;
+                    cnv->toULength=1;
                     state=quotePairOne;
                 } else /* Urs */ {
                     /* callback(illegal) */
-                    cnv->invalidCharBuffer[0]=b;
-                    cnv->invalidCharLength=1;
-                    goto callback;
+                    *pErrorCode=U_ILLEGAL_CHAR_FOUND;
+                    cnv->toUBytes[0]=b;
+                    cnv->toULength=1;
+                    goto endloop;
                 }
                 break;
             case quotePairOne:
                 byteOne=b;
+                cnv->toUBytes[1]=b;
+                cnv->toULength=2;
                 state=quotePairTwo;
                 break;
             case quotePairTwo:
@@ -861,80 +847,34 @@ fastUnicode:
     }
 endloop:
 
-    if(pArgs->flush && source>=sourceLimit) {
-        /* reset the state for the next conversion */
-        if(state!=readCommand && U_SUCCESS(*pErrorCode)) {
-            /* a character byte sequence remains incomplete */
-            *pErrorCode=U_TRUNCATED_CHAR_FOUND;
+    if(U_FAILURE(*pErrorCode) && *pErrorCode!=U_BUFFER_OVERFLOW_ERROR) {
+        /* copy the input sequence into the error buffer */
+        int8_t i;
+
+        for(i=0; i<cnv->toULength; ++i) {
+            cnv->invalidCharBuffer[i]=(char)cnv->toUBytes[i];
         }
-        _SCSUReset(cnv, UCNV_RESET_TO_UNICODE);
-    } else {
-        /* set the converter state back into UConverter */
-        scsu->toUIsSingleByteMode=isSingleByteMode;
-        scsu->toUState=state;
-        scsu->toUQuoteWindow=quoteWindow;
-        scsu->toUDynamicWindow=dynamicWindow;
-        scsu->toUByteOne=byteOne;
+        cnv->invalidCharLength=i;
+
+        /* reset to deal with the next character */
+        state=readCommand;
     }
 
-finish:
+    /* set the converter state back into UConverter */
+    if(state==readCommand) {
+        /* not in a multi-byte sequence, reset toULength */
+        cnv->toULength=0;
+    }
+    scsu->toUIsSingleByteMode=isSingleByteMode;
+    scsu->toUState=state;
+    scsu->toUQuoteWindow=quoteWindow;
+    scsu->toUDynamicWindow=dynamicWindow;
+    scsu->toUByteOne=byteOne;
+
     /* write back the updated pointers */
     pArgs->source=(const char *)source;
     pArgs->target=target;
     return;
-
-callback:
-    /* call the callback function with all the preparations and post-processing */
-    /* update the arguments structure */
-    pArgs->source=(const char *)source;
-    pArgs->target=target;
-    /* the current bytes were copied to invalidCharBuffer before the goto callback jump */
-
-    /* set the converter state in UConverter to deal with the next character */
-    scsu->toUIsSingleByteMode=isSingleByteMode;
-    scsu->toUState=readCommand;
-    scsu->toUQuoteWindow=quoteWindow;
-    scsu->toUDynamicWindow=dynamicWindow;
-    scsu->toUByteOne=0;
-
-    /* call the callback function */
-    *pErrorCode=U_ILLEGAL_CHAR_FOUND;
-    cnv->fromCharErrorBehaviour(cnv->toUContext, pArgs, cnv->invalidCharBuffer, cnv->invalidCharLength, UCNV_ILLEGAL, pErrorCode);
-
-    /* get the converter state from UConverter */
-    isSingleByteMode=scsu->toUIsSingleByteMode;
-    state=scsu->toUState;
-    quoteWindow=scsu->toUQuoteWindow;
-    dynamicWindow=scsu->toUDynamicWindow;
-    byteOne=scsu->toUByteOne;
-
-    target=pArgs->target;
-
-    source=(const uint8_t *)pArgs->source;
-
-    /*
-     * If the callback overflowed the target, then we need to
-     * stop here with an overflow indication.
-     */
-    if(*pErrorCode==U_BUFFER_OVERFLOW_ERROR) {
-        goto endloop;
-    } else if(cnv->UCharErrorBufferLength>0) {
-        /* target is full */
-        *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
-        goto endloop;
-    } else if(U_FAILURE(*pErrorCode)) {
-        /* break on error */
-        _SCSUReset(cnv, UCNV_RESET_TO_UNICODE);
-        goto finish;
-    } else {
-        goto loop;
-    }
-}
-
-static UChar32
-_SCSUGetNextUChar(UConverterToUnicodeArgs *pArgs,
-                  UErrorCode *pErrorCode) {
-    return ucnv_getNextUCharFromToUImpl(pArgs, _SCSUToUnicode, TRUE, pErrorCode);
 }
 
 /* SCSU-from-Unicode conversion functions ----------------------------------- */
@@ -1095,7 +1035,6 @@ _SCSUFromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
 
     int32_t sourceIndex, nextSourceIndex;
 
-    uint32_t i;
     int32_t length;
 
     /* variables for compression heuristics */
@@ -1188,7 +1127,8 @@ getTrailSingle:
                         } else {
                             /* this is an unmatched lead code unit (1st surrogate) */
                             /* callback(illegal) */
-                            goto callback;
+                            *pErrorCode=U_ILLEGAL_CHAR_FOUND;
+                            goto endloop;
                         }
                     } else {
                         /* no more input */
@@ -1197,7 +1137,8 @@ getTrailSingle:
                 } else {
                     /* this is an unmatched trail code unit (2nd surrogate) */
                     /* callback(illegal) */
-                    goto callback;
+                    *pErrorCode=U_ILLEGAL_CHAR_FOUND;
+                    goto endloop;
                 }
 
                 /* compress supplementary character U+10000..U+10ffff */
@@ -1383,7 +1324,8 @@ getTrailUnicode:
                         } else {
                             /* this is an unmatched lead code unit (1st surrogate) */
                             /* callback(illegal) */
-                            goto callback;
+                            *pErrorCode=U_ILLEGAL_CHAR_FOUND;
+                            goto endloop;
                         }
                     } else {
                         /* no more input */
@@ -1392,7 +1334,8 @@ getTrailUnicode:
                 } else {
                     /* this is an unmatched trail code unit (2nd surrogate) */
                     /* callback(illegal) */
-                    goto callback;
+                    *pErrorCode=U_ILLEGAL_CHAR_FOUND;
+                    goto endloop;
                 }
 
                 /* compress supplementary character */
@@ -1443,22 +1386,19 @@ getTrailUnicode:
     }
 endloop:
 
-    if(pArgs->flush && source>=sourceLimit) {
-        /* reset the state for the next conversion */
-        if(c!=0 && U_SUCCESS(*pErrorCode)) {
-            /* a character byte sequence remains incomplete */
-            *pErrorCode=U_TRUNCATED_CHAR_FOUND;
-        }
-        _SCSUReset(cnv, UCNV_RESET_FROM_UNICODE);
-    } else {
-        /* set the converter state back into UConverter */
-        scsu->fromUIsSingleByteMode=isSingleByteMode;
-        scsu->fromUDynamicWindow=dynamicWindow;
-
-        cnv->fromUSurrogateLead=(UChar)c;
+    if(U_FAILURE(*pErrorCode) && *pErrorCode!=U_BUFFER_OVERFLOW_ERROR) {
+        /* c is an unpaired surrogate */
+        cnv->invalidUCharBuffer[0]=(UChar)c;
+        cnv->invalidUCharLength=1;
+        c=0;
     }
 
-finish:
+    /* set the converter state back into UConverter */
+    scsu->fromUIsSingleByteMode=isSingleByteMode;
+    scsu->fromUDynamicWindow=dynamicWindow;
+
+    cnv->fromUSurrogateLead=(UChar)c;
+
     /* write back the updated pointers */
     pArgs->source=source;
     pArgs->target=(char *)target;
@@ -1566,59 +1506,6 @@ outputBytes:
         c=0;
         goto endloop;
     }
-
-callback:
-    /* call the callback function with all the preparations and post-processing */
-    /* update the arguments structure */
-    pArgs->source=source;
-    pArgs->target=(char *)target;
-    pArgs->offsets=offsets;
-    /* set the converter state in UConverter to deal with the next character */
-    scsu->fromUIsSingleByteMode=isSingleByteMode;
-    scsu->fromUDynamicWindow=dynamicWindow;
-    cnv->fromUSurrogateLead=0;
-
-    /* write the code point as code units */
-    i=0;
-    UTF_APPEND_CHAR_UNSAFE(cnv->invalidUCharBuffer, i, c);
-    cnv->invalidUCharLength=(int8_t)i;
-
-    /* call the callback function */
-    *pErrorCode=U_ILLEGAL_CHAR_FOUND;
-    cnv->fromUCharErrorBehaviour(cnv->fromUContext, pArgs, cnv->invalidUCharBuffer, i, c, UCNV_ILLEGAL, pErrorCode);
-
-    /* get the converter state from UConverter */
-    isSingleByteMode=scsu->fromUIsSingleByteMode;
-    dynamicWindow=scsu->fromUDynamicWindow;
-    currentOffset=scsu->fromUDynamicOffsets[dynamicWindow];
-    c=cnv->fromUSurrogateLead;
-
-    /* update target and deal with offsets if necessary */
-    offsets=ucnv_updateCallbackOffsets(offsets, (int32_t)(((uint8_t *)pArgs->target)-target), sourceIndex);
-    target=(uint8_t *)pArgs->target;
-
-    /* update the source pointer and index */
-    sourceIndex=(int32_t)(nextSourceIndex+(pArgs->source-source));
-    source=pArgs->source;
-    targetCapacity=(int32_t)((uint8_t *)pArgs->targetLimit-target);
-
-    /*
-     * If the callback overflowed the target, then we need to
-     * stop here with an overflow indication.
-     */
-    if(*pErrorCode==U_BUFFER_OVERFLOW_ERROR) {
-        goto endloop;
-    } else if(cnv->charErrorBufferLength>0) {
-        /* target is full */
-        *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
-        goto endloop;
-    } else if(U_FAILURE(*pErrorCode)) {
-        /* break on error */
-        _SCSUReset(cnv, UCNV_RESET_FROM_UNICODE);
-        goto finish;
-    } else {
-        goto loop;
-    }
 }
 
 /*
@@ -1643,7 +1530,6 @@ _SCSUFromUnicode(UConverterFromUnicodeArgs *pArgs,
 
     uint32_t c, delta;
 
-    uint32_t i;
     int32_t length;
 
     /* variables for compression heuristics */
@@ -1720,7 +1606,8 @@ getTrailSingle:
                         } else {
                             /* this is an unmatched lead code unit (1st surrogate) */
                             /* callback(illegal) */
-                            goto callback;
+                            *pErrorCode=U_ILLEGAL_CHAR_FOUND;
+                            goto endloop;
                         }
                     } else {
                         /* no more input */
@@ -1729,7 +1616,8 @@ getTrailSingle:
                 } else {
                     /* this is an unmatched trail code unit (2nd surrogate) */
                     /* callback(illegal) */
-                    goto callback;
+                    *pErrorCode=U_ILLEGAL_CHAR_FOUND;
+                    goto endloop;
                 }
 
                 /* compress supplementary character U+10000..U+10ffff */
@@ -1902,7 +1790,8 @@ getTrailUnicode:
                         } else {
                             /* this is an unmatched lead code unit (1st surrogate) */
                             /* callback(illegal) */
-                            goto callback;
+                            *pErrorCode=U_ILLEGAL_CHAR_FOUND;
+                            goto endloop;
                         }
                     } else {
                         /* no more input */
@@ -1911,7 +1800,8 @@ getTrailUnicode:
                 } else {
                     /* this is an unmatched trail code unit (2nd surrogate) */
                     /* callback(illegal) */
-                    goto callback;
+                    *pErrorCode=U_ILLEGAL_CHAR_FOUND;
+                    goto endloop;
                 }
 
                 /* compress supplementary character */
@@ -1961,22 +1851,19 @@ getTrailUnicode:
     }
 endloop:
 
-    if(pArgs->flush && source>=sourceLimit) {
-        /* reset the state for the next conversion */
-        if(c!=0 && U_SUCCESS(*pErrorCode)) {
-            /* a character byte sequence remains incomplete */
-            *pErrorCode=U_TRUNCATED_CHAR_FOUND;
-        }
-        _SCSUReset(cnv, UCNV_RESET_FROM_UNICODE);
-    } else {
-        /* set the converter state back into UConverter */
-        scsu->fromUIsSingleByteMode=isSingleByteMode;
-        scsu->fromUDynamicWindow=dynamicWindow;
-
-        cnv->fromUSurrogateLead=(UChar)c;
+    if(U_FAILURE(*pErrorCode) && *pErrorCode!=U_BUFFER_OVERFLOW_ERROR) {
+        /* c is an unpaired surrogate */
+        cnv->invalidUCharBuffer[0]=(UChar)c;
+        cnv->invalidUCharLength=1;
+        c=0;
     }
 
-finish:
+    /* set the converter state back into UConverter */
+    scsu->fromUIsSingleByteMode=isSingleByteMode;
+    scsu->fromUDynamicWindow=dynamicWindow;
+
+    cnv->fromUSurrogateLead=(UChar)c;
+
     /* write back the updated pointers */
     pArgs->source=source;
     pArgs->target=(char *)target;
@@ -2051,54 +1938,6 @@ outputBytes:
         *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
         c=0;
         goto endloop;
-    }
-
-callback:
-    /* call the callback function with all the preparations and post-processing */
-    /* update the arguments structure */
-    pArgs->source=source;
-    pArgs->target=(char *)target;
-    /* set the converter state in UConverter to deal with the next character */
-    scsu->fromUIsSingleByteMode=isSingleByteMode;
-    scsu->fromUDynamicWindow=dynamicWindow;
-    cnv->fromUSurrogateLead=0;
-
-    /* write the code point as code units */
-    i=0;
-    UTF_APPEND_CHAR_UNSAFE(cnv->invalidUCharBuffer, i, c);
-    cnv->invalidUCharLength=(int8_t)i;
-
-    /* call the callback function */
-    *pErrorCode=U_ILLEGAL_CHAR_FOUND;
-    cnv->fromUCharErrorBehaviour(cnv->fromUContext, pArgs, cnv->invalidUCharBuffer, i, c, UCNV_ILLEGAL, pErrorCode);
-
-    /* get the converter state from UConverter */
-    isSingleByteMode=scsu->fromUIsSingleByteMode;
-    dynamicWindow=scsu->fromUDynamicWindow;
-    currentOffset=scsu->fromUDynamicOffsets[dynamicWindow];
-    c=cnv->fromUSurrogateLead;
-
-    target=(uint8_t *)pArgs->target;
-
-    source=pArgs->source;
-    targetCapacity=(int32_t)((uint8_t *)pArgs->targetLimit-target);
-
-    /*
-     * If the callback overflowed the target, then we need to
-     * stop here with an overflow indication.
-     */
-    if(*pErrorCode==U_BUFFER_OVERFLOW_ERROR) {
-        goto endloop;
-    } else if(cnv->charErrorBufferLength>0) {
-        /* target is full */
-        *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
-        goto endloop;
-    } else if(U_FAILURE(*pErrorCode)) {
-        /* break on error */
-        _SCSUReset(cnv, UCNV_RESET_FROM_UNICODE);
-        goto finish;
-    } else {
-        goto loop;
     }
 }
 
@@ -2194,7 +2033,7 @@ static const UConverterImpl _SCSUImpl={
     _SCSUToUnicodeWithOffsets,
     _SCSUFromUnicode,
     _SCSUFromUnicodeWithOffsets,
-    _SCSUGetNextUChar,
+    NULL,
 
     NULL,
     _SCSUGetName,

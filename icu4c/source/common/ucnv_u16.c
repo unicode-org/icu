@@ -35,7 +35,7 @@ _UTF16PEToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
     int32_t count;
     int32_t sourceIndex     = 0;
 
-    if(length <= 0 && cnv->toUnicodeStatus == 0) {
+    if(length <= 0) {
         /* no input, nothing to do */
         return;
     }
@@ -46,14 +46,14 @@ _UTF16PEToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
     }
 
     /* complete a partial UChar from the last call */
-    if(length != 0 && cnv->toUnicodeStatus != 0) {
+    if(length != 0 && cnv->toULength != 0) {
         /*
          * copy the byte from the last call and the first one here into the target,
          * byte-wise to keep the platform endianness
          */
         uint8_t *p = (uint8_t *)target++;
-        *p++ = (uint8_t)cnv->toUnicodeStatus;
-        cnv->toUnicodeStatus = 0;
+        *p++ = cnv->toUBytes[0];
+        cnv->toULength = 0;
         *p = *source++;
         --length;
         --targetCapacity;
@@ -88,16 +88,9 @@ _UTF16PEToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
         /* it must be targetCapacity==0 because otherwise the above would have copied more */
         *pErrorCode = U_BUFFER_OVERFLOW_ERROR;
     } else if(length == 1) {
-        if(pArgs->flush) {
-            /* a UChar remains incomplete */
-            *pErrorCode = U_TRUNCATED_CHAR_FOUND;
-        } else {
-            /* consume the last byte and store it, making sure that it will never set the status to 0 */
-            cnv->toUnicodeStatus = *source++ | 0x100;
-        }
-    } else /* length==0 */ if(cnv->toUnicodeStatus!=0 && pArgs->flush) {
-        /* a UChar remains incomplete */
-        *pErrorCode = U_TRUNCATED_CHAR_FOUND;
+        /* consume the last byte and store it */
+        cnv->toUBytes[0]=*source++;
+        cnv->toULength=1;
     }
 
     /* write back the updated pointers */
@@ -199,7 +192,7 @@ _UTF16OEToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
     int32_t count;
     int32_t sourceIndex     = 0;
 
-    if(length <= 0 && cnv->toUnicodeStatus == 0) {
+    if(length <= 0) {
         /* no input, nothing to do */
         return;
     }
@@ -210,14 +203,14 @@ _UTF16OEToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
     }
 
     /* complete a partial UChar from the last call */
-    if(length != 0 && cnv->toUnicodeStatus != 0) {
+    if(length != 0 && cnv->toULength != 0) {
         /*
          * copy the byte from the last call and the first one here into the target,
          * byte-wise, reversing the platform endianness
          */
         *target8++ = *source++;
-        *target8++ = (uint8_t)cnv->toUnicodeStatus;
-        cnv->toUnicodeStatus = 0;
+        *target8++ = cnv->toUBytes[0];
+        cnv->toULength = 0;
         ++target;
         --length;
         --targetCapacity;
@@ -260,16 +253,8 @@ _UTF16OEToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
         /* it must be targetCapacity==0 because otherwise the above would have copied more */
         *pErrorCode = U_BUFFER_OVERFLOW_ERROR;
     } else if(length == 1) {
-        if(pArgs->flush) {
-            /* a UChar remains incomplete */
-            *pErrorCode = U_TRUNCATED_CHAR_FOUND;
-        } else {
-            /* consume the last byte and store it, making sure that it will never set the status to 0 */
-            cnv->toUnicodeStatus = *source++ | 0x100;
-        }
-    } else /* length==0 */ if(cnv->toUnicodeStatus!=0 && pArgs->flush) {
-        /* a UChar remains incomplete */
-        *pErrorCode = U_TRUNCATED_CHAR_FOUND;
+        cnv->toUBytes[0]=*source++;
+        cnv->toULength=1;
     }
 
     /* write back the updated pointers */
@@ -727,12 +712,12 @@ _UTF16ToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
             _UTF16BEToUnicodeWithOffsets(pArgs, pErrorCode);
             pArgs->source=source;
             pArgs->sourceLimit=sourceLimit;
+            state=8;
             break;
         }
-        cnv->mode=0; /* reset */
-    } else {
-        cnv->mode=state;
     }
+
+    cnv->mode=state;
 }
 
 static UChar32
@@ -744,7 +729,7 @@ _UTF16GetNextUChar(UConverterToUnicodeArgs *pArgs,
     case 9:
         return T_UConverter_getNextUChar_UTF16_LE(pArgs, pErrorCode);
     default:
-        return ucnv_getNextUCharFromToUImpl(pArgs, _UTF16ToUnicodeWithOffsets, TRUE, pErrorCode);
+        return UCNV_GET_NEXT_UCHAR_USE_TO_U;
     }
 }
 
