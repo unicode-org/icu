@@ -401,7 +401,7 @@ void log_verbose(const char* pattern, ...)
 
 int processArgs(const TestNode* root,
              int argc,
-             const char** argv)
+             const char* const argv[])
 {
 /**
  * This main will parse the l, v, h, n, and path arguments
@@ -410,10 +410,10 @@ int processArgs(const TestNode* root,
   int                i;
   int                doList = FALSE;
   int                runAll = FALSE;
-  int                           subtreeOptionSeen = FALSE;
+  int                subtreeOptionSeen = FALSE;
 
-  int                           errorCount = 0;
-  
+  int                errorCount = 0;
+
   toRun = root;
   VERBOSITY = FALSE;
   ERR_MSG = TRUE;

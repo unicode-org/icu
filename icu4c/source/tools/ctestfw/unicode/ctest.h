@@ -161,7 +161,7 @@ T_CTEST_API void log_verbose(const char* pattern, ...);
 
 T_CTEST_API int processArgs(const TestNode* root,
                              int argc,
-                             const char** argv);
+                             const char* const argv[]);
 
 
 
