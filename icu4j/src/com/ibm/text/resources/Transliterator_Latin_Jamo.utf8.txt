@@ -386,6 +386,15 @@
   {p} $latinMedial <> $Pi;
   {h} $latinMedial <> $Hi;
 
+# 'r' in final position.  Because of the equivalency of the 'l' and
+# 'r' jamo (the glyphs are the same), we try to provide the same
+# equivalency in Latin-Jamo.  The 'l' to 'r' conversion is handled
+# below.  If we see an 'r' in an apparent final position, treat it
+# like 'l'.  For example, "karka" => Ki A R EU Ki A without this rule.
+# Instead, we want Ki A L Ki A.
+
+  $jamoMedial {r} $latinInitial > | l;
+
 # Initial + Final: If we match the next rule, we have initial then
 # final consonant with no intervening medial.  We insert the null
 # vowel BEFORE it to create a well-formed syllable.  (In the next rule
