@@ -456,7 +456,7 @@ typedef enum {
 } UColCETags;
 
 typedef struct {
-      UChar32 variableTopValue;
+      uint32_t variableTopValue;
       UColAttributeValue frenchCollation;
       UColAttributeValue alternateHandling; /* attribute for handling variable elements*/
       UColAttributeValue caseFirst;         /* who goes first, lower case or uppercase */
@@ -532,8 +532,6 @@ struct UCollator {
     const UChar *contractionIndex;
     const uint32_t *contractionCEs;
     const uint8_t *scriptOrder;
-    uint8_t variableMax1;
-    uint8_t variableMax2;
     uint8_t caseSwitch;
     uint8_t tertiaryCommon;
     uint8_t tertiaryMask;
@@ -543,7 +541,7 @@ struct UCollator {
     uint8_t tertiaryTopCount;
     uint8_t tertiaryBottomCount;
 
-    UChar32 variableTopValue;
+    uint32_t variableTopValue;
     UColAttributeValue frenchCollation;
     UColAttributeValue alternateHandling; /* attribute for handling variable elements*/
     UColAttributeValue caseFirst;         /* who goes first, lower case or uppercase */

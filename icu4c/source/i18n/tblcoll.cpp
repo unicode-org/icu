@@ -551,6 +551,35 @@ UColAttributeValue RuleBasedCollator::getAttribute(UColAttribute attr,
   return ucol_getAttribute(ucollator, attr, &status);
 }
 
+uint32_t RuleBasedCollator::setVariableTop(const UChar *varTop, int32_t len, UErrorCode &status) {
+  return ucol_setVariableTop(ucollator, varTop, len, &status);
+}
+
+uint32_t RuleBasedCollator::setVariableTop(const UnicodeString varTop, UErrorCode &status) {
+  UChar sStart[STACK_BUFFER_LENGTH_];
+  UChar *uSource = sStart;
+  uint32_t sourceLen = varTop.length();
+
+  if(sourceLen >= STACK_BUFFER_LENGTH_)
+    uSource = new UChar[sourceLen+1];
+
+  varTop.extract(0, sourceLen, uSource);
+  uSource[sourceLen] = 0;
+  uint32_t result = ucol_setVariableTop(ucollator, uSource, sourceLen, &status);
+  if(sStart != uSource)
+    delete[] uSource;
+
+  return result;
+}
+
+void RuleBasedCollator::setVariableTop(const uint32_t varTop, UErrorCode &status) {
+  ucol_restoreVariableTop(ucollator, varTop, &status);
+}
+
+uint32_t RuleBasedCollator::getVariableTop(UErrorCode &status) const {
+  return ucol_getVariableTop(ucollator, &status);
+}
+
 Collator* RuleBasedCollator::safeClone(void)
 {
   UErrorCode intStatus = U_ZERO_ERROR;

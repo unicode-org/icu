@@ -2672,10 +2672,8 @@ int32_t ucol_getSortKeySize(const UCollator *coll, collIterate *s, int32_t curre
     UBool  qShifted = shifted  && (compareQuad == 0);
     UBool  isFrenchSec = (coll->frenchCollation == UCOL_ON) && (compareSec == 0);
 
-    //uint8_t variableMax1 = coll->variableMax1;
-    //uint8_t variableMax2 = coll->variableMax2;
-    uint32_t variableMax = (coll->variableMax1<<8) | coll->variableMax2;
-    uint8_t UCOL_COMMON_BOT4 = (uint8_t)(coll->variableMax1+1);
+    uint32_t variableTopValue = coll->variableTopValue;
+    uint8_t UCOL_COMMON_BOT4 = (uint8_t)((coll->variableTopValue>>8)+1);
     uint8_t UCOL_BOT_COUNT4 = (uint8_t)(0xFF - UCOL_COMMON_BOT4);
 
     uint32_t order = UCOL_NO_MORE_CES;
@@ -2719,9 +2717,7 @@ int32_t ucol_getSortKeySize(const UCollator *coll, collIterate *s, int32_t curre
           primary1 = (uint8_t)(order >> 8);
 
 
-          //if(shifted && ((notIsContinuation && primary1 <= variableMax1 && primary1 > 0
-          //  && (primary1 < variableMax1 || primary1 == variableMax1 && primary2 < variableMax2))
-          if(shifted && ((notIsContinuation && order <= variableMax && primary1 > 0)
+          if(shifted && ((notIsContinuation && order <= variableTopValue && primary1 > 0)
             || (!notIsContinuation && wasShifted))) {
             if(compareQuad == 0) {
               if(c4 > 0) {
@@ -2898,8 +2894,8 @@ ucol_calcSortKey(const    UCollator    *coll,
 
     int32_t len = (sourceLength == -1 ? u_strlen(source) : sourceLength);
 
-    uint32_t variableMax = (coll->variableMax1<<8) | coll->variableMax2;
-    uint8_t UCOL_COMMON_BOT4 = (uint8_t)(coll->variableMax1+1);
+    uint32_t variableTopValue = coll->variableTopValue;
+    uint8_t UCOL_COMMON_BOT4 = (uint8_t)((coll->variableTopValue>>8)+1);
     uint8_t UCOL_BOT_COUNT4 = (uint8_t)(0xFF - UCOL_COMMON_BOT4);
 
     UColAttributeValue strength = coll->strength;
@@ -2975,7 +2971,7 @@ ucol_calcSortKey(const    UCollator    *coll,
     uint8_t tertiary = 0;
     uint8_t caseSwitch = coll->caseSwitch;
     uint8_t tertiaryMask = coll->tertiaryMask;
-    int32_t tertiaryAddition = coll->tertiaryAddition;
+    int8_t tertiaryAddition = (int8_t)coll->tertiaryAddition;
     uint8_t tertiaryTop = coll->tertiaryTop;
     uint8_t tertiaryBottom = coll->tertiaryBottom;
     uint8_t tertiaryCommon = coll->tertiaryCommon;
@@ -3023,7 +3019,7 @@ ucol_calcSortKey(const    UCollator    *coll,
               }
             }
 
-            if(shifted && ((notIsContinuation && order <= variableMax && primary1 > 0)
+            if(shifted && ((notIsContinuation && order <= variableTopValue && primary1 > 0)
               || (!notIsContinuation && wasShifted))) {
               if(count4 > 0) {
                 while (count4 >= UCOL_BOT_COUNT4) {
@@ -3471,7 +3467,7 @@ ucol_calcSortKeySimpleTertiary(const    UCollator    *coll,
     uint8_t tertiary = 0;
     uint8_t caseSwitch = coll->caseSwitch;
     uint8_t tertiaryMask = coll->tertiaryMask;
-    int8_t tertiaryAddition = coll->tertiaryAddition;
+    int8_t tertiaryAddition = (int8_t)coll->tertiaryAddition;
     uint8_t tertiaryTop = coll->tertiaryTop;
     uint8_t tertiaryBottom = coll->tertiaryBottom;
     uint8_t tertiaryCommon = coll->tertiaryCommon;
@@ -3771,15 +3767,6 @@ U_CAPI char U_EXPORT2 *ucol_sortKeyToString(const UCollator *coll, const uint8_t
 /* there are new APIs and some compatibility APIs                           */
 /****************************************************************************/
 void ucol_updateInternalState(UCollator *coll) {
-/*
-      uint32_t variableMaxCE = ucmp32_get(coll->mapping, coll->variableTopValue);
-      coll->variableMax1 = (uint8_t)((variableMaxCE & 0xFF000000) >> 24);
-      coll->variableMax2 = (uint8_t)((variableMaxCE & 0x00FF0000) >> 16);
-*/
-      coll->variableMax1 = (uint8_t)((coll->variableTopValue & 0xFF00) >> 8);
-      coll->variableMax2 = (uint8_t)((coll->variableTopValue & 0x00FF));
-
-
       if(coll->caseFirst == UCOL_UPPER_FIRST) {
         coll->caseSwitch = UCOL_CASE_SWITCH;
       } else {
@@ -3820,8 +3807,8 @@ void ucol_updateInternalState(UCollator *coll) {
 
 }
 
-U_CAPI uint32_t ucol_setVariableTop(UCollator *coll, UChar *varTop, uint32_t len, UErrorCode *status) {
-  if(U_FAILURE(*status)) {
+U_CAPI uint32_t ucol_setVariableTop(UCollator *coll, const UChar *varTop, int32_t len, UErrorCode *status) {
+  if(U_FAILURE(*status) || coll == NULL) {
     return 0;
   }
   if(len == -1) {
@@ -3835,16 +3822,43 @@ U_CAPI uint32_t ucol_setVariableTop(UCollator *coll, UChar *varTop, uint32_t len
   collIterate s;
   IInit_collIterate(coll, varTop, len, &s);
 
-  ucol_IGetNextCE(coll, &s, status);
+  uint32_t CE = ucol_IGetNextCE(coll, &s, status);
 
-  *status = U_UNSUPPORTED_ERROR;
-  return 0;
+  if(s.pos != s.endp) {
+    *status = U_CE_NOT_FOUND_ERROR;
+    return 0;
+  }
 
+  uint32_t nextCE = ucol_IGetNextCE(coll, &s, status);
+
+  if(isContinuation(nextCE) && (nextCE & UCOL_PRIMARYMASK) != 0) {
+    *status = U_PRIMARY_TOO_LONG_ERROR;
+    return 0;
+  }
+
+  coll->variableTopValue = (CE & UCOL_PRIMARYMASK)>>16;
+
+  return CE & UCOL_PRIMARYMASK;
 }
 
+U_CAPI uint32_t ucol_getVariableTop(const UCollator *coll, UErrorCode *status) {
+  if(U_FAILURE(*status) || coll == NULL) {
+    return 0;
+  }
+  return coll->variableTopValue<<16;
+}
 
+U_CAPI void ucol_restoreVariableTop(UCollator *coll, const uint32_t varTop, UErrorCode *status) {
+  if(U_FAILURE(*status) || coll == NULL) {
+    return;
+  }
+  coll->variableTopValue = (varTop & UCOL_PRIMARYMASK)>>16;
+}
 /* Attribute setter API */
 U_CAPI void ucol_setAttribute(UCollator *coll, UColAttribute attr, UColAttributeValue value, UErrorCode *status) {
+    if(U_FAILURE(*status) || coll == NULL) {
+      return;
+    }
     switch(attr) {
     case UCOL_FRENCH_COLLATION: /* attribute for direction of secondary weights*/
         if(value == UCOL_ON) {
@@ -3942,6 +3956,9 @@ U_CAPI void ucol_setAttribute(UCollator *coll, UColAttribute attr, UColAttribute
 }
 
 U_CAPI UColAttributeValue ucol_getAttribute(const UCollator *coll, UColAttribute attr, UErrorCode *status) {
+    if(U_FAILURE(*status) || coll == NULL) {
+      return UCOL_DEFAULT;
+    }
     switch(attr) {
     case UCOL_FRENCH_COLLATION: /* attribute for direction of secondary weights*/
         return coll->frenchCollation;
@@ -4456,7 +4473,7 @@ ucol_strcoll( const UCollator    *coll,
     uint8_t tertiaryMask = coll->tertiaryMask;
 
     // This is the lowest primary value that will not be ignored if shifted
-    uint32_t LVT = (shifted)?((coll->variableMax1)<<24 | (coll->variableMax2)<<16):0;
+    uint32_t LVT = (shifted)?(coll->variableTopValue<<16):0;
 
     UCollationResult result = UCOL_EQUAL;
     UErrorCode status = U_ZERO_ERROR;
