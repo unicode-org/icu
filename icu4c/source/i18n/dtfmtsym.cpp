@@ -111,6 +111,24 @@ static const UChar gLastResortZoneStrings[5][4] =
     {0x0047, 0x004D, 0x0054, 0x0000}  /* "GMT" */
 };
 
+/* Sizes for the last resort string arrays */
+typedef enum LastResortSize {
+    kMonthNum = 13,
+    kMonthLen = 3,
+
+    kDayNum = 8,
+    kDayLen = 2,
+
+    kAmPmNum = 2,
+    kAmPmLen = 3,
+
+    kEraNum = 2,
+    kEraLen = 3,
+
+    kZoneNum = 5,
+    kZoneLen = 4
+} LastResortSize;
+
 U_NAMESPACE_BEGIN
 
 UOBJECT_DEFINE_RTTI_IMPLEMENTATION(DateFormatSymbols)
@@ -509,8 +527,8 @@ DateFormatSymbols::setLocalPatternChars(const UnicodeString& newLocalPatternChar
 
 //------------------------------------------------------
 
-void
-DateFormatSymbols::initField(UnicodeString **field, int32_t& length, const UResourceBundle *data, UErrorCode &status) {
+static void
+initField(UnicodeString **field, int32_t& length, const UResourceBundle *data, UErrorCode &status) {
     if (U_SUCCESS(status)) {
         int32_t strLen = 0;
         length = ures_getSize(data);
@@ -529,8 +547,8 @@ DateFormatSymbols::initField(UnicodeString **field, int32_t& length, const UReso
     }
 }
 
-void
-DateFormatSymbols::initField(UnicodeString **field, int32_t& length, const UChar *data, LastResortSize numStr, LastResortSize strLen, UErrorCode &status) {
+static void
+initField(UnicodeString **field, int32_t& length, const UChar *data, LastResortSize numStr, LastResortSize strLen, UErrorCode &status) {
     if (U_SUCCESS(status)) {
         length = numStr;
         *field = newUnicodeStringArray((size_t)numStr);

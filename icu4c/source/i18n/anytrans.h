@@ -124,12 +124,6 @@ private:
     static void registerIDs();
 
     friend class Transliterator; // for registerIDs()
-
-    /**
-     * Return the script code for a given name, or
-     * USCRIPT_INVALID_CODE if not found.
-     */
-    static UScriptCode scriptNameToCode(const UnicodeString& name);
 };
 
 U_NAMESPACE_END
