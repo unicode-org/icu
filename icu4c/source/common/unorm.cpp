@@ -333,7 +333,7 @@ _mergeOrdered(const UChar *start, UChar *p, const UChar *limit) {
 
     while(p<limit) {
         pSplit=p;
-        cc=_getNextCC(p, limit, c, c2);
+        cc=_getNextCC((const UChar*)p, limit, c, c2);
         if(cc==0) {
             /* does not bubble back */
             trailCC=0;
