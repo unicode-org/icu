@@ -3,13 +3,15 @@
 # Corporation and others. All Rights Reserved.
 #--------------------------------------------------------------------
 # $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/data/Attic/Transliterator_Cyrillic_Latin.txt,v $
-# $Date: 2001/11/02 19:07:05 $
-# $Revision: 1.4 $
+# $Date: 2001/11/20 00:06:25 $
+# $Revision: 1.5 $
 #--------------------------------------------------------------------
 # TODO: add remaining characters
 # Should add variants for Russian-English, Russian-German
 # Those can use this as a base, and then remap cases
 # like a $hat to ya or ja.
+
+:: [\u0000-\u007F [:Cyrillic:] [:nonspacing mark:]] ;
 
 :: NFD (NFC) ;
 
@@ -300,3 +302,5 @@ $ignore = [[:Mark:]''] * ;
 | ks < x ;
 
 :: NFC (NFD) ;
+# note: a global filter is more efficient, but MUST include all source chars!!
+:: ([\u0000-\u007E \u02B9 \u02BA [:Latin:] [:nonspacing mark:]]);
