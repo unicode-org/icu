@@ -13,7 +13,7 @@ import com.ibm.icu.lang.*;
 
 /**
  * @author Alan Liu
- * @version $RCSfile: NormalizationTransliterator.java,v $ $Revision: 1.21 $ $Date: 2003/12/20 03:07:10 $
+ * @version $RCSfile: NormalizationTransliterator.java,v $ $Revision: 1.22 $ $Date: 2004/02/20 00:16:34 $
  */
 final class NormalizationTransliterator extends Transliterator {
     
@@ -46,8 +46,8 @@ final class NormalizationTransliterator extends Transliterator {
         D = 0, C = 1, KD= 2, KC = 3;
     
     // Instance data, simply pointer to one of the sets below
-    final UnicodeSet UNSAFE_START;
-    final UnicodeSet SKIPPABLE;
+    final UnicodeSet unsafeStart;
+    final UnicodeSet skippable;
     
     /**
      * System registration hook.
@@ -130,8 +130,11 @@ final class NormalizationTransliterator extends Transliterator {
         super(id, null);
         mode = m;
         options = opt;
-        UNSAFE_START = UNSAFE_STARTS[startChoice];
-        SKIPPABLE = SKIPPABLES[startChoice];
+        if (UNSAFE_STARTS[startChoice] == null) {
+            initStatics(startChoice);
+        }
+        unsafeStart = UNSAFE_STARTS[startChoice];
+        skippable = SKIPPABLES[startChoice];
     }
 
     /**
@@ -158,7 +161,7 @@ final class NormalizationTransliterator extends Transliterator {
         int cp;
         for (int i = start+1; i < limit; i += UTF16.getCharCount(cp)) {
             cp = text.char32At(i);
-            if (UCharacter.getCombiningClass(cp) == 0 && !UNSAFE_START.contains(cp)) {
+            if (UCharacter.getCombiningClass(cp) == 0 && !unsafeStart.contains(cp)) {
                 int delta = convert(text, lastSafe, i, null);
                 i += delta;
                 limit += delta;
@@ -171,8 +174,8 @@ final class NormalizationTransliterator extends Transliterator {
             overallDelta += delta;
             lastSafe = limit + delta;
         } else {
-            // We are incremental, so accept the last characters IF they turn into SKIPPABLEs
-            int delta = convert(text, lastSafe, limit, SKIPPABLE);
+            // We are incremental, so accept the last characters IF they turn into skippables
+            int delta = convert(text, lastSafe, limit, skippable);
             if (delta != Integer.MIN_VALUE) {
                 overallDelta += delta;
                 lastSafe = limit + delta;
@@ -202,7 +205,7 @@ final class NormalizationTransliterator extends Transliterator {
         
         // verify OK, if specified
         if (verify != null) {
-            boolean skip = !SKIPPABLE.containsAll(output);
+            boolean skip = !skippable.containsAll(output);
             if (DEBUG) {
                 System.out.println((skip ? "  SKIP: " : "NOSKIP: ") 
                     + com.ibm.icu.impl.Utility.escape(input) 
@@ -220,18 +223,16 @@ final class NormalizationTransliterator extends Transliterator {
     
     private char buffer[] = new char[30];
     
-    static {
-        UNSAFE_STARTS[D] = new UnicodeSet("[\u0F73\u0F75\u0F81]", false);
-        UNSAFE_STARTS[C] = new UnicodeSet("[\u09BE\u09D7\u0B3E\u0B56-\u0B57\u0BBE\u0BD7\u0CC2\u0CD5-\u0CD6"
-            + "\u0D3E\u0D57\u0DCF\u0DDF\u0F73\u0F75\u0F81\u102E\u1161-\u1175\u11A8-\u11C2]", false);
-        UNSAFE_STARTS[KD] = new UnicodeSet("[\u0F73\u0F75\u0F81\uFF9E-\uFF9F]", false);
-        UNSAFE_STARTS[KC] = new UnicodeSet("[\u09BE\u09D7\u0B3E\u0B56-\u0B57\u0BBE\u0BD7\u0CC2\u0CD5-\u0CD6"
-            + "\u0D3E\u0D57\u0DCF\u0DDF\u0F73\u0F75\u0F81\u102E\u1161-\u1175\u11A8-\u11C2\u3133\u3135-\u3136"
-            + "\u313A-\u313F\u314F-\u3163\uFF9E-\uFF9F\uFFA3\uFFA5-\uFFA6\uFFAA-\uFFAF\uFFC2-\uFFC7\uFFCA-\uFFCF"
-            + "\uFFD2-\uFFD7\uFFDA-\uFFDC]", false);
-            
-        SKIPPABLES[D] = new UnicodeSet(
-	        "[^\\u00C0-\\u00C5\\u00C7-\\u00CF\\u00D1-\\u00D6\\u00D9-\\u00DD"
+    /**
+     * Initialize statics for the given mode.  This is slow, so we
+     * defer it.
+     */
+    private static final void initStatics(int startChoice) {
+        switch (startChoice) {
+        case D:
+          UNSAFE_STARTS[D] = new UnicodeSet("[\u0F73\u0F75\u0F81]", false);
+          SKIPPABLES[D] = new UnicodeSet(
+            "[^\\u00C0-\\u00C5\\u00C7-\\u00CF\\u00D1-\\u00D6\\u00D9-\\u00DD"
             + "\\u00E0-\\u00E5\\u00E7-\\u00EF\\u00F1-\\u00F6\\u00F9-\\u00FD"
             + "\\u00FF-\\u010F\\u0112-\\u0125\\u0128-\\u0130\\u0134-\\u0137"
             + "\\u0139-\\u013E\\u0143-\\u0148\\u014C-\\u0151\\u0154-\\u0165"
@@ -283,9 +284,12 @@ final class NormalizationTransliterator extends Transliterator {
             + "\\U0001D16D-\\U0001D172\\U0001D17B-\\U0001D182\\U0001D185-"
             + "\\U0001D18B\\U0001D1AA-\\U0001D1AD\\U0001D1BB-\\U0001D1C0\\U0002"
             + "F800-\\U0002FA1D]", false);
-
-        SKIPPABLES[C] = new UnicodeSet(
-	        "[^<->A-PR-Za-pr-z\\u00A8\\u00C0-\\u00CF\\u00D1-\\u00D6\\u00D8-"
+          break;
+        case C:
+          UNSAFE_STARTS[C] = new UnicodeSet("[\u09BE\u09D7\u0B3E\u0B56-\u0B57\u0BBE\u0BD7\u0CC2\u0CD5-\u0CD6"
+            + "\u0D3E\u0D57\u0DCF\u0DDF\u0F73\u0F75\u0F81\u102E\u1161-\u1175\u11A8-\u11C2]", false);
+          SKIPPABLES[C] = new UnicodeSet(
+            "[^<->A-PR-Za-pr-z\\u00A8\\u00C0-\\u00CF\\u00D1-\\u00D6\\u00D8-"
             + "\\u00DD\\u00E0-\\u00EF\\u00F1-\\u00F6\\u00F8-\\u00FD\\u00FF-"
             + "\\u0103\\u0106-\\u010F\\u0112-\\u0117\\u011A-\\u0121\\u0124-"
             + "\\u0125\\u0128-\\u012D\\u0130\\u0139-\\u013A\\u013D-\\u013E"
@@ -390,9 +394,11 @@ final class NormalizationTransliterator extends Transliterator {
             + "\\U0001D15E-\\U0001D169\\U0001D16D-\\U0001D172\\U0001D17B-"
             + "\\U0001D182\\U0001D185-\\U0001D18B\\U0001D1AA-\\U0001D1AD\\U0001"
             + "D1BB-\\U0001D1C0\\U0002F800-\\U0002FA1D]", false);
-
-        SKIPPABLES[KD] = new UnicodeSet(
-	        "[^\\u00A0\\u00A8\\u00AA\\u00AF\\u00B2-\\u00B5\\u00B8-\\u00BA"
+          break;
+        case KD:
+          UNSAFE_STARTS[KD] = new UnicodeSet("[\u0F73\u0F75\u0F81\uFF9E-\uFF9F]", false);
+          SKIPPABLES[KD] = new UnicodeSet(
+            "[^\\u00A0\\u00A8\\u00AA\\u00AF\\u00B2-\\u00B5\\u00B8-\\u00BA"
             + "\\u00BC-\\u00BE\\u00C0-\\u00C5\\u00C7-\\u00CF\\u00D1-\\u00D6"
             + "\\u00D9-\\u00DD\\u00E0-\\u00E5\\u00E7-\\u00EF\\u00F1-\\u00F6"
             + "\\u00F9-\\u00FD\\u00FF-\\u010F\\u0112-\\u0125\\u0128-\\u0130"
@@ -469,9 +475,14 @@ final class NormalizationTransliterator extends Transliterator {
             + "\\U0001D540-\\U0001D544\\U0001D546\\U0001D54A-\\U0001D550\\U0001"
             + "D552-\\U0001D6A3\\U0001D6A8-\\U0001D7C9\\U0001D7CE-\\U0001D7FF"
             + "\\U0002F800-\\U0002FA1D]", false);
-
-        SKIPPABLES[KC] = new UnicodeSet(
-	        "[^<->A-PR-Za-pr-z\\u00A0\\u00A8\\u00AA\\u00AF\\u00B2-\\u00B5"
+          break;
+        case KC:
+          UNSAFE_STARTS[KC] = new UnicodeSet("[\u09BE\u09D7\u0B3E\u0B56-\u0B57\u0BBE\u0BD7\u0CC2\u0CD5-\u0CD6"
+            + "\u0D3E\u0D57\u0DCF\u0DDF\u0F73\u0F75\u0F81\u102E\u1161-\u1175\u11A8-\u11C2\u3133\u3135-\u3136"
+            + "\u313A-\u313F\u314F-\u3163\uFF9E-\uFF9F\uFFA3\uFFA5-\uFFA6\uFFAA-\uFFAF\uFFC2-\uFFC7\uFFCA-\uFFCF"
+            + "\uFFD2-\uFFD7\uFFDA-\uFFDC]", false);
+          SKIPPABLES[KC] = new UnicodeSet(
+            "[^<->A-PR-Za-pr-z\\u00A0\\u00A8\\u00AA\\u00AF\\u00B2-\\u00B5"
             + "\\u00B8-\\u00BA\\u00BC-\\u00BE\\u00C0-\\u00CF\\u00D1-\\u00D6"
             + "\\u00D8-\\u00DD\\u00E0-\\u00EF\\u00F1-\\u00F6\\u00F8-\\u00FD"
             + "\\u00FF-\\u0103\\u0106-\\u010F\\u0112-\\u0117\\u011A-\\u0121"
@@ -602,5 +613,7 @@ final class NormalizationTransliterator extends Transliterator {
             + "\\U0001D53B-\\U0001D53E\\U0001D540-\\U0001D544\\U0001D546\\U0001"
             + "D54A-\\U0001D550\\U0001D552-\\U0001D6A3\\U0001D6A8-\\U0001D7C9"
             + "\\U0001D7CE-\\U0001D7FF\\U0002F800-\\U0002FA1D]", false);
+          break;
+        }
     }    
 }
