@@ -38,9 +38,9 @@ U_CDECL_END
 /* Protos */
 static void usage(void);
 static void version(void);
-static void processFile(const char *filename, const char* cp, UErrorCode *status);
-static char* make_res_filename(const char *filename, UErrorCode *status);
-static char* make_col_filename(const char *filename, UErrorCode *status);
+static void processFile(const char *filename, const char* cp, const char *outputDir, UErrorCode *status);
+static char* make_res_filename(const char *filename, const char *outputDir, UErrorCode *status);
+static char* make_col_filename(const char *filename, const char *outputDir, UErrorCode *status);
 static void make_col(const char *filename, UErrorCode *status);
 int main(int argc, char **argv);
 
@@ -51,7 +51,8 @@ int main(int argc, char **argv);
 /* The version of genrb */
 #define GENRB_VERSION "1.0"
 
-  char *encoding = "";
+  char *encoding = ""; 
+
 
 int
 main(int argc,
@@ -64,6 +65,7 @@ main(int argc,
   int i;
   char *arg;
   UErrorCode status;
+  char *outputDir = NULL; /* NULL = no output directory, use current */
 
 
   if(argc == 1)
@@ -91,6 +93,9 @@ main(int argc,
             encoding = 0;
         }
 
+    }
+    else if(uprv_strncmp(arg, "-D", 2) == 0) {
+        outputDir = arg+2;
     }
 
     /* POSIX.1 says all arguments after -- are not options */
@@ -126,7 +131,7 @@ main(int argc,
   for(i = optind; i < argc; ++i) {
     status = U_ZERO_ERROR;
     arg = getLongPathname(argv[i]);
-    processFile(arg, encoding, &status);
+    processFile(arg, encoding, outputDir, &status);
     make_col(arg, &status);
     if(U_FAILURE(status)) {
       printf("genrb: %s processing file \"%s\"\n", u_errorName(status), arg);
@@ -148,6 +153,7 @@ usage()
   puts("  -eEncoding        Resource bundle uses specified Encoding");
   puts("  -h, --help        Print this message and exit.");
   puts("  -v, --version     Print the version number of genrb and exit.");
+  puts("  -Ddir             Store ALL output files under 'dir'.");
   encoding!=NULL?puts(encoding):puts("encoding is NULL");
 }
 
@@ -162,7 +168,7 @@ version()
 
 /* Process a file */
 static void
-processFile(const char *filename, const char *cp,
+processFile(const char *filename, const char *cp, const char *outputDir,
 	    UErrorCode *status)
 {
   FileStream *in;
@@ -187,7 +193,7 @@ processFile(const char *filename, const char *cp,
   data = parse(in, cp, status);
 
   /* Determine the target rb filename */
-  rbname = make_res_filename(filename, status);
+  rbname = make_res_filename(filename, outputDir,  status);
   if(U_FAILURE(*status)) {
     goto finish;
   }
@@ -216,6 +222,7 @@ processFile(const char *filename, const char *cp,
 /* Generate the target .res file name from the input file name */
 static char*
 make_res_filename(const char *filename,
+                  const char *outputDir,
 		 UErrorCode *status)
 {
   char *basename;
@@ -242,16 +249,35 @@ make_res_filename(const char *filename,
   }
   get_dirname(dirname, filename);
 
-  resName = (char*) uprv_malloc(sizeof(char) * (uprv_strlen(dirname)
-					       + uprv_strlen(basename) 
-					       + uprv_strlen(RES_SUFFIX) + 1));
-  if(resName == 0) {
-    *status = U_MEMORY_ALLOCATION_ERROR;
-    goto finish;
+  if ( outputDir == NULL )
+  {
+      /* output in same dir as .txt */
+      resName = (char*) uprv_malloc(sizeof(char) * (uprv_strlen(dirname)
+                                                    + uprv_strlen(basename) 
+                                                    + uprv_strlen(RES_SUFFIX) + 1));
+      if(resName == 0) {
+          *status = U_MEMORY_ALLOCATION_ERROR;
+          goto finish;
+      }
+      uprv_strcpy(resName, dirname);
+      uprv_strcat(resName, basename);
+      uprv_strcat(resName, RES_SUFFIX);
   }
-  uprv_strcpy(resName, dirname);
-  uprv_strcat(resName, basename);
-  uprv_strcat(resName, RES_SUFFIX);
+  else
+  {
+      /* output in 'outputDir'  */
+      resName = (char*) uprv_malloc(sizeof(char) * (uprv_strlen(outputDir)
+                                                    + uprv_strlen(basename) 
+                                                    + uprv_strlen(RES_SUFFIX) + 1));
+      if(resName == 0) {
+          *status = U_MEMORY_ALLOCATION_ERROR;
+          goto finish;
+      }
+      uprv_strcpy(resName, outputDir);
+      uprv_strcat(resName, basename);
+      uprv_strcat(resName, RES_SUFFIX);
+      
+  }
 
  finish:
   uprv_free(basename);
@@ -263,6 +289,7 @@ make_res_filename(const char *filename,
 /* Generate the target .col file name from the input file name */
 static char*
 make_col_filename(const char *filename,
+                  const char *outputDir,
 		 UErrorCode *status)
 {
   char *basename;
@@ -287,18 +314,40 @@ make_col_filename(const char *filename,
     *status = U_MEMORY_ALLOCATION_ERROR;
     goto finish;
   }
-  get_dirname(dirname, filename);
 
-  colName = (char*) uprv_malloc(sizeof(char) * (uprv_strlen(dirname)
-					       + uprv_strlen(basename) 
-					       + uprv_strlen(COL_SUFFIX) + 1));
-  if(colName == 0) {
-    *status = U_MEMORY_ALLOCATION_ERROR;
-    goto finish;
+  if(outputDir == NULL)
+  {
+      
+      get_dirname(dirname, filename);
+      
+      colName = (char*) uprv_malloc(sizeof(char) * (uprv_strlen(dirname)
+                                                    + uprv_strlen(basename) 
+                                                    + uprv_strlen(COL_SUFFIX) + 1));
+      if(colName == 0) {
+          *status = U_MEMORY_ALLOCATION_ERROR;
+          goto finish;
+      }
+      uprv_strcpy(colName, dirname);
+      uprv_strcat(colName, basename);
+      uprv_strcat(colName, COL_SUFFIX);
+
   }
-  uprv_strcpy(colName, dirname);
-  uprv_strcat(colName, basename);
-  uprv_strcat(colName, COL_SUFFIX);
+  else
+  {
+      
+      get_dirname(dirname, filename);
+      
+      colName = (char*) uprv_malloc(sizeof(char) * (uprv_strlen(outputDir)
+                                                    + uprv_strlen(basename) 
+                                                    + uprv_strlen(COL_SUFFIX) + 1));
+      if(colName == 0) {
+          *status = U_MEMORY_ALLOCATION_ERROR;
+          goto finish;
+      }
+      uprv_strcpy(colName, outputDir);
+      uprv_strcat(colName, basename);
+      uprv_strcat(colName, COL_SUFFIX);
+  }
 
  finish:
   uprv_free(basename);
