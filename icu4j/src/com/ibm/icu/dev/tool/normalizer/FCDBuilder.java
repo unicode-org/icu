@@ -5,8 +5,8 @@
 ******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/tool/normalizer/Attic/FCDBuilder.java,v $ 
-* $Date: 2001/03/08 02:06:48 $ 
-* $Revision: 1.2 $
+* $Date: 2001/03/08 03:05:47 $ 
+* $Revision: 1.3 $
 *
 ******************************************************************************
 */
@@ -109,8 +109,8 @@ public class FCDBuilder
   {
     String cstr = UCharacter.toString(ch),
            nfd = Normalizer.decompose(cstr, false, 0);
-    int lastindex = UTF16.countCP(nfd) - 1;
-    int lastch = UTF16.charAtCPOffset(nfd, lastindex);
+    int lastindex = UTF16.countCodePoint(nfd) - 1;
+    int lastch = UTF16.charAtCodePointOffset(nfd, lastindex);
     return UCharacter.getCombiningClass(lastch);
   }
 
