@@ -5,27 +5,39 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/Attic/readme.txt,v $
-* $Date: 2003/03/18 00:42:43 $
-* $Revision: 1.8 $
+* $Date: 2003/03/18 16:38:11 $
+* $Revision: 1.9 $
 *
 *******************************************************************************
 */
 
+This file provides instructions for building and running the UnicodeTools, which
+can be used to:
+
+- build the Derived Unicode files in the UCD (Unicode Character Database),
+- build the transformed UCA (Unicode Collation Algorithm) files needed by ICU.
+- run consistency checks on beta releases of the UCD and the UCA , and
+
+
 WARNING!!
 
-These directories contain some Unicode tools used to build various files,
-and to check the consistency of the Unicode releases.
-
-- They are NOT production level code, and should never be used in programs.
+- This is NOT production level code, and should never be used in programs.
 - The API is subject to change without notice, and will not be maintained.
-- The source is uncommented, and not well structured -- classic spaghetti style.
-- There is no build mechanism.
-- I have not checked to make sure it works on Unix; probably the only change that
-  needs to be made is to fix the file separator.
+- The source is uncommented, and has many warts; since it is not production code,
+  it has not been worth the time to clean it up.
+- It will probably not work on Unix or Mac without changing the file separator.
+- Currently it uses hard-coded directory names.
+- The contents of multiple versions of the UCD must be copied to a local directory.
+
 
 Instructions:
 
-1. You must edit UCD_Types at the top, to set the directories for the build:
+0. If you are using Eclipse for your IDE, look at the instructions on
+
+http://oss.software.ibm.com/icu/docs/eclipse_howto/eclipse_howto.htm
+
+
+1. You must edit UCD_Types.java at the top, to set the directories for the build:
 
     public static final String DATA_DIR = "C:\\DATA\\";
     public static final String UCD_DIR = BASE_DIR + "UCD\\";
@@ -93,44 +105,54 @@ C://DATA/
             EXTRAS-Update/
 
 
-3. All of the following have "version X" on the command line. If you want a specific version
+3. All of the following have "version X" in the options you give to Java (either on the 
+command line, or in the Eclipse 'run' options. If you want a specific version
 like 3.1.0, then you would write "version 3.1.1". If you want the latest version (4.0.0),
 you can omit the "version X".
 
-3. For each version, the tools build a set of binary data in BIN that contain
-the information for that release. This is done automatically, or you can manually do it
-with:
 
-  java <UCD>Main version X build
+4. Running UCD, you will use com.ibm.text.UCD.Main as your main class.
+
+4a. For each version, the tools build a set of binary data in BIN that contain
+the information for that release. This is done automatically, or you can manually do it
+with the options
+
+  version X build
 
 This builds an compressed format of all the UCD data (except blocks and Unihan)
 into the BIN directory. Don't worry about the voluminous console messages, unless one says
-"FAIL".
-
-
-4. To build all of the Unicode files for a particular version X, run
-
-  java <UCD>Main version X all
-  
-
-4a. To build a particular file, like CaseFolding, use that file name instead of all
-
-  java <UCD>Main version X CaseFolding
-  
+"FAIL". 
 
 4b. All of the generated files get a "d" version number, e.g. CaseFolding-4.0.0d3.txt.
 To change the D version on generated files, edit the link in GenerateData.java:
 
     static final int dVersion = 2; // change to fix the generated file D version. If less than zero, no "d"
+    
+Note: if for any reason you modify the binary format of the BIN files, you also have
+to bump the value in that file:
+
+    static final byte BINARY_FORMAT = 8; // bumped if binary format of UCD changes
 
 
-5. To run basic consistency checking, run:
+4c. To build all of the Unicode files for a particular version X, run
 
-  java <UCD>Main version X verify
+  version X all
+  
+
+4d. To build a particular file, like CaseFolding, use that file name instead of all
+
+  version X CaseFolding
+  
+
+4e. To run basic consistency checking, run:
+
+  version X verify
 
 Don't worry about any console messages except those that say FAIL.
 
 
-6. To build all the UCA files used by ICU, use the option:
+5. Running UCA, you will use com.ibm.text.UCA.Main as your main class.
+
+5a. To build all the UCA files used by ICU, use the option:
 
     java <UCA>Main ICU
