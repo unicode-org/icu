@@ -316,6 +316,7 @@ icu4j/src/com/ibm/icu/dev/test/search/package.html svneol=native#text/html
 icu4j/src/com/ibm/icu/dev/test/translit/package.html svneol=native#text/html
 icu4j/src/com/ibm/icu/dev/tool/compression/package.html svneol=native#text/html
 icu4j/src/com/ibm/icu/dev/tool/normalizer/package.html svneol=native#text/html
+icu4j/src/com/ibm/icu/dev/tool/xmlcomparator/ResultXML.xml svneol=native#text/xml
 icu4j/src/com/ibm/icu/impl/data/ICULocaleData.jar -text svneol=unset#application/java-archive
 icu4j/src/com/ibm/icu/impl/data/invuca.icu -text
 icu4j/src/com/ibm/icu/impl/data/package.html svneol=native#text/html
