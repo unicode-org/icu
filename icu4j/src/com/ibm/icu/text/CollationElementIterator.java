@@ -1371,15 +1371,19 @@ public final class CollationElementIterator
             return collator.m_expansion_[getExpansionOffset(collator, ce)];
         }
         else {
-            // swap the prevowel and the following char into the
-            // buffer with their order swapped
-            // buffer is always clean when we are in the source string
-            m_buffer_.append(nextChar());
-            m_buffer_.append(ch);
-            m_FCDLimit_ = m_source_.getIndex();
-            m_FCDStart_ = m_FCDLimit_ - 2;
-            m_bufferOffset_ = 0;
-            return IGNORABLE;
+            if(!isEnd()) {
+                // swap the prevowel and the following char into the
+                // buffer with their order swapped
+                // buffer is always clean when we are in the source string
+                m_buffer_.append(nextChar());
+                m_buffer_.append(ch);
+                m_FCDLimit_ = m_source_.getIndex();
+                m_FCDStart_ = m_FCDLimit_ - 2;
+                m_bufferOffset_ = 0;
+                return IGNORABLE;
+            } else {
+                return collator.m_expansion_[getExpansionOffset(collator, ce)];
+            }
         }
     }
 
