@@ -85,6 +85,59 @@ static uint32_t strengthMask[UCOL_CE_STRENGTH_LIMIT] = {
   0xFFFFFFFF
 };
 
+U_CAPI uint32_t U_EXPORT2 ucol_inv_getNextCE(uint32_t CE, uint32_t strength) {
+  uint32_t SecondCE = 0;
+  uint32_t *CETable = (uint32_t *)((uint8_t *)invUCA+invUCA->table);
+  uint32_t nextCE, nextContCE;
+  int32_t iCE;
+
+  iCE = ucol_inv_findCE(CE, 0);
+
+  if(iCE<0) {
+    return UCOL_NOT_FOUND;
+  }
+
+  CE &= strengthMask[strength];
+  SecondCE &= strengthMask[strength];
+
+  nextCE = CE;
+  nextContCE = 0;
+
+  while((nextCE  & strengthMask[strength]) == CE 
+    && (nextContCE  & strengthMask[strength]) == SecondCE) {
+    nextCE = (*(CETable+3*(++iCE)));
+    nextContCE = (*(CETable+3*(iCE)+1));
+  }
+
+  return nextCE;
+}
+
+U_CAPI uint32_t U_EXPORT2 ucol_inv_getPrevCE(uint32_t CE, uint32_t strength) {
+  uint32_t SecondCE = 0;
+  uint32_t *CETable = (uint32_t *)((uint8_t *)invUCA+invUCA->table);
+  uint32_t previousCE, previousContCE;
+  int32_t iCE;
+
+  iCE = ucol_inv_findCE(CE, 0);
+
+  if(iCE<0) {
+    return UCOL_NOT_FOUND;
+  }
+
+  CE &= strengthMask[strength];
+  SecondCE &= strengthMask[strength];
+
+  previousCE = CE;
+  previousContCE = 0;
+
+  while((previousCE  & strengthMask[strength]) == CE && (previousContCE  & strengthMask[strength])== SecondCE) {
+    previousCE = (*(CETable+3*(--iCE)));
+    previousContCE = (*(CETable+3*(iCE)+1));
+  }
+
+  return previousCE;
+}
+
 int32_t ucol_inv_getPrevious(UColTokListHeader *lh, uint32_t strength) {
 
   uint32_t CE = lh->baseCE;
