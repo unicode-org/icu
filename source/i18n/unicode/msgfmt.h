@@ -717,14 +717,14 @@ private:
     static void copyAndFixQuotes(const UnicodeString& appendTo, int32_t start, int32_t end, UnicodeString& target);
 
     /**
-     * Returns array of formattable types in the parsed pattern 
+     * Returns array of argument types in the parsed pattern 
      * for use in C API.  Only for the use of umsg_vformat().  Not
      * for public consumption.
      * @param listCount  Output parameter to receive the size of array
      * @return           The array of formattable types in the pattern
      * @internal
      */
-    const Formattable::Type* getFormatTypeList(int32_t& listCount) const {
+    const Formattable::Type* getArgTypeList(int32_t& listCount) const {
         listCount = argTypeCount;
         return argTypes; 
     }
