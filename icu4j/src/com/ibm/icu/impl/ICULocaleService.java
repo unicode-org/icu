@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/ICULocaleService.java,v $
- * $Date: 2003/04/19 00:01:52 $
- * $Revision: 1.13 $
+ * $Date: 2003/05/01 18:59:11 $
+ * $Revision: 1.14 $
  *
  *******************************************************************************
  */
@@ -461,17 +461,21 @@ public class ICULocaleService extends ICUService {
 	 * Return a localized name for the locale represented by id.
 	 */
 	public String getDisplayName(String id, Locale locale) {
-            if (locale == null) {
-                return id;
+            if (isSupportedID(id)) {
+                if (locale == null) {
+                    return id;
+                }
+                Locale loc = LocaleUtility.getLocaleFromName(id);
+                return loc.getDisplayName(locale);
             }
-            Locale loc = LocaleUtility.getLocaleFromName(id);
-	    return loc.getDisplayName(locale);
+            return null;
 	}
 
         /**
          * Utility method used by create(Key, ICUService).  Subclasses can implement
          * this instead of create.
          */
+
         ///CLOVER:OFF
         protected Object handleCreate(Locale loc, int kind, ICUService service) {
             return null;
@@ -479,11 +483,21 @@ public class ICULocaleService extends ICUService {
         ///CLOVER:ON
 
         /**
+         * Return true if this id is one the factory supports (visible or 
+         * otherwise).
+         */
+        protected boolean isSupportedID(String id) {
+            return getSupportedIDs().contains(id);
+        }
+        
+        /**
          * Return the set of ids that this factory supports (visible or 
          * otherwise).  This can be called often and might need to be
          * cached if it is expensive to create.
          */
-        protected abstract Set getSupportedIDs();
+        protected Set getSupportedIDs() {
+            return Collections.EMPTY_SET;
+        }
 
         /**
          * For debugging.
@@ -537,8 +551,16 @@ public class ICULocaleService extends ICUService {
             return null;
         }
 
-        protected Set getSupportedIDs() {
-            return Collections.singleton(id);
+        protected boolean isSupportedID(String id) {
+            return this.id.equals(id);
+        }
+
+        public void updateVisibleIDs(Map result) {
+            if ((coverage & 0x1) == 0) {
+                result.put(id, this);
+            } else {
+                result.remove(id);
+            }
         }
 
         public String toString() {
