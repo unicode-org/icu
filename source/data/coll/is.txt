@@ -12,7 +12,7 @@ is {
         Version { "2.0" }
         Sequence { 
             "&[before 1]b<á<<<Á"
-            "&[before 1]d<<đ<<<Đ<ð<<<Ð"
+            "&d<<đ<<<Đ<ð<<<Ð"
             "&[before 1]f<é<<<É"
             "&[before 1]j<í<<<Í"
             "&[before 1]p<ó<<<Ó"
