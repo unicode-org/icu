@@ -1,0 +1,6 @@
+en
+{
+P_CANNOT_ADD_LIST		{  "{0} Cannot add {1}: {2}to {3}list" }
+MESSAGE					{  " English message " }
+LOGENTRY					{  "{1}\t{0,date}" }
+}

@@ -1,0 +1,888 @@
+<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="Template" content="F:\Program Files\Microsoft Office\Office\html.dot">
+<meta name="GENERATOR" content="Microsoft FrontPage 3.0">
+<title>ReadMe for ICU</title>
+</head>
+
+<body bgcolor="#FFFFFF" link="#0000FF" vlink="#800080">
+
+<h2>ReadMe: IBM's International Classes For Unicode</h2>
+
+<p>Version: 07/22/1999 <br>
+</p>
+
+<hr>
+
+<p>COPYRIGHT: <br>
+© Copyright Taligent, Inc., 1997 <br>
+© Copyright International Business Machines Corporation, 1997 - 1999 <br>
+Licensed Material - Program-Property of IBM - All Rights Reserved. <br>
+US Government Users Restricted Rights - Use, duplication, or disclosure restricted by GSA
+ADP Schedule Contract with IBM Corp. <br>
+</p>
+
+<hr>
+
+<p><br>
+&nbsp; <br>
+&nbsp; </p>
+
+<h3><u>Contents</u></h3>
+
+<ul>
+  <li><a href="#introduction">Introduction</a></li>
+  <li><a href="#WhatContain">What the International Classes for Unicode Contain</a></li>
+  <li><a href="#API">API overview</a></li>
+  <li><a href="#PlatformDependencies">Platform Dependencies</a></li>
+  <li><a href="#ImportantNotes">Important Notes regarding Win32</a></li>
+  <li><a href="#HowToInstall">How to Install/Build</a></li>
+  <li><a href="#addlocaledatafile">How to add a locale data file</a></li>
+  <li><a href="#addrbdatatoapp">How to add resource bundle data to your application</a></li>
+  <li><a href="#WhereCollation">Where Collation Data is Stored</a></li>
+  <li><a href="#CharsetConvert">Character Set Conversion Information</a></li>
+  <li><a href="#ProgrammingNotes">Programming Notes</a></li>
+  <li><a href="#WhereToFindMore">Where to Find More Information</a></li>
+  <li><a href="#SubmittingComments">Submitting Comments, Requesting Features and Reporting
+    Bugs</a></li>
+</ul>
+
+<h3><a NAME="introduction"></a><u>Introduction</u></h3>
+
+<p>Today's software market is a global one in which it is desirable to develop and
+maintain one application that supports a wide variety of national languages. IBM's
+International Classes for Unicode provides the following tools to help you write language
+independent applications: 
+
+<ul>
+  <li>UnicodeString supporting the Unicode 3.0 standard</li>
+  <li>Resource bundles for storing and accessing localized information</li>
+  <li>Number formatters for converting binary numbers into text strings for meaningful display</li>
+  <li>Date and time formatters for converting internal time data into text strings for
+    meaningful display</li>
+  <li>Message formatters for putting together sequences of strings, numbers dates and other
+    format to create messages</li>
+  <li>Text collation supporting language sensitive comparison of strings</li>
+  <li>Text boundary analysis for finding characters, word and sentence boundaries</li>
+</ul>
+
+<p>Changing simple data files rather than modifying program code easily localizes
+applications written using these tools. The following locales are supported: <font
+face="Courier New">ar, ar_AE, ar_BH, ar_DZ, ar_EG, ar_IQ, ar_JO, ar_KW, ar_LB, ar_LY,
+ar_MA, ar_OM, ar_QA, ar_SA, ar_SD, ar_SY, ar_TN, ar_YE, be, be_BY, bg, bg_BG, ca, ca_ES,
+ca_ES_EURO, cs, cs_CZ, da, da_DK, de, de_AT, de_AT_EURO, de_CH, de_DE, de_DE_EURO, de_LU,
+de_LU_EURO, el, el_GR, en, en_AU, en_CA, en_GB, en_IE, en_IE_EURO, en_NZ, en_US, en_ZA,
+es, es_AR, es_BO, es_CL, es_CO, es_CR, es_DO, es_EC, es_ES, es_ES_EURO, es_GT, es_HN,
+es_MX, es_NI, es_PA, es_PE, es_PR, es_PY, es_SV, es_UY, es_VE, et, et_EE, fi, fi_FI,
+fi_FI_EURO, fr, fr_BE, fr_BE_EURO, fr_CA, fr_CH, fr_FR, fr_FR_EURO, fr_LU, fr_LU_EURO, hr,
+hr_HR, hu, hu_HU, index, is, is_IS, it, it_CH, it_IT, it_IT_EURO, iw, iw_IL, ja, ja_JP,
+ko, ko_KR, lt, lt_LT, lv, lv_LV, mk, mk_MK, nl, nl_BE, nl_BE_EURO, nl_NL, nl_NL_EURO, no,
+no_NO, no_NO_NY, pl, pl_PL, pt, pt_BR, pt_PT, pt_PT_EURO, ro, ro_RO, ru, ru_RU, sh, sh_YU,
+sk, sk_SK, sl, sl_SI, sq, sq_AL, sr, sr_YU, sv, sv_SE, th, th_TH, tr, tr_TR, uk, uk_UA,
+vi, vi_VN, zh, zh_CN, zh_HK, zh_TW.</font></p>
+
+<p>It is possible to support additional locales by adding more locale data files, with no
+code changes. </p>
+
+<p>Please refer to POSIX programmer's Guide for details on what the ISO locale ID means. </p>
+
+<p>Your comments are important to making this release successful.&nbsp; We are committed
+to fixing any bugs, and will also use your feedback to help plan future releases. </p>
+
+<blockquote>
+  <b><u><p>IMPORTANT</u>: Please make sure you understand the <a href="license.html">Copyright
+  and License information</a>.</b></p>
+</blockquote>
+
+<blockquote>
+  <p>&nbsp;</p>
+</blockquote>
+
+<h3><a NAME="WhatContain"></a><u>What the International Classes For Unicode Contain</u></h3>
+
+<p>All files are contained in <b>icu-XXXXXX.zip.</b> <br>
+Please unzip this file.&nbsp; It will re-construct the source directory. Please be sure to
+do &quot;<strong>unzip -a icu-XXXXXX.zip -d drive:\directory</strong>&quot; on Win32 platforms.
+&nbsp; This will convert the line feed/carriage return characters correctly on windows.
+&nbsp; Before running the test programs or samples, please set the environment variable <strong>ICU_DATA</strong>,
+the full pathname of the data directory, to indicate where the locale data files and
+conversion mapping tables are.&nbsp; If this variable is not set, the default user data
+directory will be used.</p>
+
+<p>Below, <b>$Root</b> is the placement of the icu directory in your file system, like &quot;drive:\...\icu&quot; in your environment.
+&quot;drive:\...&quot; stands for any drive and any directory on that drive that you chose to install icu into.</p>
+
+<p><b>The following files describe the code drop:</b> <br>
+&nbsp; <br>
+&nbsp; </p>
+
+<table BORDER="1">
+  <tr>
+    <td>readme.html (this file)</td>
+    <td>describes the IBM's International Classes for Unicode</td>
+  </tr>
+  <tr>
+    <td>license.html</td>
+    <td>contains IBM's public license</td>
+  </tr>
+</table>
+
+<p><b>The following directories contain source code and data files:</b> <br>
+&nbsp; <br>
+&nbsp; </p>
+
+<table BORDER="1" WIDTH="623">
+  <tr>
+    <td WIDTH="20%">$Root\source\common\</td>
+    <td WIDTH="80%">The utility classes, such as ResourceBundle, Unicode, Locale,
+    UnicodeString. The codepage conversion library API, UnicodeConverter.</td>
+  </tr>
+  <tr>
+    <td WIDTH="20%">$Root\source\i18n\</td>
+    <td WIDTH="80%">The collation source files, Collator, RuleBasedCollator and
+    CollationKey.&nbsp; <br>
+    The text boundary API, which locates character, word, sentence, and&nbsp; <br>
+    line breaks.&nbsp; <br>
+    The format API, which formats and parses data in numeric or date format to and from text.</td>
+  </tr>
+  <tr>
+    <td WIDTH="20%">$Root\source\test\intltest\</td>
+    <td WIDTH="80%">A test suite including all C++ APIs. For information about running the
+    test suite, see <a href="docs/intltest.html">docs\intltest.html</a>.</td>
+  </tr>
+  <tr>
+    <td WIDTH="20%">$Root\source\test\cintltst\</td>
+    <td WIDTH="80%">A test suite including all C APIs. For information about running the test
+    suite, see&nbsp; <a href="docs/cintltst.html">docs\cintltst.html.</a></td>
+  </tr>
+  <tr>
+    <td WIDTH="20%">$Root\data\</td>
+    <td WIDTH="80%">The Unicode 3.0 data file.&nbsp; Please see <a
+    href="http://www.unicode.org/">http://www.unicode.org/</a> for more information.&nbsp; <br>
+    This directory also contains the resource files for all international objects.&nbsp; These
+    files are of three types:&nbsp; <ul>
+      <li>TXT files contain general locale data.&nbsp;</li>
+      <li>RES files contain non-portable locale data files which are generated by the <strong>genrb</strong>
+        tool.</li>
+      <li>COL files are non-portable packed binary collation data files which are created by the <strong>gencol</strong>
+        tool.&nbsp;</li>
+      <li>UCM files which contain mapping tables {from,to} Unicode in text format</li>
+      <li>CNV files are non-portable packed binary conversion data generated by the <strong>makeconv</strong>
+        tool.</li>
+    </ul>
+    </td>
+  </tr>
+  <tr>
+    <td WIDTH="20%">$Root\source\tools\genrb</td>
+    <td WIDTH="80%">This tool converts the portable locale data files in text format to
+    machine-specific binary format for resource bundle performance efficiency.&nbsp; To run
+    this tool on all the locale data files, please type the following commands on the
+    supported platforms:<ul>
+      <li>Win32: <strong>genrb Debug</strong> (or &quot;genrb Release&quot; for release build)</li>
+      <li>UNIX: type <strong>make</strong> under the command prompt.&nbsp; All the binary format
+        resource files will be created automatically.</li>
+    </ul>
+    </td>
+  </tr>
+  <tr>
+    <td WIDTH="20%">$Root\source\tools\gencol</td>
+    <td WIDTH="80%">&nbsp;<p>This tool converts the collation rules in the portable locale data
+    files in text format to machine-specific binary collation data.&nbsp; To run this tool for
+    all the supported collators, please type the following under the command prompt on the
+    supported platforms:<ul>
+      <li>Win32: <strong>gencol</strong> </li>
+      <li>UNIX: type <strong>make</strong> under the command prompt.&nbsp; All the binary format
+        collation files will be created automatically.</li>
+    </ul>
+    </td>
+  </tr>
+  <tr>
+    <td WIDTH="20%">$Root\source\tools\makeconv</td>
+    <td WIDTH="80%">&nbsp;<p>This tool converts the native encoding to/from UCS-2 mapping table in
+    text format to machine-specific binary format.&nbsp; To run this tool for all the
+    supported converters, please type the following under the command prompt on the supported
+    platforms:<ul>
+      <li>Win32: <strong>makeconv Debug </strong>(or &quot;makeconv Release&quot; for release
+        build) </li>
+      <li>UNIX: type <strong>make</strong> under the command prompt.&nbsp; All the binary format
+        conversion tables will be created automatically.</li>
+    </ul>
+    </td>
+  </tr>
+</table>
+
+<p>&nbsp;<b>The following directories are populated when you've built the framework:</b> <br>
+&nbsp; (on Unix, replace $Root with the value given to the file &quot;configure&quot;) <br>
+&nbsp; </p>
+
+<table BORDER="1">
+  <tr>
+    <td>$Root\include\</td>
+    <td>contains all the public header files.</td>
+  </tr>
+  <tr>
+    <td>$output</td>
+    <td>contains the libraries for static/dynamic linking or executable programs.</td>
+  </tr>
+</table>
+
+<p><b>The following diagram shows the main directory structure of the IBM's International
+Classes for Unicode:</b> </p>
+
+<pre>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; icu-NNNN
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;output&nbsp;&nbsp;  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    icu
+&nbsp;&nbsp;&nbsp;&nbsp; _____|_____       ______________|______________________________
+&nbsp;&nbsp;&nbsp; |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;   |&nbsp;&nbsp;&nbsp;&nbsp;  | &nbsp;   &nbsp; |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |&nbsp;   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |          |
+ libraries   programs &nbsp;include&nbsp;data&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; source&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |          |
+ (built)    (built)   (built)&nbsp;  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; readme.html license.html
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |                         
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;                  _________________|__________________________
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;                   |       |   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |         |        |
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;                   common  i18n&nbsp;&nbsp;    test     extra     tools   samples
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  &nbsp; &nbsp;  |                 |   
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ___|___&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  ___|_________________
+                                          |      |          |      |      |     | 
+                                      intltest cintltst makeconv ctestfw genrb  ....</pre>
+
+<h3><a NAME="API"></a><u>API Overview</u></h3>
+
+<p>In the International Classes for Unicode, there are two categories: 
+
+<ul>
+  <li>Low-level Unicode/Resource Attributes: (<strong>icuuc</strong> library)<ul>
+      <li><a href="docs/utilCL.html">Utility Classes</a></li>
+      <li>Conversion Interface</li>
+    </ul>
+  </li>
+  <li>High-level Unicode Internationalization: (<strong>icui18n</strong> library)<ul>
+      <li><a href="docs/boundCL.html">Text Boundary Classes</a></li>
+      <li><a href="docs/collateCL.html">Collation Classes</a></li>
+      <li><a href="docs/formatCL.html">Formatting Classes</a></li>
+    </ul>
+  </li>
+</ul>
+
+<p>See IBM's<a href="docs/codeConv.html"> International Classes for Unicode Code
+Conventions</a> for a discussion of code conventions common to all library classes. </p>
+
+<p>See also <a href="html/aindex.html">html/aindex.html</a> for an alphabetical index, and
+<a href="html/HIERjava.html">html/HIERjava.html</a> for a hierarchical index to detailed
+API documentation. <br>
+&nbsp; <br>
+&nbsp; </p>
+
+<h3><a NAME="PlatformDependencies"></a><u>Platform Dependencies</u></h3>
+
+<p>The platform dependencies have been isolated into the following 4 files: 
+
+<ul>
+  <li><u>platform.h.in:</u> Platform-dependent typedefs and defines:</li>
+</ul>
+
+<blockquote>
+  <ul>
+    <li>XP_CPLUSPLUS is defined for C++</li>
+    <li>bool_t, TRUE and FALSE, int8_t, int16_t etc.</li>
+    <li>U_EXPORT and U_IMPORT for specifying dynamic library import and export</li>
+  </ul>
+</blockquote>
+
+<ul>
+  <li><u>putil.c:</u> platform-dependent implementations of various functions that are
+    platform dependent: (declared in putil.h)</li>
+</ul>
+
+<blockquote>
+  <ul>
+    <li>icu_isNaN, icu_isInfinite(double), icu_getNaN(); icu_getInfinity for handling special
+      floating point values</li>
+    <li>icu_tzset, icu_timezone, icu_tzname and time for reading platform specific time and
+      timezone information</li>
+    <li>icu_getDefaultDataDirectory, icu_getDefaultLocaleID for reading the locale setting and
+      data directory</li>
+    <li>icu_isBigEndian for finding the endianess of the platform</li>
+    <li>icu_nextDouble is used specifically by the ChoiceFormat API.</li>
+  </ul>
+</blockquote>
+
+<ul>
+  <li><u>mutex.h and mutex.cpp</u>: Code for doing synchronization in multithreaded
+    applications. If you wish to use IBM's International Classes for Unicode in a
+    multithreaded application, you must provide a synchronization primitive that the classes
+    can use to protect their global data against simultaneous modifications. See <a
+    href="docs/mutex.html">docs\mutex.html</a> for more information.</li>
+  <ul>
+    <li>We supply sample implementations for WinNT, Win95, Sun, Linux and for AIX on an RS/6000.</li>
+    <li>If you are changing the platform-dependent files, ptypes.h and putil.h may also be
+      interesting, but shouldn't have to be changed. If you think any other files than the ones
+      mentioned above have platform dependencies, please contact us.</li>
+    <li>For the Intltest test suite, intltest.cpp in &quot;icu\source\test\intltest\&quot;
+      contains the method pathnameInContext, which must also be adapted to any new platform.</li>
+  </ul>
+</ul>
+
+<h3><a NAME="ImportantNotes"></a><b><u>Important Notes Regarding Win32</u></b></h3>
+
+<p>If you are building on the Win32 platform, it is important that you understand a few
+build details: </p>
+
+<p><u>DLL directories and the PATH setting:</u> As delivered, the IBM's International
+Classes for Unicode build as several DLLs. These DLLs are placed in the directories
+&quot;icu\bin\Debug&quot; and &quot;icu\bin\Release&quot;.&nbsp; You must add either of
+these directories to the PATH environment variable in your system, or any executables you
+build will not be able to access IBM's International Classes for Unicode libraries.
+Alternatively, you can copy the DLL files into a directory already in your PATH, but we do
+not recommend this -- you can wind up with multiple copies of the DLL, and wind up using
+the wrong one. </p>
+
+<p><u>To change your PATH:</u>&nbsp; Do this under NT by using the System control panel.
+Pick the &quot;Environment&quot; tab, select the variable PATH in the lower box.&nbsp; In
+the &quot;value&quot; box, append the string &quot;;drive:\...\icu\bin\Debug&quot; at the end of
+the path string.&nbsp; If there is nothing there, just type in
+&quot;drive:\...\icu\bin\Debug&quot;. Click the Set button, then the Ok button. </p>
+
+<p><u>Link with Runtime libraries:</u> All the DLLs link with the C runtime library
+&quot;Debug Multithreaded DLL&quot; or &quot;Multithreaded DLL.&quot; (This is changed
+through the Project Settings dialog, on the C/C++ tab, under Code Generation.) It is
+important that any executable or other DLL you build which uses the IBM's International
+Classes for Unicode DLLs links with these runtime libraries as well. If you do not do
+this, you will seemingly get memory errors when you run the executable. <br>
+&nbsp; <br>
+&nbsp; </p>
+
+<h3><a NAME="HowToInstall"></a><u>How to Install/Build on Win NT</u></h3>
+
+<p>Building IBM's International Classes for Unicode requires: 
+
+<ul>
+  <li>Microsoft NT 3.51 or above</li>
+  <li>Microsoft Visual C++ 6.0 (Service Pack 2 is required to work with the release build of
+    max speed optimization).</li>
+</ul>
+
+<p>The steps are: 
+
+<ol>
+  <li>Unzip the icu-XXXX.zip file, type &quot;unzip -a icu-XXXX.zip -d drive:\directory&quot; under
+    command prompt.&nbsp; drive:\directory\icu is the root ($Root) directory
+    (you may but don't need to place &quot;icu&quot; into another directory).
+    If you change the root, you will
+    change the project settings accordingly in EACH makefile in the project, updating the
+    include and library paths.</li>
+  <li>Start Microsoft Visual C++ 6.0.</li>
+  <li>Choose &quot;File&quot; menu and select &quot;Open WorkSpace&quot;.</li>
+  <li>In the file chooser, choose icu\source\allinone\allinone.dsw. Open this workspace.</li>
+  <li>This workspace includes all the IBM's International Classes for Unicode libraries,
+    necessary tools as well as intltest and cintltest test suite projects.</li>
+  <li>Set the active Project. Choose &quot;Project&quot; menu and select &quot;Set active
+    project&quot;. In the submenu, select &quot;intltest&quot;.</li>
+  <li>Set the active configuration (&quot;Win32 Debug&quot; or &quot;Win32 Release&quot;) and
+    make sure this matches your PATH setting as described in the previous chapter. (See note
+    below.)</li>
+  <li>Choose &quot;Build&quot; menu and select &quot;Rebuild All&quot;. If you want to build
+    the Debug and Release configurations at the same time, choose &quot;Build&quot; menu and
+    select &quot;Batch Build...&quot; instead (and mark all configurations as checked), then
+    click the button named &quot;Rebuild All&quot;.</li>
+  <li>Repeat step6-8 and set &quot;makeconv&quot; project to be active and build the makeconv
+    tool.</li>
+  <li>Repeat step9 to build both genrb and gencol tools.</li>
+  <li>Run the mkcnvfle.bat script to create the converter data files in binary format.</li>
+  <li>Run the genrb.bat script to create the locale data files in binary format.</li>
+  <li>Run the gencol.exe program to pre-load the collation data and create the collation data
+    in binary format.</li>
+  <li>Save the value of the &quot;TZ&quot; environment variable and then set it to
+    &quot;PST8PDT&quot;.&nbsp; </li>
+  <li>Reopen the &quot;allinone&quot; project file and run the &quot;intltest&quot; test.
+    &nbsp; Reset the &quot;TZ&quot; value.</li>
+  <li>To run the C test suite, set &quot;cintltst&quot; as the active project and repeat step
+    7, 8 and then run the &quot;cintltst&quot; test..</li>
+  <li>Build and run as outlined above.</li>
+</ol>
+<b>
+
+<p>Note: </b>To set the active configuration, two different possibilities are: 
+
+<ul>
+  <li>Choose &quot;Build&quot; menu, select &quot;Set Active Configuration&quot;, and select
+    &quot;Win32 Release&quot; or &quot;Win32 Debug&quot;.</li>
+  <li>Another way is to select &quot;Customize&quot; in the &quot;Tools&quot; menu, select the
+    &quot;Toolbars&quot; tab, enable &quot;Build&quot; instead of &quot;Build Minibar&quot;,
+    and click on &quot;Close&quot;. This will bring up a toolbar which you can move aside the
+    other permanent toolbars at the top of the MSVC window. The advantage is that you now have
+    an easy-to-reach pop-up menu which will always show the currently selected active
+    configuration.&nbsp; Or, you can drag the project and configuration selectiors and drop
+    them on the menu bar for later selection.</li>
+</ul>
+
+<p>It is also possible to build each library individually, using the Makefiles in each
+respective directory. They have to be built in the following order: <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1. common <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2. i18n <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 3. makeconv<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 4. genrb<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 5. gencol<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 6. ctestfw <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 7. intltest and cintltst, if you want to run
+the test suite. <br>
+Regarding the test suite, please read the directions in <a href="docs/intltest.html">docs/intltest.html</a>
+and <a href="docs/cintltst.html">docs/cintltst.html</a> </p>
+
+<h3>How to Install/Build on Unix</h3>
+
+<p>There is a set of Makefiles for Unix which supports Linux w/gcc, Solaris w/gcc and
+Workshop CC. and AIX w/xlc. </p>
+
+<p>Building IBM's International Classes for Unicode on Unix requires: </p>
+
+<p>A UNIX C++ compiler, (gcc, cc, xlc_r, etc...) installed on the target machine. A recent
+version of GNU make (3.7+). </p>
+
+<p>The steps are: 
+
+<ol>
+  <li>Unzip the icu-XXXX.zip file with the &quot;-a&quot; option.</li>
+  <li>Change directory to the &quot;icu/source&quot;.</li>
+  <li>Type &quot;./configure&quot; or type &quot;./configure --help&quot; to print the
+    avialable options.</li>
+  <li>Type &quot;make&quot; to compile the libraries and all the data files.</li>
+  <li>Optionally, type &quot;make check&quot; to verify the test suite.</li>
+  <li>Type &quot;Make install&quot; to install.</li>
+</ol>
+
+<p>It is also possible to build each library individually, using the Makefiles in each
+respective directory. They have to be built in the following order: <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1. common <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2. i18n <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 3. makeconv <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 4. genrb<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 5. gencol<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 6. ctestfw <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 7. intltest and cintltst, if you want to run
+the test suite. <br>
+Regarding the test suite, please read the directions in <a href="docs/intltest.html">docs/intltest.html</a>
+and <a href="docs/cintltst.html">docs/cintltst.html</a> </p>
+
+<p><a NAME="addlocaledatafile"></a> </p>
+
+<h3><u>How to add a locale data file</u></h3>
+
+<p>To add locale data files to IBM's International Classes for Unicode do the following: </p>
+
+<blockquote>
+  <p>1. Create a file containing the key-value pairs which value you are overriding from the
+  parent locale data file. <br>
+  &nbsp;&nbsp;&nbsp; Make sure the filename is the locale ID with the extension
+  &quot;.txt&quot;. We recommend you copy parent file and change the values <br>
+  &nbsp;&nbsp;&nbsp; that need to be changed, remove all other key-pairs. Be sure to update
+  the locale ID key (the outmost brace) with <br>
+  &nbsp;&nbsp;&nbsp; the name of the locale id your a creating.</p>
+</blockquote>
+
+<blockquote>
+  <p>2. Name the file with locale ID you are creating with a &quot;.txt&quot; at the end.</p>
+</blockquote>
+
+<blockquote>
+  <blockquote>
+    <p>e.g.&nbsp;&nbsp;&nbsp; fr_BF.txt <br>
+    Would create a locale that inherits all the key-value pairs from fr.txt.</p>
+  </blockquote>
+</blockquote>
+
+<blockquote>
+  <p>3. Add the name of that file (without the &quot;.txt&quot; extension) as a single line
+  in &quot;index.txt&quot; file in the default locale directory (icu/data/).</p>
+  <p>4. Run the genrb tool to convert the file into binary format.&nbsp; Under the command
+  prompt, type:</p>
+  <blockquote>
+    <p><font face="Courier New">&gt; genrb \Full Path\fr_BF.txt</font></p>
+  </blockquote>
+</blockquote>
+
+<p><a NAME="addrbdatatoapp"></a></p>
+<b><u><font size="+1">
+
+<p>How to add resource bundle data to your application</font></u></b> </p>
+
+<p>Adding resource bundle data to your application is quite simple: </p>
+
+<blockquote>
+  <p>Create resource bundle files with the right format and names in a directory for
+  resource bundles you create in your application directory tree.(for more information of
+  that format of these files see <a
+  href="http://www.ibm.com/java/education/international-unicode/unicodec.html">resource
+  bundle format)</a> <br>
+  Use that same directory name (absolute path) when instantiating a resource bundle at run
+  time.</p>
+</blockquote>
+
+<p><a NAME="WhereCollation"></a></p>
+
+<h3><u>Where Collation Data is stored</u></h3>
+
+<p>Collation data is stored in a single directory on a local disk. Each locale's data is
+stored in a corresponding ASCII text file indicated by a &quot;CollationElements&quot; tag
+. For instance, the data for de_CH is stored with a tag &quot;CollationElements&quot; in a
+file named &quot;de_CH.txt&quot;. Reading the collation data from these files can be
+time-consuming, especially for large pieces of data that occur in languages such as
+Japanese. For this reason, the Collation Framework implements a second file format, a
+performance-optimized, non-portable, binary format. These binary files are generated
+automatically by the framework the first time a collation table is parsed. They have names
+of the form &quot;de_CH.col&quot;. Once the files are generated by the framework, future
+loading of those collations occur from the binary file, rather than the text file, at much
+higher speed. </p>
+
+<p>In general, you don't have to do anything special with these files. They can be
+generated directly by using the &quot;gencol&quot; tool.&nbsp; In addition, they can also
+be generated and used automatically by the framework, without intervention on your part.
+However, there are situations in which you will have to regenerate them. To do so, you
+must manually delete the &quot;.col&quot; files from your collation data directory and
+re-run the gencol tool.</p>
+
+<p>You will need to regenerate your &quot;.col&quot; files in the following circumstances:
+
+<ol>
+  <li>You are moving your data to another platform.&nbsp; Since the &quot;.col&quot; files are
+    non-portable, you must make sure they are regenerated.</li>
+  <li><b>DO NOT </b>copy them from one platform to another.</li>
+  <li>You have changed the &quot;CollationElements&quot; data in the locale's &quot;.txt&quot;
+    file.&nbsp; Note that if you change the default rules for some reason, which underlie all
+    collations, then you will have to rebuild ALL your &quot;.col&quot; files, since they all
+    are merged with the default rule set.</li>
+</ol>
+
+<h3><a NAME="CharsetConvert"></a><u>Character Set Conversion Information</u></h3>
+
+<p>The charset conversion library provides ways to convert simple text strings (e.g.,
+char*) such as ISO 8859-1 to and from Unicode. The objective is to provide clean, simple,
+reliable, portable and adaptable data structures and algorithms to support the IBM's
+International Classes for Unicode's character codeset Conversion APIs. The conversion data
+in the library originated from the NLTC lab in IBM. The IBM character set conversion
+tables are publicly available in the published IBM document called &quot;CHARACTER DATA
+REPRESENTATION ARCHITECTURE - REFERENCE AND REGISTRY&quot;. The character set conversion
+library includes single-byte, double-byte and some UCS encodings to and from Unicode. This
+document can be ordered through Mechanicsberg and it comes with 2 CD ROMs which have
+machine readable conversion tables on them. The license agreement is included in IBM's
+International Classes for Unicode agreement. </p>
+
+<p>To order the document in the US you can call 1-800-879-2755 and request document number
+SC09-2190-00. The cost of this publication is $75.00 US not including tax. </p>
+
+<p>Currently, the support code pages are: </p>
+
+<p><font face="Courier New">ibm-1004: PC Data Latin-1<br>
+ibm-1008: Arabic 8bit ISO/ASCII<br>
+ibm-1038: Adobe Symbol Set<br>
+ibm-1089: ISO-8859-6<br>
+ibm-1112: MS Windows Baltic Rim<br>
+ibm-1116: PC Data Estonia<br>
+ibm-1117: PC Data Latvia<br>
+ibm-1118: PC Data Lithuania<br>
+ibm-1119: PC Data Russian<br>
+ibm-1123: Cyrillic Ukraine EBCDIC<br>
+ibm-1140: </font><font COLOR="#000000" size="3" face="Courier New">EBCDIC USA, Canada,
+Netherlands, Portugal, Brazil, Australia, New Zealand - EBCDIC: Italy</font><font
+face="Courier New"><br>
+ibm-1141: EBCDIC Germany, Austria<br>
+ibm-1142: EBCDIC Denmark etc.<br>
+ibm-1143: EBCDIC Sweden<br>
+ibm-1144: EBCDIC Italy<br>
+ibm-1145: EBCDIC Spain<br>
+ibm-1146: EBCDIC UK Irland<br>
+ibm-1147: EBCDIC France<br>
+ibm-1148: EBCDIC International Latin-1<br>
+ibm-1250: MS-Windows Latin-2<br>
+ibm-1251: MS-Windows Cyrillic<br>
+ibm-1252: MS-Windows Latin-1<br>
+ibm-1253: MS-Windows Greek<br>
+ibm-1254: MS-Windows Turkey<br>
+ibm-1255: MS-Windows Hebrew<br>
+ibm-1256: MS-Windows Arabic<br>
+ibm-1257: MS-Windows Baltic Rim<br>
+ibm-1258: MS-Windows Vietnamese<br>
+ibm-1275: Apple Latin-1<br>
+ibm-1276: Adobe (Postscript) Standard Encoding<br>
+ibm-1277: Adobe (Postscript) Latin-1<br>
+ibm-1280: Apple Greek<br>
+ibm-1281: Apple Turkey<br>
+ibm-1282: Apple Central European<br>
+ibm-1283: Apple Cyrillic<br>
+ibm-1361: Korean EUC Windows cp949<br>
+ibm-1383: Simplified Chinese EUC<br>
+ibm-1386: Simplified Chinese GBK<br>
+ibm-290: Japanese Katakana SBCS<br>
+ibm-37 : </font><font COLOR="#000000" size="3" face="Courier New">CECP: USA, Canada
+(ESA*), Netherlands, Portugal, Brazil, Australia, New Zealand - MS Windows, Hebrew</font><font
+face="Courier New"><br>
+ibm-420: Arabic (with presentation forms)<br>
+ibm-424: Hebrew<br>
+ibm-437: PC Data PC Base USA<br>
+ibm-813: ISO-8859-7<br>
+ibm-833: Korean Host Extended SBCS<br>
+ibm-852: PC Data Latin-2 Multilingual<br>
+ibm-855: PC Data Cyrillic<br>
+ibm-856: PC Data Hebrew<br>
+ibm-857: PC Data Turkey<br>
+ibm-858: PC Data with EURO<br>
+ibm-859: PC Latin-9<br>
+ibm-860: PC Data Portugal<br>
+ibm-861: PC Data Iceland<br>
+ibm-863: PC Data Canada<br>
+ibm-864: PC Data Arabic<br>
+ibm-865: PC Data Denmark<br>
+ibm-866: PC Data Russian<br>
+ibm-867: PC Data Hebrew<br>
+ibm-868: PC Data Urdu<br>
+ibm-869: PC Data Greek<br>
+ibm-874: PC Data Thai<br>
+ibm-878: Russian Internet koi8-r<br>
+ibm-912: ISO-8859-2<br>
+ibm-913: ISO-8859-3<br>
+ibm-914: ISO-8859-4<br>
+ibm-915: ISO-8859-5<br>
+ibm-916: ISO-8859-8<br>
+ibm-920: ISO-8859-9<br>
+ibm-921: Baltic 8bit<br>
+ibm-922: Estonia 8bit<br>
+ibm-923: ISO-8859-15<br>
+ibm-930: Japanese Katakana-Kanji Host<br>
+ibm-933: Korean Host Mixed<br>
+ibm-935: Simplified Chinese Host Mixed<br>
+ibm-937: Traditional Chinese Host Mixed<br>
+ibm-942: Japanese PC Data Mixed<br>
+ibm-943: Japanese PC Data for Open Environment<br>
+ibm-949: KS Code PC Data Mixed<br>
+ibm-950: BIG-5<br>
+ibm-970: Korean EUC</font></p>
+
+<h3><a NAME="ProgrammingNotes"></a><u>Programming Notes</u></h3>
+
+<h4><b><u>Reporting Errors</u></b></h4>
+
+<p>In order for the code to be portable, only a subset of the C++ language that will
+compile correctly on even the oldest of C++ compilers (and also to provide a usable C
+interface) can be used in the implementation, which means that there's no use the C++
+exception mechanism in the code. </p>
+
+<p>After considering many alternatives, the decision was that every function that can fail
+takes an error-code parameter by reference. This is always the last parameter in the
+function&#146;s parameter list. The ErrorCode type is defined as a enumerated type. Zero
+represents no error, positive values represent errors, and negative values represent
+non-error status codes. Macros were provided, SUCCESS and FAILURE, to check the error
+code. </p>
+
+<p>The ErrorCode parameter is an input-output parameter. Every function tests the error
+code before doing anything else, and immediately exits if it&#146;s a FAILURE error code.
+If the function fails later on, it sets the error code appropriately and exits without
+doing any other work (except, of course, any cleanup it has to do). If the function
+encounters a non-error condition it wants to signal (such as &quot;encountered an
+unmappable character&quot; in transcoding), it sets the error code appropriately and
+continues. Otherwise, the function leaves the error code unchanged. </p>
+
+<p>Generally, only functions that don&#146;t take an ErrorCode parameter, but call
+functions that do, have to declare one. Almost all functions that take an ErrorCode
+parameter and also call other functions that do merely have to propagate the error code
+they were passed down to the functions they call. Functions that declare a new ErrorCode
+parameter must initialize it to ZERO_ERROR before calling any other functions. </p>
+
+<p>The rationale here is to allow a function to call several functions (that take error
+codes) in a row without having to check the error code after each one. [A function usually
+will have to check the error code before doing any other processing, however, since it is
+supposed to stop immediately after receiving an error code.] Propagating the error-code
+parameter down the call chain saves the programmer from having to declare one everywhere,
+and also allows us to more closely mimic the C++ exception protocol. </p>
+
+<h4><b><u>C Function and Data Type Naming</u></b></h4>
+<b>
+
+<p>Function names.</b> If a function is identical (or almost identical) to an ANSI or
+POSIX function, we give it the same name and (as much as possible) the same parameter
+list. A &quot;u&quot; is prepended onto the beginning of the name. </p>
+
+<p>For functions that exist prior to version 1.2.1, that the function name should begin
+with a lower-case &quot;u&quot;. After the &quot;u&quot; is a short code identifying the
+subsystem it belongs to (e.g., &quot;loc&quot;, &quot;rb&quot;, &quot;cnv&quot;,
+&quot;coll&quot;, etc.). This code is separated from the actual function name by an
+underscore, and the actual function name can be anything. For example, </p>
+
+<blockquote>
+  <pre><font size="-1">UChar* uloc_getLanguage(...);
+void uloc_setDefaultLocale(...);
+UChar* ures_getString(...);</font></pre>
+</blockquote>
+
+<p><b>Struct and enum type names.</b> For structs and enum types, the rule is that their
+names begin with a capital &quot;U.&quot; There is no underscore for struct names.</p>
+
+<pre><font size="-1" face="Courier New">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; UResourceBundle;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; UCollator;
+       UCollationResult;</font></pre>
+<b>
+
+<p>Enum value names.</b> Enumeration values have names that begin with &quot;UXXX&quot;
+where XXX stands for the name of the functional category.</p>
+
+<blockquote>
+  <pre><font size="-1" face="Courier New">UNUM_DECIMAL;
+UCOL_GREATER;</font></pre>
+</blockquote>
+<b>
+
+<p>Macro names.</b> Macro names are in all caps, but there are currently no other
+requirements. </p>
+
+<p><b>Constant names.</b> Many constant names (constants defined with &quot;const&quot;,
+not macros defined with &quot;#define&quot; that are used as constants) begin with a
+lowercase k, but this isn&#146;t universally enforced. </p>
+
+<h4><b><u>Preflighting and Overflow Handling</u></b></h4>
+
+<p>In ICU's C APIs, the user needs to adhere to the following principles for consistency
+across all functional categories: 
+
+<ol>
+  <li>All the Unicode string processing should be expressed in terms of a UChar* buffer that
+    is always null terminated.</li>
+  <li>The APIs assume that the input string parameters are statically allocated fix-sized
+    character buffers.</li>
+  <li>When the value a function is going to return is already stored as a constant value in
+    static space (e.g., it&#146;s coming from a fixed table, or is stored in a cache), the
+    function will just return the const UChar* pointer.</li>
+  <li>When the function can&#146;t return a UChar* to storage the user doesn&#146;t have to
+    delete, the caller needs to pass in a pointer to a character buffer that the function can
+    fill with the result. This pointer needs to be accompanied by a int32_t parameter that
+    gives the size of the buffer.</li>
+</ol>
+
+<p>To find out how large the result buffer should be, ICU provides a <strong>preflighting</strong>
+C interface.&nbsp; The interface works like this: 
+
+<ol>
+  <li>When using the &quot;<b>preflighting</b>&quot; option: you need to pass the function a
+    NULL pointer for the buffer pointer, and the function returns the actual size of the
+    result. You can then choose to allocate a buffer of the correct size and re-run the
+    operation if you would like to.</li>
+  <li>After allocating a buffer of some reasonable size on the stack and passes that to the
+    function, if the result can fit in that buffer, everything&nbsp; works fine. If the result
+    doesn&#146;t fit, the function will return the actual size needed.&nbsp; You can then
+    allocate a buffer of the correct size on the heap and try calling the same function again.</li>
+  <li>Now you have created a buffer of some reasonable size on the stack and passes it to the
+    function.&nbsp; If you don't care about the completeness of the result and the allocated
+    buffer is too small, you can continue on using the truncated result.</li>
+</ol>
+
+<p>The following three options demonstrates how to use the preflighting interface, </p>
+
+<blockquote>
+  <pre><font size="-1"><font face="Courier New">/**&nbsp;
+</font>&nbsp;* @param result is a pointer to where the actual result will be.
+&nbsp;* @param maxResultSize is the number of characters the buffer pointed to be result has room for.&nbsp;
+&nbsp;* @return The actual length of the result (counting the terminating null)
+&nbsp;*/
+int32_t doSomething( /* input params */, UChar* result,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; int32_t maxResultSize,<font
+face="Courier New"> UErrorCode* err);</font></font></pre>
+</blockquote>
+
+<p>In this sample, if the actual result doesn&#146;t fit in the space available in <font
+size="-1" face="Courier New">maxResultSize</font>, this function returns the amount of
+space necessary to hold the result, and result holds as many characters of the actual
+result as possible. If you don&#146;t care about this, no further action is necessary. If
+you <i>do </i>care about the truncated characters, you can then allocate a buffer on the
+heap of the size specified by the return value and call the function again, passing <i>that
+</i>buffer&#146;s address for result. </p>
+
+<p>All preflighting functions have a fill-in <font size="-1" face="Courier New">ErrorCode</font>
+parameter (and follow the normal <font size="-1" face="Courier New">ErrorCode</font>
+rules), even if they are not currently doing so. Buffer overflow would be treated as a
+FAILURE error condition, but would <i>not</i> be reported when the caller passes in NULL
+for <font size="-1" face="Courier New">actualResultSize</font> (presumably, a NULL for
+this parameter means the client doesn&#146;t care if he got a buffer overflow). All other
+failing error conditions will overwrite the &quot;buffer overflow&quot; error, e.g. <font
+face="Courier New">MISSING_RESOURCE_ERROR</font> etc..</p>
+
+<h4><b><u>Arrays as return types</u></b></h4>
+
+<p>Returning an array of strings is fairly easy in C++, but very hard in C. Instead of
+returning the array pointer directly, we opted for an iterative interface instead: split
+the function into two functions.&nbsp; One returns the number of elements in the array,
+and the other one returns a single specified element from the array.</p>
+
+<blockquote>
+  <pre><font size="-1" face="Courier New">int32_t countArrayItems(/* params */);
+int32_t getArrayElement(int32_t elementIndex, /* other params */,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; UChar* result, int32_t maxResultSize, UErrorCode* err);</font></pre>
+</blockquote>
+
+<p>In this case, iterating across all the elements in the array would amount to a call to
+the count() function followed by multiple calls to the getElement() function. </p>
+
+<blockquote>
+  <pre><font size="-1" face="Courier New">for (i = 0; i &lt; countArrayItems(...); i++) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; UChar element[50];
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; getArrayItem(i, ..., element, 50, &amp;err);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; /* do something with element */
+}</font></pre>
+</blockquote>
+
+<p>In the case of the resource bundle <font face="Courier New">ures_XXXX</font> functions
+returning 2-dimensional arrays, the getElement() function takes both x and y coordinates
+for the desired element, and the count() function returns the number of arrays (x axis).
+&nbsp; Since the size of each array element in the resource 2-D arrays should always be
+the same, this provides an easy-to-use C interface. </p>
+
+<blockquote>
+  <pre><font size="-1" face="Courier New">void countArrayItems(int32_t* rows, int32_t* columns,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; /* other params */);
+
+int32_t get2dArrayElement(int32_t rowIndex,&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; int32_t colIndex,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; /* other params */,&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; UChar* result,&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; int32_t maxResultSize,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; UErrorCode* err);</font></pre>
+</blockquote>
+
+<h3><a NAME="WhereToFindMore"></a><u>Where to Find More Information</u></h3>
+<a href="http://www.ibm.com/java/tools/international-classes/">
+
+<p>http://www.ibm.com/java/tools/international-classes/</a> is a pointer to general
+information about the International Classes For Unicode. </p>
+
+<p><a href="html/aindex.html">html/aindex.html</a> is an alphabetical index to detailed
+API documentation. <br>
+<a href="html/HIERjava.html">html/HIERjava.html</a> is a hierarchical index to detailed
+API documentation. </p>
+
+<p><a href="docs/collate.html">docs\collate.html</a> is an overview to Collation. </p>
+
+<p><a href="docs/BreakIterator.html">docs\BreakIterator.html</a> is a diagram showing how
+BreakIterator processes text elements. </p>
+
+<p><a href="http://www.ibm.com/java/education/international-unicode/unicode1.html">http://www.ibm.com/java/education/international-unicode/unicode1.html</a>
+is a pointer to information on how to make applications global. <br>
+&nbsp; </p>
+
+<h3><a NAME="SubmittingComments"></a><u>Submitting Comments, Requesting Features and
+Reporting Bugs</u></h3>
+
+<p>To submit comments, request features and report bugs, please contact us.&nbsp; While we
+are not able to respond individually to each comment, we do review all comments. Send
+Internet email to <a href="mailto:icu4c@us.ibm.com">icu4c@us.ibm.com.</a> <br>
+</p>
+
+<hr>
+
+<p>© Copyright 1997 Taligent, Inc. <br>
+© Copyright 1997-1999 IBM Corporation <br>
+IBM Center for Java Technology Silicon Valley, <br>
+10275 N De Anza Blvd., Cupertino, CA 95014 <br>
+All rights reserved. </p>
+
+<hr>
+</body>
+</html>

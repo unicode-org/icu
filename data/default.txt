@@ -1,0 +1,550 @@
+// ****************************************************************************
+// *                                                                          *
+// * COPYRIGHT:                                                               *
+// * (C) Copyright Taligent, Inc.,  1997                                      *
+// * (C) Copyright International Business Machines Corporation,  1997-99      *
+// * Licensed Material - Program-Property of IBM - All Rights Reserved.       *
+// * US Government Users Restricted Rights - Use, duplication, or disclosure  *
+// * restricted by GSA ADP Schedule Contract with IBM Corp.                   *
+// *                                                                          *
+// ****************************************************************************
+
+default {
+    Version { "3" }
+    "%%EURO" { "Euro" }         // Euro variant display name
+    "%%B"    { "Bokm\u00e5l" }  // Norwegian variant display name
+    "%%NY"   { "Nynorsk" }      // Norwegian variant display name
+    // Formats for the display name of a locale, for a list of
+    // items, and for composing two items in a list into one item.
+    // The list patterns are used in the variant name and in the
+    // full display name.
+    //
+    // This is the language-neutral form of this resource.
+    //
+    LocaleNamePatterns {
+         {
+            "{0,choice,0#|1#{1}|2#{1} ({2})}", // Display name
+            "{0,choice,0#|1#{1}|2#{1},{2}|3#{1},{2},{3}}", // List
+            "{0},{1}" // List composition
+         }
+     }
+
+    AmPmMarkers { 
+            "AM",
+            "PM",
+    }
+    Countries { 
+        AF { "Afghanistan" }
+        AL { "Albania" }
+        DZ { "Algeria" }
+        AD { "Andorra" }
+        AO { "Angola" }
+        AI { "Anguilla" }
+        AR { "Argentina" }
+        AM { "Armenia" }
+        AW { "Aruba" }
+        AU { "Australia" }
+        AT { "Austria" }
+        AZ { "Azerbaijan" }
+        BS { "Bahamas" }
+        BH { "Bahrain" }
+        BD { "Bangladesh" }
+        BB { "Barbados" }
+        BY { "Belarus" }
+        BE { "Belgium" }
+        BZ { "Belize" }
+        BJ { "Benin" }
+        BM { "Bermuda" }
+        BT { "Bhutan" }
+        BO { "Bolivia" }
+        BA { "Bosnia and Herzegovina" }
+        BW { "Botswana" }
+        BR { "Brazil" }
+        BN { "Brunei" }
+        BG { "Bulgaria" }
+        BF { "Burkina Faso" }
+        BI { "Burundi" }
+        KH { "Cambodia" }
+        CM { "Cameroon" }
+        CA { "Canada" }
+        CV { "Cape Verde" }
+        CF { "Central African Republic" }
+        TD { "Chad" }
+        CL { "Chile" }
+        CN { "China" }
+        CO { "Colombia" }
+        KM { "Comoros" }
+        CG { "Congo" }
+        CR { "Costa Rica" }
+        CI { "C\u00F4te d'Ivoire" }
+        HR { "Croatia" }
+        CU { "Cuba" }
+        CY { "Cyprus" }
+        CZ { "Czech Republic" }
+        DK { "Denmark" }
+        DJ { "Djibouti" }
+        DM { "Dominica" }
+        DO { "Dominican Republic" }
+        TP { "East Timor" }
+        EC { "Ecuador" }
+        EG { "Egypt" }
+        SV { "El Salvador" }
+        GQ { "Equatorial Guinea" }
+        ER { "Eritrea" }
+        EE { "Estonia" }
+        ET { "Ethiopia" }
+        FJ { "Fiji" }
+        FI { "Finland" }
+        FR { "France" }
+        GF { "French Guiana" }
+        PF { "French Polynesia" }
+        TF { "French Southern Territories" }
+        GA { "Gabon" }
+        GM { "Gambia" }
+        GE { "Georgia" }
+        DE { "Germany" }
+        GH { "Ghana" }
+        GR { "Greece" }
+        GP { "Guadeloupe" }
+        GT { "Guatemala" }
+        GN { "Guinea" }
+        GW { "Guinea-Bissau" }
+        GY { "Guyana" }
+        HT { "Haiti" }
+        HN { "Honduras" }
+        HK { "Hong Kong" }
+        HU { "Hungary" }
+        IS { "Iceland" }
+        IN { "India" }
+        ID { "Indonesia" }
+        IR { "Iran" }
+        IQ { "Iraq" }
+        IE { "Ireland" }
+        IL { "Israel" }
+        IT { "Italy" }
+        JM { "Jamaica" }
+        JP { "Japan" }
+        JO { "Jordan" }
+        KZ { "Kazakhstan" }
+        KE { "Kenya" }
+        KI { "Kiribati" }
+        KP { "North Korea" }
+        KR { "South Korea" }
+        KW { "Kuwait" }
+        KG { "Kyrgyzstan" }
+        LA { "Laos" }
+        LV { "Latvia" }
+        LB { "Lebanon" }
+        LS { "Lesotho" }
+        LR { "Liberia" }
+        LY { "Libya" }
+        LI { "Liechtenstein" }
+        LT { "Lithuania" }
+        LU { "Luxembourg" }
+        MK { "Macedonia" }
+        MG { "Madagascar" }
+        MY { "Malaysia" }
+        ML { "Mali" }
+        MT { "Malta" }
+        MQ { "Martinique" }
+        MR { "Mauritania" }
+        MU { "Mauritius" }
+        YT { "Mayotte" }
+        MX { "Mexico" }
+        FM { "Micronesia" }
+        MD { "Moldova" }
+        MC { "Monaco" }
+        MN { "Mongolia" }
+        MS { "Montserrat" }
+        MA { "Morocco" }
+        MZ { "Mozambique" }
+        MM { "Myanmar" }
+        NA { "Namibia" }
+        NP { "Nepal" }
+        NL { "Netherlands" }
+        AN { "Netherlands Antilles" }
+        NC { "New Caledonia" }
+        NZ { "New Zealand" }
+        NI { "Nicaragua" }
+        NE { "Niger" }
+        NG { "Nigeria" }
+        NU { "Niue" }
+        NO { "Norway" }
+        OM { "Oman" }
+        PK { "Pakistan" }
+        PA { "Panama" }
+        PG { "Papua New Guinea" }
+        PY { "Paraguay" }
+        PE { "Peru" }
+        PH { "Philippines" }
+        PL { "Poland" }
+        PT { "Portugal" }
+        PR { "Puerto Rico" }
+        QA { "Qatar" }
+        RO { "Romania" }
+        RU { "Russia" }
+        RW { "Rwanda" }
+        SA { "Saudi Arabia" }
+        SN { "Senegal" }
+        SP { "Serbia" }
+        SC { "Seychelles" }
+        SL { "Sierra Leone" }
+        SG { "Singapore" }
+        SK { "Slovakia" }
+        SI { "Slovenia" }
+        SO { "Somalia" }
+        ZA { "South Africa" }
+        ES { "Spain" }
+        LK { "Sri Lanka" }
+        SD { "Sudan" }
+        SR { "Suriname" }
+        SZ { "Swaziland" }
+        SE { "Sweden" }
+        CH { "Switzerland" }
+        SY { "Syria" }
+        TW { "Taiwan" }
+        TJ { "Tajikistan" }
+        TZ { "Tanzania" }
+        TH { "Thailand" }
+        TG { "Togo" }
+        TK { "Tokelau" }
+        TO { "Tonga" }
+        TT { "Trinidad and Tobago" }
+        TN { "Tunisia" }
+        TR { "Turkey" }
+        TM { "Turkmenistan" }
+        UG { "Uganda" }
+        UA { "Ukraine" }
+        AE { "United Arab Emirates" }
+        GB { "United Kingdom" }
+        US { "United States" }
+        UY { "Uruguay" }
+        UZ { "Uzbekistan" }
+        VU { "Vanuatu" }
+        VA { "Vatican" }
+        VE { "Venezuela" }
+        VN { "Vietnam" }
+        VG { "British Virgin Islands" }
+        VI { "U.S. Virgin Islands" }
+        EH { "Western Sahara" }
+        YE { "Yemen" }
+        YU { "Yugoslavia" }
+        ZR { "Zaire" }
+        ZM { "Zambia" }
+        ZW { "Zimbabwe" }
+    }
+    CurrencyElements { 
+            "\u00A4",
+            "XXX",
+            "",
+    }
+    DateTimeElements { 
+            "1",
+            "1",
+    }
+    DateTimePatterns { 
+            "h:mm:ss a z",
+            "h:mm:ss a z",
+            "h:mm:ss a",
+            "h:mm a",
+            "EEEE, MMMM d, yyyy",
+            "MMMM d, yyyy",
+            "MMM d, yyyy",
+            "M/d/yy",
+            "{1} {0}",
+    }
+    DayAbbreviations { 
+            "Sun",
+            "Mon",
+            "Tue",
+            "Wed",
+            "Thu",
+            "Fri",
+            "Sat",
+    }
+    DayNames { 
+            "Sunday",
+            "Monday",
+            "Tuesday",
+            "Wednesday",
+            "Thursday",
+            "Friday",
+            "Saturday",
+    }
+    Eras { 
+            "BC",
+            "AD",
+    }
+    Languages { 
+        ab { "Abkhazian" }
+        aa { "Afar" }
+        af { "Afrikaans" }
+        sq { "Albanian" }
+        am { "Amharic" }
+        ar { "Arabic" }
+        hy { "Armenian" }
+        as { "Assamese" }
+        ay { "Aymara" }
+        az { "Azerbaijani" }
+        ba { "Bashkir" }
+        eu { "Basque" }
+        bn { "Bengali" }
+        dz { "Bhutani" }
+        bh { "Bihari" }
+        bi { "Bislama" }
+        br { "Breton" }
+        bg { "Bulgarian" }
+        my { "Burmese" }
+        be { "Byelorussian" }
+        km { "Cambodian" }
+        ca { "Catalan" }
+        zh { "Chinese" }
+        co { "Corsican" }
+        hr { "Croatian" }
+        cs { "Czech" }
+        da { "Danish" }
+        nl { "Dutch" }
+        en { "English" }
+        eo { "Esperanto" }
+        et { "Estonian" }
+        fo { "Faeroese" }
+        fj { "Fiji" }
+        fi { "Finnish" }
+        fr { "French" }
+        fy { "Frisian" }
+        gl { "Galician" }
+        ka { "Georgian" }
+        de { "German" }
+        el { "Greek" }
+        kl { "Greenlandic" }
+        gn { "Guarani" }
+        gu { "Gujarati" }
+        ha { "Hausa" }
+        he { "Hebrew" }
+        iw { "Hebrew" }
+        hi { "Hindi" }
+        hu { "Hungarian" }
+        is { "Icelandic" }
+        id { "Indonesian" }
+        in { "Indonesian" }
+        ia { "Interlingua" }
+        ie { "Interlingue" }
+        iu { "Inukitut" }
+        ik { "Inupiak" }
+        ga { "Irish" }
+        it { "Italian" }
+        ja { "Japanese" }
+        jw { "Javanese" }
+        kn { "Kannada" }
+        ks { "Kashmiri" }
+        kk { "Kazakh" }
+        rw { "Kinyarwanda" }
+        ky { "Kirghiz" }
+        rn { "Kirundi" }
+        ko { "Korean" }
+        ku { "Kurdish" }
+        lo { "Laothian" }
+        la { "Latin" }
+        lv { "Latvian (Lettish)" }
+        ln { "Lingala" }
+        lt { "Lithuanian" }
+        mk { "Macedonian" }
+        mg { "Malagasy" }
+        ms { "Malay" }
+        ml { "Malayalam" }
+        mt { "Maltese" }
+        mi { "Maori" }
+        mr { "Marathi" }
+        mo { "Moldavian" }
+        mn { "Mongolian" }
+        na { "Nauru" }
+        ne { "Nepali" }
+        no { "Norwegian" }
+        oc { "Occitan" }
+        or { "Oriya" }
+        om { "Oromo (Afan)" }
+        ps { "Pashto (Pushto)" }
+        fa { "Persian" }
+        pl { "Polish" }
+        pt { "Portuguese" }
+        pa { "Punjabi" }
+        qu { "Quechua" }
+        rm { "Rhaeto-Romance" }
+        ro { "Romanian" }
+        ru { "Russian" }
+        sm { "Samoan" }
+        sg { "Sangro" }
+        sa { "Sanskrit" }
+        gd { "Scots Gaelic" }
+        sr { "Serbian" }
+        sh { "Serbo-Croatian" }
+        st { "Sesotho" }
+        tn { "Setswana" }
+        sn { "Shona" }
+        sd { "Sindhi" }
+        si { "Singhalese" }
+        ss { "Siswati" }
+        sk { "Slovak" }
+        sl { "Slovenian" }
+        so { "Somali" }
+        es { "Spanish" }
+        su { "Sundanese" }
+        sw { "Swahili" }
+        sv { "Swedish" }
+        tl { "Tagalog" }
+        tg { "Tajik" }
+        ta { "Tamil" }
+        tt { "Tatar" }
+        te { "Telugu" }
+        th { "Thai" }
+        bo { "Tibetan" }
+        ti { "Tigrinya" }
+        to { "Tonga" }
+        ts { "Tsonga" }
+        tr { "Turkish" }
+        tk { "Turkmen" }
+        tw { "Twi" }
+        ug { "Uighur" }
+        uk { "Ukrainian" }
+        ur { "Urdu" }
+        uz { "Uzbek" }
+        vi { "Vietnamese" }
+        vo { "Volapuk" }
+        cy { "Welsh" }
+        wo { "Wolof" }
+        xh { "Xhosa" }
+        ji { "Yiddish" }
+        yi { "Yiddish" }
+        yo { "Yoruba" }
+        za { "Zhuang" }
+        zu { "Zulu" }
+    }
+    LocaleID { "0409" }
+    LocaleString { "en" }
+    MonthAbbreviations { 
+            "Jan",
+            "Feb",
+            "Mar",
+            "Apr",
+            "May",
+            "Jun",
+            "Jul",
+            "Aug",
+            "Sep",
+            "Oct",
+            "Nov",
+            "Dec",
+            "",
+    }
+    MonthNames { 
+            "January",
+            "February",
+            "March",
+            "April",
+            "May",
+            "June",
+            "July",
+            "August",
+            "September",
+            "October",
+            "November",
+            "December",
+            "",
+    }
+    NumberElements { 
+            ".",
+            ",",
+            ";",
+            "%",
+            "0",
+            "#",
+            "-",
+            "E",
+            "\u2030",
+            "\u221E",
+            "\uFFFD",
+    }
+    NumberPatterns { 
+            "#,##0.###;-#,##0.###",
+            "\u00A4 #,##0.00;-\u00A4 #,##0.00",
+            "#,##0%",
+    }
+    ShortCountry { "" }
+    ShortLanguage { "eng" }
+    localPatternChars { "GyMdkHmsSEDFwWahKz" }
+    zoneStrings { 
+        {
+                "PST",
+                "Pacific Standard Time",
+                "PST",
+                "Pacific Daylight Time",
+                "PDT",
+                "San Francisco",
+        }
+        {
+                "MST",
+                "Mountain Standard Time",
+                "MST",
+                "Mountain Daylight Time",
+                "MDT",
+                "Denver",
+        }
+        {
+                "PNT",
+                "Mountain Standard Time",
+                "MST",
+                "Mountain Standard Time",
+                "MST",
+                "Phoenix",
+        }
+        {
+                "CST",
+                "Central Standard Time",
+                "CST",
+                "Central Daylight Time",
+                "CDT",
+                "Chicago",
+        }
+        {
+                "EST",
+                "Eastern Standard Time",
+                "EST",
+                "Eastern Daylight Time",
+                "EDT",
+                "New York",
+        }
+        {
+                "IET",
+                "Eastern Standard Time",
+                "EST",
+                "Eastern Standard Time",
+                "EST",
+                "Indianapolis",
+        }
+        {
+                "PRT",
+                "Atlantic Standard Time",
+                "AST",
+                "Atlantic Daylight Time",
+                "ADT",
+                "Halifax",
+        }
+        {
+                "HST",
+                "Hawaii Standard Time",
+                "HST",
+                "Hawaii Daylight Time",
+                "HDT",
+                "Honolulu",
+        }
+        {
+                "AST",
+                "Alaska Standard Time",
+                "AST",
+                "Alaska Daylight Time",
+                "ADT",
+                "Anchorage",
+        }
+    }
+}
+
