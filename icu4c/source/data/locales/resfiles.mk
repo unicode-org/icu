@@ -59,7 +59,7 @@ es_PE.txt es_PR.txt es_PY.txt es_SV.txt es_US.txt\
 es_UY.txt es_VE.txt\
 et.txt et_EE.txt\
 eu.txt eu_ES.txt eu_ES_PREEURO.txt\
-fa.txt fa_IR.txt\
+fa.txt fa_AF.txt fa_IR.txt\
 fi.txt fi_FI.txt fi_FI_PREEURO.txt\
 fo.txt fo_FO.txt\
 fr.txt fr_BE.txt fr_BE_PREEURO.txt fr_CA.txt fr_CH.txt\
@@ -92,6 +92,7 @@ nl.txt nl_BE.txt nl_BE_PREEURO.txt nl_NL.txt nl_NL_PREEURO.txt\
 nn.txt nn_NO.txt\
 om.txt om_ET.txt om_KE.txt\
 pl.txt pl_PL.txt\
+ps.txt ps_AF.txt\
 pt.txt pt_BR.txt pt_PT.txt pt_PT_PREEURO.txt\
 ro.txt ro_RO.txt\
 ru.txt ru_RU.txt ru_UA.txt\
