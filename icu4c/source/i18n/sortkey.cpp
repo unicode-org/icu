@@ -234,16 +234,13 @@ CollationKey::compareTo(const CollationKey& target) const
   }
 
   if (minLength > 0) {
-    uint8_t diff;
-    do {
-      diff = *(src ++) - *(tgt ++);
-      if (diff > 0) {
-        return Collator::GREATER;
-      }
-      else if (diff < 0) {
+    uint8_t diff = uprv_memcmp(src, tgt, minLength * sizeof(UChar));
+    if (diff > 0) {
+      return Collator::GREATER;
+    }
+    else
+      if (diff < 0)
         return Collator::LESS;
-      }
-    } while (-- minLength > 0);
   }
 
   return result;
