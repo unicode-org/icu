@@ -14,6 +14,7 @@
 #include "unicode/unistr.h"
 
 class ParsePosition;
+class TransliterationRuleData;
 
 /**
  * A mutable set of Unicode characters.  Objects of this class
@@ -202,6 +203,24 @@ class U_I18N_API UnicodeSet {
      * zero length and are filled in on demand.
      */
     static UnicodeString* CATEGORY_PAIRS_CACHE;
+
+    /**
+     * Delimiter string used in patterns to close a category reference:
+     * ":]".  Example: "[:Lu:]".
+     */
+    static const UnicodeString CATEGORY_CLOSE;
+
+    /**
+     * Delimiter char beginning a variable reference:
+     * "{".  Example: "{var}".
+     */
+    static const UChar VARIABLE_REF_OPEN;
+    
+    /**
+     * Delimiter char ending a variable reference:
+     * "}".  Example: "{var}".
+     */
+    static const UChar VARIABLE_REF_CLOSE;
 
     //----------------------------------------------------------------
     // Debugging and testing
@@ -503,6 +522,7 @@ private:
     static UnicodeString& parse(UnicodeString& pairsBuf /*result*/,
                                 const UnicodeString& pattern,
                                 ParsePosition& pos,
+                                const TransliterationRuleData* data,
                                 UErrorCode& status);
 
     //----------------------------------------------------------------
