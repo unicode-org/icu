@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/demo/translit/Attic/Demo.java,v $ 
- * $Date: 2001/11/25 23:18:02 $ 
- * $Revision: 1.7 $
+ * $Date: 2001/11/28 19:27:09 $ 
+ * $Revision: 1.8 $
  *
  *****************************************************************************************
  */
@@ -15,7 +15,7 @@ import java.applet.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
-import com.ibm.text.components.*;
+import com.ibm.icu.demo.components.*;
 import com.ibm.text.*;
 
 /**
@@ -27,7 +27,7 @@ import com.ibm.text.*;
  * <p>Copyright (c) IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: Demo.java,v $ $Revision: 1.7 $ $Date: 2001/11/25 23:18:02 $
+ * @version $RCSfile: Demo.java,v $ $Revision: 1.8 $ $Date: 2001/11/28 19:27:09 $
  */
 public class Demo extends Frame {
 

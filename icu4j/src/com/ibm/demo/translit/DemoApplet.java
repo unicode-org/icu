@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/demo/translit/Attic/DemoApplet.java,v $ 
- * $Date: 2000/03/10 03:47:44 $ 
- * $Revision: 1.4 $
+ * $Date: 2001/11/28 19:27:09 $ 
+ * $Revision: 1.5 $
  *
  *****************************************************************************************
  */
@@ -14,7 +14,7 @@ package com.ibm.demo.translit;
 import java.awt.*;
 import java.awt.event.*;
 import java.applet.*;
-import com.ibm.text.components.AppletFrame;
+import com.ibm.icu.demo.components.AppletFrame;
 
 /**
  * A simple Applet that shows a button.  When pressed, the button
@@ -24,7 +24,7 @@ import com.ibm.text.components.AppletFrame;
  * <p>Copyright (c) IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: DemoApplet.java,v $ $Revision: 1.4 $ $Date: 2000/03/10 03:47:44 $
+ * @version $RCSfile: DemoApplet.java,v $ $Revision: 1.5 $ $Date: 2001/11/28 19:27:09 $
  */
 public class DemoApplet extends Applet {
 
