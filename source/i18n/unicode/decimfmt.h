@@ -1187,6 +1187,10 @@ private:
     UBool subparse(const UnicodeString& text, ParsePosition& parsePosition,
                     DigitList& digits, UBool* status) const;
 
+    static int32_t compareAffix(const UnicodeString& affix,
+                                const UnicodeString& input,
+                                int32_t pos);
+
     /**
      * Get a decimal format symbol.
      * Returns a const reference to the symbol string.
