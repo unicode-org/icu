@@ -54,8 +54,16 @@ ctest_pathnameInContext( char* fullname, int32_t maxsize, const char* relPath )
     int32_t lenMainDir;
     int32_t lenRelPath ;   
 
-#ifdef _WIN32
-        mainDir = "";   /*  The "intlwork" directory is part of the relative path*/
+#if defined(_WIN32) || defined(WIN32) || defined(__OS2__) || defined(OS2)
+        char mainDirBuffer[200];
+        mainDir = getenv("ICU_DATA");
+        if(mainDir!=NULL) {
+            strcpy(mainDirBuffer, mainDir);
+            strcat(mainDirBuffer, "..\\..");
+        } else {
+            mainDirBuffer[0]='\0';
+        }
+        mainDir=mainDirBuffer;
         sepChar = '\\';
 #elif defined(_AIX) || defined(SOLARIS) || defined(LINUX) || defined(HPUX)
         mainDir = getenv("HOME");
