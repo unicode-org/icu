@@ -506,6 +506,11 @@ UnicodeString::doCompare( UTextOffset start,
   UTextOffset minLength;
   int8_t lengthResult;
 
+  // get the srcLength if necessary
+  if(srcLength < 0) {
+    srcLength = u_strlen(srcChars + srcStart);
+  }
+
   // are we comparing different lengths?
   if(length != srcLength) {
     if(length < srcLength) {
@@ -581,6 +586,11 @@ UnicodeString::doCompareCodePointOrder(UTextOffset start,
   UTextOffset minLength;
   int8_t lengthResult;
 
+  // get the srcLength if necessary
+  if(srcLength < 0) {
+    srcLength = u_strlen(srcChars + srcStart);
+  }
+
   // are we comparing different lengths?
   if(length != srcLength) {
     if(length < srcLength) {
@@ -625,6 +635,11 @@ UnicodeString::doCaseCompare(UTextOffset start,
 
   // pin indices to legal values
   pinIndices(start, length);
+
+  // get the srcLength if necessary
+  if(srcLength < 0) {
+    srcLength = u_strlen(srcChars + srcStart);
+  }
 
   // get the correct pointer
   const UChar *chars = getArrayStart();
@@ -722,8 +737,16 @@ UnicodeString::indexOf(const UChar *srcChars,
                UTextOffset start,
                int32_t length) const
 {
-  if(isBogus() || srcChars == 0 || srcStart < 0 || srcLength <= 0) {
+  if(isBogus() || srcChars == 0 || srcStart < 0 || srcLength == 0) {
     return -1;
+  }
+
+  // get the srcLength if necessary
+  if(srcLength < 0) {
+    srcLength = u_strlen(srcChars + srcStart);
+    if(srcLength == 0) {
+      return -1;
+    }
   }
 
   // now we will only work with srcLength-1
@@ -787,8 +810,16 @@ UnicodeString::lastIndexOf(const UChar *srcChars,
                UTextOffset start,
                int32_t length) const
 {
-  if(isBogus() || srcChars == 0 || srcStart < 0 || srcLength <= 0) {
+  if(isBogus() || srcChars == 0 || srcStart < 0 || srcLength == 0) {
     return -1;
+  }
+
+  // get the srcLength if necessary
+  if(srcLength < 0) {
+    srcLength = u_strlen(srcChars + srcStart);
+    if(srcLength == 0) {
+      return -1;
+    }
   }
 
   // now we will only work with srcLength-1
@@ -1123,6 +1154,9 @@ UnicodeString::doReplace(UTextOffset start,
 
   if(srcChars == 0) {
     srcStart = srcLength = 0;
+  } else if(srcLength < 0) {
+    // get the srcLength if necessary
+    srcLength = u_strlen(srcChars + srcStart);
   }
 
   int32_t *bufferToDelete = 0;
