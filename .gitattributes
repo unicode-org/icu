@@ -35,6 +35,7 @@ icu4j/src/com/ibm/icu/dev/test/translit/package.html svneol=native#text/html
 icu4j/src/com/ibm/icu/dev/tool/compression/package.html svneol=native#text/html
 icu4j/src/com/ibm/icu/dev/tool/normalizer/package.html svneol=native#text/html
 icu4j/src/com/ibm/icu/impl/data/ICULocaleData.jar -text svneol=unset#application/java-archive
+icu4j/src/com/ibm/icu/impl/data/invuca.dat -text
 icu4j/src/com/ibm/icu/impl/data/package.html svneol=native#text/html
 icu4j/src/com/ibm/icu/impl/data/thai_dict -text
 icu4j/src/com/ibm/icu/impl/data/ucadata.dat -text

@@ -4,27 +4,36 @@
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
-* $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/Attic/BOSCU.java,v $ 
-* $Date: 2002/06/22 07:23:45 $ 
-* $Revision: 1.3 $
+* $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/BOCU.java,v $ 
+* $Date: 2002/07/12 21:59:21 $ 
+* $Revision: 1.1 $
 *
 *******************************************************************************
 */
-package com.ibm.icu.text;
+package com.ibm.icu.impl;
 
 import com.ibm.icu.impl.UnicodeCharacterIterator;
 
 /**
- * <p>Binary Ordered Compression Scheme for Unicode</p>
+ * <p>Binary Ordered Compression for Unicode</p>
  * 
- * <p>(Syn Wee: reference a paper if we have one on our site)</p>
+ * <p>Users are strongly encouraged to read the ICU paper on 
+ * <a href=http://oss.software.ibm.com/docs/papers/binary_ordered_compression_for_unicode.html>
+ * BOCU</a> before attempting to use this class.</p>
+ * 
  * <p>BOCU is used to compress unicode text into a stream of unsigned
  * bytes.  For many kinds of text the compression compares favorably
  * to UTF-8, and for some kinds of text (such as CJK) it does better.
  * The resulting bytes will compare in the same order as the original
  * code points.  The byte stream does not contain the values 0, 1, or
- * 2. (Syn Wee, I don't understand the comment later in the source
- * about these values being used in sort keys, can you explain?)</p>
+ * 2.</p>
+ * 
+ * <p>One example of a use of BOCU is in {@link 
+ * Collator#getCollationKey(String)} for a RuleBasedCollator object with 
+ * collation strength IDENTICAL. The result CollationKey will consist of the 
+ * collation order of the source string followed by the BOCU result of the 
+ * source string. 
+ * </p> 
  *
  * <p>Unlike a UTF encoding, BOCU-compressed text is not suitable for
  * random access.</p>
@@ -73,37 +82,27 @@ import com.ibm.icu.impl.UnicodeCharacterIterator;
  * @author Syn Wee Quek
  * @since release 2.2, May 3rd 2002
  * @draft 2.2 */
-public class BOSCU 
+public class BOCU 
 {      
     // public constructors --------------------------------------------------
     
     // public methods -------------------------------------------------------
         
     /**
-     * <p>(Syn Wee-- I think this should be renamed to 'compress')</p>
      * <p>Encode the code points of a string as a sequence of bytes,
      * preserving lexical order.</p>
-     *
+     * <p>The minimum size of buffer required for the compression can be 
+     * preflighted by getCompressionLength(String).</p>
      * @param source text source
      * @param buffer output buffer
      * @param offset to start writing to
      * @return end offset where the writing stopped
+     * @see #getCompressionLength(String)
+     * @exception ArrayIndexOutOfBoundsException thrown if size of buffer is 
+     *            too small for the output.
      */
-    public static int writeIdenticalLevelRun(String source, byte buffer[], 
-                                             int offset) 
+    public static int compress(String source, byte buffer[], int offset) 
     {
-        // (Syn Wee - this is a public function so comments of this nature don't
-        // really belong in the documentation, I think.  So I moved them.)
-        // Optimize the difference-taking for runs of Unicode text within
-        // small scripts.
-        // Most small scripts are allocated within aligned 128-blocks of Unicode
-        // code points. Lexical order is preserved if "prev" is always moved
-        // into the middle of such a block.
-        // <p>Additionally, "prev" is moved from anywhere in the Unihan area into 
-        // the middle of that area.
-        // Note that the identical-level run in a sort key is generated from
-        // NFD text - there are never Hangul characters included.
-
         int prev = 0;
         UnicodeCharacterIterator iterator = new UnicodeCharacterIterator(source);
         int codepoint = iterator.nextCodePoint();
@@ -125,12 +124,12 @@ public class BOSCU
     }
         
     /** 
-     * <p>(Syn Wee, I think this should be renamed getCompressedLength).</p>
-     * Return the number of  bytes that writeIdenticalLevelRun() would write.
+     * Return the number of  bytes that compress() would write.
      * @param source text source string
      * @return the length of the BOCU result 
+     * @see #compress(String, byte[], int)
      */
-    public static int lengthOfIdenticalLevelRun(String source) 
+    public static int getCompressionLength(String source) 
     {
         int prev = 0;
         int result = 0;
@@ -245,7 +244,7 @@ public class BOSCU
     /**
      * Constructor private to prevent initialization
      */
-    private BOSCU()
+    private BOCU()
     {
     }                                                                                                   
     

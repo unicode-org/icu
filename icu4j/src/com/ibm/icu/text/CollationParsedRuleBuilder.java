@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/CollationParsedRuleBuilder.java,v $ 
-* $Date: 2002/06/21 23:57:55 $ 
-* $Revision: 1.1 $
+* $Date: 2002/07/12 21:59:22 $ 
+* $Revision: 1.2 $
 *
 *******************************************************************************
 */
@@ -20,8 +20,10 @@ import java.util.Vector;
 import java.util.Arrays;
 import java.util.Enumeration;
 
-import com.ibm.icu.dev.test.lang.UCharacterCaseTest;
 import com.ibm.icu.impl.TrieBuilder;
+import com.ibm.icu.impl.IntTrieBuilder;
+import com.ibm.icu.impl.TrieIterator;
+import com.ibm.icu.impl.Utility;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.impl.NormalizerImpl;
 import com.ibm.icu.util.RangeValueIterator;
@@ -81,35 +83,36 @@ class CollationParsedRuleBuilder
 	     * @param ce ce to test
 	     * @param contce continuation ce to test
 	     * @param strength collation strength
-	     * @param result an array to store the return results of inverse ce, 
-	     *        previous inverse ce and previous inverse continuation ce
+	     * @param prevresult an array to store the return results previous 
+         *                   inverse ce and previous inverse continuation ce
+         * @return result of the inverse ce 
 	     */
-	    final void getInversePrevCE(int ce, int contce, int strength, 
-                                    int result[]) 
+	    final int getInversePrevCE(int ce, int contce, int strength, 
+                                    int prevresult[]) 
 	    {
-		    int ice = findInverseCE(ce, contce);
+		    int result = findInverseCE(ce, contce);
 		
-		    if (ice < 0) {
-		        result[0] = -1;
-		                result[1] = CollationElementIterator.NULLORDER;
-		        return;
+		    if (result < 0) {
+		        prevresult[0] = CollationElementIterator.NULLORDER;
+		        return -1;
 		    }
 		
 		    ce &= STRENGTH_MASK_[strength];
 		    contce &= STRENGTH_MASK_[strength];
 		
-		    result[1] = ce;
-		    result[2] = contce;
+            prevresult[0] = ce;
+		    prevresult[1] = contce;
 		
-		    while ((result[1]  & STRENGTH_MASK_[strength]) == ce 
-		           && (result[2]  & STRENGTH_MASK_[strength])== contce
-		           && ice > 0) { 
+		    while ((prevresult[0]  & STRENGTH_MASK_[strength]) == ce 
+		           && (prevresult[1]  & STRENGTH_MASK_[strength])== contce
+		           && result > 0) { 
 		                // this condition should prevent falling off the edge of the 
 		                // world 
 		        // here, we end up in a singularity - zero
-		        result[1] = m_table_[3 * (-- ice)];
-		        result[2] = m_table_[3 * ice + 1];
+		        prevresult[0] = m_table_[3 * (-- result)];
+		        prevresult[1] = m_table_[3 * result + 1];
 		   }
+           return result;
 		}
         
         /**
@@ -128,10 +131,11 @@ class CollationParsedRuleBuilder
 		        result = (top + bottom) >> 1;
 		        int first = m_table_[3 * result];
 		        int second = m_table_[3 * result + 1];
-			    if (first > ce) {
+                int comparison = Utility.compareUnsigned(first, ce);
+			    if (comparison > 0) {
 			        top = result;
 			    } 
-                else if (first < ce) {
+                else if (comparison < 0) {
 			        bottom = result;
 			    } 
                 else {
@@ -177,8 +181,11 @@ class CollationParsedRuleBuilder
 			    listheader.m_pos_[i] = -1;
 		    }
 	
-	        if (listheader.m_baseCE_ >= CE_PRIMARY_IMPLICIT_MIN_ 
-	            && listheader.m_baseCE_ < CE_PRIMARY_IMPLICIT_MAX_) { 
+	        if ((listheader.m_baseCE_ >>> 24) 
+                >= RuleBasedCollator.UCA_CONSTANTS_.PRIMARY_IMPLICIT_MIN_
+	            && (listheader.m_baseCE_ >>> 24)
+                < RuleBasedCollator.UCA_CONSTANTS_.PRIMARY_IMPLICIT_MAX_) 
+            { 
 	            // implicits -
 			    listheader.m_pos_[0] = 0;
 			    int t1 = listheader.m_baseCE_;
@@ -231,7 +238,7 @@ class CollationParsedRuleBuilder
 			} 
 	        else {
 			    while (true) {
-			        if (tokenstrength < CE_STRENGTH_LIMIT_) {
+			        if (tokenstrength < CE_BASIC_STRENGTH_LIMIT_) {
 	                    listheader.m_pos_[tokenstrength] 
 	                                   = getInverseNext(listheader, 
                                                         tokenstrength);
@@ -248,12 +255,12 @@ class CollationParsedRuleBuilder
 			
 			        while (token != null && token.m_strength_ >= tokenstrength) 
                     {
-				        if (tokenstrength < CE_STRENGTH_LIMIT_) {
+				        if (tokenstrength < CE_BASIC_STRENGTH_LIMIT_) {
 				            listheader.m_lStrToken_[tokenstrength] = token;
 				        }
 				        token = token.m_next_;
 				    }
-			        if (tokenstrength < CE_STRENGTH_LIMIT_ - 1) {
+			        if (tokenstrength < CE_BASIC_STRENGTH_LIMIT_ - 1) {
 			            // check if previous interval is the same and merge the 
 	                    // intervals if it is so
 			            if (listheader.m_pos_[tokenstrength] 
@@ -378,9 +385,9 @@ class CollationParsedRuleBuilder
 		else { // no rules, but no error either must be only options
 		       // We will init the collator from UCA   
 		    collator.setWithUCATables();
-		    // And set only the options
-		    m_parser_.setDefaultOptionsInCollator(collator);
 		}
+        // And set only the options
+        m_parser_.setDefaultOptionsInCollator(collator);
     }
     
     /**
@@ -427,7 +434,7 @@ class CollationParsedRuleBuilder
 	    for (int i = 0; i < m_parser_.m_resultLength_; i ++) {
 		    // now we need to generate the CEs  
 		    // We stuff the initial value in the buffers, and increase the 
-            // appropriate buffer according to strength                                                          */
+            // appropriate buffer according to strength
 		    initBuffers(m_parser_.m_listHeader_[i]);
 	    }
 		
@@ -479,8 +486,8 @@ class CollationParsedRuleBuilder
 		// add latin-1 stuff
 		for (char u = 0; u < 0x100; u ++) {
             // if ((CE = ucmpe32_get(t.m_mapping, u)) == UCOL_NOT_FOUND
-            int CE = TrieBuilder.get32(t.m_mapping_, (int)u);
-		    if (CE == CE_NOT_FOUND_ 
+            int CE = t.m_mapping_.getValue((int)u);
+            if (CE == CE_NOT_FOUND_ 
 		        // this test is for contractions that are missing the starting 
                 // element. Looks like latin-1 should be done before 
                 // assembling the table, even if it results in more false 
@@ -507,11 +514,11 @@ class CollationParsedRuleBuilder
 		}
 		
         // copy contractions from the UCA - this is felt mostly for cyrillic
-		char conts[] = RuleBasedCollator.UCA_.m_UCAContraction_;
+		char conts[] = RuleBasedCollator.UCA_CONTRACTIONS_;
         int offset = 0;
 		while (conts[offset] != 0) {
 		    // tailoredCE = ucmpe32_get(t.m_mapping, *conts);
-		    int tailoredCE = TrieBuilder.get32(t.m_mapping_, conts[offset]);
+		    int tailoredCE = t.m_mapping_.getValue(conts[offset]);
 		    if (tailoredCE != CE_NOT_FOUND_) {         
 		        boolean needToAdd = true;
 		        if (isContractionTableElement(tailoredCE)) {
@@ -551,18 +558,11 @@ class CollationParsedRuleBuilder
 		    offset += 3;
 		}
 		
-        BuildTable temp = new BuildTable(t);
-        assembleTable(temp, temp.m_collator_);
-		// produce canonical closure 
-		CollationElementIterator coleiter 
-                            = temp.m_collator_.getCollationElementIterator("");
-        RangeValueIterator typeiter = UCharacter.getTypeIterator();
-        RangeValueIterator.Element element = new RangeValueIterator.Element();
-        while (typeiter.next(element)) {
-        	_enumCategoryRangeClosureCategory(t, temp.m_collator_, coleiter, 
-                                              element.start, element.limit, 
-                                              element.value);
-        }
+        // Add completely ignorable elements
+        processUCACompleteIgnorables(t);
+  
+        // canonical closure 
+        canonicalClosure(t);
 		// still need to produce compatibility closure
 		assembleTable(t, collator);  
     }
@@ -723,7 +723,7 @@ class CollationParsedRuleBuilder
 		 * Builds a contraction table
 		 * @param buildtable
 		 */
-		ContractionTable(TrieBuilder.BuildTable mapping) 
+		ContractionTable(IntTrieBuilder mapping) 
 		{
 		    m_mapping_ = mapping;
 		    m_elements_ = new Vector();
@@ -754,15 +754,52 @@ class CollationParsedRuleBuilder
 		 * Vector of BasicContractionTable
 		 */
         Vector m_elements_;
-        TrieBuilder.BuildTable m_mapping_;
+        IntTrieBuilder m_mapping_;
         StringBuffer m_codePoints_;
 	    Vector m_CEs_;
 	    Vector m_offsets_;
 	    int m_currentTag_;
 	};
 
-	private static class BuildTable 
+	private static class BuildTable implements TrieBuilder.DataManipulate
 	{
+		// package private methods ------------------------------------------
+		
+		/**
+		 * For construction of the Trie tables.
+		 * Has to be labeled public
+		 * @param table build table
+		 * @param cp
+		 * @param offset
+		 * @return data offset or 0 
+		 * @draft 2.2
+		 */
+		public final int getFoldedValue(int cp, int offset)
+		{
+		    int limit = cp + 0x400;
+		    while (cp < limit) {
+		    	int value = m_mapping_.getValue(cp);
+		    	boolean inBlockZero = m_mapping_.isInZeroBlock(cp);
+			    int tag = getCETag(value);
+			    if (inBlockZero == true) {
+			        cp += TrieBuilder.DATA_BLOCK_LENGTH_;
+			    } 
+			    else if (!(isSpecial(value) && (tag == CE_IMPLICIT_TAG_ 
+			                                    || tag == CE_NOT_FOUND_TAG_))) {
+			        // These are values that are starting in either UCA 
+			        // (IMPLICIT_TAG) or in the tailorings (NOT_FOUND_TAG). 
+			        // Presence of these tags means that there is nothing in 
+			        // this position and that it should be skipped.
+			        return RuleBasedCollator.CE_SPECIAL_FLAG_ 
+			               | (CE_SURROGATE_TAG_ << 24) | offset;
+			    } 
+			    else {
+			        ++ cp;
+			    }
+		    }
+			return 0;
+		}
+	
 		// package private constructor --------------------------------------
 		
 		/**
@@ -779,7 +816,7 @@ class CollationParsedRuleBuilder
 	        m_expansions_ = new Vector();
 	        // Do your own mallocs for the structure, array and have linear 
 	        // Latin 1
-	        m_mapping_ = TrieBuilder.open(null, null, 0x100000, 
+	        m_mapping_ = new IntTrieBuilder(null, 0x100000, 
 	                                      RuleBasedCollator.CE_SPECIAL_FLAG_
                                           | (CE_NOT_FOUND_TAG_ << 24), 
 	                                      true); 
@@ -812,7 +849,7 @@ class CollationParsedRuleBuilder
         BuildTable(BuildTable table) 
         {
             m_collator_ = table.m_collator_;
-            m_mapping_ = new TrieBuilder.BuildTable(table.m_mapping_);
+            m_mapping_ = new IntTrieBuilder(table.m_mapping_);
             m_expansions_ = (Vector)table.m_expansions_.clone();
             m_contractions_ = new ContractionTable(table.m_contractions_);
             m_contractions_.m_mapping_ = m_mapping_;
@@ -831,7 +868,7 @@ class CollationParsedRuleBuilder
 		// package private data members -------------------------------------
 		
 		RuleBasedCollator m_collator_;
-        TrieBuilder.BuildTable m_mapping_; 
+        IntTrieBuilder m_mapping_; 
         Vector m_expansions_; 
         ContractionTable m_contractions_;
 	    // UCATableHeader image;
@@ -951,11 +988,6 @@ class CollationParsedRuleBuilder
      * Maximum collation strength
      */
     private static final int CE_STRENGTH_LIMIT_ = 16;
-    /**
-     * Implicit ce minimum
-     */
-    private static final int CE_PRIMARY_IMPLICIT_MIN_ = 0xE8000000;
-    private static final int CE_PRIMARY_IMPLICIT_MAX_ = 0xF0000000;
     /**
      * Strength mask array, used in inverse UCA
      */
@@ -1262,7 +1294,7 @@ class CollationParsedRuleBuilder
         switch (strength) 
         {
             case Collator.PRIMARY:
-                return ce1 | ce2 >> 16;
+                return ce1 | ce2 >>> 16;
             case Collator.SECONDARY:
                 return ce1 << 16 | ce2 << 8;
             default:
@@ -1289,7 +1321,8 @@ class CollationParsedRuleBuilder
 	
 	    int count = token.m_toInsert_;
 	
-	    if (low >= high && strength > Collator.PRIMARY) {
+	    if (Utility.compareUnsigned(low, high) >= 0 
+            && strength > Collator.PRIMARY) {
 	        int s = strength;
 	        while (true) {
 		        s --;
@@ -1315,15 +1348,20 @@ class CollationParsedRuleBuilder
 	        low = 0x01000000;
 	    }
 	    if (strength == Collator.SECONDARY) { // similar as simple 
-	        if (low >= (RuleBasedCollator.COMMON_BOTTOM_2_ <<24) 
-                && low < (RuleBasedCollator.COMMON_TOP_2_ << 24)) {
+	        if (Utility.compareUnsigned(low, 
+                                 RuleBasedCollator.COMMON_BOTTOM_2_ << 24) >= 0
+                && Utility.compareUnsigned(low, 
+                                 RuleBasedCollator.COMMON_TOP_2_ << 24) < 0) {
 	            low = RuleBasedCollator.COMMON_TOP_2_ << 24;
             }
-	        if (high > (RuleBasedCollator.COMMON_BOTTOM_2_ << 24) 
-                && high < (RuleBasedCollator.COMMON_TOP_2_ << 24)) {
+	        if (Utility.compareUnsigned(high, 
+                                  RuleBasedCollator.COMMON_BOTTOM_2_ << 24) > 0 
+                && Utility.compareUnsigned(high, 
+                                  RuleBasedCollator.COMMON_TOP_2_ << 24) < 0) {
 	            high = RuleBasedCollator.COMMON_TOP_2_ << 24;
 	        } 
-	        if (low < (RuleBasedCollator.COMMON_BOTTOM_2_ << 24)) {
+	        if (Utility.compareUnsigned(low, 
+                               RuleBasedCollator.COMMON_BOTTOM_2_ << 24) < 0) {
 	            g.m_rangesLength_ = allocateWeights(
                                          RuleBasedCollator.COMMON_TOP_2_ << 24, 
                                          high, count, maxbyte, g.m_ranges_);
@@ -1423,13 +1461,13 @@ class CollationParsedRuleBuilder
 	    	// processing since parts of expansion can be tailored, while 
 	    	// others are not
 	    	if (tok.m_expansion_ != 0) {
-	            int len = tok.m_expansion_ >> 24;
+	            int len = tok.m_expansion_ >>> 24;
 	            int currentSequenceLen = len;
 	            int expOffset = tok.m_expansion_ & 0x00FFFFFF;
 	            CollationRuleParser.Token exp 
 	                                         = new CollationRuleParser.Token();
 	            exp.m_source_ = currentSequenceLen | expOffset;
-	            exp.m_rules_ = m_parser_.m_source_.toString();
+	            exp.m_rules_ = m_parser_.m_source_;
 	
 	            while (len > 0) {
 			        currentSequenceLen = len;
@@ -1455,7 +1493,7 @@ class CollationParsedRuleBuilder
 			                 break;
 			             } 
 			             else {
-			                 currentSequenceLen--;
+			                 currentSequenceLen --;
 			             }
 			        }
 	                if (currentSequenceLen == 0) { 
@@ -1511,7 +1549,7 @@ class CollationParsedRuleBuilder
 		    else {
 	            el.m_prefixChars_ = null;
 	            int offset = tok.m_source_ & 0x00FFFFFF;
-	            int size = tok.m_source_ >> 24;
+	            int size = tok.m_source_ >>> 24;
 	            el.m_uchars_ = m_parser_.m_source_.substring(offset, 
 	                                                         offset + size);
 	        }
@@ -1693,10 +1731,12 @@ class CollationParsedRuleBuilder
 	            element.m_mapCE_ = element.m_CEs_[0];
 	        } 
 	        else { // add thai - totally bad here
+                // omitted the expansion offset here for the builder
+                // (HEADER_SIZE_ >> 2)
 	            int expansion = RuleBasedCollator.CE_SPECIAL_FLAG_ 
 	                        | (CE_THAI_TAG_ << RuleBasedCollator.CE_TAG_SHIFT_) 
-	                        | ((addExpansion(expansions, element.m_CEs_[0])
-	                                               + (HEADER_SIZE_ >> 2)) << 4) 
+	                        | (addExpansion(expansions, element.m_CEs_[0])
+	                           << 4) 
 	                        | 0x1;
 	            element.m_mapCE_ = expansion;
 	        }
@@ -1731,11 +1771,13 @@ class CollationParsedRuleBuilder
 	                               | ((element.m_CEs_[1] >> 24) & 0xFF);   
 	        } 
 	        else {
+                // omitting expansion offset in builder
+                // (HEADER_SIZE_ >> 2)
 	            int expansion = RuleBasedCollator.CE_SPECIAL_FLAG_ 
 	                        | (CE_EXPANSION_TAG_ 
 	                                      << RuleBasedCollator.CE_TAG_SHIFT_) 
-	                        | ((addExpansion(expansions, element.m_CEs_[0])
-	                            + (HEADER_SIZE_ >> 2)) << 4) & 0xFFFFF0;
+	                        | (addExpansion(expansions, element.m_CEs_[0])
+                                << 4) & 0xFFFFF0;
 	
 	            for (int i = 1; i < element.m_CEs_.length; i ++) {
 	                 addExpansion(expansions, element.m_CEs_[i]);
@@ -1811,7 +1853,7 @@ class CollationParsedRuleBuilder
             // should also be included
 	        CanonicalIterator it = new CanonicalIterator(element.m_cPoints_);
 		    String source = it.next();
-		    while (source.length() > 0) {
+		    while (source != null && source.length() > 0) {
 		        if (Normalizer.quickCheck(source, Normalizer.FCD) 
                     != Normalizer.NO) {
 		            element.m_uchars_ = source;
@@ -1894,9 +1936,8 @@ class CollationParsedRuleBuilder
 	    if (result > -1) {
 	        // found the ce in expansion, we'll just modify the size if it 
 	        // is smaller
-	        int currentsize = ((Byte)maxexpansion.m_expansionCESize_.get(
-	                                                      result)).byteValue();
-		    if (currentsize < expansionsize) {
+	        Object currentsize = maxexpansion.m_expansionCESize_.get(result);
+		    if (((Byte)currentsize).byteValue() < expansionsize) {
 		        maxexpansion.m_expansionCESize_.set(result, 
 		                                          new Byte(expansionsize));
 		    }
@@ -1907,8 +1948,8 @@ class CollationParsedRuleBuilder
 		    maxexpansion.m_endExpansionCE_.insertElementAt(
 		                                           new Integer(endexpansion),
 		                                           start + 1);
-		    maxexpansion.m_endExpansionCE_.insertElementAt(
-		                                           new Integer(expansionsize),
+		    maxexpansion.m_expansionCESize_.insertElementAt(
+		                                           new Byte(expansionsize),
 		                                           start + 1);
 	    }
 	    return maxexpansion.m_endExpansionCE_.size();
@@ -2025,7 +2066,7 @@ class CollationParsedRuleBuilder
 	                                         element.m_cPoints_.length() - 1));
 	    }
 	    // First we need to check if contractions starts with a surrogate
-	    int cp = UTF16.charAt(element.m_cPoints_, element.m_cPointsOffset_);
+	    // int cp = UTF16.charAt(element.m_cPoints_, element.m_cPointsOffset_);
 	
 	    // If there are any Jamos in the contraction, we should turn on special 
 	    // processing for Jamos
@@ -2041,14 +2082,11 @@ class CollationParsedRuleBuilder
 	                                                    (char)0, CE);
 	        int newCE = processContraction(contractions, element, 
 	                                       CE_NOT_FOUND_);
-	        int contractionOffset = addContraction(contractions, 
-                              firstContractionOffset, 
-                              element.m_prefixChars_.charAt(element.m_prefix_), 
-                              newCE);
-	        contractionOffset = addContraction(contractions, 
-	                                           firstContractionOffset, 
-	                                           (char)0xFFFF, 
-	                                           CE);
+	        addContraction(contractions, firstContractionOffset, 
+                           element.m_prefixChars_.charAt(element.m_prefix_), 
+                           newCE);
+	        addContraction(contractions, firstContractionOffset, (char)0xFFFF, 
+    	                   CE);
 	        CE = constructSpecialCE(CE_SPEC_PROC_TAG_, firstContractionOffset);
 	    } 
 	    else { 
@@ -2105,7 +2143,7 @@ class CollationParsedRuleBuilder
 	 */
 	private static final boolean isSpecial(int CE) 
 	{
-		return ((CE & RuleBasedCollator.CE_SPECIAL_FLAG_) >> 28) == 0xF;
+		return (CE & RuleBasedCollator.CE_SPECIAL_FLAG_) == 0xF0000000;
 	}
 	
 	/**
@@ -2115,7 +2153,7 @@ class CollationParsedRuleBuilder
 	 */
 	private static final int getCETag(int CE) 
 	{
-	    return (CE & RuleBasedCollator.CE_TAG_MASK_) >> 
+	    return (CE & RuleBasedCollator.CE_TAG_MASK_) >>> 
 	           RuleBasedCollator.CE_TAG_SHIFT_;
 	}
 	
@@ -2196,7 +2234,7 @@ class CollationParsedRuleBuilder
     {
 	    BasicContractionTable tbl = getBasicContractionTable(table, element);
 	    if (tbl == null) {
-	        tbl = addAContractionElement(table, element);
+	        tbl = addAContractionElement(table);
 	        element = table.m_elements_.size() - 1;
 	    } 
 	
@@ -2208,12 +2246,10 @@ class CollationParsedRuleBuilder
     /**
      * Adds a contraction element to the table
      * @param table contraction table to update
-     * @param offset to add at, this will be modified
      * @return contraction 
      */
     private static BasicContractionTable addAContractionElement(
-                                                       ContractionTable table, 
-                                                       int offset) 
+                                                       ContractionTable table) 
     {
 	    BasicContractionTable result = new BasicContractionTable();
 	    table.m_elements_.add(result);
@@ -2244,8 +2280,6 @@ class CollationParsedRuleBuilder
 	                                      int existingCE) 
     {
 	    int firstContractionOffset = 0;
-	    int contractionOffset = 0;
-
 	    // end of recursion 
 	    if (element.m_cPoints_.length() - element.m_cPointsOffset_ == 1) {
 	        if (isContractionTableElement(existingCE) 
@@ -2276,13 +2310,11 @@ class CollationParsedRuleBuilder
 	                                           (char)0, existingCE);
 	        int newCE = processContraction(contractions, element, 
 	                                       CE_NOT_FOUND_);
-	        contractionOffset = addContraction(contractions, 
-	                                           firstContractionOffset, 
+	        addContraction(contractions, firstContractionOffset, 
 	                       element.m_cPoints_.charAt(element.m_cPointsOffset_), 
-	                                           newCE);
-	        contractionOffset = addContraction(contractions, 
-	                                           firstContractionOffset, 
-	                                           (char)0xFFFF, existingCE);
+	                       newCE);
+	        addContraction(contractions, firstContractionOffset, 
+	                       (char)0xFFFF, existingCE);
 	        existingCE = constructSpecialCE(contractions.m_currentTag_, 
 	                                        firstContractionOffset);
 	    } 
@@ -2322,8 +2354,9 @@ class CollationParsedRuleBuilder
 	 */
 	private static final boolean isContractionTableElement(int CE) 
 	{ 
-		return isSpecial(CE) && getCETag(CE) == CE_CONTRACTION_TAG_
-		       || getCETag(CE) == CE_SPEC_PROC_TAG_;
+		return isSpecial(CE) 
+               && (getCETag(CE) == CE_CONTRACTION_TAG_
+		           || getCETag(CE) == CE_SPEC_PROC_TAG_);
 	}
 	
 	/**
@@ -2422,7 +2455,7 @@ class CollationParsedRuleBuilder
     	element &= 0xFFFFFF;
 	    BasicContractionTable tbl = getBasicContractionTable(table, element);	
 	    if (tbl == null) {
-	        tbl = addAContractionElement(table, element);
+	        tbl = addAContractionElement(table);
 	        element = table.m_elements_.size() - 1;
 	    }
 	
@@ -2447,7 +2480,7 @@ class CollationParsedRuleBuilder
 	    element &= 0xFFFFFF;
 	    BasicContractionTable tbl = getBasicContractionTable(table, element);
 	    if (tbl == null) {
-	        tbl = addAContractionElement(table, element);
+	        tbl = addAContractionElement(table);
 	        element = table.m_elements_.size() - 1;
 	    }
 	
@@ -2471,15 +2504,27 @@ class CollationParsedRuleBuilder
 	private final static int finalizeAddition(BuildTable t, Elements element) 
 	{
 		int CE = CE_NOT_FOUND_;
+        // This should add a completely ignorable element to the  
+        // unsafe table, so that backward iteration will skip 
+        // over it when treating contractions. 
+        if (element.m_mapCE_ == 0) { 
+            for (int i = 0; i < element.m_cPoints_.length(); i ++) { 
+                char ch = element.m_cPoints_.charAt(i);
+                if (!UTF16.isTrailSurrogate(ch)) { 
+                    unsafeCPSet(t.m_unsafeCP_, ch); 
+                } 
+            } 
+        } 
+
 		if (element.m_cPoints_.length() - element.m_cPointsOffset_ > 1) { 
 		    // we're adding a contraction
 		    int cp = UTF16.charAt(element.m_cPoints_, element.m_cPointsOffset_);
-		    CE = TrieBuilder.get32(t.m_mapping_, cp);
+		    CE = t.m_mapping_.getValue(cp);
 		    CE = addContraction(t, CE, element);
 		} 
 		else { 
 		    // easy case
-		    CE = TrieBuilder.get32(t.m_mapping_, element.m_cPoints_.charAt(
+		    CE = t.m_mapping_.getValue(element.m_cPoints_.charAt(
 		                                           element.m_cPointsOffset_));
 		
 		    if (CE != CE_NOT_FOUND_) {
@@ -2499,15 +2544,15 @@ class CollationParsedRuleBuilder
 			        }
 		        } 
 		        else {
-		            TrieBuilder.set32(t.m_mapping_, element.m_cPoints_.charAt(
+		            t.m_mapping_.setValue(element.m_cPoints_.charAt(
 		                                             element.m_cPointsOffset_), 
-		                               element.m_mapCE_);
+		                                  element.m_mapCE_);
 		        }
 		    } 
 		    else {
-		        TrieBuilder.set32(t.m_mapping_, element.m_cPoints_.charAt(
+		        t.m_mapping_.setValue(element.m_cPoints_.charAt(
                                                      element.m_cPointsOffset_), 
-                                   element.m_mapCE_);
+                                      element.m_mapCE_);
 		    }
 		}
 		return CE;
@@ -2570,13 +2615,11 @@ class CollationParsedRuleBuilder
 		                          CONTRACTION_TABLE_NEW_ELEMENT_, (char)0, CE);
 		        int newCE = processContraction(contractions, element, 
 		                                       CE_NOT_FOUND_);
-		        int contractionOffset = addContraction(contractions, 
-		                                               firstContractionOffset, 
+		        addContraction(contractions, firstContractionOffset, 
                           element.m_cPoints_.charAt(element.m_cPointsOffset_), 
                                                        newCE);
-		        contractionOffset = addContraction(contractions, 
-		                                           firstContractionOffset, 
-		                                           (char)0xFFFF, CE);
+		        addContraction(contractions, firstContractionOffset, 
+                               (char)0xFFFF, CE);
 		        CE = constructSpecialCE(CE_CONTRACTION_TAG_, 
 		                                firstContractionOffset);
 		    } 
@@ -2606,11 +2649,11 @@ class CollationParsedRuleBuilder
 		        }
 		    }
 		    element.m_cPointsOffset_ -= cpsize;
-	        TrieBuilder.set32(t.m_mapping_, cp, CE);
+	        t.m_mapping_.setValue(cp, CE);
 	    } 
 	    else if (!isContraction(CE)) { 
 	        // this is just a surrogate, and there is no contraction 
-	        TrieBuilder.set32(t.m_mapping_, cp, element.m_mapCE_);
+	        t.m_mapping_.setValue(cp, element.m_mapCE_);
 	    } 
 	    else { 
 	        // fill out the first stage of the contraction with the surrogate 
@@ -2746,7 +2789,7 @@ class CollationParsedRuleBuilder
         // [0] unused, [5] to make index checks unnecessary 
         int lengthCounts[] = new int[6];     
         // countBytes to the power of index 
-        int powers[] = new int[5];
+        long powers[] = new long[5]; // for unsignedness
         // gcc requires explicit initialization 
         powers[0] = 1;
         powers[1] = countBytes;
@@ -2759,9 +2802,10 @@ class CollationParsedRuleBuilder
             return 0;
         }
         // what is the maximum number of weights with these ranges?
-        int maxCount = 0;
+        long maxCount = 0;
         for (int i = 0; i < rangeCount; ++ i) {
-            maxCount += ranges[i].m_count_ * powers[4 - ranges[i].m_length_];
+            maxCount += (long)ranges[i].m_count_ 
+                        * powers[4 - ranges[i].m_length_];
         }
         if (maxCount < n) {
             return 0;
@@ -2796,12 +2840,11 @@ class CollationParsedRuleBuilder
                 // easy case, just make this one range large enough by 
                 // lengthening it once more, possibly split it
                 rangeCount = 1;
-                int maxLength = minLength + 1;
                 // calculate how to split the range between maxLength-1 
                 // (count1) and maxLength (count2) 
-                int power_1 = powers[minLength - ranges[0].m_length_];
-                int power = power_1 * countBytes;
-                int count2 = (n + power - 1) / power;
+                long power_1 = powers[minLength - ranges[0].m_length_];
+                long power = power_1 * countBytes;
+                int count2 = (int)((n + power - 1) / power);
                 int count1 = ranges[0].m_count_ - count2;
                 // split the range
                 if (count1 < 1) {
@@ -2846,9 +2889,9 @@ class CollationParsedRuleBuilder
                     ranges[0].m_count_ = count1;
                     ranges[1].m_count_ = count2;
     
-                    ranges[0].m_count2_ = count1 * power_1;
+                    ranges[0].m_count2_ = (int)(count1 * power_1);
                     // will be *countBytes when lengthened 
-                    ranges[1].m_count2_ = count2 * power_1; 
+                    ranges[1].m_count2_ = (int)(count2 * power_1); 
     
                     // lengthen the second range to maxLength
                     lengthenRange(ranges, 1, maxByte, countBytes);
@@ -2925,7 +2968,7 @@ class CollationParsedRuleBuilder
         // get the lengths of the limits 
         int lowerLength = lengthOfWeight(lowerLimit);
         int upperLength = lengthOfWeight(upperLimit);
-        if (lowerLimit >= upperLimit) {
+        if (Utility.compareUnsigned(lowerLimit, upperLimit) >= 0) {
             return 0;
         }
         // check that neither is a prefix of the other
@@ -2972,7 +3015,7 @@ class CollationParsedRuleBuilder
         WeightRange upper[] = {new WeightRange(), new WeightRange(), 
                                new WeightRange(), new WeightRange(), 
                                new WeightRange()}; 
-        for (int length = upperLength; length >= 2; -- length) {
+        for (int length = upperLength; length >= 2; length --) {
             int trail = getWeightByte(weight, length);
             if (trail > RuleBasedCollator.BYTE_FIRST_TAILORED_) {
                 upper[length].m_start_ = setWeightTrail(weight, length, 
@@ -3135,16 +3178,17 @@ class CollationParsedRuleBuilder
      */
     private void assembleTable(BuildTable t, RuleBasedCollator collator) 
     {
-        TrieBuilder.BuildTable mapping = t.m_mapping_;
+        IntTrieBuilder mapping = t.m_mapping_;
         Vector expansions = t.m_expansions_;
         ContractionTable contractions = t.m_contractions_;
         MaxExpansionTable maxexpansion = t.m_maxExpansions_;
     
-        int beforeContractions = (HEADER_SIZE_ 
-                                 + paddedsize(expansions.size() << 2)) >>> 1;
-        collator.m_contractionOffset_ = beforeContractions;
-        int contractionsSize 
-                           = constructTable(contractions, beforeContractions);
+        // contraction offset has to be in since we are building on the 
+        // UCA contractions 
+        // int beforeContractions = (HEADER_SIZE_ 
+        //                         + paddedsize(expansions.size() << 2)) >>> 1;
+        collator.m_contractionOffset_ = 0;
+        int contractionsSize = constructTable(contractions);
     
         // the following operation depends on the trie data. Therefore, we have 
         // to do it before the trie is compacted 
@@ -3175,13 +3219,14 @@ class CollationParsedRuleBuilder
             }
         } 
         // copy mapping table
-        collator.m_trie_ = TrieBuilder.createIntTrie(mapping, 
+        collator.m_trie_ = mapping.serialize(t, 
                                RuleBasedCollator.DataManipulate.getInstance());
         // copy max expansion table
         // not copying the first element which is a dummy
         // to be in synch with icu4c's builder, we continue to use the 
         // expansion offset
-        collator.m_expansionOffset_ = HEADER_SIZE_ >> 2; 
+        // omitting expansion offset in builder
+        collator.m_expansionOffset_ = 0; 
         size = maxexpansion.m_endExpansionCE_.size() - 1;
         collator.m_expansionEndCE_ = new int[size];
         for (int i = 1; i < size; i ++) {
@@ -3190,8 +3235,8 @@ class CollationParsedRuleBuilder
         }
         collator.m_expansionEndCEMaxSize_ = new byte[size];
         for (int i = 1; i < size; i ++) {
-            collator.m_expansionEndCEMaxSize_[i - 1] = ((Byte)
-                           maxexpansion.m_expansionCESize_.get(i)).byteValue();
+            collator.m_expansionEndCEMaxSize_[i - 1] 
+                 = ((Byte)maxexpansion.m_expansionCESize_.get(i)).byteValue();
         }
         // Unsafe chars table.  Finish it off, then copy it.
         unsafeCPAddCCNZ(t);
@@ -3220,7 +3265,8 @@ class CollationParsedRuleBuilder
     {
         collator.m_caseFirst_ = option.m_caseFirst_;
         collator.setDecomposition(option.m_decomposition_);
-        collator.setAlternateHandling(option.m_isAlternateHandlingShifted_);
+        collator.setAlternateHandlingShifted(
+                                         option.m_isAlternateHandlingShifted_);
         collator.setCaseLevel(option.m_isCaseLevel_);
         collator.setFrenchCollation(option.m_isFrenchCollation_);
         collator.m_isHiragana4_ = option.m_isHiragana4_;
@@ -3231,10 +3277,9 @@ class CollationParsedRuleBuilder
     /**
      * Constructing the contraction table
      * @param table contraction table
-     * @param mainOffset
      * @return 
      */
-    private int constructTable(ContractionTable table, int mainOffset) 
+    private int constructTable(ContractionTable table) 
     {
         // See how much memory we need 
         int tsize = table.m_elements_.size();
@@ -3244,7 +3289,7 @@ class CollationParsedRuleBuilder
         table.m_offsets_.clear();
         int position = 0;
         for (int i = 0; i < tsize; i ++) {
-            table.m_offsets_.add(new Integer(position + mainOffset));
+            table.m_offsets_.add(new Integer(position));
             position += ((BasicContractionTable)
                                        table.m_elements_.get(i)).m_CEs_.size();
         }
@@ -3288,12 +3333,12 @@ class CollationParsedRuleBuilder
         }
     
         for (int i = 0; i <= 0x10FFFF; i ++) {
-            int CE = TrieBuilder.get32(table.m_mapping_, i);
+            int CE = table.m_mapping_.getValue(i);
             if (isContractionTableElement(CE)) {
                 CE = constructSpecialCE(getCETag(CE), 
                                         ((Integer)table.m_offsets_.get(
                                         getContractionOffset(CE))).intValue());
-                TrieBuilder.set32(table.m_mapping_, i, CE);
+                table.m_mapping_.setValue(i, CE);
             }
         }
         return position;
@@ -3316,7 +3361,7 @@ class CollationParsedRuleBuilder
      * @param maxjamoexpansion maximum jamo expansion table
      * @param jamospecial is jamo special?
      */
-    private static void getMaxExpansionJamo(TrieBuilder.BuildTable mapping, 
+    private static void getMaxExpansionJamo(IntTrieBuilder mapping, 
                                             MaxExpansionTable maxexpansion,
                                             MaxJamoExpansionTable 
                                                               maxjamoexpansion,
@@ -3330,7 +3375,7 @@ class CollationParsedRuleBuilder
         int t = TBASE + TCOUNT - 1;
         
         while (v >= VBASE) {
-            int ce = TrieBuilder.get32(mapping, v);
+            int ce = mapping.getValue(v);
             if ((ce & RuleBasedCollator.CE_SPECIAL_FLAG_) 
                                       != RuleBasedCollator.CE_SPECIAL_FLAG_) {
                 setMaxExpansion(ce, (byte)2, maxexpansion);
@@ -3340,7 +3385,7 @@ class CollationParsedRuleBuilder
         
         while (t >= TBASE)
         {
-            int ce = TrieBuilder.get32(mapping, t);
+            int ce = mapping.getValue(t);
             if ((ce & RuleBasedCollator.CE_SPECIAL_FLAG_) 
                                       != RuleBasedCollator.CE_SPECIAL_FLAG_) {
                 setMaxExpansion(ce, (byte)3, maxexpansion);
@@ -3391,7 +3436,6 @@ class CollationParsedRuleBuilder
         }
     
         if (t.m_prefixLookup_ != null) {
-            int i = -1;
             Enumeration enum = t.m_prefixLookup_.elements();
             while (enum.hasMoreElements()) {
                 Elements e = (Elements)enum.nextElement();
@@ -3414,7 +3458,7 @@ class CollationParsedRuleBuilder
      * @param type character type
      * @return 
      */
-    private static boolean _enumCategoryRangeClosureCategory(BuildTable t, 
+    private static boolean enumCategoryRangeClosureCategory(BuildTable t, 
                                              RuleBasedCollator collator, 
                                              CollationElementIterator colEl, 
                                              int start, int limit, int type) 
@@ -3423,8 +3467,7 @@ class CollationParsedRuleBuilder
             // if the range is assigned - we might ommit more categories later
             Elements el = new Elements();
             for (int u32 = start; u32 < limit; u32 ++) {
-                int len = 0;
-                String comp = UCharacter.toString(u32);
+            	String comp = UCharacter.toString(u32);
                 String decomp = Normalizer.decompose(comp, false);
                 if (decomp.length() > 1 || (decomp.length() == 1 
                                           && decomp.charAt(0) != (char)u32)) {
@@ -3464,6 +3507,9 @@ class CollationParsedRuleBuilder
                             // Since unsafeCPSet is static in ucol_elm, we are 
                             // going to wrap it up in the unsafeCPAddCCNZ 
                             // function
+                            el.m_isThai_ 
+                                    = CollationElementIterator.isThaiPreVowel(
+                                                   el.m_cPoints_.charAt(0));
                         }
                         addAnElement(t, el);
                     }
@@ -3484,4 +3530,51 @@ class CollationParsedRuleBuilder
 		       || (ch >= 0x1175 && ch <= 0x1161) 
 		       || (ch >= 0x11A8 && ch <= 0x11C2);
 	}
+    
+    /**
+     * Produces canonical closure
+     */
+    private void canonicalClosure(BuildTable t) 
+    {
+        BuildTable temp = new BuildTable(t);
+        assembleTable(temp, temp.m_collator_);
+        // produce canonical closure 
+        CollationElementIterator coleiter 
+                            = temp.m_collator_.getCollationElementIterator("");
+        RangeValueIterator typeiter = UCharacter.getTypeIterator();
+        RangeValueIterator.Element element = new RangeValueIterator.Element();
+        while (typeiter.next(element)) {
+            enumCategoryRangeClosureCategory(t, temp.m_collator_, coleiter, 
+                                              element.start, element.limit, 
+                                              element.value);
+        }
+    }
+    
+    private static void processUCACompleteIgnorables(BuildTable t) 
+    {
+        TrieIterator trieiterator 
+                            = new TrieIterator(RuleBasedCollator.UCA_.m_trie_);
+        RangeValueIterator.Element element = new RangeValueIterator.Element();
+        while (trieiterator.next(element)) {
+            int start = element.start;
+            int limit = element.limit;
+            if (element.value == 0) {
+                while (start < limit) {
+                    int CE = t.m_mapping_.getValue(start);
+                    if (CE == CE_NOT_FOUND_) {
+                        Elements el = new Elements();
+                        el.m_isThai_ = false;
+                        el.m_prefix_ = 0;
+                        el.m_uchars_ = UCharacter.toString(start);
+                        el.m_cPoints_ = el.m_uchars_;
+                        el.m_cPointsOffset_ = 0;
+                        el.m_CEs_ = new int[1];
+                        el.m_CEs_[0] = 0;
+                        addAnElement(t, el);
+                    }
+                    start ++;
+                }
+            }
+        }
+    }
 }

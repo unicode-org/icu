@@ -5,8 +5,8 @@
 ******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/TrieIterator.java,v $
-* $Date: 2002/03/13 05:44:14 $
-* $Revision: 1.5 $
+* $Date: 2002/07/12 21:59:22 $
+* $Revision: 1.6 $
 *
 ******************************************************************************
 */
@@ -16,7 +16,6 @@ package com.ibm.icu.impl;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.text.UTF16;
 import com.ibm.icu.util.RangeValueIterator;
-import com.ibm.icu.util.RangeValueIterator.*;
 
 /**
  * <p>Class enabling iteration of the values in a Trie.</p>
@@ -46,7 +45,7 @@ public class TrieIterator implements RangeValueIterator
     * @exception IllegalArgumentException throw when argument is null.
     * @draft 2.1
     */
-    protected TrieIterator(Trie trie)
+    public TrieIterator(Trie trie)
     {
         if (trie == null) {
             throw new IllegalArgumentException(
