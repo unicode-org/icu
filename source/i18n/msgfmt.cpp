@@ -168,8 +168,11 @@ MessageFormat::MessageFormat(const UnicodeString& pattern,
 
 MessageFormat::~MessageFormat()
 {
-    for (int32_t i = 0; i < fCount; i++)
-        delete fFormats[i];
+    for (int32_t i = 0; i < fCount; i++) {
+        if (fFormats[i]) {
+            delete fFormats[i];
+        }
+    }
     delete [] fOffsets;
     delete [] fArgumentNumbers;
     fCount = 0;
