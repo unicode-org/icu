@@ -8,8 +8,9 @@
 * File CITERTST.C
 *
 * Modification History:
-*        Name                     Description            
-*     Madhu Katragadda            Ported for C API
+* Date      Name               Description            
+*           Madhu Katragadda   Ported for C API
+* 02/19/01  synwee             Modified test case for new collation iterator
 *********************************************************************************/
 /*
  * Collation Iterator tests.
@@ -21,9 +22,11 @@
 #include "unicode/utypes.h"
 #include "unicode/ucol.h"
 #include "unicode/uloc.h"
+#include "unicode/uchar.h"
 #include "cintltst.h"
 #include "citertst.h"
 #include "unicode/ustring.h"
+#include "cmemory.h"
 
 #define ARRAY_LENGTH(array) (sizeof array / sizeof array[0])
 
@@ -37,11 +40,57 @@ void addCollIterTest(TestNode** root)
     addTest(root, &TestPrevious, "tscoll/citertst/TestPrevious");
     addTest(root, &TestOffset, "tscoll/citertst/TestOffset");
     addTest(root, &TestSetText, "tscoll/citertst/TestSetText");
-    addTest(root, &TestMaxExpansion, "tscoll/citertst/TestMaxExpansion");
-
+    // addTest(root, &TestMaxExpansion, "tscoll/citertst/TestMaxExpansion");
+    addTest(root, &TestUnicodeChar, "tscoll/citertst/TestUnicodeChar");
 
 }
 
+/**
+ * Test for CollationElementIterator previous and next for the whole set of
+ * unicode characters.
+ */
+static void TestUnicodeChar()
+{
+    UChar source[0xFF];
+    UCollator *en_us;
+    UCollationElements *iter;
+    UErrorCode status = U_ZERO_ERROR;
+    UChar codepoint;
+
+    UChar *test;
+    en_us = ucol_open("en_US", &status);
+
+    for (codepoint = 1; codepoint < 0xFFFE;)
+    {
+      test = source;
+
+      while (codepoint % 0xFF != 0) 
+      {
+        if (u_isdefined(codepoint))
+          *(test ++) = codepoint;
+        codepoint ++;
+      }
+
+      if (u_isdefined(codepoint))
+        *(test ++) = codepoint;
+      
+      if (codepoint != 0xFFFF)
+        codepoint ++;
+
+      *test = 0;  
+      iter=ucol_openElements(en_us, source, u_strlen(source), &status);
+      if(U_FAILURE(status)){
+          log_err("ERROR: in creation of collation element iterator using ucol_openElements()\n %s\n", 
+              myErrorName(status));
+          return;
+      }
+      /* A basic test to see if it's working at all */
+      backAndForth(iter);
+      ucol_closeElements(iter);
+    }
+
+    ucol_close(en_us);
+}
 
 /**
  * Test for CollationElementIterator.previous()
@@ -75,6 +124,8 @@ static void TestPrevious()
     /* Test with a contracting character sequence */
     u_uastrcpy(rule, " < a,A < b,B < c,C, d,D < z,Z < ch,cH,Ch,CH");
     c1 = ucol_openRules(rule, u_strlen(rule), UCOL_NO_NORMALIZATION, UCOL_DEFAULT_STRENGTH, &status);
+    // synwee : temporarily changed
+    // c1 = ucol_open("es_ES", &status);
     if (c1 == NULL || U_FAILURE(status))
     {
         log_err("Couldn't create a RuleBasedCollator with a contracting sequence\n %s\n", 
@@ -233,7 +284,7 @@ static void TestSetText()
     c = ucol_next(iter2, &status);
     i = 0;
 
-    while ( ++i < 10 && c != UCOL_NULLORDER)
+    while ( ++i < 10 && (c != UCOL_NULLORDER))
     {
         if (U_FAILURE(status))
         {
@@ -278,20 +329,31 @@ static void backAndForth(UCollationElements *iter)
     
     /* Now go through it backwards and make sure we get the same values */
     index = orderLength;
+    ucol_reset(iter);
     
+    /* synwee : changed */
     while ((o = ucol_previous(iter, &status)) != UCOL_NULLORDER)
     {
-        if (o != orders[--index])
+      if (o != orders[-- index])
+      {
+        if (o == 0)
+          index ++;
+        else
         {
-            
+          while (index > 0 && orders[-- index] == 0)
+          {
+          }
+          if (o != orders[index])
+          {
             log_err("Mismatch at index : %d\n", index);
             break;
+          }
         }
+      }
     }
 
     if (index != 0)
     {
-
         log_err("Didn't get back to beginning - index is %d\n", index);
 
         ucol_reset(iter);
@@ -434,7 +496,7 @@ static int32_t* getOrders(UCollationElements *iter, int32_t *orderLength)
     status= U_ZERO_ERROR;
 
 
-
+    /* synwee : changed */
     while ((order=ucol_next(iter, &status)) != UCOL_NULLORDER)
     {
         if (size == maxSize)
