@@ -75,7 +75,8 @@ enum {
 /* value constants for auxTrie */
 enum {
     _NORM_AUX_COMP_EX_SHIFT=10,
-    _NORM_AUX_UNSAFE_SHIFT=11
+    _NORM_AUX_UNSAFE_SHIFT=11,
+    _NORM_AUX_NFC_SKIPPABLE_F_SHIFT=12
 };
 
 #define _NORM_AUX_MAX_FNC           ((int32_t)1<<_NORM_AUX_COMP_EX_SHIFT)
@@ -83,6 +84,7 @@ enum {
 #define _NORM_AUX_FNC_MASK          (uint32_t)(_NORM_AUX_MAX_FNC-1)
 #define _NORM_AUX_COMP_EX_MASK      ((uint32_t)1<<_NORM_AUX_COMP_EX_SHIFT)
 #define _NORM_AUX_UNSAFE_MASK       ((uint32_t)1<<_NORM_AUX_UNSAFE_SHIFT)
+#define _NORM_AUX_NFC_SKIP_F_MASK   ((uint32_t)1<<_NORM_AUX_NFC_SKIPPABLE_F_SHIFT)
 
 /* canonStartSets[0..31] contains indexes for what is in the array */
 enum {
@@ -312,11 +314,27 @@ U_CAPI UBool U_EXPORT2
 unorm_getCanonStartSet(UChar32 c, USerializedSet *fillSet);
 
 /**
- * Description of the format of unorm.dat version 2.1.
+ * Is c an NF<mode>-skippable code point? See unormimp.h.
+ * @internal
+ */
+U_CAPI UBool U_EXPORT2
+unorm_isNFSkippable(UChar32 c, UNormalizationMode mode);
+
+/**
+ * Enumerate each normalization data trie and add the
+ * start of each range of same properties to the set.
+ * @internal
+ */
+U_CAPI void U_EXPORT2
+unorm_addPropertyStarts(USet *set);
+
+/**
+ * Description of the format of unorm.dat version 2.2.
  *
  * Main change from version 1 to version 2:
  * Use of new, common UTrie instead of normalization-specific tries.
  * Change to version 2.1: add third/auxiliary trie with associated data.
+ * Change to version 2.2: add skippable (f) flag data (_NORM_AUX_NFC_SKIP_F_MASK).
  *
  * For more details of how to use the data structures see the code
  * in unorm.cpp (runtime normalization code) and
@@ -520,7 +538,8 @@ unorm_getCanonStartSet(UChar32 c, USerializedSet *fillSet);
  *
  * The auxiliary 16-bit trie contains data for additional properties.
  * Bits
- * 15..12   reserved (for skippable flags, see NormalizerTransliterator)
+ * 15..13   reserved
+ *     12   not NFC_Skippable (f) (formatVersion>=2.2)
  *     11   flag: not a safe starter for canonical closure
  *     10   composition exclusion
  *  9.. 0   index into extraData[] to FC_NFKC_Closure string
@@ -540,6 +559,29 @@ unorm_getCanonStartSet(UChar32 c, USerializedSet *fillSet);
  *     length=*s&0xff;
  *     ++s;
  *   }
+ *
+ * Conditions for "NF* Skippable" from Mark Davis' com.ibm.text.UCD.NFSkippable:
+ * (used in NormalizerTransliterator)
+ *
+ * A skippable character is
+ * a) unassigned, or ALL of the following:
+ * b) of combining class 0.
+ * c) not decomposed by this normalization form.
+ * AND if NFC or NFKC,
+ * d) can never compose with a previous character.
+ * e) can never compose with a following character.
+ * f) can never change if another character is added.
+ *    Example: a-breve might satisfy all but f, but if you
+ *    add an ogonek it changes to a-ogonek + breve
+ *
+ * a)..e) must be tested from norm32.
+ * Since f) is more complicated, the (not-)NFC_Skippable flag (f) is built
+ * into the auxiliary trie.
+ * The same bit is used for NFC and NFKC; (c) differs for them.
+ * As usual, we build the "not skippable" flags so that unassigned
+ * code points get a 0 bit.
+ * This bit is only valid after (a)..(e) test FALSE; test NFD_NO before (f) as well.
+ * Test Hangul LV syllables entirely in code.
  *
  *
  * - structure inside canonStartSets[]
