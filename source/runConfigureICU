@@ -155,4 +155,5 @@ esac
 
 echo
 echo If the result of the above commands look OK to you, go to the directory
-echo $icu/source and type \"make\" to make the icu.
+echo $icu/source to build the icu.
+
