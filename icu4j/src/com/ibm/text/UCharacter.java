@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/UCharacter.java,v $ 
-* $Date: 2001/11/06 00:02:14 $ 
-* $Revision: 1.16 $
+* $Date: 2001/11/12 21:51:02 $ 
+* $Revision: 1.17 $
 *
 *******************************************************************************
 */
@@ -1316,22 +1316,6 @@ public final class UCharacter
         }
         
         return result.toString();
-    }
-    
-    /**
-    * Return title cased version of the argument string
-    * This method converts all letters (as defined by
-    * <code>UCharacter.isLetter()</code>) to lower case, except for those
-    * letters preceded by non-letters.  The latter are converted to title
-    * case using <code>UCharacter.toTitleCase()</code>.
-    * @draft
-    * @param str string to be converted to its titlecased form
-    * @return result title cased form of the argument string
-    */
-    public static String toTitleCase(String str) 
-    {
-        // look at icu bug 1233 for implementation.
-        return null;
     }
     
     /**
