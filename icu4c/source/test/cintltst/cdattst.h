@@ -29,6 +29,11 @@
     static void TestSymbols(void);
 
     /**
+     * Test DateFormat(Calendar) API
+     */
+    static void TestDateFormatCalendar(void);
+
+    /**
      * test subroutines used by TestSymbols
      **/
     static void VerifygetSymbols(UDateFormat*, UDateFormatSymbolType, int32_t, const char*);

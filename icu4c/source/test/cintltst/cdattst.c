@@ -33,6 +33,7 @@ void addDateForTest(TestNode** root)
 {
     addTest(root, &TestDateFormat, "tsformat/cdattst/TestDateFormat");
     addTest(root, &TestSymbols, "tsformat/cdattst/TestSymbols");
+    addTest(root, &TestDateFormatCalendar, "tsformat/cdattst/TestCalendar");
 }
 /* Testing the DateFormat API */
 static void TestDateFormat()
@@ -529,6 +530,92 @@ uprv_free(pattern);
     }
     uprv_free(value);
     
+}
+
+/**
+ * Test DateFormat(Calendar) API
+ */
+void TestDateFormatCalendar() {
+    UDateFormat *date=0, *time=0, *full=0;
+    UCalendar *cal=0;
+    UChar buf[256];
+    char cbuf[256];
+    int32_t pos;
+    UDate when;
+    UErrorCode ec = U_ZERO_ERROR;
+
+    // Create a formatter for date fields.
+    date = udat_open(UDAT_NONE, UDAT_SHORT, "en_US", NULL, 0, NULL, 0, &ec);
+    if (U_FAILURE(ec)) {
+        log_err("FAIL: udat_open(NONE, SHORT, en_US) failed with %s\n", 
+                u_errorName(ec));
+        goto FAIL;
+    }
+
+    // Create a formatter for time fields.
+    time = udat_open(UDAT_SHORT, UDAT_NONE, "en_US", NULL, 0, NULL, 0, &ec);
+    if (U_FAILURE(ec)) {
+        log_err("FAIL: udat_open(SHORT, NONE, en_US) failed with %s\n", 
+                u_errorName(ec));
+        goto FAIL;
+    }
+
+    // Create a full format for output
+    full = udat_open(UDAT_FULL, UDAT_FULL, "en_US", NULL, 0, NULL, 0, &ec);
+    if (U_FAILURE(ec)) {
+        log_err("FAIL: udat_open(FULL, FULL, en_US) failed with %s\n", 
+                u_errorName(ec));
+        goto FAIL;
+    }
+
+    // Create a calendar
+    cal = ucal_open(NULL, 0, "en_US", UCAL_GREGORIAN, &ec);
+    if (U_FAILURE(ec)) {
+        log_err("FAIL: ucal_open(en_US) failed with %s\n", 
+                u_errorName(ec));
+        goto FAIL;
+    }
+
+    // Parse the date
+    ucal_clear(cal);
+    u_uastrcpy(buf, "4/5/2001");
+    pos = 0;
+    udat_parseCalendar(date, cal, buf, -1, &pos, &ec);
+    if (U_FAILURE(ec)) {
+        log_err("FAIL: udat_parseCalendar(4/5/2001) failed at %d with %s\n",
+                pos, u_errorName(ec));
+        goto FAIL;
+    }
+
+    // Parse the time
+    u_uastrcpy(buf, "5:45 PM");
+    pos = 0;
+    udat_parseCalendar(time, cal, buf, -1, &pos, &ec);
+    if (U_FAILURE(ec)) {
+        log_err("FAIL: udat_parseCalendar(17:45) failed at %d with %s\n",
+                pos, u_errorName(ec));
+        goto FAIL;
+    }
+    
+    // Check result
+    when = ucal_getMillis(cal, &ec);
+    if (U_FAILURE(ec)) {
+        log_err("FAIL: ucal_getMillis() failed with %s\n", u_errorName(ec));
+        goto FAIL;
+    }
+    udat_format(full, when, buf, sizeof(buf), NULL, &ec);
+    if (U_FAILURE(ec)) {
+        log_err("FAIL: udat_format() failed with %s\n", u_errorName(ec));
+        goto FAIL;
+    }
+    u_austrcpy(cbuf, buf);
+    log_verbose("Parsed result: %s\n", cbuf);
+
+ FAIL:    
+    udat_close(date);
+    udat_close(time);
+    udat_close(full);
+    ucal_close(cal);
 }
 
 /*INTERNAL FUNCTIONS USED*/
