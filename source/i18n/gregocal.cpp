@@ -36,6 +36,8 @@
 *   10/15/99    aliu        Fixed j31, incorrect WEEK_OF_YEAR computation.
 *   10/15/99    aliu        Fixed j32, cannot set date to Feb 29 2000 AD.
 *                           {JDK bug 4210209 4209272}
+*   11/15/99    weiv        Added YEAR_WOY and DOW_LOCAL computation
+*                           to timeToFields method, updated kMinValues, kMaxValues & kLeastMaxValues
 ********************************************************************************
 */
 
@@ -106,17 +108,19 @@ const UDate GregorianCalendar::LATEST_SUPPORTED_MILLIS    =   4503599627370495.0
  * MILLISECOND             0         0         999         999
  * ZONE_OFFSET           -12*      -12*         12*         12*
  * DST_OFFSET              0         0           1*          1*
+ * YEAR_WOY                1         1      140742      144683
+ * DOW_LOCAL               1         1           7           7
  * </pre>
  * (*) In units of one-hour
  */
 const int32_t GregorianCalendar::kMinValues[] = {
-    0,1,0,1,0,1,1,1,-1,0,0,0,0,0,0,-12*U_MILLIS_PER_HOUR,0
+    0,1,0,1,0,1,1,1,-1,0,0,0,0,0,0,-12*U_MILLIS_PER_HOUR,0,1,1
 };
 const int32_t GregorianCalendar::kLeastMaxValues[] = {
-    1,140742,11,52,4,28,365,7,4,1,11,23,59,59,999,12*U_MILLIS_PER_HOUR,1*U_MILLIS_PER_HOUR
+    1,140742,11,52,4,28,365,7,4,1,11,23,59,59,999,12*U_MILLIS_PER_HOUR,1*U_MILLIS_PER_HOUR,140742,7
 };
 const int32_t GregorianCalendar::kMaxValues[] = {
-    1,144683,11,53,6,31,366,7,6,1,11,23,59,59,999,12*U_MILLIS_PER_HOUR,1*U_MILLIS_PER_HOUR
+    1,144683,11,53,6,31,366,7,6,1,11,23,59,59,999,12*U_MILLIS_PER_HOUR,1*U_MILLIS_PER_HOUR, 144683,7
 };
 
 char GregorianCalendar::fgClassID = 0; // Value is irrelevant
@@ -386,7 +390,7 @@ GregorianCalendar::timeToFields(UDate theTime, bool_t quick, UErrorCode& status)
         return;
 
     int32_t rawYear;
-    int32_t year, month, date, dayOfWeek, dayOfYear, era;
+    int32_t year, yearOfWeekOfYear, month, date, dayOfWeek, locDayOfWeek, dayOfYear, era;
     bool_t isLeap;
 
     // Compute the year, month, and day of month from the given millis
@@ -448,6 +452,7 @@ GregorianCalendar::timeToFields(UDate theTime, bool_t quick, UErrorCode& status)
     
     // Normalize day of week
     dayOfWeek += (dayOfWeek < 0) ? (SUNDAY+7) : SUNDAY;
+    
 
     era = AD;
     year = rawYear;
@@ -455,6 +460,9 @@ GregorianCalendar::timeToFields(UDate theTime, bool_t quick, UErrorCode& status)
         era = BC;
         year = 1 - year;
     }
+
+    // Calculate year of week of year
+
 
     internalSet(ERA, era);
     internalSet(YEAR, year);
@@ -464,6 +472,8 @@ GregorianCalendar::timeToFields(UDate theTime, bool_t quick, UErrorCode& status)
     internalSet(DAY_OF_YEAR, ++dayOfYear); // Convert from 0-based to 1-based
     if (quick) 
         return;
+
+    yearOfWeekOfYear = year;
 
     // Compute the week of the year.  Valid week numbers run from 1 to 52
     // or 53, depending on the year, the first day of the week, and the
@@ -483,17 +493,29 @@ GregorianCalendar::timeToFields(UDate theTime, bool_t quick, UErrorCode& status)
         if (lastRelDow < 0) lastRelDow += 7;
         if (dayOfYear > 359 && // Fast check which eliminates most cases
             (6 - lastRelDow) >= getMinimalDaysInFirstWeek() &&
-            (dayOfYear + 7 - relDow) > lastDoy) woy = 1;
+            (dayOfYear + 7 - relDow) > lastDoy) {
+                woy = 1;
+                yearOfWeekOfYear++;
+        }
     }
     else if (woy == 0) {
         // We are the last week of the previous year.
         int32_t prevDoy = dayOfYear + yearLength(rawYear - 1);
         woy = weekNumber(prevDoy, dayOfWeek);
+        yearOfWeekOfYear--;
     }
+
+
     internalSet(WEEK_OF_YEAR, woy);
+    internalSet(YEAR_WOY, yearOfWeekOfYear);
 
     internalSet(WEEK_OF_MONTH, weekNumber(date, dayOfWeek));
     internalSet(DAY_OF_WEEK_IN_MONTH, (date-1) / 7 + 1);
+
+    // Calculate localized day of week
+    locDayOfWeek = dayOfWeek-getFirstDayOfWeek()+1;
+    locDayOfWeek += (locDayOfWeek<1?7:0);
+    internalSet(DOW_LOCAL, locDayOfWeek);
 }
 
 // -------------------------------------

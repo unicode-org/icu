@@ -33,7 +33,8 @@
 
 // generic date-format pattern symbols.  For their meanings, see class docs
 // for SimpleDateFormat
-UnicodeString DateFormatSymbols::fgPatternChars = "GyMdkHmsSEDFwWahKz";
+//UnicodeString DateFormatSymbols::fgPatternChars = "GyMdkHmsSEDFwWahKz";
+UnicodeString DateFormatSymbols::fgPatternChars = "GyMdkHmsSEDFwWahKzYe";
 
 //------------------------------------------------------
 // Strings of last resort.  These are only used if we have no resource
