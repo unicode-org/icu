@@ -1127,28 +1127,25 @@ The leftmost codepage (.xxx) wins.
       l = lang, C = ctry, M = charmap, V = variant
     */
 
-    if(gCorrectedPOSIXLocale != NULL) {
-      return gCorrectedPOSIXLocale; 
+    if (gCorrectedPOSIXLocale != NULL) {
+        return gCorrectedPOSIXLocale; 
     }
 
-    if((p = uprv_strchr(posixID, '.')) != NULL)
-    {
+    if ((p = uprv_strchr(posixID, '.')) != NULL) {
         /* assume new locale can't be larger than old one? */
         correctedPOSIXLocale = uprv_malloc(uprv_strlen(posixID));
         uprv_strncpy(correctedPOSIXLocale, posixID, p-posixID);
         correctedPOSIXLocale[p-posixID] = 0;
 
         /* do not copy after the @ */
-        if((p = uprv_strchr(correctedPOSIXLocale, '@')) != NULL)
-        {
+        if ((p = uprv_strchr(correctedPOSIXLocale, '@')) != NULL) {
             correctedPOSIXLocale[p-correctedPOSIXLocale] = 0;
         }
     }
 
     /* Note that we scan the *uncorrected* ID. */
-    if((p = uprv_strrchr(posixID, '@')) != NULL)
-    {
-        if(correctedPOSIXLocale == NULL) {
+    if ((p = uprv_strrchr(posixID, '@')) != NULL) {
+        if (correctedPOSIXLocale == NULL) {
             correctedPOSIXLocale = uprv_malloc(uprv_strlen(posixID));
             uprv_strncpy(correctedPOSIXLocale, posixID, p-posixID);
             correctedPOSIXLocale[p-posixID] = 0;
@@ -1156,58 +1153,58 @@ The leftmost codepage (.xxx) wins.
         p++;
 
         /* Take care of any special cases here.. */
-        if(!uprv_strcmp(p, "nynorsk"))
-        {
+        if (!uprv_strcmp(p, "nynorsk")) {
             p = "NY";
 
             /*      Should we assume no_NO_NY instead of possible no__NY?
-            * if(!uprv_strcmp(correctedPOSIXLocale, "no")) {
-            *         uprv_strcpy(correctedPOSIXLocale, "no_NO");
-            *         }
+            * if (!uprv_strcmp(correctedPOSIXLocale, "no")) {
+            *     uprv_strcpy(correctedPOSIXLocale, "no_NO");
+            * }
             */
         }
 
-        if(uprv_strchr(correctedPOSIXLocale,'_') == NULL)
-        {
+        if (uprv_strchr(correctedPOSIXLocale,'_') == NULL) {
             uprv_strcat(correctedPOSIXLocale, "__"); /* aa@b -> aa__b */
         }
-        else
-        {
+        else {
             uprv_strcat(correctedPOSIXLocale, "_"); /* aa_CC@b -> aa_CC_b */
         }
 
-        if((q = uprv_strchr(p, '.')) != NULL)
-        {
+        if ((q = uprv_strchr(p, '.')) != NULL) {
             /* How big will the resulting string be? */
             len = uprv_strlen(correctedPOSIXLocale) + (q-p);
             uprv_strncat(correctedPOSIXLocale, p, q-p);
             correctedPOSIXLocale[len] = 0;
         }
-        else
-        {
-          uprv_strcat(correctedPOSIXLocale, p);  /* Anything following the @ sign */
+        else {
+            /* Anything following the @ sign */
+            uprv_strcat(correctedPOSIXLocale, p);
         }
 
         /* Should there be a map from 'no@nynorsk' -> no_NO_NY here?
-        How about 'russian' -> 'ru'?
-        */
+         * How about 'russian' -> 'ru'?
+         */
     }
 
     /* Was a correction made? */
-    if(correctedPOSIXLocale != NULL) 
-    {
+    if (correctedPOSIXLocale != NULL) {
         posixID = correctedPOSIXLocale;
+    }
+    else {
+        /* copy it, just in case the original pointer goes away.  See j2395 */
+        correctedPOSIXLocale = (char *)uprv_malloc(uprv_strlen(posixID) + 1);
+        posixID = uprv_strcpy(correctedPOSIXLocale, posixID);
     }
 
     umtx_lock(NULL);
-      if(gCorrectedPOSIXLocale == NULL) {
+    if (gCorrectedPOSIXLocale == NULL) {
         gCorrectedPOSIXLocale = correctedPOSIXLocale;
         correctedPOSIXLocale = NULL;
-      }
+    }
     umtx_unlock(NULL);
 
-    if(correctedPOSIXLocale != NULL) {  /* Was already set - clean up. */
-      uprv_free(correctedPOSIXLocale); 
+    if (correctedPOSIXLocale != NULL) {  /* Was already set - clean up. */
+        uprv_free(correctedPOSIXLocale); 
     }
 
     return posixID;
