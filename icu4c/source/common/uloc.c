@@ -91,6 +91,11 @@ static int32_t _installedLocalesCount = 0;
  * This list must be kept in sync with LANGUAGES_3, with corresponding
  * entries matched.
  *
+ * This table should be terminated with a NULL entry, followed by a
+ * second list, and another NULL entry.  The first list is visible to
+ * user code when this array is returned by API.  The second list
+ * contains codes we support, but do not expose through user API.
+ *
  * Notes
  *
  * Tables updated per http://lcweb.loc.gov/standards/iso639-2/ to
@@ -180,6 +185,10 @@ NULL
  *
  * Where a 3-letter language code has no 2-letter equivalent, the
  * 3-letter code occupies both LANGUAGES[i] and LANGUAGES_3[i].
+ *
+ * This table should be terminated with a NULL entry, followed by a
+ * second list, and another NULL entry.  The two lists correspond to
+ * the two lists in LANGUAGES.
  */
 static const char * const LANGUAGES_3[] = {
 /*  "aa",  "ab",  "ace", "ach", "ada", "ady", "ae",  "af",  "afa",    */
@@ -311,6 +320,11 @@ NULL
  * This list must be kept in sync with COUNTRIES_3, with corresponding
  * entries matched.
  *
+ * This table should be terminated with a NULL entry, followed by a
+ * second list, and another NULL entry.  The first list is visible to
+ * user code when this array is returned by API.  The second list
+ * contains codes we support, but do not expose through user API.
+ *
  * Notes:
  *
  * ZR(ZAR) is now CD(COD) and FX(FXX) is PS(PSE) as per
@@ -365,6 +379,10 @@ NULL
  * For all valid i, COUNTRIES[i] must refer to the same country as
  * COUNTRIES_3[i].  The commented-out lines are copied from COUNTRIES
  * to make eyeballing this baby easier.
+ *
+ * This table should be terminated with a NULL entry, followed by a
+ * second list, and another NULL entry.  The two lists correspond to
+ * the two lists in COUNTRIES.
  */
 static const char * const COUNTRIES_3[] = {
 /*  "AD",  "AE",  "AF",  "AG",  "AI",  "AL",  "AM",  "AN",     */
@@ -504,6 +522,7 @@ static const CanonicalizationMap CANONICALIZATION_MAP[] = {
 #define _isIDSeparator(a) (a == '_' || a == '-')
 
 #define _isPrefixLetter(a) ((a=='x')||(a=='X')||(a=='i')||(a=='I'))
+
 /*returns TRUE if one of the special prefixes is here (s=string)
   'x-' or 'i-' */
 #define _isIDPrefix(s) (_isPrefixLetter(s[0])&&_isIDSeparator(s[1]))
@@ -513,26 +532,27 @@ static const CanonicalizationMap CANONICALIZATION_MAP[] = {
  */
 #define _isTerminator(a)  ((a==0)||(a=='.')||(a=='@'))
 
+/**
+ * Lookup 'key' in the array 'list'.  The array 'list' should contain
+ * a NULL entry, followed by more entries, and a second NULL entry.
+ *
+ * The 'list' param should be LANGUAGES, LANGUAGES_3, COUNTRIES, or
+ * COUNTRIES_3.
+ */
 static int16_t _findIndex(const char* const* list, const char* key)
 {
     const char* const* anchor = list;
-    
-    while (*list)
-    {
-        if (uprv_strcmp(key, *list) == 0) 
-        {
-            return (int16_t)(list - anchor);
+    int32_t pass = 0;
+
+    /* Make two passes through two NULL-terminated arrays at 'list' */
+    while (pass++ < 2) {
+        while (*list) {
+            if (uprv_strcmp(key, *list) == 0) {
+                return (int16_t)(list - anchor);
+            }
+            list++;
         }
-        list++;
-    }
-    list++;     /* skip first NULL *CWB*/
-    while (*list)    /* scan obsolete table */
-    {
-        if (uprv_strcmp(key, *list) == 0) 
-        {
-            return (int16_t)(list - anchor);
-        }
-        list++;
+        ++list;     /* skip final NULL *CWB*/
     }
     return -1;
 }
@@ -729,22 +749,40 @@ _getVariant(const char *localeID,
     return i;
 }
 
+/* bit-flags for 'options' parameter of _canonicalize */
+#define _ULOC_STRIP_KEYWORDS 0x8
+#define _ULOC_CANONICALIZE   0x1
+
 static int32_t
-uloc_getNameInternal(const char* localeID,
-             char* name,
-             int32_t nameCapacity,
-             UBool stripKeywords,
-             UErrorCode* err)  
-{
+_canonicalize(const char* localeID,
+              char* _name,
+              int32_t _nameCapacity,
+              uint32_t options,
+              UErrorCode* err) {
     int32_t i, fieldCount, scriptSize;
     UBool alreadyAddedAKeyword = FALSE;
+    char localeBuffer[ULOC_FULLNAME_CAPACITY];
+    int32_t idx, len;
+    char* name;
+    const char* original = localeID;
+    int32_t nameCapacity;
 
-    if(err==NULL || U_FAILURE(*err)) {
+    if (U_FAILURE(*err)) {
         return 0;
     }
     
-    if(localeID==NULL) {
+    if (localeID==NULL) {
         localeID=uloc_getDefault();
+    }
+
+    /* if we are doing a full canonicalization, then put results in localeBuffer;
+       otherwise send them to _name. */
+    if ((options & _ULOC_CANONICALIZE) != 0) {
+        name = localeBuffer;
+        nameCapacity = sizeof(localeBuffer);
+    } else {
+        name = _name;
+        nameCapacity = _nameCapacity;
     }
 
     /* get all pieces, one after another, and separate with '_' */
@@ -788,7 +826,7 @@ uloc_getNameInternal(const char* localeID,
         }
     }
 
-    if(!stripKeywords) {
+    if ((options & _ULOC_STRIP_KEYWORDS) == 0) {
         /* if we do not have a variant tag yet then try a POSIX variant after '@' */
         if((localeID=locale_getKeywordsStart(localeID))!=NULL) {
             const char *keywordIndicator = uprv_strchr(localeID, ULOC_KEYWORD_ASSIGN);
@@ -816,65 +854,44 @@ uloc_getNameInternal(const char* localeID,
             }
         }
     }
-    return u_terminateChars(name, nameCapacity, i, err);
-}
+    len = u_terminateChars(name, nameCapacity, i, err);
 
-U_CAPI int32_t  U_EXPORT2
-uloc_canonicalize(const char* localeID,
-             char* name,
-             int32_t nameCapacity,
-             UErrorCode* err)  
-{
-    char localeBuffer[ULOC_FULLNAME_CAPACITY];
-    int32_t idx, len, minLen;
-
-    if (U_FAILURE(*err)) {
-        return 0;
-    }
-
-    len = uloc_getName(localeID, localeBuffer, sizeof(localeBuffer), err);
-    if (U_SUCCESS(*err) && *err != U_STRING_NOT_TERMINATED_WARNING) {
-        char *euroVariant;
-        /* See if this is an already known locale */
-        for (idx = 0; idx < (int32_t)(sizeof(CANONICALIZATION_MAP)/sizeof(CANONICALIZATION_MAP[0])); idx++) {
-            if (uprv_strncmp(localeBuffer, CANONICALIZATION_MAP[idx].id, len) == 0) {
-                int32_t nameLen = uprv_strlen(CANONICALIZATION_MAP[idx].canonicalID);
-                uprv_strncpy(localeBuffer, CANONICALIZATION_MAP[idx].canonicalID, nameLen);
-                u_terminateChars(localeBuffer, sizeof(localeBuffer), nameLen, err);
-                len = nameLen;
-                break;
+    if ((options & _ULOC_CANONICALIZE) != 0) {
+        if (U_SUCCESS(*err) && *err != U_STRING_NOT_TERMINATED_WARNING) {
+            char *euroVariant;
+            /* See if this is an already known locale */
+            for (idx = 0; idx < (int32_t)(sizeof(CANONICALIZATION_MAP)/sizeof(CANONICALIZATION_MAP[0])); idx++) {
+                if (uprv_strncmp(localeBuffer, CANONICALIZATION_MAP[idx].id, len) == 0) {
+                    int32_t nameLen = uprv_strlen(CANONICALIZATION_MAP[idx].canonicalID);
+                    uprv_strncpy(localeBuffer, CANONICALIZATION_MAP[idx].canonicalID, nameLen);
+                    u_terminateChars(localeBuffer, sizeof(localeBuffer), nameLen, err);
+                    len = nameLen;
+                    break;
+                }
             }
-        }
-        /* convert the POSIX euro variant */
-        euroVariant = (char *)uprv_strstr(localeBuffer, "_EURO");
-        if (euroVariant && uprv_strlen(euroVariant) == 5) {
-            int32_t euroKeyLen = 13;  /* strlen("@currency=EUR")13 */
-            int32_t euroDiff = 8;  /* strlen("@currency=EUR")13 - strlen("_EURO")5 */
-            len += euroDiff;
-            if (euroDiff > (nameCapacity - len)) {
-                euroDiff -= (nameCapacity - len);
+            /* convert the POSIX euro variant */
+            euroVariant = (char *)uprv_strstr(localeBuffer, "_EURO");
+            if (euroVariant && uprv_strlen(euroVariant) == 5) {
+                int32_t euroKeyLen = 13;  /* strlen("@currency=EUR")13 */
+                int32_t euroDiff = 8;  /* strlen("@currency=EUR")13 - strlen("_EURO")5 */
+                len += euroDiff;
+                if (euroDiff > (_nameCapacity - len)) {
+                    euroDiff -= (_nameCapacity - len);
+                }
+                uprv_strncpy(euroVariant, "@currency=EUR", euroKeyLen);
+                u_terminateChars(localeBuffer, sizeof(localeBuffer), len, err);
             }
-            uprv_strncpy(euroVariant, "@currency=EUR", euroKeyLen);
-            u_terminateChars(localeBuffer, sizeof(localeBuffer), len, err);
+            uprv_strncpy(_name, localeBuffer, (len > _nameCapacity) ? _nameCapacity : len);
+            u_terminateChars(_name, _nameCapacity, len, err);
+        } else {
+            /* It's too long. We can't convert anything meaningful out of this. */
+            *err = U_ZERO_ERROR;
+            len = _canonicalize(original, _name, _nameCapacity, 0, err);
         }
-        minLen = len;
-        if (minLen > nameCapacity) {
-            /* Pin the length */
-            minLen = nameCapacity;
-        }
-        if (minLen < nameCapacity) {
-            uprv_strncpy(name, localeBuffer, minLen);
-        }
-        u_terminateChars(name, nameCapacity, len, err);
-    }
-    else {
-        /* It's too long. We can't convert anything meaningful out of this. */
-        *err = U_ZERO_ERROR;
-        len = uloc_getName(localeID, name, nameCapacity, err);
     }
     return len;
 }
-  
+
 /* ### ID parsing API **************************************************/
 
 U_CAPI int32_t  U_EXPORT2
@@ -1036,18 +1053,27 @@ uloc_getName(const char* localeID,
              int32_t nameCapacity,
              UErrorCode* err)  
 {
-    return uloc_getNameInternal(localeID, name, nameCapacity, FALSE, err);
+    return _canonicalize(localeID, name, nameCapacity, 0, err);
 }
 
 U_CAPI int32_t  U_EXPORT2
 uloc_getBaseName(const char* localeID,
-             char* name,
-             int32_t nameCapacity,
-             UErrorCode* err)  
+                 char* name,
+                 int32_t nameCapacity,
+                 UErrorCode* err)  
 {
-    return uloc_getNameInternal(localeID, name, nameCapacity, TRUE, err);
+    return _canonicalize(localeID, name, nameCapacity, _ULOC_STRIP_KEYWORDS, err);
 }
 
+U_CAPI int32_t  U_EXPORT2
+uloc_canonicalize(const char* localeID,
+                  char* name,
+                  int32_t nameCapacity,
+                  UErrorCode* err)  
+{
+    return _canonicalize(localeID, name, nameCapacity, _ULOC_CANONICALIZE, err);
+}
+  
 U_CAPI const char*  U_EXPORT2
 uloc_getISO3Language(const char* localeID) 
 {
