@@ -1563,22 +1563,21 @@ uint32_t ucol_getPrevUCA(UChar ch, collIterate *collationSource,
 /**
 * Inserts the argument character into the end of the buffer pushing back the 
 * null terminator.
-* @param data collation element iterator data
+* @param data collIterate struct data
+* @param pNull pointer to the null termination
 * @param ch character to be appended
 * @return the position of the new addition
 */
-inline UChar * insertBufferEnd(collIterate *data, UChar ch) 
+inline UChar * insertBufferEnd(collIterate *data, UChar *pNull, UChar ch) 
 {
           uint32_t  size    = data->writableBufSize;
-          uint32_t  strlen  = u_strlen(data->writableBuffer);
           UChar    *newbuffer;
     const uint32_t  incsize = 5;
 
-    if (size > strlen) {
-        UChar *end = data->writableBuffer + strlen;
-        *end = ch;
-        *(end + 1) = 0;
-        return end;
+    if ((data->writableBuffer + size) > (pNull + 1)) {
+        *pNull = ch;
+        *(pNull + 1) = 0;
+        return pNull;
     }
 
     /* 
@@ -1676,6 +1675,7 @@ inline UChar getNextNormalizedChar(collIterate *data)
     UChar  nextch;
     UChar  ch;
     UBool  innormbuf = data->flags & UCOL_ITER_INNORMBUF;
+    UChar  *pNull = NULL;
     if ((data->flags & (UCOL_ITER_NORM | UCOL_ITER_INNORMBUF)) == 0 ||
         (innormbuf && *data->pos != 0) ||
         (!innormbuf && data->pos < data->fcdPosition)) {
@@ -1702,9 +1702,11 @@ inline UChar getNextNormalizedChar(collIterate *data)
             if (*(data->fcdPosition + 1) == 0 ||
                 data->fcdPosition + 1 == data->endp) {
                 /* at the end of the string, dump it into the normalizer */
-                data->pos = insertBufferEnd(data, *(data->fcdPosition)) + 1;
+                data->pos = insertBufferEnd(data, data->pos, 
+                                            *(data->fcdPosition)) + 1;
                 return *(data->fcdPosition ++);
             }
+            pNull = data->pos;
             data->pos = data->fcdPosition;
         }
         else {
@@ -1739,7 +1741,7 @@ inline UChar getNextNormalizedChar(collIterate *data)
         no normalization is to be done hence only one character will be 
         appended to the buffer.
         */
-        data->pos = insertBufferEnd(data, ch) + 1;
+        data->pos = insertBufferEnd(data, pNull, ch) + 1;
     }
     
     /* points back to the pos in string */
@@ -1899,23 +1901,21 @@ uint32_t getSpecialCE(const UCollator *coll, uint32_t CE, collIterate *source, U
 * Inserts the argument character into the front of the buffer replacing the 
 * front null terminator.
 * @param data collation element iterator data
+* @param pNull pointer to the null terminator
 * @param ch character to be appended
 * @return positon of added character
 */
-inline UChar * insertBufferFront(collIterate *data, UChar ch) 
+inline UChar * insertBufferFront(collIterate *data, UChar *pNull, UChar ch) 
 {
           uint32_t  size    = data->writableBufSize;
-          UChar    *end     = data->writableBuffer + (size - 1);
+          UChar    *end;
           UChar    *newbuffer;
     const uint32_t  incsize = 5;
 
-    while (end > data->writableBuffer) {
-        if (*end == 0) {
-            *end       = ch;
-            *(end - 1) = 0;
-            return end;
-        }
-        end --;
+    if (pNull > data->writableBuffer + 1) {
+        *pNull       = ch;
+        *(pNull - 1) = 0;
+        return pNull;
     }
 
     /* 
@@ -2034,6 +2034,7 @@ inline UChar getPrevNormalizedChar(collIterate *data)
     UChar  ch;
     UChar *start;
     UBool  innormbuf = data->flags & UCOL_ITER_INNORMBUF;
+    UChar *pNull = NULL;
     if ((data->flags & (UCOL_ITER_NORM | UCOL_ITER_INNORMBUF)) == 0 || 
         (innormbuf && *(data->pos - 1) != 0)) {
         /* 
@@ -2061,10 +2062,11 @@ inline UChar getPrevNormalizedChar(collIterate *data)
         */
         if (data->fcdPosition == data->string) {
             /* at the start of the string, just dump it into the normalizer */
-            insertBufferFront(data, *(data->fcdPosition));
+            insertBufferFront(data, data->pos - 1, *(data->fcdPosition));
             data->fcdPosition = NULL;
             return *(data->pos - 1);
         }
+        pNull  = data->pos - 1;
         start  = data->fcdPosition;
         ch     = *start;
         prevch = *(start - 1);
@@ -2095,14 +2097,9 @@ inline UChar getPrevNormalizedChar(collIterate *data)
     no normalization is to be done hence only one character will be 
     appended to the buffer.
     */
-        insertBufferFront(data, ch);
+        insertBufferFront(data, pNull, ch);
         data->fcdPosition --;
     }
-    /*
-    else {
-        /* points back to the pos in string */
-    //    data->pos = start;
-    //}
     
     return ch;
 }
