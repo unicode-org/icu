@@ -1026,7 +1026,7 @@ LocaleTest::TestAtypicalLocales()
                                      "espagnol (Allemagne)",
                                     "Croatie",
                                     CharsToUnicodeString("Su\\u00E8de"),
-                                    CharsToUnicodeString("R\\u00E9publique Dominicaine"),
+                                    CharsToUnicodeString("R\\u00E9publique dominicaine"),
                                     "Belgique" };
     UnicodeString spanishDisplayNames [] = {
                                      CharsToUnicodeString("alem\\u00E1n (Canad\\u00E1)"),
