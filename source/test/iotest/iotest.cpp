@@ -101,6 +101,7 @@ static void TestFileFromICU(UFILE *myFile) {
     *n = 1;
     u_fprintf(myFile, "\t\nPointer to integer (Count) %%n: n=%d %n n=%d\n", *n, n, *n);
     u_fprintf(myFile, "Pointer to integer Value: %d\n", *n);
+    u_fprintf(myFile, "This is a long test123456789012345678901234567890123456789012345678901234567890\n");
     *n = 1;
     fprintf(u_fgetfile(myFile), "\tNormal fprintf count: n=%d %n n=%d\n", *n ,n, *n);
     fprintf(u_fgetfile(myFile), "\tNormal fprintf count value: n=%d\n", *n);
@@ -258,6 +259,14 @@ static void TestFileFromICU(UFILE *myFile) {
     }
     u_austrncpy(myString, myUString, sizeof(myUString)/sizeof(*myUString));
     if (myString == NULL || strcmp(myString, "Pointer to integer Value: 37\n") != 0) {
+        log_err("u_fgets got \"%s\"\n", myString);
+    }
+
+    if (u_fgets(myFile, sizeof(myUString)/sizeof(*myUString), myUString) != myUString) {
+        log_err("u_fgets did not return myUString\n");
+    }
+    u_austrncpy(myString, myUString, sizeof(myUString)/sizeof(*myUString));
+    if (myString == NULL || strcmp(myString, "This is a long test123456789012345678901234567890123456789012345678901234567890\n") != 0) {
         log_err("u_fgets got \"%s\"\n", myString);
     }
 
@@ -744,11 +753,16 @@ static void TestFprintfFormat() {
     TestFPrintFormat("%10f", 123.456789, "%10f", 123.456789);
     TestFPrintFormat("%-10f", 123.456789, "%-10f", 123.456789);
 
+    TestFPrintFormat("%e", 1234567.89, "%e", 1234567.89);
+    TestFPrintFormat("%E", 1234567.89, "%E", 1234567.89);
     TestFPrintFormat("%10e", 1.23456789, "%10e", 1.23456789);
     TestFPrintFormat("%-10e", 1.23456789, "%-10e", 1.23456789);
-    TestFPrintFormat("%10e", 123.456789, "%10e", 123.456789);
-    TestFPrintFormat("%-10e", 123.456789, "%-10e", 123.456789);
+    TestFPrintFormat("%10e", 1234.56789, "%10e", 1234.56789);
+    TestFPrintFormat("%-10e", 1234.56789, "%-10e", 1234.56789);
 
+    TestFPrintFormat("%g", 123456.789, "%g", 123456.789);
+    TestFPrintFormat("%g", 1234567.89, "%g", 1234567.89);
+    TestFPrintFormat("%G", 1234567.89, "%G", 1234567.89);
     TestFPrintFormat("%10g", 1.23456789, "%10g", 1.23456789);
     TestFPrintFormat("%-10g", 1.23456789, "%-10g", 1.23456789);
     TestFPrintFormat("%10g", 123.456789, "%10g", 123.456789);
@@ -1014,6 +1028,12 @@ static void TestString() {
         log_err("%%V Got: %f, Expected: %f\n", *newDoubleValuePtr, myFloat);
     }
 
+    u_sprintf(myUString, NULL, "This is a long test123456789012345678901234567890123456789012345678901234567890");
+    u_austrncpy(myString, myUString, sizeof(myString)/sizeof(*myString));
+    if (strcmp(myString, "This is a long test123456789012345678901234567890123456789012345678901234567890")) {
+        log_err("%%U Got: %s, Expected: My String\n", myString);
+    }
+
 
 //  u_sscanf(uStringBuf, NULL, "Pointer %%p: %p\n", myFile);
 }
@@ -1119,11 +1139,16 @@ static void TestSprintfFormat() {
     TestSPrintFormat("%10f", 123.456789, "%10f", 123.456789);
     TestSPrintFormat("%-10f", 123.456789, "%-10f", 123.456789);
 
+    TestSPrintFormat("%e", 1234567.89, "%e", 1234567.89);
+    TestSPrintFormat("%E", 1234567.89, "%E", 1234567.89);
     TestSPrintFormat("%10e", 1.23456789, "%10e", 1.23456789);
     TestSPrintFormat("%-10e", 1.23456789, "%-10e", 1.23456789);
     TestSPrintFormat("%10e", 123.456789, "%10e", 123.456789);
     TestSPrintFormat("%-10e", 123.456789, "%-10e", 123.456789);
 
+    TestSPrintFormat("%g", 123456.789, "%g", 123456.789);
+    TestSPrintFormat("%g", 1234567.89, "%g", 1234567.89);
+    TestSPrintFormat("%G", 1234567.89, "%G", 1234567.89);
     TestSPrintFormat("%10g", 1.23456789, "%10g", 1.23456789);
     TestSPrintFormat("%-10g", 1.23456789, "%-10g", 1.23456789);
     TestSPrintFormat("%10g", 123.456789, "%10g", 123.456789);
