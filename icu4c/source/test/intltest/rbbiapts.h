@@ -49,17 +49,10 @@ public:
       **/
     void TestGetSetAdoptText();
      /**
-      * Testing the methods first(), next(), next(int) and following() of RuleBasedBreakIterator
+      * Testing the iteration methods of RuleBasedBreakIterator
       **/
-    void TestFirstNextFollowing(void);
-    /**
-     * Testing the methods lastt(), previous(), and preceding() of RuleBasedBreakIterator
-     **/
-   void TestLastPreviousPreceding(void);
-    /**
-     * Tests the method IsBoundary() of RuleBasedBreakIterator
-     **/
-    void TestIsBoundary(void);
+    void TestIteration(void);
+
 
     /**
      * Tests creating RuleBasedBreakIterator from rules strings.

@@ -282,352 +282,224 @@ void RBBIAPITest::TestGetSetAdoptText()
     delete charIter1;
     delete rb;
 
- }   
-void RBBIAPITest::TestFirstNextFollowing()
+ } 
+
+  
+void RBBIAPITest::TestIteration()
 {
-    int32_t p, q;
+    // This test just verifies that the API is present.
+    // Testing for correct operation of the break rules happens elsewhere.
+
     UErrorCode status=U_ZERO_ERROR;
-    UnicodeString testString="This is a word break. Isn't it? 2.25";
-    logln((UnicodeString)"Testing first() and next(), following() with custom rules");
-    logln((UnicodeString)"testing word iterator - string :- \"" + prettify(testString) + (UnicodeString)"\"\n");
-
-    RuleBasedBreakIterator* wordIter1 = (RuleBasedBreakIterator*)RuleBasedBreakIterator::createWordInstance(Locale::getDefault(), status);
-    if(U_FAILURE(status))
-        errln("FAIL : in construction");
-    else{
-        wordIter1->setText(testString);
-        p = wordIter1->first();
-        if(p !=0 )
-            errln((UnicodeString)"ERROR: first() returned" + p + (UnicodeString)"instead of 0");
-
-        q=wordIter1->next(9);
-        doTest(testString, p,  q, 20, "This is a word break");
-        p=q;
-        q=wordIter1->next();
-        doTest(testString, p, q, 21, ".");
-        p=q;
-        q=wordIter1->next(3);
-        doTest(testString, p, q, 28, " Isn't ");
-        p=q;
-        q=wordIter1->next(2);
-        doTest(testString, p, q, 31, "it?");
-        //logln((UnicodeString)"Testing following(int)");
-        q=wordIter1->following(2);
-        doTest(testString, 2, q, 4, "is");
-        q=wordIter1->following(22);
-        doTest(testString, 22, q, 27, "Isn't"); 
-        wordIter1->last();   
-        p=wordIter1->next();
-        q=wordIter1->following(wordIter1->last());
-        if(p != RuleBasedBreakIterator::DONE || q != RuleBasedBreakIterator::DONE)
-            errln((UnicodeString)"ERROR: next()/following() at last position returned #" + 
-                p + (UnicodeString)" and " + q + (UnicodeString)" instead of" + testString.length() + (UnicodeString)"\n");
-
+    RuleBasedBreakIterator* bi  = (RuleBasedBreakIterator*)RuleBasedBreakIterator::createCharacterInstance(Locale::getDefault(), status);
+    if (U_FAILURE(status) || bi == NULL)  {
+        errln("Failure creating character break iterator.  Status = %s", u_errorName(status));
     }
+    delete bi;
 
     status=U_ZERO_ERROR;
-    RuleBasedBreakIterator* charIter1 = (RuleBasedBreakIterator*)RuleBasedBreakIterator::createCharacterInstance(Locale::getDefault(), status);
-    if(U_FAILURE(status))
-        errln("FAIL : in construction");
-    else{
-        testString=CharsToUnicodeString("Write hindi here. \\u092d\\u093e\\u0930\\u0924 \\u0938\\u0941\\u0902\\u0926\\u0930 \\u0939\\u094c\\u0964");
-        logln((UnicodeString)"testing char iter - string:- \"" + prettify(testString) + (UnicodeString)"\"");
-        charIter1->setText(testString);
-        p = charIter1->first();
-        if(p !=0 )
-            errln((UnicodeString)"ERROR: first() returned" + p + (UnicodeString)"instead of 0");
-        q=charIter1->next();
-        doTest(testString, p, q, 1, "W");
-        p=q;
-        q=charIter1->next(4);
-        doTest(testString, p, q, 5, "rite");
-        p=q;                              
-        q=charIter1->next(12);
-        doTest(testString, p, q, 17, " hindi here.");
-        p=q;
-        q=charIter1->next(-6);
-        doTest(testString, p, q, 11, " here.");
-        p=q;
-        q=charIter1->next(6);
-        doTest(testString, p, q, 17, " here."); 
-        // hindi starts here
-        p=q;
-        q=charIter1->next(5);
-        doTest(testString, p, q, 22, " \\u092d\\u093e\\u0930\\u0924");
-        p=q;
-        q=charIter1->next(2);
-        doTest(testString, p, q, 26, " \\u0938\\u0941\\u0902");
-
-        q=charIter1->following(24);
-        doTest(testString, 24, q, 26, "\\u0941\\u0902");
-        q=charIter1->following(20);
-        doTest(testString, 20, q, 21, "\\u0930");
-        p=charIter1->following(charIter1->last());
-        q=charIter1->next(charIter1->last());
-        if(p != RuleBasedBreakIterator::DONE || q != RuleBasedBreakIterator::DONE)
-            errln((UnicodeString)"ERROR: following()/next() at last position returned #" +
-                p + (UnicodeString)" and " + q + (UnicodeString)" instead of" + testString.length());
-
-
+    bi  = (RuleBasedBreakIterator*)RuleBasedBreakIterator::createWordInstance(Locale::getDefault(), status);
+    if (U_FAILURE(status) || bi == NULL)  {
+        errln("Failure creating Word break iterator.  Status = %s", u_errorName(status));
     }
+    delete bi;
 
     status=U_ZERO_ERROR;
-    testString="Hello! how are you? I'am fine. Thankyou. How are you doing? This\n costs $20,00,000.";
-    //          0123456789012345678901234567890123456789012345678901234567890123 45678901234567890123456789
-    //          0         1         2         3         4         5         6          7         8
-    RuleBasedBreakIterator* sentIter1=(RuleBasedBreakIterator*)RuleBasedBreakIterator::createSentenceInstance(Locale::getDefault(), status);
-    if(U_FAILURE(status))
-        errln("FAIL : in construction");
-    else{
-        logln((UnicodeString)"testing sentence iter - String:- \"" + prettify(testString) + (UnicodeString)"\""); 
-        sentIter1->setText(testString);
-        p = sentIter1->first();
-        if(p !=0 )
-            errln((UnicodeString)"ERROR: first() returned" + p + (UnicodeString)"instead of 0");
-        q=sentIter1->next();
-        doTest(testString, p, q, 7,  "Hello! ");
-        p=q;
-        q=sentIter1->next(2);
-        doTest(testString, p, q, 31, "how are you? I'am fine. ");
-        p=q;        
-        q=sentIter1->next(-2);
-        doTest(testString, p, q, 7, "how are you? I'am fine. ");
-        p=q;
-        q=sentIter1->next(4);
-        doTest(testString, p, q, 60, "how are you? I'am fine. Thankyou. How are you doing? ");
-        p=q; 
-        q=sentIter1->next(2);
-        doTest(testString, p, q, 83, "This\n costs $20,00,000.");
-        q=sentIter1->following(1);
-        doTest(testString, 1, q, 7, "ello! ");
-        q=sentIter1->following(10);
-        doTest(testString, 10, q, 20,  " are you? ");
-        q=sentIter1->following(20);
-        doTest(testString, 20, q, 31, "I'am fine. ");  
-        p=sentIter1->following(sentIter1->last());
-        q=sentIter1->next(sentIter1->last());
-        if(p != RuleBasedBreakIterator::DONE || q != RuleBasedBreakIterator::DONE)
-            errln((UnicodeString)"ERROR: following()/next() at last position returned #" + 
-                p + (UnicodeString)" and " + q + (UnicodeString)" instead of" + testString.length());
-
+    bi  = (RuleBasedBreakIterator*)RuleBasedBreakIterator::createLineInstance(Locale::getDefault(), status);
+    if (U_FAILURE(status) || bi == NULL)  {
+        errln("Failure creating Line break iterator.  Status = %s", u_errorName(status));
     }
+    delete bi;
 
     status=U_ZERO_ERROR;
-    testString=CharsToUnicodeString("Hello! how\r\n (are)\r you? I'am fine- Thankyou. foo\\u00a0bar How, are, you? This, costs $20,00,000.");     
-    logln("(UnicodeString)testing line iter - String:- \"" + prettify(testString) + (UnicodeString)"\""); 
-    RuleBasedBreakIterator* lineIter1=(RuleBasedBreakIterator*)RuleBasedBreakIterator::createLineInstance(Locale::getDefault(), status);
-    if(U_FAILURE(status))
-        errln("FAIL : in construction");
-    else{
-        lineIter1->setText(testString);
-
-        p = lineIter1->first();
-        if(p !=0 )
-            errln((UnicodeString)"ERROR: first() returned" + p + (UnicodeString)"instead of 0");
-        q=lineIter1->next();
-        doTest(testString, p, q, 7,  "Hello! ");
-        p=q;
-        p=q;
-        q=lineIter1->next(4);
-        doTest(testString, p, q, 20, "how\r\n (are)\r ");
-        p=q;        
-        q=lineIter1->next(-4);
-        doTest(testString, p, q, 7, "how\r\n (are)\r ");
-        p=q;
-        q=lineIter1->next(6);
-        doTest(testString, p, q, 30, "how\r\n (are)\r you? I'am ");
-        p=q;
-        q=lineIter1->next();
-        doTest(testString, p, q, 36, "fine- ");
-        p=q;
-        q=lineIter1->next(2);
-        doTest(testString, p, q, 54, "Thankyou. foo\\u00a0bar ");
-        q=lineIter1->following(60);
-        doTest(testString, 60, q, 64, "re, ");
-        q=lineIter1->following(1);
-        doTest(testString, 1, q, 7, "ello! ");
-        q=lineIter1->following(10);
-        doTest(testString, 10, q, 12,  "\r\n");
-        q=lineIter1->following(20);
-        doTest(testString, 20, q, 25, "you? ");  
-        p=lineIter1->following(lineIter1->last());
-        q=lineIter1->next(lineIter1->last());
-        if(p != RuleBasedBreakIterator::DONE || q != RuleBasedBreakIterator::DONE)
-            errln((UnicodeString)"ERROR: following()/next() at last position returned #" + 
-                p + (UnicodeString)" and " + q + (UnicodeString)" instead of" + testString.length());
+    bi  = (RuleBasedBreakIterator*)RuleBasedBreakIterator::createSentenceInstance(Locale::getDefault(), status);
+    if (U_FAILURE(status) || bi == NULL)  {
+        errln("Failure creating Sentence break iterator.  Status = %s", u_errorName(status));
     }
-    delete wordIter1;
-    delete charIter1;
-    delete sentIter1;
-    delete lineIter1;
-}
-
-void RBBIAPITest::TestLastPreviousPreceding()
-{
-    int32_t p, q;
-    UErrorCode status=U_ZERO_ERROR;
-    UnicodeString testString="This is a word break. Isn't it? 2.25 dollars";
-    logln((UnicodeString)"Testing last(),previous(), preceding() with custom rules");
-    logln((UnicodeString)"testing word iteration for string \"" + prettify(testString) + (UnicodeString)"\"");
-
-    RuleBasedBreakIterator *wordIter1 = (RuleBasedBreakIterator*)RuleBasedBreakIterator::createWordInstance(Locale::getDefault(), status);
-    if(U_FAILURE(status))
-        errln("FAIL : in construction");
-    else{
-        wordIter1->setText(testString);
-        p = wordIter1->last();
-        if(p !=testString.length() ){
-            errln((UnicodeString)"ERROR: first() returned" + p + (UnicodeString)"instead of" + testString.length());
-    }
-
-    q=wordIter1->previous();
-    doTest(testString, p, q, 37, "dollars");
-    p=q;
-    q=wordIter1->previous();
-    doTest(testString, p, q, 36, " ");
-    q=wordIter1->preceding(25);
-    doTest(testString, 25, q, 22, "Isn");
-    p=q;
-    q=wordIter1->previous();
-    doTest(testString, p, q, 21, " ");
-    q=wordIter1->preceding(20);
-    doTest(testString, 20, q, 15, "break");  
-    p=wordIter1->preceding(wordIter1->first());
-    if(p != RuleBasedBreakIterator::DONE)
-        errln((UnicodeString)"ERROR: preceding()  at starting position returned #" + p + (UnicodeString)" instead of 0");
-
-    }
+    delete bi;
 
     status=U_ZERO_ERROR;
-    testString=CharsToUnicodeString("Write hindi here. \\u092d\\u093e\\u0930\\u0924 \\u0938\\u0941\\u0902\\u0926\\u0930 \\u0939\\u094c\\u0964");
-    logln((UnicodeString)"testing character iteration for string \" " + prettify(testString) + (UnicodeString)"\" \n");
-
-
-    RuleBasedBreakIterator *charIter1 = (RuleBasedBreakIterator*)RuleBasedBreakIterator::createCharacterInstance(Locale::getDefault(), status);
-    if(U_FAILURE(status))
-        errln("FAIL : in construction");
-    else{
-        charIter1->setText(testString);
-        p = charIter1->last();
-        if(p != testString.length() )
-            errln((UnicodeString)"ERROR: first() returned" + p + (UnicodeString)"instead of" + testString.length());
-        q=charIter1->previous();
-        doTest(testString, p, q, 31, "\\u0964");
-        p=q;
-        q=charIter1->previous();
-        doTest(testString, p, q, 30, "\\u094c");
-        p=q;
-        q=charIter1->previous();
-        doTest(testString, p, q, 29, "\\u0939");
-        q=charIter1->preceding(26);
-        doTest(testString, 26, q, 23, "\\u0938\\u0941\\u0902");
-        q=charIter1->preceding(16);
-        doTest(testString, 16, q, 15, "e");
-        p=q;
-        q=charIter1->previous();
-        doTest(testString, p, q, 14, "r"); 
-        charIter1->first();
-        p=charIter1->previous();
-        q=charIter1->preceding(charIter1->first());
-        if(p != RuleBasedBreakIterator::DONE || q != RuleBasedBreakIterator::DONE)
-            errln((UnicodeString)"ERROR: previous()/preceding() at starting position returned #" +
-              p + (UnicodeString)" and " + q + (UnicodeString)" instead of 0\n");      
-
+    bi  = (RuleBasedBreakIterator*)RuleBasedBreakIterator::createTitleInstance(Locale::getDefault(), status);
+    if (U_FAILURE(status) || bi == NULL)  {
+        errln("Failure creating Title break iterator.  Status = %s", u_errorName(status));
     }
-
+    delete bi;
 
     status=U_ZERO_ERROR;
-    testString="Hello! how are you? I'am fine. Thankyou. How are you doing? This\n costs $20,00,000.";
-    logln((UnicodeString)"testing sentence iter - String:- \"" + prettify(testString) + (UnicodeString)"\""); 
-
-
-    RuleBasedBreakIterator* sentIter1=(RuleBasedBreakIterator*)RuleBasedBreakIterator::createSentenceInstance(Locale::getDefault(), status);
-    if(U_FAILURE(status))
-        errln("FAIL : in construction");
-    else{
-        sentIter1->setText(testString);
-        p = sentIter1->last();
-        if(p != testString.length() )
-            errln((UnicodeString)"ERROR: last() returned" + p + (UnicodeString)"instead of " + testString.length());
-        q=sentIter1->previous();
-        q=sentIter1->previous();
-        doTest(testString, p, q, 60, "This\n costs $20,00,000.");
-        p=q;
-        q=sentIter1->previous();
-        doTest(testString, p, q, 41, "How are you doing? ");
-        q=sentIter1->preceding(40);
-        doTest(testString, 40, q, 31, "Thankyou.");
-        q=sentIter1->preceding(25);
-        doTest(testString, 25, q, 20, "I'am "); 
-        sentIter1->first();
-        p=sentIter1->previous();
-        q=sentIter1->preceding(sentIter1->first());
-        if(p != RuleBasedBreakIterator::DONE || q != RuleBasedBreakIterator::DONE)
-            errln((UnicodeString)"ERROR: previous()/preceding() at starting position returned #" +
-              p + (UnicodeString)" and " + q + (UnicodeString)" instead of 0\n");
-
+    bi  = (RuleBasedBreakIterator*)RuleBasedBreakIterator::createCharacterInstance(Locale::getDefault(), status);
+    if (U_FAILURE(status) || bi == NULL)  {
+        errln("Failure creating character break iterator.  Status = %s", u_errorName(status));
+        return;   // Skip the rest of these tests.
     }
 
-    status=U_ZERO_ERROR;
-    testString="Hello! how are you? I'am fine. Thankyou. How are you doing? This\n costs $20,00,000.";
-    logln((UnicodeString)"testing line iter - String:- \"" + prettify(testString) + (UnicodeString)"\""); 
 
-    RuleBasedBreakIterator* lineIter1=(RuleBasedBreakIterator*)RuleBasedBreakIterator::createLineInstance(Locale::getDefault(), status);
-    if(U_FAILURE(status))
-        errln("FAIL : in construction");
-    else{
-        lineIter1->setText(testString);
-        p = lineIter1->last();
-        q=lineIter1->previous();
-        doTest(testString, p, q, 72, "$20,00,000.");
-        p=q;
-        q=lineIter1->previous();
-        doTest(testString, p, q, 66, "costs ");
-        q=lineIter1->preceding(40);
-        doTest(testString, 40, q, 31, "Thankyou.");
-        q=lineIter1->preceding(25);
-        doTest(testString, 25, q, 20, "I'am "); 
-        lineIter1->first();
-        p=lineIter1->previous();
-        q=lineIter1->preceding(sentIter1->first());
-        if(p != RuleBasedBreakIterator::DONE || q != RuleBasedBreakIterator::DONE)
-            errln((UnicodeString)"ERROR: previous()/preceding() at starting position returned #" + 
-              p + (UnicodeString)" and " +  q + (UnicodeString)" instead of 0\n");
+    UnicodeString testString="0123456789";
+    bi->setText(testString);
 
+    int32_t i;
+    i = bi->first();
+    if (i != 0) {
+        errln("Incorrect value from bi->first().  Expected 0, got %d.", i);
     }
 
-    delete sentIter1;
-    delete charIter1;
-    delete wordIter1;
-    delete lineIter1;
+    i = bi->last();
+    if (i != 10) {
+        errln("Incorrect value from bi->last().  Expected 10, got %d", i);
+    }
+
+    //
+    // Previous
+    //
+    bi->last();
+    i = bi->previous();
+    if (i != 9) {
+        errln("Incorrect value from bi->last() at line %d.  Expected 9, got %d", __LINE__, i);
+    }
+
+
+    bi->first();
+    i = bi->previous();
+    if (i != BreakIterator::DONE) {
+        errln("Incorrect value from bi->previous() at line %d.  Expected DONE, got %d", __LINE__, i);
+    }
+
+    //
+    // next()
+    //
+    bi->first();
+    i = bi->next();
+    if (i != 1) {
+        errln("Incorrect value from bi->next() at line %d.  Expected 1, got %d", __LINE__, i);
+    }
+
+    bi->last();
+    i = bi->next();
+    if (i != BreakIterator::DONE) {
+        errln("Incorrect value from bi->next() at line %d.  Expected DONE, got %d", __LINE__, i);
+    }
+
+
+    //
+    //  current()
+    //
+    bi->first();
+    i = bi->current();
+    if (i != 0) {
+        errln("Incorrect value from bi->previous() at line %d.  Expected 0, got %d", __LINE__, i);
+    }
+
+    bi->next();
+    i = bi->current();
+    if (i != 1) {
+        errln("Incorrect value from bi->previous() at line %d.  Expected 1, got %d", __LINE__, i);
+    }
+
+    bi->last();
+    bi->next();
+    i = bi->current();
+    if (i != 10) {
+        errln("Incorrect value from bi->previous() at line %d.  Expected 10, got %d", __LINE__, i);
+    }
+
+    bi->first();
+    bi->previous();
+    i = bi->current();
+    if (i != 0) {
+        errln("Incorrect value from bi->previous() at line %d.  Expected 0, got %d", __LINE__, i);
+    }
+
+
+    //
+    // Following()
+    //
+    i = bi->following(4);
+    if (i != 5) {
+        errln("Incorrect value from bi->following() at line %d.  Expected 5, got %d", __LINE__, i);
+    }
+
+    i = bi->following(9);
+    if (i != 10) {
+        errln("Incorrect value from bi->following() at line %d.  Expected 10, got %d", __LINE__, i);
+    }
+
+    i = bi->following(10);
+    if (i != BreakIterator::DONE) {
+        errln("Incorrect value from bi->following() at line %d.  Expected DONE, got %d", __LINE__, i);
+    }
+
+
+    //
+    // Preceding
+    //
+    i = bi->preceding(4);
+    if (i != 3) {
+        errln("Incorrect value from bi->preceding() at line %d.  Expected 3, got %d", __LINE__, i);
+    }
+
+    i = bi->preceding(10);
+    if (i != 9) {
+        errln("Incorrect value from bi->preceding() at line %d.  Expected 9, got %d", __LINE__, i);
+    }
+
+    i = bi->preceding(1);
+    if (i != 0) {
+        errln("Incorrect value from bi->preceding() at line %d.  Expected 0, got %d", __LINE__, i);
+    }
+
+    i = bi->preceding(0);
+    if (i != BreakIterator::DONE) {
+        errln("Incorrect value from bi->preceding() at line %d.  Expected DONE, got %d", __LINE__, i);
+    }
+
+
+    //
+    // isBoundary()
+    //
+    bi->first();
+    if (bi->isBoundary(3) != TRUE) {
+        errln("Incorrect value from bi->isBoudary() at line %d.  Expected TRUE, got FALSE", __LINE__, i);
+    }
+    i = bi->current();
+    if (i != 3) {
+        errln("Incorrect value from bi->current() at line %d.  Expected 3, got %d", __LINE__, i);
+    }
+
+
+    if (bi->isBoundary(11) != FALSE) {
+        errln("Incorrect value from bi->isBoudary() at line %d.  Expected FALSE, got TRUE", __LINE__, i);
+    }
+    i = bi->current();
+    if (i != 10) {
+        errln("Incorrect value from bi->current() at line %d.  Expected 10, got %d", __LINE__, i);
+    }
+
+    //
+    // next(n)
+    //
+    bi->first();
+    i = bi->next(4);
+    if (i != 4) {
+        errln("Incorrect value from bi->next() at line %d.  Expected 4, got %d", __LINE__, i);
+    }
+
+    i = bi->next(6);
+    if (i != 10) {
+        errln("Incorrect value from bi->next() at line %d.  Expected 10, got %d", __LINE__, i);
+    }
+
+    bi->first();
+    i = bi->next(11);
+    if (i != BreakIterator::DONE) {
+        errln("Incorrect value from bi->next() at line %d.  Expected BreakIterator::DONE, got %d", __LINE__, i);
+    }
+
+    delete bi;
+
 }
 
 
-void RBBIAPITest::TestIsBoundary(){
-    UErrorCode status=U_ZERO_ERROR;
-    UnicodeString testString1=CharsToUnicodeString("Write here. \\u092d\\u093e\\u0930\\u0924 \\u0938\\u0941\\u0902\\u0926\\u0930 \\u0939\\u094c\\u0964");
-
-    RuleBasedBreakIterator* charIter1 = (RuleBasedBreakIterator*)RuleBasedBreakIterator::createCharacterInstance(Locale::getDefault(), status);
-    if(U_FAILURE(status))
-        errln("FAIL: in construction");
-    else{
-         charIter1->setText(testString1);
-         int32_t bounds1[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 20, 21, 22, 23, 24, 25, 26};
-         doBoundaryTest(*charIter1, testString1, bounds1);
-    }
 
 
-    RuleBasedBreakIterator* wordIter2 = (RuleBasedBreakIterator*)RuleBasedBreakIterator::createWordInstance(Locale::getDefault(), status);
-    if(U_FAILURE(status))
-        errln("FAIL : in construction");
-    else{  
-        wordIter2->setText(testString1);
-        int32_t bounds2[] = {0, 5, 6, 10, 11, 12, 16, 17, 22, 23, 25, 26};
-        doBoundaryTest(*wordIter2, testString1, bounds2);
-    }
-    delete wordIter2;
-    delete charIter1;
-}
 
 
 void RBBIAPITest::TestBuilder() {
@@ -912,9 +784,9 @@ void RBBIAPITest::runIndexedTest( int32_t index, UBool exec, const char* &name, 
         case  1: name = "TestgetRules"; if (exec) TestgetRules(); break;
         case  2: name = "TestHashCode"; if (exec) TestHashCode(); break;
         case  3: name = "TestGetSetAdoptText"; if (exec) TestGetSetAdoptText(); break;
-        case  4: name = "TestFirstNextFollowing"; if (exec) TestFirstNextFollowing(); break;
-        case  5: name = "TestLastPreviousPreceding"; if (exec) TestLastPreviousPreceding(); break;
-        case  6: name = "TestIsBoundary"; if (exec) TestIsBoundary(); break;
+        case  4: name = "TestIteration"; if (exec) TestIteration(); break;
+        case  5: name = ""; break;   /* Extra */
+        case  6: name = ""; break;   /* Extra */
         case  7: name = "TestBuilder"; if (exec) TestBuilder(); break;
         case  8: name = "TestQuoteGrouping"; if (exec) TestQuoteGrouping(); break;
         case  9: name = "TestWordStatus"; if (exec) TestWordStatus(); break;
