@@ -873,7 +873,7 @@ MBCS_FROM_UCHAR32_ISO2022(UConverterSharedData* sharedData,
     }
 }
 /* This inline function replicates code in _MBCSSingleFromUChar32() function in ucnvmbcs.c
- * any future change in _MBCSFromUChar32() function should be reflected in 
+ * any future change in _MBCSSingleFromUChar32() function should be reflected in 
  * this macro
  */
 U_INLINE void 
@@ -941,6 +941,9 @@ T_UConverter_getNextUChar_ISO_2022(UConverterToUnicodeArgs* args,
                err);
     }while(args->source < args->sourceLimit);
 
+    if( (args->source == args->sourceLimit) && args->flush){
+        _ISO2022Reset(args->converter,UCNV_RESET_TO_UNICODE);
+    }
     return 0xffff;
 }
 
@@ -1031,7 +1034,11 @@ T_UConverter_toUnicode_ISO_2022(UConverterToUnicodeArgs *args,
     }while(args->source < args->sourceLimit);
 
     myData->isFirstBuffer=FALSE;
-}
+    if( (args->source == args->sourceLimit) && args->flush){
+        _ISO2022Reset(args->converter,UCNV_RESET_FROM_UNICODE);
+    }
+    
+}   
 
 U_CFUNC void 
 T_UConverter_toUnicode_ISO_2022_OFFSETS_LOGIC(UConverterToUnicodeArgs* args,
@@ -1135,7 +1142,9 @@ T_UConverter_toUnicode_ISO_2022_OFFSETS_LOGIC(UConverterToUnicodeArgs* args,
         myOffset += args->source - sourceStart;
 
     }while(mySourceLimit != args->sourceLimit);
-
+    if( (args->source == args->sourceLimit) && args->flush){
+        _ISO2022Reset(args->converter,UCNV_RESET_TO_UNICODE);
+    }
 }
 
 UCNV_TableStates_2022 
