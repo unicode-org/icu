@@ -64,7 +64,14 @@ bool_t Transliterator::cacheInitialized = FALSE;
  * transliterator.  The ID is appended to this to form the key.
  * The resource bundle value should be a String.
  */
-const char* Transliterator::RB_DISPLAY_NAME_PREFIX = "T:";
+const char* Transliterator::RB_DISPLAY_NAME_PREFIX = "%Translit%%";
+
+/**
+ * Prefix for resource bundle key for the display name for a
+ * transliterator SCRIPT.  The ID is appended to this to form the key.
+ * The resource bundle value should be a String.
+ */
+const char* Transliterator::RB_SCRIPT_DISPLAY_NAME_PREFIX = "%Translit%";
 
 /**
  * Resource bundle key for display name pattern.
@@ -365,8 +372,9 @@ const UnicodeString& Transliterator::getID(void) const {
  * display to the user in the default locale.  See {@link
  * #getDisplayName(Locale)} for details.
  */
-UnicodeString& Transliterator::getDisplayName(UnicodeString& result) const {
-    return getDisplayName(Locale::getDefault(), result);
+UnicodeString& Transliterator::getDisplayName(const UnicodeString& ID,
+                                              UnicodeString& result) {
+    return getDisplayName(ID, Locale::getDefault(), result);
 }
 
 /**
@@ -387,8 +395,9 @@ UnicodeString& Transliterator::getDisplayName(UnicodeString& result) const {
  * localized.
  * @see java.text.MessageFormat
  */
-UnicodeString& Transliterator::getDisplayName(const Locale& inLocale,
-                                              UnicodeString& result) const {
+UnicodeString& Transliterator::getDisplayName(const UnicodeString& ID,
+                                              const Locale& inLocale,
+                                              UnicodeString& result) {
     UErrorCode status = U_ZERO_ERROR;
     ResourceBundle bundle(Locale::getDataDirectory(), inLocale, status);
     // Suspend checking status until later...
@@ -397,7 +406,7 @@ UnicodeString& Transliterator::getDisplayName(const Locale& inLocale,
     char key[100];
     uprv_strcpy(key, RB_DISPLAY_NAME_PREFIX);
     int32_t length=uprv_strlen(RB_DISPLAY_NAME_PREFIX);
-    key[ID.extract(0, sizeof(key)-length-1, key+length, "")]=0;
+    key[length + ID.extract(0, sizeof(key)-length-1, key+length, "")]=0;
 
     // Try to retrieve a UnicodeString* from the bundle.  The result,
     // if any, should NOT be deleted.
@@ -437,6 +446,24 @@ UnicodeString& Transliterator::getDisplayName(const Locale& inLocale,
             args[2].setString(right);
             nargs = 3;
         }
+
+        // Use display names for the scripts, if they exist
+        UnicodeString s;
+        for (int j=1; j<=((i<0)?1:2); ++j) {
+            status = U_ZERO_ERROR;
+            uprv_strcpy(key, RB_SCRIPT_DISPLAY_NAME_PREFIX);
+            length=uprv_strlen(RB_SCRIPT_DISPLAY_NAME_PREFIX);
+            args[j].getString(s);
+            key[length + s.extract(0, sizeof(key)-length-1, key+length, "")]=0;
+
+            resString = bundle.getString(key, status);
+
+            if (U_SUCCESS(status)) {
+                args[j] = *resString;
+            }
+        }
+        
+        status = U_ZERO_ERROR;
         FieldPosition pos; // ignored by msg
         msg.format(args, nargs, result, pos, status);
         if (U_SUCCESS(status)) {
@@ -623,7 +650,7 @@ Transliterator* Transliterator::_createInstance(const UnicodeString& ID) {
         // a string in the RB cache.
         const UnicodeString* rules = bundle.getString(RB_RULE, status);
 
-        // If rules == 0 at this piont, or if the status indicates a
+        // If rules == 0 at this point, or if the status indicates a
         // failure, then we don't have any rules -- there is probably
         // an installation error.  The list in the root locale should
         // correspond to all the installed transliterators; if it
