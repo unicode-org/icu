@@ -246,6 +246,7 @@ static void setEntryName(UResourceDataEntry *res, char *name, UErrorCode *status
 
 /**
  *  INTERNAL: Inits and opens an entry from a data DLL.
+ *    CAUTION:  resbMutex must be locked when calling this function.
  */
 static UResourceDataEntry *init_entry(const char *localeID, const char *path, UErrorCode *status) {
     UResourceDataEntry *r = NULL;
@@ -377,6 +378,7 @@ static UResourceDataEntry *init_entry(const char *localeID, const char *path, UE
 }
 
 /* INTERNAL: */
+/*   CAUTION:  resbMutex must be locked when calling this function! */
 static UResourceDataEntry *findFirstExisting(const char* path, char* name, UBool *isRoot, UBool *hasChopped, UBool *isDefault, UErrorCode* status) {
   UResourceDataEntry *r = NULL;
   UBool hasRealData = FALSE;
@@ -517,6 +519,7 @@ static UResourceDataEntry *entryOpen(const char* path, const char* localeID, UEr
 
 /**
  * Functions to create and destroy resource bundles.
+ *     CAUTION:  resbMutex must be locked when calling this function.
  */
 /* INTERNAL: */
 static void entryCloseInt(UResourceDataEntry *resB) {

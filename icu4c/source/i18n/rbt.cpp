@@ -18,10 +18,13 @@
 #include "rbt_data.h"
 #include "rbt_rule.h"
 #include "rbt.h"
+#include "umutex.h"
 
 U_NAMESPACE_BEGIN
 
 UOBJECT_DEFINE_RTTI_IMPLEMENTATION(RuleBasedTransliterator)
+
+static UMTX  transliteratorDataMutex = NULL;
 
 void RuleBasedTransliterator::_construct(const UnicodeString& rules,
                                          UTransDirection direction,
@@ -228,7 +231,7 @@ RuleBasedTransliterator::handleTransliterate(Replaceable& text, UTransPosition& 
     }
 
     if (isDataOwned==FALSE) {
-        fData->lock();
+        umtx_lock(&transliteratorDataMutex);
     }
     while (index.start < index.limit &&
            loopCount <= loopLimit &&
@@ -236,7 +239,7 @@ RuleBasedTransliterator::handleTransliterate(Replaceable& text, UTransPosition& 
         ++loopCount;
     }
     if (isDataOwned==FALSE) {
-        fData->unlock();
+        umtx_unlock(&transliteratorDataMutex);
     }
 }
 
