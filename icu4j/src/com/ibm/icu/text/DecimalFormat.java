@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/DecimalFormat.java,v $ 
- * $Date: 2003/06/05 23:05:17 $ 
- * $Revision: 1.34 $
+ * $Date: 2003/06/06 21:09:43 $ 
+ * $Revision: 1.35 $
  *
  *****************************************************************************************
  */
@@ -53,17 +53,9 @@ import java.io.ObjectInputStream;
  * }
  * </pre></blockquote>
  *
- * <p>A <code>DecimalFormat</code> comprises a <em>pattern</em> and a set of
- * <em>symbols</em>.  The pattern may be set directly using
- * <code>applyPattern()</code>, or indirectly using the API methods.  The
- * symbols are stored in a <code>DecimalFormatSymbols</code> object.  When using
- * the <code>NumberFormat</code> factory methods, the pattern and symbols are
- * read from localized <code>ResourceBundle</code>s in the package
- * <code>java.text.resource</code>.
- * 
  * <h4>Synchronization</h4>
  * <p>
- * Decimal formats are generally not synchronized. It is recommended to create 
+ * Decimal formats are not synchronized. It is recommended that you create 
  * separate format instances for each thread. If multiple threads access a format
  * concurrently, it must be synchronized externally. 
  * <p>
@@ -75,7 +67,7 @@ import java.io.ObjectInputStream;
  * // and percent format for each locale</strong>
  * Locale[] locales = NumberFormat.getAvailableLocales();
  * double myNumber = -1234.56;
- * NumberFormat form;
+ * NumberFormat format;
  * for (int j=0; j<3; ++j) {
  *     System.out.println("FORMAT");
  *     for (int i = 0; i < locales.length; ++i) {
@@ -86,25 +78,125 @@ import java.io.ObjectInputStream;
  *         System.out.print(locales[i].getDisplayName());
  *         switch (j) {
  *         case 0:
- *             form = NumberFormat.getInstance(locales[i]); break;
+ *             format = NumberFormat.getInstance(locales[i]); break;
  *         case 1:
- *             form = NumberFormat.getCurrencyInstance(locales[i]); break;
+ *             format = NumberFormat.getCurrencyInstance(locales[i]); break;
  *         default:
- *             form = NumberFormat.getPercentInstance(locales[i]); break;
+ *             format = NumberFormat.getPercentInstance(locales[i]); break;
  *         }
  *         try {
- *             // Assume form is a DecimalFormat
- *             System.out.print(": " + ((DecimalFormat) form).toPattern()
+ *             // Assume format is a DecimalFormat
+ *             System.out.print(": " + ((DecimalFormat) format).toPattern()
  *                              + " -> " + form.format(myNumber));
  *         } catch (IllegalArgumentException e) {}
  *         try {
- *             System.out.println(" -> " + form.parse(form.format(myNumber)));
+ *             System.out.println(" -> " + format.parse(form.format(myNumber)));
  *         } catch (ParseException e) {}
  *     }
  * }
  * </pre></blockquote>
  *
  * <p><strong>Notes</strong>
+ *
+ * <h4>Patterns</h4>
+ *
+ * <p>A <code>DecimalFormat</code> consists of a <em>pattern</em> and a set of
+ * <em>symbols</em>.  The pattern may be set directly using
+ * <code>applyPattern()</code>, or indirectly using the API methods.  The
+ * symbols are stored in a <code>DecimalFormatSymbols</code> object.  When using
+ * the <code>NumberFormat</code> factory methods, the pattern and symbols are
+ * read from localized <code>ResourceBundle</code>s provided by ICU.
+ * 
+ * <table bgcolor="#ccccff" border="0" cellspacing="3" cellpadding="3" summary="Example patterns">
+ *
+ * </table>
+ *
+ * <h4>Special Pattern Characters</h4>
+ *
+ * <p>Many characters in a pattern are taken literally; they are matched during
+ * parsing and output unchanged during formatting.  Special characters, on the
+ * other hand, stand for other characters, strings, or classes of characters.
+ * They must be quoted, unless noted otherwise, if they are to appear in the
+ * prefix or suffix as literals.
+ *
+ * <p>The characters listed here are used in non-localized patterns.  Localized
+ * patterns use the corresponding characters taken from this formatter's
+ * <code>DecimalFormatSymbols</code> object instead, and these characters lose
+ * their special status.  Two exceptions are the currency sign and quote, which
+ * are not localized.
+ *
+ * <blockquote>
+ * <table border=0 cellspacing=3 cellpadding=0 summary="Chart showing symbol,
+ *  location, localized, and meaning.">
+ *     <tr bgcolor="#ccccff">
+ *          <th align=left>Symbol
+ *          <th align=left>Location
+ *          <th align=left>Localized?
+ *          <th align=left>Meaning
+ *     <tr valign=top>
+ *          <td><code>0</code>
+ *          <td>Number
+ *          <td>Yes
+ *          <td>Digit
+ *     <tr valign=top bgcolor="#eeeeff">
+ *          <td><code>#</code>
+ *          <td>Number
+ *          <td>Yes
+ *          <td>Digit, zero shows as absent
+ *     <tr valign=top>
+ *          <td><code>.</code>
+ *          <td>Number
+ *          <td>Yes
+ *          <td>Decimal separator or monetary decimal separator
+ *     <tr valign=top bgcolor="#eeeeff">
+ *          <td><code>-</code>
+ *          <td>Number
+ *          <td>Yes
+ *          <td>Minus sign
+ *     <tr valign=top>
+ *          <td><code>,</code>
+ *          <td>Number
+ *          <td>Yes
+ *          <td>Grouping separator
+ *     <tr valign=top bgcolor="#eeeeff">
+ *          <td><code>E</code>
+ *          <td>Number
+ *          <td>Yes
+ *          <td>Separates mantissa and exponent in scientific notation.
+ *              <em>Need not be quoted in prefix or suffix.</em>
+ *     <tr valign=top>
+ *          <td><code>;</code>
+ *          <td>Subpattern boundary
+ *          <td>Yes
+ *          <td>Separates positive and negative subpatterns
+ *     <tr valign=top bgcolor="#eeeeff">
+ *          <td><code>%</code>
+ *          <td>Prefix or suffix
+ *          <td>Yes
+ *          <td>Multiply by 100 and show as percentage
+ *     <tr valign=top>
+ *          <td><code>&#92;u2030</code>
+ *          <td>Prefix or suffix
+ *          <td>Yes
+ *          <td>Multiply by 1000 and show as per mille
+ *     <tr valign=top bgcolor="#eeeeff">
+ *          <td><code>&#164;</code> (<code>&#92;u00A4</code>)
+ *          <td>Prefix or suffix
+ *          <td>No
+ *          <td>Currency sign, replaced by currency symbol.  If
+ *              doubled, replaced by international currency symbol.
+ *              If present in a pattern, the monetary decimal separator
+ *              is used instead of the decimal separator.
+ *     <tr valign=top>
+ *          <td><code>'</code>
+ *          <td>Prefix or suffix
+ *          <td>No
+ *          <td>Used to quote special characters in a prefix or suffix,
+ *              for example, <code>"'#'#"</code> formats 123 to
+ *              <code>"#123"</code>.  To create a single quote
+ *              itself, use two in a row: <code>"# o''clock"</code>.
+ * </table>
+ * </blockquote>
  *
  * <p>A <code>DecimalFormat</code> pattern contains a postive and negative
  * subpattern, for example, "#,##0.00;(#,##0.00)".  Each subpattern has a
@@ -172,7 +264,6 @@ import java.io.ObjectInputStream;
  * <code>DecimalFormatSymbols</code> object.
  *
  * <p>
- * <strong><font face=helvetica color=red>NEW</font></strong>
  * <strong>Scientific Notation</strong>
  *
  * <p>Numbers in scientific notation are expressed as the product of a mantissa
@@ -234,7 +325,7 @@ import java.io.ObjectInputStream;
  *
  * <li>Some parameters which usually do not matter have meaning when padding is
  * used, because the pattern width is significant with padding.  In the pattern
- * "^ ##,##,#,##0.##", the format width is 14.  The initial characters "##,##,"
+ * "* ##,##,#,##0.##", the format width is 14.  The initial characters "##,##,"
  * do not affect the grouping size or maximum integer digits, but they do affect
  * the format width.
  *
@@ -446,7 +537,7 @@ public class DecimalFormat extends NumberFormat {
      * @see DecimalFormatSymbols
      * @stable ICU 2.0
      */
-    public DecimalFormat (String pattern, DecimalFormatSymbols symbols) {
+    public DecimalFormat(String pattern, DecimalFormatSymbols symbols) {
         // Always applyPattern after the symbols are set
         this.symbols = (DecimalFormatSymbols) symbols.clone();
         setCurrencyForSymbols();
@@ -1665,8 +1756,7 @@ public class DecimalFormat extends NumberFormat {
     }
 
     /**
-     * Returns the decimal format symbols, which is generally not changed
-     * by the programmer or user.
+     * Returns a copy of the decimal format symbols used by this format.
      * @return desired DecimalFormatSymbols
      * @see DecimalFormatSymbols
      * @stable ICU 2.0
@@ -1682,8 +1772,8 @@ public class DecimalFormat extends NumberFormat {
 
 
     /**
-     * Sets the decimal format symbols, which is generally not changed
-     * by the programmer or user.
+     * Sets the decimal format symbols used by this format.  The
+     * format uses a copy of the provided symbols.
      * @param newSymbols desired DecimalFormatSymbols
      * @see DecimalFormatSymbols
      * @stable ICU 2.0
@@ -2229,6 +2319,14 @@ public class DecimalFormat extends NumberFormat {
     /**
      * Allows you to set the behavior of the decimal separator with integers.
      * (The decimal separator will always appear with decimals.)
+     *
+     * <p>This only affects formatting, and only where
+     * there might be no digits after the decimal point, e.g.,
+     * if true,  3456.00 -> "3,456."
+     * if false, 3456.00 -> "3456"
+     * This is independent of parsing.  If you want parsing to stop at the decimal
+     * point, use setParseIntegerOnly.
+     *
      * <P>Example: Decimal ON: 12345 -> 12345.; OFF: 12345 -> 12345
      * @stable ICU 2.0
      */
@@ -2500,7 +2598,7 @@ public class DecimalFormat extends NumberFormat {
             }
             StringBuffer affixBuf = new StringBuffer();
             expandAffix(affixPat, affixBuf, true);
-            buf.append(affixBuf);
+            buf.append(affixBuf.toString());
             return affixBuf.length();
         }
 
@@ -2510,7 +2608,7 @@ public class DecimalFormat extends NumberFormat {
         } else {
             affix = isNegative ? negativeSuffix : positiveSuffix;
         }
-        buf.append(affix.toString());
+        buf.append(affix);
         return affix.length();
     }
 

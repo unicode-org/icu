@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/NumberFormat.java,v $ 
- * $Date: 2003/06/03 18:49:34 $ 
- * $Revision: 1.28 $
+ * $Date: 2003/06/06 21:09:43 $ 
+ * $Revision: 1.29 $
  *
  *****************************************************************************************
  */
@@ -100,25 +100,16 @@ import com.ibm.icu.impl.LocaleUtility;
  * encounter an unusual one.
  *
  * <p>
- * NumberFormat and DecimalFormat are designed such that some controls
+ * NumberFormat is designed such that some controls
  * work for formatting and others work for parsing.  The following is
  * the detailed description for each these control methods,
  * <p>
  * setParseIntegerOnly : only affects parsing, e.g.
- * if true,  "3456.78" -> 3456 (and leaves the parse position just after index 6)
- * if false, "3456.78" -> 3456.78 (and leaves the parse position just after index 8)
+ * if true,  "3456.78" -> 3456 (and leaves the parse position just after '6')
+ * if false, "3456.78" -> 3456.78 (and leaves the parse position just after '8')
  * This is independent of formatting.  If you want to not show a decimal point
  * where there might be no digits after the decimal point, use
- * setDecimalSeparatorAlwaysShown.
- * <p>
- * setDecimalSeparatorAlwaysShown : only affects formatting, and only where
- * there might be no digits after the decimal point, such as with a pattern
- * like "#,##0.##", e.g.,
- * if true,  3456.00 -> "3,456."
- * if false, 3456.00 -> "3456"
- * This is independent of parsing.  If you want parsing to stop at the decimal
- * point, use setParseIntegerOnly.
- *
+ * setDecimalSeparatorAlwaysShown on DecimalFormat.
  * <p>
  * You can also use forms of the <code>parse</code> and <code>format</code>
  * methods with <code>ParsePosition</code> and <code>FieldPosition</code> to
@@ -153,6 +144,11 @@ import com.ibm.icu.impl.LocaleUtility;
  * concurrently, it must be synchronized externally. 
  * <p>
  *
+ * <h4>DecimalFormat</h4>
+ * <p>DecimalFormat is the concrete implementation of NumberFormat, and the
+ * NumberFormat API is essentially an abstraction from DecimalFormat's API.
+ * Refer to DecimalFormat for more information about this API.</p>
+ *
  * see          DecimalFormat
  * see          java.text.ChoiceFormat
  * @author       Mark Davis
@@ -160,7 +156,7 @@ import com.ibm.icu.impl.LocaleUtility;
  * @author       Alan Liu
  * @stable ICU 2.0
  */
-public abstract class NumberFormat extends Format{
+public abstract class NumberFormat extends Format {
 
     // Constants used by factory methods to specify a style of format.
     private static final int NUMBERSTYLE = 0;
@@ -188,7 +184,7 @@ public abstract class NumberFormat extends Format{
     /**
      * <strong><font face=helvetica color=red>CHANGED</font></strong>
      * Format an object.  Change: recognizes <code>BigInteger</code>
-     * and <code>BigDecimal</code> objects now.
+     * and <code>BigDecimal</code> objects.
      * @stable ICU 2.0
      */
     public final StringBuffer format(Object number,
@@ -261,7 +257,7 @@ public abstract class NumberFormat extends Format{
 
     /**
      * <strong><font face=helvetica color=red>NEW</font></strong>
-     * Convenience method to format a BigDecimal.
+     * Convenience method to format an ICU BigDecimal.
      * @stable ICU 2.0
      */
     public final String format(com.ibm.icu.math.BigDecimal number) {
@@ -333,7 +329,7 @@ public abstract class NumberFormat extends Format{
 
     /**
      * Parses text from the beginning of the given string to produce a number.
-     * The method may not use the entire text of the given string.
+     * The method might not use the entire text of the given string.
      *
      * @param text A String whose beginning should be parsed.
      * @return A Number parsed from the string.
@@ -358,9 +354,10 @@ public abstract class NumberFormat extends Format{
      * Returns true if this format will parse numbers as integers only.
      * For example in the English locale, with ParseIntegerOnly true, the
      * string "1234." would be parsed as the integer value 1234 and parsing
-     * would stop at the "." character.  Of course, the exact format accepted
-     * by the parse operation is locale dependant and determined by sub-classes
-     * of NumberFormat.
+     * would stop at the "." character.  The decimal separator accepted
+     * by the parse operation is locale-dependent and determined by the
+     * subclass.
+     * @return true if this will parse integers only
      * @stable ICU 2.0
      */
     public boolean isParseIntegerOnly() {
@@ -369,6 +366,7 @@ public abstract class NumberFormat extends Format{
 
     /**
      * Sets whether or not numbers should be parsed as integers only.
+     * @param value true if this should parse integers only
      * @see #isParseIntegerOnly
      * @stable ICU 2.0
      */
@@ -383,7 +381,7 @@ public abstract class NumberFormat extends Format{
      * The default format is one of the styles provided by the other
      * factory methods: getNumberInstance, getIntegerInstance,
      * getCurrencyInstance or getPercentInstance.
-     * Exactly which one is locale dependant.
+     * Exactly which one is locale-dependent.
      * @stable ICU 2.0
      */
     //Bug 4408066 [Richard/GCL]
@@ -395,7 +393,7 @@ public abstract class NumberFormat extends Format{
      * Returns the default number format for the specified locale.
      * The default format is one of the styles provided by the other
      * factory methods: getNumberInstance, getCurrencyInstance or getPercentInstance.
-     * Exactly which one is locale dependant.
+     * Exactly which one is locale-dependent.
      * @stable ICU 2.0
      */
     public static NumberFormat getInstance(Locale inLocale) {
@@ -453,6 +451,7 @@ public abstract class NumberFormat extends Format{
 
     /**
      * Returns a currency format for the current default locale.
+     * @return a number format for currency
      * @stable ICU 2.0
      */
     public final static NumberFormat getCurrencyInstance() {
@@ -461,6 +460,7 @@ public abstract class NumberFormat extends Format{
 
     /**
      * Returns a currency format for the specified locale.
+     * @return a number format for currency
      * @stable ICU 2.0
      */
     public static NumberFormat getCurrencyInstance(Locale inLocale) {
@@ -469,6 +469,7 @@ public abstract class NumberFormat extends Format{
 
     /**
      * Returns a percentage format for the current default locale.
+     * @return a number format for percents
      * @stable ICU 2.0
      */
     public final static NumberFormat getPercentInstance() {
@@ -477,6 +478,7 @@ public abstract class NumberFormat extends Format{
 
     /**
      * Returns a percentage format for the specified locale.
+     * @return a number format for percents
      * @stable ICU 2.0
      */
     public static NumberFormat getPercentInstance(Locale inLocale) {
@@ -486,6 +488,7 @@ public abstract class NumberFormat extends Format{
     /**
      * <strong><font face=helvetica color=red>NEW</font></strong>
      * Returns a scientific format for the current default locale.
+     * @return a scientific number format
      * @stable ICU 2.0
      */
     public final static NumberFormat getScientificInstance() {
@@ -495,6 +498,7 @@ public abstract class NumberFormat extends Format{
     /**
      * <strong><font face=helvetica color=red>NEW</font></strong>
      * Returns a scientific format for the specified locale.
+     * @return a scientific number format
      * @stable ICU 2.0
      */
     public static NumberFormat getScientificInstance(Locale inLocale) {
@@ -506,7 +510,7 @@ public abstract class NumberFormat extends Format{
      * A NumberFormatFactory is used to register new number formats.  The factory
      * should be able to create any of the predefined formats for each locale it
      * supports.  When registered, the locales it supports extend or override the
-     * locale already supported by ICU.
+     * locales already supported by ICU.
      *
      * @draft ICU 2.6
      */
@@ -542,27 +546,28 @@ public abstract class NumberFormat extends Format{
         public static final int FORMAT_INTEGER = INTEGERSTYLE;
 
         /**
-         * Return true if this factory is visible.  Default is true.
+         * Returns true if this factory is visible.  Default is true.
          * If not visible, the locales supported by this factory will not
          * be listed by getAvailableLocales.  This value must not change.
          * @return true if the factory is visible.
          * @draft ICU 2.6
          */
+	///CLOVER:OFF
         public boolean visible() {
             return true;
         }
+	///CLOVER:ON
 
         /**
-         * Return an unmodifiable collection of the locale names directly 
-         * supported by this factory.  This collection must not change once
-         * created.
+         * Returns an immutable collection of the locale names directly 
+         * supported by this factory.
          * @return the supported locale names.
          * @draft ICU 2.6
          */
          public abstract Set getSupportedLocaleNames();
 
         /**
-         * Return a number format of the appropriate type.  If the locale
+         * Returns a number format of the appropriate type.  If the locale
          * is not supported, return null.  If the locale is supported, but
          * the type is not provided by this service, return null.  Otherwise
          * return an appropriate instance of NumberFormat.
@@ -638,16 +643,18 @@ public abstract class NumberFormat extends Format{
                 shim = (NumberFormatShim)cls.newInstance();
             }
             catch (Exception e) {
+		///CLOVER:OFF
                 e.printStackTrace();
                 throw new RuntimeException(e.getMessage());
+		///CLOVER:ON
             }
         }
         return shim;
     }
 
     /**
-     * Get the set of Locales for which NumberFormats are installed
-     * @return available locales
+     * Get the list of Locales for which NumberFormats are available.
+     * @return the available locales
      * @stable ICU 2.0
      */
     public static Locale[] getAvailableLocales() {
@@ -658,12 +665,12 @@ public abstract class NumberFormat extends Format{
     }
 
     /**
-     * Registers a new NumberFormatFactory.  The factory is adopted by the service and
-     * must not be modified.  The returned object is a key that can be used to unregister this
-     * factory.
+     * Registers a new NumberFormatFactory.  The factory is adopted by
+     * the service and must not be modified.  The returned object is a
+     * key that can be used to unregister this factory.
      * @param factory the factory to register
      * @return a key with which to unregister the factory
-     * @draft ICU 2.6
+     * @draft ICU 2.6 
      */
     public static Object registerFactory(NumberFormatFactory factory) {
         if (factory == null) {
@@ -675,7 +682,7 @@ public abstract class NumberFormat extends Format{
     /**
      * Unregister the factory or instance associated with this key (obtained from
      * registerInstance or registerFactory).
-     * @param registryKey a key obtained from registerInstance or registerFactory
+     * @param registryKey a key obtained from registerFactory
      * @return true if the object was successfully unregistered
      * @draft ICU 2.6
      */
@@ -703,7 +710,11 @@ public abstract class NumberFormat extends Format{
     }
 
     /**
-     * Overrides equals
+     * Overrides equals.  Two NumberFormats are equal if they are of the same class
+     * and the settings (groupingUsed, parseIntegerOnly, maximumIntegerDigits, etc.
+     * are equal.
+     * @param obj the object to compare against
+     * @return true if the object is equal to this.
      * @stable ICU 2.0
      */
     public boolean equals(Object obj) {
@@ -722,7 +733,7 @@ public abstract class NumberFormat extends Format{
     }
 
     /**
-     * Overrides Cloneable
+     * Overrides Cloneable.
      * @stable ICU 2.0
      */
     public Object clone()
@@ -733,9 +744,11 @@ public abstract class NumberFormat extends Format{
 
     /**
      * Returns true if grouping is used in this format. For example, in the
-     * English locale, with grouping on, the number 1234567 might be formatted
+     * en_US locale, with grouping on, the number 1234567 will be formatted
      * as "1,234,567". The grouping separator as well as the size of each group
-     * is locale dependant and is determined by sub-classes of NumberFormat.
+     * is locale-dependent and is determined by subclasses of NumberFormat.
+     * Grouping affects both parsing and formatting.
+     * @return true if grouping is used
      * @see #setGroupingUsed
      * @stable ICU 2.0
      */
@@ -744,8 +757,10 @@ public abstract class NumberFormat extends Format{
     }
 
     /**
-     * Set whether or not grouping will be used in this format.
+     * Sets whether or not grouping will be used in this format.  Grouping
+     * affects both parsing and formatting.
      * @see #isGroupingUsed
+     * @param newValue true to use grouping.
      * @stable ICU 2.0
      */
     public void setGroupingUsed(boolean newValue) {
@@ -754,7 +769,10 @@ public abstract class NumberFormat extends Format{
 
     /**
      * Returns the maximum number of digits allowed in the integer portion of a
-     * number.
+     * number.  The default value is 40, which subclasses can override.
+     * When formatting, the exact behavior when this value is exceeded is
+     * subclass-specific.  When parsing, this has no effect.
+     * @return the maximum number of integer digits
      * @see #setMaximumIntegerDigits
      * @stable ICU 2.0
      */
@@ -764,12 +782,12 @@ public abstract class NumberFormat extends Format{
 
     /**
      * Sets the maximum number of digits allowed in the integer portion of a
-     * number. MaximumIntegerDigits must be >= minimumIntegerDigits.  If the
+     * number. This must be >= minimumIntegerDigits.  If the
      * new value for maximumIntegerDigits is less than the current value
      * of minimumIntegerDigits, then minimumIntegerDigits will also be set to
      * the new value.
      * @param newValue the maximum number of integer digits to be shown; if
-     * less than zero, then zero is used. The concrete subclass may enforce an
+     * less than zero, then zero is used.  Subclasses might enforce an
      * upper limit to this value appropriate to the numeric type being formatted.
      * @see #getMaximumIntegerDigits
      * @stable ICU 2.0
@@ -782,7 +800,11 @@ public abstract class NumberFormat extends Format{
 
     /**
      * Returns the minimum number of digits allowed in the integer portion of a
-     * number.
+     * number.  The default value is 1, which subclasses can override.
+     * When formatting, if this value is not reached, numbers are padded on the
+     * left with the locale-specific '0' character to ensure at least this
+     * number of integer digits.  When parsing, this has no effect.
+     * @return the minimum number of integer digits
      * @see #setMinimumIntegerDigits
      * @stable ICU 2.0
      */
@@ -792,12 +814,12 @@ public abstract class NumberFormat extends Format{
 
     /**
      * Sets the minimum number of digits allowed in the integer portion of a
-     * number.  MinimumIntegerDigits must be <= maximumIntegerDigits.  If the
-     * new value for minimumIntegerDigits exceeds the current value
+     * number.  This must be <= maximumIntegerDigits.  If the
+     * new value for minimumIntegerDigits is more than the current value
      * of maximumIntegerDigits, then maximumIntegerDigits will also be set to
-     * the new value
+     * the new value.
      * @param newValue the minimum number of integer digits to be shown; if
-     * less than zero, then zero is used. The concrete subclass may enforce an
+     * less than zero, then zero is used. Subclasses might enforce an
      * upper limit to this value appropriate to the numeric type being formatted.
      * @see #getMinimumIntegerDigits
      * @stable ICU 2.0
@@ -809,10 +831,14 @@ public abstract class NumberFormat extends Format{
     }
 
     /**
-     * Returns the maximum number of digits allowed in the fraction portion of a
-     * number.
+     * Returns the maximum number of digits allowed in the fraction
+     * portion of a number.  The default value is 3, which subclasses
+     * can override.  When formatting, the exact behavior when this
+     * value is exceeded is subclass-specific.  When parsing, this has 
+     * no effect.
+     * @return the maximum number of fraction digits
      * @see #setMaximumFractionDigits
-     * @stable ICU 2.0
+     * @stable ICU 2.0 
      */
     public int getMaximumFractionDigits() {
         return maximumFractionDigits;
@@ -820,7 +846,7 @@ public abstract class NumberFormat extends Format{
 
     /**
      * Sets the maximum number of digits allowed in the fraction portion of a
-     * number. MaximumFractionDigits must be >= minimumFractionDigits.  If the
+     * number. This must be >= minimumFractionDigits.  If the
      * new value for maximumFractionDigits is less than the current value
      * of minimumFractionDigits, then minimumFractionDigits will also be set to
      * the new value.
@@ -838,7 +864,11 @@ public abstract class NumberFormat extends Format{
 
     /**
      * Returns the minimum number of digits allowed in the fraction portion of a
-     * number.
+     * number.  The default value is 0, which subclasses can override.
+     * When formatting, if this value is not reached, numbers are padded on
+     * the right with the locale-specific '0' character to ensure at least
+     * this number of fraction digits.  When parsing, this has no effect.
+     * @return the minimum number of fraction digits
      * @see #setMinimumFractionDigits
      * @stable ICU 2.0
      */
@@ -848,12 +878,12 @@ public abstract class NumberFormat extends Format{
 
     /**
      * Sets the minimum number of digits allowed in the fraction portion of a
-     * number. MinimumFractionDigits must be <= maximumFractionDigits.  If the
+     * number.  This must be <= maximumFractionDigits.  If the
      * new value for minimumFractionDigits exceeds the current value
-     * of maximumFractionDigits, then maximumIntegerDigits will also be set to
+     * of maximumFractionDigits, then maximumFractionDigits will also be set to
      * the new value.
      * @param newValue the minimum number of fraction digits to be shown; if
-     * less than zero, then zero is used. The concrete subclass may enforce an
+     * less than zero, then zero is used.  Subclasses might enforce an
      * upper limit to this value appropriate to the numeric type being formatted.
      * @see #getMinimumFractionDigits
      * @stable ICU 2.0
@@ -918,7 +948,7 @@ public abstract class NumberFormat extends Format{
     }
 
     /**
-     * Return the pattern for the provided locale and choice.
+     * Returns the pattern for the provided locale and choice.
      * @param forLocale the locale of the data.
      * @param choice the pattern format.
      * @return the pattern
@@ -996,7 +1026,6 @@ public abstract class NumberFormat extends Format{
      * since the <code>int</code> fields were not present in JDK 1.1.
      * Finally, set serialVersionOnStream back to the maximum allowed value so that
      * default serialization will work properly if this object is streamed out again.
-     *
      */
     private void readObject(ObjectInputStream stream)
          throws IOException, ClassNotFoundException
@@ -1026,7 +1055,6 @@ public abstract class NumberFormat extends Format{
      * equal to the <code>int</code> fields such as <code>maximumIntegerDigits</code>
      * (or to <code>Byte.MAX_VALUE</code>, whichever is smaller), for compatibility
      * with the JDK 1.1 version of the stream format.
-     *
      */
     private void writeObject(ObjectOutputStream stream)
          throws IOException
