@@ -26,7 +26,7 @@ U_CFUNC void ucln_i18n_registerCleanup(void);
 
 U_CFUNC UBool transliterator_cleanup(void);
 
-U_CFUNC UBool unicodeset_cleanup(void);
+U_CFUNC UBool unicodePropertySet_cleanup(void);
 
 U_CFUNC UBool dateFormatSymbols_cleanup(void);
 
