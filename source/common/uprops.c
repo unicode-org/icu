@@ -409,13 +409,26 @@ u_getIntPropertyMaxValue(UProperty which) {
 
 /*
  * Return a set of characters for property enumeration.
+ * The set implicitly contains 0x110000 as well, which is one more than the highest
+ * Unicode code point.
+ *
+ * This set is used as an ordered list - its code points are ordered, and
+ * consecutive code points (in Unicode code point order) in the set define a range.
  * For each two consecutive characters (start, limit) in the set,
- * all of the properties for start..limit-1 are all the same,
- * except for character names.
+ * all of the UCD/normalization and related properties for
+ * all code points start..limit-1 are all the same,
+ * except for character names and ISO comments.
+ *
+ * All Unicode code points U+0000..U+10ffff are covered by these ranges.
+ * The ranges define a partition of the Unicode code space.
+ * ICU uses the inclusions set to enumerate properties for generating
+ * UnicodeSets containing all code points that have a certain property value.
  *
  * The Inclusion List is generated from the UCD. It is generated
  * by enumerating the data tries, and code points for hardcoded properties
  * are added as well.
+ *
+ * --------------------------------------------------------------------------
  *
  * The following are ideas for getting properties-unique code point ranges,
  * with possible optimizations beyond the current implementation.
