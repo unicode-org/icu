@@ -147,7 +147,7 @@ UnicodeStringTest::TestBasicManipulation()
         }
 
         // NUL-terminate the string buffer and test u_countChar32(length=-1)
-        const UChar *buffer=s.append((UChar)0).getBuffer();
+        const UChar *buffer=s.getTerminatedBuffer();
         if(
             u_countChar32(buffer, -1)!=4 ||
             u_countChar32(buffer+1, -1)!=4 ||
@@ -1007,6 +1007,27 @@ UnicodeStringTest::TestMiscellaneous()
     test1.releaseBuffer();  // implicit -1
     if(test1.length()!=test1.getCapacity() || test1.charAt(1)!=1 || test1.charAt(100)!=1 || test1.charAt(test1.getCapacity()-1)!=1) {
         errln("UnicodeString::releaseBuffer(-1 but no NUL) does not properly set the length of the UnicodeString");
+    }
+
+    // test getTerminatedBuffer()
+    test1=UnicodeString("This is another test.", "");
+    test2=UnicodeString("This is another test.", "");
+    q=test1.getTerminatedBuffer();
+    if(q[test1.length()]!=0 || test1!=test2 || test2.compare(q, -1)!=0) {
+        errln("getTerminatedBuffer()[length]!=0");
+    }
+
+    const UChar u[]={ 5, 6, 7, 8, 0 };
+    test1.setTo(FALSE, u, 3);
+    q=test1.getTerminatedBuffer();
+    if(q==u || q[0]!=5 || q[1]!=6 || q[2]!=7 || q[3]!=0) {
+        errln("UnicodeString(u[3]).getTerminatedBuffer() returns a bad buffer");
+    }
+
+    test1.setTo(TRUE, u, -1);
+    q=test1.getTerminatedBuffer();
+    if(q!=u || test1.length()!=4 || q[3]!=8 || q[4]!=0) {
+        errln("UnicodeString(u[-1]).getTerminatedBuffer() returns a bad buffer");
     }
 
 /*
