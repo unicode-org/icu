@@ -55,7 +55,7 @@ public class XPathTokenizer{
         }
         return null;
     }
-    private static StringBuffer deleteToken(StringBuffer xpath){
+    public static StringBuffer deleteToken(StringBuffer xpath){
         int length = xpath.length(); 
         int current =  length - 1;
         while(current > 0 ){

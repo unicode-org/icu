@@ -62,7 +62,7 @@ public class LDMLUtilities {
                                                 boolean ignoreIfNoneAvailable){
     	Document full =null;
         try{
-        	full = parse(sourceDir+File.separator+ "root.xml");
+        	full = parse(sourceDir+File.separator+ "root.xml", ignoreRoot);
             if(full!=null){
                 full = resolveAliases(full, sourceDir, "root");
             }
@@ -101,7 +101,7 @@ public class LDMLUtilities {
             File file = new File(fileName);
             if(file.exists()){
                 isAvailable = true;
-                doc = parse(fileName);
+                doc = parse(fileName, ignoreUnavailable);
                 doc = resolveAliases(doc, sourceDir, loc);
                 /*
                  * Debugging
@@ -158,7 +158,7 @@ public class LDMLUtilities {
             ds.serialize(doc);
             os.flush();
             ByteArrayInputStream is = new ByteArrayInputStream(os.toByteArray());
-            doc = parse(new InputSource(is),"Fully resolved: "+fileName);
+            doc = parse(new InputSource(is),"Fully resolved: "+fileName, false);
             return doc;
         }catch(IOException ex){
             throw new RuntimeException(ex.getMessage());
@@ -556,7 +556,7 @@ public class LDMLUtilities {
                                                       " from source locale: "+thisLocale);
                }
                // this is a is an absolute XPath
-               Document newDoc = parse(sourceDir + File.separator + source + ".xml" );
+               Document newDoc = parse(sourceDir + File.separator + source + ".xml", false);
                replacementList = getNodeListAsArray(newDoc, path);
            }else{
                // path attribute is referencing another node in this DOM tree
@@ -633,7 +633,7 @@ public class LDMLUtilities {
     public static boolean isDraft(Node fullyResolved, StringBuffer xpath){
         Node current = getNode(fullyResolved, xpath.toString());
         String draft = null;
-        while(current!=null){
+        while(current!=null && current.getNodeType()== Node.ELEMENT_NODE){
             draft = getAttributeValue(current, LDMLConstants.DRAFT);
             if(draft!=null){
                 if(draft.equals("true")){
@@ -714,6 +714,22 @@ public class LDMLUtilities {
             }
             return null;
         }catch(TransformerException ex){
+            throw new RuntimeException(ex.getMessage());
+        } 
+    }
+    public static Node[] getElementsByTagName(Document doc, String tagName){
+        try{
+            NodeList list = doc.getElementsByTagName(tagName);
+            int length = list.getLength();
+            if(length>0){
+                Node[] array = new Node[length];
+                for(int i=0; i<length; i++){
+                    array[i] = list.item(i);
+                }
+                return array;
+            }
+            return null;
+        }catch(Exception ex){
             throw new RuntimeException(ex.getMessage());
         } 
     }
@@ -799,6 +815,65 @@ public class LDMLUtilities {
         return node;
     }
     /**
+     * Fetches the node from the document that matches the given xpath.
+     * The context namespace node is required if the xpath contains 
+     * namespace elments
+     * @param doc
+     * @param xpath
+     * @param namespaceNode
+     * @return
+     */
+    public static NodeList getNodeList(Document doc, String xpath, Node namespaceNode){
+        try{
+            NodeList nl = XPathAPI.selectNodeList(doc, xpath, namespaceNode);
+            if(nl.getLength()==0){
+                return null;
+            }
+            return nl;
+
+        }catch(TransformerException ex){
+            throw new RuntimeException(ex.getMessage());
+        }
+    }
+    /**
+     * Fetches the node from the document which matches the xpath
+     * @param node
+     * @param xpath
+     * @return
+     */
+    public static NodeList getNodeList(Node node, String xpath){
+        try{
+            NodeList nl = XPathAPI.selectNodeList(node, xpath);
+            int len = nl.getLength();
+            if(len==0){
+                return null;
+            }
+            return nl;
+        }catch(TransformerException ex){
+            throw new RuntimeException(ex.getMessage());
+        }
+    }
+
+    /**
+     * Fetches node list from the children of the context node.
+     * @param context
+     * @param resToFetch
+     * @param fullyResolved
+     * @param xpath
+     * @return
+     */
+    public static NodeList getNodeList(Node context, String resToFetch, Document fullyResolved, String xpath){
+        String ctx = "./"+ resToFetch;
+        NodeList list = getNodeList(context, ctx);
+        if(list == null && fullyResolved!=null){
+            // try from fully resolved
+            String path = xpath+"/"+resToFetch;
+            list = getNodeList(fullyResolved, path);
+        }
+        return list;
+    }
+
+    /**
      * Decide if the node is text, and so must be handled specially 
      * @param n
      * @return
@@ -850,17 +925,17 @@ public class LDMLUtilities {
      * otherwise throws an unchecked RuntimeException if there 
      * is any fatal problem
      */
-    public static Document parse(String filename)
+    public static Document parse(String filename, boolean ignoreError)throws RuntimeException
     {
         // Force filerefs to be URI's if needed: note this is independent of any other files
         String docURI = filenameToURL(filename);
-        return parse(new InputSource(docURI),filename);
+        return parse(new InputSource(docURI),filename,ignoreError);
     }
     public static Document parseAndResolveAliases(String locale, String sourceDir, boolean ignoreError){
         try{
-            Document full = parse(sourceDir+File.separator+ "root.xml");
+            Document full = parse(sourceDir+File.separator+ locale, ignoreError);
             if(full!=null){
-                full = resolveAliases(full, sourceDir, "root");
+                full = resolveAliases(full, sourceDir, locale );
             }
            /*
             * Debugging
@@ -870,15 +945,15 @@ public class LDMLUtilities {
                 System.err.println("Aliases not resolved!. list.getLength() returned "+ list.length);
             }*/
             return full;
-        }catch(RuntimeException ex){
+        }catch(Exception ex){
             if(!ignoreError){
-                throw ex;
+                throw new RuntimeException(ex);
             }
         }
         return null;
 
     }
-    public static Document parse(InputSource docSrc, String filename){
+    public static Document parse(InputSource docSrc, String filename, boolean ignoreError){
         
         DocumentBuilderFactory dfactory = DocumentBuilderFactory.newInstance();
         // Always set namespaces on
@@ -890,8 +965,8 @@ public class LDMLUtilities {
         // Local class: cheap non-printing ErrorHandler
         // This is used to suppress validation warnings
         ErrorHandler nullHandler = new ErrorHandler() {
-            public void warning(SAXParseException e) throws SAXException {System.err.println("Warning: " + e.getMessage());}
-            public void error(SAXParseException e) throws SAXException {System.err.println("Error: " + e.getMessage());}
+            public void warning(SAXParseException e) throws SAXException {System.err.println("WARNING: " + e.getMessage());}
+            public void error(SAXParseException e) throws SAXException {System.err.println("ERROR: " + e.getMessage());}
             public void fatalError(SAXParseException e) throws SAXException 
             {
                 throw e;
@@ -910,57 +985,8 @@ public class LDMLUtilities {
         {
             // ... if we couldn't parse as XML, attempt parse as HTML...
             System.out.println("ERROR :" + se.getMessage());
-            try
-            {
-                // @todo need to find an HTML to DOM parser we can use!!!
-                // doc = someHTMLParser.parse(new InputSource(filename));
-                throw new RuntimeException("XMLComparator no HTML parser!");
-            }
-            catch (Exception e)
-            {
-                if(filename!=null)
-                {
-                    // ... if we can't parse as HTML, then just parse the text
-                    try
-                    {
-    
-                        // Parse as text, line by line
-                        //   Since we already know it should be text, this should 
-                        //   work better than parsing by bytes.
-                        FileReader fr = new FileReader(filename);
-                        BufferedReader br = new BufferedReader(fr);
-                        StringBuffer buffer = new StringBuffer();
-                        for (;;)
-                        {
-                            String tmp = br.readLine();
-    
-                            if (tmp == null)
-                            {
-                                break;
-                            }
-    
-                            buffer.append(tmp);
-                            buffer.append("\n");  // Put in the newlines as well
-                        }
-    
-                        DocumentBuilder docBuilder = dfactory.newDocumentBuilder();
-                        doc = docBuilder.newDocument();
-                        Element outElem = doc.createElement("out");
-                        Text textNode = doc.createTextNode(buffer.toString());
-    
-                        // Note: will this always be a valid node?  If we're parsing 
-                        //    in as text, will there ever be cases where the diff that's 
-                        //    done later on will fail becuase some really garbage-like 
-                        //    text has been put into a node?
-                        outElem.appendChild(textNode);
-                        doc.appendChild(outElem);
-                    }
-                    catch (Throwable throwable)
-                    {
-
-                        //throwable.printStackTrace();
-                    }
-                }
+            if(!ignoreError){
+                throw new RuntimeException(se);
             }
         }
         return doc;
@@ -1054,9 +1080,14 @@ public class LDMLUtilities {
             for (int i = 0; i < attrs.getLength(); i++)
             {
               Node attr = attrs.item(i);
-              out.print(" " + attr.getNodeName() + 
-                        "=\"" + attr.getNodeValue() + 
-                        "\"");
+              String name = attr.getNodeName();
+              String value = attr.getNodeValue();
+              boolean isTypeStandard = (name.equals("type")&& value.equals("standard"));
+              if(!isTypeStandard){
+                  out.print(" " + name + 
+                            "=\"" + value + 
+                            "\"");
+              }
             }
             out.print(">");
 
@@ -1092,7 +1123,7 @@ public class LDMLUtilities {
           // print text
         case Node.TEXT_NODE: 
           {
-            out.print(node.getNodeValue());
+            out.print(escapeForXML(node.getNodeValue()));
             break;
           }
 
@@ -1118,5 +1149,26 @@ public class LDMLUtilities {
         out.print('>');
       }
     } // printDOMTree(Node, PrintWriter)
-
+    
+    private static String escapeForXML(String string){
+        int len = string.length();
+        StringBuffer ret = new StringBuffer(len);
+        for(int i =0 ; i<len; i++){
+           char ch = string.charAt(i);
+           switch(ch){
+               case '<':
+                   ret.append("&lt;");
+                   break;
+               case '>':
+                   ret.append("&gt;");
+                   break;
+               case '&':
+                   ret.append("&amp;");
+                   break;
+               default :
+                   ret.append(ch);
+           }
+        }
+        return ret.toString();
+    }
 }
