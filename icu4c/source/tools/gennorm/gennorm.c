@@ -183,7 +183,7 @@ main(int argc, char* argv[]) {
 
 /* parser for DerivedNormalizationProperties.txt ---------------------------- */
 
-static void
+static void U_CALLCONV
 derivedNormalizationPropertiesLineFn(void *context,
                                      char *fields[][2], int32_t fieldCount,
                                      UErrorCode *pErrorCode) {
@@ -281,7 +281,7 @@ parseDerivedNormalizationProperties(const char *filename, UErrorCode *pErrorCode
 
 /* parser for UnicodeData.txt ----------------------------------------------- */
 
-static void
+static void U_CALLCONV
 unicodeDataLineFn(void *context,
                   char *fields[][2], int32_t fieldCount,
                   UErrorCode *pErrorCode) {

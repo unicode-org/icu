@@ -506,7 +506,7 @@ void ucol_uprv_tok_initData() {
   }
 }
 
-const UChar *
+U_CAPI const UChar * U_EXPORT2
 ucol_tok_getNextArgument(const UChar *start, const UChar *end, 
                                UColAttribute *attrib, UColAttributeValue *value, 
                                UErrorCode *status) {

@@ -239,7 +239,7 @@ getTokenIndex(const char *const tokens[], int32_t countTokens, const char *s) {
 static uint32_t mirrorMappings[MAX_MIRROR_COUNT][2];
 static int32_t mirrorCount=0;
 
-static void
+static void U_CALLCONV
 mirrorLineFn(void *context,
              char *fields[][2], int32_t fieldCount,
              UErrorCode *pErrorCode) {
@@ -295,7 +295,7 @@ parseBidiMirroring(const char *filename, UErrorCode *pErrorCode) {
 static SpecialCasing specialCasings[MAX_SPECIAL_CASING_COUNT];
 static int32_t specialCasingCount=0;
 
-static void
+static void U_CALLCONV
 specialCasingLineFn(void *context,
                     char *fields[][2], int32_t fieldCount,
                     UErrorCode *pErrorCode) {
@@ -390,7 +390,7 @@ parseSpecialCasing(const char *filename, UErrorCode *pErrorCode) {
 static CaseFolding caseFoldings[MAX_CASE_FOLDING_COUNT];
 static int32_t caseFoldingCount=0;
 
-static void
+static void U_CALLCONV
 caseFoldingLineFn(void *context,
                   char *fields[][2], int32_t fieldCount,
                   UErrorCode *pErrorCode) {
@@ -546,7 +546,7 @@ static struct {
 
 static int32_t unicodeAreaIndex=0, mirrorIndex=0, specialCasingIndex=0, caseFoldingIndex=0;
 
-static void
+static void U_CALLCONV
 unicodeDataLineFn(void *context,
                   char *fields[][2], int32_t fieldCount,
                   UErrorCode *pErrorCode) {

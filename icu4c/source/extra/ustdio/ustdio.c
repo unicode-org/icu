@@ -536,7 +536,8 @@ u_fgetc(UFILE        *f)
 }
 
 /* u_unescapeAt() callback to return a UChar from a UFILE */
-static UChar _charAt(int32_t offset, void *context) {
+static UChar U_CALLCONV
+_charAt(int32_t offset, void *context) {
     return ((UFILE*) context)->fUCPos[offset];
 }
 
