@@ -29,13 +29,16 @@
 #include "unicode/utypes.h"
 #include "cstring.h"
 #include "cmemory.h"
-#include "ucmp8.h"
+/* SBCS needed: #include "ucmp8.h" */
 #include "ucmp16.h"
 #include "ucnv_bld.h"
 #include "ucnv_cnv.h"
 #include "unewdata.h"
 #include "ucmpwrit.h"
 #include "makeconv.h"
+
+#if 0
+/* SBCS replaced by MBCS 2000dec20 */
 
 /* SBCS --------------------------------------------------------------------- */
 
@@ -229,6 +232,7 @@ SBCSWrite(NewConverter *cnvData, const UConverterStaticData *staticData, UNewDat
     }
     return size;
 }
+#endif
 
 /* DBCS and EBCDIC_STATEFUL ------------------------------------------------- */
 

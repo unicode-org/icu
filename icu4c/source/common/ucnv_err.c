@@ -15,8 +15,6 @@
 *   06/29/2000  helena      Major rewrite of the callback APIs.
 */
 
-#include "ucmp8.h"
-#include "ucmp16.h"
 #include "unicode/ucnv_err.h"
 #include "unicode/ucnv_cb.h"
 #include "ucnv_cnv.h"

@@ -560,8 +560,10 @@ void readHeaderFromFile(UConverterSharedData* mySharedData,
                   if ( myConverter->subCharLen == 0 )
                   {
                     myConverter->subCharLen = prototype->subCharLen;
-                    uprv_memcpy(myConverter->subChar, prototype->subChar,
-                                prototype->subCharLen);
+                    if(prototype->subCharLen>0) {
+                        uprv_memcpy(myConverter->subChar, prototype->subChar,
+                                    prototype->subCharLen);
+                    }
                   }
                 }
               }
@@ -826,12 +828,23 @@ UConverterSharedData* createConverterFromTableFile(const char* converterName, UE
     {
     case UCNV_SBCS: 
       {
-        mySharedData->table = (UConverterTable *)SBCSOpen();
+        /* SBCS: use MBCS data structure with a default state table */
+        myStaticData->conversionType = UCNV_MBCS;
+        mySharedData->table = (UConverterTable *)MBCSOpen(mySharedData->staticData->maxBytesPerChar);
+        if(mySharedData->table != NULL) {
+            if(!MBCSAddState((NewConverter *)mySharedData->table, "0-ff")) {
+                *err = U_INVALID_TABLE_FORMAT;
+                ((NewConverter *)mySharedData->table)->close((NewConverter *)mySharedData->table);
+                mySharedData->table=NULL;
+            }
+        } else {
+            *err = U_MEMORY_ALLOCATION_ERROR;
+        }
         break;
       }
     case UCNV_MBCS: 
       {
-        /* MBCSOpen() was called by */
+        /* MBCSOpen() was called by readHeaderFromFile() */
         break;
       }
     case UCNV_EBCDIC_STATEFUL: 

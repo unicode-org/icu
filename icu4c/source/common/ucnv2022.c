@@ -29,7 +29,7 @@
 #include "unicode/utypes.h"
 #include "cmemory.h"
 #include "ucmp16.h"
-#include "ucmp8.h"
+/* SBCS needed: #include "ucmp8.h" */
 #include "unicode/ucnv_err.h"
 #include "ucnv_bld.h"
 #include "unicode/ucnv.h"
@@ -1197,8 +1197,8 @@ U_CFUNC void UConverter_fromUnicode_ISO_2022_JP(UConverterFromUnicodeArgs* args,
     int32_t myTargetIndex = 0;
     CompactShortArray *myFromUnicodeDBCS = NULL;
     CompactShortArray *myFromUnicodeDBCSFallback = NULL;
-    CompactByteArray  *myFromUnicodeSBCS = NULL;
-    CompactByteArray  *myFromUnicodeSBCSFallback = NULL;
+    /* SBCS was: CompactByteArray  *myFromUnicodeSBCS = NULL; */
+    /* SBCS was: CompactByteArray  *myFromUnicodeSBCSFallback = NULL; */
     UChar32 targetUniChar = missingCharMarker;
     StateEnum currentState=ASCII;
     Cnv2022Type myType =ASCII1;
@@ -1309,6 +1309,13 @@ getTrail:
                     switch (myType){
                     
                         case SBCS:
+                            targetUniChar = (uint16_t)_MBCSSingleFromUChar32(myConverterData->fromUnicodeConverter->sharedData, mySourceChar, FALSE);
+                            /*
+                             * If mySourceChar is unassigned, then _MBCSSingleFromUChar32() returns -1
+                             * which becomes the same as missingCharMarker with the cast to uint16_t.
+                             */
+#if 0
+                            /* SBCS was: */
                             if( mySourceChar <0xffff) {
                                 myFromUnicodeSBCS = &myConverterData->fromUnicodeConverter->sharedData->table->sbcs.fromUnicode;
                                 myFromUnicodeSBCSFallback = &myConverterData->fromUnicodeConverter->sharedData->table->sbcs.fromUnicodeFallback;
@@ -1325,6 +1332,7 @@ getTrail:
                                 /* ucmp8_getU returns 0 for missing char so explicitly set it missingCharMarker*/
                                 targetUniChar=(UChar)((targetUniChar==0) ? (UChar) missingCharMarker : targetUniChar);
                             }
+#endif
                             break;
                     
                         case DBCS:
@@ -1506,8 +1514,8 @@ U_CFUNC void UConverter_fromUnicode_ISO_2022_JP_OFFSETS_LOGIC(UConverterFromUnic
     int32_t myTargetIndex = 0;
     CompactShortArray *myFromUnicodeDBCS = NULL;
     CompactShortArray *myFromUnicodeDBCSFallback = NULL;
-    CompactByteArray  *myFromUnicodeSBCS = NULL;
-    CompactByteArray  *myFromUnicodeSBCSFallback = NULL;
+    /* SBCS was: CompactByteArray  *myFromUnicodeSBCS = NULL; */
+    /* SBCS was: CompactByteArray  *myFromUnicodeSBCSFallback = NULL; */
     UChar32 targetUniChar = missingCharMarker;
     StateEnum currentState=ASCII;
     Cnv2022Type myType=ASCII1;
@@ -1619,6 +1627,13 @@ getTrail:
                     switch (myType){
                     
                         case SBCS:
+                            targetUniChar = (uint16_t)_MBCSSingleFromUChar32(myConverterData->fromUnicodeConverter->sharedData, mySourceChar, FALSE);
+                            /*
+                             * If mySourceChar is unassigned, then _MBCSSingleFromUChar32() returns -1
+                             * which becomes the same as missingCharMarker with the cast to uint16_t.
+                             */
+#if 0
+                            /* SBCS was: */
                             if(mySourceChar < 0xffff){
                                 myFromUnicodeSBCS = &myConverterData->fromUnicodeConverter->sharedData->table->sbcs.fromUnicode;
                                 myFromUnicodeSBCSFallback = &myConverterData->fromUnicodeConverter->sharedData->table->sbcs.fromUnicodeFallback;
@@ -1636,6 +1651,7 @@ getTrail:
                                 /* ucmp8_getU returns 0 for missing char so explicitly set it missingCharMarker*/
                                 targetUniChar=(UChar)((targetUniChar==0) ? (UChar) missingCharMarker : targetUniChar);
                             }
+#endif
                             break;
                     
                         case DBCS:
@@ -2048,6 +2064,9 @@ U_CFUNC void UConverter_toUnicode_ISO_2022_JP(UConverterToUnicodeArgs *args,
                     break;
                 case SBCS:
                     if(args->converter->toUnicodeStatus == 0x00){
+                        targetUniChar = _MBCS_SINGLE_SIMPLE_GET_NEXT_BMP(myData->currentConverter->sharedData, mySourceChar);
+#if 0
+                        /* SBCS was: */
                         myToUnicodeSBCS = myData->currentConverter->sharedData->table->sbcs.toUnicode;
                         myToUnicodeFallbackSBCS = myData->currentConverter->sharedData->table->sbcs.toUnicodeFallback;
                         targetUniChar = myToUnicodeSBCS[(unsigned char) mySourceChar];
@@ -2063,7 +2082,7 @@ U_CFUNC void UConverter_toUnicode_ISO_2022_JP(UConverterToUnicodeArgs *args,
                             }
                         }
                         */
-                        
+#endif
                     }
                     else{
                         goto SAVE_STATE;
@@ -2285,6 +2304,9 @@ U_CFUNC void UConverter_toUnicode_ISO_2022_JP_OFFSETS_LOGIC(UConverterToUnicodeA
                     break;
                 case SBCS:
                     if(args->converter->toUnicodeStatus == 0x00){
+                        targetUniChar = _MBCS_SINGLE_SIMPLE_GET_NEXT_BMP(myData->currentConverter->sharedData, mySourceChar);
+#if 0
+                        /* SBCS was: */
                         myToUnicodeSBCS = myData->currentConverter->sharedData->table->sbcs.toUnicode;
                         myToUnicodeFallbackSBCS = myData->currentConverter->sharedData->table->sbcs.toUnicodeFallback;
                         targetUniChar = myToUnicodeSBCS[(unsigned char) mySourceChar];
@@ -2300,6 +2322,7 @@ U_CFUNC void UConverter_toUnicode_ISO_2022_JP_OFFSETS_LOGIC(UConverterToUnicodeA
                             }
                         }
                         */
+#endif
                     }
                     else{
                         goto SAVE_STATE;

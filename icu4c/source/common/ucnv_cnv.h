@@ -22,9 +22,11 @@
 #include "unicode/ucnv_err.h"
 #include "ucnv_bld.h"
 #include "ucnvmbcs.h"
-#include "ucmp8.h"
+/* SBCS needed: #include "ucmp8.h" */
 #include "ucmp16.h"
 
+#if 0
+/* SBCS was: */
 /*Table Node Definitions */
 typedef struct
   {
@@ -34,6 +36,7 @@ typedef struct
     CompactByteArray fromUnicodeFallback;
   }
 UConverterSBCSTable;
+#endif
 
 typedef struct
   {
@@ -46,7 +49,7 @@ UConverterDBCSTable;
 
 union UConverterTable
   {
-    UConverterSBCSTable sbcs;
+    /* UConverterSBCSTable sbcs; */
     UConverterDBCSTable dbcs;
     UConverterMBCSTable mbcs;
   };

@@ -26,7 +26,7 @@
 #include "unicode/utypes.h"
 #include "cmemory.h"
 #include "ucmp16.h"
-#include "ucmp8.h"
+/* SBCS needed: #include "ucmp8.h" */
 #include "unicode/ucnv_err.h"
 #include "ucnv_bld.h"
 #include "unicode/ucnv.h"
@@ -1081,7 +1081,8 @@ _LMBCSGetNextUCharWorker(UConverterToUnicodeArgs*   args,
             
             if (CurByte >= ULMBCS_C1START)
             {
-               uniChar = cnv->sharedData->table->sbcs.toUnicode[CurByte];
+               uniChar = _MBCS_SINGLE_SIMPLE_GET_NEXT_BMP(cnv->sharedData, CurByte);
+               /* SBCS was: uniChar = cnv->sharedData->table->sbcs.toUnicode[CurByte]; */
             }
             else
             {
@@ -1130,7 +1131,8 @@ _LMBCSGetNextUCharWorker(UConverterToUnicodeArgs*   args,
          }
          else                                   /* single byte conversion */
          {
-            uniChar = cnv->sharedData->table->sbcs.toUnicode[CurByte];
+            uniChar = _MBCS_SINGLE_SIMPLE_GET_NEXT_BMP(cnv->sharedData, CurByte);
+            /* SBCS was: uniChar = cnv->sharedData->table->sbcs.toUnicode[CurByte]; */
          }
       }
    }
