@@ -26,6 +26,12 @@
 
 #define MAX_TOKEN_LEN 128
    
+    /**
+    * Test for CollationElementIterator previous and next for the whole set of
+    * unicode characters.
+    */
+    static void TestUnicodeChar(void);
+
        /**
      * Test for CollationElementIterator.previous()
      *
