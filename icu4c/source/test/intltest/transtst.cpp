@@ -20,11 +20,12 @@
 #include "unicode/ucnv_err.h"
 
 // Define character constants thusly to be EBCDIC-friendly
-
-#define LEFT_BRACE ((UChar)0x007B) /*{*/
-#define PIPE       ((UChar)0x007C) /*|*/
-#define ZERO       ((UChar)0x0030) /*0*/
-#define UPPER_A    ((UChar)0x0041) /*A*/
+enum {
+    LEFT_BRACE=((UChar)0x007B), /*{*/
+    PIPE      =((UChar)0x007C), /*|*/
+    ZERO      =((UChar)0x0030), /*0*/
+    UPPER_A   =((UChar)0x0041)  /*A*/
+};
 
 #define CASE(id,test) case id:                          \
                           name = #test;                 \
