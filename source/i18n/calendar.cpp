@@ -101,7 +101,7 @@ static ICULocaleService* gService = NULL;
 
 // -------------------------------------
 
-static const char *gBasicCalendars[] = { "@calendar=gregorian", "@calendar=japanese",
+static const char * const gBasicCalendars[] = { "@calendar=gregorian", "@calendar=japanese",
                                          "@calendar=buddhist", "@calendar=islamic-civil",
                                          "@calendar=islamic", "@calendar=hebrew", "@calendar=chinese",
                                          NULL };
