@@ -131,7 +131,10 @@ UnicodeString::toTitle(BreakIterator *titleIter, const Locale &locale) {
 
 UnicodeString &
 UnicodeString::foldCase(uint32_t options) {
-    return caseMap(0, Locale::getDefault(), options, FOLD_CASE);
+    /* The Locale parameter isn't used.
+    We pick a random non-case specific locale that is created cheaply.
+    */
+    return caseMap(0, Locale::getEnglish(), options, FOLD_CASE);
 }
 
 UnicodeString &
