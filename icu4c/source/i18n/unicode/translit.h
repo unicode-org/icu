@@ -842,7 +842,7 @@ public:
      * CompoundTransliterator, if it contains ID blocks, or a
      * NullTransliterator, if it contains ID blocks which parse as
      * empty for the given direction.
-     * @param id            the id for the transliterator.
+     * @param ID            the id for the transliterator.
      * @param rules         rules, separated by ';'
      * @param dir           either FORWARD or REVERSE.
      * @param parseError    Struct to recieve information on position 
