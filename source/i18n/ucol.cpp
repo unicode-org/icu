@@ -1444,8 +1444,8 @@ uint32_t ucol_getNextUCA(UChar ch, collIterate *collationSource, UErrorCode *sta
           return 0; /* completely ignorable */
         }
         /* Make up an artifical CE from code point as per UCA */
-        order = 0xD0800343 | (ch & 0xF000) << 12 | (ch & 0x0FE0) << 11;
-        *(collationSource->CEpos++) = 0x040000C0 | (ch & 0x001F) << 27;
+        order = 0xD0800303 | (ch & 0xF000) << 12 | (ch & 0x0FE0) << 11;
+        *(collationSource->CEpos++) = 0x04000083 | (ch & 0x001F) << 27;
       }
     }
     return order; /* return the CE */
@@ -1574,10 +1574,10 @@ uint32_t ucol_getPrevUCA(UChar ch, collIterate *collationSource,
         return 0; /* completely ignorable */
       
       /* Make up an artifical CE from code point as per UCA */
-      *(collationSource->CEpos ++) = 0xD08003C3 | (ch & 0xF000) << 12 | 
+      *(collationSource->CEpos ++) = 0xD0800303 | (ch & 0xF000) << 12 | 
                                      (ch & 0x0FE0) << 11;
       collationSource->toReturn = collationSource->CEpos;
-      order = 0x04000080 | (ch & 0x001F) << 27;
+      order = 0x04000083 | (ch & 0x001F) << 27;
       *(collationSource->CEpos ++) = order;
     }
   }
