@@ -216,9 +216,9 @@ AC_CHECK_LIB(wcs, wcscpy)
 HAVE_DLOPEN=0
 
 #add more libs here..
-AC_CHECK_LIB(dl, dlopen)
+AC_SEARCH_LIBS(dlopen, c dl)
 
-if test $ac_cv_lib_dl_dlopen = yes; then
+if test "$ac_cv_search_dlopen" != no; then
 HAVE_DLOPEN=1
 fi
 
