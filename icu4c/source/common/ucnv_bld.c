@@ -549,7 +549,7 @@ bool_t   isDataBasedConverter (const char *name)
       UHashtable* myHT;
       
       {
-          myHT = uhash_open (uhash_hashIString, &err);
+          myHT = uhash_open ((UHashFunction)uhash_hashIString, &err);
           
           if (U_FAILURE (err)) return FALSE;
           while (algorithmicConverterNames[i][0] != '\0')

@@ -170,7 +170,7 @@ typedef uint8_t UVersionInfo[U_MAX_VERSION_LEN];
 
 /* Work around the OS390 compiler issue, to be removed when the compiler 
 updates come out.  */
-#ifdef OS390
+#if defined(OS390) && defined(XP_CPLUSPLUS)
 #    define U_CALLCONV __cdecl
 #else
 #    define U_CALLCONV 

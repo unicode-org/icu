@@ -16,7 +16,7 @@ TransliterationRuleData::TransliterationRuleData(UErrorCode& status) :
     if (U_FAILURE(status)) {
         return;
     }
-    variableNames = uhash_open(uhash_hashUString, &status);
+    variableNames = uhash_open((UHashFunction)uhash_hashUString, &status);
     setVariables = uhash_open(0, &status);
 }
 

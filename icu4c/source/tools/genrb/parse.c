@@ -330,7 +330,7 @@ parse(FileStream *f, const char *cp,
       ustr_cpy(&localeName, &token, status);
       rblist_setlocale(list, localeName.fChars, status);
       if(U_FAILURE(*status)) goto finish;
-      data = uhash_open(uhash_hashUString, status);
+      data = uhash_open((UHashFunction)uhash_hashUString, status);
       break;
       
     case eClose:
