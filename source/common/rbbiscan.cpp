@@ -469,6 +469,8 @@ UBool RBBIRuleScanner::doParseActions(EParseAction action)
             UnicodeString opt(fRB->fRules, fOptionStart, fScanIndex-fOptionStart);
             if (opt == "chain") {
                 fRB->fChainRules = TRUE;
+            } else if (opt == "LBCMNoChain") {
+                fRB->fLBCMNoChain = TRUE;
             } else {
                 error(U_BRK_UNRECOGNIZED_OPTION);
             }
