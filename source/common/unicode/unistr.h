@@ -1148,16 +1148,19 @@ public:
 
   /**
    * Return the code unit at offset <tt>offset</tt>.
+   * If the offset is not valid (0..length()-1) then U+ffff is returned.
    * @param offset a valid offset into the text
-   * @returns the code unit at offset <tt>offset</tt>
+   * @return the code unit at offset <tt>offset</tt>
+   *         or 0xffff if the offset is not valid for this string
    * @stable
    */
   inline UChar charAt(int32_t offset) const;
 
   /**
    * Return the code unit at offset <tt>offset</tt>.
+   * If the offset is not valid (0..length()-1) then U+ffff is returned.
    * @param offset a valid offset into the text
-   * @returns the code unit at offset <tt>offset</tt>
+   * @return the code unit at offset <tt>offset</tt>
    * @stable
    */
   inline UChar operator[] (int32_t offset) const;
@@ -1165,10 +1168,12 @@ public:
   /**
    * Return the code point that contains the code unit
    * at offset <tt>offset</tt>.
+   * If the offset is not valid (0..length()-1) then U+ffff is returned.
    * @param offset a valid offset into the text
    * that indicates the text offset of any of the code units
    * that will be assembled into a code point (21-bit value) and returned
-   * @returns the code point of text at <tt>offset</tt>
+   * @return the code point of text at <tt>offset</tt>
+   *         or 0xffff if the offset is not valid for this string
    * @stable
    */
   inline UChar32 char32At(int32_t offset) const;
@@ -1269,6 +1274,15 @@ public:
    * If delta>0 then the index is moved forward (toward the end of the string).
    *
    * This behaves like CharacterIterator::move32(delta, kCurrent).
+   *
+   * Behavior for out-of-bounds indexes:
+   * <code>moveIndex32</code> pins the input index to 0..length(), i.e.,
+   * if the input index<0 then it is pinned to 0;
+   * if it is index>length() then it is pinned to length().
+   * Afterwards, the index is moved by <code>delta</code> code points
+   * forward or backward,
+   * but no further backward than to 0 and no further forward than to length().
+   * The resulting index return value will be in between 0 and length(), inclusively.
    *
    * Examples:
    * <pre>
