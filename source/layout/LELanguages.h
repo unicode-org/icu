@@ -6,8 +6,8 @@
  * YOU REALLY KNOW WHAT YOU'RE DOING.
  *
  * $Source: /xsrl/Nsvn/icu/icu/source/layout/LELanguages.h,v $
- * $Date: 2003/04/15 20:43:27 $
- * $Revision: 1.2 $
+ * $Date: 2003/05/20 23:37:16 $
+ * $Revision: 1.3 $
  */
 
 #ifndef __LELANGUAGES_H

@@ -3,7 +3,7 @@
  *
  * (C) Copyright IBM Corp. 1998 - 2003 - All Rights Reserved.
  *
- * $Source: /xsrl/Nsvn/icu/icu/source/layout/HanLayoutEngine.cpp,v $ $Date: 2003/05/13 00:44:33 $ $Revision: 1.2 $
+ * $Source: /xsrl/Nsvn/icu/icu/source/layout/HanLayoutEngine.cpp,v $ $Date: 2003/05/20 23:36:02 $ $Revision: 1.3 $
  */
 
 #include "LETypes.h"
@@ -31,9 +31,9 @@ HanOpenTypeLayoutEngine::~HanOpenTypeLayoutEngine()
 
 const LETag emptyTag = 0x00000000;
 
-const LETag loclFeatureTag = LE_MAKE_TAG('l', 'o', 'c', 'l');
-const LETag smplFeatureTag = LE_MAKE_TAG('s', 'm', 'p', 'l');
-const LETag tradFeatureTag = LE_MAKE_TAG('t', 'r', 'a', 'd');
+const LETag loclFeatureTag = LE_LOCL_FEATURE_TAG;
+const LETag smplFeatureTag = LE_SMPL_FEATURE_TAG;
+const LETag tradFeatureTag = LE_TRAD_FEATURE_TAG;
 
 const LETag features[] = {loclFeatureTag, emptyTag};
 

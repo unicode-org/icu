@@ -136,7 +136,7 @@ GnomeFontInstance::~GnomeFontInstance()
 
 LEErrorCode GnomeFontInstance::initMapper()
 {
-    LETag cmapTag = LE_MAKE_TAG('c', 'm', 'a', 'p');
+    LETag cmapTag = LE_CMAP_TABLE_TAG;
     const CMAPTable *cmap = (const CMAPTable *) readFontTable(cmapTag);
 
     if (cmap == NULL) {

@@ -29,8 +29,8 @@ OpenTypeLayoutEngine::OpenTypeLayoutEngine(const LEFontInstance *fontInstance, l
     : LayoutEngine(fontInstance, scriptCode, languageCode), fFeatureTags(NULL), fGSUBTable(gsubTable),
       fFeatureOrder(NULL), fSubstitutionFilter(NULL)
 {
-    static le_uint32 gdefTableTag = LE_MAKE_TAG('G', 'D', 'E', 'F');
-    static le_uint32 gposTableTag = LE_MAKE_TAG('G', 'P', 'O', 'S');
+    static le_uint32 gdefTableTag = LE_GDEF_TABLE_TAG;
+    static le_uint32 gposTableTag = LE_GPOS_TABLE_TAG;
 
     fGDEFTable = (const GlyphDefinitionTableHeader *) getFontTable(gdefTableTag);
     fGPOSTable = (const GlyphPositioningTableHeader *) getFontTable(gposTableTag);
