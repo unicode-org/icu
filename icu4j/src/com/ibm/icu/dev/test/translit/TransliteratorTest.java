@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/translit/TransliteratorTest.java,v $
- * $Date: 2001/10/22 23:24:11 $
- * $Revision: 1.55 $
+ * $Date: 2001/10/25 00:02:24 $
+ * $Revision: 1.56 $
  *
  *****************************************************************************************
  */
@@ -1049,12 +1049,12 @@ public class TransliteratorTest extends TestFmwk {
      * correctly.  Originally, each component filter f(i) is replaced by
      * f'(i) = f(i) && g, where g is the filter for the compound
      * transliterator.
-     * 
+     *
      * From Mark:
      *
      * Suppose and I have a transliterator X. Internally X is
      * "Greek-Latin; Latin-Cyrillic; Any-Lower". I use a filter [^A].
-     * 
+     *
      * The compound should convert all greek characters (through latin) to
      * cyrillic, then lowercase the result. The filter should say "don't
      * touch 'A' in the original". But because an intermediate result
@@ -1343,7 +1343,7 @@ public class TransliteratorTest extends TestFmwk {
                 Enumeration ev = Transliterator.getAvailableVariants(source, target);
                 for (int k=0; ev.hasMoreElements(); ++k) {
                     String variant = (String) ev.nextElement();
-                    if (variant.length() == 0) { 
+                    if (variant.length() == 0) {
                         logln("  " + k + ": <empty>");
                     } else {
                         logln("  " + k + ": " + variant);
@@ -1409,11 +1409,6 @@ public class TransliteratorTest extends TestFmwk {
                                "TEST", "::NFD; aa > Q; a > q;",
                                Transliterator.FORWARD);
         expect(t, "aa", "Q");
-
-        // In the process of debugging this...
-//      t = Transliterator.getInstance("Latin-Devanagari;Devanagari-Latin");
-//      String s = "rmk\u1E63\u0113t";
-//      expect(t, s, s);
     }
 
     /**
@@ -1542,6 +1537,43 @@ public class TransliteratorTest extends TestFmwk {
                "[ a stitch ]\n[ in time ]\r[ saves 9]");
     }
 
+    /**
+     * Test various failure points of the new 2.0 engine.
+     */
+    public void TestNewEngine() {
+        Transliterator t = Transliterator.getInstance("Latin-Hiragana");
+        // Katakana should be untouched
+        expect(t, "a\u3042\u30A2", "\u3042\u3042\u30A2");
+
+        Transliterator a =
+            Transliterator.createFromRules("a", "a > A;", Transliterator.FORWARD);
+        Transliterator A =
+            Transliterator.createFromRules("A", "A > b;", Transliterator.FORWARD);
+
+        Transliterator array[] = new Transliterator[] {
+            a,
+            Transliterator.getInstance("NFD"),
+            A };
+
+        t = new CompoundTransliterator(array, new UnicodeSet("[:Ll:]"));
+
+        expect(t, "aAaA", "bAbA");
+
+        expect("$smooth = x; $macron = q; [:^L:] { ([aeiouyAEIOUY] $macron?) } [^aeiouyAEIOUY$smooth$macron] > | $1 $smooth ;",
+               "a",
+               "ax");
+        
+        String gr =
+            "$ddot = \u0308 ;" +
+            "$lcgvowel = [\u03b1\u03b5\u03b7\u03b9\u03bf\u03c5\u03c9] ;" +
+            "$rough = \u0314 ;" +
+            "($lcgvowel+ $ddot?) $rough > h | $1 ;" +
+            "\u03b1 <> a ;" +
+            "$rough <> h ;";
+            
+        expect(gr, "\u03B1\u0314", "ha");
+    }
+
     //======================================================================
     // icu4j ONLY
     // These tests are not mirrored (yet) in icu4c at
@@ -1561,7 +1593,58 @@ public class TransliteratorTest extends TestFmwk {
     }
 
     public void TestDebugIndic() {
-        expect("'-'h\\u0323>a;", "-h\u0323", "a");
+//      Transliterator a = 
+//          Transliterator.getInstance("Latin-Devanagari",
+//                                     Transliterator.FORWARD);
+//      Transliterator b = 
+//          Transliterator.getInstance("Devanagari-Latin",
+//                                     Transliterator.FORWARD);
+      Transliterator ab = 
+          Transliterator.getInstance("Latin-Devanagari;Devanagari-Latin",
+                                     Transliterator.FORWARD);
+
+//      //expect(a, "rjuna", "\u0930\u094d\u091c\u0941\u0928");
+//      //expect(b, "\u0930\u094d\u091c\u0941\u0928", "rjuna");
+      expect(ab, "arjuna", "arjuna");
+
+//      expect(ab, "\ue030\ue04d\u091c\u0941na", "rjuna");
+
+//      expect(Transliterator.getInstance("Latin-InterIndic; InterIndic-Devanagari; Devanagari-InterIndic; InterIndic-Latin"),
+//             "\ue030\ue04d\u091c\u0941na", "rjuna");
+
+//      expect(Transliterator.getInstance("Latin-InterIndic"),
+//             "\ue030\ue04d\u091c\u0941na", "rjuna");
+
+        expect(
+               Transliterator.getInstance("Latin-InterIndic; InterIndic-Latin"),
+               //Transliterator.getInstance("InterIndic-Latin"),
+               "u\ue028\ue04d", "un");
+
+        /*
+    (InterIndic-Devanagari;Devanagari-InterIndic;InterIndic-Latin:Keyboard) 
+\ue030 ->
+{|\ue030|} + \ue04d ->
+{|\ue030\ue04d|} + \u091c ->
+{|\ue030\ue04d\u091c|} + \u0941 ->
+{rju||} + n ->
+{rju|n|} + a ->
+{rjun|a|} =>
+rjuna
+
+    FAIL: (Latin-InterIndic;InterIndic-Devanagari;Devanagari-InterIndic;InterIndic-Latin:Keyboard)
+\ue030 ->
+{|\ue030|} + \ue04d ->
+{|\ue030\ue04d|} + \u091c ->
+{|\ue030\u091c|} + \u0941 ->
+{raju||} + n ->
+{raju|n|} + a ->
+{raju|\ue028\ue04da|} =>
+rajuna, expected rjuna
+    */
+    
+        Transliterator t = Transliterator.getInstance("Latin-Devanagari;Devanagari-Latin");
+        String s = "rmk\u1E63\u0113t";
+        expect(t, s, s);
     }
 
     //======================================================================
@@ -1618,7 +1701,7 @@ public class TransliteratorTest extends TestFmwk {
             "\u1E6Dhya",
             "\u1E0Dya",
             "\u1E0Dhya",
-            // Not roundtrippable -- 
+            // Not roundtrippable --
             // \u0939\u094d\u094d\u092E  - hma
             // \u0939\u094d\u092E         - hma
             // CharsToUnicodeString("hma"),
@@ -1627,7 +1710,7 @@ public class TransliteratorTest extends TestFmwk {
             "\u015Bca",
             "\u0115",
             "san\u0304j\u012Bb s\u0113nagupta",
-            "\u0101nand vaddir\u0101ju",    
+            "\u0101nand vaddir\u0101ju",
             "\u0101",
             "a"
         };
@@ -1685,7 +1768,7 @@ public class TransliteratorTest extends TestFmwk {
             "\u0936\u094D\u091A",          /* s\u0301ca  */
             "\u090d",                      /* e\u0306    */
             "\u0938\u0902\u091C\u0940\u092C\u094D \u0938\u0947\u0928\u0917\u0941\u092A\u094D\u0924",
-            "\u0906\u0928\u0902\u0926\u094D \u0935\u0926\u094D\u0926\u093F\u0930\u093E\u091C\u0941",    
+            "\u0906\u0928\u0902\u0926\u094D \u0935\u0926\u094D\u0926\u093F\u0930\u093E\u091C\u0941",
             "\u0906",
             "\u0905",
         };
@@ -1699,7 +1782,7 @@ public class TransliteratorTest extends TestFmwk {
             expect(latinToDev,(source[i]),(expected[i]));
             expect(devToLatin,(expected[i]),(source[i]));
         }
-            
+
     }
     public void  TestTeluguLatinRT(){
         int MAX_LEN=10;
@@ -1717,8 +1800,8 @@ public class TransliteratorTest extends TestFmwk {
         };
 
         String[]  expected = {
-            "\u0c30\u0c18\u0c41\u0c30\u0c3e\u0c2e\u0c4d \u0c35\u0c3f\u0c36\u0c4d\u0c35\u0c28\u0c3e\u0c27",     
-            "\u0c06\u0c28\u0c02\u0c26\u0c4d \u0C35\u0C26\u0C4D\u0C26\u0C3F\u0C30\u0C3E\u0C1C\u0C41",     
+            "\u0c30\u0c18\u0c41\u0c30\u0c3e\u0c2e\u0c4d \u0c35\u0c3f\u0c36\u0c4d\u0c35\u0c28\u0c3e\u0c27",
+            "\u0c06\u0c28\u0c02\u0c26\u0c4d \u0C35\u0C26\u0C4D\u0C26\u0C3F\u0C30\u0C3E\u0C1C\u0C41",
             "\u0c30\u0c3e\u0c1c\u0c40\u0c35\u0c4d \u0c15\u0c36\u0c30\u0c2c\u0c3e\u0c26",
             "\u0c38\u0c02\u0c1c\u0c40\u0c35\u0c4d \u0c15\u0c36\u0c30\u0c2c\u0c3e\u0c26",
             "\u0c38\u0c02\u0c1c\u0c40\u0c2c\u0c4d \u0c38\u0c46\u0c28\u0c4d\u0c17\u0c41\u0c2a\u0c4d\u0c24",
@@ -1853,12 +1936,12 @@ public class TransliteratorTest extends TestFmwk {
                 String source,
                 String expectedResult,
                 Transliterator.Position pos) {
-        Transliterator t = new RuleBasedTransliterator("<ID>", rules);
+        Transliterator t = Transliterator.createFromRules("<ID>", rules, Transliterator.FORWARD);
         expect(t, source, expectedResult, pos);
     }
 
     void expect(String rules, String source, String expectedResult) {
-        expect(new RuleBasedTransliterator("<ID>", rules), source, expectedResult);
+        expect(rules, source, expectedResult, null);
     }
 
     void expect(Transliterator t, String source, String expectedResult,
