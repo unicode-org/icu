@@ -414,7 +414,6 @@ typedef struct {
       uint32_t contractionCEs;   /* uint32_t *contractionCEs;       */
       uint32_t contractionSize;  /* needed for various closures */
       uint32_t latinOneMapping;  /* fast track to latin1 chars      */
-      CompactIntArray *mapping;
       int32_t CEcount;
       UChar variableTopValue;
       UVersionInfo version;

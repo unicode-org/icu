@@ -92,6 +92,7 @@ tempUCATable * uprv_uca_initTempTable(UCATableHeader *image, UErrorCode *status)
 }
 
 void uprv_uca_closeTempTable(tempUCATable *t) {
+  uprv_free(t->expansions->CEs);
   uprv_free(t->expansions);
   uprv_cnttab_close(t->contractions);
   ucmp32_close(t->mapping);
@@ -249,6 +250,7 @@ UCATableHeader *uprv_uca_reassembleTable(tempUCATable *t, UCATableHeader *mD, UE
       contractionsSize = uprv_cnttab_constructTable(contractions, beforeContractions, status);
     } else {
       contractionsSize = mD->contractionSize;
+      uprv_cnttab_moveTable(contractions, mD->contractionIndex/sizeof(UChar), beforeContractions, status);
     }
 
     ucmp32_compact(mapping, 1);
@@ -269,6 +271,8 @@ UCATableHeader *uprv_uca_reassembleTable(tempUCATable *t, UCATableHeader *mD, UE
 
     UCATableHeader *myData = (UCATableHeader *)dataStart;
     myData->contractionSize = contractionsSize;
+    myData->version[0] = 0;
+    myData->version[1] = 0;
 
     tableOffset += paddedsize(sizeof(UCATableHeader));
 
@@ -326,7 +330,7 @@ UCATableHeader *uprv_uca_reassembleTable(tempUCATable *t, UCATableHeader *mD, UE
 
     /* This should happen upon ressurection */
     const uint8_t *mapPosition = (uint8_t*)myData+myData->mappingPosition;
-    myData->mapping = ucmp32_openFromData(&mapPosition, status);
+    uprv_mstrm_close(ms);
     return myData;
 }
 

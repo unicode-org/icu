@@ -121,7 +121,7 @@ void printOutTable(UCATableHeader *myData, UErrorCode *status) {
     uint8_t size = 0;
     char buffer[1024];
     for(i = 0; i<=0xFFFF; i++) {
-        CE = ucmp32_get(myData->mapping, i);
+        //CE = ucmp32_get(myData->mapping, i);
         if(CE != UCOL_NOT_FOUND) {
             fprintf(stdout, "%04X; ", i);
             if(CE < UCOL_NOT_FOUND) {

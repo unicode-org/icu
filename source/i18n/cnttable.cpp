@@ -69,6 +69,19 @@ ContractionTable *addATableElement(CntTable *table, uint32_t *key, UErrorCode *s
 }
 
 
+int32_t uprv_cnttab_moveTable(CntTable *table, uint32_t oldOffset, uint32_t newOffset, UErrorCode *status) {
+    uint32_t i, CE;
+    int32_t difference = newOffset - oldOffset;
+    for(i = 0; i<=0xFFFF; i++) {
+        CE = ucmp32_get(table->mapping, i);
+        if(isContraction(CE)) {
+            CE = constructContractCE(getContractOffset(CE)+difference);
+            ucmp32_set(table->mapping, (UChar)i, CE);
+        }
+    }
+    return table->position;
+}
+
 int32_t uprv_cnttab_constructTable(CntTable *table, uint32_t mainOffset, UErrorCode *status) {
     if(U_FAILURE(*status)) {
         return 0;
@@ -158,6 +171,7 @@ void uprv_cnttab_close(CntTable *table) {
         free(table->elements[i]->codePoints);
         free(table->elements[i]);
     }
+    free(table->elements);
     free(table->CEs);
     free(table->offsets);
     free(table->codePoints);
