@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/TransliterationRuleSet.java,v $
- * $Date: 2001/11/05 18:55:54 $
- * $Revision: 1.16 $
+ * $Date: 2001/11/06 05:06:26 $
+ * $Revision: 1.17 $
  *
  *****************************************************************************************
  */
@@ -27,13 +27,11 @@ import java.util.*;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: TransliterationRuleSet.java,v $ $Revision: 1.16 $ $Date: 2001/11/05 18:55:54 $
+ * @version $RCSfile: TransliterationRuleSet.java,v $ $Revision: 1.17 $ $Date: 2001/11/06 05:06:26 $
  */
 class TransliterationRuleSet {
     /**
-     * Vector of rules, in the order added.  This is only used while the rule
-     * set is getting built.  After that, freeze() reorders and indexes the
-     * rules, and this Vector is freed.
+     * Vector of rules, in the order added.
      */
     private Vector ruleVector;
 
@@ -44,7 +42,9 @@ class TransliterationRuleSet {
 
     /**
      * Sorted and indexed table of rules.  This is created by freeze() from
-     * the rules in ruleVector.
+     * the rules in ruleVector.  rules.length >= ruleVector.size(), and the
+     * references in rules[] are aliases of the references in ruleVector.
+     * A single rule in ruleVector is listed one or more times in rules[].
      */
     private TransliterationRule[] rules;
 
@@ -80,9 +80,6 @@ class TransliterationRuleSet {
      * @param rule the rule to add
      */
     public void addRule(TransliterationRule rule) {
-        if (ruleVector == null) {
-            throw new IllegalArgumentException("Cannot add rules after freezing");
-        }
         ruleVector.addElement(rule);
         int len;
         if ((len = rule.getAnteContextLength()) > maxContextLength) {
@@ -151,7 +148,6 @@ class TransliterationRuleSet {
          */
         rules = new TransliterationRule[v.size()];
         v.copyInto(rules);
-        ruleVector = null;
 
         StringBuffer errors = null;
 
@@ -276,33 +272,27 @@ class TransliterationRuleSet {
      */
     String toRules(boolean escapeUnprintable) {
         int i;
-        int count = index[256];
+        int count = ruleVector.size();
         StringBuffer ruleSource = new StringBuffer();
-        boolean first = true;
         for (i=0; i<count; ++i) {
-            boolean seen = false;
-            for (int j=i-1; j>=0; --j) {
-                if (rules[i] == rules[j]) {
-                    seen = true;
-                    break;
-                }
+            if (i != 0) {
+                ruleSource.append('\n');
             }
-            if (!seen) {
-                if (!first) {
-                    ruleSource.append('\n');
-                }
-                first = false;
-                ruleSource.append(rules[i].toRule(escapeUnprintable));
-            }
+            TransliterationRule r =
+                (TransliterationRule) ruleVector.elementAt(i);
+            ruleSource.append(r.toRule(escapeUnprintable));
         }
         return ruleSource.toString();
     }
 }
 
 /* $Log: TransliterationRuleSet.java,v $
- * Revision 1.16  2001/11/05 18:55:54  alan
- * jitterbug 60: elide duplicate rules in toRules()
+ * Revision 1.17  2001/11/06 05:06:26  alan
+ * jitterbug 60: make toRules() read from original vector
  *
+/* Revision 1.16  2001/11/05 18:55:54  alan
+/* jitterbug 60: elide duplicate rules in toRules()
+/*
 /* Revision 1.15  2001/10/26 22:48:41  alan
 /* jitterbug 68: add DEBUG support to dump rule-based match progression
 /*
