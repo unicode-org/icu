@@ -22,7 +22,7 @@ the text of the standard is expected to be republished in December.</p>
 
 <p>Byte sequence structure: 
 <ul>
-    <li>Single-byte: 00-80</li>
+    <li>Single-byte: 00-7f</li>
     <li>Two-byte: 81-fe | 40-7e, 80-fe</li>
     <li>Four-byte: 81-fe | 30-39 | 81-fe | 30-39</li>
 </ul></p>
@@ -96,7 +96,7 @@ Compared with the above, it
     <li>corrects the mappings for U+2e97 and U+303e</li>
     <li>removes any mappings for single surrogates</li>
     <li>removes all fallback mappings, specifying only roundtrip mappings between GB 18030 and Unicode 3.0</li>
-    <li>changes the mapping for the Euro sign and removes the fullwidth Euro sign</li>
+    <li>changes the mapping for the Euro sign and removes the fullwidth Euro sign (GB+80 is not used any more)</li>
     <li>re-enumerates all four-byte GB sequences for Unicode BMP code points from U+0080</li>
 </ul>
 This results in a new codepage definition that removes backwards compatibility with GBK for some 80 characters
