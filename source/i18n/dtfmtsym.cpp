@@ -168,27 +168,46 @@ DateFormatSymbols::assignArray(UnicodeString*& dstArray,
                                const UnicodeString* srcArray,
                                int32_t srcCount)
 {
-    // duplicates or aliases the source array, depending on the status of
-    // the appropriate isOwned flag
+    // assignArray() is only called by copyData(), which in turn implements the
+    // copy constructor and the assignment operator.
+    // All strings in a DateFormatSymbols object are created in one of the following
+    // three ways that all allow to safely use UnicodeString::fastCopyFrom():
+    // - readonly-aliases from resource bundles
+    // - readonly-aliases or allocated strings from constants
+    // - safely cloned strings (with owned buffers) from setXYZ() functions
+    //
+    // Note that this is true for as long as DateFormatSymbols can be constructed
+    // only from a locale bundle or set via the cloning API,
+    // *and* for as long as all the strings are in *private* fields, preventing
+    // a subclass from creating these strings in an "unsafe" way (with respect to fastCopyFrom()).
     dstCount = srcCount;
     dstArray = new UnicodeString[srcCount];
-    uprv_arrayCopy(srcArray, dstArray, srcCount);
+    if(dstArray != NULL) {
+        int32_t i;
+        for(i=0; i<srcCount; ++i) {
+            dstArray[i].fastCopyFrom(srcArray[i]);
+        }
+    }
 }
 
 /**
  * Create a copy, in fZoneStrings, of the given zone strings array.  The
  * member variables fZoneStringsRowCount and fZoneStringsColCount should
- * be set already by the caller.  The fIsOwned flags are not checked or set
- * by this method; that is the caller's responsibility.
+ * be set already by the caller.
  */
 void
 DateFormatSymbols::createZoneStrings(const UnicodeString *const * otherStrings)
 {
+    int32_t row, col;
+
     fZoneStrings = (UnicodeString **)uprv_malloc(fZoneStringsRowCount * sizeof(UnicodeString *));
-    for (int32_t row=0; row<fZoneStringsRowCount; ++row)
+    for (row=0; row<fZoneStringsRowCount; ++row)
     {
         fZoneStrings[row] = new UnicodeString[fZoneStringsColCount];
-        uprv_arrayCopy(otherStrings[row], fZoneStrings[row], fZoneStringsColCount);
+        for (col=0; col<fZoneStringsColCount; ++col) {
+            // fastCopyFrom() - see assignArray comments
+            fZoneStrings[row][col].fastCopyFrom(otherStrings[row][col]);
+        }
     }
 }
 
@@ -208,14 +227,12 @@ DateFormatSymbols::copyData(const DateFormatSymbols& other) {
     fZoneStringsColCount = other.fZoneStringsColCount;
     createZoneStrings((const UnicodeString**)other.fZoneStrings);
 
-    fLocalPatternChars = other.fLocalPatternChars;
+    // fastCopyFrom() - see assignArray comments
+    fLocalPatternChars.fastCopyFrom(other.fLocalPatternChars);
 }
 
 /**
- * Assignment operator.  A bit messy because the other object may or may not
- * own each of its arrays.  We then alias or copy those arrays as appropriate.
- * Arrays that aren't owned are assumed to be permanently "around," which is
- * true, since they are owned by the ResourceBundle cache.
+ * Assignment operator.
  */
 DateFormatSymbols& DateFormatSymbols::operator=(const DateFormatSymbols& other)
 {
@@ -269,6 +286,9 @@ UBool
 DateFormatSymbols::operator==(const DateFormatSymbols& other) const
 {
     // First do cheap comparisons
+    if (this == &other) {
+        return TRUE;
+    }
     if (fErasCount == other.fErasCount &&
         fMonthsCount == other.fMonthsCount &&
         fShortMonthsCount == other.fShortMonthsCount &&
@@ -474,8 +494,8 @@ DateFormatSymbols::getPatternUChars(void)
 UnicodeString&
 DateFormatSymbols::getLocalPatternChars(UnicodeString& result) const
 {
-    result = fLocalPatternChars;
-    return result;
+    // fastCopyFrom() - see assignArray comments
+    return result.fastCopyFrom(fLocalPatternChars);
 }
 
 //------------------------------------------------------
@@ -495,6 +515,7 @@ DateFormatSymbols::initField(UnicodeString **field, int32_t& length, const Resou
         *field = new UnicodeString[length];
         if (*field) {
             for(int32_t i = 0; i<length; i++) {
+                // fastCopyFrom() - see assignArray comments
                 (*(field)+i)->fastCopyFrom(data.getStringEx(i, status));
             }
         }
@@ -512,7 +533,9 @@ DateFormatSymbols::initField(UnicodeString **field, int32_t& length, const UChar
         *field = new UnicodeString[(size_t)numStr];
         if (*field) {
             for(int32_t i = 0; i<length; i++) {
-                *(*(field)+i) = data+(i*((int32_t)strLen));
+                // readonly aliases - all "data" strings are constant
+                // -1 as length for variable-length strings (gLastResortDayNames[0] is empty)
+                (*(field)+i)->setTo(TRUE, data+(i*((int32_t)strLen)), -1);
             }
         }
         else {
@@ -586,6 +609,7 @@ DateFormatSymbols::initializeData(const Locale& locale, UErrorCode& status, UBoo
     initField(&fMonths, fMonthsCount, resource.get(fgMonthNamesTag, status), status);
     initField(&fShortMonths, fShortMonthsCount, resource.get(fgMonthAbbreviationsTag, status), status);
     initField(&fAmPms, fAmPmsCount, resource.get(fgAmPmMarkersTag, status), status);
+    // fastCopyFrom() - see assignArray comments
     fLocalPatternChars.fastCopyFrom(resource.getStringEx(fgLocalPatternCharsTag, status));
 
     ResourceBundle zoneArray = resource.get(fgZoneStringsTag, status);
@@ -608,6 +632,7 @@ DateFormatSymbols::initializeData(const Locale& locale, UErrorCode& status, UBoo
         }
         zoneRow = zoneArray.get(i, status);
         for(int32_t j = 0; j<fZoneStringsColCount; j++) {
+            // fastCopyFrom() - see assignArray comments
             fZoneStrings[i][j].fastCopyFrom(zoneRow.getStringEx(j, status));
         }
     }
@@ -621,8 +646,9 @@ DateFormatSymbols::initializeData(const Locale& locale, UErrorCode& status, UBoo
         status = U_MEMORY_ALLOCATION_ERROR;
         return;
     }
-    fWeekdays[0] = UnicodeString();
+    // leave fWeekdays[0] empty
     for(i = 0; i<fWeekdaysCount; i++) {
+        // fastCopyFrom() - see assignArray comments
         fWeekdays[i+1].fastCopyFrom(weekdaysData.getStringEx(i, status));
     }
 
@@ -634,8 +660,9 @@ DateFormatSymbols::initializeData(const Locale& locale, UErrorCode& status, UBoo
         status = U_MEMORY_ALLOCATION_ERROR;
         return;
     }
-    fShortWeekdays[0] = UnicodeString();
+    // leave fShortWeekdays[0] empty
     for(i = 0; i<fShortWeekdaysCount; i++) {
+        // fastCopyFrom() - see assignArray comments
         fShortWeekdays[i+1].fastCopyFrom(lsweekdaysData.getStringEx(i, status));
     }
 
