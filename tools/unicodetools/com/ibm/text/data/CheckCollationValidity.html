@@ -1,188 +1,175 @@
-<html><body>
-<h1
- >1. Mismatches when NFD is OFF</h1><h2
- >Date:Sat Jun 22 13:56:49 PDT 2002</h2><h2
- >File Version:-3.1.1d1</h2><p
- >Alternate Handling = NON_IGNORABLE</p><table border="1"
- ><caption
-  >Mismatches in UCA-NOD: Plain vs NFC: 4</caption><tr
-  ><th
-   >Code</th><th
-   >Type</th><th
-   >CC?</th><th
-   >Key</th></tr><tr
-  ><th rowSpan="2" align="right"
-   >F951 CJK COMPATIBILITY IDEOGRAPH-F951<br
-    ></br>NFC=964B</th><th
-   >Plain</th><th
-   >n</th><td
-   >[FF41 96FB | 0020 0020 | 0002 0002]</td></tr><tr
-  ><th
-   >NFC</th><th
-   >ERROR</th><td
-   >[FF41 964B | 0020 0020 | 0002 0002]</td></tr><tr
-  ><th rowSpan="2" align="right"
-   >FB1F HEBREW LIGATURE YIDDISH YOD YOD PATAH<br
-    ></br>NFC=05F2 05B7</th><th
-   >Plain</th><th
-   >n</th><td
-   >[0EC0 0EC0 | 0020 0020 00B2 | 0004 0004 001F]</td></tr><tr
- 
-  ><th
-   >NFC</th><th
-   >Y</th><td
-   >[0EC0 0EC0 | 0020 0020 00B2 | 0004 0004 0002]</td></tr><tr
- 
-  ><th rowSpan="2" align="right"
-   >FB3A HEBREW LETTER FINAL KAF WITH DAGESH<br
-    ></br>NFC=05DA 05BC</th><th
-   >Plain</th><th
-   >n</th><td
-   >[0EC1 | 0020 00B6 | 0019 0019]</td></tr><tr
-  ><th
-   >NFC</th><th
-   >Y</th><td
-   >[0EC1 | 0020 00B6 | 0019 0002]</td></tr><tr
-  ><th rowSpan="2" align="right"
-   >FB43 HEBREW LETTER FINAL PE WITH DAGESH<br
-    ></br>NFC=05E3 05BC</th><th
-   >Plain</th><th
-   >n</th><td
-   >[0EC7 | 0020 00B6 | 0019 0019]</td></tr><tr
-  ><th
-   >NFC</th><th
-   >Y</th><td
-   >[0EC7 | 0020 00B6 | 0019 0002]</td></tr></table><br>
+<html><head><meta http-equiv='Content-Type' content='text/html; charset=utf-8'>
+<title>UCA Validity Log</title>
+<style>.bottom { border-bottom-style: solid; border-bottom-color: #0000FF }</style>
+</head><body bgcolor='#FFFFFF'>
+<h1>Collation Validity Checks</h1>
+<table><tr><td>Date: </td><td>Thu Jun 27 08:51:25 PDT 2002</td></tr>
+<tr><td>File Version: </td><td>3.1.1d2</td></tr></table>
+<h2>1. Mismatches when NFD is OFF</h2>
+<p>Alternate Handling = NON_IGNORABLE</p>
+<p>NOTE: NFD form is used by UCA,so if other forms are different there are <i>ignored</i>. This may indicate a problem, e.g. missing contraction.</p>
+<table border='1'>
+<tr><th>Name</th><th>Type</th><th>Unicode</th><th>Key</th></tr>
+<tr><td rowSpan='3' class='bottom'>GREEK UPSILON WITH ACUTE AND HOOK SYMBOL</td><td>NFD</td><td>03D2 0301</td><td>[0CA8 | 0020 0032 | 000A 0002]</td></tr>
+<tr><td>NFC</td><td>03D3</td><td>[0CA8 | 0020 0032 | 000A 0004]</td></tr>
+<tr><td class='bottom'>Plain</td><td class='bottom'>03D3</td><td class='bottom'>[0CA8 | 0020 0032 | 000A 0004]</td></tr>
+<tr><td rowSpan='3' class='bottom'>GREEK UPSILON WITH DIAERESIS AND HOOK SYMBOL</td><td>NFD</td><td>03D2 0308</td><td>[0CA8 | 0020 0047 | 000A 0002]</td></tr>
+<tr><td>NFC</td><td>03D4</td><td>[0CA8 | 0020 0047 | 000A 0004]</td></tr>
+<tr><td class='bottom'>Plain</td><td class='bottom'>03D4</td><td class='bottom'>[0CA8 | 0020 0047 | 000A 0004]</td></tr>
+<tr><td rowSpan='3' class='bottom'>KANNADA VOWEL SIGN O,<br>KANNADA LENGTH MARK</td><td>NFD</td><td>0CC6 0CC2 0CD5</td><td>[12C3 12C7 | 0020 0020 | 0002 0002]</td></tr>
+<tr><td>NFC</td><td>0CCB</td><td>[12C4 | 0020 | 0002]</td></tr>
+<tr><td class='bottom'>Plain</td><td class='bottom'>0CCA 0CD5</td><td class='bottom'>[12C4 | 0020 | 0002]</td></tr>
+<tr><td rowSpan='3' class='bottom'>KANNADA VOWEL SIGN OO</td><td>NFD</td><td>0CC6 0CC2 0CD5</td><td>[12C3 12C7 | 0020 0020 | 0002 0002]</td></tr>
+<tr><td>NFC</td><td>0CCB</td><td>[12C4 | 0020 | 0002]</td></tr>
+<tr><td class='bottom'>Plain</td><td class='bottom'>0CCB</td><td class='bottom'>[12C4 | 0020 | 0002]</td></tr>
+<tr><td rowSpan='3' class='bottom'>SINHALA VOWEL SIGN KOMBUVA HAA AELA-PILLA,<br>SINHALA SIGN AL-LAKUNA</td><td>NFD</td><td>0DD9 0DCF 0DCA</td><td>[1352 1346 | 0020 0020 | 0002 0002]</td></tr>
+<tr><td>NFC</td><td>0DDD</td><td>[1353 | 0020 | 0002]</td></tr>
+<tr><td class='bottom'>Plain</td><td class='bottom'>0DDC 0DCA</td><td class='bottom'>[1353 | 0020 | 0002]</td></tr>
+<tr><td rowSpan='3' class='bottom'>SINHALA VOWEL SIGN KOMBUVA HAA DIGA AELA-PILLA</td><td>NFD</td><td>0DD9 0DCF 0DCA</td><td>[1352 1346 | 0020 0020 | 0002 0002]</td></tr>
+<tr><td>NFC</td><td>0DDD</td><td>[1353 | 0020 | 0002]</td></tr>
+<tr><td class='bottom'>Plain</td><td class='bottom'>0DDD</td><td class='bottom'>[1353 | 0020 | 0002]</td></tr>
+<tr><td rowSpan='3' class='bottom'>LATIN SMALL LETTER LONG S WITH DOT ABOVE</td><td>NFD</td><td>017F 0307</td><td>[0BA7 | 0020 0154 0052 | 0004 0004 0002]</td></tr>
+<tr><td>NFC</td><td>1E9B</td><td>[0BA7 | 0020 0154 0052 | 0004 0004 001F]</td></tr>
+<tr><td class='bottom'>Plain</td><td class='bottom'>1E9B</td><td class='bottom'>[0BA7 | 0020 0154 0052 | 0004 0004 001F]</td></tr>
+<tr><td rowSpan='3' class='bottom'>HEBREW LIGATURE YIDDISH YOD YOD PATAH</td><td>NFD</td><td>05F2 05B7</td><td>[0EC0 0EC0 | 0020 0020 00B2 | 0004 0004 0002]</td></tr>
+<tr><td>NFC</td><td>05F2 05B7</td><td>[0EC0 0EC0 | 0020 0020 00B2 | 0004 0004 0002]</td></tr>
+<tr><td class='bottom'>Plain</td><td class='bottom'>FB1F</td><td class='bottom'>[0EC0 0EC0 | 0020 0020 00B2 | 0004 0004 001F]</td></tr>
+<tr><td rowSpan='3' class='bottom'>HEBREW LETTER FINAL KAF WITH DAGESH</td><td>NFD</td><td>05DA 05BC</td><td>[0EC1 | 0020 00B6 | 0019 0002]</td></tr>
+<tr><td>NFC</td><td>05DA 05BC</td><td>[0EC1 | 0020 00B6 | 0019 0002]</td></tr>
+<tr><td class='bottom'>Plain</td><td class='bottom'>FB3A</td><td class='bottom'>[0EC1 | 0020 00B6 | 0019 0019]</td></tr>
+<tr><td rowSpan='3' class='bottom'>HEBREW LETTER FINAL PE WITH DAGESH</td><td>NFD</td><td>05E3 05BC</td><td>[0EC7 | 0020 00B6 | 0019 0002]</td></tr>
+<tr><td>NFC</td><td>05E3 05BC</td><td>[0EC7 | 0020 00B6 | 0019 0002]</td></tr>
+<tr><td class='bottom'>Plain</td><td class='bottom'>FB43</td><td class='bottom'>[0EC7 | 0020 00B6 | 0019 0019]</td></tr>
+</table>
+<p>Errors: 10</p>
+<br>
 <h1>2. Differences in Ordering</h1>
 <p>Codes and names are in the white rows: bold means that the NO-NFD sort key differs from UCA key.</p>
 <p>Keys are in the light blue rows: green is the bad key, blue is UCA, black is where they equal.</p>
+<p>Note: so black lines are generally ok.</p>
 <table border='1' cellspacing='0' cellpadding='2'>
 <tr><th>File Order</th><th>Code and Decomp</th><th>Key and Decomp-Key</th></tr>
-<tr><td colspan='3'></td><tr>
-<tr><td>11414</td><td>F951 CJK COMPATIBILITY IDEOGRAPH-F951<br><964B> </td><td>
-<font color='#009900'>[FF41 96FB | 0020 0020 | 0002 0002 | |]</font><br><font color='#000099'>[FF41 964B | 0020 0020 | 0002 0002 | |]</font>
-</td></tr>
-<tr><td>11415</td><td>FA09 CJK COMPATIBILITY IDEOGRAPH-FA09<br><964D> </td><td>
-[FF41 964D | 0020 0020 | 0002 0002 | |]
-</td></tr>
 </table>
-<h2>3. Primaries Incompatible with Decompositions</h2><table border='1' cellspacing='0' cellpadding='2'>
+<p>Errors: 0</p>
+<h2>3. Primaries Incompatible with Decompositions</h2>
+<p>Warning: only checking characters defined in base: 3.1.1</p>
+<table border='1' cellspacing='0' cellpadding='2'>
 <tr><th>Code</td><th>Sort Key</th><th>Decomposed Sort Key</th><th>Name</th></tr>
-<tr><td>2047</td><td>[FFC0 A047]</td><td>[024E 024E]</td><td>DOUBLE QUESTION MARK</td></tr>
-<tr><td>2057</td><td>[FFC0 A057]</td><td>[02B6 02B6 02B6 02B6]</td><td>QUADRUPLE PRIME</td></tr>
-<tr><td>2071</td><td>[FFC0 A071]</td><td>[0AD3]</td><td>SUPERSCRIPT LATIN SMALL LETTER I</td></tr>
-<tr><td>213D</td><td>[FFC0 A13D]</td><td>[0C93]</td><td>DOUBLE-STRUCK SMALL GAMMA</td></tr>
-<tr><td>213E</td><td>[FFC0 A13E]</td><td>[0C93]</td><td>DOUBLE-STRUCK CAPITAL GAMMA</td></tr>
-<tr><td>213F</td><td>[FFC0 A13F]</td><td>[0CA3]</td><td>DOUBLE-STRUCK CAPITAL PI</td></tr>
-<tr><td>2140</td><td>[FFC0 A140]</td><td>[039E]</td><td>DOUBLE-STRUCK N-ARY SUMMATION</td></tr>
-<tr><td>2145</td><td>[FFC0 A145]</td><td>[0A49]</td><td>DOUBLE-STRUCK ITALIC CAPITAL D</td></tr>
-<tr><td>2146</td><td>[FFC0 A146]</td><td>[0A49]</td><td>DOUBLE-STRUCK ITALIC SMALL D</td></tr>
-<tr><td>2147</td><td>[FFC0 A147]</td><td>[0A65]</td><td>DOUBLE-STRUCK ITALIC SMALL E</td></tr>
-<tr><td>2148</td><td>[FFC0 A148]</td><td>[0AD3]</td><td>DOUBLE-STRUCK ITALIC SMALL I</td></tr>
-<tr><td>2149</td><td>[FFC0 A149]</td><td>[0AE7]</td><td>DOUBLE-STRUCK ITALIC SMALL J</td></tr>
-<tr><td>2A0C</td><td>[FFC0 AA0C]</td><td>[03C2 03C2 03C2 03C2]</td><td>QUADRUPLE INTEGRAL OPERATOR</td></tr>
-<tr><td>2A74</td><td>[FFC0 AA74]</td><td>[0237 0237 03A4]</td><td>DOUBLE COLON EQUAL</td></tr>
-<tr><td>2A75</td><td>[FFC0 AA75]</td><td>[03A4 03A4]</td><td>TWO CONSECUTIVE EQUALS SIGNS</td></tr>
-<tr><td>2A76</td><td>[FFC0 AA76]</td><td>[03A4 03A4 03A4]</td><td>THREE CONSECUTIVE EQUALS SIGNS</td></tr>
-<tr><td>2ADC</td><td>[FFC0 AADC]</td><td>[FFC0 AADD]</td><td>FORKING</td></tr>
-<tr><td>309F</td><td>[FFC0 B09F]</td><td>[1946 1948]</td><td>HIRAGANA DIGRAPH YORI</td></tr>
-<tr><td>30FF</td><td>[FFC0 B0FF]</td><td>[192A 1934]</td><td>KATAKANA DIGRAPH KOTO</td></tr>
-<tr><td>3251</td><td>[FFC0 B251]</td><td>[0A0D 0A0C]</td><td>CIRCLED NUMBER TWENTY ONE</td></tr>
-<tr><td>3252</td><td>[FFC0 B252]</td><td>[0A0D 0A0D]</td><td>CIRCLED NUMBER TWENTY TWO</td></tr>
-<tr><td>3253</td><td>[FFC0 B253]</td><td>[0A0D 0A0E]</td><td>CIRCLED NUMBER TWENTY THREE</td></tr>
-<tr><td>3254</td><td>[FFC0 B254]</td><td>[0A0D 0A0F]</td><td>CIRCLED NUMBER TWENTY FOUR</td></tr>
-<tr><td>3255</td><td>[FFC0 B255]</td><td>[0A0D 0A10]</td><td>CIRCLED NUMBER TWENTY FIVE</td></tr>
-<tr><td>3256</td><td>[FFC0 B256]</td><td>[0A0D 0A11]</td><td>CIRCLED NUMBER TWENTY SIX</td></tr>
-<tr><td>3257</td><td>[FFC0 B257]</td><td>[0A0D 0A12]</td><td>CIRCLED NUMBER TWENTY SEVEN</td></tr>
-<tr><td>3258</td><td>[FFC0 B258]</td><td>[0A0D 0A13]</td><td>CIRCLED NUMBER TWENTY EIGHT</td></tr>
-<tr><td>3259</td><td>[FFC0 B259]</td><td>[0A0D 0A14]</td><td>CIRCLED NUMBER TWENTY NINE</td></tr>
-<tr><td>325A</td><td>[FFC0 B25A]</td><td>[0A0E 0A0B]</td><td>CIRCLED NUMBER THIRTY</td></tr>
-<tr><td>325B</td><td>[FFC0 B25B]</td><td>[0A0E 0A0C]</td><td>CIRCLED NUMBER THIRTY ONE</td></tr>
-<tr><td>325C</td><td>[FFC0 B25C]</td><td>[0A0E 0A0D]</td><td>CIRCLED NUMBER THIRTY TWO</td></tr>
-<tr><td>325D</td><td>[FFC0 B25D]</td><td>[0A0E 0A0E]</td><td>CIRCLED NUMBER THIRTY THREE</td></tr>
-<tr><td>325E</td><td>[FFC0 B25E]</td><td>[0A0E 0A0F]</td><td>CIRCLED NUMBER THIRTY FOUR</td></tr>
-<tr><td>325F</td><td>[FFC0 B25F]</td><td>[0A0E 0A10]</td><td>CIRCLED NUMBER THIRTY FIVE</td></tr>
-<tr><td>32B1</td><td>[FFC0 B2B1]</td><td>[0A0E 0A11]</td><td>CIRCLED NUMBER THIRTY SIX</td></tr>
-<tr><td>32B2</td><td>[FFC0 B2B2]</td><td>[0A0E 0A12]</td><td>CIRCLED NUMBER THIRTY SEVEN</td></tr>
-<tr><td>32B3</td><td>[FFC0 B2B3]</td><td>[0A0E 0A13]</td><td>CIRCLED NUMBER THIRTY EIGHT</td></tr>
-<tr><td>32B4</td><td>[FFC0 B2B4]</td><td>[0A0E 0A14]</td><td>CIRCLED NUMBER THIRTY NINE</td></tr>
-<tr><td>32B5</td><td>[FFC0 B2B5]</td><td>[0A0F 0A0B]</td><td>CIRCLED NUMBER FORTY</td></tr>
-<tr><td>32B6</td><td>[FFC0 B2B6]</td><td>[0A0F 0A0C]</td><td>CIRCLED NUMBER FORTY ONE</td></tr>
-<tr><td>32B7</td><td>[FFC0 B2B7]</td><td>[0A0F 0A0D]</td><td>CIRCLED NUMBER FORTY TWO</td></tr>
-<tr><td>32B8</td><td>[FFC0 B2B8]</td><td>[0A0F 0A0E]</td><td>CIRCLED NUMBER FORTY THREE</td></tr>
-<tr><td>32B9</td><td>[FFC0 B2B9]</td><td>[0A0F 0A0F]</td><td>CIRCLED NUMBER FORTY FOUR</td></tr>
-<tr><td>32BA</td><td>[FFC0 B2BA]</td><td>[0A0F 0A10]</td><td>CIRCLED NUMBER FORTY FIVE</td></tr>
-<tr><td>32BB</td><td>[FFC0 B2BB]</td><td>[0A0F 0A11]</td><td>CIRCLED NUMBER FORTY SIX</td></tr>
-<tr><td>32BC</td><td>[FFC0 B2BC]</td><td>[0A0F 0A12]</td><td>CIRCLED NUMBER FORTY SEVEN</td></tr>
-<tr><td>32BD</td><td>[FFC0 B2BD]</td><td>[0A0F 0A13]</td><td>CIRCLED NUMBER FORTY EIGHT</td></tr>
-<tr><td>32BE</td><td>[FFC0 B2BE]</td><td>[0A0F 0A14]</td><td>CIRCLED NUMBER FORTY NINE</td></tr>
-<tr><td>32BF</td><td>[FFC0 B2BF]</td><td>[0A10 0A0B]</td><td>CIRCLED NUMBER FIFTY</td></tr>
-<tr><td>F951</td><td>[FF41 96FB]</td><td>[FF41 964B]</td><td>CJK COMPATIBILITY IDEOGRAPH-F951</td></tr>
-<tr><td>FA30</td><td>[FFC1 FA30]</td><td>[FF40 CFAE]</td><td>CJK COMPATIBILITY IDEOGRAPH-FA30</td></tr>
-<tr><td>FA31</td><td>[FFC1 FA31]</td><td>[FF40 D0E7]</td><td>CJK COMPATIBILITY IDEOGRAPH-FA31</td></tr>
-<tr><td>FA32</td><td>[FFC1 FA32]</td><td>[FF40 D14D]</td><td>CJK COMPATIBILITY IDEOGRAPH-FA32</td></tr>
-<tr><td>FA33</td><td>[FFC1 FA33]</td><td>[FF40 D2C9]</td><td>CJK COMPATIBILITY IDEOGRAPH-FA33</td></tr>
-<tr><td>FA34</td><td>[FFC1 FA34]</td><td>[FF40 D2E4]</td><td>CJK COMPATIBILITY IDEOGRAPH-FA34</td></tr>
-<tr><td>FA35</td><td>[FFC1 FA35]</td><td>[FF40 D351]</td><td>CJK COMPATIBILITY IDEOGRAPH-FA35</td></tr>
-<tr><td>FA36</td><td>[FFC1 FA36]</td><td>[FF40 D59D]</td><td>CJK COMPATIBILITY IDEOGRAPH-FA36</td></tr>
-<tr><td>FA37</td><td>[FFC1 FA37]</td><td>[FF40 D606]</td><td>CJK COMPATIBILITY IDEOGRAPH-FA37</td></tr>
-<tr><td>FA38</td><td>[FFC1 FA38]</td><td>[FF40 D668]</td><td>CJK COMPATIBILITY IDEOGRAPH-FA38</td></tr>
-<tr><td>FA39</td><td>[FFC1 FA39]</td><td>[FF40 D840]</td><td>CJK COMPATIBILITY IDEOGRAPH-FA39</td></tr>
-<tr><td>FA3A</td><td>[FFC1 FA3A]</td><td>[FF40 D8A8]</td><td>CJK COMPATIBILITY IDEOGRAPH-FA3A</td></tr>
-<tr><td>FA3B</td><td>[FFC1 FA3B]</td><td>[FF40 DC64]</td><td>CJK COMPATIBILITY IDEOGRAPH-FA3B</td></tr>
-<tr><td>FA3C</td><td>[FFC1 FA3C]</td><td>[FF40 DC6E]</td><td>CJK COMPATIBILITY IDEOGRAPH-FA3C</td></tr>
-<tr><td>FA3D</td><td>[FFC1 FA3D]</td><td>[FF40 E094]</td><td>CJK COMPATIBILITY IDEOGRAPH-FA3D</td></tr>
-<tr><td>FA3E</td><td>[FFC1 FA3E]</td><td>[FF40 E168]</td><td>CJK COMPATIBILITY IDEOGRAPH-FA3E</td></tr>
-<tr><td>FA3F</td><td>[FFC1 FA3F]</td><td>[FF40 E18E]</td><td>CJK COMPATIBILITY IDEOGRAPH-FA3F</td></tr>
-<tr><td>FA40</td><td>[FFC1 FA40]</td><td>[FF40 E1F2]</td><td>CJK COMPATIBILITY IDEOGRAPH-FA40</td></tr>
-<tr><td>FA41</td><td>[FFC1 FA41]</td><td>[FF40 E54F]</td><td>CJK COMPATIBILITY IDEOGRAPH-FA41</td></tr>
-<tr><td>FA42</td><td>[FFC1 FA42]</td><td>[FF40 E5E2]</td><td>CJK COMPATIBILITY IDEOGRAPH-FA42</td></tr>
-<tr><td>FA43</td><td>[FFC1 FA43]</td><td>[FF40 E691]</td><td>CJK COMPATIBILITY IDEOGRAPH-FA43</td></tr>
-<tr><td>FA44</td><td>[FFC1 FA44]</td><td>[FF40 E885]</td><td>CJK COMPATIBILITY IDEOGRAPH-FA44</td></tr>
-<tr><td>FA45</td><td>[FFC1 FA45]</td><td>[FF40 ED77]</td><td>CJK COMPATIBILITY IDEOGRAPH-FA45</td></tr>
-<tr><td>FA46</td><td>[FFC1 FA46]</td><td>[FF40 EE1A]</td><td>CJK COMPATIBILITY IDEOGRAPH-FA46</td></tr>
-<tr><td>FA47</td><td>[FFC1 FA47]</td><td>[FF40 EF22]</td><td>CJK COMPATIBILITY IDEOGRAPH-FA47</td></tr>
-<tr><td>FA48</td><td>[FFC1 FA48]</td><td>[FF40 F16E]</td><td>CJK COMPATIBILITY IDEOGRAPH-FA48</td></tr>
-<tr><td>FA49</td><td>[FFC1 FA49]</td><td>[FF40 F22B]</td><td>CJK COMPATIBILITY IDEOGRAPH-FA49</td></tr>
-<tr><td>FA4A</td><td>[FFC1 FA4A]</td><td>[FF40 F422]</td><td>CJK COMPATIBILITY IDEOGRAPH-FA4A</td></tr>
-<tr><td>FA4B</td><td>[FFC1 FA4B]</td><td>[FF40 F891]</td><td>CJK COMPATIBILITY IDEOGRAPH-FA4B</td></tr>
-<tr><td>FA4C</td><td>[FFC1 FA4C]</td><td>[FF40 F93E]</td><td>CJK COMPATIBILITY IDEOGRAPH-FA4C</td></tr>
-<tr><td>FA4D</td><td>[FFC1 FA4D]</td><td>[FF40 F949]</td><td>CJK COMPATIBILITY IDEOGRAPH-FA4D</td></tr>
-<tr><td>FA4E</td><td>[FFC1 FA4E]</td><td>[FF40 F948]</td><td>CJK COMPATIBILITY IDEOGRAPH-FA4E</td></tr>
-<tr><td>FA4F</td><td>[FFC1 FA4F]</td><td>[FF40 F950]</td><td>CJK COMPATIBILITY IDEOGRAPH-FA4F</td></tr>
-<tr><td>FA50</td><td>[FFC1 FA50]</td><td>[FF40 F956]</td><td>CJK COMPATIBILITY IDEOGRAPH-FA50</td></tr>
-<tr><td>FA51</td><td>[FFC1 FA51]</td><td>[FF40 F95D]</td><td>CJK COMPATIBILITY IDEOGRAPH-FA51</td></tr>
-<tr><td>FA52</td><td>[FFC1 FA52]</td><td>[FF40 F98D]</td><td>CJK COMPATIBILITY IDEOGRAPH-FA52</td></tr>
-<tr><td>FA53</td><td>[FFC1 FA53]</td><td>[FF40 F98E]</td><td>CJK COMPATIBILITY IDEOGRAPH-FA53</td></tr>
-<tr><td>FA54</td><td>[FFC1 FA54]</td><td>[FF40 FA40]</td><td>CJK COMPATIBILITY IDEOGRAPH-FA54</td></tr>
-<tr><td>FA55</td><td>[FFC1 FA55]</td><td>[FF40 FA81]</td><td>CJK COMPATIBILITY IDEOGRAPH-FA55</td></tr>
-<tr><td>FA56</td><td>[FFC1 FA56]</td><td>[FF40 FBC0]</td><td>CJK COMPATIBILITY IDEOGRAPH-FA56</td></tr>
-<tr><td>FA57</td><td>[FFC1 FA57]</td><td>[FF40 FDF4]</td><td>CJK COMPATIBILITY IDEOGRAPH-FA57</td></tr>
-<tr><td>FA58</td><td>[FFC1 FA58]</td><td>[FF40 FE09]</td><td>CJK COMPATIBILITY IDEOGRAPH-FA58</td></tr>
-<tr><td>FA59</td><td>[FFC1 FA59]</td><td>[FF40 FE41]</td><td>CJK COMPATIBILITY IDEOGRAPH-FA59</td></tr>
-<tr><td>FA5A</td><td>[FFC1 FA5A]</td><td>[FF40 FF72]</td><td>CJK COMPATIBILITY IDEOGRAPH-FA5A</td></tr>
-<tr><td>FA5B</td><td>[FFC1 FA5B]</td><td>[FF41 8005]</td><td>CJK COMPATIBILITY IDEOGRAPH-FA5B</td></tr>
-<tr><td>FA5C</td><td>[FFC1 FA5C]</td><td>[FF41 81ED]</td><td>CJK COMPATIBILITY IDEOGRAPH-FA5C</td></tr>
-<tr><td>FA5D</td><td>[FFC1 FA5D]</td><td>[FF41 8279]</td><td>CJK COMPATIBILITY IDEOGRAPH-FA5D</td></tr>
-<tr><td>FA5E</td><td>[FFC1 FA5E]</td><td>[FF41 8279]</td><td>CJK COMPATIBILITY IDEOGRAPH-FA5E</td></tr>
-<tr><td>FA5F</td><td>[FFC1 FA5F]</td><td>[FF41 8457]</td><td>CJK COMPATIBILITY IDEOGRAPH-FA5F</td></tr>
-<tr><td>FA60</td><td>[FFC1 FA60]</td><td>[FF41 8910]</td><td>CJK COMPATIBILITY IDEOGRAPH-FA60</td></tr>
-<tr><td>FA61</td><td>[FFC1 FA61]</td><td>[FF41 8996]</td><td>CJK COMPATIBILITY IDEOGRAPH-FA61</td></tr>
-<tr><td>FA62</td><td>[FFC1 FA62]</td><td>[FF41 8B01]</td><td>CJK COMPATIBILITY IDEOGRAPH-FA62</td></tr>
-<tr><td>FA63</td><td>[FFC1 FA63]</td><td>[FF41 8B39]</td><td>CJK COMPATIBILITY IDEOGRAPH-FA63</td></tr>
-<tr><td>FA64</td><td>[FFC1 FA64]</td><td>[FF41 8CD3]</td><td>CJK COMPATIBILITY IDEOGRAPH-FA64</td></tr>
-<tr><td>FA65</td><td>[FFC1 FA65]</td><td>[FF41 8D08]</td><td>CJK COMPATIBILITY IDEOGRAPH-FA65</td></tr>
-<tr><td>FA66</td><td>[FFC1 FA66]</td><td>[FF41 8FB6]</td><td>CJK COMPATIBILITY IDEOGRAPH-FA66</td></tr>
-<tr><td>FA67</td><td>[FFC1 FA67]</td><td>[FF41 9038]</td><td>CJK COMPATIBILITY IDEOGRAPH-FA67</td></tr>
-<tr><td>FA68</td><td>[FFC1 FA68]</td><td>[FF41 96E3]</td><td>CJK COMPATIBILITY IDEOGRAPH-FA68</td></tr>
-<tr><td>FA69</td><td>[FFC1 FA69]</td><td>[FF41 97FF]</td><td>CJK COMPATIBILITY IDEOGRAPH-FA69</td></tr>
-<tr><td>FA6A</td><td>[FFC1 FA6A]</td><td>[FF41 983B]</td><td>CJK COMPATIBILITY IDEOGRAPH-FA6A</td></tr>
-<tr><td>FDFC</td><td>[FFC1 FDFC]</td><td>[0EF9 0F4A 0ED6 0F2D]</td><td>RIAL SIGN</td></tr>
-<tr><td>FF5F</td><td>[FFC1 FF5F]</td><td>[FFC0 A985]</td><td>FULLWIDTH LEFT WHITE PARENTHESIS</td></tr>
-<tr><td>FF60</td><td>[FFC1 FF60]</td><td>[FFC0 A986]</td><td>FULLWIDTH RIGHT WHITE PARENTHESIS</td></tr>
 </table>
-<h2>4. Secondaries Incompatible with Decompositions</h2><table border='1' cellspacing='0' cellpadding='2'>
+<p>Errors: 0</p>
+<h2>4. Secondaries Incompatible with Decompositions</h2>
+<p>Warning: only checking characters defined in base: 3.1.1</p>
+<table border='1' cellspacing='0' cellpadding='2'>
 <tr><th>Code</td><th>Sort Key</th><th>Decomposed Sort Key</th><th>Name</th></tr>
+<tr><td>3220</td><td>[027A FB40 CE00 027B | 0020 0020 0020 0020]</td><td>[027A FB40 CE00 027B | 0020 0020 0020]</td><td>PARENTHESIZED IDEOGRAPH ONE</td></tr>
+<tr><td>3221</td><td>[027A FB40 CE8C 027B | 0020 0020 0020 0020]</td><td>[027A FB40 CE8C 027B | 0020 0020 0020]</td><td>PARENTHESIZED IDEOGRAPH TWO</td></tr>
+<tr><td>3222</td><td>[027A FB40 CE09 027B | 0020 0020 0020 0020]</td><td>[027A FB40 CE09 027B | 0020 0020 0020]</td><td>PARENTHESIZED IDEOGRAPH THREE</td></tr>
+<tr><td>3223</td><td>[027A FB40 D6DB 027B | 0020 0020 0020 0020]</td><td>[027A FB40 D6DB 027B | 0020 0020 0020]</td><td>PARENTHESIZED IDEOGRAPH FOUR</td></tr>
+<tr><td>3224</td><td>[027A FB40 CE94 027B | 0020 0020 0020 0020]</td><td>[027A FB40 CE94 027B | 0020 0020 0020]</td><td>PARENTHESIZED IDEOGRAPH FIVE</td></tr>
+<tr><td>3225</td><td>[027A FB40 D16D 027B | 0020 0020 0020 0020]</td><td>[027A FB40 D16D 027B | 0020 0020 0020]</td><td>PARENTHESIZED IDEOGRAPH SIX</td></tr>
+<tr><td>3226</td><td>[027A FB40 CE03 027B | 0020 0020 0020 0020]</td><td>[027A FB40 CE03 027B | 0020 0020 0020]</td><td>PARENTHESIZED IDEOGRAPH SEVEN</td></tr>
+<tr><td>3227</td><td>[027A FB40 D16B 027B | 0020 0020 0020 0020]</td><td>[027A FB40 D16B 027B | 0020 0020 0020]</td><td>PARENTHESIZED IDEOGRAPH EIGHT</td></tr>
+<tr><td>3228</td><td>[027A FB40 CE5D 027B | 0020 0020 0020 0020]</td><td>[027A FB40 CE5D 027B | 0020 0020 0020]</td><td>PARENTHESIZED IDEOGRAPH NINE</td></tr>
+<tr><td>3229</td><td>[027A FB40 D341 027B | 0020 0020 0020 0020]</td><td>[027A FB40 D341 027B | 0020 0020 0020]</td><td>PARENTHESIZED IDEOGRAPH TEN</td></tr>
+<tr><td>322A</td><td>[027A FB40 E708 027B | 0020 0020 0020 0020]</td><td>[027A FB40 E708 027B | 0020 0020 0020]</td><td>PARENTHESIZED IDEOGRAPH MOON</td></tr>
+<tr><td>322B</td><td>[027A FB40 F06B 027B | 0020 0020 0020 0020]</td><td>[027A FB40 F06B 027B | 0020 0020 0020]</td><td>PARENTHESIZED IDEOGRAPH FIRE</td></tr>
+<tr><td>322C</td><td>[027A FB40 EC34 027B | 0020 0020 0020 0020]</td><td>[027A FB40 EC34 027B | 0020 0020 0020]</td><td>PARENTHESIZED IDEOGRAPH WATER</td></tr>
+<tr><td>322D</td><td>[027A FB40 E728 027B | 0020 0020 0020 0020]</td><td>[027A FB40 E728 027B | 0020 0020 0020]</td><td>PARENTHESIZED IDEOGRAPH WOOD</td></tr>
+<tr><td>322E</td><td>[027A FB41 91D1 027B | 0020 0020 0020 0020]</td><td>[027A FB41 91D1 027B | 0020 0020 0020]</td><td>PARENTHESIZED IDEOGRAPH METAL</td></tr>
+<tr><td>322F</td><td>[027A FB40 D71F 027B | 0020 0020 0020 0020]</td><td>[027A FB40 D71F 027B | 0020 0020 0020]</td><td>PARENTHESIZED IDEOGRAPH EARTH</td></tr>
+<tr><td>3230</td><td>[027A FB40 E5E5 027B | 0020 0020 0020 0020]</td><td>[027A FB40 E5E5 027B | 0020 0020 0020]</td><td>PARENTHESIZED IDEOGRAPH SUN</td></tr>
+<tr><td>3231</td><td>[027A FB40 E82A 027B | 0020 0020 0020 0020]</td><td>[027A FB40 E82A 027B | 0020 0020 0020]</td><td>PARENTHESIZED IDEOGRAPH STOCK</td></tr>
+<tr><td>3232</td><td>[027A FB40 E709 027B | 0020 0020 0020 0020]</td><td>[027A FB40 E709 027B | 0020 0020 0020]</td><td>PARENTHESIZED IDEOGRAPH HAVE</td></tr>
+<tr><td>3233</td><td>[027A FB40 F93E 027B | 0020 0020 0020 0020]</td><td>[027A FB40 F93E 027B | 0020 0020 0020]</td><td>PARENTHESIZED IDEOGRAPH SOCIETY</td></tr>
+<tr><td>3234</td><td>[027A FB40 D40D 027B | 0020 0020 0020 0020]</td><td>[027A FB40 D40D 027B | 0020 0020 0020]</td><td>PARENTHESIZED IDEOGRAPH NAME</td></tr>
+<tr><td>3235</td><td>[027A FB40 F279 027B | 0020 0020 0020 0020]</td><td>[027A FB40 F279 027B | 0020 0020 0020]</td><td>PARENTHESIZED IDEOGRAPH SPECIAL</td></tr>
+<tr><td>3236</td><td>[027A FB41 8CA1 027B | 0020 0020 0020 0020]</td><td>[027A FB41 8CA1 027B | 0020 0020 0020]</td><td>PARENTHESIZED IDEOGRAPH FINANCIAL</td></tr>
+<tr><td>3237</td><td>[027A FB40 F95D 027B | 0020 0020 0020 0020]</td><td>[027A FB40 F95D 027B | 0020 0020 0020]</td><td>PARENTHESIZED IDEOGRAPH CONGRATULATION</td></tr>
+<tr><td>3238</td><td>[027A FB40 D2B4 027B | 0020 0020 0020 0020]</td><td>[027A FB40 D2B4 027B | 0020 0020 0020]</td><td>PARENTHESIZED IDEOGRAPH LABOR</td></tr>
+<tr><td>3239</td><td>[027A FB40 CEE3 027B | 0020 0020 0020 0020]</td><td>[027A FB40 CEE3 027B | 0020 0020 0020]</td><td>PARENTHESIZED IDEOGRAPH REPRESENT</td></tr>
+<tr><td>323A</td><td>[027A FB40 D47C 027B | 0020 0020 0020 0020]</td><td>[027A FB40 D47C 027B | 0020 0020 0020]</td><td>PARENTHESIZED IDEOGRAPH CALL</td></tr>
+<tr><td>323B</td><td>[027A FB40 DB66 027B | 0020 0020 0020 0020]</td><td>[027A FB40 DB66 027B | 0020 0020 0020]</td><td>PARENTHESIZED IDEOGRAPH STUDY</td></tr>
+<tr><td>323C</td><td>[027A FB40 F6E3 027B | 0020 0020 0020 0020]</td><td>[027A FB40 F6E3 027B | 0020 0020 0020]</td><td>PARENTHESIZED IDEOGRAPH SUPERVISE</td></tr>
+<tr><td>323D</td><td>[027A FB40 CF01 027B | 0020 0020 0020 0020]</td><td>[027A FB40 CF01 027B | 0020 0020 0020]</td><td>PARENTHESIZED IDEOGRAPH ENTERPRISE</td></tr>
+<tr><td>323E</td><td>[027A FB41 8CC7 027B | 0020 0020 0020 0020]</td><td>[027A FB41 8CC7 027B | 0020 0020 0020]</td><td>PARENTHESIZED IDEOGRAPH RESOURCE</td></tr>
+<tr><td>323F</td><td>[027A FB40 D354 027B | 0020 0020 0020 0020]</td><td>[027A FB40 D354 027B | 0020 0020 0020]</td><td>PARENTHESIZED IDEOGRAPH ALLIANCE</td></tr>
+<tr><td>3240</td><td>[027A FB40 F96D 027B | 0020 0020 0020 0020]</td><td>[027A FB40 F96D 027B | 0020 0020 0020]</td><td>PARENTHESIZED IDEOGRAPH FESTIVAL</td></tr>
+<tr><td>3241</td><td>[027A FB40 CF11 027B | 0020 0020 0020 0020]</td><td>[027A FB40 CF11 027B | 0020 0020 0020]</td><td>PARENTHESIZED IDEOGRAPH REST</td></tr>
+<tr><td>3242</td><td>[027A FB41 81EA 027B | 0020 0020 0020 0020]</td><td>[027A FB41 81EA 027B | 0020 0020 0020]</td><td>PARENTHESIZED IDEOGRAPH SELF</td></tr>
+<tr><td>3243</td><td>[027A FB41 81F3 027B | 0020 0020 0020 0020]</td><td>[027A FB41 81F3 027B | 0020 0020 0020]</td><td>PARENTHESIZED IDEOGRAPH REACH</td></tr>
+<tr><td>32C0</td><td>[0A0C FB40 E708 | 0020 0020 0020]</td><td>[0A0C FB40 E708 | 0020 0020]</td><td>IDEOGRAPHIC TELEGRAPH SYMBOL FOR JANUARY</td></tr>
+<tr><td>32C1</td><td>[0A0D FB40 E708 | 0020 0020 0020]</td><td>[0A0D FB40 E708 | 0020 0020]</td><td>IDEOGRAPHIC TELEGRAPH SYMBOL FOR FEBRUARY</td></tr>
+<tr><td>32C2</td><td>[0A0E FB40 E708 | 0020 0020 0020]</td><td>[0A0E FB40 E708 | 0020 0020]</td><td>IDEOGRAPHIC TELEGRAPH SYMBOL FOR MARCH</td></tr>
+<tr><td>32C3</td><td>[0A0F FB40 E708 | 0020 0020 0020]</td><td>[0A0F FB40 E708 | 0020 0020]</td><td>IDEOGRAPHIC TELEGRAPH SYMBOL FOR APRIL</td></tr>
+<tr><td>32C4</td><td>[0A10 FB40 E708 | 0020 0020 0020]</td><td>[0A10 FB40 E708 | 0020 0020]</td><td>IDEOGRAPHIC TELEGRAPH SYMBOL FOR MAY</td></tr>
+<tr><td>32C5</td><td>[0A11 FB40 E708 | 0020 0020 0020]</td><td>[0A11 FB40 E708 | 0020 0020]</td><td>IDEOGRAPHIC TELEGRAPH SYMBOL FOR JUNE</td></tr>
+<tr><td>32C6</td><td>[0A12 FB40 E708 | 0020 0020 0020]</td><td>[0A12 FB40 E708 | 0020 0020]</td><td>IDEOGRAPHIC TELEGRAPH SYMBOL FOR JULY</td></tr>
+<tr><td>32C7</td><td>[0A13 FB40 E708 | 0020 0020 0020]</td><td>[0A13 FB40 E708 | 0020 0020]</td><td>IDEOGRAPHIC TELEGRAPH SYMBOL FOR AUGUST</td></tr>
+<tr><td>32C8</td><td>[0A14 FB40 E708 | 0020 0020 0020]</td><td>[0A14 FB40 E708 | 0020 0020]</td><td>IDEOGRAPHIC TELEGRAPH SYMBOL FOR SEPTEMBER</td></tr>
+<tr><td>32C9</td><td>[0A0C 0A0B FB40 E708 | 0020 0020 0020 0020]</td><td>[0A0C 0A0B FB40 E708 | 0020 0020 0020]</td><td>IDEOGRAPHIC TELEGRAPH SYMBOL FOR OCTOBER</td></tr>
+<tr><td>32CA</td><td>[0A0C 0A0C FB40 E708 | 0020 0020 0020 0020]</td><td>[0A0C 0A0C FB40 E708 | 0020 0020 0020]</td><td>IDEOGRAPHIC TELEGRAPH SYMBOL FOR NOVEMBER</td></tr>
+<tr><td>32CB</td><td>[0A0C 0A0D FB40 E708 | 0020 0020 0020 0020]</td><td>[0A0C 0A0D FB40 E708 | 0020 0020 0020]</td><td>IDEOGRAPHIC TELEGRAPH SYMBOL FOR DECEMBER</td></tr>
+<tr><td>3358</td><td>[0A0B FB40 F0B9 | 0020 0020 0020]</td><td>[0A0B FB40 F0B9 | 0020 0020]</td><td>IDEOGRAPHIC TELEGRAPH SYMBOL FOR HOUR ZERO</td></tr>
+<tr><td>3359</td><td>[0A0C FB40 F0B9 | 0020 0020 0020]</td><td>[0A0C FB40 F0B9 | 0020 0020]</td><td>IDEOGRAPHIC TELEGRAPH SYMBOL FOR HOUR ONE</td></tr>
+<tr><td>335A</td><td>[0A0D FB40 F0B9 | 0020 0020 0020]</td><td>[0A0D FB40 F0B9 | 0020 0020]</td><td>IDEOGRAPHIC TELEGRAPH SYMBOL FOR HOUR TWO</td></tr>
+<tr><td>335B</td><td>[0A0E FB40 F0B9 | 0020 0020 0020]</td><td>[0A0E FB40 F0B9 | 0020 0020]</td><td>IDEOGRAPHIC TELEGRAPH SYMBOL FOR HOUR THREE</td></tr>
+<tr><td>335C</td><td>[0A0F FB40 F0B9 | 0020 0020 0020]</td><td>[0A0F FB40 F0B9 | 0020 0020]</td><td>IDEOGRAPHIC TELEGRAPH SYMBOL FOR HOUR FOUR</td></tr>
+<tr><td>335D</td><td>[0A10 FB40 F0B9 | 0020 0020 0020]</td><td>[0A10 FB40 F0B9 | 0020 0020]</td><td>IDEOGRAPHIC TELEGRAPH SYMBOL FOR HOUR FIVE</td></tr>
+<tr><td>335E</td><td>[0A11 FB40 F0B9 | 0020 0020 0020]</td><td>[0A11 FB40 F0B9 | 0020 0020]</td><td>IDEOGRAPHIC TELEGRAPH SYMBOL FOR HOUR SIX</td></tr>
+<tr><td>335F</td><td>[0A12 FB40 F0B9 | 0020 0020 0020]</td><td>[0A12 FB40 F0B9 | 0020 0020]</td><td>IDEOGRAPHIC TELEGRAPH SYMBOL FOR HOUR SEVEN</td></tr>
+<tr><td>3360</td><td>[0A13 FB40 F0B9 | 0020 0020 0020]</td><td>[0A13 FB40 F0B9 | 0020 0020]</td><td>IDEOGRAPHIC TELEGRAPH SYMBOL FOR HOUR EIGHT</td></tr>
+<tr><td>3361</td><td>[0A14 FB40 F0B9 | 0020 0020 0020]</td><td>[0A14 FB40 F0B9 | 0020 0020]</td><td>IDEOGRAPHIC TELEGRAPH SYMBOL FOR HOUR NINE</td></tr>
+<tr><td>3362</td><td>[0A0C 0A0B FB40 F0B9 | 0020 0020 0020 0020]</td><td>[0A0C 0A0B FB40 F0B9 | 0020 0020 0020]</td><td>IDEOGRAPHIC TELEGRAPH SYMBOL FOR HOUR TEN</td></tr>
+<tr><td>3363</td><td>[0A0C 0A0C FB40 F0B9 | 0020 0020 0020 0020]</td><td>[0A0C 0A0C FB40 F0B9 | 0020 0020 0020]</td><td>IDEOGRAPHIC TELEGRAPH SYMBOL FOR HOUR ELEVEN</td></tr>
+<tr><td>3364</td><td>[0A0C 0A0D FB40 F0B9 | 0020 0020 0020 0020]</td><td>[0A0C 0A0D FB40 F0B9 | 0020 0020 0020]</td><td>IDEOGRAPHIC TELEGRAPH SYMBOL FOR HOUR TWELVE</td></tr>
+<tr><td>3365</td><td>[0A0C 0A0E FB40 F0B9 | 0020 0020 0020 0020]</td><td>[0A0C 0A0E FB40 F0B9 | 0020 0020 0020]</td><td>IDEOGRAPHIC TELEGRAPH SYMBOL FOR HOUR THIRTEEN</td></tr>
+<tr><td>3366</td><td>[0A0C 0A0F FB40 F0B9 | 0020 0020 0020 0020]</td><td>[0A0C 0A0F FB40 F0B9 | 0020 0020 0020]</td><td>IDEOGRAPHIC TELEGRAPH SYMBOL FOR HOUR FOURTEEN</td></tr>
+<tr><td>3367</td><td>[0A0C 0A10 FB40 F0B9 | 0020 0020 0020 0020]</td><td>[0A0C 0A10 FB40 F0B9 | 0020 0020 0020]</td><td>IDEOGRAPHIC TELEGRAPH SYMBOL FOR HOUR FIFTEEN</td></tr>
+<tr><td>3368</td><td>[0A0C 0A11 FB40 F0B9 | 0020 0020 0020 0020]</td><td>[0A0C 0A11 FB40 F0B9 | 0020 0020 0020]</td><td>IDEOGRAPHIC TELEGRAPH SYMBOL FOR HOUR SIXTEEN</td></tr>
+<tr><td>3369</td><td>[0A0C 0A12 FB40 F0B9 | 0020 0020 0020 0020]</td><td>[0A0C 0A12 FB40 F0B9 | 0020 0020 0020]</td><td>IDEOGRAPHIC TELEGRAPH SYMBOL FOR HOUR SEVENTEEN</td></tr>
+<tr><td>336A</td><td>[0A0C 0A13 FB40 F0B9 | 0020 0020 0020 0020]</td><td>[0A0C 0A13 FB40 F0B9 | 0020 0020 0020]</td><td>IDEOGRAPHIC TELEGRAPH SYMBOL FOR HOUR EIGHTEEN</td></tr>
+<tr><td>336B</td><td>[0A0C 0A14 FB40 F0B9 | 0020 0020 0020 0020]</td><td>[0A0C 0A14 FB40 F0B9 | 0020 0020 0020]</td><td>IDEOGRAPHIC TELEGRAPH SYMBOL FOR HOUR NINETEEN</td></tr>
+<tr><td>336C</td><td>[0A0D 0A0B FB40 F0B9 | 0020 0020 0020 0020]</td><td>[0A0D 0A0B FB40 F0B9 | 0020 0020 0020]</td><td>IDEOGRAPHIC TELEGRAPH SYMBOL FOR HOUR TWENTY</td></tr>
+<tr><td>336D</td><td>[0A0D 0A0C FB40 F0B9 | 0020 0020 0020 0020]</td><td>[0A0D 0A0C FB40 F0B9 | 0020 0020 0020]</td><td>IDEOGRAPHIC TELEGRAPH SYMBOL FOR HOUR TWENTY-ONE</td></tr>
+<tr><td>336E</td><td>[0A0D 0A0D FB40 F0B9 | 0020 0020 0020 0020]</td><td>[0A0D 0A0D FB40 F0B9 | 0020 0020 0020]</td><td>IDEOGRAPHIC TELEGRAPH SYMBOL FOR HOUR TWENTY-TWO</td></tr>
+<tr><td>336F</td><td>[0A0D 0A0E FB40 F0B9 | 0020 0020 0020 0020]</td><td>[0A0D 0A0E FB40 F0B9 | 0020 0020 0020]</td><td>IDEOGRAPHIC TELEGRAPH SYMBOL FOR HOUR TWENTY-THREE</td></tr>
+<tr><td>3370</td><td>[0A0D 0A0F FB40 F0B9 | 0020 0020 0020 0020]</td><td>[0A0D 0A0F FB40 F0B9 | 0020 0020 0020]</td><td>IDEOGRAPHIC TELEGRAPH SYMBOL FOR HOUR TWENTY-FOUR</td></tr>
+<tr><td>337B</td><td>[FB40 DE73 FB40 E210 | 0020 0020 0020 0020]</td><td>[FB40 DE73 FB40 E210 | 0020 0020]</td><td>SQUARE ERA NAME HEISEI</td></tr>
+<tr><td>337C</td><td>[FB40 E62D FB40 D48C | 0020 0020 0020 0020]</td><td>[FB40 E62D FB40 D48C | 0020 0020]</td><td>SQUARE ERA NAME SYOUWA</td></tr>
+<tr><td>337D</td><td>[FB40 D927 FB40 EB63 | 0020 0020 0020 0020]</td><td>[FB40 D927 FB40 EB63 | 0020 0020]</td><td>SQUARE ERA NAME TAISYOU</td></tr>
+<tr><td>337E</td><td>[FB40 E60E FB40 ECBB | 0020 0020 0020 0020]</td><td>[FB40 E60E FB40 ECBB | 0020 0020]</td><td>SQUARE ERA NAME MEIZI</td></tr>
+<tr><td>337F</td><td>[FB40 E82A FB40 DF0F FB40 CF1A FB40 F93E | 0020 0020 0020 0020 0020 0020 0020 0020]</td><td>[FB40 E82A FB40 DF0F FB40 CF1A FB40 F93E | 0020 0020 0020 0020]</td><td>SQUARE CORPORATION</td></tr>
+<tr><td>33E0</td><td>[0A0C FB40 E5E5 | 0020 0020 0020]</td><td>[0A0C FB40 E5E5 | 0020 0020]</td><td>IDEOGRAPHIC TELEGRAPH SYMBOL FOR DAY ONE</td></tr>
+<tr><td>33E1</td><td>[0A0D FB40 E5E5 | 0020 0020 0020]</td><td>[0A0D FB40 E5E5 | 0020 0020]</td><td>IDEOGRAPHIC TELEGRAPH SYMBOL FOR DAY TWO</td></tr>
+<tr><td>33E2</td><td>[0A0E FB40 E5E5 | 0020 0020 0020]</td><td>[0A0E FB40 E5E5 | 0020 0020]</td><td>IDEOGRAPHIC TELEGRAPH SYMBOL FOR DAY THREE</td></tr>
+<tr><td>33E3</td><td>[0A0F FB40 E5E5 | 0020 0020 0020]</td><td>[0A0F FB40 E5E5 | 0020 0020]</td><td>IDEOGRAPHIC TELEGRAPH SYMBOL FOR DAY FOUR</td></tr>
+<tr><td>33E4</td><td>[0A10 FB40 E5E5 | 0020 0020 0020]</td><td>[0A10 FB40 E5E5 | 0020 0020]</td><td>IDEOGRAPHIC TELEGRAPH SYMBOL FOR DAY FIVE</td></tr>
+<tr><td>33E5</td><td>[0A11 FB40 E5E5 | 0020 0020 0020]</td><td>[0A11 FB40 E5E5 | 0020 0020]</td><td>IDEOGRAPHIC TELEGRAPH SYMBOL FOR DAY SIX</td></tr>
+<tr><td>33E6</td><td>[0A12 FB40 E5E5 | 0020 0020 0020]</td><td>[0A12 FB40 E5E5 | 0020 0020]</td><td>IDEOGRAPHIC TELEGRAPH SYMBOL FOR DAY SEVEN</td></tr>
+<tr><td>33E7</td><td>[0A13 FB40 E5E5 | 0020 0020 0020]</td><td>[0A13 FB40 E5E5 | 0020 0020]</td><td>IDEOGRAPHIC TELEGRAPH SYMBOL FOR DAY EIGHT</td></tr>
+<tr><td>33E8</td><td>[0A14 FB40 E5E5 | 0020 0020 0020]</td><td>[0A14 FB40 E5E5 | 0020 0020]</td><td>IDEOGRAPHIC TELEGRAPH SYMBOL FOR DAY NINE</td></tr>
+<tr><td>33E9</td><td>[0A0C 0A0B FB40 E5E5 | 0020 0020 0020 0020]</td><td>[0A0C 0A0B FB40 E5E5 | 0020 0020 0020]</td><td>IDEOGRAPHIC TELEGRAPH SYMBOL FOR DAY TEN</td></tr>
+<tr><td>33EA</td><td>[0A0C 0A0C FB40 E5E5 | 0020 0020 0020 0020]</td><td>[0A0C 0A0C FB40 E5E5 | 0020 0020 0020]</td><td>IDEOGRAPHIC TELEGRAPH SYMBOL FOR DAY ELEVEN</td></tr>
+<tr><td>33EB</td><td>[0A0C 0A0D FB40 E5E5 | 0020 0020 0020 0020]</td><td>[0A0C 0A0D FB40 E5E5 | 0020 0020 0020]</td><td>IDEOGRAPHIC TELEGRAPH SYMBOL FOR DAY TWELVE</td></tr>
+<tr><td>33EC</td><td>[0A0C 0A0E FB40 E5E5 | 0020 0020 0020 0020]</td><td>[0A0C 0A0E FB40 E5E5 | 0020 0020 0020]</td><td>IDEOGRAPHIC TELEGRAPH SYMBOL FOR DAY THIRTEEN</td></tr>
+<tr><td>33ED</td><td>[0A0C 0A0F FB40 E5E5 | 0020 0020 0020 0020]</td><td>[0A0C 0A0F FB40 E5E5 | 0020 0020 0020]</td><td>IDEOGRAPHIC TELEGRAPH SYMBOL FOR DAY FOURTEEN</td></tr>
+<tr><td>33EE</td><td>[0A0C 0A10 FB40 E5E5 | 0020 0020 0020 0020]</td><td>[0A0C 0A10 FB40 E5E5 | 0020 0020 0020]</td><td>IDEOGRAPHIC TELEGRAPH SYMBOL FOR DAY FIFTEEN</td></tr>
+<tr><td>33EF</td><td>[0A0C 0A11 FB40 E5E5 | 0020 0020 0020 0020]</td><td>[0A0C 0A11 FB40 E5E5 | 0020 0020 0020]</td><td>IDEOGRAPHIC TELEGRAPH SYMBOL FOR DAY SIXTEEN</td></tr>
+<tr><td>33F0</td><td>[0A0C 0A12 FB40 E5E5 | 0020 0020 0020 0020]</td><td>[0A0C 0A12 FB40 E5E5 | 0020 0020 0020]</td><td>IDEOGRAPHIC TELEGRAPH SYMBOL FOR DAY SEVENTEEN</td></tr>
+<tr><td>33F1</td><td>[0A0C 0A13 FB40 E5E5 | 0020 0020 0020 0020]</td><td>[0A0C 0A13 FB40 E5E5 | 0020 0020 0020]</td><td>IDEOGRAPHIC TELEGRAPH SYMBOL FOR DAY EIGHTEEN</td></tr>
+<tr><td>33F2</td><td>[0A0C 0A14 FB40 E5E5 | 0020 0020 0020 0020]</td><td>[0A0C 0A14 FB40 E5E5 | 0020 0020 0020]</td><td>IDEOGRAPHIC TELEGRAPH SYMBOL FOR DAY NINETEEN</td></tr>
+<tr><td>33F3</td><td>[0A0D 0A0B FB40 E5E5 | 0020 0020 0020 0020]</td><td>[0A0D 0A0B FB40 E5E5 | 0020 0020 0020]</td><td>IDEOGRAPHIC TELEGRAPH SYMBOL FOR DAY TWENTY</td></tr>
+<tr><td>33F4</td><td>[0A0D 0A0C FB40 E5E5 | 0020 0020 0020 0020]</td><td>[0A0D 0A0C FB40 E5E5 | 0020 0020 0020]</td><td>IDEOGRAPHIC TELEGRAPH SYMBOL FOR DAY TWENTY-ONE</td></tr>
+<tr><td>33F5</td><td>[0A0D 0A0D FB40 E5E5 | 0020 0020 0020 0020]</td><td>[0A0D 0A0D FB40 E5E5 | 0020 0020 0020]</td><td>IDEOGRAPHIC TELEGRAPH SYMBOL FOR DAY TWENTY-TWO</td></tr>
+<tr><td>33F6</td><td>[0A0D 0A0E FB40 E5E5 | 0020 0020 0020 0020]</td><td>[0A0D 0A0E FB40 E5E5 | 0020 0020 0020]</td><td>IDEOGRAPHIC TELEGRAPH SYMBOL FOR DAY TWENTY-THREE</td></tr>
+<tr><td>33F7</td><td>[0A0D 0A0F FB40 E5E5 | 0020 0020 0020 0020]</td><td>[0A0D 0A0F FB40 E5E5 | 0020 0020 0020]</td><td>IDEOGRAPHIC TELEGRAPH SYMBOL FOR DAY TWENTY-FOUR</td></tr>
+<tr><td>33F8</td><td>[0A0D 0A10 FB40 E5E5 | 0020 0020 0020 0020]</td><td>[0A0D 0A10 FB40 E5E5 | 0020 0020 0020]</td><td>IDEOGRAPHIC TELEGRAPH SYMBOL FOR DAY TWENTY-FIVE</td></tr>
+<tr><td>33F9</td><td>[0A0D 0A11 FB40 E5E5 | 0020 0020 0020 0020]</td><td>[0A0D 0A11 FB40 E5E5 | 0020 0020 0020]</td><td>IDEOGRAPHIC TELEGRAPH SYMBOL FOR DAY TWENTY-SIX</td></tr>
+<tr><td>33FA</td><td>[0A0D 0A12 FB40 E5E5 | 0020 0020 0020 0020]</td><td>[0A0D 0A12 FB40 E5E5 | 0020 0020 0020]</td><td>IDEOGRAPHIC TELEGRAPH SYMBOL FOR DAY TWENTY-SEVEN</td></tr>
+<tr><td>33FB</td><td>[0A0D 0A13 FB40 E5E5 | 0020 0020 0020 0020]</td><td>[0A0D 0A13 FB40 E5E5 | 0020 0020 0020]</td><td>IDEOGRAPHIC TELEGRAPH SYMBOL FOR DAY TWENTY-EIGHT</td></tr>
+<tr><td>33FC</td><td>[0A0D 0A14 FB40 E5E5 | 0020 0020 0020 0020]</td><td>[0A0D 0A14 FB40 E5E5 | 0020 0020 0020]</td><td>IDEOGRAPHIC TELEGRAPH SYMBOL FOR DAY TWENTY-NINE</td></tr>
+<tr><td>33FD</td><td>[0A0E 0A0B FB40 E5E5 | 0020 0020 0020 0020]</td><td>[0A0E 0A0B FB40 E5E5 | 0020 0020 0020]</td><td>IDEOGRAPHIC TELEGRAPH SYMBOL FOR DAY THIRTY</td></tr>
+<tr><td>33FE</td><td>[0A0E 0A0C FB40 E5E5 | 0020 0020 0020 0020]</td><td>[0A0E 0A0C FB40 E5E5 | 0020 0020 0020]</td><td>IDEOGRAPHIC TELEGRAPH SYMBOL FOR DAY THIRTY-ONE</td></tr>
 <tr><td>FBA4</td><td>[0F3D | 00CC]</td><td>[0F3D | 0020 00CC]</td><td>ARABIC LETTER HEH WITH YEH ABOVE ISOLATED FORM</td></tr>
 <tr><td>FBA5</td><td>[0F3D | 00CC]</td><td>[0F3D | 0020 00CC]</td><td>ARABIC LETTER HEH WITH YEH ABOVE FINAL FORM</td></tr>
 <tr><td>FBB0</td><td>[0F4F | 00CC]</td><td>[0F4F | 0020 00CC]</td><td>ARABIC LETTER YEH BARREE WITH HAMZA ABOVE ISOLATED FORM</td></tr>
@@ -190,16 +177,447 @@
 <tr><td>FD3C</td><td>[0ED6 | 00BD]</td><td>[0ED6 | 0020 00BD]</td><td>ARABIC LIGATURE ALEF WITH FATHATAN FINAL FORM</td></tr>
 <tr><td>FD3D</td><td>[0ED6 | 00BD]</td><td>[0ED6 | 0020 00BD]</td><td>ARABIC LIGATURE ALEF WITH FATHATAN ISOLATED FORM</td></tr>
 </table>
-<p>Note: characters with decompositions to space + X, and tatweel + X are excluded, as are a few special characters: [\u017F\u0CCB\u0DDD\u1E9B\uFB05]</p>
-<h2>5. Checking for well-formedness</h2>
+<p>Errors: 115</p>
+<h2>5. Tertiaries Incompatible with Decompositions</h2>
+<p>Note: Tertiary differences are not really errors; these are just warnings</p>
+<p>Warning: only checking characters defined in base: 3.1.1</p>
 <table border='1' cellspacing='0' cellpadding='2'>
-<tr><td>WF2.2</td><td>[0F3D.00CC.001A]</td><td>U+FBA4 ARABIC LETTER HEH WITH YEH ABOVE ISOLATED FORM</td></tr>
-<tr><td>WF2.2</td><td>[0F3D.00CC.0019]</td><td>U+FBA5 ARABIC LETTER HEH WITH YEH ABOVE FINAL FORM</td></tr>
-<tr><td>WF2.2</td><td>[0F4F.00CC.001A]</td><td>U+FBB0 ARABIC LETTER YEH BARREE WITH HAMZA ABOVE ISOLATED FORM</td></tr>
-<tr><td>WF2.2</td><td>[0F4F.00CC.0019]</td><td>U+FBB1 ARABIC LETTER YEH BARREE WITH HAMZA ABOVE FINAL FORM</td></tr>
-<tr><td>WF2.2</td><td>[0ED6.00BD.0019]</td><td>U+FD3C ARABIC LIGATURE ALEF WITH FATHATAN FINAL FORM</td></tr>
-<tr><td>WF2.2</td><td>[0ED6.00BD.001A]</td><td>U+FD3D ARABIC LIGATURE ALEF WITH FATHATAN ISOLATED FORM</td></tr>
+<tr><th>Code</td><th>Sort Key</th><th>Decomposed Sort Key</th><th>Name</th></tr>
+<tr><td>03D3</td><td>[0CA8 | 0020 0032 | 000A 0004]</td><td>[0CA8 | 0020 0032 | 0008 0002]</td><td>GREEK UPSILON WITH ACUTE AND HOOK SYMBOL</td></tr>
+<tr><td>03D4</td><td>[0CA8 | 0020 0047 | 000A 0004]</td><td>[0CA8 | 0020 0047 | 0008 0002]</td><td>GREEK UPSILON WITH DIAERESIS AND HOOK SYMBOL</td></tr>
+<tr><td>FB3A</td><td>[0EC1 | 0020 00B6 | 0019 0019]</td><td>[0EC1 | 0020 00B6 | 0019 0002]</td><td>HEBREW LETTER FINAL KAF WITH DAGESH</td></tr>
+<tr><td>FB43</td><td>[0EC7 | 0020 00B6 | 0019 0019]</td><td>[0EC7 | 0020 00B6 | 0019 0002]</td><td>HEBREW LETTER FINAL PE WITH DAGESH</td></tr>
+</table>
+<p>Errors: 4</p>
+<p>Note: characters with decompositions to space + X, and tatweel + X are excluded, as are a few special characters: [\u017F\u0CCB\u0DDD\u1E9B\uFB05]</p>
+<h2>6. Checking for well-formedness</h2>
+<table border='1' cellspacing='0' cellpadding='2'>
+<tr><td>1. BAD IMPLICIT</td><td>[FB40.0020.0004] [CE36.0020.0002] [0000.0153.001F]</td><td>U+2E80 CJK RADICAL REPEAT</td></tr>
+<tr><td>2. BAD IMPLICIT</td><td>[FB40.0020.0004] [D382.0020.0002] [0000.0153.001F]</td><td>U+2E81 CJK RADICAL CLIFF</td></tr>
+<tr><td>3. BAD IMPLICIT</td><td>[FB40.0020.0004] [CE59.0020.0002] [0000.0153.001F]</td><td>U+2E84 CJK RADICAL SECOND THREE</td></tr>
+<tr><td>4. BAD IMPLICIT</td><td>[FB40.0020.0004] [D182.0020.0002] [0000.0153.001F]</td><td>U+2E86 CJK RADICAL BOX</td></tr>
+<tr><td>5. BAD IMPLICIT</td><td>[FB40.0020.0004] [D1E0.0020.0002] [0000.0153.001F]</td><td>U+2E87 CJK RADICAL TABLE</td></tr>
+<tr><td>6. BAD IMPLICIT</td><td>[FB40.0020.0004] [D200.0020.0002] [0000.0153.001F]</td><td>U+2E88 CJK RADICAL KNIFE ONE</td></tr>
+<tr><td>7. BAD IMPLICIT</td><td>[FB40.0020.0004] [D35C.0020.0002] [0000.0153.001F]</td><td>U+2E8A CJK RADICAL DIVINATION</td></tr>
+<tr><td>8. BAD IMPLICIT</td><td>[FB40.0020.0004] [D369.0020.0002] [0000.0153.001F]</td><td>U+2E8B CJK RADICAL SEAL</td></tr>
+<tr><td>9. BAD IMPLICIT</td><td>[FB40.0020.0004] [DC0F.0020.0002] [0000.0153.001F]</td><td>U+2E8C CJK RADICAL SMALL ONE</td></tr>
+<tr><td>10. BAD IMPLICIT</td><td>[FB40.0020.0004] [DC0F.0020.0002] [0000.0154.001F]</td><td>U+2E8D CJK RADICAL SMALL TWO</td></tr>
+<tr><td>11. BAD IMPLICIT</td><td>[FB40.0020.0004] [DC22.0020.0002] [0000.0153.001F]</td><td>U+2E8E CJK RADICAL LAME ONE</td></tr>
+<tr><td>12. BAD IMPLICIT</td><td>[FB40.0020.0004] [DC23.0020.0002] [0000.0153.001F]</td><td>U+2E91 CJK RADICAL LAME FOUR</td></tr>
+<tr><td>13. BAD IMPLICIT</td><td>[FB40.0020.0004] [DF50.0020.0002] [0000.0153.001F]</td><td>U+2E95 CJK RADICAL SNOUT TWO</td></tr>
+<tr><td>14. BAD IMPLICIT</td><td>[FB40.0020.0004] [DFC3.0020.0002] [0000.0153.001F]</td><td>U+2E97 CJK RADICAL HEART TWO</td></tr>
+<tr><td>15. BAD IMPLICIT</td><td>[FB40.0020.0004] [E5E5.0020.0002] [0000.0153.001F]</td><td>U+2E9C CJK RADICAL SUN</td></tr>
+<tr><td>16. BAD IMPLICIT</td><td>[FB40.0020.0004] [E708.0020.0002] [0000.0153.001F]</td><td>U+2E9D CJK RADICAL MOON</td></tr>
+<tr><td>17. BAD IMPLICIT</td><td>[FB40.0020.0004] [EB7A.0020.0002] [0000.0153.001F]</td><td>U+2E9E CJK RADICAL DEATH</td></tr>
+<tr><td>18. BAD IMPLICIT</td><td>[FB40.0020.0004] [F22B.0020.0002] [0000.0153.001F]</td><td>U+2EA5 CJK RADICAL PAW TWO</td></tr>
+<tr><td>19. BAD IMPLICIT</td><td>[FB40.0020.0004] [F25B.0020.0002] [0000.0153.001F]</td><td>U+2EA7 CJK RADICAL COW</td></tr>
+<tr><td>20. BAD IMPLICIT</td><td>[FB40.0020.0004] [F38B.0020.0002] [0000.0153.001F]</td><td>U+2EA9 CJK RADICAL JADE</td></tr>
+<tr><td>21. BAD IMPLICIT</td><td>[FB40.0020.0004] [F58B.0020.0002] [0000.0153.001F]</td><td>U+2EAA CJK RADICAL BOLT OF CLOTH</td></tr>
+<tr><td>22. BAD IMPLICIT</td><td>[FB40.0020.0004] [F6EE.0020.0002] [0000.0153.001F]</td><td>U+2EAB CJK RADICAL EYE</td></tr>
+<tr><td>23. BAD IMPLICIT</td><td>[FB40.0020.0004] [F93A.0020.0002] [0000.0153.001F]</td><td>U+2EAC CJK RADICAL SPIRIT ONE</td></tr>
+<tr><td>24. BAD IMPLICIT</td><td>[FB40.0020.0004] [FAF9.0020.0002] [0000.0153.001F]</td><td>U+2EAE CJK RADICAL BAMBOO</td></tr>
+<tr><td>25. BAD IMPLICIT</td><td>[FB40.0020.0004] [FF53.0020.0002] [0000.0153.001F]</td><td>U+2EB3 CJK RADICAL NET THREE</td></tr>
+<tr><td>26. BAD IMPLICIT</td><td>[FB40.0020.0004] [FF53.0020.0002] [0000.0154.001F]</td><td>U+2EB4 CJK RADICAL NET FOUR</td></tr>
+<tr><td>27. BAD IMPLICIT</td><td>[FB40.0020.0004] [FF52.0020.0002] [0000.0153.001F]</td><td>U+2EB5 CJK RADICAL MESH</td></tr>
+<tr><td>28. BAD IMPLICIT</td><td>[FB40.0020.0004] [FF8A.0020.0002] [0000.0153.001F]</td><td>U+2EB6 CJK RADICAL SHEEP</td></tr>
+<tr><td>29. BAD IMPLICIT</td><td>[FB40.0020.0004] [FF8A.0020.0002] [0000.0154.001F]</td><td>U+2EB7 CJK RADICAL RAM</td></tr>
+<tr><td>30. BAD IMPLICIT</td><td>[FB41.0020.0004] [807F.0020.0002] [0000.0153.001F]</td><td>U+2EBB CJK RADICAL BRUSH TWO</td></tr>
+<tr><td>31. BAD IMPLICIT</td><td>[FB41.0020.0004] [8089.0020.0002] [0000.0153.001F]</td><td>U+2EBC CJK RADICAL MEAT</td></tr>
+<tr><td>32. BAD IMPLICIT</td><td>[FB41.0020.0004] [81FC.0020.0002] [0000.0153.001F]</td><td>U+2EBD CJK RADICAL MORTAR</td></tr>
+<tr><td>33. BAD IMPLICIT</td><td>[FB41.0020.0004] [8279.0020.0002] [0000.0153.001F]</td><td>U+2EBF CJK RADICAL GRASS TWO</td></tr>
+<tr><td>34. BAD IMPLICIT</td><td>[FB41.0020.0004] [8279.0020.0002] [0000.0154.001F]</td><td>U+2EC0 CJK RADICAL GRASS THREE</td></tr>
+<tr><td>35. BAD IMPLICIT</td><td>[FB41.0020.0004] [89D2.0020.0002] [0000.0153.001F]</td><td>U+2EC7 CJK RADICAL HORN</td></tr>
+<tr><td>36. BAD IMPLICIT</td><td>[FB41.0020.0004] [8DB3.0020.0002] [0000.0153.001F]</td><td>U+2ECA CJK RADICAL FOOT</td></tr>
+<tr><td>37. BAD IMPLICIT</td><td>[FB41.0020.0004] [8FB6.0020.0002] [0000.0153.001F]</td><td>U+2ECD CJK RADICAL WALK ONE</td></tr>
+<tr><td>38. BAD IMPLICIT</td><td>[FB41.0020.0004] [8FB6.0020.0002] [0000.0154.001F]</td><td>U+2ECE CJK RADICAL WALK TWO</td></tr>
+<tr><td>39. BAD IMPLICIT</td><td>[FB41.0020.0004] [9091.0020.0002] [0000.0153.001F]</td><td>U+2ECF CJK RADICAL CITY</td></tr>
+<tr><td>40. BAD IMPLICIT</td><td>[FB41.0020.0004] [961C.0020.0002] [0000.0153.001F]</td><td>U+2ED5 CJK RADICAL MOUND ONE</td></tr>
+<tr><td>41. BAD IMPLICIT</td><td>[FB41.0020.0004] [96E8.0020.0002] [0000.0153.001F]</td><td>U+2ED7 CJK RADICAL RAIN</td></tr>
+<tr><td>42. BAD IMPLICIT</td><td>[FB41.0020.0004] [98E0.0020.0002] [0000.0153.001F]</td><td>U+2EDE CJK RADICAL EAT TWO</td></tr>
+<tr><td>43. BAD IMPLICIT</td><td>[FB41.0020.0004] [9996.0020.0002] [0000.0153.001F]</td><td>U+2EE1 CJK RADICAL HEAD</td></tr>
+<tr><td>44. BAD IMPLICIT</td><td>[FB41.0020.0004] [9AA8.0020.0002] [0000.0153.001F]</td><td>U+2EE3 CJK RADICAL BONE</td></tr>
+<tr><td>45. BAD IMPLICIT</td><td>[FB41.0020.0004] [9B3C.0020.0002] [0000.0153.001F]</td><td>U+2EE4 CJK RADICAL GHOST</td></tr>
+<tr><td>46. BAD IMPLICIT</td><td>[FB41.0020.0004] [9E75.0020.0002] [0000.0153.001F]</td><td>U+2EE7 CJK RADICAL C-SIMPLIFIED SALT</td></tr>
+<tr><td>47. BAD IMPLICIT</td><td>[FB41.0020.0004] [9F4A.0020.0002] [0000.0153.001F]</td><td>U+2EEB CJK RADICAL J-SIMPLIFIED EVEN</td></tr>
+<tr><td>48. BAD IMPLICIT</td><td>[FB41.0020.0004] [9F52.0020.0002] [0000.0153.001F]</td><td>U+2EED CJK RADICAL J-SIMPLIFIED TOOTH</td></tr>
+<tr><td>49. BAD IMPLICIT</td><td>[FB41.0020.0004] [9F8D.0020.0002] [0000.0153.001F]</td><td>U+2EEF CJK RADICAL J-SIMPLIFIED DRAGON</td></tr>
+<tr><td>50. BAD IMPLICIT</td><td>[FB41.0020.0004] [9F9C.0020.0002] [0000.0153.001F]</td><td>U+2EF1 CJK RADICAL TURTLE</td></tr>
+<tr><td>51. BAD IMPLICIT</td><td>[FB41.0020.0004] [9F9C.0020.0002] [0000.0154.001F]</td><td>U+2EF2 CJK RADICAL J-SIMPLIFIED TURTLE</td></tr>
+<tr><td>52. BAD IMPLICIT</td><td>[027A.0020.0004] [FB40.0020.0004] [CE00.0020.0002] [027B.0020.001F]</td><td>U+3220 PARENTHESIZED IDEOGRAPH ONE</td></tr>
+<tr><td>53. BAD IMPLICIT</td><td>[027A.0020.0004] [FB40.0020.0004] [CE8C.0020.0002] [027B.0020.001F]</td><td>U+3221 PARENTHESIZED IDEOGRAPH TWO</td></tr>
+<tr><td>54. BAD IMPLICIT</td><td>[027A.0020.0004] [FB40.0020.0004] [CE09.0020.0002] [027B.0020.001F]</td><td>U+3222 PARENTHESIZED IDEOGRAPH THREE</td></tr>
+<tr><td>55. BAD IMPLICIT</td><td>[027A.0020.0004] [FB40.0020.0004] [D6DB.0020.0002] [027B.0020.001F]</td><td>U+3223 PARENTHESIZED IDEOGRAPH FOUR</td></tr>
+<tr><td>56. BAD IMPLICIT</td><td>[027A.0020.0004] [FB40.0020.0004] [CE94.0020.0002] [027B.0020.001F]</td><td>U+3224 PARENTHESIZED IDEOGRAPH FIVE</td></tr>
+<tr><td>57. BAD IMPLICIT</td><td>[027A.0020.0004] [FB40.0020.0004] [D16D.0020.0002] [027B.0020.001F]</td><td>U+3225 PARENTHESIZED IDEOGRAPH SIX</td></tr>
+<tr><td>58. BAD IMPLICIT</td><td>[027A.0020.0004] [FB40.0020.0004] [CE03.0020.0002] [027B.0020.001F]</td><td>U+3226 PARENTHESIZED IDEOGRAPH SEVEN</td></tr>
+<tr><td>59. BAD IMPLICIT</td><td>[027A.0020.0004] [FB40.0020.0004] [D16B.0020.0002] [027B.0020.001F]</td><td>U+3227 PARENTHESIZED IDEOGRAPH EIGHT</td></tr>
+<tr><td>60. BAD IMPLICIT</td><td>[027A.0020.0004] [FB40.0020.0004] [CE5D.0020.0002] [027B.0020.001F]</td><td>U+3228 PARENTHESIZED IDEOGRAPH NINE</td></tr>
+<tr><td>61. BAD IMPLICIT</td><td>[027A.0020.0004] [FB40.0020.0004] [D341.0020.0002] [027B.0020.001F]</td><td>U+3229 PARENTHESIZED IDEOGRAPH TEN</td></tr>
+<tr><td>62. BAD IMPLICIT</td><td>[027A.0020.0004] [FB40.0020.0004] [E708.0020.0002] [027B.0020.001F]</td><td>U+322A PARENTHESIZED IDEOGRAPH MOON</td></tr>
+<tr><td>63. BAD IMPLICIT</td><td>[027A.0020.0004] [FB40.0020.0004] [F06B.0020.0002] [027B.0020.001F]</td><td>U+322B PARENTHESIZED IDEOGRAPH FIRE</td></tr>
+<tr><td>64. BAD IMPLICIT</td><td>[027A.0020.0004] [FB40.0020.0004] [EC34.0020.0002] [027B.0020.001F]</td><td>U+322C PARENTHESIZED IDEOGRAPH WATER</td></tr>
+<tr><td>65. BAD IMPLICIT</td><td>[027A.0020.0004] [FB40.0020.0004] [E728.0020.0002] [027B.0020.001F]</td><td>U+322D PARENTHESIZED IDEOGRAPH WOOD</td></tr>
+<tr><td>66. BAD IMPLICIT</td><td>[027A.0020.0004] [FB41.0020.0004] [91D1.0020.0002] [027B.0020.001F]</td><td>U+322E PARENTHESIZED IDEOGRAPH METAL</td></tr>
+<tr><td>67. BAD IMPLICIT</td><td>[027A.0020.0004] [FB40.0020.0004] [D71F.0020.0002] [027B.0020.001F]</td><td>U+322F PARENTHESIZED IDEOGRAPH EARTH</td></tr>
+<tr><td>68. BAD IMPLICIT</td><td>[027A.0020.0004] [FB40.0020.0004] [E5E5.0020.0002] [027B.0020.001F]</td><td>U+3230 PARENTHESIZED IDEOGRAPH SUN</td></tr>
+<tr><td>69. BAD IMPLICIT</td><td>[027A.0020.0004] [FB40.0020.0004] [E82A.0020.0002] [027B.0020.001F]</td><td>U+3231 PARENTHESIZED IDEOGRAPH STOCK</td></tr>
+<tr><td>70. BAD IMPLICIT</td><td>[027A.0020.0004] [FB40.0020.0004] [E709.0020.0002] [027B.0020.001F]</td><td>U+3232 PARENTHESIZED IDEOGRAPH HAVE</td></tr>
+<tr><td>71. BAD IMPLICIT</td><td>[027A.0020.0004] [FB40.0020.0004] [F93E.0020.0002] [027B.0020.001F]</td><td>U+3233 PARENTHESIZED IDEOGRAPH SOCIETY</td></tr>
+<tr><td>72. BAD IMPLICIT</td><td>[027A.0020.0004] [FB40.0020.0004] [D40D.0020.0002] [027B.0020.001F]</td><td>U+3234 PARENTHESIZED IDEOGRAPH NAME</td></tr>
+<tr><td>73. BAD IMPLICIT</td><td>[027A.0020.0004] [FB40.0020.0004] [F279.0020.0002] [027B.0020.001F]</td><td>U+3235 PARENTHESIZED IDEOGRAPH SPECIAL</td></tr>
+<tr><td>74. BAD IMPLICIT</td><td>[027A.0020.0004] [FB41.0020.0004] [8CA1.0020.0002] [027B.0020.001F]</td><td>U+3236 PARENTHESIZED IDEOGRAPH FINANCIAL</td></tr>
+<tr><td>75. BAD IMPLICIT</td><td>[027A.0020.0004] [FB40.0020.0004] [F95D.0020.0002] [027B.0020.001F]</td><td>U+3237 PARENTHESIZED IDEOGRAPH CONGRATULATION</td></tr>
+<tr><td>76. BAD IMPLICIT</td><td>[027A.0020.0004] [FB40.0020.0004] [D2B4.0020.0002] [027B.0020.001F]</td><td>U+3238 PARENTHESIZED IDEOGRAPH LABOR</td></tr>
+<tr><td>77. BAD IMPLICIT</td><td>[027A.0020.0004] [FB40.0020.0004] [CEE3.0020.0002] [027B.0020.001F]</td><td>U+3239 PARENTHESIZED IDEOGRAPH REPRESENT</td></tr>
+<tr><td>78. BAD IMPLICIT</td><td>[027A.0020.0004] [FB40.0020.0004] [D47C.0020.0002] [027B.0020.001F]</td><td>U+323A PARENTHESIZED IDEOGRAPH CALL</td></tr>
+<tr><td>79. BAD IMPLICIT</td><td>[027A.0020.0004] [FB40.0020.0004] [DB66.0020.0002] [027B.0020.001F]</td><td>U+323B PARENTHESIZED IDEOGRAPH STUDY</td></tr>
+<tr><td>80. BAD IMPLICIT</td><td>[027A.0020.0004] [FB40.0020.0004] [F6E3.0020.0002] [027B.0020.001F]</td><td>U+323C PARENTHESIZED IDEOGRAPH SUPERVISE</td></tr>
+<tr><td>81. BAD IMPLICIT</td><td>[027A.0020.0004] [FB40.0020.0004] [CF01.0020.0002] [027B.0020.001F]</td><td>U+323D PARENTHESIZED IDEOGRAPH ENTERPRISE</td></tr>
+<tr><td>82. BAD IMPLICIT</td><td>[027A.0020.0004] [FB41.0020.0004] [8CC7.0020.0002] [027B.0020.001F]</td><td>U+323E PARENTHESIZED IDEOGRAPH RESOURCE</td></tr>
+<tr><td>83. BAD IMPLICIT</td><td>[027A.0020.0004] [FB40.0020.0004] [D354.0020.0002] [027B.0020.001F]</td><td>U+323F PARENTHESIZED IDEOGRAPH ALLIANCE</td></tr>
+<tr><td>84. BAD IMPLICIT</td><td>[027A.0020.0004] [FB40.0020.0004] [F96D.0020.0002] [027B.0020.001F]</td><td>U+3240 PARENTHESIZED IDEOGRAPH FESTIVAL</td></tr>
+<tr><td>85. BAD IMPLICIT</td><td>[027A.0020.0004] [FB40.0020.0004] [CF11.0020.0002] [027B.0020.001F]</td><td>U+3241 PARENTHESIZED IDEOGRAPH REST</td></tr>
+<tr><td>86. BAD IMPLICIT</td><td>[027A.0020.0004] [FB41.0020.0004] [81EA.0020.0002] [027B.0020.001F]</td><td>U+3242 PARENTHESIZED IDEOGRAPH SELF</td></tr>
+<tr><td>87. BAD IMPLICIT</td><td>[027A.0020.0004] [FB41.0020.0004] [81F3.0020.0002] [027B.0020.001F]</td><td>U+3243 PARENTHESIZED IDEOGRAPH REACH</td></tr>
+<tr><td>88. BAD IMPLICIT</td><td>[0A0C.0020.0004] [FB40.0020.0004] [E708.0020.0002]</td><td>U+32C0 IDEOGRAPHIC TELEGRAPH SYMBOL FOR JANUARY</td></tr>
+<tr><td>89. BAD IMPLICIT</td><td>[0A0D.0020.0004] [FB40.0020.0004] [E708.0020.0002]</td><td>U+32C1 IDEOGRAPHIC TELEGRAPH SYMBOL FOR FEBRUARY</td></tr>
+<tr><td>90. BAD IMPLICIT</td><td>[0A0E.0020.0004] [FB40.0020.0004] [E708.0020.0002]</td><td>U+32C2 IDEOGRAPHIC TELEGRAPH SYMBOL FOR MARCH</td></tr>
+<tr><td>91. BAD IMPLICIT</td><td>[0A0F.0020.0004] [FB40.0020.0004] [E708.0020.0002]</td><td>U+32C3 IDEOGRAPHIC TELEGRAPH SYMBOL FOR APRIL</td></tr>
+<tr><td>92. BAD IMPLICIT</td><td>[0A10.0020.0004] [FB40.0020.0004] [E708.0020.0002]</td><td>U+32C4 IDEOGRAPHIC TELEGRAPH SYMBOL FOR MAY</td></tr>
+<tr><td>93. BAD IMPLICIT</td><td>[0A11.0020.0004] [FB40.0020.0004] [E708.0020.0002]</td><td>U+32C5 IDEOGRAPHIC TELEGRAPH SYMBOL FOR JUNE</td></tr>
+<tr><td>94. BAD IMPLICIT</td><td>[0A12.0020.0004] [FB40.0020.0004] [E708.0020.0002]</td><td>U+32C6 IDEOGRAPHIC TELEGRAPH SYMBOL FOR JULY</td></tr>
+<tr><td>95. BAD IMPLICIT</td><td>[0A13.0020.0004] [FB40.0020.0004] [E708.0020.0002]</td><td>U+32C7 IDEOGRAPHIC TELEGRAPH SYMBOL FOR AUGUST</td></tr>
+<tr><td>96. BAD IMPLICIT</td><td>[0A14.0020.0004] [FB40.0020.0004] [E708.0020.0002]</td><td>U+32C8 IDEOGRAPHIC TELEGRAPH SYMBOL FOR SEPTEMBER</td></tr>
+<tr><td>97. BAD IMPLICIT</td><td>[0A0C.0020.0004] [0A0B.0020.0004] [FB40.0020.001F] [E708.0020.0002]</td><td>U+32C9 IDEOGRAPHIC TELEGRAPH SYMBOL FOR OCTOBER</td></tr>
+<tr><td>98. BAD IMPLICIT</td><td>[0A0C.0020.0004] [0A0C.0020.0004] [FB40.0020.001F] [E708.0020.0002]</td><td>U+32CA IDEOGRAPHIC TELEGRAPH SYMBOL FOR NOVEMBER</td></tr>
+<tr><td>99. BAD IMPLICIT</td><td>[0A0C.0020.0004] [0A0D.0020.0004] [FB40.0020.001F] [E708.0020.0002]</td><td>U+32CB IDEOGRAPHIC TELEGRAPH SYMBOL FOR DECEMBER</td></tr>
+<tr><td>100. BAD IMPLICIT</td><td>[0A0B.0020.0004] [FB40.0020.0004] [F0B9.0020.0002]</td><td>U+3358 IDEOGRAPHIC TELEGRAPH SYMBOL FOR HOUR ZERO</td></tr>
+<tr><td>101. BAD IMPLICIT</td><td>[0A0C.0020.0004] [FB40.0020.0004] [F0B9.0020.0002]</td><td>U+3359 IDEOGRAPHIC TELEGRAPH SYMBOL FOR HOUR ONE</td></tr>
+<tr><td>102. BAD IMPLICIT</td><td>[0A0D.0020.0004] [FB40.0020.0004] [F0B9.0020.0002]</td><td>U+335A IDEOGRAPHIC TELEGRAPH SYMBOL FOR HOUR TWO</td></tr>
+<tr><td>103. BAD IMPLICIT</td><td>[0A0E.0020.0004] [FB40.0020.0004] [F0B9.0020.0002]</td><td>U+335B IDEOGRAPHIC TELEGRAPH SYMBOL FOR HOUR THREE</td></tr>
+<tr><td>104. BAD IMPLICIT</td><td>[0A0F.0020.0004] [FB40.0020.0004] [F0B9.0020.0002]</td><td>U+335C IDEOGRAPHIC TELEGRAPH SYMBOL FOR HOUR FOUR</td></tr>
+<tr><td>105. BAD IMPLICIT</td><td>[0A10.0020.0004] [FB40.0020.0004] [F0B9.0020.0002]</td><td>U+335D IDEOGRAPHIC TELEGRAPH SYMBOL FOR HOUR FIVE</td></tr>
+<tr><td>106. BAD IMPLICIT</td><td>[0A11.0020.0004] [FB40.0020.0004] [F0B9.0020.0002]</td><td>U+335E IDEOGRAPHIC TELEGRAPH SYMBOL FOR HOUR SIX</td></tr>
+<tr><td>107. BAD IMPLICIT</td><td>[0A12.0020.0004] [FB40.0020.0004] [F0B9.0020.0002]</td><td>U+335F IDEOGRAPHIC TELEGRAPH SYMBOL FOR HOUR SEVEN</td></tr>
+<tr><td>108. BAD IMPLICIT</td><td>[0A13.0020.0004] [FB40.0020.0004] [F0B9.0020.0002]</td><td>U+3360 IDEOGRAPHIC TELEGRAPH SYMBOL FOR HOUR EIGHT</td></tr>
+<tr><td>109. BAD IMPLICIT</td><td>[0A14.0020.0004] [FB40.0020.0004] [F0B9.0020.0002]</td><td>U+3361 IDEOGRAPHIC TELEGRAPH SYMBOL FOR HOUR NINE</td></tr>
+<tr><td>110. BAD IMPLICIT</td><td>[0A0C.0020.0004] [0A0B.0020.0004] [FB40.0020.001F] [F0B9.0020.0002]</td><td>U+3362 IDEOGRAPHIC TELEGRAPH SYMBOL FOR HOUR TEN</td></tr>
+<tr><td>111. BAD IMPLICIT</td><td>[0A0C.0020.0004] [0A0C.0020.0004] [FB40.0020.001F] [F0B9.0020.0002]</td><td>U+3363 IDEOGRAPHIC TELEGRAPH SYMBOL FOR HOUR ELEVEN</td></tr>
+<tr><td>112. BAD IMPLICIT</td><td>[0A0C.0020.0004] [0A0D.0020.0004] [FB40.0020.001F] [F0B9.0020.0002]</td><td>U+3364 IDEOGRAPHIC TELEGRAPH SYMBOL FOR HOUR TWELVE</td></tr>
+<tr><td>113. BAD IMPLICIT</td><td>[0A0C.0020.0004] [0A0E.0020.0004] [FB40.0020.001F] [F0B9.0020.0002]</td><td>U+3365 IDEOGRAPHIC TELEGRAPH SYMBOL FOR HOUR THIRTEEN</td></tr>
+<tr><td>114. BAD IMPLICIT</td><td>[0A0C.0020.0004] [0A0F.0020.0004] [FB40.0020.001F] [F0B9.0020.0002]</td><td>U+3366 IDEOGRAPHIC TELEGRAPH SYMBOL FOR HOUR FOURTEEN</td></tr>
+<tr><td>115. BAD IMPLICIT</td><td>[0A0C.0020.0004] [0A10.0020.0004] [FB40.0020.001F] [F0B9.0020.0002]</td><td>U+3367 IDEOGRAPHIC TELEGRAPH SYMBOL FOR HOUR FIFTEEN</td></tr>
+<tr><td>116. BAD IMPLICIT</td><td>[0A0C.0020.0004] [0A11.0020.0004] [FB40.0020.001F] [F0B9.0020.0002]</td><td>U+3368 IDEOGRAPHIC TELEGRAPH SYMBOL FOR HOUR SIXTEEN</td></tr>
+<tr><td>117. BAD IMPLICIT</td><td>[0A0C.0020.0004] [0A12.0020.0004] [FB40.0020.001F] [F0B9.0020.0002]</td><td>U+3369 IDEOGRAPHIC TELEGRAPH SYMBOL FOR HOUR SEVENTEEN</td></tr>
+<tr><td>118. BAD IMPLICIT</td><td>[0A0C.0020.0004] [0A13.0020.0004] [FB40.0020.001F] [F0B9.0020.0002]</td><td>U+336A IDEOGRAPHIC TELEGRAPH SYMBOL FOR HOUR EIGHTEEN</td></tr>
+<tr><td>119. BAD IMPLICIT</td><td>[0A0C.0020.0004] [0A14.0020.0004] [FB40.0020.001F] [F0B9.0020.0002]</td><td>U+336B IDEOGRAPHIC TELEGRAPH SYMBOL FOR HOUR NINETEEN</td></tr>
+<tr><td>120. BAD IMPLICIT</td><td>[0A0D.0020.0004] [0A0B.0020.0004] [FB40.0020.001F] [F0B9.0020.0002]</td><td>U+336C IDEOGRAPHIC TELEGRAPH SYMBOL FOR HOUR TWENTY</td></tr>
+<tr><td>121. BAD IMPLICIT</td><td>[0A0D.0020.0004] [0A0C.0020.0004] [FB40.0020.001F] [F0B9.0020.0002]</td><td>U+336D IDEOGRAPHIC TELEGRAPH SYMBOL FOR HOUR TWENTY-ONE</td></tr>
+<tr><td>122. BAD IMPLICIT</td><td>[0A0D.0020.0004] [0A0D.0020.0004] [FB40.0020.001F] [F0B9.0020.0002]</td><td>U+336E IDEOGRAPHIC TELEGRAPH SYMBOL FOR HOUR TWENTY-TWO</td></tr>
+<tr><td>123. BAD IMPLICIT</td><td>[0A0D.0020.0004] [0A0E.0020.0004] [FB40.0020.001F] [F0B9.0020.0002]</td><td>U+336F IDEOGRAPHIC TELEGRAPH SYMBOL FOR HOUR TWENTY-THREE</td></tr>
+<tr><td>124. BAD IMPLICIT</td><td>[0A0D.0020.0004] [0A0F.0020.0004] [FB40.0020.001F] [F0B9.0020.0002]</td><td>U+3370 IDEOGRAPHIC TELEGRAPH SYMBOL FOR HOUR TWENTY-FOUR</td></tr>
+<tr><td>125. BAD IMPLICIT</td><td>[FB40.0020.001C] [DE73.0020.0002] [FB40.0020.001F] [E210.0020.0002]</td><td>U+337B SQUARE ERA NAME HEISEI</td></tr>
+<tr><td>126. BAD IMPLICIT</td><td>[FB40.0020.001C] [DE73.0020.0002] [FB40.0020.001F] [E210.0020.0002]</td><td>U+337B SQUARE ERA NAME HEISEI</td></tr>
+<tr><td>127. BAD IMPLICIT</td><td>[FB40.0020.001C] [E62D.0020.0002] [FB40.0020.001F] [D48C.0020.0002]</td><td>U+337C SQUARE ERA NAME SYOUWA</td></tr>
+<tr><td>128. BAD IMPLICIT</td><td>[FB40.0020.001C] [E62D.0020.0002] [FB40.0020.001F] [D48C.0020.0002]</td><td>U+337C SQUARE ERA NAME SYOUWA</td></tr>
+<tr><td>129. BAD IMPLICIT</td><td>[FB40.0020.001C] [D927.0020.0002] [FB40.0020.001F] [EB63.0020.0002]</td><td>U+337D SQUARE ERA NAME TAISYOU</td></tr>
+<tr><td>130. BAD IMPLICIT</td><td>[FB40.0020.001C] [D927.0020.0002] [FB40.0020.001F] [EB63.0020.0002]</td><td>U+337D SQUARE ERA NAME TAISYOU</td></tr>
+<tr><td>131. BAD IMPLICIT</td><td>[FB40.0020.001C] [E60E.0020.0002] [FB40.0020.001F] [ECBB.0020.0002]</td><td>U+337E SQUARE ERA NAME MEIZI</td></tr>
+<tr><td>132. BAD IMPLICIT</td><td>[FB40.0020.001C] [E60E.0020.0002] [FB40.0020.001F] [ECBB.0020.0002]</td><td>U+337E SQUARE ERA NAME MEIZI</td></tr>
+<tr><td>133. BAD IMPLICIT</td><td>[FB40.0020.001C] [E82A.0020.0002] [FB40.0020.001F] [DF0F.0020.0002] [FB40.0020.001F] [CF1A.0020.0002] [FB40.0020.001F] [F93E.0020.0002]</td><td>U+337F SQUARE CORPORATION</td></tr>
+<tr><td>134. BAD IMPLICIT</td><td>[FB40.0020.001C] [E82A.0020.0002] [FB40.0020.001F] [DF0F.0020.0002] [FB40.0020.001F] [CF1A.0020.0002] [FB40.0020.001F] [F93E.0020.0002]</td><td>U+337F SQUARE CORPORATION</td></tr>
+<tr><td>135. BAD IMPLICIT</td><td>[FB40.0020.001C] [E82A.0020.0002] [FB40.0020.001F] [DF0F.0020.0002] [FB40.0020.001F] [CF1A.0020.0002] [FB40.0020.001F] [F93E.0020.0002]</td><td>U+337F SQUARE CORPORATION</td></tr>
+<tr><td>136. BAD IMPLICIT</td><td>[FB40.0020.001C] [E82A.0020.0002] [FB40.0020.001F] [DF0F.0020.0002] [FB40.0020.001F] [CF1A.0020.0002] [FB40.0020.001F] [F93E.0020.0002]</td><td>U+337F SQUARE CORPORATION</td></tr>
+<tr><td>137. BAD IMPLICIT</td><td>[0A0C.0020.0004] [FB40.0020.0004] [E5E5.0020.0002]</td><td>U+33E0 IDEOGRAPHIC TELEGRAPH SYMBOL FOR DAY ONE</td></tr>
+<tr><td>138. BAD IMPLICIT</td><td>[0A0D.0020.0004] [FB40.0020.0004] [E5E5.0020.0002]</td><td>U+33E1 IDEOGRAPHIC TELEGRAPH SYMBOL FOR DAY TWO</td></tr>
+<tr><td>139. BAD IMPLICIT</td><td>[0A0E.0020.0004] [FB40.0020.0004] [E5E5.0020.0002]</td><td>U+33E2 IDEOGRAPHIC TELEGRAPH SYMBOL FOR DAY THREE</td></tr>
+<tr><td>140. BAD IMPLICIT</td><td>[0A0F.0020.0004] [FB40.0020.0004] [E5E5.0020.0002]</td><td>U+33E3 IDEOGRAPHIC TELEGRAPH SYMBOL FOR DAY FOUR</td></tr>
+<tr><td>141. BAD IMPLICIT</td><td>[0A10.0020.0004] [FB40.0020.0004] [E5E5.0020.0002]</td><td>U+33E4 IDEOGRAPHIC TELEGRAPH SYMBOL FOR DAY FIVE</td></tr>
+<tr><td>142. BAD IMPLICIT</td><td>[0A11.0020.0004] [FB40.0020.0004] [E5E5.0020.0002]</td><td>U+33E5 IDEOGRAPHIC TELEGRAPH SYMBOL FOR DAY SIX</td></tr>
+<tr><td>143. BAD IMPLICIT</td><td>[0A12.0020.0004] [FB40.0020.0004] [E5E5.0020.0002]</td><td>U+33E6 IDEOGRAPHIC TELEGRAPH SYMBOL FOR DAY SEVEN</td></tr>
+<tr><td>144. BAD IMPLICIT</td><td>[0A13.0020.0004] [FB40.0020.0004] [E5E5.0020.0002]</td><td>U+33E7 IDEOGRAPHIC TELEGRAPH SYMBOL FOR DAY EIGHT</td></tr>
+<tr><td>145. BAD IMPLICIT</td><td>[0A14.0020.0004] [FB40.0020.0004] [E5E5.0020.0002]</td><td>U+33E8 IDEOGRAPHIC TELEGRAPH SYMBOL FOR DAY NINE</td></tr>
+<tr><td>146. BAD IMPLICIT</td><td>[0A0C.0020.0004] [0A0B.0020.0004] [FB40.0020.001F] [E5E5.0020.0002]</td><td>U+33E9 IDEOGRAPHIC TELEGRAPH SYMBOL FOR DAY TEN</td></tr>
+<tr><td>147. BAD IMPLICIT</td><td>[0A0C.0020.0004] [0A0C.0020.0004] [FB40.0020.001F] [E5E5.0020.0002]</td><td>U+33EA IDEOGRAPHIC TELEGRAPH SYMBOL FOR DAY ELEVEN</td></tr>
+<tr><td>148. BAD IMPLICIT</td><td>[0A0C.0020.0004] [0A0D.0020.0004] [FB40.0020.001F] [E5E5.0020.0002]</td><td>U+33EB IDEOGRAPHIC TELEGRAPH SYMBOL FOR DAY TWELVE</td></tr>
+<tr><td>149. BAD IMPLICIT</td><td>[0A0C.0020.0004] [0A0E.0020.0004] [FB40.0020.001F] [E5E5.0020.0002]</td><td>U+33EC IDEOGRAPHIC TELEGRAPH SYMBOL FOR DAY THIRTEEN</td></tr>
+<tr><td>150. BAD IMPLICIT</td><td>[0A0C.0020.0004] [0A0F.0020.0004] [FB40.0020.001F] [E5E5.0020.0002]</td><td>U+33ED IDEOGRAPHIC TELEGRAPH SYMBOL FOR DAY FOURTEEN</td></tr>
+<tr><td>151. BAD IMPLICIT</td><td>[0A0C.0020.0004] [0A10.0020.0004] [FB40.0020.001F] [E5E5.0020.0002]</td><td>U+33EE IDEOGRAPHIC TELEGRAPH SYMBOL FOR DAY FIFTEEN</td></tr>
+<tr><td>152. BAD IMPLICIT</td><td>[0A0C.0020.0004] [0A11.0020.0004] [FB40.0020.001F] [E5E5.0020.0002]</td><td>U+33EF IDEOGRAPHIC TELEGRAPH SYMBOL FOR DAY SIXTEEN</td></tr>
+<tr><td>153. BAD IMPLICIT</td><td>[0A0C.0020.0004] [0A12.0020.0004] [FB40.0020.001F] [E5E5.0020.0002]</td><td>U+33F0 IDEOGRAPHIC TELEGRAPH SYMBOL FOR DAY SEVENTEEN</td></tr>
+<tr><td>154. BAD IMPLICIT</td><td>[0A0C.0020.0004] [0A13.0020.0004] [FB40.0020.001F] [E5E5.0020.0002]</td><td>U+33F1 IDEOGRAPHIC TELEGRAPH SYMBOL FOR DAY EIGHTEEN</td></tr>
+<tr><td>155. BAD IMPLICIT</td><td>[0A0C.0020.0004] [0A14.0020.0004] [FB40.0020.001F] [E5E5.0020.0002]</td><td>U+33F2 IDEOGRAPHIC TELEGRAPH SYMBOL FOR DAY NINETEEN</td></tr>
+<tr><td>156. BAD IMPLICIT</td><td>[0A0D.0020.0004] [0A0B.0020.0004] [FB40.0020.001F] [E5E5.0020.0002]</td><td>U+33F3 IDEOGRAPHIC TELEGRAPH SYMBOL FOR DAY TWENTY</td></tr>
+<tr><td>157. BAD IMPLICIT</td><td>[0A0D.0020.0004] [0A0C.0020.0004] [FB40.0020.001F] [E5E5.0020.0002]</td><td>U+33F4 IDEOGRAPHIC TELEGRAPH SYMBOL FOR DAY TWENTY-ONE</td></tr>
+<tr><td>158. BAD IMPLICIT</td><td>[0A0D.0020.0004] [0A0D.0020.0004] [FB40.0020.001F] [E5E5.0020.0002]</td><td>U+33F5 IDEOGRAPHIC TELEGRAPH SYMBOL FOR DAY TWENTY-TWO</td></tr>
+<tr><td>159. BAD IMPLICIT</td><td>[0A0D.0020.0004] [0A0E.0020.0004] [FB40.0020.001F] [E5E5.0020.0002]</td><td>U+33F6 IDEOGRAPHIC TELEGRAPH SYMBOL FOR DAY TWENTY-THREE</td></tr>
+<tr><td>160. BAD IMPLICIT</td><td>[0A0D.0020.0004] [0A0F.0020.0004] [FB40.0020.001F] [E5E5.0020.0002]</td><td>U+33F7 IDEOGRAPHIC TELEGRAPH SYMBOL FOR DAY TWENTY-FOUR</td></tr>
+<tr><td>161. BAD IMPLICIT</td><td>[0A0D.0020.0004] [0A10.0020.0004] [FB40.0020.001F] [E5E5.0020.0002]</td><td>U+33F8 IDEOGRAPHIC TELEGRAPH SYMBOL FOR DAY TWENTY-FIVE</td></tr>
+<tr><td>162. BAD IMPLICIT</td><td>[0A0D.0020.0004] [0A11.0020.0004] [FB40.0020.001F] [E5E5.0020.0002]</td><td>U+33F9 IDEOGRAPHIC TELEGRAPH SYMBOL FOR DAY TWENTY-SIX</td></tr>
+<tr><td>163. BAD IMPLICIT</td><td>[0A0D.0020.0004] [0A12.0020.0004] [FB40.0020.001F] [E5E5.0020.0002]</td><td>U+33FA IDEOGRAPHIC TELEGRAPH SYMBOL FOR DAY TWENTY-SEVEN</td></tr>
+<tr><td>164. BAD IMPLICIT</td><td>[0A0D.0020.0004] [0A13.0020.0004] [FB40.0020.001F] [E5E5.0020.0002]</td><td>U+33FB IDEOGRAPHIC TELEGRAPH SYMBOL FOR DAY TWENTY-EIGHT</td></tr>
+<tr><td>165. BAD IMPLICIT</td><td>[0A0D.0020.0004] [0A14.0020.0004] [FB40.0020.001F] [E5E5.0020.0002]</td><td>U+33FC IDEOGRAPHIC TELEGRAPH SYMBOL FOR DAY TWENTY-NINE</td></tr>
+<tr><td>166. BAD IMPLICIT</td><td>[0A0E.0020.0004] [0A0B.0020.0004] [FB40.0020.001F] [E5E5.0020.0002]</td><td>U+33FD IDEOGRAPHIC TELEGRAPH SYMBOL FOR DAY THIRTY</td></tr>
+<tr><td>167. BAD IMPLICIT</td><td>[0A0E.0020.0004] [0A0C.0020.0004] [FB40.0020.001F] [E5E5.0020.0002]</td><td>U+33FE IDEOGRAPHIC TELEGRAPH SYMBOL FOR DAY THIRTY-ONE</td></tr>
+<tr><td>168. WF2.2</td><td>[0F3D.00CC.001A]</td><td>U+FBA4 ARABIC LETTER HEH WITH YEH ABOVE ISOLATED FORM</td></tr>
+<tr><td>169. WF2.2</td><td>[0F3D.00CC.0019]</td><td>U+FBA5 ARABIC LETTER HEH WITH YEH ABOVE FINAL FORM</td></tr>
+<tr><td>170. WF2.2</td><td>[0F4F.00CC.001A]</td><td>U+FBB0 ARABIC LETTER YEH BARREE WITH HAMZA ABOVE ISOLATED FORM</td></tr>
+<tr><td>171. WF2.2</td><td>[0F4F.00CC.0019]</td><td>U+FBB1 ARABIC LETTER YEH BARREE WITH HAMZA ABOVE FINAL FORM</td></tr>
+<tr><td>172. WF2.2</td><td>[0ED6.00BD.0019]</td><td>U+FD3C ARABIC LIGATURE ALEF WITH FATHATAN FINAL FORM</td></tr>
+<tr><td>173. WF2.2</td><td>[0ED6.00BD.001A]</td><td>U+FD3D ARABIC LIGATURE ALEF WITH FATHATAN ISOLATED FORM</td></tr>
+<tr><td>174. BAD IMPLICIT</td><td>[FB40.0020.0002] [FBC9.0000.0000]</td><td>U+2F963 CJK COMPATIBILITY IDEOGRAPH-2F963</td></tr>
+<tr><td>175. BAD IMPLICIT</td><td>[FB80.0020.0002] [C227.0000.0000]</td><td>U+2F964 CJK COMPATIBILITY IDEOGRAPH-2F964</td></tr>
 </table>
 <p>Minimum Secondary in Primary Ignorable = 0021 from 	[0000.0021.0002]	U+0332 COMBINING LOW LINE</p>
-<p>Well-formedness errors: 6</p>
+<p>Errors: 175</p>
+<h2>7. Comparing Other Equivalents</h2>
+<p>These are not necessarily errors, but should be examined for <i>possible</i> errors</p>
+<p>Each pair is canonically equivalent, but has different sort keys</p>
+<table border='1' cellspacing='0' cellpadding='2'>
+<tr><th>Name</th><th>Code</th><th>Sort Keys</th></tr>
+<tr><td rowspan='3'>1</td><td>CYRILLIC CAPITAL LETTER GJE</td>
+<td>0403</td>
+<td>[0CE9 | 0020 | 0008 |]</td></tr>
+<tr><td>CYRILLIC CAPITAL LETTER GHE,<br>COMBINING ACUTE ACCENT</td>
+<td>0413 0301</td>
+<td>[0CE9 | 0020 | 0008 |]</td></tr>
+<tr><td class='bottom'>CYRILLIC CAPITAL LETTER GHE,<br>COMBINING ACUTE TONE MARK</td>
+<td class='bottom'>0413 0341</td>
+<td class='bottom'>[0CD5 | 0020 0032 | 0008 0002 |]</td></tr>
+<tr><td rowspan='3'>2</td><td>CYRILLIC CAPITAL LETTER KJE</td>
+<td>040C</td>
+<td>[0DA1 | 0020 | 0008 |]</td></tr>
+<tr><td>CYRILLIC CAPITAL LETTER KA,<br>COMBINING ACUTE ACCENT</td>
+<td>041A 0301</td>
+<td>[0DA1 | 0020 | 0008 |]</td></tr>
+<tr><td class='bottom'>CYRILLIC CAPITAL LETTER KA,<br>COMBINING ACUTE TONE MARK</td>
+<td class='bottom'>041A 0341</td>
+<td class='bottom'>[0D31 | 0020 0032 | 0008 0002 |]</td></tr>
+<tr><td rowspan='3'>3</td><td>CYRILLIC SMALL LETTER GHE,<br>COMBINING ACUTE ACCENT</td>
+<td>0433 0301</td>
+<td>[0CE9 | 0020 | 0002 |]</td></tr>
+<tr><td>CYRILLIC SMALL LETTER GHE,<br>COMBINING ACUTE ACCENT</td>
+<td>0433 0301</td>
+<td>[0CE9 | 0020 | 0002 |]</td></tr>
+<tr><td class='bottom'>CYRILLIC SMALL LETTER GHE,<br>COMBINING ACUTE TONE MARK</td>
+<td class='bottom'>0433 0341</td>
+<td class='bottom'>[0CD5 | 0020 0032 | 0002 0002 |]</td></tr>
+<tr><td rowspan='3'>4</td><td>CYRILLIC SMALL LETTER KA,<br>COMBINING ACUTE ACCENT</td>
+<td>043A 0301</td>
+<td>[0DA1 | 0020 | 0002 |]</td></tr>
+<tr><td>CYRILLIC SMALL LETTER KA,<br>COMBINING ACUTE ACCENT</td>
+<td>043A 0301</td>
+<td>[0DA1 | 0020 | 0002 |]</td></tr>
+<tr><td class='bottom'>CYRILLIC SMALL LETTER KA,<br>COMBINING ACUTE TONE MARK</td>
+<td class='bottom'>043A 0341</td>
+<td class='bottom'>[0D31 | 0020 0032 | 0002 0002 |]</td></tr>
+<tr><td rowspan='3'>5</td><td>TIBETAN SUBJOINED LETTER RA,<br>TIBETAN VOWEL SIGN AA,<br>TIBETAN VOWEL SIGN REVERSED I</td>
+<td>0FB2 0F71 0F80</td>
+<td>[141C | 0020 | 0002 |]</td></tr>
+<tr><td>TIBETAN SUBJOINED LETTER RA,<br>TIBETAN VOWEL SIGN AA,<br>TIBETAN VOWEL SIGN REVERSED I</td>
+<td>0FB2 0F71 0F80</td>
+<td>[141C | 0020 | 0002 |]</td></tr>
+<tr><td class='bottom'>TIBETAN SUBJOINED LETTER RA,<br>TIBETAN VOWEL SIGN REVERSED II</td>
+<td class='bottom'>0FB2 0F81</td>
+<td class='bottom'>[1403 1418 | 0020 0020 | 0002 0002 |]</td></tr>
+<tr><td rowspan='3'>6</td><td>TIBETAN SUBJOINED LETTER LA,<br>TIBETAN VOWEL SIGN AA,<br>TIBETAN VOWEL SIGN REVERSED I</td>
+<td>0FB3 0F71 0F80</td>
+<td>[141E | 0020 | 0002 |]</td></tr>
+<tr><td>TIBETAN SUBJOINED LETTER LA,<br>TIBETAN VOWEL SIGN AA,<br>TIBETAN VOWEL SIGN REVERSED I</td>
+<td>0FB3 0F71 0F80</td>
+<td>[141E | 0020 | 0002 |]</td></tr>
+<tr><td class='bottom'>TIBETAN SUBJOINED LETTER LA,<br>TIBETAN VOWEL SIGN REVERSED II</td>
+<td class='bottom'>0FB3 0F81</td>
+<td class='bottom'>[1405 1418 | 0020 0020 | 0002 0002 |]</td></tr>
+<tr><td rowspan='3'>7</td><td>CJK COMPATIBILITY IDEOGRAPH-2F805</td>
+<td>2F805</td>
+<td>[FB40 CFAE | 0020 | 0002 |]</td></tr>
+<tr><td>CJK UNIFIED IDEOGRAPH-4FAE</td>
+<td>4FAE</td>
+<td>[FB40 CFAE | 0020 | 0002 |]</td></tr>
+<tr><td class='bottom'>CJK COMPATIBILITY IDEOGRAPH-FA30</td>
+<td class='bottom'>FA30</td>
+<td class='bottom'>[FBC1 FA30 | 0020 | 0002 |]</td></tr>
+<tr><td rowspan='3'>8</td><td>CJK COMPATIBILITY IDEOGRAPH-2F80A</td>
+<td>2F80A</td>
+<td>[FB40 D0E7 | 0020 | 0002 |]</td></tr>
+<tr><td>CJK UNIFIED IDEOGRAPH-50E7</td>
+<td>50E7</td>
+<td>[FB40 D0E7 | 0020 | 0002 |]</td></tr>
+<tr><td class='bottom'>CJK COMPATIBILITY IDEOGRAPH-FA31</td>
+<td class='bottom'>FA31</td>
+<td class='bottom'>[FBC1 FA31 | 0020 | 0002 |]</td></tr>
+<tr><td rowspan='3'>9</td><td>CJK COMPATIBILITY IDEOGRAPH-2F80E</td>
+<td>2F80E</td>
+<td>[FB40 D14D | 0020 | 0002 |]</td></tr>
+<tr><td>CJK UNIFIED IDEOGRAPH-514D</td>
+<td>514D</td>
+<td>[FB40 D14D | 0020 | 0002 |]</td></tr>
+<tr><td class='bottom'>CJK COMPATIBILITY IDEOGRAPH-FA32</td>
+<td class='bottom'>FA32</td>
+<td class='bottom'>[FBC1 FA32 | 0020 | 0002 |]</td></tr>
+<tr><td rowspan='3'>10</td><td>CJK COMPATIBILITY IDEOGRAPH-2F826</td>
+<td>2F826</td>
+<td>[FB40 D2C9 | 0020 | 0002 |]</td></tr>
+<tr><td>CJK UNIFIED IDEOGRAPH-52C9</td>
+<td>52C9</td>
+<td>[FB40 D2C9 | 0020 | 0002 |]</td></tr>
+<tr><td class='bottom'>CJK COMPATIBILITY IDEOGRAPH-FA33</td>
+<td class='bottom'>FA33</td>
+<td class='bottom'>[FBC1 FA33 | 0020 | 0002 |]</td></tr>
+<tr><td rowspan='3'>11</td><td>CJK COMPATIBILITY IDEOGRAPH-2F827</td>
+<td>2F827</td>
+<td>[FB40 D2E4 | 0020 | 0002 |]</td></tr>
+<tr><td>CJK UNIFIED IDEOGRAPH-52E4</td>
+<td>52E4</td>
+<td>[FB40 D2E4 | 0020 | 0002 |]</td></tr>
+<tr><td class='bottom'>CJK COMPATIBILITY IDEOGRAPH-FA34</td>
+<td class='bottom'>FA34</td>
+<td class='bottom'>[FBC1 FA34 | 0020 | 0002 |]</td></tr>
+<tr><td rowspan='3'>12</td><td>CJK COMPATIBILITY IDEOGRAPH-2F82D</td>
+<td>2F82D</td>
+<td>[FB40 D351 | 0020 | 0002 |]</td></tr>
+<tr><td>CJK UNIFIED IDEOGRAPH-5351</td>
+<td>5351</td>
+<td>[FB40 D351 | 0020 | 0002 |]</td></tr>
+<tr><td class='bottom'>CJK COMPATIBILITY IDEOGRAPH-FA35</td>
+<td class='bottom'>FA35</td>
+<td class='bottom'>[FBC1 FA35 | 0020 | 0002 |]</td></tr>
+<tr><td rowspan='3'>13</td><td>CJK COMPATIBILITY IDEOGRAPH-2F84C</td>
+<td>2F84C</td>
+<td>[FB40 D606 | 0020 | 0002 |]</td></tr>
+<tr><td>CJK UNIFIED IDEOGRAPH-5606</td>
+<td>5606</td>
+<td>[FB40 D606 | 0020 | 0002 |]</td></tr>
+<tr><td class='bottom'>CJK COMPATIBILITY IDEOGRAPH-FA37</td>
+<td class='bottom'>FA37</td>
+<td class='bottom'>[FBC1 FA37 | 0020 | 0002 |]</td></tr>
+<tr><td rowspan='3'>14</td><td>CJK COMPATIBILITY IDEOGRAPH-2F878</td>
+<td>2F878</td>
+<td>[FB40 DC6E | 0020 | 0002 |]</td></tr>
+<tr><td>CJK UNIFIED IDEOGRAPH-5C6E</td>
+<td>5C6E</td>
+<td>[FB40 DC6E | 0020 | 0002 |]</td></tr>
+<tr><td class='bottom'>CJK COMPATIBILITY IDEOGRAPH-FA3C</td>
+<td class='bottom'>FA3C</td>
+<td class='bottom'>[FBC1 FA3C | 0020 | 0002 |]</td></tr>
+<tr><td rowspan='3'>15</td><td>CJK COMPATIBILITY IDEOGRAPH-2F8A3</td>
+<td>2F8A3</td>
+<td>[FB40 E094 | 0020 | 0002 |]</td></tr>
+<tr><td>CJK UNIFIED IDEOGRAPH-6094</td>
+<td>6094</td>
+<td>[FB40 E094 | 0020 | 0002 |]</td></tr>
+<tr><td class='bottom'>CJK COMPATIBILITY IDEOGRAPH-FA3D</td>
+<td class='bottom'>FA3D</td>
+<td class='bottom'>[FBC1 FA3D | 0020 | 0002 |]</td></tr>
+<tr><td rowspan='3'>16</td><td>CJK COMPATIBILITY IDEOGRAPH-2F8AB</td>
+<td>2F8AB</td>
+<td>[FB40 E18E | 0020 | 0002 |]</td></tr>
+<tr><td>CJK UNIFIED IDEOGRAPH-618E</td>
+<td>618E</td>
+<td>[FB40 E18E | 0020 | 0002 |]</td></tr>
+<tr><td class='bottom'>CJK COMPATIBILITY IDEOGRAPH-FA3F</td>
+<td class='bottom'>FA3F</td>
+<td class='bottom'>[FBC1 FA3F | 0020 | 0002 |]</td></tr>
+<tr><td rowspan='3'>17</td><td>CJK COMPATIBILITY IDEOGRAPH-2F8B0</td>
+<td>2F8B0</td>
+<td>[FB40 E1F2 | 0020 | 0002 |]</td></tr>
+<tr><td>CJK UNIFIED IDEOGRAPH-61F2</td>
+<td>61F2</td>
+<td>[FB40 E1F2 | 0020 | 0002 |]</td></tr>
+<tr><td class='bottom'>CJK COMPATIBILITY IDEOGRAPH-FA40</td>
+<td class='bottom'>FA40</td>
+<td class='bottom'>[FBC1 FA40 | 0020 | 0002 |]</td></tr>
+<tr><td rowspan='3'>18</td><td>CJK COMPATIBILITY IDEOGRAPH-2F8C8</td>
+<td>2F8C8</td>
+<td>[FB40 E54F | 0020 | 0002 |]</td></tr>
+<tr><td>CJK UNIFIED IDEOGRAPH-654F</td>
+<td>654F</td>
+<td>[FB40 E54F | 0020 | 0002 |]</td></tr>
+<tr><td class='bottom'>CJK COMPATIBILITY IDEOGRAPH-FA41</td>
+<td class='bottom'>FA41</td>
+<td class='bottom'>[FBC1 FA41 | 0020 | 0002 |]</td></tr>
+<tr><td rowspan='3'>19</td><td>CJK COMPATIBILITY IDEOGRAPH-2F8CF</td>
+<td>2F8CF</td>
+<td>[FB40 E691 | 0020 | 0002 |]</td></tr>
+<tr><td>CJK UNIFIED IDEOGRAPH-6691</td>
+<td>6691</td>
+<td>[FB40 E691 | 0020 | 0002 |]</td></tr>
+<tr><td class='bottom'>CJK COMPATIBILITY IDEOGRAPH-FA43</td>
+<td class='bottom'>FA43</td>
+<td class='bottom'>[FBC1 FA43 | 0020 | 0002 |]</td></tr>
+<tr><td rowspan='3'>20</td><td>CJK COMPATIBILITY IDEOGRAPH-2F8E2</td>
+<td>2F8E2</td>
+<td>[FB40 E885 | 0020 | 0002 |]</td></tr>
+<tr><td>CJK UNIFIED IDEOGRAPH-6885</td>
+<td>6885</td>
+<td>[FB40 E885 | 0020 | 0002 |]</td></tr>
+<tr><td class='bottom'>CJK COMPATIBILITY IDEOGRAPH-FA44</td>
+<td class='bottom'>FA44</td>
+<td class='bottom'>[FBC1 FA44 | 0020 | 0002 |]</td></tr>
+<tr><td rowspan='3'>21</td><td>CJK COMPATIBILITY IDEOGRAPH-2F901</td>
+<td>2F901</td>
+<td>[FB40 ED77 | 0020 | 0002 |]</td></tr>
+<tr><td>CJK UNIFIED IDEOGRAPH-6D77</td>
+<td>6D77</td>
+<td>[FB40 ED77 | 0020 | 0002 |]</td></tr>
+<tr><td class='bottom'>CJK COMPATIBILITY IDEOGRAPH-FA45</td>
+<td class='bottom'>FA45</td>
+<td class='bottom'>[FBC1 FA45 | 0020 | 0002 |]</td></tr>
+<tr><td rowspan='3'>22</td><td>CJK COMPATIBILITY IDEOGRAPH-2F953</td>
+<td>2F953</td>
+<td>[FB40 F956 | 0020 | 0002 |]</td></tr>
+<tr><td>CJK UNIFIED IDEOGRAPH-7956</td>
+<td>7956</td>
+<td>[FB40 F956 | 0020 | 0002 |]</td></tr>
+<tr><td class='bottom'>CJK COMPATIBILITY IDEOGRAPH-FA50</td>
+<td class='bottom'>FA50</td>
+<td class='bottom'>[FBC1 FA50 | 0020 | 0002 |]</td></tr>
+<tr><td rowspan='3'>23</td><td>CJK COMPATIBILITY IDEOGRAPH-2F959</td>
+<td>2F959</td>
+<td>[FB40 FA40 | 0020 | 0002 |]</td></tr>
+<tr><td>CJK UNIFIED IDEOGRAPH-7A40</td>
+<td>7A40</td>
+<td>[FB40 FA40 | 0020 | 0002 |]</td></tr>
+<tr><td class='bottom'>CJK COMPATIBILITY IDEOGRAPH-FA54</td>
+<td class='bottom'>FA54</td>
+<td class='bottom'>[FBC1 FA54 | 0020 | 0002 |]</td></tr>
+<tr><td rowspan='3'>24</td><td>CJK COMPATIBILITY IDEOGRAPH-2F97A</td>
+<td>2F97A</td>
+<td>[FB41 8005 | 0020 | 0002 |]</td></tr>
+<tr><td>CJK UNIFIED IDEOGRAPH-8005</td>
+<td>8005</td>
+<td>[FB41 8005 | 0020 | 0002 |]</td></tr>
+<tr><td class='bottom'>CJK COMPATIBILITY IDEOGRAPH-FA5B</td>
+<td class='bottom'>FA5B</td>
+<td class='bottom'>[FBC1 FA5B | 0020 | 0002 |]</td></tr>
+<tr><td rowspan='3'>25</td><td>CJK COMPATIBILITY IDEOGRAPH-2F99F</td>
+<td>2F99F</td>
+<td>[FB41 8457 | 0020 | 0002 |]</td></tr>
+<tr><td>CJK UNIFIED IDEOGRAPH-8457</td>
+<td>8457</td>
+<td>[FB41 8457 | 0020 | 0002 |]</td></tr>
+<tr><td class='bottom'>CJK COMPATIBILITY IDEOGRAPH-FA5F</td>
+<td class='bottom'>FA5F</td>
+<td class='bottom'>[FBC1 FA5F | 0020 | 0002 |]</td></tr>
+<tr><td rowspan='3'>26</td><td>CJK COMPATIBILITY IDEOGRAPH-F996</td>
+<td>F996</td>
+<td>[FB40 FDF4 | 0020 | 0002 |]</td></tr>
+<tr><td>CJK UNIFIED IDEOGRAPH-7DF4</td>
+<td>7DF4</td>
+<td>[FB40 FDF4 | 0020 | 0002 |]</td></tr>
+<tr><td class='bottom'>CJK COMPATIBILITY IDEOGRAPH-FA57</td>
+<td class='bottom'>FA57</td>
+<td class='bottom'>[FBC1 FA57 | 0020 | 0002 |]</td></tr>
+<tr><td rowspan='3'>27</td><td>CJK COMPATIBILITY IDEOGRAPH-FA25</td>
+<td>FA25</td>
+<td>[FB41 9038 | 0020 | 0002 |]</td></tr>
+<tr><td>CJK UNIFIED IDEOGRAPH-9038</td>
+<td>9038</td>
+<td>[FB41 9038 | 0020 | 0002 |]</td></tr>
+<tr><td class='bottom'>CJK COMPATIBILITY IDEOGRAPH-FA67</td>
+<td class='bottom'>FA67</td>
+<td class='bottom'>[FBC1 FA67 | 0020 | 0002 |]</td></tr>
+</table>
+<p>Items: 27</p>
 </body></html>
