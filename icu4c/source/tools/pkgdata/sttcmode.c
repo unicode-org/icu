@@ -213,7 +213,7 @@ void pkg_mode_static(UPKGOptions *o, FileStream *makefile, UErrorCode *status)
     }
     T_FileStream_writeLine(makefile, tmp);
 
-    sprintf(tmp, "TOCOBJ= $(NAME)_dat%s \n\n", OBJ_SUFFIX);
+    sprintf(tmp, "TOCOBJ= $(NAME)_dat.$(STATIC_O)\n\n");
     T_FileStream_writeLine(makefile, tmp);
 
 #ifdef OS400
