@@ -1458,6 +1458,7 @@ root {
         nso { "nso" }
         nub { "nub" }
         nv  { "nv"  }
+        nwc { "nwc" }
         ny  { "ny"  }
         nym { "nym" }
         nyn { "nyn" }
@@ -1564,6 +1565,7 @@ root {
         tk  { "tk"  }
         tkl { "tkl" }
         tl  { "tl"  }
+        tlh { "tlh" }
         tli { "tli" }
         tmh { "tmh" }
         tn  { "tn"  }
