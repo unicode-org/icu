@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/lang/Attic/UCharacterNameReader.java,v $ 
-* $Date: 2002/03/10 20:41:23 $ 
-* $Revision: 1.6 $
+* $Date: 2002/03/25 21:31:44 $ 
+* $Revision: 1.7 $
 *
 *******************************************************************************
 */
@@ -101,7 +101,6 @@ final class UCharacterNameReader
         	    groupstring[i + 4] == 0x39 &&
         	    groupstring[i + 5] == 0x4 &&
         	    groupstring[i + 6] == 0x1e)
-        	    System.out.println("found at " + i);
         }
         	
         data.setGroup(group, groupstring);
