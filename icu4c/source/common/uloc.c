@@ -48,9 +48,9 @@ U_CAPI void locale_set_default(const char *id);
 
 /* These strings describe the resources we attempt to load from
  the locale ResourceBundle data file.*/
-static const char* const _kLocaleID       = "LocaleID";
-static const char* const _kLanguages      = "Languages";
-static const char* const _kCountries      = "Countries";
+static const char _kLocaleID[]       = "LocaleID";
+static const char _kLanguages[]      = "Languages";
+static const char _kCountries[]      = "Countries";
 
 #if 0
 /* We don't use these resources currently */
