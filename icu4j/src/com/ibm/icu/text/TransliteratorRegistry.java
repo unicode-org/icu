@@ -17,7 +17,6 @@ import com.ibm.icu.lang.UScript;
 import com.ibm.icu.util.CaseInsensitiveString;
 import com.ibm.icu.util.UResourceBundle;
 
-import java.io.*;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Locale;

@@ -15,7 +15,6 @@ package com.ibm.icu.util;
  * @deprecated This is a draft API and might change in a future release of ICU.
  */
 public class UResourceTypeMismatchException extends RuntimeException {
-    private String message;
     
     /**
      * Constuct the exception with the given message
@@ -24,15 +23,16 @@ public class UResourceTypeMismatchException extends RuntimeException {
      * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public UResourceTypeMismatchException(String msg){
-        message = msg;       
+        super(msg);       
     }
-    /**
+    /*
      * Returns the error message stored in this exception
      * @return String the error message string
      * @draft ICU 3.0
      * @deprecated This is a draft API and might change in a future release of ICU.
-     */
+     *
     public String toString(){
         return message;   
     }
+    */
 }

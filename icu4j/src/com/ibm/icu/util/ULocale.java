@@ -696,7 +696,7 @@ public final class ULocale implements Serializable {
                 { "uz_UZ_CYRL",     "uz_Cyrl_UZ", null, null }, /* .NET name */
                 { "uz_UZ_LATN",     "uz_Latn_UZ", null, null }, /* .NET name */
                 { "zh_CHS",         "zh_Hans", null, null }, /* .NET name */
-                { "zh_CHT",         "zh_Hant", null, null }, /* .NET name TODO: This should be zh_Hant once the locale structure is fixed. */
+                { "zh_CHT",         "zh_Hant", null, null }, /* .NET name */
                 { "zh_GAN",         "zh__GAN", null, null }, /* registered name */
                 { "zh_GUOYU",       "zh", null, null }, /* registered name */
                 { "zh_HAKKA",       "zh__HAKKA", null, null }, /* registered name */

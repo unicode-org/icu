@@ -1590,7 +1590,7 @@ public final class RuleBasedCollator extends Collator
 //                                     + IMPLICIT_3BYTE_COUNT_) << 24) + 0x030303;
             UCA_.init();
             ICUResourceBundle rb = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_COLLATION_BASE_NAME, ULocale.ENGLISH);
-            UCA_.m_rules_ = (String)rb.getObject("%%UCARULES");
+            UCA_.m_rules_ = (String)rb.getObject("UCARules");
         }
         catch (Exception e)
         {
