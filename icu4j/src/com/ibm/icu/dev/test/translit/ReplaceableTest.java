@@ -5,6 +5,7 @@ import com.ibm.icu.text.*;
 import com.ibm.icu.impl.Utility;
 import java.io.*;
 import java.util.BitSet;
+import java.util.HashMap;
 import java.text.ParseException;
 
 /**
@@ -17,29 +18,38 @@ public class ReplaceableTest extends TestFmwk {
     }
   
     public void Test() throws IOException, ParseException {
-        check("Lower", "ABCD", "1234", "");
-        check("Upper", "abcd\u00DF", "123455", ""); // must map 00DF to SS
-        check("Title", "aBCD", "1234", "");
-        check("NFC", "A\u0300E\u0300", "1234", "13");
-        check("NFD", "\u00C0\u00C8", "12", "1122");
+        check("Lower", "ABCD", "1234");
+        check("Upper", "abcd\u00DF", "123455"); // must map 00DF to SS
+        check("Title", "aBCD", "1234");
+        check("NFC", "A\u0300E\u0300", "13");
+        check("NFD", "\u00C0\u00C8", "1122");
+        check("*(x) > A $1 B", "wxy", "11223");
+        check("*(x)(y) > A $2 B $1 C $2 D", "wxyz", "113322334");
+        check("*(x)(y)(z) > A $3 B $2 C $1 D", "wxyzu", "114433225");
     }
     
-    void check(String transliteratorName, String test, String styles, String shouldProduceStyles) {
-        if (shouldProduceStyles.length() == 0) shouldProduceStyles = styles;
-        TestReplaceable tr = new TestReplaceable(test, styles);
+    void check(String transliteratorName, String test, String shouldProduceStyles) {
+        TestReplaceable tr = new TestReplaceable(test, null);
         String original = tr.toString();
         
-        Transliterator t = Transliterator.getInstance(transliteratorName);
+        Transliterator t;
+        if (transliteratorName.startsWith("*")) {
+        	transliteratorName = transliteratorName.substring(1);
+        	t = new RuleBasedTransliterator("test", transliteratorName);
+        } else {
+        	t = Transliterator.getInstance(transliteratorName);
+        }
         t.transliterate(tr);
         String newStyles = tr.getStyles();
         if (!newStyles.equals(shouldProduceStyles)) {
-            errln("FAIL Styles: " + transliteratorName + "("
-                + original + " => " + tr.toString() + "; should be {" + shouldProduceStyles + "}!");
+            errln("FAIL Styles: " + transliteratorName + " ( "
+                + original + " ) => " + tr.toString() + "; should be {" + shouldProduceStyles + "}!");
         } else {
-            logln("OK: " + transliteratorName + "(" + original + ") => " + tr.toString());
+            logln("OK: " + transliteratorName + " ( " + original + " ) => " + tr.toString());
         }
     }
     
+
     /**
      * This is a test class that simulates styled text.
      * It associates a style number (0..65536) with each character,
@@ -60,10 +70,10 @@ public class ReplaceableTest extends TestFmwk {
             chars = new ReplaceableString(text);
             StringBuffer s = new StringBuffer();
             for (int i = 0; i < text.length(); ++i) {
-                if (i < styles.length()) {
+                if (styles != null && i < styles.length()) {
                     s.append(styles.charAt(i));
                 } else {
-                    s.append((char) (i + 'A'));
+                    s.append((char) (i + '1'));
                 }
             }
             this.styles = new ReplaceableString(s.toString());
