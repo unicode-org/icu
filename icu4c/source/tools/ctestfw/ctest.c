@@ -249,7 +249,7 @@ static void iterateTestsWithLevel ( const TestNode* root,
   /* we want these messages to be at 0 indent. so just push the indent level breifly. */
   saveIndent = INDENT_LEVEL;
   INDENT_LEVEL = 0;
-  log_info("%s%s%c\n", (list[i]->test||mode==SHOWTESTS)?"---":"",pathToFunction, list[i]->test?'\0':TEST_SEPARATOR );
+  log_info("%s%s%c\n", (list[i]->test||mode==SHOWTESTS)?"---":"",pathToFunction, list[i]->test?' ':TEST_SEPARATOR );
   INDENT_LEVEL = saveIndent;
 
   iterateTestsWithLevel ( root->child, len, list, mode );

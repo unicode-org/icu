@@ -34,6 +34,10 @@
 #include "uoptions.h"
 #include "tzdat.h"
 
+#ifdef XP_MAC_CONSOLE
+# include <console.h>
+#endif
+
 #define INPUT_FILE "tz.txt"
 #define OUTPUT_FILE "tz.dat"
 
@@ -135,6 +139,9 @@ private:
 
 int main(int argc, const char *argv[]) {
     gentz x;
+#ifdef XP_MAC_CONSOLE
+	argc=ccommand((char***)&argv);
+#endif
     return x.main(argc, argv);
 }
 
