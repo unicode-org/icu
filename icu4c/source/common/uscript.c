@@ -214,15 +214,17 @@ uscript_getCode(const char* nameOrAbbrOrLocale,
 
     /* we still haven't found it try locale */
     if(code==USCRIPT_INVALID_CODE){
-        UResourceBundle* resB = ures_open(u_getDataDirectory(),nameOrAbbrOrLocale,err);
-        if(U_SUCCESS(*err)&& *err != U_USING_DEFAULT_ERROR){
-            UResourceBundle* resD = ures_getByKey(resB,kLocaleScript,NULL,err);
+        /* Do not propagate error codes from just not finding a locale bundle. */
+        UErrorCode localErrorCode = U_ZERO_ERROR;
+        UResourceBundle* resB = ures_open(u_getDataDirectory(),nameOrAbbrOrLocale,&localErrorCode);
+        if(U_SUCCESS(localErrorCode)&& localErrorCode != U_USING_DEFAULT_ERROR){
+            UResourceBundle* resD = ures_getByKey(resB,kLocaleScript,NULL,&localErrorCode);
             int index =0;
-            if(U_SUCCESS(*err) ){
+            if(U_SUCCESS(localErrorCode) ){
                 len =0;
                 while(ures_hasNext(resD)){
-                    const UChar* name = ures_getNextString(resD,&len,NULL,err);
-                    if(U_SUCCESS(*err)){
+                    const UChar* name = ures_getNextString(resD,&len,NULL,&localErrorCode);
+                    if(U_SUCCESS(localErrorCode)){
                         char cName[50] = {'\0'};
                         u_UCharsToChars(name,cName,len);
                         index = findStringIndex(scriptAbbr, cName, ARRAY_SIZE(scriptAbbr));

@@ -346,17 +346,20 @@ UnicodeSet* UnicodePropertySet::createFromPattern(const UnicodeString& pattern,
             // No equals seen; parse short format \p{Cf}
             UnicodeString shortName = munge(pattern, pos, close);
 
+            // Do not propagate error codes from just not finding the name.
+            UErrorCode localErrorCode = U_ZERO_ERROR;
+
             // First try general category
-            set = createCategorySet(shortName, status);
+            set = createCategorySet(shortName, localErrorCode);
 
             // If this fails, try script
-            if (set == NULL && U_SUCCESS(status)) {
-                set = createScriptSet(shortName, status);
+            if (set == NULL) {
+                set = createScriptSet(shortName, localErrorCode);
             }
 
             // If this fails, try binary property
-            if (set == NULL && U_SUCCESS(status)) {
-                set = createBinaryPropertySet(shortName, status);
+            if (set == NULL) {
+                set = createBinaryPropertySet(shortName, localErrorCode);
             }
         }
 
