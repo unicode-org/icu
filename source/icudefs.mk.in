@@ -35,13 +35,19 @@ UNICODE_VERSION = @UNICODE_VERSION@
 SO_TARGET_VERSION = @LIB_VERSION@
 SO_TARGET_VERSION_MAJOR = @LIB_VERSION_MAJOR@
 
-# Should be the same as U_ICUDATA_NAME
+# The ICU data external name is usually icudata; the entry point name is
+# the version-dependent name (for no particula reason except it was easier
+# to change the build this way). When building in common mode, the data
+# name is the versioned platform-dependent one. 
+
 ICUDATA_BASENAME_VERSION = icudt@LIB_VERSION_MAJOR@
-ICUDATA_NAME = $(ICUDATA_BASENAME_VERSION)@ICUDATA_CHAR@
+ICUDATA_PLATFORM_NAME = $(ICUDATA_BASENAME_VERSION)@ICUDATA_CHAR@
+ICUDATA_NAME = icudata
 ifeq ($(strip $(PKGDATA_MODE)),)
 PKGDATA_MODE=@DATA_PACKAGING_MODE@
 endif
 ifeq ($(PKGDATA_MODE),common)
+ICUDATA_NAME = $(ICUDATA_PLATFORM_NAME)
 ICUDATA_DIR = $(pkgdatadir)
 ICUPKGDATA_DIR = $(ICUDATA_DIR)
 else
