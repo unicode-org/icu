@@ -576,11 +576,11 @@ unicodeDataLineFn(void *context,
 static UBool U_CALLCONV
 enumTypeRange(const void *context, UChar32 start, UChar32 limit, UCharCategory type) {
     static UChar32 test[][2]={
-        0x41, U_UPPERCASE_LETTER,
-        0x308, U_NON_SPACING_MARK,
-        0xfffe, U_GENERAL_OTHER_TYPES,
-        0xe0041, U_FORMAT_CHAR,
-        0xeffff, U_UNASSIGNED
+        {0x41, U_UPPERCASE_LETTER},
+        {0x308, U_NON_SPACING_MARK},
+        {0xfffe, U_GENERAL_OTHER_TYPES},
+        {0xe0041, U_FORMAT_CHAR},
+        {0xeffff, U_UNASSIGNED}
     };
     int i, count;
 
