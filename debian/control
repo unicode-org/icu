@@ -60,7 +60,7 @@ Description: Data for ICU (source files)
  also all the table-based converters provided in the ICU distribution.
  .
  This package contains uncompiled source data. Precompiled data are in the
- `libicu1' package.
+ `libicu16' package.
 
 Package: icu-i18ndata
 Priority: extra

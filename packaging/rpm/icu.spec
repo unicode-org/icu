@@ -64,6 +64,27 @@ fi
 %post -n libicu16
 ldconfig
 
+# Adjust the current ICU link in /usr/lib/icu
+
+icucurrent=`2>/dev/null ls -dp /usr/lib/icu/* | sed -n 's,.*/\([^/]*\)/$,\1,p'| sort -rn | head -1`
+cd /usr/lib/icu
+rm -f current
+if test x"$icucurrent" != x
+then
+    ln -s "$icucurrent" current
+fi
+
+%preun -n libicu16
+# Adjust the current ICU link in /usr/lib/icu
+
+icucurrent=`2>/dev/null ls -dp /usr/lib/icu/* | sed -n 's,.*/\([^/]*\)/$,\1,p'| sort -rn | head -1`
+cd /usr/lib/icu
+rm -f current
+if test x"$icucurrent" != x
+then
+    ln -s "$icucurrent" current
+fi
+
 %prep
 %setup -q
 
@@ -584,6 +605,7 @@ make install DESTDIR=$RPM_BUILD_ROOT
 /usr/include/unicode/utf8.h
 /usr/include/unicode/utrans.h
 /usr/include/unicode/utypes.h
+/usr/lib/icu/1.6.0.1/Makefile.inc
 /usr/lib/icu/Makefile.inc
 /usr/share/icu/1.6.0.1/config
 
