@@ -659,7 +659,8 @@ void TestSortKey()
       /*0x00, 0x53, 0x00, 0x54, 0x00, 0x55, 0x00, 0x56, 0x00, 0x53, 0x00, 0x00, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x00, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x00*/
     };
 
-    int32_t sortklen, osortklen, toStringLen=0;
+    int32_t sortklen, osortklen;
+    uint32_t toStringLen=0;
     UCollator *col;
     UChar *test1, *test2, *test3;
     UErrorCode status = U_ZERO_ERROR;
@@ -691,9 +692,9 @@ void TestSortKey()
 
 
     if(ucol_getStrength(col) != UCOL_DEFAULT_STRENGTH)
-      {
+    {
         log_err("ERROR: default collation did not have UCOL_DEFAULT_STRENGTH !\n");
-      }
+    }
     /* Need to use identical strength */
     ucol_setAttribute(col, UCOL_STRENGTH, UCOL_IDENTICAL, &status);
 
