@@ -970,65 +970,63 @@
     <p>Here are the steps to build ICU:</p>
 
     <ol>
-      <li>Decompress the icuXXXX.tar (or icuXXXX.tgz) file. For example,
-      <tt>gunzip -d &lt; icuXXXX.tgz | tar xvf -</tt></li>
+      <li>Decompress the icu-<i>X</i>.<i>Y</i>.tgz (or
+      icu-<i>X</i>.<i>Y</i>.tar.gz) file. For example, <tt>"gunzip -d &lt;
+      icu-<i>X</i>.<i>Y</i>.tgz | tar xvf -"</tt></li>
 
       <li>Change directory to the "icu/source".</li>
 
-      <li>Run "chmod +x runConfigureICU configure install-sh" because these
-      files may have the wrong permissions.</li>
+      <li>Run <tt>"chmod +x runConfigureICU configure install-sh"</tt> because
+      these files may have the wrong permissions.</li>
 
-      <li>Run the <a href="source/runConfigureICU">runConfigureICU</a> script
-      for your platform. (See <a href="#HowToConfigureICU">note</a>
+      <li>Run the <tt><a href="source/runConfigureICU">runConfigureICU</a></tt>
+      script for your platform. (See <a href="#HowToConfigureICU">note</a>
       below).</li>
 
-      <li>Type "gmake" (or "make" if GNU make is the default make on your
-      platform) to compile the libraries and all the data files. The proper
-      name of the GNU make command is printed at the end of the configuration
-      run, as in "You must use gmake to compile ICU".</li>
+      <li>Type <tt>"gmake"</tt> (or "make" if GNU make is the default make on
+      your platform) to compile the libraries and all the data files. The
+      proper name of the GNU make command is printed at the end of the
+      configuration run, as in "You must use gmake to compile ICU".</li>
 
-      <li>Optionally, type "gmake check" (or "make check") to run the test
-      suite, which checks for ICU's functionality integrity (See <a href=
+      <li>Optionally, type <tt>"gmake check"</tt> to run the test suite, which
+      checks for ICU's functionality integrity (See <a href=
       "#HowToTestWithoutGmake">note</a> below).</li>
 
-      <li>Type "gmake install" (or "make install") to install. The install
-      targets support the use of the DESTDIR variable to create the
-      installation tree under a specific destination directory. (See <a href=
-      "#HowToInstallICU">note</a> below).</li>
+      <li>Type <tt>"gmake install"</tt> to install ICU. If you used the
+      --prefix= option on configure or runConfigureICU, ICU will be installed
+      to the directory you specified. (See <a href="#HowToInstallICU">note</a>
+      below).</li>
     </ol>
 
     <p><a name="HowToConfigureICU"><strong>Configuring ICU NOTE:</strong></a>
-    Type "./runConfigureICU --help" for help on how to run it and a list of
-    supported platforms. You may also want to type "./configure --help" to
-    print the available configure options that you may want to give
-    runConfigureICU. If you are not using the runConfigureICU script, or your
-    platform is not supported by the script, you may need to set your CC,CXX,
-    CFLAGS and CXXFLAGS environment variables, and type "./configure". Some of
-    the more frequently used options to configure are --disable-64bit-libs to
-    create 32-bit libraries, and --srcdir to do out of source builds (build the
-    libraries in the current location).</p>
+    Type <tt>"./runConfigureICU --help"</tt> for help on how to run it and a
+    list of supported platforms. You may also want to type <tt>"./configure
+    --help"</tt> to print the available configure options that you may want to
+    give runConfigureICU. If you are not using the runConfigureICU script, or
+    your platform is not supported by the script, you may need to set your
+    CC,CXX, CFLAGS and CXXFLAGS environment variables, and type
+    <tt>"./configure"</tt>. Some of the more frequently used options to
+    configure are --disable-64bit-libs to create 32-bit libraries, and --srcdir
+    to do out of source builds (build the libraries in the current
+    location).</p>
 
     <p><a name="HowToTestWithoutGmake"><strong>Running The Tests From The
     Command Line NOTE:</strong></a> You may have to set certain variables if
-    you with to run test programs individually, that is apart from "make
+    you with to run test programs individually, that is apart from "gmake
     check". The <strong>TZ</strong> environment variable needs to be set to
     <strong>PST8PDT</strong>. Also, the environment variable
     <strong>ICU_DATA</strong> can be set to the full pathname of the data
     directory to indicate where the locale data files and conversion mapping
     tables are when you are not using the shared library (e.g. by using the
     .dat archive or the individual data files). The trailing "/" is required
-    after the directory name (e.g. "$Root/source/data/" will work, but the
-    value "$Root/source/data" is not acceptable). You do not need to set
-    <strong>ICU_DATA</strong> if the complete data library is in your library
-    path.</p>
+    after the directory name (e.g. "$Root/source/data/out/" will work, but the
+    value "$Root/source/data/out" is not acceptable). You do not need to set
+    <strong>ICU_DATA</strong> if the complete shared data library is in your
+    library path.</p>
 
-    <p><a name="HowToInstallICU"><strong>Installing ICU NOTE:</strong></a> If
-    you are using the "gmake install" command, using the "--prefix" option on
-    configure or runConfigureICU will install ICU to the specified
-    location.</p>
-
-    <p>Some platforms use package management tools to control the installation
-    and uninstallation of files on the system, as well as the integrity of the
+    <p><a name="HowToInstallICU"><strong>Installing ICU NOTE:</strong></a> Some
+    platforms use package management tools to control the installation and
+    uninstallation of files on the system, as well as the integrity of the
     system configuration. You may want to check if ICU can be packaged for your
     package management tools by looking into the "packaging" directory. (Please
     note that if you are using a snapshot of ICU from CVS, it is probable that
@@ -1209,7 +1207,9 @@ Data set name type  : PDS</samp>
       Older versions may not work properly.</li>
     </ul>
 
-    <p>The following describes how to setup and build ICU.</p>
+    <p>The following describes how to setup and build ICU. For background
+    information, you should look at the <a href="#HowToBuildUnix">Unix</a>
+    build instructions.</p>
 
     <ol>
       <li>
@@ -1230,8 +1230,7 @@ Data set name type  : PDS</samp>
 <samp>ADDENVVAR ENVVAR(CC) VALUE('/usr/bin/icc')
 ADDENVVAR ENVVAR(CXX) VALUE('/usr/bin/icc')
 ADDENVVAR ENVVAR(MAKE) VALUE('/usr/bin/gmake')
-ADDENVVAR ENVVAR(OUTPUTDIR) VALUE('<i>libraryname</i>')
-ADDENVVAR ENVVAR(QIBM_MULTI_THREADED) VALUE('Y')</samp>
+ADDENVVAR ENVVAR(OUTPUTDIR) VALUE('<i>libraryname</i>')</samp>
 </pre>
         <i>libraryname</i> identifies target as400 library for *module, *pgm
         and *srvpgm objects.<br>
@@ -1261,7 +1260,7 @@ ADDENVVAR ENVVAR(QIBM_MULTI_THREADED) VALUE('Y')</samp>
       <li>Run <tt>'QSH'</tt></li>
 
       <li>Run gunzip on the ICU source code compressed tar archive
-      (icu-<i>X</i>-<i>Y</i>.tar.gz or icu-<i>X</i>-<i>Y</i>.tgz).</li>
+      (icu-<i>X</i>.<i>Y</i>.tgz or icu-<i>X</i>.<i>Y</i>.tar.gz).</li>
 
       <li>Run unpax-icu.sh on the tar file from the ICU download page.</li>
 
@@ -1282,32 +1281,28 @@ ADDENVVAR ENVVAR(QIBM_MULTI_THREADED) VALUE('Y')</samp>
         icu4c-support</a> mailing list. 
 
         <ol type="a">
-          <li>Run <tt>'mv data/Makefile data/Makefile.tmp'</tt></li>
+          <li>Run <tt>'mv data/Makefile data/Makefile.hide'</tt></li>
 
           <li>Run <tt>'gmake'</tt> to build some of the ICU libraries.</li>
 
-          <li>
-            When the gmake fails in icu/source/data, change OUTPUTDIR to a
-            different library than what it was previously set to. This should
-            be an empty library. You can do this by running the following
-            command: 
-<pre>
-<samp>system CHGENVVAR ENVVAR(OUTPUTDIR) VALUE('<i>datalibraryname</i>')</samp>
-</pre>
-          </li>
+          <li>When the gmake command fails in icu/source/data, run <tt>'cd
+          data'</tt></li>
 
-          <li>Run <tt>'mv data/Makefile.tmp data/Makefile'</tt></li>
+          <li>Run <tt>'mv Makefile.hide Makefile'</tt></li>
 
-          <li>Run <tt>'gmake'</tt> to build the ICU data library.</li>
+          <li>Run <tt>'gmake OUTPUTDIR=<i>datalibraryname</i></tt> to build the
+          ICU data library.</li>
 
           <li>
-            When gmake is finished run the following commands to setup the data
-            library: 
+            When gmake is finished, run the following commands to setup the
+            data library: 
 <pre>
-<samp>system CRTSRVPGM SRVPGM(<i>libraryname</i>/LIBICUDATA) MODULE(<i>datalibraryname</i>/*ALL) \
-        EXPORT(*ALL) TEXT('ICU 2.4 DATA') OPTION(*DUPPROC *DUPVAR)
-system CHGENVVAR ENVVAR(OUTPUTDIR) VALUE('<i>libraryname</i>')
-ln -fs /qsys.lib/<i>libraryname</i>.lib/libicudata.srvpgm data/libicudata.o
+<samp>system CRTLIB "LIB(<i>libraryname</i>)"
+system CHGENVVAR "ENVVAR(OUTPUTDIR) VALUE('<i>libraryname</i>')"
+system CRTSRVPGM "SRVPGM(<i>libraryname</i>/LIBICUDATA) MODULE(<i>datalibraryname</i>/*ALL)
+                  EXPORT(*ALL) TEXT('ICU 2.4 DATA') OPTION(*DUPPROC *DUPVAR)"
+ln -fs /qsys.lib/<i>libraryname</i>.lib/libicudata.srvpgm out/libicudata.o
+cd ..
 del common/libicuuc.o
 </samp>
 </pre>
@@ -1322,11 +1317,12 @@ del common/libicuuc.o
 
       <li>Run <tt>'gmake check'</tt> to build the tests.</li>
 
-      <li>If you did not specify the <tt>--disable-threads</tt> option to configure
-      before you built ICU, the "utility/MultithreadTest" test in intltest may
-      have failed. In order to make this test pass, please use <tt>'gmake check
-      QIBM_MULTI_THREADED=Y'</tt> after you built the tests with <tt>'gmake
-      check'</tt> from the previous step. You can look at the <a href=
+      <li>If you did not specify the <tt>--disable-threads</tt> option to
+      configure before you built ICU, the "utility/MultithreadTest" test in
+      intltest may have failed. In order to make this test pass, please use
+      <tt>'gmake check QIBM_MULTI_THREADED=Y'</tt> after you built the tests
+      with <tt>'gmake check'</tt> from the previous step. You can look at the
+      <a href=
       "http://publib.boulder.ibm.com/iseries/v5r1/ic2924/index.htm?info/apis/concept4.htm">
       iSeries Information Center</a> for more details.</li>
     </ol>
