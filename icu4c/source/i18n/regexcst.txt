@@ -246,7 +246,6 @@ backslash:
    'W'                   n  expr-quant                              doBackslashW
    'w'                   n  expr-quant                              doBackslashw
    'X'                   n  expr-quant                              doBackslashX
-   'x'                   n  expr-quant                              doBackslashx
    'Z'                   n  term                                    doBackslashZ
    'z'                   n  term                                    doBackslashz
    '0'                   n  expr-quant                              doOctal

@@ -1232,7 +1232,7 @@ void RegexTest::Extended() {
 //---------------------------------------------------------------------------
 void RegexTest::Errors() {
     // \escape sequences that aren't implemented yet.
-    REGEX_ERR("hex format \\x{abcd} not implemented", 1, 13, U_REGEX_UNIMPLEMENTED);
+    //REGEX_ERR("hex format \\x{abcd} not implemented", 1, 13, U_REGEX_UNIMPLEMENTED);
 
     // Missing close parentheses
     REGEX_ERR("Comment (?# with no close", 1, 25, U_REGEX_MISMATCHED_PAREN);
