@@ -795,10 +795,7 @@ ucol_cleanup(void)
         UCA_DATA_MEM = NULL;
     }
     if (UCA) {
-        /* Since UCA was opened with ucol_initCollator, ucol_close won't work. */
-        /*ucmpe32_close(UCA->mapping);*/
-        uprv_free(UCA->mapping);
-        uprv_free(UCA);
+        ucol_close(UCA);
         UCA = NULL;
     }
     return TRUE;
@@ -966,12 +963,7 @@ void ucol_initUCA(UErrorCode *status) {
         return;
     
     if(UCA == NULL) {
-        UCollator *newUCA = (UCollator *)uprv_malloc(sizeof(UCollator));
-        if (newUCA == NULL) {
-            *status = U_MEMORY_ALLOCATION_ERROR;
-            return;
-        }
-        
+        UCollator *newUCA = NULL;
         UDataMemory *result = udata_openChoice(NULL, UCA_DATA_TYPE, UCA_DATA_NAME, isAcceptableUCA, NULL, status);
         
         if(U_FAILURE(*status)) {
@@ -985,6 +977,9 @@ void ucol_initUCA(UErrorCode *status) {
             newUCA = ucol_initCollator((const UCATableHeader *)udata_getMemory(result), newUCA, status);
             if(U_SUCCESS(*status)){
                 newUCA->rb = NULL;
+		newUCA->binary = NULL;
+		newUCA->requestedLocale = NULL;
+		newUCA->hasRealData = FALSE; // real data lives in .dat file...
                 umtx_lock(NULL);
                 if(UCA == NULL) {
                     UCA = newUCA;
