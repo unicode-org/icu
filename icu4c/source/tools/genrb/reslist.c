@@ -29,18 +29,18 @@ uint32_t res_write(UNewDataMemory *mem, struct SResource *res,
                    uint32_t usedOffset, UErrorCode *status);
 
 static const UDataInfo dataInfo= {
-                                     sizeof(UDataInfo),
-                                     0,
+    sizeof(UDataInfo),
+    0,
 
-                                     U_IS_BIG_ENDIAN,
-                                     U_CHARSET_FAMILY,
-                                     sizeof(UChar),
-                                     0,
+    U_IS_BIG_ENDIAN,
+    U_CHARSET_FAMILY,
+    sizeof(UChar),
+    0,
 
-                                     {0x52, 0x65, 0x73, 0x42},     /* dataFormat="resb" */
-                                     {1, 0, 0, 0},                 /* formatVersion */
-                                     {1, 4, 0, 0}                  /* dataVersion take a look at version inside parsed resb*/
-                                 };
+    {0x52, 0x65, 0x73, 0x42},     /* dataFormat="resb" */
+    {1, 0, 0, 0},                 /* formatVersion */
+    {1, 4, 0, 0}                  /* dataVersion take a look at version inside parsed resb*/
+};
 
 static uint8_t calcPadding(uint32_t size) {
     /* returns space we need to pad */
@@ -51,9 +51,11 @@ static uint8_t calcPadding(uint32_t size) {
 void setIncludeCopyright(UBool val){
     gIncludeCopyright=val;
 }
+
 UBool getIncludeCopyright(void){
     return gIncludeCopyright;
 }
+
 /* Writing Functions */
 static uint32_t string_write(UNewDataMemory *mem, struct SResource *res,
                              uint32_t usedOffset, UErrorCode *status) {
@@ -275,9 +277,9 @@ void bundle_write(struct SRBRoot *bundle, const char *outputDir, char *writtenFi
     }
 
     if (writtenFilename) {
-       int off = 0, len = 0;
+       int32_t off = 0, len = 0;
        if (outputDir) {
-           len = uprv_strlen(outputDir);
+           len = (int32_t)uprv_strlen(outputDir);
            if (len > writtenFilenameLen) {
                len = writtenFilenameLen;
            }
@@ -288,7 +290,7 @@ void bundle_write(struct SRBRoot *bundle, const char *outputDir, char *writtenFi
            writtenFilename[off] = U_FILE_SEP_CHAR;
            if (--writtenFilenameLen) {
                ++off;
-               len = uprv_strlen(bundle->fLocale);
+               len = (int32_t)uprv_strlen(bundle->fLocale);
                if (len > writtenFilenameLen) {
                    len = writtenFilenameLen;
                }
