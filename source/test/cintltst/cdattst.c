@@ -42,6 +42,7 @@ void addDateForTest(TestNode** root)
 static void TestDateFormat()
 {
     UDateFormat *def, *fr, *it, *de, *def1, *fr_pat;
+    UDateFormat *any;
     UDateFormat *copy;
     UErrorCode status = U_ZERO_ERROR;
     UChar* result = NULL;
@@ -50,6 +51,7 @@ static void TestDateFormat()
     UChar temp[30];
     int32_t numlocales;
     UDate d1;
+    int i;
     int32_t resultlength;
     int32_t resultlengthneeded;
     int32_t parsepos;
@@ -107,9 +109,16 @@ static void TestDateFormat()
     if(numlocales < 0)
         log_data_err("FAIL: error in countAvailable\n");
     log_verbose("The number of locales for which date/time formatting patterns are available is %d\n", numlocales);
-    /*for(i=0;i<numlocales;i++)
-        log_verbose("%s\n", uloc_getName(udat_getAvailable(i))); */
     
+    for(i=0;i<numlocales;i++) {
+      UErrorCode subStatus = U_ZERO_ERROR;
+      log_verbose("Testing open of %s\n", udat_getAvailable(i));
+      any = udat_open(UDAT_SHORT, UDAT_SHORT, udat_getAvailable(i), NULL ,0, NULL, 0, &status);
+      if(U_FAILURE(subStatus)) {
+	log_data_err("FAIL: date format %s (getAvailable(%d)) is not instantiable: %s\n", udat_getAvailable(i), i, u_errorName(subStatus));
+      }
+    }
+
     /*Testing udat_clone()*/
     log_verbose("\nTesting the udat_clone() function of date format\n");
     copy=udat_clone(def, &status);
