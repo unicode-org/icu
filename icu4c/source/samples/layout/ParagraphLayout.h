@@ -42,6 +42,9 @@ struct StyleRunInfo;
  *
  * * Might want to change to a model where a paragraph object iterates over lines objects
  *   and a line object iterates over runs.
+ *
+ * * Add some constructors which don't take all the arguments, so that clients don't have
+ *   to fuss with the full-blown one if they're not doing anything tricky.
  * 
  * * May need to handle composite fonts via LEFontInstance. We'd get a 32-bit glyph ID
  *   back from mapCharToGlyph() where the high 16 bits identify the physical font. We'd
