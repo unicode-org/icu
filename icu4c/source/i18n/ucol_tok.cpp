@@ -649,6 +649,24 @@ uint8_t ucol_uprv_tok_readAndSetOption(UColTokenParser *src, const UChar *end, U
   }
 }
 
+inline UBool ucol_tok_doSetTop(UColTokenParser *src) {
+  /*
+  top = TRUE;
+  */
+  src->parsedToken.charsOffset = (uint32_t)(src->extraCurrent - src->source);
+  *src->extraCurrent++ = 0xFFFE;
+  *src->extraCurrent++ = (UChar)(ucolIndirectBoundaries[src->parsedToken.indirectIndex].startCE >> 16);
+  *src->extraCurrent++ = (UChar)(ucolIndirectBoundaries[src->parsedToken.indirectIndex].startCE & 0xFFFF);
+  if(ucolIndirectBoundaries[src->parsedToken.indirectIndex].startContCE == 0) {
+    src->parsedToken.charsLen = 3;
+  } else {
+    *src->extraCurrent++ = (UChar)(ucolIndirectBoundaries[src->parsedToken.indirectIndex].startContCE >> 16);
+    *src->extraCurrent++ = (UChar)(ucolIndirectBoundaries[src->parsedToken.indirectIndex].startContCE & 0xFFFF);
+    src->parsedToken.charsLen = 5;
+  } 
+  return TRUE;
+}
+
 U_CAPI const UChar* U_EXPORT2
 ucol_tok_parseNextToken(UColTokenParser *src, 
                         UBool startOfRules,
@@ -663,10 +681,15 @@ ucol_tok_parseNextToken(UColTokenParser *src,
   UChar *optionEnd = NULL;
   uint8_t before = 0;
   UBool isEscaped = FALSE;
-  uint32_t newCharsLen = 0, newExtensionLen = 0;
-  uint32_t charsOffset = 0, extensionOffset = 0;
+  // TODO: replace these variables with src->parsedToken counterparts
+  // no need to use them anymore since we have src->parsedToken.
+  // Ideally, token parser would be a nice class... Once, when I have
+  // more time (around 2020 probably).
+  uint32_t newExtensionLen = 0;
+  uint32_t extensionOffset = 0;
   uint32_t newStrength = UCOL_TOK_UNSET; 
 
+  src->parsedToken.charsOffset = 0;  src->parsedToken.charsLen = 0;
   src->parsedToken.prefixOffset = 0; src->parsedToken.prefixLen = 0;
   src->parsedToken.indirectIndex = 0;
 
@@ -677,11 +700,11 @@ ucol_tok_parseNextToken(UColTokenParser *src,
       if (ch == 0x0027/*'\''*/) {
           inQuote = FALSE;
       } else {
-        if ((newCharsLen == 0) || inChars) {
-          if(newCharsLen == 0) {
-            charsOffset = (uint32_t)(src->extraCurrent - src->source);
+        if ((src->parsedToken.charsLen == 0) || inChars) {
+          if(src->parsedToken.charsLen == 0) {
+            src->parsedToken.charsOffset = (uint32_t)(src->extraCurrent - src->source);
           }
-          newCharsLen++;
+          src->parsedToken.charsLen++;
         } else {
           if(newExtensionLen == 0) {
             extensionOffset = (uint32_t)(src->extraCurrent - src->source);
@@ -692,19 +715,18 @@ ucol_tok_parseNextToken(UColTokenParser *src,
     }else if(isEscaped){
       isEscaped =FALSE;
       if (newStrength == UCOL_TOK_UNSET) {
-        /* enabling rules to start with non-tokens a < b
 		*status = U_INVALID_FORMAT_ERROR;
         syntaxError(src->source,(int32_t)(src->current-src->source),(int32_t)(src->end-src->source),parseError);
         return NULL;
-		*/
-		newStrength = UCOL_TOK_RESET;
+        // enabling rules to start with non-tokens a < b
+		// newStrength = UCOL_TOK_RESET;
       }
       if(ch != 0x0000  && src->current != src->end) {
           if (inChars) {
-            if(newCharsLen == 0) {
-              charsOffset = (uint32_t)(src->current - src->source);
+            if(src->parsedToken.charsLen == 0) {
+              src->parsedToken.charsOffset = (uint32_t)(src->current - src->source);
             }
-            newCharsLen++;
+            src->parsedToken.charsLen++;
           } else {
             if(newExtensionLen == 0) {
               extensionOffset = (uint32_t)(src->current - src->source);
@@ -723,7 +745,8 @@ ucol_tok_parseNextToken(UColTokenParser *src,
 
             /* if we start with strength, we'll reset to top */
             if(startOfRules == TRUE) {
-              top = TRUE;
+              src->parsedToken.indirectIndex = 5;
+              top = ucol_tok_doSetTop(src);
               newStrength = UCOL_TOK_RESET;
               goto EndOfLoop;
             }
@@ -737,7 +760,8 @@ ucol_tok_parseNextToken(UColTokenParser *src,
 
             /* if we start with strength, we'll reset to top */
             if(startOfRules == TRUE) {
-              top = TRUE;
+              src->parsedToken.indirectIndex = 5;
+              top = ucol_tok_doSetTop(src);
               newStrength = UCOL_TOK_RESET;
               goto EndOfLoop;
             }
@@ -751,7 +775,8 @@ ucol_tok_parseNextToken(UColTokenParser *src,
 
             /* if we start with strength, we'll reset to top */
             if(startOfRules == TRUE) {
-              top = TRUE;
+              src->parsedToken.indirectIndex = 5;
+              top = ucol_tok_doSetTop(src);
               newStrength = UCOL_TOK_RESET;
               goto EndOfLoop;
             }
@@ -765,7 +790,8 @@ ucol_tok_parseNextToken(UColTokenParser *src,
 
             /* if we start with strength, we'll reset to top */
             if(startOfRules == TRUE) {
-              top = TRUE;
+              src->parsedToken.indirectIndex = 5;
+              top = ucol_tok_doSetTop(src);
               newStrength = UCOL_TOK_RESET;
               goto EndOfLoop;
             }
@@ -801,22 +827,11 @@ ucol_tok_parseNextToken(UColTokenParser *src,
               if(U_SUCCESS(*status)) {
                 if(result & UCOL_TOK_TOP) {
                   if(newStrength == UCOL_TOK_RESET) { 
-                    top = TRUE;
-                    charsOffset = (uint32_t)(src->extraCurrent - src->source);
-                    *src->extraCurrent++ = 0xFFFE;
-                    *src->extraCurrent++ = (UChar)(ucolIndirectBoundaries[src->parsedToken.indirectIndex].startCE >> 16);
-                    *src->extraCurrent++ = (UChar)(ucolIndirectBoundaries[src->parsedToken.indirectIndex].startCE & 0xFFFF);
-                    if(ucolIndirectBoundaries[src->parsedToken.indirectIndex].startContCE == 0) {
-                      newCharsLen = 3;
-                    } else {
-                      *src->extraCurrent++ = (UChar)(ucolIndirectBoundaries[src->parsedToken.indirectIndex].startContCE >> 16);
-                      *src->extraCurrent++ = (UChar)(ucolIndirectBoundaries[src->parsedToken.indirectIndex].startContCE & 0xFFFF);
-                      newCharsLen = 5;
-                    } 
+                    top = ucol_tok_doSetTop(src);
                     if(before) { // This is a combination of before and indirection like '&[before 2][first regular]<b'
                       *src->extraCurrent++ = 0x002d;
                       *src->extraCurrent++ = before;
-                      newCharsLen+=2;
+                      src->parsedToken.charsLen+=2;
                     }
 
                     src->current++;
@@ -828,8 +843,8 @@ ucol_tok_parseNextToken(UColTokenParser *src,
                 } else if(result & UCOL_TOK_VARIABLE_TOP) {
                   if(newStrength != UCOL_TOK_RESET && newStrength != UCOL_TOK_UNSET) {
                     variableTop = TRUE;
-                    charsOffset = (uint32_t)(src->extraCurrent - src->source);
-                    newCharsLen = 1;
+                    src->parsedToken.charsOffset = (uint32_t)(src->extraCurrent - src->source);
+                    src->parsedToken.charsLen = 1;
                     *src->extraCurrent++ = 0xFFFF;
                     src->current++;
                     goto EndOfLoop;
@@ -847,6 +862,7 @@ ucol_tok_parseNextToken(UColTokenParser *src,
                   }
                 } 
               } else {
+                *status = U_INVALID_FORMAT_ERROR;
                 syntaxError(src->source,(int32_t)(src->current-src->source),(int32_t)(src->end-src->source),parseError);
                 return NULL;
               }
@@ -864,26 +880,24 @@ ucol_tok_parseNextToken(UColTokenParser *src,
           /* found a quote, we're gonna start copying */
           case 0x0027/*'\''*/:
             if (newStrength == UCOL_TOK_UNSET) { /* quote is illegal until we have a strength */
-              /*
-			  enabling rules to start with a non-token character a < b
 			  *status = U_INVALID_FORMAT_ERROR;
               syntaxError(src->source,(int32_t)(src->current-src->source),(int32_t)(src->end-src->source),parseError);
               return NULL;
-			  */
-              newStrength = UCOL_TOK_RESET;
+			  // enabling rules to start with a non-token character a < b
+              // newStrength = UCOL_TOK_RESET;
             }
 
             inQuote = TRUE;
 
             if(inChars) { /* we're doing characters */
               if(wasInQuote == FALSE) {
-                charsOffset = (uint32_t)(src->extraCurrent - src->source);
+                src->parsedToken.charsOffset = (uint32_t)(src->extraCurrent - src->source);
               }
-              if (newCharsLen != 0) {
-                  uprv_memcpy(src->extraCurrent, src->current - newCharsLen, newCharsLen*sizeof(UChar));
-                  src->extraCurrent += newCharsLen;
+              if (src->parsedToken.charsLen != 0) {
+                  uprv_memcpy(src->extraCurrent, src->current - src->parsedToken.charsLen, src->parsedToken.charsLen*sizeof(UChar));
+                  src->extraCurrent += src->parsedToken.charsLen;
               }
-              newCharsLen++;
+              src->parsedToken.charsLen++;
             } else { /* we're doing an expansion */
               if(wasInQuote == FALSE) {
                 extensionOffset = (uint32_t)(src->extraCurrent - src->source);
@@ -918,18 +932,18 @@ ucol_tok_parseNextToken(UColTokenParser *src,
             // that case we would have to complicate the token hasher, which I do not 
             // intend to play with. Instead, we will do prefixes when prefixes are due
             // (before adding the elements).
-            src->parsedToken.prefixOffset = charsOffset;
-            src->parsedToken.prefixLen = newCharsLen;
+            src->parsedToken.prefixOffset = src->parsedToken.charsOffset;
+            src->parsedToken.prefixLen = src->parsedToken.charsLen;
 
             if(inChars) { /* we're doing characters */
               if(wasInQuote == FALSE) {
-                charsOffset = (uint32_t)(src->extraCurrent - src->source);
+                src->parsedToken.charsOffset = (uint32_t)(src->extraCurrent - src->source);
               }
-              if (newCharsLen != 0) {
-                  uprv_memcpy(src->extraCurrent, src->current - newCharsLen, newCharsLen*sizeof(UChar));
-                  src->extraCurrent += newCharsLen;
+              if (src->parsedToken.charsLen != 0) {
+                  uprv_memcpy(src->extraCurrent, src->current - src->parsedToken.charsLen, src->parsedToken.charsLen*sizeof(UChar));
+                  src->extraCurrent += src->parsedToken.charsLen;
               }
-              newCharsLen++;
+              src->parsedToken.charsLen++;
             }
 
             wasInQuote = TRUE;
@@ -943,12 +957,9 @@ ucol_tok_parseNextToken(UColTokenParser *src,
                      // the '|' is going to get lost.
           default:
             if (newStrength == UCOL_TOK_UNSET) {
-              /* enabling rules to start with non-tokens a < b
 			  *status = U_INVALID_FORMAT_ERROR;
               syntaxError(src->source,(int32_t)(src->current-src->source),(int32_t)(src->end-src->source),parseError);
               return NULL;
-			  */
-			  newStrength = UCOL_TOK_RESET;
             }
 
             if (ucol_tok_isSpecialChar(ch) && (inQuote == FALSE)) {
@@ -962,10 +973,10 @@ ucol_tok_parseNextToken(UColTokenParser *src,
             }
 
             if (inChars) {
-              if(newCharsLen == 0) {
-                charsOffset = (uint32_t)(src->current - src->source);
+              if(src->parsedToken.charsLen == 0) {
+                src->parsedToken.charsOffset = (uint32_t)(src->current - src->source);
               }
-              newCharsLen++;
+              src->parsedToken.charsLen++;
             } else {
               if(newExtensionLen == 0) {
                 extensionOffset = (uint32_t)(src->current - src->source);
@@ -1008,15 +1019,13 @@ ucol_tok_parseNextToken(UColTokenParser *src,
     return NULL;
   }
 
-  if (newCharsLen == 0 && top == FALSE) {
+  if (src->parsedToken.charsLen == 0 && top == FALSE) {
     syntaxError(src->source,(int32_t)(src->current-src->source),(int32_t)(src->end-src->source),parseError); 
     *status = U_INVALID_FORMAT_ERROR;
     return NULL;
   }
 
   src->parsedToken.strength = newStrength; 
-  src->parsedToken.charsOffset = charsOffset;
-  src->parsedToken.charsLen = newCharsLen;
   src->parsedToken.extensionOffset = extensionOffset;
   src->parsedToken.extensionLen = newExtensionLen;
   src->parsedToken.flags = (UCOL_TOK_VARIABLE_TOP * (variableTop?1:0)) | (UCOL_TOK_TOP * (top?1:0)) | before;
@@ -1529,7 +1538,9 @@ uint32_t ucol_tok_assembleTokenList(UColTokenParser *src, UParseError *parseErro
       /*  7 After all this, set LAST to point to sourceToken, and goto step 3. */  
       lastToken = sourceToken;
     } else {
-      return 0;
+      if(U_FAILURE(*status)) {
+        return 0;
+      }
     }
   }
 
