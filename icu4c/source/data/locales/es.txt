@@ -303,7 +303,6 @@ es {
     }
     // Spanish does not capitalize the language names like English
     Languages {
-        Fallback{ "en"}
         root{"ra\u00EDz" }    // The only exception to ISO-639
 
         af { "afrikaans" }

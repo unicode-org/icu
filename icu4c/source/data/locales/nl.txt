@@ -290,7 +290,6 @@ nl {
     }
     ExemplarCharacters { "[a-z\u00e1\u00e9\u00ed\u00f3\u00fa\u00e4\u00eb\u00ef\u00f6\u00fc\u0133]" }
     Languages { 
-        Fallback{ "en"}
         //af  { "Afrikaans" }
         am { "Amhaars" }
         ar { "Arabisch" }

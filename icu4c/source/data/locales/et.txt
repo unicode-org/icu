@@ -257,7 +257,6 @@ et {
         //ZW { "Zimbabwe" }
     }
     Languages { 
-        Fallback{ "en"}
         ar { "Araabia" }
         bg { "Bulgaaria" }
         cs { "Tiehhi" }

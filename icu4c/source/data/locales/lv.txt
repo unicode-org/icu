@@ -293,7 +293,6 @@ lv {
         "m\u0113",
     }
     Languages { 
-        Fallback{ "en"}
         ar { "ar\u0101bu" }
         bg { "bulg\u0101ru" }
         cs { "\u010Dehu" }

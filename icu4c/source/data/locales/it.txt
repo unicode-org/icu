@@ -347,7 +347,6 @@ it {
         "dC",
     }
     Languages {
-        Fallback{ "en"}
 
         af { "afrikaans" }
         am { "amarico" }
