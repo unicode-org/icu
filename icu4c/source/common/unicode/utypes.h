@@ -435,7 +435,8 @@ enum UErrorCode {
     U_MALFORMED_PRAGMA,
     U_UNCLOSED_SEGMENT,
     U_ILLEGAL_CHAR_IN_SEGMENT,
-    U_VARIABLE_RANGE_EXHAUSTED,
+    U_VARIABLE_RANGE_EXHAUSTED,         /**< Too many stand-ins generated for the given variable range */
+    U_VARIABLE_RANGE_OVERLAP,           /**< The variable range overlaps characters used in rules */
     U_PARSE_ERROR_LIMIT,                /**< end of Transliterator specific parse Errors */
 
     /* 
