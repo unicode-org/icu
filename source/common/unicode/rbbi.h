@@ -99,14 +99,6 @@ protected:
     //=======================================================================
 
     /**
-     * This constructor uses the udata interface to create a BreakIterator
-     * whose internal tables live in a memory-mapped file.  "image" is a pointer
-     * to the beginning of that file.
-     * @internal
-     */
-    RuleBasedBreakIterator(UDataMemory* image, UErrorCode &status);
-
-    /**
      * Constructor from a flattened set of RBBI data in malloced memory.
      *             RulesBasedBreakIterators built from a custom set of rules
      *             are created via this constructor; the rules are compiled
@@ -145,11 +137,25 @@ public:
      * @param parseError  In the event of a syntax error in the rules, provides the location
      *                    within the rules of the problem.
      * @param status Information on any errors encountered.
-     *  @draft ICU 2.2
+     * @draft ICU 2.2
      */
     RuleBasedBreakIterator( const UnicodeString    &rules,
                              UParseError           &parseError,
                              UErrorCode            &status);
+
+
+    /**
+     * This constructor uses the udata interface to create a BreakIterator
+     * whose internal tables live in a memory-mapped file.  "image" is an 
+     * ICU UDataMemory handle for the pre-compiled break iterator tables.
+     * @param image handle to the memory image for the break iterator data.
+     * @param status Information on any errors encountered.
+     * @see udata_open
+     * @see #getBinaryRules
+     * @draft ICU 2.8
+     */
+    RuleBasedBreakIterator(UDataMemory* image, UErrorCode &status);
+
     /**
      * Destructor
      *  @stable ICU 2.0
@@ -404,7 +410,7 @@ public:
      * is much faster than building one from the source form of the
      * break rules.
      *
-     * The binary data is can only be used with the same version of ICU
+     * The binary data can only be used with the same version of ICU
      *  and on the same platform type (processor endian-ness)
      *
      * @param length Returns the length of the binary data.  (Out paramter.)
