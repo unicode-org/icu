@@ -890,6 +890,7 @@ private:
     int32_t              fMatchEnd;        // First position after the end of the most recent match
     int32_t              fLastMatchEnd;    // First position after the end of the previous match,
                                            //   or -1 if there was no previous match.
+    int32_t              fLastReplaceEnd;  // First position after the end of the previous appendReplacement();
 
     UVector32           *fStack;
     REStackFrame        *fFrame;           // After finding a match, the last active stack
