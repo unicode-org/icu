@@ -1064,6 +1064,19 @@ main(int argc, char* argv[])
     fprintf(stdout, "   Leaks (l)             : %s\n", (leaks?      "On" : "Off"));
     fprintf(stdout, "-----------------------------------------------\n");
 
+    // Check that u_init() works
+    errorCode = U_ZERO_ERROR;
+    u_init(&errorCode);
+    if (U_FAILURE(errorCode)) {
+        fprintf(stdout,
+            "*** u_init() failed with error code = %s\n"
+                "*** Check the ICU_DATA environment variable and\n"
+                "*** check that the data files are present.\n",
+                u_errorName(errorCode));
+        return 1;
+    }
+
+
     // initial check for the default converter
     errorCode = U_ZERO_ERROR;
     cnv = ucnv_open(0, &errorCode);

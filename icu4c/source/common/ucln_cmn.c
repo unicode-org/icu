@@ -15,6 +15,7 @@
 */
 
 #include "unicode/uclean.h"
+#include "unicode/uchar.h"
 #include "ucln_cmn.h"
 #include "umutex.h"
 #include "ucln.h"
@@ -82,3 +83,46 @@ u_cleanup(void)
     umtx_destroy(NULL);
 }
 
+
+static UMTX     InitMutex = NULL;  
+
+U_CAPI void U_EXPORT2
+u_init(UErrorCode *status) {
+    /*
+     * Lock and unlock the global mutex, thus forcing into existence
+     *   if it hasn't already been created.
+     */
+    umtx_lock(NULL);
+    umtx_unlock(NULL);
+
+
+    /* Lock a private mutex for the duration of the initialization,
+     *  ensuring that there are no races through here, and to serve as
+     *  a memory barrier.  Don't use the global mutex, because of the 
+     *  possibility that some of the functions called within here might
+     *  use it.
+     */
+    umtx_lock(&InitMutex);
+
+    /*
+     *  Do a simple operation using each of the data-requiring APIs that do
+     *   not have a service object, ensuring that the required data is loaded.
+     */
+
+
+    /* Char Properties */
+    u_hasBinaryProperty(0x20, UCHAR_WHITE_SPACE);
+
+    /* Char Names  */
+    {
+        char buf[100];
+        u_charName(0x20, U_UNICODE_CHAR_NAME,  buf, 100,  status);
+    }
+
+
+    /*  TODO:  the rest of 'em  */
+
+
+    umtx_unlock(&InitMutex);
+
+}
