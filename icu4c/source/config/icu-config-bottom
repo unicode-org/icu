@@ -1,5 +1,5 @@
 ## -*-sh-*-
-## BEGIN of icu-config-bottom. $Revision: 1.4 $
+## BEGIN of icu-config-bottom. $Revision: 1.5 $
 ## Copyright (c) 2002, International Business Machines Corporation and
 ## others. All Rights Reserved.
 
@@ -46,6 +46,8 @@ allflags()
     echo "  --prefix=XXX           Set prefix to XXX for remainder of command"
     echo "  --sbindir              Print system binary path (sbin) "
     echo "  --shared-datadir       Print shared data (share) path. This is NOT the ICU data dir."
+    echo "  --shlib-c              Print the command to compile and build C shared libraries with ICU"
+    echo "  --shlib-cc             Print the command to compile and build C++ shared libraries with ICU"
     echo "  --sysconfdir           Print system config (etc) path"
     echo "  --unicode-version      Print version of Unicode data used in ICU ($UNICODE_VERSION)"
     echo "  --version              Print ICU version ($VERSION)"
@@ -285,7 +287,15 @@ do
 	    echo $pkgdatadir
 	    ;;
 
-        --version)
+	--shlib-c)
+	    echo $SHLIB_c
+	    ;;
+
+	--shlib-cc)
+	    echo $SHLIB_cc
+	    ;;
+
+	--version)
             echo $VERSION
             ;;
 
