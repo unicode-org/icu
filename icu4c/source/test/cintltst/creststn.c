@@ -214,6 +214,9 @@ static const char* norwayLocales[] = {
 };
 
 static void checkStatus(UErrorCode expected, UErrorCode status) {
+  if(U_FAILURE(status)) {
+    log_data_err("Resource not present, cannot test\n");
+  }
   if(status != expected) {
     log_err("Expected error code %s, got error code %s\n", u_errorName(expected), u_errorName(status));
   }
@@ -235,9 +238,11 @@ static void TestErrorCodes(void) {
   checkStatus(U_USING_DEFAULT_WARNING, status);
 
   /* we look up the resource which is aliased, but it lives in fallback */
-  status = U_USING_DEFAULT_WARNING; 
-  r2 = ures_getByKey(r, "CollationElements", NULL, &status);
-  checkStatus(U_USING_FALLBACK_WARNING, status);
+  if(U_SUCCESS(status) && r != NULL) {
+    status = U_USING_DEFAULT_WARNING; 
+    r2 = ures_getByKey(r, "CollationElements", NULL, &status);
+    checkStatus(U_USING_FALLBACK_WARNING, status);
+  } 
   ures_close(r);
 
   /* this bundle should return zero error, so it shouldn't change the status*/
