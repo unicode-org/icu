@@ -938,7 +938,7 @@ UCATableHeader *ucol_assembleTailoringTable(UColTokenParser *src, UErrorCode *st
         if((CE = ucmpe32_get(t->mapping, u)) == UCOL_NOT_FOUND 
           /* this test is for contractions that are missing the starting element. Looks like latin-1 should be done before assembling */
           /* the table, even if it results in more false closure elements */
-          || ((isContraction(CE)) &&
+           || ((isCntTableElement(CE)/*isContraction(CE)*/) &&
           (uprv_cnttab_getCE(t->contractions, CE, 0, status) == UCOL_NOT_FOUND))
           ) {
           decomp[0] = (UChar)u;
@@ -946,6 +946,8 @@ UCATableHeader *ucol_assembleTailoringTable(UColTokenParser *src, UErrorCode *st
           el.cPoints = el.uchars;
           el.cSize = 1;
           el.noOfCEs = 0;
+          el.prefix = el.prefixChars;
+          el.prefixSize = 0;
           init_collIterate(src->UCA, decomp, 1, &colIt);
           while(CE != UCOL_NO_MORE_CES) {
             CE = ucol_getNextCE(src->UCA, &colIt, status);
@@ -975,6 +977,8 @@ UCATableHeader *ucol_assembleTailoringTable(UColTokenParser *src, UErrorCode *st
           }
 
           if(needToAdd == TRUE) { // we need to add if this contraction is not tailored.
+            el.prefix = el.prefixChars;
+            el.prefixSize = 0;
             el.cPoints = el.uchars;
             el.noOfCEs = 0;
             el.uchars[0] = *conts;
