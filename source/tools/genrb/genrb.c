@@ -24,6 +24,10 @@
 
 U_CDECL_BEGIN
 
+extern int32_t lineCount;
+extern char  lastTag[];
+
+
 #include "error.h"
 #include "parse.h"
 #include "util.h"
@@ -161,7 +165,7 @@ main(int argc,
     processFile(arg, encoding, inputDir, outputDir, &status);
     /*make_col(arg, &status);*/
     if(U_FAILURE(status)) {
-        printf("genrb: %s processing file \"%s\"\n", u_errorName(status), arg);
+        printf("genrb: %s processing file \"%s\" around line %d, last Tag %s\n", u_errorName(status), arg, lineCount, lastTag);
     }
     if(getErrorText() != 0)
 	printf("Issued Errors and Warnings:\n       (%s)\n", getErrorText());
