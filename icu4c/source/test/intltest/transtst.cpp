@@ -1510,6 +1510,35 @@ void TransliteratorTest::TestSupplemental() {
 
 void TransliteratorTest::TestQuantifier() { 
 
+    // Make sure @ in a quantified anteContext works
+    expect("a+ {b} > | @@ c; A > a; (a+ c) > '(' $1 ')';",
+           "AAAAAb",
+           "aaa(aac)");
+
+    // Make sure @ in a quantified postContext works
+    expect("{b} a+ > c @@ |; (a+) > '(' $1 ')';",
+           "baaaaa",
+           "caa(aaa)");
+
+    // Make sure @ in a quantified postContext with seg ref works
+    expect("{(b)} a+ > $1 @@ |; (a+) > '(' $1 ')';",
+           "baaaaa",
+           "baa(aaa)");
+
+    // Make sure @ past ante context doesn't enter ante context
+    UTransPosition pos = {0, 5, 3, 5};
+    expect("a+ {b} > | @@ c; x > y; (a+ c) > '(' $1 ')';",
+           "xxxab",
+           "xxx(ac)",
+           &pos);
+
+    // Make sure @ past post context doesn't enter post context
+    UTransPosition pos2 = {0, 4, 0, 2};
+    expect("{b} a+ > c @@ |; x > y; a > A;",
+           "baxx",
+           "caxx",
+           &pos2);
+
     expect("(ab)? c > d;",
            "c abc ababc",
            "d d abd");
