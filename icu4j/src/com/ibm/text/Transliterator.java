@@ -198,9 +198,29 @@ import java.text.MessageFormat;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: Transliterator.java,v $ $Revision: 1.6 $ $Date: 2000/01/06 17:38:25 $
+ * @version $RCSfile: Transliterator.java,v $ $Revision: 1.7 $ $Date: 2000/01/18 02:30:49 $
  */
 public abstract class Transliterator {
+    /**
+     * Direction constant indicating the forward direction in a transliterator,
+     * e.g., the forward rules of a RuleBasedTransliterator.  An "A-B"
+     * transliterator transliterates A to B when operating in the forward
+     * direction, and B to A when operating in the reverse direction.
+     * @see RuleBasedTransliterator
+     * @see CompoundTransliterator
+     */
+    public static final int FORWARD = 0;
+
+    /**
+     * Direction constant indicating the reverse direction in a transliterator,
+     * e.g., the reverse rules of a RuleBasedTransliterator.  An "A-B"
+     * transliterator transliterates A to B when operating in the forward
+     * direction, and B to A when operating in the reverse direction.
+     * @see RuleBasedTransliterator
+     * @see CompoundTransliterator
+     */
+    public static final int REVERSE = 1;    
+
     /**
      * In the <code>keyboardTransliterate()</code>
      * <code>index[]</code> array, the beginning index, inclusive
@@ -259,6 +279,8 @@ public abstract class Transliterator {
      * </ul>
      */
     private static Hashtable cache;
+
+    private static Hashtable displayNameCache;
 
     /**
      * Internal object used to stand for instances of
@@ -649,6 +671,12 @@ public abstract class Transliterator {
         ResourceBundle bundle = ResourceBundle.getBundle(
             RB_LOCALE_ELEMENTS, inLocale);
 
+        // Use the registered display name, if any
+        String n = (String) displayNameCache.get(ID);
+        if (n != null) {
+            return n;
+        }
+
         // Use display name for the entire transliterator, if it
         // exists.
         try {
@@ -706,6 +734,43 @@ public abstract class Transliterator {
     }
 
     /**
+     * Returns a <code>Transliterator</code> object given its ID.
+     * The ID must be either a system transliterator ID or a ID registered
+     * using <code>registerInstance()</code>.
+     *
+     * @param ID a valid ID, as enumerated by <code>getAvailableIDs()</code>
+     * @return A <code>Transliterator</code> object with the given ID
+     * @exception IllegalArgumentException if the given ID is invalid.
+     * @see #registerInstance
+     * @see #getAvailableIDs
+     * @see #getID
+     */
+     // changed MED
+    public static Transliterator getInstance(String ID, int direction) {
+        if (ID.indexOf(';') >= 0) {
+            return new CompoundTransliterator(ID, direction, null);
+        }
+        if (direction == REVERSE) {
+            int i = ID.indexOf('-');
+            if (i < 0) {
+                throw new IllegalArgumentException("No inverse for: "
+                                                   + ID);
+            }
+            ID = ID.substring(i+1) + '-' + ID.substring(0, i);
+        }
+        Transliterator t = internalGetInstance(ID);
+        if (t != null) {
+            return t;
+        }
+        throw new IllegalArgumentException("Unsupported transliterator: "
+                                           + ID);
+    }
+
+    public static final Transliterator getInstance(String ID) {
+        return getInstance(ID, FORWARD);
+    }
+
+    /**
      * Returns this transliterator's inverse.  See the class
      * documentation for details.  This implementation simply inverts
      * the two entities in the ID and attempts to retrieve the
@@ -725,36 +790,10 @@ public abstract class Transliterator {
      * transliterator is registered.
      * @see #registerInstance
      */
-    public Transliterator getInverse() {
-        int i = ID.indexOf('-');
-        if (i >= 0) {
-            String inverseID = ID.substring(i+1) + '-' + ID.substring(0, i);
-            return internalGetInstance(inverseID);
-        }
-        return null;
+    public final Transliterator getInverse() {
+        return getInstance(ID, REVERSE);
     }
-
-    /**
-     * Returns a <code>Transliterator</code> object given its ID.
-     * The ID must be either a system transliterator ID or a ID registered
-     * using <code>registerInstance()</code>.
-     *
-     * @param ID a valid ID, as enumerated by <code>getAvailableIDs()</code>
-     * @return A <code>Transliterator</code> object with the given ID
-     * @exception IllegalArgumentException if the given ID is invalid.
-     * @see #registerInstance
-     * @see #getAvailableIDs
-     * @see #getID
-     */
-    public static Transliterator getInstance(String ID) {
-        Transliterator t = internalGetInstance(ID);
-        if (t != null) {
-            return t;
-        }
-        throw new IllegalArgumentException("Unsupported transliterator: "
-                                           + ID);
-    }
-
+    
     /**
      * Returns a transliterator object given its ID.  Unlike getInstance(),
      * this method returns null if it cannot make use of the given ID.
@@ -828,8 +867,11 @@ public abstract class Transliterator {
      * @see #registerInstance
      * @see #unregister
      */
-    public static void registerClass(String ID, Class transClass) {
-        cache.put(ID, transClass);        
+    public static void registerClass(String ID, Class transClass, String displayName) {
+        cache.put(ID, transClass);
+        if (displayName != null) {
+            displayNameCache.put(ID, displayName);
+        }
     }
 
     /**
@@ -843,6 +885,7 @@ public abstract class Transliterator {
      * @see #registerClass
      */
     public static Object unregister(String ID) {
+        displayNameCache.remove(ID);
         return cache.remove(ID);
     }
 
@@ -868,6 +911,7 @@ public abstract class Transliterator {
             String[] ruleBasedIDs = bundle.getStringArray(RB_RULE_BASED_IDS);
             
             cache = new Hashtable();
+            displayNameCache = new Hashtable();
             
             for (int i=0; i<ruleBasedIDs.length; ++i) {
                 String ID = ruleBasedIDs[i];
@@ -881,11 +925,16 @@ public abstract class Transliterator {
         } catch (MissingResourceException e) {}
 
         // Register non-rule-based transliterators
+        registerClass(HangulJamoTransliterator._ID,
+                      HangulJamoTransliterator.class, null);
+        registerClass(JamoHangulTransliterator._ID,
+                      JamoHangulTransliterator.class, null);
+                      
         registerClass(HexToUnicodeTransliterator._ID,
-                      HexToUnicodeTransliterator.class);
+                      HexToUnicodeTransliterator.class, null);
         registerClass(UnicodeToHexTransliterator._ID,
-                      UnicodeToHexTransliterator.class);
+                      UnicodeToHexTransliterator.class, null);
         registerClass(NullTransliterator._ID,
-                      NullTransliterator.class);
+                      NullTransliterator.class, null);
     }
 }

@@ -23,7 +23,7 @@ import java.util.Vector;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: CompoundTransliterator.java,v $ $Revision: 1.1 $ $Date: 1999/12/20 18:29:21 $
+ * @version $RCSfile: CompoundTransliterator.java,v $ $Revision: 1.2 $ $Date: 2000/01/18 02:30:49 $
  */
 public class CompoundTransliterator extends Transliterator {
 
@@ -46,9 +46,9 @@ public class CompoundTransliterator extends Transliterator {
      * altered by this transliterator.  If <tt>filter</tt> is
      * <tt>null</tt> then no filtering is applied.
      */
-    public CompoundTransliterator(String ID, Transliterator[] transliterators,
+    public CompoundTransliterator(Transliterator[] transliterators,
                                   UnicodeFilter filter) {
-        super(ID, filter);
+        super(joinIDs(transliterators), filter);
         trans = new Transliterator[transliterators.length];
         System.arraycopy(transliterators, 0, trans, 0, trans.length);
     }
@@ -61,9 +61,81 @@ public class CompoundTransliterator extends Transliterator {
      * @param transliterators array of <code>Transliterator</code>
      * objects
      */
-    public CompoundTransliterator(String ID, Transliterator[] transliterators) {
-        this(ID, transliterators, null);
+    public CompoundTransliterator(Transliterator[] transliterators) {
+        this(transliterators, null);
     }
+    
+    /**
+     * Splits an ID of the form "ID;ID;..." into a compound using each
+     * of the IDs. 
+     * @param ID of above form
+     * @param forward if false, does the list in reverse order, and
+     * takes the inverse of each ID.
+     */
+    public CompoundTransliterator(String ID, int direction,
+                                  UnicodeFilter filter) {
+        // changed MED
+        // Later, add "rule1[filter];rule2...
+        super(ID, filter);
+        String[] list = split(ID, ';');
+        trans = new Transliterator[list.length];
+        for (int i = 0; i < list.length; ++i) {
+            trans[i] = getInstance(list[direction==FORWARD ? i : (list.length-1-i)],
+                                   direction);
+        }
+    }
+    
+    public CompoundTransliterator(String ID, int direction) {
+        this(ID, direction, null);
+    }
+    
+    public CompoundTransliterator(String ID) {
+        this(ID, FORWARD, null);
+    }
+
+    /**
+     * Return the IDs of the given list of transliterators, concatenated
+     * with ';' delimiting them.  Equivalent to the perlish expression
+     * join(';', map($_.getID(), transliterators).
+     */
+    private static String joinIDs(Transliterator[] transliterators) {
+        StringBuffer id = new StringBuffer();
+        for (int i=0; i<transliterators.length; ++i) {
+            if (i > 0) {
+                id.append(';');
+            }
+            id.append(transliterators[i].getID());
+        }
+        return id.toString();
+    }
+
+    /**
+     * Splits a string, as in JavaScript
+     */
+    private static String[] split(String s, char divider) {
+        // changed MED
+
+	    // see how many there are
+	    int count = 1;
+	    for (int i = 0; i < s.length(); ++i) {
+	        if (s.charAt(i) == divider) ++count;
+	    }
+	    
+	    // make an array with them
+	    String[] result = new String[count];
+	    int last = 0;
+	    int current = 0;
+	    int i;
+	    for (i = 0; i < s.length(); ++i) {
+	        if (s.charAt(i) == divider) {
+	            result[current++] = s.substring(last,i);
+	            last = i+1;
+	        }
+	    }
+	    result[current++] = s.substring(last,i);
+	    return result;
+	}
+    
 
     /**
      * Returns the number of transliterators in this chain.
