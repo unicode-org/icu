@@ -54,6 +54,10 @@ public:
       * Tests for needMultipleChar(), charLength()
       **/
     void TestCharLength();
+    /**
+      * Tests for getScript()
+      **/
+    void TestScript();
 
 private:
     /**
