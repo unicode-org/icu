@@ -47,9 +47,9 @@ CPPFLAGS += -I$(top_builddir)/common -I$(top_srcdir)/common -I$(top_srcdir)/i18n
 LIBS = $(LIBICUI18N) $(LIBICUUC) $(DEFAULT_LIBS) $(LIB_M)
 
 ifeq ($(UCONVMSG_STATIC),YES)
-LIBS += -L$(MSGNAME) -l$(MSGNAME)
 DEFS += -DUCONVMSG_STATIC=$(MSGNAME)
 UCONVMSG_LIB = $(RESDIR)/lib$(MSGNAME).a
+LIBS += $(UCONVMSG_LIB)
 
 PKGMODE = static
 else
