@@ -330,7 +330,7 @@ res_findResource(const ResourceData *pResData, Resource r, const char** path) {
   int32_t indexR = 0, keyLen = 0;
   UResType type = RES_GET_TYPE(t1);
   
-  while(*pathP && nextSepP && t1 != RES_BOGUS && type >= RES_TABLE) { 
+  while(nextSepP && *pathP && t1 != RES_BOGUS && type >= RES_TABLE) { 
     /* Iteration stops if: the path has been consumed, we found a non-existing
      * resource (t1 == RES_BOGUS) or we found a scalar resource (including alias)
      */
