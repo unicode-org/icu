@@ -305,6 +305,15 @@ void CollationServiceTest::TestRegisterFactory(void)
     if (*jpcol != *ncol) {
       errln("jpcol for fu_FU_FOO failed");
     }
+
+	Locale loc = ncol->getLocale(ULOC_REQUESTED_LOCALE, status);
+	if (loc != fu_FU_FOO) {
+		errln((const UnicodeString&)"requested locale for fu_FU_FOO is not fu_FU_FOO but " + loc.getName());
+	}
+	loc = ncol->getLocale(ULOC_VALID_LOCALE, status);
+	if (loc != fu_FU) {
+		errln((const UnicodeString&)"valid locale for fu_FU_FOO is not fu_FU but " + loc.getName());
+	}
     delete ncol; ncol = NULL;
 
     UnicodeString locName = fu_FU.getName();
