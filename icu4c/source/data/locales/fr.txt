@@ -74,7 +74,7 @@ fr {
         GQ { "Guin\u00e9e Equatoriale" }
         GR { "Gr\u00e8ce" }
         GW { "Guin\u00e9e-Bissau" }
-        GY { "Guyana" }
+        //GY { "Guyana" }
 
         HK { "Hong-Kong R.A.S." }
         HR { "Croatie" }
