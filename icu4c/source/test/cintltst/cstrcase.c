@@ -51,10 +51,13 @@ TestCaseLower() {
         uprv_memcmp(lowerRoot, buffer, length*U_SIZEOF_UCHAR)!=0 ||
         buffer[length]!=0
     ) {
-        log_err("error in u_strToLower(root locale)=%ld error=%s string matches: %s\n",
+        log_err("error in u_strToLower(root locale)=%ld error=%s string matches: %s\t\nlowerRoot=%s\t\nbuffer=%s\n",
             length,
             u_errorName(errorCode),
-            uprv_memcmp(lowerRoot, buffer, length*U_SIZEOF_UCHAR)==0 && buffer[length]==0 ? "yes" : "no");
+            uprv_memcmp(lowerRoot, buffer, length*U_SIZEOF_UCHAR)==0 &&
+buffer[length]==0 ? "yes" : "no",
+            aescstrdup(lowerRoot),
+            aescstrdup(buffer));
     }
 
     /* lowercase with turkish locale and in the same buffer */

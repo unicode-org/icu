@@ -1538,6 +1538,8 @@ enumCharNamesFn(void *context,
                         log_err("u_enumCharName(0x%lx - 1.0)=%s instead of %s\n", code, name, names[i].oldName);
                     }
                     break;
+                case U_CHAR_NAME_CHOICE_COUNT:
+                    break;
             }
             break;
         }
@@ -1950,11 +1952,11 @@ static void TestUScriptCodeAPI(){
         }
     }
     {
-        uint32_t i = 0;
         UScriptCode code= USCRIPT_INVALID_CODE;
         UErrorCode  status = U_ZERO_ERROR;
         int32_t err = 0;
-        for(;i<=0x10ffff;i++){
+
+        for(i = 0; i<=0x10ffff; i++){
             code =  uscript_getScript(i,&status);
             if(code == USCRIPT_INVALID_CODE){
                 err++;
@@ -1973,20 +1975,20 @@ static void TestUScriptCodeAPI(){
 static void
 TestAdditionalProperties() {
     /* test data for u_charAge() */
-    static struct {
+    static const struct {
         UChar32 c;
         UVersionInfo version;
     } charAges[]={
-        0x41,    { 1, 1, 0, 0 },
-        0xffff,  { 1, 1, 0, 0 },
-        0x20ab,  { 2, 0, 0, 0 },
-        0x2fffe, { 2, 0, 0, 0 },
-        0x20ac,  { 2, 1, 0, 0 },
-        0xfb1d,  { 3, 0, 0, 0 },
-        0x3f4,   { 3, 1, 0, 0 },
-        0x10300, { 3, 1, 0, 0 },
-        0x220,   { 3, 2, 0, 0 },
-        0xff60,  { 3, 2, 0, 0 }
+        {0x41,    { 1, 1, 0, 0 }},
+        {0xffff,  { 1, 1, 0, 0 }},
+        {0x20ab,  { 2, 0, 0, 0 }},
+        {0x2fffe, { 2, 0, 0, 0 }},
+        {0x20ac,  { 2, 1, 0, 0 }},
+        {0xfb1d,  { 3, 0, 0, 0 }},
+        {0x3f4,   { 3, 1, 0, 0 }},
+        {0x10300, { 3, 1, 0, 0 }},
+        {0x220,   { 3, 2, 0, 0 }},
+        {0xff60,  { 3, 2, 0, 0 }}
     };
 
     /* test data for u_hasBinaryProperty() */
