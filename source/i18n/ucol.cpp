@@ -312,111 +312,8 @@ void ucol_putOptionsToHeader(UCollator* result, UCATableHeader * image, UErrorCo
     image->frenchCollation = result->frenchCollation;
     image->normalizationMode = result->normalizationMode;
     image->strength = result->strength;
-    image->variableTopValue = result->variableTopValue;
+    image->variableTopValue = result->variableTopValue; 
     image->alternateHandling = result->alternateHandling;
-}
-
-
-
-static void addCEtoContrHash(uint32_t ce, uint8_t *cTable, UCollator* coll)
-{
-    uint32_t        offset;
-    UChar           c;
-    const UChar     *cPtr;
-    const uint32_t  *cePtr;
-
-    offset = getContractOffset(ce);              /* Uchar (!) offset from top of data image into   */
-    cPtr   = (UChar *)coll->image + offset;       /*   contraction UChars table.         */
-
-    offset = cPtr - coll->contractionIndex;      /* Convert to an integer index that can be   */
-                                                 /*  used for both the UChar and CE tables    */
-    fprintf(stderr, "  Index to contraction table arrays is %x\n", offset);
-    offset++;        
-
-    /* loop through all contraction UChars in this section of the contraction table           */
-    /*   add each to the hash table, and recursively do the CE for each.                      */
-    cPtr = coll->contractionIndex;
-    cePtr = coll->contractionCEs;
-
-    for (c=cPtr[offset]; c != 0xffff; c=cPtr[++offset]) {
-        uint32_t    i;
-        uint8_t     bitInByte;
-        uint32_t    ce;
-
-        fprintf(stderr, "  adding char %x, offset = %x.  CE is %x\n", c, offset, cePtr[offset]);
-        if (c < 256)                            /*  hash the UChar                            */
-            i = c >> 3;
-        else
-            i = 32 + ((c & UCOL_UNSAFECP_TABLE_MASK) >> 3);
-        bitInByte = 1 << (c & 0x7);             /*  set the bit in the hash table.            */
-        //cTable[i] |= bitInByte;
-
-        ce = cePtr[offset];                     /* recursively add the corresponding CE,      */
-        if (isContraction(ce))  {               /*   if it's another contraction.             */
-            fprintf(stderr, "    Recursing on the CE ...\n");
-            addCEtoContrHash(ce, cTable, coll);
-            fprintf(stderr, "    Return from recursion.\n");
-        }
-    }
-} 
-
-
-
-static void buildUnsafeCPTable(uint8_t *cTable, UCollator* coll) {
-    uint32_t   ce;
-    UChar32    c;
-    int32_t    i;
-    uint8_t    bitInByte;
-    
-    fprintf(stderr, "Building UnSafeCharTable... ");
-    uprv_memset(cTable, 0, UCOL_UNSAFECP_TABLE_SIZE); 
-    
-    for (UChar cp=0; cp<0xffff; cp++) {
-        ce = ucmp32_get(coll->mapping, cp);
-        // ce = CEs[i];
-        if (isContraction(ce)) {
-            fprintf(stderr, "char, CE = %x  %x\n", cp, ce);
-            addCEtoContrHash(ce, cTable, coll);
-        }
-    }
-    
-#if 0
-    // Do again for main UCA table.  ???
-    if (UCA) {   // But don't do when initing the global UCA itself.
-        CEs    = (uint32_t *)ucmp32_getArray(UCA->mapping);
-        numCEs = ucmp32_getCount(UCA->mapping);
-        for (i=0; i<numCEs; i++) {
-            ce = CEs[i];
-            if (isContraction(ce))
-                addCEtoContrHash(ce, cTable, coll);
-        }
-    }
-#endif       
-    // Add all characters with combining class != 0
-    for (c=0; c<=0xffff; c++) {
-        if (c >= 0xd800 && c <= 0xf7ff)
-            continue;
-        if (u_getCombiningClass(c) != 0) {
-            if (c < 256)  
-                i = c >> 3;
-            else
-                i = 32 + ((c & UCOL_UNSAFECP_TABLE_MASK) >> 3);
-            bitInByte = 1 << (c & 0x7);      
-            cTable[i] |= bitInByte;
-        }
-    }
-    
-    
-    int count = 0;
-    for (i=0; i<UCOL_UNSAFECP_TABLE_SIZE; i++) {
-        uint8_t b = cTable[i];
-        for (int bit=0; bit<8; bit++) {
-            if (b & 1)
-                count ++;
-            b >>= 1;
-        }
-    }
-    fprintf(stderr, "done.  %d entries.\n", count);
 }
 
 
@@ -3622,7 +3519,7 @@ U_CAPI UCollationResult ucol_strcollinc(const UCollator *coll,
                 continue;
               } else {
                 tOrder ^= caseSwitch;
-                *(tCEs++) = tOrder;
+                *(tCEs++) = tOrder; 
                 continue;
               }
             }
