@@ -19,7 +19,7 @@
 #include "unicode/uloc.h"
 #include "unicode/ucnv.h"
 #include "unicode/ucnv_err.h"
-#include "unicode/utypes.h"
+#include "unicode/putil.h"
 #include "unicode/ustring.h"
 #include "ucnv_bld.h" /* for sizeof(UConverter) */
 #include "cintltst.h"

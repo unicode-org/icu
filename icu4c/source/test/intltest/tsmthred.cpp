@@ -117,6 +117,7 @@ void MultithreadTest::runIndexedTest( int32_t index, UBool exec,
 #include "unicode/msgfmt.h"
 #include "unicode/locid.h"
 #include "unicode/ucol.h"
+#include "unicode/calendar.h"
 #include "ucaconf.h"
 
 //-----------------------------------------------------------------------------------
@@ -628,11 +629,11 @@ public:
     virtual void run()
     {
         SimpleThread::sleep(500);          // wait, make sure they aquire the lock
-        fElapsed = uprv_getUTCtime();
+        fElapsed = Calendar::getNow();
         {
             Mutex m;                        // wait here
 
-            fElapsed = uprv_getUTCtime() - fElapsed;
+            fElapsed = Calendar::getNow() - fElapsed;
 
             if(fOtherThread.fDone == FALSE) 
                 fErr = TRUE;                // they didnt get to it yet

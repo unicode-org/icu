@@ -25,6 +25,7 @@
 #include "unicode/uloc.h"
 #include "unicode/uchar.h"
 #include "unicode/ustring.h"
+#include "unicode/putil.h"
 #include "callcoll.h"
 #include "cmemory.h"
 #include "cintltst.h"
@@ -1215,7 +1216,7 @@ static FileStream * getFractionalUCA(void)
     FileStream *result = NULL;
 
     /* Look inside ICU_DATA first */
-    uprv_strcpy(newPath, u_getDataDirectory());
+    uprv_strcpy(newPath, ctest_dataSrcDir());
     uprv_strcat(newPath, "unidata" U_FILE_SEP_STRING );
     uprv_strcat(newPath, "FractionalUCA.txt");
 

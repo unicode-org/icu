@@ -9,6 +9,7 @@
 */
 
 #include "unicode/utypes.h"
+#include "unicode/putil.h"
 #include "unicode/uclean.h"
 #include "unicode/uchar.h"
 #include "unicode/ures.h"

@@ -17,6 +17,7 @@
 
 #include "unicode/ucnv.h"
 #include "unicode/ustring.h"
+#include "unicode/putil.h"
 
 #include "uresimp.h"
 #include "cmemory.h"

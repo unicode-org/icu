@@ -19,6 +19,7 @@
  */
 
 #include <unicode/utypes.h>
+#include <unicode/putil.h>
 #include <unicode/ucnv.h>
 #include <unicode/uenum.h>
 #include <unicode/unistr.h>
