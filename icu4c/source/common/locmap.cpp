@@ -4,7 +4,7 @@
  *   Corporation and others.  All Rights Reserved.
  **********************************************************************
 */
-// $Revision: 1.5 $
+// $Revision: 1.6 $
 //
 // Provides functionality for mapping between
 // LCID and Posix IDs.
@@ -25,6 +25,15 @@
 //                          MAX_ID_LENGTH.
 // 04/23/99     stephen     Added C wrapper for convertToPosix.
 
+#ifdef WIN32
+
+/*
+ * Note:
+ * This code is used only internally by putil.c/uprv_getDefaultLocaleID().
+ * This means that this could be much simpler code, and the mapping
+ * from Win32 locale ID numbers to POSIX locale strings should
+ * be the faster one.
+ */
 
 #include <math.h>
 
@@ -38,6 +47,73 @@ int32_t        IGlobalLocales::fgLocaleCount = 0;
 uint32_t       IGlobalLocales::fgStdLang = 0x0400;
 const uint32_t IGlobalLocales::kMapSize = 40;
 ILcidPosixMap* IGlobalLocales::fgPosixIDmap = 0;
+
+/////////////////////////////////////////////////
+//
+// Internal Classes for LCID <--> POSIX Mapping
+//
+/////////////////////////////////////////////////
+
+/* forward declaration */
+class ILcidPosixMap;
+
+class ILcidPosixElement
+{
+public:
+  ILcidPosixElement(uint32_t, const char*);
+
+  ILcidPosixElement();
+  ILcidPosixElement(const ILcidPosixElement&);
+  ILcidPosixElement& operator=(const ILcidPosixElement&);
+
+  ~ILcidPosixElement();
+
+private:
+  uint32_t fHostID;
+  const char *fPosixID;
+
+  friend class ILcidPosixMap;
+};
+
+class ILcidPosixMap
+{
+public:
+
+  ILcidPosixMap();
+  void initialize (uint32_t hostID,
+                   const char* posixID,
+                   uint32_t totalNumberOfRegions = 1);
+
+  ~ILcidPosixMap();
+
+  void addRegion (uint32_t hostID,
+                  const char* posixID);
+
+  uint16_t hostLangID(void) const
+  { return fHostLangID; };
+
+  const char* posixLangID(void) const
+  { return fPosixLangID; };
+
+  uint32_t hostID(const char* fromPosixID) const;
+  const char* posixID(uint32_t fromHostID) const;
+
+  static const char* fgWildCard;
+
+
+private:
+  ILcidPosixMap(const ILcidPosixMap&);
+  ILcidPosixMap& operator=(const ILcidPosixMap&);
+
+  uint16_t fHostLangID;
+  char fPosixLangID[3];
+
+  ILcidPosixElement* fRegionMaps;
+  uint32_t fMapSize;
+  uint32_t fNumRegions;
+};
+
+//
 
 ////////////////////////////////////////////
 //
@@ -209,8 +285,8 @@ IGlobalLocales::convertToPosix(uint32_t hostid)
   return ILcidPosixMap::fgWildCard;
 }
 
-U_CFUNC const char*
-T_convertToPosix(int32_t hostid)
+U_CFUNC const char *
+T_convertToPosix(uint32_t hostid)
 {
   return IGlobalLocales::convertToPosix(hostid);
 }
@@ -262,7 +338,7 @@ IGlobalLocales::convertToLCID(const char* posixID)
 uint16_t
 IGlobalLocales::languageLCID(uint32_t hostID)
 {
-    return (uint16_t)(0x00FF & hostID);
+    return (uint16_t)(0x03FF & hostID);
 }
 
 /////////////////////////////////////////////////////
@@ -278,43 +354,20 @@ ILcidPosixElement::ILcidPosixElement(uint32_t hid,
                                      const char* pid)
 {
   fHostID = hid;
-  int32_t len = setId(pid);
-
-  if (len == 2)
-    {
-      fPosixID[2] = '_';
-      fPosixID[3] = '?';
-      fPosixID[4] = '?';
-      fPosixID[5] = 0;
-    }
-
-}
-
-int32_t ILcidPosixElement::setId(const char* id)
-{
-  int32_t len = strlen(id);
-  if (len >= MAX_ID_LENGTH) len = MAX_ID_LENGTH - 1;
-  int32_t index;
-
-  for (index = 0; index < len; index++)
-    {
-      fPosixID[index] = id[index];
-    }
-  fPosixID[len] = 0; //null terminate
-  return len;
+  fPosixID = pid;
 }
 
 ILcidPosixElement::ILcidPosixElement()
 {
   fHostID = 0;
-  fPosixID[0] = 0;
+  fPosixID = NULL;
 }
 
 
 ILcidPosixElement::ILcidPosixElement(const ILcidPosixElement& that)
 {
   fHostID = that.fHostID;
-  setId(that.fPosixID);
+  fPosixID = that.fPosixID;
 }
 
 ILcidPosixElement&
@@ -323,7 +376,7 @@ ILcidPosixElement::operator=(const ILcidPosixElement& that)
   if (this != &that)
     {
       fHostID = that.fHostID;
-      setId(that.fPosixID);
+      fPosixID = that.fPosixID;
     }
   return *this;
 }
@@ -477,3 +530,4 @@ ILcidPosixMap::posixID(uint32_t hostID) const
   return fRegionMaps[0].fPosixID;
 }
 
+#endif
