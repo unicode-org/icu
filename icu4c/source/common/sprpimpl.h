@@ -86,6 +86,8 @@ struct UStringPrepProfile{
     UDataMemory* sprepData;
     UBool isDataLoaded;
     int32_t refCount;
+    UBool doNFKC;
+    UBool checkBiDi;
 };
 
 /**
