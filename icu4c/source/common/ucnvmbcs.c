@@ -55,8 +55,12 @@
 #define MBCS_UNROLL_SINGLE_FROM_BMP 0
 
 /*
- * _MBCSHeader versions 4
+ * _MBCSHeader versions 4.1
  * (Note that the _MBCSHeader version is in addition to the converter formatVersion.)
+ *
+ * Change from version 4.0:
+ * - Replace header.reserved with header.fromUBytesLength so that all
+ *   fields in the data have length.
  *
  * Changes from version 3 (for performance improvements):
  * - new bit distribution for state table entries
@@ -364,11 +368,20 @@ gb18030Ranges[13][4]={
 
 static uint32_t
 _MBCSSizeofFromUBytes(UConverterMBCSTable *mbcsTable) {
-    /* ### TODO markus 20020911 Use _MBCSHeader.reserved to store size of fromUBytes[] */
     const uint16_t *table;
 
     uint32_t st3, maxStage3;
     uint16_t st1, maxStage1, st2;
+
+    if(mbcsTable->fromUBytesLength>0) {
+        /*
+         * We _know_ the number of bytes in the fromUnicodeBytes array
+         * starting with header.version 4.1.
+         * Otherwise, below, we need to enumerate the fromUnicode
+         * trie and find the highest entry.
+         */
+        return mbcsTable->fromUBytesLength;
+    }
 
     /* Enumerate the from-Unicode trie table to find the highest stage 3 index. */
     table=mbcsTable->fromUnicodeTable;
@@ -621,6 +634,7 @@ _MBCSLoad(UConverterSharedData *sharedData,
 
     mbcsTable->fromUnicodeTable=(const uint16_t *)(raw+header->offsetFromUTable);
     mbcsTable->fromUnicodeBytes=(const uint8_t *)(raw+header->offsetFromUBytes);
+    mbcsTable->fromUBytesLength=header->fromUBytesLength;
     mbcsTable->outputType=(uint8_t)header->flags;
 
     /* make sure that the output type is known */
