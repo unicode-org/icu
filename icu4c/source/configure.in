@@ -31,17 +31,35 @@ AC_CHECK_STRICT_COMPILE
 
 dnl Determine the host system and Makefile fragment
 AC_CANONICAL_HOST
+
+case "${host}" in
+*-*-solaris*)
+	if test "$ac_cv_prog_gcc" = no; then
+		AC_MSG_CHECKING([if we have a 64-bit (sparcv9) compiler])
+		SOL64=`$CC -xarch=v9 2>&1`
+		if test -z "$SOL64"; then
+			AC_MSG_RESULT(yes)
+			SOL64=yes
+		else
+			AC_MSG_RESULT(no)
+			SOL64=no
+		fi
+	fi ;;
+*)	SOL64=no ;;
+esac
+
 ICU_CHECK_MH_FRAG
 
 hpuxcma=false
 
-dnl Checks for libraries
+dnl Checks for libraries and other host specific stuff
 dnl On HP/UX, don't link to -lm from a shared lib because it isn't
 dnl  PIC (at least on 10.2)
 case "${host}" in
 	*-*-hpux10*)    hpuxcma=true
 			AC_CHECK_LIB(m, floor, LIB_M="-lm") ;;
 	*-*-hpux*) 	AC_CHECK_LIB(m, floor, LIB_M="-lm") ;;
+	
 	*) 		AC_CHECK_LIB(m, floor) 
 			LIB_M="" ;;
 esac
