@@ -1,6 +1,6 @@
 /*
  *
- * (C) Copyright IBM Corp. 1998-2003. All Rights Reserved.
+ * (C) Copyright IBM Corp. 1998-2004. All Rights Reserved.
  *
  * WARNING: THIS FILE IS MACHINE GENERATED. DO NOT HAND EDIT IT UNLESS
  * YOU REALLY KNOW WHAT YOU'RE DOING.
@@ -9,14 +9,14 @@
 #ifndef __SCRIPTANDLANGUAGES_H
 #define __SCRIPTANDLANGUAGES_H
 
+#include "LETypes.h"
+
+U_NAMESPACE_BEGIN
+
 /**
  * \file
  * \internal
  */
-
-#include "LETypes.h"
-
-U_NAMESPACE_BEGIN
 
 const LETag zyyyScriptTag = 0x7A797979; /* 'zyyy' (COMMON) */
 const LETag qaaiScriptTag = 0x71616169; /* 'qaai' (INHERITED) */
@@ -72,6 +72,7 @@ const LETag osmaScriptTag = 0x6F736D61; /* 'osma' (OSMANYA) */
 const LETag shawScriptTag = 0x73686177; /* 'shaw' (SHAVIAN) */
 const LETag taleScriptTag = 0x74616C65; /* 'tale' (TAI_LE) */
 const LETag ugarScriptTag = 0x75676172; /* 'ugar' (UGARITIC) */
+const LETag hrktScriptTag = 0x68726B74; /* 'hrkt' (KATAKANA_OR_HIRAGANA) */
 
 const LETag nullScriptTag = 0x00000000; /* ''     (NULL) */
 
