@@ -39,7 +39,7 @@ class UnicodeFilter;
  * default is uppercase.
  *
  * @author Alan Liu
- * @obsolete ICU 2.4. Use transliterator factory methods instead since this class will be removed in that release.
+ * @internal Use transliterator factory methods instead since this class will be removed in that release.
  */
 class U_I18N_API UnicodeToHexTransliterator : public Transliterator {
 
@@ -104,7 +104,7 @@ public:
      * NULL if none.  Adopted by this transliterator.
      * @param status Error code indicating success or failure
      * to parse pattern.
-     * @obsolete ICU 2.4. Use transliterator factory methods instead since this class will be removed in that release.
+     * @internal Use transliterator factory methods instead since this class will be removed in that release.
      */
     UnicodeToHexTransliterator(const UnicodeString& pattern,
                                UBool isUppercase,
@@ -117,7 +117,7 @@ public:
      * applyPattern() for pattern syntax.
      * @param status Error code indicating success or failure
      * to parse pattern.
-     * @obsolete ICU 2.4. Use transliterator factory methods instead since this class will be removed in that release.
+     * @internal Use transliterator factory methods instead since this class will be removed in that release.
      */
     UnicodeToHexTransliterator(const UnicodeString& pattern,
                                UErrorCode& status);
@@ -125,19 +125,19 @@ public:
     /**
      * Constructs a transliterator with the default prefix "\u"
      * that outputs uppercase hex digits.
-     * @obsolete ICU 2.4. Use transliterator factory methods instead since this class will be removed in that release.
+     * @internal Use transliterator factory methods instead since this class will be removed in that release.
      */
     UnicodeToHexTransliterator(UnicodeFilter* adoptedFilter = 0);
 
     /**
      * Destructor.
-     * @obsolete ICU 2.4. Use transliterator factory methods instead since this class will be removed in that release.
+     * @internal Use transliterator factory methods instead since this class will be removed in that release.
      */
     virtual ~UnicodeToHexTransliterator();
 
     /**
      * Copy constructor.
-     * @obsolete ICU 2.4. Use transliterator factory methods instead since this class will be removed in that release.
+     * @internal Use transliterator factory methods instead since this class will be removed in that release.
      */
     UnicodeToHexTransliterator(const UnicodeToHexTransliterator&);
 
@@ -149,7 +149,7 @@ public:
 
     /**
      * Transliterator API.
-     * @obsolete ICU 2.4. Use transliterator factory methods instead since this class will be removed in that release.
+     * @internal Use transliterator factory methods instead since this class will be removed in that release.
      */
     virtual Transliterator* clone(void) const;
 
@@ -178,31 +178,31 @@ public:
      * <p>Limitations: There is no way to set the uppercase attribute
      * in the pattern.  (applyPattern() does not alter the uppercase
      * attribute.)
-     * @obsolete ICU 2.4. Use transliterator factory methods instead since this class will be removed in that release.
+     * @internal Use transliterator factory methods instead since this class will be removed in that release.
      */
     void applyPattern(const UnicodeString& thePattern, UErrorCode& status);
 
     /**
      * Return this transliterator's pattern.
-     * @obsolete ICU 2.4. Use transliterator factory methods instead since this class will be removed in that release.
+     * @internal Use transliterator factory methods instead since this class will be removed in that release.
      */
     const UnicodeString& toPattern(void) const;
 
     /**
      * Returns true if this transliterator outputs uppercase hex digits.
-     * @obsolete ICU 2.4. Use transliterator factory methods instead since this class will be removed in that release.
+     * @internal Use transliterator factory methods instead since this class will be removed in that release.
      */
     virtual UBool isUppercase(void) const;
 
     /**
      * Sets if this transliterator outputs uppercase hex digits.
-     * @obsolete ICU 2.4. Use transliterator factory methods instead since this class will be removed in that release.
+     * @internal Use transliterator factory methods instead since this class will be removed in that release.
      */
     virtual void setUppercase(UBool outputUppercase);
 
     /**
      * Implements {@link Transliterator#handleTransliterate}.
-     * @obsolete ICU 2.4. Use transliterator factory methods instead since this class will be removed in that release.
+     * @internal Use transliterator factory methods instead since this class will be removed in that release.
      */
     virtual void handleTransliterate(Replaceable& text, UTransPosition& offsets,
                                      UBool isIncremental) const;

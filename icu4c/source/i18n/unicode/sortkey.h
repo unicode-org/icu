@@ -165,6 +165,7 @@ public:
     */
     const    uint8_t*       getByteArray(int32_t& count) const;
 
+#ifdef U_USE_COLLATION_KEY_DEPRECATES
     /**
     * Extracts the collation key values into a new array. The caller owns
     * this storage and should free it.
@@ -173,6 +174,7 @@ public:
     * @obsolete ICU 2.6. Use getByteArray instead since this API will be removed in that release.
     */
     uint8_t*                toByteArray(int32_t& count) const;
+#endif
 
     /**
     * Convenience method which does a string(bit-wise) comparison of the

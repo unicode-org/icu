@@ -46,13 +46,12 @@ void UnicodeStringTest::runIndexedTest( int32_t index, UBool exec, const char* &
         case 6: name = "TestSpacePadding"; if (exec) TestSpacePadding(); break;
         case 7: name = "TestPrefixAndSuffix"; if (exec) TestPrefixAndSuffix(); break;
         case 8: name = "TestFindAndReplace"; if (exec) TestFindAndReplace(); break;
-        case 9: name = "TestCellWidth"; if (exec) TestCellWidth(); break;
+        case 9: name = "TestBogus"; if (exec) TestBogus(); break;
         case 10: name = "TestReverse"; if (exec) TestReverse(); break;
         case 11: name = "TestMiscellaneous"; if (exec) TestMiscellaneous(); break;
         case 12: name = "TestStackAllocation"; if (exec) TestStackAllocation(); break;
         case 13: name = "TestUnescape"; if (exec) TestUnescape(); break;
         case 14: name = "TestCountChar32"; if (exec) TestCountChar32(); break;
-        case 15: name = "TestBogus"; if (exec) TestBogus(); break;
 
         default: name = ""; break; //needed to end loop
     }
@@ -575,11 +574,7 @@ UnicodeStringTest::TestRemoveReplace()
 
     for (int32_t i = 0; i < test1.length(); i++) {
         if (test5[i] != 0x53 && test5[i] != 0x50 && test5[i] != 0x41 && test5[i] != 0x4d && test5[i] != 0x20) {
-#ifdef U_USE_DEPRECATED_UCHAR_REFERENCE
-            test1[i] = 0x78;
-#else
             test1.setCharAt(i, 0x78);
-#endif
         }
     }
 
@@ -885,37 +880,6 @@ UnicodeStringTest::TestFindAndReplace()
     expectedValue = "One potato, two potato, three MISSISSIPPI, four\n";
     if (test1 != expectedValue)
         errln("findAndReplace failed: expected \"" + expectedValue + "\", got \"" + test1 + "\".");
-}
-
-void
-UnicodeStringTest::TestCellWidth()
-{
-    UChar     testData2[] = { 0x4d, 0x6f, 0x308, 0x74, 0x6c, 0x65, 0x79, 0x20, 0x43, 0x72, 0x75, 0x308, 0x65, 0x0000 };
-    UChar     testData3[] = { 0x31, 0x39, 0x39, 0x37, 0x5e74, 0x20, 0x516d, 0x6708, 0x20, 0x30, 0x33, 0x65e5, 0x5e73, 0x6210, 0x0000 };
-    UChar     testData4[] = { 0x39, 0x37, 0xb144, 0x36, 0xc6d4, 0x30, 0x33, 0xc77c, 0x0000 };
-    UChar     testData5[] = { 0x39, 0x37, 0x1103, 0x1167, 0x11ab, 0x36, 0x110b, 0x117b, 0x11af, 0x30, 0x33, 0x110b, 0x1175, 0x11af, 0x0000 };
-
-    UnicodeString   test1("The rain in Spain stays mainly on the plain.");
-    UnicodeString   test2(testData2);
-    UnicodeString   test3(testData3);
-    UnicodeString   test4(testData4);
-    UnicodeString   test5(testData5);
-    int32_t testVal = test1.numDisplayCells();
-
-    if (testVal != 44)
-        errln("test1.numDisplayCells() failed: expected 44, got %d", testVal);
-    testVal = test2.numDisplayCells();
-    if (testVal != 11)
-        errln("test2.numDisplayCells() failed: expected 11, got %d", testVal);
-    testVal = test3.numDisplayCells();
-    if (testVal != 20)
-        errln("test3.numDisplayCells() failed: expected 20, got %d", testVal);
-    testVal = test4.numDisplayCells();
-    if (testVal != 11)
-        errln("test4.numDisplayCells() failed: expected 11, got %d", testVal);
-    testVal = test5.numDisplayCells();
-    if (testVal != 11)
-        errln("test5.numDisplayCells() failed: expected 11, got %d", testVal);
 }
 
 void

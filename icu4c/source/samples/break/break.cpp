@@ -24,7 +24,7 @@ void printUnicodeString(const UnicodeString &s) {
 
 
 void printTextRange( BreakIterator& iterator, 
-		     UTextOffset start, UTextOffset end )
+		     int32_t start, int32_t end )
 {
   CharacterIterator *strIter = iterator.getText().clone();
   UnicodeString  s;
@@ -40,8 +40,8 @@ void printTextRange( BreakIterator& iterator,
 /* Print each element in order: */
 void printEachForward( BreakIterator& boundary)
 {
-  UTextOffset start = boundary.first();
-  for (UTextOffset end = boundary.next();
+  int32_t start = boundary.first();
+  for (int32_t end = boundary.next();
        end != BreakIterator::DONE;
        start = end, end = boundary.next())
     {
@@ -52,8 +52,8 @@ void printEachForward( BreakIterator& boundary)
 /* Print each element in reverse order: */
 void printEachBackward( BreakIterator& boundary)
 {
-  UTextOffset end = boundary.last();
-  for (UTextOffset start = boundary.previous();
+  int32_t end = boundary.last();
+  for (int32_t start = boundary.previous();
        start != BreakIterator::DONE;
        end = start, start = boundary.previous())
     {
@@ -64,24 +64,24 @@ void printEachBackward( BreakIterator& boundary)
 /* Print the first element */
 void printFirst(BreakIterator& boundary)
 {
-  UTextOffset start = boundary.first();
-  UTextOffset end = boundary.next();
+  int32_t start = boundary.first();
+  int32_t end = boundary.next();
   printTextRange( boundary, start, end );
 }
 
 /* Print the last element */
 void printLast(BreakIterator& boundary)
 {
-  UTextOffset end = boundary.last();
-  UTextOffset start = boundary.previous();
+  int32_t end = boundary.last();
+  int32_t start = boundary.previous();
   printTextRange( boundary, start, end );
 }
 
 /* Print the element at a specified position */
-void printAt(BreakIterator &boundary, UTextOffset pos )
+void printAt(BreakIterator &boundary, int32_t pos )
 {
-  UTextOffset end = boundary.following(pos);
-  UTextOffset start = boundary.previous();
+  int32_t end = boundary.following(pos);
+  int32_t start = boundary.previous();
   printTextRange( boundary, start, end );
 }
 

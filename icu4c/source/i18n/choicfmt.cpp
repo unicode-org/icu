@@ -448,6 +448,7 @@ ChoiceFormat::toPattern(UnicodeString& result) const
     return result;
 }
 
+#ifdef U_USE_CHOICE_FORMAT_DEPRECATES
 // -------------------------------------
 // Adopts the limit and format arrays.
 
@@ -487,6 +488,7 @@ ChoiceFormat::adoptChoices(double *limits,
         }
     }
 }
+#endif
 
 // -------------------------------------
 // Sets the limit and format arrays. 

@@ -277,6 +277,7 @@ CollationKey::ensureCapacity(int32_t newSize)
     return *this;
 }
 
+#ifdef U_USE_COLLATION_KEY_DEPRECATES
 // Create a copy of the byte array.
 uint8_t*
 CollationKey::toByteArray(int32_t& count) const
@@ -295,6 +296,7 @@ CollationKey::toByteArray(int32_t& count) const
 
     return result;
 }
+#endif
 
 int32_t
 CollationKey::hashCode() const
