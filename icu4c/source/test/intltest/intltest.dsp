@@ -140,18 +140,6 @@ LINK32=link.exe
 # Name "intltest - Win32 Debug"
 # Name "intltest - Win64 Release"
 # Name "intltest - Win64 Debug"
-# Begin Group "bidi"
-
-# PROP Default_Filter ""
-# Begin Source File
-
-SOURCE=.\biditst.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\biditst.h
-# End Source File
-# End Group
 # Begin Group "break iteration"
 
 # PROP Default_Filter ""
