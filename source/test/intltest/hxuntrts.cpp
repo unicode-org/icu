@@ -8,6 +8,10 @@
 *   03/17/2000   Madhu        Creation.
 ************************************************************************/
 
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_TRANSLITERATION
+
 /* These APIs are becoming private */
 #define ICU_HEXTOUNICODETRANSLITERATOR_USE_DEPRECATES 1
 
@@ -438,5 +442,4 @@ void HexToUniTransliteratorTest::expectAux(const UnicodeString& tag,
     }
 }
 
-
-
+#endif /* #if !UCONFIG_NO_TRANSLITERATION */

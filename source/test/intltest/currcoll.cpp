@@ -4,6 +4,10 @@
  * others. All Rights Reserved.
  ********************************************************************/
 
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_COLLATION
+
 #ifndef _COLL
 #include "unicode/coll.h"
 #endif
@@ -150,3 +154,5 @@ void CollationCurrencyTest::runIndexedTest(int32_t index, UBool exec, const char
         default: name = ""; break;
     }
 }
+
+#endif /* #if !UCONFIG_NO_COLLATION */

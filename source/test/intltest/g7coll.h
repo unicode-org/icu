@@ -31,6 +31,10 @@
 #ifndef _G7COLL
 #define _G7COLL
 
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_COLLATION
+
 #include "unicode/tblcoll.h"
 #include "tscoll.h"
 
@@ -72,4 +76,7 @@ private:
     static const UChar testCases[][MAX_TOKEN_LEN];
     static const int32_t results[TESTLOCALES][TOTALTESTSET];
 };
+
+#endif /* #if !UCONFIG_NO_COLLATION */
+
 #endif

@@ -15,6 +15,10 @@
 #ifndef REPTEST_H
 #define REPTEST_H
 
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_TRANSLITERATION
+
 #include "unicode/translit.h"
 #include "intltest.h"
 
@@ -35,8 +39,6 @@ private:
                 const UnicodeString& shouldProduceStyles);
 };
 
+#endif /* #if !UCONFIG_NO_TRANSLITERATION */
+
 #endif
-
-
-
-

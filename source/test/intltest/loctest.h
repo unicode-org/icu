@@ -58,22 +58,30 @@ public:
     void TestUninstalledISO3Names(void);
     void TestAtypicalLocales(void);
     void TestNullDefault(void);
+#if !UCONFIG_NO_FORMATTING
     void TestThaiCurrencyFormat(void);
     void TestEuroSupport(void);
+#endif
     void TestToString(void);
+#if !UCONFIG_NO_FORMATTING
     void Test4139940(void);
     void Test4143951(void);
+#endif
     void Test4147315(void);
     void Test4147317(void);
     void Test4147552(void);
     
     void TestVariantParsing(void);
     
+#if !UCONFIG_NO_FORMATTING
     void Test4105828(void) ;
+#endif
 
     void TestSetIsBogus(void);
 
+#if !UCONFIG_NO_FORMATTING
     static UDate date(int32_t y, int32_t m, int32_t d, int32_t hr = 0, int32_t min = 0, int32_t sec = 0);
+#endif
 
 private:
     /**

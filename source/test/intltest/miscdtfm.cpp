@@ -4,6 +4,10 @@
  * others. All Rights Reserved.
  ********************************************************************/
  
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_FORMATTING
+
 #include "miscdtfm.h"
 
 #include "unicode/format.h"
@@ -352,3 +356,5 @@ DateFormatMiscTests::test4117335()
     delete symbols;
 
 }
+
+#endif /* #if !UCONFIG_NO_FORMATTING */

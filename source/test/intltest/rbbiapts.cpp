@@ -9,8 +9,10 @@
 *   01/12/2000  Madhu        updated for changed API
 ************************************************************************/
 
-
 #include "unicode/utypes.h"
+
+#if !UCONFIG_NO_BREAK_ITERATION
+
 #include "unicode/uchar.h"
 #include "intltest.h"
 #include "unicode/rbbi.h"
@@ -799,5 +801,4 @@ void RBBIAPITest::doTest(UnicodeString& testString, int32_t start, int32_t gotof
         logln(prettify("****selected \"" + selected + "\""));
 }
 
-
-
+#endif /* #if !UCONFIG_NO_BREAK_ITERATION */

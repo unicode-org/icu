@@ -5,6 +5,9 @@
  ********************************************************************/
 
 #include "unicode/utypes.h"
+
+#if !UCONFIG_NO_FORMATTING
+
 #include "nmfmapts.h"
 
 #include "unicode/numfmt.h"
@@ -222,3 +225,5 @@ void IntlTestNumberFormatAPI::testAPI(/* char* par */)
     delete per;
     delete per_fr;
 }
+
+#endif /* #if !UCONFIG_NO_FORMATTING */

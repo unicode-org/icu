@@ -4,6 +4,10 @@
  * others. All Rights Reserved.
  ********************************************************************/
  
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_FORMATTING
+
 #include "dtfmttst.h"
 #include "unicode/timezone.h"
 #include "unicode/gregocal.h"
@@ -1056,5 +1060,7 @@ void DateFormatTest::TestSpaceParsing() {
         }
     }
 }
+
+#endif /* #if !UCONFIG_NO_FORMATTING */
 
 //eof

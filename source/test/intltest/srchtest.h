@@ -7,6 +7,10 @@
 #ifndef _STRSRCH_H
 #define _STRSRCH_H
 
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_COLLATION
+
 #include "unicode/tblcoll.h"
 #include "unicode/brkiter.h"
 #include "intltest.h"
@@ -49,7 +53,9 @@ private:
     void TestBasic();
     void TestNormExact();
     void TestStrength();
+#if !UCONFIG_NO_BREAK_ITERATION
     void TestBreakIterator();
+#endif
     void TestVariable();
     void TestOverlap();
     void TestCollator();
@@ -67,7 +73,9 @@ private:
     void TestCanonical();
     void TestNormCanonical();
     void TestStrengthCanonical();
+#if !UCONFIG_NO_BREAK_ITERATION
     void TestBreakIteratorCanonical();
+#endif
     void TestVariableCanonical();
     void TestOverlapCanonical();
     void TestCollatorCanonical();
@@ -79,5 +87,7 @@ private:
     void TestContractionCanonical();
     void TestSearchIterator();
 };
+
+#endif /* #if !UCONFIG_NO_COLLATION */
 
 #endif

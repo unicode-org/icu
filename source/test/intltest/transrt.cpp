@@ -7,7 +7,11 @@
 *   05/23/00    aliu        Creation.
 **********************************************************************
 */
+
 #include "unicode/utypes.h"
+
+#if !UCONFIG_NO_TRANSLITERATION
+
 #include "unicode/translit.h"
 #include "unicode/rbt.h"
 #include "unicode/uniset.h"
@@ -1381,3 +1385,5 @@ void TransliteratorRoundTripTest::TestInterIndic() {
 }
 
 // end indic tests ----------------------------------------------------------
+
+#endif /* #if !UCONFIG_NO_TRANSLITERATION */

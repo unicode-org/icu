@@ -4,6 +4,10 @@
  * others. All Rights Reserved.
  ********************************************************************/
 
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_FORMATTING
+
 #include "pptest.h"
 
 #include "unicode/numfmt.h"
@@ -198,3 +202,5 @@ void ParsePositionTest::Test4109023()
     if (fp != fp2)
         errln("Error : FieldPosition.equals() failed");
 }
+
+#endif /* #if !UCONFIG_NO_FORMATTING */

@@ -4,6 +4,10 @@
  * others. All Rights Reserved.
  ********************************************************************/
 
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_COLLATION
+
 #include "unicode/coll.h"
 #include "unicode/tblcoll.h"
 #include "unicode/unistr.h"
@@ -289,4 +293,4 @@ void G7CollationTest::runIndexedTest( int32_t index, UBool exec, const char* &na
     }
 }
 
-
+#endif /* #if !UCONFIG_NO_COLLATION */

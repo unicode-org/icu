@@ -9,6 +9,10 @@
  
 #include <stdlib.h>
 
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_FORMATTING
+
 #include "unicode/unistr.h"
 #include "unicode/datefmt.h"
 #include "unicode/smpdtfmt.h"
@@ -84,6 +88,8 @@ private:
     SimpleDateFormat *dateFormat;
     Calendar *getFieldCal;
 };
+
+#endif /* #if !UCONFIG_NO_FORMATTING */
  
 #endif // _DATEFORMATROUNDTRIPTEST_
 //eof

@@ -5,6 +5,10 @@
  *******************************************************************************
  */
 
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_FORMATTING
+
 #include "itrbnfrt.h"
 
 #include "unicode/fmtable.h"
@@ -355,3 +359,5 @@ RbnfRoundTripTest::TestRBNFDisabled() {
 
 /* U_HAVE_RBNF */
 #endif
+
+#endif /* #if !UCONFIG_NO_FORMATTING */

@@ -13,6 +13,9 @@
  */
 
 #include "unicode/utypes.h"
+
+#if !UCONFIG_NO_BREAK_ITERATION
+
 #include "itrbbi.h"
 #include "rbbiapts.h"
 #include "rbbitst.h"
@@ -42,3 +45,4 @@ void IntlTestRBBI::runIndexedTest( int32_t index, UBool exec, const char* &name,
     }
 }
 
+#endif /* #if !UCONFIG_NO_BREAK_ITERATION */

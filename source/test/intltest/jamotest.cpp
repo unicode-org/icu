@@ -9,6 +9,10 @@
 *   03/01/2001  George      port to HP/UX
 ************************************************************************/
 
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_TRANSLITERATION
+
 /* These APIs are becoming private */
 #define ICU_COMPOUNDTRANSLITERATOR_USE_DEPRECATES 1
 #define ICU_RULEBASEDTRANSLITERATOR_USE_DEPRECATES 1
@@ -525,3 +529,5 @@ JamoTest::jamoToName(const UnicodeString& input) {
     JAMO_NAME->transliterate(result);
     return result;
 }
+
+#endif /* #if !UCONFIG_NO_TRANSLITERATION */

@@ -7,6 +7,10 @@
 #ifndef _TIMEZONEREGRESSIONTEST_
 #define _TIMEZONEREGRESSIONTEST_
  
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_FORMATTING
+
 #include "unicode/timezone.h"
 #include "unicode/gregocal.h"
 #include "unicode/simpletz.h"
@@ -50,6 +54,7 @@ protected:
     UBool failure(UErrorCode status, const char* msg);
 };
 
+#endif /* #if !UCONFIG_NO_FORMATTING */
  
 #endif // _CALENDARREGRESSIONTEST_
 //eof

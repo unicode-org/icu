@@ -13,6 +13,10 @@
 * 
 ************************************************************************/
 
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_TRANSLITERATION
+
 /* These APIs are becoming private */
 #define ICU_RULEBASEDTRANSLITERATOR_USE_DEPRECATES 1
 #define ICU_HEXTOUNICODETRANSLITERATOR_USE_DEPRECATES 1
@@ -263,4 +267,4 @@ void TransliteratorErrorTest::TestHexToUniErrors() {
     delete t;
 }
 
-
+#endif /* #if !UCONFIG_NO_TRANSLITERATION */

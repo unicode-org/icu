@@ -12,6 +12,10 @@
 #ifndef _APICOLL
 #define _APICOLL
 
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_COLLATION
+
 #include "unicode/tblcoll.h"
 #include "tscoll.h"
 
@@ -151,4 +155,7 @@ private:
     enum EToken_Len { MAX_TOKEN_LEN = 16 };
 
 };
+
+#endif /* #if !UCONFIG_NO_COLLATION */
+
 #endif

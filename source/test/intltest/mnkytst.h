@@ -14,6 +14,10 @@
 #ifndef _MNKYTST
 #define _MNKYTST
 
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_COLLATION
+
 #include "tscoll.h"
 
 class CollationMonkeyTest: public IntlTestCollator {
@@ -46,4 +50,7 @@ private:
 
     Collator *myCollator;
 };
+
+#endif /* #if !UCONFIG_NO_COLLATION */
+
 #endif

@@ -81,7 +81,9 @@ public:
     void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par=0);
 
     void TestCaseConversion();
+#if !UCONFIG_NO_BREAK_ITERATION
     void TestTitleCasing();
+#endif
 };
 
 #endif

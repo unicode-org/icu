@@ -303,8 +303,10 @@ void MultithreadTest::runIndexedTest( int32_t index, UBool exec,
         break;
     case 2:
         name = "TestThreadedIntl";
+#if !UCONFIG_NO_FORMATTING
         if (exec)
             TestThreadedIntl();
+#endif
         break;
 
     default:
@@ -575,6 +577,8 @@ private:
     UnicodeString fErrorString;
 };
 
+#if !UCONFIG_NO_FORMATTING
+
 // ** FormatThreadTest - a thread that tests performing a number of numberformats.
 
 
@@ -835,6 +839,8 @@ void MultithreadTest::TestThreadedIntl()
     }
     errln("patience exceeded. ");
 }
+
+#endif /* #if !UCONFIG_NO_FORMATTING */
 
 #endif // ICU_USE_THREADS
 

@@ -4,7 +4,10 @@
  * others. All Rights Reserved.
  ********************************************************************/
 
- 
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_FORMATTING
+
 #include "dtfmrgts.h"
 
 #include "unicode/timezone.h"
@@ -1173,5 +1176,7 @@ void DateFormatRegressionTest::Test714(void)
 
    delete fmt;
 }
+
+#endif /* #if !UCONFIG_NO_FORMATTING */
 
 //eof

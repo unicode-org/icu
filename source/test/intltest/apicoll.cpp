@@ -27,6 +27,10 @@
 //  02/10/98    damiba      Added test for compare(UnicodeString&, UnicodeString&, int32_t)
 //===============================================================================
 
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_COLLATION
+
 #include "unicode/coll.h"
 #include "unicode/tblcoll.h"
 #include "unicode/coleitr.h"
@@ -1730,3 +1734,4 @@ void CollationAPITest::runIndexedTest( int32_t index, UBool exec, const char* &n
     }
 }
 
+#endif /* #if !UCONFIG_NO_COLLATION */

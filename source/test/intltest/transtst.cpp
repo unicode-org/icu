@@ -8,6 +8,10 @@
 **********************************************************************
 */
 
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_TRANSLITERATION
+
 /* These APIs are becoming private */
 #define ICU_COMPOUNDTRANSLITERATOR_USE_DEPRECATES 1
 #define ICU_NULLTRANSLITERATOR_USE_DEPRECATES 1
@@ -16,6 +20,7 @@
 #define ICU_UNICODETOHEXTRANSLITERATOR_USE_DEPRECATES 1
 
 #include "transtst.h"
+#include "unicode/locid.h"
 #include "unicode/cpdtrans.h"
 #include "unicode/dtfmtsym.h"
 #include "unicode/hextouni.h"
@@ -733,6 +738,7 @@ void TransliteratorTest::TestJ277(void) {
     expect(mini, syn, "syn");
     expect(mini, sayn, "saun");
 
+#if !UCONFIG_NO_FORMATTING
     // Transliterate the Greek locale data
     Locale el("el");
     DateFormatSymbols syms(el, status);
@@ -758,6 +764,7 @@ void TransliteratorTest::TestJ277(void) {
             errln(UnicodeString("FAIL: ") + prettify(data[i] + " -> " + out));
         }
     }
+#endif
 
     delete gl;
 }
@@ -3873,3 +3880,5 @@ void TransliteratorTest::expectAux(const UnicodeString& tag,
               + ", expected " + prettify(expectedResult));
     }
 }
+
+#endif /* #if !UCONFIG_NO_TRANSLITERATION */

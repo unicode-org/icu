@@ -7,6 +7,10 @@
 #ifndef _NUMBERFORMATTEST_
 #define _NUMBERFORMATTEST_
 
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_FORMATTING
+
 #include "unicode/numfmt.h"
 #include "unicode/decimfmt.h" 
 #include "caltztst.h"
@@ -126,5 +130,7 @@ public: // package
     // internal subtest used by TestRounding487
     void roundingTest(NumberFormat& nf, double x, int32_t maxFractionDigits, const char* expected);
 };
+
+#endif /* #if !UCONFIG_NO_FORMATTING */
  
 #endif // _NUMBERFORMATTEST_
