@@ -72,7 +72,6 @@ void deleteElement(void *element);
 int32_t readElement(char **from, char *to, char separator, UErrorCode *status);
 uint32_t getSingleCEValue(char *primary, char *secondary, char *tertiary, UBool caseBit, UErrorCode *status);
 void printOutTable(UCATableHeader *myData, UErrorCode *status);
-void processFile(FILE *data, UErrorCode *status);
 UCAElements *readAnElement(FILE *data, UErrorCode *status);
 
 
