@@ -53,12 +53,44 @@ U_CAPI  CompactByteArray* U_EXPORT2 ucmp8_open(int8_t defaultValue);
 U_CAPI  void U_EXPORT2 ucmp8_init(CompactByteArray* array, int8_t defaultValue);
 U_CAPI  void U_EXPORT2 ucmp8_initBogus(CompactByteArray* array);
 
+ /**
+  * Construct a CompactByteArray from a pre-computed index and values array. The values
+  * will be adopted by the CompactByteArray. Memory is allocated with uprv_malloc.
+  * Note: for speed, the compact method will only re-use blocks in the values array
+  * that are on a block boundary. The pre-computed arrays passed in to this constructor
+  * may re-use blocks at any position in the values array.
+  * @param indexArray the index array to be adopted
+  * @param newValues the value array to be adopted
+  * @param count the number of entries in the value array
+  * @see compact
+  */
 U_CAPI  CompactByteArray* U_EXPORT2 ucmp8_openAdopt(uint16_t* indexArray, 
                                int8_t* newValues,
                                int32_t count);
 U_CAPI  CompactByteArray* U_EXPORT2 ucmp8_openAlias(uint16_t* indexArray, 
                                int8_t* newValues,
                                int32_t count);
+
+ /**
+  * Initialize a CompactByteArray from a pre-computed index and values array. The values
+  * will be adopted by the CompactByteArray. Memory is allocated with uprv_malloc.
+  * Note: for speed, the compact method will only re-use blocks in the values array
+  * that are on a block boundary. The pre-computed arrays passed in to this constructor
+  * may re-use blocks at any position in the values array.
+  * @param indexArray the index array to be adopted
+  * @param newValues the value array to be adopted
+  * @param count the number of entries in the value array
+  * @see compact
+  */
+U_CAPI  CompactByteArray* U_EXPORT2 ucmp8_initAdopt(CompactByteArray *this_obj,
+                               uint16_t* indexArray, 
+                               int8_t* newValues,
+                               int32_t count);
+U_CAPI  CompactByteArray* U_EXPORT2 ucmp8_initAlias(CompactByteArray *this_obj,
+                               uint16_t* indexArray, 
+                               int8_t* newValues,
+                               int32_t count);
+
 U_CAPI  void U_EXPORT2 ucmp8_close(CompactByteArray* array);
 U_CAPI  UBool U_EXPORT2 isBogus(const CompactByteArray* array);
 

@@ -261,21 +261,36 @@ CompactIntArray* ucmp32_open(int32_t defaultValue)
     return this_obj;
 }
 
-CompactIntArray* ucmp32_openAdopt(uint16_t *indexArray, int32_t *newValues, int32_t  count)
+CompactIntArray* ucmp32_openAdopt(uint16_t *indexArray,
+                                  int32_t *newValues,
+                                  int32_t count)
 {
   CompactIntArray* this_obj = (CompactIntArray*) uprv_malloc(sizeof(CompactIntArray));
-  if (this_obj == NULL) return NULL;
-  this_obj->fCount = count; 
-  this_obj->fBogus = FALSE;
-  this_obj->fArray = newValues;
-  this_obj->fIndex = indexArray;
-  this_obj->fCompact = (UBool)((count < UCMP32_kUnicodeCount) ? TRUE : FALSE);
-  return this_obj;
+
+  return ucmp32_initAdopt(this_obj, indexArray, newValues, count);
 }
 
 /*=======================================================*/
  
-void ucmp32_close(    CompactIntArray* this_obj) 
+CompactIntArray* ucmp32_initAdopt(CompactIntArray* this_obj,
+                                  uint16_t *indexArray,
+                                  int32_t *newValues,
+                                  int32_t  count)
+{
+  if (this_obj) {
+    this_obj->fCount = count; 
+    this_obj->fBogus = FALSE;
+    this_obj->fArray = newValues;
+    this_obj->fIndex = indexArray;
+    this_obj->fCompact = (UBool)((count < UCMP32_kUnicodeCount) ? TRUE : FALSE);
+  }
+
+  return this_obj;
+}
+
+/*=======================================================*/
+
+void ucmp32_close(CompactIntArray* this_obj) 
 {
   if(this_obj != NULL) {
     if(this_obj->fArray != NULL) {

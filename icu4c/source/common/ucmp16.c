@@ -206,23 +206,9 @@ CompactShortArray* ucmp16_openAdopt(uint16_t *indexArray,
                     int16_t defaultValue)
 {
   CompactShortArray* this_obj = (CompactShortArray*) uprv_malloc(sizeof(CompactShortArray));
-  if (this_obj == NULL) return NULL;
-  this_obj->fHashes = NULL;
-  this_obj->fCount = count; 
-  this_obj->fDefaultValue = defaultValue;
-  this_obj->fBogus = FALSE;
-  this_obj->fArray = newValues;
-  this_obj->fIndex = indexArray;
-  this_obj->fCompact = (UBool)(count < UCMP16_kUnicodeCount);
-  this_obj->fStructSize = sizeof(CompactShortArray);
-  this_obj->kBlockShift = UCMP16_kBlockShift;
-  this_obj->kBlockMask = UCMP16_kBlockMask;
-  this_obj->fAlias = FALSE;
-  this_obj->fIAmOwned = FALSE;
 
-  return this_obj;
+  return ucmp16_initAdopt(this_obj, indexArray, newValues, count, defaultValue);
 }
-
 
 CompactShortArray* ucmp16_openAdoptWithBlockShift(uint16_t *indexArray,
                           int16_t *newValues,
@@ -234,14 +220,13 @@ CompactShortArray* ucmp16_openAdoptWithBlockShift(uint16_t *indexArray,
                          newValues,
                          count,
                          defaultValue);
-  if (this_obj == NULL) return NULL;
-  
-  this_obj->kBlockShift  = blockShift;
-  this_obj->kBlockMask = (uint32_t) (((uint32_t)1 << (uint32_t)blockShift) - (uint32_t)1);
+  if (this_obj) {
+    this_obj->kBlockShift  = blockShift;
+    this_obj->kBlockMask = (uint32_t) (((uint32_t)1 << (uint32_t)blockShift) - (uint32_t)1);
+  }
   
   return this_obj;
 }
-
 
 CompactShortArray* ucmp16_openAlias(uint16_t *indexArray,
                     int16_t *newValues, 
@@ -249,25 +234,80 @@ CompactShortArray* ucmp16_openAlias(uint16_t *indexArray,
                     int16_t defaultValue)
 {
   CompactShortArray* this_obj = (CompactShortArray*) uprv_malloc(sizeof(CompactShortArray));
-  if (this_obj == NULL) return NULL;
-  this_obj->fHashes = NULL;
-  this_obj->fCount = count; 
-  this_obj->fDefaultValue = defaultValue;
-  this_obj->fBogus = FALSE;
-  this_obj->fArray = newValues;
-  this_obj->fIndex = indexArray;
-  this_obj->fCompact = (UBool)(count < UCMP16_kUnicodeCount);
-  this_obj->fStructSize = sizeof(CompactShortArray);
-  this_obj->kBlockShift = UCMP16_kBlockShift;
-  this_obj->kBlockMask = UCMP16_kBlockMask;
-  this_obj->fAlias = TRUE;
-  this_obj->fIAmOwned = FALSE;
+
+  return ucmp16_initAlias(this_obj, indexArray, newValues, count, defaultValue);
+}
+
+/*=======================================================*/
+
+CompactShortArray* ucmp16_initAdopt(CompactShortArray *this_obj,
+                    uint16_t *indexArray,
+                    int16_t *newValues, 
+                    int32_t count,
+                    int16_t defaultValue)
+{
+  if (this_obj) {
+    this_obj->fHashes = NULL;
+    this_obj->fCount = count; 
+    this_obj->fDefaultValue = defaultValue;
+    this_obj->fBogus = FALSE;
+    this_obj->fArray = newValues;
+    this_obj->fIndex = indexArray;
+    this_obj->fCompact = (UBool)(count < UCMP16_kUnicodeCount);
+    this_obj->fStructSize = sizeof(CompactShortArray);
+    this_obj->kBlockShift = UCMP16_kBlockShift;
+    this_obj->kBlockMask = UCMP16_kBlockMask;
+    this_obj->fAlias = FALSE;
+    this_obj->fIAmOwned = FALSE;
+  }
+
+  return this_obj;
+}
+
+CompactShortArray* ucmp16_initAdoptWithBlockShift(CompactShortArray *this_obj,
+                          uint16_t *indexArray,
+                          int16_t *newValues,
+                          int32_t count,
+                          int16_t defaultValue,
+                          int32_t blockShift)
+{
+  ucmp16_initAdopt(this_obj, indexArray, newValues, count, defaultValue);
+
+  if (this_obj) {
+    this_obj->kBlockShift  = blockShift;
+    this_obj->kBlockMask = (uint32_t) (((uint32_t)1 << (uint32_t)blockShift) - (uint32_t)1);
+  }
+  
+  return this_obj;
+}
+
+
+CompactShortArray* ucmp16_initAlias(CompactShortArray *this_obj,
+                    uint16_t *indexArray,
+                    int16_t *newValues, 
+                    int32_t count,
+                    int16_t defaultValue)
+{
+  if (this_obj) {
+    this_obj->fHashes = NULL;
+    this_obj->fCount = count; 
+    this_obj->fDefaultValue = defaultValue;
+    this_obj->fBogus = FALSE;
+    this_obj->fArray = newValues;
+    this_obj->fIndex = indexArray;
+    this_obj->fCompact = (UBool)(count < UCMP16_kUnicodeCount);
+    this_obj->fStructSize = sizeof(CompactShortArray);
+    this_obj->kBlockShift = UCMP16_kBlockShift;
+    this_obj->kBlockMask = UCMP16_kBlockMask;
+    this_obj->fAlias = TRUE;
+    this_obj->fIAmOwned = FALSE;
+  }
 
   return this_obj;
 }
 
 /*=======================================================*/
- 
+
 void ucmp16_close(CompactShortArray* this_obj)
 {
   if(this_obj != NULL) {

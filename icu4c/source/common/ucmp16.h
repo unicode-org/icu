@@ -10,9 +10,9 @@
  * Modification History : 
  *
  * 05/07/97     helena      Added isBogus()
- * 07/15/98        erm            Synched with Java 1.2 CompactShortArray.java.
- * 07/30/98        erm            Added 07/29/98 code review changes.
- * 04/21/99     Damiba     Port to C/New API faster ucmp16_get
+ * 07/15/98     erm         Synched with Java 1.2 CompactShortArray.java.
+ * 07/30/98     erm         Added 07/29/98 code review changes.
+ * 04/21/99     Damiba      Port to C/New API faster ucmp16_get
  */
 
 #ifndef UCMP16_H
@@ -70,7 +70,7 @@
  * @see                CompactIntArray
  * @see                CompactCharArray
  * @see                CompactStringArray
- * @version            $Revision: 1.11 $ 8/25/98
+ * @version            $Revision: 1.12 $ 8/25/98
  * @author             Helena Shih
  */
 
@@ -103,32 +103,64 @@ U_CAPI void U_EXPORT2 ucmp16_initBogus(CompactShortArray* array);
 
  /**
   * Construct a CompactShortArray from a pre-computed index and values array. The values
-  * will be adobped by the CompactShortArray. Note: for speed, the compact method will
-  * only re-use blocks in the values array that are on a block boundary. The pre-computed
-  * arrays passed in to this constructor may re-use blocks at any position in the values
-  * array.
+  * will be adopted by the CompactShortArray. Memory is allocated with uprv_malloc.
+  * Note: for speed, the compact method will only re-use blocks in the values array
+  * that are on a block boundary. The pre-computed arrays passed in to this constructor
+  * may re-use blocks at any position in the values array.
   * @param indexArray the index array to be adopted
-  * @param newValues the value array to be adobptd
+  * @param newValues the value array to be adopted
   * @param count the number of entries in the value array
   * @param defaultValue the default value for all characters not explicitly in the array
   * @see compact
   */
 U_CAPI  CompactShortArray* U_EXPORT2 ucmp16_openAdopt(uint16_t *indexArray,
-						    int16_t *newValues,
-						    int32_t count,
-						    int16_t defaultValue );
+                                                      int16_t *newValues,
+                                                      int32_t count,
+                                                      int16_t defaultValue);
 
 U_CAPI  CompactShortArray* U_EXPORT2 ucmp16_openAdoptWithBlockShift(uint16_t *indexArray,
-								  int16_t *newValues,
-								  int32_t count,
-								  int16_t defaultValue,
-								  int32_t blockShift);
-
+                                                      int16_t *newValues,
+                                                      int32_t count,
+                                                      int16_t defaultValue,
+                                                      int32_t blockShift);
 
 U_CAPI  CompactShortArray* U_EXPORT2 ucmp16_openAlias(uint16_t *indexArray,
                                                       int16_t *newValues,
                                                       int32_t count,
                                                       int16_t defaultValue );
+
+ /**
+  * Initialize a CompactShortArray from a pre-computed index and values array. The values
+  * will be adopted by the CompactShortArray. No memory is allocated. Note: for speed,
+  * the compact method will only re-use blocks in the values array that are on a block
+  * boundary. The pre-computed arrays passed in to this constructor may re-use blocks
+  * at any position in the values array.
+  * @param this_obj the CompactShortArray to be initialized
+  * @param indexArray the index array to be adopted
+  * @param newValues the value array to be adopted
+  * @param count the number of entries in the value array
+  * @param defaultValue the default value for all characters not explicitly in the array
+  * @see compact
+  */
+U_CAPI  CompactShortArray* U_EXPORT2 ucmp16_initAdopt(CompactShortArray *this_obj,
+                                                      uint16_t *indexArray,
+                                                      int16_t *newValues,
+                                                      int32_t count,
+                                                      int16_t defaultValue );
+
+U_CAPI  CompactShortArray* U_EXPORT2 ucmp16_initAdoptWithBlockShift(CompactShortArray *this_obj,
+                                                      uint16_t *indexArray,
+                                                      int16_t *newValues,
+                                                      int32_t count,
+                                                      int16_t defaultValue,
+                                                      int32_t blockShift);
+
+U_CAPI  CompactShortArray* U_EXPORT2 ucmp16_initAlias(CompactShortArray *this_obj,
+                                                      uint16_t *indexArray,
+                                                      int16_t *newValues,
+                                                      int32_t count,
+                                                      int16_t defaultValue );
+
 
 U_CAPI  void U_EXPORT2 ucmp16_close(CompactShortArray* array);
  /**
@@ -157,8 +189,8 @@ U_CAPI  UBool U_EXPORT2 ucmp16_isBogus(const CompactShortArray* array);
   * @param value the new mapped value
   */
 U_CAPI  void U_EXPORT2 ucmp16_set(CompactShortArray *array,
-				UChar character,
-				int16_t value);
+                                  UChar character,
+                                  int16_t value);
 
 
  /**
@@ -169,9 +201,9 @@ U_CAPI  void U_EXPORT2 ucmp16_set(CompactShortArray *array,
   * @param value the new mapped value
   */
 U_CAPI  void U_EXPORT2 ucmp16_setRange(CompactShortArray* array,
-				     UChar start,
-				     UChar end, 
-				     int16_t value);
+                                       UChar start,
+                                       UChar end,
+                                       int16_t value);
 
 
 /**
