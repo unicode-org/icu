@@ -1295,7 +1295,7 @@ findNameDummy(void *context,
 static uint8_t getCharCat(UChar32 cp) {
     uint8_t cat;
 
-    if ((cp & 0xFFFE) == 0xFFFE) {
+    if ((cp & 0xFFFE) == 0xFFFE || (cp >= 0xFDD0 && cp <= 0xFDEF)) {
         return U_NONCHARACTER_CODE_POINT;
     }
 
