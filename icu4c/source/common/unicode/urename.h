@@ -373,7 +373,6 @@
 #define u_charFromName u_charFromName_1_9
 #define u_charMirror u_charMirror_1_9
 #define u_charName u_charName_1_9
-#define u_charScript u_charScript_1_9
 #define u_charType u_charType_1_9
 #define u_charsToUChars u_charsToUChars_1_9
 #define u_enumCharNames u_enumCharNames_1_9
