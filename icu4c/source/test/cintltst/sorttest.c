@@ -88,5 +88,5 @@ SortTest(void) {
 
 void
 addSortTest(TestNode** root) {
-    addTest(root, &SortTest, "tsutil/SortTest");
+    addTest(root, &SortTest, "tsutil/sorttest/SortTest");
 }

@@ -787,7 +787,7 @@ addTrieTest(TestNode** root);
 
 void
 addTrieTest(TestNode** root) {
-    addTest(root, &TrieTest, "tsutil/TrieTest");
+    addTest(root, &TrieTest, "tsutil/trietest/TrieTest");
 }
 #else
 /* standalone utrie development */
