@@ -229,7 +229,8 @@ protected:
      * \code
      * const UnicodeString* snext(UErrorCode& status) {
      *   int32_t resultLength=0;
-     *   return setChars(next(&resultLength, status), resultLength, status);
+     *   const char *s=next(&resultLength, status);
+     *   return setChars(s, resultLength, status);
      * }
      * \endcode
      *
