@@ -894,6 +894,27 @@ lineSelectionData.addElement("\u0e2b\u0e16\u0e49\u0e32\u0e17\u0e35\u0e48");
     public void TestMixedThaiLineBreak() {
         Vector lineSelectionData = new Vector();
 
+        // @suwit -- Test Arabic numerals, Thai numerals, Punctuation and English characters
+        // start
+
+        lineSelectionData.addElement("\u0E1B\u0E35");
+        lineSelectionData.addElement("\u0E1E\u0E38\u0E17\u0E18\u0E28\u0E31\u0E01\u0E23\u0E32\u0E0A ");
+        lineSelectionData.addElement("2545 ");
+        lineSelectionData.addElement("\u0E40\u0E1B\u0E47\u0E19");
+        lineSelectionData.addElement("\u0E1B\u0E35");
+        lineSelectionData.addElement("\u0E09\u0E25\u0E2D\u0E07");
+        lineSelectionData.addElement("\u0E04\u0E23\u0E1A");
+        lineSelectionData.addElement("\u0E23\u0E2D\u0E1A ");
+        lineSelectionData.addElement("\"\u0E52\u0E52\u0E50 ");
+        lineSelectionData.addElement("\u0E1b\u0E35\" ");
+        lineSelectionData.addElement("\u0E02\u0E2d\u0E07");
+        lineSelectionData.addElement("\u0E01\u0E23\u0E38\u0E07");
+        lineSelectionData.addElement("\u0E23\u0E31\u0E15\u0E19\u0E42\u0E01\u0E2A\u0E34\u0E19\u0E17\u0E23\u0E4C ");
+        lineSelectionData.addElement("(\u0E01\u0E23\u0E38\u0E07\u0E40\u0E17\u0E1e\u0E2F");
+        lineSelectionData.addElement("\u0E2B\u0E23\u0E37\u0E2D ");
+        lineSelectionData.addElement("Bangkok)");
+         
+        // @suwit - end of changes
         // Arabic numerals should always be separated from surrounding Thai text
 /*
         lineSelectionData.addElement("\u0e04\u0e48\u0e32");
@@ -927,11 +948,11 @@ lineSelectionData.addElement("\u0e2b\u0e16\u0e49\u0e32\u0e17\u0e35\u0e48");
 //        lineSelectionData.addElement("\u0e44\u0e17\u0e22)");
 // I think the above lines represent the preferred reading for this text, but our current
 // dictionary file yields the following:
-lineSelectionData.addElement("(\u0e1b\u0e23\u0e30\u0e40\u0e17\u0e28\u0e44\u0e17\u0e22)");
+        lineSelectionData.addElement("(\u0e1b\u0e23\u0e30\u0e40\u0e17\u0e28\u0e44\u0e17\u0e22)");
         lineSelectionData.addElement("\u0e08\u0e33\u0e01\u0e31\u0e14");
         lineSelectionData.addElement("\u0e40\u0e1b\u0e34\u0e14");
         lineSelectionData.addElement("\u0e15\u0e31\u0e27\"");
-*/
+
         lineSelectionData.addElement("\u0e2e\u0e32\u0e23\u0e4c\u0e14\u0e14\u0e34\u0e2a\u0e01\u0e4c\"");
         lineSelectionData.addElement("\u0e23\u0e38\u0e48\u0e19");
         lineSelectionData.addElement("\u0e43\u0e2b\u0e21\u0e48");
@@ -943,6 +964,7 @@ lineSelectionData.addElement("(\u0e1b\u0e23\u0e30\u0e40\u0e17\u0e28\u0e44\u0e17\
         lineSelectionData.addElement("\u0e40\u0e17\u0e48\u0e32");
         lineSelectionData.addElement("\u0e19\u0e31\u0e49\u0e19 ");
         lineSelectionData.addElement("(\"\u0e2e\u0e32\u0e23\u0e4c\u0e14\u0e14\u0e34\u0e2a\u0e01\u0e4c\").");
+*/
 
         generalIteratorTest(BreakIterator.getLineInstance(new Locale("th", "", "")),
                 lineSelectionData);
@@ -1550,6 +1572,20 @@ lineSelectionData.addElement("(\u0e1b\u0e23\u0e30\u0e40\u0e17\u0e28\u0e44\u0e17\
     public void TestThaiWordBreak() {
         Vector thaiWordSelection = new Vector();
 
+        // @suwit -- Thai sample data from GVT Guideline
+        // start
+        thaiWordSelection.addElement("\u0E2B\u0E19\u0E36\u0E48\u0E07"); //5
+        thaiWordSelection.addElement("\u0E04\u0E33"); //7
+        thaiWordSelection.addElement("\u0E44\u0E17\u0E22"); //10
+        thaiWordSelection.addElement("\u0E2A\u0E32\u0E21\u0E32\u0E23\u0E16"); //16
+        thaiWordSelection.addElement("\u0E1B\u0E23\u0E30\u0E01\u0E2D\u0E1A"); //22
+        thaiWordSelection.addElement("\u0E14\u0E49\u0E27\u0E22");  //26
+        thaiWordSelection.addElement("\u0e2b\u0e25\u0e32\u0e22");  //30
+        thaiWordSelection.addElement("\u0e1e\u0e22\u0e32\u0e07\u0e04\u0e4c");  //36
+
+        // @suwit - end of changes
+
+        /*  remove the old data sample because Thai translation of the Wizard of Oz is not good testcase for wordbreak API.
         thaiWordSelection.addElement("\u0E1A\u0E17"); //2
         thaiWordSelection.addElement("\u0E17\u0E35\u0E48"); //5
         thaiWordSelection.addElement("\u0E51"); //6
@@ -1597,7 +1633,8 @@ lineSelectionData.addElement("(\u0e1b\u0e23\u0e30\u0e40\u0e17\u0e28\u0e44\u0e17\
         // and this is what the dictionary does
         thaiWordSelection.addElement("\u0E40\u0E2E"); // 65
         thaiWordSelection.addElement("\u0E19\u0E23\u0E35\u0E0A\u0E32\u0E27\u0E44\u0E23\u0E48\u0E41\u0E25\u0E30"); //77
-
+        */
+        
         BreakIterator e = BreakIterator.getWordInstance(new Locale("th","",""));
 
         generalIteratorTest(e, thaiWordSelection);
