@@ -789,7 +789,7 @@ void NumberFormatTest::expectPad(DecimalFormat& fmt, const UnicodeString& pat,
     expectPad(fmt, pat, pos, width, UnicodeString(pad));
 }
 void NumberFormatTest::expectPad(DecimalFormat& fmt, const UnicodeString& pat,
-                                 int32_t pos, int32_t width, UnicodeString& pad) {
+                                 int32_t pos, int32_t width, const UnicodeString& pad) {
     int32_t apos = 0, awidth = 0;
     UnicodeString apadStr="";
     UErrorCode status = U_ZERO_ERROR;
