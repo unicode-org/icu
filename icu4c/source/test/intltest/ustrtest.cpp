@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2003, International Business Machines Corporation and
+ * Copyright (c) 1997-2004, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -440,6 +440,13 @@ UnicodeStringTest::TestExtract()
     if (test1.extract(11, 12, test4) != 12 || test4[12] != 0) {
         errln("UnicodeString.extract(char *) failed to return the correct size of destination buffer.");
     }
+
+    // test proper pinning in extractBetween()
+    test1.extractBetween(-3, 7, test5);
+    if(test5!=UNICODE_STRING("Now is ", 7)) {
+        errln("UnicodeString.extractBetween(-3, 7) did not pin properly.");
+    }
+
     test1.extractBetween(11, 23, test5);
     if (test1.extract(60, 71, test6) != 9) {
         errln("UnicodeString.extract() failed to return the correct size of destination buffer for end of buffer.");
