@@ -72,7 +72,11 @@ public class ICULocaleService extends ICUService {
      * getKey (stripping any prefix) into a ULocale.  
      */
     public Object get(ULocale locale, int kind, ULocale[] actualReturn) {
-        Key key = createKey(locale.toString(), kind);
+        String name = locale.getName();
+        if (name.length() > 0) { // arrgh, canonicalize turns "" into en_US_POSIX
+            name = ULocale.canonicalize(name);
+        }
+        Key key = createKey(name, kind);
         if (actualReturn == null) {
             return getKey(key);
         }
@@ -186,6 +190,7 @@ public class ICULocaleService extends ICUService {
      */
     public static class LocaleKey extends ICUService.Key {
         private int kind;
+        private int varstart;
         private String primaryID;
         private String fallbackID;
         private String currentID;
@@ -198,7 +203,7 @@ public class ICULocaleService extends ICUService {
         public static LocaleKey createWithCanonicalFallback(String primaryID, String canonicalFallbackID) {
             return createWithCanonicalFallback(primaryID, canonicalFallbackID, KIND_ANY);
         }
-	    
+            
         /**
          * Create a LocaleKey with canonical primary and fallback IDs.
          */
@@ -209,7 +214,7 @@ public class ICULocaleService extends ICUService {
             String canonicalPrimaryID = LocaleUtility.canonicalLocaleString(primaryID);
             return new LocaleKey(primaryID, canonicalPrimaryID, canonicalFallbackID, kind);
         }
-	    
+            
         /**
          * PrimaryID is the user's requested locale string,
          * canonicalPrimaryID is this string in canonical form,
@@ -220,11 +225,11 @@ public class ICULocaleService extends ICUService {
             super(primaryID);
 
             this.kind = kind;
-	    
             if (canonicalPrimaryID == null) {
                 this.primaryID = "";
             } else {
                 this.primaryID = canonicalPrimaryID;
+                this.varstart = this.primaryID.indexOf('@');
             }
             if (this.primaryID == "") {
                 this.fallbackID = null;
@@ -236,7 +241,7 @@ public class ICULocaleService extends ICUService {
                 }
             }
 
-            this.currentID = this.primaryID;
+            this.currentID = varstart == -1 ? this.primaryID : this.primaryID.substring(0, varstart);
         }
 
         /**
@@ -293,6 +298,17 @@ public class ICULocaleService extends ICUService {
          */
         public Locale currentLocale() {
             return LocaleUtility.getLocaleFromName(currentID);
+        }
+
+        /**
+         * Convenience method to return the ulocale corresponding to the (canonical) currentID.
+         */
+        public ULocale currentULocale() {
+            if (varstart == -1) {
+                return new ULocale(currentID);
+            } else {
+                return new ULocale(currentID + primaryID.substring(varstart));
+            }
         }
 
         /**
@@ -414,7 +430,7 @@ public class ICULocaleService extends ICUService {
                 int kind = lkey.kind();
                 
                 if (supportsULocale()) {
-                    ULocale uloc = new ULocale(lkey.currentID());
+                    ULocale uloc = lkey.currentULocale();
                     return handleCreate(uloc, kind, service);
                 } else {
                     Locale loc = lkey.currentLocale();
@@ -511,7 +527,7 @@ public class ICULocaleService extends ICUService {
             }
             Locale loc = LocaleUtility.getLocaleFromName(id);
             return loc.getDisplayName(locale);
-            //  	    }
+            //              }
             //          return null;
         }
 
