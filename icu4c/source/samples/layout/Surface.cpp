@@ -1,3 +1,7 @@
+/*
+ *   Copyright (C) 2003, International Business Machines
+ *   Corporation and others.  All Rights Reserved.
+ */
 void GDISurface::setFont(RenderingFontInstance *font)
 {
     GDIFontInstance *gFont = (GDIFontInstance *) font;

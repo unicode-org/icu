@@ -1,4 +1,6 @@
 #!/usr/bin/qsh
+#   Copyright (C) 2000-2003, International Business Machines
+#   Corporation and others.  All Rights Reserved.
 #
 # Authors:
 # Ami Fixler
