@@ -39,13 +39,15 @@ public class RandomCollator extends TestFmwk {
     
     static final String POSITION = "{$$$}";
     
-    class Shower implements BagFormatter.Shower {
-        public void println(String arg) {
-            logln(arg);
+    /*
+    class Shower extends BagFormatter.Shower {
+        public void print(String arg) {
+            log(arg);
         }
     }
     
     public Shower LOG = new Shower();
+    */
        
     public void TestRandom() throws IOException {
         int year 
@@ -54,8 +56,8 @@ public class RandomCollator extends TestFmwk {
             System.out.println("\nTestRandom skipped for 2003");
             return;
         }
-
-        PrintWriter pw = BagFormatter.openUTF8Writer("", "RandomCollationTestLog.txt", BagFormatter.CONSOLE);
+        String fileName;
+        PrintWriter pw = BagFormatter.openUTF8Writer("", "RandomCollationTestLog.txt");
         TestCollator tc = new TestCollator(chars);
         pw.println("Collation Test Run");
         pw.println("Note: For parse-exception, " + POSITION + " indicates the errorOffset");

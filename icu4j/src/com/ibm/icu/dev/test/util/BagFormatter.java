@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/util/BagFormatter.java,v $
- * $Date: 2003/12/20 03:06:54 $
- * $Revision: 1.4 $
+ * $Date: 2003/12/29 19:48:58 $
+ * $Revision: 1.5 $
  *
  *****************************************************************************************
  */
@@ -22,8 +22,11 @@ import java.util.*;
 import java.text.MessageFormat;
 
 public class BagFormatter {
+    public static final PrintWriter CONSOLE = new PrintWriter(System.out,true);
+
+    private static PrintWriter log = CONSOLE;
     
-    boolean abbreviated = false;
+    private boolean abbreviated = false;
     
     /**
      * Compare two UnicodeSets, and show the differences
@@ -39,10 +42,10 @@ public class BagFormatter {
         String name2,
         UnicodeSet set2) {
             
-        StringWriter sw = new StringWriter();
-        showSetDifferences(new PrintWriter(sw), name1, set1, name2, set2);
-        sw.flush();
-        return sw.getBuffer().toString();
+        StringWriter result = new StringWriter();
+        showSetDifferences(new PrintWriter(result),name1,set1,name2,set2);
+        result.flush();
+        return result.getBuffer().toString();
     }
     
     public String showSetDifferences(
@@ -51,10 +54,10 @@ public class BagFormatter {
         String name2,
         Collection set2) {
             
-        StringWriter sw = new StringWriter();
-        showSetDifferences(new PrintWriter(sw), name1, set1, name2, set2);
-        sw.flush();
-        return sw.getBuffer().toString();
+        StringWriter result = new StringWriter();
+        showSetDifferences(new PrintWriter(result), name1, set1, name2, set2);
+        result.flush();
+        return result.getBuffer().toString();
     }
 
     /**
@@ -71,7 +74,7 @@ public class BagFormatter {
         UnicodeSet set1,
         String name2,
         UnicodeSet set2) {
-            
+        if (pw == null) pw = CONSOLE;
         String[] names = { name1, name2 };
 
         UnicodeSet temp = new UnicodeSet(set1).removeAll(set2);
@@ -94,6 +97,7 @@ public class BagFormatter {
         String name2,
         Collection set2) {
             
+        if (pw == null) pw = CONSOLE;
         String[] names = { name1, name2 };
         // damn'd collection doesn't have a clone, so
         // we go with Set, even though that
@@ -116,14 +120,21 @@ public class BagFormatter {
         showSetNames(pw, inIn.format(names), temp);
     }
 
-    public String showSetNames(String title, Object set1) {
-        StringWriter sw = new StringWriter();
-        PrintWriter pw = new PrintWriter(sw);
-        showSetNames(pw, title, set1);
-        pw.flush();
-        String result = sw.getBuffer().toString();
-        pw.close();
-        return result;
+    /**
+     * Returns a list of items in the collection, with each separated by the separator.
+     * Each item must not be null; its toString() is called for a printable representation
+     * @param c source collection
+     * @param separator to be placed between any strings
+     * @return
+     * @internal
+     */
+    public String showSetNames(String title, Object c) {
+        StringWriter buffer = new StringWriter();
+        PrintWriter output = new PrintWriter(buffer);
+        output.println(title);
+        mainVisitor.output = output;
+        mainVisitor.doAt(c);
+        return buffer.toString();
     }
 
     /**
@@ -149,9 +160,11 @@ public class BagFormatter {
      * @internal
      */
     public void showSetNames(String filename, String title, Object c) throws IOException {
-      /*  PrintWriter pw = */new PrintWriter(
+        PrintWriter pw = new PrintWriter(
             new OutputStreamWriter(
                 new FileOutputStream(filename),"utf-8"));
+        showSetNames(log,title,c);
+        pw.close();
     }
     
     public String getAbbreviatedName(
@@ -251,6 +264,31 @@ public class BagFormatter {
         return hcp + "<reserved>";
     }
     
+    public String getName(String s) {
+        if (s.length() == 1) return getName(s.charAt(0)); // optimize
+        StringBuffer sb = new StringBuffer();
+        int cp;
+        for (int i = 0; i < s.length(); i+=UTF16.getCharCount(cp)) {
+            cp = UTF16.charAt(s,i);
+            if (i != 0) sb.append(separator);
+            sb.append(getName(cp));
+        }
+        return sb.toString();
+    }
+    
+    public String hex(String s) {
+        if (s.length() == 1) return Utility.hex(s.charAt(0),4); // optimize
+        StringBuffer sb = new StringBuffer();
+        int cp;
+        for (int i = 0; i < s.length(); i+=UTF16.getCharCount(cp)) {
+            cp = UTF16.charAt(s,i);
+            if (i != 0) sb.append(separator);
+            sb.append(Utility.hex(cp,4));
+        }
+        return sb.toString();
+    }
+    
+    String separator = ",";
     UnicodePropertySource source;
     UnicodePropertySource labelSource;
 
@@ -293,7 +331,7 @@ public class BagFormatter {
     private Visitor.Join labelVisitor = new Visitor.Join();
     
     private boolean mergeRanges = true;
-    private boolean literalCharacter = false;
+    private Transliterator showLiteral = null;
     private boolean showSetAlso = false;
 
     private RangeFinder rf = new RangeFinder();
@@ -404,7 +442,14 @@ public class BagFormatter {
             } else if (o instanceof Visitor.CodePointRange) {
                 doAt((Visitor.CodePointRange) o);
             } else {
-                output.print(o.toString());
+                String thing = o.toString();
+                output.println(
+                    singleTabber.process(
+                        hex(thing)
+                            + " \t# "
+                            + insertLiteral(thing)
+                            + " \t"
+                            + getName(thing)));
             }
         }
 
@@ -419,10 +464,7 @@ public class BagFormatter {
                             Utility.hex(cp, 4)
                                 + " \t# "
                                 + label
-                                + (literalCharacter
-                                    && (cp >= 0x20)
-                                        ? " \t(" + UTF16.valueOf(cp) + ") "
-                                        : "")
+                                + insertLiteral(cp)
                                 + " \t"
                                 + getName(cp)));
                 }
@@ -450,15 +492,7 @@ public class BagFormatter {
                                 + " \t["
                                 + nf.format(end - start + 1)
                                 + "]"
-                                + (literalCharacter
-                                    && (start >= 0x20)
-                                        ? " \t("
-                                            + UTF16.valueOf(start)
-                                            + ((start != end)
-                                                ? (".." + UTF16.valueOf(end))
-                                                : "")
-                                            + ") "
-                                        : "")
+                                + insertLiteral(start, end)
                                 + " \t"
                                 + getName(start)
                                 + ((start != end)
@@ -472,6 +506,25 @@ public class BagFormatter {
                                     : "")));
                 }
             }
+        }
+
+        private String insertLiteral(String thing) {
+            return (showLiteral == null ? ""
+                :  " \t(" + showLiteral.transliterate(thing) + ") ");
+        }
+
+        private String insertLiteral(int start, int end) {
+            return (showLiteral == null ? "" :
+                " \t(" + showLiteral.transliterate(UTF16.valueOf(start))
+                        + ((start != end)
+                            ? (".." + showLiteral.transliterate(UTF16.valueOf(end)))
+                            : "")
+                + ") ");
+        }
+
+        private String insertLiteral(int cp) {
+            return (showLiteral == null ? ""
+                :  " \t(" + showLiteral.transliterate(UTF16.valueOf(cp)) + ") ");
         }
     }
 
@@ -578,33 +631,31 @@ public class BagFormatter {
     public static final Transliterator hex = Transliterator.getInstance(
         "[^\\u0021-\\u007E\\u00A0-\\u00FF] hex");
     
-    public interface Shower {
-        public void println(String arg);
+    public static BufferedReader openUTF8Reader(String dir, String filename) throws IOException {
+        return openReader(dir,filename,"UTF-8");
     }
-    
-    public static Shower CONSOLE = new Shower() {
-        public void println(String arg) {
-            System.out.println(arg);
-        }
-    };
         
-    public static BufferedReader openUTF8Reader(String dir, String filename, Shower shower) throws IOException {
+    public static BufferedReader openReader(String dir, String filename, String encoding) throws IOException {
         File file = new File(dir + filename);
-        if (shower != null) {
-            shower.println("Creating File: " 
+        if (log != null) {
+            log.println("Opening File: " 
                 + file.getCanonicalPath());
         }
         return new BufferedReader(
             new InputStreamReader(
                 new FileInputStream(file),
-                "UTF-8"),
+                encoding),
             4*1024);       
     }
     
-    public static PrintWriter openUTF8Writer(String dir, String filename, Shower shower) throws IOException {
+    public static PrintWriter openUTF8Writer(String dir, String filename) throws IOException {
+        return openWriter(dir,filename,"UTF-8");
+    }
+        
+    public static PrintWriter openWriter(String dir, String filename, String encoding) throws IOException {
         File file = new File(dir + filename);
-        if (shower != null) {
-            shower.println("Creating File: " 
+        if (log != null) {
+            log.println("Creating File: " 
                 + file.getCanonicalPath());
         }
         //File parent = new File(file.getParent());
@@ -613,8 +664,26 @@ public class BagFormatter {
             new BufferedWriter(
                 new OutputStreamWriter(
                     new FileOutputStream(file),
-                    "UTF-8"),
+                    encoding),
                 4*1024));       
+    }
+    public static PrintWriter getLog() {
+        return log;
+    }
+    public static void setLog(PrintWriter writer) {
+        log = writer;
+    }
+    public String getSeparator() {
+        return separator;
+    }
+    public void setSeparator(String string) {
+        separator = string;
+    }
+    public Transliterator getShowLiteral() {
+        return showLiteral;
+    }
+    public void setShowLiteral(Transliterator transliterator) {
+        showLiteral = transliterator;
     }
 
 }
