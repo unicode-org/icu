@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/util/CompactCharArray.java,v $ 
- * $Date: 2002/02/25 22:43:59 $ 
- * $Revision: 1.8 $
+ * $Date: 2002/08/12 20:26:39 $ 
+ * $Revision: 1.9 $
  *
  *****************************************************************************************
  */
@@ -32,7 +32,7 @@ import com.ibm.icu.impl.Utility;
  * A compact array is composed of a index array and value array.  The index
  * array contains the indicies of Unicode characters to the value array.
  * @see                CompactByteArray
- * @version            $Revision: 1.8 $
+ * @version            $Revision: 1.9 $
  * @author             Helena Shih
  */
 public final class CompactCharArray implements Cloneable {
@@ -105,7 +105,7 @@ public final class CompactCharArray implements Cloneable {
      *          the wrong size.
      */
     public CompactCharArray(String indexArray,
-                             String valueArray)
+			    String valueArray)
     {
         this( Utility.RLEStringToCharArray(indexArray),
               Utility.RLEStringToCharArray(valueArray));
@@ -116,10 +116,11 @@ public final class CompactCharArray implements Cloneable {
      * @param index the character to get the mapped value with
      * @return the mapped value of the given character
      */
-    public char elementAt(char index) // parameterized on char
+    public char elementAt(char index)
     {
-        return (values[(indices[index >> BLOCKSHIFT] & 0xFFFF)
-                       + (index & BLOCKMASK)]);
+	int ix = (indices[index >> BLOCKSHIFT] & 0xFFFF)
+	    + (index & BLOCKMASK);
+	return ix >= values.length ? defaultValue : values[ix];
     }
 
     /**
@@ -271,9 +272,10 @@ public final class CompactCharArray implements Cloneable {
         return hashes[i] != 0;
     }
 
-    /** For internal use only.  Do not modify the result, the behavior of
-      * modified results are undefined.
-      */
+    /**
+     * For internal use only.  Do not modify the result, the behavior of
+     * modified results are undefined.
+     */
     public char[] getIndexArray()
     {
         return indices;
@@ -297,6 +299,7 @@ public final class CompactCharArray implements Cloneable {
             CompactCharArray other = (CompactCharArray) super.clone();
             other.values = (char[])values.clone();
             other.indices = (char[])indices.clone();
+            if (hashes != null) other.hashes = (int[])hashes.clone();
             return other;
         } catch (CloneNotSupportedException e) {
             throw new InternalError();
@@ -349,6 +352,7 @@ public final class CompactCharArray implements Cloneable {
         int i;
         if (isCompact) {
             char[] tempArray;
+            hashes = new int[INDEXCOUNT];
             tempArray = new char[UNICODECOUNT];
             for (i = 0; i < UNICODECOUNT; ++i) {
                 tempArray[i] = elementAt((char)i);
