@@ -2185,10 +2185,10 @@ TestAdditionalProperties() {
 
         { 0x00a0, UCHAR_GRAPHEME_BASE, TRUE },
         { 0x0a4d, UCHAR_GRAPHEME_BASE, FALSE },
-        { 0xff9f, UCHAR_GRAPHEME_BASE, FALSE },
+        { 0xff9f, UCHAR_GRAPHEME_BASE, TRUE },      /* changed from Unicode 3.2 to 4 */
 
         { 0x0300, UCHAR_GRAPHEME_EXTEND, TRUE },
-        { 0xff9f, UCHAR_GRAPHEME_EXTEND, TRUE },
+        { 0xff9f, UCHAR_GRAPHEME_EXTEND, FALSE },   /* changed from Unicode 3.2 to 4 */
         { 0x0603, UCHAR_GRAPHEME_EXTEND, FALSE },
 
         { 0x0a4d, UCHAR_GRAPHEME_LINK, TRUE },

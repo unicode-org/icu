@@ -8,7 +8,7 @@
  *   PropertyAliases.txt
  *   PropertyValueAliases.txt
  *
- * Date: Fri Mar 14 10:38:18 2003
+ * Date: Mon Mar 17 09:44:03 2003
  * Unicode version: 4.0.0
  * Script: preparse.pl
  */
@@ -19,7 +19,7 @@ const uint8_t VERSION_1 = 0;
 const uint8_t VERSION_2 = 0;
 const uint8_t VERSION_3 = 0;
 
-const int32_t STRING_COUNT = 627;
+const int32_t STRING_COUNT = 629;
 
 /* to be sorted */
 const AliasName STRING_TABLE[] = {
@@ -85,662 +85,664 @@ const AliasName STRING_TABLE[] = {
     AliasName("Bopomofo_Extended", 59),
     AliasName("Boundary_Neutral", 60),
     AliasName("Box_Drawing", 61),
-    AliasName("Braille_Patterns", 62),
-    AliasName("Break_After", 63),
-    AliasName("Break_Before", 64),
-    AliasName("Break_Both", 65),
-    AliasName("Break_Symbols", 66),
-    AliasName("Buhd", 67),
-    AliasName("Buhid", 68),
-    AliasName("Byzantine_Musical_Symbols", 69),
-    AliasName("C", 70),
-    AliasName("CB", 71),
-    AliasName("CJK_Compatibility", 72),
-    AliasName("CJK_Compatibility_Forms", 73),
-    AliasName("CJK_Compatibility_Ideographs", 74),
-    AliasName("CJK_Compatibility_Ideographs_Supplement", 75),
-    AliasName("CJK_Radicals_Supplement", 76),
-    AliasName("CJK_Symbols_and_Punctuation", 77),
-    AliasName("CJK_Unified_Ideographs", 78),
-    AliasName("CJK_Unified_Ideographs_Extension_A", 79),
-    AliasName("CJK_Unified_Ideographs_Extension_B", 80),
-    AliasName("CL", 81),
-    AliasName("CM", 82),
-    AliasName("CR", 83),
-    AliasName("CS", 84),
-    AliasName("Canadian_Aboriginal", 85),
-    AliasName("Canonical_Combining_Class", 86),
-    AliasName("Cans", 87),
-    AliasName("Carriage_Return", 88),
-    AliasName("Case_Folding", 89),
-    AliasName("Case_Sensitive", 90),
-    AliasName("Cased_Letter", 91),
-    AliasName("Cc", 92),
-    AliasName("Cf", 93),
-    AliasName("Cher", 94),
-    AliasName("Cherokee", 95),
-    AliasName("Close_Punctuation", 96),
-    AliasName("Cn", 97),
-    AliasName("Co", 98),
-    AliasName("Combining_Diacritical_Marks", 99),
-    AliasName("Combining_Diacritical_Marks_for_Symbols", 100),
-    AliasName("Combining_Half_Marks", 101),
-    AliasName("Combining_Mark", 102),
-    AliasName("Common", 103),
-    AliasName("Common_Separator", 104),
-    AliasName("Comp_Ex", 105),
-    AliasName("Complex_Context", 106),
-    AliasName("Connector_Punctuation", 107),
-    AliasName("Contingent_Break", 108),
-    AliasName("Control", 109),
-    AliasName("Control_Pictures", 110),
-    AliasName("Coptic", 111),
-    AliasName("Cprt", 112),
-    AliasName("Cs", 113),
-    AliasName("Currency_Symbol", 114),
-    AliasName("Currency_Symbols", 115),
-    AliasName("Cypriot", 116),
-    AliasName("Cypriot_Syllabary", 117),
-    AliasName("Cyrillic", 118),
-    AliasName("Cyrillic_Supplementary", 119),
-    AliasName("Cyrl", 120),
-    AliasName("D", 121),
-    AliasName("DA", 122),
-    AliasName("DAL", 123),
-    AliasName("DALATH_RISH", 124),
-    AliasName("DB", 125),
-    AliasName("DI", 126),
-    AliasName("Dash", 127),
-    AliasName("Dash_Punctuation", 128),
-    AliasName("Decimal", 129),
-    AliasName("Decimal_Number", 130),
-    AliasName("Decomposition_Type", 131),
-    AliasName("Default_Ignorable_Code_Point", 132),
-    AliasName("Dep", 133),
-    AliasName("Deprecated", 134),
-    AliasName("Deseret", 135),
-    AliasName("Deva", 136),
-    AliasName("Devanagari", 137),
-    AliasName("Dia", 138),
-    AliasName("Diacritic", 139),
-    AliasName("Digit", 140),
-    AliasName("Dingbats", 141),
-    AliasName("Double_Above", 142),
-    AliasName("Double_Below", 143),
-    AliasName("Dsrt", 144),
-    AliasName("Dual_Joining", 145),
-    AliasName("E", 146),
-    AliasName("EN", 147),
-    AliasName("ES", 148),
-    AliasName("ET", 149),
-    AliasName("EX", 150),
-    AliasName("East_Asian_Width", 151),
-    AliasName("Enclosed_Alphanumerics", 152),
-    AliasName("Enclosed_CJK_Letters_and_Months", 153),
-    AliasName("Enclosing_Mark", 154),
-    AliasName("Ethi", 155),
-    AliasName("Ethiopic", 156),
-    AliasName("European_Number", 157),
-    AliasName("European_Separator", 158),
-    AliasName("European_Terminator", 159),
-    AliasName("Exclamation", 160),
-    AliasName("Ext", 161),
-    AliasName("Extender", 162),
-    AliasName("F", 163),
-    AliasName("FE", 164),
-    AliasName("FEH", 165),
-    AliasName("FINAL_SEMKATH", 166),
-    AliasName("False", 167),
-    AliasName("Final_Punctuation", 168),
-    AliasName("Format", 169),
-    AliasName("Full_Composition_Exclusion", 170),
-    AliasName("Fullwidth", 171),
-    AliasName("GAF", 172),
-    AliasName("GAMAL", 173),
-    AliasName("GL", 174),
-    AliasName("General_Category", 175),
-    AliasName("General_Category_Mask", 176),
-    AliasName("General_Punctuation", 177),
-    AliasName("Geometric_Shapes", 178),
-    AliasName("Geor", 179),
-    AliasName("Georgian", 180),
-    AliasName("Glue", 181),
-    AliasName("Goth", 182),
-    AliasName("Gothic", 183),
-    AliasName("Gr_Base", 184),
-    AliasName("Gr_Ext", 185),
-    AliasName("Gr_Link", 186),
-    AliasName("Grapheme_Base", 187),
-    AliasName("Grapheme_Extend", 188),
-    AliasName("Grapheme_Link", 189),
-    AliasName("Greek", 190),
-    AliasName("Greek_Extended", 191),
-    AliasName("Greek_and_Coptic", 192),
-    AliasName("Grek", 193),
-    AliasName("Gujarati", 194),
-    AliasName("Gujr", 195),
-    AliasName("Gurmukhi", 196),
-    AliasName("Guru", 197),
-    AliasName("H", 198),
-    AliasName("HAH", 199),
-    AliasName("HAMZA_ON_HEH_GOAL", 200),
-    AliasName("HE", 201),
-    AliasName("HEH", 202),
-    AliasName("HEH_GOAL", 203),
-    AliasName("HETH", 204),
-    AliasName("HY", 205),
-    AliasName("Halfwidth", 206),
-    AliasName("Halfwidth_and_Fullwidth_Forms", 207),
-    AliasName("Han", 208),
-    AliasName("Hang", 209),
-    AliasName("Hangul", 210),
-    AliasName("Hangul_Compatibility_Jamo", 211),
-    AliasName("Hangul_Jamo", 212),
-    AliasName("Hangul_Syllable_Type", 213),
-    AliasName("Hangul_Syllables", 214),
-    AliasName("Hani", 215),
-    AliasName("Hano", 216),
-    AliasName("Hanunoo", 217),
-    AliasName("Hebr", 218),
-    AliasName("Hebrew", 219),
-    AliasName("Hex", 220),
-    AliasName("Hex_Digit", 221),
-    AliasName("High_Private_Use_Surrogates", 222),
-    AliasName("High_Surrogates", 223),
-    AliasName("Hira", 224),
-    AliasName("Hiragana", 225),
-    AliasName("Hyphen", 226),
-    AliasName("ID", 227),
-    AliasName("IDC", 228),
-    AliasName("IDS", 229),
-    AliasName("IDSB", 230),
-    AliasName("IDST", 231),
-    AliasName("IDS_Binary_Operator", 232),
-    AliasName("IDS_Trinary_Operator", 233),
-    AliasName("ID_Continue", 234),
-    AliasName("ID_Start", 235),
-    AliasName("IN", 236),
-    AliasName("IPA_Extensions", 237),
-    AliasName("IS", 238),
-    AliasName("ISO_Comment", 239),
-    AliasName("Ideo", 240),
-    AliasName("Ideographic", 241),
-    AliasName("Ideographic_Description_Characters", 242),
-    AliasName("Infix_Numeric", 243),
-    AliasName("Inherited", 244),
-    AliasName("Initial_Punctuation", 245),
-    AliasName("Inseperable", 246),
-    AliasName("Iota_Subscript", 247),
-    AliasName("Ital", 248),
-    AliasName("Join_C", 249),
-    AliasName("Join_Causing", 250),
-    AliasName("Join_Control", 251),
-    AliasName("Joining_Group", 252),
-    AliasName("Joining_Type", 253),
-    AliasName("KAF", 254),
-    AliasName("KAPH", 255),
-    AliasName("KHAPH", 256),
-    AliasName("KNOTTED_HEH", 257),
-    AliasName("KV", 258),
-    AliasName("Kana", 259),
-    AliasName("Kana_Voicing", 260),
-    AliasName("Kanbun", 261),
-    AliasName("Kangxi_Radicals", 262),
-    AliasName("Kannada", 263),
-    AliasName("Katakana", 264),
-    AliasName("Katakana_Phonetic_Extensions", 265),
-    AliasName("Khmer", 266),
-    AliasName("Khmer_Symbols", 267),
-    AliasName("Khmr", 268),
-    AliasName("Knda", 269),
-    AliasName("L", 270),
-    AliasName("LAM", 271),
-    AliasName("LAMADH", 272),
-    AliasName("LC", 273),
-    AliasName("LF", 274),
-    AliasName("LOE", 275),
-    AliasName("LRE", 276),
-    AliasName("LRO", 277),
-    AliasName("LV", 278),
-    AliasName("LVT", 279),
-    AliasName("LVT_Syllable", 280),
-    AliasName("LV_Syllable", 281),
-    AliasName("Lao", 282),
-    AliasName("Laoo", 283),
-    AliasName("Latin", 284),
-    AliasName("Latin-1_Supplement", 285),
-    AliasName("Latin_Extended-A", 286),
-    AliasName("Latin_Extended-B", 287),
-    AliasName("Latin_Extended_Additional", 288),
-    AliasName("Latn", 289),
-    AliasName("Leading_Jamo", 290),
-    AliasName("Left", 291),
-    AliasName("Left_Joining", 292),
-    AliasName("Left_To_Right", 293),
-    AliasName("Left_To_Right_Embedding", 294),
-    AliasName("Left_To_Right_Override", 295),
-    AliasName("Letter", 296),
-    AliasName("Letter_Number", 297),
-    AliasName("Letterlike_Symbols", 298),
-    AliasName("Limb", 299),
-    AliasName("Limbu", 300),
-    AliasName("Linb", 301),
-    AliasName("Line_Break", 302),
-    AliasName("Line_Feed", 303),
-    AliasName("Line_Separator", 304),
-    AliasName("Linear_B", 305),
-    AliasName("Linear_B_Ideograms", 306),
-    AliasName("Linear_B_Syllabary", 307),
-    AliasName("Ll", 308),
-    AliasName("Lm", 309),
-    AliasName("Lo", 310),
-    AliasName("Logical_Order_Exception", 311),
-    AliasName("Low_Surrogates", 312),
-    AliasName("Lower", 313),
-    AliasName("Lowercase", 314),
-    AliasName("Lowercase_Letter", 315),
-    AliasName("Lowercase_Mapping", 316),
-    AliasName("Lt", 317),
-    AliasName("Lu", 318),
-    AliasName("M", 319),
-    AliasName("MEEM", 320),
-    AliasName("MIM", 321),
-    AliasName("Malayalam", 322),
-    AliasName("Mandatory_Break", 323),
-    AliasName("Mark", 324),
-    AliasName("Math", 325),
-    AliasName("Math_Symbol", 326),
-    AliasName("Mathematical_Alphanumeric_Symbols", 327),
-    AliasName("Mathematical_Operators", 328),
-    AliasName("Mc", 329),
-    AliasName("Me", 330),
-    AliasName("Miscellaneous_Mathematical_Symbols-A", 331),
-    AliasName("Miscellaneous_Mathematical_Symbols-B", 332),
-    AliasName("Miscellaneous_Symbols", 333),
-    AliasName("Miscellaneous_Symbols_and_Arrows", 334),
-    AliasName("Miscellaneous_Technical", 335),
-    AliasName("Mlym", 336),
-    AliasName("Mn", 337),
-    AliasName("Modifier_Letter", 338),
-    AliasName("Modifier_Symbol", 339),
-    AliasName("Mong", 340),
-    AliasName("Mongolian", 341),
-    AliasName("Musical_Symbols", 342),
-    AliasName("Myanmar", 343),
-    AliasName("Mymr", 344),
-    AliasName("N", 345),
-    AliasName("NA", 346),
-    AliasName("NChar", 347),
-    AliasName("NK", 348),
-    AliasName("NL", 349),
-    AliasName("NOON", 350),
-    AliasName("NO_JOINING_GROUP", 351),
-    AliasName("NR", 352),
-    AliasName("NS", 353),
-    AliasName("NSM", 354),
-    AliasName("NU", 355),
-    AliasName("NUN", 356),
-    AliasName("Na", 357),
-    AliasName("Name", 358),
-    AliasName("Narrow", 359),
-    AliasName("Nd", 360),
-    AliasName("Neutral", 361),
-    AliasName("Next_Line", 362),
-    AliasName("Nl", 363),
-    AliasName("No", 364),
-    AliasName("No_Block", 365),
-    AliasName("Non_Joining", 366),
-    AliasName("Noncharacter_Code_Point", 367),
-    AliasName("None", 368),
-    AliasName("Nonspacing_Mark", 369),
-    AliasName("Nonstarter", 370),
-    AliasName("Not_Applicable", 371),
-    AliasName("Not_Reordered", 372),
-    AliasName("Nukta", 373),
-    AliasName("Number", 374),
-    AliasName("Number_Forms", 375),
-    AliasName("Numeric", 376),
-    AliasName("Numeric_Type", 377),
-    AliasName("Numeric_Value", 378),
-    AliasName("ON", 379),
-    AliasName("OP", 380),
-    AliasName("OV", 381),
-    AliasName("Ogam", 382),
-    AliasName("Ogham", 383),
-    AliasName("Old_Italic", 384),
-    AliasName("Open_Punctuation", 385),
-    AliasName("Optical_Character_Recognition", 386),
-    AliasName("Oriya", 387),
-    AliasName("Orya", 388),
-    AliasName("Osma", 389),
-    AliasName("Osmanya", 390),
-    AliasName("Other", 391),
-    AliasName("Other_Letter", 392),
-    AliasName("Other_Neutral", 393),
-    AliasName("Other_Number", 394),
-    AliasName("Other_Punctuation", 395),
-    AliasName("Other_Symbol", 396),
-    AliasName("Overlay", 397),
-    AliasName("P", 398),
-    AliasName("PDF", 399),
-    AliasName("PE", 400),
-    AliasName("PO", 401),
-    AliasName("PR", 402),
-    AliasName("Paragraph_Separator", 403),
-    AliasName("Pc", 404),
-    AliasName("Pd", 405),
-    AliasName("Pe", 406),
-    AliasName("Pf", 407),
-    AliasName("Phonetic_Extensions", 408),
-    AliasName("Pi", 409),
-    AliasName("Po", 410),
-    AliasName("Pop_Directional_Format", 411),
-    AliasName("Postfix_Numeric", 412),
-    AliasName("Prefix_Numeric", 413),
-    AliasName("Private_Use", 414),
-    AliasName("Private_Use_Area", 415),
-    AliasName("Ps", 416),
-    AliasName("Punctuation", 417),
-    AliasName("QAF", 418),
-    AliasName("QAPH", 419),
-    AliasName("QMark", 420),
-    AliasName("QU", 421),
-    AliasName("Qaac", 422),
-    AliasName("Qaai", 423),
-    AliasName("Quotation", 424),
-    AliasName("Quotation_Mark", 425),
-    AliasName("R", 426),
-    AliasName("REH", 427),
-    AliasName("REVERSED_PE", 428),
-    AliasName("RLE", 429),
-    AliasName("RLO", 430),
-    AliasName("Radical", 431),
-    AliasName("Right", 432),
-    AliasName("Right_Joining", 433),
-    AliasName("Right_To_Left", 434),
-    AliasName("Right_To_Left_Embedding", 435),
-    AliasName("Right_To_Left_Override", 436),
-    AliasName("Runic", 437),
-    AliasName("Runr", 438),
-    AliasName("S", 439),
-    AliasName("SA", 440),
-    AliasName("SAD", 441),
-    AliasName("SADHE", 442),
-    AliasName("SD", 443),
-    AliasName("SEEN", 444),
-    AliasName("SEMKATH", 445),
-    AliasName("SG", 446),
-    AliasName("SHIN", 447),
-    AliasName("SP", 448),
-    AliasName("SWASH_KAF", 449),
-    AliasName("SY", 450),
-    AliasName("SYRIAC_WAW", 451),
-    AliasName("Sc", 452),
-    AliasName("Script", 453),
-    AliasName("Segment_Separator", 454),
-    AliasName("Sensitive", 455),
-    AliasName("Separator", 456),
-    AliasName("Shavian", 457),
-    AliasName("Shaw", 458),
-    AliasName("Simple_Case_Folding", 459),
-    AliasName("Simple_Lowercase_Mapping", 460),
-    AliasName("Simple_Titlecase_Mapping", 461),
-    AliasName("Simple_Uppercase_Mapping", 462),
-    AliasName("Sinh", 463),
-    AliasName("Sinhala", 464),
-    AliasName("Sk", 465),
-    AliasName("Sm", 466),
-    AliasName("Small_Form_Variants", 467),
-    AliasName("So", 468),
-    AliasName("Soft_Dotted", 469),
-    AliasName("Space", 470),
-    AliasName("Space_Separator", 471),
-    AliasName("Spacing_Mark", 472),
-    AliasName("Spacing_Modifier_Letters", 473),
-    AliasName("Specials", 474),
-    AliasName("Superscripts_and_Subscripts", 475),
-    AliasName("Supplemental_Arrows-A", 476),
-    AliasName("Supplemental_Arrows-B", 477),
-    AliasName("Supplemental_Mathematical_Operators", 478),
-    AliasName("Supplementary_Private_Use_Area-A", 479),
-    AliasName("Supplementary_Private_Use_Area-B", 480),
-    AliasName("Surrogate", 481),
-    AliasName("Symbol", 482),
-    AliasName("Syrc", 483),
-    AliasName("Syriac", 484),
-    AliasName("T", 485),
-    AliasName("TAH", 486),
-    AliasName("TAW", 487),
-    AliasName("TEH_MARBUTA", 488),
-    AliasName("TETH", 489),
-    AliasName("Tagalog", 490),
-    AliasName("Tagb", 491),
-    AliasName("Tagbanwa", 492),
-    AliasName("Tags", 493),
-    AliasName("Tai_Le", 494),
-    AliasName("Tai_Xuan_Jing_Symbols", 495),
-    AliasName("Tale", 496),
-    AliasName("Tamil", 497),
-    AliasName("Taml", 498),
-    AliasName("Telu", 499),
-    AliasName("Telugu", 500),
-    AliasName("Term", 501),
-    AliasName("Terminal_Punctuation", 502),
-    AliasName("Tglg", 503),
-    AliasName("Thaa", 504),
-    AliasName("Thaana", 505),
-    AliasName("Thai", 506),
-    AliasName("Tibetan", 507),
-    AliasName("Tibt", 508),
-    AliasName("Titlecase_Letter", 509),
-    AliasName("Titlecase_Mapping", 510),
-    AliasName("Trailing_Jamo", 511),
-    AliasName("Transparent", 512),
-    AliasName("True", 513),
-    AliasName("U", 514),
-    AliasName("UIdeo", 515),
-    AliasName("Ugar", 516),
-    AliasName("Ugaritic", 517),
-    AliasName("Unassigned", 518),
-    AliasName("Unicode_1_Name", 519),
-    AliasName("Unified_Canadian_Aboriginal_Syllabics", 520),
-    AliasName("Unified_Ideograph", 521),
-    AliasName("Unknown", 522),
-    AliasName("Upper", 523),
-    AliasName("Uppercase", 524),
-    AliasName("Uppercase_Letter", 525),
-    AliasName("Uppercase_Mapping", 526),
-    AliasName("V", 527),
-    AliasName("VR", 528),
-    AliasName("Variation_Selectors", 529),
-    AliasName("Variation_Selectors_Supplement", 530),
-    AliasName("Virama", 531),
-    AliasName("Vowel_Jamo", 532),
-    AliasName("W", 533),
-    AliasName("WAW", 534),
-    AliasName("WJ", 535),
-    AliasName("WS", 536),
-    AliasName("WSpace", 537),
-    AliasName("White_Space", 538),
-    AliasName("Wide", 539),
-    AliasName("Word_Joiner", 540),
-    AliasName("XIDC", 541),
-    AliasName("XIDS", 542),
-    AliasName("XID_Continue", 543),
-    AliasName("XID_Start", 544),
-    AliasName("XX", 545),
-    AliasName("YEH", 546),
-    AliasName("YEH_BARREE", 547),
-    AliasName("YEH_WITH_TAIL", 548),
-    AliasName("YUDH", 549),
-    AliasName("YUDH_HE", 550),
-    AliasName("Yi", 551),
-    AliasName("Yi_Radicals", 552),
-    AliasName("Yi_Syllables", 553),
-    AliasName("Yiii", 554),
-    AliasName("Yijing_Hexagram_Symbols", 555),
-    AliasName("Z", 556),
-    AliasName("ZAIN", 557),
-    AliasName("ZHAIN", 558),
-    AliasName("ZW", 559),
-    AliasName("ZWSpace", 560),
-    AliasName("Zl", 561),
-    AliasName("Zp", 562),
-    AliasName("Zs", 563),
-    AliasName("Zyyy", 564),
-    AliasName("age", 565),
-    AliasName("bc", 566),
-    AliasName("blk", 567),
-    AliasName("bmg", 568),
-    AliasName("can", 569),
-    AliasName("canonical", 570),
-    AliasName("ccc", 571),
-    AliasName("cf", 572),
-    AliasName("circle", 573),
-    AliasName("com", 574),
-    AliasName("compat", 575),
-    AliasName("de", 576),
-    AliasName("di", 577),
-    AliasName("dt", 578),
-    AliasName("ea", 579),
-    AliasName("enc", 580),
-    AliasName("fin", 581),
-    AliasName("final", 582),
-    AliasName("font", 583),
-    AliasName("fra", 584),
-    AliasName("fraction", 585),
-    AliasName("gc", 586),
-    AliasName("gcm", 587),
-    AliasName("hst", 588),
-    AliasName("init", 589),
-    AliasName("initial", 590),
-    AliasName("isc", 591),
-    AliasName("iso", 592),
-    AliasName("isolated", 593),
-    AliasName("jg", 594),
-    AliasName("jt", 595),
-    AliasName("lb", 596),
-    AliasName("lc", 597),
-    AliasName("med", 598),
-    AliasName("medial", 599),
-    AliasName("na", 600),
-    AliasName("na1", 601),
-    AliasName("nar", 602),
-    AliasName("narrow", 603),
-    AliasName("nb", 604),
-    AliasName("noBreak", 605),
-    AliasName("none", 606),
-    AliasName("nt", 607),
-    AliasName("nu", 608),
-    AliasName("nv", 609),
-    AliasName("sc", 610),
-    AliasName("sfc", 611),
-    AliasName("slc", 612),
-    AliasName("small", 613),
-    AliasName("sml", 614),
-    AliasName("sqr", 615),
-    AliasName("square", 616),
-    AliasName("stc", 617),
-    AliasName("sub", 618),
-    AliasName("suc", 619),
-    AliasName("sup", 620),
-    AliasName("super", 621),
-    AliasName("tc", 622),
-    AliasName("uc", 623),
-    AliasName("vert", 624),
-    AliasName("vertical", 625),
-    AliasName("wide", 626),
+    AliasName("Brai", 62),
+    AliasName("Braille", 63),
+    AliasName("Braille_Patterns", 64),
+    AliasName("Break_After", 65),
+    AliasName("Break_Before", 66),
+    AliasName("Break_Both", 67),
+    AliasName("Break_Symbols", 68),
+    AliasName("Buhd", 69),
+    AliasName("Buhid", 70),
+    AliasName("Byzantine_Musical_Symbols", 71),
+    AliasName("C", 72),
+    AliasName("CB", 73),
+    AliasName("CJK_Compatibility", 74),
+    AliasName("CJK_Compatibility_Forms", 75),
+    AliasName("CJK_Compatibility_Ideographs", 76),
+    AliasName("CJK_Compatibility_Ideographs_Supplement", 77),
+    AliasName("CJK_Radicals_Supplement", 78),
+    AliasName("CJK_Symbols_and_Punctuation", 79),
+    AliasName("CJK_Unified_Ideographs", 80),
+    AliasName("CJK_Unified_Ideographs_Extension_A", 81),
+    AliasName("CJK_Unified_Ideographs_Extension_B", 82),
+    AliasName("CL", 83),
+    AliasName("CM", 84),
+    AliasName("CR", 85),
+    AliasName("CS", 86),
+    AliasName("Canadian_Aboriginal", 87),
+    AliasName("Canonical_Combining_Class", 88),
+    AliasName("Cans", 89),
+    AliasName("Carriage_Return", 90),
+    AliasName("Case_Folding", 91),
+    AliasName("Case_Sensitive", 92),
+    AliasName("Cased_Letter", 93),
+    AliasName("Cc", 94),
+    AliasName("Cf", 95),
+    AliasName("Cher", 96),
+    AliasName("Cherokee", 97),
+    AliasName("Close_Punctuation", 98),
+    AliasName("Cn", 99),
+    AliasName("Co", 100),
+    AliasName("Combining_Diacritical_Marks", 101),
+    AliasName("Combining_Diacritical_Marks_for_Symbols", 102),
+    AliasName("Combining_Half_Marks", 103),
+    AliasName("Combining_Mark", 104),
+    AliasName("Common", 105),
+    AliasName("Common_Separator", 106),
+    AliasName("Comp_Ex", 107),
+    AliasName("Complex_Context", 108),
+    AliasName("Connector_Punctuation", 109),
+    AliasName("Contingent_Break", 110),
+    AliasName("Control", 111),
+    AliasName("Control_Pictures", 112),
+    AliasName("Coptic", 113),
+    AliasName("Cprt", 114),
+    AliasName("Cs", 115),
+    AliasName("Currency_Symbol", 116),
+    AliasName("Currency_Symbols", 117),
+    AliasName("Cypriot", 118),
+    AliasName("Cypriot_Syllabary", 119),
+    AliasName("Cyrillic", 120),
+    AliasName("Cyrillic_Supplementary", 121),
+    AliasName("Cyrl", 122),
+    AliasName("D", 123),
+    AliasName("DA", 124),
+    AliasName("DAL", 125),
+    AliasName("DALATH_RISH", 126),
+    AliasName("DB", 127),
+    AliasName("DI", 128),
+    AliasName("Dash", 129),
+    AliasName("Dash_Punctuation", 130),
+    AliasName("Decimal", 131),
+    AliasName("Decimal_Number", 132),
+    AliasName("Decomposition_Type", 133),
+    AliasName("Default_Ignorable_Code_Point", 134),
+    AliasName("Dep", 135),
+    AliasName("Deprecated", 136),
+    AliasName("Deseret", 137),
+    AliasName("Deva", 138),
+    AliasName("Devanagari", 139),
+    AliasName("Dia", 140),
+    AliasName("Diacritic", 141),
+    AliasName("Digit", 142),
+    AliasName("Dingbats", 143),
+    AliasName("Double_Above", 144),
+    AliasName("Double_Below", 145),
+    AliasName("Dsrt", 146),
+    AliasName("Dual_Joining", 147),
+    AliasName("E", 148),
+    AliasName("EN", 149),
+    AliasName("ES", 150),
+    AliasName("ET", 151),
+    AliasName("EX", 152),
+    AliasName("East_Asian_Width", 153),
+    AliasName("Enclosed_Alphanumerics", 154),
+    AliasName("Enclosed_CJK_Letters_and_Months", 155),
+    AliasName("Enclosing_Mark", 156),
+    AliasName("Ethi", 157),
+    AliasName("Ethiopic", 158),
+    AliasName("European_Number", 159),
+    AliasName("European_Separator", 160),
+    AliasName("European_Terminator", 161),
+    AliasName("Exclamation", 162),
+    AliasName("Ext", 163),
+    AliasName("Extender", 164),
+    AliasName("F", 165),
+    AliasName("FE", 166),
+    AliasName("FEH", 167),
+    AliasName("FINAL_SEMKATH", 168),
+    AliasName("False", 169),
+    AliasName("Final_Punctuation", 170),
+    AliasName("Format", 171),
+    AliasName("Full_Composition_Exclusion", 172),
+    AliasName("Fullwidth", 173),
+    AliasName("GAF", 174),
+    AliasName("GAMAL", 175),
+    AliasName("GL", 176),
+    AliasName("General_Category", 177),
+    AliasName("General_Category_Mask", 178),
+    AliasName("General_Punctuation", 179),
+    AliasName("Geometric_Shapes", 180),
+    AliasName("Geor", 181),
+    AliasName("Georgian", 182),
+    AliasName("Glue", 183),
+    AliasName("Goth", 184),
+    AliasName("Gothic", 185),
+    AliasName("Gr_Base", 186),
+    AliasName("Gr_Ext", 187),
+    AliasName("Gr_Link", 188),
+    AliasName("Grapheme_Base", 189),
+    AliasName("Grapheme_Extend", 190),
+    AliasName("Grapheme_Link", 191),
+    AliasName("Greek", 192),
+    AliasName("Greek_Extended", 193),
+    AliasName("Greek_and_Coptic", 194),
+    AliasName("Grek", 195),
+    AliasName("Gujarati", 196),
+    AliasName("Gujr", 197),
+    AliasName("Gurmukhi", 198),
+    AliasName("Guru", 199),
+    AliasName("H", 200),
+    AliasName("HAH", 201),
+    AliasName("HAMZA_ON_HEH_GOAL", 202),
+    AliasName("HE", 203),
+    AliasName("HEH", 204),
+    AliasName("HEH_GOAL", 205),
+    AliasName("HETH", 206),
+    AliasName("HY", 207),
+    AliasName("Halfwidth", 208),
+    AliasName("Halfwidth_and_Fullwidth_Forms", 209),
+    AliasName("Han", 210),
+    AliasName("Hang", 211),
+    AliasName("Hangul", 212),
+    AliasName("Hangul_Compatibility_Jamo", 213),
+    AliasName("Hangul_Jamo", 214),
+    AliasName("Hangul_Syllable_Type", 215),
+    AliasName("Hangul_Syllables", 216),
+    AliasName("Hani", 217),
+    AliasName("Hano", 218),
+    AliasName("Hanunoo", 219),
+    AliasName("Hebr", 220),
+    AliasName("Hebrew", 221),
+    AliasName("Hex", 222),
+    AliasName("Hex_Digit", 223),
+    AliasName("High_Private_Use_Surrogates", 224),
+    AliasName("High_Surrogates", 225),
+    AliasName("Hira", 226),
+    AliasName("Hiragana", 227),
+    AliasName("Hyphen", 228),
+    AliasName("ID", 229),
+    AliasName("IDC", 230),
+    AliasName("IDS", 231),
+    AliasName("IDSB", 232),
+    AliasName("IDST", 233),
+    AliasName("IDS_Binary_Operator", 234),
+    AliasName("IDS_Trinary_Operator", 235),
+    AliasName("ID_Continue", 236),
+    AliasName("ID_Start", 237),
+    AliasName("IN", 238),
+    AliasName("IPA_Extensions", 239),
+    AliasName("IS", 240),
+    AliasName("ISO_Comment", 241),
+    AliasName("Ideo", 242),
+    AliasName("Ideographic", 243),
+    AliasName("Ideographic_Description_Characters", 244),
+    AliasName("Infix_Numeric", 245),
+    AliasName("Inherited", 246),
+    AliasName("Initial_Punctuation", 247),
+    AliasName("Inseperable", 248),
+    AliasName("Iota_Subscript", 249),
+    AliasName("Ital", 250),
+    AliasName("Join_C", 251),
+    AliasName("Join_Causing", 252),
+    AliasName("Join_Control", 253),
+    AliasName("Joining_Group", 254),
+    AliasName("Joining_Type", 255),
+    AliasName("KAF", 256),
+    AliasName("KAPH", 257),
+    AliasName("KHAPH", 258),
+    AliasName("KNOTTED_HEH", 259),
+    AliasName("KV", 260),
+    AliasName("Kana", 261),
+    AliasName("Kana_Voicing", 262),
+    AliasName("Kanbun", 263),
+    AliasName("Kangxi_Radicals", 264),
+    AliasName("Kannada", 265),
+    AliasName("Katakana", 266),
+    AliasName("Katakana_Phonetic_Extensions", 267),
+    AliasName("Khmer", 268),
+    AliasName("Khmer_Symbols", 269),
+    AliasName("Khmr", 270),
+    AliasName("Knda", 271),
+    AliasName("L", 272),
+    AliasName("LAM", 273),
+    AliasName("LAMADH", 274),
+    AliasName("LC", 275),
+    AliasName("LF", 276),
+    AliasName("LOE", 277),
+    AliasName("LRE", 278),
+    AliasName("LRO", 279),
+    AliasName("LV", 280),
+    AliasName("LVT", 281),
+    AliasName("LVT_Syllable", 282),
+    AliasName("LV_Syllable", 283),
+    AliasName("Lao", 284),
+    AliasName("Laoo", 285),
+    AliasName("Latin", 286),
+    AliasName("Latin-1_Supplement", 287),
+    AliasName("Latin_Extended-A", 288),
+    AliasName("Latin_Extended-B", 289),
+    AliasName("Latin_Extended_Additional", 290),
+    AliasName("Latn", 291),
+    AliasName("Leading_Jamo", 292),
+    AliasName("Left", 293),
+    AliasName("Left_Joining", 294),
+    AliasName("Left_To_Right", 295),
+    AliasName("Left_To_Right_Embedding", 296),
+    AliasName("Left_To_Right_Override", 297),
+    AliasName("Letter", 298),
+    AliasName("Letter_Number", 299),
+    AliasName("Letterlike_Symbols", 300),
+    AliasName("Limb", 301),
+    AliasName("Limbu", 302),
+    AliasName("Linb", 303),
+    AliasName("Line_Break", 304),
+    AliasName("Line_Feed", 305),
+    AliasName("Line_Separator", 306),
+    AliasName("Linear_B", 307),
+    AliasName("Linear_B_Ideograms", 308),
+    AliasName("Linear_B_Syllabary", 309),
+    AliasName("Ll", 310),
+    AliasName("Lm", 311),
+    AliasName("Lo", 312),
+    AliasName("Logical_Order_Exception", 313),
+    AliasName("Low_Surrogates", 314),
+    AliasName("Lower", 315),
+    AliasName("Lowercase", 316),
+    AliasName("Lowercase_Letter", 317),
+    AliasName("Lowercase_Mapping", 318),
+    AliasName("Lt", 319),
+    AliasName("Lu", 320),
+    AliasName("M", 321),
+    AliasName("MEEM", 322),
+    AliasName("MIM", 323),
+    AliasName("Malayalam", 324),
+    AliasName("Mandatory_Break", 325),
+    AliasName("Mark", 326),
+    AliasName("Math", 327),
+    AliasName("Math_Symbol", 328),
+    AliasName("Mathematical_Alphanumeric_Symbols", 329),
+    AliasName("Mathematical_Operators", 330),
+    AliasName("Mc", 331),
+    AliasName("Me", 332),
+    AliasName("Miscellaneous_Mathematical_Symbols-A", 333),
+    AliasName("Miscellaneous_Mathematical_Symbols-B", 334),
+    AliasName("Miscellaneous_Symbols", 335),
+    AliasName("Miscellaneous_Symbols_and_Arrows", 336),
+    AliasName("Miscellaneous_Technical", 337),
+    AliasName("Mlym", 338),
+    AliasName("Mn", 339),
+    AliasName("Modifier_Letter", 340),
+    AliasName("Modifier_Symbol", 341),
+    AliasName("Mong", 342),
+    AliasName("Mongolian", 343),
+    AliasName("Musical_Symbols", 344),
+    AliasName("Myanmar", 345),
+    AliasName("Mymr", 346),
+    AliasName("N", 347),
+    AliasName("NA", 348),
+    AliasName("NChar", 349),
+    AliasName("NK", 350),
+    AliasName("NL", 351),
+    AliasName("NOON", 352),
+    AliasName("NO_JOINING_GROUP", 353),
+    AliasName("NR", 354),
+    AliasName("NS", 355),
+    AliasName("NSM", 356),
+    AliasName("NU", 357),
+    AliasName("NUN", 358),
+    AliasName("Na", 359),
+    AliasName("Name", 360),
+    AliasName("Narrow", 361),
+    AliasName("Nd", 362),
+    AliasName("Neutral", 363),
+    AliasName("Next_Line", 364),
+    AliasName("Nl", 365),
+    AliasName("No", 366),
+    AliasName("No_Block", 367),
+    AliasName("Non_Joining", 368),
+    AliasName("Noncharacter_Code_Point", 369),
+    AliasName("None", 370),
+    AliasName("Nonspacing_Mark", 371),
+    AliasName("Nonstarter", 372),
+    AliasName("Not_Applicable", 373),
+    AliasName("Not_Reordered", 374),
+    AliasName("Nukta", 375),
+    AliasName("Number", 376),
+    AliasName("Number_Forms", 377),
+    AliasName("Numeric", 378),
+    AliasName("Numeric_Type", 379),
+    AliasName("Numeric_Value", 380),
+    AliasName("ON", 381),
+    AliasName("OP", 382),
+    AliasName("OV", 383),
+    AliasName("Ogam", 384),
+    AliasName("Ogham", 385),
+    AliasName("Old_Italic", 386),
+    AliasName("Open_Punctuation", 387),
+    AliasName("Optical_Character_Recognition", 388),
+    AliasName("Oriya", 389),
+    AliasName("Orya", 390),
+    AliasName("Osma", 391),
+    AliasName("Osmanya", 392),
+    AliasName("Other", 393),
+    AliasName("Other_Letter", 394),
+    AliasName("Other_Neutral", 395),
+    AliasName("Other_Number", 396),
+    AliasName("Other_Punctuation", 397),
+    AliasName("Other_Symbol", 398),
+    AliasName("Overlay", 399),
+    AliasName("P", 400),
+    AliasName("PDF", 401),
+    AliasName("PE", 402),
+    AliasName("PO", 403),
+    AliasName("PR", 404),
+    AliasName("Paragraph_Separator", 405),
+    AliasName("Pc", 406),
+    AliasName("Pd", 407),
+    AliasName("Pe", 408),
+    AliasName("Pf", 409),
+    AliasName("Phonetic_Extensions", 410),
+    AliasName("Pi", 411),
+    AliasName("Po", 412),
+    AliasName("Pop_Directional_Format", 413),
+    AliasName("Postfix_Numeric", 414),
+    AliasName("Prefix_Numeric", 415),
+    AliasName("Private_Use", 416),
+    AliasName("Private_Use_Area", 417),
+    AliasName("Ps", 418),
+    AliasName("Punctuation", 419),
+    AliasName("QAF", 420),
+    AliasName("QAPH", 421),
+    AliasName("QMark", 422),
+    AliasName("QU", 423),
+    AliasName("Qaac", 424),
+    AliasName("Qaai", 425),
+    AliasName("Quotation", 426),
+    AliasName("Quotation_Mark", 427),
+    AliasName("R", 428),
+    AliasName("REH", 429),
+    AliasName("REVERSED_PE", 430),
+    AliasName("RLE", 431),
+    AliasName("RLO", 432),
+    AliasName("Radical", 433),
+    AliasName("Right", 434),
+    AliasName("Right_Joining", 435),
+    AliasName("Right_To_Left", 436),
+    AliasName("Right_To_Left_Embedding", 437),
+    AliasName("Right_To_Left_Override", 438),
+    AliasName("Runic", 439),
+    AliasName("Runr", 440),
+    AliasName("S", 441),
+    AliasName("SA", 442),
+    AliasName("SAD", 443),
+    AliasName("SADHE", 444),
+    AliasName("SD", 445),
+    AliasName("SEEN", 446),
+    AliasName("SEMKATH", 447),
+    AliasName("SG", 448),
+    AliasName("SHIN", 449),
+    AliasName("SP", 450),
+    AliasName("SWASH_KAF", 451),
+    AliasName("SY", 452),
+    AliasName("SYRIAC_WAW", 453),
+    AliasName("Sc", 454),
+    AliasName("Script", 455),
+    AliasName("Segment_Separator", 456),
+    AliasName("Sensitive", 457),
+    AliasName("Separator", 458),
+    AliasName("Shavian", 459),
+    AliasName("Shaw", 460),
+    AliasName("Simple_Case_Folding", 461),
+    AliasName("Simple_Lowercase_Mapping", 462),
+    AliasName("Simple_Titlecase_Mapping", 463),
+    AliasName("Simple_Uppercase_Mapping", 464),
+    AliasName("Sinh", 465),
+    AliasName("Sinhala", 466),
+    AliasName("Sk", 467),
+    AliasName("Sm", 468),
+    AliasName("Small_Form_Variants", 469),
+    AliasName("So", 470),
+    AliasName("Soft_Dotted", 471),
+    AliasName("Space", 472),
+    AliasName("Space_Separator", 473),
+    AliasName("Spacing_Mark", 474),
+    AliasName("Spacing_Modifier_Letters", 475),
+    AliasName("Specials", 476),
+    AliasName("Superscripts_and_Subscripts", 477),
+    AliasName("Supplemental_Arrows-A", 478),
+    AliasName("Supplemental_Arrows-B", 479),
+    AliasName("Supplemental_Mathematical_Operators", 480),
+    AliasName("Supplementary_Private_Use_Area-A", 481),
+    AliasName("Supplementary_Private_Use_Area-B", 482),
+    AliasName("Surrogate", 483),
+    AliasName("Symbol", 484),
+    AliasName("Syrc", 485),
+    AliasName("Syriac", 486),
+    AliasName("T", 487),
+    AliasName("TAH", 488),
+    AliasName("TAW", 489),
+    AliasName("TEH_MARBUTA", 490),
+    AliasName("TETH", 491),
+    AliasName("Tagalog", 492),
+    AliasName("Tagb", 493),
+    AliasName("Tagbanwa", 494),
+    AliasName("Tags", 495),
+    AliasName("Tai_Le", 496),
+    AliasName("Tai_Xuan_Jing_Symbols", 497),
+    AliasName("Tale", 498),
+    AliasName("Tamil", 499),
+    AliasName("Taml", 500),
+    AliasName("Telu", 501),
+    AliasName("Telugu", 502),
+    AliasName("Term", 503),
+    AliasName("Terminal_Punctuation", 504),
+    AliasName("Tglg", 505),
+    AliasName("Thaa", 506),
+    AliasName("Thaana", 507),
+    AliasName("Thai", 508),
+    AliasName("Tibetan", 509),
+    AliasName("Tibt", 510),
+    AliasName("Titlecase_Letter", 511),
+    AliasName("Titlecase_Mapping", 512),
+    AliasName("Trailing_Jamo", 513),
+    AliasName("Transparent", 514),
+    AliasName("True", 515),
+    AliasName("U", 516),
+    AliasName("UIdeo", 517),
+    AliasName("Ugar", 518),
+    AliasName("Ugaritic", 519),
+    AliasName("Unassigned", 520),
+    AliasName("Unicode_1_Name", 521),
+    AliasName("Unified_Canadian_Aboriginal_Syllabics", 522),
+    AliasName("Unified_Ideograph", 523),
+    AliasName("Unknown", 524),
+    AliasName("Upper", 525),
+    AliasName("Uppercase", 526),
+    AliasName("Uppercase_Letter", 527),
+    AliasName("Uppercase_Mapping", 528),
+    AliasName("V", 529),
+    AliasName("VR", 530),
+    AliasName("Variation_Selectors", 531),
+    AliasName("Variation_Selectors_Supplement", 532),
+    AliasName("Virama", 533),
+    AliasName("Vowel_Jamo", 534),
+    AliasName("W", 535),
+    AliasName("WAW", 536),
+    AliasName("WJ", 537),
+    AliasName("WS", 538),
+    AliasName("WSpace", 539),
+    AliasName("White_Space", 540),
+    AliasName("Wide", 541),
+    AliasName("Word_Joiner", 542),
+    AliasName("XIDC", 543),
+    AliasName("XIDS", 544),
+    AliasName("XID_Continue", 545),
+    AliasName("XID_Start", 546),
+    AliasName("XX", 547),
+    AliasName("YEH", 548),
+    AliasName("YEH_BARREE", 549),
+    AliasName("YEH_WITH_TAIL", 550),
+    AliasName("YUDH", 551),
+    AliasName("YUDH_HE", 552),
+    AliasName("Yi", 553),
+    AliasName("Yi_Radicals", 554),
+    AliasName("Yi_Syllables", 555),
+    AliasName("Yiii", 556),
+    AliasName("Yijing_Hexagram_Symbols", 557),
+    AliasName("Z", 558),
+    AliasName("ZAIN", 559),
+    AliasName("ZHAIN", 560),
+    AliasName("ZW", 561),
+    AliasName("ZWSpace", 562),
+    AliasName("Zl", 563),
+    AliasName("Zp", 564),
+    AliasName("Zs", 565),
+    AliasName("Zyyy", 566),
+    AliasName("age", 567),
+    AliasName("bc", 568),
+    AliasName("blk", 569),
+    AliasName("bmg", 570),
+    AliasName("can", 571),
+    AliasName("canonical", 572),
+    AliasName("ccc", 573),
+    AliasName("cf", 574),
+    AliasName("circle", 575),
+    AliasName("com", 576),
+    AliasName("compat", 577),
+    AliasName("de", 578),
+    AliasName("di", 579),
+    AliasName("dt", 580),
+    AliasName("ea", 581),
+    AliasName("enc", 582),
+    AliasName("fin", 583),
+    AliasName("final", 584),
+    AliasName("font", 585),
+    AliasName("fra", 586),
+    AliasName("fraction", 587),
+    AliasName("gc", 588),
+    AliasName("gcm", 589),
+    AliasName("hst", 590),
+    AliasName("init", 591),
+    AliasName("initial", 592),
+    AliasName("isc", 593),
+    AliasName("iso", 594),
+    AliasName("isolated", 595),
+    AliasName("jg", 596),
+    AliasName("jt", 597),
+    AliasName("lb", 598),
+    AliasName("lc", 599),
+    AliasName("med", 600),
+    AliasName("medial", 601),
+    AliasName("na", 602),
+    AliasName("na1", 603),
+    AliasName("nar", 604),
+    AliasName("narrow", 605),
+    AliasName("nb", 606),
+    AliasName("noBreak", 607),
+    AliasName("none", 608),
+    AliasName("nt", 609),
+    AliasName("nu", 610),
+    AliasName("nv", 611),
+    AliasName("sc", 612),
+    AliasName("sfc", 613),
+    AliasName("slc", 614),
+    AliasName("small", 615),
+    AliasName("sml", 616),
+    AliasName("sqr", 617),
+    AliasName("square", 618),
+    AliasName("stc", 619),
+    AliasName("sub", 620),
+    AliasName("suc", 621),
+    AliasName("sup", 622),
+    AliasName("super", 623),
+    AliasName("tc", 624),
+    AliasName("uc", 625),
+    AliasName("vert", 626),
+    AliasName("vertical", 627),
+    AliasName("wide", 628),
 };
 
 /* to be filled in */
-int32_t REMAP[627];
+int32_t REMAP[629];
 
-const int32_t NAME_GROUP_COUNT = 886;
+const int32_t NAME_GROUP_COUNT = 888;
 
 int32_t NAME_GROUP[] = {
     18, -19,            /*   0: "Alpha", "Alphabetic" */
     2, -10,             /*   2: "AHex", "ASCII_Hex_Digit" */
     49, -51,            /*   4: "Bidi_C", "Bidi_Control" */
     52, -53,            /*   6: "Bidi_M", "Bidi_Mirrored" */
-    455, -90,           /*   8: "Sensitive", "Case_Sensitive" */
-    127, -127,          /*  10: "Dash", "Dash" */
-    126, -132,          /*  12: "DI", "Default_Ignorable_Code_Point" */
-    133, -134,          /*  14: "Dep", "Deprecated" */
-    138, -139,          /*  16: "Dia", "Diacritic" */
-    161, -162,          /*  18: "Ext", "Extender" */
-    105, -170,          /*  20: "Comp_Ex", "Full_Composition_Exclusion" */
-    184, -187,          /*  22: "Gr_Base", "Grapheme_Base" */
-    185, -188,          /*  24: "Gr_Ext", "Grapheme_Extend" */
-    186, -189,          /*  26: "Gr_Link", "Grapheme_Link" */
-    220, -221,          /*  28: "Hex", "Hex_Digit" */
-    226, -226,          /*  30: "Hyphen", "Hyphen" */
-    240, -241,          /*  32: "Ideo", "Ideographic" */
-    230, -232,          /*  34: "IDSB", "IDS_Binary_Operator" */
-    231, -233,          /*  36: "IDST", "IDS_Trinary_Operator" */
-    228, -234,          /*  38: "IDC", "ID_Continue" */
-    229, -235,          /*  40: "IDS", "ID_Start" */
-    249, -251,          /*  42: "Join_C", "Join_Control" */
-    275, -311,          /*  44: "LOE", "Logical_Order_Exception" */
-    313, -314,          /*  46: "Lower", "Lowercase" */
-    325, -325,          /*  48: "Math", "Math" */
-    347, -367,          /*  50: "NChar", "Noncharacter_Code_Point" */
-    420, -425,          /*  52: "QMark", "Quotation_Mark" */
-    431, -431,          /*  54: "Radical", "Radical" */
-    443, -469,          /*  56: "SD", "Soft_Dotted" */
-    501, -502,          /*  58: "Term", "Terminal_Punctuation" */
-    515, -521,          /*  60: "UIdeo", "Unified_Ideograph" */
-    523, -524,          /*  62: "Upper", "Uppercase" */
-    537, -538,          /*  64: "WSpace", "White_Space" */
-    541, -543,          /*  66: "XIDC", "XID_Continue" */
-    542, -544,          /*  68: "XIDS", "XID_Start" */
-    609, -378,          /*  70: "nv", "Numeric_Value" */
-    566, -50,           /*  72: "bc", "Bidi_Class" */
-    567, -55,           /*  74: "blk", "Block" */
-    571, -86,           /*  76: "ccc", "Canonical_Combining_Class" */
-    578, -131,          /*  78: "dt", "Decomposition_Type" */
-    579, -151,          /*  80: "ea", "East_Asian_Width" */
-    586, -175,          /*  82: "gc", "General_Category" */
-    588, -213,          /*  84: "hst", "Hangul_Syllable_Type" */
-    594, -252,          /*  86: "jg", "Joining_Group" */
-    595, -253,          /*  88: "jt", "Joining_Type" */
-    596, -302,          /*  90: "lb", "Line_Break" */
-    607, -377,          /*  92: "nt", "Numeric_Type" */
-    610, -453,          /*  94: "sc", "Script" */
-    587, -176,          /*  96: "gcm", "General_Category_Mask" */
-    565, -17,           /*  98: "age", "Age" */
-    568, -54,           /* 100: "bmg", "Bidi_Mirroring_Glyph" */
-    572, -89,           /* 102: "cf", "Case_Folding" */
-    591, -239,          /* 104: "isc", "ISO_Comment" */
-    597, -316,          /* 106: "lc", "Lowercase_Mapping" */
-    600, -358,          /* 108: "na", "Name" */
-    611, -459,          /* 110: "sfc", "Simple_Case_Folding" */
-    612, -460,          /* 112: "slc", "Simple_Lowercase_Mapping" */
-    617, -461,          /* 114: "stc", "Simple_Titlecase_Mapping" */
-    619, -462,          /* 116: "suc", "Simple_Uppercase_Mapping" */
-    622, -510,          /* 118: "tc", "Titlecase_Mapping" */
-    601, -519,          /* 120: "na1", "Unicode_1_Name" */
-    623, -526,          /* 122: "uc", "Uppercase_Mapping" */
+    457, -92,           /*   8: "Sensitive", "Case_Sensitive" */
+    129, -129,          /*  10: "Dash", "Dash" */
+    128, -134,          /*  12: "DI", "Default_Ignorable_Code_Point" */
+    135, -136,          /*  14: "Dep", "Deprecated" */
+    140, -141,          /*  16: "Dia", "Diacritic" */
+    163, -164,          /*  18: "Ext", "Extender" */
+    107, -172,          /*  20: "Comp_Ex", "Full_Composition_Exclusion" */
+    186, -189,          /*  22: "Gr_Base", "Grapheme_Base" */
+    187, -190,          /*  24: "Gr_Ext", "Grapheme_Extend" */
+    188, -191,          /*  26: "Gr_Link", "Grapheme_Link" */
+    222, -223,          /*  28: "Hex", "Hex_Digit" */
+    228, -228,          /*  30: "Hyphen", "Hyphen" */
+    242, -243,          /*  32: "Ideo", "Ideographic" */
+    232, -234,          /*  34: "IDSB", "IDS_Binary_Operator" */
+    233, -235,          /*  36: "IDST", "IDS_Trinary_Operator" */
+    230, -236,          /*  38: "IDC", "ID_Continue" */
+    231, -237,          /*  40: "IDS", "ID_Start" */
+    251, -253,          /*  42: "Join_C", "Join_Control" */
+    277, -313,          /*  44: "LOE", "Logical_Order_Exception" */
+    315, -316,          /*  46: "Lower", "Lowercase" */
+    327, -327,          /*  48: "Math", "Math" */
+    349, -369,          /*  50: "NChar", "Noncharacter_Code_Point" */
+    422, -427,          /*  52: "QMark", "Quotation_Mark" */
+    433, -433,          /*  54: "Radical", "Radical" */
+    445, -471,          /*  56: "SD", "Soft_Dotted" */
+    503, -504,          /*  58: "Term", "Terminal_Punctuation" */
+    517, -523,          /*  60: "UIdeo", "Unified_Ideograph" */
+    525, -526,          /*  62: "Upper", "Uppercase" */
+    539, -540,          /*  64: "WSpace", "White_Space" */
+    543, -545,          /*  66: "XIDC", "XID_Continue" */
+    544, -546,          /*  68: "XIDS", "XID_Start" */
+    611, -380,          /*  70: "nv", "Numeric_Value" */
+    568, -50,           /*  72: "bc", "Bidi_Class" */
+    569, -55,           /*  74: "blk", "Block" */
+    573, -88,           /*  76: "ccc", "Canonical_Combining_Class" */
+    580, -133,          /*  78: "dt", "Decomposition_Type" */
+    581, -153,          /*  80: "ea", "East_Asian_Width" */
+    588, -177,          /*  82: "gc", "General_Category" */
+    590, -215,          /*  84: "hst", "Hangul_Syllable_Type" */
+    596, -254,          /*  86: "jg", "Joining_Group" */
+    597, -255,          /*  88: "jt", "Joining_Type" */
+    598, -304,          /*  90: "lb", "Line_Break" */
+    609, -379,          /*  92: "nt", "Numeric_Type" */
+    612, -455,          /*  94: "sc", "Script" */
+    589, -178,          /*  96: "gcm", "General_Category_Mask" */
+    567, -17,           /*  98: "age", "Age" */
+    570, -54,           /* 100: "bmg", "Bidi_Mirroring_Glyph" */
+    574, -91,           /* 102: "cf", "Case_Folding" */
+    593, -241,          /* 104: "isc", "ISO_Comment" */
+    599, -318,          /* 106: "lc", "Lowercase_Mapping" */
+    602, -360,          /* 108: "na", "Name" */
+    613, -461,          /* 110: "sfc", "Simple_Case_Folding" */
+    614, -462,          /* 112: "slc", "Simple_Lowercase_Mapping" */
+    619, -463,          /* 114: "stc", "Simple_Titlecase_Mapping" */
+    621, -464,          /* 116: "suc", "Simple_Uppercase_Mapping" */
+    624, -512,          /* 118: "tc", "Titlecase_Mapping" */
+    603, -521,          /* 120: "na1", "Unicode_1_Name" */
+    625, -528,          /* 122: "uc", "Uppercase_Mapping" */
     8, -25,             /* 124: "AN", "Arabic_Number" */
-    33, -403,           /* 126: "B", "Paragraph_Separator" */
+    33, -405,           /* 126: "B", "Paragraph_Separator" */
     41, -60,            /* 128: "BN", "Boundary_Neutral" */
-    84, -104,           /* 130: "CS", "Common_Separator" */
-    354, -369,          /* 132: "NSM", "Nonspacing_Mark" */
-    147, -157,          /* 134: "EN", "European_Number" */
-    148, -158,          /* 136: "ES", "European_Separator" */
-    149, -159,          /* 138: "ET", "European_Terminator" */
-    270, -293,          /* 140: "L", "Left_To_Right" */
-    276, -294,          /* 142: "LRE", "Left_To_Right_Embedding" */
-    277, -295,          /* 144: "LRO", "Left_To_Right_Override" */
-    379, -393,          /* 146: "ON", "Other_Neutral" */
-    399, -411,          /* 148: "PDF", "Pop_Directional_Format" */
-    426, -434,          /* 150: "R", "Right_To_Left" */
+    86, -106,           /* 130: "CS", "Common_Separator" */
+    356, -371,          /* 132: "NSM", "Nonspacing_Mark" */
+    149, -159,          /* 134: "EN", "European_Number" */
+    150, -160,          /* 136: "ES", "European_Separator" */
+    151, -161,          /* 138: "ET", "European_Terminator" */
+    272, -295,          /* 140: "L", "Left_To_Right" */
+    278, -296,          /* 142: "LRE", "Left_To_Right_Embedding" */
+    279, -297,          /* 144: "LRO", "Left_To_Right_Override" */
+    381, -395,          /* 146: "ON", "Other_Neutral" */
+    401, -413,          /* 148: "PDF", "Pop_Directional_Format" */
+    428, -436,          /* 150: "R", "Right_To_Left" */
     5, -24,             /* 152: "AL", "Arabic_Letter" */
-    429, -435,          /* 154: "RLE", "Right_To_Left_Embedding" */
-    430, -436,          /* 156: "RLO", "Right_To_Left_Override" */
-    439, -454,          /* 158: "S", "Segment_Separator" */
-    536, -538,          /* 160: "WS", "White_Space" */
-    163, -167,          /* 162: "F", "False" */
-    485, -513,          /* 164: "T", "True" */
+    431, -437,          /* 154: "RLE", "Right_To_Left_Embedding" */
+    432, -438,          /* 156: "RLO", "Right_To_Left_Override" */
+    441, -456,          /* 158: "S", "Segment_Separator" */
+    538, -540,          /* 160: "WS", "White_Space" */
+    165, -169,          /* 162: "F", "False" */
+    487, -515,          /* 164: "T", "True" */
     0, -16,             /* 166: "", "Aegean_Numbers" */
     0, -20,             /* 168: "", "Alphabetic_Presentation_Forms" */
     0, -23,             /* 170: "", "Arabic" */
@@ -754,353 +756,354 @@ int32_t NAME_GROUP[] = {
     0, -58,             /* 186: "", "Bopomofo" */
     0, -59,             /* 188: "", "Bopomofo_Extended" */
     0, -61,             /* 190: "", "Box_Drawing" */
-    0, -62,             /* 192: "", "Braille_Patterns" */
-    0, -68,             /* 194: "", "Buhid" */
-    0, -69,             /* 196: "", "Byzantine_Musical_Symbols" */
-    0, -95,             /* 198: "", "Cherokee" */
-    0, -72,             /* 200: "", "CJK_Compatibility" */
-    0, -73,             /* 202: "", "CJK_Compatibility_Forms" */
-    0, -74,             /* 204: "", "CJK_Compatibility_Ideographs" */
-    0, -75,             /* 206: "", "CJK_Compatibility_Ideographs_Supplement" */
-    0, -76,             /* 208: "", "CJK_Radicals_Supplement" */
-    0, -77,             /* 210: "", "CJK_Symbols_and_Punctuation" */
-    0, -78,             /* 212: "", "CJK_Unified_Ideographs" */
-    0, -79,             /* 214: "", "CJK_Unified_Ideographs_Extension_A" */
-    0, -80,             /* 216: "", "CJK_Unified_Ideographs_Extension_B" */
-    0, -99,             /* 218: "", "Combining_Diacritical_Marks" */
-    0, -101,            /* 220: "", "Combining_Half_Marks" */
-    0, -100,            /* 222: "", "Combining_Diacritical_Marks_for_Symbols" */
-    0, -110,            /* 224: "", "Control_Pictures" */
-    0, -115,            /* 226: "", "Currency_Symbols" */
-    0, -117,            /* 228: "", "Cypriot_Syllabary" */
-    0, -118,            /* 230: "", "Cyrillic" */
-    0, -119,            /* 232: "", "Cyrillic_Supplementary" */
-    0, -135,            /* 234: "", "Deseret" */
-    0, -137,            /* 236: "", "Devanagari" */
-    0, -141,            /* 238: "", "Dingbats" */
-    0, -152,            /* 240: "", "Enclosed_Alphanumerics" */
-    0, -153,            /* 242: "", "Enclosed_CJK_Letters_and_Months" */
-    0, -156,            /* 244: "", "Ethiopic" */
-    0, -177,            /* 246: "", "General_Punctuation" */
-    0, -178,            /* 248: "", "Geometric_Shapes" */
-    0, -180,            /* 250: "", "Georgian" */
-    0, -183,            /* 252: "", "Gothic" */
-    0, -192,            /* 254: "", "Greek_and_Coptic" */
-    0, -191,            /* 256: "", "Greek_Extended" */
-    0, -194,            /* 258: "", "Gujarati" */
-    0, -196,            /* 260: "", "Gurmukhi" */
-    0, -207,            /* 262: "", "Halfwidth_and_Fullwidth_Forms" */
-    0, -211,            /* 264: "", "Hangul_Compatibility_Jamo" */
-    0, -212,            /* 266: "", "Hangul_Jamo" */
-    0, -214,            /* 268: "", "Hangul_Syllables" */
-    0, -217,            /* 270: "", "Hanunoo" */
-    0, -219,            /* 272: "", "Hebrew" */
-    0, -222,            /* 274: "", "High_Private_Use_Surrogates" */
-    0, -223,            /* 276: "", "High_Surrogates" */
-    0, -225,            /* 278: "", "Hiragana" */
-    0, -242,            /* 280: "", "Ideographic_Description_Characters" */
-    0, -237,            /* 282: "", "IPA_Extensions" */
-    0, -261,            /* 284: "", "Kanbun" */
-    0, -262,            /* 286: "", "Kangxi_Radicals" */
-    0, -263,            /* 288: "", "Kannada" */
-    0, -264,            /* 290: "", "Katakana" */
-    0, -265,            /* 292: "", "Katakana_Phonetic_Extensions" */
-    0, -266,            /* 294: "", "Khmer" */
-    0, -267,            /* 296: "", "Khmer_Symbols" */
-    0, -282,            /* 298: "", "Lao" */
-    0, -285,            /* 300: "", "Latin-1_Supplement" */
-    0, -286,            /* 302: "", "Latin_Extended-A" */
-    0, -288,            /* 304: "", "Latin_Extended_Additional" */
-    0, -287,            /* 306: "", "Latin_Extended-B" */
-    0, -298,            /* 308: "", "Letterlike_Symbols" */
-    0, -300,            /* 310: "", "Limbu" */
-    0, -306,            /* 312: "", "Linear_B_Ideograms" */
-    0, -307,            /* 314: "", "Linear_B_Syllabary" */
-    0, -312,            /* 316: "", "Low_Surrogates" */
-    0, -322,            /* 318: "", "Malayalam" */
-    0, -327,            /* 320: "", "Mathematical_Alphanumeric_Symbols" */
-    0, -328,            /* 322: "", "Mathematical_Operators" */
-    0, -331,            /* 324: "", "Miscellaneous_Mathematical_Symbols-A" */
-    0, -332,            /* 326: "", "Miscellaneous_Mathematical_Symbols-B" */
-    0, -333,            /* 328: "", "Miscellaneous_Symbols" */
-    0, -334,            /* 330: "", "Miscellaneous_Symbols_and_Arrows" */
-    0, -335,            /* 332: "", "Miscellaneous_Technical" */
-    0, -341,            /* 334: "", "Mongolian" */
-    0, -342,            /* 336: "", "Musical_Symbols" */
-    0, -343,            /* 338: "", "Myanmar" */
-    0, -365,            /* 340: "", "No_Block" */
-    0, -375,            /* 342: "", "Number_Forms" */
-    0, -383,            /* 344: "", "Ogham" */
-    0, -384,            /* 346: "", "Old_Italic" */
-    0, -386,            /* 348: "", "Optical_Character_Recognition" */
-    0, -387,            /* 350: "", "Oriya" */
-    0, -390,            /* 352: "", "Osmanya" */
-    0, -408,            /* 354: "", "Phonetic_Extensions" */
-    0, -415,            /* 356: "", "Private_Use_Area" */
-    0, -437,            /* 358: "", "Runic" */
-    0, -457,            /* 360: "", "Shavian" */
-    0, -464,            /* 362: "", "Sinhala" */
-    0, -467,            /* 364: "", "Small_Form_Variants" */
-    0, -473,            /* 366: "", "Spacing_Modifier_Letters" */
-    0, -474,            /* 368: "", "Specials" */
-    0, -475,            /* 370: "", "Superscripts_and_Subscripts" */
-    0, -476,            /* 372: "", "Supplemental_Arrows-A" */
-    0, -477,            /* 374: "", "Supplemental_Arrows-B" */
-    0, -478,            /* 376: "", "Supplemental_Mathematical_Operators" */
-    0, -479,            /* 378: "", "Supplementary_Private_Use_Area-A" */
-    0, -480,            /* 380: "", "Supplementary_Private_Use_Area-B" */
-    0, -484,            /* 382: "", "Syriac" */
-    0, -490,            /* 384: "", "Tagalog" */
-    0, -492,            /* 386: "", "Tagbanwa" */
-    0, -493,            /* 388: "", "Tags" */
-    0, -494,            /* 390: "", "Tai_Le" */
-    0, -495,            /* 392: "", "Tai_Xuan_Jing_Symbols" */
-    0, -497,            /* 394: "", "Tamil" */
-    0, -500,            /* 396: "", "Telugu" */
-    0, -505,            /* 398: "", "Thaana" */
-    0, -506,            /* 400: "", "Thai" */
-    0, -507,            /* 402: "", "Tibetan" */
-    0, -517,            /* 404: "", "Ugaritic" */
-    0, -520,            /* 406: "", "Unified_Canadian_Aboriginal_Syllabics" */
-    0, -529,            /* 408: "", "Variation_Selectors" */
-    0, -530,            /* 410: "", "Variation_Selectors_Supplement" */
-    0, -555,            /* 412: "", "Yijing_Hexagram_Symbols" */
-    0, -552,            /* 414: "", "Yi_Radicals" */
-    0, -553,            /* 416: "", "Yi_Syllables" */
-    352, -372,          /* 418: "NR", "Not_Reordered" */
-    381, -397,          /* 420: "OV", "Overlay" */
+    0, -64,             /* 192: "", "Braille_Patterns" */
+    0, -70,             /* 194: "", "Buhid" */
+    0, -71,             /* 196: "", "Byzantine_Musical_Symbols" */
+    0, -97,             /* 198: "", "Cherokee" */
+    0, -74,             /* 200: "", "CJK_Compatibility" */
+    0, -75,             /* 202: "", "CJK_Compatibility_Forms" */
+    0, -76,             /* 204: "", "CJK_Compatibility_Ideographs" */
+    0, -77,             /* 206: "", "CJK_Compatibility_Ideographs_Supplement" */
+    0, -78,             /* 208: "", "CJK_Radicals_Supplement" */
+    0, -79,             /* 210: "", "CJK_Symbols_and_Punctuation" */
+    0, -80,             /* 212: "", "CJK_Unified_Ideographs" */
+    0, -81,             /* 214: "", "CJK_Unified_Ideographs_Extension_A" */
+    0, -82,             /* 216: "", "CJK_Unified_Ideographs_Extension_B" */
+    0, -101,            /* 218: "", "Combining_Diacritical_Marks" */
+    0, -103,            /* 220: "", "Combining_Half_Marks" */
+    0, -102,            /* 222: "", "Combining_Diacritical_Marks_for_Symbols" */
+    0, -112,            /* 224: "", "Control_Pictures" */
+    0, -117,            /* 226: "", "Currency_Symbols" */
+    0, -119,            /* 228: "", "Cypriot_Syllabary" */
+    0, -120,            /* 230: "", "Cyrillic" */
+    0, -121,            /* 232: "", "Cyrillic_Supplementary" */
+    0, -137,            /* 234: "", "Deseret" */
+    0, -139,            /* 236: "", "Devanagari" */
+    0, -143,            /* 238: "", "Dingbats" */
+    0, -154,            /* 240: "", "Enclosed_Alphanumerics" */
+    0, -155,            /* 242: "", "Enclosed_CJK_Letters_and_Months" */
+    0, -158,            /* 244: "", "Ethiopic" */
+    0, -179,            /* 246: "", "General_Punctuation" */
+    0, -180,            /* 248: "", "Geometric_Shapes" */
+    0, -182,            /* 250: "", "Georgian" */
+    0, -185,            /* 252: "", "Gothic" */
+    0, -194,            /* 254: "", "Greek_and_Coptic" */
+    0, -193,            /* 256: "", "Greek_Extended" */
+    0, -196,            /* 258: "", "Gujarati" */
+    0, -198,            /* 260: "", "Gurmukhi" */
+    0, -209,            /* 262: "", "Halfwidth_and_Fullwidth_Forms" */
+    0, -213,            /* 264: "", "Hangul_Compatibility_Jamo" */
+    0, -214,            /* 266: "", "Hangul_Jamo" */
+    0, -216,            /* 268: "", "Hangul_Syllables" */
+    0, -219,            /* 270: "", "Hanunoo" */
+    0, -221,            /* 272: "", "Hebrew" */
+    0, -224,            /* 274: "", "High_Private_Use_Surrogates" */
+    0, -225,            /* 276: "", "High_Surrogates" */
+    0, -227,            /* 278: "", "Hiragana" */
+    0, -244,            /* 280: "", "Ideographic_Description_Characters" */
+    0, -239,            /* 282: "", "IPA_Extensions" */
+    0, -263,            /* 284: "", "Kanbun" */
+    0, -264,            /* 286: "", "Kangxi_Radicals" */
+    0, -265,            /* 288: "", "Kannada" */
+    0, -266,            /* 290: "", "Katakana" */
+    0, -267,            /* 292: "", "Katakana_Phonetic_Extensions" */
+    0, -268,            /* 294: "", "Khmer" */
+    0, -269,            /* 296: "", "Khmer_Symbols" */
+    0, -284,            /* 298: "", "Lao" */
+    0, -287,            /* 300: "", "Latin-1_Supplement" */
+    0, -288,            /* 302: "", "Latin_Extended-A" */
+    0, -290,            /* 304: "", "Latin_Extended_Additional" */
+    0, -289,            /* 306: "", "Latin_Extended-B" */
+    0, -300,            /* 308: "", "Letterlike_Symbols" */
+    0, -302,            /* 310: "", "Limbu" */
+    0, -308,            /* 312: "", "Linear_B_Ideograms" */
+    0, -309,            /* 314: "", "Linear_B_Syllabary" */
+    0, -314,            /* 316: "", "Low_Surrogates" */
+    0, -324,            /* 318: "", "Malayalam" */
+    0, -329,            /* 320: "", "Mathematical_Alphanumeric_Symbols" */
+    0, -330,            /* 322: "", "Mathematical_Operators" */
+    0, -333,            /* 324: "", "Miscellaneous_Mathematical_Symbols-A" */
+    0, -334,            /* 326: "", "Miscellaneous_Mathematical_Symbols-B" */
+    0, -335,            /* 328: "", "Miscellaneous_Symbols" */
+    0, -336,            /* 330: "", "Miscellaneous_Symbols_and_Arrows" */
+    0, -337,            /* 332: "", "Miscellaneous_Technical" */
+    0, -343,            /* 334: "", "Mongolian" */
+    0, -344,            /* 336: "", "Musical_Symbols" */
+    0, -345,            /* 338: "", "Myanmar" */
+    0, -367,            /* 340: "", "No_Block" */
+    0, -377,            /* 342: "", "Number_Forms" */
+    0, -385,            /* 344: "", "Ogham" */
+    0, -386,            /* 346: "", "Old_Italic" */
+    0, -388,            /* 348: "", "Optical_Character_Recognition" */
+    0, -389,            /* 350: "", "Oriya" */
+    0, -392,            /* 352: "", "Osmanya" */
+    0, -410,            /* 354: "", "Phonetic_Extensions" */
+    0, -417,            /* 356: "", "Private_Use_Area" */
+    0, -439,            /* 358: "", "Runic" */
+    0, -459,            /* 360: "", "Shavian" */
+    0, -466,            /* 362: "", "Sinhala" */
+    0, -469,            /* 364: "", "Small_Form_Variants" */
+    0, -475,            /* 366: "", "Spacing_Modifier_Letters" */
+    0, -476,            /* 368: "", "Specials" */
+    0, -477,            /* 370: "", "Superscripts_and_Subscripts" */
+    0, -478,            /* 372: "", "Supplemental_Arrows-A" */
+    0, -479,            /* 374: "", "Supplemental_Arrows-B" */
+    0, -480,            /* 376: "", "Supplemental_Mathematical_Operators" */
+    0, -481,            /* 378: "", "Supplementary_Private_Use_Area-A" */
+    0, -482,            /* 380: "", "Supplementary_Private_Use_Area-B" */
+    0, -486,            /* 382: "", "Syriac" */
+    0, -492,            /* 384: "", "Tagalog" */
+    0, -494,            /* 386: "", "Tagbanwa" */
+    0, -495,            /* 388: "", "Tags" */
+    0, -496,            /* 390: "", "Tai_Le" */
+    0, -497,            /* 392: "", "Tai_Xuan_Jing_Symbols" */
+    0, -499,            /* 394: "", "Tamil" */
+    0, -502,            /* 396: "", "Telugu" */
+    0, -507,            /* 398: "", "Thaana" */
+    0, -508,            /* 400: "", "Thai" */
+    0, -509,            /* 402: "", "Tibetan" */
+    0, -519,            /* 404: "", "Ugaritic" */
+    0, -522,            /* 406: "", "Unified_Canadian_Aboriginal_Syllabics" */
+    0, -531,            /* 408: "", "Variation_Selectors" */
+    0, -532,            /* 410: "", "Variation_Selectors_Supplement" */
+    0, -557,            /* 412: "", "Yijing_Hexagram_Symbols" */
+    0, -554,            /* 414: "", "Yi_Radicals" */
+    0, -555,            /* 416: "", "Yi_Syllables" */
+    354, -374,          /* 418: "NR", "Not_Reordered" */
+    383, -399,          /* 420: "OV", "Overlay" */
     12, -32,            /* 422: "ATB", "Attached_Below" */
     11, -31,            /* 424: "ATAR", "Attached_Above_Right" */
     40, -45,            /* 426: "BL", "Below_Left" */
     33, -44,            /* 428: "B", "Below" */
     42, -46,            /* 430: "BR", "Below_Right" */
-    270, -291,          /* 432: "L", "Left" */
-    426, -432,          /* 434: "R", "Right" */
+    272, -293,          /* 432: "L", "Left" */
+    428, -434,          /* 434: "R", "Right" */
     5, -14,             /* 436: "AL", "Above_Left" */
     1, -13,             /* 438: "A", "Above" */
     9, -15,             /* 440: "AR", "Above_Right" */
-    125, -143,          /* 442: "DB", "Double_Below" */
-    122, -142,          /* 444: "DA", "Double_Above" */
-    238, -247,          /* 446: "IS", "Iota_Subscript" */
-    348, -373,          /* 448: "NK", "Nukta" */
-    258, -260,          /* 450: "KV", "Kana_Voicing" */
-    528, -531,          /* 452: "VR", "Virama" */
-    569, -570,          /* 454: "can", "canonical" */
-    580, -573,          /* 456: "enc", "circle" */
-    574, -575,          /* 458: "com", "compat" */
-    581, -582,          /* 460: "fin", "final" */
-    583, -583,          /* 462: "font", "font" */
-    584, -585,          /* 464: "fra", "fraction" */
-    589, -590,          /* 466: "init", "initial" */
-    592, -593,          /* 468: "iso", "isolated" */
-    598, -599,          /* 470: "med", "medial" */
-    602, -603,          /* 472: "nar", "narrow" */
-    604, -605,          /* 474: "nb", "noBreak" */
-    0, -606,            /* 476: "", "none" */
-    614, -613,          /* 478: "sml", "small" */
-    615, -616,          /* 480: "sqr", "square" */
-    618, -618,          /* 482: "sub", "sub" */
-    620, -621,          /* 484: "sup", "super" */
-    624, -625,          /* 486: "vert", "vertical" */
-    626, -626,          /* 488: "wide", "wide" */
+    127, -145,          /* 442: "DB", "Double_Below" */
+    124, -144,          /* 444: "DA", "Double_Above" */
+    240, -249,          /* 446: "IS", "Iota_Subscript" */
+    350, -375,          /* 448: "NK", "Nukta" */
+    260, -262,          /* 450: "KV", "Kana_Voicing" */
+    530, -533,          /* 452: "VR", "Virama" */
+    571, -572,          /* 454: "can", "canonical" */
+    582, -575,          /* 456: "enc", "circle" */
+    576, -577,          /* 458: "com", "compat" */
+    583, -584,          /* 460: "fin", "final" */
+    585, -585,          /* 462: "font", "font" */
+    586, -587,          /* 464: "fra", "fraction" */
+    591, -592,          /* 466: "init", "initial" */
+    594, -595,          /* 468: "iso", "isolated" */
+    600, -601,          /* 470: "med", "medial" */
+    604, -605,          /* 472: "nar", "narrow" */
+    606, -607,          /* 474: "nb", "noBreak" */
+    0, -608,            /* 476: "", "none" */
+    616, -615,          /* 478: "sml", "small" */
+    617, -618,          /* 480: "sqr", "square" */
+    620, -620,          /* 482: "sub", "sub" */
+    622, -623,          /* 484: "sup", "super" */
+    626, -627,          /* 486: "vert", "vertical" */
+    628, -628,          /* 488: "wide", "wide" */
     1, -21,             /* 490: "A", "Ambiguous" */
-    163, -171,          /* 492: "F", "Fullwidth" */
-    198, -206,          /* 494: "H", "Halfwidth" */
-    357, -359,          /* 496: "Na", "Narrow" */
-    345, -361,          /* 498: "N", "Neutral" */
-    533, -539,          /* 500: "W", "Wide" */
-    329, -472,          /* 502: "Mc", "Spacing_Mark" */
-    404, -107,          /* 504: "Pc", "Connector_Punctuation" */
-    92, -109,           /* 506: "Cc", "Control" */
-    452, -114,          /* 508: "Sc", "Currency_Symbol" */
-    405, -128,          /* 510: "Pd", "Dash_Punctuation" */
-    360, -130,          /* 512: "Nd", "Decimal_Number" */
-    330, -154,          /* 514: "Me", "Enclosing_Mark" */
-    406, -96,           /* 516: "Pe", "Close_Punctuation" */
-    407, -168,          /* 518: "Pf", "Final_Punctuation" */
-    93, -169,           /* 520: "Cf", "Format" */
-    97, -518,           /* 522: "Cn", "Unassigned" */
-    409, -245,          /* 524: "Pi", "Initial_Punctuation" */
-    363, -297,          /* 526: "Nl", "Letter_Number" */
-    561, -304,          /* 528: "Zl", "Line_Separator" */
-    308, -315,          /* 530: "Ll", "Lowercase_Letter" */
-    466, -326,          /* 532: "Sm", "Math_Symbol" */
-    309, -338,          /* 534: "Lm", "Modifier_Letter" */
-    465, -339,          /* 536: "Sk", "Modifier_Symbol" */
-    337, -369,          /* 538: "Mn", "Nonspacing_Mark" */
-    310, -392,          /* 540: "Lo", "Other_Letter" */
-    364, -394,          /* 542: "No", "Other_Number" */
-    410, -395,          /* 544: "Po", "Other_Punctuation" */
-    468, -396,          /* 546: "So", "Other_Symbol" */
-    562, -403,          /* 548: "Zp", "Paragraph_Separator" */
-    98, -414,           /* 550: "Co", "Private_Use" */
-    563, -471,          /* 552: "Zs", "Space_Separator" */
-    416, -385,          /* 554: "Ps", "Open_Punctuation" */
-    113, -481,          /* 556: "Cs", "Surrogate" */
-    317, -509,          /* 558: "Lt", "Titlecase_Letter" */
-    318, -525,          /* 560: "Lu", "Uppercase_Letter" */
-    70, -391,           /* 562: "C", "Other" */
-    273, -91,           /* 564: "LC", "Cased_Letter" */
-    270, -296,          /* 566: "L", "Letter" */
-    319, -324,          /* 568: "M", "Mark" */
-    345, -374,          /* 570: "N", "Number" */
-    398, -417,          /* 572: "P", "Punctuation" */
-    439, -482,          /* 574: "S", "Symbol" */
-    556, -456,          /* 576: "Z", "Separator" */
-    270, -290,          /* 578: "L", "Leading_Jamo" */
-    279, -280,          /* 580: "LVT", "LVT_Syllable" */
-    278, -281,          /* 582: "LV", "LV_Syllable" */
-    346, -371,          /* 584: "NA", "Not_Applicable" */
-    485, -511,          /* 586: "T", "Trailing_Jamo" */
-    527, -532,          /* 588: "V", "Vowel_Jamo" */
+    165, -173,          /* 492: "F", "Fullwidth" */
+    200, -208,          /* 494: "H", "Halfwidth" */
+    359, -361,          /* 496: "Na", "Narrow" */
+    347, -363,          /* 498: "N", "Neutral" */
+    535, -541,          /* 500: "W", "Wide" */
+    331, -474,          /* 502: "Mc", "Spacing_Mark" */
+    406, -109,          /* 504: "Pc", "Connector_Punctuation" */
+    94, -111,           /* 506: "Cc", "Control" */
+    454, -116,          /* 508: "Sc", "Currency_Symbol" */
+    407, -130,          /* 510: "Pd", "Dash_Punctuation" */
+    362, -132,          /* 512: "Nd", "Decimal_Number" */
+    332, -156,          /* 514: "Me", "Enclosing_Mark" */
+    408, -98,           /* 516: "Pe", "Close_Punctuation" */
+    409, -170,          /* 518: "Pf", "Final_Punctuation" */
+    95, -171,           /* 520: "Cf", "Format" */
+    99, -520,           /* 522: "Cn", "Unassigned" */
+    411, -247,          /* 524: "Pi", "Initial_Punctuation" */
+    365, -299,          /* 526: "Nl", "Letter_Number" */
+    563, -306,          /* 528: "Zl", "Line_Separator" */
+    310, -317,          /* 530: "Ll", "Lowercase_Letter" */
+    468, -328,          /* 532: "Sm", "Math_Symbol" */
+    311, -340,          /* 534: "Lm", "Modifier_Letter" */
+    467, -341,          /* 536: "Sk", "Modifier_Symbol" */
+    339, -371,          /* 538: "Mn", "Nonspacing_Mark" */
+    312, -394,          /* 540: "Lo", "Other_Letter" */
+    366, -396,          /* 542: "No", "Other_Number" */
+    412, -397,          /* 544: "Po", "Other_Punctuation" */
+    470, -398,          /* 546: "So", "Other_Symbol" */
+    564, -405,          /* 548: "Zp", "Paragraph_Separator" */
+    100, -416,          /* 550: "Co", "Private_Use" */
+    565, -473,          /* 552: "Zs", "Space_Separator" */
+    418, -387,          /* 554: "Ps", "Open_Punctuation" */
+    115, -483,          /* 556: "Cs", "Surrogate" */
+    319, -511,          /* 558: "Lt", "Titlecase_Letter" */
+    320, -527,          /* 560: "Lu", "Uppercase_Letter" */
+    72, -393,           /* 562: "C", "Other" */
+    275, -93,           /* 564: "LC", "Cased_Letter" */
+    272, -298,          /* 566: "L", "Letter" */
+    321, -326,          /* 568: "M", "Mark" */
+    347, -376,          /* 570: "N", "Number" */
+    400, -419,          /* 572: "P", "Punctuation" */
+    441, -484,          /* 574: "S", "Symbol" */
+    558, -458,          /* 576: "Z", "Separator" */
+    272, -292,          /* 578: "L", "Leading_Jamo" */
+    281, -282,          /* 580: "LVT", "LVT_Syllable" */
+    280, -283,          /* 582: "LV", "LV_Syllable" */
+    348, -373,          /* 584: "NA", "Not_Applicable" */
+    487, -513,          /* 586: "T", "Trailing_Jamo" */
+    529, -534,          /* 588: "V", "Vowel_Jamo" */
     0, -4,              /* 590: "", "AIN" */
     0, -6,              /* 592: "", "ALAPH" */
     0, -7,              /* 594: "", "ALEF" */
     0, -37,             /* 596: "", "BEH" */
     0, -38,             /* 598: "", "BETH" */
-    0, -123,            /* 600: "", "DAL" */
-    0, -124,            /* 602: "", "DALATH_RISH" */
-    0, -146,            /* 604: "", "E" */
-    0, -164,            /* 606: "", "FE" */
-    0, -165,            /* 608: "", "FEH" */
-    0, -166,            /* 610: "", "FINAL_SEMKATH" */
-    0, -172,            /* 612: "", "GAF" */
-    0, -173,            /* 614: "", "GAMAL" */
-    0, -199,            /* 616: "", "HAH" */
-    0, -200,            /* 618: "", "HAMZA_ON_HEH_GOAL" */
-    0, -201,            /* 620: "", "HE" */
-    0, -202,            /* 622: "", "HEH" */
-    0, -203,            /* 624: "", "HEH_GOAL" */
-    0, -204,            /* 626: "", "HETH" */
-    0, -254,            /* 628: "", "KAF" */
-    0, -255,            /* 630: "", "KAPH" */
-    0, -256,            /* 632: "", "KHAPH" */
-    0, -257,            /* 634: "", "KNOTTED_HEH" */
-    0, -271,            /* 636: "", "LAM" */
-    0, -272,            /* 638: "", "LAMADH" */
-    0, -320,            /* 640: "", "MEEM" */
-    0, -321,            /* 642: "", "MIM" */
-    0, -350,            /* 644: "", "NOON" */
-    0, -351,            /* 646: "", "NO_JOINING_GROUP" */
-    0, -356,            /* 648: "", "NUN" */
-    0, -400,            /* 650: "", "PE" */
-    0, -418,            /* 652: "", "QAF" */
-    0, -419,            /* 654: "", "QAPH" */
-    0, -427,            /* 656: "", "REH" */
-    0, -428,            /* 658: "", "REVERSED_PE" */
-    0, -441,            /* 660: "", "SAD" */
-    0, -442,            /* 662: "", "SADHE" */
-    0, -444,            /* 664: "", "SEEN" */
-    0, -445,            /* 666: "", "SEMKATH" */
-    0, -447,            /* 668: "", "SHIN" */
-    0, -449,            /* 670: "", "SWASH_KAF" */
-    0, -451,            /* 672: "", "SYRIAC_WAW" */
-    0, -486,            /* 674: "", "TAH" */
-    0, -487,            /* 676: "", "TAW" */
-    0, -488,            /* 678: "", "TEH_MARBUTA" */
-    0, -489,            /* 680: "", "TETH" */
-    0, -534,            /* 682: "", "WAW" */
-    0, -546,            /* 684: "", "YEH" */
-    0, -547,            /* 686: "", "YEH_BARREE" */
-    0, -548,            /* 688: "", "YEH_WITH_TAIL" */
-    0, -549,            /* 690: "", "YUDH" */
-    0, -550,            /* 692: "", "YUDH_HE" */
-    0, -557,            /* 694: "", "ZAIN" */
-    0, -558,            /* 696: "", "ZHAIN" */
-    121, -145,          /* 698: "D", "Dual_Joining" */
-    70, -250,           /* 700: "C", "Join_Causing" */
-    270, -292,          /* 702: "L", "Left_Joining" */
-    514, -366,          /* 704: "U", "Non_Joining" */
-    426, -433,          /* 706: "R", "Right_Joining" */
-    485, -512,          /* 708: "T", "Transparent" */
+    0, -125,            /* 600: "", "DAL" */
+    0, -126,            /* 602: "", "DALATH_RISH" */
+    0, -148,            /* 604: "", "E" */
+    0, -166,            /* 606: "", "FE" */
+    0, -167,            /* 608: "", "FEH" */
+    0, -168,            /* 610: "", "FINAL_SEMKATH" */
+    0, -174,            /* 612: "", "GAF" */
+    0, -175,            /* 614: "", "GAMAL" */
+    0, -201,            /* 616: "", "HAH" */
+    0, -202,            /* 618: "", "HAMZA_ON_HEH_GOAL" */
+    0, -203,            /* 620: "", "HE" */
+    0, -204,            /* 622: "", "HEH" */
+    0, -205,            /* 624: "", "HEH_GOAL" */
+    0, -206,            /* 626: "", "HETH" */
+    0, -256,            /* 628: "", "KAF" */
+    0, -257,            /* 630: "", "KAPH" */
+    0, -258,            /* 632: "", "KHAPH" */
+    0, -259,            /* 634: "", "KNOTTED_HEH" */
+    0, -273,            /* 636: "", "LAM" */
+    0, -274,            /* 638: "", "LAMADH" */
+    0, -322,            /* 640: "", "MEEM" */
+    0, -323,            /* 642: "", "MIM" */
+    0, -352,            /* 644: "", "NOON" */
+    0, -353,            /* 646: "", "NO_JOINING_GROUP" */
+    0, -358,            /* 648: "", "NUN" */
+    0, -402,            /* 650: "", "PE" */
+    0, -420,            /* 652: "", "QAF" */
+    0, -421,            /* 654: "", "QAPH" */
+    0, -429,            /* 656: "", "REH" */
+    0, -430,            /* 658: "", "REVERSED_PE" */
+    0, -443,            /* 660: "", "SAD" */
+    0, -444,            /* 662: "", "SADHE" */
+    0, -446,            /* 664: "", "SEEN" */
+    0, -447,            /* 666: "", "SEMKATH" */
+    0, -449,            /* 668: "", "SHIN" */
+    0, -451,            /* 670: "", "SWASH_KAF" */
+    0, -453,            /* 672: "", "SYRIAC_WAW" */
+    0, -488,            /* 674: "", "TAH" */
+    0, -489,            /* 676: "", "TAW" */
+    0, -490,            /* 678: "", "TEH_MARBUTA" */
+    0, -491,            /* 680: "", "TETH" */
+    0, -536,            /* 682: "", "WAW" */
+    0, -548,            /* 684: "", "YEH" */
+    0, -549,            /* 686: "", "YEH_BARREE" */
+    0, -550,            /* 688: "", "YEH_WITH_TAIL" */
+    0, -551,            /* 690: "", "YUDH" */
+    0, -552,            /* 692: "", "YUDH_HE" */
+    0, -559,            /* 694: "", "ZAIN" */
+    0, -560,            /* 696: "", "ZHAIN" */
+    123, -147,          /* 698: "D", "Dual_Joining" */
+    72, -252,           /* 700: "C", "Join_Causing" */
+    272, -294,          /* 702: "L", "Left_Joining" */
+    516, -368,          /* 704: "U", "Non_Joining" */
+    428, -435,          /* 706: "R", "Right_Joining" */
+    487, -514,          /* 708: "T", "Transparent" */
     5, -19,             /* 710: "AL", "Alphabetic" */
     3, -21,             /* 712: "AI", "Ambiguous" */
-    35, -63,            /* 714: "BA", "Break_After" */
-    36, -64,            /* 716: "BB", "Break_Before" */
-    34, -65,            /* 718: "B2", "Break_Both" */
-    450, -66,           /* 720: "SY", "Break_Symbols" */
-    83, -88,            /* 722: "CR", "Carriage_Return" */
-    81, -96,            /* 724: "CL", "Close_Punctuation" */
-    82, -102,           /* 726: "CM", "Combining_Mark" */
-    440, -106,          /* 728: "SA", "Complex_Context" */
-    71, -108,           /* 730: "CB", "Contingent_Break" */
-    150, -160,          /* 732: "EX", "Exclamation" */
-    174, -181,          /* 734: "GL", "Glue" */
-    205, -226,          /* 736: "HY", "Hyphen" */
-    227, -241,          /* 738: "ID", "Ideographic" */
-    238, -243,          /* 740: "IS", "Infix_Numeric" */
-    236, -246,          /* 742: "IN", "Inseperable" */
-    274, -303,          /* 744: "LF", "Line_Feed" */
-    39, -323,           /* 746: "BK", "Mandatory_Break" */
-    349, -362,          /* 748: "NL", "Next_Line" */
-    353, -370,          /* 750: "NS", "Nonstarter" */
-    355, -376,          /* 752: "NU", "Numeric" */
-    380, -385,          /* 754: "OP", "Open_Punctuation" */
-    401, -412,          /* 756: "PO", "Postfix_Numeric" */
-    402, -413,          /* 758: "PR", "Prefix_Numeric" */
-    421, -424,          /* 760: "QU", "Quotation" */
-    448, -470,          /* 762: "SP", "Space" */
-    446, -481,          /* 764: "SG", "Surrogate" */
-    545, -522,          /* 766: "XX", "Unknown" */
-    535, -540,          /* 768: "WJ", "Word_Joiner" */
-    559, -560,          /* 770: "ZW", "ZWSpace" */
-    576, -129,          /* 772: "de", "Decimal" */
-    577, -140,          /* 774: "di", "Digit" */
-    0, -368,            /* 776: "", "None" */
-    608, -376,          /* 778: "nu", "Numeric" */
+    35, -65,            /* 714: "BA", "Break_After" */
+    36, -66,            /* 716: "BB", "Break_Before" */
+    34, -67,            /* 718: "B2", "Break_Both" */
+    452, -68,           /* 720: "SY", "Break_Symbols" */
+    85, -90,            /* 722: "CR", "Carriage_Return" */
+    83, -98,            /* 724: "CL", "Close_Punctuation" */
+    84, -104,           /* 726: "CM", "Combining_Mark" */
+    442, -108,          /* 728: "SA", "Complex_Context" */
+    73, -110,           /* 730: "CB", "Contingent_Break" */
+    152, -162,          /* 732: "EX", "Exclamation" */
+    176, -183,          /* 734: "GL", "Glue" */
+    207, -228,          /* 736: "HY", "Hyphen" */
+    229, -243,          /* 738: "ID", "Ideographic" */
+    240, -245,          /* 740: "IS", "Infix_Numeric" */
+    238, -248,          /* 742: "IN", "Inseperable" */
+    276, -305,          /* 744: "LF", "Line_Feed" */
+    39, -325,           /* 746: "BK", "Mandatory_Break" */
+    351, -364,          /* 748: "NL", "Next_Line" */
+    355, -372,          /* 750: "NS", "Nonstarter" */
+    357, -378,          /* 752: "NU", "Numeric" */
+    382, -387,          /* 754: "OP", "Open_Punctuation" */
+    403, -414,          /* 756: "PO", "Postfix_Numeric" */
+    404, -415,          /* 758: "PR", "Prefix_Numeric" */
+    423, -426,          /* 760: "QU", "Quotation" */
+    450, -472,          /* 762: "SP", "Space" */
+    448, -483,          /* 764: "SG", "Surrogate" */
+    547, -524,          /* 766: "XX", "Unknown" */
+    537, -542,          /* 768: "WJ", "Word_Joiner" */
+    561, -562,          /* 770: "ZW", "ZWSpace" */
+    578, -131,          /* 772: "de", "Decimal" */
+    579, -142,          /* 774: "di", "Digit" */
+    0, -370,            /* 776: "", "None" */
+    610, -378,          /* 778: "nu", "Numeric" */
     22, -23,            /* 780: "Arab", "Arabic" */
     29, -28,            /* 782: "Armn", "Armenian" */
     47, -48,            /* 784: "Beng", "Bengali" */
     57, -58,            /* 786: "Bopo", "Bopomofo" */
-    67, -68,            /* 788: "Buhd", "Buhid" */
-    87, -85,            /* 790: "Cans", "Canadian_Aboriginal" */
-    94, -95,            /* 792: "Cher", "Cherokee" */
-    564, -103,          /* 794: "Zyyy", "Common" */
-    422, -111,          /* 796: "Qaac", "Coptic" */
-    112, -116,          /* 798: "Cprt", "Cypriot" */
-    120, -118,          /* 800: "Cyrl", "Cyrillic" */
-    144, -135,          /* 802: "Dsrt", "Deseret" */
-    136, -137,          /* 804: "Deva", "Devanagari" */
-    155, -156,          /* 806: "Ethi", "Ethiopic" */
-    179, -180,          /* 808: "Geor", "Georgian" */
-    182, -183,          /* 810: "Goth", "Gothic" */
-    193, -190,          /* 812: "Grek", "Greek" */
-    195, -194,          /* 814: "Gujr", "Gujarati" */
-    197, -196,          /* 816: "Guru", "Gurmukhi" */
-    215, -208,          /* 818: "Hani", "Han" */
-    209, -210,          /* 820: "Hang", "Hangul" */
-    216, -217,          /* 822: "Hano", "Hanunoo" */
-    218, -219,          /* 824: "Hebr", "Hebrew" */
-    224, -225,          /* 826: "Hira", "Hiragana" */
-    423, -244,          /* 828: "Qaai", "Inherited" */
-    269, -263,          /* 830: "Knda", "Kannada" */
-    259, -264,          /* 832: "Kana", "Katakana" */
-    268, -266,          /* 834: "Khmr", "Khmer" */
-    283, -282,          /* 836: "Laoo", "Lao" */
-    289, -284,          /* 838: "Latn", "Latin" */
-    299, -300,          /* 840: "Limb", "Limbu" */
-    301, -305,          /* 842: "Linb", "Linear_B" */
-    336, -322,          /* 844: "Mlym", "Malayalam" */
-    340, -341,          /* 846: "Mong", "Mongolian" */
-    344, -343,          /* 848: "Mymr", "Myanmar" */
-    382, -383,          /* 850: "Ogam", "Ogham" */
-    248, -384,          /* 852: "Ital", "Old_Italic" */
-    388, -387,          /* 854: "Orya", "Oriya" */
-    389, -390,          /* 856: "Osma", "Osmanya" */
-    438, -437,          /* 858: "Runr", "Runic" */
-    458, -457,          /* 860: "Shaw", "Shavian" */
-    463, -464,          /* 862: "Sinh", "Sinhala" */
-    483, -484,          /* 864: "Syrc", "Syriac" */
-    503, -490,          /* 866: "Tglg", "Tagalog" */
-    491, -492,          /* 868: "Tagb", "Tagbanwa" */
-    496, -494,          /* 870: "Tale", "Tai_Le" */
-    498, -497,          /* 872: "Taml", "Tamil" */
-    499, -500,          /* 874: "Telu", "Telugu" */
-    504, -505,          /* 876: "Thaa", "Thaana" */
-    506, -506,          /* 878: "Thai", "Thai" */
-    508, -507,          /* 880: "Tibt", "Tibetan" */
-    516, -517,          /* 882: "Ugar", "Ugaritic" */
-    554, -551,          /* 884: "Yiii", "Yi" */
+    62, -63,            /* 788: "Brai", "Braille" */
+    69, -70,            /* 790: "Buhd", "Buhid" */
+    89, -87,            /* 792: "Cans", "Canadian_Aboriginal" */
+    96, -97,            /* 794: "Cher", "Cherokee" */
+    566, -105,          /* 796: "Zyyy", "Common" */
+    424, -113,          /* 798: "Qaac", "Coptic" */
+    114, -118,          /* 800: "Cprt", "Cypriot" */
+    122, -120,          /* 802: "Cyrl", "Cyrillic" */
+    146, -137,          /* 804: "Dsrt", "Deseret" */
+    138, -139,          /* 806: "Deva", "Devanagari" */
+    157, -158,          /* 808: "Ethi", "Ethiopic" */
+    181, -182,          /* 810: "Geor", "Georgian" */
+    184, -185,          /* 812: "Goth", "Gothic" */
+    195, -192,          /* 814: "Grek", "Greek" */
+    197, -196,          /* 816: "Gujr", "Gujarati" */
+    199, -198,          /* 818: "Guru", "Gurmukhi" */
+    217, -210,          /* 820: "Hani", "Han" */
+    211, -212,          /* 822: "Hang", "Hangul" */
+    218, -219,          /* 824: "Hano", "Hanunoo" */
+    220, -221,          /* 826: "Hebr", "Hebrew" */
+    226, -227,          /* 828: "Hira", "Hiragana" */
+    425, -246,          /* 830: "Qaai", "Inherited" */
+    271, -265,          /* 832: "Knda", "Kannada" */
+    261, -266,          /* 834: "Kana", "Katakana" */
+    270, -268,          /* 836: "Khmr", "Khmer" */
+    285, -284,          /* 838: "Laoo", "Lao" */
+    291, -286,          /* 840: "Latn", "Latin" */
+    301, -302,          /* 842: "Limb", "Limbu" */
+    303, -307,          /* 844: "Linb", "Linear_B" */
+    338, -324,          /* 846: "Mlym", "Malayalam" */
+    342, -343,          /* 848: "Mong", "Mongolian" */
+    346, -345,          /* 850: "Mymr", "Myanmar" */
+    384, -385,          /* 852: "Ogam", "Ogham" */
+    250, -386,          /* 854: "Ital", "Old_Italic" */
+    390, -389,          /* 856: "Orya", "Oriya" */
+    391, -392,          /* 858: "Osma", "Osmanya" */
+    440, -439,          /* 860: "Runr", "Runic" */
+    460, -459,          /* 862: "Shaw", "Shavian" */
+    465, -466,          /* 864: "Sinh", "Sinhala" */
+    485, -486,          /* 866: "Syrc", "Syriac" */
+    505, -492,          /* 868: "Tglg", "Tagalog" */
+    493, -494,          /* 870: "Tagb", "Tagbanwa" */
+    498, -496,          /* 872: "Tale", "Tai_Le" */
+    500, -499,          /* 874: "Taml", "Tamil" */
+    501, -502,          /* 876: "Telu", "Telugu" */
+    506, -507,          /* 878: "Thaa", "Thaana" */
+    508, -508,          /* 880: "Thai", "Thai" */
+    510, -509,          /* 882: "Tibt", "Tibetan" */
+    518, -519,          /* 884: "Ugar", "Ugaritic" */
+    556, -553,          /* 886: "Yiii", "Yi" */
 };
 
 #define MAX_NAMES_PER_GROUP 2
@@ -1528,62 +1531,63 @@ const Alias VALUES_nt[] = {
     Alias((int32_t) U_NT_NUMERIC, 778),
 };
 
-const int32_t VALUES_sc_COUNT = 53;
+const int32_t VALUES_sc_COUNT = 54;
 
 const Alias VALUES_sc[] = {
     Alias((int32_t) USCRIPT_ARABIC, 780),
     Alias((int32_t) USCRIPT_ARMENIAN, 782),
     Alias((int32_t) USCRIPT_BENGALI, 784),
     Alias((int32_t) USCRIPT_BOPOMOFO, 786),
-    Alias((int32_t) USCRIPT_BUHID, 788),
-    Alias((int32_t) USCRIPT_CANADIAN_ABORIGINAL, 790),
-    Alias((int32_t) USCRIPT_CHEROKEE, 792),
-    Alias((int32_t) USCRIPT_COMMON, 794),
-    Alias((int32_t) USCRIPT_COPTIC, 796),
-    Alias((int32_t) USCRIPT_CYPRIOT, 798),
-    Alias((int32_t) USCRIPT_CYRILLIC, 800),
-    Alias((int32_t) USCRIPT_DESERET, 802),
-    Alias((int32_t) USCRIPT_DEVANAGARI, 804),
-    Alias((int32_t) USCRIPT_ETHIOPIC, 806),
-    Alias((int32_t) USCRIPT_GEORGIAN, 808),
-    Alias((int32_t) USCRIPT_GOTHIC, 810),
-    Alias((int32_t) USCRIPT_GREEK, 812),
-    Alias((int32_t) USCRIPT_GUJARATI, 814),
-    Alias((int32_t) USCRIPT_GURMUKHI, 816),
-    Alias((int32_t) USCRIPT_HAN, 818),
-    Alias((int32_t) USCRIPT_HANGUL, 820),
-    Alias((int32_t) USCRIPT_HANUNOO, 822),
-    Alias((int32_t) USCRIPT_HEBREW, 824),
-    Alias((int32_t) USCRIPT_HIRAGANA, 826),
-    Alias((int32_t) USCRIPT_INHERITED, 828),
-    Alias((int32_t) USCRIPT_KANNADA, 830),
-    Alias((int32_t) USCRIPT_KATAKANA, 832),
-    Alias((int32_t) USCRIPT_KHMER, 834),
-    Alias((int32_t) USCRIPT_LAO, 836),
-    Alias((int32_t) USCRIPT_LATIN, 838),
-    Alias((int32_t) USCRIPT_LIMBU, 840),
-    Alias((int32_t) USCRIPT_LINEAR_B, 842),
-    Alias((int32_t) USCRIPT_MALAYALAM, 844),
-    Alias((int32_t) USCRIPT_MONGOLIAN, 846),
-    Alias((int32_t) USCRIPT_MYANMAR, 848),
-    Alias((int32_t) USCRIPT_OGHAM, 850),
-    Alias((int32_t) USCRIPT_OLD_ITALIC, 852),
-    Alias((int32_t) USCRIPT_ORIYA, 854),
-    Alias((int32_t) USCRIPT_OSMANYA, 856),
-    Alias((int32_t) USCRIPT_RUNIC, 858),
-    Alias((int32_t) USCRIPT_SHAVIAN, 860),
-    Alias((int32_t) USCRIPT_SINHALA, 862),
-    Alias((int32_t) USCRIPT_SYRIAC, 864),
-    Alias((int32_t) USCRIPT_TAGALOG, 866),
-    Alias((int32_t) USCRIPT_TAGBANWA, 868),
-    Alias((int32_t) USCRIPT_TAI_LE, 870),
-    Alias((int32_t) USCRIPT_TAMIL, 872),
-    Alias((int32_t) USCRIPT_TELUGU, 874),
-    Alias((int32_t) USCRIPT_THAANA, 876),
-    Alias((int32_t) USCRIPT_THAI, 878),
-    Alias((int32_t) USCRIPT_TIBETAN, 880),
-    Alias((int32_t) USCRIPT_UGARITIC, 882),
-    Alias((int32_t) USCRIPT_YI, 884),
+    Alias((int32_t) USCRIPT_BRAILLE, 788),
+    Alias((int32_t) USCRIPT_BUHID, 790),
+    Alias((int32_t) USCRIPT_CANADIAN_ABORIGINAL, 792),
+    Alias((int32_t) USCRIPT_CHEROKEE, 794),
+    Alias((int32_t) USCRIPT_COMMON, 796),
+    Alias((int32_t) USCRIPT_COPTIC, 798),
+    Alias((int32_t) USCRIPT_CYPRIOT, 800),
+    Alias((int32_t) USCRIPT_CYRILLIC, 802),
+    Alias((int32_t) USCRIPT_DESERET, 804),
+    Alias((int32_t) USCRIPT_DEVANAGARI, 806),
+    Alias((int32_t) USCRIPT_ETHIOPIC, 808),
+    Alias((int32_t) USCRIPT_GEORGIAN, 810),
+    Alias((int32_t) USCRIPT_GOTHIC, 812),
+    Alias((int32_t) USCRIPT_GREEK, 814),
+    Alias((int32_t) USCRIPT_GUJARATI, 816),
+    Alias((int32_t) USCRIPT_GURMUKHI, 818),
+    Alias((int32_t) USCRIPT_HAN, 820),
+    Alias((int32_t) USCRIPT_HANGUL, 822),
+    Alias((int32_t) USCRIPT_HANUNOO, 824),
+    Alias((int32_t) USCRIPT_HEBREW, 826),
+    Alias((int32_t) USCRIPT_HIRAGANA, 828),
+    Alias((int32_t) USCRIPT_INHERITED, 830),
+    Alias((int32_t) USCRIPT_KANNADA, 832),
+    Alias((int32_t) USCRIPT_KATAKANA, 834),
+    Alias((int32_t) USCRIPT_KHMER, 836),
+    Alias((int32_t) USCRIPT_LAO, 838),
+    Alias((int32_t) USCRIPT_LATIN, 840),
+    Alias((int32_t) USCRIPT_LIMBU, 842),
+    Alias((int32_t) USCRIPT_LINEAR_B, 844),
+    Alias((int32_t) USCRIPT_MALAYALAM, 846),
+    Alias((int32_t) USCRIPT_MONGOLIAN, 848),
+    Alias((int32_t) USCRIPT_MYANMAR, 850),
+    Alias((int32_t) USCRIPT_OGHAM, 852),
+    Alias((int32_t) USCRIPT_OLD_ITALIC, 854),
+    Alias((int32_t) USCRIPT_ORIYA, 856),
+    Alias((int32_t) USCRIPT_OSMANYA, 858),
+    Alias((int32_t) USCRIPT_RUNIC, 860),
+    Alias((int32_t) USCRIPT_SHAVIAN, 862),
+    Alias((int32_t) USCRIPT_SINHALA, 864),
+    Alias((int32_t) USCRIPT_SYRIAC, 866),
+    Alias((int32_t) USCRIPT_TAGALOG, 868),
+    Alias((int32_t) USCRIPT_TAGBANWA, 870),
+    Alias((int32_t) USCRIPT_TAI_LE, 872),
+    Alias((int32_t) USCRIPT_TAMIL, 874),
+    Alias((int32_t) USCRIPT_TELUGU, 876),
+    Alias((int32_t) USCRIPT_THAANA, 878),
+    Alias((int32_t) USCRIPT_THAI, 880),
+    Alias((int32_t) USCRIPT_TIBETAN, 882),
+    Alias((int32_t) USCRIPT_UGARITIC, 884),
+    Alias((int32_t) USCRIPT_YI, 886),
 };
 
 const int32_t PROPERTY_COUNT = 62;
