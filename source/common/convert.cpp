@@ -324,16 +324,18 @@ UnicodeConverterCPP::getCodepage(UErrorCode& err) const
     return ucnv_getCCSID(myUnicodeConverter, &err);
 }
 
-UConverterToUCallback
-UnicodeConverterCPP::getMissingCharAction() const
+void
+UnicodeConverterCPP::getMissingCharAction(UConverterToUCallback *action,
+                                          void **context) const
 {
-    return ucnv_getToUCallBack(myUnicodeConverter);
+    ucnv_getToUCallBack(myUnicodeConverter, action, context);
 }
 
-UConverterFromUCallback
-UnicodeConverterCPP::getMissingUnicodeAction() const
+void
+UnicodeConverterCPP::getMissingUnicodeAction(UConverterFromUCallback *action,
+                                             void **context) const
 {
-    return ucnv_getFromUCallBack(myUnicodeConverter);
+    ucnv_getFromUCallBack(myUnicodeConverter, action, context);
 }
 
 
