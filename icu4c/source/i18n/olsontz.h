@@ -10,9 +10,11 @@
 */
 #ifndef OLSONTZ_H
 #define OLSONTZ_H
-#if !UCONFIG_NO_FORMATTING
 
 #include "unicode/utypes.h"
+
+#if !UCONFIG_NO_FORMATTING
+
 #include "unicode/timezone.h"
 
 struct UResourceBundle;
